@@ -1,5 +1,6 @@
 package org.tuml.javageneration;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,11 +15,11 @@ public class Workspace {
 		javaClassMap.put(ojClass.getQualifiedName(), ojClass);
 	}
 
-	public static void toText() {
+	public static void toText(File project) {
 		for (Map.Entry<String, OJAnnotatedClass> entry : javaClassMap.entrySet()) {
 			ModelPrinter.addToSource(entry.getKey(), entry.getValue().toJavaString());
 		}
-		ModelPrinter.toText();
+		ModelPrinter.toText(project);
 	}
 
 	public static OJAnnotatedClass findOJClass(String name) {

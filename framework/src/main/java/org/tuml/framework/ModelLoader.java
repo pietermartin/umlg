@@ -18,12 +18,12 @@ public class ModelLoader {
 
 	protected static final ResourceSet RESOURCE_SET = new ResourceSetImpl();
 
-	public static Model loadModel() {
+	public static Model loadModel(String pathToModel) {
 		registerResourceFactories();
 		URLClassLoader loader = (URLClassLoader) Thread.currentThread().getContextClassLoader();
 		URI uri = URI.createURI(findLocation(loader, true, "org/eclipse/uml2/uml/resources", "org.eclipse.uml2.uml.resources"));
 		registerPathmaps(uri);
-		String filePath = "/home/pieter/workspace-apaeum/nakeduml/opaeum-tests/tinker/tinker-test-activity/model/activityTest.uml";
+		String filePath = pathToModel;
 		File modelFile = new File(filePath);
 		File dir = modelFile.getParentFile();
 		URI dirUri = URI.createFileURI(dir.getAbsolutePath());

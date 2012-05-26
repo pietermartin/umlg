@@ -1,14 +1,14 @@
 package org.tuml.javageneration.naming;
 
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.Package;
+import org.eclipse.uml2.uml.Type;
 
 public class Namer {
 
-	public static String name(Classifier classifier) {
-		return classifier.getName();
+	public static String name(Type type) {
+		return type.getName();
 	}
 
 	public static String name(Package nearestPackage) {

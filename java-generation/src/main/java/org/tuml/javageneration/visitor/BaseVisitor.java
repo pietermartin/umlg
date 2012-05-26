@@ -1,4 +1,4 @@
-package org.tuml.javageneration.visitors;
+package org.tuml.javageneration.visitor;
 
 import java.util.List;
 
@@ -40,8 +40,10 @@ public class BaseVisitor {
 			return Workspace.findOJClass(Namer.qualifiedName((NamedElement)otherEnd.getType()));
 		} else if (owner instanceof Classifier) {
 				return Workspace.findOJClass(Namer.qualifiedName((NamedElement)owner));
+		} else if (owner instanceof Property) {
+			return Workspace.findOJClass(Namer.qualifiedName((NamedElement)owner));
 		} else {
-			throw new IllegalStateException("Not catered for, think about ne.");
+			throw new IllegalStateException("Not catered for, think about ne. " + owner.getClass().getSimpleName());
 		}
 	}
 	
