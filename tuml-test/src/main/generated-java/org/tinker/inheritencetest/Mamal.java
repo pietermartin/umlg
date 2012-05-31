@@ -2,9 +2,9 @@ package org.tinker.inheritencetest;
 
 import com.tinkerpop.blueprints.pgm.Vertex;
 
-import org.tuml.runtime.domain.TinkerCompositionNode;
+import org.tuml.runtime.domain.CompositionNode;
 
-public class Mamal extends AbstractSpecies implements TinkerCompositionNode {
+public class Mamal extends AbstractSpecies implements CompositionNode {
 
 
 	/** Constructor for Mamal
@@ -26,6 +26,11 @@ public class Mamal extends AbstractSpecies implements TinkerCompositionNode {
 	@Override
 	public void clearCache() {
 		super.clearCache();
+	}
+	
+	@Override
+	public boolean isTinkerRoot() {
+		return true;
 	}
 
 }

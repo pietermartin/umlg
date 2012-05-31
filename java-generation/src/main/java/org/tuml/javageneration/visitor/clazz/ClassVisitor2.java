@@ -14,6 +14,7 @@ import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
 import org.opaeum.java.metamodel.annotation.OJAnnotationValue;
 import org.tuml.framework.Visitor;
 import org.tuml.javageneration.util.TinkerGenerationUtil;
+import org.tuml.javageneration.util.TumlClassOperations;
 import org.tuml.javageneration.util.TumlPropertyOperations;
 import org.tuml.javageneration.visitor.BaseVisitor;
 
@@ -24,8 +25,8 @@ public class ClassVisitor2 extends BaseVisitor implements Visitor<Class> {
 		OJAnnotatedClass annotatedClass = findOJClass(clazz);
 		setSuperClass(annotatedClass, clazz);
 		
-		implementTinkerCompositionNode(annotatedClass);
-//		implementIsRoot(annotatedClass, clazz.getEndToComposite() == null);
+		implementCompositionNode(annotatedClass);
+		implementIsRoot(annotatedClass, TumlClassOperations.getEndToComposite(clazz) == null);
 		addPersistentConstructor(annotatedClass);
 		addClearCache(annotatedClass, clazz);
 		addContructorWithVertex(annotatedClass, clazz);
@@ -77,8 +78,7 @@ public class ClassVisitor2 extends BaseVisitor implements Visitor<Class> {
 		OJAnnotatedOperation getObjectVersion = new OJAnnotatedOperation("getObjectVersion");
 		TinkerGenerationUtil.addOverrideAnnotation(getObjectVersion);
 		getObjectVersion.setReturnType(new OJPathName("int"));
-		getObjectVersion.getBody().addToStatements("return TinkerIdUtil.getVersion(this.vertex)");
-		ojClass.addToImports(TinkerGenerationUtil.tinkerIdUtilPathName);
+		getObjectVersion.getBody().addToStatements("return TinkerIdUtilFactory.getIdUtil().getVersion(this.vertex)");
 		ojClass.addToOperations(getObjectVersion);
 	}
 
@@ -86,14 +86,14 @@ public class ClassVisitor2 extends BaseVisitor implements Visitor<Class> {
 		OJAnnotatedOperation getId = new OJAnnotatedOperation("getId");
 		getId.addAnnotationIfNew(new OJAnnotationValue(new OJPathName("java.lang.Override")));
 		getId.setReturnType(new OJPathName("java.lang.Long"));
-		getId.getBody().addToStatements("return TinkerIdUtil.getId(this.vertex)");
-		ojClass.addToImports(TinkerGenerationUtil.tinkerIdUtilPathName);
+		getId.getBody().addToStatements("return TinkerIdUtilFactory.getIdUtil().getId(this.vertex)");
 		ojClass.addToOperations(getId);
 
 		OJAnnotatedOperation setId = new OJAnnotatedOperation("setId");
 		setId.addAnnotationIfNew(new OJAnnotationValue(new OJPathName("java.lang.Override")));
 		setId.addParam("id", new OJPathName("java.lang.Long"));
-		setId.getBody().addToStatements("TinkerIdUtil.setId(this.vertex, id)");
+		setId.getBody().addToStatements("TinkerIdUtilFactory.getIdUtil().setId(this.vertex, id)");
+		ojClass.addToImports(TinkerGenerationUtil.tinkerIdUtilFactoryPathName);
 		ojClass.addToOperations(setId);
 	}
 
@@ -103,6 +103,7 @@ public class ClassVisitor2 extends BaseVisitor implements Visitor<Class> {
 		constructor.getBody().addToStatements("TransactionThreadEntityVar.setNewEntity(this)");
 		constructor.getBody().addToStatements("defaultCreate()");
 		ojClass.addToImports(TinkerGenerationUtil.transactionThreadEntityVar);
+		ojClass.addToImports(TinkerGenerationUtil.graphDbPathName);
 	}
 
 	private void addSuperWithPersistenceToDefaultConstructor(OJAnnotatedClass ojClass) {
@@ -110,7 +111,7 @@ public class ClassVisitor2 extends BaseVisitor implements Visitor<Class> {
 		constructor.getBody().getStatements().add(0, new OJSimpleStatement("super( " + TinkerGenerationUtil.PERSISTENT_CONSTRUCTOR_PARAM_NAME + " )"));
 	}
 
-	private void implementTinkerCompositionNode(OJAnnotatedClass ojClass) {
+	private void implementCompositionNode(OJAnnotatedClass ojClass) {
 		ojClass.addToImplementedInterfaces(TinkerGenerationUtil.tinkerCompositionNodePathName);
 	}
 
@@ -155,6 +156,14 @@ public class ClassVisitor2 extends BaseVisitor implements Visitor<Class> {
 			constructor.getBody().addToStatements("super(vertex)");
 		}
 		ojClass.addToConstructors(constructor);
+	}
+
+	protected void implementIsRoot(OJAnnotatedClass ojClass, boolean b) {
+		OJAnnotatedOperation isRoot = new OJAnnotatedOperation("isTinkerRoot");
+		isRoot.addAnnotationIfNew(new OJAnnotationValue(new OJPathName("java.lang.Override")));
+		isRoot.setReturnType(new OJPathName("boolean"));
+		isRoot.getBody().addToStatements("return " + b);
+		ojClass.addToOperations(isRoot);
 	}
 
 }

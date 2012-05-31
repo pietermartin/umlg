@@ -2,9 +2,9 @@ package org.tinker.inheritencetest;
 
 import com.tinkerpop.blueprints.pgm.Vertex;
 
-import org.tuml.runtime.domain.TinkerCompositionNode;
+import org.tuml.runtime.domain.CompositionNode;
 
-public class Biped extends Mamal implements TinkerCompositionNode {
+public class Biped extends Mamal implements CompositionNode {
 
 
 	/** Constructor for Biped
@@ -26,6 +26,11 @@ public class Biped extends Mamal implements TinkerCompositionNode {
 	@Override
 	public void clearCache() {
 		super.clearCache();
+	}
+	
+	@Override
+	public boolean isTinkerRoot() {
+		return true;
 	}
 
 }

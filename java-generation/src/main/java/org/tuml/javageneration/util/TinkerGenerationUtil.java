@@ -19,7 +19,7 @@ public class TinkerGenerationUtil {
 	public static final OJPathName tinkerSetClosableSequenceImplPathName = new OJPathName("org.tuml.tinker.collection.TinkerSetClosableSequenceImpl");
 	public static final OJPathName tinkerIndexPathName = new OJPathName("com.tinkerpop.blueprints.pgm.Index");
 	public static final OJPathName tinkerCloseableSequencePathName = new OJPathName("com.tinkerpop.blueprints.pgm.CloseableSequence");
-	public static final OJPathName tinkerCompositionNodePathName = new OJPathName("org.tuml.runtime.domain.TinkerCompositionNode");
+	public static final OJPathName tinkerCompositionNodePathName = new OJPathName("org.tuml.runtime.domain.CompositionNode");
 	public static final OJPathName compositionNodePathName = new OJPathName("org.opaeum.runtime.domain.CompositionNode");
 	public static final OJPathName tinkerIdUtilPathName = new OJPathName("org.tuml.nakeduml.tinker.runtime.TinkerIdUtil");
 	public static final OJPathName BASE_AUDIT_SOFT_DELETE_TINKER = new OJPathName("org.tuml.runtime.domain.BaseTinkerSoftDelete");
@@ -35,8 +35,8 @@ public class TinkerGenerationUtil {
 	public static OJPathName vertexPathName = new OJPathName("com.tinkerpop.blueprints.pgm.Vertex");
 	public static OJPathName tinkerFormatter = new OJPathName("org.util.TinkerFormatter");
 	public static OJPathName transactionThreadVar = new OJPathName("org.util.TransactionThreadVar");
-	public static OJPathName transactionThreadEntityVar = new OJPathName("org.tuml.tinker.runtime.TransactionThreadEntityVar");
-	public static OJPathName graphDbPathName = new OJPathName("org.tuml.tinker.runtime.GraphDb");
+	public static OJPathName transactionThreadEntityVar = new OJPathName("org.tuml.runtime.adaptor.TransactionThreadEntityVar");
+	public static OJPathName graphDbPathName = new OJPathName("org.tuml.runtime.adaptor.GraphDb");
 	public static OJPathName tinkerAuditNodePathName = new OJPathName("org.tuml.runtime.domain.TinkerAuditNode");
 	public static OJPathName tinkerUtil = new OJPathName("org.util.TinkerUtil");
 	public static OJPathName tinkerHashSetImpl = new OJPathName("org.util.TinkerSet");
@@ -73,6 +73,8 @@ public class TinkerGenerationUtil {
 
 	public static OJPathName TINKER_QUALIFIER_PATHNAME = new OJPathName("org.tuml.tinker.collection.Qualifier");
 	public static OJPathName tinkerMultiplicityPathName = new OJPathName("org.tuml.tinker.collection.Multiplicity");
+
+	public static OJPathName tinkerIdUtilFactoryPathName = new OJPathName("org.tuml.runtime.adaptor.TinkerIdUtilFactory");
 
 //	public static String constructSelfToAuditEdgeLabel(INakedEntity entity) {
 //		return "audit";

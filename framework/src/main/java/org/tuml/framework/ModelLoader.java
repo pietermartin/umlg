@@ -18,13 +18,11 @@ public class ModelLoader {
 
 	protected static final ResourceSet RESOURCE_SET = new ResourceSetImpl();
 
-	public static Model loadModel(String pathToModel) {
+	public static Model loadModel(File modelFile) {
 		registerResourceFactories();
 		URLClassLoader loader = (URLClassLoader) Thread.currentThread().getContextClassLoader();
 		URI uri = URI.createURI(findLocation(loader, true, "org/eclipse/uml2/uml/resources", "org.eclipse.uml2.uml.resources"));
 		registerPathmaps(uri);
-		String filePath = pathToModel;
-		File modelFile = new File(filePath);
 		File dir = modelFile.getParentFile();
 		URI dirUri = URI.createFileURI(dir.getAbsolutePath());
 		return (Model) load(dirUri.appendSegment(modelFile.getName()));

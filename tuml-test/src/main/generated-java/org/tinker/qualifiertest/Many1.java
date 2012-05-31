@@ -2,12 +2,13 @@ package org.tinker.qualifiertest;
 
 import com.tinkerpop.blueprints.pgm.Vertex;
 
-import org.tuml.nakeduml.tinker.runtime.TinkerIdUtil;
+import org.tuml.runtime.adaptor.GraphDb;
+import org.tuml.runtime.adaptor.TinkerIdUtilFactory;
+import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
 import org.tuml.runtime.domain.BaseTinker;
-import org.tuml.runtime.domain.TinkerCompositionNode;
-import org.tuml.tinker.runtime.TransactionThreadEntityVar;
+import org.tuml.runtime.domain.CompositionNode;
 
-public class Many1 extends BaseTinker implements TinkerCompositionNode {
+public class Many1 extends BaseTinker implements CompositionNode {
 
 
 	/** Constructor for Many1
@@ -35,17 +36,22 @@ public class Many1 extends BaseTinker implements TinkerCompositionNode {
 	
 	@Override
 	public Long getId() {
-		return TinkerIdUtil.getId(this.vertex);
+		return TinkerIdUtilFactory.getIdUtil().getId(this.vertex);
 	}
 	
 	@Override
 	public int getObjectVersion() {
-		return TinkerIdUtil.getVersion(this.vertex);
+		return TinkerIdUtilFactory.getIdUtil().getVersion(this.vertex);
+	}
+	
+	@Override
+	public boolean isTinkerRoot() {
+		return true;
 	}
 	
 	@Override
 	public void setId(Long id) {
-		TinkerIdUtil.setId(this.vertex, id);
+		TinkerIdUtilFactory.getIdUtil().setId(this.vertex, id);
 	}
 
 }

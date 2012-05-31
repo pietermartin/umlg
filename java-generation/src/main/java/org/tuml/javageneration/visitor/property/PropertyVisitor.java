@@ -12,9 +12,6 @@ public class PropertyVisitor extends BaseVisitor implements Visitor<Property> {
 	public void visitBefore(Property p) {
 		if (TumlPropertyOperations.isQualifier(p)) {
 			OJAnnotatedClass owner = findOJClass(p);
-			if (owner == null) {
-				System.out.println();
-			}
 			if (p.isNavigable() && !p.isDerived() && p.isMultivalued()) {
 				// visitManyProperty()
 			}

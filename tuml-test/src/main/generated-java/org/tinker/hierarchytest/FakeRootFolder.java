@@ -2,9 +2,9 @@ package org.tinker.hierarchytest;
 
 import com.tinkerpop.blueprints.pgm.Vertex;
 
-import org.tuml.runtime.domain.TinkerCompositionNode;
+import org.tuml.runtime.domain.CompositionNode;
 
-public class FakeRootFolder extends AbstractRootFolder implements TinkerCompositionNode {
+public class FakeRootFolder extends AbstractRootFolder implements CompositionNode {
 
 
 	/** Constructor for FakeRootFolder
@@ -26,6 +26,11 @@ public class FakeRootFolder extends AbstractRootFolder implements TinkerComposit
 	@Override
 	public void clearCache() {
 		super.clearCache();
+	}
+	
+	@Override
+	public boolean isTinkerRoot() {
+		return true;
 	}
 
 }
