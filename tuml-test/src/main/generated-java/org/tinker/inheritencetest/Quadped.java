@@ -15,6 +15,12 @@ public class Quadped extends Mamal implements CompositionNode {
 		super(vertex);
 	}
 	
+	/** Default constructor for Quadped
+	 */
+	public Quadped() {
+		super.initVariables();
+	}
+	
 	/** Constructor for Quadped
 	 * 
 	 * @param persistent 
@@ -26,6 +32,19 @@ public class Quadped extends Mamal implements CompositionNode {
 	@Override
 	public void clearCache() {
 		super.clearCache();
+	}
+	
+	public void createComponents() {
+		super.createComponents();
+	}
+	
+	public void init() {
+		this.hasInitBeenCalled = true;
+		initVariables();
+	}
+	
+	public void initVariables() {
+		super.initVariables();
 	}
 	
 	@Override

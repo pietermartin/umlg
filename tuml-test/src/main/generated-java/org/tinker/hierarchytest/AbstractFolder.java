@@ -19,6 +19,11 @@ public class AbstractFolder extends BaseTinker implements CompositionNode {
 		this.vertex=vertex;
 	}
 	
+	/** Default constructor for AbstractFolder
+	 */
+	public AbstractFolder() {
+	}
+	
 	/** Constructor for AbstractFolder
 	 * 
 	 * @param persistent 
@@ -35,6 +40,9 @@ public class AbstractFolder extends BaseTinker implements CompositionNode {
 		this.childFolder = null;
 	}
 	
+	public void createComponents() {
+	}
+	
 	@Override
 	public Long getId() {
 		return TinkerIdUtilFactory.getIdUtil().getId(this.vertex);
@@ -45,9 +53,17 @@ public class AbstractFolder extends BaseTinker implements CompositionNode {
 		return TinkerIdUtilFactory.getIdUtil().getVersion(this.vertex);
 	}
 	
+	public void init() {
+		this.hasInitBeenCalled = true;
+		initVariables();
+	}
+	
+	public void initVariables() {
+	}
+	
 	@Override
 	public boolean isTinkerRoot() {
-		return false;
+		return true;
 	}
 	
 	@Override

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
 import org.opaeum.java.metamodel.generated.OJClassifierGEN;
 import org.opaeum.java.metamodel.utilities.JavaStringHelpers;
 import org.opaeum.java.metamodel.utilities.JavaUtil;
@@ -204,6 +205,9 @@ public class OJClassifier extends OJClassifierGEN{
 			}
 		}
 		return result;
+	}
+	public OJAnnotatedOperation findOperation(String name){
+		return (OJAnnotatedOperation)findOperation(name, Collections.emptyList());
 	}
 	public OJOperation findOperation(String name,List /* (OJPathName) */types){
 		OJOperation result = null;

@@ -26,7 +26,7 @@ public class ClassVisitor2 extends BaseVisitor implements Visitor<Class> {
 		setSuperClass(annotatedClass, clazz);
 		
 		implementCompositionNode(annotatedClass);
-		implementIsRoot(annotatedClass, TumlClassOperations.getEndToComposite(clazz) == null);
+		implementIsRoot(annotatedClass, TumlClassOperations.getOtherEndToComposite(clazz) == null);
 		addPersistentConstructor(annotatedClass);
 		addClearCache(annotatedClass, clazz);
 		addContructorWithVertex(annotatedClass, clazz);

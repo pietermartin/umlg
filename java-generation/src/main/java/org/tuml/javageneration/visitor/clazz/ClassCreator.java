@@ -8,7 +8,7 @@ import org.tuml.javageneration.util.TinkerGenerationUtil;
 import org.tuml.javageneration.util.TumlBehavioredClassifierOperations;
 import org.tuml.javageneration.visitor.BaseVisitor;
 
-public class ClassVisitor1 extends BaseVisitor implements Visitor<org.eclipse.uml2.uml.Class> {
+public class ClassCreator extends BaseVisitor implements Visitor<org.eclipse.uml2.uml.Class> {
 
 	public void visitBefore(org.eclipse.uml2.uml.Class clazz) {
 		OJAnnotatedClass annotatedClass = new OJAnnotatedClass(Namer.name(clazz));

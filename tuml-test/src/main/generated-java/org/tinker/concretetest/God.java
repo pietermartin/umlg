@@ -19,6 +19,11 @@ public class God extends BaseTinker implements CompositionNode {
 		this.vertex=vertex;
 	}
 	
+	/** Default constructor for God
+	 */
+	public God() {
+	}
+	
 	/** Constructor for God
 	 * 
 	 * @param persistent 
@@ -61,6 +66,9 @@ public class God extends BaseTinker implements CompositionNode {
 		this.nonNavigableMany = null;
 	}
 	
+	public void createComponents() {
+	}
+	
 	@Override
 	public Long getId() {
 		return TinkerIdUtilFactory.getIdUtil().getId(this.vertex);
@@ -71,9 +79,17 @@ public class God extends BaseTinker implements CompositionNode {
 		return TinkerIdUtilFactory.getIdUtil().getVersion(this.vertex);
 	}
 	
+	public void init() {
+		this.hasInitBeenCalled = true;
+		initVariables();
+	}
+	
+	public void initVariables() {
+	}
+	
 	@Override
 	public boolean isTinkerRoot() {
-		return false;
+		return true;
 	}
 	
 	@Override

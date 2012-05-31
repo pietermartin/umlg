@@ -15,6 +15,12 @@ public class AbstractRootFolder extends AbstractFolder implements CompositionNod
 		super(vertex);
 	}
 	
+	/** Default constructor for AbstractRootFolder
+	 */
+	public AbstractRootFolder() {
+		super.initVariables();
+	}
+	
 	/** Constructor for AbstractRootFolder
 	 * 
 	 * @param persistent 
@@ -26,6 +32,19 @@ public class AbstractRootFolder extends AbstractFolder implements CompositionNod
 	@Override
 	public void clearCache() {
 		super.clearCache();
+	}
+	
+	public void createComponents() {
+		super.createComponents();
+	}
+	
+	public void init() {
+		this.hasInitBeenCalled = true;
+		initVariables();
+	}
+	
+	public void initVariables() {
+		super.initVariables();
 	}
 	
 	@Override

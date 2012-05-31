@@ -13,10 +13,27 @@ public class Time extends BaseTinker implements CompositionNode {
 
 	/** Constructor for Time
 	 * 
+	 * @param compositeOwner 
+	 */
+	public Time(SpaceTime compositeOwner) {
+		this.vertex = GraphDb.getDb().addVertex("dribble");
+		createComponents();
+		init(compositeOwner);
+		TransactionThreadEntityVar.setNewEntity(this);
+		defaultCreate();
+	}
+	
+	/** Constructor for Time
+	 * 
 	 * @param vertex 
 	 */
 	public Time(Vertex vertex) {
 		this.vertex=vertex;
+	}
+	
+	/** Default constructor for Time
+	 */
+	public Time() {
 	}
 	
 	/** Constructor for Time
@@ -34,6 +51,9 @@ public class Time extends BaseTinker implements CompositionNode {
 		this.name = null;
 	}
 	
+	public void createComponents() {
+	}
+	
 	@Override
 	public Long getId() {
 		return TinkerIdUtilFactory.getIdUtil().getId(this.vertex);
@@ -44,9 +64,18 @@ public class Time extends BaseTinker implements CompositionNode {
 		return TinkerIdUtilFactory.getIdUtil().getVersion(this.vertex);
 	}
 	
+	public void init(SpaceTime compositeOwner) {
+		this.z_internalAddToSpaceTime(owner);
+		this.hasInitBeenCalled = true;
+		initVariables();
+	}
+	
+	public void initVariables() {
+	}
+	
 	@Override
 	public boolean isTinkerRoot() {
-		return true;
+		return false;
 	}
 	
 	@Override

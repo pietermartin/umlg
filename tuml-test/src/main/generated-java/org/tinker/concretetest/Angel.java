@@ -13,10 +13,27 @@ public class Angel extends BaseTinker implements CompositionNode {
 
 	/** Constructor for Angel
 	 * 
+	 * @param compositeOwner 
+	 */
+	public Angel(God compositeOwner) {
+		this.vertex = GraphDb.getDb().addVertex("dribble");
+		createComponents();
+		init(compositeOwner);
+		TransactionThreadEntityVar.setNewEntity(this);
+		defaultCreate();
+	}
+	
+	/** Constructor for Angel
+	 * 
 	 * @param vertex 
 	 */
 	public Angel(Vertex vertex) {
 		this.vertex=vertex;
+	}
+	
+	/** Default constructor for Angel
+	 */
+	public Angel() {
 	}
 	
 	/** Constructor for Angel
@@ -34,6 +51,9 @@ public class Angel extends BaseTinker implements CompositionNode {
 		this.name = null;
 	}
 	
+	public void createComponents() {
+	}
+	
 	@Override
 	public Long getId() {
 		return TinkerIdUtilFactory.getIdUtil().getId(this.vertex);
@@ -44,9 +64,18 @@ public class Angel extends BaseTinker implements CompositionNode {
 		return TinkerIdUtilFactory.getIdUtil().getVersion(this.vertex);
 	}
 	
+	public void init(God compositeOwner) {
+		this.z_internalAddToGod(owner);
+		this.hasInitBeenCalled = true;
+		initVariables();
+	}
+	
+	public void initVariables() {
+	}
+	
 	@Override
 	public boolean isTinkerRoot() {
-		return true;
+		return false;
 	}
 	
 	@Override

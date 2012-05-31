@@ -135,7 +135,19 @@ public final class TumlPropertyOperations extends PropertyOperations {
 
 	
 	public static OJPathName getTypePath(Property p) {
-		return new OJPathName(Namer.name(p.getNearestPackage()) + "." + Namer.name(p.getType()));
+		return new OJPathName(Namer.name(p.getType().getNearestPackage()) + "." + Namer.name(p.getType()));
+	}
+
+	public static String internalAdder(Property endToComposite) {
+		return "z_internalAddTo" + StringUtils.capitalize(endToComposite.getName());
+	}
+
+	public static String getter(Property property) {
+		return "get" + StringUtils.capitalize(property.getName());
+	}
+
+	public static String setter(Property property) {
+		return "set" + StringUtils.capitalize(property.getName());
 	}
 
 }

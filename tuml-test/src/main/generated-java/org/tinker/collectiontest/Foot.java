@@ -2,6 +2,7 @@ package org.tinker.collectiontest;
 
 import com.tinkerpop.blueprints.pgm.Vertex;
 
+import org.tinker.concretetest.God;
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.TinkerIdUtilFactory;
 import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
@@ -13,10 +14,27 @@ public class Foot extends BaseTinker implements CompositionNode {
 
 	/** Constructor for Foot
 	 * 
+	 * @param compositeOwner 
+	 */
+	public Foot(God compositeOwner) {
+		this.vertex = GraphDb.getDb().addVertex("dribble");
+		createComponents();
+		init(compositeOwner);
+		TransactionThreadEntityVar.setNewEntity(this);
+		defaultCreate();
+	}
+	
+	/** Constructor for Foot
+	 * 
 	 * @param vertex 
 	 */
 	public Foot(Vertex vertex) {
 		this.vertex=vertex;
+	}
+	
+	/** Default constructor for Foot
+	 */
+	public Foot() {
 	}
 	
 	/** Constructor for Foot
@@ -34,6 +52,9 @@ public class Foot extends BaseTinker implements CompositionNode {
 		this.name = null;
 	}
 	
+	public void createComponents() {
+	}
+	
 	@Override
 	public Long getId() {
 		return TinkerIdUtilFactory.getIdUtil().getId(this.vertex);
@@ -44,9 +65,18 @@ public class Foot extends BaseTinker implements CompositionNode {
 		return TinkerIdUtilFactory.getIdUtil().getVersion(this.vertex);
 	}
 	
+	public void init(God compositeOwner) {
+		this.z_internalAddToGod(owner);
+		this.hasInitBeenCalled = true;
+		initVariables();
+	}
+	
+	public void initVariables() {
+	}
+	
 	@Override
 	public boolean isTinkerRoot() {
-		return true;
+		return false;
 	}
 	
 	@Override

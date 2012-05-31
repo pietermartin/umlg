@@ -13,10 +13,27 @@ public class Space extends BaseTinker implements CompositionNode {
 
 	/** Constructor for Space
 	 * 
+	 * @param compositeOwner 
+	 */
+	public Space(SpaceTime compositeOwner) {
+		this.vertex = GraphDb.getDb().addVertex("dribble");
+		createComponents();
+		init(compositeOwner);
+		TransactionThreadEntityVar.setNewEntity(this);
+		defaultCreate();
+	}
+	
+	/** Constructor for Space
+	 * 
 	 * @param vertex 
 	 */
 	public Space(Vertex vertex) {
 		this.vertex=vertex;
+	}
+	
+	/** Default constructor for Space
+	 */
+	public Space() {
 	}
 	
 	/** Constructor for Space
@@ -34,6 +51,9 @@ public class Space extends BaseTinker implements CompositionNode {
 		this.name = null;
 	}
 	
+	public void createComponents() {
+	}
+	
 	@Override
 	public Long getId() {
 		return TinkerIdUtilFactory.getIdUtil().getId(this.vertex);
@@ -44,9 +64,18 @@ public class Space extends BaseTinker implements CompositionNode {
 		return TinkerIdUtilFactory.getIdUtil().getVersion(this.vertex);
 	}
 	
+	public void init(SpaceTime compositeOwner) {
+		this.z_internalAddToSpaceTime(owner);
+		this.hasInitBeenCalled = true;
+		initVariables();
+	}
+	
+	public void initVariables() {
+	}
+	
 	@Override
 	public boolean isTinkerRoot() {
-		return true;
+		return false;
 	}
 	
 	@Override

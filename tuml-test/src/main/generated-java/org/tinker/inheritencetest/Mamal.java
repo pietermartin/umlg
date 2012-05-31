@@ -15,6 +15,12 @@ public class Mamal extends AbstractSpecies implements CompositionNode {
 		super(vertex);
 	}
 	
+	/** Default constructor for Mamal
+	 */
+	public Mamal() {
+		super.initVariables();
+	}
+	
 	/** Constructor for Mamal
 	 * 
 	 * @param persistent 
@@ -26,6 +32,19 @@ public class Mamal extends AbstractSpecies implements CompositionNode {
 	@Override
 	public void clearCache() {
 		super.clearCache();
+	}
+	
+	public void createComponents() {
+		super.createComponents();
+	}
+	
+	public void init() {
+		this.hasInitBeenCalled = true;
+		initVariables();
+	}
+	
+	public void initVariables() {
+		super.initVariables();
 	}
 	
 	@Override

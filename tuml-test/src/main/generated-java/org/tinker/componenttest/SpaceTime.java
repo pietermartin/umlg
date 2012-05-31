@@ -2,6 +2,7 @@ package org.tinker.componenttest;
 
 import com.tinkerpop.blueprints.pgm.Vertex;
 
+import org.tinker.concretetest.Universe;
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.TinkerIdUtilFactory;
 import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
@@ -13,10 +14,27 @@ public class SpaceTime extends BaseTinker implements CompositionNode {
 
 	/** Constructor for SpaceTime
 	 * 
+	 * @param compositeOwner 
+	 */
+	public SpaceTime(Universe compositeOwner) {
+		this.vertex = GraphDb.getDb().addVertex("dribble");
+		createComponents();
+		init(compositeOwner);
+		TransactionThreadEntityVar.setNewEntity(this);
+		defaultCreate();
+	}
+	
+	/** Constructor for SpaceTime
+	 * 
 	 * @param vertex 
 	 */
 	public SpaceTime(Vertex vertex) {
 		this.vertex=vertex;
+	}
+	
+	/** Default constructor for SpaceTime
+	 */
+	public SpaceTime() {
 	}
 	
 	/** Constructor for SpaceTime
@@ -36,6 +54,15 @@ public class SpaceTime extends BaseTinker implements CompositionNode {
 		this.time = null;
 	}
 	
+	public void createComponents() {
+		if ( getSpace() == null ) {
+			setSpace(new Space(true));
+		}
+		if ( getTime() == null ) {
+			setTime(new Time(true));
+		}
+	}
+	
 	@Override
 	public Long getId() {
 		return TinkerIdUtilFactory.getIdUtil().getId(this.vertex);
@@ -44,6 +71,15 @@ public class SpaceTime extends BaseTinker implements CompositionNode {
 	@Override
 	public int getObjectVersion() {
 		return TinkerIdUtilFactory.getIdUtil().getVersion(this.vertex);
+	}
+	
+	public void init(Universe compositeOwner) {
+		this.z_internalAddToUniverse(owner);
+		this.hasInitBeenCalled = true;
+		initVariables();
+	}
+	
+	public void initVariables() {
 	}
 	
 	@Override
