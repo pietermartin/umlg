@@ -25,7 +25,7 @@ public class TinkerOrderedSetImpl<E> extends BaseCollection<E> implements Tinker
 	}
 	
 	@SuppressWarnings("unchecked")
-	public TinkerOrderedSetImpl(CompositionNode owner, String label, String uid, boolean isInverse, boolean isManyToMany, boolean composite) {
+	public TinkerOrderedSetImpl(CompositionNode owner, String label, String uid, boolean isInverse, TinkerMultiplicity multiplicity, boolean composite) {
 		super();
 		this.internalCollection =  new ListOrderedSet();
 		this.owner = owner;
@@ -37,7 +37,7 @@ public class TinkerOrderedSetImpl<E> extends BaseCollection<E> implements Tinker
 			this.index = GraphDb.getDb().createManualIndex(uid + ":::" + label, Edge.class);
 		}
 		this.inverse = isInverse;
-		this.manyToMany = isManyToMany;
+		this.multiplicity = multiplicity;
 		this.composite = composite;
 	}
 	
@@ -151,6 +151,7 @@ public class TinkerOrderedSetImpl<E> extends BaseCollection<E> implements Tinker
 		return result;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void clear() {
 		maybeLoad();

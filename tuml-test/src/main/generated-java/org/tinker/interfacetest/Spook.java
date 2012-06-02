@@ -2,15 +2,21 @@ package org.tinker.interfacetest;
 
 import com.tinkerpop.blueprints.pgm.Vertex;
 
+import java.util.UUID;
+
 import org.tinker.concretetest.God;
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.TinkerIdUtilFactory;
 import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
+import org.tuml.runtime.collection.TinkerMultiplicityImpl;
+import org.tuml.runtime.collection.TinkerSet;
+import org.tuml.runtime.collection.TinkerSetImpl;
 import org.tuml.runtime.domain.BaseTinker;
 import org.tuml.runtime.domain.CompositionNode;
 
 public class Spook extends BaseTinker implements CompositionNode {
-
+	private TinkerSet<Creature> creature;
+	private TinkerSet<String> name;
 
 	/** Constructor for Spook
 	 * 
@@ -30,6 +36,7 @@ public class Spook extends BaseTinker implements CompositionNode {
 	 */
 	public Spook(Vertex vertex) {
 		this.vertex=vertex;
+		initialiseProperties();
 	}
 	
 	/** Default constructor for Spook
@@ -45,14 +52,37 @@ public class Spook extends BaseTinker implements CompositionNode {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
+		initialiseProperties();
 	}
 
-	@Override
-	public void clearCache() {
-		this.name = null;
+	public void addToCreature(Creature creature) {
+		if ( creature != null ) {
+			creature.z_internalRemoveFromSpook(creature.getSpook());
+			creature.z_internalAddToSpook(this);
+			z_internalAddToCreature(creature);
+		}
+	}
+	
+	public void addToName(String name) {
+		if ( name != null ) {
+			z_internalAddToName(name);
+		}
 	}
 	
 	public void createComponents() {
+	}
+	
+	@Override
+	public void delete() {
+	}
+	
+	public Creature getCreature() {
+		TinkerSet<Creature> tmp = this.creature;
+		if ( !tmp.isEmpty() ) {
+			return tmp.iterator().next();
+		} else {
+			return null;
+		}
 	}
 	
 	@Override
@@ -60,13 +90,38 @@ public class Spook extends BaseTinker implements CompositionNode {
 		return TinkerIdUtilFactory.getIdUtil().getId(this.vertex);
 	}
 	
+	public String getName() {
+		TinkerSet<String> tmp = this.name;
+		if ( !tmp.isEmpty() ) {
+			return tmp.iterator().next();
+		} else {
+			return null;
+		}
+	}
+	
 	@Override
 	public int getObjectVersion() {
 		return TinkerIdUtilFactory.getIdUtil().getVersion(this.vertex);
 	}
 	
-	public void init(God compositeOwner) {
-		this.z_internalAddToGod(owner);
+	@Override
+	public CompositionNode getOwningObject() {
+		return getGod();
+	}
+	
+	@Override
+	public String getUid() {
+		String uid = (String) this.vertex.getProperty("uid");
+		if ( uid==null || uid.trim().length()==0 ) {
+			uid=UUID.randomUUID().toString();
+			this.vertex.setProperty("uid", uid);
+		}
+		return uid;
+	}
+	
+	@Override
+	public void init(CompositionNode compositeOwner) {
+		this.z_internalAddToGod((God)compositeOwner);
 		this.hasInitBeenCalled = true;
 		initVariables();
 	}
@@ -75,13 +130,41 @@ public class Spook extends BaseTinker implements CompositionNode {
 	}
 	
 	@Override
+	public void initialiseProperties() {
+		this.name =  new TinkerSetImpl<String>(this, "org__tinker__interfacetest__Spook__name", true, new TinkerMultiplicityImpl(false,false,true,false,1,1), false);
+	}
+	
+	@Override
 	public boolean isTinkerRoot() {
 		return false;
+	}
+	
+	public void setCreature(TinkerSet<Creature> creature) {
+		TinkerSet<Creature> oldValue = this.getCreature();
 	}
 	
 	@Override
 	public void setId(Long id) {
 		TinkerIdUtilFactory.getIdUtil().setId(this.vertex, id);
+	}
+	
+	public void setName(TinkerSet<String> name) {
+	}
+	
+	public void z_internalAddToCreature(Creature creature) {
+		this.creature.add(creature);
+	}
+	
+	public void z_internalAddToName(String name) {
+		this.name.add(name);
+	}
+	
+	public void z_internalRemoveFromCreature(Creature creature) {
+		this.creature.remove(creature);
+	}
+	
+	public void z_internalRemoveFromName(String name) {
+		this.name.remove(name);
 	}
 
 }

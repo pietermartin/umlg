@@ -2,10 +2,11 @@ package org.tinker.hierarchytest;
 
 import com.tinkerpop.blueprints.pgm.Vertex;
 
+import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.domain.CompositionNode;
 
 public class Folder extends AbstractFolder implements CompositionNode {
-
+	private TinkerSet<AbstractFolder> parentFolder;
 
 	/** Constructor for Folder
 	 * 
@@ -22,6 +23,7 @@ public class Folder extends AbstractFolder implements CompositionNode {
 	 */
 	public Folder(Vertex vertex) {
 		super(vertex);
+		initialiseProperties();
 	}
 	
 	/** Default constructor for Folder
@@ -36,19 +38,42 @@ public class Folder extends AbstractFolder implements CompositionNode {
 	 */
 	public Folder(Boolean persistent) {
 		super( persistent );
+		initialiseProperties();
 	}
 
-	@Override
-	public void clearCache() {
-		super.clearCache();
+	public void addToParentFolder(AbstractFolder parentFolder) {
+		if ( parentFolder != null ) {
+			parentFolder.z_internalRemoveFromChildFolder(parentFolder.getChildFolder());
+			parentFolder.z_internalAddToChildFolder(this);
+			z_internalAddToParentFolder(parentFolder);
+		}
 	}
 	
 	public void createComponents() {
 		super.createComponents();
 	}
 	
-	public void init(AbstractFolder compositeOwner) {
-		this.z_internalAddToParentFolder(owner);
+	@Override
+	public void delete() {
+	}
+	
+	@Override
+	public CompositionNode getOwningObject() {
+		return getParentFolder();
+	}
+	
+	public AbstractFolder getParentFolder() {
+		TinkerSet<AbstractFolder> tmp = this.parentFolder;
+		if ( !tmp.isEmpty() ) {
+			return tmp.iterator().next();
+		} else {
+			return null;
+		}
+	}
+	
+	@Override
+	public void init(CompositionNode compositeOwner) {
+		this.z_internalAddToParentFolder((AbstractFolder)compositeOwner);
 		this.hasInitBeenCalled = true;
 		initVariables();
 	}
@@ -58,8 +83,24 @@ public class Folder extends AbstractFolder implements CompositionNode {
 	}
 	
 	@Override
+	public void initialiseProperties() {
+		super.initialiseProperties();
+	}
+	
+	@Override
 	public boolean isTinkerRoot() {
 		return false;
+	}
+	
+	public void setParentFolder(TinkerSet<AbstractFolder> parentFolder) {
+	}
+	
+	public void z_internalAddToParentFolder(AbstractFolder parentFolder) {
+		this.parentFolder.add(parentFolder);
+	}
+	
+	public void z_internalRemoveFromParentFolder(AbstractFolder parentFolder) {
+		this.parentFolder.remove(parentFolder);
 	}
 
 }

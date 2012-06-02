@@ -16,11 +16,11 @@ public class TinkerGenerationUtil {
 
 	public static final String TINKER_DB_NULL = "__NULL__";
 	public static final OJPathName tinkerConclusionPathName = new OJPathName("com.tinkerpop.blueprints.pgm.TransactionalGraph.Conclusion");
-	public static final OJPathName tinkerSetClosableSequenceImplPathName = new OJPathName("org.tuml.tinker.collection.TinkerSetClosableSequenceImpl");
+	public static final OJPathName tinkerSetClosableSequenceImplPathName = new OJPathName("org.tuml.runtime.collection.TinkerSetClosableSequenceImpl");
 	public static final OJPathName tinkerIndexPathName = new OJPathName("com.tinkerpop.blueprints.pgm.Index");
 	public static final OJPathName tinkerCloseableSequencePathName = new OJPathName("com.tinkerpop.blueprints.pgm.CloseableSequence");
 	public static final OJPathName tinkerCompositionNodePathName = new OJPathName("org.tuml.runtime.domain.CompositionNode");
-	public static final OJPathName compositionNodePathName = new OJPathName("org.opaeum.runtime.domain.CompositionNode");
+	public static final OJPathName compositionNodePathName = new OJPathName("org.tuml.runtime.domain.CompositionNode");
 	public static final OJPathName tinkerIdUtilPathName = new OJPathName("org.tuml.nakeduml.tinker.runtime.TinkerIdUtil");
 	public static final OJPathName BASE_AUDIT_SOFT_DELETE_TINKER = new OJPathName("org.tuml.runtime.domain.BaseTinkerSoftDelete");
 	public static final OJPathName BASE_BEHAVIORED_CLASSIFIER = new OJPathName("org.tuml.runtime.domain.BaseTinkerBehavioredClassifier");
@@ -45,34 +45,37 @@ public class TinkerGenerationUtil {
 	public static OJPathName tinkerEmbeddedHashSetImpl = new OJPathName("org.util.TinkerEmbeddedHashSet");
 	public static OJPathName tinkerEmbeddedArrayListImpl = new OJPathName("org.util.TinkerEmbeddedArrayList");
 
-	public static OJPathName tinkerSet = new OJPathName("org.tuml.tinker.collection.TinkerSet");
-	public static OJPathName tinkerSetImpl = new OJPathName("org.tuml.tinker.collection.TinkerSetImpl");
-	public static OJPathName tinkerQualifiedSet = new OJPathName("org.tuml.tinker.collection.TinkerQualifiedSet");
-	public static OJPathName tinkerQualifiedSetImpl = new OJPathName("org.tuml.tinker.collection.TinkerQualifiedSetImpl");
-	public static OJPathName tinkerSequence = new OJPathName("org.tuml.tinker.collection.TinkerSequence");
-	public static OJPathName tinkerSequenceImpl = new OJPathName("org.tuml.tinker.collection.TinkerSequenceImpl");
-	public static OJPathName tinkerQualifiedSequence = new OJPathName("org.tuml.tinker.collection.TinkerQualifiedSequence");
-	public static OJPathName tinkerQualifiedSequenceImpl = new OJPathName("org.tuml.tinker.collection.TinkerQualifiedSequenceImpl");
-	public static OJPathName tinkerOrderedSet = new OJPathName("org.tuml.tinker.collection.TinkerOrderedSet");
-	public static OJPathName tinkerOrderedSetImpl = new OJPathName("org.tuml.tinker.collection.TinkerOrderedSetImpl");
-	public static OJPathName tinkerQualifiedOrderedSet = new OJPathName("org.tuml.tinker.collection.TinkerQualifiedOrderedSet");
-	public static OJPathName tinkerQualifiedOrderedSetImpl = new OJPathName("org.tuml.tinker.collection.TinkerQualifiedOrderedSetImpl");
-	public static OJPathName tinkerBag = new OJPathName("org.tuml.tinker.collection.TinkerBag");
-	public static OJPathName tinkerBagImpl = new OJPathName("org.tuml.tinker.collection.TinkerBagImpl");
+	public static OJPathName tinkerSet = new OJPathName("org.tuml.runtime.collection.TinkerSet");
+	public static OJPathName tinkerSetImpl = new OJPathName("org.tuml.runtime.collection.TinkerSetImpl");
+	public static OJPathName tinkerQualifiedSet = new OJPathName("org.tuml.runtime.collection.TinkerQualifiedSet");
+	public static OJPathName tinkerQualifiedSetImpl = new OJPathName("org.tuml.runtime.collection.TinkerQualifiedSetImpl");
+	public static OJPathName tinkerSequence = new OJPathName("org.tuml.runtime.collection.TinkerSequence");
+	public static OJPathName tinkerSequenceImpl = new OJPathName("org.tuml.runtime.collection.TinkerSequenceImpl");
+	public static OJPathName tinkerQualifiedSequence = new OJPathName("org.tuml.runtime.collection.TinkerQualifiedSequence");
+	public static OJPathName tinkerQualifiedSequenceImpl = new OJPathName("org.tuml.runtime.collection.TinkerQualifiedSequenceImpl");
+	public static OJPathName tinkerOrderedSet = new OJPathName("org.tuml.runtime.collection.TinkerOrderedSet");
+	public static OJPathName tinkerOrderedSetImpl = new OJPathName("org.tuml.runtime.collection.TinkerOrderedSetImpl");
+	public static OJPathName tinkerQualifiedOrderedSet = new OJPathName("org.tuml.runtime.collection.TinkerQualifiedOrderedSet");
+	public static OJPathName tinkerQualifiedOrderedSetImpl = new OJPathName("org.tuml.runtime.collection.TinkerQualifiedOrderedSetImpl");
+	public static OJPathName tinkerBag = new OJPathName("org.tuml.runtime.collection.TinkerBag");
+	public static OJPathName tinkerBagImpl = new OJPathName("org.tuml.runtime.collection.TinkerBagImpl");
 
-	public static OJPathName tinkerQualifiedBag = new OJPathName("org.tuml.tinker.collection.TinkerQualifiedBag");
-	public static OJPathName tinkerQualifiedBagImpl = new OJPathName("org.tuml.tinker.collection.TinkerQualifiedBagImpl");
+	public static OJPathName tinkerQualifiedBag = new OJPathName("org.tuml.runtime.collection.TinkerQualifiedBag");
+	public static OJPathName tinkerQualifiedBagImpl = new OJPathName("org.tuml.runtime.collection.TinkerQualifiedBagImpl");
 
+	public static OJPathName tinkerMultiplicityImpl = new OJPathName("org.tuml.runtime.collection.TinkerMultiplicityImpl");
+	
+	
 	public static OJPathName edgePathName = new OJPathName("com.tinkerpop.blueprints.pgm.Edge");
 	public static OJPathName storagePathName = new OJPathName("com.orientechnologies.orient.core.storage.OStorage");
 	public static String graphDbAccess = "GraphDb.getDb()";
 	public static OJPathName tinkerSchemaHelperPathName = new OJPathName("org.tuml.tinker.runtime.TinkerSchemaHelper");
 	public static String TINKER_GET_CLASSNAME = "IntrospectionUtil.getOriginalClass(this.getClass()).getName()";
-	public static OJPathName introspectionUtilPathName = new OJPathName("org.opaeum.runtime.domain.IntrospectionUtil");
+	public static OJPathName introspectionUtilPathName = new OJPathName("org.tuml.runtime.domain.IntrospectionUtil");
 	public static OJPathName TINKER_NODE = new OJPathName("org.tuml.runtime.domain.TinkerNode");
 
-	public static OJPathName TINKER_QUALIFIER_PATHNAME = new OJPathName("org.tuml.tinker.collection.Qualifier");
-	public static OJPathName tinkerMultiplicityPathName = new OJPathName("org.tuml.tinker.collection.Multiplicity");
+	public static OJPathName TINKER_QUALIFIER_PATHNAME = new OJPathName("org.tuml.runtime.collection.Qualifier");
+	public static OJPathName tinkerMultiplicityPathName = new OJPathName("org.tuml.runtime.collection.Multiplicity");
 
 	public static OJPathName tinkerIdUtilFactoryPathName = new OJPathName("org.tuml.runtime.adaptor.TinkerIdUtilFactory");
 
@@ -128,20 +131,24 @@ public class TinkerGenerationUtil {
 //	}
 
 	public static String getEdgeName(Property p) {
-		boolean inVerse = TumlPropertyOperations.isInverse(p);
+		boolean isControllingSide = TumlPropertyOperations.isControllingSide(p);
 		if (p.getAssociation() != null) {
 			return p.getAssociation().getName();
 		} else {
-			//Not that the properties swap around between inverse and !inverse.
+			//Note that the properties swap around between inverse and !inverse.
 			//This is to ensure that the edge on both sides has the same name.
-			if (!inVerse) {
-				if (p.getOtherEnd()!=null) {
+			if (!isControllingSide) {
+//				if (p.getOtherEnd()!=null) {
 					return tinkeriseUmlName(p.getOtherEnd().getQualifiedName() + "__" + p.getQualifiedName());
+//				} else {
+//					return tinkeriseUmlName(p.getQualifiedName());
+//				}
+			} else {
+				if (p.getOtherEnd()!=null) {
+					return tinkeriseUmlName(p.getQualifiedName() + "__" + p.getOtherEnd().getQualifiedName());
 				} else {
 					return tinkeriseUmlName(p.getQualifiedName());
 				}
-			} else {
-				return tinkeriseUmlName(p.getQualifiedName() + "__" + p.getOtherEnd().getQualifiedName());
 			}
 		}
 	}

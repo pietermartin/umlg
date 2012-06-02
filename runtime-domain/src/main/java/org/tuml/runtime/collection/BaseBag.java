@@ -7,8 +7,6 @@ import com.google.common.collect.Multiset;
 
 public abstract class BaseBag<E> extends BaseCollection<E> implements TinkerBag<E> {
 
-//	protected Multiset<E> internalBag = HashMultiset.create();
-
 	protected Multiset<E> getInternalBag() {
 		return (Multiset<E>) this.internalCollection;
 	}

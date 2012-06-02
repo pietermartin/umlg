@@ -13,6 +13,7 @@ public class AbstractRootFolder extends AbstractFolder implements CompositionNod
 	 */
 	public AbstractRootFolder(Vertex vertex) {
 		super(vertex);
+		initialiseProperties();
 	}
 	
 	/** Default constructor for AbstractRootFolder
@@ -27,24 +28,35 @@ public class AbstractRootFolder extends AbstractFolder implements CompositionNod
 	 */
 	public AbstractRootFolder(Boolean persistent) {
 		super( persistent );
+		initialiseProperties();
 	}
 
-	@Override
-	public void clearCache() {
-		super.clearCache();
-	}
-	
 	public void createComponents() {
 		super.createComponents();
 	}
 	
-	public void init() {
+	@Override
+	public void delete() {
+	}
+	
+	@Override
+	public CompositionNode getOwningObject() {
+		return null;
+	}
+	
+	@Override
+	public void init(CompositionNode compositeOwner) {
 		this.hasInitBeenCalled = true;
 		initVariables();
 	}
 	
 	public void initVariables() {
 		super.initVariables();
+	}
+	
+	@Override
+	public void initialiseProperties() {
+		super.initialiseProperties();
 	}
 	
 	@Override

@@ -2,6 +2,8 @@ package org.tinker.interfacetest;
 
 import com.tinkerpop.blueprints.pgm.Vertex;
 
+import java.util.UUID;
+
 import org.tinker.concretetest.God;
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.TinkerIdUtilFactory;
@@ -30,6 +32,7 @@ public class ManyA extends BaseTinker implements CompositionNode {
 	 */
 	public ManyA(Vertex vertex) {
 		this.vertex=vertex;
+		initialiseProperties();
 	}
 	
 	/** Default constructor for ManyA
@@ -45,13 +48,14 @@ public class ManyA extends BaseTinker implements CompositionNode {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
+		initialiseProperties();
 	}
 
-	@Override
-	public void clearCache() {
+	public void createComponents() {
 	}
 	
-	public void createComponents() {
+	@Override
+	public void delete() {
 	}
 	
 	@Override
@@ -64,13 +68,33 @@ public class ManyA extends BaseTinker implements CompositionNode {
 		return TinkerIdUtilFactory.getIdUtil().getVersion(this.vertex);
 	}
 	
-	public void init(God compositeOwner) {
-		this.z_internalAddToGod(owner);
+	@Override
+	public CompositionNode getOwningObject() {
+		return getGod();
+	}
+	
+	@Override
+	public String getUid() {
+		String uid = (String) this.vertex.getProperty("uid");
+		if ( uid==null || uid.trim().length()==0 ) {
+			uid=UUID.randomUUID().toString();
+			this.vertex.setProperty("uid", uid);
+		}
+		return uid;
+	}
+	
+	@Override
+	public void init(CompositionNode compositeOwner) {
+		this.z_internalAddToGod((God)compositeOwner);
 		this.hasInitBeenCalled = true;
 		initVariables();
 	}
 	
 	public void initVariables() {
+	}
+	
+	@Override
+	public void initialiseProperties() {
 	}
 	
 	@Override

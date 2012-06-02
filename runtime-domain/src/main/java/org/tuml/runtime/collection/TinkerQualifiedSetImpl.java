@@ -16,7 +16,7 @@ public class TinkerQualifiedSetImpl<E> extends BaseSet<E> implements TinkerQuali
 
 	private Index<Edge> index;
 
-	public TinkerQualifiedSetImpl(CompositionNode owner, String label, String uid, boolean isInverse, boolean isManyToMany, boolean composite) {
+	public TinkerQualifiedSetImpl(CompositionNode owner, String label, String uid, boolean isInverse, TinkerMultiplicity multiplicity, boolean composite) {
 		super();
 		this.internalCollection = new HashSet<E>();
 		this.owner = owner;
@@ -28,7 +28,7 @@ public class TinkerQualifiedSetImpl<E> extends BaseSet<E> implements TinkerQuali
 			this.index = GraphDb.getDb().createManualIndex(uid + ":::" + label, Edge.class);
 		}
 		this.inverse = isInverse;
-		this.manyToMany = isManyToMany;
+		this.multiplicity = multiplicity;
 		this.composite = composite;
 	}
 	
@@ -46,7 +46,7 @@ public class TinkerQualifiedSetImpl<E> extends BaseSet<E> implements TinkerQuali
 		if (result) {
 			edge = addInternal(e);
 		} else {
-			if (!this.manyToMany) { 
+			if (!this.isManyToMany()) { 
 				throw new IllegalStateException("Only with many to many relationship can the edge already have been created");
 			}
 			Vertex v;

@@ -1,6 +1,7 @@
 package org.tuml.javageneration.visitor.clazz;
 
 import org.eclipse.uml2.uml.Class;
+import org.eclipse.uml2.uml.Property;
 import org.opaeum.java.metamodel.OJBlock;
 import org.opaeum.java.metamodel.OJConstructor;
 import org.opaeum.java.metamodel.OJOperation;
@@ -10,8 +11,8 @@ import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
 import org.tuml.framework.Visitor;
 import org.tuml.javageneration.util.TinkerGenerationUtil;
 import org.tuml.javageneration.util.TumlClassOperations;
-import org.tuml.javageneration.util.TumlPropertyOperations;
 import org.tuml.javageneration.visitor.BaseVisitor;
+import org.tuml.javageneration.visitor.property.PropertyWrapper;
 
 public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
 
@@ -21,6 +22,8 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
 		addCreateComponents(annotatedClass, clazz);
 		addInit(annotatedClass, clazz);
 		addInitVariables(annotatedClass, clazz);
+		addGetOwningObject(annotatedClass, clazz);
+		addDelete(annotatedClass, clazz);
 		if (TumlClassOperations.hasCompositeOwner(clazz)) {
 			addConstructorWithOwnerAsParameter(annotatedClass, clazz);
 		}
@@ -33,15 +36,16 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
 
 	private void addInit(OJAnnotatedClass annotatedClass, Class clazz) {
 		OJAnnotatedOperation init = new OJAnnotatedOperation("init");
-		if (TumlClassOperations.getOtherEndToComposite(clazz) != null) {
-			init.addParam("compositeOwner", TumlClassOperations.getOtherEndToCompositePathName(clazz));
-		}
-		annotatedClass.addToOperations(init);
-		if (TumlClassOperations.hasCompositeOwner(clazz) && !TumlClassOperations.getOtherEndToComposite(clazz).isDerived()) {
-			init.getBody().addToStatements("this." + TumlPropertyOperations.internalAdder(TumlClassOperations.getOtherEndToComposite(clazz)) + "(owner)");
+		TinkerGenerationUtil.addOverrideAnnotation(init);
+		init.addParam("compositeOwner", TinkerGenerationUtil.compositionNodePathName.getCopy());
+		Property otherEndToComposite = TumlClassOperations.getOtherEndToComposite(clazz);
+		if (TumlClassOperations.hasCompositeOwner(clazz) && !otherEndToComposite.isDerived()) {
+			PropertyWrapper propertyWrapper = new PropertyWrapper(otherEndToComposite);
+			init.getBody().addToStatements("this." + propertyWrapper.internalAdder() + "(("+propertyWrapper.javaBaseTypePath().getLast()+")compositeOwner)");
 		}
 		init.getBody().addToStatements("this.hasInitBeenCalled = true");
 		init.getBody().addToStatements("initVariables()");
+		annotatedClass.addToOperations(init);
 	}
 
 	private void addInitVariables(OJAnnotatedClass annotatedClass, Class clazz) {
@@ -83,6 +87,23 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
 			constructor.getBody().getStatements().add(0, new OJSimpleStatement("super(true)"));
 			constructor.getBody().addToStatements("init(compositeOwner)");
 		}
+	}
+
+	private void addGetOwningObject(OJAnnotatedClass annotatedClass, Class clazz) {
+		OJAnnotatedOperation getOwningObject = new OJAnnotatedOperation("getOwningObject", TinkerGenerationUtil.compositionNodePathName.getCopy());
+		TinkerGenerationUtil.addOverrideAnnotation(getOwningObject);
+		if (TumlClassOperations.hasCompositeOwner(clazz)) {
+			getOwningObject.getBody().addToStatements("return " + new PropertyWrapper(TumlClassOperations.getOtherEndToComposite(clazz)).getter() + "()");
+		} else {
+			getOwningObject.getBody().addToStatements("return null"); 
+		}
+		annotatedClass.addToOperations(getOwningObject);
+	}
+
+	private void addDelete(OJAnnotatedClass annotatedClass, Class clazz) {
+		OJAnnotatedOperation delete = new OJAnnotatedOperation("delete");
+		TinkerGenerationUtil.addOverrideAnnotation(delete);
+		annotatedClass.addToOperations(delete);
 	}
 
 }

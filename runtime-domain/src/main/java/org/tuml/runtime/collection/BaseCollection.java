@@ -18,20 +18,21 @@ import org.tuml.runtime.util.TinkerFormatter;
 import com.tinkerpop.blueprints.pgm.Edge;
 import com.tinkerpop.blueprints.pgm.Vertex;
 
-public abstract class BaseCollection<E> implements Collection<E> {
+public abstract class BaseCollection<E> implements Collection<E>, TinkerMultiplicity {
 
 	protected Collection<E> internalCollection;
 	protected boolean composite;
-	//On a compositional association inverse is true for the set children
+	// On a compositional association inverse is true for the set children
 	protected boolean inverse;
-	protected boolean manyToMany;
+	// protected boolean manyToMany;
 	protected boolean loaded = false;
 	protected CompositionNode owner;
-	//This is the vertex of the owner of the collection
+	// This is the vertex of the owner of the collection
 	protected Vertex vertex;
 	protected String label;
 	protected Class<?> parentClass;
 	protected Map<Object, Vertex> internalVertexMap = new HashMap<Object, Vertex>();
+	protected TinkerMultiplicity multiplicity;
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected void loadFromVertex() {
@@ -94,7 +95,7 @@ public abstract class BaseCollection<E> implements Collection<E> {
 		boolean result = this.internalCollection.remove(o);
 		if (result) {
 			@SuppressWarnings("unchecked")
-			E e = (E)o;
+			E e = (E) o;
 			Vertex v;
 			if (o instanceof CompositionNode) {
 				CompositionNode node = (CompositionNode) o;
@@ -141,7 +142,7 @@ public abstract class BaseCollection<E> implements Collection<E> {
 		}
 		Edge edge = null;
 		// See if edge already added, this can only happen with a manyToMany
-		if (this.manyToMany) {
+		if (this.isManyToMany()) {
 			edge = addCorrelationForManyToMany(v, edge);
 		}
 		boolean createdEdge = false;
@@ -199,12 +200,12 @@ public abstract class BaseCollection<E> implements Collection<E> {
 			edge = GraphDb.getDb().addEdge(null, this.vertex, v, this.label);
 			edge.setProperty("outClass", this.parentClass.getName());
 			edge.setProperty("inClass", e.getClass().getName());
-			if (this.manyToMany) {
+			if (this.isManyToMany()) {
 				edge.setProperty("manyToManyCorrelationInverseTRUE", "SETTED");
 			}
 		} else {
 			// Inverse is only false on many to manies
-			if (!this.manyToMany) {
+			if (!this.isManyToMany()) {
 				throw new IllegalStateException("Inverse can not be false on many to many");
 			}
 			edge = GraphDb.getDb().addEdge(null, v, this.vertex, this.label);
@@ -353,6 +354,31 @@ public abstract class BaseCollection<E> implements Collection<E> {
 			}
 		}
 		return result;
+	}
+
+	@Override
+	public boolean isOneToOne() {
+		return this.multiplicity.isOneToOne();
+	}
+
+	@Override
+	public boolean isOneToMany() {
+		return this.multiplicity.isOneToMany();
+	}
+
+	@Override
+	public boolean isManyToMany() {
+		return this.multiplicity.isManyToMany();
+	}
+
+	@Override
+	public int getUpper() {
+		return this.multiplicity.getUpper();
+	}
+
+	@Override
+	public int getLower() {
+		return this.multiplicity.getLower();
 	}
 
 }

@@ -17,7 +17,6 @@ import com.tinkerpop.blueprints.pgm.Vertex;
 
 public abstract class BaseSequence<E> extends BaseCollection<E> implements TinkerSequence<E> {
 
-	// protected List<E> internalList = new ArrayList<E>();
 	protected NakedTinkerIndex<Edge> index;
 
 	protected List<E> getInternalList() {

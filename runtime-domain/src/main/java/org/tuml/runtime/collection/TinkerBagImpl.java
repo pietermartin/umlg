@@ -6,7 +6,7 @@ import com.google.common.collect.HashMultiset;
 
 public class TinkerBagImpl<E> extends BaseBag<E> implements TinkerBag<E> {
 
-	public TinkerBagImpl(CompositionNode owner, String label, boolean isInverse, boolean isManyToMany, boolean composite) {
+	public TinkerBagImpl(CompositionNode owner, String label, boolean isInverse, TinkerMultiplicity multiplicity, boolean composite) {
 		super();
 		this.internalCollection = HashMultiset.create();
 		this.owner = owner;
@@ -14,7 +14,7 @@ public class TinkerBagImpl<E> extends BaseBag<E> implements TinkerBag<E> {
 		this.label = label;
 		this.parentClass = owner.getClass();
 		this.inverse = isInverse;
-		this.manyToMany = isManyToMany;
+		this.multiplicity = multiplicity;
 		this.composite = composite;
 	}
 

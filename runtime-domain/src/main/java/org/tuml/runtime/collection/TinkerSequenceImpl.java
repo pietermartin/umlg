@@ -11,7 +11,7 @@ import com.tinkerpop.blueprints.pgm.Vertex;
 
 public class TinkerSequenceImpl<E> extends BaseSequence<E> implements TinkerSequence<E> {
 
-	public TinkerSequenceImpl(CompositionNode owner, String label, String uid, boolean isInverse, boolean isManyToMany, boolean composite) {
+	public TinkerSequenceImpl(CompositionNode owner, String label, String uid, boolean isInverse, TinkerMultiplicity multiplicity, boolean composite) {
 		super();
 		this.internalCollection = new ArrayList<E>();
 		this.owner = owner;
@@ -23,7 +23,7 @@ public class TinkerSequenceImpl<E> extends BaseSequence<E> implements TinkerSequ
 			this.index = GraphDb.getDb().createManualIndex(uid + ":::" + label, Edge.class);
 		}
 		this.inverse = isInverse;
-		this.manyToMany = isManyToMany;
+		this.multiplicity = multiplicity;
 		this.composite = composite;
 	}
 

@@ -15,8 +15,8 @@ import org.opaeum.java.metamodel.annotation.OJAnnotationValue;
 import org.tuml.framework.Visitor;
 import org.tuml.javageneration.util.TinkerGenerationUtil;
 import org.tuml.javageneration.util.TumlClassOperations;
-import org.tuml.javageneration.util.TumlPropertyOperations;
 import org.tuml.javageneration.visitor.BaseVisitor;
+import org.tuml.javageneration.visitor.property.PropertyWrapper;
 
 public class ClassVisitor2 extends BaseVisitor implements Visitor<Class> {
 
@@ -28,7 +28,7 @@ public class ClassVisitor2 extends BaseVisitor implements Visitor<Class> {
 		implementCompositionNode(annotatedClass);
 		implementIsRoot(annotatedClass, TumlClassOperations.getOtherEndToComposite(clazz) == null);
 		addPersistentConstructor(annotatedClass);
-		addClearCache(annotatedClass, clazz);
+		addInitialiseProperties(annotatedClass, clazz);
 		addContructorWithVertex(annotatedClass, clazz);
 		
 		if (clazz.getGeneralizations().isEmpty()) {
@@ -39,6 +39,7 @@ public class ClassVisitor2 extends BaseVisitor implements Visitor<Class> {
 		} else {
 			addSuperWithPersistenceToDefaultConstructor(annotatedClass);
 		}
+		addInitialisePropertiesInPersistentConstructor(annotatedClass);
 
 	}
 
@@ -72,6 +73,8 @@ public class ClassVisitor2 extends BaseVisitor implements Visitor<Class> {
 		ifStatement.addToThenPart("this.vertex.setProperty(\"uid\", uid)");
 		getUid.getBody().addToStatements(ifStatement);
 		getUid.getBody().addToStatements("return uid");
+		ojClass.addToImports("java.util.UUID");
+		ojClass.addToOperations(getUid);
 	}
 
 	protected void addGetObjectVersion(OJAnnotatedClass ojClass) {
@@ -122,30 +125,25 @@ public class ClassVisitor2 extends BaseVisitor implements Visitor<Class> {
 		ojClass.addToConstructors(persistentConstructor);
 	}
 
-	public OJAnnotatedOperation addClearCache(OJAnnotatedClass ojClass, Class clazz) {
-		OJAnnotatedOperation clearCache = new OJAnnotatedOperation("clearCache");
+	private void addInitialiseProperties(OJAnnotatedClass annotatedClass, Class clazz) {
+		OJAnnotatedOperation clearCache = new OJAnnotatedOperation("initialiseProperties");
 		TinkerGenerationUtil.addOverrideAnnotation(clearCache);
 		if (!clazz.getGeneralizations().isEmpty()) {
-			clearCache.getBody().addToStatements("super.clearCache()");
+			clearCache.getBody().addToStatements("super.initialiseProperties()");
 		}
-		ojClass.addToOperations(clearCache);
-
+		annotatedClass.addToOperations(clearCache);
 		for (Property p :  clazz.getOwnedAttributes()) {
-			if (!(p.isDerived() || p.isDerivedUnion())) {
-				if (TumlPropertyOperations.isOne(p)) {
-					OJSimpleStatement statement = new OJSimpleStatement("this." + TumlPropertyOperations.fieldName(p) + " = null");
-					statement.setName(TumlPropertyOperations.fieldName(p));
-					clearCache.getBody().addToStatements(statement);
-				} else {
-					OJSimpleStatement statement = new OJSimpleStatement("this." + TumlPropertyOperations.fieldName(p) + " = " + TumlPropertyOperations.getDefaultTinkerCollectionInitalisation(p).getExpression());
-					statement.setName(TumlPropertyOperations.fieldName(p));
-					clearCache.getBody().addToStatements(statement);
-				}
+			PropertyWrapper pWrap = new PropertyWrapper(p);
+			if (!(pWrap.isDerived() || pWrap.isDerivedUnion())) {
+				OJSimpleStatement statement = new OJSimpleStatement("this." + pWrap.fieldname() + " = " + pWrap.javaDefaultInitialisation());
+				annotatedClass.addToImports(TinkerGenerationUtil.tinkerMultiplicityImpl);
+				statement.setName(pWrap.fieldname());
+				clearCache.getBody().addToStatements(statement);
+				annotatedClass.addToImports(pWrap.javaImplTypePath());
 			}
 		}
-
-		return clearCache;
 	}
+
 
 	protected void addContructorWithVertex(OJAnnotatedClass ojClass, Class clazz) {
 		OJConstructor constructor = new OJConstructor();
@@ -155,6 +153,7 @@ public class ClassVisitor2 extends BaseVisitor implements Visitor<Class> {
 		} else {
 			constructor.getBody().addToStatements("super(vertex)");
 		}
+		constructor.getBody().addToStatements("initialiseProperties()");
 		ojClass.addToConstructors(constructor);
 	}
 
@@ -164,6 +163,11 @@ public class ClassVisitor2 extends BaseVisitor implements Visitor<Class> {
 		isRoot.setReturnType(new OJPathName("boolean"));
 		isRoot.getBody().addToStatements("return " + b);
 		ojClass.addToOperations(isRoot);
+	}
+
+	private void addInitialisePropertiesInPersistentConstructor(OJAnnotatedClass annotatedClass) {
+		OJConstructor constructor = annotatedClass.findConstructor(new OJPathName("java.lang.Boolean"));
+		constructor.getBody().addToStatements("initialiseProperties()");
 	}
 
 }

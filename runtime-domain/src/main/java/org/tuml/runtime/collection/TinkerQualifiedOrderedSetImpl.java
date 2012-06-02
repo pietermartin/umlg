@@ -21,7 +21,7 @@ public class TinkerQualifiedOrderedSetImpl<E> extends BaseCollection<E> implemen
 	protected NakedTinkerIndex<Edge> index;
 	
 	@SuppressWarnings("unchecked")
-	public TinkerQualifiedOrderedSetImpl(CompositionNode owner, String label, String uid, boolean isInverse, boolean isManyToMany, boolean composite) {
+	public TinkerQualifiedOrderedSetImpl(CompositionNode owner, String label, String uid, boolean isInverse, TinkerMultiplicity multiplicity, boolean composite) {
 		super();
 		this.internalCollection = new ListOrderedSet();
 		this.owner = owner;
@@ -33,7 +33,7 @@ public class TinkerQualifiedOrderedSetImpl<E> extends BaseCollection<E> implemen
 			this.index = GraphDb.getDb().createManualIndex(uid + ":::" + label, Edge.class);
 		}
 		this.inverse = isInverse;
-		this.manyToMany = isManyToMany;
+		this.multiplicity = multiplicity;
 		this.composite = composite;
 	}
 

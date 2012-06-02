@@ -11,33 +11,36 @@ public final class TumlPropertyOperations extends PropertyOperations {
 
 	public static boolean isMany(Property property) {
 		int qualifierCount = property.getQualifiers().size();
-		return property.getUpper() > 1 || qualifierCount > 0;
+		return property.getUpper() == -1 || property.getUpper() > 1 || qualifierCount > 0;
 	}
 
-	public static  boolean isOne(Property property) {
+	public static boolean isOne(Property property) {
 		return !isMany(property);
 	}
 
 	public static boolean isQualifier(Property p) {
 		return p.getOwner() != null && p.getOwner() instanceof Property;
 	}
-	
+
 	public static String fieldName(Property p) {
 		return StringUtils.uncapitalize(p.getName());
 	}
-	
-	public static boolean isInverse(Property p) {
+
+	public static boolean isControllingSide(Property p) {
 		boolean result = p.isComposite();
 		if (p.getOtherEnd() == null) {
 			return result = true;
 		} else if (isOneToOne(p) && !p.isComposite() && !p.getOtherEnd().isComposite()) {
-			//If association is OneToOne and both sides are non composite then take the non optional 1-1 side as inverse=true
+			// If association is OneToOne and both sides are non composite then
+			// take the non optional 1-1 side as inverse=true
 			result = p.getLower() == 1 && p.getUpper() == 1;
 		} else if (isOneToMany(p) && !p.isComposite() && !p.getOtherEnd().isComposite()) {
-			//If association is OneToMany and both sides are non composite then take the many side as inverse=true
-			result = p.getUpper() > 1;
+			// If association is OneToMany and both sides are non composite then
+			// take the many side as inverse=true
+			result = p.getUpper() == -1 || p.getUpper() > 1;
 		} else if (isManyToMany(p) && !p.isComposite() && !p.getOtherEnd().isComposite()) {
-			//If association is ManyToMany and both sides are non composite then take any side consistently
+			// If association is ManyToMany and both sides are non composite
+			// then take any side consistently
 			result = 0 > p.getName().compareTo(p.getOtherEnd().getName());
 		}
 		return result;
@@ -59,11 +62,11 @@ public final class TumlPropertyOperations extends PropertyOperations {
 		return otherEndIsOne(p) && isOne(p);
 	}
 
-	protected static boolean otherEndIsOne(Property p){
-		if(p.getOtherEnd() != null){
+	protected static boolean otherEndIsOne(Property p) {
+		if (p.getOtherEnd() != null) {
 			Property otherEnd = p.getOtherEnd();
 			return otherEnd.isNavigable() && isOne(otherEnd) && otherEnd.getQualifiers().size() == 0;
-		}else{
+		} else {
 			return false;
 		}
 	}
@@ -97,7 +100,7 @@ public final class TumlPropertyOperations extends PropertyOperations {
 		} else {
 			throw new RuntimeException("wtf");
 		}
-		collectionPathName.addToElementTypes(getTypePath(p));
+		collectionPathName.addToGenerics(getTypePath(p));
 		return collectionPathName;
 	}
 
@@ -105,41 +108,42 @@ public final class TumlPropertyOperations extends PropertyOperations {
 		OJSimpleStatement s = getDefaultTinkerCollectionInitalisation(p, getDefaultTinkerCollection(p));
 		return s;
 	}
-	
+
 	public static OJSimpleStatement getDefaultTinkerCollectionInitalisation(Property p, OJPathName collectionPathName) {
-		OJSimpleStatement ojSimpleStatement = new OJSimpleStatement(" new " + collectionPathName.getCollectionTypeName() + "(this, \""
-				+ TinkerGenerationUtil.getEdgeName(p) + "\"");
-		
+		OJSimpleStatement ojSimpleStatement = new OJSimpleStatement(" new " + collectionPathName.getCollectionTypeName() + "(this, \"" + TinkerGenerationUtil.getEdgeName(p) + "\"");
+
 		if (p.getQualifiers().isEmpty() && p.isOrdered()) {
 			ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", getUid()");
 		} else if (!p.getQualifiers().isEmpty()) {
 			ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", getUid()");
 		}
 		// Specify inverse boolean
-		if (TumlPropertyOperations.isInverse(p) || p.getOtherEnd() == null || !p.getOtherEnd().isNavigable()) {
+		if (TumlPropertyOperations.isControllingSide(p) || p.getOtherEnd() == null || !p.getOtherEnd().isNavigable()) {
 			ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", true");
 		} else {
 			ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", false");
 		}
 		// Specify manyToMany boolean
-		if (!TumlPropertyOperations.isManyToMany(p) || p.getOtherEnd() == null || !p.getOtherEnd().isNavigable()) {
-			ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", false");
-		} else {
-			ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", true");
-		}
+		// Specify the multiplicity
+		ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", new " + TinkerGenerationUtil.tinkerMultiplicityImpl.getLast() + "("
+				+ TumlPropertyOperations.isOneToOne(p) + "," + TumlPropertyOperations.isOneToMany(p) + "," + TumlPropertyOperations.isManyToOne(p) + ","
+				+ TumlPropertyOperations.isManyToMany(p) + "," + p.getLower() + "," + p.getUpper() + ")");
+		// if (!TumlPropertyOperations.isManyToMany(p) || p.getOtherEnd() ==
+		// null || !p.getOtherEnd().isNavigable()) {
+		// ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() +
+		// ", false");
+		// } else {
+		// ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() +
+		// ", true");
+		// }
 		// Specify composite boolean
 		ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", " + p.isComposite());
 		ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ")");
 		return ojSimpleStatement;
 	}
 
-	
 	public static OJPathName getTypePath(Property p) {
 		return new OJPathName(Namer.name(p.getType().getNearestPackage()) + "." + Namer.name(p.getType()));
-	}
-
-	public static String internalAdder(Property endToComposite) {
-		return "z_internalAddTo" + StringUtils.capitalize(endToComposite.getName());
 	}
 
 	public static String getter(Property property) {
@@ -148,6 +152,18 @@ public final class TumlPropertyOperations extends PropertyOperations {
 
 	public static String setter(Property property) {
 		return "set" + StringUtils.capitalize(property.getName());
+	}
+
+	public static String adder(Property property) {
+		return "addTo" + StringUtils.capitalize(property.getName());
+	}
+
+	public static String internalAdder(Property property) {
+		return "z_internalAddTo" + StringUtils.capitalize(property.getName());
+	}
+
+	public static String internalRemover(Property property) {
+		return "z_internalRemoveFrom" + StringUtils.capitalize(property.getName());
 	}
 
 }
