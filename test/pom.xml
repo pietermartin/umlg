@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-        <parent>
+<parent>
                 <artifactId>tuml-root</artifactId>
                 <groupId>org.tuml</groupId>
                 <version>0.0.1-SNAPSHOT</version>
@@ -9,13 +9,12 @@
 
 <modelVersion>4.0.0</modelVersion>
 <groupId>org.tuml</groupId>
-<artifactId>tuml-framework</artifactId>
+<artifactId>tuml-root-test</artifactId>
 <packaging>jar</packaging>
-<name>tuml framework pom</name>
+<name>tuml test pom</name>
 <version>0.0.1-SNAPSHOT</version>
   <modules>
-    <module>uml</module>
-    <module>java-generation</module>
-    <module>java-metamodel</module>
+    <module>tuml-test</module>
+    <module>tuml-test-generate</module>
   </modules>
 </project>
