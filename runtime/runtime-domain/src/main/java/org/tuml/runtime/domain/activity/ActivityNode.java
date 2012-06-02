@@ -168,7 +168,7 @@ public abstract class ActivityNode<IN extends Token, OUT extends Token> extends 
 	}
 
 	@Override
-	public void clearCache() {
+	public void initialiseProperties() {
 		// TODO Auto-generated method stub
 	}
 
@@ -196,7 +196,7 @@ public abstract class ActivityNode<IN extends Token, OUT extends Token> extends 
 	}
 
   	@Override
-	public void markDeleted() {
+	public void delete() {
 		// TODO Auto-generated method stub
 		
 	}	

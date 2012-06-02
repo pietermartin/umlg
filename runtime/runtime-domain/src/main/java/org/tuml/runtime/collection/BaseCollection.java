@@ -367,6 +367,11 @@ public abstract class BaseCollection<E> implements Collection<E>, TinkerMultipli
 	}
 
 	@Override
+	public boolean isManyToOne() {
+		return this.multiplicity.isManyToOne();
+	}
+
+	@Override
 	public boolean isManyToMany() {
 		return this.multiplicity.isManyToMany();
 	}

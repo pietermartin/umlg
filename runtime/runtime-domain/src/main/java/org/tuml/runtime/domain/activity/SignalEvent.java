@@ -45,7 +45,7 @@ public class SignalEvent extends Event {
 	}
 
 	@Override
-	public void clearCache() {
+	public void initialiseProperties() {
 		// TODO Auto-generated method stub
 		
 	}
