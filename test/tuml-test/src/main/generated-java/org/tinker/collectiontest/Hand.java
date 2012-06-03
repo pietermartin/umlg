@@ -10,7 +10,7 @@ import org.tinker.concretetest.God;
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.TinkerIdUtilFactory;
 import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
-import org.tuml.runtime.collection.TinkerMultiplicityImpl;
+import org.tuml.runtime.collection.TumlRuntimePropertyImpl;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TinkerSetImpl;
 import org.tuml.runtime.domain.BaseTinker;
@@ -149,8 +149,8 @@ public class Hand extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.left =  new TinkerSetImpl<Boolean>(this, "org__tinker__collectiontest__Hand__left", true, new TinkerMultiplicityImpl(false,false,true,false,1,1), false);
-		this.name =  new TinkerSetImpl<String>(this, "org__tinker__collectiontest__Hand__name", true, new TinkerMultiplicityImpl(false,false,true,false,1,1), false);
+		this.left =  new TinkerSetImpl<Boolean>(this, "org__tinker__collectiontest__Hand__left", true, new TumlRuntimePropertyImpl(false,false,true,false,1,1), false);
+		this.name =  new TinkerSetImpl<String>(this, "org__tinker__collectiontest__Hand__name", true, new TumlRuntimePropertyImpl(false,false,true,false,1,1), false);
 	}
 	
 	@Override

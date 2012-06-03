@@ -16,20 +16,17 @@ public class TinkerQualifiedSetImpl<E> extends BaseSet<E> implements TinkerQuali
 
 	private Index<Edge> index;
 
-	public TinkerQualifiedSetImpl(CompositionNode owner, String label, String uid, boolean isInverse, TinkerMultiplicity multiplicity, boolean composite) {
+	public TinkerQualifiedSetImpl(CompositionNode owner, String uid, TumlRuntimeProperty multiplicity) {
 		super();
 		this.internalCollection = new HashSet<E>();
 		this.owner = owner;
 		this.vertex = owner.getVertex();
-		this.label = label;
 		this.parentClass = owner.getClass();
-		this.index = GraphDb.getDb().getIndex(uid + ":::" + label, Edge.class);
+		this.index = GraphDb.getDb().getIndex(uid + ":::" + getLabel(), Edge.class);
 		if (this.index == null) {
-			this.index = GraphDb.getDb().createManualIndex(uid + ":::" + label, Edge.class);
+			this.index = GraphDb.getDb().createManualIndex(uid + ":::" + getLabel(), Edge.class);
 		}
-		this.inverse = isInverse;
-		this.multiplicity = multiplicity;
-		this.composite = composite;
+		this.tumlRuntimeProperty = multiplicity;
 	}
 	
 	public Set<E> getInternalSet() {
@@ -54,7 +51,7 @@ public class TinkerQualifiedSetImpl<E> extends BaseSet<E> implements TinkerQuali
 				CompositionNode node = (CompositionNode) e;
 				TransactionThreadEntityVar.setNewEntity((CompositionNode) node);
 				v = node.getVertex();
-				Set<Edge> edgesBetween = GraphDb.getDb().getEdgesBetween(this.vertex, v, this.label);
+				Set<Edge> edgesBetween = GraphDb.getDb().getEdgesBetween(this.vertex, v, this.getLabel());
 				if (edgesBetween.size()!=1) {
 					throw new IllegalStateException("A set can only have one edge between the two ends");
 				}
@@ -75,7 +72,7 @@ public class TinkerQualifiedSetImpl<E> extends BaseSet<E> implements TinkerQuali
 	@Override
 	public boolean remove(Object o) {
 		if (!this.loaded) {
-			this.loaded = true;
+//			this.loaded = true;
 			loadFromVertex();
 		}
 		boolean result = this.getInternalSet().remove(o);
@@ -84,19 +81,19 @@ public class TinkerQualifiedSetImpl<E> extends BaseSet<E> implements TinkerQuali
 			if (o instanceof CompositionNode) {
 				CompositionNode node = (CompositionNode) o;
 				v = node.getVertex();
-				Set<Edge> edges = GraphDb.getDb().getEdgesBetween(this.vertex, v, this.label);
+				Set<Edge> edges = GraphDb.getDb().getEdgesBetween(this.vertex, v, this.getLabel());
 				for (Edge edge : edges) {
 					removeEdgefromIndex(edge);
 					GraphDb.getDb().removeEdge(edge);
 				}
 			} else if (o.getClass().isEnum()) {
 				v = this.internalVertexMap.get(((Enum<?>) o).name());
-				Edge edge = v.getInEdges(this.label).iterator().next();
+				Edge edge = v.getInEdges(this.getLabel()).iterator().next();
 				removeEdgefromIndex(edge);
 				GraphDb.getDb().removeVertex(v);
 			} else {
 				v = this.internalVertexMap.get(o);
-				Edge edge = v.getInEdges(this.label).iterator().next();
+				Edge edge = v.getInEdges(this.getLabel()).iterator().next();
 				removeEdgefromIndex(edge);
 				GraphDb.getDb().removeVertex(v);
 			}

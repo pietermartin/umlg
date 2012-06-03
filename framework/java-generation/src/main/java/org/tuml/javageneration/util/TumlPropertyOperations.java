@@ -1,7 +1,13 @@
 package org.tuml.javageneration.util;
 
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.uml2.uml.Association;
+import org.eclipse.uml2.uml.Classifier;
+import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Property;
+import org.eclipse.uml2.uml.Type;
 import org.eclipse.uml2.uml.internal.operations.PropertyOperations;
 import org.opaeum.java.metamodel.OJPathName;
 import org.opaeum.java.metamodel.OJSimpleStatement;
@@ -9,6 +15,33 @@ import org.tuml.javageneration.naming.Namer;
 
 public final class TumlPropertyOperations extends PropertyOperations {
 
+	public static Type getOwningType(Property p) {
+		Element owner = p.getOwner();
+		// Association must come first in this if statement as Association is
+		// also a Classifier
+		if (owner instanceof Association) {
+			Association a = (Association) owner;
+			List<Property> members = a.getMemberEnds();
+			Property otherEnd = null;
+			for (Property member : members) {
+				if (member != p) {
+					otherEnd = member;
+					break;
+				}
+			}
+			if (otherEnd == null) {
+				throw new IllegalStateException("Oy, where is the other end gone to!!!");
+			}
+			return otherEnd.getType();
+		} else if (owner instanceof Classifier) {
+			return (Classifier)owner;
+		} else if (owner instanceof Property && isQualifier(p)) {
+			throw new IllegalStateException("Property is a qualifier, this method can not be called for qualifiers");
+		} else {
+			throw new IllegalStateException("Not catered for, think about ne. " + owner.getClass().getSimpleName());
+		}
+	}
+	
 	public static boolean isMany(Property property) {
 		int qualifierCount = property.getQualifiers().size();
 		return property.getUpper() == -1 || property.getUpper() > 1 || qualifierCount > 0;
@@ -65,7 +98,7 @@ public final class TumlPropertyOperations extends PropertyOperations {
 	protected static boolean otherEndIsOne(Property p) {
 		if (p.getOtherEnd() != null) {
 			Property otherEnd = p.getOtherEnd();
-			return otherEnd.isNavigable() && isOne(otherEnd) && otherEnd.getQualifiers().size() == 0;
+			return isOne(otherEnd) && otherEnd.getQualifiers().size() == 0;
 		} else {
 			return false;
 		}
@@ -110,7 +143,7 @@ public final class TumlPropertyOperations extends PropertyOperations {
 	}
 
 	public static OJSimpleStatement getDefaultTinkerCollectionInitalisation(Property p, OJPathName collectionPathName) {
-		OJSimpleStatement ojSimpleStatement = new OJSimpleStatement(" new " + collectionPathName.getCollectionTypeName() + "(this, \"" + TinkerGenerationUtil.getEdgeName(p) + "\"");
+		OJSimpleStatement ojSimpleStatement = new OJSimpleStatement(" new " + collectionPathName.getCollectionTypeName() + "(this");
 
 		if (p.getQualifiers().isEmpty() && p.isOrdered()) {
 			ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", getUid()");
@@ -118,16 +151,14 @@ public final class TumlPropertyOperations extends PropertyOperations {
 			ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", getUid()");
 		}
 		// Specify inverse boolean
-		if (TumlPropertyOperations.isControllingSide(p) || p.getOtherEnd() == null || !p.getOtherEnd().isNavigable()) {
-			ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", true");
-		} else {
-			ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", false");
-		}
+//		if (TumlPropertyOperations.isControllingSide(p) || p.getOtherEnd() == null || !p.getOtherEnd().isNavigable()) {
+//			ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", true");
+//		} else {
+//			ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", false");
+//		}
 		// Specify manyToMany boolean
 		// Specify the multiplicity
-		ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", new " + TinkerGenerationUtil.tinkerMultiplicityImpl.getLast() + "("
-				+ TumlPropertyOperations.isOneToOne(p) + "," + TumlPropertyOperations.isOneToMany(p) + "," + TumlPropertyOperations.isManyToOne(p) + ","
-				+ TumlPropertyOperations.isManyToMany(p) + "," + p.getLower() + "," + p.getUpper() + ")");
+		ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", " + TumlClassOperations.propertyEnumName(getOwningType(p)) + "." + fieldName(p).toUpperCase());
 		// if (!TumlPropertyOperations.isManyToMany(p) || p.getOtherEnd() ==
 		// null || !p.getOtherEnd().isNavigable()) {
 		// ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() +
@@ -137,7 +168,7 @@ public final class TumlPropertyOperations extends PropertyOperations {
 		// ", true");
 		// }
 		// Specify composite boolean
-		ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", " + p.isComposite());
+//		ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", " + p.isComposite());
 		ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ")");
 		return ojSimpleStatement;
 	}

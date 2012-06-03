@@ -28,7 +28,7 @@ public class PropertyVisitor extends BaseVisitor implements Visitor<Property> {
 	}
 
 	private void buildField(OJAnnotatedClass owner, PropertyWrapper propertyWrapper) {
-		OJAnnotatedField field = new OJAnnotatedField(propertyWrapper.fieldname(), propertyWrapper.javaTypePath());
+		OJAnnotatedField field = new OJAnnotatedField(propertyWrapper.fieldname(), propertyWrapper.javaTumlTypePath());
 		field.setStatic(propertyWrapper.isStatic());
 		owner.addToFields(field);
 	}

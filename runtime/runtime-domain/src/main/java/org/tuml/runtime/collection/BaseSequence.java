@@ -85,7 +85,7 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
 			if (o instanceof CompositionNode) {
 				CompositionNode node = (CompositionNode) o;
 				v = node.getVertex();
-				Set<Edge> edges = GraphDb.getDb().getEdgesBetween(this.vertex, v, this.label);
+				Set<Edge> edges = GraphDb.getDb().getEdgesBetween(this.vertex, v, this.getLabel());
 				for (Edge edge : edges) {
 					removeEdgefromIndex(v, edge, indexOf);
 					GraphDb.getDb().removeEdge(edge);
@@ -97,7 +97,7 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
 			} else if (o instanceof  TinkerNode) {
 				TinkerNode node = (TinkerNode) o;
 				v = node.getVertex();				
-				Set<Edge> edges = GraphDb.getDb().getEdgesBetween(this.vertex, v, this.label);
+				Set<Edge> edges = GraphDb.getDb().getEdgesBetween(this.vertex, v, this.getLabel());
 				for (Edge edge : edges) {
 					removeEdgefromIndex(v, edge, indexOf);
 					GraphDb.getDb().removeEdge(edge);
@@ -108,12 +108,12 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
 				}
 			} else if (o.getClass().isEnum()) {
 				v = this.internalVertexMap.get(((Enum<?>) o).name());
-				Edge edge = v.getInEdges(this.label).iterator().next();
+				Edge edge = v.getInEdges(this.getLabel()).iterator().next();
 				removeEdgefromIndex(v, edge, indexOf);
 				GraphDb.getDb().removeVertex(v);
 			} else {
 				v = this.internalVertexMap.get(o);
-				Edge edge = v.getInEdges(this.label).iterator().next();
+				Edge edge = v.getInEdges(this.getLabel()).iterator().next();
 				removeEdgefromIndex(v, edge, indexOf);
 				if (o instanceof TinkerAuditableNode) {
 					createAudit(e, v, true);

@@ -164,13 +164,6 @@ public class OJClass extends OJClassGEN {
 		}		
 		return result;
 	}
-	/**
-	 * @param string
-	 * @return
-	 */
-	public OJField findField(String name) {
-		return f_fields.get(name);
-	}
 
 	@Override
 	public void renameAll(Set<OJPathName> renamePathNames,String suffix){

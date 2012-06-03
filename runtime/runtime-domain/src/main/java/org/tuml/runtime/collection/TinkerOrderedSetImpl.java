@@ -25,20 +25,17 @@ public class TinkerOrderedSetImpl<E> extends BaseCollection<E> implements Tinker
 	}
 	
 	@SuppressWarnings("unchecked")
-	public TinkerOrderedSetImpl(CompositionNode owner, String label, String uid, boolean isInverse, TinkerMultiplicity multiplicity, boolean composite) {
+	public TinkerOrderedSetImpl(CompositionNode owner, String uid, TumlRuntimeProperty multiplicity) {
 		super();
 		this.internalCollection =  new ListOrderedSet();
 		this.owner = owner;
 		this.vertex = owner.getVertex();
-		this.label = label;
 		this.parentClass = owner.getClass();
-		this.index = GraphDb.getDb().getIndex(uid + ":::" + label, Edge.class);
+		this.index = GraphDb.getDb().getIndex(uid + ":::" + getLabel(), Edge.class);
 		if (this.index == null) {
-			this.index = GraphDb.getDb().createManualIndex(uid + ":::" + label, Edge.class);
+			this.index = GraphDb.getDb().createManualIndex(uid + ":::" + getLabel(), Edge.class);
 		}
-		this.inverse = isInverse;
-		this.multiplicity = multiplicity;
-		this.composite = composite;
+		this.tumlRuntimeProperty = multiplicity;
 	}
 	
 	@Override
@@ -131,19 +128,19 @@ public class TinkerOrderedSetImpl<E> extends BaseCollection<E> implements Tinker
 			if (o instanceof CompositionNode) {
 				CompositionNode node = (CompositionNode) o;
 				v = node.getVertex();
-				Set<Edge> edges = GraphDb.getDb().getEdgesBetween(this.vertex, v, this.label);
+				Set<Edge> edges = GraphDb.getDb().getEdgesBetween(this.vertex, v, this.getLabel());
 				for (Edge edge : edges) {
 					removeEdgefromIndex(v, edge, indexOf);
 					GraphDb.getDb().removeEdge(edge);
 				}
 			} else if (o.getClass().isEnum()) {
 				v = this.internalVertexMap.get(((Enum<?>) o).name());
-				Edge edge = v.getInEdges(this.label).iterator().next();
+				Edge edge = v.getInEdges(this.getLabel()).iterator().next();
 				removeEdgefromIndex(v, edge, indexOf);
 				GraphDb.getDb().removeVertex(v);
 			} else {
 				v = this.internalVertexMap.get(o);
-				Edge edge = v.getInEdges(this.label).iterator().next();
+				Edge edge = v.getInEdges(this.getLabel()).iterator().next();
 				removeEdgefromIndex(v, edge, indexOf);
 				GraphDb.getDb().removeVertex(v);
 			}

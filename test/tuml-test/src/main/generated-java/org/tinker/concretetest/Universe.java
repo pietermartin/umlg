@@ -10,7 +10,7 @@ import org.tinker.navigability.NonNavigableOne;
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.TinkerIdUtilFactory;
 import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
-import org.tuml.runtime.collection.TinkerMultiplicityImpl;
+import org.tuml.runtime.collection.TumlRuntimePropertyImpl;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TinkerSetImpl;
 import org.tuml.runtime.domain.BaseTinker;
@@ -216,8 +216,8 @@ public class Universe extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.name =  new TinkerSetImpl<String>(this, "org__tinker__concretetest__Universe__name", true, new TinkerMultiplicityImpl(false,false,true,false,1,1), false);
-		this.spaceTime =  new TinkerSetImpl<SpaceTime>(this, "A_<universe>_<spaceTime>", true, new TinkerMultiplicityImpl(true,false,false,false,1,1), true);
+		this.name =  new TinkerSetImpl<String>(this, "org__tinker__concretetest__Universe__name", true, new TumlRuntimePropertyImpl(false,false,true,false,1,1), false);
+		this.spaceTime =  new TinkerSetImpl<SpaceTime>(this, "A_<universe>_<spaceTime>", true, new TumlRuntimePropertyImpl(true,false,false,false,1,1), true);
 	}
 	
 	@Override

@@ -25,6 +25,24 @@ public class TumlClassOperations extends ClassOperations {
 		return clazz.getOwnedAttributes();
 	}
 
+	/*
+	 * These include all owned properties that are on the other end of an
+	 * association
+	 */
+	public static List<Property> getAllOwnedProperties(org.eclipse.uml2.uml.Class clazz) {
+		List<Property> result = clazz.getOwnedAttributes();
+		List<Association> associations = clazz.getAssociations();
+		for (Association association : associations) {
+			List<Property> memberEnds = association.getMemberEnds();
+			for (Property property : memberEnds) {
+				if (property.getType() != clazz) {
+					result.add(property);
+				}
+			}
+		}
+		return result;
+	}
+
 	public static Property getOtherEndToComposite(Class clazz) {
 		Set<Association> associations = getAllAssociations(clazz);
 		for (Association association : associations) {
@@ -45,7 +63,7 @@ public class TumlClassOperations extends ClassOperations {
 		if (classifier == type) {
 			return true;
 		}
-		if ((classifier instanceof BehavioredClassifier) && ((BehavioredClassifier)classifier).getAllImplementedInterfaces().contains(type)) {
+		if ((classifier instanceof BehavioredClassifier) && ((BehavioredClassifier) classifier).getAllImplementedInterfaces().contains(type)) {
 			return true;
 		}
 		for (Classifier general : classifier.getGenerals()) {
@@ -103,6 +121,14 @@ public class TumlClassOperations extends ClassOperations {
 
 	public static boolean hasCompositeOwner(Class clazz) {
 		return getOtherEndToComposite(clazz) != null;
+	}
+
+	public static String className(Class clazz) {
+		return Namer.name(clazz);
+	}
+
+	public static String propertyEnumName(Type type) {
+		return Namer.name(type) + "RuntimePropertyEnum";
 	}
 
 }

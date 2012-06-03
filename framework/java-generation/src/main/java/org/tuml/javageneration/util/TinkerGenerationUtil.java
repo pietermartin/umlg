@@ -15,6 +15,9 @@ public class TinkerGenerationUtil {
 	public static final String INIT_VERTEX = "initVertex";
 
 	public static final String TINKER_DB_NULL = "__NULL__";
+
+	
+	public static final OJPathName tumlRuntimePropertyPathName = new OJPathName("org.tuml.runtime.collection.TumlRuntimeProperty");
 	public static final OJPathName tinkerConclusionPathName = new OJPathName("com.tinkerpop.blueprints.pgm.TransactionalGraph.Conclusion");
 	public static final OJPathName tinkerSetClosableSequenceImplPathName = new OJPathName("org.tuml.runtime.collection.TinkerSetClosableSequenceImpl");
 	public static final OJPathName tinkerIndexPathName = new OJPathName("com.tinkerpop.blueprints.pgm.Index");
@@ -63,9 +66,6 @@ public class TinkerGenerationUtil {
 	public static OJPathName tinkerQualifiedBag = new OJPathName("org.tuml.runtime.collection.TinkerQualifiedBag");
 	public static OJPathName tinkerQualifiedBagImpl = new OJPathName("org.tuml.runtime.collection.TinkerQualifiedBagImpl");
 
-	public static OJPathName tinkerMultiplicityImpl = new OJPathName("org.tuml.runtime.collection.TinkerMultiplicityImpl");
-	
-	
 	public static OJPathName edgePathName = new OJPathName("com.tinkerpop.blueprints.pgm.Edge");
 	public static OJPathName storagePathName = new OJPathName("com.orientechnologies.orient.core.storage.OStorage");
 	public static String graphDbAccess = "GraphDb.getDb()";

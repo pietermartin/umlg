@@ -9,11 +9,10 @@ public class TinkerSetClosableSequenceImpl<E> extends BaseSet<E> implements Tink
 
 	private CloseableSequence<Edge> closeableSequence;
 
-	public TinkerSetClosableSequenceImpl(CloseableSequence<Edge> closeableSequence, boolean isInverse) {
+	public TinkerSetClosableSequenceImpl(CloseableSequence<Edge> closeableSequence) {
 		super();
 		this.internalCollection = new HashSet<E>();
 		this.closeableSequence = closeableSequence;
-		this.inverse = isInverse;
 	}
 
 	@Override

@@ -23,7 +23,7 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
 	}
 	
 	private void buildGetter(OJAnnotatedClass owner, PropertyWrapper propertyWrapper) {
-		OJAnnotatedOperation getter = new OJAnnotatedOperation(propertyWrapper.getter(), propertyWrapper.javaTypePath());
+		OJAnnotatedOperation getter = new OJAnnotatedOperation(propertyWrapper.getter(), propertyWrapper.javaTumlTypePath());
 		getter.getBody().addToStatements("return this." + propertyWrapper.fieldname());
 		owner.addToOperations(getter);
 	}

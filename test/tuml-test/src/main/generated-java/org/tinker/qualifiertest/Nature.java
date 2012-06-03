@@ -8,7 +8,7 @@ import org.tinker.concretetest.God;
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.TinkerIdUtilFactory;
 import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
-import org.tuml.runtime.collection.TinkerMultiplicityImpl;
+import org.tuml.runtime.collection.TumlRuntimePropertyImpl;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TinkerSetImpl;
 import org.tuml.runtime.domain.BaseTinker;
@@ -147,8 +147,8 @@ public class Nature extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.name1 =  new TinkerSetImpl<String>(this, "org__tinker__qualifiertest__Nature__name1", true, new TinkerMultiplicityImpl(false,false,true,false,1,1), false);
-		this.name2 =  new TinkerSetImpl<String>(this, "org__tinker__qualifiertest__Nature__name2", true, new TinkerMultiplicityImpl(false,false,true,false,1,1), false);
+		this.name1 =  new TinkerSetImpl<String>(this, "org__tinker__qualifiertest__Nature__name1", true, new TumlRuntimePropertyImpl(false,false,true,false,1,1), false);
+		this.name2 =  new TinkerSetImpl<String>(this, "org__tinker__qualifiertest__Nature__name2", true, new TumlRuntimePropertyImpl(false,false,true,false,1,1), false);
 	}
 	
 	@Override

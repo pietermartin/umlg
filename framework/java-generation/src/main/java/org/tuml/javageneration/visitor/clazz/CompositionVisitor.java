@@ -5,6 +5,7 @@ import org.eclipse.uml2.uml.Property;
 import org.opaeum.java.metamodel.OJBlock;
 import org.opaeum.java.metamodel.OJConstructor;
 import org.opaeum.java.metamodel.OJOperation;
+import org.opaeum.java.metamodel.OJPathName;
 import org.opaeum.java.metamodel.OJSimpleStatement;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
@@ -79,12 +80,14 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
 			constructor.getBody().getStatements()
 					.add(0, new OJSimpleStatement("this.vertex = " + TinkerGenerationUtil.graphDbAccess + ".addVertex(\"dribble\")"));
 			constructor.getBody().getStatements().add(1, new OJSimpleStatement("createComponents()"));
+			constructor.getBody().addToStatements("initialiseProperties()");
 			constructor.getBody().addToStatements("init(compositeOwner)");
 			constructor.getBody().addToStatements("TransactionThreadEntityVar.setNewEntity(this)");
 			constructor.getBody().addToStatements("defaultCreate()");
 			annotatedClass.addToImports(TinkerGenerationUtil.transactionThreadEntityVar);
 		} else {
 			constructor.getBody().getStatements().add(0, new OJSimpleStatement("super(true)"));
+			constructor.getBody().addToStatements("initialiseProperties()");
 			constructor.getBody().addToStatements("init(compositeOwner)");
 		}
 	}

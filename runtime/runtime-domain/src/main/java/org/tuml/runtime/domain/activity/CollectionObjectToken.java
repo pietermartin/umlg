@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.collection.BaseCollection;
-import org.tuml.runtime.collection.TinkerMultiplicityImpl;
+import org.tuml.runtime.collection.TumlRuntimePropertyImpl;
 import org.tuml.runtime.collection.TinkerSequenceImpl;
 import org.tuml.runtime.domain.CompositionNode;
 
@@ -18,12 +18,12 @@ public class CollectionObjectToken<O> extends ObjectToken<O> implements Composit
 
 	public CollectionObjectToken(Vertex vertex) {
 		super(vertex);
-		this.elements = new TinkerSequenceImpl<O>(this, "org__activitytest__contextObject", getUid(), true, new TinkerMultiplicityImpl(false, true, false, false, 0, Integer.MAX_VALUE), false);
+		this.elements = new TinkerSequenceImpl<O>(this, "org__activitytest__contextObject", getUid(), true, new TumlRuntimePropertyImpl(false, true, false, false, 0, Integer.MAX_VALUE), false);
 	}
 
 	public CollectionObjectToken(String edgeName, Collection<O> collection) {
 		super(edgeName);
-		this.elements = new TinkerSequenceImpl<O>(this, "org__activitytest__contextObject", getUid(), true, new TinkerMultiplicityImpl(false, true, false, false, 0, Integer.MAX_VALUE), false);
+		this.elements = new TinkerSequenceImpl<O>(this, "org__activitytest__contextObject", getUid(), true, new TumlRuntimePropertyImpl(false, true, false, false, 0, Integer.MAX_VALUE), false);
 		addCollection(collection);
 	}
 

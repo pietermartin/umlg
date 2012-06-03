@@ -12,7 +12,7 @@ public class TinkerIdUtilImpl implements TinkerIdUtil {
 		super();
 	}
 
-	public TinkerIdUtil getInstance() {
+	public static TinkerIdUtil getInstance() {
 		return INSTANCE;
 	}
 	

@@ -100,9 +100,6 @@ abstract public class OJClassifierGEN extends OJVisibleElement{
 	 */
 	public OJPathName getPathName(){
 		OJPackage myPackage = this.getMyPackage();
-		if(myPackage == null){
-			System.out.println();
-		}
 		return myPackage.getPathName().append(this.getName());
 	}
 	/**

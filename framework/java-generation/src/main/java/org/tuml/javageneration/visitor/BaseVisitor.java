@@ -21,6 +21,7 @@ public class BaseVisitor {
 		return Workspace.findOJClass(Namer.qualifiedName(owner));
 	}
 
+	//TODO think about interfaces
 	protected OJAnnotatedClass findOJClass(Property p) {
 		Element owner = p.getOwner();
 		// Association must come first in this if statement as Association is

@@ -18,21 +18,20 @@ import org.tuml.runtime.util.TinkerFormatter;
 import com.tinkerpop.blueprints.pgm.Edge;
 import com.tinkerpop.blueprints.pgm.Vertex;
 
-public abstract class BaseCollection<E> implements Collection<E>, TinkerMultiplicity {
+public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimeProperty {
 
 	protected Collection<E> internalCollection;
-	protected boolean composite;
+//	protected boolean composite;
 	// On a compositional association inverse is true for the set children
-	protected boolean inverse;
+//	protected boolean controllingSide;
 	// protected boolean manyToMany;
 	protected boolean loaded = false;
 	protected CompositionNode owner;
 	// This is the vertex of the owner of the collection
 	protected Vertex vertex;
-	protected String label;
 	protected Class<?> parentClass;
 	protected Map<Object, Vertex> internalVertexMap = new HashMap<Object, Vertex>();
-	protected TinkerMultiplicity multiplicity;
+	protected TumlRuntimeProperty tumlRuntimeProperty;
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected void loadFromVertex() {
@@ -56,13 +55,14 @@ public abstract class BaseCollection<E> implements Collection<E>, TinkerMultipli
 				throw new RuntimeException(ex);
 			}
 		}
+		this.loaded = true;
 	}
 
 	protected Iterable<Edge> getEdges() {
-		if (this.inverse) {
-			return this.vertex.getOutEdges(this.label);
+		if (this.isControllingSide()) {
+			return this.vertex.getOutEdges(this.getLabel());
 		} else {
-			return this.vertex.getInEdges(this.label);
+			return this.vertex.getInEdges(this.getLabel());
 		}
 	}
 
@@ -100,7 +100,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TinkerMultipli
 			if (o instanceof CompositionNode) {
 				CompositionNode node = (CompositionNode) o;
 				v = node.getVertex();
-				Set<Edge> edges = GraphDb.getDb().getEdgesBetween(this.vertex, v, this.label);
+				Set<Edge> edges = GraphDb.getDb().getEdgesBetween(this.vertex, v, this.getLabel());
 				for (Edge edge : edges) {
 					if (o instanceof TinkerAuditableNode) {
 						createAudit(e, v, true);
@@ -124,10 +124,20 @@ public abstract class BaseCollection<E> implements Collection<E>, TinkerMultipli
 
 	protected Edge addInternal(E e) {
 		Vertex v;
-		if (e instanceof CompositionNode) {
-			CompositionNode node = (CompositionNode) e;
-			TransactionThreadEntityVar.setNewEntity((CompositionNode) node);
+		if (e instanceof CompositionNode || e instanceof TinkerNode) {
+			TinkerNode node = (TinkerNode) e;
+			if (e instanceof CompositionNode) {
+				TransactionThreadEntityVar.setNewEntity((CompositionNode)node);
+			}
 			v = node.getVertex();
+			if (this.isOneToMany() || this.isOneToOne()) {
+				//Remove the existing one from the element if it exist
+				Iterator<Edge> iteratorToOne = v.getInEdges(this.getLabel()).iterator();
+				if (iteratorToOne.hasNext()) {
+					GraphDb.getDb().removeEdge(iteratorToOne.next());
+					node.initialiseProperty(this.tumlRuntimeProperty);
+				}
+			}
 		} else if (e instanceof TinkerNode) {
 			TinkerNode node = (TinkerNode) e;
 			v = node.getVertex();
@@ -157,7 +167,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TinkerMultipli
 	}
 
 	private Edge addCorrelationForManyToMany(Vertex v, Edge edge) {
-		Set<Edge> edgesBetween = GraphDb.getDb().getEdgesBetween(this.vertex, v, this.label);
+		Set<Edge> edgesBetween = GraphDb.getDb().getEdgesBetween(this.vertex, v, this.getLabel());
 		// Only a sequence can have duplicates
 		if (this instanceof TinkerSequence || this instanceof TinkerBag) {
 			for (Edge edgeBetween : edgesBetween) {
@@ -168,14 +178,14 @@ public abstract class BaseCollection<E> implements Collection<E>, TinkerMultipli
 					throw new IllegalStateException();
 				} else if (edgeBetween.getProperty("manyToManyCorrelationInverseTRUE") == null && edgeBetween.getProperty("manyToManyCorrelationInverseFALSE") != null) {
 					edge = edgeBetween;
-					if (!this.inverse) {
+					if (!this.isControllingSide()) {
 						throw new IllegalStateException();
 					}
 					edge.setProperty("manyToManyCorrelationInverseTRUE", "SETTED");
 					break;
 				} else if (edgeBetween.getProperty("manyToManyCorrelationInverseTRUE") != null && edgeBetween.getProperty("manyToManyCorrelationInverseFALSE") == null) {
 					edge = edgeBetween;
-					if (this.inverse) {
+					if (this.isControllingSide()) {
 						throw new IllegalStateException();
 					}
 					edge.setProperty("manyToManyCorrelationInverseFALSE", "SETTED");
@@ -196,19 +206,15 @@ public abstract class BaseCollection<E> implements Collection<E>, TinkerMultipli
 
 	private Edge createEdge(E e, Vertex v) {
 		Edge edge;
-		if (this.inverse) {
-			edge = GraphDb.getDb().addEdge(null, this.vertex, v, this.label);
+		if (this.isControllingSide()) {
+			edge = GraphDb.getDb().addEdge(null, this.vertex, v, this.getLabel());
 			edge.setProperty("outClass", this.parentClass.getName());
 			edge.setProperty("inClass", e.getClass().getName());
 			if (this.isManyToMany()) {
 				edge.setProperty("manyToManyCorrelationInverseTRUE", "SETTED");
 			}
 		} else {
-			// Inverse is only false on many to manies
-			if (!this.isManyToMany()) {
-				throw new IllegalStateException("Inverse can not be false on many to many");
-			}
-			edge = GraphDb.getDb().addEdge(null, v, this.vertex, this.label);
+			edge = GraphDb.getDb().addEdge(null, v, this.vertex, this.getLabel());
 			edge.setProperty("outClass", e.getClass().getName());
 			edge.setProperty("inClass", this.parentClass.getName());
 			edge.setProperty("manyToManyCorrelationInverseFALSE", "SETTED");
@@ -229,7 +235,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TinkerMultipli
 			if (TransactionThreadVar.hasNoAuditEntry(node.getClass().getName() + node.getUid())) {
 				node.createAuditVertex(false);
 			}
-			Edge auditEdge = GraphDb.getDb().addEdge(null, auditOwner.getAuditVertex(), node.getAuditVertex(), this.label);
+			Edge auditEdge = GraphDb.getDb().addEdge(null, auditOwner.getAuditVertex(), node.getAuditVertex(), this.getLabel());
 			auditEdge.setProperty("outClass", auditOwner.getClass().getName() + "Audit");
 			auditEdge.setProperty("inClass", node.getClass().getName() + "Audit");
 			if (deletion) {
@@ -243,7 +249,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TinkerMultipli
 				auditVertex.setProperty("value", e);
 				TransactionThreadVar.putAuditVertexFalse(owner.getClass().getName() + e.getClass().getName() + e.toString(), auditVertex);
 				auditVertex.setProperty("transactionNo", GraphDb.getDb().getTransactionCount());
-				Edge auditEdge = GraphDb.getDb().addEdge(null, auditOwner.getAuditVertex(), auditVertex, this.label);
+				Edge auditEdge = GraphDb.getDb().addEdge(null, auditOwner.getAuditVertex(), auditVertex, this.getLabel());
 				auditEdge.setProperty("transactionNo", GraphDb.getDb().getTransactionCount());
 				auditEdge.setProperty("outClass", this.parentClass.getName());
 				auditEdge.setProperty("inClass", e.getClass().getName() + "Audit");
@@ -255,7 +261,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TinkerMultipli
 	}
 
 	protected void maybeCallInit(E e) {
-		if (this.composite && e instanceof CompositionNode && !((CompositionNode) e).hasInitBeenCalled()) {
+		if (this.isComposite() && e instanceof CompositionNode && !((CompositionNode) e).hasInitBeenCalled()) {
 			((CompositionNode) e).init(this.owner);
 		}
 	}
@@ -267,7 +273,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TinkerMultipli
 	}
 
 	protected Vertex getVertexForDirection(Edge edge) {
-		if (this.inverse) {
+		if (this.isControllingSide()) {
 			return edge.getInVertex();
 		} else {
 			return edge.getOutVertex();
@@ -276,7 +282,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TinkerMultipli
 
 	protected Class<?> getClassToInstantiate(Edge edge) {
 		try {
-			if (this.inverse) {
+			if (this.isControllingSide()) {
 				return Class.forName((String) edge.getProperty("inClass"));
 			} else {
 				return Class.forName((String) edge.getProperty("outClass"));
@@ -357,33 +363,48 @@ public abstract class BaseCollection<E> implements Collection<E>, TinkerMultipli
 	}
 
 	@Override
+	public String getLabel() {
+		return this.tumlRuntimeProperty.getLabel();
+	}
+
+	@Override
 	public boolean isOneToOne() {
-		return this.multiplicity.isOneToOne();
+		return this.tumlRuntimeProperty.isOneToOne();
 	}
 
 	@Override
 	public boolean isOneToMany() {
-		return this.multiplicity.isOneToMany();
+		return this.tumlRuntimeProperty.isOneToMany();
 	}
 
 	@Override
 	public boolean isManyToOne() {
-		return this.multiplicity.isManyToOne();
+		return this.tumlRuntimeProperty.isManyToOne();
 	}
 
 	@Override
 	public boolean isManyToMany() {
-		return this.multiplicity.isManyToMany();
+		return this.tumlRuntimeProperty.isManyToMany();
 	}
 
 	@Override
 	public int getUpper() {
-		return this.multiplicity.getUpper();
+		return this.tumlRuntimeProperty.getUpper();
 	}
 
 	@Override
 	public int getLower() {
-		return this.multiplicity.getLower();
+		return this.tumlRuntimeProperty.getLower();
 	}
 
+	@Override
+	public boolean isControllingSide() {
+		return this.tumlRuntimeProperty.isControllingSide();
+	}
+	
+	@Override
+	public boolean isComposite() {
+		return this.tumlRuntimeProperty.isComposite();
+	}
+	
 }

@@ -56,6 +56,14 @@ public class PropertyWrapper implements Property {
 		this.property = property;
 	}
 
+	public Type getOwningType() {
+		return TumlPropertyOperations.getOwningType(this.property);
+		
+	}
+	public boolean isControllingSide() {
+		return TumlPropertyOperations.isControllingSide(this.property);
+	}
+
 	public String fieldname() {
 		return this.property.getName();
 	}
@@ -66,6 +74,18 @@ public class PropertyWrapper implements Property {
 
 	public String setter() {
 		return TumlPropertyOperations.setter(this.property);
+	}
+
+	public boolean isOneToMany() {
+		return TumlPropertyOperations.isOneToMany(this.property);
+	}
+
+	public boolean isManyToOne() {
+		return TumlPropertyOperations.isManyToOne(this.property);
+	}
+
+	public boolean isManyToMany() {
+		return TumlPropertyOperations.isManyToMany(this.property);
 	}
 
 	public boolean isOneToOne() {
@@ -91,8 +111,9 @@ public class PropertyWrapper implements Property {
 	/*
 	 * Attempting set semantics so the path is always a collection
 	 * Call javaBaseTypePath to get the type of set
+	 * This method return tuml special collection interface
 	 */
-	public OJPathName javaTypePath() {
+	public OJPathName javaTumlTypePath() {
 		OJPathName fieldType;
 		if (isOrdered() && isUnique()) {
 			if (hasQualifiers()) {
@@ -118,6 +139,27 @@ public class PropertyWrapper implements Property {
 			} else {
 				fieldType = TinkerGenerationUtil.tinkerSet.getCopy();
 			}
+		} else {
+			throw new RuntimeException("wtf");
+		}
+		fieldType.addToGenerics(javaBaseTypePath());
+		return fieldType;
+	}
+
+	/*
+	 * Attempting set semantics so the path is always a collection
+	 * Call javaBaseTypePath to get the type of set
+	 */
+	public OJPathName javaTypePath() {
+		OJPathName fieldType;
+		if (isOrdered() && isUnique()) {
+			fieldType = new OJPathName("java.util.Set");
+		} else if (isOrdered() && !isUnique()) {
+			fieldType = new OJPathName("java.util.List");
+		} else if (!isOrdered() && !isUnique()) {
+			fieldType = new OJPathName("java.util.Collection");
+		} else if (!isOrdered() && isUnique()) {
+			fieldType = new OJPathName("java.util.Set");
 		} else {
 			throw new RuntimeException("wtf");
 		}
@@ -733,7 +775,7 @@ public class PropertyWrapper implements Property {
 	@Override
 	public Type getType() {
 		// TODO Auto-generated method stub
-		return null;
+		return this.property.getType();
 	}
 
 	@Override
@@ -763,7 +805,7 @@ public class PropertyWrapper implements Property {
 
 	@Override
 	public int getUpper() {
-		return this.getUpper();
+		return this.property.getUpper();
 	}
 
 	@Override

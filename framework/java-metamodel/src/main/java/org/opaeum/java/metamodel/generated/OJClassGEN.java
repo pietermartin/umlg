@@ -9,10 +9,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.opaeum.java.metamodel.OJClass;
@@ -30,7 +28,8 @@ abstract public class OJClassGEN extends OJClassifier{
 	public static Set<OJPathName> pns = new HashSet<OJPathName>();
 	protected OJPathName pn;
 	private boolean f_needsSuppress = false;
-	protected Map<String,OJField> f_fields = new TreeMap<String,OJField>();
+//	protected Map<String,OJField> f_fields = new TreeMap<String,OJField>();
+	protected List<OJField> f_fields = new ArrayList<OJField>();
 	private OJPackage f_myPackage = null;
 	private Set<OJConstructor> f_constructors = new HashSet<OJConstructor>();
 	private SortedSet<OJPathName> f_implementedInterfaces = new TreeSet<OJPathName>();
@@ -92,7 +91,12 @@ abstract public class OJClassGEN extends OJClassifier{
 	 * @param name
 	 */
 	public OJField findField(String name){
-		return f_fields.get(name);
+		for (OJField field : f_fields) {
+			if (field.getName().equals(name)) {
+				return field;
+			}
+		}
+		return null;
 	}
 	/**
 	 * Implements the getter for attribute '+ needsSuppress : Boolean'
@@ -116,7 +120,7 @@ abstract public class OJClassGEN extends OJClassifier{
 	 * @param elements
 	 */
 	public void setFields(Collection<OJField> elements){
-		for(OJField _internal:this.f_fields.values()){
+		for(OJField _internal:this.f_fields){
 			_internal.z_internalRemoveFromOwner(((OJClass) this));
 		}
 		for(OJField _internal:elements){
@@ -135,7 +139,7 @@ abstract public class OJClassGEN extends OJClassifier{
 		if(element.getOwner() != null){
 			element.getOwner().z_internalRemoveFromFields(element);
 		}
-		this.f_fields.put(element.getName(), element);
+		this.f_fields.add(element);
 		element.z_internalAddToOwner(((OJClass) this));
 	}
 	/**
@@ -155,7 +159,7 @@ abstract public class OJClassGEN extends OJClassifier{
 	 */
 	public Collection<OJField> getFields(){
 		if(f_fields != null){
-			return Collections.unmodifiableCollection(f_fields.values());
+			return Collections.unmodifiableCollection(f_fields);
 		}else{
 			return null;
 		}
@@ -166,7 +170,7 @@ abstract public class OJClassGEN extends OJClassifier{
 	 * @param element
 	 */
 	public void z_internalAddToFields(OJField element){
-		this.f_fields.put(element.getName(), element);
+		this.f_fields.add(element);
 	}
 	/**
 	 * This operation should NOT be used by clients. It implements the correct removal of an element in an association.

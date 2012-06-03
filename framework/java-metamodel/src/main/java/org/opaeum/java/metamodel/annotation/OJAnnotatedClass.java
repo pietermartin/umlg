@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -11,9 +12,11 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.apache.commons.lang.StringUtils;
 import org.opaeum.java.metamodel.OJBlock;
 import org.opaeum.java.metamodel.OJClass;
 import org.opaeum.java.metamodel.OJConstructor;
+import org.opaeum.java.metamodel.OJField;
 import org.opaeum.java.metamodel.OJOperation;
 import org.opaeum.java.metamodel.OJPackage;
 import org.opaeum.java.metamodel.OJParameter;
@@ -25,6 +28,7 @@ import org.opaeum.java.metamodel.utilities.OJOperationComparator;
 public class OJAnnotatedClass extends OJClass implements OJAnnotatedElement {
 	Map<OJPathName, OJAnnotationValue> f_annotations = new TreeMap<OJPathName, OJAnnotationValue>();
 	private List<String> genericTypeParams = new ArrayList<String>();
+	private List<OJEnum> innerEnums = new ArrayList<OJEnum>();
 
 	public OJAnnotatedClass(String string) {
 		setName(string);
@@ -102,6 +106,11 @@ public class OJAnnotatedClass extends OJClass implements OJAnnotatedElement {
 	@Override
 	public void calcImports() {
 		super.calcImports();
+		for (OJEnum ojEnum : this.innerEnums) {
+			ojEnum.calcImports();
+			addToImports(ojEnum.getImports());
+			ojEnum.setImports(new HashSet<OJPathName>());
+		}
 		addToImports(AnnotationHelper.getImportsFrom(getFields()));
 		addToImports(AnnotationHelper.getImportsFrom(getOperations()));
 		addToImports(AnnotationHelper.getImportsFrom(this));
@@ -150,7 +159,10 @@ public class OJAnnotatedClass extends OJClass implements OJAnnotatedElement {
 		classInfo.append(JavaStringHelpers.indent(constructors(), 1));
 		classInfo.append("\n");
 		classInfo.append(JavaStringHelpers.indent(operations(), 1));
-		classInfo.append("\n}");
+		classInfo.append("\n");
+		classInfo.append(JavaStringHelpers.indent(innerEnums(), 1));
+		classInfo.append("\n");
+		classInfo.append("}");
 		return classInfo.toString();
 	}
 
@@ -178,6 +190,13 @@ public class OJAnnotatedClass extends OJClass implements OJAnnotatedElement {
 		return result;
 	}
 
+	public StringBuilder innerEnums() {
+		StringBuilder result = new StringBuilder();
+		result.append(JavaUtil.collectionToJavaString(this.innerEnums, "\n"));
+		return result;
+	}
+	
+
 	protected StringBuilder implementedInterfaces() {
 		StringBuilder result = new StringBuilder();
 		if (!this.getImplementedInterfaces().isEmpty())
@@ -194,6 +213,11 @@ public class OJAnnotatedClass extends OJClass implements OJAnnotatedElement {
 
 	public void addGenericTypeParam(String string) {
 		this.genericTypeParams.add(string);
+	}
+
+	public void addInnerEnum(OJEnum ojEnum) {
+		this.innerEnums.add(ojEnum);
+		ojEnum.setInnerClass(true);
 	}
 
 	@Override
@@ -329,5 +353,22 @@ public class OJAnnotatedClass extends OJClass implements OJAnnotatedElement {
 
 	public String getQualifiedName() {
 		return getMyPackage().toString() + "." + getName();
+	}
+	
+	public void implementGetter() {
+		for (OJField field : getFields()) {
+			OJAnnotatedOperation getter = new OJAnnotatedOperation((field.getType().getLast().equals("boolean") ? "is" : "get") + StringUtils.capitalize(field.getName()), field.getType());
+			getter.getBody().addToStatements("return this." + field.getName());
+			addToOperations(getter);
+		}
+	}
+	
+	public void createConstructorFromFields() {
+		OJConstructor constructor = new OJConstructor();
+		for (OJField field : getFields()) {
+			constructor.addParam(field.getName(), field.getType());
+			constructor.getBody().addToStatements("this." + field.getName() + " = " + field.getName());
+		}
+		addToConstructors(constructor);
 	}
 }

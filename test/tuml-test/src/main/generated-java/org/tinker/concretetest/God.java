@@ -30,7 +30,7 @@ import org.tuml.runtime.adaptor.TinkerIdUtilFactory;
 import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
 import org.tuml.runtime.collection.TinkerBag;
 import org.tuml.runtime.collection.TinkerBagImpl;
-import org.tuml.runtime.collection.TinkerMultiplicityImpl;
+import org.tuml.runtime.collection.TumlRuntimePropertyImpl;
 import org.tuml.runtime.collection.TinkerOrderedSet;
 import org.tuml.runtime.collection.TinkerOrderedSetImpl;
 import org.tuml.runtime.collection.TinkerQualifiedBag;
@@ -511,34 +511,34 @@ public class God extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.name =  new TinkerSetImpl<String>(this, "org__tinker__concretetest__God__name", true, new TinkerMultiplicityImpl(false,false,true,false,1,1), false);
-		this.universe =  new TinkerSetImpl<Universe>(this, "A_<god>_<universe>", true, new TinkerMultiplicityImpl(false,true,false,false,0,-1), true);
-		this.angel =  new TinkerSetImpl<Angel>(this, "A_<god>_<angel>", true, new TinkerMultiplicityImpl(false,true,false,false,0,-1), true);
-		this.spirit =  new TinkerSetImpl<Spirit>(this, "A_<god>_<spirit>", true, new TinkerMultiplicityImpl(false,true,false,false,0,-1), true);
-		this.being =  new TinkerSetImpl<Being>(this, "A_<god>_<being>", true, new TinkerMultiplicityImpl(false,true,false,false,0,-1), true);
-		this.abstractSpecies =  new TinkerSetImpl<AbstractSpecies>(this, "A_<god>_<abstractSpecies>", true, new TinkerMultiplicityImpl(false,true,false,false,0,-1), true);
-		this.iMany =  new TinkerSetImpl<IMany>(this, "A_<god>_<iMany>", true, new TinkerMultiplicityImpl(false,true,false,false,0,-1), true);
-		this.embeddedString =  new TinkerSetImpl<String>(this, "org__tinker__concretetest__God__embeddedString", true, new TinkerMultiplicityImpl(false,false,false,true,0,-1), false);
-		this.embeddedInteger =  new TinkerSetImpl<Integer>(this, "org__tinker__concretetest__God__embeddedInteger", true, new TinkerMultiplicityImpl(false,false,false,true,0,-1), false);
-		this.realRootFolder =  new TinkerSetImpl<RealRootFolder>(this, "A_<god>_<realRootFolder>", true, new TinkerMultiplicityImpl(false,true,false,false,0,-1), true);
-		this.fakeRootFolder =  new TinkerSetImpl<FakeRootFolder>(this, "A_<god>_<fakeRootFolder>", true, new TinkerMultiplicityImpl(false,true,false,false,0,-1), true);
-		this.reason =  new TinkerSetImpl<REASON>(this, "org__tinker__concretetest__God__reason", true, new TinkerMultiplicityImpl(false,false,true,false,1,1), false);
-		this.pet =  new TinkerSetImpl<Mamal>(this, "org__tinker__concretetest__God__pet", true, new TinkerMultiplicityImpl(false,false,true,false,1,1), false);
-		this.animalFarm =  new TinkerSetImpl<Mamal>(this, "org__tinker__concretetest__God__animalFarm", true, new TinkerMultiplicityImpl(false,false,false,true,0,-1), false);
-		this.nature =  new TinkerQualifiedSetImpl<Nature>(this, "A_<god>_<nature>", getUid(), true, new TinkerMultiplicityImpl(false,true,false,false,0,-1), true);
-		this.hand =  new TinkerSequenceImpl<Hand>(this, "A_<god>_<hand>", getUid(), true, new TinkerMultiplicityImpl(false,true,false,false,0,-1), true);
-		this.foot =  new TinkerQualifiedSequenceImpl<Foot>(this, "A_<god>_<foot>", getUid(), true, new TinkerMultiplicityImpl(false,true,false,false,0,-1), true);
-		this.world =  new TinkerOrderedSetImpl<World>(this, "A_<god>_<world>", getUid(), true, new TinkerMultiplicityImpl(false,true,false,false,0,-1), true);
-		this.fantasy =  new TinkerQualifiedOrderedSetImpl<Fantasy>(this, "A_<god>_<fantasy>", getUid(), true, new TinkerMultiplicityImpl(false,true,false,false,0,-1), true);
-		this.many1 =  new TinkerSetImpl<Many1>(this, "A_<god>_<many1>", true, new TinkerMultiplicityImpl(false,true,false,false,0,-1), true);
-		this.many2 =  new TinkerSetImpl<Many2>(this, "A_<god>_<many2>", true, new TinkerMultiplicityImpl(false,true,false,false,0,-1), true);
-		this.dream =  new TinkerBagImpl<Dream>(this, "A_<god>_<dream>", true, new TinkerMultiplicityImpl(false,true,false,false,0,-1), true);
-		this.nightmare =  new TinkerQualifiedBagImpl<Nightmare>(this, "A_<god>_<nightmare>", getUid(), true, new TinkerMultiplicityImpl(false,true,false,false,0,-1), true);
-		this.demon =  new TinkerSetImpl<Demon>(this, "A_<god>_<demon>", true, new TinkerMultiplicityImpl(false,true,false,false,0,-1), true);
-		this.oneOne =  new TinkerSetImpl<OneOne>(this, "A_<god>_<oneOne>", true, new TinkerMultiplicityImpl(false,true,false,false,0,-1), true);
-		this.oneTwo =  new TinkerSetImpl<OneTwo>(this, "A_<god>_<oneTwo>", true, new TinkerMultiplicityImpl(false,true,false,false,0,-1), true);
-		this.nonNavigableOne =  new TinkerSetImpl<NonNavigableOne>(this, "A_<god>_<nonNavigableOne>", true, new TinkerMultiplicityImpl(false,false,false,true,0,-1), true);
-		this.nonNavigableMany =  new TinkerSetImpl<NonNavigableMany>(this, "A_<god>_<nonNavigableMany>", true, new TinkerMultiplicityImpl(false,false,false,true,0,-1), true);
+		this.name =  new TinkerSetImpl<String>(this, "org__tinker__concretetest__God__name", true, new TumlRuntimePropertyImpl(false,false,true,false,1,1), false);
+		this.universe =  new TinkerSetImpl<Universe>(this, "A_<god>_<universe>", true, new TumlRuntimePropertyImpl(false,true,false,false,0,-1), true);
+		this.angel =  new TinkerSetImpl<Angel>(this, "A_<god>_<angel>", true, new TumlRuntimePropertyImpl(false,true,false,false,0,-1), true);
+		this.spirit =  new TinkerSetImpl<Spirit>(this, "A_<god>_<spirit>", true, new TumlRuntimePropertyImpl(false,true,false,false,0,-1), true);
+		this.being =  new TinkerSetImpl<Being>(this, "A_<god>_<being>", true, new TumlRuntimePropertyImpl(false,true,false,false,0,-1), true);
+		this.abstractSpecies =  new TinkerSetImpl<AbstractSpecies>(this, "A_<god>_<abstractSpecies>", true, new TumlRuntimePropertyImpl(false,true,false,false,0,-1), true);
+		this.iMany =  new TinkerSetImpl<IMany>(this, "A_<god>_<iMany>", true, new TumlRuntimePropertyImpl(false,true,false,false,0,-1), true);
+		this.embeddedString =  new TinkerSetImpl<String>(this, "org__tinker__concretetest__God__embeddedString", true, new TumlRuntimePropertyImpl(false,false,false,true,0,-1), false);
+		this.embeddedInteger =  new TinkerSetImpl<Integer>(this, "org__tinker__concretetest__God__embeddedInteger", true, new TumlRuntimePropertyImpl(false,false,false,true,0,-1), false);
+		this.realRootFolder =  new TinkerSetImpl<RealRootFolder>(this, "A_<god>_<realRootFolder>", true, new TumlRuntimePropertyImpl(false,true,false,false,0,-1), true);
+		this.fakeRootFolder =  new TinkerSetImpl<FakeRootFolder>(this, "A_<god>_<fakeRootFolder>", true, new TumlRuntimePropertyImpl(false,true,false,false,0,-1), true);
+		this.reason =  new TinkerSetImpl<REASON>(this, "org__tinker__concretetest__God__reason", true, new TumlRuntimePropertyImpl(false,false,true,false,1,1), false);
+		this.pet =  new TinkerSetImpl<Mamal>(this, "org__tinker__concretetest__God__pet", true, new TumlRuntimePropertyImpl(false,false,true,false,1,1), false);
+		this.animalFarm =  new TinkerSetImpl<Mamal>(this, "org__tinker__concretetest__God__animalFarm", true, new TumlRuntimePropertyImpl(false,false,false,true,0,-1), false);
+		this.nature =  new TinkerQualifiedSetImpl<Nature>(this, "A_<god>_<nature>", getUid(), true, new TumlRuntimePropertyImpl(false,true,false,false,0,-1), true);
+		this.hand =  new TinkerSequenceImpl<Hand>(this, "A_<god>_<hand>", getUid(), true, new TumlRuntimePropertyImpl(false,true,false,false,0,-1), true);
+		this.foot =  new TinkerQualifiedSequenceImpl<Foot>(this, "A_<god>_<foot>", getUid(), true, new TumlRuntimePropertyImpl(false,true,false,false,0,-1), true);
+		this.world =  new TinkerOrderedSetImpl<World>(this, "A_<god>_<world>", getUid(), true, new TumlRuntimePropertyImpl(false,true,false,false,0,-1), true);
+		this.fantasy =  new TinkerQualifiedOrderedSetImpl<Fantasy>(this, "A_<god>_<fantasy>", getUid(), true, new TumlRuntimePropertyImpl(false,true,false,false,0,-1), true);
+		this.many1 =  new TinkerSetImpl<Many1>(this, "A_<god>_<many1>", true, new TumlRuntimePropertyImpl(false,true,false,false,0,-1), true);
+		this.many2 =  new TinkerSetImpl<Many2>(this, "A_<god>_<many2>", true, new TumlRuntimePropertyImpl(false,true,false,false,0,-1), true);
+		this.dream =  new TinkerBagImpl<Dream>(this, "A_<god>_<dream>", true, new TumlRuntimePropertyImpl(false,true,false,false,0,-1), true);
+		this.nightmare =  new TinkerQualifiedBagImpl<Nightmare>(this, "A_<god>_<nightmare>", getUid(), true, new TumlRuntimePropertyImpl(false,true,false,false,0,-1), true);
+		this.demon =  new TinkerSetImpl<Demon>(this, "A_<god>_<demon>", true, new TumlRuntimePropertyImpl(false,true,false,false,0,-1), true);
+		this.oneOne =  new TinkerSetImpl<OneOne>(this, "A_<god>_<oneOne>", true, new TumlRuntimePropertyImpl(false,true,false,false,0,-1), true);
+		this.oneTwo =  new TinkerSetImpl<OneTwo>(this, "A_<god>_<oneTwo>", true, new TumlRuntimePropertyImpl(false,true,false,false,0,-1), true);
+		this.nonNavigableOne =  new TinkerSetImpl<NonNavigableOne>(this, "A_<god>_<nonNavigableOne>", true, new TumlRuntimePropertyImpl(false,false,false,true,0,-1), true);
+		this.nonNavigableMany =  new TinkerSetImpl<NonNavigableMany>(this, "A_<god>_<nonNavigableMany>", true, new TumlRuntimePropertyImpl(false,false,false,true,0,-1), true);
 	}
 	
 	@Override

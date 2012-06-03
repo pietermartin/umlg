@@ -6,5 +6,4 @@ public interface TinkerIdUtil {
 	Long getId(Vertex v);
 	void setId(Vertex v, Long id);
 	int getVersion(Vertex v);
-	TinkerIdUtil getInstance();
 }

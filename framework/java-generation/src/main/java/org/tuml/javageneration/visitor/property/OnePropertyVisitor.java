@@ -36,7 +36,7 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
 	 */
 	private void buildOneGetter(OJAnnotatedClass owner, PropertyWrapper propertyWrapper) {
 		OJAnnotatedOperation getter = new OJAnnotatedOperation(propertyWrapper.getter(), propertyWrapper.javaBaseTypePath());
-		OJAnnotatedField tmpField = new OJAnnotatedField("tmp", propertyWrapper.javaTypePath());
+		OJAnnotatedField tmpField = new OJAnnotatedField("tmp", propertyWrapper.javaTumlTypePath());
 		getter.getBody().addToLocals(tmpField);
 		tmpField.setInitExp("this." + propertyWrapper.fieldname());
 		OJIfStatement ifFieldNotEmpty = new OJIfStatement("!" + tmpField.getName() + ".isEmpty()");
@@ -53,7 +53,7 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
 	private void buildOneToOneSetter(OJAnnotatedClass owner, PropertyWrapper propertyWrapper) {
 		OJAnnotatedOperation setter = buildSetterOutline(owner, propertyWrapper);
 		//Get old value
-		OJAnnotatedField oldValue = new OJAnnotatedField("oldValue", propertyWrapper.javaTypePath());
+		OJAnnotatedField oldValue = new OJAnnotatedField("oldValue", propertyWrapper.javaTumlTypePath());
 		oldValue.setInitExp("this." + propertyWrapper.getter() + "()");
 		setter.getBody().addToLocals(oldValue);
 	}

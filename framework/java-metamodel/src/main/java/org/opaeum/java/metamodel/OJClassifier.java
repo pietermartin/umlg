@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
+import org.opaeum.java.metamodel.annotation.OJEnum;
 import org.opaeum.java.metamodel.generated.OJClassifierGEN;
 import org.opaeum.java.metamodel.utilities.JavaStringHelpers;
 import org.opaeum.java.metamodel.utilities.JavaUtil;
@@ -17,6 +18,7 @@ import org.opaeum.java.metamodel.utilities.OJOperationComparator;
 import org.opaeum.java.metamodel.utilities.OJPathNameComparator;
 
 public class OJClassifier extends OJClassifierGEN {
+	boolean isInnerClass = false;
 	protected OJPackage f_myPackage;
 	protected String suffix;
 
@@ -216,7 +218,7 @@ public class OJClassifier extends OJClassifierGEN {
 		String prevPackageName = "";
 		while (it.hasNext()) {
 			OJPathName path = (OJPathName) it.next();
-			if (this.getMyPackage().getPathName().equals(path.getHead())) {
+			if (!this.isInnerClass && this.getMyPackage().getPathName().equals(path.getHead())) {
 				// do nothing, imported element is in same package
 			} else {
 				if (!path.getFirst().equals(prevPackageName)) {
@@ -288,4 +290,13 @@ public class OJClassifier extends OJClassifierGEN {
 			ojOperation.renameAll(renamePathNames, suffix);
 		}
 	}
+	
+	public boolean isInnerClass() {
+		return isInnerClass;
+	}
+
+	public void setInnerClass(boolean isInnerClass) {
+		this.isInnerClass = isInnerClass;
+	}
+	
 }

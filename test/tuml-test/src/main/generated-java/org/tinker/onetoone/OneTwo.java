@@ -8,7 +8,7 @@ import org.tinker.concretetest.God;
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.TinkerIdUtilFactory;
 import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
-import org.tuml.runtime.collection.TinkerMultiplicityImpl;
+import org.tuml.runtime.collection.TumlRuntimePropertyImpl;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TinkerSetImpl;
 import org.tuml.runtime.domain.BaseTinker;
@@ -149,7 +149,7 @@ public class OneTwo extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.name =  new TinkerSetImpl<String>(this, "org__tinker__onetoone__OneTwo__name", true, new TinkerMultiplicityImpl(false,false,true,false,1,1), false);
+		this.name =  new TinkerSetImpl<String>(this, "org__tinker__onetoone__OneTwo__name", true, new TumlRuntimePropertyImpl(false,false,true,false,1,1), false);
 	}
 	
 	@Override

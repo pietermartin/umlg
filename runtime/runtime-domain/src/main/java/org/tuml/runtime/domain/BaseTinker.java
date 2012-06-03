@@ -56,5 +56,15 @@ public abstract class BaseTinker implements TinkerNode, Serializable{
 	public boolean hasInitBeenCalled() {
 		return hasInitBeenCalled;
 	}
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null || !(obj instanceof BaseTinker)) {
+			return false;
+		}
+		BaseTinker o = (BaseTinker)obj;
+		return getId().equals(o.getId());
+	}
+	
+	
 	
 }

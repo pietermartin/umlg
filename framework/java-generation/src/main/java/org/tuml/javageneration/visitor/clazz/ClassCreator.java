@@ -6,12 +6,13 @@ import org.tuml.framework.Visitor;
 import org.tuml.javageneration.naming.Namer;
 import org.tuml.javageneration.util.TinkerGenerationUtil;
 import org.tuml.javageneration.util.TumlBehavioredClassifierOperations;
+import org.tuml.javageneration.util.TumlClassOperations;
 import org.tuml.javageneration.visitor.BaseVisitor;
 
 public class ClassCreator extends BaseVisitor implements Visitor<org.eclipse.uml2.uml.Class> {
 
 	public void visitBefore(org.eclipse.uml2.uml.Class clazz) {
-		OJAnnotatedClass annotatedClass = new OJAnnotatedClass(Namer.name(clazz));
+		OJAnnotatedClass annotatedClass = new OJAnnotatedClass(TumlClassOperations.className(clazz));
 		OJPackage ojPackage = new OJPackage(Namer.name(clazz.getNearestPackage()));
 		annotatedClass.setMyPackage(ojPackage);
 		// The super class will be set later after all classes have been created
