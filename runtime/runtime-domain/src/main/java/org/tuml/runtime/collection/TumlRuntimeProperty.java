@@ -10,4 +10,5 @@ public interface TumlRuntimeProperty {
 	int getUpper();
 	int getLower();
 	String getLabel();
+	boolean isValid(int elementCount);
 }

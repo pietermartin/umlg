@@ -33,6 +33,12 @@ public class TestOneToOne extends BaseLocalDbTest {
 		db.stopTransaction(Conclusion.SUCCESS);
 		Assert.assertEquals(8, countVertices());
 		Assert.assertEquals(4, countEdges());
+		
+		db.startTransaction();
+		oneOne1.addToOneTwo(oneTwo2);
+		db.stopTransaction(Conclusion.SUCCESS);
+		Assert.assertEquals(8, countVertices());
+		Assert.assertEquals(4, countEdges());
 	}
 
 

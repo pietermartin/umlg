@@ -241,6 +241,11 @@ public class One extends BaseTinker implements CompositionNode {
 		public boolean isOneToOne() {
 			return this.oneToOne;
 		}
+		
+		@Override
+		public boolean isValid(int elementCount) {
+			return elementCount <= getUpper() && elementCount >= getLower();
+		}
 	
 	}
 }

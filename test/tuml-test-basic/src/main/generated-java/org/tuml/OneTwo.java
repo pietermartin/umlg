@@ -51,6 +51,8 @@ public class OneTwo extends BaseTinker implements CompositionNode {
 	
 	public void addToOneOne(OneOne oneOne) {
 		if ( oneOne != null ) {
+			oneOne.z_internalRemoveFromOneTwo(oneOne.getOneTwo());
+			oneOne.z_internalAddToOneTwo(this);
 			z_internalAddToOneOne(oneOne);
 		}
 	}
@@ -246,6 +248,11 @@ public class OneTwo extends BaseTinker implements CompositionNode {
 		
 		public boolean isOneToOne() {
 			return this.oneToOne;
+		}
+		
+		@Override
+		public boolean isValid(int elementCount) {
+			return elementCount <= getUpper() && elementCount >= getLower();
 		}
 	
 	}

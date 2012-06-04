@@ -63,4 +63,9 @@ public class TumlRuntimePropertyImpl implements TumlRuntimeProperty {
 		return null;
 	}
 
+	@Override
+	public boolean isValid(int elementCount) {
+		return elementCount <= getUpper() && elementCount >= getLower();
+	}
+
 }

@@ -260,6 +260,12 @@ public class ClassVisitor2 extends BaseVisitor implements Visitor<Class> {
 		fromLabel.setStatic(true);
 		ojEnum.addToOperations(fromLabel);
 		
+		OJAnnotatedOperation isValid = new OJAnnotatedOperation("isValid", new OJPathName("boolean"));
+		TinkerGenerationUtil.addOverrideAnnotation(isValid);
+		isValid.addParam("elementCount", new OJPathName("int"));
+		isValid.getBody().addToStatements("return elementCount <= getUpper() && elementCount >= getLower()");
+		ojEnum.addToOperations(isValid);
+		
 		for (Property p :  TumlClassOperations.getAllOwnedProperties(clazz)) {
 			PropertyWrapper pWrap = new PropertyWrapper(p);
 			if (!(pWrap.isDerived() || pWrap.isDerivedUnion())) {

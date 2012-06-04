@@ -21,9 +21,9 @@ import com.tinkerpop.blueprints.pgm.Vertex;
 public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimeProperty {
 
 	protected Collection<E> internalCollection;
-//	protected boolean composite;
+	// protected boolean composite;
 	// On a compositional association inverse is true for the set children
-//	protected boolean controllingSide;
+	// protected boolean controllingSide;
 	// protected boolean manyToMany;
 	protected boolean loaded = false;
 	protected CompositionNode owner;
@@ -80,13 +80,20 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 
 	@Override
 	public boolean add(E e) {
+		//validateMultiplicityForAdditionalElement calls size() which loads the collection
+		validateMultiplicityForAdditionalElement();
 		maybeCallInit(e);
-		maybeLoad();
 		boolean result = this.internalCollection.add(e);
 		if (result) {
 			addInternal(e);
 		}
 		return result;
+	}
+
+	private void validateMultiplicityForAdditionalElement() {
+		if (!isValid(size() + 1)) {
+			throw new IllegalStateException(String.format("The collection's multiplicity is (lower = %s, upper = %s). Current size = %s. It can not accept another element.", getLower(), getUpper(), size()));
+		}
 	}
 
 	@Override
@@ -127,11 +134,11 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 		if (e instanceof CompositionNode || e instanceof TinkerNode) {
 			TinkerNode node = (TinkerNode) e;
 			if (e instanceof CompositionNode) {
-				TransactionThreadEntityVar.setNewEntity((CompositionNode)node);
+				TransactionThreadEntityVar.setNewEntity((CompositionNode) node);
 			}
 			v = node.getVertex();
 			if (this.isOneToMany() || this.isOneToOne()) {
-				//Remove the existing one from the element if it exist
+				// Remove the existing one from the element if it exist
 				Iterator<Edge> iteratorToOne = v.getInEdges(this.getLabel()).iterator();
 				if (iteratorToOne.hasNext()) {
 					GraphDb.getDb().removeEdge(iteratorToOne.next());
@@ -164,6 +171,10 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 			createAudit(e, v, false);
 		}
 		return edge;
+	}
+
+	private boolean canAcceptElement() {
+		return this.tumlRuntimeProperty.isValid(size() + 1);
 	}
 
 	private Edge addCorrelationForManyToMany(Vertex v, Edge edge) {
@@ -401,10 +412,14 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 	public boolean isControllingSide() {
 		return this.tumlRuntimeProperty.isControllingSide();
 	}
-	
+
 	@Override
 	public boolean isComposite() {
 		return this.tumlRuntimeProperty.isComposite();
 	}
-	
+
+	@Override
+	public boolean isValid(int elementCount) {
+		return this.tumlRuntimeProperty.isValid(elementCount);
+	}
 }
