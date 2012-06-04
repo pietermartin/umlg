@@ -188,6 +188,14 @@ public final class TumlPropertyOperations extends PropertyOperations {
 	public static String adder(Property property) {
 		return "addTo" + StringUtils.capitalize(property.getName());
 	}
+	
+	public static String remover(Property property) {
+		return "removeFrom" + StringUtils.capitalize(property.getName());
+	}
+
+	public static String clearer(Property property) {
+		return "clear" + StringUtils.capitalize(property.getName());
+	}
 
 	public static String internalAdder(Property property) {
 		return "z_internalAddTo" + StringUtils.capitalize(property.getName());

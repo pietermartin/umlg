@@ -19,14 +19,7 @@ import org.tuml.javageneration.naming.Namer;
 public class TumlClassOperations extends ClassOperations {
 
 	/*
-	 * These include all owned properties and redefinitions
-	 */
-	public List<Property> getDirectoryImplementedProperties(org.eclipse.uml2.uml.Class clazz) {
-		return clazz.getOwnedAttributes();
-	}
-
-	/*
-	 * These include all owned properties that are on the other end of an
+	 * These include all properties that are on the other end of an
 	 * association
 	 */
 	public static List<Property> getAllOwnedProperties(org.eclipse.uml2.uml.Class clazz) {
@@ -59,7 +52,7 @@ public class TumlClassOperations extends ClassOperations {
 	/*
 	 * Only BehavioredClassifier can realize interfaces
 	 */
-	private static boolean isSpecializationOf(Classifier classifier, Type type) {
+	public static boolean isSpecializationOf(Classifier classifier, Type type) {
 		if (classifier == type) {
 			return true;
 		}
@@ -81,7 +74,7 @@ public class TumlClassOperations extends ClassOperations {
 		return result;
 	}
 
-	private static void getAllAssociationsFromGenerals(Classifier classifier, Set<Association> result) {
+	public static void getAllAssociationsFromGenerals(Classifier classifier, Set<Association> result) {
 		result.addAll(classifier.getAssociations());
 		for (Classifier general : classifier.getGenerals()) {
 			getAllAssociationsFromGenerals(general, result);

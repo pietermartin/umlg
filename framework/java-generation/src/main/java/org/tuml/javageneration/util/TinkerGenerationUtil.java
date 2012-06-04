@@ -2,7 +2,6 @@ package org.tuml.javageneration.util;
 
 import org.eclipse.uml2.uml.Property;
 import org.opaeum.java.metamodel.OJPathName;
-import org.opaeum.java.metamodel.OJSimpleStatement;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
 import org.opaeum.java.metamodel.annotation.OJAnnotationValue;
 

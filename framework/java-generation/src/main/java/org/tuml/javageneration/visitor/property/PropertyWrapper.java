@@ -96,6 +96,14 @@ public class PropertyWrapper implements Property {
 		return TumlPropertyOperations.adder(this.property);
 	}
 
+	public String remover() {
+		return TumlPropertyOperations.remover(this.property);
+	}
+
+	public String clearer() {
+		return TumlPropertyOperations.clearer(this.property);
+	}
+
 	public String internalRemover() {
 		return TumlPropertyOperations.internalRemover(this.property);
 	}

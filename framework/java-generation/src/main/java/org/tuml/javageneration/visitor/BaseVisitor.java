@@ -7,9 +7,13 @@ import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.Property;
+import org.opaeum.java.metamodel.OJIfStatement;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
+import org.opaeum.java.metamodel.annotation.OJAnnotatedField;
+import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
 import org.tuml.javageneration.Workspace;
 import org.tuml.javageneration.naming.Namer;
+import org.tuml.javageneration.visitor.property.PropertyWrapper;
 
 public class BaseVisitor {
 
@@ -47,6 +51,34 @@ public class BaseVisitor {
 		} else {
 			throw new IllegalStateException("Not catered for, think about ne. " + owner.getClass().getSimpleName());
 		}
+	}
+	
+	protected void buildField(OJAnnotatedClass owner, PropertyWrapper propertyWrapper) {
+		OJAnnotatedField field = new OJAnnotatedField(propertyWrapper.fieldname(), propertyWrapper.javaTumlTypePath());
+		field.setStatic(propertyWrapper.isStatic());
+		owner.addToFields(field);
+	}
+
+	protected void buildRemover(OJAnnotatedClass owner, PropertyWrapper propertyWrapper) {
+		OJAnnotatedOperation remover = new OJAnnotatedOperation(propertyWrapper.remover());
+		remover.addParam(propertyWrapper.fieldname(), propertyWrapper.javaTypePath());
+		OJIfStatement ifNotNull = new OJIfStatement("!" + propertyWrapper.fieldname() + ".isEmpty()");
+		ifNotNull.addToThenPart("this." + propertyWrapper.fieldname() + ".removeAll(" + propertyWrapper.fieldname() + ")");
+		remover.getBody().addToStatements(ifNotNull);
+		owner.addToOperations(remover);
+
+		OJAnnotatedOperation singleRemover = new OJAnnotatedOperation(propertyWrapper.remover());
+		singleRemover.addParam(propertyWrapper.fieldname(), propertyWrapper.javaBaseTypePath());
+		ifNotNull = new OJIfStatement(propertyWrapper.fieldname() + " != null");
+		ifNotNull.addToThenPart("this." + propertyWrapper.fieldname() + ".remove(" + propertyWrapper.fieldname() + ")");
+		singleRemover.getBody().addToStatements(ifNotNull);
+		owner.addToOperations(singleRemover);
+	}
+
+	protected void buildClearer(OJAnnotatedClass owner, PropertyWrapper propertyWrapper) {
+		OJAnnotatedOperation remover = new OJAnnotatedOperation(propertyWrapper.clearer());
+		remover.getBody().addToStatements("this." + propertyWrapper.fieldname() + ".clear()");
+		owner.addToOperations(remover);
 	}
 
 }

@@ -16,13 +16,9 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
 		//TODO qualifiers
 		if (propertyWrapper.isOne() && !propertyWrapper.isQualifier()) {
 			OJAnnotatedClass owner = findOJClass(p);
-			buildOneGetter(owner, propertyWrapper);
-			if (propertyWrapper.isOneToOne()) {
-				buildOneToOneSetter(owner, propertyWrapper);
-			} else {
-				//Many to One
-				buildManyToOneSetter(owner, propertyWrapper);
-			}
+			buildGetter(owner, propertyWrapper);
+			buildOneAdder(owner, propertyWrapper);
+			buildSetter(owner, propertyWrapper);
 		}
 	}
 
@@ -30,11 +26,11 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
 	public void visitAfter(Property element) {
 
 	}
-	
+
 	/*
 	 * ToOne properties are stored in a List similar to toMany. The first element is returned
 	 */
-	private void buildOneGetter(OJAnnotatedClass owner, PropertyWrapper propertyWrapper) {
+	public static void buildGetter(OJAnnotatedClass owner, PropertyWrapper propertyWrapper) {
 		OJAnnotatedOperation getter = new OJAnnotatedOperation(propertyWrapper.getter(), propertyWrapper.javaBaseTypePath());
 		OJAnnotatedField tmpField = new OJAnnotatedField("tmp", propertyWrapper.javaTumlTypePath());
 		getter.getBody().addToLocals(tmpField);
@@ -49,24 +45,29 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
 		getter.getBody().addToStatements(ifFieldNotEmpty);
 		owner.addToOperations(getter);
 	}
-	
-	private void buildOneToOneSetter(OJAnnotatedClass owner, PropertyWrapper propertyWrapper) {
-		OJAnnotatedOperation setter = buildSetterOutline(owner, propertyWrapper);
-		//Get old value
-		OJAnnotatedField oldValue = new OJAnnotatedField("oldValue", propertyWrapper.javaTumlTypePath());
-		oldValue.setInitExp("this." + propertyWrapper.getter() + "()");
-		setter.getBody().addToLocals(oldValue);
+
+	public static void buildOneAdder(OJAnnotatedClass owner, PropertyWrapper propertyWrapper) {
+		OJAnnotatedOperation singleAdder = new OJAnnotatedOperation(propertyWrapper.adder());
+		singleAdder.addParam(propertyWrapper.fieldname(), propertyWrapper.javaBaseTypePath());
+		OJIfStatement ifNotNull = new OJIfStatement(propertyWrapper.fieldname() + " != null");
+		ifNotNull.addToThenPart("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ")");
+		singleAdder.getBody().addToStatements(ifNotNull);
+		owner.addToOperations(singleAdder);
+		
+		// TODO qualifiers
+		// if (!map.getProperty().getQualifiers().isEmpty()) {
+		// s.setExpression(s.getExpression().replace("val)", "val, " +
+		// TinkerGenerationUtil.contructNameForQualifiedGetter(map) +
+		// "(val))"));
+		// }
+		
 	}
 
-	private void buildManyToOneSetter(OJAnnotatedClass owner, PropertyWrapper propertyWrapper) {
-		OJAnnotatedOperation setter = buildSetterOutline(owner, propertyWrapper);
+	public static void buildSetter(OJAnnotatedClass owner, PropertyWrapper pWrap) {
+		OJAnnotatedOperation setter = new OJAnnotatedOperation(pWrap.setter());
+		setter.addParam(pWrap.fieldname(), pWrap.javaBaseTypePath());
+		setter.getBody().addToStatements(pWrap.clearer() + "()");
+		setter.getBody().addToStatements(pWrap.adder() + "(" + pWrap.fieldname() + ")");
+		owner.addToOperations(setter);
 	}
-
-	private OJAnnotatedOperation buildSetterOutline(OJAnnotatedClass owner, PropertyWrapper propertyWrapper) {
-		OJAnnotatedOperation oneToOneSetter = new OJAnnotatedOperation(propertyWrapper.setter());
-		oneToOneSetter.addParam(propertyWrapper.fieldname(), propertyWrapper.javaTypePath());
-		owner.addToOperations(oneToOneSetter);
-		return oneToOneSetter;
-	}
-	
 }

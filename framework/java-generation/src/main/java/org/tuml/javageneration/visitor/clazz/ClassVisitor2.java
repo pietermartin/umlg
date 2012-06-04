@@ -5,9 +5,11 @@ import java.util.List;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Property;
+import org.opaeum.java.metamodel.OJBlock;
 import org.opaeum.java.metamodel.OJConstructor;
 import org.opaeum.java.metamodel.OJField;
 import org.opaeum.java.metamodel.OJIfStatement;
+import org.opaeum.java.metamodel.OJOperation;
 import org.opaeum.java.metamodel.OJPathName;
 import org.opaeum.java.metamodel.OJSimpleStatement;
 import org.opaeum.java.metamodel.OJSwitchCase;
@@ -29,14 +31,16 @@ public class ClassVisitor2 extends BaseVisitor implements Visitor<Class> {
 	public void visitBefore(Class clazz) {
 		OJAnnotatedClass annotatedClass = findOJClass(clazz);
 		setSuperClass(annotatedClass, clazz);
-		
-		implementCompositionNode(annotatedClass);
+		if (TumlClassOperations.hasCompositeOwner(clazz)) {
+			implementCompositionNode(annotatedClass);
+		} else {
+			implementTumlNode(annotatedClass);
+		}
 		implementIsRoot(annotatedClass, TumlClassOperations.getOtherEndToComposite(clazz) == null);
 		addPersistentConstructor(annotatedClass);
 		addInitialiseProperties(annotatedClass, clazz);
 		addInitialiseProperty(annotatedClass, clazz);
 		addContructorWithVertex(annotatedClass, clazz);
-		
 		if (clazz.getGeneralizations().isEmpty()) {
 			persistUid(annotatedClass);
 			addGetObjectVersion(annotatedClass);
@@ -47,12 +51,13 @@ public class ClassVisitor2 extends BaseVisitor implements Visitor<Class> {
 		}
 		addInitialisePropertiesInPersistentConstructor(annotatedClass);
 		addTumlRuntimePropertyEnum(annotatedClass, clazz);
+		addCreateComponents(annotatedClass, clazz);
+		addInitVariables(annotatedClass, clazz);
+		addDelete(annotatedClass, clazz);
 	}
 
 	@Override
 	public void visitAfter(Class clazz) {
-		// TODO Auto-generated method stub
-
 	}
 
 	private void setSuperClass(OJAnnotatedClass annotatedClass, Class clazz) {
@@ -106,22 +111,20 @@ public class ClassVisitor2 extends BaseVisitor implements Visitor<Class> {
 		ojClass.addToOperations(setId);
 	}
 
-	protected void initialiseVertexInPersistentConstructor(OJAnnotatedClass ojClass, Classifier c) {
+	protected void initialiseVertexInPersistentConstructor(OJAnnotatedClass ojClass, Class c) {
 		OJConstructor constructor = ojClass.findConstructor(new OJPathName("java.lang.Boolean"));
 		constructor.getBody().addToStatements("this.vertex = " + TinkerGenerationUtil.graphDbAccess + ".addVertex(\"dribble\")");
-		constructor.getBody().addToStatements("TransactionThreadEntityVar.setNewEntity(this)");
+		if (TumlClassOperations.hasCompositeOwner(c)) {
+			constructor.getBody().addToStatements("TransactionThreadEntityVar.setNewEntity(this)");
+			ojClass.addToImports(TinkerGenerationUtil.transactionThreadEntityVar);
+		}
 		constructor.getBody().addToStatements("defaultCreate()");
-		ojClass.addToImports(TinkerGenerationUtil.transactionThreadEntityVar);
 		ojClass.addToImports(TinkerGenerationUtil.graphDbPathName);
 	}
 
 	private void addSuperWithPersistenceToDefaultConstructor(OJAnnotatedClass ojClass) {
 		OJConstructor constructor = ojClass.findConstructor(new OJPathName("java.lang.Boolean"));
 		constructor.getBody().getStatements().add(0, new OJSimpleStatement("super( " + TinkerGenerationUtil.PERSISTENT_CONSTRUCTOR_PARAM_NAME + " )"));
-	}
-
-	private void implementCompositionNode(OJAnnotatedClass ojClass) {
-		ojClass.addToImplementedInterfaces(TinkerGenerationUtil.tinkerCompositionNodePathName);
 	}
 
 	protected void addPersistentConstructor(OJAnnotatedClass ojClass) {
@@ -138,7 +141,7 @@ public class ClassVisitor2 extends BaseVisitor implements Visitor<Class> {
 			initialiseProperties.getBody().addToStatements("super.initialiseProperties()");
 		}
 		annotatedClass.addToOperations(initialiseProperties);
-		for (Property p :  TumlClassOperations.getAllOwnedProperties(clazz)) {
+		for (Property p : TumlClassOperations.getAllOwnedProperties(clazz)) {
 			PropertyWrapper pWrap = new PropertyWrapper(p);
 			if (!(pWrap.isDerived() || pWrap.isDerivedUnion())) {
 				OJSimpleStatement statement = new OJSimpleStatement("this." + pWrap.fieldname() + " = " + pWrap.javaDefaultInitialisation());
@@ -161,8 +164,8 @@ public class ClassVisitor2 extends BaseVisitor implements Visitor<Class> {
 		OJSwitchStatement ojSwitchStatement = new OJSwitchStatement();
 		ojSwitchStatement.setCondition("(" + TumlClassOperations.propertyEnumName(clazz) + ".fromLabel(tumlRuntimeProperty.getLabel()))");
 		initialiseProperty.getBody().addToStatements(ojSwitchStatement);
-		
-		for (Property p :  TumlClassOperations.getAllOwnedProperties(clazz)) {
+
+		for (Property p : TumlClassOperations.getAllOwnedProperties(clazz)) {
 			PropertyWrapper pWrap = new PropertyWrapper(p);
 			if (!(pWrap.isDerived() || pWrap.isDerivedUnion())) {
 				OJSwitchCase ojSwitchCase = new OJSwitchCase();
@@ -176,7 +179,6 @@ public class ClassVisitor2 extends BaseVisitor implements Visitor<Class> {
 		}
 	}
 
-	
 	protected void addContructorWithVertex(OJAnnotatedClass ojClass, Class clazz) {
 		OJConstructor constructor = new OJConstructor();
 		constructor.addParam("vertex", new OJPathName("com.tinkerpop.blueprints.pgm.Vertex"));
@@ -221,7 +223,7 @@ public class ClassVisitor2 extends BaseVisitor implements Visitor<Class> {
 		labelField.setType(new OJPathName("String"));
 		labelField.setName("label");
 		ojEnum.addToFields(labelField);
-		
+
 		OJField isOneToOneField = new OJField();
 		isOneToOneField.setType(new OJPathName("boolean"));
 		isOneToOneField.setName("oneToOne");
@@ -251,29 +253,29 @@ public class ClassVisitor2 extends BaseVisitor implements Visitor<Class> {
 		lowerField.setType(new OJPathName("int"));
 		lowerField.setName("lower");
 		ojEnum.addToFields(lowerField);
-		
+
 		ojEnum.implementGetter();
 		ojEnum.createConstructorFromFields();
-		
+
 		OJAnnotatedOperation fromLabel = new OJAnnotatedOperation("fromLabel", new OJPathName(TumlClassOperations.propertyEnumName(clazz)));
 		fromLabel.addParam("label", new OJPathName("String"));
 		fromLabel.setStatic(true);
 		ojEnum.addToOperations(fromLabel);
-		
+
 		OJAnnotatedOperation isValid = new OJAnnotatedOperation("isValid", new OJPathName("boolean"));
 		TinkerGenerationUtil.addOverrideAnnotation(isValid);
 		isValid.addParam("elementCount", new OJPathName("int"));
-		isValid.getBody().addToStatements("return elementCount <= getUpper() && elementCount >= getLower()");
+		isValid.getBody().addToStatements("return (getUpper() == -1 || elementCount <= getUpper()) && elementCount >= getLower()");
 		ojEnum.addToOperations(isValid);
-		
-		for (Property p :  TumlClassOperations.getAllOwnedProperties(clazz)) {
+
+		for (Property p : TumlClassOperations.getAllOwnedProperties(clazz)) {
 			PropertyWrapper pWrap = new PropertyWrapper(p);
 			if (!(pWrap.isDerived() || pWrap.isDerivedUnion())) {
 
 				OJIfStatement ifLabelEquals = new OJIfStatement(pWrap.fieldname().toUpperCase() + ".getLabel().equals(label)");
 				ifLabelEquals.addToThenPart("return " + pWrap.fieldname().toUpperCase());
 				fromLabel.getBody().addToStatements(ifLabelEquals);
-				
+
 				OJEnumLiteral ojLiteral = new OJEnumLiteral(pWrap.fieldname().toUpperCase());
 
 				OJField propertyControllingSideField = new OJField();
@@ -285,12 +287,12 @@ public class ClassVisitor2 extends BaseVisitor implements Visitor<Class> {
 				compositeLabelField.setType(new OJPathName("boolean"));
 				compositeLabelField.setInitExp(Boolean.toString(pWrap.isComposite()));
 				ojLiteral.addToAttributeValues(compositeLabelField);
-				
+
 				OJField propertyLabelField = new OJField();
 				propertyLabelField.setType(new OJPathName("String"));
-				propertyLabelField.setInitExp("\""+ TinkerGenerationUtil.getEdgeName(p) +"\"");
+				propertyLabelField.setInitExp("\"" + TinkerGenerationUtil.getEdgeName(p) + "\"");
 				ojLiteral.addToAttributeValues(propertyLabelField);
-				
+
 				OJField isOneToManyAttribute = new OJField();
 				isOneToManyAttribute.setType(new OJPathName("boolean"));
 				isOneToManyAttribute.setInitExp(Boolean.toString(pWrap.isOneToMany()));
@@ -325,6 +327,43 @@ public class ClassVisitor2 extends BaseVisitor implements Visitor<Class> {
 			}
 		}
 		fromLabel.getBody().addToStatements("throw new IllegalStateException()");
+	}
+
+	private void addInitVariables(OJAnnotatedClass annotatedClass, Class clazz) {
+		OJOperation initVariables = new OJAnnotatedOperation("initVariables");
+		initVariables.setBody(annotatedClass.getDefaultConstructor().getBody());
+		if (TumlClassOperations.hasSupertype(clazz)) {
+			OJSimpleStatement simpleStatement = new OJSimpleStatement("super.initVariables()");
+			if (initVariables.getBody().getStatements().isEmpty()) {
+				initVariables.getBody().addToStatements(simpleStatement);
+			} else {
+				initVariables.getBody().getStatements().set(0, simpleStatement);
+			}
+		}
+		annotatedClass.addToOperations(initVariables);
+	}
+
+	private void addCreateComponents(OJAnnotatedClass annotatedClass, Class clazz) {
+		OJOperation createComponents = new OJAnnotatedOperation("createComponents");
+		createComponents.setBody(new OJBlock());
+		if (TumlClassOperations.hasSupertype(clazz)) {
+			createComponents.getBody().addToStatements("super.createComponents()");
+		}
+		annotatedClass.addToOperations(createComponents);
+	}
+
+	private void addDelete(OJAnnotatedClass annotatedClass, Class clazz) {
+		OJAnnotatedOperation delete = new OJAnnotatedOperation("delete");
+		TinkerGenerationUtil.addOverrideAnnotation(delete);
+		annotatedClass.addToOperations(delete);
+	}
+
+	private void implementCompositionNode(OJAnnotatedClass annotatedClass) {
+		annotatedClass.addToImplementedInterfaces(TinkerGenerationUtil.tinkerCompositionNodePathName);
+	}
+
+	private void implementTumlNode(OJAnnotatedClass annotatedClass) {
+		annotatedClass.addToImplementedInterfaces(TinkerGenerationUtil.TINKER_NODE);
 	}
 
 }
