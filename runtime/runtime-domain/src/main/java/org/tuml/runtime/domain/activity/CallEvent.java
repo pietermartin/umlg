@@ -1,5 +1,7 @@
 package org.tuml.runtime.domain.activity;
 
+import org.tuml.runtime.collection.TumlRuntimeProperty;
+
 import com.tinkerpop.blueprints.pgm.Vertex;
 
 public class CallEvent extends Event {
@@ -16,6 +18,12 @@ public class CallEvent extends Event {
 
 	@Override
 	public void initialiseProperties() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		// TODO Auto-generated method stub
 		
 	}

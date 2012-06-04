@@ -1,6 +1,7 @@
 package org.tuml.runtime.domain.activity;
 
 import org.tuml.runtime.adaptor.GraphDb;
+import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.domain.ISignal;
 import org.tuml.runtime.domain.TinkerNode;
 
@@ -46,6 +47,12 @@ public class SignalEvent extends Event {
 
 	@Override
 	public void initialiseProperties() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		// TODO Auto-generated method stub
 		
 	}

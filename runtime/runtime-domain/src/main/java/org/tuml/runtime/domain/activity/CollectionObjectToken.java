@@ -5,8 +5,8 @@ import java.util.UUID;
 
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.collection.BaseCollection;
-import org.tuml.runtime.collection.TumlRuntimePropertyImpl;
 import org.tuml.runtime.collection.TinkerSequenceImpl;
+import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.domain.CompositionNode;
 
 import com.tinkerpop.blueprints.pgm.Vertex;
@@ -18,12 +18,14 @@ public class CollectionObjectToken<O> extends ObjectToken<O> implements Composit
 
 	public CollectionObjectToken(Vertex vertex) {
 		super(vertex);
-		this.elements = new TinkerSequenceImpl<O>(this, "org__activitytest__contextObject", getUid(), true, new TumlRuntimePropertyImpl(false, true, false, false, 0, Integer.MAX_VALUE), false);
+//		this.elements = new TinkerSequenceImpl<O>(this, "org__activitytest__contextObject", getUid(), true, new TumlRuntimePropertyImpl(false, true, false, false, 0, Integer.MAX_VALUE), false);
+		this.elements = new TinkerSequenceImpl<O>(this, getUid(), new TumlRuntimePropertyImpl());
 	}
 
 	public CollectionObjectToken(String edgeName, Collection<O> collection) {
 		super(edgeName);
-		this.elements = new TinkerSequenceImpl<O>(this, "org__activitytest__contextObject", getUid(), true, new TumlRuntimePropertyImpl(false, true, false, false, 0, Integer.MAX_VALUE), false);
+//		this.elements = new TinkerSequenceImpl<O>(this, "org__activitytest__contextObject", getUid(), true, new TumlRuntimePropertyImpl(false, true, false, false, 0, Integer.MAX_VALUE), false);
+		this.elements = new TinkerSequenceImpl<O>(this, getUid(), new TumlRuntimePropertyImpl());
 		addCollection(collection);
 	}
 
@@ -133,6 +135,12 @@ public class CollectionObjectToken<O> extends ObjectToken<O> implements Composit
 	@Override
 	public boolean hasInitBeenCalled() {
 		return true;
+	}
+
+	@Override
+	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

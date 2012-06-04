@@ -4,6 +4,8 @@ import com.tinkerpop.blueprints.pgm.Vertex;
 
 public abstract class ReturnInformationOutputPin<O,OUT extends ObjectToken<O>> extends OutputPin<O,OUT> {
 
+	private static final long serialVersionUID = 1L;
+
 	public ReturnInformationOutputPin() {
 		super();
 	}
