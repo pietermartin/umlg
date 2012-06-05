@@ -26,7 +26,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 	// protected boolean controllingSide;
 	// protected boolean manyToMany;
 	protected boolean loaded = false;
-	protected CompositionNode owner;
+	protected TinkerNode owner;
 	// This is the vertex of the owner of the collection
 	protected Vertex vertex;
 	protected Class<?> parentClass;
@@ -43,7 +43,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 					Object value = this.getVertexForDirection(edge).getProperty("value");
 					node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
 					this.internalVertexMap.put(value, this.getVertexForDirection(edge));
-				} else if (CompositionNode.class.isAssignableFrom(c)) {
+				} else if (TinkerNode.class.isAssignableFrom(c)) {
 					node = (E) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
 				} else {
 					Object value = this.getVertexForDirection(edge).getProperty("value");
@@ -63,6 +63,14 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 			return this.vertex.getOutEdges(this.getLabel());
 		} else {
 			return this.vertex.getInEdges(this.getLabel());
+		}
+	}
+
+	protected Iterable<Edge> getEdges(Vertex v) {
+		if (!this.isControllingSide()) {
+			return v.getOutEdges(this.getLabel());
+		} else {
+			return v.getInEdges(this.getLabel());
 		}
 	}
 
@@ -104,8 +112,8 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 			@SuppressWarnings("unchecked")
 			E e = (E) o;
 			Vertex v;
-			if (o instanceof CompositionNode) {
-				CompositionNode node = (CompositionNode) o;
+			if (o instanceof TinkerNode) {
+				TinkerNode node = (TinkerNode) o;
 				v = node.getVertex();
 				Set<Edge> edges = GraphDb.getDb().getEdgesBetween(this.vertex, v, this.getLabel());
 				for (Edge edge : edges) {
@@ -131,7 +139,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 
 	protected Edge addInternal(E e) {
 		Vertex v;
-		if (e instanceof CompositionNode || e instanceof TinkerNode) {
+		if (e instanceof TinkerNode) {
 			TinkerNode node = (TinkerNode) e;
 			if (e instanceof CompositionNode) {
 				TransactionThreadEntityVar.setNewEntity((CompositionNode) node);
@@ -139,7 +147,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 			v = node.getVertex();
 			if (this.isOneToMany() || this.isOneToOne()) {
 				// Remove the existing one from the element if it exist
-				Iterator<Edge> iteratorToOne = v.getInEdges(this.getLabel()).iterator();
+				Iterator<Edge> iteratorToOne = getEdges(v).iterator();
 				if (iteratorToOne.hasNext()) {
 					GraphDb.getDb().removeEdge(iteratorToOne.next());
 					node.initialiseProperty(this.tumlRuntimeProperty);
@@ -171,10 +179,6 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 			createAudit(e, v, false);
 		}
 		return edge;
-	}
-
-	private boolean canAcceptElement() {
-		return this.tumlRuntimeProperty.isValid(size() + 1);
 	}
 
 	private Edge addCorrelationForManyToMany(Vertex v, Edge edge) {

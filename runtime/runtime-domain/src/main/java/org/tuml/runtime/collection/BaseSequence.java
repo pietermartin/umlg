@@ -57,9 +57,9 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
 
 		float min;
 		float max;
-		if (e instanceof CompositionNode) {
-			min = (Float) ((CompositionNode) previous).getVertex().getProperty("tinkerIndex");
-			max = (Float) ((CompositionNode) current).getVertex().getProperty("tinkerIndex");
+		if (e instanceof TinkerNode) {
+			min = (Float) ((TinkerNode) previous).getVertex().getProperty("tinkerIndex");
+			max = (Float) ((TinkerNode) current).getVertex().getProperty("tinkerIndex");
 		} else if (e.getClass().isEnum()) {
 			min = (Float) this.internalVertexMap.get(((Enum<?>) previous).name()).getProperty("tinkerIndex");
 			max = (Float) this.internalVertexMap.get(((Enum<?>) current).name()).getProperty("tinkerIndex");
@@ -82,21 +82,9 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
 			@SuppressWarnings("unchecked")
 			E e = (E)o;
 			Vertex v;
-			if (o instanceof CompositionNode) {
-				CompositionNode node = (CompositionNode) o;
-				v = node.getVertex();
-				Set<Edge> edges = GraphDb.getDb().getEdgesBetween(this.vertex, v, this.getLabel());
-				for (Edge edge : edges) {
-					removeEdgefromIndex(v, edge, indexOf);
-					GraphDb.getDb().removeEdge(edge);
-					if (o instanceof TinkerAuditableNode) {
-						createAudit(e, v, true);
-					}
-					break;
-				}
-			} else if (o instanceof  TinkerNode) {
+			if (o instanceof TinkerNode) {
 				TinkerNode node = (TinkerNode) o;
-				v = node.getVertex();				
+				v = node.getVertex();
 				Set<Edge> edges = GraphDb.getDb().getEdgesBetween(this.vertex, v, this.getLabel());
 				for (Edge edge : edges) {
 					removeEdgefromIndex(v, edge, indexOf);

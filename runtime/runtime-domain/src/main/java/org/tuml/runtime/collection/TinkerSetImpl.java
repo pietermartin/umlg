@@ -3,11 +3,11 @@ package org.tuml.runtime.collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.tuml.runtime.domain.CompositionNode;
+import org.tuml.runtime.domain.TinkerNode;
 
 public class TinkerSetImpl<E> extends BaseSet<E> implements TinkerSet<E> {
 
-	public TinkerSetImpl(CompositionNode owner, TumlRuntimeProperty multiplicity) {
+	public TinkerSetImpl(TinkerNode owner, TumlRuntimeProperty multiplicity) {
 		super();
 		this.internalCollection = new HashSet<E>();
 		this.owner = owner;

@@ -5,14 +5,14 @@ import java.util.Collection;
 import java.util.List;
 
 import org.tuml.runtime.adaptor.GraphDb;
-import org.tuml.runtime.domain.CompositionNode;
+import org.tuml.runtime.domain.TinkerNode;
 
 import com.tinkerpop.blueprints.pgm.Edge;
 import com.tinkerpop.blueprints.pgm.Vertex;
 
 public class TinkerQualifiedSequenceImpl<E> extends BaseSequence<E> implements TinkerQualifiedSequence<E> {
 
-	public TinkerQualifiedSequenceImpl(CompositionNode owner, String uid, TumlRuntimeProperty multiplicity) {
+	public TinkerQualifiedSequenceImpl(TinkerNode owner, String uid, TumlRuntimeProperty multiplicity) {
 		super();
 		this.internalCollection = new ArrayList<E>();
 		this.owner = owner;

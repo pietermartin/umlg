@@ -7,6 +7,7 @@ import java.util.Set;
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
 import org.tuml.runtime.domain.CompositionNode;
+import org.tuml.runtime.domain.TinkerNode;
 
 import com.tinkerpop.blueprints.pgm.Edge;
 import com.tinkerpop.blueprints.pgm.Index;
@@ -16,7 +17,7 @@ public class TinkerQualifiedSetImpl<E> extends BaseSet<E> implements TinkerQuali
 
 	private Index<Edge> index;
 
-	public TinkerQualifiedSetImpl(CompositionNode owner, String uid, TumlRuntimeProperty multiplicity) {
+	public TinkerQualifiedSetImpl(TinkerNode owner, String uid, TumlRuntimeProperty multiplicity) {
 		super();
 		this.internalCollection = new HashSet<E>();
 		this.owner = owner;
@@ -28,12 +29,12 @@ public class TinkerQualifiedSetImpl<E> extends BaseSet<E> implements TinkerQuali
 		}
 		this.tumlRuntimeProperty = multiplicity;
 	}
-	
+
 	public Set<E> getInternalSet() {
 		return (Set<E>) this.internalCollection;
-	}	
+	}
 
-	@Override	
+	@Override
 	public boolean add(E e, List<Qualifier> qualifiers) {
 		maybeCallInit(e);
 		maybeLoad();
@@ -43,16 +44,18 @@ public class TinkerQualifiedSetImpl<E> extends BaseSet<E> implements TinkerQuali
 		if (result) {
 			edge = addInternal(e);
 		} else {
-			if (!this.isManyToMany()) { 
+			if (!this.isManyToMany()) {
 				throw new IllegalStateException("Only with many to many relationship can the edge already have been created");
 			}
 			Vertex v;
-			if (e instanceof CompositionNode) {
-				CompositionNode node = (CompositionNode) e;
-				TransactionThreadEntityVar.setNewEntity((CompositionNode) node);
+			if (e instanceof TinkerNode) {
+				TinkerNode node = (TinkerNode) e;
+				if (e instanceof CompositionNode) {
+					TransactionThreadEntityVar.setNewEntity((CompositionNode) node);
+				}
 				v = node.getVertex();
 				Set<Edge> edgesBetween = GraphDb.getDb().getEdgesBetween(this.vertex, v, this.getLabel());
-				if (edgesBetween.size()!=1) {
+				if (edgesBetween.size() != 1) {
 					throw new IllegalStateException("A set can only have one edge between the two ends");
 				}
 				edge = edgesBetween.iterator().next();
@@ -72,14 +75,14 @@ public class TinkerQualifiedSetImpl<E> extends BaseSet<E> implements TinkerQuali
 	@Override
 	public boolean remove(Object o) {
 		if (!this.loaded) {
-//			this.loaded = true;
+			// this.loaded = true;
 			loadFromVertex();
 		}
 		boolean result = this.getInternalSet().remove(o);
 		if (result) {
 			Vertex v;
-			if (o instanceof CompositionNode) {
-				CompositionNode node = (CompositionNode) o;
+			if (o instanceof TinkerNode) {
+				TinkerNode node = (TinkerNode) o;
 				v = node.getVertex();
 				Set<Edge> edges = GraphDb.getDb().getEdgesBetween(this.vertex, v, this.getLabel());
 				for (Edge edge : edges) {
@@ -124,7 +127,7 @@ public class TinkerQualifiedSetImpl<E> extends BaseSet<E> implements TinkerQuali
 	private void addQualifierToIndex(Edge edge, List<Qualifier> qualifiers) {
 		for (Qualifier qualifier : qualifiers) {
 			this.index.put(qualifier.getKey(), qualifier.getValue(), edge);
-			edge.setProperty("index"+qualifier.getKey(), qualifier.getValue());
+			edge.setProperty("index" + qualifier.getKey(), qualifier.getValue());
 		}
 	}
 

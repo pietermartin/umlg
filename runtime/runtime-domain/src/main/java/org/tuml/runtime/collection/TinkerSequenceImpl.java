@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.tuml.runtime.adaptor.GraphDb;
-import org.tuml.runtime.domain.CompositionNode;
+import org.tuml.runtime.domain.TinkerNode;
 
 import com.tinkerpop.blueprints.pgm.Edge;
 import com.tinkerpop.blueprints.pgm.Vertex;
 
 public class TinkerSequenceImpl<E> extends BaseSequence<E> implements TinkerSequence<E> {
 
-	public TinkerSequenceImpl(CompositionNode owner, String uid, TumlRuntimeProperty multiplicity) {
+	public TinkerSequenceImpl(TinkerNode owner, String uid, TumlRuntimeProperty multiplicity) {
 		super();
 		this.internalCollection = new ArrayList<E>();
 		this.owner = owner;

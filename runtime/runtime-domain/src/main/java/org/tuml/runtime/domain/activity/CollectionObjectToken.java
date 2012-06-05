@@ -8,6 +8,7 @@ import org.tuml.runtime.collection.BaseCollection;
 import org.tuml.runtime.collection.TinkerSequenceImpl;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.domain.CompositionNode;
+import org.tuml.runtime.domain.TinkerNode;
 
 import com.tinkerpop.blueprints.pgm.Vertex;
 
@@ -122,7 +123,7 @@ public class CollectionObjectToken<O> extends ObjectToken<O> implements Composit
 	}
 
 	@Override
-	public void init(CompositionNode owner) {
+	public void init(TinkerNode owner) {
 	}
 
 	@Override

@@ -1,8 +1,7 @@
 package org.tuml.runtime.domain;
 
 public interface CompositionNode extends TinkerNode {
-	CompositionNode getOwningObject();
-	void init(CompositionNode owner);
+	TinkerNode getOwningObject();
+	void init(TinkerNode owner);
 	boolean hasInitBeenCalled();
-	void delete();
 }

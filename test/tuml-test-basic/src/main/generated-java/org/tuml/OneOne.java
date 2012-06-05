@@ -7,14 +7,13 @@ import java.util.UUID;
 
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.TinkerIdUtilFactory;
-import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TinkerSetImpl;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.domain.BaseTinker;
-import org.tuml.runtime.domain.CompositionNode;
+import org.tuml.runtime.domain.TinkerNode;
 
-public class OneOne extends BaseTinker implements CompositionNode {
+public class OneOne extends BaseTinker implements TinkerNode {
 	private TinkerSet<String> name;
 	private TinkerSet<OneTwo> oneTwo;
 
@@ -38,21 +37,28 @@ public class OneOne extends BaseTinker implements CompositionNode {
 	 */
 	public OneOne(Boolean persistent) {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
-		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
 		initialiseProperties();
 	}
 
 	public void addToName(String name) {
 		if ( name != null ) {
-			z_internalAddToName(name);
+			this.name.add(name);
 		}
 	}
 	
 	public void addToOneTwo(OneTwo oneTwo) {
 		if ( oneTwo != null ) {
-			z_internalAddToOneTwo(oneTwo);
+			this.oneTwo.add(oneTwo);
 		}
+	}
+	
+	public void clearName() {
+		this.name.clear();
+	}
+	
+	public void clearOneTwo() {
+		this.oneTwo.clear();
 	}
 	
 	public void createComponents() {
@@ -91,11 +97,6 @@ public class OneOne extends BaseTinker implements CompositionNode {
 	}
 	
 	@Override
-	public CompositionNode getOwningObject() {
-		return null;
-	}
-	
-	@Override
 	public String getUid() {
 		String uid = (String) this.vertex.getProperty("uid");
 		if ( uid==null || uid.trim().length()==0 ) {
@@ -103,12 +104,6 @@ public class OneOne extends BaseTinker implements CompositionNode {
 			this.vertex.setProperty("uid", uid);
 		}
 		return uid;
-	}
-	
-	@Override
-	public void init(CompositionNode compositeOwner) {
-		this.hasInitBeenCalled = true;
-		initVariables();
 	}
 	
 	public void initVariables() {
@@ -139,36 +134,48 @@ public class OneOne extends BaseTinker implements CompositionNode {
 		return true;
 	}
 	
+	public void removeFromName(Set<String> name) {
+		if ( !name.isEmpty() ) {
+			this.name.removeAll(name);
+		}
+	}
+	
+	public void removeFromName(String name) {
+		if ( name != null ) {
+			this.name.remove(name);
+		}
+	}
+	
+	public void removeFromOneTwo(OneTwo oneTwo) {
+		if ( oneTwo != null ) {
+			this.oneTwo.remove(oneTwo);
+		}
+	}
+	
+	public void removeFromOneTwo(Set<OneTwo> oneTwo) {
+		if ( !oneTwo.isEmpty() ) {
+			this.oneTwo.removeAll(oneTwo);
+		}
+	}
+	
 	@Override
 	public void setId(Long id) {
 		TinkerIdUtilFactory.getIdUtil().setId(this.vertex, id);
 	}
 	
-	public void setName(Set<String> name) {
+	public void setName(String name) {
+		clearName();
+		addToName(name);
 	}
 	
-	public void setOneTwo(Set<OneTwo> oneTwo) {
-	}
-	
-	public void z_internalAddToName(String name) {
-		this.name.add(name);
-	}
-	
-	public void z_internalAddToOneTwo(OneTwo oneTwo) {
-		this.oneTwo.add(oneTwo);
-	}
-	
-	public void z_internalRemoveFromName(String name) {
-		this.name.remove(name);
-	}
-	
-	public void z_internalRemoveFromOneTwo(OneTwo oneTwo) {
-		this.oneTwo.remove(oneTwo);
+	public void setOneTwo(OneTwo oneTwo) {
+		clearOneTwo();
+		addToOneTwo(oneTwo);
 	}
 
 	public enum OneOneRuntimePropertyEnum implements TumlRuntimeProperty {
-		NAME(true,false,"org__tuml__OneOne__name",false,true,false,false,1,1),
-		ONETWO(false,false,"A_<oneOne>_<oneTwo>",false,false,true,false,1,0);
+		NAME(true,false,"org__tuml__OneOne__name",false,false,true,false,1,1),
+		ONETWO(false,false,"A_<oneOne>_<oneTwo>",true,false,false,false,1,0);
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -250,7 +257,7 @@ public class OneOne extends BaseTinker implements CompositionNode {
 		
 		@Override
 		public boolean isValid(int elementCount) {
-			return elementCount <= getUpper() && elementCount >= getLower();
+			return (getUpper() == -1 || elementCount <= getUpper()) && elementCount >= getLower();
 		}
 	
 	}

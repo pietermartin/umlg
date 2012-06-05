@@ -34,15 +34,14 @@ public class NakedTransactionEventHandler<T> implements TransactionEventHandler<
 			GraphDb.incrementTransactionCount();
 			List<CompositionNode> entities = TransactionThreadEntityVar.get();
 			for (CompositionNode entity : entities) {
-				TinkerNode tinkerNode = (TinkerNode) entity;
-				constraintViolations.addAll(validator.validate(tinkerNode));
-				if (!tinkerNode.isTinkerRoot() && entity.getOwningObject() == null) {
+				constraintViolations.addAll(validator.validate((TinkerNode)entity));
+				if (!entity.isTinkerRoot() && entity.getOwningObject() == null) {
 
 					if (entity instanceof BaseTinkerAuditable && ((BaseTinkerAuditable) entity).getDeletedOn().before(new Date())) {
 						return null;
 					}
 					TransactionThreadEntityVar.clear();
-					throw new IllegalStateException(String.format("Entity %s %s does not have a composite owner", tinkerNode.getClass().getSimpleName(), tinkerNode.getId()));
+					throw new IllegalStateException(String.format("Entity %s %s does not have a composite owner", entity.getClass().getSimpleName(), entity.getId()));
 
 				}
 			}

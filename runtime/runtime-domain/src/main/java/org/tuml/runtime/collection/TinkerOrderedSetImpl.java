@@ -9,7 +9,6 @@ import java.util.Set;
 import org.apache.commons.collections.set.ListOrderedSet;
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.NakedTinkerIndex;
-import org.tuml.runtime.domain.CompositionNode;
 import org.tuml.runtime.domain.TinkerNode;
 
 import com.tinkerpop.blueprints.pgm.CloseableSequence;
@@ -25,7 +24,7 @@ public class TinkerOrderedSetImpl<E> extends BaseCollection<E> implements Tinker
 	}
 	
 	@SuppressWarnings("unchecked")
-	public TinkerOrderedSetImpl(CompositionNode owner, String uid, TumlRuntimeProperty multiplicity) {
+	public TinkerOrderedSetImpl(TinkerNode owner, String uid, TumlRuntimeProperty multiplicity) {
 		super();
 		this.internalCollection =  new ListOrderedSet();
 		this.owner = owner;
@@ -77,9 +76,9 @@ public class TinkerOrderedSetImpl<E> extends BaseCollection<E> implements Tinker
 
 		float min;
 		float max;
-		if (e instanceof CompositionNode) {
-			min = (Float) ((CompositionNode)previous).getVertex().getProperty("tinkerIndex");
-			max = (Float) ((CompositionNode)current).getVertex().getProperty("tinkerIndex");
+		if (e instanceof TinkerNode) {
+			min = (Float) ((TinkerNode)previous).getVertex().getProperty("tinkerIndex");
+			max = (Float) ((TinkerNode)current).getVertex().getProperty("tinkerIndex");
 		} else if (e.getClass().isEnum()) {
 			min = (Float) this.internalVertexMap.get(((Enum<?>) previous).name()).getProperty("tinkerIndex");
 			max = (Float) this.internalVertexMap.get(((Enum<?>) current).name()).getProperty("tinkerIndex");
@@ -125,8 +124,8 @@ public class TinkerOrderedSetImpl<E> extends BaseCollection<E> implements Tinker
 		boolean result = this.getInternalListOrderedSet().remove(o);
 		if (result) {
 			Vertex v;
-			if (o instanceof CompositionNode) {
-				CompositionNode node = (CompositionNode) o;
+			if (o instanceof TinkerNode) {
+				TinkerNode node = (TinkerNode) o;
 				v = node.getVertex();
 				Set<Edge> edges = GraphDb.getDb().getEdgesBetween(this.vertex, v, this.getLabel());
 				for (Edge edge : edges) {

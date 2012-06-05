@@ -9,4 +9,5 @@ public interface TinkerNode extends PersistentObject {
 	boolean isTinkerRoot();
 	void initialiseProperties();
 	void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty);
+	void delete();
 }

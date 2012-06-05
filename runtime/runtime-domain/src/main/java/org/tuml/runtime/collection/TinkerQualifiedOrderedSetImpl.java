@@ -21,7 +21,7 @@ public class TinkerQualifiedOrderedSetImpl<E> extends BaseCollection<E> implemen
 	protected NakedTinkerIndex<Edge> index;
 	
 	@SuppressWarnings("unchecked")
-	public TinkerQualifiedOrderedSetImpl(CompositionNode owner, String uid, TumlRuntimeProperty multiplicity) {
+	public TinkerQualifiedOrderedSetImpl(TinkerNode owner, String uid, TumlRuntimeProperty multiplicity) {
 		super();
 		this.internalCollection = new ListOrderedSet();
 		this.owner = owner;
@@ -80,9 +80,9 @@ public class TinkerQualifiedOrderedSetImpl<E> extends BaseCollection<E> implemen
 
 		float min;
 		float max;
-		if (e instanceof CompositionNode) {
-			min = (Float) ((CompositionNode)previous).getVertex().getProperty("tinkerIndex");
-			max = (Float) ((CompositionNode)current).getVertex().getProperty("tinkerIndex");
+		if (e instanceof TinkerNode) {
+			min = (Float) ((TinkerNode)previous).getVertex().getProperty("tinkerIndex");
+			max = (Float) ((TinkerNode)current).getVertex().getProperty("tinkerIndex");
 		} else if (e.getClass().isEnum()) {
 			min = (Float) this.internalVertexMap.get(((Enum<?>) previous).name()).getProperty("tinkerIndex");
 			max = (Float) this.internalVertexMap.get(((Enum<?>) current).name()).getProperty("tinkerIndex");
@@ -128,8 +128,8 @@ public class TinkerQualifiedOrderedSetImpl<E> extends BaseCollection<E> implemen
 		boolean result = this.getInternalListOrderedSet().remove(o);
 		if (result) {
 			Vertex v;
-			if (o instanceof CompositionNode) {
-				CompositionNode node = (CompositionNode) o;
+			if (o instanceof TinkerNode) {
+				TinkerNode node = (TinkerNode) o;
 				v = node.getVertex();
 				Set<Edge> edges = GraphDb.getDb().getEdgesBetween(this.vertex, v, this.getLabel());
 				for (Edge edge : edges) {

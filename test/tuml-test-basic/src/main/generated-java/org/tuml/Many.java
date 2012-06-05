@@ -13,6 +13,7 @@ import org.tuml.runtime.collection.TinkerSetImpl;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.domain.BaseTinker;
 import org.tuml.runtime.domain.CompositionNode;
+import org.tuml.runtime.domain.TinkerNode;
 
 public class Many extends BaseTinker implements CompositionNode {
 	private TinkerSet<String> name;
@@ -58,14 +59,22 @@ public class Many extends BaseTinker implements CompositionNode {
 
 	public void addToName(String name) {
 		if ( name != null ) {
-			z_internalAddToName(name);
+			this.name.add(name);
 		}
 	}
 	
 	public void addToOne(One one) {
 		if ( one != null ) {
-			z_internalAddToOne(one);
+			this.one.add(one);
 		}
+	}
+	
+	public void clearName() {
+		this.name.clear();
+	}
+	
+	public void clearOne() {
+		this.one.clear();
 	}
 	
 	public void createComponents() {
@@ -104,7 +113,7 @@ public class Many extends BaseTinker implements CompositionNode {
 	}
 	
 	@Override
-	public CompositionNode getOwningObject() {
+	public TinkerNode getOwningObject() {
 		return getOne();
 	}
 	
@@ -118,9 +127,13 @@ public class Many extends BaseTinker implements CompositionNode {
 		return uid;
 	}
 	
+	/** This gets called on creation with the compositional owner. The composition owner does not itself need to be a composite node
+	 * 
+	 * @param compositeOwner 
+	 */
 	@Override
-	public void init(CompositionNode compositeOwner) {
-		this.z_internalAddToOne((One)compositeOwner);
+	public void init(TinkerNode compositeOwner) {
+		this.one.add((One)compositeOwner);
 		this.hasInitBeenCalled = true;
 		initVariables();
 	}
@@ -153,36 +166,48 @@ public class Many extends BaseTinker implements CompositionNode {
 		return false;
 	}
 	
+	public void removeFromName(Set<String> name) {
+		if ( !name.isEmpty() ) {
+			this.name.removeAll(name);
+		}
+	}
+	
+	public void removeFromName(String name) {
+		if ( name != null ) {
+			this.name.remove(name);
+		}
+	}
+	
+	public void removeFromOne(One one) {
+		if ( one != null ) {
+			this.one.remove(one);
+		}
+	}
+	
+	public void removeFromOne(Set<One> one) {
+		if ( !one.isEmpty() ) {
+			this.one.removeAll(one);
+		}
+	}
+	
 	@Override
 	public void setId(Long id) {
 		TinkerIdUtilFactory.getIdUtil().setId(this.vertex, id);
 	}
 	
-	public void setName(Set<String> name) {
+	public void setName(String name) {
+		clearName();
+		addToName(name);
 	}
 	
-	public void setOne(Set<One> one) {
-	}
-	
-	public void z_internalAddToName(String name) {
-		this.name.add(name);
-	}
-	
-	public void z_internalAddToOne(One one) {
-		this.one.add(one);
-	}
-	
-	public void z_internalRemoveFromName(String name) {
-		this.name.remove(name);
-	}
-	
-	public void z_internalRemoveFromOne(One one) {
-		this.one.remove(one);
+	public void setOne(One one) {
+		clearOne();
+		addToOne(one);
 	}
 
 	public enum ManyRuntimePropertyEnum implements TumlRuntimeProperty {
-		NAME(true,false,"org__tuml__Many__name",false,true,false,false,1,1),
-		ONE(false,false,"A_<one>_<many>",false,true,false,false,1,1);
+		NAME(true,false,"org__tuml__Many__name",false,false,true,false,1,1),
+		ONE(false,false,"A_<one>_<many>",false,false,true,false,1,1);
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -264,7 +289,7 @@ public class Many extends BaseTinker implements CompositionNode {
 		
 		@Override
 		public boolean isValid(int elementCount) {
-			return elementCount <= getUpper() && elementCount >= getLower();
+			return (getUpper() == -1 || elementCount <= getUpper()) && elementCount >= getLower();
 		}
 	
 	}

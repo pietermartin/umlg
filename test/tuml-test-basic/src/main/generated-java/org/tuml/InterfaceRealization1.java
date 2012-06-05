@@ -8,57 +8,51 @@ import java.util.UUID;
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.TinkerIdUtilFactory;
 import org.tuml.runtime.collection.TinkerSet;
-import org.tuml.runtime.collection.TinkerSetImpl;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.domain.BaseTinker;
 import org.tuml.runtime.domain.TinkerNode;
 
-public class OneTwo extends BaseTinker implements TinkerNode {
-	private TinkerSet<String> name;
-	private TinkerSet<OneOne> oneOne;
+public class InterfaceRealization1 extends BaseTinker implements TinkerNode {
+	private TinkerSet<Interface2> interface2;
 
-	/** Constructor for OneTwo
+	/** Constructor for InterfaceRealization1
 	 * 
 	 * @param vertex 
 	 */
-	public OneTwo(Vertex vertex) {
+	public InterfaceRealization1(Vertex vertex) {
 		this.vertex=vertex;
 		initialiseProperties();
 	}
 	
-	/** Default constructor for OneTwo
+	/** Default constructor for InterfaceRealization1
 	 */
-	public OneTwo() {
+	public InterfaceRealization1() {
 	}
 	
-	/** Constructor for OneTwo
+	/** Constructor for InterfaceRealization1
 	 * 
 	 * @param persistent 
 	 */
-	public OneTwo(Boolean persistent) {
+	public InterfaceRealization1(Boolean persistent) {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
 		defaultCreate();
 		initialiseProperties();
 	}
 
-	public void addToName(String name) {
-		if ( name != null ) {
-			this.name.add(name);
+	public void addToInterface2(Interface2 interface2) {
+		if ( interface2 != null ) {
+			this.interface2.add(interface2);
 		}
 	}
 	
-	public void addToOneOne(OneOne oneOne) {
-		if ( oneOne != null ) {
-			this.oneOne.add(oneOne);
+	public void addToInterface2(Set<Interface2> interface2) {
+		if ( !interface2.isEmpty() ) {
+			this.interface2.addAll(interface2);
 		}
 	}
 	
-	public void clearName() {
-		this.name.clear();
-	}
-	
-	public void clearOneOne() {
-		this.oneOne.clear();
+	public void clearInterface2() {
+		this.interface2.clear();
 	}
 	
 	public void createComponents() {
@@ -73,27 +67,13 @@ public class OneTwo extends BaseTinker implements TinkerNode {
 		return TinkerIdUtilFactory.getIdUtil().getId(this.vertex);
 	}
 	
-	public String getName() {
-		TinkerSet<String> tmp = this.name;
-		if ( !tmp.isEmpty() ) {
-			return tmp.iterator().next();
-		} else {
-			return null;
-		}
+	public TinkerSet<Interface2> getInterface2() {
+		return this.interface2;
 	}
 	
 	@Override
 	public int getObjectVersion() {
 		return TinkerIdUtilFactory.getIdUtil().getVersion(this.vertex);
-	}
-	
-	public OneOne getOneOne() {
-		TinkerSet<OneOne> tmp = this.oneOne;
-		if ( !tmp.isEmpty() ) {
-			return tmp.iterator().next();
-		} else {
-			return null;
-		}
 	}
 	
 	@Override
@@ -111,21 +91,11 @@ public class OneTwo extends BaseTinker implements TinkerNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.name =  new TinkerSetImpl<String>(this, OneTwoRuntimePropertyEnum.NAME);
-		this.oneOne =  new TinkerSetImpl<OneOne>(this, OneTwoRuntimePropertyEnum.ONEONE);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
-		switch ( (OneTwoRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case ONEONE:
-				this.oneOne =  new TinkerSetImpl<OneOne>(this, OneTwoRuntimePropertyEnum.ONEONE);
-			break;
-		
-			case NAME:
-				this.name =  new TinkerSetImpl<String>(this, OneTwoRuntimePropertyEnum.NAME);
-			break;
-		
+		switch ( (InterfaceRealization1RuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
 		}
 	}
 	
@@ -134,27 +104,15 @@ public class OneTwo extends BaseTinker implements TinkerNode {
 		return true;
 	}
 	
-	public void removeFromName(Set<String> name) {
-		if ( !name.isEmpty() ) {
-			this.name.removeAll(name);
+	public void removeFromInterface2(Interface2 interface2) {
+		if ( interface2 != null ) {
+			this.interface2.remove(interface2);
 		}
 	}
 	
-	public void removeFromName(String name) {
-		if ( name != null ) {
-			this.name.remove(name);
-		}
-	}
-	
-	public void removeFromOneOne(OneOne oneOne) {
-		if ( oneOne != null ) {
-			this.oneOne.remove(oneOne);
-		}
-	}
-	
-	public void removeFromOneOne(Set<OneOne> oneOne) {
-		if ( !oneOne.isEmpty() ) {
-			this.oneOne.removeAll(oneOne);
+	public void removeFromInterface2(Set<Interface2> interface2) {
+		if ( !interface2.isEmpty() ) {
+			this.interface2.removeAll(interface2);
 		}
 	}
 	
@@ -163,19 +121,13 @@ public class OneTwo extends BaseTinker implements TinkerNode {
 		TinkerIdUtilFactory.getIdUtil().setId(this.vertex, id);
 	}
 	
-	public void setName(String name) {
-		clearName();
-		addToName(name);
-	}
-	
-	public void setOneOne(OneOne oneOne) {
-		clearOneOne();
-		addToOneOne(oneOne);
+	public void setInterface2(Set<Interface2> interface2) {
+		clearInterface2();
+		addToInterface2(interface2);
 	}
 
-	public enum OneTwoRuntimePropertyEnum implements TumlRuntimeProperty {
-		NAME(true,false,"org__tuml__OneTwo__name",false,false,true,false,1,1),
-		ONEONE(true,false,"A_<oneOne>_<oneTwo>",true,false,false,false,1,1);
+	public enum InterfaceRealization1RuntimePropertyEnum implements TumlRuntimeProperty {
+	;
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -185,7 +137,7 @@ public class OneTwo extends BaseTinker implements TinkerNode {
 		private boolean manyToMany;
 		private int upper;
 		private int lower;
-		/** Constructor for OneTwoRuntimePropertyEnum
+		/** Constructor for InterfaceRealization1RuntimePropertyEnum
 		 * 
 		 * @param controllingSide 
 		 * @param composite 
@@ -197,7 +149,7 @@ public class OneTwo extends BaseTinker implements TinkerNode {
 		 * @param upper 
 		 * @param lower 
 		 */
-		private OneTwoRuntimePropertyEnum(boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+		private InterfaceRealization1RuntimePropertyEnum(boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
 			this.controllingSide = controllingSide;
 			this.composite = composite;
 			this.label = label;
@@ -209,13 +161,7 @@ public class OneTwo extends BaseTinker implements TinkerNode {
 			this.lower = lower;
 		}
 	
-		static public OneTwoRuntimePropertyEnum fromLabel(String label) {
-			if ( NAME.getLabel().equals(label) ) {
-				return NAME;
-			}
-			if ( ONEONE.getLabel().equals(label) ) {
-				return ONEONE;
-			}
+		static public InterfaceRealization1RuntimePropertyEnum fromLabel(String label) {
 			throw new IllegalStateException();
 		}
 		

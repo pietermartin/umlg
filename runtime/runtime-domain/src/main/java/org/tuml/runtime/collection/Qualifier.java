@@ -1,6 +1,6 @@
 package org.tuml.runtime.collection;
 
-import org.tuml.runtime.domain.CompositionNode;
+import org.tuml.runtime.domain.TinkerNode;
 
 
 public class Qualifier {
@@ -16,8 +16,8 @@ public class Qualifier {
 	}
 
 	public String getValue() {
-		if (value instanceof CompositionNode) {
-			return ((CompositionNode) value).getUid();
+		if (value instanceof TinkerNode) {
+			return ((TinkerNode) value).getUid();
 		} else {
 			if (this.value == null) {
 				return "___NULL___";

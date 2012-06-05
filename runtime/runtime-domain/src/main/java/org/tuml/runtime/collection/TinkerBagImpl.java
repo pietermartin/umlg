@@ -1,12 +1,12 @@
 package org.tuml.runtime.collection;
 
-import org.tuml.runtime.domain.CompositionNode;
+import org.tuml.runtime.domain.TinkerNode;
 
 import com.google.common.collect.HashMultiset;
 
 public class TinkerBagImpl<E> extends BaseBag<E> implements TinkerBag<E> {
 
-	public TinkerBagImpl(CompositionNode owner, TumlRuntimeProperty multiplicity) {
+	public TinkerBagImpl(TinkerNode owner, TumlRuntimeProperty multiplicity) {
 		super();
 		this.internalCollection = HashMultiset.create();
 		this.owner = owner;

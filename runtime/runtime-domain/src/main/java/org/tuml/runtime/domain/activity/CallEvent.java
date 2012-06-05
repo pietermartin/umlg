@@ -28,4 +28,10 @@ public class CallEvent extends Event {
 		
 	}
 
+	@Override
+	public void delete() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
