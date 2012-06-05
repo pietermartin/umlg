@@ -293,6 +293,11 @@ public class ClassVisitor2 extends BaseVisitor implements Visitor<Class> {
 				propertyLabelField.setInitExp("\"" + TinkerGenerationUtil.getEdgeName(p) + "\"");
 				ojLiteral.addToAttributeValues(propertyLabelField);
 
+				OJField isOneToOneAttribute = new OJField();
+				isOneToOneAttribute.setType(new OJPathName("boolean"));
+				isOneToOneAttribute.setInitExp(Boolean.toString(pWrap.isOneToOne()));
+				ojLiteral.addToAttributeValues(isOneToOneAttribute);
+
 				OJField isOneToManyAttribute = new OJField();
 				isOneToManyAttribute.setType(new OJPathName("boolean"));
 				isOneToManyAttribute.setInitExp(Boolean.toString(pWrap.isOneToMany()));
@@ -303,10 +308,6 @@ public class ClassVisitor2 extends BaseVisitor implements Visitor<Class> {
 				isManyToOneAttribute.setInitExp(Boolean.toString(pWrap.isManyToOne()));
 				ojLiteral.addToAttributeValues(isManyToOneAttribute);
 
-				OJField isOneToOneAttribute = new OJField();
-				isOneToOneAttribute.setType(new OJPathName("boolean"));
-				isOneToOneAttribute.setInitExp(Boolean.toString(pWrap.isOneToOne()));
-				ojLiteral.addToAttributeValues(isOneToOneAttribute);
 
 				OJField isManyToManyAttribute = new OJField();
 				isManyToManyAttribute.setType(new OJPathName("boolean"));
