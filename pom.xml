@@ -7,6 +7,7 @@
 	<name>tuml root pom</name>
 	<version>0.0.1-SNAPSHOT</version>
 	<modules>
+		<module>eclipselib</module>
 		<module>framework</module>
 		<module>runtime</module>
 		<module>test</module>
