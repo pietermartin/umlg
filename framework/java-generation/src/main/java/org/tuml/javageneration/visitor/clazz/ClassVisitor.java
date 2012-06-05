@@ -25,7 +25,7 @@ import org.tuml.javageneration.util.TumlClassOperations;
 import org.tuml.javageneration.visitor.BaseVisitor;
 import org.tuml.javageneration.visitor.property.PropertyWrapper;
 
-public class ClassVisitor2 extends BaseVisitor implements Visitor<Class> {
+public class ClassVisitor extends BaseVisitor implements Visitor<Class> {
 
 	@Override
 	public void visitBefore(Class clazz) {
@@ -46,10 +46,11 @@ public class ClassVisitor2 extends BaseVisitor implements Visitor<Class> {
 			addGetObjectVersion(annotatedClass);
 			addGetSetId(annotatedClass);
 			initialiseVertexInPersistentConstructor(annotatedClass, clazz);
+			addInitialisePropertiesInPersistentConstructor(annotatedClass);
+			createComponentsInPersistentConstructor(annotatedClass);
 		} else {
 			addSuperWithPersistenceToDefaultConstructor(annotatedClass);
 		}
-		addInitialisePropertiesInPersistentConstructor(annotatedClass);
 		addTumlRuntimePropertyEnum(annotatedClass, clazz);
 		addCreateComponents(annotatedClass, clazz);
 		addInitVariables(annotatedClass, clazz);
@@ -169,7 +170,7 @@ public class ClassVisitor2 extends BaseVisitor implements Visitor<Class> {
 			PropertyWrapper pWrap = new PropertyWrapper(p);
 			if (!(pWrap.isDerived() || pWrap.isDerivedUnion())) {
 				OJSwitchCase ojSwitchCase = new OJSwitchCase();
-				ojSwitchCase.setLabel(pWrap.fieldname().toUpperCase());
+				ojSwitchCase.setLabel(pWrap.fieldname());
 				OJSimpleStatement statement = new OJSimpleStatement("this." + pWrap.fieldname() + " = " + pWrap.javaDefaultInitialisation(clazz));
 				statement.setName(pWrap.fieldname());
 				ojSwitchCase.getBody().addToStatements(statement);
@@ -202,6 +203,11 @@ public class ClassVisitor2 extends BaseVisitor implements Visitor<Class> {
 	private void addInitialisePropertiesInPersistentConstructor(OJAnnotatedClass annotatedClass) {
 		OJConstructor constructor = annotatedClass.findConstructor(new OJPathName("java.lang.Boolean"));
 		constructor.getBody().addToStatements("initialiseProperties()");
+	}
+
+	private void createComponentsInPersistentConstructor(OJAnnotatedClass annotatedClass) {
+		OJConstructor constructor = annotatedClass.findConstructor(new OJPathName("java.lang.Boolean"));
+		constructor.getBody().addToStatements("createComponents()");
 	}
 
 	private void addTumlRuntimePropertyEnum(OJAnnotatedClass annotatedClass, Class clazz) {
@@ -272,11 +278,12 @@ public class ClassVisitor2 extends BaseVisitor implements Visitor<Class> {
 			PropertyWrapper pWrap = new PropertyWrapper(p);
 			if (!(pWrap.isDerived() || pWrap.isDerivedUnion())) {
 
-				OJIfStatement ifLabelEquals = new OJIfStatement(pWrap.fieldname().toUpperCase() + ".getLabel().equals(label)");
-				ifLabelEquals.addToThenPart("return " + pWrap.fieldname().toUpperCase());
+				OJIfStatement ifLabelEquals = new OJIfStatement(pWrap.fieldname() + ".getLabel().equals(label)");
+				//Do not make upper case, leave with java case sensitive semantics
+				ifLabelEquals.addToThenPart("return " + pWrap.fieldname());
 				fromLabel.getBody().addToStatements(ifLabelEquals);
 
-				OJEnumLiteral ojLiteral = new OJEnumLiteral(pWrap.fieldname().toUpperCase());
+				OJEnumLiteral ojLiteral = new OJEnumLiteral(pWrap.fieldname());
 
 				OJField propertyControllingSideField = new OJField();
 				propertyControllingSideField.setType(new OJPathName("boolean"));

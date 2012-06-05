@@ -6,11 +6,11 @@ import java.util.Map;
 
 import org.eclipse.uml2.uml.Model;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
-import org.tuml.framework.ModelPrinter;
+import org.tuml.framework.JavaModelPrinter;
 import org.tuml.framework.ModelVisitor;
 import org.tuml.javageneration.visitor.clazz.ClassCreator;
 import org.tuml.javageneration.visitor.clazz.ClassImplementedInterfacePropertyVisitor;
-import org.tuml.javageneration.visitor.clazz.ClassVisitor2;
+import org.tuml.javageneration.visitor.clazz.ClassVisitor;
 import org.tuml.javageneration.visitor.clazz.CompositionVisitor;
 import org.tuml.javageneration.visitor.enumeration.EnumerationVisitor;
 import org.tuml.javageneration.visitor.interfaze.InterfaceVisitor;
@@ -29,9 +29,9 @@ public class Workspace {
 
 	public static void toText(File project) {
 		for (Map.Entry<String, OJAnnotatedClass> entry : javaClassMap.entrySet()) {
-			ModelPrinter.addToSource(entry.getKey(), entry.getValue().toJavaString());
+			JavaModelPrinter.addToSource(entry.getKey(), entry.getValue().toJavaString());
 		}
-		ModelPrinter.toText(project);
+		JavaModelPrinter.toText(project);
 	}
 
 	public static OJAnnotatedClass findOJClass(String name) {
@@ -41,7 +41,7 @@ public class Workspace {
 	public static void visitModel(Model model) {
 		ModelVisitor.visitModel(model, new InterfaceVisitor());
 		ModelVisitor.visitModel(model, new ClassCreator());
-		ModelVisitor.visitModel(model, new ClassVisitor2());
+		ModelVisitor.visitModel(model, new ClassVisitor());
 		ModelVisitor.visitModel(model, new EnumerationVisitor());
 		ModelVisitor.visitModel(model, new CompositionVisitor());
 		ModelVisitor.visitModel(model, new CompositionProperyVisitor());

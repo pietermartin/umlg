@@ -143,19 +143,19 @@ public class Time extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.spaceTime =  new TinkerSetImpl<SpaceTime>(this, TimeRuntimePropertyEnum.SPACETIME);
-		this.name =  new TinkerSetImpl<String>(this, TimeRuntimePropertyEnum.NAME);
+		this.spaceTime =  new TinkerSetImpl<SpaceTime>(this, TimeRuntimePropertyEnum.spaceTime);
+		this.name =  new TinkerSetImpl<String>(this, TimeRuntimePropertyEnum.name);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (TimeRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case NAME:
-				this.name =  new TinkerSetImpl<String>(this, TimeRuntimePropertyEnum.NAME);
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, TimeRuntimePropertyEnum.name);
 			break;
 		
-			case SPACETIME:
-				this.spaceTime =  new TinkerSetImpl<SpaceTime>(this, TimeRuntimePropertyEnum.SPACETIME);
+			case spaceTime:
+				this.spaceTime =  new TinkerSetImpl<SpaceTime>(this, TimeRuntimePropertyEnum.spaceTime);
 			break;
 		
 		}
@@ -206,8 +206,8 @@ public class Time extends BaseTinker implements CompositionNode {
 	}
 
 	public enum TimeRuntimePropertyEnum implements TumlRuntimeProperty {
-		SPACETIME(false,false,"A_<spaceTime>_<time>",true,false,false,false,1,1),
-		NAME(true,false,"org__tinker__componenttest__Time__name",false,false,true,false,1,1);
+		spaceTime(false,false,"A_<spaceTime>_<time>",true,false,false,false,1,1),
+		name(true,false,"org__tinker__componenttest__Time__name",false,false,true,false,1,1);
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -242,11 +242,11 @@ public class Time extends BaseTinker implements CompositionNode {
 		}
 	
 		static public TimeRuntimePropertyEnum fromLabel(String label) {
-			if ( SPACETIME.getLabel().equals(label) ) {
-				return SPACETIME;
+			if ( spaceTime.getLabel().equals(label) ) {
+				return spaceTime;
 			}
-			if ( NAME.getLabel().equals(label) ) {
-				return NAME;
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
 			throw new IllegalStateException();
 		}

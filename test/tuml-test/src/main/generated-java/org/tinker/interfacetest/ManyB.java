@@ -17,10 +17,10 @@ import org.tuml.runtime.domain.CompositionNode;
 import org.tuml.runtime.domain.TinkerNode;
 
 public class ManyB extends BaseTinker implements CompositionNode, IManyB {
-	private TinkerSet<God> god;
-	private TinkerSet<IManyA> iManyA;
 	private TinkerSet<String> name;
+	private TinkerSet<God> god;
 	private TinkerSet<IMany> iMany;
+	private TinkerSet<IManyA> iManyA;
 
 	/** Constructor for ManyB
 	 * 
@@ -186,29 +186,29 @@ public class ManyB extends BaseTinker implements CompositionNode, IManyB {
 	
 	@Override
 	public void initialiseProperties() {
-		this.god =  new TinkerSetImpl<God>(this, ManyBRuntimePropertyEnum.GOD);
-		this.iManyA =  new TinkerSetImpl<IManyA>(this, ManyBRuntimePropertyEnum.IMANYA);
-		this.name =  new TinkerSetImpl<String>(this, ManyBRuntimePropertyEnum.NAME);
-		this.iMany =  new TinkerSetImpl<IMany>(this, ManyBRuntimePropertyEnum.IMANY);
+		this.name =  new TinkerSetImpl<String>(this, ManyBRuntimePropertyEnum.name);
+		this.god =  new TinkerSetImpl<God>(this, ManyBRuntimePropertyEnum.god);
+		this.iMany =  new TinkerSetImpl<IMany>(this, ManyBRuntimePropertyEnum.iMany);
+		this.iManyA =  new TinkerSetImpl<IManyA>(this, ManyBRuntimePropertyEnum.iManyA);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (ManyBRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case IMANY:
-				this.iMany =  new TinkerSetImpl<IMany>(this, ManyBRuntimePropertyEnum.IMANY);
+			case iManyA:
+				this.iManyA =  new TinkerSetImpl<IManyA>(this, ManyBRuntimePropertyEnum.iManyA);
 			break;
 		
-			case NAME:
-				this.name =  new TinkerSetImpl<String>(this, ManyBRuntimePropertyEnum.NAME);
+			case iMany:
+				this.iMany =  new TinkerSetImpl<IMany>(this, ManyBRuntimePropertyEnum.iMany);
 			break;
 		
-			case IMANYA:
-				this.iManyA =  new TinkerSetImpl<IManyA>(this, ManyBRuntimePropertyEnum.IMANYA);
+			case god:
+				this.god =  new TinkerSetImpl<God>(this, ManyBRuntimePropertyEnum.god);
 			break;
 		
-			case GOD:
-				this.god =  new TinkerSetImpl<God>(this, ManyBRuntimePropertyEnum.GOD);
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, ManyBRuntimePropertyEnum.name);
 			break;
 		
 		}
@@ -293,10 +293,10 @@ public class ManyB extends BaseTinker implements CompositionNode, IManyB {
 	}
 
 	public enum ManyBRuntimePropertyEnum implements TumlRuntimeProperty {
-		GOD(false,false,"A_<god>_<iMany>",false,false,true,false,1,1),
-		IMANYA(true,false,"A_<iManyA>_<iManyB>",false,false,false,true,-1,0),
-		NAME(true,false,"org__tinker__interfacetest__IMany__name",false,false,true,false,1,1),
-		IMANY(true,true,"A_<god>_<iMany>",false,true,false,false,-1,0);
+		name(true,false,"org__tinker__interfacetest__IMany__name",false,false,true,false,1,1),
+		god(false,false,"A_<god>_<iMany>",false,false,true,false,1,1),
+		iMany(true,true,"A_<god>_<iMany>",false,true,false,false,-1,0),
+		iManyA(true,false,"A_<iManyA>_<iManyB>",false,false,false,true,-1,0);
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -331,17 +331,17 @@ public class ManyB extends BaseTinker implements CompositionNode, IManyB {
 		}
 	
 		static public ManyBRuntimePropertyEnum fromLabel(String label) {
-			if ( GOD.getLabel().equals(label) ) {
-				return GOD;
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
-			if ( IMANYA.getLabel().equals(label) ) {
-				return IMANYA;
+			if ( god.getLabel().equals(label) ) {
+				return god;
 			}
-			if ( NAME.getLabel().equals(label) ) {
-				return NAME;
+			if ( iMany.getLabel().equals(label) ) {
+				return iMany;
 			}
-			if ( IMANY.getLabel().equals(label) ) {
-				return IMANY;
+			if ( iManyA.getLabel().equals(label) ) {
+				return iManyA;
 			}
 			throw new IllegalStateException();
 		}

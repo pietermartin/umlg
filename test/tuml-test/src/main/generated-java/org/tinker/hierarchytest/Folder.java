@@ -97,15 +97,15 @@ public class Folder extends AbstractFolder implements CompositionNode {
 	@Override
 	public void initialiseProperties() {
 		super.initialiseProperties();
-		this.parentFolder =  new TinkerSetImpl<AbstractFolder>(this, FolderRuntimePropertyEnum.PARENTFOLDER);
+		this.parentFolder =  new TinkerSetImpl<AbstractFolder>(this, FolderRuntimePropertyEnum.parentFolder);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		super.initialiseProperties();
 		switch ( (FolderRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case PARENTFOLDER:
-				this.parentFolder =  new TinkerSetImpl<AbstractFolder>(this, FolderRuntimePropertyEnum.PARENTFOLDER);
+			case parentFolder:
+				this.parentFolder =  new TinkerSetImpl<AbstractFolder>(this, FolderRuntimePropertyEnum.parentFolder);
 			break;
 		
 		}
@@ -134,7 +134,7 @@ public class Folder extends AbstractFolder implements CompositionNode {
 	}
 
 	public enum FolderRuntimePropertyEnum implements TumlRuntimeProperty {
-		PARENTFOLDER(false,false,"A_<abstractFolder>_<folder>",false,false,true,false,1,1);
+		parentFolder(false,false,"A_<abstractFolder>_<folder>",false,false,true,false,1,1);
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -169,8 +169,8 @@ public class Folder extends AbstractFolder implements CompositionNode {
 		}
 	
 		static public FolderRuntimePropertyEnum fromLabel(String label) {
-			if ( PARENTFOLDER.getLabel().equals(label) ) {
-				return PARENTFOLDER;
+			if ( parentFolder.getLabel().equals(label) ) {
+				return parentFolder;
 			}
 			throw new IllegalStateException();
 		}

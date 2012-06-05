@@ -151,7 +151,7 @@ public final class TumlPropertyOperations extends PropertyOperations {
 		} else if (!p.getQualifiers().isEmpty()) {
 			ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", getUid()");
 		}
-		ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", " + TumlClassOperations.propertyEnumName(propertyConcreteOwner) + "." + fieldName(p).toUpperCase());
+		ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", " + TumlClassOperations.propertyEnumName(propertyConcreteOwner) + "." + fieldName(p));
 		ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ")");
 		return ojSimpleStatement;
 	}

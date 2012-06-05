@@ -39,6 +39,7 @@ public class OneOne extends BaseTinker implements TinkerNode {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
 		defaultCreate();
 		initialiseProperties();
+		createComponents();
 	}
 
 	public void addToName(String name) {
@@ -111,19 +112,19 @@ public class OneOne extends BaseTinker implements TinkerNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.name =  new TinkerSetImpl<String>(this, OneOneRuntimePropertyEnum.NAME);
-		this.oneTwo =  new TinkerSetImpl<OneTwo>(this, OneOneRuntimePropertyEnum.ONETWO);
+		this.name =  new TinkerSetImpl<String>(this, OneOneRuntimePropertyEnum.name);
+		this.oneTwo =  new TinkerSetImpl<OneTwo>(this, OneOneRuntimePropertyEnum.oneTwo);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (OneOneRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case ONETWO:
-				this.oneTwo =  new TinkerSetImpl<OneTwo>(this, OneOneRuntimePropertyEnum.ONETWO);
+			case oneTwo:
+				this.oneTwo =  new TinkerSetImpl<OneTwo>(this, OneOneRuntimePropertyEnum.oneTwo);
 			break;
 		
-			case NAME:
-				this.name =  new TinkerSetImpl<String>(this, OneOneRuntimePropertyEnum.NAME);
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, OneOneRuntimePropertyEnum.name);
 			break;
 		
 		}
@@ -174,8 +175,8 @@ public class OneOne extends BaseTinker implements TinkerNode {
 	}
 
 	public enum OneOneRuntimePropertyEnum implements TumlRuntimeProperty {
-		NAME(true,false,"org__tuml__OneOne__name",false,false,true,false,1,1),
-		ONETWO(false,false,"A_<oneOne>_<oneTwo>",true,false,false,false,1,0);
+		name(true,false,"org__tuml__OneOne__name",false,false,true,false,1,1),
+		oneTwo(false,false,"A_<oneOne>_<oneTwo>",true,false,false,false,1,0);
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -210,11 +211,11 @@ public class OneOne extends BaseTinker implements TinkerNode {
 		}
 	
 		static public OneOneRuntimePropertyEnum fromLabel(String label) {
-			if ( NAME.getLabel().equals(label) ) {
-				return NAME;
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
-			if ( ONETWO.getLabel().equals(label) ) {
-				return ONETWO;
+			if ( oneTwo.getLabel().equals(label) ) {
+				return oneTwo;
 			}
 			throw new IllegalStateException();
 		}

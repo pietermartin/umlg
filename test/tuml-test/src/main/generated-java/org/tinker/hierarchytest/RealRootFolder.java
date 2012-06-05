@@ -98,15 +98,15 @@ public class RealRootFolder extends AbstractRootFolder implements CompositionNod
 	@Override
 	public void initialiseProperties() {
 		super.initialiseProperties();
-		this.god =  new TinkerSetImpl<God>(this, RealRootFolderRuntimePropertyEnum.GOD);
+		this.god =  new TinkerSetImpl<God>(this, RealRootFolderRuntimePropertyEnum.god);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		super.initialiseProperties();
 		switch ( (RealRootFolderRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case GOD:
-				this.god =  new TinkerSetImpl<God>(this, RealRootFolderRuntimePropertyEnum.GOD);
+			case god:
+				this.god =  new TinkerSetImpl<God>(this, RealRootFolderRuntimePropertyEnum.god);
 			break;
 		
 		}
@@ -135,7 +135,7 @@ public class RealRootFolder extends AbstractRootFolder implements CompositionNod
 	}
 
 	public enum RealRootFolderRuntimePropertyEnum implements TumlRuntimeProperty {
-		GOD(false,false,"A_<god>_<realRootFolder>",false,false,true,false,1,1);
+		god(false,false,"A_<god>_<realRootFolder>",false,false,true,false,1,1);
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -170,8 +170,8 @@ public class RealRootFolder extends AbstractRootFolder implements CompositionNod
 		}
 	
 		static public RealRootFolderRuntimePropertyEnum fromLabel(String label) {
-			if ( GOD.getLabel().equals(label) ) {
-				return GOD;
+			if ( god.getLabel().equals(label) ) {
+				return god;
 			}
 			throw new IllegalStateException();
 		}

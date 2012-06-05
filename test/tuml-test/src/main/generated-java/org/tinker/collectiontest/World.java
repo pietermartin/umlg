@@ -144,19 +144,19 @@ public class World extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.name =  new TinkerSetImpl<String>(this, WorldRuntimePropertyEnum.NAME);
-		this.god =  new TinkerSetImpl<God>(this, WorldRuntimePropertyEnum.GOD);
+		this.name =  new TinkerSetImpl<String>(this, WorldRuntimePropertyEnum.name);
+		this.god =  new TinkerSetImpl<God>(this, WorldRuntimePropertyEnum.god);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (WorldRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case GOD:
-				this.god =  new TinkerSetImpl<God>(this, WorldRuntimePropertyEnum.GOD);
+			case god:
+				this.god =  new TinkerSetImpl<God>(this, WorldRuntimePropertyEnum.god);
 			break;
 		
-			case NAME:
-				this.name =  new TinkerSetImpl<String>(this, WorldRuntimePropertyEnum.NAME);
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, WorldRuntimePropertyEnum.name);
 			break;
 		
 		}
@@ -207,8 +207,8 @@ public class World extends BaseTinker implements CompositionNode {
 	}
 
 	public enum WorldRuntimePropertyEnum implements TumlRuntimeProperty {
-		NAME(true,false,"org__tinker__collectiontest__World__name",false,false,true,false,1,1),
-		GOD(false,false,"A_<god>_<world>",false,false,true,false,1,1);
+		name(true,false,"org__tinker__collectiontest__World__name",false,false,true,false,1,1),
+		god(false,false,"A_<god>_<world>",false,false,true,false,1,1);
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -243,11 +243,11 @@ public class World extends BaseTinker implements CompositionNode {
 		}
 	
 		static public WorldRuntimePropertyEnum fromLabel(String label) {
-			if ( NAME.getLabel().equals(label) ) {
-				return NAME;
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
-			if ( GOD.getLabel().equals(label) ) {
-				return GOD;
+			if ( god.getLabel().equals(label) ) {
+				return god;
 			}
 			throw new IllegalStateException();
 		}

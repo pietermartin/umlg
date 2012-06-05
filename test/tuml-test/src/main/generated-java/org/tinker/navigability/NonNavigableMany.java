@@ -165,24 +165,24 @@ public class NonNavigableMany extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.universe =  new TinkerSetImpl<Universe>(this, NonNavigableManyRuntimePropertyEnum.UNIVERSE);
-		this.god =  new TinkerSetImpl<God>(this, NonNavigableManyRuntimePropertyEnum.GOD);
-		this.name =  new TinkerSetImpl<String>(this, NonNavigableManyRuntimePropertyEnum.NAME);
+		this.universe =  new TinkerSetImpl<Universe>(this, NonNavigableManyRuntimePropertyEnum.universe);
+		this.name =  new TinkerSetImpl<String>(this, NonNavigableManyRuntimePropertyEnum.name);
+		this.god =  new TinkerSetImpl<God>(this, NonNavigableManyRuntimePropertyEnum.god);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (NonNavigableManyRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case NAME:
-				this.name =  new TinkerSetImpl<String>(this, NonNavigableManyRuntimePropertyEnum.NAME);
+			case god:
+				this.god =  new TinkerSetImpl<God>(this, NonNavigableManyRuntimePropertyEnum.god);
 			break;
 		
-			case GOD:
-				this.god =  new TinkerSetImpl<God>(this, NonNavigableManyRuntimePropertyEnum.GOD);
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, NonNavigableManyRuntimePropertyEnum.name);
 			break;
 		
-			case UNIVERSE:
-				this.universe =  new TinkerSetImpl<Universe>(this, NonNavigableManyRuntimePropertyEnum.UNIVERSE);
+			case universe:
+				this.universe =  new TinkerSetImpl<Universe>(this, NonNavigableManyRuntimePropertyEnum.universe);
 			break;
 		
 		}
@@ -250,9 +250,9 @@ public class NonNavigableMany extends BaseTinker implements CompositionNode {
 	}
 
 	public enum NonNavigableManyRuntimePropertyEnum implements TumlRuntimeProperty {
-		UNIVERSE(false,false,"A_<universe>_<nonNavigableMany>",false,false,true,false,1,1),
-		GOD(false,false,"A_<god>_<nonNavigableMany>",false,false,true,false,1,1),
-		NAME(true,false,"org__tinker__navigability__NonNavigableMany__name",false,false,true,false,1,1);
+		universe(false,false,"A_<universe>_<nonNavigableMany>",false,false,true,false,1,1),
+		name(true,false,"org__tinker__navigability__NonNavigableMany__name",false,false,true,false,1,1),
+		god(false,false,"A_<god>_<nonNavigableMany>",false,false,true,false,1,1);
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -287,14 +287,14 @@ public class NonNavigableMany extends BaseTinker implements CompositionNode {
 		}
 	
 		static public NonNavigableManyRuntimePropertyEnum fromLabel(String label) {
-			if ( UNIVERSE.getLabel().equals(label) ) {
-				return UNIVERSE;
+			if ( universe.getLabel().equals(label) ) {
+				return universe;
 			}
-			if ( GOD.getLabel().equals(label) ) {
-				return GOD;
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
-			if ( NAME.getLabel().equals(label) ) {
-				return NAME;
+			if ( god.getLabel().equals(label) ) {
+				return god;
 			}
 			throw new IllegalStateException();
 		}

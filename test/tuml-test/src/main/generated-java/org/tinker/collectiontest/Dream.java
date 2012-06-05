@@ -144,19 +144,19 @@ public class Dream extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.name =  new TinkerSetImpl<String>(this, DreamRuntimePropertyEnum.NAME);
-		this.god =  new TinkerSetImpl<God>(this, DreamRuntimePropertyEnum.GOD);
+		this.god =  new TinkerSetImpl<God>(this, DreamRuntimePropertyEnum.god);
+		this.name =  new TinkerSetImpl<String>(this, DreamRuntimePropertyEnum.name);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (DreamRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case GOD:
-				this.god =  new TinkerSetImpl<God>(this, DreamRuntimePropertyEnum.GOD);
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, DreamRuntimePropertyEnum.name);
 			break;
 		
-			case NAME:
-				this.name =  new TinkerSetImpl<String>(this, DreamRuntimePropertyEnum.NAME);
+			case god:
+				this.god =  new TinkerSetImpl<God>(this, DreamRuntimePropertyEnum.god);
 			break;
 		
 		}
@@ -207,8 +207,8 @@ public class Dream extends BaseTinker implements CompositionNode {
 	}
 
 	public enum DreamRuntimePropertyEnum implements TumlRuntimeProperty {
-		NAME(true,false,"org__tinker__collectiontest__Dream__name",false,false,true,false,1,1),
-		GOD(false,false,"A_<god>_<dream>",false,false,true,false,1,1);
+		god(false,false,"A_<god>_<dream>",false,false,true,false,1,1),
+		name(true,false,"org__tinker__collectiontest__Dream__name",false,false,true,false,1,1);
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -243,11 +243,11 @@ public class Dream extends BaseTinker implements CompositionNode {
 		}
 	
 		static public DreamRuntimePropertyEnum fromLabel(String label) {
-			if ( NAME.getLabel().equals(label) ) {
-				return NAME;
+			if ( god.getLabel().equals(label) ) {
+				return god;
 			}
-			if ( GOD.getLabel().equals(label) ) {
-				return GOD;
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
 			throw new IllegalStateException();
 		}

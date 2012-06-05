@@ -73,7 +73,9 @@ public class TumlClassOperations extends ClassOperations {
 			return true;
 		}
 		for (Classifier general : classifier.getGenerals()) {
-			isSpecializationOf(general, type);
+			if (isSpecializationOf(general, type)) {
+				return true;
+			}
 		}
 		return false;
 	}

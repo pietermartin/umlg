@@ -190,29 +190,29 @@ public class SpaceTime extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.name =  new TinkerSetImpl<String>(this, SpaceTimeRuntimePropertyEnum.NAME);
-		this.time =  new TinkerSetImpl<Time>(this, SpaceTimeRuntimePropertyEnum.TIME);
-		this.universe =  new TinkerSetImpl<Universe>(this, SpaceTimeRuntimePropertyEnum.UNIVERSE);
-		this.space =  new TinkerSetImpl<Space>(this, SpaceTimeRuntimePropertyEnum.SPACE);
+		this.name =  new TinkerSetImpl<String>(this, SpaceTimeRuntimePropertyEnum.name);
+		this.space =  new TinkerSetImpl<Space>(this, SpaceTimeRuntimePropertyEnum.space);
+		this.time =  new TinkerSetImpl<Time>(this, SpaceTimeRuntimePropertyEnum.time);
+		this.universe =  new TinkerSetImpl<Universe>(this, SpaceTimeRuntimePropertyEnum.universe);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (SpaceTimeRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case SPACE:
-				this.space =  new TinkerSetImpl<Space>(this, SpaceTimeRuntimePropertyEnum.SPACE);
+			case universe:
+				this.universe =  new TinkerSetImpl<Universe>(this, SpaceTimeRuntimePropertyEnum.universe);
 			break;
 		
-			case UNIVERSE:
-				this.universe =  new TinkerSetImpl<Universe>(this, SpaceTimeRuntimePropertyEnum.UNIVERSE);
+			case time:
+				this.time =  new TinkerSetImpl<Time>(this, SpaceTimeRuntimePropertyEnum.time);
 			break;
 		
-			case TIME:
-				this.time =  new TinkerSetImpl<Time>(this, SpaceTimeRuntimePropertyEnum.TIME);
+			case space:
+				this.space =  new TinkerSetImpl<Space>(this, SpaceTimeRuntimePropertyEnum.space);
 			break;
 		
-			case NAME:
-				this.name =  new TinkerSetImpl<String>(this, SpaceTimeRuntimePropertyEnum.NAME);
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, SpaceTimeRuntimePropertyEnum.name);
 			break;
 		
 		}
@@ -297,10 +297,10 @@ public class SpaceTime extends BaseTinker implements CompositionNode {
 	}
 
 	public enum SpaceTimeRuntimePropertyEnum implements TumlRuntimeProperty {
-		NAME(true,false,"org__tinker__componenttest__SpaceTime__name",false,false,true,false,1,1),
-		TIME(true,true,"A_<spaceTime>_<time>",true,false,false,false,1,1),
-		UNIVERSE(false,false,"A_<universe>_<spaceTime>",true,false,false,false,1,1),
-		SPACE(true,true,"A_<spaceTime>_<space>",true,false,false,false,1,1);
+		name(true,false,"org__tinker__componenttest__SpaceTime__name",false,false,true,false,1,1),
+		space(true,true,"A_<spaceTime>_<space>",true,false,false,false,1,1),
+		time(true,true,"A_<spaceTime>_<time>",true,false,false,false,1,1),
+		universe(false,false,"A_<universe>_<spaceTime>",true,false,false,false,1,1);
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -335,17 +335,17 @@ public class SpaceTime extends BaseTinker implements CompositionNode {
 		}
 	
 		static public SpaceTimeRuntimePropertyEnum fromLabel(String label) {
-			if ( NAME.getLabel().equals(label) ) {
-				return NAME;
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
-			if ( TIME.getLabel().equals(label) ) {
-				return TIME;
+			if ( space.getLabel().equals(label) ) {
+				return space;
 			}
-			if ( UNIVERSE.getLabel().equals(label) ) {
-				return UNIVERSE;
+			if ( time.getLabel().equals(label) ) {
+				return time;
 			}
-			if ( SPACE.getLabel().equals(label) ) {
-				return SPACE;
+			if ( universe.getLabel().equals(label) ) {
+				return universe;
 			}
 			throw new IllegalStateException();
 		}

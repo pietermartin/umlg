@@ -214,34 +214,34 @@ public class Many1 extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.many2 =  new TinkerQualifiedSetImpl<Many2>(this, getUid(), Many1RuntimePropertyEnum.MANY2);
-		this.name =  new TinkerSetImpl<String>(this, Many1RuntimePropertyEnum.NAME);
-		this.many2UnqualifiedList =  new TinkerSequenceImpl<Many2>(this, getUid(), Many1RuntimePropertyEnum.MANY2UNQUALIFIEDLIST);
-		this.god =  new TinkerSetImpl<God>(this, Many1RuntimePropertyEnum.GOD);
-		this.many2List =  new TinkerQualifiedSequenceImpl<Many2>(this, getUid(), Many1RuntimePropertyEnum.MANY2LIST);
+		this.many2 =  new TinkerQualifiedSetImpl<Many2>(this, getUid(), Many1RuntimePropertyEnum.many2);
+		this.many2UnqualifiedList =  new TinkerSequenceImpl<Many2>(this, getUid(), Many1RuntimePropertyEnum.many2UnqualifiedList);
+		this.god =  new TinkerSetImpl<God>(this, Many1RuntimePropertyEnum.god);
+		this.name =  new TinkerSetImpl<String>(this, Many1RuntimePropertyEnum.name);
+		this.many2List =  new TinkerQualifiedSequenceImpl<Many2>(this, getUid(), Many1RuntimePropertyEnum.many2List);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (Many1RuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case MANY2LIST:
-				this.many2List =  new TinkerQualifiedSequenceImpl<Many2>(this, getUid(), Many1RuntimePropertyEnum.MANY2LIST);
+			case many2List:
+				this.many2List =  new TinkerQualifiedSequenceImpl<Many2>(this, getUid(), Many1RuntimePropertyEnum.many2List);
 			break;
 		
-			case GOD:
-				this.god =  new TinkerSetImpl<God>(this, Many1RuntimePropertyEnum.GOD);
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, Many1RuntimePropertyEnum.name);
 			break;
 		
-			case MANY2UNQUALIFIEDLIST:
-				this.many2UnqualifiedList =  new TinkerSequenceImpl<Many2>(this, getUid(), Many1RuntimePropertyEnum.MANY2UNQUALIFIEDLIST);
+			case god:
+				this.god =  new TinkerSetImpl<God>(this, Many1RuntimePropertyEnum.god);
 			break;
 		
-			case NAME:
-				this.name =  new TinkerSetImpl<String>(this, Many1RuntimePropertyEnum.NAME);
+			case many2UnqualifiedList:
+				this.many2UnqualifiedList =  new TinkerSequenceImpl<Many2>(this, getUid(), Many1RuntimePropertyEnum.many2UnqualifiedList);
 			break;
 		
-			case MANY2:
-				this.many2 =  new TinkerQualifiedSetImpl<Many2>(this, getUid(), Many1RuntimePropertyEnum.MANY2);
+			case many2:
+				this.many2 =  new TinkerQualifiedSetImpl<Many2>(this, getUid(), Many1RuntimePropertyEnum.many2);
 			break;
 		
 		}
@@ -343,11 +343,11 @@ public class Many1 extends BaseTinker implements CompositionNode {
 	}
 
 	public enum Many1RuntimePropertyEnum implements TumlRuntimeProperty {
-		MANY2(false,false,"A_<many1>_<many2>",false,false,false,true,-1,0),
-		NAME(true,false,"org__tinker__qualifiertest__Many1__name",false,false,true,false,1,1),
-		MANY2UNQUALIFIEDLIST(false,false,"A_<many1>_<many2>_3",false,false,false,true,-1,0),
-		GOD(false,false,"A_<god>_<many1>",false,false,true,false,1,1),
-		MANY2LIST(false,false,"A_<many1>_<many2>_2",false,false,false,true,-1,0);
+		many2(false,false,"A_<many1>_<many2>",false,false,false,true,-1,0),
+		many2UnqualifiedList(false,false,"A_<many1>_<many2>_3",false,false,false,true,-1,0),
+		god(false,false,"A_<god>_<many1>",false,false,true,false,1,1),
+		name(true,false,"org__tinker__qualifiertest__Many1__name",false,false,true,false,1,1),
+		many2List(false,false,"A_<many1>_<many2>_2",false,false,false,true,-1,0);
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -382,20 +382,20 @@ public class Many1 extends BaseTinker implements CompositionNode {
 		}
 	
 		static public Many1RuntimePropertyEnum fromLabel(String label) {
-			if ( MANY2.getLabel().equals(label) ) {
-				return MANY2;
+			if ( many2.getLabel().equals(label) ) {
+				return many2;
 			}
-			if ( NAME.getLabel().equals(label) ) {
-				return NAME;
+			if ( many2UnqualifiedList.getLabel().equals(label) ) {
+				return many2UnqualifiedList;
 			}
-			if ( MANY2UNQUALIFIEDLIST.getLabel().equals(label) ) {
-				return MANY2UNQUALIFIEDLIST;
+			if ( god.getLabel().equals(label) ) {
+				return god;
 			}
-			if ( GOD.getLabel().equals(label) ) {
-				return GOD;
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
-			if ( MANY2LIST.getLabel().equals(label) ) {
-				return MANY2LIST;
+			if ( many2List.getLabel().equals(label) ) {
+				return many2List;
 			}
 			throw new IllegalStateException();
 		}

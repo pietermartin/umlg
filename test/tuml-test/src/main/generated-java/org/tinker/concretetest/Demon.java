@@ -163,24 +163,24 @@ public class Demon extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.universe =  new TinkerSetImpl<Universe>(this, DemonRuntimePropertyEnum.UNIVERSE);
-		this.name =  new TinkerSetImpl<String>(this, DemonRuntimePropertyEnum.NAME);
-		this.god =  new TinkerSetImpl<God>(this, DemonRuntimePropertyEnum.GOD);
+		this.god =  new TinkerSetImpl<God>(this, DemonRuntimePropertyEnum.god);
+		this.universe =  new TinkerSetImpl<Universe>(this, DemonRuntimePropertyEnum.universe);
+		this.name =  new TinkerSetImpl<String>(this, DemonRuntimePropertyEnum.name);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (DemonRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case GOD:
-				this.god =  new TinkerSetImpl<God>(this, DemonRuntimePropertyEnum.GOD);
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, DemonRuntimePropertyEnum.name);
 			break;
 		
-			case NAME:
-				this.name =  new TinkerSetImpl<String>(this, DemonRuntimePropertyEnum.NAME);
+			case universe:
+				this.universe =  new TinkerSetImpl<Universe>(this, DemonRuntimePropertyEnum.universe);
 			break;
 		
-			case UNIVERSE:
-				this.universe =  new TinkerSetImpl<Universe>(this, DemonRuntimePropertyEnum.UNIVERSE);
+			case god:
+				this.god =  new TinkerSetImpl<God>(this, DemonRuntimePropertyEnum.god);
 			break;
 		
 		}
@@ -248,9 +248,9 @@ public class Demon extends BaseTinker implements CompositionNode {
 	}
 
 	public enum DemonRuntimePropertyEnum implements TumlRuntimeProperty {
-		UNIVERSE(false,false,"A_<universe>_<demon>",false,false,true,false,1,1),
-		NAME(true,false,"org__tinker__concretetest__Demon__name",false,false,true,false,1,1),
-		GOD(false,false,"A_<god>_<demon>",false,false,true,false,1,1);
+		god(false,false,"A_<god>_<demon>",false,false,true,false,1,1),
+		universe(false,false,"A_<universe>_<demon>",false,false,true,false,1,1),
+		name(true,false,"org__tinker__concretetest__Demon__name",false,false,true,false,1,1);
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -285,14 +285,14 @@ public class Demon extends BaseTinker implements CompositionNode {
 		}
 	
 		static public DemonRuntimePropertyEnum fromLabel(String label) {
-			if ( UNIVERSE.getLabel().equals(label) ) {
-				return UNIVERSE;
+			if ( god.getLabel().equals(label) ) {
+				return god;
 			}
-			if ( NAME.getLabel().equals(label) ) {
-				return NAME;
+			if ( universe.getLabel().equals(label) ) {
+				return universe;
 			}
-			if ( GOD.getLabel().equals(label) ) {
-				return GOD;
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
 			throw new IllegalStateException();
 		}

@@ -1,7 +1,6 @@
 package org.tuml.javageneration.visitor.interfaze;
 
 import org.opaeum.java.metamodel.OJPackage;
-import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedInterface;
 import org.tuml.framework.Visitor;
 import org.tuml.javageneration.naming.Namer;

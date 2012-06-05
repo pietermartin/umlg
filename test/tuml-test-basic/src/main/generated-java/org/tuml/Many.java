@@ -55,6 +55,7 @@ public class Many extends BaseTinker implements CompositionNode {
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
 		initialiseProperties();
+		createComponents();
 	}
 
 	public void addToName(String name) {
@@ -133,7 +134,7 @@ public class Many extends BaseTinker implements CompositionNode {
 	 */
 	@Override
 	public void init(TinkerNode compositeOwner) {
-		this.one.add((One)compositeOwner);
+		this.addToOne((One)compositeOwner);
 		this.hasInitBeenCalled = true;
 		initVariables();
 	}
@@ -143,19 +144,19 @@ public class Many extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.name =  new TinkerSetImpl<String>(this, ManyRuntimePropertyEnum.NAME);
-		this.one =  new TinkerSetImpl<One>(this, ManyRuntimePropertyEnum.ONE);
+		this.name =  new TinkerSetImpl<String>(this, ManyRuntimePropertyEnum.name);
+		this.one =  new TinkerSetImpl<One>(this, ManyRuntimePropertyEnum.one);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (ManyRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case ONE:
-				this.one =  new TinkerSetImpl<One>(this, ManyRuntimePropertyEnum.ONE);
+			case one:
+				this.one =  new TinkerSetImpl<One>(this, ManyRuntimePropertyEnum.one);
 			break;
 		
-			case NAME:
-				this.name =  new TinkerSetImpl<String>(this, ManyRuntimePropertyEnum.NAME);
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, ManyRuntimePropertyEnum.name);
 			break;
 		
 		}
@@ -206,8 +207,8 @@ public class Many extends BaseTinker implements CompositionNode {
 	}
 
 	public enum ManyRuntimePropertyEnum implements TumlRuntimeProperty {
-		NAME(true,false,"org__tuml__Many__name",false,false,true,false,1,1),
-		ONE(false,false,"A_<one>_<many>",false,false,true,false,1,1);
+		name(true,false,"org__tuml__Many__name",false,false,true,false,1,1),
+		one(false,false,"A_<one>_<many>",false,false,true,false,1,1);
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -242,11 +243,11 @@ public class Many extends BaseTinker implements CompositionNode {
 		}
 	
 		static public ManyRuntimePropertyEnum fromLabel(String label) {
-			if ( NAME.getLabel().equals(label) ) {
-				return NAME;
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
-			if ( ONE.getLabel().equals(label) ) {
-				return ONE;
+			if ( one.getLabel().equals(label) ) {
+				return one;
 			}
 			throw new IllegalStateException();
 		}

@@ -144,19 +144,19 @@ public class Phantom extends BaseTinker implements CompositionNode, Spirit {
 	
 	@Override
 	public void initialiseProperties() {
-		this.god =  new TinkerSetImpl<God>(this, PhantomRuntimePropertyEnum.GOD);
-		this.name =  new TinkerSetImpl<String>(this, PhantomRuntimePropertyEnum.NAME);
+		this.name =  new TinkerSetImpl<String>(this, PhantomRuntimePropertyEnum.name);
+		this.god =  new TinkerSetImpl<God>(this, PhantomRuntimePropertyEnum.god);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (PhantomRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case NAME:
-				this.name =  new TinkerSetImpl<String>(this, PhantomRuntimePropertyEnum.NAME);
+			case god:
+				this.god =  new TinkerSetImpl<God>(this, PhantomRuntimePropertyEnum.god);
 			break;
 		
-			case GOD:
-				this.god =  new TinkerSetImpl<God>(this, PhantomRuntimePropertyEnum.GOD);
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, PhantomRuntimePropertyEnum.name);
 			break;
 		
 		}
@@ -207,8 +207,8 @@ public class Phantom extends BaseTinker implements CompositionNode, Spirit {
 	}
 
 	public enum PhantomRuntimePropertyEnum implements TumlRuntimeProperty {
-		GOD(false,false,"A_<god>_<spirit>",false,false,true,false,1,1),
-		NAME(true,false,"org__tinker__interfacetest__Phantom__name",false,false,true,false,1,1);
+		name(true,false,"org__tinker__interfacetest__Phantom__name",false,false,true,false,1,1),
+		god(false,false,"A_<god>_<spirit>",false,false,true,false,1,1);
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -243,11 +243,11 @@ public class Phantom extends BaseTinker implements CompositionNode, Spirit {
 		}
 	
 		static public PhantomRuntimePropertyEnum fromLabel(String label) {
-			if ( GOD.getLabel().equals(label) ) {
-				return GOD;
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
-			if ( NAME.getLabel().equals(label) ) {
-				return NAME;
+			if ( god.getLabel().equals(label) ) {
+				return god;
 			}
 			throw new IllegalStateException();
 		}

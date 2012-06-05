@@ -36,6 +36,7 @@ public class ClassImplementedInterfacePropertyVisitor extends BaseVisitor implem
 		}
 	}
 
+	//TODO move this property visitor and find concrete class via interface dependency supplier association
 	private void addPropertiesFromInterfaces(OJAnnotatedClass owner, Class clazz) {
 		Set<Property> properties = TumlClassOperations.getPropertiesOnRealizedInterfaces(clazz);
 		for (Property p : properties) {

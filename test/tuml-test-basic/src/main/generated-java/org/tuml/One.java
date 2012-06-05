@@ -39,6 +39,7 @@ public class One extends BaseTinker implements TinkerNode {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
 		defaultCreate();
 		initialiseProperties();
+		createComponents();
 	}
 
 	public void addToMany(Many many) {
@@ -112,19 +113,19 @@ public class One extends BaseTinker implements TinkerNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.name =  new TinkerSetImpl<String>(this, OneRuntimePropertyEnum.NAME);
-		this.many =  new TinkerSetImpl<Many>(this, OneRuntimePropertyEnum.MANY);
+		this.name =  new TinkerSetImpl<String>(this, OneRuntimePropertyEnum.name);
+		this.many =  new TinkerSetImpl<Many>(this, OneRuntimePropertyEnum.many);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (OneRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case MANY:
-				this.many =  new TinkerSetImpl<Many>(this, OneRuntimePropertyEnum.MANY);
+			case many:
+				this.many =  new TinkerSetImpl<Many>(this, OneRuntimePropertyEnum.many);
 			break;
 		
-			case NAME:
-				this.name =  new TinkerSetImpl<String>(this, OneRuntimePropertyEnum.NAME);
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, OneRuntimePropertyEnum.name);
 			break;
 		
 		}
@@ -175,8 +176,8 @@ public class One extends BaseTinker implements TinkerNode {
 	}
 
 	public enum OneRuntimePropertyEnum implements TumlRuntimeProperty {
-		NAME(true,false,"org__tuml__One__name",false,false,true,false,1,1),
-		MANY(true,true,"A_<one>_<many>",false,true,false,false,-1,0);
+		name(true,false,"org__tuml__One__name",false,false,true,false,1,1),
+		many(true,true,"A_<one>_<many>",false,true,false,false,-1,0);
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -211,11 +212,11 @@ public class One extends BaseTinker implements TinkerNode {
 		}
 	
 		static public OneRuntimePropertyEnum fromLabel(String label) {
-			if ( NAME.getLabel().equals(label) ) {
-				return NAME;
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
-			if ( MANY.getLabel().equals(label) ) {
-				return MANY;
+			if ( many.getLabel().equals(label) ) {
+				return many;
 			}
 			throw new IllegalStateException();
 		}

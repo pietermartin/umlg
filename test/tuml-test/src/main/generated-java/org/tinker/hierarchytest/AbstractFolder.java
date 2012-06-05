@@ -112,19 +112,19 @@ public class AbstractFolder extends BaseTinker implements TinkerNode, Hierarchy 
 	
 	@Override
 	public void initialiseProperties() {
-		this.childFolder =  new TinkerSetImpl<Folder>(this, AbstractFolderRuntimePropertyEnum.CHILDFOLDER);
-		this.name =  new TinkerSetImpl<String>(this, AbstractFolderRuntimePropertyEnum.NAME);
+		this.name =  new TinkerSetImpl<String>(this, AbstractFolderRuntimePropertyEnum.name);
+		this.childFolder =  new TinkerSetImpl<Folder>(this, AbstractFolderRuntimePropertyEnum.childFolder);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (AbstractFolderRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case NAME:
-				this.name =  new TinkerSetImpl<String>(this, AbstractFolderRuntimePropertyEnum.NAME);
+			case childFolder:
+				this.childFolder =  new TinkerSetImpl<Folder>(this, AbstractFolderRuntimePropertyEnum.childFolder);
 			break;
 		
-			case CHILDFOLDER:
-				this.childFolder =  new TinkerSetImpl<Folder>(this, AbstractFolderRuntimePropertyEnum.CHILDFOLDER);
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, AbstractFolderRuntimePropertyEnum.name);
 			break;
 		
 		}
@@ -175,8 +175,8 @@ public class AbstractFolder extends BaseTinker implements TinkerNode, Hierarchy 
 	}
 
 	public enum AbstractFolderRuntimePropertyEnum implements TumlRuntimeProperty {
-		CHILDFOLDER(true,true,"A_<abstractFolder>_<folder>",false,true,false,false,-1,0),
-		NAME(true,false,"org__tinker__hierarchytest__AbstractFolder__name",false,false,true,false,1,1);
+		name(true,false,"org__tinker__hierarchytest__AbstractFolder__name",false,false,true,false,1,1),
+		childFolder(true,true,"A_<abstractFolder>_<folder>",false,true,false,false,-1,0);
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -211,11 +211,11 @@ public class AbstractFolder extends BaseTinker implements TinkerNode, Hierarchy 
 		}
 	
 		static public AbstractFolderRuntimePropertyEnum fromLabel(String label) {
-			if ( CHILDFOLDER.getLabel().equals(label) ) {
-				return CHILDFOLDER;
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
-			if ( NAME.getLabel().equals(label) ) {
-				return NAME;
+			if ( childFolder.getLabel().equals(label) ) {
+				return childFolder;
 			}
 			throw new IllegalStateException();
 		}

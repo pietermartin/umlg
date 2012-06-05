@@ -163,24 +163,24 @@ public class Angel extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.god =  new TinkerSetImpl<God>(this, AngelRuntimePropertyEnum.GOD);
-		this.name =  new TinkerSetImpl<String>(this, AngelRuntimePropertyEnum.NAME);
-		this.universe =  new TinkerSetImpl<Universe>(this, AngelRuntimePropertyEnum.UNIVERSE);
+		this.universe =  new TinkerSetImpl<Universe>(this, AngelRuntimePropertyEnum.universe);
+		this.god =  new TinkerSetImpl<God>(this, AngelRuntimePropertyEnum.god);
+		this.name =  new TinkerSetImpl<String>(this, AngelRuntimePropertyEnum.name);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (AngelRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case UNIVERSE:
-				this.universe =  new TinkerSetImpl<Universe>(this, AngelRuntimePropertyEnum.UNIVERSE);
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, AngelRuntimePropertyEnum.name);
 			break;
 		
-			case NAME:
-				this.name =  new TinkerSetImpl<String>(this, AngelRuntimePropertyEnum.NAME);
+			case god:
+				this.god =  new TinkerSetImpl<God>(this, AngelRuntimePropertyEnum.god);
 			break;
 		
-			case GOD:
-				this.god =  new TinkerSetImpl<God>(this, AngelRuntimePropertyEnum.GOD);
+			case universe:
+				this.universe =  new TinkerSetImpl<Universe>(this, AngelRuntimePropertyEnum.universe);
 			break;
 		
 		}
@@ -248,9 +248,9 @@ public class Angel extends BaseTinker implements CompositionNode {
 	}
 
 	public enum AngelRuntimePropertyEnum implements TumlRuntimeProperty {
-		GOD(false,false,"A_<god>_<angel>",false,false,true,false,1,1),
-		NAME(true,false,"org__tinker__concretetest__Angel__name",false,false,true,false,1,1),
-		UNIVERSE(true,false,"A_<universe>_<angel>",true,false,false,false,1,1);
+		universe(true,false,"A_<universe>_<angel>",true,false,false,false,1,1),
+		god(false,false,"A_<god>_<angel>",false,false,true,false,1,1),
+		name(true,false,"org__tinker__concretetest__Angel__name",false,false,true,false,1,1);
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -285,14 +285,14 @@ public class Angel extends BaseTinker implements CompositionNode {
 		}
 	
 		static public AngelRuntimePropertyEnum fromLabel(String label) {
-			if ( GOD.getLabel().equals(label) ) {
-				return GOD;
+			if ( universe.getLabel().equals(label) ) {
+				return universe;
 			}
-			if ( NAME.getLabel().equals(label) ) {
-				return NAME;
+			if ( god.getLabel().equals(label) ) {
+				return god;
 			}
-			if ( UNIVERSE.getLabel().equals(label) ) {
-				return UNIVERSE;
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
 			throw new IllegalStateException();
 		}

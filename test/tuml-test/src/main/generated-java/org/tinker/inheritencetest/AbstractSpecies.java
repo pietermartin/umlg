@@ -144,19 +144,19 @@ public class AbstractSpecies extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.god =  new TinkerSetImpl<God>(this, AbstractSpeciesRuntimePropertyEnum.GOD);
-		this.name =  new TinkerSetImpl<String>(this, AbstractSpeciesRuntimePropertyEnum.NAME);
+		this.name =  new TinkerSetImpl<String>(this, AbstractSpeciesRuntimePropertyEnum.name);
+		this.god =  new TinkerSetImpl<God>(this, AbstractSpeciesRuntimePropertyEnum.god);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (AbstractSpeciesRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case NAME:
-				this.name =  new TinkerSetImpl<String>(this, AbstractSpeciesRuntimePropertyEnum.NAME);
+			case god:
+				this.god =  new TinkerSetImpl<God>(this, AbstractSpeciesRuntimePropertyEnum.god);
 			break;
 		
-			case GOD:
-				this.god =  new TinkerSetImpl<God>(this, AbstractSpeciesRuntimePropertyEnum.GOD);
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, AbstractSpeciesRuntimePropertyEnum.name);
 			break;
 		
 		}
@@ -207,8 +207,8 @@ public class AbstractSpecies extends BaseTinker implements CompositionNode {
 	}
 
 	public enum AbstractSpeciesRuntimePropertyEnum implements TumlRuntimeProperty {
-		GOD(false,false,"A_<god>_<abstractSpecies>",false,false,true,false,1,1),
-		NAME(true,false,"org__tinker__inheritencetest__AbstractSpecies__name",false,false,true,false,1,1);
+		name(true,false,"org__tinker__inheritencetest__AbstractSpecies__name",false,false,true,false,1,1),
+		god(false,false,"A_<god>_<abstractSpecies>",false,false,true,false,1,1);
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -243,11 +243,11 @@ public class AbstractSpecies extends BaseTinker implements CompositionNode {
 		}
 	
 		static public AbstractSpeciesRuntimePropertyEnum fromLabel(String label) {
-			if ( GOD.getLabel().equals(label) ) {
-				return GOD;
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
-			if ( NAME.getLabel().equals(label) ) {
-				return NAME;
+			if ( god.getLabel().equals(label) ) {
+				return god;
 			}
 			throw new IllegalStateException();
 		}

@@ -9,7 +9,7 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 
-public class ModelPrinter {
+public class JavaModelPrinter {
 
 	public static Map<String, String> sourceFiles = new HashMap<String, String>();
 	private final static String SOURCE_FOLDER = "src/main/generated-java";

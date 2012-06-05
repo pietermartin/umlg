@@ -144,19 +144,19 @@ public class Foot extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.god =  new TinkerSetImpl<God>(this, FootRuntimePropertyEnum.GOD);
-		this.name =  new TinkerSetImpl<String>(this, FootRuntimePropertyEnum.NAME);
+		this.god =  new TinkerSetImpl<God>(this, FootRuntimePropertyEnum.god);
+		this.name =  new TinkerSetImpl<String>(this, FootRuntimePropertyEnum.name);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (FootRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case NAME:
-				this.name =  new TinkerSetImpl<String>(this, FootRuntimePropertyEnum.NAME);
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, FootRuntimePropertyEnum.name);
 			break;
 		
-			case GOD:
-				this.god =  new TinkerSetImpl<God>(this, FootRuntimePropertyEnum.GOD);
+			case god:
+				this.god =  new TinkerSetImpl<God>(this, FootRuntimePropertyEnum.god);
 			break;
 		
 		}
@@ -207,8 +207,8 @@ public class Foot extends BaseTinker implements CompositionNode {
 	}
 
 	public enum FootRuntimePropertyEnum implements TumlRuntimeProperty {
-		GOD(false,false,"A_<god>_<foot>",false,false,true,false,1,1),
-		NAME(true,false,"org__tinker__collectiontest__Foot__name",false,false,true,false,1,1);
+		god(false,false,"A_<god>_<foot>",false,false,true,false,1,1),
+		name(true,false,"org__tinker__collectiontest__Foot__name",false,false,true,false,1,1);
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -243,11 +243,11 @@ public class Foot extends BaseTinker implements CompositionNode {
 		}
 	
 		static public FootRuntimePropertyEnum fromLabel(String label) {
-			if ( GOD.getLabel().equals(label) ) {
-				return GOD;
+			if ( god.getLabel().equals(label) ) {
+				return god;
 			}
-			if ( NAME.getLabel().equals(label) ) {
-				return NAME;
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
 			throw new IllegalStateException();
 		}

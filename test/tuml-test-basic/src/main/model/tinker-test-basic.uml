@@ -83,5 +83,29 @@
         <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_MsSoE65uEeG2vYtMbkVHmA" value="1"/>
       </ownedEnd>
     </packagedElement>
+    <packagedElement xmi:type="uml:Package" xmi:id="_WqFCoK85EeGzNfwuvR7FNw" name="inheritence">
+      <packagedElement xmi:type="uml:Class" xmi:id="_Y_GZQK85EeGzNfwuvR7FNw" name="God">
+        <ownedAttribute xmi:id="_rFWM8K85EeGzNfwuvR7FNw" name="abstractSpecies" type="_ZsZkIK85EeGzNfwuvR7FNw" aggregation="composite" association="_rFZQSq85EeGzNfwuvR7FNw">
+          <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_rFWM8a85EeGzNfwuvR7FNw" value="*"/>
+          <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_rFWM8q85EeGzNfwuvR7FNw"/>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_ZsZkIK85EeGzNfwuvR7FNw" name="AbstractSpecies"/>
+      <packagedElement xmi:type="uml:Class" xmi:id="_brypAK85EeGzNfwuvR7FNw" name="Mamal">
+        <generalization xmi:id="_g1Alk685EeGzNfwuvR7FNw" general="_ZsZkIK85EeGzNfwuvR7FNw"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_cV2SoK85EeGzNfwuvR7FNw" name="Biped">
+        <generalization xmi:id="_ghGyIK85EeGzNfwuvR7FNw" general="_brypAK85EeGzNfwuvR7FNw"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_evo0gK85EeGzNfwuvR7FNw" name="Quadped">
+        <generalization xmi:id="_grsRg685EeGzNfwuvR7FNw" general="_brypAK85EeGzNfwuvR7FNw"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="_rFZQSq85EeGzNfwuvR7FNw" name="A_&lt;god>_&lt;abstractSpecies>" memberEnd="_rFZQS685EeGzNfwuvR7FNw _rFWM8K85EeGzNfwuvR7FNw" navigableOwnedEnd="_rFZQS685EeGzNfwuvR7FNw">
+        <ownedEnd xmi:id="_rFZQS685EeGzNfwuvR7FNw" name="god" type="_Y_GZQK85EeGzNfwuvR7FNw" association="_rFZQSq85EeGzNfwuvR7FNw">
+          <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_rFZQTK85EeGzNfwuvR7FNw" value="1"/>
+          <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_rFZQTa85EeGzNfwuvR7FNw" value="1"/>
+        </ownedEnd>
+      </packagedElement>
+    </packagedElement>
   </packagedElement>
 </uml:Model>
