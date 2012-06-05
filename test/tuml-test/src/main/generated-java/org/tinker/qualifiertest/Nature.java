@@ -2,22 +2,24 @@ package org.tinker.qualifiertest;
 
 import com.tinkerpop.blueprints.pgm.Vertex;
 
+import java.util.Set;
 import java.util.UUID;
 
 import org.tinker.concretetest.God;
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.TinkerIdUtilFactory;
 import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
-import org.tuml.runtime.collection.TumlRuntimePropertyImpl;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TinkerSetImpl;
+import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.domain.BaseTinker;
 import org.tuml.runtime.domain.CompositionNode;
+import org.tuml.runtime.domain.TinkerNode;
 
 public class Nature extends BaseTinker implements CompositionNode {
-	private TinkerSet<God> god;
 	private TinkerSet<String> name1;
 	private TinkerSet<String> name2;
+	private TinkerSet<God> god;
 
 	/** Constructor for Nature
 	 * 
@@ -26,6 +28,7 @@ public class Nature extends BaseTinker implements CompositionNode {
 	public Nature(God compositeOwner) {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
 		createComponents();
+		initialiseProperties();
 		init(compositeOwner);
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
@@ -58,22 +61,32 @@ public class Nature extends BaseTinker implements CompositionNode {
 
 	public void addToGod(God god) {
 		if ( god != null ) {
-			god.z_internalRemoveFromNature(god.getNature());
-			god.z_internalAddToNature(this);
-			z_internalAddToGod(god);
+			this.god.add(god);
 		}
 	}
 	
 	public void addToName1(String name1) {
 		if ( name1 != null ) {
-			z_internalAddToName1(name1);
+			this.name1.add(name1);
 		}
 	}
 	
 	public void addToName2(String name2) {
 		if ( name2 != null ) {
-			z_internalAddToName2(name2);
+			this.name2.add(name2);
 		}
+	}
+	
+	public void clearGod() {
+		this.god.clear();
+	}
+	
+	public void clearName1() {
+		this.name1.clear();
+	}
+	
+	public void clearName2() {
+		this.name2.clear();
 	}
 	
 	public void createComponents() {
@@ -121,7 +134,7 @@ public class Nature extends BaseTinker implements CompositionNode {
 	}
 	
 	@Override
-	public CompositionNode getOwningObject() {
+	public TinkerNode getOwningObject() {
 		return getGod();
 	}
 	
@@ -135,9 +148,13 @@ public class Nature extends BaseTinker implements CompositionNode {
 		return uid;
 	}
 	
+	/** This gets called on creation with the compositional owner. The composition owner does not itself need to be a composite node
+	 * 
+	 * @param compositeOwner 
+	 */
 	@Override
-	public void init(CompositionNode compositeOwner) {
-		this.z_internalAddToGod((God)compositeOwner);
+	public void init(TinkerNode compositeOwner) {
+		this.god.add((God)compositeOwner);
 		this.hasInitBeenCalled = true;
 		initVariables();
 	}
@@ -147,8 +164,27 @@ public class Nature extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.name1 =  new TinkerSetImpl<String>(this, "org__tinker__qualifiertest__Nature__name1", true, new TumlRuntimePropertyImpl(false,false,true,false,1,1), false);
-		this.name2 =  new TinkerSetImpl<String>(this, "org__tinker__qualifiertest__Nature__name2", true, new TumlRuntimePropertyImpl(false,false,true,false,1,1), false);
+		this.name2 =  new TinkerSetImpl<String>(this, NatureRuntimePropertyEnum.NAME2);
+		this.god =  new TinkerSetImpl<God>(this, NatureRuntimePropertyEnum.GOD);
+		this.name1 =  new TinkerSetImpl<String>(this, NatureRuntimePropertyEnum.NAME1);
+	}
+	
+	@Override
+	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
+		switch ( (NatureRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
+			case NAME1:
+				this.name1 =  new TinkerSetImpl<String>(this, NatureRuntimePropertyEnum.NAME1);
+			break;
+		
+			case GOD:
+				this.god =  new TinkerSetImpl<God>(this, NatureRuntimePropertyEnum.GOD);
+			break;
+		
+			case NAME2:
+				this.name2 =  new TinkerSetImpl<String>(this, NatureRuntimePropertyEnum.NAME2);
+			break;
+		
+		}
 	}
 	
 	@Override
@@ -156,7 +192,45 @@ public class Nature extends BaseTinker implements CompositionNode {
 		return false;
 	}
 	
-	public void setGod(TinkerSet<God> god) {
+	public void removeFromGod(God god) {
+		if ( god != null ) {
+			this.god.remove(god);
+		}
+	}
+	
+	public void removeFromGod(Set<God> god) {
+		if ( !god.isEmpty() ) {
+			this.god.removeAll(god);
+		}
+	}
+	
+	public void removeFromName1(Set<String> name1) {
+		if ( !name1.isEmpty() ) {
+			this.name1.removeAll(name1);
+		}
+	}
+	
+	public void removeFromName1(String name1) {
+		if ( name1 != null ) {
+			this.name1.remove(name1);
+		}
+	}
+	
+	public void removeFromName2(Set<String> name2) {
+		if ( !name2.isEmpty() ) {
+			this.name2.removeAll(name2);
+		}
+	}
+	
+	public void removeFromName2(String name2) {
+		if ( name2 != null ) {
+			this.name2.remove(name2);
+		}
+	}
+	
+	public void setGod(God god) {
+		clearGod();
+		addToGod(god);
 	}
 	
 	@Override
@@ -164,34 +238,106 @@ public class Nature extends BaseTinker implements CompositionNode {
 		TinkerIdUtilFactory.getIdUtil().setId(this.vertex, id);
 	}
 	
-	public void setName1(TinkerSet<String> name1) {
+	public void setName1(String name1) {
+		clearName1();
+		addToName1(name1);
 	}
 	
-	public void setName2(TinkerSet<String> name2) {
-	}
-	
-	public void z_internalAddToGod(God god) {
-		this.god.add(god);
-	}
-	
-	public void z_internalAddToName1(String name1) {
-		this.name1.add(name1);
-	}
-	
-	public void z_internalAddToName2(String name2) {
-		this.name2.add(name2);
-	}
-	
-	public void z_internalRemoveFromGod(God god) {
-		this.god.remove(god);
-	}
-	
-	public void z_internalRemoveFromName1(String name1) {
-		this.name1.remove(name1);
-	}
-	
-	public void z_internalRemoveFromName2(String name2) {
-		this.name2.remove(name2);
+	public void setName2(String name2) {
+		clearName2();
+		addToName2(name2);
 	}
 
+	public enum NatureRuntimePropertyEnum implements TumlRuntimeProperty {
+		NAME2(true,false,"org__tinker__qualifiertest__Nature__name2",false,false,true,false,1,1),
+		GOD(false,false,"A_<god>_<nature>",false,false,true,false,1,1),
+		NAME1(true,false,"org__tinker__qualifiertest__Nature__name1",false,false,true,false,1,1);
+		private boolean controllingSide;
+		private boolean composite;
+		private String label;
+		private boolean oneToOne;
+		private boolean oneToMany;
+		private boolean manyToOne;
+		private boolean manyToMany;
+		private int upper;
+		private int lower;
+		/** Constructor for NatureRuntimePropertyEnum
+		 * 
+		 * @param controllingSide 
+		 * @param composite 
+		 * @param label 
+		 * @param oneToOne 
+		 * @param oneToMany 
+		 * @param manyToOne 
+		 * @param manyToMany 
+		 * @param upper 
+		 * @param lower 
+		 */
+		private NatureRuntimePropertyEnum(boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+			this.controllingSide = controllingSide;
+			this.composite = composite;
+			this.label = label;
+			this.oneToOne = oneToOne;
+			this.oneToMany = oneToMany;
+			this.manyToOne = manyToOne;
+			this.manyToMany = manyToMany;
+			this.upper = upper;
+			this.lower = lower;
+		}
+	
+		static public NatureRuntimePropertyEnum fromLabel(String label) {
+			if ( NAME2.getLabel().equals(label) ) {
+				return NAME2;
+			}
+			if ( GOD.getLabel().equals(label) ) {
+				return GOD;
+			}
+			if ( NAME1.getLabel().equals(label) ) {
+				return NAME1;
+			}
+			throw new IllegalStateException();
+		}
+		
+		public String getLabel() {
+			return this.label;
+		}
+		
+		public int getLower() {
+			return this.lower;
+		}
+		
+		public int getUpper() {
+			return this.upper;
+		}
+		
+		public boolean isComposite() {
+			return this.composite;
+		}
+		
+		public boolean isControllingSide() {
+			return this.controllingSide;
+		}
+		
+		public boolean isManyToMany() {
+			return this.manyToMany;
+		}
+		
+		public boolean isManyToOne() {
+			return this.manyToOne;
+		}
+		
+		public boolean isOneToMany() {
+			return this.oneToMany;
+		}
+		
+		public boolean isOneToOne() {
+			return this.oneToOne;
+		}
+		
+		@Override
+		public boolean isValid(int elementCount) {
+			return (getUpper() == -1 || elementCount <= getUpper()) && elementCount >= getLower();
+		}
+	
+	}
 }

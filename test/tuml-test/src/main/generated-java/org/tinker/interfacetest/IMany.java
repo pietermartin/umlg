@@ -1,27 +1,34 @@
 package org.tinker.interfacetest;
 
+import java.util.Set;
+
 import org.tinker.concretetest.God;
 import org.tuml.runtime.collection.TinkerSet;
+import org.tuml.runtime.domain.CompositionNode;
 
-public interface IMany {
+public interface IMany extends CompositionNode {
 	public void addToGod(God god);
 	
 	public void addToName(String name);
+	
+	public void clearGod();
+	
+	public void clearName();
 	
 	public God getGod();
 	
 	public String getName();
 	
-	public void setGod(TinkerSet<God> god);
+	public void removeFromGod(God god);
 	
-	public void setName(TinkerSet<String> name);
+	public void removeFromGod(Set<God> god);
 	
-	public void z_internalAddToGod(God god);
+	public void removeFromName(Set<String> name);
 	
-	public void z_internalAddToName(String name);
+	public void removeFromName(String name);
 	
-	public void z_internalRemoveFromGod(God god);
+	public void setGod(God god);
 	
-	public void z_internalRemoveFromName(String name);
+	public void setName(String name);
 
 }

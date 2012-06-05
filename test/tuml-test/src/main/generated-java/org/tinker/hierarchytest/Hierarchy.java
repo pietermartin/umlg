@@ -1,5 +1,7 @@
 package org.tinker.hierarchytest;
 
-public interface Hierarchy {
+import org.tuml.runtime.domain.TinkerNode;
+
+public interface Hierarchy extends TinkerNode {
 
 }

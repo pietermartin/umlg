@@ -163,6 +163,11 @@
         <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="__pnb9K5tEeG2vYtMbkVHmA" presentation="default">
           <element href="tinker-test-basic.uml#__p5v0K5tEeG2vYtMbkVHmA"/>
         </semanticModel>
+        <contained xsi:type="di:GraphNode" xmi:id="_5Ty4YK8oEeGCcIQSVUaYfQ" position="0,0" size="-1,-1">
+          <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_5Ty4Ya8oEeGCcIQSVUaYfQ" presentation="default">
+            <element href="tinker-test-basic.uml#_5UFzUK8oEeGCcIQSVUaYfQ"/>
+          </semanticModel>
+        </contained>
       </contained>
       <contained xsi:type="di:GraphNode" xmi:id="__pnb9a5tEeG2vYtMbkVHmA">
         <property xmi:id="__pnb9q5tEeG2vYtMbkVHmA" key="eStructuralFeatureID" value="38 41 "/>
@@ -223,6 +228,11 @@
         <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_Iagp1K5uEeG2vYtMbkVHmA" presentation="default">
           <element href="tinker-test-basic.uml#_IaifAK5uEeG2vYtMbkVHmA"/>
         </semanticModel>
+        <contained xsi:type="di:GraphNode" xmi:id="_7Cpm4K8oEeGCcIQSVUaYfQ" position="0,0" size="-1,-1">
+          <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_7Cpm4a8oEeGCcIQSVUaYfQ" presentation="default">
+            <element href="tinker-test-basic.uml#_7Cq1AK8oEeGCcIQSVUaYfQ"/>
+          </semanticModel>
+        </contained>
       </contained>
       <contained xsi:type="di:GraphNode" xmi:id="_Iagp1a5uEeG2vYtMbkVHmA">
         <property xmi:id="_Iagp1q5uEeG2vYtMbkVHmA" key="eStructuralFeatureID" value="38 41 "/>

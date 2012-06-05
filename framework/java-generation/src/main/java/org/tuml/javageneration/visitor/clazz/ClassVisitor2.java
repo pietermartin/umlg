@@ -144,7 +144,7 @@ public class ClassVisitor2 extends BaseVisitor implements Visitor<Class> {
 		for (Property p : TumlClassOperations.getAllOwnedProperties(clazz)) {
 			PropertyWrapper pWrap = new PropertyWrapper(p);
 			if (!(pWrap.isDerived() || pWrap.isDerivedUnion())) {
-				OJSimpleStatement statement = new OJSimpleStatement("this." + pWrap.fieldname() + " = " + pWrap.javaDefaultInitialisation());
+				OJSimpleStatement statement = new OJSimpleStatement("this." + pWrap.fieldname() + " = " + pWrap.javaDefaultInitialisation(clazz));
 				statement.setName(pWrap.fieldname());
 				initialiseProperties.getBody().addToStatements(statement);
 				annotatedClass.addToImports(pWrap.javaImplTypePath());
@@ -170,7 +170,7 @@ public class ClassVisitor2 extends BaseVisitor implements Visitor<Class> {
 			if (!(pWrap.isDerived() || pWrap.isDerivedUnion())) {
 				OJSwitchCase ojSwitchCase = new OJSwitchCase();
 				ojSwitchCase.setLabel(pWrap.fieldname().toUpperCase());
-				OJSimpleStatement statement = new OJSimpleStatement("this." + pWrap.fieldname() + " = " + pWrap.javaDefaultInitialisation());
+				OJSimpleStatement statement = new OJSimpleStatement("this." + pWrap.fieldname() + " = " + pWrap.javaDefaultInitialisation(clazz));
 				statement.setName(pWrap.fieldname());
 				ojSwitchCase.getBody().addToStatements(statement);
 				annotatedClass.addToImports(pWrap.javaImplTypePath());

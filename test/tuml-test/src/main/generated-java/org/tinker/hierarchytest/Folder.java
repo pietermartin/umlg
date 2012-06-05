@@ -2,8 +2,13 @@ package org.tinker.hierarchytest;
 
 import com.tinkerpop.blueprints.pgm.Vertex;
 
+import java.util.Set;
+
 import org.tuml.runtime.collection.TinkerSet;
+import org.tuml.runtime.collection.TinkerSetImpl;
+import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.domain.CompositionNode;
+import org.tuml.runtime.domain.TinkerNode;
 
 public class Folder extends AbstractFolder implements CompositionNode {
 	private TinkerSet<AbstractFolder> parentFolder;
@@ -14,6 +19,7 @@ public class Folder extends AbstractFolder implements CompositionNode {
 	 */
 	public Folder(AbstractFolder compositeOwner) {
 		super(true);
+		initialiseProperties();
 		init(compositeOwner);
 	}
 	
@@ -43,10 +49,12 @@ public class Folder extends AbstractFolder implements CompositionNode {
 
 	public void addToParentFolder(AbstractFolder parentFolder) {
 		if ( parentFolder != null ) {
-			parentFolder.z_internalRemoveFromChildFolder(parentFolder.getChildFolder());
-			parentFolder.z_internalAddToChildFolder(this);
-			z_internalAddToParentFolder(parentFolder);
+			this.parentFolder.add(parentFolder);
 		}
+	}
+	
+	public void clearParentFolder() {
+		this.parentFolder.clear();
 	}
 	
 	public void createComponents() {
@@ -58,7 +66,7 @@ public class Folder extends AbstractFolder implements CompositionNode {
 	}
 	
 	@Override
-	public CompositionNode getOwningObject() {
+	public TinkerNode getOwningObject() {
 		return getParentFolder();
 	}
 	
@@ -71,9 +79,13 @@ public class Folder extends AbstractFolder implements CompositionNode {
 		}
 	}
 	
+	/** This gets called on creation with the compositional owner. The composition owner does not itself need to be a composite node
+	 * 
+	 * @param compositeOwner 
+	 */
 	@Override
-	public void init(CompositionNode compositeOwner) {
-		this.z_internalAddToParentFolder((AbstractFolder)compositeOwner);
+	public void init(TinkerNode compositeOwner) {
+		this.parentFolder.add((AbstractFolder)compositeOwner);
 		this.hasInitBeenCalled = true;
 		initVariables();
 	}
@@ -85,6 +97,18 @@ public class Folder extends AbstractFolder implements CompositionNode {
 	@Override
 	public void initialiseProperties() {
 		super.initialiseProperties();
+		this.parentFolder =  new TinkerSetImpl<AbstractFolder>(this, FolderRuntimePropertyEnum.PARENTFOLDER);
+	}
+	
+	@Override
+	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
+		super.initialiseProperties();
+		switch ( (FolderRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
+			case PARENTFOLDER:
+				this.parentFolder =  new TinkerSetImpl<AbstractFolder>(this, FolderRuntimePropertyEnum.PARENTFOLDER);
+			break;
+		
+		}
 	}
 	
 	@Override
@@ -92,15 +116,105 @@ public class Folder extends AbstractFolder implements CompositionNode {
 		return false;
 	}
 	
-	public void setParentFolder(TinkerSet<AbstractFolder> parentFolder) {
+	public void removeFromParentFolder(AbstractFolder parentFolder) {
+		if ( parentFolder != null ) {
+			this.parentFolder.remove(parentFolder);
+		}
 	}
 	
-	public void z_internalAddToParentFolder(AbstractFolder parentFolder) {
-		this.parentFolder.add(parentFolder);
+	public void removeFromParentFolder(Set<AbstractFolder> parentFolder) {
+		if ( !parentFolder.isEmpty() ) {
+			this.parentFolder.removeAll(parentFolder);
+		}
 	}
 	
-	public void z_internalRemoveFromParentFolder(AbstractFolder parentFolder) {
-		this.parentFolder.remove(parentFolder);
+	public void setParentFolder(AbstractFolder parentFolder) {
+		clearParentFolder();
+		addToParentFolder(parentFolder);
 	}
 
+	public enum FolderRuntimePropertyEnum implements TumlRuntimeProperty {
+		PARENTFOLDER(false,false,"A_<abstractFolder>_<folder>",false,false,true,false,1,1);
+		private boolean controllingSide;
+		private boolean composite;
+		private String label;
+		private boolean oneToOne;
+		private boolean oneToMany;
+		private boolean manyToOne;
+		private boolean manyToMany;
+		private int upper;
+		private int lower;
+		/** Constructor for FolderRuntimePropertyEnum
+		 * 
+		 * @param controllingSide 
+		 * @param composite 
+		 * @param label 
+		 * @param oneToOne 
+		 * @param oneToMany 
+		 * @param manyToOne 
+		 * @param manyToMany 
+		 * @param upper 
+		 * @param lower 
+		 */
+		private FolderRuntimePropertyEnum(boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+			this.controllingSide = controllingSide;
+			this.composite = composite;
+			this.label = label;
+			this.oneToOne = oneToOne;
+			this.oneToMany = oneToMany;
+			this.manyToOne = manyToOne;
+			this.manyToMany = manyToMany;
+			this.upper = upper;
+			this.lower = lower;
+		}
+	
+		static public FolderRuntimePropertyEnum fromLabel(String label) {
+			if ( PARENTFOLDER.getLabel().equals(label) ) {
+				return PARENTFOLDER;
+			}
+			throw new IllegalStateException();
+		}
+		
+		public String getLabel() {
+			return this.label;
+		}
+		
+		public int getLower() {
+			return this.lower;
+		}
+		
+		public int getUpper() {
+			return this.upper;
+		}
+		
+		public boolean isComposite() {
+			return this.composite;
+		}
+		
+		public boolean isControllingSide() {
+			return this.controllingSide;
+		}
+		
+		public boolean isManyToMany() {
+			return this.manyToMany;
+		}
+		
+		public boolean isManyToOne() {
+			return this.manyToOne;
+		}
+		
+		public boolean isOneToMany() {
+			return this.oneToMany;
+		}
+		
+		public boolean isOneToOne() {
+			return this.oneToOne;
+		}
+		
+		@Override
+		public boolean isValid(int elementCount) {
+			return (getUpper() == -1 || elementCount <= getUpper()) && elementCount >= getLower();
+		}
+	
+	}
 }

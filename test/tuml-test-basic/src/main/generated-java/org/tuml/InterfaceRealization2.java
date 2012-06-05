@@ -9,12 +9,14 @@ import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.TinkerIdUtilFactory;
 import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
 import org.tuml.runtime.collection.TinkerSet;
+import org.tuml.runtime.collection.TinkerSetImpl;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.domain.BaseTinker;
 import org.tuml.runtime.domain.CompositionNode;
 import org.tuml.runtime.domain.TinkerNode;
 
-public class InterfaceRealization2 extends BaseTinker implements CompositionNode {
+public class InterfaceRealization2 extends BaseTinker implements CompositionNode, Interface2 {
+	private TinkerSet<String> name;
 	private TinkerSet<Interface1> interface1;
 
 	/** Constructor for InterfaceRealization2
@@ -61,8 +63,18 @@ public class InterfaceRealization2 extends BaseTinker implements CompositionNode
 		}
 	}
 	
+	public void addToName(String name) {
+		if ( name != null ) {
+			this.name.add(name);
+		}
+	}
+	
 	public void clearInterface1() {
 		this.interface1.clear();
+	}
+	
+	public void clearName() {
+		this.name.clear();
 	}
 	
 	public void createComponents() {
@@ -79,6 +91,15 @@ public class InterfaceRealization2 extends BaseTinker implements CompositionNode
 	
 	public Interface1 getInterface1() {
 		TinkerSet<Interface1> tmp = this.interface1;
+		if ( !tmp.isEmpty() ) {
+			return tmp.iterator().next();
+		} else {
+			return null;
+		}
+	}
+	
+	public String getName() {
+		TinkerSet<String> tmp = this.name;
 		if ( !tmp.isEmpty() ) {
 			return tmp.iterator().next();
 		} else {
@@ -122,11 +143,21 @@ public class InterfaceRealization2 extends BaseTinker implements CompositionNode
 	
 	@Override
 	public void initialiseProperties() {
+		this.name =  new TinkerSetImpl<String>(this, InterfaceRealization2RuntimePropertyEnum.NAME);
+		this.interface1 =  new TinkerSetImpl<Interface1>(this, InterfaceRealization2RuntimePropertyEnum.INTERFACE1);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (InterfaceRealization2RuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
+			case INTERFACE1:
+				this.interface1 =  new TinkerSetImpl<Interface1>(this, InterfaceRealization2RuntimePropertyEnum.INTERFACE1);
+			break;
+		
+			case NAME:
+				this.name =  new TinkerSetImpl<String>(this, InterfaceRealization2RuntimePropertyEnum.NAME);
+			break;
+		
 		}
 	}
 	
@@ -147,6 +178,18 @@ public class InterfaceRealization2 extends BaseTinker implements CompositionNode
 		}
 	}
 	
+	public void removeFromName(Set<String> name) {
+		if ( !name.isEmpty() ) {
+			this.name.removeAll(name);
+		}
+	}
+	
+	public void removeFromName(String name) {
+		if ( name != null ) {
+			this.name.remove(name);
+		}
+	}
+	
 	@Override
 	public void setId(Long id) {
 		TinkerIdUtilFactory.getIdUtil().setId(this.vertex, id);
@@ -156,9 +199,15 @@ public class InterfaceRealization2 extends BaseTinker implements CompositionNode
 		clearInterface1();
 		addToInterface1(interface1);
 	}
+	
+	public void setName(String name) {
+		clearName();
+		addToName(name);
+	}
 
 	public enum InterfaceRealization2RuntimePropertyEnum implements TumlRuntimeProperty {
-	;
+		NAME(true,false,"org__tuml__Interface2__name",false,false,true,false,1,1),
+		INTERFACE1(false,false,"A_<interface1>_<interface2>",false,false,true,false,1,1);
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -193,6 +242,12 @@ public class InterfaceRealization2 extends BaseTinker implements CompositionNode
 		}
 	
 		static public InterfaceRealization2RuntimePropertyEnum fromLabel(String label) {
+			if ( NAME.getLabel().equals(label) ) {
+				return NAME;
+			}
+			if ( INTERFACE1.getLabel().equals(label) ) {
+				return INTERFACE1;
+			}
 			throw new IllegalStateException();
 		}
 		

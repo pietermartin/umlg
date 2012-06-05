@@ -1,18 +1,23 @@
 package org.tinker.embeddedtest;
 
+import java.util.Set;
+
 import org.tinker.concretetest.God;
 import org.tuml.runtime.collection.TinkerSet;
 
 public enum REASON {
-;
+	GOOD,
+	BAD;
 	private TinkerSet<God> god;
 
 	public void addToGod(God god) {
 		if ( god != null ) {
-			god.z_internalRemoveFromREASON(god.getREASON());
-			god.z_internalAddToREASON(this);
-			z_internalAddToGod(god);
+			this.god.add(god);
 		}
+	}
+	
+	public void clearGod() {
+		this.god.clear();
 	}
 	
 	public God getGod() {
@@ -24,15 +29,21 @@ public enum REASON {
 		}
 	}
 	
-	public void setGod(TinkerSet<God> god) {
+	public void removeFromGod(God god) {
+		if ( god != null ) {
+			this.god.remove(god);
+		}
 	}
 	
-	public void z_internalAddToGod(God god) {
-		this.god.add(god);
+	public void removeFromGod(Set<God> god) {
+		if ( !god.isEmpty() ) {
+			this.god.removeAll(god);
+		}
 	}
 	
-	public void z_internalRemoveFromGod(God god) {
-		this.god.remove(god);
+	public void setGod(God god) {
+		clearGod();
+		addToGod(god);
 	}
 
 }

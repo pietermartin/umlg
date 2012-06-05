@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.uml2.uml.AggregationKind;
 import org.eclipse.uml2.uml.Association;
+import org.eclipse.uml2.uml.BehavioredClassifier;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Comment;
@@ -179,8 +180,11 @@ public class PropertyWrapper implements Property {
 		return TumlPropertyOperations.getDefaultTinkerCollection(this.property);
 	}
 	
-	public String javaDefaultInitialisation() {
-		return TumlPropertyOperations.getDefaultTinkerCollectionInitalisation(this.property).getExpression();
+	/*
+	 * The property might be owned by an interface but the initialisation is for a realization on a BehavioredClassifier
+	 */
+	public String javaDefaultInitialisation(BehavioredClassifier propertyConcreteOwner) {
+		return TumlPropertyOperations.getDefaultTinkerCollectionInitalisation(this.property, propertyConcreteOwner).getExpression();
 	}
 
 	public boolean isOne() {

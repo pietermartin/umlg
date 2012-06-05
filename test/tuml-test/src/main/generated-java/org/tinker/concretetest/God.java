@@ -2,6 +2,9 @@ package org.tinker.concretetest;
 
 import com.tinkerpop.blueprints.pgm.Vertex;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.tinker.collectiontest.Dream;
@@ -27,10 +30,8 @@ import org.tinker.qualifiertest.Many2;
 import org.tinker.qualifiertest.Nature;
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.TinkerIdUtilFactory;
-import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
 import org.tuml.runtime.collection.TinkerBag;
 import org.tuml.runtime.collection.TinkerBagImpl;
-import org.tuml.runtime.collection.TumlRuntimePropertyImpl;
 import org.tuml.runtime.collection.TinkerOrderedSet;
 import org.tuml.runtime.collection.TinkerOrderedSetImpl;
 import org.tuml.runtime.collection.TinkerQualifiedBag;
@@ -45,40 +46,41 @@ import org.tuml.runtime.collection.TinkerSequence;
 import org.tuml.runtime.collection.TinkerSequenceImpl;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TinkerSetImpl;
+import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.domain.BaseTinker;
-import org.tuml.runtime.domain.CompositionNode;
+import org.tuml.runtime.domain.TinkerNode;
 
-public class God extends BaseTinker implements CompositionNode {
-	private TinkerSet<AbstractSpecies> abstractSpecies;
+public class God extends BaseTinker implements TinkerNode {
+	private TinkerSet<String> name;
+	private TinkerSet<Universe> universe;
 	private TinkerSet<Angel> angel;
-	private TinkerSet<Mamal> animalFarm;
+	private TinkerSet<Spirit> spirit;
 	private TinkerSet<Being> being;
-	private TinkerSet<Demon> demon;
-	private TinkerBag<Dream> dream;
-	private TinkerSet<Integer> embeddedInteger;
-	private TinkerSet<String> embeddedString;
-	private TinkerSet<FakeRootFolder> fakeRootFolder;
-	private TinkerQualifiedOrderedSet<Fantasy> fantasy;
-	private TinkerQualifiedSequence<Foot> foot;
-	private TinkerSequence<Hand> hand;
+	private TinkerSet<AbstractSpecies> abstractSpecies;
 	private TinkerSet<IMany> iMany;
+	private TinkerSet<String> embeddedString;
+	private TinkerSet<Integer> embeddedInteger;
+	private TinkerSet<RealRootFolder> realRootFolder;
+	private TinkerSet<FakeRootFolder> fakeRootFolder;
+	private TinkerSet<REASON> reason;
+	private TinkerSet<Mamal> pet;
+	private TinkerSet<Mamal> animalFarm;
+	private TinkerQualifiedSet<Nature> nature;
+	private TinkerSequence<Hand> hand;
+	private TinkerQualifiedSequence<Foot> foot;
+	private TinkerOrderedSet<World> world;
+	private TinkerQualifiedOrderedSet<Fantasy> fantasy;
 	private TinkerSet<Many1> many1;
 	private TinkerSet<Many2> many2;
-	private TinkerQualifiedBag<Nightmare> memory;
-	private TinkerSet<String> name;
-	private TinkerQualifiedSet<Nature> nature;
+	private TinkerBag<Dream> dream;
 	private TinkerQualifiedBag<Nightmare> nightmare;
-	private TinkerSet<NonNavigableMany> nonNavigableMany;
-	private TinkerSet<NonNavigableOne> nonNavigableOne;
+	private TinkerSet<Demon> demon;
 	private TinkerSet<OneOne> oneOne;
 	private TinkerSet<OneTwo> oneTwo;
-	private TinkerSet<Mamal> pet;
+	private TinkerSet<NonNavigableOne> nonNavigableOne;
+	private TinkerSet<NonNavigableMany> nonNavigableMany;
 	private TinkerSet<REASON> rEASON;
-	private TinkerSet<RealRootFolder> realRootFolder;
-	private TinkerSet<REASON> reason;
-	private TinkerSet<Spirit> spirit;
-	private TinkerSet<Universe> universe;
-	private TinkerOrderedSet<World> world;
+	private TinkerQualifiedBag<Nightmare> memory;
 
 	/** Constructor for God
 	 * 
@@ -100,237 +102,470 @@ public class God extends BaseTinker implements CompositionNode {
 	 */
 	public God(Boolean persistent) {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
-		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
 		initialiseProperties();
 	}
 
 	public void addToAbstractSpecies(AbstractSpecies abstractSpecies) {
 		if ( abstractSpecies != null ) {
-			abstractSpecies.z_internalRemoveFromGod(abstractSpecies.getGod());
-			abstractSpecies.z_internalAddToGod(this);
-			z_internalAddToAbstractSpecies(abstractSpecies);
+			this.abstractSpecies.add(abstractSpecies);
+		}
+	}
+	
+	public void addToAbstractSpecies(Set<AbstractSpecies> abstractSpecies) {
+		if ( !abstractSpecies.isEmpty() ) {
+			this.abstractSpecies.addAll(abstractSpecies);
 		}
 	}
 	
 	public void addToAngel(Angel angel) {
 		if ( angel != null ) {
-			angel.z_internalRemoveFromGod(angel.getGod());
-			angel.z_internalAddToGod(this);
-			z_internalAddToAngel(angel);
+			this.angel.add(angel);
+		}
+	}
+	
+	public void addToAngel(Set<Angel> angel) {
+		if ( !angel.isEmpty() ) {
+			this.angel.addAll(angel);
 		}
 	}
 	
 	public void addToAnimalFarm(Mamal animalFarm) {
 		if ( animalFarm != null ) {
-			z_internalAddToAnimalFarm(animalFarm);
+			this.animalFarm.add(animalFarm);
+		}
+	}
+	
+	public void addToAnimalFarm(Set<Mamal> animalFarm) {
+		if ( !animalFarm.isEmpty() ) {
+			this.animalFarm.addAll(animalFarm);
 		}
 	}
 	
 	public void addToBeing(Being being) {
 		if ( being != null ) {
-			being.z_internalRemoveFromGod(being.getGod());
-			being.z_internalAddToGod(this);
-			z_internalAddToBeing(being);
+			this.being.add(being);
+		}
+	}
+	
+	public void addToBeing(Set<Being> being) {
+		if ( !being.isEmpty() ) {
+			this.being.addAll(being);
 		}
 	}
 	
 	public void addToDemon(Demon demon) {
 		if ( demon != null ) {
-			demon.z_internalRemoveFromGod(demon.getGod());
-			demon.z_internalAddToGod(this);
-			z_internalAddToDemon(demon);
+			this.demon.add(demon);
+		}
+	}
+	
+	public void addToDemon(Set<Demon> demon) {
+		if ( !demon.isEmpty() ) {
+			this.demon.addAll(demon);
+		}
+	}
+	
+	public void addToDream(Collection<Dream> dream) {
+		if ( !dream.isEmpty() ) {
+			this.dream.addAll(dream);
 		}
 	}
 	
 	public void addToDream(Dream dream) {
 		if ( dream != null ) {
-			dream.z_internalRemoveFromGod(dream.getGod());
-			dream.z_internalAddToGod(this);
-			z_internalAddToDream(dream);
+			this.dream.add(dream);
 		}
 	}
 	
 	public void addToEmbeddedInteger(Integer embeddedInteger) {
 		if ( embeddedInteger != null ) {
-			z_internalAddToEmbeddedInteger(embeddedInteger);
+			this.embeddedInteger.add(embeddedInteger);
+		}
+	}
+	
+	public void addToEmbeddedInteger(Set<Integer> embeddedInteger) {
+		if ( !embeddedInteger.isEmpty() ) {
+			this.embeddedInteger.addAll(embeddedInteger);
+		}
+	}
+	
+	public void addToEmbeddedString(Set<String> embeddedString) {
+		if ( !embeddedString.isEmpty() ) {
+			this.embeddedString.addAll(embeddedString);
 		}
 	}
 	
 	public void addToEmbeddedString(String embeddedString) {
 		if ( embeddedString != null ) {
-			z_internalAddToEmbeddedString(embeddedString);
+			this.embeddedString.add(embeddedString);
 		}
 	}
 	
 	public void addToFakeRootFolder(FakeRootFolder fakeRootFolder) {
 		if ( fakeRootFolder != null ) {
-			fakeRootFolder.z_internalRemoveFromGod(fakeRootFolder.getGod());
-			fakeRootFolder.z_internalAddToGod(this);
-			z_internalAddToFakeRootFolder(fakeRootFolder);
+			this.fakeRootFolder.add(fakeRootFolder);
+		}
+	}
+	
+	public void addToFakeRootFolder(Set<FakeRootFolder> fakeRootFolder) {
+		if ( !fakeRootFolder.isEmpty() ) {
+			this.fakeRootFolder.addAll(fakeRootFolder);
 		}
 	}
 	
 	public void addToFantasy(Fantasy fantasy) {
 		if ( fantasy != null ) {
-			fantasy.z_internalRemoveFromGod(fantasy.getGod());
-			fantasy.z_internalAddToGod(this);
-			z_internalAddToFantasy(fantasy);
+			this.fantasy.add(fantasy);
+		}
+	}
+	
+	public void addToFantasy(Set<Fantasy> fantasy) {
+		if ( !fantasy.isEmpty() ) {
+			this.fantasy.addAll(fantasy);
 		}
 	}
 	
 	public void addToFoot(Foot foot) {
 		if ( foot != null ) {
-			foot.z_internalRemoveFromGod(foot.getGod());
-			foot.z_internalAddToGod(this);
-			z_internalAddToFoot(foot);
+			this.foot.add(foot);
+		}
+	}
+	
+	public void addToFoot(List<Foot> foot) {
+		if ( !foot.isEmpty() ) {
+			this.foot.addAll(foot);
 		}
 	}
 	
 	public void addToHand(Hand hand) {
 		if ( hand != null ) {
-			hand.z_internalRemoveFromGod(hand.getGod());
-			hand.z_internalAddToGod(this);
-			z_internalAddToHand(hand);
+			this.hand.add(hand);
+		}
+	}
+	
+	public void addToHand(List<Hand> hand) {
+		if ( !hand.isEmpty() ) {
+			this.hand.addAll(hand);
 		}
 	}
 	
 	public void addToIMany(IMany iMany) {
 		if ( iMany != null ) {
-			iMany.z_internalRemoveFromGod(iMany.getGod());
-			iMany.z_internalAddToGod(this);
-			z_internalAddToIMany(iMany);
+			this.iMany.add(iMany);
+		}
+	}
+	
+	public void addToIMany(Set<IMany> iMany) {
+		if ( !iMany.isEmpty() ) {
+			this.iMany.addAll(iMany);
 		}
 	}
 	
 	public void addToMany1(Many1 many1) {
 		if ( many1 != null ) {
-			many1.z_internalRemoveFromGod(many1.getGod());
-			many1.z_internalAddToGod(this);
-			z_internalAddToMany1(many1);
+			this.many1.add(many1);
+		}
+	}
+	
+	public void addToMany1(Set<Many1> many1) {
+		if ( !many1.isEmpty() ) {
+			this.many1.addAll(many1);
 		}
 	}
 	
 	public void addToMany2(Many2 many2) {
 		if ( many2 != null ) {
-			many2.z_internalRemoveFromGod(many2.getGod());
-			many2.z_internalAddToGod(this);
-			z_internalAddToMany2(many2);
+			this.many2.add(many2);
+		}
+	}
+	
+	public void addToMany2(Set<Many2> many2) {
+		if ( !many2.isEmpty() ) {
+			this.many2.addAll(many2);
+		}
+	}
+	
+	public void addToMemory(Collection<Nightmare> memory) {
+		if ( !memory.isEmpty() ) {
+			this.memory.addAll(memory);
 		}
 	}
 	
 	public void addToMemory(Nightmare memory) {
 		if ( memory != null ) {
-			memory.z_internalRemoveFromGodOfMemory(memory.getGodOfMemory());
-			memory.z_internalAddToGodOfMemory(this);
-			z_internalAddToMemory(memory);
+			this.memory.add(memory);
 		}
 	}
 	
 	public void addToName(String name) {
 		if ( name != null ) {
-			z_internalAddToName(name);
+			this.name.add(name);
 		}
 	}
 	
 	public void addToNature(Nature nature) {
 		if ( nature != null ) {
-			nature.z_internalRemoveFromGod(nature.getGod());
-			nature.z_internalAddToGod(this);
-			z_internalAddToNature(nature);
+			this.nature.add(nature);
+		}
+	}
+	
+	public void addToNature(Set<Nature> nature) {
+		if ( !nature.isEmpty() ) {
+			this.nature.addAll(nature);
+		}
+	}
+	
+	public void addToNightmare(Collection<Nightmare> nightmare) {
+		if ( !nightmare.isEmpty() ) {
+			this.nightmare.addAll(nightmare);
 		}
 	}
 	
 	public void addToNightmare(Nightmare nightmare) {
 		if ( nightmare != null ) {
-			nightmare.z_internalRemoveFromGod(nightmare.getGod());
-			nightmare.z_internalAddToGod(this);
-			z_internalAddToNightmare(nightmare);
+			this.nightmare.add(nightmare);
 		}
 	}
 	
 	public void addToNonNavigableMany(NonNavigableMany nonNavigableMany) {
 		if ( nonNavigableMany != null ) {
-			nonNavigableMany.z_internalRemoveFromGod(nonNavigableMany.getGod());
-			nonNavigableMany.z_internalAddToGod(this);
-			z_internalAddToNonNavigableMany(nonNavigableMany);
+			this.nonNavigableMany.add(nonNavigableMany);
+		}
+	}
+	
+	public void addToNonNavigableMany(Set<NonNavigableMany> nonNavigableMany) {
+		if ( !nonNavigableMany.isEmpty() ) {
+			this.nonNavigableMany.addAll(nonNavigableMany);
 		}
 	}
 	
 	public void addToNonNavigableOne(NonNavigableOne nonNavigableOne) {
 		if ( nonNavigableOne != null ) {
-			nonNavigableOne.z_internalRemoveFromGod(nonNavigableOne.getGod());
-			nonNavigableOne.z_internalAddToGod(this);
-			z_internalAddToNonNavigableOne(nonNavigableOne);
+			this.nonNavigableOne.add(nonNavigableOne);
+		}
+	}
+	
+	public void addToNonNavigableOne(Set<NonNavigableOne> nonNavigableOne) {
+		if ( !nonNavigableOne.isEmpty() ) {
+			this.nonNavigableOne.addAll(nonNavigableOne);
 		}
 	}
 	
 	public void addToOneOne(OneOne oneOne) {
 		if ( oneOne != null ) {
-			oneOne.z_internalRemoveFromGod(oneOne.getGod());
-			oneOne.z_internalAddToGod(this);
-			z_internalAddToOneOne(oneOne);
+			this.oneOne.add(oneOne);
+		}
+	}
+	
+	public void addToOneOne(Set<OneOne> oneOne) {
+		if ( !oneOne.isEmpty() ) {
+			this.oneOne.addAll(oneOne);
 		}
 	}
 	
 	public void addToOneTwo(OneTwo oneTwo) {
 		if ( oneTwo != null ) {
-			oneTwo.z_internalRemoveFromGod(oneTwo.getGod());
-			oneTwo.z_internalAddToGod(this);
-			z_internalAddToOneTwo(oneTwo);
+			this.oneTwo.add(oneTwo);
+		}
+	}
+	
+	public void addToOneTwo(Set<OneTwo> oneTwo) {
+		if ( !oneTwo.isEmpty() ) {
+			this.oneTwo.addAll(oneTwo);
 		}
 	}
 	
 	public void addToPet(Mamal pet) {
 		if ( pet != null ) {
-			z_internalAddToPet(pet);
+			this.pet.add(pet);
 		}
 	}
 	
 	public void addToREASON(REASON rEASON) {
 		if ( rEASON != null ) {
-			rEASON.z_internalRemoveFromGod(rEASON.getGod());
-			rEASON.z_internalAddToGod(this);
-			z_internalAddToREASON(rEASON);
+			this.rEASON.add(rEASON);
+		}
+	}
+	
+	public void addToREASON(Set<REASON> rEASON) {
+		if ( !rEASON.isEmpty() ) {
+			this.rEASON.addAll(rEASON);
 		}
 	}
 	
 	public void addToRealRootFolder(RealRootFolder realRootFolder) {
 		if ( realRootFolder != null ) {
-			realRootFolder.z_internalRemoveFromGod(realRootFolder.getGod());
-			realRootFolder.z_internalAddToGod(this);
-			z_internalAddToRealRootFolder(realRootFolder);
+			this.realRootFolder.add(realRootFolder);
+		}
+	}
+	
+	public void addToRealRootFolder(Set<RealRootFolder> realRootFolder) {
+		if ( !realRootFolder.isEmpty() ) {
+			this.realRootFolder.addAll(realRootFolder);
 		}
 	}
 	
 	public void addToReason(REASON reason) {
 		if ( reason != null ) {
-			z_internalAddToReason(reason);
+			this.reason.add(reason);
+		}
+	}
+	
+	public void addToSpirit(Set<Spirit> spirit) {
+		if ( !spirit.isEmpty() ) {
+			this.spirit.addAll(spirit);
 		}
 	}
 	
 	public void addToSpirit(Spirit spirit) {
 		if ( spirit != null ) {
-			spirit.z_internalRemoveFromGod(spirit.getGod());
-			spirit.z_internalAddToGod(this);
-			z_internalAddToSpirit(spirit);
+			this.spirit.add(spirit);
+		}
+	}
+	
+	public void addToUniverse(Set<Universe> universe) {
+		if ( !universe.isEmpty() ) {
+			this.universe.addAll(universe);
 		}
 	}
 	
 	public void addToUniverse(Universe universe) {
 		if ( universe != null ) {
-			universe.z_internalRemoveFromGod(universe.getGod());
-			universe.z_internalAddToGod(this);
-			z_internalAddToUniverse(universe);
+			this.universe.add(universe);
+		}
+	}
+	
+	public void addToWorld(Set<World> world) {
+		if ( !world.isEmpty() ) {
+			this.world.addAll(world);
 		}
 	}
 	
 	public void addToWorld(World world) {
 		if ( world != null ) {
-			world.z_internalRemoveFromGod(world.getGod());
-			world.z_internalAddToGod(this);
-			z_internalAddToWorld(world);
+			this.world.add(world);
 		}
+	}
+	
+	public void clearAbstractSpecies() {
+		this.abstractSpecies.clear();
+	}
+	
+	public void clearAngel() {
+		this.angel.clear();
+	}
+	
+	public void clearAnimalFarm() {
+		this.animalFarm.clear();
+	}
+	
+	public void clearBeing() {
+		this.being.clear();
+	}
+	
+	public void clearDemon() {
+		this.demon.clear();
+	}
+	
+	public void clearDream() {
+		this.dream.clear();
+	}
+	
+	public void clearEmbeddedInteger() {
+		this.embeddedInteger.clear();
+	}
+	
+	public void clearEmbeddedString() {
+		this.embeddedString.clear();
+	}
+	
+	public void clearFakeRootFolder() {
+		this.fakeRootFolder.clear();
+	}
+	
+	public void clearFantasy() {
+		this.fantasy.clear();
+	}
+	
+	public void clearFoot() {
+		this.foot.clear();
+	}
+	
+	public void clearHand() {
+		this.hand.clear();
+	}
+	
+	public void clearIMany() {
+		this.iMany.clear();
+	}
+	
+	public void clearMany1() {
+		this.many1.clear();
+	}
+	
+	public void clearMany2() {
+		this.many2.clear();
+	}
+	
+	public void clearMemory() {
+		this.memory.clear();
+	}
+	
+	public void clearName() {
+		this.name.clear();
+	}
+	
+	public void clearNature() {
+		this.nature.clear();
+	}
+	
+	public void clearNightmare() {
+		this.nightmare.clear();
+	}
+	
+	public void clearNonNavigableMany() {
+		this.nonNavigableMany.clear();
+	}
+	
+	public void clearNonNavigableOne() {
+		this.nonNavigableOne.clear();
+	}
+	
+	public void clearOneOne() {
+		this.oneOne.clear();
+	}
+	
+	public void clearOneTwo() {
+		this.oneTwo.clear();
+	}
+	
+	public void clearPet() {
+		this.pet.clear();
+	}
+	
+	public void clearREASON() {
+		this.rEASON.clear();
+	}
+	
+	public void clearRealRootFolder() {
+		this.realRootFolder.clear();
+	}
+	
+	public void clearReason() {
+		this.reason.clear();
+	}
+	
+	public void clearSpirit() {
+		this.spirit.clear();
+	}
+	
+	public void clearUniverse() {
+		this.universe.clear();
+	}
+	
+	public void clearWorld() {
+		this.world.clear();
 	}
 	
 	public void createComponents() {
@@ -447,11 +682,6 @@ public class God extends BaseTinker implements CompositionNode {
 		return this.oneTwo;
 	}
 	
-	@Override
-	public CompositionNode getOwningObject() {
-		return null;
-	}
-	
 	public Mamal getPet() {
 		TinkerSet<Mamal> tmp = this.pet;
 		if ( !tmp.isEmpty() ) {
@@ -500,45 +730,167 @@ public class God extends BaseTinker implements CompositionNode {
 		return this.world;
 	}
 	
-	@Override
-	public void init(CompositionNode compositeOwner) {
-		this.hasInitBeenCalled = true;
-		initVariables();
-	}
-	
 	public void initVariables() {
 	}
 	
 	@Override
 	public void initialiseProperties() {
-		this.name =  new TinkerSetImpl<String>(this, "org__tinker__concretetest__God__name", true, new TumlRuntimePropertyImpl(false,false,true,false,1,1), false);
-		this.universe =  new TinkerSetImpl<Universe>(this, "A_<god>_<universe>", true, new TumlRuntimePropertyImpl(false,true,false,false,0,-1), true);
-		this.angel =  new TinkerSetImpl<Angel>(this, "A_<god>_<angel>", true, new TumlRuntimePropertyImpl(false,true,false,false,0,-1), true);
-		this.spirit =  new TinkerSetImpl<Spirit>(this, "A_<god>_<spirit>", true, new TumlRuntimePropertyImpl(false,true,false,false,0,-1), true);
-		this.being =  new TinkerSetImpl<Being>(this, "A_<god>_<being>", true, new TumlRuntimePropertyImpl(false,true,false,false,0,-1), true);
-		this.abstractSpecies =  new TinkerSetImpl<AbstractSpecies>(this, "A_<god>_<abstractSpecies>", true, new TumlRuntimePropertyImpl(false,true,false,false,0,-1), true);
-		this.iMany =  new TinkerSetImpl<IMany>(this, "A_<god>_<iMany>", true, new TumlRuntimePropertyImpl(false,true,false,false,0,-1), true);
-		this.embeddedString =  new TinkerSetImpl<String>(this, "org__tinker__concretetest__God__embeddedString", true, new TumlRuntimePropertyImpl(false,false,false,true,0,-1), false);
-		this.embeddedInteger =  new TinkerSetImpl<Integer>(this, "org__tinker__concretetest__God__embeddedInteger", true, new TumlRuntimePropertyImpl(false,false,false,true,0,-1), false);
-		this.realRootFolder =  new TinkerSetImpl<RealRootFolder>(this, "A_<god>_<realRootFolder>", true, new TumlRuntimePropertyImpl(false,true,false,false,0,-1), true);
-		this.fakeRootFolder =  new TinkerSetImpl<FakeRootFolder>(this, "A_<god>_<fakeRootFolder>", true, new TumlRuntimePropertyImpl(false,true,false,false,0,-1), true);
-		this.reason =  new TinkerSetImpl<REASON>(this, "org__tinker__concretetest__God__reason", true, new TumlRuntimePropertyImpl(false,false,true,false,1,1), false);
-		this.pet =  new TinkerSetImpl<Mamal>(this, "org__tinker__concretetest__God__pet", true, new TumlRuntimePropertyImpl(false,false,true,false,1,1), false);
-		this.animalFarm =  new TinkerSetImpl<Mamal>(this, "org__tinker__concretetest__God__animalFarm", true, new TumlRuntimePropertyImpl(false,false,false,true,0,-1), false);
-		this.nature =  new TinkerQualifiedSetImpl<Nature>(this, "A_<god>_<nature>", getUid(), true, new TumlRuntimePropertyImpl(false,true,false,false,0,-1), true);
-		this.hand =  new TinkerSequenceImpl<Hand>(this, "A_<god>_<hand>", getUid(), true, new TumlRuntimePropertyImpl(false,true,false,false,0,-1), true);
-		this.foot =  new TinkerQualifiedSequenceImpl<Foot>(this, "A_<god>_<foot>", getUid(), true, new TumlRuntimePropertyImpl(false,true,false,false,0,-1), true);
-		this.world =  new TinkerOrderedSetImpl<World>(this, "A_<god>_<world>", getUid(), true, new TumlRuntimePropertyImpl(false,true,false,false,0,-1), true);
-		this.fantasy =  new TinkerQualifiedOrderedSetImpl<Fantasy>(this, "A_<god>_<fantasy>", getUid(), true, new TumlRuntimePropertyImpl(false,true,false,false,0,-1), true);
-		this.many1 =  new TinkerSetImpl<Many1>(this, "A_<god>_<many1>", true, new TumlRuntimePropertyImpl(false,true,false,false,0,-1), true);
-		this.many2 =  new TinkerSetImpl<Many2>(this, "A_<god>_<many2>", true, new TumlRuntimePropertyImpl(false,true,false,false,0,-1), true);
-		this.dream =  new TinkerBagImpl<Dream>(this, "A_<god>_<dream>", true, new TumlRuntimePropertyImpl(false,true,false,false,0,-1), true);
-		this.nightmare =  new TinkerQualifiedBagImpl<Nightmare>(this, "A_<god>_<nightmare>", getUid(), true, new TumlRuntimePropertyImpl(false,true,false,false,0,-1), true);
-		this.demon =  new TinkerSetImpl<Demon>(this, "A_<god>_<demon>", true, new TumlRuntimePropertyImpl(false,true,false,false,0,-1), true);
-		this.oneOne =  new TinkerSetImpl<OneOne>(this, "A_<god>_<oneOne>", true, new TumlRuntimePropertyImpl(false,true,false,false,0,-1), true);
-		this.oneTwo =  new TinkerSetImpl<OneTwo>(this, "A_<god>_<oneTwo>", true, new TumlRuntimePropertyImpl(false,true,false,false,0,-1), true);
-		this.nonNavigableOne =  new TinkerSetImpl<NonNavigableOne>(this, "A_<god>_<nonNavigableOne>", true, new TumlRuntimePropertyImpl(false,false,false,true,0,-1), true);
-		this.nonNavigableMany =  new TinkerSetImpl<NonNavigableMany>(this, "A_<god>_<nonNavigableMany>", true, new TumlRuntimePropertyImpl(false,false,false,true,0,-1), true);
+		this.being =  new TinkerSetImpl<Being>(this, GodRuntimePropertyEnum.BEING);
+		this.embeddedString =  new TinkerSetImpl<String>(this, GodRuntimePropertyEnum.EMBEDDEDSTRING);
+		this.foot =  new TinkerQualifiedSequenceImpl<Foot>(this, getUid(), GodRuntimePropertyEnum.FOOT);
+		this.angel =  new TinkerSetImpl<Angel>(this, GodRuntimePropertyEnum.ANGEL);
+		this.world =  new TinkerOrderedSetImpl<World>(this, getUid(), GodRuntimePropertyEnum.WORLD);
+		this.many2 =  new TinkerSetImpl<Many2>(this, GodRuntimePropertyEnum.MANY2);
+		this.demon =  new TinkerSetImpl<Demon>(this, GodRuntimePropertyEnum.DEMON);
+		this.fakeRootFolder =  new TinkerSetImpl<FakeRootFolder>(this, GodRuntimePropertyEnum.FAKEROOTFOLDER);
+		this.fantasy =  new TinkerQualifiedOrderedSetImpl<Fantasy>(this, getUid(), GodRuntimePropertyEnum.FANTASY);
+		this.spirit =  new TinkerSetImpl<Spirit>(this, GodRuntimePropertyEnum.SPIRIT);
+		this.name =  new TinkerSetImpl<String>(this, GodRuntimePropertyEnum.NAME);
+		this.many1 =  new TinkerSetImpl<Many1>(this, GodRuntimePropertyEnum.MANY1);
+		this.embeddedInteger =  new TinkerSetImpl<Integer>(this, GodRuntimePropertyEnum.EMBEDDEDINTEGER);
+		this.oneTwo =  new TinkerSetImpl<OneTwo>(this, GodRuntimePropertyEnum.ONETWO);
+		this.realRootFolder =  new TinkerSetImpl<RealRootFolder>(this, GodRuntimePropertyEnum.REALROOTFOLDER);
+		this.rEASON =  new TinkerSetImpl<REASON>(this, GodRuntimePropertyEnum.REASON);
+		this.nature =  new TinkerQualifiedSetImpl<Nature>(this, getUid(), GodRuntimePropertyEnum.NATURE);
+		this.iMany =  new TinkerSetImpl<IMany>(this, GodRuntimePropertyEnum.IMANY);
+		this.animalFarm =  new TinkerSetImpl<Mamal>(this, GodRuntimePropertyEnum.ANIMALFARM);
+		this.universe =  new TinkerSetImpl<Universe>(this, GodRuntimePropertyEnum.UNIVERSE);
+		this.pet =  new TinkerSetImpl<Mamal>(this, GodRuntimePropertyEnum.PET);
+		this.abstractSpecies =  new TinkerSetImpl<AbstractSpecies>(this, GodRuntimePropertyEnum.ABSTRACTSPECIES);
+		this.memory =  new TinkerQualifiedBagImpl<Nightmare>(this, getUid(), GodRuntimePropertyEnum.MEMORY);
+		this.reason =  new TinkerSetImpl<REASON>(this, GodRuntimePropertyEnum.REASON);
+		this.nightmare =  new TinkerQualifiedBagImpl<Nightmare>(this, getUid(), GodRuntimePropertyEnum.NIGHTMARE);
+		this.nonNavigableMany =  new TinkerSetImpl<NonNavigableMany>(this, GodRuntimePropertyEnum.NONNAVIGABLEMANY);
+		this.oneOne =  new TinkerSetImpl<OneOne>(this, GodRuntimePropertyEnum.ONEONE);
+		this.dream =  new TinkerBagImpl<Dream>(this, GodRuntimePropertyEnum.DREAM);
+		this.hand =  new TinkerSequenceImpl<Hand>(this, getUid(), GodRuntimePropertyEnum.HAND);
+		this.nonNavigableOne =  new TinkerSetImpl<NonNavigableOne>(this, GodRuntimePropertyEnum.NONNAVIGABLEONE);
+	}
+	
+	@Override
+	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
+		switch ( (GodRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
+			case NONNAVIGABLEONE:
+				this.nonNavigableOne =  new TinkerSetImpl<NonNavigableOne>(this, GodRuntimePropertyEnum.NONNAVIGABLEONE);
+			break;
+		
+			case HAND:
+				this.hand =  new TinkerSequenceImpl<Hand>(this, getUid(), GodRuntimePropertyEnum.HAND);
+			break;
+		
+			case DREAM:
+				this.dream =  new TinkerBagImpl<Dream>(this, GodRuntimePropertyEnum.DREAM);
+			break;
+		
+			case ONEONE:
+				this.oneOne =  new TinkerSetImpl<OneOne>(this, GodRuntimePropertyEnum.ONEONE);
+			break;
+		
+			case NONNAVIGABLEMANY:
+				this.nonNavigableMany =  new TinkerSetImpl<NonNavigableMany>(this, GodRuntimePropertyEnum.NONNAVIGABLEMANY);
+			break;
+		
+			case EMBEDDEDINTEGER:
+				this.embeddedInteger =  new TinkerSetImpl<Integer>(this, GodRuntimePropertyEnum.EMBEDDEDINTEGER);
+			break;
+		
+			case MANY1:
+				this.many1 =  new TinkerSetImpl<Many1>(this, GodRuntimePropertyEnum.MANY1);
+			break;
+		
+			case NAME:
+				this.name =  new TinkerSetImpl<String>(this, GodRuntimePropertyEnum.NAME);
+			break;
+		
+			case SPIRIT:
+				this.spirit =  new TinkerSetImpl<Spirit>(this, GodRuntimePropertyEnum.SPIRIT);
+			break;
+		
+			case FANTASY:
+				this.fantasy =  new TinkerQualifiedOrderedSetImpl<Fantasy>(this, getUid(), GodRuntimePropertyEnum.FANTASY);
+			break;
+		
+			case FAKEROOTFOLDER:
+				this.fakeRootFolder =  new TinkerSetImpl<FakeRootFolder>(this, GodRuntimePropertyEnum.FAKEROOTFOLDER);
+			break;
+		
+			case DEMON:
+				this.demon =  new TinkerSetImpl<Demon>(this, GodRuntimePropertyEnum.DEMON);
+			break;
+		
+			case MANY2:
+				this.many2 =  new TinkerSetImpl<Many2>(this, GodRuntimePropertyEnum.MANY2);
+			break;
+		
+			case WORLD:
+				this.world =  new TinkerOrderedSetImpl<World>(this, getUid(), GodRuntimePropertyEnum.WORLD);
+			break;
+		
+			case ANGEL:
+				this.angel =  new TinkerSetImpl<Angel>(this, GodRuntimePropertyEnum.ANGEL);
+			break;
+		
+			case FOOT:
+				this.foot =  new TinkerQualifiedSequenceImpl<Foot>(this, getUid(), GodRuntimePropertyEnum.FOOT);
+			break;
+		
+			case EMBEDDEDSTRING:
+				this.embeddedString =  new TinkerSetImpl<String>(this, GodRuntimePropertyEnum.EMBEDDEDSTRING);
+			break;
+		
+			case BEING:
+				this.being =  new TinkerSetImpl<Being>(this, GodRuntimePropertyEnum.BEING);
+			break;
+		
+			case ONETWO:
+				this.oneTwo =  new TinkerSetImpl<OneTwo>(this, GodRuntimePropertyEnum.ONETWO);
+			break;
+		
+			case REALROOTFOLDER:
+				this.realRootFolder =  new TinkerSetImpl<RealRootFolder>(this, GodRuntimePropertyEnum.REALROOTFOLDER);
+			break;
+		
+			case REASON:
+				this.rEASON =  new TinkerSetImpl<REASON>(this, GodRuntimePropertyEnum.REASON);
+			break;
+		
+			case NATURE:
+				this.nature =  new TinkerQualifiedSetImpl<Nature>(this, getUid(), GodRuntimePropertyEnum.NATURE);
+			break;
+		
+			case IMANY:
+				this.iMany =  new TinkerSetImpl<IMany>(this, GodRuntimePropertyEnum.IMANY);
+			break;
+		
+			case ANIMALFARM:
+				this.animalFarm =  new TinkerSetImpl<Mamal>(this, GodRuntimePropertyEnum.ANIMALFARM);
+			break;
+		
+			case UNIVERSE:
+				this.universe =  new TinkerSetImpl<Universe>(this, GodRuntimePropertyEnum.UNIVERSE);
+			break;
+		
+			case PET:
+				this.pet =  new TinkerSetImpl<Mamal>(this, GodRuntimePropertyEnum.PET);
+			break;
+		
+			case ABSTRACTSPECIES:
+				this.abstractSpecies =  new TinkerSetImpl<AbstractSpecies>(this, GodRuntimePropertyEnum.ABSTRACTSPECIES);
+			break;
+		
+			case MEMORY:
+				this.memory =  new TinkerQualifiedBagImpl<Nightmare>(this, getUid(), GodRuntimePropertyEnum.MEMORY);
+			break;
+		
+			case REASON:
+				this.reason =  new TinkerSetImpl<REASON>(this, GodRuntimePropertyEnum.REASON);
+			break;
+		
+			case NIGHTMARE:
+				this.nightmare =  new TinkerQualifiedBagImpl<Nightmare>(this, getUid(), GodRuntimePropertyEnum.NIGHTMARE);
+			break;
+		
+		}
 	}
 	
 	@Override
@@ -546,258 +898,719 @@ public class God extends BaseTinker implements CompositionNode {
 		return true;
 	}
 	
+	public void removeFromAbstractSpecies(AbstractSpecies abstractSpecies) {
+		if ( abstractSpecies != null ) {
+			this.abstractSpecies.remove(abstractSpecies);
+		}
+	}
+	
+	public void removeFromAbstractSpecies(Set<AbstractSpecies> abstractSpecies) {
+		if ( !abstractSpecies.isEmpty() ) {
+			this.abstractSpecies.removeAll(abstractSpecies);
+		}
+	}
+	
+	public void removeFromAngel(Angel angel) {
+		if ( angel != null ) {
+			this.angel.remove(angel);
+		}
+	}
+	
+	public void removeFromAngel(Set<Angel> angel) {
+		if ( !angel.isEmpty() ) {
+			this.angel.removeAll(angel);
+		}
+	}
+	
+	public void removeFromAnimalFarm(Mamal animalFarm) {
+		if ( animalFarm != null ) {
+			this.animalFarm.remove(animalFarm);
+		}
+	}
+	
+	public void removeFromAnimalFarm(Set<Mamal> animalFarm) {
+		if ( !animalFarm.isEmpty() ) {
+			this.animalFarm.removeAll(animalFarm);
+		}
+	}
+	
+	public void removeFromBeing(Being being) {
+		if ( being != null ) {
+			this.being.remove(being);
+		}
+	}
+	
+	public void removeFromBeing(Set<Being> being) {
+		if ( !being.isEmpty() ) {
+			this.being.removeAll(being);
+		}
+	}
+	
+	public void removeFromDemon(Demon demon) {
+		if ( demon != null ) {
+			this.demon.remove(demon);
+		}
+	}
+	
+	public void removeFromDemon(Set<Demon> demon) {
+		if ( !demon.isEmpty() ) {
+			this.demon.removeAll(demon);
+		}
+	}
+	
+	public void removeFromDream(Collection<Dream> dream) {
+		if ( !dream.isEmpty() ) {
+			this.dream.removeAll(dream);
+		}
+	}
+	
+	public void removeFromDream(Dream dream) {
+		if ( dream != null ) {
+			this.dream.remove(dream);
+		}
+	}
+	
+	public void removeFromEmbeddedInteger(Integer embeddedInteger) {
+		if ( embeddedInteger != null ) {
+			this.embeddedInteger.remove(embeddedInteger);
+		}
+	}
+	
+	public void removeFromEmbeddedInteger(Set<Integer> embeddedInteger) {
+		if ( !embeddedInteger.isEmpty() ) {
+			this.embeddedInteger.removeAll(embeddedInteger);
+		}
+	}
+	
+	public void removeFromEmbeddedString(Set<String> embeddedString) {
+		if ( !embeddedString.isEmpty() ) {
+			this.embeddedString.removeAll(embeddedString);
+		}
+	}
+	
+	public void removeFromEmbeddedString(String embeddedString) {
+		if ( embeddedString != null ) {
+			this.embeddedString.remove(embeddedString);
+		}
+	}
+	
+	public void removeFromFakeRootFolder(FakeRootFolder fakeRootFolder) {
+		if ( fakeRootFolder != null ) {
+			this.fakeRootFolder.remove(fakeRootFolder);
+		}
+	}
+	
+	public void removeFromFakeRootFolder(Set<FakeRootFolder> fakeRootFolder) {
+		if ( !fakeRootFolder.isEmpty() ) {
+			this.fakeRootFolder.removeAll(fakeRootFolder);
+		}
+	}
+	
+	public void removeFromFantasy(Fantasy fantasy) {
+		if ( fantasy != null ) {
+			this.fantasy.remove(fantasy);
+		}
+	}
+	
+	public void removeFromFantasy(Set<Fantasy> fantasy) {
+		if ( !fantasy.isEmpty() ) {
+			this.fantasy.removeAll(fantasy);
+		}
+	}
+	
+	public void removeFromFoot(Foot foot) {
+		if ( foot != null ) {
+			this.foot.remove(foot);
+		}
+	}
+	
+	public void removeFromFoot(List<Foot> foot) {
+		if ( !foot.isEmpty() ) {
+			this.foot.removeAll(foot);
+		}
+	}
+	
+	public void removeFromHand(Hand hand) {
+		if ( hand != null ) {
+			this.hand.remove(hand);
+		}
+	}
+	
+	public void removeFromHand(List<Hand> hand) {
+		if ( !hand.isEmpty() ) {
+			this.hand.removeAll(hand);
+		}
+	}
+	
+	public void removeFromIMany(IMany iMany) {
+		if ( iMany != null ) {
+			this.iMany.remove(iMany);
+		}
+	}
+	
+	public void removeFromIMany(Set<IMany> iMany) {
+		if ( !iMany.isEmpty() ) {
+			this.iMany.removeAll(iMany);
+		}
+	}
+	
+	public void removeFromMany1(Many1 many1) {
+		if ( many1 != null ) {
+			this.many1.remove(many1);
+		}
+	}
+	
+	public void removeFromMany1(Set<Many1> many1) {
+		if ( !many1.isEmpty() ) {
+			this.many1.removeAll(many1);
+		}
+	}
+	
+	public void removeFromMany2(Many2 many2) {
+		if ( many2 != null ) {
+			this.many2.remove(many2);
+		}
+	}
+	
+	public void removeFromMany2(Set<Many2> many2) {
+		if ( !many2.isEmpty() ) {
+			this.many2.removeAll(many2);
+		}
+	}
+	
+	public void removeFromMemory(Collection<Nightmare> memory) {
+		if ( !memory.isEmpty() ) {
+			this.memory.removeAll(memory);
+		}
+	}
+	
+	public void removeFromMemory(Nightmare memory) {
+		if ( memory != null ) {
+			this.memory.remove(memory);
+		}
+	}
+	
+	public void removeFromName(Set<String> name) {
+		if ( !name.isEmpty() ) {
+			this.name.removeAll(name);
+		}
+	}
+	
+	public void removeFromName(String name) {
+		if ( name != null ) {
+			this.name.remove(name);
+		}
+	}
+	
+	public void removeFromNature(Nature nature) {
+		if ( nature != null ) {
+			this.nature.remove(nature);
+		}
+	}
+	
+	public void removeFromNature(Set<Nature> nature) {
+		if ( !nature.isEmpty() ) {
+			this.nature.removeAll(nature);
+		}
+	}
+	
+	public void removeFromNightmare(Collection<Nightmare> nightmare) {
+		if ( !nightmare.isEmpty() ) {
+			this.nightmare.removeAll(nightmare);
+		}
+	}
+	
+	public void removeFromNightmare(Nightmare nightmare) {
+		if ( nightmare != null ) {
+			this.nightmare.remove(nightmare);
+		}
+	}
+	
+	public void removeFromNonNavigableMany(NonNavigableMany nonNavigableMany) {
+		if ( nonNavigableMany != null ) {
+			this.nonNavigableMany.remove(nonNavigableMany);
+		}
+	}
+	
+	public void removeFromNonNavigableMany(Set<NonNavigableMany> nonNavigableMany) {
+		if ( !nonNavigableMany.isEmpty() ) {
+			this.nonNavigableMany.removeAll(nonNavigableMany);
+		}
+	}
+	
+	public void removeFromNonNavigableOne(NonNavigableOne nonNavigableOne) {
+		if ( nonNavigableOne != null ) {
+			this.nonNavigableOne.remove(nonNavigableOne);
+		}
+	}
+	
+	public void removeFromNonNavigableOne(Set<NonNavigableOne> nonNavigableOne) {
+		if ( !nonNavigableOne.isEmpty() ) {
+			this.nonNavigableOne.removeAll(nonNavigableOne);
+		}
+	}
+	
+	public void removeFromOneOne(OneOne oneOne) {
+		if ( oneOne != null ) {
+			this.oneOne.remove(oneOne);
+		}
+	}
+	
+	public void removeFromOneOne(Set<OneOne> oneOne) {
+		if ( !oneOne.isEmpty() ) {
+			this.oneOne.removeAll(oneOne);
+		}
+	}
+	
+	public void removeFromOneTwo(OneTwo oneTwo) {
+		if ( oneTwo != null ) {
+			this.oneTwo.remove(oneTwo);
+		}
+	}
+	
+	public void removeFromOneTwo(Set<OneTwo> oneTwo) {
+		if ( !oneTwo.isEmpty() ) {
+			this.oneTwo.removeAll(oneTwo);
+		}
+	}
+	
+	public void removeFromPet(Mamal pet) {
+		if ( pet != null ) {
+			this.pet.remove(pet);
+		}
+	}
+	
+	public void removeFromPet(Set<Mamal> pet) {
+		if ( !pet.isEmpty() ) {
+			this.pet.removeAll(pet);
+		}
+	}
+	
+	public void removeFromREASON(REASON rEASON) {
+		if ( rEASON != null ) {
+			this.rEASON.remove(rEASON);
+		}
+	}
+	
+	public void removeFromREASON(Set<REASON> rEASON) {
+		if ( !rEASON.isEmpty() ) {
+			this.rEASON.removeAll(rEASON);
+		}
+	}
+	
+	public void removeFromRealRootFolder(RealRootFolder realRootFolder) {
+		if ( realRootFolder != null ) {
+			this.realRootFolder.remove(realRootFolder);
+		}
+	}
+	
+	public void removeFromRealRootFolder(Set<RealRootFolder> realRootFolder) {
+		if ( !realRootFolder.isEmpty() ) {
+			this.realRootFolder.removeAll(realRootFolder);
+		}
+	}
+	
+	public void removeFromReason(REASON reason) {
+		if ( reason != null ) {
+			this.reason.remove(reason);
+		}
+	}
+	
+	public void removeFromReason(Set<REASON> reason) {
+		if ( !reason.isEmpty() ) {
+			this.reason.removeAll(reason);
+		}
+	}
+	
+	public void removeFromSpirit(Set<Spirit> spirit) {
+		if ( !spirit.isEmpty() ) {
+			this.spirit.removeAll(spirit);
+		}
+	}
+	
+	public void removeFromSpirit(Spirit spirit) {
+		if ( spirit != null ) {
+			this.spirit.remove(spirit);
+		}
+	}
+	
+	public void removeFromUniverse(Set<Universe> universe) {
+		if ( !universe.isEmpty() ) {
+			this.universe.removeAll(universe);
+		}
+	}
+	
+	public void removeFromUniverse(Universe universe) {
+		if ( universe != null ) {
+			this.universe.remove(universe);
+		}
+	}
+	
+	public void removeFromWorld(Set<World> world) {
+		if ( !world.isEmpty() ) {
+			this.world.removeAll(world);
+		}
+	}
+	
+	public void removeFromWorld(World world) {
+		if ( world != null ) {
+			this.world.remove(world);
+		}
+	}
+	
+	public void setAbstractSpecies(Set<AbstractSpecies> abstractSpecies) {
+		clearAbstractSpecies();
+		addToAbstractSpecies(abstractSpecies);
+	}
+	
+	public void setAngel(Set<Angel> angel) {
+		clearAngel();
+		addToAngel(angel);
+	}
+	
+	public void setAnimalFarm(Set<Mamal> animalFarm) {
+		clearAnimalFarm();
+		addToAnimalFarm(animalFarm);
+	}
+	
+	public void setBeing(Set<Being> being) {
+		clearBeing();
+		addToBeing(being);
+	}
+	
+	public void setDemon(Set<Demon> demon) {
+		clearDemon();
+		addToDemon(demon);
+	}
+	
+	public void setDream(Collection<Dream> dream) {
+		clearDream();
+		addToDream(dream);
+	}
+	
+	public void setEmbeddedInteger(Set<Integer> embeddedInteger) {
+		clearEmbeddedInteger();
+		addToEmbeddedInteger(embeddedInteger);
+	}
+	
+	public void setEmbeddedString(Set<String> embeddedString) {
+		clearEmbeddedString();
+		addToEmbeddedString(embeddedString);
+	}
+	
+	public void setFakeRootFolder(Set<FakeRootFolder> fakeRootFolder) {
+		clearFakeRootFolder();
+		addToFakeRootFolder(fakeRootFolder);
+	}
+	
+	public void setFantasy(Set<Fantasy> fantasy) {
+		clearFantasy();
+		addToFantasy(fantasy);
+	}
+	
+	public void setFoot(List<Foot> foot) {
+		clearFoot();
+		addToFoot(foot);
+	}
+	
+	public void setHand(List<Hand> hand) {
+		clearHand();
+		addToHand(hand);
+	}
+	
+	public void setIMany(Set<IMany> iMany) {
+		clearIMany();
+		addToIMany(iMany);
+	}
+	
 	@Override
 	public void setId(Long id) {
 		TinkerIdUtilFactory.getIdUtil().setId(this.vertex, id);
 	}
 	
-	public void setName(TinkerSet<String> name) {
+	public void setMany1(Set<Many1> many1) {
+		clearMany1();
+		addToMany1(many1);
 	}
 	
-	public void setPet(TinkerSet<Mamal> pet) {
+	public void setMany2(Set<Many2> many2) {
+		clearMany2();
+		addToMany2(many2);
 	}
 	
-	public void setReason(TinkerSet<REASON> reason) {
+	public void setMemory(Collection<Nightmare> memory) {
+		clearMemory();
+		addToMemory(memory);
 	}
 	
-	public void z_internalAddToAbstractSpecies(AbstractSpecies abstractSpecies) {
-		this.abstractSpecies.add(abstractSpecies);
+	public void setName(String name) {
+		clearName();
+		addToName(name);
 	}
 	
-	public void z_internalAddToAngel(Angel angel) {
-		this.angel.add(angel);
+	public void setNature(Set<Nature> nature) {
+		clearNature();
+		addToNature(nature);
 	}
 	
-	public void z_internalAddToAnimalFarm(Mamal animalFarm) {
-		this.animalFarm.add(animalFarm);
+	public void setNightmare(Collection<Nightmare> nightmare) {
+		clearNightmare();
+		addToNightmare(nightmare);
 	}
 	
-	public void z_internalAddToBeing(Being being) {
-		this.being.add(being);
+	public void setNonNavigableMany(Set<NonNavigableMany> nonNavigableMany) {
+		clearNonNavigableMany();
+		addToNonNavigableMany(nonNavigableMany);
 	}
 	
-	public void z_internalAddToDemon(Demon demon) {
-		this.demon.add(demon);
+	public void setNonNavigableOne(Set<NonNavigableOne> nonNavigableOne) {
+		clearNonNavigableOne();
+		addToNonNavigableOne(nonNavigableOne);
 	}
 	
-	public void z_internalAddToDream(Dream dream) {
-		this.dream.add(dream);
+	public void setOneOne(Set<OneOne> oneOne) {
+		clearOneOne();
+		addToOneOne(oneOne);
 	}
 	
-	public void z_internalAddToEmbeddedInteger(Integer embeddedInteger) {
-		this.embeddedInteger.add(embeddedInteger);
+	public void setOneTwo(Set<OneTwo> oneTwo) {
+		clearOneTwo();
+		addToOneTwo(oneTwo);
 	}
 	
-	public void z_internalAddToEmbeddedString(String embeddedString) {
-		this.embeddedString.add(embeddedString);
+	public void setPet(Mamal pet) {
+		clearPet();
+		addToPet(pet);
 	}
 	
-	public void z_internalAddToFakeRootFolder(FakeRootFolder fakeRootFolder) {
-		this.fakeRootFolder.add(fakeRootFolder);
+	public void setREASON(Set<REASON> rEASON) {
+		clearREASON();
+		addToREASON(rEASON);
 	}
 	
-	public void z_internalAddToFantasy(Fantasy fantasy) {
-		this.fantasy.add(fantasy);
+	public void setRealRootFolder(Set<RealRootFolder> realRootFolder) {
+		clearRealRootFolder();
+		addToRealRootFolder(realRootFolder);
 	}
 	
-	public void z_internalAddToFoot(Foot foot) {
-		this.foot.add(foot);
+	public void setReason(REASON reason) {
+		clearReason();
+		addToReason(reason);
 	}
 	
-	public void z_internalAddToHand(Hand hand) {
-		this.hand.add(hand);
+	public void setSpirit(Set<Spirit> spirit) {
+		clearSpirit();
+		addToSpirit(spirit);
 	}
 	
-	public void z_internalAddToIMany(IMany iMany) {
-		this.iMany.add(iMany);
+	public void setUniverse(Set<Universe> universe) {
+		clearUniverse();
+		addToUniverse(universe);
 	}
 	
-	public void z_internalAddToMany1(Many1 many1) {
-		this.many1.add(many1);
-	}
-	
-	public void z_internalAddToMany2(Many2 many2) {
-		this.many2.add(many2);
-	}
-	
-	public void z_internalAddToMemory(Nightmare memory) {
-		this.memory.add(memory);
-	}
-	
-	public void z_internalAddToName(String name) {
-		this.name.add(name);
-	}
-	
-	public void z_internalAddToNature(Nature nature) {
-		this.nature.add(nature);
-	}
-	
-	public void z_internalAddToNightmare(Nightmare nightmare) {
-		this.nightmare.add(nightmare);
-	}
-	
-	public void z_internalAddToNonNavigableMany(NonNavigableMany nonNavigableMany) {
-		this.nonNavigableMany.add(nonNavigableMany);
-	}
-	
-	public void z_internalAddToNonNavigableOne(NonNavigableOne nonNavigableOne) {
-		this.nonNavigableOne.add(nonNavigableOne);
-	}
-	
-	public void z_internalAddToOneOne(OneOne oneOne) {
-		this.oneOne.add(oneOne);
-	}
-	
-	public void z_internalAddToOneTwo(OneTwo oneTwo) {
-		this.oneTwo.add(oneTwo);
-	}
-	
-	public void z_internalAddToPet(Mamal pet) {
-		this.pet.add(pet);
-	}
-	
-	public void z_internalAddToREASON(REASON rEASON) {
-		this.rEASON.add(rEASON);
-	}
-	
-	public void z_internalAddToRealRootFolder(RealRootFolder realRootFolder) {
-		this.realRootFolder.add(realRootFolder);
-	}
-	
-	public void z_internalAddToReason(REASON reason) {
-		this.reason.add(reason);
-	}
-	
-	public void z_internalAddToSpirit(Spirit spirit) {
-		this.spirit.add(spirit);
-	}
-	
-	public void z_internalAddToUniverse(Universe universe) {
-		this.universe.add(universe);
-	}
-	
-	public void z_internalAddToWorld(World world) {
-		this.world.add(world);
-	}
-	
-	public void z_internalRemoveFromAbstractSpecies(AbstractSpecies abstractSpecies) {
-		this.abstractSpecies.remove(abstractSpecies);
-	}
-	
-	public void z_internalRemoveFromAngel(Angel angel) {
-		this.angel.remove(angel);
-	}
-	
-	public void z_internalRemoveFromAnimalFarm(Mamal animalFarm) {
-		this.animalFarm.remove(animalFarm);
-	}
-	
-	public void z_internalRemoveFromBeing(Being being) {
-		this.being.remove(being);
-	}
-	
-	public void z_internalRemoveFromDemon(Demon demon) {
-		this.demon.remove(demon);
-	}
-	
-	public void z_internalRemoveFromDream(Dream dream) {
-		this.dream.remove(dream);
-	}
-	
-	public void z_internalRemoveFromEmbeddedInteger(Integer embeddedInteger) {
-		this.embeddedInteger.remove(embeddedInteger);
-	}
-	
-	public void z_internalRemoveFromEmbeddedString(String embeddedString) {
-		this.embeddedString.remove(embeddedString);
-	}
-	
-	public void z_internalRemoveFromFakeRootFolder(FakeRootFolder fakeRootFolder) {
-		this.fakeRootFolder.remove(fakeRootFolder);
-	}
-	
-	public void z_internalRemoveFromFantasy(Fantasy fantasy) {
-		this.fantasy.remove(fantasy);
-	}
-	
-	public void z_internalRemoveFromFoot(Foot foot) {
-		this.foot.remove(foot);
-	}
-	
-	public void z_internalRemoveFromHand(Hand hand) {
-		this.hand.remove(hand);
-	}
-	
-	public void z_internalRemoveFromIMany(IMany iMany) {
-		this.iMany.remove(iMany);
-	}
-	
-	public void z_internalRemoveFromMany1(Many1 many1) {
-		this.many1.remove(many1);
-	}
-	
-	public void z_internalRemoveFromMany2(Many2 many2) {
-		this.many2.remove(many2);
-	}
-	
-	public void z_internalRemoveFromMemory(Nightmare memory) {
-		this.memory.remove(memory);
-	}
-	
-	public void z_internalRemoveFromName(String name) {
-		this.name.remove(name);
-	}
-	
-	public void z_internalRemoveFromNature(Nature nature) {
-		this.nature.remove(nature);
-	}
-	
-	public void z_internalRemoveFromNightmare(Nightmare nightmare) {
-		this.nightmare.remove(nightmare);
-	}
-	
-	public void z_internalRemoveFromNonNavigableMany(NonNavigableMany nonNavigableMany) {
-		this.nonNavigableMany.remove(nonNavigableMany);
-	}
-	
-	public void z_internalRemoveFromNonNavigableOne(NonNavigableOne nonNavigableOne) {
-		this.nonNavigableOne.remove(nonNavigableOne);
-	}
-	
-	public void z_internalRemoveFromOneOne(OneOne oneOne) {
-		this.oneOne.remove(oneOne);
-	}
-	
-	public void z_internalRemoveFromOneTwo(OneTwo oneTwo) {
-		this.oneTwo.remove(oneTwo);
-	}
-	
-	public void z_internalRemoveFromPet(Mamal pet) {
-		this.pet.remove(pet);
-	}
-	
-	public void z_internalRemoveFromREASON(REASON rEASON) {
-		this.rEASON.remove(rEASON);
-	}
-	
-	public void z_internalRemoveFromRealRootFolder(RealRootFolder realRootFolder) {
-		this.realRootFolder.remove(realRootFolder);
-	}
-	
-	public void z_internalRemoveFromReason(REASON reason) {
-		this.reason.remove(reason);
-	}
-	
-	public void z_internalRemoveFromSpirit(Spirit spirit) {
-		this.spirit.remove(spirit);
-	}
-	
-	public void z_internalRemoveFromUniverse(Universe universe) {
-		this.universe.remove(universe);
-	}
-	
-	public void z_internalRemoveFromWorld(World world) {
-		this.world.remove(world);
+	public void setWorld(Set<World> world) {
+		clearWorld();
+		addToWorld(world);
 	}
 
+	public enum GodRuntimePropertyEnum implements TumlRuntimeProperty {
+		BEING(true,true,"A_<god>_<being>",false,true,false,false,-1,0),
+		EMBEDDEDSTRING(true,false,"org__tinker__concretetest__God__embeddedString",false,false,false,true,-1,0),
+		FOOT(true,true,"A_<god>_<foot>",false,true,false,false,-1,0),
+		ANGEL(true,true,"A_<god>_<angel>",false,true,false,false,-1,0),
+		WORLD(true,true,"A_<god>_<world>",false,true,false,false,-1,0),
+		MANY2(true,true,"A_<god>_<many2>",false,true,false,false,-1,0),
+		DEMON(true,true,"A_<god>_<demon>",false,true,false,false,-1,0),
+		FAKEROOTFOLDER(true,true,"A_<god>_<fakeRootFolder>",false,true,false,false,-1,0),
+		FANTASY(true,true,"A_<god>_<fantasy>",false,true,false,false,-1,0),
+		SPIRIT(true,true,"A_<god>_<spirit>",false,true,false,false,-1,0),
+		NAME(true,false,"org__tinker__concretetest__God__name",false,false,true,false,1,1),
+		MANY1(true,true,"A_<god>_<many1>",false,true,false,false,-1,0),
+		EMBEDDEDINTEGER(true,false,"org__tinker__concretetest__God__embeddedInteger",false,false,false,true,-1,0),
+		ONETWO(true,true,"A_<god>_<oneTwo>",false,true,false,false,-1,0),
+		REALROOTFOLDER(true,true,"A_<god>_<realRootFolder>",false,true,false,false,-1,0),
+		REASON(true,false,"A_<god>_<rEASON>",false,true,false,false,-1,0),
+		NATURE(true,true,"A_<god>_<nature>",false,true,false,false,-1,0),
+		IMANY(true,true,"A_<god>_<iMany>",false,true,false,false,-1,0),
+		ANIMALFARM(true,false,"org__tinker__concretetest__God__animalFarm",false,false,false,true,-1,0),
+		UNIVERSE(true,true,"A_<god>_<universe>",false,true,false,false,-1,0),
+		PET(true,false,"org__tinker__concretetest__God__pet",false,false,true,false,1,1),
+		ABSTRACTSPECIES(true,true,"A_<god>_<abstractSpecies>",false,true,false,false,-1,0),
+		MEMORY(true,false,"A_<god>_<nightmare>_2",false,true,false,false,-1,0),
+		REASON(true,false,"org__tinker__concretetest__God__reason",false,false,true,false,1,1),
+		NIGHTMARE(true,true,"A_<god>_<nightmare>",false,true,false,false,-1,0),
+		NONNAVIGABLEMANY(true,true,"A_<god>_<nonNavigableMany>",false,true,false,false,-1,0),
+		ONEONE(true,true,"A_<god>_<oneOne>",false,true,false,false,-1,0),
+		DREAM(true,true,"A_<god>_<dream>",false,true,false,false,-1,0),
+		HAND(true,true,"A_<god>_<hand>",false,true,false,false,-1,0),
+		NONNAVIGABLEONE(true,true,"A_<god>_<nonNavigableOne>",false,true,false,false,-1,0);
+		private boolean controllingSide;
+		private boolean composite;
+		private String label;
+		private boolean oneToOne;
+		private boolean oneToMany;
+		private boolean manyToOne;
+		private boolean manyToMany;
+		private int upper;
+		private int lower;
+		/** Constructor for GodRuntimePropertyEnum
+		 * 
+		 * @param controllingSide 
+		 * @param composite 
+		 * @param label 
+		 * @param oneToOne 
+		 * @param oneToMany 
+		 * @param manyToOne 
+		 * @param manyToMany 
+		 * @param upper 
+		 * @param lower 
+		 */
+		private GodRuntimePropertyEnum(boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+			this.controllingSide = controllingSide;
+			this.composite = composite;
+			this.label = label;
+			this.oneToOne = oneToOne;
+			this.oneToMany = oneToMany;
+			this.manyToOne = manyToOne;
+			this.manyToMany = manyToMany;
+			this.upper = upper;
+			this.lower = lower;
+		}
+	
+		static public GodRuntimePropertyEnum fromLabel(String label) {
+			if ( BEING.getLabel().equals(label) ) {
+				return BEING;
+			}
+			if ( EMBEDDEDSTRING.getLabel().equals(label) ) {
+				return EMBEDDEDSTRING;
+			}
+			if ( FOOT.getLabel().equals(label) ) {
+				return FOOT;
+			}
+			if ( ANGEL.getLabel().equals(label) ) {
+				return ANGEL;
+			}
+			if ( WORLD.getLabel().equals(label) ) {
+				return WORLD;
+			}
+			if ( MANY2.getLabel().equals(label) ) {
+				return MANY2;
+			}
+			if ( DEMON.getLabel().equals(label) ) {
+				return DEMON;
+			}
+			if ( FAKEROOTFOLDER.getLabel().equals(label) ) {
+				return FAKEROOTFOLDER;
+			}
+			if ( FANTASY.getLabel().equals(label) ) {
+				return FANTASY;
+			}
+			if ( SPIRIT.getLabel().equals(label) ) {
+				return SPIRIT;
+			}
+			if ( NAME.getLabel().equals(label) ) {
+				return NAME;
+			}
+			if ( MANY1.getLabel().equals(label) ) {
+				return MANY1;
+			}
+			if ( EMBEDDEDINTEGER.getLabel().equals(label) ) {
+				return EMBEDDEDINTEGER;
+			}
+			if ( ONETWO.getLabel().equals(label) ) {
+				return ONETWO;
+			}
+			if ( REALROOTFOLDER.getLabel().equals(label) ) {
+				return REALROOTFOLDER;
+			}
+			if ( REASON.getLabel().equals(label) ) {
+				return REASON;
+			}
+			if ( NATURE.getLabel().equals(label) ) {
+				return NATURE;
+			}
+			if ( IMANY.getLabel().equals(label) ) {
+				return IMANY;
+			}
+			if ( ANIMALFARM.getLabel().equals(label) ) {
+				return ANIMALFARM;
+			}
+			if ( UNIVERSE.getLabel().equals(label) ) {
+				return UNIVERSE;
+			}
+			if ( PET.getLabel().equals(label) ) {
+				return PET;
+			}
+			if ( ABSTRACTSPECIES.getLabel().equals(label) ) {
+				return ABSTRACTSPECIES;
+			}
+			if ( MEMORY.getLabel().equals(label) ) {
+				return MEMORY;
+			}
+			if ( REASON.getLabel().equals(label) ) {
+				return REASON;
+			}
+			if ( NIGHTMARE.getLabel().equals(label) ) {
+				return NIGHTMARE;
+			}
+			if ( NONNAVIGABLEMANY.getLabel().equals(label) ) {
+				return NONNAVIGABLEMANY;
+			}
+			if ( ONEONE.getLabel().equals(label) ) {
+				return ONEONE;
+			}
+			if ( DREAM.getLabel().equals(label) ) {
+				return DREAM;
+			}
+			if ( HAND.getLabel().equals(label) ) {
+				return HAND;
+			}
+			if ( NONNAVIGABLEONE.getLabel().equals(label) ) {
+				return NONNAVIGABLEONE;
+			}
+			throw new IllegalStateException();
+		}
+		
+		public String getLabel() {
+			return this.label;
+		}
+		
+		public int getLower() {
+			return this.lower;
+		}
+		
+		public int getUpper() {
+			return this.upper;
+		}
+		
+		public boolean isComposite() {
+			return this.composite;
+		}
+		
+		public boolean isControllingSide() {
+			return this.controllingSide;
+		}
+		
+		public boolean isManyToMany() {
+			return this.manyToMany;
+		}
+		
+		public boolean isManyToOne() {
+			return this.manyToOne;
+		}
+		
+		public boolean isOneToMany() {
+			return this.oneToMany;
+		}
+		
+		public boolean isOneToOne() {
+			return this.oneToOne;
+		}
+		
+		@Override
+		public boolean isValid(int elementCount) {
+			return (getUpper() == -1 || elementCount <= getUpper()) && elementCount >= getLower();
+		}
+	
+	}
 }

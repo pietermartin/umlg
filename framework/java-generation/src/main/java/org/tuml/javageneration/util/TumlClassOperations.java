@@ -22,8 +22,8 @@ public class TumlClassOperations extends ClassOperations {
 	 * These include all properties that are on the other end of an
 	 * association
 	 */
-	public static List<Property> getAllOwnedProperties(org.eclipse.uml2.uml.Class clazz) {
-		List<Property> result = clazz.getOwnedAttributes();
+	public static Set<Property> getAllOwnedProperties(org.eclipse.uml2.uml.Class clazz) {
+		Set<Property> result = new HashSet<Property>(clazz.getAttributes());
 		List<Association> associations = clazz.getAssociations();
 		for (Association association : associations) {
 			List<Property> memberEnds = association.getMemberEnds();
@@ -31,6 +31,19 @@ public class TumlClassOperations extends ClassOperations {
 				if (property.getType() != clazz) {
 					result.add(property);
 				}
+			}
+		}
+		result.addAll(getPropertiesOnRealizedInterfaces(clazz));
+		return result;
+	}
+	
+	public static Set<Property> getPropertiesOnRealizedInterfaces(org.eclipse.uml2.uml.Class clazz) {
+		Set<Property> result = new HashSet<Property>();
+		List<Interface> interfaces = clazz.getImplementedInterfaces();
+		for (Interface inf : interfaces) {
+			Set<Property> properties = TumlInterfaceOperations.getAllProperties(inf);
+			for (Property p : properties) {
+				result.add(p);
 			}
 		}
 		return result;

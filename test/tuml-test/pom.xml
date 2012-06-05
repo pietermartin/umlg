@@ -34,8 +34,18 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.tuml</groupId>
-			<artifactId>runtime-domain</artifactId>
+			<artifactId>java-generation</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>org.tuml</groupId>
+			<artifactId>runtime-domain-neo4j</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.tuml</groupId>
+			<artifactId>runtime-test</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>		
 	</dependencies>
 </project>

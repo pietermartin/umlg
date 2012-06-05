@@ -62,6 +62,9 @@
         <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_MsOWoa5uEeG2vYtMbkVHmA" value="*"/>
         <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_MsOWoq5uEeG2vYtMbkVHmA"/>
       </ownedAttribute>
+      <ownedAttribute xmi:id="_5UFzUK8oEeGCcIQSVUaYfQ" name="name">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+      </ownedAttribute>
     </packagedElement>
     <packagedElement xmi:type="uml:Class" xmi:id="_Aqu6sK5uEeG2vYtMbkVHmA" name="InterfaceRealization1" clientDependency="_CNuXc65uEeG2vYtMbkVHmA">
       <interfaceRealization xmi:id="_CNuXc65uEeG2vYtMbkVHmA" name="InterfaceRealization1" supplier="__p5v0K5tEeG2vYtMbkVHmA" client="_Aqu6sK5uEeG2vYtMbkVHmA" contract="__p5v0K5tEeG2vYtMbkVHmA"/>
@@ -69,7 +72,11 @@
     <packagedElement xmi:type="uml:Class" xmi:id="_DHa_kK5uEeG2vYtMbkVHmA" name="InterfaceRealization2" clientDependency="_Kp0aAK5uEeG2vYtMbkVHmA">
       <interfaceRealization xmi:id="_Kp0aAK5uEeG2vYtMbkVHmA" name="InterfaceRealization1" supplier="_IaifAK5uEeG2vYtMbkVHmA" client="_DHa_kK5uEeG2vYtMbkVHmA" contract="_IaifAK5uEeG2vYtMbkVHmA"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Interface" xmi:id="_IaifAK5uEeG2vYtMbkVHmA" name="Interface2"/>
+    <packagedElement xmi:type="uml:Interface" xmi:id="_IaifAK5uEeG2vYtMbkVHmA" name="Interface2">
+      <ownedAttribute xmi:id="_7Cq1AK8oEeGCcIQSVUaYfQ" name="name">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+      </ownedAttribute>
+    </packagedElement>
     <packagedElement xmi:type="uml:Association" xmi:id="_MsSoEK5uEeG2vYtMbkVHmA" name="A_&lt;interface1>_&lt;interface2>" memberEnd="_MsSoEa5uEeG2vYtMbkVHmA _MsOWoK5uEeG2vYtMbkVHmA" navigableOwnedEnd="_MsSoEa5uEeG2vYtMbkVHmA">
       <ownedEnd xmi:id="_MsSoEa5uEeG2vYtMbkVHmA" name="interface1" type="__p5v0K5tEeG2vYtMbkVHmA" association="_MsSoEK5uEeG2vYtMbkVHmA">
         <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_MsSoEq5uEeG2vYtMbkVHmA" value="1"/>

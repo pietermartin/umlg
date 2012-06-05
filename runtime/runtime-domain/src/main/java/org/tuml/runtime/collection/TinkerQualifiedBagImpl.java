@@ -61,7 +61,15 @@ public class TinkerQualifiedBagImpl<E> extends BaseBag<E> implements TinkerQuali
 				throw new IllegalStateException("Embedded relationships can not be many to many");
 			}
 		}
-		addQualifierToIndex(edge, qualifiers);
+		
+		// Edge can only be null on isOneToMany, toOneToOne which is a
+		// String, Interger, Boolean or primitive
+		if (edge == null && !isOnePrimitive(e)) {
+			throw new IllegalStateException("Edge can only be null on isOneToMany, toOneToOne which is a String, Interger, Boolean or primitive");
+		}
+		if (edge != null) {
+			addQualifierToIndex(edge, qualifiers);
+		}
 		return result;
 
 	}

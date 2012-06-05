@@ -101,6 +101,8 @@ public class OJClassifier extends OJClassifierGEN {
 			// do nothing, no need to import "Integer"
 		}else if(path.getLast().equals("String")){
 			// do nothing, no need to import "String"
+		}else if(path.getLast().equals("Boolean")){
+			// do nothing, no need to import "String"
 		}else if(path.getLast().equals("boolean")){
 			// do nothing, no need to import "boolean"
 		}else if(path.getLast().equals("float")){

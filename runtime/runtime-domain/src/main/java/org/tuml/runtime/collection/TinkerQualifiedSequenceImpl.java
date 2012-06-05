@@ -33,9 +33,16 @@ public class TinkerQualifiedSequenceImpl<E> extends BaseSequence<E> implements T
 		boolean result = this.getInternalList().add(e);
 		if (result) {
 			Edge edge = addInternal(e);
-			this.index.put("index", new Float(this.getInternalList().size() - 1), edge);
-			getVertexForDirection(edge).setProperty("tinkerIndex", new Float(this.getInternalList().size() - 1));
-			addQualifierToIndex(edge, qualifiers);
+			// Edge can only be null on isOneToMany, toOneToOne which is a
+			// String, Interger, Boolean or primitive
+			if (edge == null && !isOnePrimitive(e)) {
+				throw new IllegalStateException("Edge can only be null on isOneToMany, toOneToOne which is a String, Interger, Boolean or primitive");
+			}
+			if (edge != null) {
+				this.index.put("index", new Float(this.getInternalList().size() - 1), edge);
+				getVertexForDirection(edge).setProperty("tinkerIndex", new Float(this.getInternalList().size() - 1));
+				addQualifierToIndex(edge, qualifiers);
+			}
 		}
 		return result;
 	}
@@ -91,7 +98,7 @@ public class TinkerQualifiedSequenceImpl<E> extends BaseSequence<E> implements T
 			edge.setProperty("index" + qualifier.getKey(), qualifier.getValue());
 		}
 	}
-	
+
 	protected void removeEdgefromIndex(Vertex v, Edge edge, int indexOf) {
 		this.index.remove("index", v.getProperty("tinkerIndex"), edge);
 		for (String key : edge.getPropertyKeys()) {

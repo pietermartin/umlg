@@ -17,9 +17,9 @@ import com.tinkerpop.blueprints.pgm.Vertex;
 
 public class TinkerQualifiedOrderedSetImpl<E> extends BaseCollection<E> implements TinkerQualifiedOrderedSet<E> {
 
-//	protected ListOrderedSet internalListOrderedSet = new ListOrderedSet();
+	// protected ListOrderedSet internalListOrderedSet = new ListOrderedSet();
 	protected NakedTinkerIndex<Edge> index;
-	
+
 	@SuppressWarnings("unchecked")
 	public TinkerQualifiedOrderedSetImpl(TinkerNode owner, String uid, TumlRuntimeProperty multiplicity) {
 		super();
@@ -37,7 +37,7 @@ public class TinkerQualifiedOrderedSetImpl<E> extends BaseCollection<E> implemen
 	public ListOrderedSet getInternalListOrderedSet() {
 		return (ListOrderedSet) this.internalCollection;
 	}
-	
+
 	@Override
 	public boolean add(E e, List<Qualifier> qualifiers) {
 		maybeCallInit(e);
@@ -46,9 +46,16 @@ public class TinkerQualifiedOrderedSetImpl<E> extends BaseCollection<E> implemen
 		boolean result = this.getInternalListOrderedSet().add(e);
 		if (result) {
 			Edge edge = addInternal(e);
-			this.index.put("index", new Float(this.getInternalListOrderedSet().size() - 1), edge);
-			getVertexForDirection(edge).setProperty("tinkerIndex", new Float(this.getInternalListOrderedSet().size() - 1));
-			addQualifierToIndex(edge, qualifiers);
+			// Edge can only be null on isOneToMany, toOneToOne which is a
+			// String, Interger, Boolean or primitive
+			if (edge == null && !isOnePrimitive(e)) {
+				throw new IllegalStateException("Edge can only be null on isOneToMany, toOneToOne which is a String, Interger, Boolean or primitive");
+			}
+			if (edge != null) {
+				this.index.put("index", new Float(this.getInternalListOrderedSet().size() - 1), edge);
+				getVertexForDirection(edge).setProperty("tinkerIndex", new Float(this.getInternalListOrderedSet().size() - 1));
+				addQualifierToIndex(edge, qualifiers);
+			}
 		}
 		return result;
 	}
@@ -73,29 +80,37 @@ public class TinkerQualifiedOrderedSetImpl<E> extends BaseCollection<E> implemen
 
 	@SuppressWarnings("unchecked")
 	protected Edge addToListAndListIndex(int indexOf, E e) {
-		E previous = (E)this.getInternalListOrderedSet().get(indexOf - 1);
-		E current = (E)this.getInternalListOrderedSet().get(indexOf);
+		E previous = (E) this.getInternalListOrderedSet().get(indexOf - 1);
+		E current = (E) this.getInternalListOrderedSet().get(indexOf);
 		this.getInternalListOrderedSet().add(indexOf, e);
 		Edge edge = addInternal(e);
-
-		float min;
-		float max;
-		if (e instanceof TinkerNode) {
-			min = (Float) ((TinkerNode)previous).getVertex().getProperty("tinkerIndex");
-			max = (Float) ((TinkerNode)current).getVertex().getProperty("tinkerIndex");
-		} else if (e.getClass().isEnum()) {
-			min = (Float) this.internalVertexMap.get(((Enum<?>) previous).name()).getProperty("tinkerIndex");
-			max = (Float) this.internalVertexMap.get(((Enum<?>) current).name()).getProperty("tinkerIndex");
-		} else {
-			min = (Float) this.internalVertexMap.get(previous).getProperty("tinkerIndex");
-			max = (Float) this.internalVertexMap.get(current).getProperty("tinkerIndex");
+		// Edge can only be null on isOneToMany, toOneToOne which is a
+		// String, Interger, Boolean or primitive
+		if (edge == null && !isOnePrimitive(e)) {
+			throw new IllegalStateException("Edge can only be null on isOneToMany, toOneToOne which is a String, Interger, Boolean or primitive");
 		}
-		float tinkerIndex = (min + max) / 2; 
-		this.index.put("index", tinkerIndex, edge);
-		getVertexForDirection(edge).setProperty("tinkerIndex", tinkerIndex);
-		return edge;
+		if (edge != null) {
+			float min;
+			float max;
+			if (e instanceof TinkerNode) {
+				min = (Float) ((TinkerNode) previous).getVertex().getProperty("tinkerIndex");
+				max = (Float) ((TinkerNode) current).getVertex().getProperty("tinkerIndex");
+			} else if (e.getClass().isEnum()) {
+				min = (Float) this.internalVertexMap.get(((Enum<?>) previous).name()).getProperty("tinkerIndex");
+				max = (Float) this.internalVertexMap.get(((Enum<?>) current).name()).getProperty("tinkerIndex");
+			} else {
+				min = (Float) this.internalVertexMap.get(previous).getProperty("tinkerIndex");
+				max = (Float) this.internalVertexMap.get(current).getProperty("tinkerIndex");
+			}
+			float tinkerIndex = (min + max) / 2;
+			this.index.put("index", tinkerIndex, edge);
+			getVertexForDirection(edge).setProperty("tinkerIndex", tinkerIndex);
+			return edge;
+		} else {
+			return null;
+		}
 	}
-	
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected void loadFromVertex() {
 		CloseableSequence<Edge> edges = this.index.queryList(0F, true, false);
@@ -234,7 +249,7 @@ public class TinkerQualifiedOrderedSetImpl<E> extends BaseCollection<E> implemen
 			edge.setProperty("index" + qualifier.getKey(), qualifier.getValue());
 		}
 	}
-	
+
 	protected void removeEdgefromIndex(Vertex v, Edge edge, int indexOf) {
 		this.index.remove("index", v.getProperty("tinkerIndex"), edge);
 		for (String key : edge.getPropertyKeys()) {

@@ -115,6 +115,11 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 			if (o instanceof TinkerNode) {
 				TinkerNode node = (TinkerNode) o;
 				v = node.getVertex();
+				
+				if (node instanceof CompositionNode) {
+					TransactionThreadEntityVar.setNewEntity((CompositionNode) node);
+				}
+				
 				Set<Edge> edges = GraphDb.getDb().getEdgesBetween(this.vertex, v, this.getLabel());
 				for (Edge edge : edges) {
 					if (o instanceof TinkerAuditableNode) {
@@ -138,7 +143,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 	}
 
 	protected Edge addInternal(E e) {
-		Vertex v;
+		Vertex v = null;
 		if (e instanceof TinkerNode) {
 			TinkerNode node = (TinkerNode) e;
 			if (e instanceof CompositionNode) {
@@ -153,32 +158,41 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 					node.initialiseProperty(this.tumlRuntimeProperty);
 				}
 			}
-		} else if (e instanceof TinkerNode) {
-			TinkerNode node = (TinkerNode) e;
-			v = node.getVertex();
 		} else if (e.getClass().isEnum()) {
 			v = GraphDb.getDb().addVertex(null);
 			v.setProperty("value", ((Enum<?>) e).name());
 			this.internalVertexMap.put(((Enum<?>) e).name(), v);
+		} else if (isOnePrimitive(e)) {
+			this.vertex.setProperty(tumlRuntimeProperty.getLabel(), e);
 		} else {
 			v = GraphDb.getDb().addVertex(null);
 			v.setProperty("value", e);
 			this.internalVertexMap.put(e, v);
 		}
-		Edge edge = null;
-		// See if edge already added, this can only happen with a manyToMany
-		if (this.isManyToMany()) {
-			edge = addCorrelationForManyToMany(v, edge);
+		if (v !=null) {
+			Edge edge = null;
+			// See if edge already added, this can only happen with a manyToMany
+			if (this.isManyToMany()) {
+				edge = addCorrelationForManyToMany(v, edge);
+			}
+			boolean createdEdge = false;
+			if (edge == null) {
+				createdEdge = true;
+				edge = createEdge(e, v);
+			}
+			if (createdEdge && this.owner instanceof TinkerAuditableNode) {
+				createAudit(e, v, false);
+			}
+			return edge;
+		} else {
+			return null;
 		}
-		boolean createdEdge = false;
-		if (edge == null) {
-			createdEdge = true;
-			edge = createEdge(e, v);
-		}
-		if (createdEdge && this.owner instanceof TinkerAuditableNode) {
-			createAudit(e, v, false);
-		}
-		return edge;
+		
+	}
+
+	protected boolean isOnePrimitive(E e) {
+		//primitive properties on a classifier is manytoone as the otherside is null it defaults to many
+		return this.isManyToOne() && (e.getClass() == String.class || e.getClass() == Integer.class || e.getClass() == Boolean.class || e.getClass().isPrimitive());
 	}
 
 	private Edge addCorrelationForManyToMany(Vertex v, Edge edge) {

@@ -1,14 +1,23 @@
 package org.tinker.interfacetest;
 
-import org.tuml.runtime.collection.TinkerSet;
+import java.util.Set;
 
-public interface IManyB {
+import org.tuml.runtime.collection.TinkerSet;
+import org.tuml.runtime.domain.TinkerNode;
+
+public interface IManyB extends TinkerNode {
 	public void addToIManyA(IManyA iManyA);
+	
+	public void addToIManyA(Set<IManyA> iManyA);
+	
+	public void clearIManyA();
 	
 	public TinkerSet<IManyA> getIManyA();
 	
-	public void z_internalAddToIManyA(IManyA iManyA);
+	public void removeFromIManyA(IManyA iManyA);
 	
-	public void z_internalRemoveFromIManyA(IManyA iManyA);
+	public void removeFromIManyA(Set<IManyA> iManyA);
+	
+	public void setIManyA(Set<IManyA> iManyA);
 
 }

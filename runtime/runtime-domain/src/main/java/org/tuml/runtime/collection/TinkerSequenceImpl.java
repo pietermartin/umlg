@@ -31,8 +31,15 @@ public class TinkerSequenceImpl<E> extends BaseSequence<E> implements TinkerSequ
 		boolean result = this.getInternalList().add(e);
 		if (result) {
 			Edge edge = addInternal(e);
-			this.index.put("index", new Float(this.getInternalList().size() - 1), edge);
-			getVertexForDirection(edge).setProperty("tinkerIndex", new Float(this.getInternalList().size() - 1));
+			// Edge can only be null on isOneToMany, toOneToOne which is a
+			// String, Integer, Boolean or primitive
+			if (edge == null && !isOnePrimitive(e)) {
+				throw new IllegalStateException("Edge can only be null on isOneToMany, toOneToOne which is a String, Interger, Boolean or primitive");
+			}
+			if (edge != null) {
+				this.index.put("index", new Float(this.getInternalList().size() - 1), edge);
+				getVertexForDirection(edge).setProperty("tinkerIndex", new Float(this.getInternalList().size() - 1));
+			}
 		}
 		return result;
 	}
@@ -43,7 +50,6 @@ public class TinkerSequenceImpl<E> extends BaseSequence<E> implements TinkerSequ
 		maybeLoad();
 		addToListAndListIndex(indexOf, e);
 	}
-
 
 	@Override
 	public boolean addAll(Collection<? extends E> c) {
@@ -56,7 +62,6 @@ public class TinkerSequenceImpl<E> extends BaseSequence<E> implements TinkerSequ
 		}
 		return result;
 	}
-
 
 	@Override
 	public boolean addAll(int index, Collection<? extends E> c) {

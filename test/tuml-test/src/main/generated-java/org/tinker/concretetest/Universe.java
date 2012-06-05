@@ -2,6 +2,7 @@ package org.tinker.concretetest;
 
 import com.tinkerpop.blueprints.pgm.Vertex;
 
+import java.util.Set;
 import java.util.UUID;
 
 import org.tinker.componenttest.SpaceTime;
@@ -10,20 +11,21 @@ import org.tinker.navigability.NonNavigableOne;
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.TinkerIdUtilFactory;
 import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
-import org.tuml.runtime.collection.TumlRuntimePropertyImpl;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TinkerSetImpl;
+import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.domain.BaseTinker;
 import org.tuml.runtime.domain.CompositionNode;
+import org.tuml.runtime.domain.TinkerNode;
 
 public class Universe extends BaseTinker implements CompositionNode {
+	private TinkerSet<String> name;
+	private TinkerSet<SpaceTime> spaceTime;
+	private TinkerSet<God> god;
 	private TinkerSet<Angel> angel;
 	private TinkerSet<Demon> demon;
-	private TinkerSet<God> god;
-	private TinkerSet<String> name;
-	private TinkerSet<NonNavigableMany> nonNavigableMany;
 	private TinkerSet<NonNavigableOne> nonNavigableOne;
-	private TinkerSet<SpaceTime> spaceTime;
+	private TinkerSet<NonNavigableMany> nonNavigableMany;
 
 	/** Constructor for Universe
 	 * 
@@ -32,6 +34,7 @@ public class Universe extends BaseTinker implements CompositionNode {
 	public Universe(God compositeOwner) {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
 		createComponents();
+		initialiseProperties();
 		init(compositeOwner);
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
@@ -64,56 +67,84 @@ public class Universe extends BaseTinker implements CompositionNode {
 
 	public void addToAngel(Angel angel) {
 		if ( angel != null ) {
-			angel.z_internalRemoveFromUniverse(angel.getUniverse());
-			angel.z_internalAddToUniverse(this);
-			z_internalAddToAngel(angel);
+			this.angel.add(angel);
 		}
 	}
 	
 	public void addToDemon(Demon demon) {
 		if ( demon != null ) {
-			demon.z_internalRemoveFromUniverse(demon.getUniverse());
-			demon.z_internalAddToUniverse(this);
-			z_internalAddToDemon(demon);
+			this.demon.add(demon);
+		}
+	}
+	
+	public void addToDemon(Set<Demon> demon) {
+		if ( !demon.isEmpty() ) {
+			this.demon.addAll(demon);
 		}
 	}
 	
 	public void addToGod(God god) {
 		if ( god != null ) {
-			god.z_internalRemoveFromUniverse(god.getUniverse());
-			god.z_internalAddToUniverse(this);
-			z_internalAddToGod(god);
+			this.god.add(god);
 		}
 	}
 	
 	public void addToName(String name) {
 		if ( name != null ) {
-			z_internalAddToName(name);
+			this.name.add(name);
 		}
 	}
 	
 	public void addToNonNavigableMany(NonNavigableMany nonNavigableMany) {
 		if ( nonNavigableMany != null ) {
-			nonNavigableMany.z_internalRemoveFromUniverse(nonNavigableMany.getUniverse());
-			nonNavigableMany.z_internalAddToUniverse(this);
-			z_internalAddToNonNavigableMany(nonNavigableMany);
+			this.nonNavigableMany.add(nonNavigableMany);
+		}
+	}
+	
+	public void addToNonNavigableMany(Set<NonNavigableMany> nonNavigableMany) {
+		if ( !nonNavigableMany.isEmpty() ) {
+			this.nonNavigableMany.addAll(nonNavigableMany);
 		}
 	}
 	
 	public void addToNonNavigableOne(NonNavigableOne nonNavigableOne) {
 		if ( nonNavigableOne != null ) {
-			nonNavigableOne.z_internalRemoveFromUniverse(nonNavigableOne.getUniverse());
-			nonNavigableOne.z_internalAddToUniverse(this);
-			z_internalAddToNonNavigableOne(nonNavigableOne);
+			this.nonNavigableOne.add(nonNavigableOne);
 		}
 	}
 	
 	public void addToSpaceTime(SpaceTime spaceTime) {
 		if ( spaceTime != null ) {
-			spaceTime.z_internalRemoveFromUniverse(spaceTime.getUniverse());
-			spaceTime.z_internalAddToUniverse(this);
-			z_internalAddToSpaceTime(spaceTime);
+			this.spaceTime.add(spaceTime);
 		}
+	}
+	
+	public void clearAngel() {
+		this.angel.clear();
+	}
+	
+	public void clearDemon() {
+		this.demon.clear();
+	}
+	
+	public void clearGod() {
+		this.god.clear();
+	}
+	
+	public void clearName() {
+		this.name.clear();
+	}
+	
+	public void clearNonNavigableMany() {
+		this.nonNavigableMany.clear();
+	}
+	
+	public void clearNonNavigableOne() {
+		this.nonNavigableOne.clear();
+	}
+	
+	public void clearSpaceTime() {
+		this.spaceTime.clear();
 	}
 	
 	public void createComponents() {
@@ -181,7 +212,7 @@ public class Universe extends BaseTinker implements CompositionNode {
 	}
 	
 	@Override
-	public CompositionNode getOwningObject() {
+	public TinkerNode getOwningObject() {
 		return getGod();
 	}
 	
@@ -204,9 +235,13 @@ public class Universe extends BaseTinker implements CompositionNode {
 		return uid;
 	}
 	
+	/** This gets called on creation with the compositional owner. The composition owner does not itself need to be a composite node
+	 * 
+	 * @param compositeOwner 
+	 */
 	@Override
-	public void init(CompositionNode compositeOwner) {
-		this.z_internalAddToGod((God)compositeOwner);
+	public void init(TinkerNode compositeOwner) {
+		this.god.add((God)compositeOwner);
 		this.hasInitBeenCalled = true;
 		initVariables();
 	}
@@ -216,8 +251,47 @@ public class Universe extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.name =  new TinkerSetImpl<String>(this, "org__tinker__concretetest__Universe__name", true, new TumlRuntimePropertyImpl(false,false,true,false,1,1), false);
-		this.spaceTime =  new TinkerSetImpl<SpaceTime>(this, "A_<universe>_<spaceTime>", true, new TumlRuntimePropertyImpl(true,false,false,false,1,1), true);
+		this.demon =  new TinkerSetImpl<Demon>(this, UniverseRuntimePropertyEnum.DEMON);
+		this.angel =  new TinkerSetImpl<Angel>(this, UniverseRuntimePropertyEnum.ANGEL);
+		this.name =  new TinkerSetImpl<String>(this, UniverseRuntimePropertyEnum.NAME);
+		this.nonNavigableMany =  new TinkerSetImpl<NonNavigableMany>(this, UniverseRuntimePropertyEnum.NONNAVIGABLEMANY);
+		this.spaceTime =  new TinkerSetImpl<SpaceTime>(this, UniverseRuntimePropertyEnum.SPACETIME);
+		this.god =  new TinkerSetImpl<God>(this, UniverseRuntimePropertyEnum.GOD);
+		this.nonNavigableOne =  new TinkerSetImpl<NonNavigableOne>(this, UniverseRuntimePropertyEnum.NONNAVIGABLEONE);
+	}
+	
+	@Override
+	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
+		switch ( (UniverseRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
+			case NONNAVIGABLEONE:
+				this.nonNavigableOne =  new TinkerSetImpl<NonNavigableOne>(this, UniverseRuntimePropertyEnum.NONNAVIGABLEONE);
+			break;
+		
+			case GOD:
+				this.god =  new TinkerSetImpl<God>(this, UniverseRuntimePropertyEnum.GOD);
+			break;
+		
+			case SPACETIME:
+				this.spaceTime =  new TinkerSetImpl<SpaceTime>(this, UniverseRuntimePropertyEnum.SPACETIME);
+			break;
+		
+			case NONNAVIGABLEMANY:
+				this.nonNavigableMany =  new TinkerSetImpl<NonNavigableMany>(this, UniverseRuntimePropertyEnum.NONNAVIGABLEMANY);
+			break;
+		
+			case NAME:
+				this.name =  new TinkerSetImpl<String>(this, UniverseRuntimePropertyEnum.NAME);
+			break;
+		
+			case ANGEL:
+				this.angel =  new TinkerSetImpl<Angel>(this, UniverseRuntimePropertyEnum.ANGEL);
+			break;
+		
+			case DEMON:
+				this.demon =  new TinkerSetImpl<Demon>(this, UniverseRuntimePropertyEnum.DEMON);
+			break;
+		
+		}
 	}
 	
 	@Override
@@ -225,11 +299,103 @@ public class Universe extends BaseTinker implements CompositionNode {
 		return false;
 	}
 	
-	public void setAngel(TinkerSet<Angel> angel) {
-		TinkerSet<Angel> oldValue = this.getAngel();
+	public void removeFromAngel(Angel angel) {
+		if ( angel != null ) {
+			this.angel.remove(angel);
+		}
 	}
 	
-	public void setGod(TinkerSet<God> god) {
+	public void removeFromAngel(Set<Angel> angel) {
+		if ( !angel.isEmpty() ) {
+			this.angel.removeAll(angel);
+		}
+	}
+	
+	public void removeFromDemon(Demon demon) {
+		if ( demon != null ) {
+			this.demon.remove(demon);
+		}
+	}
+	
+	public void removeFromDemon(Set<Demon> demon) {
+		if ( !demon.isEmpty() ) {
+			this.demon.removeAll(demon);
+		}
+	}
+	
+	public void removeFromGod(God god) {
+		if ( god != null ) {
+			this.god.remove(god);
+		}
+	}
+	
+	public void removeFromGod(Set<God> god) {
+		if ( !god.isEmpty() ) {
+			this.god.removeAll(god);
+		}
+	}
+	
+	public void removeFromName(Set<String> name) {
+		if ( !name.isEmpty() ) {
+			this.name.removeAll(name);
+		}
+	}
+	
+	public void removeFromName(String name) {
+		if ( name != null ) {
+			this.name.remove(name);
+		}
+	}
+	
+	public void removeFromNonNavigableMany(NonNavigableMany nonNavigableMany) {
+		if ( nonNavigableMany != null ) {
+			this.nonNavigableMany.remove(nonNavigableMany);
+		}
+	}
+	
+	public void removeFromNonNavigableMany(Set<NonNavigableMany> nonNavigableMany) {
+		if ( !nonNavigableMany.isEmpty() ) {
+			this.nonNavigableMany.removeAll(nonNavigableMany);
+		}
+	}
+	
+	public void removeFromNonNavigableOne(NonNavigableOne nonNavigableOne) {
+		if ( nonNavigableOne != null ) {
+			this.nonNavigableOne.remove(nonNavigableOne);
+		}
+	}
+	
+	public void removeFromNonNavigableOne(Set<NonNavigableOne> nonNavigableOne) {
+		if ( !nonNavigableOne.isEmpty() ) {
+			this.nonNavigableOne.removeAll(nonNavigableOne);
+		}
+	}
+	
+	public void removeFromSpaceTime(Set<SpaceTime> spaceTime) {
+		if ( !spaceTime.isEmpty() ) {
+			this.spaceTime.removeAll(spaceTime);
+		}
+	}
+	
+	public void removeFromSpaceTime(SpaceTime spaceTime) {
+		if ( spaceTime != null ) {
+			this.spaceTime.remove(spaceTime);
+		}
+	}
+	
+	public void setAngel(Angel angel) {
+		clearAngel();
+		addToAngel(angel);
+	}
+	
+	public void setDemon(Set<Demon> demon) {
+		clearDemon();
+		addToDemon(demon);
+	}
+	
+	public void setGod(God god) {
+		clearGod();
+		addToGod(god);
 	}
 	
 	@Override
@@ -237,70 +403,132 @@ public class Universe extends BaseTinker implements CompositionNode {
 		TinkerIdUtilFactory.getIdUtil().setId(this.vertex, id);
 	}
 	
-	public void setName(TinkerSet<String> name) {
+	public void setName(String name) {
+		clearName();
+		addToName(name);
 	}
 	
-	public void setNonNavigableOne(TinkerSet<NonNavigableOne> nonNavigableOne) {
+	public void setNonNavigableMany(Set<NonNavigableMany> nonNavigableMany) {
+		clearNonNavigableMany();
+		addToNonNavigableMany(nonNavigableMany);
 	}
 	
-	public void setSpaceTime(TinkerSet<SpaceTime> spaceTime) {
-		TinkerSet<SpaceTime> oldValue = this.getSpaceTime();
+	public void setNonNavigableOne(NonNavigableOne nonNavigableOne) {
+		clearNonNavigableOne();
+		addToNonNavigableOne(nonNavigableOne);
 	}
 	
-	public void z_internalAddToAngel(Angel angel) {
-		this.angel.add(angel);
-	}
-	
-	public void z_internalAddToDemon(Demon demon) {
-		this.demon.add(demon);
-	}
-	
-	public void z_internalAddToGod(God god) {
-		this.god.add(god);
-	}
-	
-	public void z_internalAddToName(String name) {
-		this.name.add(name);
-	}
-	
-	public void z_internalAddToNonNavigableMany(NonNavigableMany nonNavigableMany) {
-		this.nonNavigableMany.add(nonNavigableMany);
-	}
-	
-	public void z_internalAddToNonNavigableOne(NonNavigableOne nonNavigableOne) {
-		this.nonNavigableOne.add(nonNavigableOne);
-	}
-	
-	public void z_internalAddToSpaceTime(SpaceTime spaceTime) {
-		this.spaceTime.add(spaceTime);
-	}
-	
-	public void z_internalRemoveFromAngel(Angel angel) {
-		this.angel.remove(angel);
-	}
-	
-	public void z_internalRemoveFromDemon(Demon demon) {
-		this.demon.remove(demon);
-	}
-	
-	public void z_internalRemoveFromGod(God god) {
-		this.god.remove(god);
-	}
-	
-	public void z_internalRemoveFromName(String name) {
-		this.name.remove(name);
-	}
-	
-	public void z_internalRemoveFromNonNavigableMany(NonNavigableMany nonNavigableMany) {
-		this.nonNavigableMany.remove(nonNavigableMany);
-	}
-	
-	public void z_internalRemoveFromNonNavigableOne(NonNavigableOne nonNavigableOne) {
-		this.nonNavigableOne.remove(nonNavigableOne);
-	}
-	
-	public void z_internalRemoveFromSpaceTime(SpaceTime spaceTime) {
-		this.spaceTime.remove(spaceTime);
+	public void setSpaceTime(SpaceTime spaceTime) {
+		clearSpaceTime();
+		addToSpaceTime(spaceTime);
 	}
 
+	public enum UniverseRuntimePropertyEnum implements TumlRuntimeProperty {
+		DEMON(true,false,"A_<universe>_<demon>",false,true,false,false,-1,1),
+		ANGEL(false,false,"A_<universe>_<angel>",true,false,false,false,1,0),
+		NAME(true,false,"org__tinker__concretetest__Universe__name",false,false,true,false,1,1),
+		NONNAVIGABLEMANY(true,false,"A_<universe>_<nonNavigableMany>",false,true,false,false,-1,0),
+		SPACETIME(true,true,"A_<universe>_<spaceTime>",true,false,false,false,1,1),
+		GOD(false,false,"A_<god>_<universe>",false,false,true,false,1,1),
+		NONNAVIGABLEONE(false,false,"A_<universe>_<nonNavigableOne>",true,false,false,false,1,0);
+		private boolean controllingSide;
+		private boolean composite;
+		private String label;
+		private boolean oneToOne;
+		private boolean oneToMany;
+		private boolean manyToOne;
+		private boolean manyToMany;
+		private int upper;
+		private int lower;
+		/** Constructor for UniverseRuntimePropertyEnum
+		 * 
+		 * @param controllingSide 
+		 * @param composite 
+		 * @param label 
+		 * @param oneToOne 
+		 * @param oneToMany 
+		 * @param manyToOne 
+		 * @param manyToMany 
+		 * @param upper 
+		 * @param lower 
+		 */
+		private UniverseRuntimePropertyEnum(boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+			this.controllingSide = controllingSide;
+			this.composite = composite;
+			this.label = label;
+			this.oneToOne = oneToOne;
+			this.oneToMany = oneToMany;
+			this.manyToOne = manyToOne;
+			this.manyToMany = manyToMany;
+			this.upper = upper;
+			this.lower = lower;
+		}
+	
+		static public UniverseRuntimePropertyEnum fromLabel(String label) {
+			if ( DEMON.getLabel().equals(label) ) {
+				return DEMON;
+			}
+			if ( ANGEL.getLabel().equals(label) ) {
+				return ANGEL;
+			}
+			if ( NAME.getLabel().equals(label) ) {
+				return NAME;
+			}
+			if ( NONNAVIGABLEMANY.getLabel().equals(label) ) {
+				return NONNAVIGABLEMANY;
+			}
+			if ( SPACETIME.getLabel().equals(label) ) {
+				return SPACETIME;
+			}
+			if ( GOD.getLabel().equals(label) ) {
+				return GOD;
+			}
+			if ( NONNAVIGABLEONE.getLabel().equals(label) ) {
+				return NONNAVIGABLEONE;
+			}
+			throw new IllegalStateException();
+		}
+		
+		public String getLabel() {
+			return this.label;
+		}
+		
+		public int getLower() {
+			return this.lower;
+		}
+		
+		public int getUpper() {
+			return this.upper;
+		}
+		
+		public boolean isComposite() {
+			return this.composite;
+		}
+		
+		public boolean isControllingSide() {
+			return this.controllingSide;
+		}
+		
+		public boolean isManyToMany() {
+			return this.manyToMany;
+		}
+		
+		public boolean isManyToOne() {
+			return this.manyToOne;
+		}
+		
+		public boolean isOneToMany() {
+			return this.oneToMany;
+		}
+		
+		public boolean isOneToOne() {
+			return this.oneToOne;
+		}
+		
+		@Override
+		public boolean isValid(int elementCount) {
+			return (getUpper() == -1 || elementCount <= getUpper()) && elementCount >= getLower();
+		}
+	
+	}
 }

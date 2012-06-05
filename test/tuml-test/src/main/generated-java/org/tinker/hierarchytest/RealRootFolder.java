@@ -2,9 +2,14 @@ package org.tinker.hierarchytest;
 
 import com.tinkerpop.blueprints.pgm.Vertex;
 
+import java.util.Set;
+
 import org.tinker.concretetest.God;
 import org.tuml.runtime.collection.TinkerSet;
+import org.tuml.runtime.collection.TinkerSetImpl;
+import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.domain.CompositionNode;
+import org.tuml.runtime.domain.TinkerNode;
 
 public class RealRootFolder extends AbstractRootFolder implements CompositionNode {
 	private TinkerSet<God> god;
@@ -15,6 +20,7 @@ public class RealRootFolder extends AbstractRootFolder implements CompositionNod
 	 */
 	public RealRootFolder(God compositeOwner) {
 		super(true);
+		initialiseProperties();
 		init(compositeOwner);
 	}
 	
@@ -44,10 +50,12 @@ public class RealRootFolder extends AbstractRootFolder implements CompositionNod
 
 	public void addToGod(God god) {
 		if ( god != null ) {
-			god.z_internalRemoveFromRealRootFolder(god.getRealRootFolder());
-			god.z_internalAddToRealRootFolder(this);
-			z_internalAddToGod(god);
+			this.god.add(god);
 		}
+	}
+	
+	public void clearGod() {
+		this.god.clear();
 	}
 	
 	public void createComponents() {
@@ -68,13 +76,17 @@ public class RealRootFolder extends AbstractRootFolder implements CompositionNod
 	}
 	
 	@Override
-	public CompositionNode getOwningObject() {
+	public TinkerNode getOwningObject() {
 		return getGod();
 	}
 	
+	/** This gets called on creation with the compositional owner. The composition owner does not itself need to be a composite node
+	 * 
+	 * @param compositeOwner 
+	 */
 	@Override
-	public void init(CompositionNode compositeOwner) {
-		this.z_internalAddToGod((God)compositeOwner);
+	public void init(TinkerNode compositeOwner) {
+		this.god.add((God)compositeOwner);
 		this.hasInitBeenCalled = true;
 		initVariables();
 	}
@@ -86,6 +98,18 @@ public class RealRootFolder extends AbstractRootFolder implements CompositionNod
 	@Override
 	public void initialiseProperties() {
 		super.initialiseProperties();
+		this.god =  new TinkerSetImpl<God>(this, RealRootFolderRuntimePropertyEnum.GOD);
+	}
+	
+	@Override
+	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
+		super.initialiseProperties();
+		switch ( (RealRootFolderRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
+			case GOD:
+				this.god =  new TinkerSetImpl<God>(this, RealRootFolderRuntimePropertyEnum.GOD);
+			break;
+		
+		}
 	}
 	
 	@Override
@@ -93,15 +117,105 @@ public class RealRootFolder extends AbstractRootFolder implements CompositionNod
 		return false;
 	}
 	
-	public void setGod(TinkerSet<God> god) {
+	public void removeFromGod(God god) {
+		if ( god != null ) {
+			this.god.remove(god);
+		}
 	}
 	
-	public void z_internalAddToGod(God god) {
-		this.god.add(god);
+	public void removeFromGod(Set<God> god) {
+		if ( !god.isEmpty() ) {
+			this.god.removeAll(god);
+		}
 	}
 	
-	public void z_internalRemoveFromGod(God god) {
-		this.god.remove(god);
+	public void setGod(God god) {
+		clearGod();
+		addToGod(god);
 	}
 
+	public enum RealRootFolderRuntimePropertyEnum implements TumlRuntimeProperty {
+		GOD(false,false,"A_<god>_<realRootFolder>",false,false,true,false,1,1);
+		private boolean controllingSide;
+		private boolean composite;
+		private String label;
+		private boolean oneToOne;
+		private boolean oneToMany;
+		private boolean manyToOne;
+		private boolean manyToMany;
+		private int upper;
+		private int lower;
+		/** Constructor for RealRootFolderRuntimePropertyEnum
+		 * 
+		 * @param controllingSide 
+		 * @param composite 
+		 * @param label 
+		 * @param oneToOne 
+		 * @param oneToMany 
+		 * @param manyToOne 
+		 * @param manyToMany 
+		 * @param upper 
+		 * @param lower 
+		 */
+		private RealRootFolderRuntimePropertyEnum(boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+			this.controllingSide = controllingSide;
+			this.composite = composite;
+			this.label = label;
+			this.oneToOne = oneToOne;
+			this.oneToMany = oneToMany;
+			this.manyToOne = manyToOne;
+			this.manyToMany = manyToMany;
+			this.upper = upper;
+			this.lower = lower;
+		}
+	
+		static public RealRootFolderRuntimePropertyEnum fromLabel(String label) {
+			if ( GOD.getLabel().equals(label) ) {
+				return GOD;
+			}
+			throw new IllegalStateException();
+		}
+		
+		public String getLabel() {
+			return this.label;
+		}
+		
+		public int getLower() {
+			return this.lower;
+		}
+		
+		public int getUpper() {
+			return this.upper;
+		}
+		
+		public boolean isComposite() {
+			return this.composite;
+		}
+		
+		public boolean isControllingSide() {
+			return this.controllingSide;
+		}
+		
+		public boolean isManyToMany() {
+			return this.manyToMany;
+		}
+		
+		public boolean isManyToOne() {
+			return this.manyToOne;
+		}
+		
+		public boolean isOneToMany() {
+			return this.oneToMany;
+		}
+		
+		public boolean isOneToOne() {
+			return this.oneToOne;
+		}
+		
+		@Override
+		public boolean isValid(int elementCount) {
+			return (getUpper() == -1 || elementCount <= getUpper()) && elementCount >= getLower();
+		}
+	
+	}
 }

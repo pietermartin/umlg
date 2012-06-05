@@ -2,27 +2,33 @@ package org.tinker.qualifiertest;
 
 import com.tinkerpop.blueprints.pgm.Vertex;
 
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.tinker.concretetest.God;
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.TinkerIdUtilFactory;
 import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
-import org.tuml.runtime.collection.TumlRuntimePropertyImpl;
 import org.tuml.runtime.collection.TinkerQualifiedSequence;
+import org.tuml.runtime.collection.TinkerQualifiedSequenceImpl;
 import org.tuml.runtime.collection.TinkerQualifiedSet;
+import org.tuml.runtime.collection.TinkerQualifiedSetImpl;
 import org.tuml.runtime.collection.TinkerSequence;
+import org.tuml.runtime.collection.TinkerSequenceImpl;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TinkerSetImpl;
+import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.domain.BaseTinker;
 import org.tuml.runtime.domain.CompositionNode;
+import org.tuml.runtime.domain.TinkerNode;
 
 public class Many1 extends BaseTinker implements CompositionNode {
+	private TinkerSet<String> name;
 	private TinkerSet<God> god;
 	private TinkerQualifiedSet<Many2> many2;
 	private TinkerQualifiedSequence<Many2> many2List;
 	private TinkerSequence<Many2> many2UnqualifiedList;
-	private TinkerSet<String> name;
 
 	/** Constructor for Many1
 	 * 
@@ -31,6 +37,7 @@ public class Many1 extends BaseTinker implements CompositionNode {
 	public Many1(God compositeOwner) {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
 		createComponents();
+		initialiseProperties();
 		init(compositeOwner);
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
@@ -63,40 +70,70 @@ public class Many1 extends BaseTinker implements CompositionNode {
 
 	public void addToGod(God god) {
 		if ( god != null ) {
-			god.z_internalRemoveFromMany1(god.getMany1());
-			god.z_internalAddToMany1(this);
-			z_internalAddToGod(god);
+			this.god.add(god);
 		}
 	}
 	
 	public void addToMany2(Many2 many2) {
 		if ( many2 != null ) {
-			many2.z_internalRemoveFromMany1(many2.getMany1());
-			many2.z_internalAddToMany1(this);
-			z_internalAddToMany2(many2);
+			this.many2.add(many2);
+		}
+	}
+	
+	public void addToMany2(Set<Many2> many2) {
+		if ( !many2.isEmpty() ) {
+			this.many2.addAll(many2);
+		}
+	}
+	
+	public void addToMany2List(List<Many2> many2List) {
+		if ( !many2List.isEmpty() ) {
+			this.many2List.addAll(many2List);
 		}
 	}
 	
 	public void addToMany2List(Many2 many2List) {
 		if ( many2List != null ) {
-			many2List.z_internalRemoveFromMany1List(many2List.getMany1List());
-			many2List.z_internalAddToMany1List(this);
-			z_internalAddToMany2List(many2List);
+			this.many2List.add(many2List);
+		}
+	}
+	
+	public void addToMany2UnqualifiedList(List<Many2> many2UnqualifiedList) {
+		if ( !many2UnqualifiedList.isEmpty() ) {
+			this.many2UnqualifiedList.addAll(many2UnqualifiedList);
 		}
 	}
 	
 	public void addToMany2UnqualifiedList(Many2 many2UnqualifiedList) {
 		if ( many2UnqualifiedList != null ) {
-			many2UnqualifiedList.z_internalRemoveFromMany1UnqualifiedList(many2UnqualifiedList.getMany1UnqualifiedList());
-			many2UnqualifiedList.z_internalAddToMany1UnqualifiedList(this);
-			z_internalAddToMany2UnqualifiedList(many2UnqualifiedList);
+			this.many2UnqualifiedList.add(many2UnqualifiedList);
 		}
 	}
 	
 	public void addToName(String name) {
 		if ( name != null ) {
-			z_internalAddToName(name);
+			this.name.add(name);
 		}
+	}
+	
+	public void clearGod() {
+		this.god.clear();
+	}
+	
+	public void clearMany2() {
+		this.many2.clear();
+	}
+	
+	public void clearMany2List() {
+		this.many2List.clear();
+	}
+	
+	public void clearMany2UnqualifiedList() {
+		this.many2UnqualifiedList.clear();
+	}
+	
+	public void clearName() {
+		this.name.clear();
 	}
 	
 	public void createComponents() {
@@ -147,7 +184,7 @@ public class Many1 extends BaseTinker implements CompositionNode {
 	}
 	
 	@Override
-	public CompositionNode getOwningObject() {
+	public TinkerNode getOwningObject() {
 		return getGod();
 	}
 	
@@ -161,9 +198,13 @@ public class Many1 extends BaseTinker implements CompositionNode {
 		return uid;
 	}
 	
+	/** This gets called on creation with the compositional owner. The composition owner does not itself need to be a composite node
+	 * 
+	 * @param compositeOwner 
+	 */
 	@Override
-	public void init(CompositionNode compositeOwner) {
-		this.z_internalAddToGod((God)compositeOwner);
+	public void init(TinkerNode compositeOwner) {
+		this.god.add((God)compositeOwner);
 		this.hasInitBeenCalled = true;
 		initVariables();
 	}
@@ -173,7 +214,37 @@ public class Many1 extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.name =  new TinkerSetImpl<String>(this, "org__tinker__qualifiertest__Many1__name", true, new TumlRuntimePropertyImpl(false,false,true,false,1,1), false);
+		this.many2 =  new TinkerQualifiedSetImpl<Many2>(this, getUid(), Many1RuntimePropertyEnum.MANY2);
+		this.name =  new TinkerSetImpl<String>(this, Many1RuntimePropertyEnum.NAME);
+		this.many2UnqualifiedList =  new TinkerSequenceImpl<Many2>(this, getUid(), Many1RuntimePropertyEnum.MANY2UNQUALIFIEDLIST);
+		this.god =  new TinkerSetImpl<God>(this, Many1RuntimePropertyEnum.GOD);
+		this.many2List =  new TinkerQualifiedSequenceImpl<Many2>(this, getUid(), Many1RuntimePropertyEnum.MANY2LIST);
+	}
+	
+	@Override
+	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
+		switch ( (Many1RuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
+			case MANY2LIST:
+				this.many2List =  new TinkerQualifiedSequenceImpl<Many2>(this, getUid(), Many1RuntimePropertyEnum.MANY2LIST);
+			break;
+		
+			case GOD:
+				this.god =  new TinkerSetImpl<God>(this, Many1RuntimePropertyEnum.GOD);
+			break;
+		
+			case MANY2UNQUALIFIEDLIST:
+				this.many2UnqualifiedList =  new TinkerSequenceImpl<Many2>(this, getUid(), Many1RuntimePropertyEnum.MANY2UNQUALIFIEDLIST);
+			break;
+		
+			case NAME:
+				this.name =  new TinkerSetImpl<String>(this, Many1RuntimePropertyEnum.NAME);
+			break;
+		
+			case MANY2:
+				this.many2 =  new TinkerQualifiedSetImpl<Many2>(this, getUid(), Many1RuntimePropertyEnum.MANY2);
+			break;
+		
+		}
 	}
 	
 	@Override
@@ -181,7 +252,69 @@ public class Many1 extends BaseTinker implements CompositionNode {
 		return false;
 	}
 	
-	public void setGod(TinkerSet<God> god) {
+	public void removeFromGod(God god) {
+		if ( god != null ) {
+			this.god.remove(god);
+		}
+	}
+	
+	public void removeFromGod(Set<God> god) {
+		if ( !god.isEmpty() ) {
+			this.god.removeAll(god);
+		}
+	}
+	
+	public void removeFromMany2(Many2 many2) {
+		if ( many2 != null ) {
+			this.many2.remove(many2);
+		}
+	}
+	
+	public void removeFromMany2(Set<Many2> many2) {
+		if ( !many2.isEmpty() ) {
+			this.many2.removeAll(many2);
+		}
+	}
+	
+	public void removeFromMany2List(List<Many2> many2List) {
+		if ( !many2List.isEmpty() ) {
+			this.many2List.removeAll(many2List);
+		}
+	}
+	
+	public void removeFromMany2List(Many2 many2List) {
+		if ( many2List != null ) {
+			this.many2List.remove(many2List);
+		}
+	}
+	
+	public void removeFromMany2UnqualifiedList(List<Many2> many2UnqualifiedList) {
+		if ( !many2UnqualifiedList.isEmpty() ) {
+			this.many2UnqualifiedList.removeAll(many2UnqualifiedList);
+		}
+	}
+	
+	public void removeFromMany2UnqualifiedList(Many2 many2UnqualifiedList) {
+		if ( many2UnqualifiedList != null ) {
+			this.many2UnqualifiedList.remove(many2UnqualifiedList);
+		}
+	}
+	
+	public void removeFromName(Set<String> name) {
+		if ( !name.isEmpty() ) {
+			this.name.removeAll(name);
+		}
+	}
+	
+	public void removeFromName(String name) {
+		if ( name != null ) {
+			this.name.remove(name);
+		}
+	}
+	
+	public void setGod(God god) {
+		clearGod();
+		addToGod(god);
 	}
 	
 	@Override
@@ -189,47 +322,124 @@ public class Many1 extends BaseTinker implements CompositionNode {
 		TinkerIdUtilFactory.getIdUtil().setId(this.vertex, id);
 	}
 	
-	public void setName(TinkerSet<String> name) {
+	public void setMany2(Set<Many2> many2) {
+		clearMany2();
+		addToMany2(many2);
 	}
 	
-	public void z_internalAddToGod(God god) {
-		this.god.add(god);
+	public void setMany2List(List<Many2> many2List) {
+		clearMany2List();
+		addToMany2List(many2List);
 	}
 	
-	public void z_internalAddToMany2(Many2 many2) {
-		this.many2.add(many2);
+	public void setMany2UnqualifiedList(List<Many2> many2UnqualifiedList) {
+		clearMany2UnqualifiedList();
+		addToMany2UnqualifiedList(many2UnqualifiedList);
 	}
 	
-	public void z_internalAddToMany2List(Many2 many2List) {
-		this.many2List.add(many2List);
-	}
-	
-	public void z_internalAddToMany2UnqualifiedList(Many2 many2UnqualifiedList) {
-		this.many2UnqualifiedList.add(many2UnqualifiedList);
-	}
-	
-	public void z_internalAddToName(String name) {
-		this.name.add(name);
-	}
-	
-	public void z_internalRemoveFromGod(God god) {
-		this.god.remove(god);
-	}
-	
-	public void z_internalRemoveFromMany2(Many2 many2) {
-		this.many2.remove(many2);
-	}
-	
-	public void z_internalRemoveFromMany2List(Many2 many2List) {
-		this.many2List.remove(many2List);
-	}
-	
-	public void z_internalRemoveFromMany2UnqualifiedList(Many2 many2UnqualifiedList) {
-		this.many2UnqualifiedList.remove(many2UnqualifiedList);
-	}
-	
-	public void z_internalRemoveFromName(String name) {
-		this.name.remove(name);
+	public void setName(String name) {
+		clearName();
+		addToName(name);
 	}
 
+	public enum Many1RuntimePropertyEnum implements TumlRuntimeProperty {
+		MANY2(false,false,"A_<many1>_<many2>",false,false,false,true,-1,0),
+		NAME(true,false,"org__tinker__qualifiertest__Many1__name",false,false,true,false,1,1),
+		MANY2UNQUALIFIEDLIST(false,false,"A_<many1>_<many2>_3",false,false,false,true,-1,0),
+		GOD(false,false,"A_<god>_<many1>",false,false,true,false,1,1),
+		MANY2LIST(false,false,"A_<many1>_<many2>_2",false,false,false,true,-1,0);
+		private boolean controllingSide;
+		private boolean composite;
+		private String label;
+		private boolean oneToOne;
+		private boolean oneToMany;
+		private boolean manyToOne;
+		private boolean manyToMany;
+		private int upper;
+		private int lower;
+		/** Constructor for Many1RuntimePropertyEnum
+		 * 
+		 * @param controllingSide 
+		 * @param composite 
+		 * @param label 
+		 * @param oneToOne 
+		 * @param oneToMany 
+		 * @param manyToOne 
+		 * @param manyToMany 
+		 * @param upper 
+		 * @param lower 
+		 */
+		private Many1RuntimePropertyEnum(boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+			this.controllingSide = controllingSide;
+			this.composite = composite;
+			this.label = label;
+			this.oneToOne = oneToOne;
+			this.oneToMany = oneToMany;
+			this.manyToOne = manyToOne;
+			this.manyToMany = manyToMany;
+			this.upper = upper;
+			this.lower = lower;
+		}
+	
+		static public Many1RuntimePropertyEnum fromLabel(String label) {
+			if ( MANY2.getLabel().equals(label) ) {
+				return MANY2;
+			}
+			if ( NAME.getLabel().equals(label) ) {
+				return NAME;
+			}
+			if ( MANY2UNQUALIFIEDLIST.getLabel().equals(label) ) {
+				return MANY2UNQUALIFIEDLIST;
+			}
+			if ( GOD.getLabel().equals(label) ) {
+				return GOD;
+			}
+			if ( MANY2LIST.getLabel().equals(label) ) {
+				return MANY2LIST;
+			}
+			throw new IllegalStateException();
+		}
+		
+		public String getLabel() {
+			return this.label;
+		}
+		
+		public int getLower() {
+			return this.lower;
+		}
+		
+		public int getUpper() {
+			return this.upper;
+		}
+		
+		public boolean isComposite() {
+			return this.composite;
+		}
+		
+		public boolean isControllingSide() {
+			return this.controllingSide;
+		}
+		
+		public boolean isManyToMany() {
+			return this.manyToMany;
+		}
+		
+		public boolean isManyToOne() {
+			return this.manyToOne;
+		}
+		
+		public boolean isOneToMany() {
+			return this.oneToMany;
+		}
+		
+		public boolean isOneToOne() {
+			return this.oneToOne;
+		}
+		
+		@Override
+		public boolean isValid(int elementCount) {
+			return (getUpper() == -1 || elementCount <= getUpper()) && elementCount >= getLower();
+		}
+	
+	}
 }
