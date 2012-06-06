@@ -19,7 +19,6 @@ public class Folder extends AbstractFolder implements CompositionNode {
 	 */
 	public Folder(AbstractFolder compositeOwner) {
 		super(true);
-		initialiseProperties();
 		init(compositeOwner);
 	}
 	
@@ -44,7 +43,6 @@ public class Folder extends AbstractFolder implements CompositionNode {
 	 */
 	public Folder(Boolean persistent) {
 		super( persistent );
-		initialiseProperties();
 	}
 
 	public void addToParentFolder(AbstractFolder parentFolder) {
@@ -85,7 +83,7 @@ public class Folder extends AbstractFolder implements CompositionNode {
 	 */
 	@Override
 	public void init(TinkerNode compositeOwner) {
-		this.parentFolder.add((AbstractFolder)compositeOwner);
+		this.addToParentFolder((AbstractFolder)compositeOwner);
 		this.hasInitBeenCalled = true;
 		initVariables();
 	}

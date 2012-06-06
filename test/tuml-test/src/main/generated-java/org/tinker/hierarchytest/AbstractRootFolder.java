@@ -1,7 +1,9 @@
 package org.tinker.hierarchytest;
 
+import com.tinkerpop.blueprints.pgm.Edge;
 import com.tinkerpop.blueprints.pgm.Vertex;
 
+import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.domain.TinkerNode;
 
@@ -29,7 +31,8 @@ public class AbstractRootFolder extends AbstractFolder implements TinkerNode {
 	 */
 	public AbstractRootFolder(Boolean persistent) {
 		super( persistent );
-		initialiseProperties();
+		Edge edge = GraphDb.getDb().addEdge(null, GraphDb.getDb().getRoot(), this.vertex, "root");
+		edge.setProperty("inClass", this.getClass().getName());
 	}
 
 	public void createComponents() {

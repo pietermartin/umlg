@@ -17,10 +17,9 @@ import org.tuml.runtime.domain.CompositionNode;
 import org.tuml.runtime.domain.TinkerNode;
 
 public class ManyB extends BaseTinker implements CompositionNode, IManyB {
-	private TinkerSet<String> name;
 	private TinkerSet<God> god;
-	private TinkerSet<IMany> iMany;
 	private TinkerSet<IManyA> iManyA;
+	private TinkerSet<String> name;
 
 	/** Constructor for ManyB
 	 * 
@@ -28,8 +27,8 @@ public class ManyB extends BaseTinker implements CompositionNode, IManyB {
 	 */
 	public ManyB(God compositeOwner) {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
-		createComponents();
 		initialiseProperties();
+		createComponents();
 		init(compositeOwner);
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
@@ -58,23 +57,12 @@ public class ManyB extends BaseTinker implements CompositionNode, IManyB {
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
 		initialiseProperties();
+		createComponents();
 	}
 
 	public void addToGod(God god) {
 		if ( god != null ) {
 			this.god.add(god);
-		}
-	}
-	
-	public void addToIMany(IMany iMany) {
-		if ( iMany != null ) {
-			this.iMany.add(iMany);
-		}
-	}
-	
-	public void addToIMany(Set<IMany> iMany) {
-		if ( !iMany.isEmpty() ) {
-			this.iMany.addAll(iMany);
 		}
 	}
 	
@@ -100,10 +88,6 @@ public class ManyB extends BaseTinker implements CompositionNode, IManyB {
 		this.god.clear();
 	}
 	
-	public void clearIMany() {
-		this.iMany.clear();
-	}
-	
 	public void clearIManyA() {
 		this.iManyA.clear();
 	}
@@ -126,10 +110,6 @@ public class ManyB extends BaseTinker implements CompositionNode, IManyB {
 		} else {
 			return null;
 		}
-	}
-	
-	public TinkerSet<IMany> getIMany() {
-		return this.iMany;
 	}
 	
 	public TinkerSet<IManyA> getIManyA() {
@@ -176,7 +156,7 @@ public class ManyB extends BaseTinker implements CompositionNode, IManyB {
 	 */
 	@Override
 	public void init(TinkerNode compositeOwner) {
-		this.god.add((God)compositeOwner);
+		this.addToGod((God)compositeOwner);
 		this.hasInitBeenCalled = true;
 		initVariables();
 	}
@@ -186,29 +166,24 @@ public class ManyB extends BaseTinker implements CompositionNode, IManyB {
 	
 	@Override
 	public void initialiseProperties() {
-		this.name =  new TinkerSetImpl<String>(this, ManyBRuntimePropertyEnum.name);
 		this.god =  new TinkerSetImpl<God>(this, ManyBRuntimePropertyEnum.god);
-		this.iMany =  new TinkerSetImpl<IMany>(this, ManyBRuntimePropertyEnum.iMany);
 		this.iManyA =  new TinkerSetImpl<IManyA>(this, ManyBRuntimePropertyEnum.iManyA);
+		this.name =  new TinkerSetImpl<String>(this, ManyBRuntimePropertyEnum.name);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (ManyBRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, ManyBRuntimePropertyEnum.name);
+			break;
+		
 			case iManyA:
 				this.iManyA =  new TinkerSetImpl<IManyA>(this, ManyBRuntimePropertyEnum.iManyA);
 			break;
 		
-			case iMany:
-				this.iMany =  new TinkerSetImpl<IMany>(this, ManyBRuntimePropertyEnum.iMany);
-			break;
-		
 			case god:
 				this.god =  new TinkerSetImpl<God>(this, ManyBRuntimePropertyEnum.god);
-			break;
-		
-			case name:
-				this.name =  new TinkerSetImpl<String>(this, ManyBRuntimePropertyEnum.name);
 			break;
 		
 		}
@@ -228,18 +203,6 @@ public class ManyB extends BaseTinker implements CompositionNode, IManyB {
 	public void removeFromGod(Set<God> god) {
 		if ( !god.isEmpty() ) {
 			this.god.removeAll(god);
-		}
-	}
-	
-	public void removeFromIMany(IMany iMany) {
-		if ( iMany != null ) {
-			this.iMany.remove(iMany);
-		}
-	}
-	
-	public void removeFromIMany(Set<IMany> iMany) {
-		if ( !iMany.isEmpty() ) {
-			this.iMany.removeAll(iMany);
 		}
 	}
 	
@@ -272,11 +235,6 @@ public class ManyB extends BaseTinker implements CompositionNode, IManyB {
 		addToGod(god);
 	}
 	
-	public void setIMany(Set<IMany> iMany) {
-		clearIMany();
-		addToIMany(iMany);
-	}
-	
 	public void setIManyA(Set<IManyA> iManyA) {
 		clearIManyA();
 		addToIManyA(iManyA);
@@ -293,10 +251,9 @@ public class ManyB extends BaseTinker implements CompositionNode, IManyB {
 	}
 
 	public enum ManyBRuntimePropertyEnum implements TumlRuntimeProperty {
-		name(true,false,"org__tinker__interfacetest__IMany__name",false,false,true,false,1,1),
 		god(false,false,"A_<god>_<iMany>",false,false,true,false,1,1),
-		iMany(true,true,"A_<god>_<iMany>",false,true,false,false,-1,0),
-		iManyA(true,false,"A_<iManyA>_<iManyB>",false,false,false,true,-1,0);
+		iManyA(true,false,"A_<iManyA>_<iManyB>",false,false,false,true,-1,0),
+		name(true,false,"org__tinker__interfacetest__IMany__name",false,false,true,false,1,1);
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -331,17 +288,14 @@ public class ManyB extends BaseTinker implements CompositionNode, IManyB {
 		}
 	
 		static public ManyBRuntimePropertyEnum fromLabel(String label) {
-			if ( name.getLabel().equals(label) ) {
-				return name;
-			}
 			if ( god.getLabel().equals(label) ) {
 				return god;
 			}
-			if ( iMany.getLabel().equals(label) ) {
-				return iMany;
-			}
 			if ( iManyA.getLabel().equals(label) ) {
 				return iManyA;
+			}
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
 			throw new IllegalStateException();
 		}

@@ -1,5 +1,6 @@
 package org.tinker.concretetest;
 
+import com.tinkerpop.blueprints.pgm.Edge;
 import com.tinkerpop.blueprints.pgm.Vertex;
 
 import java.util.Collection;
@@ -104,6 +105,9 @@ public class God extends BaseTinker implements TinkerNode {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
 		defaultCreate();
 		initialiseProperties();
+		createComponents();
+		Edge edge = GraphDb.getDb().addEdge(null, GraphDb.getDb().getRoot(), this.vertex, "root");
+		edge.setProperty("inClass", this.getClass().getName());
 	}
 
 	public void addToAbstractSpecies(AbstractSpecies abstractSpecies) {
@@ -735,111 +739,47 @@ public class God extends BaseTinker implements TinkerNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.fakeRootFolder =  new TinkerSetImpl<FakeRootFolder>(this, GodRuntimePropertyEnum.fakeRootFolder);
-		this.hand =  new TinkerSequenceImpl<Hand>(this, getUid(), GodRuntimePropertyEnum.hand);
-		this.foot =  new TinkerQualifiedSequenceImpl<Foot>(this, getUid(), GodRuntimePropertyEnum.foot);
-		this.memory =  new TinkerQualifiedBagImpl<Nightmare>(this, getUid(), GodRuntimePropertyEnum.memory);
-		this.oneOne =  new TinkerSetImpl<OneOne>(this, GodRuntimePropertyEnum.oneOne);
-		this.name =  new TinkerSetImpl<String>(this, GodRuntimePropertyEnum.name);
-		this.nature =  new TinkerQualifiedSetImpl<Nature>(this, getUid(), GodRuntimePropertyEnum.nature);
-		this.embeddedString =  new TinkerSetImpl<String>(this, GodRuntimePropertyEnum.embeddedString);
-		this.rEASON =  new TinkerSetImpl<REASON>(this, GodRuntimePropertyEnum.rEASON);
-		this.world =  new TinkerOrderedSetImpl<World>(this, getUid(), GodRuntimePropertyEnum.world);
-		this.abstractSpecies =  new TinkerSetImpl<AbstractSpecies>(this, GodRuntimePropertyEnum.abstractSpecies);
-		this.dream =  new TinkerBagImpl<Dream>(this, GodRuntimePropertyEnum.dream);
-		this.iMany =  new TinkerSetImpl<IMany>(this, GodRuntimePropertyEnum.iMany);
-		this.realRootFolder =  new TinkerSetImpl<RealRootFolder>(this, GodRuntimePropertyEnum.realRootFolder);
-		this.angel =  new TinkerSetImpl<Angel>(this, GodRuntimePropertyEnum.angel);
 		this.oneTwo =  new TinkerSetImpl<OneTwo>(this, GodRuntimePropertyEnum.oneTwo);
+		this.many2 =  new TinkerSetImpl<Many2>(this, GodRuntimePropertyEnum.many2);
+		this.fantasy =  new TinkerQualifiedOrderedSetImpl<Fantasy>(this, getUid(), GodRuntimePropertyEnum.fantasy);
+		this.foot =  new TinkerQualifiedSequenceImpl<Foot>(this, getUid(), GodRuntimePropertyEnum.foot);
+		this.name =  new TinkerSetImpl<String>(this, GodRuntimePropertyEnum.name);
+		this.rEASON =  new TinkerSetImpl<REASON>(this, GodRuntimePropertyEnum.rEASON);
 		this.reason =  new TinkerSetImpl<REASON>(this, GodRuntimePropertyEnum.reason);
+		this.embeddedInteger =  new TinkerSetImpl<Integer>(this, GodRuntimePropertyEnum.embeddedInteger);
+		this.animalFarm =  new TinkerSetImpl<Mamal>(this, GodRuntimePropertyEnum.animalFarm);
+		this.nature =  new TinkerQualifiedSetImpl<Nature>(this, getUid(), GodRuntimePropertyEnum.nature);
+		this.abstractSpecies =  new TinkerSetImpl<AbstractSpecies>(this, GodRuntimePropertyEnum.abstractSpecies);
+		this.many1 =  new TinkerSetImpl<Many1>(this, GodRuntimePropertyEnum.many1);
+		this.pet =  new TinkerSetImpl<Mamal>(this, GodRuntimePropertyEnum.pet);
+		this.demon =  new TinkerSetImpl<Demon>(this, GodRuntimePropertyEnum.demon);
+		this.dream =  new TinkerBagImpl<Dream>(this, GodRuntimePropertyEnum.dream);
+		this.memory =  new TinkerQualifiedBagImpl<Nightmare>(this, getUid(), GodRuntimePropertyEnum.memory);
+		this.nonNavigableMany =  new TinkerSetImpl<NonNavigableMany>(this, GodRuntimePropertyEnum.nonNavigableMany);
+		this.fakeRootFolder =  new TinkerSetImpl<FakeRootFolder>(this, GodRuntimePropertyEnum.fakeRootFolder);
+		this.world =  new TinkerOrderedSetImpl<World>(this, getUid(), GodRuntimePropertyEnum.world);
+		this.oneOne =  new TinkerSetImpl<OneOne>(this, GodRuntimePropertyEnum.oneOne);
+		this.spirit =  new TinkerSetImpl<Spirit>(this, GodRuntimePropertyEnum.spirit);
 		this.nightmare =  new TinkerQualifiedBagImpl<Nightmare>(this, getUid(), GodRuntimePropertyEnum.nightmare);
 		this.being =  new TinkerSetImpl<Being>(this, GodRuntimePropertyEnum.being);
-		this.many1 =  new TinkerSetImpl<Many1>(this, GodRuntimePropertyEnum.many1);
-		this.animalFarm =  new TinkerSetImpl<Mamal>(this, GodRuntimePropertyEnum.animalFarm);
-		this.nonNavigableOne =  new TinkerSetImpl<NonNavigableOne>(this, GodRuntimePropertyEnum.nonNavigableOne);
-		this.nonNavigableMany =  new TinkerSetImpl<NonNavigableMany>(this, GodRuntimePropertyEnum.nonNavigableMany);
-		this.pet =  new TinkerSetImpl<Mamal>(this, GodRuntimePropertyEnum.pet);
-		this.embeddedInteger =  new TinkerSetImpl<Integer>(this, GodRuntimePropertyEnum.embeddedInteger);
+		this.iMany =  new TinkerSetImpl<IMany>(this, GodRuntimePropertyEnum.iMany);
 		this.universe =  new TinkerSetImpl<Universe>(this, GodRuntimePropertyEnum.universe);
-		this.spirit =  new TinkerSetImpl<Spirit>(this, GodRuntimePropertyEnum.spirit);
-		this.many2 =  new TinkerSetImpl<Many2>(this, GodRuntimePropertyEnum.many2);
-		this.demon =  new TinkerSetImpl<Demon>(this, GodRuntimePropertyEnum.demon);
-		this.fantasy =  new TinkerQualifiedOrderedSetImpl<Fantasy>(this, getUid(), GodRuntimePropertyEnum.fantasy);
+		this.hand =  new TinkerSequenceImpl<Hand>(this, getUid(), GodRuntimePropertyEnum.hand);
+		this.angel =  new TinkerSetImpl<Angel>(this, GodRuntimePropertyEnum.angel);
+		this.realRootFolder =  new TinkerSetImpl<RealRootFolder>(this, GodRuntimePropertyEnum.realRootFolder);
+		this.embeddedString =  new TinkerSetImpl<String>(this, GodRuntimePropertyEnum.embeddedString);
+		this.nonNavigableOne =  new TinkerSetImpl<NonNavigableOne>(this, GodRuntimePropertyEnum.nonNavigableOne);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (GodRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case fantasy:
-				this.fantasy =  new TinkerQualifiedOrderedSetImpl<Fantasy>(this, getUid(), GodRuntimePropertyEnum.fantasy);
-			break;
-		
-			case demon:
-				this.demon =  new TinkerSetImpl<Demon>(this, GodRuntimePropertyEnum.demon);
-			break;
-		
-			case many2:
-				this.many2 =  new TinkerSetImpl<Many2>(this, GodRuntimePropertyEnum.many2);
-			break;
-		
-			case spirit:
-				this.spirit =  new TinkerSetImpl<Spirit>(this, GodRuntimePropertyEnum.spirit);
-			break;
-		
-			case universe:
-				this.universe =  new TinkerSetImpl<Universe>(this, GodRuntimePropertyEnum.universe);
-			break;
-		
-			case iMany:
-				this.iMany =  new TinkerSetImpl<IMany>(this, GodRuntimePropertyEnum.iMany);
-			break;
-		
-			case dream:
-				this.dream =  new TinkerBagImpl<Dream>(this, GodRuntimePropertyEnum.dream);
-			break;
-		
-			case abstractSpecies:
-				this.abstractSpecies =  new TinkerSetImpl<AbstractSpecies>(this, GodRuntimePropertyEnum.abstractSpecies);
-			break;
-		
-			case world:
-				this.world =  new TinkerOrderedSetImpl<World>(this, getUid(), GodRuntimePropertyEnum.world);
-			break;
-		
-			case rEASON:
-				this.rEASON =  new TinkerSetImpl<REASON>(this, GodRuntimePropertyEnum.rEASON);
+			case nonNavigableOne:
+				this.nonNavigableOne =  new TinkerSetImpl<NonNavigableOne>(this, GodRuntimePropertyEnum.nonNavigableOne);
 			break;
 		
 			case embeddedString:
 				this.embeddedString =  new TinkerSetImpl<String>(this, GodRuntimePropertyEnum.embeddedString);
-			break;
-		
-			case nature:
-				this.nature =  new TinkerQualifiedSetImpl<Nature>(this, getUid(), GodRuntimePropertyEnum.nature);
-			break;
-		
-			case name:
-				this.name =  new TinkerSetImpl<String>(this, GodRuntimePropertyEnum.name);
-			break;
-		
-			case oneOne:
-				this.oneOne =  new TinkerSetImpl<OneOne>(this, GodRuntimePropertyEnum.oneOne);
-			break;
-		
-			case memory:
-				this.memory =  new TinkerQualifiedBagImpl<Nightmare>(this, getUid(), GodRuntimePropertyEnum.memory);
-			break;
-		
-			case foot:
-				this.foot =  new TinkerQualifiedSequenceImpl<Foot>(this, getUid(), GodRuntimePropertyEnum.foot);
-			break;
-		
-			case hand:
-				this.hand =  new TinkerSequenceImpl<Hand>(this, getUid(), GodRuntimePropertyEnum.hand);
-			break;
-		
-			case fakeRootFolder:
-				this.fakeRootFolder =  new TinkerSetImpl<FakeRootFolder>(this, GodRuntimePropertyEnum.fakeRootFolder);
 			break;
 		
 			case realRootFolder:
@@ -850,12 +790,92 @@ public class God extends BaseTinker implements TinkerNode {
 				this.angel =  new TinkerSetImpl<Angel>(this, GodRuntimePropertyEnum.angel);
 			break;
 		
-			case oneTwo:
-				this.oneTwo =  new TinkerSetImpl<OneTwo>(this, GodRuntimePropertyEnum.oneTwo);
+			case hand:
+				this.hand =  new TinkerSequenceImpl<Hand>(this, getUid(), GodRuntimePropertyEnum.hand);
+			break;
+		
+			case pet:
+				this.pet =  new TinkerSetImpl<Mamal>(this, GodRuntimePropertyEnum.pet);
+			break;
+		
+			case many1:
+				this.many1 =  new TinkerSetImpl<Many1>(this, GodRuntimePropertyEnum.many1);
+			break;
+		
+			case abstractSpecies:
+				this.abstractSpecies =  new TinkerSetImpl<AbstractSpecies>(this, GodRuntimePropertyEnum.abstractSpecies);
+			break;
+		
+			case nature:
+				this.nature =  new TinkerQualifiedSetImpl<Nature>(this, getUid(), GodRuntimePropertyEnum.nature);
+			break;
+		
+			case animalFarm:
+				this.animalFarm =  new TinkerSetImpl<Mamal>(this, GodRuntimePropertyEnum.animalFarm);
+			break;
+		
+			case embeddedInteger:
+				this.embeddedInteger =  new TinkerSetImpl<Integer>(this, GodRuntimePropertyEnum.embeddedInteger);
 			break;
 		
 			case reason:
 				this.reason =  new TinkerSetImpl<REASON>(this, GodRuntimePropertyEnum.reason);
+			break;
+		
+			case rEASON:
+				this.rEASON =  new TinkerSetImpl<REASON>(this, GodRuntimePropertyEnum.rEASON);
+			break;
+		
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, GodRuntimePropertyEnum.name);
+			break;
+		
+			case foot:
+				this.foot =  new TinkerQualifiedSequenceImpl<Foot>(this, getUid(), GodRuntimePropertyEnum.foot);
+			break;
+		
+			case fantasy:
+				this.fantasy =  new TinkerQualifiedOrderedSetImpl<Fantasy>(this, getUid(), GodRuntimePropertyEnum.fantasy);
+			break;
+		
+			case many2:
+				this.many2 =  new TinkerSetImpl<Many2>(this, GodRuntimePropertyEnum.many2);
+			break;
+		
+			case oneTwo:
+				this.oneTwo =  new TinkerSetImpl<OneTwo>(this, GodRuntimePropertyEnum.oneTwo);
+			break;
+		
+			case demon:
+				this.demon =  new TinkerSetImpl<Demon>(this, GodRuntimePropertyEnum.demon);
+			break;
+		
+			case dream:
+				this.dream =  new TinkerBagImpl<Dream>(this, GodRuntimePropertyEnum.dream);
+			break;
+		
+			case memory:
+				this.memory =  new TinkerQualifiedBagImpl<Nightmare>(this, getUid(), GodRuntimePropertyEnum.memory);
+			break;
+		
+			case nonNavigableMany:
+				this.nonNavigableMany =  new TinkerSetImpl<NonNavigableMany>(this, GodRuntimePropertyEnum.nonNavigableMany);
+			break;
+		
+			case fakeRootFolder:
+				this.fakeRootFolder =  new TinkerSetImpl<FakeRootFolder>(this, GodRuntimePropertyEnum.fakeRootFolder);
+			break;
+		
+			case world:
+				this.world =  new TinkerOrderedSetImpl<World>(this, getUid(), GodRuntimePropertyEnum.world);
+			break;
+		
+			case oneOne:
+				this.oneOne =  new TinkerSetImpl<OneOne>(this, GodRuntimePropertyEnum.oneOne);
+			break;
+		
+			case spirit:
+				this.spirit =  new TinkerSetImpl<Spirit>(this, GodRuntimePropertyEnum.spirit);
 			break;
 		
 			case nightmare:
@@ -866,28 +886,12 @@ public class God extends BaseTinker implements TinkerNode {
 				this.being =  new TinkerSetImpl<Being>(this, GodRuntimePropertyEnum.being);
 			break;
 		
-			case many1:
-				this.many1 =  new TinkerSetImpl<Many1>(this, GodRuntimePropertyEnum.many1);
+			case iMany:
+				this.iMany =  new TinkerSetImpl<IMany>(this, GodRuntimePropertyEnum.iMany);
 			break;
 		
-			case animalFarm:
-				this.animalFarm =  new TinkerSetImpl<Mamal>(this, GodRuntimePropertyEnum.animalFarm);
-			break;
-		
-			case nonNavigableOne:
-				this.nonNavigableOne =  new TinkerSetImpl<NonNavigableOne>(this, GodRuntimePropertyEnum.nonNavigableOne);
-			break;
-		
-			case nonNavigableMany:
-				this.nonNavigableMany =  new TinkerSetImpl<NonNavigableMany>(this, GodRuntimePropertyEnum.nonNavigableMany);
-			break;
-		
-			case pet:
-				this.pet =  new TinkerSetImpl<Mamal>(this, GodRuntimePropertyEnum.pet);
-			break;
-		
-			case embeddedInteger:
-				this.embeddedInteger =  new TinkerSetImpl<Integer>(this, GodRuntimePropertyEnum.embeddedInteger);
+			case universe:
+				this.universe =  new TinkerSetImpl<Universe>(this, GodRuntimePropertyEnum.universe);
 			break;
 		
 		}
@@ -1414,36 +1418,36 @@ public class God extends BaseTinker implements TinkerNode {
 	}
 
 	public enum GodRuntimePropertyEnum implements TumlRuntimeProperty {
-		fakeRootFolder(true,true,"A_<god>_<fakeRootFolder>",false,true,false,false,-1,0),
-		hand(true,true,"A_<god>_<hand>",false,true,false,false,-1,0),
-		foot(true,true,"A_<god>_<foot>",false,true,false,false,-1,0),
-		memory(true,false,"A_<god>_<nightmare>_2",false,true,false,false,-1,0),
-		oneOne(true,true,"A_<god>_<oneOne>",false,true,false,false,-1,0),
-		name(true,false,"org__tinker__concretetest__God__name",false,false,true,false,1,1),
-		nature(true,true,"A_<god>_<nature>",false,true,false,false,-1,0),
-		embeddedString(true,false,"org__tinker__concretetest__God__embeddedString",false,false,false,true,-1,0),
-		rEASON(true,false,"A_<god>_<rEASON>",false,true,false,false,-1,0),
-		world(true,true,"A_<god>_<world>",false,true,false,false,-1,0),
-		abstractSpecies(true,true,"A_<god>_<abstractSpecies>",false,true,false,false,-1,0),
-		dream(true,true,"A_<god>_<dream>",false,true,false,false,-1,0),
-		iMany(true,true,"A_<god>_<iMany>",false,true,false,false,-1,0),
-		realRootFolder(true,true,"A_<god>_<realRootFolder>",false,true,false,false,-1,0),
-		angel(true,true,"A_<god>_<angel>",false,true,false,false,-1,0),
 		oneTwo(true,true,"A_<god>_<oneTwo>",false,true,false,false,-1,0),
+		many2(true,true,"A_<god>_<many2>",false,true,false,false,-1,0),
+		fantasy(true,true,"A_<god>_<fantasy>",false,true,false,false,-1,0),
+		foot(true,true,"A_<god>_<foot>",false,true,false,false,-1,0),
+		name(true,false,"org__tinker__concretetest__God__name",false,false,true,false,1,1),
+		rEASON(true,false,"A_<god>_<rEASON>",false,true,false,false,-1,0),
 		reason(true,false,"org__tinker__concretetest__God__reason",false,false,true,false,1,1),
+		embeddedInteger(true,false,"org__tinker__concretetest__God__embeddedInteger",false,false,false,true,-1,0),
+		animalFarm(true,false,"org__tinker__concretetest__God__animalFarm",false,false,false,true,-1,0),
+		nature(true,true,"A_<god>_<nature>",false,true,false,false,-1,0),
+		abstractSpecies(true,true,"A_<god>_<abstractSpecies>",false,true,false,false,-1,0),
+		many1(true,true,"A_<god>_<many1>",false,true,false,false,-1,0),
+		pet(true,false,"org__tinker__concretetest__God__pet",false,false,true,false,1,1),
+		demon(true,true,"A_<god>_<demon>",false,true,false,false,-1,0),
+		dream(true,true,"A_<god>_<dream>",false,true,false,false,-1,0),
+		memory(true,false,"A_<god>_<nightmare>_2",false,true,false,false,-1,0),
+		nonNavigableMany(true,true,"A_<god>_<nonNavigableMany>",false,true,false,false,-1,0),
+		fakeRootFolder(true,true,"A_<god>_<fakeRootFolder>",false,true,false,false,-1,0),
+		world(true,true,"A_<god>_<world>",false,true,false,false,-1,0),
+		oneOne(true,true,"A_<god>_<oneOne>",false,true,false,false,-1,0),
+		spirit(true,true,"A_<god>_<spirit>",false,true,false,false,-1,0),
 		nightmare(true,true,"A_<god>_<nightmare>",false,true,false,false,-1,0),
 		being(true,true,"A_<god>_<being>",false,true,false,false,-1,0),
-		many1(true,true,"A_<god>_<many1>",false,true,false,false,-1,0),
-		animalFarm(true,false,"org__tinker__concretetest__God__animalFarm",false,false,false,true,-1,0),
-		nonNavigableOne(true,true,"A_<god>_<nonNavigableOne>",false,true,false,false,-1,0),
-		nonNavigableMany(true,true,"A_<god>_<nonNavigableMany>",false,true,false,false,-1,0),
-		pet(true,false,"org__tinker__concretetest__God__pet",false,false,true,false,1,1),
-		embeddedInteger(true,false,"org__tinker__concretetest__God__embeddedInteger",false,false,false,true,-1,0),
+		iMany(true,true,"A_<god>_<iMany>",false,true,false,false,-1,0),
 		universe(true,true,"A_<god>_<universe>",false,true,false,false,-1,0),
-		spirit(true,true,"A_<god>_<spirit>",false,true,false,false,-1,0),
-		many2(true,true,"A_<god>_<many2>",false,true,false,false,-1,0),
-		demon(true,true,"A_<god>_<demon>",false,true,false,false,-1,0),
-		fantasy(true,true,"A_<god>_<fantasy>",false,true,false,false,-1,0);
+		hand(true,true,"A_<god>_<hand>",false,true,false,false,-1,0),
+		angel(true,true,"A_<god>_<angel>",false,true,false,false,-1,0),
+		realRootFolder(true,true,"A_<god>_<realRootFolder>",false,true,false,false,-1,0),
+		embeddedString(true,false,"org__tinker__concretetest__God__embeddedString",false,false,false,true,-1,0),
+		nonNavigableOne(true,true,"A_<god>_<nonNavigableOne>",false,true,false,false,-1,0);
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -1478,56 +1482,68 @@ public class God extends BaseTinker implements TinkerNode {
 		}
 	
 		static public GodRuntimePropertyEnum fromLabel(String label) {
-			if ( fakeRootFolder.getLabel().equals(label) ) {
-				return fakeRootFolder;
+			if ( oneTwo.getLabel().equals(label) ) {
+				return oneTwo;
 			}
-			if ( hand.getLabel().equals(label) ) {
-				return hand;
+			if ( many2.getLabel().equals(label) ) {
+				return many2;
+			}
+			if ( fantasy.getLabel().equals(label) ) {
+				return fantasy;
 			}
 			if ( foot.getLabel().equals(label) ) {
 				return foot;
 			}
-			if ( memory.getLabel().equals(label) ) {
-				return memory;
-			}
-			if ( oneOne.getLabel().equals(label) ) {
-				return oneOne;
-			}
 			if ( name.getLabel().equals(label) ) {
 				return name;
-			}
-			if ( nature.getLabel().equals(label) ) {
-				return nature;
-			}
-			if ( embeddedString.getLabel().equals(label) ) {
-				return embeddedString;
 			}
 			if ( rEASON.getLabel().equals(label) ) {
 				return rEASON;
 			}
-			if ( world.getLabel().equals(label) ) {
-				return world;
+			if ( reason.getLabel().equals(label) ) {
+				return reason;
+			}
+			if ( embeddedInteger.getLabel().equals(label) ) {
+				return embeddedInteger;
+			}
+			if ( animalFarm.getLabel().equals(label) ) {
+				return animalFarm;
+			}
+			if ( nature.getLabel().equals(label) ) {
+				return nature;
 			}
 			if ( abstractSpecies.getLabel().equals(label) ) {
 				return abstractSpecies;
 			}
+			if ( many1.getLabel().equals(label) ) {
+				return many1;
+			}
+			if ( pet.getLabel().equals(label) ) {
+				return pet;
+			}
+			if ( demon.getLabel().equals(label) ) {
+				return demon;
+			}
 			if ( dream.getLabel().equals(label) ) {
 				return dream;
 			}
-			if ( iMany.getLabel().equals(label) ) {
-				return iMany;
+			if ( memory.getLabel().equals(label) ) {
+				return memory;
 			}
-			if ( realRootFolder.getLabel().equals(label) ) {
-				return realRootFolder;
+			if ( nonNavigableMany.getLabel().equals(label) ) {
+				return nonNavigableMany;
 			}
-			if ( angel.getLabel().equals(label) ) {
-				return angel;
+			if ( fakeRootFolder.getLabel().equals(label) ) {
+				return fakeRootFolder;
 			}
-			if ( oneTwo.getLabel().equals(label) ) {
-				return oneTwo;
+			if ( world.getLabel().equals(label) ) {
+				return world;
 			}
-			if ( reason.getLabel().equals(label) ) {
-				return reason;
+			if ( oneOne.getLabel().equals(label) ) {
+				return oneOne;
+			}
+			if ( spirit.getLabel().equals(label) ) {
+				return spirit;
 			}
 			if ( nightmare.getLabel().equals(label) ) {
 				return nightmare;
@@ -1535,38 +1551,26 @@ public class God extends BaseTinker implements TinkerNode {
 			if ( being.getLabel().equals(label) ) {
 				return being;
 			}
-			if ( many1.getLabel().equals(label) ) {
-				return many1;
-			}
-			if ( animalFarm.getLabel().equals(label) ) {
-				return animalFarm;
-			}
-			if ( nonNavigableOne.getLabel().equals(label) ) {
-				return nonNavigableOne;
-			}
-			if ( nonNavigableMany.getLabel().equals(label) ) {
-				return nonNavigableMany;
-			}
-			if ( pet.getLabel().equals(label) ) {
-				return pet;
-			}
-			if ( embeddedInteger.getLabel().equals(label) ) {
-				return embeddedInteger;
+			if ( iMany.getLabel().equals(label) ) {
+				return iMany;
 			}
 			if ( universe.getLabel().equals(label) ) {
 				return universe;
 			}
-			if ( spirit.getLabel().equals(label) ) {
-				return spirit;
+			if ( hand.getLabel().equals(label) ) {
+				return hand;
 			}
-			if ( many2.getLabel().equals(label) ) {
-				return many2;
+			if ( angel.getLabel().equals(label) ) {
+				return angel;
 			}
-			if ( demon.getLabel().equals(label) ) {
-				return demon;
+			if ( realRootFolder.getLabel().equals(label) ) {
+				return realRootFolder;
 			}
-			if ( fantasy.getLabel().equals(label) ) {
-				return fantasy;
+			if ( embeddedString.getLabel().equals(label) ) {
+				return embeddedString;
+			}
+			if ( nonNavigableOne.getLabel().equals(label) ) {
+				return nonNavigableOne;
 			}
 			throw new IllegalStateException();
 		}

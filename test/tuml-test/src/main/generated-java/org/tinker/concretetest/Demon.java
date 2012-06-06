@@ -26,8 +26,8 @@ public class Demon extends BaseTinker implements CompositionNode {
 	 */
 	public Demon(God compositeOwner) {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
-		createComponents();
 		initialiseProperties();
+		createComponents();
 		init(compositeOwner);
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
@@ -56,6 +56,7 @@ public class Demon extends BaseTinker implements CompositionNode {
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
 		initialiseProperties();
+		createComponents();
 	}
 
 	public void addToGod(God god) {
@@ -153,7 +154,7 @@ public class Demon extends BaseTinker implements CompositionNode {
 	 */
 	@Override
 	public void init(TinkerNode compositeOwner) {
-		this.god.add((God)compositeOwner);
+		this.addToGod((God)compositeOwner);
 		this.hasInitBeenCalled = true;
 		initVariables();
 	}
@@ -163,8 +164,8 @@ public class Demon extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.god =  new TinkerSetImpl<God>(this, DemonRuntimePropertyEnum.god);
 		this.universe =  new TinkerSetImpl<Universe>(this, DemonRuntimePropertyEnum.universe);
+		this.god =  new TinkerSetImpl<God>(this, DemonRuntimePropertyEnum.god);
 		this.name =  new TinkerSetImpl<String>(this, DemonRuntimePropertyEnum.name);
 	}
 	
@@ -175,12 +176,12 @@ public class Demon extends BaseTinker implements CompositionNode {
 				this.name =  new TinkerSetImpl<String>(this, DemonRuntimePropertyEnum.name);
 			break;
 		
-			case universe:
-				this.universe =  new TinkerSetImpl<Universe>(this, DemonRuntimePropertyEnum.universe);
-			break;
-		
 			case god:
 				this.god =  new TinkerSetImpl<God>(this, DemonRuntimePropertyEnum.god);
+			break;
+		
+			case universe:
+				this.universe =  new TinkerSetImpl<Universe>(this, DemonRuntimePropertyEnum.universe);
 			break;
 		
 		}
@@ -248,8 +249,8 @@ public class Demon extends BaseTinker implements CompositionNode {
 	}
 
 	public enum DemonRuntimePropertyEnum implements TumlRuntimeProperty {
-		god(false,false,"A_<god>_<demon>",false,false,true,false,1,1),
 		universe(false,false,"A_<universe>_<demon>",false,false,true,false,1,1),
+		god(false,false,"A_<god>_<demon>",false,false,true,false,1,1),
 		name(true,false,"org__tinker__concretetest__Demon__name",false,false,true,false,1,1);
 		private boolean controllingSide;
 		private boolean composite;
@@ -285,11 +286,11 @@ public class Demon extends BaseTinker implements CompositionNode {
 		}
 	
 		static public DemonRuntimePropertyEnum fromLabel(String label) {
-			if ( god.getLabel().equals(label) ) {
-				return god;
-			}
 			if ( universe.getLabel().equals(label) ) {
 				return universe;
+			}
+			if ( god.getLabel().equals(label) ) {
+				return god;
 			}
 			if ( name.getLabel().equals(label) ) {
 				return name;

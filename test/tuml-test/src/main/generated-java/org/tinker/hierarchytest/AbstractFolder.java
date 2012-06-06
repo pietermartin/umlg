@@ -1,5 +1,6 @@
 package org.tinker.hierarchytest;
 
+import com.tinkerpop.blueprints.pgm.Edge;
 import com.tinkerpop.blueprints.pgm.Vertex;
 
 import java.util.Set;
@@ -39,6 +40,9 @@ public class AbstractFolder extends BaseTinker implements TinkerNode, Hierarchy 
 		this.vertex = GraphDb.getDb().addVertex("dribble");
 		defaultCreate();
 		initialiseProperties();
+		createComponents();
+		Edge edge = GraphDb.getDb().addEdge(null, GraphDb.getDb().getRoot(), this.vertex, "root");
+		edge.setProperty("inClass", this.getClass().getName());
 	}
 
 	public void addToChildFolder(Folder childFolder) {

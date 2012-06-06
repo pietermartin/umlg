@@ -3,9 +3,9 @@ package org.tinker.interfacetest;
 import java.util.Set;
 
 import org.tuml.runtime.collection.TinkerSet;
-import org.tuml.runtime.domain.TinkerNode;
+import org.tuml.runtime.domain.CompositionNode;
 
-public interface IManyB extends TinkerNode {
+public interface IManyB extends CompositionNode {
 	public void addToIManyA(IManyA iManyA);
 	
 	public void addToIManyA(Set<IManyA> iManyA);

@@ -28,8 +28,8 @@ public class Nightmare extends BaseTinker implements CompositionNode {
 	 */
 	public Nightmare(God compositeOwner) {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
-		createComponents();
 		initialiseProperties();
+		createComponents();
 		init(compositeOwner);
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
@@ -58,6 +58,7 @@ public class Nightmare extends BaseTinker implements CompositionNode {
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
 		initialiseProperties();
+		createComponents();
 	}
 
 	public void addToGod(God god) {
@@ -174,7 +175,7 @@ public class Nightmare extends BaseTinker implements CompositionNode {
 	 */
 	@Override
 	public void init(TinkerNode compositeOwner) {
-		this.god.add((God)compositeOwner);
+		this.addToGod((God)compositeOwner);
 		this.hasInitBeenCalled = true;
 		initVariables();
 	}
@@ -184,29 +185,29 @@ public class Nightmare extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.nameNonUnique =  new TinkerSetImpl<String>(this, NightmareRuntimePropertyEnum.nameNonUnique);
-		this.name =  new TinkerSetImpl<String>(this, NightmareRuntimePropertyEnum.name);
-		this.god =  new TinkerSetImpl<God>(this, NightmareRuntimePropertyEnum.god);
 		this.godOfMemory =  new TinkerSetImpl<God>(this, NightmareRuntimePropertyEnum.godOfMemory);
+		this.god =  new TinkerSetImpl<God>(this, NightmareRuntimePropertyEnum.god);
+		this.name =  new TinkerSetImpl<String>(this, NightmareRuntimePropertyEnum.name);
+		this.nameNonUnique =  new TinkerSetImpl<String>(this, NightmareRuntimePropertyEnum.nameNonUnique);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (NightmareRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case godOfMemory:
-				this.godOfMemory =  new TinkerSetImpl<God>(this, NightmareRuntimePropertyEnum.godOfMemory);
-			break;
-		
-			case god:
-				this.god =  new TinkerSetImpl<God>(this, NightmareRuntimePropertyEnum.god);
+			case nameNonUnique:
+				this.nameNonUnique =  new TinkerSetImpl<String>(this, NightmareRuntimePropertyEnum.nameNonUnique);
 			break;
 		
 			case name:
 				this.name =  new TinkerSetImpl<String>(this, NightmareRuntimePropertyEnum.name);
 			break;
 		
-			case nameNonUnique:
-				this.nameNonUnique =  new TinkerSetImpl<String>(this, NightmareRuntimePropertyEnum.nameNonUnique);
+			case god:
+				this.god =  new TinkerSetImpl<God>(this, NightmareRuntimePropertyEnum.god);
+			break;
+		
+			case godOfMemory:
+				this.godOfMemory =  new TinkerSetImpl<God>(this, NightmareRuntimePropertyEnum.godOfMemory);
 			break;
 		
 		}
@@ -291,10 +292,10 @@ public class Nightmare extends BaseTinker implements CompositionNode {
 	}
 
 	public enum NightmareRuntimePropertyEnum implements TumlRuntimeProperty {
-		nameNonUnique(true,false,"org__tinker__collectiontest__Nightmare__nameNonUnique",false,false,true,false,1,1),
-		name(true,false,"org__tinker__collectiontest__Nightmare__name",false,false,true,false,1,1),
+		godOfMemory(false,false,"A_<god>_<nightmare>_2",false,false,true,false,1,1),
 		god(false,false,"A_<god>_<nightmare>",false,false,true,false,1,1),
-		godOfMemory(false,false,"A_<god>_<nightmare>_2",false,false,true,false,1,1);
+		name(true,false,"org__tinker__collectiontest__Nightmare__name",false,false,true,false,1,1),
+		nameNonUnique(true,false,"org__tinker__collectiontest__Nightmare__nameNonUnique",false,false,true,false,1,1);
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -329,17 +330,17 @@ public class Nightmare extends BaseTinker implements CompositionNode {
 		}
 	
 		static public NightmareRuntimePropertyEnum fromLabel(String label) {
-			if ( nameNonUnique.getLabel().equals(label) ) {
-				return nameNonUnique;
-			}
-			if ( name.getLabel().equals(label) ) {
-				return name;
+			if ( godOfMemory.getLabel().equals(label) ) {
+				return godOfMemory;
 			}
 			if ( god.getLabel().equals(label) ) {
 				return god;
 			}
-			if ( godOfMemory.getLabel().equals(label) ) {
-				return godOfMemory;
+			if ( name.getLabel().equals(label) ) {
+				return name;
+			}
+			if ( nameNonUnique.getLabel().equals(label) ) {
+				return nameNonUnique;
 			}
 			throw new IllegalStateException();
 		}

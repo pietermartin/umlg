@@ -26,8 +26,8 @@ public class Foot extends BaseTinker implements CompositionNode {
 	 */
 	public Foot(God compositeOwner) {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
-		createComponents();
 		initialiseProperties();
+		createComponents();
 		init(compositeOwner);
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
@@ -56,6 +56,7 @@ public class Foot extends BaseTinker implements CompositionNode {
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
 		initialiseProperties();
+		createComponents();
 	}
 
 	public void addToGod(God god) {
@@ -134,7 +135,7 @@ public class Foot extends BaseTinker implements CompositionNode {
 	 */
 	@Override
 	public void init(TinkerNode compositeOwner) {
-		this.god.add((God)compositeOwner);
+		this.addToGod((God)compositeOwner);
 		this.hasInitBeenCalled = true;
 		initVariables();
 	}
@@ -144,19 +145,19 @@ public class Foot extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.god =  new TinkerSetImpl<God>(this, FootRuntimePropertyEnum.god);
 		this.name =  new TinkerSetImpl<String>(this, FootRuntimePropertyEnum.name);
+		this.god =  new TinkerSetImpl<God>(this, FootRuntimePropertyEnum.god);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (FootRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case name:
-				this.name =  new TinkerSetImpl<String>(this, FootRuntimePropertyEnum.name);
-			break;
-		
 			case god:
 				this.god =  new TinkerSetImpl<God>(this, FootRuntimePropertyEnum.god);
+			break;
+		
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, FootRuntimePropertyEnum.name);
 			break;
 		
 		}
@@ -207,8 +208,8 @@ public class Foot extends BaseTinker implements CompositionNode {
 	}
 
 	public enum FootRuntimePropertyEnum implements TumlRuntimeProperty {
-		god(false,false,"A_<god>_<foot>",false,false,true,false,1,1),
-		name(true,false,"org__tinker__collectiontest__Foot__name",false,false,true,false,1,1);
+		name(true,false,"org__tinker__collectiontest__Foot__name",false,false,true,false,1,1),
+		god(false,false,"A_<god>_<foot>",false,false,true,false,1,1);
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -243,11 +244,11 @@ public class Foot extends BaseTinker implements CompositionNode {
 		}
 	
 		static public FootRuntimePropertyEnum fromLabel(String label) {
-			if ( god.getLabel().equals(label) ) {
-				return god;
-			}
 			if ( name.getLabel().equals(label) ) {
 				return name;
+			}
+			if ( god.getLabel().equals(label) ) {
+				return god;
 			}
 			throw new IllegalStateException();
 		}

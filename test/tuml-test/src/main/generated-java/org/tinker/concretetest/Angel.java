@@ -26,8 +26,8 @@ public class Angel extends BaseTinker implements CompositionNode {
 	 */
 	public Angel(God compositeOwner) {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
-		createComponents();
 		initialiseProperties();
+		createComponents();
 		init(compositeOwner);
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
@@ -56,6 +56,7 @@ public class Angel extends BaseTinker implements CompositionNode {
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
 		initialiseProperties();
+		createComponents();
 	}
 
 	public void addToGod(God god) {
@@ -153,7 +154,7 @@ public class Angel extends BaseTinker implements CompositionNode {
 	 */
 	@Override
 	public void init(TinkerNode compositeOwner) {
-		this.god.add((God)compositeOwner);
+		this.addToGod((God)compositeOwner);
 		this.hasInitBeenCalled = true;
 		initVariables();
 	}
@@ -164,19 +165,19 @@ public class Angel extends BaseTinker implements CompositionNode {
 	@Override
 	public void initialiseProperties() {
 		this.universe =  new TinkerSetImpl<Universe>(this, AngelRuntimePropertyEnum.universe);
-		this.god =  new TinkerSetImpl<God>(this, AngelRuntimePropertyEnum.god);
 		this.name =  new TinkerSetImpl<String>(this, AngelRuntimePropertyEnum.name);
+		this.god =  new TinkerSetImpl<God>(this, AngelRuntimePropertyEnum.god);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (AngelRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case name:
-				this.name =  new TinkerSetImpl<String>(this, AngelRuntimePropertyEnum.name);
-			break;
-		
 			case god:
 				this.god =  new TinkerSetImpl<God>(this, AngelRuntimePropertyEnum.god);
+			break;
+		
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, AngelRuntimePropertyEnum.name);
 			break;
 		
 			case universe:
@@ -249,8 +250,8 @@ public class Angel extends BaseTinker implements CompositionNode {
 
 	public enum AngelRuntimePropertyEnum implements TumlRuntimeProperty {
 		universe(true,false,"A_<universe>_<angel>",true,false,false,false,1,1),
-		god(false,false,"A_<god>_<angel>",false,false,true,false,1,1),
-		name(true,false,"org__tinker__concretetest__Angel__name",false,false,true,false,1,1);
+		name(true,false,"org__tinker__concretetest__Angel__name",false,false,true,false,1,1),
+		god(false,false,"A_<god>_<angel>",false,false,true,false,1,1);
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -288,11 +289,11 @@ public class Angel extends BaseTinker implements CompositionNode {
 			if ( universe.getLabel().equals(label) ) {
 				return universe;
 			}
-			if ( god.getLabel().equals(label) ) {
-				return god;
-			}
 			if ( name.getLabel().equals(label) ) {
 				return name;
+			}
+			if ( god.getLabel().equals(label) ) {
+				return god;
 			}
 			throw new IllegalStateException();
 		}

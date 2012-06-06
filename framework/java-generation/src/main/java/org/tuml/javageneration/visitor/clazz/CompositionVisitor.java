@@ -3,6 +3,7 @@ package org.tuml.javageneration.visitor.clazz;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Property;
 import org.opaeum.java.metamodel.OJConstructor;
+import org.opaeum.java.metamodel.OJPathName;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
 import org.tuml.framework.Visitor;
@@ -20,6 +21,8 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
 			addInit(annotatedClass, clazz);
 			addGetOwningObject(annotatedClass, clazz);
 			addConstructorWithOwnerAsParameter(annotatedClass, clazz);
+		} else {
+			addEdgeToRoot(annotatedClass, clazz);
 		}
 	}
 
@@ -50,8 +53,8 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
 		annotatedClass.addToConstructors(constructor);
 		if (clazz.getGeneralizations().isEmpty()) {
 			constructor.getBody().addToStatements("this.vertex = " + TinkerGenerationUtil.graphDbAccess + ".addVertex(\"dribble\")");
-			constructor.getBody().addToStatements("createComponents()");
 			constructor.getBody().addToStatements("initialiseProperties()");
+			constructor.getBody().addToStatements("createComponents()");
 			constructor.getBody().addToStatements("init(compositeOwner)");
 			constructor.getBody().addToStatements("TransactionThreadEntityVar.setNewEntity(this)");
 			constructor.getBody().addToStatements("defaultCreate()");
@@ -71,6 +74,14 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
 			getOwningObject.getBody().addToStatements("return null"); 
 		}
 		annotatedClass.addToOperations(getOwningObject);
+	}
+
+	private void addEdgeToRoot(OJAnnotatedClass annotatedClass, Class clazz) {
+		OJConstructor constructor = annotatedClass.findConstructor(new OJPathName("java.lang.Boolean"));
+		constructor.getBody().addToStatements(TinkerGenerationUtil.edgePathName.getLast() + " edge = " + TinkerGenerationUtil.graphDbAccess + ".addEdge(null, " + TinkerGenerationUtil.graphDbAccess + ".getRoot(), this.vertex, \"root\")");
+		constructor.getBody().addToStatements("edge.setProperty(\"inClass\", this.getClass().getName())");
+		annotatedClass.addToImports(TinkerGenerationUtil.edgePathName.getCopy());
+		annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName.getCopy());
 	}
 
 }

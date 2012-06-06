@@ -26,8 +26,8 @@ public class Phantom extends BaseTinker implements CompositionNode, Spirit {
 	 */
 	public Phantom(God compositeOwner) {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
-		createComponents();
 		initialiseProperties();
+		createComponents();
 		init(compositeOwner);
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
@@ -56,6 +56,7 @@ public class Phantom extends BaseTinker implements CompositionNode, Spirit {
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
 		initialiseProperties();
+		createComponents();
 	}
 
 	public void addToGod(God god) {
@@ -134,7 +135,7 @@ public class Phantom extends BaseTinker implements CompositionNode, Spirit {
 	 */
 	@Override
 	public void init(TinkerNode compositeOwner) {
-		this.god.add((God)compositeOwner);
+		this.addToGod((God)compositeOwner);
 		this.hasInitBeenCalled = true;
 		initVariables();
 	}

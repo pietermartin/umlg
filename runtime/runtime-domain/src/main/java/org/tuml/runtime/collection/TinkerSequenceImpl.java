@@ -17,11 +17,11 @@ public class TinkerSequenceImpl<E> extends BaseSequence<E> implements TinkerSequ
 		this.owner = owner;
 		this.vertex = owner.getVertex();
 		this.parentClass = owner.getClass();
+		this.tumlRuntimeProperty = multiplicity;
 		this.index = GraphDb.getDb().getIndex(uid + ":::" + getLabel(), Edge.class);
 		if (this.index == null) {
 			this.index = GraphDb.getDb().createManualIndex(uid + ":::" + getLabel(), Edge.class);
 		}
-		this.tumlRuntimeProperty = multiplicity;
 	}
 
 	@Override

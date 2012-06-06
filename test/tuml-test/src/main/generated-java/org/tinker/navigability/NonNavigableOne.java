@@ -28,8 +28,8 @@ public class NonNavigableOne extends BaseTinker implements CompositionNode {
 	 */
 	public NonNavigableOne(God compositeOwner) {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
-		createComponents();
 		initialiseProperties();
+		createComponents();
 		init(compositeOwner);
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
@@ -58,6 +58,7 @@ public class NonNavigableOne extends BaseTinker implements CompositionNode {
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
 		initialiseProperties();
+		createComponents();
 	}
 
 	public void addToGod(God god) {
@@ -155,7 +156,7 @@ public class NonNavigableOne extends BaseTinker implements CompositionNode {
 	 */
 	@Override
 	public void init(TinkerNode compositeOwner) {
-		this.god.add((God)compositeOwner);
+		this.addToGod((God)compositeOwner);
 		this.hasInitBeenCalled = true;
 		initVariables();
 	}
@@ -165,24 +166,24 @@ public class NonNavigableOne extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.god =  new TinkerSetImpl<God>(this, NonNavigableOneRuntimePropertyEnum.god);
 		this.name =  new TinkerSetImpl<String>(this, NonNavigableOneRuntimePropertyEnum.name);
 		this.universe =  new TinkerSetImpl<Universe>(this, NonNavigableOneRuntimePropertyEnum.universe);
+		this.god =  new TinkerSetImpl<God>(this, NonNavigableOneRuntimePropertyEnum.god);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (NonNavigableOneRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
+			case god:
+				this.god =  new TinkerSetImpl<God>(this, NonNavigableOneRuntimePropertyEnum.god);
+			break;
+		
 			case universe:
 				this.universe =  new TinkerSetImpl<Universe>(this, NonNavigableOneRuntimePropertyEnum.universe);
 			break;
 		
 			case name:
 				this.name =  new TinkerSetImpl<String>(this, NonNavigableOneRuntimePropertyEnum.name);
-			break;
-		
-			case god:
-				this.god =  new TinkerSetImpl<God>(this, NonNavigableOneRuntimePropertyEnum.god);
 			break;
 		
 		}
@@ -250,9 +251,9 @@ public class NonNavigableOne extends BaseTinker implements CompositionNode {
 	}
 
 	public enum NonNavigableOneRuntimePropertyEnum implements TumlRuntimeProperty {
-		god(false,false,"A_<god>_<nonNavigableOne>",false,false,true,false,1,1),
 		name(true,false,"org__tinker__navigability__NonNavigableOne__name",false,false,true,false,1,1),
-		universe(true,false,"A_<universe>_<nonNavigableOne>",true,false,false,false,1,1);
+		universe(true,false,"A_<universe>_<nonNavigableOne>",true,false,false,false,1,1),
+		god(false,false,"A_<god>_<nonNavigableOne>",false,false,true,false,1,1);
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -287,14 +288,14 @@ public class NonNavigableOne extends BaseTinker implements CompositionNode {
 		}
 	
 		static public NonNavigableOneRuntimePropertyEnum fromLabel(String label) {
-			if ( god.getLabel().equals(label) ) {
-				return god;
-			}
 			if ( name.getLabel().equals(label) ) {
 				return name;
 			}
 			if ( universe.getLabel().equals(label) ) {
 				return universe;
+			}
+			if ( god.getLabel().equals(label) ) {
+				return god;
 			}
 			throw new IllegalStateException();
 		}

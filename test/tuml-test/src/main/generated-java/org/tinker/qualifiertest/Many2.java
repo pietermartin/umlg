@@ -36,8 +36,8 @@ public class Many2 extends BaseTinker implements CompositionNode {
 	 */
 	public Many2(God compositeOwner) {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
-		createComponents();
 		initialiseProperties();
+		createComponents();
 		init(compositeOwner);
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
@@ -66,6 +66,7 @@ public class Many2 extends BaseTinker implements CompositionNode {
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
 		initialiseProperties();
+		createComponents();
 	}
 
 	public void addToGod(God god) {
@@ -204,7 +205,7 @@ public class Many2 extends BaseTinker implements CompositionNode {
 	 */
 	@Override
 	public void init(TinkerNode compositeOwner) {
-		this.god.add((God)compositeOwner);
+		this.addToGod((God)compositeOwner);
 		this.hasInitBeenCalled = true;
 		initVariables();
 	}
@@ -214,9 +215,9 @@ public class Many2 extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.many1 =  new TinkerQualifiedSetImpl<Many1>(this, getUid(), Many2RuntimePropertyEnum.many1);
-		this.many1UnqualifiedList =  new TinkerSequenceImpl<Many1>(this, getUid(), Many2RuntimePropertyEnum.many1UnqualifiedList);
 		this.many1List =  new TinkerQualifiedSequenceImpl<Many1>(this, getUid(), Many2RuntimePropertyEnum.many1List);
+		this.many1UnqualifiedList =  new TinkerSequenceImpl<Many1>(this, getUid(), Many2RuntimePropertyEnum.many1UnqualifiedList);
+		this.many1 =  new TinkerQualifiedSetImpl<Many1>(this, getUid(), Many2RuntimePropertyEnum.many1);
 		this.god =  new TinkerSetImpl<God>(this, Many2RuntimePropertyEnum.god);
 		this.name =  new TinkerSetImpl<String>(this, Many2RuntimePropertyEnum.name);
 	}
@@ -232,16 +233,16 @@ public class Many2 extends BaseTinker implements CompositionNode {
 				this.god =  new TinkerSetImpl<God>(this, Many2RuntimePropertyEnum.god);
 			break;
 		
-			case many1List:
-				this.many1List =  new TinkerQualifiedSequenceImpl<Many1>(this, getUid(), Many2RuntimePropertyEnum.many1List);
+			case many1:
+				this.many1 =  new TinkerQualifiedSetImpl<Many1>(this, getUid(), Many2RuntimePropertyEnum.many1);
 			break;
 		
 			case many1UnqualifiedList:
 				this.many1UnqualifiedList =  new TinkerSequenceImpl<Many1>(this, getUid(), Many2RuntimePropertyEnum.many1UnqualifiedList);
 			break;
 		
-			case many1:
-				this.many1 =  new TinkerQualifiedSetImpl<Many1>(this, getUid(), Many2RuntimePropertyEnum.many1);
+			case many1List:
+				this.many1List =  new TinkerQualifiedSequenceImpl<Many1>(this, getUid(), Many2RuntimePropertyEnum.many1List);
 			break;
 		
 		}
@@ -343,9 +344,9 @@ public class Many2 extends BaseTinker implements CompositionNode {
 	}
 
 	public enum Many2RuntimePropertyEnum implements TumlRuntimeProperty {
-		many1(true,false,"A_<many1>_<many2>",false,false,false,true,-1,0),
-		many1UnqualifiedList(true,false,"A_<many1>_<many2>_3",false,false,false,true,-1,0),
 		many1List(true,false,"A_<many1>_<many2>_2",false,false,false,true,-1,0),
+		many1UnqualifiedList(true,false,"A_<many1>_<many2>_3",false,false,false,true,-1,0),
+		many1(true,false,"A_<many1>_<many2>",false,false,false,true,-1,0),
 		god(false,false,"A_<god>_<many2>",false,false,true,false,1,1),
 		name(true,false,"org__tinker__qualifiertest__Many2__name",false,false,true,false,1,1);
 		private boolean controllingSide;
@@ -382,14 +383,14 @@ public class Many2 extends BaseTinker implements CompositionNode {
 		}
 	
 		static public Many2RuntimePropertyEnum fromLabel(String label) {
-			if ( many1.getLabel().equals(label) ) {
-				return many1;
+			if ( many1List.getLabel().equals(label) ) {
+				return many1List;
 			}
 			if ( many1UnqualifiedList.getLabel().equals(label) ) {
 				return many1UnqualifiedList;
 			}
-			if ( many1List.getLabel().equals(label) ) {
-				return many1List;
+			if ( many1.getLabel().equals(label) ) {
+				return many1;
 			}
 			if ( god.getLabel().equals(label) ) {
 				return god;

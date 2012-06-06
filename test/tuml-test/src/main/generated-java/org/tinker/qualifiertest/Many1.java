@@ -36,8 +36,8 @@ public class Many1 extends BaseTinker implements CompositionNode {
 	 */
 	public Many1(God compositeOwner) {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
-		createComponents();
 		initialiseProperties();
+		createComponents();
 		init(compositeOwner);
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
@@ -66,6 +66,7 @@ public class Many1 extends BaseTinker implements CompositionNode {
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
 		initialiseProperties();
+		createComponents();
 	}
 
 	public void addToGod(God god) {
@@ -204,7 +205,7 @@ public class Many1 extends BaseTinker implements CompositionNode {
 	 */
 	@Override
 	public void init(TinkerNode compositeOwner) {
-		this.god.add((God)compositeOwner);
+		this.addToGod((God)compositeOwner);
 		this.hasInitBeenCalled = true;
 		initVariables();
 	}
@@ -214,34 +215,34 @@ public class Many1 extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.many2 =  new TinkerQualifiedSetImpl<Many2>(this, getUid(), Many1RuntimePropertyEnum.many2);
-		this.many2UnqualifiedList =  new TinkerSequenceImpl<Many2>(this, getUid(), Many1RuntimePropertyEnum.many2UnqualifiedList);
-		this.god =  new TinkerSetImpl<God>(this, Many1RuntimePropertyEnum.god);
-		this.name =  new TinkerSetImpl<String>(this, Many1RuntimePropertyEnum.name);
 		this.many2List =  new TinkerQualifiedSequenceImpl<Many2>(this, getUid(), Many1RuntimePropertyEnum.many2List);
+		this.name =  new TinkerSetImpl<String>(this, Many1RuntimePropertyEnum.name);
+		this.many2UnqualifiedList =  new TinkerSequenceImpl<Many2>(this, getUid(), Many1RuntimePropertyEnum.many2UnqualifiedList);
+		this.many2 =  new TinkerQualifiedSetImpl<Many2>(this, getUid(), Many1RuntimePropertyEnum.many2);
+		this.god =  new TinkerSetImpl<God>(this, Many1RuntimePropertyEnum.god);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (Many1RuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case many2List:
-				this.many2List =  new TinkerQualifiedSequenceImpl<Many2>(this, getUid(), Many1RuntimePropertyEnum.many2List);
-			break;
-		
-			case name:
-				this.name =  new TinkerSetImpl<String>(this, Many1RuntimePropertyEnum.name);
-			break;
-		
 			case god:
 				this.god =  new TinkerSetImpl<God>(this, Many1RuntimePropertyEnum.god);
+			break;
+		
+			case many2:
+				this.many2 =  new TinkerQualifiedSetImpl<Many2>(this, getUid(), Many1RuntimePropertyEnum.many2);
 			break;
 		
 			case many2UnqualifiedList:
 				this.many2UnqualifiedList =  new TinkerSequenceImpl<Many2>(this, getUid(), Many1RuntimePropertyEnum.many2UnqualifiedList);
 			break;
 		
-			case many2:
-				this.many2 =  new TinkerQualifiedSetImpl<Many2>(this, getUid(), Many1RuntimePropertyEnum.many2);
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, Many1RuntimePropertyEnum.name);
+			break;
+		
+			case many2List:
+				this.many2List =  new TinkerQualifiedSequenceImpl<Many2>(this, getUid(), Many1RuntimePropertyEnum.many2List);
 			break;
 		
 		}
@@ -343,11 +344,11 @@ public class Many1 extends BaseTinker implements CompositionNode {
 	}
 
 	public enum Many1RuntimePropertyEnum implements TumlRuntimeProperty {
-		many2(false,false,"A_<many1>_<many2>",false,false,false,true,-1,0),
-		many2UnqualifiedList(false,false,"A_<many1>_<many2>_3",false,false,false,true,-1,0),
-		god(false,false,"A_<god>_<many1>",false,false,true,false,1,1),
+		many2List(false,false,"A_<many1>_<many2>_2",false,false,false,true,-1,0),
 		name(true,false,"org__tinker__qualifiertest__Many1__name",false,false,true,false,1,1),
-		many2List(false,false,"A_<many1>_<many2>_2",false,false,false,true,-1,0);
+		many2UnqualifiedList(false,false,"A_<many1>_<many2>_3",false,false,false,true,-1,0),
+		many2(false,false,"A_<many1>_<many2>",false,false,false,true,-1,0),
+		god(false,false,"A_<god>_<many1>",false,false,true,false,1,1);
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -382,20 +383,20 @@ public class Many1 extends BaseTinker implements CompositionNode {
 		}
 	
 		static public Many1RuntimePropertyEnum fromLabel(String label) {
-			if ( many2.getLabel().equals(label) ) {
-				return many2;
-			}
-			if ( many2UnqualifiedList.getLabel().equals(label) ) {
-				return many2UnqualifiedList;
-			}
-			if ( god.getLabel().equals(label) ) {
-				return god;
+			if ( many2List.getLabel().equals(label) ) {
+				return many2List;
 			}
 			if ( name.getLabel().equals(label) ) {
 				return name;
 			}
-			if ( many2List.getLabel().equals(label) ) {
-				return many2List;
+			if ( many2UnqualifiedList.getLabel().equals(label) ) {
+				return many2UnqualifiedList;
+			}
+			if ( many2.getLabel().equals(label) ) {
+				return many2;
+			}
+			if ( god.getLabel().equals(label) ) {
+				return god;
 			}
 			throw new IllegalStateException();
 		}

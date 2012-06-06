@@ -2,12 +2,23 @@ package org.tinker.inheritencetest;
 
 import com.tinkerpop.blueprints.pgm.Vertex;
 
+import org.tinker.concretetest.God;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
+import org.tuml.runtime.domain.CompositionNode;
 import org.tuml.runtime.domain.TinkerNode;
 
-public class Biped extends Mamal implements TinkerNode {
+public class Biped extends Mamal implements CompositionNode {
 
 
+	/** Constructor for Biped
+	 * 
+	 * @param compositeOwner 
+	 */
+	public Biped(God compositeOwner) {
+		super(true);
+		init(compositeOwner);
+	}
+	
 	/** Constructor for Biped
 	 * 
 	 * @param vertex 
@@ -29,7 +40,6 @@ public class Biped extends Mamal implements TinkerNode {
 	 */
 	public Biped(Boolean persistent) {
 		super( persistent );
-		initialiseProperties();
 	}
 
 	public void createComponents() {
@@ -38,6 +48,22 @@ public class Biped extends Mamal implements TinkerNode {
 	
 	@Override
 	public void delete() {
+	}
+	
+	@Override
+	public TinkerNode getOwningObject() {
+		return getGod();
+	}
+	
+	/** This gets called on creation with the compositional owner. The composition owner does not itself need to be a composite node
+	 * 
+	 * @param compositeOwner 
+	 */
+	@Override
+	public void init(TinkerNode compositeOwner) {
+		this.addToGod((God)compositeOwner);
+		this.hasInitBeenCalled = true;
+		initVariables();
 	}
 	
 	public void initVariables() {
@@ -58,7 +84,7 @@ public class Biped extends Mamal implements TinkerNode {
 	
 	@Override
 	public boolean isTinkerRoot() {
-		return true;
+		return false;
 	}
 
 	public enum BipedRuntimePropertyEnum implements TumlRuntimeProperty {

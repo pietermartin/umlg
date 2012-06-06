@@ -20,7 +20,6 @@ public class FakeRootFolder extends AbstractRootFolder implements CompositionNod
 	 */
 	public FakeRootFolder(God compositeOwner) {
 		super(true);
-		initialiseProperties();
 		init(compositeOwner);
 	}
 	
@@ -45,7 +44,6 @@ public class FakeRootFolder extends AbstractRootFolder implements CompositionNod
 	 */
 	public FakeRootFolder(Boolean persistent) {
 		super( persistent );
-		initialiseProperties();
 	}
 
 	public void addToGod(God god) {
@@ -86,7 +84,7 @@ public class FakeRootFolder extends AbstractRootFolder implements CompositionNod
 	 */
 	@Override
 	public void init(TinkerNode compositeOwner) {
-		this.god.add((God)compositeOwner);
+		this.addToGod((God)compositeOwner);
 		this.hasInitBeenCalled = true;
 		initVariables();
 	}

@@ -57,8 +57,9 @@ public class TestOneToMany extends BaseLocalDbTest {
 		god.removeFromUniverse(universe1);
 		God god2 = new God(true);
 		god2.setName("god2");
-		universe1.init(god2);
-		universe1.addToOwningObject();
+		universe1.setGod(god2);
+//		universe1.init(god2);
+//		universe1.addToOwningObject();
 		db.stopTransaction(Conclusion.SUCCESS);
 		Assert.assertEquals(14, countVertices());
 		Assert.assertEquals(14, countEdges());

@@ -33,8 +33,8 @@ public class Universe extends BaseTinker implements CompositionNode {
 	 */
 	public Universe(God compositeOwner) {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
-		createComponents();
 		initialiseProperties();
+		createComponents();
 		init(compositeOwner);
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
@@ -63,6 +63,7 @@ public class Universe extends BaseTinker implements CompositionNode {
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
 		initialiseProperties();
+		createComponents();
 	}
 
 	public void addToAngel(Angel angel) {
@@ -241,7 +242,7 @@ public class Universe extends BaseTinker implements CompositionNode {
 	 */
 	@Override
 	public void init(TinkerNode compositeOwner) {
-		this.god.add((God)compositeOwner);
+		this.addToGod((God)compositeOwner);
 		this.hasInitBeenCalled = true;
 		initVariables();
 	}
@@ -253,10 +254,10 @@ public class Universe extends BaseTinker implements CompositionNode {
 	public void initialiseProperties() {
 		this.demon =  new TinkerSetImpl<Demon>(this, UniverseRuntimePropertyEnum.demon);
 		this.nonNavigableOne =  new TinkerSetImpl<NonNavigableOne>(this, UniverseRuntimePropertyEnum.nonNavigableOne);
-		this.spaceTime =  new TinkerSetImpl<SpaceTime>(this, UniverseRuntimePropertyEnum.spaceTime);
-		this.angel =  new TinkerSetImpl<Angel>(this, UniverseRuntimePropertyEnum.angel);
 		this.god =  new TinkerSetImpl<God>(this, UniverseRuntimePropertyEnum.god);
+		this.angel =  new TinkerSetImpl<Angel>(this, UniverseRuntimePropertyEnum.angel);
 		this.nonNavigableMany =  new TinkerSetImpl<NonNavigableMany>(this, UniverseRuntimePropertyEnum.nonNavigableMany);
+		this.spaceTime =  new TinkerSetImpl<SpaceTime>(this, UniverseRuntimePropertyEnum.spaceTime);
 		this.name =  new TinkerSetImpl<String>(this, UniverseRuntimePropertyEnum.name);
 	}
 	
@@ -267,20 +268,20 @@ public class Universe extends BaseTinker implements CompositionNode {
 				this.name =  new TinkerSetImpl<String>(this, UniverseRuntimePropertyEnum.name);
 			break;
 		
-			case nonNavigableMany:
-				this.nonNavigableMany =  new TinkerSetImpl<NonNavigableMany>(this, UniverseRuntimePropertyEnum.nonNavigableMany);
+			case spaceTime:
+				this.spaceTime =  new TinkerSetImpl<SpaceTime>(this, UniverseRuntimePropertyEnum.spaceTime);
 			break;
 		
-			case god:
-				this.god =  new TinkerSetImpl<God>(this, UniverseRuntimePropertyEnum.god);
+			case nonNavigableMany:
+				this.nonNavigableMany =  new TinkerSetImpl<NonNavigableMany>(this, UniverseRuntimePropertyEnum.nonNavigableMany);
 			break;
 		
 			case angel:
 				this.angel =  new TinkerSetImpl<Angel>(this, UniverseRuntimePropertyEnum.angel);
 			break;
 		
-			case spaceTime:
-				this.spaceTime =  new TinkerSetImpl<SpaceTime>(this, UniverseRuntimePropertyEnum.spaceTime);
+			case god:
+				this.god =  new TinkerSetImpl<God>(this, UniverseRuntimePropertyEnum.god);
 			break;
 		
 			case nonNavigableOne:
@@ -426,10 +427,10 @@ public class Universe extends BaseTinker implements CompositionNode {
 	public enum UniverseRuntimePropertyEnum implements TumlRuntimeProperty {
 		demon(true,false,"A_<universe>_<demon>",false,true,false,false,-1,1),
 		nonNavigableOne(false,false,"A_<universe>_<nonNavigableOne>",true,false,false,false,1,0),
-		spaceTime(true,true,"A_<universe>_<spaceTime>",true,false,false,false,1,1),
-		angel(false,false,"A_<universe>_<angel>",true,false,false,false,1,0),
 		god(false,false,"A_<god>_<universe>",false,false,true,false,1,1),
+		angel(false,false,"A_<universe>_<angel>",true,false,false,false,1,0),
 		nonNavigableMany(true,false,"A_<universe>_<nonNavigableMany>",false,true,false,false,-1,0),
+		spaceTime(true,true,"A_<universe>_<spaceTime>",true,false,false,false,1,1),
 		name(true,false,"org__tinker__concretetest__Universe__name",false,false,true,false,1,1);
 		private boolean controllingSide;
 		private boolean composite;
@@ -471,17 +472,17 @@ public class Universe extends BaseTinker implements CompositionNode {
 			if ( nonNavigableOne.getLabel().equals(label) ) {
 				return nonNavigableOne;
 			}
-			if ( spaceTime.getLabel().equals(label) ) {
-				return spaceTime;
+			if ( god.getLabel().equals(label) ) {
+				return god;
 			}
 			if ( angel.getLabel().equals(label) ) {
 				return angel;
 			}
-			if ( god.getLabel().equals(label) ) {
-				return god;
-			}
 			if ( nonNavigableMany.getLabel().equals(label) ) {
 				return nonNavigableMany;
+			}
+			if ( spaceTime.getLabel().equals(label) ) {
+				return spaceTime;
 			}
 			if ( name.getLabel().equals(label) ) {
 				return name;

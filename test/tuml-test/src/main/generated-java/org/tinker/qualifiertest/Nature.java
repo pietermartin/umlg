@@ -27,8 +27,8 @@ public class Nature extends BaseTinker implements CompositionNode {
 	 */
 	public Nature(God compositeOwner) {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
-		createComponents();
 		initialiseProperties();
+		createComponents();
 		init(compositeOwner);
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
@@ -57,6 +57,7 @@ public class Nature extends BaseTinker implements CompositionNode {
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
 		initialiseProperties();
+		createComponents();
 	}
 
 	public void addToGod(God god) {
@@ -154,7 +155,7 @@ public class Nature extends BaseTinker implements CompositionNode {
 	 */
 	@Override
 	public void init(TinkerNode compositeOwner) {
-		this.god.add((God)compositeOwner);
+		this.addToGod((God)compositeOwner);
 		this.hasInitBeenCalled = true;
 		initVariables();
 	}
@@ -164,24 +165,24 @@ public class Nature extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.name2 =  new TinkerSetImpl<String>(this, NatureRuntimePropertyEnum.name2);
-		this.god =  new TinkerSetImpl<God>(this, NatureRuntimePropertyEnum.god);
 		this.name1 =  new TinkerSetImpl<String>(this, NatureRuntimePropertyEnum.name1);
+		this.god =  new TinkerSetImpl<God>(this, NatureRuntimePropertyEnum.god);
+		this.name2 =  new TinkerSetImpl<String>(this, NatureRuntimePropertyEnum.name2);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (NatureRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case name1:
-				this.name1 =  new TinkerSetImpl<String>(this, NatureRuntimePropertyEnum.name1);
+			case name2:
+				this.name2 =  new TinkerSetImpl<String>(this, NatureRuntimePropertyEnum.name2);
 			break;
 		
 			case god:
 				this.god =  new TinkerSetImpl<God>(this, NatureRuntimePropertyEnum.god);
 			break;
 		
-			case name2:
-				this.name2 =  new TinkerSetImpl<String>(this, NatureRuntimePropertyEnum.name2);
+			case name1:
+				this.name1 =  new TinkerSetImpl<String>(this, NatureRuntimePropertyEnum.name1);
 			break;
 		
 		}
@@ -249,9 +250,9 @@ public class Nature extends BaseTinker implements CompositionNode {
 	}
 
 	public enum NatureRuntimePropertyEnum implements TumlRuntimeProperty {
-		name2(true,false,"org__tinker__qualifiertest__Nature__name2",false,false,true,false,1,1),
+		name1(true,false,"org__tinker__qualifiertest__Nature__name1",false,false,true,false,1,1),
 		god(false,false,"A_<god>_<nature>",false,false,true,false,1,1),
-		name1(true,false,"org__tinker__qualifiertest__Nature__name1",false,false,true,false,1,1);
+		name2(true,false,"org__tinker__qualifiertest__Nature__name2",false,false,true,false,1,1);
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -286,14 +287,14 @@ public class Nature extends BaseTinker implements CompositionNode {
 		}
 	
 		static public NatureRuntimePropertyEnum fromLabel(String label) {
-			if ( name2.getLabel().equals(label) ) {
-				return name2;
+			if ( name1.getLabel().equals(label) ) {
+				return name1;
 			}
 			if ( god.getLabel().equals(label) ) {
 				return god;
 			}
-			if ( name1.getLabel().equals(label) ) {
-				return name1;
+			if ( name2.getLabel().equals(label) ) {
+				return name2;
 			}
 			throw new IllegalStateException();
 		}

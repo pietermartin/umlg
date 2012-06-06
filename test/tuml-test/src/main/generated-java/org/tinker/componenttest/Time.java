@@ -25,8 +25,8 @@ public class Time extends BaseTinker implements CompositionNode {
 	 */
 	public Time(SpaceTime compositeOwner) {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
-		createComponents();
 		initialiseProperties();
+		createComponents();
 		init(compositeOwner);
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
@@ -55,6 +55,7 @@ public class Time extends BaseTinker implements CompositionNode {
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
 		initialiseProperties();
+		createComponents();
 	}
 
 	public void addToName(String name) {
@@ -133,7 +134,7 @@ public class Time extends BaseTinker implements CompositionNode {
 	 */
 	@Override
 	public void init(TinkerNode compositeOwner) {
-		this.spaceTime.add((SpaceTime)compositeOwner);
+		this.addToSpaceTime((SpaceTime)compositeOwner);
 		this.hasInitBeenCalled = true;
 		initVariables();
 	}
@@ -143,19 +144,19 @@ public class Time extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.spaceTime =  new TinkerSetImpl<SpaceTime>(this, TimeRuntimePropertyEnum.spaceTime);
 		this.name =  new TinkerSetImpl<String>(this, TimeRuntimePropertyEnum.name);
+		this.spaceTime =  new TinkerSetImpl<SpaceTime>(this, TimeRuntimePropertyEnum.spaceTime);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (TimeRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case name:
-				this.name =  new TinkerSetImpl<String>(this, TimeRuntimePropertyEnum.name);
-			break;
-		
 			case spaceTime:
 				this.spaceTime =  new TinkerSetImpl<SpaceTime>(this, TimeRuntimePropertyEnum.spaceTime);
+			break;
+		
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, TimeRuntimePropertyEnum.name);
 			break;
 		
 		}
@@ -206,8 +207,8 @@ public class Time extends BaseTinker implements CompositionNode {
 	}
 
 	public enum TimeRuntimePropertyEnum implements TumlRuntimeProperty {
-		spaceTime(false,false,"A_<spaceTime>_<time>",true,false,false,false,1,1),
-		name(true,false,"org__tinker__componenttest__Time__name",false,false,true,false,1,1);
+		name(true,false,"org__tinker__componenttest__Time__name",false,false,true,false,1,1),
+		spaceTime(false,false,"A_<spaceTime>_<time>",true,false,false,false,1,1);
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -242,11 +243,11 @@ public class Time extends BaseTinker implements CompositionNode {
 		}
 	
 		static public TimeRuntimePropertyEnum fromLabel(String label) {
-			if ( spaceTime.getLabel().equals(label) ) {
-				return spaceTime;
-			}
 			if ( name.getLabel().equals(label) ) {
 				return name;
+			}
+			if ( spaceTime.getLabel().equals(label) ) {
+				return spaceTime;
 			}
 			throw new IllegalStateException();
 		}
