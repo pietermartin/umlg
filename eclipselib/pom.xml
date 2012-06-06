@@ -6,44 +6,227 @@
 	<packaging>pom</packaging>
 	<name>tuml eclipse lib pom</name>
 	<version>0.0.1-SNAPSHOT</version>
-<!-- 	<build> -->
-<!-- 		<pluginManagement> -->
-<!-- 			<plugins> -->
-<!-- 				<plugin> -->
-<!-- 					<groupId>org.apache.maven.plugins</groupId> -->
-<!-- 					<artifactId>maven-install-plugin</artifactId> -->
-<!-- 					<executions> -->
-<!-- 						<execution> -->
-<!-- 							<id>copy-eclipse-lib-app</id> -->
-<!-- 							<phase>validate</phase> -->
-<!-- 							<goals> -->
-<!-- 								<goal>install-file</goal> -->
-<!-- 							</goals> -->
-<!-- 							<configuration> -->
-<!-- 								<file>${basedir}/app-1.0.0.jar</file> -->
-<!-- 								<groupId>org.eclipse.equinox</groupId> -->
-<!-- 								<artifactId>app</artifactId> -->
-<!-- 								<version>1.0.0</version> -->
-<!-- 								<packaging>jar</packaging> -->
-<!-- 							</configuration> -->
-<!-- 						</execution> -->
-<!-- 						<execution> -->
-<!-- 							<id>copy-eclipse-lib-common</id> -->
-<!-- 							<phase>validate</phase> -->
-<!-- 							<goals> -->
-<!-- 								<goal>install-file</goal> -->
-<!-- 							</goals> -->
-<!-- 							<configuration> -->
-<!-- 								<file>${basedir}/common-1.6.0-v201105021727.jar</file> -->
-<!-- 								<groupId>org.eclipse.equinox</groupId> -->
-<!-- 								<artifactId>common</artifactId> -->
-<!-- 								<version>3.6.0-v20110523</version> -->
-<!-- 								<packaging>jar</packaging> -->
-<!-- 							</configuration> -->
-<!-- 						</execution> -->
-<!-- 					</executions> -->
-<!-- 				</plugin> -->
-<!-- 			</plugins> -->
-<!-- 		</pluginManagement> -->
-<!-- 	</build> -->
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-install-plugin</artifactId>
+					<executions>
+						<execution>
+							<id>org.eclipse.uml2.uml.resources.3.1.100-v201008191510</id>
+							<phase>validate</phase>
+							<goals>
+								<goal>install-file</goal>
+							</goals>
+							<configuration>
+								<file>${basedir}/org/eclipse/uml2/uml/resources/3.1.100-v201008191510/resources-3.1.100-v201008191510.jar</file>
+								<groupId>org.eclipse.uml2.uml</groupId>
+								<artifactId>resources</artifactId>
+								<version>3.1.100-v201008191510</version>
+								<packaging>jar</packaging>
+							</configuration>
+						</execution>
+						<execution>
+							<id>org.eclipse.uml2.uml.3.2.100-v201108110105</id>
+							<phase>validate</phase>
+							<goals>
+								<goal>install-file</goal>
+							</goals>
+							<configuration>
+								<file>${basedir}/org/eclipse/uml2/uml/3.2.100-v201108110105/uml-3.2.100-v201108110105.jar</file>
+								<groupId>org.eclipse.uml2</groupId>
+								<artifactId>uml</artifactId>
+								<version>3.2.100-v201108110105</version>
+								<packaging>jar</packaging>
+							</configuration>
+						</execution>
+						<execution>
+							<id>org.eclipse.core.runtime.3.7.0-v20110110</id>
+							<phase>validate</phase>
+							<goals>
+								<goal>install-file</goal>
+							</goals>
+							<configuration>
+								<file>${basedir}/org/eclipse/core/runtime/3.7.0-v20110110/runtime-3.7.0-v20110110.jar</file>
+								<groupId>org.eclipse.core</groupId>
+								<artifactId>runtime</artifactId>
+								<version>3.7.0-v20110110</version>
+								<packaging>jar</packaging>
+							</configuration>
+						</execution>
+						<execution>
+							<id>org.eclipse.osgi.3.7.0-v20110613</id>
+							<phase>validate</phase>
+							<goals>
+								<goal>install-file</goal>
+							</goals>
+							<configuration>
+								<file>${basedir}/org/eclipse/osgi/3.7.0-v20110613/osgi-3.7.0-v20110613.jar</file>
+								<groupId>org.eclipse</groupId>
+								<artifactId>osgi</artifactId>
+								<version>3.7.0-v20110613</version>
+								<packaging>jar</packaging>
+							</configuration>
+						</execution>
+						<execution>
+							<id>org.eclipse.equinox.common.3.6.0-v20110523</id>
+							<phase>validate</phase>
+							<goals>
+								<goal>install-file</goal>
+							</goals>
+							<configuration>
+								<file>${basedir}/org/eclipse/equinox/common/3.6.0-v20110523/common-3.6.0-v20110523.jar</file>
+								<groupId>org.eclipse.equinox</groupId>
+								<artifactId>common</artifactId>
+								<version>3.6.0-v20110523</version>
+								<packaging>jar</packaging>
+							</configuration>
+						</execution>
+						<execution>
+							<id>org.eclipse.core.jobs.3.5.100-v20110404</id>
+							<phase>validate</phase>
+							<goals>
+								<goal>install-file</goal>
+							</goals>
+							<configuration>
+								<file>${basedir}/org/eclipse/core/jobs/3.5.100-v20110404/jobs-3.5.100-v20110404.jar</file>
+								<groupId>org.eclipse.core</groupId>
+								<artifactId>jobs</artifactId>
+								<version>3.5.100-v20110404</version>
+								<packaging>jar</packaging>
+							</configuration>
+						</execution>
+						
+						<execution>
+							<id>org.eclipse.equinox.registry.3.5.100-v20110502</id>
+							<phase>validate</phase>
+							<goals>
+								<goal>install-file</goal>
+							</goals>
+							<configuration>
+								<file>${basedir}/org/eclipse/equinox/registry/3.5.100-v20110502/registry-3.5.100-v20110502.jar</file>
+								<groupId>org.eclipse.equinox</groupId>
+								<artifactId>registry</artifactId>
+								<version>3.5.100-v20110502</version>
+								<packaging>jar</packaging>
+							</configuration>
+						</execution>
+						<execution>
+							<id>org.eclipse.equinox.preferences.3.4.0-v20110502</id>
+							<phase>validate</phase>
+							<goals>
+								<goal>install-file</goal>
+							</goals>
+							<configuration>
+								<file>${basedir}/org/eclipse/equinox/preferences/3.4.0-v20110502/preferences-3.4.0-v20110502.jar</file>
+								<groupId>org.eclipse.equinox</groupId>
+								<artifactId>preferences</artifactId>
+								<version>3.4.0-v20110502</version>
+								<packaging>jar</packaging>
+							</configuration>
+						</execution>
+						<execution>
+							<id>org.eclipse.core.contenttype.3.4.100-v20110423-0524</id>
+							<phase>validate</phase>
+							<goals>
+								<goal>install-file</goal>
+							</goals>
+							<configuration>
+								<file>${basedir}/org/eclipse/core/contenttype/3.4.100-v20110423-0524/contenttype-3.4.100-v20110423-0524.jar</file>
+								<groupId>org.eclipse.core</groupId>
+								<artifactId>contenttype</artifactId>
+								<version>3.4.100-v20110423-0524</version>
+								<packaging>jar</packaging>
+							</configuration>
+						</execution>
+						<execution>
+							<id>org.eclipse.equinox.app.1.0.0</id>
+							<phase>validate</phase>
+							<goals>
+								<goal>install-file</goal>
+							</goals>
+							<configuration>
+								<file>${basedir}/org/eclipse/equinox/app/1.0.0/app-1.0.0.jar</file>
+								<groupId>org.eclipse.equinox</groupId>
+								<artifactId>app</artifactId>
+								<version>1.0.0</version>
+								<packaging>jar</packaging>
+							</configuration>
+						</execution>
+						<execution>
+							<id>org.eclipse.emf.ecore.2.7.0-v20120127-1122</id>
+							<phase>validate</phase>
+							<goals>
+								<goal>install-file</goal>
+							</goals>
+							<configuration>
+								<file>${basedir}/org/eclipse/emf/ecore/2.7.0-v20120127-1122/ecore-2.7.0-v20120127-1122.jar</file>
+								<groupId>org.eclipse.emf</groupId>
+								<artifactId>ecore</artifactId>
+								<version>2.7.0-v20120127-1122</version>
+								<packaging>jar</packaging>
+							</configuration>
+						</execution>
+						<execution>
+							<id>org.eclipse.emf.common.2.7.0-v20120127-1122</id>
+							<phase>validate</phase>
+							<goals>
+								<goal>install-file</goal>
+							</goals>
+							<configuration>
+								<file>${basedir}/org/eclipse/emf/common/2.7.0-v20120127-1122/common-2.7.0-v20120127-1122.jar</file>
+								<groupId>org.eclipse.emf</groupId>
+								<artifactId>common</artifactId>
+								<version>2.7.0-v20120127-1122</version>
+								<packaging>jar</packaging>
+							</configuration>
+						</execution>
+						<execution>
+							<id>org.eclipse.emf.xmi.2.7.0-v20120127-1122</id>
+							<phase>validate</phase>
+							<goals>
+								<goal>install-file</goal>
+							</goals>
+							<configuration>
+								<file>${basedir}/org/eclipse/emf/ecore/xmi/2.7.0-v20120127-1122/xmi-2.7.0-v20120127-1122.jar</file>
+								<groupId>org.eclipse.emf.ecore</groupId>
+								<artifactId>xmi</artifactId>
+								<version>2.7.0-v20120127-1122</version>
+								<packaging>jar</packaging>
+							</configuration>
+						</execution>
+						<execution>
+							<id>org.eclipse.uml2.common.1.6.0-v201105021727</id>
+							<phase>validate</phase>
+							<goals>
+								<goal>install-file</goal>
+							</goals>
+							<configuration>
+								<file>${basedir}/org/eclipse/uml2/common/1.6.0-v201105021727/common-1.6.0-v201105021727.jar</file>
+								<groupId>org.eclipse.uml2</groupId>
+								<artifactId>common</artifactId>
+								<version>1.6.0-v201105021727</version>
+								<packaging>jar</packaging>
+							</configuration>
+						</execution>
+						<execution>
+							<id>org.eclipse.emf.mapping.ecore2xml.2.7.0-v20120130-0943</id>
+							<phase>validate</phase>
+							<goals>
+								<goal>install-file</goal>
+							</goals>
+							<configuration>
+								<file>${basedir}/org/eclipse/emf/mapping/ecore2xml/2.7.0-v20120130-0943/ecore2xml-2.7.0-v20120130-0943.jar</file>
+								<groupId>org.eclipse.emf.mapping</groupId>
+								<artifactId>ecore2xml</artifactId>
+								<version>2.7.0-v20120130-0943</version>
+								<packaging>jar</packaging>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
 </project>
