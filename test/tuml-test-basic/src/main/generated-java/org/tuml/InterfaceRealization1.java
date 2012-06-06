@@ -14,8 +14,8 @@ import org.tuml.runtime.domain.BaseTinker;
 import org.tuml.runtime.domain.TinkerNode;
 
 public class InterfaceRealization1 extends BaseTinker implements TinkerNode, Interface1 {
-	private TinkerSet<Interface2> interface2;
 	private TinkerSet<String> name;
+	private TinkerSet<Interface2> interface2;
 
 	/** Constructor for InterfaceRealization1
 	 * 

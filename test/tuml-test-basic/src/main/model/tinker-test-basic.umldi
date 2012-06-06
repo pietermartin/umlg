@@ -284,7 +284,7 @@
       <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_X43J8a85EeGzNfwuvR7FNw" presentation="org.topcased.modeler.uml.classdiagram">
         <element href="tinker-test-basic.uml#_WqFCoK85EeGzNfwuvR7FNw"/>
       </semanticModel>
-      <contained xsi:type="di:GraphNode" xmi:id="_Y_DV8K85EeGzNfwuvR7FNw" position="494,45" size="100,-1">
+      <contained xsi:type="di:GraphNode" xmi:id="_Y_DV8K85EeGzNfwuvR7FNw" position="494,45" size="189,-1">
         <anchorage xmi:id="_rFW0AK85EeGzNfwuvR7FNw" graphEdge="_rFZQQK85EeGzNfwuvR7FNw"/>
         <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_Y_DV8a85EeGzNfwuvR7FNw" presentation="default">
           <element href="tinker-test-basic.uml#_Y_GZQK85EeGzNfwuvR7FNw"/>
@@ -294,6 +294,11 @@
           <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_Y_DV9K85EeGzNfwuvR7FNw" presentation="default">
             <element href="tinker-test-basic.uml#_Y_GZQK85EeGzNfwuvR7FNw"/>
           </semanticModel>
+          <contained xsi:type="di:GraphNode" xmi:id="_R-nXcK-ZEeG3P-BMR4CjHA" position="0,0" size="-1,-1">
+            <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_R-nXca-ZEeG3P-BMR4CjHA" presentation="default">
+              <element href="tinker-test-basic.uml#_R_F4kK-ZEeG3P-BMR4CjHA"/>
+            </semanticModel>
+          </contained>
         </contained>
         <contained xsi:type="di:GraphNode" xmi:id="_Y_DV9a85EeGzNfwuvR7FNw">
           <property xmi:id="_Y_DV9q85EeGzNfwuvR7FNw" key="eStructuralFeatureID" value="47 50 "/>
@@ -312,6 +317,11 @@
           <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_ZsXu9K85EeGzNfwuvR7FNw" presentation="default">
             <element href="tinker-test-basic.uml#_ZsZkIK85EeGzNfwuvR7FNw"/>
           </semanticModel>
+          <contained xsi:type="di:GraphNode" xmi:id="_UIU18K-ZEeG3P-BMR4CjHA" position="0,0" size="-1,-1">
+            <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_UIU18a-ZEeG3P-BMR4CjHA" presentation="default">
+              <element href="tinker-test-basic.uml#_UIWEEK-ZEeG3P-BMR4CjHA"/>
+            </semanticModel>
+          </contained>
         </contained>
         <contained xsi:type="di:GraphNode" xmi:id="_ZsXu9a85EeGzNfwuvR7FNw">
           <property xmi:id="_ZsXu9q85EeGzNfwuvR7FNw" key="eStructuralFeatureID" value="47 50 "/>

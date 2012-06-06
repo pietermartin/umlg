@@ -89,8 +89,15 @@
           <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_rFWM8a85EeGzNfwuvR7FNw" value="*"/>
           <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_rFWM8q85EeGzNfwuvR7FNw"/>
         </ownedAttribute>
+        <ownedAttribute xmi:id="_R_F4kK-ZEeG3P-BMR4CjHA" name="name">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </ownedAttribute>
       </packagedElement>
-      <packagedElement xmi:type="uml:Class" xmi:id="_ZsZkIK85EeGzNfwuvR7FNw" name="AbstractSpecies"/>
+      <packagedElement xmi:type="uml:Class" xmi:id="_ZsZkIK85EeGzNfwuvR7FNw" name="AbstractSpecies">
+        <ownedAttribute xmi:id="_UIWEEK-ZEeG3P-BMR4CjHA" name="name">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </ownedAttribute>
+      </packagedElement>
       <packagedElement xmi:type="uml:Class" xmi:id="_brypAK85EeGzNfwuvR7FNw" name="Mamal">
         <generalization xmi:id="_g1Alk685EeGzNfwuvR7FNw" general="_ZsZkIK85EeGzNfwuvR7FNw"/>
       </packagedElement>

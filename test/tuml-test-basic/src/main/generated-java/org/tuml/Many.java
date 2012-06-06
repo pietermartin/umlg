@@ -144,19 +144,19 @@ public class Many extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.name =  new TinkerSetImpl<String>(this, ManyRuntimePropertyEnum.name);
 		this.one =  new TinkerSetImpl<One>(this, ManyRuntimePropertyEnum.one);
+		this.name =  new TinkerSetImpl<String>(this, ManyRuntimePropertyEnum.name);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (ManyRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case one:
-				this.one =  new TinkerSetImpl<One>(this, ManyRuntimePropertyEnum.one);
-			break;
-		
 			case name:
 				this.name =  new TinkerSetImpl<String>(this, ManyRuntimePropertyEnum.name);
+			break;
+		
+			case one:
+				this.one =  new TinkerSetImpl<One>(this, ManyRuntimePropertyEnum.one);
 			break;
 		
 		}
@@ -207,8 +207,8 @@ public class Many extends BaseTinker implements CompositionNode {
 	}
 
 	public enum ManyRuntimePropertyEnum implements TumlRuntimeProperty {
-		name(true,false,"org__tuml__Many__name",false,false,true,false,1,1),
-		one(false,false,"A_<one>_<many>",false,false,true,false,1,1);
+		one(false,false,"A_<one>_<many>",false,false,true,false,1,1),
+		name(true,false,"org__tuml__Many__name",false,false,true,false,1,1);
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -243,11 +243,11 @@ public class Many extends BaseTinker implements CompositionNode {
 		}
 	
 		static public ManyRuntimePropertyEnum fromLabel(String label) {
-			if ( name.getLabel().equals(label) ) {
-				return name;
-			}
 			if ( one.getLabel().equals(label) ) {
 				return one;
+			}
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
 			throw new IllegalStateException();
 		}

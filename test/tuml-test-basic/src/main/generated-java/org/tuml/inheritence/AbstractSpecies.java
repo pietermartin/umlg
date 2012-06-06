@@ -16,6 +16,7 @@ import org.tuml.runtime.domain.CompositionNode;
 import org.tuml.runtime.domain.TinkerNode;
 
 public class AbstractSpecies extends BaseTinker implements CompositionNode {
+	private TinkerSet<String> name;
 	private TinkerSet<God> god;
 
 	/** Constructor for AbstractSpecies
@@ -63,8 +64,18 @@ public class AbstractSpecies extends BaseTinker implements CompositionNode {
 		}
 	}
 	
+	public void addToName(String name) {
+		if ( name != null ) {
+			this.name.add(name);
+		}
+	}
+	
 	public void clearGod() {
 		this.god.clear();
+	}
+	
+	public void clearName() {
+		this.name.clear();
 	}
 	
 	public void createComponents() {
@@ -86,6 +97,15 @@ public class AbstractSpecies extends BaseTinker implements CompositionNode {
 	@Override
 	public Long getId() {
 		return TinkerIdUtilFactory.getIdUtil().getId(this.vertex);
+	}
+	
+	public String getName() {
+		TinkerSet<String> tmp = this.name;
+		if ( !tmp.isEmpty() ) {
+			return tmp.iterator().next();
+		} else {
+			return null;
+		}
 	}
 	
 	@Override
@@ -125,11 +145,16 @@ public class AbstractSpecies extends BaseTinker implements CompositionNode {
 	@Override
 	public void initialiseProperties() {
 		this.god =  new TinkerSetImpl<God>(this, AbstractSpeciesRuntimePropertyEnum.god);
+		this.name =  new TinkerSetImpl<String>(this, AbstractSpeciesRuntimePropertyEnum.name);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (AbstractSpeciesRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, AbstractSpeciesRuntimePropertyEnum.name);
+			break;
+		
 			case god:
 				this.god =  new TinkerSetImpl<God>(this, AbstractSpeciesRuntimePropertyEnum.god);
 			break;
@@ -154,6 +179,18 @@ public class AbstractSpecies extends BaseTinker implements CompositionNode {
 		}
 	}
 	
+	public void removeFromName(Set<String> name) {
+		if ( !name.isEmpty() ) {
+			this.name.removeAll(name);
+		}
+	}
+	
+	public void removeFromName(String name) {
+		if ( name != null ) {
+			this.name.remove(name);
+		}
+	}
+	
 	public void setGod(God god) {
 		clearGod();
 		addToGod(god);
@@ -163,9 +200,15 @@ public class AbstractSpecies extends BaseTinker implements CompositionNode {
 	public void setId(Long id) {
 		TinkerIdUtilFactory.getIdUtil().setId(this.vertex, id);
 	}
+	
+	public void setName(String name) {
+		clearName();
+		addToName(name);
+	}
 
 	public enum AbstractSpeciesRuntimePropertyEnum implements TumlRuntimeProperty {
-		god(false,false,"A_<god>_<abstractSpecies>",false,false,true,false,1,1);
+		god(false,false,"A_<god>_<abstractSpecies>",false,false,true,false,1,1),
+		name(true,false,"org__tuml__inheritence__AbstractSpecies__name",false,false,true,false,1,1);
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -202,6 +245,9 @@ public class AbstractSpecies extends BaseTinker implements CompositionNode {
 		static public AbstractSpeciesRuntimePropertyEnum fromLabel(String label) {
 			if ( god.getLabel().equals(label) ) {
 				return god;
+			}
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
 			throw new IllegalStateException();
 		}

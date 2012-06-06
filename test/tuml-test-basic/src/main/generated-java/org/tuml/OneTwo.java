@@ -112,19 +112,19 @@ public class OneTwo extends BaseTinker implements TinkerNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.oneOne =  new TinkerSetImpl<OneOne>(this, OneTwoRuntimePropertyEnum.oneOne);
 		this.name =  new TinkerSetImpl<String>(this, OneTwoRuntimePropertyEnum.name);
+		this.oneOne =  new TinkerSetImpl<OneOne>(this, OneTwoRuntimePropertyEnum.oneOne);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (OneTwoRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case name:
-				this.name =  new TinkerSetImpl<String>(this, OneTwoRuntimePropertyEnum.name);
-			break;
-		
 			case oneOne:
 				this.oneOne =  new TinkerSetImpl<OneOne>(this, OneTwoRuntimePropertyEnum.oneOne);
+			break;
+		
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, OneTwoRuntimePropertyEnum.name);
 			break;
 		
 		}
@@ -175,8 +175,8 @@ public class OneTwo extends BaseTinker implements TinkerNode {
 	}
 
 	public enum OneTwoRuntimePropertyEnum implements TumlRuntimeProperty {
-		oneOne(true,false,"A_<oneOne>_<oneTwo>",true,false,false,false,1,1),
-		name(true,false,"org__tuml__OneTwo__name",false,false,true,false,1,1);
+		name(true,false,"org__tuml__OneTwo__name",false,false,true,false,1,1),
+		oneOne(true,false,"A_<oneOne>_<oneTwo>",true,false,false,false,1,1);
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -211,11 +211,11 @@ public class OneTwo extends BaseTinker implements TinkerNode {
 		}
 	
 		static public OneTwoRuntimePropertyEnum fromLabel(String label) {
-			if ( oneOne.getLabel().equals(label) ) {
-				return oneOne;
-			}
 			if ( name.getLabel().equals(label) ) {
 				return name;
+			}
+			if ( oneOne.getLabel().equals(label) ) {
+				return oneOne;
 			}
 			throw new IllegalStateException();
 		}
