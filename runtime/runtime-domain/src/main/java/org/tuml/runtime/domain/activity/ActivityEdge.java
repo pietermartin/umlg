@@ -8,7 +8,7 @@ import java.util.NoSuchElementException;
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.domain.activity.interf.IActivityEdge;
 
-import com.tinkerpop.blueprints.pgm.Edge;
+import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.pipes.AbstractPipe;
 
 public abstract class ActivityEdge<T extends Token> extends AbstractPipe<T, Boolean> implements IActivityEdge<T> {

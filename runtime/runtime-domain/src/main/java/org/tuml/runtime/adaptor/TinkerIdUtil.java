@@ -1,6 +1,6 @@
 package org.tuml.runtime.adaptor;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 public interface TinkerIdUtil {
 	Long getId(Vertex v);

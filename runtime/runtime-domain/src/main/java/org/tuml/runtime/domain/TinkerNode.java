@@ -2,7 +2,7 @@ package org.tuml.runtime.domain;
 
 import org.tuml.runtime.collection.TumlRuntimeProperty;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 public interface TinkerNode extends PersistentObject {
 	Vertex getVertex();

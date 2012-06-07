@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.tuml.runtime.domain.activity.interf.IActivityEdge;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 public abstract class GenericControlNode extends ControlNode<Token, Token> {
 

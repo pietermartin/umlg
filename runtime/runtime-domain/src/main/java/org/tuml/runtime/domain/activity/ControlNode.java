@@ -7,8 +7,9 @@ import org.tuml.runtime.domain.CompositionNode;
 import org.tuml.runtime.domain.activity.interf.IActivityEdge;
 import org.tuml.runtime.domain.activity.interf.IControlNode;
 
-import com.tinkerpop.blueprints.pgm.Edge;
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Direction;
+import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Vertex;
 
 public abstract class ControlNode<IN extends Token, OUT extends Token> extends ActivityNode<IN, OUT> implements IControlNode<IN, OUT> {
 
@@ -47,11 +48,11 @@ public abstract class ControlNode<IN extends Token, OUT extends Token> extends A
 	public List<IN> getInTokens() {
 		List<IN> result = new ArrayList<IN>();
 		for (IActivityEdge<?> flow : getIncoming()) {
-			Iterable<Edge> iter = this.vertex.getOutEdges(Token.TOKEN + flow.getName());
+			Iterable<Edge> iter = this.vertex.getEdges(Direction.OUT, Token.TOKEN + flow.getName());
 			for (Edge edge : iter) {
 				Token token;
 				if (flow instanceof ControlFlow) {
-					token = new ControlToken(edge.getInVertex());
+					token = new ControlToken(edge.getVertex(Direction.IN));
 				} else {
 					token = contructInToken(edge);
 				}
@@ -67,11 +68,11 @@ public abstract class ControlNode<IN extends Token, OUT extends Token> extends A
 		List<IN> result = new ArrayList<IN>();
 		for (IActivityEdge<?> flow : getIncoming()) {
 			if (flow.getName().equals(inFlowName)) {
-				Iterable<Edge> iter = this.vertex.getOutEdges(Token.TOKEN + flow.getName());
+				Iterable<Edge> iter = this.vertex.getEdges(Direction.OUT, Token.TOKEN + flow.getName());
 				for (Edge edge : iter) {
 					Token token;
 					if (flow instanceof ControlFlow) {
-						token = new ControlToken(edge.getInVertex());
+						token = new ControlToken(edge.getVertex(Direction.IN));
 					} else {
 						token = contructInToken(edge);
 					}
@@ -87,11 +88,11 @@ public abstract class ControlNode<IN extends Token, OUT extends Token> extends A
 	public List<OUT> getOutTokens() {
 		List<OUT> result = new ArrayList<OUT>();
 		for (IActivityEdge<OUT> flow : getOutgoing()) {
-			Iterable<Edge> iter = this.vertex.getOutEdges(Token.TOKEN + flow.getName());
+			Iterable<Edge> iter = this.vertex.getEdges(Direction.OUT, Token.TOKEN + flow.getName());
 			for (Edge edge : iter) {
 				Token token;
 				if (flow instanceof ControlFlow) {
-					token = new ControlToken(edge.getInVertex());
+					token = new ControlToken(edge.getVertex(Direction.IN));
 				} else {
 					token = contructOutToken(edge);
 				}
@@ -107,11 +108,11 @@ public abstract class ControlNode<IN extends Token, OUT extends Token> extends A
 		List<OUT> result = new ArrayList<OUT>();
 		for (IActivityEdge<OUT> flow : getOutgoing()) {
 			if (flow.getName().equals(outFlowName)) {
-				Iterable<Edge> iter = this.vertex.getOutEdges(Token.TOKEN + flow.getName());
+				Iterable<Edge> iter = this.vertex.getEdges(Direction.OUT, Token.TOKEN + flow.getName());
 				for (Edge edge : iter) {
 					Token token;
 					if (flow instanceof ControlFlow) {
-						token = new ControlToken(edge.getInVertex());
+						token = new ControlToken(edge.getVertex(Direction.IN));
 					} else {
 						token = contructOutToken(edge);
 					}
@@ -129,7 +130,7 @@ public abstract class ControlNode<IN extends Token, OUT extends Token> extends A
 	protected IN contructInToken(Edge edge) {
 		try {
 			Class<?> c = Class.forName((String) edge.getProperty("tokenClass"));
-			return (IN) c.getConstructor(Vertex.class).newInstance(edge.getInVertex());
+			return (IN) c.getConstructor(Vertex.class).newInstance(edge.getVertex(Direction.IN));
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -139,7 +140,7 @@ public abstract class ControlNode<IN extends Token, OUT extends Token> extends A
 	protected OUT contructOutToken(Edge edge) {
 		try {
 			Class<?> c = Class.forName((String) edge.getProperty("tokenClass"));
-			return (OUT) c.getConstructor(Vertex.class).newInstance(edge.getInVertex());
+			return (OUT) c.getConstructor(Vertex.class).newInstance(edge.getVertex(Direction.IN));
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

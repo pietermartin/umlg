@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.tuml.runtime.domain.activity.interf.IOneInputPin;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 public abstract class OneInputPin<O> extends InputPin<O, SingleObjectToken<O>> implements IOneInputPin<O> {
 

@@ -3,7 +3,7 @@ package org.tuml.runtime.domain.activity;
 import org.tuml.runtime.domain.CompositionNode;
 import org.tuml.runtime.domain.activity.interf.IPin;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 public abstract class Pin<O,IN extends ObjectToken<O>,OUT extends ObjectToken<O>> extends ObjectNode<O, IN, OUT> implements IPin<O,IN,OUT> {
 	

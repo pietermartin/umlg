@@ -9,9 +9,10 @@ import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
 import org.tuml.runtime.domain.CompositionNode;
 import org.tuml.runtime.domain.TinkerNode;
 
-import com.tinkerpop.blueprints.pgm.Edge;
-import com.tinkerpop.blueprints.pgm.Index;
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Direction;
+import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Index;
+import com.tinkerpop.blueprints.Vertex;
 
 public class TinkerQualifiedSetImpl<E> extends BaseSet<E> implements TinkerQualifiedSet<E> {
 
@@ -98,12 +99,12 @@ public class TinkerQualifiedSetImpl<E> extends BaseSet<E> implements TinkerQuali
 				}
 			} else if (o.getClass().isEnum()) {
 				v = this.internalVertexMap.get(((Enum<?>) o).name());
-				Edge edge = v.getInEdges(this.getLabel()).iterator().next();
+				Edge edge = v.getEdges(Direction.IN, this.getLabel()).iterator().next();
 				removeEdgefromIndex(edge);
 				GraphDb.getDb().removeVertex(v);
 			} else {
 				v = this.internalVertexMap.get(o);
-				Edge edge = v.getInEdges(this.getLabel()).iterator().next();
+				Edge edge = v.getEdges(Direction.IN, this.getLabel()).iterator().next();
 				removeEdgefromIndex(edge);
 				GraphDb.getDb().removeVertex(v);
 			}

@@ -12,7 +12,7 @@ import org.tuml.runtime.domain.activity.interf.IActivityNode;
 import org.tuml.runtime.domain.activity.interf.IBehavioredClassifier;
 import org.tuml.runtime.domain.activity.interf.IEvent;
 
-import com.tinkerpop.blueprints.pgm.Edge;
+import com.tinkerpop.blueprints.Edge;
 
 public abstract class BaseTinkerBehavioredClassifier extends BaseTinkerSoftDelete implements Serializable, CompositionNode, IBehavioredClassifier {
 

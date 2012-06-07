@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.tuml.runtime.domain.activity.interf.IOneOutActivityParameterNode;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 public abstract class OneOutActivityParameterNode<O> extends OutActivityParameterNode<O,SingleObjectToken<O>> implements IOneOutActivityParameterNode<O> {
 

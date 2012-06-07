@@ -6,7 +6,7 @@ import java.util.Date;
 
 import org.tuml.runtime.util.TinkerFormatter;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 public abstract class BaseTinker implements TinkerNode, Serializable{
 

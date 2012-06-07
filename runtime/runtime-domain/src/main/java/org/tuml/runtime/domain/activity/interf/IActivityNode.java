@@ -9,7 +9,7 @@ import org.tuml.runtime.domain.activity.NodeStat;
 import org.tuml.runtime.domain.activity.NodeStatus;
 import org.tuml.runtime.domain.activity.Token;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 public interface IActivityNode<IN extends Token, OUT extends Token> extends CompositionNode, INamedElement {
 	boolean mayContinue();

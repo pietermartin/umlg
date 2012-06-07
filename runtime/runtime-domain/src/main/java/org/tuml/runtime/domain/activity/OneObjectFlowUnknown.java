@@ -1,6 +1,6 @@
 package org.tuml.runtime.domain.activity;
 
-import com.tinkerpop.blueprints.pgm.Edge;
+import com.tinkerpop.blueprints.Edge;
 
 public abstract class OneObjectFlowUnknown extends ObjectFlowUnknown<SingleObjectToken<?>> {
 

@@ -3,7 +3,7 @@ package org.tuml.runtime.domain.activity;
 import org.tuml.runtime.domain.activity.interf.ICallOperationAction;
 import org.tuml.runtime.domain.activity.interf.IInputPin;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 public abstract class CallOperationAction extends CallAction implements ICallOperationAction {
 

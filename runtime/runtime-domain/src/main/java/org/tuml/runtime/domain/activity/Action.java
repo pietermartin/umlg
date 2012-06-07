@@ -10,8 +10,9 @@ import org.tuml.runtime.domain.activity.interf.IAction;
 import org.tuml.runtime.domain.activity.interf.IInputPin;
 import org.tuml.runtime.domain.activity.interf.IOutputPin;
 
-import com.tinkerpop.blueprints.pgm.Edge;
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Direction;
+import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Vertex;
 
 public abstract class Action extends ExecutableNode implements IAction {
 
@@ -178,9 +179,9 @@ public abstract class Action extends ExecutableNode implements IAction {
 	public List<ControlToken> getInTokens() {
 		List<ControlToken> result = new ArrayList<ControlToken>();
 		for (ControlFlow flow : getIncoming()) {
-			Iterable<Edge> iter = this.vertex.getOutEdges(Token.TOKEN + flow.getName());
+			Iterable<Edge> iter = this.vertex.getEdges(Direction.OUT, Token.TOKEN + flow.getName());
 			for (Edge edge : iter) {
-				result.add(new ControlToken(edge.getInVertex()));
+				result.add(new ControlToken(edge.getVertex(Direction.IN)));
 			}
 		}
 		return result;
@@ -191,9 +192,9 @@ public abstract class Action extends ExecutableNode implements IAction {
 		List<ControlToken> result = new ArrayList<ControlToken>();
 		for (ControlFlow flow : getIncoming()) {
 			if (inFlowName.equals(flow.getName())) {
-				Iterable<Edge> iter = this.vertex.getOutEdges(Token.TOKEN + flow.getName());
+				Iterable<Edge> iter = this.vertex.getEdges(Direction.OUT, Token.TOKEN + flow.getName());
 				for (Edge edge : iter) {
-					result.add(new ControlToken(edge.getInVertex()));
+					result.add(new ControlToken(edge.getVertex(Direction.IN)));
 				}
 			}
 		}
@@ -204,9 +205,9 @@ public abstract class Action extends ExecutableNode implements IAction {
 	public List<ControlToken> getOutTokens() {
 		List<ControlToken> result = new ArrayList<ControlToken>();
 		for (ControlFlow flow : getOutgoing()) {
-			Iterable<Edge> iter = this.vertex.getOutEdges(Token.TOKEN + flow.getName());
+			Iterable<Edge> iter = this.vertex.getEdges(Direction.OUT, Token.TOKEN + flow.getName());
 			for (Edge edge : iter) {
-				result.add(new ControlToken(edge.getInVertex()));
+				result.add(new ControlToken(edge.getVertex(Direction.IN)));
 			}
 		}
 		return result;
@@ -217,9 +218,9 @@ public abstract class Action extends ExecutableNode implements IAction {
 		List<ControlToken> result = new ArrayList<ControlToken>();
 		for (ControlFlow flow : getOutgoing()) {
 			if (flow.getName().equals(outFlowName)) {
-				Iterable<Edge> iter = this.vertex.getOutEdges(Token.TOKEN + flow.getName());
+				Iterable<Edge> iter = this.vertex.getEdges(Direction.OUT, Token.TOKEN + flow.getName());
 				for (Edge edge : iter) {
-					ControlToken e = new ControlToken(edge.getInVertex());
+					ControlToken e = new ControlToken(edge.getVertex(Direction.IN));
 					result.add(e);
 				}
 			}

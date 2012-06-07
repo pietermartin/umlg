@@ -5,8 +5,9 @@ import java.util.List;
 
 import org.tuml.runtime.domain.activity.interf.IObjectNode;
 
-import com.tinkerpop.blueprints.pgm.Edge;
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Direction;
+import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Vertex;
 
 public abstract class ObjectNode<O, IN extends ObjectToken<O>, OUT extends ObjectToken<O>> extends ActivityNode<IN, OUT> implements IObjectNode<O, IN, OUT> {
 
@@ -44,7 +45,7 @@ public abstract class ObjectNode<O, IN extends ObjectToken<O>, OUT extends Objec
 	public List<IN> getInTokens() {
 		List<IN> result = new ArrayList<IN>();
 		for (ObjectFlowKnown<O, IN> flow : getIncoming()) {
-			Iterable<Edge> iter = this.vertex.getOutEdges(Token.TOKEN + flow.getName());
+			Iterable<Edge> iter = this.vertex.getEdges(Direction.OUT, Token.TOKEN + flow.getName());
 			for (Edge edge : iter) {
 				try {
 					result.add(constructInToken(edge));
@@ -62,7 +63,7 @@ public abstract class ObjectNode<O, IN extends ObjectToken<O>, OUT extends Objec
 		for (ObjectFlowKnown<O, IN> flow : getIncoming()) {
 			if (inFlowName.equals(flow.getName())) {
 				if (flow instanceof ObjectFlowKnown) {
-					Iterable<Edge> iter = this.vertex.getOutEdges(Token.TOKEN + flow.getName());
+					Iterable<Edge> iter = this.vertex.getEdges(Direction.OUT, Token.TOKEN + flow.getName());
 					for (Edge edge : iter) {
 						result.add(constructInToken(edge));
 					}
@@ -84,7 +85,7 @@ public abstract class ObjectNode<O, IN extends ObjectToken<O>, OUT extends Objec
 	@Override
 	public List<OUT> getOutTokens() {
 		List<OUT> result = new ArrayList<OUT>();
-		Iterable<Edge> iter = this.vertex.getOutEdges(Token.TOKEN + getName());
+		Iterable<Edge> iter = this.vertex.getEdges(Direction.OUT,Token.TOKEN + getName());
 		for (Edge edge : iter) {
 			result.add(constructOutToken(edge));
 		}
@@ -96,7 +97,7 @@ public abstract class ObjectNode<O, IN extends ObjectToken<O>, OUT extends Objec
 		List<OUT> result = new ArrayList<OUT>();
 		for (ObjectFlowKnown<O, OUT> flow : getOutgoing()) {
 			if (flow.getName().equals(outFlowName)) {
-				Iterable<Edge> iter = this.vertex.getOutEdges(Token.TOKEN + flow.getName());
+				Iterable<Edge> iter = this.vertex.getEdges(Direction.OUT, Token.TOKEN + flow.getName());
 				for (Edge edge : iter) {
 					result.add(constructOutToken(edge));
 				}
@@ -115,7 +116,7 @@ public abstract class ObjectNode<O, IN extends ObjectToken<O>, OUT extends Objec
 	protected IN constructInToken(Edge edge) {
 		try {
 			Class<?> c = Class.forName((String) edge.getProperty("tokenClass"));
-			return (IN) c.getConstructor(Vertex.class).newInstance(edge.getInVertex());
+			return (IN) c.getConstructor(Vertex.class).newInstance(edge.getVertex(Direction.IN));
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -125,7 +126,7 @@ public abstract class ObjectNode<O, IN extends ObjectToken<O>, OUT extends Objec
 	protected OUT constructOutToken(Edge edge) {
 		try {
 			Class<?> c = Class.forName((String) edge.getProperty("tokenClass"));
-			return (OUT) c.getConstructor(Vertex.class).newInstance(edge.getInVertex());
+			return (OUT) c.getConstructor(Vertex.class).newInstance(edge.getVertex(Direction.IN));
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

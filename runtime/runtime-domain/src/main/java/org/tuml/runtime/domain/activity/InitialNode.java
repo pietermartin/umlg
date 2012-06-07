@@ -5,8 +5,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.tinkerpop.blueprints.pgm.Edge;
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Direction;
+import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Vertex;
 
 
 public abstract class InitialNode extends ControlNode<ControlToken, ControlToken> {
@@ -40,9 +41,9 @@ public abstract class InitialNode extends ControlNode<ControlToken, ControlToken
 	@Override
 	public List<ControlToken> getInTokens() {
 		List<ControlToken> result = new ArrayList<ControlToken>();
-		Iterable<Edge> iter = this.vertex.getOutEdges(Token.TOKEN + getName());
+		Iterable<Edge> iter = this.vertex.getEdges(Direction.OUT, Token.TOKEN + getName());
 		for (Edge edge : iter) {
-			result.add(new ControlToken(edge.getInVertex()));
+			result.add(new ControlToken(edge.getVertex(Direction.IN)));
 		}
 		return result;
 	}
@@ -56,9 +57,9 @@ public abstract class InitialNode extends ControlNode<ControlToken, ControlToken
 	public List<ControlToken> getOutTokens() {
 		List<ControlToken> result = new ArrayList<ControlToken>();
 		for (ActivityEdge<ControlToken> flow : getOutgoing()) {
-			Iterable<Edge> iter = this.vertex.getOutEdges(Token.TOKEN + flow.getName());
+			Iterable<Edge> iter = this.vertex.getEdges(Direction.OUT, Token.TOKEN + flow.getName());
 			for (Edge edge : iter) {
-				result.add(new ControlToken(edge.getInVertex()));
+				result.add(new ControlToken(edge.getVertex(Direction.IN)));
 			}
 		}
 		return result;
@@ -69,9 +70,9 @@ public abstract class InitialNode extends ControlNode<ControlToken, ControlToken
 		List<ControlToken> result = new ArrayList<ControlToken>();
 		for (ActivityEdge<ControlToken> flow : getOutgoing()) {
 			if (flow.getName().equals(outFlowName)) {
-				Iterable<Edge> iter = this.vertex.getOutEdges(Token.TOKEN + flow.getName());
+				Iterable<Edge> iter = this.vertex.getEdges(Direction.OUT, Token.TOKEN + flow.getName());
 				for (Edge edge : iter) {
-					result.add(new ControlToken(edge.getInVertex()));
+					result.add(new ControlToken(edge.getVertex(Direction.IN)));
 				}
 			}
 		}

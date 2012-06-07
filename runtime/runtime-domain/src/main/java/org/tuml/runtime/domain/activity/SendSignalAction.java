@@ -11,8 +11,8 @@ import org.tuml.runtime.domain.activity.interf.IOutputPin;
 import org.tuml.runtime.domain.activity.interf.ISendSignalAction;
 import org.tuml.runtime.util.TinkerClassifierBehaviorExecutorService;
 
-import com.tinkerpop.blueprints.pgm.TransactionalGraph.Conclusion;
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
+import com.tinkerpop.blueprints.Vertex;
 
 public abstract class SendSignalAction extends InvocationAction implements ISendSignalAction {
 

@@ -2,7 +2,7 @@ package org.tuml.runtime.domain.activity;
 
 import java.util.List;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 /*
  * Join node can have one in control flow and one in object flow. In this case an object flow flows out

@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.tuml.runtime.domain.activity.interf.IManyInActivityParameterNode;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 public abstract class ManyInActivityParameterNode<O> extends InActivityParameterNode<O,CollectionObjectToken<O>> implements IManyInActivityParameterNode<O> {
 

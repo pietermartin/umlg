@@ -7,9 +7,8 @@ import org.tuml.runtime.adaptor.NakedGraphFactory;
 import org.tuml.runtime.adaptor.TinkerSchemaHelper;
 import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
 
-import com.tinkerpop.blueprints.pgm.Index;
-import com.tinkerpop.blueprints.pgm.TransactionalGraph.Conclusion;
-import com.tinkerpop.blueprints.pgm.impls.neo4j.Neo4jGraph;
+import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
+import com.tinkerpop.blueprints.impls.neo4j.Neo4jGraph;
 
 public class NakedNeo4jGraphFactory implements NakedGraphFactory {
 	
@@ -26,10 +25,11 @@ public class NakedNeo4jGraphFactory implements NakedGraphFactory {
 	public NakedGraph getNakedGraph(String url, TinkerSchemaHelper schemaHelper, boolean withSchema) {
 		File f = new File(url);
 		Neo4jGraph db = new Neo4jGraph(f.getAbsolutePath());
-		db.dropIndex(Index.VERTICES);
-		db.dropIndex(Index.EDGES);
+//TODO investigate
+//		db.dropIndex(Index<Element>.VERTICES);
+//		db.dropIndex(Index<Element>.EDGES);
 //		db.setTransactionMode(Mode.MANUAL);
-		db.setMaxBufferSize(0);
+//		db.setMaxBufferSize(0);
 		TransactionThreadEntityVar.clear();
 		NakedGraph nakedGraph = new NakedNeo4jGraph(db, schemaHelper);
 		nakedGraph.startTransaction();

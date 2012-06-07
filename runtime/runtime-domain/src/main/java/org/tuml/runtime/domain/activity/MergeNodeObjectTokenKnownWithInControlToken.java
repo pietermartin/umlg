@@ -2,7 +2,7 @@ package org.tuml.runtime.domain.activity;
 
 import java.util.List;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 
 public abstract class MergeNodeObjectTokenKnownWithInControlToken<O, OUT extends ObjectToken<O>> extends MergeNode<Token, OUT> {

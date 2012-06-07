@@ -7,7 +7,7 @@ import java.util.NoSuchElementException;
 
 import org.tuml.runtime.domain.activity.interf.IOutputPin;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 public abstract class OutputPin<O, OUT extends ObjectToken<O>> extends Pin<O, OUT, OUT> implements IOutputPin<O, OUT> {
 

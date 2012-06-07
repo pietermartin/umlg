@@ -15,8 +15,9 @@ import org.tuml.runtime.domain.TinkerAuditableNode;
 import org.tuml.runtime.domain.TinkerNode;
 import org.tuml.runtime.util.TinkerFormatter;
 
-import com.tinkerpop.blueprints.pgm.Edge;
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Direction;
+import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Vertex;
 
 public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimeProperty {
 
@@ -60,17 +61,17 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 
 	protected Iterable<Edge> getEdges() {
 		if (this.isControllingSide()) {
-			return this.vertex.getOutEdges(this.getLabel());
+			return this.vertex.getEdges(Direction.OUT, this.getLabel());
 		} else {
-			return this.vertex.getInEdges(this.getLabel());
+			return this.vertex.getEdges(Direction.IN, this.getLabel());
 		}
 	}
 
 	protected Iterable<Edge> getEdges(Vertex v) {
 		if (!this.isControllingSide()) {
-			return v.getOutEdges(this.getLabel());
+			return v.getEdges(Direction.OUT, this.getLabel());
 		} else {
-			return v.getInEdges(this.getLabel());
+			return v.getEdges(Direction.IN, this.getLabel());
 		}
 	}
 
@@ -303,9 +304,9 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 
 	protected Vertex getVertexForDirection(Edge edge) {
 		if (this.isControllingSide()) {
-			return edge.getInVertex();
+			return edge.getVertex(Direction.IN);
 		} else {
-			return edge.getOutVertex();
+			return edge.getVertex(Direction.OUT);
 		}
 	}
 

@@ -6,7 +6,7 @@ import java.util.logging.Level;
 import org.tuml.runtime.domain.activity.interf.ICallAction;
 import org.tuml.runtime.domain.activity.interf.IOutputPin;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 public abstract class CallAction extends InvocationAction implements ICallAction {
 

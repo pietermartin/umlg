@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.tuml.runtime.domain.activity.interf.IManyValuePin;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 public abstract class ManyValuePin<O> extends ValuePin<O, CollectionObjectToken<O>> implements IManyValuePin<O> {
 

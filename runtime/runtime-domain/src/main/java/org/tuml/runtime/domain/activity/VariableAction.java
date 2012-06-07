@@ -1,6 +1,6 @@
 package org.tuml.runtime.domain.activity;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 /*
  * V is the type of the variable, if it has multiplicity of many then the elements are of type V

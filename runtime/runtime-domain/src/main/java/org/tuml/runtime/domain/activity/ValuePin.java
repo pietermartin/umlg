@@ -2,7 +2,7 @@ package org.tuml.runtime.domain.activity;
 
 import org.tuml.runtime.domain.activity.interf.IValuePin;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 public abstract class ValuePin<O, OUT extends ObjectToken<O>> extends InputPin<O, OUT> implements IValuePin<O, OUT> {
 

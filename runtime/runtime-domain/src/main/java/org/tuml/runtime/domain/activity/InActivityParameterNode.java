@@ -6,8 +6,9 @@ import java.util.List;
 
 import org.tuml.runtime.domain.activity.interf.IInActivityParameterNode;
 
-import com.tinkerpop.blueprints.pgm.Edge;
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Direction;
+import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Vertex;
 
 public abstract class InActivityParameterNode<O, IN extends ObjectToken<O>> extends ActivityParameterNode<O, IN> implements IInActivityParameterNode<O, IN> {
 
@@ -67,7 +68,7 @@ public abstract class InActivityParameterNode<O, IN extends ObjectToken<O>> exte
 	@Override
 	public List<IN> getInTokens() {
 		List<IN> result = new ArrayList<IN>();
-		Iterable<Edge> iter = this.vertex.getOutEdges(Token.TOKEN + getName());
+		Iterable<Edge> iter = this.vertex.getEdges(Direction.OUT, Token.TOKEN + getName());
 		for (Edge edge : iter) {
 			result.add(constructInToken(edge));
 		}

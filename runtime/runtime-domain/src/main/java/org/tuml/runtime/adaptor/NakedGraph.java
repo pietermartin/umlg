@@ -10,11 +10,11 @@ import javax.transaction.TransactionManager;
 
 import org.tuml.runtime.domain.PersistentObject;
 
-import com.tinkerpop.blueprints.pgm.Edge;
-import com.tinkerpop.blueprints.pgm.Element;
-import com.tinkerpop.blueprints.pgm.IndexableGraph;
-import com.tinkerpop.blueprints.pgm.TransactionalGraph;
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Element;
+import com.tinkerpop.blueprints.IndexableGraph;
+import com.tinkerpop.blueprints.TransactionalGraph;
+import com.tinkerpop.blueprints.Vertex;
 
 public interface NakedGraph extends TransactionalGraph, IndexableGraph, Serializable  {
 	void incrementTransactionCount();

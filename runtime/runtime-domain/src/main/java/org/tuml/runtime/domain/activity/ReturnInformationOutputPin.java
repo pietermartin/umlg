@@ -1,6 +1,6 @@
 package org.tuml.runtime.domain.activity;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 public abstract class ReturnInformationOutputPin<O,OUT extends ObjectToken<O>> extends OutputPin<O,OUT> {
 

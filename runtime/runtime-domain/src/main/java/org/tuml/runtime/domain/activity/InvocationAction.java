@@ -7,7 +7,7 @@ import java.util.List;
 import org.tuml.runtime.domain.activity.interf.IInputPin;
 import org.tuml.runtime.domain.activity.interf.IInvocationAction;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 public abstract class InvocationAction extends Action implements IInvocationAction {
 

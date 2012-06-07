@@ -13,8 +13,9 @@ import org.tuml.runtime.domain.activity.interf.IActivityEdge;
 import org.tuml.runtime.domain.activity.interf.IActivityNode;
 import org.tuml.runtime.util.TinkerUtil;
 
-import com.tinkerpop.blueprints.pgm.Edge;
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Direction;
+import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.pipes.AbstractPipe;
 
 public abstract class ActivityNode<IN extends Token, OUT extends Token> extends AbstractPipe<IN, Boolean> implements IActivityNode<IN, OUT> {
@@ -102,7 +103,7 @@ public abstract class ActivityNode<IN extends Token, OUT extends Token> extends 
 
 	protected boolean doAllIncomingFlowsHaveTokens() {
 		for (IActivityEdge<?> flow : getIncoming()) {
-			Iterable<Edge> iter = this.vertex.getOutEdges(Token.TOKEN + flow.getName());
+			Iterable<Edge> iter = this.vertex.getEdges(Direction.OUT, Token.TOKEN + flow.getName());
 			if (iter.iterator().hasNext()) {
 				continue;
 			} else {

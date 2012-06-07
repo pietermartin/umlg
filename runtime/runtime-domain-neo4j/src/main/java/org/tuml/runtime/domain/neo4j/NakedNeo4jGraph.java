@@ -25,14 +25,16 @@ import org.tuml.runtime.adaptor.TinkerSchemaHelper;
 import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
 import org.tuml.runtime.domain.PersistentObject;
 
-import com.tinkerpop.blueprints.pgm.AutomaticIndex;
-import com.tinkerpop.blueprints.pgm.Edge;
-import com.tinkerpop.blueprints.pgm.Element;
-import com.tinkerpop.blueprints.pgm.Index;
-import com.tinkerpop.blueprints.pgm.Vertex;
-import com.tinkerpop.blueprints.pgm.impls.neo4j.Neo4jEdge;
-import com.tinkerpop.blueprints.pgm.impls.neo4j.Neo4jGraph;
-import com.tinkerpop.blueprints.pgm.impls.neo4j.Neo4jVertex;
+import com.tinkerpop.blueprints.Direction;
+import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Element;
+import com.tinkerpop.blueprints.Features;
+import com.tinkerpop.blueprints.Index;
+import com.tinkerpop.blueprints.Parameter;
+import com.tinkerpop.blueprints.Vertex;
+import com.tinkerpop.blueprints.impls.neo4j.Neo4jEdge;
+import com.tinkerpop.blueprints.impls.neo4j.Neo4jGraph;
+import com.tinkerpop.blueprints.impls.neo4j.Neo4jVertex;
 
 public class NakedNeo4jGraph implements NakedGraph {
 
@@ -235,11 +237,11 @@ public class NakedNeo4jGraph implements NakedGraph {
 	@Override
 	public List<PersistentObject> getCompositeRoots() {
 		List<PersistentObject> result = new ArrayList<PersistentObject>();
-		Iterable<Edge> iter = getRoot().getOutEdges("root");
+		Iterable<Edge> iter = getRoot().getEdges(Direction.OUT, "root");
 		for (Edge edge : iter) {
 			try {
 				Class<?> c = Class.forName((String) edge.getProperty("inClass"));
-				result.add((PersistentObject) c.getConstructor(Vertex.class).newInstance(edge.getInVertex()));
+				result.add((PersistentObject) c.getConstructor(Vertex.class).newInstance(edge.getVertex(Direction.IN)));
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
@@ -305,24 +307,48 @@ public class NakedNeo4jGraph implements NakedGraph {
 		}
 	}
 
-	@Override
-	public void setMaxBufferSize(int bufferSize) {
-		this.neo4jGraph.setMaxBufferSize(bufferSize);
-	}
-
-	@Override
-	public int getMaxBufferSize() {
-		return this.neo4jGraph.getMaxBufferSize();
-	}
-
-	@Override
-	public int getCurrentBufferSize() {
-		return this.neo4jGraph.getCurrentBufferSize();
-	}
+//	@Override
+//	public void setMaxBufferSize(int bufferSize) {
+//		this.neo4jGraph.setMaxBufferSize(bufferSize);
+//	}
+//
+//	@Override
+//	public int getMaxBufferSize() {
+//		return this.neo4jGraph.getMaxBufferSize();
+//	}
+//
+//	@Override
+//	public int getCurrentBufferSize() {
+//		return this.neo4jGraph.getCurrentBufferSize();
+//	}
 
 	@Override
 	public boolean isTransactionActive() {
 		return txCount.get() != null;
 	}
+
+	@Override
+	public Features getFeatures() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+//	@Override
+//	public Iterable<Vertex> getVertices(String key, Object value) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	@Override
+//	public Iterable<Edge> getEdges(String key, Object value) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	@Override
+//	public <T extends Element> Index<T> createIndex(String indexName, Class<T> indexClass, Parameter... indexParameters) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
 }

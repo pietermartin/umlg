@@ -2,7 +2,8 @@ package org.tuml.runtime.domain.activity;
 
 import org.tuml.runtime.adaptor.GraphDb;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Direction;
+import com.tinkerpop.blueprints.Vertex;
 
 public abstract class Token {
 
@@ -35,9 +36,9 @@ public abstract class Token {
 	public abstract void remove();
 
 	protected void removeEdgeFromActivityNode() {
-		if (this.vertex.getInEdges(TOKEN + getEdgeName()).iterator().hasNext()) {
-			GraphDb.getDb().removeEdge(this.vertex.getInEdges().iterator().next());
-			if (this.vertex.getInEdges().iterator().hasNext()) {
+		if (this.vertex.getEdges(Direction.IN, TOKEN + getEdgeName()).iterator().hasNext()) {
+			GraphDb.getDb().removeEdge(this.vertex.getEdges(Direction.IN).iterator().next());
+			if (this.vertex.getEdges(Direction.IN).iterator().hasNext()) {
 				throw new IllegalStateException("Token can not have more than one edge!");
 			}
 		}

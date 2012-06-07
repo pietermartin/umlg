@@ -5,8 +5,9 @@ import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.domain.ISignal;
 import org.tuml.runtime.domain.TinkerNode;
 
-import com.tinkerpop.blueprints.pgm.Edge;
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Direction;
+import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Vertex;
 
 public class SignalEvent extends Event {
 
@@ -26,12 +27,12 @@ public class SignalEvent extends Event {
 	}
 
 	public ISignal getSignal() {
-		Iterable<Edge> iter1 = this.vertex.getInEdges("event_signal");
+		Iterable<Edge> iter1 = this.vertex.getEdges(Direction.IN, "event_signal");
 		if ( iter1.iterator().hasNext() ) {
 			Edge edge = iter1.iterator().next();
 			try {
 				Class<?> c = Class.forName((String)edge.getProperty("outClass"));
-				return (ISignal) c.getConstructor(Vertex.class).newInstance(edge.getOutVertex());
+				return (ISignal) c.getConstructor(Vertex.class).newInstance(edge.getVertex(Direction.OUT));
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}

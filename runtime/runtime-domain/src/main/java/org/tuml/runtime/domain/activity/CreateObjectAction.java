@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import org.tuml.runtime.domain.activity.interf.IInputPin;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 
 public abstract class CreateObjectAction<O> extends Action {

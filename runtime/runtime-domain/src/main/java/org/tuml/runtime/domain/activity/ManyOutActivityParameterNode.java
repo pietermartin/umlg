@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.tuml.runtime.domain.activity.interf.IManyOutActivityParameterNode;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 public abstract class ManyOutActivityParameterNode<O> extends OutActivityParameterNode<O,CollectionObjectToken<O>> implements IManyOutActivityParameterNode<O> {
 

@@ -13,8 +13,9 @@ import org.tuml.runtime.domain.activity.interf.IEvent;
 import org.tuml.runtime.domain.activity.interf.IInputPin;
 import org.tuml.runtime.domain.activity.interf.IOutputPin;
 
-import com.tinkerpop.blueprints.pgm.Edge;
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Direction;
+import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Vertex;
 
 public abstract class AbstractActivity extends BaseTinkerSoftDelete implements CompositionNode {
 
@@ -27,12 +28,12 @@ public abstract class AbstractActivity extends BaseTinkerSoftDelete implements C
 	}
 	
 	public CallAction getCallAction() {
-		Iterable<Edge> iter1 = this.vertex.getOutEdges("callAction");
+		Iterable<Edge> iter1 = this.vertex.getEdges(Direction.OUT, "callAction");
 		if ( iter1.iterator().hasNext() ) {
 			Edge edge = iter1.iterator().next();
 			try {
 				Class<?> c = Class.forName((String) edge.getProperty("inClass"));
-				return (CallAction) c.getConstructor(Vertex.class).newInstance(edge.getInVertex());
+				return (CallAction) c.getConstructor(Vertex.class).newInstance(edge.getVertex(Direction.IN));
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}

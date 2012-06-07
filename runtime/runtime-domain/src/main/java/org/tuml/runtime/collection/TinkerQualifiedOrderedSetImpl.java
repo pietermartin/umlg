@@ -8,12 +8,12 @@ import java.util.Set;
 import org.apache.commons.collections.set.ListOrderedSet;
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.NakedTinkerIndex;
-import org.tuml.runtime.domain.CompositionNode;
 import org.tuml.runtime.domain.TinkerNode;
 
-import com.tinkerpop.blueprints.pgm.CloseableSequence;
-import com.tinkerpop.blueprints.pgm.Edge;
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.CloseableIterable;
+import com.tinkerpop.blueprints.Direction;
+import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Vertex;
 
 public class TinkerQualifiedOrderedSetImpl<E> extends BaseCollection<E> implements TinkerQualifiedOrderedSet<E> {
 
@@ -113,7 +113,7 @@ public class TinkerQualifiedOrderedSetImpl<E> extends BaseCollection<E> implemen
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected void loadFromVertex() {
-		CloseableSequence<Edge> edges = this.index.queryList(0F, true, false);
+		CloseableIterable<Edge> edges = this.index.queryList(0F, true, false);
 		for (Edge edge : edges) {
 			E node = null;
 			try {
@@ -153,12 +153,12 @@ public class TinkerQualifiedOrderedSetImpl<E> extends BaseCollection<E> implemen
 				}
 			} else if (o.getClass().isEnum()) {
 				v = this.internalVertexMap.get(((Enum<?>) o).name());
-				Edge edge = v.getInEdges(this.getLabel()).iterator().next();
+				Edge edge = v.getEdges(Direction.IN, this.getLabel()).iterator().next();
 				removeEdgefromIndex(v, edge, indexOf);
 				GraphDb.getDb().removeVertex(v);
 			} else {
 				v = this.internalVertexMap.get(o);
-				Edge edge = v.getInEdges(this.getLabel()).iterator().next();
+				Edge edge = v.getEdges(Direction.IN, this.getLabel()).iterator().next();
 				removeEdgefromIndex(v, edge, indexOf);
 				GraphDb.getDb().removeVertex(v);
 			}

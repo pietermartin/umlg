@@ -7,8 +7,9 @@ import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.domain.CompositionNode;
 import org.tuml.runtime.domain.TinkerNode;
 
-import com.tinkerpop.blueprints.pgm.Edge;
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Direction;
+import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Vertex;
 
 public class SingleObjectToken<O> extends ObjectToken<O> {
 
@@ -43,22 +44,22 @@ public class SingleObjectToken<O> extends ObjectToken<O> {
 
 	protected void removeEdgeToObject() {
 		O object = getObject();
-		Edge edge = this.vertex.getOutEdges(TOKEN + "toObject").iterator().next();
+		Edge edge = this.vertex.getEdges(Direction.OUT, TOKEN + "toObject").iterator().next();
 		if (object instanceof TinkerNode) {
 			GraphDb.getDb().removeEdge(edge);
 		} else if (object.getClass().isEnum()) {
-			GraphDb.getDb().removeVertex(edge.getInVertex());
+			GraphDb.getDb().removeVertex(edge.getVertex(Direction.IN));
 		} else {
-			GraphDb.getDb().removeVertex(edge.getInVertex());
+			GraphDb.getDb().removeVertex(edge.getVertex(Direction.IN));
 		}
 	}
 
 	@Override
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public O getObject() {
-		Edge edge = this.vertex.getOutEdges(TOKEN + "toObject").iterator().next();
+		Edge edge = this.vertex.getEdges(Direction.OUT, TOKEN + "toObject").iterator().next();
 		Class<?> c = getClassToInstantiate(edge);
-		Vertex v = edge.getInVertex();
+		Vertex v = edge.getVertex(Direction.IN);
 		O node = null;
 		try {
 			if (c.isEnum()) {

@@ -16,8 +16,9 @@ import org.tuml.runtime.domain.activity.interf.IOutputPin;
 import org.tuml.runtime.domain.activity.interf.ISignalEvent;
 import org.tuml.runtime.domain.activity.interf.ITrigger;
 
-import com.tinkerpop.blueprints.pgm.Edge;
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Direction;
+import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Vertex;
 
 public abstract class AcceptEventAction extends Action implements IAcceptEventAction {
 
@@ -53,9 +54,9 @@ public abstract class AcceptEventAction extends Action implements IAcceptEventAc
 	@Override
 	public List<ControlToken> getInTokens() {
 		List<ControlToken> result = new ArrayList<ControlToken>();
-		Iterable<Edge> iter = this.vertex.getOutEdges(Token.TOKEN + getName());
+		Iterable<Edge> iter = this.vertex.getEdges(Direction.OUT, Token.TOKEN + getName());
 		for (Edge edge : iter) {
-			result.add(new ControlToken(edge.getInVertex()));
+			result.add(new ControlToken(edge.getVertex(Direction.IN)));
 		}
 		return result;
 	}

@@ -2,7 +2,7 @@ package org.tuml.runtime.domain.activity;
 
 import org.tuml.runtime.domain.activity.interf.IAcceptCallAction;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 public abstract class AcceptCallAction extends AcceptEventAction implements IAcceptCallAction {
 

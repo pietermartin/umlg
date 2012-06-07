@@ -3,7 +3,7 @@ package org.tuml.runtime.domain.activity;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 public abstract class JoinNodeObjectTokenUnknown<IN extends ObjectToken<?>> extends JoinNode<IN, IN> {
 

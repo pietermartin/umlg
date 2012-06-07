@@ -3,8 +3,9 @@ package org.tuml.runtime.domain.activity;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.tinkerpop.blueprints.pgm.Edge;
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Direction;
+import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Vertex;
 
 public abstract class JoinNodeObjectTokenUnknownWithInControlToken<OUT extends ObjectToken<?>> extends JoinNode<Token, OUT> {
 
@@ -43,14 +44,14 @@ public abstract class JoinNodeObjectTokenUnknownWithInControlToken<OUT extends O
 	public List<Token> getInTokens() {
 		List<Token> result = new ArrayList<Token>();
 		for (ActivityEdge<? extends Token> flow : getIncoming()) {
-			Iterable<Edge> iter = this.vertex.getOutEdges(Token.TOKEN + flow.getName());
+			Iterable<Edge> iter = this.vertex.getEdges(Direction.OUT, Token.TOKEN + flow.getName());
 			for (Edge edge : iter) {
 				Token token;
 				if (!(flow instanceof ControlFlow)) {
 					token = contructOutToken(edge);
 					result.add(token);
 				} else {
-					token = new ControlToken(edge.getInVertex());
+					token = new ControlToken(edge.getVertex(Direction.IN));
 					token.remove();
 				}
 			}

@@ -3,7 +3,7 @@ package org.tuml.runtime.adaptor;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 
 public class TransactionThreadVar {

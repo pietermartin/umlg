@@ -3,7 +3,7 @@ package org.tuml.runtime.domain.activity;
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.domain.TinkerNode;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 public abstract class Event implements TinkerNode {
 
