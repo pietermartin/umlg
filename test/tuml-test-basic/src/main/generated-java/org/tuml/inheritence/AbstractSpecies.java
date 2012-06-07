@@ -1,6 +1,6 @@
 package org.tuml.inheritence;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 import java.util.Set;
 import java.util.UUID;
@@ -25,8 +25,8 @@ public class AbstractSpecies extends BaseTinker implements CompositionNode {
 	 */
 	public AbstractSpecies(God compositeOwner) {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
-		createComponents();
 		initialiseProperties();
+		createComponents();
 		init(compositeOwner);
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
@@ -144,19 +144,19 @@ public class AbstractSpecies extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.god =  new TinkerSetImpl<God>(this, AbstractSpeciesRuntimePropertyEnum.god);
 		this.name =  new TinkerSetImpl<String>(this, AbstractSpeciesRuntimePropertyEnum.name);
+		this.god =  new TinkerSetImpl<God>(this, AbstractSpeciesRuntimePropertyEnum.god);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (AbstractSpeciesRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case name:
-				this.name =  new TinkerSetImpl<String>(this, AbstractSpeciesRuntimePropertyEnum.name);
-			break;
-		
 			case god:
 				this.god =  new TinkerSetImpl<God>(this, AbstractSpeciesRuntimePropertyEnum.god);
+			break;
+		
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, AbstractSpeciesRuntimePropertyEnum.name);
 			break;
 		
 		}
@@ -207,8 +207,8 @@ public class AbstractSpecies extends BaseTinker implements CompositionNode {
 	}
 
 	public enum AbstractSpeciesRuntimePropertyEnum implements TumlRuntimeProperty {
-		god(false,false,"A_<god>_<abstractSpecies>",false,false,true,false,1,1),
-		name(true,false,"org__tuml__inheritence__AbstractSpecies__name",false,false,true,false,1,1);
+		name(true,false,"org__tuml__inheritence__AbstractSpecies__name",false,false,true,false,1,1),
+		god(false,false,"A_<god>_<abstractSpecies>",false,false,true,false,1,1);
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -243,11 +243,11 @@ public class AbstractSpecies extends BaseTinker implements CompositionNode {
 		}
 	
 		static public AbstractSpeciesRuntimePropertyEnum fromLabel(String label) {
-			if ( god.getLabel().equals(label) ) {
-				return god;
-			}
 			if ( name.getLabel().equals(label) ) {
 				return name;
+			}
+			if ( god.getLabel().equals(label) ) {
+				return god;
 			}
 			throw new IllegalStateException();
 		}

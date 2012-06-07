@@ -7,7 +7,7 @@ import org.tuml.OneOne;
 import org.tuml.OneTwo;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
-import com.tinkerpop.blueprints.pgm.TransactionalGraph.Conclusion;
+import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 
 public class TestOneToOne extends BaseLocalDbTest {
 
@@ -32,13 +32,14 @@ public class TestOneToOne extends BaseLocalDbTest {
 		oneOne4.addToOneTwo(oneTwo4);
 		db.stopTransaction(Conclusion.SUCCESS);
 		Assert.assertEquals(8, countVertices());
-		Assert.assertEquals(4, countEdges());
+		//There is an edge to the root node for every non composite vertex
+		Assert.assertEquals(12, countEdges());
 		
 		db.startTransaction();
 		oneOne1.addToOneTwo(oneTwo2);
 		db.stopTransaction(Conclusion.SUCCESS);
 		Assert.assertEquals(8, countVertices());
-		Assert.assertEquals(4, countEdges());
+		Assert.assertEquals(12, countEdges());
 	}
 	
 	@Test
@@ -62,7 +63,7 @@ public class TestOneToOne extends BaseLocalDbTest {
 		oneOne4.addToOneTwo(oneTwo4);
 		db.stopTransaction(Conclusion.SUCCESS);
 		Assert.assertEquals(8, countVertices());
-		Assert.assertEquals(4, countEdges());
+		Assert.assertEquals(12, countEdges());
 		
 		db.startTransaction();
 		oneOne1.setOneTwo(oneTwo2);
@@ -70,7 +71,7 @@ public class TestOneToOne extends BaseLocalDbTest {
 		Assert.assertEquals(oneTwo2.getOneOne(), oneOne1);
 		db.stopTransaction(Conclusion.SUCCESS);
 		Assert.assertEquals(8, countVertices());
-		Assert.assertEquals(3, countEdges());
+		Assert.assertEquals(11, countEdges());
 		
 		OneOne oneOne1Test = new OneOne(oneOne1.getVertex());
 		Assert.assertEquals(oneTwo2, oneOne1Test.getOneTwo());

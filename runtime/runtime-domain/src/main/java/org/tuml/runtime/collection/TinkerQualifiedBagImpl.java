@@ -27,7 +27,7 @@ public class TinkerQualifiedBagImpl<E> extends BaseBag<E> implements TinkerQuali
 		this.tumlRuntimeProperty = multiplicity;
 		this.index = GraphDb.getDb().getIndex(uid + ":::" + getLabel(), Edge.class);
 		if (this.index == null) {
-			this.index = GraphDb.getDb().createManualIndex(uid + ":::" + getLabel(), Edge.class);
+			this.index = GraphDb.getDb().createKeyIndex(uid + ":::" + getLabel(), Edge.class);
 		}
 	}
 

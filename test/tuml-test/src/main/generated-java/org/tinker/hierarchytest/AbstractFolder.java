@@ -1,6 +1,6 @@
 package org.tinker.hierarchytest;
 
-import com.tinkerpop.blueprints.pgm.Edge;
+import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.pgm.Vertex;
 
 import java.util.Set;

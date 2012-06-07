@@ -106,10 +106,10 @@ public class NakedNeo4jGraph implements NakedGraph {
 		return neo4jGraph.getEdges();
 	}
 
-	@Override
-	public void clear() {
-		neo4jGraph.clear();
-	}
+//	@Override
+//	public void clear() {
+//		neo4jGraph.clear();
+//	}
 
 	@Override
 	public void shutdown() {
@@ -118,8 +118,9 @@ public class NakedNeo4jGraph implements NakedGraph {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public <T extends Element> NakedTinkerIndex<T> createManualIndex(String indexName, Class<T> indexClass) {
-		return new NakedNeo4jIndex(neo4jGraph.createManualIndex(indexName, indexClass));
+	public <T extends Element> NakedTinkerIndex<T> createKeyIndex(String indexName, Class<T> indexClass) {
+		this.neo4jGraph.createKeyIndex(indexName, indexClass);
+		return new NakedNeo4jIndex(this.getIndex(indexName, indexClass));
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -133,10 +134,10 @@ public class NakedNeo4jGraph implements NakedGraph {
 		}
 	}
 
-	@Override
-	public <T extends Element> AutomaticIndex<T> createAutomaticIndex(String indexName, Class<T> indexClass, Set<String> indexKeys) {
-		return neo4jGraph.createAutomaticIndex(indexName, indexClass, indexKeys);
-	}
+//	@Override
+//	public <T extends Element> AutomaticIndex<T> createAutomaticIndex(String indexName, Class<T> indexClass, Set<String> indexKeys) {
+//		return neo4jGraph.createAutomaticIndex(indexName, indexClass, indexKeys);
+//	}
 
 	@Override
 	public Iterable<Index<? extends Element>> getIndices() {
@@ -186,7 +187,10 @@ public class NakedNeo4jGraph implements NakedGraph {
 		for (Relationship relationship : relationships) {
 			if ((relationship.getStartNode().equals(n1) && relationship.getEndNode().equals(n2))
 					|| (relationship.getStartNode().equals(n2) && relationship.getEndNode().equals(n1))) {
-				result.add(new Neo4jEdge(relationship, neo4jGraph));
+				
+				
+				result.add(neo4jGraph.getEdge(relationship.getId()));
+//				result.add(new Neo4jEdge(relationship, neo4jGraph));
 			}
 		}
 		return result;
@@ -197,7 +201,7 @@ public class NakedNeo4jGraph implements NakedGraph {
 		try {
 			neo4jGraph.getRawGraph().getNodeById(1);
 		} catch (NotFoundException e) {
-			((EmbeddedGraphDatabase) neo4jGraph.getRawGraph()).getConfig().getGraphDbModule().createNewReferenceNode();
+			((EmbeddedGraphDatabase) neo4jGraph.getRawGraph()).getNodeManager().setReferenceNodeId(neo4jGraph.getRawGraph().createNode().getId()) ;
 			Vertex root = getRoot();
 			root.setProperty("transactionCount", 1);
 		}
@@ -205,17 +209,18 @@ public class NakedNeo4jGraph implements NakedGraph {
 
 	@Override
 	public Vertex getRoot() {
-		return new Neo4jVertex(neo4jGraph.getRawGraph().getNodeById(1), neo4jGraph);
+		return this.neo4jGraph.getVertex(1L);
+//		return new Neo4jVertex(neo4jGraph.getRawGraph().getNodeById(1), neo4jGraph);
 	}
 
 	@Override
 	public long countVertices() {
-		return ((EmbeddedGraphDatabase) neo4jGraph.getRawGraph()).getConfig().getGraphDbModule().getNodeManager().getNumberOfIdsInUse(Node.class) - 1;
+		return ((EmbeddedGraphDatabase) neo4jGraph.getRawGraph()).getNodeManager().getNumberOfIdsInUse(Node.class) - 1;
 	}
 
 	@Override
 	public long countEdges() {
-		return ((EmbeddedGraphDatabase) neo4jGraph.getRawGraph()).getConfig().getGraphDbModule().getNodeManager().getNumberOfIdsInUse(Relationship.class);
+		return ((EmbeddedGraphDatabase) neo4jGraph.getRawGraph()).getNodeManager().getNumberOfIdsInUse(Relationship.class);
 	}
 
 	@Override
@@ -275,14 +280,13 @@ public class NakedNeo4jGraph implements NakedGraph {
 
 	@Override
 	public TransactionManager getTransactionManager() {
-		return ((AbstractGraphDatabase) neo4jGraph.getRawGraph()).getConfig().getTxModule().getTxManager();
+		return ((AbstractGraphDatabase) neo4jGraph.getRawGraph()).getTxManager();
 	}
 
 	@Override
 	public void resume(Transaction t) {
 		try {
 			getTransactionManager().resume(t);
-//			neo4jGraph.resume(new TopLevelTransaction(getTransactionManager()));
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -291,7 +295,6 @@ public class NakedNeo4jGraph implements NakedGraph {
 	@Override
 	public Transaction suspend() {
 		try {
-//			neo4jGraph.suspend();
 			return getTransactionManager().suspend();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -333,22 +336,22 @@ public class NakedNeo4jGraph implements NakedGraph {
 		return null;
 	}
 
-//	@Override
-//	public Iterable<Vertex> getVertices(String key, Object value) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-//
-//	@Override
-//	public Iterable<Edge> getEdges(String key, Object value) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-//
-//	@Override
-//	public <T extends Element> Index<T> createIndex(String indexName, Class<T> indexClass, Parameter... indexParameters) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
+	@Override
+	public Iterable<Vertex> getVertices(String key, Object value) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Iterable<Edge> getEdges(String key, Object value) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <T extends Element> Index<T> createIndex(String indexName, Class<T> indexClass, Parameter... indexParameters) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

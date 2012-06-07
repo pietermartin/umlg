@@ -1,6 +1,7 @@
 package org.tuml;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Vertex;
 
 import java.util.Set;
 import java.util.UUID;
@@ -40,6 +41,8 @@ public class OneOne extends BaseTinker implements TinkerNode {
 		defaultCreate();
 		initialiseProperties();
 		createComponents();
+		Edge edge = GraphDb.getDb().addEdge(null, GraphDb.getDb().getRoot(), this.vertex, "root");
+		edge.setProperty("inClass", this.getClass().getName());
 	}
 
 	public void addToName(String name) {

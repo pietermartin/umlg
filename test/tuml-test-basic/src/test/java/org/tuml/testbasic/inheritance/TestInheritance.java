@@ -8,7 +8,7 @@ import org.tuml.inheritence.God;
 import org.tuml.inheritence.Mamal;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
-import com.tinkerpop.blueprints.pgm.TransactionalGraph.Conclusion;
+import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 
 public class TestInheritance extends BaseLocalDbTest {
 
@@ -23,7 +23,7 @@ public class TestInheritance extends BaseLocalDbTest {
 		biped.setName("biped");
 		db.stopTransaction(Conclusion.SUCCESS);
 		Assert.assertEquals(3, countVertices());
-		Assert.assertEquals(2, countEdges());
+		Assert.assertEquals(3, countEdges());
 	}
 	
 }

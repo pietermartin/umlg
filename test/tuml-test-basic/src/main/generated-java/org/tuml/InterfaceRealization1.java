@@ -1,6 +1,7 @@
 package org.tuml;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Vertex;
 
 import java.util.Set;
 import java.util.UUID;
@@ -40,6 +41,8 @@ public class InterfaceRealization1 extends BaseTinker implements TinkerNode, Int
 		defaultCreate();
 		initialiseProperties();
 		createComponents();
+		Edge edge = GraphDb.getDb().addEdge(null, GraphDb.getDb().getRoot(), this.vertex, "root");
+		edge.setProperty("inClass", this.getClass().getName());
 	}
 
 	public void addToInterface2(Interface2 interface2) {

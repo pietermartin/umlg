@@ -182,7 +182,7 @@ public class ClassVisitor extends BaseVisitor implements Visitor<Class> {
 
 	protected void addContructorWithVertex(OJAnnotatedClass ojClass, Class clazz) {
 		OJConstructor constructor = new OJConstructor();
-		constructor.addParam("vertex", new OJPathName("com.tinkerpop.blueprints.pgm.Vertex"));
+		constructor.addParam("vertex", TinkerGenerationUtil.vertexPathName);
 		if (clazz.getGeneralizations().isEmpty()) {
 			constructor.getBody().addToStatements("this.vertex=vertex");
 		} else {

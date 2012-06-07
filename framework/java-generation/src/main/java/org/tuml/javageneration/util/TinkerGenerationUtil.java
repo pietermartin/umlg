@@ -34,7 +34,7 @@ public class TinkerGenerationUtil {
 	public static final String ORIGINAL_UID = "originalUid";
 	public static OJPathName oGraphDatabase = new OJPathName("com.orientechnologies.orient.core.db.graph.OGraphDatabase");
 	public static OJPathName schemaPathName = new OJPathName("com.orientechnologies.orient.core.metadata.schema.OSchema");
-	public static OJPathName vertexPathName = new OJPathName("com.tinkerpop.blueprints.pgm.Vertex");
+	public static OJPathName vertexPathName = new OJPathName("com.tinkerpop.blueprints.Vertex");
 	public static OJPathName tinkerFormatter = new OJPathName("org.util.TinkerFormatter");
 	public static OJPathName transactionThreadVar = new OJPathName("org.util.TransactionThreadVar");
 	public static OJPathName transactionThreadEntityVar = new OJPathName("org.tuml.runtime.adaptor.TransactionThreadEntityVar");
@@ -65,7 +65,7 @@ public class TinkerGenerationUtil {
 	public static OJPathName tinkerQualifiedBag = new OJPathName("org.tuml.runtime.collection.TinkerQualifiedBag");
 	public static OJPathName tinkerQualifiedBagImpl = new OJPathName("org.tuml.runtime.collection.TinkerQualifiedBagImpl");
 
-	public static OJPathName edgePathName = new OJPathName("com.tinkerpop.blueprints.pgm.Edge");
+	public static OJPathName edgePathName = new OJPathName("com.tinkerpop.blueprints.Edge");
 	public static OJPathName storagePathName = new OJPathName("com.orientechnologies.orient.core.storage.OStorage");
 	public static String graphDbAccess = "GraphDb.getDb()";
 	public static OJPathName tinkerSchemaHelperPathName = new OJPathName("org.tuml.tinker.runtime.TinkerSchemaHelper");
