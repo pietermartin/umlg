@@ -10,7 +10,7 @@ import org.tinker.hierarchytest.Hierarchy;
 import org.tinker.hierarchytest.RealRootFolder;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
-import com.tinkerpop.blueprints.pgm.TransactionalGraph.Conclusion;
+import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 
 public class TestHierarchy extends BaseLocalDbTest {
 

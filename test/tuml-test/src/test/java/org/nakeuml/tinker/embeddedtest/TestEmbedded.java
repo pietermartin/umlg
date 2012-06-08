@@ -7,7 +7,7 @@ import org.tinker.embeddedtest.REASON;
 import org.tinker.inheritencetest.Mamal;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
-import com.tinkerpop.blueprints.pgm.TransactionalGraph.Conclusion;
+import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 
 public class TestEmbedded extends BaseLocalDbTest {
 
@@ -60,8 +60,8 @@ public class TestEmbedded extends BaseLocalDbTest {
 		god.setName("THEGOD");
 		god.setReason(REASON.GOOD);
 		db.stopTransaction(Conclusion.SUCCESS);
-		Assert.assertEquals(1, countVertices());
-		Assert.assertEquals(1, countEdges());
+		Assert.assertEquals(2, countVertices());
+		Assert.assertEquals(2, countEdges());
 		God g = new God(god.getVertex());
 		Assert.assertEquals(REASON.GOOD, g.getReason());
 	}

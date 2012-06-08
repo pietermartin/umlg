@@ -34,7 +34,7 @@ public class TinkerOrderedSetImpl<E> extends BaseCollection<E> implements Tinker
 		this.tumlRuntimeProperty = multiplicity;
 		this.index = GraphDb.getDb().getIndex(uid + ":::" + getLabel(), Edge.class);
 		if (this.index == null) {
-			this.index = GraphDb.getDb().createKeyIndex(uid + ":::" + getLabel(), Edge.class);
+			this.index = GraphDb.getDb().createIndex(uid + ":::" + getLabel(), Edge.class);
 		}
 	}
 
@@ -47,7 +47,7 @@ public class TinkerOrderedSetImpl<E> extends BaseCollection<E> implements Tinker
 			Edge edge = addInternal(e);
 			// Edge can only be null on isOneToMany, toOneToOne which is a
 			// String, Interger, Boolean or primitive
-			if (edge == null && !isOnePrimitive(e)) {
+			if (edge == null && !isOnePrimitive()) {
 				throw new IllegalStateException("Edge can only be null on isOneToMany, toOneToOne which is a String, Interger, Boolean or primitive");
 			}
 			if (edge != null) {
@@ -81,7 +81,7 @@ public class TinkerOrderedSetImpl<E> extends BaseCollection<E> implements Tinker
 		E current = (E) this.getInternalListOrderedSet().get(indexOf);
 		this.getInternalListOrderedSet().add(indexOf, e);
 		Edge edge = addInternal(e);
-		if (edge == null && !isOnePrimitive(e)) {
+		if (edge == null && !isOnePrimitive()) {
 			throw new IllegalStateException("Edge can only be null on isOneToMany, toOneToOne which is a String, Interger, Boolean or primitive");
 		}
 		if (edge != null) {

@@ -118,9 +118,8 @@ public class NakedNeo4jGraph implements NakedGraph {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public <T extends Element> NakedTinkerIndex<T> createKeyIndex(String indexName, Class<T> indexClass) {
-		this.neo4jGraph.createKeyIndex(indexName, indexClass);
-		return new NakedNeo4jIndex(this.getIndex(indexName, indexClass));
+	public <T extends Element> NakedTinkerIndex<T> createIndex(String indexName, Class<T> indexClass) {
+		return new NakedNeo4jIndex(this.neo4jGraph.createIndex(indexName, indexClass));
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })

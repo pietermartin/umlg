@@ -1,6 +1,6 @@
 package org.tinker.concretetest;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 import java.util.Set;
 import java.util.UUID;
@@ -164,24 +164,24 @@ public class Angel extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.universe =  new TinkerSetImpl<Universe>(this, AngelRuntimePropertyEnum.universe);
-		this.name =  new TinkerSetImpl<String>(this, AngelRuntimePropertyEnum.name);
 		this.god =  new TinkerSetImpl<God>(this, AngelRuntimePropertyEnum.god);
+		this.name =  new TinkerSetImpl<String>(this, AngelRuntimePropertyEnum.name);
+		this.universe =  new TinkerSetImpl<Universe>(this, AngelRuntimePropertyEnum.universe);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (AngelRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case god:
-				this.god =  new TinkerSetImpl<God>(this, AngelRuntimePropertyEnum.god);
+			case universe:
+				this.universe =  new TinkerSetImpl<Universe>(this, AngelRuntimePropertyEnum.universe);
 			break;
 		
 			case name:
 				this.name =  new TinkerSetImpl<String>(this, AngelRuntimePropertyEnum.name);
 			break;
 		
-			case universe:
-				this.universe =  new TinkerSetImpl<Universe>(this, AngelRuntimePropertyEnum.universe);
+			case god:
+				this.god =  new TinkerSetImpl<God>(this, AngelRuntimePropertyEnum.god);
 			break;
 		
 		}
@@ -249,9 +249,10 @@ public class Angel extends BaseTinker implements CompositionNode {
 	}
 
 	public enum AngelRuntimePropertyEnum implements TumlRuntimeProperty {
-		universe(true,false,"A_<universe>_<angel>",true,false,false,false,1,1),
-		name(true,false,"org__tinker__concretetest__Angel__name",false,false,true,false,1,1),
-		god(false,false,"A_<god>_<angel>",false,false,true,false,1,1);
+		god(false,false,false,"A_<god>_<angel>",false,false,true,false,1,1),
+		name(true,true,false,"org__tinker__concretetest__Angel__name",false,false,true,false,1,1),
+		universe(false,true,false,"A_<universe>_<angel>",true,false,false,false,1,1);
+		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -263,6 +264,7 @@ public class Angel extends BaseTinker implements CompositionNode {
 		private int lower;
 		/** Constructor for AngelRuntimePropertyEnum
 		 * 
+		 * @param onePrimitive 
 		 * @param controllingSide 
 		 * @param composite 
 		 * @param label 
@@ -273,7 +275,8 @@ public class Angel extends BaseTinker implements CompositionNode {
 		 * @param upper 
 		 * @param lower 
 		 */
-		private AngelRuntimePropertyEnum(boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+		private AngelRuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+			this.onePrimitive = onePrimitive;
 			this.controllingSide = controllingSide;
 			this.composite = composite;
 			this.label = label;
@@ -286,14 +289,14 @@ public class Angel extends BaseTinker implements CompositionNode {
 		}
 	
 		static public AngelRuntimePropertyEnum fromLabel(String label) {
-			if ( universe.getLabel().equals(label) ) {
-				return universe;
+			if ( god.getLabel().equals(label) ) {
+				return god;
 			}
 			if ( name.getLabel().equals(label) ) {
 				return name;
 			}
-			if ( god.getLabel().equals(label) ) {
-				return god;
+			if ( universe.getLabel().equals(label) ) {
+				return universe;
 			}
 			throw new IllegalStateException();
 		}
@@ -324,6 +327,10 @@ public class Angel extends BaseTinker implements CompositionNode {
 		
 		public boolean isManyToOne() {
 			return this.manyToOne;
+		}
+		
+		public boolean isOnePrimitive() {
+			return this.onePrimitive;
 		}
 		
 		public boolean isOneToMany() {

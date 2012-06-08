@@ -1,6 +1,6 @@
 package org.tinker.componenttest;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 import java.util.Set;
 import java.util.UUID;
@@ -207,8 +207,9 @@ public class Time extends BaseTinker implements CompositionNode {
 	}
 
 	public enum TimeRuntimePropertyEnum implements TumlRuntimeProperty {
-		name(true,false,"org__tinker__componenttest__Time__name",false,false,true,false,1,1),
-		spaceTime(false,false,"A_<spaceTime>_<time>",true,false,false,false,1,1);
+		name(true,true,false,"org__tinker__componenttest__Time__name",false,false,true,false,1,1),
+		spaceTime(false,false,false,"A_<spaceTime>_<time>",true,false,false,false,1,1);
+		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -220,6 +221,7 @@ public class Time extends BaseTinker implements CompositionNode {
 		private int lower;
 		/** Constructor for TimeRuntimePropertyEnum
 		 * 
+		 * @param onePrimitive 
 		 * @param controllingSide 
 		 * @param composite 
 		 * @param label 
@@ -230,7 +232,8 @@ public class Time extends BaseTinker implements CompositionNode {
 		 * @param upper 
 		 * @param lower 
 		 */
-		private TimeRuntimePropertyEnum(boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+		private TimeRuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+			this.onePrimitive = onePrimitive;
 			this.controllingSide = controllingSide;
 			this.composite = composite;
 			this.label = label;
@@ -278,6 +281,10 @@ public class Time extends BaseTinker implements CompositionNode {
 		
 		public boolean isManyToOne() {
 			return this.manyToOne;
+		}
+		
+		public boolean isOnePrimitive() {
+			return this.onePrimitive;
 		}
 		
 		public boolean isOneToMany() {

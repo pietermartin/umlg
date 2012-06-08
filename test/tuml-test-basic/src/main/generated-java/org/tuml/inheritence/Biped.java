@@ -88,6 +88,7 @@ public class Biped extends Mamal implements CompositionNode {
 
 	public enum BipedRuntimePropertyEnum implements TumlRuntimeProperty {
 	;
+		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -99,6 +100,7 @@ public class Biped extends Mamal implements CompositionNode {
 		private int lower;
 		/** Constructor for BipedRuntimePropertyEnum
 		 * 
+		 * @param onePrimitive 
 		 * @param controllingSide 
 		 * @param composite 
 		 * @param label 
@@ -109,7 +111,8 @@ public class Biped extends Mamal implements CompositionNode {
 		 * @param upper 
 		 * @param lower 
 		 */
-		private BipedRuntimePropertyEnum(boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+		private BipedRuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+			this.onePrimitive = onePrimitive;
 			this.controllingSide = controllingSide;
 			this.composite = composite;
 			this.label = label;
@@ -151,6 +154,10 @@ public class Biped extends Mamal implements CompositionNode {
 		
 		public boolean isManyToOne() {
 			return this.manyToOne;
+		}
+		
+		public boolean isOnePrimitive() {
+			return this.onePrimitive;
 		}
 		
 		public boolean isOneToMany() {

@@ -1,6 +1,6 @@
 package org.tinker.hierarchytest;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 import java.util.Set;
 
@@ -133,7 +133,8 @@ public class FakeRootFolder extends AbstractRootFolder implements CompositionNod
 	}
 
 	public enum FakeRootFolderRuntimePropertyEnum implements TumlRuntimeProperty {
-		god(false,false,"A_<god>_<fakeRootFolder>",false,false,true,false,1,1);
+		god(false,false,false,"A_<god>_<fakeRootFolder>",false,false,true,false,1,1);
+		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -145,6 +146,7 @@ public class FakeRootFolder extends AbstractRootFolder implements CompositionNod
 		private int lower;
 		/** Constructor for FakeRootFolderRuntimePropertyEnum
 		 * 
+		 * @param onePrimitive 
 		 * @param controllingSide 
 		 * @param composite 
 		 * @param label 
@@ -155,7 +157,8 @@ public class FakeRootFolder extends AbstractRootFolder implements CompositionNod
 		 * @param upper 
 		 * @param lower 
 		 */
-		private FakeRootFolderRuntimePropertyEnum(boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+		private FakeRootFolderRuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+			this.onePrimitive = onePrimitive;
 			this.controllingSide = controllingSide;
 			this.composite = composite;
 			this.label = label;
@@ -200,6 +203,10 @@ public class FakeRootFolder extends AbstractRootFolder implements CompositionNod
 		
 		public boolean isManyToOne() {
 			return this.manyToOne;
+		}
+		
+		public boolean isOnePrimitive() {
+			return this.onePrimitive;
 		}
 		
 		public boolean isOneToMany() {

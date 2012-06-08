@@ -1,6 +1,6 @@
 package org.tinker.hierarchytest;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 import java.util.Set;
 
@@ -132,7 +132,8 @@ public class Folder extends AbstractFolder implements CompositionNode {
 	}
 
 	public enum FolderRuntimePropertyEnum implements TumlRuntimeProperty {
-		parentFolder(false,false,"A_<abstractFolder>_<folder>",false,false,true,false,1,1);
+		parentFolder(false,false,false,"A_<abstractFolder>_<folder>",false,false,true,false,1,1);
+		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -144,6 +145,7 @@ public class Folder extends AbstractFolder implements CompositionNode {
 		private int lower;
 		/** Constructor for FolderRuntimePropertyEnum
 		 * 
+		 * @param onePrimitive 
 		 * @param controllingSide 
 		 * @param composite 
 		 * @param label 
@@ -154,7 +156,8 @@ public class Folder extends AbstractFolder implements CompositionNode {
 		 * @param upper 
 		 * @param lower 
 		 */
-		private FolderRuntimePropertyEnum(boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+		private FolderRuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+			this.onePrimitive = onePrimitive;
 			this.controllingSide = controllingSide;
 			this.composite = composite;
 			this.label = label;
@@ -199,6 +202,10 @@ public class Folder extends AbstractFolder implements CompositionNode {
 		
 		public boolean isManyToOne() {
 			return this.manyToOne;
+		}
+		
+		public boolean isOnePrimitive() {
+			return this.onePrimitive;
 		}
 		
 		public boolean isOneToMany() {

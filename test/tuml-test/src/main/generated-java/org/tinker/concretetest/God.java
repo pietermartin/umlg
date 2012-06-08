@@ -1,7 +1,7 @@
 package org.tinker.concretetest;
 
 import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 import java.util.Collection;
 import java.util.List;
@@ -1418,36 +1418,37 @@ public class God extends BaseTinker implements TinkerNode {
 	}
 
 	public enum GodRuntimePropertyEnum implements TumlRuntimeProperty {
-		name(true,false,"org__tinker__concretetest__God__name",false,false,true,false,1,1),
-		oneOne(true,true,"A_<god>_<oneOne>",false,true,false,false,-1,0),
-		many1(true,true,"A_<god>_<many1>",false,true,false,false,-1,0),
-		world(true,true,"A_<god>_<world>",false,true,false,false,-1,0),
-		foot(true,true,"A_<god>_<foot>",false,true,false,false,-1,0),
-		fakeRootFolder(true,true,"A_<god>_<fakeRootFolder>",false,true,false,false,-1,0),
-		reason(true,false,"org__tinker__concretetest__God__reason",false,false,true,false,1,1),
-		embeddedString(true,false,"org__tinker__concretetest__God__embeddedString",false,false,false,true,-1,0),
-		memory(true,false,"A_<god>_<nightmare>_2",false,true,false,false,-1,0),
-		rEASON(true,false,"A_<god>_<rEASON>",false,true,false,false,-1,0),
-		animalFarm(true,false,"org__tinker__concretetest__God__animalFarm",false,false,false,true,-1,0),
-		being(true,true,"A_<god>_<being>",false,true,false,false,-1,0),
-		pet(true,false,"org__tinker__concretetest__God__pet",false,false,true,false,1,1),
-		many2(true,true,"A_<god>_<many2>",false,true,false,false,-1,0),
-		fantasy(true,true,"A_<god>_<fantasy>",false,true,false,false,-1,0),
-		nonNavigableOne(true,true,"A_<god>_<nonNavigableOne>",false,true,false,false,-1,0),
-		nightmare(true,true,"A_<god>_<nightmare>",false,true,false,false,-1,0),
-		realRootFolder(true,true,"A_<god>_<realRootFolder>",false,true,false,false,-1,0),
-		nature(true,true,"A_<god>_<nature>",false,true,false,false,-1,0),
-		demon(true,true,"A_<god>_<demon>",false,true,false,false,-1,0),
-		angel(true,true,"A_<god>_<angel>",false,true,false,false,-1,0),
-		hand(true,true,"A_<god>_<hand>",false,true,false,false,-1,0),
-		dream(true,true,"A_<god>_<dream>",false,true,false,false,-1,0),
-		spirit(true,true,"A_<god>_<spirit>",false,true,false,false,-1,0),
-		abstractSpecies(true,true,"A_<god>_<abstractSpecies>",false,true,false,false,-1,0),
-		nonNavigableMany(true,true,"A_<god>_<nonNavigableMany>",false,true,false,false,-1,0),
-		embeddedInteger(true,false,"org__tinker__concretetest__God__embeddedInteger",false,false,false,true,-1,0),
-		iMany(true,true,"A_<god>_<iMany>",false,true,false,false,-1,0),
-		oneTwo(true,true,"A_<god>_<oneTwo>",false,true,false,false,-1,0),
-		universe(true,true,"A_<god>_<universe>",false,true,false,false,-1,0);
+		name(true,true,false,"org__tinker__concretetest__God__name",false,false,true,false,1,1),
+		oneOne(false,true,true,"A_<god>_<oneOne>",false,true,false,false,-1,0),
+		many1(false,true,true,"A_<god>_<many1>",false,true,false,false,-1,0),
+		world(false,true,true,"A_<god>_<world>",false,true,false,false,-1,0),
+		foot(false,true,true,"A_<god>_<foot>",false,true,false,false,-1,0),
+		fakeRootFolder(false,true,true,"A_<god>_<fakeRootFolder>",false,true,false,false,-1,0),
+		reason(false,true,false,"org__tinker__concretetest__God__reason",false,false,true,false,1,1),
+		embeddedString(false,true,false,"org__tinker__concretetest__God__embeddedString",false,false,false,true,-1,0),
+		memory(false,true,false,"A_<god>_<nightmare>_2",false,true,false,false,-1,0),
+		rEASON(false,true,false,"A_<god>_<rEASON>",false,true,false,false,-1,0),
+		animalFarm(false,true,false,"org__tinker__concretetest__God__animalFarm",false,false,false,true,-1,0),
+		being(false,true,true,"A_<god>_<being>",false,true,false,false,-1,0),
+		pet(false,true,false,"org__tinker__concretetest__God__pet",false,false,true,false,1,1),
+		many2(false,true,true,"A_<god>_<many2>",false,true,false,false,-1,0),
+		fantasy(false,true,true,"A_<god>_<fantasy>",false,true,false,false,-1,0),
+		nonNavigableOne(false,true,true,"A_<god>_<nonNavigableOne>",false,true,false,false,-1,0),
+		nightmare(false,true,true,"A_<god>_<nightmare>",false,true,false,false,-1,0),
+		realRootFolder(false,true,true,"A_<god>_<realRootFolder>",false,true,false,false,-1,0),
+		nature(false,true,true,"A_<god>_<nature>",false,true,false,false,-1,0),
+		demon(false,true,true,"A_<god>_<demon>",false,true,false,false,-1,0),
+		angel(false,true,true,"A_<god>_<angel>",false,true,false,false,-1,0),
+		hand(false,true,true,"A_<god>_<hand>",false,true,false,false,-1,0),
+		dream(false,true,true,"A_<god>_<dream>",false,true,false,false,-1,0),
+		spirit(false,true,true,"A_<god>_<spirit>",false,true,false,false,-1,0),
+		abstractSpecies(false,true,true,"A_<god>_<abstractSpecies>",false,true,false,false,-1,0),
+		nonNavigableMany(false,true,true,"A_<god>_<nonNavigableMany>",false,true,false,false,-1,0),
+		embeddedInteger(false,true,false,"org__tinker__concretetest__God__embeddedInteger",false,false,false,true,-1,0),
+		iMany(false,true,true,"A_<god>_<iMany>",false,true,false,false,-1,0),
+		oneTwo(false,true,true,"A_<god>_<oneTwo>",false,true,false,false,-1,0),
+		universe(false,true,true,"A_<god>_<universe>",false,true,false,false,-1,0);
+		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -1459,6 +1460,7 @@ public class God extends BaseTinker implements TinkerNode {
 		private int lower;
 		/** Constructor for GodRuntimePropertyEnum
 		 * 
+		 * @param onePrimitive 
 		 * @param controllingSide 
 		 * @param composite 
 		 * @param label 
@@ -1469,7 +1471,8 @@ public class God extends BaseTinker implements TinkerNode {
 		 * @param upper 
 		 * @param lower 
 		 */
-		private GodRuntimePropertyEnum(boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+		private GodRuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+			this.onePrimitive = onePrimitive;
 			this.controllingSide = controllingSide;
 			this.composite = composite;
 			this.label = label;
@@ -1601,6 +1604,10 @@ public class God extends BaseTinker implements TinkerNode {
 		
 		public boolean isManyToOne() {
 			return this.manyToOne;
+		}
+		
+		public boolean isOnePrimitive() {
+			return this.onePrimitive;
 		}
 		
 		public boolean isOneToMany() {

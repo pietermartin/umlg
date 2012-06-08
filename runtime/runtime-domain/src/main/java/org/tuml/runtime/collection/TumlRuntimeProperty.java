@@ -1,6 +1,7 @@
 package org.tuml.runtime.collection;
 
 public interface TumlRuntimeProperty {
+	boolean isOnePrimitive();
 	boolean isControllingSide();
 	boolean isComposite();
 	boolean isOneToOne(); 

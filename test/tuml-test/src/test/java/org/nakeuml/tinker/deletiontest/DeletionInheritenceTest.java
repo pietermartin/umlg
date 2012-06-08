@@ -7,7 +7,7 @@ import org.tinker.inheritencetest.Biped;
 import org.tinker.inheritencetest.Mamal;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
-import com.tinkerpop.blueprints.pgm.TransactionalGraph.Conclusion;
+import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 
 public class DeletionInheritenceTest extends BaseLocalDbTest {
 
@@ -24,8 +24,8 @@ public class DeletionInheritenceTest extends BaseLocalDbTest {
 		Assert.assertEquals(3, countVertices());
 		Assert.assertEquals(3, countEdges());
 		db.startTransaction();
-		biped.markDeleted();
-		mamal.markDeleted();
+		biped.delete();
+		mamal.delete();
 		db.stopTransaction(Conclusion.SUCCESS);
 		Assert.assertEquals(1, countVertices());
 		Assert.assertEquals(1, countEdges());

@@ -8,7 +8,7 @@ import org.tinker.qualifiertest.Many1;
 import org.tinker.qualifiertest.Many2;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
-import com.tinkerpop.blueprints.pgm.TransactionalGraph.Conclusion;
+import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 
 public class TestQualifierOnManyToMany extends BaseLocalDbTest {
 

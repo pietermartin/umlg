@@ -1,6 +1,6 @@
 package org.tinker.inheritencetest;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 import org.tinker.concretetest.God;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
@@ -89,6 +89,7 @@ public class Quadped extends Mamal implements CompositionNode {
 
 	public enum QuadpedRuntimePropertyEnum implements TumlRuntimeProperty {
 	;
+		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -100,6 +101,7 @@ public class Quadped extends Mamal implements CompositionNode {
 		private int lower;
 		/** Constructor for QuadpedRuntimePropertyEnum
 		 * 
+		 * @param onePrimitive 
 		 * @param controllingSide 
 		 * @param composite 
 		 * @param label 
@@ -110,7 +112,8 @@ public class Quadped extends Mamal implements CompositionNode {
 		 * @param upper 
 		 * @param lower 
 		 */
-		private QuadpedRuntimePropertyEnum(boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+		private QuadpedRuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+			this.onePrimitive = onePrimitive;
 			this.controllingSide = controllingSide;
 			this.composite = composite;
 			this.label = label;
@@ -152,6 +155,10 @@ public class Quadped extends Mamal implements CompositionNode {
 		
 		public boolean isManyToOne() {
 			return this.manyToOne;
+		}
+		
+		public boolean isOnePrimitive() {
+			return this.onePrimitive;
 		}
 		
 		public boolean isOneToMany() {

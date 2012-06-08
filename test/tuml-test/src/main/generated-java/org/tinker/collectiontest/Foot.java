@@ -1,6 +1,6 @@
 package org.tinker.collectiontest;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 import java.util.Set;
 import java.util.UUID;
@@ -145,19 +145,19 @@ public class Foot extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.name =  new TinkerSetImpl<String>(this, FootRuntimePropertyEnum.name);
 		this.god =  new TinkerSetImpl<God>(this, FootRuntimePropertyEnum.god);
+		this.name =  new TinkerSetImpl<String>(this, FootRuntimePropertyEnum.name);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (FootRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case god:
-				this.god =  new TinkerSetImpl<God>(this, FootRuntimePropertyEnum.god);
-			break;
-		
 			case name:
 				this.name =  new TinkerSetImpl<String>(this, FootRuntimePropertyEnum.name);
+			break;
+		
+			case god:
+				this.god =  new TinkerSetImpl<God>(this, FootRuntimePropertyEnum.god);
 			break;
 		
 		}
@@ -208,8 +208,9 @@ public class Foot extends BaseTinker implements CompositionNode {
 	}
 
 	public enum FootRuntimePropertyEnum implements TumlRuntimeProperty {
-		name(true,false,"org__tinker__collectiontest__Foot__name",false,false,true,false,1,1),
-		god(false,false,"A_<god>_<foot>",false,false,true,false,1,1);
+		god(false,false,false,"A_<god>_<foot>",false,false,true,false,1,1),
+		name(true,true,false,"org__tinker__collectiontest__Foot__name",false,false,true,false,1,1);
+		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -221,6 +222,7 @@ public class Foot extends BaseTinker implements CompositionNode {
 		private int lower;
 		/** Constructor for FootRuntimePropertyEnum
 		 * 
+		 * @param onePrimitive 
 		 * @param controllingSide 
 		 * @param composite 
 		 * @param label 
@@ -231,7 +233,8 @@ public class Foot extends BaseTinker implements CompositionNode {
 		 * @param upper 
 		 * @param lower 
 		 */
-		private FootRuntimePropertyEnum(boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+		private FootRuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+			this.onePrimitive = onePrimitive;
 			this.controllingSide = controllingSide;
 			this.composite = composite;
 			this.label = label;
@@ -244,11 +247,11 @@ public class Foot extends BaseTinker implements CompositionNode {
 		}
 	
 		static public FootRuntimePropertyEnum fromLabel(String label) {
-			if ( name.getLabel().equals(label) ) {
-				return name;
-			}
 			if ( god.getLabel().equals(label) ) {
 				return god;
+			}
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
 			throw new IllegalStateException();
 		}
@@ -279,6 +282,10 @@ public class Foot extends BaseTinker implements CompositionNode {
 		
 		public boolean isManyToOne() {
 			return this.manyToOne;
+		}
+		
+		public boolean isOnePrimitive() {
+			return this.onePrimitive;
 		}
 		
 		public boolean isOneToMany() {

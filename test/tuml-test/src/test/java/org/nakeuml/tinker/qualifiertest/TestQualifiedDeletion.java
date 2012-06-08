@@ -11,7 +11,7 @@ import org.tinker.qualifiertest.Many2;
 import org.tinker.qualifiertest.Nature;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
-import com.tinkerpop.blueprints.pgm.TransactionalGraph.Conclusion;
+import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 
 public class TestQualifiedDeletion extends BaseLocalDbTest {
 

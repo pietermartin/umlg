@@ -1,6 +1,6 @@
 package org.tinker.interfacetest;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 import java.util.Set;
 import java.util.UUID;
@@ -166,19 +166,19 @@ public class Spook extends BaseTinker implements CompositionNode, Spirit {
 	@Override
 	public void initialiseProperties() {
 		this.name =  new TinkerSetImpl<String>(this, SpookRuntimePropertyEnum.name);
-		this.god =  new TinkerSetImpl<God>(this, SpookRuntimePropertyEnum.god);
 		this.creature =  new TinkerSetImpl<Creature>(this, SpookRuntimePropertyEnum.creature);
+		this.god =  new TinkerSetImpl<God>(this, SpookRuntimePropertyEnum.god);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (SpookRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case creature:
-				this.creature =  new TinkerSetImpl<Creature>(this, SpookRuntimePropertyEnum.creature);
-			break;
-		
 			case god:
 				this.god =  new TinkerSetImpl<God>(this, SpookRuntimePropertyEnum.god);
+			break;
+		
+			case creature:
+				this.creature =  new TinkerSetImpl<Creature>(this, SpookRuntimePropertyEnum.creature);
 			break;
 		
 			case name:
@@ -250,9 +250,10 @@ public class Spook extends BaseTinker implements CompositionNode, Spirit {
 	}
 
 	public enum SpookRuntimePropertyEnum implements TumlRuntimeProperty {
-		name(true,false,"org__tinker__interfacetest__Spook__name",false,false,true,false,1,1),
-		god(false,false,"A_<god>_<spirit>",false,false,true,false,1,1),
-		creature(true,false,"A_<spook>_<creature>",true,false,false,false,1,1);
+		name(true,true,false,"org__tinker__interfacetest__Spook__name",false,false,true,false,1,1),
+		creature(false,true,false,"A_<spook>_<creature>",true,false,false,false,1,1),
+		god(false,false,false,"A_<god>_<spirit>",false,false,true,false,1,1);
+		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -264,6 +265,7 @@ public class Spook extends BaseTinker implements CompositionNode, Spirit {
 		private int lower;
 		/** Constructor for SpookRuntimePropertyEnum
 		 * 
+		 * @param onePrimitive 
 		 * @param controllingSide 
 		 * @param composite 
 		 * @param label 
@@ -274,7 +276,8 @@ public class Spook extends BaseTinker implements CompositionNode, Spirit {
 		 * @param upper 
 		 * @param lower 
 		 */
-		private SpookRuntimePropertyEnum(boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+		private SpookRuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+			this.onePrimitive = onePrimitive;
 			this.controllingSide = controllingSide;
 			this.composite = composite;
 			this.label = label;
@@ -290,11 +293,11 @@ public class Spook extends BaseTinker implements CompositionNode, Spirit {
 			if ( name.getLabel().equals(label) ) {
 				return name;
 			}
-			if ( god.getLabel().equals(label) ) {
-				return god;
-			}
 			if ( creature.getLabel().equals(label) ) {
 				return creature;
+			}
+			if ( god.getLabel().equals(label) ) {
+				return god;
 			}
 			throw new IllegalStateException();
 		}
@@ -325,6 +328,10 @@ public class Spook extends BaseTinker implements CompositionNode, Spirit {
 		
 		public boolean isManyToOne() {
 			return this.manyToOne;
+		}
+		
+		public boolean isOnePrimitive() {
+			return this.onePrimitive;
 		}
 		
 		public boolean isOneToMany() {

@@ -1,6 +1,6 @@
 package org.tinker.componenttest;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 import java.util.Set;
 import java.util.UUID;
@@ -144,19 +144,19 @@ public class Space extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.name =  new TinkerSetImpl<String>(this, SpaceRuntimePropertyEnum.name);
 		this.spaceTime =  new TinkerSetImpl<SpaceTime>(this, SpaceRuntimePropertyEnum.spaceTime);
+		this.name =  new TinkerSetImpl<String>(this, SpaceRuntimePropertyEnum.name);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (SpaceRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case spaceTime:
-				this.spaceTime =  new TinkerSetImpl<SpaceTime>(this, SpaceRuntimePropertyEnum.spaceTime);
-			break;
-		
 			case name:
 				this.name =  new TinkerSetImpl<String>(this, SpaceRuntimePropertyEnum.name);
+			break;
+		
+			case spaceTime:
+				this.spaceTime =  new TinkerSetImpl<SpaceTime>(this, SpaceRuntimePropertyEnum.spaceTime);
 			break;
 		
 		}
@@ -207,8 +207,9 @@ public class Space extends BaseTinker implements CompositionNode {
 	}
 
 	public enum SpaceRuntimePropertyEnum implements TumlRuntimeProperty {
-		name(true,false,"org__tinker__componenttest__Space__name",false,false,true,false,1,1),
-		spaceTime(false,false,"A_<spaceTime>_<space>",true,false,false,false,1,1);
+		spaceTime(false,false,false,"A_<spaceTime>_<space>",true,false,false,false,1,1),
+		name(true,true,false,"org__tinker__componenttest__Space__name",false,false,true,false,1,1);
+		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -220,6 +221,7 @@ public class Space extends BaseTinker implements CompositionNode {
 		private int lower;
 		/** Constructor for SpaceRuntimePropertyEnum
 		 * 
+		 * @param onePrimitive 
 		 * @param controllingSide 
 		 * @param composite 
 		 * @param label 
@@ -230,7 +232,8 @@ public class Space extends BaseTinker implements CompositionNode {
 		 * @param upper 
 		 * @param lower 
 		 */
-		private SpaceRuntimePropertyEnum(boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+		private SpaceRuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+			this.onePrimitive = onePrimitive;
 			this.controllingSide = controllingSide;
 			this.composite = composite;
 			this.label = label;
@@ -243,11 +246,11 @@ public class Space extends BaseTinker implements CompositionNode {
 		}
 	
 		static public SpaceRuntimePropertyEnum fromLabel(String label) {
-			if ( name.getLabel().equals(label) ) {
-				return name;
-			}
 			if ( spaceTime.getLabel().equals(label) ) {
 				return spaceTime;
+			}
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
 			throw new IllegalStateException();
 		}
@@ -278,6 +281,10 @@ public class Space extends BaseTinker implements CompositionNode {
 		
 		public boolean isManyToOne() {
 			return this.manyToOne;
+		}
+		
+		public boolean isOnePrimitive() {
+			return this.onePrimitive;
 		}
 		
 		public boolean isOneToMany() {

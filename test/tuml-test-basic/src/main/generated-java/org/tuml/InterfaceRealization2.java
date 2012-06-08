@@ -207,8 +207,9 @@ public class InterfaceRealization2 extends BaseTinker implements CompositionNode
 	}
 
 	public enum InterfaceRealization2RuntimePropertyEnum implements TumlRuntimeProperty {
-		name(true,false,"org__tuml__Interface2__name",false,false,true,false,1,1),
-		interface1(false,false,"A_<interface1>_<interface2>",false,false,true,false,1,1);
+		name(true,true,false,"org__tuml__Interface2__name",false,false,true,false,1,1),
+		interface1(false,false,false,"A_<interface1>_<interface2>",false,false,true,false,1,1);
+		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -220,6 +221,7 @@ public class InterfaceRealization2 extends BaseTinker implements CompositionNode
 		private int lower;
 		/** Constructor for InterfaceRealization2RuntimePropertyEnum
 		 * 
+		 * @param onePrimitive 
 		 * @param controllingSide 
 		 * @param composite 
 		 * @param label 
@@ -230,7 +232,8 @@ public class InterfaceRealization2 extends BaseTinker implements CompositionNode
 		 * @param upper 
 		 * @param lower 
 		 */
-		private InterfaceRealization2RuntimePropertyEnum(boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+		private InterfaceRealization2RuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+			this.onePrimitive = onePrimitive;
 			this.controllingSide = controllingSide;
 			this.composite = composite;
 			this.label = label;
@@ -278,6 +281,10 @@ public class InterfaceRealization2 extends BaseTinker implements CompositionNode
 		
 		public boolean isManyToOne() {
 			return this.manyToOne;
+		}
+		
+		public boolean isOnePrimitive() {
+			return this.onePrimitive;
 		}
 		
 		public boolean isOneToMany() {

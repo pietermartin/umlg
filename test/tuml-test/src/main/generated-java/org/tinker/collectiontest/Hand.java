@@ -1,6 +1,6 @@
 package org.tinker.collectiontest;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 import java.util.Set;
 import java.util.UUID;
@@ -165,24 +165,24 @@ public class Hand extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
+		this.god =  new TinkerSetImpl<God>(this, HandRuntimePropertyEnum.god);
 		this.name =  new TinkerSetImpl<String>(this, HandRuntimePropertyEnum.name);
 		this.left =  new TinkerSetImpl<Boolean>(this, HandRuntimePropertyEnum.left);
-		this.god =  new TinkerSetImpl<God>(this, HandRuntimePropertyEnum.god);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (HandRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case god:
-				this.god =  new TinkerSetImpl<God>(this, HandRuntimePropertyEnum.god);
-			break;
-		
 			case left:
 				this.left =  new TinkerSetImpl<Boolean>(this, HandRuntimePropertyEnum.left);
 			break;
 		
 			case name:
 				this.name =  new TinkerSetImpl<String>(this, HandRuntimePropertyEnum.name);
+			break;
+		
+			case god:
+				this.god =  new TinkerSetImpl<God>(this, HandRuntimePropertyEnum.god);
 			break;
 		
 		}
@@ -250,9 +250,10 @@ public class Hand extends BaseTinker implements CompositionNode {
 	}
 
 	public enum HandRuntimePropertyEnum implements TumlRuntimeProperty {
-		name(true,false,"org__tinker__collectiontest__Hand__name",false,false,true,false,1,1),
-		left(true,false,"org__tinker__collectiontest__Hand__left",false,false,true,false,1,1),
-		god(false,false,"A_<god>_<hand>",false,false,true,false,1,1);
+		god(false,false,false,"A_<god>_<hand>",false,false,true,false,1,1),
+		name(true,true,false,"org__tinker__collectiontest__Hand__name",false,false,true,false,1,1),
+		left(true,true,false,"org__tinker__collectiontest__Hand__left",false,false,true,false,1,1);
+		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -264,6 +265,7 @@ public class Hand extends BaseTinker implements CompositionNode {
 		private int lower;
 		/** Constructor for HandRuntimePropertyEnum
 		 * 
+		 * @param onePrimitive 
 		 * @param controllingSide 
 		 * @param composite 
 		 * @param label 
@@ -274,7 +276,8 @@ public class Hand extends BaseTinker implements CompositionNode {
 		 * @param upper 
 		 * @param lower 
 		 */
-		private HandRuntimePropertyEnum(boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+		private HandRuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+			this.onePrimitive = onePrimitive;
 			this.controllingSide = controllingSide;
 			this.composite = composite;
 			this.label = label;
@@ -287,14 +290,14 @@ public class Hand extends BaseTinker implements CompositionNode {
 		}
 	
 		static public HandRuntimePropertyEnum fromLabel(String label) {
+			if ( god.getLabel().equals(label) ) {
+				return god;
+			}
 			if ( name.getLabel().equals(label) ) {
 				return name;
 			}
 			if ( left.getLabel().equals(label) ) {
 				return left;
-			}
-			if ( god.getLabel().equals(label) ) {
-				return god;
 			}
 			throw new IllegalStateException();
 		}
@@ -325,6 +328,10 @@ public class Hand extends BaseTinker implements CompositionNode {
 		
 		public boolean isManyToOne() {
 			return this.manyToOne;
+		}
+		
+		public boolean isOnePrimitive() {
+			return this.onePrimitive;
 		}
 		
 		public boolean isOneToMany() {

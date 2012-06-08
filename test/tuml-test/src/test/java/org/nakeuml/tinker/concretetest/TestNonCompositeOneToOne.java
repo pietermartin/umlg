@@ -10,7 +10,7 @@ import org.tinker.onetoone.OneOne;
 import org.tinker.onetoone.OneTwo;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
-import com.tinkerpop.blueprints.pgm.TransactionalGraph.Conclusion;
+import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 
 public class TestNonCompositeOneToOne extends BaseLocalDbTest {
 
@@ -121,8 +121,10 @@ public class TestNonCompositeOneToOne extends BaseLocalDbTest {
 		Assert.assertEquals(5, countVertices());
 		Assert.assertEquals(6, countEdges());
 		
-		Assert.assertNull(oneOne2.getOneTwo());
-		Assert.assertNull(oneTwo1.getOneOne());
+		OneOne testOneOne2 = new OneOne(oneOne2.getVertex());
+		Assert.assertNull(testOneOne2.getOneTwo());
+		OneTwo testOneTwo1 = new OneTwo(oneTwo1.getVertex());
+		Assert.assertNull(testOneTwo1.getOneOne());
 		Assert.assertNotNull(oneOne1.getOneTwo());
 		
 		db.startTransaction();
@@ -167,7 +169,8 @@ public class TestNonCompositeOneToOne extends BaseLocalDbTest {
 		db.stopTransaction(Conclusion.SUCCESS);
 		Assert.assertEquals(5, countVertices());
 		Assert.assertEquals(6, countEdges());
-		Assert.assertNull(oneOne2.getOneTwo());
+		OneOne testOneOne2 = new OneOne(oneOne2.getVertex());
+		Assert.assertNull(testOneOne2.getOneTwo());
 		
 	}	
 

@@ -1,6 +1,6 @@
 package org.tinker.concretetest;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 import java.util.Set;
 import java.util.UUID;
@@ -164,24 +164,24 @@ public class Demon extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
+		this.name =  new TinkerSetImpl<String>(this, DemonRuntimePropertyEnum.name);
 		this.universe =  new TinkerSetImpl<Universe>(this, DemonRuntimePropertyEnum.universe);
 		this.god =  new TinkerSetImpl<God>(this, DemonRuntimePropertyEnum.god);
-		this.name =  new TinkerSetImpl<String>(this, DemonRuntimePropertyEnum.name);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (DemonRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case name:
-				this.name =  new TinkerSetImpl<String>(this, DemonRuntimePropertyEnum.name);
-			break;
-		
 			case god:
 				this.god =  new TinkerSetImpl<God>(this, DemonRuntimePropertyEnum.god);
 			break;
 		
 			case universe:
 				this.universe =  new TinkerSetImpl<Universe>(this, DemonRuntimePropertyEnum.universe);
+			break;
+		
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, DemonRuntimePropertyEnum.name);
 			break;
 		
 		}
@@ -249,9 +249,10 @@ public class Demon extends BaseTinker implements CompositionNode {
 	}
 
 	public enum DemonRuntimePropertyEnum implements TumlRuntimeProperty {
-		universe(false,false,"A_<universe>_<demon>",false,false,true,false,1,1),
-		god(false,false,"A_<god>_<demon>",false,false,true,false,1,1),
-		name(true,false,"org__tinker__concretetest__Demon__name",false,false,true,false,1,1);
+		name(true,true,false,"org__tinker__concretetest__Demon__name",false,false,true,false,1,1),
+		universe(false,false,false,"A_<universe>_<demon>",false,false,true,false,1,1),
+		god(false,false,false,"A_<god>_<demon>",false,false,true,false,1,1);
+		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -263,6 +264,7 @@ public class Demon extends BaseTinker implements CompositionNode {
 		private int lower;
 		/** Constructor for DemonRuntimePropertyEnum
 		 * 
+		 * @param onePrimitive 
 		 * @param controllingSide 
 		 * @param composite 
 		 * @param label 
@@ -273,7 +275,8 @@ public class Demon extends BaseTinker implements CompositionNode {
 		 * @param upper 
 		 * @param lower 
 		 */
-		private DemonRuntimePropertyEnum(boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+		private DemonRuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+			this.onePrimitive = onePrimitive;
 			this.controllingSide = controllingSide;
 			this.composite = composite;
 			this.label = label;
@@ -286,14 +289,14 @@ public class Demon extends BaseTinker implements CompositionNode {
 		}
 	
 		static public DemonRuntimePropertyEnum fromLabel(String label) {
+			if ( name.getLabel().equals(label) ) {
+				return name;
+			}
 			if ( universe.getLabel().equals(label) ) {
 				return universe;
 			}
 			if ( god.getLabel().equals(label) ) {
 				return god;
-			}
-			if ( name.getLabel().equals(label) ) {
-				return name;
 			}
 			throw new IllegalStateException();
 		}
@@ -324,6 +327,10 @@ public class Demon extends BaseTinker implements CompositionNode {
 		
 		public boolean isManyToOne() {
 			return this.manyToOne;
+		}
+		
+		public boolean isOnePrimitive() {
+			return this.onePrimitive;
 		}
 		
 		public boolean isOneToMany() {

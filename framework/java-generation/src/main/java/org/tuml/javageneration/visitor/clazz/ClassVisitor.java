@@ -215,6 +215,11 @@ public class ClassVisitor extends BaseVisitor implements Visitor<Class> {
 		ojEnum.addToImplementedInterfaces(TinkerGenerationUtil.tumlRuntimePropertyPathName.getCopy());
 		annotatedClass.addInnerEnum(ojEnum);
 
+		OJField isOnePrimitiveField = new OJField();
+		isOnePrimitiveField.setType(new OJPathName("boolean"));
+		isOnePrimitiveField.setName("onePrimitive");
+		ojEnum.addToFields(isOnePrimitiveField);
+
 		OJField inverseField = new OJField();
 		inverseField.setType(new OJPathName("boolean"));
 		inverseField.setName("controllingSide");
@@ -284,6 +289,12 @@ public class ClassVisitor extends BaseVisitor implements Visitor<Class> {
 				fromLabel.getBody().addToStatements(ifLabelEquals);
 
 				OJEnumLiteral ojLiteral = new OJEnumLiteral(pWrap.fieldname());
+
+				OJField propertyOnePrimitiveField = new OJField();
+				propertyOnePrimitiveField.setType(new OJPathName("boolean"));
+				//A one primitive property is a isManyToOne. Seeing as the opposite end is null it defaults to many
+				propertyOnePrimitiveField.setInitExp(Boolean.toString(pWrap.isPrimitive() && pWrap.isManyToOne()));
+				ojLiteral.addToAttributeValues(propertyOnePrimitiveField);
 
 				OJField propertyControllingSideField = new OJField();
 				propertyControllingSideField.setType(new OJPathName("boolean"));

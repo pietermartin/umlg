@@ -7,7 +7,7 @@ import org.tinker.concretetest.God;
 import org.tinker.concretetest.Universe;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
-import com.tinkerpop.blueprints.pgm.TransactionalGraph.Conclusion;
+import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 
 public class TestComponent extends BaseLocalDbTest {
 

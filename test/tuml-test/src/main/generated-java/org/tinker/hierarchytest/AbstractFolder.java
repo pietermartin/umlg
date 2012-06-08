@@ -1,7 +1,7 @@
 package org.tinker.hierarchytest;
 
 import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 import java.util.Set;
 import java.util.UUID;
@@ -179,8 +179,9 @@ public class AbstractFolder extends BaseTinker implements TinkerNode, Hierarchy 
 	}
 
 	public enum AbstractFolderRuntimePropertyEnum implements TumlRuntimeProperty {
-		name(true,false,"org__tinker__hierarchytest__AbstractFolder__name",false,false,true,false,1,1),
-		childFolder(true,true,"A_<abstractFolder>_<folder>",false,true,false,false,-1,0);
+		name(true,true,false,"org__tinker__hierarchytest__AbstractFolder__name",false,false,true,false,1,1),
+		childFolder(false,true,true,"A_<abstractFolder>_<folder>",false,true,false,false,-1,0);
+		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -192,6 +193,7 @@ public class AbstractFolder extends BaseTinker implements TinkerNode, Hierarchy 
 		private int lower;
 		/** Constructor for AbstractFolderRuntimePropertyEnum
 		 * 
+		 * @param onePrimitive 
 		 * @param controllingSide 
 		 * @param composite 
 		 * @param label 
@@ -202,7 +204,8 @@ public class AbstractFolder extends BaseTinker implements TinkerNode, Hierarchy 
 		 * @param upper 
 		 * @param lower 
 		 */
-		private AbstractFolderRuntimePropertyEnum(boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+		private AbstractFolderRuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+			this.onePrimitive = onePrimitive;
 			this.controllingSide = controllingSide;
 			this.composite = composite;
 			this.label = label;
@@ -250,6 +253,10 @@ public class AbstractFolder extends BaseTinker implements TinkerNode, Hierarchy 
 		
 		public boolean isManyToOne() {
 			return this.manyToOne;
+		}
+		
+		public boolean isOnePrimitive() {
+			return this.onePrimitive;
 		}
 		
 		public boolean isOneToMany() {

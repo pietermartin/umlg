@@ -1,6 +1,6 @@
 package org.tinker.componenttest;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 import java.util.Set;
 import java.util.UUID;
@@ -191,29 +191,29 @@ public class SpaceTime extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.universe =  new TinkerSetImpl<Universe>(this, SpaceTimeRuntimePropertyEnum.universe);
-		this.time =  new TinkerSetImpl<Time>(this, SpaceTimeRuntimePropertyEnum.time);
 		this.space =  new TinkerSetImpl<Space>(this, SpaceTimeRuntimePropertyEnum.space);
 		this.name =  new TinkerSetImpl<String>(this, SpaceTimeRuntimePropertyEnum.name);
+		this.time =  new TinkerSetImpl<Time>(this, SpaceTimeRuntimePropertyEnum.time);
+		this.universe =  new TinkerSetImpl<Universe>(this, SpaceTimeRuntimePropertyEnum.universe);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (SpaceTimeRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case name:
-				this.name =  new TinkerSetImpl<String>(this, SpaceTimeRuntimePropertyEnum.name);
-			break;
-		
-			case space:
-				this.space =  new TinkerSetImpl<Space>(this, SpaceTimeRuntimePropertyEnum.space);
+			case universe:
+				this.universe =  new TinkerSetImpl<Universe>(this, SpaceTimeRuntimePropertyEnum.universe);
 			break;
 		
 			case time:
 				this.time =  new TinkerSetImpl<Time>(this, SpaceTimeRuntimePropertyEnum.time);
 			break;
 		
-			case universe:
-				this.universe =  new TinkerSetImpl<Universe>(this, SpaceTimeRuntimePropertyEnum.universe);
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, SpaceTimeRuntimePropertyEnum.name);
+			break;
+		
+			case space:
+				this.space =  new TinkerSetImpl<Space>(this, SpaceTimeRuntimePropertyEnum.space);
 			break;
 		
 		}
@@ -298,10 +298,11 @@ public class SpaceTime extends BaseTinker implements CompositionNode {
 	}
 
 	public enum SpaceTimeRuntimePropertyEnum implements TumlRuntimeProperty {
-		universe(false,false,"A_<universe>_<spaceTime>",true,false,false,false,1,1),
-		time(true,true,"A_<spaceTime>_<time>",true,false,false,false,1,1),
-		space(true,true,"A_<spaceTime>_<space>",true,false,false,false,1,1),
-		name(true,false,"org__tinker__componenttest__SpaceTime__name",false,false,true,false,1,1);
+		space(false,true,true,"A_<spaceTime>_<space>",true,false,false,false,1,1),
+		name(true,true,false,"org__tinker__componenttest__SpaceTime__name",false,false,true,false,1,1),
+		time(false,true,true,"A_<spaceTime>_<time>",true,false,false,false,1,1),
+		universe(false,false,false,"A_<universe>_<spaceTime>",true,false,false,false,1,1);
+		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -313,6 +314,7 @@ public class SpaceTime extends BaseTinker implements CompositionNode {
 		private int lower;
 		/** Constructor for SpaceTimeRuntimePropertyEnum
 		 * 
+		 * @param onePrimitive 
 		 * @param controllingSide 
 		 * @param composite 
 		 * @param label 
@@ -323,7 +325,8 @@ public class SpaceTime extends BaseTinker implements CompositionNode {
 		 * @param upper 
 		 * @param lower 
 		 */
-		private SpaceTimeRuntimePropertyEnum(boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+		private SpaceTimeRuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+			this.onePrimitive = onePrimitive;
 			this.controllingSide = controllingSide;
 			this.composite = composite;
 			this.label = label;
@@ -336,17 +339,17 @@ public class SpaceTime extends BaseTinker implements CompositionNode {
 		}
 	
 		static public SpaceTimeRuntimePropertyEnum fromLabel(String label) {
-			if ( universe.getLabel().equals(label) ) {
-				return universe;
-			}
-			if ( time.getLabel().equals(label) ) {
-				return time;
-			}
 			if ( space.getLabel().equals(label) ) {
 				return space;
 			}
 			if ( name.getLabel().equals(label) ) {
 				return name;
+			}
+			if ( time.getLabel().equals(label) ) {
+				return time;
+			}
+			if ( universe.getLabel().equals(label) ) {
+				return universe;
 			}
 			throw new IllegalStateException();
 		}
@@ -377,6 +380,10 @@ public class SpaceTime extends BaseTinker implements CompositionNode {
 		
 		public boolean isManyToOne() {
 			return this.manyToOne;
+		}
+		
+		public boolean isOnePrimitive() {
+			return this.onePrimitive;
 		}
 		
 		public boolean isOneToMany() {

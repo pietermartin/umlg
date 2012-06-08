@@ -36,24 +36,31 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected void loadFromVertex() {
-		for (Edge edge : getEdges()) {
-			E node = null;
-			try {
-				Class<?> c = this.getClassToInstantiate(edge);
-				if (c.isEnum()) {
-					Object value = this.getVertexForDirection(edge).getProperty("value");
-					node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
-					this.internalVertexMap.put(value, this.getVertexForDirection(edge));
-				} else if (TinkerNode.class.isAssignableFrom(c)) {
-					node = (E) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
-				} else {
-					Object value = this.getVertexForDirection(edge).getProperty("value");
-					node = (E) value;
-					this.internalVertexMap.put(value, this.getVertexForDirection(edge));
+		if (!isOnePrimitive()) {
+			for (Edge edge : getEdges()) {
+				E node = null;
+				try {
+					Class<?> c = this.getClassToInstantiate(edge);
+					if (c.isEnum()) {
+						Object value = this.getVertexForDirection(edge).getProperty("value");
+						node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
+						this.internalVertexMap.put(value, this.getVertexForDirection(edge));
+					} else if (TinkerNode.class.isAssignableFrom(c)) {
+						node = (E) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
+					} else {
+						Object value = this.getVertexForDirection(edge).getProperty("value");
+						node = (E) value;
+						this.internalVertexMap.put(value, this.getVertexForDirection(edge));
+					}
+					this.internalCollection.add(node);
+				} catch (Exception ex) {
+					throw new RuntimeException(ex);
 				}
-				this.internalCollection.add(node);
-			} catch (Exception ex) {
-				throw new RuntimeException(ex);
+			}
+		} else {
+			E property = (E)this.vertex.getProperty(getLabel());
+			if (property!=null) {
+				this.internalCollection.add(property);
 			}
 		}
 		this.loaded = true;
@@ -89,7 +96,8 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 
 	@Override
 	public boolean add(E e) {
-		//validateMultiplicityForAdditionalElement calls size() which loads the collection
+		// validateMultiplicityForAdditionalElement calls size() which loads the
+		// collection
 		validateMultiplicityForAdditionalElement();
 		maybeCallInit(e);
 		boolean result = this.internalCollection.add(e);
@@ -101,7 +109,8 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 
 	private void validateMultiplicityForAdditionalElement() {
 		if (!isValid(size() + 1)) {
-			throw new IllegalStateException(String.format("The collection's multiplicity is (lower = %s, upper = %s). Current size = %s. It can not accept another element.", getLower(), getUpper(), size()));
+			throw new IllegalStateException(String.format("The collection's multiplicity is (lower = %s, upper = %s). Current size = %s. It can not accept another element.",
+					getLower(), getUpper(), size()));
 		}
 	}
 
@@ -116,11 +125,11 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 			if (o instanceof TinkerNode) {
 				TinkerNode node = (TinkerNode) o;
 				v = node.getVertex();
-				
+
 				if (node instanceof CompositionNode) {
 					TransactionThreadEntityVar.setNewEntity((CompositionNode) node);
 				}
-				
+
 				Set<Edge> edges = GraphDb.getDb().getEdgesBetween(this.vertex, v, this.getLabel());
 				for (Edge edge : edges) {
 					if (o instanceof TinkerAuditableNode) {
@@ -132,6 +141,8 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 			} else if (o.getClass().isEnum()) {
 				v = this.internalVertexMap.get(((Enum<?>) o).name());
 				GraphDb.getDb().removeVertex(v);
+			} else if (isOnePrimitive()) {
+				//Do nothing
 			} else {
 				v = this.internalVertexMap.get(o);
 				if (this.owner instanceof TinkerAuditableNode) {
@@ -163,14 +174,14 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 			v = GraphDb.getDb().addVertex(null);
 			v.setProperty("value", ((Enum<?>) e).name());
 			this.internalVertexMap.put(((Enum<?>) e).name(), v);
-		} else if (isOnePrimitive(e)) {
-			this.vertex.setProperty(tumlRuntimeProperty.getLabel(), e);
+		} else if (isOnePrimitive()) {
+			this.vertex.setProperty(getLabel(), e);
 		} else {
 			v = GraphDb.getDb().addVertex(null);
 			v.setProperty("value", e);
 			this.internalVertexMap.put(e, v);
 		}
-		if (v !=null) {
+		if (v != null) {
 			Edge edge = null;
 			// See if edge already added, this can only happen with a manyToMany
 			if (this.isManyToMany()) {
@@ -188,13 +199,14 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 		} else {
 			return null;
 		}
-		
+
 	}
 
-	protected boolean isOnePrimitive(E e) {
-		//primitive properties on a classifier is manytoone as the otherside is null it defaults to many
-		return this.isManyToOne() && (e.getClass() == String.class || e.getClass() == Integer.class || e.getClass() == Boolean.class || e.getClass().isPrimitive());
-	}
+//	protected boolean isOnePrimitive(E e) {
+//		// primitive properties on a classifier is manytoone as the otherside is
+//		// null it defaults to many
+//		return this.isManyToOne() && this.tumlRuntimeProperty.isPrimitive();
+//	}
 
 	private Edge addCorrelationForManyToMany(Vertex v, Edge edge) {
 		Set<Edge> edgesBetween = GraphDb.getDb().getEdgesBetween(this.vertex, v, this.getLabel());
@@ -390,6 +402,11 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 			}
 		}
 		return result;
+	}
+
+	@Override
+	public boolean isOnePrimitive() {
+		return this.tumlRuntimeProperty.isOnePrimitive();
 	}
 
 	@Override

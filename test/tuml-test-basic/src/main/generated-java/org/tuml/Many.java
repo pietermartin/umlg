@@ -207,8 +207,9 @@ public class Many extends BaseTinker implements CompositionNode {
 	}
 
 	public enum ManyRuntimePropertyEnum implements TumlRuntimeProperty {
-		one(false,false,"A_<one>_<many>",false,false,true,false,1,1),
-		name(true,false,"org__tuml__Many__name",false,false,true,false,1,1);
+		one(false,false,false,"A_<one>_<many>",false,false,true,false,1,1),
+		name(true,true,false,"org__tuml__Many__name",false,false,true,false,1,1);
+		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -220,6 +221,7 @@ public class Many extends BaseTinker implements CompositionNode {
 		private int lower;
 		/** Constructor for ManyRuntimePropertyEnum
 		 * 
+		 * @param onePrimitive 
 		 * @param controllingSide 
 		 * @param composite 
 		 * @param label 
@@ -230,7 +232,8 @@ public class Many extends BaseTinker implements CompositionNode {
 		 * @param upper 
 		 * @param lower 
 		 */
-		private ManyRuntimePropertyEnum(boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+		private ManyRuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+			this.onePrimitive = onePrimitive;
 			this.controllingSide = controllingSide;
 			this.composite = composite;
 			this.label = label;
@@ -278,6 +281,10 @@ public class Many extends BaseTinker implements CompositionNode {
 		
 		public boolean isManyToOne() {
 			return this.manyToOne;
+		}
+		
+		public boolean isOnePrimitive() {
+			return this.onePrimitive;
 		}
 		
 		public boolean isOneToMany() {

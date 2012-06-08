@@ -21,7 +21,7 @@ public class TinkerQualifiedSequenceImpl<E> extends BaseSequence<E> implements T
 		this.tumlRuntimeProperty = multiplicity;
 		this.index = GraphDb.getDb().getIndex(uid + ":::" + getLabel(), Edge.class);
 		if (this.index == null) {
-			this.index = GraphDb.getDb().createKeyIndex(uid + ":::" + getLabel(), Edge.class);
+			this.index = GraphDb.getDb().createIndex(uid + ":::" + getLabel(), Edge.class);
 		}
 	}
 
@@ -35,7 +35,7 @@ public class TinkerQualifiedSequenceImpl<E> extends BaseSequence<E> implements T
 			Edge edge = addInternal(e);
 			// Edge can only be null on isOneToMany, toOneToOne which is a
 			// String, Interger, Boolean or primitive
-			if (edge == null && !isOnePrimitive(e)) {
+			if (edge == null && !isOnePrimitive()) {
 				throw new IllegalStateException("Edge can only be null on isOneToMany, toOneToOne which is a String, Interger, Boolean or primitive");
 			}
 			if (edge != null) {

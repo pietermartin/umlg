@@ -10,7 +10,7 @@ import org.tinker.onetoone.OneOne;
 import org.tinker.onetoone.OneTwo;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
-import com.tinkerpop.blueprints.pgm.TransactionalGraph.Conclusion;
+import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 
 public class DeletionTest extends BaseLocalDbTest {
 
@@ -27,7 +27,7 @@ public class DeletionTest extends BaseLocalDbTest {
 		db.startTransaction();
 		God godTest = new God(god.getVertex());
 		Universe testDeletion = godTest.getUniverse().iterator().next();
-		testDeletion.markDeleted();
+		testDeletion.delete();
 		db.stopTransaction(Conclusion.SUCCESS);
 		Assert.assertEquals(1, countVertices());
 		Assert.assertEquals(1, countEdges());
@@ -86,7 +86,7 @@ public class DeletionTest extends BaseLocalDbTest {
 		Assert.assertEquals(4, manyBTest.getIManyA().size());
 		db.startTransaction();
 		ManyA testDeletion = new ManyA(manyA1.getVertex());
-		testDeletion.markDeleted();
+		testDeletion.delete();
 		db.stopTransaction(Conclusion.SUCCESS);
 		Assert.assertEquals(12, countVertices());
 		Assert.assertEquals(24, countEdges());
@@ -95,7 +95,7 @@ public class DeletionTest extends BaseLocalDbTest {
 
 		db.startTransaction();
 		testDeletion = new ManyA(manyA2.getVertex());
-		testDeletion.markDeleted();
+		testDeletion.delete();
 		db.stopTransaction(Conclusion.SUCCESS);
 		Assert.assertEquals(11, countVertices());
 		Assert.assertEquals(19, countEdges());
@@ -104,7 +104,7 @@ public class DeletionTest extends BaseLocalDbTest {
 
 		db.startTransaction();
 		testDeletion = new ManyA(manyA3.getVertex());
-		testDeletion.markDeleted();
+		testDeletion.delete();
 		db.stopTransaction(Conclusion.SUCCESS);
 		Assert.assertEquals(10, countVertices());
 		Assert.assertEquals(14, countEdges());
@@ -113,7 +113,7 @@ public class DeletionTest extends BaseLocalDbTest {
 
 		db.startTransaction();
 		testDeletion = new ManyA(manyA4.getVertex());
-		testDeletion.markDeleted();
+		testDeletion.delete();
 		db.stopTransaction(Conclusion.SUCCESS);
 		Assert.assertEquals(9, countVertices());
 		Assert.assertEquals(9, countEdges());
@@ -123,13 +123,13 @@ public class DeletionTest extends BaseLocalDbTest {
 		db.startTransaction();
 		testGod.getIMany().clear();
 		ManyB manyB = new ManyB(manyB1.getVertex());
-		manyB.markDeleted();
+		manyB.delete();
 		manyB = new ManyB(manyB2.getVertex());
-		manyB.markDeleted();
+		manyB.delete();
 		manyB = new ManyB(manyB3.getVertex());
-		manyB.markDeleted();
+		manyB.delete();
 		manyB = new ManyB(manyB4.getVertex());
-		manyB.markDeleted();
+		manyB.delete();
 		
 		db.stopTransaction(Conclusion.SUCCESS);
 		Assert.assertEquals(5, countVertices());
@@ -151,7 +151,7 @@ public class DeletionTest extends BaseLocalDbTest {
 		Assert.assertEquals(3, countVertices());
 		Assert.assertEquals(4, countEdges());
 		db.startTransaction();
-		oneOne1.markDeleted();
+		oneOne1.delete();
 		db.stopTransaction(Conclusion.SUCCESS);
 		Assert.assertEquals(2, countVertices());
 		Assert.assertEquals(2, countEdges());
@@ -172,7 +172,7 @@ public class DeletionTest extends BaseLocalDbTest {
 		Assert.assertEquals(3, countVertices());
 		Assert.assertEquals(4, countEdges());
 		db.startTransaction();
-		oneTwo1.markDeleted();
+		oneTwo1.delete();
 		db.stopTransaction(Conclusion.SUCCESS);
 		Assert.assertEquals(2, countVertices());
 		Assert.assertEquals(2, countEdges());

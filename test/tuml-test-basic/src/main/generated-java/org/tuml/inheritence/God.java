@@ -116,19 +116,19 @@ public class God extends BaseTinker implements TinkerNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.abstractSpecies =  new TinkerSetImpl<AbstractSpecies>(this, GodRuntimePropertyEnum.abstractSpecies);
 		this.name =  new TinkerSetImpl<String>(this, GodRuntimePropertyEnum.name);
+		this.abstractSpecies =  new TinkerSetImpl<AbstractSpecies>(this, GodRuntimePropertyEnum.abstractSpecies);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (GodRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case name:
-				this.name =  new TinkerSetImpl<String>(this, GodRuntimePropertyEnum.name);
-			break;
-		
 			case abstractSpecies:
 				this.abstractSpecies =  new TinkerSetImpl<AbstractSpecies>(this, GodRuntimePropertyEnum.abstractSpecies);
+			break;
+		
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, GodRuntimePropertyEnum.name);
 			break;
 		
 		}
@@ -179,8 +179,9 @@ public class God extends BaseTinker implements TinkerNode {
 	}
 
 	public enum GodRuntimePropertyEnum implements TumlRuntimeProperty {
-		abstractSpecies(true,true,"A_<god>_<abstractSpecies>",false,true,false,false,-1,0),
-		name(true,false,"org__tuml__inheritence__God__name",false,false,true,false,1,1);
+		name(true,true,false,"org__tuml__inheritence__God__name",false,false,true,false,1,1),
+		abstractSpecies(false,true,true,"A_<god>_<abstractSpecies>",false,true,false,false,-1,0);
+		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -192,6 +193,7 @@ public class God extends BaseTinker implements TinkerNode {
 		private int lower;
 		/** Constructor for GodRuntimePropertyEnum
 		 * 
+		 * @param onePrimitive 
 		 * @param controllingSide 
 		 * @param composite 
 		 * @param label 
@@ -202,7 +204,8 @@ public class God extends BaseTinker implements TinkerNode {
 		 * @param upper 
 		 * @param lower 
 		 */
-		private GodRuntimePropertyEnum(boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+		private GodRuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+			this.onePrimitive = onePrimitive;
 			this.controllingSide = controllingSide;
 			this.composite = composite;
 			this.label = label;
@@ -215,11 +218,11 @@ public class God extends BaseTinker implements TinkerNode {
 		}
 	
 		static public GodRuntimePropertyEnum fromLabel(String label) {
-			if ( abstractSpecies.getLabel().equals(label) ) {
-				return abstractSpecies;
-			}
 			if ( name.getLabel().equals(label) ) {
 				return name;
+			}
+			if ( abstractSpecies.getLabel().equals(label) ) {
+				return abstractSpecies;
 			}
 			throw new IllegalStateException();
 		}
@@ -250,6 +253,10 @@ public class God extends BaseTinker implements TinkerNode {
 		
 		public boolean isManyToOne() {
 			return this.manyToOne;
+		}
+		
+		public boolean isOnePrimitive() {
+			return this.onePrimitive;
 		}
 		
 		public boolean isOneToMany() {

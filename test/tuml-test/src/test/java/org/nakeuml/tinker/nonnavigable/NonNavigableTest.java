@@ -9,7 +9,7 @@ import org.tinker.navigability.NonNavigableMany;
 import org.tinker.navigability.NonNavigableOne;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
-import com.tinkerpop.blueprints.pgm.TransactionalGraph.Conclusion;
+import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 
 public class NonNavigableTest extends BaseLocalDbTest {
 

@@ -1,6 +1,6 @@
 package org.tinker.qualifiertest;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 import java.util.List;
 import java.util.Set;
@@ -215,22 +215,26 @@ public class Many1 extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.many2List =  new TinkerQualifiedSequenceImpl<Many2>(this, getUid(), Many1RuntimePropertyEnum.many2List);
 		this.name =  new TinkerSetImpl<String>(this, Many1RuntimePropertyEnum.name);
 		this.many2UnqualifiedList =  new TinkerSequenceImpl<Many2>(this, getUid(), Many1RuntimePropertyEnum.many2UnqualifiedList);
-		this.many2 =  new TinkerQualifiedSetImpl<Many2>(this, getUid(), Many1RuntimePropertyEnum.many2);
 		this.god =  new TinkerSetImpl<God>(this, Many1RuntimePropertyEnum.god);
+		this.many2List =  new TinkerQualifiedSequenceImpl<Many2>(this, getUid(), Many1RuntimePropertyEnum.many2List);
+		this.many2 =  new TinkerQualifiedSetImpl<Many2>(this, getUid(), Many1RuntimePropertyEnum.many2);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (Many1RuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case god:
-				this.god =  new TinkerSetImpl<God>(this, Many1RuntimePropertyEnum.god);
-			break;
-		
 			case many2:
 				this.many2 =  new TinkerQualifiedSetImpl<Many2>(this, getUid(), Many1RuntimePropertyEnum.many2);
+			break;
+		
+			case many2List:
+				this.many2List =  new TinkerQualifiedSequenceImpl<Many2>(this, getUid(), Many1RuntimePropertyEnum.many2List);
+			break;
+		
+			case god:
+				this.god =  new TinkerSetImpl<God>(this, Many1RuntimePropertyEnum.god);
 			break;
 		
 			case many2UnqualifiedList:
@@ -239,10 +243,6 @@ public class Many1 extends BaseTinker implements CompositionNode {
 		
 			case name:
 				this.name =  new TinkerSetImpl<String>(this, Many1RuntimePropertyEnum.name);
-			break;
-		
-			case many2List:
-				this.many2List =  new TinkerQualifiedSequenceImpl<Many2>(this, getUid(), Many1RuntimePropertyEnum.many2List);
 			break;
 		
 		}
@@ -344,11 +344,12 @@ public class Many1 extends BaseTinker implements CompositionNode {
 	}
 
 	public enum Many1RuntimePropertyEnum implements TumlRuntimeProperty {
-		many2List(false,false,"A_<many1>_<many2>_2",false,false,false,true,-1,0),
-		name(true,false,"org__tinker__qualifiertest__Many1__name",false,false,true,false,1,1),
-		many2UnqualifiedList(false,false,"A_<many1>_<many2>_3",false,false,false,true,-1,0),
-		many2(false,false,"A_<many1>_<many2>",false,false,false,true,-1,0),
-		god(false,false,"A_<god>_<many1>",false,false,true,false,1,1);
+		name(true,true,false,"org__tinker__qualifiertest__Many1__name",false,false,true,false,1,1),
+		many2UnqualifiedList(false,false,false,"A_<many1>_<many2>_3",false,false,false,true,-1,0),
+		god(false,false,false,"A_<god>_<many1>",false,false,true,false,1,1),
+		many2List(false,false,false,"A_<many1>_<many2>_2",false,false,false,true,-1,0),
+		many2(false,false,false,"A_<many1>_<many2>",false,false,false,true,-1,0);
+		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -360,6 +361,7 @@ public class Many1 extends BaseTinker implements CompositionNode {
 		private int lower;
 		/** Constructor for Many1RuntimePropertyEnum
 		 * 
+		 * @param onePrimitive 
 		 * @param controllingSide 
 		 * @param composite 
 		 * @param label 
@@ -370,7 +372,8 @@ public class Many1 extends BaseTinker implements CompositionNode {
 		 * @param upper 
 		 * @param lower 
 		 */
-		private Many1RuntimePropertyEnum(boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+		private Many1RuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+			this.onePrimitive = onePrimitive;
 			this.controllingSide = controllingSide;
 			this.composite = composite;
 			this.label = label;
@@ -383,20 +386,20 @@ public class Many1 extends BaseTinker implements CompositionNode {
 		}
 	
 		static public Many1RuntimePropertyEnum fromLabel(String label) {
-			if ( many2List.getLabel().equals(label) ) {
-				return many2List;
-			}
 			if ( name.getLabel().equals(label) ) {
 				return name;
 			}
 			if ( many2UnqualifiedList.getLabel().equals(label) ) {
 				return many2UnqualifiedList;
 			}
-			if ( many2.getLabel().equals(label) ) {
-				return many2;
-			}
 			if ( god.getLabel().equals(label) ) {
 				return god;
+			}
+			if ( many2List.getLabel().equals(label) ) {
+				return many2List;
+			}
+			if ( many2.getLabel().equals(label) ) {
+				return many2;
 			}
 			throw new IllegalStateException();
 		}
@@ -427,6 +430,10 @@ public class Many1 extends BaseTinker implements CompositionNode {
 		
 		public boolean isManyToOne() {
 			return this.manyToOne;
+		}
+		
+		public boolean isOnePrimitive() {
+			return this.onePrimitive;
 		}
 		
 		public boolean isOneToMany() {

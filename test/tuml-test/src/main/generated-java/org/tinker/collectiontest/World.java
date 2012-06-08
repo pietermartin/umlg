@@ -1,6 +1,6 @@
 package org.tinker.collectiontest;
 
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 import java.util.Set;
 import java.util.UUID;
@@ -208,8 +208,9 @@ public class World extends BaseTinker implements CompositionNode {
 	}
 
 	public enum WorldRuntimePropertyEnum implements TumlRuntimeProperty {
-		name(true,false,"org__tinker__collectiontest__World__name",false,false,true,false,1,1),
-		god(false,false,"A_<god>_<world>",false,false,true,false,1,1);
+		name(true,true,false,"org__tinker__collectiontest__World__name",false,false,true,false,1,1),
+		god(false,false,false,"A_<god>_<world>",false,false,true,false,1,1);
+		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -221,6 +222,7 @@ public class World extends BaseTinker implements CompositionNode {
 		private int lower;
 		/** Constructor for WorldRuntimePropertyEnum
 		 * 
+		 * @param onePrimitive 
 		 * @param controllingSide 
 		 * @param composite 
 		 * @param label 
@@ -231,7 +233,8 @@ public class World extends BaseTinker implements CompositionNode {
 		 * @param upper 
 		 * @param lower 
 		 */
-		private WorldRuntimePropertyEnum(boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+		private WorldRuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+			this.onePrimitive = onePrimitive;
 			this.controllingSide = controllingSide;
 			this.composite = composite;
 			this.label = label;
@@ -279,6 +282,10 @@ public class World extends BaseTinker implements CompositionNode {
 		
 		public boolean isManyToOne() {
 			return this.manyToOne;
+		}
+		
+		public boolean isOnePrimitive() {
+			return this.onePrimitive;
 		}
 		
 		public boolean isOneToMany() {

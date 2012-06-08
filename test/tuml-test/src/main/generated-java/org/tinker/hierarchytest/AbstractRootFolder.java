@@ -1,7 +1,7 @@
 package org.tinker.hierarchytest;
 
 import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.pgm.Vertex;
+import com.tinkerpop.blueprints.Vertex;
 
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
@@ -66,6 +66,7 @@ public class AbstractRootFolder extends AbstractFolder implements TinkerNode {
 
 	public enum AbstractRootFolderRuntimePropertyEnum implements TumlRuntimeProperty {
 	;
+		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -77,6 +78,7 @@ public class AbstractRootFolder extends AbstractFolder implements TinkerNode {
 		private int lower;
 		/** Constructor for AbstractRootFolderRuntimePropertyEnum
 		 * 
+		 * @param onePrimitive 
 		 * @param controllingSide 
 		 * @param composite 
 		 * @param label 
@@ -87,7 +89,8 @@ public class AbstractRootFolder extends AbstractFolder implements TinkerNode {
 		 * @param upper 
 		 * @param lower 
 		 */
-		private AbstractRootFolderRuntimePropertyEnum(boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+		private AbstractRootFolderRuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+			this.onePrimitive = onePrimitive;
 			this.controllingSide = controllingSide;
 			this.composite = composite;
 			this.label = label;
@@ -129,6 +132,10 @@ public class AbstractRootFolder extends AbstractFolder implements TinkerNode {
 		
 		public boolean isManyToOne() {
 			return this.manyToOne;
+		}
+		
+		public boolean isOnePrimitive() {
+			return this.onePrimitive;
 		}
 		
 		public boolean isOneToMany() {

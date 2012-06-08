@@ -30,7 +30,7 @@ public class TinkerQualifiedOrderedSetImpl<E> extends BaseCollection<E> implemen
 		this.tumlRuntimeProperty = multiplicity;
 		this.index = GraphDb.getDb().getIndex(uid + ":::" + getLabel(), Edge.class);
 		if (this.index == null) {
-			this.index = GraphDb.getDb().createKeyIndex(uid + ":::" + getLabel(), Edge.class);
+			this.index = GraphDb.getDb().createIndex(uid + ":::" + getLabel(), Edge.class);
 		}
 	}
 
@@ -48,7 +48,7 @@ public class TinkerQualifiedOrderedSetImpl<E> extends BaseCollection<E> implemen
 			Edge edge = addInternal(e);
 			// Edge can only be null on isOneToMany, toOneToOne which is a
 			// String, Interger, Boolean or primitive
-			if (edge == null && !isOnePrimitive(e)) {
+			if (edge == null && !isOnePrimitive()) {
 				throw new IllegalStateException("Edge can only be null on isOneToMany, toOneToOne which is a String, Interger, Boolean or primitive");
 			}
 			if (edge != null) {
@@ -86,7 +86,7 @@ public class TinkerQualifiedOrderedSetImpl<E> extends BaseCollection<E> implemen
 		Edge edge = addInternal(e);
 		// Edge can only be null on isOneToMany, toOneToOne which is a
 		// String, Interger, Boolean or primitive
-		if (edge == null && !isOnePrimitive(e)) {
+		if (edge == null && !isOnePrimitive()) {
 			throw new IllegalStateException("Edge can only be null on isOneToMany, toOneToOne which is a String, Interger, Boolean or primitive");
 		}
 		if (edge != null) {
