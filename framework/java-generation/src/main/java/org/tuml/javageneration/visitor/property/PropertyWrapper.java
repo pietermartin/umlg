@@ -81,6 +81,10 @@ public class PropertyWrapper implements Property {
 		return TumlPropertyOperations.isPrimitive(this.property);
 	}
 
+	public boolean isEnumeration() {
+		return TumlPropertyOperations.isEnumeration(this.property);
+	}
+	
 	public boolean isOneToMany() {
 		return TumlPropertyOperations.isOneToMany(this.property);
 	}

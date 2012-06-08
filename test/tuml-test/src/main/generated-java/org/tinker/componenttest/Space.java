@@ -83,6 +83,7 @@ public class Space extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void delete() {
+		GraphDb.getDb().removeVertex(this.vertex);
 	}
 	
 	@Override

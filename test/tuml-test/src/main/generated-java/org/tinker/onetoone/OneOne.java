@@ -95,6 +95,7 @@ public class OneOne extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void delete() {
+		GraphDb.getDb().removeVertex(this.vertex);
 	}
 	
 	public God getGod() {
@@ -165,24 +166,24 @@ public class OneOne extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
+		this.oneTwo =  new TinkerSetImpl<OneTwo>(this, OneOneRuntimePropertyEnum.oneTwo);
 		this.god =  new TinkerSetImpl<God>(this, OneOneRuntimePropertyEnum.god);
 		this.name =  new TinkerSetImpl<String>(this, OneOneRuntimePropertyEnum.name);
-		this.oneTwo =  new TinkerSetImpl<OneTwo>(this, OneOneRuntimePropertyEnum.oneTwo);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (OneOneRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case oneTwo:
-				this.oneTwo =  new TinkerSetImpl<OneTwo>(this, OneOneRuntimePropertyEnum.oneTwo);
-			break;
-		
 			case name:
 				this.name =  new TinkerSetImpl<String>(this, OneOneRuntimePropertyEnum.name);
 			break;
 		
 			case god:
 				this.god =  new TinkerSetImpl<God>(this, OneOneRuntimePropertyEnum.god);
+			break;
+		
+			case oneTwo:
+				this.oneTwo =  new TinkerSetImpl<OneTwo>(this, OneOneRuntimePropertyEnum.oneTwo);
 			break;
 		
 		}
@@ -250,9 +251,9 @@ public class OneOne extends BaseTinker implements CompositionNode {
 	}
 
 	public enum OneOneRuntimePropertyEnum implements TumlRuntimeProperty {
+		oneTwo(false,true,false,"A_<oneOne>_<oneTwo>",true,false,false,false,1,1),
 		god(false,false,false,"A_<god>_<oneOne>",false,false,true,false,1,1),
-		name(true,true,false,"org__tinker__onetoone__OneOne__name",false,false,true,false,1,1),
-		oneTwo(false,true,false,"A_<oneOne>_<oneTwo>",true,false,false,false,1,1);
+		name(true,true,false,"org__tinker__onetoone__OneOne__name",false,false,true,false,1,1);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -290,14 +291,14 @@ public class OneOne extends BaseTinker implements CompositionNode {
 		}
 	
 		static public OneOneRuntimePropertyEnum fromLabel(String label) {
+			if ( oneTwo.getLabel().equals(label) ) {
+				return oneTwo;
+			}
 			if ( god.getLabel().equals(label) ) {
 				return god;
 			}
 			if ( name.getLabel().equals(label) ) {
 				return name;
-			}
-			if ( oneTwo.getLabel().equals(label) ) {
-				return oneTwo;
 			}
 			throw new IllegalStateException();
 		}

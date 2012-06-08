@@ -94,6 +94,7 @@ public class Angel extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void delete() {
+		GraphDb.getDb().removeVertex(this.vertex);
 	}
 	
 	public God getGod() {
@@ -165,19 +166,19 @@ public class Angel extends BaseTinker implements CompositionNode {
 	@Override
 	public void initialiseProperties() {
 		this.god =  new TinkerSetImpl<God>(this, AngelRuntimePropertyEnum.god);
-		this.name =  new TinkerSetImpl<String>(this, AngelRuntimePropertyEnum.name);
 		this.universe =  new TinkerSetImpl<Universe>(this, AngelRuntimePropertyEnum.universe);
+		this.name =  new TinkerSetImpl<String>(this, AngelRuntimePropertyEnum.name);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (AngelRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case universe:
-				this.universe =  new TinkerSetImpl<Universe>(this, AngelRuntimePropertyEnum.universe);
-			break;
-		
 			case name:
 				this.name =  new TinkerSetImpl<String>(this, AngelRuntimePropertyEnum.name);
+			break;
+		
+			case universe:
+				this.universe =  new TinkerSetImpl<Universe>(this, AngelRuntimePropertyEnum.universe);
 			break;
 		
 			case god:
@@ -250,8 +251,8 @@ public class Angel extends BaseTinker implements CompositionNode {
 
 	public enum AngelRuntimePropertyEnum implements TumlRuntimeProperty {
 		god(false,false,false,"A_<god>_<angel>",false,false,true,false,1,1),
-		name(true,true,false,"org__tinker__concretetest__Angel__name",false,false,true,false,1,1),
-		universe(false,true,false,"A_<universe>_<angel>",true,false,false,false,1,1);
+		universe(false,true,false,"A_<universe>_<angel>",true,false,false,false,1,1),
+		name(true,true,false,"org__tinker__concretetest__Angel__name",false,false,true,false,1,1);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -292,11 +293,11 @@ public class Angel extends BaseTinker implements CompositionNode {
 			if ( god.getLabel().equals(label) ) {
 				return god;
 			}
-			if ( name.getLabel().equals(label) ) {
-				return name;
-			}
 			if ( universe.getLabel().equals(label) ) {
 				return universe;
+			}
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
 			throw new IllegalStateException();
 		}

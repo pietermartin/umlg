@@ -101,6 +101,7 @@ public class ManyB extends BaseTinker implements CompositionNode, IManyB {
 	
 	@Override
 	public void delete() {
+		GraphDb.getDb().removeVertex(this.vertex);
 	}
 	
 	public God getGod() {

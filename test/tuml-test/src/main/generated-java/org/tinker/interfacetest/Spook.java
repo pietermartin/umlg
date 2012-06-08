@@ -95,6 +95,7 @@ public class Spook extends BaseTinker implements CompositionNode, Spirit {
 	
 	@Override
 	public void delete() {
+		GraphDb.getDb().removeVertex(this.vertex);
 	}
 	
 	public Creature getCreature() {
@@ -165,24 +166,24 @@ public class Spook extends BaseTinker implements CompositionNode, Spirit {
 	
 	@Override
 	public void initialiseProperties() {
-		this.name =  new TinkerSetImpl<String>(this, SpookRuntimePropertyEnum.name);
 		this.creature =  new TinkerSetImpl<Creature>(this, SpookRuntimePropertyEnum.creature);
 		this.god =  new TinkerSetImpl<God>(this, SpookRuntimePropertyEnum.god);
+		this.name =  new TinkerSetImpl<String>(this, SpookRuntimePropertyEnum.name);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (SpookRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, SpookRuntimePropertyEnum.name);
+			break;
+		
 			case god:
 				this.god =  new TinkerSetImpl<God>(this, SpookRuntimePropertyEnum.god);
 			break;
 		
 			case creature:
 				this.creature =  new TinkerSetImpl<Creature>(this, SpookRuntimePropertyEnum.creature);
-			break;
-		
-			case name:
-				this.name =  new TinkerSetImpl<String>(this, SpookRuntimePropertyEnum.name);
 			break;
 		
 		}
@@ -250,9 +251,9 @@ public class Spook extends BaseTinker implements CompositionNode, Spirit {
 	}
 
 	public enum SpookRuntimePropertyEnum implements TumlRuntimeProperty {
-		name(true,true,false,"org__tinker__interfacetest__Spook__name",false,false,true,false,1,1),
 		creature(false,true,false,"A_<spook>_<creature>",true,false,false,false,1,1),
-		god(false,false,false,"A_<god>_<spirit>",false,false,true,false,1,1);
+		god(false,false,false,"A_<god>_<spirit>",false,false,true,false,1,1),
+		name(true,true,false,"org__tinker__interfacetest__Spook__name",false,false,true,false,1,1);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -290,14 +291,14 @@ public class Spook extends BaseTinker implements CompositionNode, Spirit {
 		}
 	
 		static public SpookRuntimePropertyEnum fromLabel(String label) {
-			if ( name.getLabel().equals(label) ) {
-				return name;
-			}
 			if ( creature.getLabel().equals(label) ) {
 				return creature;
 			}
 			if ( god.getLabel().equals(label) ) {
 				return god;
+			}
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
 			throw new IllegalStateException();
 		}

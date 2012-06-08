@@ -76,6 +76,10 @@ public class AbstractFolder extends BaseTinker implements TinkerNode, Hierarchy 
 	
 	@Override
 	public void delete() {
+		for ( Folder child : getChildFolder() ) {
+			child.delete();
+		}
+		GraphDb.getDb().removeVertex(this.vertex);
 	}
 	
 	public TinkerSet<Folder> getChildFolder() {
@@ -116,19 +120,19 @@ public class AbstractFolder extends BaseTinker implements TinkerNode, Hierarchy 
 	
 	@Override
 	public void initialiseProperties() {
-		this.name =  new TinkerSetImpl<String>(this, AbstractFolderRuntimePropertyEnum.name);
 		this.childFolder =  new TinkerSetImpl<Folder>(this, AbstractFolderRuntimePropertyEnum.childFolder);
+		this.name =  new TinkerSetImpl<String>(this, AbstractFolderRuntimePropertyEnum.name);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (AbstractFolderRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case childFolder:
-				this.childFolder =  new TinkerSetImpl<Folder>(this, AbstractFolderRuntimePropertyEnum.childFolder);
-			break;
-		
 			case name:
 				this.name =  new TinkerSetImpl<String>(this, AbstractFolderRuntimePropertyEnum.name);
+			break;
+		
+			case childFolder:
+				this.childFolder =  new TinkerSetImpl<Folder>(this, AbstractFolderRuntimePropertyEnum.childFolder);
 			break;
 		
 		}
@@ -179,8 +183,8 @@ public class AbstractFolder extends BaseTinker implements TinkerNode, Hierarchy 
 	}
 
 	public enum AbstractFolderRuntimePropertyEnum implements TumlRuntimeProperty {
-		name(true,true,false,"org__tinker__hierarchytest__AbstractFolder__name",false,false,true,false,1,1),
-		childFolder(false,true,true,"A_<abstractFolder>_<folder>",false,true,false,false,-1,0);
+		childFolder(false,true,true,"A_<abstractFolder>_<folder>",false,true,false,false,-1,0),
+		name(true,true,false,"org__tinker__hierarchytest__AbstractFolder__name",false,false,true,false,1,1);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -218,11 +222,11 @@ public class AbstractFolder extends BaseTinker implements TinkerNode, Hierarchy 
 		}
 	
 		static public AbstractFolderRuntimePropertyEnum fromLabel(String label) {
-			if ( name.getLabel().equals(label) ) {
-				return name;
-			}
 			if ( childFolder.getLabel().equals(label) ) {
 				return childFolder;
+			}
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
 			throw new IllegalStateException();
 		}

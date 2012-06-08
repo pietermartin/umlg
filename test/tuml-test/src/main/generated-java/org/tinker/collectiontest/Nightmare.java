@@ -106,6 +106,7 @@ public class Nightmare extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void delete() {
+		GraphDb.getDb().removeVertex(this.vertex);
 	}
 	
 	public God getGod() {
@@ -185,15 +186,19 @@ public class Nightmare extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.name =  new TinkerSetImpl<String>(this, NightmareRuntimePropertyEnum.name);
 		this.nameNonUnique =  new TinkerSetImpl<String>(this, NightmareRuntimePropertyEnum.nameNonUnique);
 		this.godOfMemory =  new TinkerSetImpl<God>(this, NightmareRuntimePropertyEnum.godOfMemory);
 		this.god =  new TinkerSetImpl<God>(this, NightmareRuntimePropertyEnum.god);
+		this.name =  new TinkerSetImpl<String>(this, NightmareRuntimePropertyEnum.name);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (NightmareRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, NightmareRuntimePropertyEnum.name);
+			break;
+		
 			case god:
 				this.god =  new TinkerSetImpl<God>(this, NightmareRuntimePropertyEnum.god);
 			break;
@@ -204,10 +209,6 @@ public class Nightmare extends BaseTinker implements CompositionNode {
 		
 			case nameNonUnique:
 				this.nameNonUnique =  new TinkerSetImpl<String>(this, NightmareRuntimePropertyEnum.nameNonUnique);
-			break;
-		
-			case name:
-				this.name =  new TinkerSetImpl<String>(this, NightmareRuntimePropertyEnum.name);
 			break;
 		
 		}
@@ -292,10 +293,10 @@ public class Nightmare extends BaseTinker implements CompositionNode {
 	}
 
 	public enum NightmareRuntimePropertyEnum implements TumlRuntimeProperty {
-		name(true,true,false,"org__tinker__collectiontest__Nightmare__name",false,false,true,false,1,1),
 		nameNonUnique(true,true,false,"org__tinker__collectiontest__Nightmare__nameNonUnique",false,false,true,false,1,1),
 		godOfMemory(false,false,false,"A_<god>_<nightmare>_2",false,false,true,false,1,1),
-		god(false,false,false,"A_<god>_<nightmare>",false,false,true,false,1,1);
+		god(false,false,false,"A_<god>_<nightmare>",false,false,true,false,1,1),
+		name(true,true,false,"org__tinker__collectiontest__Nightmare__name",false,false,true,false,1,1);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -333,9 +334,6 @@ public class Nightmare extends BaseTinker implements CompositionNode {
 		}
 	
 		static public NightmareRuntimePropertyEnum fromLabel(String label) {
-			if ( name.getLabel().equals(label) ) {
-				return name;
-			}
 			if ( nameNonUnique.getLabel().equals(label) ) {
 				return nameNonUnique;
 			}
@@ -344,6 +342,9 @@ public class Nightmare extends BaseTinker implements CompositionNode {
 			}
 			if ( god.getLabel().equals(label) ) {
 				return god;
+			}
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
 			throw new IllegalStateException();
 		}

@@ -80,6 +80,7 @@ public class EmbeddedSetDeletionTest extends BaseLocalDbTest {
 		mamal3.setName("mamal3");
 		Mamal mamal4 = new Mamal(god);
 		mamal4.setName("mamal4");
+		//animalFarm is an embedded many
 		god.addToAnimalFarm(mamal1);
 		god.addToAnimalFarm(mamal2);
 		god.addToAnimalFarm(mamal3);
@@ -89,6 +90,9 @@ public class EmbeddedSetDeletionTest extends BaseLocalDbTest {
 		Assert.assertEquals(9, countEdges());
 		db.startTransaction();
 		God godTest = new God(god.getVertex());
+		for (Mamal animal : godTest.getAnimalFarm()) {
+			System.out.println(animal.getVertex().toString());
+		}
 		godTest.removeFromAnimalFarm(mamal3);
 		db.stopTransaction(Conclusion.SUCCESS);
 		Assert.assertEquals(5, countVertices());

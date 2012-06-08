@@ -176,7 +176,8 @@ public class DeletionTest extends BaseLocalDbTest {
 		db.stopTransaction(Conclusion.SUCCESS);
 		Assert.assertEquals(2, countVertices());
 		Assert.assertEquals(2, countEdges());
-		Assert.assertNull(oneOne1.getOneTwo());
+		OneOne testOneOne1 = new OneOne(oneOne1.getVertex());
+		Assert.assertNull(testOneOne1.getOneTwo());
 	}
 
 }

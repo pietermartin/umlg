@@ -15,8 +15,21 @@ import org.eclipse.uml2.uml.Type;
 import org.eclipse.uml2.uml.internal.operations.ClassOperations;
 import org.opaeum.java.metamodel.OJPathName;
 import org.tuml.javageneration.naming.Namer;
+import org.tuml.javageneration.visitor.property.PropertyWrapper;
 
 public class TumlClassOperations extends ClassOperations {
+
+	public static Set<Property> getChildPropertiesToDelete(org.eclipse.uml2.uml.Class clazz) {
+		Set<Property> result = new HashSet<Property>();
+		Set<Property> ownedProperties = getAllOwnedProperties(clazz);
+		for (Property p : ownedProperties) {
+			PropertyWrapper pWrap = new PropertyWrapper(p);
+			if (pWrap.isComposite() || (!pWrap.isPrimitive() && !pWrap.isEnumeration() && pWrap.getOtherEnd()==null)) {
+				result.add(p);
+			}
+		}
+		return result;
+	}
 
 	/*
 	 * These include all properties that are on the other end of an

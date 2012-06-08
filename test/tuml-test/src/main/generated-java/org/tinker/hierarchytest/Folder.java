@@ -4,6 +4,7 @@ import com.tinkerpop.blueprints.Vertex;
 
 import java.util.Set;
 
+import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TinkerSetImpl;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
@@ -61,6 +62,7 @@ public class Folder extends AbstractFolder implements CompositionNode {
 	
 	@Override
 	public void delete() {
+		GraphDb.getDb().removeVertex(this.vertex);
 	}
 	
 	@Override

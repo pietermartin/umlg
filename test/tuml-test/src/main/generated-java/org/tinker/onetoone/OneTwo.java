@@ -95,6 +95,7 @@ public class OneTwo extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void delete() {
+		GraphDb.getDb().removeVertex(this.vertex);
 	}
 	
 	public God getGod() {
@@ -166,19 +167,19 @@ public class OneTwo extends BaseTinker implements CompositionNode {
 	@Override
 	public void initialiseProperties() {
 		this.god =  new TinkerSetImpl<God>(this, OneTwoRuntimePropertyEnum.god);
-		this.oneOne =  new TinkerSetImpl<OneOne>(this, OneTwoRuntimePropertyEnum.oneOne);
 		this.name =  new TinkerSetImpl<String>(this, OneTwoRuntimePropertyEnum.name);
+		this.oneOne =  new TinkerSetImpl<OneOne>(this, OneTwoRuntimePropertyEnum.oneOne);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (OneTwoRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case name:
-				this.name =  new TinkerSetImpl<String>(this, OneTwoRuntimePropertyEnum.name);
-			break;
-		
 			case oneOne:
 				this.oneOne =  new TinkerSetImpl<OneOne>(this, OneTwoRuntimePropertyEnum.oneOne);
+			break;
+		
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, OneTwoRuntimePropertyEnum.name);
 			break;
 		
 			case god:
@@ -251,8 +252,8 @@ public class OneTwo extends BaseTinker implements CompositionNode {
 
 	public enum OneTwoRuntimePropertyEnum implements TumlRuntimeProperty {
 		god(false,false,false,"A_<god>_<oneTwo>",false,false,true,false,1,1),
-		oneOne(false,false,false,"A_<oneOne>_<oneTwo>",true,false,false,false,1,0),
-		name(true,true,false,"org__tinker__onetoone__OneTwo__name",false,false,true,false,1,1);
+		name(true,true,false,"org__tinker__onetoone__OneTwo__name",false,false,true,false,1,1),
+		oneOne(false,false,false,"A_<oneOne>_<oneTwo>",true,false,false,false,1,0);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -293,11 +294,11 @@ public class OneTwo extends BaseTinker implements CompositionNode {
 			if ( god.getLabel().equals(label) ) {
 				return god;
 			}
-			if ( oneOne.getLabel().equals(label) ) {
-				return oneOne;
-			}
 			if ( name.getLabel().equals(label) ) {
 				return name;
+			}
+			if ( oneOne.getLabel().equals(label) ) {
+				return oneOne;
 			}
 			throw new IllegalStateException();
 		}

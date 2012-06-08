@@ -94,6 +94,7 @@ public class Demon extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void delete() {
+		GraphDb.getDb().removeVertex(this.vertex);
 	}
 	
 	public God getGod() {
@@ -164,24 +165,24 @@ public class Demon extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
+		this.god =  new TinkerSetImpl<God>(this, DemonRuntimePropertyEnum.god);
 		this.name =  new TinkerSetImpl<String>(this, DemonRuntimePropertyEnum.name);
 		this.universe =  new TinkerSetImpl<Universe>(this, DemonRuntimePropertyEnum.universe);
-		this.god =  new TinkerSetImpl<God>(this, DemonRuntimePropertyEnum.god);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (DemonRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case god:
-				this.god =  new TinkerSetImpl<God>(this, DemonRuntimePropertyEnum.god);
-			break;
-		
 			case universe:
 				this.universe =  new TinkerSetImpl<Universe>(this, DemonRuntimePropertyEnum.universe);
 			break;
 		
 			case name:
 				this.name =  new TinkerSetImpl<String>(this, DemonRuntimePropertyEnum.name);
+			break;
+		
+			case god:
+				this.god =  new TinkerSetImpl<God>(this, DemonRuntimePropertyEnum.god);
 			break;
 		
 		}
@@ -249,9 +250,9 @@ public class Demon extends BaseTinker implements CompositionNode {
 	}
 
 	public enum DemonRuntimePropertyEnum implements TumlRuntimeProperty {
+		god(false,false,false,"A_<god>_<demon>",false,false,true,false,1,1),
 		name(true,true,false,"org__tinker__concretetest__Demon__name",false,false,true,false,1,1),
-		universe(false,false,false,"A_<universe>_<demon>",false,false,true,false,1,1),
-		god(false,false,false,"A_<god>_<demon>",false,false,true,false,1,1);
+		universe(false,false,false,"A_<universe>_<demon>",false,false,true,false,1,1);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -289,14 +290,14 @@ public class Demon extends BaseTinker implements CompositionNode {
 		}
 	
 		static public DemonRuntimePropertyEnum fromLabel(String label) {
+			if ( god.getLabel().equals(label) ) {
+				return god;
+			}
 			if ( name.getLabel().equals(label) ) {
 				return name;
 			}
 			if ( universe.getLabel().equals(label) ) {
 				return universe;
-			}
-			if ( god.getLabel().equals(label) ) {
-				return god;
 			}
 			throw new IllegalStateException();
 		}

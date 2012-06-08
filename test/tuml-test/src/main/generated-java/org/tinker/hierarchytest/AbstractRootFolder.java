@@ -41,6 +41,7 @@ public class AbstractRootFolder extends AbstractFolder implements TinkerNode {
 	
 	@Override
 	public void delete() {
+		GraphDb.getDb().removeVertex(this.vertex);
 	}
 	
 	public void initVariables() {

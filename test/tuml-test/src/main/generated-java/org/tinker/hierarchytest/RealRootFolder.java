@@ -5,6 +5,7 @@ import com.tinkerpop.blueprints.Vertex;
 import java.util.Set;
 
 import org.tinker.concretetest.God;
+import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TinkerSetImpl;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
@@ -62,6 +63,7 @@ public class RealRootFolder extends AbstractRootFolder implements CompositionNod
 	
 	@Override
 	public void delete() {
+		GraphDb.getDb().removeVertex(this.vertex);
 	}
 	
 	public God getGod() {

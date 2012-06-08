@@ -84,6 +84,7 @@ public class Dream extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void delete() {
+		GraphDb.getDb().removeVertex(this.vertex);
 	}
 	
 	public God getGod() {
@@ -145,19 +146,19 @@ public class Dream extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.god =  new TinkerSetImpl<God>(this, DreamRuntimePropertyEnum.god);
 		this.name =  new TinkerSetImpl<String>(this, DreamRuntimePropertyEnum.name);
+		this.god =  new TinkerSetImpl<God>(this, DreamRuntimePropertyEnum.god);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (DreamRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case name:
-				this.name =  new TinkerSetImpl<String>(this, DreamRuntimePropertyEnum.name);
-			break;
-		
 			case god:
 				this.god =  new TinkerSetImpl<God>(this, DreamRuntimePropertyEnum.god);
+			break;
+		
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, DreamRuntimePropertyEnum.name);
 			break;
 		
 		}
@@ -208,8 +209,8 @@ public class Dream extends BaseTinker implements CompositionNode {
 	}
 
 	public enum DreamRuntimePropertyEnum implements TumlRuntimeProperty {
-		god(false,false,false,"A_<god>_<dream>",false,false,true,false,1,1),
-		name(true,true,false,"org__tinker__collectiontest__Dream__name",false,false,true,false,1,1);
+		name(true,true,false,"org__tinker__collectiontest__Dream__name",false,false,true,false,1,1),
+		god(false,false,false,"A_<god>_<dream>",false,false,true,false,1,1);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -247,11 +248,11 @@ public class Dream extends BaseTinker implements CompositionNode {
 		}
 	
 		static public DreamRuntimePropertyEnum fromLabel(String label) {
-			if ( god.getLabel().equals(label) ) {
-				return god;
-			}
 			if ( name.getLabel().equals(label) ) {
 				return name;
+			}
+			if ( god.getLabel().equals(label) ) {
+				return god;
 			}
 			throw new IllegalStateException();
 		}

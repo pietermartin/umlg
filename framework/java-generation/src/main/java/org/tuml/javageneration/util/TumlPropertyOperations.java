@@ -7,6 +7,7 @@ import org.eclipse.uml2.uml.Association;
 import org.eclipse.uml2.uml.BehavioredClassifier;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Element;
+import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
@@ -63,6 +64,10 @@ public final class TumlPropertyOperations extends PropertyOperations {
 	
 	public static boolean isPrimitive(Property property) {
 		return property.getType() instanceof PrimitiveType;
+	}
+
+	public static boolean isEnumeration(Property property) {
+		return property.getType() instanceof Enumeration;
 	}
 
 	public static boolean isControllingSide(Property p) {

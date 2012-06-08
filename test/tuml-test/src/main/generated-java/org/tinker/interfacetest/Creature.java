@@ -95,6 +95,7 @@ public class Creature extends BaseTinker implements CompositionNode, Being {
 	
 	@Override
 	public void delete() {
+		GraphDb.getDb().removeVertex(this.vertex);
 	}
 	
 	public God getGod() {
@@ -166,19 +167,19 @@ public class Creature extends BaseTinker implements CompositionNode, Being {
 	@Override
 	public void initialiseProperties() {
 		this.god =  new TinkerSetImpl<God>(this, CreatureRuntimePropertyEnum.god);
-		this.name =  new TinkerSetImpl<String>(this, CreatureRuntimePropertyEnum.name);
 		this.spook =  new TinkerSetImpl<Spook>(this, CreatureRuntimePropertyEnum.spook);
+		this.name =  new TinkerSetImpl<String>(this, CreatureRuntimePropertyEnum.name);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (CreatureRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case spook:
-				this.spook =  new TinkerSetImpl<Spook>(this, CreatureRuntimePropertyEnum.spook);
-			break;
-		
 			case name:
 				this.name =  new TinkerSetImpl<String>(this, CreatureRuntimePropertyEnum.name);
+			break;
+		
+			case spook:
+				this.spook =  new TinkerSetImpl<Spook>(this, CreatureRuntimePropertyEnum.spook);
 			break;
 		
 			case god:
@@ -251,8 +252,8 @@ public class Creature extends BaseTinker implements CompositionNode, Being {
 
 	public enum CreatureRuntimePropertyEnum implements TumlRuntimeProperty {
 		god(false,false,false,"A_<god>_<being>",false,false,true,false,1,1),
-		name(true,true,false,"org__tinker__interfacetest__Creature__name",false,false,true,false,1,1),
-		spook(false,false,false,"A_<spook>_<creature>",true,false,false,false,1,0);
+		spook(false,false,false,"A_<spook>_<creature>",true,false,false,false,1,0),
+		name(true,true,false,"org__tinker__interfacetest__Creature__name",false,false,true,false,1,1);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -293,11 +294,11 @@ public class Creature extends BaseTinker implements CompositionNode, Being {
 			if ( god.getLabel().equals(label) ) {
 				return god;
 			}
-			if ( name.getLabel().equals(label) ) {
-				return name;
-			}
 			if ( spook.getLabel().equals(label) ) {
 				return spook;
+			}
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
 			throw new IllegalStateException();
 		}

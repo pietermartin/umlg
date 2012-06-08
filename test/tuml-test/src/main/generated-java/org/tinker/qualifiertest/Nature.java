@@ -95,6 +95,7 @@ public class Nature extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void delete() {
+		GraphDb.getDb().removeVertex(this.vertex);
 	}
 	
 	public God getGod() {
@@ -165,24 +166,24 @@ public class Nature extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
+		this.name1 =  new TinkerSetImpl<String>(this, NatureRuntimePropertyEnum.name1);
 		this.name2 =  new TinkerSetImpl<String>(this, NatureRuntimePropertyEnum.name2);
 		this.god =  new TinkerSetImpl<God>(this, NatureRuntimePropertyEnum.god);
-		this.name1 =  new TinkerSetImpl<String>(this, NatureRuntimePropertyEnum.name1);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (NatureRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case name1:
-				this.name1 =  new TinkerSetImpl<String>(this, NatureRuntimePropertyEnum.name1);
-			break;
-		
 			case god:
 				this.god =  new TinkerSetImpl<God>(this, NatureRuntimePropertyEnum.god);
 			break;
 		
 			case name2:
 				this.name2 =  new TinkerSetImpl<String>(this, NatureRuntimePropertyEnum.name2);
+			break;
+		
+			case name1:
+				this.name1 =  new TinkerSetImpl<String>(this, NatureRuntimePropertyEnum.name1);
 			break;
 		
 		}
@@ -250,9 +251,9 @@ public class Nature extends BaseTinker implements CompositionNode {
 	}
 
 	public enum NatureRuntimePropertyEnum implements TumlRuntimeProperty {
+		name1(true,true,false,"org__tinker__qualifiertest__Nature__name1",false,false,true,false,1,1),
 		name2(true,true,false,"org__tinker__qualifiertest__Nature__name2",false,false,true,false,1,1),
-		god(false,false,false,"A_<god>_<nature>",false,false,true,false,1,1),
-		name1(true,true,false,"org__tinker__qualifiertest__Nature__name1",false,false,true,false,1,1);
+		god(false,false,false,"A_<god>_<nature>",false,false,true,false,1,1);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -290,14 +291,14 @@ public class Nature extends BaseTinker implements CompositionNode {
 		}
 	
 		static public NatureRuntimePropertyEnum fromLabel(String label) {
+			if ( name1.getLabel().equals(label) ) {
+				return name1;
+			}
 			if ( name2.getLabel().equals(label) ) {
 				return name2;
 			}
 			if ( god.getLabel().equals(label) ) {
 				return god;
-			}
-			if ( name1.getLabel().equals(label) ) {
-				return name1;
 			}
 			throw new IllegalStateException();
 		}

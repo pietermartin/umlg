@@ -18,8 +18,8 @@ import org.tuml.runtime.domain.TinkerNode;
 
 public class ManyA extends BaseTinker implements CompositionNode, IManyA {
 	private TinkerSet<God> god;
-	private TinkerSet<String> name;
 	private TinkerSet<IManyB> iManyB;
+	private TinkerSet<String> name;
 
 	/** Constructor for ManyA
 	 * 
@@ -101,6 +101,7 @@ public class ManyA extends BaseTinker implements CompositionNode, IManyA {
 	
 	@Override
 	public void delete() {
+		GraphDb.getDb().removeVertex(this.vertex);
 	}
 	
 	public God getGod() {
@@ -167,19 +168,19 @@ public class ManyA extends BaseTinker implements CompositionNode, IManyA {
 	@Override
 	public void initialiseProperties() {
 		this.god =  new TinkerSetImpl<God>(this, ManyARuntimePropertyEnum.god);
-		this.name =  new TinkerSetImpl<String>(this, ManyARuntimePropertyEnum.name);
 		this.iManyB =  new TinkerSetImpl<IManyB>(this, ManyARuntimePropertyEnum.iManyB);
+		this.name =  new TinkerSetImpl<String>(this, ManyARuntimePropertyEnum.name);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (ManyARuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case iManyB:
-				this.iManyB =  new TinkerSetImpl<IManyB>(this, ManyARuntimePropertyEnum.iManyB);
-			break;
-		
 			case name:
 				this.name =  new TinkerSetImpl<String>(this, ManyARuntimePropertyEnum.name);
+			break;
+		
+			case iManyB:
+				this.iManyB =  new TinkerSetImpl<IManyB>(this, ManyARuntimePropertyEnum.iManyB);
 			break;
 		
 			case god:
@@ -252,8 +253,8 @@ public class ManyA extends BaseTinker implements CompositionNode, IManyA {
 
 	public enum ManyARuntimePropertyEnum implements TumlRuntimeProperty {
 		god(false,false,false,"A_<god>_<iMany>",false,false,true,false,1,1),
-		name(true,true,false,"org__tinker__interfacetest__IMany__name",false,false,true,false,1,1),
-		iManyB(false,false,false,"A_<iManyA>_<iManyB>",false,false,false,true,-1,0);
+		iManyB(false,false,false,"A_<iManyA>_<iManyB>",false,false,false,true,-1,0),
+		name(true,true,false,"org__tinker__interfacetest__IMany__name",false,false,true,false,1,1);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -294,11 +295,11 @@ public class ManyA extends BaseTinker implements CompositionNode, IManyA {
 			if ( god.getLabel().equals(label) ) {
 				return god;
 			}
-			if ( name.getLabel().equals(label) ) {
-				return name;
-			}
 			if ( iManyB.getLabel().equals(label) ) {
 				return iManyB;
+			}
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
 			throw new IllegalStateException();
 		}

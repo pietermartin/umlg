@@ -3,6 +3,7 @@ package org.tinker.inheritencetest;
 import com.tinkerpop.blueprints.Vertex;
 
 import org.tinker.concretetest.God;
+import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.domain.CompositionNode;
 import org.tuml.runtime.domain.TinkerNode;
@@ -48,6 +49,7 @@ public class Biped extends Mamal implements CompositionNode {
 	
 	@Override
 	public void delete() {
+		GraphDb.getDb().removeVertex(this.vertex);
 	}
 	
 	@Override

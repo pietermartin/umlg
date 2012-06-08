@@ -84,6 +84,7 @@ public class Phantom extends BaseTinker implements CompositionNode, Spirit {
 	
 	@Override
 	public void delete() {
+		GraphDb.getDb().removeVertex(this.vertex);
 	}
 	
 	public God getGod() {
@@ -145,19 +146,19 @@ public class Phantom extends BaseTinker implements CompositionNode, Spirit {
 	
 	@Override
 	public void initialiseProperties() {
-		this.name =  new TinkerSetImpl<String>(this, PhantomRuntimePropertyEnum.name);
 		this.god =  new TinkerSetImpl<God>(this, PhantomRuntimePropertyEnum.god);
+		this.name =  new TinkerSetImpl<String>(this, PhantomRuntimePropertyEnum.name);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (PhantomRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case god:
-				this.god =  new TinkerSetImpl<God>(this, PhantomRuntimePropertyEnum.god);
-			break;
-		
 			case name:
 				this.name =  new TinkerSetImpl<String>(this, PhantomRuntimePropertyEnum.name);
+			break;
+		
+			case god:
+				this.god =  new TinkerSetImpl<God>(this, PhantomRuntimePropertyEnum.god);
 			break;
 		
 		}
@@ -208,8 +209,8 @@ public class Phantom extends BaseTinker implements CompositionNode, Spirit {
 	}
 
 	public enum PhantomRuntimePropertyEnum implements TumlRuntimeProperty {
-		name(true,true,false,"org__tinker__interfacetest__Phantom__name",false,false,true,false,1,1),
-		god(false,false,false,"A_<god>_<spirit>",false,false,true,false,1,1);
+		god(false,false,false,"A_<god>_<spirit>",false,false,true,false,1,1),
+		name(true,true,false,"org__tinker__interfacetest__Phantom__name",false,false,true,false,1,1);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -247,11 +248,11 @@ public class Phantom extends BaseTinker implements CompositionNode, Spirit {
 		}
 	
 		static public PhantomRuntimePropertyEnum fromLabel(String label) {
-			if ( name.getLabel().equals(label) ) {
-				return name;
-			}
 			if ( god.getLabel().equals(label) ) {
 				return god;
+			}
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
 			throw new IllegalStateException();
 		}

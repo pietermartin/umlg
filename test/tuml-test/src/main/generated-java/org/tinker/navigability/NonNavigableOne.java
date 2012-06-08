@@ -96,6 +96,7 @@ public class NonNavigableOne extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void delete() {
+		GraphDb.getDb().removeVertex(this.vertex);
 	}
 	
 	public God getGod() {
@@ -166,8 +167,8 @@ public class NonNavigableOne extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.name =  new TinkerSetImpl<String>(this, NonNavigableOneRuntimePropertyEnum.name);
 		this.universe =  new TinkerSetImpl<Universe>(this, NonNavigableOneRuntimePropertyEnum.universe);
+		this.name =  new TinkerSetImpl<String>(this, NonNavigableOneRuntimePropertyEnum.name);
 		this.god =  new TinkerSetImpl<God>(this, NonNavigableOneRuntimePropertyEnum.god);
 	}
 	
@@ -178,12 +179,12 @@ public class NonNavigableOne extends BaseTinker implements CompositionNode {
 				this.god =  new TinkerSetImpl<God>(this, NonNavigableOneRuntimePropertyEnum.god);
 			break;
 		
-			case universe:
-				this.universe =  new TinkerSetImpl<Universe>(this, NonNavigableOneRuntimePropertyEnum.universe);
-			break;
-		
 			case name:
 				this.name =  new TinkerSetImpl<String>(this, NonNavigableOneRuntimePropertyEnum.name);
+			break;
+		
+			case universe:
+				this.universe =  new TinkerSetImpl<Universe>(this, NonNavigableOneRuntimePropertyEnum.universe);
 			break;
 		
 		}
@@ -251,8 +252,8 @@ public class NonNavigableOne extends BaseTinker implements CompositionNode {
 	}
 
 	public enum NonNavigableOneRuntimePropertyEnum implements TumlRuntimeProperty {
-		name(true,true,false,"org__tinker__navigability__NonNavigableOne__name",false,false,true,false,1,1),
 		universe(false,true,false,"A_<universe>_<nonNavigableOne>",true,false,false,false,1,1),
+		name(true,true,false,"org__tinker__navigability__NonNavigableOne__name",false,false,true,false,1,1),
 		god(false,false,false,"A_<god>_<nonNavigableOne>",false,false,true,false,1,1);
 		private boolean onePrimitive;
 		private boolean controllingSide;
@@ -291,11 +292,11 @@ public class NonNavigableOne extends BaseTinker implements CompositionNode {
 		}
 	
 		static public NonNavigableOneRuntimePropertyEnum fromLabel(String label) {
-			if ( name.getLabel().equals(label) ) {
-				return name;
-			}
 			if ( universe.getLabel().equals(label) ) {
 				return universe;
+			}
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
 			if ( god.getLabel().equals(label) ) {
 				return god;

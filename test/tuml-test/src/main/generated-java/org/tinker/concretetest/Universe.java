@@ -156,6 +156,10 @@ public class Universe extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void delete() {
+		if ( getSpaceTime() != null ) {
+			getSpaceTime().delete();
+		}
+		GraphDb.getDb().removeVertex(this.vertex);
 	}
 	
 	public Angel getAngel() {
@@ -252,12 +256,12 @@ public class Universe extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.nonNavigableOne =  new TinkerSetImpl<NonNavigableOne>(this, UniverseRuntimePropertyEnum.nonNavigableOne);
-		this.nonNavigableMany =  new TinkerSetImpl<NonNavigableMany>(this, UniverseRuntimePropertyEnum.nonNavigableMany);
-		this.spaceTime =  new TinkerSetImpl<SpaceTime>(this, UniverseRuntimePropertyEnum.spaceTime);
-		this.god =  new TinkerSetImpl<God>(this, UniverseRuntimePropertyEnum.god);
-		this.name =  new TinkerSetImpl<String>(this, UniverseRuntimePropertyEnum.name);
 		this.demon =  new TinkerSetImpl<Demon>(this, UniverseRuntimePropertyEnum.demon);
+		this.god =  new TinkerSetImpl<God>(this, UniverseRuntimePropertyEnum.god);
+		this.spaceTime =  new TinkerSetImpl<SpaceTime>(this, UniverseRuntimePropertyEnum.spaceTime);
+		this.name =  new TinkerSetImpl<String>(this, UniverseRuntimePropertyEnum.name);
+		this.nonNavigableMany =  new TinkerSetImpl<NonNavigableMany>(this, UniverseRuntimePropertyEnum.nonNavigableMany);
+		this.nonNavigableOne =  new TinkerSetImpl<NonNavigableOne>(this, UniverseRuntimePropertyEnum.nonNavigableOne);
 		this.angel =  new TinkerSetImpl<Angel>(this, UniverseRuntimePropertyEnum.angel);
 	}
 	
@@ -268,28 +272,28 @@ public class Universe extends BaseTinker implements CompositionNode {
 				this.angel =  new TinkerSetImpl<Angel>(this, UniverseRuntimePropertyEnum.angel);
 			break;
 		
-			case demon:
-				this.demon =  new TinkerSetImpl<Demon>(this, UniverseRuntimePropertyEnum.demon);
-			break;
-		
-			case name:
-				this.name =  new TinkerSetImpl<String>(this, UniverseRuntimePropertyEnum.name);
-			break;
-		
-			case god:
-				this.god =  new TinkerSetImpl<God>(this, UniverseRuntimePropertyEnum.god);
-			break;
-		
-			case spaceTime:
-				this.spaceTime =  new TinkerSetImpl<SpaceTime>(this, UniverseRuntimePropertyEnum.spaceTime);
+			case nonNavigableOne:
+				this.nonNavigableOne =  new TinkerSetImpl<NonNavigableOne>(this, UniverseRuntimePropertyEnum.nonNavigableOne);
 			break;
 		
 			case nonNavigableMany:
 				this.nonNavigableMany =  new TinkerSetImpl<NonNavigableMany>(this, UniverseRuntimePropertyEnum.nonNavigableMany);
 			break;
 		
-			case nonNavigableOne:
-				this.nonNavigableOne =  new TinkerSetImpl<NonNavigableOne>(this, UniverseRuntimePropertyEnum.nonNavigableOne);
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, UniverseRuntimePropertyEnum.name);
+			break;
+		
+			case spaceTime:
+				this.spaceTime =  new TinkerSetImpl<SpaceTime>(this, UniverseRuntimePropertyEnum.spaceTime);
+			break;
+		
+			case god:
+				this.god =  new TinkerSetImpl<God>(this, UniverseRuntimePropertyEnum.god);
+			break;
+		
+			case demon:
+				this.demon =  new TinkerSetImpl<Demon>(this, UniverseRuntimePropertyEnum.demon);
 			break;
 		
 		}
@@ -425,12 +429,12 @@ public class Universe extends BaseTinker implements CompositionNode {
 	}
 
 	public enum UniverseRuntimePropertyEnum implements TumlRuntimeProperty {
-		nonNavigableOne(false,false,false,"A_<universe>_<nonNavigableOne>",true,false,false,false,1,0),
-		nonNavigableMany(false,true,false,"A_<universe>_<nonNavigableMany>",false,true,false,false,-1,0),
-		spaceTime(false,true,true,"A_<universe>_<spaceTime>",true,false,false,false,1,1),
-		god(false,false,false,"A_<god>_<universe>",false,false,true,false,1,1),
-		name(true,true,false,"org__tinker__concretetest__Universe__name",false,false,true,false,1,1),
 		demon(false,true,false,"A_<universe>_<demon>",false,true,false,false,-1,1),
+		god(false,false,false,"A_<god>_<universe>",false,false,true,false,1,1),
+		spaceTime(false,true,true,"A_<universe>_<spaceTime>",true,false,false,false,1,1),
+		name(true,true,false,"org__tinker__concretetest__Universe__name",false,false,true,false,1,1),
+		nonNavigableMany(false,true,false,"A_<universe>_<nonNavigableMany>",false,true,false,false,-1,0),
+		nonNavigableOne(false,false,false,"A_<universe>_<nonNavigableOne>",true,false,false,false,1,0),
 		angel(false,false,false,"A_<universe>_<angel>",true,false,false,false,1,0);
 		private boolean onePrimitive;
 		private boolean controllingSide;
@@ -469,23 +473,23 @@ public class Universe extends BaseTinker implements CompositionNode {
 		}
 	
 		static public UniverseRuntimePropertyEnum fromLabel(String label) {
-			if ( nonNavigableOne.getLabel().equals(label) ) {
-				return nonNavigableOne;
-			}
-			if ( nonNavigableMany.getLabel().equals(label) ) {
-				return nonNavigableMany;
-			}
-			if ( spaceTime.getLabel().equals(label) ) {
-				return spaceTime;
+			if ( demon.getLabel().equals(label) ) {
+				return demon;
 			}
 			if ( god.getLabel().equals(label) ) {
 				return god;
 			}
+			if ( spaceTime.getLabel().equals(label) ) {
+				return spaceTime;
+			}
 			if ( name.getLabel().equals(label) ) {
 				return name;
 			}
-			if ( demon.getLabel().equals(label) ) {
-				return demon;
+			if ( nonNavigableMany.getLabel().equals(label) ) {
+				return nonNavigableMany;
+			}
+			if ( nonNavigableOne.getLabel().equals(label) ) {
+				return nonNavigableOne;
 			}
 			if ( angel.getLabel().equals(label) ) {
 				return angel;

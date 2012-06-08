@@ -96,6 +96,7 @@ public class NonNavigableMany extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void delete() {
+		GraphDb.getDb().removeVertex(this.vertex);
 	}
 	
 	public God getGod() {
@@ -166,8 +167,8 @@ public class NonNavigableMany extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.god =  new TinkerSetImpl<God>(this, NonNavigableManyRuntimePropertyEnum.god);
 		this.universe =  new TinkerSetImpl<Universe>(this, NonNavigableManyRuntimePropertyEnum.universe);
+		this.god =  new TinkerSetImpl<God>(this, NonNavigableManyRuntimePropertyEnum.god);
 		this.name =  new TinkerSetImpl<String>(this, NonNavigableManyRuntimePropertyEnum.name);
 	}
 	
@@ -178,12 +179,12 @@ public class NonNavigableMany extends BaseTinker implements CompositionNode {
 				this.name =  new TinkerSetImpl<String>(this, NonNavigableManyRuntimePropertyEnum.name);
 			break;
 		
-			case universe:
-				this.universe =  new TinkerSetImpl<Universe>(this, NonNavigableManyRuntimePropertyEnum.universe);
-			break;
-		
 			case god:
 				this.god =  new TinkerSetImpl<God>(this, NonNavigableManyRuntimePropertyEnum.god);
+			break;
+		
+			case universe:
+				this.universe =  new TinkerSetImpl<Universe>(this, NonNavigableManyRuntimePropertyEnum.universe);
 			break;
 		
 		}
@@ -251,8 +252,8 @@ public class NonNavigableMany extends BaseTinker implements CompositionNode {
 	}
 
 	public enum NonNavigableManyRuntimePropertyEnum implements TumlRuntimeProperty {
-		god(false,false,false,"A_<god>_<nonNavigableMany>",false,false,true,false,1,1),
 		universe(false,false,false,"A_<universe>_<nonNavigableMany>",false,false,true,false,1,1),
+		god(false,false,false,"A_<god>_<nonNavigableMany>",false,false,true,false,1,1),
 		name(true,true,false,"org__tinker__navigability__NonNavigableMany__name",false,false,true,false,1,1);
 		private boolean onePrimitive;
 		private boolean controllingSide;
@@ -291,11 +292,11 @@ public class NonNavigableMany extends BaseTinker implements CompositionNode {
 		}
 	
 		static public NonNavigableManyRuntimePropertyEnum fromLabel(String label) {
-			if ( god.getLabel().equals(label) ) {
-				return god;
-			}
 			if ( universe.getLabel().equals(label) ) {
 				return universe;
+			}
+			if ( god.getLabel().equals(label) ) {
+				return god;
 			}
 			if ( name.getLabel().equals(label) ) {
 				return name;
