@@ -1,0 +1,112 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>framework</artifactId>
+		<groupId>org.tuml</groupId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	<artifactId>ocl</artifactId>
+	<dependencies>
+		<dependency>
+			<groupId>org.eclipse.uml2</groupId>
+			<artifactId>uml</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.uml2</groupId>
+			<artifactId>common</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.uml2.uml</groupId>
+			<artifactId>resources</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.emf</groupId>
+			<artifactId>ecore</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.emf.ecore</groupId>
+			<artifactId>xmi</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.emf</groupId>
+			<artifactId>common</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.15-v201012070815</version>
+		</dependency>
+
+		<!-- tudresden -->
+		<!-- <dependency> -->
+		<!-- <groupId>tudresden.ocl20.pivot</groupId> -->
+		<!-- <artifactId>model</artifactId> -->
+		<!-- <version>3.1.0-201103171358</version> -->
+		<!-- </dependency> -->
+		<dependency>
+			<groupId>tudresden.ocl20.pivot</groupId>
+			<artifactId>essentialocl</artifactId>
+			<version>3.1.0-201103171358</version>
+		</dependency>
+		<dependency>
+			<groupId>tudresden.ocl20.pivot.tools</groupId>
+			<artifactId>transformation</artifactId>
+			<version>3.1.0-201103171358</version>
+		</dependency>
+		<dependency>
+			<groupId>tudresden.ocl20.pivot.metamodels</groupId>
+			<artifactId>uml2</artifactId>
+			<version>3.1.0-201103171358</version>
+		</dependency>
+		<dependency>
+			<groupId>tudresden.ocl20.pivot</groupId>
+			<artifactId>pivotmodel</artifactId>
+			<version>3.1.0-201103171358</version>
+		</dependency>
+		<dependency>
+			<groupId>tudresden.ocl20.pivot.language</groupId>
+			<artifactId>ocl</artifactId>
+			<version>3.1.0-201103171358</version>
+		</dependency>
+		<dependency>
+			<groupId>tudresden.ocl20.pivot.language.ocl</groupId>
+			<artifactId>semantics</artifactId>
+			<version>3.1.0-201103171358</version>
+		</dependency>
+		<dependency>
+			<groupId>tudresden.ocl20.pivot.language.ocl</groupId>
+			<artifactId>staticsemantics</artifactId>
+			<version>3.1.0-201103171358</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.ibm</groupId>
+					<artifactId>icu</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>tudresden.ocl20.pivot.tools.codegen</groupId>
+			<artifactId>ocl2java</artifactId>
+			<version>3.1.0-201103171358</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.antlr</groupId>
+			<artifactId>stringtemplate</artifactId>
+			<version>3.2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.scala-lang</groupId>
+			<artifactId>scala-library</artifactId>
+			<version>2.7.7</version>
+		</dependency>
+		<dependency>
+			<groupId>org.tuml</groupId>
+			<artifactId>uml</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
+</project>

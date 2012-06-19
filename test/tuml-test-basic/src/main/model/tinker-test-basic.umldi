@@ -409,7 +409,7 @@
         <contained xsi:type="di:EdgeObjectUV" xmi:id="_rFZQQq85EeGzNfwuvR7FNw" id="srcNameEdgeObject" uDistance="10" vDistance="10"/>
         <contained xsi:type="di:EdgeObjectUV" xmi:id="_rFZQQ685EeGzNfwuvR7FNw" id="srcPropertiesEdgeObject" uDistance="25" vDistance="10"/>
         <contained xsi:type="di:EdgeObjectUV" xmi:id="_rFZQRK85EeGzNfwuvR7FNw" id="srcCountEdgeObject" uDistance="10" vDistance="-10"/>
-        <contained xsi:type="di:EdgeObjectUV" xmi:id="_rFZQRa85EeGzNfwuvR7FNw" id="targetNameEdgeObject" uDistance="10" vDistance="10"/>
+        <contained xsi:type="di:EdgeObjectUV" xmi:id="_rFZQRa85EeGzNfwuvR7FNw" id="targetNameEdgeObject" uDistance="8" vDistance="26"/>
         <contained xsi:type="di:EdgeObjectUV" xmi:id="_rFZQRq85EeGzNfwuvR7FNw" id="targetPropertiesEdgeObject" uDistance="25" vDistance="10"/>
         <contained xsi:type="di:EdgeObjectUV" xmi:id="_rFZQR685EeGzNfwuvR7FNw" id="targetCountEdgeObject" uDistance="10" vDistance="-10"/>
         <contained xsi:type="di:EdgeObjectOffset" xmi:id="_rFZQSK85EeGzNfwuvR7FNw" visible="false" id="middleNameEdgeObject" offset="0,10"/>
