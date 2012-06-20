@@ -14,6 +14,7 @@
 		<module>uml</module>
 		<module>java-generation</module>
 		<module>java-metamodel</module>
+		<module>ocl</module>
 	</modules>
 	<dependencyManagement>
 		<dependencies>
@@ -21,6 +22,12 @@
 				<groupId>org.eclipse.uml2</groupId>
 				<artifactId>uml</artifactId>
 				<version>3.2.100-v201108110105</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.eclipse.equinox</groupId>
+						<artifactId>app</artifactId>	
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.eclipse.uml2</groupId>
