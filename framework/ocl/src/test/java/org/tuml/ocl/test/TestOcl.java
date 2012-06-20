@@ -47,7 +47,7 @@ public class TestOcl {
 	}
 	
 	
-	@Test
+//	@Test
 	public void testFail() {
 		Assert.fail();
 	}

@@ -174,5 +174,15 @@
 			<artifactId>access</artifactId>
 			<version>1.2.0.201009131109</version>
 		</dependency>
+		<dependency>
+			<groupId>org.eclipse.core</groupId>
+			<artifactId>runtime</artifactId>
+			<version>3.7.0-v20110110</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse</groupId>
+			<artifactId>osgi</artifactId>
+			<version>3.7.0-v20110613</version>
+		</dependency>
 	</dependencies>
 </project>
