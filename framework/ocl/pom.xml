@@ -118,5 +118,61 @@
 			<artifactId>common</artifactId>
 			<version>3.6.0-v20110523</version>
 		</dependency>
+		<dependency>
+			<groupId>tudresden.ocl20.pivot</groupId>
+			<artifactId>model</artifactId>
+			<version>3.1.0-201103171358</version>
+		</dependency>
+		<dependency>
+			<groupId>tudresden.ocl20.pivot.tools</groupId>
+			<artifactId>template</artifactId>
+			<version>3.1.0-201103171358</version>
+		</dependency>
+		<dependency>
+			<groupId>tudresden.ocl20</groupId>
+			<artifactId>logging</artifactId>
+			<version>3.1.0-201103171358</version>
+		</dependency>
+		<dependency>
+			<groupId>
+				tudresden.ocl20.pivot.language.ocl.resource
+			</groupId>
+			<artifactId>ocl</artifactId>
+			<version>3.1.0-201103171358</version>
+		</dependency>
+		<dependency>
+			<groupId>tudresden.ocl20.pivot</groupId>
+			<artifactId>parser</artifactId>
+			<version>3.1.0-201103171358</version>
+		</dependency>
+		<dependency>
+			<groupId>tudresden.ocl20.pivot.tools</groupId>
+			<artifactId>codegen</artifactId>
+			<version>3.1.0-201103171358</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.emftext.commons</groupId>
+			<artifactId>antlr3_2_0</artifactId>
+			<version>3.2.0-v201107221427</version>
+		</dependency>
+		<dependency>
+			<groupId>org.kiama</groupId>
+			<artifactId>attribution</artifactId>
+			<version>3.1.0.201101171054</version>
+		</dependency>
+		<dependency>
+			<groupId>tudresden.ocl20.pivot.pivotmodel</groupId>
+			<artifactId>semantics</artifactId>
+			<version>3.1.0.201101171054</version>
+		</dependency>
+		<dependency>
+			<groupId>org.emftext</groupId>
+			<artifactId>access</artifactId>
+			<version>1.2.0.201009131109</version>
+		</dependency>
 	</dependencies>
 </project>
