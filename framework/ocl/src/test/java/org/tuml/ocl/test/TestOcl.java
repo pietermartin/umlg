@@ -7,6 +7,7 @@ import java.net.URLClassLoader;
 import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.uml2.uml.Model;
 import org.junit.Assert;
 import org.junit.Test;
 import org.tuml.framework.ModelLoader;
@@ -24,26 +25,25 @@ public class TestOcl {
 	final static File rlOclConstraints = new File("src/main/resources/constraints/rl_allConstraints.ocl");
 
 	@Test
-	public void testOcl() throws MalformedURLException, TemplateException {
+	public void testOcl() throws Exception {
 		StandaloneFacade.INSTANCE.initialize(new URL("file:" + new File("src/main/resources/log4j.properties").getAbsolutePath()));
-		try {
-			URLClassLoader loader = (URLClassLoader) Thread.currentThread().getContextClassLoader();
-			URI uri = URI.createURI(ModelLoader.findLocation(loader, true, "org/eclipse/uml2/uml/resources", "org.eclipse.uml2.uml.resources"));
-			IModel model = StandaloneFacade.INSTANCE.loadUMLModel(rlModel, uri);
-			List<Constraint> constraintList = StandaloneFacade.INSTANCE.parseOclConstraints(model, rlOclConstraints);
-			IOcl2JavaSettings settings = Ocl2JavaFactory.getInstance().createJavaCodeGeneratorSettings();
-			settings.setSourceDirectory("src/main/generated-ocl");
-			List<String> result = StandaloneFacade.INSTANCE.generateJavaCode(constraintList, settings);
-			int i  = 0;
-			for (String string : result) {
-				System.out.println(constraintList.get(i++));
-				System.out.println(string);
-				System.out.println("========");
-			}
-			System.out.println("Finished code generation.");
-		} catch (Exception e) {
-			e.printStackTrace();
+//		URLClassLoader loader = (URLClassLoader) Thread.currentThread().getContextClassLoader();
+//		URI uri = URI.createURI(ModelLoader.findLocation(loader, true, "org/eclipse/uml2/uml/resources", "org.eclipse.uml2.uml.resources"));
+		String absolutePath = new File("../../eclipselib/org/eclipse/uml2/uml/resources/3.1.100-v201008191510/resources-3.1.100-v201008191510.jar").getAbsolutePath();
+		URI uri = URI.createURI("jar:file:" + absolutePath + "!/");
+		IModel model = StandaloneFacade.INSTANCE.loadUMLModel(rlModel, uri);
+		List<Constraint> constraintList = StandaloneFacade.INSTANCE.parseOclConstraints(model, rlOclConstraints);
+		IOcl2JavaSettings settings = Ocl2JavaFactory.getInstance().createJavaCodeGeneratorSettings();
+		settings.setSourceDirectory("src/main/generated-ocl");
+		List<String> result = StandaloneFacade.INSTANCE.generateJavaCode(constraintList, settings);
+		Assert.assertTrue(!result.isEmpty());
+		int i  = 0;
+		for (String string : result) {
+			System.out.println(constraintList.get(i++));
+			System.out.println(string);
+			System.out.println("========");
 		}
+		System.out.println("Finished code generation.");
 	}
 	
 	
