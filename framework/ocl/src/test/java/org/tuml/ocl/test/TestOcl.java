@@ -1,23 +1,18 @@
 package org.tuml.ocl.test;
 
 import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.uml2.uml.Model;
 import org.junit.Assert;
 import org.junit.Test;
-import org.tuml.framework.ModelLoader;
 import org.tuml.ocl.StandaloneFacade;
 
 import tudresden.ocl20.pivot.model.IModel;
 import tudresden.ocl20.pivot.pivotmodel.Constraint;
 import tudresden.ocl20.pivot.tools.codegen.ocl2java.IOcl2JavaSettings;
 import tudresden.ocl20.pivot.tools.codegen.ocl2java.Ocl2JavaFactory;
-import tudresden.ocl20.pivot.tools.template.exception.TemplateException;
 
 public class TestOcl {
 
@@ -35,6 +30,7 @@ public class TestOcl {
 		List<Constraint> constraintList = StandaloneFacade.INSTANCE.parseOclConstraints(model, rlOclConstraints);
 		IOcl2JavaSettings settings = Ocl2JavaFactory.getInstance().createJavaCodeGeneratorSettings();
 		settings.setSourceDirectory("src/main/generated-ocl");
+		settings.setGettersForPropertyCallsEnabled(true);
 		List<String> result = StandaloneFacade.INSTANCE.generateJavaCode(constraintList, settings);
 		Assert.assertTrue(!result.isEmpty());
 		int i  = 0;
