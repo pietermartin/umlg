@@ -22,8 +22,6 @@ public class TestOcl {
 	@Test
 	public void testOcl() throws Exception {
 		StandaloneFacade.INSTANCE.initialize(new URL("file:" + new File("src/main/resources/log4j.properties").getAbsolutePath()));
-//		URLClassLoader loader = (URLClassLoader) Thread.currentThread().getContextClassLoader();
-//		URI uri = URI.createURI(ModelLoader.findLocation(loader, true, "org/eclipse/uml2/uml/resources", "org.eclipse.uml2.uml.resources"));
 		String absolutePath = new File("../../eclipselib/org/eclipse/uml2/uml/resources/3.1.100-v201008191510/resources-3.1.100-v201008191510.jar").getAbsolutePath();
 		URI uri = URI.createURI("jar:file:" + absolutePath + "!/");
 		IModel model = StandaloneFacade.INSTANCE.loadUMLModel(rlModel, uri);

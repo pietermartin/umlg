@@ -1,0 +1,6 @@
+package tuml::testocl
+
+context OclTest1::derivedProperty1
+derive: property1
+
+endpackage 
