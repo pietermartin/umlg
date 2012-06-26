@@ -1328,4 +1328,19 @@ public class PropertyWrapper implements Property {
 		return getOtherEnd() != null;
 	}
 
+	public String getOclValue() {
+		if (!this.property.isDerived()) {
+			throw new IllegalStateException("getOcl can only be called on a derived property");
+		}
+		return this.property.getDefaultValue().stringValue();
+	}
+
+	public String getOcl() {
+		if (!this.property.isDerived()) {
+			throw new IllegalStateException("getOcl can only be called on a derived property");
+		}
+		StringBuilder sb = new StringBuilder();
+		return this.property.getDefaultValue().stringValue();
+	}
+
 }
