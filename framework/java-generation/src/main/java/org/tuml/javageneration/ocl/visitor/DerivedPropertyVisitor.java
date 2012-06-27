@@ -18,7 +18,7 @@ public class DerivedPropertyVisitor extends BaseVisitor implements Visitor<Prope
 			if (propertyWrapper.isOne()) {
 				getter = new OJAnnotatedOperation(propertyWrapper.getter(), propertyWrapper.javaBaseTypePath());
 			} else {
-				getter = new OJAnnotatedOperation(propertyWrapper.getter(), propertyWrapper.javaTumlTypePath());
+				getter = new OJAnnotatedOperation(propertyWrapper.getter(), propertyWrapper.javaTypePath());
 			}
 			getter.getBody().addToStatements(propertyWrapper.getOclAsJava());
 			owner.addToOperations(getter);
