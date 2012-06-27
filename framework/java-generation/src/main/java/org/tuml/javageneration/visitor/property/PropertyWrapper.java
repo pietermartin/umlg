@@ -1357,7 +1357,14 @@ public class PropertyWrapper implements Property {
 			List<Constraint> constraintList = StandaloneFacade.INSTANCE.parseOclConstraints(StandaloneFacade.INSTANCE.getModel(), oclFile);
 			IOcl2JavaSettings settings = Ocl2JavaFactory.getInstance().createJavaCodeGeneratorSettings();
 			settings.setGettersForPropertyCallsEnabled(true);
-			return StandaloneFacade.INSTANCE.generateJavaCode(constraintList, settings).get(0).substring("aClass.".length());
+			String java = StandaloneFacade.INSTANCE.generateJavaCode(constraintList, settings).get(0);
+			java = java.replace("aClass.", "");
+			if (isOne()) {
+				java = "return " + java;
+			} else {
+				java = java.substring(0, java.length() - "result1".length()) + "\nreturn result1";
+			}
+			return java;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

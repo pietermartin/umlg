@@ -24,7 +24,7 @@ public class TumlClassOperations extends ClassOperations {
 		Set<Property> ownedProperties = getAllOwnedProperties(clazz);
 		for (Property p : ownedProperties) {
 			PropertyWrapper pWrap = new PropertyWrapper(p);
-			if (pWrap.isComposite() || (!pWrap.isPrimitive() && !pWrap.isEnumeration() && pWrap.getOtherEnd()==null)) {
+			if (!pWrap.isDerived() && (pWrap.isComposite() || (!pWrap.isPrimitive() && !pWrap.isEnumeration() && pWrap.getOtherEnd()==null))) {
 				result.add(p);
 			}
 		}

@@ -14,8 +14,13 @@ public class DerivedPropertyVisitor extends BaseVisitor implements Visitor<Prope
 		PropertyWrapper propertyWrapper = new PropertyWrapper(p);
 		if (propertyWrapper.isDerived()) {
 			OJAnnotatedClass owner = findOJClass(p);
-			OJAnnotatedOperation getter = new OJAnnotatedOperation(propertyWrapper.getter(), propertyWrapper.javaBaseTypePath());
-			getter.getBody().addToStatements("return " + propertyWrapper.getOclAsJava());
+			OJAnnotatedOperation getter;
+			if (propertyWrapper.isOne()) {
+				getter = new OJAnnotatedOperation(propertyWrapper.getter(), propertyWrapper.javaBaseTypePath());
+			} else {
+				getter = new OJAnnotatedOperation(propertyWrapper.getter(), propertyWrapper.javaTumlTypePath());
+			}
+			getter.getBody().addToStatements(propertyWrapper.getOclAsJava());
 			owner.addToOperations(getter);
 		}
 	}

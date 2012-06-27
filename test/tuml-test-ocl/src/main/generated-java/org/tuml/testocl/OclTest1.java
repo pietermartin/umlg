@@ -16,6 +16,7 @@ import org.tuml.runtime.domain.TinkerNode;
 
 public class OclTest1 extends BaseTinker implements TinkerNode {
 	private TinkerSet<String> property1;
+	private TinkerSet<OclTestCollection> oclTestCollection;
 
 	/** Constructor for OclTest1
 	 * 
@@ -44,10 +45,26 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 		edge.setProperty("inClass", this.getClass().getName());
 	}
 
+	public void addToOclTestCollection(OclTestCollection oclTestCollection) {
+		if ( oclTestCollection != null ) {
+			this.oclTestCollection.add(oclTestCollection);
+		}
+	}
+	
+	public void addToOclTestCollection(Set<OclTestCollection> oclTestCollection) {
+		if ( !oclTestCollection.isEmpty() ) {
+			this.oclTestCollection.addAll(oclTestCollection);
+		}
+	}
+	
 	public void addToProperty1(String property1) {
 		if ( property1 != null ) {
 			this.property1.add(property1);
 		}
+	}
+	
+	public void clearOclTestCollection() {
+		this.oclTestCollection.clear();
 	}
 	
 	public void clearProperty1() {
@@ -59,6 +76,9 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 	
 	@Override
 	public void delete() {
+		for ( OclTestCollection child : getOclTestCollection() ) {
+			child.delete();
+		}
 		GraphDb.getDb().removeVertex(this.vertex);
 	}
 	
@@ -74,6 +94,26 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 	@Override
 	public int getObjectVersion() {
 		return TinkerIdUtilFactory.getIdUtil().getVersion(this.vertex);
+	}
+	
+	public TinkerSet<OclTestCollection> getOclTestCollection() {
+		return this.oclTestCollection;
+	}
+	
+	public TinkerSet<OclTestCollection> getOclTestCollectionSelect() {
+		java.util.HashSet<org.tuml.testocl.OclTestCollection> result1;
+		result1 = new java.util.HashSet<org.tuml.testocl.OclTestCollection>();
+		
+		/* Iterator Select: Select all elements which fulfill the condition. */
+		for (org.tuml.testocl.OclTestCollection anElement1 : getOclTestCollection()) {
+		    if (anElement1.getName().equals("john")) {
+		        result1.add(anElement1);
+		    }
+		    // no else
+		}
+		
+		
+		return result1;
 	}
 	
 	public String getProperty1() {
@@ -101,11 +141,16 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 	@Override
 	public void initialiseProperties() {
 		this.property1 =  new TinkerSetImpl<String>(this, OclTest1RuntimePropertyEnum.property1);
+		this.oclTestCollection =  new TinkerSetImpl<OclTestCollection>(this, OclTest1RuntimePropertyEnum.oclTestCollection);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (OclTest1RuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
+			case oclTestCollection:
+				this.oclTestCollection =  new TinkerSetImpl<OclTestCollection>(this, OclTest1RuntimePropertyEnum.oclTestCollection);
+			break;
+		
 			case property1:
 				this.property1 =  new TinkerSetImpl<String>(this, OclTest1RuntimePropertyEnum.property1);
 			break;
@@ -116,6 +161,18 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 	@Override
 	public boolean isTinkerRoot() {
 		return true;
+	}
+	
+	public void removeFromOclTestCollection(OclTestCollection oclTestCollection) {
+		if ( oclTestCollection != null ) {
+			this.oclTestCollection.remove(oclTestCollection);
+		}
+	}
+	
+	public void removeFromOclTestCollection(Set<OclTestCollection> oclTestCollection) {
+		if ( !oclTestCollection.isEmpty() ) {
+			this.oclTestCollection.removeAll(oclTestCollection);
+		}
 	}
 	
 	public void removeFromProperty1(Set<String> property1) {
@@ -135,13 +192,19 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 		TinkerIdUtilFactory.getIdUtil().setId(this.vertex, id);
 	}
 	
+	public void setOclTestCollection(Set<OclTestCollection> oclTestCollection) {
+		clearOclTestCollection();
+		addToOclTestCollection(oclTestCollection);
+	}
+	
 	public void setProperty1(String property1) {
 		clearProperty1();
 		addToProperty1(property1);
 	}
 
 	public enum OclTest1RuntimePropertyEnum implements TumlRuntimeProperty {
-		property1(true,true,false,"testoclmodel__org__tuml__testocl__OclTest1__property1",false,false,true,false,1,1);
+		property1(true,true,false,"testoclmodel__org__tuml__testocl__OclTest1__property1",false,false,true,false,1,1),
+		oclTestCollection(false,true,true,"A_<oclTest1>_<oclTestCollection>",false,true,false,false,-1,1);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -181,6 +244,9 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 		static public OclTest1RuntimePropertyEnum fromLabel(String label) {
 			if ( property1.getLabel().equals(label) ) {
 				return property1;
+			}
+			if ( oclTestCollection.getLabel().equals(label) ) {
+				return oclTestCollection;
 			}
 			throw new IllegalStateException();
 		}
