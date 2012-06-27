@@ -139,6 +139,12 @@
 			</groupId>
 			<artifactId>ocl</artifactId>
 			<version>3.1.0-201103171358</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.ibm</groupId>
+					<artifactId>icu</artifactId>
+				</exclusion>
+			</exclusions>			
 		</dependency>
 		<dependency>
 			<groupId>tudresden.ocl20.pivot</groupId>

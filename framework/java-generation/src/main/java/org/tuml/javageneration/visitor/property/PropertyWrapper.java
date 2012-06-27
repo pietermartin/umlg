@@ -1330,7 +1330,7 @@ public class PropertyWrapper implements Property {
 
 	public String getOclValue() {
 		if (!this.property.isDerived()) {
-			throw new IllegalStateException("getOcl can only be called on a derived property");
+			throw new IllegalStateException("getOclValue can only be called on a derived property");
 		}
 		return this.property.getDefaultValue().stringValue();
 	}
@@ -1340,6 +1340,8 @@ public class PropertyWrapper implements Property {
 			throw new IllegalStateException("getOcl can only be called on a derived property");
 		}
 		StringBuilder sb = new StringBuilder();
+		sb.append("package");
+		
 		return this.property.getDefaultValue().stringValue();
 	}
 
