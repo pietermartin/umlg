@@ -1,0 +1,4 @@
+package org::tuml::testocl
+context OclTest1::oclTestAny
+derive: self.oclTestCollection->any(name <> 'john')
+endpackage

@@ -83,7 +83,8 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 	}
 	
 	public String getDerivedProperty1() {
-		return getProperty1();
+		return getProperty1()
+		;
 	}
 	
 	@Override
@@ -94,6 +95,23 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 	@Override
 	public int getObjectVersion() {
 		return TinkerIdUtilFactory.getIdUtil().getVersion(this.vertex);
+	}
+	
+	public OclTestCollection getOclTestAny() {
+		org.tuml.testocl.OclTestCollection result1;
+		result1 = null;
+		
+		/* Iterator Any: Iterate through the elements and return one element that fulfills the condition. */
+		for (org.tuml.testocl.OclTestCollection anElement1 : getOclTestCollection()) {
+		    if (!anElement1.getName().equals("john")) {
+		        result1 = anElement1;
+		        break;
+		    }
+		    // no else
+		}
+		
+		return result1
+		;
 	}
 	
 	public TinkerSet<OclTestCollection> getOclTestCollection() {
@@ -112,8 +130,21 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 		    // no else
 		}
 		
+		return result1
+		;
+	}
+	
+	public Set<String> getOclTestFlatten() {
+		java.util.ArrayList<String> result1;
+		result1 = new java.util.ArrayList<String>();
 		
-		return result1;
+		/* Iterator Collect: Iterate through all elements and collect them. Elements which are collections are flattened. */
+		for (org.tuml.testocl.OclTestCollection anElement1 : getOclTestCollection()) {
+		    result1.add(anElement1.getName());
+		}
+		
+		return tudresden.ocl20.pivot.tools.codegen.ocl2java.types.util.OclBags.asSet(result1)
+		;
 	}
 	
 	public String getProperty1() {

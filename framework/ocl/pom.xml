@@ -144,7 +144,7 @@
 					<groupId>com.ibm</groupId>
 					<artifactId>icu</artifactId>
 				</exclusion>
-			</exclusions>			
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>tudresden.ocl20.pivot</groupId>
@@ -155,6 +155,17 @@
 			<groupId>tudresden.ocl20.pivot.tools</groupId>
 			<artifactId>codegen</artifactId>
 			<version>3.1.0-201103171358</version>
+		</dependency>
+		<dependency>
+			<groupId>tudresden.ocl20.pivot.tools.codegen.ocl2java</groupId>
+			<artifactId>types</artifactId>
+			<version>3.1.0-201103171358</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>junit4</artifactId>
+					<groupId>org</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>commons-lang</groupId>

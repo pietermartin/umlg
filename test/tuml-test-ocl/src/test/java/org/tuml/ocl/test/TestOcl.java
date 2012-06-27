@@ -25,6 +25,8 @@ public class TestOcl extends BaseLocalDbTest {
 		db.stopTransaction(Conclusion.SUCCESS);
 		Assert.assertEquals(oclTest1.getProperty1(), oclTest1.getDerivedProperty1());
 		Assert.assertEquals(1, oclTest1.getOclTestCollectionSelect().size());
+		Assert.assertNotNull(oclTest1.getOclTestAny());
+		Assert.assertEquals(3, oclTest1.getOclTestFlatten().size());
 	}
 	
 }

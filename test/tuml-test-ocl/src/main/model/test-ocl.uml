@@ -37,6 +37,21 @@
               <body>self.oclTestCollection->select(name='john')</body>
             </defaultValue>
           </ownedAttribute>
+          <ownedAttribute xmi:id="_4d1H0MCOEeGzStsPq17FZA" name="oclTestAny" type="_0vhrEMCDEeGzStsPq17FZA" isDerived="true">
+            <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_8bxkEMCOEeGzStsPq17FZA" name="self.oclTestCollection->any(name != 'john')">
+              <language>ocl</language>
+              <body>self.oclTestCollection->any(name &lt;> 'john')</body>
+            </defaultValue>
+          </ownedAttribute>
+          <ownedAttribute xmi:id="_RlOYIMCREeGZOpN3XTQouA" name="oclTestFlatten" isDerived="true">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_XAixUMCREeGZOpN3XTQouA" value="*"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_VuU7gMCREeGZOpN3XTQouA"/>
+            <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_XyWowMCREeGZOpN3XTQouA" name="self.oclTestCollection.name">
+              <language>ocl</language>
+              <body>self.oclTestCollection.name->asSet()</body>
+            </defaultValue>
+          </ownedAttribute>
         </packagedElement>
         <packagedElement xmi:type="uml:Class" xmi:id="_0vhrEMCDEeGzStsPq17FZA" name="OclTestCollection">
           <ownedAttribute xmi:id="_2P21YMCDEeGzStsPq17FZA" name="name">

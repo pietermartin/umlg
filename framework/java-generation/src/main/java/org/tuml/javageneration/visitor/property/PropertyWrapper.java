@@ -1359,12 +1359,20 @@ public class PropertyWrapper implements Property {
 			settings.setGettersForPropertyCallsEnabled(true);
 			String java = StandaloneFacade.INSTANCE.generateJavaCode(constraintList, settings).get(0);
 			java = java.replace("aClass.", "");
-			if (isOne()) {
-				java = "return " + java;
-			} else {
-				java = java.substring(0, java.length() - "result1".length()) + "\nreturn result1";
+
+			StringBuilder sb = new StringBuilder();
+			String[] lines = java.split("\n");
+			int i = 1;
+			for (String s : lines) {
+				if (lines.length == i++) {
+					sb.append(s);
+					sb.append("return ");
+				} else {
+					sb.append(s);
+					sb.append("\n");
+				}
 			}
-			return java;
+			return sb.toString();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

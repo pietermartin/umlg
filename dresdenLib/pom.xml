@@ -90,6 +90,21 @@
 						</execution>
 
 						<execution>
+							<id>tudresden.ocl20.pivot.tools.codegen.ocl2java.types.3.1.0-201103171358</id>
+							<phase>validate</phase>
+							<goals>
+								<goal>install-file</goal>
+							</goals>
+							<configuration>
+								<file>${basedir}/tudresden/ocl20/pivot/tools/codegen/ocl2java/types/3.1.0-201103171358/types-3.1.0-201103171358.jar</file>
+								<groupId>tudresden.ocl20.pivot.tools.codegen.ocl2java</groupId>
+								<artifactId>types</artifactId>
+								<version>3.1.0-201103171358</version>
+								<packaging>jar</packaging>
+							</configuration>
+						</execution>
+
+						<execution>
 							<id>tudresden.ocl20.pivot.parser.3.1.0-201103171358</id>
 							<phase>validate</phase>
 							<goals>
