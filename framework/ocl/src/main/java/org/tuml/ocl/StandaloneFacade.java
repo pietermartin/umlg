@@ -75,14 +75,12 @@ public class StandaloneFacade {
 
 	/** singleton instance */
 	private static StandaloneFacade instance;
-
 	private boolean initialized = false;
 	private boolean registeredUMLMetamodel = false;
-
 	private IMetamodelRegistry standaloneMetamodelRegistry = new StandaloneMetamodelRegistry();
-
 	private IOcl2Java javaCodeGenerator;
-
+	private IModel model;
+	
 	/**
 	 * Returns the single instance of the {@link StandaloneFacade}.
 	 */
@@ -255,10 +253,12 @@ public class StandaloneFacade {
 
 		IMetamodel umlMetamodel = new UMLMetamodel();
 		standaloneMetamodelRegistry.addMetamodel(umlMetamodel);
-
-		IModel model = umlMetamodel.getModelProvider().getModel(modelFile);
-
-		return model;
+		this.model = umlMetamodel.getModelProvider().getModel(modelFile);
+		return this.model;
+	}
+	
+	public IModel getModel() {
+		return this.model;
 	}
 
 	/**

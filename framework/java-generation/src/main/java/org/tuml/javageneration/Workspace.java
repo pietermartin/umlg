@@ -8,6 +8,7 @@ import org.eclipse.uml2.uml.Model;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
 import org.tuml.framework.JavaModelPrinter;
 import org.tuml.framework.ModelVisitor;
+import org.tuml.javageneration.ocl.visitor.DerivedPropertyVisitor;
 import org.tuml.javageneration.visitor.clazz.ClassCreator;
 import org.tuml.javageneration.visitor.clazz.ClassImplementedInterfacePropertyVisitor;
 import org.tuml.javageneration.visitor.clazz.ClassVisitor;
@@ -49,6 +50,7 @@ public class Workspace {
 		ModelVisitor.visitModel(model, new ManyPropertyVisitor());
 		ModelVisitor.visitModel(model, new OnePropertyVisitor());
 		ModelVisitor.visitModel(model, new ClassImplementedInterfacePropertyVisitor());
+		ModelVisitor.visitModel(model, new DerivedPropertyVisitor());
 	}
 
 	

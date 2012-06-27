@@ -12,7 +12,7 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
 	@Override
 	public void visitBefore(Property p) {
 		PropertyWrapper propertyWrapper = new PropertyWrapper(p);
-		if (propertyWrapper.isMany() && !propertyWrapper.isQualifier()) {
+		if (propertyWrapper.isMany() && !propertyWrapper.isDerived() && !propertyWrapper.isQualifier()) {
 			OJAnnotatedClass owner = findOJClass(p);
 			buildGetter(owner, propertyWrapper);
 			buildManyAdder(owner, propertyWrapper);

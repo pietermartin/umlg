@@ -1,6 +1,8 @@
 package org.tuml.javageneration.ocl.visitor;
 
 import org.eclipse.uml2.uml.Property;
+import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
+import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
 import org.tuml.framework.Visitor;
 import org.tuml.javageneration.visitor.BaseVisitor;
 import org.tuml.javageneration.visitor.property.PropertyWrapper;
@@ -11,13 +13,16 @@ public class DerivedPropertyVisitor extends BaseVisitor implements Visitor<Prope
 	public void visitBefore(Property p) {
 		PropertyWrapper propertyWrapper = new PropertyWrapper(p);
 		if (propertyWrapper.isDerived()) {
-			String ocl = propertyWrapper.getOcl();
+			OJAnnotatedClass owner = findOJClass(p);
+			OJAnnotatedOperation getter = new OJAnnotatedOperation(propertyWrapper.getter(), propertyWrapper.javaBaseTypePath());
+			getter.getBody().addToStatements("return " + propertyWrapper.getOclAsJava());
+			owner.addToOperations(getter);
 		}
 	}
 
 	@Override
 	public void visitAfter(Property p) {
-		
+
 	}
-	
+
 }

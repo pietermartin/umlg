@@ -1,6 +1,9 @@
 package org.tuml.javageneration.visitor.property;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.notify.Adapter;
@@ -45,8 +48,14 @@ import org.eclipse.uml2.uml.Usage;
 import org.eclipse.uml2.uml.ValueSpecification;
 import org.eclipse.uml2.uml.VisibilityKind;
 import org.opaeum.java.metamodel.OJPathName;
+import org.tuml.javageneration.naming.Namer;
 import org.tuml.javageneration.util.TinkerGenerationUtil;
 import org.tuml.javageneration.util.TumlPropertyOperations;
+import org.tuml.ocl.StandaloneFacade;
+
+import tudresden.ocl20.pivot.pivotmodel.Constraint;
+import tudresden.ocl20.pivot.tools.codegen.ocl2java.IOcl2JavaSettings;
+import tudresden.ocl20.pivot.tools.codegen.ocl2java.Ocl2JavaFactory;
 
 public class PropertyWrapper implements Property {
 
@@ -59,8 +68,9 @@ public class PropertyWrapper implements Property {
 
 	public Type getOwningType() {
 		return TumlPropertyOperations.getOwningType(this.property);
-		
+
 	}
+
 	public boolean isControllingSide() {
 		return TumlPropertyOperations.isControllingSide(this.property);
 	}
@@ -84,7 +94,7 @@ public class PropertyWrapper implements Property {
 	public boolean isEnumeration() {
 		return TumlPropertyOperations.isEnumeration(this.property);
 	}
-	
+
 	public boolean isOneToMany() {
 		return TumlPropertyOperations.isOneToMany(this.property);
 	}
@@ -126,9 +136,9 @@ public class PropertyWrapper implements Property {
 	}
 
 	/*
-	 * Attempting set semantics so the path is always a collection
-	 * Call javaBaseTypePath to get the type of set
-	 * This method return tuml special collection interface
+	 * Attempting set semantics so the path is always a collection Call
+	 * javaBaseTypePath to get the type of set This method return tuml special
+	 * collection interface
 	 */
 	public OJPathName javaTumlTypePath() {
 		OJPathName fieldType;
@@ -164,8 +174,8 @@ public class PropertyWrapper implements Property {
 	}
 
 	/*
-	 * Attempting set semantics so the path is always a collection
-	 * Call javaBaseTypePath to get the type of set
+	 * Attempting set semantics so the path is always a collection Call
+	 * javaBaseTypePath to get the type of set
 	 */
 	public OJPathName javaTypePath() {
 		OJPathName fieldType;
@@ -187,9 +197,10 @@ public class PropertyWrapper implements Property {
 	public OJPathName javaImplTypePath() {
 		return TumlPropertyOperations.getDefaultTinkerCollection(this.property);
 	}
-	
+
 	/*
-	 * The property might be owned by an interface but the initialisation is for a realization on a BehavioredClassifier
+	 * The property might be owned by an interface but the initialisation is for
+	 * a realization on a BehavioredClassifier
 	 */
 	public String javaDefaultInitialisation(BehavioredClassifier propertyConcreteOwner) {
 		return TumlPropertyOperations.getDefaultTinkerCollectionInitalisation(this.property, propertyConcreteOwner).getExpression();
@@ -794,7 +805,6 @@ public class PropertyWrapper implements Property {
 
 	@Override
 	public Type getType() {
-		// TODO Auto-generated method stub
 		return this.property.getType();
 	}
 
@@ -1335,14 +1345,41 @@ public class PropertyWrapper implements Property {
 		return this.property.getDefaultValue().stringValue();
 	}
 
+	public String getOclAsJava() {
+		if (!isDerived()) {
+			throw new IllegalStateException("getOclAsJava can only be called on a derived property");
+		}
+		try {
+			File oclFile = new File("src/main/generated-resources/" + getName() + ".ocl");
+			FileWriter fw = new FileWriter(oclFile);
+			fw.write(getOcl());
+			fw.flush();
+			List<Constraint> constraintList = StandaloneFacade.INSTANCE.parseOclConstraints(StandaloneFacade.INSTANCE.getModel(), oclFile);
+			IOcl2JavaSettings settings = Ocl2JavaFactory.getInstance().createJavaCodeGeneratorSettings();
+			settings.setGettersForPropertyCallsEnabled(true);
+			return StandaloneFacade.INSTANCE.generateJavaCode(constraintList, settings).get(0).substring("aClass.".length());
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	public String getOcl() {
-		if (!this.property.isDerived()) {
+		if (!isDerived()) {
 			throw new IllegalStateException("getOcl can only be called on a derived property");
 		}
 		StringBuilder sb = new StringBuilder();
-		sb.append("package");
-		
-		return this.property.getDefaultValue().stringValue();
+		sb.append("package ");
+		sb.append(Namer.name(getOwningType().getNearestPackage()).replace(".", "::"));
+		sb.append("\ncontext ");
+		sb.append(getOwningType().getName());
+		sb.append("::");
+		sb.append(getName());
+		sb.append("\n");
+		sb.append("derive: ");
+		sb.append(this.property.getDefaultValue().stringValue());
+		sb.append("\n");
+		sb.append("endpackage");
+		return sb.toString();
 	}
 
 }

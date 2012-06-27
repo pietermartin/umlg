@@ -62,6 +62,10 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 		GraphDb.getDb().removeVertex(this.vertex);
 	}
 	
+	public String getDerivedProperty1() {
+		return getProperty1();
+	}
+	
 	@Override
 	public Long getId() {
 		return TinkerIdUtilFactory.getIdUtil().getId(this.vertex);
@@ -137,7 +141,7 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 	}
 
 	public enum OclTest1RuntimePropertyEnum implements TumlRuntimeProperty {
-		property1(true,true,false,"org__tuml__testocl__OclTest1__property1",false,false,true,false,1,1);
+		property1(true,true,false,"testoclmodel__org__tuml__testocl__OclTest1__property1",false,false,true,false,1,1);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;

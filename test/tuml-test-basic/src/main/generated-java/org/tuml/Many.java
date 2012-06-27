@@ -83,6 +83,7 @@ public class Many extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void delete() {
+		GraphDb.getDb().removeVertex(this.vertex);
 	}
 	
 	@Override
@@ -144,19 +145,19 @@ public class Many extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.one =  new TinkerSetImpl<One>(this, ManyRuntimePropertyEnum.one);
 		this.name =  new TinkerSetImpl<String>(this, ManyRuntimePropertyEnum.name);
+		this.one =  new TinkerSetImpl<One>(this, ManyRuntimePropertyEnum.one);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (ManyRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case name:
-				this.name =  new TinkerSetImpl<String>(this, ManyRuntimePropertyEnum.name);
-			break;
-		
 			case one:
 				this.one =  new TinkerSetImpl<One>(this, ManyRuntimePropertyEnum.one);
+			break;
+		
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, ManyRuntimePropertyEnum.name);
 			break;
 		
 		}
@@ -207,8 +208,8 @@ public class Many extends BaseTinker implements CompositionNode {
 	}
 
 	public enum ManyRuntimePropertyEnum implements TumlRuntimeProperty {
-		one(false,false,false,"A_<one>_<many>",false,false,true,false,1,1),
-		name(true,true,false,"org__tuml__Many__name",false,false,true,false,1,1);
+		name(true,true,false,"tuml-test-basic-model__org__tuml__Many__name",false,false,true,false,1,1),
+		one(false,false,false,"A_<one>_<many>",false,false,true,false,1,1);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -246,11 +247,11 @@ public class Many extends BaseTinker implements CompositionNode {
 		}
 	
 		static public ManyRuntimePropertyEnum fromLabel(String label) {
-			if ( one.getLabel().equals(label) ) {
-				return one;
-			}
 			if ( name.getLabel().equals(label) ) {
 				return name;
+			}
+			if ( one.getLabel().equals(label) ) {
+				return one;
 			}
 			throw new IllegalStateException();
 		}

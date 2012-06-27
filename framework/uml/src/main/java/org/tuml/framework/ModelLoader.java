@@ -17,6 +17,7 @@ import org.eclipse.uml2.uml.resource.UMLResource;
 public class ModelLoader {
 
 	protected static final ResourceSet RESOURCE_SET = new ResourceSetImpl();
+	private static Model model;
 
 	public static Model loadModel(File modelFile) {
 		registerResourceFactories();
@@ -25,9 +26,14 @@ public class ModelLoader {
 		registerPathmaps(uri);
 		File dir = modelFile.getParentFile();
 		URI dirUri = URI.createFileURI(dir.getAbsolutePath());
-		return (Model) load(dirUri.appendSegment(modelFile.getName()));
+		model = (Model) load(dirUri.appendSegment(modelFile.getName()));
+		return model;
 	}
 
+	public static Model getModel() {
+		return model;
+	}
+	
 	protected static org.eclipse.uml2.uml.Package load(URI uri) {
 		org.eclipse.uml2.uml.Package package_ = null;
 		Resource resource = RESOURCE_SET.getResource(uri, true);

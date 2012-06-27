@@ -76,6 +76,10 @@ public class God extends BaseTinker implements TinkerNode {
 	
 	@Override
 	public void delete() {
+		for ( AbstractSpecies child : getAbstractSpecies() ) {
+			child.delete();
+		}
+		GraphDb.getDb().removeVertex(this.vertex);
 	}
 	
 	public TinkerSet<AbstractSpecies> getAbstractSpecies() {
@@ -179,7 +183,7 @@ public class God extends BaseTinker implements TinkerNode {
 	}
 
 	public enum GodRuntimePropertyEnum implements TumlRuntimeProperty {
-		name(true,true,false,"org__tuml__inheritence__God__name",false,false,true,false,1,1),
+		name(true,true,false,"tuml-test-basic-model__org__tuml__inheritence__God__name",false,false,true,false,1,1),
 		abstractSpecies(false,true,true,"A_<god>_<abstractSpecies>",false,true,false,false,-1,0);
 		private boolean onePrimitive;
 		private boolean controllingSide;

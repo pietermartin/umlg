@@ -1,6 +1,4 @@
 package org::tuml::testocl
-
 context OclTest1::derivedProperty1
-derive: property1
-
-endpackage 
+derive: self.property1
+endpackage

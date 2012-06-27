@@ -70,6 +70,7 @@ public class OneOne extends BaseTinker implements TinkerNode {
 	
 	@Override
 	public void delete() {
+		GraphDb.getDb().removeVertex(this.vertex);
 	}
 	
 	@Override
@@ -178,7 +179,7 @@ public class OneOne extends BaseTinker implements TinkerNode {
 	}
 
 	public enum OneOneRuntimePropertyEnum implements TumlRuntimeProperty {
-		name(true,true,false,"org__tuml__OneOne__name",false,false,true,false,1,1),
+		name(true,true,false,"tuml-test-basic-model__org__tuml__OneOne__name",false,false,true,false,1,1),
 		oneTwo(false,false,false,"A_<oneOne>_<oneTwo>",true,false,false,false,1,0);
 		private boolean onePrimitive;
 		private boolean controllingSide;

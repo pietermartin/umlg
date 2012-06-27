@@ -2,6 +2,7 @@ package org.tuml.inheritence;
 
 import com.tinkerpop.blueprints.Vertex;
 
+import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.domain.CompositionNode;
 import org.tuml.runtime.domain.TinkerNode;
@@ -47,6 +48,7 @@ public class Quadped extends Mamal implements CompositionNode {
 	
 	@Override
 	public void delete() {
+		GraphDb.getDb().removeVertex(this.vertex);
 	}
 	
 	@Override
