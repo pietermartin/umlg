@@ -13,6 +13,7 @@
 	<modules>
 		<!-- <module>tuml-test</module> -->
 		<module>tuml-test-basic</module>
+		<module>tuml-test-ocl</module>
 	</modules>
 	<reporting>
 		<plugins>
