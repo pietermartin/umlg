@@ -1365,8 +1365,8 @@ public class PropertyWrapper implements Property {
 			int i = 1;
 			for (String s : lines) {
 				if (lines.length == i++) {
-					sb.append(s);
 					sb.append("return ");
+					sb.append(s);
 				} else {
 					sb.append(s);
 					sb.append("\n");

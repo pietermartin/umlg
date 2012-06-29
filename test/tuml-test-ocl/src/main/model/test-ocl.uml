@@ -52,16 +52,48 @@
               <body>self.oclTestCollection.name->asSet()</body>
             </defaultValue>
           </ownedAttribute>
+          <ownedAttribute xmi:id="_osNMAMGoEeGZOpN3XTQouA" name="oclTestCollection2" type="_grnZsMGoEeGZOpN3XTQouA" isDerived="true">
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_rVtk4MGoEeGZOpN3XTQouA" value="*"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_rMdiQMGoEeGZOpN3XTQouA"/>
+            <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_tNF9QMGoEeGZOpN3XTQouA" name="self.oclTestCollection.oclTestCollection2">
+              <language>ocl</language>
+              <body>self.oclTestCollection.oclTestCollection2->asSet()</body>
+            </defaultValue>
+          </ownedAttribute>
+          <ownedAttribute xmi:id="_znPgwMGpEeGZOpN3XTQouA" name="oclTestCollection2Name" isUnique="false" isDerived="true">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_2gY4IMGpEeGZOpN3XTQouA" value="*"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_2YrtoMGpEeGZOpN3XTQouA"/>
+            <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_3JF24MGpEeGZOpN3XTQouA" name="self.oclTestCollection.oclTestCollection2.name">
+              <language>ocl</language>
+              <body>self.oclTestCollection.oclTestCollection2.name</body>
+            </defaultValue>
+          </ownedAttribute>
         </packagedElement>
         <packagedElement xmi:type="uml:Class" xmi:id="_0vhrEMCDEeGzStsPq17FZA" name="OclTestCollection">
           <ownedAttribute xmi:id="_2P21YMCDEeGzStsPq17FZA" name="name">
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+          </ownedAttribute>
+          <ownedAttribute xmi:id="_jRl9cMGoEeGZOpN3XTQouA" name="oclTestCollection2" type="_grnZsMGoEeGZOpN3XTQouA" aggregation="composite" association="_jRrdCsGoEeGZOpN3XTQouA">
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_jRl9ccGoEeGZOpN3XTQouA" value="*"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_jRl9csGoEeGZOpN3XTQouA"/>
           </ownedAttribute>
         </packagedElement>
         <packagedElement xmi:type="uml:Association" xmi:id="_4vPo-sCDEeGzStsPq17FZA" name="A_&lt;oclTest1>_&lt;oclTestCollection>" memberEnd="_4vPo-8CDEeGzStsPq17FZA _4u_xUMCDEeGzStsPq17FZA" navigableOwnedEnd="_4vPo-8CDEeGzStsPq17FZA">
           <ownedEnd xmi:id="_4vPo-8CDEeGzStsPq17FZA" name="oclTest1" type="_OUDkcL7zEeG5Bt_b3EGOQQ" association="_4vPo-sCDEeGzStsPq17FZA">
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_4vPo_MCDEeGzStsPq17FZA" value="1"/>
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_4vPo_cCDEeGzStsPq17FZA" value="1"/>
+          </ownedEnd>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Class" xmi:id="_grnZsMGoEeGZOpN3XTQouA" name="OclTestCollection2">
+          <ownedAttribute xmi:id="_mSBBgMGoEeGZOpN3XTQouA" name="name">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+          </ownedAttribute>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Association" xmi:id="_jRrdCsGoEeGZOpN3XTQouA" name="A_&lt;oclTestCollection>_&lt;oclTestCollection2>" memberEnd="_jRrdC8GoEeGZOpN3XTQouA _jRl9cMGoEeGZOpN3XTQouA" navigableOwnedEnd="_jRrdC8GoEeGZOpN3XTQouA">
+          <ownedEnd xmi:id="_jRrdC8GoEeGZOpN3XTQouA" name="oclTestCollection" type="_0vhrEMCDEeGzStsPq17FZA" association="_jRrdCsGoEeGZOpN3XTQouA">
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_jRrdDMGoEeGZOpN3XTQouA" value="1"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_jRrdDcGoEeGZOpN3XTQouA" value="1"/>
           </ownedEnd>
         </packagedElement>
       </packagedElement>

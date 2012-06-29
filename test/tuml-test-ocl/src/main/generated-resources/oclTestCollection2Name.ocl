@@ -1,0 +1,4 @@
+package org::tuml::testocl
+context OclTest1::oclTestCollection2Name
+derive: self.oclTestCollection.oclTestCollection2.name
+endpackage
