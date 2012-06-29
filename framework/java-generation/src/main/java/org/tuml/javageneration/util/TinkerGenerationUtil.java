@@ -1,5 +1,6 @@
 package org.tuml.javageneration.util;
 
+import org.eclipse.uml2.uml.MultiplicityElement;
 import org.eclipse.uml2.uml.Property;
 import org.opaeum.java.metamodel.OJPathName;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
@@ -15,7 +16,6 @@ public class TinkerGenerationUtil {
 
 	public static final String TINKER_DB_NULL = "__NULL__";
 
-	
 	public static final OJPathName tumlRuntimePropertyPathName = new OJPathName("org.tuml.runtime.collection.TumlRuntimeProperty");
 	public static final OJPathName tinkerConclusionPathName = new OJPathName("com.tinkerpop.blueprints.pgm.TransactionalGraph.Conclusion");
 	public static final OJPathName tinkerSetClosableSequenceImplPathName = new OJPathName("org.tuml.runtime.collection.TinkerSetClosableSequenceImpl");
@@ -78,72 +78,102 @@ public class TinkerGenerationUtil {
 
 	public static OJPathName tinkerIdUtilFactoryPathName = new OJPathName("org.tuml.runtime.adaptor.TinkerIdUtilFactory");
 
-//	public static String constructSelfToAuditEdgeLabel(INakedEntity entity) {
-//		return "audit";
-//	}
-//
-//	public static String contructNameForQualifiedGetter(NakedStructuralFeatureMap map) {
-//		return "getQualifierFor" + StringUtils.capitalize(map.fieldname());
-//	}
-//
-//	// public static boolean calculateDirection(NakedStructuralFeatureMap map,
-//	// boolean isComposite) {
-//	// if (map.getProperty().getOtherEnd() == null) {
-//	// return isComposite = true;
-//	// } else if (map.isOneToOne() && !isComposite &&
-//	// !map.getProperty().getOtherEnd().isComposite()) {
-//	// isComposite = map.getProperty().getMultiplicity().getLower() == 1 &&
-//	// map.getProperty().getMultiplicity().getUpper() == 1;
-//	// } else if (map.isOneToMany() && !isComposite &&
-//	// !map.getProperty().getOtherEnd().isComposite()) {
-//	// isComposite = map.getProperty().getMultiplicity().getUpper() > 1;
-//	// } else if (map.isManyToMany() && !isComposite &&
-//	// !map.getProperty().getOtherEnd().isComposite()) {
-//	// isComposite = 0 >
-//	// map.getProperty().getName().compareTo(map.getProperty().getOtherEnd().getName());
-//	// }
-//	// return isComposite;
-//	// }
-//
-//	public static String constructTinkerCollectionInit(OJAnnotatedClass owner, NakedStructuralFeatureMap map, boolean jsf) {
-//		if (map.getProperty().getOtherEnd() != null) {
-//			return map.umlName() + " = new " + (map.getProperty().isOrdered() ? "TinkerArrayList" : jsf ? "TinkerJsfHashSet" : "TinkerHashSet") + "<"
-//					+ map.javaBaseTypePath().getLast() + ">(" + map.javaBaseTypePath().getLast() + ".class, this, " + owner.getName() + ".class.getMethod(\"addTo"
-//					+ StringUtils.capitalize(map.umlName()) + "\", new Class[]{" + map.javaBaseTypePath().getLast() + ".class}), " + owner.getName()
-//					+ ".class.getMethod(\"removeFrom" + StringUtils.capitalize(map.umlName()) + "\", new Class[]{" + map.javaBaseTypePath().getLast() + ".class}))";
-//		} else {
-//			return map.umlName() + " = new " + (map.getProperty().isOrdered() ? "TinkerEmbeddedArrayList" : "TinkerEmbeddedHashSet") + "<" + map.javaBaseTypePath().getLast()
-//					+ ">(this, " + owner.getName() + ".class.getMethod(\"addTo" + StringUtils.capitalize(map.umlName()) + "\", new Class[]{" + map.javaBaseTypePath().getLast()
-//					+ ".class}), " + owner.getName() + ".class.getMethod(\"removeFrom" + StringUtils.capitalize(map.umlName()) + "\", new Class[]{"
-//					+ map.javaBaseTypePath().getLast() + ".class}))";
-//		}
-//	}
-//
-//	// TODO remove this method, call one with inVerse param
-//	public static String getEdgeName(NakedStructuralFeatureMap map) {
-////		if (map.getProperty().getAssociation() != null) {
-////			return map.getProperty().getAssociation().getName();
-////		} else {
-////			return tinkeriseUmlName(map.getProperty().getMappingInfo().getQualifiedUmlName());
-////		}
-//		return getEdgeName(map, map.getProperty().isInverse());
-//	}
+	public static String calculateMultiplcity(MultiplicityElement multiplicityKind) {
+		if (multiplicityKind.getLower() == 1 && multiplicityKind.getUpper() == Integer.MAX_VALUE) {
+			return "Multiplicity.ONE_TO_MANY";
+		} else if (multiplicityKind.getLower() == 0 && multiplicityKind.getUpper() == Integer.MAX_VALUE) {
+			return "Multiplicity.ZERO_TO_MANY";
+		} else if (multiplicityKind.getLower() == 0 && multiplicityKind.getUpper() == 1) {
+			return "Multiplicity.ZERO_TO_ONE";
+		} else if (multiplicityKind.getLower() == 1 && multiplicityKind.getUpper() == 1) {
+			return "Multiplicity.ONE_TO_ONE";
+		} else {
+			throw new IllegalStateException("wtf");
+		}
+	}
+
+	// public static String constructSelfToAuditEdgeLabel(INakedEntity entity) {
+	// return "audit";
+	// }
+	//
+	// public static String
+	// contructNameForQualifiedGetter(NakedStructuralFeatureMap map) {
+	// return "getQualifierFor" + StringUtils.capitalize(map.fieldname());
+	// }
+	//
+	// // public static boolean calculateDirection(NakedStructuralFeatureMap
+	// map,
+	// // boolean isComposite) {
+	// // if (map.getProperty().getOtherEnd() == null) {
+	// // return isComposite = true;
+	// // } else if (map.isOneToOne() && !isComposite &&
+	// // !map.getProperty().getOtherEnd().isComposite()) {
+	// // isComposite = map.getProperty().getMultiplicity().getLower() == 1 &&
+	// // map.getProperty().getMultiplicity().getUpper() == 1;
+	// // } else if (map.isOneToMany() && !isComposite &&
+	// // !map.getProperty().getOtherEnd().isComposite()) {
+	// // isComposite = map.getProperty().getMultiplicity().getUpper() > 1;
+	// // } else if (map.isManyToMany() && !isComposite &&
+	// // !map.getProperty().getOtherEnd().isComposite()) {
+	// // isComposite = 0 >
+	// //
+	// map.getProperty().getName().compareTo(map.getProperty().getOtherEnd().getName());
+	// // }
+	// // return isComposite;
+	// // }
+	//
+	// public static String constructTinkerCollectionInit(OJAnnotatedClass
+	// owner, NakedStructuralFeatureMap map, boolean jsf) {
+	// if (map.getProperty().getOtherEnd() != null) {
+	// return map.umlName() + " = new " + (map.getProperty().isOrdered() ?
+	// "TinkerArrayList" : jsf ? "TinkerJsfHashSet" : "TinkerHashSet") + "<"
+	// + map.javaBaseTypePath().getLast() + ">(" +
+	// map.javaBaseTypePath().getLast() + ".class, this, " + owner.getName() +
+	// ".class.getMethod(\"addTo"
+	// + StringUtils.capitalize(map.umlName()) + "\", new Class[]{" +
+	// map.javaBaseTypePath().getLast() + ".class}), " + owner.getName()
+	// + ".class.getMethod(\"removeFrom" + StringUtils.capitalize(map.umlName())
+	// + "\", new Class[]{" + map.javaBaseTypePath().getLast() + ".class}))";
+	// } else {
+	// return map.umlName() + " = new " + (map.getProperty().isOrdered() ?
+	// "TinkerEmbeddedArrayList" : "TinkerEmbeddedHashSet") + "<" +
+	// map.javaBaseTypePath().getLast()
+	// + ">(this, " + owner.getName() + ".class.getMethod(\"addTo" +
+	// StringUtils.capitalize(map.umlName()) + "\", new Class[]{" +
+	// map.javaBaseTypePath().getLast()
+	// + ".class}), " + owner.getName() + ".class.getMethod(\"removeFrom" +
+	// StringUtils.capitalize(map.umlName()) + "\", new Class[]{"
+	// + map.javaBaseTypePath().getLast() + ".class}))";
+	// }
+	// }
+	//
+	// // TODO remove this method, call one with inVerse param
+	// public static String getEdgeName(NakedStructuralFeatureMap map) {
+	// // if (map.getProperty().getAssociation() != null) {
+	// // return map.getProperty().getAssociation().getName();
+	// // } else {
+	// // return
+	// tinkeriseUmlName(map.getProperty().getMappingInfo().getQualifiedUmlName());
+	// // }
+	// return getEdgeName(map, map.getProperty().isInverse());
+	// }
 
 	public static String getEdgeName(Property p) {
 		boolean isControllingSide = TumlPropertyOperations.isControllingSide(p);
 		if (p.getAssociation() != null) {
 			return p.getAssociation().getName();
 		} else {
-			//Note that the properties swap around between inverse and !inverse.
-			//This is to ensure that the edge on both sides has the same name.
+			// Note that the properties swap around between inverse and
+			// !inverse.
+			// This is to ensure that the edge on both sides has the same name.
 			if (!isControllingSide) {
-//				if (p.getOtherEnd()!=null) {
-					return tinkeriseUmlName(p.getOtherEnd().getQualifiedName() + "__" + p.getQualifiedName());
-//				} else {
-//					return tinkeriseUmlName(p.getQualifiedName());
-//				}
+				// if (p.getOtherEnd()!=null) {
+				return tinkeriseUmlName(p.getOtherEnd().getQualifiedName() + "__" + p.getQualifiedName());
+				// } else {
+				// return tinkeriseUmlName(p.getQualifiedName());
+				// }
 			} else {
-				if (p.getOtherEnd()!=null) {
+				if (p.getOtherEnd() != null) {
 					return tinkeriseUmlName(p.getQualifiedName() + "__" + p.getOtherEnd().getQualifiedName());
 				} else {
 					return tinkeriseUmlName(p.getQualifiedName());
@@ -152,143 +182,150 @@ public class TinkerGenerationUtil {
 		}
 	}
 
-//	public static String getEdgeName(INakedClassifier c) {
-//		return tinkeriseUmlName(c.getMappingInfo().getQualifiedUmlName());
-//	}
-//
-//	public static String constructNameForInternalCreateAuditToOne(NakedStructuralFeatureMap map) {
-//		return "z_internalCreateAuditToOne" + StringUtils.capitalize(map.umlName());
-//	}
-//
-//	public static String constructNameForInternalCreateAuditManies(NakedStructuralFeatureMap map) {
-//		return "z_internalCreateAuditToMany" + StringUtils.capitalize(map.umlName()) + "s";
-//	}
-//
-//	public static String constructNameForInternalCreateAuditMany(NakedStructuralFeatureMap map) {
-//		return "z_internalCreateAuditToMany" + StringUtils.capitalize(map.umlName());
-//	}
-//
-//	public static String constructNameForInternalManiesRemoval(NakedStructuralFeatureMap map) {
-//		return "z_internalRemoveAllFrom" + StringUtils.capitalize(map.umlName());
-//	}
-//
-//	public static OJBlock instantiateClassifier(OJBlock block, NakedStructuralFeatureMap map) {
-//		OJField field = new OJField();
-//		field.setName(map.umlName());
-//		field.setType(map.javaBaseTypePath());
-//		field.setInitExp("null");
-//		block.addToLocals(field);
-//		OJTryStatement ojTryStatement = new OJTryStatement();
-//		ojTryStatement.getTryPart().addToStatements("Vertex v = db.getVertex(" + map.umlName() + "Id)");
-//		ojTryStatement.getTryPart().addToStatements("Class<?> c = Class.forName((String) v.getProperty(\"className\"))");
-//		ojTryStatement.getTryPart().addToStatements(map.umlName() + " = (" + map.javaBaseTypePath().getLast() + ") c.getConstructor(Vertex.class).newInstance(v)");
-//		ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
-//		ojTryStatement.getCatchPart().addToStatements("throw new RuntimeException(e)");
-//		block.addToStatements(ojTryStatement);
-//		return null;
-//	}
-//
-//	public static String getClassMetaId(OJAnnotatedClass ojClass) {
-//		OJAnnotationValue numlMetaInfo = ojClass.findAnnotation(new OJPathName("org.opaeum.annotation.NumlMetaInfo"));
-//		return numlMetaInfo.findAttribute("uuid").getValues().get(0).toString();
-//	}
-//
-//	public static String getQualifierValueGetterName(INakedProperty qualifier) {
-//		NakedStructuralFeatureMap qualifierOwnerMap = OJUtil.buildStructuralFeatureMap((INakedProperty) qualifier.getOwnerElement());
-//		NakedStructuralFeatureMap map = new NakedStructuralFeatureMap(qualifier);
-//		return "get" + StringUtils.capitalize(qualifierOwnerMap.fieldname()) + StringUtils.capitalize(map.fieldname()) + "QualifierValue";
-//	}
-//
-//	public static String calculateMultiplcity(IMultiplicityKind multiplicityKind) {
-//		if (multiplicityKind.getLower() == 1 && multiplicityKind.getUpper() == Integer.MAX_VALUE) {
-//			return "Multiplicity.ONE_TO_MANY";
-//		} else if (multiplicityKind.getLower() == 0 && multiplicityKind.getUpper() == Integer.MAX_VALUE) {
-//			return "Multiplicity.ZERO_TO_MANY";
-//		} else if (multiplicityKind.getLower() == 0 && multiplicityKind.getUpper() == 1) {
-//			return "Multiplicity.ZERO_TO_ONE";
-//		} else if (multiplicityKind.getLower() == 1 && multiplicityKind.getUpper() == 1) {
-//			return "Multiplicity.ONE_TO_ONE";
-//		} else {
-//			throw new IllegalStateException("wtf");
-//		}
-//	}
-//
-//	public static String addSetterForSimpleType(NakedStructuralFeatureMap map) {
-//		return addSetterForSimpleType(map, false);
-//	}
-//
-//	public static String addSetterForSimpleType(NakedStructuralFeatureMap map, boolean audit) {
-//		if (map.getProperty().getBaseType() instanceof INakedEnumeration) {
-//			return "this." + (audit ? "auditVertex" : "vertex") + ".setProperty(\""
-//					+ TinkerGenerationUtil.tinkeriseUmlName(map.getProperty().getMappingInfo().getQualifiedUmlName()) + "\", val!=null?val.name():null)";
-//		} else {
-//			return "this." + (audit ? "auditVertex" : "vertex") + ".setProperty(\""
-//					+ TinkerGenerationUtil.tinkeriseUmlName(map.getProperty().getMappingInfo().getQualifiedUmlName()) + "\", val==null?\"" + TINKER_DB_NULL + "\":val)";
-//		}
-//	}
+	// public static String getEdgeName(INakedClassifier c) {
+	// return tinkeriseUmlName(c.getMappingInfo().getQualifiedUmlName());
+	// }
+	//
+	// public static String
+	// constructNameForInternalCreateAuditToOne(NakedStructuralFeatureMap map) {
+	// return "z_internalCreateAuditToOne" +
+	// StringUtils.capitalize(map.umlName());
+	// }
+	//
+	// public static String
+	// constructNameForInternalCreateAuditManies(NakedStructuralFeatureMap map)
+	// {
+	// return "z_internalCreateAuditToMany" +
+	// StringUtils.capitalize(map.umlName()) + "s";
+	// }
+	//
+	// public static String
+	// constructNameForInternalCreateAuditMany(NakedStructuralFeatureMap map) {
+	// return "z_internalCreateAuditToMany" +
+	// StringUtils.capitalize(map.umlName());
+	// }
+	//
+	// public static String
+	// constructNameForInternalManiesRemoval(NakedStructuralFeatureMap map) {
+	// return "z_internalRemoveAllFrom" + StringUtils.capitalize(map.umlName());
+	// }
+	//
+	// public static OJBlock instantiateClassifier(OJBlock block,
+	// NakedStructuralFeatureMap map) {
+	// OJField field = new OJField();
+	// field.setName(map.umlName());
+	// field.setType(map.javaBaseTypePath());
+	// field.setInitExp("null");
+	// block.addToLocals(field);
+	// OJTryStatement ojTryStatement = new OJTryStatement();
+	// ojTryStatement.getTryPart().addToStatements("Vertex v = db.getVertex(" +
+	// map.umlName() + "Id)");
+	// ojTryStatement.getTryPart().addToStatements("Class<?> c = Class.forName((String) v.getProperty(\"className\"))");
+	// ojTryStatement.getTryPart().addToStatements(map.umlName() + " = (" +
+	// map.javaBaseTypePath().getLast() +
+	// ") c.getConstructor(Vertex.class).newInstance(v)");
+	// ojTryStatement.setCatchParam(new OJParameter("e", new
+	// OJPathName("java.lang.Exception")));
+	// ojTryStatement.getCatchPart().addToStatements("throw new RuntimeException(e)");
+	// block.addToStatements(ojTryStatement);
+	// return null;
+	// }
+	//
+	// public static String getClassMetaId(OJAnnotatedClass ojClass) {
+	// OJAnnotationValue numlMetaInfo = ojClass.findAnnotation(new
+	// OJPathName("org.opaeum.annotation.NumlMetaInfo"));
+	// return numlMetaInfo.findAttribute("uuid").getValues().get(0).toString();
+	// }
+	//
+	//
+	//
+	// public static String addSetterForSimpleType(NakedStructuralFeatureMap
+	// map) {
+	// return addSetterForSimpleType(map, false);
+	// }
+	//
+	// public static String addSetterForSimpleType(NakedStructuralFeatureMap
+	// map, boolean audit) {
+	// if (map.getProperty().getBaseType() instanceof INakedEnumeration) {
+	// return "this." + (audit ? "auditVertex" : "vertex") + ".setProperty(\""
+	// +
+	// TinkerGenerationUtil.tinkeriseUmlName(map.getProperty().getMappingInfo().getQualifiedUmlName())
+	// + "\", val!=null?val.name():null)";
+	// } else {
+	// return "this." + (audit ? "auditVertex" : "vertex") + ".setProperty(\""
+	// +
+	// TinkerGenerationUtil.tinkeriseUmlName(map.getProperty().getMappingInfo().getQualifiedUmlName())
+	// + "\", val==null?\"" + TINKER_DB_NULL + "\":val)";
+	// }
+	// }
 
 	public static void addOverrideAnnotation(OJAnnotatedOperation oper) {
 		oper.addAnnotationIfNew(new OJAnnotationValue(new OJPathName("java.lang.Override")));
 	}
 
-//	public static OJPathName convertToMutable(OJPathName javaTypePath) {
-//		if (javaTypePath.getLast().equals("String")) {
-//			return new OJPathName("java.lang.StringBuilder");
-//		} else if (javaTypePath.getLast().equals("Integer")) {
-//			return new OJPathName("org.apache.commons.lang.mutable.MutableInteger");
-//		} else if (javaTypePath.getLast().equals("Boolean")) {
-//			return new OJPathName("org.apache.commons.lang.mutable.MutableBoolean");
-//		} else if (javaTypePath.getLast().equals("Float")) {
-//			return new OJPathName("org.apache.commons.lang.mutable.MutableFloat");
-//		} else {
-//			throw new IllegalStateException("Not supported, " + javaTypePath.getLast());
-//		}
-//	}
-//
-//	public static String validateMutableCondition(NakedStructuralFeatureMap map) {
-//		if (map.isOne()) {
-//			if (map.javaBaseTypePath().getLast().equals("String")) {
-//				return map.fieldname() + ".length() > 0";
-//			} else if (map.javaBaseTypePath().getLast().equals("Integer")) {
-//				return map.fieldname() + "intValue != 0";
-//			} else if (map.javaBaseTypePath().getLast().equals("Boolean")) {
-//				return map.fieldname() + "booleanValue";
-//			} else if (map.javaBaseTypePath().getLast().equals("Float")) {
-//				return map.fieldname() + "floatValue != 0";
-//			} else {
-//				throw new IllegalStateException("Not supported, " + map.javaBaseTypePath().getLast());
-//			}
-//		} else {
-//			return "!" + map.fieldname() + ".isEmpty()";
-//		}
-//	}
-//
-//	public static String setMutable(NakedStructuralFeatureMap map) {
-//		if (map.javaBaseTypePath().getLast().equals("String")) {
-//			return "append";
-//		} else if (map.javaBaseTypePath().getLast().equals("Integer")) {
-//			return "setValue";
-//		} else if (map.javaBaseTypePath().getLast().equals("Boolean")) {
-//			return "setValue";
-//		} else if (map.javaBaseTypePath().getLast().equals("Float")) {
-//			return "setValue";
-//		} else {
-//			throw new IllegalStateException("Not supported, " + map.javaBaseTypePath().getLast());
-//		}
-//	}
-//
-//	public static String clearMutable(NakedStructuralFeatureMap map) {
-//		if (map.javaBaseTypePath().getLast().equals("String")) {
-//			return "setLength(0)";
-//		} else if (map.javaBaseTypePath().getLast().equals("Integer")) {
-//			return "setValue(0)";
-//		} else if (map.javaBaseTypePath().getLast().equals("Boolean")) {
-//			return "setValue(false)";
-//		} else if (map.javaBaseTypePath().getLast().equals("Float")) {
-//			return "setValue(0)";
-//		} else {
-//			throw new IllegalStateException("Not supported, " + map.javaBaseTypePath().getLast());
-//		}
-//	}
+	// public static OJPathName convertToMutable(OJPathName javaTypePath) {
+	// if (javaTypePath.getLast().equals("String")) {
+	// return new OJPathName("java.lang.StringBuilder");
+	// } else if (javaTypePath.getLast().equals("Integer")) {
+	// return new OJPathName("org.apache.commons.lang.mutable.MutableInteger");
+	// } else if (javaTypePath.getLast().equals("Boolean")) {
+	// return new OJPathName("org.apache.commons.lang.mutable.MutableBoolean");
+	// } else if (javaTypePath.getLast().equals("Float")) {
+	// return new OJPathName("org.apache.commons.lang.mutable.MutableFloat");
+	// } else {
+	// throw new IllegalStateException("Not supported, " +
+	// javaTypePath.getLast());
+	// }
+	// }
+	//
+	// public static String validateMutableCondition(NakedStructuralFeatureMap
+	// map) {
+	// if (map.isOne()) {
+	// if (map.javaBaseTypePath().getLast().equals("String")) {
+	// return map.fieldname() + ".length() > 0";
+	// } else if (map.javaBaseTypePath().getLast().equals("Integer")) {
+	// return map.fieldname() + "intValue != 0";
+	// } else if (map.javaBaseTypePath().getLast().equals("Boolean")) {
+	// return map.fieldname() + "booleanValue";
+	// } else if (map.javaBaseTypePath().getLast().equals("Float")) {
+	// return map.fieldname() + "floatValue != 0";
+	// } else {
+	// throw new IllegalStateException("Not supported, " +
+	// map.javaBaseTypePath().getLast());
+	// }
+	// } else {
+	// return "!" + map.fieldname() + ".isEmpty()";
+	// }
+	// }
+	//
+	// public static String setMutable(NakedStructuralFeatureMap map) {
+	// if (map.javaBaseTypePath().getLast().equals("String")) {
+	// return "append";
+	// } else if (map.javaBaseTypePath().getLast().equals("Integer")) {
+	// return "setValue";
+	// } else if (map.javaBaseTypePath().getLast().equals("Boolean")) {
+	// return "setValue";
+	// } else if (map.javaBaseTypePath().getLast().equals("Float")) {
+	// return "setValue";
+	// } else {
+	// throw new IllegalStateException("Not supported, " +
+	// map.javaBaseTypePath().getLast());
+	// }
+	// }
+	//
+	// public static String clearMutable(NakedStructuralFeatureMap map) {
+	// if (map.javaBaseTypePath().getLast().equals("String")) {
+	// return "setLength(0)";
+	// } else if (map.javaBaseTypePath().getLast().equals("Integer")) {
+	// return "setValue(0)";
+	// } else if (map.javaBaseTypePath().getLast().equals("Boolean")) {
+	// return "setValue(false)";
+	// } else if (map.javaBaseTypePath().getLast().equals("Float")) {
+	// return "setValue(0)";
+	// } else {
+	// throw new IllegalStateException("Not supported, " +
+	// map.javaBaseTypePath().getLast());
+	// }
+	// }
 
 }

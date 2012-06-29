@@ -1,6 +1,8 @@
 package org.tuml.javageneration.visitor.property;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.uml2.uml.Property;
+import org.opaeum.java.metamodel.OJForStatement;
 import org.opaeum.java.metamodel.OJIfStatement;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
@@ -34,24 +36,30 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
 	public static void buildManyAdder(OJAnnotatedClass owner, PropertyWrapper propertyWrapper) {
 		OJAnnotatedOperation adder = new OJAnnotatedOperation(propertyWrapper.adder());
 		adder.addParam(propertyWrapper.fieldname(), propertyWrapper.javaTypePath());
-		OJIfStatement ifNotNull = new OJIfStatement("!" + propertyWrapper.fieldname() + ".isEmpty()");
-		ifNotNull.addToThenPart("this." + propertyWrapper.fieldname() + ".addAll(" + propertyWrapper.fieldname() + ")");
-		adder.getBody().addToStatements(ifNotNull);
+		if (!propertyWrapper.hasQualifiers()) {
+			OJIfStatement ifNotNull = new OJIfStatement("!" + propertyWrapper.fieldname() + ".isEmpty()");
+			ifNotNull.addToThenPart("this." + propertyWrapper.fieldname() + ".addAll(" + propertyWrapper.fieldname() + ")");
+			adder.getBody().addToStatements(ifNotNull);
+		} else {
+			String elementName = propertyWrapper.fieldname().substring(0, 1);
+			OJForStatement forAll = new OJForStatement(elementName, propertyWrapper.javaBaseTypePath(), propertyWrapper.fieldname());
+			forAll.getBody().addToStatements("this." + propertyWrapper.adder() + "(" + elementName + ")");
+			adder.getBody().addToStatements(forAll);
+		}
 		owner.addToOperations(adder);
-		
+
 		OJAnnotatedOperation singleAdder = new OJAnnotatedOperation(propertyWrapper.adder());
 		singleAdder.addParam(propertyWrapper.fieldname(), propertyWrapper.javaBaseTypePath());
-		ifNotNull = new OJIfStatement(propertyWrapper.fieldname() + " != null");
-		ifNotNull.addToThenPart("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ")");
+		OJIfStatement ifNotNull = new OJIfStatement(propertyWrapper.fieldname() + " != null");
+		if (!propertyWrapper.hasQualifiers()) {
+			ifNotNull.addToThenPart("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ")");
+		} else {
+			ifNotNull.addToThenPart("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ", " + propertyWrapper.getQualifiedGetterName() + "("
+					+ propertyWrapper.fieldname() + "))");
+		}
 		singleAdder.getBody().addToStatements(ifNotNull);
 		owner.addToOperations(singleAdder);
-		
-		// TODO qualifiers
-		// if (!map.getProperty().getQualifiers().isEmpty()) {
-		// s.setExpression(s.getExpression().replace("val)", "val, " +
-		// TinkerGenerationUtil.contructNameForQualifiedGetter(map) +
-		// "(val))"));
-		// }
+
 	}
 
 	public static void buildSetter(OJAnnotatedClass owner, PropertyWrapper pWrap) {

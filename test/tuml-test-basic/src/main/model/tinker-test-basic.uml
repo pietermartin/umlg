@@ -115,6 +115,38 @@
           </ownedEnd>
         </packagedElement>
       </packagedElement>
+      <packagedElement xmi:type="uml:Package" xmi:id="_19RG4MH_EeGL375nPDEdEA" name="qualifier">
+        <packagedElement xmi:type="uml:Class" xmi:id="_5pYMQMH_EeGL375nPDEdEA" name="God">
+          <ownedAttribute xmi:id="_9C4esMH_EeGL375nPDEdEA" name="nature" type="_7OUw0MH_EeGL375nPDEdEA" aggregation="composite" association="_9C8JGsH_EeGL375nPDEdEA">
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_9C4escH_EeGL375nPDEdEA" value="*"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_9C4essH_EeGL375nPDEdEA"/>
+            <qualifier xmi:id="_M6ScQMIAEeGL375nPDEdEA" name="natureQualifier1">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+            </qualifier>
+          </ownedAttribute>
+          <ownedAttribute xmi:id="__1DrYMH_EeGL375nPDEdEA" name="name">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+          </ownedAttribute>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Class" xmi:id="_7OUw0MH_EeGL375nPDEdEA" name="Nature">
+          <ownedAttribute xmi:id="_CUosMMIAEeGL375nPDEdEA" name="natureName">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+          </ownedAttribute>
+          <ownedAttribute xmi:id="_LYyPcMIPEeGFGqrD1aHtMw" name="natureQualifier1" isDerived="true">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+            <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_PbXUEMIPEeGFGqrD1aHtMw" name="self.name">
+              <language>ocl</language>
+              <body>self.natureName</body>
+            </defaultValue>
+          </ownedAttribute>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Association" xmi:id="_9C8JGsH_EeGL375nPDEdEA" name="A_&lt;god>_&lt;nature>" memberEnd="_9C8JG8H_EeGL375nPDEdEA _9C4esMH_EeGL375nPDEdEA" navigableOwnedEnd="_9C8JG8H_EeGL375nPDEdEA">
+          <ownedEnd xmi:id="_9C8JG8H_EeGL375nPDEdEA" name="god" type="_5pYMQMH_EeGL375nPDEdEA" association="_9C8JGsH_EeGL375nPDEdEA">
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_9C8JHMH_EeGL375nPDEdEA" value="1"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_9C8JHcH_EeGL375nPDEdEA" value="1"/>
+          </ownedEnd>
+        </packagedElement>
+      </packagedElement>
     </packagedElement>
   </packagedElement>
 </uml:Model>

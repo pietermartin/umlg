@@ -1,61 +1,54 @@
-package org.tuml.testocl;
+package org.tuml.qualifier;
 
+import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.TinkerIdUtilFactory;
-import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
+import org.tuml.runtime.collection.Multiplicity;
+import org.tuml.runtime.collection.Qualifier;
+import org.tuml.runtime.collection.TinkerQualifiedSet;
+import org.tuml.runtime.collection.TinkerQualifiedSetImpl;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TinkerSetImpl;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.domain.BaseTinker;
-import org.tuml.runtime.domain.CompositionNode;
 import org.tuml.runtime.domain.TinkerNode;
 
-public class OclTestCollection2 extends BaseTinker implements CompositionNode {
+public class God extends BaseTinker implements TinkerNode {
+	private TinkerQualifiedSet<Nature> nature;
 	private TinkerSet<String> name;
-	private TinkerSet<OclTestCollection> oclTestCollection;
 
-	/** Constructor for OclTestCollection2
-	 * 
-	 * @param compositeOwner 
-	 */
-	public OclTestCollection2(OclTestCollection compositeOwner) {
-		this.vertex = GraphDb.getDb().addVertex("dribble");
-		initialiseProperties();
-		createComponents();
-		init(compositeOwner);
-		TransactionThreadEntityVar.setNewEntity(this);
-		defaultCreate();
-	}
-	
-	/** Constructor for OclTestCollection2
+	/** Constructor for God
 	 * 
 	 * @param vertex 
 	 */
-	public OclTestCollection2(Vertex vertex) {
+	public God(Vertex vertex) {
 		this.vertex=vertex;
 		initialiseProperties();
 	}
 	
-	/** Default constructor for OclTestCollection2
+	/** Default constructor for God
 	 */
-	public OclTestCollection2() {
+	public God() {
 	}
 	
-	/** Constructor for OclTestCollection2
+	/** Constructor for God
 	 * 
 	 * @param persistent 
 	 */
-	public OclTestCollection2(Boolean persistent) {
+	public God(Boolean persistent) {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
-		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
 		initialiseProperties();
 		createComponents();
+		Edge edge = GraphDb.getDb().addEdge(null, GraphDb.getDb().getRoot(), this.vertex, "root");
+		edge.setProperty("inClass", this.getClass().getName());
 	}
 
 	public void addToName(String name) {
@@ -64,9 +57,15 @@ public class OclTestCollection2 extends BaseTinker implements CompositionNode {
 		}
 	}
 	
-	public void addToOclTestCollection(OclTestCollection oclTestCollection) {
-		if ( oclTestCollection != null ) {
-			this.oclTestCollection.add(oclTestCollection);
+	public void addToNature(Nature nature) {
+		if ( nature != null ) {
+			this.nature.add(nature, getQualifierForNature(nature));
+		}
+	}
+	
+	public void addToNature(Set<Nature> nature) {
+		for ( Nature n : nature ) {
+			this.addToNature(n);
 		}
 	}
 	
@@ -74,8 +73,8 @@ public class OclTestCollection2 extends BaseTinker implements CompositionNode {
 		this.name.clear();
 	}
 	
-	public void clearOclTestCollection() {
-		this.oclTestCollection.clear();
+	public void clearNature() {
+		this.nature.clear();
 	}
 	
 	public void createComponents() {
@@ -83,6 +82,9 @@ public class OclTestCollection2 extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void delete() {
+		for ( Nature child : getNature() ) {
+			child.delete();
+		}
 		GraphDb.getDb().removeVertex(this.vertex);
 	}
 	
@@ -100,23 +102,19 @@ public class OclTestCollection2 extends BaseTinker implements CompositionNode {
 		}
 	}
 	
+	public TinkerQualifiedSet<Nature> getNature() {
+		return this.nature;
+	}
+	
 	@Override
 	public int getObjectVersion() {
 		return TinkerIdUtilFactory.getIdUtil().getVersion(this.vertex);
 	}
 	
-	public OclTestCollection getOclTestCollection() {
-		TinkerSet<OclTestCollection> tmp = this.oclTestCollection;
-		if ( !tmp.isEmpty() ) {
-			return tmp.iterator().next();
-		} else {
-			return null;
-		}
-	}
-	
-	@Override
-	public TinkerNode getOwningObject() {
-		return getOclTestCollection();
+	public List<Qualifier> getQualifierForNature(Nature context) {
+		List<Qualifier> result = new ArrayList<Qualifier>();
+		result.add(new Qualifier("natureQualifier1", context.getNatureQualifier1(), Multiplicity.ONE_TO_ONE));
+		return result;
 	}
 	
 	@Override
@@ -129,35 +127,24 @@ public class OclTestCollection2 extends BaseTinker implements CompositionNode {
 		return uid;
 	}
 	
-	/** This gets called on creation with the compositional owner. The composition owner does not itself need to be a composite node
-	 * 
-	 * @param compositeOwner 
-	 */
-	@Override
-	public void init(TinkerNode compositeOwner) {
-		this.addToOclTestCollection((OclTestCollection)compositeOwner);
-		this.hasInitBeenCalled = true;
-		initVariables();
-	}
-	
 	public void initVariables() {
 	}
 	
 	@Override
 	public void initialiseProperties() {
-		this.name =  new TinkerSetImpl<String>(this, OclTestCollection2RuntimePropertyEnum.name);
-		this.oclTestCollection =  new TinkerSetImpl<OclTestCollection>(this, OclTestCollection2RuntimePropertyEnum.oclTestCollection);
+		this.name =  new TinkerSetImpl<String>(this, GodRuntimePropertyEnum.name);
+		this.nature =  new TinkerQualifiedSetImpl<Nature>(this, getUid(), GodRuntimePropertyEnum.nature);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
-		switch ( (OclTestCollection2RuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case oclTestCollection:
-				this.oclTestCollection =  new TinkerSetImpl<OclTestCollection>(this, OclTestCollection2RuntimePropertyEnum.oclTestCollection);
+		switch ( (GodRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
+			case nature:
+				this.nature =  new TinkerQualifiedSetImpl<Nature>(this, getUid(), GodRuntimePropertyEnum.nature);
 			break;
 		
 			case name:
-				this.name =  new TinkerSetImpl<String>(this, OclTestCollection2RuntimePropertyEnum.name);
+				this.name =  new TinkerSetImpl<String>(this, GodRuntimePropertyEnum.name);
 			break;
 		
 		}
@@ -165,7 +152,7 @@ public class OclTestCollection2 extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public boolean isTinkerRoot() {
-		return false;
+		return true;
 	}
 	
 	public void removeFromName(Set<String> name) {
@@ -180,15 +167,15 @@ public class OclTestCollection2 extends BaseTinker implements CompositionNode {
 		}
 	}
 	
-	public void removeFromOclTestCollection(OclTestCollection oclTestCollection) {
-		if ( oclTestCollection != null ) {
-			this.oclTestCollection.remove(oclTestCollection);
+	public void removeFromNature(Nature nature) {
+		if ( nature != null ) {
+			this.nature.remove(nature);
 		}
 	}
 	
-	public void removeFromOclTestCollection(Set<OclTestCollection> oclTestCollection) {
-		if ( !oclTestCollection.isEmpty() ) {
-			this.oclTestCollection.removeAll(oclTestCollection);
+	public void removeFromNature(Set<Nature> nature) {
+		if ( !nature.isEmpty() ) {
+			this.nature.removeAll(nature);
 		}
 	}
 	
@@ -202,14 +189,14 @@ public class OclTestCollection2 extends BaseTinker implements CompositionNode {
 		addToName(name);
 	}
 	
-	public void setOclTestCollection(OclTestCollection oclTestCollection) {
-		clearOclTestCollection();
-		addToOclTestCollection(oclTestCollection);
+	public void setNature(Set<Nature> nature) {
+		clearNature();
+		addToNature(nature);
 	}
 
-	public enum OclTestCollection2RuntimePropertyEnum implements TumlRuntimeProperty {
-		name(true,true,false,"testoclmodel__org__tuml__testocl__OclTestCollection2__name",false,false,true,false,1,1),
-		oclTestCollection(false,false,false,"A_<oclTestCollection>_<oclTestCollection2>",false,false,true,false,1,1);
+	public enum GodRuntimePropertyEnum implements TumlRuntimeProperty {
+		name(true,true,false,"tuml-test-basic-model__org__tuml__qualifier__God__name",false,false,true,false,1,1),
+		nature(false,true,true,"A_<god>_<nature>",false,true,false,false,-1,0);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -220,7 +207,7 @@ public class OclTestCollection2 extends BaseTinker implements CompositionNode {
 		private boolean manyToMany;
 		private int upper;
 		private int lower;
-		/** Constructor for OclTestCollection2RuntimePropertyEnum
+		/** Constructor for GodRuntimePropertyEnum
 		 * 
 		 * @param onePrimitive 
 		 * @param controllingSide 
@@ -233,7 +220,7 @@ public class OclTestCollection2 extends BaseTinker implements CompositionNode {
 		 * @param upper 
 		 * @param lower 
 		 */
-		private OclTestCollection2RuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+		private GodRuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
 			this.onePrimitive = onePrimitive;
 			this.controllingSide = controllingSide;
 			this.composite = composite;
@@ -246,12 +233,12 @@ public class OclTestCollection2 extends BaseTinker implements CompositionNode {
 			this.lower = lower;
 		}
 	
-		static public OclTestCollection2RuntimePropertyEnum fromLabel(String label) {
+		static public GodRuntimePropertyEnum fromLabel(String label) {
 			if ( name.getLabel().equals(label) ) {
 				return name;
 			}
-			if ( oclTestCollection.getLabel().equals(label) ) {
-				return oclTestCollection;
+			if ( nature.getLabel().equals(label) ) {
+				return nature;
 			}
 			throw new IllegalStateException();
 		}

@@ -15,8 +15,8 @@ import org.tuml.runtime.domain.BaseTinker;
 import org.tuml.runtime.domain.TinkerNode;
 
 public class InterfaceRealization1 extends BaseTinker implements TinkerNode, Interface1 {
-	private TinkerSet<Interface2> interface2;
 	private TinkerSet<String> name;
+	private TinkerSet<Interface2> interface2;
 
 	/** Constructor for InterfaceRealization1
 	 * 
@@ -120,19 +120,19 @@ public class InterfaceRealization1 extends BaseTinker implements TinkerNode, Int
 	
 	@Override
 	public void initialiseProperties() {
-		this.interface2 =  new TinkerSetImpl<Interface2>(this, InterfaceRealization1RuntimePropertyEnum.interface2);
 		this.name =  new TinkerSetImpl<String>(this, InterfaceRealization1RuntimePropertyEnum.name);
+		this.interface2 =  new TinkerSetImpl<Interface2>(this, InterfaceRealization1RuntimePropertyEnum.interface2);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (InterfaceRealization1RuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case name:
-				this.name =  new TinkerSetImpl<String>(this, InterfaceRealization1RuntimePropertyEnum.name);
-			break;
-		
 			case interface2:
 				this.interface2 =  new TinkerSetImpl<Interface2>(this, InterfaceRealization1RuntimePropertyEnum.interface2);
+			break;
+		
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, InterfaceRealization1RuntimePropertyEnum.name);
 			break;
 		
 		}
@@ -183,8 +183,8 @@ public class InterfaceRealization1 extends BaseTinker implements TinkerNode, Int
 	}
 
 	public enum InterfaceRealization1RuntimePropertyEnum implements TumlRuntimeProperty {
-		interface2(false,true,true,"A_<interface1>_<interface2>",false,true,false,false,-1,0),
-		name(true,true,false,"tuml-test-basic-model__org__tuml__Interface1__name",false,false,true,false,1,1);
+		name(true,true,false,"tuml-test-basic-model__org__tuml__Interface1__name",false,false,true,false,1,1),
+		interface2(false,true,true,"A_<interface1>_<interface2>",false,true,false,false,-1,0);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -222,11 +222,11 @@ public class InterfaceRealization1 extends BaseTinker implements TinkerNode, Int
 		}
 	
 		static public InterfaceRealization1RuntimePropertyEnum fromLabel(String label) {
-			if ( interface2.getLabel().equals(label) ) {
-				return interface2;
-			}
 			if ( name.getLabel().equals(label) ) {
 				return name;
+			}
+			if ( interface2.getLabel().equals(label) ) {
+				return interface2;
 			}
 			throw new IllegalStateException();
 		}

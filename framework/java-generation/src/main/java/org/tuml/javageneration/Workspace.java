@@ -19,6 +19,7 @@ import org.tuml.javageneration.visitor.property.CompositionProperyVisitor;
 import org.tuml.javageneration.visitor.property.ManyPropertyVisitor;
 import org.tuml.javageneration.visitor.property.OnePropertyVisitor;
 import org.tuml.javageneration.visitor.property.PropertyVisitor;
+import org.tuml.javageneration.visitor.property.QualifierVisitor;
 
 public class Workspace {
 
@@ -51,6 +52,7 @@ public class Workspace {
 		ModelVisitor.visitModel(model, new OnePropertyVisitor());
 		ModelVisitor.visitModel(model, new ClassImplementedInterfacePropertyVisitor());
 		ModelVisitor.visitModel(model, new DerivedPropertyVisitor());
+		ModelVisitor.visitModel(model, new QualifierVisitor());
 	}
 
 	

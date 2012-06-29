@@ -25,34 +25,46 @@ public class BaseVisitor {
 		return Workspace.findOJClass(Namer.qualifiedName(owner));
 	}
 
-	//TODO think about interfaces
+	// TODO think about interfaces
 	protected OJAnnotatedClass findOJClass(Property p) {
-		Element owner = p.getOwner();
-		// Association must come first in this if statement as Association is
-		// also a Classifier
-		if (owner instanceof Association) {
-			Association a = (Association) owner;
-			List<Property> members = a.getMemberEnds();
-			Property otherEnd = null;
-			for (Property member : members) {
-				if (member != p) {
-					otherEnd = member;
-					break;
-				}
-			}
-			if (otherEnd == null) {
-				throw new IllegalStateException("Oy, where is the other end gone to!!!");
-			}
-			return Workspace.findOJClass(Namer.qualifiedName((NamedElement) otherEnd.getType()));
-		} else if (owner instanceof Classifier) {
-			return Workspace.findOJClass(Namer.qualifiedName((NamedElement) owner));
-		} else if (owner instanceof Property) {
-			return Workspace.findOJClass(Namer.qualifiedName((NamedElement) owner));
+		PropertyWrapper pWrap;
+		if (p instanceof PropertyWrapper) {
+			pWrap = (PropertyWrapper) p;
 		} else {
-			throw new IllegalStateException("Not catered for, think about ne. " + owner.getClass().getSimpleName());
+			pWrap = new PropertyWrapper(p);
+		}
+		if (!pWrap.isQualifier()) {
+			Element owner = p.getOwner();
+			// Association must come first in this if statement as Association
+			// is
+			// also a Classifier
+			if (owner instanceof Association) {
+				Association a = (Association) owner;
+				List<Property> members = a.getMemberEnds();
+				Property otherEnd = null;
+				for (Property member : members) {
+					if (member != p) {
+						otherEnd = member;
+						break;
+					}
+				}
+				if (otherEnd == null) {
+					throw new IllegalStateException("Oy, where is the other end gone to!!!");
+				}
+				return Workspace.findOJClass(Namer.qualifiedName((NamedElement) otherEnd.getType()));
+			} else if (owner instanceof Classifier) {
+				return Workspace.findOJClass(Namer.qualifiedName((NamedElement) owner));
+			} else if (owner instanceof Property) {
+				return Workspace.findOJClass(Namer.qualifiedName((NamedElement) owner));
+			} else {
+				throw new IllegalStateException("Not catered for, think about ne. " + owner.getClass().getSimpleName());
+			}
+		} else {
+			Property owner = (Property) pWrap.getOwner();
+			return Workspace.findOJClass(Namer.qualifiedName(owner.getType()));
 		}
 	}
-	
+
 	protected void buildField(OJAnnotatedClass owner, PropertyWrapper propertyWrapper) {
 		OJAnnotatedField field = new OJAnnotatedField(propertyWrapper.fieldname(), propertyWrapper.javaTumlTypePath());
 		field.setStatic(propertyWrapper.isStatic());

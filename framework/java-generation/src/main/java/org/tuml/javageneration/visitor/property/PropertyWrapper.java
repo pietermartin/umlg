@@ -6,6 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.DiagnosticChain;
@@ -50,6 +51,7 @@ import org.eclipse.uml2.uml.VisibilityKind;
 import org.opaeum.java.metamodel.OJPathName;
 import org.tuml.javageneration.naming.Namer;
 import org.tuml.javageneration.util.TinkerGenerationUtil;
+import org.tuml.javageneration.util.TumlClassOperations;
 import org.tuml.javageneration.util.TumlPropertyOperations;
 import org.tuml.ocl.StandaloneFacade;
 
@@ -1346,10 +1348,11 @@ public class PropertyWrapper implements Property {
 	}
 
 	public String getOclAsJava() {
-		if (!isDerived()) {
-			throw new IllegalStateException("getOclAsJava can only be called on a derived property");
+		if (!isDerived() && !isQualifier()) {
+			throw new IllegalStateException("getOclAsJava can only be called on a derived property or qualifier!");
 		}
 		try {
+			// TODO move this to workspace to text something or other
 			File oclFile = new File("src/main/generated-resources/" + getName() + ".ocl");
 			FileWriter fw = new FileWriter(oclFile);
 			fw.write(getOcl());
@@ -1379,22 +1382,83 @@ public class PropertyWrapper implements Property {
 	}
 
 	public String getOcl() {
-		if (!isDerived()) {
-			throw new IllegalStateException("getOcl can only be called on a derived property");
+		if (!isDerived() && !isQualifier()) {
+			throw new IllegalStateException("getOcl can only be called on a derived property or a qualifier");
 		}
 		StringBuilder sb = new StringBuilder();
 		sb.append("package ");
-		sb.append(Namer.name(getOwningType().getNearestPackage()).replace(".", "::"));
-		sb.append("\ncontext ");
-		sb.append(getOwningType().getName());
-		sb.append("::");
-		sb.append(getName());
-		sb.append("\n");
-		sb.append("derive: ");
-		sb.append(this.property.getDefaultValue().stringValue());
+		if (isDerived()) {
+			sb.append(Namer.name(getOwningType().getNearestPackage()).replace(".", "::"));
+			sb.append("\ncontext ");
+			sb.append(getOwningType().getName());
+			sb.append("::");
+			sb.append(getName());
+			sb.append("\n");
+			sb.append("derive: ");
+			sb.append(this.property.getDefaultValue().stringValue());
+		} else {
+			// Find the derived property on the qualified context
+			Property owner = (Property) getOwner();
+			Property derived = null;
+			for (Element e : owner.getType().getOwnedElements()) {
+				if (e instanceof Property && ((NamedElement) e).getName().equals(getName())) {
+					derived = (Property) e;
+				}
+			}
+			sb.append(Namer.name(owner.getType().getNearestPackage()).replace(".", "::"));
+			sb.append("\ncontext ");
+			sb.append(owner.getType().getName());
+			sb.append("::");
+			sb.append(getName());
+			sb.append("\n");
+			sb.append("derive: ");
+			sb.append(derived.getDefaultValue().stringValue());
+		}
 		sb.append("\n");
 		sb.append("endpackage");
 		return sb.toString();
 	}
 
+	public String getQualifierValueGetterName() {
+		Property owner = (Property) getOwner();
+		return "get" + owner.getType().getName() + StringUtils.capitalize(getName()) + "QualifierValue";
+	}
+
+	public Property getQualifierCorrespondingDerivedProperty() {
+		if (!isQualifier()) {
+			throw new IllegalStateException("getCorrespondingDerivedProperty can only be called on a qualifier");
+		}
+		Property owner = (Property) getOwner();
+		for (Element e : owner.getType().getOwnedElements()) {
+			if (e instanceof Property && ((Property) e).isDerived() && ((Property) e).getName().equals(getName())) {
+				return (Property) e;
+			}
+		}
+		return null;
+	}
+
+	public OJPathName getQualifierContextPathName() {
+		return TumlClassOperations.getPathName(getType());
+	}
+	
+	public Type getQualifierContext() {
+		if (!isQualifier()) {
+			throw new IllegalStateException("getQualifierContext can only be called on a qualifier");
+		}
+		Property owner = (Property) getOwner();
+		return owner.getType();
+	}
+	
+	public boolean qualifierHasCorrespondingDerivedProperty() {
+		if (!isQualifier()) {
+			throw new IllegalStateException("getCorrespondingDerivedProperty can only be called on a qualifier");
+		}
+		return getQualifierCorrespondingDerivedProperty() != null;
+	}
+
+	public String getQualifiedGetterName() {
+		return "getQualifierFor" + StringUtils.capitalize(getName());
+	}
+	
+	
 }

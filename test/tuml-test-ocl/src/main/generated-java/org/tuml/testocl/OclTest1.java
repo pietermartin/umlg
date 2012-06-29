@@ -199,19 +199,19 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.property1 =  new TinkerSetImpl<String>(this, OclTest1RuntimePropertyEnum.property1);
 		this.oclTestCollection =  new TinkerSetImpl<OclTestCollection>(this, OclTest1RuntimePropertyEnum.oclTestCollection);
+		this.property1 =  new TinkerSetImpl<String>(this, OclTest1RuntimePropertyEnum.property1);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (OclTest1RuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case oclTestCollection:
-				this.oclTestCollection =  new TinkerSetImpl<OclTestCollection>(this, OclTest1RuntimePropertyEnum.oclTestCollection);
-			break;
-		
 			case property1:
 				this.property1 =  new TinkerSetImpl<String>(this, OclTest1RuntimePropertyEnum.property1);
+			break;
+		
+			case oclTestCollection:
+				this.oclTestCollection =  new TinkerSetImpl<OclTestCollection>(this, OclTest1RuntimePropertyEnum.oclTestCollection);
 			break;
 		
 		}
@@ -262,8 +262,8 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 	}
 
 	public enum OclTest1RuntimePropertyEnum implements TumlRuntimeProperty {
-		property1(true,true,false,"testoclmodel__org__tuml__testocl__OclTest1__property1",false,false,true,false,1,1),
-		oclTestCollection(false,true,true,"A_<oclTest1>_<oclTestCollection>",false,true,false,false,-1,1);
+		oclTestCollection(false,true,true,"A_<oclTest1>_<oclTestCollection>",false,true,false,false,-1,1),
+		property1(true,true,false,"testoclmodel__org__tuml__testocl__OclTest1__property1",false,false,true,false,1,1);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -301,11 +301,11 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 		}
 	
 		static public OclTest1RuntimePropertyEnum fromLabel(String label) {
-			if ( property1.getLabel().equals(label) ) {
-				return property1;
-			}
 			if ( oclTestCollection.getLabel().equals(label) ) {
 				return oclTestCollection;
+			}
+			if ( property1.getLabel().equals(label) ) {
+				return property1;
 			}
 			throw new IllegalStateException();
 		}

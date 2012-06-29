@@ -19,7 +19,7 @@ public class ModelVisitor {
 		if (paramTypes.length != 1) {
 			throw new IllegalStateException();
 		}
-		//This is the type the visitor is visiting
+		// This is the type the visitor is visiting
 		Type visitingType = paramTypes[0];
 		try {
 			Class<?> visitingTypeClass = (Class<?>) visitingType;
