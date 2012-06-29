@@ -1,6 +1,5 @@
 package org.tuml.javageneration.visitor.property;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.uml2.uml.Property;
 import org.opaeum.java.metamodel.OJForStatement;
 import org.opaeum.java.metamodel.OJIfStatement;

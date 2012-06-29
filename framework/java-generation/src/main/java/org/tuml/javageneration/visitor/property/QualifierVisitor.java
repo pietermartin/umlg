@@ -1,8 +1,12 @@
 package org.tuml.javageneration.visitor.property;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.uml2.uml.Property;
+import org.eclipse.uml2.uml.Type;
 import org.opaeum.java.metamodel.OJField;
+import org.opaeum.java.metamodel.OJIfStatement;
 import org.opaeum.java.metamodel.OJPathName;
+import org.opaeum.java.metamodel.OJSimpleStatement;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
 import org.tuml.framework.Visitor;
@@ -16,6 +20,7 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
 		PropertyWrapper pWrap = new PropertyWrapper(p);
 		if (pWrap.isQualifier()) {
 			validateHasCorrespondingDerivedProperty(pWrap);
+			generateQualifiedGetter(pWrap);
 		} else {
 			if (pWrap.hasQualifiers()) {
 				generateQualifierGetter(findOJClass(pWrap), pWrap);
@@ -60,11 +65,60 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
 			sb.append("(), ");
 			sb.append(TinkerGenerationUtil.calculateMultiplcity(qWrap));
 			sb.append("))");
-			qualifierGetter.getBody().addToStatements(sb.toString());	
+			qualifierGetter.getBody().addToStatements(sb.toString());
 		}
 		qualifierGetter.getBody().addToStatements("return result");
 		ojClass.addToImports(TinkerGenerationUtil.TINKER_QUALIFIER_PATHNAME);
 		ojClass.addToImports(TinkerGenerationUtil.tinkerMultiplicityPathName);
+	}
+
+	private void generateQualifiedGetter(PropertyWrapper qualifier) {
+		Property ownerElement = (Property) qualifier.getOwner();
+		PropertyWrapper ownerElementMap = new PropertyWrapper(ownerElement);
+		Type qualifiedClassifier = (Type) ownerElement.getOwner();
+		OJAnnotatedClass ojClass = findOJClass(qualifiedClassifier);
+
+		OJAnnotatedOperation qualifierValue = new OJAnnotatedOperation(ownerElementMap.getter() + "For" + StringUtils.capitalize(qualifier.fieldname()));
+		if (qualifier.isOne()) {
+			qualifierValue.setReturnType(ownerElementMap.javaBaseTypePath());
+		} else {
+			// This only return a Set for now, not sure how index behaves with
+			// duplicates
+			qualifierValue.setReturnType(qualifier.javaTypePath());
+		}
+		qualifierValue.addParam(qualifier.fieldname(), (qualifier.isOne() ? qualifier.javaBaseTypePath() : qualifier.javaTypePath()));
+
+		ojClass.addToImports(TinkerGenerationUtil.tinkerIndexPathName);
+		ojClass.addToImports(TinkerGenerationUtil.tinkerCloseableIterablePathName);
+		ojClass.addToImports(TinkerGenerationUtil.tinkerDirection);
+		qualifierValue.getBody().addToStatements(
+				"Index<Edge> index = GraphDb.getDb().getIndex(getUid() + \":::\" + \"" + TinkerGenerationUtil.getEdgeName(ownerElementMap) + "\", Edge.class)");
+		OJIfStatement ifIndexNull = new OJIfStatement("index==null", "return null");
+		ifIndexNull.addToElsePart(TinkerGenerationUtil.tinkerCloseableIterablePathName.getCopy().addToGenerics(TinkerGenerationUtil.edgePathName).getLast()
+				+ " closeableIterable = index.get(\"" + qualifier.fieldname() + "\", " + qualifier.fieldname() + "==null?\"___NULL___\":" + qualifier.fieldname() + ")");
+		OJIfStatement ifHasNext = new OJIfStatement("closeableIterable.iterator().hasNext()");
+		if (qualifier.isOne()) {
+			ifHasNext.addToThenPart("return new " + ownerElementMap.javaBaseTypePath().getLast() + "(closeableIterable.iterator().next().getVertex("
+					+ TinkerGenerationUtil.tinkerDirection.getLast() + ".IN))");
+			ifHasNext.addToElsePart("return null");
+		} else {
+			OJSimpleStatement ojSimpleStatement = new OJSimpleStatement("return new TinkerSetClosableSequenceImpl<" + ownerElementMap.javaBaseTypePath().getLast()
+					+ ">(closeableSequence");
+			// Specify inverse boolean
+			if (ownerElementMap.isControllingSide() || ownerElementMap.getOtherEnd() == null || !ownerElementMap.getOtherEnd().isNavigable()) {
+				ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", true)");
+			} else {
+				ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", false)");
+			}
+			ifHasNext.addToThenPart(ojSimpleStatement);
+			ojClass.addToImports(TinkerGenerationUtil.tinkerSetClosableSequenceImplPathName);
+			ifHasNext.addToElsePart("return Collections.<" + ownerElementMap.javaBaseTypePath().getLast() + ">emptySet()");
+			ojClass.addToImports(new OJPathName("java.util.Collections"));
+		}
+
+		ifIndexNull.addToElsePart(ifHasNext);
+		qualifierValue.getBody().addToStatements(ifIndexNull);
+		ojClass.addToOperations(qualifierValue);
 	}
 
 }

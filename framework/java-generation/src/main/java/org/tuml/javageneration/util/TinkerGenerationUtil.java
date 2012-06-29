@@ -19,8 +19,9 @@ public class TinkerGenerationUtil {
 	public static final OJPathName tumlRuntimePropertyPathName = new OJPathName("org.tuml.runtime.collection.TumlRuntimeProperty");
 	public static final OJPathName tinkerConclusionPathName = new OJPathName("com.tinkerpop.blueprints.pgm.TransactionalGraph.Conclusion");
 	public static final OJPathName tinkerSetClosableSequenceImplPathName = new OJPathName("org.tuml.runtime.collection.TinkerSetClosableSequenceImpl");
-	public static final OJPathName tinkerIndexPathName = new OJPathName("com.tinkerpop.blueprints.pgm.Index");
-	public static final OJPathName tinkerCloseableSequencePathName = new OJPathName("com.tinkerpop.blueprints.pgm.CloseableSequence");
+	public static final OJPathName tinkerIndexPathName = new OJPathName("com.tinkerpop.blueprints.Index");
+	public static final OJPathName tinkerCloseableIterablePathName = new OJPathName("com.tinkerpop.blueprints.CloseableIterable");
+	public static final OJPathName tinkerDirection = new OJPathName("com.tinkerpop.blueprints.Direction");
 	public static final OJPathName tinkerCompositionNodePathName = new OJPathName("org.tuml.runtime.domain.CompositionNode");
 	public static final OJPathName compositionNodePathName = new OJPathName("org.tuml.runtime.domain.CompositionNode");
 	public static final OJPathName tinkerIdUtilPathName = new OJPathName("org.tuml.nakeduml.tinker.runtime.TinkerIdUtil");

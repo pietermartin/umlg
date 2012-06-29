@@ -1,6 +1,9 @@
 package org.tuml.qualifier;
 
+import com.tinkerpop.blueprints.CloseableIterable;
+import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Index;
 import com.tinkerpop.blueprints.Vertex;
 
 import java.util.ArrayList;
@@ -104,6 +107,20 @@ public class God extends BaseTinker implements TinkerNode {
 	
 	public TinkerQualifiedSet<Nature> getNature() {
 		return this.nature;
+	}
+	
+	public Nature getNatureForNatureQualifier1(String natureQualifier1) {
+		Index<Edge> index = GraphDb.getDb().getIndex(getUid() + ":::" + "A_<god>_<nature>", Edge.class);
+		if ( index==null ) {
+			return null;
+		} else {
+			CloseableIterable<Edge> closeableIterable = index.get("natureQualifier1", natureQualifier1==null?"___NULL___":natureQualifier1);
+			if ( closeableIterable.iterator().hasNext() ) {
+				return new Nature(closeableIterable.iterator().next().getVertex(Direction.IN));
+			} else {
+				return null;
+			}
+		}
 	}
 	
 	@Override
