@@ -3,7 +3,6 @@ package org.tuml.testbasic.qualifier;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.tuml.inheritence.Biped;
 import org.tuml.qualifier.God;
 import org.tuml.qualifier.Nature;
 import org.tuml.runtime.test.BaseLocalDbTest;
@@ -17,12 +16,15 @@ public class TestQualifier extends BaseLocalDbTest {
 		db.startTransaction();
 		God god = new God(true);
 		god.setName("God");
-		Nature nature1 = new Nature(god);
+		Nature nature1 = new Nature(true);
 		nature1.setNatureName("natureName1");
-		Nature nature2 = new Nature(god);
+		nature1.addToGod(god);
+		Nature nature2 = new Nature(true);
 		nature2.setNatureName("natureName2");
-		Nature nature3 = new Nature(god);
+		nature2.addToGod(god);
+		Nature nature3 = new Nature(true);
 		nature3.setNatureName("natureName3");
+		nature3.addToGod(god);
 		db.stopTransaction(Conclusion.SUCCESS);
 		
 		God testGod = new God(god.getVertex());

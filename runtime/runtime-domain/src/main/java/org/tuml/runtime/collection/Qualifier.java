@@ -54,5 +54,17 @@ public class Qualifier {
 	public boolean isMany() {
 		return this.multiplicity.isMany();
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("key = ");
+		sb.append(this.key);
+		sb.append(" value = ");
+		sb.append(this.value);
+		sb.append(" Multiplicity = ");
+		sb.append(this.multiplicity);
+		return sb.toString();
+	}
 
 }

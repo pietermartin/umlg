@@ -7,6 +7,7 @@ import com.tinkerpop.blueprints.Index;
 import com.tinkerpop.blueprints.Vertex;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -62,7 +63,7 @@ public class God extends BaseTinker implements TinkerNode {
 	
 	public void addToNature(Nature nature) {
 		if ( nature != null ) {
-			this.nature.add(nature, getQualifierForNature(nature));
+			this.nature.add(nature);
 		}
 	}
 	
@@ -131,6 +132,30 @@ public class God extends BaseTinker implements TinkerNode {
 	public List<Qualifier> getQualifierForNature(Nature context) {
 		List<Qualifier> result = new ArrayList<Qualifier>();
 		result.add(new Qualifier("natureQualifier1", context.getNatureQualifier1(), Multiplicity.ONE_TO_ONE));
+		return result;
+	}
+	
+	/** GetQualifiers is called from the collection in order to update the index used to implement the qualifier
+	 * 
+	 * @param tumlRuntimeProperty 
+	 * @param node 
+	 */
+	@Override
+	public List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, TinkerNode node) {
+		List<Qualifier> result = Collections.emptyList();
+		GodRuntimePropertyEnum runtimeProperty = GodRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
+		if ( runtimeProperty != null && result.isEmpty() ) {
+			switch ( runtimeProperty ) {
+				case nature:
+					result = getQualifierForNature((Nature)node);
+				break;
+			
+				default:
+					result = Collections.emptyList();
+				break;
+			}
+		
+		}
 		return result;
 	}
 	
@@ -212,8 +237,8 @@ public class God extends BaseTinker implements TinkerNode {
 	}
 
 	public enum GodRuntimePropertyEnum implements TumlRuntimeProperty {
-		name(true,true,false,"tuml-test-basic-model__org__tuml__qualifier__God__name",false,false,true,false,1,1),
-		nature(false,true,true,"A_<god>_<nature>",false,true,false,false,-1,0);
+		name(true,true,false,"tuml-test-basic-model__org__tuml__qualifier__God__name",false,false,true,false,1,1,false,false),
+		nature(false,true,true,"A_<god>_<nature>",false,true,false,false,-1,0,true,false);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -224,6 +249,8 @@ public class God extends BaseTinker implements TinkerNode {
 		private boolean manyToMany;
 		private int upper;
 		private int lower;
+		private boolean qualified;
+		private boolean inverseQualified;
 		/** Constructor for GodRuntimePropertyEnum
 		 * 
 		 * @param onePrimitive 
@@ -236,8 +263,10 @@ public class God extends BaseTinker implements TinkerNode {
 		 * @param manyToMany 
 		 * @param upper 
 		 * @param lower 
+		 * @param qualified 
+		 * @param inverseQualified 
 		 */
-		private GodRuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+		private GodRuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower, boolean qualified, boolean inverseQualified) {
 			this.onePrimitive = onePrimitive;
 			this.controllingSide = controllingSide;
 			this.composite = composite;
@@ -248,6 +277,8 @@ public class God extends BaseTinker implements TinkerNode {
 			this.manyToMany = manyToMany;
 			this.upper = upper;
 			this.lower = lower;
+			this.qualified = qualified;
+			this.inverseQualified = inverseQualified;
 		}
 	
 		static public GodRuntimePropertyEnum fromLabel(String label) {
@@ -257,7 +288,7 @@ public class God extends BaseTinker implements TinkerNode {
 			if ( nature.getLabel().equals(label) ) {
 				return nature;
 			}
-			throw new IllegalStateException();
+			return null;
 		}
 		
 		public String getLabel() {
@@ -280,6 +311,10 @@ public class God extends BaseTinker implements TinkerNode {
 			return this.controllingSide;
 		}
 		
+		public boolean isInverseQualified() {
+			return this.inverseQualified;
+		}
+		
 		public boolean isManyToMany() {
 			return this.manyToMany;
 		}
@@ -298,6 +333,10 @@ public class God extends BaseTinker implements TinkerNode {
 		
 		public boolean isOneToOne() {
 			return this.oneToOne;
+		}
+		
+		public boolean isQualified() {
+			return this.qualified;
 		}
 		
 		@Override

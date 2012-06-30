@@ -17,6 +17,7 @@ import org.tuml.runtime.util.TinkerFormatter;
 
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Index;
 import com.tinkerpop.blueprints.Vertex;
 
 public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimeProperty {
@@ -58,8 +59,8 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 				}
 			}
 		} else {
-			E property = (E)this.vertex.getProperty(getLabel());
-			if (property!=null) {
+			E property = (E) this.vertex.getProperty(getLabel());
+			if (property != null) {
 				this.internalCollection.add(property);
 			}
 		}
@@ -102,10 +103,58 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 		maybeCallInit(e);
 		boolean result = this.internalCollection.add(e);
 		if (result) {
-			addInternal(e);
+			Edge edge = addInternal(e);
+
+			// if is qualified update index
+			if (isQualified()) {
+				//Can only qualify TinkerNode's
+				if (!(e instanceof TinkerNode)) {
+					throw new IllegalStateException("Primitive properties can not be qualified!");
+				}
+				
+				//Create index lazily
+				Index<Edge> index = GraphDb.getDb().getIndex(this.owner.getUid() + ":::" + getLabel(), Edge.class);
+				if (index == null) {
+					index = GraphDb.getDb().createIndex(this.owner.getUid() + ":::" + getLabel(), Edge.class);
+				}
+				addQualifierToIndex(index, edge, this.owner, (TinkerNode)e);
+			}
+			
+			// if is qualified update index
+			if (isInverseQualified()) {
+				//Can only qualify TinkerNode's
+				if (!(e instanceof TinkerNode)) {
+					throw new IllegalStateException("Primitive properties can not be qualified!");
+				}
+				TinkerNode node = (TinkerNode)e;
+
+				//Create index lazily
+				Index<Edge> index = GraphDb.getDb().getIndex(node.getUid() + ":::" + getLabel(), Edge.class);
+				if (index == null) {
+					index = GraphDb.getDb().createIndex(node.getUid() + ":::" + getLabel(), Edge.class);
+				}
+				addQualifierToIndex(index, edge, node, this.owner);
+			}			
+			
+		} else {
+			
 		}
+
+
 		return result;
 	}
+	
+	/**
+	 * @param nodeBeingIndexed element is the context for the ocl expression representing the qualifier value 
+	 */
+	private void addQualifierToIndex(Index<Edge> index, Edge edge, TinkerNode qualifiedNode, TinkerNode qualifierNode) {
+		for (Qualifier qualifier : qualifiedNode.getQualifiers(this.tumlRuntimeProperty, qualifierNode)) {
+			validateQualifiedMultiplicity(index, qualifier);
+			index.put(qualifier.getKey(), qualifier.getValue(), edge);
+			edge.setProperty("index" + qualifier.getKey(), qualifier.getValue());
+		}
+	}
+
 
 	private void validateMultiplicityForAdditionalElement() {
 		if (!isValid(size() + 1)) {
@@ -142,7 +191,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 				v = this.internalVertexMap.get(((Enum<?>) o).name());
 				GraphDb.getDb().removeVertex(v);
 			} else if (isOnePrimitive()) {
-				//Do nothing
+				// Do nothing
 			} else {
 				v = this.internalVertexMap.get(o);
 				if (this.owner instanceof TinkerAuditableNode) {
@@ -167,6 +216,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 				Iterator<Edge> iteratorToOne = getEdges(v).iterator();
 				if (iteratorToOne.hasNext()) {
 					GraphDb.getDb().removeEdge(iteratorToOne.next());
+					//Reinitialise the property as is still holds a reference in memory to the previous 'one'
 					node.initialiseProperty(this.tumlRuntimeProperty);
 				}
 			}
@@ -201,12 +251,6 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 		}
 
 	}
-
-//	protected boolean isOnePrimitive(E e) {
-//		// primitive properties on a classifier is manytoone as the otherside is
-//		// null it defaults to many
-//		return this.isManyToOne() && this.tumlRuntimeProperty.isPrimitive();
-//	}
 
 	private Edge addCorrelationForManyToMany(Vertex v, Edge edge) {
 		Set<Edge> edgesBetween = GraphDb.getDb().getEdgesBetween(this.vertex, v, this.getLabel());
@@ -458,4 +502,25 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 	public boolean isValid(int elementCount) {
 		return this.tumlRuntimeProperty.isValid(elementCount);
 	}
+	
+	@Override
+	public boolean isQualified() {
+		return this.tumlRuntimeProperty.isQualified();
+	}
+	
+	@Override
+	public boolean isInverseQualified() {
+		return this.tumlRuntimeProperty.isInverseQualified();
+	}
+
+	protected void validateQualifiedMultiplicity(Index<Edge> index, Qualifier qualifier) {
+		if (qualifier.isOne()) {
+			long count = index.count(qualifier.getKey(), qualifier.getValue());
+			if (count > 0) {
+				// Add info to exception
+				throw new IllegalStateException("qualifier fails, entry for qualifier already exist");
+			}
+		}
+	}
+
 }

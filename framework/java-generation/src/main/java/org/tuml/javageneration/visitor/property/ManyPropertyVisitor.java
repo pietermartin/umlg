@@ -50,12 +50,12 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
 		OJAnnotatedOperation singleAdder = new OJAnnotatedOperation(propertyWrapper.adder());
 		singleAdder.addParam(propertyWrapper.fieldname(), propertyWrapper.javaBaseTypePath());
 		OJIfStatement ifNotNull = new OJIfStatement(propertyWrapper.fieldname() + " != null");
-		if (!propertyWrapper.hasQualifiers()) {
+//		if (!propertyWrapper.hasQualifiers()) {
 			ifNotNull.addToThenPart("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ")");
-		} else {
-			ifNotNull.addToThenPart("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ", " + propertyWrapper.getQualifiedGetterName() + "("
-					+ propertyWrapper.fieldname() + "))");
-		}
+//		} else {
+//			ifNotNull.addToThenPart("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ", " + propertyWrapper.getQualifiedGetterName() + "("
+//					+ propertyWrapper.fieldname() + "))");
+//		}
 		singleAdder.getBody().addToStatements(ifNotNull);
 		owner.addToOperations(singleAdder);
 

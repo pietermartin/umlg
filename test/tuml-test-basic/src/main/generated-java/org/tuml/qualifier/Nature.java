@@ -2,12 +2,15 @@ package org.tuml.qualifier;
 
 import com.tinkerpop.blueprints.Vertex;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.TinkerIdUtilFactory;
 import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
+import org.tuml.runtime.collection.Qualifier;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TinkerSetImpl;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
@@ -123,6 +126,26 @@ public class Nature extends BaseTinker implements CompositionNode {
 		return getGod();
 	}
 	
+	/** GetQualifiers is called from the collection in order to update the index used to implement the qualifier
+	 * 
+	 * @param tumlRuntimeProperty 
+	 * @param node 
+	 */
+	@Override
+	public List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, TinkerNode node) {
+		List<Qualifier> result = Collections.emptyList();
+		NatureRuntimePropertyEnum runtimeProperty = NatureRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
+		if ( runtimeProperty != null && result.isEmpty() ) {
+			switch ( runtimeProperty ) {
+				default:
+					result = Collections.emptyList();
+				break;
+			}
+		
+		}
+		return result;
+	}
+	
 	@Override
 	public String getUid() {
 		String uid = (String) this.vertex.getProperty("uid");
@@ -212,8 +235,8 @@ public class Nature extends BaseTinker implements CompositionNode {
 	}
 
 	public enum NatureRuntimePropertyEnum implements TumlRuntimeProperty {
-		god(false,false,false,"A_<god>_<nature>",false,false,true,false,1,1),
-		natureName(true,true,false,"tuml-test-basic-model__org__tuml__qualifier__Nature__natureName",false,false,true,false,1,1);
+		god(false,false,false,"A_<god>_<nature>",false,false,true,false,1,1,false,true),
+		natureName(true,true,false,"tuml-test-basic-model__org__tuml__qualifier__Nature__natureName",false,false,true,false,1,1,false,false);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -224,6 +247,8 @@ public class Nature extends BaseTinker implements CompositionNode {
 		private boolean manyToMany;
 		private int upper;
 		private int lower;
+		private boolean qualified;
+		private boolean inverseQualified;
 		/** Constructor for NatureRuntimePropertyEnum
 		 * 
 		 * @param onePrimitive 
@@ -236,8 +261,10 @@ public class Nature extends BaseTinker implements CompositionNode {
 		 * @param manyToMany 
 		 * @param upper 
 		 * @param lower 
+		 * @param qualified 
+		 * @param inverseQualified 
 		 */
-		private NatureRuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+		private NatureRuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower, boolean qualified, boolean inverseQualified) {
 			this.onePrimitive = onePrimitive;
 			this.controllingSide = controllingSide;
 			this.composite = composite;
@@ -248,6 +275,8 @@ public class Nature extends BaseTinker implements CompositionNode {
 			this.manyToMany = manyToMany;
 			this.upper = upper;
 			this.lower = lower;
+			this.qualified = qualified;
+			this.inverseQualified = inverseQualified;
 		}
 	
 		static public NatureRuntimePropertyEnum fromLabel(String label) {
@@ -257,7 +286,7 @@ public class Nature extends BaseTinker implements CompositionNode {
 			if ( natureName.getLabel().equals(label) ) {
 				return natureName;
 			}
-			throw new IllegalStateException();
+			return null;
 		}
 		
 		public String getLabel() {
@@ -280,6 +309,10 @@ public class Nature extends BaseTinker implements CompositionNode {
 			return this.controllingSide;
 		}
 		
+		public boolean isInverseQualified() {
+			return this.inverseQualified;
+		}
+		
 		public boolean isManyToMany() {
 			return this.manyToMany;
 		}
@@ -298,6 +331,10 @@ public class Nature extends BaseTinker implements CompositionNode {
 		
 		public boolean isOneToOne() {
 			return this.oneToOne;
+		}
+		
+		public boolean isQualified() {
+			return this.qualified;
 		}
 		
 		@Override

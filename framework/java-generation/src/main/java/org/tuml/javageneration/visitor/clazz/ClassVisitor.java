@@ -1,5 +1,6 @@
 package org.tuml.javageneration.visitor.clazz;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.uml2.uml.Class;
@@ -55,6 +56,7 @@ public class ClassVisitor extends BaseVisitor implements Visitor<Class> {
 		addCreateComponents(annotatedClass, clazz);
 		addInitVariables(annotatedClass, clazz);
 		addDelete(annotatedClass, clazz);
+		addGetQualifiers(annotatedClass, clazz);
 	}
 
 	@Override
@@ -158,7 +160,7 @@ public class ClassVisitor extends BaseVisitor implements Visitor<Class> {
 		TinkerGenerationUtil.addOverrideAnnotation(initialiseProperty);
 		initialiseProperty.addParam("tumlRuntimeProperty", TinkerGenerationUtil.tumlRuntimePropertyPathName.getCopy());
 		if (!clazz.getGeneralizations().isEmpty()) {
-			initialiseProperty.getBody().addToStatements("super.initialiseProperties()");
+			initialiseProperty.getBody().addToStatements("super.initialiseProperty(tumlRuntimeProperty)");
 		}
 		annotatedClass.addToOperations(initialiseProperty);
 
@@ -265,6 +267,16 @@ public class ClassVisitor extends BaseVisitor implements Visitor<Class> {
 		lowerField.setName("lower");
 		ojEnum.addToFields(lowerField);
 
+		OJField qualifiedField = new OJField();
+		qualifiedField.setType(new OJPathName("boolean"));
+		qualifiedField.setName("qualified");
+		ojEnum.addToFields(qualifiedField);
+
+		OJField inverseQualifiedField = new OJField();
+		inverseQualifiedField.setType(new OJPathName("boolean"));
+		inverseQualifiedField.setName("inverseQualified");
+		ojEnum.addToFields(inverseQualifiedField);
+
 		ojEnum.implementGetter();
 		ojEnum.createConstructorFromFields();
 
@@ -342,10 +354,20 @@ public class ClassVisitor extends BaseVisitor implements Visitor<Class> {
 				lowerAttribute.setInitExp(Integer.toString(pWrap.getLower()));
 				ojLiteral.addToAttributeValues(lowerAttribute);
 
+				OJField qualifiedAttribute = new OJField();
+				qualifiedAttribute.setType(new OJPathName("boolean"));
+				qualifiedAttribute.setInitExp(Boolean.toString(pWrap.isQualified()));
+				ojLiteral.addToAttributeValues(qualifiedAttribute);
+
+				OJField inverseQualifiedAttribute = new OJField();
+				inverseQualifiedAttribute.setType(new OJPathName("boolean"));
+				inverseQualifiedAttribute.setInitExp(Boolean.toString(pWrap.isInverseQualified()));
+				ojLiteral.addToAttributeValues(inverseQualifiedAttribute);
+
 				ojEnum.addToLiterals(ojLiteral);
 			}
 		}
-		fromLabel.getBody().addToStatements("throw new IllegalStateException()");
+		fromLabel.getBody().addToStatements("return null");
 	}
 
 	private void addInitVariables(OJAnnotatedClass annotatedClass, Class clazz) {
@@ -383,6 +405,52 @@ public class ClassVisitor extends BaseVisitor implements Visitor<Class> {
 
 	private void implementTumlNode(OJAnnotatedClass annotatedClass) {
 		annotatedClass.addToImplementedInterfaces(TinkerGenerationUtil.TINKER_NODE);
+	}
+
+	private void addGetQualifiers(OJAnnotatedClass annotatedClass, Class clazz) {
+		OJAnnotatedOperation getQualifiers = new OJAnnotatedOperation("getQualifiers");
+		TinkerGenerationUtil.addOverrideAnnotation(getQualifiers);
+		getQualifiers.setComment("getQualifiers is called from the collection in order to update the index used to implement the qualifier");
+		getQualifiers.addParam("tumlRuntimeProperty", TinkerGenerationUtil.tumlRuntimePropertyPathName.getCopy());
+		getQualifiers.addParam("node", TinkerGenerationUtil.TINKER_NODE);
+		getQualifiers.setReturnType(new OJPathName("java.util.List").addToGenerics(TinkerGenerationUtil.TINKER_QUALIFIER_PATHNAME));
+		annotatedClass.addToOperations(getQualifiers);
+
+		OJField result = null;
+		if (!clazz.getGeneralizations().isEmpty()) {
+			result = new OJField(getQualifiers.getBody(), "result", getQualifiers.getReturnType(), "super.getQualifiers(tumlRuntimeProperty, node)"); 
+		} else {
+			result = new OJField(getQualifiers.getBody(), "result", getQualifiers.getReturnType(), "Collections.emptyList()"); 
+		}
+		
+		OJField runtimeProperty = new OJField(getQualifiers.getBody(), "runtimeProperty", new OJPathName(TumlClassOperations.propertyEnumName(clazz)));
+		runtimeProperty.setInitExp(TumlClassOperations.propertyEnumName(clazz) + ".fromLabel(tumlRuntimeProperty.getLabel())");
+		
+		OJIfStatement ifRuntimePropertyNotNull = new OJIfStatement(runtimeProperty.getName() + " != null && result.isEmpty()");
+		getQualifiers.getBody().addToStatements(ifRuntimePropertyNotNull);
+		
+		OJSwitchStatement ojSwitchStatement = new OJSwitchStatement();
+		ojSwitchStatement.setCondition("runtimeProperty");
+		ifRuntimePropertyNotNull.addToThenPart(ojSwitchStatement);
+		
+		for (Property p : TumlClassOperations.getAllOwnedProperties(clazz)) {
+			PropertyWrapper pWrap = new PropertyWrapper(p);
+			if (pWrap.isQualified()) {
+				OJSwitchCase ojSwitchCase = new OJSwitchCase();
+				ojSwitchCase.setLabel(pWrap.fieldname());
+				OJSimpleStatement statement = new OJSimpleStatement("result = " + pWrap.getQualifiedGetterName() + "((" + pWrap.getType().getName() + ")node)");
+				statement.setName(pWrap.fieldname());
+				ojSwitchCase.getBody().addToStatements(statement);
+				annotatedClass.addToImports(pWrap.javaImplTypePath());
+				ojSwitchStatement.addToCases(ojSwitchCase);
+			}
+		}
+		OJSwitchCase ojSwitchCase = new OJSwitchCase();
+		ojSwitchCase.getBody().addToStatements("result = Collections.emptyList()");
+		ojSwitchStatement.setDefCase(ojSwitchCase);
+		
+		getQualifiers.getBody().addToStatements("return " + result.getName());
+		annotatedClass.addToImports("java.util.Collections");
 	}
 
 }

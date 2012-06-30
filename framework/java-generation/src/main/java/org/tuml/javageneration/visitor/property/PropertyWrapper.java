@@ -1331,6 +1331,18 @@ public class PropertyWrapper implements Property {
 		return !this.property.getQualifiers().isEmpty();
 	}
 
+	public boolean isQualified() {
+		return hasQualifiers();
+	}
+
+	public boolean isInverseQualified() {
+		if (getOtherEnd() != null) {
+			return new PropertyWrapper(getOtherEnd()).isQualified();
+		} else {
+			return false;
+		}
+	}
+
 	public boolean isQualifier() {
 		Element owner = this.property.getOwner();
 		return owner instanceof Property && ((Property) owner).getQualifiers().contains(this.property);
@@ -1440,7 +1452,7 @@ public class PropertyWrapper implements Property {
 	public OJPathName getQualifierContextPathName() {
 		return TumlClassOperations.getPathName(getType());
 	}
-	
+
 	public Type getQualifierContext() {
 		if (!isQualifier()) {
 			throw new IllegalStateException("getQualifierContext can only be called on a qualifier");
@@ -1448,7 +1460,7 @@ public class PropertyWrapper implements Property {
 		Property owner = (Property) getOwner();
 		return owner.getType();
 	}
-	
+
 	public boolean qualifierHasCorrespondingDerivedProperty() {
 		if (!isQualifier()) {
 			throw new IllegalStateException("getCorrespondingDerivedProperty can only be called on a qualifier");
@@ -1459,6 +1471,5 @@ public class PropertyWrapper implements Property {
 	public String getQualifiedGetterName() {
 		return "getQualifierFor" + StringUtils.capitalize(getName());
 	}
-	
-	
+
 }

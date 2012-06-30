@@ -3,11 +3,14 @@ package org.tuml;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.TinkerIdUtilFactory;
+import org.tuml.runtime.collection.Qualifier;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TinkerSetImpl;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
@@ -105,6 +108,26 @@ public class InterfaceRealization1 extends BaseTinker implements TinkerNode, Int
 		return TinkerIdUtilFactory.getIdUtil().getVersion(this.vertex);
 	}
 	
+	/** GetQualifiers is called from the collection in order to update the index used to implement the qualifier
+	 * 
+	 * @param tumlRuntimeProperty 
+	 * @param node 
+	 */
+	@Override
+	public List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, TinkerNode node) {
+		List<Qualifier> result = Collections.emptyList();
+		InterfaceRealization1RuntimePropertyEnum runtimeProperty = InterfaceRealization1RuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
+		if ( runtimeProperty != null && result.isEmpty() ) {
+			switch ( runtimeProperty ) {
+				default:
+					result = Collections.emptyList();
+				break;
+			}
+		
+		}
+		return result;
+	}
+	
 	@Override
 	public String getUid() {
 		String uid = (String) this.vertex.getProperty("uid");
@@ -183,8 +206,8 @@ public class InterfaceRealization1 extends BaseTinker implements TinkerNode, Int
 	}
 
 	public enum InterfaceRealization1RuntimePropertyEnum implements TumlRuntimeProperty {
-		name(true,true,false,"tuml-test-basic-model__org__tuml__Interface1__name",false,false,true,false,1,1),
-		interface2(false,true,true,"A_<interface1>_<interface2>",false,true,false,false,-1,0);
+		name(true,true,false,"tuml-test-basic-model__org__tuml__Interface1__name",false,false,true,false,1,1,false,false),
+		interface2(false,true,true,"A_<interface1>_<interface2>",false,true,false,false,-1,0,false,false);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -195,6 +218,8 @@ public class InterfaceRealization1 extends BaseTinker implements TinkerNode, Int
 		private boolean manyToMany;
 		private int upper;
 		private int lower;
+		private boolean qualified;
+		private boolean inverseQualified;
 		/** Constructor for InterfaceRealization1RuntimePropertyEnum
 		 * 
 		 * @param onePrimitive 
@@ -207,8 +232,10 @@ public class InterfaceRealization1 extends BaseTinker implements TinkerNode, Int
 		 * @param manyToMany 
 		 * @param upper 
 		 * @param lower 
+		 * @param qualified 
+		 * @param inverseQualified 
 		 */
-		private InterfaceRealization1RuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+		private InterfaceRealization1RuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower, boolean qualified, boolean inverseQualified) {
 			this.onePrimitive = onePrimitive;
 			this.controllingSide = controllingSide;
 			this.composite = composite;
@@ -219,6 +246,8 @@ public class InterfaceRealization1 extends BaseTinker implements TinkerNode, Int
 			this.manyToMany = manyToMany;
 			this.upper = upper;
 			this.lower = lower;
+			this.qualified = qualified;
+			this.inverseQualified = inverseQualified;
 		}
 	
 		static public InterfaceRealization1RuntimePropertyEnum fromLabel(String label) {
@@ -228,7 +257,7 @@ public class InterfaceRealization1 extends BaseTinker implements TinkerNode, Int
 			if ( interface2.getLabel().equals(label) ) {
 				return interface2;
 			}
-			throw new IllegalStateException();
+			return null;
 		}
 		
 		public String getLabel() {
@@ -251,6 +280,10 @@ public class InterfaceRealization1 extends BaseTinker implements TinkerNode, Int
 			return this.controllingSide;
 		}
 		
+		public boolean isInverseQualified() {
+			return this.inverseQualified;
+		}
+		
 		public boolean isManyToMany() {
 			return this.manyToMany;
 		}
@@ -269,6 +302,10 @@ public class InterfaceRealization1 extends BaseTinker implements TinkerNode, Int
 		
 		public boolean isOneToOne() {
 			return this.oneToOne;
+		}
+		
+		public boolean isQualified() {
+			return this.qualified;
 		}
 		
 		@Override

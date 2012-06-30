@@ -2,7 +2,11 @@ package org.tuml.inheritence;
 
 import com.tinkerpop.blueprints.Vertex;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.tuml.runtime.adaptor.GraphDb;
+import org.tuml.runtime.collection.Qualifier;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.domain.CompositionNode;
 import org.tuml.runtime.domain.TinkerNode;
@@ -56,6 +60,26 @@ public class Mamal extends AbstractSpecies implements CompositionNode {
 		return getGod();
 	}
 	
+	/** GetQualifiers is called from the collection in order to update the index used to implement the qualifier
+	 * 
+	 * @param tumlRuntimeProperty 
+	 * @param node 
+	 */
+	@Override
+	public List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, TinkerNode node) {
+		List<Qualifier> result = super.getQualifiers(tumlRuntimeProperty, node);
+		MamalRuntimePropertyEnum runtimeProperty = MamalRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
+		if ( runtimeProperty != null && result.isEmpty() ) {
+			switch ( runtimeProperty ) {
+				default:
+					result = Collections.emptyList();
+				break;
+			}
+		
+		}
+		return result;
+	}
+	
 	/** This gets called on creation with the compositional owner. The composition owner does not itself need to be a composite node
 	 * 
 	 * @param compositeOwner 
@@ -78,7 +102,7 @@ public class Mamal extends AbstractSpecies implements CompositionNode {
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
-		super.initialiseProperties();
+		super.initialiseProperty(tumlRuntimeProperty);
 		switch ( (MamalRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
 		}
 	}
@@ -100,6 +124,8 @@ public class Mamal extends AbstractSpecies implements CompositionNode {
 		private boolean manyToMany;
 		private int upper;
 		private int lower;
+		private boolean qualified;
+		private boolean inverseQualified;
 		/** Constructor for MamalRuntimePropertyEnum
 		 * 
 		 * @param onePrimitive 
@@ -112,8 +138,10 @@ public class Mamal extends AbstractSpecies implements CompositionNode {
 		 * @param manyToMany 
 		 * @param upper 
 		 * @param lower 
+		 * @param qualified 
+		 * @param inverseQualified 
 		 */
-		private MamalRuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+		private MamalRuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower, boolean qualified, boolean inverseQualified) {
 			this.onePrimitive = onePrimitive;
 			this.controllingSide = controllingSide;
 			this.composite = composite;
@@ -124,10 +152,12 @@ public class Mamal extends AbstractSpecies implements CompositionNode {
 			this.manyToMany = manyToMany;
 			this.upper = upper;
 			this.lower = lower;
+			this.qualified = qualified;
+			this.inverseQualified = inverseQualified;
 		}
 	
 		static public MamalRuntimePropertyEnum fromLabel(String label) {
-			throw new IllegalStateException();
+			return null;
 		}
 		
 		public String getLabel() {
@@ -150,6 +180,10 @@ public class Mamal extends AbstractSpecies implements CompositionNode {
 			return this.controllingSide;
 		}
 		
+		public boolean isInverseQualified() {
+			return this.inverseQualified;
+		}
+		
 		public boolean isManyToMany() {
 			return this.manyToMany;
 		}
@@ -168,6 +202,10 @@ public class Mamal extends AbstractSpecies implements CompositionNode {
 		
 		public boolean isOneToOne() {
 			return this.oneToOne;
+		}
+		
+		public boolean isQualified() {
+			return this.qualified;
 		}
 		
 		@Override
