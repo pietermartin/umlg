@@ -7,7 +7,6 @@ import java.util.Set;
 
 import org.apache.commons.collections.set.ListOrderedSet;
 import org.tuml.runtime.adaptor.GraphDb;
-import org.tuml.runtime.adaptor.NakedTinkerIndex;
 import org.tuml.runtime.domain.TinkerNode;
 
 import com.tinkerpop.blueprints.CloseableIterable;
@@ -17,20 +16,13 @@ import com.tinkerpop.blueprints.Vertex;
 
 public class TinkerQualifiedOrderedSetImpl<E> extends BaseCollection<E> implements TinkerQualifiedOrderedSet<E> {
 
-	// protected ListOrderedSet internalListOrderedSet = new ListOrderedSet();
-	protected NakedTinkerIndex<Edge> index;
-
 	@SuppressWarnings("unchecked")
-	public TinkerQualifiedOrderedSetImpl(TinkerNode owner, String uid, TumlRuntimeProperty multiplicity) {
-		super();
+	public TinkerQualifiedOrderedSetImpl(TinkerNode owner, TumlRuntimeProperty runtimeProperty) {
+		super(owner, runtimeProperty);
 		this.internalCollection = new ListOrderedSet();
-		this.owner = owner;
-		this.vertex = owner.getVertex();
-		this.parentClass = owner.getClass();
-		this.tumlRuntimeProperty = multiplicity;
-		this.index = GraphDb.getDb().getIndex(uid + ":::" + getLabel(), Edge.class);
+		this.index = GraphDb.getDb().getIndex(owner.getUid() + ":::" + getLabel(), Edge.class);
 		if (this.index == null) {
-			this.index = GraphDb.getDb().createIndex(uid + ":::" + getLabel(), Edge.class);
+			this.index = GraphDb.getDb().createIndex(owner.getUid() + ":::" + getLabel(), Edge.class);
 		}
 	}
 
@@ -39,43 +31,23 @@ public class TinkerQualifiedOrderedSetImpl<E> extends BaseCollection<E> implemen
 	}
 
 	@Override
-	public boolean add(E e, List<Qualifier> qualifiers) {
-		maybeCallInit(e);
-		maybeLoad();
-		validateQualifiedMultiplicity(qualifiers);
-		boolean result = this.getInternalListOrderedSet().add(e);
-		if (result) {
-			Edge edge = addInternal(e);
-			// Edge can only be null on isOneToMany, toOneToOne which is a
-			// String, Interger, Boolean or primitive
-			if (edge == null && !isOnePrimitive()) {
-				throw new IllegalStateException("Edge can only be null on isOneToMany, toOneToOne which is a String, Interger, Boolean or primitive");
-			}
-			if (edge != null) {
-				this.index.put("index", new Float(this.getInternalListOrderedSet().size() - 1), edge);
-				getVertexForDirection(edge).setProperty("tinkerIndex", new Float(this.getInternalListOrderedSet().size() - 1));
-				addQualifierToIndex(edge, qualifiers);
-			}
-		}
-		return result;
+	protected void doWithEdgeAfterAddition(Edge edge, E e) {
+		this.index.put("index", new Float(this.getInternalListOrderedSet().size() - 1), edge);
+		getVertexForDirection(edge).setProperty("tinkerIndex", new Float(this.getInternalListOrderedSet().size() - 1));
+		addQualifierToIndex(edge, e);
 	}
-
+	
 	@Override
-	public void add(int indexOf, E e, List<Qualifier> qualifiers) {
+	public void add(int indexOf, E e) {
 		maybeCallInit(e);
 		maybeLoad();
 		Edge edge = addToListAndListIndex(indexOf, e);
-		addQualifierToIndex(edge, qualifiers);
+		addQualifierToIndex(edge, e);
 	}
 
 	@Override
 	public boolean add(E e) {
 		throw new IllegalStateException("This method can not be called on a qualified association. Call add(E, List<Qualifier>) instead");
-	}
-
-	@Override
-	public void add(int indexOf, E e) {
-		throw new IllegalStateException("This method can not be called on a qualified association. Call add(int, E, List<Qualifier>) instead");
 	}
 
 	@SuppressWarnings("unchecked")
@@ -85,7 +57,7 @@ public class TinkerQualifiedOrderedSetImpl<E> extends BaseCollection<E> implemen
 		this.getInternalListOrderedSet().add(indexOf, e);
 		Edge edge = addInternal(e);
 		// Edge can only be null on isOneToMany, toOneToOne which is a
-		// String, Interger, Boolean or primitive
+		// String, Integer, Boolean or primitive
 		if (edge == null && !isOnePrimitive()) {
 			throw new IllegalStateException("Edge can only be null on isOneToMany, toOneToOne which is a String, Interger, Boolean or primitive");
 		}

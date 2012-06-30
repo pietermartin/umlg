@@ -155,10 +155,7 @@ public final class TumlPropertyOperations extends PropertyOperations {
 
 	private static OJSimpleStatement getDefaultTinkerCollectionInitalisation(Property p, BehavioredClassifier propertyConcreteOwner, OJPathName collectionPathName) {
 		OJSimpleStatement ojSimpleStatement = new OJSimpleStatement(" new " + collectionPathName.getCollectionTypeName() + "(this");
-
 		if (p.getQualifiers().isEmpty() && p.isOrdered()) {
-			ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", getUid()");
-		} else if (!p.getQualifiers().isEmpty()) {
 			ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", getUid()");
 		}
 		ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", " + TumlClassOperations.propertyEnumName(propertyConcreteOwner) + "." + fieldName(p));

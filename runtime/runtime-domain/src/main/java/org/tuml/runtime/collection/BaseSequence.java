@@ -6,7 +6,6 @@ import java.util.ListIterator;
 import java.util.Set;
 
 import org.tuml.runtime.adaptor.GraphDb;
-import org.tuml.runtime.adaptor.NakedTinkerIndex;
 import org.tuml.runtime.domain.TinkerAuditableNode;
 import org.tuml.runtime.domain.TinkerNode;
 
@@ -17,10 +16,22 @@ import com.tinkerpop.blueprints.Vertex;
 
 public abstract class BaseSequence<E> extends BaseCollection<E> implements TinkerSequence<E> {
 
-	protected NakedTinkerIndex<Edge> index;
-
+	public BaseSequence(TinkerNode owner, TumlRuntimeProperty runtimeProperty) {
+		super(owner, runtimeProperty);
+		this.index = GraphDb.getDb().getIndex(owner.getUid() + ":::" + getLabel(), Edge.class);
+		if (this.index == null) {
+			this.index = GraphDb.getDb().createIndex(owner.getUid() + ":::" + getLabel(), Edge.class);
+		}		
+	}
+	
 	protected List<E> getInternalList() {
 		return (List<E>) this.internalCollection;
+	}
+	
+	@Override
+	protected void doWithEdgeAfterAddition(Edge edge, E e) {
+		this.index.put("index", new Float(this.getInternalList().size() - 1), edge);
+		getVertexForDirection(edge).setProperty("tinkerIndex", new Float(this.getInternalList().size() - 1));
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -55,6 +66,11 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
 		this.getInternalList().add(indexOf, e);
 		Edge edge = addInternal(e);
 
+		// Edge can only be null on a one primitive
+		if (edge == null && !isOnePrimitive()) {
+			throw new IllegalStateException("Edge can only be null on isOne which is a String, Interger, Boolean or primitive");
+		}
+		
 		float min;
 		float max;
 		if (e instanceof TinkerNode) {

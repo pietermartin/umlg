@@ -1,6 +1,5 @@
 package org.tuml.javageneration.visitor.clazz;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.uml2.uml.Class;

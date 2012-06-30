@@ -1,15 +1,21 @@
 package org.tuml.runtime.collection;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
-import com.tinkerpop.blueprints.Vertex;
+import org.tuml.runtime.domain.TinkerNode;
 
 public abstract class BaseSet<E> extends BaseCollection<E> implements TinkerSet<E> {
 
-	protected Map<Object, Vertex> internalVertexMap = new HashMap<Object, Vertex>();
+	public BaseSet() {
+		super();
+		this.internalCollection = new HashSet<E>();
+	}
+	
+	public BaseSet(TinkerNode owner, TumlRuntimeProperty runtimeProperty) {
+		super(owner, runtimeProperty);
+		this.internalCollection = new HashSet<E>();
+	}
 
 	protected Set<E> getInternalSet() {
 		return (Set<E>) this.internalCollection;

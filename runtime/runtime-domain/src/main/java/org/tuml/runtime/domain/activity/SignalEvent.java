@@ -1,6 +1,9 @@
 package org.tuml.runtime.domain.activity;
 
+import java.util.List;
+
 import org.tuml.runtime.adaptor.GraphDb;
+import org.tuml.runtime.collection.Qualifier;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.domain.ISignal;
 import org.tuml.runtime.domain.TinkerNode;
@@ -62,6 +65,11 @@ public class SignalEvent extends Event {
 	public void delete() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, TinkerNode node) {
+		return null;
 	}
 	
 }

@@ -30,6 +30,8 @@ public class TestQualifier extends BaseLocalDbTest {
 		God testGod = new God(god.getVertex());
 		Nature testNature = testGod.getNatureForNatureQualifier1("natureName2");
 		Assert.assertNotNull(testNature);
+		testNature = testGod.getNatureForNatureQualifier1("natureNameX");
+		Assert.assertNull(testNature);
 		
 	}
 

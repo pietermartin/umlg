@@ -4,81 +4,75 @@ import java.util.List;
 import java.util.Set;
 
 import org.tuml.runtime.adaptor.GraphDb;
-import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
-import org.tuml.runtime.domain.CompositionNode;
 import org.tuml.runtime.domain.TinkerNode;
 
-import com.google.common.collect.HashMultiset;
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.Index;
 import com.tinkerpop.blueprints.Vertex;
 
 public class TinkerQualifiedBagImpl<E> extends BaseBag<E> implements TinkerQualifiedBag<E> {
 
-	private Index<Edge> index;
-
-	public TinkerQualifiedBagImpl(TinkerNode owner, String uid, TumlRuntimeProperty multiplicity) {
-		super();
-		this.internalCollection = HashMultiset.create();
-		this.owner = owner;
-		this.vertex = owner.getVertex();
-		this.parentClass = owner.getClass();
-		this.tumlRuntimeProperty = multiplicity;
-		this.index = GraphDb.getDb().getIndex(uid + ":::" + getLabel(), Edge.class);
+	public TinkerQualifiedBagImpl(TinkerNode owner, TumlRuntimeProperty runtimeProperty) {
+		super(owner, runtimeProperty);
+		this.index = GraphDb.getDb().getIndex(owner.getUid() + ":::" + getLabel(), Edge.class);
 		if (this.index == null) {
-			this.index = GraphDb.getDb().createIndex(uid + ":::" + getLabel(), Edge.class);
+			this.index = GraphDb.getDb().createIndex(owner.getUid() + ":::" + getLabel(), Edge.class);
 		}
 	}
 
 	@Override
-	public boolean add(E e, List<Qualifier> qualifiers) {
-		maybeCallInit(e);
-		maybeLoad();
-
-		validateQualifiedMultiplicity(qualifiers);
-
-		boolean result = this.getInternalBag().add(e);
-		Edge edge = null;
-		if (result) {
-			edge = addInternal(e);
-		} else {
-			if (!this.isManyToMany()) {
-				throw new IllegalStateException("Only with many to many relationship can the edge already have been created");
-			}
-			Vertex v;
-			if (e instanceof TinkerNode) {
-				TinkerNode node = (TinkerNode) e;
-				if (e instanceof CompositionNode) {
-					TransactionThreadEntityVar.setNewEntity((CompositionNode) node);
-				}
-				v = node.getVertex();
-				Set<Edge> edgesBetween = GraphDb.getDb().getEdgesBetween(this.vertex, v, this.getLabel());
-				if (edgesBetween.size() != 1) {
-					throw new IllegalStateException("A set can only have one edge between the two ends");
-				}
-				edge = edgesBetween.iterator().next();
-			} else {
-				throw new IllegalStateException("Embedded relationships can not be many to many");
-			}
-		}
-		
-		// Edge can only be null on isOneToMany, toOneToOne which is a
-		// String, Interger, Boolean or primitive
-		if (edge == null && !isOnePrimitive()) {
-			throw new IllegalStateException("Edge can only be null on isOneToMany, toOneToOne which is a String, Interger, Boolean or primitive");
-		}
-		if (edge != null) {
-			addQualifierToIndex(edge, qualifiers);
-		}
-		return result;
-
+	protected void doWithEdgeAfterAddition(Edge edge, E e) {
+		addQualifierToIndex(edge, e);
 	}
-
-	@Override
-	public boolean add(E e) {
-		throw new IllegalStateException("This method can not be called on a qualified association. Call add(E, List<Qualifier>) instead");
-	}
+	
+//	@Override
+//	public boolean add(E e, List<Qualifier> qualifiers) {
+//		maybeCallInit(e);
+//		maybeLoad();
+//
+//		validateQualifiedMultiplicity(qualifiers);
+//
+//		boolean result = this.getInternalBag().add(e);
+//		Edge edge = null;
+//		if (result) {
+//			edge = addInternal(e);
+//		} else {
+//			if (!this.isManyToMany()) {
+//				throw new IllegalStateException("Only with many to many relationship can the edge already have been created");
+//			}
+//			Vertex v;
+//			if (e instanceof TinkerNode) {
+//				TinkerNode node = (TinkerNode) e;
+//				if (e instanceof CompositionNode) {
+//					TransactionThreadEntityVar.setNewEntity((CompositionNode) node);
+//				}
+//				v = node.getVertex();
+//				Set<Edge> edgesBetween = GraphDb.getDb().getEdgesBetween(this.vertex, v, this.getLabel());
+//				if (edgesBetween.size() != 1) {
+//					throw new IllegalStateException("A set can only have one edge between the two ends");
+//				}
+//				edge = edgesBetween.iterator().next();
+//			} else {
+//				throw new IllegalStateException("Embedded relationships can not be many to many");
+//			}
+//		}
+//		
+//		// Edge can only be null on isOneToMany, toOneToOne which is a
+//		// String, Interger, Boolean or primitive
+//		if (edge == null && !isOnePrimitive()) {
+//			throw new IllegalStateException("Edge can only be null on isOneToMany, toOneToOne which is a String, Interger, Boolean or primitive");
+//		}
+//		if (edge != null) {
+//			addQualifierToIndex(edge, qualifiers);
+//		}
+//		return result;
+//
+//	}
+//
+//	@Override
+//	public boolean add(E e) {
+//		throw new IllegalStateException("This method can not be called on a qualified association. Call add(E, List<Qualifier>) instead");
+//	}
 
 	@Override
 	public boolean remove(Object o) {

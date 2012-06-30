@@ -1,7 +1,5 @@
 package org.tuml.runtime.collection;
 
-import java.util.HashSet;
-
 import com.tinkerpop.blueprints.CloseableIterable;
 import com.tinkerpop.blueprints.Edge;
 
@@ -11,7 +9,6 @@ public class TinkerSetClosableSequenceImpl<E> extends BaseSet<E> implements Tink
 
 	public TinkerSetClosableSequenceImpl(CloseableIterable<Edge> closeableSequence) {
 		super();
-		this.internalCollection = new HashSet<E>();
 		this.closeableIterable = closeableSequence;
 	}
 
@@ -27,6 +24,11 @@ public class TinkerSetClosableSequenceImpl<E> extends BaseSet<E> implements Tink
 
 	@Override
 	public boolean remove(Object o) {
+		throw new IllegalStateException("This set is read only! It is constructed from a indexed search result");
+	}
+
+	@Override
+	protected void doWithEdgeAfterAddition(Edge edge, E e) {
 		throw new IllegalStateException("This set is read only! It is constructed from a indexed search result");
 	}
 

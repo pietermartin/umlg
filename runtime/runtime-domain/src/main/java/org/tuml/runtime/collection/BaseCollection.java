@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.tuml.runtime.adaptor.GraphDb;
+import org.tuml.runtime.adaptor.NakedTinkerIndex;
 import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
 import org.tuml.runtime.adaptor.TransactionThreadVar;
 import org.tuml.runtime.domain.CompositionNode;
@@ -23,10 +24,7 @@ import com.tinkerpop.blueprints.Vertex;
 public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimeProperty {
 
 	protected Collection<E> internalCollection;
-	// protected boolean composite;
-	// On a compositional association inverse is true for the set children
-	// protected boolean controllingSide;
-	// protected boolean manyToMany;
+	protected NakedTinkerIndex<Edge> index;
 	protected boolean loaded = false;
 	protected TinkerNode owner;
 	// This is the vertex of the owner of the collection
@@ -34,6 +32,17 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 	protected Class<?> parentClass;
 	protected Map<Object, Vertex> internalVertexMap = new HashMap<Object, Vertex>();
 	protected TumlRuntimeProperty tumlRuntimeProperty;
+
+	public BaseCollection() {
+	}
+	
+	public BaseCollection(TinkerNode owner, TumlRuntimeProperty runtimeProperty) {
+		super();
+		this.owner = owner;
+		this.vertex = owner.getVertex();
+		this.parentClass = owner.getClass();
+		this.tumlRuntimeProperty = runtimeProperty;
+	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected void loadFromVertex() {
@@ -105,58 +114,21 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 		if (result) {
 			Edge edge = addInternal(e);
 
-			// if is qualified update index
-			if (isQualified()) {
-				//Can only qualify TinkerNode's
-				if (!(e instanceof TinkerNode)) {
-					throw new IllegalStateException("Primitive properties can not be qualified!");
-				}
-				
-				//Create index lazily
-				Index<Edge> index = GraphDb.getDb().getIndex(this.owner.getUid() + ":::" + getLabel(), Edge.class);
-				if (index == null) {
-					index = GraphDb.getDb().createIndex(this.owner.getUid() + ":::" + getLabel(), Edge.class);
-				}
-				addQualifierToIndex(index, edge, this.owner, (TinkerNode)e);
+			// Edge can only be null on a one primitive
+			if (edge == null && !isOnePrimitive()) {
+				throw new IllegalStateException("Edge can only be null on isOne which is a String, Interger, Boolean or primitive");
 			}
 			
-			// if is qualified update index
-			if (isInverseQualified()) {
-				//Can only qualify TinkerNode's
-				if (!(e instanceof TinkerNode)) {
-					throw new IllegalStateException("Primitive properties can not be qualified!");
-				}
-				TinkerNode node = (TinkerNode)e;
-
-				//Create index lazily
-				Index<Edge> index = GraphDb.getDb().getIndex(node.getUid() + ":::" + getLabel(), Edge.class);
-				if (index == null) {
-					index = GraphDb.getDb().createIndex(node.getUid() + ":::" + getLabel(), Edge.class);
-				}
-				addQualifierToIndex(index, edge, node, this.owner);
-			}			
-			
-		} else {
+			doWithEdgeAfterAddition(edge, e);
 			
 		}
-
 
 		return result;
 	}
-	
-	/**
-	 * @param nodeBeingIndexed element is the context for the ocl expression representing the qualifier value 
-	 */
-	private void addQualifierToIndex(Index<Edge> index, Edge edge, TinkerNode qualifiedNode, TinkerNode qualifierNode) {
-		for (Qualifier qualifier : qualifiedNode.getQualifiers(this.tumlRuntimeProperty, qualifierNode)) {
-			validateQualifiedMultiplicity(index, qualifier);
-			index.put(qualifier.getKey(), qualifier.getValue(), edge);
-			edge.setProperty("index" + qualifier.getKey(), qualifier.getValue());
-		}
-	}
 
+	protected abstract void doWithEdgeAfterAddition(Edge edge, E e);
 
-	private void validateMultiplicityForAdditionalElement() {
+	protected void validateMultiplicityForAdditionalElement() {
 		if (!isValid(size() + 1)) {
 			throw new IllegalStateException(String.format("The collection's multiplicity is (lower = %s, upper = %s). Current size = %s. It can not accept another element.",
 					getLower(), getUpper(), size()));
@@ -216,7 +188,8 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 				Iterator<Edge> iteratorToOne = getEdges(v).iterator();
 				if (iteratorToOne.hasNext()) {
 					GraphDb.getDb().removeEdge(iteratorToOne.next());
-					//Reinitialise the property as is still holds a reference in memory to the previous 'one'
+					// Reinitialise the property as is still holds a reference
+					// in memory to the previous 'one'
 					node.initialiseProperty(this.tumlRuntimeProperty);
 				}
 			}
@@ -502,12 +475,12 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 	public boolean isValid(int elementCount) {
 		return this.tumlRuntimeProperty.isValid(elementCount);
 	}
-	
+
 	@Override
 	public boolean isQualified() {
 		return this.tumlRuntimeProperty.isQualified();
 	}
-	
+
 	@Override
 	public boolean isInverseQualified() {
 		return this.tumlRuntimeProperty.isInverseQualified();
@@ -523,4 +496,43 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 		}
 	}
 
+	protected void addQualifierToIndex(Edge edge, E e) {
+		// if is qualified update index
+		if (isQualified()) {
+			// Can only qualify TinkerNode's
+			if (!(e instanceof TinkerNode)) {
+				throw new IllegalStateException("Primitive properties can not be qualified!");
+			}
+			addQualifierToIndex(this.index, edge, this.owner, (TinkerNode) e);
+		}
+
+		// if is qualified update index
+		if (isInverseQualified()) {
+			// Can only qualify TinkerNode's
+			if (!(e instanceof TinkerNode)) {
+				throw new IllegalStateException("Primitive properties can not be qualified!");
+			}
+			TinkerNode node = (TinkerNode) e;
+
+			Index<Edge> index = GraphDb.getDb().getIndex(node.getUid() + ":::" + getLabel(), Edge.class);
+			if (index == null) {
+				index = GraphDb.getDb().createIndex(node.getUid() + ":::" + getLabel(), Edge.class);
+			}
+			addQualifierToIndex(index, edge, node, this.owner);
+		}
+	}
+
+	/**
+	 * @param nodeBeingIndexed
+	 *            element is the context for the ocl expression representing the
+	 *            qualifier value
+	 */
+	private void addQualifierToIndex(Index<Edge> index, Edge edge, TinkerNode qualifiedNode, TinkerNode qualifierNode) {
+		for (Qualifier qualifier : qualifiedNode.getQualifiers(this.tumlRuntimeProperty, qualifierNode)) {
+			validateQualifiedMultiplicity(index, qualifier);
+			index.put(qualifier.getKey(), qualifier.getValue(), edge);
+			edge.setProperty("index" + qualifier.getKey(), qualifier.getValue());
+		}
+	}
+	
 }

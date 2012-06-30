@@ -175,14 +175,14 @@ public class God extends BaseTinker implements TinkerNode {
 	@Override
 	public void initialiseProperties() {
 		this.name =  new TinkerSetImpl<String>(this, GodRuntimePropertyEnum.name);
-		this.nature =  new TinkerQualifiedSetImpl<Nature>(this, getUid(), GodRuntimePropertyEnum.nature);
+		this.nature =  new TinkerQualifiedSetImpl<Nature>(this, GodRuntimePropertyEnum.nature);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (GodRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
 			case nature:
-				this.nature =  new TinkerQualifiedSetImpl<Nature>(this, getUid(), GodRuntimePropertyEnum.nature);
+				this.nature =  new TinkerQualifiedSetImpl<Nature>(this, GodRuntimePropertyEnum.nature);
 			break;
 		
 			case name:

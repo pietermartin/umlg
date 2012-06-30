@@ -1,35 +1,29 @@
 package org.tuml.runtime.collection;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.domain.TinkerNode;
 
 import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.Index;
 
 public class TinkerQualifiedSetImpl<E> extends BaseSet<E> implements TinkerQualifiedSet<E> {
 
-	private Index<Edge> index;
-
-	public TinkerQualifiedSetImpl(TinkerNode owner, String uid, TumlRuntimeProperty multiplicity) {
-		super();
-		this.internalCollection = new HashSet<E>();
-		this.owner = owner;
-		this.vertex = owner.getVertex();
-		this.parentClass = owner.getClass();
-		this.tumlRuntimeProperty = multiplicity;
-		this.index = GraphDb.getDb().getIndex(uid + ":::" + getLabel(), Edge.class);
+	public TinkerQualifiedSetImpl(TinkerNode owner, TumlRuntimeProperty runtimeProperty) {
+		super(owner, runtimeProperty);
+		this.index = GraphDb.getDb().getIndex(owner.getUid() + ":::" + getLabel(), Edge.class);
 		if (this.index == null) {
-			this.index = GraphDb.getDb().createIndex(uid + ":::" + getLabel(), Edge.class);
+			this.index = GraphDb.getDb().createIndex(owner.getUid() + ":::" + getLabel(), Edge.class);
 		}
 	}
-
-	public Set<E> getInternalSet() {
-		return (Set<E>) this.internalCollection;
+	
+	@Override
+	protected void doWithEdgeAfterAddition(Edge edge, E e) {
+		addQualifierToIndex(edge, e);
 	}
 
+//	public Set<E> getInternalSet() {
+//		return (Set<E>) this.internalCollection;
+//	}
+//
 //	@Override
 //	public boolean add(E e, List<Qualifier> qualifiers) {
 //		maybeCallInit(e);

@@ -8,7 +8,6 @@ import java.util.Set;
 
 import org.apache.commons.collections.set.ListOrderedSet;
 import org.tuml.runtime.adaptor.GraphDb;
-import org.tuml.runtime.adaptor.NakedTinkerIndex;
 import org.tuml.runtime.domain.TinkerNode;
 
 import com.tinkerpop.blueprints.CloseableIterable;
@@ -18,44 +17,24 @@ import com.tinkerpop.blueprints.Vertex;
 
 public class TinkerOrderedSetImpl<E> extends BaseCollection<E> implements TinkerOrderedSet<E> {
 
-	protected NakedTinkerIndex<Edge> index;
+	@SuppressWarnings("unchecked")
+	public TinkerOrderedSetImpl(TinkerNode owner, TumlRuntimeProperty runtimeProperty) {
+		super(owner, runtimeProperty);
+		this.internalCollection = new ListOrderedSet();
+		this.index = GraphDb.getDb().getIndex(owner.getUid() + ":::" + getLabel(), Edge.class);
+		if (this.index == null) {
+			this.index = GraphDb.getDb().createIndex(owner.getUid() + ":::" + getLabel(), Edge.class);
+		}
+	}
 
 	protected ListOrderedSet getInternalListOrderedSet() {
 		return (ListOrderedSet) this.internalCollection;
 	}
 
-	@SuppressWarnings("unchecked")
-	public TinkerOrderedSetImpl(TinkerNode owner, String uid, TumlRuntimeProperty multiplicity) {
-		super();
-		this.internalCollection = new ListOrderedSet();
-		this.owner = owner;
-		this.vertex = owner.getVertex();
-		this.parentClass = owner.getClass();
-		this.tumlRuntimeProperty = multiplicity;
-		this.index = GraphDb.getDb().getIndex(uid + ":::" + getLabel(), Edge.class);
-		if (this.index == null) {
-			this.index = GraphDb.getDb().createIndex(uid + ":::" + getLabel(), Edge.class);
-		}
-	}
-
 	@Override
-	public boolean add(E e) {
-		maybeCallInit(e);
-		maybeLoad();
-		boolean result = this.getInternalListOrderedSet().add(e);
-		if (result) {
-			Edge edge = addInternal(e);
-			// Edge can only be null on isOneToMany, toOneToOne which is a
-			// String, Interger, Boolean or primitive
-			if (edge == null && !isOnePrimitive()) {
-				throw new IllegalStateException("Edge can only be null on isOneToMany, toOneToOne which is a String, Interger, Boolean or primitive");
-			}
-			if (edge != null) {
-				this.index.put("index", new Float(this.getInternalListOrderedSet().size() - 1), edge);
-				getVertexForDirection(edge).setProperty("tinkerIndex", new Float(this.getInternalListOrderedSet().size() - 1));
-			}
-		}
-		return result;
+	protected void doWithEdgeAfterAddition(Edge edge, E e) {
+		this.index.put("index", new Float(this.getInternalListOrderedSet().size() - 1), edge);
+		getVertexForDirection(edge).setProperty("tinkerIndex", new Float(this.getInternalListOrderedSet().size() - 1));
 	}
 
 	@Override
@@ -70,8 +49,10 @@ public class TinkerOrderedSetImpl<E> extends BaseCollection<E> implements Tinker
 
 	@Override
 	public void add(int indexOf, E e) {
+		// validateMultiplicityForAdditionalElement calls size() which loads the
+		// collection
+		validateMultiplicityForAdditionalElement();
 		maybeCallInit(e);
-		maybeLoad();
 		addToListAndListIndex(indexOf, e);
 	}
 

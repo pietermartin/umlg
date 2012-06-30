@@ -73,4 +73,16 @@ public class TumlRuntimePropertyImpl implements TumlRuntimeProperty {
 		return false;
 	}
 
+	@Override
+	public boolean isQualified() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isInverseQualified() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

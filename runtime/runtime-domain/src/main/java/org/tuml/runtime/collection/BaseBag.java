@@ -2,11 +2,18 @@ package org.tuml.runtime.collection;
 
 import java.util.Set;
 
+import org.tuml.runtime.domain.TinkerNode;
+
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 
 public abstract class BaseBag<E> extends BaseCollection<E> implements TinkerBag<E> {
 
+	public BaseBag(TinkerNode owner, TumlRuntimeProperty runtimeProperty) {
+		super(owner, runtimeProperty);
+		this.internalCollection = HashMultiset.create();
+	}
+	
 	protected Multiset<E> getInternalBag() {
 		return (Multiset<E>) this.internalCollection;
 	}
