@@ -85,4 +85,22 @@ public class TumlRuntimePropertyImpl implements TumlRuntimeProperty {
 		return false;
 	}
 
+	@Override
+	public boolean isOrdered() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isInverseOrdered() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isUnique() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

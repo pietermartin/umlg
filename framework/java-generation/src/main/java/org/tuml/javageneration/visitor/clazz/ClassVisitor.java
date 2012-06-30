@@ -56,6 +56,7 @@ public class ClassVisitor extends BaseVisitor implements Visitor<Class> {
 		addInitVariables(annotatedClass, clazz);
 		addDelete(annotatedClass, clazz);
 		addGetQualifiers(annotatedClass, clazz);
+		addGetSize(annotatedClass, clazz);
 	}
 
 	@Override
@@ -276,6 +277,21 @@ public class ClassVisitor extends BaseVisitor implements Visitor<Class> {
 		inverseQualifiedField.setName("inverseQualified");
 		ojEnum.addToFields(inverseQualifiedField);
 
+		OJField orderedField = new OJField();
+		orderedField.setType(new OJPathName("boolean"));
+		orderedField.setName("ordered");
+		ojEnum.addToFields(orderedField);
+
+		OJField inverseOrderedField = new OJField();
+		inverseOrderedField.setType(new OJPathName("boolean"));
+		inverseOrderedField.setName("inverseOrdered");
+		ojEnum.addToFields(inverseOrderedField);
+
+		OJField uniqueField = new OJField();
+		uniqueField.setType(new OJPathName("boolean"));
+		uniqueField.setName("unique");
+		ojEnum.addToFields(uniqueField);
+
 		ojEnum.implementGetter();
 		ojEnum.createConstructorFromFields();
 
@@ -363,6 +379,21 @@ public class ClassVisitor extends BaseVisitor implements Visitor<Class> {
 				inverseQualifiedAttribute.setInitExp(Boolean.toString(pWrap.isInverseQualified()));
 				ojLiteral.addToAttributeValues(inverseQualifiedAttribute);
 
+				OJField orderedAttribute = new OJField();
+				orderedAttribute.setType(new OJPathName("boolean"));
+				orderedAttribute.setInitExp(Boolean.toString(pWrap.isOrdered()));
+				ojLiteral.addToAttributeValues(orderedAttribute);
+
+				OJField inverseOrderedAttribute = new OJField();
+				inverseOrderedAttribute.setType(new OJPathName("boolean"));
+				inverseOrderedAttribute.setInitExp(Boolean.toString(pWrap.isInverseOrdered()));
+				ojLiteral.addToAttributeValues(inverseOrderedAttribute);
+
+				OJField uniqueAttribute = new OJField();
+				uniqueAttribute.setType(new OJPathName("boolean"));
+				uniqueAttribute.setInitExp(Boolean.toString(pWrap.isUnique()));
+				ojLiteral.addToAttributeValues(uniqueAttribute);
+
 				ojEnum.addToLiterals(ojLiteral);
 			}
 		}
@@ -446,6 +477,51 @@ public class ClassVisitor extends BaseVisitor implements Visitor<Class> {
 		}
 		OJSwitchCase ojSwitchCase = new OJSwitchCase();
 		ojSwitchCase.getBody().addToStatements("result = Collections.emptyList()");
+		ojSwitchStatement.setDefCase(ojSwitchCase);
+		
+		getQualifiers.getBody().addToStatements("return " + result.getName());
+		annotatedClass.addToImports("java.util.Collections");
+	}
+
+	private void addGetSize(OJAnnotatedClass annotatedClass, Class clazz) {
+		OJAnnotatedOperation getQualifiers = new OJAnnotatedOperation("getSize");
+		TinkerGenerationUtil.addOverrideAnnotation(getQualifiers);
+		getQualifiers.setComment("getSize is called from the collection in order to update the index used to implement a sequance's index");
+		getQualifiers.addParam("tumlRuntimeProperty", TinkerGenerationUtil.tumlRuntimePropertyPathName.getCopy());
+		getQualifiers.setReturnType(new OJPathName("int"));
+		annotatedClass.addToOperations(getQualifiers);
+
+		OJField result = null;
+		if (!clazz.getGeneralizations().isEmpty()) {
+			result = new OJField(getQualifiers.getBody(), "result", getQualifiers.getReturnType(), "super.getSize(tumlRuntimeProperty)"); 
+		} else {
+			result = new OJField(getQualifiers.getBody(), "result", getQualifiers.getReturnType(), "0"); 
+		}
+		
+		OJField runtimeProperty = new OJField(getQualifiers.getBody(), "runtimeProperty", new OJPathName(TumlClassOperations.propertyEnumName(clazz)));
+		runtimeProperty.setInitExp(TumlClassOperations.propertyEnumName(clazz) + ".fromLabel(tumlRuntimeProperty.getLabel())");
+		
+		OJIfStatement ifRuntimePropertyNotNull = new OJIfStatement(runtimeProperty.getName() + " != null && result == 0");
+		getQualifiers.getBody().addToStatements(ifRuntimePropertyNotNull);
+		
+		OJSwitchStatement ojSwitchStatement = new OJSwitchStatement();
+		ojSwitchStatement.setCondition("runtimeProperty");
+		ifRuntimePropertyNotNull.addToThenPart(ojSwitchStatement);
+		
+		for (Property p : TumlClassOperations.getAllOwnedProperties(clazz)) {
+			PropertyWrapper pWrap = new PropertyWrapper(p);
+			if (pWrap.isQualified()) {
+				OJSwitchCase ojSwitchCase = new OJSwitchCase();
+				ojSwitchCase.setLabel(pWrap.fieldname());
+				OJSimpleStatement statement = new OJSimpleStatement("result = " + pWrap.getter() + "().size()");
+				statement.setName(pWrap.fieldname());
+				ojSwitchCase.getBody().addToStatements(statement);
+				annotatedClass.addToImports(pWrap.javaImplTypePath());
+				ojSwitchStatement.addToCases(ojSwitchCase);
+			}
+		}
+		OJSwitchCase ojSwitchCase = new OJSwitchCase();
+		ojSwitchCase.getBody().addToStatements("result = 0");
 		ojSwitchStatement.setDefCase(ojSwitchCase);
 		
 		getQualifiers.getBody().addToStatements("return " + result.getName());

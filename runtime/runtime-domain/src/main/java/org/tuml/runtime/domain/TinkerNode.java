@@ -14,4 +14,5 @@ public interface TinkerNode extends PersistentObject {
 	void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty);
 	List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, TinkerNode node);
 	void delete();
+	int getSize(TumlRuntimeProperty tumlRuntimeProperty);
 }

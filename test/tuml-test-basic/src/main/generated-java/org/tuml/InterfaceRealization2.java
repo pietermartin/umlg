@@ -142,6 +142,25 @@ public class InterfaceRealization2 extends BaseTinker implements CompositionNode
 		return result;
 	}
 	
+	/** GetSize is called from the collection in order to update the index used to implement a sequance's index
+	 * 
+	 * @param tumlRuntimeProperty 
+	 */
+	@Override
+	public int getSize(TumlRuntimeProperty tumlRuntimeProperty) {
+		int result = 0;
+		InterfaceRealization2RuntimePropertyEnum runtimeProperty = InterfaceRealization2RuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
+		if ( runtimeProperty != null && result == 0 ) {
+			switch ( runtimeProperty ) {
+				default:
+					result = 0;
+				break;
+			}
+		
+		}
+		return result;
+	}
+	
 	@Override
 	public String getUid() {
 		String uid = (String) this.vertex.getProperty("uid");
@@ -231,8 +250,8 @@ public class InterfaceRealization2 extends BaseTinker implements CompositionNode
 	}
 
 	public enum InterfaceRealization2RuntimePropertyEnum implements TumlRuntimeProperty {
-		interface1(false,false,false,"A_<interface1>_<interface2>",false,false,true,false,1,1,false,false),
-		name(true,true,false,"tuml-test-basic-model__org__tuml__Interface2__name",false,false,true,false,1,1,false,false);
+		interface1(false,false,false,"A_<interface1>_<interface2>",false,false,true,false,1,1,false,false,false,false,true),
+		name(true,true,false,"tuml-test-basic-model__org__tuml__Interface2__name",false,false,true,false,1,1,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -245,6 +264,9 @@ public class InterfaceRealization2 extends BaseTinker implements CompositionNode
 		private int lower;
 		private boolean qualified;
 		private boolean inverseQualified;
+		private boolean ordered;
+		private boolean inverseOrdered;
+		private boolean unique;
 		/** Constructor for InterfaceRealization2RuntimePropertyEnum
 		 * 
 		 * @param onePrimitive 
@@ -259,8 +281,11 @@ public class InterfaceRealization2 extends BaseTinker implements CompositionNode
 		 * @param lower 
 		 * @param qualified 
 		 * @param inverseQualified 
+		 * @param ordered 
+		 * @param inverseOrdered 
+		 * @param unique 
 		 */
-		private InterfaceRealization2RuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower, boolean qualified, boolean inverseQualified) {
+		private InterfaceRealization2RuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower, boolean qualified, boolean inverseQualified, boolean ordered, boolean inverseOrdered, boolean unique) {
 			this.onePrimitive = onePrimitive;
 			this.controllingSide = controllingSide;
 			this.composite = composite;
@@ -273,6 +298,9 @@ public class InterfaceRealization2 extends BaseTinker implements CompositionNode
 			this.lower = lower;
 			this.qualified = qualified;
 			this.inverseQualified = inverseQualified;
+			this.ordered = ordered;
+			this.inverseOrdered = inverseOrdered;
+			this.unique = unique;
 		}
 	
 		static public InterfaceRealization2RuntimePropertyEnum fromLabel(String label) {
@@ -305,6 +333,10 @@ public class InterfaceRealization2 extends BaseTinker implements CompositionNode
 			return this.controllingSide;
 		}
 		
+		public boolean isInverseOrdered() {
+			return this.inverseOrdered;
+		}
+		
 		public boolean isInverseQualified() {
 			return this.inverseQualified;
 		}
@@ -329,8 +361,16 @@ public class InterfaceRealization2 extends BaseTinker implements CompositionNode
 			return this.oneToOne;
 		}
 		
+		public boolean isOrdered() {
+			return this.ordered;
+		}
+		
 		public boolean isQualified() {
 			return this.qualified;
+		}
+		
+		public boolean isUnique() {
+			return this.unique;
 		}
 		
 		@Override

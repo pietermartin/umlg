@@ -146,6 +146,25 @@ public class Nature extends BaseTinker implements CompositionNode {
 		return result;
 	}
 	
+	/** GetSize is called from the collection in order to update the index used to implement a sequance's index
+	 * 
+	 * @param tumlRuntimeProperty 
+	 */
+	@Override
+	public int getSize(TumlRuntimeProperty tumlRuntimeProperty) {
+		int result = 0;
+		NatureRuntimePropertyEnum runtimeProperty = NatureRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
+		if ( runtimeProperty != null && result == 0 ) {
+			switch ( runtimeProperty ) {
+				default:
+					result = 0;
+				break;
+			}
+		
+		}
+		return result;
+	}
+	
 	@Override
 	public String getUid() {
 		String uid = (String) this.vertex.getProperty("uid");
@@ -235,8 +254,8 @@ public class Nature extends BaseTinker implements CompositionNode {
 	}
 
 	public enum NatureRuntimePropertyEnum implements TumlRuntimeProperty {
-		god(false,false,false,"A_<god>_<nature>",false,false,true,false,1,1,false,true),
-		natureName(true,true,false,"tuml-test-basic-model__org__tuml__qualifier__Nature__natureName",false,false,true,false,1,1,false,false);
+		god(false,false,false,"A_<god>_<nature>",false,false,true,false,1,1,false,true,false,false,true),
+		natureName(true,true,false,"tuml-test-basic-model__org__tuml__qualifier__Nature__natureName",false,false,true,false,1,1,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -249,6 +268,9 @@ public class Nature extends BaseTinker implements CompositionNode {
 		private int lower;
 		private boolean qualified;
 		private boolean inverseQualified;
+		private boolean ordered;
+		private boolean inverseOrdered;
+		private boolean unique;
 		/** Constructor for NatureRuntimePropertyEnum
 		 * 
 		 * @param onePrimitive 
@@ -263,8 +285,11 @@ public class Nature extends BaseTinker implements CompositionNode {
 		 * @param lower 
 		 * @param qualified 
 		 * @param inverseQualified 
+		 * @param ordered 
+		 * @param inverseOrdered 
+		 * @param unique 
 		 */
-		private NatureRuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower, boolean qualified, boolean inverseQualified) {
+		private NatureRuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower, boolean qualified, boolean inverseQualified, boolean ordered, boolean inverseOrdered, boolean unique) {
 			this.onePrimitive = onePrimitive;
 			this.controllingSide = controllingSide;
 			this.composite = composite;
@@ -277,6 +302,9 @@ public class Nature extends BaseTinker implements CompositionNode {
 			this.lower = lower;
 			this.qualified = qualified;
 			this.inverseQualified = inverseQualified;
+			this.ordered = ordered;
+			this.inverseOrdered = inverseOrdered;
+			this.unique = unique;
 		}
 	
 		static public NatureRuntimePropertyEnum fromLabel(String label) {
@@ -309,6 +337,10 @@ public class Nature extends BaseTinker implements CompositionNode {
 			return this.controllingSide;
 		}
 		
+		public boolean isInverseOrdered() {
+			return this.inverseOrdered;
+		}
+		
 		public boolean isInverseQualified() {
 			return this.inverseQualified;
 		}
@@ -333,8 +365,16 @@ public class Nature extends BaseTinker implements CompositionNode {
 			return this.oneToOne;
 		}
 		
+		public boolean isOrdered() {
+			return this.ordered;
+		}
+		
 		public boolean isQualified() {
 			return this.qualified;
+		}
+		
+		public boolean isUnique() {
+			return this.unique;
 		}
 		
 		@Override

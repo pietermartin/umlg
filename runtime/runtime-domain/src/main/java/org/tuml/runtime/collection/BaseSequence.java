@@ -28,12 +28,6 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
 		return (List<E>) this.internalCollection;
 	}
 	
-	@Override
-	protected void doWithEdgeAfterAddition(Edge edge, E e) {
-		this.index.put("index", new Float(this.getInternalList().size() - 1), edge);
-		getVertexForDirection(edge).setProperty("tinkerIndex", new Float(this.getInternalList().size() - 1));
-	}
-
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	protected void loadFromVertex() {

@@ -80,6 +80,25 @@ public class Quadped extends Mamal implements CompositionNode {
 		return result;
 	}
 	
+	/** GetSize is called from the collection in order to update the index used to implement a sequance's index
+	 * 
+	 * @param tumlRuntimeProperty 
+	 */
+	@Override
+	public int getSize(TumlRuntimeProperty tumlRuntimeProperty) {
+		int result = super.getSize(tumlRuntimeProperty);
+		QuadpedRuntimePropertyEnum runtimeProperty = QuadpedRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
+		if ( runtimeProperty != null && result == 0 ) {
+			switch ( runtimeProperty ) {
+				default:
+					result = 0;
+				break;
+			}
+		
+		}
+		return result;
+	}
+	
 	/** This gets called on creation with the compositional owner. The composition owner does not itself need to be a composite node
 	 * 
 	 * @param compositeOwner 
@@ -126,6 +145,9 @@ public class Quadped extends Mamal implements CompositionNode {
 		private int lower;
 		private boolean qualified;
 		private boolean inverseQualified;
+		private boolean ordered;
+		private boolean inverseOrdered;
+		private boolean unique;
 		/** Constructor for QuadpedRuntimePropertyEnum
 		 * 
 		 * @param onePrimitive 
@@ -140,8 +162,11 @@ public class Quadped extends Mamal implements CompositionNode {
 		 * @param lower 
 		 * @param qualified 
 		 * @param inverseQualified 
+		 * @param ordered 
+		 * @param inverseOrdered 
+		 * @param unique 
 		 */
-		private QuadpedRuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower, boolean qualified, boolean inverseQualified) {
+		private QuadpedRuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower, boolean qualified, boolean inverseQualified, boolean ordered, boolean inverseOrdered, boolean unique) {
 			this.onePrimitive = onePrimitive;
 			this.controllingSide = controllingSide;
 			this.composite = composite;
@@ -154,6 +179,9 @@ public class Quadped extends Mamal implements CompositionNode {
 			this.lower = lower;
 			this.qualified = qualified;
 			this.inverseQualified = inverseQualified;
+			this.ordered = ordered;
+			this.inverseOrdered = inverseOrdered;
+			this.unique = unique;
 		}
 	
 		static public QuadpedRuntimePropertyEnum fromLabel(String label) {
@@ -180,6 +208,10 @@ public class Quadped extends Mamal implements CompositionNode {
 			return this.controllingSide;
 		}
 		
+		public boolean isInverseOrdered() {
+			return this.inverseOrdered;
+		}
+		
 		public boolean isInverseQualified() {
 			return this.inverseQualified;
 		}
@@ -204,8 +236,16 @@ public class Quadped extends Mamal implements CompositionNode {
 			return this.oneToOne;
 		}
 		
+		public boolean isOrdered() {
+			return this.ordered;
+		}
+		
 		public boolean isQualified() {
 			return this.qualified;
+		}
+		
+		public boolean isUnique() {
+			return this.unique;
 		}
 		
 		@Override

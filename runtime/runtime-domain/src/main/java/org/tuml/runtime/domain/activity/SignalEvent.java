@@ -71,5 +71,11 @@ public class SignalEvent extends Event {
 	public List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, TinkerNode node) {
 		return null;
 	}
+
+	@Override
+	public int getSize(TumlRuntimeProperty tumlRuntimeProperty) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 }

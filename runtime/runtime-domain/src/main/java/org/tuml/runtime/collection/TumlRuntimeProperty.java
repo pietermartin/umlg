@@ -14,4 +14,7 @@ public interface TumlRuntimeProperty {
 	boolean isValid(int elementCount);
 	boolean isQualified();
 	boolean isInverseQualified();
+	boolean isOrdered();
+	boolean isInverseOrdered();
+	boolean isUnique();
 }

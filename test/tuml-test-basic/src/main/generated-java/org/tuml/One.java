@@ -128,6 +128,25 @@ public class One extends BaseTinker implements TinkerNode {
 		return result;
 	}
 	
+	/** GetSize is called from the collection in order to update the index used to implement a sequance's index
+	 * 
+	 * @param tumlRuntimeProperty 
+	 */
+	@Override
+	public int getSize(TumlRuntimeProperty tumlRuntimeProperty) {
+		int result = 0;
+		OneRuntimePropertyEnum runtimeProperty = OneRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
+		if ( runtimeProperty != null && result == 0 ) {
+			switch ( runtimeProperty ) {
+				default:
+					result = 0;
+				break;
+			}
+		
+		}
+		return result;
+	}
+	
 	@Override
 	public String getUid() {
 		String uid = (String) this.vertex.getProperty("uid");
@@ -206,8 +225,8 @@ public class One extends BaseTinker implements TinkerNode {
 	}
 
 	public enum OneRuntimePropertyEnum implements TumlRuntimeProperty {
-		many(false,true,true,"A_<one>_<many>",false,true,false,false,-1,0,false,false),
-		name(true,true,false,"tuml-test-basic-model__org__tuml__One__name",false,false,true,false,1,1,false,false);
+		many(false,true,true,"A_<one>_<many>",false,true,false,false,-1,0,false,false,false,false,true),
+		name(true,true,false,"tuml-test-basic-model__org__tuml__One__name",false,false,true,false,1,1,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -220,6 +239,9 @@ public class One extends BaseTinker implements TinkerNode {
 		private int lower;
 		private boolean qualified;
 		private boolean inverseQualified;
+		private boolean ordered;
+		private boolean inverseOrdered;
+		private boolean unique;
 		/** Constructor for OneRuntimePropertyEnum
 		 * 
 		 * @param onePrimitive 
@@ -234,8 +256,11 @@ public class One extends BaseTinker implements TinkerNode {
 		 * @param lower 
 		 * @param qualified 
 		 * @param inverseQualified 
+		 * @param ordered 
+		 * @param inverseOrdered 
+		 * @param unique 
 		 */
-		private OneRuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower, boolean qualified, boolean inverseQualified) {
+		private OneRuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower, boolean qualified, boolean inverseQualified, boolean ordered, boolean inverseOrdered, boolean unique) {
 			this.onePrimitive = onePrimitive;
 			this.controllingSide = controllingSide;
 			this.composite = composite;
@@ -248,6 +273,9 @@ public class One extends BaseTinker implements TinkerNode {
 			this.lower = lower;
 			this.qualified = qualified;
 			this.inverseQualified = inverseQualified;
+			this.ordered = ordered;
+			this.inverseOrdered = inverseOrdered;
+			this.unique = unique;
 		}
 	
 		static public OneRuntimePropertyEnum fromLabel(String label) {
@@ -280,6 +308,10 @@ public class One extends BaseTinker implements TinkerNode {
 			return this.controllingSide;
 		}
 		
+		public boolean isInverseOrdered() {
+			return this.inverseOrdered;
+		}
+		
 		public boolean isInverseQualified() {
 			return this.inverseQualified;
 		}
@@ -304,8 +336,16 @@ public class One extends BaseTinker implements TinkerNode {
 			return this.oneToOne;
 		}
 		
+		public boolean isOrdered() {
+			return this.ordered;
+		}
+		
 		public boolean isQualified() {
 			return this.qualified;
+		}
+		
+		public boolean isUnique() {
+			return this.unique;
 		}
 		
 		@Override

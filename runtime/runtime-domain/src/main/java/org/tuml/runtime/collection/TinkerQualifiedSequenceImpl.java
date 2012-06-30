@@ -16,17 +16,15 @@ public class TinkerQualifiedSequenceImpl<E> extends BaseSequence<E> implements T
 	}
 
 	@Override
-	protected void doWithEdgeAfterAddition(Edge edge, E e) {
-		super.doWithEdgeAfterAddition(edge, e);
-		addQualifierToIndex(edge, e);
-	}
-	
-	@Override
 	public void add(int indexOf, E e) {
 		maybeCallInit(e);
 		maybeLoad();
 		Edge edge = addToListAndListIndex(indexOf, e);
-		addQualifierToIndex(edge, e);
+		// Can only qualify TinkerNode's
+		if (!(e instanceof TinkerNode)) {
+			throw new IllegalStateException("Primitive properties can not be qualified!");
+		}
+		addQualifierToIndex(edge, (TinkerNode)e);
 	}
 
 	@Override

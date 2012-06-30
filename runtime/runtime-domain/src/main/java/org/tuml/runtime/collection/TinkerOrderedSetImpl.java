@@ -32,12 +32,6 @@ public class TinkerOrderedSetImpl<E> extends BaseCollection<E> implements Tinker
 	}
 
 	@Override
-	protected void doWithEdgeAfterAddition(Edge edge, E e) {
-		this.index.put("index", new Float(this.getInternalListOrderedSet().size() - 1), edge);
-		getVertexForDirection(edge).setProperty("tinkerIndex", new Float(this.getInternalListOrderedSet().size() - 1));
-	}
-
-	@Override
 	public boolean addAll(int index, Collection<? extends E> c) {
 		maybeLoad();
 		int indexOf = index;

@@ -820,6 +820,10 @@ public class PropertyWrapper implements Property {
 		return this.property.isOrdered();
 	}
 
+	public boolean isInverseOrdered() {
+		return getOtherEnd() != null && getOtherEnd().isOrdered();
+	}
+
 	@Override
 	public void setIsOrdered(boolean value) {
 		throw new RuntimeException("Not supported");

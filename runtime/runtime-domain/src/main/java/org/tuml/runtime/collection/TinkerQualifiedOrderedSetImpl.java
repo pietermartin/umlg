@@ -31,18 +31,15 @@ public class TinkerQualifiedOrderedSetImpl<E> extends BaseCollection<E> implemen
 	}
 
 	@Override
-	protected void doWithEdgeAfterAddition(Edge edge, E e) {
-		this.index.put("index", new Float(this.getInternalListOrderedSet().size() - 1), edge);
-		getVertexForDirection(edge).setProperty("tinkerIndex", new Float(this.getInternalListOrderedSet().size() - 1));
-		addQualifierToIndex(edge, e);
-	}
-	
-	@Override
 	public void add(int indexOf, E e) {
 		maybeCallInit(e);
 		maybeLoad();
 		Edge edge = addToListAndListIndex(indexOf, e);
-		addQualifierToIndex(edge, e);
+		// Can only qualify TinkerNode's
+		if (!(e instanceof TinkerNode)) {
+			throw new IllegalStateException("Primitive properties can not be qualified!");
+		}
+		addQualifierToIndex(edge, (TinkerNode)e);
 	}
 
 	@Override
@@ -212,13 +209,6 @@ public class TinkerQualifiedOrderedSetImpl<E> extends BaseCollection<E> implemen
 					throw new IllegalStateException("qualifier fails, entry for qualifier already exist");
 				}
 			}
-		}
-	}
-
-	private void addQualifierToIndex(Edge edge, List<Qualifier> qualifiers) {
-		for (Qualifier qualifier : qualifiers) {
-			this.index.put(qualifier.getKey(), qualifier.getValue(), edge);
-			edge.setProperty("index" + qualifier.getKey(), qualifier.getValue());
 		}
 	}
 

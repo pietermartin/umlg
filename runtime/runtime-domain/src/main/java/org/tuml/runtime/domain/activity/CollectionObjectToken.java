@@ -147,4 +147,10 @@ public class CollectionObjectToken<O> extends ObjectToken<O> implements Composit
 		return null;
 	}
 
+	@Override
+	public int getSize(TumlRuntimeProperty tumlRuntimeProperty) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }
