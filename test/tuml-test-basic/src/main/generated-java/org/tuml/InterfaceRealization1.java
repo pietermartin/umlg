@@ -138,6 +138,14 @@ public class InterfaceRealization1 extends BaseTinker implements TinkerNode, Int
 		InterfaceRealization1RuntimePropertyEnum runtimeProperty = InterfaceRealization1RuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result == 0 ) {
 			switch ( runtimeProperty ) {
+				case name:
+					result = name.size();
+				break;
+			
+				case interface2:
+					result = interface2.size();
+				break;
+			
 				default:
 					result = 0;
 				break;

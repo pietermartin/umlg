@@ -460,18 +460,32 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 	}
 
 	protected void addOrderToIndex(Edge edge, TinkerNode node) {
+		//The element is always added to the end of the list
 		if (isOrdered()) {
-			this.index.put("index", new Float(this.internalCollection.size() - 1), edge);
+			Edge biggestIndexedEdge = index.getBiggestIndexForSequence();
+			Float size;
+			if (biggestIndexedEdge==null) {
+				size = 1F;
+			} else {
+				size = (Float) biggestIndexedEdge.getProperty("tinkerIndex") + 1F;
+			}
+			this.index.put("index", new Float(size), edge);
 			getVertexForDirection(edge).setProperty("tinkerIndex", new Float(this.internalCollection.size() - 1));
 		}
 		if (isInverseOrdered()) {
-			Index<Edge> index = GraphDb.getDb().getIndex(node.getUid() + ":::" + getLabel(), Edge.class);
+			NakedTinkerIndex<Edge> index = GraphDb.getDb().getIndex(node.getUid() + ":::" + getLabel(), Edge.class);
 			if (index == null) {
 				index = GraphDb.getDb().createIndex(node.getUid() + ":::" + getLabel(), Edge.class);
 			}
-			int size = node.getSize(this.tumlRuntimeProperty);
-			index.put("index", new Float(size - 1), edge);
-			getVertexForDirection(edge).setProperty("tinkerIndex", new Float(size - 1));
+			Edge biggestIndexedEdge = index.getBiggestIndexForSequence();
+			Float size;
+			if (biggestIndexedEdge == null) {
+				size = 1F;
+			} else {
+				size = (Float) getVertexForDirection(biggestIndexedEdge).getProperty("tinkerIndex") + 1F;
+			}
+			index.put("index", new Float(size), edge);
+			getVertexForDirection(edge).setProperty("tinkerIndex", new Float(size));
 		}
 	}
 

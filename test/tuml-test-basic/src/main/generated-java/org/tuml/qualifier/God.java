@@ -170,7 +170,11 @@ public class God extends BaseTinker implements TinkerNode {
 		if ( runtimeProperty != null && result == 0 ) {
 			switch ( runtimeProperty ) {
 				case nature:
-					result = getNature().size();
+					result = nature.size();
+				break;
+			
+				case name:
+					result = name.size();
 				break;
 			
 				default:

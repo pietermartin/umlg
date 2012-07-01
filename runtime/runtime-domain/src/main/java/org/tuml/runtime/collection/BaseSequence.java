@@ -62,7 +62,7 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
 
 		// Edge can only be null on a one primitive
 		if (edge == null && !isOnePrimitive()) {
-			throw new IllegalStateException("Edge can only be null on isOne which is a String, Interger, Boolean or primitive");
+			throw new IllegalStateException("Edge can only be null on isOne which is a String, Integer, Boolean or primitive");
 		}
 		
 		float min;

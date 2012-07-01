@@ -156,6 +156,14 @@ public class Nature extends BaseTinker implements CompositionNode {
 		NatureRuntimePropertyEnum runtimeProperty = NatureRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result == 0 ) {
 			switch ( runtimeProperty ) {
+				case natureName:
+					result = natureName.size();
+				break;
+			
+				case god:
+					result = god.size();
+				break;
+			
 				default:
 					result = 0;
 				break;

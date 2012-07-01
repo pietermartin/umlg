@@ -147,6 +147,28 @@
           </ownedEnd>
         </packagedElement>
       </packagedElement>
+      <packagedElement xmi:type="uml:Package" xmi:id="_-B0UMMNUEeGwsJEO56VJvw" name="sequence">
+        <packagedElement xmi:type="uml:Class" xmi:id="_Ag4XoMNVEeGwsJEO56VJvw" name="SequenceRoot">
+          <ownedAttribute xmi:id="_WV_pwMNVEeGwsJEO56VJvw" name="name">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+          </ownedAttribute>
+          <ownedAttribute xmi:id="_aw35oMNVEeGwsJEO56VJvw" name="sequenceTest" type="_CHo6EMNVEeGwsJEO56VJvw" isOrdered="true" isUnique="false" aggregation="composite" association="_axBqoMNVEeGwsJEO56VJvw">
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_aw35ocNVEeGwsJEO56VJvw" value="*"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_aw35osNVEeGwsJEO56VJvw"/>
+          </ownedAttribute>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Class" xmi:id="_CHo6EMNVEeGwsJEO56VJvw" name="SequenceTest">
+          <ownedAttribute xmi:id="_X9hBMMNVEeGwsJEO56VJvw" name="name">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+          </ownedAttribute>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Association" xmi:id="_axBqoMNVEeGwsJEO56VJvw" name="A_&lt;sequenceRoot>_&lt;sequenceTest>" memberEnd="_axBqocNVEeGwsJEO56VJvw _aw35oMNVEeGwsJEO56VJvw" navigableOwnedEnd="_axBqocNVEeGwsJEO56VJvw">
+          <ownedEnd xmi:id="_axBqocNVEeGwsJEO56VJvw" name="sequenceRoot" type="_Ag4XoMNVEeGwsJEO56VJvw" association="_axBqoMNVEeGwsJEO56VJvw">
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_axBqosNVEeGwsJEO56VJvw" value="1"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_axBqo8NVEeGwsJEO56VJvw" value="1"/>
+          </ownedEnd>
+        </packagedElement>
+      </packagedElement>
     </packagedElement>
   </packagedElement>
 </uml:Model>

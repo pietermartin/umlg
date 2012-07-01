@@ -152,6 +152,14 @@ public class Many extends BaseTinker implements CompositionNode {
 		ManyRuntimePropertyEnum runtimeProperty = ManyRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result == 0 ) {
 			switch ( runtimeProperty ) {
+				case one:
+					result = one.size();
+				break;
+			
+				case name:
+					result = name.size();
+				break;
+			
 				default:
 					result = 0;
 				break;

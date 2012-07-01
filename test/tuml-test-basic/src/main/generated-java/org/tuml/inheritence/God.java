@@ -138,6 +138,14 @@ public class God extends BaseTinker implements TinkerNode {
 		GodRuntimePropertyEnum runtimeProperty = GodRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result == 0 ) {
 			switch ( runtimeProperty ) {
+				case abstractSpecies:
+					result = abstractSpecies.size();
+				break;
+			
+				case name:
+					result = name.size();
+				break;
+			
 				default:
 					result = 0;
 				break;

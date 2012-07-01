@@ -134,6 +134,14 @@ public class OneTwo extends BaseTinker implements TinkerNode {
 		OneTwoRuntimePropertyEnum runtimeProperty = OneTwoRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result == 0 ) {
 			switch ( runtimeProperty ) {
+				case name:
+					result = name.size();
+				break;
+			
+				case oneOne:
+					result = oneOne.size();
+				break;
+			
 				default:
 					result = 0;
 				break;

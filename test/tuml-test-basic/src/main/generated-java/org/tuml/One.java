@@ -138,6 +138,14 @@ public class One extends BaseTinker implements TinkerNode {
 		OneRuntimePropertyEnum runtimeProperty = OneRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result == 0 ) {
 			switch ( runtimeProperty ) {
+				case name:
+					result = name.size();
+				break;
+			
+				case many:
+					result = many.size();
+				break;
+			
 				default:
 					result = 0;
 				break;

@@ -1,6 +1,11 @@
 package org.tuml.runtime.domain.neo4j;
 
+import java.util.Iterator;
+
+import org.apache.commons.lang.NotImplementedException;
+import org.apache.lucene.search.NumericRangeQuery;
 import org.neo4j.graphdb.PropertyContainer;
+import org.neo4j.index.lucene.QueryContext;
 import org.neo4j.index.lucene.ValueContext;
 import org.tuml.runtime.adaptor.NakedTinkerIndex;
 
@@ -45,37 +50,42 @@ public class NakedNeo4jIndex<T extends Element, S extends PropertyContainer> imp
 	}
 
 	public CloseableIterable<T> query(String key, Object value) {
-		throw new NoSuchMethodError();
+		throw new NotImplementedException();
 		// if (key.equals("index") && value == null) {
-		// Query q = NumericRangeQuery.newIntRange("index", Integer.MIN_VALUE,
-		// Integer.MAX_VALUE, true, true);
-		// return this.index.query(key,
-		// new QueryContext(q).sortNumeric("index", false));
-		// } else if (key.equals("index") && value != null
-		// && value instanceof Integer) {
-		// Query q = NumericRangeQuery.newIntRange("index", (Integer) value,
-		// (Integer) value, true, true);
-		// return this.index.query(key,
-		// new QueryContext(q).sortNumeric("index", false));
+		// NumericRangeQuery<Integer> q = NumericRangeQuery.newIntRange("index",
+		// Integer.MIN_VALUE, Integer.MAX_VALUE, true, true);
+		// return this.index.query(key, new QueryContext(q).sortNumeric("index",
+		// false));
+		// } else if (key.equals("index") && value != null && value instanceof
+		// Integer) {
+		// NumericRangeQuery<Integer> q = NumericRangeQuery.newIntRange("index",
+		// (Integer) value, (Integer) value, true, true);
+		// return this.index.query(key, new QueryContext(q).sortNumeric("index",
+		// false));
 		// } else {
 		// return this.index.query(key, value);
 		// }
 	}
 
+	public T getBiggestIndexForSequence() {
+		CloseableIterable<T> iter = this.index.query("index", QueryContext.numericRange("index", 0F, null).sortNumeric("index", true));
+		Iterator<T> iterator = iter.iterator();
+		if (iterator.hasNext()) {
+			return iterator.next();
+		} else {
+			return null;
+		}
+	}
+
 	@Override
 	public CloseableIterable<T> get(Float value) {
-		throw new NoSuchMethodError();
-		// return this.index.query("index",
-		// QueryContext.numericRange("index", value, value));
+		return this.index.query("index", QueryContext.numericRange("index", value, value));
 	}
 
 	@Override
 	public CloseableIterable<T> queryList(Float from, boolean minInclusive, boolean reversed) {
-		throw new NoSuchMethodError();
-		// Query q = NumericRangeQuery.newFloatRange("index", from,
-		// Float.MAX_VALUE, minInclusive, true);
-		// return this.index.query(null,
-		// new QueryContext(q).sortNumeric("index", reversed));
+		NumericRangeQuery<Float> q = NumericRangeQuery.newFloatRange("index", from, Float.MAX_VALUE, minInclusive, true);
+		return this.index.query(null, new QueryContext(q).sortNumeric("index", reversed));
 	}
 
 	@Override

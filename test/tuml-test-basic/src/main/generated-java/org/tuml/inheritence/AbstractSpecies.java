@@ -152,6 +152,14 @@ public class AbstractSpecies extends BaseTinker implements CompositionNode {
 		AbstractSpeciesRuntimePropertyEnum runtimeProperty = AbstractSpeciesRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result == 0 ) {
 			switch ( runtimeProperty ) {
+				case god:
+					result = god.size();
+				break;
+			
+				case name:
+					result = name.size();
+				break;
+			
 				default:
 					result = 0;
 				break;

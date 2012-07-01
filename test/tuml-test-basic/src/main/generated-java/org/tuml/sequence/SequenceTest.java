@@ -1,4 +1,4 @@
-package org.tuml;
+package org.tuml.sequence;
 
 import com.tinkerpop.blueprints.Vertex;
 
@@ -18,15 +18,15 @@ import org.tuml.runtime.domain.BaseTinker;
 import org.tuml.runtime.domain.CompositionNode;
 import org.tuml.runtime.domain.TinkerNode;
 
-public class InterfaceRealization2 extends BaseTinker implements CompositionNode, Interface2 {
-	private TinkerSet<Interface1> interface1;
+public class SequenceTest extends BaseTinker implements CompositionNode {
 	private TinkerSet<String> name;
+	private TinkerSet<SequenceRoot> sequenceRoot;
 
-	/** Constructor for InterfaceRealization2
+	/** Constructor for SequenceTest
 	 * 
 	 * @param compositeOwner 
 	 */
-	public InterfaceRealization2(Interface1 compositeOwner) {
+	public SequenceTest(SequenceRoot compositeOwner) {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
 		initialiseProperties();
 		createComponents();
@@ -35,25 +35,25 @@ public class InterfaceRealization2 extends BaseTinker implements CompositionNode
 		defaultCreate();
 	}
 	
-	/** Constructor for InterfaceRealization2
+	/** Constructor for SequenceTest
 	 * 
 	 * @param vertex 
 	 */
-	public InterfaceRealization2(Vertex vertex) {
+	public SequenceTest(Vertex vertex) {
 		this.vertex=vertex;
 		initialiseProperties();
 	}
 	
-	/** Default constructor for InterfaceRealization2
+	/** Default constructor for SequenceTest
 	 */
-	public InterfaceRealization2() {
+	public SequenceTest() {
 	}
 	
-	/** Constructor for InterfaceRealization2
+	/** Constructor for SequenceTest
 	 * 
 	 * @param persistent 
 	 */
-	public InterfaceRealization2(Boolean persistent) {
+	public SequenceTest(Boolean persistent) {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
@@ -61,24 +61,24 @@ public class InterfaceRealization2 extends BaseTinker implements CompositionNode
 		createComponents();
 	}
 
-	public void addToInterface1(Interface1 interface1) {
-		if ( interface1 != null ) {
-			this.interface1.add(interface1);
-		}
-	}
-	
 	public void addToName(String name) {
 		if ( name != null ) {
 			this.name.add(name);
 		}
 	}
 	
-	public void clearInterface1() {
-		this.interface1.clear();
+	public void addToSequenceRoot(SequenceRoot sequenceRoot) {
+		if ( sequenceRoot != null ) {
+			this.sequenceRoot.add(sequenceRoot);
+		}
 	}
 	
 	public void clearName() {
 		this.name.clear();
+	}
+	
+	public void clearSequenceRoot() {
+		this.sequenceRoot.clear();
 	}
 	
 	public void createComponents() {
@@ -92,15 +92,6 @@ public class InterfaceRealization2 extends BaseTinker implements CompositionNode
 	@Override
 	public Long getId() {
 		return TinkerIdUtilFactory.getIdUtil().getId(this.vertex);
-	}
-	
-	public Interface1 getInterface1() {
-		TinkerSet<Interface1> tmp = this.interface1;
-		if ( !tmp.isEmpty() ) {
-			return tmp.iterator().next();
-		} else {
-			return null;
-		}
 	}
 	
 	public String getName() {
@@ -119,7 +110,7 @@ public class InterfaceRealization2 extends BaseTinker implements CompositionNode
 	
 	@Override
 	public TinkerNode getOwningObject() {
-		return getInterface1();
+		return getSequenceRoot();
 	}
 	
 	/** GetQualifiers is called from the collection in order to update the index used to implement the qualifier
@@ -130,7 +121,7 @@ public class InterfaceRealization2 extends BaseTinker implements CompositionNode
 	@Override
 	public List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, TinkerNode node) {
 		List<Qualifier> result = Collections.emptyList();
-		InterfaceRealization2RuntimePropertyEnum runtimeProperty = InterfaceRealization2RuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
+		SequenceTestRuntimePropertyEnum runtimeProperty = SequenceTestRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result.isEmpty() ) {
 			switch ( runtimeProperty ) {
 				default:
@@ -142,6 +133,15 @@ public class InterfaceRealization2 extends BaseTinker implements CompositionNode
 		return result;
 	}
 	
+	public SequenceRoot getSequenceRoot() {
+		TinkerSet<SequenceRoot> tmp = this.sequenceRoot;
+		if ( !tmp.isEmpty() ) {
+			return tmp.iterator().next();
+		} else {
+			return null;
+		}
+	}
+	
 	/** GetSize is called from the collection in order to update the index used to implement a sequance's index
 	 * 
 	 * @param tumlRuntimeProperty 
@@ -149,15 +149,15 @@ public class InterfaceRealization2 extends BaseTinker implements CompositionNode
 	@Override
 	public int getSize(TumlRuntimeProperty tumlRuntimeProperty) {
 		int result = 0;
-		InterfaceRealization2RuntimePropertyEnum runtimeProperty = InterfaceRealization2RuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
+		SequenceTestRuntimePropertyEnum runtimeProperty = SequenceTestRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result == 0 ) {
 			switch ( runtimeProperty ) {
 				case name:
 					result = name.size();
 				break;
 			
-				case interface1:
-					result = interface1.size();
+				case sequenceRoot:
+					result = sequenceRoot.size();
 				break;
 			
 				default:
@@ -185,7 +185,7 @@ public class InterfaceRealization2 extends BaseTinker implements CompositionNode
 	 */
 	@Override
 	public void init(TinkerNode compositeOwner) {
-		this.addToInterface1((Interface1)compositeOwner);
+		this.addToSequenceRoot((SequenceRoot)compositeOwner);
 		this.hasInitBeenCalled = true;
 		initVariables();
 	}
@@ -195,19 +195,19 @@ public class InterfaceRealization2 extends BaseTinker implements CompositionNode
 	
 	@Override
 	public void initialiseProperties() {
-		this.interface1 =  new TinkerSetImpl<Interface1>(this, InterfaceRealization2RuntimePropertyEnum.interface1);
-		this.name =  new TinkerSetImpl<String>(this, InterfaceRealization2RuntimePropertyEnum.name);
+		this.sequenceRoot =  new TinkerSetImpl<SequenceRoot>(this, SequenceTestRuntimePropertyEnum.sequenceRoot);
+		this.name =  new TinkerSetImpl<String>(this, SequenceTestRuntimePropertyEnum.name);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
-		switch ( (InterfaceRealization2RuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
+		switch ( (SequenceTestRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
 			case name:
-				this.name =  new TinkerSetImpl<String>(this, InterfaceRealization2RuntimePropertyEnum.name);
+				this.name =  new TinkerSetImpl<String>(this, SequenceTestRuntimePropertyEnum.name);
 			break;
 		
-			case interface1:
-				this.interface1 =  new TinkerSetImpl<Interface1>(this, InterfaceRealization2RuntimePropertyEnum.interface1);
+			case sequenceRoot:
+				this.sequenceRoot =  new TinkerSetImpl<SequenceRoot>(this, SequenceTestRuntimePropertyEnum.sequenceRoot);
 			break;
 		
 		}
@@ -216,18 +216,6 @@ public class InterfaceRealization2 extends BaseTinker implements CompositionNode
 	@Override
 	public boolean isTinkerRoot() {
 		return false;
-	}
-	
-	public void removeFromInterface1(Interface1 interface1) {
-		if ( interface1 != null ) {
-			this.interface1.remove(interface1);
-		}
-	}
-	
-	public void removeFromInterface1(Set<Interface1> interface1) {
-		if ( !interface1.isEmpty() ) {
-			this.interface1.removeAll(interface1);
-		}
 	}
 	
 	public void removeFromName(Set<String> name) {
@@ -242,24 +230,36 @@ public class InterfaceRealization2 extends BaseTinker implements CompositionNode
 		}
 	}
 	
+	public void removeFromSequenceRoot(SequenceRoot sequenceRoot) {
+		if ( sequenceRoot != null ) {
+			this.sequenceRoot.remove(sequenceRoot);
+		}
+	}
+	
+	public void removeFromSequenceRoot(Set<SequenceRoot> sequenceRoot) {
+		if ( !sequenceRoot.isEmpty() ) {
+			this.sequenceRoot.removeAll(sequenceRoot);
+		}
+	}
+	
 	@Override
 	public void setId(Long id) {
 		TinkerIdUtilFactory.getIdUtil().setId(this.vertex, id);
-	}
-	
-	public void setInterface1(Interface1 interface1) {
-		clearInterface1();
-		addToInterface1(interface1);
 	}
 	
 	public void setName(String name) {
 		clearName();
 		addToName(name);
 	}
+	
+	public void setSequenceRoot(SequenceRoot sequenceRoot) {
+		clearSequenceRoot();
+		addToSequenceRoot(sequenceRoot);
+	}
 
-	public enum InterfaceRealization2RuntimePropertyEnum implements TumlRuntimeProperty {
-		interface1(false,false,false,"A_<interface1>_<interface2>",false,false,true,false,1,1,false,false,false,false,true),
-		name(true,true,false,"tuml-test-basic-model__org__tuml__Interface2__name",false,false,true,false,1,1,false,false,false,false,true);
+	public enum SequenceTestRuntimePropertyEnum implements TumlRuntimeProperty {
+		sequenceRoot(false,false,false,"A_<sequenceRoot>_<sequenceTest>",false,false,true,false,1,1,false,false,false,true,true),
+		name(true,true,false,"tuml-test-basic-model__org__tuml__sequence__SequenceTest__name",false,false,true,false,1,1,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -275,7 +275,7 @@ public class InterfaceRealization2 extends BaseTinker implements CompositionNode
 		private boolean ordered;
 		private boolean inverseOrdered;
 		private boolean unique;
-		/** Constructor for InterfaceRealization2RuntimePropertyEnum
+		/** Constructor for SequenceTestRuntimePropertyEnum
 		 * 
 		 * @param onePrimitive 
 		 * @param controllingSide 
@@ -293,7 +293,7 @@ public class InterfaceRealization2 extends BaseTinker implements CompositionNode
 		 * @param inverseOrdered 
 		 * @param unique 
 		 */
-		private InterfaceRealization2RuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower, boolean qualified, boolean inverseQualified, boolean ordered, boolean inverseOrdered, boolean unique) {
+		private SequenceTestRuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower, boolean qualified, boolean inverseQualified, boolean ordered, boolean inverseOrdered, boolean unique) {
 			this.onePrimitive = onePrimitive;
 			this.controllingSide = controllingSide;
 			this.composite = composite;
@@ -311,9 +311,9 @@ public class InterfaceRealization2 extends BaseTinker implements CompositionNode
 			this.unique = unique;
 		}
 	
-		static public InterfaceRealization2RuntimePropertyEnum fromLabel(String label) {
-			if ( interface1.getLabel().equals(label) ) {
-				return interface1;
+		static public SequenceTestRuntimePropertyEnum fromLabel(String label) {
+			if ( sequenceRoot.getLabel().equals(label) ) {
+				return sequenceRoot;
 			}
 			if ( name.getLabel().equals(label) ) {
 				return name;
