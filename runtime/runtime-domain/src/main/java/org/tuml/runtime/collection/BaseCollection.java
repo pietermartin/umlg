@@ -35,7 +35,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 
 	public BaseCollection() {
 	}
-	
+
 	public BaseCollection(TinkerNode owner, TumlRuntimeProperty runtimeProperty) {
 		super();
 		this.owner = owner;
@@ -124,17 +124,22 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 				if (!(e instanceof TinkerNode)) {
 					throw new IllegalStateException("Primitive properties can not be qualified!");
 				}
-				addQualifierToIndex(edge, (TinkerNode)e);
+				addQualifierToIndex(edge, (TinkerNode) e);
 			}
-			
+
 			if (isOrdered() || isInverseOrdered()) {
 				// Can only qualify TinkerNode's
 				if (!(e instanceof TinkerNode)) {
 					throw new IllegalStateException("Primitive properties can not be qualified!");
 				}
-				addOrderToIndex(edge, (TinkerNode)e);
+				if (isOrdered()) {
+					addOrderToIndex(edge, (TinkerNode) e);
+				}
+				if (isInverseOrdered()) {
+					addOrderToInverseIndex(edge, (TinkerNode) e);
+				}
 			}
-			
+
 		}
 
 		return result;
@@ -432,7 +437,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 		}
 		return result;
 	}
-	
+
 	protected void validateQualifiedMultiplicity(Index<Edge> index, Qualifier qualifier) {
 		if (qualifier.isOne()) {
 			long count = index.count(qualifier.getKey(), qualifier.getValue());
@@ -460,33 +465,39 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 	}
 
 	protected void addOrderToIndex(Edge edge, TinkerNode node) {
-		//The element is always added to the end of the list
-		if (isOrdered()) {
-			Edge biggestIndexedEdge = index.getBiggestIndexForSequence();
-			Float size;
-			if (biggestIndexedEdge==null) {
-				size = 1F;
-			} else {
-				size = (Float) biggestIndexedEdge.getProperty("tinkerIndex") + 1F;
-			}
-			this.index.put("index", new Float(size), edge);
-			getVertexForDirection(edge).setProperty("tinkerIndex", new Float(this.internalCollection.size() - 1));
+		// The element is always added to the end of the list
+		if (!isOrdered()) {
+			throw new IllegalStateException("addOrderToIndex can only be called where association end is ordered");
 		}
-		if (isInverseOrdered()) {
-			NakedTinkerIndex<Edge> index = GraphDb.getDb().getIndex(node.getUid() + ":::" + getLabel(), Edge.class);
-			if (index == null) {
-				index = GraphDb.getDb().createIndex(node.getUid() + ":::" + getLabel(), Edge.class);
-			}
-			Edge biggestIndexedEdge = index.getBiggestIndexForSequence();
-			Float size;
-			if (biggestIndexedEdge == null) {
-				size = 1F;
-			} else {
-				size = (Float) getVertexForDirection(biggestIndexedEdge).getProperty("tinkerIndex") + 1F;
-			}
-			index.put("index", new Float(size), edge);
-			getVertexForDirection(edge).setProperty("tinkerIndex", new Float(size));
+		Edge edgeToLastElementInSequence = index.getEdgeToLastElementInSequence();
+		Float size;
+		if (edgeToLastElementInSequence == null) {
+			size = 1F;
+		} else {
+			size = (Float) edgeToLastElementInSequence.getProperty("tinkerIndex") + 1F;
 		}
+		this.index.put("index", size, edge);
+		getVertexForDirection(edge).setProperty("tinkerIndex", size);
+	}
+
+	protected void addOrderToInverseIndex(Edge edge, TinkerNode node) {
+		// The element is always added to the end of the list
+		if (!isInverseOrdered()) {
+			throw new IllegalStateException("addOrderToInverseIndex can only be called where the inverse side of the association is ordered");
+		}
+		NakedTinkerIndex<Edge> index = GraphDb.getDb().getIndex(node.getUid() + ":::" + getLabel(), Edge.class);
+		if (index == null) {
+			index = GraphDb.getDb().createIndex(node.getUid() + ":::" + getLabel(), Edge.class);
+		}
+		Edge edgeToLastElementInSequence = index.getEdgeToLastElementInSequence();
+		Float size;
+		if (edgeToLastElementInSequence == null) {
+			size = 1F;
+		} else {
+			size = (Float) getVertexForDirection(edgeToLastElementInSequence).getProperty("tinkerIndex") + 1F;
+		}
+		index.put("index", size, edge);
+		getVertexForDirection(edge).setProperty("tinkerIndex", size);
 	}
 
 	/**
@@ -501,7 +512,6 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 			edge.setProperty("index" + qualifier.getKey(), qualifier.getValue());
 		}
 	}
-
 
 	@Override
 	public boolean isOnePrimitive() {
@@ -567,7 +577,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 	public boolean isInverseQualified() {
 		return this.tumlRuntimeProperty.isInverseQualified();
 	}
-	
+
 	@Override
 	public boolean isOrdered() {
 		return this.tumlRuntimeProperty.isOrdered();

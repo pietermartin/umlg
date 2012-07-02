@@ -11,6 +11,8 @@ import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.TinkerIdUtilFactory;
 import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
 import org.tuml.runtime.collection.Qualifier;
+import org.tuml.runtime.collection.TinkerOrderedSet;
+import org.tuml.runtime.collection.TinkerOrderedSetImpl;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TinkerSetImpl;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
@@ -19,8 +21,9 @@ import org.tuml.runtime.domain.CompositionNode;
 import org.tuml.runtime.domain.TinkerNode;
 
 public class SequenceTest extends BaseTinker implements CompositionNode {
+	static final public long serialVersionUID = 1L;
 	private TinkerSet<String> name;
-	private TinkerSet<SequenceRoot> sequenceRoot;
+	private TinkerOrderedSet<SequenceRoot> sequenceRoot;
 
 	/** Constructor for SequenceTest
 	 * 
@@ -134,9 +137,9 @@ public class SequenceTest extends BaseTinker implements CompositionNode {
 	}
 	
 	public SequenceRoot getSequenceRoot() {
-		TinkerSet<SequenceRoot> tmp = this.sequenceRoot;
+		TinkerOrderedSet<SequenceRoot> tmp = this.sequenceRoot;
 		if ( !tmp.isEmpty() ) {
-			return tmp.iterator().next();
+			return tmp.get(0);
 		} else {
 			return null;
 		}
@@ -195,7 +198,7 @@ public class SequenceTest extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.sequenceRoot =  new TinkerSetImpl<SequenceRoot>(this, SequenceTestRuntimePropertyEnum.sequenceRoot);
+		this.sequenceRoot =  new TinkerOrderedSetImpl<SequenceRoot>(this, SequenceTestRuntimePropertyEnum.sequenceRoot);
 		this.name =  new TinkerSetImpl<String>(this, SequenceTestRuntimePropertyEnum.name);
 	}
 	
@@ -207,7 +210,7 @@ public class SequenceTest extends BaseTinker implements CompositionNode {
 			break;
 		
 			case sequenceRoot:
-				this.sequenceRoot =  new TinkerSetImpl<SequenceRoot>(this, SequenceTestRuntimePropertyEnum.sequenceRoot);
+				this.sequenceRoot =  new TinkerOrderedSetImpl<SequenceRoot>(this, SequenceTestRuntimePropertyEnum.sequenceRoot);
 			break;
 		
 		}
@@ -258,7 +261,7 @@ public class SequenceTest extends BaseTinker implements CompositionNode {
 	}
 
 	public enum SequenceTestRuntimePropertyEnum implements TumlRuntimeProperty {
-		sequenceRoot(false,false,false,"A_<sequenceRoot>_<sequenceTest>",false,false,true,false,1,1,false,false,false,true,true),
+		sequenceRoot(false,false,false,"A_<sequenceRoot>_<sequenceTest>",false,false,true,false,1,1,false,false,true,true,true),
 		name(true,true,false,"tuml-test-basic-model__org__tuml__sequence__SequenceTest__name",false,false,true,false,1,1,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;

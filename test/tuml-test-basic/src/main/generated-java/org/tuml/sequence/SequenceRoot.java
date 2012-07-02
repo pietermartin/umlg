@@ -11,8 +11,8 @@ import java.util.UUID;
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.TinkerIdUtilFactory;
 import org.tuml.runtime.collection.Qualifier;
-import org.tuml.runtime.collection.TinkerSequence;
-import org.tuml.runtime.collection.TinkerSequenceImpl;
+import org.tuml.runtime.collection.TinkerOrderedSet;
+import org.tuml.runtime.collection.TinkerOrderedSetImpl;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TinkerSetImpl;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
@@ -20,8 +20,9 @@ import org.tuml.runtime.domain.BaseTinker;
 import org.tuml.runtime.domain.TinkerNode;
 
 public class SequenceRoot extends BaseTinker implements TinkerNode {
+	static final public long serialVersionUID = 1L;
 	private TinkerSet<String> name;
-	private TinkerSequence<SequenceTest> sequenceTest;
+	private TinkerOrderedSet<SequenceTest> sequenceTest;
 
 	/** Constructor for SequenceRoot
 	 * 
@@ -56,15 +57,15 @@ public class SequenceRoot extends BaseTinker implements TinkerNode {
 		}
 	}
 	
-	public void addToSequenceTest(List<SequenceTest> sequenceTest) {
-		if ( !sequenceTest.isEmpty() ) {
-			this.sequenceTest.addAll(sequenceTest);
-		}
-	}
-	
 	public void addToSequenceTest(SequenceTest sequenceTest) {
 		if ( sequenceTest != null ) {
 			this.sequenceTest.add(sequenceTest);
+		}
+	}
+	
+	public void addToSequenceTest(Set<SequenceTest> sequenceTest) {
+		if ( !sequenceTest.isEmpty() ) {
+			this.sequenceTest.addAll(sequenceTest);
 		}
 	}
 	
@@ -126,7 +127,7 @@ public class SequenceRoot extends BaseTinker implements TinkerNode {
 		return result;
 	}
 	
-	public TinkerSequence<SequenceTest> getSequenceTest() {
+	public TinkerOrderedSet<SequenceTest> getSequenceTest() {
 		return this.sequenceTest;
 	}
 	
@@ -173,14 +174,14 @@ public class SequenceRoot extends BaseTinker implements TinkerNode {
 	@Override
 	public void initialiseProperties() {
 		this.name =  new TinkerSetImpl<String>(this, SequenceRootRuntimePropertyEnum.name);
-		this.sequenceTest =  new TinkerSequenceImpl<SequenceTest>(this, SequenceRootRuntimePropertyEnum.sequenceTest);
+		this.sequenceTest =  new TinkerOrderedSetImpl<SequenceTest>(this, SequenceRootRuntimePropertyEnum.sequenceTest);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (SequenceRootRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
 			case sequenceTest:
-				this.sequenceTest =  new TinkerSequenceImpl<SequenceTest>(this, SequenceRootRuntimePropertyEnum.sequenceTest);
+				this.sequenceTest =  new TinkerOrderedSetImpl<SequenceTest>(this, SequenceRootRuntimePropertyEnum.sequenceTest);
 			break;
 		
 			case name:
@@ -207,15 +208,15 @@ public class SequenceRoot extends BaseTinker implements TinkerNode {
 		}
 	}
 	
-	public void removeFromSequenceTest(List<SequenceTest> sequenceTest) {
-		if ( !sequenceTest.isEmpty() ) {
-			this.sequenceTest.removeAll(sequenceTest);
-		}
-	}
-	
 	public void removeFromSequenceTest(SequenceTest sequenceTest) {
 		if ( sequenceTest != null ) {
 			this.sequenceTest.remove(sequenceTest);
+		}
+	}
+	
+	public void removeFromSequenceTest(Set<SequenceTest> sequenceTest) {
+		if ( !sequenceTest.isEmpty() ) {
+			this.sequenceTest.removeAll(sequenceTest);
 		}
 	}
 	
@@ -229,14 +230,14 @@ public class SequenceRoot extends BaseTinker implements TinkerNode {
 		addToName(name);
 	}
 	
-	public void setSequenceTest(List<SequenceTest> sequenceTest) {
+	public void setSequenceTest(Set<SequenceTest> sequenceTest) {
 		clearSequenceTest();
 		addToSequenceTest(sequenceTest);
 	}
 
 	public enum SequenceRootRuntimePropertyEnum implements TumlRuntimeProperty {
 		name(true,true,false,"tuml-test-basic-model__org__tuml__sequence__SequenceRoot__name",false,false,true,false,1,1,false,false,false,false,true),
-		sequenceTest(false,true,true,"A_<sequenceRoot>_<sequenceTest>",false,true,false,false,-1,0,false,false,true,false,false);
+		sequenceTest(false,true,true,"A_<sequenceRoot>_<sequenceTest>",false,true,false,false,-1,0,false,false,true,true,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;

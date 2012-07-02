@@ -1476,4 +1476,11 @@ public class PropertyWrapper implements Property {
 		return "getQualifierFor" + StringUtils.capitalize(getName());
 	}
 
+	public String emptyCollection() {
+		if (isUnique()) {
+			return "Collections.emptySet()";
+		} else {
+			return "Collections.emptyList()";
+		}
+	}
 }

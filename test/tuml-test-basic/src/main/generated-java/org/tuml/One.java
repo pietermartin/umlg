@@ -18,6 +18,7 @@ import org.tuml.runtime.domain.BaseTinker;
 import org.tuml.runtime.domain.TinkerNode;
 
 public class One extends BaseTinker implements TinkerNode {
+	static final public long serialVersionUID = 1L;
 	private TinkerSet<String> name;
 	private TinkerSet<Many> many;
 
@@ -138,12 +139,12 @@ public class One extends BaseTinker implements TinkerNode {
 		OneRuntimePropertyEnum runtimeProperty = OneRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result == 0 ) {
 			switch ( runtimeProperty ) {
-				case name:
-					result = name.size();
-				break;
-			
 				case many:
 					result = many.size();
+				break;
+			
+				case name:
+					result = name.size();
 				break;
 			
 				default:
@@ -170,19 +171,19 @@ public class One extends BaseTinker implements TinkerNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.many =  new TinkerSetImpl<Many>(this, OneRuntimePropertyEnum.many);
 		this.name =  new TinkerSetImpl<String>(this, OneRuntimePropertyEnum.name);
+		this.many =  new TinkerSetImpl<Many>(this, OneRuntimePropertyEnum.many);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (OneRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case name:
-				this.name =  new TinkerSetImpl<String>(this, OneRuntimePropertyEnum.name);
-			break;
-		
 			case many:
 				this.many =  new TinkerSetImpl<Many>(this, OneRuntimePropertyEnum.many);
+			break;
+		
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, OneRuntimePropertyEnum.name);
 			break;
 		
 		}
@@ -233,8 +234,8 @@ public class One extends BaseTinker implements TinkerNode {
 	}
 
 	public enum OneRuntimePropertyEnum implements TumlRuntimeProperty {
-		many(false,true,true,"A_<one>_<many>",false,true,false,false,-1,0,false,false,false,false,true),
-		name(true,true,false,"tuml-test-basic-model__org__tuml__One__name",false,false,true,false,1,1,false,false,false,false,true);
+		name(true,true,false,"tuml-test-basic-model__org__tuml__One__name",false,false,true,false,1,1,false,false,false,false,true),
+		many(false,true,true,"A_<one>_<many>",false,true,false,false,-1,0,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -287,11 +288,11 @@ public class One extends BaseTinker implements TinkerNode {
 		}
 	
 		static public OneRuntimePropertyEnum fromLabel(String label) {
-			if ( many.getLabel().equals(label) ) {
-				return many;
-			}
 			if ( name.getLabel().equals(label) ) {
 				return name;
+			}
+			if ( many.getLabel().equals(label) ) {
+				return many;
 			}
 			return null;
 		}

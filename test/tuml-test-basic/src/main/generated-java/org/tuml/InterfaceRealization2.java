@@ -19,6 +19,7 @@ import org.tuml.runtime.domain.CompositionNode;
 import org.tuml.runtime.domain.TinkerNode;
 
 public class InterfaceRealization2 extends BaseTinker implements CompositionNode, Interface2 {
+	static final public long serialVersionUID = 1L;
 	private TinkerSet<Interface1> interface1;
 	private TinkerSet<String> name;
 

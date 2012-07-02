@@ -1,6 +1,5 @@
 package org.tuml.runtime.collection;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import org.tuml.runtime.domain.TinkerNode;
@@ -12,7 +11,6 @@ public class TinkerSequenceImpl<E> extends BaseSequence<E> implements TinkerSequ
 
 	public TinkerSequenceImpl(TinkerNode owner, TumlRuntimeProperty runtimeProperty) {
 		super(owner, runtimeProperty);
-		this.internalCollection = new ArrayList<E>();
 	}
 
 	@Override

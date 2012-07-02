@@ -16,9 +16,11 @@ public class TinkerGenerationUtil {
 
 	public static final String TINKER_DB_NULL = "__NULL__";
 
+	public static final OJPathName tumlTinkerSequenceClosableIterableImpl = new OJPathName("org.tuml.runtime.collection.TinkerSequenceClosableIterableImpl");
+	public static final OJPathName tumlTinkerSetClosableIterableImpl = new OJPathName("org.tuml.runtime.collection.TinkerSetClosableIterableImpl");
+	
 	public static final OJPathName tumlRuntimePropertyPathName = new OJPathName("org.tuml.runtime.collection.TumlRuntimeProperty");
 	public static final OJPathName tinkerConclusionPathName = new OJPathName("com.tinkerpop.blueprints.pgm.TransactionalGraph.Conclusion");
-	public static final OJPathName tinkerSetClosableSequenceImplPathName = new OJPathName("org.tuml.runtime.collection.TinkerSetClosableSequenceImpl");
 	public static final OJPathName tinkerIndexPathName = new OJPathName("com.tinkerpop.blueprints.Index");
 	public static final OJPathName tinkerCloseableIterablePathName = new OJPathName("com.tinkerpop.blueprints.CloseableIterable");
 	public static final OJPathName tinkerDirection = new OJPathName("com.tinkerpop.blueprints.Direction");
@@ -80,9 +82,9 @@ public class TinkerGenerationUtil {
 	public static OJPathName tinkerIdUtilFactoryPathName = new OJPathName("org.tuml.runtime.adaptor.TinkerIdUtilFactory");
 
 	public static String calculateMultiplcity(MultiplicityElement multiplicityKind) {
-		if (multiplicityKind.getLower() == 1 && multiplicityKind.getUpper() == Integer.MAX_VALUE) {
+		if (multiplicityKind.getLower() == 1 && ((multiplicityKind.getUpper() == Integer.MAX_VALUE) || (multiplicityKind.getUpper() == -1))) {
 			return "Multiplicity.ONE_TO_MANY";
-		} else if (multiplicityKind.getLower() == 0 && multiplicityKind.getUpper() == Integer.MAX_VALUE) {
+		} else if (multiplicityKind.getLower() == 0 && ((multiplicityKind.getUpper() == Integer.MAX_VALUE) || (multiplicityKind.getUpper() == -1))) {
 			return "Multiplicity.ZERO_TO_MANY";
 		} else if (multiplicityKind.getLower() == 0 && multiplicityKind.getUpper() == 1) {
 			return "Multiplicity.ZERO_TO_ONE";

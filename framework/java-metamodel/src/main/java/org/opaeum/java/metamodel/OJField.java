@@ -2,6 +2,7 @@ package org.opaeum.java.metamodel;
 
 import java.util.Set;
 
+import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
 import org.opaeum.java.metamodel.generated.OJFieldGEN;
 
 public class OJField extends OJFieldGEN {
@@ -13,10 +14,19 @@ public class OJField extends OJFieldGEN {
 		setVisibility(OJVisibilityKind.PRIVATE);
 	}
 
+	public OJField(OJAnnotatedClass clazz, String name, OJPathName type) {
+		this(name, type);
+		clazz.addToFields(this);
+	}
+
 	public OJField(OJBlock block, String name, OJPathName type) {
+		this(name, type);
+		block.addToLocals(this);
+	}
+
+	public OJField(String name, OJPathName type) {
 		setName(name);
 		setType(type);
-		block.addToLocals(this);
 	}
 
 	public OJField(OJBlock body, String name, OJPathName type, String initExpr) {

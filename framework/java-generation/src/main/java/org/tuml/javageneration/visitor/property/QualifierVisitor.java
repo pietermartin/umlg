@@ -23,6 +23,8 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
 			generateQualifiedGetter(pWrap);
 		} else {
 			if (pWrap.hasQualifiers()) {
+				//TODO findOJClass does not work here as the pWrap is on an association.
+				//Need to get the side where the type is different to pWrap's type
 				generateQualifierGetter(findOJClass(pWrap), pWrap);
 			}
 		}
@@ -34,8 +36,8 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
 
 	private void validateHasCorrespondingDerivedProperty(PropertyWrapper pWrap) {
 		if (!pWrap.qualifierHasCorrespondingDerivedProperty()) {
-			throw new IllegalStateException(String.format("Qualified %s does not have a corresponding derived property on %s",
-					new Object[] { pWrap.getName(), pWrap.getQualifierContext() }));
+			throw new IllegalStateException(String.format("Qualified %s on %s does not have a corresponding derived property on %s",
+					new Object[] { pWrap.getName(), pWrap.getOwner(), pWrap.getQualifierContext().getName() }));
 		}
 	}
 
@@ -74,45 +76,42 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
 
 	private void generateQualifiedGetter(PropertyWrapper qualifier) {
 		Property ownerElement = (Property) qualifier.getOwner();
-		PropertyWrapper ownerElementMap = new PropertyWrapper(ownerElement);
-		Type qualifiedClassifier = (Type) ownerElement.getOwner();
+		PropertyWrapper ownerElementPWrap = new PropertyWrapper(ownerElement);
+		Type qualifiedClassifier = ownerElementPWrap.getOwningType();
 		OJAnnotatedClass ojClass = findOJClass(qualifiedClassifier);
 
-		OJAnnotatedOperation qualifierValue = new OJAnnotatedOperation(ownerElementMap.getter() + "For" + StringUtils.capitalize(qualifier.fieldname()));
+		OJAnnotatedOperation qualifierValue = new OJAnnotatedOperation(ownerElementPWrap.getter() + "For" + StringUtils.capitalize(qualifier.fieldname()));
 		if (qualifier.isOne()) {
-			qualifierValue.setReturnType(ownerElementMap.javaBaseTypePath());
+			qualifierValue.setReturnType(ownerElementPWrap.javaBaseTypePath());
 		} else {
-			// This only return a Set for now, not sure how index behaves with
-			// duplicates
-			qualifierValue.setReturnType(qualifier.javaTypePath());
+			// This needs to only return a Set for now, not sorting the result by index as yet
+			qualifierValue.setReturnType(ownerElementPWrap.javaTypePath());
 		}
 		qualifierValue.addParam(qualifier.fieldname(), (qualifier.isOne() ? qualifier.javaBaseTypePath() : qualifier.javaTypePath()));
 
 		ojClass.addToImports(TinkerGenerationUtil.tinkerIndexPathName);
 		ojClass.addToImports(TinkerGenerationUtil.tinkerCloseableIterablePathName);
 		ojClass.addToImports(TinkerGenerationUtil.tinkerDirection);
+		ojClass.addToImports(TinkerGenerationUtil.edgePathName);
 		qualifierValue.getBody().addToStatements(
-				"Index<Edge> index = GraphDb.getDb().getIndex(getUid() + \":::\" + \"" + TinkerGenerationUtil.getEdgeName(ownerElementMap) + "\", Edge.class)");
+				"Index<Edge> index = GraphDb.getDb().getIndex(getUid() + \":::\" + \"" + TinkerGenerationUtil.getEdgeName(ownerElementPWrap) + "\", Edge.class)");
 		OJIfStatement ifIndexNull = new OJIfStatement("index==null", "return null");
 		ifIndexNull.addToElsePart(TinkerGenerationUtil.tinkerCloseableIterablePathName.getCopy().addToGenerics(TinkerGenerationUtil.edgePathName).getLast()
 				+ " closeableIterable = index.get(\"" + qualifier.fieldname() + "\", " + qualifier.fieldname() + "==null?\"___NULL___\":" + qualifier.fieldname() + ")");
 		OJIfStatement ifHasNext = new OJIfStatement("closeableIterable.iterator().hasNext()");
 		if (qualifier.isOne()) {
-			ifHasNext.addToThenPart("return new " + ownerElementMap.javaBaseTypePath().getLast() + "(closeableIterable.iterator().next().getVertex("
+			ifHasNext.addToThenPart("return new " + ownerElementPWrap.javaBaseTypePath().getLast() + "(closeableIterable.iterator().next().getVertex("
 					+ TinkerGenerationUtil.tinkerDirection.getLast() + ".IN))");
 			ifHasNext.addToElsePart("return null");
 		} else {
-			OJSimpleStatement ojSimpleStatement = new OJSimpleStatement("return new TinkerSetClosableSequenceImpl<" + ownerElementMap.javaBaseTypePath().getLast()
-					+ ">(closeableSequence");
-			// Specify inverse boolean
-			if (ownerElementMap.isControllingSide() || ownerElementMap.getOtherEnd() == null || !ownerElementMap.getOtherEnd().isNavigable()) {
-				ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", true)");
+			OJSimpleStatement ojSimpleStatement = new OJSimpleStatement("return new " + (ownerElementPWrap.isUnique()?TinkerGenerationUtil.tumlTinkerSetClosableIterableImpl.getCopy().addToGenerics(ownerElementPWrap.javaBaseTypePath()).getLast():TinkerGenerationUtil.tumlTinkerSequenceClosableIterableImpl.getCopy().addToGenerics(ownerElementPWrap.javaBaseTypePath()).getLast()) + "(closeableIterable)");
+			if (ownerElementPWrap.isUnique()) {
+				ojClass.addToImports(TinkerGenerationUtil.tumlTinkerSetClosableIterableImpl);
 			} else {
-				ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", false)");
+				ojClass.addToImports(TinkerGenerationUtil.tumlTinkerSequenceClosableIterableImpl);
 			}
 			ifHasNext.addToThenPart(ojSimpleStatement);
-			ojClass.addToImports(TinkerGenerationUtil.tinkerSetClosableSequenceImplPathName);
-			ifHasNext.addToElsePart("return Collections.<" + ownerElementMap.javaBaseTypePath().getLast() + ">emptySet()");
+			ifHasNext.addToElsePart("return " + ownerElementPWrap.emptyCollection());
 			ojClass.addToImports(new OJPathName("java.util.Collections"));
 		}
 
@@ -120,5 +119,4 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
 		qualifierValue.getBody().addToStatements(ifIndexNull);
 		ojClass.addToOperations(qualifierValue);
 	}
-
 }

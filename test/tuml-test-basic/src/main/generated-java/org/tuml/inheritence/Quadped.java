@@ -12,7 +12,7 @@ import org.tuml.runtime.domain.CompositionNode;
 import org.tuml.runtime.domain.TinkerNode;
 
 public class Quadped extends Mamal implements CompositionNode {
-
+	static final public long serialVersionUID = 1L;
 
 	/** Constructor for Quadped
 	 * 

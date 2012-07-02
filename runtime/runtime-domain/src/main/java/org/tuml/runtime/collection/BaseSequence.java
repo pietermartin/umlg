@@ -16,8 +16,14 @@ import com.tinkerpop.blueprints.Vertex;
 
 public abstract class BaseSequence<E> extends BaseCollection<E> implements TinkerSequence<E> {
 
+	public BaseSequence() {
+		super();
+		this.internalCollection = new ArrayList<E>();
+	}
+	
 	public BaseSequence(TinkerNode owner, TumlRuntimeProperty runtimeProperty) {
 		super(owner, runtimeProperty);
+		this.internalCollection = new ArrayList<E>();
 		this.index = GraphDb.getDb().getIndex(owner.getUid() + ":::" + getLabel(), Edge.class);
 		if (this.index == null) {
 			this.index = GraphDb.getDb().createIndex(owner.getUid() + ":::" + getLabel(), Edge.class);
@@ -70,6 +76,9 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
 		if (e instanceof TinkerNode) {
 			min = (Float) ((TinkerNode) previous).getVertex().getProperty("tinkerIndex");
 			max = (Float) ((TinkerNode) current).getVertex().getProperty("tinkerIndex");
+			if (isInverseOrdered()) {
+				addOrderToInverseIndex(edge, (TinkerNode)e);
+			}
 		} else if (e.getClass().isEnum()) {
 			min = (Float) this.internalVertexMap.get(((Enum<?>) previous).name()).getProperty("tinkerIndex");
 			max = (Float) this.internalVertexMap.get(((Enum<?>) current).name()).getProperty("tinkerIndex");

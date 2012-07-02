@@ -67,7 +67,7 @@ public class NakedNeo4jIndex<T extends Element, S extends PropertyContainer> imp
 		// }
 	}
 
-	public T getBiggestIndexForSequence() {
+	public T getEdgeToLastElementInSequence() {
 		CloseableIterable<T> iter = this.index.query("index", QueryContext.numericRange("index", 0F, null).sortNumeric("index", true));
 		Iterator<T> iterator = iter.iterator();
 		if (iterator.hasNext()) {

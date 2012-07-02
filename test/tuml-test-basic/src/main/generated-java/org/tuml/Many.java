@@ -19,6 +19,7 @@ import org.tuml.runtime.domain.CompositionNode;
 import org.tuml.runtime.domain.TinkerNode;
 
 public class Many extends BaseTinker implements CompositionNode {
+	static final public long serialVersionUID = 1L;
 	private TinkerSet<String> name;
 	private TinkerSet<One> one;
 
@@ -152,12 +153,12 @@ public class Many extends BaseTinker implements CompositionNode {
 		ManyRuntimePropertyEnum runtimeProperty = ManyRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result == 0 ) {
 			switch ( runtimeProperty ) {
-				case one:
-					result = one.size();
-				break;
-			
 				case name:
 					result = name.size();
+				break;
+			
+				case one:
+					result = one.size();
 				break;
 			
 				default:
@@ -195,19 +196,19 @@ public class Many extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.name =  new TinkerSetImpl<String>(this, ManyRuntimePropertyEnum.name);
 		this.one =  new TinkerSetImpl<One>(this, ManyRuntimePropertyEnum.one);
+		this.name =  new TinkerSetImpl<String>(this, ManyRuntimePropertyEnum.name);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (ManyRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case one:
-				this.one =  new TinkerSetImpl<One>(this, ManyRuntimePropertyEnum.one);
-			break;
-		
 			case name:
 				this.name =  new TinkerSetImpl<String>(this, ManyRuntimePropertyEnum.name);
+			break;
+		
+			case one:
+				this.one =  new TinkerSetImpl<One>(this, ManyRuntimePropertyEnum.one);
 			break;
 		
 		}
@@ -258,8 +259,8 @@ public class Many extends BaseTinker implements CompositionNode {
 	}
 
 	public enum ManyRuntimePropertyEnum implements TumlRuntimeProperty {
-		name(true,true,false,"tuml-test-basic-model__org__tuml__Many__name",false,false,true,false,1,1,false,false,false,false,true),
-		one(false,false,false,"A_<one>_<many>",false,false,true,false,1,1,false,false,false,false,true);
+		one(false,false,false,"A_<one>_<many>",false,false,true,false,1,1,false,false,false,false,true),
+		name(true,true,false,"tuml-test-basic-model__org__tuml__Many__name",false,false,true,false,1,1,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -312,11 +313,11 @@ public class Many extends BaseTinker implements CompositionNode {
 		}
 	
 		static public ManyRuntimePropertyEnum fromLabel(String label) {
-			if ( name.getLabel().equals(label) ) {
-				return name;
-			}
 			if ( one.getLabel().equals(label) ) {
 				return one;
+			}
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
 			return null;
 		}

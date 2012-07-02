@@ -7,6 +7,7 @@ import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Property;
 import org.opaeum.java.metamodel.OJBlock;
 import org.opaeum.java.metamodel.OJConstructor;
+import org.opaeum.java.metamodel.OJField;
 import org.opaeum.java.metamodel.OJIfStatement;
 import org.opaeum.java.metamodel.OJOperation;
 import org.opaeum.java.metamodel.OJPathName;
@@ -31,6 +32,7 @@ public class ClassVisitor extends BaseVisitor implements Visitor<Class> {
 		} else {
 			implementTumlNode(annotatedClass);
 		}
+		addDefaultSerialization(annotatedClass);
 		implementIsRoot(annotatedClass, TumlClassOperations.getOtherEndToComposite(clazz) == null);
 		addPersistentConstructor(annotatedClass);
 		addInitialiseProperties(annotatedClass, clazz);
@@ -48,6 +50,14 @@ public class ClassVisitor extends BaseVisitor implements Visitor<Class> {
 		addCreateComponents(annotatedClass, clazz);
 		addInitVariables(annotatedClass, clazz);
 		addDelete(annotatedClass, clazz);
+	}
+
+	//TODO turn into proper value
+	private void addDefaultSerialization(OJAnnotatedClass annotatedClass) {
+		OJField defaultSerialization = new OJField(annotatedClass, "serialVersionUID", new OJPathName("long"));
+		defaultSerialization.setFinal(true);
+		defaultSerialization.setStatic(true);
+		defaultSerialization.setInitExp("1L");
 	}
 
 	@Override

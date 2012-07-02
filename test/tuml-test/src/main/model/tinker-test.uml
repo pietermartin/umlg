@@ -152,17 +152,11 @@
           <qualifier xmi:id="_oTa3IAihEeG067WTUlY0-g" name="qualifier1">
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_rUmfIAyREeGNSfCmMLqh1A" value="1"/>
-            <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_vimVUAo7EeG-6OkEevpG6w" name="OpaqueExpression1">
-              <body>self.name1</body>
-            </defaultValue>
           </qualifier>
           <qualifier xmi:id="_KW7PAA1TEeGMEcd2Uio8Tg" name="qualifier2">
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_TrGJEA1TEeGMEcd2Uio8Tg" value="*"/>
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_UIi6EA1TEeGMEcd2Uio8Tg"/>
-            <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_Pp49cA1TEeGMEcd2Uio8Tg" name="OpaqueExpression1">
-              <body>self.name2</body>
-            </defaultValue>
           </qualifier>
         </ownedAttribute>
         <ownedAttribute xmi:id="_2wJZYBFHEeGoRIAInCGFZA" name="hand" type="_dVgyEBFHEeGoRIAInCGFZA" isOrdered="true" isUnique="false" aggregation="composite" association="_2wO48BFHEeGoRIAInCGFZA">
@@ -188,9 +182,6 @@
           <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_yoF-shh1EeGyD6zYrs7NuQ"/>
           <qualifier xmi:id="_-rykoBh2EeGyD6zYrs7NuQ" name="fantasyQualifierOnName">
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
-            <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_Czh2EBh3EeGyD6zYrs7NuQ" name="OpaqueExpression1">
-              <body>name</body>
-            </defaultValue>
           </qualifier>
         </ownedAttribute>
         <ownedAttribute xmi:id="_-V3QQBncEeGZfswubjlR9Q" name="many1" type="_36iLkBncEeGZfswubjlR9Q" aggregation="composite" association="_-WC2cBncEeGZfswubjlR9Q">
@@ -210,9 +201,6 @@
           <lowerValue xmi:type="uml:LiteralInteger" xmi:id="__Y1SohqsEeG2HY-TJLNivw"/>
           <qualifier xmi:id="_sejkgBqtEeG2HY-TJLNivw" name="qualifier1">
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
-            <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_t6pIABqtEeG2HY-TJLNivw" name="OpaqueExpression1">
-              <body>name</body>
-            </defaultValue>
           </qualifier>
         </ownedAttribute>
         <ownedAttribute xmi:id="_wXVisDRxEeG7DpOu3iq2YQ" name="demon" type="_rQp8wDRxEeG7DpOu3iq2YQ" aggregation="composite" association="_wXXX6jRxEeG7DpOu3iq2YQ">
@@ -440,6 +428,20 @@
         <ownedAttribute xmi:id="_HGZ5cA1TEeGMEcd2Uio8Tg" name="name2">
           <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
         </ownedAttribute>
+        <ownedAttribute xmi:id="_pNKkYMRjEeGr8dhiXoL-ZA" name="qualifier1" isDerived="true">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+          <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_tN5O4MRjEeGr8dhiXoL-ZA" name="self.name1">
+            <language>ocl</language>
+            <body>self.name1</body>
+          </defaultValue>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_vP2fkMRjEeGr8dhiXoL-ZA" name="qualifier2" isDerived="true">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+          <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_xe5KAMRjEeGr8dhiXoL-ZA" name="self.name2">
+            <language>ocl</language>
+            <body>self.name2</body>
+          </defaultValue>
+        </ownedAttribute>
       </packagedElement>
       <packagedElement xmi:type="uml:Association" xmi:id="_Yq2WivJKEeCeFLHNTzV0LA" name="A_&lt;god>_&lt;nature>" memberEnd="_Yq29kPJKEeCeFLHNTzV0LA _YqwP4PJKEeCeFLHNTzV0LA" navigableOwnedEnd="_Yq29kPJKEeCeFLHNTzV0LA">
         <ownedEnd xmi:id="_Yq29kPJKEeCeFLHNTzV0LA" name="god" type="_YuD8sOwiEeCSwqyeEHd1tw" association="_Yq2WivJKEeCeFLHNTzV0LA">
@@ -451,10 +453,38 @@
         <ownedAttribute xmi:id="_5p0-8BncEeGZfswubjlR9Q" name="name">
           <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
         </ownedAttribute>
+        <ownedAttribute xmi:id="_ugE2MMRoEeGJXus6eZqdyw" name="qualifier1" isDerived="true">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+          <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_wwOT4MRoEeGJXus6eZqdyw" name="self.name">
+            <language>ocl</language>
+            <body>self.name</body>
+          </defaultValue>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_pgz4IMRuEeGJXus6eZqdyw" name="listQualifier1" isDerived="true">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+          <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_rOeT0MRuEeGJXus6eZqdyw" name="self.name">
+            <language>ocl</language>
+            <body>self.name</body>
+          </defaultValue>
+        </ownedAttribute>
       </packagedElement>
       <packagedElement xmi:type="uml:Class" xmi:id="_4rB0YBncEeGZfswubjlR9Q" name="Many2">
         <ownedAttribute xmi:id="_6ZuK0BncEeGZfswubjlR9Q" name="name">
           <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_1YvXIMRoEeGJXus6eZqdyw" name="qualifier1" isDerived="true">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+          <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_3gCa0MRoEeGJXus6eZqdyw" name="self.name">
+            <language>ocl</language>
+            <body>self.name</body>
+          </defaultValue>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_EcSnIMRvEeGJXus6eZqdyw" name="listQualifier2" isDerived="true">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+          <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_GajDkMRvEeGJXus6eZqdyw" name="self.name">
+            <language>ocl</language>
+            <body>self.name</body>
+          </defaultValue>
         </ownedAttribute>
       </packagedElement>
       <packagedElement xmi:type="uml:Association" xmi:id="_-WC2cBncEeGZfswubjlR9Q" name="A_&lt;god>_&lt;many1>" memberEnd="_-WDdgBncEeGZfswubjlR9Q _-V3QQBncEeGZfswubjlR9Q" navigableOwnedEnd="_-WDdgBncEeGZfswubjlR9Q">
@@ -477,9 +507,6 @@
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_NGckIBnnEeGZfswubjlR9Q" value="*"/>
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_NTaCEBnnEeGZfswubjlR9Q"/>
-            <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_J-rh8BnnEeGZfswubjlR9Q" name="OpaqueExpression1">
-              <body>name</body>
-            </defaultValue>
           </qualifier>
         </ownedEnd>
         <ownedEnd xmi:id="_Cp4DJBndEeGZfswubjlR9Q" name="many2" type="_4rB0YBncEeGZfswubjlR9Q" association="_Cp4DIBndEeGZfswubjlR9Q">
@@ -487,9 +514,6 @@
           <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Cp4DJhndEeGZfswubjlR9Q"/>
           <qualifier xmi:id="_M-YY0BndEeGZfswubjlR9Q" name="qualifier1">
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
-            <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_x74w8BneEeGZfswubjlR9Q" name="OpaqueExpression1">
-              <body>name</body>
-            </defaultValue>
           </qualifier>
         </ownedEnd>
       </packagedElement>
@@ -501,9 +525,6 @@
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_nlEhkBnzEeGZfswubjlR9Q" value="*"/>
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_nfMjEBnzEeGZfswubjlR9Q"/>
-            <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_z8OakBnqEeGZfswubjlR9Q" name="OpaqueExpression1">
-              <body>name</body>
-            </defaultValue>
           </qualifier>
         </ownedEnd>
         <ownedEnd xmi:id="_h0dj9BnqEeGZfswubjlR9Q" name="many2List" type="_4rB0YBncEeGZfswubjlR9Q" isOrdered="true" isUnique="false" association="_h0dj8BnqEeGZfswubjlR9Q">
@@ -513,9 +534,6 @@
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_YoRyIBnzEeGZfswubjlR9Q" value="1"/>
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_YiyOIBnzEeGZfswubjlR9Q" value="1"/>
-            <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_xaQNEBnqEeGZfswubjlR9Q" name="OpaqueExpression1">
-              <body>name</body>
-            </defaultValue>
           </qualifier>
         </ownedEnd>
       </packagedElement>
@@ -549,6 +567,13 @@
         <ownedAttribute xmi:id="_IKLEEBhKEeGoXdfOp4zUvw" name="name">
           <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
         </ownedAttribute>
+        <ownedAttribute xmi:id="_uLKyoMRnEeGJXus6eZqdyw" name="godFootQualifier" isDerived="true">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+          <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_yRvmcMRnEeGJXus6eZqdyw" name="self.name">
+            <language>ocl</language>
+            <body>self.name</body>
+          </defaultValue>
+        </ownedAttribute>
       </packagedElement>
       <packagedElement xmi:type="uml:Association" xmi:id="_Krd8KhhKEeGoXdfOp4zUvw" name="A_&lt;god>_&lt;foot>" memberEnd="_Krd8KxhKEeGoXdfOp4zUvw _KrZDoBhKEeGoXdfOp4zUvw" navigableOwnedEnd="_Krd8KxhKEeGoXdfOp4zUvw">
         <ownedEnd xmi:id="_Krd8KxhKEeGoXdfOp4zUvw" name="god" type="_YuD8sOwiEeCSwqyeEHd1tw" association="_Krd8KhhKEeGoXdfOp4zUvw">
@@ -570,6 +595,13 @@
       <packagedElement xmi:type="uml:Class" xmi:id="_w-VyoBh1EeGyD6zYrs7NuQ" name="Fantasy">
         <ownedAttribute xmi:id="_1fC9sBh1EeGyD6zYrs7NuQ" name="name">
           <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_6J9f4MRnEeGJXus6eZqdyw" name="fantasyQualifierOnName" isDerived="true">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+          <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_Cr3PgMRoEeGJXus6eZqdyw" name="self.name">
+            <language>ocl</language>
+            <body>self.name</body>
+          </defaultValue>
         </ownedAttribute>
       </packagedElement>
       <packagedElement xmi:type="uml:Association" xmi:id="_yoSzABh1EeGyD6zYrs7NuQ" name="A_&lt;god>_&lt;fantasy>" memberEnd="_yoSzARh1EeGyD6zYrs7NuQ _yoF-sBh1EeGyD6zYrs7NuQ" navigableOwnedEnd="_yoSzARh1EeGyD6zYrs7NuQ">
@@ -595,6 +627,13 @@
         </ownedAttribute>
         <ownedAttribute xmi:id="_RCfXUBq1EeG2HY-TJLNivw" name="nameNonUnique">
           <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_Qvap0MRoEeGJXus6eZqdyw" name="qualifier1" isDerived="true">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+          <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_S8LcUMRoEeGJXus6eZqdyw" name="self.name">
+            <language>ocl</language>
+            <body>self.name</body>
+          </defaultValue>
         </ownedAttribute>
       </packagedElement>
       <packagedElement xmi:type="uml:Association" xmi:id="__Y9OcBqsEeG2HY-TJLNivw" name="A_&lt;god>_&lt;nightmare>" memberEnd="__Y9OcRqsEeG2HY-TJLNivw __Y1SoBqsEeG2HY-TJLNivw" navigableOwnedEnd="__Y9OcRqsEeG2HY-TJLNivw">

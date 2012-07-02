@@ -7,5 +7,5 @@ import com.tinkerpop.blueprints.Index;
 public interface NakedTinkerIndex<T extends Element> extends Index<T> {
 	CloseableIterable<T> queryList(Float from, boolean minInclusive, boolean reversed);
 	CloseableIterable<T> get(Float value);
-	T getBiggestIndexForSequence();
+	T getEdgeToLastElementInSequence();
 }

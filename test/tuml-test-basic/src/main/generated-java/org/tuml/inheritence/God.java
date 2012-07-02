@@ -18,6 +18,7 @@ import org.tuml.runtime.domain.BaseTinker;
 import org.tuml.runtime.domain.TinkerNode;
 
 public class God extends BaseTinker implements TinkerNode {
+	static final public long serialVersionUID = 1L;
 	private TinkerSet<AbstractSpecies> abstractSpecies;
 	private TinkerSet<String> name;
 
