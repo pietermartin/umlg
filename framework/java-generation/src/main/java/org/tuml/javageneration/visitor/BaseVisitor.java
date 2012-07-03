@@ -36,16 +36,22 @@ public class BaseVisitor {
 		if (!pWrap.isQualifier()) {
 			Element owner = p.getOwner();
 			// Association must come first in this if statement as Association
-			// is
-			// also a Classifier
+			// is also a Classifier
 			if (owner instanceof Association) {
 				Association a = (Association) owner;
 				List<Property> members = a.getMemberEnds();
 				Property otherEnd = null;
 				for (Property member : members) {
-					if (member != p) {
-						otherEnd = member;
-						break;
+					if (p instanceof PropertyWrapper) {
+						if (member != ((PropertyWrapper)p).getProperty()) {
+							otherEnd = member;
+							break;
+						}
+					} else {
+						if (member != p) {
+							otherEnd = member;
+							break;
+						}
 					}
 				}
 				if (otherEnd == null) {

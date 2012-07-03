@@ -2,9 +2,9 @@ package org.nakeuml.tinker.collectiontest;
 
 import org.junit.Test;
 import org.neo4j.graphdb.TransactionFailureException;
-import org.tinker.concretetest.God;
-import org.tinker.interfacetest.ManyA;
-import org.tinker.interfacetest.ManyB;
+import org.tuml.concretetest.God;
+import org.tuml.interfacetest.ManyA;
+import org.tuml.interfacetest.ManyB;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
 import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;

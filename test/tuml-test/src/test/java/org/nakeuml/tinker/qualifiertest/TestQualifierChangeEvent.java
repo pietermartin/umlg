@@ -2,8 +2,8 @@ package org.nakeuml.tinker.qualifiertest;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.tinker.concretetest.God;
-import org.tinker.qualifiertest.Nature;
+import org.tuml.concretetest.God;
+import org.tuml.qualifiertest.Nature;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
 import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;

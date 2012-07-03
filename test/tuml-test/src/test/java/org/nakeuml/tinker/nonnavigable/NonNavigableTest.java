@@ -3,10 +3,10 @@ package org.nakeuml.tinker.nonnavigable;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.tinker.concretetest.God;
-import org.tinker.concretetest.Universe;
-import org.tinker.navigability.NonNavigableMany;
-import org.tinker.navigability.NonNavigableOne;
+import org.tuml.concretetest.God;
+import org.tuml.concretetest.Universe;
+import org.tuml.navigability.NonNavigableMany;
+import org.tuml.navigability.NonNavigableOne;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
 import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;

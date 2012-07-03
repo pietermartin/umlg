@@ -106,9 +106,10 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 
 	@Override
 	public boolean add(E e) {
-		// validateMultiplicityForAdditionalElement calls size() which loads the
-		// collection
 		validateMultiplicityForAdditionalElement();
+		if (isQualified() || isInverseQualified()) {
+			validateQualifiedAssociation(e);
+		}
 		maybeCallInit(e);
 		boolean result = this.internalCollection.add(e);
 		if (result) {
@@ -143,6 +144,31 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 		}
 
 		return result;
+	}
+
+	private void validateQualifiedAssociation(E e) {
+		if (!(e instanceof TinkerNode)) {
+			throw new IllegalStateException("Primitive properties can not be qualified!");
+		}
+		TinkerNode node = (TinkerNode)e;
+		if (isQualified()) {
+			if (!(e instanceof TinkerNode)) {
+				throw new IllegalStateException("Primitive properties can not be qualified!");
+			}
+			for (Qualifier qualifier : this.owner.getQualifiers(this.tumlRuntimeProperty, node)) {
+				validateQualifiedMultiplicity(index, qualifier);
+			}
+		}
+		if (isInverseQualified()) {
+			Index<Edge> tmpIndex;
+			tmpIndex = GraphDb.getDb().getIndex(((TinkerNode) e).getUid() + ":::" + getLabel(), Edge.class);
+			if (tmpIndex == null) {
+				tmpIndex = GraphDb.getDb().createIndex(((TinkerNode) e).getUid() + ":::" + getLabel(), Edge.class);
+			}
+			for (Qualifier qualifier : node.getQualifiers(this.tumlRuntimeProperty, this.owner)) {
+				validateQualifiedMultiplicity(tmpIndex, qualifier);
+			}
+		}
 	}
 
 	protected void validateMultiplicityForAdditionalElement() {
@@ -200,7 +226,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 				TransactionThreadEntityVar.setNewEntity((CompositionNode) node);
 			}
 			v = node.getVertex();
-			if (this.isOneToMany() || this.isOneToOne()) {
+			if (this.isUnique() && (this.isOneToMany() || this.isOneToOne())) {
 				// Remove the existing one from the element if it exist
 				Iterator<Edge> iteratorToOne = getEdges(v).iterator();
 				if (iteratorToOne.hasNext()) {
@@ -438,7 +464,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 		return result;
 	}
 
-	protected void validateQualifiedMultiplicity(Index<Edge> index, Qualifier qualifier) {
+	private void validateQualifiedMultiplicity(Index<Edge> index, Qualifier qualifier) {
 		if (qualifier.isOne()) {
 			long count = index.count(qualifier.getKey(), qualifier.getValue());
 			if (count > 0) {
@@ -507,7 +533,6 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 	 */
 	private void addQualifierToIndex(Index<Edge> index, Edge edge, TinkerNode qualifiedNode, TinkerNode qualifierNode) {
 		for (Qualifier qualifier : qualifiedNode.getQualifiers(this.tumlRuntimeProperty, qualifierNode)) {
-			validateQualifiedMultiplicity(index, qualifier);
 			index.put(qualifier.getKey(), qualifier.getValue(), edge);
 			edge.setProperty("index" + qualifier.getKey(), qualifier.getValue());
 		}

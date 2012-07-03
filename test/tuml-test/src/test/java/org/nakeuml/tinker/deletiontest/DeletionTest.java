@@ -2,12 +2,12 @@ package org.nakeuml.tinker.deletiontest;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.tinker.concretetest.God;
-import org.tinker.concretetest.Universe;
-import org.tinker.interfacetest.ManyA;
-import org.tinker.interfacetest.ManyB;
-import org.tinker.onetoone.OneOne;
-import org.tinker.onetoone.OneTwo;
+import org.tuml.concretetest.God;
+import org.tuml.concretetest.Universe;
+import org.tuml.interfacetest.ManyA;
+import org.tuml.interfacetest.ManyB;
+import org.tuml.onetoone.OneOne;
+import org.tuml.onetoone.OneTwo;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
 import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;

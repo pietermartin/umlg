@@ -23,8 +23,6 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
 			generateQualifiedGetter(pWrap);
 		} else {
 			if (pWrap.hasQualifiers()) {
-				//TODO findOJClass does not work here as the pWrap is on an association.
-				//Need to get the side where the type is different to pWrap's type
 				generateQualifierGetter(findOJClass(pWrap), pWrap);
 			}
 		}

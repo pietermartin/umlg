@@ -1,0 +1,4 @@
+package org::tuml::collectiontest
+context Nightmare::qualifier1
+derive: self.name
+endpackage

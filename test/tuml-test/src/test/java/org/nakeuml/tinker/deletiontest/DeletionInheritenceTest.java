@@ -2,9 +2,9 @@ package org.nakeuml.tinker.deletiontest;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.tinker.concretetest.God;
-import org.tinker.inheritencetest.Biped;
-import org.tinker.inheritencetest.Mamal;
+import org.tuml.concretetest.God;
+import org.tuml.inheritencetest.Biped;
+import org.tuml.inheritencetest.Mamal;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
 import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;

@@ -4,10 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
-import org.tinker.concretetest.God;
-import org.tinker.hierarchytest.Folder;
-import org.tinker.hierarchytest.Hierarchy;
-import org.tinker.hierarchytest.RealRootFolder;
+import org.tuml.concretetest.God;
+import org.tuml.hierarchytest.RealRootFolder;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
 import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;

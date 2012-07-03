@@ -3,9 +3,9 @@ package org.nakeuml.tinker.qualifiertest;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.tinker.concretetest.God;
-import org.tinker.qualifiertest.Many1;
-import org.tinker.qualifiertest.Many2;
+import org.tuml.concretetest.God;
+import org.tuml.qualifiertest.Many1;
+import org.tuml.qualifiertest.Many2;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
 import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;

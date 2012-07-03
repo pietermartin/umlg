@@ -4,11 +4,11 @@ import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.tinker.concretetest.God;
-import org.tinker.concretetest.Universe;
-import org.tinker.qualifiertest.Many1;
-import org.tinker.qualifiertest.Many2;
-import org.tinker.qualifiertest.Nature;
+import org.tuml.concretetest.God;
+import org.tuml.concretetest.Universe;
+import org.tuml.qualifiertest.Many1;
+import org.tuml.qualifiertest.Many2;
+import org.tuml.qualifiertest.Nature;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
 import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;

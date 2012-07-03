@@ -2,10 +2,10 @@ package org.nakeuml.tinker.interfacetest;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.tinker.concretetest.God;
-import org.tinker.interfacetest.Creature;
-import org.tinker.interfacetest.Phantom;
-import org.tinker.interfacetest.Spook;
+import org.tuml.concretetest.God;
+import org.tuml.interfacetest.Creature;
+import org.tuml.interfacetest.Phantom;
+import org.tuml.interfacetest.Spook;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
 import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;

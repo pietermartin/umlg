@@ -1,0 +1,4 @@
+package org::tuml::collectiontest
+context Fantasy::fantasyQualifierOnName
+derive: self.name
+endpackage

@@ -1483,4 +1483,9 @@ public class PropertyWrapper implements Property {
 			return "Collections.emptyList()";
 		}
 	}
+	
+	public Property getProperty() {
+		return property;
+	}
+
 }

@@ -1,0 +1,4 @@
+package org::tuml::collectiontest
+context Foot::godFootQualifier
+derive: self.name
+endpackage

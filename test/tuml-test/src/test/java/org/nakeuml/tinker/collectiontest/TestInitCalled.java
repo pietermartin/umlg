@@ -3,8 +3,8 @@ package org.nakeuml.tinker.collectiontest;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.tinker.concretetest.God;
-import org.tinker.inheritencetest.Biped;
+import org.tuml.concretetest.God;
+import org.tuml.inheritencetest.Biped;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
 import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
