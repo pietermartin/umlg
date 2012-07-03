@@ -165,16 +165,16 @@ public class Creature extends BaseTinker implements CompositionNode, Being {
 		CreatureRuntimePropertyEnum runtimeProperty = CreatureRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result == 0 ) {
 			switch ( runtimeProperty ) {
-				case name:
-					result = name.size();
+				case spook:
+					result = spook.size();
 				break;
 			
 				case god:
 					result = god.size();
 				break;
 			
-				case spook:
-					result = spook.size();
+				case name:
+					result = name.size();
 				break;
 			
 				default:
@@ -221,24 +221,24 @@ public class Creature extends BaseTinker implements CompositionNode, Being {
 	
 	@Override
 	public void initialiseProperties() {
-		this.spook =  new TinkerSetImpl<Spook>(this, CreatureRuntimePropertyEnum.spook);
-		this.god =  new TinkerSetImpl<God>(this, CreatureRuntimePropertyEnum.god);
 		this.name =  new TinkerSetImpl<String>(this, CreatureRuntimePropertyEnum.name);
+		this.god =  new TinkerSetImpl<God>(this, CreatureRuntimePropertyEnum.god);
+		this.spook =  new TinkerSetImpl<Spook>(this, CreatureRuntimePropertyEnum.spook);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (CreatureRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case name:
-				this.name =  new TinkerSetImpl<String>(this, CreatureRuntimePropertyEnum.name);
+			case spook:
+				this.spook =  new TinkerSetImpl<Spook>(this, CreatureRuntimePropertyEnum.spook);
 			break;
 		
 			case god:
 				this.god =  new TinkerSetImpl<God>(this, CreatureRuntimePropertyEnum.god);
 			break;
 		
-			case spook:
-				this.spook =  new TinkerSetImpl<Spook>(this, CreatureRuntimePropertyEnum.spook);
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, CreatureRuntimePropertyEnum.name);
 			break;
 		
 		}
@@ -306,9 +306,9 @@ public class Creature extends BaseTinker implements CompositionNode, Being {
 	}
 
 	public enum CreatureRuntimePropertyEnum implements TumlRuntimeProperty {
-		spook(false,false,false,"A_<spook>_<creature>",true,false,false,false,1,0,false,false,false,false,true),
+		name(true,true,false,"tuml-test__org__tuml__interfacetest__Creature__name",false,false,true,false,1,1,false,false,false,false,true),
 		god(false,false,false,"A_<god>_<being>",false,false,true,false,1,1,false,false,false,false,true),
-		name(true,true,false,"tuml-test__org__tuml__interfacetest__Creature__name",false,false,true,false,1,1,false,false,false,false,true);
+		spook(false,false,false,"A_<spook>_<creature>",true,false,false,false,1,0,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -361,14 +361,14 @@ public class Creature extends BaseTinker implements CompositionNode, Being {
 		}
 	
 		static public CreatureRuntimePropertyEnum fromLabel(String label) {
-			if ( spook.getLabel().equals(label) ) {
-				return spook;
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
 			if ( god.getLabel().equals(label) ) {
 				return god;
 			}
-			if ( name.getLabel().equals(label) ) {
-				return name;
+			if ( spook.getLabel().equals(label) ) {
+				return spook;
 			}
 			return null;
 		}

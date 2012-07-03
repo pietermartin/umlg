@@ -42,11 +42,6 @@ public class TinkerQualifiedOrderedSetImpl<E> extends BaseCollection<E> implemen
 		addQualifierToIndex(edge, (TinkerNode)e);
 	}
 
-	@Override
-	public boolean add(E e) {
-		throw new IllegalStateException("This method can not be called on a qualified association. Call add(E, List<Qualifier>) instead");
-	}
-
 	@SuppressWarnings("unchecked")
 	protected Edge addToListAndListIndex(int indexOf, E e) {
 		E previous = (E) this.getInternalListOrderedSet().get(indexOf - 1);

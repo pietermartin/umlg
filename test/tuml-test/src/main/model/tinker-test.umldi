@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<diagrams:Diagrams xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.topcased.org/DI/1.0" xmlns:diagrams="http://www.topcased.org/Diagrams/1.0" xmi:id="_im0g4MTDEeGJXus6eZqdyw" activeDiagram="_mnlnoMTDEeGJXus6eZqdyw">
+<diagrams:Diagrams xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.topcased.org/DI/1.0" xmlns:diagrams="http://www.topcased.org/Diagrams/1.0" xmi:id="_im0g4MTDEeGJXus6eZqdyw" activeDiagram="_pv55YBFLEeGoRIAInCGFZA">
   <model href="tinker-test.uml#_qb8akM37EdqwVrslYOdUDA"/>
   <diagrams xmi:id="_im3kMMTDEeGJXus6eZqdyw" position="0,0" size="100,100" name="org" viewport="0,0">
     <property xmi:id="_inGNsMTDEeGJXus6eZqdyw" key="pageFormatName" value="A4"/>
@@ -1270,7 +1270,7 @@
     </subdiagrams>
     <subdiagrams xmi:id="_CU3zAPJKEeCeFLHNTzV0LA">
       <model href="tinker-test.uml#_AoGIIPJKEeCeFLHNTzV0LA"/>
-      <diagrams xmi:id="_CU5BIPJKEeCeFLHNTzV0LA" position="0,0" size="100,100" name="qualifiertest" viewport="0,80">
+      <diagrams xmi:id="_CU5BIPJKEeCeFLHNTzV0LA" position="0,0" size="100,100" name="qualifiertest" viewport="0,9">
         <property xmi:id="_CVFOYPJKEeCeFLHNTzV0LA" key="pageFormatName" value="A4"/>
         <property xmi:id="_CVFOYfJKEeCeFLHNTzV0LA" key="diagramWidth" value="840"/>
         <property xmi:id="_CVFOYvJKEeCeFLHNTzV0LA" key="diagramHeight" value="1188"/>
@@ -1492,7 +1492,7 @@
     </subdiagrams>
     <subdiagrams xmi:id="_pv5SUBFLEeGoRIAInCGFZA">
       <model href="tinker-test.uml#_ossv8BFLEeGoRIAInCGFZA"/>
-      <diagrams xmi:id="_pv55YBFLEeGoRIAInCGFZA" position="0,0" size="100,100" name="collection" viewport="0,0">
+      <diagrams xmi:id="_pv55YBFLEeGoRIAInCGFZA" position="0,0" size="100,100" name="collection" viewport="-41,0">
         <property xmi:id="_pwLmMBFLEeGoRIAInCGFZA" key="pageFormatName" value="A4"/>
         <property xmi:id="_pwLmMRFLEeGoRIAInCGFZA" key="diagramWidth" value="840"/>
         <property xmi:id="_pwLmMhFLEeGoRIAInCGFZA" key="diagramHeight" value="1188"/>
@@ -1523,7 +1523,7 @@
             </semanticModel>
           </contained>
         </contained>
-        <contained xsi:type="di:GraphNode" xmi:id="_usquUBFLEeGoRIAInCGFZA" position="456,380" size="184,-1">
+        <contained xsi:type="di:GraphNode" xmi:id="_usquUBFLEeGoRIAInCGFZA" position="582,269" size="184,-1">
           <anchorage xmi:id="_us1tcRFLEeGoRIAInCGFZA" graphEdge="_us27kBFLEeGoRIAInCGFZA"/>
           <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_usquURFLEeGoRIAInCGFZA" presentation="default">
             <element href="tinker-test.uml#_dVgyEBFHEeGoRIAInCGFZA"/>
@@ -1564,7 +1564,7 @@
           <contained xsi:type="di:EdgeObjectOffset" xmi:id="_us27mBFLEeGoRIAInCGFZA" visible="false" id="middleNameEdgeObject" offset="0,10"/>
           <contained xsi:type="di:EdgeObjectOffset" xmi:id="_us27mRFLEeGoRIAInCGFZA" id="stereotypeEdgeObject" offset="0,-10"/>
         </contained>
-        <contained xsi:type="di:GraphNode" xmi:id="_HQm-0BhKEeGoXdfOp4zUvw" position="485,241" size="159,-1">
+        <contained xsi:type="di:GraphNode" xmi:id="_HQm-0BhKEeGoXdfOp4zUvw" position="604,158" size="159,-1">
           <anchorage xmi:id="_Kra40BhKEeGoXdfOp4zUvw" graphEdge="_Krd8IBhKEeGoXdfOp4zUvw"/>
           <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_HQm-0RhKEeGoXdfOp4zUvw" presentation="default">
             <element href="tinker-test.uml#_HQzzIBhKEeGoXdfOp4zUvw"/>
@@ -1605,7 +1605,7 @@
           <contained xsi:type="di:EdgeObjectOffset" xmi:id="_Krd8KBhKEeGoXdfOp4zUvw" visible="false" id="middleNameEdgeObject" offset="0,10"/>
           <contained xsi:type="di:EdgeObjectOffset" xmi:id="_Krd8KRhKEeGoXdfOp4zUvw" id="stereotypeEdgeObject" offset="0,-10"/>
         </contained>
-        <contained xsi:type="di:GraphNode" xmi:id="_n1AX8BhnEeGyD6zYrs7NuQ" position="506,115" size="181,-1">
+        <contained xsi:type="di:GraphNode" xmi:id="_n1AX8BhnEeGyD6zYrs7NuQ" position="572,44" size="181,-1">
           <anchorage xmi:id="_vJxmEBhnEeGyD6zYrs7NuQ" graphEdge="_vJy0MBhnEeGyD6zYrs7NuQ"/>
           <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_n1A_ABhnEeGyD6zYrs7NuQ" presentation="default">
             <element href="tinker-test.uml#_n1FQcBhnEeGyD6zYrs7NuQ"/>
@@ -1641,7 +1641,7 @@
           <contained xsi:type="di:EdgeObjectOffset" xmi:id="_vJy0OBhnEeGyD6zYrs7NuQ" visible="false" id="middleNameEdgeObject" offset="0,10"/>
           <contained xsi:type="di:EdgeObjectOffset" xmi:id="_vJy0ORhnEeGyD6zYrs7NuQ" id="stereotypeEdgeObject" offset="0,-10"/>
         </contained>
-        <contained xsi:type="di:GraphNode" xmi:id="_w-MBoBh1EeGyD6zYrs7NuQ" position="271,419" size="145,-1">
+        <contained xsi:type="di:GraphNode" xmi:id="_w-MBoBh1EeGyD6zYrs7NuQ" position="557,383" size="145,-1">
           <anchorage xmi:id="_yoJCABh1EeGyD6zYrs7NuQ" graphEdge="_yoLeQBh1EeGyD6zYrs7NuQ"/>
           <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_w-MBoRh1EeGyD6zYrs7NuQ" presentation="default">
             <element href="tinker-test.uml#_w-VyoBh1EeGyD6zYrs7NuQ"/>
@@ -1682,7 +1682,7 @@
           <contained xsi:type="di:EdgeObjectOffset" xmi:id="_yoLeSBh1EeGyD6zYrs7NuQ" visible="false" id="middleNameEdgeObject" offset="0,10"/>
           <contained xsi:type="di:EdgeObjectOffset" xmi:id="_yoLeSRh1EeGyD6zYrs7NuQ" id="stereotypeEdgeObject" offset="0,-10"/>
         </contained>
-        <contained xsi:type="di:GraphNode" xmi:id="_1DffcBn8EeG2tbT4yXI5_w" position="114,345" size="167,-1">
+        <contained xsi:type="di:GraphNode" xmi:id="_1DffcBn8EeG2tbT4yXI5_w" position="370,472" size="167,-1">
           <anchorage xmi:id="_5cQPcBn8EeG2tbT4yXI5_w" graphEdge="_5cSEoBn8EeG2tbT4yXI5_w"/>
           <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_1DffcRn8EeG2tbT4yXI5_w" presentation="default">
             <element href="tinker-test.uml#_1Djw4Bn8EeG2tbT4yXI5_w"/>
@@ -1718,7 +1718,7 @@
           <contained xsi:type="di:EdgeObjectOffset" xmi:id="_5cSEqBn8EeG2tbT4yXI5_w" visible="false" id="middleNameEdgeObject" offset="0,10"/>
           <contained xsi:type="di:EdgeObjectOffset" xmi:id="_5cSEqRn8EeG2tbT4yXI5_w" id="stereotypeEdgeObject" offset="0,-10"/>
         </contained>
-        <contained xsi:type="di:GraphNode" xmi:id="_7zGiEBqsEeG2HY-TJLNivw" position="30,263" size="151,-1">
+        <contained xsi:type="di:GraphNode" xmi:id="_7zGiEBqsEeG2HY-TJLNivw" position="30,263" size="259,-1">
           <anchorage xmi:id="__Y6yMBqsEeG2HY-TJLNivw" graphEdge="__Y8nYBqsEeG2HY-TJLNivw _NSuoYBqyEeG2HY-TJLNivw"/>
           <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_7zGiERqsEeG2HY-TJLNivw" presentation="default">
             <element href="tinker-test.uml#_7zSvUBqsEeG2HY-TJLNivw"/>
@@ -1741,6 +1741,11 @@
             <contained xsi:type="di:GraphNode" xmi:id="_QvZbsMRoEeGJXus6eZqdyw" position="0,0" size="-1,-1">
               <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_QvZbscRoEeGJXus6eZqdyw" presentation="default">
                 <element href="tinker-test.uml#_Qvap0MRoEeGJXus6eZqdyw"/>
+              </semanticModel>
+            </contained>
+            <contained xsi:type="di:GraphNode" xmi:id="_bMEnIMUyEeGJ_K04GuAseA" position="0,0" size="-1,-1">
+              <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_bMEnIcUyEeGJ_K04GuAseA" presentation="default">
+                <element href="tinker-test.uml#_bMVs4MUyEeGJ_K04GuAseA"/>
               </semanticModel>
             </contained>
           </contained>
@@ -1777,7 +1782,8 @@
           <contained xsi:type="di:EdgeObjectUV" xmi:id="_NSuoZxqyEeG2HY-TJLNivw" id="targetCountEdgeObject" uDistance="10" vDistance="-10"/>
           <contained xsi:type="di:EdgeObjectOffset" xmi:id="_NSuoaBqyEeG2HY-TJLNivw" visible="false" id="middleNameEdgeObject" offset="-81,4"/>
           <contained xsi:type="di:EdgeObjectOffset" xmi:id="_NSuoaRqyEeG2HY-TJLNivw" id="stereotypeEdgeObject" offset="0,-10"/>
-          <waypoints>[-128, 76, 0, -127]</waypoints>
+          <waypoints>[-106, 84, -21, -136]</waypoints>
+          <waypoints>[-106, 135, -21, -85]</waypoints>
         </contained>
       </diagrams>
     </subdiagrams>

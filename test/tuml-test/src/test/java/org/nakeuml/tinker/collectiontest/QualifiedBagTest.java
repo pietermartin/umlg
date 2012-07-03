@@ -78,8 +78,8 @@ public class QualifiedBagTest extends BaseLocalDbTest {
 		Assert.assertEquals(4, countVertices());
 		Assert.assertEquals(9, countEdges());
 		God godTest = new God(god.getVertex());
-		//Qualified relationships return a Set
-		Assert.assertEquals(1, godTest.getMemoryForQualifier1("edno3").size());
+		
+		Assert.assertEquals(3, godTest.getMemoryForMemoryQualifier1("edno3").size());
 
 		db.startTransaction();
 		Nightmare memory4 = new Nightmare(true);
@@ -90,7 +90,7 @@ public class QualifiedBagTest extends BaseLocalDbTest {
 		db.stopTransaction(Conclusion.SUCCESS);
 		Assert.assertEquals(5, countVertices());
 		Assert.assertEquals(11, countEdges());
-		Assert.assertEquals(2, godTest.getMemoryForQualifier1("edno3").size());
+		Assert.assertEquals(4, godTest.getMemoryForMemoryQualifier1("edno3").size());
 		
 	}	
 }

@@ -7,8 +7,8 @@ public class TinkerSetClosableIterableImpl<E> extends BaseSet<E> implements Tink
 
 	private CloseableIterable<Edge> closeableIterable;
 
-	public TinkerSetClosableIterableImpl(CloseableIterable<Edge> closeableSequence) {
-		super();
+	public TinkerSetClosableIterableImpl(CloseableIterable<Edge> closeableSequence, TumlRuntimeProperty runtimeProperty) {
+		super(runtimeProperty);
 		this.closeableIterable = closeableSequence;
 	}
 

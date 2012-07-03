@@ -33,7 +33,8 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 	protected Map<Object, Vertex> internalVertexMap = new HashMap<Object, Vertex>();
 	protected TumlRuntimeProperty tumlRuntimeProperty;
 
-	public BaseCollection() {
+	public BaseCollection(TumlRuntimeProperty runtimeProperty) {
+		this.tumlRuntimeProperty = runtimeProperty;
 	}
 
 	public BaseCollection(TinkerNode owner, TumlRuntimeProperty runtimeProperty) {
@@ -382,6 +383,14 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 		}
 	}
 
+	protected Vertex getOppositeVertexForDirection(Edge edge) {
+		if (this.isControllingSide()) {
+			return edge.getVertex(Direction.OUT);
+		} else {
+			return edge.getVertex(Direction.IN);
+		}
+	}
+
 	protected Class<?> getClassToInstantiate(Edge edge) {
 		try {
 			if (this.isControllingSide()) {
@@ -493,14 +502,14 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 	protected void addOrderToIndex(Edge edge, TinkerNode node) {
 		// The element is always added to the end of the list
 		if (!isOrdered()) {
-			throw new IllegalStateException("addOrderToIndex can only be called where association end is ordered");
+			throw new IllegalStateException("addOrderToIndex can only be called where the association end is ordered");
 		}
 		Edge edgeToLastElementInSequence = index.getEdgeToLastElementInSequence();
 		Float size;
 		if (edgeToLastElementInSequence == null) {
 			size = 1F;
 		} else {
-			size = (Float) edgeToLastElementInSequence.getProperty("tinkerIndex") + 1F;
+			size = (Float) getVertexForDirection(edgeToLastElementInSequence).getProperty("tinkerIndex") + 1F;
 		}
 		this.index.put("index", size, edge);
 		getVertexForDirection(edge).setProperty("tinkerIndex", size);
@@ -520,10 +529,10 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 		if (edgeToLastElementInSequence == null) {
 			size = 1F;
 		} else {
-			size = (Float) getVertexForDirection(edgeToLastElementInSequence).getProperty("tinkerIndex") + 1F;
+			size = (Float) getOppositeVertexForDirection(edgeToLastElementInSequence).getProperty("tinkerIndex") + 1F;
 		}
 		index.put("index", size, edge);
-		getVertexForDirection(edge).setProperty("tinkerIndex", size);
+		getOppositeVertexForDirection(edge).setProperty("tinkerIndex", size);
 	}
 
 	/**

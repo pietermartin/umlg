@@ -164,16 +164,16 @@ public class Angel extends BaseTinker implements CompositionNode {
 		AngelRuntimePropertyEnum runtimeProperty = AngelRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result == 0 ) {
 			switch ( runtimeProperty ) {
-				case universe:
-					result = universe.size();
-				break;
-			
 				case name:
 					result = name.size();
 				break;
 			
 				case god:
 					result = god.size();
+				break;
+			
+				case universe:
+					result = universe.size();
 				break;
 			
 				default:
@@ -220,24 +220,24 @@ public class Angel extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
+		this.universe =  new TinkerSetImpl<Universe>(this, AngelRuntimePropertyEnum.universe);
 		this.god =  new TinkerSetImpl<God>(this, AngelRuntimePropertyEnum.god);
 		this.name =  new TinkerSetImpl<String>(this, AngelRuntimePropertyEnum.name);
-		this.universe =  new TinkerSetImpl<Universe>(this, AngelRuntimePropertyEnum.universe);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (AngelRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case universe:
-				this.universe =  new TinkerSetImpl<Universe>(this, AngelRuntimePropertyEnum.universe);
-			break;
-		
 			case name:
 				this.name =  new TinkerSetImpl<String>(this, AngelRuntimePropertyEnum.name);
 			break;
 		
 			case god:
 				this.god =  new TinkerSetImpl<God>(this, AngelRuntimePropertyEnum.god);
+			break;
+		
+			case universe:
+				this.universe =  new TinkerSetImpl<Universe>(this, AngelRuntimePropertyEnum.universe);
 			break;
 		
 		}
@@ -305,9 +305,9 @@ public class Angel extends BaseTinker implements CompositionNode {
 	}
 
 	public enum AngelRuntimePropertyEnum implements TumlRuntimeProperty {
+		universe(false,true,false,"A_<universe>_<angel>",true,false,false,false,1,1,false,false,false,false,true),
 		god(false,false,false,"A_<god>_<angel>",false,false,true,false,1,1,false,false,false,false,true),
-		name(true,true,false,"tuml-test__org__tuml__concretetest__Angel__name",false,false,true,false,1,1,false,false,false,false,true),
-		universe(false,true,false,"A_<universe>_<angel>",true,false,false,false,1,1,false,false,false,false,true);
+		name(true,true,false,"tuml-test__org__tuml__concretetest__Angel__name",false,false,true,false,1,1,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -360,14 +360,14 @@ public class Angel extends BaseTinker implements CompositionNode {
 		}
 	
 		static public AngelRuntimePropertyEnum fromLabel(String label) {
+			if ( universe.getLabel().equals(label) ) {
+				return universe;
+			}
 			if ( god.getLabel().equals(label) ) {
 				return god;
 			}
 			if ( name.getLabel().equals(label) ) {
 				return name;
-			}
-			if ( universe.getLabel().equals(label) ) {
-				return universe;
 			}
 			return null;
 		}

@@ -158,12 +158,12 @@ public class Fantasy extends BaseTinker implements CompositionNode {
 		FantasyRuntimePropertyEnum runtimeProperty = FantasyRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result == 0 ) {
 			switch ( runtimeProperty ) {
-				case god:
-					result = god.size();
-				break;
-			
 				case name:
 					result = name.size();
+				break;
+			
+				case god:
+					result = god.size();
 				break;
 			
 				default:
@@ -201,19 +201,19 @@ public class Fantasy extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.name =  new TinkerSetImpl<String>(this, FantasyRuntimePropertyEnum.name);
 		this.god =  new TinkerSetImpl<God>(this, FantasyRuntimePropertyEnum.god);
+		this.name =  new TinkerSetImpl<String>(this, FantasyRuntimePropertyEnum.name);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (FantasyRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case god:
-				this.god =  new TinkerSetImpl<God>(this, FantasyRuntimePropertyEnum.god);
-			break;
-		
 			case name:
 				this.name =  new TinkerSetImpl<String>(this, FantasyRuntimePropertyEnum.name);
+			break;
+		
+			case god:
+				this.god =  new TinkerSetImpl<God>(this, FantasyRuntimePropertyEnum.god);
 			break;
 		
 		}
@@ -264,8 +264,8 @@ public class Fantasy extends BaseTinker implements CompositionNode {
 	}
 
 	public enum FantasyRuntimePropertyEnum implements TumlRuntimeProperty {
-		name(true,true,false,"tuml-test__org__tuml__collectiontest__Fantasy__name",false,false,true,false,1,1,false,false,false,false,true),
-		god(false,false,false,"A_<god>_<fantasy>",false,false,true,false,1,1,false,true,false,true,true);
+		god(false,false,false,"A_<god>_<fantasy>",false,false,true,false,1,1,false,true,false,true,true),
+		name(true,true,false,"tuml-test__org__tuml__collectiontest__Fantasy__name",false,false,true,false,1,1,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -318,11 +318,11 @@ public class Fantasy extends BaseTinker implements CompositionNode {
 		}
 	
 		static public FantasyRuntimePropertyEnum fromLabel(String label) {
-			if ( name.getLabel().equals(label) ) {
-				return name;
-			}
 			if ( god.getLabel().equals(label) ) {
 				return god;
+			}
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
 			return null;
 		}

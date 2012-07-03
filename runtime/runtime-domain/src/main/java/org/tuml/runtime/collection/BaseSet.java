@@ -7,8 +7,8 @@ import org.tuml.runtime.domain.TinkerNode;
 
 public abstract class BaseSet<E> extends BaseCollection<E> implements TinkerSet<E> {
 
-	public BaseSet() {
-		super();
+	public BaseSet(TumlRuntimeProperty runtimeProperty) {
+		super(runtimeProperty);
 		this.internalCollection = new HashSet<E>();
 	}
 	

@@ -1454,6 +1454,12 @@ public class PropertyWrapper implements Property {
 	}
 
 	public OJPathName getQualifierContextPathName() {
+		if (isQualifier()) {
+			throw new IllegalStateException("getQualifierContextPathName can not only be called on a qualifier");
+		}
+		if (!hasQualifiers()) {
+			throw new IllegalStateException("getQualifierContextPathName can not only be called on a qualified property");
+		}
 		return TumlClassOperations.getPathName(getType());
 	}
 
@@ -1488,4 +1494,7 @@ public class PropertyWrapper implements Property {
 		return property;
 	}
 
+	public String getTumlRuntimePropertyEnum() {
+		return TumlClassOperations.propertyEnumName(getOwningType()) + "." + fieldname();
+	}
 }

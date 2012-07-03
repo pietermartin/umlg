@@ -16,8 +16,8 @@ import com.tinkerpop.blueprints.Vertex;
 
 public abstract class BaseSequence<E> extends BaseCollection<E> implements TinkerSequence<E> {
 
-	public BaseSequence() {
-		super();
+	public BaseSequence(TumlRuntimeProperty runtimeProperty) {
+		super(runtimeProperty);
 		this.internalCollection = new ArrayList<E>();
 	}
 	
@@ -60,6 +60,9 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
 		this.loaded = true;
 	}
 
+	/*
+	 * This can only be added from the
+	 */
 	protected Edge addToListAndListIndex(int indexOf, E e) {
 		E previous = this.getInternalList().get(indexOf - 1);
 		E current = this.getInternalList().get(indexOf);

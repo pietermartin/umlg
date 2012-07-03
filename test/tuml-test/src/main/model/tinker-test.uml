@@ -636,6 +636,13 @@
               <body>self.name</body>
             </defaultValue>
           </ownedAttribute>
+          <ownedAttribute xmi:id="_bMVs4MUyEeGJ_K04GuAseA" name="memoryQualifier1" isDerived="true">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+            <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_cxUGoMUyEeGJ_K04GuAseA" name="self.nameNonUnique">
+              <language>ocl</language>
+              <body>self.nameNonUnique</body>
+            </defaultValue>
+          </ownedAttribute>
         </packagedElement>
         <packagedElement xmi:type="uml:Association" xmi:id="__Y9OcBqsEeG2HY-TJLNivw" name="A_&lt;god>_&lt;nightmare>" memberEnd="__Y9OcRqsEeG2HY-TJLNivw __Y1SoBqsEeG2HY-TJLNivw" navigableOwnedEnd="__Y9OcRqsEeG2HY-TJLNivw">
           <ownedEnd xmi:id="__Y9OcRqsEeG2HY-TJLNivw" name="god" type="_YuD8sOwiEeCSwqyeEHd1tw" association="__Y9OcBqsEeG2HY-TJLNivw">
@@ -651,13 +658,10 @@
           <ownedEnd xmi:id="_NS6OlBqyEeG2HY-TJLNivw" name="memory" type="_7zSvUBqsEeG2HY-TJLNivw" isUnique="false" association="_NS6OkBqyEeG2HY-TJLNivw">
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_NS6OlRqyEeG2HY-TJLNivw" value="*"/>
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_NS6OlhqyEeG2HY-TJLNivw"/>
-            <qualifier xmi:id="_VtHawBqyEeG2HY-TJLNivw" name="qualifier1">
+            <qualifier xmi:id="_VtHawBqyEeG2HY-TJLNivw" name="memoryQualifier1">
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Xzf4cBqyEeG2HY-TJLNivw" value="*"/>
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Xs79cBqyEeG2HY-TJLNivw" value="1"/>
-              <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_YykIwBqyEeG2HY-TJLNivw" name="OpaqueExpression1">
-                <body>nameNonUnique</body>
-              </defaultValue>
             </qualifier>
           </ownedEnd>
         </packagedElement>

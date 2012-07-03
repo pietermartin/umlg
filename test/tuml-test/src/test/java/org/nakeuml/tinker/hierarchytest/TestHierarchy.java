@@ -5,6 +5,8 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.tuml.concretetest.God;
+import org.tuml.hierarchytest.Folder;
+import org.tuml.hierarchytest.Hierarchy;
 import org.tuml.hierarchytest.RealRootFolder;
 import org.tuml.runtime.test.BaseLocalDbTest;
 

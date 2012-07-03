@@ -136,6 +136,10 @@ public class Nightmare extends BaseTinker implements CompositionNode {
 		return TinkerIdUtilFactory.getIdUtil().getId(this.vertex);
 	}
 	
+	public String getMemoryQualifier1() {
+		return getNameNonUnique();
+	}
+	
 	public String getName() {
 		TinkerSet<String> tmp = this.name;
 		if ( !tmp.isEmpty() ) {
@@ -198,20 +202,20 @@ public class Nightmare extends BaseTinker implements CompositionNode {
 		NightmareRuntimePropertyEnum runtimeProperty = NightmareRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result == 0 ) {
 			switch ( runtimeProperty ) {
-				case godOfMemory:
-					result = godOfMemory.size();
-				break;
-			
-				case nameNonUnique:
-					result = nameNonUnique.size();
+				case name:
+					result = name.size();
 				break;
 			
 				case god:
 					result = god.size();
 				break;
 			
-				case name:
-					result = name.size();
+				case godOfMemory:
+					result = godOfMemory.size();
+				break;
+			
+				case nameNonUnique:
+					result = nameNonUnique.size();
 				break;
 			
 				default:
@@ -249,29 +253,29 @@ public class Nightmare extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.name =  new TinkerSetImpl<String>(this, NightmareRuntimePropertyEnum.name);
-		this.god =  new TinkerSetImpl<God>(this, NightmareRuntimePropertyEnum.god);
 		this.nameNonUnique =  new TinkerSetImpl<String>(this, NightmareRuntimePropertyEnum.nameNonUnique);
 		this.godOfMemory =  new TinkerSetImpl<God>(this, NightmareRuntimePropertyEnum.godOfMemory);
+		this.god =  new TinkerSetImpl<God>(this, NightmareRuntimePropertyEnum.god);
+		this.name =  new TinkerSetImpl<String>(this, NightmareRuntimePropertyEnum.name);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (NightmareRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case godOfMemory:
-				this.godOfMemory =  new TinkerSetImpl<God>(this, NightmareRuntimePropertyEnum.godOfMemory);
-			break;
-		
-			case nameNonUnique:
-				this.nameNonUnique =  new TinkerSetImpl<String>(this, NightmareRuntimePropertyEnum.nameNonUnique);
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, NightmareRuntimePropertyEnum.name);
 			break;
 		
 			case god:
 				this.god =  new TinkerSetImpl<God>(this, NightmareRuntimePropertyEnum.god);
 			break;
 		
-			case name:
-				this.name =  new TinkerSetImpl<String>(this, NightmareRuntimePropertyEnum.name);
+			case godOfMemory:
+				this.godOfMemory =  new TinkerSetImpl<God>(this, NightmareRuntimePropertyEnum.godOfMemory);
+			break;
+		
+			case nameNonUnique:
+				this.nameNonUnique =  new TinkerSetImpl<String>(this, NightmareRuntimePropertyEnum.nameNonUnique);
 			break;
 		
 		}
@@ -356,10 +360,10 @@ public class Nightmare extends BaseTinker implements CompositionNode {
 	}
 
 	public enum NightmareRuntimePropertyEnum implements TumlRuntimeProperty {
-		name(true,true,false,"tuml-test__org__tuml__collectiontest__Nightmare__name",false,false,true,false,1,1,false,false,false,false,true),
-		god(false,false,false,"A_<god>_<nightmare>",false,false,true,false,1,1,false,true,false,false,true),
 		nameNonUnique(true,true,false,"tuml-test__org__tuml__collectiontest__Nightmare__nameNonUnique",false,false,true,false,1,1,false,false,false,false,true),
-		godOfMemory(false,false,false,"A_<god>_<nightmare>_2",false,false,true,false,1,1,false,true,false,false,true);
+		godOfMemory(false,false,false,"A_<god>_<nightmare>_2",false,false,true,false,1,1,false,true,false,false,true),
+		god(false,false,false,"A_<god>_<nightmare>",false,false,true,false,1,1,false,true,false,false,true),
+		name(true,true,false,"tuml-test__org__tuml__collectiontest__Nightmare__name",false,false,true,false,1,1,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -412,17 +416,17 @@ public class Nightmare extends BaseTinker implements CompositionNode {
 		}
 	
 		static public NightmareRuntimePropertyEnum fromLabel(String label) {
-			if ( name.getLabel().equals(label) ) {
-				return name;
-			}
-			if ( god.getLabel().equals(label) ) {
-				return god;
-			}
 			if ( nameNonUnique.getLabel().equals(label) ) {
 				return nameNonUnique;
 			}
 			if ( godOfMemory.getLabel().equals(label) ) {
 				return godOfMemory;
+			}
+			if ( god.getLabel().equals(label) ) {
+				return god;
+			}
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
 			return null;
 		}
