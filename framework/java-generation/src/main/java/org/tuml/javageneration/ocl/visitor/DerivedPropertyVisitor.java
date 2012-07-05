@@ -4,8 +4,8 @@ import org.eclipse.uml2.uml.Property;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
 import org.tuml.framework.Visitor;
+import org.tuml.javageneration.util.PropertyWrapper;
 import org.tuml.javageneration.visitor.BaseVisitor;
-import org.tuml.javageneration.visitor.property.PropertyWrapper;
 
 public class DerivedPropertyVisitor extends BaseVisitor implements Visitor<Property> {
 
@@ -20,7 +20,7 @@ public class DerivedPropertyVisitor extends BaseVisitor implements Visitor<Prope
 			} else {
 				getter = new OJAnnotatedOperation(propertyWrapper.getter(), propertyWrapper.javaTypePath());
 			}
-			getter.getBody().addToStatements(propertyWrapper.getOclAsJava());
+			getter.getBody().addToStatements(propertyWrapper.getOclDefaultValueAsJava());
 			owner.addToOperations(getter);
 		}
 	}

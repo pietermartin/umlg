@@ -8,6 +8,7 @@ import java.util.Map;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
 import org.tuml.framework.Visitor;
+import org.tuml.javageneration.util.PropertyWrapper;
 import org.tuml.javageneration.visitor.BaseVisitor;
 
 /**

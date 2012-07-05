@@ -30,8 +30,9 @@ public class AbstractSpecies extends BaseTinker implements CompositionNode {
 	public AbstractSpecies(God compositeOwner) {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
 		initialiseProperties();
+		initVariables();
 		createComponents();
-		init(compositeOwner);
+		addToGod(compositeOwner);
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
 	}
@@ -43,6 +44,7 @@ public class AbstractSpecies extends BaseTinker implements CompositionNode {
 	public AbstractSpecies(Vertex vertex) {
 		this.vertex=vertex;
 		initialiseProperties();
+		initVariables();
 	}
 	
 	/** Default constructor for AbstractSpecies
@@ -59,6 +61,7 @@ public class AbstractSpecies extends BaseTinker implements CompositionNode {
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
 		initialiseProperties();
+		initVariables();
 		createComponents();
 	}
 
@@ -153,12 +156,12 @@ public class AbstractSpecies extends BaseTinker implements CompositionNode {
 		AbstractSpeciesRuntimePropertyEnum runtimeProperty = AbstractSpeciesRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result == 0 ) {
 			switch ( runtimeProperty ) {
-				case god:
-					result = god.size();
-				break;
-			
 				case name:
 					result = name.size();
+				break;
+			
+				case god:
+					result = god.size();
 				break;
 			
 				default:
@@ -180,35 +183,24 @@ public class AbstractSpecies extends BaseTinker implements CompositionNode {
 		return uid;
 	}
 	
-	/** This gets called on creation with the compositional owner. The composition owner does not itself need to be a composite node
-	 * 
-	 * @param compositeOwner 
-	 */
-	@Override
-	public void init(TinkerNode compositeOwner) {
-		this.addToGod((God)compositeOwner);
-		this.hasInitBeenCalled = true;
-		initVariables();
-	}
-	
 	public void initVariables() {
 	}
 	
 	@Override
 	public void initialiseProperties() {
-		this.name =  new TinkerSetImpl<String>(this, AbstractSpeciesRuntimePropertyEnum.name);
 		this.god =  new TinkerSetImpl<God>(this, AbstractSpeciesRuntimePropertyEnum.god);
+		this.name =  new TinkerSetImpl<String>(this, AbstractSpeciesRuntimePropertyEnum.name);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (AbstractSpeciesRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case god:
-				this.god =  new TinkerSetImpl<God>(this, AbstractSpeciesRuntimePropertyEnum.god);
-			break;
-		
 			case name:
 				this.name =  new TinkerSetImpl<String>(this, AbstractSpeciesRuntimePropertyEnum.name);
+			break;
+		
+			case god:
+				this.god =  new TinkerSetImpl<God>(this, AbstractSpeciesRuntimePropertyEnum.god);
 			break;
 		
 		}
@@ -259,8 +251,8 @@ public class AbstractSpecies extends BaseTinker implements CompositionNode {
 	}
 
 	public enum AbstractSpeciesRuntimePropertyEnum implements TumlRuntimeProperty {
-		name(true,true,false,"tuml-test-basic-model__org__tuml__inheritence__AbstractSpecies__name",false,false,true,false,1,1,false,false,false,false,true),
-		god(false,false,false,"A_<god>_<abstractSpecies>",false,false,true,false,1,1,false,false,false,false,true);
+		god(false,false,false,"A_<god>_<abstractSpecies>",false,false,true,false,1,1,false,false,false,false,true),
+		name(true,true,false,"tuml-test-basic-model__org__tuml__inheritence__AbstractSpecies__name",false,false,true,false,1,1,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -313,11 +305,11 @@ public class AbstractSpecies extends BaseTinker implements CompositionNode {
 		}
 	
 		static public AbstractSpeciesRuntimePropertyEnum fromLabel(String label) {
-			if ( name.getLabel().equals(label) ) {
-				return name;
-			}
 			if ( god.getLabel().equals(label) ) {
 				return god;
+			}
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
 			return null;
 		}

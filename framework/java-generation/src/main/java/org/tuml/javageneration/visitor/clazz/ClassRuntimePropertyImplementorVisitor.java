@@ -13,10 +13,10 @@ import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
 import org.opaeum.java.metamodel.annotation.OJEnum;
 import org.opaeum.java.metamodel.annotation.OJEnumLiteral;
 import org.tuml.framework.Visitor;
+import org.tuml.javageneration.util.PropertyWrapper;
 import org.tuml.javageneration.util.TinkerGenerationUtil;
 import org.tuml.javageneration.util.TumlClassOperations;
 import org.tuml.javageneration.visitor.BaseVisitor;
-import org.tuml.javageneration.visitor.property.PropertyWrapper;
 
 public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implements Visitor<Class> {
 

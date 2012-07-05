@@ -30,8 +30,9 @@ public class Many extends BaseTinker implements CompositionNode {
 	public Many(One compositeOwner) {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
 		initialiseProperties();
+		initVariables();
 		createComponents();
-		init(compositeOwner);
+		addToOne(compositeOwner);
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
 	}
@@ -43,6 +44,7 @@ public class Many extends BaseTinker implements CompositionNode {
 	public Many(Vertex vertex) {
 		this.vertex=vertex;
 		initialiseProperties();
+		initVariables();
 	}
 	
 	/** Default constructor for Many
@@ -59,6 +61,7 @@ public class Many extends BaseTinker implements CompositionNode {
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
 		initialiseProperties();
+		initVariables();
 		createComponents();
 	}
 
@@ -153,12 +156,12 @@ public class Many extends BaseTinker implements CompositionNode {
 		ManyRuntimePropertyEnum runtimeProperty = ManyRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result == 0 ) {
 			switch ( runtimeProperty ) {
-				case name:
-					result = name.size();
-				break;
-			
 				case one:
 					result = one.size();
+				break;
+			
+				case name:
+					result = name.size();
 				break;
 			
 				default:
@@ -180,35 +183,24 @@ public class Many extends BaseTinker implements CompositionNode {
 		return uid;
 	}
 	
-	/** This gets called on creation with the compositional owner. The composition owner does not itself need to be a composite node
-	 * 
-	 * @param compositeOwner 
-	 */
-	@Override
-	public void init(TinkerNode compositeOwner) {
-		this.addToOne((One)compositeOwner);
-		this.hasInitBeenCalled = true;
-		initVariables();
-	}
-	
 	public void initVariables() {
 	}
 	
 	@Override
 	public void initialiseProperties() {
-		this.one =  new TinkerSetImpl<One>(this, ManyRuntimePropertyEnum.one);
 		this.name =  new TinkerSetImpl<String>(this, ManyRuntimePropertyEnum.name);
+		this.one =  new TinkerSetImpl<One>(this, ManyRuntimePropertyEnum.one);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (ManyRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case name:
-				this.name =  new TinkerSetImpl<String>(this, ManyRuntimePropertyEnum.name);
-			break;
-		
 			case one:
 				this.one =  new TinkerSetImpl<One>(this, ManyRuntimePropertyEnum.one);
+			break;
+		
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, ManyRuntimePropertyEnum.name);
 			break;
 		
 		}
@@ -259,8 +251,8 @@ public class Many extends BaseTinker implements CompositionNode {
 	}
 
 	public enum ManyRuntimePropertyEnum implements TumlRuntimeProperty {
-		one(false,false,false,"A_<one>_<many>",false,false,true,false,1,1,false,false,false,false,true),
-		name(true,true,false,"tuml-test-basic-model__org__tuml__Many__name",false,false,true,false,1,1,false,false,false,false,true);
+		name(true,true,false,"tuml-test-basic-model__org__tuml__Many__name",false,false,true,false,1,1,false,false,false,false,true),
+		one(false,false,false,"A_<one>_<many>",false,false,true,false,1,1,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -313,11 +305,11 @@ public class Many extends BaseTinker implements CompositionNode {
 		}
 	
 		static public ManyRuntimePropertyEnum fromLabel(String label) {
-			if ( one.getLabel().equals(label) ) {
-				return one;
-			}
 			if ( name.getLabel().equals(label) ) {
 				return name;
+			}
+			if ( one.getLabel().equals(label) ) {
+				return one;
 			}
 			return null;
 		}

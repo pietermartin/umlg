@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<diagrams:Diagrams xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.topcased.org/DI/1.0" xmlns:diagrams="http://www.topcased.org/Diagrams/1.0" xmi:id="_im0g4MTDEeGJXus6eZqdyw" activeDiagram="_pv55YBFLEeGoRIAInCGFZA">
+<diagrams:Diagrams xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.topcased.org/DI/1.0" xmlns:diagrams="http://www.topcased.org/Diagrams/1.0" xmi:id="_im0g4MTDEeGJXus6eZqdyw" activeDiagram="_YbSxsewiEeCSwqyeEHd1tw">
   <model href="tinker-test.uml#_qb8akM37EdqwVrslYOdUDA"/>
   <diagrams xmi:id="_im3kMMTDEeGJXus6eZqdyw" position="0,0" size="100,100" name="org" viewport="0,0">
     <property xmi:id="_inGNsMTDEeGJXus6eZqdyw" key="pageFormatName" value="A4"/>
@@ -497,7 +497,7 @@
     </subdiagrams>
     <subdiagrams xmi:id="_YbSxsOwiEeCSwqyeEHd1tw">
       <model href="tinker-test.uml#_XSCqoOwiEeCSwqyeEHd1tw"/>
-      <diagrams xmi:id="_YbSxsewiEeCSwqyeEHd1tw" position="0,0" size="100,100" name="concretetest" viewport="-28,0">
+      <diagrams xmi:id="_YbSxsewiEeCSwqyeEHd1tw" position="0,0" size="100,100" name="concretetest" viewport="0,80">
         <property xmi:id="_YbhbMOwiEeCSwqyeEHd1tw" key="pageFormatName" value="A4"/>
         <property xmi:id="_YbhbMewiEeCSwqyeEHd1tw" key="diagramWidth" value="840"/>
         <property xmi:id="_YbhbMuwiEeCSwqyeEHd1tw" key="diagramHeight" value="1188"/>
@@ -1492,7 +1492,7 @@
     </subdiagrams>
     <subdiagrams xmi:id="_pv5SUBFLEeGoRIAInCGFZA">
       <model href="tinker-test.uml#_ossv8BFLEeGoRIAInCGFZA"/>
-      <diagrams xmi:id="_pv55YBFLEeGoRIAInCGFZA" position="0,0" size="100,100" name="collection" viewport="-41,0">
+      <diagrams xmi:id="_pv55YBFLEeGoRIAInCGFZA" position="0,0" size="100,100" name="collection" viewport="0,0">
         <property xmi:id="_pwLmMBFLEeGoRIAInCGFZA" key="pageFormatName" value="A4"/>
         <property xmi:id="_pwLmMRFLEeGoRIAInCGFZA" key="diagramWidth" value="840"/>
         <property xmi:id="_pwLmMhFLEeGoRIAInCGFZA" key="diagramHeight" value="1188"/>

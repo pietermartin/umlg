@@ -20,7 +20,7 @@ public class Biped extends Mamal implements CompositionNode {
 	 */
 	public Biped(God compositeOwner) {
 		super(true);
-		init(compositeOwner);
+		addToGod(compositeOwner);
 	}
 	
 	/** Constructor for Biped
@@ -30,6 +30,7 @@ public class Biped extends Mamal implements CompositionNode {
 	public Biped(Vertex vertex) {
 		super(vertex);
 		initialiseProperties();
+		initVariables();
 	}
 	
 	/** Default constructor for Biped
@@ -97,17 +98,6 @@ public class Biped extends Mamal implements CompositionNode {
 		
 		}
 		return result;
-	}
-	
-	/** This gets called on creation with the compositional owner. The composition owner does not itself need to be a composite node
-	 * 
-	 * @param compositeOwner 
-	 */
-	@Override
-	public void init(TinkerNode compositeOwner) {
-		this.addToGod((God)compositeOwner);
-		this.hasInitBeenCalled = true;
-		initVariables();
 	}
 	
 	public void initVariables() {

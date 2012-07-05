@@ -29,6 +29,7 @@ public class OneOne extends BaseTinker implements TinkerNode {
 	public OneOne(Vertex vertex) {
 		this.vertex=vertex;
 		initialiseProperties();
+		initVariables();
 	}
 	
 	/** Default constructor for OneOne
@@ -44,6 +45,7 @@ public class OneOne extends BaseTinker implements TinkerNode {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
 		defaultCreate();
 		initialiseProperties();
+		initVariables();
 		createComponents();
 		Edge edge = GraphDb.getDb().addEdge(null, GraphDb.getDb().getRoot(), this.vertex, "root");
 		edge.setProperty("inClass", this.getClass().getName());

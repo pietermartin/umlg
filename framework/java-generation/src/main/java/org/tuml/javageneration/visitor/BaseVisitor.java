@@ -13,7 +13,7 @@ import org.opaeum.java.metamodel.annotation.OJAnnotatedField;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
 import org.tuml.javageneration.Workspace;
 import org.tuml.javageneration.naming.Namer;
-import org.tuml.javageneration.visitor.property.PropertyWrapper;
+import org.tuml.javageneration.util.PropertyWrapper;
 
 public class BaseVisitor {
 

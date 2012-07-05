@@ -158,11 +158,16 @@ public abstract class ActivityNode<IN extends Token, OUT extends Token> extends 
 
 	//CompositionNode interface
 	
-	@Override
-	public boolean hasInitBeenCalled() {
-		return this.hasInitBeenCalled;
-	}
-
+//	@Override
+//	public boolean hasInitBeenCalled() {
+//		return this.hasInitBeenCalled;
+//	}
+	
+//	@Override
+//	public void init(TinkerNode owner) {
+//		//not used
+//	}
+	
 	@Override
 	public boolean isTinkerRoot() {
 		return false;
@@ -190,11 +195,6 @@ public abstract class ActivityNode<IN extends Token, OUT extends Token> extends 
 
 	@Override
 	public abstract TinkerNode getOwningObject();
-
-	@Override
-	public void init(TinkerNode owner) {
-		//not used
-	}
 
   	@Override
 	public void delete() {

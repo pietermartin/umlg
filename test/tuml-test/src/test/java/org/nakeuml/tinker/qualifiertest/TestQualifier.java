@@ -21,14 +21,12 @@ public class TestQualifier extends BaseLocalDbTest {
 		Nature nature = new Nature(true);
 		nature.setName1("nature1");
 		nature.setName2("nature2");
-		nature.init(god);
-		nature.addToOwningObject();
+		nature.addToGod(god);
 		
 		Nature nature2 = new Nature(true);
 		nature2.setName1("nature1");
 		nature2.setName2("nature2");
-		nature2.init(god);
-		nature2.addToOwningObject();
+		nature2.addToGod(god);
 		db.stopTransaction(Conclusion.SUCCESS);
 	}
 
@@ -41,8 +39,7 @@ public class TestQualifier extends BaseLocalDbTest {
 		Nature nature = new Nature(true);
 		nature.setName1("nature1");
 		nature.setName2("nature2");
-		nature.init(god);
-		nature.addToOwningObject();
+		nature.addToGod(god);
 		
 		db.stopTransaction(Conclusion.SUCCESS);
 		
@@ -66,8 +63,7 @@ public class TestQualifier extends BaseLocalDbTest {
 		god.setName("THEGOD");
 		
 		Nature nature = new Nature(true);
-		nature.init(god);
-		nature.addToOwningObject();
+		nature.addToGod(god);
 		db.stopTransaction(Conclusion.SUCCESS);
 		
 		db.startTransaction();
@@ -86,14 +82,12 @@ public class TestQualifier extends BaseLocalDbTest {
 		God god = new God(true);
 		god.setName("THEGOD");
 		Nature nature = new Nature(true);
-		nature.init(god);
-		nature.addToOwningObject();
+		nature.addToGod(god);
 		db.stopTransaction(Conclusion.SUCCESS);
 
 		db.startTransaction();
 		nature = new Nature(true);
-		nature.init(god);
-		nature.addToOwningObject();
+		nature.addToGod(god);
 		db.stopTransaction(Conclusion.SUCCESS);
 
 		db.startTransaction();
@@ -108,40 +102,35 @@ public class TestQualifier extends BaseLocalDbTest {
 		Nature nature = new Nature(true);
 		nature.setName1("name1_0");
 		nature.setName2("xxx");
-		nature.init(god);
-		nature.addToOwningObject();
+		nature.addToGod(god);
 		db.stopTransaction(Conclusion.SUCCESS);
 
 		db.startTransaction();
 		nature = new Nature(true);
 		nature.setName1("name1_1");
 		nature.setName2("xxx");
-		nature.init(god);
-		nature.addToOwningObject();
+		nature.addToGod(god);
 		db.stopTransaction(Conclusion.SUCCESS);
 
 		db.startTransaction();
 		nature = new Nature(true);
 		nature.setName1("name1_2");
 		nature.setName2("xxx");
-		nature.init(god);
-		nature.addToOwningObject();
+		nature.addToGod(god);
 		db.stopTransaction(Conclusion.SUCCESS);
 
 		db.startTransaction();
 		nature = new Nature(true);
 		nature.setName1("name1_3");
 		nature.setName2("xxx");
-		nature.init(god);
-		nature.addToOwningObject();
+		nature.addToGod(god);
 		db.stopTransaction(Conclusion.SUCCESS);
 
 		db.startTransaction();
 		nature = new Nature(true);
 		nature.setName1("name1_4");
 		nature.setName2("yyy");
-		nature.init(god);
-		nature.addToOwningObject();
+		nature.addToGod(god);
 		db.stopTransaction(Conclusion.SUCCESS);
 
 		db.startTransaction();

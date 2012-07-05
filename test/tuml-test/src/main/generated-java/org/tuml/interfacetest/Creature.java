@@ -32,8 +32,9 @@ public class Creature extends BaseTinker implements CompositionNode, Being {
 	public Creature(God compositeOwner) {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
 		initialiseProperties();
+		initVariables();
 		createComponents();
-		init(compositeOwner);
+		addToGod(compositeOwner);
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
 	}
@@ -61,6 +62,7 @@ public class Creature extends BaseTinker implements CompositionNode, Being {
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
 		initialiseProperties();
+		initVariables();
 		createComponents();
 	}
 
@@ -165,16 +167,16 @@ public class Creature extends BaseTinker implements CompositionNode, Being {
 		CreatureRuntimePropertyEnum runtimeProperty = CreatureRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result == 0 ) {
 			switch ( runtimeProperty ) {
-				case spook:
-					result = spook.size();
+				case name:
+					result = name.size();
 				break;
 			
 				case god:
 					result = god.size();
 				break;
 			
-				case name:
-					result = name.size();
+				case spook:
+					result = spook.size();
 				break;
 			
 				default:
@@ -205,40 +207,29 @@ public class Creature extends BaseTinker implements CompositionNode, Being {
 		return uid;
 	}
 	
-	/** This gets called on creation with the compositional owner. The composition owner does not itself need to be a composite node
-	 * 
-	 * @param compositeOwner 
-	 */
-	@Override
-	public void init(TinkerNode compositeOwner) {
-		this.addToGod((God)compositeOwner);
-		this.hasInitBeenCalled = true;
-		initVariables();
-	}
-	
 	public void initVariables() {
 	}
 	
 	@Override
 	public void initialiseProperties() {
-		this.name =  new TinkerSetImpl<String>(this, CreatureRuntimePropertyEnum.name);
-		this.god =  new TinkerSetImpl<God>(this, CreatureRuntimePropertyEnum.god);
 		this.spook =  new TinkerSetImpl<Spook>(this, CreatureRuntimePropertyEnum.spook);
+		this.god =  new TinkerSetImpl<God>(this, CreatureRuntimePropertyEnum.god);
+		this.name =  new TinkerSetImpl<String>(this, CreatureRuntimePropertyEnum.name);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (CreatureRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case spook:
-				this.spook =  new TinkerSetImpl<Spook>(this, CreatureRuntimePropertyEnum.spook);
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, CreatureRuntimePropertyEnum.name);
 			break;
 		
 			case god:
 				this.god =  new TinkerSetImpl<God>(this, CreatureRuntimePropertyEnum.god);
 			break;
 		
-			case name:
-				this.name =  new TinkerSetImpl<String>(this, CreatureRuntimePropertyEnum.name);
+			case spook:
+				this.spook =  new TinkerSetImpl<Spook>(this, CreatureRuntimePropertyEnum.spook);
 			break;
 		
 		}
@@ -306,9 +297,9 @@ public class Creature extends BaseTinker implements CompositionNode, Being {
 	}
 
 	public enum CreatureRuntimePropertyEnum implements TumlRuntimeProperty {
-		name(true,true,false,"tuml-test__org__tuml__interfacetest__Creature__name",false,false,true,false,1,1,false,false,false,false,true),
+		spook(false,false,false,"A_<spook>_<creature>",true,false,false,false,1,0,false,false,false,false,true),
 		god(false,false,false,"A_<god>_<being>",false,false,true,false,1,1,false,false,false,false,true),
-		spook(false,false,false,"A_<spook>_<creature>",true,false,false,false,1,0,false,false,false,false,true);
+		name(true,true,false,"tuml-test__org__tuml__interfacetest__Creature__name",false,false,true,false,1,1,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -361,14 +352,14 @@ public class Creature extends BaseTinker implements CompositionNode, Being {
 		}
 	
 		static public CreatureRuntimePropertyEnum fromLabel(String label) {
-			if ( name.getLabel().equals(label) ) {
-				return name;
+			if ( spook.getLabel().equals(label) ) {
+				return spook;
 			}
 			if ( god.getLabel().equals(label) ) {
 				return god;
 			}
-			if ( spook.getLabel().equals(label) ) {
-				return spook;
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
 			return null;
 		}

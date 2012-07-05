@@ -10,6 +10,7 @@ import org.opaeum.java.metamodel.OJSimpleStatement;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
 import org.tuml.framework.Visitor;
+import org.tuml.javageneration.util.PropertyWrapper;
 import org.tuml.javageneration.util.TinkerGenerationUtil;
 import org.tuml.javageneration.visitor.BaseVisitor;
 
@@ -97,9 +98,11 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
 		OJIfStatement ifIndexNull = new OJIfStatement("index==null", "return null");
 		ifIndexNull.addToElsePart(TinkerGenerationUtil.tinkerCloseableIterablePathName.getCopy().addToGenerics(TinkerGenerationUtil.edgePathName).getLast()
 				+ " closeableIterable = index.get(\"" + qualifier.fieldname() + "\", " + qualifier.fieldname() + "==null?\"___NULL___\":" + qualifier.fieldname() + ")");
-		OJIfStatement ifHasNext = new OJIfStatement("closeableIterable.iterator().hasNext()");
+		ifIndexNull.addToElsePart("Iterator<Edge> iterator = closeableIterable.iterator()");
+		ojClass.addToImports("java.util.Iterator");
+		OJIfStatement ifHasNext = new OJIfStatement("iterator.hasNext()");
 		if (qualifier.isOne()) {
-			ifHasNext.addToThenPart("return new " + ownerElementPWrap.javaBaseTypePath().getLast() + "(closeableIterable.iterator().next().getVertex("
+			ifHasNext.addToThenPart("return new " + ownerElementPWrap.javaBaseTypePath().getLast() + "(iterator.next().getVertex("
 					+ TinkerGenerationUtil.tinkerDirection.getLast() + ".IN))");
 			ifHasNext.addToElsePart("return null");
 		} else {
@@ -110,7 +113,7 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
 			} else {
 				ojSimpleStatement = new OJSimpleStatement("return new " + TinkerGenerationUtil.tumlTinkerSequenceClosableIterableImpl.getCopy().addToGenerics(ownerElementPWrap.javaBaseTypePath()).getLast());
 			}
-			ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + "(closeableIterable, " + ownerElementPWrap.getTumlRuntimePropertyEnum() + ")");
+			ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + "(iterator, " + ownerElementPWrap.getTumlRuntimePropertyEnum() + ")");
 			if (ownerElementPWrap.isUnique()) {
 				ojClass.addToImports(TinkerGenerationUtil.tumlTinkerSetClosableIterableImpl);
 			} else {

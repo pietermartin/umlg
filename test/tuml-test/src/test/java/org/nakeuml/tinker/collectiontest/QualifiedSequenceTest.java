@@ -18,10 +18,10 @@ public class QualifiedSequenceTest extends BaseLocalDbTest {
 		god.setName("THEGOD");
 		Foot foot1 = new Foot(true);
 		foot1.setName("foot1");
-		foot1.init(god);
+		foot1.addToGod(god);
 		Foot foot2 = new Foot(true);
 		foot2.setName("foot2");
-		foot2.init(god);
+		foot2.addToGod(god);
 		db.stopTransaction(Conclusion.SUCCESS);
 		God godTest = new God(god.getVertex());
 		Assert.assertEquals("foot1", godTest.getFootForGodFootQualifier("foot1").getName());
@@ -35,10 +35,10 @@ public class QualifiedSequenceTest extends BaseLocalDbTest {
 		god.setName("THEGOD");
 		Foot foot1 = new Foot(true);
 		foot1.setName("foot1");
-		foot1.init(god);
+		foot1.addToGod(god);
 		Foot foot2 = new Foot(true);
 		foot2.setName("foot1");
-		foot2.init(god);
+		foot2.addToGod(god);
 		db.stopTransaction(Conclusion.SUCCESS);
 	}	
 	

@@ -27,6 +27,9 @@ public class TestSequence extends BaseLocalDbTest {
 		Assert.assertEquals("sequenceTest3", sequenceRootTest.getSequenceTest().get(2).getName());
 		SequenceTest sequenceTestTest = new SequenceTest(sequenceTest2.getVertex());
 		Assert.assertEquals("sequenceRoot", sequenceTestTest.getSequenceRoot().getName());
+		
+		
+		
 	}
 
 }

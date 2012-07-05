@@ -46,7 +46,7 @@ public class TinkerOrderedSetImpl<E> extends BaseCollection<E> implements Tinker
 		// validateMultiplicityForAdditionalElement calls size() which loads the
 		// collection
 		validateMultiplicityForAdditionalElement();
-		maybeCallInit(e);
+//		maybeCallInit(e);
 		addToListAndListIndex(indexOf, e);
 	}
 

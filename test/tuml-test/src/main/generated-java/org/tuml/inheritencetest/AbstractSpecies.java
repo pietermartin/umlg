@@ -31,8 +31,9 @@ public class AbstractSpecies extends BaseTinker implements CompositionNode {
 	public AbstractSpecies(God compositeOwner) {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
 		initialiseProperties();
+		initVariables();
 		createComponents();
-		init(compositeOwner);
+		addToGod(compositeOwner);
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
 	}
@@ -49,6 +50,7 @@ public class AbstractSpecies extends BaseTinker implements CompositionNode {
 	/** Default constructor for AbstractSpecies
 	 */
 	public AbstractSpecies() {
+		setName("thisisdodge");
 	}
 	
 	/** Constructor for AbstractSpecies
@@ -60,6 +62,7 @@ public class AbstractSpecies extends BaseTinker implements CompositionNode {
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
 		initialiseProperties();
+		initVariables();
 		createComponents();
 	}
 
@@ -181,18 +184,8 @@ public class AbstractSpecies extends BaseTinker implements CompositionNode {
 		return uid;
 	}
 	
-	/** This gets called on creation with the compositional owner. The composition owner does not itself need to be a composite node
-	 * 
-	 * @param compositeOwner 
-	 */
-	@Override
-	public void init(TinkerNode compositeOwner) {
-		this.addToGod((God)compositeOwner);
-		this.hasInitBeenCalled = true;
-		initVariables();
-	}
-	
 	public void initVariables() {
+		setName("thisisdodge");
 	}
 	
 	@Override

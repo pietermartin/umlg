@@ -6,6 +6,7 @@ import org.opaeum.java.metamodel.OJIfStatement;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
 import org.tuml.framework.Visitor;
+import org.tuml.javageneration.util.PropertyWrapper;
 import org.tuml.javageneration.visitor.BaseVisitor;
 
 public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property> {

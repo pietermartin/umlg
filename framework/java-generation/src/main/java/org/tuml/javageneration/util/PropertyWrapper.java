@@ -1,4 +1,4 @@
-package org.tuml.javageneration.visitor.property;
+package org.tuml.javageneration.util;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -35,6 +35,7 @@ import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.MultiplicityElement;
 import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.Namespace;
+import org.eclipse.uml2.uml.OpaqueExpression;
 import org.eclipse.uml2.uml.Package;
 import org.eclipse.uml2.uml.PackageableElement;
 import org.eclipse.uml2.uml.ParameterableElement;
@@ -50,9 +51,6 @@ import org.eclipse.uml2.uml.ValueSpecification;
 import org.eclipse.uml2.uml.VisibilityKind;
 import org.opaeum.java.metamodel.OJPathName;
 import org.tuml.javageneration.naming.Namer;
-import org.tuml.javageneration.util.TinkerGenerationUtil;
-import org.tuml.javageneration.util.TumlClassOperations;
-import org.tuml.javageneration.util.TumlPropertyOperations;
 import org.tuml.ocl.StandaloneFacade;
 
 import tudresden.ocl20.pivot.pivotmodel.Constraint;
@@ -1363,15 +1361,18 @@ public class PropertyWrapper implements Property {
 		return this.property.getDefaultValue().stringValue();
 	}
 
-	public String getOclAsJava() {
-		if (!isDerived() && !isQualifier()) {
-			throw new IllegalStateException("getOclAsJava can only be called on a derived property or qualifier!");
+	public String getOclDefaultValueAsJava() {
+//		if (!isDerived() && !isQualifier()) {
+//			throw new IllegalStateException("getOclDefaultValueAsJava can only be called on a derived property or qualifier!");
+//		}
+		if (!hasOclDefaultValue()) {
+			throw new IllegalStateException("getOclDefaultValueAsJava can only be called on a property with a default value with the language specified as ocl!");
 		}
 		try {
 			// TODO move this to workspace to text something or other
 			File oclFile = new File("src/main/generated-resources/" + getName() + ".ocl");
 			FileWriter fw = new FileWriter(oclFile);
-			fw.write(getOcl());
+			fw.write(getOclDefaultValue());
 			fw.flush();
 			List<Constraint> constraintList = StandaloneFacade.INSTANCE.parseOclConstraints(StandaloneFacade.INSTANCE.getModel(), oclFile);
 			IOcl2JavaSettings settings = Ocl2JavaFactory.getInstance().createJavaCodeGeneratorSettings();
@@ -1384,7 +1385,10 @@ public class PropertyWrapper implements Property {
 			int i = 1;
 			for (String s : lines) {
 				if (lines.length == i++) {
-					sb.append("return ");
+					//Derived property is used in getters
+					if (isDerived()) {
+						sb.append("return ");
+					}
 					sb.append(s);
 				} else {
 					sb.append(s);
@@ -1397,22 +1401,23 @@ public class PropertyWrapper implements Property {
 		}
 	}
 
-	public String getOcl() {
-		if (!isDerived() && !isQualifier()) {
+	private boolean hasOclDefaultValue() {
+		ValueSpecification v = getDefaultValue();
+		if (v instanceof OpaqueExpression) {
+			OpaqueExpression expr = (OpaqueExpression)v;
+			return expr.getLanguages().contains("ocl");
+		} else {
+			return false;
+		}
+	}
+
+	public String getOclDefaultValue() {
+		if (!hasOclDefaultValue()) {
 			throw new IllegalStateException("getOcl can only be called on a derived property or a qualifier");
 		}
 		StringBuilder sb = new StringBuilder();
 		sb.append("package ");
-		if (isDerived()) {
-			sb.append(Namer.name(getOwningType().getNearestPackage()).replace(".", "::"));
-			sb.append("\ncontext ");
-			sb.append(getOwningType().getName());
-			sb.append("::");
-			sb.append(getName());
-			sb.append("\n");
-			sb.append("derive: ");
-			sb.append(this.property.getDefaultValue().stringValue());
-		} else {
+		if (isQualified()) {
 			// Find the derived property on the qualified context
 			Property owner = (Property) getOwner();
 			Property derived = null;
@@ -1429,6 +1434,15 @@ public class PropertyWrapper implements Property {
 			sb.append("\n");
 			sb.append("derive: ");
 			sb.append(derived.getDefaultValue().stringValue());
+		} else {
+			sb.append(Namer.name(getOwningType().getNearestPackage()).replace(".", "::"));
+			sb.append("\ncontext ");
+			sb.append(getOwningType().getName());
+			sb.append("::");
+			sb.append(getName());
+			sb.append("\n");
+			sb.append("derive: ");
+			sb.append(this.property.getDefaultValue().stringValue());
 		}
 		sb.append("\n");
 		sb.append("endpackage");

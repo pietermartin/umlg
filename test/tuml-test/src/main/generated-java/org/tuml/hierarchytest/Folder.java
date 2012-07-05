@@ -24,7 +24,7 @@ public class Folder extends AbstractFolder implements CompositionNode {
 	 */
 	public Folder(AbstractFolder compositeOwner) {
 		super(true);
-		init(compositeOwner);
+		addToParentFolder(compositeOwner);
 	}
 	
 	/** Constructor for Folder
@@ -124,17 +124,6 @@ public class Folder extends AbstractFolder implements CompositionNode {
 		
 		}
 		return result;
-	}
-	
-	/** This gets called on creation with the compositional owner. The composition owner does not itself need to be a composite node
-	 * 
-	 * @param compositeOwner 
-	 */
-	@Override
-	public void init(TinkerNode compositeOwner) {
-		this.addToParentFolder((AbstractFolder)compositeOwner);
-		this.hasInitBeenCalled = true;
-		initVariables();
 	}
 	
 	public void initVariables() {

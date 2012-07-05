@@ -20,43 +20,35 @@ public class TestQualifierOnManyToMany extends BaseLocalDbTest {
 		
 		Many1 many1_1 = new Many1(true);
 		many1_1.setName("many1_1");
-		many1_1.init(god);
-		many1_1.addToOwningObject();
+		many1_1.addToGod(god);
 		
 		Many1 many1_2 = new Many1(true);
 		many1_2.setName("many1_1");
-		many1_2.init(god);
-		many1_2.addToOwningObject();
+		many1_2.addToGod(god);
 
 		Many1 many1_3 = new Many1(true);
 		many1_3.setName("many1_1");
-		many1_3.init(god);
-		many1_3.addToOwningObject();
+		many1_3.addToGod(god);
 
 		Many1 many1_4 = new Many1(true);
 		many1_4.setName("many1_4");
-		many1_4.init(god);
-		many1_4.addToOwningObject();
+		many1_4.addToGod(god);
 
 		Many2 many2_1 = new Many2(true);
 		many2_1.setName("many2_1");
-		many2_1.init(god);
-		many2_1.addToOwningObject();
+		many2_1.addToGod(god);
 		
 		Many2 many2_2 = new Many2(true);
 		many2_2.setName("many2_2");
-		many2_2.init(god);
-		many2_2.addToOwningObject();
+		many2_2.addToGod(god);
 
 		Many2 many2_3 = new Many2(true);
 		many2_3.setName("many2_3");
-		many2_3.init(god);
-		many2_3.addToOwningObject();
+		many2_3.addToGod(god);
 
 		Many2 many2_4 = new Many2(true);
 		many2_4.setName("many2_4");
-		many2_4.init(god);
-		many2_4.addToOwningObject();
+		many2_4.addToGod(god);
 
 		many1_1.addToMany2(many2_1);
 		many1_1.addToMany2(many2_2);
@@ -109,43 +101,35 @@ public class TestQualifierOnManyToMany extends BaseLocalDbTest {
 		
 		Many1 many1_1 = new Many1(true);
 		many1_1.setName("many1_1");
-		many1_1.init(god);
-		many1_1.addToOwningObject();
+		many1_1.addToGod(god);
 		
 		Many1 many1_2 = new Many1(true);
 		many1_2.setName("many1_1");
-		many1_2.init(god);
-		many1_2.addToOwningObject();
+		many1_2.addToGod(god);
 
 		Many1 many1_3 = new Many1(true);
 		many1_3.setName("many1_1");
-		many1_3.init(god);
-		many1_3.addToOwningObject();
+		many1_3.addToGod(god);
 
 		Many1 many1_4 = new Many1(true);
 		many1_4.setName("many1_4");
-		many1_4.init(god);
-		many1_4.addToOwningObject();
+		many1_4.addToGod(god);
 
 		Many2 many2_1 = new Many2(true);
 		many2_1.setName("many2_1");
-		many2_1.init(god);
-		many2_1.addToOwningObject();
+		many2_1.addToGod(god);
 		
 		Many2 many2_2 = new Many2(true);
 		many2_2.setName("many2_2");
-		many2_2.init(god);
-		many2_2.addToOwningObject();
+		many2_2.addToGod(god);
 
 		Many2 many2_3 = new Many2(true);
 		many2_3.setName("many2_3");
-		many2_3.init(god);
-		many2_3.addToOwningObject();
+		many2_3.addToGod(god);
 
 		Many2 many2_4 = new Many2(true);
 		many2_4.setName("many2_4");
-		many2_4.init(god);
-		many2_4.addToOwningObject();
+		many2_4.addToGod(god);
 
 		many1_1.addToMany2List(many2_1);
 		many1_1.addToMany2List(many2_2);

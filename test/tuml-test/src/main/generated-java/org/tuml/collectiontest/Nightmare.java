@@ -33,8 +33,9 @@ public class Nightmare extends BaseTinker implements CompositionNode {
 	public Nightmare(God compositeOwner) {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
 		initialiseProperties();
+		initVariables();
 		createComponents();
-		init(compositeOwner);
+		addToGod(compositeOwner);
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
 	}
@@ -62,6 +63,7 @@ public class Nightmare extends BaseTinker implements CompositionNode {
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
 		initialiseProperties();
+		initVariables();
 		createComponents();
 	}
 
@@ -210,12 +212,12 @@ public class Nightmare extends BaseTinker implements CompositionNode {
 					result = god.size();
 				break;
 			
-				case godOfMemory:
-					result = godOfMemory.size();
-				break;
-			
 				case nameNonUnique:
 					result = nameNonUnique.size();
+				break;
+			
+				case godOfMemory:
+					result = godOfMemory.size();
 				break;
 			
 				default:
@@ -237,24 +239,13 @@ public class Nightmare extends BaseTinker implements CompositionNode {
 		return uid;
 	}
 	
-	/** This gets called on creation with the compositional owner. The composition owner does not itself need to be a composite node
-	 * 
-	 * @param compositeOwner 
-	 */
-	@Override
-	public void init(TinkerNode compositeOwner) {
-		this.addToGod((God)compositeOwner);
-		this.hasInitBeenCalled = true;
-		initVariables();
-	}
-	
 	public void initVariables() {
 	}
 	
 	@Override
 	public void initialiseProperties() {
-		this.nameNonUnique =  new TinkerSetImpl<String>(this, NightmareRuntimePropertyEnum.nameNonUnique);
 		this.godOfMemory =  new TinkerSetImpl<God>(this, NightmareRuntimePropertyEnum.godOfMemory);
+		this.nameNonUnique =  new TinkerSetImpl<String>(this, NightmareRuntimePropertyEnum.nameNonUnique);
 		this.god =  new TinkerSetImpl<God>(this, NightmareRuntimePropertyEnum.god);
 		this.name =  new TinkerSetImpl<String>(this, NightmareRuntimePropertyEnum.name);
 	}
@@ -270,12 +261,12 @@ public class Nightmare extends BaseTinker implements CompositionNode {
 				this.god =  new TinkerSetImpl<God>(this, NightmareRuntimePropertyEnum.god);
 			break;
 		
-			case godOfMemory:
-				this.godOfMemory =  new TinkerSetImpl<God>(this, NightmareRuntimePropertyEnum.godOfMemory);
-			break;
-		
 			case nameNonUnique:
 				this.nameNonUnique =  new TinkerSetImpl<String>(this, NightmareRuntimePropertyEnum.nameNonUnique);
+			break;
+		
+			case godOfMemory:
+				this.godOfMemory =  new TinkerSetImpl<God>(this, NightmareRuntimePropertyEnum.godOfMemory);
 			break;
 		
 		}
@@ -360,8 +351,8 @@ public class Nightmare extends BaseTinker implements CompositionNode {
 	}
 
 	public enum NightmareRuntimePropertyEnum implements TumlRuntimeProperty {
-		nameNonUnique(true,true,false,"tuml-test__org__tuml__collectiontest__Nightmare__nameNonUnique",false,false,true,false,1,1,false,false,false,false,true),
 		godOfMemory(false,false,false,"A_<god>_<nightmare>_2",false,false,true,false,1,1,false,true,false,false,true),
+		nameNonUnique(true,true,false,"tuml-test__org__tuml__collectiontest__Nightmare__nameNonUnique",false,false,true,false,1,1,false,false,false,false,true),
 		god(false,false,false,"A_<god>_<nightmare>",false,false,true,false,1,1,false,true,false,false,true),
 		name(true,true,false,"tuml-test__org__tuml__collectiontest__Nightmare__name",false,false,true,false,1,1,false,false,false,false,true);
 		private boolean onePrimitive;
@@ -416,11 +407,11 @@ public class Nightmare extends BaseTinker implements CompositionNode {
 		}
 	
 		static public NightmareRuntimePropertyEnum fromLabel(String label) {
-			if ( nameNonUnique.getLabel().equals(label) ) {
-				return nameNonUnique;
-			}
 			if ( godOfMemory.getLabel().equals(label) ) {
 				return godOfMemory;
+			}
+			if ( nameNonUnique.getLabel().equals(label) ) {
+				return nameNonUnique;
 			}
 			if ( god.getLabel().equals(label) ) {
 				return god;

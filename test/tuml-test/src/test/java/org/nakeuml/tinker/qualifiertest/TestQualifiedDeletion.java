@@ -69,7 +69,7 @@ public class TestQualifiedDeletion extends BaseLocalDbTest {
 		
 		db.startTransaction();
 		Many1 many1Test = new Many1(many11.getVertex());
-		many1Test.markDeleted();
+		many1Test.delete();
 		db.stopTransaction(Conclusion.SUCCESS);
 		
 		many2Test = new Many2(many21.getVertex());
@@ -130,7 +130,7 @@ public class TestQualifiedDeletion extends BaseLocalDbTest {
 		
 		db.startTransaction();
 		Many1 many1Test = new Many1(many11.getVertex());
-		many1Test.markDeleted();
+		many1Test.delete();
 		db.stopTransaction(Conclusion.SUCCESS);
 		
 		many2Test = new Many2(many21.getVertex());
@@ -146,57 +146,52 @@ public class TestQualifiedDeletion extends BaseLocalDbTest {
 		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
-		
 		Nature nature = new Nature(true);
 		nature.setName1("name1_0");
 		nature.setName2("xxx");
-		nature.init(god);
-		nature.addToOwningObject();
+		nature.addToGod(god);
 		db.stopTransaction(Conclusion.SUCCESS);
 
 		db.startTransaction();
 		nature = new Nature(true);
 		nature.setName1("name1_1");
 		nature.setName2("xxx");
-		nature.init(god);
-		nature.addToOwningObject();
+		nature.addToGod(god);
 		db.stopTransaction(Conclusion.SUCCESS);
 
 		db.startTransaction();
 		nature = new Nature(true);
 		nature.setName1("name1_2");
 		nature.setName2("xxx");
-		nature.init(god);
-		nature.addToOwningObject();
+		nature.addToGod(god);
 		db.stopTransaction(Conclusion.SUCCESS);
 
 		db.startTransaction();
 		nature = new Nature(true);
 		nature.setName1("name1_3");
 		nature.setName2("xxx");
-		nature.init(god);
-		nature.addToOwningObject();
+		nature.addToGod(god);
 		db.stopTransaction(Conclusion.SUCCESS);
 
 		db.startTransaction();
 		nature = new Nature(true);
 		nature.setName1("name1_4");
 		nature.setName2("yyy");
-		nature.init(god);
-		nature.addToOwningObject();
+		nature.addToGod(god);
 		db.stopTransaction(Conclusion.SUCCESS);
 
-		db.startTransaction();
+		//TODO this fails inside a transaction at the moment due to tinkerpop bug on hasNext() method of Neo4jEdgeIterable
+//		db.startTransaction();
 		God godTest = new God(god.getVertex());
 		Set<Nature> natureForQualifier2 = godTest.getNatureForQualifier2("xxx");
 		Assert.assertEquals(4, natureForQualifier2.size());
 		natureForQualifier2 = godTest.getNatureForQualifier2("yyy");
 		Assert.assertEquals(1, natureForQualifier2.size());
 		Nature natureForDeletion = godTest.getNatureForQualifier1("name1_0");
-		db.stopTransaction(Conclusion.SUCCESS);
+//		db.stopTransaction(Conclusion.SUCCESS);
 
 		db.startTransaction();
-		natureForDeletion.markDeleted();
+		natureForDeletion.delete();
 		db.stopTransaction(Conclusion.SUCCESS);
 		
 		God godTest2 = new God(god.getVertex());

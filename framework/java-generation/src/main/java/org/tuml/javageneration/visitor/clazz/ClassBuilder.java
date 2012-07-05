@@ -16,12 +16,15 @@ import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
 import org.opaeum.java.metamodel.annotation.OJAnnotationValue;
 import org.tuml.framework.Visitor;
+import org.tuml.javageneration.util.PropertyWrapper;
 import org.tuml.javageneration.util.TinkerGenerationUtil;
 import org.tuml.javageneration.util.TumlClassOperations;
 import org.tuml.javageneration.visitor.BaseVisitor;
-import org.tuml.javageneration.visitor.property.PropertyWrapper;
 
-public class ClassVisitor extends BaseVisitor implements Visitor<Class> {
+public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
+
+	public static final String INIT_VARIABLES = "initVariables";
+	public static final String INITIALISE_PROPERTIES = "initialiseProperties";
 
 	@Override
 	public void visitBefore(Class clazz) {
@@ -37,12 +40,14 @@ public class ClassVisitor extends BaseVisitor implements Visitor<Class> {
 		addPersistentConstructor(annotatedClass);
 		addInitialiseProperties(annotatedClass, clazz);
 		addContructorWithVertex(annotatedClass, clazz);
+		addInitialisePropertiesInConstructorWithVertex(annotatedClass);
 		if (clazz.getGeneralizations().isEmpty()) {
 			persistUid(annotatedClass);
 			addGetObjectVersion(annotatedClass);
 			addGetSetId(annotatedClass);
 			initialiseVertexInPersistentConstructor(annotatedClass, clazz);
 			addInitialisePropertiesInPersistentConstructor(annotatedClass);
+			addInitVariablesInPersistentConstructor(annotatedClass);
 			createComponentsInPersistentConstructor(annotatedClass);
 		} else {
 			addSuperWithPersistenceToDefaultConstructor(annotatedClass);
@@ -52,16 +57,21 @@ public class ClassVisitor extends BaseVisitor implements Visitor<Class> {
 		addDelete(annotatedClass, clazz);
 	}
 
-	//TODO turn into proper value
+	@Override
+	public void visitAfter(Class clazz) {
+	}
+
+	private void addInitialisePropertiesInConstructorWithVertex(OJAnnotatedClass annotatedClass) {
+		OJConstructor c = annotatedClass.findConstructor(TinkerGenerationUtil.vertexPathName);
+		c.getBody().addToStatements(INITIALISE_PROPERTIES + "()");
+	}
+
+	// TODO turn into proper value
 	private void addDefaultSerialization(OJAnnotatedClass annotatedClass) {
 		OJField defaultSerialization = new OJField(annotatedClass, "serialVersionUID", new OJPathName("long"));
 		defaultSerialization.setFinal(true);
 		defaultSerialization.setStatic(true);
 		defaultSerialization.setInitExp("1L");
-	}
-
-	@Override
-	public void visitAfter(Class clazz) {
 	}
 
 	private void setSuperClass(OJAnnotatedClass annotatedClass, Class clazz) {
@@ -139,10 +149,10 @@ public class ClassVisitor extends BaseVisitor implements Visitor<Class> {
 	}
 
 	private void addInitialiseProperties(OJAnnotatedClass annotatedClass, Class clazz) {
-		OJAnnotatedOperation initialiseProperties = new OJAnnotatedOperation("initialiseProperties");
+		OJAnnotatedOperation initialiseProperties = new OJAnnotatedOperation(INITIALISE_PROPERTIES);
 		TinkerGenerationUtil.addOverrideAnnotation(initialiseProperties);
 		if (!clazz.getGeneralizations().isEmpty()) {
-			initialiseProperties.getBody().addToStatements("super.initialiseProperties()");
+			initialiseProperties.getBody().addToStatements("super." + INITIALISE_PROPERTIES + "()");
 		}
 		annotatedClass.addToOperations(initialiseProperties);
 		for (Property p : TumlClassOperations.getAllOwnedProperties(clazz)) {
@@ -164,7 +174,6 @@ public class ClassVisitor extends BaseVisitor implements Visitor<Class> {
 		} else {
 			constructor.getBody().addToStatements("super(vertex)");
 		}
-		constructor.getBody().addToStatements("initialiseProperties()");
 		ojClass.addToConstructors(constructor);
 	}
 
@@ -178,7 +187,12 @@ public class ClassVisitor extends BaseVisitor implements Visitor<Class> {
 
 	private void addInitialisePropertiesInPersistentConstructor(OJAnnotatedClass annotatedClass) {
 		OJConstructor constructor = annotatedClass.findConstructor(new OJPathName("java.lang.Boolean"));
-		constructor.getBody().addToStatements("initialiseProperties()");
+		constructor.getBody().addToStatements(INITIALISE_PROPERTIES + "()");
+	}
+
+	private void addInitVariablesInPersistentConstructor(OJAnnotatedClass annotatedClass) {
+		OJConstructor constructor = annotatedClass.findConstructor(new OJPathName("java.lang.Boolean"));
+		constructor.getBody().addToStatements(INIT_VARIABLES + "()");
 	}
 
 	private void createComponentsInPersistentConstructor(OJAnnotatedClass annotatedClass) {
@@ -187,7 +201,7 @@ public class ClassVisitor extends BaseVisitor implements Visitor<Class> {
 	}
 
 	private void addInitVariables(OJAnnotatedClass annotatedClass, Class clazz) {
-		OJOperation initVariables = new OJAnnotatedOperation("initVariables");
+		OJOperation initVariables = new OJAnnotatedOperation(INIT_VARIABLES);
 		initVariables.setBody(annotatedClass.getDefaultConstructor().getBody());
 		if (TumlClassOperations.hasSupertype(clazz)) {
 			OJSimpleStatement simpleStatement = new OJSimpleStatement("super.initVariables()");

@@ -18,13 +18,13 @@ public class TestQualifier extends BaseLocalDbTest {
 		god.setName("God");
 		Nature nature1 = new Nature(true);
 		nature1.setNatureName("natureName1");
-		nature1.init(god);
+		nature1.addToGod(god);
 		Nature nature2 = new Nature(true);
 		nature2.setNatureName("natureName2");
-		nature2.init(god);
+		nature2.addToGod(god);
 		Nature nature3 = new Nature(true);
 		nature3.setNatureName("natureName3");
-		nature3.init(god);
+		nature3.addToGod(god);
 		db.stopTransaction(Conclusion.SUCCESS);
 		
 		God testGod = new God(god.getVertex());

@@ -95,7 +95,8 @@
         <packagedElement xmi:type="uml:Class" xmi:id="_YuD8sOwiEeCSwqyeEHd1tw" name="God">
           <ownedAttribute xmi:id="_aI90cOwiEeCSwqyeEHd1tw" name="name">
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
-            <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_j63TQBOpEeGDXq42Ku95_Q" name="OpaqueExpression1">
+            <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_j63TQBOpEeGDXq42Ku95_Q" name="'whatajol'">
+              <language>ocl</language>
               <body>'whatajol'</body>
             </defaultValue>
           </ownedAttribute>
@@ -169,9 +170,6 @@
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_KrZDohhKEeGoXdfOp4zUvw"/>
             <qualifier xmi:id="_N600EBhKEeGoXdfOp4zUvw" name="godFootQualifier">
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
-              <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_QiSlkBhKEeGoXdfOp4zUvw" name="OpaqueExpression1">
-                <body>name</body>
-              </defaultValue>
             </qualifier>
           </ownedAttribute>
           <ownedAttribute xmi:id="_vJwX8BhnEeGyD6zYrs7NuQ" name="world" type="_n1FQcBhnEeGyD6zYrs7NuQ" isOrdered="true" aggregation="composite" association="_vJzbQBhnEeGyD6zYrs7NuQ">
@@ -287,7 +285,8 @@
         <packagedElement xmi:type="uml:Class" xmi:id="_cikV0O6jEeCKZsw1ityolg" name="AbstractSpecies" isAbstract="true">
           <ownedAttribute xmi:id="_C76PQO6kEeCKZsw1ityolg" name="name">
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
-            <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_xziTQBOpEeGDXq42Ku95_Q" name="OpaqueExpression1">
+            <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_xwBzwMbIEeGNXa131cbGdQ" name="'thisisdodge'">
+              <language>ocl</language>
               <body>'thisisdodge'</body>
             </defaultValue>
           </ownedAttribute>

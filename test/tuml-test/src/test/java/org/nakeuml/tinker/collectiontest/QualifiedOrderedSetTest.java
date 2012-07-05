@@ -18,7 +18,7 @@ public class QualifiedOrderedSetTest extends BaseLocalDbTest {
 		god.setName("THEGOD");
 		Fantasy fantasy1 = new Fantasy(true);
 		fantasy1.setName("fantasy1");
-		fantasy1.init(god);
+		fantasy1.addToGod(god);
 		god.getFantasy().add(fantasy1);
 		db.stopTransaction(Conclusion.SUCCESS);
 		God godTest = new God(god.getVertex());

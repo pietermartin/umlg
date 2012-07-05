@@ -32,8 +32,9 @@ public class OneOne extends BaseTinker implements CompositionNode {
 	public OneOne(God compositeOwner) {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
 		initialiseProperties();
+		initVariables();
 		createComponents();
-		init(compositeOwner);
+		addToGod(compositeOwner);
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
 	}
@@ -61,6 +62,7 @@ public class OneOne extends BaseTinker implements CompositionNode {
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
 		initialiseProperties();
+		initVariables();
 		createComponents();
 	}
 
@@ -174,16 +176,16 @@ public class OneOne extends BaseTinker implements CompositionNode {
 		OneOneRuntimePropertyEnum runtimeProperty = OneOneRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result == 0 ) {
 			switch ( runtimeProperty ) {
+				case god:
+					result = god.size();
+				break;
+			
 				case name:
 					result = name.size();
 				break;
 			
 				case oneTwo:
 					result = oneTwo.size();
-				break;
-			
-				case god:
-					result = god.size();
 				break;
 			
 				default:
@@ -205,40 +207,29 @@ public class OneOne extends BaseTinker implements CompositionNode {
 		return uid;
 	}
 	
-	/** This gets called on creation with the compositional owner. The composition owner does not itself need to be a composite node
-	 * 
-	 * @param compositeOwner 
-	 */
-	@Override
-	public void init(TinkerNode compositeOwner) {
-		this.addToGod((God)compositeOwner);
-		this.hasInitBeenCalled = true;
-		initVariables();
-	}
-	
 	public void initVariables() {
 	}
 	
 	@Override
 	public void initialiseProperties() {
-		this.god =  new TinkerSetImpl<God>(this, OneOneRuntimePropertyEnum.god);
 		this.oneTwo =  new TinkerSetImpl<OneTwo>(this, OneOneRuntimePropertyEnum.oneTwo);
 		this.name =  new TinkerSetImpl<String>(this, OneOneRuntimePropertyEnum.name);
+		this.god =  new TinkerSetImpl<God>(this, OneOneRuntimePropertyEnum.god);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (OneOneRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
+			case god:
+				this.god =  new TinkerSetImpl<God>(this, OneOneRuntimePropertyEnum.god);
+			break;
+		
 			case name:
 				this.name =  new TinkerSetImpl<String>(this, OneOneRuntimePropertyEnum.name);
 			break;
 		
 			case oneTwo:
 				this.oneTwo =  new TinkerSetImpl<OneTwo>(this, OneOneRuntimePropertyEnum.oneTwo);
-			break;
-		
-			case god:
-				this.god =  new TinkerSetImpl<God>(this, OneOneRuntimePropertyEnum.god);
 			break;
 		
 		}
@@ -306,9 +297,9 @@ public class OneOne extends BaseTinker implements CompositionNode {
 	}
 
 	public enum OneOneRuntimePropertyEnum implements TumlRuntimeProperty {
-		god(false,false,false,"A_<god>_<oneOne>",false,false,true,false,1,1,false,false,false,false,true),
 		oneTwo(false,true,false,"A_<oneOne>_<oneTwo>",true,false,false,false,1,1,false,false,false,false,true),
-		name(true,true,false,"tuml-test__org__tuml__onetoone__OneOne__name",false,false,true,false,1,1,false,false,false,false,true);
+		name(true,true,false,"tuml-test__org__tuml__onetoone__OneOne__name",false,false,true,false,1,1,false,false,false,false,true),
+		god(false,false,false,"A_<god>_<oneOne>",false,false,true,false,1,1,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -361,14 +352,14 @@ public class OneOne extends BaseTinker implements CompositionNode {
 		}
 	
 		static public OneOneRuntimePropertyEnum fromLabel(String label) {
-			if ( god.getLabel().equals(label) ) {
-				return god;
-			}
 			if ( oneTwo.getLabel().equals(label) ) {
 				return oneTwo;
 			}
 			if ( name.getLabel().equals(label) ) {
 				return name;
+			}
+			if ( god.getLabel().equals(label) ) {
+				return god;
 			}
 			return null;
 		}

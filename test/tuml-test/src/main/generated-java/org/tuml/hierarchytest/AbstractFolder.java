@@ -44,6 +44,7 @@ public class AbstractFolder extends BaseTinker implements TinkerNode, Hierarchy 
 		this.vertex = GraphDb.getDb().addVertex("dribble");
 		defaultCreate();
 		initialiseProperties();
+		initVariables();
 		createComponents();
 		Edge edge = GraphDb.getDb().addEdge(null, GraphDb.getDb().getRoot(), this.vertex, "root");
 		edge.setProperty("inClass", this.getClass().getName());

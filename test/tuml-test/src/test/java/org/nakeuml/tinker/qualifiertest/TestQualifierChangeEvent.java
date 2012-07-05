@@ -19,14 +19,12 @@ public class TestQualifierChangeEvent extends BaseLocalDbTest {
 		Nature nature = new Nature(true);
 		nature.setName1("nature1");
 		nature.setName2("nature2");
-		nature.init(god);
-		nature.addToOwningObject();
+		nature.addToGod(god);
 		
 		Nature nature2 = new Nature(true);
 		nature2.setName1("nature2");
 		nature2.setName2("nature2");
-		nature2.init(god);
-		nature2.addToOwningObject();
+		nature2.addToGod(god);
 		db.stopTransaction(Conclusion.SUCCESS);
 		
 		db.startTransaction();

@@ -72,7 +72,7 @@ public class SequenceTest extends BaseLocalDbTest {
 		Hand hand1_5 = new Hand(true);
 		hand1_5.setLeft(true);
 		hand1_5.setName("hand1_5");
-		hand1_5.init(god);
+		hand1_5.addToGod(god);
 		god.getHand().add(1, hand1_5);
 		db.stopTransaction(Conclusion.SUCCESS);
 		
@@ -121,7 +121,9 @@ public class SequenceTest extends BaseLocalDbTest {
 		hand4.setLeft(true);
 		hand4.setName("hand4");
 		db.stopTransaction(Conclusion.SUCCESS);
-
+		God godTest = new God(god.getVertex());
+		Assert.assertEquals(4, godTest.getHand().size());
+		
 		db.startTransaction();
 		Hand hand5 = new Hand(true);
 		hand5.setLeft(true);
@@ -143,7 +145,7 @@ public class SequenceTest extends BaseLocalDbTest {
 		god.getHand().addAll(moreHands);
 		db.stopTransaction(Conclusion.SUCCESS);
 
-		God godTest = new God(god.getVertex());
+		godTest = new God(god.getVertex());
 		Assert.assertEquals(8, godTest.getHand().size());
 		Assert.assertEquals("hand1", godTest.getHand().get(0).getName());
 		Assert.assertEquals("hand2", godTest.getHand().get(1).getName());
@@ -244,35 +246,35 @@ public class SequenceTest extends BaseLocalDbTest {
 		
 		Many1 many1_1 = new Many1(true);
 		many1_1.setName("many1_1");
-		many1_1.init(god);
+		many1_1.addToGod(god);
 		
 		Many1 many1_2 = new Many1(true);
 		many1_2.setName("many1_1");
-		many1_2.init(god);
+		many1_2.addToGod(god);
 
 		Many1 many1_3 = new Many1(true);
 		many1_3.setName("many1_1");
-		many1_3.init(god);
+		many1_3.addToGod(god);
 
 		Many1 many1_4 = new Many1(true);
 		many1_4.setName("many1_4");
-		many1_4.init(god);
+		many1_4.addToGod(god);
 
 		Many2 many2_1 = new Many2(true);
 		many2_1.setName("many2_1");
-		many2_1.init(god);
+		many2_1.addToGod(god);
 		
 		Many2 many2_2 = new Many2(true);
 		many2_2.setName("many2_2");
-		many2_2.init(god);
+		many2_2.addToGod(god);
 
 		Many2 many2_3 = new Many2(true);
 		many2_3.setName("many2_3");
-		many2_3.init(god);
+		many2_3.addToGod(god);
 
 		Many2 many2_4 = new Many2(true);
 		many2_4.setName("many2_4");
-		many2_4.init(god);
+		many2_4.addToGod(god);
 
 		many1_1.addToMany2UnqualifiedList(many2_1);
 		many1_1.addToMany2UnqualifiedList(many2_2);

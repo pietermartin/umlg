@@ -15,7 +15,6 @@ import org.eclipse.uml2.uml.Type;
 import org.eclipse.uml2.uml.internal.operations.ClassOperations;
 import org.opaeum.java.metamodel.OJPathName;
 import org.tuml.javageneration.naming.Namer;
-import org.tuml.javageneration.visitor.property.PropertyWrapper;
 
 public class TumlClassOperations extends ClassOperations {
 

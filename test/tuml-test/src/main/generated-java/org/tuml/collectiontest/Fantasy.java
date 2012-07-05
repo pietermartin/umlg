@@ -31,8 +31,9 @@ public class Fantasy extends BaseTinker implements CompositionNode {
 	public Fantasy(God compositeOwner) {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
 		initialiseProperties();
+		initVariables();
 		createComponents();
-		init(compositeOwner);
+		addToGod(compositeOwner);
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
 	}
@@ -60,6 +61,7 @@ public class Fantasy extends BaseTinker implements CompositionNode {
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
 		initialiseProperties();
+		initVariables();
 		createComponents();
 	}
 
@@ -158,12 +160,12 @@ public class Fantasy extends BaseTinker implements CompositionNode {
 		FantasyRuntimePropertyEnum runtimeProperty = FantasyRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result == 0 ) {
 			switch ( runtimeProperty ) {
-				case name:
-					result = name.size();
-				break;
-			
 				case god:
 					result = god.size();
+				break;
+			
+				case name:
+					result = name.size();
 				break;
 			
 				default:
@@ -185,35 +187,24 @@ public class Fantasy extends BaseTinker implements CompositionNode {
 		return uid;
 	}
 	
-	/** This gets called on creation with the compositional owner. The composition owner does not itself need to be a composite node
-	 * 
-	 * @param compositeOwner 
-	 */
-	@Override
-	public void init(TinkerNode compositeOwner) {
-		this.addToGod((God)compositeOwner);
-		this.hasInitBeenCalled = true;
-		initVariables();
-	}
-	
 	public void initVariables() {
 	}
 	
 	@Override
 	public void initialiseProperties() {
-		this.god =  new TinkerSetImpl<God>(this, FantasyRuntimePropertyEnum.god);
 		this.name =  new TinkerSetImpl<String>(this, FantasyRuntimePropertyEnum.name);
+		this.god =  new TinkerSetImpl<God>(this, FantasyRuntimePropertyEnum.god);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (FantasyRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case name:
-				this.name =  new TinkerSetImpl<String>(this, FantasyRuntimePropertyEnum.name);
-			break;
-		
 			case god:
 				this.god =  new TinkerSetImpl<God>(this, FantasyRuntimePropertyEnum.god);
+			break;
+		
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, FantasyRuntimePropertyEnum.name);
 			break;
 		
 		}
@@ -264,8 +255,8 @@ public class Fantasy extends BaseTinker implements CompositionNode {
 	}
 
 	public enum FantasyRuntimePropertyEnum implements TumlRuntimeProperty {
-		god(false,false,false,"A_<god>_<fantasy>",false,false,true,false,1,1,false,true,false,true,true),
-		name(true,true,false,"tuml-test__org__tuml__collectiontest__Fantasy__name",false,false,true,false,1,1,false,false,false,false,true);
+		name(true,true,false,"tuml-test__org__tuml__collectiontest__Fantasy__name",false,false,true,false,1,1,false,false,false,false,true),
+		god(false,false,false,"A_<god>_<fantasy>",false,false,true,false,1,1,false,true,false,true,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -318,11 +309,11 @@ public class Fantasy extends BaseTinker implements CompositionNode {
 		}
 	
 		static public FantasyRuntimePropertyEnum fromLabel(String label) {
-			if ( god.getLabel().equals(label) ) {
-				return god;
-			}
 			if ( name.getLabel().equals(label) ) {
 				return name;
+			}
+			if ( god.getLabel().equals(label) ) {
+				return god;
 			}
 			return null;
 		}

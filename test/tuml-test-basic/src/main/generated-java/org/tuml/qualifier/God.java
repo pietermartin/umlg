@@ -36,6 +36,7 @@ public class God extends BaseTinker implements TinkerNode {
 	public God(Vertex vertex) {
 		this.vertex=vertex;
 		initialiseProperties();
+		initVariables();
 	}
 	
 	/** Default constructor for God
@@ -51,6 +52,7 @@ public class God extends BaseTinker implements TinkerNode {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
 		defaultCreate();
 		initialiseProperties();
+		initVariables();
 		createComponents();
 		Edge edge = GraphDb.getDb().addEdge(null, GraphDb.getDb().getRoot(), this.vertex, "root");
 		edge.setProperty("inClass", this.getClass().getName());
@@ -112,7 +114,7 @@ public class God extends BaseTinker implements TinkerNode {
 	}
 	
 	public Nature getNatureForNatureQualifier1(String natureQualifier1) {
-		Index<Edge> index = GraphDb.getDb().getIndex(getUid() + ":::" + "A_<god>_<nature>", Edge.class);
+		Index<Edge> index = GraphDb.getDb().getIndex(getUid() + ":::" + GodRuntimePropertyEnum.nature.getLabel(), Edge.class);
 		if ( index==null ) {
 			return null;
 		} else {
@@ -170,12 +172,12 @@ public class God extends BaseTinker implements TinkerNode {
 		GodRuntimePropertyEnum runtimeProperty = GodRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result == 0 ) {
 			switch ( runtimeProperty ) {
-				case nature:
-					result = nature.size();
-				break;
-			
 				case name:
 					result = name.size();
+				break;
+			
+				case nature:
+					result = nature.size();
 				break;
 			
 				default:
@@ -202,19 +204,19 @@ public class God extends BaseTinker implements TinkerNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.name =  new TinkerSetImpl<String>(this, GodRuntimePropertyEnum.name);
 		this.nature =  new TinkerQualifiedSetImpl<Nature>(this, GodRuntimePropertyEnum.nature);
+		this.name =  new TinkerSetImpl<String>(this, GodRuntimePropertyEnum.name);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (GodRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case nature:
-				this.nature =  new TinkerQualifiedSetImpl<Nature>(this, GodRuntimePropertyEnum.nature);
-			break;
-		
 			case name:
 				this.name =  new TinkerSetImpl<String>(this, GodRuntimePropertyEnum.name);
+			break;
+		
+			case nature:
+				this.nature =  new TinkerQualifiedSetImpl<Nature>(this, GodRuntimePropertyEnum.nature);
 			break;
 		
 		}
@@ -265,8 +267,8 @@ public class God extends BaseTinker implements TinkerNode {
 	}
 
 	public enum GodRuntimePropertyEnum implements TumlRuntimeProperty {
-		name(true,true,false,"tuml-test-basic-model__org__tuml__qualifier__God__name",false,false,true,false,1,1,false,false,false,false,true),
-		nature(false,true,true,"A_<god>_<nature>",false,true,false,false,-1,0,true,false,false,false,true);
+		nature(false,true,true,"A_<god>_<nature>",false,true,false,false,-1,0,true,false,false,false,true),
+		name(true,true,false,"tuml-test-basic-model__org__tuml__qualifier__God__name",false,false,true,false,1,1,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -319,11 +321,11 @@ public class God extends BaseTinker implements TinkerNode {
 		}
 	
 		static public GodRuntimePropertyEnum fromLabel(String label) {
-			if ( name.getLabel().equals(label) ) {
-				return name;
-			}
 			if ( nature.getLabel().equals(label) ) {
 				return nature;
+			}
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
 			return null;
 		}

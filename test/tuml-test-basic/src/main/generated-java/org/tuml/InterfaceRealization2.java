@@ -20,8 +20,8 @@ import org.tuml.runtime.domain.TinkerNode;
 
 public class InterfaceRealization2 extends BaseTinker implements CompositionNode, Interface2 {
 	static final public long serialVersionUID = 1L;
-	private TinkerSet<Interface1> interface1;
 	private TinkerSet<String> name;
+	private TinkerSet<Interface1> interface1;
 
 	/** Constructor for InterfaceRealization2
 	 * 
@@ -30,8 +30,9 @@ public class InterfaceRealization2 extends BaseTinker implements CompositionNode
 	public InterfaceRealization2(Interface1 compositeOwner) {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
 		initialiseProperties();
+		initVariables();
 		createComponents();
-		init(compositeOwner);
+		addToInterface1(compositeOwner);
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
 	}
@@ -43,6 +44,7 @@ public class InterfaceRealization2 extends BaseTinker implements CompositionNode
 	public InterfaceRealization2(Vertex vertex) {
 		this.vertex=vertex;
 		initialiseProperties();
+		initVariables();
 	}
 	
 	/** Default constructor for InterfaceRealization2
@@ -59,6 +61,7 @@ public class InterfaceRealization2 extends BaseTinker implements CompositionNode
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
 		initialiseProperties();
+		initVariables();
 		createComponents();
 	}
 
@@ -153,12 +156,12 @@ public class InterfaceRealization2 extends BaseTinker implements CompositionNode
 		InterfaceRealization2RuntimePropertyEnum runtimeProperty = InterfaceRealization2RuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result == 0 ) {
 			switch ( runtimeProperty ) {
-				case name:
-					result = name.size();
-				break;
-			
 				case interface1:
 					result = interface1.size();
+				break;
+			
+				case name:
+					result = name.size();
 				break;
 			
 				default:
@@ -180,35 +183,24 @@ public class InterfaceRealization2 extends BaseTinker implements CompositionNode
 		return uid;
 	}
 	
-	/** This gets called on creation with the compositional owner. The composition owner does not itself need to be a composite node
-	 * 
-	 * @param compositeOwner 
-	 */
-	@Override
-	public void init(TinkerNode compositeOwner) {
-		this.addToInterface1((Interface1)compositeOwner);
-		this.hasInitBeenCalled = true;
-		initVariables();
-	}
-	
 	public void initVariables() {
 	}
 	
 	@Override
 	public void initialiseProperties() {
-		this.interface1 =  new TinkerSetImpl<Interface1>(this, InterfaceRealization2RuntimePropertyEnum.interface1);
 		this.name =  new TinkerSetImpl<String>(this, InterfaceRealization2RuntimePropertyEnum.name);
+		this.interface1 =  new TinkerSetImpl<Interface1>(this, InterfaceRealization2RuntimePropertyEnum.interface1);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (InterfaceRealization2RuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case name:
-				this.name =  new TinkerSetImpl<String>(this, InterfaceRealization2RuntimePropertyEnum.name);
-			break;
-		
 			case interface1:
 				this.interface1 =  new TinkerSetImpl<Interface1>(this, InterfaceRealization2RuntimePropertyEnum.interface1);
+			break;
+		
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, InterfaceRealization2RuntimePropertyEnum.name);
 			break;
 		
 		}
@@ -259,8 +251,8 @@ public class InterfaceRealization2 extends BaseTinker implements CompositionNode
 	}
 
 	public enum InterfaceRealization2RuntimePropertyEnum implements TumlRuntimeProperty {
-		interface1(false,false,false,"A_<interface1>_<interface2>",false,false,true,false,1,1,false,false,false,false,true),
-		name(true,true,false,"tuml-test-basic-model__org__tuml__Interface2__name",false,false,true,false,1,1,false,false,false,false,true);
+		name(true,true,false,"tuml-test-basic-model__org__tuml__Interface2__name",false,false,true,false,1,1,false,false,false,false,true),
+		interface1(false,false,false,"A_<interface1>_<interface2>",false,false,true,false,1,1,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -313,11 +305,11 @@ public class InterfaceRealization2 extends BaseTinker implements CompositionNode
 		}
 	
 		static public InterfaceRealization2RuntimePropertyEnum fromLabel(String label) {
-			if ( interface1.getLabel().equals(label) ) {
-				return interface1;
-			}
 			if ( name.getLabel().equals(label) ) {
 				return name;
+			}
+			if ( interface1.getLabel().equals(label) ) {
+				return interface1;
 			}
 			return null;
 		}

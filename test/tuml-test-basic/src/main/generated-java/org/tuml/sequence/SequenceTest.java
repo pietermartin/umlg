@@ -32,8 +32,9 @@ public class SequenceTest extends BaseTinker implements CompositionNode {
 	public SequenceTest(SequenceRoot compositeOwner) {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
 		initialiseProperties();
+		initVariables();
 		createComponents();
-		init(compositeOwner);
+		addToSequenceRoot(compositeOwner);
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
 	}
@@ -45,6 +46,7 @@ public class SequenceTest extends BaseTinker implements CompositionNode {
 	public SequenceTest(Vertex vertex) {
 		this.vertex=vertex;
 		initialiseProperties();
+		initVariables();
 	}
 	
 	/** Default constructor for SequenceTest
@@ -61,6 +63,7 @@ public class SequenceTest extends BaseTinker implements CompositionNode {
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
 		initialiseProperties();
+		initVariables();
 		createComponents();
 	}
 
@@ -180,17 +183,6 @@ public class SequenceTest extends BaseTinker implements CompositionNode {
 			this.vertex.setProperty("uid", uid);
 		}
 		return uid;
-	}
-	
-	/** This gets called on creation with the compositional owner. The composition owner does not itself need to be a composite node
-	 * 
-	 * @param compositeOwner 
-	 */
-	@Override
-	public void init(TinkerNode compositeOwner) {
-		this.addToSequenceRoot((SequenceRoot)compositeOwner);
-		this.hasInitBeenCalled = true;
-		initVariables();
 	}
 	
 	public void initVariables() {

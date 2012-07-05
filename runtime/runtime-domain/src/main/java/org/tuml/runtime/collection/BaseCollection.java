@@ -48,7 +48,8 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected void loadFromVertex() {
 		if (!isOnePrimitive()) {
-			for (Edge edge : getEdges()) {
+			for (Iterator<Edge> iter = getEdges(); iter.hasNext(); ) {
+				Edge edge = iter.next();
 				E node = null;
 				try {
 					Class<?> c = this.getClassToInstantiate(edge);
@@ -77,11 +78,11 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 		this.loaded = true;
 	}
 
-	protected Iterable<Edge> getEdges() {
+	protected Iterator<Edge> getEdges() {
 		if (this.isControllingSide()) {
-			return this.vertex.getEdges(Direction.OUT, this.getLabel());
+			return this.vertex.getEdges(Direction.OUT, this.getLabel()).iterator();
 		} else {
-			return this.vertex.getEdges(Direction.IN, this.getLabel());
+			return this.vertex.getEdges(Direction.IN, this.getLabel()).iterator();
 		}
 	}
 
@@ -111,7 +112,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 		if (isQualified() || isInverseQualified()) {
 			validateQualifiedAssociation(e);
 		}
-		maybeCallInit(e);
+//		maybeCallInit(e);
 		boolean result = this.internalCollection.add(e);
 		if (result) {
 			Edge edge = addInternal(e);
@@ -143,7 +144,6 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 			}
 
 		}
-
 		return result;
 	}
 
@@ -151,7 +151,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 		if (!(e instanceof TinkerNode)) {
 			throw new IllegalStateException("Primitive properties can not be qualified!");
 		}
-		TinkerNode node = (TinkerNode)e;
+		TinkerNode node = (TinkerNode) e;
 		if (isQualified()) {
 			if (!(e instanceof TinkerNode)) {
 				throw new IllegalStateException("Primitive properties can not be qualified!");
@@ -251,9 +251,9 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 		if (v != null) {
 			Edge edge = null;
 			// See if edge already added, this can only happen with a manyToMany
-			if (this.isManyToMany()) {
-				edge = addCorrelationForManyToMany(v, edge);
-			}
+			// if (this.isManyToMany()) {
+			// edge = addCorrelationForManyToMany(v, edge);
+			// }
 			boolean createdEdge = false;
 			if (edge == null) {
 				createdEdge = true;
@@ -271,7 +271,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 
 	private Edge addCorrelationForManyToMany(Vertex v, Edge edge) {
 		Set<Edge> edgesBetween = GraphDb.getDb().getEdgesBetween(this.vertex, v, this.getLabel());
-		// Only a sequence can have duplicates
+		// Only sequences or bags can have duplicates
 		if (this instanceof TinkerSequence || this instanceof TinkerBag) {
 			for (Edge edgeBetween : edgesBetween) {
 
@@ -320,7 +320,9 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 			edge = GraphDb.getDb().addEdge(null, v, this.vertex, this.getLabel());
 			edge.setProperty("outClass", e.getClass().getName());
 			edge.setProperty("inClass", this.parentClass.getName());
-			edge.setProperty("manyToManyCorrelationInverseFALSE", "SETTED");
+			if (this.isManyToMany()) {
+				edge.setProperty("manyToManyCorrelationInverseFALSE", "SETTED");
+			}
 		}
 		return edge;
 	}
@@ -363,11 +365,14 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 		}
 	}
 
-	protected void maybeCallInit(E e) {
-		if (this.isComposite() && e instanceof CompositionNode && !((CompositionNode) e).hasInitBeenCalled()) {
-			((CompositionNode) e).init(this.owner);
-		}
-	}
+//	protected boolean maybeCallInit(E e) {
+//		if (this.isComposite() && e instanceof CompositionNode && !((CompositionNode) e).hasInitBeenCalled()) {
+//			((CompositionNode) e).init(this.owner);
+//			return true;
+//		} else {
+//			return false;
+//		}
+//	}
 
 	protected void maybeLoad() {
 		if (!this.loaded) {

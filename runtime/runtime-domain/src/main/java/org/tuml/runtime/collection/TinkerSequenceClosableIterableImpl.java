@@ -1,25 +1,25 @@
 package org.tuml.runtime.collection;
 
 import java.util.Collection;
+import java.util.Iterator;
 
 import org.tuml.runtime.domain.TinkerNode;
 
-import com.tinkerpop.blueprints.CloseableIterable;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 
 public class TinkerSequenceClosableIterableImpl<E> extends BaseSequence<E> implements TinkerSequence<E> {
 
-	private CloseableIterable<Edge> closeableIterable;
+	private Iterator<Edge> closeableIterator;
 
-	public TinkerSequenceClosableIterableImpl(CloseableIterable<Edge> closeableSequence, TumlRuntimeProperty tumlRuntimeProperty) {
+	public TinkerSequenceClosableIterableImpl(Iterator<Edge> closeableIterator, TumlRuntimeProperty tumlRuntimeProperty) {
 		super(tumlRuntimeProperty);
-		this.closeableIterable = closeableSequence;
+		this.closeableIterator = closeableIterator;
 	}
 
 	@Override
-	protected Iterable<Edge> getEdges() {
-		return this.closeableIterable;
+	protected Iterator<Edge> getEdges() {
+		return this.closeableIterator;
 	}
 
 	@Override
@@ -45,7 +45,8 @@ public class TinkerSequenceClosableIterableImpl<E> extends BaseSequence<E> imple
 	@Override
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected void loadFromVertex() {
-		for (Edge edge : getEdges()) {
+		for (Iterator<Edge> iter = getEdges(); iter.hasNext(); ) {
+			Edge edge = iter.next();
 			E node = null;
 			try {
 				Class<?> c = this.getClassToInstantiate(edge);

@@ -122,20 +122,20 @@ public class CollectionObjectToken<O> extends ObjectToken<O> implements Composit
 		return null;
 	}
 
-	@Override
-	public void init(TinkerNode owner) {
-	}
+//	@Override
+//	public void init(TinkerNode owner) {
+//	}
+//	
+//	@Override
+//	public boolean hasInitBeenCalled() {
+//		return true;
+//	}
 
 	@Override
 	public void delete() {
 		if (true) {
 			throw new RuntimeException("check this out");
 		}
-	}
-
-	@Override
-	public boolean hasInitBeenCalled() {
-		return true;
 	}
 
 	@Override

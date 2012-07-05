@@ -18,7 +18,7 @@ public class TinkerSequenceImpl<E> extends BaseSequence<E> implements TinkerSequ
 		// validateMultiplicityForAdditionalElement calls size() which loads the
 		// collection
 		validateMultiplicityForAdditionalElement();
-		maybeCallInit(e);
+//		maybeCallInit(e);
 		addToListAndListIndex(indexOf, e);
 	}
 

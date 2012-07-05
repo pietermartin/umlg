@@ -25,7 +25,7 @@ public class FakeRootFolder extends AbstractRootFolder implements CompositionNod
 	 */
 	public FakeRootFolder(God compositeOwner) {
 		super(true);
-		init(compositeOwner);
+		addToGod(compositeOwner);
 	}
 	
 	/** Constructor for FakeRootFolder
@@ -125,17 +125,6 @@ public class FakeRootFolder extends AbstractRootFolder implements CompositionNod
 		
 		}
 		return result;
-	}
-	
-	/** This gets called on creation with the compositional owner. The composition owner does not itself need to be a composite node
-	 * 
-	 * @param compositeOwner 
-	 */
-	@Override
-	public void init(TinkerNode compositeOwner) {
-		this.addToGod((God)compositeOwner);
-		this.hasInitBeenCalled = true;
-		initVariables();
 	}
 	
 	public void initVariables() {

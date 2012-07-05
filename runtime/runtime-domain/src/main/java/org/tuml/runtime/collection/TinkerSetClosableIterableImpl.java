@@ -1,20 +1,21 @@
 package org.tuml.runtime.collection;
 
-import com.tinkerpop.blueprints.CloseableIterable;
+import java.util.Iterator;
+
 import com.tinkerpop.blueprints.Edge;
 
 public class TinkerSetClosableIterableImpl<E> extends BaseSet<E> implements TinkerSet<E> {
 
-	private CloseableIterable<Edge> closeableIterable;
+	private Iterator<Edge> iterator;
 
-	public TinkerSetClosableIterableImpl(CloseableIterable<Edge> closeableSequence, TumlRuntimeProperty runtimeProperty) {
+	public TinkerSetClosableIterableImpl(Iterator<Edge> iterator, TumlRuntimeProperty runtimeProperty) {
 		super(runtimeProperty);
-		this.closeableIterable = closeableSequence;
+		this.iterator = iterator;
 	}
 
 	@Override
-	protected Iterable<Edge> getEdges() {
-		return this.closeableIterable;
+	protected Iterator<Edge> getEdges() {
+		return this.iterator;
 	}
 
 	@Override
