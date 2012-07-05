@@ -133,13 +133,13 @@ public class TestQualifier extends BaseLocalDbTest {
 		nature.addToGod(god);
 		db.stopTransaction(Conclusion.SUCCESS);
 
-		db.startTransaction();
+//		db.startTransaction();
 		God godTest = new God(god.getVertex());
 		Set<Nature> natureForQualifier2 = godTest.getNatureForQualifier2("xxx");
 		Assert.assertEquals(4, natureForQualifier2.size());
 		natureForQualifier2 = godTest.getNatureForQualifier2("yyy");
 		Assert.assertEquals(1, natureForQualifier2.size());
-		db.stopTransaction(Conclusion.SUCCESS);
+//		db.stopTransaction(Conclusion.SUCCESS);
 	}	
 
 }
