@@ -2,12 +2,15 @@ package org.tuml.testocl;
 
 import com.tinkerpop.blueprints.Vertex;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.TinkerIdUtilFactory;
 import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
+import org.tuml.runtime.collection.Qualifier;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TinkerSetImpl;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
@@ -16,6 +19,7 @@ import org.tuml.runtime.domain.CompositionNode;
 import org.tuml.runtime.domain.TinkerNode;
 
 public class OclTestCollection2 extends BaseTinker implements CompositionNode {
+	static final public long serialVersionUID = 1L;
 	private TinkerSet<String> name;
 	private TinkerSet<OclTestCollection> oclTestCollection;
 
@@ -26,8 +30,9 @@ public class OclTestCollection2 extends BaseTinker implements CompositionNode {
 	public OclTestCollection2(OclTestCollection compositeOwner) {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
 		initialiseProperties();
+		initVariables();
 		createComponents();
-		init(compositeOwner);
+		addToOclTestCollection(compositeOwner);
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
 	}
@@ -55,6 +60,7 @@ public class OclTestCollection2 extends BaseTinker implements CompositionNode {
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
 		initialiseProperties();
+		initVariables();
 		createComponents();
 	}
 
@@ -119,6 +125,53 @@ public class OclTestCollection2 extends BaseTinker implements CompositionNode {
 		return getOclTestCollection();
 	}
 	
+	/** GetQualifiers is called from the collection in order to update the index used to implement the qualifier
+	 * 
+	 * @param tumlRuntimeProperty 
+	 * @param node 
+	 */
+	@Override
+	public List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, TinkerNode node) {
+		List<Qualifier> result = Collections.emptyList();
+		OclTestCollection2RuntimePropertyEnum runtimeProperty = OclTestCollection2RuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
+		if ( runtimeProperty != null && result.isEmpty() ) {
+			switch ( runtimeProperty ) {
+				default:
+					result = Collections.emptyList();
+				break;
+			}
+		
+		}
+		return result;
+	}
+	
+	/** GetSize is called from the collection in order to update the index used to implement a sequance's index
+	 * 
+	 * @param tumlRuntimeProperty 
+	 */
+	@Override
+	public int getSize(TumlRuntimeProperty tumlRuntimeProperty) {
+		int result = 0;
+		OclTestCollection2RuntimePropertyEnum runtimeProperty = OclTestCollection2RuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
+		if ( runtimeProperty != null && result == 0 ) {
+			switch ( runtimeProperty ) {
+				case name:
+					result = name.size();
+				break;
+			
+				case oclTestCollection:
+					result = oclTestCollection.size();
+				break;
+			
+				default:
+					result = 0;
+				break;
+			}
+		
+		}
+		return result;
+	}
+	
 	@Override
 	public String getUid() {
 		String uid = (String) this.vertex.getProperty("uid");
@@ -129,35 +182,24 @@ public class OclTestCollection2 extends BaseTinker implements CompositionNode {
 		return uid;
 	}
 	
-	/** This gets called on creation with the compositional owner. The composition owner does not itself need to be a composite node
-	 * 
-	 * @param compositeOwner 
-	 */
-	@Override
-	public void init(TinkerNode compositeOwner) {
-		this.addToOclTestCollection((OclTestCollection)compositeOwner);
-		this.hasInitBeenCalled = true;
-		initVariables();
-	}
-	
 	public void initVariables() {
 	}
 	
 	@Override
 	public void initialiseProperties() {
-		this.name =  new TinkerSetImpl<String>(this, OclTestCollection2RuntimePropertyEnum.name);
 		this.oclTestCollection =  new TinkerSetImpl<OclTestCollection>(this, OclTestCollection2RuntimePropertyEnum.oclTestCollection);
+		this.name =  new TinkerSetImpl<String>(this, OclTestCollection2RuntimePropertyEnum.name);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (OclTestCollection2RuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case oclTestCollection:
-				this.oclTestCollection =  new TinkerSetImpl<OclTestCollection>(this, OclTestCollection2RuntimePropertyEnum.oclTestCollection);
-			break;
-		
 			case name:
 				this.name =  new TinkerSetImpl<String>(this, OclTestCollection2RuntimePropertyEnum.name);
+			break;
+		
+			case oclTestCollection:
+				this.oclTestCollection =  new TinkerSetImpl<OclTestCollection>(this, OclTestCollection2RuntimePropertyEnum.oclTestCollection);
 			break;
 		
 		}
@@ -208,8 +250,8 @@ public class OclTestCollection2 extends BaseTinker implements CompositionNode {
 	}
 
 	public enum OclTestCollection2RuntimePropertyEnum implements TumlRuntimeProperty {
-		name(true,true,false,"testoclmodel__org__tuml__testocl__OclTestCollection2__name",false,false,true,false,1,1),
-		oclTestCollection(false,false,false,"A_<oclTestCollection>_<oclTestCollection2>",false,false,true,false,1,1);
+		oclTestCollection(false,false,false,"A_<oclTestCollection>_<oclTestCollection2>",false,false,true,false,1,1,false,false,false,false,true),
+		name(true,true,false,"testoclmodel__org__tuml__testocl__OclTestCollection2__name",false,false,true,false,1,1,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -220,6 +262,11 @@ public class OclTestCollection2 extends BaseTinker implements CompositionNode {
 		private boolean manyToMany;
 		private int upper;
 		private int lower;
+		private boolean qualified;
+		private boolean inverseQualified;
+		private boolean ordered;
+		private boolean inverseOrdered;
+		private boolean unique;
 		/** Constructor for OclTestCollection2RuntimePropertyEnum
 		 * 
 		 * @param onePrimitive 
@@ -232,8 +279,13 @@ public class OclTestCollection2 extends BaseTinker implements CompositionNode {
 		 * @param manyToMany 
 		 * @param upper 
 		 * @param lower 
+		 * @param qualified 
+		 * @param inverseQualified 
+		 * @param ordered 
+		 * @param inverseOrdered 
+		 * @param unique 
 		 */
-		private OclTestCollection2RuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+		private OclTestCollection2RuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower, boolean qualified, boolean inverseQualified, boolean ordered, boolean inverseOrdered, boolean unique) {
 			this.onePrimitive = onePrimitive;
 			this.controllingSide = controllingSide;
 			this.composite = composite;
@@ -244,16 +296,21 @@ public class OclTestCollection2 extends BaseTinker implements CompositionNode {
 			this.manyToMany = manyToMany;
 			this.upper = upper;
 			this.lower = lower;
+			this.qualified = qualified;
+			this.inverseQualified = inverseQualified;
+			this.ordered = ordered;
+			this.inverseOrdered = inverseOrdered;
+			this.unique = unique;
 		}
 	
 		static public OclTestCollection2RuntimePropertyEnum fromLabel(String label) {
-			if ( name.getLabel().equals(label) ) {
-				return name;
-			}
 			if ( oclTestCollection.getLabel().equals(label) ) {
 				return oclTestCollection;
 			}
-			throw new IllegalStateException();
+			if ( name.getLabel().equals(label) ) {
+				return name;
+			}
+			return null;
 		}
 		
 		public String getLabel() {
@@ -276,6 +333,14 @@ public class OclTestCollection2 extends BaseTinker implements CompositionNode {
 			return this.controllingSide;
 		}
 		
+		public boolean isInverseOrdered() {
+			return this.inverseOrdered;
+		}
+		
+		public boolean isInverseQualified() {
+			return this.inverseQualified;
+		}
+		
 		public boolean isManyToMany() {
 			return this.manyToMany;
 		}
@@ -294,6 +359,18 @@ public class OclTestCollection2 extends BaseTinker implements CompositionNode {
 		
 		public boolean isOneToOne() {
 			return this.oneToOne;
+		}
+		
+		public boolean isOrdered() {
+			return this.ordered;
+		}
+		
+		public boolean isQualified() {
+			return this.qualified;
+		}
+		
+		public boolean isUnique() {
+			return this.unique;
 		}
 		
 		@Override

@@ -112,7 +112,6 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 		if (isQualified() || isInverseQualified()) {
 			validateQualifiedAssociation(e);
 		}
-//		maybeCallInit(e);
 		boolean result = this.internalCollection.add(e);
 		if (result) {
 			Edge edge = addInternal(e);
@@ -250,10 +249,6 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 		}
 		if (v != null) {
 			Edge edge = null;
-			// See if edge already added, this can only happen with a manyToMany
-			// if (this.isManyToMany()) {
-			// edge = addCorrelationForManyToMany(v, edge);
-			// }
 			boolean createdEdge = false;
 			if (edge == null) {
 				createdEdge = true;
@@ -267,44 +262,6 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 			return null;
 		}
 
-	}
-
-	private Edge addCorrelationForManyToMany(Vertex v, Edge edge) {
-		Set<Edge> edgesBetween = GraphDb.getDb().getEdgesBetween(this.vertex, v, this.getLabel());
-		// Only sequences or bags can have duplicates
-		if (this instanceof TinkerSequence || this instanceof TinkerBag) {
-			for (Edge edgeBetween : edgesBetween) {
-
-				if (edgeBetween.getProperty("manyToManyCorrelationInverseTRUE") != null && edgeBetween.getProperty("manyToManyCorrelationInverseFALSE") != null) {
-					// A new edge must be created as this is a duplicate
-				} else if (edgeBetween.getProperty("manyToManyCorrelationInverseTRUE") == null && edgeBetween.getProperty("manyToManyCorrelationInverseFALSE") == null) {
-					throw new IllegalStateException();
-				} else if (edgeBetween.getProperty("manyToManyCorrelationInverseTRUE") == null && edgeBetween.getProperty("manyToManyCorrelationInverseFALSE") != null) {
-					edge = edgeBetween;
-					if (!this.isControllingSide()) {
-						throw new IllegalStateException();
-					}
-					edge.setProperty("manyToManyCorrelationInverseTRUE", "SETTED");
-					break;
-				} else if (edgeBetween.getProperty("manyToManyCorrelationInverseTRUE") != null && edgeBetween.getProperty("manyToManyCorrelationInverseFALSE") == null) {
-					edge = edgeBetween;
-					if (this.isControllingSide()) {
-						throw new IllegalStateException();
-					}
-					edge.setProperty("manyToManyCorrelationInverseFALSE", "SETTED");
-					break;
-				}
-
-			}
-		} else {
-			if (!edgesBetween.isEmpty()) {
-				if (edgesBetween.size() != 1) {
-					throw new IllegalStateException("A set can only have one edge between the two ends");
-				}
-				edge = edgesBetween.iterator().next();
-			}
-		}
-		return edge;
 	}
 
 	private Edge createEdge(E e, Vertex v) {
@@ -364,15 +321,6 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 			}
 		}
 	}
-
-//	protected boolean maybeCallInit(E e) {
-//		if (this.isComposite() && e instanceof CompositionNode && !((CompositionNode) e).hasInitBeenCalled()) {
-//			((CompositionNode) e).init(this.owner);
-//			return true;
-//		} else {
-//			return false;
-//		}
-//	}
 
 	protected void maybeLoad() {
 		if (!this.loaded) {

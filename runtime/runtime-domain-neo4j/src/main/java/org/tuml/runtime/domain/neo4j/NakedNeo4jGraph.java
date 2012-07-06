@@ -106,11 +106,6 @@ public class NakedNeo4jGraph implements NakedGraph {
 		return neo4jGraph.getEdges();
 	}
 
-//	@Override
-//	public void clear() {
-//		neo4jGraph.clear();
-//	}
-
 	@Override
 	public void shutdown() {
 		neo4jGraph.shutdown();
@@ -132,11 +127,6 @@ public class NakedNeo4jGraph implements NakedGraph {
 			return null;
 		}
 	}
-
-//	@Override
-//	public <T extends Element> AutomaticIndex<T> createAutomaticIndex(String indexName, Class<T> indexClass, Set<String> indexKeys) {
-//		return neo4jGraph.createAutomaticIndex(indexName, indexClass, indexKeys);
-//	}
 
 	@Override
 	public Iterable<Index<? extends Element>> getIndices() {
@@ -189,7 +179,6 @@ public class NakedNeo4jGraph implements NakedGraph {
 				
 				
 				result.add(neo4jGraph.getEdge(relationship.getId()));
-//				result.add(new Neo4jEdge(relationship, neo4jGraph));
 			}
 		}
 		return result;
@@ -209,7 +198,6 @@ public class NakedNeo4jGraph implements NakedGraph {
 	@Override
 	public Vertex getRoot() {
 		return this.neo4jGraph.getVertex(1L);
-//		return new Neo4jVertex(neo4jGraph.getRawGraph().getNodeById(1), neo4jGraph);
 	}
 
 	@Override
@@ -308,21 +296,6 @@ public class NakedNeo4jGraph implements NakedGraph {
 			throw new RuntimeException(e);
 		}
 	}
-
-//	@Override
-//	public void setMaxBufferSize(int bufferSize) {
-//		this.neo4jGraph.setMaxBufferSize(bufferSize);
-//	}
-//
-//	@Override
-//	public int getMaxBufferSize() {
-//		return this.neo4jGraph.getMaxBufferSize();
-//	}
-//
-//	@Override
-//	public int getCurrentBufferSize() {
-//		return this.neo4jGraph.getCurrentBufferSize();
-//	}
 
 	@Override
 	public boolean isTransactionActive() {

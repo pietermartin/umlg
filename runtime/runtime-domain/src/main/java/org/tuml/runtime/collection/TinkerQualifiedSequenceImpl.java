@@ -15,7 +15,6 @@ public class TinkerQualifiedSequenceImpl<E> extends BaseSequence<E> implements T
 
 	@Override
 	public void add(int indexOf, E e) {
-//		maybeCallInit(e);
 		maybeLoad();
 		Edge edge = addToListAndListIndex(indexOf, e);
 		// Can only qualify TinkerNode's

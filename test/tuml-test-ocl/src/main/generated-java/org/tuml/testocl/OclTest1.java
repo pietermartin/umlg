@@ -4,11 +4,14 @@ import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.TinkerIdUtilFactory;
+import org.tuml.runtime.collection.Qualifier;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TinkerSetImpl;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
@@ -16,6 +19,7 @@ import org.tuml.runtime.domain.BaseTinker;
 import org.tuml.runtime.domain.TinkerNode;
 
 public class OclTest1 extends BaseTinker implements TinkerNode {
+	static final public long serialVersionUID = 1L;
 	private TinkerSet<String> property1;
 	private TinkerSet<OclTestCollection> oclTestCollection;
 
@@ -41,6 +45,7 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
 		defaultCreate();
 		initialiseProperties();
+		initVariables();
 		createComponents();
 		Edge edge = GraphDb.getDb().addEdge(null, GraphDb.getDb().getRoot(), this.vertex, "root");
 		edge.setProperty("inClass", this.getClass().getName());
@@ -184,6 +189,53 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 		}
 	}
 	
+	/** GetQualifiers is called from the collection in order to update the index used to implement the qualifier
+	 * 
+	 * @param tumlRuntimeProperty 
+	 * @param node 
+	 */
+	@Override
+	public List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, TinkerNode node) {
+		List<Qualifier> result = Collections.emptyList();
+		OclTest1RuntimePropertyEnum runtimeProperty = OclTest1RuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
+		if ( runtimeProperty != null && result.isEmpty() ) {
+			switch ( runtimeProperty ) {
+				default:
+					result = Collections.emptyList();
+				break;
+			}
+		
+		}
+		return result;
+	}
+	
+	/** GetSize is called from the collection in order to update the index used to implement a sequance's index
+	 * 
+	 * @param tumlRuntimeProperty 
+	 */
+	@Override
+	public int getSize(TumlRuntimeProperty tumlRuntimeProperty) {
+		int result = 0;
+		OclTest1RuntimePropertyEnum runtimeProperty = OclTest1RuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
+		if ( runtimeProperty != null && result == 0 ) {
+			switch ( runtimeProperty ) {
+				case oclTestCollection:
+					result = oclTestCollection.size();
+				break;
+			
+				case property1:
+					result = property1.size();
+				break;
+			
+				default:
+					result = 0;
+				break;
+			}
+		
+		}
+		return result;
+	}
+	
 	@Override
 	public String getUid() {
 		String uid = (String) this.vertex.getProperty("uid");
@@ -199,19 +251,19 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.oclTestCollection =  new TinkerSetImpl<OclTestCollection>(this, OclTest1RuntimePropertyEnum.oclTestCollection);
 		this.property1 =  new TinkerSetImpl<String>(this, OclTest1RuntimePropertyEnum.property1);
+		this.oclTestCollection =  new TinkerSetImpl<OclTestCollection>(this, OclTest1RuntimePropertyEnum.oclTestCollection);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (OclTest1RuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case property1:
-				this.property1 =  new TinkerSetImpl<String>(this, OclTest1RuntimePropertyEnum.property1);
-			break;
-		
 			case oclTestCollection:
 				this.oclTestCollection =  new TinkerSetImpl<OclTestCollection>(this, OclTest1RuntimePropertyEnum.oclTestCollection);
+			break;
+		
+			case property1:
+				this.property1 =  new TinkerSetImpl<String>(this, OclTest1RuntimePropertyEnum.property1);
 			break;
 		
 		}
@@ -262,8 +314,8 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 	}
 
 	public enum OclTest1RuntimePropertyEnum implements TumlRuntimeProperty {
-		oclTestCollection(false,true,true,"A_<oclTest1>_<oclTestCollection>",false,true,false,false,-1,1),
-		property1(true,true,false,"testoclmodel__org__tuml__testocl__OclTest1__property1",false,false,true,false,1,1);
+		property1(true,true,false,"testoclmodel__org__tuml__testocl__OclTest1__property1",false,false,true,false,1,1,false,false,false,false,true),
+		oclTestCollection(false,true,true,"A_<oclTest1>_<oclTestCollection>",false,true,false,false,-1,1,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -274,6 +326,11 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 		private boolean manyToMany;
 		private int upper;
 		private int lower;
+		private boolean qualified;
+		private boolean inverseQualified;
+		private boolean ordered;
+		private boolean inverseOrdered;
+		private boolean unique;
 		/** Constructor for OclTest1RuntimePropertyEnum
 		 * 
 		 * @param onePrimitive 
@@ -286,8 +343,13 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 		 * @param manyToMany 
 		 * @param upper 
 		 * @param lower 
+		 * @param qualified 
+		 * @param inverseQualified 
+		 * @param ordered 
+		 * @param inverseOrdered 
+		 * @param unique 
 		 */
-		private OclTest1RuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower) {
+		private OclTest1RuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower, boolean qualified, boolean inverseQualified, boolean ordered, boolean inverseOrdered, boolean unique) {
 			this.onePrimitive = onePrimitive;
 			this.controllingSide = controllingSide;
 			this.composite = composite;
@@ -298,16 +360,21 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 			this.manyToMany = manyToMany;
 			this.upper = upper;
 			this.lower = lower;
+			this.qualified = qualified;
+			this.inverseQualified = inverseQualified;
+			this.ordered = ordered;
+			this.inverseOrdered = inverseOrdered;
+			this.unique = unique;
 		}
 	
 		static public OclTest1RuntimePropertyEnum fromLabel(String label) {
-			if ( oclTestCollection.getLabel().equals(label) ) {
-				return oclTestCollection;
-			}
 			if ( property1.getLabel().equals(label) ) {
 				return property1;
 			}
-			throw new IllegalStateException();
+			if ( oclTestCollection.getLabel().equals(label) ) {
+				return oclTestCollection;
+			}
+			return null;
 		}
 		
 		public String getLabel() {
@@ -330,6 +397,14 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 			return this.controllingSide;
 		}
 		
+		public boolean isInverseOrdered() {
+			return this.inverseOrdered;
+		}
+		
+		public boolean isInverseQualified() {
+			return this.inverseQualified;
+		}
+		
 		public boolean isManyToMany() {
 			return this.manyToMany;
 		}
@@ -348,6 +423,18 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 		
 		public boolean isOneToOne() {
 			return this.oneToOne;
+		}
+		
+		public boolean isOrdered() {
+			return this.ordered;
+		}
+		
+		public boolean isQualified() {
+			return this.qualified;
+		}
+		
+		public boolean isUnique() {
+			return this.unique;
 		}
 		
 		@Override
