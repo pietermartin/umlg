@@ -31,7 +31,6 @@ public class SequenceRoot extends BaseTinker implements TinkerNode {
 	public SequenceRoot(Vertex vertex) {
 		this.vertex=vertex;
 		initialiseProperties();
-		initVariables();
 	}
 	
 	/** Default constructor for SequenceRoot

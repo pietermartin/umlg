@@ -29,7 +29,6 @@ public class OneOne extends BaseTinker implements TinkerNode {
 	public OneOne(Vertex vertex) {
 		this.vertex=vertex;
 		initialiseProperties();
-		initVariables();
 	}
 	
 	/** Default constructor for OneOne

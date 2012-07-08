@@ -180,12 +180,12 @@ public class Hand extends BaseTinker implements CompositionNode {
 					result = god.size();
 				break;
 			
-				case left:
-					result = left.size();
-				break;
-			
 				case name:
 					result = name.size();
+				break;
+			
+				case left:
+					result = left.size();
 				break;
 			
 				default:
@@ -212,8 +212,8 @@ public class Hand extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.name =  new TinkerSetImpl<String>(this, HandRuntimePropertyEnum.name);
 		this.left =  new TinkerSetImpl<Boolean>(this, HandRuntimePropertyEnum.left);
+		this.name =  new TinkerSetImpl<String>(this, HandRuntimePropertyEnum.name);
 		this.god =  new TinkerSetImpl<God>(this, HandRuntimePropertyEnum.god);
 	}
 	
@@ -224,12 +224,12 @@ public class Hand extends BaseTinker implements CompositionNode {
 				this.god =  new TinkerSetImpl<God>(this, HandRuntimePropertyEnum.god);
 			break;
 		
-			case left:
-				this.left =  new TinkerSetImpl<Boolean>(this, HandRuntimePropertyEnum.left);
-			break;
-		
 			case name:
 				this.name =  new TinkerSetImpl<String>(this, HandRuntimePropertyEnum.name);
+			break;
+		
+			case left:
+				this.left =  new TinkerSetImpl<Boolean>(this, HandRuntimePropertyEnum.left);
 			break;
 		
 		}
@@ -297,8 +297,8 @@ public class Hand extends BaseTinker implements CompositionNode {
 	}
 
 	public enum HandRuntimePropertyEnum implements TumlRuntimeProperty {
-		name(true,true,false,"tuml-test__org__tuml__collectiontest__Hand__name",false,false,true,false,1,1,false,false,false,false,true),
 		left(true,true,false,"tuml-test__org__tuml__collectiontest__Hand__left",false,false,true,false,1,1,false,false,false,false,true),
+		name(true,true,false,"tuml-test__org__tuml__collectiontest__Hand__name",false,false,true,false,1,1,false,false,false,false,true),
 		god(false,false,false,"A_<god>_<hand>",false,false,true,false,1,1,false,false,false,true,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
@@ -352,11 +352,11 @@ public class Hand extends BaseTinker implements CompositionNode {
 		}
 	
 		static public HandRuntimePropertyEnum fromLabel(String label) {
-			if ( name.getLabel().equals(label) ) {
-				return name;
-			}
 			if ( left.getLabel().equals(label) ) {
 				return left;
+			}
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
 			if ( god.getLabel().equals(label) ) {
 				return god;

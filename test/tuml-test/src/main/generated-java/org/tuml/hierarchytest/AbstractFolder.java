@@ -91,6 +91,10 @@ public class AbstractFolder extends BaseTinker implements TinkerNode, Hierarchy 
 		return this.childFolder;
 	}
 	
+	public Hierarchy getChildren() {
+		return getChildFolder();
+	}
+	
 	@Override
 	public Long getId() {
 		return TinkerIdUtilFactory.getIdUtil().getId(this.vertex);
@@ -140,12 +144,12 @@ public class AbstractFolder extends BaseTinker implements TinkerNode, Hierarchy 
 		AbstractFolderRuntimePropertyEnum runtimeProperty = AbstractFolderRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result == 0 ) {
 			switch ( runtimeProperty ) {
-				case childFolder:
-					result = childFolder.size();
-				break;
-			
 				case name:
 					result = name.size();
+				break;
+			
+				case childFolder:
+					result = childFolder.size();
 				break;
 			
 				default:
@@ -172,19 +176,19 @@ public class AbstractFolder extends BaseTinker implements TinkerNode, Hierarchy 
 	
 	@Override
 	public void initialiseProperties() {
-		this.name =  new TinkerSetImpl<String>(this, AbstractFolderRuntimePropertyEnum.name);
 		this.childFolder =  new TinkerSetImpl<Folder>(this, AbstractFolderRuntimePropertyEnum.childFolder);
+		this.name =  new TinkerSetImpl<String>(this, AbstractFolderRuntimePropertyEnum.name);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (AbstractFolderRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case childFolder:
-				this.childFolder =  new TinkerSetImpl<Folder>(this, AbstractFolderRuntimePropertyEnum.childFolder);
-			break;
-		
 			case name:
 				this.name =  new TinkerSetImpl<String>(this, AbstractFolderRuntimePropertyEnum.name);
+			break;
+		
+			case childFolder:
+				this.childFolder =  new TinkerSetImpl<Folder>(this, AbstractFolderRuntimePropertyEnum.childFolder);
 			break;
 		
 		}
@@ -235,8 +239,8 @@ public class AbstractFolder extends BaseTinker implements TinkerNode, Hierarchy 
 	}
 
 	public enum AbstractFolderRuntimePropertyEnum implements TumlRuntimeProperty {
-		name(true,true,false,"tuml-test__org__tuml__hierarchytest__AbstractFolder__name",false,false,true,false,1,1,false,false,false,false,true),
-		childFolder(false,true,true,"A_<abstractFolder>_<folder>",false,true,false,false,-1,0,false,false,false,false,true);
+		childFolder(false,true,true,"A_<abstractFolder>_<folder>",false,true,false,false,-1,0,false,false,false,false,true),
+		name(true,true,false,"tuml-test__org__tuml__hierarchytest__AbstractFolder__name",false,false,true,false,1,1,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -289,11 +293,11 @@ public class AbstractFolder extends BaseTinker implements TinkerNode, Hierarchy 
 		}
 	
 		static public AbstractFolderRuntimePropertyEnum fromLabel(String label) {
-			if ( name.getLabel().equals(label) ) {
-				return name;
-			}
 			if ( childFolder.getLabel().equals(label) ) {
 				return childFolder;
+			}
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
 			return null;
 		}

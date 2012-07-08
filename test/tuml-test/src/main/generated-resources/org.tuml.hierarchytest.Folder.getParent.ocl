@@ -1,0 +1,4 @@
+package org::tuml::hierarchytest
+context Folder::getParent() : Hierarchy
+body: self.parentFolder
+endpackage

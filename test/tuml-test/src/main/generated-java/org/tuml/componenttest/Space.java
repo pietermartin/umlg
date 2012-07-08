@@ -146,12 +146,12 @@ public class Space extends BaseTinker implements CompositionNode {
 		SpaceRuntimePropertyEnum runtimeProperty = SpaceRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result == 0 ) {
 			switch ( runtimeProperty ) {
-				case spaceTime:
-					result = spaceTime.size();
-				break;
-			
 				case name:
 					result = name.size();
+				break;
+			
+				case spaceTime:
+					result = spaceTime.size();
 				break;
 			
 				default:
@@ -187,19 +187,19 @@ public class Space extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.name =  new TinkerSetImpl<String>(this, SpaceRuntimePropertyEnum.name);
 		this.spaceTime =  new TinkerSetImpl<SpaceTime>(this, SpaceRuntimePropertyEnum.spaceTime);
+		this.name =  new TinkerSetImpl<String>(this, SpaceRuntimePropertyEnum.name);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (SpaceRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case spaceTime:
-				this.spaceTime =  new TinkerSetImpl<SpaceTime>(this, SpaceRuntimePropertyEnum.spaceTime);
-			break;
-		
 			case name:
 				this.name =  new TinkerSetImpl<String>(this, SpaceRuntimePropertyEnum.name);
+			break;
+		
+			case spaceTime:
+				this.spaceTime =  new TinkerSetImpl<SpaceTime>(this, SpaceRuntimePropertyEnum.spaceTime);
 			break;
 		
 		}
@@ -250,8 +250,8 @@ public class Space extends BaseTinker implements CompositionNode {
 	}
 
 	public enum SpaceRuntimePropertyEnum implements TumlRuntimeProperty {
-		name(true,true,false,"tuml-test__org__tuml__componenttest__Space__name",false,false,true,false,1,1,false,false,false,false,true),
-		spaceTime(false,false,false,"A_<spaceTime>_<space>",true,false,false,false,1,1,false,false,false,false,true);
+		spaceTime(false,false,false,"A_<spaceTime>_<space>",true,false,false,false,1,1,false,false,false,false,true),
+		name(true,true,false,"tuml-test__org__tuml__componenttest__Space__name",false,false,true,false,1,1,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -304,11 +304,11 @@ public class Space extends BaseTinker implements CompositionNode {
 		}
 	
 		static public SpaceRuntimePropertyEnum fromLabel(String label) {
-			if ( name.getLabel().equals(label) ) {
-				return name;
-			}
 			if ( spaceTime.getLabel().equals(label) ) {
 				return spaceTime;
+			}
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
 			return null;
 		}

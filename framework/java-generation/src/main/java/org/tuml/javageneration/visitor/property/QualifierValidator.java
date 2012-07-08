@@ -8,6 +8,7 @@ import java.util.Map;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
 import org.tuml.framework.Visitor;
+import org.tuml.javageneration.Workspace;
 import org.tuml.javageneration.util.PropertyWrapper;
 import org.tuml.javageneration.visitor.BaseVisitor;
 
@@ -22,6 +23,10 @@ import org.tuml.javageneration.visitor.BaseVisitor;
  * 
  */
 public class QualifierValidator extends BaseVisitor implements Visitor<Property> {
+
+	public QualifierValidator(Workspace workspace) {
+		super(workspace);
+	}
 
 	private final static Map<org.eclipse.uml2.uml.Type, List<Property>> derivedPropertyMap = new HashMap<org.eclipse.uml2.uml.Type, List<Property>>();
 

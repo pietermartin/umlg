@@ -30,7 +30,6 @@ public class Mamal extends AbstractSpecies implements CompositionNode {
 	public Mamal(Vertex vertex) {
 		super(vertex);
 		initialiseProperties();
-		initVariables();
 	}
 	
 	/** Default constructor for Mamal

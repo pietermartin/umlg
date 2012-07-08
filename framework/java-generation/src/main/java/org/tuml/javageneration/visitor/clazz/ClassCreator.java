@@ -3,6 +3,7 @@ package org.tuml.javageneration.visitor.clazz;
 import org.opaeum.java.metamodel.OJPackage;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
 import org.tuml.framework.Visitor;
+import org.tuml.javageneration.Workspace;
 import org.tuml.javageneration.naming.Namer;
 import org.tuml.javageneration.util.TinkerGenerationUtil;
 import org.tuml.javageneration.util.TumlBehavioredClassifierOperations;
@@ -10,6 +11,10 @@ import org.tuml.javageneration.util.TumlClassOperations;
 import org.tuml.javageneration.visitor.BaseVisitor;
 
 public class ClassCreator extends BaseVisitor implements Visitor<org.eclipse.uml2.uml.Class> {
+
+	public ClassCreator(Workspace workspace) {
+		super(workspace);
+	}
 
 	public void visitBefore(org.eclipse.uml2.uml.Class clazz) {
 		OJAnnotatedClass annotatedClass = new OJAnnotatedClass(TumlClassOperations.className(clazz));

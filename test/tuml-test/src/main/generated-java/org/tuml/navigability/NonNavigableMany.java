@@ -172,12 +172,12 @@ public class NonNavigableMany extends BaseTinker implements CompositionNode {
 					result = name.size();
 				break;
 			
-				case god:
-					result = god.size();
-				break;
-			
 				case universe:
 					result = universe.size();
+				break;
+			
+				case god:
+					result = god.size();
 				break;
 			
 				default:
@@ -213,8 +213,8 @@ public class NonNavigableMany extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.universe =  new TinkerSetImpl<Universe>(this, NonNavigableManyRuntimePropertyEnum.universe);
 		this.god =  new TinkerSetImpl<God>(this, NonNavigableManyRuntimePropertyEnum.god);
+		this.universe =  new TinkerSetImpl<Universe>(this, NonNavigableManyRuntimePropertyEnum.universe);
 		this.name =  new TinkerSetImpl<String>(this, NonNavigableManyRuntimePropertyEnum.name);
 	}
 	
@@ -225,12 +225,12 @@ public class NonNavigableMany extends BaseTinker implements CompositionNode {
 				this.name =  new TinkerSetImpl<String>(this, NonNavigableManyRuntimePropertyEnum.name);
 			break;
 		
-			case god:
-				this.god =  new TinkerSetImpl<God>(this, NonNavigableManyRuntimePropertyEnum.god);
-			break;
-		
 			case universe:
 				this.universe =  new TinkerSetImpl<Universe>(this, NonNavigableManyRuntimePropertyEnum.universe);
+			break;
+		
+			case god:
+				this.god =  new TinkerSetImpl<God>(this, NonNavigableManyRuntimePropertyEnum.god);
 			break;
 		
 		}
@@ -298,8 +298,8 @@ public class NonNavigableMany extends BaseTinker implements CompositionNode {
 	}
 
 	public enum NonNavigableManyRuntimePropertyEnum implements TumlRuntimeProperty {
-		universe(false,false,false,"A_<universe>_<nonNavigableMany>",false,false,true,false,1,1,false,false,false,false,true),
 		god(false,false,false,"A_<god>_<nonNavigableMany>",false,false,true,false,1,1,false,false,false,false,true),
+		universe(false,false,false,"A_<universe>_<nonNavigableMany>",false,false,true,false,1,1,false,false,false,false,true),
 		name(true,true,false,"tuml-test__org__tuml__navigability__NonNavigableMany__name",false,false,true,false,1,1,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
@@ -353,11 +353,11 @@ public class NonNavigableMany extends BaseTinker implements CompositionNode {
 		}
 	
 		static public NonNavigableManyRuntimePropertyEnum fromLabel(String label) {
-			if ( universe.getLabel().equals(label) ) {
-				return universe;
-			}
 			if ( god.getLabel().equals(label) ) {
 				return god;
+			}
+			if ( universe.getLabel().equals(label) ) {
+				return universe;
 			}
 			if ( name.getLabel().equals(label) ) {
 				return name;

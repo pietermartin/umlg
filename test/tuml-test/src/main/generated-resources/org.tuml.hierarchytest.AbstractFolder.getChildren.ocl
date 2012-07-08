@@ -1,0 +1,4 @@
+package org::tuml::hierarchytest
+context AbstractFolder::getChildren() : Set(Hierarchy)
+body: childFolder
+endpackage

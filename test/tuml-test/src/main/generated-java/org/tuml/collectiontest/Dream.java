@@ -156,12 +156,12 @@ public class Dream extends BaseTinker implements CompositionNode {
 		DreamRuntimePropertyEnum runtimeProperty = DreamRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result == 0 ) {
 			switch ( runtimeProperty ) {
-				case god:
-					result = god.size();
-				break;
-			
 				case name:
 					result = name.size();
+				break;
+			
+				case god:
+					result = god.size();
 				break;
 			
 				default:
@@ -188,19 +188,19 @@ public class Dream extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.name =  new TinkerSetImpl<String>(this, DreamRuntimePropertyEnum.name);
 		this.god =  new TinkerSetImpl<God>(this, DreamRuntimePropertyEnum.god);
+		this.name =  new TinkerSetImpl<String>(this, DreamRuntimePropertyEnum.name);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (DreamRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case god:
-				this.god =  new TinkerSetImpl<God>(this, DreamRuntimePropertyEnum.god);
-			break;
-		
 			case name:
 				this.name =  new TinkerSetImpl<String>(this, DreamRuntimePropertyEnum.name);
+			break;
+		
+			case god:
+				this.god =  new TinkerSetImpl<God>(this, DreamRuntimePropertyEnum.god);
 			break;
 		
 		}
@@ -251,8 +251,8 @@ public class Dream extends BaseTinker implements CompositionNode {
 	}
 
 	public enum DreamRuntimePropertyEnum implements TumlRuntimeProperty {
-		name(true,true,false,"tuml-test__org__tuml__collectiontest__Dream__name",false,false,true,false,1,1,false,false,false,false,true),
-		god(false,false,false,"A_<god>_<dream>",false,false,true,false,1,1,false,false,false,false,true);
+		god(false,false,false,"A_<god>_<dream>",false,false,true,false,1,1,false,false,false,false,true),
+		name(true,true,false,"tuml-test__org__tuml__collectiontest__Dream__name",false,false,true,false,1,1,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -305,11 +305,11 @@ public class Dream extends BaseTinker implements CompositionNode {
 		}
 	
 		static public DreamRuntimePropertyEnum fromLabel(String label) {
-			if ( name.getLabel().equals(label) ) {
-				return name;
-			}
 			if ( god.getLabel().equals(label) ) {
 				return god;
+			}
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
 			return null;
 		}

@@ -9,6 +9,7 @@ import org.eclipse.uml2.uml.Property;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedInterface;
 import org.tuml.framework.Visitor;
+import org.tuml.javageneration.Workspace;
 import org.tuml.javageneration.util.PropertyWrapper;
 import org.tuml.javageneration.util.TumlClassOperations;
 import org.tuml.javageneration.visitor.BaseVisitor;
@@ -16,6 +17,10 @@ import org.tuml.javageneration.visitor.property.ManyPropertyVisitor;
 import org.tuml.javageneration.visitor.property.OnePropertyVisitor;
 
 public class ClassImplementedInterfacePropertyVisitor extends BaseVisitor implements Visitor<Class> {
+
+	public ClassImplementedInterfacePropertyVisitor(Workspace workspace) {
+		super(workspace);
+	}
 
 	@Override
 	public void visitBefore(Class clazz) {

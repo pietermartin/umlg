@@ -257,12 +257,8 @@ public class Universe extends BaseTinker implements CompositionNode {
 		UniverseRuntimePropertyEnum runtimeProperty = UniverseRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result == 0 ) {
 			switch ( runtimeProperty ) {
-				case nonNavigableMany:
-					result = nonNavigableMany.size();
-				break;
-			
-				case demon:
-					result = demon.size();
+				case god:
+					result = god.size();
 				break;
 			
 				case name:
@@ -273,16 +269,20 @@ public class Universe extends BaseTinker implements CompositionNode {
 					result = nonNavigableOne.size();
 				break;
 			
-				case spaceTime:
-					result = spaceTime.size();
-				break;
-			
-				case god:
-					result = god.size();
+				case demon:
+					result = demon.size();
 				break;
 			
 				case angel:
 					result = angel.size();
+				break;
+			
+				case spaceTime:
+					result = spaceTime.size();
+				break;
+			
+				case nonNavigableMany:
+					result = nonNavigableMany.size();
 				break;
 			
 				default:
@@ -318,24 +318,20 @@ public class Universe extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.angel =  new TinkerSetImpl<Angel>(this, UniverseRuntimePropertyEnum.angel);
-		this.god =  new TinkerSetImpl<God>(this, UniverseRuntimePropertyEnum.god);
+		this.nonNavigableMany =  new TinkerSetImpl<NonNavigableMany>(this, UniverseRuntimePropertyEnum.nonNavigableMany);
 		this.spaceTime =  new TinkerSetImpl<SpaceTime>(this, UniverseRuntimePropertyEnum.spaceTime);
+		this.angel =  new TinkerSetImpl<Angel>(this, UniverseRuntimePropertyEnum.angel);
+		this.demon =  new TinkerSetImpl<Demon>(this, UniverseRuntimePropertyEnum.demon);
 		this.nonNavigableOne =  new TinkerSetImpl<NonNavigableOne>(this, UniverseRuntimePropertyEnum.nonNavigableOne);
 		this.name =  new TinkerSetImpl<String>(this, UniverseRuntimePropertyEnum.name);
-		this.demon =  new TinkerSetImpl<Demon>(this, UniverseRuntimePropertyEnum.demon);
-		this.nonNavigableMany =  new TinkerSetImpl<NonNavigableMany>(this, UniverseRuntimePropertyEnum.nonNavigableMany);
+		this.god =  new TinkerSetImpl<God>(this, UniverseRuntimePropertyEnum.god);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (UniverseRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case nonNavigableMany:
-				this.nonNavigableMany =  new TinkerSetImpl<NonNavigableMany>(this, UniverseRuntimePropertyEnum.nonNavigableMany);
-			break;
-		
-			case demon:
-				this.demon =  new TinkerSetImpl<Demon>(this, UniverseRuntimePropertyEnum.demon);
+			case god:
+				this.god =  new TinkerSetImpl<God>(this, UniverseRuntimePropertyEnum.god);
 			break;
 		
 			case name:
@@ -346,16 +342,20 @@ public class Universe extends BaseTinker implements CompositionNode {
 				this.nonNavigableOne =  new TinkerSetImpl<NonNavigableOne>(this, UniverseRuntimePropertyEnum.nonNavigableOne);
 			break;
 		
-			case spaceTime:
-				this.spaceTime =  new TinkerSetImpl<SpaceTime>(this, UniverseRuntimePropertyEnum.spaceTime);
-			break;
-		
-			case god:
-				this.god =  new TinkerSetImpl<God>(this, UniverseRuntimePropertyEnum.god);
+			case demon:
+				this.demon =  new TinkerSetImpl<Demon>(this, UniverseRuntimePropertyEnum.demon);
 			break;
 		
 			case angel:
 				this.angel =  new TinkerSetImpl<Angel>(this, UniverseRuntimePropertyEnum.angel);
+			break;
+		
+			case spaceTime:
+				this.spaceTime =  new TinkerSetImpl<SpaceTime>(this, UniverseRuntimePropertyEnum.spaceTime);
+			break;
+		
+			case nonNavigableMany:
+				this.nonNavigableMany =  new TinkerSetImpl<NonNavigableMany>(this, UniverseRuntimePropertyEnum.nonNavigableMany);
 			break;
 		
 		}
@@ -491,13 +491,13 @@ public class Universe extends BaseTinker implements CompositionNode {
 	}
 
 	public enum UniverseRuntimePropertyEnum implements TumlRuntimeProperty {
-		angel(false,false,false,"A_<universe>_<angel>",true,false,false,false,1,0,false,false,false,false,true),
-		god(false,false,false,"A_<god>_<universe>",false,false,true,false,1,1,false,false,false,false,true),
+		nonNavigableMany(false,true,false,"A_<universe>_<nonNavigableMany>",false,true,false,false,-1,0,false,false,false,false,true),
 		spaceTime(false,true,true,"A_<universe>_<spaceTime>",true,false,false,false,1,1,false,false,false,false,true),
+		angel(false,false,false,"A_<universe>_<angel>",true,false,false,false,1,0,false,false,false,false,true),
+		demon(false,true,false,"A_<universe>_<demon>",false,true,false,false,-1,1,false,false,false,false,true),
 		nonNavigableOne(false,false,false,"A_<universe>_<nonNavigableOne>",true,false,false,false,1,0,false,false,false,false,true),
 		name(true,true,false,"tuml-test__org__tuml__concretetest__Universe__name",false,false,true,false,1,1,false,false,false,false,true),
-		demon(false,true,false,"A_<universe>_<demon>",false,true,false,false,-1,1,false,false,false,false,true),
-		nonNavigableMany(false,true,false,"A_<universe>_<nonNavigableMany>",false,true,false,false,-1,0,false,false,false,false,true);
+		god(false,false,false,"A_<god>_<universe>",false,false,true,false,1,1,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -550,14 +550,17 @@ public class Universe extends BaseTinker implements CompositionNode {
 		}
 	
 		static public UniverseRuntimePropertyEnum fromLabel(String label) {
-			if ( angel.getLabel().equals(label) ) {
-				return angel;
-			}
-			if ( god.getLabel().equals(label) ) {
-				return god;
+			if ( nonNavigableMany.getLabel().equals(label) ) {
+				return nonNavigableMany;
 			}
 			if ( spaceTime.getLabel().equals(label) ) {
 				return spaceTime;
+			}
+			if ( angel.getLabel().equals(label) ) {
+				return angel;
+			}
+			if ( demon.getLabel().equals(label) ) {
+				return demon;
 			}
 			if ( nonNavigableOne.getLabel().equals(label) ) {
 				return nonNavigableOne;
@@ -565,11 +568,8 @@ public class Universe extends BaseTinker implements CompositionNode {
 			if ( name.getLabel().equals(label) ) {
 				return name;
 			}
-			if ( demon.getLabel().equals(label) ) {
-				return demon;
-			}
-			if ( nonNavigableMany.getLabel().equals(label) ) {
-				return nonNavigableMany;
+			if ( god.getLabel().equals(label) ) {
+				return god;
 			}
 			return null;
 		}

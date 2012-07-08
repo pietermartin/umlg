@@ -1,4 +1,4 @@
 package org::tuml::inheritencetest
 context AbstractSpecies::name
-derive: 'thisisdodge'
+init: 'thisisdodge'
 endpackage

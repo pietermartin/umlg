@@ -6,10 +6,15 @@ import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedField;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
 import org.tuml.framework.Visitor;
+import org.tuml.javageneration.Workspace;
 import org.tuml.javageneration.util.PropertyWrapper;
 import org.tuml.javageneration.visitor.BaseVisitor;
 
 public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property> {
+
+	public OnePropertyVisitor(Workspace workspace) {
+		super(workspace);
+	}
 
 	@Override
 	public void visitBefore(Property p) {

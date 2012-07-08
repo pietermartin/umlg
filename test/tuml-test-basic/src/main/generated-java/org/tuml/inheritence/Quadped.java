@@ -30,7 +30,6 @@ public class Quadped extends Mamal implements CompositionNode {
 	public Quadped(Vertex vertex) {
 		super(vertex);
 		initialiseProperties();
-		initVariables();
 	}
 	
 	/** Default constructor for Quadped

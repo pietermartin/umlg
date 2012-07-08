@@ -8,6 +8,7 @@ import com.tinkerpop.blueprints.Vertex;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -36,7 +37,6 @@ public class God extends BaseTinker implements TinkerNode {
 	public God(Vertex vertex) {
 		this.vertex=vertex;
 		initialiseProperties();
-		initVariables();
 	}
 	
 	/** Default constructor for God
@@ -119,8 +119,9 @@ public class God extends BaseTinker implements TinkerNode {
 			return null;
 		} else {
 			CloseableIterable<Edge> closeableIterable = index.get("natureQualifier1", natureQualifier1==null?"___NULL___":natureQualifier1);
-			if ( closeableIterable.iterator().hasNext() ) {
-				return new Nature(closeableIterable.iterator().next().getVertex(Direction.IN));
+			Iterator<Edge> iterator = closeableIterable.iterator();
+			if ( iterator.hasNext() ) {
+				return new Nature(iterator.next().getVertex(Direction.IN));
 			} else {
 				return null;
 			}

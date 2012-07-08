@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<diagrams:Diagrams xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.topcased.org/DI/1.0" xmlns:diagrams="http://www.topcased.org/Diagrams/1.0" xmi:id="_4RyEwMAeEeGJPdxBi7GiSw" activeDiagram="__JqtEMNUEeGwsJEO56VJvw">
+<diagrams:Diagrams xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.topcased.org/DI/1.0" xmlns:diagrams="http://www.topcased.org/Diagrams/1.0" xmi:id="_4RyEwMAeEeGJPdxBi7GiSw" activeDiagram="_VJ0wYK1CEeG4sJlJhTM52A">
   <model href="tinker-test-basic.uml#_qb8akM37EdqwVrslYOdUDA"/>
   <diagrams xmi:id="_4Rz58MAeEeGJPdxBi7GiSw" position="0,0" size="100,100" name="org" viewport="0,0">
     <property xmi:id="_4SGN0MAeEeGJPdxBi7GiSw" key="pageFormatName" value="A4"/>
@@ -43,7 +43,7 @@
     </diagrams>
     <subdiagrams xmi:id="_VJyUIa1CEeG4sJlJhTM52A" activeDiagram="_X43J8K85EeGzNfwuvR7FNw">
       <model href="tinker-test-basic.uml#_w8IxIM37EdqwVrslYOdUDA"/>
-      <diagrams xmi:id="_VJ0wYK1CEeG4sJlJhTM52A" position="0,0" size="100,100" name="tuml-test-basic" viewport="0,312">
+      <diagrams xmi:id="_VJ0wYK1CEeG4sJlJhTM52A" position="0,0" size="100,100" name="tuml-test-basic" viewport="0,384">
         <property xmi:id="_VP_p0K1CEeG4sJlJhTM52A" key="pageFormatName" value="A4"/>
         <property xmi:id="_VP_p0a1CEeG4sJlJhTM52A" key="diagramWidth" value="840"/>
         <property xmi:id="_VP_p0q1CEeG4sJlJhTM52A" key="diagramHeight" value="1188"/>
@@ -315,6 +315,11 @@
         <contained xsi:type="di:GraphNode" xmi:id="_-BqjMMNUEeGwsJEO56VJvw" position="90,729" size="150,120">
           <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_-BqjMcNUEeGwsJEO56VJvw" presentation="default">
             <element href="tinker-test-basic.uml#_-B0UMMNUEeGwsJEO56VJvw"/>
+          </semanticModel>
+        </contained>
+        <contained xsi:type="di:GraphNode" xmi:id="___fq8Mi8EeGDV5N-kPDIOw" position="360,734" size="150,120">
+          <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="___fq8ci8EeGDV5N-kPDIOw" presentation="default">
+            <element href="tinker-test-basic.uml#___wJoMi8EeGDV5N-kPDIOw"/>
           </semanticModel>
         </contained>
       </diagrams>

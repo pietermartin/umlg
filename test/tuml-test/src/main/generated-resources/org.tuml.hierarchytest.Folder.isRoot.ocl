@@ -1,0 +1,4 @@
+package org::tuml::hierarchytest
+context Folder::isRoot() : Boolean
+body: false
+endpackage

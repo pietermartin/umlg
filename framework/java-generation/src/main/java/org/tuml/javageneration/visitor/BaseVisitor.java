@@ -17,12 +17,19 @@ import org.tuml.javageneration.util.PropertyWrapper;
 
 public class BaseVisitor {
 
+	protected Workspace workspace;
+	
+	public BaseVisitor(Workspace workspace) {
+		super();
+		this.workspace = workspace;
+	}
+
 	protected void addToSource(OJAnnotatedClass source) {
-		Workspace.addToClassMap(source);
+		this.workspace.addToClassMap(source);
 	}
 
 	protected OJAnnotatedClass findOJClass(NamedElement owner) {
-		return Workspace.findOJClass(Namer.qualifiedName(owner));
+		return this.workspace.findOJClass(Namer.qualifiedName(owner));
 	}
 
 	// TODO think about interfaces
@@ -57,17 +64,17 @@ public class BaseVisitor {
 				if (otherEnd == null) {
 					throw new IllegalStateException("Oy, where is the other end gone to!!!");
 				}
-				return Workspace.findOJClass(Namer.qualifiedName((NamedElement) otherEnd.getType()));
+				return this.workspace.findOJClass(Namer.qualifiedName((NamedElement) otherEnd.getType()));
 			} else if (owner instanceof Classifier) {
-				return Workspace.findOJClass(Namer.qualifiedName((NamedElement) owner));
+				return this.workspace.findOJClass(Namer.qualifiedName((NamedElement) owner));
 			} else if (owner instanceof Property) {
-				return Workspace.findOJClass(Namer.qualifiedName((NamedElement) owner));
+				return this.workspace.findOJClass(Namer.qualifiedName((NamedElement) owner));
 			} else {
 				throw new IllegalStateException("Not catered for, think about ne. " + owner.getClass().getSimpleName());
 			}
 		} else {
 			Property owner = (Property) pWrap.getOwner();
-			return Workspace.findOJClass(Namer.qualifiedName(owner.getType()));
+			return this.workspace.findOJClass(Namer.qualifiedName(owner.getType()));
 		}
 	}
 

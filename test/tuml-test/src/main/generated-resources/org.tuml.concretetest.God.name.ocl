@@ -1,0 +1,4 @@
+package org::tuml::concretetest
+context God::name
+init: 'whatajol'
+endpackage

@@ -30,7 +30,6 @@ public class Biped extends Mamal implements CompositionNode {
 	public Biped(Vertex vertex) {
 		super(vertex);
 		initialiseProperties();
-		initVariables();
 	}
 	
 	/** Default constructor for Biped

@@ -47,7 +47,7 @@ public final class TumlPropertyOperations extends PropertyOperations {
 	
 	public static boolean isMany(Property property) {
 		int qualifierCount = property.getQualifiers().size();
-		return property.getUpper() == -1 || property.getUpper() > 1 || qualifierCount > 0;
+		return TumlMultiplicityOperations.isMany(property) || qualifierCount > 0;
 	}
 
 	public static boolean isOne(Property property) {

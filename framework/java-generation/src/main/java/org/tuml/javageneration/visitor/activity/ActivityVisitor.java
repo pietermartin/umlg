@@ -4,10 +4,15 @@ import org.eclipse.uml2.uml.Activity;
 import org.opaeum.java.metamodel.OJPackage;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
 import org.tuml.framework.Visitor;
+import org.tuml.javageneration.Workspace;
 import org.tuml.javageneration.naming.Namer;
 import org.tuml.javageneration.visitor.BaseVisitor;
 
 public class ActivityVisitor extends BaseVisitor implements Visitor<Activity> {
+
+	public ActivityVisitor(Workspace workspace) {
+		super(workspace);
+	}
 
 	public void visitBefore(Activity activity) {
 		OJAnnotatedClass annotatedClass = new OJAnnotatedClass(Namer.name(activity));

@@ -7,12 +7,17 @@ import org.opaeum.java.metamodel.OJIfStatement;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
 import org.tuml.framework.Visitor;
+import org.tuml.javageneration.Workspace;
 import org.tuml.javageneration.util.PropertyWrapper;
 import org.tuml.javageneration.util.TumlClassOperations;
 import org.tuml.javageneration.util.TumlPropertyOperations;
 import org.tuml.javageneration.visitor.BaseVisitor;
 
 public class CompositionProperyVisitor extends BaseVisitor implements Visitor<Property> {
+
+	public CompositionProperyVisitor(Workspace workspace) {
+		super(workspace);
+	}
 
 	@Override
 	public void visitBefore(Property p) {

@@ -12,7 +12,7 @@ import org.apache.commons.io.FileUtils;
 public class JavaModelPrinter {
 
 	public static Map<String, String> sourceFiles = new HashMap<String, String>();
-	private final static String SOURCE_FOLDER = "src/main/generated-java";
+	public final static String SOURCE_FOLDER = "src/main/generated-java";
 
 	public static void addToSource(String name, String source) {
 		sourceFiles.put(name, source);

@@ -332,7 +332,7 @@
         </packagedElement>
         <packagedElement xmi:type="uml:Class" xmi:id="_Gvo3IO92EeC2XrXxx1atfA" name="AbstractRootFolder" isAbstract="true">
           <generalization xmi:id="_cPqqEO92EeC2XrXxx1atfA" general="_aqqbIO92EeC2XrXxx1atfA"/>
-          <ownedOperation xmi:id="_Uy4IYO92EeC2XrXxx1atfA" name="isRoot" bodyCondition="_WJQsgO92EeC2XrXxx1atfA">
+          <ownedOperation xmi:id="_Uy4IYO92EeC2XrXxx1atfA" name="isRoot" isQuery="true" bodyCondition="_WJQsgO92EeC2XrXxx1atfA">
             <ownedRule xmi:id="_WJQsgO92EeC2XrXxx1atfA" name="Constraint1">
               <specification xmi:type="uml:OpaqueExpression" xmi:id="_XFwxAO92EeC2XrXxx1atfA" name="OpaqueExpression1">
                 <body>true</body>
@@ -359,12 +359,12 @@
           <ownedAttribute xmi:id="_fIGPwO92EeC2XrXxx1atfA" name="name">
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
           </ownedAttribute>
-          <ownedAttribute xmi:id="_AiPrUO93EeC2XrXxx1atfA" name="childFolder" type="_duv3MO92EeC2XrXxx1atfA" aggregation="composite" association="_AiaDYO93EeC2XrXxx1atfA">
-            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_AiPrUe93EeC2XrXxx1atfA" value="*"/>
-            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_AiPrUu93EeC2XrXxx1atfA"/>
+          <ownedAttribute xmi:id="_MlRC0Mh0EeGOGaDJ7v_YxQ" name="childFolder" type="_duv3MO92EeC2XrXxx1atfA" aggregation="composite" association="_MlUtOsh0EeGOGaDJ7v_YxQ">
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_MlRC0ch0EeGOGaDJ7v_YxQ" value="*"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_MlRC0sh0EeGOGaDJ7v_YxQ"/>
           </ownedAttribute>
           <interfaceRealization xmi:id="_3RfRoO92EeC2XrXxx1atfA" name="InterfaceRealization1" supplier="_h5L3UO92EeC2XrXxx1atfA" client="_aqqbIO92EeC2XrXxx1atfA" contract="_h5L3UO92EeC2XrXxx1atfA"/>
-          <ownedOperation xmi:id="_TB6roO93EeC2XrXxx1atfA" name="getChildren" bodyCondition="_P-h9sO94EeC2XrXxx1atfA">
+          <ownedOperation xmi:id="_TB6roO93EeC2XrXxx1atfA" name="getChildren" isQuery="true" bodyCondition="_P-h9sO94EeC2XrXxx1atfA">
             <ownedRule xmi:id="_P-h9sO94EeC2XrXxx1atfA" name="Constraint1">
               <specification xmi:type="uml:OpaqueExpression" xmi:id="_QnGZkO94EeC2XrXxx1atfA" name="OpaqueExpression1">
                 <body>childFolder</body>
@@ -378,7 +378,7 @@
         </packagedElement>
         <packagedElement xmi:type="uml:Class" xmi:id="_duv3MO92EeC2XrXxx1atfA" name="Folder">
           <generalization xmi:id="_CUMKEO93EeC2XrXxx1atfA" general="_aqqbIO92EeC2XrXxx1atfA"/>
-          <ownedOperation xmi:id="_GhhGIO93EeC2XrXxx1atfA" name="isRoot" bodyCondition="_ISFE0O93EeC2XrXxx1atfA">
+          <ownedOperation xmi:id="_GhhGIO93EeC2XrXxx1atfA" name="isRoot" isQuery="true" bodyCondition="_ISFE0O93EeC2XrXxx1atfA">
             <ownedRule xmi:id="_ISFE0O93EeC2XrXxx1atfA" name="Constraint1">
               <specification xmi:type="uml:OpaqueExpression" xmi:id="_I7vs4O93EeC2XrXxx1atfA" name="OpaqueExpression1">
                 <body>false</body>
@@ -388,13 +388,28 @@
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
             </ownedParameter>
           </ownedOperation>
-          <ownedOperation xmi:id="_Mi4LoO93EeC2XrXxx1atfA" name="getParent" bodyCondition="_PNzg0O93EeC2XrXxx1atfA">
-            <ownedRule xmi:id="_PNzg0O93EeC2XrXxx1atfA" name="Constraint1">
-              <specification xmi:type="uml:OpaqueExpression" xmi:id="_QGL6UO93EeC2XrXxx1atfA" name="OpaqueExpression1">
-                <body>parentFolder</body>
+          <ownedOperation xmi:id="_CNc5EMg1EeGAQZwzYnVCYA" name="testQueryOperation" isQuery="true" bodyCondition="_QudBYMhWEeG65_Q_lrVv6A">
+            <ownedRule xmi:id="_QudBYMhWEeG65_Q_lrVv6A" name="query">
+              <specification xmi:type="uml:OpaqueExpression" xmi:id="_WQSSQMhWEeG65_Q_lrVv6A" name="self.name">
+                <language>ocl</language>
+                <body>self.name</body>
               </specification>
             </ownedRule>
-            <ownedParameter xmi:id="_Nf-GAO93EeC2XrXxx1atfA" name="return" type="_h5L3UO92EeC2XrXxx1atfA" direction="return"/>
+            <ownedParameter xmi:id="_DVdqAMg1EeGAQZwzYnVCYA" name="return" direction="return">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+            </ownedParameter>
+            <ownedParameter xmi:id="_EdY7YMg1EeGAQZwzYnVCYA" name="test">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+            </ownedParameter>
+          </ownedOperation>
+          <ownedOperation xmi:id="_9uGk0Mh0EeGA9qdtqzpYeA" name="getParent" isQuery="true" bodyCondition="_CXw3kMh1EeGA9qdtqzpYeA">
+            <ownedRule xmi:id="_CXw3kMh1EeGA9qdtqzpYeA" name="Constraint1">
+              <specification xmi:type="uml:OpaqueExpression" xmi:id="_DWNc0Mh1EeGA9qdtqzpYeA" name="self.parentFolder">
+                <language>ocl</language>
+                <body>self.parentFolder</body>
+              </specification>
+            </ownedRule>
+            <ownedParameter xmi:id="__hGzgMh0EeGA9qdtqzpYeA" name="return" type="_h5L3UO92EeC2XrXxx1atfA" direction="return"/>
           </ownedOperation>
         </packagedElement>
         <packagedElement xmi:type="uml:Interface" xmi:id="_h5L3UO92EeC2XrXxx1atfA" name="Hierarchy">
@@ -407,16 +422,16 @@
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_w-ozgO92EeC2XrXxx1atfA"/>
             </ownedParameter>
           </ownedOperation>
-          <ownedOperation xmi:id="_yWkPwO92EeC2XrXxx1atfA" name="isRoot">
+          <ownedOperation xmi:id="_yWkPwO92EeC2XrXxx1atfA" name="isRoot" isQuery="true">
             <ownedParameter xmi:id="_zLuWIO92EeC2XrXxx1atfA" name="return" direction="return">
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
             </ownedParameter>
           </ownedOperation>
         </packagedElement>
-        <packagedElement xmi:type="uml:Association" xmi:id="_AiaDYO93EeC2XrXxx1atfA" name="A_&lt;abstractFolder>_&lt;folder>" memberEnd="_AiaDYe93EeC2XrXxx1atfA _AiPrUO93EeC2XrXxx1atfA" navigableOwnedEnd="_AiaDYe93EeC2XrXxx1atfA">
-          <ownedEnd xmi:id="_AiaDYe93EeC2XrXxx1atfA" name="parentFolder" type="_aqqbIO92EeC2XrXxx1atfA" association="_AiaDYO93EeC2XrXxx1atfA">
-            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_AiaDYu93EeC2XrXxx1atfA" value="1"/>
-            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_AiaDY-93EeC2XrXxx1atfA" value="1"/>
+        <packagedElement xmi:type="uml:Association" xmi:id="_MlUtOsh0EeGOGaDJ7v_YxQ" name="A_&lt;abstractFolder>_&lt;folder>" memberEnd="_MlUtO8h0EeGOGaDJ7v_YxQ _MlRC0Mh0EeGOGaDJ7v_YxQ" navigableOwnedEnd="_MlUtO8h0EeGOGaDJ7v_YxQ">
+          <ownedEnd xmi:id="_MlUtO8h0EeGOGaDJ7v_YxQ" name="parentFolder" type="_aqqbIO92EeC2XrXxx1atfA" association="_MlUtOsh0EeGOGaDJ7v_YxQ">
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_MlUtPMh0EeGOGaDJ7v_YxQ" value="1"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_MlUtPch0EeGOGaDJ7v_YxQ" value="1"/>
           </ownedEnd>
         </packagedElement>
       </packagedElement>

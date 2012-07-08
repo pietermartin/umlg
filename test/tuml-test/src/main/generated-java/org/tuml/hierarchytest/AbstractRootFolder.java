@@ -103,6 +103,10 @@ public class AbstractRootFolder extends AbstractFolder implements TinkerNode {
 		}
 	}
 	
+	public Boolean isRoot() {
+		return new Boolean(true);
+	}
+	
 	@Override
 	public boolean isTinkerRoot() {
 		return true;

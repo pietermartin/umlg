@@ -44,7 +44,6 @@ public class AbstractSpecies extends BaseTinker implements CompositionNode {
 	public AbstractSpecies(Vertex vertex) {
 		this.vertex=vertex;
 		initialiseProperties();
-		initVariables();
 	}
 	
 	/** Default constructor for AbstractSpecies

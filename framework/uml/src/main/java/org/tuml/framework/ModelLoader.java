@@ -63,12 +63,10 @@ public class ModelLoader {
 						File file = new File(url.getFile());
 						if(ext.endsWith(".jar")){
 							if(jar){
-								System.out.println(ext);
 								location = "jar:file:///" + file.getAbsolutePath().replace('\\', '/') + "!/";
 							}
 						}else{
 							if(!jar){
-								System.out.println(ext);
 								location = "file:///" + file.getAbsolutePath().replace('\\', '/');
 							}
 						}

@@ -44,7 +44,6 @@ public class Nature extends BaseTinker implements CompositionNode {
 	public Nature(Vertex vertex) {
 		this.vertex=vertex;
 		initialiseProperties();
-		initVariables();
 	}
 	
 	/** Default constructor for Nature
@@ -160,12 +159,12 @@ public class Nature extends BaseTinker implements CompositionNode {
 		NatureRuntimePropertyEnum runtimeProperty = NatureRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result == 0 ) {
 			switch ( runtimeProperty ) {
-				case god:
-					result = god.size();
-				break;
-			
 				case natureName:
 					result = natureName.size();
+				break;
+			
+				case god:
+					result = god.size();
 				break;
 			
 				default:
@@ -192,19 +191,19 @@ public class Nature extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.natureName =  new TinkerSetImpl<String>(this, NatureRuntimePropertyEnum.natureName);
 		this.god =  new TinkerSetImpl<God>(this, NatureRuntimePropertyEnum.god);
+		this.natureName =  new TinkerSetImpl<String>(this, NatureRuntimePropertyEnum.natureName);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (NatureRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case god:
-				this.god =  new TinkerSetImpl<God>(this, NatureRuntimePropertyEnum.god);
-			break;
-		
 			case natureName:
 				this.natureName =  new TinkerSetImpl<String>(this, NatureRuntimePropertyEnum.natureName);
+			break;
+		
+			case god:
+				this.god =  new TinkerSetImpl<God>(this, NatureRuntimePropertyEnum.god);
 			break;
 		
 		}
@@ -255,8 +254,8 @@ public class Nature extends BaseTinker implements CompositionNode {
 	}
 
 	public enum NatureRuntimePropertyEnum implements TumlRuntimeProperty {
-		natureName(true,true,false,"tuml-test-basic-model__org__tuml__qualifier__Nature__natureName",false,false,true,false,1,1,false,false,false,false,true),
-		god(false,false,false,"A_<god>_<nature>",false,false,true,false,1,1,false,true,false,false,true);
+		god(false,false,false,"A_<god>_<nature>",false,false,true,false,1,1,false,true,false,false,true),
+		natureName(true,true,false,"tuml-test-basic-model__org__tuml__qualifier__Nature__natureName",false,false,true,false,1,1,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -309,11 +308,11 @@ public class Nature extends BaseTinker implements CompositionNode {
 		}
 	
 		static public NatureRuntimePropertyEnum fromLabel(String label) {
-			if ( natureName.getLabel().equals(label) ) {
-				return natureName;
-			}
 			if ( god.getLabel().equals(label) ) {
 				return god;
+			}
+			if ( natureName.getLabel().equals(label) ) {
+				return natureName;
 			}
 			return null;
 		}

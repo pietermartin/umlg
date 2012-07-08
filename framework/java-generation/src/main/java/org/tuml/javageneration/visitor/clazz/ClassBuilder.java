@@ -16,12 +16,17 @@ import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
 import org.opaeum.java.metamodel.annotation.OJAnnotationValue;
 import org.tuml.framework.Visitor;
+import org.tuml.javageneration.Workspace;
 import org.tuml.javageneration.util.PropertyWrapper;
 import org.tuml.javageneration.util.TinkerGenerationUtil;
 import org.tuml.javageneration.util.TumlClassOperations;
 import org.tuml.javageneration.visitor.BaseVisitor;
 
 public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
+
+	public ClassBuilder(Workspace workspace) {
+		super(workspace);
+	}
 
 	public static final String INIT_VARIABLES = "initVariables";
 	public static final String INITIALISE_PROPERTIES = "initialiseProperties";

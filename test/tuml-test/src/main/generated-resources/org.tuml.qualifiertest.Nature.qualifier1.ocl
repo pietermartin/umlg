@@ -1,0 +1,4 @@
+package org::tuml::qualifiertest
+context Nature::qualifier1
+derive: self.name1
+endpackage

@@ -1,0 +1,4 @@
+package org::tuml::qualifiertest
+context Many1::qualifier1
+derive: self.name
+endpackage

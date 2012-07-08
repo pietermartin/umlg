@@ -50,7 +50,7 @@ public class AbstractSpecies extends BaseTinker implements CompositionNode {
 	/** Default constructor for AbstractSpecies
 	 */
 	public AbstractSpecies() {
-		setName("thisisdodge");
+		setName(return "thisisdodge");
 	}
 	
 	/** Constructor for AbstractSpecies
@@ -185,7 +185,7 @@ public class AbstractSpecies extends BaseTinker implements CompositionNode {
 	}
 	
 	public void initVariables() {
-		setName("thisisdodge");
+		setName(return "thisisdodge");
 	}
 	
 	@Override

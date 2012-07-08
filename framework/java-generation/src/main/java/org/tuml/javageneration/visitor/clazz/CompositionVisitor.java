@@ -9,12 +9,17 @@ import org.opaeum.java.metamodel.OJPathName;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
 import org.tuml.framework.Visitor;
+import org.tuml.javageneration.Workspace;
 import org.tuml.javageneration.util.PropertyWrapper;
 import org.tuml.javageneration.util.TinkerGenerationUtil;
 import org.tuml.javageneration.util.TumlClassOperations;
 import org.tuml.javageneration.visitor.BaseVisitor;
 
 public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
+
+	public CompositionVisitor(Workspace workspace) {
+		super(workspace);
+	}
 
 	@Override
 	public void visitBefore(Class clazz) {

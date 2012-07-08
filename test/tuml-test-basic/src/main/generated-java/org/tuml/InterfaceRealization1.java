@@ -29,7 +29,6 @@ public class InterfaceRealization1 extends BaseTinker implements TinkerNode, Int
 	public InterfaceRealization1(Vertex vertex) {
 		this.vertex=vertex;
 		initialiseProperties();
-		initVariables();
 	}
 	
 	/** Default constructor for InterfaceRealization1

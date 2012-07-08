@@ -44,7 +44,6 @@ public class Many extends BaseTinker implements CompositionNode {
 	public Many(Vertex vertex) {
 		this.vertex=vertex;
 		initialiseProperties();
-		initVariables();
 	}
 	
 	/** Default constructor for Many

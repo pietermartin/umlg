@@ -147,6 +147,10 @@ public class Folder extends AbstractFolder implements CompositionNode {
 		}
 	}
 	
+	public Boolean isRoot() {
+		return new Boolean(false);
+	}
+	
 	@Override
 	public boolean isTinkerRoot() {
 		return false;
@@ -167,6 +171,10 @@ public class Folder extends AbstractFolder implements CompositionNode {
 	public void setParentFolder(AbstractFolder parentFolder) {
 		clearParentFolder();
 		addToParentFolder(parentFolder);
+	}
+	
+	public String testQueryOperation(String test) {
+		return getName();
 	}
 
 	public enum FolderRuntimePropertyEnum implements TumlRuntimeProperty {

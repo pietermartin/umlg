@@ -13,12 +13,17 @@ import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
 import org.opaeum.java.metamodel.annotation.OJEnum;
 import org.opaeum.java.metamodel.annotation.OJEnumLiteral;
 import org.tuml.framework.Visitor;
+import org.tuml.javageneration.Workspace;
 import org.tuml.javageneration.util.PropertyWrapper;
 import org.tuml.javageneration.util.TinkerGenerationUtil;
 import org.tuml.javageneration.util.TumlClassOperations;
 import org.tuml.javageneration.visitor.BaseVisitor;
 
 public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implements Visitor<Class> {
+
+	public ClassRuntimePropertyImplementorVisitor(Workspace workspace) {
+		super(workspace);
+	}
 
 	@Override
 	public void visitBefore(Class clazz) {
