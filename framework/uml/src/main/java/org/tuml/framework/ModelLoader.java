@@ -16,7 +16,7 @@ import org.eclipse.uml2.uml.resource.UMLResource;
 
 public class ModelLoader {
 
-	protected static final ResourceSet RESOURCE_SET = new ResourceSetImpl();
+	public static final ResourceSet RESOURCE_SET = new ResourceSetImpl();
 	private static Model model;
 
 	public static Model loadModel(File modelFile) {
@@ -37,6 +37,7 @@ public class ModelLoader {
 	protected static org.eclipse.uml2.uml.Package load(URI uri) {
 		org.eclipse.uml2.uml.Package package_ = null;
 		Resource resource = RESOURCE_SET.getResource(uri, true);
+//		package_ = (org.eclipse.uml2.uml.Package) resource.getContents().get(0);
 		package_ = (org.eclipse.uml2.uml.Package) EcoreUtil.getObjectByType(resource.getContents(), UMLPackage.Literals.PACKAGE);
 		return package_;
 	}

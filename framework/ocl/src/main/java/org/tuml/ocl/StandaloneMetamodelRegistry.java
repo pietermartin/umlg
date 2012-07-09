@@ -1,10 +1,6 @@
 package org.tuml.ocl;
 
-import java.util.HashMap;
 import java.util.Map;
-
-import tudresden.ocl20.pivot.model.metamodel.IMetamodel;
-import tudresden.ocl20.pivot.model.metamodel.IMetamodelRegistry;
 
 /**
  * <p>
@@ -19,50 +15,50 @@ import tudresden.ocl20.pivot.model.metamodel.IMetamodelRegistry;
  * @author Michael Thiele
  * 
  */
-public class StandaloneMetamodelRegistry implements IMetamodelRegistry {
+public class StandaloneMetamodelRegistry /* implements IMetamodelRegistry */ {
 
-	protected Map<String, IMetamodel> metaModels =
-			new HashMap<String, IMetamodel>();
-
-	/*
-	 * (non-Javadoc)
-	 * @see
-	 * tudresden.ocl20.pivot.modelbus.metamodel.IMetamodelRegistry#addMetamodel
-	 * (tudresden.ocl20.pivot.modelbus.metamodel.IMetamodel)
-	 */
-	public void addMetamodel(IMetamodel metamodel) {
-
-		metaModels.put(metamodel.getId(), metamodel);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see tudresden.ocl20.pivot.modelbus.metamodel.IMetamodelRegistry#dispose()
-	 */
-	public void dispose() {
-
-		metaModels.clear();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see
-	 * tudresden.ocl20.pivot.modelbus.metamodel.IMetamodelRegistry#getMetamodel
-	 * (java.lang.String)
-	 */
-	public IMetamodel getMetamodel(String id) {
-
-		return metaModels.get(id);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see
-	 * tudresden.ocl20.pivot.modelbus.metamodel.IMetamodelRegistry#getMetamodels()
-	 */
-	public IMetamodel[] getMetamodels() {
-
-		return metaModels.values().toArray(new IMetamodel[0]);
-	}
+//	protected Map<String, IMetamodel> metaModels =
+//			new HashMap<String, IMetamodel>();
+//
+//	/*
+//	 * (non-Javadoc)
+//	 * @see
+//	 * tudresden.ocl20.pivot.modelbus.metamodel.IMetamodelRegistry#addMetamodel
+//	 * (tudresden.ocl20.pivot.modelbus.metamodel.IMetamodel)
+//	 */
+//	public void addMetamodel(IMetamodel metamodel) {
+//
+//		metaModels.put(metamodel.getId(), metamodel);
+//	}
+//
+//	/*
+//	 * (non-Javadoc)
+//	 * @see tudresden.ocl20.pivot.modelbus.metamodel.IMetamodelRegistry#dispose()
+//	 */
+//	public void dispose() {
+//
+//		metaModels.clear();
+//	}
+//
+//	/*
+//	 * (non-Javadoc)
+//	 * @see
+//	 * tudresden.ocl20.pivot.modelbus.metamodel.IMetamodelRegistry#getMetamodel
+//	 * (java.lang.String)
+//	 */
+//	public IMetamodel getMetamodel(String id) {
+//
+//		return metaModels.get(id);
+//	}
+//
+//	/*
+//	 * (non-Javadoc)
+//	 * @see
+//	 * tudresden.ocl20.pivot.modelbus.metamodel.IMetamodelRegistry#getMetamodels()
+//	 */
+//	public IMetamodel[] getMetamodels() {
+//
+//		return metaModels.values().toArray(new IMetamodel[0]);
+//	}
 
 }
