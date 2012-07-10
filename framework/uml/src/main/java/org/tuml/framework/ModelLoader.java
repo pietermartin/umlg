@@ -10,9 +10,11 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.ocl.uml.UMLEnvironmentFactory;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.UMLPackage;
 import org.eclipse.uml2.uml.resource.UMLResource;
+import org.eclipse.ocl.Environment;
 
 public class ModelLoader {
 
@@ -33,16 +35,18 @@ public class ModelLoader {
 	public static Model getModel() {
 		return model;
 	}
-	
+
 	protected static org.eclipse.uml2.uml.Package load(URI uri) {
 		org.eclipse.uml2.uml.Package package_ = null;
 		Resource resource = RESOURCE_SET.getResource(uri, true);
-//		package_ = (org.eclipse.uml2.uml.Package) resource.getContents().get(0);
+		// package_ = (org.eclipse.uml2.uml.Package)
+		// resource.getContents().get(0);
 		package_ = (org.eclipse.uml2.uml.Package) EcoreUtil.getObjectByType(resource.getContents(), UMLPackage.Literals.PACKAGE);
 		return package_;
 	}
 
 	protected static void registerResourceFactories() {
+		Environment.Registry.INSTANCE.registerEnvironment(new UMLEnvironmentFactory().createEnvironment());
 		RESOURCE_SET.getResourceFactoryRegistry().getExtensionToFactoryMap().put(UMLResource.FILE_EXTENSION, UMLResource.Factory.INSTANCE);
 		RESOURCE_SET.getPackageRegistry().put(UMLPackage.eNS_URI, UMLPackage.eINSTANCE);
 	}
@@ -53,21 +57,21 @@ public class ModelLoader {
 		URIConverter.URI_MAP.put(URI.createURI(UMLResource.PROFILES_PATHMAP), uri.appendSegment("profiles").appendSegment(""));
 	}
 
-	public static String findLocation(URLClassLoader s,boolean jar,String...names){
-		try{
+	public static String findLocation(URLClassLoader s, boolean jar, String... names) {
+		try {
 			URL[] urls = s.getURLs();
 			String location = null;
-			outer:for(URL url:urls){
-				for(String string:names){
+			outer: for (URL url : urls) {
+				for (String string : names) {
 					String ext = url.toExternalForm();
-					if(ext.contains(string)){
+					if (ext.contains(string)) {
 						File file = new File(url.getFile());
-						if(ext.endsWith(".jar")){
-							if(jar){
+						if (ext.endsWith(".jar")) {
+							if (jar) {
 								location = "jar:file:///" + file.getAbsolutePath().replace('\\', '/') + "!/";
 							}
-						}else{
-							if(!jar){
+						} else {
+							if (!jar) {
 								location = "file:///" + file.getAbsolutePath().replace('\\', '/');
 							}
 						}
@@ -75,11 +79,11 @@ public class ModelLoader {
 					}
 				}
 			}
-			if(location == null && s.getParent() instanceof URLClassLoader && s.getParent() != s){
+			if (location == null && s.getParent() instanceof URLClassLoader && s.getParent() != s) {
 				location = findLocation((URLClassLoader) s.getParent(), jar, names);
 			}
 			return location;
-		}catch(Throwable t){
+		} catch (Throwable t) {
 			System.out.println(t.toString());
 			return null;
 		}

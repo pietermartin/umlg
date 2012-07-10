@@ -1,4 +1,4 @@
-package org.tuml.eclipse.ocl;
+package org.tuml.ocl;
 
 import java.io.File;
 import java.util.List;
@@ -26,41 +26,54 @@ import org.eclipse.uml2.uml.SendSignalAction;
 import org.eclipse.uml2.uml.State;
 import org.tuml.framework.ModelLoader;
 
-public class TumlOcl2Java {
+public class TumlOcl2Parser {
 
-	protected OCL<Package, Classifier, Operation, Property, EnumerationLiteral, Parameter, State, CallOperationAction, SendSignalAction, Constraint, Class, EObject> ocl;
-	protected Environment<Package, Classifier, Operation, Property, EnumerationLiteral, Parameter, State, CallOperationAction, SendSignalAction, Constraint, Class, EObject> environment;
-	protected OCLHelper<Classifier, Operation, Property, Constraint> helper;
+	private OCL<Package, Classifier, Operation, Property, EnumerationLiteral, Parameter, State, CallOperationAction, SendSignalAction, Constraint, Class, EObject> ocl;
+	private Environment<Package, Classifier, Operation, Property, EnumerationLiteral, Parameter, State, CallOperationAction, SendSignalAction, Constraint, Class, EObject> environment;
+	private OCLHelper<Classifier, Operation, Property, Constraint> helper;
 
-	public static void main(String[] args) {
-		TumlOcl2Java tumlOcl2Java = new TumlOcl2Java();
-		tumlOcl2Java.parseOcl(new File("/home/pieter/workspace-tuml/tuml/test/tuml-test-ocl/src/main/model/test-ocl.uml"));
-	}
-
-	public void parseOcl(File modelFile) {
-		Model model = ModelLoader.loadModel(modelFile);
+	public final static TumlOcl2Parser INSTANCE = new TumlOcl2Parser();
+	
+	private TumlOcl2Parser() {
 		this.ocl = org.eclipse.ocl.uml.OCL.newInstance(ModelLoader.RESOURCE_SET);
-		this.environment = this.ocl.getEnvironment();
-		helper = ocl.createOCLHelper();
-
+		this.environment = ocl.getEnvironment();
+		this.helper = ocl.createOCLHelper();
+	}
+	
+	public static void main(String[] args) {
+		Model model = ModelLoader.loadModel(new File("/home/pieter/workspace-tuml/tuml/test/tuml-test-ocl/src/main/model/test-ocl.uml"));
+		TumlOcl2Parser parser = new TumlOcl2Parser();
 		StringBuilder sb = new StringBuilder();
-		sb.append("package Model::org::tuml::testocl\n");
-		sb.append("context OclTest1::derivedProperty1 : String\n");
+		sb.append("package Model::org::tuml::ocl\n");
+		sb.append("context Parent::derivedName : String\n");
 		sb.append("derive :\n");
-		sb.append("self.property1\n");
-		sb.append("endpackage\n");
+		sb.append("self.name\n");
+		sb.append("endpackage\n");		
+		parser.parseOcl(sb.toString());
+		System.out.println("Success 1");
+		
+		sb = new StringBuilder();
+		sb.append("package Model::org::tuml::ocl\n");
+		sb.append("context Parent::firstChild : Child\n");
+		sb.append("derive :\n");
+		sb.append("self.child->first()\n");
+		sb.append("endpackage\n");		
+		parser.parseOcl(sb.toString());
+		System.out.println("Success 2");
 
-		OCLExpression<Classifier> constraint = parseConstraint(sb.toString());
-		System.out.println(constraint);
+	}
+	
+	public OCLExpression<Classifier> parseOcl(String oclText) {
+		return parseConstraint(oclText);
 	}
 
-	protected OCLExpression<Classifier> parseConstraint(String text) {
+	private OCLExpression<Classifier> parseConstraint(String text) {
 		OCLExpression<Classifier> result = parseConstraintUnvalidated(text);
 		validate(result);
 		return result;
 	}
 
-	protected OCLExpression<Classifier> parseConstraintUnvalidated(String text) {
+	private OCLExpression<Classifier> parseConstraintUnvalidated(String text) {
 		List<Constraint> constraints;
 		Constraint constraint = null;
 
@@ -79,7 +92,7 @@ public class TumlOcl2Java {
 		return result;
 	}
 
-	protected void validate(Constraint constraint) {
+	private void validate(Constraint constraint) {
 		try {
 			ocl.validate(constraint);
 		} catch (SemanticException e) {
@@ -87,7 +100,7 @@ public class TumlOcl2Java {
 		}
 	}
 
-	protected void validate(OCLExpression<Classifier> expr) {
+	private void validate(OCLExpression<Classifier> expr) {
 		try {
 			EObject eContainer = expr.eContainer();
 			if ((eContainer != null) && Constraint.class.isAssignableFrom(eContainer.eContainer().getClass())) {
@@ -102,7 +115,7 @@ public class TumlOcl2Java {
 		}
 	}
 
-	public OCLExpression<Classifier> getBodyExpression(Constraint constraint) {
+	private OCLExpression<Classifier> getBodyExpression(Constraint constraint) {
 		return ((ExpressionInOCL) constraint.getSpecification()).getBodyExpression();
 	}
 

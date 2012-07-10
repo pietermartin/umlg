@@ -28,6 +28,8 @@ import org.eclipse.uml2.uml.Dependency;
 import org.eclipse.uml2.uml.Deployment;
 import org.eclipse.uml2.uml.DirectedRelationship;
 import org.eclipse.uml2.uml.Element;
+import org.eclipse.uml2.uml.Interface;
+import org.eclipse.uml2.uml.LiteralString;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.MultiplicityElement;
 import org.eclipse.uml2.uml.NamedElement;
@@ -1241,11 +1243,6 @@ public class PropertyWrapper implements Property {
 	}
 
 	@Override
-	public boolean validateNavigableReadonly(DiagnosticChain diagnostics, Map<Object, Object> context) {
-		throw new RuntimeException("Not supported");
-	}
-
-	@Override
 	public boolean validateDerivedUnionIsDerived(DiagnosticChain diagnostics, Map<Object, Object> context) {
 		throw new RuntimeException("Not supported");
 	}
@@ -1421,11 +1418,11 @@ public class PropertyWrapper implements Property {
 //
 //	}
 
-	private boolean hasOclDefaultValue() {
+	public boolean hasOclDefaultValue() {
 		ValueSpecification v = getDefaultValue();
 		if (v instanceof OpaqueExpression) {
 			OpaqueExpression expr = (OpaqueExpression) v;
-			return expr.getLanguages().contains("ocl");
+			return expr.getLanguages().contains("ocl") || expr.getLanguages().contains("OCL");
 		} else {
 			return false;
 		}
@@ -1456,11 +1453,13 @@ public class PropertyWrapper implements Property {
 		PropertyWrapper pWrap = new PropertyWrapper(p);
 		StringBuilder sb = new StringBuilder();
 		sb.append("package ");
-		sb.append(Namer.name(pWrap.getOwningType().getNearestPackage()).replace(".", "::"));
+		sb.append(Namer.nameIncludingModel(pWrap.getOwningType().getNearestPackage()).replace(".", "::"));
 		sb.append("\ncontext ");
 		sb.append(pWrap.getOwningType().getName());
 		sb.append("::");
 		sb.append(getName());
+		sb.append(" : ");
+		sb.append(pWrap.getType().getName());
 		sb.append("\n");
 		sb.append("derive: ");
 		sb.append(pWrap.getDefaultValue().stringValue());
@@ -1469,7 +1468,7 @@ public class PropertyWrapper implements Property {
 		return sb.toString();
 	}
 
-	public String getOclInitValue() {
+	public String getOclDefaultValue() {
 		if (!hasOclDefaultValue()) {
 			throw new IllegalStateException(String.format("Property %s does not have a default value", new Object[] { this.getName() }));
 		}
@@ -1483,18 +1482,18 @@ public class PropertyWrapper implements Property {
 					derived = (Property) e;
 				}
 			}
-			sb.append(getOclInitValue(derived));
+			sb.append(getOclDefaultValue(derived));
 		} else {
-			sb.append(getOclInitValue(this.property));
+			sb.append(getOclDefaultValue(this.property));
 		}
 		return sb.toString();
 	}
 
-	private String getOclInitValue(Property p) {
+	private String getOclDefaultValue(Property p) {
 		PropertyWrapper pWrap = new PropertyWrapper(p);
 		StringBuilder sb = new StringBuilder();
 		sb.append("package ");
-		sb.append(Namer.name(pWrap.getOwningType().getNearestPackage()).replace(".", "::"));
+		sb.append(Namer.nameIncludingModel(pWrap.getOwningType().getNearestPackage()).replace(".", "::"));
 		sb.append("\ncontext ");
 		sb.append(pWrap.getOwningType().getName());
 		sb.append("::");
@@ -1568,5 +1567,47 @@ public class PropertyWrapper implements Property {
 
 	public String getTumlRuntimePropertyEnum() {
 		return TumlClassOperations.propertyEnumName(getOwningType()) + "." + fieldname();
+	}
+
+	@Override
+	public boolean validateNonLeafRedefinition(DiagnosticChain arg0, Map<Object, Object> arg1) {
+		throw new RuntimeException("Not supported");
+	}
+
+	@Override
+	public Interface getInterface() {
+		throw new RuntimeException("Not supported");
+	}
+
+	@Override
+	public boolean isID() {
+		throw new RuntimeException("Not supported");
+	}
+
+	@Override
+	public void setInterface(Interface arg0) {
+		throw new RuntimeException("Not supported");
+	}
+
+	@Override
+	public void setIsID(boolean arg0) {
+		throw new RuntimeException("Not supported");
+	}
+
+	@Override
+	public void setRealDefaultValue(double arg0) {
+		throw new RuntimeException("Not supported");
+	}
+
+	public String getInitValue() {
+		ValueSpecification v = getDefaultValue();
+		if (v instanceof OpaqueExpression) {
+			return getOclDefaultValue();
+		} else if (v instanceof LiteralString) {
+			LiteralString expr = (LiteralString) v;
+			return expr.getValue();
+		} else {
+			throw new RuntimeException("Not supported");
+		}
 	}
 }

@@ -1,4 +1,0 @@
-package org::tuml::testocl
-context OclTest1::oclTestCollection2
-derive: self.oclTestCollection.oclTestCollection2->asSet()
-endpackage

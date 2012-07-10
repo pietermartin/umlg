@@ -28,7 +28,6 @@ import org.tuml.javageneration.visitor.property.OnePropertyVisitor;
 import org.tuml.javageneration.visitor.property.PropertyVisitor;
 import org.tuml.javageneration.visitor.property.QualifierValidator;
 import org.tuml.javageneration.visitor.property.QualifierVisitor;
-import org.tuml.ocl.TumlOcl;
 
 public class Workspace {
 
@@ -57,18 +56,17 @@ public class Workspace {
 				sourceDir.getAbsolutePath() }));
 	}
 	
-	public File writeOclFile(String ocl, String qualifiedName) {
-		try {
-			File oclFile = new File("src/main/generated-resources/" + qualifiedName + ".ocl");
-			FileWriter fw = new FileWriter(oclFile);
-			fw.write(ocl);
-			fw.flush();
-			return oclFile;
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
+//	public File writeOclFile(String ocl, String qualifiedName) {
+//		try {
+//			File oclFile = new File("src/main/generated-resources/" + qualifiedName + ".ocl");
+//			FileWriter fw = new FileWriter(oclFile);
+//			fw.write(ocl);
+//			fw.flush();
+//			return oclFile;
+//		} catch (Exception e) {
+//			throw new RuntimeException(e);
+//		}
+//	}
 
 	private void toText() {
 		for (Map.Entry<String, OJAnnotatedClass> entry : this.javaClassMap.entrySet()) {
@@ -92,7 +90,7 @@ public class Workspace {
 	private void visitModel() {
 		clearOclFiles();
 		this.model = ModelLoader.loadModel(modelFile);
-		TumlOcl.prepareDresdenOcl(this.modelFile);
+//		TumlOcl.prepareDresdenOcl(this.modelFile);
 		ModelVisitor.visitModel(this.model, new InterfaceVisitor(this));
 		ModelVisitor.visitModel(this.model, new ClassCreator(this));
 		ModelVisitor.visitModel(this.model, new ClassBuilder(this));

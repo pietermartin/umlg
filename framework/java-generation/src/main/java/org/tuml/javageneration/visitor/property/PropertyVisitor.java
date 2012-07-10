@@ -1,17 +1,16 @@
 package org.tuml.javageneration.visitor.property;
 
-import java.io.File;
-
+import org.eclipse.ocl.expressions.OCLExpression;
+import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Property;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
 import org.tuml.framework.Visitor;
 import org.tuml.javageneration.Workspace;
-import org.tuml.javageneration.naming.Namer;
-import org.tuml.javageneration.util.OclUtil;
 import org.tuml.javageneration.util.PropertyWrapper;
 import org.tuml.javageneration.visitor.BaseVisitor;
 import org.tuml.javageneration.visitor.clazz.ClassBuilder;
+import org.tuml.ocl.TumlOcl2Parser;
 
 public class PropertyVisitor extends BaseVisitor implements Visitor<Property> {
 
@@ -39,9 +38,13 @@ public class PropertyVisitor extends BaseVisitor implements Visitor<Property> {
 
 	private void addInitialization(OJAnnotatedClass owner, PropertyWrapper propertyWrapper) {
 		OJAnnotatedOperation initVariables = owner.findOperation(ClassBuilder.INIT_VARIABLES);
-		String ocl = propertyWrapper.getOclInitValue();
-		File oclFile = this.workspace.writeOclFile(ocl, Namer.qualifiedName(propertyWrapper));
-		String java = OclUtil.oclToJava(oclFile);
+		String java;
+		if (propertyWrapper.hasOclDefaultValue()) {
+			OCLExpression<Classifier> constraint = TumlOcl2Parser.INSTANCE.parseOcl(propertyWrapper.getOclDefaultValue());
+			java = "//TODO " + constraint.toString();
+		} else {
+			java = propertyWrapper.getInitValue();
+		}
 		initVariables.getBody().addToStatements(propertyWrapper.setter() + "(" + java + ")");
 	}
 

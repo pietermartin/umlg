@@ -46,6 +46,20 @@
 			<groupId>org.eclipse.emf</groupId>
 			<artifactId>common</artifactId>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.eclipse.ocl</groupId>
+			<artifactId>uml</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.ocl</groupId>
+			<artifactId>ecore</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse</groupId>
+			<artifactId>ocl</artifactId>
+		</dependency>
+		
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>

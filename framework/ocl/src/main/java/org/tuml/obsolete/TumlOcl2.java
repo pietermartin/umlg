@@ -1,4 +1,4 @@
-package org.tuml.ocl;
+package org.tuml.obsolete;
 
 
 public class TumlOcl2 {

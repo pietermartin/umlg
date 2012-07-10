@@ -1,4 +1,4 @@
-package org.tuml.ocl;
+package org.tuml.obsolete;
 
 import java.io.File;
 import java.net.URL;

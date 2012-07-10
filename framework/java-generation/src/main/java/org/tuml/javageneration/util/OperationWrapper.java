@@ -1309,16 +1309,6 @@ public class OperationWrapper implements Operation {
 	}
 
 	@Override
-	public int lowerBound() {
-		return this.operation.lowerBound();
-	}
-
-	@Override
-	public int upperBound() {
-		return this.operation.upperBound();
-	}
-
-	@Override
 	public EList<Parameter> returnResult() {
 		return this.operation.returnResult();
 	}
@@ -1342,6 +1332,11 @@ public class OperationWrapper implements Operation {
 		Constraint bodyCondition = getBodyCondition();
 		String ocl = TumlConstraintOperations.getAsOcl(bodyCondition);
 		return ocl;
+	}
+
+	@Override
+	public boolean validateNonLeafRedefinition(DiagnosticChain arg0, Map<Object, Object> arg1) {
+		throw new RuntimeException("Not supported");
 	}
 	
 }

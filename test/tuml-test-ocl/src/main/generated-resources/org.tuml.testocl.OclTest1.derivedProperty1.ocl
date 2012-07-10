@@ -1,4 +1,0 @@
-package org::tuml::testocl
-context OclTest1::derivedProperty1
-derive: self.property1
-endpackage

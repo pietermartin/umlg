@@ -1,7 +1,7 @@
 package org.tuml.javageneration.visitor.operation;
 
-import java.io.File;
-
+import org.eclipse.ocl.expressions.OCLExpression;
+import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.NamedElement;
@@ -10,10 +10,9 @@ import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
 import org.tuml.framework.Visitor;
 import org.tuml.javageneration.Workspace;
-import org.tuml.javageneration.naming.Namer;
-import org.tuml.javageneration.util.OclUtil;
 import org.tuml.javageneration.util.OperationWrapper;
 import org.tuml.javageneration.visitor.BaseVisitor;
+import org.tuml.ocl.TumlOcl2Parser;
 
 public class OperationImplementorSimple extends BaseVisitor implements Visitor<org.eclipse.uml2.uml.Operation> {
 
@@ -58,8 +57,7 @@ public class OperationImplementorSimple extends BaseVisitor implements Visitor<o
 	private void addQueryBody(OJAnnotatedClass ojClass, OJAnnotatedOperation ojOper, Operation oper) {
 		OperationWrapper operWrapper = new OperationWrapper(oper);
 		String ocl = operWrapper.getOclBodyCondition();
-		File oclFile = this.workspace.writeOclFile(ocl, Namer.qualifiedName(operWrapper));
-		String java = OclUtil.oclToJava(oclFile);
-		ojOper.getBody().addToStatements(java);
+		OCLExpression<Classifier> constraint = TumlOcl2Parser.INSTANCE.parseOcl(ocl);
+		ojOper.getBody().addToStatements("//TODO " + constraint.toString());
 	}
 }

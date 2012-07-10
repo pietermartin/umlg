@@ -1,16 +1,15 @@
 package org.tuml.javageneration.ocl.visitor;
 
-import java.io.File;
-
+import org.eclipse.ocl.expressions.OCLExpression;
+import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Property;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
 import org.tuml.framework.Visitor;
 import org.tuml.javageneration.Workspace;
-import org.tuml.javageneration.naming.Namer;
-import org.tuml.javageneration.util.OclUtil;
 import org.tuml.javageneration.util.PropertyWrapper;
 import org.tuml.javageneration.visitor.BaseVisitor;
+import org.tuml.ocl.TumlOcl2Parser;
 
 public class DerivedPropertyVisitor extends BaseVisitor implements Visitor<Property> {
 
@@ -30,9 +29,8 @@ public class DerivedPropertyVisitor extends BaseVisitor implements Visitor<Prope
 				getter = new OJAnnotatedOperation(propertyWrapper.getter(), propertyWrapper.javaTypePath());
 			}
 			String ocl = propertyWrapper.getOclDerivedValue();
-			File oclFile = this.workspace.writeOclFile(ocl, Namer.qualifiedName(p));
-			String java = OclUtil.oclToJava(oclFile);
-			getter.getBody().addToStatements(java);
+			OCLExpression<Classifier> contraint = TumlOcl2Parser.INSTANCE.parseOcl(ocl);
+			getter.getBody().addToStatements("//TODO " + contraint.toString());
 			owner.addToOperations(getter);
 		}
 	}

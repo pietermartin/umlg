@@ -1,4 +1,0 @@
-package org::tuml::testocl
-context OclTest1::oclTestCollectionSelect
-derive: self.oclTestCollection->select(name='john')
-endpackage
