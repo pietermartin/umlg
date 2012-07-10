@@ -1605,7 +1605,8 @@ public class PropertyWrapper implements Property {
 			return getOclDefaultValue();
 		} else if (v instanceof LiteralString) {
 			LiteralString expr = (LiteralString) v;
-			return expr.getValue();
+			String result = expr.getValue();
+			return result.replaceAll("^\"|\"$", "");
 		} else {
 			throw new RuntimeException("Not supported");
 		}

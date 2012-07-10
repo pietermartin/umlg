@@ -155,12 +155,12 @@ public class Child extends BaseTinker implements CompositionNode {
 		ChildRuntimePropertyEnum runtimeProperty = ChildRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result == 0 ) {
 			switch ( runtimeProperty ) {
-				case name:
-					result = name.size();
-				break;
-			
 				case parent:
 					result = parent.size();
+				break;
+			
+				case name:
+					result = name.size();
 				break;
 			
 				default:
@@ -187,19 +187,19 @@ public class Child extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.parent =  new TinkerSetImpl<Parent>(this, ChildRuntimePropertyEnum.parent);
 		this.name =  new TinkerSetImpl<String>(this, ChildRuntimePropertyEnum.name);
+		this.parent =  new TinkerSetImpl<Parent>(this, ChildRuntimePropertyEnum.parent);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (ChildRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case name:
-				this.name =  new TinkerSetImpl<String>(this, ChildRuntimePropertyEnum.name);
-			break;
-		
 			case parent:
 				this.parent =  new TinkerSetImpl<Parent>(this, ChildRuntimePropertyEnum.parent);
+			break;
+		
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, ChildRuntimePropertyEnum.name);
 			break;
 		
 		}
@@ -250,8 +250,8 @@ public class Child extends BaseTinker implements CompositionNode {
 	}
 
 	public enum ChildRuntimePropertyEnum implements TumlRuntimeProperty {
-		parent(false,false,false,"parent_child_1",false,false,true,false,1,1,false,false,false,true,true),
-		name(true,true,false,"Model__org__tuml__ocl__Child__name",false,false,true,false,1,1,false,false,false,false,true);
+		name(true,true,false,"Model__org__tuml__ocl__Child__name",false,false,true,false,1,1,false,false,false,false,true),
+		parent(false,false,false,"parent_child_1",false,false,true,false,1,1,false,false,false,true,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -304,11 +304,11 @@ public class Child extends BaseTinker implements CompositionNode {
 		}
 	
 		static public ChildRuntimePropertyEnum fromLabel(String label) {
-			if ( parent.getLabel().equals(label) ) {
-				return parent;
-			}
 			if ( name.getLabel().equals(label) ) {
 				return name;
+			}
+			if ( parent.getLabel().equals(label) ) {
+				return parent;
 			}
 			return null;
 		}

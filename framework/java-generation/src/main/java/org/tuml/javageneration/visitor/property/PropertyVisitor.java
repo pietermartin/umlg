@@ -45,7 +45,7 @@ public class PropertyVisitor extends BaseVisitor implements Visitor<Property> {
 		} else {
 			java = propertyWrapper.getInitValue();
 		}
-		initVariables.getBody().addToStatements(propertyWrapper.setter() + "(" + java + ")");
+		initVariables.getBody().addToStatements(propertyWrapper.setter() + "(\"" + java + "\")");
 	}
 
 }

@@ -36,7 +36,7 @@ public class Parent extends BaseTinker implements TinkerNode {
 	/** Default constructor for Parent
 	 */
 	public Parent() {
-		setName(thisisthename);
+		setName("thisisthename");
 	}
 	
 	/** Constructor for Parent
@@ -151,12 +151,12 @@ public class Parent extends BaseTinker implements TinkerNode {
 		ParentRuntimePropertyEnum runtimeProperty = ParentRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result == 0 ) {
 			switch ( runtimeProperty ) {
-				case child:
-					result = child.size();
-				break;
-			
 				case name:
 					result = name.size();
+				break;
+			
+				case child:
+					result = child.size();
 				break;
 			
 				default:
@@ -179,24 +179,24 @@ public class Parent extends BaseTinker implements TinkerNode {
 	}
 	
 	public void initVariables() {
-		setName(thisisthename);
+		setName("thisisthename");
 	}
 	
 	@Override
 	public void initialiseProperties() {
-		this.name =  new TinkerSetImpl<String>(this, ParentRuntimePropertyEnum.name);
 		this.child =  new TinkerOrderedSetImpl<Child>(this, ParentRuntimePropertyEnum.child);
+		this.name =  new TinkerSetImpl<String>(this, ParentRuntimePropertyEnum.name);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (ParentRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case child:
-				this.child =  new TinkerOrderedSetImpl<Child>(this, ParentRuntimePropertyEnum.child);
-			break;
-		
 			case name:
 				this.name =  new TinkerSetImpl<String>(this, ParentRuntimePropertyEnum.name);
+			break;
+		
+			case child:
+				this.child =  new TinkerOrderedSetImpl<Child>(this, ParentRuntimePropertyEnum.child);
 			break;
 		
 		}
@@ -247,8 +247,8 @@ public class Parent extends BaseTinker implements TinkerNode {
 	}
 
 	public enum ParentRuntimePropertyEnum implements TumlRuntimeProperty {
-		name(true,true,false,"Model__org__tuml__ocl__Parent__name",false,false,true,false,1,1,false,false,false,false,true),
-		child(false,true,true,"parent_child_1",false,true,false,false,-1,0,false,false,true,false,true);
+		child(false,true,true,"parent_child_1",false,true,false,false,-1,0,false,false,true,false,true),
+		name(true,true,false,"Model__org__tuml__ocl__Parent__name",false,false,true,false,1,1,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -301,11 +301,11 @@ public class Parent extends BaseTinker implements TinkerNode {
 		}
 	
 		static public ParentRuntimePropertyEnum fromLabel(String label) {
-			if ( name.getLabel().equals(label) ) {
-				return name;
-			}
 			if ( child.getLabel().equals(label) ) {
 				return child;
+			}
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
 			return null;
 		}
