@@ -64,7 +64,7 @@
       </diagrams>
       <subdiagrams xmi:id="_N2NK0L7zEeG5Bt_b3EGOQQ">
         <model href="test-ocl.uml#_MqqkwL7zEeG5Bt_b3EGOQQ"/>
-        <diagrams xmi:id="_N2Nx4L7zEeG5Bt_b3EGOQQ" position="0,0" size="100,100" name="tuml-test-ocl" viewport="0,252">
+        <diagrams xmi:id="_N2Nx4L7zEeG5Bt_b3EGOQQ" position="0,0" size="100,100" name="tuml-test-ocl" viewport="0,80">
           <property xmi:id="_N2bNQL7zEeG5Bt_b3EGOQQ" key="pageFormatName" value="A3"/>
           <property xmi:id="_N2bNQb7zEeG5Bt_b3EGOQQ" key="diagramWidth" value="1188"/>
           <property xmi:id="_N2bNQr7zEeG5Bt_b3EGOQQ" key="diagramHeight" value="1680"/>
@@ -207,7 +207,7 @@
             <contained xsi:type="di:EdgeObjectOffset" xmi:id="_jRrdCMGoEeGZOpN3XTQouA" visible="false" id="middleNameEdgeObject" offset="0,10"/>
             <contained xsi:type="di:EdgeObjectOffset" xmi:id="_jRrdCcGoEeGZOpN3XTQouA" id="stereotypeEdgeObject" offset="0,-10"/>
           </contained>
-          <contained xsi:type="di:GraphNode" xmi:id="_Dla94Mi_EeGDV5N-kPDIOw" position="37,391" size="176,-1">
+          <contained xsi:type="di:GraphNode" xmi:id="_Dla94Mi_EeGDV5N-kPDIOw" position="48,343" size="176,-1">
             <anchorage xmi:id="_YVtV8Mi_EeGDV5N-kPDIOw" graphEdge="_YVvLIMi_EeGDV5N-kPDIOw"/>
             <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_Dla94ci_EeGDV5N-kPDIOw" presentation="default">
               <element href="test-ocl.uml#_DlgdcMi_EeGDV5N-kPDIOw"/>
