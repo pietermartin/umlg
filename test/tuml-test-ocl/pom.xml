@@ -8,7 +8,7 @@
 	</parent>
 	<artifactId>tuml-test-ocl</artifactId>
 
-	<name>tuml-test-ocl</name>
+	<name>test-ocl</name>
 	<url>http://maven.apache.org</url>
 	<build>
 		<plugins>

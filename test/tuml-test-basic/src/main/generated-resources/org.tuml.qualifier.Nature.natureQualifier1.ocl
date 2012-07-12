@@ -1,4 +1,0 @@
-package org::tuml::qualifier
-context Nature::natureQualifier1
-derive: self.natureName
-endpackage

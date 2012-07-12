@@ -4,7 +4,7 @@
 	<groupId>org.tuml</groupId>
 	<artifactId>tuml-root</artifactId>
 	<packaging>pom</packaging>
-	<name>tuml root pom</name>
+	<name>tuml</name>
 	<version>0.0.1-SNAPSHOT</version>
 	<modules>
 		<module>eclipselib</module>

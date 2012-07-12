@@ -1,4 +1,4 @@
-package org.tuml.ocl;
+package org.tuml.testocl;
 
 import com.tinkerpop.blueprints.Vertex;
 
@@ -18,44 +18,46 @@ import org.tuml.runtime.domain.BaseTinker;
 import org.tuml.runtime.domain.CompositionNode;
 import org.tuml.runtime.domain.TinkerNode;
 
-public class Child extends BaseTinker implements CompositionNode {
+public class OclTestCollection extends BaseTinker implements CompositionNode {
 	static final public long serialVersionUID = 1L;
 	private TinkerSet<String> name;
-	private TinkerSet<Parent> parent;
+	private TinkerSet<OclTestCollection2> oclTestCollection2;
+	private TinkerSet<OclTest1> oclTest1;
+	private TinkerSet<OclTest2> oclTest2;
 
-	/** Constructor for Child
+	/** Constructor for OclTestCollection
 	 * 
 	 * @param compositeOwner 
 	 */
-	public Child(Parent compositeOwner) {
+	public OclTestCollection(OclTest1 compositeOwner) {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
 		initialiseProperties();
 		initVariables();
 		createComponents();
-		addToParent(compositeOwner);
+		addToOclTest1(compositeOwner);
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
 	}
 	
-	/** Constructor for Child
+	/** Constructor for OclTestCollection
 	 * 
 	 * @param vertex 
 	 */
-	public Child(Vertex vertex) {
+	public OclTestCollection(Vertex vertex) {
 		this.vertex=vertex;
 		initialiseProperties();
 	}
 	
-	/** Default constructor for Child
+	/** Default constructor for OclTestCollection
 	 */
-	public Child() {
+	public OclTestCollection() {
 	}
 	
-	/** Constructor for Child
+	/** Constructor for OclTestCollection
 	 * 
 	 * @param persistent 
 	 */
-	public Child(Boolean persistent) {
+	public OclTestCollection(Boolean persistent) {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
@@ -70,9 +72,27 @@ public class Child extends BaseTinker implements CompositionNode {
 		}
 	}
 	
-	public void addToParent(Parent parent) {
-		if ( parent != null ) {
-			this.parent.add(parent);
+	public void addToOclTest1(OclTest1 oclTest1) {
+		if ( oclTest1 != null ) {
+			this.oclTest1.add(oclTest1);
+		}
+	}
+	
+	public void addToOclTest2(OclTest2 oclTest2) {
+		if ( oclTest2 != null ) {
+			this.oclTest2.add(oclTest2);
+		}
+	}
+	
+	public void addToOclTestCollection2(OclTestCollection2 oclTestCollection2) {
+		if ( oclTestCollection2 != null ) {
+			this.oclTestCollection2.add(oclTestCollection2);
+		}
+	}
+	
+	public void addToOclTestCollection2(Set<OclTestCollection2> oclTestCollection2) {
+		if ( !oclTestCollection2.isEmpty() ) {
+			this.oclTestCollection2.addAll(oclTestCollection2);
 		}
 	}
 	
@@ -80,8 +100,16 @@ public class Child extends BaseTinker implements CompositionNode {
 		this.name.clear();
 	}
 	
-	public void clearParent() {
-		this.parent.clear();
+	public void clearOclTest1() {
+		this.oclTest1.clear();
+	}
+	
+	public void clearOclTest2() {
+		this.oclTest2.clear();
+	}
+	
+	public void clearOclTestCollection2() {
+		this.oclTestCollection2.clear();
 	}
 	
 	public void createComponents() {
@@ -89,7 +117,13 @@ public class Child extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void delete() {
+		for ( OclTestCollection2 child : getOclTestCollection2() ) {
+			child.delete();
+		}
 		GraphDb.getDb().removeVertex(this.vertex);
+	}
+	
+	public OclTest2 getDerivedTest() {
 	}
 	
 	@Override
@@ -111,18 +145,31 @@ public class Child extends BaseTinker implements CompositionNode {
 		return TinkerIdUtilFactory.getIdUtil().getVersion(this.vertex);
 	}
 	
-	@Override
-	public TinkerNode getOwningObject() {
-		return getParent();
-	}
-	
-	public Parent getParent() {
-		TinkerSet<Parent> tmp = this.parent;
+	public OclTest1 getOclTest1() {
+		TinkerSet<OclTest1> tmp = this.oclTest1;
 		if ( !tmp.isEmpty() ) {
 			return tmp.iterator().next();
 		} else {
 			return null;
 		}
+	}
+	
+	public OclTest2 getOclTest2() {
+		TinkerSet<OclTest2> tmp = this.oclTest2;
+		if ( !tmp.isEmpty() ) {
+			return tmp.iterator().next();
+		} else {
+			return null;
+		}
+	}
+	
+	public TinkerSet<OclTestCollection2> getOclTestCollection2() {
+		return this.oclTestCollection2;
+	}
+	
+	@Override
+	public TinkerNode getOwningObject() {
+		return getOclTest1();
 	}
 	
 	/** GetQualifiers is called from the collection in order to update the index used to implement the qualifier
@@ -133,7 +180,7 @@ public class Child extends BaseTinker implements CompositionNode {
 	@Override
 	public List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, TinkerNode node) {
 		List<Qualifier> result = Collections.emptyList();
-		ChildRuntimePropertyEnum runtimeProperty = ChildRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
+		OclTestCollectionRuntimePropertyEnum runtimeProperty = OclTestCollectionRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result.isEmpty() ) {
 			switch ( runtimeProperty ) {
 				default:
@@ -152,15 +199,23 @@ public class Child extends BaseTinker implements CompositionNode {
 	@Override
 	public int getSize(TumlRuntimeProperty tumlRuntimeProperty) {
 		int result = 0;
-		ChildRuntimePropertyEnum runtimeProperty = ChildRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
+		OclTestCollectionRuntimePropertyEnum runtimeProperty = OclTestCollectionRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result == 0 ) {
 			switch ( runtimeProperty ) {
-				case parent:
-					result = parent.size();
+				case oclTest1:
+					result = oclTest1.size();
+				break;
+			
+				case oclTestCollection2:
+					result = oclTestCollection2.size();
 				break;
 			
 				case name:
 					result = name.size();
+				break;
+			
+				case oclTest2:
+					result = oclTest2.size();
 				break;
 			
 				default:
@@ -187,19 +242,29 @@ public class Child extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.name =  new TinkerSetImpl<String>(this, ChildRuntimePropertyEnum.name);
-		this.parent =  new TinkerSetImpl<Parent>(this, ChildRuntimePropertyEnum.parent);
+		this.oclTest2 =  new TinkerSetImpl<OclTest2>(this, OclTestCollectionRuntimePropertyEnum.oclTest2);
+		this.name =  new TinkerSetImpl<String>(this, OclTestCollectionRuntimePropertyEnum.name);
+		this.oclTestCollection2 =  new TinkerSetImpl<OclTestCollection2>(this, OclTestCollectionRuntimePropertyEnum.oclTestCollection2);
+		this.oclTest1 =  new TinkerSetImpl<OclTest1>(this, OclTestCollectionRuntimePropertyEnum.oclTest1);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
-		switch ( (ChildRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case parent:
-				this.parent =  new TinkerSetImpl<Parent>(this, ChildRuntimePropertyEnum.parent);
+		switch ( (OclTestCollectionRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
+			case oclTest1:
+				this.oclTest1 =  new TinkerSetImpl<OclTest1>(this, OclTestCollectionRuntimePropertyEnum.oclTest1);
+			break;
+		
+			case oclTestCollection2:
+				this.oclTestCollection2 =  new TinkerSetImpl<OclTestCollection2>(this, OclTestCollectionRuntimePropertyEnum.oclTestCollection2);
 			break;
 		
 			case name:
-				this.name =  new TinkerSetImpl<String>(this, ChildRuntimePropertyEnum.name);
+				this.name =  new TinkerSetImpl<String>(this, OclTestCollectionRuntimePropertyEnum.name);
+			break;
+		
+			case oclTest2:
+				this.oclTest2 =  new TinkerSetImpl<OclTest2>(this, OclTestCollectionRuntimePropertyEnum.oclTest2);
 			break;
 		
 		}
@@ -222,15 +287,39 @@ public class Child extends BaseTinker implements CompositionNode {
 		}
 	}
 	
-	public void removeFromParent(Parent parent) {
-		if ( parent != null ) {
-			this.parent.remove(parent);
+	public void removeFromOclTest1(OclTest1 oclTest1) {
+		if ( oclTest1 != null ) {
+			this.oclTest1.remove(oclTest1);
 		}
 	}
 	
-	public void removeFromParent(Set<Parent> parent) {
-		if ( !parent.isEmpty() ) {
-			this.parent.removeAll(parent);
+	public void removeFromOclTest1(Set<OclTest1> oclTest1) {
+		if ( !oclTest1.isEmpty() ) {
+			this.oclTest1.removeAll(oclTest1);
+		}
+	}
+	
+	public void removeFromOclTest2(OclTest2 oclTest2) {
+		if ( oclTest2 != null ) {
+			this.oclTest2.remove(oclTest2);
+		}
+	}
+	
+	public void removeFromOclTest2(Set<OclTest2> oclTest2) {
+		if ( !oclTest2.isEmpty() ) {
+			this.oclTest2.removeAll(oclTest2);
+		}
+	}
+	
+	public void removeFromOclTestCollection2(OclTestCollection2 oclTestCollection2) {
+		if ( oclTestCollection2 != null ) {
+			this.oclTestCollection2.remove(oclTestCollection2);
+		}
+	}
+	
+	public void removeFromOclTestCollection2(Set<OclTestCollection2> oclTestCollection2) {
+		if ( !oclTestCollection2.isEmpty() ) {
+			this.oclTestCollection2.removeAll(oclTestCollection2);
 		}
 	}
 	
@@ -244,14 +333,26 @@ public class Child extends BaseTinker implements CompositionNode {
 		addToName(name);
 	}
 	
-	public void setParent(Parent parent) {
-		clearParent();
-		addToParent(parent);
+	public void setOclTest1(OclTest1 oclTest1) {
+		clearOclTest1();
+		addToOclTest1(oclTest1);
+	}
+	
+	public void setOclTest2(OclTest2 oclTest2) {
+		clearOclTest2();
+		addToOclTest2(oclTest2);
+	}
+	
+	public void setOclTestCollection2(Set<OclTestCollection2> oclTestCollection2) {
+		clearOclTestCollection2();
+		addToOclTestCollection2(oclTestCollection2);
 	}
 
-	public enum ChildRuntimePropertyEnum implements TumlRuntimeProperty {
-		name(true,true,false,"Model__org__tuml__ocl__Child__name",false,false,true,false,1,1,false,false,false,false,true),
-		parent(false,false,false,"parent_child_1",false,false,true,false,1,1,false,false,false,true,true);
+	public enum OclTestCollectionRuntimePropertyEnum implements TumlRuntimeProperty {
+		oclTest2(false,false,false,"A_<oclTest2>_<oclTestCollection>",false,false,true,false,1,1,false,false,false,false,true),
+		name(true,true,false,"testoclmodel__org__tuml__testocl__OclTestCollection__name",false,false,true,false,1,1,false,false,false,false,true),
+		oclTestCollection2(false,true,true,"A_<oclTestCollection>_<oclTestCollection2>",false,true,false,false,-1,0,false,false,false,false,true),
+		oclTest1(false,false,false,"A_<oclTest1>_<oclTestCollection>",false,false,true,false,1,1,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -267,7 +368,7 @@ public class Child extends BaseTinker implements CompositionNode {
 		private boolean ordered;
 		private boolean inverseOrdered;
 		private boolean unique;
-		/** Constructor for ChildRuntimePropertyEnum
+		/** Constructor for OclTestCollectionRuntimePropertyEnum
 		 * 
 		 * @param onePrimitive 
 		 * @param controllingSide 
@@ -285,7 +386,7 @@ public class Child extends BaseTinker implements CompositionNode {
 		 * @param inverseOrdered 
 		 * @param unique 
 		 */
-		private ChildRuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower, boolean qualified, boolean inverseQualified, boolean ordered, boolean inverseOrdered, boolean unique) {
+		private OclTestCollectionRuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower, boolean qualified, boolean inverseQualified, boolean ordered, boolean inverseOrdered, boolean unique) {
 			this.onePrimitive = onePrimitive;
 			this.controllingSide = controllingSide;
 			this.composite = composite;
@@ -303,12 +404,18 @@ public class Child extends BaseTinker implements CompositionNode {
 			this.unique = unique;
 		}
 	
-		static public ChildRuntimePropertyEnum fromLabel(String label) {
+		static public OclTestCollectionRuntimePropertyEnum fromLabel(String label) {
+			if ( oclTest2.getLabel().equals(label) ) {
+				return oclTest2;
+			}
 			if ( name.getLabel().equals(label) ) {
 				return name;
 			}
-			if ( parent.getLabel().equals(label) ) {
-				return parent;
+			if ( oclTestCollection2.getLabel().equals(label) ) {
+				return oclTestCollection2;
+			}
+			if ( oclTest1.getLabel().equals(label) ) {
+				return oclTest1;
 			}
 			return null;
 		}

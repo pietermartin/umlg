@@ -12,6 +12,7 @@ import org.eclipse.ocl.SemanticException;
 import org.eclipse.ocl.expressions.OCLExpression;
 import org.eclipse.ocl.helper.OCLHelper;
 import org.eclipse.ocl.uml.ExpressionInOCL;
+import org.eclipse.ocl.uml.impl.PropertyCallExpImpl;
 import org.eclipse.uml2.uml.CallOperationAction;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Classifier;
@@ -28,95 +29,111 @@ import org.tuml.framework.ModelLoader;
 
 public class TumlOcl2Parser {
 
-	private OCL<Package, Classifier, Operation, Property, EnumerationLiteral, Parameter, State, CallOperationAction, SendSignalAction, Constraint, Class, EObject> ocl;
-	private Environment<Package, Classifier, Operation, Property, EnumerationLiteral, Parameter, State, CallOperationAction, SendSignalAction, Constraint, Class, EObject> environment;
-	private OCLHelper<Classifier, Operation, Property, Constraint> helper;
+    private OCL<Package, Classifier, Operation, Property, EnumerationLiteral, Parameter, State, CallOperationAction, SendSignalAction, Constraint, Class, EObject> ocl;
+    private Environment<Package, Classifier, Operation, Property, EnumerationLiteral, Parameter, State, CallOperationAction, SendSignalAction, Constraint, Class, EObject> environment;
+    private OCLHelper<Classifier, Operation, Property, Constraint> helper;
+    public final static TumlOcl2Parser INSTANCE = new TumlOcl2Parser();
 
-	public final static TumlOcl2Parser INSTANCE = new TumlOcl2Parser();
-	
-	private TumlOcl2Parser() {
-		this.ocl = org.eclipse.ocl.uml.OCL.newInstance(ModelLoader.RESOURCE_SET);
-		this.environment = ocl.getEnvironment();
-		this.helper = ocl.createOCLHelper();
-	}
-	
-	public static void main(String[] args) {
-		Model model = ModelLoader.loadModel(new File("/home/pieter/workspace-tuml/tuml/test/tuml-test-ocl/src/main/model/test-ocl.uml"));
-		TumlOcl2Parser parser = new TumlOcl2Parser();
-		StringBuilder sb = new StringBuilder();
-		sb.append("package Model::org::tuml::ocl\n");
-		sb.append("context Parent::derivedName : String\n");
-		sb.append("derive :\n");
-		sb.append("self.name\n");
-		sb.append("endpackage\n");		
-		parser.parseOcl(sb.toString());
-		System.out.println("Success 1");
-		
-		sb = new StringBuilder();
-		sb.append("package Model::org::tuml::ocl\n");
-		sb.append("context Parent::firstChild : Child\n");
-		sb.append("derive :\n");
-		sb.append("self.child->first()\n");
-		sb.append("endpackage\n");		
-		parser.parseOcl(sb.toString());
-		System.out.println("Success 2");
+    private TumlOcl2Parser() {
+        this.ocl = org.eclipse.ocl.uml.OCL.newInstance(ModelLoader.RESOURCE_SET);
+        this.environment = ocl.getEnvironment();
+        this.helper = ocl.createOCLHelper();
+    }
 
-	}
-	
-	public OCLExpression<Classifier> parseOcl(String oclText) {
-		return parseConstraint(oclText);
-	}
+    public static void main(String[] args) {
+        Model model = ModelLoader.loadModel(new File("/home/pieter/workspace-tuml/tuml/test/tuml-test-ocl/src/main/model/test-ocl.uml"));
+        TumlOcl2Parser parser = new TumlOcl2Parser();
+        StringBuilder sb = new StringBuilder();
+        sb.append("package testoclmodel::org::tuml::testocl\n");
+        sb.append("context OclTest1::derivedProperty1 : String\n");
+        sb.append("derive :\n");
+        sb.append("self.property1\n");
+        sb.append("endpackage\n");
 
-	private OCLExpression<Classifier> parseConstraint(String text) {
-		OCLExpression<Classifier> result = parseConstraintUnvalidated(text);
-		validate(result);
-		return result;
-	}
+        OCLExpression<Classifier> expr = parser.parseOcl(sb.toString());
+        System.out.println("Success 1 " + expr);
 
-	private OCLExpression<Classifier> parseConstraintUnvalidated(String text) {
-		List<Constraint> constraints;
-		Constraint constraint = null;
+        sb = new StringBuilder();
+        sb.append("package testoclmodel::org::tuml::testocl\n");
+        sb.append("context OclTest1::oclTestCollectionSelect : Set(OclTestCollection)\n");
+        sb.append("derive:\n");
+        sb.append("self.oclTestCollection->select(name='john')\n");
+        sb.append("endpackage\n");
+        parser.parseOcl(sb.toString());
+        System.out.println("Success 2");
 
-		try {
-			constraints = ocl.parse(new OCLInput(text));
-			constraint = constraints.get(0);
-		} catch (ParserException e) {
-			throw new RuntimeException(e);
-		} catch (IllegalArgumentException e) {
-			throw new RuntimeException(e);
-		}
+        sb = new StringBuilder();
+        sb.append("package testoclmodel::org::tuml::testocl\n");
+        sb.append("context OclTest1\n");
+        sb.append("inv testInv : property1 = 'halo'\n");
+        sb.append("endpackage\n");
+        parser.parseOcl(sb.toString());
+        System.out.println("Success 3");
+        
+        sb = new StringBuilder();
+        sb.append("package testoclmodel::org::tuml::testocl\n");
+        sb.append("context OclTest1\n");
+        sb.append("inv testInv : (property1 = 'halo1') and (property1 = 'halo2') and (property1 = 'halo3')\n");
+        sb.append("endpackage\n");
+        parser.parseOcl(sb.toString());
+        System.out.println("Success 4");        
+    }
 
-		OCLExpression<Classifier> result = null;
-		result = getBodyExpression(constraint);
+    public OCLExpression<Classifier> parseOcl(String oclText) {
+        return parseConstraint(oclText);
+    }
 
-		return result;
-	}
+    private OCLExpression<Classifier> parseConstraint(String text) {
+        OCLExpression<Classifier> result = parseConstraintUnvalidated(text);
+        if (result instanceof PropertyCallExpImpl) {
+            Property referredproperty = ((PropertyCallExpImpl) result).getReferredProperty();
+            System.out.println(referredproperty);
+        }
+        validate(result);
+        return result;
+    }
 
-	private void validate(Constraint constraint) {
-		try {
-			ocl.validate(constraint);
-		} catch (SemanticException e) {
-			throw new RuntimeException(e);
-		}
-	}
+    private OCLExpression<Classifier> parseConstraintUnvalidated(String text) {
+        List<Constraint> constraints;
+        Constraint constraint = null;
 
-	private void validate(OCLExpression<Classifier> expr) {
-		try {
-			EObject eContainer = expr.eContainer();
-			if ((eContainer != null) && Constraint.class.isAssignableFrom(eContainer.eContainer().getClass())) {
-				// start validation from the constraint, for good measure
-				Constraint eContainerContainer = (Constraint) eContainer.eContainer();
-				validate(eContainerContainer);
-			} else {
-				ocl.validate(expr);
-			}
-		} catch (SemanticException e) {
-			throw new RuntimeException(e);
-		}
-	}
+        try {
+            constraints = ocl.parse(new OCLInput(text));
+            constraint = constraints.get(0);
+        } catch (ParserException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException(e);
+        }
 
-	private OCLExpression<Classifier> getBodyExpression(Constraint constraint) {
-		return ((ExpressionInOCL) constraint.getSpecification()).getBodyExpression();
-	}
+        OCLExpression<Classifier> result = getBodyExpression(constraint);
+        return result;
+    }
 
+    private void validate(Constraint constraint) {
+        try {
+            ocl.validate(constraint);
+        } catch (SemanticException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void validate(OCLExpression<Classifier> expr) {
+        try {
+            EObject eContainer = expr.eContainer();
+            if ((eContainer != null) && Constraint.class.isAssignableFrom(eContainer.eContainer().getClass())) {
+                // start validation from the constraint, for good measure
+                Constraint eContainerContainer = (Constraint) eContainer.eContainer();
+                validate(eContainerContainer);
+            } else {
+                ocl.validate(expr);
+            }
+        } catch (SemanticException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private OCLExpression<Classifier> getBodyExpression(Constraint constraint) {
+        return ((ExpressionInOCL) constraint.getSpecification()).getBodyExpression();
+    }
 }

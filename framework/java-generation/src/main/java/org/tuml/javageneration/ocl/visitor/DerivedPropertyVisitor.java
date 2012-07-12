@@ -10,6 +10,7 @@ import org.tuml.javageneration.Workspace;
 import org.tuml.javageneration.util.PropertyWrapper;
 import org.tuml.javageneration.visitor.BaseVisitor;
 import org.tuml.ocl.TumlOcl2Parser;
+import org.tuml.ocl.java.TumlOcl2Java;
 
 public class DerivedPropertyVisitor extends BaseVisitor implements Visitor<Property> {
 
@@ -29,8 +30,8 @@ public class DerivedPropertyVisitor extends BaseVisitor implements Visitor<Prope
 				getter = new OJAnnotatedOperation(propertyWrapper.getter(), propertyWrapper.javaTypePath());
 			}
 			String ocl = propertyWrapper.getOclDerivedValue();
-			OCLExpression<Classifier> contraint = TumlOcl2Parser.INSTANCE.parseOcl(ocl);
-			getter.getBody().addToStatements("//TODO " + contraint.toString());
+			OCLExpression<Classifier> oclExp = TumlOcl2Parser.INSTANCE.parseOcl(ocl);
+			getter.getBody().addToStatements(TumlOcl2Java.oclToJava(oclExp));
 			owner.addToOperations(getter);
 		}
 	}
