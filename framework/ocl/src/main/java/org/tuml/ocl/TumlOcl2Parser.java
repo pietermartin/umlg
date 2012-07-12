@@ -12,7 +12,6 @@ import org.eclipse.ocl.SemanticException;
 import org.eclipse.ocl.expressions.OCLExpression;
 import org.eclipse.ocl.helper.OCLHelper;
 import org.eclipse.ocl.uml.ExpressionInOCL;
-import org.eclipse.ocl.uml.impl.PropertyCallExpImpl;
 import org.eclipse.uml2.uml.CallOperationAction;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Classifier;
@@ -85,10 +84,6 @@ public class TumlOcl2Parser {
 
     private OCLExpression<Classifier> parseConstraint(String text) {
         OCLExpression<Classifier> result = parseConstraintUnvalidated(text);
-        if (result instanceof PropertyCallExpImpl) {
-            Property referredproperty = ((PropertyCallExpImpl) result).getReferredProperty();
-            System.out.println(referredproperty);
-        }
         validate(result);
         return result;
     }

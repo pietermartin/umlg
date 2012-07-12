@@ -11,6 +11,7 @@ import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.NakedTinkerIndex;
 import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
 import org.tuml.runtime.adaptor.TransactionThreadVar;
+import org.tuml.runtime.collection.ocl.OclStdLibCollectionOperations;
 import org.tuml.runtime.domain.CompositionNode;
 import org.tuml.runtime.domain.TinkerAuditableNode;
 import org.tuml.runtime.domain.TinkerNode;
@@ -21,7 +22,7 @@ import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Index;
 import com.tinkerpop.blueprints.Vertex;
 
-public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimeProperty {
+public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimeProperty, OclStdLibCollectionOperations {
 
 	protected Collection<E> internalCollection;
 	protected NakedTinkerIndex<Edge> index;
@@ -578,6 +579,11 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 	@Override
 	public boolean isUnique() {
 		return this.tumlRuntimeProperty.isUnique();
+	}
+
+	@Override
+	public boolean equals(OclStdLibCollectionOperations c) {
+		return this.internalCollection.equals(c);
 	}
 
 }

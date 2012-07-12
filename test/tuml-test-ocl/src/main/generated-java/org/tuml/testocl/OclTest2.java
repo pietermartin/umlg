@@ -164,12 +164,12 @@ public class OclTest2 extends BaseTinker implements TinkerNode {
 					result = oclTestCollection.size();
 				break;
 			
-				case name:
-					result = name.size();
-				break;
-			
 				case name2:
 					result = name2.size();
+				break;
+			
+				case name:
+					result = name.size();
 				break;
 			
 				default:
@@ -196,8 +196,8 @@ public class OclTest2 extends BaseTinker implements TinkerNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.name2 =  new TinkerSetImpl<String>(this, OclTest2RuntimePropertyEnum.name2);
 		this.name =  new TinkerSetImpl<String>(this, OclTest2RuntimePropertyEnum.name);
+		this.name2 =  new TinkerSetImpl<String>(this, OclTest2RuntimePropertyEnum.name2);
 		this.oclTestCollection =  new TinkerSetImpl<OclTestCollection>(this, OclTest2RuntimePropertyEnum.oclTestCollection);
 	}
 	
@@ -208,12 +208,12 @@ public class OclTest2 extends BaseTinker implements TinkerNode {
 				this.oclTestCollection =  new TinkerSetImpl<OclTestCollection>(this, OclTest2RuntimePropertyEnum.oclTestCollection);
 			break;
 		
-			case name:
-				this.name =  new TinkerSetImpl<String>(this, OclTest2RuntimePropertyEnum.name);
-			break;
-		
 			case name2:
 				this.name2 =  new TinkerSetImpl<String>(this, OclTest2RuntimePropertyEnum.name2);
+			break;
+		
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, OclTest2RuntimePropertyEnum.name);
 			break;
 		
 		}
@@ -281,8 +281,8 @@ public class OclTest2 extends BaseTinker implements TinkerNode {
 	}
 
 	public enum OclTest2RuntimePropertyEnum implements TumlRuntimeProperty {
-		name2(true,true,false,"testoclmodel__org__tuml__testocl__OclTest2__name2",false,false,true,false,1,1,false,false,false,false,true),
 		name(true,true,false,"testoclmodel__org__tuml__testocl__OclTest2__name",false,false,true,false,1,1,false,false,false,false,true),
+		name2(true,true,false,"testoclmodel__org__tuml__testocl__OclTest2__name2",false,false,true,false,1,1,false,false,false,false,true),
 		oclTestCollection(false,true,true,"A_<oclTest2>_<oclTestCollection>",false,true,false,false,-1,0,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
@@ -336,11 +336,11 @@ public class OclTest2 extends BaseTinker implements TinkerNode {
 		}
 	
 		static public OclTest2RuntimePropertyEnum fromLabel(String label) {
-			if ( name2.getLabel().equals(label) ) {
-				return name2;
-			}
 			if ( name.getLabel().equals(label) ) {
 				return name;
+			}
+			if ( name2.getLabel().equals(label) ) {
+				return name2;
 			}
 			if ( oclTestCollection.getLabel().equals(label) ) {
 				return oclTestCollection;

@@ -7,7 +7,7 @@ import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.ParameterDirectionKind;
 import org.eclipse.uml2.uml.internal.operations.OperationOperations;
-import org.tuml.ocl.java.TumlOcl2Java;
+import org.tuml.javageneration.ocl.TumlOcl2Java;
 
 public class TumlOperationOperations extends OperationOperations {
 

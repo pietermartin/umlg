@@ -15,6 +15,7 @@ import org.tuml.runtime.collection.Qualifier;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TinkerSetImpl;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
+import org.tuml.runtime.collection.ocl.BooleanVisitor;
 import org.tuml.runtime.domain.BaseTinker;
 import org.tuml.runtime.domain.TinkerNode;
 
@@ -89,6 +90,7 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 	}
 	
 	public String getDerivedProperty1() {
+		return getProperty1();
 	}
 	
 	@Override
@@ -102,6 +104,7 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 	}
 	
 	public OclTestCollection getOclTestAny() {
+		return getOclTestCollection()->any(temp1 : OclTestCollection | getName().<>('john'));
 	}
 	
 	public TinkerSet<OclTestCollection> getOclTestCollection() {
@@ -109,15 +112,25 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 	}
 	
 	public Set<OclTestCollection2> getOclTestCollection2() {
+		return getOclTestCollection()->collect(temp1 : OclTestCollection | getOclTestCollection2())->asSet();
 	}
 	
 	public Collection<String> getOclTestCollection2Name() {
+		return getOclTestCollection()->collect(temp1 : OclTestCollection | getOclTestCollection2())->collect(temp2 : OclTestCollection2 | getName());
 	}
 	
 	public Set<OclTestCollection> getOclTestCollectionSelect() {
+		return getOclTestCollection().select(new BooleanVisitor<OclTestCollection>() {
+			@Override
+			public boolean evaluate(OclTestCollection e) {
+				return e.getName().equals("john");
+			}
+		});
+//		return getOclTestCollection()->select(temp1 : OclTestCollection | getName().=('john'));
 	}
 	
 	public Set<String> getOclTestFlatten() {
+		return getOclTestCollection()->collect(temp1 : OclTestCollection | getName())->asSet();
 	}
 	
 	public String getProperty1() {

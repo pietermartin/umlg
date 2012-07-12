@@ -1,7 +1,6 @@
 package org.tuml.javageneration;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -48,6 +47,12 @@ public class Workspace {
 	}
 
 	public void generate() {
+//		try {
+//			URL url = Workspace.class.getResource("/logging.properties");
+//			LogManager.getLogManager().readConfiguration(url.openStream());
+//		} catch (Exception e) {
+//			throw new RuntimeException(e);
+//		}
 		File sourceDir = new File(projectRoot, JavaModelPrinter.SOURCE_FOLDER);
 		logger.info("Generation started");
 		visitModel();

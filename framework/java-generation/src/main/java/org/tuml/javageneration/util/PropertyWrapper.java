@@ -50,7 +50,7 @@ import org.eclipse.uml2.uml.ValueSpecification;
 import org.eclipse.uml2.uml.VisibilityKind;
 import org.opaeum.java.metamodel.OJPathName;
 import org.tuml.javageneration.naming.Namer;
-import org.tuml.ocl.java.TumlOcl2Java;
+import org.tuml.javageneration.ocl.TumlOcl2Java;
 
 public class PropertyWrapper implements Property {
 

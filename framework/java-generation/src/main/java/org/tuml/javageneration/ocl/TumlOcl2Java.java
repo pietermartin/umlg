@@ -1,8 +1,9 @@
-package org.tuml.ocl.java;
+package org.tuml.javageneration.ocl;
 
-import org.eclipse.ocl.expressions.*;
+import org.eclipse.ocl.expressions.OCLExpression;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.MultiplicityElement;
+import org.tuml.javageneration.ocl.visitor.ToTumlJavaVisitor;
 
 public class TumlOcl2Java {
 
@@ -21,7 +22,6 @@ public class TumlOcl2Java {
     }
 
     public static String oclToJava(OCLExpression<Classifier> expr) {
-        expr.accept(new VisitOperationCallExp());
-        return "";
+        return expr.accept(ToTumlJavaVisitor.getInstance(expr));
     }
 }
