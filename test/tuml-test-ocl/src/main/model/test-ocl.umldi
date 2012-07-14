@@ -64,7 +64,7 @@
       </diagrams>
       <subdiagrams xmi:id="_N2NK0L7zEeG5Bt_b3EGOQQ">
         <model href="test-ocl.uml#_MqqkwL7zEeG5Bt_b3EGOQQ"/>
-        <diagrams xmi:id="_N2Nx4L7zEeG5Bt_b3EGOQQ" position="0,0" size="100,100" name="tuml-test-ocl" viewport="80,255">
+        <diagrams xmi:id="_N2Nx4L7zEeG5Bt_b3EGOQQ" position="0,0" size="100,100" name="tuml-test-ocl" viewport="80,80">
           <property xmi:id="_N2bNQL7zEeG5Bt_b3EGOQQ" key="pageFormatName" value="A3"/>
           <property xmi:id="_N2bNQb7zEeG5Bt_b3EGOQQ" key="diagramWidth" value="1188"/>
           <property xmi:id="_N2bNQr7zEeG5Bt_b3EGOQQ" key="diagramHeight" value="1680"/>
@@ -125,6 +125,11 @@
               <contained xsi:type="di:GraphNode" xmi:id="_lkT0UM2YEeGWefmLH6lr-Q" position="0,0" size="-1,-1">
                 <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_lkT0Uc2YEeGWefmLH6lr-Q" presentation="default">
                   <element href="test-ocl.uml#_lkk6EM2YEeGWefmLH6lr-Q"/>
+                </semanticModel>
+              </contained>
+              <contained xsi:type="di:GraphNode" xmi:id="_ZKnZgM31EeGLeN4_6t_0Vg" position="0,0" size="-1,-1">
+                <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_ZKnZgc31EeGLeN4_6t_0Vg" presentation="default">
+                  <element href="test-ocl.uml#_ZKrD4M31EeGLeN4_6t_0Vg"/>
                 </semanticModel>
               </contained>
             </contained>

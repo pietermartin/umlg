@@ -131,11 +131,11 @@ public class OclTestCollection extends BaseTinker implements CompositionNode {
 	/**
 	 * Implements the ocl statement for derived property 'derivedTest'
 	 * <pre>
-	 *  package testoclmodel::org::tuml::testocl
+	 * package testoclmodel::org::tuml::testocl
 	 *     context OclTestCollection::derivedTest : OclTest2
 	 *     derive: self.oclTest2
-	 * endpackage </pre>
-	 * 
+	 * endpackage
+	 * </pre>
 	 */
 	public OclTest2 getDerivedTest() {
 		return getOclTest2();

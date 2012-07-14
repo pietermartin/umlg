@@ -13,12 +13,13 @@ import org.tuml.javageneration.ocl.visitor.java.OclAsSequenceExprToJava;
 import org.tuml.javageneration.ocl.visitor.java.OclAsSetExprToJava;
 import org.tuml.javageneration.ocl.visitor.java.OclDefaultToStringExprToJava;
 import org.tuml.javageneration.ocl.visitor.java.OclEqualExprToJava;
+import org.tuml.javageneration.ocl.visitor.java.OclFlattenExprToJava;
 import org.tuml.javageneration.ocl.visitor.java.OclNotEqualExprToJava;
 
 public enum OclOperationExpEnum implements HandleOperationExp {
 
 	EQUAL(new OclEqualExprToJava()), NOT_EQUAL(new OclNotEqualExprToJava()), AS_SET(new OclAsSetExprToJava()), AS_SEQUENCE(new OclAsSequenceExprToJava()), AS_ORDERED_SET(
-			new OclAsOrderedSetExprToJava()), AS_BAG(new OclAsBagExprToJava()), DEFAULT(new OclDefaultToStringExprToJava());
+			new OclAsOrderedSetExprToJava()), AS_BAG(new OclAsBagExprToJava()), FLATTEN(new OclFlattenExprToJava()), DEFAULT(new OclDefaultToStringExprToJava());
 	private static Logger logger = Logger.getLogger(OclOperationExpEnum.class.getPackage().getName());
 	private HandleOperationExp implementor;
 
@@ -39,6 +40,8 @@ public enum OclOperationExpEnum implements HandleOperationExp {
 			return AS_ORDERED_SET;
 		} else if (name.equals(PredefinedType.AS_BAG_NAME)) {
 			return AS_BAG;
+		} else if (name.equals(PredefinedType.FLATTEN_NAME)) {
+			return FLATTEN;
 		} else {
 			logger.warning(String.format("Not yet implemented, '%s'", name));
 			return DEFAULT;

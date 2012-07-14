@@ -69,13 +69,21 @@
               <body>self.oclTestCollection.oclTestCollection2.name</body>
             </defaultValue>
           </ownedAttribute>
-          <ownedAttribute xmi:id="_lkk6EM2YEeGWefmLH6lr-Q" name="oclCollectNested" isUnique="false" isDerived="true">
-            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+          <ownedAttribute xmi:id="_lkk6EM2YEeGWefmLH6lr-Q" name="oclCollectNested" type="_grnZsMGoEeGZOpN3XTQouA" isUnique="false" isDerived="true">
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_H5ZOIM2ZEeGWefmLH6lr-Q" value="*"/>
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_HurL4M2ZEeGWefmLH6lr-Q"/>
-            <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_03UrYM2YEeGWefmLH6lr-Q" name="self.oclTestCollection->collectNested(name)">
+            <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_03UrYM2YEeGWefmLH6lr-Q" name="self.oclTestCollection->collectNested(oclTestCollection2)->flatten()">
               <language>ocl</language>
-              <body>self.oclTestCollection->collectNested(name)</body>
+              <body>self.oclTestCollection->collectNested(oclTestCollection2)->flatten()</body>
+            </defaultValue>
+          </ownedAttribute>
+          <ownedAttribute xmi:id="_ZKrD4M31EeGLeN4_6t_0Vg" name="oclSelectCollectAsSequence" isOrdered="true" isUnique="false" isDerived="true">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_mQ4PsM32EeGLeN4_6t_0Vg" value="*"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_m2Z-oM32EeGLeN4_6t_0Vg"/>
+            <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_e6iJsM31EeGLeN4_6t_0Vg" name="self.oclTestCollection->select(name='john')->collect(oclTestCollection2)->collect(name)->asSequence()">
+              <language>ocl</language>
+              <body>self.oclTestCollection->select(name='john')->collect(oclTestCollection2)->collect(name)->asSequence()</body>
             </defaultValue>
           </ownedAttribute>
         </packagedElement>

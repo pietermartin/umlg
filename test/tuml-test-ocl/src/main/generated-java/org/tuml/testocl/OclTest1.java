@@ -12,6 +12,7 @@ import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.TinkerIdUtilFactory;
 import org.tuml.runtime.collection.Qualifier;
 import org.tuml.runtime.collection.TinkerBag;
+import org.tuml.runtime.collection.TinkerSequence;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.collection.impl.TinkerBagImpl;
@@ -96,11 +97,11 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 	/**
 	 * Implements the ocl statement for derived property 'derivedProperty1'
 	 * <pre>
-	 *  package testoclmodel::org::tuml::testocl
+	 * package testoclmodel::org::tuml::testocl
 	 *     context OclTest1::derivedProperty1 : String
 	 *     derive: self.property1
-	 * endpackage </pre>
-	 * 
+	 * endpackage
+	 * </pre>
 	 */
 	public String getDerivedProperty1() {
 		return getProperty1();
@@ -119,11 +120,11 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 	/**
 	 * Implements the ocl statement for derived property 'oclAny'
 	 * <pre>
-	 *  package testoclmodel::org::tuml::testocl
+	 * package testoclmodel::org::tuml::testocl
 	 *     context OclTest1::oclAny : OclTestCollection
 	 *     derive: self.oclTestCollection->any(name <> 'john')
-	 * endpackage </pre>
-	 * 
+	 * endpackage
+	 * </pre>
 	 */
 	public OclTestCollection getOclAny() {
 		return getOclTestCollection().any(new BooleanExpressionWithV<OclTestCollection>() {
@@ -137,11 +138,11 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 	/**
 	 * Implements the ocl statement for derived property 'oclCollectAsSet'
 	 * <pre>
-	 *  package testoclmodel::org::tuml::testocl
+	 * package testoclmodel::org::tuml::testocl
 	 *     context OclTest1::oclCollectAsSet : Set(OclTestCollection2)
 	 *     derive: self.oclTestCollection.oclTestCollection2->asSet()
-	 * endpackage </pre>
-	 * 
+	 * endpackage
+	 * </pre>
 	 */
 	public TinkerSet<OclTestCollection2> getOclCollectAsSet() {
 		return getOclTestCollection().<OclTestCollection2, Set<OclTestCollection2>>collect(new BodyExpressionEvaluator<Set<OclTestCollection2>, OclTestCollection>() {
@@ -155,11 +156,11 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 	/**
 	 * Implements the ocl statement for derived property 'oclCollectName'
 	 * <pre>
-	 *  package testoclmodel::org::tuml::testocl
+	 * package testoclmodel::org::tuml::testocl
 	 *     context OclTest1::oclCollectName : Bag(String)
 	 *     derive: self.oclTestCollection.oclTestCollection2.name
-	 * endpackage </pre>
-	 * 
+	 * endpackage
+	 * </pre>
 	 */
 	public TinkerBag<String> getOclCollectName() {
 		return getOclTestCollection().<OclTestCollection2, Set<OclTestCollection2>>collect(new BodyExpressionEvaluator<Set<OclTestCollection2>, OclTestCollection>() {
@@ -178,11 +179,11 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 	/**
 	 * Implements the ocl statement for derived property 'oclCollectNameAsSet'
 	 * <pre>
-	 *  package testoclmodel::org::tuml::testocl
+	 * package testoclmodel::org::tuml::testocl
 	 *     context OclTest1::oclCollectNameAsSet : Set(String)
 	 *     derive: self.oclTestCollection.name->asSet()
-	 * endpackage </pre>
-	 * 
+	 * endpackage
+	 * </pre>
 	 */
 	public TinkerSet<String> getOclCollectNameAsSet() {
 		return getOclTestCollection().<String, String>collect(new BodyExpressionEvaluator<String, OclTestCollection>() {
@@ -196,29 +197,29 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 	/**
 	 * Implements the ocl statement for derived property 'oclCollectNested'
 	 * <pre>
-	 *  package testoclmodel::org::tuml::testocl
-	 *     context OclTest1::oclCollectNested : Bag(String)
-	 *     derive: self.oclTestCollection->collectNested(name)
-	 * endpackage </pre>
-	 * 
+	 * package testoclmodel::org::tuml::testocl
+	 *     context OclTest1::oclCollectNested : Bag(OclTestCollection2)
+	 *     derive: self.oclTestCollection->collectNested(oclTestCollection2)->flatten()
+	 * endpackage
+	 * </pre>
 	 */
-	public TinkerBag<String> getOclCollectNested() {
-		return getOclTestCollection().collectNested(new BodyExpressionEvaluator<String, OclTestCollection>() {
+	public TinkerBag<OclTestCollection2> getOclCollectNested() {
+		return getOclTestCollection().collectNested(new BodyExpressionEvaluator<Set<OclTestCollection2>, OclTestCollection>() {
 		    @Override
-		    public String evaluate(OclTestCollection e) {
-		        return e.getName();
+		    public Set<OclTestCollection2> evaluate(OclTestCollection e) {
+		        return e.getOclTestCollection2();
 		    }
-		});
+		}).flatten();
 	}
 	
 	/**
 	 * Implements the ocl statement for derived property 'oclSelect'
 	 * <pre>
-	 *  package testoclmodel::org::tuml::testocl
+	 * package testoclmodel::org::tuml::testocl
 	 *     context OclTest1::oclSelect : Bag(OclTestCollection)
 	 *     derive: self.oclTestCollection->select(name='john')
-	 * endpackage </pre>
-	 * 
+	 * endpackage
+	 * </pre>
 	 */
 	public TinkerBag<OclTestCollection> getOclSelect() {
 		return getOclTestCollection().select(new BooleanExpressionWithV<OclTestCollection>() {
@@ -227,6 +228,34 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 		        return e.getName().equals("john");
 		    }
 		});
+	}
+	
+	/**
+	 * Implements the ocl statement for derived property 'oclSelectCollectAsSequence'
+	 * <pre>
+	 * package testoclmodel::org::tuml::testocl
+	 *     context OclTest1::oclSelectCollectAsSequence : Sequence(String)
+	 *     derive: self.oclTestCollection->select(name='john')->collect(oclTestCollection2)->collect(name)->asSequence()
+	 * endpackage
+	 * </pre>
+	 */
+	public TinkerSequence<String> getOclSelectCollectAsSequence() {
+		return getOclTestCollection().select(new BooleanExpressionWithV<OclTestCollection>() {
+		    @Override
+		    public Boolean evaluate(OclTestCollection e) {
+		        return e.getName().equals("john");
+		    }
+		}).<OclTestCollection2, Set<OclTestCollection2>>collect(new BodyExpressionEvaluator<Set<OclTestCollection2>, OclTestCollection>() {
+		    @Override
+		    public Set<OclTestCollection2> evaluate(OclTestCollection e) {
+		        return e.getOclTestCollection2();
+		    }
+		}).<String, String>collect(new BodyExpressionEvaluator<String, OclTestCollection2>() {
+		    @Override
+		    public String evaluate(OclTestCollection2 e) {
+		        return e.getName();
+		    }
+		}).asSequence();
 	}
 	
 	public TinkerBag<OclTestCollection> getOclTestCollection() {
