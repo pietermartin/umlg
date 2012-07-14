@@ -16,6 +16,8 @@ public class TinkerGenerationUtil {
 
 	public static final String TINKER_DB_NULL = "__NULL__";
 
+	public static final OJPathName tumlOclStdCollectionLib = new OJPathName("org.tuml.runtime.collection.ocl.*");
+
 	public static final OJPathName tumlTinkerSequenceClosableIterableImpl = new OJPathName("org.tuml.runtime.collection.TinkerSequenceClosableIterableImpl");
 	public static final OJPathName tumlTinkerSetClosableIterableImpl = new OJPathName("org.tuml.runtime.collection.TinkerSetClosableIterableImpl");
 	
@@ -51,22 +53,22 @@ public class TinkerGenerationUtil {
 	public static OJPathName tinkerEmbeddedArrayListImpl = new OJPathName("org.util.TinkerEmbeddedArrayList");
 
 	public static OJPathName tinkerSet = new OJPathName("org.tuml.runtime.collection.TinkerSet");
-	public static OJPathName tinkerSetImpl = new OJPathName("org.tuml.runtime.collection.TinkerSetImpl");
+	public static OJPathName tinkerSetImpl = new OJPathName("org.tuml.runtime.collection.impl.TinkerSetImpl");
 	public static OJPathName tinkerQualifiedSet = new OJPathName("org.tuml.runtime.collection.TinkerQualifiedSet");
-	public static OJPathName tinkerQualifiedSetImpl = new OJPathName("org.tuml.runtime.collection.TinkerQualifiedSetImpl");
+	public static OJPathName tinkerQualifiedSetImpl = new OJPathName("org.tuml.runtime.collection.impl.TinkerQualifiedSetImpl");
 	public static OJPathName tinkerSequence = new OJPathName("org.tuml.runtime.collection.TinkerSequence");
 	public static OJPathName tinkerSequenceImpl = new OJPathName("org.tuml.runtime.collection.TinkerSequenceImpl");
-	public static OJPathName tinkerQualifiedSequence = new OJPathName("org.tuml.runtime.collection.TinkerQualifiedSequence");
+	public static OJPathName tinkerQualifiedSequence = new OJPathName("org.tuml.runtime.collection.impl.TinkerQualifiedSequence");
 	public static OJPathName tinkerQualifiedSequenceImpl = new OJPathName("org.tuml.runtime.collection.TinkerQualifiedSequenceImpl");
 	public static OJPathName tinkerOrderedSet = new OJPathName("org.tuml.runtime.collection.TinkerOrderedSet");
-	public static OJPathName tinkerOrderedSetImpl = new OJPathName("org.tuml.runtime.collection.TinkerOrderedSetImpl");
+	public static OJPathName tinkerOrderedSetImpl = new OJPathName("org.tuml.runtime.collection.impl.TinkerOrderedSetImpl");
 	public static OJPathName tinkerQualifiedOrderedSet = new OJPathName("org.tuml.runtime.collection.TinkerQualifiedOrderedSet");
-	public static OJPathName tinkerQualifiedOrderedSetImpl = new OJPathName("org.tuml.runtime.collection.TinkerQualifiedOrderedSetImpl");
+	public static OJPathName tinkerQualifiedOrderedSetImpl = new OJPathName("org.tuml.runtime.collection.impl.TinkerQualifiedOrderedSetImpl");
 	public static OJPathName tinkerBag = new OJPathName("org.tuml.runtime.collection.TinkerBag");
-	public static OJPathName tinkerBagImpl = new OJPathName("org.tuml.runtime.collection.TinkerBagImpl");
+	public static OJPathName tinkerBagImpl = new OJPathName("org.tuml.runtime.collection.impl.TinkerBagImpl");
 
 	public static OJPathName tinkerQualifiedBag = new OJPathName("org.tuml.runtime.collection.TinkerQualifiedBag");
-	public static OJPathName tinkerQualifiedBagImpl = new OJPathName("org.tuml.runtime.collection.TinkerQualifiedBagImpl");
+	public static OJPathName tinkerQualifiedBagImpl = new OJPathName("org.tuml.runtime.collection..impl.TinkerQualifiedBagImpl");
 
 	public static OJPathName edgePathName = new OJPathName("com.tinkerpop.blueprints.Edge");
 	public static OJPathName storagePathName = new OJPathName("com.orientechnologies.orient.core.storage.OStorage");

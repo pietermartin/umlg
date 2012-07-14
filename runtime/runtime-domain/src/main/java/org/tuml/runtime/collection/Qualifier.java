@@ -2,7 +2,6 @@ package org.tuml.runtime.collection;
 
 import org.tuml.runtime.domain.TinkerNode;
 
-
 public class Qualifier {
 	private String key;
 	private Object value;

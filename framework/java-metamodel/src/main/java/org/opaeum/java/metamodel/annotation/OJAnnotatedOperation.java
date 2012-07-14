@@ -16,9 +16,9 @@ public class OJAnnotatedOperation extends OJOperation implements OJAnnotatedElem
 	public static final String RESULT = "result";
 	Map<OJPathName, OJAnnotationValue> f_annotations = new TreeMap<OJPathName, OJAnnotationValue>();
 	private OJAnnotatedField resultVariable;
-	public OJAnnotatedOperation(String string,OJPathName ojPathName){
+	public OJAnnotatedOperation(String string,OJPathName returnPathName){
 		this(string);
-		setReturnType(ojPathName);
+		setReturnType(returnPathName);
 	}
 	public OJAnnotatedOperation(String string){
 		super();

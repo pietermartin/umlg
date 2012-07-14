@@ -3,28 +3,30 @@ package org.tuml.testocl;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 
-import java.util.Collection;
+import java.util.*;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.TinkerIdUtilFactory;
 import org.tuml.runtime.collection.Qualifier;
+import org.tuml.runtime.collection.TinkerBag;
 import org.tuml.runtime.collection.TinkerSet;
-import org.tuml.runtime.collection.TinkerSetImpl;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
-import org.tuml.runtime.collection.ocl.BooleanVisitor;
+import org.tuml.runtime.collection.impl.TinkerBagImpl;
+import org.tuml.runtime.collection.impl.TinkerSetImpl;
+import org.tuml.runtime.collection.ocl.*;
 import org.tuml.runtime.domain.BaseTinker;
 import org.tuml.runtime.domain.TinkerNode;
 
 public class OclTest1 extends BaseTinker implements TinkerNode {
 	static final public long serialVersionUID = 1L;
 	private TinkerSet<String> property1;
-	private TinkerSet<OclTestCollection> oclTestCollection;
+	private TinkerBag<OclTestCollection> oclTestCollection;
 
-	/** Constructor for OclTest1
+	/**
+	 * constructor for OclTest1
 	 * 
 	 * @param vertex 
 	 */
@@ -33,12 +35,14 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 		initialiseProperties();
 	}
 	
-	/** Default constructor for OclTest1
+	/**
+	 * default constructor for OclTest1
 	 */
 	public OclTest1() {
 	}
 	
-	/** Constructor for OclTest1
+	/**
+	 * constructor for OclTest1
 	 * 
 	 * @param persistent 
 	 */
@@ -58,7 +62,7 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 		}
 	}
 	
-	public void addToOclTestCollection(Set<OclTestCollection> oclTestCollection) {
+	public void addToOclTestCollection(TinkerBag<OclTestCollection> oclTestCollection) {
 		if ( !oclTestCollection.isEmpty() ) {
 			this.oclTestCollection.addAll(oclTestCollection);
 		}
@@ -89,6 +93,15 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 		GraphDb.getDb().removeVertex(this.vertex);
 	}
 	
+	/**
+	 * Implements the ocl statement for derived property 'derivedProperty1'
+	 * <pre>
+	 *  package testoclmodel::org::tuml::testocl
+	 *     context OclTest1::derivedProperty1 : String
+	 *     derive: self.property1
+	 * endpackage </pre>
+	 * 
+	 */
 	public String getDerivedProperty1() {
 		return getProperty1();
 	}
@@ -103,34 +116,121 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 		return TinkerIdUtilFactory.getIdUtil().getVersion(this.vertex);
 	}
 	
-	public OclTestCollection getOclTestAny() {
-		return getOclTestCollection()->any(temp1 : OclTestCollection | getName().<>('john'));
-	}
-	
-	public TinkerSet<OclTestCollection> getOclTestCollection() {
-		return this.oclTestCollection;
-	}
-	
-	public Set<OclTestCollection2> getOclTestCollection2() {
-		return getOclTestCollection()->collect(temp1 : OclTestCollection | getOclTestCollection2())->asSet();
-	}
-	
-	public Collection<String> getOclTestCollection2Name() {
-		return getOclTestCollection()->collect(temp1 : OclTestCollection | getOclTestCollection2())->collect(temp2 : OclTestCollection2 | getName());
-	}
-	
-	public Set<OclTestCollection> getOclTestCollectionSelect() {
-		return getOclTestCollection().select(new BooleanVisitor<OclTestCollection>() {
-			@Override
-			public boolean evaluate(OclTestCollection e) {
-				return e.getName().equals("john");
-			}
+	/**
+	 * Implements the ocl statement for derived property 'oclAny'
+	 * <pre>
+	 *  package testoclmodel::org::tuml::testocl
+	 *     context OclTest1::oclAny : OclTestCollection
+	 *     derive: self.oclTestCollection->any(name <> 'john')
+	 * endpackage </pre>
+	 * 
+	 */
+	public OclTestCollection getOclAny() {
+		return getOclTestCollection().any(new BooleanExpressionWithV<OclTestCollection>() {
+		    @Override
+		    public Boolean evaluate(OclTestCollection e) {
+		        return e.getName().equals("john") == false;
+		    }
 		});
-//		return getOclTestCollection()->select(temp1 : OclTestCollection | getName().=('john'));
 	}
 	
-	public Set<String> getOclTestFlatten() {
-		return getOclTestCollection()->collect(temp1 : OclTestCollection | getName())->asSet();
+	/**
+	 * Implements the ocl statement for derived property 'oclCollectAsSet'
+	 * <pre>
+	 *  package testoclmodel::org::tuml::testocl
+	 *     context OclTest1::oclCollectAsSet : Set(OclTestCollection2)
+	 *     derive: self.oclTestCollection.oclTestCollection2->asSet()
+	 * endpackage </pre>
+	 * 
+	 */
+	public TinkerSet<OclTestCollection2> getOclCollectAsSet() {
+		return getOclTestCollection().<OclTestCollection2, Set<OclTestCollection2>>collect(new BodyExpressionEvaluator<Set<OclTestCollection2>, OclTestCollection>() {
+		    @Override
+		    public Set<OclTestCollection2> evaluate(OclTestCollection e) {
+		        return e.getOclTestCollection2();
+		    }
+		}).asSet();
+	}
+	
+	/**
+	 * Implements the ocl statement for derived property 'oclCollectName'
+	 * <pre>
+	 *  package testoclmodel::org::tuml::testocl
+	 *     context OclTest1::oclCollectName : Bag(String)
+	 *     derive: self.oclTestCollection.oclTestCollection2.name
+	 * endpackage </pre>
+	 * 
+	 */
+	public TinkerBag<String> getOclCollectName() {
+		return getOclTestCollection().<OclTestCollection2, Set<OclTestCollection2>>collect(new BodyExpressionEvaluator<Set<OclTestCollection2>, OclTestCollection>() {
+		    @Override
+		    public Set<OclTestCollection2> evaluate(OclTestCollection e) {
+		        return e.getOclTestCollection2();
+		    }
+		}).<String, String>collect(new BodyExpressionEvaluator<String, OclTestCollection2>() {
+		    @Override
+		    public String evaluate(OclTestCollection2 e) {
+		        return e.getName();
+		    }
+		});
+	}
+	
+	/**
+	 * Implements the ocl statement for derived property 'oclCollectNameAsSet'
+	 * <pre>
+	 *  package testoclmodel::org::tuml::testocl
+	 *     context OclTest1::oclCollectNameAsSet : Set(String)
+	 *     derive: self.oclTestCollection.name->asSet()
+	 * endpackage </pre>
+	 * 
+	 */
+	public TinkerSet<String> getOclCollectNameAsSet() {
+		return getOclTestCollection().<String, String>collect(new BodyExpressionEvaluator<String, OclTestCollection>() {
+		    @Override
+		    public String evaluate(OclTestCollection e) {
+		        return e.getName();
+		    }
+		}).asSet();
+	}
+	
+	/**
+	 * Implements the ocl statement for derived property 'oclCollectNested'
+	 * <pre>
+	 *  package testoclmodel::org::tuml::testocl
+	 *     context OclTest1::oclCollectNested : Bag(String)
+	 *     derive: self.oclTestCollection->collectNested(name)
+	 * endpackage </pre>
+	 * 
+	 */
+	public TinkerBag<String> getOclCollectNested() {
+		return getOclTestCollection().collectNested(new BodyExpressionEvaluator<String, OclTestCollection>() {
+		    @Override
+		    public String evaluate(OclTestCollection e) {
+		        return e.getName();
+		    }
+		});
+	}
+	
+	/**
+	 * Implements the ocl statement for derived property 'oclSelect'
+	 * <pre>
+	 *  package testoclmodel::org::tuml::testocl
+	 *     context OclTest1::oclSelect : Bag(OclTestCollection)
+	 *     derive: self.oclTestCollection->select(name='john')
+	 * endpackage </pre>
+	 * 
+	 */
+	public TinkerBag<OclTestCollection> getOclSelect() {
+		return getOclTestCollection().select(new BooleanExpressionWithV<OclTestCollection>() {
+		    @Override
+		    public Boolean evaluate(OclTestCollection e) {
+		        return e.getName().equals("john");
+		    }
+		});
+	}
+	
+	public TinkerBag<OclTestCollection> getOclTestCollection() {
+		return this.oclTestCollection;
 	}
 	
 	public String getProperty1() {
@@ -142,7 +242,8 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 		}
 	}
 	
-	/** GetQualifiers is called from the collection in order to update the index used to implement the qualifier
+	/**
+	 * getQualifiers is called from the collection in order to update the index used to implement the qualifier
 	 * 
 	 * @param tumlRuntimeProperty 
 	 * @param node 
@@ -162,7 +263,8 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 		return result;
 	}
 	
-	/** GetSize is called from the collection in order to update the index used to implement a sequance's index
+	/**
+	 * getSize is called from the collection in order to update the index used to implement a sequance's index
 	 * 
 	 * @param tumlRuntimeProperty 
 	 */
@@ -204,7 +306,7 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.oclTestCollection =  new TinkerSetImpl<OclTestCollection>(this, OclTest1RuntimePropertyEnum.oclTestCollection);
+		this.oclTestCollection =  new TinkerBagImpl<OclTestCollection>(this, OclTest1RuntimePropertyEnum.oclTestCollection);
 		this.property1 =  new TinkerSetImpl<String>(this, OclTest1RuntimePropertyEnum.property1);
 	}
 	
@@ -216,7 +318,7 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 			break;
 		
 			case oclTestCollection:
-				this.oclTestCollection =  new TinkerSetImpl<OclTestCollection>(this, OclTest1RuntimePropertyEnum.oclTestCollection);
+				this.oclTestCollection =  new TinkerBagImpl<OclTestCollection>(this, OclTest1RuntimePropertyEnum.oclTestCollection);
 			break;
 		
 		}
@@ -233,15 +335,9 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 		}
 	}
 	
-	public void removeFromOclTestCollection(Set<OclTestCollection> oclTestCollection) {
+	public void removeFromOclTestCollection(TinkerBag<OclTestCollection> oclTestCollection) {
 		if ( !oclTestCollection.isEmpty() ) {
 			this.oclTestCollection.removeAll(oclTestCollection);
-		}
-	}
-	
-	public void removeFromProperty1(Set<String> property1) {
-		if ( !property1.isEmpty() ) {
-			this.property1.removeAll(property1);
 		}
 	}
 	
@@ -251,12 +347,18 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 		}
 	}
 	
+	public void removeFromProperty1(TinkerSet<String> property1) {
+		if ( !property1.isEmpty() ) {
+			this.property1.removeAll(property1);
+		}
+	}
+	
 	@Override
 	public void setId(Long id) {
 		TinkerIdUtilFactory.getIdUtil().setId(this.vertex, id);
 	}
 	
-	public void setOclTestCollection(Set<OclTestCollection> oclTestCollection) {
+	public void setOclTestCollection(TinkerBag<OclTestCollection> oclTestCollection) {
 		clearOclTestCollection();
 		addToOclTestCollection(oclTestCollection);
 	}
@@ -267,7 +369,7 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 	}
 
 	public enum OclTest1RuntimePropertyEnum implements TumlRuntimeProperty {
-		oclTestCollection(false,true,true,"A_<oclTest1>_<oclTestCollection>",false,true,false,false,-1,1,false,false,false,false,true),
+		oclTestCollection(false,true,true,"A_<oclTest1>_<oclTestCollection>",false,true,false,false,-1,1,false,false,false,false,false),
 		property1(true,true,false,"testoclmodel__org__tuml__testocl__OclTest1__property1",false,false,true,false,1,1,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
@@ -284,7 +386,8 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 		private boolean ordered;
 		private boolean inverseOrdered;
 		private boolean unique;
-		/** Constructor for OclTest1RuntimePropertyEnum
+		/**
+		 * constructor for OclTest1RuntimePropertyEnum
 		 * 
 		 * @param onePrimitive 
 		 * @param controllingSide 

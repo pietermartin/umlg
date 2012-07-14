@@ -64,7 +64,7 @@
       </diagrams>
       <subdiagrams xmi:id="_N2NK0L7zEeG5Bt_b3EGOQQ">
         <model href="test-ocl.uml#_MqqkwL7zEeG5Bt_b3EGOQQ"/>
-        <diagrams xmi:id="_N2Nx4L7zEeG5Bt_b3EGOQQ" position="0,0" size="100,100" name="tuml-test-ocl" viewport="0,80">
+        <diagrams xmi:id="_N2Nx4L7zEeG5Bt_b3EGOQQ" position="0,0" size="100,100" name="tuml-test-ocl" viewport="80,255">
           <property xmi:id="_N2bNQL7zEeG5Bt_b3EGOQQ" key="pageFormatName" value="A3"/>
           <property xmi:id="_N2bNQb7zEeG5Bt_b3EGOQQ" key="diagramWidth" value="1188"/>
           <property xmi:id="_N2bNQr7zEeG5Bt_b3EGOQQ" key="diagramHeight" value="1680"/>
@@ -77,7 +77,7 @@
           <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_N2Nx4b7zEeG5Bt_b3EGOQQ" presentation="org.topcased.modeler.uml.classdiagram">
             <element href="test-ocl.uml#_MqqkwL7zEeG5Bt_b3EGOQQ"/>
           </semanticModel>
-          <contained xsi:type="di:GraphNode" xmi:id="_OTzFwL7zEeG5Bt_b3EGOQQ" position="482,64" size="413,-1">
+          <contained xsi:type="di:GraphNode" xmi:id="_OTzFwL7zEeG5Bt_b3EGOQQ" position="319,74" size="726,-1">
             <anchorage xmi:id="_4vBmgMCDEeGzStsPq17FZA" graphEdge="_4vPo8MCDEeGzStsPq17FZA"/>
             <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_OTzFwb7zEeG5Bt_b3EGOQQ" presentation="default">
               <element href="test-ocl.uml#_OUDkcL7zEeG5Bt_b3EGOQQ"/>
@@ -120,6 +120,11 @@
               <contained xsi:type="di:GraphNode" xmi:id="_znO5sMGpEeGZOpN3XTQouA" position="0,0" size="-1,-1">
                 <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_znO5scGpEeGZOpN3XTQouA" presentation="default">
                   <element href="test-ocl.uml#_znPgwMGpEeGZOpN3XTQouA"/>
+                </semanticModel>
+              </contained>
+              <contained xsi:type="di:GraphNode" xmi:id="_lkT0UM2YEeGWefmLH6lr-Q" position="0,0" size="-1,-1">
+                <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_lkT0Uc2YEeGWefmLH6lr-Q" presentation="default">
+                  <element href="test-ocl.uml#_lkk6EM2YEeGWefmLH6lr-Q"/>
                 </semanticModel>
               </contained>
             </contained>

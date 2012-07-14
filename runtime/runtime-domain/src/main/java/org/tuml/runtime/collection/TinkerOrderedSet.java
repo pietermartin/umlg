@@ -1,5 +1,10 @@
 package org.tuml.runtime.collection;
 
-public interface TinkerOrderedSet<E> extends TinkerSet<E>, TinkerSequence<E> {
+import java.util.List;
+import java.util.Set;
+
+import org.tuml.runtime.collection.ocl.OclStdLibOrderedSet;
+
+public interface TinkerOrderedSet<E> extends TinkerCollection<E>, Set<E>, List<E>, OclStdLibOrderedSet<E> {
 
 }

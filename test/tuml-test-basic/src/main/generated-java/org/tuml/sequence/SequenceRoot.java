@@ -12,10 +12,10 @@ import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.TinkerIdUtilFactory;
 import org.tuml.runtime.collection.Qualifier;
 import org.tuml.runtime.collection.TinkerOrderedSet;
-import org.tuml.runtime.collection.TinkerOrderedSetImpl;
 import org.tuml.runtime.collection.TinkerSet;
-import org.tuml.runtime.collection.TinkerSetImpl;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
+import org.tuml.runtime.collection.impl.TinkerOrderedSetImpl;
+import org.tuml.runtime.collection.impl.TinkerSetImpl;
 import org.tuml.runtime.domain.BaseTinker;
 import org.tuml.runtime.domain.TinkerNode;
 

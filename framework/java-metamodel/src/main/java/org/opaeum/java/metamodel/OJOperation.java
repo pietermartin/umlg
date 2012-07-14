@@ -98,9 +98,9 @@ public class OJOperation extends OJOperationGEN{
 	 * @param result
 	 */
 	protected void addJavaDocComment(StringBuilder result){
-		String comment = JavaStringHelpers.firstCharToUpper(getComment());
+		String comment = getComment();
 		comment = JavaStringHelpers.replaceAllSubstrings(comment, "\n", "\n * ");
-		result.append("/** " + comment);
+		result.append("/**\n * " + comment);
 		boolean first = true;
 		Iterator it = getParameters().iterator();
 		while(it.hasNext()){

@@ -18,10 +18,10 @@ import org.tuml.runtime.adaptor.TinkerIdUtilFactory;
 import org.tuml.runtime.collection.Multiplicity;
 import org.tuml.runtime.collection.Qualifier;
 import org.tuml.runtime.collection.TinkerQualifiedSet;
-import org.tuml.runtime.collection.TinkerQualifiedSetImpl;
 import org.tuml.runtime.collection.TinkerSet;
-import org.tuml.runtime.collection.TinkerSetImpl;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
+import org.tuml.runtime.collection.impl.TinkerQualifiedSetImpl;
+import org.tuml.runtime.collection.impl.TinkerSetImpl;
 import org.tuml.runtime.domain.BaseTinker;
 import org.tuml.runtime.domain.TinkerNode;
 

@@ -3,7 +3,7 @@ package org.tuml.javageneration.ocl;
 import org.eclipse.ocl.expressions.OCLExpression;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.MultiplicityElement;
-import org.tuml.javageneration.ocl.visitor.ToTumlJavaVisitor;
+import org.tuml.javageneration.ocl.visitor.Tuml2JavaVisitor;
 
 public class TumlOcl2Java {
 
@@ -22,6 +22,6 @@ public class TumlOcl2Java {
     }
 
     public static String oclToJava(OCLExpression<Classifier> expr) {
-        return expr.accept(ToTumlJavaVisitor.getInstance(expr));
+        return expr.accept(Tuml2JavaVisitor.getInstance(expr));
     }
 }

@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.ocl.uml.CollectionType;
 import org.eclipse.uml2.uml.Association;
 import org.eclipse.uml2.uml.BehavioredClassifier;
 import org.eclipse.uml2.uml.Class;
@@ -143,8 +144,18 @@ public class TumlClassOperations extends ClassOperations {
 		return getOtherEndToComposite(clazz) != null;
 	}
 
-	public static String className(Class clazz) {
-		return Namer.name(clazz);
+	public static String className(Classifier clazz) {
+		if (clazz instanceof CollectionType) {
+			CollectionType collectionType = (CollectionType)clazz;
+			StringBuilder sb = new StringBuilder();
+			sb.append(collectionType.getKind());
+			sb.append("<");
+			sb.append(className(collectionType.getElementType()));
+			sb.append(">");
+			return sb.toString();
+		} else {
+			return Namer.name(clazz);
+		}
 	}
 
 	public static String propertyEnumName(Type type) {

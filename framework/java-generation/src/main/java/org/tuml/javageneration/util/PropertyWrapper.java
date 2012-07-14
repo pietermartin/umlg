@@ -174,14 +174,14 @@ public class PropertyWrapper implements Property {
      */
     public OJPathName javaTypePath() {
         OJPathName fieldType;
-        if (isOrdered() && isUnique()) {
-            fieldType = new OJPathName("java.util.Set");
+        if (!isOrdered() && isUnique()) {
+            fieldType = TinkerGenerationUtil.tinkerSet.getCopy();
         } else if (isOrdered() && !isUnique()) {
-            fieldType = new OJPathName("java.util.List");
+            fieldType = TinkerGenerationUtil.tinkerSequence.getCopy();
         } else if (!isOrdered() && !isUnique()) {
-            fieldType = new OJPathName("java.util.Collection");
-        } else if (!isOrdered() && isUnique()) {
-            fieldType = new OJPathName("java.util.Set");
+            fieldType = TinkerGenerationUtil.tinkerBag.getCopy();
+        } else if (isOrdered() && isUnique()) {
+            fieldType = TinkerGenerationUtil.tinkerOrderedSet.getCopy();
         } else {
             throw new RuntimeException("wtf");
         }
@@ -1377,7 +1377,7 @@ public class PropertyWrapper implements Property {
         StringBuilder sb = new StringBuilder();
         sb.append("package ");
         sb.append(Namer.nameIncludingModel(pWrap.getOwningType().getNearestPackage()).replace(".", "::"));
-        sb.append("\ncontext ");
+        sb.append("\n    context ");
         sb.append(pWrap.getOwningType().getName());
         sb.append("::");
         sb.append(getName());
@@ -1393,7 +1393,7 @@ public class PropertyWrapper implements Property {
         }
 
         sb.append("\n");
-        sb.append("derive: ");
+        sb.append("    derive: ");
         sb.append(pWrap.getDefaultValue().stringValue());
         sb.append("\n");
         sb.append("endpackage");

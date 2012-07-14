@@ -5,15 +5,14 @@ import com.tinkerpop.blueprints.Vertex;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.TinkerIdUtilFactory;
 import org.tuml.runtime.collection.Qualifier;
 import org.tuml.runtime.collection.TinkerSet;
-import org.tuml.runtime.collection.TinkerSetImpl;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
+import org.tuml.runtime.collection.impl.TinkerSetImpl;
 import org.tuml.runtime.domain.BaseTinker;
 import org.tuml.runtime.domain.TinkerNode;
 
@@ -23,7 +22,8 @@ public class OclTest2 extends BaseTinker implements TinkerNode {
 	private TinkerSet<OclTestCollection> oclTestCollection;
 	private TinkerSet<String> name2;
 
-	/** Constructor for OclTest2
+	/**
+	 * constructor for OclTest2
 	 * 
 	 * @param vertex 
 	 */
@@ -32,12 +32,14 @@ public class OclTest2 extends BaseTinker implements TinkerNode {
 		initialiseProperties();
 	}
 	
-	/** Default constructor for OclTest2
+	/**
+	 * default constructor for OclTest2
 	 */
 	public OclTest2() {
 	}
 	
-	/** Constructor for OclTest2
+	/**
+	 * constructor for OclTest2
 	 * 
 	 * @param persistent 
 	 */
@@ -69,7 +71,7 @@ public class OclTest2 extends BaseTinker implements TinkerNode {
 		}
 	}
 	
-	public void addToOclTestCollection(Set<OclTestCollection> oclTestCollection) {
+	public void addToOclTestCollection(TinkerSet<OclTestCollection> oclTestCollection) {
 		if ( !oclTestCollection.isEmpty() ) {
 			this.oclTestCollection.addAll(oclTestCollection);
 		}
@@ -92,9 +94,6 @@ public class OclTest2 extends BaseTinker implements TinkerNode {
 	
 	@Override
 	public void delete() {
-		for ( OclTestCollection child : getOclTestCollection() ) {
-			child.delete();
-		}
 		GraphDb.getDb().removeVertex(this.vertex);
 	}
 	
@@ -130,7 +129,8 @@ public class OclTest2 extends BaseTinker implements TinkerNode {
 		return this.oclTestCollection;
 	}
 	
-	/** GetQualifiers is called from the collection in order to update the index used to implement the qualifier
+	/**
+	 * getQualifiers is called from the collection in order to update the index used to implement the qualifier
 	 * 
 	 * @param tumlRuntimeProperty 
 	 * @param node 
@@ -150,7 +150,8 @@ public class OclTest2 extends BaseTinker implements TinkerNode {
 		return result;
 	}
 	
-	/** GetSize is called from the collection in order to update the index used to implement a sequance's index
+	/**
+	 * getSize is called from the collection in order to update the index used to implement a sequance's index
 	 * 
 	 * @param tumlRuntimeProperty 
 	 */
@@ -164,12 +165,12 @@ public class OclTest2 extends BaseTinker implements TinkerNode {
 					result = oclTestCollection.size();
 				break;
 			
-				case name2:
-					result = name2.size();
-				break;
-			
 				case name:
 					result = name.size();
+				break;
+			
+				case name2:
+					result = name2.size();
 				break;
 			
 				default:
@@ -196,8 +197,8 @@ public class OclTest2 extends BaseTinker implements TinkerNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.name =  new TinkerSetImpl<String>(this, OclTest2RuntimePropertyEnum.name);
 		this.name2 =  new TinkerSetImpl<String>(this, OclTest2RuntimePropertyEnum.name2);
+		this.name =  new TinkerSetImpl<String>(this, OclTest2RuntimePropertyEnum.name);
 		this.oclTestCollection =  new TinkerSetImpl<OclTestCollection>(this, OclTest2RuntimePropertyEnum.oclTestCollection);
 	}
 	
@@ -208,12 +209,12 @@ public class OclTest2 extends BaseTinker implements TinkerNode {
 				this.oclTestCollection =  new TinkerSetImpl<OclTestCollection>(this, OclTest2RuntimePropertyEnum.oclTestCollection);
 			break;
 		
-			case name2:
-				this.name2 =  new TinkerSetImpl<String>(this, OclTest2RuntimePropertyEnum.name2);
-			break;
-		
 			case name:
 				this.name =  new TinkerSetImpl<String>(this, OclTest2RuntimePropertyEnum.name);
+			break;
+		
+			case name2:
+				this.name2 =  new TinkerSetImpl<String>(this, OclTest2RuntimePropertyEnum.name2);
 			break;
 		
 		}
@@ -224,21 +225,15 @@ public class OclTest2 extends BaseTinker implements TinkerNode {
 		return true;
 	}
 	
-	public void removeFromName(Set<String> name) {
-		if ( !name.isEmpty() ) {
-			this.name.removeAll(name);
-		}
-	}
-	
 	public void removeFromName(String name) {
 		if ( name != null ) {
 			this.name.remove(name);
 		}
 	}
 	
-	public void removeFromName2(Set<String> name2) {
-		if ( !name2.isEmpty() ) {
-			this.name2.removeAll(name2);
+	public void removeFromName(TinkerSet<String> name) {
+		if ( !name.isEmpty() ) {
+			this.name.removeAll(name);
 		}
 	}
 	
@@ -248,13 +243,19 @@ public class OclTest2 extends BaseTinker implements TinkerNode {
 		}
 	}
 	
+	public void removeFromName2(TinkerSet<String> name2) {
+		if ( !name2.isEmpty() ) {
+			this.name2.removeAll(name2);
+		}
+	}
+	
 	public void removeFromOclTestCollection(OclTestCollection oclTestCollection) {
 		if ( oclTestCollection != null ) {
 			this.oclTestCollection.remove(oclTestCollection);
 		}
 	}
 	
-	public void removeFromOclTestCollection(Set<OclTestCollection> oclTestCollection) {
+	public void removeFromOclTestCollection(TinkerSet<OclTestCollection> oclTestCollection) {
 		if ( !oclTestCollection.isEmpty() ) {
 			this.oclTestCollection.removeAll(oclTestCollection);
 		}
@@ -275,15 +276,15 @@ public class OclTest2 extends BaseTinker implements TinkerNode {
 		addToName2(name2);
 	}
 	
-	public void setOclTestCollection(Set<OclTestCollection> oclTestCollection) {
+	public void setOclTestCollection(TinkerSet<OclTestCollection> oclTestCollection) {
 		clearOclTestCollection();
 		addToOclTestCollection(oclTestCollection);
 	}
 
 	public enum OclTest2RuntimePropertyEnum implements TumlRuntimeProperty {
-		name(true,true,false,"testoclmodel__org__tuml__testocl__OclTest2__name",false,false,true,false,1,1,false,false,false,false,true),
 		name2(true,true,false,"testoclmodel__org__tuml__testocl__OclTest2__name2",false,false,true,false,1,1,false,false,false,false,true),
-		oclTestCollection(false,true,true,"A_<oclTest2>_<oclTestCollection>",false,true,false,false,-1,0,false,false,false,false,true);
+		name(true,true,false,"testoclmodel__org__tuml__testocl__OclTest2__name",false,false,true,false,1,1,false,false,false,false,true),
+		oclTestCollection(false,true,false,"A_<oclTest2>_<oclTestCollection>",false,true,false,false,-1,0,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -299,7 +300,8 @@ public class OclTest2 extends BaseTinker implements TinkerNode {
 		private boolean ordered;
 		private boolean inverseOrdered;
 		private boolean unique;
-		/** Constructor for OclTest2RuntimePropertyEnum
+		/**
+		 * constructor for OclTest2RuntimePropertyEnum
 		 * 
 		 * @param onePrimitive 
 		 * @param controllingSide 
@@ -336,11 +338,11 @@ public class OclTest2 extends BaseTinker implements TinkerNode {
 		}
 	
 		static public OclTest2RuntimePropertyEnum fromLabel(String label) {
-			if ( name.getLabel().equals(label) ) {
-				return name;
-			}
 			if ( name2.getLabel().equals(label) ) {
 				return name2;
+			}
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
 			if ( oclTestCollection.getLabel().equals(label) ) {
 				return oclTestCollection;

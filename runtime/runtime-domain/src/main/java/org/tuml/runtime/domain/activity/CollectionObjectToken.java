@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.UUID;
 
 import org.tuml.runtime.adaptor.GraphDb;
-import org.tuml.runtime.collection.BaseCollection;
 import org.tuml.runtime.collection.Qualifier;
-import org.tuml.runtime.collection.TinkerSequenceImpl;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
+import org.tuml.runtime.collection.impl.BaseCollection;
+import org.tuml.runtime.collection.impl.TinkerSequenceImpl;
 import org.tuml.runtime.domain.CompositionNode;
 import org.tuml.runtime.domain.TinkerNode;
 
