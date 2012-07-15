@@ -1,4 +1,4 @@
-package org.tuml.javageneration.ocl.visitor.java;
+package org.tuml.javageneration.ocl.visitor.tojava;
 
 import java.util.List;
 
@@ -7,15 +7,18 @@ import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Operation;
 import org.tuml.javageneration.ocl.visitor.HandleOperationExp;
 
-public class OclNotEqualExprToJava implements HandleOperationExp {
+public class OclConcatExprToJava implements HandleOperationExp {
 
 	@Override
 	public String handleOperationExp(OperationCallExp<Classifier, Operation> oc, String sourceResult, List<String> argumentResults) {
+		if (argumentResults.size() != 1) {
+			throw new IllegalStateException("The concat operation must have one and only one argument!");
+		}
 		StringBuilder result = new StringBuilder();
 		result.append(sourceResult);
-		result.append(".equals(");
+		result.append(".concat(");
 		result.append(argumentResults.get(0));
-		result.append(") == false");
+		result.append(")");		
 		return result.toString();
 	}
 

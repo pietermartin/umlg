@@ -5,7 +5,7 @@ import java.util.Set;
 import org.tuml.runtime.collection.TinkerBag;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.collection.ocl.BodyExpressionEvaluator;
-import org.tuml.runtime.collection.ocl.BooleanExpressionWithV;
+import org.tuml.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.tuml.runtime.collection.ocl.OclStdLibBag;
 import org.tuml.runtime.collection.ocl.OclStdLibBagImpl;
 import org.tuml.runtime.domain.TinkerNode;
@@ -104,7 +104,7 @@ public abstract class BaseBag<E> extends BaseCollection<E> implements TinkerBag<
 	}
 	
 	@Override
-	public TinkerBag<E> select(BooleanExpressionWithV<E> v) {
+	public TinkerBag<E> select(BooleanExpressionEvaluator<E> v) {
 		maybeLoad();
 		return this.oclStdLibBag.select(v);
 	}

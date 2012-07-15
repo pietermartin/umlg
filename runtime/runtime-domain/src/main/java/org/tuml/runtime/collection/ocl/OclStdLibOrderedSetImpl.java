@@ -28,7 +28,7 @@ public class OclStdLibOrderedSetImpl<E> extends OclStdLibCollectionImpl<E> imple
 	}
 	
 	@Override
-	public TinkerOrderedSet<E> select(BooleanExpressionWithV<E> v) {
+	public TinkerOrderedSet<E> select(BooleanExpressionEvaluator<E> v) {
 		ListOrderedSet result = new ListOrderedSet();
 		for (E e : this.collection) {
 			if (v.evaluate(e)) {

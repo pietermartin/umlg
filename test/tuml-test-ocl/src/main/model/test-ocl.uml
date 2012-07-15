@@ -86,6 +86,13 @@
               <body>self.oclTestCollection->select(name='john')->collect(oclTestCollection2)->collect(name)->asSequence()</body>
             </defaultValue>
           </ownedAttribute>
+          <ownedAttribute xmi:id="_8zwz4M5QEeGODN7VUYRlgg" name="oclIterateExp" isUnique="false" isDerived="true">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+            <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_Bhbc4M5REeGODN7VUYRlgg" name="self.oclTestCollection->iterate(iter : OclTestCollection; acc : String = '' | acc.concat(iter.name) )">
+              <language>ocl</language>
+              <body>self.oclTestCollection->iterate(iter : OclTestCollection; acc : String = '' | acc.concat(iter.name) )</body>
+            </defaultValue>
+          </ownedAttribute>
         </packagedElement>
         <packagedElement xmi:type="uml:Class" xmi:id="_0vhrEMCDEeGzStsPq17FZA" name="OclTestCollection">
           <ownedAttribute xmi:id="_2P21YMCDEeGzStsPq17FZA" name="name">

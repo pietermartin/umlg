@@ -50,11 +50,16 @@ import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.SendSignalAction;
 import org.eclipse.uml2.uml.State;
+import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
+import org.tuml.javageneration.ocl.visitor.tojava.OclIterateExpToJava;
+import org.tuml.javageneration.ocl.visitor.tojava.OclVariableExpToJava;
 import org.tuml.javageneration.util.PropertyWrapper;
+import org.tuml.javageneration.util.TinkerGenerationUtil;
 
 public class Tuml2JavaVisitor extends
 		AbstractVisitor<String, Classifier, Operation, Property, EnumerationLiteral, Parameter, State, CallOperationAction, SendSignalAction, Constraint> {
 
+	private OJAnnotatedClass ojClass;
 	private final Environment<?, Classifier, Operation, Property, EnumerationLiteral, Parameter, State, CallOperationAction, SendSignalAction, Constraint, ?, ?> env;
 	private final UMLReflection<?, Classifier, Operation, Property, EnumerationLiteral, Parameter, State, CallOperationAction, SendSignalAction, Constraint> uml;
 
@@ -72,7 +77,8 @@ public class Tuml2JavaVisitor extends
 	 * @param env
 	 *            my environment
 	 */
-	protected Tuml2JavaVisitor(Environment<?, Classifier, Operation, Property, EnumerationLiteral, Parameter, State, CallOperationAction, SendSignalAction, Constraint, ?, ?> env) {
+	protected Tuml2JavaVisitor(OJAnnotatedClass ojClass, Environment<?, Classifier, Operation, Property, EnumerationLiteral, Parameter, State, CallOperationAction, SendSignalAction, Constraint, ?, ?> env) {
+		this.ojClass = ojClass;
 		this.env = env;
 		this.uml = (env == null) ? null : env.getUMLReflection();
 	}
@@ -86,10 +92,10 @@ public class Tuml2JavaVisitor extends
 	 * 
 	 * @return the corresponding instance
 	 */
-	public static Tuml2JavaVisitor getInstance(
+	public static Tuml2JavaVisitor getInstance(OJAnnotatedClass ojClass,
 			Environment<?, Classifier, Operation, Property, EnumerationLiteral, Parameter, State, CallOperationAction, SendSignalAction, Constraint, ?, ?> env) {
 
-		return new Tuml2JavaVisitor(env);
+		return new Tuml2JavaVisitor(ojClass, env);
 	}
 
 	/**
@@ -102,8 +108,8 @@ public class Tuml2JavaVisitor extends
 	 * @return the corresponding instance
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static Tuml2JavaVisitor getInstance(TypedElement<Classifier> element) {
-		return new Tuml2JavaVisitor((Environment) Environment.Registry.INSTANCE.getEnvironmentFor(element));
+	public static Tuml2JavaVisitor getInstance(OJAnnotatedClass ojClass, TypedElement<Classifier> element) {
+		return new Tuml2JavaVisitor(ojClass, (Environment) Environment.Registry.INSTANCE.getEnvironmentFor(element));
 	}
 
 	/**
@@ -151,31 +157,31 @@ public class Tuml2JavaVisitor extends
 		String name = oc.getReferredOperation().getName();
 		return OclOperationExpEnum.from(name).handleOperationExp(oc, sourceResult, argumentResults);
 
-		
-//		OCLExpression<Classifier> source = oc.getSource();
-//		Classifier sourceType = source != null ? source.getType() : null;
-//		Operation oper = oc.getReferredOperation();
-//
-//		StringBuilder result = new StringBuilder();
-//
-//		result.append(sourceResult);
-//		
-//		result.append(sourceType instanceof CollectionType<?, ?> ? "->" : "."); //$NON-NLS-1$ //$NON-NLS-2$
-//		result.append(SimpleOperationEnum.from(oper.getName()).toJavaString());
-//
-//		result.append('(');
-//		for (Iterator<String> iter = argumentResults.iterator(); iter.hasNext();) {
-//			result.append(iter.next());
-//			if (iter.hasNext()) {
-//				result.append(", ");//$NON-NLS-1$
-//			}
-//		}
-//		result.append(')');
-//		if (SimpleOperationEnum.from(oper.getName()).requiresNegation()) {
-//			result.append(" == false");
-//		}
-//
-//		return maybeAtPre(oc, result.toString());
+		// OCLExpression<Classifier> source = oc.getSource();
+		// Classifier sourceType = source != null ? source.getType() : null;
+		// Operation oper = oc.getReferredOperation();
+		//
+		// StringBuilder result = new StringBuilder();
+		//
+		// result.append(sourceResult);
+		//
+		//		result.append(sourceType instanceof CollectionType<?, ?> ? "->" : "."); //$NON-NLS-1$ //$NON-NLS-2$
+		// result.append(SimpleOperationEnum.from(oper.getName()).toJavaString());
+		//
+		// result.append('(');
+		// for (Iterator<String> iter = argumentResults.iterator();
+		// iter.hasNext();) {
+		// result.append(iter.next());
+		// if (iter.hasNext()) {
+		//				result.append(", ");//$NON-NLS-1$
+		// }
+		// }
+		// result.append(')');
+		// if (SimpleOperationEnum.from(oper.getName()).requiresNegation()) {
+		// result.append(" == false");
+		// }
+		//
+		// return maybeAtPre(oc, result.toString());
 	}
 
 	/**
@@ -228,33 +234,13 @@ public class Tuml2JavaVisitor extends
 	protected String handlePropertyCallExp(PropertyCallExp<Classifier, Property> pc, String sourceResult, List<String> qualifierResults) {
 		Property property = pc.getReferredProperty();
 		PropertyWrapper pWrap = new PropertyWrapper(property);
-
-		// TODO
-		// if (sourceResult == null) {
-		// // if we are the qualifier of an association class call, then
-		// // we just return our name, because our source is null (implied)
-		// return getName(property);
-		// }
-
-		//		StringBuilder result = new StringBuilder(maybeAtPre(pc, sourceResult + "." + getName(property)));//$NON-NLS-1$
-		StringBuilder result = new StringBuilder(pWrap.getter());
+		StringBuilder result = new StringBuilder();
+		if (!sourceResult.equals("self")) {
+			result.append(sourceResult);
+			result.append(".");
+		}
+		result.append(pWrap.getter());
 		result.append("()");
-		// TODO
-		// if (!qualifierResults.isEmpty()) {
-		// result.append('[');
-		//
-		// for (Iterator<String> iter = qualifierResults.iterator();
-		// iter.hasNext();) {
-		// result.append(iter.next());
-		//
-		// if (iter.hasNext()) {
-		//					result.append(", "); //$NON-NLS-1$
-		// }
-		// }
-		//
-		// result.append(']');
-		// }
-
 		return result.toString();
 	}
 
@@ -299,24 +285,28 @@ public class Tuml2JavaVisitor extends
 	 */
 	@Override
 	protected String handleVariable(Variable<Classifier, Parameter> vd, String initResult) {
-		String varName = vd.getName();
-
-		if (varName == null) {
-			varName = NULL_PLACEHOLDER;
-		}
-
-		Classifier type = vd.getType();
-		String result = varName;
-
-		if (type != null) {
-			result += " : " + getName(type);//$NON-NLS-1$
-		}
-
-		if (initResult != null) {
-			result += " = " + initResult;//$NON-NLS-1$
-		}
-
-		return result;
+		
+		return new OclVariableExpToJava().handleVariable(vd, initResult);
+		
+		
+//		String varName = vd.getName();
+//
+//		if (varName == null) {
+//			varName = NULL_PLACEHOLDER;
+//		}
+//
+//		Classifier type = vd.getType();
+//		String result = varName;
+//
+//		if (type != null) {
+//			result += " : " + getName(type);//$NON-NLS-1$
+//		}
+//
+//		if (initResult != null) {
+//			result += " = " + initResult;//$NON-NLS-1$
+//		}
+//
+//		return result;
 	}
 
 	/**
@@ -459,23 +449,9 @@ public class Tuml2JavaVisitor extends
 	 */
 	@Override
 	protected String handleIterateExp(IterateExp<Classifier, Parameter> callExp, String sourceResult, List<String> variableResults, String resultResult, String bodyResult) {
-
-		StringBuilder result = new StringBuilder();
-
-		result.append(sourceResult).append("->iterate("); //$NON-NLS-1$
-
-		for (Iterator<String> iter = variableResults.iterator(); iter.hasNext();) {
-			result.append(iter.next());
-			if (iter.hasNext()) {
-				result.append(", ");//$NON-NLS-1$
-			}
-		}
-
-		result.append("; ").append(resultResult).append(" | ");//$NON-NLS-2$//$NON-NLS-1$
-
-		result.append(bodyResult).append(')');
-
-		return result.toString();
+		this.ojClass.addToImports(TinkerGenerationUtil.tumlOclStdCollectionLib);
+		this.ojClass.addToImports("java.util.*");
+		return new OclIterateExpToJava().handleIterateExp(callExp, sourceResult, variableResults, resultResult, bodyResult);
 	}
 
 	/**
@@ -487,6 +463,8 @@ public class Tuml2JavaVisitor extends
 	 */
 	@Override
 	protected String handleIteratorExp(IteratorExp<Classifier, Parameter> callExp, String sourceResult, List<String> variableResults, String bodyResult) {
+		this.ojClass.addToImports(TinkerGenerationUtil.tumlOclStdCollectionLib);
+		this.ojClass.addToImports("java.util.*");
 		String name = callExp.getName();
 		return OclIteratorExpEnum.from(name).handleIteratorExp(callExp, sourceResult, variableResults, bodyResult);
 	}

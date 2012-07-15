@@ -26,7 +26,7 @@ public abstract class OclStdLibCollectionImpl<E> implements OclStdLibCollection<
 	}
 
 	@Override
-	public E any(BooleanExpressionWithV<E> v) {
+	public E any(BooleanExpressionEvaluator<E> v) {
 		for (E e : this.collection) {
 			if (v.evaluate(e)) {
 				return e;
@@ -53,6 +53,15 @@ public abstract class OclStdLibCollectionImpl<E> implements OclStdLibCollection<
 	@Override
 	public TinkerBag<E> asBag() {
 		return new OclStdLibBagImpl<E>(this.collection);
+	}
+	
+	@Override
+	public <R> R iterate(IterateExpressionAccumulator<R, E> v) {
+		R acc = v.initAccumulator();
+		for (E e : this.collection) {
+			acc = v.accumulate(acc, e);
+		}
+		return acc;
 	}
 
 }

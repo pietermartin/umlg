@@ -54,13 +54,16 @@ public interface OclStdLibCollection<E> {
 	 */
 	// boolean excludes(Object t);
 
+
+	<R> R iterate(IterateExpressionAccumulator<R, E> v);
+	
 	/**
 	 * The subset of set for which expr is true. source->select(iterator | body)
 	 * = source->iterate(iterator; result : Set(T) = Set{} | if body then
 	 * result->including(iterator) else result endif) select may have at most
 	 * one iterator variable.
 	 */
-	OclStdLibCollection<E> select(BooleanExpressionWithV<E> e);
+	TinkerCollection<E> select(BooleanExpressionEvaluator<E> e);
 
 	/**
 	 * Returns any element in the source collection for which body evaluates to
@@ -76,7 +79,7 @@ public interface OclStdLibCollection<E> {
 	 * @param e
 	 * @return
 	 */
-	E any(BooleanExpressionWithV<E> e);
+	E any(BooleanExpressionEvaluator<E> e);
 
 	/**
 	 * The Collection of elements that results from applying body to every
@@ -93,7 +96,7 @@ public interface OclStdLibCollection<E> {
 	 * @param e
 	 * @return
 	 */
-	<T, R> OclStdLibCollection<T> collect(BodyExpressionEvaluator<R, E> e);
+	<T, R> TinkerCollection<T> collect(BodyExpressionEvaluator<R, E> e);
 	
 	/**
      * The Bag of elements which results from applying body to every member of the source set.
@@ -106,7 +109,7 @@ public interface OclStdLibCollection<E> {
 	 * @param e
 	 * @return
 	 */
-	<R> OclStdLibCollection<R> collectNested(BodyExpressionEvaluator<R, E> e);	
+	<R> TinkerCollection<R> collectNested(BodyExpressionEvaluator<R, E> e);	
 
 	/**
 	 * flatten() : Collection(T2)

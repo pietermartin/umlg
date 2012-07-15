@@ -22,9 +22,9 @@ public class OclStdLibBagImpl<E> extends OclStdLibCollectionImpl<E> implements T
 		super(bag);
 		this.bag = bag;
 	}
-
+	
 	@Override
-	public TinkerBag<E> select(BooleanExpressionWithV<E> v) {
+	public TinkerBag<E> select(BooleanExpressionEvaluator<E> v) {
 		Multiset<E> result = HashMultiset.create();
 		for (E e : this.collection) {
 			if (v.evaluate(e)) {

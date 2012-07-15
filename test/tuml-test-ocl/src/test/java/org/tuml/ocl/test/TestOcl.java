@@ -83,6 +83,7 @@ public class TestOcl extends BaseLocalDbTest {
 		
 		db.stopTransaction(Conclusion.SUCCESS);
 		Assert.assertEquals(4, oclTest1.getOclSelectCollectAsSequence().size());
+		Assert.assertEquals("oclTestCollection1oclTestCollection2johnjohn".length(), oclTest1.getOclIterateExp().length());
 	}
 	
 }

@@ -1,4 +1,4 @@
-package org.tuml.javageneration.ocl.visitor.java;
+package org.tuml.javageneration.ocl.visitor.tojava;
 
 import java.util.List;
 
@@ -6,10 +6,11 @@ import org.eclipse.ocl.expressions.IteratorExp;
 import org.eclipse.ocl.expressions.Variable;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Parameter;
+import org.tuml.javageneration.ocl.util.TumlOclUtil;
 import org.tuml.javageneration.ocl.visitor.HandleIteratorExp;
 import org.tuml.javageneration.util.TumlClassOperations;
 
-public class OclSelectToJava implements HandleIteratorExp {
+public class OclSelectExpToJava implements HandleIteratorExp {
 
 	/**
 	 * Generates something like below
@@ -30,14 +31,16 @@ public class OclSelectToJava implements HandleIteratorExp {
 		String variableType = TumlClassOperations.className(variable.getType());
 		StringBuilder result = new StringBuilder(sourceResult);
 		result.append(".select(");
-		result.append("new BooleanExpressionWithV<");
+		result.append("new ");
+		result.append(HandleIteratorExp.BooleanExpressionEvaluator);
+		result.append("<");
 		result.append(variableType);
 		result.append(">() {\n");
 		result.append("    @Override\n");
 		result.append("    public Boolean evaluate(");
-		result.append(variableType);
-		result.append(" e) {\n");
-		result.append("        return e.");
+		result.append(TumlOclUtil.removeVariableInit(variableResults.get(0)));
+		result.append(") {\n");
+		result.append("        return ");
 		result.append(bodyResult);
 		result.append(";\n    }");
 		result.append("\n})");

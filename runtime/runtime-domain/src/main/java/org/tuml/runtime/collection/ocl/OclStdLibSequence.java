@@ -6,7 +6,7 @@ import org.tuml.runtime.collection.TinkerSequence;
 public interface OclStdLibSequence<E> extends OclStdLibCollection<E> {
 
 	@Override
-	TinkerSequence<E> select(BooleanExpressionWithV<E> e);
+	TinkerSequence<E> select(BooleanExpressionEvaluator<E> e);
 	
 	@Override
 	<R> TinkerSequence<R> collectNested(BodyExpressionEvaluator<R, E> e);

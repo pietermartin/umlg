@@ -17,7 +17,8 @@ import org.tuml.runtime.collection.TinkerOrderedSet;
 import org.tuml.runtime.collection.TinkerSequence;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
-import org.tuml.runtime.collection.ocl.BooleanExpressionWithV;
+import org.tuml.runtime.collection.ocl.BooleanExpressionEvaluator;
+import org.tuml.runtime.collection.ocl.IterateExpressionAccumulator;
 import org.tuml.runtime.collection.ocl.OclStdLibCollection;
 import org.tuml.runtime.domain.CompositionNode;
 import org.tuml.runtime.domain.TinkerAuditableNode;
@@ -596,7 +597,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 	}
 
 	@Override
-	public E any(BooleanExpressionWithV<E> v) {
+	public E any(BooleanExpressionEvaluator<E> v) {
 		maybeLoad();
 		return this.oclStdLibCollection.any(v);
 	}
@@ -623,5 +624,11 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 	public TinkerBag<E> asBag() {
 		maybeLoad();
 		return this.oclStdLibCollection.asBag();
+	}
+	
+	@Override
+	public <R> R iterate(IterateExpressionAccumulator<R, E> v) {
+		maybeLoad();
+		return this.oclStdLibCollection.iterate(v);
 	}
 }

@@ -7,7 +7,7 @@ import org.tuml.runtime.collection.TinkerOrderedSet;
 public interface OclStdLibOrderedSet<E> extends OclStdLibCollection<E> {
 
 	@Override
-	TinkerOrderedSet<E> select(BooleanExpressionWithV<E> e);
+	TinkerOrderedSet<E> select(BooleanExpressionEvaluator<E> e);
 	
 	@Override
 	<R> TinkerBag<R> collectNested(BodyExpressionEvaluator<R, E> e);
@@ -17,5 +17,5 @@ public interface OclStdLibOrderedSet<E> extends OclStdLibCollection<E> {
 
 	@Override
 	<R> TinkerOrderedSet<R> flatten();
-
+	
 }

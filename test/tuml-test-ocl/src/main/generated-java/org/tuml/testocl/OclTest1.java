@@ -127,10 +127,10 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 	 * </pre>
 	 */
 	public OclTestCollection getOclAny() {
-		return getOclTestCollection().any(new BooleanExpressionWithV<OclTestCollection>() {
+		return getOclTestCollection().any(new BooleanExpressionEvaluator<OclTestCollection>() {
 		    @Override
-		    public Boolean evaluate(OclTestCollection e) {
-		        return e.getName().equals("john") == false;
+		    public Boolean evaluate(OclTestCollection temp1) {
+		        return temp1.getName().equals("john") == false;
 		    }
 		});
 	}
@@ -147,8 +147,8 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 	public TinkerSet<OclTestCollection2> getOclCollectAsSet() {
 		return getOclTestCollection().<OclTestCollection2, Set<OclTestCollection2>>collect(new BodyExpressionEvaluator<Set<OclTestCollection2>, OclTestCollection>() {
 		    @Override
-		    public Set<OclTestCollection2> evaluate(OclTestCollection e) {
-		        return e.getOclTestCollection2();
+		    public Set<OclTestCollection2> evaluate(OclTestCollection temp1) {
+		        return temp1.getOclTestCollection2();
 		    }
 		}).asSet();
 	}
@@ -165,13 +165,13 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 	public TinkerBag<String> getOclCollectName() {
 		return getOclTestCollection().<OclTestCollection2, Set<OclTestCollection2>>collect(new BodyExpressionEvaluator<Set<OclTestCollection2>, OclTestCollection>() {
 		    @Override
-		    public Set<OclTestCollection2> evaluate(OclTestCollection e) {
-		        return e.getOclTestCollection2();
+		    public Set<OclTestCollection2> evaluate(OclTestCollection temp1) {
+		        return temp1.getOclTestCollection2();
 		    }
 		}).<String, String>collect(new BodyExpressionEvaluator<String, OclTestCollection2>() {
 		    @Override
-		    public String evaluate(OclTestCollection2 e) {
-		        return e.getName();
+		    public String evaluate(OclTestCollection2 temp2) {
+		        return temp2.getName();
 		    }
 		});
 	}
@@ -188,8 +188,8 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 	public TinkerSet<String> getOclCollectNameAsSet() {
 		return getOclTestCollection().<String, String>collect(new BodyExpressionEvaluator<String, OclTestCollection>() {
 		    @Override
-		    public String evaluate(OclTestCollection e) {
-		        return e.getName();
+		    public String evaluate(OclTestCollection temp1) {
+		        return temp1.getName();
 		    }
 		}).asSet();
 	}
@@ -206,10 +206,34 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 	public TinkerBag<OclTestCollection2> getOclCollectNested() {
 		return getOclTestCollection().collectNested(new BodyExpressionEvaluator<Set<OclTestCollection2>, OclTestCollection>() {
 		    @Override
-		    public Set<OclTestCollection2> evaluate(OclTestCollection e) {
-		        return e.getOclTestCollection2();
+		    public Set<OclTestCollection2> evaluate(OclTestCollection temp1) {
+		        return temp1.getOclTestCollection2();
 		    }
 		}).flatten();
+	}
+	
+	/**
+	 * Implements the ocl statement for derived property 'oclIterateExp'
+	 * <pre>
+	 * package testoclmodel::org::tuml::testocl
+	 *     context OclTest1::oclIterateExp : String
+	 *     derive: self.oclTestCollection->iterate(iter : OclTestCollection; acc : String = '' | acc.concat(iter.name) )
+	 * endpackage
+	 * </pre>
+	 */
+	public String getOclIterateExp() {
+		return getOclTestCollection().iterate(new IterateExpressionAccumulator<String, OclTestCollection>() {
+		    @Override
+		    public String accumulate(String acc, OclTestCollection iter) {
+		        return acc.concat(iter.getName());
+		    }
+		
+		    @Override
+		    public String initAccumulator() {
+		        String acc = "";
+		        return acc;
+		    }
+		});
 	}
 	
 	/**
@@ -222,10 +246,10 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 	 * </pre>
 	 */
 	public TinkerBag<OclTestCollection> getOclSelect() {
-		return getOclTestCollection().select(new BooleanExpressionWithV<OclTestCollection>() {
+		return getOclTestCollection().select(new BooleanExpressionEvaluator<OclTestCollection>() {
 		    @Override
-		    public Boolean evaluate(OclTestCollection e) {
-		        return e.getName().equals("john");
+		    public Boolean evaluate(OclTestCollection temp1) {
+		        return temp1.getName().equals("john");
 		    }
 		});
 	}
@@ -240,20 +264,20 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 	 * </pre>
 	 */
 	public TinkerSequence<String> getOclSelectCollectAsSequence() {
-		return getOclTestCollection().select(new BooleanExpressionWithV<OclTestCollection>() {
+		return getOclTestCollection().select(new BooleanExpressionEvaluator<OclTestCollection>() {
 		    @Override
-		    public Boolean evaluate(OclTestCollection e) {
-		        return e.getName().equals("john");
+		    public Boolean evaluate(OclTestCollection temp1) {
+		        return temp1.getName().equals("john");
 		    }
 		}).<OclTestCollection2, Set<OclTestCollection2>>collect(new BodyExpressionEvaluator<Set<OclTestCollection2>, OclTestCollection>() {
 		    @Override
-		    public Set<OclTestCollection2> evaluate(OclTestCollection e) {
-		        return e.getOclTestCollection2();
+		    public Set<OclTestCollection2> evaluate(OclTestCollection temp2) {
+		        return temp2.getOclTestCollection2();
 		    }
 		}).<String, String>collect(new BodyExpressionEvaluator<String, OclTestCollection2>() {
 		    @Override
-		    public String evaluate(OclTestCollection2 e) {
-		        return e.getName();
+		    public String evaluate(OclTestCollection2 temp3) {
+		        return temp3.getName();
 		    }
 		}).asSequence();
 	}

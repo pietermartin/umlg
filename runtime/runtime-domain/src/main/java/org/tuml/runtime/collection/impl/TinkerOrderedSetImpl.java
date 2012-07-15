@@ -12,7 +12,7 @@ import org.tuml.runtime.collection.TinkerBag;
 import org.tuml.runtime.collection.TinkerOrderedSet;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.collection.ocl.BodyExpressionEvaluator;
-import org.tuml.runtime.collection.ocl.BooleanExpressionWithV;
+import org.tuml.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.tuml.runtime.collection.ocl.OclStdLibOrderedSet;
 import org.tuml.runtime.collection.ocl.OclStdLibOrderedSetImpl;
 import org.tuml.runtime.domain.TinkerNode;
@@ -228,7 +228,7 @@ public class TinkerOrderedSetImpl<E> extends BaseCollection<E> implements Tinker
 	}
 
 	@Override
-	public TinkerOrderedSet<E> select(BooleanExpressionWithV<E> v) {
+	public TinkerOrderedSet<E> select(BooleanExpressionEvaluator<E> v) {
 		maybeLoad();
 		return this.oclStdLibOrderedSet.select(v);
 	}

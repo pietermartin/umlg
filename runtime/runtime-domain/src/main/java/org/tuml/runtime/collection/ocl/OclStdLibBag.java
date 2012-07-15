@@ -6,7 +6,7 @@ import org.tuml.runtime.collection.TinkerBag;
 public interface OclStdLibBag<E> extends OclStdLibCollection<E> {
 
 	@Override
-	TinkerBag<E> select(BooleanExpressionWithV<E> e);
+	TinkerBag<E> select(BooleanExpressionEvaluator<E> e);
 	
 	@Override
 	<R> TinkerBag<R> collectNested(BodyExpressionEvaluator<R, E> e);
@@ -16,5 +16,5 @@ public interface OclStdLibBag<E> extends OclStdLibCollection<E> {
 	
 	@Override
 	<R> TinkerBag<R> flatten();
-
+	
 }

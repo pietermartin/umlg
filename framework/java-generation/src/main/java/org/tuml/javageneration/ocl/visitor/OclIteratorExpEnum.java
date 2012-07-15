@@ -6,14 +6,14 @@ import org.eclipse.ocl.expressions.IteratorExp;
 import org.eclipse.ocl.utilities.PredefinedType;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Parameter;
-import org.tuml.javageneration.ocl.visitor.java.OclAnyToJava;
-import org.tuml.javageneration.ocl.visitor.java.OclCollectNestedToJava;
-import org.tuml.javageneration.ocl.visitor.java.OclCollectToJava;
-import org.tuml.javageneration.ocl.visitor.java.OclSelectToJava;
+import org.tuml.javageneration.ocl.visitor.tojava.OclAnyExpToJava;
+import org.tuml.javageneration.ocl.visitor.tojava.OclCollectExpToJava;
+import org.tuml.javageneration.ocl.visitor.tojava.OclCollectNestedExpToJava;
+import org.tuml.javageneration.ocl.visitor.tojava.OclSelectExpToJava;
 
 public enum OclIteratorExpEnum implements HandleIteratorExp {
 
-	SELECT(new OclSelectToJava()), COLLECT(new OclCollectToJava()), COLLECT_NESTED(new OclCollectNestedToJava()), ANY(new OclAnyToJava());
+	SELECT(new OclSelectExpToJava()), COLLECT(new OclCollectExpToJava()), COLLECT_NESTED(new OclCollectNestedExpToJava()), ANY(new OclAnyExpToJava());
 	private HandleIteratorExp implementor;
 	
 	private OclIteratorExpEnum(HandleIteratorExp implementor) {

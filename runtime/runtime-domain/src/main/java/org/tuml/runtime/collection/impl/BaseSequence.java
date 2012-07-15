@@ -9,7 +9,7 @@ import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.collection.TinkerSequence;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.collection.ocl.BodyExpressionEvaluator;
-import org.tuml.runtime.collection.ocl.BooleanExpressionWithV;
+import org.tuml.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.tuml.runtime.collection.ocl.OclStdLibSequence;
 import org.tuml.runtime.collection.ocl.OclStdLibSequenceImpl;
 import org.tuml.runtime.domain.TinkerAuditableNode;
@@ -219,7 +219,7 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
 	}
 
 	@Override
-	public TinkerSequence<E> select(BooleanExpressionWithV<E> v) {
+	public TinkerSequence<E> select(BooleanExpressionEvaluator<E> v) {
 		maybeLoad();
 		return this.oclStdLibSequence.select(v);
 	}

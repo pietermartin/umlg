@@ -22,7 +22,7 @@ public class OclStdLibSequenceImpl<E> extends OclStdLibCollectionImpl<E> impleme
 	}
 	
 	@Override
-	public TinkerSequence<E> select(BooleanExpressionWithV<E> v) {
+	public TinkerSequence<E> select(BooleanExpressionEvaluator<E> v) {
 		List<E> result = new ArrayList<E>();
 		for (E e : this.collection) {
 			if (v.evaluate(e)) {

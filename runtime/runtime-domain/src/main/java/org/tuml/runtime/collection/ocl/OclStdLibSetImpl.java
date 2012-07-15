@@ -26,7 +26,7 @@ public class OclStdLibSetImpl<E> extends OclStdLibCollectionImpl<E> implements T
 	}
 
 	@Override
-	public TinkerSet<E> select(BooleanExpressionWithV<E> v) {
+	public TinkerSet<E> select(BooleanExpressionEvaluator<E> v) {
 		Set<E> result = new HashSet<E>();
 		for (E e : this.collection) {
 			if (v.evaluate(e)) {

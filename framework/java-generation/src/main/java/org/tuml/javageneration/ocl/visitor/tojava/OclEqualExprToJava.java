@@ -1,4 +1,4 @@
-package org.tuml.javageneration.ocl.visitor.java;
+package org.tuml.javageneration.ocl.visitor.tojava;
 
 import java.util.List;
 

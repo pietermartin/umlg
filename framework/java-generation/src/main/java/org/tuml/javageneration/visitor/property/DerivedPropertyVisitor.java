@@ -11,7 +11,6 @@ import org.tuml.framework.Visitor;
 import org.tuml.javageneration.Workspace;
 import org.tuml.javageneration.ocl.TumlOcl2Java;
 import org.tuml.javageneration.util.PropertyWrapper;
-import org.tuml.javageneration.util.TinkerGenerationUtil;
 import org.tuml.javageneration.visitor.BaseVisitor;
 import org.tuml.ocl.TumlOcl2Parser;
 
@@ -43,9 +42,7 @@ public class DerivedPropertyVisitor extends BaseVisitor implements Visitor<Prope
 			getter.setComment(String.format("Implements the ocl statement for derived property '%s'\n<pre>\n%s\n</pre>", propertyWrapper.getName(), ocl));
 			logger.fine(String.format("About to parse ocl expression \n%s", new Object[] { ocl }));
 			OCLExpression<Classifier> oclExp = TumlOcl2Parser.INSTANCE.parseOcl(ocl);
-			getter.getBody().addToStatements("return " + TumlOcl2Java.oclToJava(oclExp));
-			owner.addToImports(TinkerGenerationUtil.tumlOclStdCollectionLib);
-			owner.addToImports("java.util.*");
+			getter.getBody().addToStatements("return " + TumlOcl2Java.oclToJava(owner, oclExp));
 			owner.addToOperations(getter);
 		}
 	}
