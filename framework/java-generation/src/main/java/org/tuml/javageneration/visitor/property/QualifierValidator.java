@@ -66,7 +66,7 @@ public class QualifierValidator extends BaseVisitor implements Visitor<Property>
 	}
 
 	private void validateHasCorrespondingDerivedProperty(PropertyWrapper pWrap) {
-		if (!pWrap.qualifierHasCorrespondingDerivedProperty()) {
+		if (!pWrap.haveQualifierCorrespondingDerivedProperty()) {
 			throw new IllegalStateException(String.format("Qualified %s on %s does not have a corresponding derived property on %s",
 					new Object[] { pWrap.getName(), pWrap.getOwner(), pWrap.getQualifierContext().getName() }));
 		}

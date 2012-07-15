@@ -1,8 +1,10 @@
 package org.tuml.javageneration.ocl.visitor;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.ocl.Environment;
 import org.eclipse.ocl.expressions.AssociationClassCallExp;
@@ -77,7 +79,8 @@ public class Tuml2JavaVisitor extends
 	 * @param env
 	 *            my environment
 	 */
-	protected Tuml2JavaVisitor(OJAnnotatedClass ojClass, Environment<?, Classifier, Operation, Property, EnumerationLiteral, Parameter, State, CallOperationAction, SendSignalAction, Constraint, ?, ?> env) {
+	protected Tuml2JavaVisitor(OJAnnotatedClass ojClass,
+			Environment<?, Classifier, Operation, Property, EnumerationLiteral, Parameter, State, CallOperationAction, SendSignalAction, Constraint, ?, ?> env) {
 		this.ojClass = ojClass;
 		this.env = env;
 		this.uml = (env == null) ? null : env.getUMLReflection();
@@ -223,24 +226,66 @@ public class Tuml2JavaVisitor extends
 	 *            the property call expression
 	 * @return string source.ref
 	 */
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.ocl.utilities.AbstractVisitor#handlePropertyCallExp(org.eclipse
-	 * .ocl.expressions.PropertyCallExp, java.lang.Object, java.util.List)
-	 */
 	@Override
 	protected String handlePropertyCallExp(PropertyCallExp<Classifier, Property> pc, String sourceResult, List<String> qualifierResults) {
+		// Tuml specific qualifier semantics.
+		// Each qualifier represents a seperate qualification of the
+		// association.
+		// A such the list my only have one valid value in it
 		Property property = pc.getReferredProperty();
+		boolean foundQualifier = false;
+		String qualifierResult = null;
+		Property qualifier = null;
+		// Remove StringLiterals to ignore
+		List<String> validQualifierResults = new ArrayList<String>();
+		for (String qualifierResultTmp : qualifierResults) {
+			if (!qualifierResultTmp.equals("\"__IGNORE__\"")) {
+				validQualifierResults.add(qualifierResultTmp);
+			}
+		}
+		// If there is more than one value left, remove Integer literals '-1'
+		List<String> finalValidQualifierResults = new ArrayList<String>();
+		if (validQualifierResults.size() > 1) {
+			for (String qualifierResultTmp : validQualifierResults) {
+				if (!StringUtils.remove(qualifierResultTmp, " ").equals("-1")) {
+					finalValidQualifierResults.add(qualifierResultTmp);
+				}
+			}
+		} else {
+			finalValidQualifierResults = validQualifierResults;
+		}
+
+		if (!qualifierResults.isEmpty() && (finalValidQualifierResults.isEmpty() || finalValidQualifierResults.size() > 1)) {
+			throw new IllegalStateException("Only one qualifier value can be specified!");
+		} else if (!qualifierResults.isEmpty()) {
+			int i = 0;
+			qualifierResult = finalValidQualifierResults.get(0);
+			for (String qualifierResultTmp : qualifierResults) {
+				if (qualifierResult.equals(qualifierResultTmp)) {
+					break;
+				}
+				i++;
+			}
+			qualifier = property.getQualifiers().get(i);
+			foundQualifier = true;
+		}
 		PropertyWrapper pWrap = new PropertyWrapper(property);
+		String getter;
+		if (foundQualifier) {
+			PropertyWrapper qualifierPWrap = new PropertyWrapper(qualifier);
+			getter = pWrap.getQualifiedNameFor(qualifierPWrap);
+			getter += "(" + qualifierResult + ")";
+		} else {
+			getter = pWrap.getter();
+			getter += "()";
+		}
 		StringBuilder result = new StringBuilder();
 		if (!sourceResult.equals("self")) {
 			result.append(sourceResult);
 			result.append(".");
 		}
-		result.append(pWrap.getter());
-		result.append("()");
+		result.append(getter);
+
 		return result.toString();
 	}
 
@@ -285,28 +330,27 @@ public class Tuml2JavaVisitor extends
 	 */
 	@Override
 	protected String handleVariable(Variable<Classifier, Parameter> vd, String initResult) {
-		
+
 		return new OclVariableExpToJava().handleVariable(vd, initResult);
-		
-		
-//		String varName = vd.getName();
-//
-//		if (varName == null) {
-//			varName = NULL_PLACEHOLDER;
-//		}
-//
-//		Classifier type = vd.getType();
-//		String result = varName;
-//
-//		if (type != null) {
-//			result += " : " + getName(type);//$NON-NLS-1$
-//		}
-//
-//		if (initResult != null) {
-//			result += " = " + initResult;//$NON-NLS-1$
-//		}
-//
-//		return result;
+
+		// String varName = vd.getName();
+		//
+		// if (varName == null) {
+		// varName = NULL_PLACEHOLDER;
+		// }
+		//
+		// Classifier type = vd.getType();
+		// String result = varName;
+		//
+		// if (type != null) {
+		//			result += " : " + getName(type);//$NON-NLS-1$
+		// }
+		//
+		// if (initResult != null) {
+		//			result += " = " + initResult;//$NON-NLS-1$
+		// }
+		//
+		// return result;
 	}
 
 	/**

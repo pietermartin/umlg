@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Profile xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/3.0.0/UML" xmi:id="_XkGiwB07Ed-QQ4mYkrb7Gg" name="tuml">
+  <eAnnotations xmi:id="_8I_ksc61EeGGf_d7HuXdjw" source="http://www.eclipse.org/uml2/2.0.0/UML">
+    <contents xmi:type="ecore:EPackage" xmi:id="_2zMvQM62EeGEl_PAnbcd0Q" name="tuml" nsURI="http:///schemas/tuml/_2zMIMM62EeGEl_PAnbcd0Q/6" nsPrefix="tuml">
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_2zMvQc62EeGEl_PAnbcd0Q" name="QualifierAssociation">
+        <eAnnotations xmi:id="_2zMvQs62EeGEl_PAnbcd0Q" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_8vot8M61EeGGf_d7HuXdjw"/>
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_2zMvQ862EeGEl_PAnbcd0Q" name="base_Association" ordered="false" lowerBound="1">
+          <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/3.0.0/UML#//Association"/>
+        </eStructuralFeatures>
+      </eClassifiers>
+    </contents>
+    <contents xmi:type="ecore:EPackage" xmi:id="_VIK_Ec62EeGGf_d7HuXdjw" name="tuml" nsURI="http:///schemas/tuml/_VIK_EM62EeGGf_d7HuXdjw/5" nsPrefix="tuml">
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_VIK_Es62EeGGf_d7HuXdjw" name="QualifierAssociation">
+        <eAnnotations xmi:id="_VIK_E862EeGGf_d7HuXdjw" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_8vot8M61EeGGf_d7HuXdjw"/>
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_VIK_FM62EeGGf_d7HuXdjw" name="base_Association" ordered="false" lowerBound="1">
+          <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/3.0.0/UML#//Association"/>
+        </eStructuralFeatures>
+      </eClassifiers>
+    </contents>
+    <contents xmi:type="ecore:EPackage" xmi:id="_LjpU0c62EeGGf_d7HuXdjw" name="tuml" nsURI="http:///schemas/tuml/_LjpU0M62EeGGf_d7HuXdjw/4" nsPrefix="tuml">
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_LjpU0s62EeGGf_d7HuXdjw" name="QualifierAssociation">
+        <eAnnotations xmi:id="_LjpU0862EeGGf_d7HuXdjw" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_8vot8M61EeGGf_d7HuXdjw"/>
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_LjpU1M62EeGGf_d7HuXdjw" name="base_Association" ordered="false" lowerBound="1">
+          <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/3.0.0/UML#//Association"/>
+        </eStructuralFeatures>
+      </eClassifiers>
+    </contents>
+    <contents xmi:type="ecore:EPackage" xmi:id="_Gn5MgM62EeGGf_d7HuXdjw" name="tuml" nsURI="http:///schemas/tuml/_Gn4lcM62EeGGf_d7HuXdjw/3" nsPrefix="tuml">
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_Gn5Mgc62EeGGf_d7HuXdjw" name="QualifierAssociation">
+        <eAnnotations xmi:id="_Gn5Mgs62EeGGf_d7HuXdjw" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_8vot8M61EeGGf_d7HuXdjw"/>
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_Gn5Mg862EeGGf_d7HuXdjw" name="base_Association" ordered="false" lowerBound="1">
+          <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/3.0.0/UML#//Association"/>
+        </eStructuralFeatures>
+      </eClassifiers>
+    </contents>
+    <contents xmi:type="ecore:EPackage" xmi:id="_B6N8cc62EeGGf_d7HuXdjw" name="tuml" nsURI="http:///schemas/tuml/_B6N8cM62EeGGf_d7HuXdjw/2" nsPrefix="tuml">
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_B6OjgM62EeGGf_d7HuXdjw" name="QualifierAssociation">
+        <eAnnotations xmi:id="_B6Ojgc62EeGGf_d7HuXdjw" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_8vot8M61EeGGf_d7HuXdjw"/>
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_B6Ojgs62EeGGf_d7HuXdjw" name="base_Association" ordered="false" lowerBound="1">
+          <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/3.0.0/UML#//Association"/>
+        </eStructuralFeatures>
+      </eClassifiers>
+    </contents>
+    <contents xmi:type="ecore:EPackage" xmi:id="__X80AM61EeGGf_d7HuXdjw" name="tuml" nsURI="http:///schemas/tuml/__X8M8M61EeGGf_d7HuXdjw/1" nsPrefix="tuml">
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="__X80Ac61EeGGf_d7HuXdjw" name="QualifierAssociation">
+        <eAnnotations xmi:id="__X80As61EeGGf_d7HuXdjw" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_8vot8M61EeGGf_d7HuXdjw"/>
+      </eClassifiers>
+    </contents>
+    <contents xmi:type="ecore:EPackage" xmi:id="_8I_kss61EeGGf_d7HuXdjw" name="tuml" nsURI="http:///schemas/tuml/_8I_ksM61EeGGf_d7HuXdjw/0" nsPrefix="tuml"/>
+  </eAnnotations>
+  <elementImport xmi:id="__vIk8M61EeGGf_d7HuXdjw">
+    <importedElement xmi:type="uml:Class" href="pathmap://UML_METAMODELS/UML.metamodel.uml#Association"/>
+  </elementImport>
+  <packageImport xmi:id="_b3qnYCWuEd62NaW46C6lHg">
+    <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+  </packageImport>
+  <packageImport xmi:id="_YlKXIB07Ed-QQ4mYkrb7Gg">
+    <importedPackage xmi:type="uml:Model" href="pathmap://UML_METAMODELS/UML.metamodel.uml#_0"/>
+  </packageImport>
+  <packagedElement xmi:type="uml:Stereotype" xmi:id="_8vot8M61EeGGf_d7HuXdjw" name="QualifierAssociation">
+    <ownedAttribute xmi:id="_BeMu0s62EeGGf_d7HuXdjw" name="base_Association" association="_BeMu0M62EeGGf_d7HuXdjw">
+      <type xmi:type="uml:Class" href="pathmap://UML_METAMODELS/UML.metamodel.uml#Association"/>
+    </ownedAttribute>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Extension" xmi:id="_BeMu0M62EeGGf_d7HuXdjw" name="Association_QualifierAssociation" memberEnd="_BeMu0c62EeGGf_d7HuXdjw _BeMu0s62EeGGf_d7HuXdjw">
+    <ownedEnd xmi:type="uml:ExtensionEnd" xmi:id="_BeMu0c62EeGGf_d7HuXdjw" name="extension_QualifierAssociation" type="_8vot8M61EeGGf_d7HuXdjw" aggregation="composite" association="_BeMu0M62EeGGf_d7HuXdjw"/>
+  </packagedElement>
+</uml:Profile>

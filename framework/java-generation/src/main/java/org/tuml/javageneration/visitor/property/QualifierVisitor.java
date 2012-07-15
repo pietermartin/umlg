@@ -1,6 +1,5 @@
 package org.tuml.javageneration.visitor.property;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
 import org.opaeum.java.metamodel.OJField;
@@ -39,7 +38,7 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
 	}
 
 	private void validateHasCorrespondingDerivedProperty(PropertyWrapper qualifier) {
-		if (!qualifier.qualifierHasCorrespondingDerivedProperty()) {
+		if (!qualifier.haveQualifierCorrespondingDerivedProperty()) {
 			throw new IllegalStateException(String.format("Qualifier %s on %s does not have a corresponding derived property on %s",
 					new Object[] { qualifier.getName(), qualifier.getOwner(), qualifier.getQualifierContext().getName() }));
 		}
@@ -84,7 +83,8 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
 		Type qualifiedClassifier = ownerElementPWrap.getOwningType();
 		OJAnnotatedClass ojClass = findOJClass(qualifiedClassifier);
 
-		OJAnnotatedOperation qualifierValue = new OJAnnotatedOperation(ownerElementPWrap.getter() + "For" + StringUtils.capitalize(qualifier.fieldname()));
+//		OJAnnotatedOperation qualifierValue = new OJAnnotatedOperation(ownerElementPWrap.getter() + "For" + StringUtils.capitalize(qualifier.fieldname()));
+		OJAnnotatedOperation qualifierValue = new OJAnnotatedOperation(ownerElementPWrap.getQualifiedNameFor(qualifier));
 		if (qualifier.isOne()) {
 			qualifierValue.setReturnType(ownerElementPWrap.javaBaseTypePath());
 		} else {

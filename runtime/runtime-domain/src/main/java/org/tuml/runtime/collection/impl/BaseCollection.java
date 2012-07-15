@@ -58,7 +58,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected void loadFromVertex() {
 		if (!isOnePrimitive()) {
-			for (Iterator<Edge> iter = getEdges(); iter.hasNext(); ) {
+			for (Iterator<Edge> iter = getEdges(); iter.hasNext();) {
 				Edge edge = iter.next();
 				E node = null;
 				try {
@@ -441,7 +441,8 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 			long count = index.count(qualifier.getKey(), qualifier.getValue());
 			if (count > 0) {
 				// Add info to exception
-				throw new IllegalStateException("qualifier fails, entry for qualifier already exist");
+				throw new IllegalStateException(String.format("Qualifier fails, qualifier multiplicity is one and an entry for key '%s' and value '%s' already exist",
+						qualifier.getKey(), qualifier.getValue()));
 			}
 		}
 	}
@@ -607,25 +608,25 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 		maybeLoad();
 		return this.oclStdLibCollection.asSet();
 	}
-	
+
 	@Override
 	public TinkerOrderedSet<E> asOrderedSet() {
 		maybeLoad();
 		return this.oclStdLibCollection.asOrderedSet();
 	}
-	
+
 	@Override
 	public TinkerSequence<E> asSequence() {
 		maybeLoad();
 		return this.oclStdLibCollection.asSequence();
 	}
-	
+
 	@Override
 	public TinkerBag<E> asBag() {
 		maybeLoad();
 		return this.oclStdLibCollection.asBag();
 	}
-	
+
 	@Override
 	public <R> R iterate(IterateExpressionAccumulator<R, E> v) {
 		maybeLoad();

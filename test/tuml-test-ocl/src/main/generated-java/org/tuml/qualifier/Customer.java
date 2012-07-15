@@ -1,6 +1,5 @@
-package org.tuml.testocl;
+package org.tuml.qualifier;
 
-import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 
 import java.util.Collections;
@@ -9,84 +8,94 @@ import java.util.UUID;
 
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.TinkerIdUtilFactory;
+import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
 import org.tuml.runtime.collection.Qualifier;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.collection.impl.TinkerSetImpl;
 import org.tuml.runtime.domain.BaseTinker;
+import org.tuml.runtime.domain.CompositionNode;
 import org.tuml.runtime.domain.TinkerNode;
 
-public class OclTest2 extends BaseTinker implements TinkerNode {
+public class Customer extends BaseTinker implements CompositionNode {
 	static final public long serialVersionUID = 1L;
 	private TinkerSet<String> name;
-	private TinkerSet<OclTestCollection> oclTestCollection;
-	private TinkerSet<String> name2;
+	private TinkerSet<Integer> accountNumber;
+	private TinkerSet<Bank> bank;
 
 	/**
-	 * constructor for OclTest2
+	 * constructor for Customer
+	 * 
+	 * @param compositeOwner 
+	 */
+	public Customer(Bank compositeOwner) {
+		this.vertex = GraphDb.getDb().addVertex("dribble");
+		initialiseProperties();
+		initVariables();
+		createComponents();
+		addToBank(compositeOwner);
+		TransactionThreadEntityVar.setNewEntity(this);
+		defaultCreate();
+	}
+	
+	/**
+	 * constructor for Customer
 	 * 
 	 * @param vertex 
 	 */
-	public OclTest2(Vertex vertex) {
+	public Customer(Vertex vertex) {
 		this.vertex=vertex;
 		initialiseProperties();
 	}
 	
 	/**
-	 * default constructor for OclTest2
+	 * default constructor for Customer
 	 */
-	public OclTest2() {
+	public Customer() {
 	}
 	
 	/**
-	 * constructor for OclTest2
+	 * constructor for Customer
 	 * 
 	 * @param persistent 
 	 */
-	public OclTest2(Boolean persistent) {
+	public Customer(Boolean persistent) {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
+		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
 		initialiseProperties();
 		initVariables();
 		createComponents();
-		Edge edge = GraphDb.getDb().addEdge(null, GraphDb.getDb().getRoot(), this.vertex, "root");
-		edge.setProperty("inClass", this.getClass().getName());
 	}
 
+	public void addToAccountNumber(Integer accountNumber) {
+		if ( accountNumber != null ) {
+			this.accountNumber.add(accountNumber);
+		}
+	}
+	
+	public void addToBank(Bank bank) {
+		if ( bank != null ) {
+			this.bank.add(bank);
+		}
+	}
+	
 	public void addToName(String name) {
 		if ( name != null ) {
 			this.name.add(name);
 		}
 	}
 	
-	public void addToName2(String name2) {
-		if ( name2 != null ) {
-			this.name2.add(name2);
-		}
+	public void clearAccountNumber() {
+		this.accountNumber.clear();
 	}
 	
-	public void addToOclTestCollection(OclTestCollection oclTestCollection) {
-		if ( oclTestCollection != null ) {
-			this.oclTestCollection.add(oclTestCollection);
-		}
-	}
-	
-	public void addToOclTestCollection(TinkerSet<OclTestCollection> oclTestCollection) {
-		if ( !oclTestCollection.isEmpty() ) {
-			this.oclTestCollection.addAll(oclTestCollection);
-		}
+	public void clearBank() {
+		this.bank.clear();
 	}
 	
 	public void clearName() {
 		this.name.clear();
-	}
-	
-	public void clearName2() {
-		this.name2.clear();
-	}
-	
-	public void clearOclTestCollection() {
-		this.oclTestCollection.clear();
 	}
 	
 	public void createComponents() {
@@ -95,6 +104,37 @@ public class OclTest2 extends BaseTinker implements TinkerNode {
 	@Override
 	public void delete() {
 		GraphDb.getDb().removeVertex(this.vertex);
+	}
+	
+	public Integer getAccountNumber() {
+		TinkerSet<Integer> tmp = this.accountNumber;
+		if ( !tmp.isEmpty() ) {
+			return tmp.iterator().next();
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Implements the ocl statement for derived property 'accountNumberQualifier'
+	 * <pre>
+	 * package testoclmodel::org::tuml::qualifier
+	 *     context Customer::accountNumberQualifier : Integer
+	 *     derive: self.accountNumber
+	 * endpackage
+	 * </pre>
+	 */
+	public Integer getAccountNumberQualifier() {
+		return getAccountNumber();
+	}
+	
+	public Bank getBank() {
+		TinkerSet<Bank> tmp = this.bank;
+		if ( !tmp.isEmpty() ) {
+			return tmp.iterator().next();
+		} else {
+			return null;
+		}
 	}
 	
 	@Override
@@ -111,13 +151,17 @@ public class OclTest2 extends BaseTinker implements TinkerNode {
 		}
 	}
 	
-	public String getName2() {
-		TinkerSet<String> tmp = this.name2;
-		if ( !tmp.isEmpty() ) {
-			return tmp.iterator().next();
-		} else {
-			return null;
-		}
+	/**
+	 * Implements the ocl statement for derived property 'nameQualifier'
+	 * <pre>
+	 * package testoclmodel::org::tuml::qualifier
+	 *     context Customer::nameQualifier : String
+	 *     derive: self.name
+	 * endpackage
+	 * </pre>
+	 */
+	public String getNameQualifier() {
+		return getName();
 	}
 	
 	@Override
@@ -125,8 +169,9 @@ public class OclTest2 extends BaseTinker implements TinkerNode {
 		return TinkerIdUtilFactory.getIdUtil().getVersion(this.vertex);
 	}
 	
-	public TinkerSet<OclTestCollection> getOclTestCollection() {
-		return this.oclTestCollection;
+	@Override
+	public TinkerNode getOwningObject() {
+		return getBank();
 	}
 	
 	/**
@@ -138,7 +183,7 @@ public class OclTest2 extends BaseTinker implements TinkerNode {
 	@Override
 	public List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, TinkerNode node) {
 		List<Qualifier> result = Collections.emptyList();
-		OclTest2RuntimePropertyEnum runtimeProperty = OclTest2RuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
+		CustomerRuntimePropertyEnum runtimeProperty = CustomerRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result.isEmpty() ) {
 			switch ( runtimeProperty ) {
 				default:
@@ -158,19 +203,19 @@ public class OclTest2 extends BaseTinker implements TinkerNode {
 	@Override
 	public int getSize(TumlRuntimeProperty tumlRuntimeProperty) {
 		int result = 0;
-		OclTest2RuntimePropertyEnum runtimeProperty = OclTest2RuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
+		CustomerRuntimePropertyEnum runtimeProperty = CustomerRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result == 0 ) {
 			switch ( runtimeProperty ) {
-				case oclTestCollection:
-					result = oclTestCollection.size();
-				break;
-			
 				case name:
 					result = name.size();
 				break;
 			
-				case name2:
-					result = name2.size();
+				case accountNumber:
+					result = accountNumber.size();
+				break;
+			
+				case bank:
+					result = bank.size();
 				break;
 			
 				default:
@@ -197,24 +242,24 @@ public class OclTest2 extends BaseTinker implements TinkerNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.name2 =  new TinkerSetImpl<String>(this, OclTest2RuntimePropertyEnum.name2);
-		this.name =  new TinkerSetImpl<String>(this, OclTest2RuntimePropertyEnum.name);
-		this.oclTestCollection =  new TinkerSetImpl<OclTestCollection>(this, OclTest2RuntimePropertyEnum.oclTestCollection);
+		this.bank =  new TinkerSetImpl<Bank>(this, CustomerRuntimePropertyEnum.bank);
+		this.accountNumber =  new TinkerSetImpl<Integer>(this, CustomerRuntimePropertyEnum.accountNumber);
+		this.name =  new TinkerSetImpl<String>(this, CustomerRuntimePropertyEnum.name);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
-		switch ( (OclTest2RuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case oclTestCollection:
-				this.oclTestCollection =  new TinkerSetImpl<OclTestCollection>(this, OclTest2RuntimePropertyEnum.oclTestCollection);
-			break;
-		
+		switch ( (CustomerRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
 			case name:
-				this.name =  new TinkerSetImpl<String>(this, OclTest2RuntimePropertyEnum.name);
+				this.name =  new TinkerSetImpl<String>(this, CustomerRuntimePropertyEnum.name);
 			break;
 		
-			case name2:
-				this.name2 =  new TinkerSetImpl<String>(this, OclTest2RuntimePropertyEnum.name2);
+			case accountNumber:
+				this.accountNumber =  new TinkerSetImpl<Integer>(this, CustomerRuntimePropertyEnum.accountNumber);
+			break;
+		
+			case bank:
+				this.bank =  new TinkerSetImpl<Bank>(this, CustomerRuntimePropertyEnum.bank);
 			break;
 		
 		}
@@ -222,7 +267,31 @@ public class OclTest2 extends BaseTinker implements TinkerNode {
 	
 	@Override
 	public boolean isTinkerRoot() {
-		return true;
+		return false;
+	}
+	
+	public void removeFromAccountNumber(Integer accountNumber) {
+		if ( accountNumber != null ) {
+			this.accountNumber.remove(accountNumber);
+		}
+	}
+	
+	public void removeFromAccountNumber(TinkerSet<Integer> accountNumber) {
+		if ( !accountNumber.isEmpty() ) {
+			this.accountNumber.removeAll(accountNumber);
+		}
+	}
+	
+	public void removeFromBank(Bank bank) {
+		if ( bank != null ) {
+			this.bank.remove(bank);
+		}
+	}
+	
+	public void removeFromBank(TinkerSet<Bank> bank) {
+		if ( !bank.isEmpty() ) {
+			this.bank.removeAll(bank);
+		}
 	}
 	
 	public void removeFromName(String name) {
@@ -237,28 +306,14 @@ public class OclTest2 extends BaseTinker implements TinkerNode {
 		}
 	}
 	
-	public void removeFromName2(String name2) {
-		if ( name2 != null ) {
-			this.name2.remove(name2);
-		}
+	public void setAccountNumber(Integer accountNumber) {
+		clearAccountNumber();
+		addToAccountNumber(accountNumber);
 	}
 	
-	public void removeFromName2(TinkerSet<String> name2) {
-		if ( !name2.isEmpty() ) {
-			this.name2.removeAll(name2);
-		}
-	}
-	
-	public void removeFromOclTestCollection(OclTestCollection oclTestCollection) {
-		if ( oclTestCollection != null ) {
-			this.oclTestCollection.remove(oclTestCollection);
-		}
-	}
-	
-	public void removeFromOclTestCollection(TinkerSet<OclTestCollection> oclTestCollection) {
-		if ( !oclTestCollection.isEmpty() ) {
-			this.oclTestCollection.removeAll(oclTestCollection);
-		}
+	public void setBank(Bank bank) {
+		clearBank();
+		addToBank(bank);
 	}
 	
 	@Override
@@ -270,21 +325,11 @@ public class OclTest2 extends BaseTinker implements TinkerNode {
 		clearName();
 		addToName(name);
 	}
-	
-	public void setName2(String name2) {
-		clearName2();
-		addToName2(name2);
-	}
-	
-	public void setOclTestCollection(TinkerSet<OclTestCollection> oclTestCollection) {
-		clearOclTestCollection();
-		addToOclTestCollection(oclTestCollection);
-	}
 
-	public enum OclTest2RuntimePropertyEnum implements TumlRuntimeProperty {
-		name2(true,true,false,"testoclmodel__org__tuml__testocl__OclTest2__name2",false,false,true,false,1,1,false,false,false,false,true),
-		name(true,true,false,"testoclmodel__org__tuml__testocl__OclTest2__name",false,false,true,false,1,1,false,false,false,false,true),
-		oclTestCollection(false,true,false,"A_<oclTest2>_<oclTestCollection>",false,true,false,false,-1,0,false,false,false,false,true);
+	public enum CustomerRuntimePropertyEnum implements TumlRuntimeProperty {
+		bank(false,false,false,"A_<bank>_<customer>",false,false,true,false,1,1,false,true,false,false,true),
+		accountNumber(true,true,false,"testoclmodel__org__tuml__qualifier__Customer__accountNumber",false,false,true,false,1,1,false,false,false,false,true),
+		name(true,true,false,"testoclmodel__org__tuml__qualifier__Customer__name",false,false,true,false,1,1,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -301,7 +346,7 @@ public class OclTest2 extends BaseTinker implements TinkerNode {
 		private boolean inverseOrdered;
 		private boolean unique;
 		/**
-		 * constructor for OclTest2RuntimePropertyEnum
+		 * constructor for CustomerRuntimePropertyEnum
 		 * 
 		 * @param onePrimitive 
 		 * @param controllingSide 
@@ -319,7 +364,7 @@ public class OclTest2 extends BaseTinker implements TinkerNode {
 		 * @param inverseOrdered 
 		 * @param unique 
 		 */
-		private OclTest2RuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower, boolean qualified, boolean inverseQualified, boolean ordered, boolean inverseOrdered, boolean unique) {
+		private CustomerRuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower, boolean qualified, boolean inverseQualified, boolean ordered, boolean inverseOrdered, boolean unique) {
 			this.onePrimitive = onePrimitive;
 			this.controllingSide = controllingSide;
 			this.composite = composite;
@@ -337,15 +382,15 @@ public class OclTest2 extends BaseTinker implements TinkerNode {
 			this.unique = unique;
 		}
 	
-		static public OclTest2RuntimePropertyEnum fromLabel(String label) {
-			if ( name2.getLabel().equals(label) ) {
-				return name2;
+		static public CustomerRuntimePropertyEnum fromLabel(String label) {
+			if ( bank.getLabel().equals(label) ) {
+				return bank;
+			}
+			if ( accountNumber.getLabel().equals(label) ) {
+				return accountNumber;
 			}
 			if ( name.getLabel().equals(label) ) {
 				return name;
-			}
-			if ( oclTestCollection.getLabel().equals(label) ) {
-				return oclTestCollection;
 			}
 			return null;
 		}

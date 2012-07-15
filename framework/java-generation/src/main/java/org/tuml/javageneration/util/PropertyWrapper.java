@@ -1438,11 +1438,6 @@ public class PropertyWrapper implements Property {
         return sb.toString();
     }
 
-    public String getQualifierValueGetterName() {
-        Property owner = (Property) getOwner();
-        return "get" + owner.getType().getName() + StringUtils.capitalize(getName()) + "QualifierValue";
-    }
-
     public Property getQualifierCorrespondingDerivedProperty() {
         if (!isQualifier()) {
             throw new IllegalStateException("getCorrespondingDerivedProperty can only be called on a qualifier");
@@ -1474,7 +1469,7 @@ public class PropertyWrapper implements Property {
         return owner.getType();
     }
 
-    public boolean qualifierHasCorrespondingDerivedProperty() {
+    public boolean haveQualifierCorrespondingDerivedProperty() {
         if (!isQualifier()) {
             throw new IllegalStateException("getCorrespondingDerivedProperty can only be called on a qualifier");
         }
@@ -1483,6 +1478,10 @@ public class PropertyWrapper implements Property {
 
     public String getQualifiedGetterName() {
         return "getQualifierFor" + StringUtils.capitalize(getName());
+    }
+
+    public String getQualifiedNameFor(PropertyWrapper qualifer) {
+    	return getter() + "For" + StringUtils.capitalize(qualifer.getName());
     }
 
     public String emptyCollection() {
