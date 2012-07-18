@@ -5,7 +5,6 @@ import com.tinkerpop.blueprints.Vertex;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import org.tuml.runtime.adaptor.GraphDb;
@@ -22,7 +21,8 @@ public class InterfaceRealization1 extends BaseTinker implements TinkerNode, Int
 	private TinkerSet<String> name;
 	private TinkerSet<Interface2> interface2;
 
-	/** Constructor for InterfaceRealization1
+	/**
+	 * constructor for InterfaceRealization1
 	 * 
 	 * @param vertex 
 	 */
@@ -31,12 +31,14 @@ public class InterfaceRealization1 extends BaseTinker implements TinkerNode, Int
 		initialiseProperties();
 	}
 	
-	/** Default constructor for InterfaceRealization1
+	/**
+	 * default constructor for InterfaceRealization1
 	 */
 	public InterfaceRealization1() {
 	}
 	
-	/** Constructor for InterfaceRealization1
+	/**
+	 * constructor for InterfaceRealization1
 	 * 
 	 * @param persistent 
 	 */
@@ -56,7 +58,7 @@ public class InterfaceRealization1 extends BaseTinker implements TinkerNode, Int
 		}
 	}
 	
-	public void addToInterface2(Set<Interface2> interface2) {
+	public void addToInterface2(TinkerSet<Interface2> interface2) {
 		if ( !interface2.isEmpty() ) {
 			this.interface2.addAll(interface2);
 		}
@@ -110,7 +112,8 @@ public class InterfaceRealization1 extends BaseTinker implements TinkerNode, Int
 		return TinkerIdUtilFactory.getIdUtil().getVersion(this.vertex);
 	}
 	
-	/** GetQualifiers is called from the collection in order to update the index used to implement the qualifier
+	/**
+	 * getQualifiers is called from the collection in order to update the index used to implement the qualifier
 	 * 
 	 * @param tumlRuntimeProperty 
 	 * @param node 
@@ -130,7 +133,8 @@ public class InterfaceRealization1 extends BaseTinker implements TinkerNode, Int
 		return result;
 	}
 	
-	/** GetSize is called from the collection in order to update the index used to implement a sequance's index
+	/**
+	 * getSize is called from the collection in order to update the index used to implement a sequance's index
 	 * 
 	 * @param tumlRuntimeProperty 
 	 */
@@ -201,15 +205,9 @@ public class InterfaceRealization1 extends BaseTinker implements TinkerNode, Int
 		}
 	}
 	
-	public void removeFromInterface2(Set<Interface2> interface2) {
+	public void removeFromInterface2(TinkerSet<Interface2> interface2) {
 		if ( !interface2.isEmpty() ) {
 			this.interface2.removeAll(interface2);
-		}
-	}
-	
-	public void removeFromName(Set<String> name) {
-		if ( !name.isEmpty() ) {
-			this.name.removeAll(name);
 		}
 	}
 	
@@ -219,12 +217,18 @@ public class InterfaceRealization1 extends BaseTinker implements TinkerNode, Int
 		}
 	}
 	
+	public void removeFromName(TinkerSet<String> name) {
+		if ( !name.isEmpty() ) {
+			this.name.removeAll(name);
+		}
+	}
+	
 	@Override
 	public void setId(Long id) {
 		TinkerIdUtilFactory.getIdUtil().setId(this.vertex, id);
 	}
 	
-	public void setInterface2(Set<Interface2> interface2) {
+	public void setInterface2(TinkerSet<Interface2> interface2) {
 		clearInterface2();
 		addToInterface2(interface2);
 	}
@@ -235,7 +239,7 @@ public class InterfaceRealization1 extends BaseTinker implements TinkerNode, Int
 	}
 
 	public enum InterfaceRealization1RuntimePropertyEnum implements TumlRuntimeProperty {
-		name(true,true,false,"tuml-test-basic-model__org__tuml__Interface1__name",false,false,true,false,1,1,false,false,false,false,true),
+		name(true,true,false,"basicmodel__org__tuml__Interface1__name",false,false,true,false,1,1,false,false,false,false,true),
 		interface2(false,true,true,"A_<interface1>_<interface2>",false,true,false,false,-1,0,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
@@ -252,7 +256,8 @@ public class InterfaceRealization1 extends BaseTinker implements TinkerNode, Int
 		private boolean ordered;
 		private boolean inverseOrdered;
 		private boolean unique;
-		/** Constructor for InterfaceRealization1RuntimePropertyEnum
+		/**
+		 * constructor for InterfaceRealization1RuntimePropertyEnum
 		 * 
 		 * @param onePrimitive 
 		 * @param controllingSide 

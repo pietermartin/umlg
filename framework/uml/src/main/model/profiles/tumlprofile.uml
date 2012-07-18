@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<uml:Profile xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/3.0.0/UML" xmi:id="_XkGiwB07Ed-QQ4mYkrb7Gg" name="tuml">
+<uml:Profile xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xmi:id="_XkGiwB07Ed-QQ4mYkrb7Gg" name="tuml">
   <eAnnotations xmi:id="_8I_ksc61EeGGf_d7HuXdjw" source="http://www.eclipse.org/uml2/2.0.0/UML">
+    <contents xmi:type="ecore:EPackage" xmi:id="_GP8VAM8CEeGQvantw8VX5Q" name="tuml" nsURI="http:///schemas/tuml/_GP7G4M8CEeGQvantw8VX5Q/7" nsPrefix="tuml">
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_GP8VAc8CEeGQvantw8VX5Q" name="QualifierAssociation">
+        <eAnnotations xmi:id="_GP8VAs8CEeGQvantw8VX5Q" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_8vot8M61EeGGf_d7HuXdjw"/>
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_GP8VA88CEeGQvantw8VX5Q" name="base_Association" ordered="false" lowerBound="1">
+          <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/3.0.0/UML#//Association"/>
+        </eStructuralFeatures>
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_GP8VBc8CEeGQvantw8VX5Q" name="referencedQualifier" ordered="false" lowerBound="1">
+          <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/3.0.0/UML#//Property"/>
+        </eStructuralFeatures>
+      </eClassifiers>
+    </contents>
     <contents xmi:type="ecore:EPackage" xmi:id="_2zMvQM62EeGEl_PAnbcd0Q" name="tuml" nsURI="http:///schemas/tuml/_2zMIMM62EeGEl_PAnbcd0Q/6" nsPrefix="tuml">
       <eClassifiers xmi:type="ecore:EClass" xmi:id="_2zMvQc62EeGEl_PAnbcd0Q" name="QualifierAssociation">
         <eAnnotations xmi:id="_2zMvQs62EeGEl_PAnbcd0Q" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_8vot8M61EeGGf_d7HuXdjw"/>
@@ -60,6 +71,9 @@
   <packagedElement xmi:type="uml:Stereotype" xmi:id="_8vot8M61EeGGf_d7HuXdjw" name="QualifierAssociation">
     <ownedAttribute xmi:id="_BeMu0s62EeGGf_d7HuXdjw" name="base_Association" association="_BeMu0M62EeGGf_d7HuXdjw">
       <type xmi:type="uml:Class" href="pathmap://UML_METAMODELS/UML.metamodel.uml#Association"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:id="_3aLaoM8BEeGQvantw8VX5Q" name="referencedQualifier">
+      <type xmi:type="uml:Class" href="pathmap://UML_METAMODELS/UML.metamodel.uml#Property"/>
     </ownedAttribute>
   </packagedElement>
   <packagedElement xmi:type="uml:Extension" xmi:id="_BeMu0M62EeGGf_d7HuXdjw" name="Association_QualifierAssociation" memberEnd="_BeMu0c62EeGGf_d7HuXdjw _BeMu0s62EeGGf_d7HuXdjw">

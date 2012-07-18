@@ -2,11 +2,9 @@ package org.tuml.javageneration;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import org.apache.commons.io.FileUtils;
 import org.eclipse.uml2.uml.Model;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
 import org.tuml.framework.JavaModelPrinter;
@@ -47,12 +45,6 @@ public class Workspace {
 	}
 
 	public void generate() {
-//		try {
-//			URL url = Workspace.class.getResource("/logging.properties");
-//			LogManager.getLogManager().readConfiguration(url.openStream());
-//		} catch (Exception e) {
-//			throw new RuntimeException(e);
-//		}
 		File sourceDir = new File(projectRoot, JavaModelPrinter.SOURCE_FOLDER);
 		logger.info("Generation started");
 		visitModel();
@@ -61,18 +53,6 @@ public class Workspace {
 				sourceDir.getAbsolutePath() }));
 	}
 	
-//	public File writeOclFile(String ocl, String qualifiedName) {
-//		try {
-//			File oclFile = new File("src/main/generated-resources/" + qualifiedName + ".ocl");
-//			FileWriter fw = new FileWriter(oclFile);
-//			fw.write(ocl);
-//			fw.flush();
-//			return oclFile;
-//		} catch (Exception e) {
-//			throw new RuntimeException(e);
-//		}
-//	}
-
 	private void toText() {
 		for (Map.Entry<String, OJAnnotatedClass> entry : this.javaClassMap.entrySet()) {
 			JavaModelPrinter.addToSource(entry.getKey(), entry.getValue().toJavaString());
@@ -84,18 +64,8 @@ public class Workspace {
 		return this.javaClassMap.get(name);
 	}
 
-	private void clearOclFiles() {
-		Iterator<File> iter = FileUtils.iterateFiles(new File(this.projectRoot, RESOURCE_FOLDER), new String[] { "ocl" }, false);
-		while (iter.hasNext()) {
-			File file = (File) iter.next();
-			file.delete();
-		}
-	}
-
 	private void visitModel() {
-		clearOclFiles();
 		this.model = ModelLoader.loadModel(modelFile);
-//		TumlOcl.prepareDresdenOcl(this.modelFile);
 		ModelVisitor.visitModel(this.model, new InterfaceVisitor(this));
 		ModelVisitor.visitModel(this.model, new ClassCreator(this));
 		ModelVisitor.visitModel(this.model, new ClassBuilder(this));
@@ -111,6 +81,10 @@ public class Workspace {
 		ModelVisitor.visitModel(this.model, new QualifierValidator(this));
 		ModelVisitor.visitModel(this.model, new QualifierVisitor(this));
 		ModelVisitor.visitModel(this.model, new OperationImplementorSimple(this));
+	}
+
+	public Model getModel() {
+		return model;
 	}
 
 }

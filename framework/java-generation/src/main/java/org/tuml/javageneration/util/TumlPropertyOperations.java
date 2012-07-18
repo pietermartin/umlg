@@ -50,6 +50,14 @@ public final class TumlPropertyOperations extends PropertyOperations {
 		return TumlMultiplicityOperations.isMany(property) || qualifierCount > 0;
 	}
 
+	public static boolean isUnqualifiedOne(Property property) {
+		return !isUnqualifiedMany(property);
+	}
+
+	public static boolean isUnqualifiedMany(Property property) {
+		return TumlMultiplicityOperations.isMany(property);
+	}
+
 	public static boolean isOne(Property property) {
 		return !isMany(property);
 	}

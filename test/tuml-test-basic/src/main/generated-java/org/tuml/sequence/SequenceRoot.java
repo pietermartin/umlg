@@ -5,7 +5,6 @@ import com.tinkerpop.blueprints.Vertex;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import org.tuml.runtime.adaptor.GraphDb;
@@ -24,7 +23,8 @@ public class SequenceRoot extends BaseTinker implements TinkerNode {
 	private TinkerSet<String> name;
 	private TinkerOrderedSet<SequenceTest> sequenceTest;
 
-	/** Constructor for SequenceRoot
+	/**
+	 * constructor for SequenceRoot
 	 * 
 	 * @param vertex 
 	 */
@@ -33,12 +33,14 @@ public class SequenceRoot extends BaseTinker implements TinkerNode {
 		initialiseProperties();
 	}
 	
-	/** Default constructor for SequenceRoot
+	/**
+	 * default constructor for SequenceRoot
 	 */
 	public SequenceRoot() {
 	}
 	
-	/** Constructor for SequenceRoot
+	/**
+	 * constructor for SequenceRoot
 	 * 
 	 * @param persistent 
 	 */
@@ -64,7 +66,7 @@ public class SequenceRoot extends BaseTinker implements TinkerNode {
 		}
 	}
 	
-	public void addToSequenceTest(Set<SequenceTest> sequenceTest) {
+	public void addToSequenceTest(TinkerOrderedSet<SequenceTest> sequenceTest) {
 		if ( !sequenceTest.isEmpty() ) {
 			this.sequenceTest.addAll(sequenceTest);
 		}
@@ -108,7 +110,8 @@ public class SequenceRoot extends BaseTinker implements TinkerNode {
 		return TinkerIdUtilFactory.getIdUtil().getVersion(this.vertex);
 	}
 	
-	/** GetQualifiers is called from the collection in order to update the index used to implement the qualifier
+	/**
+	 * getQualifiers is called from the collection in order to update the index used to implement the qualifier
 	 * 
 	 * @param tumlRuntimeProperty 
 	 * @param node 
@@ -132,7 +135,8 @@ public class SequenceRoot extends BaseTinker implements TinkerNode {
 		return this.sequenceTest;
 	}
 	
-	/** GetSize is called from the collection in order to update the index used to implement a sequance's index
+	/**
+	 * getSize is called from the collection in order to update the index used to implement a sequance's index
 	 * 
 	 * @param tumlRuntimeProperty 
 	 */
@@ -197,15 +201,15 @@ public class SequenceRoot extends BaseTinker implements TinkerNode {
 		return true;
 	}
 	
-	public void removeFromName(Set<String> name) {
-		if ( !name.isEmpty() ) {
-			this.name.removeAll(name);
-		}
-	}
-	
 	public void removeFromName(String name) {
 		if ( name != null ) {
 			this.name.remove(name);
+		}
+	}
+	
+	public void removeFromName(TinkerSet<String> name) {
+		if ( !name.isEmpty() ) {
+			this.name.removeAll(name);
 		}
 	}
 	
@@ -215,7 +219,7 @@ public class SequenceRoot extends BaseTinker implements TinkerNode {
 		}
 	}
 	
-	public void removeFromSequenceTest(Set<SequenceTest> sequenceTest) {
+	public void removeFromSequenceTest(TinkerOrderedSet<SequenceTest> sequenceTest) {
 		if ( !sequenceTest.isEmpty() ) {
 			this.sequenceTest.removeAll(sequenceTest);
 		}
@@ -231,14 +235,14 @@ public class SequenceRoot extends BaseTinker implements TinkerNode {
 		addToName(name);
 	}
 	
-	public void setSequenceTest(Set<SequenceTest> sequenceTest) {
+	public void setSequenceTest(TinkerOrderedSet<SequenceTest> sequenceTest) {
 		clearSequenceTest();
 		addToSequenceTest(sequenceTest);
 	}
 
 	public enum SequenceRootRuntimePropertyEnum implements TumlRuntimeProperty {
 		sequenceTest(false,true,true,"A_<sequenceRoot>_<sequenceTest>",false,true,false,false,-1,0,false,false,true,true,true),
-		name(true,true,false,"tuml-test-basic-model__org__tuml__sequence__SequenceRoot__name",false,false,true,false,1,1,false,false,false,false,true);
+		name(true,true,false,"basicmodel__org__tuml__sequence__SequenceRoot__name",false,false,true,false,1,1,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -254,7 +258,8 @@ public class SequenceRoot extends BaseTinker implements TinkerNode {
 		private boolean ordered;
 		private boolean inverseOrdered;
 		private boolean unique;
-		/** Constructor for SequenceRootRuntimePropertyEnum
+		/**
+		 * constructor for SequenceRootRuntimePropertyEnum
 		 * 
 		 * @param onePrimitive 
 		 * @param controllingSide 

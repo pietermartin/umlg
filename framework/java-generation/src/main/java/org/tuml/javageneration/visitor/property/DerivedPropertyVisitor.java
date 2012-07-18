@@ -40,7 +40,7 @@ public class DerivedPropertyVisitor extends BaseVisitor implements Visitor<Prope
 			}
 			String ocl = propertyWrapper.getOclDerivedValue();
 			getter.setComment(String.format("Implements the ocl statement for derived property '%s'\n<pre>\n%s\n</pre>", propertyWrapper.getName(), ocl));
-			logger.fine(String.format("About to parse ocl expression \n%s", new Object[] { ocl }));
+			logger.info(String.format("About to parse ocl expression \n%s", new Object[] { ocl }));
 			OCLExpression<Classifier> oclExp = TumlOcl2Parser.INSTANCE.parseOcl(ocl);
 			getter.getBody().addToStatements("return " + TumlOcl2Java.oclToJava(owner, oclExp));
 			owner.addToOperations(getter);

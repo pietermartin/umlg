@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import org.tuml.runtime.adaptor.GraphDb;
@@ -29,8 +28,10 @@ public class God extends BaseTinker implements TinkerNode {
 	static final public long serialVersionUID = 1L;
 	private TinkerQualifiedSet<Nature> nature;
 	private TinkerSet<String> name;
+	private TinkerQualifiedSet<Angel> angel;
 
-	/** Constructor for God
+	/**
+	 * constructor for God
 	 * 
 	 * @param vertex 
 	 */
@@ -39,12 +40,14 @@ public class God extends BaseTinker implements TinkerNode {
 		initialiseProperties();
 	}
 	
-	/** Default constructor for God
+	/**
+	 * default constructor for God
 	 */
 	public God() {
 	}
 	
-	/** Constructor for God
+	/**
+	 * constructor for God
 	 * 
 	 * @param persistent 
 	 */
@@ -58,6 +61,18 @@ public class God extends BaseTinker implements TinkerNode {
 		edge.setProperty("inClass", this.getClass().getName());
 	}
 
+	public void addToAngel(Angel angel) {
+		if ( angel != null ) {
+			this.angel.add(angel);
+		}
+	}
+	
+	public void addToAngel(TinkerSet<Angel> angel) {
+		for ( Angel a : angel ) {
+			this.addToAngel(a);
+		}
+	}
+	
 	public void addToName(String name) {
 		if ( name != null ) {
 			this.name.add(name);
@@ -70,10 +85,14 @@ public class God extends BaseTinker implements TinkerNode {
 		}
 	}
 	
-	public void addToNature(Set<Nature> nature) {
+	public void addToNature(TinkerSet<Nature> nature) {
 		for ( Nature n : nature ) {
 			this.addToNature(n);
 		}
+	}
+	
+	public void clearAngel() {
+		this.angel.clear();
 	}
 	
 	public void clearName() {
@@ -92,7 +111,32 @@ public class God extends BaseTinker implements TinkerNode {
 		for ( Nature child : getNature() ) {
 			child.delete();
 		}
+		for ( Angel child : getAngel() ) {
+			child.delete();
+		}
 		GraphDb.getDb().removeVertex(this.vertex);
+	}
+	
+	public TinkerQualifiedSet<Angel> getAngel() {
+		return this.angel;
+	}
+	
+	public Angel getAngelForAngelNameQualifierAngelRankQualifier(String angelNameQualifier, Integer angelRankQualifier) {
+		Index<Edge> index = GraphDb.getDb().getIndex(getUid() + ":::" + GodRuntimePropertyEnum.angel.getLabel(), Edge.class);
+		if ( index==null ) {
+			return null;
+		} else {
+			String indexKey = "angelNameQualifierangelRankQualifier";
+			String indexValue = angelNameQualifier==null?"___NULL___":angelNameQualifier;
+			indexValue += angelRankQualifier==null?"___NULL___":angelRankQualifier;
+			CloseableIterable<Edge> closeableIterable = index.get(indexKey, indexValue);
+			Iterator<Edge> iterator = closeableIterable.iterator();
+			if ( iterator.hasNext() ) {
+				return new Angel(iterator.next().getVertex(Direction.IN));
+			} else {
+				return null;
+			}
+		}
 	}
 	
 	@Override
@@ -118,7 +162,9 @@ public class God extends BaseTinker implements TinkerNode {
 		if ( index==null ) {
 			return null;
 		} else {
-			CloseableIterable<Edge> closeableIterable = index.get("natureQualifier1", natureQualifier1==null?"___NULL___":natureQualifier1);
+			String indexKey = "natureQualifier1";
+			String indexValue = natureQualifier1==null?"___NULL___":natureQualifier1;
+			CloseableIterable<Edge> closeableIterable = index.get(indexKey, indexValue);
 			Iterator<Edge> iterator = closeableIterable.iterator();
 			if ( iterator.hasNext() ) {
 				return new Nature(iterator.next().getVertex(Direction.IN));
@@ -133,13 +179,20 @@ public class God extends BaseTinker implements TinkerNode {
 		return TinkerIdUtilFactory.getIdUtil().getVersion(this.vertex);
 	}
 	
-	public List<Qualifier> getQualifierForNature(Nature context) {
+	public List<Qualifier> getQualifierForAngel(Angel context) {
 		List<Qualifier> result = new ArrayList<Qualifier>();
-		result.add(new Qualifier("natureQualifier1", context.getNatureQualifier1(), Multiplicity.ONE_TO_ONE));
+		result.add(new Qualifier(new String[]{"angelNameQualifier", "angelRankQualifier"}, new String[]{context.getAngelNameQualifier().toString() , context.getAngelRankQualifier().toString() }, Multiplicity.ZERO_TO_ONE));
 		return result;
 	}
 	
-	/** GetQualifiers is called from the collection in order to update the index used to implement the qualifier
+	public List<Qualifier> getQualifierForNature(Nature context) {
+		List<Qualifier> result = new ArrayList<Qualifier>();
+		result.add(new Qualifier(new String[]{"natureQualifier1"}, new String[]{context.getNatureQualifier1().toString() }, Multiplicity.ZERO_TO_ONE));
+		return result;
+	}
+	
+	/**
+	 * getQualifiers is called from the collection in order to update the index used to implement the qualifier
 	 * 
 	 * @param tumlRuntimeProperty 
 	 * @param node 
@@ -150,6 +203,10 @@ public class God extends BaseTinker implements TinkerNode {
 		GodRuntimePropertyEnum runtimeProperty = GodRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result.isEmpty() ) {
 			switch ( runtimeProperty ) {
+				case angel:
+					result = getQualifierForAngel((Angel)node);
+				break;
+			
 				case nature:
 					result = getQualifierForNature((Nature)node);
 				break;
@@ -163,7 +220,8 @@ public class God extends BaseTinker implements TinkerNode {
 		return result;
 	}
 	
-	/** GetSize is called from the collection in order to update the index used to implement a sequance's index
+	/**
+	 * getSize is called from the collection in order to update the index used to implement a sequance's index
 	 * 
 	 * @param tumlRuntimeProperty 
 	 */
@@ -175,6 +233,10 @@ public class God extends BaseTinker implements TinkerNode {
 			switch ( runtimeProperty ) {
 				case name:
 					result = name.size();
+				break;
+			
+				case angel:
+					result = angel.size();
 				break;
 			
 				case nature:
@@ -206,6 +268,7 @@ public class God extends BaseTinker implements TinkerNode {
 	@Override
 	public void initialiseProperties() {
 		this.nature =  new TinkerQualifiedSetImpl<Nature>(this, GodRuntimePropertyEnum.nature);
+		this.angel =  new TinkerQualifiedSetImpl<Angel>(this, GodRuntimePropertyEnum.angel);
 		this.name =  new TinkerSetImpl<String>(this, GodRuntimePropertyEnum.name);
 	}
 	
@@ -214,6 +277,10 @@ public class God extends BaseTinker implements TinkerNode {
 		switch ( (GodRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
 			case name:
 				this.name =  new TinkerSetImpl<String>(this, GodRuntimePropertyEnum.name);
+			break;
+		
+			case angel:
+				this.angel =  new TinkerQualifiedSetImpl<Angel>(this, GodRuntimePropertyEnum.angel);
 			break;
 		
 			case nature:
@@ -228,9 +295,15 @@ public class God extends BaseTinker implements TinkerNode {
 		return true;
 	}
 	
-	public void removeFromName(Set<String> name) {
-		if ( !name.isEmpty() ) {
-			this.name.removeAll(name);
+	public void removeFromAngel(Angel angel) {
+		if ( angel != null ) {
+			this.angel.remove(angel);
+		}
+	}
+	
+	public void removeFromAngel(TinkerSet<Angel> angel) {
+		if ( !angel.isEmpty() ) {
+			this.angel.removeAll(angel);
 		}
 	}
 	
@@ -240,16 +313,27 @@ public class God extends BaseTinker implements TinkerNode {
 		}
 	}
 	
+	public void removeFromName(TinkerSet<String> name) {
+		if ( !name.isEmpty() ) {
+			this.name.removeAll(name);
+		}
+	}
+	
 	public void removeFromNature(Nature nature) {
 		if ( nature != null ) {
 			this.nature.remove(nature);
 		}
 	}
 	
-	public void removeFromNature(Set<Nature> nature) {
+	public void removeFromNature(TinkerSet<Nature> nature) {
 		if ( !nature.isEmpty() ) {
 			this.nature.removeAll(nature);
 		}
+	}
+	
+	public void setAngel(TinkerSet<Angel> angel) {
+		clearAngel();
+		addToAngel(angel);
 	}
 	
 	@Override
@@ -262,14 +346,15 @@ public class God extends BaseTinker implements TinkerNode {
 		addToName(name);
 	}
 	
-	public void setNature(Set<Nature> nature) {
+	public void setNature(TinkerSet<Nature> nature) {
 		clearNature();
 		addToNature(nature);
 	}
 
 	public enum GodRuntimePropertyEnum implements TumlRuntimeProperty {
-		nature(false,true,true,"A_<god>_<nature>",false,true,false,false,-1,0,true,false,false,false,true),
-		name(true,true,false,"tuml-test-basic-model__org__tuml__qualifier__God__name",false,false,true,false,1,1,false,false,false,false,true);
+		nature(false,true,true,"A_<god>_<nature>",false,true,false,false,1,0,true,false,false,false,true),
+		angel(false,true,true,"A_<god>_<angel>",false,true,false,false,1,0,true,false,false,false,true),
+		name(true,true,false,"basicmodel__org__tuml__qualifier__God__name",false,false,true,false,1,1,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -285,7 +370,8 @@ public class God extends BaseTinker implements TinkerNode {
 		private boolean ordered;
 		private boolean inverseOrdered;
 		private boolean unique;
-		/** Constructor for GodRuntimePropertyEnum
+		/**
+		 * constructor for GodRuntimePropertyEnum
 		 * 
 		 * @param onePrimitive 
 		 * @param controllingSide 
@@ -324,6 +410,9 @@ public class God extends BaseTinker implements TinkerNode {
 		static public GodRuntimePropertyEnum fromLabel(String label) {
 			if ( nature.getLabel().equals(label) ) {
 				return nature;
+			}
+			if ( angel.getLabel().equals(label) ) {
+				return angel;
 			}
 			if ( name.getLabel().equals(label) ) {
 				return name;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<uml:Model xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:uml="http://www.eclipse.org/uml2/3.0.0/UML" xmi:id="_qb8akM37EdqwVrslYOdUDA" name="tuml-test-basic-model">
+<uml:Model xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:uml="http://www.eclipse.org/uml2/3.0.0/UML" xmi:id="_qb8akM37EdqwVrslYOdUDA" name="basicmodel">
   <elementImport xmi:id="_hZz7UK1CEeG4sJlJhTM52A">
     <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
   </elementImport>
@@ -118,7 +118,7 @@
       <packagedElement xmi:type="uml:Package" xmi:id="_19RG4MH_EeGL375nPDEdEA" name="qualifier">
         <packagedElement xmi:type="uml:Class" xmi:id="_5pYMQMH_EeGL375nPDEdEA" name="God">
           <ownedAttribute xmi:id="_9C4esMH_EeGL375nPDEdEA" name="nature" type="_7OUw0MH_EeGL375nPDEdEA" aggregation="composite" association="_9C8JGsH_EeGL375nPDEdEA">
-            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_9C4escH_EeGL375nPDEdEA" value="*"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_9C4escH_EeGL375nPDEdEA" value="1"/>
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_9C4essH_EeGL375nPDEdEA"/>
             <qualifier xmi:id="_M6ScQMIAEeGL375nPDEdEA" name="natureQualifier1">
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
@@ -126,6 +126,16 @@
           </ownedAttribute>
           <ownedAttribute xmi:id="__1DrYMH_EeGL375nPDEdEA" name="name">
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+          </ownedAttribute>
+          <ownedAttribute xmi:id="_hrsJUM_PEeGGFrQzok82hA" name="angel" type="_R3AvoM_PEeGGFrQzok82hA" aggregation="composite" association="_hr3vgM_PEeGGFrQzok82hA">
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_hrsJUc_PEeGGFrQzok82hA" value="1"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_hrsJUs_PEeGGFrQzok82hA"/>
+            <qualifier xmi:id="_vdQbwM_PEeGGFrQzok82hA" name="angelNameQualifier">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+            </qualifier>
+            <qualifier xmi:id="_AWQZMM_QEeGGFrQzok82hA" name="angelRankQualifier">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+            </qualifier>
           </ownedAttribute>
         </packagedElement>
         <packagedElement xmi:type="uml:Class" xmi:id="_7OUw0MH_EeGL375nPDEdEA" name="Nature">
@@ -144,6 +154,34 @@
           <ownedEnd xmi:id="_9C8JG8H_EeGL375nPDEdEA" name="god" type="_5pYMQMH_EeGL375nPDEdEA" association="_9C8JGsH_EeGL375nPDEdEA">
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_9C8JHMH_EeGL375nPDEdEA" value="1"/>
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_9C8JHcH_EeGL375nPDEdEA" value="1"/>
+          </ownedEnd>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Class" xmi:id="_R3AvoM_PEeGGFrQzok82hA" name="Angel">
+          <ownedAttribute xmi:id="_YwaQYM_PEeGGFrQzok82hA" name="name">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+          </ownedAttribute>
+          <ownedAttribute xmi:id="_aPKtYM_PEeGGFrQzok82hA" name="rank">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+          </ownedAttribute>
+          <ownedAttribute xmi:id="_buiOYM_PEeGGFrQzok82hA" name="angelNameQualifier" isDerived="true">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+            <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_eaznYM_PEeGGFrQzok82hA" name="self.name">
+              <language>ocl</language>
+              <body>self.name</body>
+            </defaultValue>
+          </ownedAttribute>
+          <ownedAttribute xmi:id="_6uxMQM_PEeGGFrQzok82hA" name="angelRankQualifier" isDerived="true">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+            <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_9mjRsM_PEeGGFrQzok82hA" name="self.rank">
+              <language>ocl</language>
+              <body>self.rank</body>
+            </defaultValue>
+          </ownedAttribute>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Association" xmi:id="_hr3vgM_PEeGGFrQzok82hA" name="A_&lt;god>_&lt;angel>" memberEnd="_hr3vgc_PEeGGFrQzok82hA _hrsJUM_PEeGGFrQzok82hA" navigableOwnedEnd="_hr3vgc_PEeGGFrQzok82hA">
+          <ownedEnd xmi:id="_hr3vgc_PEeGGFrQzok82hA" name="god" type="_5pYMQMH_EeGL375nPDEdEA" association="_hr3vgM_PEeGGFrQzok82hA">
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_hr3vgs_PEeGGFrQzok82hA" value="1"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_hr3vg8_PEeGGFrQzok82hA" value="1"/>
           </ownedEnd>
         </packagedElement>
       </packagedElement>

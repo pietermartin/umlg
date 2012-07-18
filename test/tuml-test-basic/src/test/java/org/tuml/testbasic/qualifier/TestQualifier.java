@@ -12,7 +12,7 @@ import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 public class TestQualifier extends BaseLocalDbTest {
 	
 	@Test
-	public void testInheritance() {
+	public void testQualifier() {
 		db.startTransaction();
 		God god = new God(true);
 		god.setName("God");

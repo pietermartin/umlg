@@ -10,11 +10,13 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.ocl.Environment;
 import org.eclipse.ocl.uml.UMLEnvironmentFactory;
 import org.eclipse.uml2.uml.Model;
+import org.eclipse.uml2.uml.Profile;
+import org.eclipse.uml2.uml.Stereotype;
 import org.eclipse.uml2.uml.UMLPackage;
 import org.eclipse.uml2.uml.resource.UMLResource;
-import org.eclipse.ocl.Environment;
 
 public class ModelLoader {
 
@@ -34,6 +36,15 @@ public class ModelLoader {
 
     public static Model getModel() {
         return model;
+    }
+    
+    public static Stereotype findStereotype(String name) {
+    	Profile tumlProfile = (Profile)model.getAllAppliedProfiles().get(0);
+    	System.out.println(tumlProfile.getMetaclassReferences());
+//    	org.eclipse.uml2.uml.Class system = (org.eclipse.uml2.uml.Class) tumlProfile.allOwningPackages()getOwnedElements().get(0);
+//    	> Stereotype s = system.getAppliedStereotypes().get(0);
+//    	> System.out.println(s);
+    	return null;
     }
 
     protected static org.eclipse.uml2.uml.Package load(URI uri) {

@@ -1,7 +1,11 @@
 package org.tuml.javageneration.visitor.property;
 
+import java.util.Iterator;
+import java.util.List;
+
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
+import org.opaeum.java.metamodel.OJBlock;
 import org.opaeum.java.metamodel.OJField;
 import org.opaeum.java.metamodel.OJIfStatement;
 import org.opaeum.java.metamodel.OJPathName;
@@ -23,13 +27,9 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
 	@Override
 	public void visitBefore(Property p) {
 		PropertyWrapper pWrap = new PropertyWrapper(p);
-		if (pWrap.isQualifier()) {
-			validateHasCorrespondingDerivedProperty(pWrap);
+		if (pWrap.hasQualifiers()) {
+			generateQualifierGetter(findOJClass(pWrap), pWrap);
 			generateQualifiedGetter(pWrap);
-		} else {
-			if (pWrap.hasQualifiers()) {
-				generateQualifierGetter(findOJClass(pWrap), pWrap);
-			}
 		}
 	}
 
@@ -56,77 +56,121 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
 		ojClass.addToImports("java.util.ArrayList");
 		qualifierGetter.setReturnType(result.getType());
 		qualifierGetter.getBody().addToLocals(result);
-		for (Property p : qualified.getQualifiers()) {
-			PropertyWrapper qWrap = new PropertyWrapper(p);
-			StringBuilder sb = new StringBuilder();
-			sb.append("result.add(");
-			sb.append("new ");
-			sb.append(TinkerGenerationUtil.TINKER_QUALIFIER_PATHNAME.getLast());
-			sb.append("(\"");
+
+		StringBuilder sb = new StringBuilder();
+		sb.append("result.add(");
+		sb.append("new ");
+		sb.append(TinkerGenerationUtil.TINKER_QUALIFIER_PATHNAME.getLast());
+		sb.append("(new String[]{");
+
+		for (Iterator<Property> iterator = qualified.getQualifiers().iterator(); iterator.hasNext();) {
+			PropertyWrapper qWrap = new PropertyWrapper(iterator.next());
+			sb.append("\"");
 			sb.append(qWrap.getName());
-			sb.append("\", ");
+			sb.append("\"");
+			if (iterator.hasNext()) {
+				sb.append(", ");
+			}
+		}
+		sb.append("}, new String[]{");
+		for (Iterator<Property> iterator = qualified.getQualifiers().iterator(); iterator.hasNext();) {
+			PropertyWrapper qWrap = new PropertyWrapper(iterator.next());
 			sb.append("context.");
 			sb.append(qWrap.getter());
-			sb.append("(), ");
-			sb.append(TinkerGenerationUtil.calculateMultiplcity(qWrap));
-			sb.append("))");
-			qualifierGetter.getBody().addToStatements(sb.toString());
+			sb.append("().toString() ");
+			if (iterator.hasNext()) {
+				sb.append(", ");
+			}
 		}
+
+		sb.append("}, ");
+		sb.append(TinkerGenerationUtil.calculateMultiplcity(qualified));
+		sb.append("))");
+		qualifierGetter.getBody().addToStatements(sb.toString());
+
 		qualifierGetter.getBody().addToStatements("return result");
 		ojClass.addToImports(TinkerGenerationUtil.TINKER_QUALIFIER_PATHNAME);
 		ojClass.addToImports(TinkerGenerationUtil.tinkerMultiplicityPathName);
 	}
 
-	private void generateQualifiedGetter(PropertyWrapper qualifier) {
-		Property ownerElement = (Property) qualifier.getOwner();
-		PropertyWrapper ownerElementPWrap = new PropertyWrapper(ownerElement);
-		Type qualifiedClassifier = ownerElementPWrap.getOwningType();
+	private void generateQualifiedGetter(PropertyWrapper qualified) {
+		PropertyWrapper qualifiedPropertyWrapper = new PropertyWrapper(qualified);
+		List<PropertyWrapper> qualifiers = qualifiedPropertyWrapper.getQualifiersAsPropertyWrappers();
+		for (PropertyWrapper qualifier : qualifiers) {
+			validateHasCorrespondingDerivedProperty(qualifier);
+		}
+
+		Type qualifiedClassifier = qualifiedPropertyWrapper.getOwningType();
 		OJAnnotatedClass ojClass = findOJClass(qualifiedClassifier);
 
-//		OJAnnotatedOperation qualifierValue = new OJAnnotatedOperation(ownerElementPWrap.getter() + "For" + StringUtils.capitalize(qualifier.fieldname()));
-		OJAnnotatedOperation qualifierValue = new OJAnnotatedOperation(ownerElementPWrap.getQualifiedNameFor(qualifier));
-		if (qualifier.isOne()) {
-			qualifierValue.setReturnType(ownerElementPWrap.javaBaseTypePath());
+		OJAnnotatedOperation qualifierValue = new OJAnnotatedOperation(qualifiedPropertyWrapper.getQualifiedNameFor(qualifiers.toArray(new PropertyWrapper[] {})));
+		if (qualified.isUnqualifiedOne()) {
+			qualifierValue.setReturnType(qualifiedPropertyWrapper.javaBaseTypePath());
 		} else {
-			// This needs to only return a Set or Bag for now, not sorting the result
+			// This needs to only return a Set or Bag for now, not sorting the
+			// result
 			// by index as yet
-			qualifierValue.setReturnType(ownerElementPWrap.javaTypePath());
+			qualifierValue.setReturnType(qualifiedPropertyWrapper.javaTypePath());
 		}
-		qualifierValue.addParam(qualifier.fieldname(), qualifier.javaBaseTypePath());
-
+		for (PropertyWrapper qualifier : qualifiers) {
+			qualifierValue.addParam(qualifier.fieldname(), qualifier.javaBaseTypePath());
+		}
 		ojClass.addToImports(TinkerGenerationUtil.tinkerIndexPathName);
 		ojClass.addToImports(TinkerGenerationUtil.tinkerCloseableIterablePathName);
 		ojClass.addToImports(TinkerGenerationUtil.tinkerDirection);
 		ojClass.addToImports(TinkerGenerationUtil.edgePathName);
 		qualifierValue.getBody().addToStatements(
-				"Index<Edge> index = GraphDb.getDb().getIndex(getUid() + \":::\" + " + ownerElementPWrap.getTumlRuntimePropertyEnum() + ".getLabel(), Edge.class)");
+				"Index<Edge> index = GraphDb.getDb().getIndex(getUid() + \":::\" + " + qualifiedPropertyWrapper.getTumlRuntimePropertyEnum() + ".getLabel(), Edge.class)");
 		OJIfStatement ifIndexNull = new OJIfStatement("index==null", "return null");
-		ifIndexNull.addToElsePart(TinkerGenerationUtil.tinkerCloseableIterablePathName.getCopy().addToGenerics(TinkerGenerationUtil.edgePathName).getLast()
-				+ " closeableIterable = index.get(\"" + qualifier.fieldname() + "\", " + qualifier.fieldname() + "==null?\"___NULL___\":" + qualifier.fieldname() + ")");
+
+		OJBlock elseBlock = new OJBlock();
+		OJField indexKey = new OJField(elseBlock, "indexKey", new OJPathName("String"));
+		String init = "";
+		for (PropertyWrapper qualifier : qualifiers) {
+			init += qualifier.fieldname();
+		}
+		indexKey.setInitExp("\"" + init + "\"");
+		elseBlock.addToLocals(indexKey);
+
+		OJField indexValue = new OJField(elseBlock, "indexValue", new OJPathName("String"));
+		boolean first = true;
+		for (PropertyWrapper qualifier : qualifiers) {
+			if (first) {
+				first = false;
+				indexValue.setInitExp(qualifier.fieldname() + "==null?\"___NULL___\":" + qualifier.fieldname());
+			} else {
+				elseBlock.addToStatements("indexValue += " + qualifier.fieldname() + "==null?\"___NULL___\":" + qualifier.fieldname());
+			}
+		}
+		elseBlock.addToStatements(TinkerGenerationUtil.tinkerCloseableIterablePathName.getCopy().addToGenerics(TinkerGenerationUtil.edgePathName).getLast()
+				+ " closeableIterable = index.get(" + "indexKey" + ", indexValue)");
+		ifIndexNull.setElsePart(elseBlock);
+
 		ifIndexNull.addToElsePart("Iterator<Edge> iterator = closeableIterable.iterator()");
 		ojClass.addToImports("java.util.Iterator");
 		OJIfStatement ifHasNext = new OJIfStatement("iterator.hasNext()");
-		if (qualifier.isOne()) {
-			ifHasNext.addToThenPart("return new " + ownerElementPWrap.javaBaseTypePath().getLast() + "(iterator.next().getVertex("
+		if (qualified.isUnqualifiedOne()) {
+			ifHasNext.addToThenPart("return new " + qualifiedPropertyWrapper.javaBaseTypePath().getLast() + "(iterator.next().getVertex("
 					+ TinkerGenerationUtil.tinkerDirection.getLast() + ".IN))");
 			ifHasNext.addToElsePart("return null");
 		} else {
 			OJSimpleStatement ojSimpleStatement;
-			if (ownerElementPWrap.isUnique()) {
-				ojSimpleStatement = new OJSimpleStatement("return new " + TinkerGenerationUtil.tumlTinkerSetClosableIterableImpl.getCopy().addToGenerics(ownerElementPWrap.javaBaseTypePath())
-						.getLast());
+			if (qualifiedPropertyWrapper.isUnique()) {
+				ojSimpleStatement = new OJSimpleStatement("return new "
+						+ TinkerGenerationUtil.tumlTinkerSetClosableIterableImpl.getCopy().addToGenerics(qualifiedPropertyWrapper.javaBaseTypePath()).getLast());
 			} else {
-				ojSimpleStatement = new OJSimpleStatement("return new " + TinkerGenerationUtil.tumlTinkerSequenceClosableIterableImpl.getCopy().addToGenerics(ownerElementPWrap.javaBaseTypePath()).getLast());
+				ojSimpleStatement = new OJSimpleStatement("return new "
+						+ TinkerGenerationUtil.tumlTinkerSequenceClosableIterableImpl.getCopy().addToGenerics(qualifiedPropertyWrapper.javaBaseTypePath()).getLast());
 			}
-			ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + "(iterator, " + ownerElementPWrap.getTumlRuntimePropertyEnum() + ")");
-			if (ownerElementPWrap.isUnique()) {
+			ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + "(iterator, " + qualifiedPropertyWrapper.getTumlRuntimePropertyEnum() + ")");
+			if (qualifiedPropertyWrapper.isUnique()) {
 				ojClass.addToImports(TinkerGenerationUtil.tumlTinkerSetClosableIterableImpl);
 			} else {
 				ojClass.addToImports(TinkerGenerationUtil.tumlTinkerSequenceClosableIterableImpl);
 			}
 			ifHasNext.addToThenPart(ojSimpleStatement);
-			ifHasNext.addToElsePart("return " + ownerElementPWrap.emptyCollection());
-			ojClass.addToImports(new OJPathName("java.util.Collections"));
+			ifHasNext.addToElsePart("return " + qualifiedPropertyWrapper.emptyCollection());
+			ojClass.addToImports(TinkerGenerationUtil.tumlTumlCollections);
 		}
 
 		ifIndexNull.addToElsePart(ifHasNext);

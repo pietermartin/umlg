@@ -4,7 +4,6 @@ import com.tinkerpop.blueprints.Vertex;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import org.tuml.runtime.adaptor.GraphDb;
@@ -23,7 +22,8 @@ public class Nature extends BaseTinker implements CompositionNode {
 	private TinkerSet<String> natureName;
 	private TinkerSet<God> god;
 
-	/** Constructor for Nature
+	/**
+	 * constructor for Nature
 	 * 
 	 * @param compositeOwner 
 	 */
@@ -37,7 +37,8 @@ public class Nature extends BaseTinker implements CompositionNode {
 		defaultCreate();
 	}
 	
-	/** Constructor for Nature
+	/**
+	 * constructor for Nature
 	 * 
 	 * @param vertex 
 	 */
@@ -46,12 +47,14 @@ public class Nature extends BaseTinker implements CompositionNode {
 		initialiseProperties();
 	}
 	
-	/** Default constructor for Nature
+	/**
+	 * default constructor for Nature
 	 */
 	public Nature() {
 	}
 	
-	/** Constructor for Nature
+	/**
+	 * constructor for Nature
 	 * 
 	 * @param persistent 
 	 */
@@ -115,6 +118,15 @@ public class Nature extends BaseTinker implements CompositionNode {
 		}
 	}
 	
+	/**
+	 * Implements the ocl statement for derived property 'natureQualifier1'
+	 * <pre>
+	 * package basicmodel::org::tuml::qualifier
+	 *     context Nature::natureQualifier1 : String
+	 *     derive: self.natureName
+	 * endpackage
+	 * </pre>
+	 */
 	public String getNatureQualifier1() {
 		return getNatureName();
 	}
@@ -129,7 +141,8 @@ public class Nature extends BaseTinker implements CompositionNode {
 		return getGod();
 	}
 	
-	/** GetQualifiers is called from the collection in order to update the index used to implement the qualifier
+	/**
+	 * getQualifiers is called from the collection in order to update the index used to implement the qualifier
 	 * 
 	 * @param tumlRuntimeProperty 
 	 * @param node 
@@ -149,7 +162,8 @@ public class Nature extends BaseTinker implements CompositionNode {
 		return result;
 	}
 	
-	/** GetSize is called from the collection in order to update the index used to implement a sequance's index
+	/**
+	 * getSize is called from the collection in order to update the index used to implement a sequance's index
 	 * 
 	 * @param tumlRuntimeProperty 
 	 */
@@ -220,21 +234,21 @@ public class Nature extends BaseTinker implements CompositionNode {
 		}
 	}
 	
-	public void removeFromGod(Set<God> god) {
+	public void removeFromGod(TinkerSet<God> god) {
 		if ( !god.isEmpty() ) {
 			this.god.removeAll(god);
-		}
-	}
-	
-	public void removeFromNatureName(Set<String> natureName) {
-		if ( !natureName.isEmpty() ) {
-			this.natureName.removeAll(natureName);
 		}
 	}
 	
 	public void removeFromNatureName(String natureName) {
 		if ( natureName != null ) {
 			this.natureName.remove(natureName);
+		}
+	}
+	
+	public void removeFromNatureName(TinkerSet<String> natureName) {
+		if ( !natureName.isEmpty() ) {
+			this.natureName.removeAll(natureName);
 		}
 	}
 	
@@ -255,7 +269,7 @@ public class Nature extends BaseTinker implements CompositionNode {
 
 	public enum NatureRuntimePropertyEnum implements TumlRuntimeProperty {
 		god(false,false,false,"A_<god>_<nature>",false,false,true,false,1,1,false,true,false,false,true),
-		natureName(true,true,false,"tuml-test-basic-model__org__tuml__qualifier__Nature__natureName",false,false,true,false,1,1,false,false,false,false,true);
+		natureName(true,true,false,"basicmodel__org__tuml__qualifier__Nature__natureName",false,false,true,false,1,1,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -271,7 +285,8 @@ public class Nature extends BaseTinker implements CompositionNode {
 		private boolean ordered;
 		private boolean inverseOrdered;
 		private boolean unique;
-		/** Constructor for NatureRuntimePropertyEnum
+		/**
+		 * constructor for NatureRuntimePropertyEnum
 		 * 
 		 * @param onePrimitive 
 		 * @param controllingSide 

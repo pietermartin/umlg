@@ -4,7 +4,6 @@ import com.tinkerpop.blueprints.Vertex;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import org.tuml.runtime.adaptor.GraphDb;
@@ -25,7 +24,8 @@ public class SequenceTest extends BaseTinker implements CompositionNode {
 	private TinkerSet<String> name;
 	private TinkerOrderedSet<SequenceRoot> sequenceRoot;
 
-	/** Constructor for SequenceTest
+	/**
+	 * constructor for SequenceTest
 	 * 
 	 * @param compositeOwner 
 	 */
@@ -39,7 +39,8 @@ public class SequenceTest extends BaseTinker implements CompositionNode {
 		defaultCreate();
 	}
 	
-	/** Constructor for SequenceTest
+	/**
+	 * constructor for SequenceTest
 	 * 
 	 * @param vertex 
 	 */
@@ -48,12 +49,14 @@ public class SequenceTest extends BaseTinker implements CompositionNode {
 		initialiseProperties();
 	}
 	
-	/** Default constructor for SequenceTest
+	/**
+	 * default constructor for SequenceTest
 	 */
 	public SequenceTest() {
 	}
 	
-	/** Constructor for SequenceTest
+	/**
+	 * constructor for SequenceTest
 	 * 
 	 * @param persistent 
 	 */
@@ -118,7 +121,8 @@ public class SequenceTest extends BaseTinker implements CompositionNode {
 		return getSequenceRoot();
 	}
 	
-	/** GetQualifiers is called from the collection in order to update the index used to implement the qualifier
+	/**
+	 * getQualifiers is called from the collection in order to update the index used to implement the qualifier
 	 * 
 	 * @param tumlRuntimeProperty 
 	 * @param node 
@@ -147,7 +151,8 @@ public class SequenceTest extends BaseTinker implements CompositionNode {
 		}
 	}
 	
-	/** GetSize is called from the collection in order to update the index used to implement a sequance's index
+	/**
+	 * getSize is called from the collection in order to update the index used to implement a sequance's index
 	 * 
 	 * @param tumlRuntimeProperty 
 	 */
@@ -157,12 +162,12 @@ public class SequenceTest extends BaseTinker implements CompositionNode {
 		SequenceTestRuntimePropertyEnum runtimeProperty = SequenceTestRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result == 0 ) {
 			switch ( runtimeProperty ) {
-				case sequenceRoot:
-					result = sequenceRoot.size();
-				break;
-			
 				case name:
 					result = name.size();
+				break;
+			
+				case sequenceRoot:
+					result = sequenceRoot.size();
 				break;
 			
 				default:
@@ -189,19 +194,19 @@ public class SequenceTest extends BaseTinker implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.name =  new TinkerSetImpl<String>(this, SequenceTestRuntimePropertyEnum.name);
 		this.sequenceRoot =  new TinkerOrderedSetImpl<SequenceRoot>(this, SequenceTestRuntimePropertyEnum.sequenceRoot);
+		this.name =  new TinkerSetImpl<String>(this, SequenceTestRuntimePropertyEnum.name);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (SequenceTestRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case sequenceRoot:
-				this.sequenceRoot =  new TinkerOrderedSetImpl<SequenceRoot>(this, SequenceTestRuntimePropertyEnum.sequenceRoot);
-			break;
-		
 			case name:
 				this.name =  new TinkerSetImpl<String>(this, SequenceTestRuntimePropertyEnum.name);
+			break;
+		
+			case sequenceRoot:
+				this.sequenceRoot =  new TinkerOrderedSetImpl<SequenceRoot>(this, SequenceTestRuntimePropertyEnum.sequenceRoot);
 			break;
 		
 		}
@@ -212,15 +217,15 @@ public class SequenceTest extends BaseTinker implements CompositionNode {
 		return false;
 	}
 	
-	public void removeFromName(Set<String> name) {
-		if ( !name.isEmpty() ) {
-			this.name.removeAll(name);
-		}
-	}
-	
 	public void removeFromName(String name) {
 		if ( name != null ) {
 			this.name.remove(name);
+		}
+	}
+	
+	public void removeFromName(TinkerSet<String> name) {
+		if ( !name.isEmpty() ) {
+			this.name.removeAll(name);
 		}
 	}
 	
@@ -230,7 +235,7 @@ public class SequenceTest extends BaseTinker implements CompositionNode {
 		}
 	}
 	
-	public void removeFromSequenceRoot(Set<SequenceRoot> sequenceRoot) {
+	public void removeFromSequenceRoot(TinkerOrderedSet<SequenceRoot> sequenceRoot) {
 		if ( !sequenceRoot.isEmpty() ) {
 			this.sequenceRoot.removeAll(sequenceRoot);
 		}
@@ -252,8 +257,8 @@ public class SequenceTest extends BaseTinker implements CompositionNode {
 	}
 
 	public enum SequenceTestRuntimePropertyEnum implements TumlRuntimeProperty {
-		name(true,true,false,"tuml-test-basic-model__org__tuml__sequence__SequenceTest__name",false,false,true,false,1,1,false,false,false,false,true),
-		sequenceRoot(false,false,false,"A_<sequenceRoot>_<sequenceTest>",false,false,true,false,1,1,false,false,true,true,true);
+		sequenceRoot(false,false,false,"A_<sequenceRoot>_<sequenceTest>",false,false,true,false,1,1,false,false,true,true,true),
+		name(true,true,false,"basicmodel__org__tuml__sequence__SequenceTest__name",false,false,true,false,1,1,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -269,7 +274,8 @@ public class SequenceTest extends BaseTinker implements CompositionNode {
 		private boolean ordered;
 		private boolean inverseOrdered;
 		private boolean unique;
-		/** Constructor for SequenceTestRuntimePropertyEnum
+		/**
+		 * constructor for SequenceTestRuntimePropertyEnum
 		 * 
 		 * @param onePrimitive 
 		 * @param controllingSide 
@@ -306,11 +312,11 @@ public class SequenceTest extends BaseTinker implements CompositionNode {
 		}
 	
 		static public SequenceTestRuntimePropertyEnum fromLabel(String label) {
-			if ( name.getLabel().equals(label) ) {
-				return name;
-			}
 			if ( sequenceRoot.getLabel().equals(label) ) {
 				return sequenceRoot;
+			}
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
 			return null;
 		}

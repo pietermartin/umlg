@@ -5,7 +5,6 @@ import com.tinkerpop.blueprints.Vertex;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import org.tuml.runtime.adaptor.GraphDb;
@@ -22,7 +21,8 @@ public class One extends BaseTinker implements TinkerNode {
 	private TinkerSet<String> name;
 	private TinkerSet<Many> many;
 
-	/** Constructor for One
+	/**
+	 * constructor for One
 	 * 
 	 * @param vertex 
 	 */
@@ -31,12 +31,14 @@ public class One extends BaseTinker implements TinkerNode {
 		initialiseProperties();
 	}
 	
-	/** Default constructor for One
+	/**
+	 * default constructor for One
 	 */
 	public One() {
 	}
 	
-	/** Constructor for One
+	/**
+	 * constructor for One
 	 * 
 	 * @param persistent 
 	 */
@@ -56,7 +58,7 @@ public class One extends BaseTinker implements TinkerNode {
 		}
 	}
 	
-	public void addToMany(Set<Many> many) {
+	public void addToMany(TinkerSet<Many> many) {
 		if ( !many.isEmpty() ) {
 			this.many.addAll(many);
 		}
@@ -110,7 +112,8 @@ public class One extends BaseTinker implements TinkerNode {
 		return TinkerIdUtilFactory.getIdUtil().getVersion(this.vertex);
 	}
 	
-	/** GetQualifiers is called from the collection in order to update the index used to implement the qualifier
+	/**
+	 * getQualifiers is called from the collection in order to update the index used to implement the qualifier
 	 * 
 	 * @param tumlRuntimeProperty 
 	 * @param node 
@@ -130,7 +133,8 @@ public class One extends BaseTinker implements TinkerNode {
 		return result;
 	}
 	
-	/** GetSize is called from the collection in order to update the index used to implement a sequance's index
+	/**
+	 * getSize is called from the collection in order to update the index used to implement a sequance's index
 	 * 
 	 * @param tumlRuntimeProperty 
 	 */
@@ -201,15 +205,9 @@ public class One extends BaseTinker implements TinkerNode {
 		}
 	}
 	
-	public void removeFromMany(Set<Many> many) {
+	public void removeFromMany(TinkerSet<Many> many) {
 		if ( !many.isEmpty() ) {
 			this.many.removeAll(many);
-		}
-	}
-	
-	public void removeFromName(Set<String> name) {
-		if ( !name.isEmpty() ) {
-			this.name.removeAll(name);
 		}
 	}
 	
@@ -219,12 +217,18 @@ public class One extends BaseTinker implements TinkerNode {
 		}
 	}
 	
+	public void removeFromName(TinkerSet<String> name) {
+		if ( !name.isEmpty() ) {
+			this.name.removeAll(name);
+		}
+	}
+	
 	@Override
 	public void setId(Long id) {
 		TinkerIdUtilFactory.getIdUtil().setId(this.vertex, id);
 	}
 	
-	public void setMany(Set<Many> many) {
+	public void setMany(TinkerSet<Many> many) {
 		clearMany();
 		addToMany(many);
 	}
@@ -235,7 +239,7 @@ public class One extends BaseTinker implements TinkerNode {
 	}
 
 	public enum OneRuntimePropertyEnum implements TumlRuntimeProperty {
-		name(true,true,false,"tuml-test-basic-model__org__tuml__One__name",false,false,true,false,1,1,false,false,false,false,true),
+		name(true,true,false,"basicmodel__org__tuml__One__name",false,false,true,false,1,1,false,false,false,false,true),
 		many(false,true,true,"A_<one>_<many>",false,true,false,false,-1,0,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
@@ -252,7 +256,8 @@ public class One extends BaseTinker implements TinkerNode {
 		private boolean ordered;
 		private boolean inverseOrdered;
 		private boolean unique;
-		/** Constructor for OneRuntimePropertyEnum
+		/**
+		 * constructor for OneRuntimePropertyEnum
 		 * 
 		 * @param onePrimitive 
 		 * @param controllingSide 

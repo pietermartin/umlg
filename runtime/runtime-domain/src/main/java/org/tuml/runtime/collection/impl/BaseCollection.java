@@ -162,9 +162,6 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 		}
 		TinkerNode node = (TinkerNode) e;
 		if (isQualified()) {
-			if (!(e instanceof TinkerNode)) {
-				throw new IllegalStateException("Primitive properties can not be qualified!");
-			}
 			for (Qualifier qualifier : this.owner.getQualifiers(this.tumlRuntimeProperty, node)) {
 				validateQualifiedMultiplicity(index, qualifier);
 			}
@@ -500,9 +497,12 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 	}
 
 	/**
-	 * @param nodeBeingIndexed
-	 *            element is the context for the ocl expression representing the
-	 *            qualifier value
+	 * element is the context for the ocl expression representing the qualifier
+	 * value
+	 * 
+	 * @param index
+	 * @param qualifiedNode
+	 * @param qualifierNode
 	 */
 	private void addQualifierToIndex(Index<Edge> index, Edge edge, TinkerNode qualifiedNode, TinkerNode qualifierNode) {
 		for (Qualifier qualifier : qualifiedNode.getQualifiers(this.tumlRuntimeProperty, qualifierNode)) {

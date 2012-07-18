@@ -14,7 +14,8 @@ import org.tuml.runtime.domain.TinkerNode;
 public class Mamal extends AbstractSpecies implements CompositionNode {
 	static final public long serialVersionUID = 1L;
 
-	/** Constructor for Mamal
+	/**
+	 * constructor for Mamal
 	 * 
 	 * @param compositeOwner 
 	 */
@@ -23,7 +24,8 @@ public class Mamal extends AbstractSpecies implements CompositionNode {
 		addToGod(compositeOwner);
 	}
 	
-	/** Constructor for Mamal
+	/**
+	 * constructor for Mamal
 	 * 
 	 * @param vertex 
 	 */
@@ -32,13 +34,15 @@ public class Mamal extends AbstractSpecies implements CompositionNode {
 		initialiseProperties();
 	}
 	
-	/** Default constructor for Mamal
+	/**
+	 * default constructor for Mamal
 	 */
 	public Mamal() {
 		super.initVariables();
 	}
 	
-	/** Constructor for Mamal
+	/**
+	 * constructor for Mamal
 	 * 
 	 * @param persistent 
 	 */
@@ -60,7 +64,8 @@ public class Mamal extends AbstractSpecies implements CompositionNode {
 		return getGod();
 	}
 	
-	/** GetQualifiers is called from the collection in order to update the index used to implement the qualifier
+	/**
+	 * getQualifiers is called from the collection in order to update the index used to implement the qualifier
 	 * 
 	 * @param tumlRuntimeProperty 
 	 * @param node 
@@ -80,7 +85,8 @@ public class Mamal extends AbstractSpecies implements CompositionNode {
 		return result;
 	}
 	
-	/** GetSize is called from the collection in order to update the index used to implement a sequance's index
+	/**
+	 * getSize is called from the collection in order to update the index used to implement a sequance's index
 	 * 
 	 * @param tumlRuntimeProperty 
 	 */
@@ -137,7 +143,8 @@ public class Mamal extends AbstractSpecies implements CompositionNode {
 		private boolean ordered;
 		private boolean inverseOrdered;
 		private boolean unique;
-		/** Constructor for MamalRuntimePropertyEnum
+		/**
+		 * constructor for MamalRuntimePropertyEnum
 		 * 
 		 * @param onePrimitive 
 		 * @param controllingSide 

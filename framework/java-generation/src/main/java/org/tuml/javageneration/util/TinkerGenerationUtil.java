@@ -16,10 +16,11 @@ public class TinkerGenerationUtil {
 
 	public static final String TINKER_DB_NULL = "__NULL__";
 
+	public static final OJPathName tumlTumlCollections = new OJPathName("org.tuml.runtime.util.TumlCollections");
 	public static final OJPathName tumlOclStdCollectionLib = new OJPathName("org.tuml.runtime.collection.ocl.*");
 
-	public static final OJPathName tumlTinkerSequenceClosableIterableImpl = new OJPathName("org.tuml.runtime.collection.TinkerSequenceClosableIterableImpl");
-	public static final OJPathName tumlTinkerSetClosableIterableImpl = new OJPathName("org.tuml.runtime.collection.TinkerSetClosableIterableImpl");
+	public static final OJPathName tumlTinkerSequenceClosableIterableImpl = new OJPathName("org.tuml.runtime.collection.impl.TinkerSequenceClosableIterableImpl");
+	public static final OJPathName tumlTinkerSetClosableIterableImpl = new OJPathName("org.tuml.runtime.collection.impl.TinkerSetClosableIterableImpl");
 	
 	public static final OJPathName tumlRuntimePropertyPathName = new OJPathName("org.tuml.runtime.collection.TumlRuntimeProperty");
 	public static final OJPathName tinkerConclusionPathName = new OJPathName("com.tinkerpop.blueprints.pgm.TransactionalGraph.Conclusion");

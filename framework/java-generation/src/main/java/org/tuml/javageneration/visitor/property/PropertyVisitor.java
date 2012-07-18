@@ -3,8 +3,10 @@ package org.tuml.javageneration.visitor.property;
 import org.eclipse.ocl.expressions.OCLExpression;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Property;
+import org.eclipse.uml2.uml.Stereotype;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
+import org.tuml.framework.ModelLoader;
 import org.tuml.framework.Visitor;
 import org.tuml.javageneration.Workspace;
 import org.tuml.javageneration.util.PropertyWrapper;
@@ -22,7 +24,10 @@ public class PropertyVisitor extends BaseVisitor implements Visitor<Property> {
 	public void visitBefore(Property p) {
 		PropertyWrapper propertyWrapper = new PropertyWrapper(p);
 		OJAnnotatedClass owner = findOJClass(p);
-		if (!propertyWrapper.isDerived() && !propertyWrapper.isQualifier()) {
+		
+//		Stereotype stereotype = ModelLoader.findStereotype("qualifierAssociation");
+		
+		if (!propertyWrapper.isDerived() && !propertyWrapper.isQualifier() && !propertyWrapper.isForQualifier()) {
 			buildField(owner, propertyWrapper);
 			buildRemover(owner, propertyWrapper);
 			buildClearer(owner, propertyWrapper);

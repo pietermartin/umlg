@@ -5,7 +5,6 @@ import com.tinkerpop.blueprints.Vertex;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import org.tuml.runtime.adaptor.GraphDb;
@@ -22,7 +21,8 @@ public class OneOne extends BaseTinker implements TinkerNode {
 	private TinkerSet<String> name;
 	private TinkerSet<OneTwo> oneTwo;
 
-	/** Constructor for OneOne
+	/**
+	 * constructor for OneOne
 	 * 
 	 * @param vertex 
 	 */
@@ -31,12 +31,14 @@ public class OneOne extends BaseTinker implements TinkerNode {
 		initialiseProperties();
 	}
 	
-	/** Default constructor for OneOne
+	/**
+	 * default constructor for OneOne
 	 */
 	public OneOne() {
 	}
 	
-	/** Constructor for OneOne
+	/**
+	 * constructor for OneOne
 	 * 
 	 * @param persistent 
 	 */
@@ -106,7 +108,8 @@ public class OneOne extends BaseTinker implements TinkerNode {
 		}
 	}
 	
-	/** GetQualifiers is called from the collection in order to update the index used to implement the qualifier
+	/**
+	 * getQualifiers is called from the collection in order to update the index used to implement the qualifier
 	 * 
 	 * @param tumlRuntimeProperty 
 	 * @param node 
@@ -126,7 +129,8 @@ public class OneOne extends BaseTinker implements TinkerNode {
 		return result;
 	}
 	
-	/** GetSize is called from the collection in order to update the index used to implement a sequance's index
+	/**
+	 * getSize is called from the collection in order to update the index used to implement a sequance's index
 	 * 
 	 * @param tumlRuntimeProperty 
 	 */
@@ -191,15 +195,15 @@ public class OneOne extends BaseTinker implements TinkerNode {
 		return true;
 	}
 	
-	public void removeFromName(Set<String> name) {
-		if ( !name.isEmpty() ) {
-			this.name.removeAll(name);
-		}
-	}
-	
 	public void removeFromName(String name) {
 		if ( name != null ) {
 			this.name.remove(name);
+		}
+	}
+	
+	public void removeFromName(TinkerSet<String> name) {
+		if ( !name.isEmpty() ) {
+			this.name.removeAll(name);
 		}
 	}
 	
@@ -209,7 +213,7 @@ public class OneOne extends BaseTinker implements TinkerNode {
 		}
 	}
 	
-	public void removeFromOneTwo(Set<OneTwo> oneTwo) {
+	public void removeFromOneTwo(TinkerSet<OneTwo> oneTwo) {
 		if ( !oneTwo.isEmpty() ) {
 			this.oneTwo.removeAll(oneTwo);
 		}
@@ -231,7 +235,7 @@ public class OneOne extends BaseTinker implements TinkerNode {
 	}
 
 	public enum OneOneRuntimePropertyEnum implements TumlRuntimeProperty {
-		name(true,true,false,"tuml-test-basic-model__org__tuml__OneOne__name",false,false,true,false,1,1,false,false,false,false,true),
+		name(true,true,false,"basicmodel__org__tuml__OneOne__name",false,false,true,false,1,1,false,false,false,false,true),
 		oneTwo(false,false,false,"A_<oneOne>_<oneTwo>",true,false,false,false,1,0,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
@@ -248,7 +252,8 @@ public class OneOne extends BaseTinker implements TinkerNode {
 		private boolean ordered;
 		private boolean inverseOrdered;
 		private boolean unique;
-		/** Constructor for OneOneRuntimePropertyEnum
+		/**
+		 * constructor for OneOneRuntimePropertyEnum
 		 * 
 		 * @param onePrimitive 
 		 * @param controllingSide 
