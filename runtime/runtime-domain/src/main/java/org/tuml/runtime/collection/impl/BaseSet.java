@@ -10,7 +10,7 @@ import org.tuml.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.tuml.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.tuml.runtime.collection.ocl.OclStdLibSet;
 import org.tuml.runtime.collection.ocl.OclStdLibSetImpl;
-import org.tuml.runtime.domain.TinkerNode;
+import org.tuml.runtime.domain.TumlNode;
 
 public abstract class BaseSet<E> extends BaseCollection<E> implements TinkerSet<E>, OclStdLibSet<E> {
 
@@ -23,7 +23,7 @@ public abstract class BaseSet<E> extends BaseCollection<E> implements TinkerSet<
 		this.oclStdLibCollection = this.oclStdLibSet;
 	}
 	
-	public BaseSet(TinkerNode owner, TumlRuntimeProperty runtimeProperty) {
+	public BaseSet(TumlNode owner, TumlRuntimeProperty runtimeProperty) {
 		super(owner, runtimeProperty);
 		this.internalCollection = new HashSet<E>();
 		this.oclStdLibSet = new OclStdLibSetImpl<E>((Set<E>)this.internalCollection);
@@ -64,6 +64,60 @@ public abstract class BaseSet<E> extends BaseCollection<E> implements TinkerSet<
 	public TinkerSet<E> select(BooleanExpressionEvaluator<E> v) {
 		maybeLoad();
 		return this.oclStdLibSet.select(v);
+	}
+
+	@Override
+	public TinkerSet<E> union(TinkerSet<E> s) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerBag<E> union(TinkerBag<E> bag) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public Boolean equals(TinkerSet<E> s) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerSet<E> intersection(TinkerSet<E> s) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerSet<E> intersection(TinkerBag<E> bag) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerSet<E> subtract(TinkerSet<E> s) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerSet<E> including(E e) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerSet<E> excluding(E e) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerSet<E> symmetricDifference(TinkerSet<E> s) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
 	}
 
 }

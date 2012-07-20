@@ -8,7 +8,7 @@ import java.util.NoSuchElementException;
 
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.domain.ISignal;
-import org.tuml.runtime.domain.TinkerNode;
+import org.tuml.runtime.domain.TumlNode;
 import org.tuml.runtime.domain.activity.interf.IAcceptEventAction;
 import org.tuml.runtime.domain.activity.interf.IEvent;
 import org.tuml.runtime.domain.activity.interf.IInputPin;
@@ -87,11 +87,11 @@ public abstract class AcceptEventAction extends Action implements IAcceptEventAc
 	protected void removeEvent(IEvent event) {
 		if (event instanceof ISignalEvent) {
 			ISignal signal = ((ISignalEvent)event).getSignal();
-			if (signal instanceof TinkerNode) {
-				GraphDb.getDb().removeVertex(((TinkerNode) signal).getVertex());
+			if (signal instanceof TumlNode) {
+				GraphDb.getDb().removeVertex(((TumlNode) signal).getVertex());
 			}
 		}
-		GraphDb.getDb().removeVertex(((TinkerNode)event).getVertex());
+		GraphDb.getDb().removeVertex(((TumlNode)event).getVertex());
 	}	
 	
 	@Override

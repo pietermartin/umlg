@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.TinkerIdUtilFactory;
 import org.tuml.runtime.domain.BaseTinkerBehavioredClassifier;
-import org.tuml.runtime.domain.TinkerNode;
+import org.tuml.runtime.domain.TumlNode;
 import org.tuml.runtime.domain.activity.interf.IActivityEdge;
 import org.tuml.runtime.domain.activity.interf.IActivityNode;
 import org.tuml.runtime.util.TinkerUtil;
@@ -194,7 +194,7 @@ public abstract class ActivityNode<IN extends Token, OUT extends Token> extends 
 	}
 
 	@Override
-	public abstract TinkerNode getOwningObject();
+	public abstract TumlNode getOwningObject();
 
   	@Override
 	public void delete() {

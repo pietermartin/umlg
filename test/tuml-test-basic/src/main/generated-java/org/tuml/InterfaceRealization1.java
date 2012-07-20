@@ -13,10 +13,10 @@ import org.tuml.runtime.collection.Qualifier;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.collection.impl.TinkerSetImpl;
-import org.tuml.runtime.domain.BaseTinker;
-import org.tuml.runtime.domain.TinkerNode;
+import org.tuml.runtime.domain.BaseTuml;
+import org.tuml.runtime.domain.TumlNode;
 
-public class InterfaceRealization1 extends BaseTinker implements TinkerNode, Interface1 {
+public class InterfaceRealization1 extends BaseTuml implements TumlNode, Interface1 {
 	static final public long serialVersionUID = 1L;
 	private TinkerSet<String> name;
 	private TinkerSet<Interface2> interface2;
@@ -119,7 +119,7 @@ public class InterfaceRealization1 extends BaseTinker implements TinkerNode, Int
 	 * @param node 
 	 */
 	@Override
-	public List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, TinkerNode node) {
+	public List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, TumlNode node) {
 		List<Qualifier> result = Collections.emptyList();
 		InterfaceRealization1RuntimePropertyEnum runtimeProperty = InterfaceRealization1RuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result.isEmpty() ) {

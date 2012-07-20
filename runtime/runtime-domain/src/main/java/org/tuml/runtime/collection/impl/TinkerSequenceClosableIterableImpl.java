@@ -5,7 +5,7 @@ import java.util.Iterator;
 
 import org.tuml.runtime.collection.TinkerSequence;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
-import org.tuml.runtime.domain.TinkerNode;
+import org.tuml.runtime.domain.TumlNode;
 
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
@@ -56,7 +56,7 @@ public class TinkerSequenceClosableIterableImpl<E> extends BaseSequence<E> imple
 					Object value = this.getVertexForDirection(edge).getProperty("value");
 					node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
 					this.internalVertexMap.put(value, this.getVertexForDirection(edge));
-				} else if (TinkerNode.class.isAssignableFrom(c)) {
+				} else if (TumlNode.class.isAssignableFrom(c)) {
 					node = (E) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
 				} else {
 					Object value = this.getVertexForDirection(edge).getProperty("value");

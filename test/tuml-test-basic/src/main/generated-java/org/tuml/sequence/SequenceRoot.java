@@ -15,10 +15,10 @@ import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.collection.impl.TinkerOrderedSetImpl;
 import org.tuml.runtime.collection.impl.TinkerSetImpl;
-import org.tuml.runtime.domain.BaseTinker;
-import org.tuml.runtime.domain.TinkerNode;
+import org.tuml.runtime.domain.BaseTuml;
+import org.tuml.runtime.domain.TumlNode;
 
-public class SequenceRoot extends BaseTinker implements TinkerNode {
+public class SequenceRoot extends BaseTuml implements TumlNode {
 	static final public long serialVersionUID = 1L;
 	private TinkerSet<String> name;
 	private TinkerOrderedSet<SequenceTest> sequenceTest;
@@ -117,7 +117,7 @@ public class SequenceRoot extends BaseTinker implements TinkerNode {
 	 * @param node 
 	 */
 	@Override
-	public List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, TinkerNode node) {
+	public List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, TumlNode node) {
 		List<Qualifier> result = Collections.emptyList();
 		SequenceRootRuntimePropertyEnum runtimeProperty = SequenceRootRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result.isEmpty() ) {

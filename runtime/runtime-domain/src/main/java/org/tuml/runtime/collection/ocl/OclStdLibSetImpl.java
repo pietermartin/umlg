@@ -24,7 +24,66 @@ public class OclStdLibSetImpl<E> extends OclStdLibCollectionImpl<E> implements T
 		super(set);
 		this.set = set;
 	}
+	
+	@Override
+	public TinkerSet<E> union(TinkerSet<E> s) {
+		//TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
 
+	@Override
+	public TinkerBag<E> union(TinkerBag<E> bag) {
+		//TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public Boolean equals(TinkerSet<E> s) {
+		//TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerSet<E> intersection(TinkerSet<E> s) {
+		//TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerSet<E> intersection(TinkerBag<E> bag) {
+		//TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerSet<E> subtract(TinkerSet<E> s) {
+		//TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerSet<E> including(E e) {
+		//TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerSet<E> excluding(E e) {
+		//TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerSet<E> symmetricDifference(TinkerSet<E> s) {
+		//TODO Implement
+		throw new RuntimeException("Not implemented");
+	}	
+
+	
+	/***************************************************
+	 * Iterate goodies
+	 ***************************************************/
+	
 	@Override
 	public TinkerSet<E> select(BooleanExpressionEvaluator<E> v) {
 		Set<E> result = new HashSet<E>();
@@ -123,6 +182,6 @@ public class OclStdLibSetImpl<E> extends OclStdLibCollectionImpl<E> implements T
 	@Override
 	public void clear() {
 		this.set.clear();
-	}	
+	}
 	
 }

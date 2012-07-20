@@ -5,7 +5,7 @@ import java.util.Collection;
 
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.domain.CompositionNode;
-import org.tuml.runtime.domain.TinkerNode;
+import org.tuml.runtime.domain.TumlNode;
 
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
@@ -28,8 +28,8 @@ public class SingleObjectToken<O> extends ObjectToken<O> {
 
 	private void addEdgeToObject(O object) {
 		Vertex v;
-		if (object instanceof TinkerNode) {
-			TinkerNode node = (TinkerNode) object;
+		if (object instanceof TumlNode) {
+			TumlNode node = (TumlNode) object;
 			v = node.getVertex();
 		} else if (object.getClass().isEnum()) {
 			v = GraphDb.getDb().addVertex(null);
@@ -45,7 +45,7 @@ public class SingleObjectToken<O> extends ObjectToken<O> {
 	protected void removeEdgeToObject() {
 		O object = getObject();
 		Edge edge = this.vertex.getEdges(Direction.OUT, TOKEN + "toObject").iterator().next();
-		if (object instanceof TinkerNode) {
+		if (object instanceof TumlNode) {
 			GraphDb.getDb().removeEdge(edge);
 		} else if (object.getClass().isEnum()) {
 			GraphDb.getDb().removeVertex(edge.getVertex(Direction.IN));

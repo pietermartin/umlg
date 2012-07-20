@@ -12,6 +12,7 @@ import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.TinkerIdUtilFactory;
 import org.tuml.runtime.collection.Qualifier;
 import org.tuml.runtime.collection.TinkerBag;
+import org.tuml.runtime.collection.TinkerOrderedSet;
 import org.tuml.runtime.collection.TinkerSequence;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
@@ -237,6 +238,30 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 	}
 	
 	/**
+	 * Implements the ocl statement for derived property 'oclIterateExp2'
+	 * <pre>
+	 * package testoclmodel::org::tuml::testocl
+	 *     context OclTest1::oclIterateExp2 : OrderedSet(OclTestCollection2)
+	 *     derive: self.oclTestCollection->iterate(iter : OclTestCollection; acc : OrderedSet(OclTestCollection2) = OrderedSet{} | acc->including(iter.oclTestCollection2->any(name='john'))->asOrderedSet())
+	 * endpackage
+	 * </pre>
+	 */
+	public TinkerOrderedSet<OclTestCollection2> getOclIterateExp2() {
+		return getOclTestCollection().iterate(new IterateExpressionAccumulator<OrderedSet<OclTestCollection2>, OclTestCollection>() {
+		    @Override
+		    public OrderedSet<OclTestCollection2> accumulate(OrderedSet<OclTestCollection2> acc, OclTestCollection iter) {
+		        return acc->including(iter.oclTestCollection2->any(temp1 : OclTestCollection2 | temp1.name.=('john'))).asOrderedSet();
+		    }
+		
+		    @Override
+		    public OrderedSet<OclTestCollection2> initAccumulator() {
+		        OrderedSet<OclTestCollection2> acc = OrderedSet {};
+		        return acc;
+		    }
+		});
+	}
+	
+	/**
 	 * Implements the ocl statement for derived property 'oclSelect'
 	 * <pre>
 	 * package testoclmodel::org::tuml::testocl
@@ -327,12 +352,12 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 		OclTest1RuntimePropertyEnum runtimeProperty = OclTest1RuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result == 0 ) {
 			switch ( runtimeProperty ) {
-				case property1:
-					result = property1.size();
-				break;
-			
 				case oclTestCollection:
 					result = oclTestCollection.size();
+				break;
+			
+				case property1:
+					result = property1.size();
 				break;
 			
 				default:
@@ -359,19 +384,19 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.oclTestCollection =  new TinkerBagImpl<OclTestCollection>(this, OclTest1RuntimePropertyEnum.oclTestCollection);
 		this.property1 =  new TinkerSetImpl<String>(this, OclTest1RuntimePropertyEnum.property1);
+		this.oclTestCollection =  new TinkerBagImpl<OclTestCollection>(this, OclTest1RuntimePropertyEnum.oclTestCollection);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (OclTest1RuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case property1:
-				this.property1 =  new TinkerSetImpl<String>(this, OclTest1RuntimePropertyEnum.property1);
-			break;
-		
 			case oclTestCollection:
 				this.oclTestCollection =  new TinkerBagImpl<OclTestCollection>(this, OclTest1RuntimePropertyEnum.oclTestCollection);
+			break;
+		
+			case property1:
+				this.property1 =  new TinkerSetImpl<String>(this, OclTest1RuntimePropertyEnum.property1);
 			break;
 		
 		}
@@ -422,8 +447,8 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 	}
 
 	public enum OclTest1RuntimePropertyEnum implements TumlRuntimeProperty {
-		oclTestCollection(false,true,true,"A_<oclTest1>_<oclTestCollection>",false,true,false,false,-1,1,false,false,false,false,false),
-		property1(true,true,false,"testoclmodel__org__tuml__testocl__OclTest1__property1",false,false,true,false,1,1,false,false,false,false,true);
+		property1(true,true,false,"testoclmodel__org__tuml__testocl__OclTest1__property1",false,false,true,false,1,1,false,false,false,false,true),
+		oclTestCollection(false,true,true,"A_<oclTest1>_<oclTestCollection>",false,true,false,false,-1,1,false,false,false,false,false);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -477,11 +502,11 @@ public class OclTest1 extends BaseTinker implements TinkerNode {
 		}
 	
 		static public OclTest1RuntimePropertyEnum fromLabel(String label) {
-			if ( oclTestCollection.getLabel().equals(label) ) {
-				return oclTestCollection;
-			}
 			if ( property1.getLabel().equals(label) ) {
 				return property1;
+			}
+			if ( oclTestCollection.getLabel().equals(label) ) {
+				return oclTestCollection;
 			}
 			return null;
 		}

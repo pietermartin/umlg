@@ -1,6 +1,6 @@
 package org.tuml.runtime.collection;
 
-import org.tuml.runtime.domain.TinkerNode;
+import org.tuml.runtime.domain.TumlNode;
 
 public class Qualifier {
 	private String key;
@@ -30,8 +30,8 @@ public class Qualifier {
 	}
 
 	public String getValue() {
-		if (value instanceof TinkerNode) {
-			return ((TinkerNode) value).getUid();
+		if (value instanceof TumlNode) {
+			return ((TumlNode) value).getUid();
 		} else {
 			if (this.value == null) {
 				return "___NULL___";

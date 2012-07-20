@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<diagrams:Diagrams xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.topcased.org/DI/1.0" xmlns:diagrams="http://www.topcased.org/Diagrams/1.0" xmi:id="_C5WfwMB0EeGJPdxBi7GiSw" activeDiagram="_AR5WkM5wEeG36cJ3v-Rmsg">
+<diagrams:Diagrams xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.topcased.org/DI/1.0" xmlns:diagrams="http://www.topcased.org/Diagrams/1.0" xmi:id="_C5WfwMB0EeGJPdxBi7GiSw" activeDiagram="_N2Nx4L7zEeG5Bt_b3EGOQQ">
   <model href="test-ocl.uml#_qb8akM37EdqwVrslYOdUDA"/>
   <diagrams xmi:id="_C5WfwcB0EeGJPdxBi7GiSw" position="0,0" size="100,100" name="testoclmodel" viewport="0,0">
     <property xmi:id="_C5d0gMB0EeGJPdxBi7GiSw" key="pageFormatName" value="A4"/>
@@ -69,7 +69,7 @@
       </diagrams>
       <subdiagrams xmi:id="_N2NK0L7zEeG5Bt_b3EGOQQ">
         <model href="test-ocl.uml#_MqqkwL7zEeG5Bt_b3EGOQQ"/>
-        <diagrams xmi:id="_N2Nx4L7zEeG5Bt_b3EGOQQ" position="0,0" size="100,100" name="tuml-test-ocl" viewport="80,80">
+        <diagrams xmi:id="_N2Nx4L7zEeG5Bt_b3EGOQQ" position="0,0" size="100,100" name="tuml-test-ocl" viewport="80,76">
           <property xmi:id="_N2bNQL7zEeG5Bt_b3EGOQQ" key="pageFormatName" value="A3"/>
           <property xmi:id="_N2bNQb7zEeG5Bt_b3EGOQQ" key="diagramWidth" value="1188"/>
           <property xmi:id="_N2bNQr7zEeG5Bt_b3EGOQQ" key="diagramHeight" value="1680"/>
@@ -82,7 +82,7 @@
           <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_N2Nx4b7zEeG5Bt_b3EGOQQ" presentation="org.topcased.modeler.uml.classdiagram">
             <element href="test-ocl.uml#_MqqkwL7zEeG5Bt_b3EGOQQ"/>
           </semanticModel>
-          <contained xsi:type="di:GraphNode" xmi:id="_OTzFwL7zEeG5Bt_b3EGOQQ" position="319,74" size="726,-1">
+          <contained xsi:type="di:GraphNode" xmi:id="_OTzFwL7zEeG5Bt_b3EGOQQ" position="155,74" size="890,-1">
             <anchorage xmi:id="_4vBmgMCDEeGzStsPq17FZA" graphEdge="_4vPo8MCDEeGzStsPq17FZA"/>
             <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_OTzFwb7zEeG5Bt_b3EGOQQ" presentation="default">
               <element href="test-ocl.uml#_OUDkcL7zEeG5Bt_b3EGOQQ"/>
@@ -140,6 +140,11 @@
               <contained xsi:type="di:GraphNode" xmi:id="_8zl0wM5QEeGODN7VUYRlgg" position="0,0" size="-1,-1">
                 <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_8zl0wc5QEeGODN7VUYRlgg" presentation="default">
                   <element href="test-ocl.uml#_8zwz4M5QEeGODN7VUYRlgg"/>
+                </semanticModel>
+              </contained>
+              <contained xsi:type="di:GraphNode" xmi:id="_0F3XYNEIEeGgJMFwJSMAJw" position="0,0" size="-1,-1">
+                <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_0F3XYdEIEeGgJMFwJSMAJw" presentation="default">
+                  <element href="test-ocl.uml#_0F5zoNEIEeGgJMFwJSMAJw"/>
                 </semanticModel>
               </contained>
             </contained>
@@ -300,14 +305,9 @@
                   <element href="test-ocl.uml#_DFVHgM5wEeG36cJ3v-Rmsg"/>
                 </semanticModel>
               </contained>
-              <contained xsi:type="di:GraphNode" xmi:id="_4Ra8MM5zEeG36cJ3v-Rmsg" position="0,0" size="-1,-1">
-                <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_4Ra8Mc5zEeG36cJ3v-Rmsg" presentation="default">
-                  <element href="test-ocl.uml#_4RcKUM5zEeG36cJ3v-Rmsg"/>
-                </semanticModel>
-              </contained>
-              <contained xsi:type="di:GraphNode" xmi:id="_zWJtgM6eEeGE5caT1HEp2A" position="0,0" size="-1,-1">
-                <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_zWJtgc6eEeGE5caT1HEp2A" presentation="default">
-                  <element href="test-ocl.uml#_zWPNEM6eEeGE5caT1HEp2A"/>
+              <contained xsi:type="di:GraphNode" xmi:id="_meopgNEEEeGr9dUaROkemg" position="0,0" size="-1,-1">
+                <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_meopgdEEEeGr9dUaROkemg" presentation="default">
+                  <element href="test-ocl.uml#_mesT4NEEEeGr9dUaROkemg"/>
                 </semanticModel>
               </contained>
             </contained>

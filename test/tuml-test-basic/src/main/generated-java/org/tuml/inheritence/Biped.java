@@ -9,7 +9,7 @@ import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.collection.Qualifier;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.domain.CompositionNode;
-import org.tuml.runtime.domain.TinkerNode;
+import org.tuml.runtime.domain.TumlNode;
 
 public class Biped extends Mamal implements CompositionNode {
 	static final public long serialVersionUID = 1L;
@@ -60,7 +60,7 @@ public class Biped extends Mamal implements CompositionNode {
 	}
 	
 	@Override
-	public TinkerNode getOwningObject() {
+	public TumlNode getOwningObject() {
 		return getGod();
 	}
 	
@@ -71,7 +71,7 @@ public class Biped extends Mamal implements CompositionNode {
 	 * @param node 
 	 */
 	@Override
-	public List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, TinkerNode node) {
+	public List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, TumlNode node) {
 		List<Qualifier> result = super.getQualifiers(tumlRuntimeProperty, node);
 		BipedRuntimePropertyEnum runtimeProperty = BipedRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result.isEmpty() ) {

@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.tuml.runtime.collection.TinkerBag;
 import org.tuml.runtime.collection.TinkerCollection;
+import org.tuml.runtime.collection.TinkerSet;
 
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
@@ -22,6 +23,68 @@ public class OclStdLibBagImpl<E> extends OclStdLibCollectionImpl<E> implements T
 		super(bag);
 		this.bag = bag;
 	}
+
+	@Override
+	public Boolean equals(TinkerBag<E> bag) {
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerBag<E> union(TinkerBag<E> bag) {
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerBag<E> union(TinkerSet<E> set) {
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerBag<E> intersection(TinkerBag<E> bag) {
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerSet<E> intersection(TinkerSet<E> set) {
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerBag<E> including(E object) {
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerBag<E> excluding(E object) {
+		throw new RuntimeException("Not implemented");
+	}
+
+	/***************************************************
+	 * Iterate goodies
+	 ***************************************************/
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T2> TinkerBag<T2> flatten() {
+		if (needsFlattening()) {
+			Multiset<T2> result = HashMultiset.create();
+			for (E e : this.bag) {
+				if (e instanceof TinkerCollection) {
+					TinkerCollection<?> collection = (TinkerCollection<?>) e;
+					result.addAll(collection.<T2> flatten());
+				} else {
+					result.add((T2) e);
+				}
+			}
+			return new OclStdLibBagImpl<T2>(result);
+		} else {
+			return new OclStdLibBagImpl<T2>((Collection<T2>) this.bag);
+		}
+	}
+	
+	/***************************************************
+	 * Iterate goodies
+	 ***************************************************/
 	
 	@Override
 	public TinkerBag<E> select(BooleanExpressionEvaluator<E> v) {
@@ -48,25 +111,6 @@ public class OclStdLibBagImpl<E> extends OclStdLibCollectionImpl<E> implements T
 		return collectNested(v).<T> flatten();
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public <R> TinkerBag<R> flatten() {
-		if (needsFlattening()) {
-			Multiset<R> result = HashMultiset.create();
-			for (E e : this.bag) {
-				if (e instanceof TinkerCollection) {
-					TinkerCollection<?> collection = (TinkerCollection<?>) e;
-					result.addAll(collection.<R> flatten());
-				} else {
-					result.add((R) e);
-				}
-			}
-			return new OclStdLibBagImpl<R>(result);
-		} else {
-			return new OclStdLibBagImpl<R>((Collection<R>) this.bag);
-		}
-	}
-	
 	private boolean needsFlattening() {
 		return !this.bag.isEmpty() && this.bag.iterator().next() instanceof TinkerCollection;
 	}

@@ -16,18 +16,21 @@ import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.TinkerIdUtilFactory;
 import org.tuml.runtime.collection.Multiplicity;
 import org.tuml.runtime.collection.Qualifier;
+import org.tuml.runtime.collection.TinkerOrderedSet;
 import org.tuml.runtime.collection.TinkerQualifiedSet;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
+import org.tuml.runtime.collection.impl.TinkerOrderedSetImpl;
 import org.tuml.runtime.collection.impl.TinkerQualifiedSetImpl;
 import org.tuml.runtime.collection.impl.TinkerSetImpl;
-import org.tuml.runtime.domain.BaseTinker;
-import org.tuml.runtime.domain.TinkerNode;
+import org.tuml.runtime.domain.BaseTuml;
+import org.tuml.runtime.domain.TumlNode;
 
-public class Bank extends BaseTinker implements TinkerNode {
+public class Bank extends BaseTuml implements TumlNode {
 	static final public long serialVersionUID = 1L;
 	private TinkerSet<String> name;
 	private TinkerQualifiedSet<Customer> customer;
+	private TinkerOrderedSet<Employee> employee;
 
 	/**
 	 * constructor for Bank
@@ -72,6 +75,18 @@ public class Bank extends BaseTinker implements TinkerNode {
 		}
 	}
 	
+	public void addToEmployee(Employee employee) {
+		if ( employee != null ) {
+			this.employee.add(employee);
+		}
+	}
+	
+	public void addToEmployee(TinkerOrderedSet<Employee> employee) {
+		if ( !employee.isEmpty() ) {
+			this.employee.addAll(employee);
+		}
+	}
+	
 	public void addToName(String name) {
 		if ( name != null ) {
 			this.name.add(name);
@@ -80,6 +95,10 @@ public class Bank extends BaseTinker implements TinkerNode {
 	
 	public void clearCustomer() {
 		this.customer.clear();
+	}
+	
+	public void clearEmployee() {
+		this.employee.clear();
 	}
 	
 	public void clearName() {
@@ -94,6 +113,9 @@ public class Bank extends BaseTinker implements TinkerNode {
 		for ( Customer child : getCustomer() ) {
 			child.delete();
 		}
+		for ( Employee child : getEmployee() ) {
+			child.delete();
+		}
 		GraphDb.getDb().removeVertex(this.vertex);
 	}
 	
@@ -101,27 +123,15 @@ public class Bank extends BaseTinker implements TinkerNode {
 		return this.customer;
 	}
 	
-	public Customer getCustomerForAccountNumberQualifier(Integer accountNumberQualifier) {
+	public Customer getCustomerForNameQualifierAccountNumberQualifier(String nameQualifier, Integer accountNumberQualifier) {
 		Index<Edge> index = GraphDb.getDb().getIndex(getUid() + ":::" + BankRuntimePropertyEnum.customer.getLabel(), Edge.class);
 		if ( index==null ) {
 			return null;
 		} else {
-			CloseableIterable<Edge> closeableIterable = index.get("accountNumberQualifier", accountNumberQualifier==null?"___NULL___":accountNumberQualifier);
-			Iterator<Edge> iterator = closeableIterable.iterator();
-			if ( iterator.hasNext() ) {
-				return new Customer(iterator.next().getVertex(Direction.IN));
-			} else {
-				return null;
-			}
-		}
-	}
-	
-	public Customer getCustomerForNameQualifier(String nameQualifier) {
-		Index<Edge> index = GraphDb.getDb().getIndex(getUid() + ":::" + BankRuntimePropertyEnum.customer.getLabel(), Edge.class);
-		if ( index==null ) {
-			return null;
-		} else {
-			CloseableIterable<Edge> closeableIterable = index.get("nameQualifier", nameQualifier==null?"___NULL___":nameQualifier);
+			String indexKey = "nameQualifieraccountNumberQualifier";
+			String indexValue = nameQualifier==null?"___NULL___":nameQualifier;
+			indexValue += accountNumberQualifier==null?"___NULL___":accountNumberQualifier;
+			CloseableIterable<Edge> closeableIterable = index.get(indexKey, indexValue);
 			Iterator<Edge> iterator = closeableIterable.iterator();
 			if ( iterator.hasNext() ) {
 				return new Customer(iterator.next().getVertex(Direction.IN));
@@ -132,29 +142,20 @@ public class Bank extends BaseTinker implements TinkerNode {
 	}
 	
 	/**
-	 * Implements the ocl statement for derived property 'findCustomer100'
+	 * Implements the ocl statement for derived property 'customerJohn001'
 	 * <pre>
 	 * package testoclmodel::org::tuml::qualifier
-	 *     context Bank::findCustomer100 : Customer
-	 *     derive: self.customer['__IGNORE__',100]
+	 *     context Bank::customerJohn001 : Customer
+	 *     derive: self.customer['john',1]
 	 * endpackage
 	 * </pre>
 	 */
-	public Customer getFindCustomer100() {
-		return getCustomerForAccountNumberQualifier(100);
+	public Customer getCustomerJohn001() {
+		return getCustomerForNameQualifierAccountNumberQualifier("john", 1);
 	}
 	
-	/**
-	 * Implements the ocl statement for derived property 'findJohn'
-	 * <pre>
-	 * package testoclmodel::org::tuml::qualifier
-	 *     context Bank::findJohn : Customer
-	 *     derive: self.customer['john',-1]
-	 * endpackage
-	 * </pre>
-	 */
-	public Customer getFindJohn() {
-		return getCustomerForNameQualifier("john");
+	public TinkerOrderedSet<Employee> getEmployee() {
+		return this.employee;
 	}
 	
 	@Override
@@ -178,8 +179,7 @@ public class Bank extends BaseTinker implements TinkerNode {
 	
 	public List<Qualifier> getQualifierForCustomer(Customer context) {
 		List<Qualifier> result = new ArrayList<Qualifier>();
-		result.add(new Qualifier("nameQualifier", context.getNameQualifier(), Multiplicity.ONE_TO_ONE));
-		result.add(new Qualifier("accountNumberQualifier", context.getAccountNumberQualifier(), Multiplicity.ONE_TO_ONE));
+		result.add(new Qualifier(new String[]{"nameQualifier", "accountNumberQualifier"}, new String[]{context.getNameQualifier().toString() , context.getAccountNumberQualifier().toString() }, Multiplicity.ZERO_TO_ONE));
 		return result;
 	}
 	
@@ -190,7 +190,7 @@ public class Bank extends BaseTinker implements TinkerNode {
 	 * @param node 
 	 */
 	@Override
-	public List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, TinkerNode node) {
+	public List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, TumlNode node) {
 		List<Qualifier> result = Collections.emptyList();
 		BankRuntimePropertyEnum runtimeProperty = BankRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result.isEmpty() ) {
@@ -219,6 +219,10 @@ public class Bank extends BaseTinker implements TinkerNode {
 		BankRuntimePropertyEnum runtimeProperty = BankRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result == 0 ) {
 			switch ( runtimeProperty ) {
+				case employee:
+					result = employee.size();
+				break;
+			
 				case name:
 					result = name.size();
 				break;
@@ -253,11 +257,16 @@ public class Bank extends BaseTinker implements TinkerNode {
 	public void initialiseProperties() {
 		this.customer =  new TinkerQualifiedSetImpl<Customer>(this, BankRuntimePropertyEnum.customer);
 		this.name =  new TinkerSetImpl<String>(this, BankRuntimePropertyEnum.name);
+		this.employee =  new TinkerOrderedSetImpl<Employee>(this, BankRuntimePropertyEnum.employee);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (BankRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
+			case employee:
+				this.employee =  new TinkerOrderedSetImpl<Employee>(this, BankRuntimePropertyEnum.employee);
+			break;
+		
 			case name:
 				this.name =  new TinkerSetImpl<String>(this, BankRuntimePropertyEnum.name);
 			break;
@@ -286,6 +295,18 @@ public class Bank extends BaseTinker implements TinkerNode {
 		}
 	}
 	
+	public void removeFromEmployee(Employee employee) {
+		if ( employee != null ) {
+			this.employee.remove(employee);
+		}
+	}
+	
+	public void removeFromEmployee(TinkerOrderedSet<Employee> employee) {
+		if ( !employee.isEmpty() ) {
+			this.employee.removeAll(employee);
+		}
+	}
+	
 	public void removeFromName(String name) {
 		if ( name != null ) {
 			this.name.remove(name);
@@ -303,6 +324,11 @@ public class Bank extends BaseTinker implements TinkerNode {
 		addToCustomer(customer);
 	}
 	
+	public void setEmployee(TinkerOrderedSet<Employee> employee) {
+		clearEmployee();
+		addToEmployee(employee);
+	}
+	
 	@Override
 	public void setId(Long id) {
 		TinkerIdUtilFactory.getIdUtil().setId(this.vertex, id);
@@ -314,8 +340,9 @@ public class Bank extends BaseTinker implements TinkerNode {
 	}
 
 	public enum BankRuntimePropertyEnum implements TumlRuntimeProperty {
-		customer(false,true,true,"A_<bank>_<customer>",false,true,false,false,-1,0,true,false,false,false,true),
-		name(true,true,false,"testoclmodel__org__tuml__qualifier__Bank__name",false,false,true,false,1,1,false,false,false,false,true);
+		customer(false,true,true,"A_<bank>_<customer>",false,true,false,false,1,0,true,false,false,false,true),
+		name(true,true,false,"testoclmodel__org__tuml__qualifier__Bank__name",false,false,true,false,1,1,false,false,false,false,true),
+		employee(false,true,true,"A_<bank>_<employee>",false,true,false,false,-1,0,false,false,true,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -374,6 +401,9 @@ public class Bank extends BaseTinker implements TinkerNode {
 			}
 			if ( name.getLabel().equals(label) ) {
 				return name;
+			}
+			if ( employee.getLabel().equals(label) ) {
+				return employee;
 			}
 			return null;
 		}

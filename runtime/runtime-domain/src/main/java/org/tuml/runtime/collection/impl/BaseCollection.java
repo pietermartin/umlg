@@ -13,16 +13,20 @@ import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
 import org.tuml.runtime.adaptor.TransactionThreadVar;
 import org.tuml.runtime.collection.Qualifier;
 import org.tuml.runtime.collection.TinkerBag;
+import org.tuml.runtime.collection.TinkerCollection;
 import org.tuml.runtime.collection.TinkerOrderedSet;
 import org.tuml.runtime.collection.TinkerSequence;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
+import org.tuml.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.tuml.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.tuml.runtime.collection.ocl.IterateExpressionAccumulator;
 import org.tuml.runtime.collection.ocl.OclStdLibCollection;
 import org.tuml.runtime.domain.CompositionNode;
 import org.tuml.runtime.domain.TinkerAuditableNode;
-import org.tuml.runtime.domain.TinkerNode;
+import org.tuml.runtime.domain.TumlNode;
+import org.tuml.runtime.domain.ocl.OclAny;
+import org.tuml.runtime.domain.ocl.OclState;
 import org.tuml.runtime.util.TinkerFormatter;
 
 import com.tinkerpop.blueprints.Direction;
@@ -36,7 +40,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 	protected OclStdLibCollection<E> oclStdLibCollection;
 	protected NakedTinkerIndex<Edge> index;
 	protected boolean loaded = false;
-	protected TinkerNode owner;
+	protected TumlNode owner;
 	// This is the vertex of the owner of the collection
 	protected Vertex vertex;
 	protected Class<?> parentClass;
@@ -47,7 +51,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 		this.tumlRuntimeProperty = runtimeProperty;
 	}
 
-	public BaseCollection(TinkerNode owner, TumlRuntimeProperty runtimeProperty) {
+	public BaseCollection(TumlNode owner, TumlRuntimeProperty runtimeProperty) {
 		super();
 		this.owner = owner;
 		this.vertex = owner.getVertex();
@@ -67,7 +71,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 						Object value = this.getVertexForDirection(edge).getProperty("value");
 						node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
 						this.internalVertexMap.put(value, this.getVertexForDirection(edge));
-					} else if (TinkerNode.class.isAssignableFrom(c)) {
+					} else if (TumlNode.class.isAssignableFrom(c)) {
 						node = (E) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
 					} else {
 						Object value = this.getVertexForDirection(edge).getProperty("value");
@@ -133,22 +137,22 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 
 			if (isQualified() || isInverseQualified()) {
 				// Can only qualify TinkerNode's
-				if (!(e instanceof TinkerNode)) {
+				if (!(e instanceof TumlNode)) {
 					throw new IllegalStateException("Primitive properties can not be qualified!");
 				}
-				addQualifierToIndex(edge, (TinkerNode) e);
+				addQualifierToIndex(edge, (TumlNode) e);
 			}
 
 			if (isOrdered() || isInverseOrdered()) {
 				// Can only qualify TinkerNode's
-				if (!(e instanceof TinkerNode)) {
+				if (!(e instanceof TumlNode)) {
 					throw new IllegalStateException("Primitive properties can not be qualified!");
 				}
 				if (isOrdered()) {
-					addOrderToIndex(edge, (TinkerNode) e);
+					addOrderToIndex(edge, (TumlNode) e);
 				}
 				if (isInverseOrdered()) {
-					addOrderToInverseIndex(edge, (TinkerNode) e);
+					addOrderToInverseIndex(edge, (TumlNode) e);
 				}
 			}
 
@@ -157,10 +161,10 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 	}
 
 	private void validateQualifiedAssociation(E e) {
-		if (!(e instanceof TinkerNode)) {
+		if (!(e instanceof TumlNode)) {
 			throw new IllegalStateException("Primitive properties can not be qualified!");
 		}
-		TinkerNode node = (TinkerNode) e;
+		TumlNode node = (TumlNode) e;
 		if (isQualified()) {
 			for (Qualifier qualifier : this.owner.getQualifiers(this.tumlRuntimeProperty, node)) {
 				validateQualifiedMultiplicity(index, qualifier);
@@ -168,9 +172,9 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 		}
 		if (isInverseQualified()) {
 			Index<Edge> tmpIndex;
-			tmpIndex = GraphDb.getDb().getIndex(((TinkerNode) e).getUid() + ":::" + getLabel(), Edge.class);
+			tmpIndex = GraphDb.getDb().getIndex(((TumlNode) e).getUid() + ":::" + getLabel(), Edge.class);
 			if (tmpIndex == null) {
-				tmpIndex = GraphDb.getDb().createIndex(((TinkerNode) e).getUid() + ":::" + getLabel(), Edge.class);
+				tmpIndex = GraphDb.getDb().createIndex(((TumlNode) e).getUid() + ":::" + getLabel(), Edge.class);
 			}
 			for (Qualifier qualifier : node.getQualifiers(this.tumlRuntimeProperty, this.owner)) {
 				validateQualifiedMultiplicity(tmpIndex, qualifier);
@@ -193,8 +197,8 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 			@SuppressWarnings("unchecked")
 			E e = (E) o;
 			Vertex v;
-			if (o instanceof TinkerNode) {
-				TinkerNode node = (TinkerNode) o;
+			if (o instanceof TumlNode) {
+				TumlNode node = (TumlNode) o;
 				v = node.getVertex();
 
 				if (node instanceof CompositionNode) {
@@ -227,8 +231,8 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 
 	protected Edge addInternal(E e) {
 		Vertex v = null;
-		if (e instanceof TinkerNode) {
-			TinkerNode node = (TinkerNode) e;
+		if (e instanceof TumlNode) {
+			TumlNode node = (TumlNode) e;
 			if (e instanceof CompositionNode) {
 				TransactionThreadEntityVar.setNewEntity((CompositionNode) node);
 			}
@@ -444,7 +448,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 		}
 	}
 
-	protected void addQualifierToIndex(Edge edge, TinkerNode node) {
+	protected void addQualifierToIndex(Edge edge, TumlNode node) {
 		// if is qualified update index
 		if (isQualified()) {
 			addQualifierToIndex(this.index, edge, this.owner, node);
@@ -460,7 +464,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 		}
 	}
 
-	protected void addOrderToIndex(Edge edge, TinkerNode node) {
+	protected void addOrderToIndex(Edge edge, TumlNode node) {
 		// The element is always added to the end of the list
 		if (!isOrdered()) {
 			throw new IllegalStateException("addOrderToIndex can only be called where the association end is ordered");
@@ -476,7 +480,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 		getVertexForDirection(edge).setProperty("tinkerIndex", size);
 	}
 
-	protected void addOrderToInverseIndex(Edge edge, TinkerNode node) {
+	protected void addOrderToInverseIndex(Edge edge, TumlNode node) {
 		// The element is always added to the end of the list
 		if (!isInverseOrdered()) {
 			throw new IllegalStateException("addOrderToInverseIndex can only be called where the inverse side of the association is ordered");
@@ -504,7 +508,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 	 * @param qualifiedNode
 	 * @param qualifierNode
 	 */
-	private void addQualifierToIndex(Index<Edge> index, Edge edge, TinkerNode qualifiedNode, TinkerNode qualifierNode) {
+	private void addQualifierToIndex(Index<Edge> index, Edge edge, TumlNode qualifiedNode, TumlNode qualifierNode) {
 		for (Qualifier qualifier : qualifiedNode.getQualifiers(this.tumlRuntimeProperty, qualifierNode)) {
 			index.put(qualifier.getKey(), qualifier.getValue(), edge);
 			edge.setProperty("index" + qualifier.getKey(), qualifier.getValue());
@@ -592,7 +596,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 	}
 
 	@Override
-	public boolean equals(OclStdLibCollection<E> c) {
+	public boolean equals(TinkerCollection<E> c) {
 		maybeLoad();
 		return this.oclStdLibCollection.equals(c);
 	}
@@ -632,4 +636,161 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 		maybeLoad();
 		return this.oclStdLibCollection.iterate(v);
 	}
+	
+	@Override
+	public Boolean equals(OclAny oclAny) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public Boolean notEquals(OclAny oclAny) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public Boolean oclIsNew() {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public Boolean oclIsUndefined() {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public Boolean oclIsInvalid() {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public <T> T oclAsType(T classifier) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public Boolean oclIsTypeOf(TumlNode classifier) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public Boolean oclIsKindOf(TumlNode classifier) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public Boolean oclIsInState(OclState state) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TumlNode oclType() {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public String oclLocale() {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public boolean notEquals() {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public boolean includes(E t) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public boolean excludes(E t) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public int count(E e) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public Boolean includesAll(TinkerCollection<E> c) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public Boolean excludesAll(TinkerCollection<E> c) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public Boolean notEmpty() {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public E max() {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public E min() {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public E sum() {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerSet<?> product(TinkerCollection<E> c) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public <T2> TinkerCollection<T2> flatten() {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerCollection<E> select(BooleanExpressionEvaluator<E> e) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public <T, R> TinkerCollection<T> collect(BodyExpressionEvaluator<R, E> e) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public <R> TinkerCollection<R> collectNested(BodyExpressionEvaluator<R, E> e) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+	
 }

@@ -28,14 +28,13 @@ public class TestQualifiers extends BaseLocalDbTest {
 
 		Customer john1 = new Customer(true);
 		john1.setName("john");
-		john1.setAccountNumber(-400);
+		john1.setAccountNumber(1);
 		john1.setBank(bank);
 
 		db.stopTransaction(Conclusion.SUCCESS);
 		Assert.assertEquals(1001, new Bank(bank.getVertex()).getCustomer().size());
-		Assert.assertNotNull(new Bank(bank.getVertex()).getCustomerForAccountNumberQualifier(400));
-		Assert.assertNotNull(new Bank(bank.getVertex()).getFindCustomer100());
-		Assert.assertNotNull(new Bank(bank.getVertex()).getFindJohn());
+		Assert.assertNotNull(new Bank(bank.getVertex()).getCustomerForNameQualifierAccountNumberQualifier("c1", 1));
+		Assert.assertNotNull(new Bank(bank.getVertex()).getCustomerJohn001());
 		stopWatch.stop();
 		System.out.println("Time taken = " + stopWatch.toString());
 	}

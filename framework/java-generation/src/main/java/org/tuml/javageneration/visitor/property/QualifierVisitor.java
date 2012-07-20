@@ -103,7 +103,7 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
 		Type qualifiedClassifier = qualifiedPropertyWrapper.getOwningType();
 		OJAnnotatedClass ojClass = findOJClass(qualifiedClassifier);
 
-		OJAnnotatedOperation qualifierValue = new OJAnnotatedOperation(qualifiedPropertyWrapper.getQualifiedNameFor(qualifiers.toArray(new PropertyWrapper[] {})));
+		OJAnnotatedOperation qualifierValue = new OJAnnotatedOperation(qualifiedPropertyWrapper.getQualifiedNameFor(qualifiers));
 		if (qualified.isUnqualifiedOne()) {
 			qualifierValue.setReturnType(qualifiedPropertyWrapper.javaBaseTypePath());
 		} else {

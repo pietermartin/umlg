@@ -3,12 +3,13 @@ package org.tuml.runtime.collection.impl;
 import java.util.Set;
 
 import org.tuml.runtime.collection.TinkerBag;
+import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.tuml.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.tuml.runtime.collection.ocl.OclStdLibBag;
 import org.tuml.runtime.collection.ocl.OclStdLibBagImpl;
-import org.tuml.runtime.domain.TinkerNode;
+import org.tuml.runtime.domain.TumlNode;
 
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
@@ -17,7 +18,7 @@ public abstract class BaseBag<E> extends BaseCollection<E> implements TinkerBag<
 
 	protected OclStdLibBag<E> oclStdLibBag;
 	
-	public BaseBag(TinkerNode owner, TumlRuntimeProperty runtimeProperty) {
+	public BaseBag(TumlNode owner, TumlRuntimeProperty runtimeProperty) {
 		super(owner, runtimeProperty);
 		this.internalCollection = HashMultiset.create();
 		this.oclStdLibBag = new OclStdLibBagImpl<E>((Multiset<E>)this.internalCollection); 
@@ -109,4 +110,47 @@ public abstract class BaseBag<E> extends BaseCollection<E> implements TinkerBag<
 		return this.oclStdLibBag.select(v);
 	}
 
+	@Override
+	public Boolean equals(TinkerBag<E> bag) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerBag<E> union(TinkerBag<E> bag) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerBag<E> union(TinkerSet<E> set) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerBag<E> intersection(TinkerBag<E> bag) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerSet<E> intersection(TinkerSet<E> set) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerBag<E> including(E object) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerBag<E> excluding(E object) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	
 }

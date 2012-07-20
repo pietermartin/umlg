@@ -1498,9 +1498,9 @@ public class PropertyWrapper implements Property {
 		return "getQualifierFor" + StringUtils.capitalize(getName());
 	}
 
-	public String getQualifiedNameFor(PropertyWrapper ... qualifer) {
+	public String getQualifiedNameFor(List<PropertyWrapper> qualifers) {
 		StringBuilder sb = new StringBuilder();
-		for (PropertyWrapper q : qualifer) {
+		for (PropertyWrapper q : qualifers) {
 			sb.append(StringUtils.capitalize(q.getName()));
 		}
 		return getter() + "For" + sb.toString();

@@ -6,17 +6,19 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.tuml.runtime.domain.ocl.OclAny;
+import org.tuml.runtime.domain.ocl.OclState;
 import org.tuml.runtime.util.TinkerFormatter;
 
 import com.tinkerpop.blueprints.Vertex;
 
-public abstract class BaseTinker implements TinkerNode, Serializable {
+public abstract class BaseTuml implements TumlNode, Serializable {
 
 	private static final long serialVersionUID = 3751023772087546585L;
 	protected Vertex vertex;
 	protected boolean hasInitBeenCalled = false;
 
-	public BaseTinker() {
+	public BaseTuml() {
 		super();
 	}
 
@@ -78,8 +80,74 @@ public abstract class BaseTinker implements TinkerNode, Serializable {
 		if (obj.getClass() != getClass()) {
 			return false;
 		}
-		BaseTinker rhs = (BaseTinker) obj;
+		BaseTuml rhs = (BaseTuml) obj;
 		return new EqualsBuilder().append(getId(), rhs.getId()).isEquals();
+	}
+
+	@Override
+	public Boolean equals(OclAny oclAny) {
+		throw new RuntimeException("Not implemented");
+//		return null;
+	}
+
+	@Override
+	public Boolean notEquals(OclAny oclAny) {
+		throw new RuntimeException("Not implemented");
+//		return null;
+	}
+
+	@Override
+	public Boolean oclIsNew() {
+		throw new RuntimeException("Not implemented");
+//		return null;
+	}
+
+	@Override
+	public Boolean oclIsUndefined() {
+		throw new RuntimeException("Not implemented");
+//		return null;
+	}
+
+	@Override
+	public Boolean oclIsInvalid() {
+		throw new RuntimeException("Not implemented");
+//		return null;
+	}
+
+	@Override
+	public <T> T oclAsType(T classifier) {
+		throw new RuntimeException("Not implemented");
+//		return null;
+	}
+
+	@Override
+	public Boolean oclIsTypeOf(TumlNode classifier) {
+		throw new RuntimeException("Not implemented");
+//		return null;
+	}
+
+	@Override
+	public Boolean oclIsKindOf(TumlNode classifier) {
+		throw new RuntimeException("Not implemented");
+//		return null;
+	}
+
+	@Override
+	public Boolean oclIsInState(OclState state) {
+		throw new RuntimeException("Not implemented");
+//		return null;
+	}
+
+	@Override
+	public TumlNode oclType() {
+		throw new RuntimeException("Not implemented");
+//		return null;
+	}
+
+	@Override
+	public String oclLocale() {
+		throw new RuntimeException("Not implemented");
+//		return null;
 	}
 
 }

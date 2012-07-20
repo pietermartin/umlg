@@ -20,6 +20,76 @@ public class OclStdLibSequenceImpl<E> extends OclStdLibCollectionImpl<E> impleme
 		super(list);
 		this.list = list;
 	}
+
+	@Override
+	public Boolean equals(TinkerSequence<E> s) {
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerSequence<E> union(TinkerSequence<E> s) {
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerSequence<E> append(E object) {
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerSequence<E> prepend(E object) {
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerSequence<E> insertAt(Integer index, E object) {
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerSequence<E> subSequence(Integer lower, Integer upper) {
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public E at(Integer i) {
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public int indexOf(Object obj) {
+		throw new RuntimeException("Not implemented");
+	}
+	
+//	@Override
+//	public int indexOf(Object o) {
+//		return this.list.indexOf(o);
+//	}
+
+
+	@Override
+	public E last() {
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerSequence<E> including(E object) {
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerSequence<E> excluding(E object) {
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerSequence<E> reverse() {
+		throw new RuntimeException("Not implemented");
+	}	
+
+	/***************************************************
+	 * Iterate goodies
+	 ***************************************************/
 	
 	@Override
 	public TinkerSequence<E> select(BooleanExpressionEvaluator<E> v) {
@@ -137,11 +207,6 @@ public class OclStdLibSequenceImpl<E> extends OclStdLibCollectionImpl<E> impleme
 	}
 
 	@Override
-	public int indexOf(Object o) {
-		return this.list.indexOf(o);
-	}
-
-	@Override
 	public int lastIndexOf(Object o) {
 		return this.list.lastIndexOf(o);
 	}
@@ -159,6 +224,11 @@ public class OclStdLibSequenceImpl<E> extends OclStdLibCollectionImpl<E> impleme
 	@Override
 	public List<E> subList(int fromIndex, int toIndex) {
 		return this.list.subList(fromIndex, toIndex);
-	}	
+	}
+
+	@Override
+	public E first() {
+		return this.list.get(0);
+	}
 	
 }

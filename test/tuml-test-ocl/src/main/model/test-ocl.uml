@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xmi:XMI xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tuml="http:///schemas/tuml/_2zMIMM62EeGEl_PAnbcd0Q/6" xmlns:uml="http://www.eclipse.org/uml2/3.0.0/UML" xsi:schemaLocation="http:///schemas/tuml/_2zMIMM62EeGEl_PAnbcd0Q/6 ../../../../uml/src/main/model/profiles/tumlprofile.uml#_2zMvQM62EeGEl_PAnbcd0Q">
+<xmi:XMI xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tuml="http:///schemas/tuml/_2zMIMM62EeGEl_PAnbcd0Q/6" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xsi:schemaLocation="http:///schemas/tuml/_2zMIMM62EeGEl_PAnbcd0Q/6 ../../../../uml/src/main/model/profiles/tumlprofile.uml#_2zMvQM62EeGEl_PAnbcd0Q">
   <uml:Model xmi:id="_qb8akM37EdqwVrslYOdUDA" name="testoclmodel">
     <elementImport xmi:id="_vH2KoL7zEeG5Bt_b3EGOQQ">
       <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
@@ -94,6 +94,14 @@
                 <body>self.oclTestCollection->iterate(iter : OclTestCollection; acc : String = '' | acc.concat(iter.name) )</body>
               </defaultValue>
             </ownedAttribute>
+            <ownedAttribute xmi:id="_0F5zoNEIEeGgJMFwJSMAJw" name="oclIterateExp2" type="_grnZsMGoEeGZOpN3XTQouA" isOrdered="true" isDerived="true">
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_5-f-sNEIEeGgJMFwJSMAJw" value="*"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_53hM8NEIEeGgJMFwJSMAJw"/>
+              <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_7TSAUNEIEeGgJMFwJSMAJw" name="self.oclTestCollection->iterate(iter : OclTestCollection; acc : OrderedSet(OclTestCollection2) = OrderedSet{} | acc->includes(iter.oclTestCollection2->any(name = 'john')))">
+                <language>ocl</language>
+                <body>self.oclTestCollection->iterate(iter : OclTestCollection; acc : OrderedSet(OclTestCollection2) = OrderedSet{} | acc->including(iter.oclTestCollection2->any(name='john'))->asOrderedSet())</body>
+              </defaultValue>
+            </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Class" xmi:id="_0vhrEMCDEeGzStsPq17FZA" name="OclTestCollection">
             <ownedAttribute xmi:id="_2P21YMCDEeGzStsPq17FZA" name="name">
@@ -160,23 +168,16 @@
               <qualifier xmi:id="_Scpy0M6cEeGE5caT1HEp2A" name="accountNumberQualifier">
                 <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
               </qualifier>
-              <qualifier xmi:id="_y16YIM6nEeGvubEk1n1G9w" name="employeeQualifier" type="_8GpjsM6nEeGvubEk1n1G9w"/>
-            </ownedAttribute>
-            <ownedAttribute xmi:id="_4RcKUM5zEeG36cJ3v-Rmsg" name="findCustomer100" type="_BrVOsM5wEeG36cJ3v-Rmsg" isDerived="true">
-              <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_9LjT4M5zEeG36cJ3v-Rmsg" name="self.customer['__IGNORE__',100,null]">
-                <language>ocl</language>
-                <body>self.customer['__IGNORE__',100,null]</body>
-              </defaultValue>
-            </ownedAttribute>
-            <ownedAttribute xmi:id="_zWPNEM6eEeGE5caT1HEp2A" name="findJohn" type="_BrVOsM5wEeG36cJ3v-Rmsg" isDerived="true">
-              <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_2_-T4M6eEeGE5caT1HEp2A" name="self.customer['john',-1,null]">
-                <language>ocl</language>
-                <body>self.customer['john',-1,null]</body>
-              </defaultValue>
             </ownedAttribute>
             <ownedAttribute xmi:id="_efKE8M6oEeGvubEk1n1G9w" name="employee" type="_8GpjsM6nEeGvubEk1n1G9w" isOrdered="true" aggregation="composite" association="_efWSMM6oEeGvubEk1n1G9w">
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_efKE8c6oEeGvubEk1n1G9w" value="*"/>
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_efKE8s6oEeGvubEk1n1G9w"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:id="_mesT4NEEEeGr9dUaROkemg" name="customerJohn001" type="_BrVOsM5wEeG36cJ3v-Rmsg" isDerived="true">
+              <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_wh0lsNEEEeGr9dUaROkemg" name="self.customer['john',1]">
+                <language>ocl</language>
+                <body>self.customer['john',1]</body>
+              </defaultValue>
             </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Class" xmi:id="_BrVOsM5wEeG36cJ3v-Rmsg" name="Customer">

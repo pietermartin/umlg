@@ -8,7 +8,7 @@ import org.tuml.runtime.util.TinkerFormatter;
 
 import com.tinkerpop.blueprints.Vertex;
 
-public abstract class BaseTinkerSoftDelete extends BaseTinker implements Serializable {
+public abstract class BaseTinkerSoftDelete extends BaseTuml implements Serializable {
 
 	private static final long serialVersionUID = 3751023772087546585L;
 	protected Vertex auditVertex;

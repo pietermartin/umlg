@@ -13,7 +13,7 @@ import org.tuml.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.tuml.runtime.collection.ocl.OclStdLibSequence;
 import org.tuml.runtime.collection.ocl.OclStdLibSequenceImpl;
 import org.tuml.runtime.domain.TinkerAuditableNode;
-import org.tuml.runtime.domain.TinkerNode;
+import org.tuml.runtime.domain.TumlNode;
 
 import com.tinkerpop.blueprints.CloseableIterable;
 import com.tinkerpop.blueprints.Direction;
@@ -31,7 +31,7 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
 		this.oclStdLibCollection = this.oclStdLibSequence;
 	}
 
-	public BaseSequence(TinkerNode owner, TumlRuntimeProperty runtimeProperty) {
+	public BaseSequence(TumlNode owner, TumlRuntimeProperty runtimeProperty) {
 		super(owner, runtimeProperty);
 		this.internalCollection = new ArrayList<E>();
 		this.oclStdLibCollection = new OclStdLibSequenceImpl<E>((List<E>) this.internalCollection);
@@ -57,7 +57,7 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
 				if (c.isEnum()) {
 					node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
 					this.internalVertexMap.put(value, this.getVertexForDirection(edge));
-				} else if (TinkerNode.class.isAssignableFrom(c)) {
+				} else if (TumlNode.class.isAssignableFrom(c)) {
 					node = (E) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
 				} else {
 					node = (E) value;
@@ -87,11 +87,11 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
 
 		float min;
 		float max;
-		if (e instanceof TinkerNode) {
-			min = (Float) ((TinkerNode) previous).getVertex().getProperty("tinkerIndex");
-			max = (Float) ((TinkerNode) current).getVertex().getProperty("tinkerIndex");
+		if (e instanceof TumlNode) {
+			min = (Float) ((TumlNode) previous).getVertex().getProperty("tinkerIndex");
+			max = (Float) ((TumlNode) current).getVertex().getProperty("tinkerIndex");
 			if (isInverseOrdered()) {
-				addOrderToInverseIndex(edge, (TinkerNode) e);
+				addOrderToInverseIndex(edge, (TumlNode) e);
 			}
 		} else if (e.getClass().isEnum()) {
 			min = (Float) this.internalVertexMap.get(((Enum<?>) previous).name()).getProperty("tinkerIndex");
@@ -115,8 +115,8 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
 			@SuppressWarnings("unchecked")
 			E e = (E) o;
 			Vertex v;
-			if (o instanceof TinkerNode) {
-				TinkerNode node = (TinkerNode) o;
+			if (o instanceof TumlNode) {
+				TumlNode node = (TumlNode) o;
 				v = node.getVertex();
 				Set<Edge> edges = GraphDb.getDb().getEdgesBetween(this.vertex, v, this.getLabel());
 				for (Edge edge : edges) {
@@ -223,4 +223,76 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
 		maybeLoad();
 		return this.oclStdLibSequence.select(v);
 	}
+	
+	@Override
+	public E first() {
+		return oclStdLibSequence.first();
+	}
+	
+	@Override
+	public Boolean equals(TinkerSequence<E> s) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerSequence<E> union(TinkerSequence<E> s) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerSequence<E> append(E object) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerSequence<E> prepend(E object) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerSequence<E> insertAt(Integer index, E object) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerSequence<E> subSequence(Integer lower, Integer upper) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public E at(Integer i) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public E last() {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerSequence<E> including(E object) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerSequence<E> excluding(E object) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerSequence<E> reverse() {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
 }

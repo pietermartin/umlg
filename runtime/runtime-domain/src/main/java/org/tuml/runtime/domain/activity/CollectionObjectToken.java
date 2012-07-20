@@ -10,7 +10,9 @@ import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.collection.impl.BaseCollection;
 import org.tuml.runtime.collection.impl.TinkerSequenceImpl;
 import org.tuml.runtime.domain.CompositionNode;
-import org.tuml.runtime.domain.TinkerNode;
+import org.tuml.runtime.domain.TumlNode;
+import org.tuml.runtime.domain.ocl.OclAny;
+import org.tuml.runtime.domain.ocl.OclState;
 
 import com.tinkerpop.blueprints.Vertex;
 
@@ -122,15 +124,6 @@ public class CollectionObjectToken<O> extends ObjectToken<O> implements Composit
 		return null;
 	}
 
-//	@Override
-//	public void init(TinkerNode owner) {
-//	}
-//	
-//	@Override
-//	public boolean hasInitBeenCalled() {
-//		return true;
-//	}
-
 	@Override
 	public void delete() {
 		if (true) {
@@ -140,17 +133,87 @@ public class CollectionObjectToken<O> extends ObjectToken<O> implements Composit
 
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
 	}
 
 	@Override
-	public List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, TinkerNode node) {
-		return null;
+	public List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, TumlNode node) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
 	}
 
 	@Override
 	public int getSize(TumlRuntimeProperty tumlRuntimeProperty) {
-		// TODO Auto-generated method stub
-		return 0;
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
 	}
+
+	@Override
+	public Boolean equals(OclAny oclAny) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public Boolean notEquals(OclAny oclAny) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public Boolean oclIsNew() {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public Boolean oclIsUndefined() {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public Boolean oclIsInvalid() {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public <T> T oclAsType(T classifier) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public Boolean oclIsTypeOf(TumlNode classifier) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public Boolean oclIsKindOf(TumlNode classifier) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public Boolean oclIsInState(OclState state) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TumlNode oclType() {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public String oclLocale() {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
 
 }

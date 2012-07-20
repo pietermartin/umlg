@@ -6,7 +6,7 @@ import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.collection.Qualifier;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.domain.ISignal;
-import org.tuml.runtime.domain.TinkerNode;
+import org.tuml.runtime.domain.TumlNode;
 
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
@@ -44,7 +44,7 @@ public class SignalEvent extends Event {
 	}
 	
 	public void setSignal(ISignal signal) {
-		Edge edge = GraphDb.getDb().addEdge(null, ((TinkerNode)signal).getVertex(), this.vertex,"event_signal");
+		Edge edge = GraphDb.getDb().addEdge(null, ((TumlNode)signal).getVertex(), this.vertex,"event_signal");
 		edge.setProperty("outClass", signal.getClass().getName());
 		edge.setProperty("inClass", this.getClass().getName());
 	}
@@ -68,7 +68,7 @@ public class SignalEvent extends Event {
 	}
 
 	@Override
-	public List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, TinkerNode node) {
+	public List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, TumlNode node) {
 		return null;
 	}
 

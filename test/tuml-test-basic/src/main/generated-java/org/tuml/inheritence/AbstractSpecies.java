@@ -13,11 +13,11 @@ import org.tuml.runtime.collection.Qualifier;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.collection.impl.TinkerSetImpl;
-import org.tuml.runtime.domain.BaseTinker;
+import org.tuml.runtime.domain.BaseTuml;
 import org.tuml.runtime.domain.CompositionNode;
-import org.tuml.runtime.domain.TinkerNode;
+import org.tuml.runtime.domain.TumlNode;
 
-public class AbstractSpecies extends BaseTinker implements CompositionNode {
+public class AbstractSpecies extends BaseTuml implements CompositionNode {
 	static final public long serialVersionUID = 1L;
 	private TinkerSet<String> name;
 	private TinkerSet<God> god;
@@ -124,7 +124,7 @@ public class AbstractSpecies extends BaseTinker implements CompositionNode {
 	}
 	
 	@Override
-	public TinkerNode getOwningObject() {
+	public TumlNode getOwningObject() {
 		return getGod();
 	}
 	
@@ -135,7 +135,7 @@ public class AbstractSpecies extends BaseTinker implements CompositionNode {
 	 * @param node 
 	 */
 	@Override
-	public List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, TinkerNode node) {
+	public List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, TumlNode node) {
 		List<Qualifier> result = Collections.emptyList();
 		AbstractSpeciesRuntimePropertyEnum runtimeProperty = AbstractSpeciesRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result.isEmpty() ) {

@@ -9,13 +9,14 @@ import java.util.Set;
 import org.apache.commons.collections.set.ListOrderedSet;
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.collection.TinkerBag;
+import org.tuml.runtime.collection.TinkerCollection;
 import org.tuml.runtime.collection.TinkerOrderedSet;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.tuml.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.tuml.runtime.collection.ocl.OclStdLibOrderedSet;
 import org.tuml.runtime.collection.ocl.OclStdLibOrderedSetImpl;
-import org.tuml.runtime.domain.TinkerNode;
+import org.tuml.runtime.domain.TumlNode;
 
 import com.tinkerpop.blueprints.CloseableIterable;
 import com.tinkerpop.blueprints.Direction;
@@ -27,7 +28,7 @@ public class TinkerOrderedSetImpl<E> extends BaseCollection<E> implements Tinker
 	protected OclStdLibOrderedSet<E> oclStdLibOrderedSet;
 
 	@SuppressWarnings("unchecked")
-	public TinkerOrderedSetImpl(TinkerNode owner, TumlRuntimeProperty runtimeProperty) {
+	public TinkerOrderedSetImpl(TumlNode owner, TumlRuntimeProperty runtimeProperty) {
 		super(owner, runtimeProperty);
 		this.internalCollection = new ListOrderedSet();
 		this.oclStdLibOrderedSet = new OclStdLibOrderedSetImpl<E>((ListOrderedSet)this.internalCollection); 
@@ -73,9 +74,9 @@ public class TinkerOrderedSetImpl<E> extends BaseCollection<E> implements Tinker
 		if (edge != null) {
 			float min;
 			float max;
-			if (e instanceof TinkerNode) {
-				min = (Float) ((TinkerNode) previous).getVertex().getProperty("tinkerIndex");
-				max = (Float) ((TinkerNode) current).getVertex().getProperty("tinkerIndex");
+			if (e instanceof TumlNode) {
+				min = (Float) ((TumlNode) previous).getVertex().getProperty("tinkerIndex");
+				max = (Float) ((TumlNode) current).getVertex().getProperty("tinkerIndex");
 			} else if (e.getClass().isEnum()) {
 				min = (Float) this.internalVertexMap.get(((Enum<?>) previous).name()).getProperty("tinkerIndex");
 				max = (Float) this.internalVertexMap.get(((Enum<?>) current).name()).getProperty("tinkerIndex");
@@ -103,7 +104,7 @@ public class TinkerOrderedSetImpl<E> extends BaseCollection<E> implements Tinker
 				if (c.isEnum()) {
 					node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
 					this.internalVertexMap.put(value, this.getVertexForDirection(edge));
-				} else if (TinkerNode.class.isAssignableFrom(c)) {
+				} else if (TumlNode.class.isAssignableFrom(c)) {
 					node = (E) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
 				} else {
 					node = (E) value;
@@ -124,8 +125,8 @@ public class TinkerOrderedSetImpl<E> extends BaseCollection<E> implements Tinker
 		boolean result = this.getInternalListOrderedSet().remove(o);
 		if (result) {
 			Vertex v;
-			if (o instanceof TinkerNode) {
-				TinkerNode node = (TinkerNode) o;
+			if (o instanceof TumlNode) {
+				TumlNode node = (TumlNode) o;
 				v = node.getVertex();
 				Set<Edge> edges = GraphDb.getDb().getEdgesBetween(this.vertex, v, this.getLabel());
 				for (Edge edge : edges) {
@@ -222,7 +223,7 @@ public class TinkerOrderedSetImpl<E> extends BaseCollection<E> implements Tinker
 	}
 	
 	@Override
-	public <R> TinkerOrderedSet<R> flatten() {
+	public <T2> TinkerCollection<T2> flatten() {
 		maybeLoad();
 		return this.oclStdLibOrderedSet.flatten();
 	}
@@ -231,5 +232,53 @@ public class TinkerOrderedSetImpl<E> extends BaseCollection<E> implements Tinker
 	public TinkerOrderedSet<E> select(BooleanExpressionEvaluator<E> v) {
 		maybeLoad();
 		return this.oclStdLibOrderedSet.select(v);
+	}
+
+	@Override
+	public TinkerOrderedSet<E> append(E e) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerOrderedSet<E> prepend(E e) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerOrderedSet<E> insertAt(Integer index, E e) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerOrderedSet<E> subOrderedSet(Integer lower, Integer upper) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public E at(Integer i) {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public E first() {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public E last() {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerOrderedSet<E> reverse() {
+		// TODO Implement
+		throw new RuntimeException("Not implemented");
 	}
 }

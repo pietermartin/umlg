@@ -15,7 +15,7 @@ import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
 import org.tuml.runtime.adaptor.TransactionThreadVar;
 import org.tuml.runtime.domain.BaseTinkerAuditable;
 import org.tuml.runtime.domain.CompositionNode;
-import org.tuml.runtime.domain.TinkerNode;
+import org.tuml.runtime.domain.TumlNode;
 
 public class NakedTransactionEventHandler<T> implements TransactionEventHandler<T> {
 
@@ -29,12 +29,12 @@ public class NakedTransactionEventHandler<T> implements TransactionEventHandler<
 	@Override
 	public T beforeCommit(TransactionData data) throws Exception {
 		if (!isEmpty(data)) {
-			Set<ConstraintViolation<TinkerNode>> constraintViolations = new HashSet<ConstraintViolation<TinkerNode>>();
+			Set<ConstraintViolation<TumlNode>> constraintViolations = new HashSet<ConstraintViolation<TumlNode>>();
 			TransactionThreadVar.clear();
 			GraphDb.incrementTransactionCount();
 			List<CompositionNode> entities = TransactionThreadEntityVar.get();
 			for (CompositionNode entity : entities) {
-				constraintViolations.addAll(validator.validate((TinkerNode)entity));
+				constraintViolations.addAll(validator.validate((TumlNode)entity));
 				if (!entity.isTinkerRoot() && entity.getOwningObject() == null) {
 
 					if (entity instanceof BaseTinkerAuditable && ((BaseTinkerAuditable) entity).getDeletedOn().before(new Date())) {

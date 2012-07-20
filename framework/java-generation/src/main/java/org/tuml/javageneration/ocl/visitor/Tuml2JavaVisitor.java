@@ -228,53 +228,12 @@ public class Tuml2JavaVisitor extends
 	 */
 	@Override
 	protected String handlePropertyCallExp(PropertyCallExp<Classifier, Property> pc, String sourceResult, List<String> qualifierResults) {
-		// Tuml specific qualifier semantics.
-		// Each qualifier represents a seperate qualification of the
-		// association.
-		// A such the list my only have one valid value in it
 		Property property = pc.getReferredProperty();
-		boolean foundQualifier = false;
-		String qualifierResult = null;
-		Property qualifier = null;
-		// Remove StringLiterals to ignore
-		List<String> validQualifierResults = new ArrayList<String>();
-		for (String qualifierResultTmp : qualifierResults) {
-			if (!qualifierResultTmp.equals("\"__IGNORE__\"")) {
-				validQualifierResults.add(qualifierResultTmp);
-			}
-		}
-		// If there is more than one value left, remove Integer literals '-1'
-		List<String> finalValidQualifierResults = new ArrayList<String>();
-		if (validQualifierResults.size() > 1) {
-			for (String qualifierResultTmp : validQualifierResults) {
-				if (!StringUtils.remove(qualifierResultTmp, " ").equals("-1")) {
-					finalValidQualifierResults.add(qualifierResultTmp);
-				}
-			}
-		} else {
-			finalValidQualifierResults = validQualifierResults;
-		}
-
-		if (!qualifierResults.isEmpty() && (finalValidQualifierResults.isEmpty() || finalValidQualifierResults.size() > 1)) {
-			throw new IllegalStateException("Only one qualifier value can be specified!");
-		} else if (!qualifierResults.isEmpty()) {
-			int i = 0;
-			qualifierResult = finalValidQualifierResults.get(0);
-			for (String qualifierResultTmp : qualifierResults) {
-				if (qualifierResult.equals(qualifierResultTmp)) {
-					break;
-				}
-				i++;
-			}
-			qualifier = property.getQualifiers().get(i);
-			foundQualifier = true;
-		}
 		PropertyWrapper pWrap = new PropertyWrapper(property);
 		String getter;
-		if (foundQualifier) {
-			PropertyWrapper qualifierPWrap = new PropertyWrapper(qualifier);
-			getter = pWrap.getQualifiedNameFor(qualifierPWrap);
-			getter += "(" + qualifierResult + ")";
+		if (!qualifierResults.isEmpty()) {
+			getter = pWrap.getQualifiedNameFor(pWrap.getQualifiersAsPropertyWrappers());
+			getter += "(" + qualifierResults.toString().replace("[", "").replace("]", "") + ")";
 		} else {
 			getter = pWrap.getter();
 			getter += "()";
@@ -285,7 +244,6 @@ public class Tuml2JavaVisitor extends
 			result.append(".");
 		}
 		result.append(getter);
-
 		return result.toString();
 	}
 

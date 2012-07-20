@@ -17,49 +17,48 @@ import org.tuml.runtime.domain.BaseTuml;
 import org.tuml.runtime.domain.CompositionNode;
 import org.tuml.runtime.domain.TumlNode;
 
-public class Angel extends BaseTuml implements CompositionNode {
+public class Employee extends BaseTuml implements CompositionNode {
 	static final public long serialVersionUID = 1L;
 	private TinkerSet<String> name;
-	private TinkerSet<Integer> rank;
-	private TinkerSet<God> god;
+	private TinkerSet<Bank> bank;
 
 	/**
-	 * constructor for Angel
+	 * constructor for Employee
 	 * 
 	 * @param compositeOwner 
 	 */
-	public Angel(God compositeOwner) {
+	public Employee(Bank compositeOwner) {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
 		initialiseProperties();
 		initVariables();
 		createComponents();
-		addToGod(compositeOwner);
+		addToBank(compositeOwner);
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
 	}
 	
 	/**
-	 * constructor for Angel
+	 * constructor for Employee
 	 * 
 	 * @param vertex 
 	 */
-	public Angel(Vertex vertex) {
+	public Employee(Vertex vertex) {
 		this.vertex=vertex;
 		initialiseProperties();
 	}
 	
 	/**
-	 * default constructor for Angel
+	 * default constructor for Employee
 	 */
-	public Angel() {
+	public Employee() {
 	}
 	
 	/**
-	 * constructor for Angel
+	 * constructor for Employee
 	 * 
 	 * @param persistent 
 	 */
-	public Angel(Boolean persistent) {
+	public Employee(Boolean persistent) {
 		this.vertex = GraphDb.getDb().addVertex("dribble");
 		TransactionThreadEntityVar.setNewEntity(this);
 		defaultCreate();
@@ -68,9 +67,9 @@ public class Angel extends BaseTuml implements CompositionNode {
 		createComponents();
 	}
 
-	public void addToGod(God god) {
-		if ( god != null ) {
-			this.god.add(god);
+	public void addToBank(Bank bank) {
+		if ( bank != null ) {
+			this.bank.add(bank);
 		}
 	}
 	
@@ -80,22 +79,12 @@ public class Angel extends BaseTuml implements CompositionNode {
 		}
 	}
 	
-	public void addToRank(Integer rank) {
-		if ( rank != null ) {
-			this.rank.add(rank);
-		}
-	}
-	
-	public void clearGod() {
-		this.god.clear();
+	public void clearBank() {
+		this.bank.clear();
 	}
 	
 	public void clearName() {
 		this.name.clear();
-	}
-	
-	public void clearRank() {
-		this.rank.clear();
 	}
 	
 	public void createComponents() {
@@ -106,34 +95,8 @@ public class Angel extends BaseTuml implements CompositionNode {
 		GraphDb.getDb().removeVertex(this.vertex);
 	}
 	
-	/**
-	 * Implements the ocl statement for derived property 'angelNameQualifier'
-	 * <pre>
-	 * package basicmodel::org::tuml::qualifier
-	 *     context Angel::angelNameQualifier : String
-	 *     derive: self.name
-	 * endpackage
-	 * </pre>
-	 */
-	public String getAngelNameQualifier() {
-		return getName();
-	}
-	
-	/**
-	 * Implements the ocl statement for derived property 'angelRankQualifier'
-	 * <pre>
-	 * package basicmodel::org::tuml::qualifier
-	 *     context Angel::angelRankQualifier : Integer
-	 *     derive: self.rank
-	 * endpackage
-	 * </pre>
-	 */
-	public Integer getAngelRankQualifier() {
-		return getRank();
-	}
-	
-	public God getGod() {
-		TinkerSet<God> tmp = this.god;
+	public Bank getBank() {
+		TinkerSet<Bank> tmp = this.bank;
 		if ( !tmp.isEmpty() ) {
 			return tmp.iterator().next();
 		} else {
@@ -162,7 +125,7 @@ public class Angel extends BaseTuml implements CompositionNode {
 	
 	@Override
 	public TumlNode getOwningObject() {
-		return getGod();
+		return getBank();
 	}
 	
 	/**
@@ -174,7 +137,7 @@ public class Angel extends BaseTuml implements CompositionNode {
 	@Override
 	public List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, TumlNode node) {
 		List<Qualifier> result = Collections.emptyList();
-		AngelRuntimePropertyEnum runtimeProperty = AngelRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
+		EmployeeRuntimePropertyEnum runtimeProperty = EmployeeRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result.isEmpty() ) {
 			switch ( runtimeProperty ) {
 				default:
@@ -186,15 +149,6 @@ public class Angel extends BaseTuml implements CompositionNode {
 		return result;
 	}
 	
-	public Integer getRank() {
-		TinkerSet<Integer> tmp = this.rank;
-		if ( !tmp.isEmpty() ) {
-			return tmp.iterator().next();
-		} else {
-			return null;
-		}
-	}
-	
 	/**
 	 * getSize is called from the collection in order to update the index used to implement a sequance's index
 	 * 
@@ -203,19 +157,15 @@ public class Angel extends BaseTuml implements CompositionNode {
 	@Override
 	public int getSize(TumlRuntimeProperty tumlRuntimeProperty) {
 		int result = 0;
-		AngelRuntimePropertyEnum runtimeProperty = AngelRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
+		EmployeeRuntimePropertyEnum runtimeProperty = EmployeeRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result == 0 ) {
 			switch ( runtimeProperty ) {
-				case rank:
-					result = rank.size();
-				break;
-			
 				case name:
 					result = name.size();
 				break;
 			
-				case god:
-					result = god.size();
+				case bank:
+					result = bank.size();
 				break;
 			
 				default:
@@ -242,24 +192,19 @@ public class Angel extends BaseTuml implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.god =  new TinkerSetImpl<God>(this, AngelRuntimePropertyEnum.god);
-		this.name =  new TinkerSetImpl<String>(this, AngelRuntimePropertyEnum.name);
-		this.rank =  new TinkerSetImpl<Integer>(this, AngelRuntimePropertyEnum.rank);
+		this.bank =  new TinkerSetImpl<Bank>(this, EmployeeRuntimePropertyEnum.bank);
+		this.name =  new TinkerSetImpl<String>(this, EmployeeRuntimePropertyEnum.name);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
-		switch ( (AngelRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case rank:
-				this.rank =  new TinkerSetImpl<Integer>(this, AngelRuntimePropertyEnum.rank);
-			break;
-		
+		switch ( (EmployeeRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
 			case name:
-				this.name =  new TinkerSetImpl<String>(this, AngelRuntimePropertyEnum.name);
+				this.name =  new TinkerSetImpl<String>(this, EmployeeRuntimePropertyEnum.name);
 			break;
 		
-			case god:
-				this.god =  new TinkerSetImpl<God>(this, AngelRuntimePropertyEnum.god);
+			case bank:
+				this.bank =  new TinkerSetImpl<Bank>(this, EmployeeRuntimePropertyEnum.bank);
 			break;
 		
 		}
@@ -270,15 +215,15 @@ public class Angel extends BaseTuml implements CompositionNode {
 		return false;
 	}
 	
-	public void removeFromGod(God god) {
-		if ( god != null ) {
-			this.god.remove(god);
+	public void removeFromBank(Bank bank) {
+		if ( bank != null ) {
+			this.bank.remove(bank);
 		}
 	}
 	
-	public void removeFromGod(TinkerSet<God> god) {
-		if ( !god.isEmpty() ) {
-			this.god.removeAll(god);
+	public void removeFromBank(TinkerSet<Bank> bank) {
+		if ( !bank.isEmpty() ) {
+			this.bank.removeAll(bank);
 		}
 	}
 	
@@ -294,21 +239,9 @@ public class Angel extends BaseTuml implements CompositionNode {
 		}
 	}
 	
-	public void removeFromRank(Integer rank) {
-		if ( rank != null ) {
-			this.rank.remove(rank);
-		}
-	}
-	
-	public void removeFromRank(TinkerSet<Integer> rank) {
-		if ( !rank.isEmpty() ) {
-			this.rank.removeAll(rank);
-		}
-	}
-	
-	public void setGod(God god) {
-		clearGod();
-		addToGod(god);
+	public void setBank(Bank bank) {
+		clearBank();
+		addToBank(bank);
 	}
 	
 	@Override
@@ -320,16 +253,10 @@ public class Angel extends BaseTuml implements CompositionNode {
 		clearName();
 		addToName(name);
 	}
-	
-	public void setRank(Integer rank) {
-		clearRank();
-		addToRank(rank);
-	}
 
-	public enum AngelRuntimePropertyEnum implements TumlRuntimeProperty {
-		god(false,false,false,"A_<god>_<angel>",false,false,true,false,1,1,false,true,false,false,true),
-		name(true,true,false,"basicmodel__org__tuml__qualifier__Angel__name",false,false,true,false,1,1,false,false,false,false,true),
-		rank(true,true,false,"basicmodel__org__tuml__qualifier__Angel__rank",false,false,true,false,1,1,false,false,false,false,true);
+	public enum EmployeeRuntimePropertyEnum implements TumlRuntimeProperty {
+		bank(false,false,false,"A_<bank>_<employee>",false,false,true,false,1,1,false,false,false,true,true),
+		name(true,true,false,"testoclmodel__org__tuml__qualifier__Employee__name",false,false,true,false,1,1,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -346,7 +273,7 @@ public class Angel extends BaseTuml implements CompositionNode {
 		private boolean inverseOrdered;
 		private boolean unique;
 		/**
-		 * constructor for AngelRuntimePropertyEnum
+		 * constructor for EmployeeRuntimePropertyEnum
 		 * 
 		 * @param onePrimitive 
 		 * @param controllingSide 
@@ -364,7 +291,7 @@ public class Angel extends BaseTuml implements CompositionNode {
 		 * @param inverseOrdered 
 		 * @param unique 
 		 */
-		private AngelRuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower, boolean qualified, boolean inverseQualified, boolean ordered, boolean inverseOrdered, boolean unique) {
+		private EmployeeRuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower, boolean qualified, boolean inverseQualified, boolean ordered, boolean inverseOrdered, boolean unique) {
 			this.onePrimitive = onePrimitive;
 			this.controllingSide = controllingSide;
 			this.composite = composite;
@@ -382,15 +309,12 @@ public class Angel extends BaseTuml implements CompositionNode {
 			this.unique = unique;
 		}
 	
-		static public AngelRuntimePropertyEnum fromLabel(String label) {
-			if ( god.getLabel().equals(label) ) {
-				return god;
+		static public EmployeeRuntimePropertyEnum fromLabel(String label) {
+			if ( bank.getLabel().equals(label) ) {
+				return bank;
 			}
 			if ( name.getLabel().equals(label) ) {
 				return name;
-			}
-			if ( rank.getLabel().equals(label) ) {
-				return rank;
 			}
 			return null;
 		}

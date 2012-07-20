@@ -28,6 +28,51 @@ public class OclStdLibOrderedSetImpl<E> extends OclStdLibCollectionImpl<E> imple
 	}
 	
 	@Override
+	public TinkerOrderedSet<E> append(E e) {
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerOrderedSet<E> prepend(E e) {
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerOrderedSet<E> insertAt(Integer index, E e) {
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerOrderedSet<E> subOrderedSet(Integer lower, Integer upper) {
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public E at(Integer i) {
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public E first() {
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public E last() {
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TinkerOrderedSet<E> reverse() {
+		throw new RuntimeException("Not implemented");
+	}
+
+	
+	/***************************************************
+	 * Iterate goodies
+	 ***************************************************/
+	
+	@Override
 	public TinkerOrderedSet<E> select(BooleanExpressionEvaluator<E> v) {
 		ListOrderedSet result = new ListOrderedSet();
 		for (E e : this.collection) {

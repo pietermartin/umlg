@@ -4,14 +4,14 @@ import java.util.Collection;
 
 import org.tuml.runtime.collection.TinkerSequence;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
-import org.tuml.runtime.domain.TinkerNode;
+import org.tuml.runtime.domain.TumlNode;
 
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 
 public class TinkerSequenceImpl<E> extends BaseSequence<E> implements TinkerSequence<E> {
 
-	public TinkerSequenceImpl(TinkerNode owner, TumlRuntimeProperty runtimeProperty) {
+	public TinkerSequenceImpl(TumlNode owner, TumlRuntimeProperty runtimeProperty) {
 		super(owner, runtimeProperty);
 	}
 

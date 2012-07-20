@@ -1,11 +1,13 @@
 package org.tuml.runtime.domain.activity;
 
 import org.tuml.runtime.adaptor.GraphDb;
-import org.tuml.runtime.domain.TinkerNode;
+import org.tuml.runtime.domain.TumlNode;
+import org.tuml.runtime.domain.ocl.OclAny;
+import org.tuml.runtime.domain.ocl.OclState;
 
 import com.tinkerpop.blueprints.Vertex;
 
-public abstract class Event implements TinkerNode {
+public abstract class Event implements TumlNode {
 
 	private static final long serialVersionUID = 546409593170432165L;
 	protected Vertex vertex;
@@ -52,5 +54,71 @@ public abstract class Event implements TinkerNode {
 	public int getObjectVersion() {
 		return 0;
 	}
-	
+
+	@Override
+	public Boolean equals(OclAny oclAny) {
+		//TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public Boolean notEquals(OclAny oclAny) {
+		//TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public Boolean oclIsNew() {
+		//TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public Boolean oclIsUndefined() {
+		//TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public Boolean oclIsInvalid() {
+		//TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public <T> T oclAsType(T classifier) {
+		//TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public Boolean oclIsTypeOf(TumlNode classifier) {
+		//TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public Boolean oclIsKindOf(TumlNode classifier) {
+		//TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public Boolean oclIsInState(OclState state) {
+		//TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public TumlNode oclType() {
+		//TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public String oclLocale() {
+		//TODO Implement
+		throw new RuntimeException("Not implemented");
+	}
+
 }

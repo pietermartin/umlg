@@ -4,14 +4,14 @@ import java.util.Collection;
 
 import org.tuml.runtime.collection.TinkerQualifiedSequence;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
-import org.tuml.runtime.domain.TinkerNode;
+import org.tuml.runtime.domain.TumlNode;
 
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 
 public class TinkerQualifiedSequenceImpl<E> extends BaseSequence<E> implements TinkerQualifiedSequence<E> {
 
-	public TinkerQualifiedSequenceImpl(TinkerNode owner, TumlRuntimeProperty runtimeProperty) {
+	public TinkerQualifiedSequenceImpl(TumlNode owner, TumlRuntimeProperty runtimeProperty) {
 		super(owner, runtimeProperty);
 	}
 
@@ -20,10 +20,10 @@ public class TinkerQualifiedSequenceImpl<E> extends BaseSequence<E> implements T
 		maybeLoad();
 		Edge edge = addToListAndListIndex(indexOf, e);
 		// Can only qualify TinkerNode's
-		if (!(e instanceof TinkerNode)) {
+		if (!(e instanceof TumlNode)) {
 			throw new IllegalStateException("Primitive properties can not be qualified!");
 		}
-		addQualifierToIndex(edge, (TinkerNode)e);
+		addQualifierToIndex(edge, (TumlNode)e);
 	}
 
 	@Override
