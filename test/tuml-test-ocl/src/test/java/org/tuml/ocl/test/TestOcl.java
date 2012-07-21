@@ -3,6 +3,7 @@ package org.tuml.ocl.test;
 import junit.framework.Assert;
 
 import org.junit.Test;
+import org.tuml.runtime.domain.ocl.OclIsInvalidException;
 import org.tuml.runtime.test.BaseLocalDbTest;
 import org.tuml.testocl.OclTest1;
 import org.tuml.testocl.OclTestCollection;
@@ -103,14 +104,44 @@ public class TestOcl extends BaseLocalDbTest {
 		oclTestCollection2_1_2.setName("john");
 		OclTestCollection2 oclTestCollection2_1_3 = new OclTestCollection2(oclTestCollection1);
 		oclTestCollection2_1_3.setName("john3");
-
-
 		
 		db.stopTransaction(Conclusion.SUCCESS);
 		
 		Assert.assertEquals(2, oclTest1.getOclTestCollection().size());
 		Assert.assertEquals(1, oclTest1.getOclIterateExp2().size());
-
 	}
+	
+	@Test
+	public void testOclFirst() {
+		db.startTransaction();
+		OclTest1 oclTest1 = new OclTest1(true);
+		oclTest1.setProperty1("property1");
+		OclTestCollection oclTestCollection1 = new OclTestCollection(oclTest1);
+		oclTestCollection1.setName("oclTestCollection1");
+		OclTestCollection oclTestCollection2 = new OclTestCollection(oclTest1);
+		oclTestCollection2.setName("oclTestCollection2");
+		db.stopTransaction(Conclusion.SUCCESS);
+		Assert.assertEquals(2, oclTest1.getOclTestCollection().size());
+		Assert.assertNotNull(oclTest1.getTestOclFirst());
+	}
+
+	@Test(expected=OclIsInvalidException.class)
+	public void testOclFirstOclInvalid1() {
+		db.startTransaction();
+		OclTest1 oclTest1 = new OclTest1(true);
+		oclTest1.setProperty1("property1");
+		Assert.assertEquals(0, oclTest1.getOclTestCollection().size());
+		Assert.assertNull(oclTest1.getTestOclFirst());
+	}
+	
+	@Test()
+	public void testOclFirstOclInvalid2() {
+		db.startTransaction();
+		OclTest1 oclTest1 = new OclTest1(true);
+		oclTest1.setProperty1("property1");
+		Assert.assertEquals(0, oclTest1.getOclTestCollection().size());
+		Assert.assertTrue(oclTest1.getTestFirstOclInvalid());
+	}
+
 	
 }

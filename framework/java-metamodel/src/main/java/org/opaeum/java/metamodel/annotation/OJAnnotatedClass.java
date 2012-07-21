@@ -371,4 +371,14 @@ public class OJAnnotatedClass extends OJClass implements OJAnnotatedElement {
 		}
 		addToConstructors(constructor);
 	}
+	
+	public int countOperationsStartingWith(String name) {
+		int count = 0;
+		for (OJOperation oper : getOperations()) {
+			if (oper.getName().startsWith(name)) {
+				count++;
+			}
+		}
+		return count;
+	}
 }

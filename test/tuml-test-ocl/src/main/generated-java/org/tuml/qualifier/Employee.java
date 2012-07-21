@@ -160,12 +160,12 @@ public class Employee extends BaseTuml implements CompositionNode {
 		EmployeeRuntimePropertyEnum runtimeProperty = EmployeeRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result == 0 ) {
 			switch ( runtimeProperty ) {
-				case name:
-					result = name.size();
-				break;
-			
 				case bank:
 					result = bank.size();
+				break;
+			
+				case name:
+					result = name.size();
 				break;
 			
 				default:
@@ -192,19 +192,19 @@ public class Employee extends BaseTuml implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.bank =  new TinkerSetImpl<Bank>(this, EmployeeRuntimePropertyEnum.bank);
 		this.name =  new TinkerSetImpl<String>(this, EmployeeRuntimePropertyEnum.name);
+		this.bank =  new TinkerSetImpl<Bank>(this, EmployeeRuntimePropertyEnum.bank);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (EmployeeRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case name:
-				this.name =  new TinkerSetImpl<String>(this, EmployeeRuntimePropertyEnum.name);
-			break;
-		
 			case bank:
 				this.bank =  new TinkerSetImpl<Bank>(this, EmployeeRuntimePropertyEnum.bank);
+			break;
+		
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, EmployeeRuntimePropertyEnum.name);
 			break;
 		
 		}
@@ -255,8 +255,8 @@ public class Employee extends BaseTuml implements CompositionNode {
 	}
 
 	public enum EmployeeRuntimePropertyEnum implements TumlRuntimeProperty {
-		bank(false,false,false,"A_<bank>_<employee>",false,false,true,false,1,1,false,false,false,true,true),
-		name(true,true,false,"testoclmodel__org__tuml__qualifier__Employee__name",false,false,true,false,1,1,false,false,false,false,true);
+		name(true,true,false,"testoclmodel__org__tuml__qualifier__Employee__name",false,false,true,false,1,1,false,false,false,false,true),
+		bank(false,false,false,"A_<bank>_<employee>",false,false,true,false,1,1,false,false,false,true,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -310,11 +310,11 @@ public class Employee extends BaseTuml implements CompositionNode {
 		}
 	
 		static public EmployeeRuntimePropertyEnum fromLabel(String label) {
-			if ( bank.getLabel().equals(label) ) {
-				return bank;
-			}
 			if ( name.getLabel().equals(label) ) {
 				return name;
+			}
+			if ( bank.getLabel().equals(label) ) {
+				return bank;
 			}
 			return null;
 		}

@@ -7,6 +7,7 @@ import org.eclipse.ocl.expressions.OperationCallExp;
 import org.eclipse.ocl.utilities.PredefinedType;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Operation;
+import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
 import org.tuml.javageneration.ocl.visitor.tojava.OclAsBagExprToJava;
 import org.tuml.javageneration.ocl.visitor.tojava.OclAsOrderedSetExprToJava;
 import org.tuml.javageneration.ocl.visitor.tojava.OclAsSequenceExprToJava;
@@ -19,14 +20,16 @@ import org.tuml.javageneration.ocl.visitor.tojava.OclFlattenExprToJava;
 import org.tuml.javageneration.ocl.visitor.tojava.OclIncludingExprToJava;
 import org.tuml.javageneration.ocl.visitor.tojava.OclMinusExprToJava;
 import org.tuml.javageneration.ocl.visitor.tojava.OclNotEqualExprToJava;
+import org.tuml.javageneration.ocl.visitor.tojava.OclOclIsInvalidExpToJava;
 import org.tuml.javageneration.ocl.visitor.tojava.OclToStringExprToJava;
 
 public enum OclOperationExpEnum implements HandleOperationExp {
 
-	INCLUDING(new OclIncludingExprToJava()), TO_STRING(new OclToStringExprToJava()), FIRST(new OclFirstExprToJava()), MINUS(new OclMinusExprToJava()), EQUAL(new OclEqualExprToJava()), NOT_EQUAL(new OclNotEqualExprToJava()), AS_SET(new OclAsSetExprToJava()), AS_SEQUENCE(new OclAsSequenceExprToJava()), AS_ORDERED_SET(
+	OCL_IS_INVALID(new OclOclIsInvalidExpToJava()), INCLUDING(new OclIncludingExprToJava()), TO_STRING(new OclToStringExprToJava()), FIRST(new OclFirstExprToJava()), MINUS(new OclMinusExprToJava()), EQUAL(new OclEqualExprToJava()), NOT_EQUAL(new OclNotEqualExprToJava()), AS_SET(new OclAsSetExprToJava()), AS_SEQUENCE(new OclAsSequenceExprToJava()), AS_ORDERED_SET(
 			new OclAsOrderedSetExprToJava()), AS_BAG(new OclAsBagExprToJava()), FLATTEN(new OclFlattenExprToJava()), CONCAT(new OclConcatExprToJava()), DEFAULT(new OclDefaultToStringExprToJava());
 	private static Logger logger = Logger.getLogger(OclOperationExpEnum.class.getPackage().getName());
 	private HandleOperationExp implementor;
+	private OJAnnotatedClass ojClass;
 
 	private OclOperationExpEnum(HandleOperationExp implementor) {
 		this.implementor = implementor;
@@ -57,13 +60,23 @@ public enum OclOperationExpEnum implements HandleOperationExp {
 			return TO_STRING;
 		} else if (name.equals(PredefinedType.INCLUDING_NAME)) {
 			return INCLUDING;
+		} else if (name.equals(PredefinedType.OCL_IS_INVALID_NAME)) {
+			return OCL_IS_INVALID;
 		} else {
 			logger.warning(String.format("Not yet implemented, '%s'", name));
 			return DEFAULT;
 		}
 	}
 
+
+	@Override
 	public String handleOperationExp(OperationCallExp<Classifier, Operation> oc, String sourceResult, List<String> argumentResults) {
-		return implementor.handleOperationExp(oc, sourceResult, argumentResults);
+		return implementor.setOJClass(ojClass).handleOperationExp(oc, sourceResult, argumentResults);
+	}
+
+	@Override
+	public HandleOperationExp setOJClass(OJAnnotatedClass ojClass) {
+		this.ojClass = ojClass;
+		return this;
 	}
 }

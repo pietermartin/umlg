@@ -16,6 +16,7 @@ public class TinkerGenerationUtil {
 
 	public static final String TINKER_DB_NULL = "__NULL__";
 
+	public static final OJPathName tumlOclIsInvalidException = new OJPathName("org.tuml.runtime.domain.ocl.OclIsInvalidException");
 	public static final OJPathName tumlTumlCollections = new OJPathName("org.tuml.runtime.util.TumlCollections");
 	public static final OJPathName tumlOclStdCollectionLib = new OJPathName("org.tuml.runtime.collection.ocl.*");
 	public static final OJPathName tumlMemoryCollectionLib = new OJPathName("org.tuml.runtime.collection.memory.*");

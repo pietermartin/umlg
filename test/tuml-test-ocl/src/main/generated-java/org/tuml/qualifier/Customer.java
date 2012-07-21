@@ -219,16 +219,16 @@ public class Customer extends BaseTuml implements CompositionNode {
 		CustomerRuntimePropertyEnum runtimeProperty = CustomerRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result == 0 ) {
 			switch ( runtimeProperty ) {
-				case accountNumber:
-					result = accountNumber.size();
+				case name:
+					result = name.size();
 				break;
 			
 				case bank:
 					result = bank.size();
 				break;
 			
-				case name:
-					result = name.size();
+				case accountNumber:
+					result = accountNumber.size();
 				break;
 			
 				default:
@@ -255,24 +255,24 @@ public class Customer extends BaseTuml implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.name =  new TinkerSetImpl<String>(this, CustomerRuntimePropertyEnum.name);
-		this.bank =  new TinkerSetImpl<Bank>(this, CustomerRuntimePropertyEnum.bank);
 		this.accountNumber =  new TinkerSetImpl<Integer>(this, CustomerRuntimePropertyEnum.accountNumber);
+		this.bank =  new TinkerSetImpl<Bank>(this, CustomerRuntimePropertyEnum.bank);
+		this.name =  new TinkerSetImpl<String>(this, CustomerRuntimePropertyEnum.name);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (CustomerRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case accountNumber:
-				this.accountNumber =  new TinkerSetImpl<Integer>(this, CustomerRuntimePropertyEnum.accountNumber);
+			case name:
+				this.name =  new TinkerSetImpl<String>(this, CustomerRuntimePropertyEnum.name);
 			break;
 		
 			case bank:
 				this.bank =  new TinkerSetImpl<Bank>(this, CustomerRuntimePropertyEnum.bank);
 			break;
 		
-			case name:
-				this.name =  new TinkerSetImpl<String>(this, CustomerRuntimePropertyEnum.name);
+			case accountNumber:
+				this.accountNumber =  new TinkerSetImpl<Integer>(this, CustomerRuntimePropertyEnum.accountNumber);
 			break;
 		
 		}
@@ -340,9 +340,9 @@ public class Customer extends BaseTuml implements CompositionNode {
 	}
 
 	public enum CustomerRuntimePropertyEnum implements TumlRuntimeProperty {
-		name(true,true,false,"testoclmodel__org__tuml__qualifier__Customer__name",false,false,true,false,1,1,false,false,false,false,true),
+		accountNumber(true,true,false,"testoclmodel__org__tuml__qualifier__Customer__accountNumber",false,false,true,false,1,1,false,false,false,false,true),
 		bank(false,false,false,"A_<bank>_<customer>",false,false,true,false,1,1,false,true,false,false,true),
-		accountNumber(true,true,false,"testoclmodel__org__tuml__qualifier__Customer__accountNumber",false,false,true,false,1,1,false,false,false,false,true);
+		name(true,true,false,"testoclmodel__org__tuml__qualifier__Customer__name",false,false,true,false,1,1,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -396,14 +396,14 @@ public class Customer extends BaseTuml implements CompositionNode {
 		}
 	
 		static public CustomerRuntimePropertyEnum fromLabel(String label) {
-			if ( name.getLabel().equals(label) ) {
-				return name;
+			if ( accountNumber.getLabel().equals(label) ) {
+				return accountNumber;
 			}
 			if ( bank.getLabel().equals(label) ) {
 				return bank;
 			}
-			if ( accountNumber.getLabel().equals(label) ) {
-				return accountNumber;
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
 			return null;
 		}

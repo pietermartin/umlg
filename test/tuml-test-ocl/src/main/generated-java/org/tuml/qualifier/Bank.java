@@ -219,12 +219,12 @@ public class Bank extends BaseTuml implements TumlNode {
 		BankRuntimePropertyEnum runtimeProperty = BankRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result == 0 ) {
 			switch ( runtimeProperty ) {
-				case employee:
-					result = employee.size();
-				break;
-			
 				case name:
 					result = name.size();
+				break;
+			
+				case employee:
+					result = employee.size();
 				break;
 			
 				case customer:
@@ -256,19 +256,19 @@ public class Bank extends BaseTuml implements TumlNode {
 	@Override
 	public void initialiseProperties() {
 		this.customer =  new TinkerQualifiedSetImpl<Customer>(this, BankRuntimePropertyEnum.customer);
-		this.name =  new TinkerSetImpl<String>(this, BankRuntimePropertyEnum.name);
 		this.employee =  new TinkerOrderedSetImpl<Employee>(this, BankRuntimePropertyEnum.employee);
+		this.name =  new TinkerSetImpl<String>(this, BankRuntimePropertyEnum.name);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (BankRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case employee:
-				this.employee =  new TinkerOrderedSetImpl<Employee>(this, BankRuntimePropertyEnum.employee);
-			break;
-		
 			case name:
 				this.name =  new TinkerSetImpl<String>(this, BankRuntimePropertyEnum.name);
+			break;
+		
+			case employee:
+				this.employee =  new TinkerOrderedSetImpl<Employee>(this, BankRuntimePropertyEnum.employee);
 			break;
 		
 			case customer:
@@ -341,8 +341,8 @@ public class Bank extends BaseTuml implements TumlNode {
 
 	public enum BankRuntimePropertyEnum implements TumlRuntimeProperty {
 		customer(false,true,true,"A_<bank>_<customer>",false,true,false,false,1,0,true,false,false,false,true),
-		name(true,true,false,"testoclmodel__org__tuml__qualifier__Bank__name",false,false,true,false,1,1,false,false,false,false,true),
-		employee(false,true,true,"A_<bank>_<employee>",false,true,false,false,-1,0,false,false,true,false,true);
+		employee(false,true,true,"A_<bank>_<employee>",false,true,false,false,-1,0,false,false,true,false,true),
+		name(true,true,false,"testoclmodel__org__tuml__qualifier__Bank__name",false,false,true,false,1,1,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -399,11 +399,11 @@ public class Bank extends BaseTuml implements TumlNode {
 			if ( customer.getLabel().equals(label) ) {
 				return customer;
 			}
-			if ( name.getLabel().equals(label) ) {
-				return name;
-			}
 			if ( employee.getLabel().equals(label) ) {
 				return employee;
+			}
+			if ( name.getLabel().equals(label) ) {
+				return name;
 			}
 			return null;
 		}

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 import org.tuml.runtime.collection.TinkerSequence;
+import org.tuml.runtime.domain.ocl.OclIsInvalidException;
 
 public class OclStdLibSequenceImpl<E> extends OclStdLibCollectionImpl<E> implements TinkerSequence<E> {
 
@@ -231,7 +232,11 @@ public class OclStdLibSequenceImpl<E> extends OclStdLibCollectionImpl<E> impleme
 
 	@Override
 	public E first() {
-		return this.list.get(0);
+		if (this.list.isEmpty()) {
+			throw new OclIsInvalidException();
+		} else {
+			return this.list.get(0);
+		}
 	}
 	
 }

@@ -102,6 +102,23 @@
                 <body>self.oclTestCollection->iterate(iter : OclTestCollection; acc : OrderedSet(OclTestCollection2) = OrderedSet{} | acc->including(iter.oclTestCollection2->any(name='john'))->asOrderedSet())</body>
               </defaultValue>
             </ownedAttribute>
+            <ownedAttribute xmi:id="_ifib4NNjEeGKavO94GdHpQ" name="testOclFirst" isOrdered="true" isUnique="false" isDerived="true">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_llIT0NNjEeGKavO94GdHpQ" value="1"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_ldOVANNjEeGKavO94GdHpQ"/>
+              <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_m0V48NNjEeGKavO94GdHpQ" name="self.oclTestCollection.name->asSequence()->first()">
+                <language>ocl</language>
+                <body>self.oclTestCollection.name->asSequence()->first()</body>
+              </defaultValue>
+            </ownedAttribute>
+            <ownedAttribute xmi:id="_DdMBUNNnEeGTS4BrQBVxnw" name="testFirstOclInvalid" isDerived="true">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_F5x_kNNnEeGTS4BrQBVxnw"/>
+              <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_Ga2sUNNnEeGTS4BrQBVxnw" name="self.oclTestCollection.name->asSequence->first()->oclIsInvalid()">
+                <language>ocl</language>
+                <body>self.oclTestCollection.name->asSequence()->first().oclIsInvalid()</body>
+              </defaultValue>
+            </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Class" xmi:id="_0vhrEMCDEeGzStsPq17FZA" name="OclTestCollection">
             <ownedAttribute xmi:id="_2P21YMCDEeGzStsPq17FZA" name="name">

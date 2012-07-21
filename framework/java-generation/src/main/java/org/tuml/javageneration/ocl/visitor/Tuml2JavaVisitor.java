@@ -156,33 +156,7 @@ public class Tuml2JavaVisitor extends
 	@Override
 	protected String handleOperationCallExp(OperationCallExp<Classifier, Operation> oc, String sourceResult, List<String> argumentResults) {
 		String name = oc.getReferredOperation().getName();
-		return OclOperationExpEnum.from(name).handleOperationExp(oc, sourceResult, argumentResults);
-
-		// OCLExpression<Classifier> source = oc.getSource();
-		// Classifier sourceType = source != null ? source.getType() : null;
-		// Operation oper = oc.getReferredOperation();
-		//
-		// StringBuilder result = new StringBuilder();
-		//
-		// result.append(sourceResult);
-		//
-		//		result.append(sourceType instanceof CollectionType<?, ?> ? "->" : "."); //$NON-NLS-1$ //$NON-NLS-2$
-		// result.append(SimpleOperationEnum.from(oper.getName()).toJavaString());
-		//
-		// result.append('(');
-		// for (Iterator<String> iter = argumentResults.iterator();
-		// iter.hasNext();) {
-		// result.append(iter.next());
-		// if (iter.hasNext()) {
-		//				result.append(", ");//$NON-NLS-1$
-		// }
-		// }
-		// result.append(')');
-		// if (SimpleOperationEnum.from(oper.getName()).requiresNegation()) {
-		// result.append(" == false");
-		// }
-		//
-		// return maybeAtPre(oc, result.toString());
+		return OclOperationExpEnum.from(name).setOJClass(this.ojClass).handleOperationExp(oc, sourceResult, argumentResults);
 	}
 
 	/**
