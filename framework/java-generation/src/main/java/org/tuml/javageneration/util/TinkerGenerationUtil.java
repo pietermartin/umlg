@@ -18,9 +18,10 @@ public class TinkerGenerationUtil {
 
 	public static final OJPathName tumlTumlCollections = new OJPathName("org.tuml.runtime.util.TumlCollections");
 	public static final OJPathName tumlOclStdCollectionLib = new OJPathName("org.tuml.runtime.collection.ocl.*");
+	public static final OJPathName tumlMemoryCollectionLib = new OJPathName("org.tuml.runtime.collection.memory.*");
 
-	public static final OJPathName tumlTinkerSequenceClosableIterableImpl = new OJPathName("org.tuml.runtime.collection.impl.TinkerSequenceClosableIterableImpl");
-	public static final OJPathName tumlTinkerSetClosableIterableImpl = new OJPathName("org.tuml.runtime.collection.impl.TinkerSetClosableIterableImpl");
+	public static final OJPathName tumlTinkerSequenceClosableIterableImpl = new OJPathName("org.tuml.runtime.collection.persistent.TinkerSequenceClosableIterableImpl");
+	public static final OJPathName tumlTinkerSetClosableIterableImpl = new OJPathName("org.tuml.runtime.collection.persistent.TinkerSetClosableIterableImpl");
 	
 	public static final OJPathName tumlRuntimePropertyPathName = new OJPathName("org.tuml.runtime.collection.TumlRuntimeProperty");
 	public static final OJPathName tinkerConclusionPathName = new OJPathName("com.tinkerpop.blueprints.pgm.TransactionalGraph.Conclusion");
@@ -32,7 +33,7 @@ public class TinkerGenerationUtil {
 	public static final OJPathName tinkerIdUtilPathName = new OJPathName("org.tuml.nakeduml.tinker.runtime.TinkerIdUtil");
 	public static final OJPathName BASE_AUDIT_SOFT_DELETE_TINKER = new OJPathName("org.tuml.runtime.domain.BaseTinkerSoftDelete");
 	public static final OJPathName BASE_BEHAVIORED_CLASSIFIER = new OJPathName("org.tuml.runtime.domain.BaseTinkerBehavioredClassifier");
-	public static final OJPathName BASE_TINKER = new OJPathName("org.tuml.runtime.domain.BaseTinker");
+	public static final OJPathName BASE_TINKER = new OJPathName("org.tuml.runtime.domain.BaseTuml");
 	public static final String BASE_AUDIT_TINKER = "org.tuml.runtime.domain.BaseTinkerAuditable";
 	public static final String PERSISTENT_CONSTRUCTOR_NAME = "persistentConstructor";
 	public static final String PERSISTENT_CONSTRUCTOR_PARAM_NAME = "persistent";
@@ -53,20 +54,21 @@ public class TinkerGenerationUtil {
 	public static OJPathName tinkerEmbeddedHashSetImpl = new OJPathName("org.util.TinkerEmbeddedHashSet");
 	public static OJPathName tinkerEmbeddedArrayListImpl = new OJPathName("org.util.TinkerEmbeddedArrayList");
 
+	public static OJPathName tinkerCollection = new OJPathName("org.tuml.runtime.collection.TinkerCollection");
 	public static OJPathName tinkerSet = new OJPathName("org.tuml.runtime.collection.TinkerSet");
-	public static OJPathName tinkerSetImpl = new OJPathName("org.tuml.runtime.collection.impl.TinkerSetImpl");
+	public static OJPathName tinkerSetImpl = new OJPathName("org.tuml.runtime.collection.persistent.TinkerSetImpl");
 	public static OJPathName tinkerQualifiedSet = new OJPathName("org.tuml.runtime.collection.TinkerQualifiedSet");
-	public static OJPathName tinkerQualifiedSetImpl = new OJPathName("org.tuml.runtime.collection.impl.TinkerQualifiedSetImpl");
+	public static OJPathName tinkerQualifiedSetImpl = new OJPathName("org.tuml.runtime.collection.persistent.TinkerQualifiedSetImpl");
 	public static OJPathName tinkerSequence = new OJPathName("org.tuml.runtime.collection.TinkerSequence");
 	public static OJPathName tinkerSequenceImpl = new OJPathName("org.tuml.runtime.collection.TinkerSequenceImpl");
-	public static OJPathName tinkerQualifiedSequence = new OJPathName("org.tuml.runtime.collection.impl.TinkerQualifiedSequence");
+	public static OJPathName tinkerQualifiedSequence = new OJPathName("org.tuml.runtime.collection.persistent.TinkerQualifiedSequence");
 	public static OJPathName tinkerQualifiedSequenceImpl = new OJPathName("org.tuml.runtime.collection.TinkerQualifiedSequenceImpl");
 	public static OJPathName tinkerOrderedSet = new OJPathName("org.tuml.runtime.collection.TinkerOrderedSet");
-	public static OJPathName tinkerOrderedSetImpl = new OJPathName("org.tuml.runtime.collection.impl.TinkerOrderedSetImpl");
+	public static OJPathName tinkerOrderedSetImpl = new OJPathName("org.tuml.runtime.collection.persistent.TinkerOrderedSetImpl");
 	public static OJPathName tinkerQualifiedOrderedSet = new OJPathName("org.tuml.runtime.collection.TinkerQualifiedOrderedSet");
-	public static OJPathName tinkerQualifiedOrderedSetImpl = new OJPathName("org.tuml.runtime.collection.impl.TinkerQualifiedOrderedSetImpl");
+	public static OJPathName tinkerQualifiedOrderedSetImpl = new OJPathName("org.tuml.runtime.collection.persistent.TinkerQualifiedOrderedSetImpl");
 	public static OJPathName tinkerBag = new OJPathName("org.tuml.runtime.collection.TinkerBag");
-	public static OJPathName tinkerBagImpl = new OJPathName("org.tuml.runtime.collection.impl.TinkerBagImpl");
+	public static OJPathName tinkerBagImpl = new OJPathName("org.tuml.runtime.collection.persistent.TinkerBagImpl");
 
 	public static OJPathName tinkerQualifiedBag = new OJPathName("org.tuml.runtime.collection.TinkerQualifiedBag");
 	public static OJPathName tinkerQualifiedBagImpl = new OJPathName("org.tuml.runtime.collection..impl.TinkerQualifiedBagImpl");
@@ -77,7 +79,7 @@ public class TinkerGenerationUtil {
 	public static OJPathName tinkerSchemaHelperPathName = new OJPathName("org.tuml.tinker.runtime.TinkerSchemaHelper");
 	public static String TINKER_GET_CLASSNAME = "IntrospectionUtil.getOriginalClass(this.getClass()).getName()";
 	public static OJPathName introspectionUtilPathName = new OJPathName("org.tuml.runtime.domain.IntrospectionUtil");
-	public static OJPathName TINKER_NODE = new OJPathName("org.tuml.runtime.domain.TinkerNode");
+	public static OJPathName TINKER_NODE = new OJPathName("org.tuml.runtime.domain.TumlNode");
 
 	public static OJPathName TINKER_QUALIFIER_PATHNAME = new OJPathName("org.tuml.runtime.collection.Qualifier");
 	public static OJPathName tinkerMultiplicityPathName = new OJPathName("org.tuml.runtime.collection.Multiplicity");

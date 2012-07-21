@@ -16,13 +16,14 @@ import org.tuml.javageneration.ocl.visitor.tojava.OclDefaultToStringExprToJava;
 import org.tuml.javageneration.ocl.visitor.tojava.OclEqualExprToJava;
 import org.tuml.javageneration.ocl.visitor.tojava.OclFirstExprToJava;
 import org.tuml.javageneration.ocl.visitor.tojava.OclFlattenExprToJava;
+import org.tuml.javageneration.ocl.visitor.tojava.OclIncludingExprToJava;
 import org.tuml.javageneration.ocl.visitor.tojava.OclMinusExprToJava;
 import org.tuml.javageneration.ocl.visitor.tojava.OclNotEqualExprToJava;
 import org.tuml.javageneration.ocl.visitor.tojava.OclToStringExprToJava;
 
 public enum OclOperationExpEnum implements HandleOperationExp {
 
-	TO_STRING(new OclToStringExprToJava()), FIRST(new OclFirstExprToJava()), MINUS(new OclMinusExprToJava()), EQUAL(new OclEqualExprToJava()), NOT_EQUAL(new OclNotEqualExprToJava()), AS_SET(new OclAsSetExprToJava()), AS_SEQUENCE(new OclAsSequenceExprToJava()), AS_ORDERED_SET(
+	INCLUDING(new OclIncludingExprToJava()), TO_STRING(new OclToStringExprToJava()), FIRST(new OclFirstExprToJava()), MINUS(new OclMinusExprToJava()), EQUAL(new OclEqualExprToJava()), NOT_EQUAL(new OclNotEqualExprToJava()), AS_SET(new OclAsSetExprToJava()), AS_SEQUENCE(new OclAsSequenceExprToJava()), AS_ORDERED_SET(
 			new OclAsOrderedSetExprToJava()), AS_BAG(new OclAsBagExprToJava()), FLATTEN(new OclFlattenExprToJava()), CONCAT(new OclConcatExprToJava()), DEFAULT(new OclDefaultToStringExprToJava());
 	private static Logger logger = Logger.getLogger(OclOperationExpEnum.class.getPackage().getName());
 	private HandleOperationExp implementor;
@@ -54,6 +55,8 @@ public enum OclOperationExpEnum implements HandleOperationExp {
 			return FIRST;
 		} else if (name.equals(PredefinedType.TO_STRING_NAME)) {
 			return TO_STRING;
+		} else if (name.equals(PredefinedType.INCLUDING_NAME)) {
+			return INCLUDING;
 		} else {
 			logger.warning(String.format("Not yet implemented, '%s'", name));
 			return DEFAULT;

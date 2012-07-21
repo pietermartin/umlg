@@ -1,4 +1,4 @@
-package org.tuml.runtime.collection.impl;
+package org.tuml.runtime.collection.persistent;
 
 import java.util.Set;
 

@@ -2,7 +2,6 @@ package org.tuml.runtime.domain.activity;
 
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.domain.TumlNode;
-import org.tuml.runtime.domain.ocl.OclAny;
 import org.tuml.runtime.domain.ocl.OclState;
 
 import com.tinkerpop.blueprints.Vertex;
@@ -56,13 +55,13 @@ public abstract class Event implements TumlNode {
 	}
 
 	@Override
-	public Boolean equals(OclAny oclAny) {
+	public boolean equals(Object oclAny) {
 		//TODO Implement
 		throw new RuntimeException("Not implemented");
 	}
 
 	@Override
-	public Boolean notEquals(OclAny oclAny) {
+	public boolean notEquals(Object oclAny) {
 		//TODO Implement
 		throw new RuntimeException("Not implemented");
 	}
@@ -92,13 +91,13 @@ public abstract class Event implements TumlNode {
 	}
 
 	@Override
-	public Boolean oclIsTypeOf(TumlNode classifier) {
+	public Boolean oclIsTypeOf(Object classifier) {
 		//TODO Implement
 		throw new RuntimeException("Not implemented");
 	}
 
 	@Override
-	public Boolean oclIsKindOf(TumlNode classifier) {
+	public Boolean oclIsKindOf(Object classifier) {
 		//TODO Implement
 		throw new RuntimeException("Not implemented");
 	}
@@ -110,7 +109,7 @@ public abstract class Event implements TumlNode {
 	}
 
 	@Override
-	public TumlNode oclType() {
+	public <T  extends Object> Class<T> oclType() {
 		//TODO Implement
 		throw new RuntimeException("Not implemented");
 	}

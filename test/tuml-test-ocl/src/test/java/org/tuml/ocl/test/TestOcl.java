@@ -86,4 +86,31 @@ public class TestOcl extends BaseLocalDbTest {
 		Assert.assertEquals("oclTestCollection1oclTestCollection2johnjohn".length(), oclTest1.getOclIterateExp().length());
 	}
 	
+	@Test
+	public void testOclIterate1() {
+		db.startTransaction();
+		OclTest1 oclTest1 = new OclTest1(true);
+		oclTest1.setProperty1("property1");
+		
+		OclTestCollection oclTestCollection1 = new OclTestCollection(oclTest1);
+		oclTestCollection1.setName("oclTestCollection1");
+		OclTestCollection oclTestCollection2 = new OclTestCollection(oclTest1);
+		oclTestCollection2.setName("oclTestCollection2");
+
+		OclTestCollection2 oclTestCollection2_1_1 = new OclTestCollection2(oclTestCollection1);
+		oclTestCollection2_1_1.setName("john");
+		OclTestCollection2 oclTestCollection2_1_2 = new OclTestCollection2(oclTestCollection1);
+		oclTestCollection2_1_2.setName("john");
+		OclTestCollection2 oclTestCollection2_1_3 = new OclTestCollection2(oclTestCollection1);
+		oclTestCollection2_1_3.setName("john3");
+
+
+		
+		db.stopTransaction(Conclusion.SUCCESS);
+		
+		Assert.assertEquals(2, oclTest1.getOclTestCollection().size());
+		Assert.assertEquals(1, oclTest1.getOclIterateExp2().size());
+
+	}
+	
 }

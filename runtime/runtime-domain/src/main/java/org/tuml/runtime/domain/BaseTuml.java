@@ -85,13 +85,7 @@ public abstract class BaseTuml implements TumlNode, Serializable {
 	}
 
 	@Override
-	public Boolean equals(OclAny oclAny) {
-		throw new RuntimeException("Not implemented");
-//		return null;
-	}
-
-	@Override
-	public Boolean notEquals(OclAny oclAny) {
+	public boolean notEquals(Object object) {
 		throw new RuntimeException("Not implemented");
 //		return null;
 	}
@@ -121,13 +115,13 @@ public abstract class BaseTuml implements TumlNode, Serializable {
 	}
 
 	@Override
-	public Boolean oclIsTypeOf(TumlNode classifier) {
+	public Boolean oclIsTypeOf(Object object) {
 		throw new RuntimeException("Not implemented");
 //		return null;
 	}
 
 	@Override
-	public Boolean oclIsKindOf(TumlNode classifier) {
+	public Boolean oclIsKindOf(Object object) {
 		throw new RuntimeException("Not implemented");
 //		return null;
 	}
@@ -139,7 +133,7 @@ public abstract class BaseTuml implements TumlNode, Serializable {
 	}
 
 	@Override
-	public TumlNode oclType() {
+	public <T  extends Object> Class<T> oclType() {
 		throw new RuntimeException("Not implemented");
 //		return null;
 	}

@@ -162,4 +162,24 @@ public interface OclStdLibOrderedSet<E> extends OclStdLibCollection<E> {
 	
 	@Override
 	<T, R> TinkerBag<T> collect(BodyExpressionEvaluator<R, E> e);
+	
+	/*************************************************
+	 * 
+	 * Not in spec
+	 * 
+	 *************************************************/
+	/**
+	 * including(object : T) : Set(T)
+	 * 
+	 * <pre>
+	 * The set containing all elements of self plus object.
+	 * 		post: result->forAll(elem | self->includes(elem) or (elem = object))
+	 * 		post: self- >forAll(elem | result->includes(elem)) 
+	 * 		post: result->includes(object)
+	 * </pre>
+	 */
+	TinkerOrderedSet<E> including(E e);
+	
+	
+	
 }

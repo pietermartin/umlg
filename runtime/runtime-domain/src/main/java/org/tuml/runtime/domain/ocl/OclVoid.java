@@ -1,5 +1,4 @@
 package org.tuml.runtime.domain.ocl;
 
-public interface OclVoid {
-
+public interface OclVoid extends OclAny {
 }

@@ -1,4 +1,4 @@
-package org.tuml.runtime.collection.impl;
+package org.tuml.runtime.collection.persistent;
 
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.collection.TinkerQualifiedSet;

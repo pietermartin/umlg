@@ -28,7 +28,7 @@ public interface OclStdLibCollection<E> extends OclAny {
 	 * 	post: result = not (self = c)
 	 * </pre>
 	 */
-	boolean notEquals();
+	boolean notEquals(TinkerCollection<E> c);
 
 	/**
 	 * size() : Integer

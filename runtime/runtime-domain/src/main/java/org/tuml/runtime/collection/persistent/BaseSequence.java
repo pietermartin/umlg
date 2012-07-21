@@ -1,4 +1,4 @@
-package org.tuml.runtime.collection.impl;
+package org.tuml.runtime.collection.persistent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -226,73 +226,74 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
 	
 	@Override
 	public E first() {
+		maybeLoad();
 		return oclStdLibSequence.first();
 	}
 	
 	@Override
 	public Boolean equals(TinkerSequence<E> s) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibSequence.equals(s);
 	}
 
 	@Override
 	public TinkerSequence<E> union(TinkerSequence<E> s) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibSequence.union(s);
 	}
 
 	@Override
 	public TinkerSequence<E> append(E object) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibSequence.append(object);
 	}
 
 	@Override
 	public TinkerSequence<E> prepend(E object) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibSequence.prepend(object);
 	}
 
 	@Override
 	public TinkerSequence<E> insertAt(Integer index, E object) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibSequence.insertAt(index, object);
 	}
 
 	@Override
 	public TinkerSequence<E> subSequence(Integer lower, Integer upper) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibSequence.subSequence(lower, upper);
 	}
 
 	@Override
 	public E at(Integer i) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibSequence.at(i);
 	}
 
 	@Override
 	public E last() {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibSequence.last();
 	}
 
 	@Override
 	public TinkerSequence<E> including(E object) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibSequence.including(object);
 	}
 
 	@Override
 	public TinkerSequence<E> excluding(E object) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibSequence.excluding(object);
 	}
 
 	@Override
 	public TinkerSequence<E> reverse() {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibSequence.reverse();
 	}
 
 }

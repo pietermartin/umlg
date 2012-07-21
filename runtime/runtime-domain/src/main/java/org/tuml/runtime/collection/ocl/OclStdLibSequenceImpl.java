@@ -73,8 +73,11 @@ public class OclStdLibSequenceImpl<E> extends OclStdLibCollectionImpl<E> impleme
 	}
 
 	@Override
-	public TinkerSequence<E> including(E object) {
-		throw new RuntimeException("Not implemented");
+	public TinkerSequence<E> including(E e) {
+		if (e != null) {
+			this.list.add(e);
+		}
+		return this;
 	}
 
 	@Override

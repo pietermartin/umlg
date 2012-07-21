@@ -1,4 +1,4 @@
-package org.tuml.runtime.collection.impl;
+package org.tuml.runtime.collection.persistent;
 
 import org.tuml.runtime.collection.TinkerBag;
 import org.tuml.runtime.collection.TumlRuntimeProperty;

@@ -12,7 +12,7 @@ import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
 import org.tuml.runtime.collection.Qualifier;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
-import org.tuml.runtime.collection.impl.TinkerSetImpl;
+import org.tuml.runtime.collection.persistent.TinkerSetImpl;
 import org.tuml.runtime.domain.BaseTuml;
 import org.tuml.runtime.domain.CompositionNode;
 import org.tuml.runtime.domain.TumlNode;

@@ -20,9 +20,9 @@ import org.tuml.runtime.collection.TinkerOrderedSet;
 import org.tuml.runtime.collection.TinkerQualifiedSet;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
-import org.tuml.runtime.collection.impl.TinkerOrderedSetImpl;
-import org.tuml.runtime.collection.impl.TinkerQualifiedSetImpl;
-import org.tuml.runtime.collection.impl.TinkerSetImpl;
+import org.tuml.runtime.collection.persistent.TinkerOrderedSetImpl;
+import org.tuml.runtime.collection.persistent.TinkerQualifiedSetImpl;
+import org.tuml.runtime.collection.persistent.TinkerSetImpl;
 import org.tuml.runtime.domain.BaseTuml;
 import org.tuml.runtime.domain.TumlNode;
 

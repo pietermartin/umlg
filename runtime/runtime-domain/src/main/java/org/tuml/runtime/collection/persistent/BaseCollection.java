@@ -1,4 +1,4 @@
-package org.tuml.runtime.collection.impl;
+package org.tuml.runtime.collection.persistent;
 
 import java.util.Collection;
 import java.util.Date;
@@ -25,7 +25,6 @@ import org.tuml.runtime.collection.ocl.OclStdLibCollection;
 import org.tuml.runtime.domain.CompositionNode;
 import org.tuml.runtime.domain.TinkerAuditableNode;
 import org.tuml.runtime.domain.TumlNode;
-import org.tuml.runtime.domain.ocl.OclAny;
 import org.tuml.runtime.domain.ocl.OclState;
 import org.tuml.runtime.util.TinkerFormatter;
 
@@ -600,6 +599,12 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 		maybeLoad();
 		return this.oclStdLibCollection.equals(c);
 	}
+	
+	@Override
+	public boolean notEquals(TinkerCollection<E> c) {
+		maybeLoad();
+		return this.oclStdLibCollection.notEquals(c);
+	}
 
 	@Override
 	public E any(BooleanExpressionEvaluator<E> v) {
@@ -638,159 +643,153 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 	}
 	
 	@Override
-	public Boolean equals(OclAny oclAny) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+	public boolean equals(Object object) {
+		maybeLoad();
+		return this.oclStdLibCollection.equals(object);
 	}
 
 	@Override
-	public Boolean notEquals(OclAny oclAny) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+	public boolean notEquals(Object object) {
+		maybeLoad();
+		return this.oclStdLibCollection.notEquals(object);
 	}
 
 	@Override
 	public Boolean oclIsNew() {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibCollection.oclIsNew();
 	}
 
 	@Override
 	public Boolean oclIsUndefined() {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibCollection.oclIsUndefined();
 	}
 
 	@Override
 	public Boolean oclIsInvalid() {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibCollection.oclIsInvalid();
 	}
 
 	@Override
 	public <T> T oclAsType(T classifier) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibCollection.oclAsType(classifier);
 	}
 
 	@Override
-	public Boolean oclIsTypeOf(TumlNode classifier) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+	public Boolean oclIsTypeOf(Object object) {
+		maybeLoad();
+		return this.oclStdLibCollection.oclIsTypeOf(object);
 	}
 
 	@Override
-	public Boolean oclIsKindOf(TumlNode classifier) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+	public Boolean oclIsKindOf(Object object) {
+		maybeLoad();
+		return this.oclStdLibCollection.oclIsKindOf(object);
 	}
 
 	@Override
 	public Boolean oclIsInState(OclState state) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibCollection.oclIsInState(state);
 	}
 
 	@Override
-	public TumlNode oclType() {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+	public <T  extends Object> Class<T> oclType() {
+		maybeLoad();
+		return this.oclStdLibCollection.oclType();
 	}
 
 	@Override
 	public String oclLocale() {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
-	}
-
-	@Override
-	public boolean notEquals() {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibCollection.oclLocale();
 	}
 
 	@Override
 	public boolean includes(E t) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibCollection.includes(t);
 	}
 
 	@Override
 	public boolean excludes(E t) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibCollection.excludes(t);
 	}
 
 	@Override
 	public int count(E e) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibCollection.count(e);
 	}
 
 	@Override
 	public Boolean includesAll(TinkerCollection<E> c) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibCollection.includesAll(c);
 	}
 
 	@Override
 	public Boolean excludesAll(TinkerCollection<E> c) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibCollection.excludesAll(c);
 	}
 
 	@Override
 	public Boolean notEmpty() {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibCollection.notEmpty();
 	}
 
 	@Override
 	public E max() {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibCollection.max();
 	}
 
 	@Override
 	public E min() {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibCollection.min();
 	}
 
 	@Override
 	public E sum() {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibCollection.sum();
 	}
 
 	@Override
 	public TinkerSet<?> product(TinkerCollection<E> c) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibCollection.product(c);
 	}
 
 	@Override
 	public <T2> TinkerCollection<T2> flatten() {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibCollection.flatten();
 	}
 
 	@Override
 	public TinkerCollection<E> select(BooleanExpressionEvaluator<E> e) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibCollection.select(e);
 	}
 
 	@Override
 	public <T, R> TinkerCollection<T> collect(BodyExpressionEvaluator<R, E> e) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibCollection.collect(e);
 	}
 
 	@Override
 	public <R> TinkerCollection<R> collectNested(BodyExpressionEvaluator<R, E> e) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibCollection.collectNested(e);
 	}
 	
 }

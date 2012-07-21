@@ -1,4 +1,4 @@
-package org.tuml.runtime.collection.impl;
+package org.tuml.runtime.collection.persistent;
 
 import java.util.Set;
 
@@ -112,45 +112,44 @@ public abstract class BaseBag<E> extends BaseCollection<E> implements TinkerBag<
 
 	@Override
 	public Boolean equals(TinkerBag<E> bag) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibBag.equals(bag);
 	}
 
 	@Override
 	public TinkerBag<E> union(TinkerBag<E> bag) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibBag.union(bag);
 	}
 
 	@Override
 	public TinkerBag<E> union(TinkerSet<E> set) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibBag.union(set);
 	}
 
 	@Override
 	public TinkerBag<E> intersection(TinkerBag<E> bag) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibBag.intersection(bag);
 	}
 
 	@Override
 	public TinkerSet<E> intersection(TinkerSet<E> set) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibBag.intersection(set);
 	}
 
 	@Override
 	public TinkerBag<E> including(E object) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibBag.including(object);
 	}
 
 	@Override
 	public TinkerBag<E> excluding(E object) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibBag.excluding(object);
 	}
-
 	
 }

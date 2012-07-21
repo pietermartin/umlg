@@ -1,6 +1,5 @@
 package org.tuml.runtime.domain.ocl;
 
-import org.tuml.runtime.domain.TumlNode;
 
 public interface OclAny {
 	/**
@@ -11,7 +10,8 @@ public interface OclAny {
 	 * @param oclAny
 	 * @return
 	 */
-	Boolean equals(OclAny oclAny);
+	@Override
+	boolean equals(Object o);
 	/**
 	 * <> (object2 : OclAny) : Boolean
      * True if self is a different object from object2. Infix operator.
@@ -20,7 +20,7 @@ public interface OclAny {
 	 * @param oclAny
 	 * @return
 	 */
-	Boolean notEquals(OclAny oclAny);
+	boolean notEquals(Object object);
 	/**
 	 * oclIsNew() : Boolean
 	 * 
@@ -70,7 +70,7 @@ public interface OclAny {
 	 * @param classifier
 	 * @return
 	 */
-	Boolean oclIsTypeOf(TumlNode classifier);
+	Boolean oclIsTypeOf(Object object);
 	/**
 	 * oclIsKindOf(type : Classifier) : Boolean
 	 * 
@@ -80,7 +80,7 @@ public interface OclAny {
 	 * @param classifier
 	 * @return
 	 */
-	Boolean oclIsKindOf(TumlNode classifier);
+	Boolean oclIsKindOf(Object object);
 	/**
 	 * oclIsInState(statespec : OclState) : Boolean
 	 * 
@@ -99,7 +99,7 @@ public interface OclAny {
 	 * 
 	 * @return
 	 */
-	TumlNode oclType();
+	<T  extends Object> Class<T> oclType();
 	/**
 	 * oclLocale : String
 	 * 

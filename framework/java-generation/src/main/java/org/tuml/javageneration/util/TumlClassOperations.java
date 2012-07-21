@@ -16,6 +16,7 @@ import org.eclipse.uml2.uml.Type;
 import org.eclipse.uml2.uml.internal.operations.ClassOperations;
 import org.opaeum.java.metamodel.OJPathName;
 import org.tuml.javageneration.naming.Namer;
+import org.tuml.javageneration.ocl.util.TumlCollectionKindEnum;
 
 public class TumlClassOperations extends ClassOperations {
 
@@ -148,7 +149,7 @@ public class TumlClassOperations extends ClassOperations {
 		if (clazz instanceof CollectionType) {
 			CollectionType collectionType = (CollectionType)clazz;
 			StringBuilder sb = new StringBuilder();
-			sb.append(collectionType.getKind());
+			sb.append(TumlCollectionKindEnum.from(collectionType.getKind()).getOjPathName().getLast());
 			sb.append("<");
 			sb.append(className(collectionType.getElementType()));
 			sb.append(">");
@@ -157,7 +158,7 @@ public class TumlClassOperations extends ClassOperations {
 			return Namer.name(clazz);
 		}
 	}
-
+	
 	public static String propertyEnumName(Type type) {
 		return Namer.name(type) + "RuntimePropertyEnum";
 	}

@@ -1,16 +1,13 @@
 package org.tuml.javageneration.ocl.visitor;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.ocl.Environment;
 import org.eclipse.ocl.expressions.AssociationClassCallExp;
 import org.eclipse.ocl.expressions.BooleanLiteralExp;
 import org.eclipse.ocl.expressions.CollectionItem;
-import org.eclipse.ocl.expressions.CollectionKind;
 import org.eclipse.ocl.expressions.CollectionLiteralExp;
 import org.eclipse.ocl.expressions.CollectionRange;
 import org.eclipse.ocl.expressions.EnumLiteralExp;
@@ -53,6 +50,7 @@ import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.SendSignalAction;
 import org.eclipse.uml2.uml.State;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
+import org.tuml.javageneration.ocl.util.TumlCollectionKindEnum;
 import org.tuml.javageneration.ocl.visitor.tojava.OclIterateExpToJava;
 import org.tuml.javageneration.ocl.visitor.tojava.OclVariableExpToJava;
 import org.tuml.javageneration.util.PropertyWrapper;
@@ -451,6 +449,7 @@ public class Tuml2JavaVisitor extends
 	 */
 	@Override
 	protected String handleIterateExp(IterateExp<Classifier, Parameter> callExp, String sourceResult, List<String> variableResults, String resultResult, String bodyResult) {
+		this.ojClass.addToImports(TinkerGenerationUtil.tumlMemoryCollectionLib);
 		this.ojClass.addToImports(TinkerGenerationUtil.tumlOclStdCollectionLib);
 		this.ojClass.addToImports("java.util.*");
 		return new OclIterateExpToJava().handleIterateExp(callExp, sourceResult, variableResults, resultResult, bodyResult);
@@ -480,41 +479,45 @@ public class Tuml2JavaVisitor extends
 	 */
 	@Override
 	protected String handleCollectionLiteralExp(CollectionLiteralExp<Classifier> cl, List<String> partResults) {
-
-		StringBuilder result = new StringBuilder();
-
-		// construct the appropriate collection from the parts
-		// based on the collection kind.
-		CollectionKind kind = cl.getKind();
-
-		switch (kind) {
-		case SET_LITERAL:
-			result.append("Set {");//$NON-NLS-1$
-			break;
-		case ORDERED_SET_LITERAL:
-			result.append("OrderedSet {");//$NON-NLS-1$
-			break;
-		case BAG_LITERAL:
-			result.append("Bag {");//$NON-NLS-1$
-			break;
-		case SEQUENCE_LITERAL:
-			result.append("Sequence {");//$NON-NLS-1$
-			break;
-		default:
-			result.append("Collection {");//$NON-NLS-1$
-			break;
+		if (!partResults.isEmpty()) {
+			throw new RuntimeException("not implemented");
 		}
-
-		for (Iterator<String> iter = partResults.iterator(); iter.hasNext();) {
-			result.append(iter.next());
-			if (iter.hasNext()) {
-				result.append(", "); //$NON-NLS-1$
-			}
-		}
-
-		result.append('}');
-
-		return result.toString();
+		return TumlCollectionKindEnum.from(cl.getKind()).getEmptyCollection();
+		
+//		StringBuilder result = new StringBuilder();
+//
+//		// construct the appropriate collection from the parts
+//		// based on the collection kind.
+//		CollectionKind kind = cl.getKind();
+//
+//		switch (kind) {
+//		case SET_LITERAL:
+//			result.append("Set {");//$NON-NLS-1$
+//			break;
+//		case ORDERED_SET_LITERAL:
+//			result.append("OrderedSet {");//$NON-NLS-1$
+//			break;
+//		case BAG_LITERAL:
+//			result.append("Bag {");//$NON-NLS-1$
+//			break;
+//		case SEQUENCE_LITERAL:
+//			result.append("Sequence {");//$NON-NLS-1$
+//			break;
+//		default:
+//			result.append("Collection {");//$NON-NLS-1$
+//			break;
+//		}
+//
+//		for (Iterator<String> iter = partResults.iterator(); iter.hasNext();) {
+//			result.append(iter.next());
+//			if (iter.hasNext()) {
+//				result.append(", "); //$NON-NLS-1$
+//			}
+//		}
+//
+//		result.append('}');
+//
+//		return result.toString();
 	}
 
 	@Override

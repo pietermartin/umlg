@@ -216,5 +216,13 @@ public class OclStdLibOrderedSetImpl<E> extends OclStdLibCollectionImpl<E> imple
 	public List<E> subList(int fromIndex, int toIndex) {
 		throw new RuntimeException("Not supported");
 	}
+
+	@Override
+	public TinkerOrderedSet<E> including(E e) {
+		if (e != null) {
+			this.orderedSet.add(e);
+		}
+		return this;
+	}
 	
 }

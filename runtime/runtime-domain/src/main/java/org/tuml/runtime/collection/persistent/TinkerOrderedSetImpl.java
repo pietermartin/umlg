@@ -1,4 +1,4 @@
-package org.tuml.runtime.collection.impl;
+package org.tuml.runtime.collection.persistent;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -236,49 +236,55 @@ public class TinkerOrderedSetImpl<E> extends BaseCollection<E> implements Tinker
 
 	@Override
 	public TinkerOrderedSet<E> append(E e) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibOrderedSet.append(e);
 	}
 
 	@Override
 	public TinkerOrderedSet<E> prepend(E e) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibOrderedSet.prepend(e);
 	}
 
 	@Override
 	public TinkerOrderedSet<E> insertAt(Integer index, E e) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibOrderedSet.insertAt(index, e);
 	}
 
 	@Override
 	public TinkerOrderedSet<E> subOrderedSet(Integer lower, Integer upper) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibOrderedSet.subOrderedSet(lower, upper);
 	}
 
 	@Override
 	public E at(Integer i) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibOrderedSet.at(i);
 	}
 
 	@Override
 	public E first() {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibOrderedSet.first();
 	}
 
 	@Override
 	public E last() {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibOrderedSet.last();
 	}
 
 	@Override
 	public TinkerOrderedSet<E> reverse() {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibOrderedSet.reverse();
+	}
+
+	@Override
+	public TinkerOrderedSet<E> including(E e) {
+		maybeLoad();
+		return this.oclStdLibOrderedSet.including(e);
 	}
 }

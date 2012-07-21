@@ -7,8 +7,6 @@ import org.tuml.runtime.collection.TinkerCollection;
 import org.tuml.runtime.collection.TinkerOrderedSet;
 import org.tuml.runtime.collection.TinkerSequence;
 import org.tuml.runtime.collection.TinkerSet;
-import org.tuml.runtime.domain.TumlNode;
-import org.tuml.runtime.domain.ocl.OclAny;
 import org.tuml.runtime.domain.ocl.OclState;
 
 public class OclStdLibCollectionImpl<E> implements OclStdLibCollection<E> {
@@ -26,14 +24,14 @@ public class OclStdLibCollectionImpl<E> implements OclStdLibCollection<E> {
 
 
 	@Override
-	public boolean notEquals() {
+	public boolean notEquals(TinkerCollection<E> c) {
 		throw new RuntimeException("Not implemented");
 	}
 
 
 	@Override
 	public int size() {
-		throw new RuntimeException("Not implemented");
+		return this.collection.size();
 	}
 
 
@@ -176,13 +174,13 @@ public class OclStdLibCollectionImpl<E> implements OclStdLibCollection<E> {
 	 *******************************/
 	
 	@Override
-	public Boolean equals(OclAny oclAny) {
+	public boolean equals(Object object) {
 		throw new RuntimeException("Not implemented");
 //		return null;
 	}
 
 	@Override
-	public Boolean notEquals(OclAny oclAny) {
+	public boolean notEquals(Object object) {
 		throw new RuntimeException("Not implemented");
 //		return null;
 	}
@@ -212,13 +210,13 @@ public class OclStdLibCollectionImpl<E> implements OclStdLibCollection<E> {
 	}
 
 	@Override
-	public Boolean oclIsTypeOf(TumlNode classifier) {
+	public Boolean oclIsTypeOf(Object object) {
 		throw new RuntimeException("Not implemented");
 //		return null;
 	}
 
 	@Override
-	public Boolean oclIsKindOf(TumlNode classifier) {
+	public Boolean oclIsKindOf(Object object) {
 		throw new RuntimeException("Not implemented");
 //		return null;
 	}
@@ -230,7 +228,7 @@ public class OclStdLibCollectionImpl<E> implements OclStdLibCollection<E> {
 	}
 
 	@Override
-	public TumlNode oclType() {
+	public <T  extends Object> Class<T> oclType() {
 		throw new RuntimeException("Not implemented");
 //		return null;
 	}

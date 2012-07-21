@@ -1,4 +1,4 @@
-package org.tuml.runtime.collection.impl;
+package org.tuml.runtime.collection.persistent;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -68,56 +68,56 @@ public abstract class BaseSet<E> extends BaseCollection<E> implements TinkerSet<
 
 	@Override
 	public TinkerSet<E> union(TinkerSet<E> s) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibSet.union(s);
 	}
 
 	@Override
 	public TinkerBag<E> union(TinkerBag<E> bag) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibSet.union(bag);
 	}
 
 	@Override
 	public Boolean equals(TinkerSet<E> s) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibSet.equals(s);
 	}
 
 	@Override
 	public TinkerSet<E> intersection(TinkerSet<E> s) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibSet.intersection(s);
 	}
 
 	@Override
 	public TinkerSet<E> intersection(TinkerBag<E> bag) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibSet.intersection(bag);
 	}
 
 	@Override
 	public TinkerSet<E> subtract(TinkerSet<E> s) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibSet.subtract(s);
 	}
 
 	@Override
 	public TinkerSet<E> including(E e) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibSet.including(e);
 	}
 
 	@Override
 	public TinkerSet<E> excluding(E e) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibSet.excluding(e);
 	}
 
 	@Override
 	public TinkerSet<E> symmetricDifference(TinkerSet<E> s) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		maybeLoad();
+		return this.oclStdLibSet.symmetricDifference(s);
 	}
 
 }
