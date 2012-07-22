@@ -11,8 +11,8 @@ import org.tuml.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.tuml.runtime.collection.ocl.OclStdLibSequence;
 import org.tuml.runtime.collection.ocl.OclStdLibSequenceImpl;
 
-public class TumlMemorySequence <E> extends TumlMemoryCollection<E> implements TinkerSequence<E> {
-	
+public class TumlMemorySequence<E> extends TumlMemoryCollection<E> implements TinkerSequence<E> {
+
 	protected OclStdLibSequence<E> oclStdLibSequence;
 
 	public TumlMemorySequence() {
@@ -21,18 +21,18 @@ public class TumlMemorySequence <E> extends TumlMemoryCollection<E> implements T
 		this.oclStdLibSequence = new OclStdLibSequenceImpl<E>((List<E>) this.internalCollection);
 		this.oclStdLibCollection = this.oclStdLibSequence;
 	}
-	
+
 	public TumlMemorySequence(Collection<E> c) {
 		super();
 		this.internalCollection = new ArrayList<E>(c);
 		this.oclStdLibSequence = new OclStdLibSequenceImpl<E>((List<E>) this.internalCollection);
 		this.oclStdLibCollection = this.oclStdLibSequence;
 	}
-	
+
 	protected List<E> getInternalList() {
 		return (List<E>) this.internalCollection;
 	}
-	
+
 	@Override
 	public <T2> TinkerSequence<T2> flatten() {
 		return this.oclStdLibSequence.flatten();
@@ -70,7 +70,7 @@ public class TumlMemorySequence <E> extends TumlMemoryCollection<E> implements T
 
 	@Override
 	public void add(int index, E element) {
-		getInternalList().add(index, element);		
+		getInternalList().add(index, element);
 	}
 
 	@Override
@@ -162,5 +162,5 @@ public class TumlMemorySequence <E> extends TumlMemoryCollection<E> implements T
 	public TinkerSequence<E> reverse() {
 		return this.oclStdLibSequence.reverse();
 	}
-	
+
 }

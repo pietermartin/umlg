@@ -49,12 +49,15 @@ import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.SendSignalAction;
 import org.eclipse.uml2.uml.State;
+import org.opaeum.java.metamodel.OJPathName;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
 import org.tuml.javageneration.ocl.util.TumlCollectionKindEnum;
+import org.tuml.javageneration.ocl.visitor.tojava.OclIfExpToJava;
 import org.tuml.javageneration.ocl.visitor.tojava.OclIterateExpToJava;
 import org.tuml.javageneration.ocl.visitor.tojava.OclVariableExpToJava;
 import org.tuml.javageneration.util.PropertyWrapper;
 import org.tuml.javageneration.util.TinkerGenerationUtil;
+import org.tuml.javageneration.util.TumlClassOperations;
 
 public class Tuml2JavaVisitor extends
 		AbstractVisitor<String, Classifier, Operation, Property, EnumerationLiteral, Parameter, State, CallOperationAction, SendSignalAction, Constraint> {
@@ -292,14 +295,7 @@ public class Tuml2JavaVisitor extends
 	 */
 	@Override
 	protected String handleIfExp(IfExp<Classifier> ifExp, String conditionResult, String thenResult, String elseResult) {
-		StringBuilder result = new StringBuilder();
-
-		result.append("if ").append(conditionResult); //$NON-NLS-1$
-		result.append(" then ").append(thenResult); //$NON-NLS-1$
-		result.append(" else ").append(elseResult); //$NON-NLS-1$
-		result.append(" endif"); //$NON-NLS-1$
-
-		return result.toString();
+		return new OclIfExpToJava().setOJClass(this.ojClass).handleIfExp(ifExp, conditionResult, thenResult, elseResult);
 	}
 
 	@Override
@@ -456,42 +452,9 @@ public class Tuml2JavaVisitor extends
 		if (!partResults.isEmpty()) {
 			throw new RuntimeException("not implemented");
 		}
-		return TumlCollectionKindEnum.from(cl.getKind()).getEmptyCollection();
-		
-//		StringBuilder result = new StringBuilder();
-//
-//		// construct the appropriate collection from the parts
-//		// based on the collection kind.
-//		CollectionKind kind = cl.getKind();
-//
-//		switch (kind) {
-//		case SET_LITERAL:
-//			result.append("Set {");//$NON-NLS-1$
-//			break;
-//		case ORDERED_SET_LITERAL:
-//			result.append("OrderedSet {");//$NON-NLS-1$
-//			break;
-//		case BAG_LITERAL:
-//			result.append("Bag {");//$NON-NLS-1$
-//			break;
-//		case SEQUENCE_LITERAL:
-//			result.append("Sequence {");//$NON-NLS-1$
-//			break;
-//		default:
-//			result.append("Collection {");//$NON-NLS-1$
-//			break;
-//		}
-//
-//		for (Iterator<String> iter = partResults.iterator(); iter.hasNext();) {
-//			result.append(iter.next());
-//			if (iter.hasNext()) {
-//				result.append(", "); //$NON-NLS-1$
-//			}
-//		}
-//
-//		result.append('}');
-//
-//		return result.toString();
+		OJPathName o = TumlCollectionKindEnum.from(cl.getKind()).getMemoryCollection();
+		//Can not add a generic parameter here as the information is not available in the collection literal
+		return "new " + o.getLast() + "()";
 	}
 
 	@Override

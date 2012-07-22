@@ -225,12 +225,12 @@ public class OclTestCollection extends BaseTuml implements CompositionNode {
 					result = oclTestCollection2.size();
 				break;
 			
-				case oclTest1:
-					result = oclTest1.size();
-				break;
-			
 				case oclTest2:
 					result = oclTest2.size();
+				break;
+			
+				case oclTest1:
+					result = oclTest1.size();
 				break;
 			
 				default:
@@ -257,8 +257,8 @@ public class OclTestCollection extends BaseTuml implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.oclTest2 =  new TinkerSetImpl<OclTest2>(this, OclTestCollectionRuntimePropertyEnum.oclTest2);
 		this.oclTest1 =  new TinkerSetImpl<OclTest1>(this, OclTestCollectionRuntimePropertyEnum.oclTest1);
+		this.oclTest2 =  new TinkerSetImpl<OclTest2>(this, OclTestCollectionRuntimePropertyEnum.oclTest2);
 		this.oclTestCollection2 =  new TinkerSetImpl<OclTestCollection2>(this, OclTestCollectionRuntimePropertyEnum.oclTestCollection2);
 		this.name =  new TinkerSetImpl<String>(this, OclTestCollectionRuntimePropertyEnum.name);
 	}
@@ -274,12 +274,12 @@ public class OclTestCollection extends BaseTuml implements CompositionNode {
 				this.oclTestCollection2 =  new TinkerSetImpl<OclTestCollection2>(this, OclTestCollectionRuntimePropertyEnum.oclTestCollection2);
 			break;
 		
-			case oclTest1:
-				this.oclTest1 =  new TinkerSetImpl<OclTest1>(this, OclTestCollectionRuntimePropertyEnum.oclTest1);
-			break;
-		
 			case oclTest2:
 				this.oclTest2 =  new TinkerSetImpl<OclTest2>(this, OclTestCollectionRuntimePropertyEnum.oclTest2);
+			break;
+		
+			case oclTest1:
+				this.oclTest1 =  new TinkerSetImpl<OclTest1>(this, OclTestCollectionRuntimePropertyEnum.oclTest1);
 			break;
 		
 		}
@@ -364,8 +364,8 @@ public class OclTestCollection extends BaseTuml implements CompositionNode {
 	}
 
 	public enum OclTestCollectionRuntimePropertyEnum implements TumlRuntimeProperty {
-		oclTest2(false,false,false,"A_<oclTest2>_<oclTestCollection>",false,false,true,false,1,1,false,false,false,false,true),
 		oclTest1(false,false,false,"A_<oclTest1>_<oclTestCollection>",false,false,true,false,1,1,false,false,false,false,true),
+		oclTest2(false,false,false,"A_<oclTest2>_<oclTestCollection>",false,false,true,false,1,1,false,false,false,false,true),
 		oclTestCollection2(false,true,true,"A_<oclTestCollection>_<oclTestCollection2>",false,true,false,false,-1,0,false,false,false,false,true),
 		name(true,true,false,"testoclmodel__org__tuml__testocl__OclTestCollection__name",false,false,true,false,1,1,false,false,false,false,true);
 		private boolean onePrimitive;
@@ -421,11 +421,11 @@ public class OclTestCollection extends BaseTuml implements CompositionNode {
 		}
 	
 		static public OclTestCollectionRuntimePropertyEnum fromLabel(String label) {
-			if ( oclTest2.getLabel().equals(label) ) {
-				return oclTest2;
-			}
 			if ( oclTest1.getLabel().equals(label) ) {
 				return oclTest1;
+			}
+			if ( oclTest2.getLabel().equals(label) ) {
+				return oclTest2;
 			}
 			if ( oclTestCollection2.getLabel().equals(label) ) {
 				return oclTestCollection2;

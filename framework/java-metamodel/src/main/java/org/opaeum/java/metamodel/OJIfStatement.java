@@ -22,6 +22,14 @@ public class OJIfStatement extends OJIfStatementGEN {
 		this.addToThenPart(thenPart);
 	}
 
+	public OJIfStatement(String condition, String thenPart, String elsePart) {
+		super();
+		this.setThenPart(new OJBlock());
+		this.setCondition(condition);
+		this.addToThenPart(thenPart);
+		this.addToElsePart(elsePart);
+	}
+
 	public OJIfStatement(String condition) {
 		this.setThenPart(new OJBlock());
 		this.setCondition(condition);

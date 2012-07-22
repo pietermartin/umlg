@@ -126,6 +126,21 @@
                 <body>self.oclTestCollection->any(name='joe').oclIsUndefined()</body>
               </defaultValue>
             </ownedAttribute>
+            <ownedAttribute xmi:id="_Wl51ANQfEeGeeMxpPlv9wg" name="testOclIfExp" isDerived="true">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="__lZ4YNQfEeGeeMxpPlv9wg" name="if self.oclTestCollection->isEmpty() then 'halo' else 'bye' endif">
+                <language>ocl</language>
+                <body>if self.oclTestCollection->isEmpty() then 'halo' else 'bye' endif</body>
+              </defaultValue>
+            </ownedAttribute>
+            <ownedAttribute xmi:id="_L8lToNQkEeGSP5acdy3Lgg" name="testOclExpResultMany" type="_0vhrEMCDEeGzStsPq17FZA" isOrdered="true" isUnique="false" isDerived="true">
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Qs3LwNQkEeGSP5acdy3Lgg" value="*"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_SAJYkNQkEeGSP5acdy3Lgg"/>
+              <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_S8DnMNQkEeGSP5acdy3Lgg" name="if self.oclTestCollection->isEmpty then Sequence{} else self.oclTestCollection->asSequence() endif">
+                <language>ocl</language>
+                <body>if self.oclTestCollection->isEmpty() then Sequence{} else self.oclTestCollection->asSequence() endif</body>
+              </defaultValue>
+            </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Class" xmi:id="_0vhrEMCDEeGzStsPq17FZA" name="OclTestCollection">
             <ownedAttribute xmi:id="_2P21YMCDEeGzStsPq17FZA" name="name">

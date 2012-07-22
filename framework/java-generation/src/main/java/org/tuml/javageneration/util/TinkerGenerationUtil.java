@@ -16,6 +16,13 @@ public class TinkerGenerationUtil {
 
 	public static final String TINKER_DB_NULL = "__NULL__";
 
+	public static final OJPathName tumlMemoryCollection = new OJPathName("org.tuml.runtime.collection.memory.TumlMemoryCollection");
+	public static final OJPathName tumlMemoryBag = new OJPathName("org.tuml.runtime.collection.memory.TumlMemoryBag");
+	public static final OJPathName tumlMemorySet = new OJPathName("org.tuml.runtime.collection.memory.TumlMemorySet");
+	public static final OJPathName tumlMemoryOrderedSet = new OJPathName("org.tuml.runtime.collection.memory.TumlMemoryOrderedSet");
+	public static final OJPathName tumlMemorySequence = new OJPathName("org.tuml.runtime.collection.memory.TumlMemorySequence");
+
+	
 	public static final OJPathName tumlOclIsInvalidException = new OJPathName("org.tuml.runtime.domain.ocl.OclIsInvalidException");
 	public static final OJPathName tumlTumlCollections = new OJPathName("org.tuml.runtime.util.TumlCollections");
 	public static final OJPathName tumlOclStdCollectionLib = new OJPathName("org.tuml.runtime.collection.ocl.*");

@@ -4,9 +4,6 @@ import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 
 import java.util.*;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
 
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.TinkerIdUtilFactory;
@@ -262,7 +259,7 @@ public class OclTest1 extends BaseTuml implements TumlNode {
 		
 		    @Override
 		    public TinkerOrderedSet<OclTestCollection2> initAccumulator() {
-		        TinkerOrderedSet<OclTestCollection2> acc = new TumlMemoryOrderedSet();
+		        TinkerOrderedSet<OclTestCollection2> acc = new TumlMemoryOrderedSet<OclTestCollection2>();
 		        return acc;
 		    }
 		});
@@ -390,6 +387,19 @@ public class OclTest1 extends BaseTuml implements TumlNode {
 	}
 	
 	/**
+	 * Implements the ocl statement for derived property 'testOclExpResultMany'
+	 * <pre>
+	 * package testoclmodel::org::tuml::testocl
+	 *     context OclTest1::testOclExpResultMany : Sequence(OclTestCollection)
+	 *     derive: if self.oclTestCollection->isEmpty() then Sequence{} else self.oclTestCollection->asSequence() endif
+	 * endpackage
+	 * </pre>
+	 */
+	public TinkerSequence<OclTestCollection> getTestOclExpResultMany() {
+		return ifExp1();
+	}
+	
+	/**
 	 * Implements the ocl statement for derived property 'testOclFirst'
 	 * <pre>
 	 * package testoclmodel::org::tuml::testocl
@@ -405,6 +415,19 @@ public class OclTest1 extends BaseTuml implements TumlNode {
 		        return temp1.getName();
 		    }
 		}).asSequence().first();
+	}
+	
+	/**
+	 * Implements the ocl statement for derived property 'testOclIfExp'
+	 * <pre>
+	 * package testoclmodel::org::tuml::testocl
+	 *     context OclTest1::testOclIfExp : String
+	 *     derive: if self.oclTestCollection->isEmpty() then 'halo' else 'bye' endif
+	 * endpackage
+	 * </pre>
+	 */
+	public String getTestOclIfExp() {
+		return ifExp0();
 	}
 	
 	/**
@@ -495,6 +518,22 @@ public class OclTest1 extends BaseTuml implements TumlNode {
 	public void setProperty1(String property1) {
 		clearProperty1();
 		addToProperty1(property1);
+	}
+	
+	private String ifExp0() {
+		if ( getOclTestCollection().isEmpty() ) {
+			return "halo";
+		} else {
+			return "bye";
+		}
+	}
+	
+	private TinkerSequence<OclTestCollection> ifExp1() {
+		if ( getOclTestCollection().isEmpty() ) {
+			return new TumlMemorySequence<OclTestCollection>();
+		} else {
+			return getOclTestCollection().asSequence();
+		}
 	}
 	
 	private Boolean oclIsInvalid0() {

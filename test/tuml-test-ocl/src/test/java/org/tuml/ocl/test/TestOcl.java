@@ -143,5 +143,21 @@ public class TestOcl extends BaseLocalDbTest {
 		Assert.assertTrue(oclTest1.getTestFirstOclInvalid());
 	}
 
-	
+	@Test()
+	public void testOclIfExp1() {
+		db.startTransaction();
+		OclTest1 oclTest1 = new OclTest1(true);
+		oclTest1.setProperty1("property1");
+		Assert.assertEquals("halo", oclTest1.getTestOclIfExp());
+	}
+
+	@Test()
+	public void testOclIfExp2() {
+		db.startTransaction();
+		OclTest1 oclTest1 = new OclTest1(true);
+		oclTest1.setProperty1("property1");
+		Assert.assertNotNull(oclTest1.getTestOclExpResultMany());
+		Assert.assertEquals(0, oclTest1.getTestOclExpResultMany().size());
+	}
+
 }
