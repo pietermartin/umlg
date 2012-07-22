@@ -359,12 +359,12 @@ public class OclTest1 extends BaseTuml implements TumlNode {
 		OclTest1RuntimePropertyEnum runtimeProperty = OclTest1RuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result == 0 ) {
 			switch ( runtimeProperty ) {
-				case oclTestCollection:
-					result = oclTestCollection.size();
-				break;
-			
 				case property1:
 					result = property1.size();
+				break;
+			
+				case oclTestCollection:
+					result = oclTestCollection.size();
 				break;
 			
 				default:
@@ -407,6 +407,19 @@ public class OclTest1 extends BaseTuml implements TumlNode {
 		}).asSequence().first();
 	}
 	
+	/**
+	 * Implements the ocl statement for derived property 'testOclIsUndefined'
+	 * <pre>
+	 * package testoclmodel::org::tuml::testocl
+	 *     context OclTest1::testOclIsUndefined : Boolean
+	 *     derive: self.oclTestCollection->any(name='joe').oclIsUndefined()
+	 * endpackage
+	 * </pre>
+	 */
+	public Boolean getTestOclIsUndefined() {
+		return oclIsUndefined0();
+	}
+	
 	@Override
 	public String getUid() {
 		String uid = (String) this.vertex.getProperty("uid");
@@ -422,19 +435,19 @@ public class OclTest1 extends BaseTuml implements TumlNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.property1 =  new TinkerSetImpl<String>(this, OclTest1RuntimePropertyEnum.property1);
 		this.oclTestCollection =  new TinkerBagImpl<OclTestCollection>(this, OclTest1RuntimePropertyEnum.oclTestCollection);
+		this.property1 =  new TinkerSetImpl<String>(this, OclTest1RuntimePropertyEnum.property1);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (OclTest1RuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case oclTestCollection:
-				this.oclTestCollection =  new TinkerBagImpl<OclTestCollection>(this, OclTest1RuntimePropertyEnum.oclTestCollection);
-			break;
-		
 			case property1:
 				this.property1 =  new TinkerSetImpl<String>(this, OclTest1RuntimePropertyEnum.property1);
+			break;
+		
+			case oclTestCollection:
+				this.oclTestCollection =  new TinkerBagImpl<OclTestCollection>(this, OclTest1RuntimePropertyEnum.oclTestCollection);
 			break;
 		
 		}
@@ -497,10 +510,23 @@ public class OclTest1 extends BaseTuml implements TumlNode {
 			return true;
 		}
 	}
+	
+	private Boolean oclIsUndefined0() {
+		try {
+			return getOclTestCollection().any(new BooleanExpressionEvaluator<OclTestCollection>() {
+			    @Override
+			    public Boolean evaluate(OclTestCollection temp1) {
+			        return temp1.getName().equals("joe");
+			    }
+			}) == null;
+		} catch (OclIsInvalidException e) {
+			return true;
+		}
+	}
 
 	public enum OclTest1RuntimePropertyEnum implements TumlRuntimeProperty {
-		property1(true,true,false,"testoclmodel__org__tuml__testocl__OclTest1__property1",false,false,true,false,1,1,false,false,false,false,true),
-		oclTestCollection(false,true,true,"A_<oclTest1>_<oclTestCollection>",false,true,false,false,-1,1,false,false,false,false,false);
+		oclTestCollection(false,true,true,"A_<oclTest1>_<oclTestCollection>",false,true,false,false,-1,1,false,false,false,false,false),
+		property1(true,true,false,"testoclmodel__org__tuml__testocl__OclTest1__property1",false,false,true,false,1,1,false,false,false,false,true);
 		private boolean onePrimitive;
 		private boolean controllingSide;
 		private boolean composite;
@@ -554,11 +580,11 @@ public class OclTest1 extends BaseTuml implements TumlNode {
 		}
 	
 		static public OclTest1RuntimePropertyEnum fromLabel(String label) {
-			if ( property1.getLabel().equals(label) ) {
-				return property1;
-			}
 			if ( oclTestCollection.getLabel().equals(label) ) {
 				return oclTestCollection;
+			}
+			if ( property1.getLabel().equals(label) ) {
+				return property1;
 			}
 			return null;
 		}

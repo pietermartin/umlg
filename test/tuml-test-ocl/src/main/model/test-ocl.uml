@@ -119,6 +119,13 @@
                 <body>self.oclTestCollection.name->asSequence()->first().oclIsInvalid()</body>
               </defaultValue>
             </ownedAttribute>
+            <ownedAttribute xmi:id="_y-1WQNQbEeGeeMxpPlv9wg" name="testOclIsUndefined" isDerived="true">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
+              <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_3p4JENQbEeGeeMxpPlv9wg" name="self.oclTestCollection->any(name='joe').oclIsUndefined()">
+                <language>ocl</language>
+                <body>self.oclTestCollection->any(name='joe').oclIsUndefined()</body>
+              </defaultValue>
+            </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Class" xmi:id="_0vhrEMCDEeGzStsPq17FZA" name="OclTestCollection">
             <ownedAttribute xmi:id="_2P21YMCDEeGzStsPq17FZA" name="name">

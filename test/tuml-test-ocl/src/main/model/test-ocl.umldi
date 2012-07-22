@@ -157,6 +157,11 @@
                   <element href="test-ocl.uml#_DdMBUNNnEeGTS4BrQBVxnw"/>
                 </semanticModel>
               </contained>
+              <contained xsi:type="di:GraphNode" xmi:id="_y-szYNQbEeGeeMxpPlv9wg" position="0,0" size="-1,-1">
+                <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_y-szYdQbEeGeeMxpPlv9wg" presentation="default">
+                  <element href="test-ocl.uml#_y-1WQNQbEeGeeMxpPlv9wg"/>
+                </semanticModel>
+              </contained>
             </contained>
             <contained xsi:type="di:GraphNode" xmi:id="_OTzFxb7zEeG5Bt_b3EGOQQ">
               <property xmi:id="_OTzFxr7zEeG5Bt_b3EGOQQ" key="eStructuralFeatureID" value="47 50 "/>
