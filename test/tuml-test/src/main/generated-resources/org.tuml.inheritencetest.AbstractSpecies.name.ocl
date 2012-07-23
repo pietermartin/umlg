@@ -1,4 +1,0 @@
-package org::tuml::inheritencetest
-context AbstractSpecies::name
-init: 'thisisdodge'
-endpackage

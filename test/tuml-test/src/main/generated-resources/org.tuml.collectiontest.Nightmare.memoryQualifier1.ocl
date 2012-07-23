@@ -1,4 +1,0 @@
-package org::tuml::collectiontest
-context Nightmare::memoryQualifier1
-derive: self.nameNonUnique
-endpackage

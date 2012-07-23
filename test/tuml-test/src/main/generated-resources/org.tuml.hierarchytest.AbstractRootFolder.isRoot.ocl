@@ -1,4 +1,0 @@
-package org::tuml::hierarchytest
-context AbstractRootFolder::isRoot() : Boolean
-body: true
-endpackage

@@ -1,4 +1,0 @@
-package org::tuml::hierarchytest
-context Folder::testQueryOperation(test: String) : String
-body: self.name
-endpackage
