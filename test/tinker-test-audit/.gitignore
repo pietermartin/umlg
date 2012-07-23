@@ -1,0 +1,4 @@
+/target
+.classpath
+/src/main/generated-java
+/src/test/generated-java
