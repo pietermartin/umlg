@@ -13,8 +13,13 @@ public class OclStdLibSequenceImpl<E> extends OclStdLibCollectionImpl<E> impleme
 
 	private List<E> list;
 
-	public OclStdLibSequenceImpl(Collection<E> collection) {
-		this(new ArrayList<E>(collection));
+	/**
+	 * A regular constructor compiles in eclipse but not in maven
+	 * @param collection
+	 * @return
+	 */
+	public static <E> OclStdLibSequenceImpl<E> get(Collection<E> collection) {
+		return new OclStdLibSequenceImpl<E>(new ArrayList<E>(collection));
 	}
 
 	public OclStdLibSequenceImpl(List<E> list) {

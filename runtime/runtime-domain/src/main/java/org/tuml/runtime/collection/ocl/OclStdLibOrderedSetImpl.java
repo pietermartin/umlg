@@ -17,10 +17,15 @@ public class OclStdLibOrderedSetImpl<E> extends OclStdLibCollectionImpl<E> imple
 
 	private ListOrderedSet orderedSet;
 
-	public OclStdLibOrderedSetImpl(Collection<E> collection) {
-		this(ListOrderedSet.decorate(new ArrayList<E>(collection)));
+	/**
+	 * A regular constructor compiles in eclipse but not in maven
+	 * @param collection
+	 * @return
+	 */
+	public static <E> OclStdLibOrderedSetImpl<E> get(Collection<E> collection) {
+		return new OclStdLibOrderedSetImpl<E>(ListOrderedSet.decorate(new ArrayList<E>(collection)));
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	public OclStdLibOrderedSetImpl(ListOrderedSet orderedSet) {
 		super(orderedSet);

@@ -142,22 +142,22 @@ public class OclStdLibCollectionImpl<E> implements OclStdLibCollection<E> {
 	
 	@Override
 	public TinkerSet<E> asSet() {
-		return new OclStdLibSetImpl<E>(this.collection);
+		return OclStdLibSetImpl.<E>get(this.collection);
 	}
 	
 	@Override
 	public TinkerOrderedSet<E> asOrderedSet() {
-		return new OclStdLibOrderedSetImpl<E>(this.collection);
+		return OclStdLibOrderedSetImpl.<E>get(this.collection);
 	}
 	
 	@Override
 	public TinkerSequence<E> asSequence() {
-		return new OclStdLibSequenceImpl<E>(this.collection);
+		return OclStdLibSequenceImpl.<E>get(this.collection);
 	}
 	
 	@Override
 	public TinkerBag<E> asBag() {
-		return new OclStdLibBagImpl<E>(this.collection);
+		return OclStdLibBagImpl.<E>get(this.collection);
 	}
 	
 	@Override

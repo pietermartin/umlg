@@ -15,8 +15,17 @@ public class OclStdLibBagImpl<E> extends OclStdLibCollectionImpl<E> implements T
 
 	private Multiset<E> bag;
 
-	public OclStdLibBagImpl(Collection<E> bag) {
-		this(HashMultiset.create(bag));
+//	public OclStdLibBagImpl(Collection<E> bag) {
+//		this(HashMultiset.create(bag));
+//	}
+	
+	/**
+	 * A regular constructor compiles in eclipse but not in maven
+	 * @param collection
+	 * @return
+	 */
+	public static <E> OclStdLibBagImpl<E> get(Collection<E> bag) {
+		return new OclStdLibBagImpl<E>(HashMultiset.create(bag));
 	}
 
 	public OclStdLibBagImpl(Multiset<E> bag) {
@@ -78,7 +87,7 @@ public class OclStdLibBagImpl<E> extends OclStdLibCollectionImpl<E> implements T
 			}
 			return new OclStdLibBagImpl<T2>(result);
 		} else {
-			return new OclStdLibBagImpl<T2>((Collection<T2>) this.bag);
+			return OclStdLibBagImpl.<T2>get((Collection<T2>) this.bag);
 		}
 	}
 	
