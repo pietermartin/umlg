@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<diagrams:Diagrams xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.topcased.org/DI/1.0" xmlns:diagrams="http://www.topcased.org/Diagrams/1.0" xmi:id="_im0g4MTDEeGJXus6eZqdyw" activeDiagram="__fYVkO91EeC2XrXxx1atfA">
+<diagrams:Diagrams xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.topcased.org/DI/1.0" xmlns:diagrams="http://www.topcased.org/Diagrams/1.0" xmi:id="_im0g4MTDEeGJXus6eZqdyw" activeDiagram="_pv55YBFLEeGoRIAInCGFZA">
   <model href="tinker-test.uml#_qb8akM37EdqwVrslYOdUDA"/>
   <diagrams xmi:id="_im3kMMTDEeGJXus6eZqdyw" position="0,0" size="100,100" name="org" viewport="0,0">
     <property xmi:id="_inGNsMTDEeGJXus6eZqdyw" key="pageFormatName" value="A4"/>
@@ -971,7 +971,7 @@
     </subdiagrams>
     <subdiagrams xmi:id="__fXugO91EeC2XrXxx1atfA">
       <model href="tinker-test.uml#_-S1C4O91EeC2XrXxx1atfA"/>
-      <diagrams xmi:id="__fYVkO91EeC2XrXxx1atfA" position="0,0" size="100,100" name="hierarchy" viewport="0,80">
+      <diagrams xmi:id="__fYVkO91EeC2XrXxx1atfA" position="0,0" size="100,100" name="hierarchy" viewport="0,53">
         <property xmi:id="__fpbUO91EeC2XrXxx1atfA" key="pageFormatName" value="A4"/>
         <property xmi:id="__fpbUe91EeC2XrXxx1atfA" key="diagramWidth" value="840"/>
         <property xmi:id="__fpbUu91EeC2XrXxx1atfA" key="diagramHeight" value="1188"/>
@@ -1275,7 +1275,7 @@
     </subdiagrams>
     <subdiagrams xmi:id="_CU3zAPJKEeCeFLHNTzV0LA">
       <model href="tinker-test.uml#_AoGIIPJKEeCeFLHNTzV0LA"/>
-      <diagrams xmi:id="_CU5BIPJKEeCeFLHNTzV0LA" position="0,0" size="100,100" name="qualifiertest" viewport="0,9">
+      <diagrams xmi:id="_CU5BIPJKEeCeFLHNTzV0LA" position="0,0" size="100,100" name="qualifiertest" viewport="0,80">
         <property xmi:id="_CVFOYPJKEeCeFLHNTzV0LA" key="pageFormatName" value="A4"/>
         <property xmi:id="_CVFOYfJKEeCeFLHNTzV0LA" key="diagramWidth" value="840"/>
         <property xmi:id="_CVFOYvJKEeCeFLHNTzV0LA" key="diagramHeight" value="1188"/>
@@ -1324,11 +1324,6 @@
             <contained xsi:type="di:GraphNode" xmi:id="_HGYEQA1TEeGMEcd2Uio8Tg" position="0,0" size="-1,-1">
               <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_HGYEQQ1TEeGMEcd2Uio8Tg" presentation="default">
                 <element href="tinker-test.uml#_HGZ5cA1TEeGMEcd2Uio8Tg"/>
-              </semanticModel>
-            </contained>
-            <contained xsi:type="di:GraphNode" xmi:id="_pNHhEMRjEeGr8dhiXoL-ZA" position="0,0" size="-1,-1">
-              <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_pNHhEcRjEeGr8dhiXoL-ZA" presentation="default">
-                <element href="tinker-test.uml#_pNKkYMRjEeGr8dhiXoL-ZA"/>
               </semanticModel>
             </contained>
             <contained xsi:type="di:GraphNode" xmi:id="_vP14gMRjEeGr8dhiXoL-ZA" position="0,0" size="-1,-1">
@@ -1497,7 +1492,7 @@
     </subdiagrams>
     <subdiagrams xmi:id="_pv5SUBFLEeGoRIAInCGFZA">
       <model href="tinker-test.uml#_ossv8BFLEeGoRIAInCGFZA"/>
-      <diagrams xmi:id="_pv55YBFLEeGoRIAInCGFZA" position="0,0" size="100,100" name="collection" viewport="0,0">
+      <diagrams xmi:id="_pv55YBFLEeGoRIAInCGFZA" position="0,0" size="100,100" name="collection" viewport="-41,102">
         <property xmi:id="_pwLmMBFLEeGoRIAInCGFZA" key="pageFormatName" value="A4"/>
         <property xmi:id="_pwLmMRFLEeGoRIAInCGFZA" key="diagramWidth" value="840"/>
         <property xmi:id="_pwLmMhFLEeGoRIAInCGFZA" key="diagramHeight" value="1188"/>

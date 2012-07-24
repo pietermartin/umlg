@@ -53,7 +53,7 @@ import org.opaeum.java.metamodel.OJParameter;
 import org.opaeum.java.metamodel.OJPathName;
 
 public class OperationWrapper implements Operation {
-	
+
 	private Operation operation;
 
 	public OperationWrapper(Operation oper) {
@@ -92,7 +92,7 @@ public class OperationWrapper implements Operation {
 	@Override
 	public void setIsAbstract(boolean value) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -122,7 +122,7 @@ public class OperationWrapper implements Operation {
 	@Override
 	public void setConcurrency(CallConcurrencyKind value) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -367,13 +367,13 @@ public class OperationWrapper implements Operation {
 	@Override
 	public void setName(String value) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void unsetName() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -391,13 +391,13 @@ public class OperationWrapper implements Operation {
 	@Override
 	public void setVisibility(VisibilityKind value) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void unsetVisibility() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -444,7 +444,7 @@ public class OperationWrapper implements Operation {
 	@Override
 	public void setNameExpression(StringExpression value) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -618,7 +618,7 @@ public class OperationWrapper implements Operation {
 	@Override
 	public void setValue(Stereotype stereotype, String propertyName, Object newValue) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -744,7 +744,7 @@ public class OperationWrapper implements Operation {
 	@Override
 	public void destroy() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -852,13 +852,13 @@ public class OperationWrapper implements Operation {
 	@Override
 	public void eSet(EStructuralFeature arg0, Object arg1) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void eUnset(EStructuralFeature arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -876,13 +876,13 @@ public class OperationWrapper implements Operation {
 	@Override
 	public void eNotify(Notification arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void eSetDeliver(boolean arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -894,7 +894,7 @@ public class OperationWrapper implements Operation {
 	@Override
 	public void setIsStatic(boolean value) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -924,7 +924,7 @@ public class OperationWrapper implements Operation {
 	@Override
 	public void setIsLeaf(boolean value) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -996,7 +996,7 @@ public class OperationWrapper implements Operation {
 	@Override
 	public void setTemplateParameter(TemplateParameter value) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -1008,7 +1008,7 @@ public class OperationWrapper implements Operation {
 	@Override
 	public void setOwningTemplateParameter(TemplateParameter value) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -1056,7 +1056,7 @@ public class OperationWrapper implements Operation {
 	@Override
 	public void setOwnedTemplateSignature(TemplateSignature value) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -1092,7 +1092,7 @@ public class OperationWrapper implements Operation {
 	@Override
 	public void setIsQuery(boolean value) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -1104,7 +1104,7 @@ public class OperationWrapper implements Operation {
 	@Override
 	public void setIsOrdered(boolean value) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -1116,7 +1116,7 @@ public class OperationWrapper implements Operation {
 	@Override
 	public void setIsUnique(boolean value) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -1128,7 +1128,7 @@ public class OperationWrapper implements Operation {
 	@Override
 	public void setLower(int value) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -1140,7 +1140,7 @@ public class OperationWrapper implements Operation {
 	@Override
 	public void setUpper(int value) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -1152,7 +1152,7 @@ public class OperationWrapper implements Operation {
 	@Override
 	public void setClass_(Class value) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -1242,7 +1242,7 @@ public class OperationWrapper implements Operation {
 	@Override
 	public void setDatatype(DataType value) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -1253,7 +1253,7 @@ public class OperationWrapper implements Operation {
 	@Override
 	public void setBodyCondition(Constraint value) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -1277,7 +1277,7 @@ public class OperationWrapper implements Operation {
 	@Override
 	public void setType(Type value) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -1289,7 +1289,7 @@ public class OperationWrapper implements Operation {
 	@Override
 	public void setInterface(Interface value) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -1314,7 +1314,12 @@ public class OperationWrapper implements Operation {
 	}
 
 	public OJPathName getReturnParamPathName() {
-		return TumlClassOperations.getPathName(getReturnResult().getType());
+		ParameterWrapper parameterWrapper = new ParameterWrapper(getReturnResult());
+		if (parameterWrapper.isMany()) {
+			return parameterWrapper.javaTumlTypePath();
+		} else {
+			return parameterWrapper.javaBaseTypePath();
+		}
 	}
 
 	public List<OJParameter> getOJParametersExceptReturn() {
@@ -1326,7 +1331,7 @@ public class OperationWrapper implements Operation {
 	}
 
 	public String getOclBodyCondition() {
-		if (getBodyCondition()==null) {
+		if (getBodyCondition() == null) {
 			throw new IllegalStateException(String.format("Property %s does not have a body condtion", new Object[] { this.getName() }));
 		}
 		Constraint bodyCondition = getBodyCondition();
@@ -1338,5 +1343,5 @@ public class OperationWrapper implements Operation {
 	public boolean validateNonLeafRedefinition(DiagnosticChain arg0, Map<Object, Object> arg1) {
 		throw new RuntimeException("Not supported");
 	}
-	
+
 }

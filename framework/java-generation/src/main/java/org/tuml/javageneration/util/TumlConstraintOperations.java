@@ -11,7 +11,7 @@ public class TumlConstraintOperations extends ConstraintOperations {
 		Operation oper = (Operation) constraint.getContext();
 		StringBuilder sb = new StringBuilder();
 		sb.append("package ");
-		sb.append(Namer.name(oper.getNearestPackage()).replace(".", "::"));
+		sb.append(Namer.nameIncludingModel(oper.getNearestPackage()).replace(".", "::"));
 		sb.append("\ncontext ");
 		sb.append(TumlOperationOperations.asOclSignature(oper));
 		sb.append("\n");

@@ -155,19 +155,10 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
 			ifHasNext.addToElsePart("return null");
 		} else {
 			OJSimpleStatement ojSimpleStatement;
-			if (qualifiedPropertyWrapper.isUnique()) {
-				ojSimpleStatement = new OJSimpleStatement("return new "
-						+ TinkerGenerationUtil.tumlTinkerSetClosableIterableImpl.getCopy().addToGenerics(qualifiedPropertyWrapper.javaBaseTypePath()).getLast());
-			} else {
-				ojSimpleStatement = new OJSimpleStatement("return new "
-						+ TinkerGenerationUtil.tumlTinkerSequenceClosableIterableImpl.getCopy().addToGenerics(qualifiedPropertyWrapper.javaBaseTypePath()).getLast());
-			}
+			ojSimpleStatement = new OJSimpleStatement("return new "
+					+ qualifiedPropertyWrapper.javaClosableIteratorTypePath().getCopy().addToGenerics(qualifiedPropertyWrapper.javaBaseTypePath()).getLast());
 			ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + "(iterator, " + qualifiedPropertyWrapper.getTumlRuntimePropertyEnum() + ")");
-			if (qualifiedPropertyWrapper.isUnique()) {
-				ojClass.addToImports(TinkerGenerationUtil.tumlTinkerSetClosableIterableImpl);
-			} else {
-				ojClass.addToImports(TinkerGenerationUtil.tumlTinkerSequenceClosableIterableImpl);
-			}
+			ojClass.addToImports(qualifiedPropertyWrapper.javaClosableIteratorTypePath());
 			ifHasNext.addToThenPart(ojSimpleStatement);
 			ifHasNext.addToElsePart("return " + qualifiedPropertyWrapper.emptyCollection());
 			ojClass.addToImports(TinkerGenerationUtil.tumlTumlCollections);

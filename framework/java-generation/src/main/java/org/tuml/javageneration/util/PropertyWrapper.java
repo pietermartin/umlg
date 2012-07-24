@@ -1,39 +1,25 @@
 package org.tuml.javageneration.util;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.emf.common.notify.Adapter;
-import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.TreeIterator;
-import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EOperation;
-import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.uml2.uml.AggregationKind;
 import org.eclipse.uml2.uml.Association;
 import org.eclipse.uml2.uml.BehavioredClassifier;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Classifier;
-import org.eclipse.uml2.uml.Comment;
 import org.eclipse.uml2.uml.ConnectorEnd;
 import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.Dependency;
 import org.eclipse.uml2.uml.Deployment;
-import org.eclipse.uml2.uml.DirectedRelationship;
 import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.LiteralString;
-import org.eclipse.uml2.uml.Model;
-import org.eclipse.uml2.uml.MultiplicityElement;
 import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.Namespace;
 import org.eclipse.uml2.uml.OpaqueExpression;
@@ -42,8 +28,6 @@ import org.eclipse.uml2.uml.PackageableElement;
 import org.eclipse.uml2.uml.ParameterableElement;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.RedefinableElement;
-import org.eclipse.uml2.uml.Relationship;
-import org.eclipse.uml2.uml.Stereotype;
 import org.eclipse.uml2.uml.StringExpression;
 import org.eclipse.uml2.uml.TemplateParameter;
 import org.eclipse.uml2.uml.Type;
@@ -54,13 +38,17 @@ import org.opaeum.java.metamodel.OJPathName;
 import org.tuml.javageneration.naming.Namer;
 import org.tuml.javageneration.ocl.TumlOcl2Java;
 
-public class PropertyWrapper implements Property {
+public class PropertyWrapper extends MultiplicityWrapper implements Property {
 
 	private Property property;
 
 	public PropertyWrapper(Property property) {
-		super();
+		super(property);
 		this.property = property;
+	}
+
+	public boolean isInverseOrdered() {
+		return getOtherEnd() != null && getOtherEnd().isOrdered();
 	}
 
 	public Type getOwningType() {
@@ -190,6 +178,37 @@ public class PropertyWrapper implements Property {
 		fieldType.addToGenerics(javaBaseTypePath());
 		return fieldType;
 	}
+	
+	public String emptyCollection() {
+		if (!isOrdered() && isUnique()) {
+			return "TumlCollections.emptySet()";
+		} else if (isOrdered() && !isUnique()) {
+			return "TumlCollections.emptySequence()";
+		} else if (!isOrdered() && !isUnique()) {
+			return "TumlCollections.emptyBag()";
+		} else if (isOrdered() && isUnique()) {
+			return "TumlCollections.emptyOrderedSet()";
+		} else {
+			throw new RuntimeException("wtf");
+		}
+	}
+	
+	public OJPathName javaClosableIteratorTypePath() {
+		OJPathName fieldType;
+		if (!isOrdered() && isUnique()) {
+			fieldType = TinkerGenerationUtil.tumlSetCloseableIterablePathName.getCopy();
+		} else if (isOrdered() && !isUnique()) {
+			fieldType = TinkerGenerationUtil.tumlSequenceCloseableIterablePathName.getCopy();
+		} else if (!isOrdered() && !isUnique()) {
+			fieldType = TinkerGenerationUtil.tumlBagCloseableIterablePathName.getCopy();
+		} else if (isOrdered() && isUnique()) {
+			fieldType = TinkerGenerationUtil.tumlOrderedSetCloseableIterablePathName.getCopy();
+		} else {
+			throw new RuntimeException("wtf");
+		}
+		fieldType.addToGenerics(javaBaseTypePath());
+		return fieldType;
+	}	
 
 	public OJPathName javaImplTypePath() {
 		return TumlPropertyOperations.getDefaultTinkerCollection(this.property);
@@ -448,360 +467,6 @@ public class PropertyWrapper implements Property {
 	public EList<Package> allOwningPackages() {
 		return this.property.allOwningPackages();
 	}
-
-	@Override
-	public EList<Element> getOwnedElements() {
-		return this.property.getOwnedElements();
-	}
-
-	@Override
-	public Element getOwner() {
-		return this.property.getOwner();
-	}
-
-	@Override
-	public EList<Comment> getOwnedComments() {
-		return this.property.getOwnedComments();
-	}
-
-	@Override
-	public Comment createOwnedComment() {
-		throw new RuntimeException("Not supported");
-	}
-
-	@Override
-	public boolean validateNotOwnSelf(DiagnosticChain diagnostics, Map<Object, Object> context) {
-		throw new RuntimeException("Not supported");
-	}
-
-	@Override
-	public boolean validateHasOwner(DiagnosticChain diagnostics, Map<Object, Object> context) {
-		throw new RuntimeException("Not supported");
-	}
-
-	@Override
-	public EList<EObject> getStereotypeApplications() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EObject getStereotypeApplication(Stereotype stereotype) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EList<Stereotype> getRequiredStereotypes() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Stereotype getRequiredStereotype(String qualifiedName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EList<Stereotype> getAppliedStereotypes() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Stereotype getAppliedStereotype(String qualifiedName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EList<Stereotype> getAppliedSubstereotypes(Stereotype stereotype) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Stereotype getAppliedSubstereotype(Stereotype stereotype, String qualifiedName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean hasValue(Stereotype stereotype, String propertyName) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public Object getValue(Stereotype stereotype, String propertyName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setValue(Stereotype stereotype, String propertyName, Object newValue) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public EAnnotation createEAnnotation(String source) {
-		throw new RuntimeException("Not supported");
-	}
-
-	@Override
-	public EList<Relationship> getRelationships() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EList<Relationship> getRelationships(EClass eClass) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EList<DirectedRelationship> getSourceDirectedRelationships() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EList<DirectedRelationship> getSourceDirectedRelationships(EClass eClass) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EList<DirectedRelationship> getTargetDirectedRelationships() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EList<DirectedRelationship> getTargetDirectedRelationships(EClass eClass) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EList<String> getKeywords() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean addKeyword(String keyword) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean removeKeyword(String keyword) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public Package getNearestPackage() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Model getModel() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean isStereotypeApplicable(Stereotype stereotype) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isStereotypeRequired(Stereotype stereotype) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isStereotypeApplied(Stereotype stereotype) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public EObject applyStereotype(Stereotype stereotype) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EObject unapplyStereotype(Stereotype stereotype) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EList<Stereotype> getApplicableStereotypes() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Stereotype getApplicableStereotype(String qualifiedName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean hasKeyword(String keyword) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void destroy() {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public EList<Element> allOwnedElements() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean mustBeOwned() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public EAnnotation getEAnnotation(String arg0) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EList<EAnnotation> getEAnnotations() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public TreeIterator<EObject> eAllContents() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EClass eClass() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EObject eContainer() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EStructuralFeature eContainingFeature() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EReference eContainmentFeature() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EList<EObject> eContents() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public EList<EObject> eCrossReferences() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Object eGet(EStructuralFeature arg0) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Object eGet(EStructuralFeature arg0, boolean arg1) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Object eInvoke(EOperation arg0, EList<?> arg1) throws InvocationTargetException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean eIsProxy() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean eIsSet(EStructuralFeature arg0) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public Resource eResource() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void eSet(EStructuralFeature arg0, Object arg1) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void eUnset(EStructuralFeature arg0) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public EList<Adapter> eAdapters() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean eDeliver() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void eNotify(Notification arg0) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void eSetDeliver(boolean arg0) {
-		// TODO Auto-generated method stub
-	}
-
 	@Override
 	public Type getType() {
 		return this.property.getType();
@@ -810,149 +475,6 @@ public class PropertyWrapper implements Property {
 	@Override
 	public void setType(Type value) {
 		throw new RuntimeException("Not supported");
-	}
-
-	@Override
-	public boolean isOrdered() {
-		return this.property.isOrdered();
-	}
-
-	public boolean isInverseOrdered() {
-		return getOtherEnd() != null && getOtherEnd().isOrdered();
-	}
-
-	@Override
-	public void setIsOrdered(boolean value) {
-		throw new RuntimeException("Not supported");
-	}
-
-	@Override
-	public boolean isUnique() {
-		return this.property.isUnique();
-	}
-
-	@Override
-	public void setIsUnique(boolean value) {
-		throw new RuntimeException("Not supported");
-	}
-
-	@Override
-	public int getUpper() {
-		return this.property.getUpper();
-	}
-
-	@Override
-	public void setUpper(int value) {
-		throw new RuntimeException("Not supported");
-	}
-
-	@Override
-	public int getLower() {
-		return this.property.getLower();
-	}
-
-	@Override
-	public void setLower(int value) {
-		throw new RuntimeException("Not supported");
-	}
-
-	@Override
-	public ValueSpecification getUpperValue() {
-		return null;
-	}
-
-	@Override
-	public void setUpperValue(ValueSpecification value) {
-		throw new RuntimeException("Not supported");
-	}
-
-	@Override
-	public ValueSpecification createUpperValue(String name, Type type, EClass eClass) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ValueSpecification getLowerValue() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setLowerValue(ValueSpecification value) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public ValueSpecification createLowerValue(String name, Type type, EClass eClass) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean validateLowerGe0(DiagnosticChain diagnostics, Map<Object, Object> context) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean validateUpperGeLower(DiagnosticChain diagnostics, Map<Object, Object> context) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean validateValueSpecificationNoSideEffects(DiagnosticChain diagnostics, Map<Object, Object> context) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean validateValueSpecificationConstant(DiagnosticChain diagnostics, Map<Object, Object> context) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isMultivalued() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean includesCardinality(int C) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean includesMultiplicity(MultiplicityElement M) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public int lowerBound() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int upperBound() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public boolean compatibleWith(MultiplicityElement other) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean is(int lowerbound, int upperbound) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	@Override
@@ -1504,14 +1026,6 @@ public class PropertyWrapper implements Property {
 			sb.append(StringUtils.capitalize(q.getName()));
 		}
 		return getter() + "For" + sb.toString();
-	}
-
-	public String emptyCollection() {
-		if (isUnique()) {
-			return "TumlCollections.emptySet()";
-		} else {
-			return "TumlCollections.emptyList()";
-		}
 	}
 
 	public Property getProperty() {

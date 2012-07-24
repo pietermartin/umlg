@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<uml:Model xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xmi:id="_qb8akM37EdqwVrslYOdUDA" name="tuml-test">
+<uml:Model xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xmi:id="_qb8akM37EdqwVrslYOdUDA" name="tumltest">
   <elementImport xmi:id="_vhWmcOYQEeCCXPbP2D6kZQ">
     <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
   </elementImport>
@@ -151,13 +151,9 @@
           <ownedAttribute xmi:id="_YqwP4PJKEeCeFLHNTzV0LA" name="nature" type="_F-NRMPJKEeCeFLHNTzV0LA" aggregation="composite" association="_Yq2WivJKEeCeFLHNTzV0LA">
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_YqwP4fJKEeCeFLHNTzV0LA" value="*"/>
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_YqwP4vJKEeCeFLHNTzV0LA"/>
-            <qualifier xmi:id="_oTa3IAihEeG067WTUlY0-g" name="qualifier1">
-              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
-              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_rUmfIAyREeGNSfCmMLqh1A" value="1"/>
-            </qualifier>
             <qualifier xmi:id="_KW7PAA1TEeGMEcd2Uio8Tg" name="qualifier2">
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
-              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_TrGJEA1TEeGMEcd2Uio8Tg" value="*"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_TrGJEA1TEeGMEcd2Uio8Tg" value="1"/>
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_UIi6EA1TEeGMEcd2Uio8Tg"/>
             </qualifier>
           </ownedAttribute>
@@ -367,7 +363,7 @@
           <ownedOperation xmi:id="_TB6roO93EeC2XrXxx1atfA" name="getChildren" isQuery="true" bodyCondition="_P-h9sO94EeC2XrXxx1atfA">
             <ownedRule xmi:id="_P-h9sO94EeC2XrXxx1atfA" name="Constraint1">
               <specification xmi:type="uml:OpaqueExpression" xmi:id="_QnGZkO94EeC2XrXxx1atfA" name="OpaqueExpression1">
-                <body>childFolder</body>
+                <body>Set{}->union(self.childFolder)</body>
               </specification>
             </ownedRule>
             <ownedParameter xmi:id="_UZVKgO93EeC2XrXxx1atfA" name="return" type="_h5L3UO92EeC2XrXxx1atfA" direction="return">
@@ -443,13 +439,6 @@
           <ownedAttribute xmi:id="_HGZ5cA1TEeGMEcd2Uio8Tg" name="name2">
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
           </ownedAttribute>
-          <ownedAttribute xmi:id="_pNKkYMRjEeGr8dhiXoL-ZA" name="qualifier1" isDerived="true">
-            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
-            <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_tN5O4MRjEeGr8dhiXoL-ZA" name="self.name1">
-              <language>ocl</language>
-              <body>self.name1</body>
-            </defaultValue>
-          </ownedAttribute>
           <ownedAttribute xmi:id="_vP2fkMRjEeGr8dhiXoL-ZA" name="qualifier2" isDerived="true">
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
             <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_xe5KAMRjEeGr8dhiXoL-ZA" name="self.name2">
@@ -516,19 +505,20 @@
         </packagedElement>
         <packagedElement xmi:type="uml:Association" xmi:id="_Cp4DIBndEeGZfswubjlR9Q" name="A_&lt;many1>_&lt;many2>" memberEnd="_Cp4DIRndEeGZfswubjlR9Q _Cp4DJBndEeGZfswubjlR9Q" navigableOwnedEnd="_Cp4DIRndEeGZfswubjlR9Q _Cp4DJBndEeGZfswubjlR9Q">
           <ownedEnd xmi:id="_Cp4DIRndEeGZfswubjlR9Q" name="many1" type="_36iLkBncEeGZfswubjlR9Q" association="_Cp4DIBndEeGZfswubjlR9Q">
-            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Cp4DIhndEeGZfswubjlR9Q" value="*"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Cp4DIhndEeGZfswubjlR9Q" value="1"/>
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Cp4DIxndEeGZfswubjlR9Q"/>
             <qualifier xmi:id="_H-qK8BnnEeGZfswubjlR9Q" name="qualifier1">
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
-              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_NGckIBnnEeGZfswubjlR9Q" value="*"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_NGckIBnnEeGZfswubjlR9Q" value="1"/>
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_NTaCEBnnEeGZfswubjlR9Q"/>
             </qualifier>
           </ownedEnd>
           <ownedEnd xmi:id="_Cp4DJBndEeGZfswubjlR9Q" name="many2" type="_4rB0YBncEeGZfswubjlR9Q" association="_Cp4DIBndEeGZfswubjlR9Q">
-            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Cp4DJRndEeGZfswubjlR9Q" value="*"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Cp4DJRndEeGZfswubjlR9Q" value="1"/>
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Cp4DJhndEeGZfswubjlR9Q"/>
             <qualifier xmi:id="_M-YY0BndEeGZfswubjlR9Q" name="qualifier1">
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_wZdscNVNEeGcwq_z4Bwsdw"/>
             </qualifier>
           </ownedEnd>
         </packagedElement>
@@ -538,8 +528,8 @@
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_h0dj8xnqEeGZfswubjlR9Q"/>
             <qualifier xmi:id="_pdOsIBnqEeGZfswubjlR9Q" name="listQualifier1">
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
-              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_nlEhkBnzEeGZfswubjlR9Q" value="*"/>
-              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_nfMjEBnzEeGZfswubjlR9Q"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_nlEhkBnzEeGZfswubjlR9Q" value="1"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_nfMjEBnzEeGZfswubjlR9Q" value="1"/>
             </qualifier>
           </ownedEnd>
           <ownedEnd xmi:id="_h0dj9BnqEeGZfswubjlR9Q" name="many2List" type="_4rB0YBncEeGZfswubjlR9Q" isOrdered="true" isUnique="false" association="_h0dj8BnqEeGZfswubjlR9Q">
@@ -674,8 +664,8 @@
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_NS6OlhqyEeG2HY-TJLNivw"/>
             <qualifier xmi:id="_VtHawBqyEeG2HY-TJLNivw" name="memoryQualifier1">
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
-              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Xzf4cBqyEeG2HY-TJLNivw" value="*"/>
-              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Xs79cBqyEeG2HY-TJLNivw" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Xzf4cBqyEeG2HY-TJLNivw" value="1"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Xs79cBqyEeG2HY-TJLNivw"/>
             </qualifier>
           </ownedEnd>
         </packagedElement>

@@ -17,6 +17,13 @@ import com.google.common.collect.Multiset;
 public abstract class BaseBag<E> extends BaseCollection<E> implements TinkerBag<E> {
 
 	protected OclStdLibBag<E> oclStdLibBag;
+
+	public BaseBag(TumlRuntimeProperty runtimeProperty) {
+		super(runtimeProperty);
+		this.internalCollection = HashMultiset.create();
+		this.oclStdLibBag = new OclStdLibBagImpl<E>((Multiset<E>)this.internalCollection); 
+		this.oclStdLibCollection = this.oclStdLibBag;
+	}
 	
 	public BaseBag(TumlNode owner, TumlRuntimeProperty runtimeProperty) {
 		super(owner, runtimeProperty);

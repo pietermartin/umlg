@@ -11,5 +11,5 @@ public class TumlMultiplicityOperations {
 	public static boolean isMany(MultiplicityElement multiplicityElement) {
 		return multiplicityElement.getUpper() == -1 || multiplicityElement.getUpper() > 1;
 	}
-
+	
 }

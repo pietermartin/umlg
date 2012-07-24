@@ -47,7 +47,7 @@ public class PropertyVisitor extends BaseVisitor implements Visitor<Property> {
 		
 		String ocl = propertyWrapper.getOclDerivedValue();
 		OJAnnotatedOperation initVariables = owner.findOperation(ClassBuilder.INIT_VARIABLES);
-		initVariables.setComment(String.format("Implements the ocl statement for derived property '%s'\n<pre>\n%s\n</pre>", propertyWrapper.getName(), ocl));
+		initVariables.setComment(String.format("Implements the ocl statement for initialization variable '%s'\n<pre>\n%s\n</pre>", propertyWrapper.getName(), ocl));
 		logger.info(String.format("About to parse ocl expression \n%s", new Object[] { ocl }));
 		
 		String java;

@@ -40,7 +40,7 @@ public interface OclStdLibSequence<E> extends OclStdLibCollection<E> {
 	 * </pre>
 	 * 
 	 */
-	TinkerSequence<E> union(TinkerSequence<E> s);
+	TinkerSequence<E> union(TinkerSequence<? extends E> s);
 	
 	/**
 	 * flatten() : Sequence(T2)

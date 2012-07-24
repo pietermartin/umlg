@@ -18,7 +18,7 @@ public interface OclStdLibSet<E> extends OclStdLibCollection<E> {
 	 * 
 	 * <pre>
 	 */
-	TinkerSet<E> union(TinkerSet<E> s);
+	TinkerSet<E> union(TinkerSet<? extends E> s);
 
 	/**
 	 * union(bag : Bag(T)) : Bag(T)

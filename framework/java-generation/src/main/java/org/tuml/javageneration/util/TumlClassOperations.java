@@ -13,8 +13,10 @@ import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
+import org.eclipse.uml2.uml.VisibilityKind;
 import org.eclipse.uml2.uml.internal.operations.ClassOperations;
 import org.opaeum.java.metamodel.OJPathName;
+import org.opaeum.java.metamodel.OJVisibilityKind;
 import org.tuml.javageneration.naming.Namer;
 import org.tuml.javageneration.ocl.util.TumlCollectionKindEnum;
 
@@ -161,6 +163,21 @@ public class TumlClassOperations extends ClassOperations {
 	
 	public static String propertyEnumName(Type type) {
 		return Namer.name(type) + "RuntimePropertyEnum";
+	}
+
+	public static OJVisibilityKind getVisibility(VisibilityKind visibility) {
+		switch (visibility) {
+		case PRIVATE_LITERAL:
+			return OJVisibilityKind.PRIVATE;
+		case PROTECTED_LITERAL:
+			return OJVisibilityKind.PROTECTED;
+		case PUBLIC_LITERAL:
+			return OJVisibilityKind.PUBLIC;
+		case PACKAGE_LITERAL:
+			return OJVisibilityKind.DEFAULT;
+		default:
+			throw new RuntimeException("Not supported");
+		}
 	}
 
 }

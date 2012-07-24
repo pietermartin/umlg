@@ -20,6 +20,9 @@ public class ClassCreator extends BaseVisitor implements Visitor<org.eclipse.uml
 		OJAnnotatedClass annotatedClass = new OJAnnotatedClass(TumlClassOperations.className(clazz));
 		OJPackage ojPackage = new OJPackage(Namer.name(clazz.getNearestPackage()));
 		annotatedClass.setMyPackage(ojPackage);
+		annotatedClass.setVisibility(TumlClassOperations.getVisibility(clazz.getVisibility()));
+		annotatedClass.setAbstract(clazz.isAbstract());
+		
 		// The super class will be set later after all classes have been created
 		if (TumlBehavioredClassifierOperations.hasBehavior(clazz)) {
 			annotatedClass.setSuperclass(TinkerGenerationUtil.BASE_BEHAVIORED_CLASSIFIER);

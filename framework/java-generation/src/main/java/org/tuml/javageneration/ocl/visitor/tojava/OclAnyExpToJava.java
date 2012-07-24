@@ -28,6 +28,7 @@ public class OclAnyExpToJava implements HandleIteratorExp {
 			throw new IllegalStateException("An ocl select iterator expression may only have on iterator, i.e. variable");
 		}
 		Variable<Classifier, Parameter> variable = callExp.getIterator().get(0);
+		
 		String variableType = TumlClassOperations.className(variable.getType());
 		StringBuilder result = new StringBuilder(sourceResult);
 		result.append(".any(");

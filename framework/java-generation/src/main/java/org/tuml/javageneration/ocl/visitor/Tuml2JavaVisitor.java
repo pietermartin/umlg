@@ -57,7 +57,6 @@ import org.tuml.javageneration.ocl.visitor.tojava.OclIterateExpToJava;
 import org.tuml.javageneration.ocl.visitor.tojava.OclVariableExpToJava;
 import org.tuml.javageneration.util.PropertyWrapper;
 import org.tuml.javageneration.util.TinkerGenerationUtil;
-import org.tuml.javageneration.util.TumlClassOperations;
 
 public class Tuml2JavaVisitor extends
 		AbstractVisitor<String, Classifier, Operation, Property, EnumerationLiteral, Parameter, State, CallOperationAction, SendSignalAction, Constraint> {
@@ -263,27 +262,7 @@ public class Tuml2JavaVisitor extends
 	 */
 	@Override
 	protected String handleVariable(Variable<Classifier, Parameter> vd, String initResult) {
-
-		return new OclVariableExpToJava().handleVariable(vd, initResult);
-
-		// String varName = vd.getName();
-		//
-		// if (varName == null) {
-		// varName = NULL_PLACEHOLDER;
-		// }
-		//
-		// Classifier type = vd.getType();
-		// String result = varName;
-		//
-		// if (type != null) {
-		//			result += " : " + getName(type);//$NON-NLS-1$
-		// }
-		//
-		// if (initResult != null) {
-		//			result += " = " + initResult;//$NON-NLS-1$
-		// }
-		//
-		// return result;
+		return new OclVariableExpToJava().setOJClass(this.ojClass).handleVariable(vd, initResult);
 	}
 
 	/**

@@ -35,6 +35,13 @@ public class TinkerGenerationUtil {
 	public static final OJPathName tinkerConclusionPathName = new OJPathName("com.tinkerpop.blueprints.pgm.TransactionalGraph.Conclusion");
 	public static final OJPathName tinkerIndexPathName = new OJPathName("com.tinkerpop.blueprints.Index");
 	public static final OJPathName tinkerCloseableIterablePathName = new OJPathName("com.tinkerpop.blueprints.CloseableIterable");
+	
+	public static final OJPathName tumlBagCloseableIterablePathName = new OJPathName("org.tuml.runtime.collection.persistent.TinkerBagClosableIterableImpl");
+	public static final OJPathName tumlSequenceCloseableIterablePathName = new OJPathName("org.tuml.runtime.collection.persistent.TinkerSequenceClosableIterableImpl");
+	public static final OJPathName tumlSetCloseableIterablePathName = new OJPathName("org.tuml.runtime.collection.persistent.TinkerSetClosableIterableImpl");
+	public static final OJPathName tumlOrderedSetCloseableIterablePathName = new OJPathName("org.tuml.runtime.collection.persistent.TinkerOrderedSetClosableIterableImpl");
+	
+	
 	public static final OJPathName tinkerDirection = new OJPathName("com.tinkerpop.blueprints.Direction");
 	public static final OJPathName tinkerCompositionNodePathName = new OJPathName("org.tuml.runtime.domain.CompositionNode");
 	public static final OJPathName compositionNodePathName = new OJPathName("org.tuml.runtime.domain.CompositionNode");
@@ -68,9 +75,9 @@ public class TinkerGenerationUtil {
 	public static OJPathName tinkerQualifiedSet = new OJPathName("org.tuml.runtime.collection.TinkerQualifiedSet");
 	public static OJPathName tinkerQualifiedSetImpl = new OJPathName("org.tuml.runtime.collection.persistent.TinkerQualifiedSetImpl");
 	public static OJPathName tinkerSequence = new OJPathName("org.tuml.runtime.collection.TinkerSequence");
-	public static OJPathName tinkerSequenceImpl = new OJPathName("org.tuml.runtime.collection.TinkerSequenceImpl");
-	public static OJPathName tinkerQualifiedSequence = new OJPathName("org.tuml.runtime.collection.persistent.TinkerQualifiedSequence");
-	public static OJPathName tinkerQualifiedSequenceImpl = new OJPathName("org.tuml.runtime.collection.TinkerQualifiedSequenceImpl");
+	public static OJPathName tinkerSequenceImpl = new OJPathName("org.tuml.runtime.collection.persistent.TinkerSequenceImpl");
+	public static OJPathName tinkerQualifiedSequence = new OJPathName("org.tuml.runtime.collection.TinkerQualifiedSequence");
+	public static OJPathName tinkerQualifiedSequenceImpl = new OJPathName("org.tuml.runtime.collection.persistent.TinkerQualifiedSequenceImpl");
 	public static OJPathName tinkerOrderedSet = new OJPathName("org.tuml.runtime.collection.TinkerOrderedSet");
 	public static OJPathName tinkerOrderedSetImpl = new OJPathName("org.tuml.runtime.collection.persistent.TinkerOrderedSetImpl");
 	public static OJPathName tinkerQualifiedOrderedSet = new OJPathName("org.tuml.runtime.collection.TinkerQualifiedOrderedSet");
@@ -79,7 +86,7 @@ public class TinkerGenerationUtil {
 	public static OJPathName tinkerBagImpl = new OJPathName("org.tuml.runtime.collection.persistent.TinkerBagImpl");
 
 	public static OJPathName tinkerQualifiedBag = new OJPathName("org.tuml.runtime.collection.TinkerQualifiedBag");
-	public static OJPathName tinkerQualifiedBagImpl = new OJPathName("org.tuml.runtime.collection..impl.TinkerQualifiedBagImpl");
+	public static OJPathName tinkerQualifiedBagImpl = new OJPathName("org.tuml.runtime.collection.persistent.TinkerQualifiedBagImpl");
 
 	public static OJPathName edgePathName = new OJPathName("com.tinkerpop.blueprints.Edge");
 	public static OJPathName storagePathName = new OJPathName("com.orientechnologies.orient.core.storage.OStorage");
