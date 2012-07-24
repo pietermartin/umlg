@@ -33,7 +33,7 @@ public class OclStdLibSequenceImpl<E> extends OclStdLibCollectionImpl<E> impleme
 	}
 
 	@Override
-	public TinkerSequence<E> union(TinkerSequence<E> s) {
+	public TinkerSequence<E> union(TinkerSequence<? extends E> s) {
 		throw new RuntimeException("Not implemented");
 	}
 

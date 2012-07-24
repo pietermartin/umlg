@@ -67,13 +67,13 @@ public abstract class BaseSet<E> extends BaseCollection<E> implements TinkerSet<
 	}
 
 	@Override
-	public TinkerSet<E> union(TinkerSet<E> s) {
+	public TinkerSet<E> union(TinkerSet<? extends E> s) {
 		maybeLoad();
 		return this.oclStdLibSet.union(s);
 	}
 
 	@Override
-	public TinkerBag<E> union(TinkerBag<E> bag) {
+	public TinkerBag<E> union(TinkerBag<? extends E> bag) {
 		maybeLoad();
 		return this.oclStdLibSet.union(bag);
 	}

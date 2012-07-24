@@ -109,7 +109,7 @@ public class TumlMemorySequence<E> extends TumlMemoryCollection<E> implements Ti
 	}
 
 	@Override
-	public TinkerSequence<E> union(TinkerSequence<E> s) {
+	public TinkerSequence<E> union(TinkerSequence<? extends E> s) {
 		return this.oclStdLibSequence.union(s);
 	}
 

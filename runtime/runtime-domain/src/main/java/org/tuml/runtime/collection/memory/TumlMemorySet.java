@@ -50,12 +50,12 @@ public class TumlMemorySet<E> extends TumlMemoryCollection<E> implements TinkerS
 	}
 
 	@Override
-	public TinkerSet<E> union(TinkerSet<E> s) {
+	public TinkerSet<E> union(TinkerSet<? extends  E> s) {
 		return oclStdLibSet.union(s);
 	}
 
 	@Override
-	public TinkerBag<E> union(TinkerBag<E> bag) {
+	public TinkerBag<E> union(TinkerBag<? extends E> bag) {
 		return oclStdLibSet.union(bag);
 	}
 

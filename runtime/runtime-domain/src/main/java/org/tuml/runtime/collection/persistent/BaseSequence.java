@@ -237,7 +237,7 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
 	}
 
 	@Override
-	public TinkerSequence<E> union(TinkerSequence<E> s) {
+	public TinkerSequence<E> union(TinkerSequence<? extends E> s) {
 		maybeLoad();
 		return this.oclStdLibSequence.union(s);
 	}

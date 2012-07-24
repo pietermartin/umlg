@@ -30,7 +30,7 @@ public interface OclStdLibSet<E> extends OclStdLibCollection<E> {
 	 * 		post: bag ->forAll(elem | result->includes(elem))
 	 * </pre>
 	 */
-	TinkerBag<E> union(TinkerBag<E> bag);
+	TinkerBag<E> union(TinkerBag<? extends E> bag);
 
 	/**
 	 * = (s : Set(T)) : Boolean
