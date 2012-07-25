@@ -15,6 +15,7 @@ import org.eclipse.uml2.uml.internal.operations.PropertyOperations;
 import org.opaeum.java.metamodel.OJPathName;
 import org.opaeum.java.metamodel.OJSimpleStatement;
 import org.tuml.javageneration.naming.Namer;
+import org.tuml.javageneration.ocl.util.TumlCollectionKindEnum;
 
 public final class TumlPropertyOperations extends PropertyOperations {
 
@@ -127,27 +128,27 @@ public final class TumlPropertyOperations extends PropertyOperations {
 		OJPathName collectionPathName;
 		if (p.isOrdered() && p.isUnique()) {
 			if (!p.getQualifiers().isEmpty()) {
-				collectionPathName = TinkerGenerationUtil.tinkerQualifiedOrderedSetImpl.getCopy();
+				collectionPathName = TumlCollectionKindEnum.QUALIFIED_ORDERED_SET.getImplementationPathName();
 			} else {
-				collectionPathName = TinkerGenerationUtil.tinkerOrderedSetImpl.getCopy();
+				collectionPathName = TumlCollectionKindEnum.ORDERED_SET.getImplementationPathName();
 			}
 		} else if (p.isOrdered() && !p.isUnique()) {
 			if (!p.getQualifiers().isEmpty()) {
-				collectionPathName = TinkerGenerationUtil.tinkerQualifiedSequenceImpl.getCopy();
+				collectionPathName = TumlCollectionKindEnum.QUALIFIED_SEQUENCE.getImplementationPathName();
 			} else {
-				collectionPathName = TinkerGenerationUtil.tinkerSequenceImpl.getCopy();
+				collectionPathName = TumlCollectionKindEnum.SEQUENCE.getImplementationPathName();
 			}
 		} else if (!p.isOrdered() && !p.isUnique()) {
 			if (!p.getQualifiers().isEmpty()) {
-				collectionPathName = TinkerGenerationUtil.tinkerQualifiedBagImpl.getCopy();
+				collectionPathName = TumlCollectionKindEnum.QUALIFIED_BAG.getImplementationPathName();
 			} else {
-				collectionPathName = TinkerGenerationUtil.tinkerBagImpl.getCopy();
+				collectionPathName = TumlCollectionKindEnum.BAG.getImplementationPathName();
 			}
 		} else if (!p.isOrdered() && p.isUnique()) {
 			if (!p.getQualifiers().isEmpty()) {
-				collectionPathName = TinkerGenerationUtil.tinkerQualifiedSetImpl.getCopy();
+				collectionPathName = TumlCollectionKindEnum.QUALIFIED_SET.getImplementationPathName();
 			} else {
-				collectionPathName = TinkerGenerationUtil.tinkerSetImpl.getCopy();
+				collectionPathName = TumlCollectionKindEnum.SET.getImplementationPathName();
 			}
 		} else {
 			throw new RuntimeException("wtf");

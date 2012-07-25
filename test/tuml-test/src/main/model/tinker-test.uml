@@ -328,6 +328,16 @@
         </packagedElement>
         <packagedElement xmi:type="uml:Class" xmi:id="_Gvo3IO92EeC2XrXxx1atfA" name="AbstractRootFolder" isAbstract="true">
           <generalization xmi:id="_cPqqEO92EeC2XrXxx1atfA" general="_aqqbIO92EeC2XrXxx1atfA"/>
+          <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_owNCsNYWEeGBwu4LWWVlPg" name="getParent" specification="_i_0_gNYWEeGBwu4LWWVlPg">
+            <ownedParameter xmi:id="_owNCsdYWEeGBwu4LWWVlPg" name="return" type="_h5L3UO92EeC2XrXxx1atfA" direction="return">
+              <eAnnotations xmi:id="_owNCstYWEeGBwu4LWWVlPg" source="http://www.topcased.org/author">
+                <details xmi:id="_owNCs9YWEeGBwu4LWWVlPg" key="author" value=""/>
+              </eAnnotations>
+            </ownedParameter>
+            <language>OCL</language>
+            <body>null</body>
+            <body>null</body>
+          </ownedBehavior>
           <ownedOperation xmi:id="_Uy4IYO92EeC2XrXxx1atfA" name="isRoot" isQuery="true" bodyCondition="_WJQsgO92EeC2XrXxx1atfA">
             <ownedRule xmi:id="_WJQsgO92EeC2XrXxx1atfA" name="Constraint1">
               <specification xmi:type="uml:OpaqueExpression" xmi:id="_XFwxAO92EeC2XrXxx1atfA" name="OpaqueExpression1">
@@ -337,6 +347,12 @@
             <ownedParameter xmi:id="_bLVNUO94EeC2XrXxx1atfA" name="return" direction="return">
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
             </ownedParameter>
+          </ownedOperation>
+          <ownedOperation xmi:id="_i_0_gNYWEeGBwu4LWWVlPg" name="getParent" method="_owNCsNYWEeGBwu4LWWVlPg" isQuery="true" bodyCondition="_wAag8NYWEeGBwu4LWWVlPg">
+            <ownedRule xmi:id="_wAag8NYWEeGBwu4LWWVlPg" name="Constraint1">
+              <specification xmi:type="uml:LiteralNull" xmi:id="_yu1PANYWEeGBwu4LWWVlPg"/>
+            </ownedRule>
+            <ownedParameter xmi:id="_kLjLwNYWEeGBwu4LWWVlPg" name="return" type="_h5L3UO92EeC2XrXxx1atfA" direction="return"/>
           </ownedOperation>
         </packagedElement>
         <packagedElement xmi:type="uml:Association" xmi:id="_Mef3YO92EeC2XrXxx1atfA" name="A_&lt;god>_&lt;realRootFolder>" memberEnd="_Mef3Ye92EeC2XrXxx1atfA _MeXUgO92EeC2XrXxx1atfA" navigableOwnedEnd="_Mef3Ye92EeC2XrXxx1atfA">

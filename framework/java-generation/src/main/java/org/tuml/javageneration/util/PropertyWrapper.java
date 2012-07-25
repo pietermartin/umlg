@@ -37,6 +37,7 @@ import org.eclipse.uml2.uml.VisibilityKind;
 import org.opaeum.java.metamodel.OJPathName;
 import org.tuml.javageneration.naming.Namer;
 import org.tuml.javageneration.ocl.TumlOcl2Java;
+import org.tuml.javageneration.ocl.util.TumlCollectionKindEnum;
 
 public class PropertyWrapper extends MultiplicityWrapper implements Property {
 
@@ -129,27 +130,27 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 		OJPathName fieldType;
 		if (isOrdered() && isUnique()) {
 			if (hasQualifiers()) {
-				fieldType = TinkerGenerationUtil.tinkerQualifiedOrderedSet.getCopy();
+				fieldType = TumlCollectionKindEnum.QUALIFIED_ORDERED_SET.getInterfacePathName();
 			} else {
-				fieldType = TinkerGenerationUtil.tinkerOrderedSet.getCopy();
+				fieldType = TumlCollectionKindEnum.ORDERED_SET.getInterfacePathName();
 			}
 		} else if (isOrdered() && !isUnique()) {
 			if (hasQualifiers()) {
-				fieldType = TinkerGenerationUtil.tinkerQualifiedSequence.getCopy();
+				fieldType = TumlCollectionKindEnum.QUALIFIED_SEQUENCE.getInterfacePathName();
 			} else {
-				fieldType = TinkerGenerationUtil.tinkerSequence.getCopy();
+				fieldType = TumlCollectionKindEnum.SEQUENCE.getInterfacePathName();
 			}
 		} else if (!isOrdered() && !isUnique()) {
 			if (hasQualifiers()) {
-				fieldType = TinkerGenerationUtil.tinkerQualifiedBag.getCopy();
+				fieldType = TumlCollectionKindEnum.QUALIFIED_BAG.getInterfacePathName();
 			} else {
-				fieldType = TinkerGenerationUtil.tinkerBag.getCopy();
+				fieldType = TumlCollectionKindEnum.BAG.getInterfacePathName();
 			}
 		} else if (!isOrdered() && isUnique()) {
 			if (hasQualifiers()) {
-				fieldType = TinkerGenerationUtil.tinkerQualifiedSet.getCopy();
+				fieldType = TumlCollectionKindEnum.QUALIFIED_SET.getInterfacePathName();
 			} else {
-				fieldType = TinkerGenerationUtil.tinkerSet.getCopy();
+				fieldType = TumlCollectionKindEnum.SET.getInterfacePathName();
 			}
 		} else {
 			throw new RuntimeException("wtf");
@@ -165,13 +166,13 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 	public OJPathName javaTypePath() {
 		OJPathName fieldType;
 		if (!isOrdered() && isUnique()) {
-			fieldType = TinkerGenerationUtil.tinkerSet.getCopy();
+			fieldType = TumlCollectionKindEnum.SET.getInterfacePathName();
 		} else if (isOrdered() && !isUnique()) {
-			fieldType = TinkerGenerationUtil.tinkerSequence.getCopy();
+			fieldType = TumlCollectionKindEnum.SEQUENCE.getInterfacePathName();
 		} else if (!isOrdered() && !isUnique()) {
-			fieldType = TinkerGenerationUtil.tinkerBag.getCopy();
+			fieldType = TumlCollectionKindEnum.BAG.getInterfacePathName();
 		} else if (isOrdered() && isUnique()) {
-			fieldType = TinkerGenerationUtil.tinkerOrderedSet.getCopy();
+			fieldType = TumlCollectionKindEnum.ORDERED_SET.getInterfacePathName();
 		} else {
 			throw new RuntimeException("wtf");
 		}
@@ -196,13 +197,13 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 	public OJPathName javaClosableIteratorTypePath() {
 		OJPathName fieldType;
 		if (!isOrdered() && isUnique()) {
-			fieldType = TinkerGenerationUtil.tumlSetCloseableIterablePathName.getCopy();
+			fieldType = TumlCollectionKindEnum.SET.getClosableIteratorPathName();
 		} else if (isOrdered() && !isUnique()) {
-			fieldType = TinkerGenerationUtil.tumlSequenceCloseableIterablePathName.getCopy();
+			fieldType = TumlCollectionKindEnum.SEQUENCE.getClosableIteratorPathName();
 		} else if (!isOrdered() && !isUnique()) {
-			fieldType = TinkerGenerationUtil.tumlBagCloseableIterablePathName.getCopy();
+			fieldType = TumlCollectionKindEnum.BAG.getClosableIteratorPathName();
 		} else if (isOrdered() && isUnique()) {
-			fieldType = TinkerGenerationUtil.tumlOrderedSetCloseableIterablePathName.getCopy();
+			fieldType = TumlCollectionKindEnum.ORDERED_SET.getClosableIteratorPathName();
 		} else {
 			throw new RuntimeException("wtf");
 		}

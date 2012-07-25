@@ -24,6 +24,7 @@ import org.eclipse.uml2.uml.ValueSpecification;
 import org.eclipse.uml2.uml.VisibilityKind;
 import org.opaeum.java.metamodel.OJPathName;
 import org.tuml.javageneration.naming.Namer;
+import org.tuml.javageneration.ocl.util.TumlCollectionKindEnum;
 
 public class ParameterWrapper extends MultiplicityWrapper implements Parameter {
 
@@ -37,13 +38,13 @@ public class ParameterWrapper extends MultiplicityWrapper implements Parameter {
 	public OJPathName javaTumlTypePath() {
 		OJPathName fieldType;
 		if (isOrdered() && isUnique()) {
-			fieldType = TinkerGenerationUtil.tinkerOrderedSet.getCopy();
+			fieldType = TumlCollectionKindEnum.ORDERED_SET.getInterfacePathName();
 		} else if (isOrdered() && !isUnique()) {
-			fieldType = TinkerGenerationUtil.tinkerSequence.getCopy();
+			fieldType = TumlCollectionKindEnum.SEQUENCE.getInterfacePathName();
 		} else if (!isOrdered() && !isUnique()) {
-			fieldType = TinkerGenerationUtil.tinkerBag.getCopy();
+			fieldType = TumlCollectionKindEnum.BAG.getInterfacePathName();
 		} else if (!isOrdered() && isUnique()) {
-			fieldType = TinkerGenerationUtil.tinkerSet.getCopy();
+			fieldType = TumlCollectionKindEnum.SET.getInterfacePathName();
 		} else {
 			throw new RuntimeException("wtf");
 		}

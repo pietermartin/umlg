@@ -12,21 +12,30 @@ import org.tuml.javageneration.util.TinkerGenerationUtil;
 
 public enum TumlCollectionKindEnum {
 
-	COLLECTION(TinkerGenerationUtil.tinkerCollection.getCopy(), TinkerGenerationUtil.tumlMemoryCollection.getCopy()), SET(TinkerGenerationUtil.tinkerSet.getCopy(),
-			TinkerGenerationUtil.tumlMemorySet.getCopy()), SEQUENCE(TinkerGenerationUtil.tinkerSequence.getCopy(), TinkerGenerationUtil.tumlMemorySequence.getCopy()), BAG(
-			TinkerGenerationUtil.tinkerBag.getCopy(), TinkerGenerationUtil.tumlMemoryBag.getCopy()), ORDERED_SET(TinkerGenerationUtil.tinkerOrderedSet.getCopy(),
-			TinkerGenerationUtil.tumlMemoryOrderedSet.getCopy());
+	COLLECTION(TinkerGenerationUtil.tinkerCollection.getCopy(), null, TinkerGenerationUtil.tumlMemoryCollection.getCopy(), null), 
+	SET(TinkerGenerationUtil.tinkerSet.getCopy(), TinkerGenerationUtil.tinkerSetImpl.getCopy(), TinkerGenerationUtil.tumlMemorySet.getCopy(), TinkerGenerationUtil.tumlSetCloseableIterablePathName.getCopy()),
+	QUALIFIED_SET(TinkerGenerationUtil.tinkerQualifiedSet.getCopy(), TinkerGenerationUtil.tinkerQualifiedSetImpl.getCopy(), TinkerGenerationUtil.tumlMemorySet.getCopy(), TinkerGenerationUtil.tumlSetCloseableIterablePathName.getCopy()), 
+	SEQUENCE(TinkerGenerationUtil.tinkerSequence.getCopy(), TinkerGenerationUtil.tinkerSequenceImpl.getCopy(), TinkerGenerationUtil.tumlMemorySequence.getCopy(), TinkerGenerationUtil.tumlSequenceCloseableIterablePathName.getCopy()), 
+	QUALIFIED_SEQUENCE(TinkerGenerationUtil.tinkerQualifiedSequence.getCopy(), TinkerGenerationUtil.tinkerQualifiedSequenceImpl.getCopy(), TinkerGenerationUtil.tumlMemorySequence.getCopy(), TinkerGenerationUtil.tumlSequenceCloseableIterablePathName.getCopy()),
+	BAG(TinkerGenerationUtil.tinkerBag.getCopy(), TinkerGenerationUtil.tinkerBagImpl.getCopy(), TinkerGenerationUtil.tumlMemoryBag.getCopy(), TinkerGenerationUtil.tumlBagCloseableIterablePathName.getCopy()), 
+	QUALIFIED_BAG(TinkerGenerationUtil.tinkerQualifiedBag.getCopy(), TinkerGenerationUtil.tinkerQualifiedBagImpl.getCopy(), TinkerGenerationUtil.tumlMemoryBag.getCopy(), TinkerGenerationUtil.tumlBagCloseableIterablePathName.getCopy()), 
+	ORDERED_SET(TinkerGenerationUtil.tinkerOrderedSet.getCopy(), TinkerGenerationUtil.tinkerOrderedSetImpl.getCopy(), TinkerGenerationUtil.tumlMemoryOrderedSet.getCopy(), TinkerGenerationUtil.tumlOrderedSetCloseableIterablePathName.getCopy()),
+	QUALIFIED_ORDERED_SET(TinkerGenerationUtil.tinkerQualifiedOrderedSet.getCopy(), TinkerGenerationUtil.tinkerQualifiedOrderedSetImpl.getCopy(), TinkerGenerationUtil.tumlMemoryOrderedSet.getCopy(), TinkerGenerationUtil.tumlOrderedSetCloseableIterablePathName.getCopy());
 
-	private OJPathName ojPathName;
+	private OJPathName interfacePathName;
+	private OJPathName implPathName;
 	private OJPathName memoryCollection;
+	private OJPathName closableIteratorPathName;
 
-	private TumlCollectionKindEnum(OJPathName ojPathName, OJPathName memoryCollection) {
-		this.ojPathName = ojPathName;
+	private TumlCollectionKindEnum(OJPathName interfacePathName, OJPathName implPathName, OJPathName memoryCollection, OJPathName closableIteratorPathName) {
+		this.interfacePathName = interfacePathName;
+		this.implPathName = implPathName;
 		this.memoryCollection = memoryCollection;
+		this.closableIteratorPathName = closableIteratorPathName;
 	}
 
 	public OJPathName getOjPathName() {
-		return ojPathName;
+		return interfacePathName;
 	}
 
 	public static TumlCollectionKindEnum from(CollectionKind collectionKind) {
@@ -62,8 +71,20 @@ public enum TumlCollectionKindEnum {
 		}
 	}
 
+	public OJPathName getInterfacePathName() {
+		return this.interfacePathName.getCopy();
+	}
+
 	public OJPathName getMemoryCollection() {
-		return memoryCollection;
+		return this.memoryCollection.getCopy();
+	}
+
+	public OJPathName getClosableIteratorPathName() {
+		return this.closableIteratorPathName.getCopy();
+	}
+
+	public OJPathName getImplementationPathName() {
+		return this.implPathName.getCopy();
 	}
 
 }

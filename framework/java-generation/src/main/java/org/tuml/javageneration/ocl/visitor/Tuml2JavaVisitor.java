@@ -432,6 +432,7 @@ public class Tuml2JavaVisitor extends
 			throw new RuntimeException("not implemented");
 		}
 		OJPathName o = TumlCollectionKindEnum.from(cl.getKind()).getMemoryCollection();
+		this.ojClass.addToImports(o);
 		//Can not add a generic parameter here as the information is not available in the collection literal
 		return "new " + o.getLast() + "()";
 	}
