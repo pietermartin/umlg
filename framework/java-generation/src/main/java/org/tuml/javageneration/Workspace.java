@@ -10,6 +10,7 @@ import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
 import org.tuml.framework.JavaModelPrinter;
 import org.tuml.framework.ModelLoader;
 import org.tuml.framework.ModelVisitor;
+import org.tuml.javageneration.audit.visitor.clazz.ClassAuditTransformation;
 import org.tuml.javageneration.visitor.clazz.ClassBuilder;
 import org.tuml.javageneration.visitor.clazz.ClassCreator;
 import org.tuml.javageneration.visitor.clazz.ClassImplementedInterfacePropertyVisitor;
@@ -34,11 +35,18 @@ public class Workspace {
 	private File projectRoot;
 	private File modelFile;
 	private Model model;
+	private boolean audit = false;
 
-	public Workspace(File projectRoot, File modelFile) {
+	public Workspace(File projectRoot, File modelFile, boolean audit) {
 		this.projectRoot = projectRoot;
 		this.modelFile = modelFile;
+		this.audit = audit;
 	}
+
+//	public Workspace(File projectRoot, File modelFile) {
+//		this.projectRoot = projectRoot;
+//		this.modelFile = modelFile;
+//	}
 
 	public void addToClassMap(OJAnnotatedClass ojClass) {
 		this.javaClassMap.put(ojClass.getQualifiedName(), ojClass);
@@ -81,6 +89,9 @@ public class Workspace {
 		ModelVisitor.visitModel(this.model, new QualifierValidator(this));
 		ModelVisitor.visitModel(this.model, new QualifierVisitor(this));
 		ModelVisitor.visitModel(this.model, new OperationImplementorSimple(this));
+		if (this.audit) {
+			ModelVisitor.visitModel(this.model, new ClassAuditTransformation(this));
+		}
 	}
 
 	public Model getModel() {

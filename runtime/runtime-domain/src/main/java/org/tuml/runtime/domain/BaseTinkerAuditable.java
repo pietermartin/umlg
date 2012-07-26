@@ -6,7 +6,7 @@ import java.util.Date;
 import org.tuml.runtime.adaptor.TransactionThreadVar;
 import org.tuml.runtime.util.TinkerFormatter;
 
-public abstract class BaseTinkerAuditable extends BaseTinkerSoftDelete implements TinkerAuditableNode, Serializable{
+public abstract class BaseTinkerAuditable extends BaseTumlAudit implements TinkerAuditableNode, Serializable{
 
 	private static final long serialVersionUID = 3751023772087546585L;
 	

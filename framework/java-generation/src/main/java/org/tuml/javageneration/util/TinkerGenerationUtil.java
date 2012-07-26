@@ -46,7 +46,7 @@ public class TinkerGenerationUtil {
 	public static final OJPathName tinkerCompositionNodePathName = new OJPathName("org.tuml.runtime.domain.CompositionNode");
 	public static final OJPathName compositionNodePathName = new OJPathName("org.tuml.runtime.domain.CompositionNode");
 	public static final OJPathName tinkerIdUtilPathName = new OJPathName("org.tuml.nakeduml.tinker.runtime.TinkerIdUtil");
-	public static final OJPathName BASE_AUDIT_SOFT_DELETE_TINKER = new OJPathName("org.tuml.runtime.domain.BaseTinkerSoftDelete");
+	public static final OJPathName BASE_TUML_AUDIT = new OJPathName("org.tuml.runtime.domain.BaseTumlAudit");
 	public static final OJPathName BASE_BEHAVIORED_CLASSIFIER = new OJPathName("org.tuml.runtime.domain.BaseTinkerBehavioredClassifier");
 	public static final OJPathName BASE_TINKER = new OJPathName("org.tuml.runtime.domain.BaseTuml");
 	public static final String BASE_AUDIT_TINKER = "org.tuml.runtime.domain.BaseTinkerAuditable";

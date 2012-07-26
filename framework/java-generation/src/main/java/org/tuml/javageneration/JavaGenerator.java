@@ -8,8 +8,8 @@ public class JavaGenerator {
 	private static Logger logger = Logger.getLogger(JavaGenerator.class.getPackage().getName());
 	
 	public static void main(String[] args) {
-		if (args.length < 2) {
-			throw new IllegalStateException("2 arguments expected, path to the modeFile and path to the workspace.");
+		if (args.length != 3) {
+			throw new IllegalStateException("3 arguments expected, path to the modeFile and path to the workspace and an audit flag.");
 		}
 		File modelFile = new File(args[0]);
 		File projectRoot = new File(args[1]);
@@ -19,8 +19,9 @@ public class JavaGenerator {
 		if (!projectRoot.exists()) {
 			throw new IllegalStateException(String.format("projectRoot %s does not exist", projectRoot.getAbsolutePath()));
 		}
+		boolean audit = Boolean.parseBoolean(args[2]);
 		logger.info(String.format("Generating code for %s into %s", modelFile.getAbsolutePath(), projectRoot.getAbsolutePath()));
-		Workspace workspace = new Workspace(projectRoot, modelFile);
+		Workspace workspace = new Workspace(projectRoot, modelFile, audit);
 		workspace.generate();
 	}
 	

@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.tuml.runtime.adaptor.GraphDb;
-import org.tuml.runtime.domain.BaseTinkerSoftDelete;
+import org.tuml.runtime.domain.BaseTumlAudit;
 import org.tuml.runtime.domain.CompositionNode;
 import org.tuml.runtime.domain.activity.interf.IActivityEdge;
 import org.tuml.runtime.domain.activity.interf.IActivityNode;
@@ -17,7 +17,7 @@ import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 
-public abstract class AbstractActivity extends BaseTinkerSoftDelete implements CompositionNode {
+public abstract class AbstractActivity extends BaseTumlAudit implements CompositionNode {
 
 	private static final long serialVersionUID = 7647066355373095288L;
 

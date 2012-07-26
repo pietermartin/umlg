@@ -4,16 +4,17 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
 
+import org.tuml.runtime.adaptor.TransactionThreadVar;
 import org.tuml.runtime.util.TinkerFormatter;
 
 import com.tinkerpop.blueprints.Vertex;
 
-public abstract class BaseTinkerSoftDelete extends BaseTuml implements Serializable {
+public abstract class BaseTumlAudit extends BaseTuml implements TinkerAuditableNode, Serializable {
 
 	private static final long serialVersionUID = 3751023772087546585L;
 	protected Vertex auditVertex;
 
-	public BaseTinkerSoftDelete() {
+	public BaseTumlAudit() {
 		super();
 	}
 
@@ -27,6 +28,10 @@ public abstract class BaseTinkerSoftDelete extends BaseTuml implements Serializa
 
 	public void setDeletedOn(Date deletedOn) {
 		this.vertex.setProperty("deletedOn", TinkerFormatter.format(deletedOn));
+		if ( TransactionThreadVar.hasNoAuditEntry(getClass().getName() + getUid()) ) {
+			createAuditVertex(false);
+		}
+		getAuditVertex().setProperty("deletedOn", TinkerFormatter.format(deletedOn));
 	}
 
 	public void defaultCreate() {

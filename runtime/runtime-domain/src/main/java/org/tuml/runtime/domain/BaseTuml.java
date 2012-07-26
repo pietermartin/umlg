@@ -6,7 +6,6 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.tuml.runtime.domain.ocl.OclAny;
 import org.tuml.runtime.domain.ocl.OclState;
 import org.tuml.runtime.util.TinkerFormatter;
 
@@ -87,61 +86,51 @@ public abstract class BaseTuml implements TumlNode, Serializable {
 	@Override
 	public boolean notEquals(Object object) {
 		throw new RuntimeException("Not implemented");
-//		return null;
 	}
 
 	@Override
 	public Boolean oclIsNew() {
 		throw new RuntimeException("Not implemented");
-//		return null;
 	}
 
 	@Override
 	public Boolean oclIsUndefined() {
 		throw new RuntimeException("Not implemented");
-//		return null;
 	}
 
 	@Override
 	public Boolean oclIsInvalid() {
 		throw new RuntimeException("Not implemented");
-//		return null;
 	}
 
 	@Override
 	public <T> T oclAsType(T classifier) {
 		throw new RuntimeException("Not implemented");
-//		return null;
 	}
 
 	@Override
 	public Boolean oclIsTypeOf(Object object) {
 		throw new RuntimeException("Not implemented");
-//		return null;
 	}
 
 	@Override
 	public Boolean oclIsKindOf(Object object) {
 		throw new RuntimeException("Not implemented");
-//		return null;
 	}
 
 	@Override
 	public Boolean oclIsInState(OclState state) {
 		throw new RuntimeException("Not implemented");
-//		return null;
 	}
 
 	@Override
 	public <T  extends Object> Class<T> oclType() {
 		throw new RuntimeException("Not implemented");
-//		return null;
 	}
 
 	@Override
 	public String oclLocale() {
 		throw new RuntimeException("Not implemented");
-//		return null;
 	}
 
 }

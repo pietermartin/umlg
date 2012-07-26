@@ -14,7 +14,7 @@ import org.tuml.runtime.domain.activity.interf.IEvent;
 
 import com.tinkerpop.blueprints.Edge;
 
-public abstract class BaseTinkerBehavioredClassifier extends BaseTinkerSoftDelete implements Serializable, CompositionNode, IBehavioredClassifier {
+public abstract class BaseTinkerBehavioredClassifier extends BaseTumlAudit implements Serializable, CompositionNode, IBehavioredClassifier {
 
 	private static final long serialVersionUID = 228929853082097254L;
 	protected TinkerSequence<IEvent> events;
