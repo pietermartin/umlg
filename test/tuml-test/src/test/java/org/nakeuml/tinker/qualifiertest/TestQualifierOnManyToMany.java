@@ -17,11 +17,11 @@ public class TestQualifierOnManyToMany extends BaseLocalDbTest {
 		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
-		
+
 		Many1 many1_1 = new Many1(true);
 		many1_1.setName("many1_1");
 		many1_1.addToGod(god);
-		
+
 		Many1 many1_2 = new Many1(true);
 		many1_2.setName("many1_1");
 		many1_2.addToGod(god);
@@ -37,7 +37,7 @@ public class TestQualifierOnManyToMany extends BaseLocalDbTest {
 		Many2 many2_1 = new Many2(true);
 		many2_1.setName("many2_1");
 		many2_1.addToGod(god);
-		
+
 		Many2 many2_2 = new Many2(true);
 		many2_2.setName("many2_2");
 		many2_2.addToGod(god);
@@ -73,24 +73,24 @@ public class TestQualifierOnManyToMany extends BaseLocalDbTest {
 		db.stopTransaction(Conclusion.SUCCESS);
 		Assert.assertEquals(9, countVertices());
 		Assert.assertEquals(25, countEdges());
-		
+
 		Many1 m = new Many1(many1_1.getVertex());
 		Assert.assertNotNull(m.getMany2ForQualifier1("many2_1"));
 		Assert.assertNotNull(m.getMany2ForQualifier1("many2_2"));
 		Assert.assertNotNull(m.getMany2ForQualifier1("many2_3"));
 		Assert.assertNotNull(m.getMany2ForQualifier1("many2_4"));
-		
+
 		Many2 m2 = new Many2(many2_1.getVertex());
-		Assert.assertEquals(3, m2.getMany1ForQualifier1("many1_1").size());
-		Assert.assertEquals(3, m2.getMany1ForQualifier1("many1_1").size());
-		Assert.assertEquals(3, m2.getMany1ForQualifier1("many1_1").size());
-		Assert.assertEquals(3, m2.getMany1ForQualifier1("many1_1").size());
-		
-		Assert.assertEquals(1, m2.getMany1ForQualifier1("many1_4").size());
-		Assert.assertEquals(1, m2.getMany1ForQualifier1("many1_4").size());
-		Assert.assertEquals(1, m2.getMany1ForQualifier1("many1_4").size());
-		Assert.assertEquals(1, m2.getMany1ForQualifier1("many1_4").size());
-		
+		Assert.assertNotNull(m2.getMany1ForQualifier1("many1_1"));
+		Assert.assertNotNull(m2.getMany1ForQualifier1("many1_1"));
+		Assert.assertNotNull(m2.getMany1ForQualifier1("many1_1"));
+		Assert.assertNotNull(m2.getMany1ForQualifier1("many1_1"));
+
+		Assert.assertNotNull(m2.getMany1ForQualifier1("many1_4"));
+		Assert.assertNotNull(m2.getMany1ForQualifier1("many1_4"));
+		Assert.assertNotNull(m2.getMany1ForQualifier1("many1_4"));
+		Assert.assertNotNull(m2.getMany1ForQualifier1("many1_4"));
+
 	}
 
 	@Test
@@ -98,11 +98,11 @@ public class TestQualifierOnManyToMany extends BaseLocalDbTest {
 		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
-		
+
 		Many1 many1_1 = new Many1(true);
 		many1_1.setName("many1_1");
 		many1_1.addToGod(god);
-		
+
 		Many1 many1_2 = new Many1(true);
 		many1_2.setName("many1_1");
 		many1_2.addToGod(god);
@@ -118,7 +118,7 @@ public class TestQualifierOnManyToMany extends BaseLocalDbTest {
 		Many2 many2_1 = new Many2(true);
 		many2_1.setName("many2_1");
 		many2_1.addToGod(god);
-		
+
 		Many2 many2_2 = new Many2(true);
 		many2_2.setName("many2_2");
 		many2_2.addToGod(god);
@@ -154,36 +154,23 @@ public class TestQualifierOnManyToMany extends BaseLocalDbTest {
 		db.stopTransaction(Conclusion.SUCCESS);
 		Assert.assertEquals(9, countVertices());
 		Assert.assertEquals(25, countEdges());
-		
+
 		Many1 m = new Many1(many1_1.getVertex());
-		Assert.assertNotNull(m.getMany2ListForListQualifier2("many2_1"));
-		Assert.assertNotNull(m.getMany2ListForListQualifier2("many2_2"));
-		Assert.assertNotNull(m.getMany2ListForListQualifier2("many2_3"));
-		Assert.assertNotNull(m.getMany2ListForListQualifier2("many2_4"));
-		
+		Assert.assertEquals(1, m.getMany2ListForListQualifier2("many2_1").size());
+		Assert.assertEquals(1, m.getMany2ListForListQualifier2("many2_2").size());
+		Assert.assertEquals(1, m.getMany2ListForListQualifier2("many2_3").size());
+		Assert.assertEquals(1, m.getMany2ListForListQualifier2("many2_4").size());
+
 		Many2 m2 = new Many2(many2_1.getVertex());
 		Assert.assertEquals(3, m2.getMany1ListForListQualifier1("many1_1").size());
 		Assert.assertEquals(3, m2.getMany1ListForListQualifier1("many1_1").size());
 		Assert.assertEquals(3, m2.getMany1ListForListQualifier1("many1_1").size());
 		Assert.assertEquals(3, m2.getMany1ListForListQualifier1("many1_1").size());
-		
-		Assert.assertEquals(1, m2.getMany1ListForListQualifier1("many1_4").size());
-		Assert.assertEquals(1, m2.getMany1ListForListQualifier1("many1_4").size());
-		Assert.assertEquals(1, m2.getMany1ListForListQualifier1("many1_4").size());
-		Assert.assertEquals(1, m2.getMany1ListForListQualifier1("many1_4").size());
-		
-		db.startTransaction();
 
-		boolean illegalStateExceptionHappened = false;
-		try {
-			//There is a uniqueu qualifier on many2.name
-			many1_1.addToMany2List(many2_1);
-		} catch (IllegalStateException e) {
-			illegalStateExceptionHappened = true;
-		}
-		
-		Assert.assertTrue(illegalStateExceptionHappened);
-		db.stopTransaction(Conclusion.SUCCESS);
+		Assert.assertEquals(1, m2.getMany1ListForListQualifier1("many1_4").size());
+		Assert.assertEquals(1, m2.getMany1ListForListQualifier1("many1_4").size());
+		Assert.assertEquals(1, m2.getMany1ListForListQualifier1("many1_4").size());
+		Assert.assertEquals(1, m2.getMany1ListForListQualifier1("many1_4").size());
 	}
 
 }

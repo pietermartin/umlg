@@ -180,4 +180,8 @@ public class TumlClassOperations extends ClassOperations {
 		}
 	}
 
+	public static boolean isRoot(Class clazz) {
+		return false;
+	}
+
 }

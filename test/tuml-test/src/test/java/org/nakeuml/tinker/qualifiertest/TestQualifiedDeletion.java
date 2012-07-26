@@ -9,6 +9,7 @@ import org.tuml.concretetest.Universe;
 import org.tuml.qualifiertest.Many1;
 import org.tuml.qualifiertest.Many2;
 import org.tuml.qualifiertest.Nature;
+import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
 import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
@@ -152,12 +153,18 @@ public class TestQualifiedDeletion extends BaseLocalDbTest {
 		nature.addToGod(god);
 		db.stopTransaction(Conclusion.SUCCESS);
 
+		Assert.assertEquals(2, countVertices());
+		Assert.assertEquals(2, countEdges());
+		
 		db.startTransaction();
 		nature = new Nature(true);
 		nature.setName1("name1_1");
 		nature.setName2("xxx");
 		nature.addToGod(god);
 		db.stopTransaction(Conclusion.SUCCESS);
+
+		Assert.assertEquals(3, countVertices());
+		Assert.assertEquals(3, countEdges());
 
 		db.startTransaction();
 		nature = new Nature(true);
@@ -166,12 +173,18 @@ public class TestQualifiedDeletion extends BaseLocalDbTest {
 		nature.addToGod(god);
 		db.stopTransaction(Conclusion.SUCCESS);
 
+		Assert.assertEquals(4, countVertices());
+		Assert.assertEquals(4, countEdges());
+
 		db.startTransaction();
 		nature = new Nature(true);
 		nature.setName1("name1_3");
 		nature.setName2("xxx");
 		nature.addToGod(god);
 		db.stopTransaction(Conclusion.SUCCESS);
+
+		Assert.assertEquals(5, countVertices());
+		Assert.assertEquals(5, countEdges());
 
 		db.startTransaction();
 		nature = new Nature(true);
@@ -180,23 +193,32 @@ public class TestQualifiedDeletion extends BaseLocalDbTest {
 		nature.addToGod(god);
 		db.stopTransaction(Conclusion.SUCCESS);
 
-		//TODO this fails inside a transaction at the moment due to tinkerpop bug on hasNext() method of Neo4jEdgeIterable
-//		db.startTransaction();
+		Assert.assertEquals(6, countVertices());
+		Assert.assertEquals(6, countEdges());
+
+		db.startTransaction();
 		God godTest = new God(god.getVertex());
 		Set<Nature> natureForQualifier2 = godTest.getNatureForQualifier2("xxx");
 		Assert.assertEquals(4, natureForQualifier2.size());
 		natureForQualifier2 = godTest.getNatureForQualifier2("yyy");
 		Assert.assertEquals(1, natureForQualifier2.size());
-		Nature natureForDeletion = godTest.getNatureForQualifier1("name1_0");
-//		db.stopTransaction(Conclusion.SUCCESS);
+		db.stopTransaction(Conclusion.SUCCESS);
 
 		db.startTransaction();
-		natureForDeletion.delete();
-		db.stopTransaction(Conclusion.SUCCESS);
-		
 		God godTest2 = new God(god.getVertex());
-		Assert.assertNull(godTest2.getNatureForQualifier1("name1_0"));
-		Assert.assertEquals(3, godTest2.getNatureForQualifier2("xxx").size());
+		TinkerSet<Nature> natures = godTest2.getNatureForQualifier2("xxx");
+		for (Nature nature2 : natures) {
+			nature2.delete();
+			break;
+		}
+		db.stopTransaction(Conclusion.SUCCESS);
+
+		Assert.assertEquals(5, countVertices());
+		Assert.assertEquals(5, countEdges());
+
+		God godTest3 = new God(god.getVertex());
+		natures = godTest3.getNatureForQualifier2("xxx");
+		Assert.assertEquals(3, natures.size());
 		Assert.assertEquals(1, godTest2.getNatureForQualifier2("yyy").size());
 		
 	}		

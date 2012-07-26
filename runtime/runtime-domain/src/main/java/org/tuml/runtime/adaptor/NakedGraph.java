@@ -17,6 +17,8 @@ import com.tinkerpop.blueprints.TransactionalGraph;
 import com.tinkerpop.blueprints.Vertex;
 
 public interface NakedGraph extends TransactionalGraph, IndexableGraph, Serializable  {
+	void setCheckElementsInTransaction(boolean b);
+	void startTransaction();
 	void incrementTransactionCount();
 	long getTransactionCount();
 	Vertex getRoot();

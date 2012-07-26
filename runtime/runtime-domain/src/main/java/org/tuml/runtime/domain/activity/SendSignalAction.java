@@ -38,7 +38,7 @@ public abstract class SendSignalAction extends InvocationAction implements ISend
 			public Boolean call() throws Exception {
 				//TODO huge todo dude, synchronize this to only start once previous calling thread's transaction commits
 				Thread.sleep(1000);
-				GraphDb.getDb().startTransaction();
+//				GraphDb.getDb().startTransaction();
 				try {
 					resolveTarget().receiveSignal(getSignal());
 					GraphDb.getDb().stopTransaction(Conclusion.SUCCESS);

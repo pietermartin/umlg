@@ -6,58 +6,37 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.tuml.concretetest.God;
 import org.tuml.qualifiertest.Nature;
+import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
 import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 
 public class TestQualifier extends BaseLocalDbTest {
 
-	@Test(expected=IllegalStateException.class)
-	public void testQualifierEnsuresUniqueness() {
-		db.startTransaction();
-		God god = new God(true);
-		god.setName("THEGOD");
-		
-		Nature nature = new Nature(true);
-		nature.setName1("nature1");
-		nature.setName2("nature2");
-		nature.addToGod(god);
-		
-		Nature nature2 = new Nature(true);
-		nature2.setName1("nature1");
-		nature2.setName2("nature2");
-		nature2.addToGod(god);
-		db.stopTransaction(Conclusion.SUCCESS);
-	}
-
 	@Test
 	public void testQualifiedGetter() {
 		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
-		
 		Nature nature = new Nature(true);
 		nature.setName1("nature1");
 		nature.setName2("nature2");
 		nature.addToGod(god);
-		
 		db.stopTransaction(Conclusion.SUCCESS);
 		
 		db.startTransaction();
-		
 		God godTest = new God(god.getVertex());
-		Nature natureForQualifier1 = godTest.getNatureForQualifier1("nature1");
-		Assert.assertNotNull(natureForQualifier1);
-		Assert.assertEquals("nature1", natureForQualifier1.getName1());
-
-		Nature natureForQualifier2 = godTest.getNatureForQualifier1("nature2");
-		Assert.assertNull(natureForQualifier2);
-
+		TinkerSet<Nature> natureForQualifier1 = godTest.getNatureForQualifier2("nature2");
+		Assert.assertTrue(!natureForQualifier1.isEmpty());
+		Assert.assertEquals("nature1", natureForQualifier1.iterator().next().getName1());
+		natureForQualifier1 = godTest.getNatureForQualifier2("nature1");
+		Assert.assertTrue(natureForQualifier1.isEmpty());
 		db.stopTransaction(Conclusion.SUCCESS);
 	}
 	
 	@Test
 	public void testQualifiedWithNull() {
+		db.setCheckElementsInTransaction(true);
 		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
@@ -68,30 +47,12 @@ public class TestQualifier extends BaseLocalDbTest {
 		
 		db.startTransaction();
 		God godTest = new God(god.getVertex());
-		Nature natureForQualifier1 = godTest.getNatureForQualifier1(null);
-		Assert.assertNotNull(natureForQualifier1);
-		Assert.assertEquals(null, natureForQualifier1.getName1());
-		Nature natureForQualifier2 = godTest.getNatureForQualifier1("nature2");
-		Assert.assertNull(natureForQualifier2);
+		god.setName("ss");
+		TinkerSet<Nature> natureForQualifier1 = godTest.getNatureForQualifier2(null);
+		Assert.assertTrue(!natureForQualifier1.isEmpty());
+		Assert.assertNull(natureForQualifier1.iterator().next().getName1());
 		db.stopTransaction(Conclusion.SUCCESS);
 	}
-	
-	@Test(expected=IllegalStateException.class)
-	public void testQualifiedWithNullException() {
-		db.startTransaction();
-		God god = new God(true);
-		god.setName("THEGOD");
-		Nature nature = new Nature(true);
-		nature.addToGod(god);
-		db.stopTransaction(Conclusion.SUCCESS);
-
-		db.startTransaction();
-		nature = new Nature(true);
-		nature.addToGod(god);
-		db.stopTransaction(Conclusion.SUCCESS);
-
-		db.startTransaction();
-	}	
 	
 	@Test
 	public void testQualifiedMany() {

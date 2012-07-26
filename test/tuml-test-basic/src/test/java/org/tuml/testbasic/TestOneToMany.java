@@ -55,5 +55,22 @@ public class TestOneToMany extends BaseLocalDbTest {
 
 		Assert.assertEquals(one1, many21.getOne());
 	}
+	
+	@Test
+	public void testDelete() {
+		db.startTransaction();
+		One one1 = new One(true);
+		Many many11 = new Many(one1);
+		db.stopTransaction(Conclusion.SUCCESS);
+		Assert.assertEquals(2, countVertices());
+		Assert.assertEquals(2, countEdges());
+
+		db.startTransaction();
+		many11.delete();
+		db.stopTransaction(Conclusion.SUCCESS);
+		Assert.assertEquals(1, countVertices());
+		Assert.assertEquals(1, countEdges());
+		
+	}
 
 }

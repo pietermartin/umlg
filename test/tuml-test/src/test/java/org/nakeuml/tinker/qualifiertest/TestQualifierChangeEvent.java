@@ -29,11 +29,11 @@ public class TestQualifierChangeEvent extends BaseLocalDbTest {
 		
 		db.startTransaction();
 		God g = new God(god.getVertex());
-		g.getNatureForQualifier1("nature1").setName1("nameSoGonaFail");
+		g.getNatureForQualifier2("nature2").iterator().next().setName1("nameSoGonaFail");
 		db.stopTransaction(Conclusion.SUCCESS);
 		
 		God gg = new God(god.getVertex());
-		Assert.assertNotNull(gg.getNatureForQualifier1("nameSoGonaFail"));
+		Assert.assertTrue(!gg.getNatureForQualifier2("nameSoGonaFail").isEmpty());
 		
 	}
 

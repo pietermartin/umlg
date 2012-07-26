@@ -2,6 +2,9 @@ package org.tuml.runtime.domain.neo4j;
 
 import java.io.File;
 
+import javax.transaction.NotSupportedException;
+import javax.transaction.SystemException;
+
 import org.tuml.runtime.adaptor.NakedGraph;
 import org.tuml.runtime.adaptor.NakedGraphFactory;
 import org.tuml.runtime.adaptor.TinkerSchemaHelper;
@@ -32,9 +35,7 @@ public class NakedNeo4jGraphFactory implements NakedGraphFactory {
 //		db.setMaxBufferSize(0);
 		TransactionThreadEntityVar.clear();
 		NakedGraph nakedGraph = new NakedNeo4jGraph(db, schemaHelper);
-		nakedGraph.startTransaction();
 		nakedGraph.addRoot();
-		nakedGraph.stopTransaction(Conclusion.SUCCESS);
 		nakedGraph.registerListeners();			
 		return nakedGraph;
 	}

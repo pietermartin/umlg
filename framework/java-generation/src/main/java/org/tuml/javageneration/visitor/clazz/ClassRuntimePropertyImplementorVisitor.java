@@ -156,7 +156,10 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
 		OJAnnotatedOperation isValid = new OJAnnotatedOperation("isValid", new OJPathName("boolean"));
 		TinkerGenerationUtil.addOverrideAnnotation(isValid);
 		isValid.addParam("elementCount", new OJPathName("int"));
-		isValid.getBody().addToStatements("return (getUpper() == -1 || elementCount <= getUpper()) && elementCount >= getLower()");
+		OJIfStatement ifQualified = new OJIfStatement("isQualified()");
+		ifQualified.addToThenPart("return elementCount >= getLower()");
+		ifQualified.addToElsePart("return (getUpper() == -1 || elementCount <= getUpper()) && elementCount >= getLower()");
+		isValid.getBody().addToStatements(ifQualified);
 		ojEnum.addToOperations(isValid);
 
 		for (Property p : TumlClassOperations.getAllOwnedProperties(clazz)) {

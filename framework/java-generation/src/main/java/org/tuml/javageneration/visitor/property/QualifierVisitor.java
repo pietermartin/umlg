@@ -28,7 +28,9 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
 	public void visitBefore(Property p) {
 		PropertyWrapper pWrap = new PropertyWrapper(p);
 		if (pWrap.hasQualifiers()) {
+			//This generates the method that returns the tuml qualifier, i.e. org.tuml.runtime.collection.Qualifier
 			generateQualifierGetter(findOJClass(pWrap), pWrap);
+			//This generates the getter that takes qualifier value as input
 			generateQualifiedGetter(pWrap);
 		}
 	}
@@ -77,6 +79,10 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
 			PropertyWrapper qWrap = new PropertyWrapper(iterator.next());
 			sb.append("context.");
 			sb.append(qWrap.getter());
+			sb.append("() == null ? ");
+			sb.append("\"___NULL___\" : ");
+			sb.append("context.");
+			sb.append(qWrap.getter());
 			sb.append("().toString() ");
 			if (iterator.hasNext()) {
 				sb.append(", ");
@@ -94,12 +100,14 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
 	}
 
 	private void generateQualifiedGetter(PropertyWrapper qualified) {
-		PropertyWrapper qualifiedPropertyWrapper = new PropertyWrapper(qualified);
+//		PropertyWrapper qualifiedPropertyWrapper = new PropertyWrapper(qualified);
+		PropertyWrapper qualifiedPropertyWrapper = qualified;
 		List<PropertyWrapper> qualifiers = qualifiedPropertyWrapper.getQualifiersAsPropertyWrappers();
 		for (PropertyWrapper qualifier : qualifiers) {
 			validateHasCorrespondingDerivedProperty(qualifier);
 		}
 
+		//TODO might be a intermittent bug in getting owning type logic for many to manies
 		Type qualifiedClassifier = qualifiedPropertyWrapper.getOwningType();
 		OJAnnotatedClass ojClass = findOJClass(qualifiedClassifier);
 

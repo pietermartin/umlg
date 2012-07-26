@@ -162,7 +162,7 @@
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_2wJZYhFHEeGoRIAInCGFZA"/>
           </ownedAttribute>
           <ownedAttribute xmi:id="_KrZDoBhKEeGoXdfOp4zUvw" name="foot" type="_HQzzIBhKEeGoXdfOp4zUvw" isOrdered="true" isUnique="false" aggregation="composite" association="_Krd8KhhKEeGoXdfOp4zUvw">
-            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_KrZDoRhKEeGoXdfOp4zUvw" value="*"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_KrZDoRhKEeGoXdfOp4zUvw" value="1"/>
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_KrZDohhKEeGoXdfOp4zUvw"/>
             <qualifier xmi:id="_N600EBhKEeGoXdfOp4zUvw" name="godFootQualifier">
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
@@ -192,7 +192,7 @@
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_5cL-Ahn8EeG2tbT4yXI5_w"/>
           </ownedAttribute>
           <ownedAttribute xmi:id="__Y1SoBqsEeG2HY-TJLNivw" name="nightmare" type="_7zSvUBqsEeG2HY-TJLNivw" isUnique="false" aggregation="composite" association="__Y9OcBqsEeG2HY-TJLNivw">
-            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="__Y1SoRqsEeG2HY-TJLNivw" value="*"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="__Y1SoRqsEeG2HY-TJLNivw" value="1"/>
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="__Y1SohqsEeG2HY-TJLNivw"/>
             <qualifier xmi:id="_sejkgBqtEeG2HY-TJLNivw" name="qualifier1">
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
@@ -521,7 +521,7 @@
         </packagedElement>
         <packagedElement xmi:type="uml:Association" xmi:id="_Cp4DIBndEeGZfswubjlR9Q" name="A_&lt;many1>_&lt;many2>" memberEnd="_Cp4DIRndEeGZfswubjlR9Q _Cp4DJBndEeGZfswubjlR9Q" navigableOwnedEnd="_Cp4DIRndEeGZfswubjlR9Q _Cp4DJBndEeGZfswubjlR9Q">
           <ownedEnd xmi:id="_Cp4DIRndEeGZfswubjlR9Q" name="many1" type="_36iLkBncEeGZfswubjlR9Q" association="_Cp4DIBndEeGZfswubjlR9Q">
-            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Cp4DIhndEeGZfswubjlR9Q" value="1"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Cp4DIhndEeGZfswubjlR9Q" value="*"/>
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Cp4DIxndEeGZfswubjlR9Q"/>
             <qualifier xmi:id="_H-qK8BnnEeGZfswubjlR9Q" name="qualifier1">
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>

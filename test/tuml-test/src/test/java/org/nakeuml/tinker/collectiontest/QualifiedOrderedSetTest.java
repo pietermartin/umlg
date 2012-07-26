@@ -11,7 +11,7 @@ import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 
 public class QualifiedOrderedSetTest extends BaseLocalDbTest {
 
-	@Test(expected=IllegalStateException.class)
+	@Test
 	public void testOrderedSetIsUnique() {
 		db.startTransaction();
 		God god = new God(true);

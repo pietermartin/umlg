@@ -32,7 +32,6 @@ import com.tinkerpop.blueprints.Features;
 import com.tinkerpop.blueprints.Index;
 import com.tinkerpop.blueprints.Parameter;
 import com.tinkerpop.blueprints.Vertex;
-import com.tinkerpop.blueprints.impls.neo4j.Neo4jEdge;
 import com.tinkerpop.blueprints.impls.neo4j.Neo4jGraph;
 import com.tinkerpop.blueprints.impls.neo4j.Neo4jVertex;
 
@@ -61,14 +60,13 @@ public class NakedNeo4jGraph implements NakedGraph {
 
 	@Override
 	public void startTransaction() {
-		neo4jGraph.startTransaction();
 		txCount.set(1);
 	}
 
 	@Override
 	public void stopTransaction(Conclusion conclusion) {
 		neo4jGraph.stopTransaction(conclusion);
-		txCount.remove();
+		// txCount.remove();
 	}
 
 	@Override
@@ -156,7 +154,7 @@ public class NakedNeo4jGraph implements NakedGraph {
 		}
 		return v;
 	}
-	
+
 	@Override
 	public void removeVertex(Vertex vertex) {
 		TransactionThreadEntityVar.remove(vertex.getId().toString());
@@ -176,8 +174,7 @@ public class NakedNeo4jGraph implements NakedGraph {
 		for (Relationship relationship : relationships) {
 			if ((relationship.getStartNode().equals(n1) && relationship.getEndNode().equals(n2))
 					|| (relationship.getStartNode().equals(n2) && relationship.getEndNode().equals(n1))) {
-				
-				
+
 				result.add(neo4jGraph.getEdge(relationship.getId()));
 			}
 		}
@@ -189,7 +186,13 @@ public class NakedNeo4jGraph implements NakedGraph {
 		try {
 			neo4jGraph.getRawGraph().getNodeById(1);
 		} catch (NotFoundException e) {
-			((EmbeddedGraphDatabase) neo4jGraph.getRawGraph()).getNodeManager().setReferenceNodeId(neo4jGraph.getRawGraph().createNode().getId()) ;
+			try {
+				((EmbeddedGraphDatabase) neo4jGraph.getRawGraph()).getTxManager().begin();
+				((EmbeddedGraphDatabase) neo4jGraph.getRawGraph()).getNodeManager().setReferenceNodeId(neo4jGraph.getRawGraph().createNode().getId());
+				((EmbeddedGraphDatabase) neo4jGraph.getRawGraph()).getTxManager().commit();
+			} catch (Exception e1) {
+				throw new RuntimeException(e1);
+			}
 			Vertex root = getRoot();
 			root.setProperty("transactionCount", 1);
 		}
@@ -324,6 +327,11 @@ public class NakedNeo4jGraph implements NakedGraph {
 	public <T extends Element> Index<T> createIndex(String indexName, Class<T> indexClass, Parameter... indexParameters) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void setCheckElementsInTransaction(boolean b) {
+		neo4jGraph.setCheckElementsInTransaction(b);
 	}
 
 }
