@@ -220,4 +220,9 @@ public class OJPathName extends OJPathNameGEN implements Comparable<OJPathName>{
 	public List<OJPathName> getGenerics() {
 		return this.generics;
 	}
+	public OJPathName renameLast(String name) {
+		removeFromNames(getLast());
+		append(name);
+		return this;
+	}
 }

@@ -184,4 +184,9 @@ public class TumlClassOperations extends ClassOperations {
 		return false;
 	}
 
+	public static OJPathName getAuditPathName(Class c) {
+		OJPathName pathName = getPathName(c);
+		return pathName.renameLast(pathName.getLast() + "Audit");
+	}
+
 }
