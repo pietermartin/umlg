@@ -4,16 +4,21 @@ import java.util.List;
 
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Classifier;
+import org.eclipse.uml2.uml.Property;
+import org.opaeum.java.metamodel.OJBlock;
 import org.opaeum.java.metamodel.OJField;
 import org.opaeum.java.metamodel.OJForStatement;
+import org.opaeum.java.metamodel.OJIfStatement;
 import org.opaeum.java.metamodel.OJParameter;
 import org.opaeum.java.metamodel.OJPathName;
 import org.opaeum.java.metamodel.OJTryStatement;
 import org.opaeum.java.metamodel.OJVisibilityKind;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
+import org.opaeum.java.metamodel.generated.OJVisibilityKindGEN;
 import org.tuml.framework.Visitor;
 import org.tuml.javageneration.Workspace;
+import org.tuml.javageneration.util.PropertyWrapper;
 import org.tuml.javageneration.util.TinkerGenerationUtil;
 import org.tuml.javageneration.util.TumlClassOperations;
 import org.tuml.javageneration.visitor.BaseVisitor;
@@ -32,6 +37,7 @@ public class ClassAuditTransformation extends BaseVisitor implements Visitor<Cla
 			addCreateAuditVertex(annotatedClass, clazz);
 			addCreateAuditVertexWithAuditEdge(annotatedClass, clazz);
 			addGetAudits(annotatedClass, clazz);
+			addCopyShallowStateToAuditVertex(annotatedClass, clazz);
 		}
 	}
 
@@ -68,16 +74,18 @@ public class ClassAuditTransformation extends BaseVisitor implements Visitor<Cla
 		createAuditVertexWithAuditEdge.setVisibility(OJVisibilityKind.PRIVATE);
 		ojClass.addToImports(TinkerGenerationUtil.graphDbPathName);
 		createAuditVertexWithAuditEdge.getBody().addToStatements("this.auditVertex = " + TinkerGenerationUtil.graphDbAccess + ".addVertex(\"dribble\")");
-		createAuditVertexWithAuditEdge.getBody().addToStatements("TransactionThreadVar.putAuditVertexFalse(getClass().getName() + getUid(), this.auditVertex)");
+		createAuditVertexWithAuditEdge.getBody().addToStatements(
+				TinkerGenerationUtil.transactionThreadVar.getLast() + ".putAuditVertexFalse(getClass().getName() + getUid(), this.auditVertex)");
 		createAuditVertexWithAuditEdge.getBody().addToStatements(
 				"this.auditVertex.setProperty(\"transactionNo\", " + TinkerGenerationUtil.graphDbAccess + ".getTransactionCount())");
 		createAuditVertexWithAuditEdge.getBody().addToStatements(
 				"Edge auditEdgeToOriginal = " + TinkerGenerationUtil.graphDbAccess + ".addEdge(null, this.vertex, this.auditVertex, \"audit\")");
 		createAuditVertexWithAuditEdge.getBody().addToStatements(
 				"auditEdgeToOriginal.setProperty(\"transactionNo\", " + TinkerGenerationUtil.graphDbAccess + ".getTransactionCount())");
-		createAuditVertexWithAuditEdge.getBody().addToStatements("auditEdgeToOriginal.setProperty(\"outClass\", " + TinkerGenerationUtil.TINKER_GET_CLASSNAME + ")");
-		createAuditVertexWithAuditEdge.getBody().addToStatements("auditEdgeToOriginal.setProperty(\"inClass\", " + TinkerGenerationUtil.TINKER_GET_CLASSNAME + " + \"Audit\")");
-		createAuditVertexWithAuditEdge.getBody().addToStatements("copyAuditShallowState(this, this)");
+		createAuditVertexWithAuditEdge.getBody().addToStatements("auditEdgeToOriginal.setProperty(\"outClass\", this.getClass().getName())");
+		createAuditVertexWithAuditEdge.getBody().addToStatements("auditEdgeToOriginal.setProperty(\"inClass\", this.getClass().getName() + \"Audit\")");
+		createAuditVertexWithAuditEdge.getBody().addToStatements("copyShallowStateToAudit(this, this)");
+		ojClass.addToImports(TinkerGenerationUtil.transactionThreadVar.getCopy());
 		ojClass.addToOperations(createAuditVertexWithAuditEdge);
 	}
 
@@ -116,9 +124,40 @@ public class ClassAuditTransformation extends BaseVisitor implements Visitor<Cla
 		originalClass.addToImports(new OJPathName("java.util.Collections"));
 		originalClass.addToImports(new OJPathName("java.util.Comparator"));
 		originalClass.addToImports(TinkerGenerationUtil.tinkerAuditNodePathName);
+		originalClass.addToImports(TinkerGenerationUtil.tinkerDirection);
 
 		getAudits.getBody().addToStatements("return result");
 		originalClass.addToOperations(getAudits);
+	}
+
+	private void addCopyShallowStateToAuditVertex(OJAnnotatedClass annotatedClass, Class clazz) {
+		OJAnnotatedOperation oper = new OJAnnotatedOperation("copyShallowStateToAudit");
+		oper.setVisibility(OJVisibilityKindGEN.PUBLIC);
+		oper.addParam("from", annotatedClass.getPathName());
+		oper.addParam("to", annotatedClass.getPathName());
+		addCopyStatements(clazz, annotatedClass, oper.getBody(), false, true);
+		addGetOriginalUid(oper);
+		oper.getBody().addToStatements("to.auditVertex.setProperty(\"change\", change.toArray(new String[]{}))");
+		annotatedClass.addToOperations(oper);
+	}
+
+	private void addCopyStatements(Class clazz, OJAnnotatedClass annotatedClass, OJBlock body, boolean b, boolean c) {
+		OJField change = new OJField("change", new OJPathName("java.util.List").addToGenerics("String"));
+		annotatedClass.addToImports(new OJPathName("java.lang.ArrayList"));
+		change.setInitExp("new ArrayList<String>()");
+		annotatedClass.addToImports("java.util.ArrayList");
+		body.addToLocals(change);
+		for (Property p : TumlClassOperations.getOnePrimitiveOrEnumProperties(clazz)) {
+			PropertyWrapper pWrap = new PropertyWrapper(p);
+			OJIfStatement ifNotNull = new OJIfStatement("from." + pWrap.getter() + "() != null");
+			ifNotNull.addToThenPart("to." + pWrap.setter() + "(from." + pWrap.getter() + "())");
+			ifNotNull.addToThenPart("change.add(\"" + pWrap.getName() + "\")");
+			body.addToStatements(ifNotNull);
+		}
+	}
+
+	private void addGetOriginalUid(OJAnnotatedOperation oper) {
+		oper.getBody().addToStatements("to.auditVertex.setProperty(\"" + TinkerGenerationUtil.ORIGINAL_UID + "\" , getUid())");
 	}
 
 }

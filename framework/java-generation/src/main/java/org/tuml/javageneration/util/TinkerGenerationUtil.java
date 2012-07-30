@@ -32,7 +32,7 @@ public class TinkerGenerationUtil {
 	public static final OJPathName tumlTinkerSetClosableIterableImpl = new OJPathName("org.tuml.runtime.collection.persistent.TinkerSetClosableIterableImpl");
 	
 	public static final OJPathName tumlRuntimePropertyPathName = new OJPathName("org.tuml.runtime.collection.TumlRuntimeProperty");
-	public static final OJPathName tinkerConclusionPathName = new OJPathName("com.tinkerpop.blueprints.pgm.TransactionalGraph.Conclusion");
+	public static final OJPathName tinkerConclusionPathName = new OJPathName("com.tinkerpop.blueprints.TransactionalGraph.Conclusion");
 	public static final OJPathName tinkerIndexPathName = new OJPathName("com.tinkerpop.blueprints.Index");
 	public static final OJPathName tinkerCloseableIterablePathName = new OJPathName("com.tinkerpop.blueprints.CloseableIterable");
 	
@@ -45,7 +45,7 @@ public class TinkerGenerationUtil {
 	public static final OJPathName tinkerDirection = new OJPathName("com.tinkerpop.blueprints.Direction");
 	public static final OJPathName tinkerCompositionNodePathName = new OJPathName("org.tuml.runtime.domain.CompositionNode");
 	public static final OJPathName compositionNodePathName = new OJPathName("org.tuml.runtime.domain.CompositionNode");
-	public static final OJPathName tinkerIdUtilPathName = new OJPathName("org.tuml.nakeduml.tinker.runtime.TinkerIdUtil");
+	public static final OJPathName tinkerIdUtilPathName = new OJPathName("org.tuml.runtime.adaptor.TinkerIdUtil");
 	public static final OJPathName BASE_TUML_AUDIT = new OJPathName("org.tuml.runtime.domain.BaseTumlAudit");
 	public static final OJPathName BASE_BEHAVIORED_CLASSIFIER = new OJPathName("org.tuml.runtime.domain.BaseTinkerBehavioredClassifier");
 	public static final OJPathName BASE_TINKER = new OJPathName("org.tuml.runtime.domain.BaseTuml");
@@ -58,7 +58,7 @@ public class TinkerGenerationUtil {
 	public static OJPathName schemaPathName = new OJPathName("com.orientechnologies.orient.core.metadata.schema.OSchema");
 	public static OJPathName vertexPathName = new OJPathName("com.tinkerpop.blueprints.Vertex");
 	public static OJPathName tinkerFormatter = new OJPathName("org.util.TinkerFormatter");
-	public static OJPathName transactionThreadVar = new OJPathName("org.util.TransactionThreadVar");
+	public static OJPathName transactionThreadVar = new OJPathName("org.tuml.runtime.adaptor.TransactionThreadVar");
 	public static OJPathName transactionThreadEntityVar = new OJPathName("org.tuml.runtime.adaptor.TransactionThreadEntityVar");
 	public static OJPathName graphDbPathName = new OJPathName("org.tuml.runtime.adaptor.GraphDb");
 	public static OJPathName tinkerAuditNodePathName = new OJPathName("org.tuml.runtime.domain.TinkerAuditNode");
@@ -92,7 +92,7 @@ public class TinkerGenerationUtil {
 	public static OJPathName storagePathName = new OJPathName("com.orientechnologies.orient.core.storage.OStorage");
 	public static String graphDbAccess = "GraphDb.getDb()";
 	public static OJPathName tinkerSchemaHelperPathName = new OJPathName("org.tuml.tinker.runtime.TinkerSchemaHelper");
-	public static String TINKER_GET_CLASSNAME = "IntrospectionUtil.getOriginalClass(this.getClass()).getName()";
+//	public static String TINKER_GET_CLASSNAME = "IntrospectionUtil.getOriginalClass(this.getClass()).getName()";
 	public static OJPathName introspectionUtilPathName = new OJPathName("org.tuml.runtime.domain.IntrospectionUtil");
 	public static OJPathName TINKER_NODE = new OJPathName("org.tuml.runtime.domain.TumlNode");
 

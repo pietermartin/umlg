@@ -45,7 +45,7 @@ public class ModelVisitor {
 					visitor.visitAfter(element);
 				}
 			} else {
-				Class<?>[] elementInterfaces = visitingTypeClass.getInterfaces();
+				Class<?>[] elementInterfaces = element.getClass().getInterfaces();
 				for (Class<?> elementInterface : elementInterfaces) {
 					if (visitingTypeClass.equals(elementInterface)) {
 						visitor.visitAfter(element);

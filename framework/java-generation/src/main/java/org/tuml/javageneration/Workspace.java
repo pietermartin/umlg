@@ -10,6 +10,7 @@ import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
 import org.tuml.framework.JavaModelPrinter;
 import org.tuml.framework.ModelLoader;
 import org.tuml.framework.ModelVisitor;
+import org.tuml.javageneration.audit.visitor.clazz.AuditClassCreator;
 import org.tuml.javageneration.audit.visitor.clazz.ClassAuditTransformation;
 import org.tuml.javageneration.visitor.clazz.ClassBuilder;
 import org.tuml.javageneration.visitor.clazz.ClassCreator;
@@ -91,6 +92,7 @@ public class Workspace {
 		ModelVisitor.visitModel(this.model, new OperationImplementorSimple(this));
 		if (this.audit) {
 			ModelVisitor.visitModel(this.model, new ClassAuditTransformation(this));
+			ModelVisitor.visitModel(this.model, new AuditClassCreator(this));
 		}
 	}
 

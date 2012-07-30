@@ -35,6 +35,21 @@ public class TumlClassOperations extends ClassOperations {
 	}
 
 	/*
+	 * Returns all properties that are to be persisted on the clazz's vertex.
+	 * i.e. only simple types and enums
+	 */
+	public static Set<Property> getOnePrimitiveOrEnumProperties(org.eclipse.uml2.uml.Class clazz) {
+		Set<Property> result = new HashSet<Property>();
+		for (Property p : clazz.getAttributes()) {
+			PropertyWrapper pWrap = new PropertyWrapper(p);
+			if (!pWrap.isDerived() && pWrap.isOne() && (pWrap.isPrimitive() || pWrap.isEnumeration())) {
+				result.add(p);
+			}
+		}
+		return result;
+	}
+
+	/*
 	 * These include all properties that are on the other end of an
 	 * association
 	 */
@@ -187,6 +202,15 @@ public class TumlClassOperations extends ClassOperations {
 	public static OJPathName getAuditPathName(Class c) {
 		OJPathName pathName = getPathName(c);
 		return pathName.renameLast(pathName.getLast() + "Audit");
+	}
+
+	public static Property getAttribute(Class c , String name) {
+		for (Property p : c.getAllAttributes()) {
+			if (p.getName().equals(name)) {
+				return p;
+			}
+		}
+		return null;
 	}
 
 }
