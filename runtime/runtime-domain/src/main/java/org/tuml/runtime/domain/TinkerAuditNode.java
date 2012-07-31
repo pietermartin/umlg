@@ -10,4 +10,5 @@ public interface TinkerAuditNode extends PersistentObject {
 	String getOriginalUid();
 	Vertex getVertex();
 	boolean isTinkerRoot();
+	String getName();
 }

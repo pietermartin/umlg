@@ -213,4 +213,8 @@ public class TumlClassOperations extends ClassOperations {
 		return null;
 	}
 
+	public static boolean isOnInterface(PropertyWrapper pWrap) {
+		return pWrap.getOwningType() instanceof Interface;
+	}
+
 }

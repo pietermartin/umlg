@@ -7,12 +7,12 @@ import java.util.Set;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.opaeum.test.tinker.BaseLocalDbTest;
-import org.tinker.concretetest.God;
-import org.tinker.concretetest.GodAudit;
-import org.tinker.embeddedtest.REASON;
+import org.tuml.concretetest.God;
+import org.tuml.concretetest.GodAudit;
+import org.tuml.embeddedtest.REASON;
+import org.tuml.runtime.test.BaseLocalDbTest;
 
-import com.tinkerpop.blueprints.pgm.TransactionalGraph.Conclusion;
+import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 
 public class TestEmbedded extends BaseLocalDbTest {
 

@@ -3,13 +3,13 @@ package org.nakeuml.tinker.concretetest;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.opaeum.test.tinker.BaseLocalDbTest;
-import org.tinker.componenttest.SpaceTime;
-import org.tinker.concretetest.Demon;
-import org.tinker.concretetest.God;
-import org.tinker.concretetest.Universe;
+import org.tuml.componenttest.SpaceTime;
+import org.tuml.concretetest.Demon;
+import org.tuml.concretetest.God;
+import org.tuml.concretetest.Universe;
+import org.tuml.runtime.test.BaseLocalDbTest;
 
-import com.tinkerpop.blueprints.pgm.TransactionalGraph.Conclusion;
+import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 
 public class TestNonCompositeOneToManyAudit extends BaseLocalDbTest {
 

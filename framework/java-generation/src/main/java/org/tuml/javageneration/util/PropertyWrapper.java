@@ -121,6 +121,14 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 		return TumlPropertyOperations.getTypePath(this.property);
 	}
 
+	public OJPathName javaAuditBaseTypePath() {
+		if (!isPrimitive() && !isEnumeration()) {
+			return TumlPropertyOperations.getTypePath(this.property).appendToTail("Audit");
+		} else {
+			return TumlPropertyOperations.getTypePath(this.property);
+		}
+	}
+
 	/*
 	 * Attempting set semantics so the path is always a collection Call
 	 * javaBaseTypePath to get the type of set This method return tuml special
@@ -158,6 +166,12 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 		fieldType.addToGenerics(javaBaseTypePath());
 		return fieldType;
 	}
+	
+	public OJPathName javaTumlMemoryTypePath() {
+		OJPathName memoryCollectionPathName = TumlCollectionKindEnum.from(this).getMemoryCollection();
+		memoryCollectionPathName.addToGenerics(TumlClassOperations.getPathName(this.getType()));
+		return memoryCollectionPathName;
+	}
 
 	/*
 	 * Attempting set semantics so the path is always a collection Call
@@ -179,6 +193,24 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 		fieldType.addToGenerics(javaBaseTypePath());
 		return fieldType;
 	}
+	
+	public OJPathName javaAuditTypePath() {
+		OJPathName fieldType;
+		if (!isOrdered() && isUnique()) {
+			fieldType = TumlCollectionKindEnum.SET.getInterfacePathName();
+		} else if (isOrdered() && !isUnique()) {
+			fieldType = TumlCollectionKindEnum.SEQUENCE.getInterfacePathName();
+		} else if (!isOrdered() && !isUnique()) {
+			fieldType = TumlCollectionKindEnum.BAG.getInterfacePathName();
+		} else if (isOrdered() && isUnique()) {
+			fieldType = TumlCollectionKindEnum.ORDERED_SET.getInterfacePathName();
+		} else {
+			throw new RuntimeException("wtf");
+		}
+		fieldType.addToGenerics(javaAuditBaseTypePath());
+		return fieldType;
+	}
+
 	
 	public String emptyCollection() {
 		if (!isOrdered() && isUnique()) {
@@ -214,6 +246,14 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 	public OJPathName javaImplTypePath() {
 		return TumlPropertyOperations.getDefaultTinkerCollection(this.property);
 	}
+
+//	public OJPathName javaAuditImplTypePath() {
+//		OJPathName impl = javaImplTypePath().getCopy();
+//		if (!impl.getGenerics().isEmpty()) {
+//			impl.getGenerics().get(0).appendToTail("Audit");
+//		}
+//		return impl;
+//	}
 
 	/*
 	 * The property might be owned by an interface but the initialisation is for
@@ -1089,4 +1129,5 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 	public boolean isForQualifier() {
 		return !this.property.getOwner().getAppliedStereotypes().isEmpty();
 	}
+
 }

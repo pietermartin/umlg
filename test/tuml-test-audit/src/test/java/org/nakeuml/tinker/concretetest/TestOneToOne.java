@@ -3,12 +3,12 @@ package org.nakeuml.tinker.concretetest;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.opaeum.test.tinker.BaseLocalDbTest;
-import org.tinker.concretetest.God;
-import org.tinker.onetoone.OneOne;
-import org.tinker.onetoone.OneTwo;
+import org.tuml.concretetest.God;
+import org.tuml.onetoone.OneOne;
+import org.tuml.onetoone.OneTwo;
+import org.tuml.runtime.test.BaseLocalDbTest;
 
-import com.tinkerpop.blueprints.pgm.TransactionalGraph.Conclusion;
+import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 
 public class TestOneToOne extends BaseLocalDbTest {
 
@@ -89,7 +89,7 @@ public class TestOneToOne extends BaseLocalDbTest {
 		Assert.assertEquals(18, countEdges());
 
 		db.startTransaction();
-		oneOne1.getOneTwo().markDeleted();
+		oneOne1.getOneTwo().delete();
 		db.stopTransaction(Conclusion.SUCCESS);
 		Assert.assertEquals(12, countVertices());
 		//Remember the edge to the original gets deleted

@@ -164,7 +164,7 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
 		} else {
 			OJSimpleStatement ojSimpleStatement;
 			ojSimpleStatement = new OJSimpleStatement("return new "
-					+ qualifiedPropertyWrapper.javaClosableIteratorTypePath().getCopy().addToGenerics(qualifiedPropertyWrapper.javaBaseTypePath()).getLast());
+					+ qualifiedPropertyWrapper.javaClosableIteratorTypePath().getCopy().getLast());
 			ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + "(iterator, " + qualifiedPropertyWrapper.getTumlRuntimePropertyEnum() + ")");
 			ojClass.addToImports(qualifiedPropertyWrapper.javaClosableIteratorTypePath());
 			ifHasNext.addToThenPart(ojSimpleStatement);

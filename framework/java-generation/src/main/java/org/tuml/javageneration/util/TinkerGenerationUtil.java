@@ -57,12 +57,12 @@ public class TinkerGenerationUtil {
 	public static OJPathName oGraphDatabase = new OJPathName("com.orientechnologies.orient.core.db.graph.OGraphDatabase");
 	public static OJPathName schemaPathName = new OJPathName("com.orientechnologies.orient.core.metadata.schema.OSchema");
 	public static OJPathName vertexPathName = new OJPathName("com.tinkerpop.blueprints.Vertex");
-	public static OJPathName tinkerFormatter = new OJPathName("org.util.TinkerFormatter");
+	public static OJPathName tinkerFormatter = new OJPathName("org.tuml.runtime.util.TinkerFormatter");
 	public static OJPathName transactionThreadVar = new OJPathName("org.tuml.runtime.adaptor.TransactionThreadVar");
 	public static OJPathName transactionThreadEntityVar = new OJPathName("org.tuml.runtime.adaptor.TransactionThreadEntityVar");
 	public static OJPathName graphDbPathName = new OJPathName("org.tuml.runtime.adaptor.GraphDb");
 	public static OJPathName tinkerAuditNodePathName = new OJPathName("org.tuml.runtime.domain.TinkerAuditNode");
-	public static OJPathName tinkerUtil = new OJPathName("org.util.TinkerUtil");
+//	public static OJPathName tinkerUtil = new OJPathName("org.util.TinkerUtil");
 	public static OJPathName tinkerHashSetImpl = new OJPathName("org.util.TinkerSet");
 	public static OJPathName tinkerJsfHashSetImpl = new OJPathName("org.util.TinkerJsfHashSet");
 	public static OJPathName tinkerArrayListImpl = new OJPathName("org.util.TinkerArrayList");

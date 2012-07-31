@@ -45,7 +45,7 @@ public class AuditClassCreator extends BaseVisitor implements Visitor<Class> {
 			OJPathName superTypePathName = superClass.getPathName();
 			String className = superTypePathName.getLast();
 			superTypePathName.replaceTail(className + "Audit");
-			this.auditClass.setSuperclass(superClass.getPathName());
+			this.auditClass.setSuperclass(superTypePathName);
 		}
 		this.auditClass.addToImplementedInterfaces(TinkerGenerationUtil.tinkerAuditNodePathName);
 		addToSource(this.auditClass);

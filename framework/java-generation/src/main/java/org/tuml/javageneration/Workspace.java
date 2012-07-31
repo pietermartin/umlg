@@ -12,6 +12,8 @@ import org.tuml.framework.ModelLoader;
 import org.tuml.framework.ModelVisitor;
 import org.tuml.javageneration.audit.visitor.clazz.AuditClassCreator;
 import org.tuml.javageneration.audit.visitor.clazz.ClassAuditTransformation;
+import org.tuml.javageneration.audit.visitor.interfaze.AuditInterfaceCreator;
+import org.tuml.javageneration.audit.visitor.property.AuditPropertyVisitor;
 import org.tuml.javageneration.visitor.clazz.ClassBuilder;
 import org.tuml.javageneration.visitor.clazz.ClassCreator;
 import org.tuml.javageneration.visitor.clazz.ClassImplementedInterfacePropertyVisitor;
@@ -93,6 +95,8 @@ public class Workspace {
 		if (this.audit) {
 			ModelVisitor.visitModel(this.model, new ClassAuditTransformation(this));
 			ModelVisitor.visitModel(this.model, new AuditClassCreator(this));
+			ModelVisitor.visitModel(this.model, new AuditInterfaceCreator(this));
+			ModelVisitor.visitModel(this.model, new AuditPropertyVisitor(this));
 		}
 	}
 

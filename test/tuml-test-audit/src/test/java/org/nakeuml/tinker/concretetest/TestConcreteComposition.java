@@ -4,12 +4,12 @@ import static org.junit.Assert.assertEquals;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.opaeum.test.tinker.BaseLocalDbTest;
-import org.tinker.collectiontest.Hand;
-import org.tinker.concretetest.God;
-import org.tinker.inheritencetest.Biped;
+import org.tuml.collectiontest.Hand;
+import org.tuml.concretetest.God;
+import org.tuml.inheritencetest.Biped;
+import org.tuml.runtime.test.BaseLocalDbTest;
 
-import com.tinkerpop.blueprints.pgm.TransactionalGraph.Conclusion;
+import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 
 public class TestConcreteComposition extends BaseLocalDbTest {
 
@@ -50,7 +50,7 @@ public class TestConcreteComposition extends BaseLocalDbTest {
 		db.startTransaction();
 		God godTestDeleteHand = new God(god.getVertex());
 		Hand handToDelete = godTestDeleteHand.getHand().get(1);
-		handToDelete.markDeleted();
+		handToDelete.delete();
 		db.stopTransaction(Conclusion.SUCCESS);
 		
 		assertEquals(9, countVertices());
@@ -77,7 +77,7 @@ public class TestConcreteComposition extends BaseLocalDbTest {
 		Assert.assertEquals(4, countVertices());
 		Assert.assertEquals(5, countEdges());
 		db.startTransaction();
-		biped.markDeleted();
+		biped.delete();
 		db.stopTransaction(Conclusion.SUCCESS);
 		Assert.assertEquals(5, countVertices());
 		Assert.assertEquals(6, countEdges());

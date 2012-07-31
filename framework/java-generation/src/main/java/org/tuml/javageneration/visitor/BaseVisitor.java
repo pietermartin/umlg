@@ -32,6 +32,12 @@ public class BaseVisitor {
 		return this.workspace.findOJClass(Namer.qualifiedName(owner));
 	}
 
+	protected OJAnnotatedClass findAuditOJClass(Property p) {
+		OJAnnotatedClass ojClass = findOJClass(p);
+		OJAnnotatedClass findOJClass = this.workspace.findOJClass(ojClass.getQualifiedName() + "Audit");
+		return findOJClass;
+	}
+	
 	// TODO think about interfaces
 	protected OJAnnotatedClass findOJClass(Property p) {
 		PropertyWrapper pWrap;

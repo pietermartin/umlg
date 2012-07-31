@@ -6,6 +6,7 @@ import org.eclipse.ocl.uml.CollectionType;
 import org.eclipse.ocl.uml.OrderedSetType;
 import org.eclipse.ocl.uml.SequenceType;
 import org.eclipse.ocl.uml.SetType;
+import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
 import org.opaeum.java.metamodel.OJPathName;
 import org.tuml.javageneration.util.TinkerGenerationUtil;
@@ -68,6 +69,20 @@ public enum TumlCollectionKindEnum {
 			return COLLECTION;
 		} else {
 			throw new IllegalStateException("Unknown collection literal");
+		}
+	}
+
+	public static TumlCollectionKindEnum from(Property p) {
+		if (p.isOrdered() && p.isUnique()) {
+			return ORDERED_SET;
+		} else if (p.isOrdered() && !p.isUnique()) {
+			return SEQUENCE;
+		} else if (!p.isOrdered() && !p.isUnique()) {
+			return BAG;
+		} else if (!p.isOrdered() && p.isUnique()) {
+			return SET;
+		} else {
+			throw new RuntimeException("wtf");
 		}
 	}
 
