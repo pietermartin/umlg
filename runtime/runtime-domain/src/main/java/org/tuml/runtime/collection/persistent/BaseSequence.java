@@ -123,7 +123,7 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
 					removeEdgefromIndex(v, edge, indexOf);
 					GraphDb.getDb().removeEdge(edge);
 					if (o instanceof TinkerAuditableNode) {
-						createAudit(e, v, true);
+						createAudit(e, true);
 					}
 					break;
 				}
@@ -137,7 +137,7 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
 				Edge edge = v.getEdges(Direction.IN, this.getLabel()).iterator().next();
 				removeEdgefromIndex(v, edge, indexOf);
 				if (o instanceof TinkerAuditableNode) {
-					createAudit(e, v, true);
+					createAudit(e, true);
 				}
 				GraphDb.getDb().removeVertex(v);
 			}

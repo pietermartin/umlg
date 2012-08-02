@@ -1,16 +1,11 @@
 package org.tuml.testbasic;
 
-import java.io.File;
-
-import org.tuml.javageneration.Workspace;
+import org.tuml.javageneration.JavaGenerator;
 
 public class TestBasicGeneration {
 
 	public static void main(String[] args) {
-		File modelFile = new File("src/main/model/tinker-test-basic.uml");
-		File projectRoot = new File("/home/pieter/workspace-tuml/tuml/test/tuml-test-basic");
-		Workspace workspace = new Workspace(projectRoot, modelFile, false);
-		workspace.generate();
+		JavaGenerator.main(new String[] { "src/main/model/tinker-test-basic.uml", "/home/pieter/workspace-tuml/tuml/test/tuml-test-basic", "false" });
 	}
 	
 }

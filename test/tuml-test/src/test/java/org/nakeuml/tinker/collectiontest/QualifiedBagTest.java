@@ -76,6 +76,7 @@ public class QualifiedBagTest extends BaseLocalDbTest {
 
 		db.stopTransaction(Conclusion.SUCCESS);
 		Assert.assertEquals(4, countVertices());
+		//This is failling, need to think about one to many with a bag on the many side
 		Assert.assertEquals(9, countEdges());
 		God godTest = new God(god.getVertex());
 		

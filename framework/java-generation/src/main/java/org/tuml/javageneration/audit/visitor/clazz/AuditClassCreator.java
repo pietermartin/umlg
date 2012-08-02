@@ -79,10 +79,8 @@ public class AuditClassCreator extends BaseVisitor implements Visitor<Class> {
 			implementAbstractGetNextAuditEntries();
 		}
 		addContructorWithVertex(clazz);
-//		implementTinkerNode(this.auditClass);
 		implementTinkerAuditNode();
 		implementIsTinkerRoot(TumlClassOperations.hasCompositeOwner(clazz));
-//		implementEmptyClearCache();
 		this.auditClass.addToImports(TinkerGenerationUtil.tinkerDirection);
 	}
 
@@ -405,10 +403,6 @@ public class AuditClassCreator extends BaseVisitor implements Visitor<Class> {
 		this.auditClass.addToConstructors(constructor);
 	}
 
-//	private void implementTinkerAuditNode(OJAnnotatedInterface intf) {
-//		intf.addToSuperInterfaces(TinkerGenerationUtil.tinkerAuditNodePathName);
-//	}
-
 	private void implementTinkerAuditNode() {
 		this.auditClass.addToImplementedInterfaces(TinkerGenerationUtil.tinkerAuditNodePathName);
 	}
@@ -420,11 +414,5 @@ public class AuditClassCreator extends BaseVisitor implements Visitor<Class> {
 		isRoot.getBody().addToStatements("return " + b);
 		this.auditClass.addToOperations(isRoot);
 	}
-
-//	private void implementEmptyClearCache() {
-//		OJAnnotatedOperation clearCache = new OJAnnotatedOperation("clearCache");
-//		TinkerGenerationUtil.addOverrideAnnotation(clearCache);
-//		this.auditClass.addToOperations(clearCache);
-//	}
 
 }

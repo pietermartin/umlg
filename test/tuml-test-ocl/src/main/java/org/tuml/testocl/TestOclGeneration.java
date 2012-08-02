@@ -1,16 +1,11 @@
 package org.tuml.testocl;
 
-import java.io.File;
-
-import org.tuml.javageneration.Workspace;
+import org.tuml.javageneration.JavaGenerator;
 
 public class TestOclGeneration {
 
 	public static void main(String[] args) {
-		File modelFile = new File("src/main/model/test-ocl.uml");
-		File projectRoot = new File("/home/pieter/workspace-tuml/tuml/test/tuml-test-ocl");
-		Workspace workspace = new Workspace(projectRoot, modelFile, false);
-		workspace.generate();
+		JavaGenerator.main(new String[] { "src/main/model/test-ocl.uml", "/home/pieter/workspace-tuml/tuml/test/tuml-test-ocl", "false" });
 	}
 	
 }

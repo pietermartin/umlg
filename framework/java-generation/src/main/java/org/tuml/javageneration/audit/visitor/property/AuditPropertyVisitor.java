@@ -56,7 +56,7 @@ public class AuditPropertyVisitor extends BaseVisitor implements Visitor<Propert
 				buildGetAuditsForThisMany(pWrap, auditClass);
 				buildPolymorphicGetterForMany(pWrap, getter);
 			} else {
-				if (!pWrap.isPrimitive() && !pWrap.isEnumeration()) {
+				if (!pWrap.isPrimitive() /* && !pWrap.isEnumeration() */) {
 					buildGetAuditForOne(pWrap, auditClass);
 					buildGetAuditForThisOne(pWrap, auditClass);
 					getter.setReturnType(pWrap.javaAuditBaseTypePath());
@@ -257,11 +257,7 @@ public class AuditPropertyVisitor extends BaseVisitor implements Visitor<Propert
 		OJPathName defaultValue = pWrap.javaImplTypePath();
 		owner.addToImports(defaultValue);
 
-		// boolean isComposite = map.getProperty().isComposite();
-		// isComposite = TinkerGenerationUtil.calculateDirection(map,
-		// isComposite);
 		boolean isComposite = pWrap.isControllingSide();
-
 		String associationName = TinkerGenerationUtil.getEdgeName(pWrap);
 		if (isComposite) {
 			getAuditsForThisOne.getBody().addToStatements("Iterable<Edge> iter = this.vertex.getEdges(Direction.OUT, \"" + associationName + "\")");
@@ -280,26 +276,47 @@ public class AuditPropertyVisitor extends BaseVisitor implements Visitor<Propert
 		OJSimpleStatement forClass = new OJSimpleStatement();
 		OJSimpleStatement constructClass = new OJSimpleStatement();
 		if (isComposite) {
-			forClass.setExpression("Class<?> c = Class.forName((String) edge.getProperty(\"inClass\"))");
-			constructClass.setExpression(pWrap.javaAuditBaseTypePath().getLast() + " instance = (" + pWrap.javaAuditBaseTypePath().getLast()
-					+ ")c.getConstructor(Vertex.class).newInstance(edge.getVertex(Direction.IN))");
-			ifNotDeleted.addToThenPart(forClass);
-			ifNotDeleted.addToThenPart(constructClass);
+			if (!pWrap.isEnumeration()) {
+				forClass.setExpression("Class<?> c = Class.forName((String) edge.getProperty(\"inClass\"))");
+				constructClass.setExpression(pWrap.javaAuditBaseTypePath().getLast() + " instance = (" + pWrap.javaAuditBaseTypePath().getLast()
+						+ ")c.getConstructor(Vertex.class).newInstance(edge.getVertex(Direction.IN))");
+			} else {
+				forClass.setExpression("Object value = edge.getVertex(Direction.IN).getProperty(\"value\")");
+				constructClass.setExpression("Class<?> c = Class.forName((String) edge.getProperty(\"inClass\"))");
+			}
 		} else {
-			forClass.setExpression("Class<?> c = Class.forName((String) edge.getProperty(\"outClass\"))");
-			constructClass.setExpression(pWrap.javaAuditBaseTypePath().getLast() + " instance = (" + pWrap.javaAuditBaseTypePath().getLast()
-					+ ")c.getConstructor(Vertex.class).newInstance(edge.getVertex(Direction.OUT))");
-			ifNotDeleted.addToThenPart(forClass);
-			ifNotDeleted.addToThenPart(constructClass);
+			if (!pWrap.isEnumeration()) {
+				forClass.setExpression("Class<?> c = Class.forName((String) edge.getProperty(\"outClass\"))");
+				constructClass.setExpression(pWrap.javaAuditBaseTypePath().getLast() + " instance = (" + pWrap.javaAuditBaseTypePath().getLast()
+						+ ")c.getConstructor(Vertex.class).newInstance(edge.getVertex(Direction.OUT))");
+			} else {
+				forClass.setExpression("Object value = edge.getVertex(Direction.OUT).getProperty(\"value\")");
+				constructClass.setExpression("Class<?> c = Class.forName((String) edge.getProperty(\"outClass\"))");
+			}
 		}
+		ifNotDeleted.addToThenPart(forClass);
+		ifNotDeleted.addToThenPart(constructClass);
 
-		OJIfStatement ifRemovedAuditContains = new OJIfStatement("!removedAudits.containsKey(instance.getOriginalUid())");
-		ifRemovedAuditContains.addToThenPart("return (" + pWrap.javaAuditBaseTypePath().getLast() + ")iterateToLatest(transactionNo, instance)");
-		ifNotDeleted.addToThenPart(ifRemovedAuditContains);
-
+		if (!pWrap.isEnumeration()) {
+			OJIfStatement ifRemovedAuditContains = new OJIfStatement("!removedAudits.containsKey(instance.getOriginalUid())");
+			ifRemovedAuditContains.addToThenPart("return (" + pWrap.javaAuditBaseTypePath().getLast() + ")iterateToLatest(transactionNo, instance)");
+			ifNotDeleted.addToThenPart(ifRemovedAuditContains);
+		} else {
+			ifNotDeleted.addToThenPart(pWrap.javaAuditBaseTypePath().getLast() + " instance = (" + pWrap.javaAuditBaseTypePath().getLast()
+					+ ")Enum.valueOf((Class<? extends Enum>) c, (String) value)");
+			OJIfStatement ifRemovedAuditContains = new OJIfStatement("!removedAudits.containsKey(instance.name())");
+			ifRemovedAuditContains.addToThenPart("return instance");
+			ifNotDeleted.addToThenPart(ifRemovedAuditContains);
+		}
 		ifNotDeleted.addToElsePart(forClass);
 		ifNotDeleted.addToElsePart(constructClass);
-		ifNotDeleted.addToElsePart("removedAudits.put(instance.getOriginalUid(), instance)");
+		if (!pWrap.isEnumeration()) {
+			ifNotDeleted.addToElsePart("removedAudits.put(instance.getOriginalUid(), instance)");
+		} else {
+			ifNotDeleted.addToElsePart(pWrap.javaAuditBaseTypePath().getLast() + " instance = (" + pWrap.javaAuditBaseTypePath().getLast()
+					+ ")Enum.valueOf((Class<? extends Enum>) c, (String) value)");
+			ifNotDeleted.addToElsePart("removedAudits.put(instance.name(), instance)");
+		}
 
 		ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
 		ojTryStatement.getCatchPart().addToStatements("throw new RuntimeException(e)");

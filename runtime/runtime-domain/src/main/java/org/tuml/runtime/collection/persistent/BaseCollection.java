@@ -207,7 +207,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 				Set<Edge> edges = GraphDb.getDb().getEdgesBetween(this.vertex, v, this.getLabel());
 				for (Edge edge : edges) {
 					if (o instanceof TinkerAuditableNode) {
-						createAudit(e, v, true);
+						createAudit(e, true);
 					}
 					GraphDb.getDb().removeEdge(edge);
 					break;
@@ -220,7 +220,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 			} else {
 				v = this.internalVertexMap.get(o);
 				if (this.owner instanceof TinkerAuditableNode) {
-					createAudit(e, v, true);
+					createAudit(e, true);
 				}
 				GraphDb.getDb().removeVertex(v);
 			}
@@ -240,10 +240,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 				// Remove the existing one from the element if it exist
 				Iterator<Edge> iteratorToOne = getEdges(v).iterator();
 				if (iteratorToOne.hasNext()) {
-					GraphDb.getDb().removeEdge(iteratorToOne.next());
-					// Reinitialise the property as is still holds a reference
-					// in memory to the previous 'one'
-					node.initialiseProperty(this.tumlRuntimeProperty);
+					throw new IllegalStateException("Its a 1");
 				}
 			}
 		} else if (e.getClass().isEnum()) {
@@ -265,10 +262,13 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 				edge = createEdge(e, v);
 			}
 			if (createdEdge && this.owner instanceof TinkerAuditableNode) {
-				createAudit(e, v, false);
+				createAudit(e, false);
 			}
 			return edge;
 		} else {
+			if (owner instanceof TinkerAuditableNode) {
+				createPrimitiveAudit(e);
+			}
 			return null;
 		}
 
@@ -294,7 +294,15 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 		return edge;
 	}
 
-	protected void createAudit(E e, Vertex v, boolean deletion) {
+	private void createPrimitiveAudit(E e) {
+		TinkerAuditableNode auditOwner = (TinkerAuditableNode) owner;
+		if (TransactionThreadVar.hasNoAuditEntry(owner.getClass().getName() + owner.getUid())) {
+			auditOwner.createAuditVertex(false);
+		}
+		auditOwner.getAuditVertex().setProperty(getLabel(), e);
+	}
+
+	protected void createAudit(E e, boolean deletion) {
 		if (!(owner instanceof TinkerAuditableNode)) {
 			throw new IllegalStateException("if the collection member is an TinkerAuditableNode, then the owner must be a TinkerAuditableNode!");
 		}
@@ -307,25 +315,43 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 			if (TransactionThreadVar.hasNoAuditEntry(node.getClass().getName() + node.getUid())) {
 				node.createAuditVertex(false);
 			}
-			Edge auditEdge = GraphDb.getDb().addEdge(null, auditOwner.getAuditVertex(), node.getAuditVertex(), this.getLabel());
-			auditEdge.setProperty("outClass", auditOwner.getClass().getName() + "Audit");
-			auditEdge.setProperty("inClass", node.getClass().getName() + "Audit");
+			Edge auditEdge;
+			if (isControllingSide()) {
+				auditEdge = GraphDb.getDb().addEdge(null, auditOwner.getAuditVertex(), node.getAuditVertex(), this.getLabel());
+				auditEdge.setProperty("outClass", auditOwner.getClass().getName() + "Audit");
+				auditEdge.setProperty("inClass", node.getClass().getName() + "Audit");
+			} else {
+				auditEdge = GraphDb.getDb().addEdge(null, node.getAuditVertex(), auditOwner.getAuditVertex(), this.getLabel());
+				auditEdge.setProperty("inClass", auditOwner.getClass().getName() + "Audit");
+				auditEdge.setProperty("outClass", node.getClass().getName() + "Audit");
+			}
 			if (deletion) {
 				auditEdge.setProperty("deletedOn", TinkerFormatter.format(new Date()));
 			}
 		} else if (e.getClass().isEnum()) {
-
+			Vertex v = GraphDb.getDb().addVertex(null);
+			v.setProperty("value", ((Enum<?>) e).name());
+			Edge auditEdge = GraphDb.getDb().addEdge(null, auditOwner.getAuditVertex(), v, this.getLabel());
+			auditEdge.setProperty("outClass", auditOwner.getClass().getName() + "Audit");
+			auditEdge.setProperty("inClass", e.getClass().getName());
 		} else {
 			if (TransactionThreadVar.hasNoAuditEntry(owner.getClass().getName() + e.getClass().getName() + e.toString())) {
 				Vertex auditVertex = GraphDb.getDb().addVertex(null);
 				auditVertex.setProperty("value", e);
 				TransactionThreadVar.putAuditVertexFalse(owner.getClass().getName() + e.getClass().getName() + e.toString(), auditVertex);
 				auditVertex.setProperty("transactionNo", GraphDb.getDb().getTransactionCount());
-				Edge auditEdge = GraphDb.getDb().addEdge(null, auditOwner.getAuditVertex(), auditVertex, this.getLabel());
-				auditEdge.setProperty("transactionNo", GraphDb.getDb().getTransactionCount());
-				auditEdge.setProperty("outClass", this.parentClass.getName());
-				auditEdge.setProperty("inClass", e.getClass().getName() + "Audit");
+				Edge auditEdge;
+				if (isControllingSide()) {
+					auditEdge = GraphDb.getDb().addEdge(null, auditOwner.getAuditVertex(), auditVertex, this.getLabel());
+					auditEdge.setProperty("outClass", this.parentClass.getName());
+					auditEdge.setProperty("inClass", e.getClass().getName() + "Audit");
+				} else {
+					auditEdge = GraphDb.getDb().addEdge(null, auditVertex, auditOwner.getAuditVertex(), this.getLabel());
+					auditEdge.setProperty("inClass", this.parentClass.getName());
+					auditEdge.setProperty("outClass", e.getClass().getName() + "Audit");
+				}
 				if (deletion) {
+					auditEdge.setProperty("transactionNo", GraphDb.getDb().getTransactionCount());
 					auditEdge.setProperty("deletedOn", TinkerFormatter.format(new Date()));
 				}
 			}
@@ -599,7 +625,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 		maybeLoad();
 		return this.oclStdLibCollection.equals(c);
 	}
-	
+
 	@Override
 	public boolean notEquals(TinkerCollection<E> c) {
 		maybeLoad();
@@ -641,7 +667,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 		maybeLoad();
 		return this.oclStdLibCollection.iterate(v);
 	}
-	
+
 	@Override
 	public boolean equals(Object object) {
 		maybeLoad();
@@ -697,7 +723,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 	}
 
 	@Override
-	public <T  extends Object> Class<T> oclType() {
+	public <T extends Object> Class<T> oclType() {
 		maybeLoad();
 		return this.oclStdLibCollection.oclType();
 	}
@@ -791,5 +817,5 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 		maybeLoad();
 		return this.oclStdLibCollection.collectNested(e);
 	}
-	
+
 }

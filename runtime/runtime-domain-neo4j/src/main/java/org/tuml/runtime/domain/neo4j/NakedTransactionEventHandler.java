@@ -28,7 +28,7 @@ public class NakedTransactionEventHandler<T> implements TransactionEventHandler<
 
 	@Override
 	public T beforeCommit(TransactionData data) throws Exception {
-		if (!isEmpty(data)) {
+		if (!isEmpty(data) && GraphDb.getDb()!=null) {
 			Set<ConstraintViolation<TumlNode>> constraintViolations = new HashSet<ConstraintViolation<TumlNode>>();
 			TransactionThreadVar.clear();
 			GraphDb.incrementTransactionCount();

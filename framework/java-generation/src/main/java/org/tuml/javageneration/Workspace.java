@@ -19,6 +19,7 @@ import org.tuml.javageneration.visitor.clazz.ClassCreator;
 import org.tuml.javageneration.visitor.clazz.ClassImplementedInterfacePropertyVisitor;
 import org.tuml.javageneration.visitor.clazz.ClassRuntimePropertyImplementorVisitor;
 import org.tuml.javageneration.visitor.clazz.CompositionVisitor;
+import org.tuml.javageneration.visitor.clazz.InterfaceRuntimePropertyImplementorVisitor;
 import org.tuml.javageneration.visitor.enumeration.EnumerationVisitor;
 import org.tuml.javageneration.visitor.interfaze.InterfaceVisitor;
 import org.tuml.javageneration.visitor.operation.OperationImplementorSimple;
@@ -81,6 +82,7 @@ public class Workspace {
 		ModelVisitor.visitModel(this.model, new ClassCreator(this));
 		ModelVisitor.visitModel(this.model, new ClassBuilder(this));
 		ModelVisitor.visitModel(this.model, new ClassRuntimePropertyImplementorVisitor(this));
+		ModelVisitor.visitModel(this.model, new InterfaceRuntimePropertyImplementorVisitor(this));
 		ModelVisitor.visitModel(this.model, new EnumerationVisitor(this));
 		ModelVisitor.visitModel(this.model, new CompositionVisitor(this));
 		ModelVisitor.visitModel(this.model, new CompositionProperyVisitor(this));

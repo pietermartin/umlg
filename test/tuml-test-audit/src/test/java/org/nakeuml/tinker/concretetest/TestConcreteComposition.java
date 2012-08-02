@@ -44,7 +44,7 @@ public class TestConcreteComposition extends BaseLocalDbTest {
 		Assert.assertEquals(2, godTest.getAudits().get(2).getHand().size());
 
 		assertEquals(8, countVertices());
-		//To previous edges are created whilst traversing audits
+		//Two previous edges are created whilst traversing audits
 		assertEquals(12, countEdges());
 
 		db.startTransaction();

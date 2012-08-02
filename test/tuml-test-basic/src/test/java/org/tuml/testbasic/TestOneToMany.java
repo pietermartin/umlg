@@ -42,7 +42,7 @@ public class TestOneToMany extends BaseLocalDbTest {
 
 		db.startTransaction();
 		// This is to ensure the collection is loaded, to test that it gets
-		// cleared again to ensure the correct one get laded on the next call
+		// cleared again to ensure the correct one get loaded on the next call
 		many21.getOne();
 		one1.addToMany(many21);
 		db.stopTransaction(Conclusion.SUCCESS);

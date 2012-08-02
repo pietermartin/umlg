@@ -48,7 +48,7 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
 			constructor.getBody().addToStatements("initialiseProperties()");
 			constructor.getBody().addToStatements(ClassBuilder.INIT_VARIABLES + "()");
 			constructor.getBody().addToStatements("createComponents()");
-			
+
 			PropertyWrapper pWrap = new PropertyWrapper(TumlClassOperations.getOtherEndToComposite(clazz));
 			constructor.getBody().addToStatements(pWrap.adder() + "(compositeOwner)");
 			constructor.getBody().addToStatements("TransactionThreadEntityVar.setNewEntity(this)");
@@ -67,14 +67,16 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
 		if (TumlClassOperations.hasCompositeOwner(clazz)) {
 			getOwningObject.getBody().addToStatements("return " + new PropertyWrapper(TumlClassOperations.getOtherEndToComposite(clazz)).getter() + "()");
 		} else {
-			getOwningObject.getBody().addToStatements("return null"); 
+			getOwningObject.getBody().addToStatements("return null");
 		}
 		annotatedClass.addToOperations(getOwningObject);
 	}
 
 	private void addEdgeToRoot(OJAnnotatedClass annotatedClass, Class clazz) {
 		OJConstructor constructor = annotatedClass.findConstructor(new OJPathName("java.lang.Boolean"));
-		constructor.getBody().addToStatements(TinkerGenerationUtil.edgePathName.getLast() + " edge = " + TinkerGenerationUtil.graphDbAccess + ".addEdge(null, " + TinkerGenerationUtil.graphDbAccess + ".getRoot(), this.vertex, \"root\")");
+		constructor.getBody().addToStatements(
+				TinkerGenerationUtil.edgePathName.getLast() + " edge = " + TinkerGenerationUtil.graphDbAccess + ".addEdge(null, " + TinkerGenerationUtil.graphDbAccess
+						+ ".getRoot(), this.vertex, \"root\")");
 		constructor.getBody().addToStatements("edge.setProperty(\"inClass\", this.getClass().getName())");
 		annotatedClass.addToImports(TinkerGenerationUtil.edgePathName.getCopy());
 		annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName.getCopy());
@@ -94,8 +96,17 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
 				delete.getBody().addToStatements(ifChildToDeleteNotNull);
 			}
 		}
-		delete.getBody().addToStatements(TinkerGenerationUtil.graphDbAccess + ".removeVertex(this.vertex)");
-		annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName.getCopy());
+
+		for (Property p : TumlClassOperations.getPropertiesToClearOnDeletion(clazz)) {
+			PropertyWrapper pWrap = new PropertyWrapper(p);
+			delete.getBody().addToStatements("this." + pWrap.fieldname() + ".clear()");
+		}
+		if (clazz.getGenerals().isEmpty()) {
+			delete.getBody().addToStatements(TinkerGenerationUtil.graphDbAccess + ".removeVertex(this.vertex)");
+			annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName.getCopy());
+		} else {
+			delete.getBody().addToStatements("super.delete()");
+		}
 	}
 
 }

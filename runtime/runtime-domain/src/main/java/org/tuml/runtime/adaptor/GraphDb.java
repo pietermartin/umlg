@@ -24,7 +24,6 @@ public class GraphDb {
 		NakedGraph nakedGraph = dbVar.get();
 		if (nakedGraph==null) {
 			nakedGraph = staticdb;
-//			nakedGraph.setMaxBufferSize(0);
 			setDb(nakedGraph);
 		}
 		return nakedGraph;

@@ -34,6 +34,18 @@ public class TumlClassOperations extends ClassOperations {
 		return result;
 	}
 
+	public static Set<Property> getPropertiesToClearOnDeletion(org.eclipse.uml2.uml.Class clazz) {
+		Set<Property> result = new HashSet<Property>();
+		Set<Property> ownedProperties = getAllOwnedProperties(clazz);
+		for (Property p : ownedProperties) {
+			PropertyWrapper pWrap = new PropertyWrapper(p);
+			if (!pWrap.isDerived() && !pWrap.isComposite() && !pWrap.isPrimitive() && !pWrap.isEnumeration()) {
+				result.add(p);
+			}
+		}
+		return result;
+	}
+
 	/*
 	 * Returns all properties that are to be persisted on the clazz's vertex.
 	 * i.e. only simple types and enums
@@ -67,6 +79,7 @@ public class TumlClassOperations extends ClassOperations {
 		result.addAll(getPropertiesOnRealizedInterfaces(clazz));
 		return result;
 	}
+	
 	
 	public static Set<Property> getPropertiesOnRealizedInterfaces(org.eclipse.uml2.uml.Class clazz) {
 		Set<Property> result = new HashSet<Property>();

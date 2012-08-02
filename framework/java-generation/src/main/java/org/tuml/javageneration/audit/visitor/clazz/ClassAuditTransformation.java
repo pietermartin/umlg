@@ -39,6 +39,7 @@ public class ClassAuditTransformation extends BaseVisitor implements Visitor<Cla
 			addGetAudits(annotatedClass, clazz);
 			addCopyShallowStateToAuditVertex(annotatedClass, clazz);
 		}
+		addAddPreviousOnDeletion(clazz, annotatedClass);
 	}
 
 	@Override
@@ -93,16 +94,16 @@ public class ClassAuditTransformation extends BaseVisitor implements Visitor<Cla
 		OJAnnotatedOperation getAudits = new OJAnnotatedOperation("getAudits");
 		OJField result = new OJField();
 		result.setName("result");
-		OJPathName resultPathName = new OJPathName("java.util.List");
+		OJPathName resultPathName = new OJPathName("java.util.LinkedList");
 		OJPathName auditPath = TumlClassOperations.getAuditPathName(c);
 		resultPathName.addToElementTypes(auditPath);
 		getAudits.setReturnType(resultPathName);
 		result.setType(resultPathName);
-		result.setInitExp("new ArrayList<" + auditPath.getLast() + ">()");
+		result.setInitExp("new LinkedList<" + auditPath.getLast() + ">()");
 		getAudits.getBody().addToLocals(result);
 
 		OJForStatement forStatement = new OJForStatement("edge", TinkerGenerationUtil.edgePathName, "this.vertex.getEdges(" + TinkerGenerationUtil.tinkerDirection.getLast()
-				+ ".IN, \"audit\")");
+				+ ".OUT, \"audit\")");
 		OJTryStatement ojTryStatement = new OJTryStatement();
 		ojTryStatement.getTryPart().addToStatements("Class<?> c = Class.forName((String) edge.getProperty(\"inClass\"))");
 		ojTryStatement.getTryPart().addToStatements(
@@ -158,6 +159,13 @@ public class ClassAuditTransformation extends BaseVisitor implements Visitor<Cla
 
 	private void addGetOriginalUid(OJAnnotatedOperation oper) {
 		oper.getBody().addToStatements("to.auditVertex.setProperty(\"" + TinkerGenerationUtil.ORIGINAL_UID + "\" , getUid())");
+	}
+
+	private void addAddPreviousOnDeletion(Class clazz, OJAnnotatedClass annotatedClass) {
+		if (clazz.getGenerals().isEmpty()) {
+			OJAnnotatedOperation delete = annotatedClass.findOperation("delete");
+			delete.getBody().addToStatements(delete.getBody().getStatements().size() - 1, "getAudits().getLast().createEdgeToPreviousAuditInternal()");
+		}
 	}
 
 }

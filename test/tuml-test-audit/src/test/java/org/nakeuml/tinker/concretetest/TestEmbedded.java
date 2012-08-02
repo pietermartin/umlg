@@ -23,8 +23,9 @@ public class TestEmbedded extends BaseLocalDbTest {
 		god.setName("THEGOD");
 		god.setReason(REASON.GOOD);
 		db.stopTransaction(Conclusion.SUCCESS);
-		assertEquals(2, countVertices());
-		assertEquals(2, countEdges());
+		assertEquals(4, countVertices());
+		//No edge created to original for enums
+		assertEquals(4, countEdges());
 		God godTest = new God(god.getVertex());
 		Assert.assertEquals(1, godTest.getAudits().size());
 		GodAudit auditGod = godTest.getAudits().get(0);

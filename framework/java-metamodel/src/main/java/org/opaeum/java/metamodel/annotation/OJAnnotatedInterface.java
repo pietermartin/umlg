@@ -35,6 +35,8 @@ public class OJAnnotatedInterface extends OJAnnotatedClass {
 		classInfo.append(" {\n");
 		classInfo.append(JavaStringHelpers.indent(operations(), 1));
 		classInfo.append("\n");
+		classInfo.append(JavaStringHelpers.indent(innerEnums(), 1));
+		classInfo.append("\n");
 		classInfo.append("}");
 		return classInfo.toString();
 	}

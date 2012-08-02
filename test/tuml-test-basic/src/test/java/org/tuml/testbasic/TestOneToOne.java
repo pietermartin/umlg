@@ -46,6 +46,7 @@ public class TestOneToOne extends BaseLocalDbTest {
 	public void testOneToOneCheckInverseSides() {
 		db.startTransaction();
 		OneOne oneOne1 = new OneOne(true);
+		oneOne1.setName("asd");
 		OneTwo oneTwo1 = new OneTwo(true);
 		OneOne oneOne2 = new OneOne(true);
 		OneTwo oneTwo2 = new OneTwo(true);
@@ -85,6 +86,5 @@ public class TestOneToOne extends BaseLocalDbTest {
 		OneTwo oneTwo1Test = new OneTwo(oneTwo1.getVertex());
 		Assert.assertNull(oneTwo1Test.getOneOne());
 	}	
-
 
 }
