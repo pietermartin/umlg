@@ -2,5 +2,3 @@
 /target
 /.classpath
 /.project
-/src/main/generated-java/*
-/src/main/generated-resources/*
