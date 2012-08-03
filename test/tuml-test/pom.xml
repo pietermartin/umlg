@@ -55,8 +55,9 @@
 						<configuration>
 							<mainClass>org.tuml.javageneration.JavaGenerator</mainClass>
 							<arguments>
-								<argument>src/main/model/tinker-test.uml</argument>
-								<argument>./</argument>
+								<argument>test/tuml-test/src/main/model/tinker-test.uml</argument>
+								<argument>test/tuml-test/</argument>
+								<argument>false</argument>
 							</arguments>
 						</configuration>
 					</execution>

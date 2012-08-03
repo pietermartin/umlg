@@ -58,8 +58,9 @@
 						<configuration>
 							<mainClass>org.tuml.javageneration.JavaGenerator</mainClass>
 							<arguments>
-								<argument>src/main/model/test-ocl.uml</argument>
-								<argument>./</argument>
+								<argument>test/tuml-test-ocl/src/main/model/test-ocl.uml</argument>
+								<argument>test/tuml-test-ocl/</argument>
+								<argument>false</argument>
 							</arguments>
 						</configuration>
 					</execution>
