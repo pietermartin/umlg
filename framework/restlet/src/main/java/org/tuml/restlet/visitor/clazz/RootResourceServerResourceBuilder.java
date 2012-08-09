@@ -19,29 +19,33 @@ import org.tuml.javageneration.util.TinkerGenerationUtil;
 import org.tuml.javageneration.util.TumlClassOperations;
 import org.tuml.restlet.util.TumlRestletGenerationUtil;
 
-public class EntityServerResourceBuilder extends BaseServerResourceBuilder implements Visitor<Class> {
+public class RootResourceServerResourceBuilder extends BaseServerResourceBuilder implements Visitor<Class> {
 
-	public EntityServerResourceBuilder(Workspace workspace) {
+	public RootResourceServerResourceBuilder(Workspace workspace) {
 		super(workspace);
 	}
 
 	@Override
 	public void visitBefore(Class clazz) {
-		if (!clazz.isAbstract()) {
+		if (!clazz.isAbstract() && !TumlClassOperations.hasCompositeOwner(clazz)) {
+			
 			OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(TumlClassOperations.className(clazz) + "ServerResource");
 			OJPackage ojPackage = new OJPackage(Namer.name(clazz.getNearestPackage()) + ".restlet");
 			annotatedInf.setMyPackage(ojPackage);
 			addToSource(annotatedInf);
-			OJAnnotatedClass annotatedClass = new OJAnnotatedClass(TumlClassOperations.className(clazz) + "ServerResourceImpl");
+			
+			OJAnnotatedClass annotatedClass = new OJAnnotatedClass(TumlClassOperations.className(clazz) + "sServerResourceImpl");
 			annotatedClass.setSuperclass(TumlRestletGenerationUtil.ServerResource);
-			annotatedClass.addToImplementedInterfaces(annotatedInf.getPathName());
 			annotatedClass.setMyPackage(ojPackage);
+			annotatedClass.addToImplementedInterfaces(annotatedInf.getPathName());
 			annotatedClass.setVisibility(TumlClassOperations.getVisibility(clazz.getVisibility()));
 			addToSource(annotatedClass);
+			
 			addPrivateIdVariable(clazz, annotatedClass);
 			addDefaultConstructor(annotatedClass);
-			addGetRepresentation(clazz, annotatedInf, annotatedClass);
+			addGetRootObjectRepresentation(clazz, annotatedInf, annotatedClass);
 			addToRouterEnum(clazz, annotatedClass);
+			
 		}
 	}
 
@@ -49,8 +53,7 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
 	public void visitAfter(Class clazz) {
 	}
 	
-	private void addGetRepresentation(Class clazz, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass) {
-		
+	private void addGetRootObjectRepresentation(Class clazz, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass) {
 		OJAnnotatedOperation getInf = new OJAnnotatedOperation("get", TumlRestletGenerationUtil.Representation);
 		annotatedInf.addToOperations(getInf);
 		getInf.addAnnotationIfNew(new OJAnnotationValue(TumlRestletGenerationUtil.Get, "json"));
@@ -59,16 +62,17 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
 		get.addToThrows(TumlRestletGenerationUtil.ResourceException);
 		annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
 		TinkerGenerationUtil.addOverrideAnnotation(get);
-		get.getBody().addToStatements(
-				"this." + getIdFieldName(clazz) + "= Integer.parseInt((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"));");
-		get.getBody().addToStatements(
-				TumlClassOperations.className(clazz) + " c = new " + TumlClassOperations.className(clazz) + "(GraphDb.getDb().getVertex(this." + getIdFieldName(clazz)
-						+ "))");
-		annotatedClass.addToImports(TumlClassOperations.getPathName(clazz));
-		
-		get.getBody().addToStatements("StringBuilder json = new StringBuilder()");
+
+		OJField json = new OJField("json", new OJPathName("java.lang.StringBuilder"));
+		json.setInitExp("new StringBuilder()");
+		get.getBody().addToLocals(json);
+		OJField resource = new OJField("resource", new OJPathName("java.util.List").addToGenerics(TumlClassOperations.getPathName(clazz)));
+		resource.setInitExp("Root.INSTANCE.get" + TumlClassOperations.className(clazz) + "()");
+		get.getBody().addToLocals(resource);
+		annotatedClass.addToImports("org.tuml.root.Root");
 		get.getBody().addToStatements("json.append(\"[\")");
-		get.getBody().addToStatements("json.append("  + "c.toJson())");
+		get.getBody().addToStatements("json.append(ToJsonUtil.toJson(resource))");
+		annotatedClass.addToImports(TinkerGenerationUtil.ToJsonUtil);
 		
 		get.getBody().addToStatements("json.append(\",\")");
 		get.getBody().addToStatements("json.append(\" {\\\"meta\\\" : \")");
@@ -76,7 +80,7 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
 		annotatedClass.addToImports(TumlClassOperations.getPathName(clazz).append(TumlClassOperations.propertyEnumName(clazz)));
 		get.getBody().addToStatements("json.append(\"}]\")");
 		get.getBody().addToStatements("return new " + TumlRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
-		
+
 		annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
 		annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);
 		annotatedClass.addToOperations(get);
@@ -84,11 +88,11 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
 	
 	private void addToRouterEnum(Class clazz, OJAnnotatedClass annotatedClass) {
 		OJEnum routerEnum = (OJEnum) this.workspace.findOJClass("restlet.RestletRouterEnum");
-		OJEnumLiteral ojLiteral = new OJEnumLiteral(TumlClassOperations.className(clazz).toUpperCase());
+		OJEnumLiteral ojLiteral = new OJEnumLiteral(TumlClassOperations.className(clazz).toUpperCase() + "S");
 
 		OJField uri = new OJField();
 		uri.setType(new OJPathName("String"));
-		uri.setInitExp("\"/" + TumlClassOperations.className(clazz).toLowerCase() + "s/{" + TumlClassOperations.className(clazz).toLowerCase() + "Id}\"");
+		uri.setInitExp("\"/" + TumlClassOperations.className(clazz).toLowerCase() + "s\"");
 		ojLiteral.addToAttributeValues(uri);
 
 		OJField serverResourceClassField = new OJField();

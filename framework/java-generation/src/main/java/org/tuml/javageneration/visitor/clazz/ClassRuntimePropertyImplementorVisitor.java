@@ -178,7 +178,7 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
 		OJAnnotatedOperation asJson = new OJAnnotatedOperation("asJson", new OJPathName("String"));
 		asJson.setStatic(true);
 		asJson.getBody().addToStatements("StringBuilder sb = new StringBuilder();");
-		asJson.getBody().addToStatements("sb.append(\"[\")");
+		asJson.getBody().addToStatements("sb.append(\"{\\\"" + TumlClassOperations.className(clazz) + "\\\": [\")");
 		ojEnum.addToOperations(asJson);
 
 		Set<Property> allOwnedProperties = TumlClassOperations.getAllOwnedProperties(clazz);
@@ -334,7 +334,7 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
 				ojEnum.addToLiterals(ojLiteral);
 			}
 		}
-		asJson.getBody().addToStatements("sb.append(\"]\")");
+		asJson.getBody().addToStatements("sb.append(\"]}\")");
 		asJson.getBody().addToStatements("return sb.toString()");
 		fromLabel.getBody().addToStatements("return null");
 	}

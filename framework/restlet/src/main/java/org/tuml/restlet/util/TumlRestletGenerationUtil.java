@@ -4,6 +4,7 @@ import org.opaeum.java.metamodel.OJPathName;
 
 public class TumlRestletGenerationUtil {
 
+	public final static OJPathName Get = new OJPathName("org.restlet.resource.Get");
 	public final static OJPathName ServerResource = new OJPathName("org.restlet.resource.ServerResource");
 	public final static OJPathName Representation = new OJPathName("org.restlet.representation.Representation");
 	public final static OJPathName ResourceException = new OJPathName("org.restlet.resource.ResourceException");
