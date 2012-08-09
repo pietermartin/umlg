@@ -77,5 +77,11 @@ public class SignalEvent extends Event {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
+	@Override
+	public String toJson() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }

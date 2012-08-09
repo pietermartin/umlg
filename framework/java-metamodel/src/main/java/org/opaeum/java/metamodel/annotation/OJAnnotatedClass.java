@@ -38,6 +38,10 @@ public class OJAnnotatedClass extends OJClass implements OJAnnotatedElement {
 		
 	}
 	
+	public OJAnnotatedOperation findOperation(String name, OJPathName ... pathNames) {
+		return (OJAnnotatedOperation) super.findOperation(name, Arrays.asList(pathNames));
+	}
+	
 	public OJAnnotationValue findAnnotation(OJPathName path) {
 		return AnnotationHelper.getAnnotation(this, path);
 	}

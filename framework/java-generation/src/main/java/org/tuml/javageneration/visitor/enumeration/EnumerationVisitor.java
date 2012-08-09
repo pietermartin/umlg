@@ -5,8 +5,8 @@ import org.opaeum.java.metamodel.OJPackage;
 import org.opaeum.java.metamodel.annotation.OJEnum;
 import org.opaeum.java.metamodel.annotation.OJEnumLiteral;
 import org.tuml.framework.Visitor;
-import org.tuml.javageneration.Workspace;
-import org.tuml.javageneration.naming.Namer;
+import org.tuml.generation.Workspace;
+import org.tuml.javageneration.util.Namer;
 import org.tuml.javageneration.visitor.BaseVisitor;
 
 public class EnumerationVisitor extends BaseVisitor implements Visitor<org.eclipse.uml2.uml.Enumeration> {

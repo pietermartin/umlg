@@ -17,7 +17,6 @@ import org.eclipse.uml2.uml.VisibilityKind;
 import org.eclipse.uml2.uml.internal.operations.ClassOperations;
 import org.opaeum.java.metamodel.OJPathName;
 import org.opaeum.java.metamodel.OJVisibilityKind;
-import org.tuml.javageneration.naming.Namer;
 import org.tuml.javageneration.ocl.util.TumlCollectionKindEnum;
 
 public class TumlClassOperations extends ClassOperations {
@@ -46,7 +45,7 @@ public class TumlClassOperations extends ClassOperations {
 		return result;
 	}
 
-	/*
+	/**
 	 * Returns all properties that are to be persisted on the clazz's vertex.
 	 * i.e. only simple types and enums
 	 */
@@ -61,9 +60,20 @@ public class TumlClassOperations extends ClassOperations {
 		return result;
 	}
 
+	public static Set<Property> getPrimitiveOrEnumOrComponentsProperties(org.eclipse.uml2.uml.Class clazz) {
+		Set<Property> result = new HashSet<Property>();
+		for (Property p : clazz.getAttributes()) {
+			PropertyWrapper pWrap = new PropertyWrapper(p);
+			if (!pWrap.isDerived() && (pWrap.isPrimitive() || pWrap.isEnumeration() || pWrap.isComponent())) {
+				result.add(p);
+			}
+		}
+		return result;
+	}
+
 	/*
 	 * These include all properties that are on the other end of an
-	 * association
+	 * association. It does not include inherited properties
 	 */
 	public static Set<Property> getAllOwnedProperties(org.eclipse.uml2.uml.Class clazz) {
 		Set<Property> result = new HashSet<Property>(clazz.getAttributes());
@@ -228,6 +238,10 @@ public class TumlClassOperations extends ClassOperations {
 
 	public static boolean isOnInterface(PropertyWrapper pWrap) {
 		return pWrap.getOwningType() instanceof Interface;
+	}
+
+	public static List<Property> getPropertiesForToJson(Class clazz) {
+		return clazz.getAttributes();
 	}
 
 }

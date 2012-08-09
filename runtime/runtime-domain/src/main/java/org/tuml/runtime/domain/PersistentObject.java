@@ -7,4 +7,5 @@ public interface PersistentObject extends Serializable {
 	void setId(Long id);
 	String getUid();
 	int getObjectVersion();
+	String toJson();
 }

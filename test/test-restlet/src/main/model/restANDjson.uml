@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xmi:id="_qb8akM37EdqwVrslYOdUDA" name="restAndJson">
+  <elementImport xmi:id="_H7SxMN4kEeGdB9TPHp60mw">
+    <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
+  </elementImport>
+  <elementImport xmi:id="_H7UmYN4kEeGdB9TPHp60mw">
+    <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+  </elementImport>
+  <elementImport xmi:id="_H7UmYd4kEeGdB9TPHp60mw">
+    <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+  </elementImport>
+  <elementImport xmi:id="_H7UmYt4kEeGdB9TPHp60mw">
+    <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#UnlimitedNatural"/>
+  </elementImport>
+  <packagedElement xmi:type="uml:Package" xmi:id="_w8IxIM37EdqwVrslYOdUDA" name="org">
+    <packagedElement xmi:type="uml:Package" xmi:id="_y-4osN4jEeGdB9TPHp60mw" name="tuml">
+      <packagedElement xmi:type="uml:Package" xmi:id="_1nC9wN4jEeGdB9TPHp60mw" name="test">
+        <packagedElement xmi:type="uml:Class" xmi:id="_4a8owN4jEeGdB9TPHp60mw" name="Hand">
+          <ownedAttribute xmi:id="_-ufDYN4jEeGdB9TPHp60mw" name="finger" type="_4sr5AN4jEeGdB9TPHp60mw" aggregation="composite" association="_-uo0YN4jEeGdB9TPHp60mw">
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_-ufDYd4jEeGdB9TPHp60mw" value="*"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_-ufDYt4jEeGdB9TPHp60mw"/>
+          </ownedAttribute>
+          <ownedAttribute xmi:id="_Dg0J8N4kEeGdB9TPHp60mw" name="name">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+          </ownedAttribute>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Class" xmi:id="_4sr5AN4jEeGdB9TPHp60mw" name="Finger">
+          <ownedAttribute xmi:id="_D5Ya8N4kEeGdB9TPHp60mw" name="name">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+          </ownedAttribute>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Class" xmi:id="_47QggN4jEeGdB9TPHp60mw" name="Ring">
+          <ownedAttribute xmi:id="_DsLscN4kEeGdB9TPHp60mw" name="name">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+          </ownedAttribute>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Class" xmi:id="_6R3uIN4jEeGdB9TPHp60mw" name="Human">
+          <ownedAttribute xmi:id="_-UB8AN4jEeGdB9TPHp60mw" name="hand" type="_4a8owN4jEeGdB9TPHp60mw" aggregation="composite" association="_-UTBwN4jEeGdB9TPHp60mw">
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_-UB8Ad4jEeGdB9TPHp60mw" value="*"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_-UB8At4jEeGdB9TPHp60mw"/>
+          </ownedAttribute>
+          <ownedAttribute xmi:id="_-f6b4N4jEeGdB9TPHp60mw" name="ring" type="_47QggN4jEeGdB9TPHp60mw" aggregation="composite" association="_-gBJkN4jEeGdB9TPHp60mw">
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_-f6b4d4jEeGdB9TPHp60mw" value="*"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_-f6b4t4jEeGdB9TPHp60mw"/>
+          </ownedAttribute>
+          <ownedAttribute xmi:id="_DTkYIN4kEeGdB9TPHp60mw" name="name">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+          </ownedAttribute>
+          <ownedAttribute xmi:id="_k7fUoOF_EeGBUJuU-RDn9Q" name="name2">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+          </ownedAttribute>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Association" xmi:id="_-UTBwN4jEeGdB9TPHp60mw" name="A_&lt;human>_&lt;hand>" memberEnd="_-UTBwd4jEeGdB9TPHp60mw _-UB8AN4jEeGdB9TPHp60mw" navigableOwnedEnd="_-UTBwd4jEeGdB9TPHp60mw">
+          <ownedEnd xmi:id="_-UTBwd4jEeGdB9TPHp60mw" name="human" type="_6R3uIN4jEeGdB9TPHp60mw" association="_-UTBwN4jEeGdB9TPHp60mw">
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_-UTBwt4jEeGdB9TPHp60mw" value="1"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_-UTBw94jEeGdB9TPHp60mw" value="1"/>
+          </ownedEnd>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Association" xmi:id="_-gBJkN4jEeGdB9TPHp60mw" name="A_&lt;human>_&lt;ring>" memberEnd="_-gBJkd4jEeGdB9TPHp60mw _-f6b4N4jEeGdB9TPHp60mw" navigableOwnedEnd="_-gBJkd4jEeGdB9TPHp60mw">
+          <ownedEnd xmi:id="_-gBJkd4jEeGdB9TPHp60mw" name="human" type="_6R3uIN4jEeGdB9TPHp60mw" association="_-gBJkN4jEeGdB9TPHp60mw">
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_-gBJkt4jEeGdB9TPHp60mw" value="1"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_-gBJk94jEeGdB9TPHp60mw" value="1"/>
+          </ownedEnd>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Association" xmi:id="_-uo0YN4jEeGdB9TPHp60mw" name="A_&lt;hand>_&lt;finger>" memberEnd="_-uo0Yd4jEeGdB9TPHp60mw _-ufDYN4jEeGdB9TPHp60mw" navigableOwnedEnd="_-uo0Yd4jEeGdB9TPHp60mw">
+          <ownedEnd xmi:id="_-uo0Yd4jEeGdB9TPHp60mw" name="hand" type="_4a8owN4jEeGdB9TPHp60mw" association="_-uo0YN4jEeGdB9TPHp60mw">
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_-uo0Yt4jEeGdB9TPHp60mw" value="1"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_-uo0Y94jEeGdB9TPHp60mw" value="1"/>
+          </ownedEnd>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Association" xmi:id="_6i6BZ-IhEeGlCp0hR7Wlcw" name="A_&lt;ring>_&lt;finger>" memberEnd="_6i6BaOIhEeGlCp0hR7Wlcw _6i6Ba-IhEeGlCp0hR7Wlcw" navigableOwnedEnd="_6i6BaOIhEeGlCp0hR7Wlcw _6i6Ba-IhEeGlCp0hR7Wlcw">
+          <ownedEnd xmi:id="_6i6BaOIhEeGlCp0hR7Wlcw" name="ring" type="_47QggN4jEeGdB9TPHp60mw" association="_6i6BZ-IhEeGlCp0hR7Wlcw">
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_6i6BaeIhEeGlCp0hR7Wlcw" value="1"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_6i6BauIhEeGlCp0hR7Wlcw"/>
+          </ownedEnd>
+          <ownedEnd xmi:id="_6i6Ba-IhEeGlCp0hR7Wlcw" name="finger" type="_4sr5AN4jEeGdB9TPHp60mw" association="_6i6BZ-IhEeGlCp0hR7Wlcw">
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_6i6BbOIhEeGlCp0hR7Wlcw" value="1"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_6i6BbeIhEeGlCp0hR7Wlcw" value="1"/>
+          </ownedEnd>
+        </packagedElement>
+      </packagedElement>
+    </packagedElement>
+  </packagedElement>
+</uml:Model>

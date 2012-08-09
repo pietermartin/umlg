@@ -14,7 +14,6 @@ import org.eclipse.uml2.uml.Type;
 import org.eclipse.uml2.uml.internal.operations.PropertyOperations;
 import org.opaeum.java.metamodel.OJPathName;
 import org.opaeum.java.metamodel.OJSimpleStatement;
-import org.tuml.javageneration.naming.Namer;
 import org.tuml.javageneration.ocl.util.TumlCollectionKindEnum;
 
 public final class TumlPropertyOperations extends PropertyOperations {

@@ -214,5 +214,10 @@ public class CollectionObjectToken<O> extends ObjectToken<O> implements Composit
 		throw new RuntimeException("Not implemented");
 	}
 
+	@Override
+	public String toJson() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

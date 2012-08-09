@@ -12,7 +12,8 @@ public class ModelVisitor {
 	public static void visitModel(Element element, @SuppressWarnings("rawtypes") Visitor visitor) {
 		Type[] types = visitor.getClass().getGenericInterfaces();
 		if (types.length != 1) {
-			throw new IllegalStateException();
+			throw new IllegalStateException(String.format("Visitor must have one and only one generic interface, visitor %s has %s", visitor.getClass().getSimpleName(),
+					types.length));
 		}
 		ParameterizedType t = (ParameterizedType) types[0];
 		Type[] paramTypes = t.getActualTypeArguments();

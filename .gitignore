@@ -1,3 +1,11 @@
 /.settings
 /.project
 /.metadata
+framework/restlet/.settings
+framework/restlet/target
+framework/restlet/.classpath
+framework/restlet/.project
+framework/generation/.settings
+framework/generation/target
+framework/generation/.classpath
+framework/generation/.project

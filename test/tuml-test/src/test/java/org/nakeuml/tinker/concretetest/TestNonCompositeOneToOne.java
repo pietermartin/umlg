@@ -24,9 +24,31 @@ public class TestNonCompositeOneToOne extends BaseLocalDbTest {
 		Angel angel = new Angel(god);
 		angel.setName("angel1");
 		universe1.setAngel(angel);
+		System.out.println(angel.getUniverse());
 		db.stopTransaction(Conclusion.SUCCESS);
 		Universe universeTest = new Universe(universe1.getVertex());
 		Assert.assertNotNull(universeTest.getAngel());
+		Angel angelTest = new Angel(angel.getVertex());
+		Assert.assertNotNull(angelTest.getUniverse());
+		Assert.assertEquals(7, countEdges());
+	}
+	
+	@Test
+	public void testNonCompositeOneToOneCreationOtherWayAround() {
+		db.startTransaction();
+		God god = new God(true);
+		god.setName("THEGOD");
+		Universe universe1 = new Universe(god);
+		universe1.setName("universe1");
+		Angel angel = new Angel(god);
+		angel.setName("angel1");
+		angel.setUniverse(universe1);
+		System.out.println(universe1.getAngel());
+		db.stopTransaction(Conclusion.SUCCESS);
+		Universe universeTest = new Universe(universe1.getVertex());
+		Assert.assertNotNull(universeTest.getAngel());
+		Angel angelTest = new Angel(angel.getVertex());
+		Assert.assertNotNull(angelTest.getUniverse());
 		Assert.assertEquals(7, countEdges());
 	}
 

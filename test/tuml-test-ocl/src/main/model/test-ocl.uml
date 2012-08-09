@@ -218,6 +218,20 @@
                 <body>self.customer['john',1]</body>
               </defaultValue>
             </ownedAttribute>
+            <ownedAttribute xmi:id="_tgPjsOIeEeGFxYwhvIRWMQ" name="employeeSize" isDerived="true">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+              <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_x4YooOIeEeGFxYwhvIRWMQ" name="self.employee->size()">
+                <language>ocl</language>
+                <body>self.employee->size()</body>
+              </defaultValue>
+            </ownedAttribute>
+            <ownedAttribute xmi:id="_wdGg8OIfEeGlCp0hR7Wlcw" name="customerSize" isDerived="true">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+              <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_yigHMOIfEeGlCp0hR7Wlcw" name="self.customer->size()">
+                <language>ocl</language>
+                <body>self.customer->size()</body>
+              </defaultValue>
+            </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Class" xmi:id="_BrVOsM5wEeG36cJ3v-Rmsg" name="Customer">
             <ownedAttribute xmi:id="_FeHj0M5wEeG36cJ3v-Rmsg" name="name">

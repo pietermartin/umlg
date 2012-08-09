@@ -50,4 +50,10 @@ public class CallEvent extends Event {
 		return 0;
 	}
 
+	@Override
+	public String toJson() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

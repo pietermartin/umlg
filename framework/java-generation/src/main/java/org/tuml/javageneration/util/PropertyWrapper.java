@@ -35,7 +35,6 @@ import org.eclipse.uml2.uml.Usage;
 import org.eclipse.uml2.uml.ValueSpecification;
 import org.eclipse.uml2.uml.VisibilityKind;
 import org.opaeum.java.metamodel.OJPathName;
-import org.tuml.javageneration.naming.Namer;
 import org.tuml.javageneration.ocl.TumlOcl2Java;
 import org.tuml.javageneration.ocl.util.TumlCollectionKindEnum;
 
@@ -47,6 +46,225 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 		super(property);
 		this.property = property;
 	}
+	
+	public boolean hasQualifiers() {
+		return !this.property.getQualifiers().isEmpty();
+	}
+
+	public boolean isQualified() {
+		return hasQualifiers();
+	}
+
+	public boolean isInverseQualified() {
+		if (getOtherEnd() != null) {
+			return new PropertyWrapper(getOtherEnd()).isQualified();
+		} else {
+			return false;
+		}
+	}
+
+	public boolean isQualifier() {
+		Element owner = this.property.getOwner();
+		return owner instanceof Property && ((Property) owner).getQualifiers().contains(this.property);
+	}
+
+	public boolean hasOtherEnd() {
+		return getOtherEnd() != null;
+	}
+
+	public String getOclValue() {
+		if (!this.property.isDerived()) {
+			throw new IllegalStateException("getOclValue can only be called on a derived property");
+		}
+		return this.property.getDefaultValue().stringValue();
+	}
+
+	public boolean hasOclDefaultValue() {
+		ValueSpecification v = getDefaultValue();
+		if (v instanceof OpaqueExpression) {
+			OpaqueExpression expr = (OpaqueExpression) v;
+			return expr.getLanguages().contains("ocl") || expr.getLanguages().contains("OCL");
+		} else {
+			return false;
+		}
+	}
+
+	public String getOclDerivedValue() {
+		if (!hasOclDefaultValue()) {
+			throw new IllegalStateException(String.format("Property %s does not have a default value", new Object[] { this.getName() }));
+		}
+		StringBuilder sb = new StringBuilder();
+		if (isQualified()) {
+			// Find the derived property on the qualified context
+			Property owner = (Property) getOwner();
+			Property derived = null;
+			for (Element e : owner.getType().getOwnedElements()) {
+				if (e instanceof Property && ((NamedElement) e).getName().equals(getName())) {
+					derived = (Property) e;
+				}
+			}
+			sb.append(getOclDerivedValue(derived));
+		} else {
+			sb.append(getOclDerivedValue(this.property));
+		}
+		return sb.toString();
+	}
+
+	private String getOclDerivedValue(Property p) {
+		PropertyWrapper pWrap = new PropertyWrapper(p);
+		StringBuilder sb = new StringBuilder();
+		sb.append("package ");
+		sb.append(Namer.nameIncludingModel(pWrap.getOwningType().getNearestPackage()).replace(".", "::"));
+		sb.append("\n    context ");
+		sb.append(pWrap.getOwningType().getName());
+		sb.append("::");
+		sb.append(getName());
+		sb.append(" : ");
+
+		if (pWrap.isMany()) {
+			sb.append(TumlOcl2Java.getCollectionInterface(pWrap));
+			sb.append("(");
+			sb.append(pWrap.getType().getName());
+			sb.append(")");
+		} else {
+			sb.append(pWrap.getType().getName());
+		}
+
+		sb.append("\n");
+		sb.append("    derive: ");
+		sb.append(pWrap.getDefaultValue().stringValue());
+		sb.append("\n");
+		sb.append("endpackage");
+		return sb.toString();
+	}
+
+	public String getOclDefaultValue() {
+		if (!hasOclDefaultValue()) {
+			throw new IllegalStateException(String.format("Property %s does not have a default value", new Object[] { this.getName() }));
+		}
+		StringBuilder sb = new StringBuilder();
+		if (isQualified()) {
+			// Find the derived property on the qualified context
+			Property owner = (Property) getOwner();
+			Property derived = null;
+			for (Element e : owner.getType().getOwnedElements()) {
+				if (e instanceof Property && ((NamedElement) e).getName().equals(getName())) {
+					derived = (Property) e;
+				}
+			}
+			sb.append(getOclDefaultValue(derived));
+		} else {
+			sb.append(getOclDefaultValue(this.property));
+		}
+		return sb.toString();
+	}
+
+	private String getOclDefaultValue(Property p) {
+		PropertyWrapper pWrap = new PropertyWrapper(p);
+		StringBuilder sb = new StringBuilder();
+		sb.append("package ");
+		sb.append(Namer.nameIncludingModel(pWrap.getOwningType().getNearestPackage()).replace(".", "::"));
+		sb.append("\ncontext ");
+		sb.append(pWrap.getOwningType().getName());
+		sb.append("::");
+		sb.append(getName());
+		sb.append("\n");
+		sb.append("init: ");
+		sb.append(pWrap.getDefaultValue().stringValue());
+		sb.append("\n");
+		sb.append("endpackage");
+		return sb.toString();
+	}
+
+	public Property getQualifierCorrespondingDerivedProperty() {
+		if (!isQualifier()) {
+			throw new IllegalStateException("getCorrespondingDerivedProperty can only be called on a qualifier");
+		}
+		Property owner = (Property) getOwner();
+		for (Element e : owner.getType().getOwnedElements()) {
+			if (e instanceof Property && ((Property) e).isDerived() && ((Property) e).getName().equals(getName())) {
+				return (Property) e;
+			}
+		}
+		return null;
+	}
+
+	public OJPathName getQualifierContextPathName() {
+		if (isQualifier()) {
+			throw new IllegalStateException("getQualifierContextPathName can not only be called on a qualifier");
+		}
+		if (!hasQualifiers()) {
+			throw new IllegalStateException("getQualifierContextPathName can not only be called on a qualified property");
+		}
+		return TumlClassOperations.getPathName(getType());
+	}
+
+	public Type getQualifierContext() {
+		if (!isQualifier()) {
+			throw new IllegalStateException("getQualifierContext can only be called on a qualifier");
+		}
+		Property owner = (Property) getOwner();
+		return owner.getType();
+	}
+
+	public boolean haveQualifierCorrespondingDerivedProperty() {
+		if (!isQualifier()) {
+			throw new IllegalStateException("getCorrespondingDerivedProperty can only be called on a qualifier");
+		}
+		return getQualifierCorrespondingDerivedProperty() != null;
+	}
+
+	public String getQualifiedGetterName() {
+		return "getQualifierFor" + StringUtils.capitalize(getName());
+	}
+
+	public String getQualifiedNameFor(List<PropertyWrapper> qualifers) {
+		StringBuilder sb = new StringBuilder();
+		for (PropertyWrapper q : qualifers) {
+			sb.append(StringUtils.capitalize(q.getName()));
+		}
+		return getter() + "For" + sb.toString();
+	}
+
+	public Property getProperty() {
+		return property;
+	}
+
+	public String getTumlRuntimePropertyEnum() {
+		return TumlClassOperations.propertyEnumName(getOwningType()) + "." + fieldname();
+	}	
+	
+	public String getInitValue() {
+		ValueSpecification v = getDefaultValue();
+		if (v instanceof OpaqueExpression) {
+			return getOclDefaultValue();
+		} else if (v instanceof LiteralString) {
+			LiteralString expr = (LiteralString) v;
+			String result = expr.getValue();
+			return result.replaceAll("^\"|\"$", "");
+		} else {
+			throw new RuntimeException("Not supported");
+		}
+	}
+
+	/**
+	 * 
+	 * @param stereotype
+	 * @return Returns true is the property's owner is an association
+	 *         stereotyped with <<QualifierAssociation>>
+	 */
+	public boolean isForQualifier() {
+		return !this.property.getOwner().getAppliedStereotypes().isEmpty();
+	}
+
+	public String toJson() {
+		return "\\\"" + getName() + "\\\": \\\"\" + " + getter() + "() + \"\\\"";
+	}
+
+	public boolean isComponent() {
+		return !this.property.isDerived() && this.property.getType() instanceof org.eclipse.uml2.uml.Class && isOne() && this.property.isComposite() && this.property.getLower() == 1;
+	}
+
 
 	public boolean isInverseOrdered() {
 		return getOtherEnd() != null && getOtherEnd().isOrdered();
@@ -166,7 +384,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 		fieldType.addToGenerics(javaBaseTypePath());
 		return fieldType;
 	}
-	
+
 	public OJPathName javaTumlMemoryTypePath() {
 		OJPathName memoryCollectionPathName = TumlCollectionKindEnum.from(this).getMemoryCollection();
 		memoryCollectionPathName.addToGenerics(TumlClassOperations.getPathName(this.getType()));
@@ -193,7 +411,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 		fieldType.addToGenerics(javaBaseTypePath());
 		return fieldType;
 	}
-	
+
 	public OJPathName javaAuditTypePath() {
 		OJPathName fieldType;
 		if (!isOrdered() && isUnique()) {
@@ -211,7 +429,6 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 		return fieldType;
 	}
 
-	
 	public String emptyCollection() {
 		if (!isOrdered() && isUnique()) {
 			return "TumlCollections.emptySet()";
@@ -225,7 +442,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 			throw new RuntimeException("wtf");
 		}
 	}
-	
+
 	public OJPathName javaClosableIteratorTypePath() {
 		OJPathName fieldType;
 		if (!isOrdered() && isUnique()) {
@@ -241,19 +458,19 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 		}
 		fieldType.addToGenerics(javaBaseTypePath());
 		return fieldType;
-	}	
+	}
 
 	public OJPathName javaImplTypePath() {
 		return TumlPropertyOperations.getDefaultTinkerCollection(this.property);
 	}
 
-//	public OJPathName javaAuditImplTypePath() {
-//		OJPathName impl = javaImplTypePath().getCopy();
-//		if (!impl.getGenerics().isEmpty()) {
-//			impl.getGenerics().get(0).appendToTail("Audit");
-//		}
-//		return impl;
-//	}
+	// public OJPathName javaAuditImplTypePath() {
+	// OJPathName impl = javaImplTypePath().getCopy();
+	// if (!impl.getGenerics().isEmpty()) {
+	// impl.getGenerics().get(0).appendToTail("Audit");
+	// }
+	// return impl;
+	// }
 
 	/*
 	 * The property might be owned by an interface but the initialisation is for
@@ -274,9 +491,17 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 	public boolean isMany() {
 		return TumlPropertyOperations.isMany(this.property);
 	}
-	
+
 	public boolean isUnqualifiedMany() {
 		return TumlPropertyOperations.isUnqualifiedMany(this.property);
+	}
+	
+	public List<PropertyWrapper> getQualifiersAsPropertyWrappers() {
+		List<PropertyWrapper> result = new ArrayList<PropertyWrapper>();
+		for (Property q : this.property.getQualifiers()) {
+			result.add(new PropertyWrapper(q));
+		}
+		return result;
 	}
 
 	@Override
@@ -508,6 +733,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 	public EList<Package> allOwningPackages() {
 		return this.property.allOwningPackages();
 	}
+
 	@Override
 	public Type getType() {
 		return this.property.getType();
@@ -756,14 +982,6 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 		return this.property.getQualifiers();
 	}
 
-	public List<PropertyWrapper> getQualifiersAsPropertyWrappers() {
-		List<PropertyWrapper> result = new ArrayList<PropertyWrapper>();
-		for (Property q : this.property.getQualifiers()) {
-			result.add(new PropertyWrapper(q));
-		}
-		return result;
-	}
-
 	@Override
 	public Property createQualifier(String name, Type type, EClass eClass) {
 		throw new RuntimeException("Not supported");
@@ -890,193 +1108,6 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 		return this.property.isNavigable();
 	}
 
-	public boolean hasQualifiers() {
-		return !this.property.getQualifiers().isEmpty();
-	}
-
-	public boolean isQualified() {
-		return hasQualifiers();
-	}
-
-	public boolean isInverseQualified() {
-		if (getOtherEnd() != null) {
-			return new PropertyWrapper(getOtherEnd()).isQualified();
-		} else {
-			return false;
-		}
-	}
-
-	public boolean isQualifier() {
-		Element owner = this.property.getOwner();
-		return owner instanceof Property && ((Property) owner).getQualifiers().contains(this.property);
-	}
-
-	public boolean hasOtherEnd() {
-		return getOtherEnd() != null;
-	}
-
-	public String getOclValue() {
-		if (!this.property.isDerived()) {
-			throw new IllegalStateException("getOclValue can only be called on a derived property");
-		}
-		return this.property.getDefaultValue().stringValue();
-	}
-
-	public boolean hasOclDefaultValue() {
-		ValueSpecification v = getDefaultValue();
-		if (v instanceof OpaqueExpression) {
-			OpaqueExpression expr = (OpaqueExpression) v;
-			return expr.getLanguages().contains("ocl") || expr.getLanguages().contains("OCL");
-		} else {
-			return false;
-		}
-	}
-
-	public String getOclDerivedValue() {
-		if (!hasOclDefaultValue()) {
-			throw new IllegalStateException(String.format("Property %s does not have a default value", new Object[] { this.getName() }));
-		}
-		StringBuilder sb = new StringBuilder();
-		if (isQualified()) {
-			// Find the derived property on the qualified context
-			Property owner = (Property) getOwner();
-			Property derived = null;
-			for (Element e : owner.getType().getOwnedElements()) {
-				if (e instanceof Property && ((NamedElement) e).getName().equals(getName())) {
-					derived = (Property) e;
-				}
-			}
-			sb.append(getOclDerivedValue(derived));
-		} else {
-			sb.append(getOclDerivedValue(this.property));
-		}
-		return sb.toString();
-	}
-
-	private String getOclDerivedValue(Property p) {
-		PropertyWrapper pWrap = new PropertyWrapper(p);
-		StringBuilder sb = new StringBuilder();
-		sb.append("package ");
-		sb.append(Namer.nameIncludingModel(pWrap.getOwningType().getNearestPackage()).replace(".", "::"));
-		sb.append("\n    context ");
-		sb.append(pWrap.getOwningType().getName());
-		sb.append("::");
-		sb.append(getName());
-		sb.append(" : ");
-
-		if (pWrap.isMany()) {
-			sb.append(TumlOcl2Java.getCollectionInterface(pWrap));
-			sb.append("(");
-			sb.append(pWrap.getType().getName());
-			sb.append(")");
-		} else {
-			sb.append(pWrap.getType().getName());
-		}
-
-		sb.append("\n");
-		sb.append("    derive: ");
-		sb.append(pWrap.getDefaultValue().stringValue());
-		sb.append("\n");
-		sb.append("endpackage");
-		return sb.toString();
-	}
-
-	public String getOclDefaultValue() {
-		if (!hasOclDefaultValue()) {
-			throw new IllegalStateException(String.format("Property %s does not have a default value", new Object[] { this.getName() }));
-		}
-		StringBuilder sb = new StringBuilder();
-		if (isQualified()) {
-			// Find the derived property on the qualified context
-			Property owner = (Property) getOwner();
-			Property derived = null;
-			for (Element e : owner.getType().getOwnedElements()) {
-				if (e instanceof Property && ((NamedElement) e).getName().equals(getName())) {
-					derived = (Property) e;
-				}
-			}
-			sb.append(getOclDefaultValue(derived));
-		} else {
-			sb.append(getOclDefaultValue(this.property));
-		}
-		return sb.toString();
-	}
-
-	private String getOclDefaultValue(Property p) {
-		PropertyWrapper pWrap = new PropertyWrapper(p);
-		StringBuilder sb = new StringBuilder();
-		sb.append("package ");
-		sb.append(Namer.nameIncludingModel(pWrap.getOwningType().getNearestPackage()).replace(".", "::"));
-		sb.append("\ncontext ");
-		sb.append(pWrap.getOwningType().getName());
-		sb.append("::");
-		sb.append(getName());
-		sb.append("\n");
-		sb.append("init: ");
-		sb.append(pWrap.getDefaultValue().stringValue());
-		sb.append("\n");
-		sb.append("endpackage");
-		return sb.toString();
-	}
-
-	public Property getQualifierCorrespondingDerivedProperty() {
-		if (!isQualifier()) {
-			throw new IllegalStateException("getCorrespondingDerivedProperty can only be called on a qualifier");
-		}
-		Property owner = (Property) getOwner();
-		for (Element e : owner.getType().getOwnedElements()) {
-			if (e instanceof Property && ((Property) e).isDerived() && ((Property) e).getName().equals(getName())) {
-				return (Property) e;
-			}
-		}
-		return null;
-	}
-
-	public OJPathName getQualifierContextPathName() {
-		if (isQualifier()) {
-			throw new IllegalStateException("getQualifierContextPathName can not only be called on a qualifier");
-		}
-		if (!hasQualifiers()) {
-			throw new IllegalStateException("getQualifierContextPathName can not only be called on a qualified property");
-		}
-		return TumlClassOperations.getPathName(getType());
-	}
-
-	public Type getQualifierContext() {
-		if (!isQualifier()) {
-			throw new IllegalStateException("getQualifierContext can only be called on a qualifier");
-		}
-		Property owner = (Property) getOwner();
-		return owner.getType();
-	}
-
-	public boolean haveQualifierCorrespondingDerivedProperty() {
-		if (!isQualifier()) {
-			throw new IllegalStateException("getCorrespondingDerivedProperty can only be called on a qualifier");
-		}
-		return getQualifierCorrespondingDerivedProperty() != null;
-	}
-
-	public String getQualifiedGetterName() {
-		return "getQualifierFor" + StringUtils.capitalize(getName());
-	}
-
-	public String getQualifiedNameFor(List<PropertyWrapper> qualifers) {
-		StringBuilder sb = new StringBuilder();
-		for (PropertyWrapper q : qualifers) {
-			sb.append(StringUtils.capitalize(q.getName()));
-		}
-		return getter() + "For" + sb.toString();
-	}
-
-	public Property getProperty() {
-		return property;
-	}
-
-	public String getTumlRuntimePropertyEnum() {
-		return TumlClassOperations.propertyEnumName(getOwningType()) + "." + fieldname();
-	}
-
 	@Override
 	public boolean validateNonLeafRedefinition(DiagnosticChain arg0, Map<Object, Object> arg1) {
 		throw new RuntimeException("Not supported");
@@ -1105,29 +1136,6 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 	@Override
 	public void setRealDefaultValue(double arg0) {
 		throw new RuntimeException("Not supported");
-	}
-
-	public String getInitValue() {
-		ValueSpecification v = getDefaultValue();
-		if (v instanceof OpaqueExpression) {
-			return getOclDefaultValue();
-		} else if (v instanceof LiteralString) {
-			LiteralString expr = (LiteralString) v;
-			String result = expr.getValue();
-			return result.replaceAll("^\"|\"$", "");
-		} else {
-			throw new RuntimeException("Not supported");
-		}
-	}
-
-	/**
-	 * 
-	 * @param stereotype 
-	 * @return Returns true is the property's owner is an association
-	 *         stereotyped with <<QualifierAssociation>>
-	 */
-	public boolean isForQualifier() {
-		return !this.property.getOwner().getAppliedStereotypes().isEmpty();
 	}
 
 }

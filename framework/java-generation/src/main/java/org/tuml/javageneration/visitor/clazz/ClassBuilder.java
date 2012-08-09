@@ -16,7 +16,7 @@ import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
 import org.opaeum.java.metamodel.annotation.OJAnnotationValue;
 import org.tuml.framework.Visitor;
-import org.tuml.javageneration.Workspace;
+import org.tuml.generation.Workspace;
 import org.tuml.javageneration.util.PropertyWrapper;
 import org.tuml.javageneration.util.TinkerGenerationUtil;
 import org.tuml.javageneration.util.TumlClassOperations;
@@ -133,6 +133,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 	protected void initialiseVertexInPersistentConstructor(OJAnnotatedClass ojClass, Class c) {
 		OJConstructor constructor = ojClass.findConstructor(new OJPathName("java.lang.Boolean"));
 		constructor.getBody().addToStatements("this.vertex = " + TinkerGenerationUtil.graphDbAccess + ".addVertex(\"dribble\")");
+		constructor.getBody().addToStatements("this.vertex.setProperty(\"className\", getClass().getName())");
 		if (TumlClassOperations.hasCompositeOwner(c)) {
 			constructor.getBody().addToStatements("TransactionThreadEntityVar.setNewEntity(this)");
 			ojClass.addToImports(TinkerGenerationUtil.transactionThreadEntityVar);

@@ -541,6 +541,11 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 	}
 
 	@Override
+	public String toJson() {
+		return this.tumlRuntimeProperty.toJson();
+	}
+
+	@Override
 	public boolean isOnePrimitive() {
 		return this.tumlRuntimeProperty.isOnePrimitive();
 	}

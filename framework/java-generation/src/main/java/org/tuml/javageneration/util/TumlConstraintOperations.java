@@ -3,7 +3,6 @@ package org.tuml.javageneration.util;
 import org.eclipse.uml2.uml.Constraint;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.internal.operations.ConstraintOperations;
-import org.tuml.javageneration.naming.Namer;
 
 public class TumlConstraintOperations extends ConstraintOperations {
 

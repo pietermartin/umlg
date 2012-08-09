@@ -11,8 +11,8 @@ import org.opaeum.java.metamodel.OJIfStatement;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedField;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
-import org.tuml.javageneration.Workspace;
-import org.tuml.javageneration.naming.Namer;
+import org.tuml.generation.Workspace;
+import org.tuml.javageneration.util.Namer;
 import org.tuml.javageneration.util.PropertyWrapper;
 
 public class BaseVisitor {
@@ -34,6 +34,12 @@ public class BaseVisitor {
 
 	protected OJAnnotatedClass findAuditOJClass(Property p) {
 		OJAnnotatedClass ojClass = findOJClass(p);
+		OJAnnotatedClass findOJClass = this.workspace.findOJClass(ojClass.getQualifiedName() + "Audit");
+		return findOJClass;
+	}
+	
+	protected OJAnnotatedClass findAuditOJClass(org.eclipse.uml2.uml.Class clazz) {
+		OJAnnotatedClass ojClass = findOJClass(clazz);
 		OJAnnotatedClass findOJClass = this.workspace.findOJClass(ojClass.getQualifiedName() + "Audit");
 		return findOJClass;
 	}

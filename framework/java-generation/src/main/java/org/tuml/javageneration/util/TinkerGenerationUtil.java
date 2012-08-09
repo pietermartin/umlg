@@ -16,6 +16,7 @@ public class TinkerGenerationUtil {
 
 	public static final String TINKER_DB_NULL = "__NULL__";
 
+	public static final OJPathName ToJsonUtil = new OJPathName("org.tuml.runtime.domain.json.ToJsonUtil");
 	public static final OJPathName tumlMemoryCollection = new OJPathName("org.tuml.runtime.collection.memory.TumlMemoryCollection");
 	public static final OJPathName tumlMemoryBag = new OJPathName("org.tuml.runtime.collection.memory.TumlMemoryBag");
 	public static final OJPathName tumlMemorySet = new OJPathName("org.tuml.runtime.collection.memory.TumlMemorySet");

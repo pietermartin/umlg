@@ -1,5 +1,7 @@
 package org.tuml.javageneration.visitor.clazz;
 
+import java.util.Set;
+
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Property;
 import org.opaeum.java.metamodel.OJField;
@@ -13,7 +15,7 @@ import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
 import org.opaeum.java.metamodel.annotation.OJEnum;
 import org.opaeum.java.metamodel.annotation.OJEnumLiteral;
 import org.tuml.framework.Visitor;
-import org.tuml.javageneration.Workspace;
+import org.tuml.generation.Workspace;
 import org.tuml.javageneration.util.PropertyWrapper;
 import org.tuml.javageneration.util.TinkerGenerationUtil;
 import org.tuml.javageneration.util.TumlClassOperations;
@@ -67,6 +69,7 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
 
 	private void addTumlRuntimePropertyEnum(OJAnnotatedClass annotatedClass, Class clazz) {
 		OJEnum ojEnum = new OJEnum(TumlClassOperations.propertyEnumName(clazz));
+		ojEnum.setStatic(true);
 		ojEnum.addToImplementedInterfaces(TinkerGenerationUtil.tumlRuntimePropertyPathName.getCopy());
 		annotatedClass.addInnerEnum(ojEnum);
 
@@ -145,6 +148,11 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
 		uniqueField.setName("unique");
 		ojEnum.addToFields(uniqueField);
 
+		OJField jsonField = new OJField();
+		jsonField.setType(new OJPathName("String"));
+		jsonField.setName("json");
+		ojEnum.addToFields(jsonField);
+
 		ojEnum.implementGetter();
 		ojEnum.createConstructorFromFields();
 
@@ -162,9 +170,28 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
 		isValid.getBody().addToStatements(ifQualified);
 		ojEnum.addToOperations(isValid);
 
-		for (Property p : TumlClassOperations.getAllOwnedProperties(clazz)) {
+		OJAnnotatedOperation toJson = new OJAnnotatedOperation("toJson", new OJPathName("String"));
+		TinkerGenerationUtil.addOverrideAnnotation(toJson);
+		toJson.getBody().addToStatements("return getJson()");
+		ojEnum.addToOperations(toJson);
+
+		OJAnnotatedOperation asJson = new OJAnnotatedOperation("asJson", new OJPathName("String"));
+		asJson.setStatic(true);
+		asJson.getBody().addToStatements("StringBuilder sb = new StringBuilder();");
+		asJson.getBody().addToStatements("sb.append(\"[\")");
+		ojEnum.addToOperations(asJson);
+
+		Set<Property> allOwnedProperties = TumlClassOperations.getAllOwnedProperties(clazz);
+		int count = 0;
+		for (Property p : allOwnedProperties) {
+			count++;
 			PropertyWrapper pWrap = new PropertyWrapper(p);
 			if (!(pWrap.isDerived() || pWrap.isDerivedUnion())) {
+
+				asJson.getBody().addToStatements("sb.append(" + ojEnum.getName() + "." + pWrap.fieldname() + ".toJson())");
+				if (count != allOwnedProperties.size()) {
+					asJson.getBody().addToStatements("sb.append(\",\")");
+				}
 
 				OJIfStatement ifLabelEquals = new OJIfStatement(pWrap.fieldname() + ".getLabel().equals(label)");
 				// Do not make upper case, leave with java case sensitive
@@ -251,9 +278,64 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
 				uniqueAttribute.setInitExp(Boolean.toString(pWrap.isUnique()));
 				ojLiteral.addToAttributeValues(uniqueAttribute);
 
+				OJField jsonAttribute = new OJField();
+				jsonAttribute.setType(new OJPathName("String"));
+
+				StringBuilder sb = new StringBuilder();
+				sb.append("{\\\"");
+				sb.append(pWrap.fieldname());
+				sb.append("\\\": ");
+				sb.append("{\\\"");
+				sb.append("onePrimitive\\\": ");
+				sb.append(propertyOnePrimitiveField.getInitExp());
+				sb.append(", ");
+				sb.append("\\\"controllingSide\\\": ");
+				sb.append(propertyControllingSideField.getInitExp());
+				sb.append(", ");
+				sb.append("\\\"composite\\\": ");
+				sb.append(compositeLabelField.getInitExp());
+				sb.append(", ");
+				sb.append("\\\"oneToOne\\\": ");
+				sb.append(isOneToOneAttribute.getInitExp());
+				sb.append(", ");
+				sb.append("\\\"oneToMany\\\": ");
+				sb.append(isOneToManyAttribute.getInitExp());
+				sb.append(", ");
+				sb.append("\\\"manyToOne\\\": ");
+				sb.append(isManyToOneAttribute.getInitExp());
+				sb.append(", ");
+				sb.append("\\\"manyToMany\\\": ");
+				sb.append(isManyToManyAttribute.getInitExp());
+				sb.append(", ");
+				sb.append("\\\"upper\\\": ");
+				sb.append(upperAttribute.getInitExp());
+				sb.append(", ");
+				sb.append("\\\"lower\\\": ");
+				sb.append(lowerAttribute.getInitExp());
+				sb.append(", ");
+				sb.append("\\\"label\\\": \\");
+				sb.append(propertyLabelField.getInitExp().subSequence(0, propertyLabelField.getInitExp().length() - 1));
+				sb.append("\\\", ");
+				sb.append("\\\"qualified\\\": ");
+				sb.append(qualifiedAttribute.getInitExp());
+				sb.append(", ");
+				sb.append("\\\"inverseQualified\\\": ");
+				sb.append(inverseQualifiedAttribute.getInitExp());
+				sb.append(", ");
+				sb.append("\\\"inverseOrdered\\\": ");
+				sb.append(orderedAttribute.getInitExp());
+				sb.append(", ");
+				sb.append("\\\"unique\\\": ");
+				sb.append(uniqueAttribute.getInitExp());
+				sb.append("}}");
+				jsonAttribute.setInitExp("\"" + sb.toString() + "\"");
+				ojLiteral.addToAttributeValues(jsonAttribute);
+
 				ojEnum.addToLiterals(ojLiteral);
 			}
 		}
+		asJson.getBody().addToStatements("sb.append(\"]\")");
+		asJson.getBody().addToStatements("return sb.toString()");
 		fromLabel.getBody().addToStatements("return null");
 	}
 
