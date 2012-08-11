@@ -219,4 +219,8 @@ public class OclStdLibBagImpl<E> extends OclStdLibCollectionImpl<E> implements T
 		this.bag.clear();
 	}
 
+	@Override
+	public String toJson() {
+		throw new RuntimeException("Not yet implemented");
+	}
 }

@@ -243,5 +243,11 @@ public class OclStdLibSequenceImpl<E> extends OclStdLibCollectionImpl<E> impleme
 			return this.list.get(0);
 		}
 	}
-	
+
+	@Override
+	public String toJson() {
+		//TODO
+		throw new RuntimeException("Not yet implemented");
+	}
+
 }

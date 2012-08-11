@@ -20,7 +20,7 @@ public class RootEntryPointBuilder extends BaseVisitor implements Visitor<Class>
 
 	@Override
 	public void visitBefore(Class clazz) {
-		if (!TumlClassOperations.hasCompositeOwner(clazz)) {
+		if (!TumlClassOperations.hasCompositeOwner(clazz) && !clazz.isAbstract()) {
 			OJAnnotatedClass root = this.workspace.findOJClass("org.tuml.root.Root");
 			OJAnnotatedOperation getter = new OJAnnotatedOperation("get" + TumlClassOperations.className(clazz), new OJPathName("java.util.List").addToGenerics(TumlClassOperations
 					.getPathName(clazz)));

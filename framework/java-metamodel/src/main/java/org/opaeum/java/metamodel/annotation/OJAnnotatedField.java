@@ -1,7 +1,6 @@
 package org.opaeum.java.metamodel.annotation;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -91,5 +90,8 @@ public class OJAnnotatedField extends OJField implements OJAnnotatedElement{
 	}
 	public OJAnnotationValue findAnnotation(OJPathName path){
 		return AnnotationHelper.getAnnotation(this, path);
+	}
+	public void suppressUncheckedWarning() {
+		addAnnotationIfNew(new OJAnnotationValue(new OJPathName("java.lang.SuppressWarnings"), "unchecked"));
 	}
 }

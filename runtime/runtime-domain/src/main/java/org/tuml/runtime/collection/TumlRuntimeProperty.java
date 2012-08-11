@@ -2,6 +2,7 @@ package org.tuml.runtime.collection;
 
 public interface TumlRuntimeProperty {
 	boolean isOnePrimitive();
+	boolean isManyPrimitive();
 	boolean isControllingSide();
 	boolean isComposite();
 	boolean isOneToOne(); 

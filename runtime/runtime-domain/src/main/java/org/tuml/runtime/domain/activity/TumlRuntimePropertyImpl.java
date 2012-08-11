@@ -109,4 +109,10 @@ public class TumlRuntimePropertyImpl implements TumlRuntimeProperty {
 		return null;
 	}
 
+	@Override
+	public boolean isManyPrimitive() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

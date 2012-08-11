@@ -57,7 +57,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 		this.parentClass = owner.getClass();
 		this.tumlRuntimeProperty = runtimeProperty;
 	}
-
+	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected void loadFromVertex() {
 		if (!isOnePrimitive()) {
@@ -203,11 +203,15 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 				if (node instanceof CompositionNode) {
 					TransactionThreadEntityVar.setNewEntity((CompositionNode) node);
 				}
-
+				
 				Set<Edge> edges = GraphDb.getDb().getEdgesBetween(this.vertex, v, this.getLabel());
 				for (Edge edge : edges) {
 					if (o instanceof TinkerAuditableNode) {
 						createAudit(e, true);
+					}
+					if (isInverseOrdered()) {
+						Index<Edge> index = GraphDb.getDb().getIndex(node.getUid() + ":::" + getLabel(), Edge.class);
+						index.remove("index", this.owner.getVertex().getProperty("tinkerIndex"), edge);
 					}
 					GraphDb.getDb().removeEdge(edge);
 					break;
@@ -542,12 +546,37 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 
 	@Override
 	public String toJson() {
-		return this.tumlRuntimeProperty.toJson();
+		maybeLoad();
+		StringBuilder sb = new StringBuilder();
+		if (isManyPrimitive()) {
+			sb.append("[");
+			int count = 0;
+			for (E e : this.internalCollection) {
+				count++;
+				if (e instanceof String) {
+					sb.append("\"");
+					sb.append(e);
+					sb.append("\"");
+				} else {
+					sb.append(e);
+				}
+				if (count < size()) {
+					sb.append(",");
+				}
+			}
+			sb.append("]");
+		}
+		return sb.toString();
 	}
 
 	@Override
 	public boolean isOnePrimitive() {
 		return this.tumlRuntimeProperty.isOnePrimitive();
+	}
+
+	@Override
+	public boolean isManyPrimitive() {
+		return this.tumlRuntimeProperty.isManyPrimitive();
 	}
 
 	@Override

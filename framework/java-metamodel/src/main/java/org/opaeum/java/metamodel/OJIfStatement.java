@@ -5,7 +5,6 @@ import java.util.Set;
 import org.opaeum.java.metamodel.generated.OJIfStatementGEN;
 import org.opaeum.java.metamodel.utilities.JavaStringHelpers;
 
-
 public class OJIfStatement extends OJIfStatementGEN {
 	/*********************************************************************
 	 * The constructor
@@ -68,6 +67,11 @@ public class OJIfStatement extends OJIfStatementGEN {
 	public String toJavaString() {
 		String result = "if ( " + getCondition() + " ) {\n";
 		result = result + JavaStringHelpers.indent(getThenPart().toJavaString(), 1) + "\n}";
+		int count = 0;
+		for (OJBlock elseIf : this.elseIfPart) {
+			result = result + " else if ( " + this.elseIfCondition.get(count) + " ) {\n" + JavaStringHelpers.indent(elseIf.toJavaString(), 1) + "\n}";
+			count++;
+		}
 		if (getElsePart() != null) {
 			result = result + " else {\n" + JavaStringHelpers.indent(getElsePart().toJavaString(), 1) + "\n}";
 		}

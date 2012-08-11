@@ -31,7 +31,7 @@ public class TinkerOrderedSetImpl<E> extends BaseCollection<E> implements Tinker
 	public TinkerOrderedSetImpl(TumlNode owner, TumlRuntimeProperty runtimeProperty) {
 		super(owner, runtimeProperty);
 		this.internalCollection = new ListOrderedSet();
-		this.oclStdLibOrderedSet = new OclStdLibOrderedSetImpl<E>((ListOrderedSet)this.internalCollection); 
+		this.oclStdLibOrderedSet = new OclStdLibOrderedSetImpl<E>((ListOrderedSet) this.internalCollection);
 		this.oclStdLibCollection = this.oclStdLibOrderedSet;
 		this.index = GraphDb.getDb().getIndex(owner.getUid() + ":::" + getLabel(), Edge.class);
 		if (this.index == null) {
@@ -58,33 +58,56 @@ public class TinkerOrderedSetImpl<E> extends BaseCollection<E> implements Tinker
 		// validateMultiplicityForAdditionalElement calls size() which loads the
 		// collection
 		validateMultiplicityForAdditionalElement();
-//		maybeCallInit(e);
+		// maybeCallInit(e);
 		addToListAndListIndex(indexOf, e);
 	}
 
 	@SuppressWarnings("unchecked")
 	protected Edge addToListAndListIndex(int indexOf, E e) {
-		E previous = (E) this.getInternalListOrderedSet().get(indexOf - 1);
+		E previous = null;
+		if (indexOf > 0) {
+			previous = (E) this.getInternalListOrderedSet().get(indexOf - 1);
+		}
 		E current = (E) this.getInternalListOrderedSet().get(indexOf);
+		boolean itsAMoveInTheSequence = this.getInternalListOrderedSet().contains(e);
+		if (itsAMoveInTheSequence) {
+			remove(e);
+		}
 		this.getInternalListOrderedSet().add(indexOf, e);
 		Edge edge = addInternal(e);
+
+		// Edge can only be null on a one primitive
 		if (edge == null && !isOnePrimitive()) {
 			throw new IllegalStateException("Edge can only be null on isOneToMany, toOneToOne which is a String, Interger, Boolean or primitive");
 		}
+
 		if (edge != null) {
-			float min;
-			float max;
+			float min = 0;
+			float max = 0;
+			float elementToAddIndex = 0;
 			if (e instanceof TumlNode) {
-				min = (Float) ((TumlNode) previous).getVertex().getProperty("tinkerIndex");
+				elementToAddIndex = (itsAMoveInTheSequence ? (Float) ((TumlNode) e).getVertex().getProperty("tinkerIndex") : 0);
+				if (previous != null) {
+					min = (Float) ((TumlNode) previous).getVertex().getProperty("tinkerIndex");
+				}
 				max = (Float) ((TumlNode) current).getVertex().getProperty("tinkerIndex");
 			} else if (e.getClass().isEnum()) {
-				min = (Float) this.internalVertexMap.get(((Enum<?>) previous).name()).getProperty("tinkerIndex");
+				elementToAddIndex = (itsAMoveInTheSequence ? (Float) this.internalVertexMap.get(((Enum<?>) e).name()).getProperty("tinkerIndex") : 0);
+				if (previous != null) {
+					min = (Float) this.internalVertexMap.get(((Enum<?>) previous).name()).getProperty("tinkerIndex");
+				}
 				max = (Float) this.internalVertexMap.get(((Enum<?>) current).name()).getProperty("tinkerIndex");
 			} else {
-				min = (Float) this.internalVertexMap.get(previous).getProperty("tinkerIndex");
+				elementToAddIndex = (itsAMoveInTheSequence ? (Float) this.internalVertexMap.get(e).getProperty("tinkerIndex") : 0);
+				if (previous != null) {
+					min = (Float) this.internalVertexMap.get(previous).getProperty("tinkerIndex");
+				}
 				max = (Float) this.internalVertexMap.get(current).getProperty("tinkerIndex");
 			}
 			float tinkerIndex = (min + max) / 2;
+			if (itsAMoveInTheSequence && (elementToAddIndex < tinkerIndex)) {
+				tinkerIndex++;
+			}
 			this.index.put("index", tinkerIndex, edge);
 			getVertexForDirection(edge).setProperty("tinkerIndex", tinkerIndex);
 			return edge;
@@ -97,22 +120,24 @@ public class TinkerOrderedSetImpl<E> extends BaseCollection<E> implements Tinker
 	protected void loadFromVertex() {
 		CloseableIterable<Edge> edges = this.index.queryList(0F, true, false);
 		for (Edge edge : edges) {
-			E node = null;
-			try {
-				Class<?> c = this.getClassToInstantiate(edge);
-				Object value = this.getVertexForDirection(edge).getProperty("value");
-				if (c.isEnum()) {
-					node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
-					this.internalVertexMap.put(value, this.getVertexForDirection(edge));
-				} else if (TumlNode.class.isAssignableFrom(c)) {
-					node = (E) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
-				} else {
-					node = (E) value;
-					this.internalVertexMap.put(value, this.getVertexForDirection(edge));
+			if (!GraphDb.getDb().hasEdgeBeenDeleted(edge)) {
+				E node = null;
+				try {
+					Class<?> c = this.getClassToInstantiate(edge);
+					Object value = this.getVertexForDirection(edge).getProperty("value");
+					if (c.isEnum()) {
+						node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
+						this.internalVertexMap.put(value, this.getVertexForDirection(edge));
+					} else if (TumlNode.class.isAssignableFrom(c)) {
+						node = (E) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
+					} else {
+						node = (E) value;
+						this.internalVertexMap.put(value, this.getVertexForDirection(edge));
+					}
+					this.getInternalListOrderedSet().add(node);
+				} catch (Exception ex) {
+					throw new RuntimeException(ex);
 				}
-				this.getInternalListOrderedSet().add(node);
-			} catch (Exception ex) {
-				throw new RuntimeException(ex);
 			}
 		}
 		this.loaded = true;
@@ -221,7 +246,7 @@ public class TinkerOrderedSetImpl<E> extends BaseCollection<E> implements Tinker
 		maybeLoad();
 		return this.oclStdLibOrderedSet.collect(v);
 	}
-	
+
 	@Override
 	public <T2> TinkerCollection<T2> flatten() {
 		maybeLoad();

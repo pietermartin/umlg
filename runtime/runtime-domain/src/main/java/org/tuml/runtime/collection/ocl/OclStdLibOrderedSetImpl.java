@@ -229,5 +229,11 @@ public class OclStdLibOrderedSetImpl<E> extends OclStdLibCollectionImpl<E> imple
 		}
 		return this;
 	}
-	
+
+	@Override
+	public String toJson() {
+		//TODO
+		throw new RuntimeException("Not yet implemented");
+	}
+
 }

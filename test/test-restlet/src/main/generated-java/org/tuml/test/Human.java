@@ -3,20 +3,19 @@ package org.tuml.test;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.TinkerIdUtilFactory;
 import org.tuml.runtime.collection.Qualifier;
+import org.tuml.runtime.collection.TinkerBag;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
+import org.tuml.runtime.collection.persistent.TinkerBagImpl;
 import org.tuml.runtime.collection.persistent.TinkerSetImpl;
 import org.tuml.runtime.domain.BaseTuml;
 import org.tuml.runtime.domain.TumlNode;
@@ -26,7 +25,7 @@ import org.tuml.test.Ring.RingRuntimePropertyEnum;
 public class Human extends BaseTuml implements TumlNode {
 	static final public long serialVersionUID = 1L;
 	private TinkerSet<Hand> hand;
-	private TinkerSet<Ring> ring;
+	private TinkerBag<Ring> ring;
 	private TinkerSet<String> name;
 	private TinkerSet<String> name2;
 
@@ -100,7 +99,7 @@ public class Human extends BaseTuml implements TumlNode {
 		}
 	}
 	
-	public void addToRing(TinkerSet<Ring> ring) {
+	public void addToRing(TinkerBag<Ring> ring) {
 		if ( !ring.isEmpty() ) {
 			this.ring.addAll(ring);
 		}
@@ -127,13 +126,40 @@ public class Human extends BaseTuml implements TumlNode {
 	
 	@Override
 	public void delete() {
-		for ( Hand child : getHand() ) {
-			child.delete();
-		}
 		for ( Ring child : getRing() ) {
 			child.delete();
 		}
+		for ( Hand child : getHand() ) {
+			child.delete();
+		}
 		GraphDb.getDb().removeVertex(this.vertex);
+	}
+	
+	@Override
+	public void fromJson(Map<String,Object> propertyMap) {
+		for ( String propertyName : propertyMap.keySet() ) {
+			if ( propertyName.equals("name2") ) {
+				setName2((String)propertyMap.get(propertyName));
+			} else if ( propertyName.equals("name") ) {
+				setName((String)propertyMap.get(propertyName));
+			} else if ( propertyName.equals("id") ) {
+				//Ignored;
+			} else {
+				throw new IllegalStateException();
+			}
+		}
+	}
+	
+	@Override
+	public void fromJson(String json) {
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			@SuppressWarnings(	"unchecked")
+			 Map<String,Object> propertyMap = mapper.readValue(json, Map.class);
+			fromJson(propertyMap);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	public TinkerSet<Hand> getHand() {
@@ -189,12 +215,12 @@ public class Human extends BaseTuml implements TumlNode {
 		return result;
 	}
 	
-	public TinkerSet<Ring> getRing() {
+	public TinkerBag<Ring> getRing() {
 		return this.ring;
 	}
 	
 	/**
-	 * getSize is called from the collection in order to update the index used to implement a sequance's index
+	 * getSize is called from the collection in order to update the index used to implement a sequence's index
 	 * 
 	 * @param tumlRuntimeProperty 
 	 */
@@ -204,10 +230,6 @@ public class Human extends BaseTuml implements TumlNode {
 		HumanRuntimePropertyEnum runtimeProperty = HumanRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result == 0 ) {
 			switch ( runtimeProperty ) {
-				case ring:
-					result = ring.size();
-				break;
-			
 				case hand:
 					result = hand.size();
 				break;
@@ -218,6 +240,10 @@ public class Human extends BaseTuml implements TumlNode {
 			
 				case name2:
 					result = name2.size();
+				break;
+			
+				case ring:
+					result = ring.size();
 				break;
 			
 				default:
@@ -244,19 +270,15 @@ public class Human extends BaseTuml implements TumlNode {
 	
 	@Override
 	public void initialiseProperties() {
+		this.ring =  new TinkerBagImpl<Ring>(this, HumanRuntimePropertyEnum.ring);
 		this.name2 =  new TinkerSetImpl<String>(this, HumanRuntimePropertyEnum.name2);
 		this.name =  new TinkerSetImpl<String>(this, HumanRuntimePropertyEnum.name);
 		this.hand =  new TinkerSetImpl<Hand>(this, HumanRuntimePropertyEnum.hand);
-		this.ring =  new TinkerSetImpl<Ring>(this, HumanRuntimePropertyEnum.ring);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (HumanRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case ring:
-				this.ring =  new TinkerSetImpl<Ring>(this, HumanRuntimePropertyEnum.ring);
-			break;
-		
 			case hand:
 				this.hand =  new TinkerSetImpl<Hand>(this, HumanRuntimePropertyEnum.hand);
 			break;
@@ -267,6 +289,10 @@ public class Human extends BaseTuml implements TumlNode {
 		
 			case name2:
 				this.name2 =  new TinkerSetImpl<String>(this, HumanRuntimePropertyEnum.name2);
+			break;
+		
+			case ring:
+				this.ring =  new TinkerBagImpl<Ring>(this, HumanRuntimePropertyEnum.ring);
 			break;
 		
 		}
@@ -319,7 +345,7 @@ public class Human extends BaseTuml implements TumlNode {
 		}
 	}
 	
-	public void removeFromRing(TinkerSet<Ring> ring) {
+	public void removeFromRing(TinkerBag<Ring> ring) {
 		if ( !ring.isEmpty() ) {
 			this.ring.removeAll(ring);
 		}
@@ -345,7 +371,7 @@ public class Human extends BaseTuml implements TumlNode {
 		addToName2(name2);
 	}
 	
-	public void setRing(TinkerSet<Ring> ring) {
+	public void setRing(TinkerBag<Ring> ring) {
 		clearRing();
 		addToRing(ring);
 	}
@@ -361,33 +387,14 @@ public class Human extends BaseTuml implements TumlNode {
 		sb.append("}");
 		return sb.toString();
 	}
-	
-	public void fromJson(String json) {
-		ObjectMapper mapper = new ObjectMapper();
-		try {
-			Map<String, Object> propertyMap = mapper.readValue(json, Map.class);
-			for (String propertyName : propertyMap.keySet()) {
-				if (propertyName.equals("name")) {
-					setName((String) propertyMap.get(propertyName));
-				} else if (propertyName.equals("name2")) {
-					setName2((String) propertyMap.get(propertyName));
-				} else if (propertyName.equals("id")) {
-				} else {
-					throw new IllegalStateException();
-				}
-			}
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
 
 	static public enum HumanRuntimePropertyEnum implements TumlRuntimeProperty {
-		name2(true,true,false,"restAndJson__org__tuml__test__Human__name2",false,false,true,false,1,1,false,false,false,false,true,"{\"name2\": {\"onePrimitive\": true, \"controllingSide\": true, \"composite\": false, \"oneToOne\": false, \"oneToMany\": false, \"manyToOne\": true, \"manyToMany\": false, \"upper\": 1, \"lower\": 1, \"label\": \"restAndJson__org__tuml__test__Human__name2\", \"qualified\": false, \"inverseQualified\": false, \"inverseOrdered\": false, \"unique\": true}}"),
-		name(true,true,false,"restAndJson__org__tuml__test__Human__name",false,false,true,false,1,1,false,false,false,false,true,"{\"name\": {\"onePrimitive\": true, \"controllingSide\": true, \"composite\": false, \"oneToOne\": false, \"oneToMany\": false, \"manyToOne\": true, \"manyToMany\": false, \"upper\": 1, \"lower\": 1, \"label\": \"restAndJson__org__tuml__test__Human__name\", \"qualified\": false, \"inverseQualified\": false, \"inverseOrdered\": false, \"unique\": true}}"),
-		hand(false,true,true,"A_<human>_<hand>",false,true,false,false,-1,0,false,false,false,false,true,"{\"hand\": {\"onePrimitive\": false, \"controllingSide\": true, \"composite\": true, \"oneToOne\": false, \"oneToMany\": true, \"manyToOne\": false, \"manyToMany\": false, \"upper\": -1, \"lower\": 0, \"label\": \"A_<human>_<hand>\", \"qualified\": false, \"inverseQualified\": false, \"inverseOrdered\": false, \"unique\": true}}"),
-		ring(false,true,true,"A_<human>_<ring>",false,true,false,false,-1,0,false,false,false,false,true,"{\"ring\": {\"onePrimitive\": false, \"controllingSide\": true, \"composite\": true, \"oneToOne\": false, \"oneToMany\": true, \"manyToOne\": false, \"manyToMany\": false, \"upper\": -1, \"lower\": 0, \"label\": \"A_<human>_<ring>\", \"qualified\": false, \"inverseQualified\": false, \"inverseOrdered\": false, \"unique\": true}}");
+		ring(false,false,true,true,"A_<human>_<ring>",false,true,false,false,-1,0,false,false,false,false,false,"{\"ring\": {\"onePrimitive\": false, \"manyPrimitive\": false, \"controllingSide\": true, \"composite\": true, \"oneToOne\": false, \"oneToMany\": true, \"manyToOne\": false, \"manyToMany\": false, \"upper\": -1, \"lower\": 0, \"label\": \"A_<human>_<ring>\", \"qualified\": false, \"inverseQualified\": false, \"inverseOrdered\": false, \"unique\": false}}"),
+		name2(true,false,true,false,"restAndJson__org__tuml__test__Human__name2",false,false,true,false,1,1,false,false,false,false,true,"{\"name2\": {\"onePrimitive\": true, \"manyPrimitive\": false, \"controllingSide\": true, \"composite\": false, \"oneToOne\": false, \"oneToMany\": false, \"manyToOne\": true, \"manyToMany\": false, \"upper\": 1, \"lower\": 1, \"label\": \"restAndJson__org__tuml__test__Human__name2\", \"qualified\": false, \"inverseQualified\": false, \"inverseOrdered\": false, \"unique\": true}}"),
+		name(true,false,true,false,"restAndJson__org__tuml__test__Human__name",false,false,true,false,1,1,false,false,false,false,true,"{\"name\": {\"onePrimitive\": true, \"manyPrimitive\": false, \"controllingSide\": true, \"composite\": false, \"oneToOne\": false, \"oneToMany\": false, \"manyToOne\": true, \"manyToMany\": false, \"upper\": 1, \"lower\": 1, \"label\": \"restAndJson__org__tuml__test__Human__name\", \"qualified\": false, \"inverseQualified\": false, \"inverseOrdered\": false, \"unique\": true}}"),
+		hand(false,false,true,true,"A_<human>_<hand>",false,true,false,false,-1,0,false,false,false,false,true,"{\"hand\": {\"onePrimitive\": false, \"manyPrimitive\": false, \"controllingSide\": true, \"composite\": true, \"oneToOne\": false, \"oneToMany\": true, \"manyToOne\": false, \"manyToMany\": false, \"upper\": -1, \"lower\": 0, \"label\": \"A_<human>_<hand>\", \"qualified\": false, \"inverseQualified\": false, \"inverseOrdered\": false, \"unique\": true}}");
 		private boolean onePrimitive;
+		private boolean manyPrimitive;
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -407,6 +414,7 @@ public class Human extends BaseTuml implements TumlNode {
 		 * constructor for HumanRuntimePropertyEnum
 		 * 
 		 * @param onePrimitive 
+		 * @param manyPrimitive 
 		 * @param controllingSide 
 		 * @param composite 
 		 * @param label 
@@ -423,8 +431,9 @@ public class Human extends BaseTuml implements TumlNode {
 		 * @param unique 
 		 * @param json 
 		 */
-		private HumanRuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower, boolean qualified, boolean inverseQualified, boolean ordered, boolean inverseOrdered, boolean unique, String json) {
+		private HumanRuntimePropertyEnum(boolean onePrimitive, boolean manyPrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower, boolean qualified, boolean inverseQualified, boolean ordered, boolean inverseOrdered, boolean unique, String json) {
 			this.onePrimitive = onePrimitive;
+			this.manyPrimitive = manyPrimitive;
 			this.controllingSide = controllingSide;
 			this.composite = composite;
 			this.label = label;
@@ -445,18 +454,21 @@ public class Human extends BaseTuml implements TumlNode {
 		static public String asJson() {
 			StringBuilder sb = new StringBuilder();;
 			sb.append("{\"Human\": [");
+			sb.append(HumanRuntimePropertyEnum.ring.toJson());
+			sb.append(",");
 			sb.append(HumanRuntimePropertyEnum.name2.toJson());
 			sb.append(",");
 			sb.append(HumanRuntimePropertyEnum.name.toJson());
 			sb.append(",");
 			sb.append(HumanRuntimePropertyEnum.hand.toJson());
-			sb.append(",");
-			sb.append(HumanRuntimePropertyEnum.ring.toJson());
 			sb.append("]}");
 			return sb.toString();
 		}
 		
 		static public HumanRuntimePropertyEnum fromLabel(String label) {
+			if ( ring.getLabel().equals(label) ) {
+				return ring;
+			}
 			if ( name2.getLabel().equals(label) ) {
 				return name2;
 			}
@@ -465,9 +477,6 @@ public class Human extends BaseTuml implements TumlNode {
 			}
 			if ( hand.getLabel().equals(label) ) {
 				return hand;
-			}
-			if ( ring.getLabel().equals(label) ) {
-				return ring;
 			}
 			return null;
 		}
@@ -502,6 +511,10 @@ public class Human extends BaseTuml implements TumlNode {
 		
 		public boolean isInverseQualified() {
 			return this.inverseQualified;
+		}
+		
+		public boolean isManyPrimitive() {
+			return this.manyPrimitive;
 		}
 		
 		public boolean isManyToMany() {
@@ -549,5 +562,6 @@ public class Human extends BaseTuml implements TumlNode {
 		public String toJson() {
 			return getJson();
 		}
+	
 	}
 }

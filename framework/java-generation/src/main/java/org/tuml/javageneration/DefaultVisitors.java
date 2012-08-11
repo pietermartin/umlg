@@ -12,8 +12,9 @@ import org.tuml.javageneration.visitor.clazz.ClassRuntimePropertyImplementorVisi
 import org.tuml.javageneration.visitor.clazz.CompositionVisitor;
 import org.tuml.javageneration.visitor.clazz.InterfaceRuntimePropertyImplementorVisitor;
 import org.tuml.javageneration.visitor.clazz.RootEntryPointBuilder;
-import org.tuml.javageneration.visitor.clazz.ToJsonCreator;
+import org.tuml.javageneration.visitor.clazz.ToFromJsonCreator;
 import org.tuml.javageneration.visitor.enumeration.EnumerationVisitor;
+import org.tuml.javageneration.visitor.enumeration.TofromJsonForEnumCreator;
 import org.tuml.javageneration.visitor.interfaze.InterfaceVisitor;
 import org.tuml.javageneration.visitor.model.RootEntryPointCreator;
 import org.tuml.javageneration.visitor.operation.OperationImplementorSimple;
@@ -45,7 +46,8 @@ public class DefaultVisitors {
 		result.add(new QualifierValidator(Workspace.INSTANCE));
 		result.add(new QualifierVisitor(Workspace.INSTANCE));
 		result.add(new OperationImplementorSimple(Workspace.INSTANCE));
-		result.add(new ToJsonCreator(Workspace.INSTANCE));
+		result.add(new ToFromJsonCreator(Workspace.INSTANCE));
+		result.add(new TofromJsonForEnumCreator(Workspace.INSTANCE));
 		result.add(new RootEntryPointCreator(Workspace.INSTANCE));
 		result.add(new RootEntryPointBuilder(Workspace.INSTANCE));
 		return result;

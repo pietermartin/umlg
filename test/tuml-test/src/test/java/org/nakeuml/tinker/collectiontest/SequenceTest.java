@@ -6,6 +6,7 @@ import java.util.List;
 import junit.framework.Assert;
 
 import org.junit.Test;
+import org.tuml.collectiontest.Finger;
 import org.tuml.collectiontest.Hand;
 import org.tuml.concretetest.God;
 import org.tuml.qualifiertest.Many1;
@@ -72,7 +73,6 @@ public class SequenceTest extends BaseLocalDbTest {
 		Hand hand1_5 = new Hand(true);
 		hand1_5.setLeft(true);
 		hand1_5.setName("hand1_5");
-		hand1_5.addToGod(god);
 		god.getHand().add(1, hand1_5);
 		db.stopTransaction(Conclusion.SUCCESS);
 		
@@ -82,7 +82,7 @@ public class SequenceTest extends BaseLocalDbTest {
 		Assert.assertTrue(godTest1.getHand().get(2).getName().equals("hand2"));
 		Assert.assertTrue(godTest1.getHand().get(1).getName().equals("hand1_5"));
 		Assert.assertTrue(godTest1.getHand().get(0).getName().equals("hand1"));
-		Assert.assertEquals(6, godTest1.getHand().size());
+		Assert.assertEquals(5, godTest1.getHand().size());
 		
 		God godTest2 = new God(god.getVertex());
 		int i = 0;
@@ -214,9 +214,9 @@ public class SequenceTest extends BaseLocalDbTest {
 		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
-		Hand hand = new Hand(god);
-		hand.setLeft(true);
-		hand.setName("hand1");
+		Hand hand1 = new Hand(god);
+		hand1.setLeft(true);
+		hand1.setName("hand1");
 		Hand hand2 = new Hand(god);
 		hand2.setLeft(true);
 		hand2.setName("hand2");
@@ -224,7 +224,7 @@ public class SequenceTest extends BaseLocalDbTest {
 
 		db.startTransaction();
 		God godTest = new God(god.getVertex());
-		godTest.getHand().add(hand);
+		godTest.getHand().add(hand1);
 		godTest.getHand().add(hand2);
 		db.stopTransaction(Conclusion.SUCCESS);
 		
@@ -313,5 +313,63 @@ public class SequenceTest extends BaseLocalDbTest {
 		Assert.assertEquals(33, countEdges());
 	}
 
+	@Test
+	public void testRemovalOfEdgeFromIndex() {
+		db.startTransaction();
+		God god = new God(true);
+		god.setName("THEGOD");
+		Hand hand1 = new Hand(god);
+		hand1.setLeft(true);
+		hand1.setName("hand1");
+		Hand hand2 = new Hand(god);
+		hand2.setLeft(false);
+		hand2.setName("hand2");
+		db.stopTransaction(Conclusion.SUCCESS);
+		Assert.assertEquals(3, countVertices());
+		Assert.assertEquals(3, countEdges());
+		
+		db.startTransaction();
+		god.addToHand(hand1);
+		db.stopTransaction(Conclusion.SUCCESS);
+		Assert.assertEquals(3, countVertices());
+		Assert.assertEquals(3, countEdges());
+	}
 	
+	@Test
+	public void testAddAtIndex() {
+		db.startTransaction();
+		God god = new God(true);
+		god.setName("THEGOD");
+		Hand hand1 = new Hand(god);
+		hand1.setLeft(true);
+		hand1.setName("hand1");
+		Finger finger1 = new Finger(hand1);
+		finger1.setName("finger1");
+		Finger finger2 = new Finger(hand1);
+		finger2.setName("finger2");
+		Finger finger3 = new Finger(hand1);
+		finger3.setName("finger3");
+		Finger finger4 = new Finger(hand1);
+		finger4.setName("finger4");
+		Finger finger5 = new Finger(hand1);
+		finger5.setName("finger5");
+		db.stopTransaction(Conclusion.SUCCESS);
+		Assert.assertEquals(7, countVertices());
+		Assert.assertEquals(7, countEdges());
+		
+		db.startTransaction();
+		int indexToTest = 4;
+		hand1.getFinger().add(indexToTest, finger2);
+		db.stopTransaction(Conclusion.SUCCESS);
+		Assert.assertEquals(7, countVertices());
+		Assert.assertEquals(7, countEdges());
+		Finger fingerTest = new Finger(finger2.getVertex());
+		Hand handTest = new Hand(hand1.getVertex());
+		for (Finger f : handTest.getFinger()) {
+			System.out.println(f.getName());
+		}
+		Assert.assertEquals(handTest.getFinger().get(indexToTest).getId(), fingerTest.getId());
+		
+	}
+
 }

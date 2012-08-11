@@ -45,6 +45,11 @@ public class InterfaceRuntimePropertyImplementorVisitor extends BaseVisitor impl
 		isOnePrimitiveField.setName("onePrimitive");
 		ojEnum.addToFields(isOnePrimitiveField);
 
+		OJField isManyPrimitiveField = new OJField();
+		isManyPrimitiveField.setType(new OJPathName("boolean"));
+		isManyPrimitiveField.setName("manyPrimitive");
+		ojEnum.addToFields(isManyPrimitiveField);
+
 		OJField inverseField = new OJField();
 		inverseField.setType(new OJPathName("boolean"));
 		inverseField.setName("controllingSide");
@@ -173,6 +178,11 @@ public class InterfaceRuntimePropertyImplementorVisitor extends BaseVisitor impl
 				// opposite end is null it defaults to many
 				propertyOnePrimitiveField.setInitExp(Boolean.toString(pWrap.isPrimitive() && pWrap.isManyToOne()));
 				ojLiteral.addToAttributeValues(propertyOnePrimitiveField);
+
+				OJField propertyManyPrimitiveField = new OJField();
+				propertyManyPrimitiveField.setType(new OJPathName("boolean"));
+				propertyManyPrimitiveField.setInitExp(Boolean.toString(pWrap.isPrimitive() && pWrap.isMany()));
+				ojLiteral.addToAttributeValues(propertyManyPrimitiveField);
 
 				OJField propertyControllingSideField = new OJField();
 				propertyControllingSideField.setType(new OJPathName("boolean"));

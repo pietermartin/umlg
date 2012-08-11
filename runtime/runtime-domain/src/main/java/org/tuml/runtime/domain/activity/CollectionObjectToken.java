@@ -2,6 +2,7 @@ package org.tuml.runtime.domain.activity;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.tuml.runtime.adaptor.GraphDb;
@@ -218,6 +219,18 @@ public class CollectionObjectToken<O> extends ObjectToken<O> implements Composit
 	public String toJson() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void fromJson(String json) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void fromJson(Map<String, Object> propertyMap) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

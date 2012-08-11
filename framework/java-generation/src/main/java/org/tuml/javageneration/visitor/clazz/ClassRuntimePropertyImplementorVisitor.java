@@ -78,6 +78,11 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
 		isOnePrimitiveField.setName("onePrimitive");
 		ojEnum.addToFields(isOnePrimitiveField);
 
+		OJField isManyPrimitiveField = new OJField();
+		isManyPrimitiveField.setType(new OJPathName("boolean"));
+		isManyPrimitiveField.setName("manyPrimitive");
+		ojEnum.addToFields(isManyPrimitiveField);
+
 		OJField inverseField = new OJField();
 		inverseField.setType(new OJPathName("boolean"));
 		inverseField.setName("controllingSide");
@@ -208,6 +213,11 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
 				propertyOnePrimitiveField.setInitExp(Boolean.toString(pWrap.isPrimitive() && pWrap.isManyToOne()));
 				ojLiteral.addToAttributeValues(propertyOnePrimitiveField);
 
+				OJField propertyManyPrimitiveField = new OJField();
+				propertyManyPrimitiveField.setType(new OJPathName("boolean"));
+				propertyManyPrimitiveField.setInitExp(Boolean.toString(pWrap.isPrimitive() && pWrap.isMany()));
+				ojLiteral.addToAttributeValues(propertyManyPrimitiveField);
+				
 				OJField propertyControllingSideField = new OJField();
 				propertyControllingSideField.setType(new OJPathName("boolean"));
 				propertyControllingSideField.setInitExp(Boolean.toString(pWrap.isControllingSide()));
@@ -288,6 +298,9 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
 				sb.append("{\\\"");
 				sb.append("onePrimitive\\\": ");
 				sb.append(propertyOnePrimitiveField.getInitExp());
+				sb.append(", ");
+				sb.append("\\\"manyPrimitive\\\": ");
+				sb.append(propertyManyPrimitiveField.getInitExp());
 				sb.append(", ");
 				sb.append("\\\"controllingSide\\\": ");
 				sb.append(propertyControllingSideField.getInitExp());
@@ -388,7 +401,7 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
 	private void addGetSize(OJAnnotatedClass annotatedClass, Class clazz) {
 		OJAnnotatedOperation getQualifiers = new OJAnnotatedOperation("getSize");
 		TinkerGenerationUtil.addOverrideAnnotation(getQualifiers);
-		getQualifiers.setComment("getSize is called from the collection in order to update the index used to implement a sequance's index");
+		getQualifiers.setComment("getSize is called from the collection in order to update the index used to implement a sequence's index");
 		getQualifiers.addParam("tumlRuntimeProperty", TinkerGenerationUtil.tumlRuntimePropertyPathName.getCopy());
 		getQualifiers.setReturnType(new OJPathName("int"));
 		annotatedClass.addToOperations(getQualifiers);

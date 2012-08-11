@@ -10,7 +10,6 @@ import org.tuml.test.restlet.Hand_finger_ServerResourceImpl;
 import org.tuml.test.restlet.Hand_human_ServerResourceImpl;
 import org.tuml.test.restlet.HumanServerResourceImpl;
 import org.tuml.test.restlet.Human_hand_ServerResourceImpl;
-import org.tuml.test.restlet.Human_ring_ServerResourceImpl;
 import org.tuml.test.restlet.HumansServerResourceImpl;
 import org.tuml.test.restlet.RingServerResourceImpl;
 import org.tuml.test.restlet.Ring_finger_ServerResourceImpl;
@@ -23,7 +22,6 @@ public enum RestletRouterEnum {
 	HUMAN("/humans/{humanId}",HumanServerResourceImpl.class),
 	HAND_finger("/hands/{handId}/finger",Hand_finger_ServerResourceImpl.class),
 	HUMAN_hand("/humans/{humanId}/hand",Human_hand_ServerResourceImpl.class),
-	HUMAN_ring("/humans/{humanId}/ring",Human_ring_ServerResourceImpl.class),
 	HAND_human("/hands/{handId}/human",Hand_human_ServerResourceImpl.class),
 	RING_human("/rings/{ringId}/human",Ring_human_ServerResourceImpl.class),
 	FINGER_hand("/fingers/{fingerId}/hand",Finger_hand_ServerResourceImpl.class),
@@ -55,7 +53,6 @@ public enum RestletRouterEnum {
 		RestletRouterEnum.HUMAN.attach(router);
 		RestletRouterEnum.HAND_finger.attach(router);
 		RestletRouterEnum.HUMAN_hand.attach(router);
-		RestletRouterEnum.HUMAN_ring.attach(router);
 		RestletRouterEnum.HAND_human.attach(router);
 		RestletRouterEnum.RING_human.attach(router);
 		RestletRouterEnum.FINGER_hand.attach(router);

@@ -244,4 +244,9 @@ public class TumlMemoryCollection<E> implements TinkerCollection<E> {
 		return this.oclStdLibCollection.collectNested(e);
 	}
 
+	@Override
+	public String toJson() {
+		//TODO
+		throw new RuntimeException("Not yet implemented");
+	}
 }

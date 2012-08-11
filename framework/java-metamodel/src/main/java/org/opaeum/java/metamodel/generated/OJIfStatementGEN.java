@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.opaeum.java.metamodel.OJBlock;
 import org.opaeum.java.metamodel.OJElement;
+import org.opaeum.java.metamodel.OJField;
 import org.opaeum.java.metamodel.OJIfStatement;
 import org.opaeum.java.metamodel.OJStatement;
 import org.opaeum.java.metamodel.utilities.InvariantError;
@@ -18,6 +19,8 @@ import org.opaeum.java.metamodel.utilities.InvariantError;
 abstract public class OJIfStatementGEN extends OJStatement {
 	private String f_condition = "";
 	private OJBlock f_thenPart = null;
+	protected List<String> elseIfCondition = new ArrayList<String>();
+	protected List<OJBlock> elseIfPart = new ArrayList<OJBlock>();
 	private OJBlock f_elsePart = null;
 	static protected boolean usesAllInstances = false;
 	static protected List<OJIfStatement> allInstances = new ArrayList<OJIfStatement>();
@@ -45,6 +48,47 @@ abstract public class OJIfStatementGEN extends OJStatement {
 		if ( usesAllInstances ) {
 			allInstances.add(((OJIfStatement)this));
 		}
+	}
+
+	public OJBlock addToElseIfCondition(String condition, OJField f) {
+		addToElseIfCondition(condition);
+		return addToElseIf(f);
+	}
+	
+	
+	public OJBlock addToElseIfCondition(String condition, String s) {
+		addToElseIfCondition(condition);
+		return addToElseIf(s);
+	}
+
+	private void addToElseIfCondition(String condition) {
+		this.elseIfCondition.add(condition);
+	}
+
+	private void removeToElseIfCondition(String condition) {
+		this.elseIfCondition.remove(condition);
+	}
+
+	private OJBlock addToElseIf(OJField f) {
+		OJBlock block = new OJBlock();
+		block.addToLocals(f);
+		this.elseIfPart.add(block);
+		return block;
+	}
+
+	private OJBlock addToElseIf(String s) {
+		OJBlock block = new OJBlock();
+		block.addToStatements(s);
+		this.elseIfPart.add(block);
+		return block;
+	}
+
+	private void addToElseIf(OJBlock block) {
+		this.elseIfPart.add(block);
+	}
+
+	private void removeFromToElseIf(OJBlock block) {
+		this.elseIfPart.remove(block);
 	}
 
 	/** Implements the getter for feature '+ condition : String'

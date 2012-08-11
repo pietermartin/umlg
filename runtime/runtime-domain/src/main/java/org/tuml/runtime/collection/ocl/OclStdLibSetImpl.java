@@ -192,5 +192,11 @@ public class OclStdLibSetImpl<E> extends OclStdLibCollectionImpl<E> implements T
 	public void clear() {
 		this.set.clear();
 	}
-	
+
+	@Override
+	public String toJson() {
+		//TODO
+		throw new RuntimeException("Not yet implemented");
+	}
+
 }

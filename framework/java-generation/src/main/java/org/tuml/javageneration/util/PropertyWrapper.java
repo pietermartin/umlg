@@ -258,7 +258,12 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 	}
 
 	public String toJson() {
-		return "\\\"" + getName() + "\\\": \\\"\" + " + getter() + "() + \"\\\"";
+		if (isMany()) {
+			
+			return "\\\"" + getName() + "\\\": \\\"\" + " + getter() + "() + \"\\\"";
+		} else {
+			return "\\\"" + getName() + "\\\": \\\"\" + " + getter() + "() + \"\\\"";
+		}
 	}
 
 	public boolean isComponent() {

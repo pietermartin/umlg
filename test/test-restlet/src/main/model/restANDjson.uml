@@ -16,7 +16,7 @@
     <packagedElement xmi:type="uml:Package" xmi:id="_y-4osN4jEeGdB9TPHp60mw" name="tuml">
       <packagedElement xmi:type="uml:Package" xmi:id="_1nC9wN4jEeGdB9TPHp60mw" name="test">
         <packagedElement xmi:type="uml:Class" xmi:id="_4a8owN4jEeGdB9TPHp60mw" name="Hand">
-          <ownedAttribute xmi:id="_-ufDYN4jEeGdB9TPHp60mw" name="finger" type="_4sr5AN4jEeGdB9TPHp60mw" aggregation="composite" association="_-uo0YN4jEeGdB9TPHp60mw">
+          <ownedAttribute xmi:id="_-ufDYN4jEeGdB9TPHp60mw" name="finger" type="_4sr5AN4jEeGdB9TPHp60mw" isOrdered="true" aggregation="composite" association="_-uo0YN4jEeGdB9TPHp60mw">
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_-ufDYd4jEeGdB9TPHp60mw" value="*"/>
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_-ufDYt4jEeGdB9TPHp60mw"/>
           </ownedAttribute>
@@ -39,7 +39,7 @@
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_-UB8Ad4jEeGdB9TPHp60mw" value="*"/>
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_-UB8At4jEeGdB9TPHp60mw"/>
           </ownedAttribute>
-          <ownedAttribute xmi:id="_-f6b4N4jEeGdB9TPHp60mw" name="ring" type="_47QggN4jEeGdB9TPHp60mw" aggregation="composite" association="_-gBJkN4jEeGdB9TPHp60mw">
+          <ownedAttribute xmi:id="_-f6b4N4jEeGdB9TPHp60mw" name="ring" type="_47QggN4jEeGdB9TPHp60mw" isUnique="false" aggregation="composite" association="_-gBJkN4jEeGdB9TPHp60mw">
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_-f6b4d4jEeGdB9TPHp60mw" value="*"/>
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_-f6b4t4jEeGdB9TPHp60mw"/>
           </ownedAttribute>

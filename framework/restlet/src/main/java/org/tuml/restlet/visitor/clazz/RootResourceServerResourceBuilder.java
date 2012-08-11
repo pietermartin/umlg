@@ -29,7 +29,7 @@ public class RootResourceServerResourceBuilder extends BaseServerResourceBuilder
 	public void visitBefore(Class clazz) {
 		if (!clazz.isAbstract() && !TumlClassOperations.hasCompositeOwner(clazz)) {
 			
-			OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(TumlClassOperations.className(clazz) + "ServerResource");
+			OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(TumlClassOperations.className(clazz) + "sServerResource");
 			OJPackage ojPackage = new OJPackage(Namer.name(clazz.getNearestPackage()) + ".restlet");
 			annotatedInf.setMyPackage(ojPackage);
 			addToSource(annotatedInf);

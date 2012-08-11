@@ -1,5 +1,7 @@
 package org.tuml.test.restlet;
 
+import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
+
 import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
@@ -22,6 +24,27 @@ public class HumanServerResourceImpl extends ServerResource implements HumanServ
 	public Representation get() throws ResourceException {
 		this.humanId= Integer.parseInt((String)getRequestAttributes().get("humanId"));;
 		Human c = new Human(GraphDb.getDb().getVertex(this.humanId));
+		StringBuilder json = new StringBuilder();
+		json.append("[");
+		json.append(c.toJson());
+		json.append(",");
+		json.append(" {\"meta\" : ");
+		json.append(HumanRuntimePropertyEnum.asJson());
+		json.append("}]");
+		return new JsonRepresentation(json.toString());
+	}
+	
+	@Override
+	public Representation put(Representation entity) throws ResourceException {
+		this.humanId= Integer.parseInt((String)getRequestAttributes().get("humanId"));;
+		Human c = new Human(GraphDb.getDb().getVertex(this.humanId));
+		GraphDb.getDb().startTransaction();
+		try {
+			c.fromJson(entity.getText());;
+			GraphDb.getDb().stopTransaction(Conclusion.SUCCESS);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 		StringBuilder json = new StringBuilder();
 		json.append("[");
 		json.append(c.toJson());

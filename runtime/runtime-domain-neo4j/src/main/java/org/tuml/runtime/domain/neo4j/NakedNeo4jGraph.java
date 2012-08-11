@@ -32,6 +32,7 @@ import com.tinkerpop.blueprints.Features;
 import com.tinkerpop.blueprints.Index;
 import com.tinkerpop.blueprints.Parameter;
 import com.tinkerpop.blueprints.Vertex;
+import com.tinkerpop.blueprints.impls.neo4j.Neo4jEdge;
 import com.tinkerpop.blueprints.impls.neo4j.Neo4jGraph;
 import com.tinkerpop.blueprints.impls.neo4j.Neo4jVertex;
 
@@ -332,6 +333,27 @@ public class NakedNeo4jGraph implements NakedGraph {
 	@Override
 	public void setCheckElementsInTransaction(boolean b) {
 		neo4jGraph.setCheckElementsInTransaction(b);
+	}
+
+	@Override
+	public boolean hasEdgeBeenDeleted(Edge edge) {
+		Neo4jEdge neo4jEdge = (Neo4jEdge) edge;
+		try {
+			neo4jEdge.getRawEdge().hasProperty("asd");
+			return false;
+		} catch (Exception e) {
+			return true;
+		}
+		//The way below requires a transaction to have been started.
+		
+//		Neo4jEdge neo4jEdge = (Neo4jEdge) edge;
+//		EmbeddedGraphDatabase g = (EmbeddedGraphDatabase)this.neo4jGraph.getRawGraph();
+//		for (Relationship r : g.getNodeManager().getTransactionData().deletedRelationships()) {
+//			if (neo4jEdge.getRawEdge().equals(r)) {
+//				return true;
+//			}
+//		}
+//		return false;
 	}
 
 }

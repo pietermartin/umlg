@@ -8,6 +8,7 @@ import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.domain.json.ToJsonUtil;
 import org.tuml.test.Human;
 import org.tuml.test.Human.HumanRuntimePropertyEnum;
+import org.tuml.test.Ring.RingRuntimePropertyEnum;
 
 public class Human_ring_ServerResourceImpl extends ServerResource implements Human_ring_ServerResource {
 	private int humanId;
@@ -29,6 +30,9 @@ public class Human_ring_ServerResourceImpl extends ServerResource implements Hum
 		json.append(",");
 		json.append(" {\"meta\" : ");
 		json.append(HumanRuntimePropertyEnum.asJson());
+		json.append("}, ");
+		json.append(" {\"meta\" : ");
+		json.append(RingRuntimePropertyEnum.asJson());
 		json.append("}]");
 		return new JsonRepresentation(json.toString());
 	}

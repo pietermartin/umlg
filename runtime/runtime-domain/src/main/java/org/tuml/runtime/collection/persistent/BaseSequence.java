@@ -50,22 +50,24 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
 	protected void loadFromVertex() {
 		CloseableIterable<Edge> edges = this.index.queryList(0F, true, false);
 		for (Edge edge : edges) {
-			E node = null;
-			try {
-				Class<?> c = this.getClassToInstantiate(edge);
-				Object value = this.getVertexForDirection(edge).getProperty("value");
-				if (c.isEnum()) {
-					node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
-					this.internalVertexMap.put(value, this.getVertexForDirection(edge));
-				} else if (TumlNode.class.isAssignableFrom(c)) {
-					node = (E) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
-				} else {
-					node = (E) value;
-					this.internalVertexMap.put(value, this.getVertexForDirection(edge));
+			if (!GraphDb.getDb().hasEdgeBeenDeleted(edge)) {
+				E node = null;
+				try {
+					Class<?> c = this.getClassToInstantiate(edge);
+					Object value = this.getVertexForDirection(edge).getProperty("value");
+					if (c.isEnum()) {
+						node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
+						this.internalVertexMap.put(value, this.getVertexForDirection(edge));
+					} else if (TumlNode.class.isAssignableFrom(c)) {
+						node = (E) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
+					} else {
+						node = (E) value;
+						this.internalVertexMap.put(value, this.getVertexForDirection(edge));
+					}
+					this.getInternalList().add(node);
+				} catch (Exception ex) {
+					throw new RuntimeException(ex);
 				}
-				this.getInternalList().add(node);
-			} catch (Exception ex) {
-				throw new RuntimeException(ex);
 			}
 		}
 		this.loaded = true;
@@ -75,8 +77,15 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
 	 * This can only be added from the
 	 */
 	protected Edge addToListAndListIndex(int indexOf, E e) {
-		E previous = this.getInternalList().get(indexOf - 1);
+		E previous = null;
+		if (indexOf > 0) {
+			previous = (E) this.getInternalList().get(indexOf - 1);
+		}
 		E current = this.getInternalList().get(indexOf);
+		boolean itsAMoveInTheSequence = this.getInternalList().contains(e);
+		if (itsAMoveInTheSequence) {
+			remove(e);
+		}
 		this.getInternalList().add(indexOf, e);
 		Edge edge = addInternal(e);
 
@@ -84,25 +93,39 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
 		if (edge == null && !isOnePrimitive()) {
 			throw new IllegalStateException("Edge can only be null on isOne which is a String, Integer, Boolean or primitive");
 		}
-
-		float min;
-		float max;
-		if (e instanceof TumlNode) {
-			min = (Float) ((TumlNode) previous).getVertex().getProperty("tinkerIndex");
-			max = (Float) ((TumlNode) current).getVertex().getProperty("tinkerIndex");
-			if (isInverseOrdered()) {
-				addOrderToInverseIndex(edge, (TumlNode) e);
+		if (edge != null) {
+			float min = 0;
+			float max = 0;
+			float elementToAddIndex = 0;
+			if (e instanceof TumlNode) {
+				elementToAddIndex = (itsAMoveInTheSequence ? (Float) ((TumlNode) e).getVertex().getProperty("tinkerIndex") : 0);
+				if (previous != null) {
+					min = (Float) ((TumlNode) previous).getVertex().getProperty("tinkerIndex");
+				}
+				max = (Float) ((TumlNode) current).getVertex().getProperty("tinkerIndex");
+				if (isInverseOrdered()) {
+					addOrderToInverseIndex(edge, (TumlNode) e);
+				}
+			} else if (e.getClass().isEnum()) {
+				elementToAddIndex = (itsAMoveInTheSequence ? (Float) this.internalVertexMap.get(((Enum<?>) e).name()).getProperty("tinkerIndex") : 0);
+				if (previous != null) {
+					min = (Float) this.internalVertexMap.get(((Enum<?>) previous).name()).getProperty("tinkerIndex");
+				}
+				max = (Float) this.internalVertexMap.get(((Enum<?>) current).name()).getProperty("tinkerIndex");
+			} else {
+				elementToAddIndex = (itsAMoveInTheSequence ? (Float) this.internalVertexMap.get(e).getProperty("tinkerIndex") : 0);
+				if (previous != null) {
+					min = (Float) this.internalVertexMap.get(previous).getProperty("tinkerIndex");
+				}
+				max = (Float) this.internalVertexMap.get(current).getProperty("tinkerIndex");
 			}
-		} else if (e.getClass().isEnum()) {
-			min = (Float) this.internalVertexMap.get(((Enum<?>) previous).name()).getProperty("tinkerIndex");
-			max = (Float) this.internalVertexMap.get(((Enum<?>) current).name()).getProperty("tinkerIndex");
-		} else {
-			min = (Float) this.internalVertexMap.get(previous).getProperty("tinkerIndex");
-			max = (Float) this.internalVertexMap.get(current).getProperty("tinkerIndex");
+			float tinkerIndex = (min + max) / 2;
+			if (itsAMoveInTheSequence && (elementToAddIndex < tinkerIndex)) {
+				tinkerIndex++;
+			}
+			this.index.put("index", tinkerIndex, edge);
+			getVertexForDirection(edge).setProperty("tinkerIndex", tinkerIndex);
 		}
-		float tinkerIndex = (min + max) / 2;
-		this.index.put("index", tinkerIndex, edge);
-		getVertexForDirection(edge).setProperty("tinkerIndex", tinkerIndex);
 		return edge;
 	}
 
@@ -211,7 +234,7 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
 		maybeLoad();
 		return this.oclStdLibSequence.collect(v);
 	}
-	
+
 	@Override
 	public <R> TinkerSequence<R> flatten() {
 		maybeLoad();
@@ -223,13 +246,13 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
 		maybeLoad();
 		return this.oclStdLibSequence.select(v);
 	}
-	
+
 	@Override
 	public E first() {
 		maybeLoad();
 		return oclStdLibSequence.first();
 	}
-	
+
 	@Override
 	public Boolean equals(TinkerSequence<E> s) {
 		maybeLoad();

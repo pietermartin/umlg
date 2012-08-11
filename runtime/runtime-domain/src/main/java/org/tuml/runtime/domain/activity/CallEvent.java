@@ -1,6 +1,7 @@
 package org.tuml.runtime.domain.activity;
 
 import java.util.List;
+import java.util.Map;
 
 import org.tuml.runtime.collection.Qualifier;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
@@ -54,6 +55,18 @@ public class CallEvent extends Event {
 	public String toJson() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void fromJson(String json) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void fromJson(Map<String, Object> propertyMap) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

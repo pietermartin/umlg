@@ -12,7 +12,7 @@ import org.tuml.runtime.domain.json.ToJsonUtil;
 import org.tuml.test.Human;
 import org.tuml.test.Human.HumanRuntimePropertyEnum;
 
-public class HumansServerResourceImpl extends ServerResource implements HumanServerResource {
+public class HumansServerResourceImpl extends ServerResource implements HumansServerResource {
 	private int humanId;
 
 	/**

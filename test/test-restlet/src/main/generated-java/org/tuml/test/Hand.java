@@ -4,14 +4,18 @@ import com.tinkerpop.blueprints.Vertex;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.TinkerIdUtilFactory;
 import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
 import org.tuml.runtime.collection.Qualifier;
+import org.tuml.runtime.collection.TinkerOrderedSet;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
+import org.tuml.runtime.collection.persistent.TinkerOrderedSetImpl;
 import org.tuml.runtime.collection.persistent.TinkerSetImpl;
 import org.tuml.runtime.domain.BaseTuml;
 import org.tuml.runtime.domain.CompositionNode;
@@ -20,7 +24,7 @@ import org.tuml.test.Finger.FingerRuntimePropertyEnum;
 
 public class Hand extends BaseTuml implements CompositionNode {
 	static final public long serialVersionUID = 1L;
-	private TinkerSet<Finger> finger;
+	private TinkerOrderedSet<Finger> finger;
 	private TinkerSet<String> name;
 	private TinkerSet<Human> human;
 
@@ -80,7 +84,7 @@ public class Hand extends BaseTuml implements CompositionNode {
 		}
 	}
 	
-	public void addToFinger(TinkerSet<Finger> finger) {
+	public void addToFinger(TinkerOrderedSet<Finger> finger) {
 		if ( !finger.isEmpty() ) {
 			this.finger.addAll(finger);
 		}
@@ -122,7 +126,32 @@ public class Hand extends BaseTuml implements CompositionNode {
 		GraphDb.getDb().removeVertex(this.vertex);
 	}
 	
-	public TinkerSet<Finger> getFinger() {
+	@Override
+	public void fromJson(Map<String,Object> propertyMap) {
+		for ( String propertyName : propertyMap.keySet() ) {
+			if ( propertyName.equals("name") ) {
+				setName((String)propertyMap.get(propertyName));
+			} else if ( propertyName.equals("id") ) {
+				//Ignored;
+			} else {
+				throw new IllegalStateException();
+			}
+		}
+	}
+	
+	@Override
+	public void fromJson(String json) {
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			@SuppressWarnings(	"unchecked")
+			 Map<String,Object> propertyMap = mapper.readValue(json, Map.class);
+			fromJson(propertyMap);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public TinkerOrderedSet<Finger> getFinger() {
 		return this.finger;
 	}
 	
@@ -181,7 +210,7 @@ public class Hand extends BaseTuml implements CompositionNode {
 	}
 	
 	/**
-	 * getSize is called from the collection in order to update the index used to implement a sequance's index
+	 * getSize is called from the collection in order to update the index used to implement a sequence's index
 	 * 
 	 * @param tumlRuntimeProperty 
 	 */
@@ -191,16 +220,16 @@ public class Hand extends BaseTuml implements CompositionNode {
 		HandRuntimePropertyEnum runtimeProperty = HandRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel());
 		if ( runtimeProperty != null && result == 0 ) {
 			switch ( runtimeProperty ) {
-				case human:
-					result = human.size();
-				break;
-			
 				case finger:
 					result = finger.size();
 				break;
 			
 				case name:
 					result = name.size();
+				break;
+			
+				case human:
+					result = human.size();
 				break;
 			
 				default:
@@ -227,24 +256,24 @@ public class Hand extends BaseTuml implements CompositionNode {
 	
 	@Override
 	public void initialiseProperties() {
-		this.name =  new TinkerSetImpl<String>(this, HandRuntimePropertyEnum.name);
-		this.finger =  new TinkerSetImpl<Finger>(this, HandRuntimePropertyEnum.finger);
 		this.human =  new TinkerSetImpl<Human>(this, HandRuntimePropertyEnum.human);
+		this.name =  new TinkerSetImpl<String>(this, HandRuntimePropertyEnum.name);
+		this.finger =  new TinkerOrderedSetImpl<Finger>(this, HandRuntimePropertyEnum.finger);
 	}
 	
 	@Override
 	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
 		switch ( (HandRuntimePropertyEnum.fromLabel(tumlRuntimeProperty.getLabel())) ) {
-			case human:
-				this.human =  new TinkerSetImpl<Human>(this, HandRuntimePropertyEnum.human);
-			break;
-		
 			case finger:
-				this.finger =  new TinkerSetImpl<Finger>(this, HandRuntimePropertyEnum.finger);
+				this.finger =  new TinkerOrderedSetImpl<Finger>(this, HandRuntimePropertyEnum.finger);
 			break;
 		
 			case name:
 				this.name =  new TinkerSetImpl<String>(this, HandRuntimePropertyEnum.name);
+			break;
+		
+			case human:
+				this.human =  new TinkerSetImpl<Human>(this, HandRuntimePropertyEnum.human);
 			break;
 		
 		}
@@ -261,7 +290,7 @@ public class Hand extends BaseTuml implements CompositionNode {
 		}
 	}
 	
-	public void removeFromFinger(TinkerSet<Finger> finger) {
+	public void removeFromFinger(TinkerOrderedSet<Finger> finger) {
 		if ( !finger.isEmpty() ) {
 			this.finger.removeAll(finger);
 		}
@@ -291,7 +320,7 @@ public class Hand extends BaseTuml implements CompositionNode {
 		}
 	}
 	
-	public void setFinger(TinkerSet<Finger> finger) {
+	public void setFinger(TinkerOrderedSet<Finger> finger) {
 		clearFinger();
 		addToFinger(finger);
 	}
@@ -322,10 +351,11 @@ public class Hand extends BaseTuml implements CompositionNode {
 	}
 
 	static public enum HandRuntimePropertyEnum implements TumlRuntimeProperty {
-		name(true,true,false,"restAndJson__org__tuml__test__Hand__name",false,false,true,false,1,1,false,false,false,false,true,"{\"name\": {\"onePrimitive\": true, \"controllingSide\": true, \"composite\": false, \"oneToOne\": false, \"oneToMany\": false, \"manyToOne\": true, \"manyToMany\": false, \"upper\": 1, \"lower\": 1, \"label\": \"restAndJson__org__tuml__test__Hand__name\", \"qualified\": false, \"inverseQualified\": false, \"inverseOrdered\": false, \"unique\": true}}"),
-		finger(false,true,true,"A_<hand>_<finger>",false,true,false,false,-1,0,false,false,false,false,true,"{\"finger\": {\"onePrimitive\": false, \"controllingSide\": true, \"composite\": true, \"oneToOne\": false, \"oneToMany\": true, \"manyToOne\": false, \"manyToMany\": false, \"upper\": -1, \"lower\": 0, \"label\": \"A_<hand>_<finger>\", \"qualified\": false, \"inverseQualified\": false, \"inverseOrdered\": false, \"unique\": true}}"),
-		human(false,false,false,"A_<human>_<hand>",false,false,true,false,1,1,false,false,false,false,true,"{\"human\": {\"onePrimitive\": false, \"controllingSide\": false, \"composite\": false, \"oneToOne\": false, \"oneToMany\": false, \"manyToOne\": true, \"manyToMany\": false, \"upper\": 1, \"lower\": 1, \"label\": \"A_<human>_<hand>\", \"qualified\": false, \"inverseQualified\": false, \"inverseOrdered\": false, \"unique\": true}}");
+		human(false,false,false,false,"A_<human>_<hand>",false,false,true,false,1,1,false,false,false,false,true,"{\"human\": {\"onePrimitive\": false, \"manyPrimitive\": false, \"controllingSide\": false, \"composite\": false, \"oneToOne\": false, \"oneToMany\": false, \"manyToOne\": true, \"manyToMany\": false, \"upper\": 1, \"lower\": 1, \"label\": \"A_<human>_<hand>\", \"qualified\": false, \"inverseQualified\": false, \"inverseOrdered\": false, \"unique\": true}}"),
+		name(true,false,true,false,"restAndJson__org__tuml__test__Hand__name",false,false,true,false,1,1,false,false,false,false,true,"{\"name\": {\"onePrimitive\": true, \"manyPrimitive\": false, \"controllingSide\": true, \"composite\": false, \"oneToOne\": false, \"oneToMany\": false, \"manyToOne\": true, \"manyToMany\": false, \"upper\": 1, \"lower\": 1, \"label\": \"restAndJson__org__tuml__test__Hand__name\", \"qualified\": false, \"inverseQualified\": false, \"inverseOrdered\": false, \"unique\": true}}"),
+		finger(false,false,true,true,"A_<hand>_<finger>",false,true,false,false,-1,0,false,false,true,false,true,"{\"finger\": {\"onePrimitive\": false, \"manyPrimitive\": false, \"controllingSide\": true, \"composite\": true, \"oneToOne\": false, \"oneToMany\": true, \"manyToOne\": false, \"manyToMany\": false, \"upper\": -1, \"lower\": 0, \"label\": \"A_<hand>_<finger>\", \"qualified\": false, \"inverseQualified\": false, \"inverseOrdered\": true, \"unique\": true}}");
 		private boolean onePrimitive;
+		private boolean manyPrimitive;
 		private boolean controllingSide;
 		private boolean composite;
 		private String label;
@@ -345,6 +375,7 @@ public class Hand extends BaseTuml implements CompositionNode {
 		 * constructor for HandRuntimePropertyEnum
 		 * 
 		 * @param onePrimitive 
+		 * @param manyPrimitive 
 		 * @param controllingSide 
 		 * @param composite 
 		 * @param label 
@@ -361,8 +392,9 @@ public class Hand extends BaseTuml implements CompositionNode {
 		 * @param unique 
 		 * @param json 
 		 */
-		private HandRuntimePropertyEnum(boolean onePrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower, boolean qualified, boolean inverseQualified, boolean ordered, boolean inverseOrdered, boolean unique, String json) {
+		private HandRuntimePropertyEnum(boolean onePrimitive, boolean manyPrimitive, boolean controllingSide, boolean composite, String label, boolean oneToOne, boolean oneToMany, boolean manyToOne, boolean manyToMany, int upper, int lower, boolean qualified, boolean inverseQualified, boolean ordered, boolean inverseOrdered, boolean unique, String json) {
 			this.onePrimitive = onePrimitive;
+			this.manyPrimitive = manyPrimitive;
 			this.controllingSide = controllingSide;
 			this.composite = composite;
 			this.label = label;
@@ -383,24 +415,24 @@ public class Hand extends BaseTuml implements CompositionNode {
 		static public String asJson() {
 			StringBuilder sb = new StringBuilder();;
 			sb.append("{\"Hand\": [");
+			sb.append(HandRuntimePropertyEnum.human.toJson());
+			sb.append(",");
 			sb.append(HandRuntimePropertyEnum.name.toJson());
 			sb.append(",");
 			sb.append(HandRuntimePropertyEnum.finger.toJson());
-			sb.append(",");
-			sb.append(HandRuntimePropertyEnum.human.toJson());
 			sb.append("]}");
 			return sb.toString();
 		}
 		
 		static public HandRuntimePropertyEnum fromLabel(String label) {
+			if ( human.getLabel().equals(label) ) {
+				return human;
+			}
 			if ( name.getLabel().equals(label) ) {
 				return name;
 			}
 			if ( finger.getLabel().equals(label) ) {
 				return finger;
-			}
-			if ( human.getLabel().equals(label) ) {
-				return human;
 			}
 			return null;
 		}
@@ -435,6 +467,10 @@ public class Hand extends BaseTuml implements CompositionNode {
 		
 		public boolean isInverseQualified() {
 			return this.inverseQualified;
+		}
+		
+		public boolean isManyPrimitive() {
+			return this.manyPrimitive;
 		}
 		
 		public boolean isManyToMany() {
