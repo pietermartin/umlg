@@ -17,21 +17,20 @@ import org.opaeum.java.metamodel.annotation.OJEnumLiteral;
 import org.tuml.framework.Visitor;
 import org.tuml.generation.Workspace;
 import org.tuml.javageneration.util.Condition;
-import org.tuml.javageneration.util.Namer;
 import org.tuml.javageneration.util.TinkerGenerationUtil;
 import org.tuml.javageneration.util.TumlClassOperations;
 import org.tuml.javageneration.util.TumlModelOperations;
 import org.tuml.restlet.util.TumlRestletGenerationUtil;
 
-public class RootServerResourceBuilder extends BaseServerResourceBuilder implements Visitor<Model> {
+public class AppResourceServerResourceBuilder extends BaseServerResourceBuilder implements Visitor<Model> {
 
-	public RootServerResourceBuilder(Workspace workspace) {
+	public AppResourceServerResourceBuilder(Workspace workspace) {
 		super(workspace);
 	}
 
 	@Override
 	public void visitBefore(Model model) {
-		
+
 		OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface("RootServerResource");
 		OJPackage ojPackage = new OJPackage("restlet");
 		annotatedInf.setMyPackage(ojPackage);
@@ -45,7 +44,7 @@ public class RootServerResourceBuilder extends BaseServerResourceBuilder impleme
 
 		addDefaultConstructor(annotatedClass);
 		addGetRootObjectRepresentation(model, annotatedInf, annotatedClass);
-		addToRouterEnum(annotatedClass);
+		addToRouterEnum(model, annotatedClass);
 	}
 
 	@Override
@@ -57,7 +56,7 @@ public class RootServerResourceBuilder extends BaseServerResourceBuilder impleme
 		OJAnnotatedOperation getInf = new OJAnnotatedOperation("get", TumlRestletGenerationUtil.Representation);
 		annotatedInf.addToOperations(getInf);
 		getInf.addAnnotationIfNew(new OJAnnotationValue(TumlRestletGenerationUtil.Get, "json"));
-		
+
 		OJAnnotatedOperation get = new OJAnnotatedOperation("get", TumlRestletGenerationUtil.Representation);
 		get.addToThrows(TumlRestletGenerationUtil.ResourceException);
 		annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
@@ -66,7 +65,7 @@ public class RootServerResourceBuilder extends BaseServerResourceBuilder impleme
 		OJField json = new OJField("json", new OJPathName("java.lang.StringBuilder"));
 		json.setInitExp("new StringBuilder()");
 		get.getBody().addToLocals(json);
-		
+
 		@SuppressWarnings("unchecked")
 		List<Class> result = (List<Class>) TumlModelOperations.findElements(model, new Condition() {
 			@Override
@@ -74,34 +73,36 @@ public class RootServerResourceBuilder extends BaseServerResourceBuilder impleme
 				if (!(e instanceof Class)) {
 					return false;
 				}
-				Class clazz = (Class)e;
+				Class clazz = (Class) e;
 				return !clazz.isAbstract() && !TumlClassOperations.hasCompositeOwner(clazz);
 			}
 		});
-		get.getBody().addToStatements("json.append(\"[\")");
+		get.getBody().addToStatements("json.append(\"{\\\"data\\\": {\\\"properties\\\": [{\\\"name\\\": \\\"APP\\\"}]}, \\\"meta\\\": {\\\"name\\\": \\\"App\\\", \\\"properties\\\": [\")");
+		
 		int count = 0;
 		for (Class clazz : result) {
 			count++;
-			get.getBody().addToStatements("json.append(" + TumlClassOperations.propertyEnumName(clazz) + ".asJson())");
-			annotatedClass.addToImports(TumlClassOperations.getPathName(clazz).append(TumlClassOperations.propertyEnumName(clazz)));
+			get.getBody().addToStatements(
+					"json.append(\"" + "{\\\"name\\\": \\\"" + TumlClassOperations.className(clazz) + "\\\", \\\"tumlUri\\\": \\\"/"
+							+ clazz.getModel().getName() + "/" + TumlClassOperations.className(clazz).toLowerCase() + "s" + "\\\"}\")");
 			if (count < result.size()) {
 				get.getBody().addToStatements("json.append(\", \")");
 			}
 		}
-		get.getBody().addToStatements("json.append(\"]\")");
-		
+		get.getBody().addToStatements("json.append(\"]}}\")");
+
 		get.getBody().addToStatements("return new " + TumlRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
 		annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);
 		annotatedClass.addToOperations(get);
 	}
 
-	private void addToRouterEnum(OJAnnotatedClass annotatedClass) {
+	private void addToRouterEnum(Model model, OJAnnotatedClass annotatedClass) {
 		OJEnum routerEnum = (OJEnum) this.workspace.findOJClass("restlet.RestletRouterEnum");
 		OJEnumLiteral ojLiteral = new OJEnumLiteral("ROOT");
 
 		OJField uri = new OJField();
 		uri.setType(new OJPathName("String"));
-		uri.setInitExp("\"/\"");
+		uri.setInitExp("\"/" + model.getName() + "\"");
 		ojLiteral.addToAttributeValues(uri);
 
 		OJField serverResourceClassField = new OJField();

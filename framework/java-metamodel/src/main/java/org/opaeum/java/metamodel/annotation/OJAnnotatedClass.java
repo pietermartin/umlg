@@ -385,4 +385,14 @@ public class OJAnnotatedClass extends OJClass implements OJAnnotatedElement {
 		}
 		return count;
 	}
+
+	public OJEnum findEnum(String enumName) {
+		for (OJEnum e : this.innerEnums) {
+			if (e.getName().equals(enumName)) {
+				return e;
+			}
+		}
+		return null;
+	}
+	
 }

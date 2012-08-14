@@ -31,7 +31,7 @@ public class RootEntryPointBuilder extends BaseVisitor implements Visitor<Class>
 			root.addToImports(new OJPathName("java.util.ArrayList"));
 			getter.getBody().addToLocals(result);
 			OJField iter = new OJField("iter", new OJPathName("java.util.Iterator").addToGenerics(TinkerGenerationUtil.edgePathName));
-			iter.setInitExp("v.getEdges(Direction.OUT, \"root\").iterator()");
+			iter.setInitExp("v.getEdges(Direction.OUT, \"root" + TumlClassOperations.className(clazz) + "\").iterator()");
 			getter.getBody().addToLocals(iter);
 			OJWhileStatement ojWhileStatement = new OJWhileStatement();
 			ojWhileStatement.setCondition("iter.hasNext()");

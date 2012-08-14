@@ -48,16 +48,12 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 
 			addCompositeParentIdField(pWrap, annotatedClass);
 			addGetObjectRepresentation(pWrap, annotatedInf, annotatedClass);
-			//TODO think about
-			//Put must be Idempotence, i.e. calling it many times must make no difference to server state
-			
-			//non unique sequence or a bag can not put as adding the same value more than once changes the state
-			if (!pWrap.isUnique()) {
-				//Use post
-			} else {
-				addPutObjectRepresentation(pWrap, annotatedInf, annotatedClass);
-				addServerResourceToRouterEnum(pWrap, annotatedClass);
-			}
+			// Put must be Idempotence, i.e. calling it many times must make no
+			// difference to server state
+			// non unique sequence or a bag can not put as adding the same value
+			// more than once changes the state
+			addPutPostObjectRepresentation(pWrap, annotatedInf, annotatedClass);
+			addServerResourceToRouterEnum(pWrap, annotatedClass);
 		}
 	}
 
@@ -106,14 +102,14 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 		annotatedClass.addToOperations(get);
 	}
 
-	private void addPutObjectRepresentation(PropertyWrapper pWrap, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass) {
+	private void addPutPostObjectRepresentation(PropertyWrapper pWrap, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass) {
 
-		OJAnnotatedOperation putInf = new OJAnnotatedOperation("put", TumlRestletGenerationUtil.Representation);
+		OJAnnotatedOperation putInf = new OJAnnotatedOperation(pWrap.isUnique() ? "put" : "post", TumlRestletGenerationUtil.Representation);
 		putInf.addToParameters(new OJParameter("entity", TumlRestletGenerationUtil.Representation));
 		annotatedInf.addToOperations(putInf);
-		putInf.addAnnotationIfNew(new OJAnnotationValue(TumlRestletGenerationUtil.Put, "json"));
+		putInf.addAnnotationIfNew(new OJAnnotationValue((pWrap.isUnique() ? TumlRestletGenerationUtil.Put : TumlRestletGenerationUtil.Post), "json"));
 
-		OJAnnotatedOperation put = new OJAnnotatedOperation("put", TumlRestletGenerationUtil.Representation);
+		OJAnnotatedOperation put = new OJAnnotatedOperation(pWrap.isUnique() ? "put" : "post", TumlRestletGenerationUtil.Representation);
 		put.addToParameters(new OJParameter("entity", TumlRestletGenerationUtil.Representation));
 		put.addToThrows(TumlRestletGenerationUtil.ResourceException);
 		annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
@@ -144,8 +140,14 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 		ojTryStatement.getTryPart().addToLocals(childResource);
 
 		ojTryStatement.getTryPart().addToStatements("childResource.fromJson(propertyMap)");
-
-		ojTryStatement.getTryPart().addToStatements("parentResource." + pWrap.adder() + "(childResource)");
+		if (pWrap.isOrdered()) {
+			OJAnnotatedField indexField = new OJAnnotatedField("index", new OJPathName("int"));
+			indexField.setInitExp("Integer.valueOf(getQuery().getFirst(\"index\").getValue())");
+			ojTryStatement.getTryPart().addToLocals(indexField);
+			ojTryStatement.getTryPart().addToStatements("parentResource." + pWrap.getter() + "().add(index, childResource)");
+		} else {
+			ojTryStatement.getTryPart().addToStatements("parentResource." + pWrap.adder() + "(childResource)");
+		}
 
 		ojTryStatement.getTryPart().addToStatements("GraphDb.getDb().stopTransaction(Conclusion.SUCCESS)");
 		annotatedClass.addToImports(TinkerGenerationUtil.tinkerConclusionPathName);
@@ -183,7 +185,7 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 
 		OJField uri = new OJField();
 		uri.setType(new OJPathName("String"));
-		uri.setInitExp("\"/" + TumlClassOperations.getPathName(pWrap.getOwningType()).getLast().toLowerCase() + "s/{"
+		uri.setInitExp("\"/" + pWrap.getProperty().getModel().getName() + "/" + TumlClassOperations.getPathName(pWrap.getOwningType()).getLast().toLowerCase() + "s/{"
 				+ TumlClassOperations.getPathName(pWrap.getOwningType()).getLast().toLowerCase() + "Id}/" + pWrap.getName() + "\"");
 		ojLiteral.addToAttributeValues(uri);
 

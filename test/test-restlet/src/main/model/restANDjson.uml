@@ -78,6 +78,26 @@
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_6i6BbeIhEeGlCp0hR7Wlcw" value="1"/>
           </ownedEnd>
         </packagedElement>
+        <packagedElement xmi:type="uml:Class" xmi:id="_V39UwOZFEeGrlbmObN1_Rg" name="Alien">
+          <ownedAttribute xmi:id="_W54r0OZFEeGrlbmObN1_Rg" name="name">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+          </ownedAttribute>
+          <ownedAttribute xmi:id="_dnFjoOZFEeGrlbmObN1_Rg" name="ship" type="_Z7usMOZFEeGrlbmObN1_Rg" isOrdered="true" aggregation="composite" association="_dnHY2uZFEeGrlbmObN1_Rg">
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_dnFjoeZFEeGrlbmObN1_Rg" value="*"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_dnFjouZFEeGrlbmObN1_Rg"/>
+          </ownedAttribute>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Class" xmi:id="_Z7usMOZFEeGrlbmObN1_Rg" name="Ship">
+          <ownedAttribute xmi:id="_bUmjoOZFEeGrlbmObN1_Rg" name="name">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+          </ownedAttribute>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Association" xmi:id="_dnHY2uZFEeGrlbmObN1_Rg" name="A_&lt;alien>_&lt;ship>" memberEnd="_dnHY2-ZFEeGrlbmObN1_Rg _dnFjoOZFEeGrlbmObN1_Rg" navigableOwnedEnd="_dnHY2-ZFEeGrlbmObN1_Rg">
+          <ownedEnd xmi:id="_dnHY2-ZFEeGrlbmObN1_Rg" name="alien" type="_V39UwOZFEeGrlbmObN1_Rg" association="_dnHY2uZFEeGrlbmObN1_Rg">
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_dnHY3OZFEeGrlbmObN1_Rg" value="1"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_dnHY3eZFEeGrlbmObN1_Rg" value="1"/>
+          </ownedEnd>
+        </packagedElement>
       </packagedElement>
     </packagedElement>
   </packagedElement>

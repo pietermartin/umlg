@@ -183,7 +183,7 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
 		OJAnnotatedOperation asJson = new OJAnnotatedOperation("asJson", new OJPathName("String"));
 		asJson.setStatic(true);
 		asJson.getBody().addToStatements("StringBuilder sb = new StringBuilder();");
-		asJson.getBody().addToStatements("sb.append(\"{\\\"" + TumlClassOperations.className(clazz) + "\\\": [\")");
+		asJson.getBody().addToStatements("sb.append(\"{\\\"name\\\": \\\"" + TumlClassOperations.className(clazz) + "\\\", \\\"properties\\\": [\")");
 		ojEnum.addToOperations(asJson);
 
 		Set<Property> allOwnedProperties = TumlClassOperations.getAllOwnedProperties(clazz);
@@ -289,14 +289,14 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
 				ojLiteral.addToAttributeValues(uniqueAttribute);
 
 				OJField jsonAttribute = new OJField();
+				jsonAttribute.setName("json");
 				jsonAttribute.setType(new OJPathName("String"));
 
 				StringBuilder sb = new StringBuilder();
-				sb.append("{\\\"");
+				sb.append("{\\\"name\\\": \\\"");
 				sb.append(pWrap.fieldname());
-				sb.append("\\\": ");
-				sb.append("{\\\"");
-				sb.append("onePrimitive\\\": ");
+				sb.append("\\\", ");
+				sb.append("\\\"onePrimitive\\\": ");
 				sb.append(propertyOnePrimitiveField.getInitExp());
 				sb.append(", ");
 				sb.append("\\\"manyPrimitive\\\": ");
@@ -340,7 +340,7 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
 				sb.append(", ");
 				sb.append("\\\"unique\\\": ");
 				sb.append(uniqueAttribute.getInitExp());
-				sb.append("}}");
+				sb.append("}");
 				jsonAttribute.setInitExp("\"" + sb.toString() + "\"");
 				ojLiteral.addToAttributeValues(jsonAttribute);
 

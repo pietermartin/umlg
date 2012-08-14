@@ -76,7 +76,7 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
 		OJConstructor constructor = annotatedClass.findConstructor(new OJPathName("java.lang.Boolean"));
 		constructor.getBody().addToStatements(
 				TinkerGenerationUtil.edgePathName.getLast() + " edge = " + TinkerGenerationUtil.graphDbAccess + ".addEdge(null, " + TinkerGenerationUtil.graphDbAccess
-						+ ".getRoot(), this.vertex, \"root\")");
+						+ ".getRoot(), this.vertex, \"root" + TumlClassOperations.className(clazz) + "\")");
 		constructor.getBody().addToStatements("edge.setProperty(\"inClass\", this.getClass().getName())");
 		annotatedClass.addToImports(TinkerGenerationUtil.edgePathName.getCopy());
 		annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName.getCopy());

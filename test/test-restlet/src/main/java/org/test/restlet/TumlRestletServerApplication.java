@@ -5,7 +5,7 @@ import org.restlet.Context;
 import org.restlet.Restlet;
 import org.restlet.resource.Directory;
 import org.restlet.routing.Router;
-import org.test.restlet.gui.HumanGuiServerResource;
+import org.test.restlet.gui.TumlGuiServerResource;
 
 public class TumlRestletServerApplication extends Application {
 
@@ -25,16 +25,15 @@ public class TumlRestletServerApplication extends Application {
 	public Restlet createInboundRoot() {
 		Router router = new Router(getContext());
 		restlet.RestletRouterEnum.attachAll(router);
-		router.attach("/view/humans/{humanId}", HumanGuiServerResource.class);
+		router.attach("/view/", TumlGuiServerResource.class);
+		
         Directory slickgrid = new Directory(getContext(), "clap://slickgrid");
         slickgrid.setListingAllowed(true);
         router.attach("/view", slickgrid);
+        
         Directory jquery = new Directory(getContext(), "clap://jquery");
         jquery.setListingAllowed(true);
-        router.attach("/view", slickgrid);
-        Directory css = new Directory(getContext(), "clap://jquery");
-        css.setListingAllowed(true);
-        router.attach("/view", slickgrid);
+        router.attach("/view", jquery);
 		return router;
 	};
 

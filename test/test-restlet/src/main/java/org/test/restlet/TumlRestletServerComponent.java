@@ -15,10 +15,12 @@ import org.restlet.data.Protocol;
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.NakedGraph;
 import org.tuml.runtime.adaptor.NakedGraphFactory;
+import org.tuml.test.Alien;
 import org.tuml.test.Finger;
 import org.tuml.test.Hand;
 import org.tuml.test.Human;
 import org.tuml.test.Ring;
+import org.tuml.test.Ship;
 
 import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 
@@ -55,21 +57,31 @@ public class TumlRestletServerComponent extends Component {
 			Human human = new Human(true);
 			human.setName("human1" + i);
 			human.setName2("human2" + i);
-			
+
 			for (int j = 0; j < 2; j++) {
 				Hand hand = new Hand(human);
 				hand.setName("hand" + j);
-				
+
 				for (int k = 0; k < 5; k++) {
-					Finger finger  = new Finger(hand);
+					Finger finger = new Finger(hand);
 					finger.setName("finger" + k);
-					
+
 					Ring ring = new Ring(human);
 					ring.setName("ring" + i + j + k);
 					finger.setRing(ring);
 				}
 			}
 		}
+
+		for (int i = 0; i < 10; i++) {
+			Alien alien = new Alien(true);
+			alien.setName("alien" + i);
+			for (int j = 0; j < 2; j++) {
+				Ship ship = new Ship(alien);
+				ship.setName("alienShip" + j);
+			}
+		}
+
 		GraphDb.getDb().stopTransaction(Conclusion.SUCCESS);
 	}
 

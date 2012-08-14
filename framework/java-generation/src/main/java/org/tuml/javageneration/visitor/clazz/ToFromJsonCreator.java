@@ -52,26 +52,26 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 			toJson.getBody().addToStatements("result = result.substring(1, result.length() - 1)");
 			toJson.getBody().addToStatements("StringBuilder sb = new StringBuilder(result)");
 		}
-		toJson.getBody().addToStatements("sb.append(\"{\")");
-		toJson.getBody().addToStatements("sb.append(\"\\\"id\\\": \" + getId() + \", \")");
+		toJson.getBody().addToStatements("sb.append(\"[\")");
+		toJson.getBody().addToStatements("sb.append(\"{\\\"name\\\": \\\"id\\\", \\\"value\\\":  \" + getId() + \"}, \")");
 		Set<Property> propertiesForToJson = TumlClassOperations.getPrimitiveOrEnumOrComponentsProperties(clazz);
 		int count = 0;
 		for (Property p : propertiesForToJson) {
 			count++;
 			PropertyWrapper pWrap = new PropertyWrapper(p);
 			if (pWrap.isMany()) {
-				toJson.getBody().addToStatements("sb.append(\"" + "\\\"" + pWrap.getName() + "\\\": \" + " + pWrap.getter() + "().toJson() + \"" + "\")");
+				toJson.getBody().addToStatements("sb.append(\"{\\\"name\\\": " + "" + "\\\"" + pWrap.getName() + "\\\", \\\"value\\\": \\\"\" + " + pWrap.getter() + "().toJson() + \"\\\"" + "}\")");
 			} else if (pWrap.isEnumeration()) {
 				toJson.getBody().addToStatements(
-						"sb.append(\"" + "\\\"" + pWrap.getName() + "\\\": \\\"\" + (" + pWrap.getter() + "() == null ? \"null\" : " + pWrap.getter() + "().toJson()) + \"\\\"" + "\")");
+						"sb.append(\"{\\\"name\\\": " + "\\\"" + pWrap.getName() + "\\\", \\\"value\\\": \" + (" + pWrap.getter() + "() == null ? \"null\" : " + pWrap.getter() + "().toJson()) + \"\\\"" + "}\")");
 			} else {
-				toJson.getBody().addToStatements("sb.append(\"" + "\\\"" + pWrap.getName() + "\\\": \\\"\" + " + pWrap.getter() + "() + \"\\\"" + "\")");
+				toJson.getBody().addToStatements("sb.append(\"{\\\"name\\\": " + "\\\"" + pWrap.getName() + "\\\", \\\"value\\\": \\\"\" + " + pWrap.getter() + "() + \"\\\"" + "}\")");
 			}
 			if (count < propertiesForToJson.size()) {
 				toJson.getBody().addToStatements("sb.append(\", \")");
 			}
 		}
-		toJson.getBody().addToStatements("sb.append(\"}\")");
+		toJson.getBody().addToStatements("sb.append(\"]\")");
 		toJson.getBody().addToStatements("return sb.toString()");
 		annotatedClass.addToOperations(toJson);
 	}
