@@ -19,7 +19,6 @@ import org.tuml.generation.Workspace;
 import org.tuml.javageneration.util.Namer;
 import org.tuml.javageneration.util.TinkerGenerationUtil;
 import org.tuml.javageneration.util.TumlClassOperations;
-import org.tuml.javageneration.util.TumlModelOperations;
 import org.tuml.restlet.util.TumlRestletGenerationUtil;
 
 public class EntityServerResourceBuilder extends BaseServerResourceBuilder implements Visitor<Class> {
@@ -130,7 +129,7 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
 
 		OJField uri = new OJField();
 		uri.setType(new OJPathName("String"));
-		uri.setInitExp("\"/" + clazz.getModel().getName() + "/" + TumlClassOperations.className(clazz).toLowerCase() + "s/{" + TumlClassOperations.className(clazz).toLowerCase()
+		uri.setInitExp("\"/" + TumlClassOperations.className(clazz).toLowerCase() + "s/{" + TumlClassOperations.className(clazz).toLowerCase()
 				+ "Id}\"");
 		ojLiteral.addToAttributeValues(uri);
 

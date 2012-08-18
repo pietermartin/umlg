@@ -33,13 +33,13 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 		if (!pWrap.isComponent() && !pWrap.isPrimitive() && !pWrap.isEnumeration()) {
 			OJAnnotatedClass owner = findOJClass(p);
 
-			OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_" + pWrap.getName()
+			OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_" + pWrap.getOtherEnd().getName() + "_" + pWrap.getName()
 					+ "_ServerResource");
 			OJPackage ojPackage = new OJPackage(owner.getMyPackage().toString() + ".restlet");
 			annotatedInf.setMyPackage(ojPackage);
 			addToSource(annotatedInf);
 
-			OJAnnotatedClass annotatedClass = new OJAnnotatedClass(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_" + pWrap.getName() + "_ServerResourceImpl");
+			OJAnnotatedClass annotatedClass = new OJAnnotatedClass(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_" + pWrap.getOtherEnd().getName() + "_" + pWrap.getName() + "_ServerResourceImpl");
 			annotatedClass.setSuperclass(TumlRestletGenerationUtil.ServerResource);
 			annotatedClass.addToImplementedInterfaces(annotatedInf.getPathName());
 			annotatedClass.setMyPackage(ojPackage);
@@ -81,20 +81,19 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 						+ "))");
 		annotatedClass.addToImports(parentPathName);
 		get.getBody().addToStatements("StringBuilder json = new StringBuilder()");
-		get.getBody().addToStatements("json.append(\"[\")");
+		get.getBody().addToStatements("json.append(\"{\\\"data\\\": [\")");
 		get.getBody().addToStatements("json.append(ToJsonUtil.toJson(parentResource." + pWrap.getter() + "()))");
 		annotatedClass.addToImports(TinkerGenerationUtil.ToJsonUtil);
-		get.getBody().addToStatements("json.append(\",\")");
-		get.getBody().addToStatements("json.append(\" {\\\"meta\\\" : \")");
+		get.getBody().addToStatements("json.append(\"],\")");
+		get.getBody().addToStatements("json.append(\" \\\"meta\\\" : [\")");
 		get.getBody().addToStatements("json.append(" + TumlClassOperations.propertyEnumName(pWrap.getOwningType()) + ".asJson())");
 		annotatedClass.addToImports(TumlClassOperations.getPathName(pWrap.getOwningType()).append(TumlClassOperations.propertyEnumName(pWrap.getOwningType())));
-		get.getBody().addToStatements("json.append(\"}, \")");
+		get.getBody().addToStatements("json.append(\", \")");
 
-		get.getBody().addToStatements("json.append(\" {\\\"meta\\\" : \")");
 		get.getBody().addToStatements("json.append(" + TumlClassOperations.propertyEnumName(new PropertyWrapper(pWrap.getOtherEnd()).getOwningType()) + ".asJson())");
 		annotatedClass.addToImports(TumlClassOperations.getPathName(new PropertyWrapper(pWrap.getOtherEnd()).getOwningType()).append(
 				TumlClassOperations.propertyEnumName(new PropertyWrapper(pWrap.getOtherEnd()).getOwningType())));
-		get.getBody().addToStatements("json.append(\"}]\")");
+		get.getBody().addToStatements("json.append(\"]}\")");
 
 		get.getBody().addToStatements("return new " + TumlRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
 		annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
@@ -185,7 +184,7 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 
 		OJField uri = new OJField();
 		uri.setType(new OJPathName("String"));
-		uri.setInitExp("\"/" + pWrap.getProperty().getModel().getName() + "/" + TumlClassOperations.getPathName(pWrap.getOwningType()).getLast().toLowerCase() + "s/{"
+		uri.setInitExp("\"/" + TumlClassOperations.getPathName(pWrap.getOwningType()).getLast().toLowerCase() + "s/{"
 				+ TumlClassOperations.getPathName(pWrap.getOwningType()).getLast().toLowerCase() + "Id}/" + pWrap.getName() + "\"");
 		ojLiteral.addToAttributeValues(uri);
 

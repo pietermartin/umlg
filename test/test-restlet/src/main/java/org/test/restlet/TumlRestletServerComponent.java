@@ -48,7 +48,7 @@ public class TumlRestletServerComponent extends Component {
 		getServers().add(server);
 
 		// Attach the application to the default virtual host
-		getDefaultHost().attachDefault(new TumlRestletServerApplication());
+		getDefaultHost().attach("/restAndJson", new TumlRestletServerApplication());
 	}
 
 	private void createDefaultData() {

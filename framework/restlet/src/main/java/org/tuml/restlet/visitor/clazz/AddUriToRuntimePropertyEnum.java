@@ -7,6 +7,7 @@ import org.eclipse.uml2.uml.Class;
 import org.opaeum.java.metamodel.OJConstructor;
 import org.opaeum.java.metamodel.OJField;
 import org.opaeum.java.metamodel.OJPathName;
+import org.opaeum.java.metamodel.OJSimpleStatement;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
 import org.opaeum.java.metamodel.annotation.OJEnum;
@@ -26,6 +27,9 @@ public class AddUriToRuntimePropertyEnum extends BaseVisitor implements Visitor<
 	public void visitBefore(Class clazz) {
 		OJAnnotatedClass annotatedClass = findOJClass(clazz);
 		OJEnum ojEnum = annotatedClass.findEnum(TumlClassOperations.propertyEnumName(clazz));
+		
+		addUriToObject(clazz, ojEnum);
+		
 		OJField uriPrimitiveField = new OJField();
 		uriPrimitiveField.setType(new OJPathName("String"));
 		uriPrimitiveField.setName("tumlUri");
@@ -42,10 +46,14 @@ public class AddUriToRuntimePropertyEnum extends BaseVisitor implements Visitor<
 
 		List<OJEnumLiteral> literals = ojEnum.getLiterals();
 		for (OJEnumLiteral literal : literals) {
-
-			String uri = "\"/" + clazz.getModel().getName() + "/" + TumlClassOperations.getPathName(clazz).getLast().toLowerCase() + "s/{"
-					+ TumlClassOperations.getPathName(clazz).getLast().toLowerCase() + "Id}/" + literal.getName() + "\"";
-
+			String uri;
+			//TODO add in a literal property for isRoot
+			if (literal.getName().equals(clazz.getModel().getName())) {
+				uri = "\"/" + clazz.getModel().getName() + "\"";
+			} else {
+				uri = "\"/" + clazz.getModel().getName() + "/" + TumlClassOperations.getPathName(clazz).getLast().toLowerCase() + "s/{"
+						+ TumlClassOperations.getPathName(clazz).getLast().toLowerCase() + "Id}/" + literal.getName() + "\"";
+			}
 			OJField uriAttribute = new OJField();
 			uriAttribute.setType(new OJPathName("String"));
 			uriAttribute.setInitExp(uri);
@@ -62,6 +70,12 @@ public class AddUriToRuntimePropertyEnum extends BaseVisitor implements Visitor<
 			jsonField.setInitExp(initExp);
 		}
 
+	}
+
+	private void addUriToObject(Class clazz, OJEnum ojEnum) {
+		OJAnnotatedOperation asJson =  ojEnum.findOperation("asJson");
+		OJSimpleStatement s =  (OJSimpleStatement) asJson.getBody().findStatement("uri");
+		s.setExpression("sb.append(\"\\\"uri\\\": \\\"" + TumlClassOperations.getPathName(clazz).getLast().toLowerCase() + "s/{" + TumlClassOperations.getPathName(clazz).getLast().toLowerCase() + "Id}\\\", \")");
 	}
 
 	@Override

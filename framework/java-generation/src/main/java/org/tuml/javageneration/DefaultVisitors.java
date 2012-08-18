@@ -33,6 +33,8 @@ public class DefaultVisitors {
 		result.add(new InterfaceVisitor(Workspace.INSTANCE));
 		result.add(new ClassCreator(Workspace.INSTANCE));
 		result.add(new ClassBuilder(Workspace.INSTANCE));
+		result.add(new RootEntryPointCreator(Workspace.INSTANCE));
+		result.add(new RootEntryPointBuilder(Workspace.INSTANCE));
 		result.add(new ClassRuntimePropertyImplementorVisitor(Workspace.INSTANCE));
 		result.add(new InterfaceRuntimePropertyImplementorVisitor(Workspace.INSTANCE));
 		result.add(new EnumerationVisitor(Workspace.INSTANCE));
@@ -48,8 +50,6 @@ public class DefaultVisitors {
 		result.add(new OperationImplementorSimple(Workspace.INSTANCE));
 		result.add(new ToFromJsonCreator(Workspace.INSTANCE));
 		result.add(new TofromJsonForEnumCreator(Workspace.INSTANCE));
-		result.add(new RootEntryPointCreator(Workspace.INSTANCE));
-		result.add(new RootEntryPointBuilder(Workspace.INSTANCE));
 		return result;
 		
 //		if (this.audit) {

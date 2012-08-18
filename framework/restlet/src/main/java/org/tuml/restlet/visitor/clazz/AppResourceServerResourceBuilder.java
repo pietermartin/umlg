@@ -49,7 +49,6 @@ public class AppResourceServerResourceBuilder extends BaseServerResourceBuilder 
 
 	@Override
 	public void visitAfter(Model model) {
-		System.out.println();
 	}
 
 	private void addGetRootObjectRepresentation(Model model, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass) {
@@ -65,33 +64,13 @@ public class AppResourceServerResourceBuilder extends BaseServerResourceBuilder 
 		OJField json = new OJField("json", new OJPathName("java.lang.StringBuilder"));
 		json.setInitExp("new StringBuilder()");
 		get.getBody().addToLocals(json);
-
-		@SuppressWarnings("unchecked")
-		List<Class> result = (List<Class>) TumlModelOperations.findElements(model, new Condition() {
-			@Override
-			public boolean evaluateOn(Element e) {
-				if (!(e instanceof Class)) {
-					return false;
-				}
-				Class clazz = (Class) e;
-				return !clazz.isAbstract() && !TumlClassOperations.hasCompositeOwner(clazz);
-			}
-		});
-		get.getBody().addToStatements("json.append(\"{\\\"data\\\": {\\\"properties\\\": [{\\\"name\\\": \\\"APP\\\"}]}, \\\"meta\\\": {\\\"name\\\": \\\"App\\\", \\\"properties\\\": [\")");
-		
-		int count = 0;
-		for (Class clazz : result) {
-			count++;
-			get.getBody().addToStatements(
-					"json.append(\"" + "{\\\"name\\\": \\\"" + TumlClassOperations.className(clazz) + "\\\", \\\"tumlUri\\\": \\\"/"
-							+ clazz.getModel().getName() + "/" + TumlClassOperations.className(clazz).toLowerCase() + "s" + "\\\"}\")");
-			if (count < result.size()) {
-				get.getBody().addToStatements("json.append(\", \")");
-			}
-		}
-		get.getBody().addToStatements("json.append(\"]}}\")");
-
+		get.getBody().addToStatements("json.append(\"{\\\"data\\\": [{\\\"name\\\": \\\"APP\\\"}]\")");
+		get.getBody().addToStatements("json.append(\", \\\"meta\\\": \")");
+		get.getBody().addToStatements("json.append(RootRuntimePropertyEnum.asJson())");
+		annotatedClass.addToImports("org.tuml.root.Root.RootRuntimePropertyEnum");
+		get.getBody().addToStatements("json.append(\"}\")");
 		get.getBody().addToStatements("return new " + TumlRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
+		
 		annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);
 		annotatedClass.addToOperations(get);
 	}
@@ -102,7 +81,7 @@ public class AppResourceServerResourceBuilder extends BaseServerResourceBuilder 
 
 		OJField uri = new OJField();
 		uri.setType(new OJPathName("String"));
-		uri.setInitExp("\"/" + model.getName() + "\"");
+		uri.setInitExp("\"\"");
 		ojLiteral.addToAttributeValues(uri);
 
 		OJField serverResourceClassField = new OJField();

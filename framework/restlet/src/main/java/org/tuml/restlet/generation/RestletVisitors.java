@@ -7,11 +7,12 @@ import org.tuml.framework.Visitor;
 import org.tuml.generation.Workspace;
 import org.tuml.javageneration.DefaultVisitors;
 import org.tuml.restlet.router.RestletRouterEnumGenerator;
+import org.tuml.restlet.visitor.clazz.AddUriToRootRuntimePropertyEnum;
 import org.tuml.restlet.visitor.clazz.AddUriToRuntimePropertyEnum;
+import org.tuml.restlet.visitor.clazz.AppResourceServerResourceBuilder;
 import org.tuml.restlet.visitor.clazz.EntityServerResourceBuilder;
 import org.tuml.restlet.visitor.clazz.NavigatePropertyServerResourceBuilder;
 import org.tuml.restlet.visitor.clazz.RootResourceServerResourceBuilder;
-import org.tuml.restlet.visitor.clazz.AppResourceServerResourceBuilder;
 
 public class RestletVisitors {
 
@@ -24,6 +25,7 @@ public class RestletVisitors {
 		result.add(new RootResourceServerResourceBuilder(Workspace.INSTANCE));
 		result.add(new AppResourceServerResourceBuilder(Workspace.INSTANCE));
 		result.add(new AddUriToRuntimePropertyEnum(Workspace.INSTANCE));
+		result.add(new AddUriToRootRuntimePropertyEnum(Workspace.INSTANCE));
 		return result;
 	}
 	

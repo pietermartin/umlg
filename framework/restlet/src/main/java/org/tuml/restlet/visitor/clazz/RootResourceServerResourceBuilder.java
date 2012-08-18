@@ -1,11 +1,9 @@
 package org.tuml.restlet.visitor.clazz;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.uml2.uml.Class;
 import org.opaeum.java.metamodel.OJField;
 import org.opaeum.java.metamodel.OJPackage;
 import org.opaeum.java.metamodel.OJPathName;
-import org.opaeum.java.metamodel.OJVisibilityKind;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedInterface;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
@@ -41,7 +39,6 @@ public class RootResourceServerResourceBuilder extends BaseServerResourceBuilder
 			annotatedClass.setVisibility(TumlClassOperations.getVisibility(clazz.getVisibility()));
 			addToSource(annotatedClass);
 
-			addPrivateIdVariable(clazz, annotatedClass);
 			addDefaultConstructor(annotatedClass);
 			addGetRootObjectRepresentation(clazz, annotatedInf, annotatedClass);
 			addToRouterEnum(clazz, annotatedClass);
@@ -74,13 +71,16 @@ public class RootResourceServerResourceBuilder extends BaseServerResourceBuilder
 		get.getBody().addToStatements("json.append(ToJsonUtil.toJson(resource))");
 		annotatedClass.addToImports(TinkerGenerationUtil.ToJsonUtil);
 
-		get.getBody().addToStatements("json.append(\"], \\\"meta\\\": \")");
+		get.getBody().addToStatements("json.append(\"], \\\"meta\\\": [\")");
+		//Meta data remains for the root object as viewing a many list does not change the context
+		get.getBody().addToStatements("json.append("+TinkerGenerationUtil.RootRuntimePropertyEnum.getLast()+".asJson())");
+		annotatedClass.addToImports(TinkerGenerationUtil.RootRuntimePropertyEnum);
+		get.getBody().addToStatements("json.append(\", \")");
 		get.getBody().addToStatements("json.append(" + TumlClassOperations.propertyEnumName(clazz) + ".asJson())");
 		annotatedClass.addToImports(TumlClassOperations.getPathName(clazz).append(TumlClassOperations.propertyEnumName(clazz)));
-		get.getBody().addToStatements("json.append(\"}\")");
+		get.getBody().addToStatements("json.append(\"]}\")");
 		get.getBody().addToStatements("return new " + TumlRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
 
-		annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
 		annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);
 		annotatedClass.addToOperations(get);
 	}
@@ -91,7 +91,7 @@ public class RootResourceServerResourceBuilder extends BaseServerResourceBuilder
 
 		OJField uri = new OJField();
 		uri.setType(new OJPathName("String"));
-		uri.setInitExp("\"/" + clazz.getModel().getName() + "/" + TumlClassOperations.className(clazz).toLowerCase() + "s\"");
+		uri.setInitExp("\"/" + TumlClassOperations.className(clazz).toLowerCase() + "s\"");
 		ojLiteral.addToAttributeValues(uri);
 
 		OJField serverResourceClassField = new OJField();
@@ -105,16 +105,6 @@ public class RootResourceServerResourceBuilder extends BaseServerResourceBuilder
 
 		OJAnnotatedOperation attachAll = routerEnum.findOperation("attachAll", TumlRestletGenerationUtil.Router);
 		attachAll.getBody().addToStatements(routerEnum.getName() + "." + ojLiteral.getName() + ".attach(router)");
-	}
-
-	private void addPrivateIdVariable(Class clazz, OJAnnotatedClass annotatedClass) {
-		OJField privateId = new OJField(getIdFieldName(clazz), new OJPathName("int"));
-		privateId.setVisibility(OJVisibilityKind.PRIVATE);
-		annotatedClass.addToFields(privateId);
-	}
-
-	private String getIdFieldName(Class clazz) {
-		return StringUtils.uncapitalize(TumlClassOperations.className(clazz)) + "Id";
 	}
 
 }

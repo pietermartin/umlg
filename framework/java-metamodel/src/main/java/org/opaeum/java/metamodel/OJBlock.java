@@ -23,6 +23,15 @@ public class OJBlock extends OJBlockGEN{
 	public OJBlock(String name,String comment){
 		// super(name, comment);
 	}
+	public void addToStatements(String name, String str){
+		if(str.length() == 0)
+			return;
+		OJSimpleStatement stat = new OJSimpleStatement();
+		stat.setName(name);
+		stat.setExpression(str);
+		this.addToStatements(stat);
+	}
+
 	public void addToStatements(String str){
 		if(str.length() == 0)
 			return;

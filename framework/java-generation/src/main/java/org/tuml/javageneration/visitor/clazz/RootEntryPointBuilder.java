@@ -22,25 +22,28 @@ public class RootEntryPointBuilder extends BaseVisitor implements Visitor<Class>
 	public void visitBefore(Class clazz) {
 		if (!TumlClassOperations.hasCompositeOwner(clazz) && !clazz.isAbstract()) {
 			OJAnnotatedClass root = this.workspace.findOJClass("org.tuml.root.Root");
-			OJAnnotatedOperation getter = new OJAnnotatedOperation("get" + TumlClassOperations.className(clazz), new OJPathName("java.util.List").addToGenerics(TumlClassOperations
-					.getPathName(clazz)));
-			root.addToOperations(getter);
-
-			OJField result = new OJField("result", new OJPathName("java.util.List").addToGenerics(TumlClassOperations.getPathName(clazz)));
-			result.setInitExp("new ArrayList<" + TumlClassOperations.getPathName(clazz).getLast() + ">()");
-			root.addToImports(new OJPathName("java.util.ArrayList"));
-			getter.getBody().addToLocals(result);
-			OJField iter = new OJField("iter", new OJPathName("java.util.Iterator").addToGenerics(TinkerGenerationUtil.edgePathName));
-			iter.setInitExp("v.getEdges(Direction.OUT, \"root" + TumlClassOperations.className(clazz) + "\").iterator()");
-			getter.getBody().addToLocals(iter);
-			OJWhileStatement ojWhileStatement = new OJWhileStatement();
-			ojWhileStatement.setCondition("iter.hasNext()");
-			ojWhileStatement.getBody().addToStatements("Edge edge = (Edge) iter.next()");
-			ojWhileStatement.getBody().addToStatements("result.add(new " + TumlClassOperations.className(clazz) + "(edge.getVertex(Direction.IN)));");
-			getter.getBody().addToStatements(ojWhileStatement);
-			getter.getBody().addToStatements("return result");
-			root.addToImports(TinkerGenerationUtil.tinkerDirection);
+			addGetterToAppRootForRootEntity(clazz, root);
 		}
+	}
+
+	private void addGetterToAppRootForRootEntity(Class clazz, OJAnnotatedClass root) {
+		OJAnnotatedOperation getter = new OJAnnotatedOperation("get" + TumlClassOperations.className(clazz), new OJPathName("java.util.List").addToGenerics(TumlClassOperations
+				.getPathName(clazz)));
+		root.addToOperations(getter);
+		OJField result = new OJField("result", new OJPathName("java.util.List").addToGenerics(TumlClassOperations.getPathName(clazz)));
+		result.setInitExp("new ArrayList<" + TumlClassOperations.getPathName(clazz).getLast() + ">()");
+		root.addToImports(new OJPathName("java.util.ArrayList"));
+		getter.getBody().addToLocals(result);
+		OJField iter = new OJField("iter", new OJPathName("java.util.Iterator").addToGenerics(TinkerGenerationUtil.edgePathName));
+		iter.setInitExp("v.getEdges(Direction.OUT, \"root" + TumlClassOperations.className(clazz) + "\").iterator()");
+		getter.getBody().addToLocals(iter);
+		OJWhileStatement ojWhileStatement = new OJWhileStatement();
+		ojWhileStatement.setCondition("iter.hasNext()");
+		ojWhileStatement.getBody().addToStatements("Edge edge = (Edge) iter.next()");
+		ojWhileStatement.getBody().addToStatements("result.add(new " + TumlClassOperations.className(clazz) + "(edge.getVertex(Direction.IN)));");
+		getter.getBody().addToStatements(ojWhileStatement);
+		getter.getBody().addToStatements("return result");
+		root.addToImports(TinkerGenerationUtil.tinkerDirection);
 	}
 
 	@Override
