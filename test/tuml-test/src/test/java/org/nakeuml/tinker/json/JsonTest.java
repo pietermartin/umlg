@@ -12,6 +12,7 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
 import org.tuml.concretetest.God;
+import org.tuml.embeddedtest.REASON;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
 import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
@@ -31,6 +32,7 @@ public class JsonTest extends BaseLocalDbTest {
 		ObjectMapper mapper = new ObjectMapper();
 		System.out.println(god.toJson());
 		@SuppressWarnings("unchecked")
+		
 		Map<String,Object> jsonObject = mapper.readValue(god.toJson(), Map.class);
 		Assert.assertFalse(jsonObject.isEmpty());
 		Assert.assertSame(ArrayList.class, jsonObject.get("embeddedString").getClass());
@@ -103,4 +105,36 @@ public class JsonTest extends BaseLocalDbTest {
 
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testJsonToFromWithNulls() throws JsonParseException, JsonMappingException, IOException {
+		db.startTransaction();
+		God g1 = new God(true);
+		g1.setName("g1");
+		g1.setReason(REASON.BAD);
+		God g2 = new God(true);
+		g2.setName("g2");
+		g2.setReason(null);
+		db.stopTransaction(Conclusion.SUCCESS);
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		Map<String, Object> jsonMap = objectMapper.readValue(g1.toJson(), Map.class);
+		Assert.assertEquals("BAD", jsonMap.get("reason"));
+
+		jsonMap = objectMapper.readValue(g2.toJson(), Map.class);
+		Assert.assertEquals("null", jsonMap.get("reason"));
+		
+		db.startTransaction();
+		God god1FromJson = new God(true);
+		god1FromJson.fromJson(g1.toJson());
+		God god2FromJson = new God(true);
+		god2FromJson.fromJson(g2.toJson());
+		db.stopTransaction(Conclusion.SUCCESS);
+		
+		Assert.assertEquals(REASON.BAD, god1FromJson.getReason());
+		Assert.assertEquals("g1", god1FromJson.getName());
+		Assert.assertNull(god2FromJson.getReason());
+		Assert.assertEquals("g2", god2FromJson.getName());
+		
+	}
 }

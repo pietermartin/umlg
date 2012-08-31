@@ -94,7 +94,7 @@ public class RootEntryPointCreator extends BaseVisitor implements Visitor<Model>
 		//Add root entities as though they are fake properties to App root
 		for (Class clazz : result) {
 			count++;
-			RuntimePropertyImplementor.addEnumLiteral(ojEnum, fromLabel, StringUtils.uncapitalize(TumlClassOperations.className(clazz)), false, true, false, false, true, false,
+			RuntimePropertyImplementor.addEnumLiteral(ojEnum, fromLabel, StringUtils.uncapitalize(TumlClassOperations.className(clazz)), false, true, false, false, true, false, false,
 					false, false, -1, 0, false, false, true, false, true, "root" + TumlClassOperations.className(clazz));
 
 			asJson.getBody().addToStatements("sb.append(" + ojEnum.getName() + "." + StringUtils.uncapitalize(TumlClassOperations.className(clazz)) + ".toJson())");

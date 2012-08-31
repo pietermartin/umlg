@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.tuml.concretetest.Angel;
 import org.tuml.concretetest.God;
 import org.tuml.concretetest.Universe;
+import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
 import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
@@ -65,6 +66,76 @@ public class TestOneToMany extends BaseLocalDbTest {
 		Assert.assertEquals(14, countEdges());
 		Assert.assertEquals("god2", universe1.getGod().getName());
 		Assert.assertEquals(2, new God(god.getVertex()).getUniverse().size());
+	}
+	
+	@Test
+	public void testClearClearsInternalCollection() {
+		db.startTransaction();
+		God god = new God(true);
+		god.setName("THEGOD");
+		Universe universe1 = new Universe(god);
+		universe1.setName("universe1");
+		Universe universe2 = new Universe(god);
+		universe2.setName("universe2");
+		Universe universe3 = new Universe(god);
+		universe3.setName("universe3");
+		db.stopTransaction(Conclusion.SUCCESS);
+		Assert.assertEquals(3, god.getUniverse().size());
+		db.startTransaction();
+		Universe u = new Universe(GraphDb.getDb().getVertex(universe1.getVertex().getId()));
+		god.addToUniverse(u);
+		db.stopTransaction(Conclusion.SUCCESS);
+		God g = new God(god.getVertex());
+		Assert.assertEquals(3, g.getUniverse().size());
+	}
+	
+	@Test
+	public void testClearClearsInternalCollection2() {
+		db.startTransaction();
+		God god = new God(true);
+		god.setName("THEGOD");
+		Universe universe1 = new Universe(god);
+		universe1.setName("universe1");
+		Universe universe2 = new Universe(god);
+		universe2.setName("universe2");
+		Universe universe3 = new Universe(god);
+		universe3.setName("universe3");
+		db.stopTransaction(Conclusion.SUCCESS);
+		Assert.assertEquals(3, god.getUniverse().size());
+		db.startTransaction();
+		Universe u = new Universe(GraphDb.getDb().getVertex(universe1.getVertex().getId()));
+		god.getUniverse().add(u);
+		db.stopTransaction(Conclusion.SUCCESS);
+		God g = new God(god.getVertex());
+		Assert.assertEquals(3, g.getUniverse().size());
+	}
+	
+	@Test
+	public void testClearClearsInternalCollection3() {
+		db.startTransaction();
+		God god = new God(true);
+		god.setName("THEGOD");
+		Universe universe1 = new Universe(god);
+		universe1.setName("universe1");
+		Universe universe2 = new Universe(god);
+		universe2.setName("universe2");
+		Universe universe3 = new Universe(god);
+		universe3.setName("universe3");
+		
+		God god2 = new God(true);
+		god2.setName("THEGOD2");
+		Universe universe1_2 = new Universe(god2);
+		universe1_2.setName("universe1_2");
+		
+		db.stopTransaction(Conclusion.SUCCESS);
+		Assert.assertEquals(3, god.getUniverse().size());
+		db.startTransaction();
+		Universe u = new Universe(GraphDb.getDb().getVertex(universe1.getVertex().getId()));
+		u.clearGod();
+		god2.getUniverse().add(u);
+		db.stopTransaction(Conclusion.SUCCESS);
+		God g = new God(god.getVertex());
+		Assert.assertEquals(2, g.getUniverse().size());
 	}
 	
 }

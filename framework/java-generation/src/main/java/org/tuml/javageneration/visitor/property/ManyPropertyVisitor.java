@@ -69,6 +69,9 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
 				ifNotNull2.addToThenPart(propertyWrapper.fieldname() + "." + otherEnd.clearer() + "()");
 				ifNotNull2.addToThenPart(propertyWrapper.fieldname() + ".initialiseProperty(" + TumlClassOperations.propertyEnumName(otherEnd.getOwningType()) + "."
 						+ otherEnd.fieldname() + ")");
+				
+				ifNotNull2.addToThenPart(propertyWrapper.remover() + "(" + propertyWrapper.fieldname() + ")");
+				
 				owner.addToImports(TumlClassOperations.getPathName(otherEnd.getOwningType()).append(TumlClassOperations.propertyEnumName(otherEnd.getOwningType())));
 				singleAdder.getBody().addToStatements(ifNotNull2);
 			}

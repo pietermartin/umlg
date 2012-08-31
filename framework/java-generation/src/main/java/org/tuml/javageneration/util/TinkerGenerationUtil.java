@@ -291,6 +291,10 @@ public class TinkerGenerationUtil {
 		oper.addAnnotationIfNew(new OJAnnotationValue(new OJPathName("java.lang.Override")));
 	}
 
+	public static void addSuppressWarning(OJAnnotatedOperation put) {
+		put.addAnnotationIfNew(new OJAnnotationValue(new OJPathName("java.lang.SuppressWarnings"), "unchecked"));
+	}
+
 	// public static OJPathName convertToMutable(OJPathName javaTypePath) {
 	// if (javaTypePath.getLast().equals("String")) {
 	// return new OJPathName("java.lang.StringBuilder");

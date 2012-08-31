@@ -115,4 +115,10 @@ public class TumlRuntimePropertyImpl implements TumlRuntimeProperty {
 		return false;
 	}
 
+	@Override
+	public boolean isInverseComposite() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

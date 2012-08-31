@@ -4,6 +4,7 @@ import java.util.Set;
 
 import org.eclipse.uml2.uml.Property;
 import org.opaeum.java.metamodel.OJField;
+import org.opaeum.java.metamodel.OJForStatement;
 import org.opaeum.java.metamodel.OJIfStatement;
 import org.opaeum.java.metamodel.OJPathName;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
@@ -40,6 +41,11 @@ public class RuntimePropertyImplementor {
 		compositeField.setType(new OJPathName("boolean"));
 		compositeField.setName("composite");
 		ojEnum.addToFields(compositeField);
+
+		OJField inverseCompositeField = new OJField();
+		inverseCompositeField.setType(new OJPathName("boolean"));
+		inverseCompositeField.setName("inverseComposite");
+		ojEnum.addToFields(inverseCompositeField);
 
 		OJField labelField = new OJField();
 		labelField.setType(new OJPathName("String"));
@@ -134,18 +140,24 @@ public class RuntimePropertyImplementor {
 		asJson.getBody().addToStatements("name", "sb.append(\"{\\\"name\\\": \\\"" + className + "\\\", \")");
 		asJson.getBody().addToStatements("uri", "sb.append(\"\\\"uri\\\": \\\"TODO\\\", \")");
 		asJson.getBody().addToStatements("properties", "sb.append(\"\\\"properties\\\": [\")");
+		
+		OJField count = new OJField("count", new OJPathName("int"));
+		count.setInitExp("1");
+		asJson.getBody().addToLocals(count);
+		
+		OJForStatement forLiterals = new OJForStatement("l", new OJPathName(enumName), ojEnum.getName() + ".values()");
+		forLiterals.getBody().addToStatements("sb.append(l.toJson())");
+		OJIfStatement ifCountSize = new OJIfStatement("count < " + ojEnum.getName() + ".values().length");
+		ifCountSize.addToThenPart("count++");
+		ifCountSize.addToThenPart("sb.append(\",\")");
+		forLiterals.getBody().addToStatements(ifCountSize);
+		asJson.getBody().addToStatements(forLiterals);
 		ojEnum.addToOperations(asJson);
 
-		int count = 0;
 		for (Property p : allOwnedProperties) {
-			count++;
 			PropertyWrapper pWrap = new PropertyWrapper(p);
 			if (!(pWrap.isDerived() || pWrap.isDerivedUnion())) {
-				asJson.getBody().addToStatements("sb.append(" + ojEnum.getName() + "." + pWrap.fieldname() + ".toJson())");
-				if (count != allOwnedProperties.size()) {
-					asJson.getBody().addToStatements("sb.append(\",\")");
-				}
-				addEnumLiteral(ojEnum, fromLabel, pWrap.fieldname(), pWrap.isPrimitive(), pWrap.isManyToOne(), pWrap.isMany(), pWrap.isControllingSide(), pWrap.isComposite(),
+				addEnumLiteral(ojEnum, fromLabel, pWrap.fieldname(), pWrap.isPrimitive(), pWrap.isManyToOne(), pWrap.isMany(), pWrap.isControllingSide(), pWrap.isComposite(), pWrap.isInverseComposite(),
 						pWrap.isOneToOne(), pWrap.isOneToMany(), pWrap.isManyToMany(), pWrap.getUpper(), pWrap.getLower(), pWrap.isQualified(), pWrap.isInverseQualified(),
 						pWrap.isOrdered(), pWrap.isInverseOrdered(), pWrap.isUnique(), TinkerGenerationUtil.getEdgeName(pWrap.getProperty()));
 			}
@@ -153,9 +165,7 @@ public class RuntimePropertyImplementor {
 
 		if (!hasCompositeOwner) {
 			//Add in fake property to root
-			asJson.getBody().addToStatements("sb.append(\",\")");
-			asJson.getBody().addToStatements("sb.append(" + ojEnum.getName() + "." + modelName + ".toJson())");
-			addEnumLiteral(ojEnum, fromLabel, modelName, false, true, false, false, true, false, false, false, -1, 0, false, false, false, false, false, "root" + className);
+			addEnumLiteral(ojEnum, fromLabel, modelName, false, true, false, false, true, false, false, false, false, -1, 0, false, false, false, false, false, "root" + className);
 		}
 		asJson.getBody().addToStatements("sb.append(\"]}\")");
 		asJson.getBody().addToStatements("return sb.toString()");
@@ -164,14 +174,14 @@ public class RuntimePropertyImplementor {
 	}
 
 	public static void addEnumLiteral(OJEnum ojEnum, OJAnnotatedOperation fromLabel, String fieldName, boolean isPrimitive, boolean isManyToOne, boolean isMany,
-			boolean isControllingSide, boolean isComposite, boolean isOneToOne, boolean isOneToMany, boolean isManyToMany, int getUpper, int getLower, boolean isQualified,
+			boolean isControllingSide, boolean isComposite, boolean isInverseComposite, boolean isOneToOne, boolean isOneToMany, boolean isManyToMany, int getUpper, int getLower, boolean isQualified,
 			boolean isInverseQualified, boolean isOrdered, boolean isInverseOrdered, boolean isUnique, String edgeName) {
 
 		OJIfStatement ifLabelEquals = new OJIfStatement(fieldName + ".getLabel().equals(label)");
 		// Do not make upper case, leave with java case sensitive
 		// semantics
 		ifLabelEquals.addToThenPart("return " + fieldName);
-		fromLabel.getBody().addToStatements(ifLabelEquals);
+		fromLabel.getBody().addToStatements(0, ifLabelEquals);
 
 		OJEnumLiteral ojLiteral = new OJEnumLiteral(fieldName);
 
@@ -196,6 +206,11 @@ public class RuntimePropertyImplementor {
 		compositeLabelField.setType(new OJPathName("boolean"));
 		compositeLabelField.setInitExp(Boolean.toString(isComposite));
 		ojLiteral.addToAttributeValues(compositeLabelField);
+
+		OJField inverseCompositeLabelField = new OJField();
+		inverseCompositeLabelField.setType(new OJPathName("boolean"));
+		inverseCompositeLabelField.setInitExp(Boolean.toString(isInverseComposite));
+		ojLiteral.addToAttributeValues(inverseCompositeLabelField);
 
 		OJField propertyLabelField = new OJField();
 		propertyLabelField.setType(new OJPathName("String"));
@@ -276,6 +291,9 @@ public class RuntimePropertyImplementor {
 		sb.append(", ");
 		sb.append("\\\"composite\\\": ");
 		sb.append(compositeLabelField.getInitExp());
+		sb.append(", ");
+		sb.append("\\\"inverseComposite\\\": ");
+		sb.append(inverseCompositeLabelField.getInitExp());
 		sb.append(", ");
 		sb.append("\\\"oneToOne\\\": ");
 		sb.append(isOneToOneAttribute.getInitExp());

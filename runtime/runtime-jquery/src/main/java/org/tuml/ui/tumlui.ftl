@@ -5,17 +5,70 @@
 	<link type="text/css" rel="stylesheet" href="/${app.rootUrl}/javascript/layout/layout-default-latest.css" />
 	<link rel="stylesheet" href="/${app.rootUrl}/javascript/slickgrid/slick.grid.css" type="text/css"/>
 	<link rel="stylesheet" href="/${app.rootUrl}/javascript/slickgrid/css/smoothness/jquery-ui-1.8.16.custom.css" type="text/css"/>
+	<link rel="stylesheet" href="/${app.rootUrl}/javascript/slickgrid/controls/slick.pager.css" type="text/css"/>
+	<link rel="stylesheet" href="/${app.rootUrl}/javascript/slickgrid/examples/examples.css" type="text/css"/>
+	<link rel="stylesheet" href="/${app.rootUrl}/javascript/slickgrid/controls/slick.columnpicker.css" type="text/css"/>
+	<link rel="stylesheet" href="/${app.rootUrl}/javascript/tuml/tuml.css" type="text/css"/>
 
+	<style>
+		.slick-headerrow-column {
+		      background: #87ceeb;
+		      text-overflow: clip;
+		      -moz-box-sizing: border-box;
+		      box-sizing: border-box;
+	    }
+
+	    .slick-headerrow-column input {
+	      margin: 0;
+	      padding: 0;
+	      width: 100%;
+	      height: 100%;
+	      -moz-box-sizing: border-box;
+	      box-sizing: border-box;
+	    }
+
+
+		.cell-title {
+			font-weight: bold;
+		}
+		.cell-effort-driven {
+			text-align: center;
+		}
+		.cell-selection {
+			border-right-color: silver;
+			border-right-style: solid;
+			background: #f5f5f5;
+			color: gray;
+			text-align: right;
+			font-size: 10px;
+		}
+		.slick-row.selected .cell-selection {
+			background-color: transparent; /* show default selected row background */
+		}
+	</style>
+
+	<script src="/${app.rootUrl}/javascript/tuml/tuml.js"></script>
 	<script src="/${app.rootUrl}/javascript/slickgrid/lib/jquery-1.7.min.js"></script>
 	<script src="/${app.rootUrl}/javascript/slickgrid/lib/jquery-ui-1.8.16.custom.min.js"></script>
 	<script src="/${app.rootUrl}/javascript/slickgrid/lib/jquery.event.drag-2.0.min.js"></script>
 	<script src="/${app.rootUrl}/javascript/layout/jquery.layout-latest.js"></script>
 	<script src="/${app.rootUrl}/javascript/slickgrid/slick.core.js"></script>
 	<script src="/${app.rootUrl}/javascript/slickgrid/slick.grid.js"></script>
+	<script src="/${app.rootUrl}/javascript/slickgrid/slick.dataview.js"></script>
 	<script src="/${app.rootUrl}/javascript/slickgrid/slick.formatters.js"></script>
 	<script src="/${app.rootUrl}/javascript/slickgrid/tuml.slick.formatters.js"></script>
-	<script>
+	<script src="/${app.rootUrl}/javascript/slickgrid/controls/slick.pager.js"></script>
+	<script src="/${app.rootUrl}/javascript/slickgrid/controls/slick.columnpicker.js"></script>
 
+	<script src="/${app.rootUrl}/javascript/slickgrid/plugins/slick.cellrangedecorator.js"></script>
+	<script src="/${app.rootUrl}/javascript/slickgrid/plugins/slick.cellrangeselector.js"></script>
+	<script src="/${app.rootUrl}/javascript/slickgrid/plugins/slick.cellselectionmodel.js"></script>
+	<script src="/${app.rootUrl}/javascript/slickgrid/plugins/slick.rowselectionmodel.js"></script>
+	<script src="/${app.rootUrl}/javascript/slickgrid/slick.editors.js"></script>
+
+
+	<script>
+	var grid;
 	var myLayout;
 	$(document).ready(function() {
 		// $('body').layout({ applyDefaultStyles: true, resizable: true });
@@ -84,145 +137,24 @@
 
 	});
 
-	window.onpopstate = function(event) {
-		var pathname = document.location.pathname.replace("/ui", "");
-	    refreshPageTo(pathname);
-	};
-
-	//This adds in the /ui part after /${app.rootUrl}
-	function change_my_url(title, url)	{
-		var urlToPush = '/${app.rootUrl}/ui' +  url.substring('${app.rootUrl}/'.length);
-		history.pushState({}, title, urlToPush);
-	}
-
-	function refreshPageTo(tumlUri) {
-
-		var jqxhr = $.getJSON(tumlUri, function(response, b, c) {
-			var classNameLowerCased;
-			var menuArray = [];
-			var metaForData = {};
-			var isOne;
-			if (response.meta instanceof Array) {
-				//Property is a many, meta has 2 properties, one for both sides of the association
-				//The first one is the parent property, i.e. the context property for which the menu is built
-				isOne = false;
-				var contextMeta = response.meta[0];
-				classNameLowerCased = contextMeta.name.toLowerCase();
-				$.each(contextMeta.properties, function(index, metaProperty) {
-					menuArray[index] = metaProperty;
-				});
-				metaForData = response.meta[1];
-				createPageForMany(response.data, metaForData, metaForData.uri);
-			} else {
-				//Property is a one
-				isOne = true;
-				$.each(response.meta.properties, function(index, metaProperty) {
-					menuArray[index] = metaProperty;
-				});
-				classNameLowerCased = response.meta.name.toLowerCase();
-				metaForData = response.meta;
-				createPageForOne(response.data, metaForData);
-			}
-
-			var vertexId = tumlUri.match(/\d+/);
-			if (vertexId != null) {
-				createLeftMenu(menuArray, classNameLowerCased, vertexId[0]);
-			} else {
-				createLeftMenu(menuArray);
-			}
-
-		}).fail(function(a, b, c) {
-			alert("error " + a + ' ' + b + ' ' + c);
-		});
-
-	}
-
-	function createPageForMany(data, metaForData, currentUri) {
-		$('.ui-layout-center').children().remove();
-		var gridData = [];
-		$.each(data, function(index, rowArray) {
-			var gridObject = {};
-			for(var i=0, len=rowArray.length; i < len; i++) {
-				var rowPropertyObject = rowArray[i]; 
-				gridObject[rowPropertyObject.name] = rowPropertyObject.value;
-			}
-			//Add in url to object
-			gridObject['link'] = currentUri;
-
-			gridData[index] = gridObject;
-			// console.log(data);
-		});
-		$('<div class="grid-header" style="width:100%"><label>' + metaForData.name + ':</label></div><div id="myGrid" style="width:100%;height:500px;"></div>').appendTo(".ui-layout-center");
-		createGrid(gridData);
-	}
-
-	function createPageForOne(data, metaForData) {
-		$('.ui-layout-center').children().remove();
-
-		$('<div>' + metaForData.name + '</div>').appendTo('.ui-layout-center');
-
-		$.each(metaForData.properties, function(index, property) {
-			if (property.onePrimitive) {
-
-				$.each(data, function(index, value) {
-					if (value.name == property.name) {
-						$('<div><label for="' + property.name + 'Id">' + property.name + '</label><input id="' + property.name + 'Id" type="text" class="field" name="' + property.name + '" value="' + value.value + '" /></div>').appendTo('.ui-layout-center');
-					}
-				});
-
-			}
-		});
-
-	}
-
-	function createGrid(data) {
-		var grid;
-		var columns = [{
-			id: "id",
-			name: "id",
-			field: "id"
-		}, {
-			id: "name",
-			name: "name",
-			field: "name"
-		}, {
-			id: "link", name: "Link", field: "link", width: 80, resizable: true, formatter: TumlSlick.Formatters.Link
-		}
-		];
-		var options = {
-			enableCellNavigation: true,
-			enableColumnReorder: false
-		};
-		grid = new Slick.Grid("#myGrid", data, columns, options);
-	}
-
-	function createLeftMenu(menuArray, classNameLowerCased, vertexId) {
-		$('.ui-left-menu-link').children().remove();
-		$.each(menuArray, function(index, value) {
-			var adjustedUri = menuArray[index].tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), vertexId);
-			// var adjustedUri = menuArray[index].tumlUri.replace('{' + classNameLowerCased + 'Id}', vertexId);
-			$('.ui-left-menu-link').append('<li>').append(
-				$('<a>',{
-						text: menuArray[index].name,
-						title: menuArray[index].name,
-						href: adjustedUri,
-						click: function(){ 
-							change_my_url( menuArray[index].name, adjustedUri );
-							refreshPageTo( adjustedUri );return false;
-						}
-					}
-				)).append('</li>');
-		});
-	}
-
-
+window.onpopstate = function(event) {
+	var pathname = document.location.pathname.replace("/ui", "");
+	refreshPageTo(pathname);
+};
 
 </script>
 </head>
 <body>
 	<div class="ui-layout-center">
-		
-  </div>
+
+<!-- 		<div class="grid-header" style="width:100%">
+			<label>Replace with label</label>
+		</div>
+		<div id="myGrid" style="width:100%;height:90%;"></div>
+		<div id="pager" style="width:100%;height:20px;"></div>
+ -->		
+	</div>
+
 	</div>
 	<div class="ui-layout-north">North</div>
 	<div class="ui-layout-south">South</div>

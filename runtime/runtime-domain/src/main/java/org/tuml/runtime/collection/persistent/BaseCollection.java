@@ -241,11 +241,16 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 			}
 			v = node.getVertex();
 			if (this.isUnique() && (this.isOneToMany() || this.isOneToOne())) {
-				// Remove the existing one from the element if it exist
+				// Check that the existing one from the element does not exist, the user must first remove it
 				Iterator<Edge> iteratorToOne = getEdges(v).iterator();
 				if (iteratorToOne.hasNext()) {
 					throw new IllegalStateException("Its a 1");
 				}
+				
+				//Even if the user cleared the one, a reference on the other side may remain in memory.
+				//Clearing this property is not performance issue as it is a one
+				node.initialiseProperty(tumlRuntimeProperty);
+				
 			}
 		} else if (e.getClass().isEnum()) {
 			v = GraphDb.getDb().addVertex(null);
@@ -622,6 +627,11 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 	@Override
 	public boolean isComposite() {
 		return this.tumlRuntimeProperty.isComposite();
+	}
+
+	@Override
+	public boolean isInverseComposite() {
+		return this.tumlRuntimeProperty.isInverseComposite();
 	}
 
 	@Override

@@ -47,6 +47,15 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 		this.property = property;
 	}
 	
+	public boolean isInverseComposite() {
+		if (getOtherEnd() != null) {
+			return new PropertyWrapper(getOtherEnd()).isComposite();
+		} else {
+			return false;
+		}
+	}
+
+	
 	public boolean hasQualifiers() {
 		return !this.property.getQualifiers().isEmpty();
 	}

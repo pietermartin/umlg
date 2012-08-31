@@ -2,10 +2,7 @@ package org.tuml.restlet.visitor.clazz;
 
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.uml2.uml.Class;
-import org.eclipse.uml2.uml.Element;
-import org.eclipse.uml2.uml.Model;
 import org.opaeum.java.metamodel.OJConstructor;
 import org.opaeum.java.metamodel.OJField;
 import org.opaeum.java.metamodel.OJPathName;
@@ -16,31 +13,29 @@ import org.opaeum.java.metamodel.annotation.OJEnum;
 import org.opaeum.java.metamodel.annotation.OJEnumLiteral;
 import org.tuml.framework.Visitor;
 import org.tuml.generation.Workspace;
-import org.tuml.javageneration.util.Condition;
 import org.tuml.javageneration.util.TumlClassOperations;
-import org.tuml.javageneration.util.TumlModelOperations;
 import org.tuml.javageneration.visitor.BaseVisitor;
 
-public class AddUriToRootRuntimePropertyEnum extends BaseVisitor implements Visitor<Model> {
+public class AddTumlUriFieldToRuntimePropertyEnum extends BaseVisitor implements Visitor<Class> {
 
-	public AddUriToRootRuntimePropertyEnum(Workspace workspace) {
+	public AddTumlUriFieldToRuntimePropertyEnum(Workspace workspace) {
 		super(workspace);
 	}
 
 	@Override
-	public void visitBefore(Model model) {
-		OJAnnotatedClass annotatedClass = this.workspace.findOJClass("org.tuml.root.Root");
-		OJEnum ojEnum = annotatedClass.findEnum("RootRuntimePropertyEnum");
+	public void visitBefore(Class clazz) {
+		OJAnnotatedClass annotatedClass = findOJClass(clazz);
+		OJEnum ojEnum = annotatedClass.findEnum(TumlClassOperations.propertyEnumName(clazz));
 		
-		addUriToObject(model, ojEnum);
+		addUriToObject(clazz, ojEnum);
+		addUriToToJson(clazz, annotatedClass);
 		
 		OJField uriPrimitiveField = new OJField();
 		uriPrimitiveField.setType(new OJPathName("String"));
 		uriPrimitiveField.setName("tumlUri");
 		ojEnum.addToFields(uriPrimitiveField);
 
-		OJAnnotatedOperation getter = new OJAnnotatedOperation((uriPrimitiveField.getType().getLast().equals("boolean") ? "is" : "get")
-				+ StringUtils.capitalize(uriPrimitiveField.getName()), uriPrimitiveField.getType());
+		OJAnnotatedOperation getter = new OJAnnotatedOperation("getTumlUri", uriPrimitiveField.getType());
 		getter.getBody().addToStatements("return this." + uriPrimitiveField.getName());
 		ojEnum.addToOperations(getter);
 
@@ -48,32 +43,19 @@ public class AddUriToRootRuntimePropertyEnum extends BaseVisitor implements Visi
 		constructor.addParam(uriPrimitiveField.getName(), uriPrimitiveField.getType());
 		constructor.getBody().addToStatements("this." + uriPrimitiveField.getName() + " = " + uriPrimitiveField.getName());
 
-		@SuppressWarnings("unchecked")
-		List<Class> result = (List<Class>) TumlModelOperations.findElements(model, new Condition() {
-			@Override
-			public boolean evaluateOn(Element e) {
-				if (!(e instanceof Class)) {
-					return false;
-				}
-				Class clazz = (Class) e;
-				return !clazz.isAbstract() && !TumlClassOperations.hasCompositeOwner(clazz);
-			}
-		});
-
 		List<OJEnumLiteral> literals = ojEnum.getLiterals();
 		for (OJEnumLiteral literal : literals) {
-			Class clazz = null;
-			for (Class c : result) {
-				if (StringUtils.uncapitalize(TumlClassOperations.className(c)).equals(literal.getName())) {
-					clazz = c;
-					break;
-				}
-			}
 			String uri;
-			if (clazz != null) {
-				uri = "\"/" + clazz.getModel().getName() + "/" + TumlClassOperations.getPathName(clazz).getLast().toLowerCase() + "s\"";
+			if (literal.getName().equals(clazz.getModel().getName())) {
+				uri = "\"/" + clazz.getModel().getName() + "\"";
 			} else {
-				uri = "\"/" + model.getName() + "\"";
+				if (literal.getName().equals("self")) {
+					uri = "\"/" + clazz.getModel().getName() + "/" + TumlClassOperations.getPathName(clazz).getLast().toLowerCase() + "s/{"
+							+ TumlClassOperations.getPathName(clazz).getLast().toLowerCase() + "Id}/\"";
+				} else {
+					uri = "\"/" + clazz.getModel().getName() + "/" + TumlClassOperations.getPathName(clazz).getLast().toLowerCase() + "s/{"
+							+ TumlClassOperations.getPathName(clazz).getLast().toLowerCase() + "Id}/" + literal.getName() + "\"";
+				}
 			}
 			OJField uriAttribute = new OJField();
 			uriAttribute.setType(new OJPathName("String"));
@@ -92,16 +74,27 @@ public class AddUriToRootRuntimePropertyEnum extends BaseVisitor implements Visi
 		}
 
 	}
-	
-	@Override
-	public void visitAfter(Model element) {
 
+	private void addUriToToJson(Class clazz, OJAnnotatedClass annotatedClass) {
+		OJAnnotatedOperation toJson =  annotatedClass.findOperation("toJson");
+		OJSimpleStatement s = (OJSimpleStatement) toJson.getBody().findStatement("uri");
+		s.setExpression("sb.append(\"\\\"uri\\\": \\\"\" + " + TumlClassOperations.propertyEnumName(clazz) + ".getUriToObject() + \"\\\"\")");
 	}
-	
-	private void addUriToObject(Model model, OJEnum ojEnum) {
+
+	private void addUriToObject(Class clazz, OJEnum ojEnum) {
+		OJAnnotatedOperation getUriToObject = new OJAnnotatedOperation("getUriToObject", new OJPathName("String"));
+		getUriToObject.setStatic(true);
+		getUriToObject.getBody().addToStatements("return " + "\"/" + clazz.getModel().getName() + "/" + TumlClassOperations.getPathName(clazz).getLast().toLowerCase() + "s/{" + TumlClassOperations.getPathName(clazz).getLast().toLowerCase() + "Id}\"");
+		ojEnum.addToOperations(getUriToObject);
+		
 		OJAnnotatedOperation asJson =  ojEnum.findOperation("asJson");
 		OJSimpleStatement s =  (OJSimpleStatement) asJson.getBody().findStatement("uri");
-		s.setExpression("sb.append(\"\\\"uri\\\": \\\"/" + model.getName() + "s\\\", \")");
+		s.setExpression("sb.append(\"\\\"uri\\\": \\\"\" + getUriToObject() + \"\\\", \")");
+	}
+
+	@Override
+	public void visitAfter(Class element) {
+
 	}
 
 }

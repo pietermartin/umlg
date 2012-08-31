@@ -5,6 +5,7 @@ public interface TumlRuntimeProperty {
 	boolean isManyPrimitive();
 	boolean isControllingSide();
 	boolean isComposite();
+	boolean isInverseComposite();
 	boolean isOneToOne(); 
 	boolean isOneToMany(); 
 	boolean isManyToOne(); 
