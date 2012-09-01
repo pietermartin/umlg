@@ -167,6 +167,12 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 				OJSimpleStatement statement = new OJSimpleStatement("this." + pWrap.fieldname() + " = " + pWrap.javaDefaultInitialisation(clazz));
 				statement.setName(pWrap.fieldname());
 				initialiseProperties.getBody().addToStatements(statement);
+				if (pWrap.isOne() && pWrap.isBoolean()) {
+					OJIfStatement ifEmpty = new OJIfStatement("this." + pWrap.fieldname() + ".isEmpty()");
+					ifEmpty.setComment("Booleans are defaulted to false if the entity already exist then it will already have a value");
+					ifEmpty.addToThenPart("this." + pWrap.fieldname() + ".add(false)");
+					initialiseProperties.getBody().addToStatements(ifEmpty);
+				}
 				annotatedClass.addToImports(pWrap.javaImplTypePath());
 			}
 		}

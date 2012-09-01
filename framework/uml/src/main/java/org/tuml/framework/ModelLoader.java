@@ -20,83 +20,112 @@ import org.eclipse.uml2.uml.resource.UMLResource;
 
 public class ModelLoader {
 
-    public static final ResourceSet RESOURCE_SET = new ResourceSetImpl();
-    private static Model model;
+	public static final ResourceSet RESOURCE_SET = new ResourceSetImpl();
+	private static Model model;
 
-    public static Model loadModel(File modelFile) {
-        registerResourceFactories();
-        URLClassLoader loader = (URLClassLoader) Thread.currentThread().getContextClassLoader();
-        URI uri = URI.createURI(findLocation(loader, true, "org/eclipse/uml2/uml/resources", "org.eclipse.uml2.uml.resources"));
-        registerPathmaps(uri);
-        File dir = modelFile.getParentFile();
-        URI dirUri = URI.createFileURI(dir.getAbsolutePath());
-        model = (Model) load(dirUri.appendSegment(modelFile.getName()));
-        return model;
-    }
+	public static Model loadModel(File modelFile) {
+		registerResourceFactories();
+		URLClassLoader loader = (URLClassLoader) Thread.currentThread().getContextClassLoader();
+		URI uri = URI.createURI(findLocation(loader, true, "org/eclipse/uml2/uml/resources", "org.eclipse.uml2.uml.resources"));
+		registerPathmaps(uri);
+//		Model dataTypes = registerTumlDataType();
 
-    public static Model getModel() {
-        return model;
-    }
-    
-    public static Stereotype findStereotype(String name) {
-    	Profile tumlProfile = (Profile)model.getAllAppliedProfiles().get(0);
-    	System.out.println(tumlProfile.getMetaclassReferences());
-//    	org.eclipse.uml2.uml.Class system = (org.eclipse.uml2.uml.Class) tumlProfile.allOwningPackages()getOwnedElements().get(0);
-//    	> Stereotype s = system.getAppliedStereotypes().get(0);
-//    	> System.out.println(s);
-    	return null;
-    }
+		File dir = modelFile.getParentFile();
+		URI dirUri = URI.createFileURI(dir.getAbsolutePath());
+		model = (Model) load(dirUri.appendSegment(modelFile.getName()));
+		
+//		model.createElementImport(dataTypes);
+		
+		return model;
+	}
 
-    protected static org.eclipse.uml2.uml.Package load(URI uri) {
-        org.eclipse.uml2.uml.Package package_ = null;
-        Resource resource = RESOURCE_SET.getResource(uri, true);
-        EcoreUtil.resolveAll(RESOURCE_SET);
-        package_ = (org.eclipse.uml2.uml.Package) resource.getContents().get(0);
-        return package_;
-    }
+	public static Model getModel() {
+		return model;
+	}
 
-    protected static void registerResourceFactories() {
-        Environment.Registry.INSTANCE.registerEnvironment(new UMLEnvironmentFactory().createEnvironment());
-        RESOURCE_SET.getResourceFactoryRegistry().getExtensionToFactoryMap().put(UMLResource.FILE_EXTENSION, UMLResource.Factory.INSTANCE);
-        RESOURCE_SET.getPackageRegistry().put(UMLPackage.eNS_URI, UMLPackage.eINSTANCE);
-    }
+	public static Stereotype findStereotype(String name) {
+		Profile tumlProfile = (Profile) model.getAllAppliedProfiles().get(0);
+		System.out.println(tumlProfile.getMetaclassReferences());
+		// org.eclipse.uml2.uml.Class system = (org.eclipse.uml2.uml.Class)
+		// tumlProfile.allOwningPackages()getOwnedElements().get(0);
+		// > Stereotype s = system.getAppliedStereotypes().get(0);
+		// > System.out.println(s);
+		return null;
+	}
 
-    protected static void registerPathmaps(URI uri) {
-        URIConverter.URI_MAP.put(URI.createURI(UMLResource.LIBRARIES_PATHMAP), uri.appendSegment("libraries").appendSegment(""));
-        URIConverter.URI_MAP.put(URI.createURI(UMLResource.METAMODELS_PATHMAP), uri.appendSegment("metamodels").appendSegment(""));
-        URIConverter.URI_MAP.put(URI.createURI(UMLResource.PROFILES_PATHMAP), uri.appendSegment("profiles").appendSegment(""));
-    }
+	protected static org.eclipse.uml2.uml.Package load(URI uri) {
+		org.eclipse.uml2.uml.Package package_ = null;
+		Resource resource = RESOURCE_SET.getResource(uri, true);
+		EcoreUtil.resolveAll(RESOURCE_SET);
+		package_ = (org.eclipse.uml2.uml.Package) resource.getContents().get(0);
+		return package_;
+	}
 
-    public static String findLocation(URLClassLoader s, boolean jar, String... names) {
-        try {
-            URL[] urls = s.getURLs();
-            String location = null;
-            outer:
-            for (URL url : urls) {
-                for (String string : names) {
-                    String ext = url.toExternalForm();
-                    if (ext.contains(string)) {
-                        File file = new File(url.getFile());
-                        if (ext.endsWith(".jar")) {
-                            if (jar) {
-                                location = "jar:file:///" + file.getAbsolutePath().replace('\\', '/') + "!/";
-                            }
-                        } else {
-                            if (!jar) {
-                                location = "file:///" + file.getAbsolutePath().replace('\\', '/');
-                            }
-                        }
-                        break outer;
-                    }
-                }
-            }
-            if (location == null && s.getParent() instanceof URLClassLoader && s.getParent() != s) {
-                location = findLocation((URLClassLoader) s.getParent(), jar, names);
-            }
-            return location;
-        } catch (Throwable t) {
-            System.out.println(t.toString());
-            return null;
-        }
-    }
+	protected static void registerResourceFactories() {
+		Environment.Registry.INSTANCE.registerEnvironment(new UMLEnvironmentFactory().createEnvironment());
+		RESOURCE_SET.getResourceFactoryRegistry().getExtensionToFactoryMap().put(UMLResource.FILE_EXTENSION, UMLResource.Factory.INSTANCE);
+		RESOURCE_SET.getPackageRegistry().put(UMLPackage.eNS_URI, UMLPackage.eINSTANCE);
+	}
+
+	protected static void registerPathmaps(URI uri) {
+		URIConverter.URI_MAP.put(URI.createURI(UMLResource.LIBRARIES_PATHMAP), uri.appendSegment("libraries").appendSegment(""));
+		URIConverter.URI_MAP.put(URI.createURI(UMLResource.METAMODELS_PATHMAP), uri.appendSegment("metamodels").appendSegment(""));
+		URIConverter.URI_MAP.put(URI.createURI(UMLResource.PROFILES_PATHMAP), uri.appendSegment("profiles").appendSegment(""));
+	}
+
+	protected static Model registerTumlDataType() {
+
+//		URL url;
+//		try {
+//			url = new URL("file:///home/pieter/workspace-tuml/tuml/runtime/runtime-domain/src/main/model/TumDataTypes.uml");
+//		} catch (MalformedURLException e) {
+//			throw new RuntimeException(e);
+//		}
+//		// Need the jarfile path so chop off the file specific stuff
+//		final String path = url.toExternalForm().split("!")[0] + "!/";
+//		// Build a uri for this path
+//		final URI baseURI = URI.createURI(path);
+//		URIConverter.URI_MAP.put(URI.createURI("platform:/resource"), baseURI.appendSegment("libraries").appendSegment(""));
+		
+		File file = new File("/home/pieter/workspace-tuml/tuml/runtime/runtime-domain/src/main/model");
+		URI dirUri = URI.createFileURI(file.getAbsolutePath());
+	
+		URIConverter.URI_MAP.put(URI.createURI("platform:/resource"), dirUri.appendSegment("libraries").appendSegment(""));
+		
+		Model umlLibrary = (Model) load(dirUri.appendSegment("TumDataTypes.uml"));
+		
+		return umlLibrary;
+	}
+
+	public static String findLocation(URLClassLoader s, boolean jar, String... names) {
+		try {
+			URL[] urls = s.getURLs();
+			String location = null;
+			outer: for (URL url : urls) {
+				for (String string : names) {
+					String ext = url.toExternalForm();
+					if (ext.contains(string)) {
+						File file = new File(url.getFile());
+						if (ext.endsWith(".jar")) {
+							if (jar) {
+								location = "jar:file:///" + file.getAbsolutePath().replace('\\', '/') + "!/";
+							}
+						} else {
+							if (!jar) {
+								location = "file:///" + file.getAbsolutePath().replace('\\', '/');
+							}
+						}
+						break outer;
+					}
+				}
+			}
+			if (location == null && s.getParent() instanceof URLClassLoader && s.getParent() != s) {
+				location = findLocation((URLClassLoader) s.getParent(), jar, names);
+			}
+			return location;
+		} catch (Throwable t) {
+			System.out.println(t.toString());
+			return null;
+		}
+	}
 }

@@ -46,9 +46,13 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
 		}
 		annotatedClass.addToOperations(initialiseProperty);
 
+		OJSimpleStatement s = new OJSimpleStatement(TumlClassOperations.propertyEnumName(clazz) + " runtimeProperty = " + "(" + TumlClassOperations.propertyEnumName(clazz) + ".fromLabel(tumlRuntimeProperty.getLabel()))");
+		initialiseProperty.getBody().addToStatements(s);
+		OJIfStatement ifNotNull = new OJIfStatement("runtimeProperty != null");
+		initialiseProperty.getBody().addToStatements(ifNotNull);
 		OJSwitchStatement ojSwitchStatement = new OJSwitchStatement();
-		ojSwitchStatement.setCondition("(" + TumlClassOperations.propertyEnumName(clazz) + ".fromLabel(tumlRuntimeProperty.getLabel()))");
-		initialiseProperty.getBody().addToStatements(ojSwitchStatement);
+		ojSwitchStatement.setCondition("runtimeProperty");
+		ifNotNull.addToThenPart(ojSwitchStatement);
 
 		for (Property p : TumlClassOperations.getAllOwnedProperties(clazz)) {
 			PropertyWrapper pWrap = new PropertyWrapper(p);

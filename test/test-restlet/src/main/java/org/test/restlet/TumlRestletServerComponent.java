@@ -61,7 +61,10 @@ public class TumlRestletServerComponent extends Component {
 			for (int j = 0; j < 2; j++) {
 				Hand hand = new Hand(human);
 				hand.setName("hand" + j);
-
+				hand.setTestNumber(i + 1);
+				hand.setTestBoolean(false);
+				hand.setTestUnlimitedNatural(1 +j * 10000000L);
+				
 				for (int k = 0; k < 5; k++) {
 					Finger finger = new Finger(hand);
 					finger.setName("finger" + k);

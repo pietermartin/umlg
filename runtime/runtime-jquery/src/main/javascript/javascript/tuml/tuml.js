@@ -12,6 +12,8 @@ function refreshPageTo(tumlUri) {
         var menuArray = [];
         var metaForData = {};
         var isOne;
+
+        var contextVertexId = tumlUri.match(/\d+/);
         if (response.meta instanceof Array) {
             //Property is a many, meta has 2 properties, one for both sides of the association
             //The first one is the parent property, i.e. the context property for which the menu is built
@@ -23,6 +25,7 @@ function refreshPageTo(tumlUri) {
             });
             metaForData = response.meta[1];
             createPageForMany(response.data, metaForData, tumlUri);
+            contextVertexId = tumlUri.match(/\d+/);
         } else {
             //Property is a one
             isOne = true;
@@ -31,12 +34,11 @@ function refreshPageTo(tumlUri) {
             });
             classNameLowerCased = response.meta.name.toLowerCase();
             metaForData = response.meta;
-            createPageForOne(response.data, metaForData);
+            createPageForOne(response.data, metaForData, tumlUri);
+            contextVertexId = response.data.id;
         }
-
-        var vertexId = tumlUri.match(/\d+/);
-        if (vertexId != null) {
-            createLeftMenu(menuArray, classNameLowerCased, vertexId[0]);
+        if (contextVertexId != null) {
+            createLeftMenu(menuArray, classNameLowerCased, contextVertexId);
         } else {
             createLeftMenu(menuArray);
         }
@@ -55,24 +57,52 @@ function createPageForMany(data, metaForData, tumlUri) {
     createGrid(data, metaForData, tumlUri);
 }
 
-function createPageForOne(data, metaForData) {
+function createPageForOne(data, metaForData, tumlUri) {
     //First destroy the grid if it exist
     $('.ui-layout-center').children().remove();
 
     $('<div>' + metaForData.name + '</div>').appendTo('.ui-layout-center');
-
+    $('<div id="formDiv"></div>').appendTo('.ui-layout-center');
     $.each(metaForData.properties, function(index, property) {
         if (property.onePrimitive) {
-
-            $.each(data, function(index, value) {
-                if (value.name == property.name) {
-                    $('<div><label for="' + property.name + 'Id">' + property.name + '</label><input id="' + property.name + 'Id" type="text" class="field" name="' + property.name + '" value="' + value.value + '" /></div>').appendTo('.ui-layout-center');
-                }
-            });
-
+            $('<div><label for="' + property.name + 'Id">' + property.name + '</label><input id="' + property.name  + 'Id" type="text" class="field" name="' + property.name + '" value="' + data[property.name]+ '" /></div>').appendTo('#formDiv');
         }
     });
+    $('#formDiv').wrap('<form id="formId"></form>');
 
+    var $saveButton = $('<button />').text('Save').click(function() {
+        $.ajax({
+            url: tumlUri,
+            type: "PUT",
+            dataType: "json",
+            contentType: "json",
+            data: formToJson(),
+            success: function() {
+                refreshPageTo(tumlUri);
+            },
+            error: function() {
+                alert("fail :-(");
+            }
+        });
+        return false ;
+    }).appendTo('#formDiv');
+
+    function formToJson() {
+        var dataToSend = {};
+        $.each(metaForData.properties, function(index, property) {
+            if (property.onePrimitive) {
+                if (property.fieldType == 'Integer' || property.fieldType == 'Long') {
+                    dataToSend[property.name] = parseInt($('#' + property.name + 'Id').val());
+                } else if (property.fieldType == 'String') {
+                    dataToSend[property.name] = $('#' + property.name + 'Id').val();
+                }
+            }
+        });
+        //var result = $('#formId').serializeObject();
+        //alert(result);
+        var result = JSON.stringify(dataToSend);
+        return result;
+    }
 }
 
 function requiredFieldValidator(value) {
@@ -96,17 +126,60 @@ function createGrid(data, metaForData, tumlUri) {
 
      $.each(metaForData.properties, function(index, property) {
          if (!property.inverseComposite && (property.oneToOne || property.manyToOne)) {
-             columns.push({
-                 id: property.name,
-                 name: property.name,
-                 field: property.name,
-                 sortable: true,
-                 editor: property.name == 'uri' ? null : Slick.Editors.Text,
-                 validator: requiredFieldValidator,
-                 formatter: property.name !== 'uri' ? null : TumlSlick.Formatters.Link
-             });
+             //Place the id column first
+             if (property.name == "id") {
+                  columns.splice(0,0,{
+                     id: property.name,
+                     name: property.name,
+                     field: property.name,
+                     sortable: true,
+                     editor: selectEditor(property),
+                     validator: requiredFieldValidator,
+                     formatter: selectFormatter(property)
+                 });           
+             } else {
+                 columns.push({
+                     id: property.name,
+                     name: property.name,
+                     field: property.name,
+                     sortable: true,
+                     editor: selectEditor(property),
+                     validator: requiredFieldValidator,
+                     formatter: selectFormatter(property)
+                 });
+             }
          }
      });
+
+    function selectFormatter(property) {
+         if (property.name == 'uri') {
+            return TumlSlick.Formatters.Link;
+        } else if (property.fieldType == 'String') {
+           return  null; 
+        } else if (property.fieldType == 'Boolean') {
+           return Slick.Formatters.Checkmark;
+        } else {
+           return null; 
+        }
+    }
+
+    function selectEditor(property) {
+        if (property.name == 'uri') {
+            return null;
+        } else if (property.name == 'id') {
+            return null;
+        } else if (property.fieldType == 'String') {
+           return  Slick.Editors.Text; 
+        } else if (property.fieldType == 'Integer') {
+           return Slick.Editors.Integer;
+        } else if (property.fieldType == 'Long') {
+           return Slick.Editors.Integer;
+        } else if (property.fieldType == 'Boolean') {
+           return Tuml.Editors.Checkbox;
+        } else {
+           return  Slick.Editors.Text; 
+        }
+    }
 
     var options = {
         showHeaderRow: true,
@@ -134,19 +207,23 @@ function createGrid(data, metaForData, tumlUri) {
     $("<div class='grid-button'/>").appendTo('.slick-pager');
 
     var $saveButton = $('<button />').text('Save').click(function() {
-        $.ajax({
-            url: tumlUri,
-            type: "POST",
-            dataType: "json",
-            contentType: "json",
-            data: JSON.stringify(data),
-            success: function() {
-                refreshPageTo(tumlUri);
-            },
-            error: function() {
-                alert("fail :-(");
-            }
-        });
+        if (grid.getEditorLock().commitCurrentEdit()) {
+            $.ajax({
+                url: tumlUri,
+                type: "POST",
+                dataType: "json",
+                contentType: "json",
+                data: JSON.stringify(data),
+                success: function() {
+                    refreshPageTo(tumlUri);
+                },
+                error: function() {
+                    alert("fail :-(");
+                }
+            });
+        } else {
+            alert("Commit failed on current active cell!");
+        }
     }).appendTo('.grid-button');
 
     var $cancelButton = $('<button />').text('Cancel').click(function() {
@@ -247,19 +324,35 @@ function createGrid(data, metaForData, tumlUri) {
     });
 
     grid.onColumnsReordered.subscribe(function(e, args) {
-        updateHeaderRow();
+        updateHeaderRow(metaForData);
     });
 
     grid.onColumnsResized.subscribe(function(e, args) {
-        updateHeaderRow();
+        updateHeaderRow(metaForData);
     });
 
-    function updateHeaderRow() {
+    function updateHeaderRow(metaForData) {
         for (var i = 0; i < columns.length; i++) {
-            if (columns[i].id !== "selector") {
+            if (columns[i].id !== "selector" && columns[i].id !== 'uri') {
                 var header = grid.getHeaderRowColumn(columns[i].id);
                 $(header).empty();
-                $("<input type='text'>").data("columnId", columns[i].id).val(columnFilters[columns[i].id]).appendTo(header);
+                $(constructHeaderRowBox(columns[i].id, metaForData)).data("columnId", columns[i].id).val(columnFilters[columns[i].id]).appendTo(header);
+            }
+        }
+    }
+
+    function constructHeaderRowBox(columnId, metaForData) {
+        for (var i = 0; i < metaForData.properties.length; i++) {
+            var property = metaForData.properties[i];
+            if (property.name == columnId && property.fieldType == 'String') {
+                return "<input type='text'>";
+            } else if (property.name == columnId && (property.fieldType == 'Integer' || property.fieldType == 'Long')) {
+                return "<input type='text'>";
+            } else if (property.name == columnId && property.fieldType == 'Boolean') {
+                //return "<INPUT type=checkbox value='true' class='editor-checkbox' hideFocus>";
+                return "<select><option value='None'>None</option><option value='true'>True</option><option value='false'>False</option></select>";
+            } else {
+                return "<input type='text'>";
             }
         }
     }
@@ -268,8 +361,27 @@ function createGrid(data, metaForData, tumlUri) {
         for (var columnId in columnFilters) {
             if (columnId !== undefined && columnFilters[columnId] !== "") {
                 var c = grid.getColumns()[grid.getColumnIndex(columnId)];
-                if (item[c.field].indexOf(columnFilters[columnId]) == -1) {
-                    return false;
+                for (var i = 0; i < metaForData.metaForData.properties.length; i++) {
+                    var property = metaForData.metaForData.properties[i];
+                    if (property.name == columnId) {
+                        if (property.fieldType == 'String') {
+                            if (item[c.field].indexOf(columnFilters[columnId]) == -1) {
+                                return false;
+                            }
+                        } else if (property.fieldType == 'Integer' || property.fieldType == 'Long') {
+                             if (item[c.field] != columnFilters[columnId]) {
+                                return false;
+                            }
+                        } else if (property.fieldType == 'Boolean') {
+                             var isNone = (columnFilters[columnId] === 'None');
+                             if (!isNone) {
+                                var isTrueSet = (columnFilters[columnId] === 'true');
+                                if (item[c.field] != isTrueSet) {
+                                    return false;
+                                }
+                            }
+                        }   
+                    }
                 }
             }
         }
@@ -290,7 +402,7 @@ function createGrid(data, metaForData, tumlUri) {
     });
     dataView.setFilter(filter);
     dataView.endUpdate();
-    updateHeaderRow();
+    updateHeaderRow(metaForData);
 
     // if you don't want the items that are not visible (due to being filtered out
     // or being on a different page) to stay selected, pass 'false' to the second arg
@@ -315,11 +427,11 @@ function requiredFieldValidator(value) {
 }
 
 
-function createLeftMenu(menuArray, classNameLowerCased, vertexId) {
+function createLeftMenu(menuArray, classNameLowerCased, contextVertexId) {
     $('.ui-left-menu-link').children().remove();
     $.each(menuArray, function(index, value) {
-        var adjustedUri = menuArray[index].tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), vertexId);
-        // var adjustedUri = menuArray[index].tumlUri.replace('{' + classNameLowerCased + 'Id}', vertexId);
+        var adjustedUri = menuArray[index].tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
+        // var adjustedUri = menuArray[index].tumlUri.replace('{' + classNameLowerCased + 'Id}', contextVertexId);
         $('.ui-left-menu-link').append('<li>').append(
             $('<a>', {
             text: menuArray[index].name,

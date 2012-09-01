@@ -1,5 +1,6 @@
 package org.opaeum.java.metamodel;
 
+import java.util.Iterator;
 import java.util.Set;
 
 import org.opaeum.java.metamodel.generated.OJIfStatementGEN;
@@ -65,7 +66,12 @@ public class OJIfStatement extends OJIfStatementGEN {
 	}
 
 	public String toJavaString() {
-		String result = "if ( " + getCondition() + " ) {\n";
+		StringBuilder sb = new StringBuilder();
+		if(!getComment().equals("")){
+			addJavaDocComment(sb);
+		}
+		String result = sb.toString();
+		result += "if ( " + getCondition() + " ) {\n";
 		result = result + JavaStringHelpers.indent(getThenPart().toJavaString(), 1) + "\n}";
 		int count = 0;
 		for (OJBlock elseIf : this.elseIfPart) {
@@ -104,4 +110,16 @@ public class OJIfStatement extends OJIfStatementGEN {
 			getElsePart().renameAll(renamePathNames, suffix);
 		}
 	}
+	
+	/**
+	 * @param result
+	 */
+	protected void addJavaDocComment(StringBuilder result){
+		String comment = getComment();
+		comment = JavaStringHelpers.replaceAllSubstrings(comment, "\n", "\n * ");
+		result.append("//");
+		result.append(comment);
+		result.append("\n");
+	}
+
 }

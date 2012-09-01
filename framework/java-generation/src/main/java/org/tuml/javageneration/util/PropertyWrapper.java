@@ -26,6 +26,7 @@ import org.eclipse.uml2.uml.OpaqueExpression;
 import org.eclipse.uml2.uml.Package;
 import org.eclipse.uml2.uml.PackageableElement;
 import org.eclipse.uml2.uml.ParameterableElement;
+import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.RedefinableElement;
 import org.eclipse.uml2.uml.StringExpression;
@@ -1150,6 +1151,22 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 	@Override
 	public void setRealDefaultValue(double arg0) {
 		throw new RuntimeException("Not supported");
+	}
+
+	public boolean isNumber() {
+		return getType() instanceof PrimitiveType && (getType().getName().equals("Integer") || getType().getName().equals("UnlimitedNatural"));
+	}
+
+	public boolean isBoolean() {
+		return getType() instanceof PrimitiveType && (getType().getName().equals("Boolean"));
+	}
+
+	public boolean isInteger() {
+		return getType() instanceof PrimitiveType && (getType().getName().equals("Integer"));
+	}
+
+	public boolean isLong() {
+		return getType() instanceof PrimitiveType && (getType().getName().equals("UnlimitedNatural"));
 	}
 
 }

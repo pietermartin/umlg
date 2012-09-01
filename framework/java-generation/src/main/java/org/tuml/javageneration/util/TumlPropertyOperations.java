@@ -11,6 +11,7 @@ import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
+import org.eclipse.uml2.uml.internal.impl.DataTypeImpl;
 import org.eclipse.uml2.uml.internal.operations.PropertyOperations;
 import org.opaeum.java.metamodel.OJPathName;
 import org.opaeum.java.metamodel.OJSimpleStatement;
@@ -107,7 +108,9 @@ public final class TumlPropertyOperations extends PropertyOperations {
 	}
 
 	public static boolean isManyToOne(Property p) {
-		return !otherEndIsOne(p) && isOne(p);
+		//TODO part of thinking about
+//		return !otherEndIsOne(p) && isOne(p);
+		return otherEndIsOne(p) && isOne(p);
 	}
 
 	public static boolean isOneToOne(Property p) {
@@ -119,7 +122,8 @@ public final class TumlPropertyOperations extends PropertyOperations {
 			Property otherEnd = p.getOtherEnd();
 			return isOne(otherEnd) && otherEnd.getQualifiers().size() == 0;
 		} else {
-			return false;
+			//TODO think about, this was false
+			return true;
 		}
 	}
 
@@ -169,7 +173,10 @@ public final class TumlPropertyOperations extends PropertyOperations {
 	}
 
 	public static OJPathName getTypePath(Property p) {
-		return new OJPathName(Namer.name(p.getType().getNearestPackage()) + "." + Namer.name(p.getType()));
+		if (p.getName().equals("testDateTime")) {
+			System.out.println(p.getType().getQualifiedName());
+		}
+		return new OJPathName(Namer.name(p.getType().getNearestPackage()) + "." + TinkerGenerationUtil.umlPrimitiveTypeToJava(p.getType()));
 	}
 
 	public static String getter(Property property) {

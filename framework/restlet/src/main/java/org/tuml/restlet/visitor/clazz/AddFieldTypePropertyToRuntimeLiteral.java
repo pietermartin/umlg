@@ -41,10 +41,8 @@ public class AddFieldTypePropertyToRuntimeLiteral extends BaseVisitor implements
 		constructor.addParam("fieldType", TumlRestletGenerationUtil.FieldType);
 		constructor.getBody().addToStatements("this.fieldType = fieldType");
 		for (Property property : properties) {
-
 			OJEnumLiteral literal = ojEnum.findLiteral(new PropertyWrapper(property).fieldname());
-
-			addFieldTypePropertyToLiteral(literal);
+			addFieldTypePropertyToLiteral(property, literal);
 		}
 
 		addFieldTypePropertyToLiteral(ojEnum.findLiteral("id"));
@@ -57,16 +55,33 @@ public class AddFieldTypePropertyToRuntimeLiteral extends BaseVisitor implements
 
 	}
 
-	static void addFieldTypePropertyToLiteral(OJEnumLiteral literal) {
-		String uri = "FieldType.Date";
+	static void addFieldTypePropertyToLiteral(Property property, OJEnumLiteral literal) {
+		String fieldTypeAstring = TumlRestletGenerationUtil.getFieldTypeForProperty(property);
 		OJField uriAttribute = new OJField();
 		uriAttribute.setType(TumlRestletGenerationUtil.FieldType);
-		uriAttribute.setInitExp(uri);
+		uriAttribute.setInitExp(fieldTypeAstring);
 		literal.addToAttributeValues(uriAttribute);
 
 		OJField jsonField = literal.findAttributeValue("json");
 		StringBuilder sb = new StringBuilder();
-		sb.append(", \\\"fieldType\\\": \\\"\" + FieldType.Date + \"\\\"}\"");
+		sb.append(", \\\"fieldType\\\": \\\"\" + " + fieldTypeAstring + " + \"\\\"}\"");
+		String initExp = jsonField.getInitExp();
+		int indexOf = initExp.lastIndexOf("}");
+		initExp = initExp.substring(0, indexOf) + sb.toString();
+
+		jsonField.setInitExp(initExp);
+	}
+
+	static void addFieldTypePropertyToLiteral(OJEnumLiteral literal) {
+		String fieldType = "FieldType.Integer";
+		OJField uriAttribute = new OJField();
+		uriAttribute.setType(TumlRestletGenerationUtil.FieldType);
+		uriAttribute.setInitExp(fieldType);
+		literal.addToAttributeValues(uriAttribute);
+
+		OJField jsonField = literal.findAttributeValue("json");
+		StringBuilder sb = new StringBuilder();
+		sb.append(", \\\"fieldType\\\": \\\"\" + " + fieldType + " + \"\\\"}\"");
 		String initExp = jsonField.getInitExp();
 		int indexOf = initExp.lastIndexOf("}");
 		initExp = initExp.substring(0, indexOf) + sb.toString();

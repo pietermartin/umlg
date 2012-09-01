@@ -65,7 +65,10 @@
 	<script src="/${app.rootUrl}/javascript/slickgrid/plugins/slick.cellselectionmodel.js"></script>
 	<script src="/${app.rootUrl}/javascript/slickgrid/plugins/slick.rowselectionmodel.js"></script>
 	<script src="/${app.rootUrl}/javascript/slickgrid/slick.editors.js"></script>
+	<script src="/${app.rootUrl}/javascript/slickgrid/tuml.slick.editors.js"></script>
 
+	<script src="/${app.rootUrl}/javascript/jquery-validation/jquery.validate.js"></script>
+	<script src="/${app.rootUrl}/javascript/jquery-misc/jquery.ba-serializeobject.js"></script>
 
 	<script>
 	var grid;

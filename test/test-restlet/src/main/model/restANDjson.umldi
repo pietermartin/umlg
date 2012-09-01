@@ -71,6 +71,21 @@
                 <element href="restANDjson.uml#_Dg0J8N4kEeGdB9TPHp60mw"/>
               </semanticModel>
             </contained>
+            <contained xsi:type="di:GraphNode" xmi:id="_0Bbl4POPEeGuRKiCevocYg" position="0,0" size="-1,-1">
+              <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_0Bbl4fOPEeGuRKiCevocYg" presentation="default">
+                <element href="restANDjson.uml#_0BsroPOPEeGuRKiCevocYg"/>
+              </semanticModel>
+            </contained>
+            <contained xsi:type="di:GraphNode" xmi:id="_3_joUPOPEeGuRKiCevocYg" position="0,0" size="-1,-1">
+              <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_3_joUfOPEeGuRKiCevocYg" presentation="default">
+                <element href="restANDjson.uml#_3_k2cPOPEeGuRKiCevocYg"/>
+              </semanticModel>
+            </contained>
+            <contained xsi:type="di:GraphNode" xmi:id="_53kS0POPEeGuRKiCevocYg" position="0,0" size="-1,-1">
+              <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_53kS0fOPEeGuRKiCevocYg" presentation="default">
+                <element href="restANDjson.uml#_53lg8POPEeGuRKiCevocYg"/>
+              </semanticModel>
+            </contained>
           </contained>
           <contained xsi:type="di:GraphNode" xmi:id="_4aWy5d4jEeGdB9TPHp60mw">
             <property xmi:id="_4aWy5t4jEeGdB9TPHp60mw" key="eStructuralFeatureID" value="47 50 "/>
@@ -125,7 +140,7 @@
             </semanticModel>
           </contained>
         </contained>
-        <contained xsi:type="di:GraphNode" xmi:id="_6RwZYN4jEeGdB9TPHp60mw" position="258,29" size="100,-1">
+        <contained xsi:type="di:GraphNode" xmi:id="_6RwZYN4jEeGdB9TPHp60mw" position="221,23" size="100,-1">
           <anchorage xmi:id="_-UCjEN4jEeGdB9TPHp60mw" graphEdge="_-UP-cN4jEeGdB9TPHp60mw _-f-GQN4jEeGdB9TPHp60mw"/>
           <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_6RwZYd4jEeGdB9TPHp60mw" presentation="default">
             <element href="restANDjson.uml#_6R3uIN4jEeGdB9TPHp60mw"/>

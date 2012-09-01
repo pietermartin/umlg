@@ -165,7 +165,7 @@ public class RuntimePropertyImplementor {
 
 		if (!hasCompositeOwner) {
 			//Add in fake property to root
-			addEnumLiteral(ojEnum, fromLabel, modelName, false, true, false, false, true, false, false, false, false, -1, 0, false, false, false, false, false, "root" + className);
+			addEnumLiteral(ojEnum, fromLabel, modelName, false, false, false, false, true, false, false, true, false, -1, 0, false, false, false, false, false, "root" + className);
 		}
 		asJson.getBody().addToStatements("sb.append(\"]}\")");
 		asJson.getBody().addToStatements("return sb.toString()");

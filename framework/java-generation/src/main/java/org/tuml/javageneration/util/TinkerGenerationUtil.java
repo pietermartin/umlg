@@ -1,7 +1,9 @@
 package org.tuml.javageneration.util;
 
 import org.eclipse.uml2.uml.MultiplicityElement;
+import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.uml2.uml.Property;
+import org.eclipse.uml2.uml.Type;
 import org.opaeum.java.metamodel.OJPathName;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
 import org.opaeum.java.metamodel.annotation.OJAnnotationValue;
@@ -106,6 +108,25 @@ public class TinkerGenerationUtil {
 
 	public static OJPathName tinkerIdUtilFactoryPathName = new OJPathName("org.tuml.runtime.adaptor.TinkerIdUtilFactory");
 
+	public static String umlPrimitiveTypeToJava(Type type) {
+		if (type instanceof PrimitiveType) {
+			PrimitiveType primitiveType = (PrimitiveType) type;
+			if (primitiveType.getName().equals("String")) {
+				return "String";
+			} else if (primitiveType.getName().equals("Integer")) {
+				return "Integer";
+			} else if (primitiveType.getName().equals("Boolean")) {
+				return "Boolean";
+			} else if (primitiveType.getName().equals("UnlimitedNatural")) {
+				return "Long";
+			} else  {
+				throw new IllegalStateException("unknown primitive " + primitiveType.getName());
+			}
+		} else {
+			return type.getName();
+		}
+	}
+	
 	public static String calculateMultiplcity(MultiplicityElement multiplicityKind) {
 		if (multiplicityKind.getLower() == 1 && ((multiplicityKind.getUpper() == Integer.MAX_VALUE) || (multiplicityKind.getUpper() == -1))) {
 			return "Multiplicity.ONE_TO_MANY";

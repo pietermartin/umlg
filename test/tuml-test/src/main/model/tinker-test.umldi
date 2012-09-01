@@ -1521,6 +1521,11 @@
             <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_t68WchFLEeGoRIAInCGFZA" presentation="default">
               <element href="tinker-test.uml#_YuD8sOwiEeCSwqyeEHd1tw"/>
             </semanticModel>
+            <contained xsi:type="di:GraphNode" xmi:id="_-mt_IPR3EeGjYNs1r3MAoQ" position="0,0" size="-1,-1">
+              <semanticModel xsi:type="di:EMFSemanticModelBridge" xmi:id="_-mt_IfR3EeGjYNs1r3MAoQ" presentation="default">
+                <element href="tinker-test.uml#_-mwbYPR3EeGjYNs1r3MAoQ"/>
+              </semanticModel>
+            </contained>
           </contained>
           <contained xsi:type="di:GraphNode" xmi:id="_t68WcxFLEeGoRIAInCGFZA">
             <property xmi:id="_t68WdBFLEeGoRIAInCGFZA" key="eStructuralFeatureID" value="47 50 "/>

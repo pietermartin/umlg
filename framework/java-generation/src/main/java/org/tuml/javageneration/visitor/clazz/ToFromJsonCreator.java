@@ -61,7 +61,11 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 				toJson.getBody().addToStatements(
 						"sb.append(\"\\\"" + pWrap.getName() + "\\\": \\\"\" + (" + pWrap.getter() + "() == null ? \"null\" : " + pWrap.getter() + "().toJson()) + \"\\\"" + "\")");
 			} else {
-				toJson.getBody().addToStatements("sb.append(\"\\\"" + pWrap.getName() + "\\\": \\\"\" + " + pWrap.getter() + "() + \"\\\"" + "\")");
+				if (pWrap.isNumber() || pWrap.isBoolean()) {
+					toJson.getBody().addToStatements("sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + " + pWrap.getter() + "() + \"" + "\")");
+				} else {
+					toJson.getBody().addToStatements("sb.append(\"\\\"" + pWrap.getName() + "\\\": \\\"\" + " + pWrap.getter() + "() + \"\\\"" + "\")");
+				}
 			}
 			toJson.getBody().addToStatements("sb.append(\", \")");
 		}
@@ -120,66 +124,34 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 					field = new OJField(pWrap.getName(), pWrap.javaBaseTypePath());
 					field.setInitExp(pWrap.javaBaseTypePath().getLast() + ".fromJson((String)propertyMap.get(\"" + pWrap.getName() + "\"))");
 				} else {
-					field = new OJField(pWrap.getName(), pWrap.javaBaseTypePath());
-					field.setInitExp("(" + pWrap.javaBaseTypePath() + ")propertyMap.get(\"" + pWrap.getName() + "\")");
+					
+					if (pWrap.isNumber()) {
+						OJField fieldNumber = new OJField(pWrap.getName() + "AsNumber", new OJPathName("Number"));
+						fieldNumber.setInitExp("(" + new OJPathName("Number") + ")propertyMap.get(\"" + pWrap.getName() + "\")");
+						field = new OJField(pWrap.getName(), pWrap.javaBaseTypePath());
+						if (pWrap.isInteger()) {
+							field.setInitExp(fieldNumber.getName() + " != null ? " + fieldNumber.getName() + ".intValue() : null");
+						} else if (pWrap.isLong()) {
+							field.setInitExp(fieldNumber.getName() + " != null ? " + fieldNumber.getName() + ".longValue() : null");
+						} else {
+							throw new RuntimeException("Not yet implemented!");
+						}
+						fromJson.getBody().addToLocals(fieldNumber);
+					} else {
+						field = new OJField(pWrap.getName(), pWrap.javaBaseTypePath());
+						field.setInitExp("(" + pWrap.javaBaseTypePath() + ")propertyMap.get(\"" + pWrap.getName() + "\")");
+					}
+					
 				}
 				fromJson.getBody().addToLocals(field);
 				OJIfStatement ifNotNull = new OJIfStatement(field.getName() + " != null");
+				//TODO that null is not going to work with anything other than a string
 				OJIfStatement ifSetToNull = new OJIfStatement(field.getName() + ".equals(\"null\")", pWrap.setter() + "(null)");
 				ifSetToNull.addToElsePart(pWrap.setter() + "(" + field.getName() + ")");
 				ifNotNull.addToThenPart(ifSetToNull);
 				fromJson.getBody().addToStatements(ifNotNull);
 				
-//				if (pWrap.isMany()) {
-//					
-//				} else if (pWrap.isEnumeration()) {
-//					
-//				}
-//				
-//				
-//				if (first) {
-//					first = false;
-//					// TODO what about manies
-//					if (pWrap.isMany()) {
-//						fromJson.getBody().addToStatements(str);
-//						ifS.setCondition("propertyName.equals(\"" + pWrap.getName() + "\")");
-//						OJAnnotatedField field = new OJAnnotatedField(pWrap.getName(), pWrap.javaTypePath());
-//						field.setInitExp("new " + pWrap.javaTumlMemoryTypePath().getLast() + "((Collection<" + pWrap.javaBaseTypePath() + ">)propertyMap.get(propertyName))");
-//						field.suppressUncheckedWarning();
-//						annotatedClass.addToImports(pWrap.javaTumlMemoryTypePath());
-//						annotatedClass.addToImports(new OJPathName("java.util.Collection"));
-//						ifS.getThenPart().addToLocals(field);
-//						ifS.addToThenPart(pWrap.setter() + "(" + pWrap.getName() + ")");
-//					} else if (pWrap.isEnumeration()) {
-//						ifS.setCondition("propertyName.equals(\"" + pWrap.getName() + "\")");
-//						ifS.addToThenPart(pWrap.setter() + "(" + pWrap.javaBaseTypePath().getLast() + ".fromJson((String)propertyMap.get(propertyName)))");
-//					} else {
-//						ifS.setCondition("propertyName.equals(\"" + pWrap.getName() + "\")");
-//						ifS.addToThenPart(pWrap.setter() + "((" + pWrap.javaBaseTypePath() + ")propertyMap.get(propertyName))");
-//					}
-//				} else {
-//					if (pWrap.isMany()) {
-//
-//						OJAnnotatedField field = new OJAnnotatedField(pWrap.getName(), pWrap.javaTypePath());
-//						field.setInitExp("new " + pWrap.javaTumlMemoryTypePath().getLast() + "((Collection<" + pWrap.javaBaseTypePath() + ">)propertyMap.get(propertyName))");
-//						field.suppressUncheckedWarning();
-//						OJBlock b = ifS.addToElseIfCondition("propertyName.equals(\"" + pWrap.getName() + "\")", field);
-//						b.addToStatements(pWrap.setter() + "(" + pWrap.getName() + ")");
-//						annotatedClass.addToImports(pWrap.javaTumlMemoryTypePath());
-//						annotatedClass.addToImports(new OJPathName("java.util.Collection"));
-//
-//					} else if (pWrap.isEnumeration()) {
-//						ifS.addToElseIfCondition("propertyName.equals(\"" + pWrap.getName() + "\")", pWrap.setter() + "(" + pWrap.javaBaseTypePath().getLast()
-//								+ ".fromJson((String)propertyMap.get(propertyName)))");
-//					} else {
-//						ifS.addToElseIfCondition("propertyName.equals(\"" + pWrap.getName() + "\")", pWrap.setter() + "((" + pWrap.javaBaseTypePath()
-//								+ ")propertyMap.get(propertyName))");
-//					}
-//				}
 			}
-//			ifS.addToElseIfCondition("propertyName.equals(\"id\")", "//Ignored");
-//			ifS.addToElsePart("throw new IllegalStateException()");
-//			fromJson.getBody().addToStatements(forS);
 		}
 	}
 

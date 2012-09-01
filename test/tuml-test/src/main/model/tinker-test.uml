@@ -218,6 +218,9 @@
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_EPphsXK_EeGxONR_qFZ0Dg" value="*"/>
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_EPphsnK_EeGxONR_qFZ0Dg"/>
           </ownedAttribute>
+          <ownedAttribute xmi:id="_-mwbYPR3EeGjYNs1r3MAoQ" name="testBoolean">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
+          </ownedAttribute>
         </packagedElement>
         <packagedElement xmi:type="uml:Class" xmi:id="_FTxxYOzqEeCemKc79Sc_aw" name="Universe">
           <ownedAttribute xmi:id="_fC9sYOzqEeCemKc79Sc_aw" name="name">

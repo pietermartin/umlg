@@ -167,7 +167,7 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 		OJField childResource = new OJField("childResource", pWrap.javaBaseTypePath());
 		add.getBody().addToLocals(childResource);
 		add.getBody().addToStatements("Object id = propertyMap.get(\"id\")");
-		
+
 		OJIfStatement ifIdNull = new OJIfStatement("id != null");
 		ifIdNull.addToThenPart("childResource = new " + pWrap.javaBaseTypePath().getLast() + "(GraphDb.getDb().getVertex(id))");
 
@@ -176,7 +176,7 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 		} else {
 			ifIdNull.addToElsePart("throw new IllegalStateException(\"A resource can only be created on a compositional relationship. Id field is required.\")");
 		}
-		
+
 		add.getBody().addToStatements(ifIdNull);
 
 		add.getBody().addToStatements("childResource.fromJson(propertyMap)");
@@ -195,22 +195,40 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 
 	private void buildToJson(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass, OJBlock block) {
 		block.addToStatements("StringBuilder json = new StringBuilder()");
-		block.addToStatements("json.append(\"{\\\"data\\\": [\")");
+		if (pWrap.isOne()) {
+			block.addToStatements("json.append(\"{\\\"data\\\": \")");
+		} else {
+			block.addToStatements("json.append(\"{\\\"data\\\": [\")");
+		}
 		block.addToStatements("json.append(ToJsonUtil.toJson(parentResource." + pWrap.getter() + "()))");
 		annotatedClass.addToImports(TinkerGenerationUtil.ToJsonUtil);
-		block.addToStatements("json.append(\"],\")");
-		block.addToStatements("json.append(\" \\\"meta\\\" : [\")");
-		block.addToStatements("json.append(" + TumlClassOperations.propertyEnumName(pWrap.getOwningType()) + ".asJson())");
-		annotatedClass.addToImports(TumlClassOperations.getPathName(pWrap.getOwningType()).append(TumlClassOperations.propertyEnumName(pWrap.getOwningType())));
-		block.addToStatements("json.append(\", \")");
-
-		block.addToStatements("json.append(" + TumlClassOperations.propertyEnumName(new PropertyWrapper(pWrap.getOtherEnd()).getOwningType()) + ".asJson())");
-		annotatedClass.addToImports(TumlClassOperations.getPathName(new PropertyWrapper(pWrap.getOtherEnd()).getOwningType()).append(
-				TumlClassOperations.propertyEnumName(new PropertyWrapper(pWrap.getOtherEnd()).getOwningType())));
-		block.addToStatements("json.append(\"]}\")");
-
+		if (pWrap.isOne()) {
+			block.addToStatements("json.append(\",\")");
+		} else {
+			block.addToStatements("json.append(\"],\")");
+		}
+		if (pWrap.isOne()) {
+			block.addToStatements("json.append(\" \\\"meta\\\" : \")");
+		} else {
+			block.addToStatements("json.append(\" \\\"meta\\\" : [\")");
+		}
+		if (pWrap.isOne()) {
+			block.addToStatements("json.append(" + TumlClassOperations.propertyEnumName(new PropertyWrapper(pWrap.getOtherEnd()).getOwningType()) + ".asJson())");
+			annotatedClass.addToImports(TumlClassOperations.getPathName(new PropertyWrapper(pWrap.getOtherEnd()).getOwningType()).append(
+					TumlClassOperations.propertyEnumName(new PropertyWrapper(pWrap.getOtherEnd()).getOwningType())));
+			block.addToStatements("json.append(\"}\")");
+		} else {
+			block.addToStatements("json.append(" + TumlClassOperations.propertyEnumName(pWrap.getOwningType()) + ".asJson())");
+			annotatedClass.addToImports(TumlClassOperations.getPathName(pWrap.getOwningType()).append(TumlClassOperations.propertyEnumName(pWrap.getOwningType())));
+			block.addToStatements("json.append(\", \")");
+			block.addToStatements("json.append(" + TumlClassOperations.propertyEnumName(new PropertyWrapper(pWrap.getOtherEnd()).getOwningType()) + ".asJson())");
+			annotatedClass.addToImports(TumlClassOperations.getPathName(new PropertyWrapper(pWrap.getOtherEnd()).getOwningType()).append(
+					TumlClassOperations.propertyEnumName(new PropertyWrapper(pWrap.getOtherEnd()).getOwningType())));
+			block.addToStatements("json.append(\"]}\")");
+		}
 		block.addToStatements("return new " + TumlRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
 	}
+
 	private void addServerResourceToRouterEnum(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass) {
 		OJEnum routerEnum = (OJEnum) this.workspace.findOJClass("restlet.RestletRouterEnum");
 		OJEnumLiteral ojLiteral = new OJEnumLiteral(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast().toUpperCase() + "_" + pWrap.getName());
