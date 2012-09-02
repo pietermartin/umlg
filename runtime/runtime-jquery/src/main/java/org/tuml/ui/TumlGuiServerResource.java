@@ -37,7 +37,7 @@ public class TumlGuiServerResource extends ServerResource {
 		//TODO work this hardcoding out
 		dataModel.put("app", new App().setRootUrl("restAndJson").setUri(uri));
 		
-		Representation tumlUiFtl = new ClientResource(LocalReference.createClapReference(getClass().getPackage())	+ "/tumlui.ftl").get();
+		Representation tumlUiFtl = new ClientResource(LocalReference.createClapReference(getClass().getPackage())	+ "/tumlui.html").get();
 		return new TemplateRepresentation(tumlUiFtl, dataModel, MediaType.TEXT_HTML);
 	}
 
