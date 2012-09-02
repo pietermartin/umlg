@@ -114,7 +114,7 @@ public class OclStdLibSetImpl<E> extends OclStdLibCollectionImpl<E> implements T
 	}
 	
 	@Override
-	public <T, R> TinkerBag<T> collect(BodyExpressionEvaluator<R, E> v) {
+	public <R> TinkerBag<R> collect(BodyExpressionEvaluator<R, E> v) {
 		return collectNested(v).flatten();
 	}
 

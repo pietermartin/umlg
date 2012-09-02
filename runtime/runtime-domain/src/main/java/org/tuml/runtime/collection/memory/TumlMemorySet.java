@@ -40,7 +40,7 @@ public class TumlMemorySet<E> extends TumlMemoryCollection<E> implements TinkerS
 	}
 
 	@Override
-	public <T, R> TinkerBag<T> collect(BodyExpressionEvaluator<R, E> e) {
+	public <R> TinkerBag<R> collect(BodyExpressionEvaluator<R, E> e) {
 		return this.oclStdLibSet.collect(e);
 	}
 

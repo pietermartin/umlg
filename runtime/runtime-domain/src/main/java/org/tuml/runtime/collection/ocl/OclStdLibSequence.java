@@ -257,6 +257,6 @@ public interface OclStdLibSequence<E> extends OclStdLibCollection<E> {
 	<R> TinkerSequence<R> collectNested(BodyExpressionEvaluator<R, E> e);
 	
 	@Override
-	<T, R> TinkerSequence<T> collect(BodyExpressionEvaluator<R, E> e);
+	<R> TinkerSequence<R> collect(BodyExpressionEvaluator<R, E> e);
 	
 }

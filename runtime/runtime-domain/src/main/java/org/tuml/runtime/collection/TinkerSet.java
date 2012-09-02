@@ -15,7 +15,7 @@ public interface TinkerSet<E> extends TinkerCollection<E>, Set<E>, OclStdLibSet<
 	<R> TinkerBag<R> collectNested(BodyExpressionEvaluator<R, E> e);
 	
 	@Override
-	<T, R> TinkerBag<T> collect(BodyExpressionEvaluator<R, E> e);
+	<R> TinkerBag<R> collect(BodyExpressionEvaluator<R, E> e);
 	
 	@Override
 	<R> TinkerSet<R> flatten();

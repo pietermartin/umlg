@@ -272,7 +272,7 @@ public interface OclStdLibCollection<E> extends OclAny {
 	 * @param e
 	 * @return
 	 */
-	<T, R> TinkerCollection<T> collect(BodyExpressionEvaluator<R, E> e);
+	<R> TinkerCollection<R> collect(BodyExpressionEvaluator<R, E> e);
 
 	/**
 	 * The Bag of elements which results from applying body to every member of

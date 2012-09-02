@@ -17,7 +17,9 @@ public class TinkerGenerationUtil {
 	public static final String INIT_VERTEX = "initVertex";
 
 	public static final String TINKER_DB_NULL = "__NULL__";
+
 	
+	public static final OJPathName BodyExpressionEvaluator = new OJPathName("org.tuml.runtime.collection.ocl.BodyExpressionEvaluator");
 	public static final OJPathName Root = new OJPathName("org.tuml.root.Root");
 	public static final OJPathName RootRuntimePropertyEnum = new OJPathName("org.tuml.root.Root.RootRuntimePropertyEnum");
 

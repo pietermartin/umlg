@@ -235,7 +235,7 @@ public class TumlMemoryCollection<E> implements TinkerCollection<E> {
 	}
 
 	@Override
-	public <T, R> TinkerCollection<T> collect(BodyExpressionEvaluator<R, E> e) {
+	public <R> TinkerCollection<R> collect(BodyExpressionEvaluator<R, E> e) {
 		return this.oclStdLibCollection.collect(e);
 	}
 

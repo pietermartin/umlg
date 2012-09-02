@@ -18,9 +18,10 @@ import org.tuml.javageneration.visitor.enumeration.TofromJsonForEnumCreator;
 import org.tuml.javageneration.visitor.interfaze.InterfaceVisitor;
 import org.tuml.javageneration.visitor.model.RootEntryPointCreator;
 import org.tuml.javageneration.visitor.operation.OperationImplementorSimple;
-import org.tuml.javageneration.visitor.property.CompositionProperyVisitor;
+import org.tuml.javageneration.visitor.property.ComponentProperyVisitor;
 import org.tuml.javageneration.visitor.property.DerivedPropertyVisitor;
 import org.tuml.javageneration.visitor.property.ManyPropertyVisitor;
+import org.tuml.javageneration.visitor.property.LookupGenerator;
 import org.tuml.javageneration.visitor.property.OnePropertyVisitor;
 import org.tuml.javageneration.visitor.property.PropertyVisitor;
 import org.tuml.javageneration.visitor.property.QualifierValidator;
@@ -39,7 +40,7 @@ public class DefaultVisitors {
 		result.add(new InterfaceRuntimePropertyImplementorVisitor(Workspace.INSTANCE));
 		result.add(new EnumerationVisitor(Workspace.INSTANCE));
 		result.add(new CompositionVisitor(Workspace.INSTANCE));
-		result.add(new CompositionProperyVisitor(Workspace.INSTANCE));
+		result.add(new ComponentProperyVisitor(Workspace.INSTANCE));
 		result.add(new PropertyVisitor(Workspace.INSTANCE));
 		result.add(new ManyPropertyVisitor(Workspace.INSTANCE));
 		result.add(new OnePropertyVisitor(Workspace.INSTANCE));
@@ -50,6 +51,7 @@ public class DefaultVisitors {
 		result.add(new OperationImplementorSimple(Workspace.INSTANCE));
 		result.add(new ToFromJsonCreator(Workspace.INSTANCE));
 		result.add(new TofromJsonForEnumCreator(Workspace.INSTANCE));
+		result.add(new LookupGenerator(Workspace.INSTANCE));
 		return result;
 		
 //		if (this.audit) {
