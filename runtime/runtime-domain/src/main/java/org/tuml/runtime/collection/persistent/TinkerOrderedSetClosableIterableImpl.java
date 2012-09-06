@@ -117,7 +117,7 @@ public class TinkerOrderedSetClosableIterableImpl<E> extends BaseCollection<E> i
 	}
 
 	@Override
-	public <T, R> TinkerBag<T> collect(BodyExpressionEvaluator<R, E> v) {
+	public <R> TinkerBag<R> collect(BodyExpressionEvaluator<R, E> v) {
 		maybeLoad();
 		return this.oclStdLibOrderedSet.collect(v);
 	}

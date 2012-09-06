@@ -242,7 +242,7 @@ public class TinkerOrderedSetImpl<E> extends BaseCollection<E> implements Tinker
 	}
 
 	@Override
-	public <T, R> TinkerBag<T> collect(BodyExpressionEvaluator<R, E> v) {
+	public <R> TinkerBag<R> collect(BodyExpressionEvaluator<R, E> v) {
 		maybeLoad();
 		return this.oclStdLibOrderedSet.collect(v);
 	}

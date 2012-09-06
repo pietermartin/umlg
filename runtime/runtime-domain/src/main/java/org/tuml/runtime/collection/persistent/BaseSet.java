@@ -49,7 +49,7 @@ public abstract class BaseSet<E> extends BaseCollection<E> implements TinkerSet<
 	}
 
 	@Override
-	public <T, R> TinkerBag<T> collect(BodyExpressionEvaluator<R, E> v) {
+	public <R> TinkerBag<R> collect(BodyExpressionEvaluator<R, E> v) {
 		maybeLoad();
 		return this.oclStdLibSet.collect(v);
 	}

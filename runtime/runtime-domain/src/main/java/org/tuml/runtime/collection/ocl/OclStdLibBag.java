@@ -161,7 +161,7 @@ public interface OclStdLibBag<E> extends OclStdLibCollection<E> {
 	 */
 	@Override
 	TinkerSet<E> asSet();
-	
+
 	/**
 	 * asOrderedSet() : OrderedSet(T)
 	 * <pre>
@@ -185,6 +185,6 @@ public interface OclStdLibBag<E> extends OclStdLibCollection<E> {
 	<R> TinkerBag<R> collectNested(BodyExpressionEvaluator<R, E> e);
 
 	@Override
-	<T, R> TinkerBag<T> collect(BodyExpressionEvaluator<R, E> e);
+	<R> TinkerBag<R> collect(BodyExpressionEvaluator<R, E> e);
 	
 }

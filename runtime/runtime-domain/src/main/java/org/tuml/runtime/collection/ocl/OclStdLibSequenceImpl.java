@@ -121,7 +121,7 @@ public class OclStdLibSequenceImpl<E> extends OclStdLibCollectionImpl<E> impleme
 	}
 	
 	@Override
-	public <T, R> TinkerSequence<T> collect(BodyExpressionEvaluator<R, E> v) {
+	public <R> TinkerSequence<R> collect(BodyExpressionEvaluator<R, E> v) {
 		return collectNested(v).flatten();
 	}
 
