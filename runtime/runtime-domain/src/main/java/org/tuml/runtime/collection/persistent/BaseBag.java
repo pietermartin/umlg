@@ -100,7 +100,7 @@ public abstract class BaseBag<E> extends BaseCollection<E> implements TinkerBag<
 	}
 
 	@Override
-	public <R> TinkerBag<R> collect(BodyExpressionEvaluator<R, E> v) {
+	public <T, R> TinkerBag<T> collect(BodyExpressionEvaluator<R, E> v) {
 		maybeLoad();
 		return this.oclStdLibBag.collect(v);
 	}

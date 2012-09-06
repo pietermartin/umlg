@@ -230,7 +230,7 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
 	}
 
 	@Override
-	public <R> TinkerSequence<R> collect(BodyExpressionEvaluator<R, E> v) {
+	public <T, R> TinkerSequence<T> collect(BodyExpressionEvaluator<R, E> v) {
 		maybeLoad();
 		return this.oclStdLibSequence.collect(v);
 	}

@@ -23,7 +23,6 @@ import org.tuml.javageneration.visitor.property.ComponentProperyVisitor;
 import org.tuml.javageneration.visitor.property.DerivedPropertyVisitor;
 import org.tuml.javageneration.visitor.property.LookupGenerator;
 import org.tuml.javageneration.visitor.property.ManyPropertyVisitor;
-import org.tuml.javageneration.visitor.property.LookupGenerator;
 import org.tuml.javageneration.visitor.property.OnePropertyVisitor;
 import org.tuml.javageneration.visitor.property.PropertyVisitor;
 import org.tuml.javageneration.visitor.property.QualifierValidator;
@@ -54,10 +53,7 @@ public class DefaultVisitors {
 		result.add(new ToFromJsonCreator(Workspace.INSTANCE));
 		result.add(new TofromJsonForEnumCreator(Workspace.INSTANCE));
 		result.add(new LookupGenerator(Workspace.INSTANCE));
-<<<<<<< HEAD
 		result.add(new ClassInterfacePropertyLookupGenerator(Workspace.INSTANCE));
-=======
->>>>>>> 953d047099e607a112abaaf6120cc6da8def3c35
 		return result;
 		
 //		if (this.audit) {

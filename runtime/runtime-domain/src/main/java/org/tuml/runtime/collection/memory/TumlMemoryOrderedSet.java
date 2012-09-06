@@ -43,7 +43,7 @@ public class TumlMemoryOrderedSet<E> extends TumlMemoryCollection<E> implements 
 	}
 
 	@Override
-	public <R> TinkerBag<R> collect(BodyExpressionEvaluator<R, E> e) {
+	public <T, R> TinkerBag<T> collect(BodyExpressionEvaluator<R, E> e) {
 		return this.oclStdLibOrderedSet.collect(e);
 	}
 

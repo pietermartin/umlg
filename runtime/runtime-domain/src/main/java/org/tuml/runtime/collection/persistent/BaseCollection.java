@@ -851,7 +851,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 	}
 
 	@Override
-	public <R> TinkerCollection<R> collect(BodyExpressionEvaluator<R, E> e) {
+	public <T, R> TinkerCollection<T> collect(BodyExpressionEvaluator<R, E> e) {
 		maybeLoad();
 		return this.oclStdLibCollection.collect(e);
 	}

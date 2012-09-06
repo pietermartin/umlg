@@ -11,10 +11,7 @@ import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
 import org.opaeum.java.metamodel.OJClass;
-<<<<<<< HEAD
 import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
-=======
->>>>>>> 953d047099e607a112abaaf6120cc6da8def3c35
 import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
 import org.tuml.framework.Visitor;
 import org.tuml.generation.Workspace;
@@ -33,19 +30,11 @@ public class LookupGenerator extends BaseVisitor implements Visitor<Property> {
 	@Override
 	public void visitBefore(Property p) {
 		PropertyWrapper propertyWrapper = new PropertyWrapper(p);
-<<<<<<< HEAD
 		if (!propertyWrapper.isComposite() && !(propertyWrapper.getType() instanceof Enumeration) && !propertyWrapper.isDerived() && !propertyWrapper.isQualifier()
 				&& propertyWrapper.getOtherEnd() != null && !(propertyWrapper.getOtherEnd().getType() instanceof Enumeration) && !propertyWrapper.getOtherEnd().isComposite()) {
 			Type compositeParent = findCompositeParent(propertyWrapper);
 			OJAnnotatedClass ojClass = findOJClass(propertyWrapper);
 			generateLookupForOneProperty(compositeParent, ojClass, new PropertyWrapper(propertyWrapper.getOtherEnd()), propertyWrapper);
-=======
-		if (!propertyWrapper.isComposite() && !(propertyWrapper.getType() instanceof Enumeration) && !propertyWrapper.isDerived()
-				&& !propertyWrapper.isQualifier() && propertyWrapper.getOtherEnd() != null && !(propertyWrapper.getOtherEnd().getType() instanceof Enumeration)
-				&& !propertyWrapper.getOtherEnd().isComposite()) {
-			Type compositeParent = findCompositeParent(propertyWrapper);
-			generateLookupForOneProperty(compositeParent, propertyWrapper, new PropertyWrapper(propertyWrapper.getOtherEnd()));
->>>>>>> 953d047099e607a112abaaf6120cc6da8def3c35
 		}
 	}
 
@@ -53,23 +42,17 @@ public class LookupGenerator extends BaseVisitor implements Visitor<Property> {
 	public void visitAfter(Property p) {
 	}
 
-<<<<<<< HEAD
 	public static void generateLookupForOneProperty(Type compositeParent, OJAnnotatedClass ojClass, PropertyWrapper propertyWrapper, PropertyWrapper otherEndPropertyWrapper) {
 		OJAnnotatedOperation lookUp = new OJAnnotatedOperation("lookup" + StringUtils.capitalize(otherEndPropertyWrapper.getName()));
 		lookUp.setReturnType(TinkerGenerationUtil.tinkerSet.getCopy().addToGenerics(TumlClassOperations.getPathName(otherEndPropertyWrapper.getType())));
-=======
-	private void generateLookupForOneProperty(Type compositeParent, PropertyWrapper propertyWrapper, PropertyWrapper otherEndPropertyWrapper) {
-		OJAnnotatedOperation lookUp = new OJAnnotatedOperation("lookup" + StringUtils.capitalize(propertyWrapper.getName()));
-		lookUp.setReturnType(TinkerGenerationUtil.tinkerSet.getCopy().addToGenerics(TumlClassOperations.getPathName(propertyWrapper.getType())));
-		OJClass ojClass = findOJClass(propertyWrapper);
->>>>>>> 953d047099e607a112abaaf6120cc6da8def3c35
 		ojClass.addToOperations(lookUp);
 		buildGetterToCompositeParent(ojClass, lookUp, propertyWrapper, otherEndPropertyWrapper, compositeParent);
 	}
 
-<<<<<<< HEAD
 	private static void buildGetterToCompositeParent(OJAnnotatedClass ojClass, OJAnnotatedOperation lookup, PropertyWrapper propertyWrapper,
 			PropertyWrapper otherEndPropertyWrapper, Type compositeParent) {
+		// build getter for special case where the non composite lookup of the
+		// same type as the is in the composite tree
 		StringBuilder sb = new StringBuilder();
 		sb.append("return ");
 		constructGetterAsString(true, sb, propertyWrapper, compositeParent);
@@ -87,38 +70,6 @@ public class LookupGenerator extends BaseVisitor implements Visitor<Property> {
 	}
 
 	private static void constructLookupAsString(OJClass ojClass, List<String> getterStringsInReverse, PropertyWrapper propertyWrapper, Type compositeParent) {
-=======
-	private void buildGetterToCompositeParent(OJClass ojClass, OJAnnotatedOperation lookup, PropertyWrapper propertyWrapper, PropertyWrapper otherEndPropertyWrapper,
-			Type compositeParent) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("return ");
-		// build getter for special case where the non composite lookup of the
-		// same type as the is in the composite tree
-		if (propertyWrapper.getType().equals(compositeParent)) {
-			constructGetterAsString(true, sb, otherEndPropertyWrapper, compositeParent);
-		} else if (otherEndPropertyWrapper.getType().equals(compositeParent)) {
-			List<String> getterStringsInReverse = new ArrayList<String>();
-			constructLookupAsString(ojClass, getterStringsInReverse, propertyWrapper, otherEndPropertyWrapper, compositeParent);
-			Collections.reverse(getterStringsInReverse);
-			for (String string : getterStringsInReverse) {
-				sb.append(string);
-			}
-		} else {
-			constructGetterAsString(true, sb, propertyWrapper, compositeParent);
-			sb.append(".");
-			List<String> getterStringsInReverse = new ArrayList<String>();
-			constructLookupAsString(ojClass, getterStringsInReverse, propertyWrapper, otherEndPropertyWrapper, compositeParent);
-			Collections.reverse(getterStringsInReverse);
-			for (String string : getterStringsInReverse) {
-				sb.append(string);
-			}
-		}
-		sb.append(".asSet()");
-		lookup.getBody().addToStatements(sb.toString());
-	}
-
-	private void constructLookupAsString(OJClass ojClass, List<String> getterStringsInReverse, PropertyWrapper propertyWrapper, PropertyWrapper otherEndPropertyWrapper, Type compositeParent) {
->>>>>>> 953d047099e607a112abaaf6120cc6da8def3c35
 		// This needs to be done in reverse;
 		if (!propertyWrapper.getType().equals(compositeParent)) {
 			PropertyWrapper otherEndToComposite;
@@ -131,7 +82,6 @@ public class LookupGenerator extends BaseVisitor implements Visitor<Property> {
 			} else {
 				throw new RuntimeException("TODO " + propertyWrapper.getType());
 			}
-<<<<<<< HEAD
 
 			PropertyWrapper otherEndToComposite2;
 			if (otherEndToComposite.getType() instanceof Interface) {
@@ -187,22 +137,6 @@ public class LookupGenerator extends BaseVisitor implements Visitor<Property> {
 	}
 
 	private static void constructGetterAsString(boolean first, StringBuilder sb, PropertyWrapper propertyWrapper, Type compositeParent) {
-=======
-			if (!propertyWrapper.getType().equals(otherEndToComposite.getOtherEnd().getType())) {
-				getterStringsInReverse.add(new PropertyWrapper(otherEndToComposite.getOtherEnd()).getter() + "().collect(new BodyExpressionEvaluator<"
-						+ propertyWrapper.getType().getName() + ", " + otherEndToComposite.getOtherEnd().getType().getName() + ">() {@Override	public "
-						+ propertyWrapper.getType().getName() + " evaluate(" + otherEndToComposite.getOtherEnd().getType().getName() + " e) {	if (e instanceof "
-						+ propertyWrapper.getType().getName() + ") { return (" + propertyWrapper.getType().getName() + ")e; } return null;	}})");
-				ojClass.addToImports(TinkerGenerationUtil.BodyExpressionEvaluator);
-			} else {
-				getterStringsInReverse.add(new PropertyWrapper(otherEndToComposite.getOtherEnd()).getter() + "()");
-			}
-			constructLookupAsString(ojClass, getterStringsInReverse, otherEndToComposite, propertyWrapper, compositeParent);
-		}
-	}
-
-	private void constructGetterAsString(boolean first, StringBuilder sb, PropertyWrapper propertyWrapper, Type compositeParent) {
->>>>>>> 953d047099e607a112abaaf6120cc6da8def3c35
 		if (!propertyWrapper.getType().equals(compositeParent)) {
 			PropertyWrapper otherEndToComposite;
 			if (propertyWrapper.getType() instanceof Interface) {
@@ -218,32 +152,19 @@ public class LookupGenerator extends BaseVisitor implements Visitor<Property> {
 				first = false;
 				sb.append(".");
 			}
-<<<<<<< HEAD
 			sb.append(otherEndToComposite.getter() + "()");
-=======
-			sb.append(otherEndToComposite.getter());
-			sb.append("()");
->>>>>>> 953d047099e607a112abaaf6120cc6da8def3c35
 			constructGetterAsString(false, sb, otherEndToComposite, compositeParent);
 		}
 
 	}
 
-<<<<<<< HEAD
 	public static Type findCompositeParent(PropertyWrapper propertyWrapper) {
-=======
-	private Type findCompositeParent(PropertyWrapper propertyWrapper) {
->>>>>>> 953d047099e607a112abaaf6120cc6da8def3c35
 		PropertyWrapper otherEnd = new PropertyWrapper(propertyWrapper.getOtherEnd());
 		// Need to find the composite parent of the 2 properties
 		return findCompositeParent(propertyWrapper, otherEnd);
 	}
 
-<<<<<<< HEAD
 	private static Type findCompositeParent(PropertyWrapper propertyWrapper, PropertyWrapper otherEnd) {
-=======
-	private Type findCompositeParent(PropertyWrapper propertyWrapper, PropertyWrapper otherEnd) {
->>>>>>> 953d047099e607a112abaaf6120cc6da8def3c35
 		List<Type> orderedListOfCompositeTypes = new ArrayList<Type>();
 		createListOfOrderedTypes(orderedListOfCompositeTypes, propertyWrapper);
 		List<Type> otherEndOrderedListOfCompositeTypes = new ArrayList<Type>();
@@ -257,11 +178,7 @@ public class LookupGenerator extends BaseVisitor implements Visitor<Property> {
 		return null;
 	}
 
-<<<<<<< HEAD
 	private static void createListOfOrderedTypes(List<Type> orderedListOfCompositeTypes, PropertyWrapper propertyWrapper) {
-=======
-	private void createListOfOrderedTypes(List<Type> orderedListOfCompositeTypes, PropertyWrapper propertyWrapper) {
->>>>>>> 953d047099e607a112abaaf6120cc6da8def3c35
 		orderedListOfCompositeTypes.add(propertyWrapper.getType());
 		Property otherEndToComposite;
 		if (propertyWrapper.getType() instanceof Interface) {

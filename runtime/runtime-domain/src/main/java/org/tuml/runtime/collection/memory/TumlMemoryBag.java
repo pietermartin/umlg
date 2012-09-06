@@ -49,7 +49,7 @@ public class TumlMemoryBag <E> extends TumlMemoryCollection<E> implements Tinker
 	}
 	
 	@Override
-	public <R> TinkerBag<R> collect(BodyExpressionEvaluator<R, E> e) {
+	public <T, R> TinkerBag<T> collect(BodyExpressionEvaluator<R, E> e) {
 		return this.oclStdLibBag.collect(e);
 	}
 

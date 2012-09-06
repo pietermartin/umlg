@@ -39,7 +39,7 @@ public class TumlMemorySequence<E> extends TumlMemoryCollection<E> implements Ti
 	}
 
 	@Override
-	public <R> TinkerSequence<R> collect(BodyExpressionEvaluator<R, E> e) {
+	public <T, R> TinkerSequence<T> collect(BodyExpressionEvaluator<R, E> e) {
 		return this.oclStdLibSequence.collect(e);
 	}
 

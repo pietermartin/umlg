@@ -28,13 +28,26 @@ public class TestOneLookup extends BaseLocalDbTest {
 		c2.setName("c2");
 		db.stopTransaction(Conclusion.SUCCESS);
 
-		TinkerSet<Creature> result = g.getBeing().collect(new BodyExpressionEvaluator<Creature, Being>() {@Override	public Creature evaluate(Being e) {	if (e instanceof Creature) { return (Creature)e; } return null;	}}).asSet();
+		TinkerSet<Creature> result = g.getBeing().<Creature, Creature> collect(new BodyExpressionEvaluator<Creature, Being>() {
+			@Override
+			public Creature evaluate(Being e) {
+				if (e instanceof Creature) {
+					return (Creature) e;
+				}
+				return null;
+			}
+		}).asSet();
 		Assert.assertEquals(2, result.size());
-		
-		TinkerSet<Being> creatures = g.getBeing().select(new BooleanExpressionEvaluator<Being>() {@Override	public Boolean evaluate(Being e) {	return e instanceof Creature; }	});
+
+		TinkerSet<Being> creatures = g.getBeing().select(new BooleanExpressionEvaluator<Being>() {
+			@Override
+			public Boolean evaluate(Being e) {
+				return e instanceof Creature;
+			}
+		});
 		Assert.assertEquals(2, creatures.size());
 	}
-	
+
 	@Test
 	public void testLookup1() {
 		db.startTransaction();
@@ -57,7 +70,7 @@ public class TestOneLookup extends BaseLocalDbTest {
 		Assert.assertEquals(2, s1.lookupCreature().size());
 		Assert.assertEquals(2, s2.lookupCreature().size());
 	}
-	
+
 	@Test
 	public void testLookupWithNonCompositeLoopupInCompositeTree() {
 		db.startTransaction();
@@ -75,5 +88,5 @@ public class TestOneLookup extends BaseLocalDbTest {
 		db.stopTransaction(Conclusion.SUCCESS);
 		Assert.assertEquals(3, g.lookupMemory().size());
 	}
-	
+
 }

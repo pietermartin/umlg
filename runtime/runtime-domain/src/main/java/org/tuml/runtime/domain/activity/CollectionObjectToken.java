@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.collection.Qualifier;
+import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.collection.persistent.BaseCollection;
 import org.tuml.runtime.collection.persistent.TinkerSequenceImpl;
@@ -231,6 +232,12 @@ public class CollectionObjectToken<O> extends ObjectToken<O> implements Composit
 	public void fromJson(Map<String, Object> propertyMap) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public <E> TinkerSet<E> asSet() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

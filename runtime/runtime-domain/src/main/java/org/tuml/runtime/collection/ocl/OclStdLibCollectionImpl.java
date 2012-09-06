@@ -120,7 +120,7 @@ public class OclStdLibCollectionImpl<E> implements OclStdLibCollection<E> {
 
 
 	@Override
-	public <R> TinkerCollection<R> collect(BodyExpressionEvaluator<R, E> e) {
+	public <T, R> TinkerCollection<T> collect(BodyExpressionEvaluator<R, E> e) {
 		throw new RuntimeException("Not implemented");
 	}
 

@@ -198,6 +198,6 @@ public interface OclStdLibSet<E> extends OclStdLibCollection<E> {
 	<R> TinkerBag<R> collectNested(BodyExpressionEvaluator<R, E> e);
 
 	@Override
-	<R> TinkerBag<R> collect(BodyExpressionEvaluator<R, E> e);
+	<T, R> TinkerBag<T> collect(BodyExpressionEvaluator<R, E> e);
 
 }

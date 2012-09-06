@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.tuml.runtime.collection.Qualifier;
+import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.domain.TumlNode;
 
@@ -67,6 +68,12 @@ public class CallEvent extends Event {
 	public void fromJson(Map<String, Object> propertyMap) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public <E> TinkerSet<E> asSet() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
