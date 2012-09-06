@@ -31,13 +31,17 @@ public class TumlOcl2Parser {
     private OCL<Package, Classifier, Operation, Property, EnumerationLiteral, Parameter, State, CallOperationAction, SendSignalAction, Constraint, Class, EObject> ocl;
     private Environment<Package, Classifier, Operation, Property, EnumerationLiteral, Parameter, State, CallOperationAction, SendSignalAction, Constraint, Class, EObject> environment;
     private OCLHelper<Classifier, Operation, Property, Constraint> helper;
-    public final static TumlOcl2Parser INSTANCE = new TumlOcl2Parser();
+	public final static TumlOcl2Parser INSTANCE = new TumlOcl2Parser();
 
     private TumlOcl2Parser() {
         this.ocl = org.eclipse.ocl.uml.OCL.newInstance(ModelLoader.RESOURCE_SET);
         this.environment = ocl.getEnvironment();
         this.helper = ocl.createOCLHelper();
     }
+
+    public OCLHelper<Classifier, Operation, Property, Constraint> getHelper() {
+		return helper;
+	}
 
     public static void main(String[] args) {
         Model model = ModelLoader.loadModel(new File("/home/pieter/workspace-tuml/tuml/test/tuml-test-ocl/src/main/model/test-ocl.uml"));
@@ -51,31 +55,34 @@ public class TumlOcl2Parser {
 
         OCLExpression<Classifier> expr = parser.parseOcl(sb.toString());
         System.out.println("Success 1 " + expr);
-
-        sb = new StringBuilder();
-        sb.append("package testoclmodel::org::tuml::testocl\n");
-        sb.append("context OclTest1::oclTestCollectionSelect : Set(OclTestCollection)\n");
-        sb.append("derive:\n");
-        sb.append("self.oclTestCollection->select(name='john')\n");
-        sb.append("endpackage\n");
-        parser.parseOcl(sb.toString());
-        System.out.println("Success 2");
-
-        sb = new StringBuilder();
-        sb.append("package testoclmodel::org::tuml::testocl\n");
-        sb.append("context OclTest1\n");
-        sb.append("inv testInv : property1 = 'halo'\n");
-        sb.append("endpackage\n");
-        parser.parseOcl(sb.toString());
-        System.out.println("Success 3");
         
-        sb = new StringBuilder();
-        sb.append("package testoclmodel::org::tuml::testocl\n");
-        sb.append("context OclTest1\n");
-        sb.append("inv testInv : (property1 = 'halo1') and (property1 = 'halo2') and (property1 = 'halo3')\n");
-        sb.append("endpackage\n");
-        parser.parseOcl(sb.toString());
-        System.out.println("Success 4");        
+//        parser.helper.setContext(context);
+//        parser.helper.defineAttribute(defExpression);
+        
+//        sb = new StringBuilder();
+//        sb.append("package testoclmodel::org::tuml::testocl\n");
+//        sb.append("context OclTest1::oclTestCollectionSelect : Set(OclTestCollection)\n");
+//        sb.append("derive:\n");
+//        sb.append("self.oclTestCollection->select(name='john')\n");
+//        sb.append("endpackage\n");
+//        parser.parseOcl(sb.toString());
+//        System.out.println("Success 2");
+//
+//        sb = new StringBuilder();
+//        sb.append("package testoclmodel::org::tuml::testocl\n");
+//        sb.append("context OclTest1\n");
+//        sb.append("inv testInv : property1 = 'halo'\n");
+//        sb.append("endpackage\n");
+//        parser.parseOcl(sb.toString());
+//        System.out.println("Success 3");
+//        
+//        sb = new StringBuilder();
+//        sb.append("package testoclmodel::org::tuml::testocl\n");
+//        sb.append("context OclTest1\n");
+//        sb.append("inv testInv : (property1 = 'halo1') and (property1 = 'halo2') and (property1 = 'halo3')\n");
+//        sb.append("endpackage\n");
+//        parser.parseOcl(sb.toString());
+//        System.out.println("Success 4");        
     }
 
     public OCLExpression<Classifier> parseOcl(String oclText) {

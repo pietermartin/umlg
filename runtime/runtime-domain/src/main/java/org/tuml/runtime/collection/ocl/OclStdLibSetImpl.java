@@ -16,83 +16,83 @@ public class OclStdLibSetImpl<E> extends OclStdLibCollectionImpl<E> implements T
 
 	private Set<E> set;
 
-//	public OclStdLibSetImpl(Collection<E> collection) {
-//		this(new HashSet<E>(collection));
-//	}
+	// public OclStdLibSetImpl(Collection<E> collection) {
+	// this(new HashSet<E>(collection));
+	// }
 
 	/**
 	 * A regular constructor compiles in eclipse but not in maven
+	 * 
 	 * @param collection
 	 * @return
 	 */
 	public static <E> OclStdLibSetImpl<E> get(Collection<E> collection) {
 		return new OclStdLibSetImpl<E>(new HashSet<E>(collection));
 	}
-	
+
 	public OclStdLibSetImpl(Set<E> set) {
 		super(set);
 		this.set = set;
 	}
-	
+
 	@Override
 	public TinkerSet<E> union(TinkerSet<? extends E> s) {
-		//TODO Implement
+		// TODO Implement
 		throw new RuntimeException("Not implemented");
 	}
 
 	@Override
 	public TinkerBag<E> union(TinkerBag<? extends E> bag) {
-		//TODO Implement
+		// TODO Implement
 		throw new RuntimeException("Not implemented");
 	}
 
 	@Override
 	public Boolean equals(TinkerSet<E> s) {
-		//TODO Implement
+		// TODO Implement
 		throw new RuntimeException("Not implemented");
 	}
 
 	@Override
 	public TinkerSet<E> intersection(TinkerSet<E> s) {
-		//TODO Implement
+		// TODO Implement
 		throw new RuntimeException("Not implemented");
 	}
 
 	@Override
 	public TinkerSet<E> intersection(TinkerBag<E> bag) {
-		//TODO Implement
+		// TODO Implement
 		throw new RuntimeException("Not implemented");
 	}
 
 	@Override
 	public TinkerSet<E> subtract(TinkerSet<E> s) {
-		//TODO Implement
+		// TODO Implement
 		throw new RuntimeException("Not implemented");
 	}
 
 	@Override
 	public TinkerSet<E> including(E e) {
-		//TODO Implement
+		// TODO Implement
 		throw new RuntimeException("Not implemented");
 	}
 
 	@Override
 	public TinkerSet<E> excluding(E e) {
-		//TODO Implement
+		// TODO Implement
 		throw new RuntimeException("Not implemented");
 	}
 
 	@Override
 	public TinkerSet<E> symmetricDifference(TinkerSet<E> s) {
-		//TODO Implement
+		// TODO Implement
 		throw new RuntimeException("Not implemented");
-	}	
+	}
 
-	
 	/***************************************************
 	 * Iterate goodies
 	 ***************************************************/
-	
+
 	@Override
 	public TinkerSet<E> select(BooleanExpressionEvaluator<E> v) {
 		Set<E> result = new HashSet<E>();
@@ -103,16 +103,19 @@ public class OclStdLibSetImpl<E> extends OclStdLibCollectionImpl<E> implements T
 		}
 		return new OclStdLibSetImpl<E>(result);
 	}
-	
+
 	@Override
 	public <R> TinkerBag<R> collectNested(BodyExpressionEvaluator<R, E> v) {
 		Multiset<R> result = HashMultiset.create();
 		for (E e : this.set) {
-			result.add(v.evaluate(e));
+			R evaluate = v.evaluate(e);
+			if (evaluate != null) {
+				result.add(evaluate);
+			}
 		}
 		return new OclStdLibBagImpl<R>(result);
 	}
-	
+
 	@Override
 	public <T, R> TinkerBag<T> collect(BodyExpressionEvaluator<R, E> v) {
 		return collectNested(v).flatten();
@@ -124,10 +127,10 @@ public class OclStdLibSetImpl<E> extends OclStdLibCollectionImpl<E> implements T
 		Set<R> result = new HashSet<R>();
 		for (E e : this.set) {
 			if (e instanceof TinkerCollection) {
-				TinkerCollection<?> collection = (TinkerCollection<?>)e;
-				result.addAll(collection.<R>flatten());
+				TinkerCollection<?> collection = (TinkerCollection<?>) e;
+				result.addAll(collection.<R> flatten());
 			} else {
-				result.add((R)e);
+				result.add((R) e);
 			}
 		}
 		return new OclStdLibSetImpl<R>(result);
@@ -195,7 +198,7 @@ public class OclStdLibSetImpl<E> extends OclStdLibCollectionImpl<E> implements T
 
 	@Override
 	public String toJson() {
-		//TODO
+		// TODO
 		throw new RuntimeException("Not yet implemented");
 	}
 

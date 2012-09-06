@@ -14,7 +14,7 @@ import org.tuml.runtime.domain.TumlNode;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 
-public abstract class BaseBag<E> extends BaseCollection<E> implements TinkerBag<E> {
+public abstract class BaseBag<E> extends BaseCollection<E> implements TinkerBag<E>, OclStdLibBag<E> {
 
 	protected OclStdLibBag<E> oclStdLibBag;
 

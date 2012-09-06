@@ -120,7 +120,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 		return sb.toString();
 	}
 
-	private String getOclDerivedValue(Property p) {
+	private static String getOclDerivedValue(Property p) {
 		PropertyWrapper pWrap = new PropertyWrapper(p);
 		StringBuilder sb = new StringBuilder();
 		sb.append("package ");
@@ -128,7 +128,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 		sb.append("\n    context ");
 		sb.append(pWrap.getOwningType().getName());
 		sb.append("::");
-		sb.append(getName());
+		sb.append(pWrap.getName());
 		sb.append(" : ");
 
 		if (pWrap.isMany()) {
@@ -1169,4 +1169,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 		return getType() instanceof PrimitiveType && (getType().getName().equals("UnlimitedNatural"));
 	}
 
+	public String toString() {
+		return this.property.toString();
+	}
 }

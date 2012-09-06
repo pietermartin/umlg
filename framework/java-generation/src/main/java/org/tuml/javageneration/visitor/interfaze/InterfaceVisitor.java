@@ -1,11 +1,13 @@
 package org.tuml.javageneration.visitor.interfaze;
 
+import org.eclipse.uml2.uml.Classifier;
 import org.opaeum.java.metamodel.OJPackage;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedInterface;
 import org.tuml.framework.Visitor;
 import org.tuml.generation.Workspace;
 import org.tuml.javageneration.util.Namer;
 import org.tuml.javageneration.util.TinkerGenerationUtil;
+import org.tuml.javageneration.util.TumlClassOperations;
 import org.tuml.javageneration.util.TumlInterfaceOperations;
 import org.tuml.javageneration.visitor.BaseVisitor;
 
@@ -20,10 +22,15 @@ public class InterfaceVisitor extends BaseVisitor implements Visitor<org.eclipse
 		OJPackage ojPackage = new OJPackage(Namer.name(inf.getNearestPackage()));
 		annotatedInterface.setMyPackage(ojPackage);
 		if (TumlInterfaceOperations.hasCompositeOwner(inf)) {
-			implementCompositionNode(annotatedInterface);
+			extendCompositionNode(annotatedInterface);
 		} else {
-			implementTumlNode(annotatedInterface);
+			extendTumlNode(annotatedInterface);
 		}
+		
+		for (Classifier c : inf.getGenerals()) {
+			annotatedInterface.addToSuperInterfaces(TumlClassOperations.getPathName(c));
+		}
+		
 		addToSource(annotatedInterface);
 	}
 
@@ -31,11 +38,11 @@ public class InterfaceVisitor extends BaseVisitor implements Visitor<org.eclipse
 		
 	}
 
-	private void implementCompositionNode(OJAnnotatedInterface annotatedInterface) {
+	private void extendCompositionNode(OJAnnotatedInterface annotatedInterface) {
 		annotatedInterface.addToSuperInterfaces(TinkerGenerationUtil.tinkerCompositionNodePathName);
 	}
 	
-	private void implementTumlNode(OJAnnotatedInterface annotatedInterface) {
+	private void extendTumlNode(OJAnnotatedInterface annotatedInterface) {
 		annotatedInterface.addToSuperInterfaces(TinkerGenerationUtil.TINKER_NODE);
 	}
 }

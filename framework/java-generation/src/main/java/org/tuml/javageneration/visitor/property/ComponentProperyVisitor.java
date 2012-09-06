@@ -12,9 +12,9 @@ import org.tuml.javageneration.util.PropertyWrapper;
 import org.tuml.javageneration.util.TumlClassOperations;
 import org.tuml.javageneration.visitor.BaseVisitor;
 
-public class CompositionProperyVisitor extends BaseVisitor implements Visitor<Property> {
+public class ComponentProperyVisitor extends BaseVisitor implements Visitor<Property> {
 
-	public CompositionProperyVisitor(Workspace workspace) {
+	public ComponentProperyVisitor(Workspace workspace) {
 		super(workspace);
 	}
 
@@ -41,3 +41,4 @@ public class CompositionProperyVisitor extends BaseVisitor implements Visitor<Pr
 	}
 
 }
+

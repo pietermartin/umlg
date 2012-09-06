@@ -6,6 +6,8 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.tuml.runtime.collection.TinkerSet;
+import org.tuml.runtime.collection.memory.TumlMemorySet;
 import org.tuml.runtime.domain.ocl.OclState;
 import org.tuml.runtime.util.TinkerFormatter;
 
@@ -131,6 +133,14 @@ public abstract class BaseTuml implements TumlNode, Serializable {
 	@Override
 	public String oclLocale() {
 		throw new RuntimeException("Not implemented");
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public <E> TinkerSet<E> asSet() {
+		TinkerSet<E> result = new TumlMemorySet<E>();
+		result.add((E)this);
+		return result;
 	}
 
 }
