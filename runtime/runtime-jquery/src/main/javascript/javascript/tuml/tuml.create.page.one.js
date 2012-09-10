@@ -44,6 +44,10 @@ function createPageForOne(data, metaForData, tumlUri) {
     function constructInputForField(property) {
         if (property.name == 'id') {
             return $('<input />', {disabled: 'disabled', type:'text', class: 'field', id: property.name + 'Id', name: property.name, value: data[property.name]});
+        } else if (!property.onePrimitive && !property.manyPrimitive && !property.composite) {
+            var select = $('<select />', {class: 'chzn-select', style: 'width:350px;',  id: property.name + 'Id', name: property.name});
+            appendLoopupOptionsToSelect(property.tumlLookupUri, data['id'], data[property.name], select);
+            return select;
         } else if (property.fieldType == 'String') {
             return $('<input />', {type:'text', class: 'field', id: property.name + 'Id', name: property.name, value: data[property.name]});
         } else if (property.fieldType == 'Integer') {
@@ -59,6 +63,34 @@ function createPageForOne(data, metaForData, tumlUri) {
         }
     }
 
+    function appendLoopupOptionsToSelect(tumlLookupUri, contextVertexId, defaultValue, $select) {
+        var adjustedUri = tumlLookupUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
+        var jqxhr = $.getJSON(adjustedUri, function(response, b, c) {
+            var contextVertexId = tumlUri.match(/\d+/);
+            if (response.meta instanceof Array) {
+                //Property is a many, meta has 2 properties, one for both sides of the association
+                //The first one is the parent property, i.e. the context property for which the menu is built
+                var options = [];
+                $.each(response.data, function(index, obj) {
+                    var option = {};
+                    option['value'] = obj.id;
+                    option['desc'] = obj.name;
+                    options.push(option);
+                });
+                for each (var value in options){
+                    $select.append($('<option />)').val(value.value).html(value.desc));
+                }
+                $select.val(defaultValue);
+                $select.chosen();
+            } else {
+                //Property is a one
+                alert('this should not happen');
+            }
+        }).fail(function(a, b, c) {
+            alert("error " + a + ' ' + b + ' ' + c);
+        });
+    }
+
     function fieldsToJson() {
         var dataToSend = {};
         $.each(metaForData.properties, function(index, property) {
@@ -70,6 +102,8 @@ function createPageForOne(data, metaForData, tumlUri) {
                 } else if (property.fieldType == 'Boolean') {
                     dataToSend[property.name] = $('#' + property.name + 'Id').attr("checked") == "checked";
                 }
+            } else if (!property.onePrimitive && !property.manyPrimitive && !property.composite) {
+                dataToSend[property.name] = parseInt($('#' + property.name + 'Id').val());
             }
         });
         var result = JSON.stringify(dataToSend);

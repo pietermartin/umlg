@@ -26,7 +26,7 @@ public class TumlClassOperations extends ClassOperations {
 		Set<Property> ownedProperties = getAllOwnedProperties(clazz);
 		for (Property p : ownedProperties) {
 			PropertyWrapper pWrap = new PropertyWrapper(p);
-			if (!pWrap.isDerived() && (pWrap.isComposite() || (!pWrap.isPrimitive() && !pWrap.isEnumeration() && pWrap.getOtherEnd()==null))) {
+			if (!pWrap.isDerived() && (pWrap.isComposite() || (!pWrap.isPrimitive() && !pWrap.isEnumeration() && pWrap.getOtherEnd() == null))) {
 				result.add(p);
 			}
 		}
@@ -62,9 +62,11 @@ public class TumlClassOperations extends ClassOperations {
 
 	public static Set<Property> getPrimitiveOrEnumOrComponentsProperties(org.eclipse.uml2.uml.Class clazz) {
 		Set<Property> result = new HashSet<Property>();
-		for (Property p : clazz.getAttributes()) {
+		for (Property p : getAllOwnedProperties(clazz)) {
 			PropertyWrapper pWrap = new PropertyWrapper(p);
-			if (!pWrap.isDerived() && (pWrap.isPrimitive() || pWrap.isEnumeration() || pWrap.isComponent())) {
+			// if (!pWrap.isDerived() && (pWrap.isPrimitive() ||
+			// pWrap.isEnumeration() || pWrap.isComponent())) {
+			if (pWrap.isOne()) {
 				result.add(p);
 			}
 		}
@@ -72,8 +74,8 @@ public class TumlClassOperations extends ClassOperations {
 	}
 
 	/*
-	 * These include all properties that are on the other end of an
-	 * association. It does not include inherited properties
+	 * These include all properties that are on the other end of an association.
+	 * It does not include inherited properties
 	 */
 	public static Set<Property> getAllOwnedProperties(org.eclipse.uml2.uml.Class clazz) {
 		Set<Property> result = new HashSet<Property>(clazz.getAttributes());
@@ -89,8 +91,7 @@ public class TumlClassOperations extends ClassOperations {
 		result.addAll(getPropertiesOnRealizedInterfaces(clazz));
 		return result;
 	}
-	
-	
+
 	public static Set<Property> getPropertiesOnRealizedInterfaces(org.eclipse.uml2.uml.Class clazz) {
 		Set<Property> result = new HashSet<Property>();
 		List<Interface> interfaces = clazz.getImplementedInterfaces();
@@ -187,7 +188,7 @@ public class TumlClassOperations extends ClassOperations {
 
 	public static String className(Classifier clazz) {
 		if (clazz instanceof CollectionType) {
-			CollectionType collectionType = (CollectionType)clazz;
+			CollectionType collectionType = (CollectionType) clazz;
 			StringBuilder sb = new StringBuilder();
 			sb.append(TumlCollectionKindEnum.from(collectionType.getKind()).getOjPathName().getLast());
 			sb.append("<");
@@ -198,7 +199,7 @@ public class TumlClassOperations extends ClassOperations {
 			return Namer.name(clazz);
 		}
 	}
-	
+
 	public static String propertyEnumName(Type type) {
 		return Namer.name(type) + "RuntimePropertyEnum";
 	}
@@ -227,7 +228,7 @@ public class TumlClassOperations extends ClassOperations {
 		return pathName.renameLast(pathName.getLast() + "Audit");
 	}
 
-	public static Property getAttribute(Class c , String name) {
+	public static Property getAttribute(Class c, String name) {
 		for (Property p : c.getAllAttributes()) {
 			if (p.getName().equals(name)) {
 				return p;

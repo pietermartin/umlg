@@ -50,7 +50,7 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 			toJson.getBody().addToStatements("result = result.substring(1, result.length() - 1)");
 			toJson.getBody().addToStatements("StringBuilder sb = new StringBuilder(result)");
 		}
-		
+
 		toJson.getBody().addToStatements("sb.append(\"{\\\"id\\\": \" + getId() + \", \")");
 		Set<Property> propertiesForToJson = TumlClassOperations.getPrimitiveOrEnumOrComponentsProperties(clazz);
 		for (Property p : propertiesForToJson) {
@@ -63,6 +63,9 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 			} else {
 				if (pWrap.isNumber() || pWrap.isBoolean()) {
 					toJson.getBody().addToStatements("sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + " + pWrap.getter() + "() + \"" + "\")");
+				} else if (pWrap.isOne() && !pWrap.isPrimitive()) {
+					toJson.getBody().addToStatements(
+							"sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + (" + pWrap.getter() + "() != null ? " + pWrap.getter() + "().getId() : -1) + \"" + "\")");
 				} else {
 					toJson.getBody().addToStatements("sb.append(\"\\\"" + pWrap.getName() + "\\\": \\\"\" + " + pWrap.getter() + "() + \"\\\"" + "\")");
 				}
@@ -117,14 +120,15 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 				OJField field;
 				if (pWrap.isMany()) {
 					field = new OJField(pWrap.getName(), pWrap.javaTypePath());
-					field.setInitExp("new " + pWrap.javaTumlMemoryTypePath().getLast() + "((Collection<" + pWrap.javaBaseTypePath() + ">)propertyMap.get(\"" + pWrap.getName() + "\"))");
+					field.setInitExp("new " + pWrap.javaTumlMemoryTypePath().getLast() + "((Collection<" + pWrap.javaBaseTypePath() + ">)propertyMap.get(\"" + pWrap.getName()
+							+ "\"))");
 					annotatedClass.addToImports(pWrap.javaTumlMemoryTypePath());
 					annotatedClass.addToImports(new OJPathName("java.util.Collection"));
 				} else if (pWrap.isEnumeration()) {
 					field = new OJField(pWrap.getName(), pWrap.javaBaseTypePath());
 					field.setInitExp(pWrap.javaBaseTypePath().getLast() + ".fromJson((String)propertyMap.get(\"" + pWrap.getName() + "\"))");
 				} else {
-					
+
 					if (pWrap.isNumber()) {
 						OJField fieldNumber = new OJField(pWrap.getName() + "AsNumber", new OJPathName("Number"));
 						fieldNumber.setInitExp("(" + new OJPathName("Number") + ")propertyMap.get(\"" + pWrap.getName() + "\")");
@@ -137,20 +141,32 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 							throw new RuntimeException("Not yet implemented!");
 						}
 						fromJson.getBody().addToLocals(fieldNumber);
+					} else if (pWrap.isOne() && !pWrap.isPrimitive()) {
+						field = new OJField(pWrap.getName() + "Id", new OJPathName("Integer"));
+						field.setInitExp("(Integer)propertyMap.get(\"" + pWrap.getName() + "\")");
 					} else {
 						field = new OJField(pWrap.getName(), pWrap.javaBaseTypePath());
 						field.setInitExp("(" + pWrap.javaBaseTypePath() + ")propertyMap.get(\"" + pWrap.getName() + "\")");
 					}
-					
+
 				}
 				fromJson.getBody().addToLocals(field);
 				OJIfStatement ifNotNull = new OJIfStatement(field.getName() + " != null");
-				//TODO that null is not going to work with anything other than a string
-				OJIfStatement ifSetToNull = new OJIfStatement(field.getName() + ".equals(\"null\")", pWrap.setter() + "(null)");
-				ifSetToNull.addToElsePart(pWrap.setter() + "(" + field.getName() + ")");
-				ifNotNull.addToThenPart(ifSetToNull);
-				fromJson.getBody().addToStatements(ifNotNull);
-				
+				if (pWrap.isOne() && !pWrap.isPrimitive()) {
+					OJIfStatement ifSetToNull = new OJIfStatement(field.getName() + ".equals(0)", pWrap.setter() + "(null)");
+					ifSetToNull.addToElsePart(pWrap.setter() + "(new " + pWrap.javaBaseTypePath().getLast() + "(GraphDb.getDb().getVertex(" + pWrap.getName() + "Id)))");
+					ifNotNull.addToThenPart(ifSetToNull);
+					fromJson.getBody().addToStatements(ifNotNull);
+				} else {
+					// TODO that null is not going to work with anything other
+					// than
+					// a string
+					OJIfStatement ifSetToNull = new OJIfStatement(field.getName() + ".equals(\"null\")", pWrap.setter() + "(null)");
+					ifSetToNull.addToElsePart(pWrap.setter() + "(" + field.getName() + ")");
+					ifNotNull.addToThenPart(ifSetToNull);
+					fromJson.getBody().addToStatements(ifNotNull);
+				}
+
 			}
 		}
 	}

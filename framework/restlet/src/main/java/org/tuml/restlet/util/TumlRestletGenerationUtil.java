@@ -34,7 +34,11 @@ public class TumlRestletGenerationUtil {
 			} else  {
 				throw new IllegalStateException("unknown primitive " + primitiveType.getName());
 			}
+		} else if (propertyWrapper.isOne()) {
+			//For the id
+			return "FieldType.Integer";
+		} else {
+			return "FieldType.Date";
 		}
-		return "FieldType.Date";
 	}
 }

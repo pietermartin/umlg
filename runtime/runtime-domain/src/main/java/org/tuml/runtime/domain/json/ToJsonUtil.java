@@ -22,9 +22,13 @@ public class ToJsonUtil {
 	}
 
 	public static String toJson(PersistentObject entity) {
-		StringBuilder json = new StringBuilder();
-		json.append(entity.toJson());
-		return json.toString();
+		if (entity != null) {
+			StringBuilder json = new StringBuilder();
+			json.append(entity.toJson());
+			return json.toString();
+		} else {
+			return "";
+		}
 	}
 
 }

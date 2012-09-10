@@ -11,10 +11,13 @@ import org.tuml.restlet.visitor.clazz.AddFieldTypePropertyToRootRuntimeLiteral;
 import org.tuml.restlet.visitor.clazz.AddFieldTypePropertyToRuntimeLiteral;
 import org.tuml.restlet.visitor.clazz.AddSelfAndIdLiteralsToRootRuntimeEnum;
 import org.tuml.restlet.visitor.clazz.AddSelfAndIdLiteralsToRuntimeEnum;
+import org.tuml.restlet.visitor.clazz.AddTumlLookupCompositeParentUriToRuntimePropertyEnum;
+import org.tuml.restlet.visitor.clazz.AddTumlLookupUriToRuntimePropertyEnum;
 import org.tuml.restlet.visitor.clazz.AddTumlUriFieldToRuntimePropertyEnum;
 import org.tuml.restlet.visitor.clazz.AddUriToRootRuntimePropertyEnum;
 import org.tuml.restlet.visitor.clazz.AppResourceServerResourceBuilder;
 import org.tuml.restlet.visitor.clazz.EntityServerResourceBuilder;
+import org.tuml.restlet.visitor.clazz.LookupResourceBuilder;
 import org.tuml.restlet.visitor.clazz.NavigatePropertyServerResourceBuilder;
 import org.tuml.restlet.visitor.clazz.RootResourceServerResourceBuilder;
 
@@ -34,6 +37,9 @@ public class RestletVisitors {
 		result.add(new AddUriToRootRuntimePropertyEnum(Workspace.INSTANCE));
 		result.add(new AddFieldTypePropertyToRuntimeLiteral(Workspace.INSTANCE));
 		result.add(new AddFieldTypePropertyToRootRuntimeLiteral(Workspace.INSTANCE));
+		result.add(new LookupResourceBuilder(Workspace.INSTANCE));
+		result.add(new AddTumlLookupUriToRuntimePropertyEnum(Workspace.INSTANCE));
+		result.add(new AddTumlLookupCompositeParentUriToRuntimePropertyEnum(Workspace.INSTANCE));
 		return result;
 	}
 	

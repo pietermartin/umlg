@@ -18,6 +18,7 @@ import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.Dependency;
 import org.eclipse.uml2.uml.Deployment;
 import org.eclipse.uml2.uml.Element;
+import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.LiteralString;
 import org.eclipse.uml2.uml.NamedElement;
@@ -46,6 +47,15 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 	public PropertyWrapper(Property property) {
 		super(property);
 		this.property = property;
+	}
+	
+	public boolean hasLookup() {
+		if (!isComposite() && !(getType() instanceof Enumeration) && !isDerived() && !isQualifier()
+				&& getOtherEnd() != null && !(getOtherEnd().getType() instanceof Enumeration) && !getOtherEnd().isComposite()) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	public boolean isInverseComposite() {
@@ -1171,5 +1181,12 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 
 	public String toString() {
 		return this.property.toString();
+	}
+
+	public String lookup() {
+		return "lookup" + StringUtils.capitalize(fieldname());
+	}
+	public String lookupCompositeParent() {
+		return "lookupCompositeParent" + StringUtils.capitalize(fieldname());
 	}
 }

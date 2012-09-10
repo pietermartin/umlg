@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
+import org.tuml.runtime.collection.TinkerCollection;
 import org.tuml.runtime.collection.TinkerSequence;
 import org.tuml.runtime.domain.ocl.OclIsInvalidException;
 
@@ -125,9 +126,19 @@ public class OclStdLibSequenceImpl<E> extends OclStdLibCollectionImpl<E> impleme
 		return collectNested(v).flatten();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public <R> TinkerSequence<R> flatten() {
-		return null;
+		List<R> result = new ArrayList<R>();
+		for (E e : this.list) {
+			if (e instanceof TinkerCollection) {
+				TinkerCollection<?> collection = (TinkerCollection<?>) e;
+				result.addAll(collection.<R> flatten());
+			} else {
+				result.add((R) e);
+			}
+		}
+		return new OclStdLibSequenceImpl<R>(result);
 	}
 
 	@Override

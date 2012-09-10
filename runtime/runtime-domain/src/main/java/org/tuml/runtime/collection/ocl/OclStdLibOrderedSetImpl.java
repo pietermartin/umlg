@@ -8,6 +8,7 @@ import java.util.ListIterator;
 
 import org.apache.commons.collections.set.ListOrderedSet;
 import org.tuml.runtime.collection.TinkerBag;
+import org.tuml.runtime.collection.TinkerCollection;
 import org.tuml.runtime.collection.TinkerOrderedSet;
 
 import com.google.common.collect.HashMultiset;
@@ -105,7 +106,16 @@ public class OclStdLibOrderedSetImpl<E> extends OclStdLibCollectionImpl<E> imple
 
 	@Override
 	public <R> TinkerOrderedSet<R> flatten() {
-		return null;
+		ListOrderedSet result = new ListOrderedSet();
+		for (Object e : this.orderedSet) {
+			if (e instanceof TinkerCollection) {
+				TinkerCollection<?> collection = (TinkerCollection<?>) e;
+				result.addAll(collection.<R> flatten());
+			} else {
+				result.add(e);
+			}
+		}
+		return new OclStdLibOrderedSetImpl<R>(result);
 	}
 
 	@Override

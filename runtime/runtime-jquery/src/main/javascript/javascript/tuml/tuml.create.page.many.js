@@ -11,6 +11,34 @@ function createGrid(data, metaForData, tumlUri) {
     var columns = [];
     var columnFilters = {};
 
+    function renderSparkline(cellNode, row, dataContext, colDef) {
+        var property;
+        for (i = 0; i < metaForData.properties.length; i++) {
+            if (metaForData.properties[i].name = colDef.name) {
+                property = metaForData.properties[i]; 
+                break;
+            }
+        }
+        var adjustedUri = property['tumlUri'].replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), dataContext['id']);
+        var result = {};
+        $.ajax({
+            type: 'GET',
+            url: adjustedUri,
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            asycn: false, 
+            success: function(response){
+                result = response.data;
+                $(cellNode).html(result.name);
+            },
+            error: function(e){
+
+            }
+        });
+    }
+
+    var lookupColumns;
+
     $.each(metaForData.properties, function(index, property) {
         if (!property.inverseComposite && (property.oneToOne || property.manyToOne)) {
             //Place the id column first
@@ -20,7 +48,7 @@ function createGrid(data, metaForData, tumlUri) {
                     name: property.name,
                     field: property.name,
                     sortable: true,
-                    editor: selectEditor(property),
+                    //editor: selectEditor(property),
                     validator: requiredFieldValidator,
                     formatter: selectFormatter(property)
                 });           
@@ -32,15 +60,32 @@ function createGrid(data, metaForData, tumlUri) {
                     sortable: true,
                     editor: selectEditor(property),
                     validator: requiredFieldValidator,
-                    formatter: selectFormatter(property)
+                    formatter: selectFormatter(property),
+                    options: {tumlLookupUri: property.tumlLookupUri, compositeLookupMap: new CompositeLookupMap()},
+                    asyncPostRender: selectAsynPostRenderer(property),
+                    width: 120
                 });
             }
         }
     });
 
+    function selectAsynPostRenderer(property) {
+        if (property.name !== 'uri' && !property.onePrimitive && !property.manyPrimitive && !property.composite) {
+            return renderSparkline;
+        } else {
+            return null;
+        }
+    }
+
     function selectFormatter(property) {
         if (property.name == 'uri') {
             return TumlSlick.Formatters.Link;
+        } else if (property.name == 'id') {
+            return null;
+        } else if (!property.onePrimitive && !property.manyPrimitive && !property.composite) {
+            return function waitingFormatter(value) {
+                return "wait...";
+            };
         } else if (property.fieldType == 'String') {
             return  null; 
         } else if (property.fieldType == 'Boolean') {
@@ -53,6 +98,8 @@ function createGrid(data, metaForData, tumlUri) {
     function selectEditor(property) {
         if (property.name == 'uri') {
             return null;
+        } else if (!property.onePrimitive && !property.manyPrimitive && !property.composite) {
+            return  Tuml.Slick.Editors.SelectCellEditor; 
         } else if (property.name == 'id') {
             return null;
         } else if (property.fieldType == 'String') {
@@ -75,6 +122,7 @@ function createGrid(data, metaForData, tumlUri) {
         enableAddRow: true,
         enableCellNavigation: true,
         asyncEditorLoading: true,
+        enableAsyncPostRender: true,
         forceFitColumns: false,
         topPanelHeight: 25
     };
@@ -90,7 +138,6 @@ function createGrid(data, metaForData, tumlUri) {
     grid.setSelectionModel(new Slick.RowSelectionModel());
     var pager = new Slick.Controls.Pager(dataView, grid, $("#pager"));
     var columnpicker = new Slick.Controls.ColumnPicker(columns, grid, options);
-
     $("<div class='grid-button'/>").appendTo('.slick-pager');
 
     var $saveButton = $('<button />').text('Save').click(function() {
@@ -217,6 +264,13 @@ function createGrid(data, metaForData, tumlUri) {
     grid.onColumnsResized.subscribe(function(e, args) {
         updateHeaderRow(metaForData);
     });
+
+    grid.onViewportChanged.subscribe(function (e, args) {
+        var vp = grid.getViewport();
+        console.log(vp);
+        //loader.ensureData(vp.top, vp.bottom);
+    });
+    grid.onViewportChanged.notify();
 
     function updateHeaderRow(metaForData) {
         for (var i = 0; i < columns.length; i++) {
