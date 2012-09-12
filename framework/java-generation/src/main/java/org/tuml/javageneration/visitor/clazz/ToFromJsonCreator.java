@@ -128,7 +128,6 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 					field = new OJField(pWrap.getName(), pWrap.javaBaseTypePath());
 					field.setInitExp(pWrap.javaBaseTypePath().getLast() + ".fromJson((String)propertyMap.get(\"" + pWrap.getName() + "\"))");
 				} else {
-
 					if (pWrap.isNumber()) {
 						OJField fieldNumber = new OJField(pWrap.getName() + "AsNumber", new OJPathName("Number"));
 						fieldNumber.setInitExp("(" + new OJPathName("Number") + ")propertyMap.get(\"" + pWrap.getName() + "\")");
@@ -142,32 +141,36 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 						}
 						fromJson.getBody().addToLocals(fieldNumber);
 					} else if (pWrap.isOne() && !pWrap.isPrimitive()) {
-						field = new OJField(pWrap.getName() + "Id", new OJPathName("Integer"));
-						field.setInitExp("(Integer)propertyMap.get(\"" + pWrap.getName() + "\")");
+						field = new OJField(pWrap.getName() + "Id", new OJPathName("Number"));
+						field.setInitExp("(Number)propertyMap.get(\"" + pWrap.getName() + "\")");
 					} else {
 						field = new OJField(pWrap.getName(), pWrap.javaBaseTypePath());
 						field.setInitExp("(" + pWrap.javaBaseTypePath() + ")propertyMap.get(\"" + pWrap.getName() + "\")");
 					}
-
 				}
 				fromJson.getBody().addToLocals(field);
-				OJIfStatement ifNotNull = new OJIfStatement(field.getName() + " != null");
-				if (pWrap.isOne() && !pWrap.isPrimitive()) {
-					OJIfStatement ifSetToNull = new OJIfStatement(field.getName() + ".equals(0)", pWrap.setter() + "(null)");
-					ifSetToNull.addToElsePart(pWrap.setter() + "(new " + pWrap.javaBaseTypePath().getLast() + "(GraphDb.getDb().getVertex(" + pWrap.getName() + "Id)))");
-					ifNotNull.addToThenPart(ifSetToNull);
-					fromJson.getBody().addToStatements(ifNotNull);
-				} else {
-					// TODO that null is not going to work with anything other
-					// than
-					// a string
-					OJIfStatement ifSetToNull = new OJIfStatement(field.getName() + ".equals(\"null\")", pWrap.setter() + "(null)");
-					ifSetToNull.addToElsePart(pWrap.setter() + "(" + field.getName() + ")");
-					ifNotNull.addToThenPart(ifSetToNull);
-					fromJson.getBody().addToStatements(ifNotNull);
-				}
-
+//				if (!pWrap.isEnumeration()) {
+					OJIfStatement ifNotNull = new OJIfStatement(field.getName() + " != null");
+					if (pWrap.isOne() && !pWrap.isPrimitive() && !pWrap.isEnumeration()) {
+						OJIfStatement ifSetToNull = new OJIfStatement(field.getName() + ".equals(-1)", pWrap.setter() + "(null)");
+						ifSetToNull
+								.addToElsePart(pWrap.setter() + "(GraphDb.getDb().<" + pWrap.javaBaseTypePath().getLast() + ">instantiateClassifier(" + pWrap.getName() + "Id.longValue()))");
+						annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
+						ifNotNull.addToThenPart(ifSetToNull);
+						fromJson.getBody().addToStatements(ifNotNull);
+					} else {
+						// TODO that null is not going to work with anything
+						// other
+						// than
+						// a string
+						OJIfStatement ifSetToNull = new OJIfStatement(field.getName() + ".equals(\"null\")", pWrap.setter() + "(null)");
+						ifSetToNull.addToElsePart(pWrap.setter() + "(" + field.getName() + ")");
+						ifNotNull.addToThenPart(ifSetToNull);
+						fromJson.getBody().addToStatements(ifNotNull);
+					}
+//				}
 			}
+
 		}
 	}
 

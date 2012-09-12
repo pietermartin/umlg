@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
 import org.opaeum.java.metamodel.OJClass;
+import org.opaeum.java.metamodel.OJField;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
 import org.tuml.framework.Visitor;
@@ -43,10 +43,27 @@ public class LookupGenerator extends BaseVisitor implements Visitor<Property> {
 	}
 
 	public static void generateLookupForOneProperty(Type compositeParent, OJAnnotatedClass ojClass, PropertyWrapper propertyWrapper, PropertyWrapper otherEndPropertyWrapper) {
-		OJAnnotatedOperation lookUp = new OJAnnotatedOperation("lookup" + StringUtils.capitalize(otherEndPropertyWrapper.getName()));
-		lookUp.setReturnType(TinkerGenerationUtil.tinkerSet.getCopy().addToGenerics(TumlClassOperations.getPathName(otherEndPropertyWrapper.getType())));
-		ojClass.addToOperations(lookUp);
-		buildGetterToCompositeParent(ojClass, lookUp, propertyWrapper, otherEndPropertyWrapper, compositeParent);
+		OJAnnotatedOperation lookupCompositeParent = new OJAnnotatedOperation(otherEndPropertyWrapper.lookupCompositeParent());
+		lookupCompositeParent.setReturnType(TumlClassOperations.getPathName(compositeParent));
+		ojClass.addToOperations(lookupCompositeParent);
+		OJAnnotatedOperation lookup = new OJAnnotatedOperation(otherEndPropertyWrapper.lookup());
+		lookup.setReturnType(TinkerGenerationUtil.tinkerSet.getCopy().addToGenerics(TumlClassOperations.getPathName(otherEndPropertyWrapper.getType())));
+		ojClass.addToOperations(lookup);
+		buildGetterToCompositeParentX(ojClass, lookupCompositeParent, propertyWrapper, compositeParent);
+		buildGetterToCompositeParent(ojClass, lookup, propertyWrapper, otherEndPropertyWrapper, compositeParent);
+	}
+
+	private static void buildGetterToCompositeParentX(OJAnnotatedClass ojClass, OJAnnotatedOperation lookupCompositeParent, PropertyWrapper propertyWrapper, Type compositeParent) {
+		// build getter for special case where the non composite lookup of the
+		// same type as the is in the composite tree
+		StringBuilder sb = new StringBuilder();
+		sb.append("return ");
+		if (propertyWrapper.getType().equals(compositeParent)) {
+			sb.append("this");
+		} else {
+			constructGetterAsString(true, sb, propertyWrapper, compositeParent);
+		}
+		lookupCompositeParent.getBody().addToStatements(sb.toString());
 	}
 
 	private static void buildGetterToCompositeParent(OJAnnotatedClass ojClass, OJAnnotatedOperation lookup, PropertyWrapper propertyWrapper,
@@ -55,9 +72,11 @@ public class LookupGenerator extends BaseVisitor implements Visitor<Property> {
 		// same type as the is in the composite tree
 		StringBuilder sb = new StringBuilder();
 		sb.append("return ");
-		constructGetterAsString(true, sb, propertyWrapper, compositeParent);
 		if (!propertyWrapper.getType().equals(compositeParent)) {
-			sb.append(".");
+			OJField compositeParentField = new OJField("compositeParent", TumlClassOperations.getPathName(compositeParent));
+			compositeParentField.setInitExp(otherEndPropertyWrapper.lookupCompositeParent() + "()");
+			lookup.getBody().addToLocals(compositeParentField);
+			sb.append("compositeParent.");
 		}
 		List<String> getterStringsInReverse = new ArrayList<String>();
 		constructLookupAsString(ojClass, getterStringsInReverse, otherEndPropertyWrapper, compositeParent);

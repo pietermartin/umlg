@@ -16,6 +16,7 @@ import org.tuml.restlet.visitor.clazz.AddTumlLookupUriToRuntimePropertyEnum;
 import org.tuml.restlet.visitor.clazz.AddTumlUriFieldToRuntimePropertyEnum;
 import org.tuml.restlet.visitor.clazz.AddUriToRootRuntimePropertyEnum;
 import org.tuml.restlet.visitor.clazz.AppResourceServerResourceBuilder;
+import org.tuml.restlet.visitor.clazz.CompositeParentResourceBuilder;
 import org.tuml.restlet.visitor.clazz.EntityServerResourceBuilder;
 import org.tuml.restlet.visitor.clazz.LookupResourceBuilder;
 import org.tuml.restlet.visitor.clazz.NavigatePropertyServerResourceBuilder;
@@ -40,6 +41,7 @@ public class RestletVisitors {
 		result.add(new LookupResourceBuilder(Workspace.INSTANCE));
 		result.add(new AddTumlLookupUriToRuntimePropertyEnum(Workspace.INSTANCE));
 		result.add(new AddTumlLookupCompositeParentUriToRuntimePropertyEnum(Workspace.INSTANCE));
+		result.add(new CompositeParentResourceBuilder(Workspace.INSTANCE));
 		return result;
 	}
 	

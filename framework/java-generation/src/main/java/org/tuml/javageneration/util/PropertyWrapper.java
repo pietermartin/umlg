@@ -48,16 +48,16 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 		super(property);
 		this.property = property;
 	}
-	
+
 	public boolean hasLookup() {
-		if (!isComposite() && !(getType() instanceof Enumeration) && !isDerived() && !isQualifier()
-				&& getOtherEnd() != null && !(getOtherEnd().getType() instanceof Enumeration) && !getOtherEnd().isComposite()) {
+		if (!isComposite() && !(getType() instanceof Enumeration) && !isDerived() && !isQualifier() && getOtherEnd() != null && !(getOtherEnd().getType() instanceof Enumeration)
+				&& !getOtherEnd().isComposite()) {
 			return true;
 		} else {
 			return false;
 		}
 	}
-	
+
 	public boolean isInverseComposite() {
 		if (getOtherEnd() != null) {
 			return new PropertyWrapper(getOtherEnd()).isComposite();
@@ -66,7 +66,6 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 		}
 	}
 
-	
 	public boolean hasQualifiers() {
 		return !this.property.getQualifiers().isEmpty();
 	}
@@ -252,8 +251,8 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 
 	public String getTumlRuntimePropertyEnum() {
 		return TumlClassOperations.propertyEnumName(getOwningType()) + "." + fieldname();
-	}	
-	
+	}
+
 	public String getInitValue() {
 		ValueSpecification v = getDefaultValue();
 		if (v instanceof OpaqueExpression) {
@@ -279,7 +278,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 
 	public String toJson() {
 		if (isMany()) {
-			
+
 			return "\\\"" + getName() + "\\\": \\\"\" + " + getter() + "() + \"\\\"";
 		} else {
 			return "\\\"" + getName() + "\\\": \\\"\" + " + getter() + "() + \"\\\"";
@@ -287,9 +286,9 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 	}
 
 	public boolean isComponent() {
-		return !this.property.isDerived() && this.property.getType() instanceof org.eclipse.uml2.uml.Class && isOne() && this.property.isComposite() && this.property.getLower() == 1;
+		return !this.property.isDerived() && this.property.getType() instanceof org.eclipse.uml2.uml.Class && isOne() && this.property.isComposite()
+				&& this.property.getLower() == 1;
 	}
-
 
 	public boolean isInverseOrdered() {
 		return getOtherEnd() != null && getOtherEnd().isOrdered();
@@ -520,7 +519,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 	public boolean isUnqualifiedMany() {
 		return TumlPropertyOperations.isUnqualifiedMany(this.property);
 	}
-	
+
 	public List<PropertyWrapper> getQualifiersAsPropertyWrappers() {
 		List<PropertyWrapper> result = new ArrayList<PropertyWrapper>();
 		for (Property q : this.property.getQualifiers()) {
@@ -1186,6 +1185,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 	public String lookup() {
 		return "lookup" + StringUtils.capitalize(fieldname());
 	}
+
 	public String lookupCompositeParent() {
 		return "lookupCompositeParent" + StringUtils.capitalize(fieldname());
 	}
