@@ -57,7 +57,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 		this.parentClass = owner.getClass();
 		this.tumlRuntimeProperty = runtimeProperty;
 	}
-	
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected void loadFromVertex() {
 		if (!isOnePrimitive()) {
@@ -203,7 +203,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 				if (node instanceof CompositionNode) {
 					TransactionThreadEntityVar.setNewEntity((CompositionNode) node);
 				}
-				
+
 				Set<Edge> edges = GraphDb.getDb().getEdgesBetween(this.vertex, v, this.getLabel());
 				for (Edge edge : edges) {
 					if (o instanceof TinkerAuditableNode) {
@@ -241,16 +241,19 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 			}
 			v = node.getVertex();
 			if (this.isUnique() && (this.isOneToMany() || this.isOneToOne())) {
-				// Check that the existing one from the element does not exist, the user must first remove it
+				// Check that the existing one from the element does not exist,
+				// the user must first remove it
 				Iterator<Edge> iteratorToOne = getEdges(v).iterator();
 				if (iteratorToOne.hasNext()) {
 					throw new IllegalStateException("Its a 1");
 				}
-				
-				//Even if the user cleared the one, a reference on the other side may remain in memory.
-				//Clearing this property is not performance issue as it is a one
+
+				// Even if the user cleared the one, a reference on the other
+				// side may remain in memory.
+				// Clearing this property is not performance issue as it is a
+				// one
 				node.initialiseProperty(tumlRuntimeProperty);
-				
+
 			}
 		} else if (e.getClass().isEnum()) {
 			v = GraphDb.getDb().addVertex(null);
@@ -553,7 +556,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 	public String toJson() {
 		maybeLoad();
 		StringBuilder sb = new StringBuilder();
-		if (isManyPrimitive()) {
+		if (isManyPrimitive() || isManyEnumeration()) {
 			sb.append("[");
 			int count = 0;
 			for (E e : this.internalCollection) {
@@ -580,8 +583,18 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 	}
 
 	@Override
+	public boolean isOneEnumeration() {
+		return this.tumlRuntimeProperty.isOneEnumeration();
+	}
+
+	@Override
 	public boolean isManyPrimitive() {
 		return this.tumlRuntimeProperty.isManyPrimitive();
+	}
+
+	@Override
+	public boolean isManyEnumeration() {
+		return this.tumlRuntimeProperty.isManyEnumeration();
 	}
 
 	@Override

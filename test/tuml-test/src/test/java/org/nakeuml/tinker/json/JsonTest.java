@@ -19,6 +19,7 @@ import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 
 public class JsonTest extends BaseLocalDbTest {
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testEmbeddedManiesToJson() throws JsonParseException, JsonMappingException, IOException {
 		db.startTransaction();
@@ -31,8 +32,6 @@ public class JsonTest extends BaseLocalDbTest {
 		
 		ObjectMapper mapper = new ObjectMapper();
 		System.out.println(god.toJson());
-		@SuppressWarnings("unchecked")
-		
 		Map<String,Object> jsonObject = mapper.readValue(god.toJson(), Map.class);
 		Assert.assertFalse(jsonObject.isEmpty());
 		Assert.assertSame(ArrayList.class, jsonObject.get("embeddedString").getClass());

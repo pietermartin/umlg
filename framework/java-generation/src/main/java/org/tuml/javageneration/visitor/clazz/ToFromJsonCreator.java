@@ -56,7 +56,10 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 		for (Property p : propertiesForToJson) {
 			PropertyWrapper pWrap = new PropertyWrapper(p);
 			if (pWrap.isMany()) {
-				toJson.getBody().addToStatements("sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + " + pWrap.getter() + "().toJson() + \"" + "\")");
+				OJIfStatement ifEmpty = new OJIfStatement(pWrap.getter() + "().isEmpty()");
+				ifEmpty.addToThenPart("sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + " + pWrap.getter() + "().toJson() + \"" + "\")");
+				ifEmpty.addToElsePart("sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + " + pWrap.getter() + "().toJson() + \"" + "\")");
+				toJson.getBody().addToStatements(ifEmpty);
 			} else if (pWrap.isEnumeration()) {
 				toJson.getBody().addToStatements(
 						"sb.append(\"\\\"" + pWrap.getName() + "\\\": \\\"\" + (" + pWrap.getter() + "() == null ? \"null\" : " + pWrap.getter() + "().toJson()) + \"\\\"" + "\")");

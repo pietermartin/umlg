@@ -121,4 +121,16 @@ public class TumlRuntimePropertyImpl implements TumlRuntimeProperty {
 		return false;
 	}
 
+	@Override
+	public boolean isOneEnumeration() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isManyEnumeration() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

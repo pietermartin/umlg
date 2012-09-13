@@ -61,7 +61,7 @@ function createGrid(data, metaForData, tumlUri) {
                     editor: selectEditor(property),
                     validator: requiredFieldValidator,
                     formatter: selectFormatter(property),
-                    options: {tumlLookupUri: property.tumlLookupUri, compositeLookupMap: new CompositeLookupMap()},
+                    options: {tumlLookupUri: property.tumlLookupUri, compositeLookupMap: new CompositeLookupMap(property.tumlCompositeParentLookupUri, property.tumlLookupUri)},
                     asyncPostRender: selectAsynPostRenderer(property),
                     width: 120
                 });

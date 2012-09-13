@@ -53,17 +53,19 @@ public class RootEntryPointCreator extends BaseVisitor implements Visitor<Model>
 		root.addToFields(vertex);
 
 		OJEnum ojEnum = RuntimePropertyImplementor.addTumlRuntimePropertyEnum(root, "RootRuntimePropertyEnum", "Root", new HashSet<Property>(), /*
-																																 * this
-																																 * is
-																																 * true
-																																 * to
-																																 * create																																 * creating
-																																 * a
-																																 * link
-																																 * to
-																																 * itself
-																																 */false, model.getName());
-		
+																																				 * this
+																																				 * is
+																																				 * true
+																																				 * to
+																																				 * create
+																																				 * *
+																																				 * creating
+																																				 * a
+																																				 * link
+																																				 * to
+																																				 * itself
+																																				 */false, model.getName());
+
 		@SuppressWarnings("unchecked")
 		List<Class> result = (List<Class>) TumlModelOperations.findElements(model, new Condition() {
 			@Override
@@ -75,8 +77,8 @@ public class RootEntryPointCreator extends BaseVisitor implements Visitor<Model>
 				return !clazz.isAbstract() && !TumlClassOperations.hasCompositeOwner(clazz);
 			}
 		});
-		
-		//Rebuild asJson
+
+		// Rebuild asJson
 		OJAnnotatedOperation asJson = ojEnum.findOperation("asJson");
 		asJson.getBody().removeAllFromStatements();
 		asJson.getBody().addToStatements("StringBuilder sb = new StringBuilder();");
@@ -88,14 +90,13 @@ public class RootEntryPointCreator extends BaseVisitor implements Visitor<Model>
 		asJson.getBody().addToStatements("sb.append(" + TinkerGenerationUtil.RootRuntimePropertyEnum.getLast() + "." + model.getName() + ".toJson())");
 		asJson.getBody().addToStatements("sb.append(\",\")");
 
-		
 		OJAnnotatedOperation fromLabel = ojEnum.findOperation("fromLabel", new OJPathName("String"));
 		int count = 0;
-		//Add root entities as though they are fake properties to App root
+		// Add root entities as though they are fake properties to App root
 		for (Class clazz : result) {
 			count++;
-			RuntimePropertyImplementor.addEnumLiteral(ojEnum, fromLabel, StringUtils.uncapitalize(TumlClassOperations.className(clazz)), false, false, true, false, true, false, false,
-					true, false, -1, 0, false, false, true, false, true, "root" + TumlClassOperations.className(clazz));
+			RuntimePropertyImplementor.addEnumLiteral(ojEnum, fromLabel, StringUtils.uncapitalize(TumlClassOperations.className(clazz)), false, false, false, true, false, true,
+					false, false, true, false, -1, 0, false, false, true, false, true, "root" + TumlClassOperations.className(clazz));
 
 			asJson.getBody().addToStatements("sb.append(" + ojEnum.getName() + "." + StringUtils.uncapitalize(TumlClassOperations.className(clazz)) + ".toJson())");
 			if (count != result.size()) {
@@ -104,8 +105,8 @@ public class RootEntryPointCreator extends BaseVisitor implements Visitor<Model>
 		}
 		asJson.getBody().addToStatements("sb.append(\"]}\")");
 		asJson.getBody().addToStatements("return sb.toString()");
-		
-		//Move fromLabel's return null from first line to last line
+
+		// Move fromLabel's return null from first line to last line
 		count = 0;
 		List<Integer> toRemove = new ArrayList<Integer>();
 		for (OJStatement s : fromLabel.getBody().getStatements()) {

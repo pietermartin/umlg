@@ -38,17 +38,12 @@ public final class TumlPropertyOperations extends PropertyOperations {
 			}
 			return otherEnd.getType();
 		} else if (owner instanceof Classifier) {
-			return (Classifier)owner;
+			return (Classifier) owner;
 		} else if (owner instanceof Property && isQualifier(p)) {
 			throw new IllegalStateException("Property is a qualifier, this method can not be called for qualifiers");
 		} else {
 			throw new IllegalStateException("Not catered for, think about ne. " + owner.getClass().getSimpleName());
 		}
-	}
-	
-	public static boolean isMany(Property property) {
-		int qualifierCount = property.getQualifiers().size();
-		return TumlMultiplicityOperations.isMany(property) || qualifierCount > 0;
 	}
 
 	public static boolean isUnqualifiedOne(Property property) {
@@ -70,7 +65,7 @@ public final class TumlPropertyOperations extends PropertyOperations {
 	public static String fieldName(Property p) {
 		return StringUtils.uncapitalize(p.getName());
 	}
-	
+
 	public static boolean isPrimitive(Property property) {
 		return property.getType() instanceof PrimitiveType;
 	}
@@ -108,9 +103,12 @@ public final class TumlPropertyOperations extends PropertyOperations {
 	}
 
 	public static boolean isManyToOne(Property p) {
-		//TODO part of thinking about
-//		return !otherEndIsOne(p) && isOne(p);
 		return otherEndIsOne(p) && isOne(p);
+	}
+
+	public static boolean isMany(Property property) {
+		int qualifierCount = property.getQualifiers().size();
+		return TumlMultiplicityOperations.isMany(property) || qualifierCount > 0;
 	}
 
 	public static boolean isOneToOne(Property p) {
@@ -122,7 +120,7 @@ public final class TumlPropertyOperations extends PropertyOperations {
 			Property otherEnd = p.getOtherEnd();
 			return isOne(otherEnd) && otherEnd.getQualifiers().size() == 0;
 		} else {
-			//TODO think about, this was false
+			// TODO think about, this was false
 			return true;
 		}
 	}
@@ -190,7 +188,7 @@ public final class TumlPropertyOperations extends PropertyOperations {
 	public static String adder(Property property) {
 		return "addTo" + StringUtils.capitalize(property.getName());
 	}
-	
+
 	public static String remover(Property property) {
 		return "removeFrom" + StringUtils.capitalize(property.getName());
 	}

@@ -3,6 +3,8 @@ package org.tuml.runtime.collection;
 public interface TumlRuntimeProperty {
 	boolean isOnePrimitive();
 	boolean isManyPrimitive();
+	boolean isOneEnumeration();
+	boolean isManyEnumeration();
 	boolean isControllingSide();
 	boolean isComposite();
 	boolean isInverseComposite();

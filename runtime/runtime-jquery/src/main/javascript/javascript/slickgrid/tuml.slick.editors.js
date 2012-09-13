@@ -10,14 +10,9 @@
         "Tuml": { 
             "Slick": {
                 "Editors": {
-                    //"Text": TextEditor,
                     "Integer": IntegerEditor,
-                    //"Date": DateEditor,
-                    //"YesNoSelect": YesNoSelectEditor,
                     "SelectCellEditor": SelectCellEditor,
                     "Checkbox": CheckboxEditor
-                    //"PercentComplete": PercentCompleteEditor,
-                    //"LongText": LongTextEditor
                 }
             }}
     });
@@ -138,8 +133,8 @@
 
         this.loadValue = function(item) {
             defaultValue = item[args.column.field];
-            args.column.options.compositeLookupMap.getOrLoadMap(item['id']);
-            loadSelectOption(args, item['id'], defaultValue);
+            args.column.options.compositeLookupMap.getOrLoadMap(item['id'], $select);
+            //loadSelectOption(args, item['id'], defaultValue);
         };
 
         this.serializeValue = function() {

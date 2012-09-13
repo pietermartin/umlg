@@ -31,9 +31,8 @@ public class AddSelfAndIdLiteralsToRuntimeEnum extends BaseVisitor implements Vi
 
 	private void addField(OJAnnotatedClass annotatedClass, OJEnum ojEnum, String fieldName) {
 		OJAnnotatedOperation fromLabel = ojEnum.findOperation("fromLabel", new OJPathName("String"));
-		RuntimePropertyImplementor.addEnumLiteral(ojEnum, fromLabel, fieldName, true, false, false, true, false, false,
-				true, false, false, 1, 1, false, false,
-				false, false, true, "");
+		RuntimePropertyImplementor.addEnumLiteral(ojEnum, fromLabel, fieldName, true, false, false, false, true, false, false, true, false, false, 1, 1, false, false, false,
+				false, true, "");
 	}
 
 }

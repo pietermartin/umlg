@@ -16,7 +16,8 @@ import org.tuml.javageneration.util.TinkerGenerationUtil;
 
 public class RuntimePropertyImplementor {
 
-	public static OJEnum addTumlRuntimePropertyEnum(OJAnnotatedClass annotatedClass, String enumName, String className, Set<Property> allOwnedProperties, boolean hasCompositeOwner, String modelName) {
+	public static OJEnum addTumlRuntimePropertyEnum(OJAnnotatedClass annotatedClass, String enumName, String className, Set<Property> allOwnedProperties,
+			boolean hasCompositeOwner, String modelName) {
 		OJEnum ojEnum = new OJEnum(enumName);
 		ojEnum.setStatic(true);
 		ojEnum.addToImplementedInterfaces(TinkerGenerationUtil.tumlRuntimePropertyPathName.getCopy());
@@ -31,6 +32,16 @@ public class RuntimePropertyImplementor {
 		isManyPrimitiveField.setType(new OJPathName("boolean"));
 		isManyPrimitiveField.setName("manyPrimitive");
 		ojEnum.addToFields(isManyPrimitiveField);
+
+		OJField isOneEnumerationField = new OJField();
+		isOneEnumerationField.setType(new OJPathName("boolean"));
+		isOneEnumerationField.setName("oneEnumeration");
+		ojEnum.addToFields(isOneEnumerationField);
+
+		OJField isManyEnumerationField = new OJField();
+		isManyEnumerationField.setType(new OJPathName("boolean"));
+		isManyEnumerationField.setName("manyEnumeration");
+		ojEnum.addToFields(isManyEnumerationField);
 
 		OJField inverseField = new OJField();
 		inverseField.setType(new OJPathName("boolean"));
@@ -140,11 +151,11 @@ public class RuntimePropertyImplementor {
 		asJson.getBody().addToStatements("name", "sb.append(\"{\\\"name\\\": \\\"" + className + "\\\", \")");
 		asJson.getBody().addToStatements("uri", "sb.append(\"\\\"uri\\\": \\\"TODO\\\", \")");
 		asJson.getBody().addToStatements("properties", "sb.append(\"\\\"properties\\\": [\")");
-		
+
 		OJField count = new OJField("count", new OJPathName("int"));
 		count.setInitExp("1");
 		asJson.getBody().addToLocals(count);
-		
+
 		OJForStatement forLiterals = new OJForStatement("l", new OJPathName(enumName), ojEnum.getName() + ".values()");
 		forLiterals.getBody().addToStatements("sb.append(l.toJson())");
 		OJIfStatement ifCountSize = new OJIfStatement("count < " + ojEnum.getName() + ".values().length");
@@ -157,15 +168,15 @@ public class RuntimePropertyImplementor {
 		for (Property p : allOwnedProperties) {
 			PropertyWrapper pWrap = new PropertyWrapper(p);
 			if (!(pWrap.isDerived() || pWrap.isDerivedUnion())) {
-				addEnumLiteral(ojEnum, fromLabel, pWrap.fieldname(), pWrap.isPrimitive(), pWrap.isManyToOne(), pWrap.isMany(), pWrap.isControllingSide(), pWrap.isComposite(), pWrap.isInverseComposite(),
-						pWrap.isOneToOne(), pWrap.isOneToMany(), pWrap.isManyToMany(), pWrap.getUpper(), pWrap.getLower(), pWrap.isQualified(), pWrap.isInverseQualified(),
-						pWrap.isOrdered(), pWrap.isInverseOrdered(), pWrap.isUnique(), TinkerGenerationUtil.getEdgeName(pWrap.getProperty()));
+				addEnumLiteral(ojEnum, fromLabel, pWrap.fieldname(), pWrap.isPrimitive(), pWrap.isEnumeration(), pWrap.isManyToOne(), pWrap.isMany(), pWrap.isControllingSide(), pWrap.isComposite(),
+						pWrap.isInverseComposite(), pWrap.isOneToOne(), pWrap.isOneToMany(), pWrap.isManyToMany(), pWrap.getUpper(), pWrap.getLower(), pWrap.isQualified(),
+						pWrap.isInverseQualified(), pWrap.isOrdered(), pWrap.isInverseOrdered(), pWrap.isUnique(), TinkerGenerationUtil.getEdgeName(pWrap.getProperty()));
 			}
 		}
 
 		if (!hasCompositeOwner) {
-			//Add in fake property to root
-			addEnumLiteral(ojEnum, fromLabel, modelName, false, false, false, false, true, false, false, true, false, -1, 0, false, false, false, false, false, "root" + className);
+			// Add in fake property to root
+			addEnumLiteral(ojEnum, fromLabel, modelName, false, false, false, false, false, true, false, false, true, false, -1, 0, false, false, false, false, false, "root" + className);
 		}
 		asJson.getBody().addToStatements("sb.append(\"]}\")");
 		asJson.getBody().addToStatements("return sb.toString()");
@@ -173,9 +184,9 @@ public class RuntimePropertyImplementor {
 		return ojEnum;
 	}
 
-	public static void addEnumLiteral(OJEnum ojEnum, OJAnnotatedOperation fromLabel, String fieldName, boolean isPrimitive, boolean isManyToOne, boolean isMany,
-			boolean isControllingSide, boolean isComposite, boolean isInverseComposite, boolean isOneToOne, boolean isOneToMany, boolean isManyToMany, int getUpper, int getLower, boolean isQualified,
-			boolean isInverseQualified, boolean isOrdered, boolean isInverseOrdered, boolean isUnique, String edgeName) {
+	public static void addEnumLiteral(OJEnum ojEnum, OJAnnotatedOperation fromLabel, String fieldName, boolean isPrimitive, boolean isEnumeration, boolean isManyToOne,
+			boolean isMany, boolean isControllingSide, boolean isComposite, boolean isInverseComposite, boolean isOneToOne, boolean isOneToMany, boolean isManyToMany,
+			int getUpper, int getLower, boolean isQualified, boolean isInverseQualified, boolean isOrdered, boolean isInverseOrdered, boolean isUnique, String edgeName) {
 
 		OJIfStatement ifLabelEquals = new OJIfStatement(fieldName + ".getLabel().equals(label)");
 		// Do not make upper case, leave with java case sensitive
@@ -196,6 +207,18 @@ public class RuntimePropertyImplementor {
 		propertyManyPrimitiveField.setType(new OJPathName("boolean"));
 		propertyManyPrimitiveField.setInitExp(Boolean.toString(isPrimitive && isMany));
 		ojLiteral.addToAttributeValues(propertyManyPrimitiveField);
+
+		OJField propertyOneEnumerationField = new OJField();
+		propertyOneEnumerationField.setType(new OJPathName("boolean"));
+		// A one primitive property is a isManyToOne. Seeing as the
+		// opposite end is null it defaults to many
+		propertyOneEnumerationField.setInitExp(Boolean.toString(isEnumeration && isManyToOne));
+		ojLiteral.addToAttributeValues(propertyOneEnumerationField);
+
+		OJField propertyManyEnumerationField = new OJField();
+		propertyManyEnumerationField.setType(new OJPathName("boolean"));
+		propertyManyEnumerationField.setInitExp(Boolean.toString(isEnumeration && isMany));
+		ojLiteral.addToAttributeValues(propertyManyEnumerationField);
 
 		OJField propertyControllingSideField = new OJField();
 		propertyControllingSideField.setType(new OJPathName("boolean"));
@@ -286,6 +309,12 @@ public class RuntimePropertyImplementor {
 		sb.append("\\\"manyPrimitive\\\": ");
 		sb.append(propertyManyPrimitiveField.getInitExp());
 		sb.append(", ");
+		sb.append("\\\"oneEnumeration\\\": ");
+		sb.append(propertyOneEnumerationField.getInitExp());
+		sb.append(", ");
+		sb.append("\\\"manyEnumeration\\\": ");
+		sb.append(propertyManyEnumerationField.getInitExp());
+		sb.append(", ");
 		sb.append("\\\"controllingSide\\\": ");
 		sb.append(propertyControllingSideField.getInitExp());
 		sb.append(", ");
@@ -334,5 +363,4 @@ public class RuntimePropertyImplementor {
 		ojEnum.addToLiterals(ojLiteral);
 	}
 
-	
 }
