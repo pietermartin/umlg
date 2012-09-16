@@ -64,8 +64,6 @@ public class TumlClassOperations extends ClassOperations {
 		Set<Property> result = new HashSet<Property>();
 		for (Property p : getAllOwnedProperties(clazz)) {
 			PropertyWrapper pWrap = new PropertyWrapper(p);
-			// if (!pWrap.isDerived() && (pWrap.isPrimitive() ||
-			// pWrap.isEnumeration() || pWrap.isComponent())) {
 			if ((pWrap.isOne() && !pWrap.isDerived() && !pWrap.isQualifier()) || (pWrap.isOneToMany() && (pWrap.isPrimitive() || pWrap.isEnumeration()))) {
 				result.add(p);
 			}
@@ -73,6 +71,19 @@ public class TumlClassOperations extends ClassOperations {
 		return result;
 	}
 
+	public static Set<Property> getPrimitiveOrEnumOrComponentsPropertiesExcludingCompositeParent(org.eclipse.uml2.uml.Class clazz) {
+		Set<Property> result = new HashSet<Property>();
+		for (Property p : getAllOwnedProperties(clazz)) {
+			PropertyWrapper pWrap = new PropertyWrapper(p);
+			if ((pWrap.isOne() && !pWrap.isDerived() && !pWrap.isQualifier()) || (pWrap.isOneToMany() && (pWrap.isPrimitive() || pWrap.isEnumeration()))) {
+				//Exclude the composite parent
+				if (!(pWrap.getOtherEnd() != null && pWrap.getOtherEnd().isComposite())) {
+					result.add(p);
+				}
+			}
+		}
+		return result;
+	}
 	/*
 	 * These include all properties that are on the other end of an association.
 	 * It does not include inherited properties

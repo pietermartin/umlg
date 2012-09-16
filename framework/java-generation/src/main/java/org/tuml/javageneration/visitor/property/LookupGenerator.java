@@ -34,7 +34,7 @@ public class LookupGenerator extends BaseVisitor implements Visitor<Property> {
 				&& propertyWrapper.getOtherEnd() != null && !(propertyWrapper.getOtherEnd().getType() instanceof Enumeration) && !propertyWrapper.getOtherEnd().isComposite()) {
 			Type compositeParent = findCompositeParent(propertyWrapper);
 			OJAnnotatedClass ojClass = findOJClass(propertyWrapper);
-			generateLookupForOneProperty(compositeParent, ojClass, new PropertyWrapper(propertyWrapper.getOtherEnd()), propertyWrapper);
+			generateLookupForNonCompositeProperty(compositeParent, ojClass, new PropertyWrapper(propertyWrapper.getOtherEnd()), propertyWrapper);
 		}
 	}
 
@@ -42,18 +42,19 @@ public class LookupGenerator extends BaseVisitor implements Visitor<Property> {
 	public void visitAfter(Property p) {
 	}
 
-	public static void generateLookupForOneProperty(Type compositeParent, OJAnnotatedClass ojClass, PropertyWrapper propertyWrapper, PropertyWrapper otherEndPropertyWrapper) {
+	public static void generateLookupForNonCompositeProperty(Type compositeParent, OJAnnotatedClass ojClass, PropertyWrapper propertyWrapper,
+			PropertyWrapper otherEndPropertyWrapper) {
 		OJAnnotatedOperation lookupCompositeParent = new OJAnnotatedOperation(otherEndPropertyWrapper.lookupCompositeParent());
 		lookupCompositeParent.setReturnType(TumlClassOperations.getPathName(compositeParent));
 		ojClass.addToOperations(lookupCompositeParent);
 		OJAnnotatedOperation lookup = new OJAnnotatedOperation(otherEndPropertyWrapper.lookup());
 		lookup.setReturnType(TinkerGenerationUtil.tinkerSet.getCopy().addToGenerics(TumlClassOperations.getPathName(otherEndPropertyWrapper.getType())));
 		ojClass.addToOperations(lookup);
-		buildGetterToCompositeParentX(ojClass, lookupCompositeParent, propertyWrapper, compositeParent);
-		buildGetterToCompositeParent(ojClass, lookup, propertyWrapper, otherEndPropertyWrapper, compositeParent);
+		buildGetterToCompositeParent(ojClass, lookupCompositeParent, propertyWrapper, compositeParent);
+		buildLookupFromCompositeParent(ojClass, lookup, propertyWrapper, otherEndPropertyWrapper, compositeParent);
 	}
 
-	private static void buildGetterToCompositeParentX(OJAnnotatedClass ojClass, OJAnnotatedOperation lookupCompositeParent, PropertyWrapper propertyWrapper, Type compositeParent) {
+	private static void buildGetterToCompositeParent(OJAnnotatedClass ojClass, OJAnnotatedOperation lookupCompositeParent, PropertyWrapper propertyWrapper, Type compositeParent) {
 		// build getter for special case where the non composite lookup of the
 		// same type as the is in the composite tree
 		StringBuilder sb = new StringBuilder();
@@ -66,7 +67,7 @@ public class LookupGenerator extends BaseVisitor implements Visitor<Property> {
 		lookupCompositeParent.getBody().addToStatements(sb.toString());
 	}
 
-	private static void buildGetterToCompositeParent(OJAnnotatedClass ojClass, OJAnnotatedOperation lookup, PropertyWrapper propertyWrapper,
+	private static void buildLookupFromCompositeParent(OJAnnotatedClass ojClass, OJAnnotatedOperation lookup, PropertyWrapper propertyWrapper,
 			PropertyWrapper otherEndPropertyWrapper, Type compositeParent) {
 		// build getter for special case where the non composite lookup of the
 		// same type as the is in the composite tree
@@ -84,7 +85,15 @@ public class LookupGenerator extends BaseVisitor implements Visitor<Property> {
 		for (String string : getterStringsInReverse) {
 			sb.append(string);
 		}
+		sb.append("<" + otherEndPropertyWrapper.javaBaseTypePath().getLast() + ">");
 		sb.append("asSet()");
+		// Ensure that one to one have a empty other side.
+		// Eg., can only display rings in the dropdown that are not already on a
+		// finger
+		if (propertyWrapper.isOneToOne()) {
+			sb.append(".select(" + constructBooleanEvaluateExpressionForType(propertyWrapper, otherEndPropertyWrapper) + ")");
+			ojClass.addToImports(TinkerGenerationUtil.BooleanExpressionEvaluator);
+		}
 		lookup.getBody().addToStatements(sb.toString());
 	}
 
@@ -140,6 +149,11 @@ public class LookupGenerator extends BaseVisitor implements Visitor<Property> {
 
 			constructLookupAsString(ojClass, getterStringsInReverse, otherEndToComposite, compositeParent);
 		}
+	}
+
+	private static String constructBooleanEvaluateExpressionForType(PropertyWrapper otherEndPWrap, PropertyWrapper propertyWrapper) {
+		return "new BooleanExpressionEvaluator<" + propertyWrapper.javaBaseTypePath().getCopy().getLast() + ">(){\n" + "    @Override\n    public Boolean evaluate("
+				+ propertyWrapper.javaBaseTypePath().getLast() + " e)" + "{\n        return e." + otherEndPWrap.getter() + "() == null ;\n    }\n}";
 	}
 
 	private static String constructBodyEvaluateExpressionForType(PropertyWrapper otherEndPWrap, PropertyWrapper propertyWrapper) {

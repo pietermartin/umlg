@@ -200,7 +200,7 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 		} else {
 			block.addToStatements("json.append(\"{\\\"data\\\": [\")");
 		}
-		block.addToStatements("json.append(ToJsonUtil.toJson(parentResource." + pWrap.getter() + "()))");
+		block.addToStatements("json.append(ToJsonUtil.toJsonWithoutCompositeParent(parentResource." + pWrap.getter() + "()))");
 		annotatedClass.addToImports(TinkerGenerationUtil.ToJsonUtil);
 		if (pWrap.isOne()) {
 			block.addToStatements("json.append(\",\")");

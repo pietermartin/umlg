@@ -76,4 +76,10 @@ public class CallEvent extends Event {
 		return null;
 	}
 
+	@Override
+	public String toJsonWithoutCompositeParent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -20,6 +20,7 @@ public class TinkerGenerationUtil {
 
 	
 	public static final OJPathName BodyExpressionEvaluator = new OJPathName("org.tuml.runtime.collection.ocl.BodyExpressionEvaluator");
+	public static final OJPathName BooleanExpressionEvaluator = new OJPathName("org.tuml.runtime.collection.ocl.BooleanExpressionEvaluator");
 	public static final OJPathName Root = new OJPathName("org.tuml.root.Root");
 	public static final OJPathName RootRuntimePropertyEnum = new OJPathName("org.tuml.root.Root.RootRuntimePropertyEnum");
 

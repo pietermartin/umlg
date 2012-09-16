@@ -76,7 +76,7 @@
 
     function SelectCellEditor(args) {
         var $select;
-        var defaultValue;
+        var currentValue;
         var scope = this;
         var options;
 
@@ -85,43 +85,6 @@
             $select.appendTo(args.container);
             $select.focus();
         };
-
-        function loadSelectOption(args, contextVertexId, defaultValue) {
-            var tumlLookupUri = args.column.options.tumlLookupUri;
-            var adjustedUri = tumlLookupUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
-            $.ajax({
-                type: 'GET',
-                url: adjustedUri,
-                dataType: 'json',
-                contentType: 'application/json; charset=utf-8',
-                asycn: false, 
-                success: function(response){
-                    if (response.meta instanceof Array) {
-                        //Property is a many, meta has 2 properties, one for both sides of the association
-                        //The first one is the parent property, i.e. the context property for which the menu is built
-                        var options = [];
-                        $.each(response.data, function(index, obj) {
-                            var option = {};
-                            option['value'] = obj.id;
-                            option['desc'] = obj.name;
-                            options.push(option);
-                        });
-                        for each (var value in options){
-                            $select.append($('<option />)').val(value.value).html(value.desc));
-                        }
-
-                        $select.val(defaultValue);
-                        $select.chosen();
-                    } else {
-                        //Property is a one
-                        alert('this should not happen');
-                    }
-                },
-                error: function(e){
-
-                }
-            });
-        }
 
         this.destroy = function() {
             $select.remove();
@@ -132,25 +95,64 @@
         };
 
         this.loadValue = function(item) {
-            defaultValue = item[args.column.field];
-            args.column.options.compositeLookupMap.getOrLoadMap(item['id'], $select);
-            //loadSelectOption(args, item['id'], defaultValue);
+            if (!args.column.options.required) {
+                $select.append($('<option />)').val("").html(""));
+            }
+            //currentValue is the vertex id of the oneToOne or manyToOne
+            currentValue = item[args.column.field];
+            //append the current value to the dropdown
+            $select.append($('<option />)').val(currentValue.id).html(currentValue.displayName));
+            args.column.options.rowLookupMap.getOrLoadMap(item['id'], function(compositeParentVertexId){
+                args.column.options.compositeParentLookupMap.getOrLoadMap(compositeParentVertexId, item['id'], function(compositeParentMap) {
+                    $.each(compositeParentMap[compositeParentVertexId], function(index, obj) {
+                        $select.append($('<option />)').val(obj.id).html(obj.displayName));
+                    });
+                    $select.val(currentValue.id);
+                    if (!args.column.options.required) {
+                        $select.chosen({allow_single_deselect: true});
+                    } else {
+                        $select.chosen();
+                    }
+                });
+            });
         };
 
         this.serializeValue = function() {
             if(args.column.options){
-                return $select.val();
+                var options = $select.children();
+                for (var i = 0; i < options.length; i++) {
+                    if (options[i].selected) {
+                        return {id: parseInt($select.val()), displayName: options[i].label};
+                        break;
+                    }
+                }
             }else{
                 return ($select.val() == "yes");
             }
         };
 
         this.applyValue = function(item,state) {
-            item[args.column.field] = parseInt(state);
+            var previousValue = item[args.column.field];
+            item[args.column.field] = state;
+            //remove state from the map and add the previousValue
+            args.column.options.rowLookupMap.getOrLoadMap(item['id'], function(compositeParentVertexId){
+                args.column.options.compositeParentLookupMap.getOrLoadMap(compositeParentVertexId, item['id'], function(compositeParentMap) {
+                    removeByValue(compositeParentMap[compositeParentVertexId], state);
+                    compositeParentMap[compositeParentVertexId].push(previousValue);
+                });
+            });
         };
 
+        function removeByValue(compositeLookup, toRemove) {
+            for(var i=0; i<compositeLookup.length; i++) {
+                if(compositeLookup[i].id == toRemove.id) {
+                    compositeLookup.splice(i, 1);
+                    break;
+                }
+            }
+        }
         this.isValueChanged = function() {
-            return ($select.val() != defaultValue);
+            return ($select.val() != currentValue.id);
         };
 
         this.validate = function() {

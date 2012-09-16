@@ -180,7 +180,7 @@ public interface OclStdLibCollection<E> extends OclAny {
 	 * @param v
 	 * @return
 	 */
-	TinkerSet<E> asSet();
+	<E> TinkerSet<E> asSet();
 
 	/**
 	 * asOrderedSet() : OrderedSet(T)

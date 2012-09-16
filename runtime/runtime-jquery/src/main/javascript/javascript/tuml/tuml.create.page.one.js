@@ -45,9 +45,9 @@ function createPageForOne(data, metaForData, tumlUri) {
         if (property.name == 'id') {
             return $('<input />', {disabled: 'disabled', type:'text', class: 'field', id: property.name + 'Id', name: property.name, value: data[property.name]});
         } else if (!property.onePrimitive && !property.manyPrimitive && !property.composite) {
-            var select = $('<select />', {class: 'chzn-select', style: 'width:350px;',  id: property.name + 'Id', name: property.name});
-            appendLoopupOptionsToSelect(property.tumlLookupUri, data['id'], data[property.name], select);
-            return select;
+            var $select = $('<select />', {class: 'chzn-select', style: 'width:350px;',  id: property.name + 'Id', name: property.name});
+            appendLoopupOptionsToSelect(property.tumlLookupUri, property.lower > 0, data['id'], data[property.name], $select);
+            return $select;
         } else if (property.fieldType == 'String') {
             return $('<input />', {type:'text', class: 'field', id: property.name + 'Id', name: property.name, value: data[property.name]});
         } else if (property.fieldType == 'Integer') {
@@ -63,11 +63,17 @@ function createPageForOne(data, metaForData, tumlUri) {
         }
     }
 
-    function appendLoopupOptionsToSelect(tumlLookupUri, contextVertexId, defaultValue, $select) {
+    function appendLoopupOptionsToSelect(tumlLookupUri, required, contextVertexId, currentValue, $select) {
         var adjustedUri = tumlLookupUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
         var jqxhr = $.getJSON(adjustedUri, function(response, b, c) {
             var contextVertexId = tumlUri.match(/\d+/);
             if (response.meta instanceof Array) {
+                //if not a required field add a black value
+                if (!required) {
+                    $select.append($('<option />)').val("").html(""));
+                }
+                //append the current value to the dropdown
+                $select.append($('<option />)').val(currentValue.id).html(currentValue.displayName));
                 //Property is a many, meta has 2 properties, one for both sides of the association
                 //The first one is the parent property, i.e. the context property for which the menu is built
                 var options = [];
@@ -80,8 +86,8 @@ function createPageForOne(data, metaForData, tumlUri) {
                 for each (var value in options){
                     $select.append($('<option />)').val(value.value).html(value.desc));
                 }
-                $select.val(defaultValue);
-                $select.chosen();
+                $select.val(currentValue.id);
+                $select.chosen({allow_single_deselect: true});
             } else {
                 //Property is a one
                 alert('this should not happen');
@@ -94,22 +100,30 @@ function createPageForOne(data, metaForData, tumlUri) {
     function fieldsToJson() {
         var dataToSend = {};
         $.each(metaForData.properties, function(index, property) {
-            if (property.onePrimitive) {
-                if (property.fieldType == 'Integer' || property.fieldType == 'Long') {
-                    dataToSend[property.name] = parseInt($('#' + property.name + 'Id').val());
-                } else if (property.fieldType == 'String') {
-                    dataToSend[property.name] = $('#' + property.name + 'Id').val();
-                } else if (property.fieldType == 'Boolean') {
-                    dataToSend[property.name] = $('#' + property.name + 'Id').attr("checked") == "checked";
+            if (property.name !== 'id' && property.name !== 'uri') {
+                if (property.onePrimitive) {
+                    if (property.fieldType == 'Integer' || property.fieldType == 'Long') {
+                        dataToSend[property.name] = parseInt($('#' + property.name + 'Id').val());
+                    } else if (property.fieldType == 'String') {
+                        dataToSend[property.name] = $('#' + property.name + 'Id').val();
+                    } else if (property.fieldType == 'Boolean') {
+                        dataToSend[property.name] = $('#' + property.name + 'Id').attr("checked") == "checked";
+                    }
+                } else if (!property.onePrimitive && !property.manyPrimitive && !property.inverseComposite) {
+                    var $select = $('#' + property.name + 'Id');
+                    var options = $select.children();
+                    for (var i = 0; i < options.length; i++) {
+                        if (options[i].selected) {
+                            dataToSend[property.name]= {id: parseInt($select.val()), displayName: options[i].label};
+                            break;
+                        }
+                    }
                 }
-            } else if (!property.onePrimitive && !property.manyPrimitive && !property.composite) {
-                dataToSend[property.name] = parseInt($('#' + property.name + 'Id').val());
-            }
-        });
-        var result = JSON.stringify(dataToSend);
-        return result;
+            }});
+            var result = JSON.stringify(dataToSend);
+            return result;
+        }
+
+        init();
+
     }
-
-    init();
-
-}

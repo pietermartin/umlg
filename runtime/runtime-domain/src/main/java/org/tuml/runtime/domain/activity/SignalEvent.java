@@ -103,5 +103,11 @@ public class SignalEvent extends Event {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public String toJsonWithoutCompositeParent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }

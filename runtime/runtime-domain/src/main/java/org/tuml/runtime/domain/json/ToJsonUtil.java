@@ -21,6 +21,22 @@ public class ToJsonUtil {
 		return json.toString();
 	}
 
+	public static String toJsonWithoutCompositeParent(Collection<? extends PersistentObject> entities) {
+		StringBuilder json = new StringBuilder();
+		if (entities != null) {
+			int count = 0;
+			for (PersistentObject p : entities) {
+				count++;
+				json.append(p.toJsonWithoutCompositeParent());
+				if (count != entities.size()) {
+					json.append(",");
+				}
+			}
+		}
+		return json.toString();
+	}
+
+
 	public static String toJson(PersistentObject entity) {
 		if (entity != null) {
 			StringBuilder json = new StringBuilder();
@@ -31,4 +47,13 @@ public class ToJsonUtil {
 		}
 	}
 
+	public static String toJsonWithoutCompositeParent(PersistentObject entity) {
+		if (entity != null) {
+			StringBuilder json = new StringBuilder();
+			json.append(entity.toJsonWithoutCompositeParent());
+			return json.toString();
+		} else {
+			return "";
+		}
+	}
 }

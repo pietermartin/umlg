@@ -33,6 +33,7 @@ public class TumlRestletServerComponent extends Component {
 
 		GraphDb.setDb(createNakedGraph());
 		createDefaultData();
+//		create1000000();
 
 		// Set basic properties
 		setName("RESTful Mail Server component");
@@ -63,8 +64,8 @@ public class TumlRestletServerComponent extends Component {
 				hand.setName("hand" + j);
 				hand.setTestNumber(i + 1);
 				hand.setTestBoolean(false);
-				hand.setTestUnlimitedNatural(1 +j * 10000000L);
-				
+				hand.setTestUnlimitedNatural(1 + j * 10000000L);
+
 				for (int k = 0; k < 5; k++) {
 					Finger finger = new Finger(hand);
 					finger.setName("finger" + k);
@@ -73,6 +74,8 @@ public class TumlRestletServerComponent extends Component {
 					ring.setName("ring" + i + j + k);
 					finger.setRing(ring);
 				}
+				Ring ring = new Ring(human);
+				ring.setName("ringExtra" + i + j);
 			}
 		}
 
@@ -88,6 +91,37 @@ public class TumlRestletServerComponent extends Component {
 		GraphDb.getDb().stopTransaction(Conclusion.SUCCESS);
 	}
 
+	private void create1000000() {
+		GraphDb.getDb().startTransaction();
+		for (int i = 0; i < 1; i++) {
+			Human human = new Human(true);
+			human.setName("human1" + i);
+			human.setName2("human2" + i);
+
+			for (int j = 0; j < 1; j++) {
+				Hand hand = new Hand(human);
+				hand.setName("hand" + j);
+				hand.setTestNumber(i + 1);
+				hand.setTestBoolean(false);
+				hand.setTestUnlimitedNatural(1 + j * 10000000L);
+
+				for (int k = 0; k < 100000; k++) {
+					if (k % 1000 == 0) {
+						System.out.println(k);
+					}
+					Finger finger = new Finger(hand);
+					finger.setName("finger" + k);
+
+					Ring ring = new Ring(human);
+					ring.setName("ring" + i + j + k);
+					finger.setRing(ring);
+				}
+				Ring ring = new Ring(human);
+				ring.setName("ringExtra" + i + j);
+			}
+		}
+		GraphDb.getDb().stopTransaction(Conclusion.SUCCESS);
+	}
 	protected NakedGraph createNakedGraph() {
 		Properties properties = new Properties();
 		try {

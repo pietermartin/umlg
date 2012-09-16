@@ -39,7 +39,7 @@ public class ClassInterfacePropertyLookupGenerator extends BaseVisitor implement
 					&& !propertyWrapper.getOtherEnd().isComposite()) {
 
 				Type compositeParent = LookupGenerator.findCompositeParent(propertyWrapper);
-				LookupGenerator.generateLookupForOneProperty(compositeParent, findOJClass(clazz), new PropertyWrapper(propertyWrapper.getOtherEnd()), propertyWrapper);
+				LookupGenerator.generateLookupForNonCompositeProperty(compositeParent, findOJClass(clazz), new PropertyWrapper(propertyWrapper.getOtherEnd()), propertyWrapper);
 			}
 		}
 	}

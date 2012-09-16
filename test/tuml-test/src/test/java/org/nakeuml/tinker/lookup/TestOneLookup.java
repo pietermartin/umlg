@@ -118,8 +118,11 @@ public class TestOneLookup extends BaseLocalDbTest {
 		s2.setName("s2");
 		c1.addToSpook(s1);
 		c2.addToSpook(s2);
+		Creature c3 = new Creature(g);
+		Spook s3 = new Spook(g);
 		db.stopTransaction(Conclusion.SUCCESS);
 
+		//One plus itself
 		Assert.assertEquals(2, c1.lookupSpook().size());
 		Assert.assertEquals(2, c2.lookupSpook().size());
 		Assert.assertEquals(2, s1.lookupCreature().size());

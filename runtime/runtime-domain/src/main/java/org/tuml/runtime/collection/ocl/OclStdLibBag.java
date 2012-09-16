@@ -160,7 +160,7 @@ public interface OclStdLibBag<E> extends OclStdLibCollection<E> {
 	 * </pre>
 	 */
 	@Override
-	TinkerSet<E> asSet();
+	<E> TinkerSet<E> asSet();
 
 	/**
 	 * asOrderedSet() : OrderedSet(T)

@@ -10,33 +10,6 @@ function createGrid(data, metaForData, tumlUri) {
     var grid;
     var columns = [];
     var columnFilters = {};
-
-    function renderSparkline(cellNode, row, dataContext, colDef) {
-        var property;
-        for (i = 0; i < metaForData.properties.length; i++) {
-            if (metaForData.properties[i].name = colDef.name) {
-                property = metaForData.properties[i]; 
-                break;
-            }
-        }
-        var adjustedUri = property['tumlUri'].replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), dataContext['id']);
-        var result = {};
-        $.ajax({
-            type: 'GET',
-            url: adjustedUri,
-            dataType: 'json',
-            contentType: 'application/json; charset=utf-8',
-            asycn: false, 
-            success: function(response){
-                result = response.data;
-                $(cellNode).html(result.name);
-            },
-            error: function(e){
-
-            }
-        });
-    }
-
     var lookupColumns;
 
     $.each(metaForData.properties, function(index, property) {
@@ -61,21 +34,12 @@ function createGrid(data, metaForData, tumlUri) {
                     editor: selectEditor(property),
                     validator: requiredFieldValidator,
                     formatter: selectFormatter(property),
-                    options: {tumlLookupUri: property.tumlLookupUri, compositeLookupMap: new CompositeLookupMap(property.tumlCompositeParentLookupUri, property.tumlLookupUri)},
-                    asyncPostRender: selectAsynPostRenderer(property),
+                    options: {required: property.lower > 0, tumlLookupUri: property.tumlLookupUri, rowLookupMap: new RowLookupMap(property.tumlCompositeParentLookupUri), compositeParentLookupMap: new CompositeParentLookupMap(property.tumlLookupUri)},
                     width: 120
                 });
             }
         }
     });
-
-    function selectAsynPostRenderer(property) {
-        if (property.name !== 'uri' && !property.onePrimitive && !property.manyPrimitive && !property.composite) {
-            return renderSparkline;
-        } else {
-            return null;
-        }
-    }
 
     function selectFormatter(property) {
         if (property.name == 'uri') {
@@ -83,9 +47,10 @@ function createGrid(data, metaForData, tumlUri) {
         } else if (property.name == 'id') {
             return null;
         } else if (!property.onePrimitive && !property.manyPrimitive && !property.composite) {
-            return function waitingFormatter(value) {
-                return "wait...";
+            return function waitingFormatter(row, cell, value, columnDef, dataContext) {
+                return value.displayName;
             };
+            return null;
         } else if (property.fieldType == 'String') {
             return  null; 
         } else if (property.fieldType == 'Boolean') {
@@ -121,7 +86,7 @@ function createGrid(data, metaForData, tumlUri) {
         editable: true,
         enableAddRow: true,
         enableCellNavigation: true,
-        asyncEditorLoading: true,
+        asyncEditorLoading: false,
         enableAsyncPostRender: true,
         forceFitColumns: false,
         topPanelHeight: 25
@@ -305,7 +270,14 @@ function createGrid(data, metaForData, tumlUri) {
                 for (var i = 0; i < metaForData.metaForData.properties.length; i++) {
                     var property = metaForData.metaForData.properties[i];
                     if (property.name == columnId) {
-                        if (property.fieldType == 'String') {
+                        if (!property.onePrimitive && !property.manyPrimitive && !property.composite) {
+                            if (item[c.field].displayName == undefined &&  item[c.field] != columnFilters[columnId]) {
+                                return false;
+                            }
+                            if (item[c.field].displayName !== undefined && item[c.field].displayName.indexOf(columnFilters[columnId]) == -1) {
+                                return false;
+                            }
+                        } else if (property.fieldType == 'String') {
                             if (item[c.field].indexOf(columnFilters[columnId]) == -1) {
                                 return false;
                             }

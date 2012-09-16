@@ -20,9 +20,9 @@ import org.tuml.javageneration.util.TinkerGenerationUtil;
 import org.tuml.javageneration.util.TumlClassOperations;
 import org.tuml.restlet.util.TumlRestletGenerationUtil;
 
-public class CompositeParentResourceBuilder extends BaseServerResourceBuilder implements Visitor<Property> {
+public class LookupCompositeParentResourceBuilder extends BaseServerResourceBuilder implements Visitor<Property> {
 
-	public CompositeParentResourceBuilder(Workspace workspace) {
+	public LookupCompositeParentResourceBuilder(Workspace workspace) {
 		super(workspace);
 	}
 
@@ -90,10 +90,10 @@ public class CompositeParentResourceBuilder extends BaseServerResourceBuilder im
 	
 	private void buildToJson(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass, OJBlock block) {
 		block.addToStatements("StringBuilder json = new StringBuilder()");
-		block.addToStatements("json.append(\"{\\\"data\\\": [\")");
+		block.addToStatements("json.append(\"{\\\"data\\\": \")");
 		block.addToStatements("json.append(ToJsonUtil.toJson(parentResource." + pWrap.lookupCompositeParent() + "()))");
 		annotatedClass.addToImports(TinkerGenerationUtil.ToJsonUtil);
-		block.addToStatements("json.append(\"],\")");
+		block.addToStatements("json.append(\",\")");
 		block.addToStatements("json.append(\" \\\"meta\\\" : [\")");
 		block.addToStatements("json.append(" + TumlClassOperations.propertyEnumName(pWrap.getOwningType()) + ".asJson())");
 		annotatedClass.addToImports(TumlClassOperations.getPathName(pWrap.getOwningType()).append(TumlClassOperations.propertyEnumName(pWrap.getOwningType())));

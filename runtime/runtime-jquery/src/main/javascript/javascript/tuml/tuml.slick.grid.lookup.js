@@ -1,7 +1,7 @@
-function CompositeLookupMap(uriToCompositeParent, lookupUri) {
-    var compositeParentMap = {};
-    this.getOrLoadMap = function(rowVertexId,$select) {
-        if (compositeParentMap[rowVertexId] == undefined) {
+function RowLookupMap(uriToCompositeParent) {
+    var rowLookupMap = {};
+    this.getOrLoadMap = function(rowVertexId, callBack) {
+        if (rowLookupMap[rowVertexId] == undefined) {
             var adjustedUri = uriToCompositeParent.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), rowVertexId);
             $.ajax({
                 type: 'GET',
@@ -9,44 +9,42 @@ function CompositeLookupMap(uriToCompositeParent, lookupUri) {
                 dataType: 'json',
                 contentType: 'application/json; charset=utf-8',
                 success: function(response){
-                    getLookupData(rowVertexId, $select, compositeParentMap[response.data.id]);
+                    rowLookupMap[rowVertexId] = {compositeId: response.data.id}; 
+                    callBack(response.data.id);
                 },
                 error: function(e){
                     alert(e);
                 }
             });
+        } else {
+            callBack(rowLookupMap[rowVertexId].compositeId);
         }
-        return compositeParentMap;
     };
+}
 
-    function getLookupData(rowVertexId, $select, compositeParentMapItem) {
-        var adjustedUri = lookupUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), rowVertexId);
-        $.ajax({
-            type: 'GET',
-            url: adjustedUri,
-            dataType: 'json',
-            contentType: 'application/json; charset=utf-8',
-            success: function(response){
-                compositeParentMapItem = response.data;
-                //Property is a many, meta has 2 properties, one for both sides of the association
-                //The first one is the parent property, i.e. the context property for which the menu is built
-                var options = [];
-                $.each(response.data, function(index, obj) {
-                    var option = {};
-                    option['value'] = obj.id;
-                    option['desc'] = obj.name;
-                    options.push(option);
-                });
-                for each (var value in options){
-                    $select.append($('<option />)').val(value.value).html(value.desc));
+function CompositeParentLookupMap( lookupUri) {
+    var compositeParentLookupMap = {};
+    this.getOrLoadMap = function (compositeParentVertexId, rowVertexId, callBack) {
+        if (compositeParentLookupMap[compositeParentVertexId] == undefined) {
+            var adjustedUri = lookupUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), rowVertexId);
+            $.ajax({
+                type: 'GET',
+                url: adjustedUri,
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function(response){
+                    compositeParentLookupMap[compositeParentVertexId] = [];
+                    for (var i = 0; i < response.data.length; i++) {
+                        compositeParentLookupMap[compositeParentVertexId].push({id: parseInt(response.data[i].id), displayName: response.data[i].name});
+                    }
+                    callBack(compositeParentLookupMap);
+                },
+                error: function(e){
+                    alert(e);
                 }
-
-                $select.val(defaultValue);
-                $select.chosen();
-            },
-            error: function(e){
-                alert(e);
-            }
-        });
+            });
+        } else {
+            callBack(compositeParentLookupMap);
+        }
     }
 }
