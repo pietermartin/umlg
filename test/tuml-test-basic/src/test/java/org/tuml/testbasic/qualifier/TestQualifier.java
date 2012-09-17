@@ -4,7 +4,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 import org.tuml.qualifier.Angel;
-import org.tuml.qualifier.God;
+import org.tuml.qualifier.God1;
 import org.tuml.qualifier.Nature;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
@@ -15,7 +15,7 @@ public class TestQualifier extends BaseLocalDbTest {
 	@Test
 	public void testQualifier() {
 		db.startTransaction();
-		God god = new God(true);
+		God1 god = new God1(true);
 		god.setName("God");
 		Nature nature1 = new Nature(true);
 		nature1.setNatureName("natureName1");
@@ -28,7 +28,7 @@ public class TestQualifier extends BaseLocalDbTest {
 		nature3.addToGod(god);
 		db.stopTransaction(Conclusion.SUCCESS);
 		
-		God testGod = new God(god.getVertex());
+		God1 testGod = new God1(god.getVertex());
 		Nature testNature = testGod.getNatureForNatureQualifier1("natureName2");
 		Assert.assertNotNull(testNature);
 		testNature = testGod.getNatureForNatureQualifier1("natureNameX");
@@ -38,7 +38,7 @@ public class TestQualifier extends BaseLocalDbTest {
 	@Test
 	public void testQualifiedWithMultipleQualifiers() {
 		db.startTransaction();
-		God god = new God(true);
+		God1 god = new God1(true);
 		god.setName("God");
 		Angel angel1 = new Angel(true);
 		angel1.setName("angelName1");
@@ -54,7 +54,7 @@ public class TestQualifier extends BaseLocalDbTest {
 		angel3.addToGod(god);
 		db.stopTransaction(Conclusion.SUCCESS);
 		
-		God testGod = new God(god.getVertex());
+		God1 testGod = new God1(god.getVertex());
 		Angel testAngel = testGod.getAngelForAngelNameQualifierAngelRankQualifier("angelName1", 1);
 		Assert.assertNotNull(testAngel);
 		testAngel = testGod.getAngelForAngelNameQualifierAngelRankQualifier("angelName1", 2);

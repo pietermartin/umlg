@@ -1,5 +1,6 @@
 package org.tuml.javageneration.util;
 
+import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.MultiplicityElement;
 import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.uml2.uml.Property;

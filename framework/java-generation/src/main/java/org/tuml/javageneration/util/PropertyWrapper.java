@@ -19,7 +19,6 @@ import org.eclipse.uml2.uml.Dependency;
 import org.eclipse.uml2.uml.Deployment;
 import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Enumeration;
-import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.LiteralString;
 import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.Namespace;
@@ -47,6 +46,10 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 	public PropertyWrapper(Property property) {
 		super(property);
 		this.property = property;
+	}
+
+	public boolean isDataType() {
+		return getType() instanceof DataType;
 	}
 
 	public boolean hasLookup() {
@@ -1132,36 +1135,6 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 		return this.property.isNavigable();
 	}
 
-	@Override
-	public boolean validateNonLeafRedefinition(DiagnosticChain arg0, Map<Object, Object> arg1) {
-		throw new RuntimeException("Not supported");
-	}
-
-	@Override
-	public Interface getInterface() {
-		throw new RuntimeException("Not supported");
-	}
-
-	@Override
-	public boolean isID() {
-		throw new RuntimeException("Not supported");
-	}
-
-	@Override
-	public void setInterface(Interface arg0) {
-		throw new RuntimeException("Not supported");
-	}
-
-	@Override
-	public void setIsID(boolean arg0) {
-		throw new RuntimeException("Not supported");
-	}
-
-	@Override
-	public void setRealDefaultValue(double arg0) {
-		throw new RuntimeException("Not supported");
-	}
-
 	public boolean isNumber() {
 		return getType() instanceof PrimitiveType && (getType().getName().equals("Integer") || getType().getName().equals("UnlimitedNatural"));
 	}
@@ -1188,5 +1161,19 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 
 	public String lookupCompositeParent() {
 		return "lookupCompositeParent" + StringUtils.capitalize(fieldname());
+	}
+
+	@Override
+	public boolean validateNavigableReadonly(DiagnosticChain diagnostics, Map<Object, Object> context) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean isDate() {
+		return getType() instanceof DataType && TumlDataTypeOperation.isDate((DataType) getType());
+	}
+
+	public boolean isEmail() {
+		return getType() instanceof DataType && TumlDataTypeOperation.isEmail((DataType) getType());
 	}
 }

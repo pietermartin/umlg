@@ -33,8 +33,12 @@ public class LookupGenerator extends BaseVisitor implements Visitor<Property> {
 		if (!propertyWrapper.isComposite() && !(propertyWrapper.getType() instanceof Enumeration) && !propertyWrapper.isDerived() && !propertyWrapper.isQualifier()
 				&& propertyWrapper.getOtherEnd() != null && !(propertyWrapper.getOtherEnd().getType() instanceof Enumeration) && !propertyWrapper.getOtherEnd().isComposite()) {
 			Type compositeParent = findCompositeParent(propertyWrapper);
-			OJAnnotatedClass ojClass = findOJClass(propertyWrapper);
-			generateLookupForNonCompositeProperty(compositeParent, ojClass, new PropertyWrapper(propertyWrapper.getOtherEnd()), propertyWrapper);
+			if (compositeParent != null) {
+				OJAnnotatedClass ojClass = findOJClass(propertyWrapper);
+				generateLookupForNonCompositeProperty(compositeParent, ojClass, new PropertyWrapper(propertyWrapper.getOtherEnd()), propertyWrapper);
+			} else {
+				//TODO allInstances
+			}
 		}
 	}
 

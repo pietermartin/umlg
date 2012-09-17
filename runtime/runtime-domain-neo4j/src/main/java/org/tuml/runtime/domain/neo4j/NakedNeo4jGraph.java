@@ -250,7 +250,9 @@ public class NakedNeo4jGraph implements NakedGraph {
 	public <T> T instantiateClassifier(Long id) {
 		try {
 			Vertex v = neo4jGraph.getVertex(id);
-			Class<?> c = schemaHelper.getClassNames().get((String) v.getProperty("className"));
+			//TODO reimplement schemaHelper
+			Class<?> c = Class.forName((String) v.getProperty("className"));
+//			Class<?> c = schemaHelper.getClassNames().get((String) v.getProperty("className"));
 			return (T) c.getConstructor(Vertex.class).newInstance(v);
 		} catch (Exception e) {
 			throw new RuntimeException(e);

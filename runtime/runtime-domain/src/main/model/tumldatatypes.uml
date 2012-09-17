@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:uml="http://www.eclipse.org/uml2/3.0.0/UML" xmi:id="_K8N1MAD6EeKS1vh1F4YVWQ" name="tumldatatypes">
+  <packagedElement xmi:type="uml:DataType" xmi:id="_OGOTEAD6EeKS1vh1F4YVWQ" name="DateTime"/>
+  <packagedElement xmi:type="uml:DataType" xmi:id="_PyFX8AD6EeKS1vh1F4YVWQ" name="Email"/>
+  <packagedElement xmi:type="uml:DataType" xmi:id="_Q1ofoAD6EeKS1vh1F4YVWQ" name="InternationPhoneNumber"/>
+  <packagedElement xmi:type="uml:DataType" xmi:id="_UFUuwAD6EeKS1vh1F4YVWQ" name="LocalPhoneNumber"/>
+  <packagedElement xmi:type="uml:DataType" xmi:id="_Yd2OMAD6EeKS1vh1F4YVWQ" name="Video"/>
+  <packagedElement xmi:type="uml:DataType" xmi:id="_a677sAD6EeKS1vh1F4YVWQ" name="Picture"/>
+</uml:Model>

@@ -11,7 +11,7 @@
 	<packaging>pom</packaging>
 	<name>tuml test pom</name>
 	<modules>
-<!-- 		<module>tuml-test</module> -->
+ 		<module>tuml-test</module>
 		<module>tuml-test-basic</module>
 		<module>tuml-test-ocl</module>
     <module>test-restlet</module>

@@ -58,10 +58,10 @@
 			<groupId>org.eclipse.uml2</groupId>
 			<artifactId>uml</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.eclipse.uml2</groupId>
-			<artifactId>types</artifactId>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.eclipse.uml2</groupId> -->
+<!-- 			<artifactId>types</artifactId> -->
+<!-- 		</dependency> -->
 		<dependency>
 			<groupId>org.eclipse.uml2</groupId>
 			<artifactId>common</artifactId>
@@ -70,14 +70,14 @@
 			<groupId>org.eclipse.uml2.uml</groupId>
 			<artifactId>resources</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.eclipse.uml2.uml.profile</groupId>
-			<artifactId>l2</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.uml2.uml.profile</groupId>
-			<artifactId>l3</artifactId>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.eclipse.uml2.uml.profile</groupId> -->
+<!-- 			<artifactId>l2</artifactId> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.eclipse.uml2.uml.profile</groupId> -->
+<!-- 			<artifactId>l3</artifactId> -->
+<!-- 		</dependency> -->
 		<dependency>
 			<groupId>org.eclipse.emf</groupId>
 			<artifactId>ecore</artifactId>
@@ -106,10 +106,10 @@
 			<groupId>org.eclipse</groupId>
 			<artifactId>ocl</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.eclipse.ocl</groupId>
-			<artifactId>common</artifactId>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.eclipse.ocl</groupId> -->
+<!-- 			<artifactId>common</artifactId> -->
+<!-- 		</dependency> -->
 
 		<dependency>
 			<groupId>commons-io</groupId>

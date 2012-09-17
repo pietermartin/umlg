@@ -2,6 +2,7 @@ package org.nakeuml.tinker.json;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -135,5 +136,15 @@ public class JsonTest extends BaseLocalDbTest {
 		Assert.assertNull(god2FromJson.getReason());
 		Assert.assertEquals("g2", god2FromJson.getName());
 		
+	}
+	
+	@Test
+	public void testDates() {
+		db.startTransaction();
+		God g1 = new God(true);
+		g1.setName("g1");
+		g1.setBeginning(new Date());
+		db.stopTransaction(Conclusion.SUCCESS);
+		System.out.println(g1.toJson());
 	}
 }

@@ -315,7 +315,7 @@ public class Tuml2JavaVisitor extends
 	 */
 	@Override
 	public String visitIntegerLiteralExp(IntegerLiteralExp<Classifier> il) {
-		return (il.getLongSymbol() == null) ? NULL_PLACEHOLDER : il.getLongSymbol().toString();
+		return (il.getIntegerSymbol() == null) ? NULL_PLACEHOLDER : il.getIntegerSymbol().toString();
 	}
 
 	/**

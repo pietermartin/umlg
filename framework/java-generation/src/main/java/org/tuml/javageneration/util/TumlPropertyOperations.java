@@ -6,12 +6,12 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.uml2.uml.Association;
 import org.eclipse.uml2.uml.BehavioredClassifier;
 import org.eclipse.uml2.uml.Classifier;
+import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
-import org.eclipse.uml2.uml.internal.impl.DataTypeImpl;
 import org.eclipse.uml2.uml.internal.operations.PropertyOperations;
 import org.opaeum.java.metamodel.OJPathName;
 import org.opaeum.java.metamodel.OJSimpleStatement;
@@ -171,10 +171,11 @@ public final class TumlPropertyOperations extends PropertyOperations {
 	}
 
 	public static OJPathName getTypePath(Property p) {
-		if (p.getName().equals("testDateTime")) {
-			System.out.println(p.getType().getQualifiedName());
+		if (!(p.getType() instanceof PrimitiveType) && !(p.getType() instanceof Enumeration) && p.getType() instanceof DataType) {
+			return DataTypeEnum.fromDataType((DataType) p.getType());
+		} else {
+			return new OJPathName(Namer.name(p.getType().getNearestPackage()) + "." + TinkerGenerationUtil.umlPrimitiveTypeToJava(p.getType()));
 		}
-		return new OJPathName(Namer.name(p.getType().getNearestPackage()) + "." + TinkerGenerationUtil.umlPrimitiveTypeToJava(p.getType()));
 	}
 
 	public static String getter(Property property) {

@@ -1340,8 +1340,15 @@ public class OperationWrapper implements Operation {
 	}
 
 	@Override
-	public boolean validateNonLeafRedefinition(DiagnosticChain arg0, Map<Object, Object> arg1) {
-		throw new RuntimeException("Not supported");
+	public int lowerBound() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int upperBound() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

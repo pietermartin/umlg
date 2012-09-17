@@ -59,8 +59,8 @@ public enum OclOperationExpEnum implements HandleOperationExp {
 			return MINUS;
 		} else if (name.equals(PredefinedType.FIRST_NAME)) {
 			return FIRST;
-		} else if (name.equals(PredefinedType.TO_STRING_NAME)) {
-			return TO_STRING;
+//		} else if (name.equals(PredefinedType.TO_STRING_NAME)) {
+//			return TO_STRING;
 		} else if (name.equals(PredefinedType.INCLUDING_NAME)) {
 			return INCLUDING;
 		} else if (name.equals(PredefinedType.OCL_IS_INVALID_NAME)) {

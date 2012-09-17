@@ -4,7 +4,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 import org.tuml.inheritence.Biped;
-import org.tuml.inheritence.God;
+import org.tuml.inheritence.God2;
 import org.tuml.inheritence.Mamal;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
@@ -15,7 +15,7 @@ public class TestInheritance extends BaseLocalDbTest {
 	@Test
 	public void testInheritance() {
 		db.startTransaction();
-		God god = new God(true);
+		God2 god = new God2(true);
 		god.setName("GOD");
 		Mamal mamal = new Mamal(god);
 		mamal.setName("mamal");

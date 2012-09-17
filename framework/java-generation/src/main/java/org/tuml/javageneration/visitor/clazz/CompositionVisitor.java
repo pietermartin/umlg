@@ -90,7 +90,7 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
 				OJForStatement forChildToDelete = new OJForStatement("child", pWrap.javaBaseTypePath(), pWrap.getter() + "()");
 				forChildToDelete.getBody().addToStatements("child.delete()");
 				delete.getBody().addToStatements(forChildToDelete);
-			} else {
+			} else if (pWrap.isPrimitive()) {
 				OJIfStatement ifChildToDeleteNotNull = new OJIfStatement(pWrap.getter() + "() != null");
 				ifChildToDeleteNotNull.addToThenPart(pWrap.getter() + "().delete()");
 				delete.getBody().addToStatements(ifChildToDeleteNotNull);
