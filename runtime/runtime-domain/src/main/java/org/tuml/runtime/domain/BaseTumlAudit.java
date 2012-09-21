@@ -1,9 +1,8 @@
 package org.tuml.runtime.domain;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
-import java.util.Date;
 
+import org.joda.time.DateTime;
 import org.tuml.runtime.adaptor.TransactionThreadVar;
 import org.tuml.runtime.util.TinkerFormatter;
 
@@ -22,11 +21,11 @@ public abstract class BaseTumlAudit extends BaseTuml implements TinkerAuditableN
 		return auditVertex;
 	}
 
-	public Date getDeletedOn() {
-		return TinkerFormatter.parse((String) this.vertex.getProperty("deletedOn"));
+	public DateTime getDeletedOn() {
+		return TinkerFormatter.parseDateTime((String) this.vertex.getProperty("deletedOn"));
 	}
 
-	public void setDeletedOn(Date deletedOn) {
+	public void setDeletedOn(DateTime deletedOn) {
 		this.vertex.setProperty("deletedOn", TinkerFormatter.format(deletedOn));
 		if ( TransactionThreadVar.hasNoAuditEntry(getClass().getName() + getUid()) ) {
 			createAuditVertex(false);
@@ -36,7 +35,7 @@ public abstract class BaseTumlAudit extends BaseTuml implements TinkerAuditableN
 
 	public void defaultCreate() {
 		super.defaultCreate();
-		this.vertex.setProperty("deletedOn", TinkerFormatter.format(new Timestamp(1000L * 60 * 60 * 24 * 365 * 1000)));
+		this.vertex.setProperty("deletedOn", TinkerFormatter.format(new DateTime(1000L * 60 * 60 * 24 * 365 * 1000)));
 	}
 
 }

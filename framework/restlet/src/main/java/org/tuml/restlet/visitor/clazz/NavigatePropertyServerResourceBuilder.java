@@ -33,7 +33,7 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 	@Override
 	public void visitBefore(Property p) {
 		PropertyWrapper pWrap = new PropertyWrapper(p);
-		if (!pWrap.isComponent() && !pWrap.isPrimitive() && !pWrap.isEnumeration()) {
+		if (!pWrap.isComponent() && !pWrap.isDataType() && !pWrap.isEnumeration()) {
 			OJAnnotatedClass owner = findOJClass(p);
 
 			OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_" + pWrap.getOtherEnd().getName()
@@ -134,7 +134,7 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 		forArray.getBody().addToStatements("add(parentResource, map)");
 
 		OJField map = new OJField("map", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object"));
-		map.setInitExp("(Map<String, Object>) o;");
+		map.setInitExp("(Map<String, Object>) o");
 		ifArray.setElsePart(new OJBlock());
 		ifArray.getElsePart().addToLocals(map);
 		ifArray.getElsePart().addToStatements("add(parentResource, map)");

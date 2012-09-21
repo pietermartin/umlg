@@ -10,9 +10,9 @@ import org.tuml.generation.Workspace;
 import org.tuml.javageneration.visitor.BaseVisitor;
 import org.tuml.javageneration.visitor.clazz.RuntimePropertyImplementor;
 
-public class AddSelfAndIdLiteralsToRootRuntimeEnum extends BaseVisitor implements Visitor<Model> {
+public class AddSelfIdAndUriLiteralsToRootRuntimeEnum extends BaseVisitor implements Visitor<Model> {
 
-	public AddSelfAndIdLiteralsToRootRuntimeEnum(Workspace workspace) {
+	public AddSelfIdAndUriLiteralsToRootRuntimeEnum(Workspace workspace) {
 		super(workspace);
 	}
 
@@ -30,9 +30,8 @@ public class AddSelfAndIdLiteralsToRootRuntimeEnum extends BaseVisitor implement
 
 	private void addField(OJAnnotatedClass annotatedClass, OJEnum ojEnum, String fieldName) {
 		OJAnnotatedOperation fromLabel = ojEnum.findOperation("fromLabel", new OJPathName("String"));
-		RuntimePropertyImplementor.addEnumLiteral(ojEnum, fromLabel, fieldName, true, false, false, false, true, false, false,
-				true, false, false, 1, 1, false, false,
-				false, false, true, "");
+		RuntimePropertyImplementor.addEnumLiteral(ojEnum, fromLabel, fieldName, true, false, false, false, false, false, true, false, false, true, false, false, false, false, false, false,
+				false, false, false, 1, 1, false, false, false, false, true, "");
 	}
 
 }

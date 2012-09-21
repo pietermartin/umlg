@@ -1,12 +1,14 @@
 package org.tuml.runtime.collection.persistent;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.NakedTinkerIndex;
 import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
@@ -60,7 +62,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected void loadFromVertex() {
-		if (!isOnePrimitive()) {
+		if (!isOnePrimitive() && !isDateTime() && !isDate() && !isTime() && !isEmail() && !isInternationalPhoneNumber() && !isLocalPhoneNumber() && !isVideo() && !isAudio() && !isImage()) {
 			for (Iterator<Edge> iter = getEdges(); iter.hasNext();) {
 				Edge edge = iter.next();
 				E node = null;
@@ -80,6 +82,30 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 					this.internalCollection.add(node);
 				} catch (Exception ex) {
 					throw new RuntimeException(ex);
+				}
+			}
+		} else if (isDateTime()) {
+			String s = (String) this.vertex.getProperty(getLabel());
+			if (s != null) {
+				E property = (E) new DateTime(s);
+				if (property != null) {
+					this.internalCollection.add(property);
+				}
+			}
+		} else if (isDate()) {
+			String s = (String) this.vertex.getProperty(getLabel());
+			if (s != null) {
+				E property = (E) new LocalDate(s);
+				if (property != null) {
+					this.internalCollection.add(property);
+				}
+			}
+		} else if (isTime()) {
+			String s = (String) this.vertex.getProperty(getLabel());
+			if (s != null) {
+				E property = (E) new LocalTime(s);
+				if (property != null) {
+					this.internalCollection.add(property);
 				}
 			}
 		} else {
@@ -130,7 +156,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 			Edge edge = addInternal(e);
 
 			// Edge can only be null on a one primitive
-			if (edge == null && !isOnePrimitive()) {
+			if (edge == null && !isOnePrimitive() && !isDateTime() && !isDate() && !isTime() && !isEmail() && !isInternationalPhoneNumber() && !isLocalPhoneNumber() && !isVideo() && !isAudio() && !isImage()) {
 				throw new IllegalStateException("Edge can only be null on isOne which is a String, Interger, Boolean or primitive");
 			}
 
@@ -219,7 +245,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 			} else if (o.getClass().isEnum()) {
 				v = this.internalVertexMap.get(((Enum<?>) o).name());
 				GraphDb.getDb().removeVertex(v);
-			} else if (isOnePrimitive()) {
+			} else if (isOnePrimitive() || isDateTime() || isDate() || isTime() || isVideo() || isAudio() || isImage()) {
 				// Do nothing
 			} else {
 				v = this.internalVertexMap.get(o);
@@ -261,6 +287,12 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 			this.internalVertexMap.put(((Enum<?>) e).name(), v);
 		} else if (isOnePrimitive()) {
 			this.vertex.setProperty(getLabel(), e);
+		} else if (isDateTime()) {
+			this.vertex.setProperty(getLabel(), ((DateTime) e).toString());
+		} else if (isDate()) {
+			this.vertex.setProperty(getLabel(), ((LocalDate) e).toString());
+		} else if (isTime()) {
+			this.vertex.setProperty(getLabel(), ((LocalTime) e).toString());
 		} else {
 			v = GraphDb.getDb().addVertex(null);
 			v.setProperty("value", e);
@@ -338,7 +370,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 				auditEdge.setProperty("outClass", node.getClass().getName() + "Audit");
 			}
 			if (deletion) {
-				auditEdge.setProperty("deletedOn", TinkerFormatter.format(new Date()));
+				auditEdge.setProperty("deletedOn", TinkerFormatter.format(new DateTime()));
 			}
 		} else if (e.getClass().isEnum()) {
 			Vertex v = GraphDb.getDb().addVertex(null);
@@ -364,7 +396,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 				}
 				if (deletion) {
 					auditEdge.setProperty("transactionNo", GraphDb.getDb().getTransactionCount());
-					auditEdge.setProperty("deletedOn", TinkerFormatter.format(new Date()));
+					auditEdge.setProperty("deletedOn", TinkerFormatter.format(new DateTime()));
 				}
 			}
 		}
@@ -580,6 +612,51 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 	@Override
 	public boolean isOnePrimitive() {
 		return this.tumlRuntimeProperty.isOnePrimitive();
+	}
+
+	@Override
+	public boolean isDateTime() {
+		return this.tumlRuntimeProperty.isDateTime();
+	}
+
+	@Override
+	public boolean isDate() {
+		return this.tumlRuntimeProperty.isDate();
+	}
+
+	@Override
+	public boolean isTime() {
+		return this.tumlRuntimeProperty.isTime();
+	}
+
+	@Override
+	public boolean isEmail() {
+		return this.tumlRuntimeProperty.isEmail();
+	}
+
+	@Override
+	public boolean isInternationalPhoneNumber() {
+		return this.tumlRuntimeProperty.isInternationalPhoneNumber();
+	}
+
+	@Override
+	public boolean isLocalPhoneNumber() {
+		return this.tumlRuntimeProperty.isLocalPhoneNumber();
+	}
+
+	@Override
+	public boolean isVideo() {
+		return this.tumlRuntimeProperty.isVideo();
+	}
+
+	@Override
+	public boolean isAudio() {
+		return this.tumlRuntimeProperty.isAudio();
+	}
+
+	@Override
+	public boolean isImage() {
+		return this.tumlRuntimeProperty.isImage();
 	}
 
 	@Override

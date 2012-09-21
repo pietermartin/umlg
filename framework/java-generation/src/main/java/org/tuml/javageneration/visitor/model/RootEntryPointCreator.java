@@ -52,19 +52,7 @@ public class RootEntryPointCreator extends BaseVisitor implements Visitor<Model>
 		OJField vertex = new OJField("v", TinkerGenerationUtil.vertexPathName);
 		root.addToFields(vertex);
 
-		OJEnum ojEnum = RuntimePropertyImplementor.addTumlRuntimePropertyEnum(root, "RootRuntimePropertyEnum", "Root", new HashSet<Property>(), /*
-																																				 * this
-																																				 * is
-																																				 * true
-																																				 * to
-																																				 * create
-																																				 * *
-																																				 * creating
-																																				 * a
-																																				 * link
-																																				 * to
-																																				 * itself
-																																				 */false, model.getName());
+		OJEnum ojEnum = RuntimePropertyImplementor.addTumlRuntimePropertyEnum(root, "RootRuntimePropertyEnum", "Root", new HashSet<Property>(), false, model.getName());
 
 		@SuppressWarnings("unchecked")
 		List<Class> result = (List<Class>) TumlModelOperations.findElements(model, new Condition() {
@@ -96,7 +84,8 @@ public class RootEntryPointCreator extends BaseVisitor implements Visitor<Model>
 		for (Class clazz : result) {
 			count++;
 			RuntimePropertyImplementor.addEnumLiteral(ojEnum, fromLabel, StringUtils.uncapitalize(TumlClassOperations.className(clazz)), false, false, false, true, false, true,
-					false, false, true, false, -1, 0, false, false, true, false, true, "root" + TumlClassOperations.className(clazz));
+					false, false, false, false, true, false, false, false, true, false, false, false, false, -1, 0, false, false, true, false, true,
+					"root" + TumlClassOperations.className(clazz));
 
 			asJson.getBody().addToStatements("sb.append(" + ojEnum.getName() + "." + StringUtils.uncapitalize(TumlClassOperations.className(clazz)) + ".toJson())");
 			if (count != result.size()) {

@@ -46,7 +46,17 @@ function createGrid(data, metaForData, tumlUri) {
             return TumlSlick.Formatters.Link;
         } else if (property.name == 'id') {
             return null;
-        } else if (!property.onePrimitive && !property.manyPrimitive && !property.composite) {
+        } else if (property.dateTime) {
+            return null;
+        } else if (property.date) {
+            return null;
+        } else if (property.time) {
+            return null;
+        } else if (property.image) {
+            return null;
+        } else if (property.email) {
+            return null;
+        } else if (!property.onePrimitive && !property.manyPrimitive) {
             return function waitingFormatter(row, cell, value, columnDef, dataContext) {
                 return value.displayName;
             };
@@ -63,6 +73,24 @@ function createGrid(data, metaForData, tumlUri) {
     function selectEditor(property) {
         if (property.name == 'uri') {
             return null;
+        } else if (property.date) {
+            return  Tuml.Slick.Editors.Date; 
+        } else if (property.time) {
+            return  Tuml.Slick.Editors.Time; 
+        } else if (property.dateTime) {
+            return  Tuml.Slick.Editors.DateTime; 
+        } else if (property.email) {
+            return null; 
+        } else if (property.internationalPhoneNumber) {
+            return null; 
+        } else if (property.localPhoneNumber) {
+            return null; 
+        } else if (property.video) {
+            return null; 
+        } else if (property.audio) {
+            return null; 
+        } else if (property.image) {
+            return null; 
         } else if (!property.onePrimitive && !property.manyPrimitive && !property.composite) {
             return  Tuml.Slick.Editors.SelectCellEditor; 
         } else if (property.name == 'id') {

@@ -11,9 +11,28 @@ function createPageForOne(data, metaForData, tumlUri) {
             if (!property.inverseComposite && (property.oneToOne || property.manyToOne) && property.name !== 'uri') {
                 var li = $('<li>').appendTo(ul);
                 $('<label />', {for: property.name + 'Id'}).text(property.name).appendTo(li);
-                var input = constructInputForField(property);
-                if (input !== undefined) {
-                    input.appendTo(li);
+                var $input = constructInputForField(property);
+                if ($input !== undefined) {
+                    $input.appendTo(li);
+                    if (property.date) {
+                        $input.datepicker({
+                            showOn: "button",
+                            buttonImageOnly: true,
+                            buttonImage: "../../javascript/slickgrid/images/calendar.gif"
+                        });
+                    } else if (property.time) {
+                        $input.timepicker({
+                            showOn: "button",
+                            buttonImageOnly: true,
+                            buttonImage: "../../javascript/slickgrid/images/calendar.gif"
+                        });
+                    } else if (property.dateTime) {
+                        $input.datetimepicker({
+                            showOn: "button",
+                            buttonImageOnly: true,
+                            buttonImage: "../../javascript/slickgrid/images/calendar.gif"
+                        });
+                    }
                 }
             }
         });
@@ -44,7 +63,17 @@ function createPageForOne(data, metaForData, tumlUri) {
     function constructInputForField(property) {
         if (property.name == 'id') {
             return $('<input />', {disabled: 'disabled', type:'text', class: 'field', id: property.name + 'Id', name: property.name, value: data[property.name]});
-        } else if (!property.onePrimitive && !property.manyPrimitive && !property.composite) {
+        } else if (property.date) {
+            var $input = $("<input type=text />");
+            $input[0].defaultValue = data[property.name];
+            return $input;
+        } else if (property.time) {
+            var $input = $("<input type=text />");
+            return $input;
+        } else if (property.dateTime) {
+            var $input = $("<input type=text />");
+            return $input;
+        } else if (!property.onePrimitive && !property.internationalPhoneNumber && !property.localPhoneNumber && !property.email && !property.video && !property.audio && !property.image && !property.manyPrimitive && !property.composite) {
             var $select = $('<select />', {class: 'chzn-select', style: 'width:350px;',  id: property.name + 'Id', name: property.name});
             appendLoopupOptionsToSelect(property.tumlLookupUri, property.lower > 0, data['id'], data[property.name], $select);
             return $select;
@@ -122,8 +151,8 @@ function createPageForOne(data, metaForData, tumlUri) {
             }});
             var result = JSON.stringify(dataToSend);
             return result;
-        }
-
-        init();
-
     }
+
+    init();
+
+}

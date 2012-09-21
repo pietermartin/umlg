@@ -1,6 +1,5 @@
 package org.tuml.runtime.domain.neo4j;
 
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -8,6 +7,7 @@ import java.util.Set;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
+import org.joda.time.DateTime;
 import org.neo4j.graphdb.event.TransactionData;
 import org.neo4j.graphdb.event.TransactionEventHandler;
 import org.tuml.runtime.adaptor.GraphDb;
@@ -37,7 +37,7 @@ public class NakedTransactionEventHandler<T> implements TransactionEventHandler<
 				constraintViolations.addAll(validator.validate((TumlNode)entity));
 				if (!entity.isTinkerRoot() && entity.getOwningObject() == null) {
 
-					if (entity instanceof BaseTinkerAuditable && ((BaseTinkerAuditable) entity).getDeletedOn().before(new Date())) {
+					if (entity instanceof BaseTinkerAuditable && ((BaseTinkerAuditable) entity).getDeletedOn().isBefore(new DateTime())) {
 						return null;
 					}
 					TransactionThreadEntityVar.clear();

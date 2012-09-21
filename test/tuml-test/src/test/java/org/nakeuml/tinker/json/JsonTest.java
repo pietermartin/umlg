@@ -2,12 +2,17 @@ package org.nakeuml.tinker.json;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.bind.DatatypeConverter;
+
 import junit.framework.Assert;
 
+import org.apache.log4j.helpers.ISO8601DateFormat;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -135,16 +140,30 @@ public class JsonTest extends BaseLocalDbTest {
 		Assert.assertEquals("g1", god1FromJson.getName());
 		Assert.assertNull(god2FromJson.getReason());
 		Assert.assertEquals("g2", god2FromJson.getName());
-		
+		Assert.assertNull(god1FromJson.getBeginning());
+		Assert.assertNull(god2FromJson.getBeginning());
+		Assert.assertNull(god1FromJson.getPet());
+		Assert.assertNull(god2FromJson.getPet());
 	}
 	
 	@Test
-	public void testDates() {
+	public void testDates() throws JsonParseException, JsonMappingException, IOException {
 		db.startTransaction();
 		God g1 = new God(true);
 		g1.setName("g1");
-		g1.setBeginning(new Date());
+		Date beginning = new Date();
+		g1.setBeginning(beginning);
 		db.stopTransaction(Conclusion.SUCCESS);
-		System.out.println(g1.toJson());
+		
+		God testG = new God(g1.getVertex());
+		Assert.assertEquals(beginning, testG.getBeginning());
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		@SuppressWarnings("unchecked")
+		Map<String, Object> jsonMap = objectMapper.readValue(testG.toJson(), Map.class);
+		
+		Calendar c = GregorianCalendar.getInstance();
+		c.setTime(beginning);
+		Assert.assertEquals(DatatypeConverter.printDateTime(c), jsonMap.get("beginning"));
 	}
 }

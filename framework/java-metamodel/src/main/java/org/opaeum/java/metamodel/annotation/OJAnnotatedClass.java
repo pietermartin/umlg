@@ -35,13 +35,13 @@ public class OJAnnotatedClass extends OJClass implements OJAnnotatedElement {
 	}
 
 	public void organizeImports() {
-		
+
 	}
-	
-	public OJAnnotatedOperation findOperation(String name, OJPathName ... pathNames) {
+
+	public OJAnnotatedOperation findOperation(String name, OJPathName... pathNames) {
 		return (OJAnnotatedOperation) super.findOperation(name, Arrays.asList(pathNames));
 	}
-	
+
 	public OJAnnotationValue findAnnotation(OJPathName path) {
 		return AnnotationHelper.getAnnotation(this, path);
 	}
@@ -94,8 +94,7 @@ public class OJAnnotatedClass extends OJClass implements OJAnnotatedElement {
 		return null;
 	}
 
-	private static boolean isMatch(List<OJPathName> pathnames,
-			List<OJPathName> paramTypes) {
+	private static boolean isMatch(List<OJPathName> pathnames, List<OJPathName> paramTypes) {
 		if (paramTypes.size() == pathnames.size()) {
 			for (int i = 0; i < paramTypes.size(); i++) {
 				if (!paramTypes.get(i).equals(pathnames.get(i))) {
@@ -130,9 +129,7 @@ public class OJAnnotatedClass extends OJClass implements OJAnnotatedElement {
 		classInfo.append("\n");
 		addJavaDocComment(classInfo);
 		if (getAnnotations().size() > 0) {
-			classInfo
-					.append(JavaStringHelpers.indent(JavaUtil
-							.collectionToJavaString(getAnnotations(), "\n"), 0));
+			classInfo.append(JavaStringHelpers.indent(JavaUtil.collectionToJavaString(getAnnotations(), "\n"), 0));
 			classInfo.append("\n");
 		}
 		if (isAbstract()) {
@@ -171,8 +168,7 @@ public class OJAnnotatedClass extends OJClass implements OJAnnotatedElement {
 	}
 
 	public StringBuilder operations() {
-		List<OJOperation> temp = new ArrayList<OJOperation>(
-				this.getOperations());
+		List<OJOperation> temp = new ArrayList<OJOperation>(this.getOperations());
 		Collections.sort(temp, new OJOperationComparator());
 		StringBuilder result = new StringBuilder();
 		result.append(JavaUtil.collectionToJavaString(temp, "\n"));
@@ -181,8 +177,7 @@ public class OJAnnotatedClass extends OJClass implements OJAnnotatedElement {
 
 	protected StringBuilder constructors() {
 		StringBuilder result = new StringBuilder();
-		TreeSet<OJConstructor> treeSet = new TreeSet<OJConstructor>(
-				new OJOperationComparator());
+		TreeSet<OJConstructor> treeSet = new TreeSet<OJConstructor>(new OJOperationComparator());
 		treeSet.addAll(this.getConstructors());
 		result.append(JavaUtil.collectionToJavaString(treeSet, "\n"));
 		return result;
@@ -199,7 +194,6 @@ public class OJAnnotatedClass extends OJClass implements OJAnnotatedElement {
 		result.append(JavaUtil.collectionToJavaString(this.innerEnums, "\n"));
 		return result;
 	}
-	
 
 	protected StringBuilder implementedInterfaces() {
 		StringBuilder result = new StringBuilder();
@@ -270,15 +264,13 @@ public class OJAnnotatedClass extends OJClass implements OJAnnotatedElement {
 		return getPathName().toString();
 	}
 
-	public void removeFromOperations(String internalRemover,
-			List<OJPathName> singletonList) {
+	public void removeFromOperations(String internalRemover, List<OJPathName> singletonList) {
 		Set<OJOperation> methodSet = f_operations.get(internalRemover);
 		if (methodSet != null) {
 			Iterator<OJOperation> iterator = methodSet.iterator();
 			while (iterator.hasNext()) {
 				OJOperation ojOperation = (OJOperation) iterator.next();
-				if (ojOperation.getName().equals(internalRemover)
-						&& ojOperation.paramsEquals(singletonList)) {
+				if (ojOperation.getName().equals(internalRemover) && ojOperation.paramsEquals(singletonList)) {
 					iterator.remove();
 					break;
 				}
@@ -295,15 +287,13 @@ public class OJAnnotatedClass extends OJClass implements OJAnnotatedElement {
 		String oldName = f_name;
 		setName(oldName + "Generated");
 		String result = toJavaString();
-		result = result.replaceAll("[\\(]this[\\)]", "((" + concreteName
-				+ ")this)");
+		result = result.replaceAll("[\\(]this[\\)]", "((" + concreteName + ")this)");
 		setName(oldName);
 		return result;
 	}
 
 	public static void main(String[] args) {
-		System.out.println("this,this;this this)this.".replaceAll("\\bthis\\b",
-				"bla"));
+		System.out.println("this,this;this this)this.".replaceAll("\\bthis\\b", "bla"));
 	}
 
 	public String toConcreteImplementationJavaString() {
@@ -315,8 +305,7 @@ public class OJAnnotatedClass extends OJClass implements OJAnnotatedElement {
 		classInfo.append("\n");
 		this.addJavaDocComment(classInfo);
 		if (this.getAnnotations().size() > 0) {
-			classInfo.append(JavaStringHelpers.indent(JavaUtil
-					.collectionToJavaString(this.getAnnotations(), "\n"), 0));
+			classInfo.append(JavaStringHelpers.indent(JavaUtil.collectionToJavaString(this.getAnnotations(), "\n"), 0));
 			classInfo.append("\n");
 		}
 		if (this.isAbstract()) {
@@ -349,8 +338,7 @@ public class OJAnnotatedClass extends OJClass implements OJAnnotatedElement {
 			sb.append(")");
 			tempConstructors.add(e);
 		}
-		classInfo.append(JavaStringHelpers.indent(
-				JavaUtil.collectionToJavaString(tempConstructors, "\n"), 1));
+		classInfo.append(JavaStringHelpers.indent(JavaUtil.collectionToJavaString(tempConstructors, "\n"), 1));
 		classInfo.append("\n}");
 		return classInfo.toString();
 	}
@@ -358,15 +346,20 @@ public class OJAnnotatedClass extends OJClass implements OJAnnotatedElement {
 	public String getQualifiedName() {
 		return getMyPackage().toString() + "." + getName();
 	}
-	
+
 	public void implementGetter() {
 		for (OJField field : getFields()) {
-			OJAnnotatedOperation getter = new OJAnnotatedOperation((field.getType().getLast().equals("boolean") ? "is" : "get") + StringUtils.capitalize(field.getName()), field.getType());
+			String name = field.getName();
+			if (name.startsWith("_")) {
+				name = name.substring(1);
+			}
+			OJAnnotatedOperation getter = new OJAnnotatedOperation((field.getType().getLast().equals("boolean") ? "is" : "get") + StringUtils.capitalize(name),
+					field.getType());
 			getter.getBody().addToStatements("return this." + field.getName());
 			addToOperations(getter);
 		}
 	}
-	
+
 	public void createConstructorFromFields() {
 		OJConstructor constructor = new OJConstructor();
 		for (OJField field : getFields()) {
@@ -375,7 +368,7 @@ public class OJAnnotatedClass extends OJClass implements OJAnnotatedElement {
 		}
 		addToConstructors(constructor);
 	}
-	
+
 	public int countOperationsStartingWith(String name) {
 		int count = 0;
 		for (OJOperation oper : getOperations()) {
@@ -394,5 +387,5 @@ public class OJAnnotatedClass extends OJClass implements OJAnnotatedElement {
 		}
 		return null;
 	}
-	
+
 }

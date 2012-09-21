@@ -25,102 +25,147 @@ public class RuntimePropertyImplementor {
 
 		OJField isOnePrimitiveField = new OJField();
 		isOnePrimitiveField.setType(new OJPathName("boolean"));
-		isOnePrimitiveField.setName("onePrimitive");
+		isOnePrimitiveField.setName("_onePrimitive");
 		ojEnum.addToFields(isOnePrimitiveField);
+
+		OJField isDate = new OJField();
+		isDate.setType(new OJPathName("boolean"));
+		isDate.setName("_date");
+		ojEnum.addToFields(isDate);
+
+		OJField isDateTime = new OJField();
+		isDateTime.setType(new OJPathName("boolean"));
+		isDateTime.setName("_dateTime");
+		ojEnum.addToFields(isDateTime);
+		
+		OJField isTime = new OJField();
+		isTime.setType(new OJPathName("boolean"));
+		isTime.setName("_time");
+		ojEnum.addToFields(isTime);
+		
+		OJField isEmail = new OJField();
+		isEmail.setType(new OJPathName("boolean"));
+		isEmail.setName("_email");
+		ojEnum.addToFields(isEmail);
+
+		OJField isInternationalPhoneNumber = new OJField();
+		isInternationalPhoneNumber.setType(new OJPathName("boolean"));
+		isInternationalPhoneNumber.setName("_internationalPhoneNumber");
+		ojEnum.addToFields(isInternationalPhoneNumber);
+
+		OJField isLocalPhoneNumber = new OJField();
+		isLocalPhoneNumber.setType(new OJPathName("boolean"));
+		isLocalPhoneNumber.setName("_localPhoneNumber");
+		ojEnum.addToFields(isLocalPhoneNumber);
+
+		OJField isVideo = new OJField();
+		isVideo.setType(new OJPathName("boolean"));
+		isVideo.setName("_video");
+		ojEnum.addToFields(isVideo);
+
+		OJField isAudio = new OJField();
+		isAudio.setType(new OJPathName("boolean"));
+		isAudio.setName("_audio");
+		ojEnum.addToFields(isAudio);
+
+		OJField isImage = new OJField();
+		isImage.setType(new OJPathName("boolean"));
+		isImage.setName("_image");
+		ojEnum.addToFields(isImage);
 
 		OJField isManyPrimitiveField = new OJField();
 		isManyPrimitiveField.setType(new OJPathName("boolean"));
-		isManyPrimitiveField.setName("manyPrimitive");
+		isManyPrimitiveField.setName("_manyPrimitive");
 		ojEnum.addToFields(isManyPrimitiveField);
 
 		OJField isOneEnumerationField = new OJField();
 		isOneEnumerationField.setType(new OJPathName("boolean"));
-		isOneEnumerationField.setName("oneEnumeration");
+		isOneEnumerationField.setName("_oneEnumeration");
 		ojEnum.addToFields(isOneEnumerationField);
 
 		OJField isManyEnumerationField = new OJField();
 		isManyEnumerationField.setType(new OJPathName("boolean"));
-		isManyEnumerationField.setName("manyEnumeration");
+		isManyEnumerationField.setName("_manyEnumeration");
 		ojEnum.addToFields(isManyEnumerationField);
 
 		OJField inverseField = new OJField();
 		inverseField.setType(new OJPathName("boolean"));
-		inverseField.setName("controllingSide");
+		inverseField.setName("_controllingSide");
 		ojEnum.addToFields(inverseField);
 
 		OJField compositeField = new OJField();
 		compositeField.setType(new OJPathName("boolean"));
-		compositeField.setName("composite");
+		compositeField.setName("_composite");
 		ojEnum.addToFields(compositeField);
 
 		OJField inverseCompositeField = new OJField();
 		inverseCompositeField.setType(new OJPathName("boolean"));
-		inverseCompositeField.setName("inverseComposite");
+		inverseCompositeField.setName("_inverseComposite");
 		ojEnum.addToFields(inverseCompositeField);
 
 		OJField labelField = new OJField();
 		labelField.setType(new OJPathName("String"));
-		labelField.setName("label");
+		labelField.setName("_label");
 		ojEnum.addToFields(labelField);
 
 		OJField isOneToOneField = new OJField();
 		isOneToOneField.setType(new OJPathName("boolean"));
-		isOneToOneField.setName("oneToOne");
+		isOneToOneField.setName("_oneToOne");
 		ojEnum.addToFields(isOneToOneField);
 
 		OJField isOneToManyField = new OJField();
 		isOneToManyField.setType(new OJPathName("boolean"));
-		isOneToManyField.setName("oneToMany");
+		isOneToManyField.setName("_oneToMany");
 		ojEnum.addToFields(isOneToManyField);
 
 		OJField isManyToOneField = new OJField();
 		isManyToOneField.setType(new OJPathName("boolean"));
-		isManyToOneField.setName("manyToOne");
+		isManyToOneField.setName("_manyToOne");
 		ojEnum.addToFields(isManyToOneField);
 
 		OJField isManyToManyField = new OJField();
 		isManyToManyField.setType(new OJPathName("boolean"));
-		isManyToManyField.setName("manyToMany");
+		isManyToManyField.setName("_manyToMany");
 		ojEnum.addToFields(isManyToManyField);
 
 		OJField upperField = new OJField();
 		upperField.setType(new OJPathName("int"));
-		upperField.setName("upper");
+		upperField.setName("_upper");
 		ojEnum.addToFields(upperField);
 
 		OJField lowerField = new OJField();
 		lowerField.setType(new OJPathName("int"));
-		lowerField.setName("lower");
+		lowerField.setName("_lower");
 		ojEnum.addToFields(lowerField);
 
 		OJField qualifiedField = new OJField();
 		qualifiedField.setType(new OJPathName("boolean"));
-		qualifiedField.setName("qualified");
+		qualifiedField.setName("_qualified");
 		ojEnum.addToFields(qualifiedField);
 
 		OJField inverseQualifiedField = new OJField();
 		inverseQualifiedField.setType(new OJPathName("boolean"));
-		inverseQualifiedField.setName("inverseQualified");
+		inverseQualifiedField.setName("_inverseQualified");
 		ojEnum.addToFields(inverseQualifiedField);
 
 		OJField orderedField = new OJField();
 		orderedField.setType(new OJPathName("boolean"));
-		orderedField.setName("ordered");
+		orderedField.setName("_ordered");
 		ojEnum.addToFields(orderedField);
 
 		OJField inverseOrderedField = new OJField();
 		inverseOrderedField.setType(new OJPathName("boolean"));
-		inverseOrderedField.setName("inverseOrdered");
+		inverseOrderedField.setName("_inverseOrdered");
 		ojEnum.addToFields(inverseOrderedField);
 
 		OJField uniqueField = new OJField();
 		uniqueField.setType(new OJPathName("boolean"));
-		uniqueField.setName("unique");
+		uniqueField.setName("_unique");
 		ojEnum.addToFields(uniqueField);
 
 		OJField jsonField = new OJField();
 		jsonField.setType(new OJPathName("String"));
-		jsonField.setName("json");
+		jsonField.setName("_json");
 		ojEnum.addToFields(jsonField);
 
 		ojEnum.implementGetter();
@@ -168,15 +213,18 @@ public class RuntimePropertyImplementor {
 		for (Property p : allOwnedProperties) {
 			PropertyWrapper pWrap = new PropertyWrapper(p);
 			if (!(pWrap.isDerived() || pWrap.isDerivedUnion())) {
-				addEnumLiteral(ojEnum, fromLabel, pWrap.fieldname(), pWrap.isPrimitive(), pWrap.isEnumeration(), pWrap.isManyToOne(), pWrap.isMany(), pWrap.isControllingSide(), pWrap.isComposite(),
-						pWrap.isInverseComposite(), pWrap.isOneToOne(), pWrap.isOneToMany(), pWrap.isManyToMany(), pWrap.getUpper(), pWrap.getLower(), pWrap.isQualified(),
-						pWrap.isInverseQualified(), pWrap.isOrdered(), pWrap.isInverseOrdered(), pWrap.isUnique(), TinkerGenerationUtil.getEdgeName(pWrap.getProperty()));
+				addEnumLiteral(ojEnum, fromLabel, pWrap.fieldname(), pWrap.isPrimitive(), pWrap.isDate(), pWrap.isDateTime(), pWrap.isTime(), pWrap.isEmail(), pWrap.isInternationalPhoneNumber(),
+						pWrap.isLocalPhoneNumber(), pWrap.isVideo(), pWrap.isAudio(), pWrap.isImage(), pWrap.isEnumeration(), pWrap.isManyToOne(), pWrap.isMany(),
+						pWrap.isControllingSide(), pWrap.isComposite(), pWrap.isInverseComposite(), pWrap.isOneToOne(), pWrap.isOneToMany(), pWrap.isManyToMany(),
+						pWrap.getUpper(), pWrap.getLower(), pWrap.isQualified(), pWrap.isInverseQualified(), pWrap.isOrdered(), pWrap.isInverseOrdered(), pWrap.isUnique(),
+						TinkerGenerationUtil.getEdgeName(pWrap.getProperty()));
 			}
 		}
 
 		if (!hasCompositeOwner) {
 			// Add in fake property to root
-			addEnumLiteral(ojEnum, fromLabel, modelName, false, false, false, false, false, true, false, false, true, false, -1, 0, false, false, false, false, false, "root" + className);
+			addEnumLiteral(ojEnum, fromLabel, modelName, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, true, true, false, false, -1,
+					0, false, false, false, false, false, "root" + className);
 		}
 		asJson.getBody().addToStatements("sb.append(\"]}\")");
 		asJson.getBody().addToStatements("return sb.toString()");
@@ -184,7 +232,8 @@ public class RuntimePropertyImplementor {
 		return ojEnum;
 	}
 
-	public static void addEnumLiteral(OJEnum ojEnum, OJAnnotatedOperation fromLabel, String fieldName, boolean isPrimitive, boolean isEnumeration, boolean isManyToOne,
+	public static void addEnumLiteral(OJEnum ojEnum, OJAnnotatedOperation fromLabel, String fieldName, boolean isPrimitive, boolean isDate, boolean isDateTime, boolean isTime, boolean isEmail,
+			boolean isInternationalPhoneNumber, boolean isLocalPhoneNumber, boolean isVideo, boolean isAudio, boolean isImage, boolean isEnumeration, boolean isManyToOne,
 			boolean isMany, boolean isControllingSide, boolean isComposite, boolean isInverseComposite, boolean isOneToOne, boolean isOneToMany, boolean isManyToMany,
 			int getUpper, int getLower, boolean isQualified, boolean isInverseQualified, boolean isOrdered, boolean isInverseOrdered, boolean isUnique, String edgeName) {
 
@@ -202,6 +251,51 @@ public class RuntimePropertyImplementor {
 		// opposite end is null it defaults to many
 		propertyOnePrimitiveField.setInitExp(Boolean.toString(isPrimitive && isManyToOne));
 		ojLiteral.addToAttributeValues(propertyOnePrimitiveField);
+
+		OJField propertyDateField = new OJField();
+		propertyDateField.setType(new OJPathName("boolean"));
+		propertyDateField.setInitExp(Boolean.toString(isDate));
+		ojLiteral.addToAttributeValues(propertyDateField);
+
+		OJField propertyDateTimeField = new OJField();
+		propertyDateTimeField.setType(new OJPathName("boolean"));
+		propertyDateTimeField.setInitExp(Boolean.toString(isDateTime));
+		ojLiteral.addToAttributeValues(propertyDateTimeField);
+
+		OJField propertyTimeField = new OJField();
+		propertyTimeField.setType(new OJPathName("boolean"));
+		propertyTimeField.setInitExp(Boolean.toString(isTime));
+		ojLiteral.addToAttributeValues(propertyTimeField);
+
+		OJField propertyEmailField = new OJField();
+		propertyEmailField.setType(new OJPathName("boolean"));
+		propertyEmailField.setInitExp(Boolean.toString(isEmail));
+		ojLiteral.addToAttributeValues(propertyEmailField);
+
+		OJField propertyInternationalPhoneNumberField = new OJField();
+		propertyInternationalPhoneNumberField.setType(new OJPathName("boolean"));
+		propertyInternationalPhoneNumberField.setInitExp(Boolean.toString(isInternationalPhoneNumber));
+		ojLiteral.addToAttributeValues(propertyInternationalPhoneNumberField);
+
+		OJField propertyLocalPhoneNumberField = new OJField();
+		propertyLocalPhoneNumberField.setType(new OJPathName("boolean"));
+		propertyLocalPhoneNumberField.setInitExp(Boolean.toString(isLocalPhoneNumber));
+		ojLiteral.addToAttributeValues(propertyLocalPhoneNumberField);
+
+		OJField propertyVideoField = new OJField();
+		propertyVideoField.setType(new OJPathName("boolean"));
+		propertyVideoField.setInitExp(Boolean.toString(isVideo));
+		ojLiteral.addToAttributeValues(propertyVideoField);
+
+		OJField propertyAudioField = new OJField();
+		propertyAudioField.setType(new OJPathName("boolean"));
+		propertyAudioField.setInitExp(Boolean.toString(isAudio));
+		ojLiteral.addToAttributeValues(propertyAudioField);
+
+		OJField propertyImageField = new OJField();
+		propertyImageField.setType(new OJPathName("boolean"));
+		propertyImageField.setInitExp(Boolean.toString(isImage));
+		ojLiteral.addToAttributeValues(propertyImageField);
 
 		OJField propertyManyPrimitiveField = new OJField();
 		propertyManyPrimitiveField.setType(new OJPathName("boolean"));
@@ -306,6 +400,35 @@ public class RuntimePropertyImplementor {
 		sb.append("\\\"onePrimitive\\\": ");
 		sb.append(propertyOnePrimitiveField.getInitExp());
 		sb.append(", ");
+
+		sb.append("\\\"date\\\": ");
+		sb.append(propertyDateField.getInitExp());
+		sb.append(", ");
+		sb.append("\\\"dateTime\\\": ");
+		sb.append(propertyDateTimeField.getInitExp());
+		sb.append(", ");
+		sb.append("\\\"time\\\": ");
+		sb.append(propertyTimeField.getInitExp());
+		sb.append(", ");
+		sb.append("\\\"email\\\": ");
+		sb.append(propertyEmailField.getInitExp());
+		sb.append(", ");
+		sb.append("\\\"internationalPhoneNumber\\\": ");
+		sb.append(propertyInternationalPhoneNumberField.getInitExp());
+		sb.append(", ");
+		sb.append("\\\"localPhoneNumber\\\": ");
+		sb.append(propertyLocalPhoneNumberField.getInitExp());
+		sb.append(", ");
+		sb.append("\\\"video\\\": ");
+		sb.append(propertyVideoField.getInitExp());
+		sb.append(", ");
+		sb.append("\\\"audio\\\": ");
+		sb.append(propertyAudioField.getInitExp());
+		sb.append(", ");
+		sb.append("\\\"image\\\": ");
+		sb.append(propertyImageField.getInitExp());
+		sb.append(", ");
+		
 		sb.append("\\\"manyPrimitive\\\": ");
 		sb.append(propertyManyPrimitiveField.getInitExp());
 		sb.append(", ");

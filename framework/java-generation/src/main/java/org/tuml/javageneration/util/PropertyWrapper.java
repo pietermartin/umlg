@@ -1176,4 +1176,32 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 	public boolean isEmail() {
 		return getType() instanceof DataType && TumlDataTypeOperation.isEmail((DataType) getType());
 	}
+
+	public boolean isInternationalPhoneNumber() {
+		return getType() instanceof DataType && TumlDataTypeOperation.isInternationalPhoneNumber((DataType) getType());
+	}
+
+	public boolean isLocalPhoneNumber() {
+		return getType() instanceof DataType && TumlDataTypeOperation.isLocalPhoneNumber((DataType) getType());
+	}
+
+	public boolean isVideo() {
+		return getType() instanceof DataType && TumlDataTypeOperation.isVideo((DataType) getType());
+	}
+
+	public boolean isAudio() {
+		return getType() instanceof DataType && TumlDataTypeOperation.isAudio((DataType) getType());
+	}
+
+	public boolean isImage() {
+		return getType() instanceof DataType && TumlDataTypeOperation.isImage((DataType) getType());
+	}
+
+	public boolean isDateTime() {
+		return getType() instanceof DataType && TumlDataTypeOperation.isDateTime((DataType) getType());
+	}
+
+	public boolean isTime() {
+		return getType() instanceof DataType && TumlDataTypeOperation.isTime((DataType) getType());
+	}
 }

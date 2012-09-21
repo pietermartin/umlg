@@ -1,10 +1,9 @@
 package org.tuml.runtime.util;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-
-import javax.xml.bind.DatatypeConverter;
+import org.apache.commons.codec.binary.Base64;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 
 //TODO make this threadvar or something
 /**
@@ -17,19 +16,59 @@ public class TinkerFormatter {
 	// private static final String TINKER_DATE_FORMAT =
 	// "yyyy.MM.dd G 'at' HH-mm-ss z";
 
-	public static Date parse(String date) {
-		// try {
-		return DatatypeConverter.parseDateTime(date).getTime();
-		// return new SimpleDateFormat(TINKER_DATE_FORMAT).parse(date);
-		// } catch (ParseException e) {
-		// throw new RuntimeException(e);
-		// }
+	public static LocalDate parseDate(String date) {
+		if (date != null && !date.isEmpty()) {
+			return LocalDate.parse(date);
+		} else {
+			return null;
+		}
 	}
 
-	public static String format(Date date) {
-		Calendar c = GregorianCalendar.getInstance();
-		c.setTime(date);
-		return DatatypeConverter.printDateTime(c);
-		// return new SimpleDateFormat(TINKER_DATE_FORMAT).format(date);
+	public static DateTime parseDateTime(String dateTime) {
+		if (dateTime != null && !dateTime.isEmpty()) {
+			return DateTime.parse(dateTime);
+		} else {
+			return null;
+		}
+	}
+
+	public static LocalTime parseTime(String time) {
+		if (time != null && !time.isEmpty()) {
+			return LocalTime.parse(time);
+		} else {
+			return null;
+		}
+	}
+
+	public static String format(DateTime dateTime) {
+		if (dateTime != null) {
+			return dateTime.toString();
+		} else {
+			return "";
+		}
+	}
+
+	public static String format(LocalDate date) {
+		if (date != null) {
+			return date.toString();
+		} else {
+			return "";
+		}
+	}
+
+	public static String format(LocalTime time) {
+		if (time != null) {
+			return time.toString();
+		} else {
+			return "";
+		}
+	}
+	
+	public static String encode(byte[] bytes) {
+		return Base64.encodeBase64String(bytes); 
+	}
+	
+	public static byte[] decode(String base64String) {
+		return Base64.decodeBase64(base64String);
 	}
 }

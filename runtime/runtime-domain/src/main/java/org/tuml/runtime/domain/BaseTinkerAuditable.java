@@ -1,8 +1,8 @@
 package org.tuml.runtime.domain;
 
 import java.io.Serializable;
-import java.util.Date;
 
+import org.joda.time.DateTime;
 import org.tuml.runtime.adaptor.TransactionThreadVar;
 import org.tuml.runtime.util.TinkerFormatter;
 
@@ -14,7 +14,7 @@ public abstract class BaseTinkerAuditable extends BaseTumlAudit implements Tinke
 		super();
 	}
 	
-	public void setDeletedOn(Date deletedOn) {
+	public void setDeletedOn(DateTime deletedOn) {
 		super.setDeletedOn(deletedOn);
 		if ( TransactionThreadVar.hasNoAuditEntry(getClass().getName() + getUid()) ) {
 			createAuditVertex(false);

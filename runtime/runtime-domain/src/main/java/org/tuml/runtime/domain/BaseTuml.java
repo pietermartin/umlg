@@ -1,11 +1,10 @@
 package org.tuml.runtime.domain;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
-import java.util.Date;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.joda.time.DateTime;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.memory.TumlMemorySet;
 import org.tuml.runtime.domain.ocl.OclState;
@@ -31,30 +30,30 @@ public abstract class BaseTuml implements TumlNode, Serializable {
 		this.vertex = vertex;
 	}
 
-	public Date getCreatedOn() {
-		return TinkerFormatter.parse((String) this.vertex.getProperty("createdOn"));
+	public DateTime getCreatedOn() {
+		return TinkerFormatter.parseDateTime((String) this.vertex.getProperty("createdOn"));
 	}
 
-	public void setCreatedOn(Date createdOn) {
+	public void setCreatedOn(DateTime createdOn) {
 		this.vertex.setProperty("createdOn", TinkerFormatter.format(createdOn));
 	}
 
-	public Date getUpdatedOn() {
-		return TinkerFormatter.parse((String) this.vertex.getProperty("updatedOn"));
+	public DateTime getUpdatedOn() {
+		return TinkerFormatter.parseDateTime((String) this.vertex.getProperty("updatedOn"));
 	}
 
-	public void setUpdatedOn(Date updatedOn) {
+	public void setUpdatedOn(DateTime updatedOn) {
 		this.vertex.setProperty("updatedOn", TinkerFormatter.format(updatedOn));
 	}
 
 	public void defaultCreate() {
-		setCreatedOn(new Timestamp(System.currentTimeMillis()));
-		setUpdatedOn(new Timestamp(System.currentTimeMillis()));
+		setCreatedOn(new DateTime());
+		setUpdatedOn(new DateTime());
 		getUid();
 	}
 
 	public void defaultUpdate() {
-		setUpdatedOn(new Timestamp(System.currentTimeMillis()));
+		setUpdatedOn(new DateTime());
 	}
 
 	public String getName() {

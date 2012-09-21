@@ -2,6 +2,15 @@ package org.tuml.runtime.collection;
 
 public interface TumlRuntimeProperty {
 	boolean isOnePrimitive();
+	boolean isDateTime();
+	boolean isDate();
+	boolean isTime();
+	boolean isEmail();
+	boolean isInternationalPhoneNumber();
+	boolean isLocalPhoneNumber();
+	boolean isVideo();
+	boolean isAudio();
+	boolean isImage();
 	boolean isManyPrimitive();
 	boolean isOneEnumeration();
 	boolean isManyEnumeration();

@@ -58,6 +58,27 @@
           <ownedAttribute xmi:id="_k7fUoOF_EeGBUJuU-RDn9Q" name="name2" visibility="public">
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
           </ownedAttribute>
+          <ownedAttribute xmi:id="_vxhccAIgEeKS1vh1F4YVWQ" name="birthDateTime">
+            <type xmi:type="uml:DataType" href="tumldatatypes.uml#_OGOTEAD6EeKS1vh1F4YVWQ"/>
+          </ownedAttribute>
+          <ownedAttribute xmi:id="_k-waMALgEeKtFpHFDhpFVA" name="birthDate">
+            <type xmi:type="uml:DataType" href="tumldatatypes.uml#_cohIAQLgEeKtFpHFDhpFVA"/>
+          </ownedAttribute>
+          <ownedAttribute xmi:id="_q43BIALgEeKtFpHFDhpFVA" name="birthTime">
+            <type xmi:type="uml:DataType" href="tumldatatypes.uml#_eqPvMALgEeKtFpHFDhpFVA"/>
+          </ownedAttribute>
+          <ownedAttribute xmi:id="_2HA7oALgEeKtFpHFDhpFVA" name="internationalNumber">
+            <type xmi:type="uml:DataType" href="tumldatatypes.uml#_Q1ofoAD6EeKS1vh1F4YVWQ"/>
+          </ownedAttribute>
+          <ownedAttribute xmi:id="_7Nbb0ALgEeKtFpHFDhpFVA" name="localNumber">
+            <type xmi:type="uml:DataType" href="tumldatatypes.uml#_UFUuwAD6EeKS1vh1F4YVWQ"/>
+          </ownedAttribute>
+          <ownedAttribute xmi:id="_8PTvkALgEeKtFpHFDhpFVA" name="email">
+            <type xmi:type="uml:DataType" href="tumldatatypes.uml#_PyFX8AD6EeKS1vh1F4YVWQ"/>
+          </ownedAttribute>
+          <ownedAttribute xmi:id="_-_xsEALgEeKtFpHFDhpFVA" name="image">
+            <type xmi:type="uml:DataType" href="tumldatatypes.uml#_8vAG0ALhEeKtFpHFDhpFVA"/>
+          </ownedAttribute>
         </packagedElement>
         <packagedElement xmi:type="uml:Association" xmi:id="_-UTBwN4jEeGdB9TPHp60mw" name="A_&lt;human>_&lt;hand>" memberEnd="_-UTBwd4jEeGdB9TPHp60mw _-UB8AN4jEeGdB9TPHp60mw" navigableOwnedEnd="_-UTBwd4jEeGdB9TPHp60mw">
           <ownedEnd xmi:id="_-UTBwd4jEeGdB9TPHp60mw" name="human" visibility="public" type="_6R3uIN4jEeGdB9TPHp60mw" association="_-UTBwN4jEeGdB9TPHp60mw">

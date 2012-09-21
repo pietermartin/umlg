@@ -133,4 +133,58 @@ public class TumlRuntimePropertyImpl implements TumlRuntimeProperty {
 		return false;
 	}
 
+	@Override
+	public boolean isDate() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isEmail() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isInternationalPhoneNumber() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isLocalPhoneNumber() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isVideo() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isAudio() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isImage() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isDateTime() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isTime() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
