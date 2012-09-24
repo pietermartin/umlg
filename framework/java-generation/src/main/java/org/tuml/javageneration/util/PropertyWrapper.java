@@ -29,6 +29,7 @@ import org.eclipse.uml2.uml.ParameterableElement;
 import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.RedefinableElement;
+import org.eclipse.uml2.uml.Stereotype;
 import org.eclipse.uml2.uml.StringExpression;
 import org.eclipse.uml2.uml.TemplateParameter;
 import org.eclipse.uml2.uml.Type;
@@ -36,8 +37,17 @@ import org.eclipse.uml2.uml.Usage;
 import org.eclipse.uml2.uml.ValueSpecification;
 import org.eclipse.uml2.uml.VisibilityKind;
 import org.opaeum.java.metamodel.OJPathName;
+import org.tuml.framework.ModelLoader;
 import org.tuml.javageneration.ocl.TumlOcl2Java;
 import org.tuml.javageneration.ocl.util.TumlCollectionKindEnum;
+import org.tuml.javageneration.validation.Max;
+import org.tuml.javageneration.validation.MaxLength;
+import org.tuml.javageneration.validation.Min;
+import org.tuml.javageneration.validation.MinLength;
+import org.tuml.javageneration.validation.Range;
+import org.tuml.javageneration.validation.RangeLength;
+import org.tuml.javageneration.validation.Url;
+import org.tuml.javageneration.validation.Validation;
 
 public class PropertyWrapper extends MultiplicityWrapper implements Property {
 
@@ -316,6 +326,10 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 
 	public String setter() {
 		return TumlPropertyOperations.setter(this.property);
+	}
+
+	public String validator() {
+		return TumlPropertyOperations.validator(this.property);
 	}
 
 	public boolean isPrimitive() {
@@ -1204,4 +1218,140 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 	public boolean isTime() {
 		return getType() instanceof DataType && TumlDataTypeOperation.isTime((DataType) getType());
 	}
+
+	public DataTypeEnum getDataTypeEnum() {
+		if (getType() instanceof DataType && !(getType() instanceof PrimitiveType) && !(getType() instanceof Enumeration)) {
+			return TumlDataTypeOperation.getDataTypeEnum((DataType) getType());
+		} else {
+			return null;
+		}
+	}
+
+	public boolean hasMaxLength() {
+		Stereotype stereotype = ModelLoader.findStereotype(TumlValidationEnum.MaxLength.name());
+		return property.isStereotypeApplied(stereotype);
+	}
+
+	public boolean hasValidation(TumlValidationEnum tumlValidationEnum) {
+		switch (tumlValidationEnum) {
+		case MaxLength:
+			return hasMaxLength();
+		case MinLength:
+			return hasMinLength();
+		case RangeLength:
+			return hasRangeLength();
+		case Min:
+			return hasMin();
+		case Max:
+			return hasMax();
+		case Range:
+			return hasRange();
+		case URL:
+			return hasUrl();
+		default:
+			break;
+		}
+		return false;
+
+	}
+
+	public List<Validation> getValidations() {
+		List<Validation> result  = new ArrayList<Validation>();
+		List<Stereotype> stereoTypes = ModelLoader.getStereotypes();
+		for (Stereotype stereotype : stereoTypes) {
+			if (property.isStereotypeApplied(stereotype)) {
+				result.add(TumlValidationEnum.fromStereotype(stereotype, this.property));
+			}
+		}
+		return result;
+	}
+	
+	public Validation getValidation(TumlValidationEnum tumlValidationEnum) {
+		switch (tumlValidationEnum) {
+		case MaxLength:
+			return getMaxLength();
+		case MinLength:
+			return getMinLength();
+		case RangeLength:
+			return getRangeLength();
+		case Min:
+			return getMin();
+		case Max:
+			return getMax();
+		case Range:
+			return getRange();
+		case URL:
+			return getUrl();
+		default:
+			break;
+		}
+		return null;
+	}
+
+	public MaxLength getMaxLength() {
+		Stereotype stereotype = ModelLoader.findStereotype(TumlValidationEnum.MaxLength.name());
+		return new MaxLength((Integer) property.getValue(stereotype, "length"));
+	}
+
+	public MinLength getMinLength() {
+		Stereotype stereotype = ModelLoader.findStereotype(TumlValidationEnum.MinLength.name());
+		return new MinLength((Integer) property.getValue(stereotype, "length"));
+	}
+
+	public RangeLength getRangeLength() {
+		Stereotype stereotype = ModelLoader.findStereotype(TumlValidationEnum.RangeLength.name());
+		return new RangeLength((Integer) property.getValue(stereotype, "min"), (Integer) property.getValue(stereotype, "max"));
+	}
+
+	public Max getMax() {
+		Stereotype stereotype = ModelLoader.findStereotype(TumlValidationEnum.Max.name());
+		return new Max((Integer) property.getValue(stereotype, "value"));
+	}
+
+	public Min getMin() {
+		Stereotype stereotype = ModelLoader.findStereotype(TumlValidationEnum.Min.name());
+		return new Min((Integer) property.getValue(stereotype, "value"));
+	}
+
+	public Range getRange() {
+		Stereotype stereotype = ModelLoader.findStereotype(TumlValidationEnum.Range.name());
+		return new Range((Integer) property.getValue(stereotype, "min"), (Integer) property.getValue(stereotype, "max"));
+	}
+
+	public Url getUrl() {
+		Stereotype stereotype = ModelLoader.findStereotype(TumlValidationEnum.URL.name());
+		return new Url((String) property.getValue(stereotype, "protocol"), (String) property.getValue(stereotype, "host"), (Integer) property.getValue(stereotype, "port"),
+				(String) property.getValue(stereotype, "regexp"), (String) property.getValue(stereotype, "flags"));
+	}
+
+	public boolean hasMinLength() {
+		Stereotype stereotype = ModelLoader.findStereotype(TumlValidationEnum.MinLength.name());
+		return property.isStereotypeApplied(stereotype);
+	}
+
+	public boolean hasRangeLength() {
+		Stereotype stereotype = ModelLoader.findStereotype(TumlValidationEnum.RangeLength.name());
+		return property.isStereotypeApplied(stereotype);
+	}
+
+	public boolean hasMin() {
+		Stereotype stereotype = ModelLoader.findStereotype(TumlValidationEnum.Min.name());
+		return property.isStereotypeApplied(stereotype);
+	}
+
+	public boolean hasMax() {
+		Stereotype stereotype = ModelLoader.findStereotype(TumlValidationEnum.Max.name());
+		return property.isStereotypeApplied(stereotype);
+	}
+
+	public boolean hasRange() {
+		Stereotype stereotype = ModelLoader.findStereotype(TumlValidationEnum.Range.name());
+		return property.isStereotypeApplied(stereotype);
+	}
+
+	public boolean hasUrl() {
+		Stereotype stereotype = ModelLoader.findStereotype(TumlValidationEnum.URL.name());
+		return property.isStereotypeApplied(stereotype);
+	}
+
 }

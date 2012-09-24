@@ -26,9 +26,6 @@ public class PropertyVisitor extends BaseVisitor implements Visitor<Property> {
 	public void visitBefore(Property p) {
 		PropertyWrapper propertyWrapper = new PropertyWrapper(p);
 		OJAnnotatedClass owner = findOJClass(p);
-		
-//		Stereotype stereotype = ModelLoader.findStereotype("qualifierAssociation");
-		
 		if (!propertyWrapper.isDerived() && !propertyWrapper.isQualifier() && !propertyWrapper.isForQualifier()) {
 			buildField(owner, propertyWrapper);
 			buildRemover(owner, propertyWrapper);

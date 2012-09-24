@@ -1,6 +1,5 @@
 package org.tuml.javageneration.util;
 
-import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.MultiplicityElement;
 import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.uml2.uml.Property;
@@ -20,6 +19,12 @@ public class TinkerGenerationUtil {
 	public static final String TINKER_DB_NULL = "__NULL__";
 
 	
+	
+	public static final OJPathName TumlConstraintViolationException = new OJPathName("org.tuml.runtime.validation.TumlConstraintViolationException");
+	public static final OJPathName TumlValidator = new OJPathName("org.tuml.runtime.validation.TumlValidator");
+	public static final OJPathName TumlConstraintViolation = new OJPathName("org.tuml.runtime.validation.TumlConstraintViolation");
+	public static final OJPathName TumlValidation = new OJPathName("org.tuml.runtime.validation.TumlValidation");
+	public static final OJPathName DataTypeEnum = new OJPathName("org.tuml.runtime.domain.DataTypeEnum");
 	public static final OJPathName BodyExpressionEvaluator = new OJPathName("org.tuml.runtime.collection.ocl.BodyExpressionEvaluator");
 	public static final OJPathName BooleanExpressionEvaluator = new OJPathName("org.tuml.runtime.collection.ocl.BooleanExpressionEvaluator");
 	public static final OJPathName Root = new OJPathName("org.tuml.root.Root");
@@ -68,7 +73,7 @@ public class TinkerGenerationUtil {
 	public static OJPathName oGraphDatabase = new OJPathName("com.orientechnologies.orient.core.db.graph.OGraphDatabase");
 	public static OJPathName schemaPathName = new OJPathName("com.orientechnologies.orient.core.metadata.schema.OSchema");
 	public static OJPathName vertexPathName = new OJPathName("com.tinkerpop.blueprints.Vertex");
-	public static OJPathName tinkerFormatter = new OJPathName("org.tuml.runtime.util.TinkerFormatter");
+	public static OJPathName tumlFormatter = new OJPathName("org.tuml.runtime.util.TumlFormatter");
 	public static OJPathName transactionThreadVar = new OJPathName("org.tuml.runtime.adaptor.TransactionThreadVar");
 	public static OJPathName transactionThreadEntityVar = new OJPathName("org.tuml.runtime.adaptor.TransactionThreadEntityVar");
 	public static OJPathName graphDbPathName = new OJPathName("org.tuml.runtime.adaptor.GraphDb");

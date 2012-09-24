@@ -67,7 +67,7 @@ public class AddTumlUriFieldToRuntimePropertyEnum extends BaseVisitor implements
 			sb.append(", \\\"tumlUri\\\": \\");
 			sb.append(uri.substring(0, uri.length() - 1) + "\\\"");
 			String initExp = jsonField.getInitExp();
-			int indexOf = initExp.indexOf("}");
+			int indexOf = initExp.lastIndexOf("}");
 			initExp = initExp.substring(0, indexOf) + sb.toString() + "}\"";
 
 			jsonField.setInitExp(initExp);

@@ -9,6 +9,7 @@ import org.tuml.javageneration.visitor.clazz.ClassBuilder;
 import org.tuml.javageneration.visitor.clazz.ClassCreator;
 import org.tuml.javageneration.visitor.clazz.ClassImplementedInterfacePropertyVisitor;
 import org.tuml.javageneration.visitor.clazz.ClassInterfacePropertyLookupGenerator;
+import org.tuml.javageneration.visitor.clazz.ClassRequiredPropertyValidationBuilder;
 import org.tuml.javageneration.visitor.clazz.ClassRuntimePropertyImplementorVisitor;
 import org.tuml.javageneration.visitor.clazz.CompositionVisitor;
 import org.tuml.javageneration.visitor.clazz.InterfaceRuntimePropertyImplementorVisitor;
@@ -24,6 +25,7 @@ import org.tuml.javageneration.visitor.property.DerivedPropertyVisitor;
 import org.tuml.javageneration.visitor.property.LookupGenerator;
 import org.tuml.javageneration.visitor.property.ManyPropertyVisitor;
 import org.tuml.javageneration.visitor.property.OnePropertyVisitor;
+import org.tuml.javageneration.visitor.property.PropertyValidatorBuilder;
 import org.tuml.javageneration.visitor.property.PropertyVisitor;
 import org.tuml.javageneration.visitor.property.QualifierValidator;
 import org.tuml.javageneration.visitor.property.QualifierVisitor;
@@ -54,6 +56,8 @@ public class DefaultVisitors {
 		result.add(new TofromJsonForEnumCreator(Workspace.INSTANCE));
 		result.add(new LookupGenerator(Workspace.INSTANCE));
 		result.add(new ClassInterfacePropertyLookupGenerator(Workspace.INSTANCE));
+		result.add(new PropertyValidatorBuilder(Workspace.INSTANCE));	
+		result.add(new ClassRequiredPropertyValidationBuilder(Workspace.INSTANCE));
 		return result;
 		
 //		if (this.audit) {

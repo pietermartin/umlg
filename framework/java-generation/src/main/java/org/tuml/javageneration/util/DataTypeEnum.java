@@ -4,34 +4,44 @@ import org.eclipse.uml2.uml.DataType;
 import org.opaeum.java.metamodel.OJPathName;
 
 public enum DataTypeEnum {
-	DateTime("org.joda.time.DateTime"), Date("org.joda.time.LocalDate"), Time("org.joda.time.LocalTime"), InternationalPhoneNumber("java.lang.String"),
-	LocalPhoneNumber("java.lang.String"), Email("java.lang.String"), Video("byte[]"), Audio("byte[]"), Image("byte[]");
+	DateTime("org.joda.time.DateTime", "DataTypeEnum.DateTime"), Date("org.joda.time.LocalDate", "DataTypeEnum.Date"), Time("org.joda.time.LocalTime", "DataTypeEnum.Time"), InternationalPhoneNumber(
+			"java.lang.String", "DataTypeEnum.InternationalPhoneNumber"), LocalPhoneNumber("java.lang.String", "DataTypeEnum.LocalPhoneNumber"), Email("java.lang.String",
+			"DataTypeEnum.Email"), Video("byte[]", "DataTypeEnum.Video"), Audio("byte[]", "DataTypeEnum.Audio"), Image("byte[]", "DataTypeEnum.Image");
 	private OJPathName pathName;
+	private String initExpression;
 
-	private DataTypeEnum(String s) {
+	private DataTypeEnum(String s, String initExpression) {
 		this.pathName = new OJPathName(s);
+		this.initExpression = initExpression;
 	}
-	
-	
-	public static OJPathName fromDataType(DataType dataType) {
+
+	public String getInitExpression() {
+		return initExpression;
+	}
+
+	public static OJPathName getPathNameFromDataType(DataType dataType) {
+		return fromDataType(dataType).getPathName();
+	}
+
+	public static DataTypeEnum fromDataType(DataType dataType) {
 		if (dataType.getName().equals(DateTime.name())) {
-			return DateTime.getPathName();
+			return DateTime;
 		} else if (dataType.getName().equals(Date.name())) {
-			return Date.getPathName();
+			return Date;
 		} else if (dataType.getName().equals(Time.name())) {
-			return Time.getPathName();
+			return Time;
 		} else if (dataType.getName().equals(InternationalPhoneNumber.name())) {
-			return InternationalPhoneNumber.getPathName();
+			return InternationalPhoneNumber;
 		} else if (dataType.getName().equals(LocalPhoneNumber.name())) {
-			return LocalPhoneNumber.getPathName();
+			return LocalPhoneNumber;
 		} else if (dataType.getName().equals(Email.name())) {
-			return Email.getPathName();
+			return Email;
 		} else if (dataType.getName().equals(Video.name())) {
-			return Video.getPathName();
+			return Video;
 		} else if (dataType.getName().equals(Audio.name())) {
-			return Audio.getPathName();
+			return Audio;
 		} else if (dataType.getName().equals(Image.name())) {
-			return Image.getPathName();
+			return Image;
 		} else {
 			throw new IllegalStateException(String.format("Unkown data type %s", dataType.getName()));
 		}
@@ -39,5 +49,41 @@ public enum DataTypeEnum {
 
 	public OJPathName getPathName() {
 		return pathName;
+	}
+
+	public boolean isDateTime() {
+		return this == DateTime;
+	}
+
+	public boolean isDate() {
+		return this == Date;
+	}
+
+	public boolean isTime() {
+		return this == Time;
+	}
+
+	public boolean isInternationalPhoneNumber() {
+		return this == InternationalPhoneNumber;
+	}
+
+	public boolean isLocalPhoneNumber() {
+		return this == LocalPhoneNumber;
+	}
+
+	public boolean isEmail() {
+		return this == Email;
+	}
+
+	public boolean isVideo() {
+		return this == Video;
+	}
+
+	public boolean isAudio() {
+		return this == Audio;
+	}
+
+	public boolean isImage() {
+		return this == Image;
 	}
 }

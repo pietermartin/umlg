@@ -25,10 +25,11 @@ import org.tuml.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.tuml.runtime.collection.ocl.IterateExpressionAccumulator;
 import org.tuml.runtime.collection.ocl.OclStdLibCollection;
 import org.tuml.runtime.domain.CompositionNode;
+import org.tuml.runtime.domain.DataTypeEnum;
 import org.tuml.runtime.domain.TinkerAuditableNode;
 import org.tuml.runtime.domain.TumlNode;
 import org.tuml.runtime.domain.ocl.OclState;
-import org.tuml.runtime.util.TinkerFormatter;
+import org.tuml.runtime.util.TumlFormatter;
 
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
@@ -62,7 +63,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected void loadFromVertex() {
-		if (!isOnePrimitive() && !isDateTime() && !isDate() && !isTime() && !isEmail() && !isInternationalPhoneNumber() && !isLocalPhoneNumber() && !isVideo() && !isAudio() && !isImage()) {
+		if (!isOnePrimitive() && getDataTypeEnum() == null) {
 			for (Iterator<Edge> iter = getEdges(); iter.hasNext();) {
 				Edge edge = iter.next();
 				E node = null;
@@ -84,29 +85,23 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 					throw new RuntimeException(ex);
 				}
 			}
-		} else if (isDateTime()) {
+		} else if (getDataTypeEnum() != null && getDataTypeEnum().isDateTime()) {
 			String s = (String) this.vertex.getProperty(getLabel());
 			if (s != null) {
 				E property = (E) new DateTime(s);
-				if (property != null) {
-					this.internalCollection.add(property);
-				}
+				this.internalCollection.add(property);
 			}
-		} else if (isDate()) {
+		} else if (getDataTypeEnum() != null && getDataTypeEnum().isDate()) {
 			String s = (String) this.vertex.getProperty(getLabel());
 			if (s != null) {
 				E property = (E) new LocalDate(s);
-				if (property != null) {
-					this.internalCollection.add(property);
-				}
+				this.internalCollection.add(property);
 			}
-		} else if (isTime()) {
+		} else if (getDataTypeEnum() != null && getDataTypeEnum().isTime()) {
 			String s = (String) this.vertex.getProperty(getLabel());
 			if (s != null) {
 				E property = (E) new LocalTime(s);
-				if (property != null) {
-					this.internalCollection.add(property);
-				}
+				this.internalCollection.add(property);
 			}
 		} else {
 			E property = (E) this.vertex.getProperty(getLabel());
@@ -156,7 +151,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 			Edge edge = addInternal(e);
 
 			// Edge can only be null on a one primitive
-			if (edge == null && !isOnePrimitive() && !isDateTime() && !isDate() && !isTime() && !isEmail() && !isInternationalPhoneNumber() && !isLocalPhoneNumber() && !isVideo() && !isAudio() && !isImage()) {
+			if (edge == null && !isOnePrimitive() && getDataTypeEnum() == null) {
 				throw new IllegalStateException("Edge can only be null on isOne which is a String, Interger, Boolean or primitive");
 			}
 
@@ -245,7 +240,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 			} else if (o.getClass().isEnum()) {
 				v = this.internalVertexMap.get(((Enum<?>) o).name());
 				GraphDb.getDb().removeVertex(v);
-			} else if (isOnePrimitive() || isDateTime() || isDate() || isTime() || isVideo() || isAudio() || isImage()) {
+			} else if (isOnePrimitive() || getDataTypeEnum() != null) {
 				// Do nothing
 			} else {
 				v = this.internalVertexMap.get(o);
@@ -287,11 +282,11 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 			this.internalVertexMap.put(((Enum<?>) e).name(), v);
 		} else if (isOnePrimitive()) {
 			this.vertex.setProperty(getLabel(), e);
-		} else if (isDateTime()) {
+		} else if (getDataTypeEnum() != null && getDataTypeEnum().isDateTime()) {
 			this.vertex.setProperty(getLabel(), ((DateTime) e).toString());
-		} else if (isDate()) {
+		} else if (getDataTypeEnum() != null && getDataTypeEnum().isDate()) {
 			this.vertex.setProperty(getLabel(), ((LocalDate) e).toString());
-		} else if (isTime()) {
+		} else if (getDataTypeEnum() != null && getDataTypeEnum().isTime()) {
 			this.vertex.setProperty(getLabel(), ((LocalTime) e).toString());
 		} else {
 			v = GraphDb.getDb().addVertex(null);
@@ -370,7 +365,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 				auditEdge.setProperty("outClass", node.getClass().getName() + "Audit");
 			}
 			if (deletion) {
-				auditEdge.setProperty("deletedOn", TinkerFormatter.format(new DateTime()));
+				auditEdge.setProperty("deletedOn", TumlFormatter.format(new DateTime()));
 			}
 		} else if (e.getClass().isEnum()) {
 			Vertex v = GraphDb.getDb().addVertex(null);
@@ -396,7 +391,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 				}
 				if (deletion) {
 					auditEdge.setProperty("transactionNo", GraphDb.getDb().getTransactionCount());
-					auditEdge.setProperty("deletedOn", TinkerFormatter.format(new DateTime()));
+					auditEdge.setProperty("deletedOn", TumlFormatter.format(new DateTime()));
 				}
 			}
 		}
@@ -615,48 +610,8 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 	}
 
 	@Override
-	public boolean isDateTime() {
-		return this.tumlRuntimeProperty.isDateTime();
-	}
-
-	@Override
-	public boolean isDate() {
-		return this.tumlRuntimeProperty.isDate();
-	}
-
-	@Override
-	public boolean isTime() {
-		return this.tumlRuntimeProperty.isTime();
-	}
-
-	@Override
-	public boolean isEmail() {
-		return this.tumlRuntimeProperty.isEmail();
-	}
-
-	@Override
-	public boolean isInternationalPhoneNumber() {
-		return this.tumlRuntimeProperty.isInternationalPhoneNumber();
-	}
-
-	@Override
-	public boolean isLocalPhoneNumber() {
-		return this.tumlRuntimeProperty.isLocalPhoneNumber();
-	}
-
-	@Override
-	public boolean isVideo() {
-		return this.tumlRuntimeProperty.isVideo();
-	}
-
-	@Override
-	public boolean isAudio() {
-		return this.tumlRuntimeProperty.isAudio();
-	}
-
-	@Override
-	public boolean isImage() {
-		return this.tumlRuntimeProperty.isImage();
+	public DataTypeEnum getDataTypeEnum() {
+		return this.tumlRuntimeProperty.getDataTypeEnum();
 	}
 
 	@Override

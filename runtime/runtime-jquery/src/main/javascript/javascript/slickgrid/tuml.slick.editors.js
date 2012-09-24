@@ -11,6 +11,7 @@
             "Slick": {
                 "Editors": {
                     "Integer": IntegerEditor,
+                    "TextEditor": TextEditor,
                     "SelectCellEditor": SelectCellEditor,
                     "Checkbox": CheckboxEditor,
                     "Date": DateEditor,
@@ -20,65 +21,41 @@
             }}
     });
 
-  function DateEditor(args) {
+  function TextEditor(args) {
     var $input;
     var defaultValue;
     var scope = this;
-    var calendarOpen = false;
 
     this.init = function () {
-      $input = $("<INPUT type=text />");
-      $input.appendTo(args.container);
-      $input.focus().select();
-      $input.datepicker({
-        showOn: "button",
-        buttonImageOnly: true,
-        buttonImage: "../javascript/slickgrid/images/calendar.gif",
-        dateFormat: "yy-mm-dd",
-        beforeShow: function () {
-          calendarOpen = true
-        },
-        onClose: function () {
-          calendarOpen = false
-        }
-      });
-      $input.width($input.width() - 18);
+      $input = $("<INPUT type=text class='editor-text' />")
+          .appendTo(args.container)
+          .bind("keydown.nav", function (e) {
+            if (e.keyCode === $.ui.keyCode.LEFT || e.keyCode === $.ui.keyCode.RIGHT) {
+              e.stopImmediatePropagation();
+            }
+          })
+          .focus()
+          .select();
     };
 
     this.destroy = function () {
-      $.datepicker.dpDiv.stop(true, true);
-      $input.datepicker("hide");
-      $input.datepicker("destroy");
       $input.remove();
-    };
-
-    this.show = function () {
-      if (calendarOpen) {
-        $.datepicker.dpDiv.stop(true, true).show();
-      }
-    };
-
-    this.hide = function () {
-      if (calendarOpen) {
-        $.datepicker.dpDiv.stop(true, true).hide();
-      }
-    };
-
-    this.position = function (position) {
-      if (!calendarOpen) {
-        return;
-      }
-       $.datepicker.dpDiv
-           .css("top", position.top + 30)
-           .css("left", position.left);
     };
 
     this.focus = function () {
       $input.focus();
     };
 
+    this.getValue = function () {
+      return $input.val();
+    };
+
+    this.setValue = function (val) {
+      $input.val(val);
+    };
+
     this.loadValue = function (item) {
-      defaultValue = item[args.column.field];
+      defaultValue = item[args.column.field] || "";
       $input.val(defaultValue);
       $input[0].defaultValue = defaultValue;
       $input.select();
@@ -97,6 +74,13 @@
     };
 
     this.validate = function () {
+      if (args.column.validator) {
+        var validationResults = args.column.validator($input.val());
+        if (!validationResults.valid) {
+          return validationResults;
+        }
+      }
+
       return {
         valid: true,
         msg: null
@@ -106,58 +90,26 @@
     this.init();
   }
 
-  function DateTimeEditor(args) {
+  function IntegerEditor(args) {
     var $input;
     var defaultValue;
     var scope = this;
-    var calendarOpen = false;
 
     this.init = function () {
-      $input = $("<INPUT type=text />");
-      $input.appendTo(args.container);
-      $input.focus().select();
-      $input.datetimepicker({
-        showOn: "button",
-        buttonImageOnly: true,
-        buttonImage: "../javascript/slickgrid/images/calendar.gif",
-        dateFormat: "yy-mm-dd",
-        timeFormat: "'T'hh:mm:ss",
-        beforeShow: function () {
-          calendarOpen = true
-        },
-        onClose: function () {
-          calendarOpen = false
+      $input = $("<INPUT type=text class='editor-text' />");
+
+      $input.bind("keydown.nav", function (e) {
+        if (e.keyCode === $.ui.keyCode.LEFT || e.keyCode === $.ui.keyCode.RIGHT) {
+          e.stopImmediatePropagation();
         }
       });
-      $input.width($input.width() - 18);
+
+      $input.appendTo(args.container);
+      $input.focus().select();
     };
 
     this.destroy = function () {
-      $.datepicker.dpDiv.stop(true, true);
-      $input.datepicker("hide");
-      $input.datepicker("destroy");
       $input.remove();
-    };
-
-    this.show = function () {
-      if (calendarOpen) {
-        $.datepicker.dpDiv.stop(true, true).show();
-      }
-    };
-
-    this.hide = function () {
-      if (calendarOpen) {
-        $.datepicker.dpDiv.stop(true, true).hide();
-      }
-    };
-
-    this.position = function (position) {
-      if (!calendarOpen) {
-        return;
-      }
-       $.datepicker.dpDiv
-           .css("top", position.top + 30)
-           .css("left", position.left);
     };
 
     this.focus = function () {
@@ -172,95 +124,7 @@
     };
 
     this.serializeValue = function () {
-      return $input.val();
-    };
-
-    this.applyValue = function (item, state) {
-        //This is to remove the space between date and time fiels in order for joda time not to moan
-      item[args.column.field] = state.replace(/ /g,"");
-    };
-
-    this.isValueChanged = function () {
-      return (!($input.val() == "" && defaultValue == null)) && ($input.val() != defaultValue);
-    };
-
-    this.validate = function () {
-      return {
-        valid: true,
-        msg: null
-      };
-    };
-
-    this.init();
-  }
-
-    
-  function TimeEditor(args) {
-    var $input;
-    var defaultValue;
-    var scope = this;
-    var calendarOpen = false;
-
-    this.init = function () {
-      $input = $("<INPUT type=text />");
-      $input.appendTo(args.container);
-      $input.focus().select();
-      $input.timepicker({
-        showOn: "button",
-        buttonImageOnly: true,
-        buttonImage: "../javascript/slickgrid/images/calendar.gif",
-        dateFormat: "yy-mm-dd",
-        beforeShow: function () {
-          calendarOpen = true
-        },
-        onClose: function () {
-          calendarOpen = false
-        }
-      });
-      $input.width($input.width() - 18);
-    };
-
-    this.destroy = function () {
-      $.datepicker.dpDiv.stop(true, true);
-      $input.datepicker("hide");
-      $input.datepicker("destroy");
-      $input.remove();
-    };
-
-    this.show = function () {
-      if (calendarOpen) {
-        $.datepicker.dpDiv.stop(true, true).show();
-      }
-    };
-
-    this.hide = function () {
-      if (calendarOpen) {
-        $.datepicker.dpDiv.stop(true, true).hide();
-      }
-    };
-
-    this.position = function (position) {
-      if (!calendarOpen) {
-        return;
-      }
-       $.datepicker.dpDiv
-           .css("top", position.top + 30)
-           .css("left", position.left);
-    };
-
-    this.focus = function () {
-      $input.focus();
-    };
-
-    this.loadValue = function (item) {
-      defaultValue = item[args.column.field];
-      $input.val(defaultValue);
-      $input[0].defaultValue = defaultValue;
-      $input.select();
-    };
-
-    this.serializeValue = function () {
-      return $input.val();
+      return parseInt($input.val(), 10) || 0;
     };
 
     this.applyValue = function (item, state) {
@@ -272,14 +136,307 @@
     };
 
     this.validate = function () {
+      if (args.column.validator) {
+        var validationResults = args.column.validator($input.val());
+        if (!validationResults.valid) {
+          return validationResults;
+        }
+      }
+
       return {
         valid: true,
         msg: null
       };
     };
-
     this.init();
   }
+    function DateEditor(args) {
+        var $input;
+        var defaultValue;
+        var scope = this;
+        var calendarOpen = false;
+
+        this.init = function () {
+            $input = $("<INPUT type=text />");
+            $input.appendTo(args.container);
+            $input.focus().select();
+            $input.datepicker({
+                showOn: "button",
+                buttonImageOnly: true,
+                buttonImage: "../javascript/slickgrid/images/calendar.gif",
+                dateFormat: "yy-mm-dd",
+                beforeShow: function () {
+                    calendarOpen = true
+                },
+                onClose: function () {
+                    calendarOpen = false
+                }
+            });
+            $input.width($input.width() - 18);
+            $input.mask("9999-99-99");
+        };
+
+        this.destroy = function () {
+            $.datepicker.dpDiv.stop(true, true);
+            $input.datepicker("hide");
+            $input.datepicker("destroy");
+            $input.remove();
+        };
+
+        this.show = function () {
+            if (calendarOpen) {
+                $.datepicker.dpDiv.stop(true, true).show();
+            }
+        };
+
+        this.hide = function () {
+            if (calendarOpen) {
+                $.datepicker.dpDiv.stop(true, true).hide();
+            }
+        };
+
+        this.position = function (position) {
+            if (!calendarOpen) {
+                return;
+            }
+            $.datepicker.dpDiv
+            .css("top", position.top + 30)
+            .css("left", position.left);
+        };
+
+        this.focus = function () {
+            if (!$input.is(":hidden")) {
+                $input.focus();
+            }
+        };
+
+        this.loadValue = function (item) {
+            defaultValue = item[args.column.field];
+            $input.val(defaultValue);
+            $input[0].defaultValue = defaultValue;
+            $input.select();
+        };
+
+        this.serializeValue = function () {
+            return $input.val();
+        };
+
+        this.applyValue = function (item, state) {
+            item[args.column.field] = state;
+        };
+
+        this.isValueChanged = function () {
+            return (!($input.val() == "" && defaultValue == null)) && ($input.val() != defaultValue);
+        };
+
+
+        this.validate = function () {
+            if (args.column.validator) {
+                var validationResults = args.column.validator($input.val());
+                if (!validationResults.valid) {
+                    return validationResults;
+                }
+            }
+
+            return {
+                valid: true,
+                msg: null
+            };
+        };
+
+        this.init();
+    }
+
+    function DateTimeEditor(args) {
+        var $input;
+        var defaultValue;
+        var scope = this;
+        var calendarOpen = false;
+
+        this.init = function () {
+            $input = $("<INPUT type=text />");
+            $input.appendTo(args.container);
+            $input.focus().select();
+            $input.datetimepicker({
+                showOn: "button",
+                buttonImageOnly: true,
+                buttonImage: "../javascript/slickgrid/images/calendar.gif",
+                dateFormat: "yy-mm-dd",
+                timeFormat: "hh:mm:ss",
+                beforeShow: function () {
+                    calendarOpen = true
+                },
+                onClose: function () {
+                    calendarOpen = false
+                }
+            });
+            $input.width($input.width() - 18);
+            $input.mask("9999-99-99T99:99:99");
+        };
+
+        this.destroy = function () {
+            $.datepicker.dpDiv.stop(true, true);
+            $input.datepicker("hide");
+            $input.datepicker("destroy");
+            $input.remove();
+        };
+
+        this.show = function () {
+            if (calendarOpen) {
+                $.datepicker.dpDiv.stop(true, true).show();
+            }
+        };
+
+        this.hide = function () {
+            if (calendarOpen) {
+                $.datepicker.dpDiv.stop(true, true).hide();
+            }
+        };
+
+        this.position = function (position) {
+            if (!calendarOpen) {
+                return;
+            }
+            $.datepicker.dpDiv
+            .css("top", position.top + 30)
+            .css("left", position.left);
+        };
+
+        this.focus = function () {
+            $input.focus();
+        };
+
+        this.loadValue = function (item) {
+            defaultValue = item[args.column.field];
+            $input.val(defaultValue);
+            $input[0].defaultValue = defaultValue;
+            $input.select();
+        };
+
+        this.serializeValue = function () {
+            return $input.val();
+        };
+
+        this.applyValue = function (item, state) {
+            //This is to remove the space between date and time fiels in order for joda time not to moan
+            item[args.column.field] = state.replace(/ /g,"T");
+        };
+
+        this.isValueChanged = function () {
+            return (!($input.val() == "" && defaultValue == null)) && ($input.val() != defaultValue);
+        };
+
+
+        this.validate = function () {
+            if (args.column.validator) {
+                var validationResults = args.column.validator($input.val());
+                if (!validationResults.valid) {
+                    return validationResults;
+                }
+            }
+
+            return {
+                valid: true,
+                msg: null
+            };
+        };
+        this.init();
+    }
+
+
+    function TimeEditor(args) {
+        var $input;
+        var defaultValue;
+        var scope = this;
+        var calendarOpen = false;
+
+        this.init = function () {
+            $input = $("<INPUT type=text />");
+            $input.appendTo(args.container);
+            $input.focus().select();
+            $input.timepicker({
+                showOn: "button",
+                buttonImageOnly: true,
+                buttonImage: "../javascript/slickgrid/images/calendar.gif",
+                beforeShow: function () {
+                    calendarOpen = true
+                },
+                onClose: function () {
+                    calendarOpen = false
+                }
+            });
+            $input.width($input.width() - 18);
+            $input.mask("99:99");
+        };
+
+        this.destroy = function () {
+            $.datepicker.dpDiv.stop(true, true);
+            $input.datepicker("hide");
+            $input.datepicker("destroy");
+            $input.remove();
+        };
+
+        this.show = function () {
+            if (calendarOpen) {
+                $.datepicker.dpDiv.stop(true, true).show();
+            }
+        };
+
+        this.hide = function () {
+            if (calendarOpen) {
+                $.datepicker.dpDiv.stop(true, true).hide();
+            }
+        };
+
+        this.position = function (position) {
+            if (!calendarOpen) {
+                return;
+            }
+            $.datepicker.dpDiv
+            .css("top", position.top + 30)
+            .css("left", position.left);
+        };
+
+        this.focus = function () {
+            $input.focus();
+        };
+
+        this.loadValue = function (item) {
+            defaultValue = item[args.column.field];
+            $input.val(defaultValue);
+            $input[0].defaultValue = defaultValue;
+            $input.select();
+        };
+
+        this.serializeValue = function () {
+            return $input.val();
+        };
+
+        this.applyValue = function (item, state) {
+            item[args.column.field] = state;
+        };
+
+        this.isValueChanged = function () {
+            return (!($input.val() == "" && defaultValue == null)) && ($input.val() != defaultValue);
+        };
+
+
+        this.validate = function () {
+            if (args.column.validator) {
+                var validationResults = args.column.validator($input.val());
+                if (!validationResults.valid) {
+                    return validationResults;
+                }
+            }
+
+            return {
+                valid: true,
+                msg: null
+            };
+        };
+
+        this.init();
+    }
     function CheckboxEditor(args) {
         var $select;
         var defaultValue;
@@ -417,13 +574,20 @@
             return ($select.val() != currentValue.id);
         };
 
-        this.validate = function() {
+
+        this.validate = function () {
+            if (args.column.validator) {
+                var validationResults = args.column.validator($input.val());
+                if (!validationResults.valid) {
+                    return validationResults;
+                }
+            }
+
             return {
                 valid: true,
                 msg: null
             };
         };
-
         this.init();
     }
 
@@ -473,12 +637,13 @@
             return (!($input.val() == "" && defaultValue == null)) && ($input.val() != defaultValue);
         };
 
+
         this.validate = function () {
-            if (isNaN($input.val())) {
-                return {
-                    valid: false,
-                    msg: "Please enter a valid integer"
-                };
+            if (args.column.validator) {
+                var validationResults = args.column.validator($input.val());
+                if (!validationResults.valid) {
+                    return validationResults;
+                }
             }
 
             return {
@@ -486,7 +651,6 @@
                 msg: null
             };
         };
-
         this.init();
     }
 })(jQuery);

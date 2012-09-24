@@ -1,16 +1,10 @@
 package org.tuml.runtime.collection;
 
+import org.tuml.runtime.domain.DataTypeEnum;
+
 public interface TumlRuntimeProperty {
 	boolean isOnePrimitive();
-	boolean isDateTime();
-	boolean isDate();
-	boolean isTime();
-	boolean isEmail();
-	boolean isInternationalPhoneNumber();
-	boolean isLocalPhoneNumber();
-	boolean isVideo();
-	boolean isAudio();
-	boolean isImage();
+	DataTypeEnum getDataTypeEnum();
 	boolean isManyPrimitive();
 	boolean isOneEnumeration();
 	boolean isManyEnumeration();

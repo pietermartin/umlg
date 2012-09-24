@@ -1,5 +1,7 @@
 package org.tuml.javageneration.visitor.clazz;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.uml2.uml.Property;
@@ -11,8 +13,10 @@ import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
 import org.opaeum.java.metamodel.annotation.OJEnum;
 import org.opaeum.java.metamodel.annotation.OJEnumLiteral;
+import org.tuml.javageneration.util.DataTypeEnum;
 import org.tuml.javageneration.util.PropertyWrapper;
 import org.tuml.javageneration.util.TinkerGenerationUtil;
+import org.tuml.javageneration.validation.Validation;
 
 public class RuntimePropertyImplementor {
 
@@ -28,50 +32,17 @@ public class RuntimePropertyImplementor {
 		isOnePrimitiveField.setName("_onePrimitive");
 		ojEnum.addToFields(isOnePrimitiveField);
 
-		OJField isDate = new OJField();
-		isDate.setType(new OJPathName("boolean"));
-		isDate.setName("_date");
-		ojEnum.addToFields(isDate);
+		OJField dataTypeEnum = new OJField();
+		dataTypeEnum.setType(TinkerGenerationUtil.DataTypeEnum);
+		dataTypeEnum.setName("dataTypeEnum");
+		ojEnum.addToFields(dataTypeEnum);
+		annotatedClass.addToImports(TinkerGenerationUtil.DataTypeEnum);
 
-		OJField isDateTime = new OJField();
-		isDateTime.setType(new OJPathName("boolean"));
-		isDateTime.setName("_dateTime");
-		ojEnum.addToFields(isDateTime);
-		
-		OJField isTime = new OJField();
-		isTime.setType(new OJPathName("boolean"));
-		isTime.setName("_time");
-		ojEnum.addToFields(isTime);
-		
-		OJField isEmail = new OJField();
-		isEmail.setType(new OJPathName("boolean"));
-		isEmail.setName("_email");
-		ojEnum.addToFields(isEmail);
-
-		OJField isInternationalPhoneNumber = new OJField();
-		isInternationalPhoneNumber.setType(new OJPathName("boolean"));
-		isInternationalPhoneNumber.setName("_internationalPhoneNumber");
-		ojEnum.addToFields(isInternationalPhoneNumber);
-
-		OJField isLocalPhoneNumber = new OJField();
-		isLocalPhoneNumber.setType(new OJPathName("boolean"));
-		isLocalPhoneNumber.setName("_localPhoneNumber");
-		ojEnum.addToFields(isLocalPhoneNumber);
-
-		OJField isVideo = new OJField();
-		isVideo.setType(new OJPathName("boolean"));
-		isVideo.setName("_video");
-		ojEnum.addToFields(isVideo);
-
-		OJField isAudio = new OJField();
-		isAudio.setType(new OJPathName("boolean"));
-		isAudio.setName("_audio");
-		ojEnum.addToFields(isAudio);
-
-		OJField isImage = new OJField();
-		isImage.setType(new OJPathName("boolean"));
-		isImage.setName("_image");
-		ojEnum.addToFields(isImage);
+		OJField validations = new OJField();
+		validations.setType(new OJPathName("java.util.List").addToGenerics(TinkerGenerationUtil.TumlValidation));
+		validations.setName("validations");
+		ojEnum.addToFields(validations);
+		annotatedClass.addToImports(TinkerGenerationUtil.TumlValidation);
 
 		OJField isManyPrimitiveField = new OJField();
 		isManyPrimitiveField.setType(new OJPathName("boolean"));
@@ -213,18 +184,17 @@ public class RuntimePropertyImplementor {
 		for (Property p : allOwnedProperties) {
 			PropertyWrapper pWrap = new PropertyWrapper(p);
 			if (!(pWrap.isDerived() || pWrap.isDerivedUnion())) {
-				addEnumLiteral(ojEnum, fromLabel, pWrap.fieldname(), pWrap.isPrimitive(), pWrap.isDate(), pWrap.isDateTime(), pWrap.isTime(), pWrap.isEmail(), pWrap.isInternationalPhoneNumber(),
-						pWrap.isLocalPhoneNumber(), pWrap.isVideo(), pWrap.isAudio(), pWrap.isImage(), pWrap.isEnumeration(), pWrap.isManyToOne(), pWrap.isMany(),
-						pWrap.isControllingSide(), pWrap.isComposite(), pWrap.isInverseComposite(), pWrap.isOneToOne(), pWrap.isOneToMany(), pWrap.isManyToMany(),
-						pWrap.getUpper(), pWrap.getLower(), pWrap.isQualified(), pWrap.isInverseQualified(), pWrap.isOrdered(), pWrap.isInverseOrdered(), pWrap.isUnique(),
-						TinkerGenerationUtil.getEdgeName(pWrap.getProperty()));
+				addEnumLiteral(ojEnum, fromLabel, pWrap.fieldname(), pWrap.isPrimitive(), pWrap.getDataTypeEnum(), pWrap.getValidations(), pWrap.isEnumeration(),
+						pWrap.isManyToOne(), pWrap.isMany(), pWrap.isControllingSide(), pWrap.isComposite(), pWrap.isInverseComposite(), pWrap.isOneToOne(), pWrap.isOneToMany(),
+						pWrap.isManyToMany(), pWrap.getUpper(), pWrap.getLower(), pWrap.isQualified(), pWrap.isInverseQualified(), pWrap.isOrdered(), pWrap.isInverseOrdered(),
+						pWrap.isUnique(), TinkerGenerationUtil.getEdgeName(pWrap.getProperty()));
 			}
 		}
 
 		if (!hasCompositeOwner) {
 			// Add in fake property to root
-			addEnumLiteral(ojEnum, fromLabel, modelName, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, true, true, false, false, -1,
-					0, false, false, false, false, false, "root" + className);
+			addEnumLiteral(ojEnum, fromLabel, modelName, false, null, Collections.<Validation> emptyList(), false, false, false, true, false, true, true, false, false, -1, 0,
+					false, false, false, false, false, "root" + className);
 		}
 		asJson.getBody().addToStatements("sb.append(\"]}\")");
 		asJson.getBody().addToStatements("return sb.toString()");
@@ -232,10 +202,10 @@ public class RuntimePropertyImplementor {
 		return ojEnum;
 	}
 
-	public static void addEnumLiteral(OJEnum ojEnum, OJAnnotatedOperation fromLabel, String fieldName, boolean isPrimitive, boolean isDate, boolean isDateTime, boolean isTime, boolean isEmail,
-			boolean isInternationalPhoneNumber, boolean isLocalPhoneNumber, boolean isVideo, boolean isAudio, boolean isImage, boolean isEnumeration, boolean isManyToOne,
-			boolean isMany, boolean isControllingSide, boolean isComposite, boolean isInverseComposite, boolean isOneToOne, boolean isOneToMany, boolean isManyToMany,
-			int getUpper, int getLower, boolean isQualified, boolean isInverseQualified, boolean isOrdered, boolean isInverseOrdered, boolean isUnique, String edgeName) {
+	public static void addEnumLiteral(OJEnum ojEnum, OJAnnotatedOperation fromLabel, String fieldName, boolean isPrimitive, DataTypeEnum dataTypeEnum,
+			List<Validation> validations, boolean isEnumeration, boolean isManyToOne, boolean isMany, boolean isControllingSide, boolean isComposite, boolean isInverseComposite,
+			boolean isOneToOne, boolean isOneToMany, boolean isManyToMany, int getUpper, int getLower, boolean isQualified, boolean isInverseQualified, boolean isOrdered,
+			boolean isInverseOrdered, boolean isUnique, String edgeName) {
 
 		OJIfStatement ifLabelEquals = new OJIfStatement(fieldName + ".getLabel().equals(label)");
 		// Do not make upper case, leave with java case sensitive
@@ -252,50 +222,30 @@ public class RuntimePropertyImplementor {
 		propertyOnePrimitiveField.setInitExp(Boolean.toString(isPrimitive && isManyToOne));
 		ojLiteral.addToAttributeValues(propertyOnePrimitiveField);
 
-		OJField propertyDateField = new OJField();
-		propertyDateField.setType(new OJPathName("boolean"));
-		propertyDateField.setInitExp(Boolean.toString(isDate));
-		ojLiteral.addToAttributeValues(propertyDateField);
+		OJField propertyDataTypeEnumField = new OJField();
+		propertyDataTypeEnumField.setType(TinkerGenerationUtil.DataTypeEnum);
+		if (dataTypeEnum != null) {
+			propertyDataTypeEnumField.setInitExp(dataTypeEnum.getInitExpression());
+		} else {
+			propertyDataTypeEnumField.setInitExp("null");
+		}
+		ojLiteral.addToAttributeValues(propertyDataTypeEnumField);
 
-		OJField propertyDateTimeField = new OJField();
-		propertyDateTimeField.setType(new OJPathName("boolean"));
-		propertyDateTimeField.setInitExp(Boolean.toString(isDateTime));
-		ojLiteral.addToAttributeValues(propertyDateTimeField);
-
-		OJField propertyTimeField = new OJField();
-		propertyTimeField.setType(new OJPathName("boolean"));
-		propertyTimeField.setInitExp(Boolean.toString(isTime));
-		ojLiteral.addToAttributeValues(propertyTimeField);
-
-		OJField propertyEmailField = new OJField();
-		propertyEmailField.setType(new OJPathName("boolean"));
-		propertyEmailField.setInitExp(Boolean.toString(isEmail));
-		ojLiteral.addToAttributeValues(propertyEmailField);
-
-		OJField propertyInternationalPhoneNumberField = new OJField();
-		propertyInternationalPhoneNumberField.setType(new OJPathName("boolean"));
-		propertyInternationalPhoneNumberField.setInitExp(Boolean.toString(isInternationalPhoneNumber));
-		ojLiteral.addToAttributeValues(propertyInternationalPhoneNumberField);
-
-		OJField propertyLocalPhoneNumberField = new OJField();
-		propertyLocalPhoneNumberField.setType(new OJPathName("boolean"));
-		propertyLocalPhoneNumberField.setInitExp(Boolean.toString(isLocalPhoneNumber));
-		ojLiteral.addToAttributeValues(propertyLocalPhoneNumberField);
-
-		OJField propertyVideoField = new OJField();
-		propertyVideoField.setType(new OJPathName("boolean"));
-		propertyVideoField.setInitExp(Boolean.toString(isVideo));
-		ojLiteral.addToAttributeValues(propertyVideoField);
-
-		OJField propertyAudioField = new OJField();
-		propertyAudioField.setType(new OJPathName("boolean"));
-		propertyAudioField.setInitExp(Boolean.toString(isAudio));
-		ojLiteral.addToAttributeValues(propertyAudioField);
-
-		OJField propertyImageField = new OJField();
-		propertyImageField.setType(new OJPathName("boolean"));
-		propertyImageField.setInitExp(Boolean.toString(isImage));
-		ojLiteral.addToAttributeValues(propertyImageField);
+		OJField propertyValidationsField = new OJField();
+		propertyValidationsField.setType(new OJPathName("java.util.ArrayList"));
+		StringBuilder sb1 = new StringBuilder();
+		for (Validation validation : validations) {
+			sb1.append(validation.toNewRuntimeTumlValidation());
+			ojEnum.addToImports(validation.getPathName());
+		}
+		if (validations.isEmpty()) {
+			propertyValidationsField.setInitExp("Collections.<TumlValidation>emptyList()");
+			ojEnum.addToImports("java.util.Collections");
+		} else {
+			ojEnum.addToImports(new OJPathName("java.util.Arrays"));
+			propertyValidationsField.setInitExp("Arrays.<TumlValidation>asList(" + sb1.toString() + ")");
+		}
+		ojLiteral.addToAttributeValues(propertyValidationsField);
 
 		OJField propertyManyPrimitiveField = new OJField();
 		propertyManyPrimitiveField.setType(new OJPathName("boolean"));
@@ -400,34 +350,26 @@ public class RuntimePropertyImplementor {
 		sb.append("\\\"onePrimitive\\\": ");
 		sb.append(propertyOnePrimitiveField.getInitExp());
 		sb.append(", ");
+		if (dataTypeEnum != null) {
+			sb.append("\\\"dataTypeEnum\\\": \\\"\" + ");
+			sb.append(propertyDataTypeEnumField.getInitExp());
+			sb.append(".toString() + \"\\\", ");
+		} else {
+			sb.append("\\\"dateTypeEnum\\\": null, ");
+		}
 
-		sb.append("\\\"date\\\": ");
-		sb.append(propertyDateField.getInitExp());
-		sb.append(", ");
-		sb.append("\\\"dateTime\\\": ");
-		sb.append(propertyDateTimeField.getInitExp());
-		sb.append(", ");
-		sb.append("\\\"time\\\": ");
-		sb.append(propertyTimeField.getInitExp());
-		sb.append(", ");
-		sb.append("\\\"email\\\": ");
-		sb.append(propertyEmailField.getInitExp());
-		sb.append(", ");
-		sb.append("\\\"internationalPhoneNumber\\\": ");
-		sb.append(propertyInternationalPhoneNumberField.getInitExp());
-		sb.append(", ");
-		sb.append("\\\"localPhoneNumber\\\": ");
-		sb.append(propertyLocalPhoneNumberField.getInitExp());
-		sb.append(", ");
-		sb.append("\\\"video\\\": ");
-		sb.append(propertyVideoField.getInitExp());
-		sb.append(", ");
-		sb.append("\\\"audio\\\": ");
-		sb.append(propertyAudioField.getInitExp());
-		sb.append(", ");
-		sb.append("\\\"image\\\": ");
-		sb.append(propertyImageField.getInitExp());
-		sb.append(", ");
+		if (!validations.isEmpty()) {
+			sb.append("\\\"validations\\\": {");
+			for (Validation validation : validations) {
+//				sb.append("{");
+				sb.append(validation.toJson());
+//				sb.append("}");
+			}
+			sb.append("}, ");
+		} else {
+			sb.append("\\\"validations\\\": null, ");
+		}
+
 		
 		sb.append("\\\"manyPrimitive\\\": ");
 		sb.append(propertyManyPrimitiveField.getInitExp());

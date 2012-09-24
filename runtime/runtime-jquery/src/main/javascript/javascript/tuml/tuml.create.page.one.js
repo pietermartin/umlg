@@ -14,24 +14,29 @@ function createPageForOne(data, metaForData, tumlUri) {
                 var $input = constructInputForField(property);
                 if ($input !== undefined) {
                     $input.appendTo(li);
-                    if (property.date) {
-                        $input.datepicker({
-                            showOn: "button",
-                            buttonImageOnly: true,
-                            buttonImage: "../../javascript/slickgrid/images/calendar.gif"
-                        });
-                    } else if (property.time) {
-                        $input.timepicker({
-                            showOn: "button",
-                            buttonImageOnly: true,
-                            buttonImage: "../../javascript/slickgrid/images/calendar.gif"
-                        });
-                    } else if (property.dateTime) {
-                        $input.datetimepicker({
-                            showOn: "button",
-                            buttonImageOnly: true,
-                            buttonImage: "../../javascript/slickgrid/images/calendar.gif"
-                        });
+                    if (property.dataTypeEnum !== undefined) {
+                        if (property.dataTypeEnum == 'Date') {
+                            $input.datepicker({
+                                showOn: "button",
+                                buttonImageOnly: true,
+                                dateFormat: "yy-mm-dd",
+                                buttonImage: "../../javascript/slickgrid/images/calendar.gif"
+                            });
+                        } else if (property.dataTypeEnum == 'Time') {
+                            $input.timepicker({
+                                showOn: "button",
+                                buttonImageOnly: true,
+                                buttonImage: "../../javascript/slickgrid/images/calendar.gif"
+                            });
+                        } else if (property.dataTypeEnum == 'DateTime') {
+                            $input.datetimepicker({
+                                showOn: "button",
+                                buttonImageOnly: true,
+                                buttonImage: "../../javascript/slickgrid/images/calendar.gif",
+                                dateFormat: "yy-mm-dd",
+                                timeFormat: "hh:mm:ss"
+                            });
+                        }
                     }
                 }
             }
@@ -63,17 +68,32 @@ function createPageForOne(data, metaForData, tumlUri) {
     function constructInputForField(property) {
         if (property.name == 'id') {
             return $('<input />', {disabled: 'disabled', type:'text', class: 'field', id: property.name + 'Id', name: property.name, value: data[property.name]});
-        } else if (property.date) {
-            var $input = $("<input type=text />");
+        } else if (property.dataTypeEnum !== undefined) {
+            var $input;
+            if (property.dataTypeEnum == 'Date') {
+                $input = $("<input />", {type:'text',id: property.name + 'Id', name: property.name});
+            } else if (property.dataTypeEnum == 'Time') {
+                $input = $("<input />", {type:'text',id: property.name + 'Id', name: property.name});
+            } else if (property.dataTypeEnum == 'DateTime') {
+                $input = $("<input />", {type:'text',id: property.name + 'Id', name: property.name});
+            } else if (property.dataTypeEnum == 'InternationalPhoneNumber') {
+                $input = $("<input />", {type:'text',id: property.name + 'Id', name: property.name});
+            } else if (property.dataTypeEnum == 'LocalPhoneNumber') {
+                $input = $("<input />", {type:'text',id: property.name + 'Id', name: property.name});
+            } else if (property.dataTypeEnum == 'Email') {
+                $input = $("<input />", {type:'text',id: property.name + 'Id', name: property.name});
+            } else if (property.dataTypeEnum == 'Video') {
+                $input = $("<input />", {type:'text',id: property.name + 'Id', name: property.name});
+            } else  if (property.dataTypeEnum == 'Audio') {
+                $input = $("<input />", {type:'text',id: property.name + 'Id', name: property.name});
+            } else if (property.dataTypeEnum == 'Image') {
+                $input = $("<input />", {type:'text',id: property.name + 'Id', name: property.name});
+            } else {
+                alert('Unsupported dataType ' + property.dataTypeEnum);
+            }
             $input[0].defaultValue = data[property.name];
             return $input;
-        } else if (property.time) {
-            var $input = $("<input type=text />");
-            return $input;
-        } else if (property.dateTime) {
-            var $input = $("<input type=text />");
-            return $input;
-        } else if (!property.onePrimitive && !property.internationalPhoneNumber && !property.localPhoneNumber && !property.email && !property.video && !property.audio && !property.image && !property.manyPrimitive && !property.composite) {
+        } else if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite) {
             var $select = $('<select />', {class: 'chzn-select', style: 'width:350px;',  id: property.name + 'Id', name: property.name});
             appendLoopupOptionsToSelect(property.tumlLookupUri, property.lower > 0, data['id'], data[property.name], $select);
             return $select;
@@ -137,6 +157,12 @@ function createPageForOne(data, metaForData, tumlUri) {
                         dataToSend[property.name] = $('#' + property.name + 'Id').val();
                     } else if (property.fieldType == 'Boolean') {
                         dataToSend[property.name] = $('#' + property.name + 'Id').attr("checked") == "checked";
+                    }
+                } else if (property.dataTypeEnum !== undefined) {
+                    if (property.dataTypeEnum == 'DateTime') {
+                        dataToSend[property.name] = $('#' + property.name + 'Id').val().replace(/ /g,"T");
+                    } else {
+                        dataToSend[property.name] = $('#' + property.name + 'Id').val();
                     }
                 } else if (!property.onePrimitive && !property.manyPrimitive && !property.inverseComposite) {
                     var $select = $('#' + property.name + 'Id');

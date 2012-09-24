@@ -9,4 +9,7 @@
   <packagedElement xmi:type="uml:DataType" xmi:id="_cohIAQLgEeKtFpHFDhpFVA" name="Date"/>
   <packagedElement xmi:type="uml:DataType" xmi:id="_eqPvMALgEeKtFpHFDhpFVA" name="Time"/>
   <packagedElement xmi:type="uml:DataType" xmi:id="_8vAG0ALhEeKtFpHFDhpFVA" name="Image"/>
+  <packagedElement xmi:type="uml:DataType" xmi:id="_QhhnkAV-EeK9oIwdQfC0-w" name="Interval"/>
+  <packagedElement xmi:type="uml:DataType" xmi:id="_fe6z8AV-EeK9oIwdQfC0-w" name="Duration"/>
+  <packagedElement xmi:type="uml:DataType" xmi:id="_tq9b4AV-EeK9oIwdQfC0-w" name="CreditCardNumber"/>
 </uml:Model>

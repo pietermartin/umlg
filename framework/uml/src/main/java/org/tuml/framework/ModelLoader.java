@@ -3,6 +3,7 @@ package org.tuml.framework;
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -22,20 +23,17 @@ public class ModelLoader {
 
 	public static final ResourceSet RESOURCE_SET = new ResourceSetImpl();
 	private static Model model;
+	private static Profile tumlValidationProfile;
 
 	public static Model loadModel(File modelFile) {
 		registerResourceFactories();
 		URLClassLoader loader = (URLClassLoader) Thread.currentThread().getContextClassLoader();
 		URI uri = URI.createURI(findLocation(loader, true, "org/eclipse/uml2/uml/resources", "org.eclipse.uml2.uml.resources"));
 		registerPathmaps(uri);
-//		Model dataTypes = registerTumlDataType();
-
 		File dir = modelFile.getParentFile();
 		URI dirUri = URI.createFileURI(dir.getAbsolutePath());
 		model = (Model) load(dirUri.appendSegment(modelFile.getName()));
-		
-//		model.createElementImport(dataTypes);
-		
+		tumlValidationProfile = model.getAppliedProfile("Tuml::Validation");
 		return model;
 	}
 
@@ -44,15 +42,13 @@ public class ModelLoader {
 	}
 
 	public static Stereotype findStereotype(String name) {
-		Profile tumlProfile = (Profile) model.getAllAppliedProfiles().get(0);
-		System.out.println(tumlProfile.getMetaclassReferences());
-		// org.eclipse.uml2.uml.Class system = (org.eclipse.uml2.uml.Class)
-		// tumlProfile.allOwningPackages()getOwnedElements().get(0);
-		// > Stereotype s = system.getAppliedStereotypes().get(0);
-		// > System.out.println(s);
-		return null;
+		return tumlValidationProfile.getOwnedStereotype(name);
 	}
 
+	public static List<Stereotype> getStereotypes() {
+		return tumlValidationProfile.getOwnedStereotypes();
+	}
+	
 	protected static org.eclipse.uml2.uml.Package load(URI uri) {
 		org.eclipse.uml2.uml.Package package_ = null;
 		Resource resource = RESOURCE_SET.getResource(uri, true);
@@ -71,30 +67,6 @@ public class ModelLoader {
 		URIConverter.URI_MAP.put(URI.createURI(UMLResource.LIBRARIES_PATHMAP), uri.appendSegment("libraries").appendSegment(""));
 		URIConverter.URI_MAP.put(URI.createURI(UMLResource.METAMODELS_PATHMAP), uri.appendSegment("metamodels").appendSegment(""));
 		URIConverter.URI_MAP.put(URI.createURI(UMLResource.PROFILES_PATHMAP), uri.appendSegment("profiles").appendSegment(""));
-	}
-
-	protected static Model registerTumlDataType() {
-
-//		URL url;
-//		try {
-//			url = new URL("file:///home/pieter/workspace-tuml/tuml/runtime/runtime-domain/src/main/model/TumDataTypes.uml");
-//		} catch (MalformedURLException e) {
-//			throw new RuntimeException(e);
-//		}
-//		// Need the jarfile path so chop off the file specific stuff
-//		final String path = url.toExternalForm().split("!")[0] + "!/";
-//		// Build a uri for this path
-//		final URI baseURI = URI.createURI(path);
-//		URIConverter.URI_MAP.put(URI.createURI("platform:/resource"), baseURI.appendSegment("libraries").appendSegment(""));
-		
-		File file = new File("/home/pieter/workspace-tuml/tuml/runtime/runtime-domain/src/main/model");
-		URI dirUri = URI.createFileURI(file.getAbsolutePath());
-	
-		URIConverter.URI_MAP.put(URI.createURI("platform:/resource"), dirUri.appendSegment("libraries").appendSegment(""));
-		
-		Model umlLibrary = (Model) load(dirUri.appendSegment("TumDataTypes.uml"));
-		
-		return umlLibrary;
 	}
 
 	public static String findLocation(URLClassLoader s, boolean jar, String... names) {

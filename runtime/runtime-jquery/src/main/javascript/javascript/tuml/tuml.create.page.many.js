@@ -21,8 +21,6 @@ function createGrid(data, metaForData, tumlUri) {
                     name: property.name,
                     field: property.name,
                     sortable: true,
-                    //editor: selectEditor(property),
-                    validator: requiredFieldValidator,
                     formatter: selectFormatter(property)
                 });           
             } else {
@@ -32,8 +30,8 @@ function createGrid(data, metaForData, tumlUri) {
                     field: property.name,
                     sortable: true,
                     editor: selectEditor(property),
-                    validator: requiredFieldValidator,
                     formatter: selectFormatter(property),
+                    validator: selectFieldValidator(property),
                     options: {required: property.lower > 0, tumlLookupUri: property.tumlLookupUri, rowLookupMap: new RowLookupMap(property.tumlCompositeParentLookupUri), compositeParentLookupMap: new CompositeParentLookupMap(property.tumlLookupUri)},
                     width: 120
                 });
@@ -46,15 +44,7 @@ function createGrid(data, metaForData, tumlUri) {
             return TumlSlick.Formatters.Link;
         } else if (property.name == 'id') {
             return null;
-        } else if (property.dateTime) {
-            return null;
-        } else if (property.date) {
-            return null;
-        } else if (property.time) {
-            return null;
-        } else if (property.image) {
-            return null;
-        } else if (property.email) {
+        } else if (property.dataTypeEnum !== undefined) {
             return null;
         } else if (!property.onePrimitive && !property.manyPrimitive) {
             return function waitingFormatter(row, cell, value, columnDef, dataContext) {
@@ -73,24 +63,28 @@ function createGrid(data, metaForData, tumlUri) {
     function selectEditor(property) {
         if (property.name == 'uri') {
             return null;
-        } else if (property.date) {
-            return  Tuml.Slick.Editors.Date; 
-        } else if (property.time) {
-            return  Tuml.Slick.Editors.Time; 
-        } else if (property.dateTime) {
-            return  Tuml.Slick.Editors.DateTime; 
-        } else if (property.email) {
-            return null; 
-        } else if (property.internationalPhoneNumber) {
-            return null; 
-        } else if (property.localPhoneNumber) {
-            return null; 
-        } else if (property.video) {
-            return null; 
-        } else if (property.audio) {
-            return null; 
-        } else if (property.image) {
-            return null; 
+        } else if (property.dataTypeEnum !== undefined) {
+            if (property.dataTypeEnum == 'Date') {
+                return  Tuml.Slick.Editors.Date; 
+            } else if (property.dataTypeEnum == 'Time') {
+                return  Tuml.Slick.Editors.Time; 
+            } else if (property.dataTypeEnum == 'DateTime') {
+                return  Tuml.Slick.Editors.DateTime; 
+            } else if (property.dataTypeEnum == 'InternationalPhoneNumber') {
+                return null; 
+            } else if (property.dataTypeEnum == 'LocalPhoneNumber') {
+                return null; 
+            } else if (property.dataTypeEnum == 'Email') {
+                return null; 
+            } else if (property.dataTypeEnum == 'Video') {
+                return null; 
+            } else  if (property.dataTypeEnum == 'Audio') {
+                return null; 
+            } else if (property.dataTypeEnum == 'Image') {
+                return null; 
+            } else {
+                alert('Unsupported dataType ' + property.dataTypeEnum);
+            }
         } else if (!property.onePrimitive && !property.manyPrimitive && !property.composite) {
             return  Tuml.Slick.Editors.SelectCellEditor; 
         } else if (property.name == 'id') {
@@ -98,7 +92,7 @@ function createGrid(data, metaForData, tumlUri) {
         } else if (property.fieldType == 'String') {
             return  Slick.Editors.Text; 
         } else if (property.fieldType == 'Integer') {
-            return Slick.Editors.Integer;
+            return Tuml.Slick.Editors.Integer;
         } else if (property.fieldType == 'Long') {
             return Slick.Editors.Integer;
         } else if (property.fieldType == 'Boolean') {
@@ -108,6 +102,75 @@ function createGrid(data, metaForData, tumlUri) {
         }
     }
 
+    function selectFieldValidator(property) {
+        if (property.name == 'uri') {
+        } else if (property.dataTypeEnum !== undefined) {
+            if (property.dataTypeEnum == 'Date') {
+            } else if (property.dataTypeEnum == 'Time') {
+            } else if (property.dataTypeEnum == 'DateTime') {
+            } else if (property.dataTypeEnum == 'InternationalPhoneNumber') {
+            } else if (property.dataTypeEnum == 'LocalPhoneNumber') {
+            } else if (property.dataTypeEnum == 'Email') {
+            } else if (property.dataTypeEnum == 'Video') {
+            } else  if (property.dataTypeEnum == 'Audio') {
+            } else if (property.dataTypeEnum == 'Image') {
+            } else {
+                alert('Unsupported dataType ' + property.dataTypeEnum);
+            }
+        } else if (!property.onePrimitive && !property.manyPrimitive && !property.composite) {
+        } else if (property.name == 'id') {
+        } else if (property.fieldType == 'String') {
+        } else if (property.fieldType == 'Integer') {
+            return function (value) {
+                if (property.lower > 0 && (value == '' || value == undefined || value == null)) {
+                    return {
+                        valie: false,
+                        msg: property.name + " is a required field!"
+                    };
+                }
+                if (isNaN(parseInt(value, 10))) {
+                    return {
+                        valid: false,
+                        msg: "Please enter a valid positive number"
+                    };
+                }
+                if (property.validations.range !== undefined) {
+                    var intValue =  parseInt(value, 10);
+                    if (intValue < property.validations.range.min || intValue > property.validations.range.max) {
+                        return {
+                            valid:false,
+                            msg: "Value need to be between " + property.validations.range.min + " and " + property.validations.range.max
+                        }
+                    }
+                }
+                return {
+                    valid: true,
+                    msg: null
+                };
+            };
+        } else if (property.fieldType == 'Long') {
+            return function () {
+                if (isNaN(parseInt($input.val(), 10))) {
+                    return {
+                        valid: false,
+                        msg: "Please enter a valid positive number"
+                    };
+                }
+
+                return {
+                    valid: true,
+                    msg: null
+                };
+            };
+        } else if (property.fieldType == 'Boolean') {
+        } else {
+        }
+        return function() {
+            return {
+                valid: true,
+                msg: null}
+        };
+    }
     var options = {
         showHeaderRow: true,
         headerRowHeight: 30,
@@ -298,7 +361,35 @@ function createGrid(data, metaForData, tumlUri) {
                 for (var i = 0; i < metaForData.metaForData.properties.length; i++) {
                     var property = metaForData.metaForData.properties[i];
                     if (property.name == columnId) {
-                        if (!property.onePrimitive && !property.manyPrimitive && !property.composite) {
+                        if (property.dataTypeEnum !== undefined) {
+                            if (property.dataTypeEnum == 'Date') {
+                                if (item[c.field] == null || item[c.field].indexOf(columnFilters[columnId]) == -1) {
+                                    return false;
+                                }
+                            } else if (property.dataTypeEnum == 'Time') {
+                                if (item[c.field] == undefined || item[c.field].indexOf(columnFilters[columnId]) == -1) {
+                                    return false;
+                                }
+                            } else if (property.dataTypeEnum == 'DateTime') {
+                                if (item[c.field] == undefined || item[c.field].indexOf(columnFilters[columnId]) == -1) {
+                                    return false;
+                                }
+                            } else if (property.dataTypeEnum == 'InternationalPhoneNumber') {
+                                if (item[c.field] == undefined || item[c.field].indexOf(columnFilters[columnId]) == -1) {
+                                    return false;
+                                }
+                            } else if (property.dataTypeEnum == 'LocalPhoneNumber') {
+                                if (item[c.field] == undefined || item[c.field].indexOf(columnFilters[columnId]) == -1) {
+                                    return false;
+                                }
+                            } else if (property.dataTypeEnum == 'Email') {
+                                if (item[c.field] == undefined || item[c.field].indexOf(columnFilters[columnId]) == -1) {
+                                    return false;
+                                }
+                            } else {
+                                alert('Unsupported dataType ' + property.dataTypeEnum);
+                            }
+                        } else if (!property.onePrimitive && !property.manyPrimitive && !property.composite) {
                             if (item[c.field].displayName == undefined &&  item[c.field] != columnFilters[columnId]) {
                                 return false;
                             }
@@ -306,7 +397,7 @@ function createGrid(data, metaForData, tumlUri) {
                                 return false;
                             }
                         } else if (property.fieldType == 'String') {
-                            if (item[c.field].indexOf(columnFilters[columnId]) == -1) {
+                            if (item[c.field] !== undefined && item[c.field].indexOf(columnFilters[columnId]) == -1) {
                                 return false;
                             }
                         } else if (property.fieldType == 'Integer' || property.fieldType == 'Long') {
@@ -333,6 +424,10 @@ function createGrid(data, metaForData, tumlUri) {
         $(e.target).addClass("ui-state-hover")
     }).mouseout(function(e) {
         $(e.target).removeClass("ui-state-hover")
+    });
+
+    grid.onValidationError.subscribe(function (e, args) {
+        alert(args.validationResults.msg);
     });
 
     // initialize the model after all the events have been hooked up

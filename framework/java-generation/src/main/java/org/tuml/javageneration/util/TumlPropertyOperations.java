@@ -80,8 +80,12 @@ public final class TumlPropertyOperations extends PropertyOperations {
 			return result = true;
 		} else if (isOneToOne(p) && !p.isComposite() && !p.getOtherEnd().isComposite()) {
 			// If association is OneToOne and both sides are non composite then
-			// take the non optional 1-1 side as inverse=true
-			result = p.getLower() == 1 && p.getUpper() == 1;
+			// take the 1-1 side as inverse=true else compare alphabetically
+			if (p.getLower() == 0 && p.getOtherEnd().getLower() == 0) {
+				result = p.getName().compareTo(p.getOtherEnd().getName()) >= -1;
+			} else {
+				result = p.getLower() == 1 && p.getUpper() == 1;
+			}
 		} else if (isOneToMany(p) && !p.isComposite() && !p.getOtherEnd().isComposite()) {
 			// If association is OneToMany and both sides are non composite then
 			// take the many side as inverse=true
@@ -172,7 +176,7 @@ public final class TumlPropertyOperations extends PropertyOperations {
 
 	public static OJPathName getTypePath(Property p) {
 		if (!(p.getType() instanceof PrimitiveType) && !(p.getType() instanceof Enumeration) && p.getType() instanceof DataType) {
-			return DataTypeEnum.fromDataType((DataType) p.getType());
+			return DataTypeEnum.getPathNameFromDataType((DataType) p.getType());
 		} else {
 			return new OJPathName(Namer.name(p.getType().getNearestPackage()) + "." + TinkerGenerationUtil.umlPrimitiveTypeToJava(p.getType()));
 		}
@@ -184,6 +188,10 @@ public final class TumlPropertyOperations extends PropertyOperations {
 
 	public static String setter(Property property) {
 		return "set" + StringUtils.capitalize(property.getName());
+	}
+
+	public static String validator(Property property) {
+		return "validate" + StringUtils.capitalize(property.getName());
 	}
 
 	public static String adder(Property property) {

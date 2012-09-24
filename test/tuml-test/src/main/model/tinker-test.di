@@ -51,7 +51,7 @@
     <windows xmi:id="_1dMZoQAOEeKpVr_ntT6cLA">
       <children xsi:type="di:TabFolder" xmi:id="_1dMZoAAOEeKpVr_ntT6cLA">
         <children>
-          <emfPageIdentifier href="tinker-test.notation#_1chrQAAOEeKpVr_ntT6cLA"/>
+          <emfPageIdentifier href="tinker-test.notation#_1chrTAAOEeKpVr_ntT6cLA"/>
         </children>
       </children>
     </windows>

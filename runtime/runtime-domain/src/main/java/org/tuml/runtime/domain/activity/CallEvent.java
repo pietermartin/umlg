@@ -7,6 +7,7 @@ import org.tuml.runtime.collection.Qualifier;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.domain.TumlNode;
+import org.tuml.runtime.validation.TumlConstraintViolation;
 
 import com.tinkerpop.blueprints.Vertex;
 
@@ -78,6 +79,12 @@ public class CallEvent extends Event {
 
 	@Override
 	public String toJsonWithoutCompositeParent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<TumlConstraintViolation> validateRequiredProperties() {
 		// TODO Auto-generated method stub
 		return null;
 	}

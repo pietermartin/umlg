@@ -104,7 +104,7 @@ public class AuditPropertyVisitor extends BaseVisitor implements Visitor<Propert
 	}
 
 	private void buildGetAuditsForThisMany(PropertyWrapper pWrap, OJClass owner, boolean embedded) {
-		owner.addToImports(TinkerGenerationUtil.tinkerFormatter);
+		owner.addToImports(TinkerGenerationUtil.tumlFormatter);
 		owner.addToImports(new OJPathName("java.util.Date"));
 		OJOperation getAuditsForThisMany = new OJOperation();
 		getAuditsForThisMany.setVisibility(OJVisibilityKind.PRIVATE);
@@ -239,7 +239,7 @@ public class AuditPropertyVisitor extends BaseVisitor implements Visitor<Propert
 
 	private void buildGetAuditForThisOne(PropertyWrapper pWrap, OJAnnotatedClass owner) {
 
-		owner.addToImports(TinkerGenerationUtil.tinkerFormatter);
+		owner.addToImports(TinkerGenerationUtil.tumlFormatter);
 		owner.addToImports(new OJPathName("java.util.Date"));
 		owner.addToImports(new OJPathName("java.util.HashSet"));
 		OJOperation getAuditsForThisOne = new OJOperation();

@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import org.joda.time.DateTime;
 import org.tuml.runtime.adaptor.TransactionThreadVar;
-import org.tuml.runtime.util.TinkerFormatter;
+import org.tuml.runtime.util.TumlFormatter;
 
 public abstract class BaseTinkerAuditable extends BaseTumlAudit implements TinkerAuditableNode, Serializable{
 
@@ -19,7 +19,7 @@ public abstract class BaseTinkerAuditable extends BaseTumlAudit implements Tinke
 		if ( TransactionThreadVar.hasNoAuditEntry(getClass().getName() + getUid()) ) {
 			createAuditVertex(false);
 		}
-		getAuditVertex().setProperty("deletedOn", TinkerFormatter.format(deletedOn));
+		getAuditVertex().setProperty("deletedOn", TumlFormatter.format(deletedOn));
 
 	}
 

@@ -33,7 +33,7 @@ public class TumlRestletServerComponent extends Component {
 
 		GraphDb.setDb(createNakedGraph());
 		createDefaultData();
-//		create1000000();
+		// create1000000();
 
 		// Set basic properties
 		setName("RESTful Mail Server component");
@@ -62,7 +62,7 @@ public class TumlRestletServerComponent extends Component {
 			for (int j = 0; j < 2; j++) {
 				Hand hand = new Hand(human);
 				hand.setName("hand" + j);
-				hand.setTestNumber(i + 1);
+				hand.setTestNumber(50);
 				hand.setTestBoolean(false);
 				hand.setTestUnlimitedNatural(1 + j * 10000000L);
 
@@ -122,6 +122,7 @@ public class TumlRestletServerComponent extends Component {
 		}
 		GraphDb.getDb().stopTransaction(Conclusion.SUCCESS);
 	}
+
 	protected NakedGraph createNakedGraph() {
 		Properties properties = new Properties();
 		try {

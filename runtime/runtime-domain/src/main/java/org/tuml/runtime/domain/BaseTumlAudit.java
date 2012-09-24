@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import org.joda.time.DateTime;
 import org.tuml.runtime.adaptor.TransactionThreadVar;
-import org.tuml.runtime.util.TinkerFormatter;
+import org.tuml.runtime.util.TumlFormatter;
 
 import com.tinkerpop.blueprints.Vertex;
 
@@ -22,20 +22,20 @@ public abstract class BaseTumlAudit extends BaseTuml implements TinkerAuditableN
 	}
 
 	public DateTime getDeletedOn() {
-		return TinkerFormatter.parseDateTime((String) this.vertex.getProperty("deletedOn"));
+		return TumlFormatter.parseDateTime((String) this.vertex.getProperty("deletedOn"));
 	}
 
 	public void setDeletedOn(DateTime deletedOn) {
-		this.vertex.setProperty("deletedOn", TinkerFormatter.format(deletedOn));
+		this.vertex.setProperty("deletedOn", TumlFormatter.format(deletedOn));
 		if ( TransactionThreadVar.hasNoAuditEntry(getClass().getName() + getUid()) ) {
 			createAuditVertex(false);
 		}
-		getAuditVertex().setProperty("deletedOn", TinkerFormatter.format(deletedOn));
+		getAuditVertex().setProperty("deletedOn", TumlFormatter.format(deletedOn));
 	}
 
 	public void defaultCreate() {
 		super.defaultCreate();
-		this.vertex.setProperty("deletedOn", TinkerFormatter.format(new DateTime(1000L * 60 * 60 * 24 * 365 * 1000)));
+		this.vertex.setProperty("deletedOn", TumlFormatter.format(new DateTime(1000L * 60 * 60 * 24 * 365 * 1000)));
 	}
 
 }

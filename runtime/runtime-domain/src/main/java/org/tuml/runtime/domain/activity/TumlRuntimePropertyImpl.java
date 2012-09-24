@@ -1,6 +1,7 @@
 package org.tuml.runtime.domain.activity;
 
 import org.tuml.runtime.collection.TumlRuntimeProperty;
+import org.tuml.runtime.domain.DataTypeEnum;
 
 public class TumlRuntimePropertyImpl implements TumlRuntimeProperty {
 
@@ -134,57 +135,9 @@ public class TumlRuntimePropertyImpl implements TumlRuntimeProperty {
 	}
 
 	@Override
-	public boolean isDate() {
+	public DataTypeEnum getDataTypeEnum() {
 		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isEmail() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isInternationalPhoneNumber() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isLocalPhoneNumber() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isVideo() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isAudio() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isImage() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isDateTime() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isTime() {
-		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 }

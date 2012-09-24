@@ -1,13 +1,16 @@
 package org.tuml.javageneration.visitor.property;
 
 import org.eclipse.uml2.uml.Property;
+import org.opaeum.java.metamodel.OJField;
 import org.opaeum.java.metamodel.OJIfStatement;
+import org.opaeum.java.metamodel.OJPathName;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedField;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
 import org.tuml.framework.Visitor;
 import org.tuml.generation.Workspace;
 import org.tuml.javageneration.util.PropertyWrapper;
+import org.tuml.javageneration.util.TinkerGenerationUtil;
 import org.tuml.javageneration.util.TumlClassOperations;
 import org.tuml.javageneration.visitor.BaseVisitor;
 
@@ -57,18 +60,21 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
 	public static void buildOneAdder(OJAnnotatedClass owner, PropertyWrapper propertyWrapper) {
 		OJAnnotatedOperation singleAdder = new OJAnnotatedOperation(propertyWrapper.adder());
 		singleAdder.addParam(propertyWrapper.fieldname(), propertyWrapper.javaBaseTypePath());
-		OJIfStatement ifNotNull = new OJIfStatement(propertyWrapper.fieldname() + " != null");
-		ifNotNull.addToThenPart("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ")");
-		singleAdder.getBody().addToStatements(ifNotNull);
+		if (!propertyWrapper.isDataType()) {
+			OJIfStatement ifNotNull = new OJIfStatement(propertyWrapper.fieldname() + " != null");
+			ifNotNull.addToThenPart("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ")");
+			singleAdder.getBody().addToStatements(ifNotNull);
+		} else {
+			OJField failedConstraints = new OJField("violations", new OJPathName("java.util.List").addToGenerics(TinkerGenerationUtil.TumlConstraintViolation));
+			failedConstraints.setInitExp(propertyWrapper.validator() + "(" + propertyWrapper.fieldname() + ")");
+			singleAdder.getBody().addToLocals(failedConstraints);
+			OJIfStatement ifValidated = new OJIfStatement(propertyWrapper.fieldname() + " != null && violations.isEmpty()");
+			ifValidated.addToThenPart("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ")");
+			singleAdder.getBody().addToStatements(ifValidated);
+			ifValidated.addToElseIfCondition("!violations.isEmpty()", "throw new TumlConstraintViolationException(violations)");
+			owner.addToImports(TinkerGenerationUtil.TumlConstraintViolationException);
+		}
 		owner.addToOperations(singleAdder);
-
-		// TODO qualifiers
-		// if (!map.getProperty().getQualifiers().isEmpty()) {
-		// s.setExpression(s.getExpression().replace("val)", "val, " +
-		// TinkerGenerationUtil.contructNameForQualifiedGetter(map) +
-		// "(val))"));
-		// }
-
 	}
 
 	public static void buildSetter(OJAnnotatedClass owner, PropertyWrapper pWrap) {
@@ -76,10 +82,9 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
 		setter.addParam(pWrap.fieldname(), pWrap.javaBaseTypePath());
 		PropertyWrapper otherEnd = new PropertyWrapper(pWrap.getOtherEnd());
 		if (pWrap.hasOtherEnd() && !pWrap.isEnumeration() && pWrap.isOneToOne()) {
-			OJIfStatement ifNotNull = new OJIfStatement(pWrap.fieldname() + " != null"); 
+			OJIfStatement ifNotNull = new OJIfStatement(pWrap.fieldname() + " != null");
 			ifNotNull.addToThenPart(pWrap.fieldname() + "." + otherEnd.clearer() + "()");
-			ifNotNull.addToThenPart(
-					pWrap.fieldname() + ".initialiseProperty(" + TumlClassOperations.propertyEnumName(otherEnd.getOwningType()) + "." + otherEnd.fieldname() + ")");
+			ifNotNull.addToThenPart(pWrap.fieldname() + ".initialiseProperty(" + TumlClassOperations.propertyEnumName(otherEnd.getOwningType()) + "." + otherEnd.fieldname() + ")");
 			owner.addToImports(TumlClassOperations.getPathName(otherEnd.getOwningType()).append(TumlClassOperations.propertyEnumName(otherEnd.getOwningType())));
 			setter.getBody().addToStatements(ifNotNull);
 		}

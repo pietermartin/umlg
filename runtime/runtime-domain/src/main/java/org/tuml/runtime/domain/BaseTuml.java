@@ -8,7 +8,7 @@ import org.joda.time.DateTime;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.memory.TumlMemorySet;
 import org.tuml.runtime.domain.ocl.OclState;
-import org.tuml.runtime.util.TinkerFormatter;
+import org.tuml.runtime.util.TumlFormatter;
 
 import com.tinkerpop.blueprints.Vertex;
 
@@ -31,19 +31,19 @@ public abstract class BaseTuml implements TumlNode, Serializable {
 	}
 
 	public DateTime getCreatedOn() {
-		return TinkerFormatter.parseDateTime((String) this.vertex.getProperty("createdOn"));
+		return TumlFormatter.parseDateTime((String) this.vertex.getProperty("createdOn"));
 	}
 
 	public void setCreatedOn(DateTime createdOn) {
-		this.vertex.setProperty("createdOn", TinkerFormatter.format(createdOn));
+		this.vertex.setProperty("createdOn", TumlFormatter.format(createdOn));
 	}
 
 	public DateTime getUpdatedOn() {
-		return TinkerFormatter.parseDateTime((String) this.vertex.getProperty("updatedOn"));
+		return TumlFormatter.parseDateTime((String) this.vertex.getProperty("updatedOn"));
 	}
 
 	public void setUpdatedOn(DateTime updatedOn) {
-		this.vertex.setProperty("updatedOn", TinkerFormatter.format(updatedOn));
+		this.vertex.setProperty("updatedOn", TumlFormatter.format(updatedOn));
 	}
 
 	public void defaultCreate() {

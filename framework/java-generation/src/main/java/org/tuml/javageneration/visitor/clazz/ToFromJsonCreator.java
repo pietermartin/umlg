@@ -74,36 +74,40 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 									+ "().getName() + \"\\\"}\" : \"{\\\"id\\\": \" + null + \", \\\"displayName\\\": \" + null + \"}\") + \"" + "\")");
 				} else if (pWrap.isDateTime()) {
 					toJson.getBody().addToStatements(
-							"sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + (" + pWrap.getter() + "() != null ? \"\\\"\" + TinkerFormatter.format(" + pWrap.getter()
-									+ "()) + \"\\\"\" : null " + "))");
-					annotatedClass.addToImports(TinkerGenerationUtil.tinkerFormatter);
+							"sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + (" + pWrap.getter() + "() != null ? \"\\\"\" + " + TinkerGenerationUtil.tumlFormatter.getLast()
+									+ ".format(" + pWrap.getter() + "()) + \"\\\"\" : null " + "))");
+					annotatedClass.addToImports(TinkerGenerationUtil.tumlFormatter);
 				} else if (pWrap.isDate()) {
 					toJson.getBody().addToStatements(
-							"sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + (" + pWrap.getter() + "() != null ? \"\\\"\" + TinkerFormatter.format(" + pWrap.getter()
-									+ "()) + \"\\\"\" : null " + "))");
-					annotatedClass.addToImports(TinkerGenerationUtil.tinkerFormatter);
+							"sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + (" + pWrap.getter() + "() != null ? \"\\\"\" + " + TinkerGenerationUtil.tumlFormatter.getLast()
+									+ ".format(" + pWrap.getter() + "()) + \"\\\"\" : null " + "))");
+					annotatedClass.addToImports(TinkerGenerationUtil.tumlFormatter);
 				} else if (pWrap.isTime()) {
 					toJson.getBody().addToStatements(
-							"sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + (" + pWrap.getter() + "() != null ? \"\\\"\" + TinkerFormatter.format(" + pWrap.getter()
-									+ "()) + \"\\\"\" : null " + "))");
-					annotatedClass.addToImports(TinkerGenerationUtil.tinkerFormatter);
+							"sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + (" + pWrap.getter() + "() != null ? \"\\\"\" + " + TinkerGenerationUtil.tumlFormatter.getLast()
+									+ ".format(" + pWrap.getter() + "()) + \"\\\"\" : null " + "))");
+					annotatedClass.addToImports(TinkerGenerationUtil.tumlFormatter);
 				} else if (pWrap.isImage()) {
 					toJson.getBody().addToStatements(
-							"sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + (" + pWrap.getter() + "() != null ? \"\\\"\" + TinkerFormatter.encode(" + pWrap.getter()
-									+ "()) + \"\\\"\" : null " + "))");
-					annotatedClass.addToImports(TinkerGenerationUtil.tinkerFormatter);
+							"sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + (" + pWrap.getter() + "() != null ? \"\\\"\" + " + TinkerGenerationUtil.tumlFormatter.getLast()
+									+ ".encode(" + pWrap.getter() + "()) + \"\\\"\" : null " + "))");
+					annotatedClass.addToImports(TinkerGenerationUtil.tumlFormatter);
 				} else if (pWrap.isVideo()) {
 					toJson.getBody().addToStatements(
-							"sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + (" + pWrap.getter() + "() != null ? \"\\\"\" + TinkerFormatter.encode(" + pWrap.getter()
-									+ "()) + \"\\\"\" : null " + "))");
-					annotatedClass.addToImports(TinkerGenerationUtil.tinkerFormatter);
+							"sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + (" + pWrap.getter() + "() != null ? \"\\\"\" + " + TinkerGenerationUtil.tumlFormatter.getLast()
+									+ ".encode(" + pWrap.getter() + "()) + \"\\\"\" : null " + "))");
+					annotatedClass.addToImports(TinkerGenerationUtil.tumlFormatter);
 				} else if (pWrap.isAudio()) {
 					toJson.getBody().addToStatements(
 							"sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + (" + pWrap.getter() + "() != null ? \"\\\"\" + TinkerFormatter.encode(" + pWrap.getter()
 									+ "()) + \"\\\"\" : null " + "))");
-					annotatedClass.addToImports(TinkerGenerationUtil.tinkerFormatter);
+					annotatedClass.addToImports(TinkerGenerationUtil.tumlFormatter);
 				} else {
-					toJson.getBody().addToStatements("sb.append(\"\\\"" + pWrap.getName() + "\\\": \\\"\" + " + pWrap.getter() + "() + \"\\\"" + "\")");
+					toJson.getBody().addToStatements(
+							"sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + (" + pWrap.getter() + "() != null ? \"\\\"\" + " + pWrap.getter() + "() + \"\\\"\" : null " + "))");
+					// toJson.getBody().addToStatements("sb.append(\"\\\"" +
+					// pWrap.getName() + "\\\": \\\"\" + " + pWrap.getter() +
+					// "() + \"\\\"" + "\")");
 				}
 			}
 			toJson.getBody().addToStatements("sb.append(\", \")");
@@ -182,16 +186,20 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 						TinkerGenerationUtil.addSuppressWarning(fromJson);
 					} else if (pWrap.isDate()) {
 						field = new OJField(pWrap.getName(), DataTypeEnum.Date.getPathName());
-						field.setInitExp("TinkerFormatter.parseDate((String)propertyMap.get(\"" + pWrap.getName() + "\"))");
-						annotatedClass.addToImports(TinkerGenerationUtil.tinkerFormatter);
+						field.setInitExp(TinkerGenerationUtil.tumlFormatter.getLast() + ".parseDate((String)propertyMap.get(\"" + pWrap.getName() + "\"))");
+						annotatedClass.addToImports(TinkerGenerationUtil.tumlFormatter);
 					} else if (pWrap.isDateTime()) {
 						field = new OJField(pWrap.getName(), DataTypeEnum.DateTime.getPathName());
-						field.setInitExp("TinkerFormatter.parseDateTime((String)propertyMap.get(\"" + pWrap.getName() + "\"))");
-						annotatedClass.addToImports(TinkerGenerationUtil.tinkerFormatter);
+						field.setInitExp(TinkerGenerationUtil.tumlFormatter.getLast() + ".parseDateTime((String)propertyMap.get(\"" + pWrap.getName() + "\"))");
+						annotatedClass.addToImports(TinkerGenerationUtil.tumlFormatter);
 					} else if (pWrap.isTime()) {
 						field = new OJField(pWrap.getName(), DataTypeEnum.Time.getPathName());
-						field.setInitExp("TinkerFormatter.parseTime((String)propertyMap.get(\"" + pWrap.getName() + "\"))");
-						annotatedClass.addToImports(TinkerGenerationUtil.tinkerFormatter);
+						field.setInitExp(TinkerGenerationUtil.tumlFormatter.getLast() + ".parseTime((String)propertyMap.get(\"" + pWrap.getName() + "\"))");
+						annotatedClass.addToImports(TinkerGenerationUtil.tumlFormatter);
+					} else if (pWrap.isImage()) {
+						field = new OJField(pWrap.getName(), DataTypeEnum.Image.getPathName());
+						field.setInitExp(TinkerGenerationUtil.tumlFormatter.getLast() + ".decode((String)propertyMap.get(\"" + pWrap.getName() + "\"))");
+						annotatedClass.addToImports(TinkerGenerationUtil.tumlFormatter);
 					} else {
 						field = new OJField(pWrap.getName(), pWrap.javaBaseTypePath());
 						field.setInitExp("(" + pWrap.javaBaseTypePath() + ")propertyMap.get(\"" + pWrap.getName() + "\")");
@@ -207,7 +215,7 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 					annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
 					ifNotNull.addToThenPart(ifSetToNull);
 					fromJson.getBody().addToStatements(ifNotNull);
-				} else if (pWrap.isOne() && pWrap.isDate()) {
+				} else if (pWrap.isOne() && pWrap.isDataType()) {
 					fromJson.getBody().addToStatements(pWrap.setter() + "(" + pWrap.fieldname() + ")");
 				} else {
 					// TODO that null is not going to work with anything

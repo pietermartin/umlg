@@ -1,10 +1,7 @@
 package org.tuml.runtime.domain.neo4j;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
 import org.joda.time.DateTime;
@@ -16,11 +13,13 @@ import org.tuml.runtime.adaptor.TransactionThreadVar;
 import org.tuml.runtime.domain.BaseTinkerAuditable;
 import org.tuml.runtime.domain.CompositionNode;
 import org.tuml.runtime.domain.TumlNode;
+import org.tuml.runtime.validation.TumlConstraintViolation;
+import org.tuml.runtime.validation.TumlConstraintViolationException;
 
 public class NakedTransactionEventHandler<T> implements TransactionEventHandler<T> {
 
 	Validator validator;
-	
+
 	public NakedTransactionEventHandler(Validator validator) {
 		super();
 		this.validator = validator;
@@ -28,36 +27,33 @@ public class NakedTransactionEventHandler<T> implements TransactionEventHandler<
 
 	@Override
 	public T beforeCommit(TransactionData data) throws Exception {
-		if (!isEmpty(data) && GraphDb.getDb()!=null) {
-			Set<ConstraintViolation<TumlNode>> constraintViolations = new HashSet<ConstraintViolation<TumlNode>>();
+		if (!isEmpty(data) && GraphDb.getDb() != null) {
 			TransactionThreadVar.clear();
 			GraphDb.incrementTransactionCount();
 			List<CompositionNode> entities = TransactionThreadEntityVar.get();
 			for (CompositionNode entity : entities) {
-				constraintViolations.addAll(validator.validate((TumlNode)entity));
+				TumlNode tumlNode = (TumlNode) entity;
+				List<TumlConstraintViolation> requiredConstraintViolations = tumlNode.validateRequiredProperties();
+				if (!requiredConstraintViolations.isEmpty()) {
+					throw new TumlConstraintViolationException(requiredConstraintViolations);
+				}
 				if (!entity.isTinkerRoot() && entity.getOwningObject() == null) {
-
 					if (entity instanceof BaseTinkerAuditable && ((BaseTinkerAuditable) entity).getDeletedOn().isBefore(new DateTime())) {
 						return null;
 					}
 					TransactionThreadEntityVar.clear();
 					throw new IllegalStateException(String.format("Entity %s %s does not have a composite owner", entity.getClass().getSimpleName(), entity.getId()));
-
 				}
 			}
 			TransactionThreadEntityVar.clear();
-			if (!constraintViolations.isEmpty()) {
-				throw new IllegalStateException("Constraint violations, need to pass violations along//TODO");
-			}
 		}
 		return null;
 	}
 
 	private boolean isEmpty(TransactionData data) {
-		return !data.assignedNodeProperties().iterator().hasNext() && !data.assignedRelationshipProperties().iterator().hasNext()
-				&& !data.createdNodes().iterator().hasNext() && !data.createdRelationships().iterator().hasNext() && !data.deletedNodes().iterator().hasNext()
-				&& !data.deletedRelationships().iterator().hasNext() && !data.removedNodeProperties().iterator().hasNext()
-				&& !data.removedRelationshipProperties().iterator().hasNext();
+		return !data.assignedNodeProperties().iterator().hasNext() && !data.assignedRelationshipProperties().iterator().hasNext() && !data.createdNodes().iterator().hasNext()
+				&& !data.createdRelationships().iterator().hasNext() && !data.deletedNodes().iterator().hasNext() && !data.deletedRelationships().iterator().hasNext()
+				&& !data.removedNodeProperties().iterator().hasNext() && !data.removedRelationshipProperties().iterator().hasNext();
 	}
 
 	@Override

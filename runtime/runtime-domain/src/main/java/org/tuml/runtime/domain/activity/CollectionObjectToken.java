@@ -14,6 +14,7 @@ import org.tuml.runtime.collection.persistent.TinkerSequenceImpl;
 import org.tuml.runtime.domain.CompositionNode;
 import org.tuml.runtime.domain.TumlNode;
 import org.tuml.runtime.domain.ocl.OclState;
+import org.tuml.runtime.validation.TumlConstraintViolation;
 
 import com.tinkerpop.blueprints.Vertex;
 
@@ -242,6 +243,12 @@ public class CollectionObjectToken<O> extends ObjectToken<O> implements Composit
 
 	@Override
 	public String toJsonWithoutCompositeParent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<TumlConstraintViolation> validateRequiredProperties() {
 		// TODO Auto-generated method stub
 		return null;
 	}

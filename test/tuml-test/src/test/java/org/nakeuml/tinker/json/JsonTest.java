@@ -2,22 +2,19 @@ package org.nakeuml.tinker.json;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.bind.DatatypeConverter;
-
 import junit.framework.Assert;
 
-import org.apache.log4j.helpers.ISO8601DateFormat;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.joda.time.DateTime;
 import org.junit.Test;
 import org.tuml.concretetest.God;
+import org.tuml.concretetest.Universe;
+import org.tuml.concretetest.Universe.UniverseRuntimePropertyEnum;
 import org.tuml.embeddedtest.REASON;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
@@ -35,16 +32,16 @@ public class JsonTest extends BaseLocalDbTest {
 		god.addToEmbeddedString("embeddedString3");
 		db.stopTransaction(Conclusion.SUCCESS);
 		Assert.assertEquals(4, countVertices());
-		
+
 		ObjectMapper mapper = new ObjectMapper();
 		System.out.println(god.toJson());
-		Map<String,Object> jsonObject = mapper.readValue(god.toJson(), Map.class);
+		Map<String, Object> jsonObject = mapper.readValue(god.toJson(), Map.class);
 		Assert.assertFalse(jsonObject.isEmpty());
 		Assert.assertSame(ArrayList.class, jsonObject.get("embeddedString").getClass());
 		boolean foundembeddedString1 = false;
 		boolean foundembeddedString2 = false;
 		boolean foundembeddedString3 = false;
-		List<String> embeddeds = (List<String>)jsonObject.get("embeddedString");
+		List<String> embeddeds = (List<String>) jsonObject.get("embeddedString");
 		for (String s : embeddeds) {
 			if (s.equals("embeddedString1")) {
 				foundembeddedString1 = true;
@@ -58,7 +55,7 @@ public class JsonTest extends BaseLocalDbTest {
 		}
 		Assert.assertTrue(foundembeddedString1 && foundembeddedString2 && foundembeddedString3);
 	}
-	
+
 	@Test
 	public void testEmbeddedManiesFromJson() throws JsonParseException, JsonMappingException, IOException {
 		db.startTransaction();
@@ -71,7 +68,7 @@ public class JsonTest extends BaseLocalDbTest {
 		god.addToEmbeddedInteger(3);
 		db.stopTransaction(Conclusion.SUCCESS);
 		Assert.assertEquals(7, countVertices());
-		
+
 		String json = god.toJson();
 		God godtest = new God(true);
 		godtest.fromJson(json);
@@ -109,7 +106,7 @@ public class JsonTest extends BaseLocalDbTest {
 		Assert.assertTrue(foundembeddedInteger1 && foundembeddedInteger2 && foundembeddedInteger3);
 
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testJsonToFromWithNulls() throws JsonParseException, JsonMappingException, IOException {
@@ -121,21 +118,21 @@ public class JsonTest extends BaseLocalDbTest {
 		g2.setName("g2");
 		g2.setReason(null);
 		db.stopTransaction(Conclusion.SUCCESS);
-		
+
 		ObjectMapper objectMapper = new ObjectMapper();
 		Map<String, Object> jsonMap = objectMapper.readValue(g1.toJson(), Map.class);
 		Assert.assertEquals("BAD", jsonMap.get("reason"));
 
 		jsonMap = objectMapper.readValue(g2.toJson(), Map.class);
 		Assert.assertEquals("null", jsonMap.get("reason"));
-		
+
 		db.startTransaction();
 		God god1FromJson = new God(true);
 		god1FromJson.fromJson(g1.toJson());
 		God god2FromJson = new God(true);
 		god2FromJson.fromJson(g2.toJson());
 		db.stopTransaction(Conclusion.SUCCESS);
-		
+
 		Assert.assertEquals(REASON.BAD, god1FromJson.getReason());
 		Assert.assertEquals("g1", god1FromJson.getName());
 		Assert.assertNull(god2FromJson.getReason());
@@ -145,25 +142,37 @@ public class JsonTest extends BaseLocalDbTest {
 		Assert.assertNull(god1FromJson.getPet());
 		Assert.assertNull(god2FromJson.getPet());
 	}
-	
+
 	@Test
 	public void testDates() throws JsonParseException, JsonMappingException, IOException {
 		db.startTransaction();
 		God g1 = new God(true);
 		g1.setName("g1");
-		Date beginning = new Date();
+		DateTime beginning = new DateTime();
 		g1.setBeginning(beginning);
 		db.stopTransaction(Conclusion.SUCCESS);
-		
+
 		God testG = new God(g1.getVertex());
 		Assert.assertEquals(beginning, testG.getBeginning());
-		
+
 		ObjectMapper objectMapper = new ObjectMapper();
 		@SuppressWarnings("unchecked")
 		Map<String, Object> jsonMap = objectMapper.readValue(testG.toJson(), Map.class);
-		
-		Calendar c = GregorianCalendar.getInstance();
-		c.setTime(beginning);
-		Assert.assertEquals(DatatypeConverter.printDateTime(c), jsonMap.get("beginning"));
+
+		Assert.assertEquals(beginning.toString(), jsonMap.get("beginning"));
+	}
+
+	@Test
+	public void testValidation() throws JsonParseException, JsonMappingException, IOException {
+		ObjectMapper objectMapper = new ObjectMapper();
+		String json = UniverseRuntimePropertyEnum.asJson();
+		@SuppressWarnings("unchecked")
+		Map<String, ArrayList<Map<String, Object>>> jsonMap = objectMapper.readValue(json, Map.class);
+		ArrayList<Map<String, Object>> o = jsonMap.get("properties");
+		boolean foundValidations = false;
+		for (Map<String, Object> map : o) {
+			foundValidations = map.containsKey("validations");
+		}
+		Assert.assertTrue(foundValidations);
 	}
 }

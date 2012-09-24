@@ -9,7 +9,7 @@ import org.joda.time.LocalTime;
 /**
  * DatatypeConverter uses ISO8610
  */
-public class TinkerFormatter {
+public class TumlFormatter {
 
 	// THe dashes instead of : in the hours minutes and seconds is for orientdb
 	// which does not like :

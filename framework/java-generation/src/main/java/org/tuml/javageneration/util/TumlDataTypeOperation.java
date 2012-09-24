@@ -41,4 +41,8 @@ public class TumlDataTypeOperation extends DataTypeOperations {
 		return dataType.getQualifiedName().equals("tumldatatypes::Image");
 	}
 
+	public static DataTypeEnum getDataTypeEnum(DataType type) {
+		return DataTypeEnum.fromDataType(type);
+	}
+
 }

@@ -35,7 +35,6 @@ public class QualifierValidator extends BaseVisitor implements Visitor<Property>
 		PropertyWrapper qualifier = new PropertyWrapper(p);
 		if (qualifier.isQualifier()) {
 			validateHasCorrespondingDerivedProperty(qualifier);
-//			Property derivedProperty = qualifier.getQualifierCorrespondingDerivedProperty();
 			Property ownerElement = (Property) p.getOwner();
 			PropertyWrapper ownerElementPWrap = new PropertyWrapper(ownerElement);
 			Type qualifiedClassifier = ownerElementPWrap.getType();

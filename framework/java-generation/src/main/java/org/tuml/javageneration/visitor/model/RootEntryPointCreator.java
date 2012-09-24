@@ -1,6 +1,7 @@
 package org.tuml.javageneration.visitor.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
@@ -23,6 +24,7 @@ import org.tuml.javageneration.util.Condition;
 import org.tuml.javageneration.util.TinkerGenerationUtil;
 import org.tuml.javageneration.util.TumlClassOperations;
 import org.tuml.javageneration.util.TumlModelOperations;
+import org.tuml.javageneration.validation.Validation;
 import org.tuml.javageneration.visitor.BaseVisitor;
 import org.tuml.javageneration.visitor.clazz.RuntimePropertyImplementor;
 
@@ -83,9 +85,9 @@ public class RootEntryPointCreator extends BaseVisitor implements Visitor<Model>
 		// Add root entities as though they are fake properties to App root
 		for (Class clazz : result) {
 			count++;
-			RuntimePropertyImplementor.addEnumLiteral(ojEnum, fromLabel, StringUtils.uncapitalize(TumlClassOperations.className(clazz)), false, false, false, true, false, true,
-					false, false, false, false, true, false, false, false, true, false, false, false, false, -1, 0, false, false, true, false, true,
-					"root" + TumlClassOperations.className(clazz));
+			RuntimePropertyImplementor.addEnumLiteral(ojEnum, fromLabel, StringUtils.uncapitalize(TumlClassOperations.className(clazz)), false, null,
+					Collections.<Validation> emptyList(), true, false, false, false, true, false, false, false, false, -1, 0, false, false, true, false, true, "root"
+							+ TumlClassOperations.className(clazz));
 
 			asJson.getBody().addToStatements("sb.append(" + ojEnum.getName() + "." + StringUtils.uncapitalize(TumlClassOperations.className(clazz)) + ".toJson())");
 			if (count != result.size()) {

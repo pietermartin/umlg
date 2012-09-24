@@ -1,5 +1,7 @@
 package org.tuml.restlet.visitor.clazz;
 
+import java.util.Collections;
+
 import org.eclipse.uml2.uml.Class;
 import org.opaeum.java.metamodel.OJPathName;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
@@ -8,6 +10,7 @@ import org.opaeum.java.metamodel.annotation.OJEnum;
 import org.tuml.framework.Visitor;
 import org.tuml.generation.Workspace;
 import org.tuml.javageneration.util.TumlClassOperations;
+import org.tuml.javageneration.validation.Validation;
 import org.tuml.javageneration.visitor.BaseVisitor;
 import org.tuml.javageneration.visitor.clazz.RuntimePropertyImplementor;
 
@@ -31,8 +34,8 @@ public class AddSelfIdAndUriLiteralsToRuntimeEnum extends BaseVisitor implements
 
 	private void addField(OJAnnotatedClass annotatedClass, OJEnum ojEnum, String fieldName) {
 		OJAnnotatedOperation fromLabel = ojEnum.findOperation("fromLabel", new OJPathName("String"));
-		RuntimePropertyImplementor.addEnumLiteral(ojEnum, fromLabel, fieldName, true, false, false, false, false, false, true, false, false, true, false, false, false, false, false, false,
-				true, false, false, 1, 1, false, false, false, false, true, "");
+		RuntimePropertyImplementor.addEnumLiteral(ojEnum, fromLabel, fieldName, true, null, Collections.<Validation> emptyList(), false, false, false, false, false, false, true,
+				false, false, 1, 1, false, false, false, false, true, "");
 	}
 
 }
