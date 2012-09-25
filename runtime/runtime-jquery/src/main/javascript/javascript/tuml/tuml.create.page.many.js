@@ -120,48 +120,11 @@ function createGrid(data, metaForData, tumlUri) {
         } else if (!property.onePrimitive && !property.manyPrimitive && !property.composite) {
         } else if (property.name == 'id') {
         } else if (property.fieldType == 'String') {
+            return new TumlSlick.Validators.TumlString(property).validate;
         } else if (property.fieldType == 'Integer') {
-            return function (value) {
-                if (property.lower > 0 && (value == '' || value == undefined || value == null)) {
-                    return {
-                        valie: false,
-                        msg: property.name + " is a required field!"
-                    };
-                }
-                if (isNaN(parseInt(value, 10))) {
-                    return {
-                        valid: false,
-                        msg: "Please enter a valid positive number"
-                    };
-                }
-                if (property.validations.range !== undefined) {
-                    var intValue =  parseInt(value, 10);
-                    if (intValue < property.validations.range.min || intValue > property.validations.range.max) {
-                        return {
-                            valid:false,
-                            msg: "Value need to be between " + property.validations.range.min + " and " + property.validations.range.max
-                        }
-                    }
-                }
-                return {
-                    valid: true,
-                    msg: null
-                };
-            };
+            return new TumlSlick.Validators.TumlNumber(property).validate;
         } else if (property.fieldType == 'Long') {
-            return function () {
-                if (isNaN(parseInt($input.val(), 10))) {
-                    return {
-                        valid: false,
-                        msg: "Please enter a valid positive number"
-                    };
-                }
-
-                return {
-                    valid: true,
-                    msg: null
-                };
-            };
+            return new TumlSlick.Validators.TumlNumber(property).validate;
         } else if (property.fieldType == 'Boolean') {
         } else {
         }
@@ -171,6 +134,7 @@ function createGrid(data, metaForData, tumlUri) {
                 msg: null}
         };
     }
+
     var options = {
         showHeaderRow: true,
         headerRowHeight: 30,

@@ -33,6 +33,31 @@
             <ownedAttribute xmi:id="_53lg8POPEeGuRKiCevocYg" name="testUnlimitedNatural" visibility="public">
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#UnlimitedNatural"/>
             </ownedAttribute>
+            <ownedAttribute xmi:id="_5DaPAAc4EeKnuck7rKo4mA" name="rangeLengthTest">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_NgrkcAc5EeKnuck7rKo4mA" value="1"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_NgqWUAc5EeKnuck7rKo4mA"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:id="_w7hagAc7EeKnuck7rKo4mA" name="maxLengthTest">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_9_UoAAc7EeKnuck7rKo4mA" value="1"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_9_UA8Ac7EeKnuck7rKo4mA"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:id="_yH5HAAc7EeKnuck7rKo4mA" name="minLengthTest">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_-nnXEAc7EeKnuck7rKo4mA" value="1"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_-nmwAAc7EeKnuck7rKo4mA"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:id="_zTf-gAc7EeKnuck7rKo4mA" name="maxNumberTest">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="__I4REQc7EeKnuck7rKo4mA" value="1"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="__I4REAc7EeKnuck7rKo4mA"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:id="_0LHjAAc7EeKnuck7rKo4mA" name="minNumberTest">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="__qESkAc7EeKnuck7rKo4mA" value="1"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="__qDrgAc7EeKnuck7rKo4mA"/>
+            </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Class" xmi:id="_4sr5AN4jEeGdB9TPHp60mw" name="Finger">
             <ownedAttribute xmi:id="_D5Ya8N4kEeGdB9TPHp60mw" name="name" visibility="public">
@@ -148,4 +173,9 @@
   </uml:Model>
   <TumlValidation:RangeLength xmi:id="_n85yMAZVEeK9oIwdQfC0-w" min="3" max="30" base_Property="_DTkYIN4kEeGdB9TPHp60mw"/>
   <TumlValidation:Range xmi:id="_M8megAZeEeK9oIwdQfC0-w" min="5" max="55" base_Property="_0BsroPOPEeGuRKiCevocYg"/>
+  <TumlValidation:RangeLength xmi:id="_E22n4Ac5EeKnuck7rKo4mA" min="4" max="8" base_Property="_5DaPAAc4EeKnuck7rKo4mA"/>
+  <TumlValidation:MaxLength xmi:id="_deDDQAc9EeKnuck7rKo4mA" length="5" base_Property="_w7hagAc7EeKnuck7rKo4mA"/>
+  <TumlValidation:MinLength xmi:id="_feq3MAc9EeKnuck7rKo4mA" length="5" base_Property="_yH5HAAc7EeKnuck7rKo4mA"/>
+  <TumlValidation:Max xmi:id="_hZdv8Ac9EeKnuck7rKo4mA" value="5" base_Property="_zTf-gAc7EeKnuck7rKo4mA"/>
+  <TumlValidation:Min xmi:id="_i9r7wAc9EeKnuck7rKo4mA" value="5" base_Property="_0LHjAAc7EeKnuck7rKo4mA"/>
 </xmi:XMI>
