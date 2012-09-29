@@ -320,6 +320,10 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 		return this.property.getName();
 	}
 
+	public String lookupOnCompositeParent() {
+		return getOtherEnd().getName() + "_" + this.property.getName();
+	}
+
 	public String getter() {
 		return TumlPropertyOperations.getter(this.property);
 	}
@@ -1170,11 +1174,11 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 	}
 
 	public String lookup() {
-		return "lookup" + StringUtils.capitalize(fieldname());
+		return "lookupFor_" + new PropertyWrapper(getOtherEnd()).getName() + "_" + getName();
 	}
 
 	public String lookupCompositeParent() {
-		return "lookupCompositeParent" + StringUtils.capitalize(fieldname());
+		return "lookupFor_" + new PropertyWrapper(getOtherEnd()).getName() + "_" + getName() + "_CompositeParent";
 	}
 
 	@Override
@@ -1256,7 +1260,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 	}
 
 	public List<Validation> getValidations() {
-		List<Validation> result  = new ArrayList<Validation>();
+		List<Validation> result = new ArrayList<Validation>();
 		List<Stereotype> stereoTypes = ModelLoader.getStereotypes();
 		for (Stereotype stereotype : stereoTypes) {
 			if (property.isStereotypeApplied(stereotype)) {
@@ -1265,7 +1269,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 		}
 		return result;
 	}
-	
+
 	public Validation getValidation(TumlValidationEnum tumlValidationEnum) {
 		switch (tumlValidationEnum) {
 		case MaxLength:

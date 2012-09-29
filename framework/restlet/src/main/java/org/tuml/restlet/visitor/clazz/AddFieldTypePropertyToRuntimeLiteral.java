@@ -27,7 +27,6 @@ public class AddFieldTypePropertyToRuntimeLiteral extends BaseVisitor implements
 	public void visitBefore(Class clazz) {
 		OJAnnotatedClass annotatedClass = findOJClass(clazz);
 		OJEnum ojEnum = annotatedClass.findEnum(TumlClassOperations.propertyEnumName(clazz));
-		Set<Property> properties = TumlClassOperations.getAllOwnedProperties(clazz);
 		OJField fieldTypeField = new OJField();
 		fieldTypeField.setType(TumlRestletGenerationUtil.FieldType);
 		fieldTypeField.setName("fieldType");
@@ -40,40 +39,41 @@ public class AddFieldTypePropertyToRuntimeLiteral extends BaseVisitor implements
 		OJConstructor constructor = ojEnum.getConstructors().iterator().next();
 		constructor.addParam("fieldType", TumlRestletGenerationUtil.FieldType);
 		constructor.getBody().addToStatements("this.fieldType = fieldType");
+		
+		Set<Property> properties = TumlClassOperations.getAllOwnedProperties(clazz);
 		for (Property property : properties) {
 			OJEnumLiteral literal = ojEnum.findLiteral(new PropertyWrapper(property).fieldname());
-			addFieldTypePropertyToLiteral(property, literal);
+			addFieldTypePropertyToLiteral(literal, TumlRestletGenerationUtil.getFieldTypeForProperty(property));
 		}
 
-		addFieldTypePropertyToLiteral(ojEnum.findLiteral("id"));
-		addFieldTypePropertyToLiteral(ojEnum.findLiteral("uri"));
+		addFieldTypePropertyToLiteral(ojEnum.findLiteral("id"), "FieldType.Integer");
+		addFieldTypePropertyToLiteral(ojEnum.findLiteral("uri"), "FieldType.String");
 
 		if (!TumlClassOperations.hasCompositeOwner(clazz)) {
 			// This is for the fake property to Root
-			addFieldTypePropertyToLiteral(ojEnum.findLiteral(clazz.getModel().getName()));
+			addFieldTypePropertyToLiteral(ojEnum.findLiteral(clazz.getModel().getName()), "FieldType.String");
 		}
 
 	}
 
-	static void addFieldTypePropertyToLiteral(Property property, OJEnumLiteral literal) {
-		String fieldTypeAstring = TumlRestletGenerationUtil.getFieldTypeForProperty(property);
-		OJField uriAttribute = new OJField();
-		uriAttribute.setType(TumlRestletGenerationUtil.FieldType);
-		uriAttribute.setInitExp(fieldTypeAstring);
-		literal.addToAttributeValues(uriAttribute);
+//	public static void addFieldTypePropertyToLiteral(Property property, OJEnumLiteral literal) {
+//		String fieldTypeAstring = TumlRestletGenerationUtil.getFieldTypeForProperty(property);
+//		OJField uriAttribute = new OJField();
+//		uriAttribute.setType(TumlRestletGenerationUtil.FieldType);
+//		uriAttribute.setInitExp(fieldTypeAstring);
+//		literal.addToAttributeValues(uriAttribute);
+//
+//		OJField jsonField = literal.findAttributeValue("json");
+//		StringBuilder sb = new StringBuilder();
+//		sb.append(", \\\"fieldType\\\": \\\"\" + " + fieldTypeAstring + " + \"\\\"}\"");
+//		String initExp = jsonField.getInitExp();
+//		int indexOf = initExp.lastIndexOf("}");
+//		initExp = initExp.substring(0, indexOf) + sb.toString();
+//
+//		jsonField.setInitExp(initExp);
+//	}
 
-		OJField jsonField = literal.findAttributeValue("json");
-		StringBuilder sb = new StringBuilder();
-		sb.append(", \\\"fieldType\\\": \\\"\" + " + fieldTypeAstring + " + \"\\\"}\"");
-		String initExp = jsonField.getInitExp();
-		int indexOf = initExp.lastIndexOf("}");
-		initExp = initExp.substring(0, indexOf) + sb.toString();
-
-		jsonField.setInitExp(initExp);
-	}
-
-	static void addFieldTypePropertyToLiteral(OJEnumLiteral literal) {
-		String fieldType = "FieldType.Integer";
+	static void addFieldTypePropertyToLiteral(OJEnumLiteral literal, String fieldType) {
 		OJField uriAttribute = new OJField();
 		uriAttribute.setType(TumlRestletGenerationUtil.FieldType);
 		uriAttribute.setInitExp(fieldType);

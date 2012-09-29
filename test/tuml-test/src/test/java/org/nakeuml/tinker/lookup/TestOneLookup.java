@@ -10,6 +10,12 @@ import org.tuml.interfacetest.Creature;
 import org.tuml.interfacetest.ManyA;
 import org.tuml.interfacetest.ManyB;
 import org.tuml.interfacetest.Spook;
+import org.tuml.lookup.Devil1;
+import org.tuml.lookup.Devil2;
+import org.tuml.lookup.Devil3;
+import org.tuml.lookup.Level1;
+import org.tuml.lookup.Level2;
+import org.tuml.lookup.Level3;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.tuml.runtime.collection.ocl.BooleanExpressionEvaluator;
@@ -35,7 +41,7 @@ public class TestOneLookup extends BaseLocalDbTest {
 		c1.addToSpook(s1);
 		c2.addToSpook(s2);
 		db.stopTransaction(Conclusion.SUCCESS);
-		Assert.assertEquals(g, new Creature(c1.getVertex()).lookupCompositeParentSpook());
+		Assert.assertEquals(g, new Creature(c1.getVertex()).lookupFor_creature_spook_CompositeParent());
 	}
 	
 	@Test
@@ -68,8 +74,8 @@ public class TestOneLookup extends BaseLocalDbTest {
 		manyA4.addToIManyB(manyB3);
 		manyA4.addToIManyB(manyB4);
 		db.stopTransaction(Conclusion.SUCCESS);
-		Assert.assertEquals(g, new ManyA(manyA4.getVertex()).lookupCompositeParentIManyB());
-		Assert.assertEquals(g, new ManyB(manyB4.getVertex()).lookupCompositeParentIManyA());
+		Assert.assertEquals(g, new ManyA(manyA4.getVertex()).lookupFor_iManyA_iManyB_CompositeParent());
+		Assert.assertEquals(g, new ManyB(manyB4.getVertex()).lookupFor_iManyB_iManyA_CompositeParent());
 	}
 	
 	@Test
@@ -122,15 +128,14 @@ public class TestOneLookup extends BaseLocalDbTest {
 		Spook s3 = new Spook(g);
 		db.stopTransaction(Conclusion.SUCCESS);
 
-		//One plus itself
-		Assert.assertEquals(2, c1.lookupSpook().size());
-		Assert.assertEquals(2, c2.lookupSpook().size());
-		Assert.assertEquals(2, s1.lookupCreature().size());
-		Assert.assertEquals(2, s2.lookupCreature().size());
+		Assert.assertEquals(1, c1.lookupFor_creature_spook().size());
+		Assert.assertEquals(1, c2.lookupFor_creature_spook().size());
+		Assert.assertEquals(1, s1.lookupFor_spook_creature().size());
+		Assert.assertEquals(1, s2.lookupFor_spook_creature().size());
 	}
 
 	@Test
-	public void testLookupWithNonCompositeLoopupInCompositeTree() {
+	public void testLookupWithNonCompositeLookupInCompositeTree() {
 		db.startTransaction();
 		God g = new God(true);
 		g.setName("G");
@@ -144,7 +149,56 @@ public class TestOneLookup extends BaseLocalDbTest {
 		n3.setName("n3");
 		g.addToNightmare(n3);
 		db.stopTransaction(Conclusion.SUCCESS);
-		Assert.assertEquals(3, g.lookupMemory().size());
+		Assert.assertEquals(3, g.lookupFor_godOfMemory_memory().size());
+	}
+	
+	@Test
+	public void testUniqueManyLookup() {
+		db.startTransaction();
+		God g = new God(true);
+		Level1 l1_0 = new Level1(g);
+		Level1 l1_1 = new Level1(g);
+		Level1 l1_2 = new Level1(g);
+		
+		Level2 l2_0_0 = new Level2(l1_0);
+		Level2 l2_0_1 = new Level2(l1_0);
+		Level2 l2_0_2 = new Level2(l1_0);
+		
+		Level2 l2_1_0 = new Level2(l1_1);
+		Level2 l2_1_1 = new Level2(l1_1);
+		Level2 l2_1_2 = new Level2(l1_1);
+		
+		Level2 l2_2_0 = new Level2(l1_2);
+		Level2 l2_2_1 = new Level2(l1_2);
+		Level2 l2_2_2 = new Level2(l1_2);
+		
+		Devil1 d1_0 = new Devil1(g);
+		Devil1 d1_1 = new Devil1(g);
+		Devil1 d1_2 = new Devil1(g);
+		
+		Devil2 d2_0_0 = new Devil2(d1_0);
+		Devil2 d2_0_1 = new Devil2(d1_0);
+		Devil2 d2_0_2 = new Devil2(d1_0);
+		
+		Devil2 d2_1_0 = new Devil2(d1_1);
+		Devil2 d2_1_1 = new Devil2(d1_1);
+		Devil2 d2_1_2 = new Devil2(d1_1);
+		
+		Devil2 d2_2_0 = new Devil2(d1_2);
+		Devil2 d2_2_1 = new Devil2(d1_2);
+		Devil2 d2_2_2 = new Devil2(d1_2);
+		
+		db.stopTransaction(Conclusion.SUCCESS);
+		Assert.assertEquals(9, l2_0_0.lookupFor_level2_devil2().size());
+		
+		db.startTransaction();
+		l2_0_0.addToDevil2(d2_0_0);
+		db.stopTransaction(Conclusion.SUCCESS);
+		
+		//TODO
+		l2_0_0.initialiseProperty(Level2.Level2RuntimePropertyEnum.level1);
+		
+		Assert.assertEquals(8, l2_0_0.lookupFor_level2_devil2().size());
 	}
 
 }

@@ -56,7 +56,8 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 			// difference to server state
 			// non unique sequence or a bag can not put as adding the same value
 			// more than once changes the state
-			addPutPostObjectRepresentation(pWrap, annotatedInf, annotatedClass);
+			addPostObjectRepresentation(pWrap, annotatedInf, annotatedClass);
+			addPutObjectRepresentation(pWrap, annotatedInf, annotatedClass);
 			addServerResourceToRouterEnum(pWrap, annotatedClass);
 		}
 	}
@@ -90,7 +91,74 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 		annotatedClass.addToOperations(get);
 	}
 
-	private void addPutPostObjectRepresentation(PropertyWrapper pWrap, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass) {
+	private void addPutObjectRepresentation(PropertyWrapper pWrap, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass) {
+		OJAnnotatedOperation putInf = new OJAnnotatedOperation("put", TumlRestletGenerationUtil.Representation);
+		putInf.addToParameters(new OJParameter("entity", TumlRestletGenerationUtil.Representation));
+		annotatedInf.addToOperations(putInf);
+		putInf.addAnnotationIfNew(new OJAnnotationValue(TumlRestletGenerationUtil.Post, "json"));
+
+		OJAnnotatedOperation put = new OJAnnotatedOperation("put", TumlRestletGenerationUtil.Representation);
+		put.addToParameters(new OJParameter("entity", TumlRestletGenerationUtil.Representation));
+		put.addToThrows(TumlRestletGenerationUtil.ResourceException);
+		annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
+		TinkerGenerationUtil.addOverrideAnnotation(put);
+		TinkerGenerationUtil.addSuppressWarning(put);
+
+		PropertyWrapper otherEndPWrap = new PropertyWrapper(pWrap.getOtherEnd());
+
+		OJPathName parentPathName = otherEndPWrap.javaBaseTypePath();
+		put.getBody().addToStatements(
+				"this." + parentPathName.getLast().toLowerCase() + "Id = Integer.parseInt((String)getRequestAttributes().get(\"" + parentPathName.getLast().toLowerCase()
+						+ "Id\"))");
+		put.getBody().addToStatements(
+				parentPathName.getLast() + " parentResource = new " + parentPathName.getLast() + "(GraphDb.getDb().getVertex(this." + parentPathName.getLast().toLowerCase() + "Id"
+						+ "))");
+
+		put.getBody().addToStatements("GraphDb.getDb().startTransaction()");
+		OJTryStatement ojTryStatement = new OJTryStatement();
+		OJField mapper = new OJField("mapper", TinkerGenerationUtil.ObjectMapper);
+		mapper.setInitExp("new ObjectMapper()");
+		ojTryStatement.getTryPart().addToLocals(mapper);
+		OJAnnotatedField objectO = new OJAnnotatedField("o", new OJPathName("Object"));
+		objectO.setInitExp("mapper.readValue(entity.getText(), Object.class)");
+		ojTryStatement.getTryPart().addToLocals(objectO);
+		OJIfStatement ifArray = new OJIfStatement("o instanceof ArrayList");
+		OJPathName genericsForArray = new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object");
+		OJField array = new OJField("array", new OJPathName("java.util.ArrayList").addToGenerics(genericsForArray));
+		array.setInitExp("(ArrayList<Map<String, Object>>)o");
+		ifArray.getThenPart().addToLocals(array);
+		ojTryStatement.getTryPart().addToStatements(ifArray);
+		OJForStatement forArray = new OJForStatement("map", new OJPathName("java.util.Map").addToGenerics(new OJPathName("String")).addToGenerics(new OJPathName("Object")),
+				"array");
+		ifArray.addToThenPart(forArray);
+		forArray.getBody().addToStatements("put(map)");
+
+		OJField map = new OJField("map", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object"));
+		map.setInitExp("(Map<String, Object>) o");
+		ifArray.setElsePart(new OJBlock());
+		ifArray.getElsePart().addToLocals(map);
+		ifArray.getElsePart().addToStatements("put(map)");
+
+		addPutResource(pWrap, annotatedClass, parentPathName);
+
+		ojTryStatement.getTryPart().addToStatements("GraphDb.getDb().stopTransaction(Conclusion.SUCCESS)");
+		annotatedClass.addToImports(TinkerGenerationUtil.tinkerConclusionPathName);
+
+		ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
+		ojTryStatement.getCatchPart().addToStatements("GraphDb.getDb().stopTransaction(Conclusion.FAILURE)");
+		ojTryStatement.getCatchPart().addToStatements("throw new RuntimeException(e)");
+		put.getBody().addToStatements(ojTryStatement);
+
+		annotatedClass.addToImports(parentPathName);
+
+		buildToJson(pWrap, annotatedClass, put.getBody());
+
+		annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
+		annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);
+		annotatedClass.addToOperations(put);
+	}
+
+	private void addPostObjectRepresentation(PropertyWrapper pWrap, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass) {
 
 		OJAnnotatedOperation putInf = new OJAnnotatedOperation("post", TumlRestletGenerationUtil.Representation);
 		putInf.addToParameters(new OJParameter("entity", TumlRestletGenerationUtil.Representation));
@@ -139,7 +207,7 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 		ifArray.getElsePart().addToLocals(map);
 		ifArray.getElsePart().addToStatements("add(parentResource, map)");
 
-		addAddResource(pWrap, annotatedClass, parentPathName);
+		addPostResource(pWrap, annotatedClass, parentPathName);
 
 		ojTryStatement.getTryPart().addToStatements("GraphDb.getDb().stopTransaction(Conclusion.SUCCESS)");
 		annotatedClass.addToImports(TinkerGenerationUtil.tinkerConclusionPathName);
@@ -158,27 +226,25 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 		annotatedClass.addToOperations(post);
 	}
 
-	private void addAddResource(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass, OJPathName parentPathName) {
+	private void addPutResource(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass, OJPathName parentPathName) {
+		OJAnnotatedOperation put = new OJAnnotatedOperation("put");
+		put.setVisibility(OJVisibilityKind.PRIVATE);
+		put.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
+		annotatedClass.addToOperations(put);
+		put.getBody().addToStatements("Object id = propertyMap.get(\"id\")");
+		put.getBody().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = new " + pWrap.javaBaseTypePath().getLast() + "(GraphDb.getDb().getVertex(id))");
+		annotatedClass.addToImports(pWrap.javaBaseTypePath());
+		put.getBody().addToStatements("childResource.fromJson(propertyMap)");
+	}
+
+	private void addPostResource(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass, OJPathName parentPathName) {
 		OJAnnotatedOperation add = new OJAnnotatedOperation("add");
 		add.setVisibility(OJVisibilityKind.PRIVATE);
 		add.addToParameters(new OJParameter("parentResource", parentPathName));
 		add.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
 		annotatedClass.addToOperations(add);
-		OJField childResource = new OJField("childResource", pWrap.javaBaseTypePath());
-		add.getBody().addToLocals(childResource);
-		add.getBody().addToStatements("Object id = propertyMap.get(\"id\")");
-
-		OJIfStatement ifIdNull = new OJIfStatement("id != null");
-		ifIdNull.addToThenPart("childResource = new " + pWrap.javaBaseTypePath().getLast() + "(GraphDb.getDb().getVertex(id))");
-
-		if (pWrap.isComposite()) {
-			ifIdNull.addToElsePart("childResource = new " + pWrap.javaBaseTypePath().getLast() + "(true)");
-		} else {
-			ifIdNull.addToElsePart("throw new IllegalStateException(\"A resource can only be created on a compositional relationship. Id field is required.\")");
-		}
-
-		add.getBody().addToStatements(ifIdNull);
-
+		add.getBody().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = new " + pWrap.javaBaseTypePath().getLast() + "(true)");
+		annotatedClass.addToImports(pWrap.javaBaseTypePath());
 		add.getBody().addToStatements("childResource.fromJson(propertyMap)");
 		if (pWrap.isOrdered()) {
 			annotatedClass.addToImports(TumlRestletGenerationUtil.Parameter);

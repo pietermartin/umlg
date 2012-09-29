@@ -34,7 +34,6 @@ function refreshPageTo(tumlUri) {
             });
             classNameLowerCased = response.meta.name.toLowerCase();
             metaForData = response.meta;
-            //createPageForOne(response.data, metaForData, tumlUri);
             createPageForOne(response.data, metaForData, tumlUri);
             contextVertexId = response.data.id;
         }

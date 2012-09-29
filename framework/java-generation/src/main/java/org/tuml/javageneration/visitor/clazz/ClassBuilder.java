@@ -132,7 +132,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 
 	protected void initialiseVertexInPersistentConstructor(OJAnnotatedClass ojClass, Class c) {
 		OJConstructor constructor = ojClass.findConstructor(new OJPathName("java.lang.Boolean"));
-		constructor.getBody().addToStatements("this.vertex = " + TinkerGenerationUtil.graphDbAccess + ".addVertex(\"dribble\")");
+		constructor.getBody().addToStatements("this.vertex = " + TinkerGenerationUtil.graphDbAccess + ".addVertex(this.getClass().getName())");
 		constructor.getBody().addToStatements("this.vertex.setProperty(\"className\", getClass().getName())");
 		if (TumlClassOperations.hasCompositeOwner(c)) {
 			constructor.getBody().addToStatements("TransactionThreadEntityVar.setNewEntity(this)");

@@ -11,7 +11,7 @@
             "Slick": {
                 "Editors": {
                     "Integer": IntegerEditor,
-                    "TextEditor": TextEditor,
+                    "Text": TextEditor,
                     "SelectCellEditor": SelectCellEditor,
                     "Checkbox": CheckboxEditor,
                     "Date": DateEditor,
@@ -499,10 +499,33 @@
         var scope = this;
         var options;
 
-        this.init = function() {
+        this.init = function(item) {
             $select = $("<SELECT tabIndex='0' class='editor-select' style='width:115px;'></SELECT>");
             $select.appendTo(args.container);
-            $select.focus();
+
+            args.column.options.rowLookupMap.getOrLoadMap(item['id'], function(compositeParentVertexId){
+                args.column.options.compositeParentLookupMap.getOrLoadMap(compositeParentVertexId, item['id'], function(compositeParentMap) {
+                    if (!args.column.options.required) {
+                        $select.append($('<option />)').val("").html(""));
+                    }
+                    $.each(compositeParentMap[compositeParentVertexId], function(index, obj) {
+                        $select.append($('<option />)').val(obj.id).html(obj.displayName));
+                    });
+                    //currentValue is the vertex id of the oneToOne or manyToOne
+                    currentValue = item[args.column.field];
+                    //append the current value to the dropdown
+                    if (currentValue !== undefined && currentValue !== null) {
+                        $select.append($('<option selected="selected"/>)').val(currentValue.id).html(currentValue.displayName));
+                    }
+                    if (!args.column.options.required) {
+                        $select.chosen({allow_single_deselect: true});
+                    } else {
+                        $select.chosen();
+                    }
+                    $select.focus();
+                });
+            });
+
         };
 
         this.destroy = function() {
@@ -514,26 +537,6 @@
         };
 
         this.loadValue = function(item) {
-            if (!args.column.options.required) {
-                $select.append($('<option />)').val("").html(""));
-            }
-            //currentValue is the vertex id of the oneToOne or manyToOne
-            currentValue = item[args.column.field];
-            //append the current value to the dropdown
-            $select.append($('<option />)').val(currentValue.id).html(currentValue.displayName));
-            args.column.options.rowLookupMap.getOrLoadMap(item['id'], function(compositeParentVertexId){
-                args.column.options.compositeParentLookupMap.getOrLoadMap(compositeParentVertexId, item['id'], function(compositeParentMap) {
-                    $.each(compositeParentMap[compositeParentVertexId], function(index, obj) {
-                        $select.append($('<option />)').val(obj.id).html(obj.displayName));
-                    });
-                    $select.val(currentValue.id);
-                    if (!args.column.options.required) {
-                        $select.chosen({allow_single_deselect: true});
-                    } else {
-                        $select.chosen();
-                    }
-                });
-            });
         };
 
         this.serializeValue = function() {
@@ -557,7 +560,9 @@
             args.column.options.rowLookupMap.getOrLoadMap(item['id'], function(compositeParentVertexId){
                 args.column.options.compositeParentLookupMap.getOrLoadMap(compositeParentVertexId, item['id'], function(compositeParentMap) {
                     removeByValue(compositeParentMap[compositeParentVertexId], state);
-                    compositeParentMap[compositeParentVertexId].push(previousValue);
+                    if (previousValue !== undefined && previousValue !== null) {
+                        compositeParentMap[compositeParentVertexId].push(previousValue);
+                    }
                 });
             });
         };
@@ -571,13 +576,17 @@
             }
         }
         this.isValueChanged = function() {
-            return ($select.val() != currentValue.id);
+            if (currentValue === null || currentValue === undefined) {
+                return true;
+            } else {
+                return ($select.val() != currentValue.id);
+            }
         };
 
 
         this.validate = function () {
             if (args.column.validator) {
-                var validationResults = args.column.validator($input.val());
+                var validationResults = args.column.validator($select.val());
                 if (!validationResults.valid) {
                     return validationResults;
                 }
@@ -588,7 +597,7 @@
                 msg: null
             };
         };
-        this.init();
+        this.init(args.item);
     }
 
 

@@ -14,6 +14,7 @@ function createGrid(data, metaForData, tumlUri) {
 
     $.each(metaForData.properties, function(index, property) {
         if (!property.inverseComposite && (property.oneToOne || property.manyToOne)) {
+            var contextVertexId = tumlUri.match(/\d+/);
             //Place the id column first
             if (property.name == "id") {
                 columns.splice(0,0,{
@@ -32,7 +33,7 @@ function createGrid(data, metaForData, tumlUri) {
                     editor: selectEditor(property),
                     formatter: selectFormatter(property),
                     validator: selectFieldValidator(property),
-                    options: {required: property.lower > 0, tumlLookupUri: property.tumlLookupUri, rowLookupMap: new RowLookupMap(property.tumlCompositeParentLookupUri), compositeParentLookupMap: new CompositeParentLookupMap(property.tumlLookupUri)},
+                    options: {required: property.lower > 0, tumlLookupUri: property.tumlLookupUri, rowLookupMap: new RowLookupMap(contextVertexId, property.tumlCompositeParentLookupUri, property.tumlCompositeParentLookupUriOnCompositeParent), compositeParentLookupMap: new CompositeParentLookupMap(contextVertexId, property.tumlLookupUri, property.tumlLookupUriOnCompositeParent)},
                     width: 120
                 });
             }
@@ -48,7 +49,11 @@ function createGrid(data, metaForData, tumlUri) {
             return null;
         } else if (!property.onePrimitive && !property.manyPrimitive) {
             return function waitingFormatter(row, cell, value, columnDef, dataContext) {
-                return value.displayName;
+                if (value !== undefined && value !== null) {
+                    return value.displayName;
+                } else {
+                    return '';
+                }
             };
             return null;
         } else if (property.fieldType == 'String') {
@@ -90,7 +95,7 @@ function createGrid(data, metaForData, tumlUri) {
         } else if (property.name == 'id') {
             return null;
         } else if (property.fieldType == 'String') {
-            return  Slick.Editors.Text; 
+            return Tuml.Slick.Editors.Text; 
         } else if (property.fieldType == 'Integer') {
             return Tuml.Slick.Editors.Integer;
         } else if (property.fieldType == 'Long') {
@@ -153,7 +158,7 @@ function createGrid(data, metaForData, tumlUri) {
     var searchString = "";
 
 
-    dataView = new Slick.Data.DataView();
+    dataView = new Tuml.Slick.Data.DataView();
     grid = new Slick.Grid("#myGrid", dataView, columns, options);
     grid.setSelectionModel(new Slick.RowSelectionModel());
     var pager = new Slick.Controls.Pager(dataView, grid, $("#pager"));
@@ -162,19 +167,38 @@ function createGrid(data, metaForData, tumlUri) {
 
     var $saveButton = $('<button />').text('Save').click(function() {
         if (grid.getEditorLock().commitCurrentEdit()) {
-            $.ajax({
-                url: tumlUri,
-                type: "POST",
-                dataType: "json",
-                contentType: "json",
-                data: JSON.stringify(data),
-                success: function() {
-                    refreshPageTo(tumlUri);
-                },
-                error: function() {
-                    alert("fail :-(");
-                }
-            });
+            //put updated items
+            if (dataView.getUpdatedItems().length !== 0) {
+                $.ajax({
+                    url: tumlUri,
+                    type: "PUT",
+                    dataType: "json",
+                    contentType: "json",
+                    data: JSON.stringify(dataView.getUpdatedItems()),
+                    success: function() {
+                        refreshPageTo(tumlUri);
+                    },
+                    error: function() {
+                        alert("fail :-(");
+                    }
+                });
+            }
+            //post new items
+            if (dataView.getNewItems().length !== 0) {
+                $.ajax({
+                    url: tumlUri,
+                    type: "POST",
+                    dataType: "json",
+                    contentType: "json",
+                    data: JSON.stringify(dataView.getNewItems()),
+                    success: function() {
+                        refreshPageTo(tumlUri);
+                    },
+                    error: function() {
+                        alert("fail :-(");
+                    }
+                });
+            }
         } else {
             alert("Commit failed on current active cell!");
         }
@@ -185,22 +209,17 @@ function createGrid(data, metaForData, tumlUri) {
     }).appendTo('.grid-button');
 
     grid.onCellChange.subscribe(function(e, args) {
-        dataView.updateItem(args.item.id, args.item);
+        dataView.updateItem(args.item.id, args.item, grid.getColumns()[args.cell]);
     });
 
     grid.onAddNewRow.subscribe(function(e, args) {
-        var item = {
-            "num": data.length,
-            "id": "new_" + (Math.round(Math.random() * 10000)),
-            "title": "New task",
-            "duration": "1 day",
-            "percentComplete": 0,
-            "start": "01/01/2009",
-            "finish": "01/01/2009",
-            "effortDriven": false
-        };
-        $.extend(item, args.item);
-        dataView.addItem(item);
+        var $newItem = {};
+        for (i = 0; i < columns.length; i++) {
+            $newItem[columns[i].name] = null;
+        }
+        //Generate a fake id, its required for the grid to work nicely
+        $newItem.id = 'fake::' + data.length + dataView.getNewItems().length + 1;
+        dataView.addItem($.extend($newItem, args.item));
     });
 
     grid.onKeyDown.subscribe(function(e) {

@@ -767,7 +767,7 @@
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_NS6OkhqyEeG2HY-TJLNivw" value="1"/>
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_NS6OkxqyEeG2HY-TJLNivw"/>
             </ownedEnd>
-            <ownedEnd xmi:id="_NS6OlBqyEeG2HY-TJLNivw" name="memory" visibility="public" type="_7zSvUBqsEeG2HY-TJLNivw" isUnique="false" association="_NS6OkBqyEeG2HY-TJLNivw">
+            <ownedEnd xmi:id="_NS6OlBqyEeG2HY-TJLNivw" name="memory" visibility="public" type="_7zSvUBqsEeG2HY-TJLNivw" association="_NS6OkBqyEeG2HY-TJLNivw">
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_NS6OlRqyEeG2HY-TJLNivw" value="*"/>
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_NS6OlhqyEeG2HY-TJLNivw"/>
               <qualifier xmi:id="_VtHawBqyEeG2HY-TJLNivw" name="memoryQualifier1" visibility="public">
@@ -1038,11 +1038,11 @@
           <packagedElement xmi:type="uml:Association" xmi:id="_3qvRavcdEeG31Myz9ELsRQ" name="A_&lt;level1>_&lt;devil1>" memberEnd="_3qvRa_cdEeG31Myz9ELsRQ _3qvRbvcdEeG31Myz9ELsRQ" navigableOwnedEnd="_3qvRa_cdEeG31Myz9ELsRQ _3qvRbvcdEeG31Myz9ELsRQ">
             <ownedEnd xmi:id="_3qvRa_cdEeG31Myz9ELsRQ" name="level1" visibility="public" type="_W_N2YPcdEeG31Myz9ELsRQ" association="_3qvRavcdEeG31Myz9ELsRQ">
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_3qvRbPcdEeG31Myz9ELsRQ" value="1"/>
-              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_3qvRbfcdEeG31Myz9ELsRQ" value="1"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_3qvRbfcdEeG31Myz9ELsRQ"/>
             </ownedEnd>
             <ownedEnd xmi:id="_3qvRbvcdEeG31Myz9ELsRQ" name="devil1" visibility="public" type="_ZoEvAPcdEeG31Myz9ELsRQ" association="_3qvRavcdEeG31Myz9ELsRQ">
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_3qvRb_cdEeG31Myz9ELsRQ" value="1"/>
-              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_3qvRcPcdEeG31Myz9ELsRQ" value="1"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_3qvRcPcdEeG31Myz9ELsRQ"/>
             </ownedEnd>
           </packagedElement>
           <packagedElement xmi:type="uml:Association" xmi:id="_4nd_avcdEeG31Myz9ELsRQ" name="A_&lt;nevil3>_&lt;nevil1>" memberEnd="_4nd_a_cdEeG31Myz9ELsRQ _4nd_bvcdEeG31Myz9ELsRQ" navigableOwnedEnd="_4nd_a_cdEeG31Myz9ELsRQ _4nd_bvcdEeG31Myz9ELsRQ">

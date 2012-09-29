@@ -39,7 +39,7 @@ public class LookupCompositeParentResourceBuilder extends BaseServerResourceBuil
 			annotatedInf.setMyPackage(ojPackage);
 			addToSource(annotatedInf);
 
-			OJAnnotatedClass annotatedClass = new OJAnnotatedClass(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_" + pWrap.getOtherEnd().getName() + "_"
+			OJAnnotatedClass annotatedClass = new OJAnnotatedClass(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_" + pWrap.getOtherEnd().getName() 
 					+ "_lookupCompositeParent" + StringUtils.capitalize(pWrap.getName()) + "_ServerResourceImpl");
 			annotatedClass.setSuperclass(TumlRestletGenerationUtil.ServerResource);
 			annotatedClass.addToImplementedInterfaces(annotatedInf.getPathName());
@@ -79,7 +79,7 @@ public class LookupCompositeParentResourceBuilder extends BaseServerResourceBuil
 				"this." + parentPathName.getLast().toLowerCase() + "Id = Integer.parseInt((String)getRequestAttributes().get(\"" + parentPathName.getLast().toLowerCase()
 						+ "Id\"))");
 		get.getBody().addToStatements(
-				parentPathName.getLast() + " parentResource = new " + parentPathName.getLast() + "(GraphDb.getDb().getVertex(this." + parentPathName.getLast().toLowerCase() + "Id"
+				parentPathName.getLast() + " resource = new " + parentPathName.getLast() + "(GraphDb.getDb().getVertex(this." + parentPathName.getLast().toLowerCase() + "Id"
 						+ "))");
 		annotatedClass.addToImports(parentPathName);
 		buildToJson(pWrap, annotatedClass, get.getBody());
@@ -91,7 +91,7 @@ public class LookupCompositeParentResourceBuilder extends BaseServerResourceBuil
 	private void buildToJson(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass, OJBlock block) {
 		block.addToStatements("StringBuilder json = new StringBuilder()");
 		block.addToStatements("json.append(\"{\\\"data\\\": \")");
-		block.addToStatements("json.append(ToJsonUtil.toJson(parentResource." + pWrap.lookupCompositeParent() + "()))");
+		block.addToStatements("json.append(ToJsonUtil.toJson(resource." + pWrap.lookupCompositeParent() + "()))");
 		annotatedClass.addToImports(TinkerGenerationUtil.ToJsonUtil);
 		block.addToStatements("json.append(\",\")");
 		block.addToStatements("json.append(\" \\\"meta\\\" : [\")");

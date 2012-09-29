@@ -53,6 +53,18 @@
         <children>
           <emfPageIdentifier href="tinker-test.notation#_1chrTAAOEeKpVr_ntT6cLA"/>
         </children>
+        <children>
+          <emfPageIdentifier href="tinker-test.notation#_1chrSgAOEeKpVr_ntT6cLA"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="tinker-test.notation#_1chrVAAOEeKpVr_ntT6cLA"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="tinker-test.notation#_1chENAAOEeKpVr_ntT6cLA"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="tinker-test.notation#_1chENgAOEeKpVr_ntT6cLA"/>
+        </children>
       </children>
     </windows>
   </sashModel>

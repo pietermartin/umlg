@@ -10,7 +10,6 @@
 	<link rel="stylesheet" href="/${app.rootUrl}/javascript/slickgrid/controls/slick.columnpicker.css" type="text/css"/>
 	<link rel="stylesheet" href="/${app.rootUrl}/javascript/tuml/tuml.css" type="text/css"/>
 	<link rel="stylesheet" href="/${app.rootUrl}/javascript/chosen/chosen.css" type="text/css"/>
-	<link rel="stylesheet" href="/${app.rootUrl}/javascript/timepicker/jquery-ui-timepicker-addon.css" type="text/css"/>
 
 	<style>
 		.slick-headerrow-column {
@@ -49,13 +48,20 @@
 		}
 	</style>
 
+	<script src="/${app.rootUrl}/javascript/tuml/tuml.js"></script>
+	<script src="/${app.rootUrl}/javascript/tuml/tuml.create.leftmenu.js"></script>
+	<script src="/${app.rootUrl}/javascript/tuml/tuml.create.page.many.js"></script>
+	<script src="/${app.rootUrl}/javascript/tuml/tuml.create.page.one.js"></script>
+	<script src="/${app.rootUrl}/javascript/tuml/tuml.slick.grid.lookup.js"></script>
 	<script src="/${app.rootUrl}/javascript/slickgrid/lib/jquery-1.7.min.js"></script>
 	<script src="/${app.rootUrl}/javascript/slickgrid/lib/jquery-ui-1.8.16.custom.min.js"></script>
 	<script src="/${app.rootUrl}/javascript/slickgrid/lib/jquery.event.drag-2.0.min.js"></script>
 	<script src="/${app.rootUrl}/javascript/layout/jquery.layout-latest.js"></script>
 	<script src="/${app.rootUrl}/javascript/slickgrid/slick.core.js"></script>
 	<script src="/${app.rootUrl}/javascript/slickgrid/slick.grid.js"></script>
+	<script src="/${app.rootUrl}/javascript/slickgrid/slick.dataview.js"></script>
 	<script src="/${app.rootUrl}/javascript/slickgrid/slick.formatters.js"></script>
+	<script src="/${app.rootUrl}/javascript/slickgrid/tuml.slick.formatters.js"></script>
 	<script src="/${app.rootUrl}/javascript/slickgrid/controls/slick.pager.js"></script>
 	<script src="/${app.rootUrl}/javascript/slickgrid/controls/slick.columnpicker.js"></script>
 
@@ -64,22 +70,15 @@
 	<script src="/${app.rootUrl}/javascript/slickgrid/plugins/slick.cellselectionmodel.js"></script>
 	<script src="/${app.rootUrl}/javascript/slickgrid/plugins/slick.rowselectionmodel.js"></script>
 	<script src="/${app.rootUrl}/javascript/slickgrid/slick.editors.js"></script>
+	<script src="/${app.rootUrl}/javascript/slickgrid/tuml.slick.editors.js"></script>
 
 	<script src="/${app.rootUrl}/javascript/jquery-validation/jquery.validate.js"></script>
 	<script src="/${app.rootUrl}/javascript/chosen/chosen.jquery.js" type="text/javascript"></script>
+
 	<script src="/${app.rootUrl}/javascript/timepicker/jquery-ui-timepicker-addon.js" type="text/javascript"></script>
 	<script src="/${app.rootUrl}/javascript/timepicker/jquery-ui-sliderAccess.js" type="text/javascript"></script>
-    <script src="/${app.rootUrl}/javascript/maskedinput/jquery.maskedinput.js" type="text/javascript"></script>	
+	
 
-	<script src="/${app.rootUrl}/javascript/tuml/tuml.js"></script>
-	<script src="/${app.rootUrl}/javascript/tuml/tuml.create.leftmenu.js"></script>
-	<script src="/${app.rootUrl}/javascript/tuml/tuml.create.page.many.js"></script>
-	<script src="/${app.rootUrl}/javascript/tuml/tuml.create.page.one.js"></script>
-	<script src="/${app.rootUrl}/javascript/tuml/tuml.slick.grid.lookup.js"></script>
-	<script src="/${app.rootUrl}/javascript/tuml/tuml.slick.validators.js"></script>
-	<script src="/${app.rootUrl}/javascript/tuml/tuml.slick.editors.js"></script>
-	<script src="/${app.rootUrl}/javascript/tuml/tuml.slick.formatters.js"></script>
-	<script src="/${app.rootUrl}/javascript/tuml/tuml.slick.dataview.js"></script>
 	<script>
 	var grid;
 	var myLayout;

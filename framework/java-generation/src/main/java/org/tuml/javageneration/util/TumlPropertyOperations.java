@@ -1,14 +1,17 @@
 package org.tuml.javageneration.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.uml2.uml.Association;
 import org.eclipse.uml2.uml.BehavioredClassifier;
+import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Enumeration;
+import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
@@ -18,6 +21,37 @@ import org.opaeum.java.metamodel.OJSimpleStatement;
 import org.tuml.javageneration.ocl.util.TumlCollectionKindEnum;
 
 public final class TumlPropertyOperations extends PropertyOperations {
+
+	public static Type findCompositeParent(PropertyWrapper propertyWrapper, PropertyWrapper otherEnd) {
+		List<Type> orderedListOfCompositeTypes = new ArrayList<Type>();
+		createListOfOrderedTypes(orderedListOfCompositeTypes, propertyWrapper);
+		List<Type> otherEndOrderedListOfCompositeTypes = new ArrayList<Type>();
+		createListOfOrderedTypes(otherEndOrderedListOfCompositeTypes, otherEnd);
+
+		for (Type type : orderedListOfCompositeTypes) {
+			if (otherEndOrderedListOfCompositeTypes.contains(type)) {
+				return type;
+			}
+		}
+		return null;
+	}
+
+	private static void createListOfOrderedTypes(List<Type> orderedListOfCompositeTypes, PropertyWrapper propertyWrapper) {
+		orderedListOfCompositeTypes.add(propertyWrapper.getType());
+		Property otherEndToComposite;
+		if (propertyWrapper.getType() instanceof Interface) {
+			Interface type = (Interface) propertyWrapper.getType();
+			otherEndToComposite = TumlInterfaceOperations.getOtherEndToComposite(type);
+		} else if (propertyWrapper.getType() instanceof Class) {
+			Class type = (Class) propertyWrapper.getType();
+			otherEndToComposite = TumlClassOperations.getOtherEndToComposite(type);
+		} else {
+			throw new RuntimeException("TODO " + propertyWrapper.getType());
+		}
+		if (otherEndToComposite != null) {
+			createListOfOrderedTypes(orderedListOfCompositeTypes, new PropertyWrapper(otherEndToComposite));
+		}
+	}
 
 	public static Type getOwningType(Property p) {
 		Element owner = p.getOwner();

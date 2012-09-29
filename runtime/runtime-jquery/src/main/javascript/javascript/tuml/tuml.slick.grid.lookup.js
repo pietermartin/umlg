@@ -1,8 +1,12 @@
-function RowLookupMap(uriToCompositeParent) {
+function RowLookupMap(contextVertexId, uriToCompositeParent, uriToCompositeParentOnCompositeParent) {
     var rowLookupMap = {};
     this.getOrLoadMap = function(rowVertexId, callBack) {
         if (rowLookupMap[rowVertexId] == undefined) {
-            var adjustedUri = uriToCompositeParent.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), rowVertexId);
+            if (isNaN(rowVertexId)) {
+                var adjustedUri = uriToCompositeParentOnCompositeParent.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
+            } else {
+                var adjustedUri = uriToCompositeParent.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), rowVertexId);
+            }
             $.ajax({
                 type: 'GET',
                 url: adjustedUri,
@@ -22,11 +26,15 @@ function RowLookupMap(uriToCompositeParent) {
     };
 }
 
-function CompositeParentLookupMap( lookupUri) {
+function CompositeParentLookupMap(contextVertexId, lookupUri, lookupUriOnCompositeParent) {
     var compositeParentLookupMap = {};
     this.getOrLoadMap = function (compositeParentVertexId, rowVertexId, callBack) {
         if (compositeParentLookupMap[compositeParentVertexId] == undefined) {
-            var adjustedUri = lookupUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), rowVertexId);
+            if (isNaN(rowVertexId)) {
+                var adjustedUri = lookupUriOnCompositeParent.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
+            } else {    
+                var adjustedUri = lookupUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), rowVertexId);
+            }
             $.ajax({
                 type: 'GET',
                 url: adjustedUri,

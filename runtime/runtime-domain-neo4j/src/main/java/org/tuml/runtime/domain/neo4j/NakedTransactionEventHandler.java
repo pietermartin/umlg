@@ -35,6 +35,7 @@ public class NakedTransactionEventHandler<T> implements TransactionEventHandler<
 				TumlNode tumlNode = (TumlNode) entity;
 				List<TumlConstraintViolation> requiredConstraintViolations = tumlNode.validateRequiredProperties();
 				if (!requiredConstraintViolations.isEmpty()) {
+					TransactionThreadEntityVar.clear();
 					throw new TumlConstraintViolationException(requiredConstraintViolations);
 				}
 				if (!entity.isTinkerRoot() && entity.getOwningObject() == null) {

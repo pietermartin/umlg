@@ -202,7 +202,7 @@ public class RuntimePropertyImplementor {
 		return ojEnum;
 	}
 
-	public static void addEnumLiteral(OJEnum ojEnum, OJAnnotatedOperation fromLabel, String fieldName, boolean isPrimitive, DataTypeEnum dataTypeEnum,
+	public static OJEnumLiteral addEnumLiteral(OJEnum ojEnum, OJAnnotatedOperation fromLabel, String fieldName, boolean isPrimitive, DataTypeEnum dataTypeEnum,
 			List<Validation> validations, boolean isEnumeration, boolean isManyToOne, boolean isMany, boolean isControllingSide, boolean isComposite, boolean isInverseComposite,
 			boolean isOneToOne, boolean isOneToMany, boolean isManyToMany, int getUpper, int getLower, boolean isQualified, boolean isInverseQualified, boolean isOrdered,
 			boolean isInverseOrdered, boolean isUnique, String edgeName) {
@@ -426,6 +426,7 @@ public class RuntimePropertyImplementor {
 		ojLiteral.addToAttributeValues(jsonAttribute);
 
 		ojEnum.addToLiterals(ojLiteral);
+		return ojLiteral;
 	}
 
 }
