@@ -27,7 +27,7 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
 	public void visitBefore(Class clazz) {
 		OJAnnotatedClass annotatedClass = findOJClass(clazz);
 		addInitialiseProperty(annotatedClass, clazz);
-		RuntimePropertyImplementor.addTumlRuntimePropertyEnum(annotatedClass, TumlClassOperations.propertyEnumName(clazz), TumlClassOperations.className(clazz),
+		RuntimePropertyImplementor.addTumlRuntimePropertyEnum(annotatedClass, TumlClassOperations.propertyEnumName(clazz), clazz,
 				TumlClassOperations.getAllOwnedProperties(clazz), TumlClassOperations.hasCompositeOwner(clazz), clazz.getModel().getName());
 		addGetQualifiers(annotatedClass, clazz);
 		addGetSize(annotatedClass, clazz);
@@ -46,7 +46,8 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
 		}
 		annotatedClass.addToOperations(initialiseProperty);
 
-		OJSimpleStatement s = new OJSimpleStatement(TumlClassOperations.propertyEnumName(clazz) + " runtimeProperty = " + "(" + TumlClassOperations.propertyEnumName(clazz) + ".fromLabel(tumlRuntimeProperty.getLabel()))");
+		OJSimpleStatement s = new OJSimpleStatement(TumlClassOperations.propertyEnumName(clazz) + " runtimeProperty = " + "("
+				+ TumlClassOperations.propertyEnumName(clazz) + ".fromLabel(tumlRuntimeProperty.getLabel()))");
 		initialiseProperty.getBody().addToStatements(s);
 		OJIfStatement ifNotNull = new OJIfStatement("runtimeProperty != null");
 		initialiseProperty.getBody().addToStatements(ifNotNull);

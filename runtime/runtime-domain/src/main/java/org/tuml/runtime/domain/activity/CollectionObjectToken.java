@@ -253,4 +253,10 @@ public class CollectionObjectToken<O> extends ObjectToken<O> implements Composit
 		return null;
 	}
 
+	@Override
+	public List<TumlNode> getPathToCompositionalRoot() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -2,8 +2,6 @@ package org.tuml.runtime.domain.neo4j;
 
 import java.util.List;
 
-import javax.validation.Validator;
-
 import org.joda.time.DateTime;
 import org.neo4j.graphdb.event.TransactionData;
 import org.neo4j.graphdb.event.TransactionEventHandler;
@@ -18,11 +16,9 @@ import org.tuml.runtime.validation.TumlConstraintViolationException;
 
 public class NakedTransactionEventHandler<T> implements TransactionEventHandler<T> {
 
-	Validator validator;
 
-	public NakedTransactionEventHandler(Validator validator) {
+	public NakedTransactionEventHandler() {
 		super();
-		this.validator = validator;
 	}
 
 	@Override

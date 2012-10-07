@@ -1,6 +1,7 @@
-function createLeftMenu(menuArray, classNameLowerCased, contextVertexId) {
+function createLeftMenu(menuArray, contextVertexId) {
     $('.ui-left-menu-link').children().remove();
     $.each(menuArray, function(index, value) {
+        var property = menuArray[index];
         var adjustedUri = menuArray[index].tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
         $('.ui-left-menu-link').append('<li>').append(
             $('<a>', {

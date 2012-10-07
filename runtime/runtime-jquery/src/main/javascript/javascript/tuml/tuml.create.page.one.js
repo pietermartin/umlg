@@ -1,9 +1,9 @@
-function createPageForOne(data, metaForData, tumlUri) {
+function createPageForOne(data, metaForData, tumlUri, qualifiedName) {
 
     function init() {
         //Clear all elements
         $('.ui-layout-center').children().remove();
-        $('<div>' + metaForData.name + '</div>').appendTo('.ui-layout-center');
+        $('<div />').text(qualifiedName).appendTo('.ui-layout-center');
         $('<div />', {id: 'formDiv'}).appendTo('.ui-layout-center');
 
         var ul = $('<ul />').appendTo("#formDiv");
@@ -20,19 +20,19 @@ function createPageForOne(data, metaForData, tumlUri) {
                                 showOn: "button",
                                 buttonImageOnly: true,
                                 dateFormat: "yy-mm-dd",
-                                buttonImage: "../../javascript/slickgrid/images/calendar.gif"
+                                buttonImage: "/restAndJson/javascript/slickgrid/images/calendar.gif"
                             });
                         } else if (property.dataTypeEnum == 'Time') {
                             $input.timepicker({
                                 showOn: "button",
                                 buttonImageOnly: true,
-                                buttonImage: "../../javascript/slickgrid/images/calendar.gif"
+                                buttonImage: "/restAndJson/javascript/slickgrid/images/calendar.gif"
                             });
                         } else if (property.dataTypeEnum == 'DateTime') {
                             $input.datetimepicker({
                                 showOn: "button",
                                 buttonImageOnly: true,
-                                buttonImage: "../../javascript/slickgrid/images/calendar.gif",
+                                buttonImage: "/restAndJson/javascript/slickgrid/images/calendar.gif",
                                 dateFormat: "yy-mm-dd",
                                 timeFormat: "hh:mm:ss"
                             });

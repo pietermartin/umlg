@@ -25,13 +25,13 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
 	public void visitBefore(Class clazz) {
 		OJAnnotatedClass annotatedClass = findOJClass(clazz);
 		if (TumlClassOperations.hasCompositeOwner(clazz)) {
-			addGetOwningObject(annotatedClass, clazz);
 			addConstructorWithOwnerAsParameter(annotatedClass, clazz);
 		} else {
 			if (!clazz.isAbstract()) {
 				addEdgeToRoot(annotatedClass, clazz);
 			}
 		}
+		addGetOwningObject(annotatedClass, clazz);
 		addCompositeChildrenToDelete(annotatedClass, clazz);
 	}
 

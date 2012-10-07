@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.Property;
 import org.opaeum.java.metamodel.OJField;
 import org.opaeum.java.metamodel.OJForStatement;
@@ -20,7 +21,7 @@ import org.tuml.javageneration.validation.Validation;
 
 public class RuntimePropertyImplementor {
 
-	public static OJEnum addTumlRuntimePropertyEnum(OJAnnotatedClass annotatedClass, String enumName, String className, Set<Property> allOwnedProperties,
+	public static OJEnum addTumlRuntimePropertyEnum(OJAnnotatedClass annotatedClass, String enumName, NamedElement className, Set<Property> allOwnedProperties,
 			boolean hasCompositeOwner, String modelName) {
 		OJEnum ojEnum = new OJEnum(enumName);
 		ojEnum.setStatic(true);
@@ -164,7 +165,7 @@ public class RuntimePropertyImplementor {
 		OJAnnotatedOperation asJson = new OJAnnotatedOperation("asJson", new OJPathName("String"));
 		asJson.setStatic(true);
 		asJson.getBody().addToStatements("StringBuilder sb = new StringBuilder();");
-		asJson.getBody().addToStatements("name", "sb.append(\"{\\\"name\\\": \\\"" + className + "\\\", \")");
+		asJson.getBody().addToStatements("name", "sb.append(\"{\\\"name\\\": \\\"" + className.getName() + "\\\", \")");
 		asJson.getBody().addToStatements("uri", "sb.append(\"\\\"uri\\\": \\\"TODO\\\", \")");
 		asJson.getBody().addToStatements("properties", "sb.append(\"\\\"properties\\\": [\")");
 
@@ -191,10 +192,10 @@ public class RuntimePropertyImplementor {
 			}
 		}
 
-		if (!hasCompositeOwner) {
+		if (!hasCompositeOwner/* && !(className instanceof Model)*/) {
 			// Add in fake property to root
 			addEnumLiteral(ojEnum, fromLabel, modelName, false, null, Collections.<Validation> emptyList(), false, false, false, true, false, true, true, false, false, -1, 0,
-					false, false, false, false, false, "root" + className);
+					false, false, false, false, false, "root" + className.getName());
 		}
 		asJson.getBody().addToStatements("sb.append(\"]}\")");
 		asJson.getBody().addToStatements("return sb.toString()");

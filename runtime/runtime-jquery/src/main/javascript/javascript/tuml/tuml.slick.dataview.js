@@ -35,10 +35,12 @@
             var items = [];         // data by index
             var updatedItems = [];  // updated data by id 
             var newItems = [];      // new data by id 
+            var deletedItems = [];  // deleted data by id 
             var rows = [];          // data by row
             var idxById = {};       // indexes by id
             var updatedIdxById = {} // updated indexes by id
             var newIdxById = {}     // new indexes by id
+            //var deletedIdxById = {} // deleted indexes by id
             var rowsById = null;    // rows by id; lazy-calculated
             var filter = null;      // filter function
             var updated = null;     // updated item ids
@@ -126,6 +128,10 @@
 
             function getNewItems() {
                 return newItems;
+            }
+
+            function getDeletedItems() {
+                return deletedItems;
             }
 
             function setItems(data, objectIdProperty) {
@@ -356,6 +362,10 @@
                 if (idx === undefined) {
                     throw "Invalid id";
                 }
+
+                var item = items[idx];
+                deletedItems.push(item);
+
                 delete idxById[id];
                 items.splice(idx, 1);
                 updateIdxById(idx);
@@ -812,6 +822,7 @@
         "getItems": getItems,
         "getUpdatedItems": getUpdatedItems,
         "getNewItems": getNewItems,
+        "getDeletedItems": getDeletedItems,
         "setItems": setItems,
         "setFilter": setFilter,
         "sort": sort,

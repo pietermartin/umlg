@@ -24,7 +24,7 @@ public class AddSelfIdAndUriLiteralsToRootRuntimeEnum extends BaseVisitor implem
 		OJAnnotatedClass annotatedClass = this.workspace.findOJClass("org.tuml.root.Root");
 		OJEnum ojEnum = annotatedClass.findEnum("RootRuntimePropertyEnum");
 		addField(annotatedClass, ojEnum, "id");
-		addField(annotatedClass, ojEnum, "uri");
+//		addField(annotatedClass, ojEnum, "uri");
 	}
 
 	@Override

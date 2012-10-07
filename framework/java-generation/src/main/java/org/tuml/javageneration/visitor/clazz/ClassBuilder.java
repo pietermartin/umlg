@@ -35,11 +35,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 	public void visitBefore(Class clazz) {
 		OJAnnotatedClass annotatedClass = findOJClass(clazz);
 		setSuperClass(annotatedClass, clazz);
-		if (TumlClassOperations.hasCompositeOwner(clazz)) {
-			implementCompositionNode(annotatedClass);
-		} else {
-			implementTumlNode(annotatedClass);
-		}
+		implementCompositionNode(annotatedClass);
 		addDefaultSerialization(annotatedClass);
 		implementIsRoot(annotatedClass, TumlClassOperations.getOtherEndToComposite(clazz) == null);
 		addPersistentConstructor(annotatedClass);
@@ -82,7 +78,8 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 	private void setSuperClass(OJAnnotatedClass annotatedClass, Class clazz) {
 		List<Classifier> generals = clazz.getGenerals();
 		if (generals.size() > 1) {
-			throw new IllegalStateException(String.format("Multiple inheritence is not supported! Class %s has more than on genereralization.", clazz.getName()));
+			throw new IllegalStateException(
+					String.format("Multiple inheritence is not supported! Class %s has more than on genereralization.", clazz.getName()));
 		}
 		if (!generals.isEmpty()) {
 			Classifier superClassifier = generals.get(0);

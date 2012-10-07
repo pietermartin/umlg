@@ -65,6 +65,7 @@ public class TinkerGenerationUtil {
 	public static final OJPathName BASE_TUML_AUDIT = new OJPathName("org.tuml.runtime.domain.BaseTumlAudit");
 	public static final OJPathName BASE_BEHAVIORED_CLASSIFIER = new OJPathName("org.tuml.runtime.domain.BaseTinkerBehavioredClassifier");
 	public static final OJPathName BASE_TINKER = new OJPathName("org.tuml.runtime.domain.BaseTuml");
+	public static final OJPathName BASE_TUML_COMPOSITION_NODE = new OJPathName("org.tuml.runtime.domain.BaseTumlCompositionNode");
 	public static final String BASE_AUDIT_TINKER = "org.tuml.runtime.domain.BaseTinkerAuditable";
 	public static final String PERSISTENT_CONSTRUCTOR_NAME = "persistentConstructor";
 	public static final String PERSISTENT_CONSTRUCTOR_PARAM_NAME = "persistent";

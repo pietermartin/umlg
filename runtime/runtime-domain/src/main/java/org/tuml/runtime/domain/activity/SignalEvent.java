@@ -116,5 +116,17 @@ public class SignalEvent extends Event {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public TumlNode getOwningObject() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<TumlNode> getPathToCompositionalRoot() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }

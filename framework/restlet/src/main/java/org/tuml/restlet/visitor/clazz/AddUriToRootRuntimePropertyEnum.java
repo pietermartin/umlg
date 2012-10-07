@@ -101,7 +101,7 @@ public class AddUriToRootRuntimePropertyEnum extends BaseVisitor implements Visi
 	private void addUriToObject(Model model, OJEnum ojEnum) {
 		OJAnnotatedOperation asJson =  ojEnum.findOperation("asJson");
 		OJSimpleStatement s =  (OJSimpleStatement) asJson.getBody().findStatement("uri");
-		s.setExpression("sb.append(\"\\\"uri\\\": \\\"/" + model.getName() + "s\\\", \")");
+		s.setExpression("sb.append(\"\\\"uri\\\": \\\"/" + model.getName() + "\\\", \")");
 	}
 
 }

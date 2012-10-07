@@ -154,7 +154,10 @@
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_MrFh4u92EeC2XrXxx1atfA"/>
             </ownedAttribute>
             <ownedAttribute xmi:id="_aug00O-AEeC2XrXxx1atfA" name="reason" visibility="public" type="_PeTyUO7EEeCKZsw1ityolg"/>
-            <ownedAttribute xmi:id="_gaPzIO-BEeC2XrXxx1atfA" name="pet" visibility="public" type="_BMXkQO6kEeCKZsw1ityolg"/>
+            <ownedAttribute xmi:id="_gaPzIO-BEeC2XrXxx1atfA" name="pet" visibility="public" type="_BMXkQO6kEeCKZsw1ityolg">
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_IzyYIBCoEeK9VbCsxPP0zw" value="1"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_IzxKABCoEeK9VbCsxPP0zw"/>
+            </ownedAttribute>
             <ownedAttribute xmi:id="_a1HrwO-DEeC2XrXxx1atfA" name="animalFarm" visibility="public" type="_BMXkQO6kEeCKZsw1ityolg">
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_c4xlkO-DEeC2XrXxx1atfA" value="*"/>
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_cy5nEO-DEeC2XrXxx1atfA"/>

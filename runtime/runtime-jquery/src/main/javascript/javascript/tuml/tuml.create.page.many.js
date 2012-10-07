@@ -1,6 +1,8 @@
-function createPageForMany(data, metaForData, tumlUri) {
+function createPageForMany(data, metaForData, tumlUri, qualifiedName) {
+    $('#contextMenu').remove();
     $('.ui-layout-center').children().remove();
-    $('<div id="gridDiv" class="grid-header" style="width:100%"><label>' + metaForData.name + ':</label></div>)').appendTo(".ui-layout-center");
+    var gridDiv = $('<div id="gridDiv" class="grid-header" style="width:100%" />)').appendTo(".ui-layout-center");
+    $('<label />').text(qualifiedName).appendTo(gridDiv);
     $('<div id="myGrid" style="width:100%;height:90%;"></div>').appendTo(".ui-layout-center");
     $('<div id="pager" style="width:100%;height:20px;"></div>').appendTo(".ui-layout-center");
     createGrid(data, metaForData, tumlUri);
@@ -40,11 +42,18 @@ function createGrid(data, metaForData, tumlUri) {
         }
     });
 
+    columns.push({id: "uri", name: "uri", field: "uri", sortable: false, formatter: TumlSlick.Formatters.Link});
+
+    columns.push(
+        {id: "delete", name: "delete", field: "delete", sortable: false, 
+            formatter: TumlSlick.Formatters.TumlDelete }
+    );
+
     function selectFormatter(property) {
         if (property.name == 'uri') {
             return TumlSlick.Formatters.Link;
         } else if (property.name == 'id') {
-            return null;
+            return TumlSlick.Formatters.Id;
         } else if (property.dataTypeEnum !== undefined) {
             return null;
         } else if (!property.onePrimitive && !property.manyPrimitive) {
@@ -57,7 +66,7 @@ function createGrid(data, metaForData, tumlUri) {
             };
             return null;
         } else if (property.fieldType == 'String') {
-            return  null; 
+            return  TumlSlick.Formatters.TumlRequired; 
         } else if (property.fieldType == 'Boolean') {
             return Slick.Formatters.Checkmark;
         } else {
@@ -178,8 +187,8 @@ function createGrid(data, metaForData, tumlUri) {
                     success: function() {
                         refreshPageTo(tumlUri);
                     },
-                    error: function() {
-                        alert("fail :-(");
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        alert("error\n" + jqXHR.responseText);
                     }
                 });
             }
@@ -194,8 +203,24 @@ function createGrid(data, metaForData, tumlUri) {
                     success: function() {
                         refreshPageTo(tumlUri);
                     },
-                    error: function() {
-                        alert("fail :-(");
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        alert("error\n" + "status = " + jqXHR.status + "\n" + jqXHR.responseText);
+                    }
+                });
+            }
+            //delete new items
+            if (dataView.getDeletedItems().length !== 0) {
+                $.ajax({
+                    url: tumlUri,
+                    type: "DELETE",
+                    dataType: "json",
+                    contentType: "json",
+                    data: JSON.stringify(dataView.getDeletedItems()),
+                    success: function() {
+                        refreshPageTo(tumlUri);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        alert("error\n" + "status = " + jqXHR.status + "\n" + jqXHR.responseText);
                     }
                 });
             }
@@ -208,14 +233,63 @@ function createGrid(data, metaForData, tumlUri) {
         refreshPageTo(tumlUri);
     }).appendTo('.grid-button');
 
+    //Create context menu
+    var contextMenuUl = $('<ul />', {id: 'contextMenu', style: 'display:none;position:absolute'}).appendTo('body');
+    $('<b />').text('Nav').appendTo(contextMenuUl);
+    var li = $('<li data="' + metaForData.uri + '" />').text("self").appendTo(contextMenuUl);
+    $.each(metaForData.properties, function(index, property) {
+        if (property.inverseComposite || !((property.dataTypeEnum !== undefined &&  property.dataTypeEnum !== null) || property.onePrimitive || property.manyPrimitive || property.name == 'id' || property.name == 'uri')) {
+            $('<li data="' + property.tumlUri + '" />').text(property.name).appendTo(contextMenuUl);
+        }
+    });
+    $('<li data="delete" />').text("delete").appendTo(contextMenuUl);
+
+    grid.onContextMenu.subscribe(function (e) {
+        e.preventDefault();
+        var cell = grid.getCellFromEvent(e);
+        $("#contextMenu")
+        .data("row", cell.row)
+        .css("top", e.pageY)
+        .css("left", e.pageX)
+        .show();
+
+        $("body").one("click", function () {
+            $("#contextMenu").hide();
+        });
+    });
+
+    $("#contextMenu").click(function (e) {
+        if (!$(e.target).is("li")) {
+            return;
+        }
+        var row = $(this).data("row");
+        var tumlUri = $(e.target).attr("data");
+        if (tumlUri !== 'delete') {
+            var url = tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), data[row].id);
+            change_my_url("unused", url);
+            refreshPageTo(url);
+        } else {
+            var item = dataView.getItem(row);
+            dataView.deleteItem(item.id);
+        }
+    }); 
+
+    grid.onActiveCellChanged.subscribe(function(e, args) {
+        if (grid.getColumns()[args.cell].name == 'delete') {
+            var item = dataView.getItem(args.row);
+            dataView.deleteItem(item.id);
+        }
+    });
+
     grid.onCellChange.subscribe(function(e, args) {
         dataView.updateItem(args.item.id, args.item, grid.getColumns()[args.cell]);
     });
 
     grid.onAddNewRow.subscribe(function(e, args) {
         var $newItem = {};
-        for (i = 0; i < columns.length; i++) {
-            $newItem[columns[i].name] = null;
+        for (i = 0; i < grid.getColumns().length; i++) {
+            var column = grid.getColumns()[i];
+            $newItem[column.name] = null;
         }
         //Generate a fake id, its required for the grid to work nicely
         $newItem.id = 'fake::' + data.length + dataView.getNewItems().length + 1;
@@ -306,14 +380,12 @@ function createGrid(data, metaForData, tumlUri) {
 
     grid.onViewportChanged.subscribe(function (e, args) {
         var vp = grid.getViewport();
-        console.log(vp);
-        //loader.ensureData(vp.top, vp.bottom);
     });
     grid.onViewportChanged.notify();
 
     function updateHeaderRow(metaForData) {
         for (var i = 0; i < columns.length; i++) {
-            if (columns[i].id !== "selector" && columns[i].id !== 'uri') {
+            if (columns[i].id !== "selector" && columns[i].id !== 'uri' && columns[i].id !== 'delete') {
                 var header = grid.getHeaderRowColumn(columns[i].id);
                 $(header).empty();
                 $(constructHeaderRowBox(columns[i].id, metaForData)).data("columnId", columns[i].id).val(columnFilters[columns[i].id]).appendTo(header);

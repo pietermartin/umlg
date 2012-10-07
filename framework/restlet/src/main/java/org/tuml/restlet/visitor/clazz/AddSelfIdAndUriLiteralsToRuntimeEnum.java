@@ -25,7 +25,8 @@ public class AddSelfIdAndUriLiteralsToRuntimeEnum extends BaseVisitor implements
 		OJAnnotatedClass annotatedClass = findOJClass(clazz);
 		OJEnum ojEnum = annotatedClass.findEnum(TumlClassOperations.propertyEnumName(clazz));
 		addField(annotatedClass, ojEnum, "id");
-		addField(annotatedClass, ojEnum, "uri");
+		//This is needed as a dummy to force a column in the grid, //TODO remove me thinks
+//		addField(annotatedClass, ojEnum, "uri");
 	}
 
 	@Override

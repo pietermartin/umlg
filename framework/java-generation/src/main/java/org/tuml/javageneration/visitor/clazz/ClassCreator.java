@@ -27,7 +27,7 @@ public class ClassCreator extends BaseVisitor implements Visitor<org.eclipse.uml
 		if (TumlBehavioredClassifierOperations.hasBehavior(clazz)) {
 			annotatedClass.setSuperclass(TinkerGenerationUtil.BASE_BEHAVIORED_CLASSIFIER);
 		} else {
-			annotatedClass.setSuperclass(TinkerGenerationUtil.BASE_TINKER);
+			annotatedClass.setSuperclass(TinkerGenerationUtil.BASE_TUML_COMPOSITION_NODE);
 		}
 		addToSource(annotatedClass);
 	}

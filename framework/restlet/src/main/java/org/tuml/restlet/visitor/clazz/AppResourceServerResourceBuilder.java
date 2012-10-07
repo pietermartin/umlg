@@ -65,10 +65,15 @@ public class AppResourceServerResourceBuilder extends BaseServerResourceBuilder 
 		json.setInitExp("new StringBuilder()");
 		get.getBody().addToLocals(json);
 		get.getBody().addToStatements("json.append(\"{\\\"data\\\": [{\\\"name\\\": \\\"APP\\\"}]\")");
-		get.getBody().addToStatements("json.append(\", \\\"meta\\\": \")");
+		get.getBody().addToStatements("json.append(\", \\\"meta\\\": [\")");
+		
+		
+		get.getBody().addToStatements("json.append(\"{\\\"qualifiedName\\\": \\\"" + model.getQualifiedName() + "\\\"}\")");
+		get.getBody().addToStatements("json.append(\", \")");
+		
 		get.getBody().addToStatements("json.append(RootRuntimePropertyEnum.asJson())");
 		annotatedClass.addToImports("org.tuml.root.Root.RootRuntimePropertyEnum");
-		get.getBody().addToStatements("json.append(\"}\")");
+		get.getBody().addToStatements("json.append(\"]}\")");
 		get.getBody().addToStatements("return new " + TumlRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
 		
 		annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);

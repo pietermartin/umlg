@@ -75,7 +75,7 @@ public class TestValidation extends BaseLocalDbTest {
 		db.stopTransaction(Conclusion.SUCCESS);
 	}
 
-	@Test(expected=TumlConstraintViolationException.class)
+	@Test(expected = TumlConstraintViolationException.class)
 	public void testValidationMinFail() {
 		db.startTransaction();
 		God g = new God(true);
@@ -93,7 +93,7 @@ public class TestValidation extends BaseLocalDbTest {
 		db.stopTransaction(Conclusion.SUCCESS);
 	}
 
-	@Test(expected=TumlConstraintViolationException.class)
+	@Test(expected = TumlConstraintViolationException.class)
 	public void testValidationMaxFail() {
 		db.startTransaction();
 		God g = new God(true);
@@ -110,7 +110,8 @@ public class TestValidation extends BaseLocalDbTest {
 		u1.setMax(51);
 		db.stopTransaction(Conclusion.SUCCESS);
 	}
-	@Test(expected=TumlConstraintViolationException.class)
+
+	@Test(expected = TumlConstraintViolationException.class)
 	public void testValidationRangeFail1() {
 		db.startTransaction();
 		God g = new God(true);
@@ -119,7 +120,7 @@ public class TestValidation extends BaseLocalDbTest {
 		db.stopTransaction(Conclusion.SUCCESS);
 	}
 
-	@Test(expected=TumlConstraintViolationException.class)
+	@Test(expected = TumlConstraintViolationException.class)
 	public void testValidationRangeFail2() {
 		db.startTransaction();
 		God g = new God(true);
@@ -137,7 +138,7 @@ public class TestValidation extends BaseLocalDbTest {
 		db.stopTransaction(Conclusion.SUCCESS);
 	}
 
-	@Test(expected=TransactionFailureException.class)
+	@Test(expected = TransactionFailureException.class)
 	public void testValidationRequiredFail() {
 		db.startTransaction();
 		God g = new God(true);
@@ -153,6 +154,19 @@ public class TestValidation extends BaseLocalDbTest {
 		ValidationTest validationTest = new ValidationTest(g);
 		validationTest.setRequiredName("asd");
 		db.stopTransaction(Conclusion.SUCCESS);
+	}
+
+	@Test
+	public void testFail() {
+		db.startTransaction();
+		try {
+			God g = new God(true);
+			ValidationTest validationTest = new ValidationTest(g);
+			// validationTest.setRequiredName("asd");
+			db.stopTransaction(Conclusion.SUCCESS);
+		} catch (TransactionFailureException e) {
+			System.out.println(e.getCause());
+		}
 	}
 
 }

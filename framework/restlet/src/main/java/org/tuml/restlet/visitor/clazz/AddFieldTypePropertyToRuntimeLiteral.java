@@ -47,7 +47,7 @@ public class AddFieldTypePropertyToRuntimeLiteral extends BaseVisitor implements
 		}
 
 		addFieldTypePropertyToLiteral(ojEnum.findLiteral("id"), "FieldType.Integer");
-		addFieldTypePropertyToLiteral(ojEnum.findLiteral("uri"), "FieldType.String");
+//		addFieldTypePropertyToLiteral(ojEnum.findLiteral("uri"), "FieldType.String");
 
 		if (!TumlClassOperations.hasCompositeOwner(clazz)) {
 			// This is for the fake property to Root

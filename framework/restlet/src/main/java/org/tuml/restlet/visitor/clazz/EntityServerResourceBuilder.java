@@ -112,10 +112,14 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
 		get.getBody().addToStatements("json.append(\"{\\\"data\\\": \")");
 		get.getBody().addToStatements("json.append(" + "c.toJson())");
 
-		get.getBody().addToStatements("json.append(\", \\\"meta\\\": \")");
+//		get.getBody().addToStatements("json.append(\", \\\"meta\\\": \")");
+		get.getBody().addToStatements("json.append(\", \\\"meta\\\" : [\")");
+		
+		get.getBody().addToStatements("json.append(\"{\\\"qualifiedName\\\": \\\"" + clazz.getQualifiedName() + "\\\"}\")");
+		get.getBody().addToStatements("json.append(\", \")");
 		get.getBody().addToStatements("json.append(" + TumlClassOperations.propertyEnumName(clazz) + ".asJson())");
 		annotatedClass.addToImports(TumlClassOperations.getPathName(clazz).append(TumlClassOperations.propertyEnumName(clazz)));
-		get.getBody().addToStatements("json.append(\"}\")");
+		get.getBody().addToStatements("json.append(\"]}\")");
 		get.getBody().addToStatements("return new " + TumlRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
 
 		annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);

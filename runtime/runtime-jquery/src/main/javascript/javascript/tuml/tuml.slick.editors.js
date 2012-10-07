@@ -55,7 +55,7 @@
     };
 
     this.loadValue = function (item) {
-      defaultValue = item[args.column.field] || "";
+      defaultValue = item[args.column.field] || null;
       $input.val(defaultValue);
       $input[0].defaultValue = defaultValue;
       $input.select();
@@ -70,7 +70,7 @@
     };
 
     this.isValueChanged = function () {
-      return (!($input.val() == "" && defaultValue == null)) && ($input.val() != defaultValue);
+      return ($input.val() != defaultValue);
     };
 
     this.validate = function () {

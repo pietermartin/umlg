@@ -156,6 +156,10 @@ public class RootResourceServerResourceBuilder extends BaseServerResourceBuilder
 		annotatedClass.addToImports(TinkerGenerationUtil.ToJsonUtil);
 
 		get.getBody().addToStatements("json.append(\"], \\\"meta\\\": [\")");
+		
+		get.getBody().addToStatements("json.append(\"{\\\"qualifiedName\\\": \\\"" + clazz.getQualifiedName() + "\\\"}\")");
+		get.getBody().addToStatements("json.append(\", \")");
+		
 		// Meta data remains for the root object as viewing a many list does not
 		// change the context
 		get.getBody().addToStatements("json.append(" + TinkerGenerationUtil.RootRuntimePropertyEnum.getLast() + ".asJson())");

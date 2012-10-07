@@ -6,11 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.transaction.SystemException;
 import javax.transaction.Transaction;
 import javax.transaction.TransactionManager;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.Node;
@@ -43,12 +41,6 @@ public class NakedNeo4jGraph implements NakedGraph {
 	private TransactionEventHandler<PersistentObject> transactionEventHandler;
 	private TinkerSchemaHelper schemaHelper;
 
-	private final ThreadLocal<Integer> txCount = new ThreadLocal<Integer>() {
-		protected Integer initialValue() {
-			return null;
-		}
-	};
-
 	public NakedNeo4jGraph(Neo4jGraph orientGraph, TinkerSchemaHelper schemaHelper) {
 		super();
 		this.neo4jGraph = orientGraph;
@@ -61,13 +53,18 @@ public class NakedNeo4jGraph implements NakedGraph {
 
 	@Override
 	public void startTransaction() {
-		txCount.set(1);
 	}
 
 	@Override
 	public void stopTransaction(Conclusion conclusion) {
-		neo4jGraph.stopTransaction(conclusion);
-		// txCount.remove();
+		TransactionManager tm = ((EmbeddedGraphDatabase) neo4jGraph.getRawGraph()).getTxManager();
+		try {
+			if (tm.getTransaction() != null) {
+				neo4jGraph.stopTransaction(conclusion);
+			}
+		} catch (SystemException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override
@@ -217,9 +214,7 @@ public class NakedNeo4jGraph implements NakedGraph {
 	@Override
 	public void registerListeners() {
 		if (transactionEventHandler == null) {
-			ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-			Validator validator = factory.getValidator();
-			transactionEventHandler = new NakedTransactionEventHandler<PersistentObject>(validator);
+			transactionEventHandler = new NakedTransactionEventHandler<PersistentObject>();
 			neo4jGraph.getRawGraph().registerTransactionEventHandler(transactionEventHandler);
 		}
 	}
@@ -250,9 +245,10 @@ public class NakedNeo4jGraph implements NakedGraph {
 	public <T> T instantiateClassifier(Long id) {
 		try {
 			Vertex v = neo4jGraph.getVertex(id);
-			//TODO reimplement schemaHelper
+			// TODO reimplement schemaHelper
 			Class<?> c = Class.forName((String) v.getProperty("className"));
-//			Class<?> c = schemaHelper.getClassNames().get((String) v.getProperty("className"));
+			// Class<?> c = schemaHelper.getClassNames().get((String)
+			// v.getProperty("className"));
 			return (T) c.getConstructor(Vertex.class).newInstance(v);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -304,11 +300,6 @@ public class NakedNeo4jGraph implements NakedGraph {
 	}
 
 	@Override
-	public boolean isTransactionActive() {
-		return txCount.get() != null;
-	}
-
-	@Override
 	public Features getFeatures() {
 		// TODO Auto-generated method stub
 		return null;
@@ -346,16 +337,18 @@ public class NakedNeo4jGraph implements NakedGraph {
 		} catch (Exception e) {
 			return true;
 		}
-		//The way below requires a transaction to have been started.
-		
-//		Neo4jEdge neo4jEdge = (Neo4jEdge) edge;
-//		EmbeddedGraphDatabase g = (EmbeddedGraphDatabase)this.neo4jGraph.getRawGraph();
-//		for (Relationship r : g.getNodeManager().getTransactionData().deletedRelationships()) {
-//			if (neo4jEdge.getRawEdge().equals(r)) {
-//				return true;
-//			}
-//		}
-//		return false;
+		// The way below requires a transaction to have been started.
+
+		// Neo4jEdge neo4jEdge = (Neo4jEdge) edge;
+		// EmbeddedGraphDatabase g =
+		// (EmbeddedGraphDatabase)this.neo4jGraph.getRawGraph();
+		// for (Relationship r :
+		// g.getNodeManager().getTransactionData().deletedRelationships()) {
+		// if (neo4jEdge.getRawEdge().equals(r)) {
+		// return true;
+		// }
+		// }
+		// return false;
 	}
 
 }

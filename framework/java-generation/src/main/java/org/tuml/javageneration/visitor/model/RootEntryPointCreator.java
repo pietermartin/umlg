@@ -54,7 +54,7 @@ public class RootEntryPointCreator extends BaseVisitor implements Visitor<Model>
 		OJField vertex = new OJField("v", TinkerGenerationUtil.vertexPathName);
 		root.addToFields(vertex);
 
-		OJEnum ojEnum = RuntimePropertyImplementor.addTumlRuntimePropertyEnum(root, "RootRuntimePropertyEnum", "Root", new HashSet<Property>(), false, model.getName());
+		OJEnum ojEnum = RuntimePropertyImplementor.addTumlRuntimePropertyEnum(root, "RootRuntimePropertyEnum", model, new HashSet<Property>(), false, model.getName());
 
 		@SuppressWarnings("unchecked")
 		List<Class> result = (List<Class>) TumlModelOperations.findElements(model, new Condition() {
