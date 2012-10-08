@@ -64,7 +64,7 @@ public class TumlClassOperations extends ClassOperations {
 		Set<Property> result = new HashSet<Property>();
 		for (Property p : getAllOwnedProperties(clazz)) {
 			PropertyWrapper pWrap = new PropertyWrapper(p);
-			if ((pWrap.isOne() && !pWrap.isDerived() && !pWrap.isQualifier()) || (pWrap.isOneToMany() && (pWrap.isPrimitive() || pWrap.isEnumeration()))) {
+			if ((pWrap.isOne() && !pWrap.isDerived() && !pWrap.isQualifier()) || (!pWrap.isDerived() && pWrap.isOneToMany() && (pWrap.isPrimitive() || pWrap.isEnumeration()))) {
 				result.add(p);
 			}
 		}
@@ -75,7 +75,7 @@ public class TumlClassOperations extends ClassOperations {
 		Set<Property> result = new HashSet<Property>();
 		for (Property p : getAllOwnedProperties(clazz)) {
 			PropertyWrapper pWrap = new PropertyWrapper(p);
-			if ((pWrap.isOne() && !pWrap.isDerived() && !pWrap.isQualifier()) || (pWrap.isOneToMany() && (pWrap.isPrimitive() || pWrap.isEnumeration()))) {
+			if ((pWrap.isOne() && !pWrap.isDerived() && !pWrap.isQualifier()) || (!pWrap.isDerived() && pWrap.isOneToMany() && (pWrap.isPrimitive() || pWrap.isEnumeration()))) {
 				//Exclude the composite parent
 				if (!(pWrap.getOtherEnd() != null && pWrap.getOtherEnd().isComposite())) {
 					result.add(p);

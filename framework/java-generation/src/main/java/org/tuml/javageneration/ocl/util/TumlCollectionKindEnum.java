@@ -72,6 +72,22 @@ public enum TumlCollectionKindEnum {
 		}
 	}
 
+	public static Type getElemenTtype(Type type) {
+		if (type instanceof SequenceType) {
+			return ((SequenceType)type).getElementType();
+		} else if (type instanceof BagType) {
+			return ((BagType)type).getElementType();
+		} else if (type instanceof SetType) {
+			return ((SetType)type).getElementType();
+		} else if (type instanceof OrderedSetType) {
+			return ((OrderedSetType)type).getElementType();
+		} else if (type instanceof CollectionType) {
+			return ((CollectionType)type).getElementType();
+		} else {
+			throw new IllegalStateException("Unknown collection literal");
+		}
+	}
+
 	public static TumlCollectionKindEnum from(Property p) {
 		if (p.isOrdered() && p.isUnique()) {
 			return ORDERED_SET;
