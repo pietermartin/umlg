@@ -16,5 +16,6 @@
 		<module>runtime-domain-neo4j</module>
     <module>runtime-jquery</module>
     <module>runtime-groovy</module>
+    <module>runtime-uml</module>
 	</modules>
 </project>

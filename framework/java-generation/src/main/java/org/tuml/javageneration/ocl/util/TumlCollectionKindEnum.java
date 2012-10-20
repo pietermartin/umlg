@@ -72,7 +72,7 @@ public enum TumlCollectionKindEnum {
 		}
 	}
 
-	public static Type getElemenTtype(Type type) {
+	public static Type getElementType(Type type) {
 		if (type instanceof SequenceType) {
 			return ((SequenceType)type).getElementType();
 		} else if (type instanceof BagType) {
