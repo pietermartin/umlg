@@ -1,5 +1,8 @@
 package org.tuml.ocl;
 
+import java.util.Collection;
+import java.util.Map;
+
 import org.apache.commons.lang.time.StopWatch;
 import org.eclipse.ocl.ParserException;
 import org.eclipse.ocl.expressions.OCLExpression;
@@ -14,7 +17,9 @@ import org.tuml.javageneration.ocl.TumlOcl2Java;
 import org.tuml.javageneration.util.Namer;
 import org.tuml.javageneration.util.TinkerGenerationUtil;
 import org.tuml.javageneration.util.TumlClassOperations;
+import org.tuml.runtime.domain.PersistentObject;
 import org.tuml.runtime.domain.TumlNode;
+import org.tuml.runtime.domain.json.ToJsonUtil;
 
 public class TumlOclExecutor {
 
@@ -36,7 +41,8 @@ public class TumlOclExecutor {
 			OCLExpression<Classifier> expr = TumlOcl2Parser.INSTANCE.getHelper().createQuery(query);
 			OJAnnotatedOperation getter = new OJAnnotatedOperation("execute");
 			getter.setReturnType(TumlOcl2Java.calcReturnType(expr));
-			getter.getBody().addToStatements("return " + TumlOcl2Java.oclToJava(oclClass, expr));
+			getter.getBody().addToStatements(getter.getReturnType().getLast() + " result = " + TumlOcl2Java.oclToJava(oclClass, expr));
+			getter.getBody().addToStatements("return result");
 			oclClass.addToOperations(getter);
 		} catch (ParserException e) {
 			throw new RuntimeException(e);
@@ -45,4 +51,60 @@ public class TumlOclExecutor {
 		Object result = TumlGroovyShell.executeQuery(javaString, contextTumlNode.getVertex());
 		return result;
 	}
+
+	@SuppressWarnings("unchecked")
+	public static String executeOclQueryToJson(String contextQualifiedName, TumlNode contextTumlNode, String query) {
+		Object result = executeOclQuery(contextQualifiedName, contextTumlNode, query);
+		if (result instanceof Map) {
+			return tupleMapToJson((Map<String, Object>) result);
+			// return "//TODO executeOclQueryToJson";
+		} else if (result instanceof Collection) {
+			return ToJsonUtil.toJsonWithoutCompositeParent((Collection<? extends PersistentObject>) result);
+		} else if (result instanceof PersistentObject) {
+			PersistentObject po = (PersistentObject) result;
+			return po.toJsonWithoutCompositeParent();
+		} else {
+			throw new IllegalStateException("wtf");
+		}
+	}
+
+	private static String tupleMapToJson(Map<String, Object> result) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
+		int count = 1;
+		for (String key : result.keySet()) {
+			Object value = result.get(key);
+			sb.append("\"");
+			sb.append(key);
+			sb.append("\": ");
+			valueToJson(sb, value);
+			if (count++ != result.size()) {
+				sb.append(", ");
+			}
+		}
+		sb.append("}");
+		return sb.toString();
+	}
+
+	private static void valueToJson(StringBuilder sb, Object value) {
+		if (value instanceof PersistentObject) {
+			sb.append( ((PersistentObject) value).toJsonWithoutCompositeParent() );
+		} else if (value instanceof String) {
+			sb.append( "\"" + value + "\"" );
+		} else if (value instanceof Collection) {
+			Collection<Object> c = (Collection<Object>)value;
+			sb.append("[");
+			int count = 1;
+			for (Object object : c) {
+				valueToJson(sb, object);
+				if (count++ != c.size()) {
+					sb.append(", ");
+				}
+			}
+			sb.append("]");
+		} else {
+			sb.append( value );
+		}
+	}
+
 }

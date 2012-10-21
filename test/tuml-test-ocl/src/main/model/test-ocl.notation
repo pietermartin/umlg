@@ -304,9 +304,9 @@
         <children xmi:type="notation:DecorationNode" xmi:id="_PX5BGgAPEeKpVr_ntT6cLA" type="3006">
           <element xmi:type="uml:Property" href="test-ocl.uml#_tgPjsOIeEeGFxYwhvIRWMQ"/>
         </children>
-        <children xmi:type="notation:Shape" xmi:id="_E7ddwBI_EeK9VbCsxPP0zw" type="3012" fontName="Sans" lineColor="0">
-          <element xmi:type="uml:Property" href="test-ocl.uml#_E7c2sBI_EeK9VbCsxPP0zw"/>
-          <layoutConstraint xmi:type="notation:Location" xmi:id="_E7ddwRI_EeK9VbCsxPP0zw"/>
+        <children xmi:type="notation:Shape" xmi:id="_LspWYBtCEeKZO-l2Budqpw" type="3012" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:Property" href="test-ocl.uml#_LsQ74BtCEeKZO-l2Budqpw"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_LspWYRtCEeKZO-l2Budqpw"/>
         </children>
       </children>
       <children xmi:type="notation:BasicCompartment" xmi:id="_PXyTYwAPEeKpVr_ntT6cLA" type="7019"/>

@@ -1,4 +1,4 @@
-package org.tuml.javageneration.ocl.util;
+package org.tuml.javageneration.util;
 
 import org.eclipse.ocl.expressions.CollectionKind;
 import org.eclipse.ocl.uml.BagType;
@@ -9,7 +9,6 @@ import org.eclipse.ocl.uml.SetType;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
 import org.opaeum.java.metamodel.OJPathName;
-import org.tuml.javageneration.util.TinkerGenerationUtil;
 
 public enum TumlCollectionKindEnum {
 

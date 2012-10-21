@@ -23,7 +23,6 @@ import org.eclipse.uml2.uml.Usage;
 import org.eclipse.uml2.uml.ValueSpecification;
 import org.eclipse.uml2.uml.VisibilityKind;
 import org.opaeum.java.metamodel.OJPathName;
-import org.tuml.javageneration.ocl.util.TumlCollectionKindEnum;
 
 public class ParameterWrapper extends MultiplicityWrapper implements Parameter {
 

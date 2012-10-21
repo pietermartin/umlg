@@ -226,6 +226,15 @@
               <body>self.employee->size()</body>
             </defaultValue>
           </ownedAttribute>
+          <ownedAttribute xmi:id="_LsQ74BtCEeKZO-l2Budqpw" name="employeeNames" isDerived="true">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_VI84wBtCEeKZO-l2Budqpw" value="*"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_VI7qoBtCEeKZO-l2Budqpw"/>
+            <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_h6PZ8BtCEeKZO-l2Budqpw" name="employeeNames">
+              <language>OCL</language>
+              <body>self.employee.name->asSet()</body>
+            </defaultValue>
+          </ownedAttribute>
         </packagedElement>
         <packagedElement xmi:type="uml:Class" xmi:id="_BrVOsM5wEeG36cJ3v-Rmsg" name="Customer">
           <ownedAttribute xmi:id="_FeHj0M5wEeG36cJ3v-Rmsg" name="name" visibility="public">

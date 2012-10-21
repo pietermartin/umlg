@@ -7,7 +7,6 @@ import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.ParameterDirectionKind;
 import org.eclipse.uml2.uml.internal.operations.OperationOperations;
-import org.tuml.javageneration.ocl.TumlOcl2Java;
 
 public class TumlOperationOperations extends OperationOperations {
 
@@ -32,7 +31,7 @@ public class TumlOperationOperations extends OperationOperations {
 		if (returnResult!=null) {
 			sb.append(" : ");
 			if (TumlMultiplicityOperations.isMany(returnResult)) {
-				sb.append(TumlOcl2Java.getCollectionInterface(returnResult));
+				sb.append(TinkerGenerationUtil.getCollectionInterface(returnResult));
 				sb.append("(");
 				sb.append(returnResult.getType().getName());
 				sb.append(")");

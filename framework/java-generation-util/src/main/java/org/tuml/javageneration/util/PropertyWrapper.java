@@ -38,8 +38,6 @@ import org.eclipse.uml2.uml.ValueSpecification;
 import org.eclipse.uml2.uml.VisibilityKind;
 import org.opaeum.java.metamodel.OJPathName;
 import org.tuml.framework.ModelLoader;
-import org.tuml.javageneration.ocl.TumlOcl2Java;
-import org.tuml.javageneration.ocl.util.TumlCollectionKindEnum;
 import org.tuml.javageneration.validation.Max;
 import org.tuml.javageneration.validation.MaxLength;
 import org.tuml.javageneration.validation.Min;
@@ -154,7 +152,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 		sb.append(" : ");
 
 		if (pWrap.isMany()) {
-			sb.append(TumlOcl2Java.getCollectionInterface(pWrap));
+			sb.append(TinkerGenerationUtil.getCollectionInterface(pWrap));
 			sb.append("(");
 			sb.append(pWrap.getType().getName());
 			sb.append(")");
@@ -430,12 +428,6 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 		return fieldType;
 	}
 
-	public OJPathName javaTumlMemoryTypePath() {
-		OJPathName memoryCollectionPathName = TumlCollectionKindEnum.from(this).getMemoryCollection();
-		memoryCollectionPathName.addToGenerics(TumlClassOperations.getPathName(this.getType()));
-		return memoryCollectionPathName;
-	}
-
 	/*
 	 * Attempting set semantics so the path is always a collection Call
 	 * javaBaseTypePath to get the type of set
@@ -455,6 +447,12 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 		}
 		fieldType.addToGenerics(javaBaseTypePath());
 		return fieldType;
+	}
+
+	public OJPathName javaTumlMemoryTypePath() {
+		OJPathName memoryCollectionPathName = TumlCollectionKindEnum.from(this).getMemoryCollection();
+		memoryCollectionPathName.addToGenerics(TumlClassOperations.getPathName(this.getType()));
+		return memoryCollectionPathName;
 	}
 
 	public OJPathName javaAuditTypePath() {

@@ -17,7 +17,6 @@ import org.eclipse.uml2.uml.VisibilityKind;
 import org.eclipse.uml2.uml.internal.operations.ClassOperations;
 import org.opaeum.java.metamodel.OJPathName;
 import org.opaeum.java.metamodel.OJVisibilityKind;
-import org.tuml.javageneration.ocl.util.TumlCollectionKindEnum;
 
 public class TumlClassOperations extends ClassOperations {
 

@@ -8,9 +8,9 @@ import org.opaeum.java.metamodel.OJPathName;
 import org.opaeum.java.metamodel.OJVisibilityKind;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
-import org.tuml.javageneration.ocl.util.TumlCollectionKindEnum;
 import org.tuml.javageneration.ocl.visitor.HandleIfExp;
 import org.tuml.javageneration.util.TumlClassOperations;
+import org.tuml.javageneration.util.TumlCollectionKindEnum;
 
 public class OclIfExpToJava implements HandleIfExp {
 

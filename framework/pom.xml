@@ -18,7 +18,9 @@
 		<module>restlet</module>
     <module>workspace</module>
     <module>generation</module>
-  </modules>
+    <module>java-generation-util</module>
+    <module>java-generation-ocl</module>
+	</modules>
 	<dependencyManagement>
 		<dependencies>
 		

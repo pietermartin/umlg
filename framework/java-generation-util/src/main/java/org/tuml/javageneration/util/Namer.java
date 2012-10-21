@@ -2,6 +2,7 @@ package org.tuml.javageneration.util;
 
 import java.util.Arrays;
 
+import org.eclipse.ocl.uml.TupleType;
 import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.Package;
 import org.eclipse.uml2.uml.Type;
@@ -9,7 +10,11 @@ import org.eclipse.uml2.uml.Type;
 public class Namer {
 
 	public static String name(Type type) {
-		return type.getName();
+		if (type instanceof TupleType) {
+			return "Map<String, Object>";
+		} else {
+			return type.getName();
+		}
 	}
 
 	public static String nameIncludingModel(Package nearestPackage) {

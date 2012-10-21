@@ -51,12 +51,14 @@ import org.eclipse.uml2.uml.SendSignalAction;
 import org.eclipse.uml2.uml.State;
 import org.opaeum.java.metamodel.OJPathName;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
-import org.tuml.javageneration.ocl.util.TumlCollectionKindEnum;
 import org.tuml.javageneration.ocl.visitor.tojava.OclIfExpToJava;
 import org.tuml.javageneration.ocl.visitor.tojava.OclIterateExpToJava;
+import org.tuml.javageneration.ocl.visitor.tojava.OclTupleLiteralExpToJava;
+import org.tuml.javageneration.ocl.visitor.tojava.OclTupleLiteralPartToJava;
 import org.tuml.javageneration.ocl.visitor.tojava.OclVariableExpToJava;
 import org.tuml.javageneration.util.PropertyWrapper;
 import org.tuml.javageneration.util.TinkerGenerationUtil;
+import org.tuml.javageneration.util.TumlCollectionKindEnum;
 
 public class Tuml2JavaVisitor extends
 		AbstractVisitor<String, Classifier, Operation, Property, EnumerationLiteral, Parameter, State, CallOperationAction, SendSignalAction, Constraint> {
@@ -456,44 +458,13 @@ public class Tuml2JavaVisitor extends
 	 */
 	@Override
 	protected String handleTupleLiteralExp(TupleLiteralExp<Classifier, Property> literalExp, List<String> partResults) {
-
-		// construct the appropriate collection from the parts
-		// based on the collection kind.
-		StringBuilder result = new StringBuilder();
-		result.append("Tuple{");//$NON-NLS-1$
-
-		for (Iterator<String> iter = partResults.iterator(); iter.hasNext();) {
-			result.append(iter.next());
-
-			if (iter.hasNext()) {
-				result.append(", ");//$NON-NLS-1$
-			}
-		}
-
-		result.append('}');
-
-		return result.toString();
+		return new OclTupleLiteralExpToJava().setOJClass(this.ojClass).handleTupleLiteralExp(literalExp, partResults);
+		
 	}
 
 	@Override
 	protected String handleTupleLiteralPart(TupleLiteralPart<Classifier, Property> part, String valueResult) {
-
-		String varName = part.getName();
-		Classifier type = part.getType();
-
-		StringBuilder result = new StringBuilder();
-
-		result.append(varName);
-
-		if (type != null) {
-			result.append(" : ").append(getName(type));//$NON-NLS-1$
-		}
-
-		if (valueResult != null) {
-			result.append(" = ").append(valueResult);//$NON-NLS-1$
-		}
-
-		return result.toString();
+		return new OclTupleLiteralPartToJava().setOJClass(this.ojClass).handleTupleLiteralPart(part, valueResult);
 	}
 
 	@Override
