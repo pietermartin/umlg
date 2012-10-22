@@ -93,7 +93,7 @@ function createGrid(data, metaForData, tumlUri) {
                     contentType: "json",
                     data: JSON.stringify(dataView.getNewItems()),
                     success: function() {
-                        refreshPageTo(tumlUri);
+                        refreshPageTo(tumlUri, metaForData.name);
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         alert("error\n" + "status = " + jqXHR.status + "\n" + jqXHR.responseText);
@@ -109,7 +109,7 @@ function createGrid(data, metaForData, tumlUri) {
                     contentType: "json",
                     data: JSON.stringify(dataView.getDeletedItems()),
                     success: function() {
-                        refreshPageTo(tumlUri);
+                        refreshPageTo(tumlUri, metaForData.name);
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         alert("error\n" + "status = " + jqXHR.status + "\n" + jqXHR.responseText);

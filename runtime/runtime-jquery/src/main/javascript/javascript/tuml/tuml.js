@@ -87,6 +87,10 @@ function refreshPageTo(tumlUri, tabId) {
                 }
             }
 
+            //Add in a tab for queries
+            $('<li class="tab"><a href=#query><span>Query</span></a></li>').appendTo(ul);
+            var tabQuery = $('<div />', {id: 'query'}).text('Write them queries here').appendTo(tabs);
+
             $('#tab-container').easytabs({/*updateHash: false,*/ animate: false});
         } else {
             if (result instanceof Array) {
