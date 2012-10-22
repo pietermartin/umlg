@@ -159,7 +159,7 @@
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_dnFjouZFEeGrlbmObN1_Rg"/>
             </ownedAttribute>
           </packagedElement>
-          <packagedElement xmi:type="uml:Class" xmi:id="_Z7usMOZFEeGrlbmObN1_Rg" name="Ship">
+          <packagedElement xmi:type="uml:Class" xmi:id="_Z7usMOZFEeGrlbmObN1_Rg" name="Ship" isAbstract="true">
             <ownedAttribute xmi:id="_bUmjoOZFEeGrlbmObN1_Rg" name="name" visibility="public">
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
             </ownedAttribute>
@@ -171,6 +171,18 @@
             </ownedEnd>
           </packagedElement>
           <packagedElement xmi:type="uml:Interval" xmi:id="_vR2VcAVjEeK9oIwdQfC0-w" name=""/>
+          <packagedElement xmi:type="uml:Class" xmi:id="_mMQB4BtnEeKZO-l2Budqpw" name="SpaceCraft">
+            <generalization xmi:id="_vaKi8BtnEeKZO-l2Budqpw" general="_Z7usMOZFEeGrlbmObN1_Rg"/>
+            <ownedAttribute xmi:id="_xEf90BtnEeKZO-l2Budqpw" name="intergalactic">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_ml87UBtnEeKZO-l2Budqpw" name="TerrestialCraft">
+            <generalization xmi:id="_vmg84BtnEeKZO-l2Budqpw" general="_Z7usMOZFEeGrlbmObN1_Rg"/>
+            <ownedAttribute xmi:id="_I3MW8BtoEeKZO-l2Budqpw" name="aquatic">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
+            </ownedAttribute>
+          </packagedElement>
         </packagedElement>
       </packagedElement>
     </packagedElement>

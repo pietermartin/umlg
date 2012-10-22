@@ -22,4 +22,5 @@ public interface TumlNode extends OclAny, PersistentObject {
 	List<TumlConstraintViolation> validateRequiredProperties();
 	TumlNode getOwningObject();
 	List<TumlNode> getPathToCompositionalRoot();
+//	String getUri();
 }

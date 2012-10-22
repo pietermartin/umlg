@@ -1,10 +1,5 @@
 function createPageForMany(data, metaForData, tumlUri, qualifiedName) {
-    $('#contextMenu').remove();
-    $('.ui-layout-center').children().remove();
-    var gridDiv = $('<div id="gridDiv" class="grid-header" style="width:100%" />)').appendTo(".ui-layout-center");
-    $('<label />').text(qualifiedName).appendTo(gridDiv);
-    $('<div id="myGrid" style="width:100%;height:90%;"></div>').appendTo(".ui-layout-center");
-    $('<div id="pager" style="width:100%;height:20px;"></div>').appendTo(".ui-layout-center");
+    $('#contextMenu' + metaForData.name).remove();
     createGrid(data, metaForData, tumlUri);
 }
 
@@ -41,113 +36,11 @@ function createGrid(data, metaForData, tumlUri) {
             }
         }
     });
-
     columns.push({id: "uri", name: "uri", field: "uri", sortable: false, formatter: TumlSlick.Formatters.Link});
-
     columns.push(
         {id: "delete", name: "delete", field: "delete", sortable: false, 
             formatter: TumlSlick.Formatters.TumlDelete }
     );
-
-    function selectFormatter(property) {
-        if (property.name == 'uri') {
-            return TumlSlick.Formatters.Link;
-        } else if (property.name == 'id') {
-            return TumlSlick.Formatters.Id;
-        } else if (property.dataTypeEnum !== undefined) {
-            return null;
-        } else if (!property.onePrimitive && !property.manyPrimitive) {
-            return function waitingFormatter(row, cell, value, columnDef, dataContext) {
-                if (value !== undefined && value !== null) {
-                    return value.displayName;
-                } else {
-                    return '';
-                }
-            };
-            return null;
-        } else if (property.fieldType == 'String') {
-            return  TumlSlick.Formatters.TumlRequired; 
-        } else if (property.fieldType == 'Boolean') {
-            return Slick.Formatters.Checkmark;
-        } else {
-            return null; 
-        }
-    }
-
-    function selectEditor(property) {
-        if (property.name == 'uri') {
-            return null;
-        } else if (property.dataTypeEnum !== undefined) {
-            if (property.dataTypeEnum == 'Date') {
-                return  Tuml.Slick.Editors.Date; 
-            } else if (property.dataTypeEnum == 'Time') {
-                return  Tuml.Slick.Editors.Time; 
-            } else if (property.dataTypeEnum == 'DateTime') {
-                return  Tuml.Slick.Editors.DateTime; 
-            } else if (property.dataTypeEnum == 'InternationalPhoneNumber') {
-                return null; 
-            } else if (property.dataTypeEnum == 'LocalPhoneNumber') {
-                return null; 
-            } else if (property.dataTypeEnum == 'Email') {
-                return null; 
-            } else if (property.dataTypeEnum == 'Video') {
-                return null; 
-            } else  if (property.dataTypeEnum == 'Audio') {
-                return null; 
-            } else if (property.dataTypeEnum == 'Image') {
-                return null; 
-            } else {
-                alert('Unsupported dataType ' + property.dataTypeEnum);
-            }
-        } else if (!property.onePrimitive && !property.manyPrimitive && !property.composite) {
-            return  Tuml.Slick.Editors.SelectCellEditor; 
-        } else if (property.name == 'id') {
-            return null;
-        } else if (property.fieldType == 'String') {
-            return Tuml.Slick.Editors.Text; 
-        } else if (property.fieldType == 'Integer') {
-            return Tuml.Slick.Editors.Integer;
-        } else if (property.fieldType == 'Long') {
-            return Slick.Editors.Integer;
-        } else if (property.fieldType == 'Boolean') {
-            return Tuml.Slick.Editors.Checkbox;
-        } else {
-            return  Slick.Editors.Text; 
-        }
-    }
-
-    function selectFieldValidator(property) {
-        if (property.name == 'uri') {
-        } else if (property.dataTypeEnum !== undefined) {
-            if (property.dataTypeEnum == 'Date') {
-            } else if (property.dataTypeEnum == 'Time') {
-            } else if (property.dataTypeEnum == 'DateTime') {
-            } else if (property.dataTypeEnum == 'InternationalPhoneNumber') {
-            } else if (property.dataTypeEnum == 'LocalPhoneNumber') {
-            } else if (property.dataTypeEnum == 'Email') {
-            } else if (property.dataTypeEnum == 'Video') {
-            } else  if (property.dataTypeEnum == 'Audio') {
-            } else if (property.dataTypeEnum == 'Image') {
-            } else {
-                alert('Unsupported dataType ' + property.dataTypeEnum);
-            }
-        } else if (!property.onePrimitive && !property.manyPrimitive && !property.composite) {
-        } else if (property.name == 'id') {
-        } else if (property.fieldType == 'String') {
-            return new TumlSlick.Validators.TumlString(property).validate;
-        } else if (property.fieldType == 'Integer') {
-            return new TumlSlick.Validators.TumlNumber(property).validate;
-        } else if (property.fieldType == 'Long') {
-            return new TumlSlick.Validators.TumlNumber(property).validate;
-        } else if (property.fieldType == 'Boolean') {
-        } else {
-        }
-        return function() {
-            return {
-                valid: true,
-                msg: null}
-        };
-    }
 
     var options = {
         showHeaderRow: true,
@@ -166,13 +59,12 @@ function createGrid(data, metaForData, tumlUri) {
     var percentCompleteThreshold = 0;
     var searchString = "";
 
-
-    dataView = new Tuml.Slick.Data.DataView();
-    grid = new Slick.Grid("#myGrid", dataView, columns, options);
+    var dataView = new Tuml.Slick.Data.DataView();
+    grid = new Slick.Grid("#myGrid" + metaForData.name , dataView, columns, options);
     grid.setSelectionModel(new Slick.RowSelectionModel());
-    var pager = new Slick.Controls.Pager(dataView, grid, $("#pager"));
+    var pager = new Slick.Controls.Pager(dataView, grid, $("#pager" + metaForData.name));
     var columnpicker = new Slick.Controls.ColumnPicker(columns, grid, options);
-    $("<div class='grid-button'/>").appendTo('.slick-pager');
+    $("<div id='grid-button" + metaForData.name + "' class='grid-button'/>").appendTo('#pager' + metaForData.name + ' .slick-pager-settings');
 
     var $saveButton = $('<button />').text('Save').click(function() {
         if (grid.getEditorLock().commitCurrentEdit()) {
@@ -185,7 +77,7 @@ function createGrid(data, metaForData, tumlUri) {
                     contentType: "json",
                     data: JSON.stringify(dataView.getUpdatedItems()),
                     success: function() {
-                        refreshPageTo(tumlUri);
+                        refreshPageTo(tumlUri, metaForData.name);
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         alert("error\n" + jqXHR.responseText);
@@ -227,16 +119,16 @@ function createGrid(data, metaForData, tumlUri) {
         } else {
             alert("Commit failed on current active cell!");
         }
-    }).appendTo('.grid-button');
+    }).appendTo('#grid-button' + metaForData.name);
 
     var $cancelButton = $('<button />').text('Cancel').click(function() {
         refreshPageTo(tumlUri);
-    }).appendTo('.grid-button');
+    }).appendTo('#grid-button' + metaForData.name);
 
     //Create context menu
-    var contextMenuUl = $('<ul />', {id: 'contextMenu', style: 'display:none;position:absolute'}).appendTo('body');
+    var contextMenuUl = $('<ul />', {id: 'contextMenu' + metaForData.name, style: 'display:none;position:absolute', class: 'contextMenu'}).appendTo('body');
     $('<b />').text('Nav').appendTo(contextMenuUl);
-    var li = $('<li data="' + metaForData.uri + '" />').text("self").appendTo(contextMenuUl);
+    $('<li data="' + metaForData.uri + '" />').text("self").appendTo(contextMenuUl);
     $.each(metaForData.properties, function(index, property) {
         if (property.inverseComposite || !((property.dataTypeEnum !== undefined &&  property.dataTypeEnum !== null) || property.onePrimitive || property.manyPrimitive || property.name == 'id' || property.name == 'uri')) {
             $('<li data="' + property.tumlUri + '" />').text(property.name).appendTo(contextMenuUl);
@@ -247,18 +139,18 @@ function createGrid(data, metaForData, tumlUri) {
     grid.onContextMenu.subscribe(function (e) {
         e.preventDefault();
         var cell = grid.getCellFromEvent(e);
-        $("#contextMenu")
+        $("#contextMenu" + metaForData.name)
         .data("row", cell.row)
         .css("top", e.pageY)
         .css("left", e.pageX)
         .show();
 
         $("body").one("click", function () {
-            $("#contextMenu").hide();
+            $("#contextMenu" + metaForData.name).hide();
         });
     });
 
-    $("#contextMenu").click(function (e) {
+    $("#contextMenu" + metaForData.name).click(function (e) {
         if (!$(e.target).is("li")) {
             return;
         }
@@ -404,9 +296,10 @@ function createGrid(data, metaForData, tumlUri) {
                 //return "<INPUT type=checkbox value='true' class='editor-checkbox' hideFocus>";
                 return "<select><option value='None'>None</option><option value='true'>True</option><option value='false'>False</option></select>";
             } else {
-                return "<input type='text'>";
+                //return "<input type='text'>";
             }
         }
+        return "<input type='text'>";
     }
 
     function filter(item, metaForData) {
@@ -501,3 +394,104 @@ function createGrid(data, metaForData, tumlUri) {
 
     $("#gridContainer").resizable();
 }
+
+function selectEditor(property) {
+    if (property.name == 'uri') {
+        return null;
+    } else if (property.dataTypeEnum !== undefined) {
+        if (property.dataTypeEnum == 'Date') {
+            return  Tuml.Slick.Editors.Date; 
+        } else if (property.dataTypeEnum == 'Time') {
+            return  Tuml.Slick.Editors.Time; 
+        } else if (property.dataTypeEnum == 'DateTime') {
+            return  Tuml.Slick.Editors.DateTime; 
+        } else if (property.dataTypeEnum == 'InternationalPhoneNumber') {
+            return null; 
+        } else if (property.dataTypeEnum == 'LocalPhoneNumber') {
+            return null; 
+        } else if (property.dataTypeEnum == 'Email') {
+            return null; 
+        } else if (property.dataTypeEnum == 'Video') {
+            return null; 
+        } else  if (property.dataTypeEnum == 'Audio') {
+            return null; 
+        } else if (property.dataTypeEnum == 'Image') {
+            return null; 
+        } else {
+            alert('Unsupported dataType ' + property.dataTypeEnum);
+        }
+    } else if (!property.onePrimitive && !property.manyPrimitive && !property.composite) {
+        return  Tuml.Slick.Editors.SelectCellEditor; 
+    } else if (property.name == 'id') {
+        return null;
+    } else if (property.fieldType == 'String') {
+        return Tuml.Slick.Editors.Text; 
+    } else if (property.fieldType == 'Integer') {
+        return Tuml.Slick.Editors.Integer;
+    } else if (property.fieldType == 'Long') {
+        return Slick.Editors.Integer;
+    } else if (property.fieldType == 'Boolean') {
+        return Tuml.Slick.Editors.Checkbox;
+    } else {
+        return  Slick.Editors.Text; 
+    }
+}
+
+function selectFieldValidator(property) {
+    if (property.name == 'uri') {
+    } else if (property.dataTypeEnum !== undefined) {
+        if (property.dataTypeEnum == 'Date') {
+        } else if (property.dataTypeEnum == 'Time') {
+        } else if (property.dataTypeEnum == 'DateTime') {
+        } else if (property.dataTypeEnum == 'InternationalPhoneNumber') {
+        } else if (property.dataTypeEnum == 'LocalPhoneNumber') {
+        } else if (property.dataTypeEnum == 'Email') {
+        } else if (property.dataTypeEnum == 'Video') {
+        } else  if (property.dataTypeEnum == 'Audio') {
+        } else if (property.dataTypeEnum == 'Image') {
+        } else {
+            alert('Unsupported dataType ' + property.dataTypeEnum);
+        }
+    } else if (!property.onePrimitive && !property.manyPrimitive && !property.composite) {
+    } else if (property.name == 'id') {
+    } else if (property.fieldType == 'String') {
+        return new TumlSlick.Validators.TumlString(property).validate;
+    } else if (property.fieldType == 'Integer') {
+        return new TumlSlick.Validators.TumlNumber(property).validate;
+    } else if (property.fieldType == 'Long') {
+        return new TumlSlick.Validators.TumlNumber(property).validate;
+    } else if (property.fieldType == 'Boolean') {
+    } else {
+    }
+    return function() {
+        return {
+            valid: true,
+            msg: null}
+    };
+}
+
+function selectFormatter(property) {
+    if (property.name == 'uri') {
+        return TumlSlick.Formatters.Link;
+    } else if (property.name == 'id') {
+        return TumlSlick.Formatters.Id;
+    } else if (property.dataTypeEnum !== undefined) {
+        return null;
+    } else if (!property.onePrimitive && !property.manyPrimitive) {
+        return function waitingFormatter(row, cell, value, columnDef, dataContext) {
+            if (value !== undefined && value !== null) {
+                return value.displayName;
+            } else {
+                return '';
+            }
+        };
+        return null;
+    } else if (property.fieldType == 'String') {
+        return  TumlSlick.Formatters.TumlRequired; 
+    } else if (property.fieldType == 'Boolean') {
+        return Slick.Formatters.Checkmark;
+    } else {
+        return null; 
+    }
+}
+

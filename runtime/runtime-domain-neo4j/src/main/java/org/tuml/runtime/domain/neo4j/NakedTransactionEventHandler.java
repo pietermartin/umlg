@@ -29,11 +29,11 @@ public class NakedTransactionEventHandler<T> implements TransactionEventHandler<
 			List<CompositionNode> entities = TransactionThreadEntityVar.get();
 			for (CompositionNode entity : entities) {
 				TumlNode tumlNode = (TumlNode) entity;
-				List<TumlConstraintViolation> requiredConstraintViolations = tumlNode.validateRequiredProperties();
-				if (!requiredConstraintViolations.isEmpty()) {
-					TransactionThreadEntityVar.clear();
-					throw new TumlConstraintViolationException(requiredConstraintViolations);
-				}
+//				List<TumlConstraintViolation> requiredConstraintViolations = tumlNode.validateRequiredProperties();
+//				if (!requiredConstraintViolations.isEmpty()) {
+//					TransactionThreadEntityVar.clear();
+//					throw new TumlConstraintViolationException(requiredConstraintViolations);
+//				}
 				if (!entity.isTinkerRoot() && entity.getOwningObject() == null) {
 					if (entity instanceof BaseTinkerAuditable && ((BaseTinkerAuditable) entity).getDeletedOn().isBefore(new DateTime())) {
 						return null;

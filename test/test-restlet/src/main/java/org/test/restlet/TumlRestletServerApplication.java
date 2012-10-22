@@ -33,6 +33,10 @@ public class TumlRestletServerApplication extends Application {
         slickgrid.setListingAllowed(true);
         router.attach("/javascript", slickgrid);
         
+		//This will load everthing under /src/main/javascript/css. The second javascript matches the route so the url looks good
+        Directory css = new Directory(getContext(), "clap://class/css");
+        css.setListingAllowed(true);
+        router.attach("/css", css);
 		return router;
 	};
 

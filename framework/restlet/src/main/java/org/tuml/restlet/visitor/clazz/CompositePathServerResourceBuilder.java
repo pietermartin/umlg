@@ -160,7 +160,7 @@ public class CompositePathServerResourceBuilder extends BaseServerResourceBuilde
 	}
 
 	private String getIdFieldName(Class clazz) {
-		return StringUtils.uncapitalize(TumlClassOperations.className(clazz)) + "Id";
+		return TumlClassOperations.className(clazz).toLowerCase() + "Id";
 	}
 
 }

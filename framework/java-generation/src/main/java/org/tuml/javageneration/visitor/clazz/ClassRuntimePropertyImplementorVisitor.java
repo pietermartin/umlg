@@ -28,7 +28,7 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
 		OJAnnotatedClass annotatedClass = findOJClass(clazz);
 		addInitialiseProperty(annotatedClass, clazz);
 		RuntimePropertyImplementor.addTumlRuntimePropertyEnum(annotatedClass, TumlClassOperations.propertyEnumName(clazz), clazz,
-				TumlClassOperations.getAllOwnedProperties(clazz), TumlClassOperations.hasCompositeOwner(clazz), clazz.getModel().getName());
+				TumlClassOperations.getAllProperties(clazz), TumlClassOperations.hasCompositeOwner(clazz), clazz.getModel().getName());
 		addGetQualifiers(annotatedClass, clazz);
 		addGetSize(annotatedClass, clazz);
 	}

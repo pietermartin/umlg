@@ -47,13 +47,14 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 		TinkerGenerationUtil.addOverrideAnnotation(toJson);
 		if (clazz.getGenerals().isEmpty()) {
 			toJson.getBody().addToStatements("StringBuilder sb = new StringBuilder()");
+			toJson.getBody().addToStatements("sb.append(\"\\\"id\\\": \" + getId() + \", \")");
 		} else {
 			toJson.getBody().addToStatements("String result = super." + operationName + "()");
 			toJson.getBody().addToStatements("result = result.substring(1, result.length() - 1)");
 			toJson.getBody().addToStatements("StringBuilder sb = new StringBuilder(result)");
+			toJson.getBody().addToStatements("sb.append(\", \")");
 		}
-
-		toJson.getBody().addToStatements("sb.append(\"{\\\"id\\\": \" + getId() + \", \")");
+		int count = 1;
 		for (Property p : propertiesForToJson) {
 			PropertyWrapper pWrap = new PropertyWrapper(p);
 			if (pWrap.isMany()) {
@@ -110,9 +111,15 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 					// "() + \"\\\"" + "\")");
 				}
 			}
-			toJson.getBody().addToStatements("sb.append(\", \")");
+			if (count++ != propertiesForToJson.size()) {
+				toJson.getBody().addToStatements("sb.append(\", \")");
+			}
 		}
-		toJson.getBody().addToStatements("uri", "sb.append(\"\\\"uri\\\": \\\"TODO\\\"\")");
+		if (clazz.getGenerals().isEmpty()) {
+			toJson.getBody().addToStatements("sb.append(\", \")");
+			toJson.getBody().addToStatements("uri", "//PlaceHolder for restfull");
+		}
+		toJson.getBody().addToStatements("sb.insert(0, \"{\")");
 		toJson.getBody().addToStatements("sb.append(\"}\")");
 		toJson.getBody().addToStatements("return sb.toString()");
 		annotatedClass.addToOperations(toJson);

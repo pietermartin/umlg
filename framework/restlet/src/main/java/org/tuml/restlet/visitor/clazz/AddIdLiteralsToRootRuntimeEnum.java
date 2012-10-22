@@ -13,9 +13,9 @@ import org.tuml.javageneration.validation.Validation;
 import org.tuml.javageneration.visitor.BaseVisitor;
 import org.tuml.javageneration.visitor.clazz.RuntimePropertyImplementor;
 
-public class AddSelfIdAndUriLiteralsToRootRuntimeEnum extends BaseVisitor implements Visitor<Model> {
+public class AddIdLiteralsToRootRuntimeEnum extends BaseVisitor implements Visitor<Model> {
 
-	public AddSelfIdAndUriLiteralsToRootRuntimeEnum(Workspace workspace) {
+	public AddIdLiteralsToRootRuntimeEnum(Workspace workspace) {
 		super(workspace);
 	}
 
@@ -24,7 +24,6 @@ public class AddSelfIdAndUriLiteralsToRootRuntimeEnum extends BaseVisitor implem
 		OJAnnotatedClass annotatedClass = this.workspace.findOJClass("org.tuml.root.Root");
 		OJEnum ojEnum = annotatedClass.findEnum("RootRuntimePropertyEnum");
 		addField(annotatedClass, ojEnum, "id");
-//		addField(annotatedClass, ojEnum, "uri");
 	}
 
 	@Override

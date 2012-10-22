@@ -10,6 +10,7 @@ import org.eclipse.uml2.uml.Association;
 import org.eclipse.uml2.uml.BehavioredClassifier;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Classifier;
+import org.eclipse.uml2.uml.Generalization;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
@@ -17,6 +18,7 @@ import org.eclipse.uml2.uml.VisibilityKind;
 import org.eclipse.uml2.uml.internal.operations.ClassOperations;
 import org.opaeum.java.metamodel.OJPathName;
 import org.opaeum.java.metamodel.OJVisibilityKind;
+import org.tuml.framework.ModelLoader;
 
 public class TumlClassOperations extends ClassOperations {
 
@@ -83,6 +85,7 @@ public class TumlClassOperations extends ClassOperations {
 		}
 		return result;
 	}
+	
 	/*
 	 * These include all properties that are on the other end of an association.
 	 * It does not include inherited properties
@@ -94,6 +97,25 @@ public class TumlClassOperations extends ClassOperations {
 			List<Property> memberEnds = association.getMemberEnds();
 			for (Property property : memberEnds) {
 				if (property.getType() != clazz) {
+					result.add(property);
+				}
+			}
+		}
+		result.addAll(getPropertiesOnRealizedInterfaces(clazz));
+		return result;
+	}
+
+	/*
+	 * These include all properties that are on the other end of an association.
+	 * It includes inherited properties
+	 */
+	public static Set<Property> getAllProperties(org.eclipse.uml2.uml.Class clazz) {
+		Set<Property> result = new HashSet<Property>(clazz.getAllAttributes());
+		Set<Association> associations = getAllAssociations(clazz);
+		for (Association association : associations) {
+			List<Property> memberEnds = association.getMemberEnds();
+			for (Property property : memberEnds) {
+				if (!isSpecializationOf(clazz, property.getType())) {
 					result.add(property);
 				}
 			}
@@ -181,7 +203,7 @@ public class TumlClassOperations extends ClassOperations {
 		return !getConcreteGenerals(clazz).isEmpty();
 	}
 
-	public static List<Class> getConcreteGenerals(Class clazz) {
+	public static List<Class> getConcreteGenerals(Classifier clazz) {
 		List<Class> result = new ArrayList<Class>();
 		List<Classifier> generals = clazz.getGenerals();
 		for (Classifier classifier : generals) {
@@ -192,6 +214,23 @@ public class TumlClassOperations extends ClassOperations {
 		return result;
 	}
 
+	private static void getConcreteImplementations(Set<Classifier> result, Classifier clazz) {
+		if (!clazz.isAbstract()) {
+			result.add(clazz);
+		}
+		List<Generalization> generalizations = ModelLoader.getSpecifics(clazz);
+		for (Generalization generalization : generalizations) {
+			Classifier specific = generalization.getSpecific();
+			getConcreteImplementations(result, specific);
+		}
+		
+	}
+
+	public static Set<Classifier> getConcreteImplementations(Classifier clazz) {
+		Set<Classifier> result = new HashSet<Classifier>();
+		getConcreteImplementations(result, clazz);
+		return result;
+	}
 	public static boolean hasCompositeOwner(Class clazz) {
 		return getOtherEndToComposite(clazz) != null;
 	}

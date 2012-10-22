@@ -3,6 +3,7 @@ package org.tuml.framework;
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -15,6 +16,9 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.ocl.Environment;
 import org.eclipse.ocl.uml.UMLEnvironmentFactory;
+import org.eclipse.uml2.uml.Classifier;
+import org.eclipse.uml2.uml.Element;
+import org.eclipse.uml2.uml.Generalization;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.Profile;
@@ -52,17 +56,30 @@ public class ModelLoader {
 			return null;
 		}
 	}
-	
+
 	public static NamedElement findNamedElement(String qualifiedName) {
 		Collection<NamedElement> results = UMLUtil.findNamedElements(RESOURCE_SET, qualifiedName);
 		if (results.size() > 1) {
-			throw new RuntimeException("This method must only be called for named elements that are unique in the system!"); 
+			throw new RuntimeException("This method must only be called for named elements that are unique in the system!");
 		}
 		if (results.isEmpty()) {
 			return null;
 		} else {
 			return results.iterator().next();
 		}
+	}
+
+	public static List<Generalization> getSpecifics(final Classifier c) {
+		List<Generalization> results = new ArrayList<Generalization>();
+		filter(results, model, new Filter() {
+			
+			@Override
+			public boolean filter(Element e) {
+				return e instanceof Generalization && ((Generalization)e).getGeneral() == c;
+			}
+		});
+		
+		return results;
 	}
 
 	public static List<Stereotype> getStereotypes() {
@@ -123,5 +140,19 @@ public class ModelLoader {
 			System.out.println(t.toString());
 			return null;
 		}
+	}
+	
+
+	private static <T extends Element> void  filter(List<T> result, Element element, Filter f) {
+		if (f.filter(element)) {
+			result.add((T) element);
+		}
+		for (Element e : element.getOwnedElements()) {
+			filter(result, e, f);
+		}
+	}
+	
+	private static interface Filter {
+		boolean filter(Element e);
 	}
 }

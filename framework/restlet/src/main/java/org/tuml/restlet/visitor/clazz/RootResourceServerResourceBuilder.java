@@ -1,6 +1,9 @@
 package org.tuml.restlet.visitor.clazz;
 
+import java.util.Set;
+
 import org.eclipse.uml2.uml.Class;
+import org.eclipse.uml2.uml.Classifier;
 import org.opaeum.java.metamodel.OJBlock;
 import org.opaeum.java.metamodel.OJField;
 import org.opaeum.java.metamodel.OJForStatement;
@@ -84,14 +87,14 @@ public class RootResourceServerResourceBuilder extends BaseServerResourceBuilder
 		array.setInitExp("(ArrayList<Map<String, Object>>)o");
 		ifArray.getThenPart().addToLocals(array);
 		ojTryStatement.getTryPart().addToStatements(ifArray);
-		OJForStatement forArray = new OJForStatement("map", new OJPathName("java.util.Map").addToGenerics(new OJPathName("String")).addToGenerics(new OJPathName("Object")),
-				"array");
+		OJForStatement forArray = new OJForStatement("map", new OJPathName("java.util.Map").addToGenerics(new OJPathName("String")).addToGenerics(
+				new OJPathName("Object")), "array");
 		ifArray.addToThenPart(forArray);
 		OJPathName classPathName = TumlClassOperations.getPathName(clazz);
 		OJField resource = new OJField("resource", classPathName);
 		forArray.getBody().addToLocals(resource);
 		OJIfStatement ifResourceExist = new OJIfStatement("map.get(\"id\") != null");
-		ifResourceExist.addToThenPart("resource = new " + classPathName.getLast()+ "(GraphDb.getDb().getVertex(map.get(\"id\")))");
+		ifResourceExist.addToThenPart("resource = new " + classPathName.getLast() + "(GraphDb.getDb().getVertex(map.get(\"id\")))");
 		ifResourceExist.addToElsePart("resource = new " + classPathName.getLast() + "(true)");
 		forArray.getBody().addToStatements(ifResourceExist);
 		forArray.getBody().addToStatements("resource.fromJson(map)");
@@ -151,23 +154,47 @@ public class RootResourceServerResourceBuilder extends BaseServerResourceBuilder
 		resource.setInitExp("Root.INSTANCE.get" + TumlClassOperations.className(clazz) + "()");
 		get.getBody().addToLocals(resource);
 		annotatedClass.addToImports("org.tuml.root.Root");
-		get.getBody().addToStatements("json.append(\"{\\\"data\\\": [\")");
-		get.getBody().addToStatements("json.append(ToJsonUtil.toJson(resource))");
-		annotatedClass.addToImports(TinkerGenerationUtil.ToJsonUtil);
 
-		get.getBody().addToStatements("json.append(\"], \\\"meta\\\": [\")");
-		
-		get.getBody().addToStatements("json.append(\"{\\\"qualifiedName\\\": \\\"" + clazz.getQualifiedName() + "\\\"}\")");
-		get.getBody().addToStatements("json.append(\", \")");
-		
-		// Meta data remains for the root object as viewing a many list does not
-		// change the context
-		get.getBody().addToStatements("json.append(" + TinkerGenerationUtil.RootRuntimePropertyEnum.getLast() + ".asJson())");
-		annotatedClass.addToImports(TinkerGenerationUtil.RootRuntimePropertyEnum);
-		get.getBody().addToStatements("json.append(\", \")");
-		get.getBody().addToStatements("json.append(" + TumlClassOperations.propertyEnumName(clazz) + ".asJson())");
-		annotatedClass.addToImports(TumlClassOperations.getPathName(clazz).append(TumlClassOperations.propertyEnumName(clazz)));
-		get.getBody().addToStatements("json.append(\"]}\")");
+		get.getBody().addToStatements("json.append(\"[\")");
+		Set<Classifier> concreteImplementations = TumlClassOperations.getConcreteImplementations(clazz);
+		int count = 1;
+		for (Classifier classifier : concreteImplementations) {
+
+			
+			get.getBody().addToStatements("json.append(\"{\\\"data\\\": [\")");
+
+			if (concreteImplementations.size() > 1) {
+				get.getBody().addToStatements("json.append(ToJsonUtil.toJson(resource.select(new "
+						+ TinkerGenerationUtil.BooleanExpressionEvaluator.getCopy().addToGenerics(TumlClassOperations.getPathName(clazz)).getLast()
+						+ "() {\n			@Override\n			public Boolean evaluate(" + TumlClassOperations.getPathName(clazz).getLast() + " e) {\n				return e instanceof "
+						+ TumlClassOperations.getPathName(classifier).getLast() + ";\n			}\n		})))");
+				annotatedClass.addToImports(TinkerGenerationUtil.BooleanExpressionEvaluator);
+				annotatedClass.addToImports(TumlClassOperations.getPathName(clazz));
+				annotatedClass.addToImports(TumlClassOperations.getPathName(classifier));
+			} else {
+				get.getBody().addToStatements("json.append(ToJsonUtil.toJson(resource))");
+			}
+
+			annotatedClass.addToImports(TinkerGenerationUtil.ToJsonUtil);
+
+			get.getBody().addToStatements("json.append(\"], \\\"meta\\\": [\")");
+
+			get.getBody().addToStatements("json.append(\"{\\\"qualifiedName\\\": \\\"" + clazz.getQualifiedName() + "\\\"}\")");
+			get.getBody().addToStatements("json.append(\", \")");
+
+			// Meta data remains for the root object as viewing a many list does
+			// not
+			// change the context
+			get.getBody().addToStatements("json.append(" + TinkerGenerationUtil.RootRuntimePropertyEnum.getLast() + ".asJson())");
+			annotatedClass.addToImports(TinkerGenerationUtil.RootRuntimePropertyEnum);
+			get.getBody().addToStatements("json.append(\", \")");
+			get.getBody().addToStatements("json.append(" + TumlClassOperations.propertyEnumName(clazz) + ".asJson())");
+			annotatedClass.addToImports(TumlClassOperations.getPathName(clazz).append(TumlClassOperations.propertyEnumName(clazz)));
+			if (concreteImplementations.size() != 1 && count++ != concreteImplementations.size()) {
+				get.getBody().addToStatements("json.append(\",\")");				
+			}
+		}
+		get.getBody().addToStatements("json.append(\"]}]\")");
 		get.getBody().addToStatements("return new " + TumlRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
 
 		annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);

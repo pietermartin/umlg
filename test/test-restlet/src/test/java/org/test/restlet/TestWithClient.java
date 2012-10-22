@@ -23,7 +23,7 @@ import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
-import org.tuml.test.restlet.Hand_hand_finger_ServerResource;
+import org.tuml.test.restlet.Hand_hand_finger_Finger_ServerResource;
 import org.tuml.test.restlet.HumanServerResource;
 
 import restlet.RootServerResource;
@@ -92,7 +92,7 @@ public class TestWithClient {
 		Client client = new Client(new Context(), Protocol.HTTP);
 		ClientResource service = new ClientResource("http://localhost:8111/");
 		service.setNext(client);
-		Hand_hand_finger_ServerResource hand_finger_ServerResource = service.getChild("/restAndJson/hands/3/finger", Hand_hand_finger_ServerResource.class);
+		Hand_hand_finger_Finger_ServerResource hand_finger_ServerResource = service.getChild("/restAndJson/hands/3/finger", Hand_hand_finger_Finger_ServerResource.class);
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		Map<String, List<Map<String, Object>>> handFingerMap = objectMapper.readValue(hand_finger_ServerResource.get().getText(), Map.class);
@@ -126,7 +126,7 @@ public class TestWithClient {
 		Client client = new Client(new Context(), Protocol.HTTP);
 		ClientResource service = new ClientResource("http://localhost:8111/");
 		service.setNext(client);
-		Hand_hand_finger_ServerResource hand_finger_ServerResource = service.getChild("/restAndJson/hands/3/finger", Hand_hand_finger_ServerResource.class);
+		Hand_hand_finger_Finger_ServerResource hand_finger_ServerResource = service.getChild("/restAndJson/hands/3/finger", Hand_hand_finger_Finger_ServerResource.class);
 
 		ObjectMapper finggerMapper = new ObjectMapper();
 		List<Map<String,Object>> fingers = new ArrayList<Map<String,Object>>();
@@ -160,7 +160,7 @@ public class TestWithClient {
 		Client client = new Client(new Context(), Protocol.HTTP);
 		ClientResource service = new ClientResource("http://localhost:8111/");
 		service.setNext(client);
-		Hand_hand_finger_ServerResource hand_finger_ServerResource = service.getChild("/restAndJson/hands/3/finger", Hand_hand_finger_ServerResource.class);
+		Hand_hand_finger_Finger_ServerResource hand_finger_ServerResource = service.getChild("/restAndJson/hands/3/finger", Hand_hand_finger_Finger_ServerResource.class);
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		Map<String, List<Map<String, Object>>> handFingerMap = objectMapper.readValue(hand_finger_ServerResource.get().getText(), Map.class);
@@ -198,7 +198,7 @@ public class TestWithClient {
 		}
 		Assert.assertTrue(foundn1 && foundn2 && foundn3 && foundn4 && foundn5 );
 		
-		hand_finger_ServerResource = service.getChild("/restAndJson/hands/3/finger", Hand_hand_finger_ServerResource.class);
+		hand_finger_ServerResource = service.getChild("/restAndJson/hands/3/finger", Hand_hand_finger_Finger_ServerResource.class);
 		handFingerMap = objectMapper.readValue(hand_finger_ServerResource.get().getText(), Map.class);
 		Assert.assertEquals(5, handFingerMap.get("data").size());
 		

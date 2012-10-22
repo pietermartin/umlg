@@ -43,7 +43,9 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
 			addPrivateIdVariable(clazz, annotatedClass);
 			addDefaultConstructor(annotatedClass);
 			addGetRepresentation(clazz, annotatedInf, annotatedClass);
-			addPutRepresentation(clazz, annotatedInf, annotatedClass);
+			if (!clazz.isAbstract()) {
+				addPutRepresentation(clazz, annotatedInf, annotatedClass);
+			}
 			addToRouterEnum(clazz, annotatedClass);
 		}
 	}
@@ -64,9 +66,11 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
 		put.addToThrows(TumlRestletGenerationUtil.ResourceException);
 		annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
 		TinkerGenerationUtil.addOverrideAnnotation(put);
-		put.getBody().addToStatements("this." + getIdFieldName(clazz) + "= Integer.parseInt((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"));");
 		put.getBody().addToStatements(
-				TumlClassOperations.className(clazz) + " c = new " + TumlClassOperations.className(clazz) + "(GraphDb.getDb().getVertex(this." + getIdFieldName(clazz) + "))");
+				"this." + getIdFieldName(clazz) + "= Integer.parseInt((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"));");
+		put.getBody().addToStatements(
+				TumlClassOperations.className(clazz) + " c = new " + TumlClassOperations.className(clazz) + "(GraphDb.getDb().getVertex(this."
+						+ getIdFieldName(clazz) + "))");
 		annotatedClass.addToImports(TumlClassOperations.getPathName(clazz));
 		put.getBody().addToStatements("GraphDb.getDb().startTransaction()");
 		OJTryStatement ojTry = new OJTryStatement();
@@ -103,18 +107,20 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
 		get.addToThrows(TumlRestletGenerationUtil.ResourceException);
 		annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
 		TinkerGenerationUtil.addOverrideAnnotation(get);
-		get.getBody().addToStatements("this." + getIdFieldName(clazz) + "= Integer.parseInt((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"));");
 		get.getBody().addToStatements(
-				TumlClassOperations.className(clazz) + " c = new " + TumlClassOperations.className(clazz) + "(GraphDb.getDb().getVertex(this." + getIdFieldName(clazz) + "))");
+				"this." + getIdFieldName(clazz) + "= Integer.parseInt((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"));");
+		get.getBody().addToStatements(
+				TumlClassOperations.className(clazz) + " c = new " + TumlClassOperations.className(clazz) + "(GraphDb.getDb().getVertex(this."
+						+ getIdFieldName(clazz) + "))");
 		annotatedClass.addToImports(TumlClassOperations.getPathName(clazz));
 
 		get.getBody().addToStatements("StringBuilder json = new StringBuilder()");
 		get.getBody().addToStatements("json.append(\"{\\\"data\\\": \")");
 		get.getBody().addToStatements("json.append(" + "c.toJson())");
 
-//		get.getBody().addToStatements("json.append(\", \\\"meta\\\": \")");
+		// get.getBody().addToStatements("json.append(\", \\\"meta\\\": \")");
 		get.getBody().addToStatements("json.append(\", \\\"meta\\\" : [\")");
-		
+
 		get.getBody().addToStatements("json.append(\"{\\\"qualifiedName\\\": \\\"" + clazz.getQualifiedName() + "\\\"}\")");
 		get.getBody().addToStatements("json.append(\", \")");
 		get.getBody().addToStatements("json.append(" + TumlClassOperations.propertyEnumName(clazz) + ".asJson())");
@@ -133,8 +139,7 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
 
 		OJField uri = new OJField();
 		uri.setType(new OJPathName("String"));
-		uri.setInitExp("\"/" + TumlClassOperations.className(clazz).toLowerCase() + "s/{" + TumlClassOperations.className(clazz).toLowerCase()
-				+ "Id}\"");
+		uri.setInitExp("\"/" + TumlClassOperations.className(clazz).toLowerCase() + "s/{" + TumlClassOperations.className(clazz).toLowerCase() + "Id}\"");
 		ojLiteral.addToAttributeValues(uri);
 
 		OJField serverResourceClassField = new OJField();
@@ -157,7 +162,7 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
 	}
 
 	private String getIdFieldName(Class clazz) {
-		return StringUtils.uncapitalize(TumlClassOperations.className(clazz)) + "Id";
+		return StringUtils.uncapitalize(TumlClassOperations.className(clazz)).toLowerCase() + "Id";
 	}
 
 }

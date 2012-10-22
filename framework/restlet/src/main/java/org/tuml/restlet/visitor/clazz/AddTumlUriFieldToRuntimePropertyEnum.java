@@ -1,18 +1,21 @@
 package org.tuml.restlet.visitor.clazz;
 
-import java.util.List;
+import java.util.Set;
 
 import org.eclipse.uml2.uml.Class;
+import org.eclipse.uml2.uml.Property;
 import org.opaeum.java.metamodel.OJConstructor;
 import org.opaeum.java.metamodel.OJField;
 import org.opaeum.java.metamodel.OJPathName;
 import org.opaeum.java.metamodel.OJSimpleStatement;
+import org.opaeum.java.metamodel.OJVisibilityKind;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
 import org.opaeum.java.metamodel.annotation.OJEnum;
 import org.opaeum.java.metamodel.annotation.OJEnumLiteral;
 import org.tuml.framework.Visitor;
 import org.tuml.generation.Workspace;
+import org.tuml.javageneration.util.PropertyWrapper;
 import org.tuml.javageneration.util.TumlClassOperations;
 import org.tuml.javageneration.visitor.BaseVisitor;
 
@@ -43,24 +46,33 @@ public class AddTumlUriFieldToRuntimePropertyEnum extends BaseVisitor implements
 		constructor.addParam(uriPrimitiveField.getName(), uriPrimitiveField.getType());
 		constructor.getBody().addToStatements("this." + uriPrimitiveField.getName() + " = " + uriPrimitiveField.getName());
 
-		List<OJEnumLiteral> literals = ojEnum.getLiterals();
-		for (OJEnumLiteral literal : literals) {
-			addTumlUriToLiteral(clazz, literal);
+		Set<Property> properties = TumlClassOperations.getAllProperties(clazz);
+		for (Property property : properties) {
+			PropertyWrapper pWrap = new PropertyWrapper(property);
+			if (!(pWrap.isDerived() || pWrap.isDerivedUnion())) {
+				OJEnumLiteral literal = ojEnum.findLiteral(pWrap.fieldname());
+				addTumlUriToLiteral(clazz, pWrap, literal);
+			}
 		}
-
+		addTumlUriToLiteral(clazz, null, ojEnum.findLiteral("id"));
+		// This is for root objects that have a literal to to model
+		OJEnumLiteral modelLiteral = ojEnum.findLiteral(clazz.getModel().getName());
+		if (modelLiteral != null) {
+			addTumlUriToLiteral(clazz, null, modelLiteral);
+		}
 	}
 
-	public static void addTumlUriToLiteral(Class clazz, OJEnumLiteral literal) {
+	public static void addTumlUriToLiteral(Class clazz, PropertyWrapper pWrap, OJEnumLiteral literal) {
 		String uri;
-		if (clazz != null) {
-			if (literal.getName().equals(clazz.getModel().getName())) {
-				uri = "\"/" + clazz.getModel().getName() + "\"";
-			} else {
-				uri = "\"/" + clazz.getModel().getName() + "/" + TumlClassOperations.getPathName(clazz).getLast().toLowerCase() + "s/{"
-						+ TumlClassOperations.getPathName(clazz).getLast().toLowerCase() + "Id}/" + literal.getName() + "\"";
-			}
+		if (literal.getName().equals(clazz.getModel().getName())) {
+			uri = "\"/" + clazz.getModel().getName() + "\"";
 		} else {
-			uri = "\"\"";
+			if (clazz != null && pWrap != null) {
+				uri = "\"/" + clazz.getModel().getName() + "/" + pWrap.getOwningType().getName().toLowerCase() + "s/{"
+						+ pWrap.getOwningType().getName().toLowerCase() + "Id}/" + literal.getName() + "\"";
+			} else {
+				uri = "\"\"";
+			}
 		}
 		OJField uriAttribute = new OJField();
 		uriAttribute.setType(new OJPathName("String"));
@@ -79,13 +91,19 @@ public class AddTumlUriFieldToRuntimePropertyEnum extends BaseVisitor implements
 	}
 
 	private void addUriToToJson(Class clazz, OJAnnotatedClass annotatedClass) {
-		OJAnnotatedOperation toJson = annotatedClass.findOperation("toJson");
-		OJSimpleStatement s = (OJSimpleStatement) toJson.getBody().findStatement("uri");
-		s.setExpression("sb.append(\"\\\"uri\\\": \\\"\" + " + TumlClassOperations.propertyEnumName(clazz) + ".getUriToObject() + \"\\\"\")");
-
-		OJAnnotatedOperation toJsonWithoutCompositeParent = annotatedClass.findOperation("toJsonWithoutCompositeParent");
-		s = (OJSimpleStatement) toJsonWithoutCompositeParent.getBody().findStatement("uri");
-		s.setExpression("sb.append(\"\\\"uri\\\": \\\"\" + " + TumlClassOperations.propertyEnumName(clazz) + ".getUriToObject() + \"\\\"\")");
+		if (clazz.getGeneralizations().isEmpty()) {
+			OJAnnotatedOperation toJson = annotatedClass.findOperation("toJson");
+			OJSimpleStatement s = (OJSimpleStatement) toJson.getBody().findStatement("uri");
+			s.setExpression("sb.append(\"\\\"uri\\\": \" + getUri())");
+			OJAnnotatedOperation toJsonWithoutCompositeParent = annotatedClass.findOperation("toJsonWithoutCompositeParent");
+			s = (OJSimpleStatement) toJsonWithoutCompositeParent.getBody().findStatement("uri");
+			s.setExpression("sb.append(\"\\\"uri\\\": \" + getUri())");
+		}
+		OJAnnotatedOperation getUri = new OJAnnotatedOperation("getUri");
+		getUri.setReturnType(new OJPathName("String"));
+		getUri.setVisibility(OJVisibilityKind.PROTECTED);
+		getUri.getBody().addToStatements("return (\"\\\"\" + " + TumlClassOperations.propertyEnumName(clazz) + ".getUriToObject() + \"\\\"\")");
+		annotatedClass.addToOperations(getUri);
 	}
 
 	private void addUriToObject(Class clazz, OJEnum ojEnum) {

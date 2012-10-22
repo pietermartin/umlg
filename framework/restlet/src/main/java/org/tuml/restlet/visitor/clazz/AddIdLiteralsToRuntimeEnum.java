@@ -14,9 +14,9 @@ import org.tuml.javageneration.validation.Validation;
 import org.tuml.javageneration.visitor.BaseVisitor;
 import org.tuml.javageneration.visitor.clazz.RuntimePropertyImplementor;
 
-public class AddSelfIdAndUriLiteralsToRuntimeEnum extends BaseVisitor implements Visitor<Class> {
+public class AddIdLiteralsToRuntimeEnum extends BaseVisitor implements Visitor<Class> {
 
-	public AddSelfIdAndUriLiteralsToRuntimeEnum(Workspace workspace) {
+	public AddIdLiteralsToRuntimeEnum(Workspace workspace) {
 		super(workspace);
 	}
 
@@ -25,8 +25,6 @@ public class AddSelfIdAndUriLiteralsToRuntimeEnum extends BaseVisitor implements
 		OJAnnotatedClass annotatedClass = findOJClass(clazz);
 		OJEnum ojEnum = annotatedClass.findEnum(TumlClassOperations.propertyEnumName(clazz));
 		addField(annotatedClass, ojEnum, "id");
-		//This is needed as a dummy to force a column in the grid, //TODO remove me thinks
-//		addField(annotatedClass, ojEnum, "uri");
 	}
 
 	@Override

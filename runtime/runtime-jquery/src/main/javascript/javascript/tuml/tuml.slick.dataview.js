@@ -29,6 +29,9 @@
                 inlineFilters: false
             };
 
+            function getIdxById() {
+                return idxById;
+            }
 
             // private
             var idProperty = "id";  // property holding a unique row id

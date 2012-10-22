@@ -13,9 +13,11 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.tuml.concretetest.God;
-import org.tuml.concretetest.Universe;
 import org.tuml.concretetest.Universe.UniverseRuntimePropertyEnum;
 import org.tuml.embeddedtest.REASON;
+import org.tuml.inheritencetest.Biped;
+import org.tuml.inheritencetest.Mamal;
+import org.tuml.inheritencetest.Quadped;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
 import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
@@ -175,4 +177,27 @@ public class JsonTest extends BaseLocalDbTest {
 		}
 		Assert.assertTrue(foundValidations);
 	}
+	
+	@Test
+	public void testWithInheritence() throws JsonParseException, JsonMappingException, IOException {
+		db.startTransaction();
+		God g1 = new God(true);
+		g1.setName("g1");
+		DateTime beginning = new DateTime();
+		g1.setBeginning(beginning);
+		Mamal mamal1 = new Mamal(g1);
+		mamal1.setName("mamal1");
+		Biped biped1 = new Biped(g1);
+		biped1.setName("biped1");
+		Quadped quadped1 = new Quadped(g1);
+		quadped1.setName("quadped1");
+		db.stopTransaction(Conclusion.SUCCESS);
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		@SuppressWarnings("unchecked")
+		Map<String, Object> jsonMap = objectMapper.readValue(quadped1.toJson(), Map.class);
+		Assert.assertEquals(4, jsonMap.size());
+		Assert.assertEquals(jsonMap.get("name"), "quadped1");
+	}
+	
 }

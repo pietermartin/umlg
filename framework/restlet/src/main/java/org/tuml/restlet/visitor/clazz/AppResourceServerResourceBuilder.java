@@ -1,9 +1,5 @@
 package org.tuml.restlet.visitor.clazz;
 
-import java.util.List;
-
-import org.eclipse.uml2.uml.Class;
-import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Model;
 import org.opaeum.java.metamodel.OJField;
 import org.opaeum.java.metamodel.OJPackage;
@@ -16,10 +12,7 @@ import org.opaeum.java.metamodel.annotation.OJEnum;
 import org.opaeum.java.metamodel.annotation.OJEnumLiteral;
 import org.tuml.framework.Visitor;
 import org.tuml.generation.Workspace;
-import org.tuml.javageneration.util.Condition;
 import org.tuml.javageneration.util.TinkerGenerationUtil;
-import org.tuml.javageneration.util.TumlClassOperations;
-import org.tuml.javageneration.util.TumlModelOperations;
 import org.tuml.restlet.util.TumlRestletGenerationUtil;
 
 public class AppResourceServerResourceBuilder extends BaseServerResourceBuilder implements Visitor<Model> {
