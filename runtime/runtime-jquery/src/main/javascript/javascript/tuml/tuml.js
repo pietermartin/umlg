@@ -93,6 +93,7 @@ function refreshPageTo(tumlUri, tabId) {
 
             $('#tab-container').easytabs({/*updateHash: false,*/ animate: false});
         } else {
+            //When navigating a property the result is an array, when accessing a entity by vertex its not, TODO refactor
             if (result instanceof Array) {
                 response = result[0];
             } else {

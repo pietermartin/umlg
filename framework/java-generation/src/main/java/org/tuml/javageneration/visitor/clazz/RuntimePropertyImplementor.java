@@ -28,6 +28,11 @@ public class RuntimePropertyImplementor {
 		ojEnum.addToImplementedInterfaces(TinkerGenerationUtil.tumlRuntimePropertyPathName.getCopy());
 		annotatedClass.addInnerEnum(ojEnum);
 
+		OJField qualifiedName = new OJField();
+		qualifiedName.setType(new OJPathName("String"));
+		qualifiedName.setName("_qualifiedName");
+		ojEnum.addToFields(qualifiedName);
+
 		OJField isOnePrimitiveField = new OJField();
 		isOnePrimitiveField.setType(new OJPathName("boolean"));
 		isOnePrimitiveField.setName("_onePrimitive");
@@ -185,7 +190,7 @@ public class RuntimePropertyImplementor {
 		for (Property p : allOwnedProperties) {
 			PropertyWrapper pWrap = new PropertyWrapper(p);
 			if (!(pWrap.isDerived() || pWrap.isDerivedUnion())) {
-				addEnumLiteral(ojEnum, fromLabel, pWrap.fieldname(), pWrap.isPrimitive(), pWrap.getDataTypeEnum(), pWrap.getValidations(), pWrap.isEnumeration(),
+				addEnumLiteral(ojEnum, fromLabel, pWrap.fieldname(), pWrap.javaBaseTypePath().toJavaString(), pWrap.isPrimitive(), pWrap.getDataTypeEnum(), pWrap.getValidations(), pWrap.isEnumeration(),
 						pWrap.isManyToOne(), pWrap.isMany(), pWrap.isControllingSide(), pWrap.isComposite(), pWrap.isInverseComposite(), pWrap.isOneToOne(), pWrap.isOneToMany(),
 						pWrap.isManyToMany(), pWrap.getUpper(), pWrap.getLower(), pWrap.isQualified(), pWrap.isInverseQualified(), pWrap.isOrdered(), pWrap.isInverseOrdered(),
 						pWrap.isUnique(), TinkerGenerationUtil.getEdgeName(pWrap.getProperty()));
@@ -194,7 +199,7 @@ public class RuntimePropertyImplementor {
 
 		if (!hasCompositeOwner/* && !(className instanceof Model)*/) {
 			// Add in fake property to root
-			addEnumLiteral(ojEnum, fromLabel, modelName, false, null, Collections.<Validation> emptyList(), false, false, false, true, false, true, true, false, false, -1, 0,
+			addEnumLiteral(ojEnum, fromLabel, modelName, modelName, false, null, Collections.<Validation> emptyList(), false, false, false, true, false, true, true, false, false, -1, 0,
 					false, false, false, false, false, "root" + className.getName());
 		}
 		asJson.getBody().addToStatements("sb.append(\"]}\")");
@@ -203,7 +208,7 @@ public class RuntimePropertyImplementor {
 		return ojEnum;
 	}
 
-	public static OJEnumLiteral addEnumLiteral(OJEnum ojEnum, OJAnnotatedOperation fromLabel, String fieldName, boolean isPrimitive, DataTypeEnum dataTypeEnum,
+	public static OJEnumLiteral addEnumLiteral(OJEnum ojEnum, OJAnnotatedOperation fromLabel, String fieldName, String qualifiedName, boolean isPrimitive, DataTypeEnum dataTypeEnum,
 			List<Validation> validations, boolean isEnumeration, boolean isManyToOne, boolean isMany, boolean isControllingSide, boolean isComposite, boolean isInverseComposite,
 			boolean isOneToOne, boolean isOneToMany, boolean isManyToMany, int getUpper, int getLower, boolean isQualified, boolean isInverseQualified, boolean isOrdered,
 			boolean isInverseOrdered, boolean isUnique, String edgeName) {
@@ -215,6 +220,11 @@ public class RuntimePropertyImplementor {
 		fromLabel.getBody().addToStatements(0, ifLabelEquals);
 
 		OJEnumLiteral ojLiteral = new OJEnumLiteral(fieldName);
+
+		OJField propertyQualifiedNameField = new OJField();
+		propertyQualifiedNameField.setType(new OJPathName("String"));
+		propertyQualifiedNameField.setInitExp("\"" + qualifiedName + "\"");
+		ojLiteral.addToAttributeValues(propertyQualifiedNameField);
 
 		OJField propertyOnePrimitiveField = new OJField();
 		propertyOnePrimitiveField.setType(new OJPathName("boolean"));
@@ -347,6 +357,8 @@ public class RuntimePropertyImplementor {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{\\\"name\\\": \\\"");
 		sb.append(fieldName);
+		
+
 		sb.append("\\\", ");
 		sb.append("\\\"onePrimitive\\\": ");
 		sb.append(propertyOnePrimitiveField.getInitExp());
@@ -362,15 +374,16 @@ public class RuntimePropertyImplementor {
 		if (!validations.isEmpty()) {
 			sb.append("\\\"validations\\\": {");
 			for (Validation validation : validations) {
-//				sb.append("{");
 				sb.append(validation.toJson());
-//				sb.append("}");
 			}
 			sb.append("}, ");
 		} else {
 			sb.append("\\\"validations\\\": null, ");
 		}
 
+		sb.append("\\\"qualifiedName\\\": \\");
+		sb.append(propertyQualifiedNameField.getInitExp().subSequence(0, propertyQualifiedNameField.getInitExp().length() - 1));
+		sb.append("\\\", ");
 		
 		sb.append("\\\"manyPrimitive\\\": ");
 		sb.append(propertyManyPrimitiveField.getInitExp());

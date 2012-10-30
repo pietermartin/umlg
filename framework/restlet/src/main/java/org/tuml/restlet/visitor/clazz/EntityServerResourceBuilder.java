@@ -81,16 +81,7 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
 		ojTry.getCatchPart().addToStatements("throw new RuntimeException(e)");
 		put.getBody().addToStatements(ojTry);
 
-		put.getBody().addToStatements("StringBuilder json = new StringBuilder()");
-		put.getBody().addToStatements("json.append(\"[\")");
-		put.getBody().addToStatements("json.append(" + "c.toJson())");
-
-		put.getBody().addToStatements("json.append(\",\")");
-		put.getBody().addToStatements("json.append(\" {\\\"meta\\\" : \")");
-		put.getBody().addToStatements("json.append(" + TumlClassOperations.propertyEnumName(clazz) + ".asJson())");
-		annotatedClass.addToImports(TumlClassOperations.getPathName(clazz).append(TumlClassOperations.propertyEnumName(clazz)));
-		put.getBody().addToStatements("json.append(\"}]\")");
-		put.getBody().addToStatements("return new " + TumlRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
+		put.getBody().addToStatements("return get()");
 
 		annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
 		annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);

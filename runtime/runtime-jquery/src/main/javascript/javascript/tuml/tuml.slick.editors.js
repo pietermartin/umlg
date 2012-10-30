@@ -13,6 +13,7 @@
                     "Integer": IntegerEditor,
                     "Text": TextEditor,
                     "SelectCellEditor": SelectCellEditor,
+                    "SelectEnumerationCellEditor": SelectEnumerationCellEditor,
                     "Checkbox": CheckboxEditor,
                     "Date": DateEditor,
                     "DateTime": DateTimeEditor,
@@ -491,6 +492,88 @@
         };
 
         this.init();
+    }
+
+    function SelectEnumerationCellEditor(args) {
+        var $select;
+        var currentValue;
+        var scope = this;
+        var options;
+
+        this.init = function(item) {
+            $select = $("<SELECT tabIndex='0' class='editor-select' style='width:115px;'></SELECT>");
+            $select.appendTo(args.container);
+
+            args.column.options.rowEnumerationLookupMap.getOrLoadMap(function(data){
+                if (!args.column.options.required) {
+                    $select.append($('<option />)').val("").html(""));
+                }
+                $.each(data, function(index, obj) {
+                    $select.append($('<option />)').val(obj).html(obj));
+                });
+                currentValue = item[args.column.field];
+                $select.val(currentValue);
+                if (!args.column.options.required) {
+                    $select.chosen({allow_single_deselect: true});
+                } else {
+                    $select.chosen();
+                }
+                $select.focus();
+            });
+
+        };
+
+        this.destroy = function() {
+            $select.remove();
+        };
+
+        this.focus = function() {
+            $select.focus();
+        };
+
+        this.loadValue = function(item) {
+        };
+
+        this.serializeValue = function() {
+            if(args.column.options){
+                var options = $select.children();
+                for (var i = 0; i < options.length; i++) {
+                    if (options[i].selected) {
+                        return $select.val();
+                    }
+                }
+            }else{
+                return ($select.val() == "yes");
+            }
+        };
+
+        this.applyValue = function(item,state) {
+            item[args.column.field] = state;
+        };
+
+        this.isValueChanged = function() {
+            if (currentValue === null || currentValue === undefined) {
+                return true;
+            } else {
+                return ($select.val() != currentValue);
+            }
+        };
+
+
+        this.validate = function () {
+            if (args.column.validator) {
+                var validationResults = args.column.validator($select.val());
+                if (!validationResults.valid) {
+                    return validationResults;
+                }
+            }
+
+            return {
+                valid: true,
+                msg: null
+            };
+        };
+        this.init(args.item);
     }
 
     function SelectCellEditor(args) {

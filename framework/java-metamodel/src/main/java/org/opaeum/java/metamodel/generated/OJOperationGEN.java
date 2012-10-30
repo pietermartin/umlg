@@ -18,8 +18,8 @@ import org.opaeum.java.metamodel.OJPathName;
 import org.opaeum.java.metamodel.OJVisibleElement;
 import org.opaeum.java.metamodel.utilities.InvariantError;
 
-
-/** Class ...
+/**
+ * Class ...
  */
 abstract public class OJOperationGEN extends OJVisibleElement {
 	private boolean f_isAbstract = false;
@@ -33,15 +33,16 @@ abstract public class OJOperationGEN extends OJVisibleElement {
 	static protected boolean usesAllInstances = false;
 	static protected List<OJOperation> allInstances = new ArrayList<OJOperation>();
 
-	/** Constructor for OJOperationGEN
+	/**
+	 * Constructor for OJOperationGEN
 	 * 
-	 * @param name 
-	 * @param comment 
-	 * @param isStatic 
-	 * @param isFinal 
-	 * @param isVolatile 
-	 * @param isAbstract 
-	 * @param needsSuppress 
+	 * @param name
+	 * @param comment
+	 * @param isStatic
+	 * @param isFinal
+	 * @param isVolatile
+	 * @param isAbstract
+	 * @param needsSuppress
 	 */
 	protected OJOperationGEN(String name, String comment, boolean isStatic, boolean isFinal, boolean isVolatile, boolean isAbstract, boolean needsSuppress) {
 		super();
@@ -52,352 +53,426 @@ abstract public class OJOperationGEN extends OJVisibleElement {
 		super.setVolatile(isVolatile);
 		this.setAbstract(isAbstract);
 		this.setNeedsSuppress(needsSuppress);
-		this.setReturnType( OJPathName.getVOID() );
-		if ( usesAllInstances ) {
-			allInstances.add(((OJOperation)this));
-		}
-	}
-	
-	/** Default constructor for OJOperation
-	 */
-	protected OJOperationGEN() {
-		super();
-		this.setReturnType( OJPathName.getVOID() );
-		if ( usesAllInstances ) {
-			allInstances.add(((OJOperation)this));
+		this.setReturnType(OJPathName.getVOID());
+		if (usesAllInstances) {
+			allInstances.add(((OJOperation) this));
 		}
 	}
 
-	/** Implements the user defined operation '+ getParamTypes() : Sequence(OJPathName)'
+	/**
+	 * Default constructor for OJOperation
+	 */
+	protected OJOperationGEN() {
+		super();
+		this.setReturnType(OJPathName.getVOID());
+		if (usesAllInstances) {
+			allInstances.add(((OJOperation) this));
+		}
+	}
+
+	/**
+	 * Implements the user defined operation '+ getParamTypes() :
+	 * Sequence(OJPathName)'
 	 */
 	public List<OJPathName> getParamTypes() {
 		List<OJPathName> result = new ArrayList<OJPathName>();
 		return result;
 	}
-	
-	/** Implements the user defined operation '+ isEqual( name: String, types: Sequence(OJPathName) ) : Boolean'
+
+	/**
+	 * Implements the user defined operation '+ isEqual( name: String, types:
+	 * Sequence(OJPathName) ) : Boolean'
 	 * 
-	 * @param name 
-	 * @param types 
+	 * @param name
+	 * @param types
 	 */
 	public boolean isEqual(String name, List<OJPathName> types) {
 		return (this.getName().equals(name) && (forAll2(name, types)));
 	}
-	
-	/** Implements the getter for attribute '+ isAbstract : Boolean'
+
+	/**
+	 * Implements the getter for attribute '+ isAbstract : Boolean'
 	 */
 	public boolean isAbstract() {
 		return f_isAbstract;
 	}
-	
-	/** Implements the setter for attribute '+ isAbstract : Boolean'
+
+	/**
+	 * Implements the setter for attribute '+ isAbstract : Boolean'
 	 * 
-	 * @param element 
+	 * @param element
 	 */
 	public void setAbstract(boolean element) {
-		if ( f_isAbstract != element ) {
+		if (f_isAbstract != element) {
 			f_isAbstract = element;
 		}
 	}
-	
-	/** Implements the getter for attribute '+ needsSuppress : Boolean'
+
+	/**
+	 * Implements the getter for attribute '+ needsSuppress : Boolean'
 	 */
 	public boolean getNeedsSuppress() {
 		return f_needsSuppress;
 	}
-	
-	/** Implements the setter for attribute '+ needsSuppress : Boolean'
+
+	/**
+	 * Implements the setter for attribute '+ needsSuppress : Boolean'
 	 * 
-	 * @param element 
+	 * @param element
 	 */
 	public void setNeedsSuppress(boolean element) {
-		if ( f_needsSuppress != element ) {
+		if (f_needsSuppress != element) {
 			f_needsSuppress = element;
 		}
 	}
-	
-	/** Implements the getter for attribute '+ genericTypeParam : OJPathName'
+
+	/**
+	 * Implements the getter for attribute '+ genericTypeParam : OJPathName'
 	 */
 	public OJPathName getGenericTypeParam() {
 		return f_genericTypeParam;
 	}
-	
-	/** Implements the setter for attribute '+ genericTypeParam : OJPathName'
+
+	/**
+	 * Implements the setter for attribute '+ genericTypeParam : OJPathName'
 	 * 
-	 * @param element 
+	 * @param element
 	 */
 	public void setGenericTypeParam(OJPathName element) {
-		if ( f_genericTypeParam != element ) {
+		if (f_genericTypeParam != element) {
 			f_genericTypeParam = element;
 		}
 	}
-	
-	/** Implements the getter for association end '+ parameters : OrderedSet(OJParameter)'
+
+	/**
+	 * Implements the getter for association end '+ parameters :
+	 * OrderedSet(OJParameter)'
 	 */
 	public List<OJParameter> getParameters() {
 		return f_parameters;
 	}
-	
-	/** Implements the setter for association end '+ parameters : OrderedSet(OJParameter)'
+
+	/**
+	 * Implements the setter for association end '+ parameters :
+	 * OrderedSet(OJParameter)'
 	 * 
-	 * @param element 
+	 * @param element
 	 */
 	public void setParameters(List<OJParameter> element) {
-		if ( f_parameters != element ) {
+		if (f_parameters != element) {
 			f_parameters = element;
 		}
 	}
-	
-	/** Implements the add element function for association end '+ parameters : OrderedSet(OJParameter)'
+
+	/**
+	 * Implements the add element function for association end '+ parameters :
+	 * OrderedSet(OJParameter)'
 	 * 
-	 * @param element 
+	 * @param element
 	 */
 	public void addToParameters(OJParameter element) {
-		if ( f_parameters.contains(element) ) {
+		if (f_parameters.contains(element)) {
 			return;
 		}
 		f_parameters.add(element);
 	}
-	
-	/** Implements the remove element function for association end '+ parameters : OrderedSet(OJParameter)'
+
+	/**
+	 * Implements the remove element function for association end '+ parameters
+	 * : OrderedSet(OJParameter)'
 	 * 
-	 * @param element 
+	 * @param element
 	 */
 	public void removeFromParameters(OJParameter element) {
 		f_parameters.remove(element);
 	}
-	
-	/** Implements the addition of a number of elements to association end '+ parameters : OrderedSet(OJParameter)'
+
+	/**
+	 * Implements the addition of a number of elements to association end '+
+	 * parameters : OrderedSet(OJParameter)'
 	 * 
-	 * @param newElems 
+	 * @param newElems
 	 */
 	public void addToParameters(Collection<OJParameter> newElems) {
-		for ( OJParameter item : newElems ) {
+		for (OJParameter item : newElems) {
 			addToParameters(item);
 		}
 	}
-	
-	/** Implements the removal of a number of elements from association end '+ parameters : OrderedSet(OJParameter)'
+
+	/**
+	 * Implements the removal of a number of elements from association end '+
+	 * parameters : OrderedSet(OJParameter)'
 	 * 
-	 * @param oldElems 
+	 * @param oldElems
 	 */
 	public void removeFromParameters(Collection<OJParameter> oldElems) {
-		for ( OJParameter item : oldElems ) {
+		for (OJParameter item : oldElems) {
 			removeFromParameters(item);
 		}
 	}
-	
-	/** Implements the removal of all elements from association end '+ parameters : OrderedSet(OJParameter)'
+
+	/**
+	 * Implements the removal of all elements from association end '+ parameters
+	 * : OrderedSet(OJParameter)'
 	 */
 	public void removeAllFromParameters() {
-		/* make a copy of the collection in order to avoid a ConcurrentModificationException*/
-		for ( OJParameter item : new ArrayList<OJParameter>(getParameters()) ) {
+		/*
+		 * make a copy of the collection in order to avoid a
+		 * ConcurrentModificationException
+		 */
+		for (OJParameter item : new ArrayList<OJParameter>(getParameters())) {
 			removeFromParameters(item);
 		}
 	}
-	
-	/** Implements the getter for association end '+ body : OJBlock'
+
+	/**
+	 * Implements the getter for association end '+ body : OJBlock'
 	 */
 	public OJBlock getBody() {
 		return f_body;
 	}
-	
-	/** Implements the setter for association end '+ body : OJBlock'
+
+	/**
+	 * Implements the setter for association end '+ body : OJBlock'
 	 * 
-	 * @param element 
+	 * @param element
 	 */
 	public void setBody(OJBlock element) {
-		if ( f_body != element ) {
+		if (f_body != element) {
 			f_body = element;
 		}
 	}
-	
-	/** Implements the setter of association end '+ owner : OJClassifier'
+
+	/**
+	 * Implements the setter of association end '+ owner : OJClassifier'
 	 * 
-	 * @param element 
+	 * @param element
 	 */
 	public void setOwner(OJClassifier element) {
-		if ( this.f_owner != element ) {
-			if ( this.f_owner != null ) {
-				this.f_owner.z_internalRemoveFromOperations(((OJOperation)this));
+		if (this.f_owner != element) {
+			if (this.f_owner != null) {
+				this.f_owner.z_internalRemoveFromOperations(((OJOperation) this));
 			}
 			this.f_owner = element;
-			if ( element != null ) {
-				element.z_internalAddToOperations(((OJOperation)this));
+			if (element != null) {
+				element.z_internalAddToOperations(((OJOperation) this));
 			}
 		}
 	}
-	
-	/** Implements the getter for association end '+ owner : OJClassifier'
+
+	/**
+	 * Implements the getter for association end '+ owner : OJClassifier'
 	 */
 	public OJClassifier getOwner() {
 		return f_owner;
 	}
-	
-	/** Should NOT be used by clients! Implements the correct setting of the link for association end '+ owner : OJClassifier' 
-						when a single element is added to it.
+
+	/**
+	 * Should NOT be used by clients! Implements the correct setting of the link
+	 * for association end '+ owner : OJClassifier' when a single element is
+	 * added to it.
 	 * 
-	 * @param element 
+	 * @param element
 	 */
 	public void z_internalAddToOwner(OJClassifier element) {
 		this.f_owner = element;
 	}
-	
-	/** Should NOT be used by clients! Implements the correct setting of the link for association end '+ owner : OJClassifier' 
-						when a single element is removed to it.
+
+	/**
+	 * Should NOT be used by clients! Implements the correct setting of the link
+	 * for association end '+ owner : OJClassifier' when a single element is
+	 * removed to it.
 	 * 
-	 * @param element 
+	 * @param element
 	 */
 	public void z_internalRemoveFromOwner(OJClassifier element) {
 		this.f_owner = null;
 	}
-	
-	/** Implements the getter for association end '+ returnType : OJPathName'
+
+	/**
+	 * Implements the getter for association end '+ returnType : OJPathName'
 	 */
 	public OJPathName getReturnType() {
 		return f_returnType;
 	}
-	
-	/** Implements the setter for association end '+ returnType : OJPathName'
+
+	/**
+	 * Implements the setter for association end '+ returnType : OJPathName'
 	 * 
-	 * @param element 
+	 * @param element
+	 */
+	public void setReturnType(String element) {
+		setReturnType(new OJPathName(element));
+	}
+
+	/**
+	 * Implements the setter for association end '+ returnType : OJPathName'
+	 * 
+	 * @param element
 	 */
 	public void setReturnType(OJPathName element) {
-		if ( f_returnType != element ) {
+		if (f_returnType != element) {
 			f_returnType = element;
 		}
 	}
-	
-	/** Implements the getter for association end '+ throws : Set(OJPathName)'
+
+	/**
+	 * Implements the getter for association end '+ throws : Set(OJPathName)'
 	 */
 	public Set<OJPathName> getThrows() {
 		return f_throws;
 	}
-	
-	/** Implements the setter for association end '+ throws : Set(OJPathName)'
+
+	/**
+	 * Implements the setter for association end '+ throws : Set(OJPathName)'
 	 * 
-	 * @param element 
+	 * @param element
 	 */
 	public void setThrows(Set<OJPathName> element) {
-		if ( f_throws != element ) {
+		if (f_throws != element) {
 			f_throws = element;
 		}
 	}
-	
-	/** Implements the add element function for association end '+ throws : Set(OJPathName)'
+
+	/**
+	 * Implements the add element function for association end '+ throws :
+	 * Set(OJPathName)'
 	 * 
-	 * @param element 
+	 * @param element
 	 */
 	public void addToThrows(OJPathName element) {
-		if ( f_throws.contains(element) ) {
+		if (f_throws.contains(element)) {
 			return;
 		}
 		f_throws.add(element);
 	}
-	
-	/** Implements the remove element function for association end '+ throws : Set(OJPathName)'
+
+	/**
+	 * Implements the remove element function for association end '+ throws :
+	 * Set(OJPathName)'
 	 * 
-	 * @param element 
+	 * @param element
 	 */
 	public void removeFromThrows(OJPathName element) {
 		f_throws.remove(element);
 	}
-	
-	/** Implements the addition of a number of elements to association end '+ throws : Set(OJPathName)'
+
+	/**
+	 * Implements the addition of a number of elements to association end '+
+	 * throws : Set(OJPathName)'
 	 * 
-	 * @param newElems 
+	 * @param newElems
 	 */
 	public void addToThrows(Collection<OJPathName> newElems) {
-		for ( OJPathName item : newElems ) {
+		for (OJPathName item : newElems) {
 			addToThrows(item);
 		}
 	}
-	
-	/** Implements the removal of a number of elements from association end '+ throws : Set(OJPathName)'
+
+	/**
+	 * Implements the removal of a number of elements from association end '+
+	 * throws : Set(OJPathName)'
 	 * 
-	 * @param oldElems 
+	 * @param oldElems
 	 */
 	public void removeFromThrows(Collection<OJPathName> oldElems) {
-		for ( OJPathName item : oldElems ) {
+		for (OJPathName item : oldElems) {
 			removeFromThrows(item);
 		}
 	}
-	
-	/** Implements the removal of all elements from association end '+ throws : Set(OJPathName)'
+
+	/**
+	 * Implements the removal of all elements from association end '+ throws :
+	 * Set(OJPathName)'
 	 */
 	public void removeAllFromThrows() {
-		/* make a copy of the collection in order to avoid a ConcurrentModificationException*/
-		for ( OJPathName item : new HashSet<OJPathName>(getThrows()) ) {
+		/*
+		 * make a copy of the collection in order to avoid a
+		 * ConcurrentModificationException
+		 */
+		for (OJPathName item : new HashSet<OJPathName>(getThrows())) {
 			removeFromThrows(item);
 		}
 	}
-	
-	/** Implements OrderedSet{1 .. self.parameters->size()}
+
+	/**
+	 * Implements OrderedSet{1 .. self.parameters->size()}
 	 * 
-	 * @param name 
-	 * @param types 
+	 * @param name
+	 * @param types
 	 */
 	private List<Integer> collectionLiteral1(String name, List<OJPathName> types) {
 		List<Integer> myList = new ArrayList<Integer>();
-		for(int i=1; i<=this.getParameters().size(); i++) myList.add(new Integer(i));
+		for (int i = 1; i <= this.getParameters().size(); i++)
+			myList.add(new Integer(i));
 		return myList;
 	}
-	
-	/** Implements ->forAll( i : Integer | self.parameters->at(i).type.equals(types->at(i)) )
+
+	/**
+	 * Implements ->forAll( i : Integer |
+	 * self.parameters->at(i).type.equals(types->at(i)) )
 	 * 
-	 * @param name 
-	 * @param types 
+	 * @param name
+	 * @param types
 	 */
 	private boolean forAll2(String name, List<OJPathName> types) {
 		Iterator it = collectionLiteral1(name, types).iterator();
-		while ( it.hasNext() ) {
+		while (it.hasNext()) {
 			Integer i = (Integer) it.next();
-			if ( !(this.getParameters().size() > i.intValue()-1 ?((OJParameter)this.getParameters().get( i.intValue()-1 )) : null).getType().equals((types.size() > i.intValue()-1 ?((OJPathName)types.get( i.intValue()-1 )) : null)) ) {
+			if (!(this.getParameters().size() > i.intValue() - 1 ? ((OJParameter) this.getParameters().get(i.intValue() - 1)) : null).getType().equals(
+					(types.size() > i.intValue() - 1 ? ((OJPathName) types.get(i.intValue() - 1)) : null))) {
 				return false;
 			}
 		}
 		return true;
 	}
-	
-	/** Checks all invariants of this object and returns a list of messages about broken invariants
+
+	/**
+	 * Checks all invariants of this object and returns a list of messages about
+	 * broken invariants
 	 */
 	public List<InvariantError> checkAllInvariants() {
 		List<InvariantError> result = new ArrayList<InvariantError>();
 		return result;
 	}
-	
-	/** Implements a check on the multiplicities of all attributes and association ends
+
+	/**
+	 * Implements a check on the multiplicities of all attributes and
+	 * association ends
 	 */
 	public List<InvariantError> checkMultiplicities() {
 		List<InvariantError> result = new ArrayList<InvariantError>();
-		if ( getOwner() == null ) {
+		if (getOwner() == null) {
 			String message = "Mandatory feature 'owner' in object '";
 			message = message + this.getIdString();
 			message = message + "' of type '" + this.getClass().getName() + "' has no value.";
-			result.add(new InvariantError(((OJOperation)this), message));
+			result.add(new InvariantError(((OJOperation) this), message));
 		}
-		if ( getReturnType() == null ) {
+		if (getReturnType() == null) {
 			String message = "Mandatory feature 'returnType' in object '";
 			message = message + this.getIdString();
 			message = message + "' of type '" + this.getClass().getName() + "' has no value.";
-			result.add(new InvariantError(((OJOperation)this), message));
+			result.add(new InvariantError(((OJOperation) this), message));
 		}
 		return result;
 	}
-	
-	/** Returns the default identifier for OJOperation
+
+	/**
+	 * Returns the default identifier for OJOperation
 	 */
 	public String getIdString() {
 		String result = "";
 		result = super.getIdString();
 		return result;
 	}
-	
-	/** Implements the OCL allInstances operation
+
+	/**
+	 * Implements the OCL allInstances operation
 	 */
 	static public List allInstances() {
-		if ( !usesAllInstances ) {
-			throw new RuntimeException("allInstances is not implemented for ((OJOperation)this) class. Set usesAllInstances to true, if you want allInstances() implemented.");
+		if (!usesAllInstances) {
+			throw new RuntimeException(
+					"allInstances is not implemented for ((OJOperation)this) class. Set usesAllInstances to true, if you want allInstances() implemented.");
 		}
 		return allInstances;
 	}

@@ -121,6 +121,10 @@
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_0lelMBB6EeK9VbCsxPP0zw" value="1"/>
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_0ld-IBB6EeK9VbCsxPP0zw"/>
             </ownedAttribute>
+            <ownedAttribute xmi:id="__959gCJ3EeK_2-gEeTkcgw" name="gender" type="_426FoCJ3EeK_2-gEeTkcgw" association="__97LoCJ3EeK_2-gEeTkcgw">
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="__959gSJ3EeK_2-gEeTkcgw" value="1"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="__959giJ3EeK_2-gEeTkcgw" value="1"/>
+            </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Association" xmi:id="_-UTBwN4jEeGdB9TPHp60mw" name="A_&lt;human>_&lt;hand>" memberEnd="_-UTBwd4jEeGdB9TPHp60mw _-UB8AN4jEeGdB9TPHp60mw" navigableOwnedEnd="_-UTBwd4jEeGdB9TPHp60mw">
             <ownedEnd xmi:id="_-UTBwd4jEeGdB9TPHp60mw" name="human" visibility="public" type="_6R3uIN4jEeGdB9TPHp60mw" association="_-UTBwN4jEeGdB9TPHp60mw">
@@ -182,6 +186,16 @@
             <ownedAttribute xmi:id="_I3MW8BtoEeKZO-l2Budqpw" name="aquatic">
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
             </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Enumeration" xmi:id="_426FoCJ3EeK_2-gEeTkcgw" name="Gender">
+            <ownedLiteral xmi:id="_8HuWICJ3EeK_2-gEeTkcgw" name="MALE"/>
+            <ownedLiteral xmi:id="_9eeGoCJ3EeK_2-gEeTkcgw" name="FEMALE"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="__97LoCJ3EeK_2-gEeTkcgw" name="human_gender_1" memberEnd="__97LoSJ3EeK_2-gEeTkcgw __959gCJ3EeK_2-gEeTkcgw">
+            <ownedEnd xmi:id="__97LoSJ3EeK_2-gEeTkcgw" name="human" type="_6R3uIN4jEeGdB9TPHp60mw" association="__97LoCJ3EeK_2-gEeTkcgw">
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="__97LoiJ3EeK_2-gEeTkcgw" value="1"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="__97LoyJ3EeK_2-gEeTkcgw" value="1"/>
+            </ownedEnd>
           </packagedElement>
         </packagedElement>
       </packagedElement>

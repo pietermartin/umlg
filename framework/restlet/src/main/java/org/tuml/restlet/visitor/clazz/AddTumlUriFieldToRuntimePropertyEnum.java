@@ -68,8 +68,14 @@ public class AddTumlUriFieldToRuntimePropertyEnum extends BaseVisitor implements
 			uri = "\"/" + clazz.getModel().getName() + "\"";
 		} else {
 			if (clazz != null && pWrap != null) {
-				uri = "\"/" + clazz.getModel().getName() + "/" + pWrap.getOwningType().getName().toLowerCase() + "s/{"
-						+ pWrap.getOwningType().getName().toLowerCase() + "Id}/" + literal.getName() + "\"";
+//				if (pWrap.isOne() && !pWrap.isDataType()) {
+//					PropertyWrapper otherEnd = new PropertyWrapper(pWrap.getOtherEnd());
+//					uri = "\"/" + clazz.getModel().getName() + "/" + otherEnd.getOwningType().getName().toLowerCase() + "/{"
+//							+ otherEnd.getOwningType().getName().toLowerCase() + "Id}\"";
+//				} else {
+					uri = "\"/" + clazz.getModel().getName() + "/" + pWrap.getOwningType().getName().toLowerCase() + "s/{"
+							+ pWrap.getOwningType().getName().toLowerCase() + "Id}/" + literal.getName() + "\"";
+//				}
 			} else {
 				uri = "\"\"";
 			}

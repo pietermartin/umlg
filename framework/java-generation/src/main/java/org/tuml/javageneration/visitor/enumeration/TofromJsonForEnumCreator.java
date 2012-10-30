@@ -29,6 +29,7 @@ public class TofromJsonForEnumCreator extends BaseVisitor implements Visitor<Enu
 		ifS.addToElsePart("return " + annotatedClass.getPathName().getLast() + ".valueOf(json)");
 		fromJson.getBody().addToStatements(ifS);
 		annotatedClass.addToOperations(fromJson);
+		
 	}
 
 	@Override

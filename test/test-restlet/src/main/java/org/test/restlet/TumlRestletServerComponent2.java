@@ -17,6 +17,7 @@ import org.tuml.runtime.adaptor.NakedGraph;
 import org.tuml.runtime.adaptor.NakedGraphFactory;
 import org.tuml.test.Alien;
 import org.tuml.test.Finger;
+import org.tuml.test.Gender;
 import org.tuml.test.Hand;
 import org.tuml.test.Human;
 import org.tuml.test.Ring;
@@ -25,12 +26,12 @@ import org.tuml.test.TerrestialCraft;
 
 import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 
-public class TumlRestletServerComponent extends Component {
+public class TumlRestletServerComponent2 extends Component {
 	public static void main(String[] args) throws Exception {
-		new TumlRestletServerComponent().start();
+		new TumlRestletServerComponent2().start();
 	}
 
-	public TumlRestletServerComponent() {
+	public TumlRestletServerComponent2() {
 
 		GraphDb.setDb(createNakedGraph());
 		createDefaultData();
@@ -50,7 +51,7 @@ public class TumlRestletServerComponent extends Component {
 		getServers().add(server);
 
 		// Attach the application to the default virtual host
-		getDefaultHost().attach("/restAndJson", new TumlRestletServerApplication());
+		getDefaultHost().attach("/restAndJson", new TumlRestletServerApplication2());
 	}
 
 	private void createDefaultData() {
@@ -59,6 +60,7 @@ public class TumlRestletServerComponent extends Component {
 			Human human = new Human(true);
 			human.setName("human1" + i);
 			human.setName2("human2" + i);
+			human.setGender(Gender.MALE);
 
 			for (int j = 0; j < 2; j++) {
 				Hand hand = new Hand(human);

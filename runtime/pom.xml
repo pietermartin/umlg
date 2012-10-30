@@ -17,5 +17,6 @@
     <module>runtime-jquery</module>
     <module>runtime-groovy</module>
     <module>runtime-uml</module>
+    <module>runtime-restlet</module>
 	</modules>
 </project>

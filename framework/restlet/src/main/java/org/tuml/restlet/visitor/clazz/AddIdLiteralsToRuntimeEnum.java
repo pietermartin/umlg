@@ -33,7 +33,7 @@ public class AddIdLiteralsToRuntimeEnum extends BaseVisitor implements Visitor<C
 
 	private void addField(OJAnnotatedClass annotatedClass, OJEnum ojEnum, String fieldName) {
 		OJAnnotatedOperation fromLabel = ojEnum.findOperation("fromLabel", new OJPathName("String"));
-		RuntimePropertyImplementor.addEnumLiteral(ojEnum, fromLabel, fieldName, true, null, Collections.<Validation> emptyList(), false, false, false, false, false, false, true,
+		RuntimePropertyImplementor.addEnumLiteral(ojEnum, fromLabel, fieldName, "not_applicable", true, null, Collections.<Validation> emptyList(), false, false, false, false, false, false, true,
 				false, false, 1, 1, false, false, false, false, true, "");
 	}
 

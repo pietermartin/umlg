@@ -25,7 +25,7 @@
 	}
 
 	function TumlDeleteFormatter(row, cell, value, columnDef, dataContext) {
-        return "<img src='/restAndJson/javascript/images/delete.png'>";
+        return "<img class='tuml-delete-img' src='/restAndJson/javascript/images/delete.png'>";
 	}
     
 

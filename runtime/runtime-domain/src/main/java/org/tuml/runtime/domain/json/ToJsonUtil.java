@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.tuml.runtime.domain.PersistentObject;
+import org.tuml.runtime.domain.TumlEnum;
 import org.tuml.runtime.domain.TumlNode;
 
 public class ToJsonUtil {
@@ -37,6 +38,23 @@ public class ToJsonUtil {
 	
 	public static void main(String[] args) {
 		System.out.println("restAndJson/humans/{humanId}".replaceAll("\\{(\\s*?.*?)*?\\}", String.valueOf(5)));
+	}
+
+	public static String enumsToJson(Collection<? extends TumlEnum> enums) {
+		StringBuilder json = new StringBuilder();
+		if (enums != null) {
+			int count = 0;
+			for (TumlEnum p : enums) {
+				count++;
+				json.append("\"");
+				json.append(p.toJson());
+				json.append("\"");
+				if (count != enums.size()) {
+					json.append(",");
+				}
+			}
+		}
+		return json.toString();
 	}
 
 	public static String toJson(Collection<? extends PersistentObject> entities) {
@@ -85,7 +103,7 @@ public class ToJsonUtil {
 			json.append(entity.toJsonWithoutCompositeParent());
 			return json.toString();
 		} else {
-			return "";
+			return "null";
 		}
 	}
 }
