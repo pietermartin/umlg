@@ -2,7 +2,6 @@ package org.nakeuml.tinker.mvel;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -63,19 +62,6 @@ public class TestMvel extends BaseLocalDbTest {
 		MVEL.executeExpression(compiled, g, map);
 		Assert.assertEquals(Integer.valueOf(3), map.get("nameSize"));
 
-	}
-
-	@Test
-	public void testProjectionUsingThis() {
-		db.startTransaction();
-		Set records = new HashSet();
-		for (int i = 0; i < 5; i++) {
-			God record = new God(true);
-			records.add(record);
-		}
-		db.stopTransaction(Conclusion.SUCCESS);
-		Object result = MVEL.executeExpression("(_prop in this)", records);
-		System.out.println("result: " + result);
 	}
 
 }

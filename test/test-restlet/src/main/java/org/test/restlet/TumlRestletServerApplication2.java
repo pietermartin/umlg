@@ -7,6 +7,7 @@ import org.restlet.resource.Directory;
 import org.restlet.routing.Router;
 import org.restlet.routing.Template;
 import org.tuml.runtime.restlet.EnumerationLookUp_ServerResourceImpl;
+import org.tuml.runtime.restlet.OclExecution_ServerResourceImpl;
 import org.tuml.ui.TumlGuiServerResource2;
 
 public class TumlRestletServerApplication2 extends Application {
@@ -29,6 +30,7 @@ public class TumlRestletServerApplication2 extends Application {
 		restlet.RestletRouterEnum.attachAll(router);
 		router.attach("/ui2", TumlGuiServerResource2.class, Template.MODE_STARTS_WITH);
 		router.attach("/tumlEnumLookup", EnumerationLookUp_ServerResourceImpl.class, Template.MODE_STARTS_WITH);
+		router.attach("/oclExecution/{contextId}", OclExecution_ServerResourceImpl.class, Template.MODE_STARTS_WITH);
 		
 		//This will load everthing under /src/main/javascript/javascript. The second javascript matches the route so the url looks good
         Directory slickgrid = new Directory(getContext(), "clap://class/javascript");

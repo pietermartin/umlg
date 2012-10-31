@@ -259,4 +259,10 @@ public class CollectionObjectToken<O> extends ObjectToken<O> implements Composit
 		return null;
 	}
 
+	@Override
+	public String getQualifiedName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

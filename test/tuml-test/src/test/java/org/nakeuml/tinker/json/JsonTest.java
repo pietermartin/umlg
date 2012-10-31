@@ -193,6 +193,7 @@ public class JsonTest extends BaseLocalDbTest {
 		quadped1.setName("quadped1");
 		db.stopTransaction(Conclusion.SUCCESS);
 		
+		System.out.println(quadped1.toJson());
 		ObjectMapper objectMapper = new ObjectMapper();
 		@SuppressWarnings("unchecked")
 		Map<String, Object> jsonMap = objectMapper.readValue(quadped1.toJson(), Map.class);

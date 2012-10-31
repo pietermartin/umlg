@@ -27,11 +27,12 @@ public class RootEntryPointBuilder extends BaseVisitor implements Visitor<Class>
 	}
 
 	private void addGetterToAppRootForRootEntity(Class clazz, OJAnnotatedClass root) {
-		OJAnnotatedOperation getter = new OJAnnotatedOperation("get" + TumlClassOperations.className(clazz), new OJPathName("java.util.List").addToGenerics(TumlClassOperations
-				.getPathName(clazz)));
+		OJAnnotatedOperation getter = new OJAnnotatedOperation("get" + TumlClassOperations.className(clazz),
+				TinkerGenerationUtil.tinkerSequence.getCopy().addToGenerics(TumlClassOperations.getPathName(clazz)));
 		root.addToOperations(getter);
-		OJField result = new OJField("result", new OJPathName("java.util.List").addToGenerics(TumlClassOperations.getPathName(clazz)));
-		result.setInitExp("new ArrayList<" + TumlClassOperations.getPathName(clazz).getLast() + ">()");
+		OJField result = new OJField("result", TinkerGenerationUtil.tinkerSequence.getCopy().addToGenerics(TumlClassOperations.getPathName(clazz)));
+		result.setInitExp("new " + TinkerGenerationUtil.tumlMemorySequence.getCopy().getLast() + "<" + TumlClassOperations.getPathName(clazz).getLast() + ">()");
+		root.addToImports(TinkerGenerationUtil.tumlMemorySequence);
 		root.addToImports(new OJPathName("java.util.ArrayList"));
 		getter.getBody().addToLocals(result);
 		OJField iter = new OJField("iter", new OJPathName("java.util.Iterator").addToGenerics(TinkerGenerationUtil.edgePathName));

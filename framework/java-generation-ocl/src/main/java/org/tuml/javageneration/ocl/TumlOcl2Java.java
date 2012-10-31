@@ -27,7 +27,7 @@ public class TumlOcl2Java {
 		if (returnType instanceof CollectionType) {
 			CollectionType collectionType = (CollectionType)returnType; 
 			TumlCollectionKindEnum tumlCollectionKindEnum = TumlCollectionKindEnum.from(returnType);
-			OJPathName collectionPathName = tumlCollectionKindEnum.getOjPathName();
+			OJPathName collectionPathName = tumlCollectionKindEnum.getOjPathName().getCopy();
 			Classifier c = collectionType.getElementType();
 			collectionPathName.addToGenerics(TumlClassOperations.getPathName(c));
 			return collectionPathName;

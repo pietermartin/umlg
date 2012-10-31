@@ -281,7 +281,8 @@ public class Tuml2JavaVisitor extends
 
 	@Override
 	public String visitTypeExp(TypeExp<Classifier> t) {
-		return getQualifiedName(t.getReferredType());
+//		return getQualifiedName(t.getReferredType());
+		return getName(t.getReferredType());
 	}
 
 	@Override

@@ -23,6 +23,42 @@ import org.tuml.runtime.domain.json.ToJsonUtil;
 
 public class TumlOclExecutor {
 
+	/**
+	 * This is for static ocl, including allInstances
+	 * @param contextQualifiedName
+	 * @param query
+	 * @return
+	 */
+	public static Object executeOclQuery(String contextQualifiedName, String query) {
+		Classifier contextClassifier = (Classifier) ModelLoader.findNamedElement(contextQualifiedName);
+		OJAnnotatedClass oclClass = new OJAnnotatedClass("OclQuery");
+		oclClass.setSuperclass(TumlClassOperations.getPathName(contextClassifier));
+		OJPackage ojPackage = new OJPackage(Namer.name(contextClassifier.getNearestPackage()));
+		oclClass.setMyPackage(ojPackage);
+		OJConstructor constructor = new OJConstructor();
+		constructor.addParam("vertex", TinkerGenerationUtil.vertexPathName);
+		constructor.getBody().addToStatements("super(vertex)");
+		oclClass.addToConstructors(constructor);
+
+		StopWatch stopWatch = new StopWatch();
+		stopWatch.start();
+		TumlOcl2Parser.INSTANCE.getHelper().setContext(contextClassifier);
+		try {
+			OCLExpression<Classifier> expr = TumlOcl2Parser.INSTANCE.getHelper().createQuery(query);
+			OJAnnotatedOperation getter = new OJAnnotatedOperation("execute");
+			getter.setStatic(true);
+			getter.setReturnType(TumlOcl2Java.calcReturnType(expr));
+			getter.getBody().addToStatements(getter.getReturnType().getLast() + " result = " + TumlOcl2Java.oclToJava(oclClass, expr));
+			getter.getBody().addToStatements("return result");
+			oclClass.addToOperations(getter);
+		} catch (ParserException e) {
+			throw new RuntimeException(e);
+		}
+		String javaString = oclClass.toJavaString();
+		Object result = TumlGroovyShell.executeQuery(javaString);
+		return result;
+	}
+
 	public static Object executeOclQuery(String contextQualifiedName, TumlNode contextTumlNode, String query) {
 		Classifier contextClassifier = (Classifier) ModelLoader.findNamedElement(contextQualifiedName);
 		OJAnnotatedClass oclClass = new OJAnnotatedClass("OclQuery");
@@ -57,7 +93,6 @@ public class TumlOclExecutor {
 		Object result = executeOclQuery(contextQualifiedName, contextTumlNode, query);
 		if (result instanceof Map) {
 			return tupleMapToJson((Map<String, Object>) result);
-			// return "//TODO executeOclQueryToJson";
 		} else if (result instanceof Collection) {
 			return ToJsonUtil.toJsonWithoutCompositeParent((Collection<? extends PersistentObject>) result);
 		} else if (result instanceof PersistentObject) {

@@ -67,7 +67,7 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
 		annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
 		TinkerGenerationUtil.addOverrideAnnotation(put);
 		put.getBody().addToStatements(
-				"this." + getIdFieldName(clazz) + "= Integer.parseInt((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"));");
+				"this." + getIdFieldName(clazz) + "= Integer.parseInt((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"))");
 		put.getBody().addToStatements(
 				TumlClassOperations.className(clazz) + " c = new " + TumlClassOperations.className(clazz) + "(GraphDb.getDb().getVertex(this."
 						+ getIdFieldName(clazz) + "))");
@@ -99,7 +99,7 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
 		annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
 		TinkerGenerationUtil.addOverrideAnnotation(get);
 		get.getBody().addToStatements(
-				"this." + getIdFieldName(clazz) + "= Integer.parseInt((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"));");
+				"this." + getIdFieldName(clazz) + "= Integer.parseInt((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"))");
 		get.getBody().addToStatements(
 				TumlClassOperations.className(clazz) + " c = new " + TumlClassOperations.className(clazz) + "(GraphDb.getDb().getVertex(this."
 						+ getIdFieldName(clazz) + "))");

@@ -128,5 +128,11 @@ public class SignalEvent extends Event {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public String getQualifiedName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }

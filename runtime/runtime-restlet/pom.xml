@@ -35,5 +35,10 @@
 			<artifactId>runtime-domain</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>org.tuml</groupId>
+			<artifactId>runtime-uml</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 </project>

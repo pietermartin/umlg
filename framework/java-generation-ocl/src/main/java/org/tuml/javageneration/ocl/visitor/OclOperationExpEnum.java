@@ -8,6 +8,7 @@ import org.eclipse.ocl.utilities.PredefinedType;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Operation;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
+import org.tuml.javageneration.ocl.visitor.tojava.OclAllInstancesExprToJava;
 import org.tuml.javageneration.ocl.visitor.tojava.OclAsBagExprToJava;
 import org.tuml.javageneration.ocl.visitor.tojava.OclAsOrderedSetExprToJava;
 import org.tuml.javageneration.ocl.visitor.tojava.OclAsSequenceExprToJava;
@@ -29,7 +30,7 @@ import org.tuml.javageneration.ocl.visitor.tojava.OclUnionExprToJava;
 
 public enum OclOperationExpEnum implements HandleOperationExp {
 
-	UNION(new OclUnionExprToJava()), IS_EMPTY(new OclIsEmptyExprToJava()), OCL_IS_UNDEFINED(new OclOclIsUndefinedExpToJava()), OCL_IS_INVALID(
+	ALL_INSTANCES(new OclAllInstancesExprToJava()), UNION(new OclUnionExprToJava()), IS_EMPTY(new OclIsEmptyExprToJava()), OCL_IS_UNDEFINED(new OclOclIsUndefinedExpToJava()), OCL_IS_INVALID(
 			new OclOclIsInvalidExpToJava()), INCLUDING(new OclIncludingExprToJava()), TO_STRING(new OclToStringExprToJava()), FIRST(new OclFirstExprToJava()), MINUS(
 			new OclMinusExprToJava()), EQUAL(new OclEqualExprToJava()), SIZE(new OclSizeExprToJava()), NOT_EQUAL(new OclNotEqualExprToJava()), AS_SET(
 			new OclAsSetExprToJava()), AS_SEQUENCE(new OclAsSequenceExprToJava()), AS_ORDERED_SET(new OclAsOrderedSetExprToJava()), AS_BAG(
@@ -45,6 +46,8 @@ public enum OclOperationExpEnum implements HandleOperationExp {
 	public static OclOperationExpEnum from(String name) {
 		if (name.equals(PredefinedType.EQUAL_NAME)) {
 			return EQUAL;
+		} else if (name.equals(PredefinedType.ALL_INSTANCES_NAME)) {
+			return ALL_INSTANCES;
 		} else if (name.equals(PredefinedType.NOT_EQUAL_NAME)) {
 			return NOT_EQUAL;
 		} else if (name.equals(PredefinedType.AS_SET_NAME)) {

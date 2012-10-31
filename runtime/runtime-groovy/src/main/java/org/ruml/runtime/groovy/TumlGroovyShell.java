@@ -19,11 +19,24 @@ public class TumlGroovyShell {
 		
 	}
 	
-	public static Object executeQuery(String query, Vertex v) {
+	public static Object executeQuery(String javaClassAsString, Vertex v) {
 		Binding binding = new Binding();
 		binding.setVariable("v", v);
 		GroovyShell shell = new GroovyShell(binding);
-		Object value = shell.evaluate(query + "; def oclQuery = new OclQuery(v); return oclQuery.execute();");
+		Object value = shell.evaluate(javaClassAsString + "; def oclQuery = new OclQuery(v); return oclQuery.execute();");
 		return value;
 	}
+	
+	/**
+	 * This is for static ocl, i.e. allInstances
+	 * @param javaClassAsString
+	 * @return
+	 */
+	public static Object executeQuery(String javaClassAsString) {
+		Binding binding = new Binding();
+		GroovyShell shell = new GroovyShell(binding);
+		Object value = shell.evaluate(javaClassAsString + "; def oclQuery = new OclQuery(); return oclQuery.execute();");
+		return value;
+	}
+
 }

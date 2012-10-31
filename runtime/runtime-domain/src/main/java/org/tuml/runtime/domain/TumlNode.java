@@ -10,7 +10,7 @@ import org.tuml.runtime.validation.TumlConstraintViolation;
 
 import com.tinkerpop.blueprints.Vertex;
 
-public interface TumlNode extends OclAny, PersistentObject {
+public interface TumlNode extends TumlEnum, OclAny, PersistentObject {
 	Vertex getVertex();
 	boolean isTinkerRoot();
 	void initialiseProperties();

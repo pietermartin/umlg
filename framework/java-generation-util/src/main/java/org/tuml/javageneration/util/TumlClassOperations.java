@@ -114,11 +114,29 @@ public class TumlClassOperations extends ClassOperations {
 		Set<Association> associations = getAllAssociations(clazz);
 		for (Association association : associations) {
 			List<Property> memberEnds = association.getMemberEnds();
-			for (Property property : memberEnds) {
-				if (!isSpecializationOf(clazz, property.getType())) {
-					result.add(property);
-				}
+			Property memberEnd1 = memberEnds.get(0); 
+			Property memberEnd2 = memberEnds.get(1);
+			
+			//This is for the case of hierarchies, i.e association to itself
+			if (isSpecializationOf(clazz, memberEnd1.getType()) && isSpecializationOf(clazz, memberEnd2.getType())) {
+				result.add(memberEnd1);
+				result.add(memberEnd2);
 			}
+			//This is to prevent getting the near side of an association
+			if (!isSpecializationOf(clazz, memberEnd1.getType())) {
+				result.add(memberEnd1);
+			}
+			//This is to prevent getting the near side of an association
+			if (!isSpecializationOf(clazz, memberEnd2.getType())) {
+				result.add(memberEnd2);
+			}
+			
+			
+//			for (Property property : memberEnds) {
+//				if (!isSpecializationOf(clazz, property.getType())) {
+//					result.add(property);
+//				} 
+//			}
 		}
 		result.addAll(getPropertiesOnRealizedInterfaces(clazz));
 		return result;
@@ -223,9 +241,34 @@ public class TumlClassOperations extends ClassOperations {
 			Classifier specific = generalization.getSpecific();
 			getConcreteImplementations(result, specific);
 		}
-		
 	}
 
+	private static void getSpecializations(Set<Classifier> result, Classifier clazz) {
+		result.add(clazz);
+		List<Generalization> generalizations = ModelLoader.getSpecifics(clazz);
+		for (Generalization generalization : generalizations) {
+			Classifier specific = generalization.getSpecific();
+			getSpecializations(result, specific);
+		}
+	}
+	
+	public static Set<Class> getSpecializationWithCompositeOwner(Classifier clazz) {
+		Set<Class> result = new HashSet<Class>();
+		Set<Classifier> specializations = getSpecializations(clazz);
+		for (Classifier c : specializations) {
+			if (c instanceof Class && hasCompositeOwner((Class) c)) {
+				result.add((Class) c);
+			}
+		}
+		return result;
+	}
+	
+	public static Set<Classifier> getSpecializations(Classifier clazz) {
+		Set<Classifier> result = new HashSet<Classifier>();
+		getSpecializations(result, clazz);
+		return result;
+	}
+	
 	public static Set<Classifier> getConcreteImplementations(Classifier clazz) {
 		Set<Classifier> result = new HashSet<Classifier>();
 		getConcreteImplementations(result, clazz);

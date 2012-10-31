@@ -18,6 +18,7 @@ import org.tuml.generation.Workspace;
 import org.tuml.javageneration.util.PropertyWrapper;
 import org.tuml.javageneration.util.TumlClassOperations;
 import org.tuml.javageneration.visitor.BaseVisitor;
+import org.tuml.javageneration.visitor.clazz.ToFromJsonCreator;
 
 public class AddTumlUriFieldToRuntimePropertyEnum extends BaseVisitor implements Visitor<Class> {
 
@@ -68,14 +69,8 @@ public class AddTumlUriFieldToRuntimePropertyEnum extends BaseVisitor implements
 			uri = "\"/" + clazz.getModel().getName() + "\"";
 		} else {
 			if (clazz != null && pWrap != null) {
-//				if (pWrap.isOne() && !pWrap.isDataType()) {
-//					PropertyWrapper otherEnd = new PropertyWrapper(pWrap.getOtherEnd());
-//					uri = "\"/" + clazz.getModel().getName() + "/" + otherEnd.getOwningType().getName().toLowerCase() + "/{"
-//							+ otherEnd.getOwningType().getName().toLowerCase() + "Id}\"";
-//				} else {
-					uri = "\"/" + clazz.getModel().getName() + "/" + pWrap.getOwningType().getName().toLowerCase() + "s/{"
-							+ pWrap.getOwningType().getName().toLowerCase() + "Id}/" + literal.getName() + "\"";
-//				}
+				uri = "\"/" + clazz.getModel().getName() + "/" + pWrap.getOwningType().getName().toLowerCase() + "s/{"
+						+ pWrap.getOwningType().getName().toLowerCase() + "Id}/" + literal.getName() + "\"";
 			} else {
 				uri = "\"\"";
 			}
@@ -99,7 +94,7 @@ public class AddTumlUriFieldToRuntimePropertyEnum extends BaseVisitor implements
 	private void addUriToToJson(Class clazz, OJAnnotatedClass annotatedClass) {
 		if (clazz.getGeneralizations().isEmpty()) {
 			OJAnnotatedOperation toJson = annotatedClass.findOperation("toJson");
-			OJSimpleStatement s = (OJSimpleStatement) toJson.getBody().findStatement("uri");
+			OJSimpleStatement s = (OJSimpleStatement) toJson.getBody().findStatement(ToFromJsonCreator.URI_FOR_RESTFULL);
 			s.setExpression("sb.append(\"\\\"uri\\\": \" + getUri())");
 			OJAnnotatedOperation toJsonWithoutCompositeParent = annotatedClass.findOperation("toJsonWithoutCompositeParent");
 			s = (OJSimpleStatement) toJsonWithoutCompositeParent.getBody().findStatement("uri");

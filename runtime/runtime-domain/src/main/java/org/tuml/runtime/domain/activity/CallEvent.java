@@ -101,4 +101,10 @@ public class CallEvent extends Event {
 		return null;
 	}
 
+	@Override
+	public String getQualifiedName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

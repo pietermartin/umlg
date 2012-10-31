@@ -25,6 +25,8 @@ import org.tuml.javageneration.visitor.BaseVisitor;
 
 public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 
+	public static final String URI_FOR_RESTFULL = "uri";
+
 	public ToFromJsonCreator(Workspace workspace) {
 		super(workspace);
 	}
@@ -52,7 +54,9 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 			toJson.getBody().addToStatements("String result = super." + operationName + "()");
 			toJson.getBody().addToStatements("result = result.substring(1, result.length() - 1)");
 			toJson.getBody().addToStatements("StringBuilder sb = new StringBuilder(result)");
-			toJson.getBody().addToStatements("sb.append(\", \")");
+			if (!propertiesForToJson.isEmpty()) {
+				toJson.getBody().addToStatements("sb.append(\", \")");
+			}
 		}
 		int count = 1;
 		for (Property p : propertiesForToJson) {
@@ -117,7 +121,7 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 		}
 		if (clazz.getGenerals().isEmpty()) {
 			toJson.getBody().addToStatements("sb.append(\", \")");
-			toJson.getBody().addToStatements("uri", "//PlaceHolder for restfull");
+			toJson.getBody().addToStatements(URI_FOR_RESTFULL, "//PlaceHolder for restfull\nsb.append(\"\\\"uri\\\": {}\")");
 		}
 		toJson.getBody().addToStatements("sb.insert(0, \"{\")");
 		toJson.getBody().addToStatements("sb.append(\"}\")");

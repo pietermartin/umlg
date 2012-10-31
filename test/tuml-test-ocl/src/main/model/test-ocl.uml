@@ -267,6 +267,10 @@
               <body>self.bank.employee->asSequence()->first()</body>
             </defaultValue>
           </ownedAttribute>
+          <ownedAttribute xmi:id="_Q45fYCLCEeK_2-gEeTkcgw" name="depth1" type="_Gg5w0CLCEeK_2-gEeTkcgw" aggregation="composite" association="_Q46GcCLCEeK_2-gEeTkcgw">
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Q45fYSLCEeK_2-gEeTkcgw" value="*"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Q45fYiLCEeK_2-gEeTkcgw"/>
+          </ownedAttribute>
         </packagedElement>
         <packagedElement xmi:type="uml:Association" xmi:id="_UvyXEM5wEeG36cJ3v-Rmsg" name="A_&lt;bank>_&lt;customer>" memberEnd="_UvyXEc5wEeG36cJ3v-Rmsg _Uvp0MM5wEeG36cJ3v-Rmsg" navigableOwnedEnd="_UvyXEc5wEeG36cJ3v-Rmsg">
           <ownedEnd xmi:id="_UvyXEc5wEeG36cJ3v-Rmsg" name="bank" visibility="public" type="_A-1VEM5wEeG36cJ3v-Rmsg" association="_UvyXEM5wEeG36cJ3v-Rmsg">
@@ -283,6 +287,32 @@
           <ownedEnd xmi:id="_efWSMc6oEeGvubEk1n1G9w" name="bank" visibility="public" type="_A-1VEM5wEeG36cJ3v-Rmsg" association="_efWSMM6oEeGvubEk1n1G9w">
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_efWSMs6oEeGvubEk1n1G9w" value="1"/>
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_efWSM86oEeGvubEk1n1G9w" value="1"/>
+          </ownedEnd>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Class" xmi:id="_Gg5w0CLCEeK_2-gEeTkcgw" name="Depth1">
+          <ownedAttribute xmi:id="_KkwAwCLCEeK_2-gEeTkcgw" name="name">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+          </ownedAttribute>
+          <ownedAttribute xmi:id="_RRT_YCLCEeK_2-gEeTkcgw" name="depth2" type="_IfF70CLCEeK_2-gEeTkcgw" aggregation="composite" association="_RRUmcCLCEeK_2-gEeTkcgw">
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_RRT_YSLCEeK_2-gEeTkcgw" value="*"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_RRT_YiLCEeK_2-gEeTkcgw"/>
+          </ownedAttribute>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Class" xmi:id="_IfF70CLCEeK_2-gEeTkcgw" name="Depth2">
+          <ownedAttribute xmi:id="_Nktx0CLCEeK_2-gEeTkcgw" name="name">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+          </ownedAttribute>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Association" xmi:id="_Q46GcCLCEeK_2-gEeTkcgw" name="customer_depth1_1" memberEnd="_Q46GcSLCEeK_2-gEeTkcgw _Q45fYCLCEeK_2-gEeTkcgw" navigableOwnedEnd="_Q46GcSLCEeK_2-gEeTkcgw">
+          <ownedEnd xmi:id="_Q46GcSLCEeK_2-gEeTkcgw" name="customer" type="_BrVOsM5wEeG36cJ3v-Rmsg" association="_Q46GcCLCEeK_2-gEeTkcgw">
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Q46GciLCEeK_2-gEeTkcgw" value="1"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Q46GcyLCEeK_2-gEeTkcgw" value="1"/>
+          </ownedEnd>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Association" xmi:id="_RRUmcCLCEeK_2-gEeTkcgw" name="depth1_depth2_1" memberEnd="_RRUmcSLCEeK_2-gEeTkcgw _RRT_YCLCEeK_2-gEeTkcgw" navigableOwnedEnd="_RRUmcSLCEeK_2-gEeTkcgw">
+          <ownedEnd xmi:id="_RRUmcSLCEeK_2-gEeTkcgw" name="depth1" type="_Gg5w0CLCEeK_2-gEeTkcgw" association="_RRUmcCLCEeK_2-gEeTkcgw">
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_RRUmciLCEeK_2-gEeTkcgw" value="1"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_RRUmcyLCEeK_2-gEeTkcgw" value="1"/>
           </ownedEnd>
         </packagedElement>
       </packagedElement>
