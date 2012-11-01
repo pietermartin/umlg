@@ -33,10 +33,10 @@ public class TumlOperationOperations extends OperationOperations {
 			if (TumlMultiplicityOperations.isMany(returnResult)) {
 				sb.append(TinkerGenerationUtil.getCollectionInterface(returnResult));
 				sb.append("(");
-				sb.append(returnResult.getType().getName());
+				sb.append(returnResult.getType().getQualifiedName());
 				sb.append(")");
 			} else {
-				sb.append(returnResult.getType().getName());
+				sb.append(returnResult.getType().getQualifiedName());
 			}
 		}
 		return sb.toString();

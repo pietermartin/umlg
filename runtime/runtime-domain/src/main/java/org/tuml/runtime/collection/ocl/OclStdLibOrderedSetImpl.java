@@ -94,7 +94,10 @@ public class OclStdLibOrderedSetImpl<E> extends OclStdLibCollectionImpl<E> imple
 	public <R> TinkerBag<R> collectNested(BodyExpressionEvaluator<R, E> v) {
 		Multiset<R> result = HashMultiset.create();
 		for (Object e : this.orderedSet) {
-			result.add(v.evaluate((E)e));
+			R evaluate = v.evaluate((E)e);
+			if (evaluate != null) {
+				result.add(evaluate);
+			}
 		}
 		return new OclStdLibBagImpl<R>(result);
 	}

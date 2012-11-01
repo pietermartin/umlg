@@ -1,43 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<uml:Model xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xmi:id="_mdTDQCM2EeK-Trh8Ll0qUQ" name="tumlLib">
+<uml:Model xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xmi:id="_mdTDQCM2EeK-Trh8Ll0qUQ" name="tumllib">
   <packageImport xmi:id="_LYfHMCM4EeK-Trh8Ll0qUQ">
     <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
   </packageImport>
   <packagedElement xmi:type="uml:Package" xmi:id="_YOjv0CM6EeK-Trh8Ll0qUQ" name="org">
     <packagedElement xmi:type="uml:Package" xmi:id="_bdslUCM6EeK-Trh8Ll0qUQ" name="tuml">
       <packagedElement xmi:type="uml:Package" xmi:id="_fEtIQCM6EeK-Trh8Ll0qUQ" name="hierarchy">
-        <packagedElement xmi:type="uml:Class" xmi:id="_txpvwCM4EeK-Trh8Ll0qUQ" clientDependency="_wwjJ0CM4EeK-Trh8Ll0qUQ" name="AbstractHierarchy" isAbstract="true">
-          <ownedAttribute xmi:id="_aOr-ECNGEeKFBpkLESs_WA" name="name" visibility="public">
-            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
-            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_afZ6oCNGEeKFBpkLESs_WA" value="1"/>
-            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_afbIwCNGEeKFBpkLESs_WA" value="1"/>
-            <defaultValue xmi:type="uml:LiteralString" xmi:id="_afcW4CNGEeKFBpkLESs_WA">
-              <value xsi:nil="true"/>
-            </defaultValue>
-          </ownedAttribute>
-          <interfaceRealization xmi:id="_wwjJ0CM4EeK-Trh8Ll0qUQ" name="InterfaceRealization1" client="_txpvwCM4EeK-Trh8Ll0qUQ" supplier="_o0lDsCM2EeK-Trh8Ll0qUQ" contract="_o0lDsCM2EeK-Trh8Ll0qUQ"/>
-          <ownedOperation xmi:id="_07Q2wCM4EeK-Trh8Ll0qUQ" name="getChildren" bodyCondition="_t45KwCM5EeK-Trh8Ll0qUQ" isQuery="true">
-            <ownedRule xmi:id="_t45KwCM5EeK-Trh8Ll0qUQ" name="getChildrenConstraint">
-              <specification xmi:type="uml:OpaqueExpression" xmi:id="_3zz7wCM5EeK-Trh8Ll0qUQ" name="getChildrenOpaqueExpression">
-                <body>Set{}->union(self.childFolder)</body>
-              </specification>
-            </ownedRule>
-            <ownedParameter xmi:id="_5MGZ0CM4EeK-Trh8Ll0qUQ" name="getChildernResult" type="_o0lDsCM2EeK-Trh8Ll0qUQ" direction="return">
-              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="__wzc8CM4EeK-Trh8Ll0qUQ"/>
-              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="__wzc8SM4EeK-Trh8Ll0qUQ" value="*"/>
-            </ownedParameter>
-          </ownedOperation>
-        </packagedElement>
+        <ownedComment xmi:id="_Gky2ACP5EeKOmc56p_1Osg">
+          <body>ocl for getAllChildren()
+self.getChildren()->iterate(iter : tumllib::org::tuml::hierarchy::Hierarchy; acc : Set(tumllib::org::tuml::hierarchy::Hierarchy) = Set{} | acc->including(iter)->union(iter.getAllChildren()))</body>
+        </ownedComment>
         <packagedElement xmi:type="uml:Interface" xmi:id="_o0lDsCM2EeK-Trh8Ll0qUQ" name="Hierarchy">
-          <ownedOperation xmi:id="_7wF2ACM3EeK-Trh8Ll0qUQ" name="getParent">
+          <ownedOperation xmi:id="_7wF2ACM3EeK-Trh8Ll0qUQ" name="getParent" isQuery="true">
             <ownedParameter xmi:id="_EJX1ICM4EeK-Trh8Ll0qUQ" name="getParentResult" type="_o0lDsCM2EeK-Trh8Ll0qUQ" direction="return"/>
           </ownedOperation>
-          <ownedOperation xmi:id="_87AJ8CM3EeK-Trh8Ll0qUQ" name="getChildren">
-            <ownedParameter xmi:id="_HUK9MCM4EeK-Trh8Ll0qUQ" name="getChildrenResult" type="_o0lDsCM2EeK-Trh8Ll0qUQ" direction="return"/>
+          <ownedOperation xmi:id="_87AJ8CM3EeK-Trh8Ll0qUQ" name="getChildren" isQuery="true">
+            <ownedParameter xmi:id="_HUK9MCM4EeK-Trh8Ll0qUQ" name="getChildrenResult" type="_o0lDsCM2EeK-Trh8Ll0qUQ" direction="return">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Td_g0CNbEeKXA8fV9fB29w"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Td_g0SNbEeKXA8fV9fB29w" value="*"/>
+            </ownedParameter>
           </ownedOperation>
           <ownedOperation xmi:id="_9_-N8CM3EeK-Trh8Ll0qUQ" name="isRoot" isQuery="true">
             <ownedParameter xmi:id="_I5swkCM4EeK-Trh8Ll0qUQ" name="isRootResult" direction="return">
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
+            </ownedParameter>
+          </ownedOperation>
+          <ownedOperation xmi:id="_fwD6sCPwEeKOmc56p_1Osg" name="getAllChildren" isQuery="true">
+            <ownedParameter xmi:id="_nNShQCPwEeKOmc56p_1Osg" name="allChildrenReturnParam" type="_o0lDsCM2EeK-Trh8Ll0qUQ" direction="return">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_TRAp8CP5EeKOmc56p_1Osg"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_TRBRACP5EeKOmc56p_1Osg" value="*"/>
             </ownedParameter>
           </ownedOperation>
         </packagedElement>

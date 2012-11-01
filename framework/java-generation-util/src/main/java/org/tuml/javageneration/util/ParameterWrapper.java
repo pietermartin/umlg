@@ -456,4 +456,10 @@ public class ParameterWrapper extends MultiplicityWrapper implements Parameter {
 		
 	}
 
+	@Override
+	public void setRealDefaultValue(double arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

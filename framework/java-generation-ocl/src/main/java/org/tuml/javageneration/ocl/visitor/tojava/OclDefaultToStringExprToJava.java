@@ -10,7 +10,9 @@ public class OclDefaultToStringExprToJava extends BaseHandleOperationExp {
 
 	@Override
 	public String handleOperationExp(OperationCallExp<Classifier, Operation> oc, String sourceResult, List<String> argumentResults) {
-		return oc.toString();
+		String result = oc.toString();
+		result = result.replace("self.", "this.");
+		return result;
 	}
 
 }

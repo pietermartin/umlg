@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xmi:XMI xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:TumlValidation="http:///schemas/TumlValidation/_ZwlW4AYoEeK9oIwdQfC0-w/7" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xsi:schemaLocation="http:///schemas/TumlValidation/_ZwlW4AYoEeK9oIwdQfC0-w/7 validation.profile.uml#_ZwlW4QYoEeK9oIwdQfC0-w">
+<xmi:XMI xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:TumlValidation="http:///schemas/TumlValidation/_xdTqsCNPEeKXA8fV9fB29w/8" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xsi:schemaLocation="http:///schemas/TumlValidation/_xdTqsCNPEeKXA8fV9fB29w/8 validation.profile.uml#_xdVf4CNPEeKXA8fV9fB29w">
   <uml:Model xmi:id="_qb8akM37EdqwVrslYOdUDA" name="tumltest">
     <elementImport xmi:id="_vhWmcOYQEeCCXPbP2D6kZQ">
       <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
@@ -421,10 +421,8 @@
             <generalization xmi:id="_Qrs3oO92EeC2XrXxx1atfA" general="_Gvo3IO92EeC2XrXxx1atfA"/>
           </packagedElement>
           <packagedElement xmi:type="uml:Class" xmi:id="_Gvo3IO92EeC2XrXxx1atfA" name="AbstractRootFolder" isAbstract="true">
-            <generalization xmi:id="_s8-MsCNHEeKFBpkLESs_WA">
-              <general xmi:type="uml:Class" href="tuml-lib.uml#_txpvwCM4EeK-Trh8Ll0qUQ"/>
-            </generalization>
-            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_owNCsNYWEeGBwu4LWWVlPg" name="getParent" specification="_i_0_gNYWEeGBwu4LWWVlPg">
+            <generalization xmi:id="_ZZkHYCNbEeKXA8fV9fB29w" general="_vA8U8CNaEeKXA8fV9fB29w"/>
+            <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_owNCsNYWEeGBwu4LWWVlPg" name="getParent">
               <ownedParameter xmi:id="_owNCsdYWEeGBwu4LWWVlPg" name="return" visibility="public" direction="return" effect="create">
                 <eAnnotations xmi:id="_owNCstYWEeGBwu4LWWVlPg" source="http://www.topcased.org/author">
                   <details xmi:id="_owNCs9YWEeGBwu4LWWVlPg" key="author" value=""/>
@@ -444,11 +442,16 @@
                 <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
               </ownedParameter>
             </ownedOperation>
-            <ownedOperation xmi:id="_i_0_gNYWEeGBwu4LWWVlPg" name="getParent" visibility="public" method="_owNCsNYWEeGBwu4LWWVlPg" bodyCondition="_wAag8NYWEeGBwu4LWWVlPg" isQuery="true">
-              <ownedRule xmi:id="_wAag8NYWEeGBwu4LWWVlPg" name="Constraint1">
-                <specification xmi:type="uml:LiteralNull" xmi:id="_yu1PANYWEeGBwu4LWWVlPg"/>
+            <ownedOperation xmi:id="_0tK28CNlEeKXA8fV9fB29w" name="getParent" bodyCondition="_CowBACNmEeKXA8fV9fB29w" isQuery="true">
+              <ownedRule xmi:id="_CowBACNmEeKXA8fV9fB29w" name="AbstractRootFolderGetParentConstraint">
+                <specification xmi:type="uml:OpaqueExpression" xmi:id="_G0KRgCNmEeKXA8fV9fB29w" name="abstractRootFolderOpaqueExpr">
+                  <language>OCL</language>
+                  <body>null</body>
+                </specification>
               </ownedRule>
-              <ownedParameter xmi:id="_kLjLwNYWEeGBwu4LWWVlPg" name="return" visibility="public" direction="return" effect="create"/>
+              <ownedParameter xmi:id="_510LwCNlEeKXA8fV9fB29w" name="getParentReturn" direction="return">
+                <type xmi:type="uml:Interface" href="tuml-lib.uml#_o0lDsCM2EeK-Trh8Ll0qUQ"/>
+              </ownedParameter>
             </ownedOperation>
           </packagedElement>
           <packagedElement xmi:type="uml:Association" xmi:id="_Mef3YO92EeC2XrXxx1atfA" name="A_&lt;god>_&lt;realRootFolder>" memberEnd="_Mef3Ye92EeC2XrXxx1atfA _MeXUgO92EeC2XrXxx1atfA" navigableOwnedEnd="_Mef3Ye92EeC2XrXxx1atfA">
@@ -464,9 +467,11 @@
             </ownedEnd>
           </packagedElement>
           <packagedElement xmi:type="uml:Class" xmi:id="_duv3MO92EeC2XrXxx1atfA" name="Folder">
-            <generalization xmi:id="_tW69wCNHEeKFBpkLESs_WA">
-              <general xmi:type="uml:Class" href="tuml-lib.uml#_txpvwCM4EeK-Trh8Ll0qUQ"/>
-            </generalization>
+            <generalization xmi:id="_ZnX54CNbEeKXA8fV9fB29w" general="_vA8U8CNaEeKXA8fV9fB29w"/>
+            <ownedAttribute xmi:id="_svpyUCNbEeKXA8fV9fB29w" name="parentFolder" type="_vA8U8CNaEeKXA8fV9fB29w" association="_svqZYCNbEeKXA8fV9fB29w">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_svpyUSNbEeKXA8fV9fB29w" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_svpyUiNbEeKXA8fV9fB29w" value="1"/>
+            </ownedAttribute>
             <ownedOperation xmi:id="_GhhGIO93EeC2XrXxx1atfA" name="isRoot" visibility="public" bodyCondition="_ISFE0O93EeC2XrXxx1atfA" isQuery="true">
               <ownedRule xmi:id="_ISFE0O93EeC2XrXxx1atfA" name="Constraint1">
                 <specification xmi:type="uml:OpaqueExpression" xmi:id="_I7vs4O93EeC2XrXxx1atfA" name="OpaqueExpression1">
@@ -498,8 +503,50 @@
                   <body>self.parentFolder</body>
                 </specification>
               </ownedRule>
-              <ownedParameter xmi:id="__hGzgMh0EeGA9qdtqzpYeA" name="return" visibility="public" direction="return" effect="create"/>
+              <ownedParameter xmi:id="__hGzgMh0EeGA9qdtqzpYeA" name="return" visibility="public" direction="return" effect="create">
+                <type xmi:type="uml:Interface" href="tuml-lib.uml#_o0lDsCM2EeK-Trh8Ll0qUQ"/>
+              </ownedParameter>
             </ownedOperation>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_vA8U8CNaEeKXA8fV9fB29w" clientDependency="_xdCj8CNaEeKXA8fV9fB29w" name="AbstractFolder" isAbstract="true">
+            <ownedAttribute xmi:id="_yxt34CNaEeKXA8fV9fB29w" name="name">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+            </ownedAttribute>
+            <interfaceRealization xmi:id="_xdCj8CNaEeKXA8fV9fB29w" name="InterfaceRealization1" client="_vA8U8CNaEeKXA8fV9fB29w">
+              <supplier xmi:type="uml:Interface" href="tuml-lib.uml#_o0lDsCM2EeK-Trh8Ll0qUQ"/>
+              <contract href="tuml-lib.uml#_o0lDsCM2EeK-Trh8Ll0qUQ"/>
+            </interfaceRealization>
+            <ownedOperation xmi:id="_6jE7YCNaEeKXA8fV9fB29w" name="getChildren" bodyCondition="_iaCpYCNbEeKXA8fV9fB29w" isQuery="true">
+              <ownedRule xmi:id="_iaCpYCNbEeKXA8fV9fB29w" name="getChildrenConstraint">
+                <specification xmi:type="uml:OpaqueExpression" xmi:id="_k-rJUCNbEeKXA8fV9fB29w" name="getChildrenOpaqueExpression">
+                  <body>Set{}->union(self.childFolder)</body>
+                </specification>
+              </ownedRule>
+              <ownedParameter xmi:id="_Dd0BwCNbEeKXA8fV9fB29w" name="getChildrenReturn" direction="return">
+                <type xmi:type="uml:Interface" href="tuml-lib.uml#_o0lDsCM2EeK-Trh8Ll0qUQ"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_WAHfUCNbEeKXA8fV9fB29w"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_WAIGYCNbEeKXA8fV9fB29w" value="*"/>
+              </ownedParameter>
+            </ownedOperation>
+            <ownedOperation xmi:id="_Ux8x4CPxEeKOmc56p_1Osg" name="getAllChildren" bodyCondition="_eIiGwCPxEeKOmc56p_1Osg" isQuery="true">
+              <ownedRule xmi:id="_eIiGwCPxEeKOmc56p_1Osg" name="getAllChildrenConstraint">
+                <specification xmi:type="uml:OpaqueExpression" xmi:id="_g-aHsCPxEeKOmc56p_1Osg" name="getAllChildrenOpaqueExpr">
+                  <language>OCL</language>
+                  <body>self.getChildren()->iterate(iter : tumllib::org::tuml::hierarchy::Hierarchy; acc : Set(tumllib::org::tuml::hierarchy::Hierarchy) = Set{} | acc->including(iter)->union(iter.getAllChildren()))</body>
+                </specification>
+              </ownedRule>
+              <ownedParameter xmi:id="_ZhsegCPxEeKOmc56p_1Osg" name="allChildrenReturn" direction="return">
+                <type xmi:type="uml:Interface" href="tuml-lib.uml#_o0lDsCM2EeK-Trh8Ll0qUQ"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_lKUVMCP2EeKOmc56p_1Osg"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_lKWxcCP2EeKOmc56p_1Osg" value="*"/>
+              </ownedParameter>
+            </ownedOperation>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_svqZYCNbEeKXA8fV9fB29w" name="folder_abstractFolder_1" memberEnd="_svqZYSNbEeKXA8fV9fB29w _svpyUCNbEeKXA8fV9fB29w" navigableOwnedEnd="_svqZYSNbEeKXA8fV9fB29w">
+            <ownedEnd xmi:id="_svqZYSNbEeKXA8fV9fB29w" name="childFolder" type="_duv3MO92EeC2XrXxx1atfA" aggregation="composite" association="_svqZYCNbEeKXA8fV9fB29w">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_svqZYiNbEeKXA8fV9fB29w"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_svqZYyNbEeKXA8fV9fB29w" value="*"/>
+            </ownedEnd>
           </packagedElement>
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_AoGIIPJKEeCeFLHNTzV0LA" name="qualifiertest">
@@ -1041,7 +1088,7 @@
     </profileApplication>
     <profileApplication xmi:id="_36wbQAV_EeK9oIwdQfC0-w">
       <eAnnotations xmi:id="_36wbQQV_EeK9oIwdQfC0-w" source="http://www.eclipse.org/uml2/2.0.0/UML">
-        <references xmi:type="ecore:EPackage" href="validation.profile.uml#_ZwlW4QYoEeK9oIwdQfC0-w"/>
+        <references xmi:type="ecore:EPackage" href="validation.profile.uml#_xdVf4CNPEeKXA8fV9fB29w"/>
       </eAnnotations>
       <appliedProfile href="validation.profile.uml#_6Zdd4AV1EeK9oIwdQfC0-w"/>
     </profileApplication>

@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.ocl.Environment;
+import org.eclipse.ocl.uml.UMLEnvironment;
 import org.eclipse.ocl.uml.UMLEnvironmentFactory;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Element;
@@ -94,12 +95,14 @@ public class ModelLoader {
 		org.eclipse.uml2.uml.Package package_ = null;
 		Resource resource = RESOURCE_SET.getResource(uri, true);
 		EcoreUtil.resolveAll(RESOURCE_SET);
+		EcoreUtil.resolveAll(resource); 
 		package_ = (org.eclipse.uml2.uml.Package) resource.getContents().get(0);
 		return package_;
 	}
 
 	protected static void registerResourceFactories() {
-		Environment.Registry.INSTANCE.registerEnvironment(new UMLEnvironmentFactory().createEnvironment());
+		UMLEnvironment umlEnvironment = new UMLEnvironmentFactory(RESOURCE_SET).createEnvironment();
+		Environment.Registry.INSTANCE.registerEnvironment(umlEnvironment);
 		RESOURCE_SET.getResourceFactoryRegistry().getExtensionToFactoryMap().put(UMLResource.FILE_EXTENSION, UMLResource.Factory.INSTANCE);
 		RESOURCE_SET.getPackageRegistry().put(UMLPackage.eNS_URI, UMLPackage.eINSTANCE);
 	}

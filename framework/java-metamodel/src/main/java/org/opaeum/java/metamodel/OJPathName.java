@@ -233,6 +233,10 @@ public class OJPathName extends OJPathNameGEN implements Comparable<OJPathName> 
 		return 0;
 	}
 
+	public void clearGenerics() {
+		this.generics.clear();
+	}
+	
 	public OJPathName addToGenerics(OJPathName path) {
 		this.generics.add(path);
 		return this;

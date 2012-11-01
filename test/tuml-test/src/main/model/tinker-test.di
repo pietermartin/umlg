@@ -51,7 +51,16 @@
     <windows xmi:id="_1dMZoQAOEeKpVr_ntT6cLA">
       <children xsi:type="di:TabFolder" xmi:id="_1dMZoAAOEeKpVr_ntT6cLA">
         <children>
+          <emfPageIdentifier href="tinker-test.notation#_1chrQAAOEeKpVr_ntT6cLA"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="tinker-test.notation#_1chrSgAOEeKpVr_ntT6cLA"/>
+        </children>
+        <children>
           <emfPageIdentifier href="tinker-test.notation#_1chrRgAOEeKpVr_ntT6cLA"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="tinker-test.notation#_1chrQgAOEeKpVr_ntT6cLA"/>
         </children>
       </children>
     </windows>

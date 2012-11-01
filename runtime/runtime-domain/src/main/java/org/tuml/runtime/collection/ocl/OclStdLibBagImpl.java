@@ -110,7 +110,10 @@ public class OclStdLibBagImpl<E> extends OclStdLibCollectionImpl<E> implements T
 	public <R> TinkerBag<R> collectNested(BodyExpressionEvaluator<R, E> v) {
 		Multiset<R> result = HashMultiset.create();
 		for (E e : this.bag) {
-			result.add(v.evaluate(e));
+			R evaluate = v.evaluate(e);
+			if (evaluate != null) {
+				result.add(evaluate);
+			}
 		}
 		return new OclStdLibBagImpl<R>(result);
 	}

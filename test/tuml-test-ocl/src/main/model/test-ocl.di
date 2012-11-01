@@ -24,10 +24,10 @@
           <emfPageIdentifier href="test-ocl.notation#_PX4aCgAPEeKpVr_ntT6cLA"/>
         </children>
         <children>
-          <emfPageIdentifier href="test-ocl.notation#_PX4aDAAPEeKpVr_ntT6cLA"/>
+          <emfPageIdentifier href="test-ocl.notation#_PX4aCAAPEeKpVr_ntT6cLA"/>
         </children>
         <children>
-          <emfPageIdentifier href="test-ocl.notation#_PX4aCAAPEeKpVr_ntT6cLA"/>
+          <emfPageIdentifier href="test-ocl.notation#_PX4aDAAPEeKpVr_ntT6cLA"/>
         </children>
       </children>
     </windows>

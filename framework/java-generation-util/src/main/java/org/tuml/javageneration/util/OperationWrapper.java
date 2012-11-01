@@ -1340,15 +1340,9 @@ public class OperationWrapper implements Operation {
 	}
 
 	@Override
-	public int lowerBound() {
+	public boolean validateNonLeafRedefinition(DiagnosticChain arg0, Map<Object, Object> arg1) {
 		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int upperBound() {
-		// TODO Auto-generated method stub
-		return 0;
+		return false;
 	}
 
 }

@@ -170,14 +170,14 @@ public class TumlClassOperations extends ClassOperations {
 	/*
 	 * Only BehavioredClassifier can realize interfaces
 	 */
-	public static boolean isSpecializationOf(Classifier classifier, Type type) {
-		if (classifier == type) {
+	public static boolean isSpecializationOf(Classifier special, Type type) {
+		if (special == type) {
 			return true;
 		}
-		if ((classifier instanceof BehavioredClassifier) && ((BehavioredClassifier) classifier).getAllImplementedInterfaces().contains(type)) {
+		if ((special instanceof BehavioredClassifier) && ((BehavioredClassifier) special).getAllImplementedInterfaces().contains(type)) {
 			return true;
 		}
-		for (Classifier general : classifier.getGenerals()) {
+		for (Classifier general : special.getGenerals()) {
 			if (isSpecializationOf(general, type)) {
 				return true;
 			}
@@ -335,6 +335,29 @@ public class TumlClassOperations extends ClassOperations {
 
 	public static List<Property> getPropertiesForToJson(Class clazz) {
 		return clazz.getAttributes();
+	}
+
+	public static boolean isHierarchy(org.eclipse.uml2.uml.Class clazz) {
+		if (realizesHierarchy(clazz)) {
+			return true;
+		}
+		List<Classifier> generals = getGenerals(clazz);
+		for (Classifier general : generals) {
+			if (realizesHierarchy((Class) general)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private static boolean realizesHierarchy(org.eclipse.uml2.uml.Class clazz) {
+		List<Interface> realizedInterfaces =  clazz.getImplementedInterfaces();
+		for (Interface interface1 : realizedInterfaces) {
+			if (interface1.getQualifiedName().equals("tumllib::org::tuml::hierarchy::Hierarchy")) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

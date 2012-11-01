@@ -37,8 +37,8 @@ public class OclStdLibSetImpl<E> extends OclStdLibCollectionImpl<E> implements T
 
 	@Override
 	public TinkerSet<E> union(TinkerSet<? extends E> s) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		addAll(s);
+		return this;
 	}
 
 	@Override
@@ -73,8 +73,8 @@ public class OclStdLibSetImpl<E> extends OclStdLibCollectionImpl<E> implements T
 
 	@Override
 	public TinkerSet<E> including(E e) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		add(e);
+		return this;
 	}
 
 	@Override

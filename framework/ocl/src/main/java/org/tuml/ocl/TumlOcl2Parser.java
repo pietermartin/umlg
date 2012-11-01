@@ -1,6 +1,7 @@
 package org.tuml.ocl;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
@@ -12,6 +13,7 @@ import org.eclipse.ocl.SemanticException;
 import org.eclipse.ocl.expressions.OCLExpression;
 import org.eclipse.ocl.helper.OCLHelper;
 import org.eclipse.ocl.uml.ExpressionInOCL;
+import org.eclipse.ocl.uml.util.OCLUMLUtil;
 import org.eclipse.uml2.uml.CallOperationAction;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Classifier;
@@ -35,15 +37,23 @@ public class TumlOcl2Parser {
 	public final static TumlOcl2Parser INSTANCE = new TumlOcl2Parser();
 
 	private TumlOcl2Parser() {
+		org.eclipse.ocl.uml.OCL.initialize(ModelLoader.RESOURCE_SET);
 		this.ocl = org.eclipse.ocl.uml.OCL.newInstance(ModelLoader.RESOURCE_SET);
-		this.environment = ocl.getEnvironment();
-		this.helper = ocl.createOCLHelper();
+		this.environment = this.ocl.getEnvironment();
+		this.helper = this.ocl.createOCLHelper();
+		NamedElement hierarchy = ModelLoader.findNamedElement("tumlLib::org::tuml::hierarchy::Hierarchy");
+		System.out.println(hierarchy);
+		NamedElement god = ModelLoader.findNamedElement("tumltest::org::tuml::concretetest::God");
+		System.out.println(god);
+//		Package p = OCLUMLUtil.findPackage(Collections.singletonList("tumlLib::org::tuml::hierarchy"), ModelLoader.RESOURCE_SET);
+		Package p = OCLUMLUtil.findPackage(Arrays.asList("tumlLib","org","tuml","hierarchy"), ModelLoader.RESOURCE_SET);
+		System.out.println(p);
 	}
 
 	public OCLHelper<Classifier, Operation, Property, Constraint> getHelper() {
 		return helper;
 	}
-	
+
 	public static void main(String[] args) {
 		Model model = ModelLoader.loadModel(new File("/home/pieter/workspace-tuml/tuml/test/tuml-test-ocl/src/main/model/test-ocl.uml"));
 		TumlOcl2Parser parser = new TumlOcl2Parser();

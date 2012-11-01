@@ -19,6 +19,7 @@ import org.eclipse.uml2.uml.Dependency;
 import org.eclipse.uml2.uml.Deployment;
 import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Enumeration;
+import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.LiteralString;
 import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.Namespace;
@@ -1179,12 +1180,6 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 		return "lookupFor_" + new PropertyWrapper(getOtherEnd()).getName() + "_" + getName() + "_CompositeParent";
 	}
 
-	@Override
-	public boolean validateNavigableReadonly(DiagnosticChain diagnostics, Map<Object, Object> context) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 	public boolean isDate() {
 		return getType() instanceof DataType && TumlDataTypeOperation.isDate((DataType) getType());
 	}
@@ -1354,6 +1349,42 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 	public boolean hasUrl() {
 		Stereotype stereotype = ModelLoader.findStereotype(TumlValidationEnum.URL.name());
 		return property.isStereotypeApplied(stereotype);
+	}
+
+	@Override
+	public boolean validateNonLeafRedefinition(DiagnosticChain arg0, Map<Object, Object> arg1) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Interface getInterface() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isID() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setInterface(Interface arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setIsID(boolean arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setRealDefaultValue(double arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

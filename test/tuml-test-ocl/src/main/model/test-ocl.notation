@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:uml="http://www.eclipse.org/uml2/3.0.0/UML">
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML">
   <notation:Diagram xmi:id="_PX4aBAAPEeKpVr_ntT6cLA" type="PapyrusUMLClassDiagram" name="testoclmodel" measurementUnit="Pixel">
     <children xmi:type="notation:Shape" xmi:id="_PXnUQAAPEeKpVr_ntT6cLA" type="2007" fontName="Sans" fontHeight="10" fillColor="6333684" lineColor="0">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_PYA84AAPEeKpVr_ntT6cLA" source="QualifiedName">
@@ -129,7 +129,7 @@
       <children xmi:type="notation:BasicCompartment" xmi:id="_PXn7VAAPEeKpVr_ntT6cLA" type="7019"/>
       <children xmi:type="notation:DecorationNode" xmi:id="_PYF1aAAPEeKpVr_ntT6cLA" type="5029"/>
       <element xmi:type="uml:Class" href="test-ocl.uml#_OUDkcL7zEeG5Bt_b3EGOQQ"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_PXn7VQAPEeKpVr_ntT6cLA" x="192" y="56" width="329"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_PXn7VQAPEeKpVr_ntT6cLA" x="136" y="60" width="329"/>
     </children>
     <children xmi:type="notation:Shape" xmi:id="_PXuB8AAPEeKpVr_ntT6cLA" type="2008" fontName="Sans" fontHeight="10" bold="true" fillColor="16770760" lineColor="0">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_PYGcdwAPEeKpVr_ntT6cLA" source="QualifiedName">

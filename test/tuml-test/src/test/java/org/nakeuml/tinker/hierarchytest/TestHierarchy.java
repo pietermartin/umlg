@@ -2,11 +2,12 @@ package org.nakeuml.tinker.hierarchytest;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import junit.framework.Assert;
 
 import org.junit.Test;
 import org.tuml.concretetest.God;
+import org.tuml.hierarchy.Hierarchy;
 import org.tuml.hierarchytest.Folder;
-import org.tuml.hierarchytest.Hierarchy;
 import org.tuml.hierarchytest.RealRootFolder;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
@@ -56,5 +57,41 @@ public class TestHierarchy extends BaseLocalDbTest {
 		assertEquals(4, countLevels);
 		assertEquals("THEGOD", ((RealRootFolder)hierarchy).getGod().getName());
 	}
-	
+
+	@Test
+	public void testGetAllChildren() {
+		db.startTransaction();
+		God god = new God(true);
+		god.setName("THEGOD");
+		RealRootFolder realRootFolder = new RealRootFolder(god);
+		realRootFolder.setName("realRootFolder");
+		Folder folder1 = new Folder(realRootFolder);
+		folder1.setName("folder1");
+		Folder folder2 = new Folder(realRootFolder);
+		folder2.setName("folder2");
+
+		Folder folder1_1 = new Folder(folder1);
+		folder1_1.setName("folder1_1");
+		Folder folder1_2 = new Folder(folder1);
+		folder1_2.setName("folder1_2");
+
+		Folder folder1_1_1 = new Folder(folder1_1);
+		folder1_1_1.setName("folder1_1_1");
+		Folder folder1_2_1 = new Folder(folder1_1);
+		folder1_2_1.setName("folder1_2_1");
+		
+		Folder folder2_1 = new Folder(folder2);
+		folder2_1.setName("folder2_1");
+		Folder folder2_2 = new Folder(folder2);
+		folder2_2.setName("folder2_2");
+
+		Folder folder2_1_1 = new Folder(folder2_1);
+		folder2_1_1.setName("folder2_1_1");
+		Folder folder2_2_1 = new Folder(folder2_1);
+		folder2_2_1.setName("folder2_2_1");
+
+		db.stopTransaction(Conclusion.SUCCESS);
+		
+		Assert.assertEquals(10, realRootFolder.getAllChildren().size());
+	}
 }

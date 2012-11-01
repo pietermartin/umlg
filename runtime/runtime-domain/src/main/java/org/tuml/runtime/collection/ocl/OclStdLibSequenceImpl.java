@@ -35,7 +35,8 @@ public class OclStdLibSequenceImpl<E> extends OclStdLibCollectionImpl<E> impleme
 
 	@Override
 	public TinkerSequence<E> union(TinkerSequence<? extends E> s) {
-		throw new RuntimeException("Not implemented");
+		addAll(s);
+		return this;
 	}
 
 	@Override
@@ -116,7 +117,10 @@ public class OclStdLibSequenceImpl<E> extends OclStdLibCollectionImpl<E> impleme
 	public <R> TinkerSequence<R> collectNested(BodyExpressionEvaluator<R, E> v) {
 		List<R> result = new ArrayList<R>();
 		for (E e : this.list) {
-			result.add(v.evaluate(e));
+			R evaluate = v.evaluate(e);
+			if (evaluate != null) {
+				result.add(evaluate);
+			}
 		}
 		return new OclStdLibSequenceImpl<R>(result);
 	}
