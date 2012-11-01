@@ -41,20 +41,19 @@ public class PropertyVisitor extends BaseVisitor implements Visitor<Property> {
 	}
 
 	private void addInitialization(OJAnnotatedClass owner, PropertyWrapper propertyWrapper) {
-		
-		String ocl = propertyWrapper.getOclDerivedValue();
-		OJAnnotatedOperation initVariables = owner.findOperation(ClassBuilder.INIT_VARIABLES);
-		initVariables.setComment(String.format("Implements the ocl statement for initialization variable '%s'\n<pre>\n%s\n</pre>", propertyWrapper.getName(), ocl));
-		logger.info(String.format("About to parse ocl expression \n%s", new Object[] { ocl }));
-		
 		String java;
+		OJAnnotatedOperation initVariables = owner.findOperation(ClassBuilder.INIT_VARIABLES);
 		if (propertyWrapper.hasOclDefaultValue()) {
+			String ocl = propertyWrapper.getOclDerivedValue();
+			initVariables.setComment(String.format("Implements the ocl statement for initialization variable '%s'\n<pre>\n%s\n</pre>", propertyWrapper.getName(), ocl));
+			logger.info(String.format("About to parse ocl expression \n%s", new Object[] { ocl }));
 			OCLExpression<Classifier> constraint = TumlOcl2Parser.INSTANCE.parseOcl(ocl);
 			java = "//TODO " + constraint.toString();
+			initVariables.getBody().addToStatements(propertyWrapper.setter() + "(\"" + java + "\")");
 		} else {
 			java = propertyWrapper.getInitValue();
+			initVariables.getBody().addToStatements(propertyWrapper.setter() + "(" + java + ")");
 		}
-		initVariables.getBody().addToStatements(propertyWrapper.setter() + "(\"" + java + "\")");
 	}
 
 }

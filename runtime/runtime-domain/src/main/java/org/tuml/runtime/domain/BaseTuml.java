@@ -30,31 +30,31 @@ public abstract class BaseTuml implements TumlNode, Serializable {
 		this.vertex = vertex;
 	}
 
-	public DateTime getCreatedOn() {
-		return TumlFormatter.parseDateTime((String) this.vertex.getProperty("createdOn"));
-	}
+//	public DateTime getCreatedOn() {
+//		return TumlFormatter.parseDateTime((String) this.vertex.getProperty("createdOn"));
+//	}
+//
+//	public void setCreatedOn(DateTime createdOn) {
+//		this.vertex.setProperty("createdOn", TumlFormatter.format(createdOn));
+//	}
 
-	public void setCreatedOn(DateTime createdOn) {
-		this.vertex.setProperty("createdOn", TumlFormatter.format(createdOn));
-	}
-
-	public DateTime getUpdatedOn() {
-		return TumlFormatter.parseDateTime((String) this.vertex.getProperty("updatedOn"));
-	}
-
-	public void setUpdatedOn(DateTime updatedOn) {
-		this.vertex.setProperty("updatedOn", TumlFormatter.format(updatedOn));
-	}
+//	public DateTime getUpdatedOn() {
+//		return TumlFormatter.parseDateTime((String) this.vertex.getProperty("updatedOn"));
+//	}
+//
+//	public void setUpdatedOn(DateTime updatedOn) {
+//		this.vertex.setProperty("updatedOn", TumlFormatter.format(updatedOn));
+//	}
 
 	public void defaultCreate() {
-		setCreatedOn(new DateTime());
-		setUpdatedOn(new DateTime());
+//		setCreatedOn(new DateTime());
+//		setUpdatedOn(new DateTime());
 		getUid();
 	}
 
-	public void defaultUpdate() {
-		setUpdatedOn(new DateTime());
-	}
+//	public void defaultUpdate() {
+//		setUpdatedOn(new DateTime());
+//	}
 
 	public String getName() {
 		return getClass().getName() + "[" + getId() + "]";

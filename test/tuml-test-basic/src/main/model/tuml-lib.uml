@@ -57,7 +57,7 @@ self.getChildren()->iterate(iter : tumllib::org::tuml::hierarchy::Hierarchy; acc
       </packagedElement>
       <packagedElement xmi:type="uml:Package" xmi:id="_sPG5sCQOEeKOmc56p_1Osg" name="query">
         <packagedElement xmi:type="uml:Class" xmi:id="_JkrskCQPEeKOmc56p_1Osg" name="Query">
-          <generalization xmi:id="_4cJHkCRsEeKzTel_Vwmhog" general="_2GNhsCQOEeKOmc56p_1Osg"/>
+          <generalization xmi:id="_XVa98CQiEeKzTel_Vwmhog" general="_2GNhsCQOEeKOmc56p_1Osg"/>
           <ownedAttribute xmi:id="_K0aPECQPEeKOmc56p_1Osg" name="queryString" visibility="public">
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_LIisACQPEeKOmc56p_1Osg" value="1"/>

@@ -12,6 +12,7 @@ import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Generalization;
 import org.eclipse.uml2.uml.Interface;
+import org.eclipse.uml2.uml.InterfaceRealization;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
 import org.eclipse.uml2.uml.VisibilityKind;
@@ -65,7 +66,8 @@ public class TumlClassOperations extends ClassOperations {
 		Set<Property> result = new HashSet<Property>();
 		for (Property p : getAllOwnedProperties(clazz)) {
 			PropertyWrapper pWrap = new PropertyWrapper(p);
-			if ((pWrap.isOne() && !pWrap.isDerived() && !pWrap.isQualifier()) || (!pWrap.isDerived() && pWrap.isOneToMany() && (pWrap.isPrimitive() || pWrap.isEnumeration()))) {
+			if ((pWrap.isOne() && !pWrap.isDerived() && !pWrap.isQualifier())
+					|| (!pWrap.isDerived() && pWrap.isOneToMany() && (pWrap.isPrimitive() || pWrap.isEnumeration()))) {
 				result.add(p);
 			}
 		}
@@ -76,8 +78,9 @@ public class TumlClassOperations extends ClassOperations {
 		Set<Property> result = new HashSet<Property>();
 		for (Property p : getAllOwnedProperties(clazz)) {
 			PropertyWrapper pWrap = new PropertyWrapper(p);
-			if ((pWrap.isOne() && !pWrap.isDerived() && !pWrap.isQualifier()) || (!pWrap.isDerived() && pWrap.isOneToMany() && (pWrap.isPrimitive() || pWrap.isEnumeration()))) {
-				//Exclude the composite parent
+			if ((pWrap.isOne() && !pWrap.isDerived() && !pWrap.isQualifier())
+					|| (!pWrap.isDerived() && pWrap.isOneToMany() && (pWrap.isPrimitive() || pWrap.isEnumeration()))) {
+				// Exclude the composite parent
 				if (!(pWrap.getOtherEnd() != null && pWrap.getOtherEnd().isComposite())) {
 					result.add(p);
 				}
@@ -85,7 +88,7 @@ public class TumlClassOperations extends ClassOperations {
 		}
 		return result;
 	}
-	
+
 	/*
 	 * These include all properties that are on the other end of an association.
 	 * It does not include inherited properties
@@ -114,29 +117,28 @@ public class TumlClassOperations extends ClassOperations {
 		Set<Association> associations = getAllAssociations(clazz);
 		for (Association association : associations) {
 			List<Property> memberEnds = association.getMemberEnds();
-			Property memberEnd1 = memberEnds.get(0); 
+			Property memberEnd1 = memberEnds.get(0);
 			Property memberEnd2 = memberEnds.get(1);
-			
-			//This is for the case of hierarchies, i.e association to itself
+
+			// This is for the case of hierarchies, i.e association to itself
 			if (isSpecializationOf(clazz, memberEnd1.getType()) && isSpecializationOf(clazz, memberEnd2.getType())) {
 				result.add(memberEnd1);
 				result.add(memberEnd2);
 			}
-			//This is to prevent getting the near side of an association
+			// This is to prevent getting the near side of an association
 			if (!isSpecializationOf(clazz, memberEnd1.getType())) {
 				result.add(memberEnd1);
 			}
-			//This is to prevent getting the near side of an association
+			// This is to prevent getting the near side of an association
 			if (!isSpecializationOf(clazz, memberEnd2.getType())) {
 				result.add(memberEnd2);
 			}
-			
-			
-//			for (Property property : memberEnds) {
-//				if (!isSpecializationOf(clazz, property.getType())) {
-//					result.add(property);
-//				} 
-//			}
+
+			// for (Property property : memberEnds) {
+			// if (!isSpecializationOf(clazz, property.getType())) {
+			// result.add(property);
+			// }
+			// }
 		}
 		result.addAll(getPropertiesOnRealizedInterfaces(clazz));
 		return result;
@@ -154,12 +156,13 @@ public class TumlClassOperations extends ClassOperations {
 		return result;
 	}
 
-	public static Property getOtherEndToComposite(Class clazz) {
-		Set<Association> associations = getAllAssociations(clazz);
+	public static Property getOtherEndToComposite(Classifier classifier) {
+		Set<Association> associations = getAllAssociations(classifier);
 		for (Association association : associations) {
 			List<Property> memberEnds = association.getMemberEnds();
 			for (Property property : memberEnds) {
-				if (!property.isComposite() && property.getType() != clazz && property.getOtherEnd().isComposite() && isSpecializationOf(clazz, property.getOtherEnd().getType())) {
+				if (!property.isComposite() && property.getType() != classifier && property.getOtherEnd().isComposite()
+						&& isSpecializationOf(classifier, property.getOtherEnd().getType())) {
 					return property;
 				}
 			}
@@ -185,12 +188,14 @@ public class TumlClassOperations extends ClassOperations {
 		return false;
 	}
 
-	public static Set<Association> getAllAssociations(Class clazz) {
+	public static Set<Association> getAllAssociations(Classifier classifier) {
 		Set<Association> result = new HashSet<Association>();
-		for (Interface implementedInterface : clazz.getAllImplementedInterfaces()) {
-			result.addAll(implementedInterface.getAssociations());
+		if (classifier instanceof Class) {
+			for (Interface implementedInterface : ((Class)classifier).getAllImplementedInterfaces()) {
+				result.addAll(implementedInterface.getAssociations());
+			}
 		}
-		getAllAssociationsFromGenerals(clazz, result);
+		getAllAssociationsFromGenerals(classifier, result);
 		return result;
 	}
 
@@ -251,31 +256,69 @@ public class TumlClassOperations extends ClassOperations {
 			getSpecializations(result, specific);
 		}
 	}
-	
-	public static Set<Class> getSpecializationWithCompositeOwner(Classifier clazz) {
-		Set<Class> result = new HashSet<Class>();
+
+	public static Set<Classifier> getRealizationWithCompositeOwner(Interface inf) {
+		Set<Classifier> result = new HashSet<Classifier>();
+		List<InterfaceRealization> interfaceRealizations = ModelLoader.getInterfaceRealization(inf);
+		for (InterfaceRealization interfaceRealization : interfaceRealizations) {
+			BehavioredClassifier c = interfaceRealization.getImplementingClassifier();
+			if (hasCompositeOwner(c)) {
+				result.add(c);
+			}
+		}
+		return result;
+	}
+
+	public static Set<Classifier> getRealizationWithoutCompositeOwner(Interface inf) {
+		Set<Classifier> result = new HashSet<Classifier>();
+		List<InterfaceRealization> interfaceRealizations = ModelLoader.getInterfaceRealization(inf);
+		for (InterfaceRealization interfaceRealization : interfaceRealizations) {
+			BehavioredClassifier c = interfaceRealization.getImplementingClassifier();
+			if (!hasCompositeOwner(c)) {
+				result.add(c);
+			}
+		}
+		return result;
+	}
+
+	public static Set<Classifier> getSpecializationWithCompositeOwner(Classifier clazz) {
+		Set<Classifier> result = new HashSet<Classifier>();
 		Set<Classifier> specializations = getSpecializations(clazz);
 		for (Classifier c : specializations) {
-			if (c instanceof Class && hasCompositeOwner((Class) c)) {
+			System.out.println(c);
+			if (hasCompositeOwner(c)) {
+				System.out.println("hasCompositeOwner " + c);
+				result.add(c);
+			}
+		}
+		return result;
+	}
+
+	public static Set<Classifier> getConcreteSpecializationsWithoutCompositeOwner(Classifier clazz) {
+		Set<Classifier> result = new HashSet<Classifier>();
+		Set<Classifier> specializations = getSpecializations(clazz);
+		for (Classifier c : specializations) {
+			if (!c.isAbstract() && c instanceof Class && !hasCompositeOwner((Class) c)) {
 				result.add((Class) c);
 			}
 		}
 		return result;
 	}
-	
+
 	public static Set<Classifier> getSpecializations(Classifier clazz) {
 		Set<Classifier> result = new HashSet<Classifier>();
 		getSpecializations(result, clazz);
 		return result;
 	}
-	
+
 	public static Set<Classifier> getConcreteImplementations(Classifier clazz) {
 		Set<Classifier> result = new HashSet<Classifier>();
 		getConcreteImplementations(result, clazz);
 		return result;
 	}
-	public static boolean hasCompositeOwner(Class clazz) {
-		return getOtherEndToComposite(clazz) != null;
+
+	public static boolean hasCompositeOwner(Classifier classifier) {
+		return getOtherEndToComposite(classifier) != null;
 	}
 
 	public static String className(Classifier clazz) {
@@ -349,9 +392,9 @@ public class TumlClassOperations extends ClassOperations {
 		}
 		return false;
 	}
-	
+
 	private static boolean realizesHierarchy(org.eclipse.uml2.uml.Class clazz) {
-		List<Interface> realizedInterfaces =  clazz.getImplementedInterfaces();
+		List<Interface> realizedInterfaces = clazz.getImplementedInterfaces();
 		for (Interface interface1 : realizedInterfaces) {
 			if (interface1.getQualifiedName().equals("tumllib::org::tuml::hierarchy::Hierarchy")) {
 				return true;
@@ -359,5 +402,6 @@ public class TumlClassOperations extends ClassOperations {
 		}
 		return false;
 	}
+
 
 }

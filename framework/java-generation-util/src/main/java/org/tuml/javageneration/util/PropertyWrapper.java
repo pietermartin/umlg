@@ -120,6 +120,16 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 		}
 	}
 
+	public boolean hasJavaDefaultValue() {
+		ValueSpecification v = getDefaultValue();
+		if (v instanceof OpaqueExpression) {
+			OpaqueExpression expr = (OpaqueExpression) v;
+			return expr.getLanguages().contains("java") || expr.getLanguages().contains("JAVA");
+		} else {
+			return false;
+		}
+	}
+	
 	public String getOclDerivedValue() {
 		if (!hasOclDefaultValue()) {
 			throw new IllegalStateException(String.format("Property %s does not have a default value", new Object[] { this.getName() }));
@@ -169,6 +179,10 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 		return sb.toString();
 	}
 
+	public String getJavaDefaultValue() {
+		return getDefaultValue().toString();
+	}
+	
 	public String getOclDefaultValue() {
 		if (!hasOclDefaultValue()) {
 			throw new IllegalStateException(String.format("Property %s does not have a default value", new Object[] { this.getName() }));
@@ -268,7 +282,11 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 	public String getInitValue() {
 		ValueSpecification v = getDefaultValue();
 		if (v instanceof OpaqueExpression) {
-			return getOclDefaultValue();
+			if (hasOclDefaultValue()) {
+				return getOclDefaultValue();
+			} else {
+				return getDefaultValue().stringValue();
+			}
 		} else if (v instanceof LiteralString) {
 			LiteralString expr = (LiteralString) v;
 			String result = expr.getValue();

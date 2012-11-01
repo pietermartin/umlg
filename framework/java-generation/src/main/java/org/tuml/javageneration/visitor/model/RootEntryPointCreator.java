@@ -42,7 +42,6 @@ public class RootEntryPointCreator extends BaseVisitor implements Visitor<Model>
 		addToSource(root);
 
 		root.getDefaultConstructor().setVisibility(OJVisibilityKind.PRIVATE);
-		root.getDefaultConstructor().getBody().addToStatements("v = GraphDb.getDb().getRoot()");
 		root.addToImports(TinkerGenerationUtil.graphDbPathName);
 		root.addToImports(TinkerGenerationUtil.vertexPathName);
 
@@ -51,8 +50,11 @@ public class RootEntryPointCreator extends BaseVisitor implements Visitor<Model>
 		INSTANCE.setInitExp("new Root()");
 		root.addToFields(INSTANCE);
 
-		OJField vertex = new OJField("v", TinkerGenerationUtil.vertexPathName);
-		root.addToFields(vertex);
+		OJAnnotatedOperation getRootVertex = new OJAnnotatedOperation("getRootVertex");
+		getRootVertex.setReturnType(TinkerGenerationUtil.vertexPathName);
+		getRootVertex.setVisibility(OJVisibilityKind.PRIVATE);
+		getRootVertex.getBody().addToStatements("return GraphDb.getDb().getRoot()");
+		root.addToOperations(getRootVertex);
 
 		OJEnum ojEnum = RuntimePropertyImplementor.addTumlRuntimePropertyEnum(root, "RootRuntimePropertyEnum", model, new HashSet<Property>(), false, model.getName());
 

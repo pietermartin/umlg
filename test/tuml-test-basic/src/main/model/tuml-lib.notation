@@ -467,15 +467,13 @@
       <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_hh4skSQPEeKzTel_Vwmhog" points="[132, 0, -404, 0]$[483, 0, -53, 0]"/>
       <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_hiGH8CQPEeKzTel_Vwmhog" id="(0.18012422360248448,0.47706422018348627)"/>
     </edges>
-    <edges xmi:type="notation:Connector" xmi:id="_4cK8wCRsEeKzTel_Vwmhog" type="4002" source="_JkxzMCQPEeKOmc56p_1Osg" target="_gQ4-wCQPEeKzTel_Vwmhog" lineColor="0">
-      <children xmi:type="notation:DecorationNode" xmi:id="_4cLj0CRsEeKzTel_Vwmhog" type="6007">
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_4cLj0SRsEeKzTel_Vwmhog" y="40"/>
+    <edges xmi:type="notation:Connector" xmi:id="_XVczICQiEeKzTel_Vwmhog" type="4002" source="_JkxzMCQPEeKOmc56p_1Osg" target="_gQ4-wCQPEeKzTel_Vwmhog" lineColor="0">
+      <children xmi:type="notation:DecorationNode" xmi:id="_XVdaMCQiEeKzTel_Vwmhog" type="6007">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_XVdaMSQiEeKzTel_Vwmhog" y="40"/>
       </children>
-      <styles xmi:type="notation:FontStyle" xmi:id="_4cK8wSRsEeKzTel_Vwmhog" fontName="Sans"/>
-      <element xmi:type="uml:Generalization" href="tuml-lib.uml#_4cJHkCRsEeKzTel_Vwmhog"/>
-      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_4cK8wiRsEeKzTel_Vwmhog" points="[-24, -1, 390, 9]$[-375, -19, 39, -9]"/>
-      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_4cPOMCRsEeKzTel_Vwmhog" id="(0.16551724137931034,0.53)"/>
-      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_4cPOMSRsEeKzTel_Vwmhog" id="(0.7577639751552795,0.41284403669724773)"/>
+      <styles xmi:type="notation:FontStyle" xmi:id="_XVczISQiEeKzTel_Vwmhog" fontName="Sans"/>
+      <element xmi:type="uml:Generalization" href="tuml-lib.uml#_XVa98CQiEeKzTel_Vwmhog"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_XVczIiQiEeKzTel_Vwmhog" points="[-53, -24, 432, -26]$[-157, -70, 328, -72]$[-317, -70, 168, -72]$[-404, -33, 81, -35]"/>
     </edges>
   </notation:Diagram>
 </xmi:XMI>

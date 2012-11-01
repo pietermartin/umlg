@@ -24,19 +24,19 @@
     <windows xmi:id="_LuSdIQAPEeKpVr_ntT6cLA">
       <children xsi:type="di:TabFolder" xmi:id="_LuSdIAAPEeKpVr_ntT6cLA">
         <children>
-          <emfPageIdentifier href="tinker-test-basic.notation#_LuJ6SAAPEeKpVr_ntT6cLA"/>
+          <emfPageIdentifier href="tinker-test-basic.notation#_LuJ6QAAPEeKpVr_ntT6cLA"/>
         </children>
         <children>
           <emfPageIdentifier href="tinker-test-basic.notation#_LuJ6QgAPEeKpVr_ntT6cLA"/>
         </children>
         <children>
-          <emfPageIdentifier href="tinker-test-basic.notation#_LuJ6RAAPEeKpVr_ntT6cLA"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="tinker-test-basic.notation#_LuJ6QAAPEeKpVr_ntT6cLA"/>
+          <emfPageIdentifier href="tinker-test-basic.notation#_LuJ6SAAPEeKpVr_ntT6cLA"/>
         </children>
         <children>
           <emfPageIdentifier href="tinker-test-basic.notation#_LuJ6RgAPEeKpVr_ntT6cLA"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="tinker-test-basic.notation#_LuJ6RAAPEeKpVr_ntT6cLA"/>
         </children>
       </children>
     </windows>

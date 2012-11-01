@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Classifier;
+import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.Property;
 import org.opaeum.java.metamodel.OJBlock;
 import org.opaeum.java.metamodel.OJConstructor;
@@ -267,28 +268,19 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 		annotatedClass.addToImports(TinkerGenerationUtil.Root);
 		List<String> propertyList = new ArrayList<String>();
 		if (TumlClassOperations.hasCompositeOwner(clazz)) {
-			// if
-			// (clazz.getQualifiedName().equals("tumllib::org::tuml::hierarchy::Hierarchy"))
-			// {
-			//
-			// } else {
-			//
-			// }
 			PropertyWrapper otherEndToComposite = new PropertyWrapper(TumlClassOperations.getOtherEndToComposite(clazz));
 			PropertyWrapper composite = new PropertyWrapper(otherEndToComposite.getOtherEnd());
-			buildLookupFromRoot(annotatedClass, propertyList, composite, composite.javaBaseTypePath(), clazz);
+			buildLookupFromRoot(annotatedClass, propertyList, composite, TumlClassOperations.getPathName(clazz), clazz);
 		} else {
 			// Check if it has specialisations that have composite owners
-			Set<Class> specializationsWithCompositeOwner = TumlClassOperations.getSpecializationWithCompositeOwner(clazz);
+			Set<Classifier> specializationsWithCompositeOwner = TumlClassOperations.getSpecializationWithCompositeOwner(clazz);
 			// Do not visit where you come from. Infinite loop...
-			specializationsWithCompositeOwner.remove(clazz);
-
+//			specializationsWithCompositeOwner.remove(clazz);
 			if (!specializationsWithCompositeOwner.isEmpty()) {
-
 				// Specialisation must be unioned together
 				List<String> unionedPropertyList = new ArrayList<String>();
 				int count = 1;
-				for (Class c : specializationsWithCompositeOwner) {
+				for (Classifier c : specializationsWithCompositeOwner) {
 					List<String> propertyListToUnion = new ArrayList<String>();
 					propertyListToUnion.addAll(propertyList);
 					PropertyWrapper otherEndToComposite = new PropertyWrapper(TumlClassOperations.getOtherEndToComposite(c));
@@ -302,8 +294,41 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 				}
 				propertyList.clear();
 				propertyList.addAll(unionedPropertyList);
-			} else {
-				propertyList.add(TinkerGenerationUtil.Root.getCopy().getLast() + ".INSTANCE." + "get" + TumlClassOperations.className(clazz) + "()");
+			}
+			Set<Classifier> specializationsWithoutCompositeOwner = TumlClassOperations.getConcreteSpecializationsWithoutCompositeOwner(clazz);
+//			specializationsWithoutCompositeOwner.remove(clazz);
+			if (!specializationsWithoutCompositeOwner.isEmpty()) {
+				List<String> unionedPropertyList = new ArrayList<String>();
+				int count = 1;
+				for (Classifier classifier : specializationsWithoutCompositeOwner) {
+					List<String> propertyListToUnion = new ArrayList<String>();
+					propertyListToUnion.addAll(propertyList);
+					if (1 != count || !specializationsWithCompositeOwner.isEmpty()) {
+						propertyListToUnion.add(".union(");
+					}
+					if (!specializationsWithCompositeOwner.isEmpty()) {
+						propertyListToUnion.add(0, ")");
+					}
+					if (specializationsWithoutCompositeOwner.size() != count++) {
+						propertyListToUnion.add(")");
+					}
+					propertyListToUnion.add(">flatten()");
+					propertyListToUnion.add(TumlClassOperations.getPathName(clazz).getLast());
+					propertyListToUnion.add(".<");
+					propertyListToUnion.add(TinkerGenerationUtil.Root.getCopy().getLast() + ".INSTANCE." + "get" + TumlClassOperations.className(classifier)
+							+ "()");
+					unionedPropertyList.addAll(propertyListToUnion);
+				}
+				propertyList.clear();
+				propertyList.addAll(unionedPropertyList);
+			} 
+			if (specializationsWithCompositeOwner.isEmpty() && specializationsWithoutCompositeOwner.isEmpty()) {
+				if (!clazz.isAbstract()) {
+					propertyList.add(TinkerGenerationUtil.Root.getCopy().getLast() + ".INSTANCE." + "get" + TumlClassOperations.className(clazz) + "()");
+				} else {
+					propertyList.add("new " + TinkerGenerationUtil.tumlMemorySet.getLast() + "<" + TumlClassOperations.getPathName(clazz).getLast() + ">()");
+					annotatedClass.addToImports(TinkerGenerationUtil.tumlMemorySet);
+				}
 			}
 
 		}
@@ -316,36 +341,60 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 		java.append(".asSet()");
 		allInstances.getBody().addToStatements(java.toString());
 		annotatedClass.addToImports(TinkerGenerationUtil.Root);
-		annotatedClass.addToImports(TinkerGenerationUtil.BodyExpressionEvaluator);
 		annotatedClass.addToOperations(allInstances);
 	}
 
 	private void buildLookupFromRoot(OJAnnotatedClass annotatedClass, List<String> propertyList, PropertyWrapper compositeEndPWrap, OJPathName returnPath,
-			Class allInstanceToGet) {
+			Classifier allInstanceToGet) {
+		annotatedClass.addToImports(TinkerGenerationUtil.BodyExpressionEvaluator);
 		annotatedClass.addToImports(compositeEndPWrap.javaBaseTypePath());
 		annotatedClass.addToImports(TumlClassOperations.getPathName(compositeEndPWrap.getOwningType()));
 		annotatedClass.addToImports(compositeEndPWrap.javaTumlTypePath());
-		if (TumlClassOperations.isSpecializationOf(allInstanceToGet, compositeEndPWrap.getType()) && !allInstanceToGet.equals(compositeEndPWrap.getType())) {
+		boolean needNarrowing = TumlClassOperations.isSpecializationOf(allInstanceToGet, compositeEndPWrap.getType())
+				&& !allInstanceToGet.equals(compositeEndPWrap.getType());
+		if (needNarrowing) {
 			// Add in a narrowing of the result to the correct type only
 			propertyList.add(constructTypeNarrowCollectStatement(compositeEndPWrap, allInstanceToGet, returnPath));
+			annotatedClass.addToImports(TumlClassOperations.getPathName(allInstanceToGet));
 		}
-		propertyList.add(constructCollectStatement(compositeEndPWrap, returnPath));
-		Class owningType = (Class) compositeEndPWrap.getOwningType();
-		if (TumlClassOperations.hasCompositeOwner(owningType)) {
+		propertyList.add(constructCollectStatement(compositeEndPWrap, returnPath, needNarrowing));
+		List<String> localPropertyList = new ArrayList<String>();
+		localPropertyList.addAll(propertyList);
+		Classifier owningType = (Classifier) compositeEndPWrap.getOwningType();
+		if (!(owningType instanceof Interface) && TumlClassOperations.hasCompositeOwner(owningType)) {
 			PropertyWrapper otherEndToComposite = new PropertyWrapper(TumlClassOperations.getOtherEndToComposite(owningType));
 			PropertyWrapper composite = new PropertyWrapper(otherEndToComposite.getOtherEnd());
 			buildLookupFromRoot(annotatedClass, propertyList, composite, composite.javaBaseTypePath(), owningType);
 		} else {
 			// Check if it has specialisations that have composite owners
-			Set<Class> specializationsWithCompositeOwner = TumlClassOperations.getSpecializationWithCompositeOwner(owningType);
+			Set<Classifier> specializationsWithCompositeOwner;
+			if (owningType instanceof Interface) {
+				specializationsWithCompositeOwner = TumlClassOperations.getRealizationWithCompositeOwner((Interface)owningType);
+			} else {
+				specializationsWithCompositeOwner = TumlClassOperations.getSpecializationWithCompositeOwner(owningType);
+			}
 			// Do not visit where you come from. Infinite loop...
+			specializationsWithCompositeOwner.remove(owningType);
 			specializationsWithCompositeOwner.remove(compositeEndPWrap.getType());
+			
+			//These 2 groups must be unioned together
+			Set<Classifier> specializationsWithoutCompositeOwner;
+			if (owningType instanceof Interface) {
+				specializationsWithoutCompositeOwner = TumlClassOperations.getRealizationWithoutCompositeOwner((Interface)owningType);
+			} else {
+				specializationsWithoutCompositeOwner = TumlClassOperations.getConcreteSpecializationsWithoutCompositeOwner(owningType);
+			}
+			specializationsWithoutCompositeOwner.remove(owningType);
+			if (owningType.isAbstract()) {
+				specializationsWithoutCompositeOwner.remove(compositeEndPWrap.getType());
+			}
+			
 			if (!specializationsWithCompositeOwner.isEmpty()) {
 
 				// Specialisation must be unioned together
 				List<String> unionedPropertyList = new ArrayList<String>();
 				int count = 1;
-				for (Class c : specializationsWithCompositeOwner) {
+				for (Classifier c : specializationsWithCompositeOwner) {
 					List<String> propertyListToUnion = new ArrayList<String>();
 					propertyListToUnion.addAll(propertyList);
 					PropertyWrapper otherEndToComposite = new PropertyWrapper(TumlClassOperations.getOtherEndToComposite(c));
@@ -359,72 +408,88 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 				}
 				propertyList.clear();
 				propertyList.addAll(unionedPropertyList);
-			} else {
-				propertyList.add(TinkerGenerationUtil.Root.getCopy().getLast() + ".INSTANCE." + "get" + TumlClassOperations.className(owningType) + "()");
+				
 			}
+
+			if (!specializationsWithoutCompositeOwner.isEmpty()) {
+				List<String> unionedPropertyList = new ArrayList<String>();
+				int count = 1;
+				for (Classifier classifier : specializationsWithoutCompositeOwner) {
+					List<String> propertyListToUnion = new ArrayList<String>();
+					if (1 != count || !specializationsWithCompositeOwner.isEmpty()) {
+						propertyListToUnion.add(".union(");
+					}
+					if (specializationsWithoutCompositeOwner.size() != count++) {
+						propertyListToUnion.add(")");
+					}
+					propertyListToUnion.addAll(localPropertyList);
+					propertyListToUnion.add(">flatten()");
+					propertyListToUnion.add(TumlClassOperations.getPathName(owningType).getLast());
+					propertyListToUnion.add(".<");
+					propertyListToUnion.add(TinkerGenerationUtil.Root.getCopy().getLast() + ".INSTANCE." + "get" + TumlClassOperations.className(classifier)
+							+ "()");
+					unionedPropertyList.addAll(propertyListToUnion);
+				}
+				localPropertyList.clear();
+				if (specializationsWithCompositeOwner.isEmpty()) {
+					//Nothing to union
+					propertyList.clear();
+				}
+				propertyList.addAll(unionedPropertyList);
+				if (!specializationsWithCompositeOwner.isEmpty()) {
+					propertyList.add(0, ")");
+				}
+			} 
+			
+			if (specializationsWithCompositeOwner.isEmpty() && specializationsWithoutCompositeOwner.isEmpty()) {
+				if (!owningType.isAbstract()) {
+					propertyList.add(TinkerGenerationUtil.Root.getCopy().getLast() + ".INSTANCE." + "get" + TumlClassOperations.className(owningType) + "()");
+				} else {
+					propertyList.add("new " + TinkerGenerationUtil.tumlMemorySet.getLast() + "<" + TumlClassOperations.getPathName(owningType).getLast()
+							+ ">()");
+					annotatedClass.addToImports(TinkerGenerationUtil.tumlMemorySet);
+				}
+			}
+
 		}
 	}
 
-	private String constructGetAllChildrenCollectStatement(PropertyWrapper pWrap, Class allInstanceToGet, OJPathName returnPath) {
+	private String constructTypeNarrowCollectStatement(PropertyWrapper pWrap, Classifier allInstanceToGet, OJPathName returnPath) {
 		OJPathName returnPathForNarrow = TumlClassOperations.getPathName(allInstanceToGet);
-		StringBuilder sb = new StringBuilder();
-		sb.append(".<");
-		sb.append(returnPathForNarrow.getLast());
-		sb.append(", ");
-		sb.append(returnPathForNarrow.getLast());
-		sb.append(">");
-		sb.append("collect(new BodyExpressionEvaluator<");
-		sb.append(returnPathForNarrow.getLast());
-		sb.append(", ");
-		sb.append(TumlClassOperations.getPathName(pWrap.getType()).getLast());
-		sb.append(">(){\n");
-		sb.append("		@Override\n");
-		sb.append("		public ");
-		sb.append(returnPathForNarrow.getLast());
-		sb.append(" evaluate(");
-		sb.append(TumlClassOperations.getPathName(pWrap.getType()).getLast());
-		sb.append(" e) {\n");
-		sb.append("			return e instanceof ");
-		sb.append(returnPathForNarrow.getLast());
-		sb.append(" ? (");
-		sb.append(returnPathForNarrow.getLast());
-		sb.append(")e : null");
-		sb.append(";\n	}}\n)");
-		return sb.toString();
-	}
-
-	private String constructTypeNarrowCollectStatement(PropertyWrapper pWrap, Class allInstanceToGet, OJPathName returnPath) {
-		OJPathName returnPathForNarrow = TumlClassOperations.getPathName(allInstanceToGet);
-		StringBuilder sb = new StringBuilder();
-		sb.append(".<");
-		sb.append(returnPathForNarrow.getLast());
-		sb.append(", ");
-		sb.append(returnPathForNarrow.getLast());
-		sb.append(">");
-		sb.append("collect(new BodyExpressionEvaluator<");
-		sb.append(returnPathForNarrow.getLast());
-		sb.append(", ");
-		sb.append(TumlClassOperations.getPathName(pWrap.getType()).getLast());
-		sb.append(">(){\n");
-		sb.append("		@Override\n");
-		sb.append("		public ");
-		sb.append(returnPathForNarrow.getLast());
-		sb.append(" evaluate(");
-		sb.append(TumlClassOperations.getPathName(pWrap.getType()).getLast());
-		sb.append(" e) {\n");
-		sb.append("			return e instanceof ");
-		sb.append(returnPathForNarrow.getLast());
-		sb.append(" ? (");
-		sb.append(returnPathForNarrow.getLast());
-		sb.append(")e : null");
-		sb.append(";\n	}}\n)");
-		return sb.toString();
-	}
-
-	private String constructCollectStatement(PropertyWrapper compositeEndPWrap, OJPathName returnPath) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(".<");
 		sb.append(returnPath.getLast());
+		sb.append(", ");
+		sb.append(returnPathForNarrow.getLast());
+		sb.append(">");
+		sb.append("collect(new BodyExpressionEvaluator<");
+		sb.append(returnPathForNarrow.getLast());
+		sb.append(", ");
+		sb.append(TumlClassOperations.getPathName(pWrap.getType()).getLast());
+		sb.append(">() {\n");
+		sb.append("		@Override\n");
+		sb.append("		public ");
+		sb.append(returnPathForNarrow.getLast());
+		sb.append(" evaluate(");
+		sb.append(TumlClassOperations.getPathName(pWrap.getType()).getLast());
+		sb.append(" e) {\n");
+		sb.append("			return e instanceof ");
+		sb.append(returnPathForNarrow.getLast());
+		sb.append(" ? (");
+		sb.append(returnPathForNarrow.getLast());
+		sb.append(")e : null");
+		sb.append(";\n		}}\n)");
+		return sb.toString();
+	}
+
+	private String constructCollectStatement(PropertyWrapper compositeEndPWrap, OJPathName returnPath, boolean needNarrowing) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(".<");
+		if (needNarrowing) {
+			sb.append(compositeEndPWrap.javaBaseTypePath().getLast());
+		} else {
+			sb.append(returnPath.getLast());
+		}
 		sb.append(", ");
 		if (compositeEndPWrap.isOne()) {
 			sb.append(compositeEndPWrap.javaBaseTypePath().getLast());
@@ -440,7 +505,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 		}
 		sb.append(", ");
 		sb.append(TumlClassOperations.getPathName(compositeEndPWrap.getOwningType()).getLast());
-		sb.append(">(){\n");
+		sb.append(">() {\n");
 		sb.append("		@Override\n");
 		sb.append("		public ");
 		if (compositeEndPWrap.isOne()) {
@@ -461,7 +526,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 			sb.append(compositeEndPWrap.javaBaseTypePath().getLast());
 			sb.append(">) e.getAllChildren());\n	}}\n)");
 		} else {
-			sb.append("();\n	}}\n)");
+			sb.append("();\n		}}\n)");
 		}
 		return sb.toString();
 	}

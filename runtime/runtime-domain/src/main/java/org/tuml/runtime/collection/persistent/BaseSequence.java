@@ -34,6 +34,7 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
 	public BaseSequence(TumlNode owner, TumlRuntimeProperty runtimeProperty) {
 		super(owner, runtimeProperty);
 		this.internalCollection = new ArrayList<E>();
+		this.oclStdLibSequence = new OclStdLibSequenceImpl<E>((List<E>) this.internalCollection);
 		this.oclStdLibCollection = new OclStdLibSequenceImpl<E>((List<E>) this.internalCollection);
 		this.index = GraphDb.getDb().getIndex(owner.getUid() + ":::" + getLabel(), Edge.class);
 		if (this.index == null) {

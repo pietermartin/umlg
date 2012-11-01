@@ -57,6 +57,7 @@ public class Workspace {
 
 	private void visitModel() {
 		this.model = ModelLoader.loadModel(modelFile);
+		logger.info(String.format("Start visiting the model"));
 		for (Visitor<?> v : visitors) {
 			ModelVisitor.visitModel(this.model, v);
 		}

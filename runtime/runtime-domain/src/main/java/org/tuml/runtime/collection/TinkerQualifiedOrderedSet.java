@@ -5,5 +5,5 @@ import java.util.Set;
 
 import org.tuml.runtime.collection.ocl.OclStdLibOrderedSet;
 
-public interface TinkerQualifiedOrderedSet<E> extends Set<E>, List<E>, OclStdLibOrderedSet<E> {
+public interface TinkerQualifiedOrderedSet<E> extends TinkerCollection<E>, Set<E>, List<E>, OclStdLibOrderedSet<E> {
 }

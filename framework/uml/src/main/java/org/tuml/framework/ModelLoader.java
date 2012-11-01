@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -20,8 +21,11 @@ import org.eclipse.ocl.uml.UMLEnvironmentFactory;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Generalization;
+import org.eclipse.uml2.uml.Interface;
+import org.eclipse.uml2.uml.InterfaceRealization;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.NamedElement;
+import org.eclipse.uml2.uml.PackageImport;
 import org.eclipse.uml2.uml.Profile;
 import org.eclipse.uml2.uml.Stereotype;
 import org.eclipse.uml2.uml.UMLPackage;
@@ -33,8 +37,10 @@ public class ModelLoader {
 	public static final ResourceSet RESOURCE_SET = new ResourceSetImpl();
 	private static Model model;
 	private static Profile tumlValidationProfile;
+	private static final Logger logger = Logger.getLogger(ModelLoader.class.getPackage().getName());
 
 	public static Model loadModel(File modelFile) {
+		logger.info(String.format("Loading model %s", modelFile.getName()));
 		registerResourceFactories();
 		URLClassLoader loader = (URLClassLoader) Thread.currentThread().getContextClassLoader();
 		URI uri = URI.createURI(findLocation(loader, true, "org/eclipse/uml2/uml/resources", "org.eclipse.uml2.uml.resources"));
@@ -43,6 +49,7 @@ public class ModelLoader {
 		URI dirUri = URI.createFileURI(dir.getAbsolutePath());
 		model = (Model) load(dirUri.appendSegment(modelFile.getName()));
 		tumlValidationProfile = model.getAppliedProfile("Tuml::Validation");
+		logger.info(String.format("Done loading the model"));
 		return model;
 	}
 
@@ -76,7 +83,37 @@ public class ModelLoader {
 			
 			@Override
 			public boolean filter(Element e) {
-				return e instanceof Generalization && ((Generalization)e).getGeneral() == c;
+				if (e instanceof NamedElement) {
+					NamedElement namedElement = (NamedElement)e;
+					if (namedElement.getName() != null) {
+						if (namedElement.getName().equals("Query")) {
+							System.out.println();
+						}
+					}
+				}
+				if (e instanceof Generalization && ((Generalization)e).getGeneral() == c) {
+					Classifier specific = ((Generalization)e).getSpecific();
+					if (specific.getName().equals("Query")) {
+						System.out.println();
+					}
+					return true;
+				} else {
+					return false;
+				}
+//				return e instanceof Generalization && ((Generalization)e).getGeneral() == c;
+			}
+		});
+		
+		return results;
+	}
+
+	public static List<InterfaceRealization> getInterfaceRealization(final Interface inf) {
+		List<InterfaceRealization> results = new ArrayList<InterfaceRealization>();
+		filter(results, model, new Filter() {
+			
+			@Override
+			public boolean filter(Element e) {
+				return e instanceof InterfaceRealization && ((InterfaceRealization)e).getContract() == inf;
 			}
 		});
 		
@@ -150,8 +187,16 @@ public class ModelLoader {
 		if (f.filter(element)) {
 			result.add((T) element);
 		}
-		for (Element e : element.getOwnedElements()) {
-			filter(result, e, f);
+		if (element instanceof PackageImport) {
+			PackageImport pi = (PackageImport)element;
+			org.eclipse.uml2.uml.Package p = pi.getImportedPackage();
+			for (Element e : p.getOwnedElements()) {
+				filter(result, e, f);
+			}
+		} else {
+			for (Element e : element.getOwnedElements()) {
+				filter(result, e, f);
+			}
 		}
 	}
 	
