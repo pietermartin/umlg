@@ -35,8 +35,8 @@ public class LookupGenerator extends BaseVisitor implements Visitor<Property> {
 		if (!propertyWrapper.isComposite() && !(propertyWrapper.getType() instanceof Enumeration) && !propertyWrapper.isDerived() && !propertyWrapper.isQualifier()
 				&& propertyWrapper.getOtherEnd() != null && !(propertyWrapper.getOtherEnd().getType() instanceof Enumeration) && !propertyWrapper.getOtherEnd().isComposite()) {
 			Type compositeParent = findCompositeParent(propertyWrapper);
+			OJAnnotatedClass ojClass = findOJClass(propertyWrapper);
 			if (compositeParent != null) {
-				OJAnnotatedClass ojClass = findOJClass(propertyWrapper);
 				PropertyWrapper otherEndPropertyWrapper = new PropertyWrapper(propertyWrapper.getOtherEnd());
 
 				PropertyWrapper otherEndToComposite;
@@ -59,13 +59,27 @@ public class LookupGenerator extends BaseVisitor implements Visitor<Property> {
 					generateLookupForNonCompositeProperty(compositeParent, ojClass, ojClass, otherEndPropertyWrapper, propertyWrapper);
 				}
 			} else {
-				// TODO allInstances
+				generateLookupForAllInstances(ojClass, propertyWrapper);
+				
 			}
 		}
 	}
 
 	@Override
 	public void visitAfter(Property p) {
+	}
+
+	private void generateLookupForAllInstances(OJAnnotatedClass ojClass, PropertyWrapper propertyWrapper) {
+		OJAnnotatedOperation lookupCompositeParentOnParent = new OJAnnotatedOperation(propertyWrapper.lookupCompositeParent());
+		lookupCompositeParentOnParent.setReturnType(TinkerGenerationUtil.Root);
+		ojClass.addToOperations(lookupCompositeParentOnParent);
+		lookupCompositeParentOnParent.getBody().addToStatements("return " + TinkerGenerationUtil.Root.getLast() + ".INSTANCE");
+		
+		OJAnnotatedOperation lookupOnParent = new OJAnnotatedOperation(propertyWrapper.lookup());
+		String pathName = "? extends " + TumlClassOperations.getPathName(propertyWrapper.getType()).getLast();
+		lookupOnParent.setReturnType(TinkerGenerationUtil.tinkerSet.getCopy().addToGenerics(pathName));
+		ojClass.addToOperations(lookupOnParent);
+		lookupOnParent.getBody().addToStatements("return " + propertyWrapper.javaBaseTypePath().getLast() + ".allInstances()");
 	}
 
 	public static void generateLookupForNonCompositeProperty(Type compositeParent, OJAnnotatedClass ojClass, OJAnnotatedClass ojClassOwningType,

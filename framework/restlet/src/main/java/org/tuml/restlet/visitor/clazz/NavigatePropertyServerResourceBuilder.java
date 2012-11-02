@@ -44,7 +44,7 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 				OJAnnotatedClass owner = findOJClass(classifier);
 
 				OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_"
-						+ pWrap.getOtherEnd().getName() + "_" + pWrap.getName()  + "_" + StringUtils.capitalize(classifier.getName()) + "_ServerResource");
+						+ pWrap.getOtherEnd().getName() + "_" + pWrap.getName() + "_" + StringUtils.capitalize(classifier.getName()) + "_ServerResource");
 				OJPackage ojPackage = new OJPackage(owner.getMyPackage().toString() + ".restlet");
 				annotatedInf.setMyPackage(ojPackage);
 				addToSource(annotatedInf);
@@ -181,14 +181,14 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 		delete.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
 		annotatedClass.addToOperations(delete);
 		delete.getBody().addToStatements("Integer id = (Integer)propertyMap.get(\"id\")");
-		delete.getBody().addToStatements(
-				pWrap.javaBaseTypePath().getLast() + " childResource = GraphDb.getDb().instantiateClassifier(Long.valueOf(id))");
+		delete.getBody().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = GraphDb.getDb().instantiateClassifier(Long.valueOf(id))");
 		annotatedClass.addToImports(pWrap.javaBaseTypePath());
 		delete.getBody().addToStatements("childResource.delete()");
 
 	}
 
-	private void addPostObjectRepresentation(Classifier concreteClassifier, PropertyWrapper pWrap, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass) {
+	private void addPostObjectRepresentation(Classifier concreteClassifier, PropertyWrapper pWrap, OJAnnotatedInterface annotatedInf,
+			OJAnnotatedClass annotatedClass) {
 		OJAnnotatedOperation postInf = new OJAnnotatedOperation("post", TumlRestletGenerationUtil.Representation);
 		postInf.addToParameters(new OJParameter("entity", TumlRestletGenerationUtil.Representation));
 		annotatedInf.addToOperations(postInf);
@@ -260,8 +260,7 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 		put.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
 		annotatedClass.addToOperations(put);
 		put.getBody().addToStatements("Integer id = (Integer)propertyMap.get(\"id\")");
-		put.getBody().addToStatements(
-				pWrap.javaBaseTypePath().getLast() + " childResource = GraphDb.getDb().instantiateClassifier(Long.valueOf(id))");
+		put.getBody().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = GraphDb.getDb().instantiateClassifier(Long.valueOf(id))");
 		annotatedClass.addToImports(pWrap.javaBaseTypePath());
 		put.getBody().addToStatements("childResource.fromJson(propertyMap)");
 	}
@@ -272,8 +271,10 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 		add.addToParameters(new OJParameter("parentResource", parentPathName));
 		add.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
 		annotatedClass.addToOperations(add);
-		add.getBody().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = new " + TumlClassOperations.getPathName(concreteClassifier).getLast() + "(true)");
+		add.getBody().addToStatements(
+				pWrap.javaBaseTypePath().getLast() + " childResource = new " + TumlClassOperations.getPathName(concreteClassifier).getLast() + "(true)");
 		annotatedClass.addToImports(pWrap.javaBaseTypePath());
+		annotatedClass.addToImports(TumlClassOperations.getPathName(concreteClassifier));
 		add.getBody().addToStatements("childResource.fromJson(propertyMap)");
 		if (pWrap.isOrdered()) {
 			annotatedClass.addToImports(TumlRestletGenerationUtil.Parameter);
@@ -289,45 +290,60 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 	}
 
 	private void buildToJson(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass, OJBlock block) {
+		annotatedClass.addToImports(TinkerGenerationUtil.ToJsonUtil);
 		block.addToStatements("StringBuilder json = new StringBuilder()");
 		block.addToStatements("json.append(\"[\")");
 
 		Set<Classifier> concreteImplementations = TumlClassOperations.getConcreteImplementations((Classifier) pWrap.getType());
 		int count = 1;
-		for (Classifier classifier : concreteImplementations) {
-
-			if (pWrap.isOne()) {
-				block.addToStatements("json.append(\"{\\\"data\\\": \")");
-			} else {
-				block.addToStatements("json.append(\"{\\\"data\\\": [\")");
-			}
-
-			if (concreteImplementations.size() > 1) {
-				block.addToStatements("json.append(ToJsonUtil.toJsonWithoutCompositeParent(parentResource." + pWrap.getter() + "().select(new "
-						+ TinkerGenerationUtil.BooleanExpressionEvaluator.getCopy().addToGenerics(TumlClassOperations.getPathName(pWrap.getType())).getLast()
-						+ "() {\n			@Override\n			public Boolean evaluate(" + TumlClassOperations.getPathName(pWrap.getType()).getLast()
-						+ " e) {\n				return e instanceof " + TumlClassOperations.getPathName(classifier).getLast() + ";\n			}\n		})))");
-				annotatedClass.addToImports(TinkerGenerationUtil.BooleanExpressionEvaluator);
-				annotatedClass.addToImports(TumlClassOperations.getPathName(pWrap.getType()));
-				annotatedClass.addToImports(TumlClassOperations.getPathName(classifier));
-			} else {
-				block.addToStatements("json.append(ToJsonUtil.toJsonWithoutCompositeParent(parentResource." + pWrap.getter() + "()))");
-			}
-			annotatedClass.addToImports(TinkerGenerationUtil.ToJsonUtil);
-			if (pWrap.isOne()) {
-				block.addToStatements("json.append(\",\")");
-			} else {
-				block.addToStatements("json.append(\"],\")");
-			}
+		OJIfStatement ifIsOneIfStatement = null;
+		if (pWrap.isOne()) {
+			block.addToStatements(pWrap.javaBaseTypePath().getLast() + " " + pWrap.fieldname() + " = parentResource." + pWrap.getter() + "()");
+			ifIsOneIfStatement = new OJIfStatement();
+			block.addToStatements("json.append(\"{\\\"data\\\": \")");
+			block.addToStatements("json.append(ToJsonUtil.toJsonWithoutCompositeParent(" + pWrap.fieldname() + "))");
+			block.addToStatements("json.append(\",\")");
 			block.addToStatements("json.append(\" \\\"meta\\\" : [\")");
 			block.addToStatements("json.append(\"{\\\"qualifiedName\\\": \\\"" + pWrap.getQualifiedName() + "\\\"}\")");
 			block.addToStatements("json.append(\", \")");
+		}
+		for (Classifier classifier : concreteImplementations) {
+			annotatedClass.addToImports(TumlClassOperations.getPathName(classifier));
 			if (pWrap.isOne()) {
-				block.addToStatements("json.append(" + TumlClassOperations.propertyEnumName(new PropertyWrapper(pWrap.getOtherEnd()).getOwningType())
-						+ ".asJson())");
+				OJBlock conditionBlock = new OJBlock();
+				String condition = pWrap.fieldname() + " instanceof " + TumlClassOperations.getPathName(classifier).getLast();
+				if (count == 1) {
+					ifIsOneIfStatement.setCondition(condition);
+					ifIsOneIfStatement.setThenPart(conditionBlock);
+				} else if (count == concreteImplementations.size()) {
+					ifIsOneIfStatement.setElsePart(conditionBlock);
+				} else {
+					conditionBlock = ifIsOneIfStatement.addToElseIfCondition(condition, "");
+				}
+				conditionBlock.addToStatements("json.append(" + TumlClassOperations.propertyEnumName(classifier) + ".asJson())");
 				annotatedClass.addToImports(TumlClassOperations.getPathName(new PropertyWrapper(pWrap.getOtherEnd()).getOwningType()).append(
 						TumlClassOperations.propertyEnumName(new PropertyWrapper(pWrap.getOtherEnd()).getOwningType())));
+				annotatedClass.addToImports(TumlClassOperations.getPathName(classifier).append(TumlClassOperations.propertyEnumName(classifier)));
+				block.addToStatements(ifIsOneIfStatement);
 			} else {
+				block.addToStatements("json.append(\"{\\\"data\\\": [\")");
+//				if (concreteImplementations.size() > 1) {
+					block.addToStatements("json.append(ToJsonUtil.toJsonWithoutCompositeParent(parentResource."
+							+ pWrap.getter()
+							+ "().select(new "
+							+ TinkerGenerationUtil.BooleanExpressionEvaluator.getCopy().addToGenerics(TumlClassOperations.getPathName(pWrap.getType()))
+									.getLast() + "() {\n			@Override\n			public Boolean evaluate(" + TumlClassOperations.getPathName(pWrap.getType()).getLast()
+							+ " e) {\n				return e instanceof " + TumlClassOperations.getPathName(classifier).getLast() + ";\n			}\n		})))");
+					annotatedClass.addToImports(TinkerGenerationUtil.BooleanExpressionEvaluator);
+					annotatedClass.addToImports(TumlClassOperations.getPathName(pWrap.getType()));
+//				}
+				block.addToStatements("json.append(\"],\")");
+				block.addToStatements("json.append(\" \\\"meta\\\" : [\")");
+				block.addToStatements("json.append(\"{\\\"qualifiedName\\\": \\\"" + pWrap.getQualifiedName() + "\\\"}\")");
+				block.addToStatements("json.append(\", \")");
+			}
+
+			if (!pWrap.isOne()) {
 				block.addToStatements("json.append(" + TumlClassOperations.propertyEnumName(pWrap.getOwningType()) + ".asJson())");
 				annotatedClass.addToImports(TumlClassOperations.getPathName(pWrap.getOwningType()).append(
 						TumlClassOperations.propertyEnumName(pWrap.getOwningType())));
@@ -335,19 +351,25 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 				block.addToStatements("json.append(" + TumlClassOperations.propertyEnumName(classifier) + ".asJson())");
 				annotatedClass.addToImports(TumlClassOperations.getPathName(classifier).append(TumlClassOperations.propertyEnumName(classifier)));
 			}
-			block.addToStatements("json.append(\"]}\")");
-			if (concreteImplementations.size() != 1 && count++ != concreteImplementations.size()) {
-				block.addToStatements("json.append(\",\")");
+			if (!pWrap.isOne()) {
+				block.addToStatements("json.append(\"]}\")");
+				if (concreteImplementations.size() != 1 && count != concreteImplementations.size()) {
+					block.addToStatements("json.append(\",\")");
+				}
 			}
+			count++;
+		}
+		if (pWrap.isOne()) {
+			block.addToStatements("json.append(\"]}\")");
 		}
 		block.addToStatements("json.append(\"]\")");
-
 		block.addToStatements("return new " + TumlRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
 	}
 
 	private void addServerResourceToRouterEnum(Classifier concreteClassifier, PropertyWrapper pWrap, OJAnnotatedClass annotatedClass) {
 		OJEnum routerEnum = (OJEnum) this.workspace.findOJClass("restlet.RestletRouterEnum");
-		OJEnumLiteral ojLiteral = new OJEnumLiteral(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast().toUpperCase() + "_" + pWrap.getName() + "_" + concreteClassifier.getName() );
+		OJEnumLiteral ojLiteral = new OJEnumLiteral(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast().toUpperCase() + "_" + pWrap.getName()
+				+ "_" + concreteClassifier.getName());
 
 		OJField uri = new OJField();
 		uri.setType(new OJPathName("String"));

@@ -137,10 +137,11 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 		OJConstructor constructor = ojClass.findConstructor(new OJPathName("java.lang.Boolean"));
 		constructor.getBody().addToStatements("this.vertex = " + TinkerGenerationUtil.graphDbAccess + ".addVertex(this.getClass().getName())");
 		constructor.getBody().addToStatements("this.vertex.setProperty(\"className\", getClass().getName())");
-		if (TumlClassOperations.hasCompositeOwner(c)) {
-			constructor.getBody().addToStatements("TransactionThreadEntityVar.setNewEntity(this)");
-			ojClass.addToImports(TinkerGenerationUtil.transactionThreadEntityVar);
-		}
+		// Do not understand this if statement
+		// if (TumlClassOperations.hasCompositeOwner(c)) {
+		constructor.getBody().addToStatements("TransactionThreadEntityVar.setNewEntity(this)");
+		ojClass.addToImports(TinkerGenerationUtil.transactionThreadEntityVar);
+		// }
 		constructor.getBody().addToStatements("defaultCreate()");
 		ojClass.addToImports(TinkerGenerationUtil.graphDbPathName);
 	}
@@ -267,6 +268,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 		}
 		annotatedClass.addToImports(TinkerGenerationUtil.Root);
 		List<String> propertyList = new ArrayList<String>();
+		List<String> localPropertyList = new ArrayList<String>();
 		if (TumlClassOperations.hasCompositeOwner(clazz)) {
 			PropertyWrapper otherEndToComposite = new PropertyWrapper(TumlClassOperations.getOtherEndToComposite(clazz));
 			PropertyWrapper composite = new PropertyWrapper(otherEndToComposite.getOtherEnd());
@@ -275,7 +277,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 			// Check if it has specialisations that have composite owners
 			Set<Classifier> specializationsWithCompositeOwner = TumlClassOperations.getSpecializationWithCompositeOwner(clazz);
 			// Do not visit where you come from. Infinite loop...
-//			specializationsWithCompositeOwner.remove(clazz);
+			// specializationsWithCompositeOwner.remove(clazz);
 			if (!specializationsWithCompositeOwner.isEmpty()) {
 				// Specialisation must be unioned together
 				List<String> unionedPropertyList = new ArrayList<String>();
@@ -296,22 +298,21 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 				propertyList.addAll(unionedPropertyList);
 			}
 			Set<Classifier> specializationsWithoutCompositeOwner = TumlClassOperations.getConcreteSpecializationsWithoutCompositeOwner(clazz);
-//			specializationsWithoutCompositeOwner.remove(clazz);
+			// specializationsWithoutCompositeOwner.remove(clazz);
 			if (!specializationsWithoutCompositeOwner.isEmpty()) {
 				List<String> unionedPropertyList = new ArrayList<String>();
 				int count = 1;
 				for (Classifier classifier : specializationsWithoutCompositeOwner) {
 					List<String> propertyListToUnion = new ArrayList<String>();
-					propertyListToUnion.addAll(propertyList);
+					
 					if (1 != count || !specializationsWithCompositeOwner.isEmpty()) {
 						propertyListToUnion.add(".union(");
-					}
-					if (!specializationsWithCompositeOwner.isEmpty()) {
-						propertyListToUnion.add(0, ")");
 					}
 					if (specializationsWithoutCompositeOwner.size() != count++) {
 						propertyListToUnion.add(")");
 					}
+					propertyListToUnion.addAll(localPropertyList);
+					
 					propertyListToUnion.add(">flatten()");
 					propertyListToUnion.add(TumlClassOperations.getPathName(clazz).getLast());
 					propertyListToUnion.add(".<");
@@ -319,9 +320,16 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 							+ "()");
 					unionedPropertyList.addAll(propertyListToUnion);
 				}
-				propertyList.clear();
+				localPropertyList.clear();
+				if (specializationsWithCompositeOwner.isEmpty()) {
+					// Nothing to union
+					propertyList.clear();
+				}
 				propertyList.addAll(unionedPropertyList);
-			} 
+				if (!specializationsWithCompositeOwner.isEmpty()) {
+					propertyList.add(0, ")");
+				}
+			}
 			if (specializationsWithCompositeOwner.isEmpty() && specializationsWithoutCompositeOwner.isEmpty()) {
 				if (!clazz.isAbstract()) {
 					propertyList.add(TinkerGenerationUtil.Root.getCopy().getLast() + ".INSTANCE." + "get" + TumlClassOperations.className(clazz) + "()");
@@ -369,18 +377,18 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 			// Check if it has specialisations that have composite owners
 			Set<Classifier> specializationsWithCompositeOwner;
 			if (owningType instanceof Interface) {
-				specializationsWithCompositeOwner = TumlClassOperations.getRealizationWithCompositeOwner((Interface)owningType);
+				specializationsWithCompositeOwner = TumlClassOperations.getRealizationWithCompositeOwner((Interface) owningType);
 			} else {
 				specializationsWithCompositeOwner = TumlClassOperations.getSpecializationWithCompositeOwner(owningType);
 			}
 			// Do not visit where you come from. Infinite loop...
 			specializationsWithCompositeOwner.remove(owningType);
 			specializationsWithCompositeOwner.remove(compositeEndPWrap.getType());
-			
-			//These 2 groups must be unioned together
+
+			// These 2 groups must be unioned together
 			Set<Classifier> specializationsWithoutCompositeOwner;
 			if (owningType instanceof Interface) {
-				specializationsWithoutCompositeOwner = TumlClassOperations.getRealizationWithoutCompositeOwner((Interface)owningType);
+				specializationsWithoutCompositeOwner = TumlClassOperations.getRealizationWithoutCompositeOwner((Interface) owningType);
 			} else {
 				specializationsWithoutCompositeOwner = TumlClassOperations.getConcreteSpecializationsWithoutCompositeOwner(owningType);
 			}
@@ -388,7 +396,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 			if (owningType.isAbstract()) {
 				specializationsWithoutCompositeOwner.remove(compositeEndPWrap.getType());
 			}
-			
+
 			if (!specializationsWithCompositeOwner.isEmpty()) {
 
 				// Specialisation must be unioned together
@@ -408,7 +416,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 				}
 				propertyList.clear();
 				propertyList.addAll(unionedPropertyList);
-				
+
 			}
 
 			if (!specializationsWithoutCompositeOwner.isEmpty()) {
@@ -416,6 +424,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 				int count = 1;
 				for (Classifier classifier : specializationsWithoutCompositeOwner) {
 					List<String> propertyListToUnion = new ArrayList<String>();
+					
 					if (1 != count || !specializationsWithCompositeOwner.isEmpty()) {
 						propertyListToUnion.add(".union(");
 					}
@@ -432,15 +441,15 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 				}
 				localPropertyList.clear();
 				if (specializationsWithCompositeOwner.isEmpty()) {
-					//Nothing to union
+					// Nothing to union
 					propertyList.clear();
 				}
 				propertyList.addAll(unionedPropertyList);
 				if (!specializationsWithCompositeOwner.isEmpty()) {
 					propertyList.add(0, ")");
 				}
-			} 
-			
+			}
+
 			if (specializationsWithCompositeOwner.isEmpty() && specializationsWithoutCompositeOwner.isEmpty()) {
 				if (!owningType.isAbstract()) {
 					propertyList.add(TinkerGenerationUtil.Root.getCopy().getLast() + ".INSTANCE." + "get" + TumlClassOperations.className(owningType) + "()");

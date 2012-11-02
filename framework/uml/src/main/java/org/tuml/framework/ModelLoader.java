@@ -83,24 +83,25 @@ public class ModelLoader {
 			
 			@Override
 			public boolean filter(Element e) {
-				if (e instanceof NamedElement) {
-					NamedElement namedElement = (NamedElement)e;
-					if (namedElement.getName() != null) {
-						if (namedElement.getName().equals("Query")) {
-							System.out.println();
-						}
-					}
-				}
-				if (e instanceof Generalization && ((Generalization)e).getGeneral() == c) {
-					Classifier specific = ((Generalization)e).getSpecific();
-					if (specific.getName().equals("Query")) {
-						System.out.println();
-					}
-					return true;
-				} else {
-					return false;
-				}
-//				return e instanceof Generalization && ((Generalization)e).getGeneral() == c;
+				//For debug
+//				if (e instanceof NamedElement) {
+//					NamedElement namedElement = (NamedElement)e;
+//					if (namedElement.getName() != null) {
+//						if (namedElement.getName().equals("Query")) {
+//							System.out.println();
+//						}
+//					}
+//				}
+//				if (e instanceof Generalization && ((Generalization)e).getGeneral() == c) {
+//					Classifier specific = ((Generalization)e).getSpecific();
+//					if (specific.getName().equals("Query")) {
+//						System.out.println();
+//					}
+//					return true;
+//				} else {
+//					return false;
+//				}
+				return e instanceof Generalization && ((Generalization)e).getGeneral() == c;
 			}
 		});
 		
@@ -183,6 +184,7 @@ public class ModelLoader {
 	}
 	
 
+	@SuppressWarnings("unchecked")
 	private static <T extends Element> void  filter(List<T> result, Element element, Filter f) {
 		if (f.filter(element)) {
 			result.add((T) element);

@@ -6,6 +6,7 @@ import java.util.List;
 import org.tuml.runtime.domain.PersistentObject;
 import org.tuml.runtime.domain.TumlEnum;
 import org.tuml.runtime.domain.TumlNode;
+import org.tuml.runtime.domain.TumlRootNode;
 
 public class ToJsonUtil {
 	public static String pathToCompositionRootAsJson(List<String> uriList, List<String> nameList, List<TumlNode> entities, String rootName, String rootUri) {
@@ -88,6 +89,16 @@ public class ToJsonUtil {
 	}
 
 	public static String toJson(PersistentObject entity) {
+		if (entity != null) {
+			StringBuilder json = new StringBuilder();
+			json.append(entity.toJson());
+			return json.toString();
+		} else {
+			return "";
+		}
+	}
+
+	public static String toJson(TumlRootNode entity) {
 		if (entity != null) {
 			StringBuilder json = new StringBuilder();
 			json.append(entity.toJson());

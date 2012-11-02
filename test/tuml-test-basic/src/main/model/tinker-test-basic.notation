@@ -419,7 +419,7 @@
       <children xmi:type="notation:BasicCompartment" xmi:id="_Lt_iMwAPEeKpVr_ntT6cLA" type="7019"/>
       <children xmi:type="notation:DecorationNode" xmi:id="_LufRdwAPEeKpVr_ntT6cLA" type="5029"/>
       <element xmi:type="uml:Class" href="tinker-test-basic.uml#_brypAK85EeGzNfwuvR7FNw"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Lt_iNAAPEeKpVr_ntT6cLA" x="264" y="238" width="100"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Lt_iNAAPEeKpVr_ntT6cLA" x="148" y="300" width="100"/>
     </children>
     <children xmi:type="notation:Shape" xmi:id="_LuAJQAAPEeKpVr_ntT6cLA" type="2008" fontName="Sans" fontHeight="10" bold="true" fillColor="16770760" lineColor="0">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_Luf4hwAPEeKpVr_ntT6cLA" source="QualifiedName">
@@ -435,7 +435,7 @@
       <children xmi:type="notation:BasicCompartment" xmi:id="_LuAJQwAPEeKpVr_ntT6cLA" type="7019"/>
       <children xmi:type="notation:DecorationNode" xmi:id="_Luf4hgAPEeKpVr_ntT6cLA" type="5029"/>
       <element xmi:type="uml:Class" href="tinker-test-basic.uml#_cV2SoK85EeGzNfwuvR7FNw"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_LuAJRAAPEeKpVr_ntT6cLA" x="192" y="340" width="100"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_LuAJRAAPEeKpVr_ntT6cLA" x="396" y="248" width="100"/>
     </children>
     <children xmi:type="notation:Shape" xmi:id="_LuBXYAAPEeKpVr_ntT6cLA" type="2008" fontName="Sans" fontHeight="10" bold="true" fillColor="16770760" lineColor="0">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_LugfkQAPEeKpVr_ntT6cLA" source="QualifiedName">
@@ -451,7 +451,7 @@
       <children xmi:type="notation:BasicCompartment" xmi:id="_LuBXYwAPEeKpVr_ntT6cLA" type="7019"/>
       <children xmi:type="notation:DecorationNode" xmi:id="_LugfkAAPEeKpVr_ntT6cLA" type="5029"/>
       <element xmi:type="uml:Class" href="tinker-test-basic.uml#_evo0gK85EeGzNfwuvR7FNw"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_LuBXZAAPEeKpVr_ntT6cLA" x="346" y="340" width="100"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_LuBXZAAPEeKpVr_ntT6cLA" x="340" y="384" width="100"/>
     </children>
     <children xmi:type="notation:Shape" xmi:id="_YI228CQrEeKzTel_Vwmhog" type="2008" fontName="Sans" lineColor="0">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_YI228iQrEeKzTel_Vwmhog" source="ShadowFigure">
@@ -495,7 +495,7 @@
         <layoutConstraint xmi:type="notation:Bounds" xmi:id="_YI3eEyQrEeKzTel_Vwmhog"/>
       </children>
       <element xmi:type="uml:Class" href="tuml-lib.uml#_2GNhsCQOEeKOmc56p_1Osg"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_YI228SQrEeKzTel_Vwmhog" x="584" y="224"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_YI228SQrEeKzTel_Vwmhog" x="764" y="44"/>
     </children>
     <element xmi:type="uml:Package" href="tinker-test-basic.uml#_WqFCoK85EeGzNfwuvR7FNw"/>
     <edges xmi:type="notation:Edge" xmi:id="_LuJTNQAPEeKpVr_ntT6cLA" type="4002" source="_LuAJQAAPEeKpVr_ntT6cLA" target="_Lt_iMAAPEeKpVr_ntT6cLA">

@@ -17,6 +17,7 @@ import org.opaeum.java.metamodel.OJStatement;
 import org.opaeum.java.metamodel.OJVisibilityKind;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
+import org.opaeum.java.metamodel.annotation.OJAnnotationValue;
 import org.opaeum.java.metamodel.annotation.OJEnum;
 import org.tuml.framework.Visitor;
 import org.tuml.generation.Workspace;
@@ -37,6 +38,7 @@ public class RootEntryPointCreator extends BaseVisitor implements Visitor<Model>
 	@Override
 	public void visitBefore(Model model) {
 		OJAnnotatedClass root = new OJAnnotatedClass("Root");
+		root.addToImplementedInterfaces(TinkerGenerationUtil.TumlRootNode);
 		OJPackage ojPackage = new OJPackage("org.tuml.root");
 		root.setMyPackage(ojPackage);
 		addToSource(root);
@@ -45,30 +47,29 @@ public class RootEntryPointCreator extends BaseVisitor implements Visitor<Model>
 		root.addToImports(TinkerGenerationUtil.graphDbPathName);
 		root.addToImports(TinkerGenerationUtil.vertexPathName);
 
-		OJField INSTANCE = new OJField("INSTANCE", root.getPathName());
-		INSTANCE.setStatic(true);
-		INSTANCE.setInitExp("new Root()");
-		root.addToFields(INSTANCE);
+		addINSTANCE(root);
+		addGetRootVertex(root);
+		rebuildAsJson(model, root);
+		implementTumlRootNode(root);
+	}
 
-		OJAnnotatedOperation getRootVertex = new OJAnnotatedOperation("getRootVertex");
-		getRootVertex.setReturnType(TinkerGenerationUtil.vertexPathName);
-		getRootVertex.setVisibility(OJVisibilityKind.PRIVATE);
-		getRootVertex.getBody().addToStatements("return GraphDb.getDb().getRoot()");
-		root.addToOperations(getRootVertex);
 
+	private void implementTumlRootNode(OJAnnotatedClass root) {
+		OJAnnotatedOperation getId = new OJAnnotatedOperation("getId");
+		getId.addAnnotationIfNew(new OJAnnotationValue(new OJPathName("java.lang.Override")));
+		getId.setReturnType(new OJPathName("java.lang.Long"));
+		getId.getBody().addToStatements("return TinkerIdUtilFactory.getIdUtil().getId(getRootVertex())");
+		root.addToOperations(getId);
+		root.addToImports(TinkerGenerationUtil.tinkerIdUtilFactoryPathName);
+		
+		OJAnnotatedOperation toJson = new OJAnnotatedOperation("toJson");
+		toJson.setReturnType("String");
+		toJson.getBody().addToStatements("return \"{\\\"id\\\": \" + getId() + \"}\"");
+		root.addToOperations(toJson);
+	}
+
+	private void rebuildAsJson(Model model, OJAnnotatedClass root) {
 		OJEnum ojEnum = RuntimePropertyImplementor.addTumlRuntimePropertyEnum(root, "RootRuntimePropertyEnum", model, new HashSet<Property>(), false, model.getName());
-
-		@SuppressWarnings("unchecked")
-		List<Class> result = (List<Class>) TumlModelOperations.findElements(model, new Condition() {
-			@Override
-			public boolean evaluateOn(Element e) {
-				if (!(e instanceof Class)) {
-					return false;
-				}
-				Class clazz = (Class) e;
-				return !clazz.isAbstract() && !TumlClassOperations.hasCompositeOwner(clazz);
-			}
-		});
 
 		// Rebuild asJson
 		OJAnnotatedOperation asJson = ojEnum.findOperation("asJson");
@@ -84,6 +85,7 @@ public class RootEntryPointCreator extends BaseVisitor implements Visitor<Model>
 
 		OJAnnotatedOperation fromLabel = ojEnum.findOperation("fromLabel", new OJPathName("String"));
 		int count = 0;
+		List<Class> result = findRootEntities(model);
 		// Add root entities as though they are fake properties to App root
 		for (Class clazz : result) {
 			count++;
@@ -98,7 +100,7 @@ public class RootEntryPointCreator extends BaseVisitor implements Visitor<Model>
 		}
 		asJson.getBody().addToStatements("sb.append(\"]}\")");
 		asJson.getBody().addToStatements("return sb.toString()");
-
+		
 		// Move fromLabel's return null from first line to last line
 		count = 0;
 		List<Integer> toRemove = new ArrayList<Integer>();
@@ -112,6 +114,37 @@ public class RootEntryPointCreator extends BaseVisitor implements Visitor<Model>
 			fromLabel.getBody().getStatements().remove(integer.intValue());
 		}
 		fromLabel.getBody().addToStatements("return null");
+
+	}
+
+	private List<Class> findRootEntities(Model model) {
+		@SuppressWarnings("unchecked")
+		List<Class> result = (List<Class>) TumlModelOperations.findElements(model, new Condition() {
+			@Override
+			public boolean evaluateOn(Element e) {
+				if (!(e instanceof Class)) {
+					return false;
+				}
+				Class clazz = (Class) e;
+				return !clazz.isAbstract() && !TumlClassOperations.hasCompositeOwner(clazz);
+			}
+		});
+		return result;
+	}
+
+	private void addGetRootVertex(OJAnnotatedClass root) {
+		OJAnnotatedOperation getRootVertex = new OJAnnotatedOperation("getRootVertex");
+		getRootVertex.setReturnType(TinkerGenerationUtil.vertexPathName);
+		getRootVertex.setVisibility(OJVisibilityKind.PRIVATE);
+		getRootVertex.getBody().addToStatements("return GraphDb.getDb().getRoot()");
+		root.addToOperations(getRootVertex);
+	}
+
+	private void addINSTANCE(OJAnnotatedClass root) {
+		OJField INSTANCE = new OJField("INSTANCE", root.getPathName());
+		INSTANCE.setStatic(true);
+		INSTANCE.setInitExp("new Root()");
+		root.addToFields(INSTANCE);
 	}
 
 	@Override

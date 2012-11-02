@@ -11,6 +11,8 @@ import org.tuml.inheritencetest.AbstractSpecies;
 import org.tuml.inheritencetest.Biped;
 import org.tuml.inheritencetest.Mamal;
 import org.tuml.inheritencetest.Quadped;
+import org.tuml.interfacetest.ManyA;
+import org.tuml.interfacetest.ManyB;
 import org.tuml.query.Query;
 import org.tuml.query.QueryEnum;
 import org.tuml.runtime.test.BaseLocalDbTest;
@@ -36,7 +38,7 @@ public class AllInstancesTest extends BaseLocalDbTest {
 		Biped biped3 = new Biped(god);
 		Biped biped4 = new Biped(god);
 		Biped biped5 = new Biped(god);
-		
+
 		Quadped quadPed1 = new Quadped(god);
 		Quadped quadPed2 = new Quadped(god);
 		Quadped quadPed3 = new Quadped(god);
@@ -50,7 +52,7 @@ public class AllInstancesTest extends BaseLocalDbTest {
 		Assert.assertEquals(5, Quadped.allInstances().size());
 		Assert.assertEquals(16, BaseModelTuml.allInstances().size());
 	}
-	
+
 	@Test
 	public void testHierarciesAllInstances() {
 		db.startTransaction();
@@ -74,13 +76,13 @@ public class AllInstancesTest extends BaseLocalDbTest {
 		folder2_2_1.setName("folder2_2_1");
 		Folder folder2_2_2 = new Folder(folder2_1);
 		folder2_2_2.setName("folder2_2_2");
-		
+
 		db.stopTransaction(Conclusion.SUCCESS);
 		Assert.assertEquals(1, RealRootFolder.allInstances().size());
 		Assert.assertEquals(7, Folder.allInstances().size());
 		Assert.assertEquals(9, BaseModelTuml.allInstances().size());
 	}
-	
+
 	@Test
 	public void testAllInstancesOnQueries() {
 		db.startTransaction();
@@ -89,7 +91,7 @@ public class AllInstancesTest extends BaseLocalDbTest {
 		Query query1 = new Query(god);
 		query1.setQueryString("");
 		query1.setQueryEnum(QueryEnum.OCL);
-		
+
 		RealRootFolder realRootFolder = new RealRootFolder(god);
 		realRootFolder.setName("realRootFolder");
 		Query query2 = new Query(realRootFolder);
@@ -139,10 +141,36 @@ public class AllInstancesTest extends BaseLocalDbTest {
 		query9.setQueryEnum(QueryEnum.OCL);
 
 		db.stopTransaction(Conclusion.SUCCESS);
-		
+
 		Assert.assertEquals(18, BaseModelTuml.allInstances().size());
 		Assert.assertEquals(9, Query.allInstances().size());
-		
+
 	}
-	
+
+	@Test
+	public void testAllInstancesOnInterfaces() {
+		db.startTransaction();
+		God god = new God(true);
+		god.setName("THEGOD");
+		ManyA manyA1 = new ManyA(god);
+		manyA1.setName("manyA1");
+		ManyA manyA2 = new ManyA(god);
+		manyA2.setName("manyA2");
+		ManyB manyB1 = new ManyB(god);
+		manyB1.setName("manyB1");
+		ManyB manyB2 = new ManyB(god);
+		manyB2.setName("manyB2");
+		
+		manyA1.addToIManyB(manyB1);
+		manyA1.addToIManyB(manyB2);
+		manyA2.addToIManyB(manyB1);
+		manyA2.addToIManyB(manyB2);
+
+		db.stopTransaction(Conclusion.SUCCESS);
+		Assert.assertEquals(2, ManyA.allInstances().size());
+		Assert.assertEquals(2, ManyB.allInstances().size());
+		//TODO eish
+//		Assert.assertEquals(2, IManyA.allInstances().size());
+	}
+
 }

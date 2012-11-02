@@ -285,9 +285,7 @@ public class TumlClassOperations extends ClassOperations {
 		Set<Classifier> result = new HashSet<Classifier>();
 		Set<Classifier> specializations = getSpecializations(clazz);
 		for (Classifier c : specializations) {
-			System.out.println(c);
 			if (hasCompositeOwner(c)) {
-				System.out.println("hasCompositeOwner " + c);
 				result.add(c);
 			}
 		}

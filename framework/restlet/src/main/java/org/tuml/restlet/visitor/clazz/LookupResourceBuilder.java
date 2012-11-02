@@ -30,23 +30,23 @@ public class LookupResourceBuilder extends BaseServerResourceBuilder implements 
 	public void visitBefore(Property p) {
 		PropertyWrapper pWrap = new PropertyWrapper(p);
 		if (pWrap.hasLookup()) {
-			
+
 			OJAnnotatedClass owner = findOJClass(p);
 
-			OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_" + pWrap.getOtherEnd().getName()
-					+ "_lookUp" + StringUtils.capitalize(pWrap.getName()) + "_ServerResource");
+			OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_"
+					+ pWrap.getOtherEnd().getName() + "_lookUp" + StringUtils.capitalize(pWrap.getName()) + "_ServerResource");
 			OJPackage ojPackage = new OJPackage(owner.getMyPackage().toString() + ".restlet");
 			annotatedInf.setMyPackage(ojPackage);
 			addToSource(annotatedInf);
 
-			OJAnnotatedClass annotatedClass = new OJAnnotatedClass(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_" + pWrap.getOtherEnd().getName() 
-					+ "_lookUp" + StringUtils.capitalize(pWrap.getName()) + "_ServerResourceImpl");
+			OJAnnotatedClass annotatedClass = new OJAnnotatedClass(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_"
+					+ pWrap.getOtherEnd().getName() + "_lookUp" + StringUtils.capitalize(pWrap.getName()) + "_ServerResourceImpl");
 			annotatedClass.setSuperclass(TumlRestletGenerationUtil.ServerResource);
 			annotatedClass.addToImplementedInterfaces(annotatedInf.getPathName());
 			annotatedClass.setMyPackage(ojPackage);
 			addToSource(annotatedClass);
 			addDefaultConstructor(annotatedClass);
-			
+
 			addCompositeParentIdField(pWrap, annotatedClass);
 			addGetObjectRepresentation(pWrap, annotatedInf, annotatedClass);
 			addServerResourceToRouterEnum(pWrap, annotatedClass);
@@ -58,11 +58,12 @@ public class LookupResourceBuilder extends BaseServerResourceBuilder implements 
 	}
 
 	private void addCompositeParentIdField(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass) {
-		OJField compositeParentFieldId = new OJField(TumlClassOperations.getPathName(pWrap.getOtherEnd().getType()).getLast().toLowerCase() + "Id", new OJPathName("int"));
+		OJField compositeParentFieldId = new OJField(TumlClassOperations.getPathName(pWrap.getOtherEnd().getType()).getLast().toLowerCase() + "Id",
+				new OJPathName("int"));
 		compositeParentFieldId.setVisibility(OJVisibilityKind.PRIVATE);
 		annotatedClass.addToFields(compositeParentFieldId);
 	}
-	
+
 	private void addGetObjectRepresentation(PropertyWrapper pWrap, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass) {
 
 		OJAnnotatedOperation getInf = new OJAnnotatedOperation("get", TumlRestletGenerationUtil.Representation);
@@ -76,10 +77,10 @@ public class LookupResourceBuilder extends BaseServerResourceBuilder implements 
 
 		OJPathName parentPathName = TumlClassOperations.getPathName(pWrap.getOtherEnd().getType());
 		get.getBody().addToStatements(
-				"this." + parentPathName.getLast().toLowerCase() + "Id = Integer.parseInt((String)getRequestAttributes().get(\"" + parentPathName.getLast().toLowerCase()
-						+ "Id\"))");
+				"this." + parentPathName.getLast().toLowerCase() + "Id = Integer.parseInt((String)getRequestAttributes().get(\""
+						+ parentPathName.getLast().toLowerCase() + "Id\"))");
 		get.getBody().addToStatements(
-				parentPathName.getLast() + " resource = new " + parentPathName.getLast() + "(GraphDb.getDb().getVertex(this." + parentPathName.getLast().toLowerCase() + "Id"
+				parentPathName.getLast() + " resource = GraphDb.getDb().instantiateClassifier(Long.valueOf(this." + parentPathName.getLast().toLowerCase() + "Id"
 						+ "))");
 		annotatedClass.addToImports(parentPathName);
 		buildToJson(pWrap, annotatedClass, get.getBody());
@@ -87,7 +88,7 @@ public class LookupResourceBuilder extends BaseServerResourceBuilder implements 
 		annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);
 		annotatedClass.addToOperations(get);
 	}
-	
+
 	private void buildToJson(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass, OJBlock block) {
 		block.addToStatements("StringBuilder json = new StringBuilder()");
 		block.addToStatements("json.append(\"{\\\"data\\\": [\")");
@@ -104,7 +105,7 @@ public class LookupResourceBuilder extends BaseServerResourceBuilder implements 
 		block.addToStatements("json.append(\"]}\")");
 		block.addToStatements("return new " + TumlRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
 	}
-	
+
 	private void addServerResourceToRouterEnum(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass) {
 		OJEnum routerEnum = (OJEnum) this.workspace.findOJClass("restlet.RestletRouterEnum");
 		OJEnumLiteral ojLiteral = new OJEnumLiteral(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast().toUpperCase() + "_" + pWrap.lookup());
@@ -127,6 +128,5 @@ public class LookupResourceBuilder extends BaseServerResourceBuilder implements 
 		OJAnnotatedOperation attachAll = routerEnum.findOperation("attachAll", TumlRestletGenerationUtil.Router);
 		attachAll.getBody().addToStatements(routerEnum.getName() + "." + ojLiteral.getName() + ".attach(router)");
 	}
-
 
 }
