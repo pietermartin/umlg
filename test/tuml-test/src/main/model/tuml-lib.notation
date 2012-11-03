@@ -464,7 +464,7 @@
       </children>
       <styles xmi:type="notation:FontStyle" xmi:id="_hh4skCQPEeKzTel_Vwmhog" fontName="Sans"/>
       <element xmi:type="uml:Association" href="tuml-lib.uml#_hhqqICQPEeKzTel_Vwmhog"/>
-      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_hh4skSQPEeKzTel_Vwmhog" points="[132, 0, -404, 0]$[483, 0, -53, 0]"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_hh4skSQPEeKzTel_Vwmhog" points="[104, 57, -451, 57]$[223, 122, -332, 122]$[339, 122, -216, 122]$[483, 40, -72, 40]"/>
       <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_hiGH8CQPEeKzTel_Vwmhog" id="(0.18012422360248448,0.47706422018348627)"/>
     </edges>
     <edges xmi:type="notation:Connector" xmi:id="_4cK8wCRsEeKzTel_Vwmhog" type="4002" source="_JkxzMCQPEeKOmc56p_1Osg" target="_gQ4-wCQPEeKzTel_Vwmhog" lineColor="0">

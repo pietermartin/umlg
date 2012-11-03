@@ -17,7 +17,7 @@
         function refresh(tumlUri, result) {
             for (i = 0; i < result.length; i++) {
                 if (result[i].meta.length === 3) {
-                    var metaForData = result[i].meta[2];
+                    var metaForData = result[i].meta[1];
                     var tumlTabViewManager = new Tuml.TumlTabViewManager(true, tumlUri, result[i].meta[0].qualifiedName, metaForData.name);
                     tumlTabViewManager.onPutSuccess.subscribe(function(e, args) {
                         console.log('TumlManyViewManager onPutSuccess fired');
@@ -47,6 +47,10 @@
                         console.log('TumlManyViewManager onCancel fired');
                         self.onCancel.notify(args, e, self);
                     });
+                    tumlTabViewManager.onSelfCellClick.subscribe(function(e, args) {
+                        console.log('TumlManyViewManager onSelfCellClick fired');
+                        self.onSelfCellClick.notify(args, e, self);
+                    });
                     tumlTabViewManager.onContextMenuClickLink.subscribe(function(e, args) {
                         console.log('TumlManyViewManager onContextMenuClickLink fired');
                         self.onContextMenuClickLink.notify(args, e, self);
@@ -64,7 +68,7 @@
             //Grids must be created after the tabs have been created.
             for (i = 0; i < result.length; i++) {
                 if (result[i].meta.length === 3) {
-                    var metaForData = result[i].meta[2];
+                    var metaForData = result[i].meta[1];
                     for (j = 0; j < tumlTabViewManagers.length; j++) {
                         if (tumlTabViewManagers[j].tabDivName === metaForData.name) {
                             tumlTabViewManagers[j].createGrid(result[i]);
@@ -92,6 +96,7 @@
             "onDeleteSuccess": new Tuml.Event(),
             "onDeleteFailure": new Tuml.Event(),
             "onCancel": new Tuml.Event(),
+            "onSelfCellClick": new Tuml.Event(),
             "onContextMenuClickLink": new Tuml.Event(),
             "onContextMenuClickDelete": new Tuml.Event(),
             "refresh": refresh,

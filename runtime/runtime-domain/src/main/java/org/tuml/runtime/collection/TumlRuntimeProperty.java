@@ -18,6 +18,8 @@ public interface TumlRuntimeProperty {
 	int getUpper();
 	int getLower();
 	String getLabel();
+	String getQualifiedName();
+	String getInverseQualifiedName();
 	boolean isValid(int elementCount);
 	boolean isQualified();
 	boolean isInverseQualified();

@@ -36,9 +36,9 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
 		this.internalCollection = new ArrayList<E>();
 		this.oclStdLibSequence = new OclStdLibSequenceImpl<E>((List<E>) this.internalCollection);
 		this.oclStdLibCollection = new OclStdLibSequenceImpl<E>((List<E>) this.internalCollection);
-		this.index = GraphDb.getDb().getIndex(owner.getUid() + ":::" + getLabel(), Edge.class);
+		this.index = GraphDb.getDb().getIndex(owner.getUid() + ":::" + getQualifiedName(), Edge.class);
 		if (this.index == null) {
-			this.index = GraphDb.getDb().createIndex(owner.getUid() + ":::" + getLabel(), Edge.class);
+			this.index = GraphDb.getDb().createIndex(owner.getUid() + ":::" + getQualifiedName(), Edge.class);
 		}
 	}
 

@@ -15,6 +15,18 @@ import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 public class TestOneToMany extends BaseLocalDbTest {
 
 	@Test
+	public void testCollectionOtherEndClearsAndReloads() {
+		db.startTransaction();
+		God god = new God(true);
+		god.setName("THEGOD");
+		Universe universe1 = new Universe(true);
+		universe1.setName("universe1");
+		god.addToUniverse(universe1);
+		db.stopTransaction(Conclusion.SUCCESS);
+		Assert.assertNotNull(universe1.getGod());
+	}
+
+	@Test
 	public void testCompositeCreation() {
 		db.startTransaction();
 		God god = new God(true);

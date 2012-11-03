@@ -3,7 +3,6 @@ package org.tuml.restlet.visitor.clazz;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.uml2.uml.Class;
 import org.opaeum.java.metamodel.OJField;
 import org.opaeum.java.metamodel.OJPackage;
@@ -31,22 +30,22 @@ public class CompositePathServerResourceBuilder extends BaseServerResourceBuilde
 
 	@Override
 	public void visitBefore(Class clazz) {
-		if (!clazz.isAbstract()) {
-			OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(TumlClassOperations.className(clazz) + "CompositePathServerResource");
-			OJPackage ojPackage = new OJPackage(Namer.name(clazz.getNearestPackage()) + ".restlet");
-			annotatedInf.setMyPackage(ojPackage);
-			addToSource(annotatedInf);
-			OJAnnotatedClass annotatedClass = new OJAnnotatedClass(TumlClassOperations.className(clazz) + "CompositePathServerResourceImpl");
-			annotatedClass.setSuperclass(TumlRestletGenerationUtil.ServerResource);
-			annotatedClass.addToImplementedInterfaces(annotatedInf.getPathName());
-			annotatedClass.setMyPackage(ojPackage);
-			annotatedClass.setVisibility(TumlClassOperations.getVisibility(clazz.getVisibility()));
-			addToSource(annotatedClass);
-			addPrivateIdVariable(clazz, annotatedClass);
-			addDefaultConstructor(annotatedClass);
-			addGetRepresentation(clazz, annotatedInf, annotatedClass);
-			addToRouterEnum(clazz, annotatedClass);
-		}
+		// if (!clazz.isAbstract()) {
+		OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(TumlClassOperations.className(clazz) + "CompositePathServerResource");
+		OJPackage ojPackage = new OJPackage(Namer.name(clazz.getNearestPackage()) + ".restlet");
+		annotatedInf.setMyPackage(ojPackage);
+		addToSource(annotatedInf);
+		OJAnnotatedClass annotatedClass = new OJAnnotatedClass(TumlClassOperations.className(clazz) + "CompositePathServerResourceImpl");
+		annotatedClass.setSuperclass(TumlRestletGenerationUtil.ServerResource);
+		annotatedClass.addToImplementedInterfaces(annotatedInf.getPathName());
+		annotatedClass.setMyPackage(ojPackage);
+		annotatedClass.setVisibility(TumlClassOperations.getVisibility(clazz.getVisibility()));
+		addToSource(annotatedClass);
+		addPrivateIdVariable(clazz, annotatedClass);
+		addDefaultConstructor(annotatedClass);
+		addGetRepresentation(clazz, annotatedInf, annotatedClass);
+		addToRouterEnum(clazz, annotatedClass);
+		// }
 	}
 
 	@Override
@@ -66,8 +65,7 @@ public class CompositePathServerResourceBuilder extends BaseServerResourceBuilde
 		get.getBody().addToStatements(
 				"this." + getIdFieldName(clazz) + "= Integer.parseInt((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"));");
 		get.getBody().addToStatements(
-				TumlClassOperations.className(clazz) + " c = new " + TumlClassOperations.className(clazz) + "(GraphDb.getDb().getVertex(this."
-						+ getIdFieldName(clazz) + "))");
+				TumlClassOperations.className(clazz) + " c = GraphDb.getDb().instantiateClassifier(Long.valueOf(this." + getIdFieldName(clazz) + "))");
 		annotatedClass.addToImports(TumlClassOperations.getPathName(clazz));
 
 		get.getBody().addToStatements("StringBuilder json = new StringBuilder()");
@@ -87,7 +85,7 @@ public class CompositePathServerResourceBuilder extends BaseServerResourceBuilde
 			}
 		}
 		pathToCompositionRootCalc.append("), Arrays.asList(");
-		
+
 		List<String> nameList = new ArrayList<String>();
 		constructNameListToCompositeRoot(nameList, clazz);
 		count = 0;
@@ -98,7 +96,7 @@ public class CompositePathServerResourceBuilder extends BaseServerResourceBuilde
 				pathToCompositionRootCalc.append(",");
 			}
 		}
-		
+
 		pathToCompositionRootCalc.append("), c.getPathToCompositionalRoot(), ");
 		pathToCompositionRootCalc.append("\"Root\", \"/restAndJson\"))");
 		get.getBody().addToStatements(pathToCompositionRootCalc.toString());
@@ -137,7 +135,8 @@ public class CompositePathServerResourceBuilder extends BaseServerResourceBuilde
 
 		OJField uri = new OJField();
 		uri.setType(new OJPathName("String"));
-		uri.setInitExp("\"/" + TumlClassOperations.className(clazz).toLowerCase() + "s/{" + TumlClassOperations.className(clazz).toLowerCase() + "Id}/compositePathToRoot\"");
+		uri.setInitExp("\"/" + TumlClassOperations.className(clazz).toLowerCase() + "s/{" + TumlClassOperations.className(clazz).toLowerCase()
+				+ "Id}/compositePathToRoot\"");
 		ojLiteral.addToAttributeValues(uri);
 
 		OJField serverResourceClassField = new OJField();

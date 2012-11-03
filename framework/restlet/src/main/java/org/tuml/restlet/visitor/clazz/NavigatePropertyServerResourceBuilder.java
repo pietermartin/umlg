@@ -37,7 +37,7 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 	@Override
 	public void visitBefore(Property p) {
 		PropertyWrapper pWrap = new PropertyWrapper(p);
-		if (!pWrap.isComponent() && !pWrap.isDataType() && !pWrap.isEnumeration()) {
+		if (!pWrap.isComponent() && !pWrap.isDataType() && !pWrap.isEnumeration() && pWrap.isNavigable()) {
 
 			Set<Classifier> concreteImplementations = TumlClassOperations.getConcreteImplementations((Classifier) pWrap.getType());
 			for (Classifier classifier : concreteImplementations) {
@@ -307,6 +307,9 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 			block.addToStatements("json.append(\"{\\\"qualifiedName\\\": \\\"" + pWrap.getQualifiedName() + "\\\"}\")");
 			block.addToStatements("json.append(\", \")");
 		}
+		//For meta data, put where one is navigating to first, then where on is navigating from
+		//This is consistent with navigating to a entity with a vertex where there is no navigating from. 
+		//i.e. the first meta data in the array is the entity navigating to.
 		for (Classifier classifier : concreteImplementations) {
 			annotatedClass.addToImports(TumlClassOperations.getPathName(classifier));
 			if (pWrap.isOne()) {
@@ -321,22 +324,23 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 					conditionBlock = ifIsOneIfStatement.addToElseIfCondition(condition, "");
 				}
 				conditionBlock.addToStatements("json.append(" + TumlClassOperations.propertyEnumName(classifier) + ".asJson())");
+				conditionBlock.addToStatements("json.append(\", \")");
+				conditionBlock.addToStatements("json.append(" + TumlClassOperations.propertyEnumName(pWrap.getOwningType()) + ".asJson())");
 				annotatedClass.addToImports(TumlClassOperations.getPathName(new PropertyWrapper(pWrap.getOtherEnd()).getOwningType()).append(
 						TumlClassOperations.propertyEnumName(new PropertyWrapper(pWrap.getOtherEnd()).getOwningType())));
 				annotatedClass.addToImports(TumlClassOperations.getPathName(classifier).append(TumlClassOperations.propertyEnumName(classifier)));
+				annotatedClass.addToImports(TumlClassOperations.getPathName(pWrap.getOwningType()).append(TumlClassOperations.propertyEnumName(pWrap.getOwningType())));
 				block.addToStatements(ifIsOneIfStatement);
 			} else {
 				block.addToStatements("json.append(\"{\\\"data\\\": [\")");
-//				if (concreteImplementations.size() > 1) {
-					block.addToStatements("json.append(ToJsonUtil.toJsonWithoutCompositeParent(parentResource."
-							+ pWrap.getter()
-							+ "().select(new "
-							+ TinkerGenerationUtil.BooleanExpressionEvaluator.getCopy().addToGenerics(TumlClassOperations.getPathName(pWrap.getType()))
-									.getLast() + "() {\n			@Override\n			public Boolean evaluate(" + TumlClassOperations.getPathName(pWrap.getType()).getLast()
-							+ " e) {\n				return e instanceof " + TumlClassOperations.getPathName(classifier).getLast() + ";\n			}\n		})))");
-					annotatedClass.addToImports(TinkerGenerationUtil.BooleanExpressionEvaluator);
-					annotatedClass.addToImports(TumlClassOperations.getPathName(pWrap.getType()));
-//				}
+				block.addToStatements("json.append(ToJsonUtil.toJsonWithoutCompositeParent(parentResource."
+						+ pWrap.getter()
+						+ "().select(new "
+						+ TinkerGenerationUtil.BooleanExpressionEvaluator.getCopy().addToGenerics(TumlClassOperations.getPathName(pWrap.getType()))
+								.getLast() + "() {\n			@Override\n			public Boolean evaluate(" + TumlClassOperations.getPathName(pWrap.getType()).getLast()
+						+ " e) {\n				return e instanceof " + TumlClassOperations.getPathName(classifier).getLast() + ";\n			}\n		})))");
+				annotatedClass.addToImports(TinkerGenerationUtil.BooleanExpressionEvaluator);
+				annotatedClass.addToImports(TumlClassOperations.getPathName(pWrap.getType()));
 				block.addToStatements("json.append(\"],\")");
 				block.addToStatements("json.append(\" \\\"meta\\\" : [\")");
 				block.addToStatements("json.append(\"{\\\"qualifiedName\\\": \\\"" + pWrap.getQualifiedName() + "\\\"}\")");
@@ -344,11 +348,11 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 			}
 
 			if (!pWrap.isOne()) {
+				block.addToStatements("json.append(" + TumlClassOperations.propertyEnumName(classifier) + ".asJson())");
+				block.addToStatements("json.append(\", \")");
 				block.addToStatements("json.append(" + TumlClassOperations.propertyEnumName(pWrap.getOwningType()) + ".asJson())");
 				annotatedClass.addToImports(TumlClassOperations.getPathName(pWrap.getOwningType()).append(
 						TumlClassOperations.propertyEnumName(pWrap.getOwningType())));
-				block.addToStatements("json.append(\", \")");
-				block.addToStatements("json.append(" + TumlClassOperations.propertyEnumName(classifier) + ".asJson())");
 				annotatedClass.addToImports(TumlClassOperations.getPathName(classifier).append(TumlClassOperations.propertyEnumName(classifier)));
 			}
 			if (!pWrap.isOne()) {

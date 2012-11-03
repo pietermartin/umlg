@@ -30,6 +30,7 @@
                 tumlTabGridManager.onPostSuccess.subscribe(function(e, args) {
                     console.log('TumlTabViewManager onPostSuccess fired');
                     self.onPostSuccess.notify(args, e, self);
+                    createGridForResult(args.data, args.tabId);
                 });
                 tumlTabGridManager.onPostFailure.subscribe(function(e, args) {
                     console.log('TumlTabViewManager onPostFailure fired');
@@ -47,6 +48,10 @@
                     console.log('TumlTabViewManager onCancel fired');
                     self.onCancel.notify(args, e, self);
                     createGridForResult(args.data, args.tabId);
+                });
+                tumlTabGridManager.onSelfCellClick.subscribe(function(e, args) {
+                    console.log('TumlTabViewManager onSelfCellClick fired');
+                    self.onSelfCellClick.notify(args, e, self);
                 });
                 tumlTabGridManager.onContextMenuClickLink.subscribe(function(e, args) {
                     console.log('TumlTabViewManager onContextMenuClickLink fired');
@@ -80,7 +85,7 @@
         function createGridForResult(result, tabId) {
             for (i = 0; i < result.length; i++) {
                 if (result[i].meta.length === 3) {
-                    var metaForData = result[i].meta[2];
+                    var metaForData = result[i].meta[1];
                     if (metaForData.name === tabId) {
                         $('#' + tabDivName).children().remove();
                         createGrid(result[i]);
@@ -111,6 +116,7 @@
             "onDeleteSuccess": new Tuml.Event(),
             "onDeleteFailure": new Tuml.Event(),
             "onCancel": new Tuml.Event(),
+            "onSelfCellClick": new Tuml.Event(),
             "onContextMenuClickLink": new Tuml.Event(),
             "onContextMenuClickDelete": new Tuml.Event(),
             //Events for one

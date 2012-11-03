@@ -33,6 +33,11 @@ public class RuntimePropertyImplementor {
 		qualifiedName.setName("_qualifiedName");
 		ojEnum.addToFields(qualifiedName);
 
+		OJField inverseQualifiedName = new OJField();
+		inverseQualifiedName.setType(new OJPathName("String"));
+		inverseQualifiedName.setName("_inverseQualifiedName");
+		ojEnum.addToFields(inverseQualifiedName);
+
 		OJField isOnePrimitiveField = new OJField();
 		isOnePrimitiveField.setType(new OJPathName("boolean"));
 		isOnePrimitiveField.setName("_onePrimitive");
@@ -153,6 +158,16 @@ public class RuntimePropertyImplementor {
 		fromLabel.setStatic(true);
 		ojEnum.addToOperations(fromLabel);
 
+		OJAnnotatedOperation fromQualifiedName = new OJAnnotatedOperation("fromQualifiedName", new OJPathName(enumName));
+		fromQualifiedName.addParam("qualifiedName", new OJPathName("String"));
+		fromQualifiedName.setStatic(true);
+		ojEnum.addToOperations(fromQualifiedName);
+
+		OJAnnotatedOperation fromInverseQualifiedName = new OJAnnotatedOperation("fromInverseQualifiedName", new OJPathName(enumName));
+		fromInverseQualifiedName.addParam("inverseQualifiedName", new OJPathName("String"));
+		fromInverseQualifiedName.setStatic(true);
+		ojEnum.addToOperations(fromInverseQualifiedName);
+
 		OJAnnotatedOperation isValid = new OJAnnotatedOperation("isValid", new OJPathName("boolean"));
 		TinkerGenerationUtil.addOverrideAnnotation(isValid);
 		isValid.addParam("elementCount", new OJPathName("int"));
@@ -190,34 +205,47 @@ public class RuntimePropertyImplementor {
 		for (Property p : allOwnedProperties) {
 			PropertyWrapper pWrap = new PropertyWrapper(p);
 			if (!(pWrap.isDerived() || pWrap.isDerivedUnion())) {
-				addEnumLiteral(ojEnum, fromLabel, pWrap.fieldname(), pWrap.javaBaseTypePath().toJavaString(), pWrap.isPrimitive(), pWrap.getDataTypeEnum(), pWrap.getValidations(), pWrap.isEnumeration(),
-						pWrap.isManyToOne(), pWrap.isMany(), pWrap.isControllingSide(), pWrap.isComposite(), pWrap.isInverseComposite(), pWrap.isOneToOne(), pWrap.isOneToMany(),
-						pWrap.isManyToMany(), pWrap.getUpper(), pWrap.getLower(), pWrap.isQualified(), pWrap.isInverseQualified(), pWrap.isOrdered(), pWrap.isInverseOrdered(),
-						pWrap.isUnique(), TinkerGenerationUtil.getEdgeName(pWrap.getProperty()));
+				addEnumLiteral(ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, pWrap.fieldname(), pWrap.getQualifiedName(), pWrap.getInverseQualifiedName(),
+						pWrap.isPrimitive() && pWrap.isOne(), pWrap.getDataTypeEnum(), pWrap.getValidations(), pWrap.isEnumeration(), pWrap.isManyToOne(),
+						pWrap.isMany(), pWrap.isControllingSide(), pWrap.isComposite(), pWrap.isInverseComposite(), pWrap.isOneToOne(), pWrap.isOneToMany(),
+						pWrap.isManyToMany(), pWrap.getUpper(), pWrap.getLower(), pWrap.isQualified(), pWrap.isInverseQualified(), pWrap.isOrdered(),
+						pWrap.isInverseOrdered(), pWrap.isUnique(), TinkerGenerationUtil.getEdgeName(pWrap.getProperty()));
 			}
 		}
 
-		if (!hasCompositeOwner/* && !(className instanceof Model)*/) {
+		if (!hasCompositeOwner/* && !(className instanceof Model) */) {
 			// Add in fake property to root
-			addEnumLiteral(ojEnum, fromLabel, modelName, modelName, false, null, Collections.<Validation> emptyList(), false, false, false, true, false, true, true, false, false, -1, 0,
-					false, false, false, false, false, "root" + className.getName());
+			addEnumLiteral(ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, modelName, modelName, "inverseOf" + modelName, false, null,
+					Collections.<Validation> emptyList(), false, false, false, true, false, true, true, false, false, -1, 0, false, false, false, false, false,
+					"root" + className.getName());
 		}
 		asJson.getBody().addToStatements("sb.append(\"]}\")");
 		asJson.getBody().addToStatements("return sb.toString()");
 		fromLabel.getBody().addToStatements("return null");
+		fromQualifiedName.getBody().addToStatements("return null");
+		fromInverseQualifiedName.getBody().addToStatements("return null");
 		return ojEnum;
 	}
 
-	public static OJEnumLiteral addEnumLiteral(OJEnum ojEnum, OJAnnotatedOperation fromLabel, String fieldName, String qualifiedName, boolean isPrimitive, DataTypeEnum dataTypeEnum,
-			List<Validation> validations, boolean isEnumeration, boolean isManyToOne, boolean isMany, boolean isControllingSide, boolean isComposite, boolean isInverseComposite,
-			boolean isOneToOne, boolean isOneToMany, boolean isManyToMany, int getUpper, int getLower, boolean isQualified, boolean isInverseQualified, boolean isOrdered,
-			boolean isInverseOrdered, boolean isUnique, String edgeName) {
+	public static OJEnumLiteral addEnumLiteral(OJEnum ojEnum, OJAnnotatedOperation fromLabel, OJAnnotatedOperation fromQualifiedName,
+			OJAnnotatedOperation fromInverseQualifiedName, String fieldName, String qualifiedName, String inverseQualifiedName, boolean isOnePrimitive, DataTypeEnum dataTypeEnum,
+			List<Validation> validations, boolean isEnumeration, boolean isManyToOne, boolean isMany, boolean isControllingSide, boolean isComposite,
+			boolean isInverseComposite, boolean isOneToOne, boolean isOneToMany, boolean isManyToMany, int getUpper, int getLower, boolean isQualified,
+			boolean isInverseQualified, boolean isOrdered, boolean isInverseOrdered, boolean isUnique, String edgeName) {
 
 		OJIfStatement ifLabelEquals = new OJIfStatement(fieldName + ".getLabel().equals(label)");
 		// Do not make upper case, leave with java case sensitive
 		// semantics
 		ifLabelEquals.addToThenPart("return " + fieldName);
 		fromLabel.getBody().addToStatements(0, ifLabelEquals);
+
+		OJIfStatement ifLabelEqualsForQualifiedName = new OJIfStatement(fieldName + ".getQualifiedName().equals(qualifiedName)");
+		ifLabelEqualsForQualifiedName.addToThenPart("return " + fieldName);
+		fromQualifiedName.getBody().addToStatements(0, ifLabelEqualsForQualifiedName);
+
+		OJIfStatement ifLabelEqualsForInverseQualifiedName = new OJIfStatement(fieldName + ".getInverseQualifiedName().equals(inverseQualifiedName)");
+		ifLabelEqualsForInverseQualifiedName.addToThenPart("return " + fieldName);
+		fromInverseQualifiedName.getBody().addToStatements(0, ifLabelEqualsForInverseQualifiedName);
 
 		OJEnumLiteral ojLiteral = new OJEnumLiteral(fieldName);
 
@@ -226,11 +254,16 @@ public class RuntimePropertyImplementor {
 		propertyQualifiedNameField.setInitExp("\"" + qualifiedName + "\"");
 		ojLiteral.addToAttributeValues(propertyQualifiedNameField);
 
+		OJField propertyInverseQualifiedNameField = new OJField();
+		propertyInverseQualifiedNameField.setType(new OJPathName("String"));
+		propertyInverseQualifiedNameField.setInitExp("\"" + inverseQualifiedName + "\"");
+		ojLiteral.addToAttributeValues(propertyInverseQualifiedNameField);
+
 		OJField propertyOnePrimitiveField = new OJField();
 		propertyOnePrimitiveField.setType(new OJPathName("boolean"));
 		// A one primitive property is a isManyToOne. Seeing as the
 		// opposite end is null it defaults to many
-		propertyOnePrimitiveField.setInitExp(Boolean.toString(isPrimitive && isManyToOne));
+		propertyOnePrimitiveField.setInitExp(Boolean.toString(isOnePrimitive));
 		ojLiteral.addToAttributeValues(propertyOnePrimitiveField);
 
 		OJField propertyDataTypeEnumField = new OJField();
@@ -260,7 +293,7 @@ public class RuntimePropertyImplementor {
 
 		OJField propertyManyPrimitiveField = new OJField();
 		propertyManyPrimitiveField.setType(new OJPathName("boolean"));
-		propertyManyPrimitiveField.setInitExp(Boolean.toString(isPrimitive && isMany));
+		propertyManyPrimitiveField.setInitExp(Boolean.toString(isOnePrimitive && isMany));
 		ojLiteral.addToAttributeValues(propertyManyPrimitiveField);
 
 		OJField propertyOneEnumerationField = new OJField();
@@ -357,7 +390,6 @@ public class RuntimePropertyImplementor {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{\\\"name\\\": \\\"");
 		sb.append(fieldName);
-		
 
 		sb.append("\\\", ");
 		sb.append("\\\"onePrimitive\\\": ");
@@ -384,7 +416,11 @@ public class RuntimePropertyImplementor {
 		sb.append("\\\"qualifiedName\\\": \\");
 		sb.append(propertyQualifiedNameField.getInitExp().subSequence(0, propertyQualifiedNameField.getInitExp().length() - 1));
 		sb.append("\\\", ");
-		
+
+		sb.append("\\\"inverseQualifiedName\\\": \\");
+		sb.append(propertyInverseQualifiedNameField.getInitExp().subSequence(0, propertyInverseQualifiedNameField.getInitExp().length() - 1));
+		sb.append("\\\", ");
+
 		sb.append("\\\"manyPrimitive\\\": ");
 		sb.append(propertyManyPrimitiveField.getInitExp());
 		sb.append(", ");

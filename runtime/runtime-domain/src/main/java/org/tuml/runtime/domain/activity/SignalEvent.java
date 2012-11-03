@@ -59,7 +59,7 @@ public class SignalEvent extends Event {
 	}
 
 	@Override
-	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
+	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty, boolean inverse) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -71,7 +71,7 @@ public class SignalEvent extends Event {
 	}
 
 	@Override
-	public List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, TumlNode node) {
+	public List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, TumlNode node, boolean inverse) {
 		return null;
 	}
 

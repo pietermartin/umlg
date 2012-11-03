@@ -140,4 +140,16 @@ public class TumlRuntimePropertyImpl implements TumlRuntimeProperty {
 		return null;
 	}
 
+	@Override
+	public String getQualifiedName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getInverseQualifiedName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

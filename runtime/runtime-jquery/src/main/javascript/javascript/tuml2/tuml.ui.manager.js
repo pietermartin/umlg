@@ -73,6 +73,12 @@
                 console.log('TumlUiManager onCancel fired');
                 self.onCancel.notify(args, e, self);
             });
+            mainViewManager.onSelfCellClick.subscribe(function(e, args) {
+                console.log('TumlUiManager onSelfCellClick fired');
+                self.onSelfCellClick.notify(args, e, self);
+                refresh(args.tumlUri);
+                changeMyUrl(args.name, args.tumlUri);
+            });
             mainViewManager.onContextMenuClickLink.subscribe(function(e, args) {
                 console.log('TumlUiManager onContextMenuClickLink fired');
                 self.onContextMenuClickLink.notify(args, e, self);
@@ -115,8 +121,8 @@
                 contentType: "json",
                 success: function(result, textStatus, jqXHR) {
                     var contextMetaData = getContextMetaData(result);
-                    contextManager.refresh(contextMetaData, contextVertexId);
                     mainViewManager.refresh(tumlUri, result);
+                    contextManager.refresh(contextMetaData, contextVertexId);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     alert('error getting ' + tumlUri + '\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
@@ -132,7 +138,8 @@
         function getContextMetaData(result) {
             //only using the context metatData here so no need to be in the look
             if (result instanceof Array && result[0].meta.length === 3) {   
-                return result[0].meta[1];
+                //the second meta element in the array is for where on is navigating too
+                return result[0].meta[2];
             } else {
                 //When navigating a property the result is an array, when accessing a entity by vertex its not, TODO refactor
                 if (result instanceof Array) {
@@ -156,6 +163,7 @@
             "onDeleteSuccess": new Tuml.Event(),
             "onDeleteFailure": new Tuml.Event(),
             "onCancel": new Tuml.Event(),
+            "onSelfCellClick": new Tuml.Event(),
             "onContextMenuClickLink": new Tuml.Event(),
             "onContextMenuClickDelete": new Tuml.Event(),
             "onPutOneSuccess": new Tuml.Event(),

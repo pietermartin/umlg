@@ -196,7 +196,7 @@ public class TestOneLookup extends BaseLocalDbTest {
 		db.stopTransaction(Conclusion.SUCCESS);
 		
 		//TODO
-		l2_0_0.initialiseProperty(Level2.Level2RuntimePropertyEnum.level1);
+		l2_0_0.initialiseProperty(Level2.Level2RuntimePropertyEnum.level1, false);
 		
 		Assert.assertEquals(8, l2_0_0.lookupFor_level2_devil2().size());
 	}

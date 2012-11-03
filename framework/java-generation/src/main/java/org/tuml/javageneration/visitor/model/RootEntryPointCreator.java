@@ -84,12 +84,14 @@ public class RootEntryPointCreator extends BaseVisitor implements Visitor<Model>
 		asJson.getBody().addToStatements("sb.append(\",\")");
 
 		OJAnnotatedOperation fromLabel = ojEnum.findOperation("fromLabel", new OJPathName("String"));
+		OJAnnotatedOperation fromQualifiedName = ojEnum.findOperation("fromQualifiedName", new OJPathName("String"));
+		OJAnnotatedOperation fromInverseQualifiedName = ojEnum.findOperation("fromInverseQualifiedName", new OJPathName("String"));
 		int count = 0;
 		List<Class> result = findRootEntities(model);
 		// Add root entities as though they are fake properties to App root
 		for (Class clazz : result) {
 			count++;
-			RuntimePropertyImplementor.addEnumLiteral(ojEnum, fromLabel, StringUtils.uncapitalize(TumlClassOperations.className(clazz)), model.getQualifiedName(), false, null,
+			RuntimePropertyImplementor.addEnumLiteral(ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, StringUtils.uncapitalize(TumlClassOperations.className(clazz)), model.getQualifiedName(), "inverseOf::" + model.getQualifiedName(), false, null,
 					Collections.<Validation> emptyList(), true, false, false, false, true, false, false, false, false, -1, 0, false, false, true, false, true, "root"
 							+ TumlClassOperations.className(clazz));
 
@@ -114,6 +116,20 @@ public class RootEntryPointCreator extends BaseVisitor implements Visitor<Model>
 			fromLabel.getBody().getStatements().remove(integer.intValue());
 		}
 		fromLabel.getBody().addToStatements("return null");
+
+		// Move fromQualifiedName's return null from first line to last line
+		count = 0;
+		toRemove = new ArrayList<Integer>();
+		for (OJStatement s : fromQualifiedName.getBody().getStatements()) {
+			if (s.toJavaString().equals("return null;")) {
+				toRemove.add(count);
+			}
+			count++;
+		}
+		for (Integer integer : toRemove) {
+			fromQualifiedName.getBody().getStatements().remove(integer.intValue());
+		}
+		fromQualifiedName.getBody().addToStatements("return null");
 
 	}
 

@@ -84,7 +84,8 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
 		if (pWrap.hasOtherEnd() && !pWrap.isEnumeration() && pWrap.isOneToOne()) {
 			OJIfStatement ifNotNull = new OJIfStatement(pWrap.fieldname() + " != null");
 			ifNotNull.addToThenPart(pWrap.fieldname() + "." + otherEnd.clearer() + "()");
-			ifNotNull.addToThenPart(pWrap.fieldname() + ".initialiseProperty(" + TumlClassOperations.propertyEnumName(otherEnd.getOwningType()) + "." + otherEnd.fieldname() + ")");
+			ifNotNull.addToThenPart(pWrap.fieldname() + ".initialiseProperty(" + TumlClassOperations.propertyEnumName(otherEnd.getOwningType()) + "."
+					+ otherEnd.fieldname() + ", false)");
 			owner.addToImports(TumlClassOperations.getPathName(otherEnd.getOwningType()).append(TumlClassOperations.propertyEnumName(otherEnd.getOwningType())));
 			setter.getBody().addToStatements(ifNotNull);
 		}

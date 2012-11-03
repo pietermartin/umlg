@@ -128,7 +128,7 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
 		ojClass.addToImports(TinkerGenerationUtil.tinkerDirection);
 		ojClass.addToImports(TinkerGenerationUtil.edgePathName);
 		qualifierValue.getBody().addToStatements(
-				"Index<Edge> index = GraphDb.getDb().getIndex(getUid() + \":::\" + " + qualifiedPropertyWrapper.getTumlRuntimePropertyEnum() + ".getLabel(), Edge.class)");
+				"Index<Edge> index = GraphDb.getDb().getIndex(getUid() + \":::\" + " + qualifiedPropertyWrapper.getTumlRuntimePropertyEnum() + ".getQualifiedName(), Edge.class)");
 		OJIfStatement ifIndexNull = new OJIfStatement("index==null", "return null");
 
 		OJBlock elseBlock = new OJBlock();

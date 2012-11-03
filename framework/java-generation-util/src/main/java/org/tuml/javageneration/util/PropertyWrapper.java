@@ -706,6 +706,14 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 		return this.property.getQualifiedName();
 	}
 
+	public String getInverseQualifiedName() {
+		if (getOtherEnd() != null) {
+			return getOtherEnd().getQualifiedName();
+		} else {
+			return "inverseOf::" + this.property.getQualifiedName(); 
+		}
+	}
+
 	@Override
 	public EList<Dependency> getClientDependencies() {
 		return this.property.getClientDependencies();

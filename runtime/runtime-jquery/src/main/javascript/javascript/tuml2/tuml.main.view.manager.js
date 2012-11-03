@@ -44,6 +44,10 @@
                 console.log('TumlMainViewManager onCancel fired');
                 self.onCancel.notify(args, e, self);
             });
+            tumlManyViewManager.onSelfCellClick.subscribe(function(e, args) {
+                console.log('TumlMainViewManager onSelfCellClick fired');
+                self.onSelfCellClick.notify(args, e, self);
+            });
             tumlManyViewManager.onContextMenuClickLink.subscribe(function(e, args) {
                 console.log('TumlMainViewManager onContextMenuClickLink fired');
                 self.onContextMenuClickLink.notify(args, e, self);
@@ -67,12 +71,14 @@
         function refresh(tumlUri, result) {
             var qualifiedName;
             if (result instanceof Array && result[0].meta.length === 3) {   
-                recreateTabContainer();
                 //Property is a many
-                qualifiedName = result[0].meta[0].qualifiedName;
+                var metaDataNavigatingTo = result[0].meta[1];
+                var metaDataNavigatingFrom = result[0].meta[2];
+                recreateTabContainer();
+                var qualifiedName = result[0].meta[0].qualifiedName;
                 var contextMetaData = result[0].meta[1];
                 var contextVertexId = tumlUri.match(/\d+/);
-                leftMenuManager.refresh(contextMetaData, contextVertexId);
+                leftMenuManager.refresh(metaDataNavigatingFrom, contextVertexId);
                 tumlManyViewManager.refresh(tumlUri, result);
             } else {
                 //Property is a one
@@ -119,6 +125,7 @@
             "onDeleteSuccess": new Tuml.Event(),
             "onDeleteFailure": new Tuml.Event(),
             "onCancel": new Tuml.Event(),
+            "onSelfCellClick": new Tuml.Event(),
             "onContextMenuClickLink": new Tuml.Event(),
             "onContextMenuClickDelete": new Tuml.Event(),
             "onPutOneSuccess": new Tuml.Event(),

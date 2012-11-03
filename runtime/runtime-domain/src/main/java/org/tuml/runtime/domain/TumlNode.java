@@ -14,8 +14,8 @@ public interface TumlNode extends TumlEnum, OclAny, PersistentObject {
 	Vertex getVertex();
 	boolean isTinkerRoot();
 	void initialiseProperties();
-	void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty);
-	List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, TumlNode node);
+	void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty, boolean inverse);
+	List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, TumlNode node, boolean inverse);
 	void delete();
 	int getSize(TumlRuntimeProperty tumlRuntimeProperty);
 	<E> TinkerSet<E> asSet();

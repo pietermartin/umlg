@@ -41,14 +41,21 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
 		OJAnnotatedOperation initialiseProperty = new OJAnnotatedOperation("initialiseProperty");
 		TinkerGenerationUtil.addOverrideAnnotation(initialiseProperty);
 		initialiseProperty.addParam("tumlRuntimeProperty", TinkerGenerationUtil.tumlRuntimePropertyPathName.getCopy());
+		initialiseProperty.addParam("inverse", "boolean");
 		if (!clazz.getGeneralizations().isEmpty()) {
-			initialiseProperty.getBody().addToStatements("super.initialiseProperty(tumlRuntimeProperty)");
+			initialiseProperty.getBody().addToStatements("super.initialiseProperty(tumlRuntimeProperty, inverse)");
 		}
 		annotatedClass.addToOperations(initialiseProperty);
 
-		OJSimpleStatement s = new OJSimpleStatement(TumlClassOperations.propertyEnumName(clazz) + " runtimeProperty = " + "("
-				+ TumlClassOperations.propertyEnumName(clazz) + ".fromLabel(tumlRuntimeProperty.getLabel()))");
-		initialiseProperty.getBody().addToStatements(s);
+		OJField runtimePropoerty = new OJField("runtimeProperty", new OJPathName(TumlClassOperations.propertyEnumName(clazz)));
+		initialiseProperty.getBody().addToLocals(runtimePropoerty);
+		OJIfStatement ifInverse = new OJIfStatement("!inverse");
+		ifInverse.addToThenPart("runtimeProperty = " + "(" + TumlClassOperations.propertyEnumName(clazz)
+				+ ".fromQualifiedName(tumlRuntimeProperty.getQualifiedName()))");
+		ifInverse.addToElsePart("runtimeProperty = " + "(" + TumlClassOperations.propertyEnumName(clazz)
+				+ ".fromQualifiedName(tumlRuntimeProperty.getInverseQualifiedName()))");
+		initialiseProperty.getBody().addToStatements(ifInverse);
+
 		OJIfStatement ifNotNull = new OJIfStatement("runtimeProperty != null");
 		initialiseProperty.getBody().addToStatements(ifNotNull);
 		OJSwitchStatement ojSwitchStatement = new OJSwitchStatement();
@@ -75,18 +82,24 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
 		getQualifiers.setComment("getQualifiers is called from the collection in order to update the index used to implement the qualifier");
 		getQualifiers.addParam("tumlRuntimeProperty", TinkerGenerationUtil.tumlRuntimePropertyPathName.getCopy());
 		getQualifiers.addParam("node", TinkerGenerationUtil.TINKER_NODE);
+		getQualifiers.addParam("inverse", "boolean");
 		getQualifiers.setReturnType(new OJPathName("java.util.List").addToGenerics(TinkerGenerationUtil.TINKER_QUALIFIER_PATHNAME));
 		annotatedClass.addToOperations(getQualifiers);
 
 		OJField result = null;
 		if (!clazz.getGeneralizations().isEmpty()) {
-			result = new OJField(getQualifiers.getBody(), "result", getQualifiers.getReturnType(), "super.getQualifiers(tumlRuntimeProperty, node)");
+			result = new OJField(getQualifiers.getBody(), "result", getQualifiers.getReturnType(), "super.getQualifiers(tumlRuntimeProperty, node, inverse)");
 		} else {
 			result = new OJField(getQualifiers.getBody(), "result", getQualifiers.getReturnType(), "Collections.emptyList()");
 		}
 
 		OJField runtimeProperty = new OJField(getQualifiers.getBody(), "runtimeProperty", new OJPathName(TumlClassOperations.propertyEnumName(clazz)));
-		runtimeProperty.setInitExp(TumlClassOperations.propertyEnumName(clazz) + ".fromLabel(tumlRuntimeProperty.getLabel())");
+		OJIfStatement ifInverse = new OJIfStatement("!inverse");
+		ifInverse.addToThenPart("runtimeProperty = " + TumlClassOperations.propertyEnumName(clazz)
+				+ ".fromQualifiedName(tumlRuntimeProperty.getQualifiedName())");
+		ifInverse.addToElsePart("runtimeProperty = " + TumlClassOperations.propertyEnumName(clazz)
+				+ ".fromQualifiedName(tumlRuntimeProperty.getInverseQualifiedName())");
+		getQualifiers.getBody().addToStatements(ifInverse);
 
 		OJIfStatement ifRuntimePropertyNotNull = new OJIfStatement(runtimeProperty.getName() + " != null && result.isEmpty()");
 		getQualifiers.getBody().addToStatements(ifRuntimePropertyNotNull);
@@ -131,7 +144,7 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
 		}
 
 		OJField runtimeProperty = new OJField(getQualifiers.getBody(), "runtimeProperty", new OJPathName(TumlClassOperations.propertyEnumName(clazz)));
-		runtimeProperty.setInitExp(TumlClassOperations.propertyEnumName(clazz) + ".fromLabel(tumlRuntimeProperty.getLabel())");
+		runtimeProperty.setInitExp(TumlClassOperations.propertyEnumName(clazz) + ".fromQualifiedName(tumlRuntimeProperty.getQualifiedName())");
 
 		OJIfStatement ifRuntimePropertyNotNull = new OJIfStatement(runtimeProperty.getName() + " != null && result == 0");
 		getQualifiers.getBody().addToStatements(ifRuntimePropertyNotNull);

@@ -347,10 +347,10 @@ public class RootResourceServerResourceBuilder extends BaseServerResourceBuilder
 			// Meta data remains for the root object as viewing a many list does
 			// not
 			// change the context
+			get.getBody().addToStatements("json.append(" + TumlClassOperations.propertyEnumName(clazz) + ".asJson())");
+			get.getBody().addToStatements("json.append(\", \")");
 			get.getBody().addToStatements("json.append(" + TinkerGenerationUtil.RootRuntimePropertyEnum.getLast() + ".asJson())");
 			annotatedClass.addToImports(TinkerGenerationUtil.RootRuntimePropertyEnum);
-			get.getBody().addToStatements("json.append(\", \")");
-			get.getBody().addToStatements("json.append(" + TumlClassOperations.propertyEnumName(clazz) + ".asJson())");
 			annotatedClass.addToImports(TumlClassOperations.getPathName(clazz).append(TumlClassOperations.propertyEnumName(clazz)));
 			if (concreteImplementations.size() != 1 && count++ != concreteImplementations.size()) {
 				get.getBody().addToStatements("json.append(\",\")");

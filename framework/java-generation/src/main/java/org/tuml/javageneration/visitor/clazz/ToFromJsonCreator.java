@@ -61,11 +61,15 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 		int count = 1;
 		for (Property p : propertiesForToJson) {
 			PropertyWrapper pWrap = new PropertyWrapper(p);
-			if (pWrap.isMany()) {
+			if (pWrap.isMany() && !pWrap.isPrimitive()) {
 				OJIfStatement ifEmpty = new OJIfStatement(pWrap.getter() + "().isEmpty()");
 				ifEmpty.addToThenPart("sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + " + pWrap.getter() + "().toJson() + \"" + "\")");
 				ifEmpty.addToElsePart("sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + " + pWrap.getter() + "().toJson() + \"" + "\")");
 				toJson.getBody().addToStatements(ifEmpty);
+			} else if (pWrap.isMany() && pWrap.isPrimitive()) {
+				toJson.getBody().addToStatements(
+						"sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + " + TinkerGenerationUtil.ToJsonUtil.getLast() + ".primitivesToJson(" + pWrap.getter() + "()) + \"" + "\")");
+				annotatedClass.addToImports(TinkerGenerationUtil.ToJsonUtil);
 			} else if (pWrap.isEnumeration()) {
 				toJson.getBody().addToStatements(
 						"sb.append(\"\\\"" + pWrap.getName() + "\\\": \\\"\" + (" + pWrap.getter() + "() == null ? \"null\" : " + pWrap.getter() + "().toJson()) + \"\\\"" + "\")");

@@ -140,7 +140,7 @@ public final class TumlPropertyOperations extends PropertyOperations {
 	}
 
 	public static boolean isManyToOne(Property p) {
-		return otherEndIsOne(p) && isOne(p);
+		return !otherEndIsOne(p) && isOne(p);
 	}
 
 	public static boolean isMany(Property property) {

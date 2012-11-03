@@ -58,6 +58,31 @@ public class ToJsonUtil {
 		return json.toString();
 	}
 
+	public static <T> String primitivesToJson(Collection<T> primitives) {
+		StringBuilder json = new StringBuilder();
+		if (primitives != null) {
+			json.append("[");
+			int count = 0;
+			for (T p : primitives) {
+				count++;
+				if (p instanceof String) {
+					json.append("\"");
+				}
+				json.append(p.toString());
+				if (p instanceof String) {
+					json.append("\"");
+				}
+				if (count != primitives.size()) {
+					json.append(",");
+				}
+			}
+			json.append("]");
+		} else {
+			json.append("null");
+		}
+		return json.toString();
+	}
+
 	public static String toJson(Collection<? extends PersistentObject> entities) {
 		StringBuilder json = new StringBuilder();
 		if (entities != null) {

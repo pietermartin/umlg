@@ -68,7 +68,7 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
 				OJIfStatement ifNotNull2 = new OJIfStatement(propertyWrapper.fieldname() + " != null"); 
 				ifNotNull2.addToThenPart(propertyWrapper.fieldname() + "." + otherEnd.clearer() + "()");
 				ifNotNull2.addToThenPart(propertyWrapper.fieldname() + ".initialiseProperty(" + TumlClassOperations.propertyEnumName(otherEnd.getOwningType()) + "."
-						+ otherEnd.fieldname() + ")");
+						+ otherEnd.fieldname() + ", false)");
 				
 				ifNotNull2.addToThenPart(propertyWrapper.remover() + "(" + propertyWrapper.fieldname() + ")");
 				

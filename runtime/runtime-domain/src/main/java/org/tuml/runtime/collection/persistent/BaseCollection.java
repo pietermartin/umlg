@@ -186,17 +186,17 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 		}
 		TumlNode node = (TumlNode) e;
 		if (isQualified()) {
-			for (Qualifier qualifier : this.owner.getQualifiers(this.tumlRuntimeProperty, node)) {
+			for (Qualifier qualifier : this.owner.getQualifiers(this.tumlRuntimeProperty, node, false)) {
 				validateQualifiedMultiplicity(index, qualifier);
 			}
 		}
 		if (isInverseQualified()) {
 			Index<Edge> tmpIndex;
-			tmpIndex = GraphDb.getDb().getIndex(((TumlNode) e).getUid() + ":::" + getLabel(), Edge.class);
+			tmpIndex = GraphDb.getDb().getIndex(((TumlNode) e).getUid() + ":::" + getInverseQualifiedName(), Edge.class);
 			if (tmpIndex == null) {
-				tmpIndex = GraphDb.getDb().createIndex(((TumlNode) e).getUid() + ":::" + getLabel(), Edge.class);
+				tmpIndex = GraphDb.getDb().createIndex(((TumlNode) e).getUid() + ":::" + getInverseQualifiedName(), Edge.class);
 			}
-			for (Qualifier qualifier : node.getQualifiers(this.tumlRuntimeProperty, this.owner)) {
+			for (Qualifier qualifier : node.getQualifiers(this.tumlRuntimeProperty, this.owner, true)) {
 				validateQualifiedMultiplicity(tmpIndex, qualifier);
 			}
 		}
@@ -231,7 +231,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 						createAudit(e, true);
 					}
 					if (isInverseOrdered()) {
-						Index<Edge> index = GraphDb.getDb().getIndex(node.getUid() + ":::" + getLabel(), Edge.class);
+						Index<Edge> index = GraphDb.getDb().getIndex(node.getUid() + ":::" + getInverseQualifiedName(), Edge.class);
 						index.remove("index", this.owner.getVertex().getProperty("tinkerIndex"), edge);
 					}
 					GraphDb.getDb().removeEdge(edge);
@@ -273,7 +273,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 				// side may remain in memory.
 				// Clearing this property is not performance issue as it is a
 				// one
-				node.initialiseProperty(tumlRuntimeProperty);
+				node.initialiseProperty(tumlRuntimeProperty, true);
 
 			}
 		} else if (e.getClass().isEnum()) {
@@ -515,16 +515,16 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 	protected void addQualifierToIndex(Edge edge, TumlNode node) {
 		// if is qualified update index
 		if (isQualified()) {
-			addQualifierToIndex(this.index, edge, this.owner, node);
+			addQualifierToIndex(this.index, edge, this.owner, node, false);
 		}
 
 		// if is qualified update index
 		if (isInverseQualified()) {
-			Index<Edge> index = GraphDb.getDb().getIndex(node.getUid() + ":::" + getLabel(), Edge.class);
+			Index<Edge> index = GraphDb.getDb().getIndex(node.getUid() + ":::" + getInverseQualifiedName(), Edge.class);
 			if (index == null) {
-				index = GraphDb.getDb().createIndex(node.getUid() + ":::" + getLabel(), Edge.class);
+				index = GraphDb.getDb().createIndex(node.getUid() + ":::" + getInverseQualifiedName(), Edge.class);
 			}
-			addQualifierToIndex(index, edge, node, this.owner);
+			addQualifierToIndex(index, edge, node, this.owner, true);
 		}
 	}
 
@@ -549,9 +549,9 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 		if (!isInverseOrdered()) {
 			throw new IllegalStateException("addOrderToInverseIndex can only be called where the inverse side of the association is ordered");
 		}
-		NakedTinkerIndex<Edge> index = GraphDb.getDb().getIndex(node.getUid() + ":::" + getLabel(), Edge.class);
+		NakedTinkerIndex<Edge> index = GraphDb.getDb().getIndex(node.getUid() + ":::" + getInverseQualifiedName(), Edge.class);
 		if (index == null) {
-			index = GraphDb.getDb().createIndex(node.getUid() + ":::" + getLabel(), Edge.class);
+			index = GraphDb.getDb().createIndex(node.getUid() + ":::" + getInverseQualifiedName(), Edge.class);
 		}
 		Edge edgeToLastElementInSequence = index.getEdgeToLastElementInSequence();
 		Float size;
@@ -572,8 +572,8 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 	 * @param qualifiedNode
 	 * @param qualifierNode
 	 */
-	private void addQualifierToIndex(Index<Edge> index, Edge edge, TumlNode qualifiedNode, TumlNode qualifierNode) {
-		for (Qualifier qualifier : qualifiedNode.getQualifiers(this.tumlRuntimeProperty, qualifierNode)) {
+	private void addQualifierToIndex(Index<Edge> index, Edge edge, TumlNode qualifiedNode, TumlNode qualifierNode, boolean inverse) {
+		for (Qualifier qualifier : qualifiedNode.getQualifiers(this.tumlRuntimeProperty, qualifierNode, inverse)) {
 			index.put(qualifier.getKey(), qualifier.getValue(), edge);
 			edge.setProperty("index" + qualifier.getKey(), qualifier.getValue());
 		}
@@ -632,6 +632,16 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 	@Override
 	public String getLabel() {
 		return this.tumlRuntimeProperty.getLabel();
+	}
+
+	@Override
+	public String getQualifiedName() {
+		return this.tumlRuntimeProperty.getQualifiedName();
+	}
+
+	@Override
+	public String getInverseQualifiedName() {
+		return this.tumlRuntimeProperty.getInverseQualifiedName();
 	}
 
 	@Override

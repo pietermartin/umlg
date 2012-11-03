@@ -111,7 +111,7 @@ public class AddTumlUriFieldToRuntimePropertyEnum extends BaseVisitor implements
 		OJAnnotatedOperation getUriToObject = new OJAnnotatedOperation("getUriToObject", new OJPathName("String"));
 		getUriToObject.setStatic(true);
 		getUriToObject.getBody().addToStatements(
-				"return " + "\"/" + clazz.getModel().getName() + "/" + TumlClassOperations.getPathName(clazz).getLast().toLowerCase() + "s/{"
+				"return " + "\"/" + this.workspace.getModel().getName() + "/" + TumlClassOperations.getPathName(clazz).getLast().toLowerCase() + "s/{"
 						+ TumlClassOperations.getPathName(clazz).getLast().toLowerCase() + "Id}\"");
 		ojEnum.addToOperations(getUriToObject);
 

@@ -14,7 +14,7 @@
         }
 
         function refresh(result) {
-            var metaForData = result.meta[2];
+            var metaForData = result.meta[1];
             var tabDiv = $('#' + metaForData.name);
             var myGridDiv = $('<div id="myGrid' + metaForData.name + '" style="width:100%;height:90%;"></div>').appendTo(tabDiv);
             var pagerDiv = $('<div id="pager' + metaForData.name + '" style="width:100%;height:20px;"></div>').appendTo(tabDiv);
@@ -35,6 +35,7 @@
             "onDeleteSuccess": new Tuml.Event(),
             "onDeleteFailure": new Tuml.Event(),
             "onCancel": new Tuml.Event(),
+            "onSelfCellClick": new Tuml.Event(),
             "onContextMenuClickLink": new Tuml.Event(),
             "onContextMenuClickDelete": new Tuml.Event(),
             "refresh": refresh
@@ -73,6 +74,7 @@
                     }
                 }
             });
+            //var formatLink = new TumlSlick.Formatters.Link(self);
             columns.push({id: "uri", name: "uri", field: "uri", sortable: false, formatter: TumlSlick.Formatters.Link});
             columns.push(
                 {id: "delete", name: "delete", field: "delete", sortable: false, 
@@ -231,11 +233,22 @@
                 }
             }); 
 
-            grid.onActiveCellChanged.subscribe(function(e, args) {
+            grid.onClick.subscribe(function(e, args) {
                 if (grid.getColumns()[args.cell].name == 'delete') {
                     var item = dataView.getItem(args.row);
                     dataView.deleteItem(item.id);
+                } else if (grid.getColumns()[args.cell].name == 'uri') {
+                    var item = dataView.getItem(args.row);
+                    var uri = item.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), item.id);
+                    self.onSelfCellClick.notify({name: 'unused', tumlUri: uri}, null, self);
                 }
+            });
+
+            grid.onActiveCellChanged.subscribe(function(e, args) {
+                //if (grid.getColumns()[args.cell].name == 'delete') {
+                    //var item = dataView.getItem(args.row);
+                    //dataView.deleteItem(item.id);
+                //}
             });
 
             grid.onCellChange.subscribe(function(e, args) {
@@ -462,7 +475,6 @@
         init();
     }
 
-
     function selectEditor(property) {
         if (property.name == 'uri') {
             return null;
@@ -505,6 +517,7 @@
         } else {
             return  Slick.Editors.Text; 
         }
+
     }
 
     function selectFieldValidator(property) {
@@ -542,7 +555,7 @@
 
     function selectFormatter(property) {
         if (property.name == 'uri') {
-            return TumlSlick.Formatters.Link;
+            return new TumlSlick.Formatters.Link;
         } else if (property.name == 'id') {
             return TumlSlick.Formatters.Id;
         } else if (property.dataTypeEnum !== undefined) {
@@ -565,6 +578,8 @@
         } else {
             return null; 
         }
+
     }
+
 
 })(jQuery);

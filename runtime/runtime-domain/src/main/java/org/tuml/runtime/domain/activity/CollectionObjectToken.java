@@ -134,13 +134,13 @@ public class CollectionObjectToken<O> extends ObjectToken<O> implements Composit
 	}
 
 	@Override
-	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty) {
+	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty, boolean inverse) {
 		// TODO Implement
 		throw new RuntimeException("Not implemented");
 	}
 
 	@Override
-	public List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, TumlNode node) {
+	public List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, TumlNode node, boolean inverse) {
 		// TODO Implement
 		throw new RuntimeException("Not implemented");
 	}
