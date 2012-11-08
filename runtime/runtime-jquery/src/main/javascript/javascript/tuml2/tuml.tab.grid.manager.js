@@ -14,12 +14,12 @@
         }
 
         function refresh(result) {
-            var metaForData = result.meta[1];
+            var metaForData = result.meta.to;
             var tabDiv = $('#' + metaForData.name);
             var myGridDiv = $('<div id="myGrid' + metaForData.name + '" style="width:100%;height:90%;"></div>').appendTo(tabDiv);
             var pagerDiv = $('<div id="pager' + metaForData.name + '" style="width:100%;height:20px;"></div>').appendTo(tabDiv);
             var t1 = $('#myGrid' + metaForData.name);
-            var qualifiedName = result.meta[0].qualifiedName;
+            var qualifiedName = result.meta.qualifiedName;
             var data = result.data;
             $('#contextMenu' + metaForData.name).remove();
             createGrid(data, metaForData, tumlUri);
@@ -571,7 +571,7 @@
                 }
             };
             return null;
-        } else if (property.fieldType == 'String') {
+        } else if (property.lower > 0 && property.fieldType == 'String') {
             return  TumlSlick.Formatters.TumlRequired; 
         } else if (property.fieldType == 'Boolean') {
             return Slick.Formatters.Checkmark;

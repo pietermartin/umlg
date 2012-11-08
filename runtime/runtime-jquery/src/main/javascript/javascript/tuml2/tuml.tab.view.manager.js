@@ -6,16 +6,18 @@
         }
     });
 
-    function TumlTabViewManager(many, tumlUri, qualifiedName, tabDivName) {
+    function TumlTabViewManager(oneManyOrQuery, tumlUri, qualifiedName, tabDivName) {
 
         var self = this;
         var tumlTabGridManager;
         var tumlTabOneManager;
+        var tumlTabQueryManager;
 
         function init() {
-            var tabContainer = $('#tab-container');
-            var tabDiv = $('<div />', {id: tabDivName}).appendTo(tabContainer);
-            if (many) {
+            if ($('#' + tabDivName) == undefined) {
+                alert('The tab must be created before calling the TumlTabViewManager.init()');
+            }
+            if (oneManyOrQuery.many) {
                 //Do not pass the div in, it causes issues with refreshing
                 tumlTabGridManager = new Tuml.TumlTabGridManager(tumlUri);
                 tumlTabGridManager.onPutSuccess.subscribe(function(e, args) {
@@ -61,7 +63,7 @@
                     console.log('TumlTabViewManager onContextMenuClickDelete fired');
                     self.onContextMenuClickDelete.notify(args, e, self);
                 });
-            } else {
+            } else if (oneManyOrQuery.one) {
                 tumlTabOneManager = new Tuml.TumlTabOneManager(tumlUri);
                 tumlTabOneManager.onPutOneSuccess.subscribe(function(e, args) {
                     console.log('TumlTabViewManager onPutOneSuccess fired');
@@ -71,27 +73,23 @@
                     console.log('TumlTabViewManager onPutOneFailure fired: ' + args.textStatus + ' ' + args.errorThrown);
                     self.onPutOneFailure.notify(args, e, self);
                 });
+            } else if (oneManyOrQuery.query) {
+                tumlTabQueryManager = new Tuml.TumlTabQueryManager(tumlUri, tabDivName);
+            } else {
+                alert('TumlTabViewManager.constructor, this should not happen!');
             }
-        }
-
-        function createTab(result) {
-            //Add in a tab
-            var tabUl = $('#tabsul');
-            li = $('<li />', {class: 'tab'}).append(
-                $('<a />', {href: '#' + tabDivName}).append(
-                    $('<span>').text(tabDivName))).appendTo(tabUl);
         }
 
         function createGridForResult(result, tabId) {
             for (i = 0; i < result.length; i++) {
-                if (result[i].meta.length === 3) {
-                    var metaForData = result[i].meta[1];
+                //if (result[i].meta.length === 3) {
+                    var metaForData = result[i].meta.to;
                     if (metaForData.name === tabId) {
                         $('#' + tabDivName).children().remove();
                         createGrid(result[i]);
                         return;
                     }
-                }
+                //}
             }
         }
 
@@ -103,6 +101,11 @@
         //Must be created after tabs have been created, else things look pretty bad like...
         function createOne(result, metaForData) {
             tumlTabOneManager.refresh(result, metaForData, qualifiedName);
+        }
+
+        //Must be created after tabs have been created, else things look pretty bad like...
+        function createQuery(oclExecuteUri) {
+            tumlTabQueryManager.createQuery(oclExecuteUri);
         }
 
         //Public api
@@ -123,10 +126,11 @@
             "onPutOneSuccess": new Tuml.Event(),
             "onPutOneFailure": new Tuml.Event(),
             //Other events
-            "createTab": createTab,
             "createOne": createOne,
             "createGrid": createGrid,
-            "tabDivName": tabDivName
+            "createQuery": createQuery,
+            "tabDivName": tabDivName,
+            "oneManyOrQuery": oneManyOrQuery
         });
 
         init();

@@ -22,8 +22,9 @@ public class TestQueryBaseModelTumlAssociation extends BaseLocalDbTest {
 		Query query1 = new Query(true);
 		query1.setQueryEnum(QueryEnum.OCL);
 		query1.setQueryString("asd");
+		query1.setName("asd");
 		universe1.addToQuery(query1);
-		Assert.assertNotNull(query1.getBaseTuml());
+		Assert.assertNotNull(query1.getBaseTumlWithQuery());
 		db.stopTransaction(Conclusion.SUCCESS);
 	}
 
@@ -36,8 +37,9 @@ public class TestQueryBaseModelTumlAssociation extends BaseLocalDbTest {
 		Query query1 = new Query(true);
 		query1.setQueryEnum(QueryEnum.OCL);
 		query1.setQueryString("asd");
+		query1.setName("asd");
 		universe1.getQuery().add(query1);
-		Assert.assertNotNull(query1.getBaseTuml());
+		Assert.assertNotNull(query1.getBaseTumlWithQuery());
 		db.stopTransaction(Conclusion.SUCCESS);
 	}
 

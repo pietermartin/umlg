@@ -30,6 +30,7 @@
 						<configuration>
 							<sources>
 								<source>src/main/generated-java</source>
+								<source>src/main/generated-java-restlet</source>
 							</sources>
 						</configuration>
 					</execution>

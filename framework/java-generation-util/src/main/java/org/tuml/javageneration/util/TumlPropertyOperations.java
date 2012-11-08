@@ -158,7 +158,8 @@ public final class TumlPropertyOperations extends PropertyOperations {
 			return isOne(otherEnd) && otherEnd.getQualifiers().size() == 0;
 		} else {
 			// TODO think about, this was false
-			return true;
+			//if the other end does not exist treat as a many
+			return false;
 		}
 	}
 

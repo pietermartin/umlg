@@ -183,7 +183,7 @@
           });
 
           // Don't hide panel if it's active (allows `getTabs` to be called manually to re-instantiate tab collection)
-          $matchingPanel.not(settings.panelActiveClass).hide();
+          $matchingPanel.not('.' + settings.panelActiveClass).hide();
 
           plugin.panels = plugin.panels.add($matchingPanel);
 

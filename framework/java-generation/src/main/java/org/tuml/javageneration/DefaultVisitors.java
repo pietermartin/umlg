@@ -27,6 +27,7 @@ import org.tuml.javageneration.visitor.property.ManyPropertyVisitor;
 import org.tuml.javageneration.visitor.property.OnePropertyVisitor;
 import org.tuml.javageneration.visitor.property.PropertyValidatorBuilder;
 import org.tuml.javageneration.visitor.property.PropertyVisitor;
+import org.tuml.javageneration.visitor.property.QualifiedNameClassNameMapBuilder;
 import org.tuml.javageneration.visitor.property.QualifierValidator;
 import org.tuml.javageneration.visitor.property.QualifierVisitor;
 
@@ -39,6 +40,7 @@ public class DefaultVisitors {
 		result.add(new ClassBuilder(Workspace.INSTANCE));
 		result.add(new RootEntryPointCreator(Workspace.INSTANCE));
 		result.add(new RootEntryPointBuilder(Workspace.INSTANCE));
+		result.add(new QualifiedNameClassNameMapBuilder(Workspace.INSTANCE));
 		result.add(new ClassRuntimePropertyImplementorVisitor(Workspace.INSTANCE));
 		result.add(new InterfaceRuntimePropertyImplementorVisitor(Workspace.INSTANCE));
 		result.add(new EnumerationVisitor(Workspace.INSTANCE));

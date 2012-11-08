@@ -18,14 +18,22 @@ import org.tuml.javageneration.util.PropertyWrapper;
 public class BaseVisitor {
 
 	protected Workspace workspace;
+	protected String sourceDir;
 	
 	public BaseVisitor(Workspace workspace) {
 		super();
 		this.workspace = workspace;
+		this.sourceDir = Workspace.DEFAULT_SOURCE_FOLDER;
+	}
+
+	public BaseVisitor(Workspace workspace, String sourceDir) {
+		super();
+		this.workspace = workspace;
+		this.sourceDir = sourceDir;
 	}
 
 	protected void addToSource(OJAnnotatedClass source) {
-		this.workspace.addToClassMap(source);
+		this.workspace.addToClassMap(source, sourceDir);
 	}
 
 	protected OJAnnotatedClass findOJClass(NamedElement owner) {

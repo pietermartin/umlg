@@ -12,6 +12,8 @@ import org.restlet.Component;
 import org.restlet.Context;
 import org.restlet.Server;
 import org.restlet.data.Protocol;
+import org.tuml.framework.ModelLoader;
+import org.tuml.ocl.TumlOcl2Parser;
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.NakedGraph;
 import org.tuml.runtime.adaptor.NakedGraphFactory;
@@ -32,10 +34,13 @@ public class TumlRestletServerComponent2 extends Component {
 	}
 
 	public TumlRestletServerComponent2() {
-
+		ModelLoader.loadModel(new File("src/main/model/restANDjson.uml"));
+		@SuppressWarnings("unused")
+		TumlOcl2Parser instance = TumlOcl2Parser.INSTANCE;
+		
 		GraphDb.setDb(createNakedGraph());
 		createDefaultData();
-		// create1000000();
+//		 create1000000();
 
 		// Set basic properties
 		setName("RESTful Mail Server component");
@@ -52,11 +57,12 @@ public class TumlRestletServerComponent2 extends Component {
 
 		// Attach the application to the default virtual host
 		getDefaultHost().attach("/restAndJson", new TumlRestletServerApplication2());
+		getDefaultHost().attach("/tumllib", new TumlRestletServerApplication2());
 	}
 
 	private void createDefaultData() {
 		GraphDb.getDb().startTransaction();
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 100000; i++) {
 			Human human = new Human(true);
 			human.setName("human1" + i);
 			human.setName2("human2" + i);

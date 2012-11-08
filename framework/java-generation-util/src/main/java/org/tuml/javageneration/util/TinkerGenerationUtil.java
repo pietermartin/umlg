@@ -18,6 +18,9 @@ public class TinkerGenerationUtil {
 
 	public static final String TINKER_DB_NULL = "__NULL__";
 	
+	public static final String QualifiedNameClassMapName = "qualifiedNameClassMap";
+	public static final OJPathName QualifiedNameClassMap = new OJPathName("org.tuml.root.QualifiedNameClassMap");
+	public static final OJPathName TumlRootPackage = new OJPathName("org.tuml.root");
 	public static final OJPathName TumlRootNode = new OJPathName("org.tuml.runtime.domain.TumlRootNode");
 	public static final OJPathName TumlEnum = new OJPathName("org.tuml.runtime.domain.TumlEnum");
 	public static final OJPathName TumlConstraintViolationException = new OJPathName("org.tuml.runtime.validation.TumlConstraintViolationException");

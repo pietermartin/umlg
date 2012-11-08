@@ -186,6 +186,7 @@ public class RuntimePropertyImplementor {
 		asJson.setStatic(true);
 		asJson.getBody().addToStatements("StringBuilder sb = new StringBuilder();");
 		asJson.getBody().addToStatements("name", "sb.append(\"{\\\"name\\\": \\\"" + className.getName() + "\\\", \")");
+		asJson.getBody().addToStatements("qualifiedName", "sb.append(\"\\\"qualifiedName\\\": \\\"" + className.getQualifiedName() + "\\\", \")");
 		asJson.getBody().addToStatements("uri", "sb.append(\"\\\"uri\\\": \\\"TODO\\\", \")");
 		asJson.getBody().addToStatements("properties", "sb.append(\"\\\"properties\\\": [\")");
 
@@ -205,11 +206,12 @@ public class RuntimePropertyImplementor {
 		for (Property p : allOwnedProperties) {
 			PropertyWrapper pWrap = new PropertyWrapper(p);
 			if (!(pWrap.isDerived() || pWrap.isDerivedUnion())) {
-				addEnumLiteral(ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, pWrap.fieldname(), pWrap.getQualifiedName(), pWrap.getInverseQualifiedName(),
-						pWrap.isPrimitive() && pWrap.isOne(), pWrap.getDataTypeEnum(), pWrap.getValidations(), pWrap.isEnumeration(), pWrap.isManyToOne(),
-						pWrap.isMany(), pWrap.isControllingSide(), pWrap.isComposite(), pWrap.isInverseComposite(), pWrap.isOneToOne(), pWrap.isOneToMany(),
-						pWrap.isManyToMany(), pWrap.getUpper(), pWrap.getLower(), pWrap.isQualified(), pWrap.isInverseQualified(), pWrap.isOrdered(),
-						pWrap.isInverseOrdered(), pWrap.isUnique(), TinkerGenerationUtil.getEdgeName(pWrap.getProperty()));
+				addEnumLiteral(ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, pWrap.fieldname(), pWrap.getQualifiedName(),
+						pWrap.getInverseQualifiedName(), pWrap.isPrimitive() && pWrap.isOne(), pWrap.getDataTypeEnum(), pWrap.getValidations(),
+						pWrap.isEnumeration(), pWrap.isManyToOne(), pWrap.isMany(), pWrap.isControllingSide(), pWrap.isComposite(), pWrap.isInverseComposite(),
+						pWrap.isOneToOne(), pWrap.isOneToMany(), pWrap.isManyToMany(), pWrap.getUpper(), pWrap.getLower(), pWrap.isQualified(),
+						pWrap.isInverseQualified(), pWrap.isOrdered(), pWrap.isInverseOrdered(), pWrap.isUnique(),
+						TinkerGenerationUtil.getEdgeName(pWrap.getProperty()));
 			}
 		}
 
@@ -228,10 +230,10 @@ public class RuntimePropertyImplementor {
 	}
 
 	public static OJEnumLiteral addEnumLiteral(OJEnum ojEnum, OJAnnotatedOperation fromLabel, OJAnnotatedOperation fromQualifiedName,
-			OJAnnotatedOperation fromInverseQualifiedName, String fieldName, String qualifiedName, String inverseQualifiedName, boolean isOnePrimitive, DataTypeEnum dataTypeEnum,
-			List<Validation> validations, boolean isEnumeration, boolean isManyToOne, boolean isMany, boolean isControllingSide, boolean isComposite,
-			boolean isInverseComposite, boolean isOneToOne, boolean isOneToMany, boolean isManyToMany, int getUpper, int getLower, boolean isQualified,
-			boolean isInverseQualified, boolean isOrdered, boolean isInverseOrdered, boolean isUnique, String edgeName) {
+			OJAnnotatedOperation fromInverseQualifiedName, String fieldName, String qualifiedName, String inverseQualifiedName, boolean isOnePrimitive,
+			DataTypeEnum dataTypeEnum, List<Validation> validations, boolean isEnumeration, boolean isManyToOne, boolean isMany, boolean isControllingSide,
+			boolean isComposite, boolean isInverseComposite, boolean isOneToOne, boolean isOneToMany, boolean isManyToMany, int getUpper, int getLower,
+			boolean isQualified, boolean isInverseQualified, boolean isOrdered, boolean isInverseOrdered, boolean isUnique, String edgeName) {
 
 		OJIfStatement ifLabelEquals = new OJIfStatement(fieldName + ".getLabel().equals(label)");
 		// Do not make upper case, leave with java case sensitive

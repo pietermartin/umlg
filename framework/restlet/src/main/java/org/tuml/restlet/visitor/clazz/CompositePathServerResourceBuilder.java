@@ -1,8 +1,5 @@
 package org.tuml.restlet.visitor.clazz;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.uml2.uml.Class;
 import org.opaeum.java.metamodel.OJField;
 import org.opaeum.java.metamodel.OJPackage;
@@ -17,15 +14,14 @@ import org.opaeum.java.metamodel.annotation.OJEnumLiteral;
 import org.tuml.framework.Visitor;
 import org.tuml.generation.Workspace;
 import org.tuml.javageneration.util.Namer;
-import org.tuml.javageneration.util.PropertyWrapper;
 import org.tuml.javageneration.util.TinkerGenerationUtil;
 import org.tuml.javageneration.util.TumlClassOperations;
 import org.tuml.restlet.util.TumlRestletGenerationUtil;
 
 public class CompositePathServerResourceBuilder extends BaseServerResourceBuilder implements Visitor<Class> {
 
-	public CompositePathServerResourceBuilder(Workspace workspace) {
-		super(workspace);
+	public CompositePathServerResourceBuilder(Workspace workspace, String sourceDir) {
+		super(workspace, sourceDir);
 	}
 
 	@Override
@@ -71,33 +67,11 @@ public class CompositePathServerResourceBuilder extends BaseServerResourceBuilde
 		get.getBody().addToStatements("StringBuilder json = new StringBuilder()");
 		get.getBody().addToStatements("json.append(\"{\\\"data\\\": [\")");
 
-		StringBuilder pathToCompositionRootCalc = new StringBuilder("json.append(ToJsonUtil.pathToCompositionRootAsJson(Arrays.asList(");
-		annotatedClass.addToImports(TinkerGenerationUtil.ToJsonUtil);
-		annotatedClass.addToImports("java.util.Arrays");
-		List<String> uriList = new ArrayList<String>();
-		constructUriListToCompositeRoot(uriList, clazz);
-		int count = 0;
-		for (String uri : uriList) {
-			count++;
-			pathToCompositionRootCalc.append(uri);
-			if (count != uriList.size()) {
-				pathToCompositionRootCalc.append(",");
-			}
-		}
-		pathToCompositionRootCalc.append("), Arrays.asList(");
+		StringBuilder pathToCompositionRootCalc = new StringBuilder("json.append(RestletToJsonUtil.pathToCompositionRootAsJson(");
+		annotatedClass.addToImports(TumlRestletGenerationUtil.RestletToJsonUtil);
 
-		List<String> nameList = new ArrayList<String>();
-		constructNameListToCompositeRoot(nameList, clazz);
-		count = 0;
-		for (String name : nameList) {
-			count++;
-			pathToCompositionRootCalc.append(name);
-			if (count != nameList.size()) {
-				pathToCompositionRootCalc.append(",");
-			}
-		}
-
-		pathToCompositionRootCalc.append("), c.getPathToCompositionalRoot(), ");
+		pathToCompositionRootCalc.append("c.<" + TumlRestletGenerationUtil.TumlRestletNode.getLast() + ">getPathToCompositionalRoot(), ");
+		annotatedClass.addToImports(TumlRestletGenerationUtil.TumlRestletNode);
 		pathToCompositionRootCalc.append("\"Root\", \"/restAndJson\"))");
 		get.getBody().addToStatements(pathToCompositionRootCalc.toString());
 		get.getBody().addToStatements("json.append(\"]}\")");
@@ -106,27 +80,6 @@ public class CompositePathServerResourceBuilder extends BaseServerResourceBuilde
 		annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
 		annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);
 		annotatedClass.addToOperations(get);
-	}
-
-	private void constructUriListToCompositeRoot(List<String> uriList, Class clazz) {
-		String uri = "";
-		uri = "\"/" + clazz.getModel().getName() + "/" + TumlClassOperations.getPathName(clazz).getLast().toLowerCase() + "s/{"
-				+ TumlClassOperations.getPathName(clazz).getLast().toLowerCase() + "Id}\"";
-		uriList.add(uri);
-		if (TumlClassOperations.hasCompositeOwner(clazz)) {
-			PropertyWrapper pWrap = new PropertyWrapper(TumlClassOperations.getOtherEndToComposite(clazz));
-			Class compositeParentType = (Class) pWrap.getType();
-			constructUriListToCompositeRoot(uriList, compositeParentType);
-		}
-	}
-
-	private void constructNameListToCompositeRoot(List<String> uriList, Class clazz) {
-		uriList.add("\"" + TumlClassOperations.getPathName(clazz).getLast() + "\"");
-		if (TumlClassOperations.hasCompositeOwner(clazz)) {
-			PropertyWrapper pWrap = new PropertyWrapper(TumlClassOperations.getOtherEndToComposite(clazz));
-			Class compositeParentType = (Class) pWrap.getType();
-			constructNameListToCompositeRoot(uriList, compositeParentType);
-		}
 	}
 
 	private void addToRouterEnum(Class clazz, OJAnnotatedClass annotatedClass) {

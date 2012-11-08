@@ -18,8 +18,8 @@ import org.tuml.javageneration.visitor.BaseVisitor;
 
 public class AddTumlLookupUriToRuntimePropertyEnum extends BaseVisitor implements Visitor<Property> {
 
-	public AddTumlLookupUriToRuntimePropertyEnum(Workspace workspace) {
-		super(workspace);
+	public AddTumlLookupUriToRuntimePropertyEnum(Workspace workspace, String sourceDir) {
+		super(workspace, sourceDir);
 	}
 
 	@Override

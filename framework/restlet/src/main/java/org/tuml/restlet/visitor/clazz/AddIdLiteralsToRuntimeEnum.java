@@ -16,8 +16,8 @@ import org.tuml.javageneration.visitor.clazz.RuntimePropertyImplementor;
 
 public class AddIdLiteralsToRuntimeEnum extends BaseVisitor implements Visitor<Class> {
 
-	public AddIdLiteralsToRuntimeEnum(Workspace workspace) {
-		super(workspace);
+	public AddIdLiteralsToRuntimeEnum(Workspace workspace, String sourceDir) {
+		super(workspace, sourceDir);
 	}
 
 	@Override

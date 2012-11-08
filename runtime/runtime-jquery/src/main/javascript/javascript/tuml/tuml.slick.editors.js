@@ -63,7 +63,11 @@
     };
 
     this.serializeValue = function () {
-      return $input.val();
+        if ($input.val() == '') {
+            return null;
+        } else {
+            return $input.val();
+        }
     };
 
     this.applyValue = function (item, state) {
@@ -174,7 +178,7 @@
                 }
             });
             $input.width($input.width() - 18);
-            $input.mask("9999-99-99");
+            //$input.mask("9999-99-99");
         };
 
         this.destroy = function () {
@@ -272,7 +276,7 @@
                 }
             });
             $input.width($input.width() - 18);
-            $input.mask("9999-99-99T99:99:99");
+            //$input.mask("9999-99-99T99:99:99");
         };
 
         this.destroy = function () {
@@ -315,6 +319,7 @@
         };
 
         this.serializeValue = function () {
+            //$input.unmask();
             return $input.val();
         };
 
@@ -367,7 +372,7 @@
                 }
             });
             $input.width($input.width() - 18);
-            $input.mask("99:99");
+            //$input.mask("99:99");
         };
 
         this.destroy = function () {

@@ -17,17 +17,19 @@
             //Clear all elements
             var tabDiv = $('#' + metaForData.name);
             tabDiv.children().remove();
-            $('<div />').text(qualifiedName).appendTo(tabDiv);
+            $('<div />').appendTo(tabDiv);
             $('<div />', {id: 'formDiv'}).appendTo(tabDiv);
 
-            var ul = $('<ul />').appendTo("#formDiv");
+            var ul = $('<ul />')
+            ul.appendTo($("#formDiv"));
             $.each(metaForData.properties, function(index, property) {
                 if (!property.inverseComposite && (property.oneToOne || property.manyToOne) && property.name !== 'uri') {
-                    var li = $('<li>').appendTo(ul);
+                    var li = $('<li>')
+                    li.appendTo(ul);
                     $('<label />', {for: property.name + 'Id'}).text(property.name).appendTo(li);
-                    var $input = constructInputForField(data, property);
+                    var $input = constructInputForField(data, property, li);
+                    $input.appendTo(li);
                     if ($input !== undefined) {
-                        $input.appendTo(li);
                         if (property.dataTypeEnum !== undefined) {
                             if (property.dataTypeEnum == 'Date') {
                                 $input.datepicker({
@@ -112,9 +114,9 @@
                 appendEnumerationLoopupOptionsToSelect("/restAndJson/tumlEnumLookup", property.qualifiedName, property.lower > 0, data[property.name], $select);
                 return $select;
             } else if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite) {
-                var $select = $('<select />', {class: 'chzn-select', style: 'width:350px;',  id: property.name + 'Id', name: property.name});
-                appendLoopupOptionsToSelect(property.tumlLookupUri, property.lower > 0, data['id'], data[property.name], $select);
-                return $select;
+                var select = $('<select />', {class: 'chzn-select', style: 'width:350px;',  id: property.name + 'Id', name: property.name});
+                appendLoopupOptionsToSelect(property.tumlLookupUri, property.lower > 0, data['id'], data[property.name], select);
+                return select;
             } else if (property.fieldType == 'String') {
                 return $('<input />', {type:'text', class: 'field', id: property.name + 'Id', name: property.name, value: data[property.name]});
             } else if (property.fieldType == 'Integer') {
@@ -130,22 +132,22 @@
             }
         }
 
-        function appendEnumerationLoopupOptionsToSelect(tumlLookupUri, propertyJavaClassName, required, currentValue, $select) {
+        function appendEnumerationLoopupOptionsToSelect(tumlLookupUri, propertyJavaClassName, required, currentValue, select) {
             var jqxhr = $.getJSON(tumlLookupUri + '?enumQualifiedName=' + propertyJavaClassName, function(response, b, c) {
                 //if not a required field add a black value
                 if (!required) {
-                    $select.append($('<option />)').val("").html(""));
+                    select.append($('<option />)').val("").html(""));
                 }
-                for (i = 0; i < response.data.length; i++) {
-                    $select.append($('<option />)').val(response.data[i]).html(response.data[i]));
+                for (var i = 0; i < response.data.length; i++) {
+                    select.append($('<option />)').val(response.data[i]).html(response.data[i]));
                 }
-                $select.val(currentValue);
+                select.val(currentValue);
                 if (!required) {
-                    $select.chosen({allow_single_deselect: true});
+                    select.chosen({allow_single_deselect: true});
                 } else {
-                    $select.chosen();
+                    select.chosen();
                 }
-                $select.focus();
+                select.focus();
             }).fail(function(a, b, c) {
                 alert("error " + a + ' ' + b + ' ' + c);
             });
@@ -203,6 +205,15 @@
                             dataToSend[property.name] = $('#' + property.name + 'Id').val().replace(/ /g,"T");
                         } else {
                             dataToSend[property.name] = $('#' + property.name + 'Id').val();
+                        }
+                    } else if (property.oneEnumeration) {
+                        var $select = $('#' + property.name + 'Id');
+                        var options = $select.children();
+                        for (var i = 0; i < options.length; i++) {
+                            if (options[i].selected) {
+                                dataToSend[property.name]= $select.val();
+                                break;
+                            }
                         }
                     } else if (!property.onePrimitive && !property.manyPrimitive && !property.inverseComposite) {
                         var $select = $('#' + property.name + 'Id');

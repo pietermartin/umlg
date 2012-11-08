@@ -15,10 +15,14 @@
         }
 
         function refresh(tumlUri, result) {
+            //A tab is created for every element in the array,
+            //i.e. for every concrete subset of the many property
             for (i = 0; i < result.length; i++) {
-                if (result[i].meta.length === 3) {
-                    var metaForData = result[i].meta[1];
-                    var tumlTabViewManager = new Tuml.TumlTabViewManager(true, tumlUri, result[i].meta[0].qualifiedName, metaForData.name);
+                if (result[i].meta.from !== undefined) {
+                    var metaForData = result[i].meta.to;
+                    var tabContainer = $('#tab-container');
+                    var tabDiv = $('<div />', {id: metaForData.name, title: metaForData.name}).appendTo(tabContainer);
+                    var tumlTabViewManager = new Tuml.TumlTabViewManager({many: true, one: false, query: false}, tumlUri, result[i].meta.qualifiedName, metaForData.name);
                     tumlTabViewManager.onPutSuccess.subscribe(function(e, args) {
                         console.log('TumlManyViewManager onPutSuccess fired');
                         self.onPutSuccess.notify(args, e, self);
@@ -60,15 +64,15 @@
                         self.onContextMenuClickDelete.notify(args, e, self);
                     });
                     tumlTabViewManagers.push(tumlTabViewManager);
-                    tumlTabViewManager.createTab(result[i]);
+                    //tumlTabViewManager.createTab();
                 } else {
                     alert('what is this about!!!');
                 }
             }
             //Grids must be created after the tabs have been created.
             for (i = 0; i < result.length; i++) {
-                if (result[i].meta.length === 3) {
-                    var metaForData = result[i].meta[1];
+                if (result[i].meta.from !== undefined) {
+                    var metaForData = result[i].meta.to;
                     for (j = 0; j < tumlTabViewManagers.length; j++) {
                         if (tumlTabViewManagers[j].tabDivName === metaForData.name) {
                             tumlTabViewManagers[j].createGrid(result[i]);
@@ -76,6 +80,33 @@
                     }
                 }
             }
+        }
+
+        function closeQuery(title, index) {
+            tumlTabViewManagers.splice(index, 1);
+        }
+
+        function openQuery(tumlUri, oclExecuteUri, qualifiedName, tabDivName) {
+            //Check is there is already a tab open for this query
+            var tumlTabViewManagerQuery; 
+            var tabIndex = 0;
+            for (j = 0; j < tumlTabViewManagers.length; j++) {
+                if (tumlTabViewManagers[j].oneManyOrQuery.query && tumlTabViewManagers[j].tabDivName == tabDivName) {
+                    tumlTabViewManagerQuery = tumlTabViewManagers[j];
+                    tabIndex = j;
+                    break;
+                }
+            }
+            if (tumlTabViewManagerQuery === undefined) {
+                $('#tab-container').tabs('add', {title: tabDivName, content: '<div id="'+tabDivName+'" />', closable: true});
+                var tumlTabViewManager = new Tuml.TumlTabViewManager({many: false, one: false, query: true}, tumlUri, qualifiedName, tabDivName);
+                tumlTabViewManagers.push(tumlTabViewManager);
+                tumlTabViewManager.createQuery(oclExecuteUri);
+            } else {
+                //Just make the tab active
+                $('#tab-container').tabs('select', tabIndex);
+            }
+
         }
 
         function clear() {
@@ -100,6 +131,8 @@
             "onContextMenuClickLink": new Tuml.Event(),
             "onContextMenuClickDelete": new Tuml.Event(),
             "refresh": refresh,
+            "openQuery": openQuery,
+            "closeQuery": closeQuery,
             "clear": clear
         });
 

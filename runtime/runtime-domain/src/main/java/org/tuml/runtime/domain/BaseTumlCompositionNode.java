@@ -10,14 +10,14 @@ public abstract class BaseTumlCompositionNode extends BaseTuml implements Compos
 	 */
 	private static final long serialVersionUID = 6012617567783938431L;
 
-	public List<TumlNode> getPathToCompositionalRoot() {
-		List<TumlNode> result = new ArrayList<TumlNode>();
+	public <T extends TumlNode> List<T> getPathToCompositionalRoot() {
+		List<T> result = new ArrayList<T>();
 		walkToRoot(result);
 		return result;
 	}
 	
-	void walkToRoot(List<TumlNode> nodes) {
-		nodes.add(this);
+	<T extends TumlNode> void walkToRoot(List<T> nodes) {
+		nodes.add((T) this);
 		if (getOwningObject() != null && getOwningObject() instanceof CompositionNode) {
 			((BaseTumlCompositionNode) getOwningObject()).walkToRoot(nodes);
 		}

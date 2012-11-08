@@ -16,8 +16,9 @@ import org.tuml.framework.Visitor;
 public class Workspace {
 
 	private static final Logger logger = Logger.getLogger(Workspace.class.getPackage().getName());
+	public final static String DEFAULT_SOURCE_FOLDER = "src/main/generated-java";
 	public final static String RESOURCE_FOLDER = "src/main/generated-resources";
-	private final Map<String, OJAnnotatedClass> javaClassMap = new HashMap<String, OJAnnotatedClass>();
+	private final Map<JavaModelPrinter.Source, OJAnnotatedClass> javaClassMap = new HashMap<JavaModelPrinter.Source, OJAnnotatedClass>();
 	private File projectRoot;
 	private File modelFile;
 	private Model model;
@@ -28,15 +29,15 @@ public class Workspace {
 	private Workspace() {
 	}
 
-	public void addToClassMap(OJAnnotatedClass ojClass) {
-		this.javaClassMap.put(ojClass.getQualifiedName(), ojClass);
+	public void addToClassMap(OJAnnotatedClass ojClass, String sourceDir) {
+		this.javaClassMap.put(new JavaModelPrinter.Source(ojClass.getQualifiedName(), sourceDir), ojClass);
 	}
 
 	public void generate(File projectRoot, File modelFile, List<Visitor<?>> visitors) {
 		this.projectRoot = projectRoot;
 		this.modelFile = modelFile;
 		this.visitors = visitors;
-		File sourceDir = new File(projectRoot, JavaModelPrinter.SOURCE_FOLDER);
+		File sourceDir = new File(projectRoot, Workspace.DEFAULT_SOURCE_FOLDER);
 		logger.info("Generation started");
 		visitModel();
 		toText();
@@ -45,14 +46,19 @@ public class Workspace {
 	}
 
 	private void toText() {
-		for (Map.Entry<String, OJAnnotatedClass> entry : this.javaClassMap.entrySet()) {
-			JavaModelPrinter.addToSource(entry.getKey(), entry.getValue().toJavaString());
+		for (Map.Entry<JavaModelPrinter.Source, OJAnnotatedClass> entry : this.javaClassMap.entrySet()) {
+			JavaModelPrinter.addToSource(entry.getKey().qualifiedName, entry.getKey().sourceDir, entry.getValue().toJavaString());
 		}
 		JavaModelPrinter.toText(this.projectRoot);
 	}
 
 	public OJAnnotatedClass findOJClass(String name) {
-		return this.javaClassMap.get(name);
+		for (Map.Entry<JavaModelPrinter.Source, OJAnnotatedClass> entry : this.javaClassMap.entrySet()) {
+			if (entry.getKey().qualifiedName.equals(name)) {
+				return entry.getValue();
+			}
+		}
+		return null;
 	}
 
 	private void visitModel() {
@@ -66,5 +72,5 @@ public class Workspace {
 	public Model getModel() {
 		return model;
 	}
-
+	
 }

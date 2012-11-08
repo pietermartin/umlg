@@ -241,7 +241,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 				v = this.internalVertexMap.get(((Enum<?>) o).name());
 				GraphDb.getDb().removeVertex(v);
 			} else if (isOnePrimitive() || getDataTypeEnum() != null) {
-				// Do nothing
+				this.vertex.removeProperty(getLabel());
 			} else {
 				v = this.internalVertexMap.get(o);
 				if (this.owner instanceof TinkerAuditableNode) {

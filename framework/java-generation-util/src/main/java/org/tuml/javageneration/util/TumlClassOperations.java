@@ -67,7 +67,7 @@ public class TumlClassOperations extends ClassOperations {
 		for (Property p : getAllOwnedProperties(clazz)) {
 			PropertyWrapper pWrap = new PropertyWrapper(p);
 			if ((pWrap.isOne() && !pWrap.isDerived() && !pWrap.isQualifier())
-					|| (!pWrap.isDerived() && pWrap.isOneToMany() && (pWrap.isPrimitive() || pWrap.isEnumeration()))) {
+					|| (!pWrap.isDerived() && pWrap.isManyToMany() && (pWrap.isPrimitive() || pWrap.isEnumeration()))) {
 				result.add(p);
 			}
 		}

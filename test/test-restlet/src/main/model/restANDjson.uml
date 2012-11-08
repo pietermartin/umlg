@@ -26,8 +26,8 @@
       <packagedElement xmi:type="uml:Package" xmi:id="_y-4osN4jEeGdB9TPHp60mw" name="tuml">
         <packagedElement xmi:type="uml:Package" xmi:id="_1nC9wN4jEeGdB9TPHp60mw" name="test">
           <packagedElement xmi:type="uml:Class" xmi:id="_4a8owN4jEeGdB9TPHp60mw" name="Hand">
-            <generalization xmi:id="_50IuQCS5EeKLnOYxvH_zlw">
-              <general xmi:type="uml:Class" href="tuml-lib.uml#_2GNhsCQOEeKOmc56p_1Osg"/>
+            <generalization xmi:id="_MtBfICXTEeKbPYSfIbmXag">
+              <general xmi:type="uml:Class" href="tuml-lib.uml#_FAMz0CXHEeKbPYSfIbmXag"/>
             </generalization>
             <ownedAttribute xmi:id="_-ufDYN4jEeGdB9TPHp60mw" name="finger" visibility="public" type="_4sr5AN4jEeGdB9TPHp60mw" isOrdered="true" aggregation="composite" association="_-uo0YN4jEeGdB9TPHp60mw">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_-ufDYt4jEeGdB9TPHp60mw"/>
@@ -72,24 +72,24 @@
             </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Class" xmi:id="_4sr5AN4jEeGdB9TPHp60mw" name="Finger">
-            <generalization xmi:id="_5QgcwCS5EeKLnOYxvH_zlw">
-              <general xmi:type="uml:Class" href="tuml-lib.uml#_2GNhsCQOEeKOmc56p_1Osg"/>
+            <generalization xmi:id="_NaBvECXTEeKbPYSfIbmXag">
+              <general xmi:type="uml:Class" href="tuml-lib.uml#_FAMz0CXHEeKbPYSfIbmXag"/>
             </generalization>
             <ownedAttribute xmi:id="_D5Ya8N4kEeGdB9TPHp60mw" name="name" visibility="public">
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
             </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Class" xmi:id="_47QggN4jEeGdB9TPHp60mw" name="Ring">
-            <generalization xmi:id="_4-lmUCS5EeKLnOYxvH_zlw">
-              <general xmi:type="uml:Class" href="tuml-lib.uml#_2GNhsCQOEeKOmc56p_1Osg"/>
+            <generalization xmi:id="_NBKjICXTEeKbPYSfIbmXag">
+              <general xmi:type="uml:Class" href="tuml-lib.uml#_FAMz0CXHEeKbPYSfIbmXag"/>
             </generalization>
             <ownedAttribute xmi:id="_DsLscN4kEeGdB9TPHp60mw" name="name" visibility="public">
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
             </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Class" xmi:id="_6R3uIN4jEeGdB9TPHp60mw" name="Human">
-            <generalization xmi:id="_5f6xwCS5EeKLnOYxvH_zlw">
-              <general xmi:type="uml:Class" href="tuml-lib.uml#_2GNhsCQOEeKOmc56p_1Osg"/>
+            <generalization xmi:id="_MZQ1oCXTEeKbPYSfIbmXag">
+              <general xmi:type="uml:Class" href="tuml-lib.uml#_FAMz0CXHEeKbPYSfIbmXag"/>
             </generalization>
             <ownedAttribute xmi:id="_-UB8AN4jEeGdB9TPHp60mw" name="hand" visibility="public" type="_4a8owN4jEeGdB9TPHp60mw" aggregation="composite" association="_-UTBwN4jEeGdB9TPHp60mw">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_-UB8At4jEeGdB9TPHp60mw"/>
@@ -176,8 +176,8 @@
             </ownedEnd>
           </packagedElement>
           <packagedElement xmi:type="uml:Class" xmi:id="_V39UwOZFEeGrlbmObN1_Rg" name="Alien">
-            <generalization xmi:id="_4O-HQCS5EeKLnOYxvH_zlw">
-              <general xmi:type="uml:Class" href="tuml-lib.uml#_2GNhsCQOEeKOmc56p_1Osg"/>
+            <generalization xmi:id="_No54kCXTEeKbPYSfIbmXag">
+              <general xmi:type="uml:Class" href="tuml-lib.uml#_FAMz0CXHEeKbPYSfIbmXag"/>
             </generalization>
             <ownedAttribute xmi:id="_W54r0OZFEeGrlbmObN1_Rg" name="name" visibility="public">
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
@@ -186,10 +186,15 @@
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_dnFjouZFEeGrlbmObN1_Rg"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_dnFjoeZFEeGrlbmObN1_Rg" value="*"/>
             </ownedAttribute>
+            <ownedAttribute xmi:id="_BiOCMCnGEeKJSILTnCPCHg" name="test">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_DuqEkCnGEeKJSILTnCPCHg"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_DuqroCnGEeKJSILTnCPCHg" value="1"/>
+            </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Class" xmi:id="_Z7usMOZFEeGrlbmObN1_Rg" name="Ship" isAbstract="true">
-            <generalization xmi:id="_4tfPQCS5EeKLnOYxvH_zlw">
-              <general xmi:type="uml:Class" href="tuml-lib.uml#_2GNhsCQOEeKOmc56p_1Osg"/>
+            <generalization xmi:id="_N2Q_ICXTEeKbPYSfIbmXag">
+              <general xmi:type="uml:Class" href="tuml-lib.uml#_FAMz0CXHEeKbPYSfIbmXag"/>
             </generalization>
             <ownedAttribute xmi:id="_bUmjoOZFEeGrlbmObN1_Rg" name="name" visibility="public">
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
@@ -220,8 +225,8 @@
           </packagedElement>
           <packagedElement xmi:type="uml:Association" xmi:id="__97LoCJ3EeK_2-gEeTkcgw" name="human_gender_1" memberEnd="__97LoSJ3EeK_2-gEeTkcgw __959gCJ3EeK_2-gEeTkcgw">
             <ownedEnd xmi:id="__97LoSJ3EeK_2-gEeTkcgw" name="human" type="_6R3uIN4jEeGdB9TPHp60mw" association="__97LoCJ3EeK_2-gEeTkcgw">
-              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="__97LoyJ3EeK_2-gEeTkcgw" value="1"/>
-              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="__97LoiJ3EeK_2-gEeTkcgw" value="1"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="__97LoyJ3EeK_2-gEeTkcgw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="__97LoiJ3EeK_2-gEeTkcgw" value="*"/>
             </ownedEnd>
           </packagedElement>
         </packagedElement>

@@ -22,8 +22,8 @@ import org.tuml.restlet.util.TumlRestletGenerationUtil;
 
 public class LookupResourceBuilder extends BaseServerResourceBuilder implements Visitor<Property> {
 
-	public LookupResourceBuilder(Workspace workspace) {
-		super(workspace);
+	public LookupResourceBuilder(Workspace workspace, String sourceDir) {
+		super(workspace, sourceDir);
 	}
 
 	@Override

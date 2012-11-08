@@ -3,7 +3,9 @@ function createLeftMenu(menuArray, contextVertexId) {
     $.each(menuArray, function(index, value) {
         var property = menuArray[index];
         var adjustedUri = menuArray[index].tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
-        $('.ui-left-menu-link').append('<li>').append(
+        $('.ui-left-menu-link').append('<li class="ui-left-menu-li" />');
+        
+        $('.ui-left-menu-li').appendTo(
             $('<a>', {
             text: menuArray[index].name,
             title: menuArray[index].name,
@@ -13,6 +15,6 @@ function createLeftMenu(menuArray, contextVertexId) {
                 refreshPageTo(adjustedUri);
                 return false;
             }
-        })).append('</li>');
+        })));
     });
 }

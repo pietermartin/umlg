@@ -1,8 +1,8 @@
 /*
 	Masked Input plugin for jQuery
-	Copyright (c) 2007-@Year Josh Bush (digitalbush.com)
+	Copyright (c) 2007-2011 Josh Bush (digitalbush.com)
 	Licensed under the MIT license (http://digitalbush.com/projects/masked-input-plugin/#license) 
-	Version: @version
+	Version: 1.3
 */
 (function($) {
 	var pasteEventName = ($.browser.msie ? 'paste' : 'input') + ".mask";
@@ -22,7 +22,6 @@
 		//Helper Function for Caret positioning
 		caret: function(begin, end) {
 			if (this.length == 0) return;
-            if (this.is(":hidden")) return; //setSelectionRange fails if the element is hidden
 			if (typeof begin == 'number') {
 				end = (typeof end == 'number') ? end : begin;
 				return this.each(function() {

@@ -14,8 +14,8 @@ import org.tuml.restlet.util.TumlRestletGenerationUtil;
 
 public class RestletRouterEnumGenerator extends BaseVisitor implements Visitor<Model> {
 
-	public RestletRouterEnumGenerator(Workspace workspace) {
-		super(workspace);
+	public RestletRouterEnumGenerator(Workspace workspace, String sourceDir) {
+		super(workspace, sourceDir);
 	}
 
 	@Override

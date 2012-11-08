@@ -16,14 +16,15 @@ import org.opaeum.java.metamodel.annotation.OJEnumLiteral;
 import org.tuml.framework.Visitor;
 import org.tuml.generation.Workspace;
 import org.tuml.javageneration.util.PropertyWrapper;
+import org.tuml.javageneration.util.TinkerGenerationUtil;
 import org.tuml.javageneration.util.TumlClassOperations;
 import org.tuml.javageneration.visitor.BaseVisitor;
 import org.tuml.javageneration.visitor.clazz.ToFromJsonCreator;
 
 public class AddTumlUriFieldToRuntimePropertyEnum extends BaseVisitor implements Visitor<Class> {
 
-	public AddTumlUriFieldToRuntimePropertyEnum(Workspace workspace) {
-		super(workspace);
+	public AddTumlUriFieldToRuntimePropertyEnum(Workspace workspace, String sourceDir) {
+		super(workspace, sourceDir);
 	}
 
 	@Override
@@ -100,11 +101,14 @@ public class AddTumlUriFieldToRuntimePropertyEnum extends BaseVisitor implements
 			s = (OJSimpleStatement) toJsonWithoutCompositeParent.getBody().findStatement("uri");
 			s.setExpression("sb.append(\"\\\"uri\\\": \" + getUri())");
 		}
-		OJAnnotatedOperation getUri = new OJAnnotatedOperation("getUri");
-		getUri.setReturnType(new OJPathName("String"));
-		getUri.setVisibility(OJVisibilityKind.PROTECTED);
-		getUri.getBody().addToStatements("return (\"\\\"\" + " + TumlClassOperations.propertyEnumName(clazz) + ".getUriToObject() + \"\\\"\")");
-		annotatedClass.addToOperations(getUri);
+		if (!clazz.isAbstract()) {
+			OJAnnotatedOperation getUri = new OJAnnotatedOperation("getUri");
+			TinkerGenerationUtil.addOverrideAnnotation(getUri);
+			getUri.setReturnType(new OJPathName("String"));
+			getUri.setVisibility(OJVisibilityKind.PUBLIC);
+			getUri.getBody().addToStatements("return (\"\\\"\" + " + TumlClassOperations.propertyEnumName(clazz) + ".getUriToObject() + \"\\\"\")");
+			annotatedClass.addToOperations(getUri);
+		}
 	}
 
 	private void addUriToObject(Class clazz, OJEnum ojEnum) {

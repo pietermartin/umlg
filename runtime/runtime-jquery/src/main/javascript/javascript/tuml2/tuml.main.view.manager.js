@@ -12,6 +12,7 @@
         var tabContainer;
         var tumlManyViewManager;
         var tumlOneViewManager;
+        var isOne;
 
         function init() {
 
@@ -68,32 +69,39 @@
             });
         }
 
+        function openQuery(tumlUri, oclExecuteUri, qualifiedName, name) {
+            if (isOne === undefined) {
+                alert('can not open the query as isOne is undefined!');
+            } else if (isOne) {
+                tumlOneViewManager.openQuery(tumlUri, oclExecuteUri, qualifiedName, name);
+            } else {
+                tumlManyViewManager.openQuery(tumlUri, oclExecuteUri, qualifiedName, name);
+            }
+        }
+
         function refresh(tumlUri, result) {
-            var qualifiedName;
-            if (result instanceof Array && result[0].meta.length === 3) {   
+            var qualifiedName = result[0].meta.qualifiedName;
+            var metaDataNavigatingTo = result[0].meta.to;
+            var metaDataNavigatingFrom = result[0].meta.from;
+            var properties = metaDataNavigatingTo.properties;
+            var propertyNavigatingTo = (metaDataNavigatingFrom == undefined ? null : findPropertyNavigatingTo(qualifiedName, metaDataNavigatingFrom));
+            if (propertyNavigatingTo != null && (propertyNavigatingTo.oneToMany || propertyNavigatingTo.manyToMany)) {
                 //Property is a many
-                var metaDataNavigatingTo = result[0].meta[1];
-                var metaDataNavigatingFrom = result[0].meta[2];
+                isOne = false;
                 recreateTabContainer();
-                var qualifiedName = result[0].meta[0].qualifiedName;
-                var contextMetaData = result[0].meta[1];
+                var contextMetaData = result[0].meta.to;
                 var contextVertexId = tumlUri.match(/\d+/);
-                leftMenuManager.refresh(metaDataNavigatingFrom, contextVertexId);
+                leftMenuManager.refresh(metaDataNavigatingFrom, metaDataNavigatingTo, contextVertexId);
                 tumlManyViewManager.refresh(tumlUri, result);
             } else {
                 //Property is a one
-                var response;
-                if (result instanceof Array) {
-                    response = result[0];
-                } else {
-                    response = result;
-                }
-                if (response.data !== null) {
+                isOne = true;
+                if (result[0].data !== null) {
                     recreateTabContainer();
-                    qualifiedName = response.meta[0].qualifiedName;
-                    var contextMetaData = response.meta[1];
-                    var contextVertexId = response.data.id;
-                    leftMenuManager.refresh(contextMetaData, contextVertexId);
+                    qualifiedName = result[0].meta.qualifiedName;
+                    var contextVertexId = result[0].data.id;
+                    //If property is a one then there is n navigating from
+                    leftMenuManager.refresh(metaDataNavigatingTo, metaDataNavigatingTo, contextVertexId);
                     tumlOneViewManager.refresh(tumlUri, result);
                 } else {
                     alert('The properties value is null. \nIt can not be navigated to.');
@@ -101,17 +109,37 @@
             }
             $('#ui-layout-center-heading').children().remove();
             $('#ui-layout-center-heading').append($('<span />').text(qualifiedName));
-            tabContainer.easytabs({animate: false});
+            tabContainer.tabs({border: false, onClose:function(title, index){  
+                if (isOne) {
+                    tumlOneViewManager.closeQuery(title, index);
+                } else {
+                    tumlManyViewManager.closeQuery(title, index);
+                }
+            }});
+        }
+
+        function findPropertyNavigatingTo(qualifiedName, metaDataNavigatingFrom) {
+            if (metaDataNavigatingFrom  == undefined) {
+                return null;
+            } else {
+                //The property one is navigating from is in the metaDataNavigatingFrom,
+                //Find the property with the qualifiedName for the metaDataNavigatingTo.qualifiedName
+                for (var i = 0; i < metaDataNavigatingFrom.properties.length; i++) {
+                    var property = metaDataNavigatingFrom.properties[i];
+                    if (property.qualifiedName == qualifiedName) {
+                        return property;
+                    }
+                }
+                alert('Property navigatingTo not found!!!');
+                return null;
+            }
         }
 
         function recreateTabContainer() {
-            //Create the tab container with its ul
-            //The tabsContainer must be created here, not in init, it don't wanna work otherwise
             if (tabContainer !== undefined) {
                 tabContainer.remove();
             }
-            tabContainer = $('<div />', {id: 'tab-container', class: 'tab-container' }).appendTo('.ui-layout-center');
-            $('<ul />', {id: 'tabsul', class: 'etabs'}).appendTo(tabContainer);
+            tabContainer = $('<div />', {id: 'tab-container', class: 'easyui-tabs' }).appendTo('.ui-layout-center');
         }
 
         //Public api
@@ -130,7 +158,8 @@
             "onContextMenuClickDelete": new Tuml.Event(),
             "onPutOneSuccess": new Tuml.Event(),
             "onPutOneFailure": new Tuml.Event(),
-            "refresh": refresh
+            "refresh": refresh,
+            "openQuery": openQuery
         });
 
         init();

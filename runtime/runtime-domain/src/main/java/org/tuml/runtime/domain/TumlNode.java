@@ -21,6 +21,6 @@ public interface TumlNode extends TumlEnum, OclAny, PersistentObject {
 	<E> TinkerSet<E> asSet();
 	List<TumlConstraintViolation> validateRequiredProperties();
 	TumlNode getOwningObject();
-	List<TumlNode> getPathToCompositionalRoot();
+	<T extends TumlNode> List<T> getPathToCompositionalRoot();
 //	String getUri();
 }

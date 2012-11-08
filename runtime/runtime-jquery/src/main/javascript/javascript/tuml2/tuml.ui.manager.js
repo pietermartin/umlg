@@ -20,7 +20,7 @@
 
         function init() {
             //Create layout
-            var myLayout = $('body').layout({north__minSize: 70, west__minSize: 200});
+            var myLayout = $('body').layout({north__minSize: 40, east: {initClosed: true}, south: {initClosed: true}, west: {minSize : 200}});
             myLayout.allowOverflow("north");
             //Create the menu
             menuManager = new Tuml.MenuManager();
@@ -41,13 +41,20 @@
                 refresh(args.uri);
                 changeMyUrl(args.name, args.uri);
             });
+            leftMenuManager.onQueryClick.subscribe(function(e, args) {
+                //Do something like refresh the page
+                console.log('TumlUiManager onQueryClick fired');
+                mainViewManager.openQuery(args.tumlUri, args.oclExecuteUri, args.qualifiedName, args.name);
+            });
 
             //Create main view manager
             mainViewManager = new Tuml.MainViewManager(leftMenuManager);
             mainViewManager.onPutSuccess.subscribe(function(e, args) {
                 console.log('TumlUiManager onPutSuccess fired');
                 self.onPutSuccess.notify(args, e, self);
-                //TODO activity log mayhap
+                if (args.data[0].meta.to.qualifiedName === 'tumllib::org::tuml::query::Query') {
+                    alert('update the tree!');
+                }
             });
             mainViewManager.onPutFailure.subscribe(function(e, args) {
                 console.log('TumlUiManager onPutFailure fired');
@@ -113,16 +120,16 @@
 
         function refresh(tumlUri) {
             //Call the server for the tumlUri
-            var contextVertexId = tumlUri.match(/\d+/);
+            var urlId = tumlUri.match(/\d+/);
             $.ajax({
                 url: tumlUri,
                 type: "GET",
                 dataType: "json",
                 contentType: "json",
                 success: function(result, textStatus, jqXHR) {
-                    var contextMetaData = getContextMetaData(result);
+                    var contextMetaData = getContextMetaData(result, urlId);
                     mainViewManager.refresh(tumlUri, result);
-                    contextManager.refresh(contextMetaData, contextVertexId);
+                    contextManager.refresh(contextMetaData.name, contextMetaData.uri, contextMetaData.contextVertexId);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     alert('error getting ' + tumlUri + '\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
@@ -130,26 +137,53 @@
             });
         }
 
-        function changeMyUrl(title, url) {
-            var urlToPush = '/restAndJson/ui2' + url.substring('restAndJson/'.length);
-            history.pushState({}, title, urlToPush);
+        function getContextMetaData(result, urlId) {
+            var qualifiedName = result[0].meta.qualifiedName;
+            var metaDataNavigatingTo = result[0].meta.to;
+            var metaDataNavigatingFrom = result[0].meta.from;
+            //var properties = metaDataNavigatingTo.properties;
+            var propertyNavigatingTo = (metaDataNavigatingFrom == undefined ? null : findPropertyNavigatingTo(qualifiedName, metaDataNavigatingFrom));
+            if (propertyNavigatingTo != null && (propertyNavigatingTo.oneToMany || propertyNavigatingTo.manyToMany)) {
+                //Property is a many
+                var contextMetaData = result[0].meta.to;
+                return {name: metaDataNavigatingFrom.name, uri: metaDataNavigatingFrom.uri, contextVertexId: urlId};
+            } else {
+                //Property is a one
+                var response = result[0];
+                if (response.data !== null) {
+                    qualifiedName = response.meta.qualifiedName;
+                    var contextMetaData = response.meta.to;
+                    return {name: contextMetaData.name, uri: contextMetaData.uri, contextVertexId: response.data.id};
+                } else {
+                    alert('The properties value is null. \nIt can not be navigated to.');
+                }
+                return null;
+            }
         }
 
-        function getContextMetaData(result) {
-            //only using the context metatData here so no need to be in the look
-            if (result instanceof Array && result[0].meta.length === 3) {   
-                //the second meta element in the array is for where on is navigating too
-                return result[0].meta[2];
+        function findPropertyNavigatingTo(qualifiedName, metaDataNavigatingFrom) {
+            if (metaDataNavigatingFrom  == undefined) {
+                return null;
             } else {
-                //When navigating a property the result is an array, when accessing a entity by vertex its not, TODO refactor
-                if (result instanceof Array) {
-                    response = result[0];
-                } else {
-                    response = result;
+                //The property one is navigating from is in the metaDataNavigatingFrom,
+                //Find the property with the qualifiedName for the metaDataNavigatingTo.qualifiedName
+                for (var i = 0; i < metaDataNavigatingFrom.properties.length; i++) {
+                    var property = metaDataNavigatingFrom.properties[i];
+                    if (property.qualifiedName == qualifiedName) {
+                        return property;
+                    }
                 }
-                return response.meta[1];
+                alert('Property navigatingTo not found!!!');
+                return null;
             }
+        }
 
+        function changeMyUrl(title, url) {
+            var indexOfSecondBackSlash = url.indexOf('/', 1);
+            var firstPart = url.substring(0, indexOfSecondBackSlash);
+            var secondPart = url.substring(indexOfSecondBackSlash, url.length);
+            var urlToPush =  firstPart + '/ui2' + secondPart;
+            history.pushState({}, title, urlToPush);
         }
 
         //Public api

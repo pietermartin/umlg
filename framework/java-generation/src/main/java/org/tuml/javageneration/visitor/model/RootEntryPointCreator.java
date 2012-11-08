@@ -39,7 +39,7 @@ public class RootEntryPointCreator extends BaseVisitor implements Visitor<Model>
 	public void visitBefore(Model model) {
 		OJAnnotatedClass root = new OJAnnotatedClass("Root");
 		root.addToImplementedInterfaces(TinkerGenerationUtil.TumlRootNode);
-		OJPackage ojPackage = new OJPackage("org.tuml.root");
+		OJPackage ojPackage = new OJPackage(TinkerGenerationUtil.TumlRootPackage.toJavaString());
 		root.setMyPackage(ojPackage);
 		addToSource(root);
 
@@ -53,7 +53,6 @@ public class RootEntryPointCreator extends BaseVisitor implements Visitor<Model>
 		implementTumlRootNode(root);
 	}
 
-
 	private void implementTumlRootNode(OJAnnotatedClass root) {
 		OJAnnotatedOperation getId = new OJAnnotatedOperation("getId");
 		getId.addAnnotationIfNew(new OJAnnotationValue(new OJPathName("java.lang.Override")));
@@ -61,7 +60,7 @@ public class RootEntryPointCreator extends BaseVisitor implements Visitor<Model>
 		getId.getBody().addToStatements("return TinkerIdUtilFactory.getIdUtil().getId(getRootVertex())");
 		root.addToOperations(getId);
 		root.addToImports(TinkerGenerationUtil.tinkerIdUtilFactoryPathName);
-		
+
 		OJAnnotatedOperation toJson = new OJAnnotatedOperation("toJson");
 		toJson.setReturnType("String");
 		toJson.getBody().addToStatements("return \"{\\\"id\\\": \" + getId() + \"}\"");
@@ -69,7 +68,8 @@ public class RootEntryPointCreator extends BaseVisitor implements Visitor<Model>
 	}
 
 	private void rebuildAsJson(Model model, OJAnnotatedClass root) {
-		OJEnum ojEnum = RuntimePropertyImplementor.addTumlRuntimePropertyEnum(root, "RootRuntimePropertyEnum", model, new HashSet<Property>(), false, model.getName());
+		OJEnum ojEnum = RuntimePropertyImplementor.addTumlRuntimePropertyEnum(root, "RootRuntimePropertyEnum", model, new HashSet<Property>(), false,
+				model.getName());
 
 		// Rebuild asJson
 		OJAnnotatedOperation asJson = ojEnum.findOperation("asJson");
@@ -91,18 +91,20 @@ public class RootEntryPointCreator extends BaseVisitor implements Visitor<Model>
 		// Add root entities as though they are fake properties to App root
 		for (Class clazz : result) {
 			count++;
-			RuntimePropertyImplementor.addEnumLiteral(ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, StringUtils.uncapitalize(TumlClassOperations.className(clazz)), model.getQualifiedName(), "inverseOf::" + model.getQualifiedName(), false, null,
-					Collections.<Validation> emptyList(), true, false, false, false, true, false, false, false, false, -1, 0, false, false, true, false, true, "root"
-							+ TumlClassOperations.className(clazz));
+			RuntimePropertyImplementor.addEnumLiteral(ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName,
+					StringUtils.uncapitalize(TumlClassOperations.className(clazz)), clazz.getQualifiedName(), "inverseOf::" + clazz.getQualifiedName(), false,
+					null, Collections.<Validation> emptyList(), true, false, false, false, true, false, false, true, false, -1, 0, false, false, true, false,
+					true, "root" + TumlClassOperations.className(clazz));
 
-			asJson.getBody().addToStatements("sb.append(" + ojEnum.getName() + "." + StringUtils.uncapitalize(TumlClassOperations.className(clazz)) + ".toJson())");
+			asJson.getBody().addToStatements(
+					"sb.append(" + ojEnum.getName() + "." + StringUtils.uncapitalize(TumlClassOperations.className(clazz)) + ".toJson())");
 			if (count != result.size()) {
 				asJson.getBody().addToStatements("sb.append(\",\")");
 			}
 		}
 		asJson.getBody().addToStatements("sb.append(\"]}\")");
 		asJson.getBody().addToStatements("return sb.toString()");
-		
+
 		// Move fromLabel's return null from first line to last line
 		count = 0;
 		List<Integer> toRemove = new ArrayList<Integer>();

@@ -34,6 +34,10 @@ public class OJField extends OJFieldGEN {
 		setInitExp(initExpr);
 	}
 
+	public OJField(String name, String path) {
+		this(name, new OJPathName(path));
+	}
+
 	public String toJavaString() {
 		String result = "";
 		if (this.getOwner() != null) { // field is part of block statement

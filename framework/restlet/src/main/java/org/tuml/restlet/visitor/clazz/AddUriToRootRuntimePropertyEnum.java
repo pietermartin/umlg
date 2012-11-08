@@ -23,8 +23,8 @@ import org.tuml.javageneration.visitor.BaseVisitor;
 
 public class AddUriToRootRuntimePropertyEnum extends BaseVisitor implements Visitor<Model> {
 
-	public AddUriToRootRuntimePropertyEnum(Workspace workspace) {
-		super(workspace);
+	public AddUriToRootRuntimePropertyEnum(Workspace workspace, String sourceDir) {
+		super(workspace, sourceDir);
 	}
 
 	@Override

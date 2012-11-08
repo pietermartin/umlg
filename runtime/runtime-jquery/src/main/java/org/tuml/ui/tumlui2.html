@@ -4,6 +4,7 @@
         <!-- /restAndJson must be come a template variable, resolved by restlet to the app name -->
         <link type="text/css" rel="stylesheet" href="/${app.rootUrl}/javascript/layout/layout-default-latest.css" />
         <link rel="stylesheet" href="/${app.rootUrl}/javascript/slickgrid/slick.grid.css" type="text/css"/>
+        <!--<link rel="stylesheet" href="/${app.rootUrl}/javascript/jquery-ui/themes/base/jquery-ui.css" type="text/css"/>-->
         <link rel="stylesheet" href="/${app.rootUrl}/javascript/slickgrid/css/smoothness/jquery-ui-1.8.16.custom.css" type="text/css"/>
         <link rel="stylesheet" href="/${app.rootUrl}/javascript/slickgrid/controls/slick.pager.css" type="text/css"/>
         <link rel="stylesheet" href="/${app.rootUrl}/javascript/slickgrid/examples/examples.css" type="text/css"/>
@@ -11,8 +12,102 @@
         <link rel="stylesheet" href="/${app.rootUrl}/javascript/tuml/tuml.css" type="text/css"/>
         <link rel="stylesheet" href="/${app.rootUrl}/javascript/chosen/chosen.css" type="text/css"/>
         <link rel="stylesheet" href="/${app.rootUrl}/javascript/timepicker/jquery-ui-timepicker-addon.css" type="text/css"/>
+        <link rel="stylesheet" href="/${app.rootUrl}/javascript/jqtree/jqtree.css" type="text/css">
 
+        <link rel="stylesheet" href="/${app.rootUrl}/javascript/jquery-easyui/themes/default/easyui.css" type="text/css">
         <style>
+            .panel {
+                height: 100%;
+            }
+            .oclouter {
+                width: 100%;
+                height: 20%;
+            }
+            .oclinner {
+                width: 100%;
+                height: 100%;
+            }
+            .ocltextarea {
+                float: left;
+                width: 80%;
+            }
+            .oclinnerbutton {
+                float: right;
+                width: 20%
+            }
+            .oclinner textarea {
+                width: 100%;
+                height: 100%;
+                -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+                -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+                box-sizing: border-box;         /* Opera/IE 8+ */
+            }
+            .oclinnerbutton {
+                float: right;
+                width: 20%;
+            }
+            .oclexecutebutton {
+                float: left;
+                width: 20%;
+            }
+            .oclexecutebutton button {
+                height: 100%;
+            }
+            .oclinputeditbutton {
+                float: right;
+                width: 80%;
+            }
+            .oclqueryname input[type=text]{
+                display:block;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .ocleditbutton {
+                text-align: center;
+            }
+            .oclresult {
+                float: left;
+                clear: both;
+            }
+            .ui-left-menu-li {
+                background: none;
+                margin-bottom: 5px;
+                padding-left: 5px;
+            }
+            .ui-left-menu-li.activeproperty {
+                background: #fe4864;
+            }
+            .ui-left-menu-li.inactiveproperty {
+                background: #8d83f6;
+            }
+            .ui-left-menu-li.contextactiveproperty {
+                background: #efa9f4;
+            }
+            .ui-left-menu-li a {
+                color: black;
+                cursor: pointer;
+                font-size: 120%;
+            }
+            .ui-left-menu-li a:hover {
+                color: blue;
+            }
+            .ui-left-menu-li-query-tree {
+                /* this removes slickgrid arrow */
+                background: none;
+                padding-left: 5px;
+            }
+            /* edit jqtree.css */
+            .jqtree-title {
+                cursor: pointer;
+                font-size: 120%;
+            }
+            .ui-left-menu-li-query-tree .jqtree-folder ul {
+                margin-left: 2px;
+            }
+            .ui-left-menu-li-query-tree li {
+                background: none;
+                padding-left: 0px;
+            }
             .ui-layout-pane-center {
                 padding: 5px
             }
@@ -20,9 +115,38 @@
                 background-color: #DDDDDD;
                 margin-bottom: 5px
             }
+            #contextHeading {
+                width: 50%;
+                margin: 0px auto;
+                text-align: center;
+                padding-top: 5px;
+            }
+            #contextHeading .contextHeadingB {
+                text-align: center;
+                font-weight:bold;
+                font-size: 120%;
+                cursor: pointer;
+            }
+            .contextHeadingB:hover {
+                color: blue;
+            }
             #contextRoot {
-                clear: left;
-                padding-top: 10px
+                /* padding-top is same as jddm menu */
+                padding-top: 5px;
+                float: left;
+            }
+            #contextRoot b {
+                vertical-align: middle; 
+                text-align: center; 
+            }
+            .contextPath:hover {
+                color: blue;
+            }
+            .contextPath {
+                cursor: pointer;
+            }
+            .selfUrl {
+                cursor: pointer;
             }
             .grid-button {
                 float: left;
@@ -82,13 +206,9 @@
             .contextMenu li:hover {
                 background-color: white;
             }
-            .contextPath {
-                cursor: pointer;
-            }
-            .selfUrl {
-                cursor: pointer;
-            }
 
+
+            /* easy tabs start 
             .etabs { margin: 0; padding: 0; }
             .tab { display: inline-block; zoom:1; *display:inline; background: #eee; border: solid 1px #999; border-bottom: none; -moz-border-radius: 4px 4px 0 0; -webkit-border-radius: 4px 4px 0 0; }
             .tab a { font-size: 14px; line-height: 2em; display: block; padding: 0 10px; outline: none; }
@@ -96,16 +216,22 @@
             .tab.active { background: #fff; padding-top: 6px; position: relative; top: 1px; border-color: #666; }
             .tab a.active { font-weight: bold; }
             .tab-container .panel-container { background: #fff; border: solid #666 1px; padding: 10px; -moz-border-radius: 0 4px 4px 4px; -webkit-border-radius: 0 4px 4px 4px; }
+            easy tabs end */
 
 
             /* Menu styles */
             #jsddm
-            {   margin: 0;
+            {
+                /* tuml add start */
+                float: right;
+                /* tuml add stop */
+                margin: 0;
                 padding: 0
             }
 
             #jsddm li
-            {   float: left;
+            {
+                float: left;
                 list-style: none;
                 font: 12px Tahoma, Arial;
                 background: none;
@@ -151,10 +277,17 @@
             }
         </style>
 
-        <script src="/${app.rootUrl}/javascript/slickgrid/lib/jquery-1.7.min.js"></script>
-        <script src="/${app.rootUrl}/javascript/jquery-easy-tab/jquery.easytabs.js" type="text/javascript"></script>
+        <!--<script src="/${app.rootUrl}/javascript/slickgrid/lib/jquery-1.7.min.js"></script>-->
+        <script src="/${app.rootUrl}/javascript/slickgrid/lib/jquery-1.7.2.js"></script>
+        <!--<script src="/${app.rootUrl}/javascript/jquery-easy-tab/jquery.easytabs.js" type="text/javascript"></script>-->
         <script src="/${app.rootUrl}/javascript/slickgrid/lib/jquery-ui-1.8.16.custom.min.js"></script>
+        <!--<script src="/${app.rootUrl}/javascript/jquery-ui/ui/jquery-ui.js"></script>-->
         <script src="/${app.rootUrl}/javascript/slickgrid/lib/jquery.event.drag-2.0.min.js"></script>
+        <script src="/${app.rootUrl}/javascript/jquery-easyui/jquery.panel.js"></script>
+        <script src="/${app.rootUrl}/javascript/jquery-easyui/jquery.linkbutton.js"></script>
+        <script src="/${app.rootUrl}/javascript/jquery-easyui/jquery.parser.js"></script>
+        <script src="/${app.rootUrl}/javascript/jquery-easyui/jquery.tabs.js"></script>
+        <!--script src="/${app.rootUrl}/javascript/jquery-easyui/jquery.easyui.min.js"></script-->
         <script src="/${app.rootUrl}/javascript/layout/jquery.layout-latest.js"></script>
         <script src="/${app.rootUrl}/javascript/slickgrid/slick.core.js"></script>
         <script src="/${app.rootUrl}/javascript/slickgrid/slick.grid.js"></script>
@@ -172,7 +305,10 @@
         <script src="/${app.rootUrl}/javascript/chosen/chosen.jquery.js" type="text/javascript"></script>
         <script src="/${app.rootUrl}/javascript/timepicker/jquery-ui-timepicker-addon.js" type="text/javascript"></script>
         <script src="/${app.rootUrl}/javascript/timepicker/jquery-ui-sliderAccess.js" type="text/javascript"></script>
-        <script src="/${app.rootUrl}/javascript/maskedinput/jquery.maskedinput.js" type="text/javascript"></script>	
+        <!--<script src="/${app.rootUrl}/javascript/maskedinput/jquery.maskedinput.js" type="text/javascript"></script>	-->
+
+        <!-- jqTree -->
+        <script src="/${app.rootUrl}/javascript/jqtree/tree.jquery.js" type="text/javascript"></script>	
 
         <!-- tuml scripts -->
         <script src="/${app.rootUrl}/javascript/tuml2/tuml.ui.manager.js"></script>
@@ -185,6 +321,7 @@
         <script src="/${app.rootUrl}/javascript/tuml2/tuml.one.view.manager.js"></script>
         <script src="/${app.rootUrl}/javascript/tuml2/tuml.tab.view.manager.js"></script>
         <script src="/${app.rootUrl}/javascript/tuml2/tuml.tab.grid.manager.js"></script>
+        <script src="/${app.rootUrl}/javascript/tuml2/tuml.tab.query.manager.js"></script>
         <script src="/${app.rootUrl}/javascript/tuml2/tuml.tab.one.manager.js"></script>
         <script src="/${app.rootUrl}/javascript/tuml/tuml.slick.grid.lookup.js"></script>
         <script src="/${app.rootUrl}/javascript/tuml/tuml.slick.validators.js"></script>

@@ -29,8 +29,8 @@ import org.tuml.restlet.util.TumlRestletGenerationUtil;
 
 public class RootResourceServerResourceBuilder extends BaseServerResourceBuilder implements Visitor<Class> {
 
-	public RootResourceServerResourceBuilder(Workspace workspace) {
-		super(workspace);
+	public RootResourceServerResourceBuilder(Workspace workspace, String sourceDir) {
+		super(workspace, sourceDir);
 	}
 
 	@Override
@@ -339,16 +339,16 @@ public class RootResourceServerResourceBuilder extends BaseServerResourceBuilder
 
 			annotatedClass.addToImports(TinkerGenerationUtil.ToJsonUtil);
 
-			get.getBody().addToStatements("json.append(\"], \\\"meta\\\": [\")");
+			get.getBody().addToStatements("meta", "json.append(\"], \\\"meta\\\": {\")");
 
-			get.getBody().addToStatements("json.append(\"{\\\"qualifiedName\\\": \\\"" + clazz.getQualifiedName() + "\\\"}\")");
-			get.getBody().addToStatements("json.append(\", \")");
+			get.getBody().addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + clazz.getQualifiedName() + "\\\"\")");
+			get.getBody().addToStatements("json.append(\", \\\"to\\\": \")");
 
 			// Meta data remains for the root object as viewing a many list does
 			// not
 			// change the context
 			get.getBody().addToStatements("json.append(" + TumlClassOperations.propertyEnumName(clazz) + ".asJson())");
-			get.getBody().addToStatements("json.append(\", \")");
+			get.getBody().addToStatements("json.append(\", \\\"from\\\": \")");
 			get.getBody().addToStatements("json.append(" + TinkerGenerationUtil.RootRuntimePropertyEnum.getLast() + ".asJson())");
 			annotatedClass.addToImports(TinkerGenerationUtil.RootRuntimePropertyEnum);
 			annotatedClass.addToImports(TumlClassOperations.getPathName(clazz).append(TumlClassOperations.propertyEnumName(clazz)));
@@ -356,7 +356,7 @@ public class RootResourceServerResourceBuilder extends BaseServerResourceBuilder
 				get.getBody().addToStatements("json.append(\",\")");
 			}
 		}
-		get.getBody().addToStatements("json.append(\"]}]\")");
+		get.getBody().addToStatements("json.append(\"}}]\")");
 		get.getBody().addToStatements("return new " + TumlRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
 
 		annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);

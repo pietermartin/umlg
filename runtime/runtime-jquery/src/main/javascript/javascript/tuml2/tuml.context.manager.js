@@ -13,12 +13,14 @@
         function init() {
         }
 
-        function refresh(contextMetaData, contextVertexId) {
+        function refresh(name, uri, contextVertexId) {
             //build context path to root
-            if (contextMetaData.name === 'Root') {
-                createContextPath([{name: 'Root', uri: contextMetaData.uri}]);
+            if (name === 'Root') {
+                createContextPath([{name: 'Root', uri: uri}]);
+                updateContextHeading('Root', 0);
             } else {
-                var pathToCompositeRootUri = contextMetaData.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId) + '/compositePathToRoot';
+                var replacedUri = uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
+                var pathToCompositeRootUri = replacedUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId) + '/compositePathToRoot';
                 $.ajax({
                     url: pathToCompositeRootUri,
                     type: "GET",
@@ -26,12 +28,23 @@
                     contentType: "json",
                     success: function(response, textStatus, jqXHR) {
                         createContextPath(response.data);
+                        updateContextHeading(name, contextVertexId, replacedUri);
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         alert('Error creating context path. textStatus: ' + textStatus + ' errorThrown: ' + errorThrown);
                     }
                 });
             }
+        }
+
+        function updateContextHeading(name, id, url) {
+            $('#contextHeading').remove();
+            var contextHeadingDiv = $('<div />', {id: "contextHeading"}).appendTo('.ui-layout-north');
+            var b = $('<b data=' + url + ' class="contextHeadingB"/>').text(name + '[' + id + ']').appendTo(contextHeadingDiv);
+            b.click(function(e) {
+                var url = $(e.target).attr("data");
+                self.onClickContextMenu.notify({uri: url, name: "unused"}, null, self);
+            });
         }
 
         function createContextPath(data) {
@@ -43,13 +56,12 @@
                 if (index === 0) {
                     b = $('<b class="contextPath" data=' + property.uri + '/>').text(property.name).appendTo("#contextRoot");
                 } else {
-                    b = $('<b class="contextPath" data=' + property.uri + '/>').text(' | ' + property.name).appendTo("#contextRoot");
+                    $('#contextRoot').append(' | ');
+                    b = $('<b class="contextPath" data=' + property.uri + '/>').text(property.name).appendTo("#contextRoot");
                 }
                 b.click(function(e) {
                     var url = $(e.target).attr("data");
                     self.onClickContextMenu.notify({uri: url, name: "unused"}, null, self);
-                    //change_my_url("unused", url);
-                    //refreshPageTo(url);
                 });
             });
         }

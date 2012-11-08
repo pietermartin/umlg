@@ -90,17 +90,20 @@ public class AllInstancesTest extends BaseLocalDbTest {
 		god.setName("THEGOD");
 		Query query1 = new Query(god);
 		query1.setQueryString("");
+		query1.setName("q1");
 		query1.setQueryEnum(QueryEnum.OCL);
 
 		RealRootFolder realRootFolder = new RealRootFolder(god);
 		realRootFolder.setName("realRootFolder");
 		Query query2 = new Query(realRootFolder);
 		query2.setQueryString("");
+		query2.setName("q2");
 		query2.setQueryEnum(QueryEnum.OCL);
 
 		Folder folder1 = new Folder(realRootFolder);
 		folder1.setName("folder1");
 		Query query3 = new Query(folder1);
+		query3.setName("q3");
 		query3.setQueryString("");
 		query3.setQueryEnum(QueryEnum.OCL);
 
@@ -108,6 +111,7 @@ public class AllInstancesTest extends BaseLocalDbTest {
 		folder1_1.setName("folder1_1");
 		Query query4 = new Query(folder1_1);
 		query4.setQueryString("");
+		query4.setName("q4");
 		query4.setQueryEnum(QueryEnum.OCL);
 
 		Folder folder2 = new Folder(realRootFolder);
@@ -115,29 +119,34 @@ public class AllInstancesTest extends BaseLocalDbTest {
 		Query query5 = new Query(folder2);
 		query5.setQueryString("");
 		query5.setQueryEnum(QueryEnum.OCL);
+		query5.setName("q5");
 
 		Folder folder2_1 = new Folder(folder2);
 		folder2_1.setName("folder2_1");
 		Query query6 = new Query(folder2_1);
 		query6.setQueryString("");
+		query6.setName("q6");
 		query6.setQueryEnum(QueryEnum.OCL);
 
 		Folder folder2_2 = new Folder(folder2);
 		folder2_2.setName("folder2_2");
 		Query query7 = new Query(folder2_2);
 		query7.setQueryString("");
+		query7.setName("q7");
 		query7.setQueryEnum(QueryEnum.OCL);
 
 		Folder folder2_2_1 = new Folder(folder2_1);
 		folder2_2_1.setName("folder2_2_1");
 		Query query8 = new Query(folder2_2_1);
 		query8.setQueryString("");
+		query8.setName("q8");
 		query8.setQueryEnum(QueryEnum.OCL);
 
 		Folder folder2_2_2 = new Folder(folder2_1);
 		folder2_2_2.setName("folder2_2_2");
 		Query query9 = new Query(folder2_2_2);
 		query9.setQueryString("");
+		query9.setName("q9");
 		query9.setQueryEnum(QueryEnum.OCL);
 
 		db.stopTransaction(Conclusion.SUCCESS);

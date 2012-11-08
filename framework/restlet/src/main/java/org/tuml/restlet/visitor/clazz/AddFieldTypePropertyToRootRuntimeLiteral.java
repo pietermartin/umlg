@@ -22,8 +22,8 @@ import org.tuml.restlet.util.TumlRestletGenerationUtil;
 
 public class AddFieldTypePropertyToRootRuntimeLiteral extends BaseVisitor implements Visitor<Model> {
 
-	public AddFieldTypePropertyToRootRuntimeLiteral(Workspace workspace) {
-		super(workspace);
+	public AddFieldTypePropertyToRootRuntimeLiteral(Workspace workspace, String sourceDir) {
+		super(workspace, sourceDir);
 	}
 
 	@Override

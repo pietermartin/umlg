@@ -25,7 +25,7 @@ public class TofromJsonForEnumCreator extends BaseVisitor implements Visitor<Enu
 		OJAnnotatedOperation fromJson = new OJAnnotatedOperation("fromJson", annotatedClass.getPathName());
 		fromJson.setStatic(true);
 		fromJson.addParam("json", new OJPathName("String"));
-		OJIfStatement ifS = new OJIfStatement("json.equals(\"null\")", "return null");
+		OJIfStatement ifS = new OJIfStatement("json == null || json.equals(\"null\")", "return null");
 		ifS.addToElsePart("return " + annotatedClass.getPathName().getLast() + ".valueOf(json)");
 		fromJson.getBody().addToStatements(ifS);
 		annotatedClass.addToOperations(fromJson);

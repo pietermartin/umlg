@@ -25,8 +25,8 @@ import org.tuml.restlet.util.TumlRestletGenerationUtil;
 
 public class LookupOnCompositeParentCompositeParentResourceBuilder extends BaseServerResourceBuilder implements Visitor<Property> {
 
-	public LookupOnCompositeParentCompositeParentResourceBuilder(Workspace workspace) {
-		super(workspace);
+	public LookupOnCompositeParentCompositeParentResourceBuilder(Workspace workspace, String sourceDir) {
+		super(workspace, sourceDir);
 	}
 
 	@Override

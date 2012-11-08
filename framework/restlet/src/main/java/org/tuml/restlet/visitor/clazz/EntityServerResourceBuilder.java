@@ -23,18 +23,18 @@ import org.tuml.restlet.util.TumlRestletGenerationUtil;
 
 public class EntityServerResourceBuilder extends BaseServerResourceBuilder implements Visitor<Class> {
 
-	public EntityServerResourceBuilder(Workspace workspace) {
-		super(workspace);
+	public EntityServerResourceBuilder(Workspace workspace, String sourceDir) {
+		super(workspace, sourceDir);
 	}
 
 	@Override
 	public void visitBefore(Class clazz) {
 		if (!clazz.isAbstract()) {
-			OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(TumlClassOperations.className(clazz) + "ServerResource");
+			OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(getServerResourceName(clazz));
 			OJPackage ojPackage = new OJPackage(Namer.name(clazz.getNearestPackage()) + ".restlet");
 			annotatedInf.setMyPackage(ojPackage);
 			addToSource(annotatedInf);
-			OJAnnotatedClass annotatedClass = new OJAnnotatedClass(TumlClassOperations.className(clazz) + "ServerResourceImpl");
+			OJAnnotatedClass annotatedClass = new OJAnnotatedClass(getServerResourceImplName(clazz));
 			annotatedClass.setSuperclass(TumlRestletGenerationUtil.ServerResource);
 			annotatedClass.addToImplementedInterfaces(annotatedInf.getPathName());
 			annotatedClass.setMyPackage(ojPackage);
@@ -106,17 +106,16 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
 		annotatedClass.addToImports(TumlClassOperations.getPathName(clazz));
 
 		get.getBody().addToStatements("StringBuilder json = new StringBuilder()");
-		get.getBody().addToStatements("json.append(\"{\\\"data\\\": \")");
+		get.getBody().addToStatements("json.append(\"[{\\\"data\\\": \")");
 		get.getBody().addToStatements("json.append(" + "c.toJson())");
 
-		// get.getBody().addToStatements("json.append(\", \\\"meta\\\": \")");
-		get.getBody().addToStatements("json.append(\", \\\"meta\\\" : [\")");
+		get.getBody().addToStatements("meta", "json.append(\", \\\"meta\\\" : {\")");
 
-		get.getBody().addToStatements("json.append(\"{\\\"qualifiedName\\\": \\\"" + clazz.getQualifiedName() + "\\\"}\")");
-		get.getBody().addToStatements("json.append(\", \")");
+		get.getBody().addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + clazz.getQualifiedName() + "\\\"\")");
+		get.getBody().addToStatements("json.append(\", \\\"to\\\": \")");
 		get.getBody().addToStatements("json.append(" + TumlClassOperations.propertyEnumName(clazz) + ".asJson())");
 		annotatedClass.addToImports(TumlClassOperations.getPathName(clazz).append(TumlClassOperations.propertyEnumName(clazz)));
-		get.getBody().addToStatements("json.append(\"]}\")");
+		get.getBody().addToStatements("json.append(\"}}]\")");
 		get.getBody().addToStatements("return new " + TumlRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
 
 		annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);

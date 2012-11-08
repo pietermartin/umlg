@@ -15,7 +15,6 @@ import org.tuml.restlet.visitor.clazz.AddTumlLookupCompositeParentUriToRuntimePr
 import org.tuml.restlet.visitor.clazz.AddTumlLookupUriToRuntimePropertyEnum;
 import org.tuml.restlet.visitor.clazz.AddTumlUriFieldToRuntimePropertyEnum;
 import org.tuml.restlet.visitor.clazz.AddUriToRootRuntimePropertyEnum;
-import org.tuml.restlet.visitor.clazz.AppResourceServerResourceBuilder;
 import org.tuml.restlet.visitor.clazz.CompositePathServerResourceBuilder;
 import org.tuml.restlet.visitor.clazz.EntityServerResourceBuilder;
 import org.tuml.restlet.visitor.clazz.LookupCompositeParentResourceBuilder;
@@ -24,31 +23,49 @@ import org.tuml.restlet.visitor.clazz.LookupOnCompositeParentResourceBuilder;
 import org.tuml.restlet.visitor.clazz.LookupResourceBuilder;
 import org.tuml.restlet.visitor.clazz.NavigatePropertyServerResourceBuilder;
 import org.tuml.restlet.visitor.clazz.RootResourceServerResourceBuilder;
+import org.tuml.restlet.visitor.clazz.TumlRestletNodeBuilder;
+import org.tuml.restlet.visitor.model.AppResourceServerResourceBuilder;
+import org.tuml.restlet.visitor.model.EnumLookupResourceServerResourceBuilder;
+import org.tuml.restlet.visitor.model.QueryExecuteResourceBuilder;
 
 public class RestletVisitors {
 
+	private static final String RESTLET_SOURCE_FOLDER = "src/main/generated-java-restlet";
+	
 	public static List<Visitor<?>> getDefaultJavaVisitors() {
 		List<Visitor<?>> result = new ArrayList<Visitor<?>>();
 		result.addAll(DefaultVisitors.getDefaultJavaVisitors());
-		result.add(new RestletRouterEnumGenerator(Workspace.INSTANCE));
-		result.add(new EntityServerResourceBuilder(Workspace.INSTANCE));
-		result.add(new NavigatePropertyServerResourceBuilder(Workspace.INSTANCE));
-		result.add(new RootResourceServerResourceBuilder(Workspace.INSTANCE));
-		result.add(new AppResourceServerResourceBuilder(Workspace.INSTANCE));
-		result.add(new AddIdLiteralsToRuntimeEnum(Workspace.INSTANCE));
-		result.add(new AddTumlUriFieldToRuntimePropertyEnum(Workspace.INSTANCE));
-		result.add(new AddIdLiteralsToRootRuntimeEnum(Workspace.INSTANCE));
-		result.add(new AddUriToRootRuntimePropertyEnum(Workspace.INSTANCE));
-		result.add(new AddFieldTypePropertyToRuntimeLiteral(Workspace.INSTANCE));
-		result.add(new AddFieldTypePropertyToRootRuntimeLiteral(Workspace.INSTANCE));
-		result.add(new AddTumlLookupUriToRuntimePropertyEnum(Workspace.INSTANCE));
-		result.add(new AddTumlLookupCompositeParentUriToRuntimePropertyEnum(Workspace.INSTANCE));
-		result.add(new LookupResourceBuilder(Workspace.INSTANCE));
-		result.add(new LookupCompositeParentResourceBuilder(Workspace.INSTANCE));
-		result.add(new LookupOnCompositeParentResourceBuilder(Workspace.INSTANCE));
-		result.add(new LookupOnCompositeParentCompositeParentResourceBuilder(Workspace.INSTANCE));
-		result.add(new CompositePathServerResourceBuilder(Workspace.INSTANCE));
+		result.add(new RestletRouterEnumGenerator(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+		result.add(new EntityServerResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+		result.add(new NavigatePropertyServerResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+		result.add(new RootResourceServerResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+		result.add(new AppResourceServerResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+		result.add(new AddIdLiteralsToRuntimeEnum(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+		result.add(new AddTumlUriFieldToRuntimePropertyEnum(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+		result.add(new AddIdLiteralsToRootRuntimeEnum(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+		result.add(new AddUriToRootRuntimePropertyEnum(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+		result.add(new AddFieldTypePropertyToRuntimeLiteral(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+		result.add(new AddFieldTypePropertyToRootRuntimeLiteral(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+		result.add(new AddTumlLookupUriToRuntimePropertyEnum(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+		result.add(new AddTumlLookupCompositeParentUriToRuntimePropertyEnum(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+		result.add(new LookupResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+		result.add(new LookupCompositeParentResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+		result.add(new LookupOnCompositeParentResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+		result.add(new LookupOnCompositeParentCompositeParentResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+		result.add(new CompositePathServerResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+		result.add(new EnumLookupResourceServerResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+		result.add(new TumlRestletNodeBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+		result.add(new QueryExecuteResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
 		return result;
+	}
+	
+	public static boolean containsVisitorForClass(Class<?> v) {
+		for (Visitor<?> visitor : getDefaultJavaVisitors()) {
+			if (visitor.getClass().equals(v)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 }
