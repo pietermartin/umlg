@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import org.apache.commons.io.FileUtils;
 import org.restlet.Component;
@@ -22,6 +23,9 @@ import org.tuml.test.Finger;
 import org.tuml.test.Gender;
 import org.tuml.test.Hand;
 import org.tuml.test.Human;
+import org.tuml.test.Many1;
+import org.tuml.test.Many2;
+import org.tuml.test.One;
 import org.tuml.test.Ring;
 import org.tuml.test.SpaceCraft;
 import org.tuml.test.TerrestialCraft;
@@ -29,17 +33,28 @@ import org.tuml.test.TerrestialCraft;
 import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 
 public class TumlRestletServerComponent2 extends Component {
+	private static final Logger logger = Logger.getLogger(TumlRestletServerComponent2.class.getPackage().getName());
 	public static void main(String[] args) throws Exception {
 		new TumlRestletServerComponent2().start();
 	}
 
 	public TumlRestletServerComponent2() {
-		ModelLoader.loadModel(new File("src/main/model/restANDjson.uml"));
-		@SuppressWarnings("unused")
-		TumlOcl2Parser instance = TumlOcl2Parser.INSTANCE;
+		//Load the model async
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				ModelLoader.loadModel(new File("src/main/model/restANDjson.uml"));
+				@SuppressWarnings("unused")
+				TumlOcl2Parser instance = TumlOcl2Parser.INSTANCE;
+			}
+		}).start();
 		
+		logger.info("start creating graph");
 		GraphDb.setDb(createNakedGraph());
+		logger.info("done creating graph");
+		logger.info("start creating default data");
 		createDefaultData();
+		logger.info("done creating default data");
 //		 create1000000();
 
 		// Set basic properties
@@ -62,11 +77,24 @@ public class TumlRestletServerComponent2 extends Component {
 
 	private void createDefaultData() {
 		GraphDb.getDb().startTransaction();
-		for (int i = 0; i < 100000; i++) {
+		for (int i = 0; i < 10; i++) {
 			Human human = new Human(true);
 			human.setName("human1" + i);
 			human.setName2("human2" + i);
 			human.setGender(Gender.MALE);
+			
+			for (int j = 0; j < 10; j++) {
+				Many1 many1 = new Many1(human);
+				many1.setName("many1" + j);
+				Many2 many2 = new Many2(human);
+				many2.setName("many2" + j);
+				One one = new One(human);
+				one.setName("one" + j);
+				many1.addToMany2(many2);
+				if (j % 2 == 1) {
+					many1.addToOne(one);
+				}
+			}
 
 			for (int j = 0; j < 2; j++) {
 				Hand hand = new Hand(human);

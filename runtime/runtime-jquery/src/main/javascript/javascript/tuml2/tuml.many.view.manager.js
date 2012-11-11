@@ -14,7 +14,12 @@
         function init() {
         }
 
-        function refresh(tumlUri, result) {
+        function clear() {
+            tumlTabViewManagers = [];
+        }
+        
+        function refresh(tumlUri, result, propertyNavigatingTo) {
+            tumlTabViewManagers = [];
             //A tab is created for every element in the array,
             //i.e. for every concrete subset of the many property
             for (i = 0; i < result.length; i++) {
@@ -22,7 +27,7 @@
                     var metaForData = result[i].meta.to;
                     var tabContainer = $('#tab-container');
                     var tabDiv = $('<div />', {id: metaForData.name, title: metaForData.name}).appendTo(tabContainer);
-                    var tumlTabViewManager = new Tuml.TumlTabViewManager({many: true, one: false, query: false}, tumlUri, result[i].meta.qualifiedName, metaForData.name);
+                    var tumlTabViewManager = new Tuml.TumlTabViewManager({propertyNavigatingTo: propertyNavigatingTo, many: true, one: false, query: false}, tumlUri, result[i].meta.qualifiedName, metaForData.name);
                     tumlTabViewManager.onPutSuccess.subscribe(function(e, args) {
                         console.log('TumlManyViewManager onPutSuccess fired');
                         self.onPutSuccess.notify(args, e, self);
@@ -86,7 +91,7 @@
             tumlTabViewManagers.splice(index, 1);
         }
 
-        function openQuery(tumlUri, oclExecuteUri, qualifiedName, tabDivName) {
+        function openQuery(tumlUri, oclExecuteUri, qualifiedName, tabDivName, queryEnum, queryString) {
             //Check is there is already a tab open for this query
             var tumlTabViewManagerQuery; 
             var tabIndex = 0;
@@ -101,7 +106,7 @@
                 $('#tab-container').tabs('add', {title: tabDivName, content: '<div id="'+tabDivName+'" />', closable: true});
                 var tumlTabViewManager = new Tuml.TumlTabViewManager({many: false, one: false, query: true}, tumlUri, qualifiedName, tabDivName);
                 tumlTabViewManagers.push(tumlTabViewManager);
-                tumlTabViewManager.createQuery(oclExecuteUri);
+                tumlTabViewManager.createQuery(oclExecuteUri, queryEnum, queryString);
             } else {
                 //Just make the tab active
                 $('#tab-container').tabs('select', tabIndex);
@@ -111,7 +116,7 @@
 
         function clear() {
             for (i = 0; i < tumlTabViewManagers.length; i++) {
-                tumlTabViewManagers[i].destroy();
+                tumlTabViewManagers[i].clear();
             }
             tumlTabViewManagers.length = 0;
         }

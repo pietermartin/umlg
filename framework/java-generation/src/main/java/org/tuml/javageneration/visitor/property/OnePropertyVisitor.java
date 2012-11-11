@@ -4,6 +4,7 @@ import org.eclipse.uml2.uml.Property;
 import org.opaeum.java.metamodel.OJField;
 import org.opaeum.java.metamodel.OJIfStatement;
 import org.opaeum.java.metamodel.OJPathName;
+import org.opaeum.java.metamodel.OJVisibilityKind;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedField;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
@@ -80,6 +81,9 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
 	public static void buildSetter(OJAnnotatedClass owner, PropertyWrapper pWrap) {
 		OJAnnotatedOperation setter = new OJAnnotatedOperation(pWrap.setter());
 		setter.addParam(pWrap.fieldname(), pWrap.javaBaseTypePath());
+		if (pWrap.isReadOnly()) {
+			setter.setVisibility(OJVisibilityKind.PROTECTED);
+		}
 		PropertyWrapper otherEnd = new PropertyWrapper(pWrap.getOtherEnd());
 		if (pWrap.hasOtherEnd() && !pWrap.isEnumeration() && pWrap.isOneToOne()) {
 			OJIfStatement ifNotNull = new OJIfStatement(pWrap.fieldname() + " != null");

@@ -42,6 +42,7 @@ public class OJEnumLiteral extends OJElement  implements OJAnnotatedElement{
 			Iterator<OJField> iter = this.attributeValues.iterator();
 			while (iter.hasNext()) {
 				OJField a = iter.next();
+				sb.append("/* " + a.getName() + " */ ");
 				sb.append(a.getInitExp());
 				if(iter.hasNext()){
 					sb.append(',');

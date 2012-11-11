@@ -20,6 +20,9 @@
             tumlManyViewManager.onPutSuccess.subscribe(function(e, args) {
                 console.log('TumlMainViewManager onPutSuccess fired');
                 self.onPutSuccess.notify(args, e, self);
+                if (args.data[0].meta.to.qualifiedName === 'tumllib::org::tuml::query::Query') {
+                    alert('update the tree!');
+                }
             });
             tumlManyViewManager.onPutFailure.subscribe(function(e, args) {
                 console.log('TumlMainViewManager onPutFailure fired');
@@ -28,6 +31,12 @@
             tumlManyViewManager.onPostSuccess.subscribe(function(e, args) {
                 console.log('TumlMainViewManager onPostSuccess fired');
                 self.onPostSuccess.notify(args, e, self);
+                if (args.data[0].meta.to.qualifiedName === 'tumllib::org::tuml::query::Query') {
+                    var metaDataNavigatingTo = args.data[0].meta.to;
+                    var metaDataNavigatingFrom = args.data[0].meta.from;
+                    var contextVertexId = args.tumlUri.match(/\d+/);
+                    leftMenuManager.refresh(metaDataNavigatingFrom, metaDataNavigatingTo, contextVertexId);
+                }
             });
             tumlManyViewManager.onPostFailure.subscribe(function(e, args) {
                 console.log('TumlMainViewManager onPostFailure fired');
@@ -69,13 +78,13 @@
             });
         }
 
-        function openQuery(tumlUri, oclExecuteUri, qualifiedName, name) {
+        function openQuery(tumlUri, oclExecuteUri, qualifiedName, name, queryEnum, queryString) {
             if (isOne === undefined) {
                 alert('can not open the query as isOne is undefined!');
             } else if (isOne) {
-                tumlOneViewManager.openQuery(tumlUri, oclExecuteUri, qualifiedName, name);
+                tumlOneViewManager.openQuery(tumlUri, oclExecuteUri, qualifiedName, name, queryEnum, queryString);
             } else {
-                tumlManyViewManager.openQuery(tumlUri, oclExecuteUri, qualifiedName, name);
+                tumlManyViewManager.openQuery(tumlUri, oclExecuteUri, qualifiedName, name, queryEnum, queryString);
             }
         }
 
@@ -83,16 +92,15 @@
             var qualifiedName = result[0].meta.qualifiedName;
             var metaDataNavigatingTo = result[0].meta.to;
             var metaDataNavigatingFrom = result[0].meta.from;
-            var properties = metaDataNavigatingTo.properties;
             var propertyNavigatingTo = (metaDataNavigatingFrom == undefined ? null : findPropertyNavigatingTo(qualifiedName, metaDataNavigatingFrom));
             if (propertyNavigatingTo != null && (propertyNavigatingTo.oneToMany || propertyNavigatingTo.manyToMany)) {
                 //Property is a many
                 isOne = false;
                 recreateTabContainer();
-                var contextMetaData = result[0].meta.to;
                 var contextVertexId = tumlUri.match(/\d+/);
                 leftMenuManager.refresh(metaDataNavigatingFrom, metaDataNavigatingTo, contextVertexId);
-                tumlManyViewManager.refresh(tumlUri, result);
+                tumlManyViewManager.refresh(tumlUri, result, propertyNavigatingTo);
+                tumlOneViewManager.clear();
             } else {
                 //Property is a one
                 isOne = true;
@@ -103,8 +111,10 @@
                     //If property is a one then there is n navigating from
                     leftMenuManager.refresh(metaDataNavigatingTo, metaDataNavigatingTo, contextVertexId);
                     tumlOneViewManager.refresh(tumlUri, result);
+                    tumlManyViewManager.clear();
                 } else {
                     alert('The properties value is null. \nIt can not be navigated to.');
+                    return false;
                 }
             }
             $('#ui-layout-center-heading').children().remove();
@@ -115,7 +125,12 @@
                 } else {
                     tumlManyViewManager.closeQuery(title, index);
                 }
+            }, onSelect: function(title, index){
+                leftMenuManager.refreshQueryMenu(title);
             }});
+            //This is the layout
+            $('body').layout().resizeAll();
+            return true;
         }
 
         function findPropertyNavigatingTo(qualifiedName, metaDataNavigatingFrom) {

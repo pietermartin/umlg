@@ -15,7 +15,7 @@
             tumlTabGridManager = new Tuml.TumlTabGridManager();
         }
 
-        function createQuery(oclExecuteUri) {
+        function createQuery(oclExecuteUri, queryEnum, queryString) {
             var queryTab = $('#' + queryTabDivName);
             //Outer div for entering ocl
             var oclOuter = $('<div />', {id: queryTabDivName + '_' + 'OclOuter', class: 'oclouter'});
@@ -24,7 +24,7 @@
             //Inner div for entering ocl and buttons
             var oclInner = $('<div />', {id: queryTabDivName + '_' + 'OclInner', class: 'oclinner'}).appendTo(oclOuter);
             var oclTextAreaDiv = $('<div />', {class: 'ocltextarea'}).appendTo(oclInner);
-            $('<textarea />', {id: 'oclquerytextfield'}).text('ocl here...').appendTo(oclTextAreaDiv);
+            $('<textarea />', {id: 'oclquerytextfield'}).text(queryString).appendTo(oclTextAreaDiv);
             var oclInnerButton = $('<div />', {id: queryTabDivName + '+' + 'OclInnerButton', class: 'oclinnerbutton'}).appendTo(oclInner);
 
             var oclExecuteButtonDiv = $('<div />', {class: "oclexecutebutton"}).appendTo(oclInnerButton);
@@ -45,7 +45,7 @@
             var inputEditButtonDiv = $('<div />', {class: 'oclinputeditbutton'}).appendTo(oclInnerButton);
             
             var oclQueryNameInputDiv = $('<div />', {class: 'oclqueryname'}).appendTo(inputEditButtonDiv);
-            $('<input >', {id: queryTabDivName + '_' + 'QueryName', type: 'text'}).appendTo(oclQueryNameInputDiv);
+            $('<input >', {id: queryTabDivName + '_' + 'QueryName', type: 'text'}).val(queryTabDivName).appendTo(oclQueryNameInputDiv);
 
             var oclEditButtonDiv = $('<div />', {class: "ocleditbutton"}).appendTo(inputEditButtonDiv);
             

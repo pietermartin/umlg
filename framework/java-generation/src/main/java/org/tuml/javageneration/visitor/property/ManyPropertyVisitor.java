@@ -3,6 +3,7 @@ package org.tuml.javageneration.visitor.property;
 import org.eclipse.uml2.uml.Property;
 import org.opaeum.java.metamodel.OJForStatement;
 import org.opaeum.java.metamodel.OJIfStatement;
+import org.opaeum.java.metamodel.OJVisibilityKind;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedInterface;
 import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
@@ -84,6 +85,9 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
 
 	public static void buildSetter(OJAnnotatedClass owner, PropertyWrapper pWrap) {
 		OJAnnotatedOperation setter = new OJAnnotatedOperation(pWrap.setter());
+		if (pWrap.isReadOnly()) {
+			setter.setVisibility(OJVisibilityKind.PROTECTED);
+		}
 		setter.addParam(pWrap.fieldname(), pWrap.javaTypePath());
 		setter.getBody().addToStatements(pWrap.clearer() + "()");
 		setter.getBody().addToStatements(pWrap.adder() + "(" + pWrap.fieldname() + ")");

@@ -337,10 +337,6 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 		return this.property.getName();
 	}
 
-	public String lookupOnCompositeParent() {
-		return getOtherEnd().getName() + "_" + this.property.getName();
-	}
-
 	public String getter() {
 		return TumlPropertyOperations.getter(this.property);
 	}
@@ -1199,7 +1195,27 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 	}
 
 	public String lookup() {
-		return "lookupFor_" + new PropertyWrapper(getOtherEnd()).getName() + "_" + getName();
+		if (getOtherEnd() != null) {
+			return "lookupFor_" + getOtherEnd().getName() + "_" + getName();
+		} else {
+			return "lookupFor_" + "_" + getName();
+		}
+	}
+
+	public String lookupGetter() {
+		return "getLookupFor_" + getOtherEnd().getName() + "_" + getName();
+	}
+
+	public String lookupOnCompositeParent() {
+		if (getOtherEnd() != null) {
+			return "lookupOnCompositeParentFor_" + getOtherEnd().getName() + "_" + this.property.getName();
+		} else {
+			return "lookupOnCompositeParentFor_" + "_" + this.property.getName();
+		}
+	}
+
+	public String lookupOnCompositeParentGetter() {
+		return "getLookupOnCompositeParentFor_" + getOtherEnd().getName() + "_" + this.property.getName();
 	}
 
 	public String lookupCompositeParent() {

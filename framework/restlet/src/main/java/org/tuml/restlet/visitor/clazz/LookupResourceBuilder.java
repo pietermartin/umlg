@@ -95,14 +95,17 @@ public class LookupResourceBuilder extends BaseServerResourceBuilder implements 
 		block.addToStatements("json.append(ToJsonUtil.toJson(resource." + pWrap.lookup() + "()))");
 		annotatedClass.addToImports(TinkerGenerationUtil.ToJsonUtil);
 		block.addToStatements("json.append(\"],\")");
-		block.addToStatements("json.append(\" \\\"meta\\\" : [\")");
-		block.addToStatements("json.append(" + TumlClassOperations.propertyEnumName(pWrap.getOwningType()) + ".asJson())");
-		annotatedClass.addToImports(TumlClassOperations.getPathName(pWrap.getOwningType()).append(TumlClassOperations.propertyEnumName(pWrap.getOwningType())));
-		block.addToStatements("json.append(\", \")");
+		block.addToStatements("json.append(\" \\\"meta\\\" : {\")");
+		block.addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + pWrap.getQualifiedName() + "\\\"\")");
+		block.addToStatements("json.append(\", \\\"to\\\": \")");
 		block.addToStatements("json.append(" + TumlClassOperations.propertyEnumName(new PropertyWrapper(pWrap.getOtherEnd()).getOwningType()) + ".asJson())");
 		annotatedClass.addToImports(TumlClassOperations.getPathName(new PropertyWrapper(pWrap.getOtherEnd()).getOwningType()).append(
 				TumlClassOperations.propertyEnumName(new PropertyWrapper(pWrap.getOtherEnd()).getOwningType())));
-		block.addToStatements("json.append(\"]}\")");
+		block.addToStatements("json.append(\", \\\"from\\\": \")");
+		block.addToStatements("json.append(" + TumlClassOperations.propertyEnumName(pWrap.getOwningType()) + ".asJson())");
+		annotatedClass.addToImports(TumlClassOperations.getPathName(pWrap.getOwningType()).append(TumlClassOperations.propertyEnumName(pWrap.getOwningType())));
+
+		block.addToStatements("json.append(\"}}\")");
 		block.addToStatements("return new " + TumlRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
 	}
 

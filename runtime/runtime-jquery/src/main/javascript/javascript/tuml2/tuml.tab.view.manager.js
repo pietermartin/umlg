@@ -13,13 +13,19 @@
         var tumlTabOneManager;
         var tumlTabQueryManager;
 
+        function clear() {
+            tumlTabGridManager = null;
+            tumlTabOneManager = null;
+            tumlTabQueryManager = null;
+        }
+
         function init() {
             if ($('#' + tabDivName) == undefined) {
                 alert('The tab must be created before calling the TumlTabViewManager.init()');
             }
             if (oneManyOrQuery.many) {
                 //Do not pass the div in, it causes issues with refreshing
-                tumlTabGridManager = new Tuml.TumlTabGridManager(tumlUri);
+                tumlTabGridManager = new Tuml.TumlTabGridManager(tumlUri, oneManyOrQuery.propertyNavigatingTo);
                 tumlTabGridManager.onPutSuccess.subscribe(function(e, args) {
                     console.log('TumlTabViewManager onPutSuccess fired');
                     self.onPutSuccess.notify(args, e, self);
@@ -82,14 +88,12 @@
 
         function createGridForResult(result, tabId) {
             for (i = 0; i < result.length; i++) {
-                //if (result[i].meta.length === 3) {
-                    var metaForData = result[i].meta.to;
-                    if (metaForData.name === tabId) {
-                        $('#' + tabDivName).children().remove();
-                        createGrid(result[i]);
-                        return;
-                    }
-                //}
+                var metaForData = result[i].meta.to;
+                if (metaForData.name === tabId) {
+                    $('#' + tabDivName).children().remove();
+                    createGrid(result[i], false);
+                    return;
+                }
             }
         }
 
@@ -104,8 +108,8 @@
         }
 
         //Must be created after tabs have been created, else things look pretty bad like...
-        function createQuery(oclExecuteUri) {
-            tumlTabQueryManager.createQuery(oclExecuteUri);
+        function createQuery(oclExecuteUri, queryEnum, queryString) {
+            tumlTabQueryManager.createQuery(oclExecuteUri, queryEnum, queryString);
         }
 
         //Public api
@@ -130,7 +134,8 @@
             "createGrid": createGrid,
             "createQuery": createQuery,
             "tabDivName": tabDivName,
-            "oneManyOrQuery": oneManyOrQuery
+            "oneManyOrQuery": oneManyOrQuery,
+            "clear": clear
         });
 
         init();

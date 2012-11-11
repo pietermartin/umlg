@@ -10,6 +10,7 @@
 
         var self = this;
         var queryProperty;
+        var queryData;
 
         function init() {
         }
@@ -41,7 +42,8 @@
                     dataType: "json",
                     contentType: "json",
                     success: function(response, textStatus, jqXHR) {
-                        internalCreateTree(response, contextVertexId);
+                        queryData = response;
+                        internalCreateTree(contextVertexId);
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         alert('Error getting query data. textStatus: ' + textStatus + ' errorThrown: ' + errorThrown);
@@ -50,14 +52,28 @@
             }
         }
 
-        function internalCreateTree(queryData, contextVertexId) {
+        function refreshQueryMenu(queryTabName) {
+            //Change the css activeproperty
+            if (queryData !== undefined) {
+                for (i = 0; i < queryData[0].data.length; i++) {
+                    var query = queryData[0].data[i];
+                    $('#queryMenu' + query.name + 'Id').removeClass('querymenuactive');
+                    $('#queryMenu' + query.name + 'Id').addClass('querymenuinactive');
+                }
+                var clickedNode = $('#queryMenu' + queryTabName + 'Id');
+                clickedNode.removeClass("querymenuinactive");
+                clickedNode.addClass("querymenuactive");
+            }
+        }
+
+        function internalCreateTree(contextVertexId) {
             var topNode = {label: 'queries'};
             var queryArray = [];
             for (i = 0; i < queryData[0].data.length; i++) {
                 var query = queryData[0].data[i];
                 var queryUri = query.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), query.id);
                 var oclExecuteUri = queryData[0].meta.oclExecuteUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
-                queryArray.push({label: query.name, tumlUri: queryUri, oclExecuteUri: oclExecuteUri, qualifiedName: queryProperty.qualifiedName, name: query.name});
+                queryArray.push({label: query.name, tumlUri: queryUri, oclExecuteUri: oclExecuteUri, qualifiedName: queryProperty.qualifiedName, name: '<span id="queryMenu' + query.name + 'Id" class="querymenuinactive">' + query.name + '</span>', _name: query.name, queryEnum: query.queryEnum, queryString: query.queryString});
             }
             var treeData = treedata = $.extend(topNode, {children: queryArray})
 
@@ -65,7 +81,9 @@
             treeDataArray.push(treeData);
 
             $('#queryTree').tree({
-                data: treeDataArray
+                data: treeDataArray,
+                autoEscape: false,
+                autoOpen: true
             });
 
             // bind 'tree.click' event
@@ -74,8 +92,17 @@
                 function(event) {
                     // The clicked node is 'event.node'
                     var node = event.node;
-                    if (node.name !== 'queries') {
-                        self.onQueryClick.notify({tumlUri: node.tumlUri, oclExecuteUri: node.oclExecuteUri, qualifiedName: node.qualifiedName, name: node.name}, null, self);
+                    if (node._name !== 'queries') {
+                        //Change the css activeproperty
+                        for (i = 0; i < queryData[0].data.length; i++) {
+                            var query = queryData[0].data[i];
+                            $('#queryMenu' + query.name + 'Id').removeClass('querymenuactive');
+                            $('#queryMenu' + query.name + 'Id').addClass('querymenuinactive');
+                        }
+                        var clickedNode = $('#queryMenu' + node._name + 'Id');
+                        clickedNode.removeClass("querymenuinactive");
+                        clickedNode.addClass("querymenuactive");
+                        self.onQueryClick.notify({tumlUri: node.tumlUri, oclExecuteUri: node.oclExecuteUri, qualifiedName: node.qualifiedName, name: node._name, queryEnum: node.queryEnum, queryString: node.queryString}, null, self);
                     }
                 }
             );
@@ -150,7 +177,8 @@
             "TumlLeftMenuManagerVersion": "1.0.0",
             "onMenuClick": new Tuml.Event(),
             "onQueryClick": new Tuml.Event(),
-            "refresh": refresh
+            "refresh": refresh,
+            "refreshQueryMenu": refreshQueryMenu
         });
 
         init();

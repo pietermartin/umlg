@@ -92,7 +92,7 @@ public class RootEntryPointCreator extends BaseVisitor implements Visitor<Model>
 		for (Class clazz : result) {
 			count++;
 			RuntimePropertyImplementor.addEnumLiteral(ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName,
-					StringUtils.uncapitalize(TumlClassOperations.className(clazz)), clazz.getQualifiedName(), "inverseOf::" + clazz.getQualifiedName(), false,
+					StringUtils.uncapitalize(TumlClassOperations.className(clazz)), clazz.getQualifiedName(), "inverseOf::" + clazz.getQualifiedName(), false, false,
 					null, Collections.<Validation> emptyList(), true, false, false, false, true, false, false, true, false, -1, 0, false, false, true, false,
 					true, "root" + TumlClassOperations.className(clazz));
 

@@ -20,7 +20,7 @@
 
         function init() {
             //Create layout
-            var myLayout = $('body').layout({north__minSize: 40, east: {initClosed: true}, south: {initClosed: true}, west: {minSize : 200}});
+            var myLayout = $('body').layout({livePaneResizing: true, north__minSize: 40, east: {initClosed: true}, south: {initClosed: true}, west: {minSize : 200}});
             myLayout.allowOverflow("north");
             //Create the menu
             menuManager = new Tuml.MenuManager();
@@ -44,7 +44,7 @@
             leftMenuManager.onQueryClick.subscribe(function(e, args) {
                 //Do something like refresh the page
                 console.log('TumlUiManager onQueryClick fired');
-                mainViewManager.openQuery(args.tumlUri, args.oclExecuteUri, args.qualifiedName, args.name);
+                mainViewManager.openQuery(args.tumlUri, args.oclExecuteUri, args.qualifiedName, args.name, args.queryEnum, args.queryString);
             });
 
             //Create main view manager
@@ -52,9 +52,6 @@
             mainViewManager.onPutSuccess.subscribe(function(e, args) {
                 console.log('TumlUiManager onPutSuccess fired');
                 self.onPutSuccess.notify(args, e, self);
-                if (args.data[0].meta.to.qualifiedName === 'tumllib::org::tuml::query::Query') {
-                    alert('update the tree!');
-                }
             });
             mainViewManager.onPutFailure.subscribe(function(e, args) {
                 console.log('TumlUiManager onPutFailure fired');
@@ -120,16 +117,20 @@
 
         function refresh(tumlUri) {
             //Call the server for the tumlUri
-            var urlId = tumlUri.match(/\d+/);
+            var urlId = tumlUri.match(/\/\d+/);
+            if (urlId != null) {
+                urlId = urlId[0].match(/\d+/);
+            }
             $.ajax({
                 url: tumlUri,
                 type: "GET",
                 dataType: "json",
                 contentType: "json",
                 success: function(result, textStatus, jqXHR) {
-                    var contextMetaData = getContextMetaData(result, urlId);
-                    mainViewManager.refresh(tumlUri, result);
-                    contextManager.refresh(contextMetaData.name, contextMetaData.uri, contextMetaData.contextVertexId);
+                    if (mainViewManager.refresh(tumlUri, result)) {
+                        var contextMetaData = getContextMetaData(result, urlId);
+                        contextManager.refresh(contextMetaData.name, contextMetaData.uri, contextMetaData.contextVertexId);
+                    }
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     alert('error getting ' + tumlUri + '\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
@@ -155,7 +156,7 @@
                     var contextMetaData = response.meta.to;
                     return {name: contextMetaData.name, uri: contextMetaData.uri, contextVertexId: response.data.id};
                 } else {
-                    alert('The properties value is null. \nIt can not be navigated to.');
+                    alert("The property's value is null. \nIt can not be navigated to.");
                 }
                 return null;
             }

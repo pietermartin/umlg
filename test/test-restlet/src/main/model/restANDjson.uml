@@ -146,6 +146,18 @@
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="__959giJ3EeK_2-gEeTkcgw" value="1"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="__959gSJ3EeK_2-gEeTkcgw" value="1"/>
             </ownedAttribute>
+            <ownedAttribute xmi:id="_3W0tcCs_EeKUKeU-gvRHzA" name="many1" type="_xP7AoCs_EeKUKeU-gvRHzA" aggregation="composite" association="_3W1UgCs_EeKUKeU-gvRHzA">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_3W0tcSs_EeKUKeU-gvRHzA"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_3W0tcis_EeKUKeU-gvRHzA" value="*"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:id="_3maooCs_EeKUKeU-gvRHzA" name="many2" type="_yDzUoCs_EeKUKeU-gvRHzA" aggregation="composite" association="_3mbPsCs_EeKUKeU-gvRHzA">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_3maooSs_EeKUKeU-gvRHzA"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_3maoois_EeKUKeU-gvRHzA" value="*"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:id="_J1LfICtAEeKUKeU-gvRHzA" name="one" type="_CTJRECtAEeKUKeU-gvRHzA" aggregation="composite" association="_J1MGMCtAEeKUKeU-gvRHzA">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_J1LfIStAEeKUKeU-gvRHzA"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_J1LfIitAEeKUKeU-gvRHzA" value="*"/>
+            </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Association" xmi:id="_-UTBwN4jEeGdB9TPHp60mw" name="A_&lt;human>_&lt;hand>" memberEnd="_-UTBwd4jEeGdB9TPHp60mw _-UB8AN4jEeGdB9TPHp60mw" navigableOwnedEnd="_-UTBwd4jEeGdB9TPHp60mw">
             <ownedEnd xmi:id="_-UTBwd4jEeGdB9TPHp60mw" name="human" visibility="public" type="_6R3uIN4jEeGdB9TPHp60mw" association="_-UTBwN4jEeGdB9TPHp60mw">
@@ -227,6 +239,74 @@
             <ownedEnd xmi:id="__97LoSJ3EeK_2-gEeTkcgw" name="human" type="_6R3uIN4jEeGdB9TPHp60mw" association="__97LoCJ3EeK_2-gEeTkcgw">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="__97LoyJ3EeK_2-gEeTkcgw"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="__97LoiJ3EeK_2-gEeTkcgw" value="*"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_xP7AoCs_EeKUKeU-gvRHzA" name="Many1">
+            <generalization xmi:id="_77tqICvdEeK9AeutZ8kzPA">
+              <general xmi:type="uml:Class" href="tuml-lib.uml#_FAMz0CXHEeKbPYSfIbmXag"/>
+            </generalization>
+            <ownedAttribute xmi:id="__HAFMCs_EeKUKeU-gvRHzA" name="many2" type="_yDzUoCs_EeKUKeU-gvRHzA" association="__HAsQCs_EeKUKeU-gvRHzA">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="__HAFMSs_EeKUKeU-gvRHzA"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="__HAFMis_EeKUKeU-gvRHzA" value="*"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:id="_O2akYCtAEeKUKeU-gvRHzA" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_PFKyECtAEeKUKeU-gvRHzA" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_PFMAMCtAEeKUKeU-gvRHzA" value="1"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_yDzUoCs_EeKUKeU-gvRHzA" name="Many2">
+            <generalization xmi:id="_8HxJICvdEeK9AeutZ8kzPA">
+              <general xmi:type="uml:Class" href="tuml-lib.uml#_FAMz0CXHEeKbPYSfIbmXag"/>
+            </generalization>
+            <ownedAttribute xmi:id="_OmRPkCtAEeKUKeU-gvRHzA" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_O0lYYCtAEeKUKeU-gvRHzA" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_O0l_cCtAEeKUKeU-gvRHzA" value="1"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_3W1UgCs_EeKUKeU-gvRHzA" name="human_many1_1" memberEnd="_3W1UgSs_EeKUKeU-gvRHzA _3W0tcCs_EeKUKeU-gvRHzA" navigableOwnedEnd="_3W1UgSs_EeKUKeU-gvRHzA">
+            <ownedEnd xmi:id="_3W1UgSs_EeKUKeU-gvRHzA" name="human" type="_6R3uIN4jEeGdB9TPHp60mw" association="_3W1UgCs_EeKUKeU-gvRHzA">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_3W1Ugis_EeKUKeU-gvRHzA" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_3W1Ugys_EeKUKeU-gvRHzA" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_3mbPsCs_EeKUKeU-gvRHzA" name="human_many2_1" memberEnd="_3mbPsSs_EeKUKeU-gvRHzA _3maooCs_EeKUKeU-gvRHzA" navigableOwnedEnd="_3mbPsSs_EeKUKeU-gvRHzA">
+            <ownedEnd xmi:id="_3mbPsSs_EeKUKeU-gvRHzA" name="human" type="_6R3uIN4jEeGdB9TPHp60mw" association="_3mbPsCs_EeKUKeU-gvRHzA">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_3mbPsis_EeKUKeU-gvRHzA" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_3mbPsys_EeKUKeU-gvRHzA" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="__HAsQCs_EeKUKeU-gvRHzA" name="many1_many2_1" memberEnd="__HAsQSs_EeKUKeU-gvRHzA __HAFMCs_EeKUKeU-gvRHzA" navigableOwnedEnd="__HAsQSs_EeKUKeU-gvRHzA">
+            <ownedEnd xmi:id="__HAsQSs_EeKUKeU-gvRHzA" name="many1" type="_xP7AoCs_EeKUKeU-gvRHzA" association="__HAsQCs_EeKUKeU-gvRHzA">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="__HAsQis_EeKUKeU-gvRHzA"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="__HAsQys_EeKUKeU-gvRHzA" value="*"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_CTJRECtAEeKUKeU-gvRHzA" name="One">
+            <generalization xmi:id="_7tm8sCvdEeK9AeutZ8kzPA">
+              <general xmi:type="uml:Class" href="tuml-lib.uml#_FAMz0CXHEeKbPYSfIbmXag"/>
+            </generalization>
+            <ownedAttribute xmi:id="_KCeUQCtAEeKUKeU-gvRHzA" name="many1" type="_xP7AoCs_EeKUKeU-gvRHzA" association="_KCeUQytAEeKUKeU-gvRHzA">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_KCeUQStAEeKUKeU-gvRHzA"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_KCeUQitAEeKUKeU-gvRHzA" value="*"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:id="_PHAlICtAEeKUKeU-gvRHzA" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_PXcN0CtAEeKUKeU-gvRHzA" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_PXc04CtAEeKUKeU-gvRHzA" value="1"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_J1MGMCtAEeKUKeU-gvRHzA" name="human_one_1" memberEnd="_J1MGMStAEeKUKeU-gvRHzA _J1LfICtAEeKUKeU-gvRHzA" navigableOwnedEnd="_J1MGMStAEeKUKeU-gvRHzA">
+            <ownedEnd xmi:id="_J1MGMStAEeKUKeU-gvRHzA" name="human" type="_6R3uIN4jEeGdB9TPHp60mw" association="_J1MGMCtAEeKUKeU-gvRHzA">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_J1MGMitAEeKUKeU-gvRHzA" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_J1MGMytAEeKUKeU-gvRHzA" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_KCeUQytAEeKUKeU-gvRHzA" name="one_many1_1" memberEnd="_KCeURCtAEeKUKeU-gvRHzA _KCeUQCtAEeKUKeU-gvRHzA" navigableOwnedEnd="_KCeURCtAEeKUKeU-gvRHzA">
+            <ownedEnd xmi:id="_KCeURCtAEeKUKeU-gvRHzA" name="one" type="_CTJRECtAEeKUKeU-gvRHzA" association="_KCeUQytAEeKUKeU-gvRHzA">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_KCeURStAEeKUKeU-gvRHzA"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_KCeURitAEeKUKeU-gvRHzA" value="1"/>
             </ownedEnd>
           </packagedElement>
         </packagedElement>

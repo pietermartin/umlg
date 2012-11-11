@@ -43,6 +43,11 @@ public class RuntimePropertyImplementor {
 		isOnePrimitiveField.setName("_onePrimitive");
 		ojEnum.addToFields(isOnePrimitiveField);
 
+		OJField readOnly = new OJField();
+		readOnly.setType(new OJPathName("Boolean"));
+		readOnly.setName("_readOnly");
+		ojEnum.addToFields(readOnly);
+
 		OJField dataTypeEnum = new OJField();
 		dataTypeEnum.setType(TinkerGenerationUtil.DataTypeEnum);
 		dataTypeEnum.setName("dataTypeEnum");
@@ -207,7 +212,7 @@ public class RuntimePropertyImplementor {
 			PropertyWrapper pWrap = new PropertyWrapper(p);
 			if (!(pWrap.isDerived() || pWrap.isDerivedUnion())) {
 				addEnumLiteral(ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, pWrap.fieldname(), pWrap.getQualifiedName(),
-						pWrap.getInverseQualifiedName(), pWrap.isPrimitive() && pWrap.isOne(), pWrap.getDataTypeEnum(), pWrap.getValidations(),
+						pWrap.getInverseQualifiedName(), pWrap.isReadOnly(), pWrap.isPrimitive() && pWrap.isOne(), pWrap.getDataTypeEnum(), pWrap.getValidations(),
 						pWrap.isEnumeration(), pWrap.isManyToOne(), pWrap.isMany(), pWrap.isControllingSide(), pWrap.isComposite(), pWrap.isInverseComposite(),
 						pWrap.isOneToOne(), pWrap.isOneToMany(), pWrap.isManyToMany(), pWrap.getUpper(), pWrap.getLower(), pWrap.isQualified(),
 						pWrap.isInverseQualified(), pWrap.isOrdered(), pWrap.isInverseOrdered(), pWrap.isUnique(),
@@ -217,7 +222,7 @@ public class RuntimePropertyImplementor {
 
 		if (!hasCompositeOwner/* && !(className instanceof Model) */) {
 			// Add in fake property to root
-			addEnumLiteral(ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, modelName, modelName, "inverseOf" + modelName, false, null,
+			addEnumLiteral(ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, modelName, modelName, "inverseOf" + modelName, false, false, null,
 					Collections.<Validation> emptyList(), false, false, false, true, false, true, true, false, false, -1, 0, false, false, false, false, false,
 					"root" + className.getName());
 		}
@@ -229,8 +234,11 @@ public class RuntimePropertyImplementor {
 		return ojEnum;
 	}
 
+	/**
+	 * Very important, the order of adding the attribut values to the literal must be the same as the order the fields were created ass that is the order of the constructor
+	 */
 	public static OJEnumLiteral addEnumLiteral(OJEnum ojEnum, OJAnnotatedOperation fromLabel, OJAnnotatedOperation fromQualifiedName,
-			OJAnnotatedOperation fromInverseQualifiedName, String fieldName, String qualifiedName, String inverseQualifiedName, boolean isOnePrimitive,
+			OJAnnotatedOperation fromInverseQualifiedName, String fieldName, String qualifiedName, String inverseQualifiedName, boolean isReadOnly, boolean isOnePrimitive,
 			DataTypeEnum dataTypeEnum, List<Validation> validations, boolean isEnumeration, boolean isManyToOne, boolean isMany, boolean isControllingSide,
 			boolean isComposite, boolean isInverseComposite, boolean isOneToOne, boolean isOneToMany, boolean isManyToMany, int getUpper, int getLower,
 			boolean isQualified, boolean isInverseQualified, boolean isOrdered, boolean isInverseOrdered, boolean isUnique, String edgeName) {
@@ -252,23 +260,33 @@ public class RuntimePropertyImplementor {
 		OJEnumLiteral ojLiteral = new OJEnumLiteral(fieldName);
 
 		OJField propertyQualifiedNameField = new OJField();
+		propertyQualifiedNameField.setName("qualifiedName");
 		propertyQualifiedNameField.setType(new OJPathName("String"));
 		propertyQualifiedNameField.setInitExp("\"" + qualifiedName + "\"");
 		ojLiteral.addToAttributeValues(propertyQualifiedNameField);
 
 		OJField propertyInverseQualifiedNameField = new OJField();
+		propertyInverseQualifiedNameField.setName("inverseQualifiedName");
 		propertyInverseQualifiedNameField.setType(new OJPathName("String"));
 		propertyInverseQualifiedNameField.setInitExp("\"" + inverseQualifiedName + "\"");
 		ojLiteral.addToAttributeValues(propertyInverseQualifiedNameField);
 
 		OJField propertyOnePrimitiveField = new OJField();
+		propertyOnePrimitiveField.setName("isOnePrimitive");
 		propertyOnePrimitiveField.setType(new OJPathName("boolean"));
 		// A one primitive property is a isManyToOne. Seeing as the
 		// opposite end is null it defaults to many
 		propertyOnePrimitiveField.setInitExp(Boolean.toString(isOnePrimitive));
 		ojLiteral.addToAttributeValues(propertyOnePrimitiveField);
 
+		OJField readOnlyField = new OJField();
+		readOnlyField.setName("isReadOnly");
+		readOnlyField.setType(new OJPathName("boolean"));
+		readOnlyField.setInitExp(Boolean.toString(isReadOnly));
+		ojLiteral.addToAttributeValues(readOnlyField);
+
 		OJField propertyDataTypeEnumField = new OJField();
+		propertyDataTypeEnumField.setName("dataTypeEnum");
 		propertyDataTypeEnumField.setType(TinkerGenerationUtil.DataTypeEnum);
 		if (dataTypeEnum != null) {
 			propertyDataTypeEnumField.setInitExp(dataTypeEnum.getInitExpression());
@@ -278,6 +296,7 @@ public class RuntimePropertyImplementor {
 		ojLiteral.addToAttributeValues(propertyDataTypeEnumField);
 
 		OJField propertyValidationsField = new OJField();
+		propertyValidationsField.setName("validations");
 		propertyValidationsField.setType(new OJPathName("java.util.ArrayList"));
 		StringBuilder sb1 = new StringBuilder();
 		for (Validation validation : validations) {
@@ -294,11 +313,13 @@ public class RuntimePropertyImplementor {
 		ojLiteral.addToAttributeValues(propertyValidationsField);
 
 		OJField propertyManyPrimitiveField = new OJField();
+		propertyManyPrimitiveField.setName("isMany");
 		propertyManyPrimitiveField.setType(new OJPathName("boolean"));
 		propertyManyPrimitiveField.setInitExp(Boolean.toString(isOnePrimitive && isMany));
 		ojLiteral.addToAttributeValues(propertyManyPrimitiveField);
 
 		OJField propertyOneEnumerationField = new OJField();
+		propertyOneEnumerationField.setName("oneEnumeration");
 		propertyOneEnumerationField.setType(new OJPathName("boolean"));
 		// A one primitive property is a isManyToOne. Seeing as the
 		// opposite end is null it defaults to many
@@ -306,81 +327,97 @@ public class RuntimePropertyImplementor {
 		ojLiteral.addToAttributeValues(propertyOneEnumerationField);
 
 		OJField propertyManyEnumerationField = new OJField();
+		propertyManyEnumerationField.setName("manyEnumeration");
 		propertyManyEnumerationField.setType(new OJPathName("boolean"));
 		propertyManyEnumerationField.setInitExp(Boolean.toString(isEnumeration && isMany));
 		ojLiteral.addToAttributeValues(propertyManyEnumerationField);
 
 		OJField propertyControllingSideField = new OJField();
+		propertyControllingSideField.setName("isControllingSide");
 		propertyControllingSideField.setType(new OJPathName("boolean"));
 		propertyControllingSideField.setInitExp(Boolean.toString(isControllingSide));
 		ojLiteral.addToAttributeValues(propertyControllingSideField);
 
 		OJField compositeLabelField = new OJField();
+		compositeLabelField.setName("isComposite");
 		compositeLabelField.setType(new OJPathName("boolean"));
 		compositeLabelField.setInitExp(Boolean.toString(isComposite));
 		ojLiteral.addToAttributeValues(compositeLabelField);
 
 		OJField inverseCompositeLabelField = new OJField();
+		inverseCompositeLabelField.setName("isInverseComposite");
 		inverseCompositeLabelField.setType(new OJPathName("boolean"));
 		inverseCompositeLabelField.setInitExp(Boolean.toString(isInverseComposite));
 		ojLiteral.addToAttributeValues(inverseCompositeLabelField);
 
 		OJField propertyLabelField = new OJField();
+		propertyLabelField.setName("label");
 		propertyLabelField.setType(new OJPathName("String"));
 		propertyLabelField.setInitExp("\"" + edgeName + "\"");
 		ojLiteral.addToAttributeValues(propertyLabelField);
 
 		OJField isOneToOneAttribute = new OJField();
+		isOneToOneAttribute.setName("isOneToOne");
 		isOneToOneAttribute.setType(new OJPathName("boolean"));
 		isOneToOneAttribute.setInitExp(Boolean.toString(isOneToOne));
 		ojLiteral.addToAttributeValues(isOneToOneAttribute);
 
 		OJField isOneToManyAttribute = new OJField();
+		isOneToManyAttribute.setName("isOneToMany");
 		isOneToManyAttribute.setType(new OJPathName("boolean"));
 		isOneToManyAttribute.setInitExp(Boolean.toString(isOneToMany));
 		ojLiteral.addToAttributeValues(isOneToManyAttribute);
 
 		OJField isManyToOneAttribute = new OJField();
+		isManyToOneAttribute.setName("isManyToOne");
 		isManyToOneAttribute.setType(new OJPathName("boolean"));
 		isManyToOneAttribute.setInitExp(Boolean.toString(isManyToOne));
 		ojLiteral.addToAttributeValues(isManyToOneAttribute);
 
 		OJField isManyToManyAttribute = new OJField();
+		isManyToManyAttribute.setName("isManyToMany");
 		isManyToManyAttribute.setType(new OJPathName("boolean"));
 		isManyToManyAttribute.setInitExp(Boolean.toString(isManyToMany));
 		ojLiteral.addToAttributeValues(isManyToManyAttribute);
 
 		OJField upperAttribute = new OJField();
+		upperAttribute.setName("upper");
 		upperAttribute.setType(new OJPathName("int"));
 		upperAttribute.setInitExp(Integer.toString(getUpper));
 		ojLiteral.addToAttributeValues(upperAttribute);
 
 		OJField lowerAttribute = new OJField();
+		lowerAttribute.setName("lower");
 		lowerAttribute.setType(new OJPathName("int"));
 		lowerAttribute.setInitExp(Integer.toString(getLower));
 		ojLiteral.addToAttributeValues(lowerAttribute);
 
 		OJField qualifiedAttribute = new OJField();
+		qualifiedAttribute.setName("isQualified");
 		qualifiedAttribute.setType(new OJPathName("boolean"));
 		qualifiedAttribute.setInitExp(Boolean.toString(isQualified));
 		ojLiteral.addToAttributeValues(qualifiedAttribute);
 
 		OJField inverseQualifiedAttribute = new OJField();
+		inverseQualifiedAttribute.setName("isInverseQualified");
 		inverseQualifiedAttribute.setType(new OJPathName("boolean"));
 		inverseQualifiedAttribute.setInitExp(Boolean.toString(isInverseQualified));
 		ojLiteral.addToAttributeValues(inverseQualifiedAttribute);
 
 		OJField orderedAttribute = new OJField();
+		orderedAttribute.setName("isOrdered");
 		orderedAttribute.setType(new OJPathName("boolean"));
 		orderedAttribute.setInitExp(Boolean.toString(isOrdered));
 		ojLiteral.addToAttributeValues(orderedAttribute);
 
 		OJField inverseOrderedAttribute = new OJField();
+		inverseOrderedAttribute.setName("isInverseOrdered");
 		inverseOrderedAttribute.setType(new OJPathName("boolean"));
 		inverseOrderedAttribute.setInitExp(Boolean.toString(isInverseOrdered));
 		ojLiteral.addToAttributeValues(inverseOrderedAttribute);
 
 		OJField uniqueAttribute = new OJField();
+		uniqueAttribute.setName("isUnique");
 		uniqueAttribute.setType(new OJPathName("boolean"));
 		uniqueAttribute.setInitExp(Boolean.toString(isUnique));
 		ojLiteral.addToAttributeValues(uniqueAttribute);
@@ -397,6 +434,11 @@ public class RuntimePropertyImplementor {
 		sb.append("\\\"onePrimitive\\\": ");
 		sb.append(propertyOnePrimitiveField.getInitExp());
 		sb.append(", ");
+
+		sb.append("\\\"readOnly\\\": ");
+		sb.append(readOnlyField.getInitExp());
+		sb.append(", ");
+
 		if (dataTypeEnum != null) {
 			sb.append("\\\"dataTypeEnum\\\": \\\"\" + ");
 			sb.append(propertyDataTypeEnumField.getInitExp());

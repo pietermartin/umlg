@@ -15,6 +15,10 @@
         function init() {
         }
 
+        function clear() {
+            tumlTabViewManagers = [];
+        }
+
         function refresh(tumlUri, result) {
             if (result instanceof Array) {
                 response = result[0];
@@ -55,7 +59,7 @@
             tumlTabViewManagers.splice(index, 1);
         }
 
-        function openQuery(tumlUri, oclExecuteUri, qualifiedName, tabDivName) {
+        function openQuery(tumlUri, oclExecuteUri, qualifiedName, tabDivName, queryEnum, queryString) {
             //Check is there is already a tab open for this query
             var tumlTabViewManagerQuery; 
             var tabIndex = 0;
@@ -70,7 +74,7 @@
                 $('#tab-container').tabs('add', {title: tabDivName, content: '<div id="'+tabDivName+'" />', closable: true});
                 var tumlTabViewManager = new Tuml.TumlTabViewManager({many: false, one: false, query: true}, tumlUri, qualifiedName, tabDivName);
                 tumlTabViewManagers.push(tumlTabViewManager);
-                tumlTabViewManager.createQuery(oclExecuteUri);
+                tumlTabViewManager.createQuery(oclExecuteUri, queryEnum, queryString);
             } else {
                 //Just make the tab active
                 $('#tab-container').tabs('select', tabIndex);

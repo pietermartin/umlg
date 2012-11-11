@@ -10,6 +10,7 @@ import org.eclipse.uml2.uml.Association;
 import org.eclipse.uml2.uml.BehavioredClassifier;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Classifier;
+import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.Generalization;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.InterfaceRealization;
@@ -399,6 +400,10 @@ public class TumlClassOperations extends ClassOperations {
 			}
 		}
 		return false;
+	}
+
+	public static boolean isEnumeration(Type owningType) {
+		return owningType instanceof Enumeration;
 	}
 
 

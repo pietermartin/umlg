@@ -84,6 +84,8 @@
         function constructInputForField(data, property) {
             if (property.name == 'id') {
                 return $('<input />', {disabled: 'disabled', type:'text', class: 'field', id: property.name + 'Id', name: property.name, value: data[property.name]});
+            } else if (property.readOnly) {
+                return $('<p />').text(data[property.name]);
             } else if (property.dataTypeEnum !== undefined) {
                 var $input;
                 if (property.dataTypeEnum == 'Date') {
@@ -156,34 +158,46 @@
             var adjustedUri = tumlLookupUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
             var jqxhr = $.getJSON(adjustedUri, function(response, b, c) {
                 var contextVertexId = tumlUri.match(/\d+/);
-                if (response.meta instanceof Array) {
                     //if not a required field add a black value
-                    if (!required) {
-                        $select.append($('<option />)').val("").html(""));
-                    }
-                    //append the current value to the dropdown
-                    $select.append($('<option />)').val(currentValue.id).html(currentValue.displayName));
-                    //Property is a many, meta has 2 properties, one for both sides of the association
-                    //The first one is the parent property, i.e. the context property for which the menu is built
-                    var options = [];
-                    $.each(response.data, function(index, obj) {
-                        var option = {};
-                        option['value'] = obj.id;
-                        option['desc'] = obj.name;
-                        options.push(option);
-                    });
-                    for each (var value in options){
-                        $select.append($('<option />)').val(value.value).html(value.desc));
-                    }
-                    $select.val(currentValue.id);
-                    $select.chosen({allow_single_deselect: true});
-                } else {
-                    //Property is a one
-                    alert('this should not happen');
+                if (!required) {
+                    $select.append($('<option />)').val("").html(""));
                 }
+                //append the current value to the dropdown
+                $select.append($('<option />)').val(currentValue.id).html(currentValue.displayName));
+                //Property is a many, meta has 2 properties, one for both sides of the association
+                //The first one is the parent property, i.e. the context property for which the menu is built
+                var options = [];
+                $.each(response.data, function(index, obj) {
+                    var option = {};
+                    option['value'] = obj.id;
+                    option['desc'] = obj.name;
+                    options.push(option);
+                });
+                for each (var value in options){
+                    $select.append($('<option />)').val(value.value).html(value.desc));
+                }
+                $select.val(currentValue.id);
+                $select.chosen({allow_single_deselect: true});
             }).fail(function(a, b, c) {
                 alert("error " + a + ' ' + b + ' ' + c);
             });
+        }
+
+        function findPropertyNavigatingTo(qualifiedName, metaDataNavigatingFrom) {
+            if (metaDataNavigatingFrom  == undefined) {
+                return null;
+            } else {
+                //The property one is navigating from is in the metaDataNavigatingFrom,
+                //Find the property with the qualifiedName for the metaDataNavigatingTo.qualifiedName
+                for (var i = 0; i < metaDataNavigatingFrom.properties.length; i++) {
+                    var property = metaDataNavigatingFrom.properties[i];
+                    if (property.qualifiedName == qualifiedName) {
+                        return property;
+                    }
+                }
+                alert('Property navigatingTo not found!!!');
+                return null;
+            }
         }
 
         function fieldsToJson() {
@@ -191,6 +205,8 @@
             $.each(metaForData.properties, function(index, property) {
                 if (property.name === 'id') {
                     dataToSend[property.name] = parseInt($('#' + property.name + 'Id').val());
+                } else if (property.readOnly) {
+                    //Do nothing
                 } else if (property.name !== 'uri') {
                     if (property.onePrimitive) {
                         if (property.fieldType == 'Integer' || property.fieldType == 'Long') {

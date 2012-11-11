@@ -40,11 +40,16 @@
         function updateContextHeading(name, id, url) {
             $('#contextHeading').remove();
             var contextHeadingDiv = $('<div />', {id: "contextHeading"}).appendTo('.ui-layout-north');
-            var b = $('<b data=' + url + ' class="contextHeadingB"/>').text(name + '[' + id + ']').appendTo(contextHeadingDiv);
-            b.click(function(e) {
-                var url = $(e.target).attr("data");
-                self.onClickContextMenu.notify({uri: url, name: "unused"}, null, self);
+            var b = $('<b data=' + url + ' class="contextHeadingB"/>').appendTo(contextHeadingDiv);
+            var a = $('<a />', {href: url, text: name + '[' + id + ']', title: name + '[' + id + ']', click :
+                function(e) {
+                    var url = $.data(e.target).data;
+                    self.onClickContextMenu.notify({uri: url, name: "unused"}, null, self);
+                    return false;
+                }
             });
+            a.data('data', url);
+            a.appendTo(b);
         }
 
         function createContextPath(data) {
@@ -54,15 +59,20 @@
             $.each(data, function(index, property) {
                 var b = {};
                 if (index === 0) {
-                    b = $('<b class="contextPath" data=' + property.uri + '/>').text(property.name).appendTo("#contextRoot");
+                    b = $('<b class="contextPath" data=' + property.uri + '/>').appendTo("#contextRoot");
                 } else {
                     $('#contextRoot').append(' | ');
-                    b = $('<b class="contextPath" data=' + property.uri + '/>').text(property.name).appendTo("#contextRoot");
+                    b = $('<b class="contextPath" data=' + property.uri + '/>').appendTo("#contextRoot");
                 }
-                b.click(function(e) {
-                    var url = $(e.target).attr("data");
-                    self.onClickContextMenu.notify({uri: url, name: "unused"}, null, self);
+                var a = $('<a />', {href: property.uri, text: property.name, title: property.name, click:
+                    function(e) {
+                        var url = $.data(e.target).data;
+                        self.onClickContextMenu.notify({uri: url, name: "unused"}, null, self);
+                        return false;
+                    }
                 });
+                a.data('data', property.uri);
+                a.appendTo(b);
             });
         }
 

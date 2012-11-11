@@ -1,5 +1,6 @@
 .slick-pager {
-  width: 100%;
+  /*width: 100%;*/
+  width: auto;
   height: 26px;
   border: 1px solid gray;
   border-top: 0;
