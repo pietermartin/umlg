@@ -174,85 +174,87 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 		List<Property> propertiesForToJson = new ArrayList<Property>(TumlClassOperations.getPrimitiveOrEnumOrComponentsProperties(clazz));
 		if (!propertiesForToJson.isEmpty()) {
 			for (Property property : propertiesForToJson) {
-				PropertyWrapper pWrap = new PropertyWrapper(property);
-				OJField field;
-				if (pWrap.isMany()) {
-					field = new OJField(pWrap.getName(), pWrap.javaTypePath());
-					field.setInitExp("new " + pWrap.javaTumlMemoryTypePath().getLast() + "((Collection<" + pWrap.javaBaseTypePath() + ">)propertyMap.get(\""
-							+ pWrap.getName() + "\"))");
-					annotatedClass.addToImports(pWrap.javaTumlMemoryTypePath());
-					annotatedClass.addToImports(new OJPathName("java.util.Collection"));
-				} else if (pWrap.isEnumeration()) {
-					field = new OJField(pWrap.getName(), pWrap.javaBaseTypePath());
-					field.setInitExp(pWrap.javaBaseTypePath().getLast() + ".fromJson((String)propertyMap.get(\"" + pWrap.getName() + "\"))");
-				} else {
-					if (pWrap.isNumber()) {
-						OJField fieldNumber = new OJField(pWrap.getName() + "AsNumber", new OJPathName("Number"));
-						fieldNumber.setInitExp("(" + new OJPathName("Number") + ")propertyMap.get(\"" + pWrap.getName() + "\")");
+				if (!property.isReadOnly()) {
+					PropertyWrapper pWrap = new PropertyWrapper(property);
+					OJField field;
+					if (pWrap.isMany()) {
+						field = new OJField(pWrap.getName(), pWrap.javaTypePath());
+						field.setInitExp("new " + pWrap.javaTumlMemoryTypePath().getLast() + "((Collection<" + pWrap.javaBaseTypePath()
+								+ ">)propertyMap.get(\"" + pWrap.getName() + "\"))");
+						annotatedClass.addToImports(pWrap.javaTumlMemoryTypePath());
+						annotatedClass.addToImports(new OJPathName("java.util.Collection"));
+					} else if (pWrap.isEnumeration()) {
 						field = new OJField(pWrap.getName(), pWrap.javaBaseTypePath());
-						if (pWrap.isInteger()) {
-							field.setInitExp(fieldNumber.getName() + " != null ? " + fieldNumber.getName() + ".intValue() : null");
-						} else if (pWrap.isLong()) {
-							field.setInitExp(fieldNumber.getName() + " != null ? " + fieldNumber.getName() + ".longValue() : null");
-						} else {
-							throw new RuntimeException("Not yet implemented!");
-						}
-						fromJson.getBody().addToLocals(fieldNumber);
-					} else if (!pWrap.isDataType()) {
-						// Primitives are data types
-						field = new OJField(pWrap.getName() + "Map", new OJPathName("Map<String, Number>"));
-						field.setInitExp("(Map<String, Number>)propertyMap.get(\"" + pWrap.getName() + "\")");
-						TinkerGenerationUtil.addSuppressWarning(fromJson);
-					} else if (pWrap.isDate()) {
-						field = new OJField(pWrap.getName(), DataTypeEnum.Date.getPathName());
-						field.setInitExp(TinkerGenerationUtil.tumlFormatter.getLast() + ".parseDate((String)propertyMap.get(\"" + pWrap.getName() + "\"))");
-						annotatedClass.addToImports(TinkerGenerationUtil.tumlFormatter);
-					} else if (pWrap.isDateTime()) {
-						field = new OJField(pWrap.getName(), DataTypeEnum.DateTime.getPathName());
-						field.setInitExp(TinkerGenerationUtil.tumlFormatter.getLast() + ".parseDateTime((String)propertyMap.get(\"" + pWrap.getName() + "\"))");
-						annotatedClass.addToImports(TinkerGenerationUtil.tumlFormatter);
-					} else if (pWrap.isTime()) {
-						field = new OJField(pWrap.getName(), DataTypeEnum.Time.getPathName());
-						field.setInitExp(TinkerGenerationUtil.tumlFormatter.getLast() + ".parseTime((String)propertyMap.get(\"" + pWrap.getName() + "\"))");
-						annotatedClass.addToImports(TinkerGenerationUtil.tumlFormatter);
-					} else if (pWrap.isImage()) {
-						field = new OJField(pWrap.getName(), DataTypeEnum.Image.getPathName());
-						field.setInitExp(TinkerGenerationUtil.tumlFormatter.getLast() + ".decode((String)propertyMap.get(\"" + pWrap.getName() + "\"))");
-						annotatedClass.addToImports(TinkerGenerationUtil.tumlFormatter);
+						field.setInitExp(pWrap.javaBaseTypePath().getLast() + ".fromJson((String)propertyMap.get(\"" + pWrap.getName() + "\"))");
 					} else {
-						field = new OJField(pWrap.getName(), pWrap.javaBaseTypePath());
-						field.setInitExp("(" + pWrap.javaBaseTypePath() + ")propertyMap.get(\"" + pWrap.getName() + "\")");
+						if (pWrap.isNumber()) {
+							OJField fieldNumber = new OJField(pWrap.getName() + "AsNumber", new OJPathName("Number"));
+							fieldNumber.setInitExp("(" + new OJPathName("Number") + ")propertyMap.get(\"" + pWrap.getName() + "\")");
+							field = new OJField(pWrap.getName(), pWrap.javaBaseTypePath());
+							if (pWrap.isInteger()) {
+								field.setInitExp(fieldNumber.getName() + " != null ? " + fieldNumber.getName() + ".intValue() : null");
+							} else if (pWrap.isLong()) {
+								field.setInitExp(fieldNumber.getName() + " != null ? " + fieldNumber.getName() + ".longValue() : null");
+							} else {
+								throw new RuntimeException("Not yet implemented!");
+							}
+							fromJson.getBody().addToLocals(fieldNumber);
+						} else if (!pWrap.isDataType()) {
+							// Primitives are data types
+							field = new OJField(pWrap.getName() + "Map", new OJPathName("Map<String, Number>"));
+							field.setInitExp("(Map<String, Number>)propertyMap.get(\"" + pWrap.getName() + "\")");
+							TinkerGenerationUtil.addSuppressWarning(fromJson);
+						} else if (pWrap.isDate()) {
+							field = new OJField(pWrap.getName(), DataTypeEnum.Date.getPathName());
+							field.setInitExp(TinkerGenerationUtil.tumlFormatter.getLast() + ".parseDate((String)propertyMap.get(\"" + pWrap.getName() + "\"))");
+							annotatedClass.addToImports(TinkerGenerationUtil.tumlFormatter);
+						} else if (pWrap.isDateTime()) {
+							field = new OJField(pWrap.getName(), DataTypeEnum.DateTime.getPathName());
+							field.setInitExp(TinkerGenerationUtil.tumlFormatter.getLast() + ".parseDateTime((String)propertyMap.get(\"" + pWrap.getName()
+									+ "\"))");
+							annotatedClass.addToImports(TinkerGenerationUtil.tumlFormatter);
+						} else if (pWrap.isTime()) {
+							field = new OJField(pWrap.getName(), DataTypeEnum.Time.getPathName());
+							field.setInitExp(TinkerGenerationUtil.tumlFormatter.getLast() + ".parseTime((String)propertyMap.get(\"" + pWrap.getName() + "\"))");
+							annotatedClass.addToImports(TinkerGenerationUtil.tumlFormatter);
+						} else if (pWrap.isImage()) {
+							field = new OJField(pWrap.getName(), DataTypeEnum.Image.getPathName());
+							field.setInitExp(TinkerGenerationUtil.tumlFormatter.getLast() + ".decode((String)propertyMap.get(\"" + pWrap.getName() + "\"))");
+							annotatedClass.addToImports(TinkerGenerationUtil.tumlFormatter);
+						} else {
+							field = new OJField(pWrap.getName(), pWrap.javaBaseTypePath());
+							field.setInitExp("(" + pWrap.javaBaseTypePath() + ")propertyMap.get(\"" + pWrap.getName() + "\")");
+						}
 					}
-				}
-				// fromJson.getBody().addToLocals(field);
-				// if (!pWrap.isEnumeration()) {
-				OJIfStatement ifInMap = new OJIfStatement("propertyMap.containsKey(\"" + pWrap.fieldname() + "\")");
-				fromJson.getBody().addToStatements(ifInMap);
-				ifInMap.getThenPart().addToLocals(field);
-				if (pWrap.isOne() && !pWrap.isDataType() && !pWrap.isEnumeration()) {
-					OJIfStatement ifSetToNull = new OJIfStatement(field.getName() + ".isEmpty() || " + field.getName() + ".get(\"id\") == null", pWrap.setter()
-							+ "(null)");
-					ifSetToNull.addToElsePart(pWrap.setter() + "((" + pWrap.javaBaseTypePath().getLast() + ")GraphDb.getDb().instantiateClassifier("
-							+ pWrap.fieldname() + "Map.get(\"id\").longValue()))");
-					annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
-					ifInMap.addToThenPart(ifSetToNull);
+					// fromJson.getBody().addToLocals(field);
+					// if (!pWrap.isEnumeration()) {
+					OJIfStatement ifInMap = new OJIfStatement("propertyMap.containsKey(\"" + pWrap.fieldname() + "\")");
 					fromJson.getBody().addToStatements(ifInMap);
-				} else if (pWrap.isOne() && pWrap.isDataType()) {
-					//Enumeration is a DataType
-					ifInMap.addToThenPart(pWrap.setter() + "(" + pWrap.fieldname() + ")");
-				} else {
-					// TODO that null is not going to work with anything
-					// other
-					// than
-					// a string
-					OJIfStatement ifSetToNull = new OJIfStatement(field.getName() + ".equals(\"null\")", pWrap.setter() + "(null)");
-					ifSetToNull.addToElsePart(pWrap.setter() + "(" + field.getName() + ")");
-					ifInMap.addToThenPart(ifSetToNull);
-					fromJson.getBody().addToStatements(ifInMap);
+					ifInMap.getThenPart().addToLocals(field);
+					if (pWrap.isOne() && !pWrap.isDataType() && !pWrap.isEnumeration()) {
+						OJIfStatement ifSetToNull = new OJIfStatement(field.getName() + ".isEmpty() || " + field.getName() + ".get(\"id\") == null",
+								pWrap.setter() + "(null)");
+						ifSetToNull.addToElsePart(pWrap.setter() + "((" + pWrap.javaBaseTypePath().getLast() + ")GraphDb.getDb().instantiateClassifier("
+								+ pWrap.fieldname() + "Map.get(\"id\").longValue()))");
+						annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
+						ifInMap.addToThenPart(ifSetToNull);
+						fromJson.getBody().addToStatements(ifInMap);
+					} else if (pWrap.isOne() && pWrap.isDataType()) {
+						// Enumeration is a DataType
+						ifInMap.addToThenPart(pWrap.setter() + "(" + pWrap.fieldname() + ")");
+					} else {
+						// TODO that null is not going to work with anything
+						// other
+						// than
+						// a string
+						OJIfStatement ifSetToNull = new OJIfStatement(field.getName() + ".equals(\"null\")", pWrap.setter() + "(null)");
+						ifSetToNull.addToElsePart(pWrap.setter() + "(" + field.getName() + ")");
+						ifInMap.addToThenPart(ifSetToNull);
+						fromJson.getBody().addToStatements(ifInMap);
+					}
+					// }
 				}
-				// }
 			}
-
 		}
 	}
 

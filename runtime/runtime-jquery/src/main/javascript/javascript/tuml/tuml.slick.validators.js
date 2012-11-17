@@ -15,6 +15,7 @@
                 "MinLength" : MinLengthValidator,
                 "Url" : UrlValidator,
                 "TumlNumber" : TumlNumberValidator,
+                "TumlManyNumber" : TumlManyNumberValidator,
                 "Range" : RangeValidator,
                 "Max" : MaxValidator,
                 "Min" : MinValidator,
@@ -25,7 +26,13 @@
     });
 
     function TumlStringValidator(property) {
-        this.validate = function(value) {
+        //Public api
+        $.extend(this, {
+            "TumlStringValidator": "1.0.0",
+            "validate": validate 
+        });
+        
+       function validate(value) {
             result = TumlSlick.Validators.Required(property, value);
             if (!result.valid){
                 return result;
@@ -62,8 +69,49 @@
             };
         }
     };
+
+    function TumlManyNumberValidator(property) {
+
+        //Public api
+        $.extend(this, {
+            "TumlManyNumberValidator": "1.0.0",
+            "validate": validate 
+        });
+
+        function validate(arrayValue, value) {
+            if (arrayValue instanceof Array) {
+                if (property.unique && value !== undefined) {
+                    for (var i = 0; i < arrayValue.length; i++) {
+                        var tmp = arrayValue[i];
+                        if (tmp == value) {
+                            return {
+                                valid: false,
+                                msg: 'The list must be unique, ' + value + ' is allready present.' 
+                            };
+                        }
+                    }
+                }
+                var result;
+                for (var i = 0; i < arrayValue.length; i++) {
+                    var tmp = arrayValue[i];
+                    result = new TumlSlick.Validators.TumlNumber(property).validate(tmp);
+                }
+                return result;
+            }
+            return {
+                valid: false,
+                msg: null
+            };
+        }
+    };
+
     function TumlNumberValidator(property) {
-        this.validate = function(value) {
+        //Public api
+        $.extend(this, {
+            "TumlNumberValidator": "1.0.0",
+            "validate": validate 
+        });
+        function validate(value) {
             result = TumlSlick.Validators.Required(property, value);
             if (!result.valid){
                 return result;
@@ -100,7 +148,7 @@
     };
 
     function NumberValidator(property, value) {
-        if (isNaN(parseInt(value, 10))) {
+        if (value === undefined || value === null || value === '' || isNaN(value)) {
             return {
                 valid: false,
                 msg: "Please enter a valid positive number"

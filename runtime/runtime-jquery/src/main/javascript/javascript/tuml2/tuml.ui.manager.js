@@ -117,10 +117,7 @@
 
         function refresh(tumlUri) {
             //Call the server for the tumlUri
-            var urlId = tumlUri.match(/\/\d+/);
-            if (urlId != null) {
-                urlId = urlId[0].match(/\d+/);
-            }
+            var urlId = retrieveVertexId(tumlUri);
             $.ajax({
                 url: tumlUri,
                 type: "GET",

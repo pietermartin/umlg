@@ -2,6 +2,7 @@ package org.nakeuml.tinker.embeddedtest;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.neo4j.graphdb.TransactionFailureException;
 import org.tuml.concretetest.God;
 import org.tuml.embeddedtest.REASON;
 import org.tuml.inheritencetest.Mamal;
@@ -149,6 +150,68 @@ public class TestEmbedded extends BaseLocalDbTest {
 		Assert.assertEquals(1, countEdges());
 		God g2 = new God(god.getVertex());
 		Assert.assertEquals(0, g2.getEmbeddedString().size());
+	}
+	
+	@Test(expected=TransactionFailureException.class)
+	public void testRequiredEmbeddedManyInteger() {
+		God g = new God(true);
+		g.setName("ANOTHERGOD");
+		org.tuml.embeddedtest.TestEmbedded testEmbedded = new org.tuml.embeddedtest.TestEmbedded(g);
+		db.stopTransaction(Conclusion.SUCCESS);
+		org.tuml.embeddedtest.TestEmbedded gt = new org.tuml.embeddedtest.TestEmbedded(testEmbedded.getVertex());
+		gt.setName("asd");
+		Assert.assertEquals(new Integer(1), gt.getManyOrderedRequiredInteger().iterator().next());
+		gt.clearManyOrderedRequiredInteger();
+		db.stopTransaction(Conclusion.SUCCESS);
+	}
+
+	@Test
+	public void testRequiredEmbeddedManyIntegerOrder() {
+		God g = new God(true);
+		g.setName("ANOTHERGOD");
+		org.tuml.embeddedtest.TestEmbedded testEmbedded = new org.tuml.embeddedtest.TestEmbedded(g);
+		testEmbedded.setName("asd");
+		db.stopTransaction(Conclusion.SUCCESS);
+		org.tuml.embeddedtest.TestEmbedded gt = new org.tuml.embeddedtest.TestEmbedded(testEmbedded.getVertex());
+		Assert.assertEquals(Integer.valueOf(1), gt.getManyOrderedRequiredInteger().get(0));
+		Assert.assertEquals(Integer.valueOf(2), gt.getManyOrderedRequiredInteger().get(1));
+		Assert.assertEquals(Integer.valueOf(3), gt.getManyOrderedRequiredInteger().get(2));
+		db.stopTransaction(Conclusion.SUCCESS);
+		gt.getManyOrderedRequiredInteger().add(2, 4);
+		db.stopTransaction(Conclusion.SUCCESS);
+		Assert.assertEquals(4, gt.getManyOrderedRequiredInteger().size());
+		Assert.assertEquals(Integer.valueOf(1), gt.getManyOrderedRequiredInteger().get(0));
+		Assert.assertEquals(Integer.valueOf(2), gt.getManyOrderedRequiredInteger().get(1));
+		Assert.assertEquals(Integer.valueOf(4), gt.getManyOrderedRequiredInteger().get(2));
+		Assert.assertEquals(Integer.valueOf(3), gt.getManyOrderedRequiredInteger().get(3));
+	}
+
+	@Test
+	public void testRequiredOrederedEmbeddedManyString() {
+		God g = new God(true);
+		g.setName("ANOTHERGOD");
+		org.tuml.embeddedtest.TestEmbedded testEmbedded = new org.tuml.embeddedtest.TestEmbedded(g);
+		testEmbedded.setName("asd");
+		db.stopTransaction(Conclusion.SUCCESS);
+		org.tuml.embeddedtest.TestEmbedded gt = new org.tuml.embeddedtest.TestEmbedded(testEmbedded.getVertex());
+		Assert.assertEquals("a", gt.getManyRequiredOrderedUniqueString().get(0));
+		Assert.assertEquals("b", gt.getManyRequiredOrderedUniqueString().get(1));
+		Assert.assertEquals("c", gt.getManyRequiredOrderedUniqueString().get(2));
+		db.stopTransaction(Conclusion.SUCCESS);
+		gt.getManyRequiredOrderedUniqueString().add(2, "d");
+		db.stopTransaction(Conclusion.SUCCESS);
+		Assert.assertEquals("a", gt.getManyRequiredOrderedUniqueString().get(0));
+		Assert.assertEquals("b", gt.getManyRequiredOrderedUniqueString().get(1));
+		Assert.assertEquals("d", gt.getManyRequiredOrderedUniqueString().get(2));
+		Assert.assertEquals("c", gt.getManyRequiredOrderedUniqueString().get(3));
+		
+		gt.addToManyRequiredOrderedUniqueString("a");
+		db.stopTransaction(Conclusion.SUCCESS);
+		Assert.assertEquals(4, gt.getManyRequiredOrderedUniqueString().size());
+		Assert.assertEquals("a", gt.getManyRequiredOrderedUniqueString().get(0));
+		Assert.assertEquals("b", gt.getManyRequiredOrderedUniqueString().get(1));
+		Assert.assertEquals("d", gt.getManyRequiredOrderedUniqueString().get(2));
+		Assert.assertEquals("c", gt.getManyRequiredOrderedUniqueString().get(3));
 	}
 	
 }

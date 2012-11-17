@@ -286,6 +286,10 @@
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_tUglggZUEeK9oIwdQfC0-w"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_tUglgQZUEeK9oIwdQfC0-w" value="*"/>
             </ownedAttribute>
+            <ownedAttribute xmi:id="_1BOpsDAOEeK9AeutZ8kzPA" name="testEmbedded" type="_lYrngDAOEeK9AeutZ8kzPA" aggregation="composite" association="_1BP30DAOEeK9AeutZ8kzPA">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_1BOpsTAOEeK9AeutZ8kzPA"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_1BOpsjAOEeK9AeutZ8kzPA" value="*"/>
+            </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Class" xmi:id="_FTxxYOzqEeCemKc79Sc_aw" name="Universe">
             <generalization xmi:id="_LJ6HkCXIEeKbPYSfIbmXag">
@@ -390,7 +394,7 @@
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_4rxeEjRxEeG7DpOu3iq2YQ" value="1"/>
             </ownedEnd>
             <ownedEnd xmi:id="_4rxeFDRxEeG7DpOu3iq2YQ" name="demon" visibility="public" type="_rQp8wDRxEeG7DpOu3iq2YQ" association="_4rxeEDRxEeG7DpOu3iq2YQ">
-              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_4rxeFjRxEeG7DpOu3iq2YQ" value="1"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_4rxeFjRxEeG7DpOu3iq2YQ"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_4rxeFTRxEeG7DpOu3iq2YQ" value="*"/>
             </ownedEnd>
           </packagedElement>
@@ -398,6 +402,12 @@
             <ownedEnd xmi:id="_tUglhAZUEeK9oIwdQfC0-w" name="god" type="_YuD8sOwiEeCSwqyeEHd1tw" association="_tUglgwZUEeK9oIwdQfC0-w">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_tUglhgZUEeK9oIwdQfC0-w" value="1"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_tUglhQZUEeK9oIwdQfC0-w" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_1BP30DAOEeK9AeutZ8kzPA" name="god_testEmbedded_1" memberEnd="_1BP30TAOEeK9AeutZ8kzPA _1BOpsDAOEeK9AeutZ8kzPA">
+            <ownedEnd xmi:id="_1BP30TAOEeK9AeutZ8kzPA" name="god" type="_YuD8sOwiEeCSwqyeEHd1tw" association="_1BP30DAOEeK9AeutZ8kzPA">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_1BP30jAOEeK9AeutZ8kzPA" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_1BP30zAOEeK9AeutZ8kzPA" value="1"/>
             </ownedEnd>
           </packagedElement>
         </packagedElement>
@@ -444,6 +454,31 @@
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Z6331u7EEeCKZsw1ityolg"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Z6331e7EEeCKZsw1ityolg" value="*"/>
             </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_lYrngDAOEeK9AeutZ8kzPA" name="TestEmbedded">
+            <ownedAttribute xmi:id="_3kc0YDAOEeK9AeutZ8kzPA" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_31h9UDAOEeK9AeutZ8kzPA" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_31ikYDAOEeK9AeutZ8kzPA" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:id="_6lx3YDAOEeK9AeutZ8kzPA" name="manyOrderedRequiredInteger" visibility="public" isOrdered="true" isUnique="false">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_61UvQDAOEeK9AeutZ8kzPA" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_61WkcDAOEeK9AeutZ8kzPA" value="*"/>
+              <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_EZd_ADAPEeK9AeutZ8kzPA" name="manyRequiredOrderedIntegerDefaultValue">
+                <language>OCL</language>
+                <body>Sequence{1,2,3}</body>
+              </defaultValue>
+            </ownedAttribute>
+            <ownedAttribute xmi:id="_NGYZ4DAREeK9AeutZ8kzPA" name="manyRequiredOrderedUniqueString" isOrdered="true">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_TmLu4DAREeK9AeutZ8kzPA" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_TmM9ADAREeK9AeutZ8kzPA" value="*"/>
+              <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_cGj0gDAREeK9AeutZ8kzPA" name="manyRequiredOrederedUniqueDefaultValue">
+                <language>OCL</language>
+                <body>OrderedSet{'a', 'b', 'c'}</body>
+              </defaultValue>
+            </ownedAttribute>
           </packagedElement>
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_-S1C4O91EeC2XrXxx1atfA" name="hierarchytest">

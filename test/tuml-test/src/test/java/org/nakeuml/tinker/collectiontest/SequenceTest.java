@@ -11,7 +11,10 @@ import org.tuml.collectiontest.Hand;
 import org.tuml.concretetest.God;
 import org.tuml.qualifiertest.Many1;
 import org.tuml.qualifiertest.Many2;
+import org.tuml.runtime.collection.memory.TumlMemorySequence;
 import org.tuml.runtime.test.BaseLocalDbTest;
+
+import scala.actors.threadpool.Arrays;
 
 import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 
@@ -41,6 +44,42 @@ public class SequenceTest extends BaseLocalDbTest {
 		godTest.getHand().get(2).getName().equals("hand3");
 		godTest.getHand().get(1).getName().equals("hand2");
 		godTest.getHand().get(0).getName().equals("hand1");
+	}
+	
+	@Test
+	public void testControllingSide() {
+		db.startTransaction();
+		God god = new God(true);
+		god.setName("THEGOD");
+		Hand hand = new Hand(true);
+		hand.setLeft(true);
+		hand.setName("hand1");
+		Hand hand2 = new Hand(true);
+		hand2.setLeft(true);
+		hand2.setName("hand2");
+		Hand hand3 = new Hand(true);
+		hand3.setLeft(true);
+		hand3.setName("hand3");
+		Hand hand4 = new Hand(true);
+		hand4.setLeft(true);
+		hand4.setName("hand4");
+		god.setHand(new TumlMemorySequence<Hand>(Arrays.asList(new Hand[]{hand, hand2, hand3, hand4})));
+		db.stopTransaction(Conclusion.SUCCESS);
+
+		Hand hand5 = new Hand(true);
+		hand5.setLeft(true);
+		hand5.setName("hand5");
+		Hand hand6 = new Hand(true);
+		hand6.setLeft(true);
+		hand6.setName("hand6");
+
+		god.setHand(new TumlMemorySequence<Hand>(Arrays.asList(new Hand[]{hand5, hand6})));
+		db.stopTransaction(Conclusion.SUCCESS);
+		God gTest = new God(god.getVertex());
+		gTest.getHand().get(1);
+		Hand testHand = new Hand(hand2.getVertex());
+		Assert.assertNull(testHand.getGod());
+		
 	}
 	
 	@Test

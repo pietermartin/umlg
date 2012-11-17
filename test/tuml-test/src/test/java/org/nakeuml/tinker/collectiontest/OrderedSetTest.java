@@ -1,10 +1,14 @@
 package org.nakeuml.tinker.collectiontest;
 
+import java.util.Arrays;
+
 import junit.framework.Assert;
 
 import org.junit.Test;
 import org.tuml.collectiontest.World;
 import org.tuml.concretetest.God;
+import org.tuml.embeddedtest.TestEmbedded;
+import org.tuml.runtime.collection.memory.TumlMemorySequence;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
 import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
@@ -57,6 +61,30 @@ public class OrderedSetTest extends BaseLocalDbTest {
 		Assert.assertEquals("world5", godTest3.getWorld().get(2).getName());
 		Assert.assertEquals("world3", godTest3.getWorld().get(3).getName());
 		Assert.assertEquals("world4", godTest3.getWorld().get(4).getName());
+	}
+	
+	@Test
+	public void testChangeOrderOnEmbedded() {
+		God g = new God(true);
+		g.setName("GOD");
+		TestEmbedded embedded = new TestEmbedded(g);
+		embedded.setName("asd");
+		embedded.addToManyOrderedRequiredInteger(9);
+		embedded.addToManyOrderedRequiredInteger(8);
+		embedded.addToManyOrderedRequiredInteger(7);
+		db.stopTransaction(Conclusion.SUCCESS);
+		TestEmbedded test = new TestEmbedded(embedded.getVertex());
+		
+		//3 are created by initial value
+		Assert.assertEquals(6, test.getManyOrderedRequiredInteger().size());
+		
+		test.setManyOrderedRequiredInteger(new TumlMemorySequence<Integer>(Arrays.asList(3,2,1)));
+		Assert.assertEquals(3, test.getManyOrderedRequiredInteger().size());
+
+		Assert.assertEquals(Integer.valueOf(3), test.getManyOrderedRequiredInteger().get(0));
+		Assert.assertEquals(Integer.valueOf(2), test.getManyOrderedRequiredInteger().get(1));
+		Assert.assertEquals(Integer.valueOf(1), test.getManyOrderedRequiredInteger().get(2));
+
 	}
 	
 	

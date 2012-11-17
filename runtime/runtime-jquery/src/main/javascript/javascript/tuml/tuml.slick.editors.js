@@ -12,8 +12,10 @@
                 "Editors": {
                     "Integer": IntegerEditor,
                     "Text": TextEditor,
-                    "SelectCellEditor": SelectCellEditor,
+                    "SelectOneToOneCellEditor": SelectOneToOneCellEditor,
+                    "SelectManyToOneCellEditor": SelectManyToOneCellEditor,
                     "SelectEnumerationCellEditor": SelectEnumerationCellEditor,
+                    "ManyPrimitiveEditor": ManyPrimitiveEditor,
                     "Checkbox": CheckboxEditor,
                     "Date": DateEditor,
                     "DateTime": DateTimeEditor,
@@ -22,139 +24,283 @@
             }}
     });
 
-  function TextEditor(args) {
-    var $input;
-    var defaultValue;
-    var scope = this;
+    function TextEditor(args) {
+        var $input;
+        var defaultValue;
+        var scope = this;
 
-    this.init = function () {
-      $input = $("<INPUT type=text class='editor-text' />")
-          .appendTo(args.container)
-          .bind("keydown.nav", function (e) {
-            if (e.keyCode === $.ui.keyCode.LEFT || e.keyCode === $.ui.keyCode.RIGHT) {
-              e.stopImmediatePropagation();
-            }
-          })
-          .focus()
-          .select();
-    };
+        this.init = function () {
+            $input = $("<INPUT type=text class='editor-text' />")
+            .appendTo(args.container)
+            .bind("keydown.nav", function (e) {
+                if (e.keyCode === $.ui.keyCode.LEFT || e.keyCode === $.ui.keyCode.RIGHT) {
+                    e.stopImmediatePropagation();
+                }
+            })
+            .focus()
+            .select();
+        };
 
-    this.destroy = function () {
-      $input.remove();
-    };
+        this.destroy = function () {
+            $input.remove();
+        };
 
-    this.focus = function () {
-      $input.focus();
-    };
+        this.focus = function () {
+            $input.focus();
+        };
 
-    this.getValue = function () {
-      return $input.val();
-    };
-
-    this.setValue = function (val) {
-      $input.val(val);
-    };
-
-    this.loadValue = function (item) {
-      defaultValue = item[args.column.field] || null;
-      $input.val(defaultValue);
-      $input[0].defaultValue = defaultValue;
-      $input.select();
-    };
-
-    this.serializeValue = function () {
-        if ($input.val() == '') {
-            return null;
-        } else {
+        this.getValue = function () {
             return $input.val();
+        };
+
+        this.setValue = function (val) {
+            $input.val(val);
+        };
+
+        this.loadValue = function (item) {
+            defaultValue = item[args.column.field] || null;
+            $input.val(defaultValue);
+            $input[0].defaultValue = defaultValue;
+            $input.select();
+        };
+
+        this.serializeValue = function () {
+            if ($input.val() == '') {
+                return null;
+            } else {
+                return $input.val();
+            }
+        };
+
+        this.applyValue = function (item, state) {
+            item[args.column.field] = state;
+        };
+
+        this.isValueChanged = function () {
+            return ($input.val() != defaultValue);
+        };
+
+        this.validate = function () {
+            if (args.column.validator) {
+                var validationResults = args.column.validator($input.val());
+                if (!validationResults.valid) {
+                    return validationResults;
+                }
+            }
+
+            return {
+                valid: true,
+                msg: null
+            };
+        };
+
+        this.init();
+    }
+
+    function ManyPrimitiveEditor(args) {
+        var $input;
+        var $div;
+        var $table;
+        var defaultValue;
+        var scope = this;
+
+        //Public api
+        $.extend(this, {
+            "TumlManyPrimitiveEditor": "1.0.0",
+            "serializeValue": serializeValue 
+        });
+
+        this.init = function () {
+            $div = $("<div class='many-primitive-editor' />");
+            var button = $('<button />').text('Add').click(function() {
+                var valueToAdd = $('.many-primitive-editor-input').val();
+                var currentValues = serializeValue();
+                var testArray = [];
+                testArray.push(valueToAdd);
+                var validationResults = args.column.validator(testArray);
+                if (currentValues.length !== 0 && validationResults.valid && args.column.options.unique) {
+                    validationResults = args.column.validator(currentValues, valueToAdd);
+                }
+                if (!validationResults.valid) {
+                    alert(validationResults.msg);
+                } else {
+                    addLi(valueToAdd);
+                }
+            }).appendTo($div);
+            $input = $('<input type=text class="many-primitive-editor-input">').appendTo($div);
+            var resultDiv = $('<div class="many-primitive-editor-result" />').appendTo($div);
+            $table = $('<table class="many-primitive-editor-result-table" />').appendTo(resultDiv);
+            var selectButtonDiv = $('<div class="many-primitive-editor-select-div"/>').appendTo($div);
+            selectButtonDiv.append($('<button class="many-primitive-editor-select"/>').click(function () {
+                args.grid.getEditorLock().commitCurrentEdit();
+            }).text('Select'));
+            selectButtonDiv.append($('<button class="many-prmitive-editor-cancel"/>').click(function() {
+                args.grid.getEditorLock().cancelCurrentEdit();
+            }).text('Cancel'));
+
+            $div.bind("keydown.nav", function (e) {
+                if (e.keyCode === $.ui.keyCode.LEFT || e.keyCode === $.ui.keyCode.RIGHT) {
+                    e.stopImmediatePropagation();
+                }
+            });
+
+            $div.appendTo(args.container);
+            $input.focus().select();
+        };
+
+        this.destroy = function () {
+            $div.remove();
+        };
+
+        this.focus = function () {
+            $input.focus();
+        };
+
+        this.loadValue = function (item) {
+            defaultValue = item[args.column.field];
+            if (defaultValue !== undefined && defaultValue !== null) {
+                for (var i = 0; i < defaultValue.length; i++) {
+                    addLi(defaultValue[i]);
+                }
+                if (args.column.options.ordered) {
+                    $table.tableDnD();
+                }
+            }
+        };
+
+        function addLi(value) {
+            var row = $('<tr />').addClass('many-primitive-editor-row');
+            var rowValue = $('<td class="many-primitive-editor-cell" />').text(value);
+            row.append(rowValue);
+            row.data('value', value);
+            var img = $('<img class="tuml-many-select-img" src="/restAndJson/javascript/images/delete.png">').click(function() {
+               var liClicked =  $(this).parent().parent();
+               liClicked.remove();
+            });
+            var imgValue = $('<td class="many-primitive-editor-cell many-primitive-editor-cell-img" />');
+            imgValue.append(img);
+            row.append(imgValue);
+            $table.append(row);
         }
-    };
 
-    this.applyValue = function (item, state) {
-      item[args.column.field] = state;
-    };
+        function serializeValue() {
+            var rowArray = $table.find('.many-primitive-editor-row');
+            var arrayToSerialize = [];
+            for (var i = 0; i < rowArray.length; i++) {
+                var row = rowArray[i];
+                arrayToSerialize.push(parseInt($(row).data('value'), 10));
+            }
+            return arrayToSerialize;
+        };
+        this.applyValue = function (item, state) {
+            item[args.column.field] = state;
+        };
 
-    this.isValueChanged = function () {
-      return ($input.val() != defaultValue);
-    };
+        this.isValueChanged = function () {
+            var rowArray = $table.find('.many-primitive-editor-row');
+            var arrayToSerialize = [];
+            for (var i = 0; i < rowArray.length; i++) {
+                var row = rowArray[i];
+                arrayToSerialize.push($(row).data('value'));
+            }
+            var result = false;
+            if (defaultValue !== undefined && defaultValue !== null && defaultValue.length == arrayToSerialize.length) {
+                for (var i = 0; i < arrayToSerialize.length; i++) {
+                    if (defaultValue[i] != arrayToSerialize[i]) {
+                        result = true;
+                        break;
+                    }
+                }
+            } else {
+                result = true;
+            }
+            return result;
+        };
 
-    this.validate = function () {
-      if (args.column.validator) {
-        var validationResults = args.column.validator($input.val());
-        if (!validationResults.valid) {
-          return validationResults;
-        }
-      }
+        this.validate = function () {
+            if (args.column.validator) {
+                var rowArray = $table.find('.many-primitive-editor-row');
+                if (rowArray.length > 0) {
+                    var arrayToSerialize = [];
+                    for (var i = 0; i < rowArray.length; i++) {
+                        var row = rowArray[i];
+                        arrayToSerialize.push($(row).data('value'));
+                    }
+                    var validationResults = args.column.validator(arrayToSerialize);
+                    if (!validationResults.valid) {
+                        return validationResults;
+                    }
+                }
+            }
 
-      return {
-        valid: true,
-        msg: null
-      };
-    };
+            return {
+                valid: true,
+                msg: null
+            };
+        };
+        this.init();
+    }
 
-    this.init();
-  }
+    function IntegerEditor(args) {
+        var $input;
+        var defaultValue;
+        var scope = this;
 
-  function IntegerEditor(args) {
-    var $input;
-    var defaultValue;
-    var scope = this;
+        this.init = function () {
+            $input = $("<INPUT type=text class='editor-text' />");
 
-    this.init = function () {
-      $input = $("<INPUT type=text class='editor-text' />");
+            $input.bind("keydown.nav", function (e) {
+                if (e.keyCode === $.ui.keyCode.LEFT || e.keyCode === $.ui.keyCode.RIGHT) {
+                    e.stopImmediatePropagation();
+                }
+            });
 
-      $input.bind("keydown.nav", function (e) {
-        if (e.keyCode === $.ui.keyCode.LEFT || e.keyCode === $.ui.keyCode.RIGHT) {
-          e.stopImmediatePropagation();
-        }
-      });
+            $input.appendTo(args.container);
+            $input.focus().select();
+        };
 
-      $input.appendTo(args.container);
-      $input.focus().select();
-    };
+        this.destroy = function () {
+            $input.remove();
+        };
 
-    this.destroy = function () {
-      $input.remove();
-    };
+        this.focus = function () {
+            $input.focus();
+        };
 
-    this.focus = function () {
-      $input.focus();
-    };
+        this.loadValue = function (item) {
+            defaultValue = item[args.column.field];
+            $input.val(defaultValue);
+            $input[0].defaultValue = defaultValue;
+            $input.select();
+        };
 
-    this.loadValue = function (item) {
-      defaultValue = item[args.column.field];
-      $input.val(defaultValue);
-      $input[0].defaultValue = defaultValue;
-      $input.select();
-    };
+        this.serializeValue = function () {
+            return parseInt($input.val(), 10) || 0;
+        };
 
-    this.serializeValue = function () {
-      return parseInt($input.val(), 10) || 0;
-    };
+        this.applyValue = function (item, state) {
+            item[args.column.field] = state;
+        };
 
-    this.applyValue = function (item, state) {
-      item[args.column.field] = state;
-    };
+        this.isValueChanged = function () {
+            return (!($input.val() == "" && defaultValue == null)) && ($input.val() != defaultValue);
+        };
 
-    this.isValueChanged = function () {
-      return (!($input.val() == "" && defaultValue == null)) && ($input.val() != defaultValue);
-    };
+        this.validate = function () {
+            if (args.column.validator) {
+                var validationResults = args.column.validator($input.val());
+                if (!validationResults.valid) {
+                    return validationResults;
+                }
+            }
 
-    this.validate = function () {
-      if (args.column.validator) {
-        var validationResults = args.column.validator($input.val());
-        if (!validationResults.valid) {
-          return validationResults;
-        }
-      }
-
-      return {
-        valid: true,
-        msg: null
-      };
-    };
-    this.init();
-  }
+            return {
+                valid: true,
+                msg: null
+            };
+        };
+        this.init();
+    }
     function DateEditor(args) {
         var $input;
         var defaultValue;
@@ -581,7 +727,7 @@
         this.init(args.item);
     }
 
-    function SelectCellEditor(args) {
+    function SelectOneToOneCellEditor(args) {
         var $select;
         var currentValue;
         var scope = this;
@@ -653,6 +799,113 @@
                     }
                 });
             });
+        };
+
+        function removeByValue(compositeLookup, toRemove) {
+            for(var i=0; i<compositeLookup.length; i++) {
+                if(compositeLookup[i].id == toRemove.id) {
+                    compositeLookup.splice(i, 1);
+                    break;
+                }
+            }
+        }
+        this.isValueChanged = function() {
+            if (currentValue === null || currentValue === undefined) {
+                return true;
+            } else {
+                return ($select.val() != currentValue.id);
+            }
+        };
+
+
+        this.validate = function () {
+            if (args.column.validator) {
+                var validationResults = args.column.validator($select.val());
+                if (!validationResults.valid) {
+                    return validationResults;
+                }
+            }
+
+            return {
+                valid: true,
+                msg: null
+            };
+        };
+        this.init(args.item);
+    }
+
+    function SelectManyToOneCellEditor(args) {
+        var $select;
+        var currentValue;
+        var scope = this;
+        var options;
+
+        this.init = function(item) {
+            $select = $("<SELECT tabIndex='0' class='editor-select' style='width:115px;'></SELECT>");
+            $select.appendTo(args.container);
+
+            args.column.options.rowLookupMap.getOrLoadMap(item['id'], function(compositeParentVertexId){
+                args.column.options.compositeParentLookupMap.getOrLoadMap(compositeParentVertexId, item['id'], function(compositeParentMap) {
+                    if (!args.column.options.required) {
+                        $select.append($('<option />)').val("").html(""));
+                    }
+                    $.each(compositeParentMap[compositeParentVertexId], function(index, obj) {
+                        $select.append($('<option />)').val(obj.id).html(obj.displayName));
+                    });
+                    //currentValue is the vertex id of the oneToOne or manyToOne
+                    currentValue = item[args.column.field];
+                    //append the current value to the dropdown
+                    if (currentValue !== undefined && currentValue !== null) {
+                        $select.append($('<option selected="selected"/>)').val(currentValue.id).html(currentValue.displayName));
+                    }
+                    if (!args.column.options.required) {
+                        $select.chosen({allow_single_deselect: true});
+                    } else {
+                        $select.chosen();
+                    }
+                    $select.focus();
+                });
+            });
+
+        };
+
+        this.destroy = function() {
+            $select.remove();
+        };
+
+        this.focus = function() {
+            $select.focus();
+        };
+
+        this.loadValue = function(item) {
+        };
+
+        this.serializeValue = function() {
+            if(args.column.options){
+                var options = $select.children();
+                for (var i = 0; i < options.length; i++) {
+                    if (options[i].selected) {
+                        return {id: parseInt($select.val()), displayName: options[i].label};
+                        break;
+                    }
+                }
+            }else{
+                return ($select.val() == "yes");
+            }
+        };
+
+        this.applyValue = function(item,state) {
+            var previousValue = item[args.column.field];
+            item[args.column.field] = state;
+            //remove state from the map and add the previousValue
+            //args.column.options.rowLookupMap.getOrLoadMap(item['id'], function(compositeParentVertexId){
+            //args.column.options.compositeParentLookupMap.getOrLoadMap(compositeParentVertexId, item['id'], function(compositeParentMap) {
+            //removeByValue(compositeParentMap[compositeParentVertexId], state);
+            //if (previousValue !== undefined && previousValue !== null) {
+            //compositeParentMap[compositeParentVertexId].push(previousValue);
+            //}
+            //});
+            //});
         };
 
         function removeByValue(compositeLookup, toRemove) {

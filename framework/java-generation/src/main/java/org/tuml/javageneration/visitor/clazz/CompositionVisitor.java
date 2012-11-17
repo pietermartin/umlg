@@ -51,7 +51,7 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
 
 			PropertyWrapper pWrap = new PropertyWrapper(TumlClassOperations.getOtherEndToComposite(clazz));
 			constructor.getBody().addToStatements(pWrap.adder() + "(compositeOwner)");
-			constructor.getBody().addToStatements("TransactionThreadEntityVar.setNewEntity(this)");
+			constructor.getBody().addToStatements(TinkerGenerationUtil.transactionThreadEntityVar.getLast() + ".setNewEntity(this)");
 			constructor.getBody().addToStatements("defaultCreate()");
 			annotatedClass.addToImports(TinkerGenerationUtil.transactionThreadEntityVar);
 		} else {

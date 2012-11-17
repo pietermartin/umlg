@@ -7,11 +7,14 @@ import org.apache.lucene.search.NumericRangeQuery;
 import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.index.lucene.QueryContext;
 import org.neo4j.index.lucene.ValueContext;
+import org.neo4j.kernel.ha.HaSettings;
 import org.tuml.runtime.adaptor.NakedTinkerIndex;
 
 import com.tinkerpop.blueprints.CloseableIterable;
+import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Element;
 import com.tinkerpop.blueprints.Index;
+import com.tinkerpop.blueprints.impls.neo4j.Neo4jEdge;
 
 public class NakedNeo4jIndex<T extends Element, S extends PropertyContainer> implements NakedTinkerIndex<T> {
 	private Index<T> index;
@@ -69,12 +72,36 @@ public class NakedNeo4jIndex<T extends Element, S extends PropertyContainer> imp
 
 	public T getEdgeToLastElementInSequence() {
 		CloseableIterable<T> iter = this.index.query("index", QueryContext.numericRange("index", 0F, null).sortNumeric("index", true));
-		Iterator<T> iterator = iter.iterator();
-		if (iterator.hasNext()) {
-			return iterator.next();
-		} else {
-			return null;
+		for (T t : iter) {
+			if (!hasEdgeBeenDeleted(t)) {
+				return t;
+			}
 		}
+		return null;
+//		if (iterator.hasNext()) {
+//			return iterator.next();
+//		} else {
+//			return null;
+//		}
+	}
+
+	private boolean hasEdgeBeenDeleted(T edge) {
+		try {
+			edge.getProperty("asd");
+			return false;
+		} catch (Exception e) {
+			return true;
+		}
+		// The way below requires a transaction to have been started.
+
+//		Neo4jEdge neo4jEdge = (Neo4jEdge) edge;
+//		EmbeddedGraphDatabase g = (EmbeddedGraphDatabase) this.neo4jGraph.getRawGraph();
+//		for (Relationship r : g.getNodeManager().getTransactionData().deletedRelationships()) {
+//			if (neo4jEdge.getRawEdge().equals(r)) {
+//				return true;
+//			}
+//		}
+//		return false;
 	}
 
 	@Override

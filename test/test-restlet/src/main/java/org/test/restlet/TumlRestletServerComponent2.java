@@ -106,7 +106,12 @@ public class TumlRestletServerComponent2 extends Component {
 				for (int k = 0; k < 5; k++) {
 					Finger finger = new Finger(hand);
 					finger.setName("finger" + k);
-
+					finger.addToManyInteger(1);
+					finger.addToManyInteger(2);
+					finger.addToManyInteger(3);
+					
+					finger.addToManyRequiredInteger(6);
+					
 					Ring ring = new Ring(human);
 					ring.setName("ring" + i + j + k);
 					finger.setRing(ring);

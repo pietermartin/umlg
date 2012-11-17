@@ -78,6 +78,25 @@
             <ownedAttribute xmi:id="_D5Ya8N4kEeGdB9TPHp60mw" name="name" visibility="public">
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
             </ownedAttribute>
+            <ownedAttribute xmi:id="_SZkQMCzvEeK9AeutZ8kzPA" name="manyInteger">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_VgGjUCzvEeK9AeutZ8kzPA"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_VgHKYCzvEeK9AeutZ8kzPA" value="*"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:id="_qYeeUC3JEeK9AeutZ8kzPA" name="manyRequiredInteger">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_smLE8C3JEeK9AeutZ8kzPA" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_smLsAC3JEeK9AeutZ8kzPA" value="*"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:id="_kluJQC_9EeK9AeutZ8kzPA" name="manyRequiredOrderedInteger" isOrdered="true">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_sv8_wC_9EeK9AeutZ8kzPA" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_sv9m0C_9EeK9AeutZ8kzPA" value="*"/>
+              <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_vn8IcDAcEeK9AeutZ8kzPA" name="manyRequiredOrderedIntegerDefaultValue">
+                <language>OCL</language>
+                <body>OrderedSet{1,2,3}</body>
+              </defaultValue>
+            </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Class" xmi:id="_47QggN4jEeGdB9TPHp60mw" name="Ring">
             <generalization xmi:id="_NBKjICXTEeKbPYSfIbmXag">

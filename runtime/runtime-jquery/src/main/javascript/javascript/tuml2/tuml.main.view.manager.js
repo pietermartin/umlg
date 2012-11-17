@@ -34,7 +34,7 @@
                 if (args.data[0].meta.to.qualifiedName === 'tumllib::org::tuml::query::Query') {
                     var metaDataNavigatingTo = args.data[0].meta.to;
                     var metaDataNavigatingFrom = args.data[0].meta.from;
-                    var contextVertexId = args.tumlUri.match(/\d+/);
+                    var contextVertexId = retrieveVertexId(args.tumlUri);
                     leftMenuManager.refresh(metaDataNavigatingFrom, metaDataNavigatingTo, contextVertexId);
                 }
             });
@@ -97,7 +97,7 @@
                 //Property is a many
                 isOne = false;
                 recreateTabContainer();
-                var contextVertexId = tumlUri.match(/\d+/);
+                var contextVertexId = retrieveVertexId(tumlUri);
                 leftMenuManager.refresh(metaDataNavigatingFrom, metaDataNavigatingTo, contextVertexId);
                 tumlManyViewManager.refresh(tumlUri, result, propertyNavigatingTo);
                 tumlOneViewManager.clear();

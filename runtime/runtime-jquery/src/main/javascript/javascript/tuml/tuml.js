@@ -7,7 +7,7 @@ function change_my_url(title, url) {
 
 function refreshPageTo(tumlUri, tabId) {
 
-    var contextVertexId = tumlUri.match(/\d+/);
+    var contextVertexId = retrieveVertexId(tumlUri);
     var jqxhr = $.getJSON(tumlUri, function(result, b, c) {
         var classNameLowerCased;
         var menuArray = [];

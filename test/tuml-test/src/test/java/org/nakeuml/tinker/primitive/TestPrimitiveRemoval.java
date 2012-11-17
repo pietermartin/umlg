@@ -11,20 +11,6 @@ import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 public class TestPrimitiveRemoval extends BaseLocalDbTest {
 	
 	@Test
-	public void testCreatedOnRemoval() {
-		db.startTransaction();
-		God g = new God(true);
-		g.setName("G");
-		db.stopTransaction(Conclusion.SUCCESS);
-		Assert.assertNotNull(g.getCreatedOn());
-		db.startTransaction();
-		g.setCreatedOn(null);
-		db.stopTransaction(Conclusion.SUCCESS);
-		God gTest = new God(g.getVertex());
-		Assert.assertNull(gTest.getCreatedOn());
-	}
-
-	@Test
 	public void testNameRemoval() {
 		db.startTransaction();
 		God g = new God(true);

@@ -164,14 +164,14 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 			}
 
 			if (isOrdered() || isInverseOrdered()) {
-				// Can only qualify TinkerNode's
-				if (!(e instanceof TumlNode)) {
-					throw new IllegalStateException("Primitive properties can not be qualified!");
-				}
 				if (isOrdered()) {
-					addOrderToIndex(edge, (TumlNode) e);
+					addOrderToIndex(edge);
 				}
 				if (isInverseOrdered()) {
+					// Can only qualify TinkerNode's
+					if (!(e instanceof TumlNode)) {
+						throw new IllegalStateException("Primitive properties can not be qualified!");
+					}
 					addOrderToInverseIndex(edge, (TumlNode) e);
 				}
 			}
@@ -528,7 +528,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 		}
 	}
 
-	protected void addOrderToIndex(Edge edge, TumlNode node) {
+	protected void addOrderToIndex(Edge edge) {
 		// The element is always added to the end of the list
 		if (!isOrdered()) {
 			throw new IllegalStateException("addOrderToIndex can only be called where the association end is ordered");

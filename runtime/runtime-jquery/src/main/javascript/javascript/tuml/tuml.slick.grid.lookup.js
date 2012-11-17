@@ -1,3 +1,4 @@
+//This map stores to composite parent of the 2 entities in an association for each row
 function RowLookupMap(contextVertexId, uriToCompositeParent, uriToCompositeParentOnCompositeParent) {
     var rowLookupMap = {};
     this.getOrLoadMap = function(rowVertexId, callBack) {

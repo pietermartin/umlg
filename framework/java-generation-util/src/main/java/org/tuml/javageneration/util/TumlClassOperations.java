@@ -79,8 +79,7 @@ public class TumlClassOperations extends ClassOperations {
 		Set<Property> result = new HashSet<Property>();
 		for (Property p : getAllOwnedProperties(clazz)) {
 			PropertyWrapper pWrap = new PropertyWrapper(p);
-			if ((pWrap.isOne() && !pWrap.isDerived() && !pWrap.isQualifier())
-					|| (!pWrap.isDerived() && pWrap.isOneToMany() && (pWrap.isPrimitive() || pWrap.isEnumeration()))) {
+			if (!pWrap.isDerived() && ((pWrap.isOne() && !pWrap.isQualifier()) || (pWrap.isManyToMany() && (pWrap.isPrimitive() || pWrap.isEnumeration())))) {
 				// Exclude the composite parent
 				if (!(pWrap.getOtherEnd() != null && pWrap.getOtherEnd().isComposite())) {
 					result.add(p);
@@ -192,7 +191,7 @@ public class TumlClassOperations extends ClassOperations {
 	public static Set<Association> getAllAssociations(Classifier classifier) {
 		Set<Association> result = new HashSet<Association>();
 		if (classifier instanceof Class) {
-			for (Interface implementedInterface : ((Class)classifier).getAllImplementedInterfaces()) {
+			for (Interface implementedInterface : ((Class) classifier).getAllImplementedInterfaces()) {
 				result.addAll(implementedInterface.getAssociations());
 			}
 		}
@@ -405,6 +404,5 @@ public class TumlClassOperations extends ClassOperations {
 	public static boolean isEnumeration(Type owningType) {
 		return owningType instanceof Enumeration;
 	}
-
 
 }

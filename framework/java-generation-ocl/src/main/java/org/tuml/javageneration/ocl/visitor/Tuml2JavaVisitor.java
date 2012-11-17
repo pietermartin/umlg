@@ -34,6 +34,8 @@ import org.eclipse.ocl.expressions.Variable;
 import org.eclipse.ocl.expressions.VariableExp;
 import org.eclipse.ocl.types.CollectionType;
 import org.eclipse.ocl.types.VoidType;
+import org.eclipse.ocl.uml.impl.CollectionTypeImpl;
+import org.eclipse.ocl.uml.impl.SetTypeImpl;
 import org.eclipse.ocl.util.TypeUtil;
 import org.eclipse.ocl.utilities.AbstractVisitor;
 import org.eclipse.ocl.utilities.ExpressionInOCL;
@@ -58,6 +60,7 @@ import org.tuml.javageneration.ocl.visitor.tojava.OclTupleLiteralPartToJava;
 import org.tuml.javageneration.ocl.visitor.tojava.OclVariableExpToJava;
 import org.tuml.javageneration.util.PropertyWrapper;
 import org.tuml.javageneration.util.TinkerGenerationUtil;
+import org.tuml.javageneration.util.TumlClassOperations;
 import org.tuml.javageneration.util.TumlCollectionKindEnum;
 
 public class Tuml2JavaVisitor extends
@@ -281,7 +284,7 @@ public class Tuml2JavaVisitor extends
 
 	@Override
 	public String visitTypeExp(TypeExp<Classifier> t) {
-//		return getQualifiedName(t.getReferredType());
+		// return getQualifiedName(t.getReferredType());
 		return getName(t.getReferredType());
 	}
 
@@ -400,7 +403,8 @@ public class Tuml2JavaVisitor extends
 	 * @return the string representation
 	 */
 	@Override
-	protected String handleIterateExp(IterateExp<Classifier, Parameter> callExp, String sourceResult, List<String> variableResults, String resultResult, String bodyResult) {
+	protected String handleIterateExp(IterateExp<Classifier, Parameter> callExp, String sourceResult, List<String> variableResults, String resultResult,
+			String bodyResult) {
 		this.ojClass.addToImports(TinkerGenerationUtil.tumlMemoryCollectionLib);
 		this.ojClass.addToImports(TinkerGenerationUtil.tumlOclStdCollectionLib);
 		this.ojClass.addToImports("java.util.*");
@@ -431,13 +435,27 @@ public class Tuml2JavaVisitor extends
 	 */
 	@Override
 	protected String handleCollectionLiteralExp(CollectionLiteralExp<Classifier> cl, List<String> partResults) {
-		if (!partResults.isEmpty()) {
-			throw new RuntimeException("not implemented");
-		}
+		StringBuilder sb = new StringBuilder();
+		CollectionTypeImpl c = (CollectionTypeImpl)cl.getType();
+		Classifier elementType = c.getElementType();
 		OJPathName o = TumlCollectionKindEnum.from(cl.getKind()).getMemoryCollection();
+		if (!(elementType instanceof org.eclipse.ocl.uml.VoidType)) {
+			OJPathName collectionGenericPath = TumlClassOperations.getPathName(elementType);
+			o.addToGenerics(collectionGenericPath);
+		}
+		sb.append("new " + o.getLast() + "(Arrays.asList(");
+		int count = 1;
+		for (String value : partResults) {
+			sb.append(value);
+			if (partResults.size() != count++) {
+				sb.append(", ");
+			}
+		}
+		sb.append("))");
 		this.ojClass.addToImports(o);
-		//Can not add a generic parameter here as the information is not available in the collection literal
-		return "new " + o.getLast() + "()";
+		// Can not add a generic parameter here as the information is not
+		// available in the collection literal
+		return sb.toString();
 	}
 
 	@Override
@@ -460,7 +478,7 @@ public class Tuml2JavaVisitor extends
 	@Override
 	protected String handleTupleLiteralExp(TupleLiteralExp<Classifier, Property> literalExp, List<String> partResults) {
 		return new OclTupleLiteralExpToJava().setOJClass(this.ojClass).handleTupleLiteralExp(literalExp, partResults);
-		
+
 	}
 
 	@Override
@@ -469,7 +487,8 @@ public class Tuml2JavaVisitor extends
 	}
 
 	@Override
-	protected String handleMessageExp(MessageExp<Classifier, CallOperationAction, SendSignalAction> messageExp, String targetResult, List<String> argumentResults) {
+	protected String handleMessageExp(MessageExp<Classifier, CallOperationAction, SendSignalAction> messageExp, String targetResult,
+			List<String> argumentResults) {
 		StringBuilder result = new StringBuilder();
 
 		result.append(targetResult);

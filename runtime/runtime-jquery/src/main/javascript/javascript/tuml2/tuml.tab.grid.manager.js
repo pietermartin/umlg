@@ -48,15 +48,10 @@
             var lookupColumns;
             //var contextVertexId = tumlUri.match(/\d+/);
             var contextVertexId;
-            var urlId = tumlUri.match(/\/\d+/);
-            if (urlId != null) {
-                contextVertexId = urlId[0].match(/\d+/);
-            } else {
-                contextVertexId = urlId;
-            }
+            contextVertexId = retrieveVertexId(tumlUri); 
 
             $.each(localMetaForData.properties, function(index, property) {
-                if (!property.inverseComposite && (property.oneToOne || property.manyToOne)) {
+                if (!property.inverseComposite && ((property.oneToOne || property.manyToOne) || property.manyPrimitive)) {
                     //Place the id column first
                     if (property.name == "id") {
                         columns.splice(0,0,{
@@ -75,7 +70,7 @@
                             editor: selectEditor(property),
                             formatter: selectFormatter(property),
                             validator: selectFieldValidator(property),
-                            options: {required: property.lower > 0, tumlLookupUri: property.tumlLookupUri,rowEnumerationLookupMap: new RowEnumerationLookupMap(property.qualifiedName, "/restAndJson/tumlEnumLookup"),  rowLookupMap: new RowLookupMap(contextVertexId, property.tumlCompositeParentLookupUri, property.tumlCompositeParentLookupUriOnCompositeParent), compositeParentLookupMap: new CompositeParentLookupMap(contextVertexId, property.tumlLookupUri, property.tumlLookupUriOnCompositeParent)},
+                            options: {required: property.lower > 0, tumlLookupUri: property.tumlLookupUri,rowEnumerationLookupMap: new RowEnumerationLookupMap(property.qualifiedName, "/restAndJson/tumlEnumLookup"),  rowLookupMap: new RowLookupMap(contextVertexId, property.tumlCompositeParentLookupUri, property.tumlCompositeParentLookupUriOnCompositeParent), compositeParentLookupMap: new CompositeParentLookupMap(contextVertexId, property.tumlLookupUri, property.tumlLookupOnCompositeParentUri), ordered: property.ordered, unique: property.unique},
                             width: 120
                         });
                     }
@@ -137,7 +132,8 @@
                                 var tabContainer = $('#tab-container');
                                 var lookupMeta = lookupResult.meta.to;
                                 var tabDiv = $('<div />', {id: lookupMeta.name, title: lookupMeta.name}).appendTo(tabContainer);
-                                var myGridDiv = $('<div id="myGridLookup' + lookupMeta.name + '" style="width:auto;height:90%;"></div>').appendTo(tabDiv);
+                                var selectHeader = $('<div id="myGridLookupHeader" class="selectheader" />').append($('<p />').text('Select the values to add.')).appendTo(tabDiv);
+                                var myGridDiv = $('<div id="myGridLookup' + lookupMeta.name + '" style="width:auto;height:84%;"></div>').appendTo(tabDiv);
                                 var pagerDiv = $('<div id="pagerLookup' + lookupMeta.name + '" style="width:auto;height:20px;"></div>').appendTo(tabDiv);
                                 removeElementsAlreadyInGrid(dataView.getNewItems(), lookupResult.data);
                                 createGrid(lookupResult.data, lookupMeta, adjustedUri, true);
@@ -234,6 +230,7 @@
                             mainGrid.invalidateRows([data.length - 1]);
                             mainGrid.updateRowCount();
                             mainGrid.render();
+                            $('#myGridLookupHeader').remove();
                             $('#myGridLookup' + metaForData.name).remove();
                             $('#pagerLookup' + metaForData.name).remove();
                             $('#myGrid' + localMetaForData.name).show();
@@ -244,6 +241,7 @@
 
                 var $cancelButton = $('<button />').text('Cancel').click(function() {
                     if (grid.getEditorLock().commitCurrentEdit()) {
+                        $('#myGridLookupHeader').remove();
                         $('#myGridLookup' + metaForData.name).remove();
                         $('#pagerLookup' + metaForData.name).remove();
                         $('#myGrid' + localMetaForData.name).show();
@@ -581,8 +579,12 @@
             }
         } else if (property.oneEnumeration) {
             return  Tuml.Slick.Editors.SelectEnumerationCellEditor; 
-        } else if (!property.onePrimitive && !property.manyPrimitive && !property.composite) {
-            return  Tuml.Slick.Editors.SelectCellEditor; 
+        } else if (property.manyPrimitive) {
+            return  Tuml.Slick.Editors.ManyPrimitiveEditor; 
+        } else if (!property.onePrimitive && !property.manyPrimitive && !property.composite && property.oneToOne) {
+            return  Tuml.Slick.Editors.SelectOneToOneCellEditor; 
+        } else if (!property.onePrimitive && !property.manyPrimitive && !property.composite && property.manyToOne) {
+            return  Tuml.Slick.Editors.SelectManyToOneCellEditor; 
         } else if (property.name == 'id') {
             return null;
         } else if (property.fieldType == 'String') {
@@ -616,13 +618,19 @@
             }
         } else if (!property.onePrimitive && !property.manyPrimitive && !property.composite) {
         } else if (property.name == 'id') {
-        } else if (property.fieldType == 'String') {
+        } else if (!property.manyPrimitive && property.fieldType == 'String') {
             return new TumlSlick.Validators.TumlString(property).validate;
-        } else if (property.fieldType == 'Integer') {
+        } else if (property.manyPrimitive && property.fieldType == 'String') {
+            return new TumlSlick.Validators.TumlManyString(property).validate;
+        } else if (!property.manyPrimitive && property.fieldType == 'Integer') {
             return new TumlSlick.Validators.TumlNumber(property).validate;
-        } else if (property.fieldType == 'Long') {
+        } else if (property.manyPrimitive && property.fieldType == 'Integer') {
+            return new TumlSlick.Validators.TumlManyNumber(property).validate;
+        } else if (!property.manyPrimitive && property.fieldType == 'Long') {
             return new TumlSlick.Validators.TumlNumber(property).validate;
-        } else if (property.fieldType == 'Boolean') {
+        } else if (property.manyPrimitive && property.fieldType == 'Long') {
+            return new TumlSlick.Validators.TumlManyNumber(property).validate;
+        } else if (!property.manyPrimitive && property.fieldType == 'Boolean') {
         } else {
         }
         return function() {

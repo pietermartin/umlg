@@ -23,10 +23,10 @@
             var ul = $('<ul />')
             ul.appendTo($("#formDiv"));
             $.each(metaForData.properties, function(index, property) {
-                if (!property.inverseComposite && (property.oneToOne || property.manyToOne) && property.name !== 'uri') {
+                if (!property.inverseComposite && ((property.oneToOne || property.manyToOne) || property.manyPrimitive) && property.name !== 'uri') {
                     var li = $('<li>')
                     li.appendTo(ul);
-                    $('<label />', {for: property.name + 'Id'}).text(property.name).appendTo(li);
+                    $('<label />', {for: property.name + 'Id'}).text(property.name + ' :').appendTo(li);
                     var $input = constructInputForField(data, property, li);
                     $input.appendTo(li);
                     if ($input !== undefined) {
@@ -58,6 +58,8 @@
                 }
             });
 
+            var $buttonDiv = $('<div class="onesavebuttondiv" />').appendTo('#formDiv');
+
             var $saveButton = $('<button />').text('Save').click(function() {
                 $.ajax({
                     url: tumlUri,
@@ -73,11 +75,11 @@
                     }
                 });
                 return false ;
-            }).appendTo('#formDiv');
+            }).appendTo($buttonDiv);
 
             var $cancelButton = $('<button />').text('Cancel').click(function() {
                 refreshPageTo(tumlUri);
-            }).appendTo('#formDiv');
+            }).appendTo($buttonDiv);
 
         }
 
@@ -120,7 +122,19 @@
                 appendLoopupOptionsToSelect(property.tumlLookupUri, property.lower > 0, data['id'], data[property.name], select);
                 return select;
             } else if (property.fieldType == 'String') {
-                return $('<input />', {type:'text', class: 'field', id: property.name + 'Id', name: property.name, value: data[property.name]});
+                var stringInput = $('<input />', {type:'text', class: 'field', id: property.name + 'Id', name: property.name, value: data[property.name]});
+                stringInput.blur(function() {
+                    var validateInput = $('#' + property.name + 'Id');
+                    var validationResult = new TumlSlick.Validators.TumlString(property).validate(validateInput.val());
+                    if (!validationResult.valid) {
+                        validateInput.addClass('validation-error');
+                        validateInput.parent().append($('<span class="validation-error-msg" />').text(validationResult.msg));
+                    } else {
+                        validateInput.removeClass('validation-error');
+                    }
+                });
+                return stringInput;
+
             } else if (property.fieldType == 'Integer') {
                 return $('<input />', {type:'text', class: 'field', id: property.name + 'Id', name: property.name, value: data[property.name]});
             } else if (property.fieldType == 'Long') {
@@ -157,7 +171,7 @@
         function appendLoopupOptionsToSelect(tumlLookupUri, required, contextVertexId, currentValue, $select) {
             var adjustedUri = tumlLookupUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
             var jqxhr = $.getJSON(adjustedUri, function(response, b, c) {
-                var contextVertexId = tumlUri.match(/\d+/);
+                var contextVertexId = retrieveVertexId(tumlUri);
                     //if not a required field add a black value
                 if (!required) {
                     $select.append($('<option />)').val("").html(""));
@@ -231,6 +245,10 @@
                                 break;
                             }
                         }
+                    } else if (property.manyPrimitive) {
+                        var inputValue = $('#' + property.name + 'Id').val();
+                        var array = inputValue.split(',');
+                        dataToSend[property.name] = array;
                     } else if (!property.onePrimitive && !property.manyPrimitive && !property.inverseComposite) {
                         var $select = $('#' + property.name + 'Id');
                         var options = $select.children();

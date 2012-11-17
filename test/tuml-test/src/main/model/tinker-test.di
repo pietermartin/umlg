@@ -66,9 +66,6 @@
           <emfPageIdentifier href="tinker-test.notation#_1chrQgAOEeKpVr_ntT6cLA"/>
         </children>
         <children>
-          <emfPageIdentifier href="tinker-test.notation#_1chrRAAOEeKpVr_ntT6cLA"/>
-        </children>
-        <children>
           <emfPageIdentifier href="tinker-test.notation#_1chrRgAOEeKpVr_ntT6cLA"/>
         </children>
         <children>
@@ -81,13 +78,13 @@
           <emfPageIdentifier href="tinker-test.notation#_1chrTAAOEeKpVr_ntT6cLA"/>
         </children>
         <children>
-          <emfPageIdentifier href="tinker-test.notation#_1chrTgAOEeKpVr_ntT6cLA"/>
-        </children>
-        <children>
           <emfPageIdentifier href="tinker-test.notation#_1chrUAAOEeKpVr_ntT6cLA"/>
         </children>
         <children>
           <emfPageIdentifier href="tinker-test.notation#_1chrVAAOEeKpVr_ntT6cLA"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="tinker-test.notation#_1chrRAAOEeKpVr_ntT6cLA"/>
         </children>
       </children>
     </windows>

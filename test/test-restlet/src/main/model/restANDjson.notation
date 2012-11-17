@@ -140,11 +140,23 @@
         <children xmi:type="notation:DecorationNode" xmi:id="_q7gjlAAOEeKpVr_ntT6cLA" type="3006">
           <element xmi:type="uml:Property" href="restANDjson.uml#_D5Ya8N4kEeGdB9TPHp60mw"/>
         </children>
+        <children xmi:type="notation:Shape" xmi:id="_SZpIsCzvEeK9AeutZ8kzPA" type="3012" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:Property" href="restANDjson.uml#_SZkQMCzvEeK9AeutZ8kzPA"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_SZpIsSzvEeK9AeutZ8kzPA"/>
+        </children>
+        <children xmi:type="notation:Shape" xmi:id="_qYhhoC3JEeK9AeutZ8kzPA" type="3012" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:Property" href="restANDjson.uml#_qYeeUC3JEeK9AeutZ8kzPA"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_qYhhoS3JEeK9AeutZ8kzPA"/>
+        </children>
+        <children xmi:type="notation:Shape" xmi:id="_klwlgC_9EeK9AeutZ8kzPA" type="3012" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:Property" href="restANDjson.uml#_kluJQC_9EeK9AeutZ8kzPA"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_klwlgS_9EeK9AeutZ8kzPA"/>
+        </children>
       </children>
       <children xmi:type="notation:BasicCompartment" xmi:id="_q6eBwwAOEeKpVr_ntT6cLA" type="7019"/>
       <children xmi:type="notation:DecorationNode" xmi:id="_q8kTgAAOEeKpVr_ntT6cLA" type="5029"/>
       <element xmi:type="uml:Class" href="restANDjson.uml#_4sr5AN4jEeGdB9TPHp60mw"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_q6eBxAAOEeKpVr_ntT6cLA" x="596" y="568" width="160"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_q6eBxAAOEeKpVr_ntT6cLA" x="564" y="576" width="261"/>
     </children>
     <children xmi:type="notation:Shape" xmi:id="_q6t5YAAOEeKpVr_ntT6cLA" type="2008" fontName="Sans" fontHeight="10" bold="true" fillColor="16770760" lineColor="0">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_q8nW0AAOEeKpVr_ntT6cLA" source="QualifiedName">
@@ -472,7 +484,7 @@
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_q8NuMgAOEeKpVr_ntT6cLA" source="CustomAppearance_Annotation">
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_q8NuMwAOEeKpVr_ntT6cLA" key="CustomAppearance_MaskValue" value="46"/>
         </eAnnotations>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_q8NuMAAOEeKpVr_ntT6cLA" x="10" y="10"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_q8NuMAAOEeKpVr_ntT6cLA" x="-23" y="16"/>
       </children>
       <element xmi:type="uml:Association" href="restANDjson.uml#_-uo0YN4jEeGdB9TPHp60mw"/>
       <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_q8Kq4AAOEeKpVr_ntT6cLA" points="[100, 11, -340, -41]$[360, 42, -80, -10]"/>

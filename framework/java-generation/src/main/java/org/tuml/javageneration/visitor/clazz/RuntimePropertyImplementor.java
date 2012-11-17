@@ -212,7 +212,7 @@ public class RuntimePropertyImplementor {
 			PropertyWrapper pWrap = new PropertyWrapper(p);
 			if (!(pWrap.isDerived() || pWrap.isDerivedUnion())) {
 				addEnumLiteral(ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, pWrap.fieldname(), pWrap.getQualifiedName(),
-						pWrap.getInverseQualifiedName(), pWrap.isReadOnly(), pWrap.isPrimitive() && pWrap.isOne(), pWrap.getDataTypeEnum(), pWrap.getValidations(),
+						pWrap.getInverseQualifiedName(), pWrap.isReadOnly(), pWrap.isPrimitive(), pWrap.getDataTypeEnum(), pWrap.getValidations(),
 						pWrap.isEnumeration(), pWrap.isManyToOne(), pWrap.isMany(), pWrap.isControllingSide(), pWrap.isComposite(), pWrap.isInverseComposite(),
 						pWrap.isOneToOne(), pWrap.isOneToMany(), pWrap.isManyToMany(), pWrap.getUpper(), pWrap.getLower(), pWrap.isQualified(),
 						pWrap.isInverseQualified(), pWrap.isOrdered(), pWrap.isInverseOrdered(), pWrap.isUnique(),
@@ -238,7 +238,7 @@ public class RuntimePropertyImplementor {
 	 * Very important, the order of adding the attribut values to the literal must be the same as the order the fields were created ass that is the order of the constructor
 	 */
 	public static OJEnumLiteral addEnumLiteral(OJEnum ojEnum, OJAnnotatedOperation fromLabel, OJAnnotatedOperation fromQualifiedName,
-			OJAnnotatedOperation fromInverseQualifiedName, String fieldName, String qualifiedName, String inverseQualifiedName, boolean isReadOnly, boolean isOnePrimitive,
+			OJAnnotatedOperation fromInverseQualifiedName, String fieldName, String qualifiedName, String inverseQualifiedName, boolean isReadOnly, boolean isPrimitive,
 			DataTypeEnum dataTypeEnum, List<Validation> validations, boolean isEnumeration, boolean isManyToOne, boolean isMany, boolean isControllingSide,
 			boolean isComposite, boolean isInverseComposite, boolean isOneToOne, boolean isOneToMany, boolean isManyToMany, int getUpper, int getLower,
 			boolean isQualified, boolean isInverseQualified, boolean isOrdered, boolean isInverseOrdered, boolean isUnique, String edgeName) {
@@ -276,7 +276,7 @@ public class RuntimePropertyImplementor {
 		propertyOnePrimitiveField.setType(new OJPathName("boolean"));
 		// A one primitive property is a isManyToOne. Seeing as the
 		// opposite end is null it defaults to many
-		propertyOnePrimitiveField.setInitExp(Boolean.toString(isOnePrimitive));
+		propertyOnePrimitiveField.setInitExp(Boolean.toString(isPrimitive && isManyToOne));
 		ojLiteral.addToAttributeValues(propertyOnePrimitiveField);
 
 		OJField readOnlyField = new OJField();
@@ -313,9 +313,9 @@ public class RuntimePropertyImplementor {
 		ojLiteral.addToAttributeValues(propertyValidationsField);
 
 		OJField propertyManyPrimitiveField = new OJField();
-		propertyManyPrimitiveField.setName("isMany");
+		propertyManyPrimitiveField.setName("isManyPrimitive");
 		propertyManyPrimitiveField.setType(new OJPathName("boolean"));
-		propertyManyPrimitiveField.setInitExp(Boolean.toString(isOnePrimitive && isMany));
+		propertyManyPrimitiveField.setInitExp(Boolean.toString(isPrimitive && isManyToMany));
 		ojLiteral.addToAttributeValues(propertyManyPrimitiveField);
 
 		OJField propertyOneEnumerationField = new OJField();
@@ -329,7 +329,7 @@ public class RuntimePropertyImplementor {
 		OJField propertyManyEnumerationField = new OJField();
 		propertyManyEnumerationField.setName("manyEnumeration");
 		propertyManyEnumerationField.setType(new OJPathName("boolean"));
-		propertyManyEnumerationField.setInitExp(Boolean.toString(isEnumeration && isMany));
+		propertyManyEnumerationField.setInitExp(Boolean.toString(isEnumeration && isManyToMany));
 		ojLiteral.addToAttributeValues(propertyManyEnumerationField);
 
 		OJField propertyControllingSideField = new OJField();
@@ -509,6 +509,9 @@ public class RuntimePropertyImplementor {
 		sb.append(", ");
 		sb.append("\\\"inverseQualified\\\": ");
 		sb.append(inverseQualifiedAttribute.getInitExp());
+		sb.append(", ");
+		sb.append("\\\"ordered\\\": ");
+		sb.append(orderedAttribute.getInitExp());
 		sb.append(", ");
 		sb.append("\\\"inverseOrdered\\\": ");
 		sb.append(orderedAttribute.getInitExp());

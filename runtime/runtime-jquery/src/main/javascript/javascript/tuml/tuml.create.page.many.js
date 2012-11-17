@@ -11,7 +11,7 @@ function createGrid(data, metaForData, tumlUri) {
 
     $.each(metaForData.properties, function(index, property) {
         if (!property.inverseComposite && (property.oneToOne || property.manyToOne)) {
-            var contextVertexId = tumlUri.match(/\d+/);
+            var contextVertexId = retieveVertexId(tumlUri);
             //Place the id column first
             if (property.name == "id") {
                 columns.splice(0,0,{

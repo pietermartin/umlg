@@ -32,7 +32,12 @@ public class ClassRequiredPropertyValidationBuilder extends BaseVisitor implemen
 		for (Property p : TumlClassOperations.getAllOwnedProperties(clazz)) {
 			PropertyWrapper pWrap = new PropertyWrapper(p);
 			if (!pWrap.isDerived() &&  pWrap.getLower() > 0) {
-				OJIfStatement ifNotNull = new OJIfStatement(pWrap.getter() + "() == null");
+				OJIfStatement ifNotNull;
+				if (pWrap.isMany()) {
+					ifNotNull = new OJIfStatement(pWrap.getter() + "().isEmpty()");
+				} else {
+					ifNotNull = new OJIfStatement(pWrap.getter() + "() == null");
+				}
 				ifNotNull.addToThenPart("result.add(new " + TinkerGenerationUtil.TumlConstraintViolation.getLast() + "(\"required\", \"" + pWrap.getQualifiedName() + "\", \"field is required\"))");
 				validateRequiredProperties.getBody().addToStatements(ifNotNull);
 			}

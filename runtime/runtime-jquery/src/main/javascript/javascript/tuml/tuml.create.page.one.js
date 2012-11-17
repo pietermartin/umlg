@@ -115,7 +115,7 @@ function createPageForOne(data, metaForData, tumlUri, qualifiedName) {
     function appendLoopupOptionsToSelect(tumlLookupUri, required, contextVertexId, currentValue, $select) {
         var adjustedUri = tumlLookupUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
         var jqxhr = $.getJSON(adjustedUri, function(response, b, c) {
-            var contextVertexId = tumlUri.match(/\d+/);
+            var contextVertexId = retrieveVertexId(tumlUri);
             if (response.meta instanceof Array) {
                 //if not a required field add a black value
                 if (!required) {

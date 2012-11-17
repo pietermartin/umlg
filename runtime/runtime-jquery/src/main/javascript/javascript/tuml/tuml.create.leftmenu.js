@@ -15,6 +15,6 @@ function createLeftMenu(menuArray, contextVertexId) {
                 refreshPageTo(adjustedUri);
                 return false;
             }
-        })));
+        }));
     });
 }

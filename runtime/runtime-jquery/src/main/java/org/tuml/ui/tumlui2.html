@@ -13,9 +13,117 @@
         <link rel="stylesheet" href="/${app.rootUrl}/javascript/chosen/chosen.css" type="text/css"/>
         <link rel="stylesheet" href="/${app.rootUrl}/javascript/timepicker/jquery-ui-timepicker-addon.css" type="text/css"/>
         <link rel="stylesheet" href="/${app.rootUrl}/javascript/jqtree/jqtree.css" type="text/css">
+        <link rel="stylesheet" href="/${app.rootUrl}/javascript/tablednd/tablednd.css" type="text/css">
 
         <link rel="stylesheet" href="/${app.rootUrl}/javascript/jquery-easyui/themes/default/easyui.css" type="text/css">
         <style>
+            .validation-error-msg {
+                margin-left: 10px;
+                color: red;
+            }
+            .validation-error {
+                border:1px solid red;
+                /* round the corners */
+                -webkit-border-radius: 3px;
+                -moz-border-radius: 3px;
+                border-radius: 3px;
+
+                /* make it glow! */
+                -webkit-box-shadow: 0px 0px 4px red;
+                -moz-box-shadow: 0px 0px 4px red;
+                box-shadow: 0px 0px 4px red;
+            }
+            #formDiv ul {
+                margin-top: 30px;
+            }
+            #formDiv li {
+                margin-bottom: 10px;
+                background: none;
+            }
+            #formDiv li label, input, p {
+                display:inline-block;
+            }
+            #formDiv li label {
+                margin-right: 20px;
+                text-align: right;
+                vertical-align: middle;
+                width: 200px;
+                font-size: 130%;
+            }
+            #formDiv .onesavebuttondiv {
+                padding-left: 170px;
+            }
+            .many-primitive-editor-li-div {
+                text-align: left;
+            }
+            .many-primitive-editor-li-div span {
+                width: 50px;
+            }
+            .many-primitive-editor-li-div img {
+                position:relative;
+                right:-50px;
+            }
+
+            .many-primitive-editor {
+                border-style: solid;
+                border-width:1px;
+                background-color: white;
+                width: 150px;
+                height: 200px;
+                text-align: center;
+            }
+            .many-primitive-editor input[type=text]{
+                width: 70px;
+            }
+            .many-primitive-editor-result {
+                height: 150px;
+                width: 90%;
+                margin-left: auto;
+                margin-right: auto;
+                overflow:auto;
+            }
+            .many-primitive-editor-result table
+            {
+                border-collapse:collapse;
+            }
+            .many-primitive-editor-result-table {
+                width: 100%;
+                border: 1px solid silver;
+            }
+            .many-primitive-editor-row:hover {
+                background-color: #E0F8F7;
+            }
+            .many-primitive-editor-row td {
+                border-right: 1px dotted silver;
+                border-bottom: 1px dotted silver;
+
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                vertical-align: middle;
+                z-index: 1;
+                margin: 0;
+
+                white-space: nowrap;
+
+                cursor: default;
+            }
+            .many-primitive-editor-cell-img{
+                text-align: center;
+            }
+            .many-primitive-editor-select-div {
+                text-align: center;
+            }
+            .selectheader {
+                width: auto;
+                height: 30px;
+            }
+            .selectheader p {
+                font-size: 150%;
+                text-align: center;
+                vertical-align: middle;
+                font-weight:bold;
+            }
             .panel {
                 height: auto;
             }
@@ -322,7 +430,11 @@
         <!-- jqTree -->
         <script src="/${app.rootUrl}/javascript/jqtree/tree.jquery.js" type="text/javascript"></script>	
 
+        <!-- table drag and drop -->
+        <script src="/${app.rootUrl}/javascript/tablednd/jquery.tablednd.js" type="text/javascript"></script>	
+
         <!-- tuml scripts -->
+        <script src="/${app.rootUrl}/javascript/tuml2/tuml.util.js"></script>
         <script src="/${app.rootUrl}/javascript/tuml2/tuml.ui.manager.js"></script>
         <script src="/${app.rootUrl}/javascript/tuml2/tuml.menu.manager.js"></script>
         <script src="/${app.rootUrl}/javascript/tuml2/tuml.context.manager.js"></script>

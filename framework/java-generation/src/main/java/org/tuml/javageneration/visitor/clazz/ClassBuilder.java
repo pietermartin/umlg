@@ -139,7 +139,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 		constructor.getBody().addToStatements("this.vertex.setProperty(\"className\", getClass().getName())");
 		// Do not understand this if statement
 		// if (TumlClassOperations.hasCompositeOwner(c)) {
-		constructor.getBody().addToStatements("TransactionThreadEntityVar.setNewEntity(this)");
+		constructor.getBody().addToStatements(TinkerGenerationUtil.transactionThreadEntityVar.getLast() + ".setNewEntity(this)");
 		ojClass.addToImports(TinkerGenerationUtil.transactionThreadEntityVar);
 		// }
 		constructor.getBody().addToStatements("defaultCreate()");
@@ -187,6 +187,8 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 		constructor.addParam("vertex", TinkerGenerationUtil.vertexPathName);
 		if (clazz.getGeneralizations().isEmpty()) {
 			constructor.getBody().addToStatements("this.vertex=vertex");
+			constructor.getBody().addToStatements(TinkerGenerationUtil.transactionThreadEntityVar.getLast() + ".setNewEntity(this)");
+			ojClass.addToImports(TinkerGenerationUtil.transactionThreadEntityVar);
 		} else {
 			constructor.getBody().addToStatements("super(vertex)");
 		}
