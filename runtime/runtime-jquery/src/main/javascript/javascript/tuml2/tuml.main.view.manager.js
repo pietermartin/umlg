@@ -25,11 +25,9 @@
                 }
             });
             tumlManyViewManager.onPutFailure.subscribe(function(e, args) {
-                console.log('TumlMainViewManager onPutFailure fired');
                 self.onPutFailure.notify(args, e, self);
             });
             tumlManyViewManager.onPostSuccess.subscribe(function(e, args) {
-                console.log('TumlMainViewManager onPostSuccess fired');
                 self.onPostSuccess.notify(args, e, self);
                 if (args.data[0].meta.to.qualifiedName === 'tumllib::org::tuml::query::Query') {
                     var metaDataNavigatingTo = args.data[0].meta.to;
@@ -39,42 +37,39 @@
                 }
             });
             tumlManyViewManager.onPostFailure.subscribe(function(e, args) {
-                console.log('TumlMainViewManager onPostFailure fired');
                 self.onPostFailure.notify(args, e, self);
             });
             tumlManyViewManager.onDeleteSuccess.subscribe(function(e, args) {
-                console.log('TumlMainViewManager onDeleteSuccess fired');
                 self.onDeleteSuccess.notify(args, e, self);
             });
             tumlManyViewManager.onDeleteFailure.subscribe(function(e, args) {
-                console.log('TumlMainViewManager onDeleteFailure fired');
                 self.onDeleteFailure.notify(args, e, self);
             });
             tumlManyViewManager.onCancel.subscribe(function(e, args) {
-                console.log('TumlMainViewManager onCancel fired');
                 self.onCancel.notify(args, e, self);
             });
             tumlManyViewManager.onSelfCellClick.subscribe(function(e, args) {
-                console.log('TumlMainViewManager onSelfCellClick fired');
                 self.onSelfCellClick.notify(args, e, self);
             });
             tumlManyViewManager.onContextMenuClickLink.subscribe(function(e, args) {
-                console.log('TumlMainViewManager onContextMenuClickLink fired');
                 self.onContextMenuClickLink.notify(args, e, self);
             });
             tumlManyViewManager.onContextMenuClickDelete.subscribe(function(e, args) {
-                console.log('TumlMainViewManager onContextMenuClickDelete fired');
                 self.onContextMenuClickDelete.notify(args, e, self);
             });
 
             tumlOneViewManager = new Tuml.TumlOneViewManager();
             tumlOneViewManager.onPutOneSuccess.subscribe(function(e, args) {
-                console.log('TumlMainViewManager onPutOneSuccess fired');
                 self.onPutOneSuccess.notify(args, e, self);
             });
             tumlOneViewManager.onPutOneFailure.subscribe(function(e, args) {
-                console.log('TumlMainViewManager onPutOneFailure fired');
                 self.onPutOneFailure.notify(args, e, self);
+            });
+            tumlOneViewManager.onPostOneSuccess.subscribe(function(e, args) {
+                self.onPostOneSuccess.notify(args, e, self);
+            });
+            tumlOneViewManager.onPostOneFailure.subscribe(function(e, args) {
+                self.onPostOneFailure.notify(args, e, self);
             });
         }
 
@@ -113,8 +108,12 @@
                     tumlOneViewManager.refresh(tumlUri, result);
                     tumlManyViewManager.clear();
                 } else {
-                    alert('The properties value is null. \nIt can not be navigated to.');
-                    return false;
+                    recreateTabContainer();
+                    qualifiedName = result[0].meta.qualifiedName;
+                    var contextVertexId = retrieveVertexId(tumlUri);
+                    leftMenuManager.refresh(metaDataNavigatingFrom, metaDataNavigatingTo, contextVertexId);
+                    tumlOneViewManager.refresh(tumlUri, result);
+                    tumlManyViewManager.clear();
                 }
             }
             $('#ui-layout-center-heading').children().remove();
@@ -173,6 +172,8 @@
             "onContextMenuClickDelete": new Tuml.Event(),
             "onPutOneSuccess": new Tuml.Event(),
             "onPutOneFailure": new Tuml.Event(),
+            "onPostOneSuccess": new Tuml.Event(),
+            "onPostOneFailure": new Tuml.Event(),
             "refresh": refresh,
             "openQuery": openQuery
         });

@@ -28,7 +28,6 @@
             //Create the context manager
             contextManager = new Tuml.ContextManager();
             contextManager.onClickContextMenu.subscribe(function(e, args) {
-                console.log('TumlUiManager onClickContextMenu fired');
                 refresh(args.uri);
                 changeMyUrl(args.name, args.uri);
             });
@@ -37,71 +36,65 @@
             leftMenuManager = new Tuml.LeftMenuManager();
             leftMenuManager.onMenuClick.subscribe(function(e, args) {
                 //Do something like refresh the page
-                console.log('looks like its happening');
                 refresh(args.uri);
                 changeMyUrl(args.name, args.uri);
             });
             leftMenuManager.onQueryClick.subscribe(function(e, args) {
                 //Do something like refresh the page
-                console.log('TumlUiManager onQueryClick fired');
                 mainViewManager.openQuery(args.tumlUri, args.oclExecuteUri, args.qualifiedName, args.name, args.queryEnum, args.queryString);
             });
 
             //Create main view manager
             mainViewManager = new Tuml.MainViewManager(leftMenuManager);
             mainViewManager.onPutSuccess.subscribe(function(e, args) {
-                console.log('TumlUiManager onPutSuccess fired');
                 self.onPutSuccess.notify(args, e, self);
             });
             mainViewManager.onPutFailure.subscribe(function(e, args) {
-                console.log('TumlUiManager onPutFailure fired');
                 self.onPutFailure.notify(args, e, self);
             });
             mainViewManager.onPostSuccess.subscribe(function(e, args) {
-                console.log('TumlUiManager onPostSuccess fired');
                 self.onPostSuccess.notify(args, e, self);
             });
             mainViewManager.onPostFailure.subscribe(function(e, args) {
-                console.log('TumlUiManager onPostFailure fired');
                 self.onPostFailure.notify(args, e, self);
             });
             mainViewManager.onDeleteSuccess.subscribe(function(e, args) {
-                console.log('TumlUiManager onDeleteSuccess fired');
                 self.onDeleteSuccess.notify(args, e, self);
             });
             mainViewManager.onDeleteFailure.subscribe(function(e, args) {
-                console.log('TumlUiManager onDeleteFailure fired');
                 self.onDeleteFailure.notify(args, e, self);
             });
             mainViewManager.onCancel.subscribe(function(e, args) {
-                console.log('TumlUiManager onCancel fired');
                 self.onCancel.notify(args, e, self);
             });
             mainViewManager.onSelfCellClick.subscribe(function(e, args) {
-                console.log('TumlUiManager onSelfCellClick fired');
                 self.onSelfCellClick.notify(args, e, self);
                 refresh(args.tumlUri);
                 changeMyUrl(args.name, args.tumlUri);
             });
             mainViewManager.onContextMenuClickLink.subscribe(function(e, args) {
-                console.log('TumlUiManager onContextMenuClickLink fired');
                 self.onContextMenuClickLink.notify(args, e, self);
                 refresh(args.tumlUri);
                 changeMyUrl(args.name, args.tumlUri);
             });
             mainViewManager.onContextMenuClickDelete.subscribe(function(e, args) {
-                console.log('TumlUiManager onContextMenuClickDelete fired');
                 self.onContextMenuClickDelete.notify(args, e, self);
             });
             mainViewManager.onPutOneSuccess.subscribe(function(e, args) {
-                console.log('TumlUiManager onPutOneSuccess fired');
                 self.onPutOneSuccess.notify(args, e, self);
                 refresh(args.uri);
                 changeMyUrl(args.name, args.uri);
             });
             mainViewManager.onPutOneFailure.subscribe(function(e, args) {
-                console.log('TumlUiManager onPutOneFailure fired');
                 self.onPutOneFailure.notify(args, e, self);
+            });
+            mainViewManager.onPostOneSuccess.subscribe(function(e, args) {
+                self.onPostOneSuccess.notify(args, e, self);
+                refresh(args.uri);
+                changeMyUrl(args.name, args.uri);
+            });
+            mainViewManager.onPostOneFailure.subscribe(function(e, args) {
+                self.onPostOneFailure.notify(args, e, self);
             });
 
             window.onpopstate = function(event) {
@@ -153,7 +146,9 @@
                     var contextMetaData = response.meta.to;
                     return {name: contextMetaData.name, uri: contextMetaData.uri, contextVertexId: response.data.id};
                 } else {
-                    alert("The property's value is null. \nIt can not be navigated to.");
+                    qualifiedName = response.meta.qualifiedName;
+                    var contextMetaData = response.meta.from;
+                    return {name: contextMetaData.name, uri: contextMetaData.uri, contextVertexId: urlId};
                 }
                 return null;
             }
@@ -199,7 +194,9 @@
             "onContextMenuClickLink": new Tuml.Event(),
             "onContextMenuClickDelete": new Tuml.Event(),
             "onPutOneSuccess": new Tuml.Event(),
-            "onPutOneFailure": new Tuml.Event()
+            "onPutOneFailure": new Tuml.Event(),
+            "onPostOneSuccess": new Tuml.Event(),
+            "onPostOneFailure": new Tuml.Event()
         });
         init();
     }

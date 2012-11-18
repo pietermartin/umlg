@@ -3,6 +3,7 @@ package org.tuml.restlet.visitor.clazz;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.uml2.uml.Class;
 import org.opaeum.java.metamodel.OJField;
+import org.opaeum.java.metamodel.OJIfStatement;
 import org.opaeum.java.metamodel.OJPackage;
 import org.opaeum.java.metamodel.OJParameter;
 import org.opaeum.java.metamodel.OJPathName;
@@ -78,6 +79,11 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
 		ojTry.getTryPart().addToStatements("GraphDb.getDb().stopTransaction(Conclusion.SUCCESS)");
 		annotatedClass.addToImports(TinkerGenerationUtil.tinkerConclusionPathName);
 		ojTry.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
+
+		ojTry.getCatchPart().addToStatements("GraphDb.getDb().stopTransaction(Conclusion.FAILURE)");
+		OJIfStatement ifRuntime = new OJIfStatement("e instanceof RuntimeException");
+		ifRuntime.addToThenPart("throw (RuntimeException)e");
+		ojTry.getCatchPart().addToStatements(ifRuntime);
 		ojTry.getCatchPart().addToStatements("throw new RuntimeException(e)");
 		put.getBody().addToStatements(ojTry);
 

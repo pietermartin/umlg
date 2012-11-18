@@ -1,8 +1,11 @@
 package org.tuml.restlet.util;
 
+import org.eclipse.uml2.uml.DataType;
+import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.uml2.uml.Property;
 import org.opaeum.java.metamodel.OJPathName;
+import org.tuml.javageneration.util.DataTypeEnum;
 import org.tuml.javageneration.util.PropertyWrapper;
 
 public class TumlRestletGenerationUtil {
@@ -41,6 +44,30 @@ public class TumlRestletGenerationUtil {
 				return "FieldType.Long";
 			} else {
 				throw new IllegalStateException("unknown primitive " + primitiveType.getName());
+			}
+		} else if (!(propertyWrapper.getType() instanceof Enumeration) && (propertyWrapper.getType() instanceof DataType)) {
+			DataTypeEnum dataTypeEnum = DataTypeEnum.fromDataType((DataType) propertyWrapper.getType());
+			switch (dataTypeEnum) {
+			case DateTime:
+				return "FieldType.String";
+			case Date:
+				return "FieldType.String";
+			case Time:
+				return "FieldType.String";
+			case InternationalPhoneNumber:
+				return "FieldType.String";
+			case LocalPhoneNumber:
+				return "FieldType.String";
+			case Email:
+				return "FieldType.String";
+			case Video:
+				return "FieldType.String";
+			case Audio:
+				return "FieldType.String";
+			case Image:
+				return "FieldType.String";
+			default:
+				throw new RuntimeException("Unknown data type " + dataTypeEnum.name());
 			}
 		} else if (propertyWrapper.isOne()) {
 			// For the id

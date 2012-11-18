@@ -28,66 +28,65 @@ public class AddTumlLookupUriToRuntimePropertyEnum extends BaseVisitor implement
 	public void visitBefore(Class clazz) {
 		OJAnnotatedClass annotatedClass = findOJClass(clazz);
 		OJEnum ojEnum = annotatedClass.findEnum(TumlClassOperations.propertyEnumName(clazz));
-		Set<Property> allOwnedProperties = TumlClassOperations.getAllProperties(clazz);
-		for (Property p : allOwnedProperties) {
-			PropertyWrapper pWrap = new PropertyWrapper(p);
-			if (pWrap.hasLookup()) {
+		
+		if (TumlClassOperations.hasLookupProperty(clazz)) {
+			OJField tumlUriLookup = ojEnum.findField("tumlLookupUri");
+			if (tumlUriLookup == null ) {
+				tumlUriLookup = new OJField();
+				tumlUriLookup.setType(new OJPathName("String"));
+				tumlUriLookup.setName("tumlLookupUri");
+				ojEnum.addToFields(tumlUriLookup);
 
-				OJField tumlUriLookup = ojEnum.findField("tumlLookupUri");
-				if (tumlUriLookup == null) {
-					tumlUriLookup = new OJField();
-					tumlUriLookup.setType(new OJPathName("String"));
-					tumlUriLookup.setName("tumlLookupUri");
-					ojEnum.addToFields(tumlUriLookup);
+				OJConstructor constructor = ojEnum.getConstructors().iterator().next();
+				constructor.addParam(tumlUriLookup.getName(), tumlUriLookup.getType());
+				constructor.getBody().addToStatements("this." + tumlUriLookup.getName() + " = " + tumlUriLookup.getName());
+			}
 
+			// Need to create a lookup uri on the immediate composite
+			// parent, to
+			// be called by new
+			// objects, Seeing as the new object has not yet been persisted
+			// it
+			// can not call the lookup on itself.
+			tumlUriLookup = ojEnum.findField("tumlLookupOnCompositeParentUri");
+			if (tumlUriLookup == null) {
+				tumlUriLookup = new OJField();
+				tumlUriLookup.setType(new OJPathName("String"));
+				tumlUriLookup.setName("tumlLookupOnCompositeParentUri");
+				ojEnum.addToFields(tumlUriLookup);
+
+				OJConstructor constructor = ojEnum.getConstructors().iterator().next();
+				constructor.addParam(tumlUriLookup.getName(), tumlUriLookup.getType());
+				constructor.getBody().addToStatements("this." + tumlUriLookup.getName() + " = " + tumlUriLookup.getName());
+			}
+
+			Set<Property> allOwnedProperties = TumlClassOperations.getAllProperties(clazz);
+			for (Property p : allOwnedProperties) {
+				PropertyWrapper pWrap = new PropertyWrapper(p);
+				if (!TumlClassOperations.isEnumeration(pWrap.getOwningType()) && pWrap.hasLookup()) {
+					tumlUriLookup = ojEnum.findField("tumlLookupUri");
 					OJAnnotatedOperation getter = new OJAnnotatedOperation(pWrap.lookupGetter(), tumlUriLookup.getType());
 					getter.getBody().addToStatements("return this." + tumlUriLookup.getName());
 					ojEnum.addToOperations(getter);
 
-					OJConstructor constructor = ojEnum.getConstructors().iterator().next();
-					constructor.addParam(tumlUriLookup.getName(), tumlUriLookup.getType());
-					constructor.getBody().addToStatements("this." + tumlUriLookup.getName() + " = " + tumlUriLookup.getName());
-				}
-				doWithLiteral("lookup", clazz, pWrap, ojEnum.findLiteral(pWrap.fieldname()), false);
-
-				// Need to create a lookup uri on the immediate composite
-				// parent, to
-				// be called by new
-				// objects, Seeing as the new object has not yet been persisted
-				// it
-				// can not call the lookup on itself.
-				tumlUriLookup = ojEnum.findField("tumlLookupOnCompositeParentUri");
-				if (tumlUriLookup == null) {
-					tumlUriLookup = new OJField();
-					tumlUriLookup.setType(new OJPathName("String"));
-					tumlUriLookup.setName("tumlLookupOnCompositeParentUri");
-					ojEnum.addToFields(tumlUriLookup);
-
-					OJAnnotatedOperation getter = new OJAnnotatedOperation(pWrap.lookupOnCompositeParentGetter(), tumlUriLookup.getType());
+					getter = new OJAnnotatedOperation(pWrap.lookupOnCompositeParentGetter(), tumlUriLookup.getType());
 					getter.getBody().addToStatements("return this." + tumlUriLookup.getName());
 					ojEnum.addToOperations(getter);
-
-					OJConstructor constructor = ojEnum.getConstructors().iterator().next();
-					constructor.addParam(tumlUriLookup.getName(), tumlUriLookup.getType());
-					constructor.getBody().addToStatements("this." + tumlUriLookup.getName() + " = " + tumlUriLookup.getName());
+					
 				}
-				doWithLiteral("lookupOnCompositeParent", clazz, pWrap, ojEnum.findLiteral(pWrap.fieldname()), true);
-
-			} else if (!TumlClassOperations.isEnumeration(pWrap.getOwningType())) {
 				doWithLiteral("lookup", clazz, pWrap, ojEnum.findLiteral(pWrap.fieldname()), false);
 				doWithLiteral("lookupOnCompositeParent", clazz, pWrap, ojEnum.findLiteral(pWrap.fieldname()), true);
 			}
-		}
-		// Add the lookups to the id property
-		doWithLiteral("tumlLookupUri", clazz, null, ojEnum.findLiteral("id"), false);
-		doWithLiteral("tumlLookupOnCompositeParentUri", clazz, null, ojEnum.findLiteral("id"), false);
+			// Add the lookups to the id property
+			doWithLiteral("tumlLookupUri", clazz, null, ojEnum.findLiteral("id"), false);
+			doWithLiteral("tumlLookupOnCompositeParentUri", clazz, null, ojEnum.findLiteral("id"), false);
 
-		if (!TumlClassOperations.hasCompositeOwner(clazz)) {
-			// Add the lookups to the root property
-			doWithLiteral("tumlLookupUri", clazz, null, ojEnum.findLiteral(clazz.getModel().getName()), false);
-			doWithLiteral("tumlLookupOnCompositeParentUri", clazz, null, ojEnum.findLiteral(clazz.getModel().getName()), false);
+			if (!TumlClassOperations.hasCompositeOwner(clazz)) {
+				// Add the lookups to the root property
+				doWithLiteral("tumlLookupUri", clazz, null, ojEnum.findLiteral(clazz.getModel().getName()), false);
+				doWithLiteral("tumlLookupOnCompositeParentUri", clazz, null, ojEnum.findLiteral(clazz.getModel().getName()), false);
+			}
 		}
-
 	}
 
 	private void doWithLiteral(String literalName, Class clazz, PropertyWrapper propertyWrapper, OJEnumLiteral literal, boolean onCompositeParent) {

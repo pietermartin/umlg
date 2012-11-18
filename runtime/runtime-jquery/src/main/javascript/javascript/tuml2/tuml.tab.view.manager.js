@@ -27,57 +27,51 @@
                 //Do not pass the div in, it causes issues with refreshing
                 tumlTabGridManager = new Tuml.TumlTabGridManager(tumlUri, oneManyOrQuery.propertyNavigatingTo);
                 tumlTabGridManager.onPutSuccess.subscribe(function(e, args) {
-                    console.log('TumlTabViewManager onPutSuccess fired');
                     self.onPutSuccess.notify(args, e, self);
                     createGridForResult(args.data, args.tabId);
                 });
                 tumlTabGridManager.onPutFailure.subscribe(function(e, args) {
-                    console.log('TumlTabViewManager onPutFailure fired: ' + args);
                     self.onPutFailure.notify(args, e, self);
                 });
                 tumlTabGridManager.onPostSuccess.subscribe(function(e, args) {
-                    console.log('TumlTabViewManager onPostSuccess fired');
                     self.onPostSuccess.notify(args, e, self);
                     createGridForResult(args.data, args.tabId);
                 });
                 tumlTabGridManager.onPostFailure.subscribe(function(e, args) {
-                    console.log('TumlTabViewManager onPostFailure fired');
                     self.onPostFailure.notify(args, e, self);
                 });
                 tumlTabGridManager.onDeleteSuccess.subscribe(function(e, args) {
-                    console.log('TumlTabViewManager onDeleteSuccess fired');
                     self.onDeleteSuccess.notify(args, e, self);
                 });
                 tumlTabGridManager.onDeleteFailure.subscribe(function(e, args) {
-                    console.log('TumlTabViewManager onDeleteFailure fired');
                     self.onDeleteFailure.notify(args, e, self);
                 });
                 tumlTabGridManager.onCancel.subscribe(function(e, args) {
-                    console.log('TumlTabViewManager onCancel fired');
                     self.onCancel.notify(args, e, self);
                     createGridForResult(args.data, args.tabId);
                 });
                 tumlTabGridManager.onSelfCellClick.subscribe(function(e, args) {
-                    console.log('TumlTabViewManager onSelfCellClick fired');
                     self.onSelfCellClick.notify(args, e, self);
                 });
                 tumlTabGridManager.onContextMenuClickLink.subscribe(function(e, args) {
-                    console.log('TumlTabViewManager onContextMenuClickLink fired');
                     self.onContextMenuClickLink.notify(args, e, self);
                 });
                 tumlTabGridManager.onContextMenuClickDelete.subscribe(function(e, args) {
-                    console.log('TumlTabViewManager onContextMenuClickDelete fired');
                     self.onContextMenuClickDelete.notify(args, e, self);
                 });
             } else if (oneManyOrQuery.one) {
                 tumlTabOneManager = new Tuml.TumlTabOneManager(tumlUri);
                 tumlTabOneManager.onPutOneSuccess.subscribe(function(e, args) {
-                    console.log('TumlTabViewManager onPutOneSuccess fired');
                     self.onPutOneSuccess.notify(args, e, self);
                 });
                 tumlTabOneManager.onPutOneFailure.subscribe(function(e, args) {
-                    console.log('TumlTabViewManager onPutOneFailure fired: ' + args.textStatus + ' ' + args.errorThrown);
                     self.onPutOneFailure.notify(args, e, self);
+                });
+                tumlTabOneManager.onPostOneSuccess.subscribe(function(e, args) {
+                    self.onPostOneSuccess.notify(args, e, self);
+                });
+                tumlTabOneManager.onPostOneFailure.subscribe(function(e, args) {
+                    self.onPostOneFailure.notify(args, e, self);
                 });
             } else if (oneManyOrQuery.query) {
                 tumlTabQueryManager = new Tuml.TumlTabQueryManager(tumlUri, tabDivName);
@@ -129,6 +123,8 @@
             //Events for one
             "onPutOneSuccess": new Tuml.Event(),
             "onPutOneFailure": new Tuml.Event(),
+            "onPostOneSuccess": new Tuml.Event(),
+            "onPostOneFailure": new Tuml.Event(),
             //Other events
             "createOne": createOne,
             "createGrid": createGrid,

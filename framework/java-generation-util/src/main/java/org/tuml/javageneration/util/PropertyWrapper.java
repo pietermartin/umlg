@@ -39,6 +39,7 @@ import org.eclipse.uml2.uml.ValueSpecification;
 import org.eclipse.uml2.uml.VisibilityKind;
 import org.opaeum.java.metamodel.OJPathName;
 import org.tuml.framework.ModelLoader;
+import org.tuml.javageneration.validation.Email;
 import org.tuml.javageneration.validation.Max;
 import org.tuml.javageneration.validation.MaxLength;
 import org.tuml.javageneration.validation.Min;
@@ -1287,6 +1288,8 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 			return hasRange();
 		case URL:
 			return hasUrl();
+		case Email:
+			return isEmail();
 		default:
 			break;
 		}
@@ -1300,6 +1303,12 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 		for (Stereotype stereotype : stereoTypes) {
 			if (property.isStereotypeApplied(stereotype)) {
 				result.add(TumlValidationEnum.fromStereotype(stereotype, this.property));
+			}
+		}
+		if (getType() instanceof DataType) {
+			Validation v = TumlValidationEnum.fromDataType((DataType)getType());
+			if (v != null) {
+				result.add(v);
 			}
 		}
 		return result;
@@ -1321,6 +1330,8 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 			return getRange();
 		case URL:
 			return getUrl();
+		case Email:
+			return getEmail();
 		default:
 			break;
 		}
@@ -1363,6 +1374,10 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 				(String) property.getValue(stereotype, "regexp"), (String) property.getValue(stereotype, "flags"));
 	}
 
+	public Email getEmail() {
+		return new Email();
+	}
+	
 	public boolean hasMinLength() {
 		Stereotype stereotype = ModelLoader.findStereotype(TumlValidationEnum.MinLength.name());
 		return property.isStereotypeApplied(stereotype);

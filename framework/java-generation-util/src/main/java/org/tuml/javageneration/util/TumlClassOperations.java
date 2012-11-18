@@ -24,6 +24,16 @@ import org.tuml.framework.ModelLoader;
 
 public class TumlClassOperations extends ClassOperations {
 
+	public static boolean hasLookupProperty(org.eclipse.uml2.uml.Class clazz) {
+		Set<Property> properties = getAllOwnedProperties(clazz);
+		for (Property property : properties) {
+			if (new PropertyWrapper(property).hasLookup()) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public static Set<Property> getChildPropertiesToDelete(org.eclipse.uml2.uml.Class clazz) {
 		Set<Property> result = new HashSet<Property>();
 		Set<Property> ownedProperties = getAllOwnedProperties(clazz);

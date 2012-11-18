@@ -71,7 +71,7 @@ public class TumlValidator {
 		throw new RuntimeException("Not yet implemented!");
 	}
 	
-	public static boolean validateEmail(String s) {
-		return EmailValidationUtils.isValid(s);
+	public static boolean validateEmail(String email) {
+		return EmailValidationUtils.isValid(email);
 	}
 }

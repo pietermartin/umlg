@@ -904,6 +904,10 @@
           <element xmi:type="uml:Property" href="tinker-test.uml#_dvZPsAWBEeK9oIwdQfC0-w"/>
           <layoutConstraint xmi:type="notation:Location" xmi:id="_dvbE4QWBEeK9oIwdQfC0-w"/>
         </children>
+        <children xmi:type="notation:Shape" xmi:id="_CqO1sDFyEeK9AeutZ8kzPA" type="3012" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:Property" href="tinker-test.uml#_CqHg8DFyEeK9AeutZ8kzPA"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_CqO1sTFyEeK9AeutZ8kzPA"/>
+        </children>
       </children>
       <children xmi:type="notation:BasicCompartment" xmi:id="_1bLncwAOEeKpVr_ntT6cLA" type="7019"/>
       <children xmi:type="notation:DecorationNode" xmi:id="_1ec95gAOEeKpVr_ntT6cLA" type="5029"/>

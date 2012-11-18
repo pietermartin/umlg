@@ -30,21 +30,32 @@
             var tabDiv = $('<div />', {id: metaForData.name, title: metaForData.name, class: 'tumltab'}).appendTo(tabContainer);
             var tumlTabViewManager = new Tuml.TumlTabViewManager({many: false, one: true, query: false}, tumlUri, response.meta.qualifiedName, metaForData.name);
             tumlTabViewManager.onPutOneSuccess.subscribe(function(e, args) {
-                console.log('TumlOneViewManager onPutOneSuccess fired');
                 //On a put success ensure that the one becomes the context
                 var data;
                 if (args.data instanceof Array) {
-                    data = result[0];
+                    data = args.data[0];
                 } else {
-                    data = result;
+                    data = args.data;
                 }
                 var uri = data.meta.to.uri;
                 var adjustedUri = uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), data.data.id);
                 self.onPutOneSuccess.notify({name: "unused", uri: adjustedUri}, e, self);
             });
             tumlTabViewManager.onPutOneFailure.subscribe(function(e, args) {
-                console.log('TumlOneViewManager onPutOneFailure fired');
-                alert('fail');
+            });
+            tumlTabViewManager.onPostOneSuccess.subscribe(function(e, args) {
+                //On a post success ensure that the one becomes the context
+                var data;
+                if (args.data instanceof Array) {
+                    data = args.data[0];
+                } else {
+                    data = args.data;
+                }
+                var uri = data.meta.to.uri;
+                var adjustedUri = uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), data.data.id);
+                self.onPostOneSuccess.notify({name: "unused", uri: adjustedUri}, e, self);
+            });
+            tumlTabViewManager.onPostOneFailure.subscribe(function(e, args) {
             });
             //Only create the tab if it does not exist. This function is called initially and after an update (PUT)
             var tabDiv = $('#' + metaForData.name);
@@ -89,6 +100,8 @@
             "TumlOneViewManagerVersion": "1.0.0",
             "onPutOneSuccess": new Tuml.Event(),
             "onPutOneFailure": new Tuml.Event(),
+            "onPostOneSuccess": new Tuml.Event(),
+            "onPostOneFailure": new Tuml.Event(),
             "refresh": refresh,
             "openQuery": openQuery,
             "closeQuery": closeQuery,

@@ -168,5 +168,22 @@ public class TestValidation extends BaseLocalDbTest {
 			System.out.println(e.getCause());
 		}
 	}
+	
+	@Test(expected = TumlConstraintViolationException.class)
+	public void testEmailValidationFail() {
+		God g = new God(true);
+		g.setName("asda");
+		Universe universe = new Universe(g);
+		universe.setEmail("asdasd");
+		db.stopTransaction(Conclusion.SUCCESS);
+	}
 
+	@Test
+	public void testEmailValidationPass() {
+		God g = new God(true);
+		g.setName("asda");
+		Universe universe = new Universe(g);
+		universe.setEmail("asdasd@asd.com");
+		db.stopTransaction(Conclusion.SUCCESS);
+	}
 }

@@ -32,7 +32,13 @@ public class TumlGuiServerResource2 extends ServerResource {
 		}
 		
 		Map<String, Object> dataModel = new HashMap<String, Object>();
-		String uri = getOriginalRef().toString().replace(getHostRef().toString(), "").replace("/ui2", "");
+		String withHostRef = getOriginalRef().toString().replace(getHostRef().toString(), "");
+		String uri;
+		if (withHostRef.endsWith("/ui2/")) {
+			uri = withHostRef.replace("/ui2/", "");
+		} else {
+			uri = withHostRef.replace("/ui2", "");
+		}
 
 		//TODO work this hardcoding out
 		dataModel.put("app", new App().setRootUrl("restAndJson").setUri(uri));

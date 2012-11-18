@@ -124,7 +124,7 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 		OJTryStatement ojTryStatement = new OJTryStatement();
 
 		OJPathName parentPathName = otherEndPWrap.javaBaseTypePath();
-		if (!pWrap.isComposite()) {
+		if (!pWrap.isComposite() && !put) {
 			ojTryStatement.getTryPart().addToStatements(
 					"this." + parentPathName.getLast().toLowerCase() + "Id = Integer.parseInt((String)getRequestAttributes().get(\""
 							+ parentPathName.getLast().toLowerCase() + "Id\"))");
@@ -180,7 +180,12 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 
 		ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
 		ojTryStatement.getCatchPart().addToStatements("GraphDb.getDb().stopTransaction(Conclusion.FAILURE)");
+
+		OJIfStatement ifRuntime = new OJIfStatement("e instanceof RuntimeException");
+		ifRuntime.addToThenPart("throw (RuntimeException)e");
+		ojTryStatement.getCatchPart().addToStatements(ifRuntime);
 		ojTryStatement.getCatchPart().addToStatements("throw new RuntimeException(e)");
+		
 		putOrDelete.getBody().addToStatements(ojTryStatement);
 
 		annotatedClass.addToImports(parentPathName);
@@ -273,7 +278,12 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 
 		ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
 		ojTryStatement.getCatchPart().addToStatements("GraphDb.getDb().stopTransaction(Conclusion.FAILURE)");
+		
+		OJIfStatement ifRuntime = new OJIfStatement("e instanceof RuntimeException");
+		ifRuntime.addToThenPart("throw (RuntimeException)e");
+		ojTryStatement.getCatchPart().addToStatements(ifRuntime);
 		ojTryStatement.getCatchPart().addToStatements("throw new RuntimeException(e)");
+		
 		post.getBody().addToStatements(ojTryStatement);
 
 		annotatedClass.addToImports(parentPathName);
@@ -361,30 +371,29 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 		for (Classifier concreteClassifierTo : concreteImplementations) {
 			annotatedClass.addToImports(TumlClassOperations.getPathName(concreteClassifierTo));
 			if (pWrap.isOne()) {
-				OJIfStatement ifNotNull = new OJIfStatement(pWrap.fieldname() + " != null");
-				OJBlock conditionBlock = new OJBlock();
-				String condition = pWrap.fieldname() + " instanceof " + TumlClassOperations.getPathName(concreteClassifierTo).getLast();
-				if (count == 1) {
-					ifIsOneIfStatement.setCondition(condition);
-					ifIsOneIfStatement.setThenPart(conditionBlock);
-				} else if (count == concreteImplementations.size()) {
-					ifIsOneIfStatement.setElsePart(conditionBlock);
-				} else {
-					conditionBlock = ifIsOneIfStatement.addToElseIfCondition(condition, "");
+				for (Classifier concreteClassifierFrom : concreteImplementationsFrom) {
+					annotatedClass.addToImports(TumlClassOperations.getPathName(concreteClassifierFrom));
+					OJBlock conditionBlock = new OJBlock();
+					String condition = "parentResource instanceof " + TumlClassOperations.getPathName(concreteClassifierFrom).getLast();
+					if (count == 1) {
+						ifIsOneIfStatement.setCondition(condition);
+						ifIsOneIfStatement.setThenPart(conditionBlock);
+					} else if (count == concreteImplementations.size()) {
+						ifIsOneIfStatement.setElsePart(conditionBlock);
+					} else {
+						conditionBlock = ifIsOneIfStatement.addToElseIfCondition(condition, "");
+					}
+					conditionBlock.addToStatements("json.append(" + TumlClassOperations.propertyEnumName(concreteClassifierTo) + ".asJson())");
+					conditionBlock.addToStatements("json.append(\", \\\"from\\\": \")");
+					conditionBlock.addToStatements("json.append(" + TumlClassOperations.propertyEnumName(pWrap.getOwningType()) + ".asJson())");
+					annotatedClass.addToImports(TumlClassOperations.getPathName(new PropertyWrapper(pWrap.getOtherEnd()).getOwningType()).append(
+							TumlClassOperations.propertyEnumName(new PropertyWrapper(pWrap.getOtherEnd()).getOwningType())));
+					annotatedClass.addToImports(TumlClassOperations.getPathName(concreteClassifierTo).append(
+							TumlClassOperations.propertyEnumName(concreteClassifierTo)));
+					annotatedClass.addToImports(TumlClassOperations.getPathName(pWrap.getOwningType()).append(
+							TumlClassOperations.propertyEnumName(pWrap.getOwningType())));
+					block.addToStatements(ifIsOneIfStatement);
 				}
-				conditionBlock.addToStatements("json.append(" + TumlClassOperations.propertyEnumName(concreteClassifierTo) + ".asJson())");
-				conditionBlock.addToStatements("json.append(\", \\\"from\\\": \")");
-				conditionBlock.addToStatements("json.append(" + TumlClassOperations.propertyEnumName(pWrap.getOwningType()) + ".asJson())");
-				annotatedClass.addToImports(TumlClassOperations.getPathName(new PropertyWrapper(pWrap.getOtherEnd()).getOwningType()).append(
-						TumlClassOperations.propertyEnumName(new PropertyWrapper(pWrap.getOtherEnd()).getOwningType())));
-				annotatedClass.addToImports(TumlClassOperations.getPathName(concreteClassifierTo).append(
-						TumlClassOperations.propertyEnumName(concreteClassifierTo)));
-				annotatedClass.addToImports(TumlClassOperations.getPathName(pWrap.getOwningType()).append(
-						TumlClassOperations.propertyEnumName(pWrap.getOwningType())));
-				ifNotNull.addToThenPart(ifIsOneIfStatement);
-				block.addToStatements(ifNotNull);
-				ifNotNull.addToElsePart("json.append(\"null\")");
-				ifNotNull.addToElsePart("json.append(\", \\\"from\\\": null\")");
 			} else {
 				block.addToStatements("json.append(\"{\\\"data\\\": [\")");
 				block.addToStatements("json.append(ToJsonUtil.toJsonWithoutCompositeParent(parentResource." + pWrap.getter() + "().select(new "

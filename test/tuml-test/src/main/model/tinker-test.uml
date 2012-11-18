@@ -339,6 +339,11 @@
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_N_AroAY7EeK9oIwdQfC0-w"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_N_B5wAY7EeK9oIwdQfC0-w" value="1"/>
             </ownedAttribute>
+            <ownedAttribute xmi:id="_CqHg8DFyEeK9AeutZ8kzPA" name="email">
+              <type xmi:type="uml:DataType" href="tumldatatypes.uml#_PyFX8AD6EeKS1vh1F4YVWQ"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_G8CCEDFyEeK9AeutZ8kzPA"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_G8DQMDFyEeK9AeutZ8kzPA" value="1"/>
+            </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Class" xmi:id="_Gi0XYOzqEeCemKc79Sc_aw" name="Angel">
             <generalization xmi:id="_K6MQkCXIEeKbPYSfIbmXag">

@@ -43,7 +43,7 @@ public enum DataTypeEnum {
 		} else if (dataType.getName().equals(Image.name())) {
 			return Image;
 		} else {
-			throw new IllegalStateException(String.format("Unkown data type %s", dataType.getName()));
+			return null;
 		}
 	}
 

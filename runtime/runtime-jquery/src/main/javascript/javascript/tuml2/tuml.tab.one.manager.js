@@ -9,25 +9,32 @@
     function TumlTabOneManager(tumlUri) {
 
         var self = this;
+        var $data;
+        var $metaForData;
+        var $qualifiedName;
 
         function init() {
         }
 
         function refresh(data, metaForData, qualifiedName) {
+            var $contextVertexId = retrieveVertexId(tumlUri);
+            $data = data;
+            $metaForData = metaForData;
+            $qualifiedName = qualifiedName;
             //Clear all elements
             var tabDiv = $('#' + metaForData.name);
             tabDiv.children().remove();
-            $('<div />').appendTo(tabDiv);
+            $('<div id="serverErrorMsg" />').appendTo(tabDiv);
             $('<div />', {id: 'formDiv'}).appendTo(tabDiv);
 
             var ul = $('<ul />')
             ul.appendTo($("#formDiv"));
             $.each(metaForData.properties, function(index, property) {
-                if (!property.inverseComposite && ((property.oneToOne || property.manyToOne) || property.manyPrimitive) && property.name !== 'uri') {
+                if (isPropertyForOnePage(property)) {
                     var li = $('<li>')
                     li.appendTo(ul);
                     $('<label />', {for: property.name + 'Id'}).text(property.name + ' :').appendTo(li);
-                    var $input = constructInputForField(data, property, li);
+                    var $input = constructInputForField(data, property);
                     $input.appendTo(li);
                     if ($input !== undefined) {
                         if (property.dataTypeEnum !== undefined) {
@@ -61,46 +68,82 @@
             var $buttonDiv = $('<div class="onesavebuttondiv" />').appendTo('#formDiv');
 
             var $saveButton = $('<button />').text('Save').click(function() {
-                $.ajax({
-                    url: tumlUri,
-                    type: "PUT",
-                    dataType: "json",
-                    contentType: "json",
-                    data: fieldsToJson(),
-                    success: function(data, textStatus, jqXHR) {
-                        self.onPutOneSuccess.notify({tumlUri: tumlUri, data: data}, null, self);
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        self.onPutOneFailure.notify({tumlUri: tumlUri, jqXHR: jqXHR, textStatus: textStatus, errorThrown: errorThrown}, null, self);
+                var validationResults = [];
+                $.each(metaForData.properties, function(index, property) {
+
+                    if (isPropertyForOnePage(property)) {
+                        var validationResult = validateField(property);
+                        if (!validationResult.valid) {
+                            validationResults.push(validationResult);
+                        }
                     }
                 });
+                if (validationResults.length === 0) {
+                    if (data !== undefined && data !== null) {
+                        $.ajax({
+                            url: tumlUri,
+                            type: "PUT",
+                            dataType: "json",
+                            contentType: "json",
+                            data: fieldsToJson(),
+                            success: function(data, textStatus, jqXHR) {
+                                self.onPutOneSuccess.notify({tumlUri: tumlUri, data: data}, null, self);
+                            },
+                            error: function(jqXHR, textStatus, errorThrown) {
+                                $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
+                                self.onPutOneFailure.notify({tumlUri: tumlUri, jqXHR: jqXHR, textStatus: textStatus, errorThrown: errorThrown}, null, self);
+                            }
+                        });
+                    } else {
+                        $.ajax({
+                            url: tumlUri,
+                            type: "POST",
+                            dataType: "json",
+                            contentType: "json",
+                            data: fieldsToJson(),
+                            success: function(data, textStatus, jqXHR) {
+                                self.onPostOneSuccess.notify({tumlUri: tumlUri, data: data}, null, self);
+                            },
+                            error: function(jqXHR, textStatus, errorThrown) {
+                                $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
+                                self.onPostOneFailure.notify({tumlUri: tumlUri, jqXHR: jqXHR, textStatus: textStatus, errorThrown: errorThrown}, null, self);
+                            }
+                        });
+                    }
+                }
                 return false ;
             }).appendTo($buttonDiv);
 
             var $cancelButton = $('<button />').text('Cancel').click(function() {
-                refreshPageTo(tumlUri);
+                refresh($data, $metaForData, $qualifiedName);
             }).appendTo($buttonDiv);
 
         }
 
+        function isPropertyForOnePage(property) {
+            return(!property.inverseComposite && ((property.oneToOne || property.manyToOne) || property.manyPrimitive) && property.name !== 'uri'); 
+        }
+
+        function removeServerErrorMessage() {
+            $('#serverErrorMsg').removeClass('server-error-msg').empty();
+        }
+
         function constructInputForField(data, property) {
+            var $input;
             if (property.name == 'id') {
-                return $('<input />', {disabled: 'disabled', type:'text', class: 'field', id: property.name + 'Id', name: property.name, value: data[property.name]});
+                $input = $('<input />', {disabled: 'disabled', type:'text', class: 'field', id: property.name + 'Id', name: property.name});
+                if (data !== undefined && data !== null) {
+                    $input[0].defaultValue = data[property.name];
+                }
             } else if (property.readOnly) {
-                return $('<p />').text(data[property.name]);
+
+                if (data !== undefined && data !== null) {
+                    $input = $('<p />').text(data[property.name]);
+                } else {
+                    $input = $('<p />');
+                }
             } else if (property.dataTypeEnum !== undefined) {
-                var $input;
-                if (property.dataTypeEnum == 'Date') {
-                    $input = $("<input />", {type:'text',id: property.name + 'Id', name: property.name});
-                } else if (property.dataTypeEnum == 'Time') {
-                    $input = $("<input />", {type:'text',id: property.name + 'Id', name: property.name});
-                } else if (property.dataTypeEnum == 'DateTime') {
-                    $input = $("<input />", {type:'text',id: property.name + 'Id', name: property.name});
-                } else if (property.dataTypeEnum == 'InternationalPhoneNumber') {
-                    $input = $("<input />", {type:'text',id: property.name + 'Id', name: property.name});
-                } else if (property.dataTypeEnum == 'LocalPhoneNumber') {
-                    $input = $("<input />", {type:'text',id: property.name + 'Id', name: property.name});
-                } else if (property.dataTypeEnum == 'Email') {
+                if (property.dataTypeEnum == 'Date' || property.dataTypeEnum == 'Time' || property.dataTypeEnum == 'DateTime' || property.dataTypeEnum == 'InternationalPhoneNumber' || property.dataTypeEnum == 'LocalPhoneNumber' || property.dataTypeEnum == 'Email') {
                     $input = $("<input />", {type:'text',id: property.name + 'Id', name: property.name});
                 } else if (property.dataTypeEnum == 'Video') {
                     $input = $("<input />", {type:'text',id: property.name + 'Id', name: property.name});
@@ -111,43 +154,81 @@
                 } else {
                     alert('Unsupported dataType ' + property.dataTypeEnum);
                 }
-                $input[0].defaultValue = data[property.name];
-                return $input;
+                if (data !== undefined && data !== null) {
+                    $input[0].defaultValue = data[property.name];
+                }
             } else if (property.oneEnumeration) {
-                var $select = $('<select />', {class: 'chzn-select', style: 'width:350px;',  id: property.name + 'Id', name: property.name});
-                appendEnumerationLoopupOptionsToSelect("/restAndJson/tumlEnumLookup", property.qualifiedName, property.lower > 0, data[property.name], $select);
-                return $select;
-            } else if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite) {
-                var select = $('<select />', {class: 'chzn-select', style: 'width:350px;',  id: property.name + 'Id', name: property.name});
-                appendLoopupOptionsToSelect(property.tumlLookupUri, property.lower > 0, data['id'], data[property.name], select);
-                return select;
-            } else if (property.fieldType == 'String') {
-                var stringInput = $('<input />', {type:'text', class: 'field', id: property.name + 'Id', name: property.name, value: data[property.name]});
-                stringInput.blur(function() {
-                    var validateInput = $('#' + property.name + 'Id');
-                    var validationResult = new TumlSlick.Validators.TumlString(property).validate(validateInput.val());
-                    if (!validationResult.valid) {
-                        validateInput.addClass('validation-error');
-                        validateInput.parent().append($('<span class="validation-error-msg" />').text(validationResult.msg));
-                    } else {
-                        validateInput.removeClass('validation-error');
-                    }
-                });
-                return stringInput;
-
-            } else if (property.fieldType == 'Integer') {
-                return $('<input />', {type:'text', class: 'field', id: property.name + 'Id', name: property.name, value: data[property.name]});
-            } else if (property.fieldType == 'Long') {
-                return $('<input />', {type:'text', class: 'field', id: property.name + 'Id', name: property.name, value: data[property.name]});
-            } else if (property.fieldType == 'Boolean') {
-                if (data[property.name]) {
-                    return $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: property.name + 'Id', name: property.name, checked: 'checked'});
+                $input = $('<select />', {class: 'chzn-select', style: 'width:350px;',  id: property.name + 'Id', name: property.name});
+                if (data !== undefined && data !==null) {
+                    appendEnumerationLoopupOptionsToSelect("/restAndJson/tumlEnumLookup", property.qualifiedName, property.lower > 0, data[property.name], $input);
                 } else {
-                    return $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: property.name + 'Id', name: property.name });
+                    appendEnumerationLoopupOptionsToSelect("/restAndJson/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, $input);
+                }
+            } else if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite) {
+                $input = $('<select />', {class: 'chzn-select', style: 'width:350px;',  id: property.name + 'Id', name: property.name});
+                if (data !== undefined && data !==null) {
+                    appendLoopupOptionsToSelect(property.tumlLookupUri, property.lower > 0, data['id'], data[property.name], $input);
+                } else {
+                    appendLoopupOptionsToSelect(property.tumlLookupOnCompositeParentUri, property.lower > 0, data['id'], data[property.name], $input);
+                }
+            } else if (property.fieldType == 'String') {
+                $input = $('<input />', {type:'text', class: 'field', id: property.name + 'Id', name: property.name});
+                if (data !== undefined && data !== null) {
+                    $input[0].defaultValue = data[property.name];
+                }
+            } else if (property.fieldType == 'Integer') {
+                $input = $('<input />', {type:'text', class: 'field', id: property.name + 'Id', name: property.name});
+                if (data !== undefined && data !== null) {
+                    $input[0].defaultValue = data[property.name];
+                }
+            } else if (property.fieldType == 'Long') {
+                $input = $('<input />', {type:'text', class: 'field', id: property.name + 'Id', name: property.name});
+                if (data !== undefined && data !== null) {
+                    $input[0].defaultValue = data[property.name];
+                }
+            } else if (property.fieldType == 'Boolean') {
+                if (data !== undefined && data !== null) {
+                    if (data[property.name]) {
+                        $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: property.name + 'Id', name: property.name, checked: 'checked'});
+                    } else {
+                        $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: property.name + 'Id', name: property.name });
+                    }
+                } else {
+                    $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: property.name + 'Id', name: property.name });
                 }
             }
+            $input.blur(function() {
+                validateField(property);
+            });
+            return $input;
         }
 
+        function validateField(property) {
+            removeServerErrorMessage();
+            var validateInput = $('#' + property.name + 'Id');
+            
+            var editor = selectEditor(property);
+            var validationResult;
+            if (editor !== undefined && editor !== null) {
+                var serializedValue = new editor().serializeValueWithValue(validateInput);
+                //selectFieldValidator returns the validate function
+                validationResult = selectFieldValidator(property)(serializedValue);
+                if (!validationResult.valid) {
+                    validateInput.removeClass('validation-error');
+                    validateInput.parent().children('.validation-error-msg').remove();
+                    validateInput.addClass('validation-error');
+                    validateInput.parent().append($('<span class="validation-error-msg" />').text(validationResult.msg));
+                } else {
+                    validateInput.removeClass('validation-error');
+                    validateInput.parent().children('.validation-error-msg').remove();
+                }
+            } else {
+                return {valid: true};
+            }
+
+            return validationResult;
+        }
+        
         function appendEnumerationLoopupOptionsToSelect(tumlLookupUri, propertyJavaClassName, required, currentValue, select) {
             var jqxhr = $.getJSON(tumlLookupUri + '?enumQualifiedName=' + propertyJavaClassName, function(response, b, c) {
                 //if not a required field add a black value
@@ -157,7 +238,9 @@
                 for (var i = 0; i < response.data.length; i++) {
                     select.append($('<option />)').val(response.data[i]).html(response.data[i]));
                 }
-                select.val(currentValue);
+                if (currentValue !== null) {
+                    select.val(currentValue);
+                }
                 if (!required) {
                     select.chosen({allow_single_deselect: true});
                 } else {
@@ -223,10 +306,19 @@
                     //Do nothing
                 } else if (property.name !== 'uri') {
                     if (property.onePrimitive) {
+                        var stringValue = $('#' + property.name + 'Id').val();
                         if (property.fieldType == 'Integer' || property.fieldType == 'Long') {
-                            dataToSend[property.name] = parseInt($('#' + property.name + 'Id').val());
+                            if (stringValue == '') {
+                                dataToSend[property.name] = null;
+                            } else {
+                                dataToSend[property.name] = parseInt(stringValue);
+                            }
                         } else if (property.fieldType == 'String') {
-                            dataToSend[property.name] = $('#' + property.name + 'Id').val();
+                            if (stringValue == '') {
+                                dataToSend[property.name] = null;
+                            } else {
+                                dataToSend[property.name] = stringValue;
+                            }
                         } else if (property.fieldType == 'Boolean') {
                             dataToSend[property.name] = $('#' + property.name + 'Id').attr("checked") == "checked";
                         }
@@ -268,6 +360,8 @@
             "TumlTabOneManagerVersion": "1.0.0",
             "onPutOneSuccess": new Tuml.Event(),
             "onPutOneFailure": new Tuml.Event(),
+            "onPostOneSuccess": new Tuml.Event(),
+            "onPostOneFailure": new Tuml.Event(),
             "refresh": refresh
         });
 

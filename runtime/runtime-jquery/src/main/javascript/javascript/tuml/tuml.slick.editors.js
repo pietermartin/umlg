@@ -25,6 +25,11 @@
     });
 
     function TextEditor(args) {
+        //Public api
+        $.extend(this, {
+            "TumlTextEditor": "1.0.0",
+            "serializeValueWithValue": serializeValueWithValue 
+        });
         var $input;
         var defaultValue;
         var scope = this;
@@ -65,10 +70,15 @@
         };
 
         this.serializeValue = function () {
-            if ($input.val() == '') {
+            return serializeValueWithValue($input);
+        };
+
+        function serializeValueWithValue(input) {
+            var value = input.val();
+            if (value == '') {
                 return null;
             } else {
-                return $input.val();
+                return value;
             }
         };
 
@@ -94,7 +104,10 @@
             };
         };
 
-        this.init();
+        //This is called from the grid, the one only uses the serializeValueWithValue function
+        if (args !== undefined) {
+            this.init();
+        }
     }
 
     function ManyPrimitiveEditor(args) {
@@ -107,7 +120,7 @@
         //Public api
         $.extend(this, {
             "TumlManyPrimitiveEditor": "1.0.0",
-            "serializeValue": serializeValue 
+            "serializeValueWithValue": serializeValueWithValue 
         });
 
         this.init = function () {
@@ -183,15 +196,20 @@
             $table.append(row);
         }
 
-        function serializeValue() {
-            var rowArray = $table.find('.many-primitive-editor-row');
+        this.serializeValue = function () {
+            return serializeValueWithValue($table);
+        };
+
+        function serializeValueWithValue(table) {
+            var rowArray = table.find('.many-primitive-editor-row');
             var arrayToSerialize = [];
             for (var i = 0; i < rowArray.length; i++) {
                 var row = rowArray[i];
                 arrayToSerialize.push(parseInt($(row).data('value'), 10));
             }
             return arrayToSerialize;
-        };
+        }
+
         this.applyValue = function (item, state) {
             item[args.column.field] = state;
         };
@@ -238,10 +256,18 @@
                 msg: null
             };
         };
-        this.init();
+        //This is called from the grid, the one only uses the serializeValueWithValue function
+        if (args !== undefined) {
+            this.init();
+        }
     }
 
     function IntegerEditor(args) {
+        //Public api
+        $.extend(this, {
+            "TumlIntegerEditor": "1.0.0",
+            "serializeValueWithValue": serializeValueWithValue 
+        });
         var $input;
         var defaultValue;
         var scope = this;
@@ -274,9 +300,13 @@
             $input.select();
         };
 
-        this.serializeValue = function () {
-            return parseInt($input.val(), 10) || 0;
+        this.serializeValue = function() {
+            return serializeValueWithValue($input);
         };
+
+        function serializeValueWithValue(input) {
+            return parseInt(input.val(), 10) || 0;
+        }
 
         this.applyValue = function (item, state) {
             item[args.column.field] = state;
@@ -299,9 +329,19 @@
                 msg: null
             };
         };
-        this.init();
+
+        //This is called from the grid, the one only uses the serializeValueWithValue function
+        if (args !== undefined) {
+            this.init();
+        }
     }
+
     function DateEditor(args) {
+        //Public api
+        $.extend(this, {
+            "TumlDateEditor": "1.0.0",
+            "serializeValueWithValue": serializeValueWithValue
+        });
         var $input;
         var defaultValue;
         var scope = this;
@@ -369,8 +409,12 @@
         };
 
         this.serializeValue = function () {
-            return $input.val();
+            return serializeValueWithValue($input);
         };
+
+        function serializeValueWithValue(input) {
+            return input.val();
+        }
 
         this.applyValue = function (item, state) {
             item[args.column.field] = state;
@@ -395,10 +439,18 @@
             };
         };
 
-        this.init();
+        //This is called from the grid, the one only uses the serializeValueWithValue function
+        if (args !== undefined) {
+            this.init();
+        }
     }
 
     function DateTimeEditor(args) {
+        //Public api
+        $.extend(this, {
+            "TumlDateTimeEditor": "1.0.0",
+            "serializeValueWithValue": serializeValueWithValue 
+        });
         var $input;
         var defaultValue;
         var scope = this;
@@ -466,8 +518,12 @@
 
         this.serializeValue = function () {
             //$input.unmask();
-            return $input.val();
+            return serializeValueWithValue($input);
         };
+
+        function serializeValueWithValue(input) {
+            return input.val();
+        }
 
         this.applyValue = function (item, state) {
             //This is to remove the space between date and time fiels in order for joda time not to moan
@@ -492,11 +548,20 @@
                 msg: null
             };
         };
-        this.init();
+
+        //This is called from the grid, the one only uses the serializeValueWithValue function
+        if (args !== undefined) {
+            this.init();
+        }
     }
 
 
     function TimeEditor(args) {
+        //Public api
+        $.extend(this, {
+            "TumlTimeEditor": "1.0.0",
+            "serializeValueWithValue": serializeValueWithValue 
+        });
         var $input;
         var defaultValue;
         var scope = this;
@@ -561,8 +626,12 @@
         };
 
         this.serializeValue = function () {
-            return $input.val();
+            return serializeValueWithValue($input);
         };
+
+        function serializeValueWithValue(input) {
+            return input.val();
+        }
 
         this.applyValue = function (item, state) {
             item[args.column.field] = state;
@@ -571,7 +640,6 @@
         this.isValueChanged = function () {
             return (!($input.val() == "" && defaultValue == null)) && ($input.val() != defaultValue);
         };
-
 
         this.validate = function () {
             if (args.column.validator) {
@@ -587,9 +655,18 @@
             };
         };
 
-        this.init();
+        //This is called from the grid, the one only uses the serializeValueWithValue function
+        if (args !== undefined) {
+            this.init();
+        }
     }
+
     function CheckboxEditor(args) {
+        //Public api
+        $.extend(this, {
+            "TumlCheckBoxEditor": "1.0.0",
+            "serializeValueWithValue": serializeValueWithValue 
+        });
         var $select;
         var defaultValue;
         var scope = this;
@@ -618,8 +695,12 @@
         };
 
         this.serializeValue = function () {
-            return ($select.attr("checked") == "checked");
+            return serializeValueWithValue($select);
         };
+
+        function serializeValueWithValue(select) {
+            return (select.attr("checked") == "checked");
+        }
 
         this.applyValue = function (item, state) {
             item[args.column.field] = state;
@@ -642,10 +723,18 @@
             };
         };
 
-        this.init();
+        //This is called from the grid, the one only uses the serializeValueWithValue function
+        if (args !== undefined) {
+            this.init();
+        }
     }
 
     function SelectEnumerationCellEditor(args) {
+        //Public api
+        $.extend(this, {
+            "TumlSelectEnumerationCellEditor": "1.0.0",
+            "serializeValueWithValue": serializeValueWithValue 
+        });
         var $select;
         var currentValue;
         var scope = this;
@@ -685,18 +774,18 @@
         this.loadValue = function(item) {
         };
 
-        this.serializeValue = function() {
+        this.serializeValue = function () {
             if(args.column.options){
-                var options = $select.children();
-                for (var i = 0; i < options.length; i++) {
-                    if (options[i].selected) {
-                        return $select.val();
-                    }
-                }
+                return serializeValueWithValue($select);
             }else{
-                return ($select.val() == "yes");
+                alert('why is this happening?');
+                //return serializeValueWithValue($select.val() == "yes"));
             }
         };
+
+        function serializeValueWithValue(select) {
+            return select.val();
+        }
 
         this.applyValue = function(item,state) {
             item[args.column.field] = state;
@@ -724,10 +813,20 @@
                 msg: null
             };
         };
-        this.init(args.item);
+
+
+        //This is called from the grid, the one only uses the serializeValueWithValue function
+        if (args !== undefined) {
+            this.init(args.item);
+        }
     }
 
     function SelectOneToOneCellEditor(args) {
+        //Public api
+        $.extend(this, {
+            "TumlSelectOneToOneEditor": "1.0.0",
+            "serializeValueWithValue": serializeValueWithValue 
+        });
         var $select;
         var currentValue;
         var scope = this;
@@ -773,19 +872,24 @@
         this.loadValue = function(item) {
         };
 
-        this.serializeValue = function() {
+        this.serializeValue = function () {
             if(args.column.options){
-                var options = $select.children();
-                for (var i = 0; i < options.length; i++) {
-                    if (options[i].selected) {
-                        return {id: parseInt($select.val()), displayName: options[i].label};
-                        break;
-                    }
-                }
-            }else{
-                return ($select.val() == "yes");
+                return serializeValueWithValue($select);
+            } else {
+                alert('why is this happening? 2');
+                //return ($select.val() == "yes");
             }
         };
+
+        function serializeValueWithValue(select) {
+            var options = select.children();
+            for (var i = 0; i < options.length; i++) {
+                if (options[i].selected) {
+                    return {id: parseInt(select.val()), displayName: options[i].label};
+                    break;
+                }
+            }
+        }
 
         this.applyValue = function(item,state) {
             var previousValue = item[args.column.field];
@@ -831,10 +935,19 @@
                 msg: null
             };
         };
-        this.init(args.item);
+
+        //This is called from the grid, the one only uses the serializeValueWithValue function
+        if (args !== undefined) {
+            this.init(args.item);
+        }
     }
 
     function SelectManyToOneCellEditor(args) {
+        //Public api
+        $.extend(this, {
+            "TumlSelectManyToOneCellEditor": "1.0.0",
+            "serializeValueWithValue": serializeValueWithValue 
+        });
         var $select;
         var currentValue;
         var scope = this;
@@ -880,19 +993,17 @@
         this.loadValue = function(item) {
         };
 
-        this.serializeValue = function() {
+        this.serializeValue = function () {
             if(args.column.options){
-                var options = $select.children();
-                for (var i = 0; i < options.length; i++) {
-                    if (options[i].selected) {
-                        return {id: parseInt($select.val()), displayName: options[i].label};
-                        break;
-                    }
-                }
+                return serializeValueWithValue($select);
             }else{
-                return ($select.val() == "yes");
+                alert('why is this happening 3?');
+                //return ($select.val() == "yes");
             }
         };
+
+        function serializeValueWithValue(select) {
+        }
 
         this.applyValue = function(item,state) {
             var previousValue = item[args.column.field];
@@ -938,11 +1049,20 @@
                 msg: null
             };
         };
-        this.init(args.item);
+
+        //This is called from the grid, the one only uses the serializeValueWithValue function
+        if (args !== undefined) {
+            this.init(args.item);
+        }
     }
 
 
     function IntegerEditor(args) {
+        //Public api
+        $.extend(this, {
+            "TumlIntegerEditor": "1.0.0",
+            "serializeValueWithValue": serializeValueWithValue 
+        });
         var $input;
         var defaultValue;
         var scope = this;
@@ -976,8 +1096,12 @@
         };
 
         this.serializeValue = function () {
-            return parseInt($input.val(), 10) || 0;
+            return parseInt($input);
         };
+        
+        function serializeValueWithValue(input) {
+            return parseInt(input.val(), 10) || 0;
+        }
 
         this.applyValue = function (item, state) {
             item[args.column.field] = state;
@@ -1001,6 +1125,10 @@
                 msg: null
             };
         };
-        this.init();
+
+        //This is called from the grid, the one only uses the serializeValueWithValue function
+        if (args !== undefined) {
+            this.init();
+        }
     }
 })(jQuery);

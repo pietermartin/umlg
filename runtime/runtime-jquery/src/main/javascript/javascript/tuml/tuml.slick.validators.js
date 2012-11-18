@@ -10,10 +10,15 @@
         "TumlSlick" : {
             "Validators" : {
                 "TumlString" : TumlStringValidator,
+                "TumlDateTime" : TumlDateTimeValidator,
                 "RangeLength" : RangeLengthValidator,
                 "MaxLength" : MaxLengthValidator,
                 "MinLength" : MinLengthValidator,
                 "Url" : UrlValidator,
+                "Email" : EmailValidator,
+                "DateTime" : DateTimeValidator,
+                "Date" : DateValidator,
+                "Time" : TimeValidator,
                 "TumlNumber" : TumlNumberValidator,
                 "TumlManyNumber" : TumlManyNumberValidator,
                 "Range" : RangeValidator,
@@ -25,6 +30,46 @@
         }
     });
 
+    function TumlDateTimeValidator(property) {
+        //Public api
+        $.extend(this, {
+            "TumlDateTimeValidator": "1.0.0",
+            "validate": validate 
+        });
+        
+       function validate(value) {
+            result = TumlSlick.Validators.Required(property, value);
+            if (!result.valid){
+                return result;
+            }
+            if (value !== undefined && value !== null && value !== '') {
+                if (property.validations !== null) {
+                    if (property.validations.date !== undefined) {
+                        result = TumlSlick.Validators.Date(property, value);
+                    }
+                    if (!result.valid){
+                        return result;
+                    }
+                    if (property.validations.time !== undefined) {
+                        result = TumlSlick.Validators.Time(property, value);
+                    }
+                    if (!result.valid){
+                        return result;
+                    }
+                    if (property.validations.dateTime !== undefined) {
+                        result = TumlSlick.Validators.DateTime(property, value);
+                    }
+                    if (!result.valid){
+                        return result;
+                    }
+                }
+            }
+            return {
+                valid: true,
+                msg: null
+            };
+        }
+    };
     function TumlStringValidator(property) {
         //Public api
         $.extend(this, {
@@ -37,30 +82,38 @@
             if (!result.valid){
                 return result;
             }
-            if (property.validations !== null) {
-                if (property.validations.rangeLength !== undefined) {
-                    result = TumlSlick.Validators.RangeLength(property, value);
-                }
-                if (!result.valid){
-                    return result;
-                }
-                if (property.validations.maxLength !== undefined) {
-                    result = TumlSlick.Validators.MaxLength(property, value);
-                }
-                if (!result.valid){
-                    return result;
-                }
-                if (property.validations.minLength !== undefined) {
-                    result = TumlSlick.Validators.MinLength(property, value);
-                }
-                if (!result.valid){
-                    return result;
-                }
-                if (property.validations.url !== undefined) {
-                    result = TumlSlick.Validators.Url(property, value);
-                }
-                if (!result.valid){
-                    return result;
+            if (value !== undefined && value !== null && value !== '') {
+                if (property.validations !== null) {
+                    if (property.validations.rangeLength !== undefined) {
+                        result = TumlSlick.Validators.RangeLength(property, value);
+                    }
+                    if (!result.valid){
+                        return result;
+                    }
+                    if (property.validations.maxLength !== undefined) {
+                        result = TumlSlick.Validators.MaxLength(property, value);
+                    }
+                    if (!result.valid){
+                        return result;
+                    }
+                    if (property.validations.minLength !== undefined) {
+                        result = TumlSlick.Validators.MinLength(property, value);
+                    }
+                    if (!result.valid){
+                        return result;
+                    }
+                    if (property.validations.url !== undefined) {
+                        result = TumlSlick.Validators.Url(property, value);
+                    }
+                    if (!result.valid){
+                        return result;
+                    }
+                    if (property.validations.email!== undefined) {
+                        result = TumlSlick.Validators.Email(property, value);
+                    }
+                    if (!result.valid){
+                        return result;
+                    }
                 }
             }
             return {
@@ -116,28 +169,30 @@
             if (!result.valid){
                 return result;
             }
-            result = TumlSlick.Validators.Number(property, value);
-            if (!result.valid){
-                return result;
-            }
-            if (property.validations !== null) {
-                if (property.validations.range !== undefined) {
-                    result = TumlSlick.Validators.Range(property, value);
-                }
+            if (value !== undefined && value !== null && value !== '') {
+                result = TumlSlick.Validators.Number(property, value);
                 if (!result.valid){
                     return result;
                 }
-                if (property.validations.max !== undefined) {
-                    result = TumlSlick.Validators.Max(property, value);
-                }
-                if (!result.valid){
-                    return result;
-                }
-                if (property.validations.min !== undefined) {
-                    result = TumlSlick.Validators.Min(property, value);
-                }
-                if (!result.valid){
-                    return result;
+                if (property.validations !== null) {
+                    if (property.validations.range !== undefined) {
+                        result = TumlSlick.Validators.Range(property, value);
+                    }
+                    if (!result.valid){
+                        return result;
+                    }
+                    if (property.validations.max !== undefined) {
+                        result = TumlSlick.Validators.Max(property, value);
+                    }
+                    if (!result.valid){
+                        return result;
+                    }
+                    if (property.validations.min !== undefined) {
+                        result = TumlSlick.Validators.Min(property, value);
+                    }
+                    if (!result.valid){
+                        return result;
+                    }
                 }
             }
             return {
@@ -229,6 +284,48 @@
 
     function UrlValidator(property, value) {
         return {valid: true};
+    }
+
+    function EmailValidator(property, value) {
+            var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; 
+        if (!re.test(value)) {
+            return {
+                valid: false,
+                msg: "Value is not a valid email address!"
+            }
+        } else {
+            return {valid: true};
+        }
+    }
+
+    function DateTimeValidator(property, value) {
+        try {
+            var result = $.datepicker.parseDateTime('yy-mm-dd', 'HH:mm:ss', value);
+            return {valid: true};
+        } catch (error) {
+            return {valid: false, msg: value + "'s format is incorrect, the format is 'yy-mm-dd HH:mm:ss'"}
+        }
+    }
+
+
+    function DateValidator(property, value) {
+        //datetimepicker thinks there is a time part to the value
+        value = value + ' 00:00:00';
+        try {
+            var result = $.datepicker.parseDate('yy-mm-dd', value);
+            return {valid: true};
+        } catch (error) {
+            return {valid: false, msg: value + "'s format is incorrect, the format is 'yy-mm-dd'"}
+        }
+    }
+
+    function TimeValidator(property, value) {
+        var result = $.datepicker.parseTime('HH:mm', value, {});
+        if (result) {
+            return {valid: true};
+        } else {
+            return {valid: false, msg: value + "'s format is incorrect, the format is 'HH:mm'"}
+        }   
     }
 
     function RequiredValidator(property, value) {
