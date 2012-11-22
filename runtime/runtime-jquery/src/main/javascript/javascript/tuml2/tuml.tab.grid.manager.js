@@ -46,7 +46,6 @@
             var columns = [];
             var columnFilters = {};
             var lookupColumns;
-            //var contextVertexId = tumlUri.match(/\d+/);
             var contextVertexId;
             contextVertexId = retrieveVertexId(tumlUri); 
 
@@ -549,34 +548,5 @@
 
         init();
     }
-
-    function selectFormatter(property) {
-        if (property.name == 'uri') {
-            return new TumlSlick.Formatters.Link;
-        } else if (property.name == 'id') {
-            return TumlSlick.Formatters.Id;
-        } else if (property.dataTypeEnum !== undefined) {
-            return null;
-        } else if (property.oneEnumeration) {
-            return  TumlSlick.Formatters.TumlRequired; 
-        } else if (!property.onePrimitive && !property.manyPrimitive) {
-            return function waitingFormatter(row, cell, value, columnDef, dataContext) {
-                if (value !== undefined && value !== null) {
-                    return value.displayName;
-                } else {
-                    return '';
-                }
-            };
-            return null;
-        } else if (property.lower > 0 && property.fieldType == 'String') {
-            return  TumlSlick.Formatters.TumlRequired; 
-        } else if (property.fieldType == 'Boolean') {
-            return Slick.Formatters.Checkmark;
-        } else {
-            return null; 
-        }
-
-    }
-
 
 })(jQuery);

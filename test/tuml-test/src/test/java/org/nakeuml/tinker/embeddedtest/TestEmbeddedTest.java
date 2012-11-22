@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.neo4j.graphdb.TransactionFailureException;
 import org.tuml.concretetest.God;
 import org.tuml.embeddedtest.REASON;
+import org.tuml.embeddedtest.TestEmbedded;
 import org.tuml.inheritencetest.Mamal;
 import org.tuml.runtime.collection.memory.TumlMemoryBag;
 import org.tuml.runtime.test.BaseLocalDbTest;
@@ -221,18 +222,36 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
 	public void testManyBoolean() {
 		God g = new God(true);
 		g.setName("ANOTHERGOD");
-		org.tuml.embeddedtest.TestEmbedded testEmbedded = new org.tuml.embeddedtest.TestEmbedded(g);
+		TestEmbedded testEmbedded = new TestEmbedded(g);
 		testEmbedded.setName("asd");
 		db.stopTransaction(Conclusion.SUCCESS);
 		testEmbedded.addToManyBoolean(true);
 		testEmbedded.addToManyBoolean(false);
 		db.stopTransaction(Conclusion.SUCCESS);
-		org.tuml.embeddedtest.TestEmbedded testEmbeddedX = new org.tuml.embeddedtest.TestEmbedded(testEmbedded.getVertex());
+		TestEmbedded testEmbeddedX = new TestEmbedded(testEmbedded.getVertex());
 		Assert.assertEquals(2, testEmbeddedX.getManyBoolean().size());
 		testEmbeddedX.setManyBoolean(new TumlMemoryBag<Boolean>(Arrays.asList(new Boolean[]{true, true})));
 		db.stopTransaction(Conclusion.SUCCESS);
-		org.tuml.embeddedtest.TestEmbedded testEmbeddedY = new org.tuml.embeddedtest.TestEmbedded(testEmbeddedX.getVertex());
+		TestEmbedded testEmbeddedY = new TestEmbedded(testEmbeddedX.getVertex());
 		Assert.assertEquals(2, testEmbeddedY.getManyBoolean().size());
 	}
-	
+
+	@Test
+	public void testManyBooleanBagJol() {
+		God g = new God(true);
+		g.setName("ANOTHERGOD");
+		TestEmbedded testEmbedded = new TestEmbedded(g);
+		testEmbedded.setName("asd");
+		db.stopTransaction(Conclusion.SUCCESS);
+		testEmbedded.addToManyBoolean(true);
+		testEmbedded.addToManyBoolean(true);
+		db.stopTransaction(Conclusion.SUCCESS);
+		TestEmbedded testEmbeddedX = new TestEmbedded(testEmbedded.getVertex());
+		Assert.assertEquals(2, testEmbeddedX.getManyBoolean().size());
+		testEmbeddedX.setManyBoolean(new TumlMemoryBag<Boolean>(Arrays.asList(new Boolean[]{false, false})));
+		db.stopTransaction(Conclusion.SUCCESS);
+		TestEmbedded testEmbeddedY = new TestEmbedded(testEmbeddedX.getVertex());
+		Assert.assertEquals(2, testEmbeddedY.getManyBoolean().size());
+	}
+
 }

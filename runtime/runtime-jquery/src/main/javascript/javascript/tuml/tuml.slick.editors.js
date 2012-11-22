@@ -18,7 +18,7 @@
                     "ManyPrimitiveEditor": ManyPrimitiveEditor,
                     "ManyStringPrimitiveEditor": ManyStringPrimitiveEditor,
                     "ManyIntegerPrimitiveEditor": ManyIntegerPrimitiveEditor,
-                    "ManyBooleanPrmitiveEditor": ManyBooleanPrimitiveEditor,
+                    "ManyBooleanPrimitiveEditor": ManyBooleanPrimitiveEditor,
                     "Checkbox": CheckboxEditor,
                     "Date": DateEditor,
                     "DateTime": DateTimeEditor,
