@@ -871,7 +871,8 @@ a.m-btn-plain-active{
 	background:url('images/pagination_loading.gif') no-repeat;
 }
 .panel{
-	overflow:hidden;
+	/*overflow:hidden;*/
+	overflow:visible;
 	font-size:12px;
 }
 .panel-header{
@@ -892,7 +893,8 @@ a.m-btn-plain-active{
 	border-bottom:1px solid #99BBE8;
 }
 .panel-body{
-	overflow:auto;
+	/*overflow:auto;*/
+	overflow:visible;
 	border:1px solid #99BBE8;
 	border-top-width:0px;
 }
@@ -1213,7 +1215,8 @@ a.s-btn-plain-active{
 a.s-btn-plain-active .s-btn-downarrow{
 	background:url('images/menu_split_downarrow.png') no-repeat 4px -19px;
 }.tabs-container{
-	overflow:hidden;
+	/*overflow:hidden;*/
+	overflow:visible;
 	background:#fff;
 }
 .tabs-header{
@@ -1416,7 +1419,8 @@ a.s-btn-plain-active .s-btn-downarrow{
 	padding:0px;
 	border:1px solid #8DB2E3;
 	border-top:0px;
-	overflow:hidden;
+	/*overflow:hidden;*/
+	overflow:visible;
 }
 .tabs-panels-noborder{
 	border:0px;

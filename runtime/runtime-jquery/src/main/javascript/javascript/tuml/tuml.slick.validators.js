@@ -20,7 +20,10 @@
                 "Date" : DateValidator,
                 "Time" : TimeValidator,
                 "TumlNumber" : TumlNumberValidator,
+                "TumlBoolean" : TumlBooleanValidator,
                 "TumlManyNumber" : TumlManyNumberValidator,
+                "TumlManyString" : TumlManyStringValidator,
+                "TumlManyBoolean" : TumlManyBooleanValidator,
                 "Range" : RangeValidator,
                 "Max" : MaxValidator,
                 "Min" : MinValidator,
@@ -123,6 +126,70 @@
         }
     };
 
+    function TumlManyStringValidator(property) {
+
+        //Public api
+        $.extend(this, {
+            "TumlManyStringValidator": "1.0.0",
+            "validate": validate 
+        });
+
+        function validate(arrayValue, value) {
+            if (arrayValue instanceof Array) {
+                if (property.unique && value !== undefined) {
+                    for (var i = 0; i < arrayValue.length; i++) {
+                        var tmp = arrayValue[i];
+                        if (tmp == value) {
+                            return {
+                                valid: false,
+                                msg: 'The list must be unique, ' + value + ' is allready present.' 
+                            };
+                        }
+                    }
+                }
+            }
+            return {
+                valid: true,
+                msg: null
+            };
+        }
+    };
+
+    function TumlManyBooleanValidator(property) {
+
+        //Public api
+        $.extend(this, {
+            "TumlManyBooleanValidator": "1.0.0",
+            "validate": validate 
+        });
+
+        function validate(arrayValue, value) {
+            if (arrayValue instanceof Array) {
+                if (property.unique && value !== undefined) {
+                    for (var i = 0; i < arrayValue.length; i++) {
+                        var tmp = arrayValue[i];
+                        if (tmp == value) {
+                            return {
+                                valid: false,
+                                msg: 'The list must be unique, ' + value + ' is allready present.' 
+                            };
+                        }
+                    }
+                }
+                var result;
+                for (var i = 0; i < arrayValue.length; i++) {
+                    var tmp = arrayValue[i];
+                    if (tmp !== 'true' && tmp !== 'false') {
+                        return {valid: false, msg: 'Value must be "true" or "false"'};
+                    }
+                }
+            }
+            return {
+                valid: true,
+                msg: null
+            };
+        }
+    };
     function TumlManyNumberValidator(property) {
 
         //Public api
@@ -153,6 +220,30 @@
             }
             return {
                 valid: false,
+                msg: null
+            };
+        }
+    };
+
+    function TumlBooleanValidator(property) {
+        //Public api
+        $.extend(this, {
+            "TumlBooleanValidator": "1.0.0",
+            "validate": validate 
+        });
+
+        function validate(value) {
+            result = TumlSlick.Validators.Required(property, value);
+            if (!result.valid){
+                return result;
+            }
+            if (value !== undefined && value !== null && value !== '') {
+                if (!result == 'true' && result == 'false') {
+                    return {valid: false, msg: 'Value must be "true" or "false"'};
+                }
+            }
+            return {
+                valid: true,
                 msg: null
             };
         }

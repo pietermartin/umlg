@@ -16,6 +16,9 @@
                     "SelectManyToOneCellEditor": SelectManyToOneCellEditor,
                     "SelectEnumerationCellEditor": SelectEnumerationCellEditor,
                     "ManyPrimitiveEditor": ManyPrimitiveEditor,
+                    "ManyStringPrimitiveEditor": ManyStringPrimitiveEditor,
+                    "ManyIntegerPrimitiveEditor": ManyIntegerPrimitiveEditor,
+                    "ManyBooleanPrmitiveEditor": ManyBooleanPrimitiveEditor,
                     "Checkbox": CheckboxEditor,
                     "Date": DateEditor,
                     "DateTime": DateTimeEditor,
@@ -110,7 +113,46 @@
         }
     }
 
-    function ManyPrimitiveEditor(args) {
+    function ManyStringPrimitiveEditor(args) {
+        var serializer = function serializeValueWithValue(table) {
+            var rowArray = table.find('.many-primitive-editor-row');
+            var arrayToSerialize = [];
+            for (var i = 0; i < rowArray.length; i++) {
+                var row = rowArray[i];
+                arrayToSerialize.push($(row).data('value'));
+            }
+            return arrayToSerialize;
+        }
+        return new Tuml.Slick.Editors.ManyPrimitiveEditor(args, serializer);
+    }
+
+    function ManyIntegerPrimitiveEditor(args) {
+        var serializer = function serializeValueWithValue(table) {
+            var rowArray = table.find('.many-primitive-editor-row');
+            var arrayToSerialize = [];
+            for (var i = 0; i < rowArray.length; i++) {
+                var row = rowArray[i];
+                arrayToSerialize.push(parseInt($(row).data('value'), 10));
+            }
+            return arrayToSerialize;
+        }
+        return new Tuml.Slick.Editors.ManyPrimitiveEditor(args, serializer);
+    }
+
+    function ManyBooleanPrimitiveEditor(args) {
+        var serializer = function serializeValueWithValue(table) {
+            var rowArray = table.find('.many-primitive-editor-row');
+            var arrayToSerialize = [];
+            for (var i = 0; i < rowArray.length; i++) {
+                var row = rowArray[i];
+                arrayToSerialize.push($(row).data('value'));
+            }
+            return arrayToSerialize;
+        }
+        return new Tuml.Slick.Editors.ManyPrimitiveEditor(args, serializer);
+    }
+
+    function ManyPrimitiveEditor(args, serializer) {
         var $input;
         var $div;
         var $table;
@@ -120,6 +162,7 @@
         //Public api
         $.extend(this, {
             "TumlManyPrimitiveEditor": "1.0.0",
+            "serializeValue": serializeValue, 
             "serializeValueWithValue": serializeValueWithValue 
         });
 
@@ -196,18 +239,12 @@
             $table.append(row);
         }
 
-        this.serializeValue = function () {
+        function serializeValue() {
             return serializeValueWithValue($table);
         };
 
         function serializeValueWithValue(table) {
-            var rowArray = table.find('.many-primitive-editor-row');
-            var arrayToSerialize = [];
-            for (var i = 0; i < rowArray.length; i++) {
-                var row = rowArray[i];
-                arrayToSerialize.push(parseInt($(row).data('value'), 10));
-            }
-            return arrayToSerialize;
+            return serializer(table);
         }
 
         this.applyValue = function (item, state) {

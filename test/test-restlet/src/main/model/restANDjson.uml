@@ -101,6 +101,16 @@
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_-FxxETGHEeK9AeutZ8kzPA"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_-FxxEjGHEeK9AeutZ8kzPA" value="1"/>
             </ownedAttribute>
+            <ownedAttribute xmi:id="_O76NcDQJEeK9AeutZ8kzPA" name="manyString">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Q069gDQJEeK9AeutZ8kzPA"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Q07kkDQJEeK9AeutZ8kzPA" value="*"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:id="_0JsQcDS-EeK9AeutZ8kzPA" name="manyBoolean" isUnique="false">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Om354DS_EeK9AeutZ8kzPA"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Om4g8DS_EeK9AeutZ8kzPA" value="*"/>
+            </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Class" xmi:id="_47QggN4jEeGdB9TPHp60mw" name="Ring">
             <generalization xmi:id="_NBKjICXTEeKbPYSfIbmXag">

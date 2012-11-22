@@ -82,16 +82,20 @@
             });
             mainViewManager.onPutOneSuccess.subscribe(function(e, args) {
                 self.onPutOneSuccess.notify(args, e, self);
-                refresh(args.uri);
-                changeMyUrl(args.name, args.uri);
+                var contextMetaData = getContextMetaData(args.data, args.tumlUri);
+                contextManager.refresh(contextMetaData.name, contextMetaData.uri, contextMetaData.contextVertexId);
+                var adjustedUri = contextMetaData.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextMetaData.contextVertexId);
+                changeMyUrl(contextMetaData.name, adjustedUri);
             });
             mainViewManager.onPutOneFailure.subscribe(function(e, args) {
                 self.onPutOneFailure.notify(args, e, self);
             });
             mainViewManager.onPostOneSuccess.subscribe(function(e, args) {
                 self.onPostOneSuccess.notify(args, e, self);
-                refresh(args.uri);
-                changeMyUrl(args.name, args.uri);
+                var contextMetaData = getContextMetaData(args.data, args.tumlUri);
+                contextManager.refresh(contextMetaData.name, contextMetaData.uri, contextMetaData.contextVertexId);
+                var adjustedUri = contextMetaData.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextMetaData.contextVertexId);
+                changeMyUrl(contextMetaData.name, adjustedUri);
             });
             mainViewManager.onPostOneFailure.subscribe(function(e, args) {
                 self.onPostOneFailure.notify(args, e, self);

@@ -152,6 +152,14 @@
           <element xmi:type="uml:Property" href="restANDjson.uml#_kluJQC_9EeK9AeutZ8kzPA"/>
           <layoutConstraint xmi:type="notation:Location" xmi:id="_klwlgS_9EeK9AeutZ8kzPA"/>
         </children>
+        <children xmi:type="notation:Shape" xmi:id="_O78CoDQJEeK9AeutZ8kzPA" type="3012" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:Property" href="restANDjson.uml#_O76NcDQJEeK9AeutZ8kzPA"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_O78CoTQJEeK9AeutZ8kzPA"/>
+        </children>
+        <children xmi:type="notation:Shape" xmi:id="_0JuFoDS-EeK9AeutZ8kzPA" type="3012" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:Property" href="restANDjson.uml#_0JsQcDS-EeK9AeutZ8kzPA"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_0JuFoTS-EeK9AeutZ8kzPA"/>
+        </children>
       </children>
       <children xmi:type="notation:BasicCompartment" xmi:id="_q6eBwwAOEeKpVr_ntT6cLA" type="7019"/>
       <children xmi:type="notation:DecorationNode" xmi:id="_q8kTgAAOEeKpVr_ntT6cLA" type="5029"/>

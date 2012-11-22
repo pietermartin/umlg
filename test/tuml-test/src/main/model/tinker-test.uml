@@ -484,6 +484,11 @@
                 <body>OrderedSet{'a', 'b', 'c'}</body>
               </defaultValue>
             </ownedAttribute>
+            <ownedAttribute xmi:id="_a-tnADTEEeK9AeutZ8kzPA" name="manyBoolean" visibility="public" isUnique="false">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_bPZuYDTEEeK9AeutZ8kzPA"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_bPa8gDTEEeK9AeutZ8kzPA" value="*"/>
+            </ownedAttribute>
           </packagedElement>
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_-S1C4O91EeC2XrXxx1atfA" name="hierarchytest">

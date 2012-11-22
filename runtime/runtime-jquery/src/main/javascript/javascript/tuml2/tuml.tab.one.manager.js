@@ -27,7 +27,7 @@
             $('<div id="serverErrorMsg" />').appendTo(tabDiv);
             $('<div />', {id: 'formDiv'}).appendTo(tabDiv);
 
-            var ul = $('<ul />')
+            var ul = $('<ul class="oneUl" />')
             ul.appendTo($("#formDiv"));
             $.each(metaForData.properties, function(index, property) {
                 if (isPropertyForOnePage(property)) {
@@ -71,7 +71,7 @@
                 var validationResults = [];
                 $.each(metaForData.properties, function(index, property) {
 
-                    if (isPropertyForOnePage(property)) {
+                    if (!property.readOnly && isPropertyForOnePage(property)) {
                         var validationResult = validateField(property);
                         if (!validationResult.valid) {
                             validationResults.push(validationResult);
@@ -121,7 +121,7 @@
         }
 
         function isPropertyForOnePage(property) {
-            return(!property.inverseComposite && ((property.oneToOne || property.manyToOne) || property.manyPrimitive) && property.name !== 'uri'); 
+            return(!property.inverseComposite && !property.composite && ((property.oneToOne || property.manyToOne) || property.manyPrimitive) && property.name !== 'uri'); 
         }
 
         function removeServerErrorMessage() {
@@ -187,14 +187,19 @@
                     $input[0].defaultValue = data[property.name];
                 }
             } else if (property.fieldType == 'Boolean') {
-                if (data !== undefined && data !== null) {
+                if (!property.manyPrimitive && data !== undefined && data !== null) {
                     if (data[property.name]) {
                         $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: property.name + 'Id', name: property.name, checked: 'checked'});
                     } else {
                         $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: property.name + 'Id', name: property.name });
                     }
-                } else {
+                } else if (!property.manyPrimitive) {
                     $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: property.name + 'Id', name: property.name });
+                } else {
+                    $input = $('<input />', {type:'text', class: 'field', id: property.name + 'Id', name: property.name});
+                    if (data !== undefined && data !== null) {
+                        $input[0].defaultValue = data[property.name];
+                    }
                 }
             }
             $input.blur(function() {
@@ -207,23 +212,52 @@
             removeServerErrorMessage();
             var validateInput = $('#' + property.name + 'Id');
             
+            var serializedValue = [];
             var editor = selectEditor(property);
             var validationResult;
-            if (editor !== undefined && editor !== null) {
-                var serializedValue = new editor().serializeValueWithValue(validateInput);
-                //selectFieldValidator returns the validate function
-                validationResult = selectFieldValidator(property)(serializedValue);
-                if (!validationResult.valid) {
-                    validateInput.removeClass('validation-error');
-                    validateInput.parent().children('.validation-error-msg').remove();
-                    validateInput.addClass('validation-error');
-                    validateInput.parent().append($('<span class="validation-error-msg" />').text(validationResult.msg));
-                } else {
-                    validateInput.removeClass('validation-error');
-                    validateInput.parent().children('.validation-error-msg').remove();
+            if (property.manyPrimitive) {
+                var stringValueArray = validateInput.val().split(',');
+                var tmpSerializedValue = [];
+                for (var i = 0; i < stringValueArray.length; i++) {
+                    var tmpValue = stringValueArray[i];
+                    if (property.fieldType === 'Integer') {
+                        if (isNaN(tmpValue)) {
+                            validationResult = {valid: false, msg: 'Please enter a valid number.'};
+                        } else {
+                            if (property.unique && tmpSerializedValue.indexOf(parseInt(stringValueArray[i])) !== -1) {
+                                validationResult = {valid: false, msg: 'Duplicates are not allowed.'};
+                            } else {
+                                tmpSerializedValue.push(parseInt(stringValueArray[i]));
+                            }
+                        }
+                    } else if (property.fieldType === 'Boolean') {
+                        if (tmpValue != 'true' && tmpValue != 'false') {
+                            validationResult = {valid: false, msg: 'Value must be "true" or "false".'};
+                        }
+                    } else {
+                        if (property.unique && tmpSerializedValue.indexOf(stringValueArray[i]) !== -1) {
+                            validationResult = {valid: false, msg: 'Duplicates are not allowed.'};
+                        } else {
+                            tmpSerializedValue.push(stringValueArray[i]);
+                        }
+                    }
+                }
+                if (validationResult === undefined) {
+                    validationResult = selectFieldValidator(property)(tmpSerializedValue);
                 }
             } else {
-                return {valid: true};
+                serializedValue = new editor().serializeValueWithValue(validateInput);
+                validationResult = selectFieldValidator(property)(serializedValue);
+            }
+            //selectFieldValidator returns the validate function
+            if (!validationResult.valid) {
+                validateInput.removeClass('validation-error');
+                validateInput.parent().children('.validation-error-msg').remove();
+                validateInput.addClass('validation-error');
+                validateInput.parent().append($('<span class="validation-error-msg" />').text(validationResult.msg));
+            } else {
+                validateInput.removeClass('validation-error');
+                validateInput.parent().children('.validation-error-msg').remove();
             }
 
             return validationResult;

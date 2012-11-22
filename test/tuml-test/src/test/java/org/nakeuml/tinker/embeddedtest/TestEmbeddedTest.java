@@ -6,11 +6,14 @@ import org.neo4j.graphdb.TransactionFailureException;
 import org.tuml.concretetest.God;
 import org.tuml.embeddedtest.REASON;
 import org.tuml.inheritencetest.Mamal;
+import org.tuml.runtime.collection.memory.TumlMemoryBag;
 import org.tuml.runtime.test.BaseLocalDbTest;
+
+import scala.actors.threadpool.Arrays;
 
 import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 
-public class TestEmbedded extends BaseLocalDbTest {
+public class TestEmbeddedTest extends BaseLocalDbTest {
 
 	@Test
 	public void testOneToManyEnum() {
@@ -212,6 +215,24 @@ public class TestEmbedded extends BaseLocalDbTest {
 		Assert.assertEquals("b", gt.getManyRequiredOrderedUniqueString().get(1));
 		Assert.assertEquals("d", gt.getManyRequiredOrderedUniqueString().get(2));
 		Assert.assertEquals("c", gt.getManyRequiredOrderedUniqueString().get(3));
+	}
+	
+	@Test
+	public void testManyBoolean() {
+		God g = new God(true);
+		g.setName("ANOTHERGOD");
+		org.tuml.embeddedtest.TestEmbedded testEmbedded = new org.tuml.embeddedtest.TestEmbedded(g);
+		testEmbedded.setName("asd");
+		db.stopTransaction(Conclusion.SUCCESS);
+		testEmbedded.addToManyBoolean(true);
+		testEmbedded.addToManyBoolean(false);
+		db.stopTransaction(Conclusion.SUCCESS);
+		org.tuml.embeddedtest.TestEmbedded testEmbeddedX = new org.tuml.embeddedtest.TestEmbedded(testEmbedded.getVertex());
+		Assert.assertEquals(2, testEmbeddedX.getManyBoolean().size());
+		testEmbeddedX.setManyBoolean(new TumlMemoryBag<Boolean>(Arrays.asList(new Boolean[]{true, true})));
+		db.stopTransaction(Conclusion.SUCCESS);
+		org.tuml.embeddedtest.TestEmbedded testEmbeddedY = new org.tuml.embeddedtest.TestEmbedded(testEmbeddedX.getVertex());
+		Assert.assertEquals(2, testEmbeddedY.getManyBoolean().size());
 	}
 	
 }

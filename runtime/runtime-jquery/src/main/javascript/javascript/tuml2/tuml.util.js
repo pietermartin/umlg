@@ -81,8 +81,12 @@ function selectEditor(property) {
         }
     } else if (property.oneEnumeration) {
         return  Tuml.Slick.Editors.SelectEnumerationCellEditor; 
-    } else if (property.manyPrimitive) {
-        return  Tuml.Slick.Editors.ManyPrimitiveEditor; 
+    } else if (property.manyPrimitive && property.fieldType === 'String') {
+        return  Tuml.Slick.Editors.ManyStringPrimitiveEditor; 
+    } else if (property.manyPrimitive && property.fieldType === 'Integer') {
+        return  Tuml.Slick.Editors.ManyIntegerPrimitiveEditor; 
+    } else if (property.manyPrimitive && property.fieldType === 'Boolean') {
+        return  Tuml.Slick.Editors.ManyBooleanPrimitiveEditor; 
     } else if (!property.onePrimitive && !property.manyPrimitive && !property.composite && property.oneToOne) {
         return  Tuml.Slick.Editors.SelectOneToOneCellEditor; 
     } else if (!property.onePrimitive && !property.manyPrimitive && !property.composite && property.manyToOne) {

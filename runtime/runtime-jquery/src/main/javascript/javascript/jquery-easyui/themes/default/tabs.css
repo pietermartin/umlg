@@ -1,5 +1,6 @@
 .tabs-container{
-	overflow:hidden;
+	/*overflow:hidden;*/
+	overflow:visible;
 	background:#fff;
 }
 .tabs-header{

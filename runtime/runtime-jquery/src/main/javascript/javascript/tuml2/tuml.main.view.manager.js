@@ -60,13 +60,32 @@
 
             tumlOneViewManager = new Tuml.TumlOneViewManager();
             tumlOneViewManager.onPutOneSuccess.subscribe(function(e, args) {
+                var metaDataNavigatingTo = args.data[0].meta.to;
+                var metaDataNavigatingFrom = args.data[0].meta.from;
+                var contextVertexId = retrieveVertexId(args.tumlUri);
+                if (metaDataNavigatingFrom === undefined) {
+                    //Put directly on the resouce
+                    leftMenuManager.refresh(metaDataNavigatingTo, metaDataNavigatingTo, args.data[0].data.id);
+                } else {
+                    //Put on the to one property
+                    //First param is contextMetaDataFrom second contextMetaDataTo
+                    leftMenuManager.refresh(metaDataNavigatingTo, metaDataNavigatingTo, args.data[0].data.id);
+                }
                 self.onPutOneSuccess.notify(args, e, self);
             });
             tumlOneViewManager.onPutOneFailure.subscribe(function(e, args) {
                 self.onPutOneFailure.notify(args, e, self);
             });
             tumlOneViewManager.onPostOneSuccess.subscribe(function(e, args) {
-                self.onPostOneSuccess.notify(args, e, self);
+                var metaDataNavigatingTo = args.data[0].meta.to;
+                var metaDataNavigatingFrom = args.data[0].meta.from;
+                if (metaDataNavigatingFrom === undefined) {
+                    alert('metaDataNaviging is undefined, this should never happen!!');
+                } else {
+                    //First param is contextMetaDataFrom second contextMetaDataTo
+                    leftMenuManager.refresh(metaDataNavigatingTo, metaDataNavigatingTo, args.data[0].data.id);
+                    self.onPostOneSuccess.notify(args, e, self);
+                }
             });
             tumlOneViewManager.onPostOneFailure.subscribe(function(e, args) {
                 self.onPostOneFailure.notify(args, e, self);
