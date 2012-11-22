@@ -27,6 +27,8 @@ function selectFormatter(property) {
         return null;
     } else if (property.lower > 0 && property.fieldType == 'String') {
         return  TumlSlick.Formatters.TumlRequired; 
+    } else if (property.manyPrimitive && property.fieldType == 'Boolean') {
+        return  TumlSlick.Formatters.TumlManyBoolean; 
     } else if (property.fieldType == 'Boolean') {
         return Slick.Formatters.Checkmark;
     } else {

@@ -11,6 +11,7 @@
             "Formatters" : {
                 "TumlRequired" : TumlRequiredFormatter,
                 "TumlDelete" : TumlDeleteFormatter,
+                "TumlManyBoolean" : TumlManyBooleanFormatter,
                 "Link" : LinkFormatter
             }
         }
@@ -34,6 +35,18 @@
         }
         var url = value.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), dataContext.id);
         return "<b class='selfUrl' tumlUriData='" + url + "'>self</b>"
+    }
+    function TumlManyBooleanFormatter(row, cell, value, columnDef, dataContext) {
+        var result = '';
+        for (var i = 0; i < value.length; i++) {
+            var booleanValue = value[i];
+            if (booleanValue === 'true') {
+                result += "<img src='/restAndJson/javascript/slickgrid/images/tick.png'>";
+            } else {
+                result += ', false';
+            }
+        }
+        return result;
     }
 
 })(jQuery);
