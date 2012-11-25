@@ -112,10 +112,10 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
 		annotatedClass.addToImports(TumlClassOperations.getPathName(clazz));
 
 		get.getBody().addToStatements("StringBuilder json = new StringBuilder()");
-		get.getBody().addToStatements("json.append(\"[{\\\"data\\\": \")");
+		get.getBody().addToStatements("json.append(\"[{\\\"data\\\": [\")");
 		get.getBody().addToStatements("json.append(" + "c.toJson())");
 
-		get.getBody().addToStatements("meta", "json.append(\", \\\"meta\\\" : {\")");
+		get.getBody().addToStatements("meta", "json.append(\"], \\\"meta\\\" : {\")");
 
 		get.getBody().addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + clazz.getQualifiedName() + "\\\"\")");
 		get.getBody().addToStatements("json.append(\", \\\"to\\\": \")");

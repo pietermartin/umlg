@@ -72,13 +72,13 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 					if (c.isEnum()) {
 						Object value = this.getVertexForDirection(edge).getProperty("value");
 						node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
-						this.internalVertexMap.put(value, this.getVertexForDirection(edge));
+						putToInternalMap(value, this.getVertexForDirection(edge));
 					} else if (TumlNode.class.isAssignableFrom(c)) {
 						node = (E) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
 					} else {
 						Object value = this.getVertexForDirection(edge).getProperty("value");
 						node = (E) value;
-						this.internalVertexMap.put(value, this.getVertexForDirection(edge));
+						putToInternalMap(value, this.getVertexForDirection(edge));
 					}
 					this.internalCollection.add(node);
 				} catch (Exception ex) {
@@ -110,6 +110,14 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 			}
 		}
 		this.loaded = true;
+	}
+
+	protected Vertex getFromInternalMap(Object key) {
+		return this.internalVertexMap.remove(key);
+	}
+
+	protected void putToInternalMap(Object key, Vertex vertex) {
+		this.internalVertexMap.put(key, vertex);
 	}
 
 	protected Iterator<Edge> getEdges() {
@@ -238,12 +246,12 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 					break;
 				}
 			} else if (o.getClass().isEnum()) {
-				v = this.internalVertexMap.get(((Enum<?>) o).name());
+				v = getFromInternalMap(((Enum<?>) o).name());
 				GraphDb.getDb().removeVertex(v);
 			} else if (isOnePrimitive() || getDataTypeEnum() != null) {
 				this.vertex.removeProperty(getLabel());
 			} else {
-				v = this.internalVertexMap.get(o);
+				v = getFromInternalMap(o);
 				if (this.owner instanceof TinkerAuditableNode) {
 					createAudit(e, true);
 				}
@@ -252,6 +260,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 		}
 		return result;
 	}
+
 
 	protected Edge addInternal(E e) {
 		Vertex v = null;
@@ -279,7 +288,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 		} else if (e.getClass().isEnum()) {
 			v = GraphDb.getDb().addVertex(null);
 			v.setProperty("value", ((Enum<?>) e).name());
-			this.internalVertexMap.put(((Enum<?>) e).name(), v);
+			putToInternalMap(((Enum<?>) e).name(), v);
 		} else if (isOnePrimitive()) {
 			this.vertex.setProperty(getLabel(), e);
 		} else if (getDataTypeEnum() != null && getDataTypeEnum().isDateTime()) {
@@ -291,7 +300,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 		} else {
 			v = GraphDb.getDb().addVertex(null);
 			v.setProperty("value", e);
-			this.internalVertexMap.put(e, v);
+			putToInternalMap(e, v);
 		}
 		if (v != null) {
 			Edge edge = null;

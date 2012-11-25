@@ -20,32 +20,39 @@
         }
 
         function refresh(tumlUri, result) {
-            if (result instanceof Array) {
-                response = result[0];
-            } else {
-                response = result;
+            var isForCreation = true;
+            for (var i = 0; i < result.length; i++) {
+                if (result[i].data.length > 0) {
+                    isForCreation = false;
+                    break;
+                }
             }
-            metaForData = response.meta.to;
-            var tabContainer = $('#tab-container');
-            var tabDiv = $('<div />', {id: metaForData.name, title: metaForData.name, class: 'tumltab'}).appendTo(tabContainer);
-            var tumlTabViewManager = new Tuml.TumlTabViewManager({many: false, one: true, query: false}, tumlUri, response.meta.qualifiedName, metaForData.name);
-            tumlTabViewManager.onPutOneSuccess.subscribe(function(e, args) {
-                self.onPutOneSuccess.notify(args, e, self);
-            });
-            tumlTabViewManager.onPutOneFailure.subscribe(function(e, args) {
-            });
-            tumlTabViewManager.onPostOneSuccess.subscribe(function(e, args) {
-                self.onPostOneSuccess.notify(args, e, self);
-            });
-            tumlTabViewManager.onPostOneFailure.subscribe(function(e, args) {
-            });
-            //Only create the tab if it does not exist. This function is called initially and after an update (PUT)
-            var tabDiv = $('#' + metaForData.name);
-            if (tabDiv.length === undefined || tabDiv == null) {
-                tumlTabViewManager.createTab(result);
+            for (var i = 0; i < result.length; i++) {
+                response = result[i];
+                metaForData = response.meta.to;
+                if (isForCreation || response.data.length > 0) {
+                    var tabContainer = $('#tab-container');
+                    var tabDiv = $('<div />', {id: metaForData.name, title: metaForData.name, class: 'tumltab'}).appendTo(tabContainer);
+                    var tumlTabViewManager = new Tuml.TumlTabViewManager({many: false, one: true, query: false}, tumlUri, response.meta.qualifiedName, metaForData.name);
+                    tumlTabViewManager.onPutOneSuccess.subscribe(function(e, args) {
+                        self.onPutOneSuccess.notify(args, e, self);
+                    });
+                    tumlTabViewManager.onPutOneFailure.subscribe(function(e, args) {
+                    });
+                    tumlTabViewManager.onPostOneSuccess.subscribe(function(e, args) {
+                        self.onPostOneSuccess.notify(args, e, self);
+                    });
+                    tumlTabViewManager.onPostOneFailure.subscribe(function(e, args) {
+                    });
+                    //Only create the tab if it does not exist. This function is called initially and after an update (PUT)
+                    var tabDiv = $('#' + metaForData.name);
+                    if (tabDiv.length === undefined || tabDiv == null) {
+                        tumlTabViewManager.createTab(result);
+                    }
+                    tumlTabViewManager.createOne(response.data[0], metaForData);
+                    tumlTabViewManagers.push(tumlTabViewManager);
+                }
             }
-            tumlTabViewManager.createOne(response.data, metaForData);
-            tumlTabViewManagers.push(tumlTabViewManager);
         }
 
         function closeQuery(title, index) {

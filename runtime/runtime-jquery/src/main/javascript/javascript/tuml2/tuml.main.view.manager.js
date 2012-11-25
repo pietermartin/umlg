@@ -71,6 +71,7 @@
                     //First param is contextMetaDataFrom second contextMetaDataTo
                     leftMenuManager.refresh(metaDataNavigatingTo, metaDataNavigatingTo, args.data[0].data.id);
                 }
+                refresh(args.tumlUri, args.data);
                 self.onPutOneSuccess.notify(args, e, self);
             });
             tumlOneViewManager.onPutOneFailure.subscribe(function(e, args) {
@@ -85,6 +86,7 @@
                     //First param is contextMetaDataFrom second contextMetaDataTo
                     leftMenuManager.refresh(metaDataNavigatingTo, metaDataNavigatingTo, args.data[0].data.id);
                     self.onPostOneSuccess.notify(args, e, self);
+                    refresh(args.tumlUri, args.data);
                 }
             });
             tumlOneViewManager.onPostOneFailure.subscribe(function(e, args) {
@@ -118,15 +120,30 @@
             } else {
                 //Property is a one
                 isOne = true;
-                if (result[0].data !== null) {
-                    recreateTabContainer();
-                    qualifiedName = result[0].meta.qualifiedName;
-                    var contextVertexId = result[0].data.id;
-                    //If property is a one then there is n navigating from
-                    leftMenuManager.refresh(metaDataNavigatingTo, metaDataNavigatingTo, contextVertexId);
-                    tumlOneViewManager.refresh(tumlUri, result);
-                    tumlManyViewManager.clear();
+                var isForCreation = true;
+                for (var i = 0; i < result.length; i++) {
+                    if (result[i].data.length > 0) {
+                        isForCreation = false;
+                        break;
+                    }
+                }
+                if (!isForCreation) {
+                    //Only one element of the array contains data, i.e. for the return concrete type
+                    for (var i = 0; i < result.length; i++) {
+                        if (result[i].data.length > 0) {
+                            recreateTabContainer();
+                            metaDataNavigatingTo = result[i].meta.to;
+                            qualifiedName = result[i].meta.qualifiedName;
+                            var contextVertexId = result[i].data[0].id;
+                            //If property is a one then there is n navigating from
+                            leftMenuManager.refresh(metaDataNavigatingTo, metaDataNavigatingTo, contextVertexId);
+                            tumlOneViewManager.refresh(tumlUri, result);
+                            tumlManyViewManager.clear();
+                            break;
+                        }
+                    }
                 } else {
+                    //This is for creation of the one
                     recreateTabContainer();
                     qualifiedName = result[0].meta.qualifiedName;
                     var contextVertexId = retrieveVertexId(tumlUri);

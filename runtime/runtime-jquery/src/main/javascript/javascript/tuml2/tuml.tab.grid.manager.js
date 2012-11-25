@@ -50,7 +50,7 @@
             contextVertexId = retrieveVertexId(tumlUri); 
 
             $.each(localMetaForData.properties, function(index, property) {
-                if (!property.inverseComposite && ((property.oneToOne || property.manyToOne) || property.manyPrimitive)) {
+                if (!property.composite && !property.inverseComposite && ((property.oneToOne || property.manyToOne) || property.manyPrimitive)) {
                     //Place the id column first
                     if (property.name == "id") {
                         columns.splice(0,0,{
@@ -157,7 +157,7 @@
                                 contentType: "json",
                                 data: JSON.stringify(dataView.getUpdatedItems()),
                                 success: function(data, textStatus, jqXHR) {
-                                    self.onPutSuccess.notify({tumlUri: tumlUri, tabId: localMetaForData.name, data: data}, null, self);
+                                    self.onPutSuccess.notify({tumlUri: tumlUri + '_' + localForMetaData.name, tabId: localMetaForData.name, data: data}, null, self);
                                 },
                                 error: function(jqXHR, textStatus, errorThrown) {
                                     self.onPutFailure.notify({tumlUri: tumlUri, tabId: localMetaForData.name}, null, self);
@@ -167,7 +167,7 @@
                         //post new items
                         if (dataView.getNewItems().length !== 0) {
                             $.ajax({
-                                url: tumlUri,
+                                url: tumlUri + '_' + localMetaForData.name,
                                 type: "POST",
                                 dataType: "json",
                                 contentType: "json",
@@ -183,7 +183,7 @@
                         //delete new items
                         if (dataView.getDeletedItems().length !== 0) {
                             $.ajax({
-                                url: tumlUri,
+                                url: tumlUri + '_' + localMetaForData.name,
                                 type: "DELETE",
                                 dataType: "json",
                                 contentType: "json",
@@ -302,6 +302,7 @@
                 if (grid.getColumns()[args.cell].name == 'delete') {
                     var item = dataView.getItem(args.row);
                     dataView.deleteItem(item.id);
+                    e.stopImmediatePropagation();
                 } else if (grid.getColumns()[args.cell].name == 'uri') {
                     var item = dataView.getItem(args.row);
                     var uri = item.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), item.id);
@@ -321,6 +322,13 @@
                 }
                 //Generate a fake id, its required for the grid to work nicely
                 $newItem.id = 'fake::' + data.length + dataView.getNewItems().length + 1;
+
+                //Default required booleans to false
+                $.each(localMetaForData.properties, function(index, property) {
+                    if (property.fieldType == 'Boolean' && property.lower > 0) {
+                        $newItem[property.name] = false;
+                    }
+                });
                 dataView.addItem($.extend($newItem, args.item));
             });
 

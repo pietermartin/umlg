@@ -1,5 +1,6 @@
 package org.tuml.runtime.collection.persistent;
 
+import java.util.List;
 import java.util.Set;
 
 import org.tuml.runtime.collection.TinkerBag;
@@ -12,12 +13,15 @@ import org.tuml.runtime.collection.ocl.OclStdLibBagImpl;
 import org.tuml.runtime.domain.TumlNode;
 
 import com.google.common.collect.HashMultiset;
+import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multiset;
+import com.tinkerpop.blueprints.Vertex;
 
 public abstract class BaseBag<E> extends BaseCollection<E> implements TinkerBag<E>, OclStdLibBag<E> {
 
 	protected OclStdLibBag<E> oclStdLibBag;
-
+	protected LinkedListMultimap<Object, Vertex> internalVertexMultiMap = LinkedListMultimap.create();
+	
 	public BaseBag(TumlRuntimeProperty runtimeProperty) {
 		super(runtimeProperty);
 		this.internalCollection = HashMultiset.create();
@@ -32,6 +36,22 @@ public abstract class BaseBag<E> extends BaseCollection<E> implements TinkerBag<
 		this.oclStdLibCollection = this.oclStdLibBag;
 	}
 	
+	protected Vertex getFromInternalMap(Object o) {
+		List<Vertex> vertexList = this.internalVertexMultiMap.get(o);
+		if (!vertexList.isEmpty()) {
+			Vertex vertex = vertexList.get(0);
+			this.internalVertexMultiMap.remove(o, vertex);
+			return vertex;
+		} else {
+			return null;
+		}
+	}
+
+	@Override
+	protected void putToInternalMap(Object key, Vertex vertex) {
+		this.internalVertexMultiMap.put(key, vertex);
+	}
+
 	protected Multiset<E> getInternalBag() {
 		return (Multiset<E>) this.internalCollection;
 	}

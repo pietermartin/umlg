@@ -42,6 +42,7 @@
                 });
                 tumlTabGridManager.onDeleteSuccess.subscribe(function(e, args) {
                     self.onDeleteSuccess.notify(args, e, self);
+                    createGridForResult(args.data, args.tabId);
                 });
                 tumlTabGridManager.onDeleteFailure.subscribe(function(e, args) {
                     self.onDeleteFailure.notify(args, e, self);
@@ -63,14 +64,12 @@
                 tumlTabOneManager = new Tuml.TumlTabOneManager(tumlUri);
                 tumlTabOneManager.onPutOneSuccess.subscribe(function(e, args) {
                     self.onPutOneSuccess.notify(args, e, self);
-                    createOne(args.data[0].data, args.data[0].meta.to);
                 });
                 tumlTabOneManager.onPutOneFailure.subscribe(function(e, args) {
                     self.onPutOneFailure.notify(args, e, self);
                 });
                 tumlTabOneManager.onPostOneSuccess.subscribe(function(e, args) {
                     self.onPostOneSuccess.notify(args, e, self);
-                    createOne(args.data[0].data, args.data[0].meta.to);
                 });
                 tumlTabOneManager.onPostOneFailure.subscribe(function(e, args) {
                     self.onPostOneFailure.notify(args, e, self);

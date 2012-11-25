@@ -61,7 +61,7 @@ public class OclStdLibSequenceImpl<E> extends OclStdLibCollectionImpl<E> impleme
 
 	@Override
 	public E at(Integer i) {
-		throw new RuntimeException("Not implemented");
+		return get(i);
 	}
 
 	@Override

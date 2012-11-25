@@ -62,20 +62,19 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
 		OJAnnotatedOperation singleAdder = new OJAnnotatedOperation(propertyWrapper.adder());
 		singleAdder.addParam(propertyWrapper.fieldname(), propertyWrapper.javaBaseTypePath());
 		if (!(owner instanceof OJAnnotatedInterface)) {
-			OJIfStatement ifNotNull = new OJIfStatement(propertyWrapper.fieldname() + " != null");
 
 			PropertyWrapper otherEnd = new PropertyWrapper(propertyWrapper.getOtherEnd());
-			if (propertyWrapper.hasOtherEnd() && !propertyWrapper.isEnumeration() && otherEnd.isOne()) {
+			if (/*For bags the one side can have many edges to the same element*/propertyWrapper.isUnique() && propertyWrapper.hasOtherEnd() && !propertyWrapper.isEnumeration() && otherEnd.isOne()) {
 				OJIfStatement ifNotNull2 = new OJIfStatement(propertyWrapper.fieldname() + " != null"); 
 				ifNotNull2.addToThenPart(propertyWrapper.fieldname() + "." + otherEnd.clearer() + "()");
 				ifNotNull2.addToThenPart(propertyWrapper.fieldname() + ".initialiseProperty(" + TumlClassOperations.propertyEnumName(otherEnd.getOwningType()) + "."
 						+ otherEnd.fieldname() + ", false)");
-				
 				ifNotNull2.addToThenPart(propertyWrapper.remover() + "(" + propertyWrapper.fieldname() + ")");
-				
 				owner.addToImports(TumlClassOperations.getPathName(otherEnd.getOwningType()).append(TumlClassOperations.propertyEnumName(otherEnd.getOwningType())));
 				singleAdder.getBody().addToStatements(ifNotNull2);
 			}
+			
+			OJIfStatement ifNotNull = new OJIfStatement(propertyWrapper.fieldname() + " != null");
 			ifNotNull.addToThenPart("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ")");
 			singleAdder.getBody().addToStatements(ifNotNull);
 		}

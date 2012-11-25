@@ -144,17 +144,19 @@
                 return {name: metaDataNavigatingFrom.name, uri: metaDataNavigatingFrom.uri, contextVertexId: urlId};
             } else {
                 //Property is a one
-                var response = result[0];
-                if (response.data !== null) {
-                    qualifiedName = response.meta.qualifiedName;
-                    var contextMetaData = response.meta.to;
-                    return {name: contextMetaData.name, uri: contextMetaData.uri, contextVertexId: response.data.id};
-                } else {
-                    qualifiedName = response.meta.qualifiedName;
-                    var contextMetaData = response.meta.from;
-                    return {name: contextMetaData.name, uri: contextMetaData.uri, contextVertexId: urlId};
+                for (var i = 0; i < result.length; i++) {
+                    var response = result[i];
+                    if (response.data.length > 0) {
+                        qualifiedName = response.meta.qualifiedName;
+                        var contextMetaData = response.meta.to;
+                        return {name: contextMetaData.name, uri: contextMetaData.uri, contextVertexId: response.data[0].id};
+                    }
                 }
-                return null;
+                var response = result[0];
+                //If there is no data then the context remains that of the parent
+                qualifiedName = response.meta.qualifiedName;
+                var contextMetaData = response.meta.from;
+                return {name: contextMetaData.name, uri: contextMetaData.uri, contextVertexId: urlId};
             }
         }
 
@@ -179,7 +181,12 @@
             var indexOfSecondBackSlash = url.indexOf('/', 1);
             var firstPart = url.substring(0, indexOfSecondBackSlash);
             var secondPart = url.substring(indexOfSecondBackSlash, url.length);
-            var urlToPush =  firstPart + '/ui2' + secondPart;
+            var urlToPush;
+            if (firstPart !== undefined && firstPart != '') {
+                urlToPush =  firstPart + '/ui2' + secondPart;
+            } else {
+                urlToPush =  secondPart + '/ui2';
+            }
             history.pushState({}, title, urlToPush);
         }
 

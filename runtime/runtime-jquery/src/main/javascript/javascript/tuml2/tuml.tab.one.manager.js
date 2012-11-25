@@ -22,14 +22,14 @@
             $metaForData = metaForData;
             $qualifiedName = qualifiedName;
             //Clear all elements
-            var tabDiv = $('#' + metaForData.name);
+            var tabDiv = $('#' + $metaForData.name);
             tabDiv.children().remove();
             $('<div id="serverErrorMsg" />').appendTo(tabDiv);
-            $('<div />', {id: 'formDiv'}).appendTo(tabDiv);
+            var $formDiv = $('<div />', {id: 'formDiv'}).appendTo(tabDiv);
 
             var ul = $('<ul class="oneUl" />')
-            ul.appendTo($("#formDiv"));
-            $.each(metaForData.properties, function(index, property) {
+            ul.appendTo($formDiv);
+            $.each($metaForData.properties, function(index, property) {
                 if (isPropertyForOnePage(property)) {
                     var li = $('<li>')
                     li.appendTo(ul);
@@ -65,12 +65,11 @@
                 }
             });
 
-            var $buttonDiv = $('<div class="onesavebuttondiv" />').appendTo('#formDiv');
+            var $buttonDiv = $('<div class="onesavebuttondiv" />').appendTo($formDiv);
 
             var $saveButton = $('<button />').text('Save').click(function() {
                 var validationResults = [];
-                $.each(metaForData.properties, function(index, property) {
-
+                $.each($metaForData.properties, function(index, property) {
                     if (!property.readOnly && isPropertyForOnePage(property)) {
                         var validationResult = validateField(property);
                         if (!validationResult.valid) {
@@ -81,7 +80,7 @@
                 if (validationResults.length === 0) {
                     if (data !== undefined && data !== null) {
                         $.ajax({
-                            url: tumlUri,
+                            url: metaForData.qualifiedName == qualifiedName ? tumlUri :tumlUri + '_' + $metaForData.name, 
                             type: "PUT",
                             dataType: "json",
                             contentType: "json",
@@ -96,7 +95,7 @@
                         });
                     } else {
                         $.ajax({
-                            url: tumlUri,
+                            url: tumlUri + '_' + $metaForData.name,
                             type: "POST",
                             dataType: "json",
                             contentType: "json",
@@ -131,7 +130,7 @@
         function constructInputForField(data, property) {
             var $input;
             if (property.name == 'id') {
-                $input = $('<input />', {disabled: 'disabled', type:'text', class: 'field', id: property.name + 'Id', name: property.name});
+                $input = $('<input />', {disabled: 'disabled', type:'text', class: 'field', id: property.name + $metaForData.name + 'Id', name: property.name});
                 if (data !== undefined && data !== null) {
                     $input[0].defaultValue = data[property.name];
                 }
@@ -144,13 +143,13 @@
                 }
             } else if (property.dataTypeEnum !== undefined) {
                 if (property.dataTypeEnum == 'Date' || property.dataTypeEnum == 'Time' || property.dataTypeEnum == 'DateTime' || property.dataTypeEnum == 'InternationalPhoneNumber' || property.dataTypeEnum == 'LocalPhoneNumber' || property.dataTypeEnum == 'Email') {
-                    $input = $("<input />", {type:'text',id: property.name + 'Id', name: property.name});
+                    $input = $("<input />", {type:'text',id: property.name + $metaForData.name + 'Id', name: property.name});
                 } else if (property.dataTypeEnum == 'Video') {
-                    $input = $("<input />", {type:'text',id: property.name + 'Id', name: property.name});
+                    $input = $("<input />", {type:'text',id: property.name + $metaForData.name + 'Id', name: property.name});
                 } else  if (property.dataTypeEnum == 'Audio') {
-                    $input = $("<input />", {type:'text',id: property.name + 'Id', name: property.name});
+                    $input = $("<input />", {type:'text',id: property.name + $metaForData.name + 'Id', name: property.name});
                 } else if (property.dataTypeEnum == 'Image') {
-                    $input = $("<input />", {type:'text',id: property.name + 'Id', name: property.name});
+                    $input = $("<input />", {type:'text',id: property.name + $metaForData.name + 'Id', name: property.name});
                 } else {
                     alert('Unsupported dataType ' + property.dataTypeEnum);
                 }
@@ -158,45 +157,45 @@
                     $input[0].defaultValue = data[property.name];
                 }
             } else if (property.oneEnumeration) {
-                $input = $('<select />', {class: 'chzn-select', style: 'width:350px;',  id: property.name + 'Id', name: property.name});
-                if (data !== undefined && data !==null) {
+                $input = $('<select />', {class: 'chzn-select', style: 'width:350px;',  id: property.name + $metaForData.name + 'Id', name: property.name});
+                if (data !== undefined && data !== null) {
                     appendEnumerationLoopupOptionsToSelect("/restAndJson/tumlEnumLookup", property.qualifiedName, property.lower > 0, data[property.name], $input);
                 } else {
                     appendEnumerationLoopupOptionsToSelect("/restAndJson/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, $input);
                 }
             } else if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite) {
-                $input = $('<select />', {class: 'chzn-select', style: 'width:350px;',  id: property.name + 'Id', name: property.name});
-                if (data !== undefined && data !==null) {
+                $input = $('<select />', {class: 'chzn-select', style: 'width:350px;',  id: property.name + $metaForData.name + 'Id', name: property.name});
+                if (data !== undefined && data !== null) {
                     appendLoopupOptionsToSelect(property.tumlLookupUri, property.lower > 0, data['id'], data[property.name], $input);
                 } else {
                     appendLoopupOptionsToSelect(property.tumlLookupOnCompositeParentUri, property.lower > 0, data['id'], data[property.name], $input);
                 }
             } else if (property.fieldType == 'String') {
-                $input = $('<input />', {type:'text', class: 'field', id: property.name + 'Id', name: property.name});
+                $input = $('<input />', {type:'text', class: 'field', id: property.name + $metaForData.name + 'Id', name: property.name});
                 if (data !== undefined && data !== null) {
                     $input[0].defaultValue = data[property.name];
                 }
             } else if (property.fieldType == 'Integer') {
-                $input = $('<input />', {type:'text', class: 'field', id: property.name + 'Id', name: property.name});
+                $input = $('<input />', {type:'text', class: 'field', id: property.name + $metaForData.name + 'Id', name: property.name});
                 if (data !== undefined && data !== null) {
                     $input[0].defaultValue = data[property.name];
                 }
             } else if (property.fieldType == 'Long') {
-                $input = $('<input />', {type:'text', class: 'field', id: property.name + 'Id', name: property.name});
+                $input = $('<input />', {type:'text', class: 'field', id: property.name + $metaForData.name + 'Id', name: property.name});
                 if (data !== undefined && data !== null) {
                     $input[0].defaultValue = data[property.name];
                 }
             } else if (property.fieldType == 'Boolean') {
                 if (!property.manyPrimitive && data !== undefined && data !== null) {
                     if (data[property.name]) {
-                        $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: property.name + 'Id', name: property.name, checked: 'checked'});
+                        $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: property.name + $metaForData.name + 'Id', name: property.name, checked: 'checked'});
                     } else {
-                        $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: property.name + 'Id', name: property.name });
+                        $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: property.name + $metaForData.name + 'Id', name: property.name });
                     }
                 } else if (!property.manyPrimitive) {
-                    $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: property.name + 'Id', name: property.name });
+                    $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: property.name + $metaForData.name + 'Id', name: property.name });
                 } else {
-                    $input = $('<input />', {type:'text', class: 'field', id: property.name + 'Id', name: property.name});
+                    $input = $('<input />', {type:'text', class: 'field', id: property.name + $metaForData.name + 'Id', name: property.name});
                     if (data !== undefined && data !== null) {
                         $input[0].defaultValue = data[property.name];
                     }
@@ -210,7 +209,7 @@
 
         function validateField(property) {
             removeServerErrorMessage();
-            var validateInput = $('#' + property.name + 'Id');
+            var validateInput = $('#' + property.name + $metaForData.name + 'Id');
             
             var serializedValue = [];
             var editor = selectEditor(property);
@@ -333,14 +332,14 @@
 
         function fieldsToJson() {
             var dataToSend = {};
-            $.each(metaForData.properties, function(index, property) {
+            $.each($metaForData.properties, function(index, property) {
                 if (property.name === 'id') {
-                    dataToSend[property.name] = parseInt($('#' + property.name + 'Id').val());
+                    dataToSend[property.name] = parseInt($('#' + property.name + $metaForData.name + 'Id').val());
                 } else if (property.readOnly) {
                     //Do nothing
                 } else if (property.name !== 'uri') {
                     if (property.onePrimitive) {
-                        var stringValue = $('#' + property.name + 'Id').val();
+                        var stringValue = $('#' + property.name + $metaForData.name + 'Id').val();
                         if (property.fieldType == 'Integer' || property.fieldType == 'Long') {
                             if (stringValue == '') {
                                 dataToSend[property.name] = null;
@@ -354,16 +353,16 @@
                                 dataToSend[property.name] = stringValue;
                             }
                         } else if (property.fieldType == 'Boolean') {
-                            dataToSend[property.name] = $('#' + property.name + 'Id').attr("checked") == "checked";
+                            dataToSend[property.name] = $('#' + property.name + $metaForData.name + 'Id').attr("checked") == "checked";
                         }
                     } else if (property.dataTypeEnum !== undefined) {
                         if (property.dataTypeEnum == 'DateTime') {
-                            dataToSend[property.name] = $('#' + property.name + 'Id').val().replace(/ /g,"T");
+                            dataToSend[property.name] = $('#' + property.name + $metaForData.name + 'Id').val().replace(/ /g,"T");
                         } else {
-                            dataToSend[property.name] = $('#' + property.name + 'Id').val();
+                            dataToSend[property.name] = $('#' + property.name + $metaForData.name + 'Id').val();
                         }
                     } else if (property.oneEnumeration) {
-                        var $select = $('#' + property.name + 'Id');
+                        var $select = $('#' + property.name + $metaForData.name + 'Id');
                         var options = $select.children();
                         for (var i = 0; i < options.length; i++) {
                             if (options[i].selected) {
@@ -372,11 +371,11 @@
                             }
                         }
                     } else if (property.manyPrimitive) {
-                        var inputValue = $('#' + property.name + 'Id').val();
+                        var inputValue = $('#' + property.name + $metaForData.name + 'Id').val();
                         var array = inputValue.split(',');
                         dataToSend[property.name] = array;
                     } else if (!property.onePrimitive && !property.manyPrimitive && !property.inverseComposite) {
-                        var $select = $('#' + property.name + 'Id');
+                        var $select = $('#' + property.name + $metaForData.name + 'Id');
                         var options = $select.children();
                         for (var i = 0; i < options.length; i++) {
                             if (options[i].selected) {

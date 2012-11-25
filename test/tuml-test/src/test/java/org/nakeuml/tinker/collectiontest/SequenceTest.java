@@ -371,7 +371,18 @@ public class SequenceTest extends BaseLocalDbTest {
 		god.addToHand(hand1);
 		db.stopTransaction(Conclusion.SUCCESS);
 		Assert.assertEquals(3, countVertices());
-		Assert.assertEquals(3, countEdges());
+		Assert.assertEquals(4, countEdges());
+		God gTest = new God(god.getVertex());
+		Assert.assertEquals(3, gTest.getHand().size());
+		
+		Hand h1 = gTest.getHand().get(0);
+		Hand h2 = gTest.getHand().get(1);
+		Hand h3 = gTest.getHand().get(2);
+		
+		Assert.assertEquals("hand1", h1.getName());
+		Assert.assertEquals("hand2", h2.getName());
+		Assert.assertEquals("hand1", h3.getName());
+		Assert.assertEquals(h1, h3);
 	}
 	
 	@Test

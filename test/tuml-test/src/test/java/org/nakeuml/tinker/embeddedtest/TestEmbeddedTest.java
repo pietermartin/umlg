@@ -252,6 +252,10 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
 		db.stopTransaction(Conclusion.SUCCESS);
 		TestEmbedded testEmbeddedY = new TestEmbedded(testEmbeddedX.getVertex());
 		Assert.assertEquals(2, testEmbeddedY.getManyBoolean().size());
+		boolean b1 = testEmbeddedY.getManyBoolean().asSequence().at(0);
+		boolean b2 = testEmbeddedY.getManyBoolean().asSequence().at(0);
+		Assert.assertSame(false, b1);
+		Assert.assertSame(false, b2);
 	}
 
 }

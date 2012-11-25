@@ -185,7 +185,7 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 		ifRuntime.addToThenPart("throw (RuntimeException)e");
 		ojTryStatement.getCatchPart().addToStatements(ifRuntime);
 		ojTryStatement.getCatchPart().addToStatements("throw new RuntimeException(e)");
-		
+
 		putOrDelete.getBody().addToStatements(ojTryStatement);
 
 		annotatedClass.addToImports(parentPathName);
@@ -278,12 +278,12 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 
 		ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
 		ojTryStatement.getCatchPart().addToStatements("GraphDb.getDb().stopTransaction(Conclusion.FAILURE)");
-		
+
 		OJIfStatement ifRuntime = new OJIfStatement("e instanceof RuntimeException");
 		ifRuntime.addToThenPart("throw (RuntimeException)e");
 		ojTryStatement.getCatchPart().addToStatements(ifRuntime);
 		ojTryStatement.getCatchPart().addToStatements("throw new RuntimeException(e)");
-		
+
 		post.getBody().addToStatements(ojTryStatement);
 
 		annotatedClass.addToImports(parentPathName);
@@ -344,25 +344,6 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 		Set<Classifier> concreteImplementationsFrom = TumlClassOperations.getConcreteImplementations((Classifier) pWrap.getOwningType());
 
 		int count = 1;
-		OJIfStatement ifIsOneIfStatement = null;
-		if (pWrap.isOne()) {
-			block.addToStatements(pWrap.javaBaseTypePath().getLast() + " " + pWrap.fieldname() + " = parentResource." + pWrap.getter() + "()");
-			ifIsOneIfStatement = new OJIfStatement();
-			block.addToStatements("json.append(\"{\\\"data\\\": \")");
-			block.addToStatements("json.append(ToJsonUtil.toJsonWithoutCompositeParent(" + pWrap.fieldname() + "))");
-			block.addToStatements("json.append(\",\")");
-			block.addToStatements("meta", "json.append(\" \\\"meta\\\" : {\")");
-
-			// The execute ocl query resource is only required if the below
-			// visitor is availeble
-			if (RestletVisitors.containsVisitorForClass(QueryExecuteResourceBuilder.class)
-					&& pWrap.getType().getQualifiedName().equals(TumlRestletGenerationUtil.queryQualifiedName)) {
-				block.addToStatements("json.append(\"\\\"oclExecuteUri\\\": \\\"/" + pWrap.getModel().getName() + "/oclExecuteQuery\\\", \")");
-			}
-
-			block.addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + pWrap.getQualifiedName() + "\\\"\")");
-			block.addToStatements("json.append(\", \\\"to\\\": \")");
-		}
 		// For meta data, put where one is navigating to first, then where on is
 		// navigating from
 		// This is consistent with navigating to a entity with a vertex where
@@ -370,90 +351,63 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 		// i.e. the first meta data in the array is the entity navigating to.
 		for (Classifier concreteClassifierTo : concreteImplementations) {
 			annotatedClass.addToImports(TumlClassOperations.getPathName(concreteClassifierTo));
+			block.addToStatements("json.append(\"{\\\"data\\\": [\")");
 			if (pWrap.isOne()) {
-				for (Classifier concreteClassifierFrom : concreteImplementationsFrom) {
-					annotatedClass.addToImports(TumlClassOperations.getPathName(concreteClassifierFrom));
-					OJBlock conditionBlock = new OJBlock();
-					String condition = "parentResource instanceof " + TumlClassOperations.getPathName(concreteClassifierFrom).getLast();
-					if (count == 1) {
-						ifIsOneIfStatement.setCondition(condition);
-						ifIsOneIfStatement.setThenPart(conditionBlock);
-					} else if (count == concreteImplementations.size()) {
-						ifIsOneIfStatement.setElsePart(conditionBlock);
-					} else {
-						conditionBlock = ifIsOneIfStatement.addToElseIfCondition(condition, "");
-					}
-					conditionBlock.addToStatements("json.append(" + TumlClassOperations.propertyEnumName(concreteClassifierTo) + ".asJson())");
-					conditionBlock.addToStatements("json.append(\", \\\"from\\\": \")");
-					conditionBlock.addToStatements("json.append(" + TumlClassOperations.propertyEnumName(pWrap.getOwningType()) + ".asJson())");
-					annotatedClass.addToImports(TumlClassOperations.getPathName(new PropertyWrapper(pWrap.getOtherEnd()).getOwningType()).append(
-							TumlClassOperations.propertyEnumName(new PropertyWrapper(pWrap.getOtherEnd()).getOwningType())));
-					annotatedClass.addToImports(TumlClassOperations.getPathName(concreteClassifierTo).append(
-							TumlClassOperations.propertyEnumName(concreteClassifierTo)));
-					annotatedClass.addToImports(TumlClassOperations.getPathName(pWrap.getOwningType()).append(
-							TumlClassOperations.propertyEnumName(pWrap.getOwningType())));
-					block.addToStatements(ifIsOneIfStatement);
-				}
+				OJIfStatement ifOneInstanceOf = new OJIfStatement("parentResource." + pWrap.getter() + "() instanceof "
+						+ TumlClassOperations.getPathName(concreteClassifierTo).getLast());
+				ifOneInstanceOf.addToThenPart("json.append(ToJsonUtil.toJsonWithoutCompositeParent(parentResource." + pWrap.getter() + "()))");
+				block.addToStatements(ifOneInstanceOf);
 			} else {
-				block.addToStatements("json.append(\"{\\\"data\\\": [\")");
 				block.addToStatements("json.append(ToJsonUtil.toJsonWithoutCompositeParent(parentResource." + pWrap.getter() + "().select(new "
 						+ TinkerGenerationUtil.BooleanExpressionEvaluator.getCopy().addToGenerics(TumlClassOperations.getPathName(pWrap.getType())).getLast()
 						+ "() {\n			@Override\n			public Boolean evaluate(" + TumlClassOperations.getPathName(pWrap.getType()).getLast()
 						+ " e) {\n				return e instanceof " + TumlClassOperations.getPathName(concreteClassifierTo).getLast() + ";\n			}\n		})))");
 				annotatedClass.addToImports(TinkerGenerationUtil.BooleanExpressionEvaluator);
-				annotatedClass.addToImports(TumlClassOperations.getPathName(pWrap.getType()));
-				block.addToStatements("json.append(\"],\")");
-
-				block.addToStatements("json.append(\" \\\"meta\\\" : {\")");
-				// The execute ocl query resource is only required if the below
-				// visitor is availeble
-				if (RestletVisitors.containsVisitorForClass(QueryExecuteResourceBuilder.class)
-						&& pWrap.getType().getQualifiedName().equals(TumlRestletGenerationUtil.queryQualifiedName)) {
-					block.addToStatements("json.append(\"\\\"oclExecuteUri\\\": \\\"/" + pWrap.getModel().getName() + "/{contextId}/oclExecuteQuery\\\", \")");
-				}
-				block.addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + pWrap.getQualifiedName() + "\\\"\")");
-				block.addToStatements("json.append(\", \\\"to\\\": \")");
 			}
+			annotatedClass.addToImports(TumlClassOperations.getPathName(pWrap.getType()));
+			block.addToStatements("json.append(\"],\")");
 
-			if (!pWrap.isOne()) {
-				int countFrom = 1;
-				OJIfStatement ifStatementFrom = new OJIfStatement();
-				for (Classifier concreteClassifierFrom : concreteImplementationsFrom) {
-					OJBlock conditionBlockFrom = new OJBlock();
-					annotatedClass.addToImports(TumlClassOperations.getPathName(concreteClassifierFrom));
-					String condition = "parentResource instanceof " + TumlClassOperations.getPathName(concreteClassifierFrom).getLast();
-					if (countFrom == 1) {
-						ifStatementFrom.setCondition(condition);
-						ifStatementFrom.setThenPart(conditionBlockFrom);
-					} else if (countFrom == concreteImplementationsFrom.size()) {
-						ifStatementFrom.setElsePart(conditionBlockFrom);
-					} else {
-						conditionBlockFrom = ifStatementFrom.addToElseIfCondition(condition, "");
-					}
-					conditionBlockFrom.addToStatements("json.append(" + TumlClassOperations.propertyEnumName(concreteClassifierTo) + ".asJson())");
-					conditionBlockFrom.addToStatements("json.append(\", \\\"from\\\": \")");
-					conditionBlockFrom.addToStatements("json.append(" + TumlClassOperations.propertyEnumName(concreteClassifierFrom) + ".asJson())");
-					annotatedClass.addToImports(TumlClassOperations.getPathName(concreteClassifierFrom).append(
-							TumlClassOperations.propertyEnumName(concreteClassifierFrom)));
-					countFrom++;
-				}
-				block.addToStatements(ifStatementFrom);
-
-				annotatedClass.addToImports(TumlClassOperations.getPathName(pWrap.getOwningType()).append(
-						TumlClassOperations.propertyEnumName(pWrap.getOwningType())));
-				annotatedClass.addToImports(TumlClassOperations.getPathName(concreteClassifierTo).append(
-						TumlClassOperations.propertyEnumName(concreteClassifierTo)));
+			block.addToStatements("json.append(\" \\\"meta\\\" : {\")");
+			// The execute ocl query resource is only required if the below
+			// visitor is availeble
+			if (RestletVisitors.containsVisitorForClass(QueryExecuteResourceBuilder.class)
+					&& pWrap.getType().getQualifiedName().equals(TumlRestletGenerationUtil.queryQualifiedName)) {
+				block.addToStatements("json.append(\"\\\"oclExecuteUri\\\": \\\"/" + pWrap.getModel().getName() + "/{contextId}/oclExecuteQuery\\\", \")");
 			}
-			if (!pWrap.isOne()) {
-				block.addToStatements("json.append(\"}\")");
-				if (concreteImplementations.size() != 1 && count != concreteImplementations.size()) {
-					block.addToStatements("json.append(\"}, \")");
+			block.addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + pWrap.getQualifiedName() + "\\\"\")");
+			block.addToStatements("json.append(\", \\\"to\\\": \")");
+			int countFrom = 1;
+			OJIfStatement ifStatementFrom = new OJIfStatement();
+			for (Classifier concreteClassifierFrom : concreteImplementationsFrom) {
+				OJBlock conditionBlockFrom = new OJBlock();
+				annotatedClass.addToImports(TumlClassOperations.getPathName(concreteClassifierFrom));
+				String condition = "parentResource instanceof " + TumlClassOperations.getPathName(concreteClassifierFrom).getLast();
+				if (countFrom == 1) {
+					ifStatementFrom.setCondition(condition);
+					ifStatementFrom.setThenPart(conditionBlockFrom);
+				} else if (countFrom == concreteImplementationsFrom.size()) {
+					ifStatementFrom.setElsePart(conditionBlockFrom);
+				} else {
+					conditionBlockFrom = ifStatementFrom.addToElseIfCondition(condition, "");
 				}
+				conditionBlockFrom.addToStatements("json.append(" + TumlClassOperations.propertyEnumName(concreteClassifierTo) + ".asJson())");
+				conditionBlockFrom.addToStatements("json.append(\", \\\"from\\\": \")");
+				conditionBlockFrom.addToStatements("json.append(" + TumlClassOperations.propertyEnumName(concreteClassifierFrom) + ".asJson())");
+				annotatedClass.addToImports(TumlClassOperations.getPathName(concreteClassifierFrom).append(
+						TumlClassOperations.propertyEnumName(concreteClassifierFrom)));
+				countFrom++;
+			}
+			block.addToStatements(ifStatementFrom);
+
+			annotatedClass.addToImports(TumlClassOperations.getPathName(pWrap.getOwningType()).append(
+					TumlClassOperations.propertyEnumName(pWrap.getOwningType())));
+			annotatedClass.addToImports(TumlClassOperations.getPathName(concreteClassifierTo)
+					.append(TumlClassOperations.propertyEnumName(concreteClassifierTo)));
+			block.addToStatements("json.append(\"}\")");
+			if (concreteImplementations.size() != 1 && count != concreteImplementations.size()) {
+				block.addToStatements("json.append(\"}, \")");
 			}
 			count++;
-		}
-		if (pWrap.isOne()) {
-			block.addToStatements("json.append(\"}\")");
 		}
 		block.addToStatements("json.append(\"}]\")");
 		block.addToStatements("return new " + TumlRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
@@ -461,13 +415,14 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 
 	private void addServerResourceToRouterEnum(Classifier concreteClassifier, PropertyWrapper pWrap, OJAnnotatedClass annotatedClass) {
 		OJEnum routerEnum = (OJEnum) this.workspace.findOJClass("restlet.RestletRouterEnum");
-		OJEnumLiteral ojLiteral = new OJEnumLiteral(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast().toUpperCase() + "_" + pWrap.getName()
+		
+		OJEnumLiteral ojLiteral = new OJEnumLiteral(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast().toUpperCase() + "_" + pWrap.fieldname()
 				+ "_" + concreteClassifier.getName());
 
 		OJField uri = new OJField();
 		uri.setType(new OJPathName("String"));
 		uri.setInitExp("\"/" + TumlClassOperations.getPathName(pWrap.getOwningType()).getLast().toLowerCase() + "s/{"
-				+ TumlClassOperations.getPathName(pWrap.getOwningType()).getLast().toLowerCase() + "Id}/" + pWrap.getName() + "\"");
+				+ TumlClassOperations.getPathName(pWrap.getOwningType()).getLast().toLowerCase() + "Id}/" + pWrap.fieldname() + "\"");
 		ojLiteral.addToAttributeValues(uri);
 
 		OJField serverResourceClassField = new OJField();
@@ -481,6 +436,28 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 
 		OJAnnotatedOperation attachAll = routerEnum.findOperation("attachAll", TumlRestletGenerationUtil.Router);
 		attachAll.getBody().addToStatements(routerEnum.getName() + "." + ojLiteral.getName() + ".attach(router)");
+
+		//Add the url for post/put to the resource
+		ojLiteral = new OJEnumLiteral(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast().toUpperCase() + "_" + pWrap.fieldname()
+				+ "_" + pWrap.fieldname() + "_" + concreteClassifier.getName());
+
+		uri = new OJField();
+		uri.setType(new OJPathName("String"));
+		uri.setInitExp("\"/" + TumlClassOperations.getPathName(pWrap.getOwningType()).getLast().toLowerCase() + "s/{"
+				+ TumlClassOperations.getPathName(pWrap.getOwningType()).getLast().toLowerCase() + "Id}/" + pWrap.fieldname() + "_" + concreteClassifier.getName() + "\"");
+		ojLiteral.addToAttributeValues(uri);
+
+		serverResourceClassField = new OJField();
+		serverResourceClassField.setType(new OJPathName("java.lang.Class"));
+		serverResourceClassField.setInitExp(annotatedClass.getName() + ".class");
+		ojLiteral.addToAttributeValues(serverResourceClassField);
+		routerEnum.addToImports(annotatedClass.getPathName());
+		routerEnum.addToImports(TumlRestletGenerationUtil.ServerResource);
+
+		routerEnum.addToLiterals(ojLiteral);
+
+		attachAll.getBody().addToStatements(routerEnum.getName() + "." + ojLiteral.getName() + ".attach(router)");
+		
 	}
 
 	private void addCompositeParentIdField(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass) {

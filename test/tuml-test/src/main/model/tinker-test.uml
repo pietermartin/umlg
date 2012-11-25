@@ -879,6 +879,10 @@
                 <body>self.nameNonUnique</body>
               </defaultValue>
             </ownedAttribute>
+            <ownedAttribute xmi:id="_Fg2FADYpEeK9AeutZ8kzPA" name="bag" type="_9G8a0DYoEeK9AeutZ8kzPA" isUnique="false" aggregation="composite" association="_Fg2FAzYpEeK9AeutZ8kzPA">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Fg2FATYpEeK9AeutZ8kzPA"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Fg2FAjYpEeK9AeutZ8kzPA" value="*"/>
+            </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Association" xmi:id="__Y9OcBqsEeG2HY-TJLNivw" name="A_&lt;god>_&lt;nightmare>" memberEnd="__Y9OcRqsEeG2HY-TJLNivw __Y1SoBqsEeG2HY-TJLNivw" navigableOwnedEnd="__Y9OcRqsEeG2HY-TJLNivw">
             <ownedEnd xmi:id="__Y9OcRqsEeG2HY-TJLNivw" name="god" visibility="public" type="_YuD8sOwiEeCSwqyeEHd1tw" association="__Y9OcBqsEeG2HY-TJLNivw">
@@ -913,6 +917,19 @@
             <ownedEnd xmi:id="_pigzq-OvEeGlQMtE5LHG3w" name="hand" visibility="public" type="_dVgyEBFHEeGoRIAInCGFZA" association="_pigzquOvEeGlQMtE5LHG3w">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_pigzreOvEeGlQMtE5LHG3w" value="1"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_pigzrOOvEeGlQMtE5LHG3w" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_9G8a0DYoEeK9AeutZ8kzPA" name="Bag">
+            <ownedAttribute xmi:id="__D1lUDYoEeK9AeutZ8kzPA" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="__aOFADYoEeK9AeutZ8kzPA" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="__aPTIDYoEeK9AeutZ8kzPA" value="1"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_Fg2FAzYpEeK9AeutZ8kzPA" name="nightmare_bag_1" memberEnd="_Fg2FBDYpEeK9AeutZ8kzPA _Fg2FADYpEeK9AeutZ8kzPA" navigableOwnedEnd="_Fg2FBDYpEeK9AeutZ8kzPA">
+            <ownedEnd xmi:id="_Fg2FBDYpEeK9AeutZ8kzPA" name="nightmare" type="_7zSvUBqsEeG2HY-TJLNivw" association="_Fg2FAzYpEeK9AeutZ8kzPA">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Fg2FBTYpEeK9AeutZ8kzPA" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Fg2FBjYpEeK9AeutZ8kzPA" value="1"/>
             </ownedEnd>
           </packagedElement>
         </packagedElement>

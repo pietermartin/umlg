@@ -70,6 +70,9 @@ function selectFieldValidator(property) {
     } else if (property.manyPrimitive && property.fieldType == 'Long') {
         return new TumlSlick.Validators.TumlManyNumber(property).validate;
     } else if (!property.manyPrimitive && property.fieldType == 'Boolean') {
+        return new TumlSlick.Validators.TumlBoolean(property).validate;
+    } else if (property.manyPrimitive && property.fieldType == 'Boolean') {
+        return new TumlSlick.Validators.TumlManyBoolean(property).validate;
     } else {
     }
     return function() {

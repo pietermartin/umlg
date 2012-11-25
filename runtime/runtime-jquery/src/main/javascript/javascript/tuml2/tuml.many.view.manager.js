@@ -69,7 +69,6 @@
                         self.onContextMenuClickDelete.notify(args, e, self);
                     });
                     tumlTabViewManagers.push(tumlTabViewManager);
-                    //tumlTabViewManager.createTab();
                 } else {
                     alert('what is this about!!!');
                 }
