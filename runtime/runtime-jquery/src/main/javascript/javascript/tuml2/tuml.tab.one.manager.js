@@ -36,6 +36,12 @@
                     $('<label />', {for: property.name + 'Id'}).text(property.name + ' :').appendTo(li);
                     var $input = constructInputForField(data, property);
                     $input.appendTo(li);
+                    if (property.manyPrimitive) {
+                        var $manyDiv = $('<div />', {class: "many-primitive-one-img"}).appendTo(li);
+                        $manyDiv.click(function(e) {
+                            openEditorForMany($input, property, $manyDiv, li);
+                        });
+                    }
                     if ($input !== undefined) {
                         if (property.dataTypeEnum !== undefined) {
                             if (property.dataTypeEnum == 'Date') {
@@ -119,6 +125,60 @@
 
         }
 
+        function openEditorForMany($inputToSet, property, $manyDiv, $li) {
+            var $div = $("<div class='many-primitive-editor-for-one' />");
+            $div.css('left', $manyDiv.position().left + 10);
+            $div.css('top', $manyDiv.position().top + 5);
+            var $table;
+            var editor = selectEditor(property);
+            var serializer = new editor().serializeValueWithValue;
+            var button = $('<button />').text('Add').click(function() {
+                var valueToAdd = $('.many-primitive-editor-input').val();
+                var currentValues = serializer($table);
+                var testArray = [];
+                testArray.push(valueToAdd);
+                var validator = selectFieldValidator(property);
+                var validationResults = validator(testArray);
+                if (currentValues.length !== 0 && validationResults.valid && property.unique) {
+                    validationResults = validator(currentValues, valueToAdd);
+                }
+                if (!validationResults.valid) {
+                    alert(validationResults.msg);
+                } else {
+                    addTr(valueToAdd);
+                }
+            }).appendTo($div);
+            $input = $('<input type=text class="many-primitive-editor-input">').appendTo($div);
+            var resultDiv = $('<div class="many-primitive-editor-result" />').appendTo($div);
+            $table = $('<table class="many-primitive-editor-result-table" />').appendTo(resultDiv);
+            var selectButtonDiv = $('<div class="many-primitive-editor-select-div"/>').appendTo($div);
+            selectButtonDiv.append($('<button class="many-primitive-editor-select"/>').click(function () {
+                var currentValues = serializer($table);
+                $inputToSet.val(currentValues.join(","));
+                $div.remove();
+            }).text('Select'));
+            selectButtonDiv.append($('<button class="many-prmitive-editor-cancel"/>').click(function() {
+                $div.remove();
+            }).text('Cancel'));
+            $div.appendTo($li);
+            $input.focus();
+
+            function addTr(value) {
+                var row = $('<tr />').addClass('many-primitive-editor-row');
+                var rowValue = $('<td class="many-primitive-editor-cell" />').text(value);
+                row.append(rowValue);
+                row.data('value', value);
+                var img = $('<img class="tuml-many-select-img" src="/restAndJson/javascript/images/delete.png">').click(function() {
+                   var liClicked =  $(this).parent().parent();
+                   liClicked.remove();
+                });
+                var imgValue = $('<td class="many-primitive-editor-cell many-primitive-editor-cell-img" />');
+                imgValue.append(img);
+                row.append(imgValue);
+                $table.append(row);
+            }
+        }
+
         function isPropertyForOnePage(property) {
             return(!property.inverseComposite && !property.composite && ((property.oneToOne || property.manyToOne) || property.manyPrimitive) && property.name !== 'uri'); 
         }
@@ -187,7 +247,7 @@
                 }
             } else if (property.fieldType == 'Boolean') {
                 if (!property.manyPrimitive && data !== undefined && data !== null) {
-                    if (data[property.name]) {
+                    if (data !== undefined && data !== null) {
                         $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: property.name + $metaForData.name + 'Id', name: property.name, checked: 'checked'});
                     } else {
                         $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: property.name + $metaForData.name + 'Id', name: property.name });

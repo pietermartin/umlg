@@ -65,11 +65,11 @@
                 var contextVertexId = retrieveVertexId(args.tumlUri);
                 if (metaDataNavigatingFrom === undefined) {
                     //Put directly on the resouce
-                    leftMenuManager.refresh(metaDataNavigatingTo, metaDataNavigatingTo, args.data[0].data.id);
+                    leftMenuManager.refresh(metaDataNavigatingTo, metaDataNavigatingTo, args.data[0].data[0].id);
                 } else {
                     //Put on the to one property
                     //First param is contextMetaDataFrom second contextMetaDataTo
-                    leftMenuManager.refresh(metaDataNavigatingTo, metaDataNavigatingTo, args.data[0].data.id);
+                    leftMenuManager.refresh(metaDataNavigatingTo, metaDataNavigatingTo, args.data[0].data[0].id);
                 }
                 refresh(args.tumlUri, args.data);
                 self.onPutOneSuccess.notify(args, e, self);

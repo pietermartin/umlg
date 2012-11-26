@@ -140,7 +140,7 @@
     }
 
     function ManyBooleanPrimitiveEditor(args) {
-        var serializer = function serializeValueWithValue(table) {
+        var serializer = function (table) {
             var rowArray = table.find('.many-primitive-editor-row');
             var arrayToSerialize = [];
             for (var i = 0; i < rowArray.length; i++) {
@@ -180,7 +180,7 @@
                 if (!validationResults.valid) {
                     alert(validationResults.msg);
                 } else {
-                    addLi(valueToAdd);
+                    addTr(valueToAdd);
                 }
             }).appendTo($div);
             $input = $('<input type=text class="many-primitive-editor-input">').appendTo($div);
@@ -216,7 +216,7 @@
             defaultValue = item[args.column.field];
             if (defaultValue !== undefined && defaultValue !== null) {
                 for (var i = 0; i < defaultValue.length; i++) {
-                    addLi(defaultValue[i]);
+                    addTr(defaultValue[i]);
                 }
                 if (args.column.options.ordered) {
                     $table.tableDnD();
@@ -224,7 +224,7 @@
             }
         };
 
-        function addLi(value) {
+        function addTr(value) {
             var row = $('<tr />').addClass('many-primitive-editor-row');
             var rowValue = $('<td class="many-primitive-editor-cell" />').text(value);
             row.append(rowValue);

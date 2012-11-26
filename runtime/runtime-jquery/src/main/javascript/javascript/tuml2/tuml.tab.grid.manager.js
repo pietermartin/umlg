@@ -157,7 +157,7 @@
                                 contentType: "json",
                                 data: JSON.stringify(dataView.getUpdatedItems()),
                                 success: function(data, textStatus, jqXHR) {
-                                    self.onPutSuccess.notify({tumlUri: tumlUri + '_' + localForMetaData.name, tabId: localMetaForData.name, data: data}, null, self);
+                                    self.onPutSuccess.notify({tumlUri: tumlUri + '_' + localMetaForData.name, tabId: localMetaForData.name, data: data}, null, self);
                                 },
                                 error: function(jqXHR, textStatus, errorThrown) {
                                     self.onPutFailure.notify({tumlUri: tumlUri, tabId: localMetaForData.name}, null, self);
