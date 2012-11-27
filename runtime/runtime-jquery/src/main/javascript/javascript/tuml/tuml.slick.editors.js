@@ -155,7 +155,10 @@
     function ManyPrimitiveEditor(args, serializer) {
         var $input;
         var $div;
+        var $addButton;
         var $table;
+        var $select;
+        var $cancel;
         var defaultValue;
         var scope = this;
 
@@ -163,13 +166,16 @@
         $.extend(this, {
             "TumlManyPrimitiveEditor": "1.0.0",
             "serializeValue": serializeValue, 
-            "serializeValueWithValue": serializeValueWithValue 
+            "serializeValueWithValue": serializeValueWithValue,
+            "handleKeyPress": handleKeyPress 
         });
 
         this.init = function () {
-            args.grid['manyEditorOpen'] = true;
+            args.grid['manyPrimitiveEditorOpen'] = true;
+            args.grid['manyPrimitiveEditor'] = this;
+
             $div = $("<div class='many-primitive-editor' />");
-            var button = $('<button id="many-primitive-editor-input-add-button" />').text('Add').click(function() {
+            $addButton = $('<button id="many-primitive-editor-input-add-button" />').text('Add').click(function() {
                 var valueToAdd = $('.many-primitive-editor-input').val();
                 var currentValues = serializeValue();
                 var testArray = [];
@@ -182,24 +188,13 @@
                     alert(validationResults.msg);
                 } else {
                     addTr(valueToAdd);
+                    $input.val('');
                 }
             }).appendTo($div);
-            $input = $('<input type=text class="many-primitive-editor-input">').appendTo($div);
-            $input.keypress(function(e) {
-                if (e.which == 13) {
-                    e.stopImmediatePropagation();
-                    $('#many-primitive-editor-input-add-button').click();
-                }
-            });
+            $input = $('<input type=text class="many-primitive-editor-input">');
+            $input.appendTo($div)
             var resultDiv = $('<div class="many-primitive-editor-result" />').appendTo($div);
             $table = $('<table class="many-primitive-editor-result-table" />').appendTo(resultDiv);
-            var selectButtonDiv = $('<div class="many-primitive-editor-select-div"/>').appendTo($div);
-            selectButtonDiv.append($('<button class="many-primitive-editor-select"/>').click(function () {
-                args.grid.getEditorLock().commitCurrentEdit();
-            }).text('Select'));
-            selectButtonDiv.append($('<button class="many-prmitive-editor-cancel"/>').click(function() {
-                args.grid.getEditorLock().cancelCurrentEdit();
-            }).text('Cancel'));
 
             $div.bind("keydown.nav", function (e) {
                 if (e.keyCode === $.ui.keyCode.LEFT || e.keyCode === $.ui.keyCode.RIGHT) {
@@ -210,6 +205,15 @@
             $div.appendTo(args.container);
             $input.focus().select();
         };
+
+        function handleKeyPress(e) {
+            if (e.target == $input[0]) {
+                if (e.which == 13) {
+                    $addButton.click();
+                    e.stopImmediatePropagation();
+                }
+            }
+        }
 
         this.destroy = function () {
             args.grid['manyEditorOpen'] = false;

@@ -38,6 +38,7 @@
             "onSelfCellClick": new Tuml.Event(),
             "onContextMenuClickLink": new Tuml.Event(),
             "onContextMenuClickDelete": new Tuml.Event(),
+            "onManyEditorKeyPress": new Tuml.Event(),
             "refresh": refresh
         });
 
@@ -337,8 +338,8 @@
             });
 
             grid.onKeyDown.subscribe(function(e) {
-                if (grid['manyEditorOpen'] && e.which == 13) {
-                    e.stopImmediatePropagation();
+                if (grid['manyPrimitiveEditorOpen']) {
+                    grid['manyPrimitiveEditor'].handleKeyPress(e);
                 }
                 // select all rows on ctrl-a
                 if (e.which != 65 || !e.ctrlKey) {

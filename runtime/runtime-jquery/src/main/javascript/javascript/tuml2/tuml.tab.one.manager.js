@@ -41,6 +41,11 @@
                         $manyDiv.click(function(e) {
                             openEditorForMany($input, property, $manyDiv, li);
                         });
+                        $input.keypress(function(e) {
+                            if (e.which == 13) {
+                                openEditorForMany($input, property, $manyDiv, li);
+                            }
+                        });
                     }
                     if ($input !== undefined) {
                         if (property.dataTypeEnum !== undefined) {
@@ -157,6 +162,13 @@
                     alert(validationResults.msg);
                 } else {
                     addTr(valueToAdd);
+                    //Need to reapply the drag and drop plugin if the table was empty
+                    if (currentValues.length == 0) {
+                        if (property.ordered) {
+                            $table.tableDnD();
+                        }
+                    }
+                    $('.many-primitive-editor-input').val('');
                 }
             }).appendTo($div);
             $input = $('<input type=text class="many-primitive-editor-input">').appendTo($div);
@@ -167,6 +179,16 @@
             });
             var resultDiv = $('<div class="many-primitive-editor-result" />').appendTo($div);
             $table = $('<table class="many-primitive-editor-result-table" />').appendTo(resultDiv);
+            //Add in current value
+            var existingValues = $inputToSet.val().split(',');
+            for (var i = 0; i < existingValues.length; i++) {
+                if (existingValues[i] !== '') {
+                    addTr(existingValues[i]);
+                }
+            }
+            if (property.ordered) {
+                $table.tableDnD();
+            }
             var selectButtonDiv = $('<div class="many-primitive-editor-select-div"/>').appendTo($div);
             selectButtonDiv.append($('<button class="many-primitive-editor-select"/>').click(function () {
                 var currentValues = serializer($table);

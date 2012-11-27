@@ -111,7 +111,7 @@
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Om354DS_EeK9AeutZ8kzPA"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Om4g8DS_EeK9AeutZ8kzPA" value="*"/>
             </ownedAttribute>
-            <ownedAttribute xmi:id="_gbzFMDZNEeK9AeutZ8kzPA" name="manyOrderedSetBoolean">
+            <ownedAttribute xmi:id="_gbzFMDZNEeK9AeutZ8kzPA" name="manyOrderedSetBoolean" isOrdered="true">
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_fsEb8DZOEeK9AeutZ8kzPA"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_fsFqEDZOEeK9AeutZ8kzPA" value="*"/>
