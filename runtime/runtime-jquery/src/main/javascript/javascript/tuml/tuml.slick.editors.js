@@ -167,8 +167,9 @@
         });
 
         this.init = function () {
+            args.grid['manyEditorOpen'] = true;
             $div = $("<div class='many-primitive-editor' />");
-            var button = $('<button />').text('Add').click(function() {
+            var button = $('<button id="many-primitive-editor-input-add-button" />').text('Add').click(function() {
                 var valueToAdd = $('.many-primitive-editor-input').val();
                 var currentValues = serializeValue();
                 var testArray = [];
@@ -184,6 +185,12 @@
                 }
             }).appendTo($div);
             $input = $('<input type=text class="many-primitive-editor-input">').appendTo($div);
+            $input.keypress(function(e) {
+                if (e.which == 13) {
+                    e.stopImmediatePropagation();
+                    $('#many-primitive-editor-input-add-button').click();
+                }
+            });
             var resultDiv = $('<div class="many-primitive-editor-result" />').appendTo($div);
             $table = $('<table class="many-primitive-editor-result-table" />').appendTo(resultDiv);
             var selectButtonDiv = $('<div class="many-primitive-editor-select-div"/>').appendTo($div);
@@ -205,6 +212,7 @@
         };
 
         this.destroy = function () {
+            args.grid['manyEditorOpen'] = false;
             $div.remove();
         };
 

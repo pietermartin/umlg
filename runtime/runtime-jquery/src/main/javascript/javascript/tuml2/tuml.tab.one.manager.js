@@ -127,12 +127,23 @@
 
         function openEditorForMany($inputToSet, property, $manyDiv, $li) {
             var $div = $("<div class='many-primitive-editor-for-one' />");
+            $div.keyup(function(e) {
+                if (e.which == 27) {
+                    $('.many-primitive-editor-cancel').click();
+                }
+            });
+            $(document).mouseup(function (e) {
+                var container = $(".many-primitive-editor-for-one");
+                if (container.has(e.target).length === 0) {
+                    container.remove();
+                }
+            });
             $div.css('left', $manyDiv.position().left + 10);
             $div.css('top', $manyDiv.position().top + 5);
             var $table;
             var editor = selectEditor(property);
             var serializer = new editor().serializeValueWithValue;
-            var button = $('<button />').text('Add').click(function() {
+            var button = $('<button id="many-primitive-editor-input-add-button" />').text('Add').click(function() {
                 var valueToAdd = $('.many-primitive-editor-input').val();
                 var currentValues = serializer($table);
                 var testArray = [];
@@ -149,6 +160,11 @@
                 }
             }).appendTo($div);
             $input = $('<input type=text class="many-primitive-editor-input">').appendTo($div);
+            $input.keypress(function(e) {
+                if (e.which == 13) {
+                    $('#many-primitive-editor-input-add-button').click();
+                }
+            });
             var resultDiv = $('<div class="many-primitive-editor-result" />').appendTo($div);
             $table = $('<table class="many-primitive-editor-result-table" />').appendTo(resultDiv);
             var selectButtonDiv = $('<div class="many-primitive-editor-select-div"/>').appendTo($div);
@@ -157,7 +173,7 @@
                 $inputToSet.val(currentValues.join(","));
                 $div.remove();
             }).text('Select'));
-            selectButtonDiv.append($('<button class="many-prmitive-editor-cancel"/>').click(function() {
+            selectButtonDiv.append($('<button class="many-primitive-editor-cancel"/>').click(function() {
                 $div.remove();
             }).text('Cancel'));
             $div.appendTo($li);
@@ -169,8 +185,8 @@
                 row.append(rowValue);
                 row.data('value', value);
                 var img = $('<img class="tuml-many-select-img" src="/restAndJson/javascript/images/delete.png">').click(function() {
-                   var liClicked =  $(this).parent().parent();
-                   liClicked.remove();
+                    var liClicked =  $(this).parent().parent();
+                    liClicked.remove();
                 });
                 var imgValue = $('<td class="many-primitive-editor-cell many-primitive-editor-cell-img" />');
                 imgValue.append(img);
@@ -270,12 +286,14 @@
         function validateField(property) {
             removeServerErrorMessage();
             var validateInput = $('#' + property.name + $metaForData.name + 'Id');
-            
+
             var serializedValue = [];
             var editor = selectEditor(property);
             var validationResult;
             if (property.manyPrimitive) {
                 var stringValueArray = validateInput.val().split(',');
+                //Remove empty strings
+                stringValueArray.remove('');
                 var tmpSerializedValue = [];
                 for (var i = 0; i < stringValueArray.length; i++) {
                     var tmpValue = stringValueArray[i];
@@ -321,7 +339,7 @@
 
             return validationResult;
         }
-        
+
         function appendEnumerationLoopupOptionsToSelect(tumlLookupUri, propertyJavaClassName, required, currentValue, select) {
             var jqxhr = $.getJSON(tumlLookupUri + '?enumQualifiedName=' + propertyJavaClassName, function(response, b, c) {
                 //if not a required field add a black value
@@ -348,7 +366,7 @@
             var adjustedUri = tumlLookupUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
             var jqxhr = $.getJSON(adjustedUri, function(response, b, c) {
                 var contextVertexId = retrieveVertexId(tumlUri);
-                    //if not a required field add a black value
+                //if not a required field add a black value
                 if (!required) {
                     $select.append($('<option />)').val("").html(""));
                 }

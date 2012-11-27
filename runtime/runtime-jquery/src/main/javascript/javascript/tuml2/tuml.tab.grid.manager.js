@@ -111,6 +111,10 @@
                 var pager = new Slick.Controls.Pager(dataView, grid, $("#pagerLookup" + localMetaForData.name));
                 $("<div id='grid-buttonLookup" + localMetaForData.name + "' class='grid-button'/>").appendTo('#pagerLookup' + localMetaForData.name + ' .slick-pager-settings');
             }
+
+            //Add in a property on the grid to tell if a many editor is open
+            grid['manyEditorOpen'] = false;
+
             grid.setSelectionModel(new Slick.RowSelectionModel()); 
             var columnpicker = new Slick.Controls.ColumnPicker(columns, grid, options);
 
@@ -333,6 +337,9 @@
             });
 
             grid.onKeyDown.subscribe(function(e) {
+                if (grid['manyEditorOpen'] && e.which == 13) {
+                    e.stopImmediatePropagation();
+                }
                 // select all rows on ctrl-a
                 if (e.which != 65 || !e.ctrlKey) {
                     return false;
