@@ -171,7 +171,10 @@
                     $('.many-primitive-editor-input').val('');
                 }
             }).appendTo($div);
-            $input = $('<input type=text class="many-primitive-editor-input">').appendTo($div);
+            //$input = $('<input type=text class="many-primitive-editor-input">').appendTo($div);
+            $input = constructInputForField(null, property);
+            $input.addClass("many-primitive-editor-input");
+            $input.appendTo($div);
             $input.keypress(function(e) {
                 if (e.which == 13) {
                     $('#many-primitive-editor-input-add-button').click();
