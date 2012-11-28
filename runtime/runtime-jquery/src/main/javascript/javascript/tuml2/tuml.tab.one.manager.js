@@ -146,6 +146,7 @@
             $div.css('left', $manyDiv.position().left + 10);
             $div.css('top', $manyDiv.position().top + 5);
             var $table;
+            var $input;
             var editor = selectEditor(property);
             var serializer = new editor().serializeValueWithValue;
             var button = $('<button id="many-primitive-editor-input-add-button" />').text('Add').click(function() {
@@ -168,7 +169,7 @@
                             $table.tableDnD();
                         }
                     }
-                    $('.many-primitive-editor-input').val('');
+                    $input.val('');
                 }
             }).appendTo($div);
             //$input = $('<input type=text class="many-primitive-editor-input">').appendTo($div);

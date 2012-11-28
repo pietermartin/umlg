@@ -313,6 +313,8 @@
                     var uri = item.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), item.id);
                     self.onSelfCellClick.notify({name: 'unused', tumlUri: uri}, null, self);
                 }
+                //unbind the document click event to close many editors
+                grid['clicked'] = true;
             });
 
             grid.onCellChange.subscribe(function(e, args) {

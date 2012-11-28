@@ -115,146 +115,139 @@
     }
 
     function ManyEnumerationEditor(args) {
-        var serializer = function serializeValueWithValue(table) {
-            var rowArray = table.find('.many-primitive-editor-row');
-            var arrayToSerialize = [];
-            for (var i = 0; i < rowArray.length; i++) {
-                var row = rowArray[i];
-                arrayToSerialize.push($(row).data('value'));
-            }
-            return arrayToSerialize;
+        this.args = args;
+        this.$item = args.item;
+        this.init();
+    }
+    ManyEnumerationEditor.prototype = new Tuml.Slick.Editors.ManyPrimitiveEditor();
+    ManyEnumerationEditor.prototype.serializeValue = function() {
+        var rowArray = this.$table.find('.many-primitive-editor-row');
+        var arrayToSerialize = [];
+        for (var i = 0; i < rowArray.length; i++) {
+            var row = rowArray[i];
+            arrayToSerialize.push($(row).data('value'));
         }
-        //return new Tuml.Slick.Editors.ManyPrimitiveEditor(args, serializer);
-        ManyEnumeration.prototype = new  Tuml.Slick.Editors.ManyPrimitiveEditor(args, serializer);
+        return arrayToSerialize;
+    }
+    ManyEnumerationEditor.prototype.createInput = function () {
+        $select = $("<SELECT tabIndex='0' class='editor-select many-primitive-editor-input' style='width:115px;'></SELECT>");
+        $select.appendTo(this.args.container);
+        $self = this;
+        this.args.column.options.rowEnumerationLookupMap.getOrLoadMap(function(data){
+            if (!$self.args.column.options.required) {
+                $select.append($('<option />)').val("").html(""));
+            }
+            $.each(data, function(index, obj) {
+                $select.append($('<option />)').val(obj).html(obj));
+            });
+            currentValue = $self.$item[$self.args.column.field];
+            $select.val(currentValue);
+            if (!$self.args.column.options.required) {
+                $select.chosen({allow_single_deselect: true});
+            } else {
+                $select.chosen();
+            }
+            $select.focus();
+        });
+        return $select;
+    }
+    ManyEnumerationEditor.prototype.resetInput = function (input) {
+        input.val('').trigger('liszt:updated');
     }
 
     function ManyStringPrimitiveEditor(args) {
-        var serializer = function serializeValueWithValue(table) {
-            var rowArray = table.find('.many-primitive-editor-row');
-            var arrayToSerialize = [];
-            for (var i = 0; i < rowArray.length; i++) {
-                var row = rowArray[i];
-                arrayToSerialize.push($(row).data('value'));
-            }
-            return arrayToSerialize;
+        this.args = args;
+        this.init();
+    }
+    ManyStringPrimitiveEditor.prototype = new Tuml.Slick.Editors.ManyPrimitiveEditor();
+    ManyStringPrimitiveEditor.prototype.serializeValue = function() {
+        var rowArray = this.$table.find('.many-primitive-editor-row');
+        var arrayToSerialize = [];
+        for (var i = 0; i < rowArray.length; i++) {
+            var row = rowArray[i];
+            arrayToSerialize.push($(row).data('value'));
         }
-        //return new Tuml.Slick.Editors.ManyPrimitiveEditor(args, serializer);
-        ManyStringPrimitiveEditor.prototype = new Tuml.Slick.Editors.ManyPrimitiveEditor(args, serializer);
+        return arrayToSerialize;
     }
 
     function ManyIntegerPrimitiveEditor(args) {
-        var serializer = function serializeValueWithValue(table) {
-            var rowArray = table.find('.many-primitive-editor-row');
-            var arrayToSerialize = [];
-            for (var i = 0; i < rowArray.length; i++) {
-                var row = rowArray[i];
-                arrayToSerialize.push(parseInt($(row).data('value'), 10));
-            }
-            return arrayToSerialize;
+        this.args = args;
+        this.init();
+    }
+    ManyIntegerPrimitiveEditor.prototype = new Tuml.Slick.Editors.ManyPrimitiveEditor(); 
+    ManyIntegerPrimitiveEditor.prototype.serializeValue = function() {
+        var rowArray = this.$table.find('.many-primitive-editor-row');
+        var arrayToSerialize = [];
+        for (var i = 0; i < rowArray.length; i++) {
+            var row = rowArray[i];
+            arrayToSerialize.push(parseInt($(row).data('value'), 10));
         }
-        //return new Tuml.Slick.Editors.ManyPrimitiveEditor(args, serializer);
-        ManyIntegerPrimitiveEditor.prototype = new Tuml.Slick.Editors.ManyPrimitiveEditor(args, serializer);
+        return arrayToSerialize;
     }
 
     function ManyBooleanPrimitiveEditor(args) {
-        var serializer = function (table) {
-            var rowArray = table.find('.many-primitive-editor-row');
-            var arrayToSerialize = [];
-            for (var i = 0; i < rowArray.length; i++) {
-                var row = rowArray[i];
-                arrayToSerialize.push($(row).data('value'));
-            }
-            return arrayToSerialize;
+        this.args= args;
+        this.init();
+    }
+    ManyBooleanPrimitiveEditor.prototype = new Tuml.Slick.Editors.ManyPrimitiveEditor();
+    ManyBooleanPrimitiveEditor.prototype.serializeValue = function() {
+        var rowArray = this.$table.find('.many-primitive-editor-row');
+        var arrayToSerialize = [];
+        for (var i = 0; i < rowArray.length; i++) {
+            var row = rowArray[i];
+            arrayToSerialize.push($(row).data('value'));
         }
-        //return new Tuml.Slick.Editors.ManyPrimitiveEditor(args, serializer);
-        ManyBooleamPrimitiveEditor.prototype = new Tuml.Slick.Editors.ManyPrimitiveEditor(args, serializer);
+        return arrayToSerialize;
     }
 
-    function ManyPrimitiveEditor(args, serializer) {
-        var $input;
+    function ManyPrimitiveEditor(args) {
+        this.args = args;
+        this.$input;
         var $div;
         var $addButton;
-        var $table;
+        this.$table;
         var $select;
         var $cancel;
         var defaultValue;
         var scope = this;
+        this.justOpened = true;
 
         //Public api
         $.extend(this, {
-            "TumlManyPrimitiveEditor": "1.0.0",
-            "serializeValue": serializeValue, 
-            "serializeValueWithValue": serializeValueWithValue,
-            "handleKeyPress": handleKeyPress 
+            "TumlManyPrimitiveEditor": "1.0.0"
         });
 
-        this.init = function () {
-            args.grid['manyPrimitiveEditorOpen'] = true;
-            args.grid['manyPrimitiveEditor'] = this;
-
-            $div = $("<div class='many-primitive-editor' />");
-            $addButton = $('<button id="many-primitive-editor-input-add-button" />').text('Add').click(function() {
-                var valueToAdd = $('.many-primitive-editor-input').val();
-                var currentValues = serializeValue();
-                var testArray = [];
-                testArray.push(valueToAdd);
-                var validationResults = args.column.validator(testArray);
-                if (currentValues.length !== 0 && validationResults.valid && args.column.options.unique) {
-                    validationResults = args.column.validator(currentValues, valueToAdd);
-                }
-                if (!validationResults.valid) {
-                    alert(validationResults.msg);
-                } else {
-                    addTr(valueToAdd);
-                    $input.val('');
-                }
-            }).appendTo($div);
-            $input = $('<input type=text class="many-primitive-editor-input">');
-            $input.appendTo($div)
-            var resultDiv = $('<div class="many-primitive-editor-result" />').appendTo($div);
-            $table = $('<table class="many-primitive-editor-result-table" />').appendTo(resultDiv);
-
-            $div.bind("keydown.nav", function (e) {
-                if (e.keyCode === $.ui.keyCode.LEFT || e.keyCode === $.ui.keyCode.RIGHT) {
-                    e.stopImmediatePropagation();
-                }
-            });
-
-            $div.appendTo(args.container);
-            $input.focus().select();
-        };
-
-        function handleKeyPress(e) {
-            if (e.target == $input[0]) {
+        this.handleKeyPress = function(e) {
+            if (e.target == this.$input[0]) {
                 if (e.which == 13) {
-                    $addButton.click();
+                    this.$addButton.click();
                     e.stopImmediatePropagation();
                 }
             }
         }
 
         this.destroy = function () {
-            args.grid['manyEditorOpen'] = false;
-            $div.remove();
+            this.args.grid['manyPrimitiveEditorOpen'] = false;
+            this.$div.remove();
         };
 
         this.focus = function () {
-            $input.focus();
+            this.$input.focus();
         };
 
         this.loadValue = function (item) {
-            defaultValue = item[args.column.field];
+            defaultValue = item[this.args.column.field];
             if (defaultValue !== undefined && defaultValue !== null) {
                 for (var i = 0; i < defaultValue.length; i++) {
-                    addTr(defaultValue[i]);
+                    this.addTr(defaultValue[i]);
                 }
-                if (args.column.options.ordered) {
-                    $table.tableDnD();
+                if (this.args.column.options.ordered) {
+                    this.$table.tableDnD();
                 }
             }
         };
 
-        function addTr(value) {
+        this.addTr = function(value) {
             var row = $('<tr />').addClass('many-primitive-editor-row');
             var rowValue = $('<td class="many-primitive-editor-cell" />').text(value);
             row.append(rowValue);
@@ -266,23 +259,15 @@
             var imgValue = $('<td class="many-primitive-editor-cell many-primitive-editor-cell-img" />');
             imgValue.append(img);
             row.append(imgValue);
-            $table.append(row);
-        }
-
-        function serializeValue() {
-            return serializeValueWithValue($table);
-        };
-
-        function serializeValueWithValue(table) {
-            return serializer(table);
+            this.$table.append(row);
         }
 
         this.applyValue = function (item, state) {
-            item[args.column.field] = state;
+            item[this.args.column.field] = state;
         };
 
         this.isValueChanged = function () {
-            var rowArray = $table.find('.many-primitive-editor-row');
+            var rowArray = this.$table.find('.many-primitive-editor-row');
             var arrayToSerialize = [];
             for (var i = 0; i < rowArray.length; i++) {
                 var row = rowArray[i];
@@ -303,15 +288,15 @@
         };
 
         this.validate = function () {
-            if (args.column.validator) {
-                var rowArray = $table.find('.many-primitive-editor-row');
+            if (this.args.column.validator) {
+                var rowArray = this.$table.find('.many-primitive-editor-row');
                 if (rowArray.length > 0) {
                     var arrayToSerialize = [];
                     for (var i = 0; i < rowArray.length; i++) {
                         var row = rowArray[i];
                         arrayToSerialize.push($(row).data('value'));
                     }
-                    var validationResults = args.column.validator(arrayToSerialize);
+                    var validationResults = this.args.column.validator(arrayToSerialize);
                     if (!validationResults.valid) {
                         return validationResults;
                     }
@@ -324,10 +309,60 @@
             };
         };
         //This is called from the grid, the one only uses the serializeValueWithValue function
-        if (args !== undefined) {
+        if (this.args !== undefined) {
             this.init();
         }
     }
+    ManyPrimitiveEditor.prototype.serializeValue = function() {
+        alert('this must be overriden');
+    };
+    ManyPrimitiveEditor.prototype.createInput = function () {
+        return $('<input type=text class="many-primitive-editor-input">');
+    }
+    ManyPrimitiveEditor.prototype.resetInput = function (input) {
+        input.val('');
+    }
+    ManyPrimitiveEditor.prototype.init = function () {
+        this.args.grid['manyPrimitiveEditorOpen'] = true;
+        this.args.grid['manyPrimitiveEditor'] = this;
+        this.$div = $("<div class='many-primitive-editor' />");
+        var $self = this;
+        this.$addButton = $('<button id="many-primitive-editor-input-add-button" />').text('Add').click(function() {
+            var valueToAdd = $('.many-primitive-editor-input').val();
+            var currentValues = $self.serializeValue();
+            var testArray = [];
+            testArray.push(valueToAdd);
+            var validationResults = $self.args.column.validator(testArray);
+            if (currentValues.length !== 0 && validationResults.valid && $self.args.column.options.unique) {
+                validationResults = $self.args.column.validator(currentValues, valueToAdd);
+            }
+            if (!validationResults.valid) {
+                alert(validationResults.msg);
+            } else {
+                $self.addTr(valueToAdd);
+                //Need to reapply the drag and drop plugin if the table was empty
+                if (currentValues.length == 0) {
+                    if ($self.args.column.options.ordered) {
+                        $self.$table.tableDnD();
+                    }
+                }
+                $self.resetInput($self.$input);
+            }
+        }).appendTo(this.$div);
+        this.$input = this.createInput();
+        this.$input.appendTo(this.$div)
+        var resultDiv = $('<div class="many-primitive-editor-result" />').appendTo(this.$div);
+        this.$table = $('<table class="many-primitive-editor-result-table" />').appendTo(resultDiv);
+
+        this.$div.bind("keydown.nav", function (e) {
+            if (e.keyCode === $.ui.keyCode.LEFT || e.keyCode === $.ui.keyCode.RIGHT) {
+                e.stopImmediatePropagation();
+            }
+        });
+
+        this.$div.appendTo(this.args.container);
+        this.$input.focus().select();
+    };
 
     function IntegerEditor(args) {
         //Public api

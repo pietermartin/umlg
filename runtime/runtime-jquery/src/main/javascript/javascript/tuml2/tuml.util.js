@@ -14,7 +14,7 @@ function selectFormatter(property) {
         return TumlSlick.Formatters.Id;
     } else if (property.dataTypeEnum !== undefined) {
         return null;
-    } else if (property.oneEnumeration) {
+    } else if (property.oneEnumeration || property.manyEnumeration) {
         return  TumlSlick.Formatters.TumlRequired; 
     } else if (!property.onePrimitive && !property.manyPrimitive) {
         return function waitingFormatter(row, cell, value, columnDef, dataContext) {
