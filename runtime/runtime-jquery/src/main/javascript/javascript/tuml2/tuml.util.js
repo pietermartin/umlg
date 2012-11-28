@@ -113,6 +113,8 @@ function selectEditor(property) {
         }
     } else if (property.oneEnumeration) {
         return  Tuml.Slick.Editors.SelectEnumerationCellEditor; 
+    } else if (property.manyEnumeration) {
+        return  Tuml.Slick.Editors.ManyEnumerationEditor; 
     } else if (property.manyPrimitive && property.fieldType === 'String') {
         return  Tuml.Slick.Editors.ManyStringPrimitiveEditor; 
     } else if (property.manyPrimitive && property.fieldType === 'Integer') {

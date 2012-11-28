@@ -17,6 +17,7 @@
                     "SelectEnumerationCellEditor": SelectEnumerationCellEditor,
                     "ManyPrimitiveEditor": ManyPrimitiveEditor,
                     "ManyStringPrimitiveEditor": ManyStringPrimitiveEditor,
+                    "ManyEnumerationEditor": ManyEnumerationEditor,
                     "ManyIntegerPrimitiveEditor": ManyIntegerPrimitiveEditor,
                     "ManyBooleanPrimitiveEditor": ManyBooleanPrimitiveEditor,
                     "Checkbox": CheckboxEditor,
@@ -113,6 +114,20 @@
         }
     }
 
+    function ManyEnumerationEditor(args) {
+        var serializer = function serializeValueWithValue(table) {
+            var rowArray = table.find('.many-primitive-editor-row');
+            var arrayToSerialize = [];
+            for (var i = 0; i < rowArray.length; i++) {
+                var row = rowArray[i];
+                arrayToSerialize.push($(row).data('value'));
+            }
+            return arrayToSerialize;
+        }
+        //return new Tuml.Slick.Editors.ManyPrimitiveEditor(args, serializer);
+        ManyEnumeration.prototype = new  Tuml.Slick.Editors.ManyPrimitiveEditor(args, serializer);
+    }
+
     function ManyStringPrimitiveEditor(args) {
         var serializer = function serializeValueWithValue(table) {
             var rowArray = table.find('.many-primitive-editor-row');
@@ -123,7 +138,8 @@
             }
             return arrayToSerialize;
         }
-        return new Tuml.Slick.Editors.ManyPrimitiveEditor(args, serializer);
+        //return new Tuml.Slick.Editors.ManyPrimitiveEditor(args, serializer);
+        ManyStringPrimitiveEditor.prototype = new Tuml.Slick.Editors.ManyPrimitiveEditor(args, serializer);
     }
 
     function ManyIntegerPrimitiveEditor(args) {
@@ -136,7 +152,8 @@
             }
             return arrayToSerialize;
         }
-        return new Tuml.Slick.Editors.ManyPrimitiveEditor(args, serializer);
+        //return new Tuml.Slick.Editors.ManyPrimitiveEditor(args, serializer);
+        ManyIntegerPrimitiveEditor.prototype = new Tuml.Slick.Editors.ManyPrimitiveEditor(args, serializer);
     }
 
     function ManyBooleanPrimitiveEditor(args) {
@@ -149,7 +166,8 @@
             }
             return arrayToSerialize;
         }
-        return new Tuml.Slick.Editors.ManyPrimitiveEditor(args, serializer);
+        //return new Tuml.Slick.Editors.ManyPrimitiveEditor(args, serializer);
+        ManyBooleamPrimitiveEditor.prototype = new Tuml.Slick.Editors.ManyPrimitiveEditor(args, serializer);
     }
 
     function ManyPrimitiveEditor(args, serializer) {

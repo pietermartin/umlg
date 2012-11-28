@@ -221,7 +221,7 @@
         }
 
         function isPropertyForOnePage(property) {
-            return(!property.inverseComposite && !property.composite && ((property.oneToOne || property.manyToOne) || property.manyPrimitive) && property.name !== 'uri'); 
+            return(!property.inverseComposite && !property.composite && ((property.oneToOne || property.manyToOne) || property.manyPrimitive || property.manyEnumeration) && property.name !== 'uri'); 
         }
 
         function removeServerErrorMessage() {
@@ -264,7 +264,14 @@
                 } else {
                     appendEnumerationLoopupOptionsToSelect("/restAndJson/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, $input);
                 }
-            } else if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite) {
+            } else if (property.manyEnumeration) {
+                $input = $('<select multiple />', {class: 'chzn-select', style: 'width:350px;',  id: property.name + $metaForData.name + 'Id', name: property.name});
+                if (data !== undefined && data !== null) {
+                    appendEnumerationLoopupOptionsToSelect("/restAndJson/tumlEnumLookup", property.qualifiedName, property.lower > 0, data[property.name], $input);
+                } else {
+                    appendEnumerationLoopupOptionsToSelect("/restAndJson/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, $input);
+                }
+            } else if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && property.oneToOne) {
                 $input = $('<select />', {class: 'chzn-select', style: 'width:350px;',  id: property.name + $metaForData.name + 'Id', name: property.name});
                 if (data !== undefined && data !== null) {
                     appendLoopupOptionsToSelect(property.tumlLookupUri, property.lower > 0, data['id'], data[property.name], $input);

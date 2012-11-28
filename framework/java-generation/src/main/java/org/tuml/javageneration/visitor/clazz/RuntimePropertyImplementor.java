@@ -329,7 +329,7 @@ public class RuntimePropertyImplementor {
 		OJField propertyManyEnumerationField = new OJField();
 		propertyManyEnumerationField.setName("manyEnumeration");
 		propertyManyEnumerationField.setType(new OJPathName("boolean"));
-		propertyManyEnumerationField.setInitExp(Boolean.toString(isEnumeration && isManyToMany));
+		propertyManyEnumerationField.setInitExp(Boolean.toString(isEnumeration && isMany));
 		ojLiteral.addToAttributeValues(propertyManyEnumerationField);
 
 		OJField propertyControllingSideField = new OJField();

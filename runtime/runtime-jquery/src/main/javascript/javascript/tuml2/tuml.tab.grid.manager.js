@@ -51,7 +51,7 @@
             contextVertexId = retrieveVertexId(tumlUri); 
 
             $.each(localMetaForData.properties, function(index, property) {
-                if (!property.composite && !property.inverseComposite && ((property.oneToOne || property.manyToOne) || property.manyPrimitive)) {
+                if (!property.composite && !property.inverseComposite && ((property.oneToOne || property.manyToOne) || property.manyPrimitive || property.manyEnumeration)) {
                     //Place the id column first
                     if (property.name == "id") {
                         columns.splice(0,0,{
