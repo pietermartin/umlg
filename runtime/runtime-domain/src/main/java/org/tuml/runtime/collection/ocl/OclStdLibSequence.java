@@ -220,16 +220,16 @@ public interface OclStdLibSequence<E> extends OclStdLibCollection<E> {
 	@Override
 	TinkerSequence<E> asSequence();
 	
-	/**
-	 * asSet() : Set(T)
-	 * <pre>
-	 * Redefines the Collection operation. The Set containing all the elements from self, with duplicates removed.
-	 * 	post: result->forAll(elem | self ->includes(elem))
-	 * 	post: self ->forAll(elem | result->includes(elem))
-	 * </pre>
-	 */
-	@Override
-	TinkerSet<E> asSet();
+//	/**
+//	 * asSet() : Set(T)
+//	 * <pre>
+//	 * Redefines the Collection operation. The Set containing all the elements from self, with duplicates removed.
+//	 * 	post: result->forAll(elem | self ->includes(elem))
+//	 * 	post: self ->forAll(elem | result->includes(elem))
+//	 * </pre>
+//	 */
+//	@Override
+//	TinkerSet<E> asSet();
 	
 	/**
 	 * asOrderedSet() : OrderedSet(T)

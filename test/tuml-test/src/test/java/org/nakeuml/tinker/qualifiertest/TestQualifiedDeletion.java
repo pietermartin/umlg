@@ -4,6 +4,9 @@ import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.tuml.componenttest.Space;
+import org.tuml.componenttest.SpaceTime;
+import org.tuml.componenttest.Time;
 import org.tuml.concretetest.God;
 import org.tuml.concretetest.Universe;
 import org.tuml.qualifiertest.Many1;
@@ -16,6 +19,7 @@ import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 
 public class TestQualifiedDeletion extends BaseLocalDbTest {
 
+	@SuppressWarnings("unused")
 	@Test
 	public void testDeletionManyToMany() {
 		db.startTransaction();
@@ -23,6 +27,9 @@ public class TestQualifiedDeletion extends BaseLocalDbTest {
 		god.setName("THEGOD");
 		Universe universe1 = new Universe(god);
 		universe1.setName("universe1");
+		SpaceTime st = new SpaceTime(universe1);
+		Space s = new Space(st);
+		Time t = new Time(st);
 		
 		Many1 many11 = new Many1(god);
 		many11.setName("many11");
@@ -77,6 +84,7 @@ public class TestQualifiedDeletion extends BaseLocalDbTest {
 		Assert.assertTrue(many2Test.getMany1ForQualifier1("many11").isEmpty());
 	}
 
+	@SuppressWarnings("unused")
 	@Test
 	public void testDeletionManyToManyList() {
 		db.startTransaction();
@@ -84,6 +92,9 @@ public class TestQualifiedDeletion extends BaseLocalDbTest {
 		god.setName("THEGOD");
 		Universe universe1 = new Universe(god);
 		universe1.setName("universe1");
+		SpaceTime st = new SpaceTime(universe1);
+		Space s = new Space(st);
+		Time t = new Time(st);
 		
 		Many1 many11 = new Many1(god);
 		many11.setName("many11");

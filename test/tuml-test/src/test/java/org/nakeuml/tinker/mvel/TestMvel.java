@@ -12,6 +12,9 @@ import org.joda.time.DateTime;
 import org.junit.Test;
 import org.mvel2.MVEL;
 import org.tuml.collectiontest.Hand;
+import org.tuml.componenttest.Space;
+import org.tuml.componenttest.SpaceTime;
+import org.tuml.componenttest.Time;
 import org.tuml.concretetest.God;
 import org.tuml.concretetest.Universe;
 import org.tuml.embeddedtest.REASON;
@@ -21,6 +24,7 @@ import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 
 public class TestMvel extends BaseLocalDbTest {
 
+	@SuppressWarnings("unused")
 	@Test
 	public void testMvel() {
 		db.startTransaction();
@@ -30,10 +34,22 @@ public class TestMvel extends BaseLocalDbTest {
 		g.setName("god");
 		Universe u1 = new Universe(g);
 		u1.setName("u1");
+		SpaceTime st1 = new SpaceTime(u1);
+		Space s1 = new Space(st1);
+		Time t1 = new Time(st1);
+
 		Universe u2 = new Universe(g);
 		u2.setName("u2");
+		SpaceTime st2 = new SpaceTime(u2);
+		Space s2 = new Space(st2);
+		Time t2 = new Time(st2);
+		
 		Universe u3 = new Universe(g);
 		u3.setName("u3");
+		SpaceTime st3 = new SpaceTime(u3);
+		Space s3 = new Space(st3);
+		Time t3 = new Time(st3);
+		
 		Hand h1 = new Hand(g);
 		h1.setName("h1");
 		Hand h2 = new Hand(g);

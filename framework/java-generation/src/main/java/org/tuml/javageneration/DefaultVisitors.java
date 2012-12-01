@@ -45,7 +45,7 @@ public class DefaultVisitors {
 		result.add(new InterfaceRuntimePropertyImplementorVisitor(Workspace.INSTANCE));
 		result.add(new EnumerationVisitor(Workspace.INSTANCE));
 		result.add(new CompositionVisitor(Workspace.INSTANCE));
-		result.add(new ComponentProperyVisitor(Workspace.INSTANCE));
+//		result.add(new ComponentProperyVisitor(Workspace.INSTANCE));
 		result.add(new PropertyVisitor(Workspace.INSTANCE));
 		result.add(new ManyPropertyVisitor(Workspace.INSTANCE));
 		result.add(new OnePropertyVisitor(Workspace.INSTANCE));

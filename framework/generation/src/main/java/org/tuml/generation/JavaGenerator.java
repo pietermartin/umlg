@@ -33,6 +33,7 @@ public class JavaGenerator {
 	public void generate(File modelFile, File projectRoot, List<Visitor<?>> visitors) {
 		logger.info(String.format("Generating code for %s into %s", modelFile.getAbsolutePath(), projectRoot.getAbsolutePath()));
 		Workspace workspace = Workspace.INSTANCE;
+		workspace.clear();
 		workspace.generate(projectRoot, modelFile, visitors);
 	}
 	

@@ -23,10 +23,16 @@ public class Workspace {
 	private File modelFile;
 	private Model model;
 	private List<Visitor<?>> visitors;
+	private JavaModelPrinter javaModelPrinter = new JavaModelPrinter();
 
 	public final static Workspace INSTANCE = new Workspace();
 
 	private Workspace() {
+	}
+	
+	public void clear() {
+		javaClassMap.clear();
+		javaModelPrinter.clear();
 	}
 
 	public void addToClassMap(OJAnnotatedClass ojClass, String sourceDir) {
@@ -47,9 +53,9 @@ public class Workspace {
 
 	private void toText() {
 		for (Map.Entry<JavaModelPrinter.Source, OJAnnotatedClass> entry : this.javaClassMap.entrySet()) {
-			JavaModelPrinter.addToSource(entry.getKey().qualifiedName, entry.getKey().sourceDir, entry.getValue().toJavaString());
+			this.javaModelPrinter.addToSource(entry.getKey().qualifiedName, entry.getKey().sourceDir, entry.getValue().toJavaString());
 		}
-		JavaModelPrinter.toText(this.projectRoot);
+		this.javaModelPrinter.toText(this.projectRoot);
 	}
 
 	public OJAnnotatedClass findOJClass(String name) {

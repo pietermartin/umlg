@@ -116,14 +116,14 @@ public interface OclStdLibOrderedSet<E> extends OclStdLibCollection<E> {
 	 */
 	E sum();
 	
-	/**
-	 * asSet() : Set(T)
-	 * </pre>
-	 * Redefines the Set operation. Returns a Set containing all of the elements of self, in undefined order.
-	 * <pre>
-	 */
-	@Override
-	TinkerSet<E> asSet();
+//	/**
+//	 * asSet() : Set(T)
+//	 * </pre>
+//	 * Redefines the Set operation. Returns a Set containing all of the elements of self, in undefined order.
+//	 * <pre>
+//	 */
+//	@Override
+//	TinkerSet<E> asSet();
 	
 	/**
 	 * asOrderedSet() : OrderedSet(T)

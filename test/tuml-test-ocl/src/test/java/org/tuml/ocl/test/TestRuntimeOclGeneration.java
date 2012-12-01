@@ -16,6 +16,7 @@ import org.tuml.qualifier.Bank;
 import org.tuml.qualifier.Employee;
 import org.tuml.runtime.collection.TinkerBag;
 import org.tuml.runtime.collection.TinkerOrderedSet;
+import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
 import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
@@ -76,9 +77,9 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 		db.stopTransaction(Conclusion.SUCCESS);
 
 		Object result = TumlOclExecutor.executeOclQuery("testoclmodel::org::tuml::qualifier::Employee", "Employee.allInstances()");
-		Assert.assertTrue(result instanceof TinkerOrderedSet<?>);
-		TinkerOrderedSet result2 = (TinkerOrderedSet<Employee>)result;
-		Assert.assertEquals(1, result2.size());
+		Assert.assertTrue(result instanceof TinkerSet<?>);
+		TinkerSet result2 = (TinkerSet<Employee>)result;
+		Assert.assertEquals(3, result2.size());
 	}
 	
 	@Test

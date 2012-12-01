@@ -3,6 +3,9 @@ package org.nakeuml.tinker.concretetest;
 import junit.framework.Assert;
 
 import org.junit.Test;
+import org.tuml.componenttest.Space;
+import org.tuml.componenttest.SpaceTime;
+import org.tuml.componenttest.Time;
 import org.tuml.concretetest.Angel;
 import org.tuml.concretetest.God;
 import org.tuml.concretetest.Universe;
@@ -14,6 +17,7 @@ import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 
 public class TestNonCompositeOneToOne extends BaseLocalDbTest {
 
+	@SuppressWarnings("unused")
 	@Test
 	public void testNonCompositeOneToOneCreation() {
 		db.startTransaction();
@@ -21,6 +25,10 @@ public class TestNonCompositeOneToOne extends BaseLocalDbTest {
 		god.setName("THEGOD");
 		Universe universe1 = new Universe(god);
 		universe1.setName("universe1");
+		SpaceTime st1 = new SpaceTime(universe1);
+		Space s1 = new Space(st1);
+		Time t1 = new Time(st1);
+
 		Angel angel = new Angel(god);
 		angel.setName("angel1");
 		universe1.setAngel(angel);
@@ -33,6 +41,7 @@ public class TestNonCompositeOneToOne extends BaseLocalDbTest {
 		Assert.assertEquals(7, countEdges());
 	}
 	
+	@SuppressWarnings("unused")
 	@Test
 	public void testNonCompositeOneToOneCreationOtherWayAround() {
 		db.startTransaction();
@@ -40,6 +49,10 @@ public class TestNonCompositeOneToOne extends BaseLocalDbTest {
 		god.setName("THEGOD");
 		Universe universe1 = new Universe(god);
 		universe1.setName("universe1");
+		SpaceTime st1 = new SpaceTime(universe1);
+		Space s1 = new Space(st1);
+		Time t1 = new Time(st1);
+
 		Angel angel = new Angel(god);
 		angel.setName("angel1");
 		angel.setUniverse(universe1);
@@ -52,6 +65,7 @@ public class TestNonCompositeOneToOne extends BaseLocalDbTest {
 		Assert.assertEquals(7, countEdges());
 	}
 
+	@SuppressWarnings("unused")
 	@Test
 	public void testNonCompositeOneToOneRemoval() {
 		db.startTransaction();
@@ -59,6 +73,10 @@ public class TestNonCompositeOneToOne extends BaseLocalDbTest {
 		god.setName("THEGOD");
 		Universe universe1 = new Universe(god);
 		universe1.setName("universe1");
+		SpaceTime st1 = new SpaceTime(universe1);
+		Space s1 = new Space(st1);
+		Time t1 = new Time(st1);
+
 		Angel angel = new Angel(god);
 		angel.setName("angel1");
 		universe1.setAngel(angel);

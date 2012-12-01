@@ -2,6 +2,9 @@ package org.nakeuml.tinker.validationtest;
 
 import org.junit.Test;
 import org.neo4j.graphdb.TransactionFailureException;
+import org.tuml.componenttest.Space;
+import org.tuml.componenttest.SpaceTime;
+import org.tuml.componenttest.Time;
 import org.tuml.componenttest.ValidationTest;
 import org.tuml.concretetest.God;
 import org.tuml.concretetest.Universe;
@@ -12,153 +15,193 @@ import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 
 public class TestValidation extends BaseLocalDbTest {
 
+	@SuppressWarnings("unused")
 	@Test(expected = TumlConstraintViolationException.class)
 	public void testValidationMaxLengthFail() {
-		db.startTransaction();
 		God g = new God(true);
 		Universe u1 = new Universe(g);
 		u1.setMaxLength("12345678911");
-		db.stopTransaction(Conclusion.SUCCESS);
+		SpaceTime st = new SpaceTime(u1);
+		Space s = new Space(st);
+		Time t = new Time(st);
+			db.stopTransaction(Conclusion.SUCCESS);
 	}
 
+	@SuppressWarnings("unused")
 	@Test
 	public void testValidationMaxLengthPass() {
-		db.startTransaction();
 		God g = new God(true);
 		Universe u1 = new Universe(g);
+		SpaceTime st = new SpaceTime(u1);
+		Space s = new Space(st);
+		Time t = new Time(st);
 		u1.setMaxLength("1234567891");
 		db.stopTransaction(Conclusion.SUCCESS);
 	}
 
+	@SuppressWarnings("unused")
 	@Test(expected = TumlConstraintViolationException.class)
 	public void testValidationMinLengthFail() {
-		db.startTransaction();
 		God g = new God(true);
 		Universe u1 = new Universe(g);
 		u1.setTestMinLength("123");
+		SpaceTime st = new SpaceTime(u1);
+		Space s = new Space(st);
+		Time t = new Time(st);
 		db.stopTransaction(Conclusion.SUCCESS);
 	}
 
+	@SuppressWarnings("unused")
 	@Test
 	public void testValidationMinLengthPass() {
-		db.startTransaction();
 		God g = new God(true);
 		Universe u1 = new Universe(g);
 		u1.setTestMinLength("12345");
+		SpaceTime st = new SpaceTime(u1);
+		Space s = new Space(st);
+		Time t = new Time(st);
 		db.stopTransaction(Conclusion.SUCCESS);
 	}
 
+	@SuppressWarnings("unused")
 	@Test(expected = TumlConstraintViolationException.class)
 	public void testValidationRangeLengthFail1() {
-		db.startTransaction();
 		God g = new God(true);
 		Universe u1 = new Universe(g);
 		u1.setRangeLength("123");
+		SpaceTime st = new SpaceTime(u1);
+		Space s = new Space(st);
+		Time t = new Time(st);
 		db.stopTransaction(Conclusion.SUCCESS);
 	}
 
+	@SuppressWarnings("unused")
 	@Test(expected = TumlConstraintViolationException.class)
 	public void testValidationRangeLengthFail2() {
-		db.startTransaction();
 		God g = new God(true);
 		Universe u1 = new Universe(g);
 		u1.setRangeLength("12345678911");
+		SpaceTime st = new SpaceTime(u1);
+		Space s = new Space(st);
+		Time t = new Time(st);
 		db.stopTransaction(Conclusion.SUCCESS);
 	}
 
+	@SuppressWarnings("unused")
 	@Test
 	public void testValidationRangeLengthPass() {
-		db.startTransaction();
 		God g = new God(true);
 		Universe u1 = new Universe(g);
 		u1.setRangeLength("123456789");
+		SpaceTime st = new SpaceTime(u1);
+		Space s = new Space(st);
+		Time t = new Time(st);
 		db.stopTransaction(Conclusion.SUCCESS);
 	}
 
+	@SuppressWarnings("unused")
 	@Test(expected = TumlConstraintViolationException.class)
 	public void testValidationMinFail() {
-		db.startTransaction();
 		God g = new God(true);
 		Universe u1 = new Universe(g);
 		u1.setMin(5);
+		SpaceTime st = new SpaceTime(u1);
+		Space s = new Space(st);
+		Time t = new Time(st);
 		db.stopTransaction(Conclusion.SUCCESS);
 	}
 
+	@SuppressWarnings("unused")
 	@Test
 	public void testValidationMinPass() {
-		db.startTransaction();
 		God g = new God(true);
 		Universe u1 = new Universe(g);
 		u1.setMin(51);
+		SpaceTime st = new SpaceTime(u1);
+		Space s = new Space(st);
+		Time t = new Time(st);
 		db.stopTransaction(Conclusion.SUCCESS);
 	}
 
+	@SuppressWarnings("unused")
 	@Test(expected = TumlConstraintViolationException.class)
 	public void testValidationMaxFail() {
-		db.startTransaction();
 		God g = new God(true);
 		Universe u1 = new Universe(g);
 		u1.setMax(101);
+		SpaceTime st = new SpaceTime(u1);
+		Space s = new Space(st);
+		Time t = new Time(st);
 		db.stopTransaction(Conclusion.SUCCESS);
 	}
 
+	@SuppressWarnings("unused")
 	@Test
 	public void testValidationMaxPass() {
-		db.startTransaction();
 		God g = new God(true);
 		Universe u1 = new Universe(g);
 		u1.setMax(51);
+		SpaceTime st = new SpaceTime(u1);
+		Space s = new Space(st);
+		Time t = new Time(st);
 		db.stopTransaction(Conclusion.SUCCESS);
 	}
 
+	@SuppressWarnings("unused")
 	@Test(expected = TumlConstraintViolationException.class)
 	public void testValidationRangeFail1() {
-		db.startTransaction();
 		God g = new God(true);
 		Universe u1 = new Universe(g);
 		u1.setRange(1);
+		SpaceTime st = new SpaceTime(u1);
+		Space s = new Space(st);
+		Time t = new Time(st);
 		db.stopTransaction(Conclusion.SUCCESS);
 	}
 
+	@SuppressWarnings("unused")
 	@Test(expected = TumlConstraintViolationException.class)
 	public void testValidationRangeFail2() {
-		db.startTransaction();
 		God g = new God(true);
 		Universe u1 = new Universe(g);
 		u1.setRange(5);
+		SpaceTime st = new SpaceTime(u1);
+		Space s = new Space(st);
+		Time t = new Time(st);
 		db.stopTransaction(Conclusion.SUCCESS);
 	}
 
+	@SuppressWarnings("unused")
 	@Test
 	public void testValidationRangePass() {
-		db.startTransaction();
 		God g = new God(true);
 		Universe u1 = new Universe(g);
 		u1.setRange(3);
+		SpaceTime st = new SpaceTime(u1);
+		Space s = new Space(st);
+		Time t = new Time(st);
 		db.stopTransaction(Conclusion.SUCCESS);
 	}
 
+	@SuppressWarnings("unused")
 	@Test(expected = TransactionFailureException.class)
 	public void testValidationRequiredFail() {
-		db.startTransaction();
 		God g = new God(true);
-		@SuppressWarnings("unused")
 		ValidationTest validationTest = new ValidationTest(g);
 		db.stopTransaction(Conclusion.SUCCESS);
 	}
 
 	@Test
 	public void testValidationRequiredPass() {
-		db.startTransaction();
 		God g = new God(true);
 		ValidationTest validationTest = new ValidationTest(g);
 		validationTest.setRequiredName("asd");
 		db.stopTransaction(Conclusion.SUCCESS);
 	}
 
+	@SuppressWarnings("unused")
 	@Test
 	public void testFail() {
-		db.startTransaction();
 		try {
 			God g = new God(true);
 			ValidationTest validationTest = new ValidationTest(g);
@@ -168,22 +211,30 @@ public class TestValidation extends BaseLocalDbTest {
 			System.out.println(e.getCause());
 		}
 	}
-	
+
+	@SuppressWarnings("unused")
 	@Test(expected = TumlConstraintViolationException.class)
 	public void testEmailValidationFail() {
 		God g = new God(true);
 		g.setName("asda");
 		Universe universe = new Universe(g);
 		universe.setEmail("asdasd");
+		SpaceTime st = new SpaceTime(universe);
+		Space s = new Space(st);
+		Time t = new Time(st);
 		db.stopTransaction(Conclusion.SUCCESS);
 	}
 
+	@SuppressWarnings("unused")
 	@Test
 	public void testEmailValidationPass() {
 		God g = new God(true);
 		g.setName("asda");
 		Universe universe = new Universe(g);
 		universe.setEmail("asdasd@asd.com");
+		SpaceTime st = new SpaceTime(universe);
+		Space s = new Space(st);
+		Time t = new Time(st);
 		db.stopTransaction(Conclusion.SUCCESS);
 	}
 }

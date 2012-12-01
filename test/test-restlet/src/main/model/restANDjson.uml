@@ -200,6 +200,10 @@
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_J1LfIStAEeKUKeU-gvRHzA"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_J1LfIitAEeKUKeU-gvRHzA" value="*"/>
             </ownedAttribute>
+            <ownedAttribute xmi:id="_O49nwDsHEeK9AeutZ8kzPA" name="home" type="_GULjQDsHEeK9AeutZ8kzPA" aggregation="composite" association="_O4-O0DsHEeK9AeutZ8kzPA">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_O49nwTsHEeK9AeutZ8kzPA" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_O49nwjsHEeK9AeutZ8kzPA" value="1"/>
+            </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Association" xmi:id="_-UTBwN4jEeGdB9TPHp60mw" name="A_&lt;human>_&lt;hand>" memberEnd="_-UTBwd4jEeGdB9TPHp60mw _-UB8AN4jEeGdB9TPHp60mw" navigableOwnedEnd="_-UTBwd4jEeGdB9TPHp60mw">
             <ownedEnd xmi:id="_-UTBwd4jEeGdB9TPHp60mw" name="human" visibility="public" type="_6R3uIN4jEeGdB9TPHp60mw" association="_-UTBwN4jEeGdB9TPHp60mw">
@@ -391,6 +395,19 @@
             <ownedEnd xmi:id="_fFShETjFEeK9AeutZ8kzPA" name="finger" type="_4sr5AN4jEeGdB9TPHp60mw" association="_fFShEDjFEeK9AeutZ8kzPA">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_fFShEjjFEeK9AeutZ8kzPA" value="1"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_fFShEzjFEeK9AeutZ8kzPA" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_GULjQDsHEeK9AeutZ8kzPA" name="Home">
+            <ownedAttribute xmi:id="_JHUZQDsHEeK9AeutZ8kzPA" name="name">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_LnJ4wDsHEeK9AeutZ8kzPA"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_LnKf0DsHEeK9AeutZ8kzPA" value="1"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_O4-O0DsHEeK9AeutZ8kzPA" name="human_home_1" memberEnd="_O4-O0TsHEeK9AeutZ8kzPA _O49nwDsHEeK9AeutZ8kzPA" navigableOwnedEnd="_O4-O0TsHEeK9AeutZ8kzPA">
+            <ownedEnd xmi:id="_O4-O0TsHEeK9AeutZ8kzPA" name="human" type="_6R3uIN4jEeGdB9TPHp60mw" association="_O4-O0DsHEeK9AeutZ8kzPA">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_O4-O0jsHEeK9AeutZ8kzPA" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_O4-O0zsHEeK9AeutZ8kzPA" value="1"/>
             </ownedEnd>
           </packagedElement>
         </packagedElement>

@@ -13,17 +13,17 @@ import org.apache.commons.io.FileUtils;
 
 public class JavaModelPrinter {
 
-	public static Map<Source, String> sourceFiles = new HashMap<Source, String>();
+	private Map<Source, String> sourceFiles = new HashMap<Source, String>();
 
-	public static void addToSource(String qualifiedName, String sourceDir, String source) {
+	public void addToSource(String qualifiedName, String sourceDir, String source) {
 		sourceFiles.put(new JavaModelPrinter.Source(qualifiedName, sourceDir), source);
 	}
 
-//	public static void addToSource(String qualifiedName, String source) {
-//		sourceFiles.put(new JavaModelPrinter.Source(qualifiedName, SOURCE_FOLDER), source);
-//	}
+	public void clear() {
+		this.sourceFiles.clear();
+	}
 
-	public static void toText(File project) {
+	public void toText(File project) {
 		if (project.exists()) {
 			try {
 				List<String> alreadyCleaned = new ArrayList<String>();
@@ -38,10 +38,10 @@ public class JavaModelPrinter {
 
 				for (Source source : sourceFiles.keySet()) {
 					String packageName = source.qualifiedName.substring(0, source.qualifiedName.lastIndexOf(".")).replace(".", "/");
-					File javaPackage = new File(source.sourceDir + "/" + packageName);
+					File javaPackage = new File(project, source.sourceDir + "/" + packageName);
 					javaPackage.mkdirs();
 					String javaFileName = source.qualifiedName.substring(source.qualifiedName.lastIndexOf(".") + 1);
-					BufferedWriter writer = new BufferedWriter(new FileWriter(new File(source.sourceDir + "/" + packageName + "/" + javaFileName + ".java")));
+					BufferedWriter writer = new BufferedWriter(new FileWriter(new File(project, source.sourceDir + "/" + packageName + "/" + javaFileName + ".java")));
 					writer.append(sourceFiles.get(source));
 					writer.close();
 				}

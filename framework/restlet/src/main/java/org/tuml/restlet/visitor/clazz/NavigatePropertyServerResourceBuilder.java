@@ -39,7 +39,7 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 	@Override
 	public void visitBefore(Property p) {
 		PropertyWrapper pWrap = new PropertyWrapper(p);
-		if (!pWrap.isComponent() && !pWrap.isDataType() && !pWrap.isEnumeration() && pWrap.isNavigable()) {
+		if (!pWrap.isDataType() && !pWrap.isEnumeration() && pWrap.isNavigable()) {
 
 			Set<Classifier> concreteImplementations = TumlClassOperations.getConcreteImplementations((Classifier) pWrap.getType());
 			for (Classifier classifier : concreteImplementations) {

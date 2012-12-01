@@ -309,7 +309,6 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 
 	public String toJson() {
 		if (isMany()) {
-
 			return "\\\"" + getName() + "\\\": \\\"\" + " + getter() + "() + \"\\\"";
 		} else {
 			return "\\\"" + getName() + "\\\": \\\"\" + " + getter() + "() + \"\\\"";
@@ -318,7 +317,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 
 	public boolean isComponent() {
 		return !this.property.isDerived() && this.property.getType() instanceof org.eclipse.uml2.uml.Class && isOne() && this.property.isComposite()
-				&& this.property.getLower() == 1;
+				&& this.property.getLower() >= 1;
 	}
 
 	public boolean isInverseOrdered() {

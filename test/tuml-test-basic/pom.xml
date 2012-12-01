@@ -42,27 +42,6 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.2.1</version>
-				<executions>
-					<execution>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>java</goal>
-						</goals>
-						<configuration>
-							<mainClass>org.tuml.javageneration.JavaGenerator</mainClass>
-							<arguments>
-								<argument>test/tuml-test-basic/src/main/model/tinker-test-basic.uml</argument>
-								<argument>test/tuml-test-basic/</argument>
-								<argument>false</argument>
-							</arguments>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 		<pluginManagement>
 			<plugins>

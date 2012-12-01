@@ -2,6 +2,7 @@ package org.tuml.testbasic;
 
 import junit.framework.Assert;
 
+import org.joda.time.DateTime;
 import org.junit.Test;
 import org.tuml.Many;
 import org.tuml.One;
@@ -15,6 +16,8 @@ public class TestOneToMany extends BaseLocalDbTest {
 	public void testBasicOneToMany() {
 		db.startTransaction();
 		One one = new One(true);
+		one.setName("asd");
+		one.setDateTime(new DateTime());
 		Many many = new Many(one);
 		db.stopTransaction(Conclusion.SUCCESS);
 		Assert.assertEquals(2, countVertices());
@@ -29,10 +32,14 @@ public class TestOneToMany extends BaseLocalDbTest {
 	public void testOneToMany() {
 		db.startTransaction();
 		One one1 = new One(true);
+		one1.setName("asd");
+		one1.setDateTime(new DateTime());
 		Many many11 = new Many(one1);
 		Many many12 = new Many(one1);
 
 		One one2 = new One(true);
+		one2.setName("asdasd");
+		one2.setDateTime(new DateTime());
 		Many many21 = new Many(one2);
 		Many many22 = new Many(one2);
 
@@ -60,6 +67,8 @@ public class TestOneToMany extends BaseLocalDbTest {
 	public void testDelete() {
 		db.startTransaction();
 		One one1 = new One(true);
+		one1.setName("asd");
+		one1.setDateTime(new DateTime());
 		Many many11 = new Many(one1);
 		db.stopTransaction(Conclusion.SUCCESS);
 		Assert.assertEquals(2, countVertices());

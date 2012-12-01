@@ -187,7 +187,7 @@
         </packagedElement>
         <packagedElement xmi:type="uml:Association" xmi:id="_YVzckMi_EeGDV5N-kPDIOw" name="A_&lt;oclTest2>_&lt;oclTestCollection>" memberEnd="_YVzckci_EeGDV5N-kPDIOw _YVsH0Mi_EeGDV5N-kPDIOw" navigableOwnedEnd="_YVzckci_EeGDV5N-kPDIOw">
           <ownedEnd xmi:id="_YVzckci_EeGDV5N-kPDIOw" name="oclTest2" visibility="public" type="_DlgdcMi_EeGDV5N-kPDIOw" association="_YVzckMi_EeGDV5N-kPDIOw">
-            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_YVzck8i_EeGDV5N-kPDIOw" value="1"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_YVzck8i_EeGDV5N-kPDIOw"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_YVzcksi_EeGDV5N-kPDIOw" value="1"/>
           </ownedEnd>
         </packagedElement>

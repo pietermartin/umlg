@@ -2,6 +2,9 @@ package org.nakeuml.tinker.deletiontest;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.tuml.componenttest.Space;
+import org.tuml.componenttest.SpaceTime;
+import org.tuml.componenttest.Time;
 import org.tuml.concretetest.God;
 import org.tuml.concretetest.Universe;
 import org.tuml.interfacetest.ManyA;
@@ -14,6 +17,7 @@ import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 
 public class DeletionTest extends BaseLocalDbTest {
 
+	@SuppressWarnings("unused")
 	@Test
 	public void testDeletion() {
 		db.startTransaction();
@@ -21,6 +25,10 @@ public class DeletionTest extends BaseLocalDbTest {
 		god.setName("THEGOD");
 		Universe universe1 = new Universe(god);
 		universe1.setName("universe1");
+		SpaceTime st1 = new SpaceTime(universe1);
+		Space s1 = new Space(st1);
+		Time t1 = new Time(st1);
+
 		db.stopTransaction(Conclusion.SUCCESS);
 		Assert.assertEquals(5, countVertices());
 		Assert.assertEquals(5, countEdges());
@@ -33,6 +41,7 @@ public class DeletionTest extends BaseLocalDbTest {
 		Assert.assertEquals(1, countEdges());
 	}
 
+	@SuppressWarnings("unused")
 	@Test
 	public void testDeletionManyToMany() {
 		db.startTransaction();
@@ -40,6 +49,10 @@ public class DeletionTest extends BaseLocalDbTest {
 		god.setName("THEGOD");
 		Universe universe1 = new Universe(god);
 		universe1.setName("universe1");
+		SpaceTime st1 = new SpaceTime(universe1);
+		Space s1 = new Space(st1);
+		Time t1 = new Time(st1);
+
 		
 		ManyA manyA1 = new ManyA(god);
 		manyA1.setName("many1");

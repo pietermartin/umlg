@@ -13,46 +13,31 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-install-plugin</artifactId>
 					<executions>
-
 						<execution>
-							<id>lpg.runtime.java.2.0.17-v201004271640</id>
+							<id>org.eclipse.osgi.3.8.1-v20120830-144521</id>
 							<phase>validate</phase>
 							<goals>
 								<goal>install-file</goal>
 							</goals>
 							<configuration>
-								<file>${basedir}/lpg/runtime/java/2.0.17-v201004271640/java-2.0.17-v201004271640.jar</file>
-								<groupId>lpg.runtime</groupId>
-								<artifactId>java</artifactId>
-								<version>2.0.17-v201004271640</version>
-								<packaging>jar</packaging>
-							</configuration>
-						</execution>
-						<execution>
-							<id>org.eclipse.ocl.3.2.0-v20120611-1210</id>
-							<phase>validate</phase>
-							<goals>
-								<goal>install-file</goal>
-							</goals>
-							<configuration>
-								<file>${basedir}/org/eclipse/ocl/3.2.0-v20120611-1210/ocl-3.2.0-v20120611-1210.jar</file>
-								<groupId>org.eclipse</groupId>
-								<artifactId>ocl</artifactId>
-								<version>3.2.0-v20120611-1210</version>
-								<packaging>jar</packaging>
-							</configuration>
-						</execution>
-						<execution>
-							<id>org.eclipse.osgi.3.8.0-v20120529-1548</id>
-							<phase>validate</phase>
-							<goals>
-								<goal>install-file</goal>
-							</goals>
-							<configuration>
-								<file>${basedir}/org/eclipse/osgi/3.8.0-v20120529-1548/osgi-3.8.0-v20120529-1548.jar</file>
+								<file>${basedir}/org/eclipse/osgi/3.8.1-v20120830-144521/osgi-3.8.1-v20120830-144521.jar</file>
 								<groupId>org.eclipse</groupId>
 								<artifactId>osgi</artifactId>
-								<version>3.8.0-v20120529-1548</version>
+								<version>3.8.1-v20120830-144521</version>
+								<packaging>jar</packaging>
+							</configuration>
+						</execution>
+						<execution>
+							<id>org.eclipse.core.jobs.3.5.300-v20120622-204750</id>
+							<phase>validate</phase>
+							<goals>
+								<goal>install-file</goal>
+							</goals>
+							<configuration>
+								<file>${basedir}/org/eclipse/core/jobs/3.5.300-v20120622-204750/jobs-3.5.300-v20120622-204750.jar</file>
+								<groupId>org.eclipse.core</groupId>
+								<artifactId>jobs</artifactId>
+								<version>3.5.300-v20120622-204750</version>
 								<packaging>jar</packaging>
 							</configuration>
 						</execution>
@@ -84,59 +69,100 @@
 								<packaging>jar</packaging>
 							</configuration>
 						</execution>
+
+
+
+
+
+
+
+
+
+
+
+
+
 						<execution>
-							<id>org.eclipse.emf.common.2.8.0-v20120606-0717</id>
+							<id>lpg.runtime.java.2.0.17-v201004271640</id>
 							<phase>validate</phase>
 							<goals>
 								<goal>install-file</goal>
 							</goals>
 							<configuration>
-								<file>${basedir}/org/eclipse/emf/common/2.8.0-v20120606-0717/common-2.8.0-v20120606-0717.jar</file>
+								<file>${basedir}/lpg/runtime/java/2.0.17-v201004271640/java-2.0.17-v201004271640.jar</file>
+								<groupId>lpg.runtime</groupId>
+								<artifactId>java</artifactId>
+								<version>2.0.17-v201004271640</version>
+								<packaging>jar</packaging>
+							</configuration>
+						</execution>
+						<execution>
+							<id>org.eclipse.ocl.3.2.1-v20120917-1739</id>
+							<phase>validate</phase>
+							<goals>
+								<goal>install-file</goal>
+							</goals>
+							<configuration>
+								<file>${basedir}/org/eclipse/ocl/3.2.1-v20120917-1739/ocl-3.2.1-v20120917-1739.jar</file>
+								<groupId>org.eclipse</groupId>
+								<artifactId>ocl</artifactId>
+								<version>3.2.1-v20120917-1739</version>
+								<packaging>jar</packaging>
+							</configuration>
+						</execution>
+						<execution>
+							<id>org.eclipse.emf.common.2.8.0-v20120911-0500</id>
+							<phase>validate</phase>
+							<goals>
+								<goal>install-file</goal>
+							</goals>
+							<configuration>
+								<file>${basedir}/org/eclipse/emf/common/2.8.0-v20120911-0500/common-2.8.0-v20120911-0500.jar</file>
 								<groupId>org.eclipse.emf</groupId>
 								<artifactId>common</artifactId>
-								<version>2.8.0-v20120606-0717</version>
+								<version>2.8.0-v20120911-0500</version>
 								<packaging>jar</packaging>
 							</configuration>
 						</execution>
 						<execution>
-							<id>org.eclipse.emf.ecore.2.8.0-v20120606-0717</id>
+							<id>org.eclipse.emf.ecore.2.8.1-v20120911-0500</id>
 							<phase>validate</phase>
 							<goals>
 								<goal>install-file</goal>
 							</goals>
 							<configuration>
-								<file>${basedir}/org/eclipse/emf/ecore/2.8.0-v20120606-0717/ecore-2.8.0-v20120606-0717.jar</file>
+								<file>${basedir}/org/eclipse/emf/ecore/2.8.1-v20120911-0500/ecore-2.8.1-v20120911-0500.jar</file>
 								<groupId>org.eclipse.emf</groupId>
 								<artifactId>ecore</artifactId>
-								<version>2.8.0-v20120606-0717</version>
+								<version>2.8.1-v20120911-0500</version>
 								<packaging>jar</packaging>
 							</configuration>
 						</execution>
 						<execution>
-							<id>org.eclipse.emf.xmi.2.8.0-v20120606-0717</id>
+							<id>org.eclipse.emf.xmi.2.8.0-v20120911-0500</id>
 							<phase>validate</phase>
 							<goals>
 								<goal>install-file</goal>
 							</goals>
 							<configuration>
-								<file>${basedir}/org/eclipse/emf/ecore/xmi/2.8.0-v20120606-0717/xmi-2.8.0-v20120606-0717.jar</file>
+								<file>${basedir}/org/eclipse/emf/ecore/xmi/2.8.0-v20120911-0500/xmi-2.8.0-v20120911-0500.jar</file>
 								<groupId>org.eclipse.emf.ecore</groupId>
 								<artifactId>xmi</artifactId>
-								<version>2.8.0-v20120606-0717</version>
+								<version>2.8.0-v20120911-0500</version>
 								<packaging>jar</packaging>
 							</configuration>
 						</execution>
 						<execution>
-							<id>org.eclipse.emf.mapping.ecore2xml.2.7.0-v20120608-0554</id>
+							<id>org.eclipse.emf.mapping.ecore2xml.2.7.0-v20120917-0436</id>
 							<phase>validate</phase>
 							<goals>
 								<goal>install-file</goal>
 							</goals>
 							<configuration>
-								<file>${basedir}/org/eclipse/emf/mapping/ecore2xml/2.7.0-v20120608-0554/ecore2xml-2.7.0-v20120608-0554.jar</file>
+								<file>${basedir}/org/eclipse/emf/mapping/ecore2xml/2.7.0-v20120917-0436/ecore2xml-2.7.0-v20120917-0436.jar</file>
 								<groupId>org.eclipse.emf.mapping</groupId>
 								<artifactId>ecore2xml</artifactId>
-								<version>2.7.0-v20120608-0554</version>
+								<version>2.7.0-v20120917-0436</version>
 								<packaging>jar</packaging>
 							</configuration>
 						</execution>
@@ -197,114 +223,114 @@
 							</configuration>
 						</execution>
 						<execution>
-							<id>org.eclipse.ocl.ecore.3.2.0-v20120522-1637</id>
+							<id>org.eclipse.ocl.ecore.3.1.2-v20111015-2027</id>
 							<phase>validate</phase>
 							<goals>
 								<goal>install-file</goal>
 							</goals>
 							<configuration>
-								<file>${basedir}/org/eclipse/ocl/ecore/3.2.0-v20120522-1637/ecore-3.2.0-v20120522-1637.jar</file>
+								<file>${basedir}/org/eclipse/ocl/ecore/3.1.2-v20111015-2027/ecore-3.1.2-v20111015-2027.jar</file>
 								<groupId>org.eclipse.ocl</groupId>
 								<artifactId>ecore</artifactId>
-								<version>3.2.0-v20120522-1637</version>
+								<version>3.1.2-v20111015-2027</version>
 								<packaging>jar</packaging>
 							</configuration>
 						</execution>
 						<execution>
-							<id>org.eclipse.ocl.uml.4.0.0-v20120611-1210</id>
+							<id>org.eclipse.ocl.uml.4.0.0-v20120917-1739</id>
 							<phase>validate</phase>
 							<goals>
 								<goal>install-file</goal>
 							</goals>
 							<configuration>
-								<file>${basedir}/org/eclipse/ocl/uml/4.0.0-v20120611-1210/uml-4.0.0-v20120611-1210.jar</file>
+								<file>${basedir}/org/eclipse/ocl/uml/4.0.0-v20120917-1739/uml-4.0.0-v20120917-1739.jar</file>
 								<groupId>org.eclipse.ocl</groupId>
 								<artifactId>uml</artifactId>
-								<version>4.0.0-v20120611-1210</version>
+								<version>4.0.0-v20120917-1739</version>
 								<packaging>jar</packaging>
 							</configuration>
 						</execution>
 						<execution>
-							<id>org.eclipse.uml2.common.1.7.0-v20120604-0919</id>
+							<id>org.eclipse.uml2.common.1.7.0-v20120913-1441</id>
 							<phase>validate</phase>
 							<goals>
 								<goal>install-file</goal>
 							</goals>
 							<configuration>
-								<file>${basedir}/org/eclipse/uml2/common/1.7.0-v20120604-0919/common-1.7.0-v20120604-0919.jar</file>
+								<file>${basedir}/org/eclipse/uml2/common/1.7.0-v20120913-1441/common-1.7.0-v20120913-1441.jar</file>
 								<groupId>org.eclipse.uml2</groupId>
 								<artifactId>common</artifactId>
-								<version>1.7.0-v20120604-0919</version>
+								<version>1.7.0-v20120913-1441</version>
 								<packaging>jar</packaging>
 							</configuration>
 						</execution>
 						<execution>
-							<id>org.eclipse.uml2.types.1.0.0-v20120604-0919</id>
+							<id>org.eclipse.uml2.types.1.0.0-v20120913-1441</id>
 							<phase>validate</phase>
 							<goals>
 								<goal>install-file</goal>
 							</goals>
 							<configuration>
-								<file>${basedir}/org/eclipse/uml2/types/1.0.0-v20120604-0919/types-1.0.0-v20120604-0919.jar</file>
+								<file>${basedir}/org/eclipse/uml2/types/1.0.0-v20120913-1441/types-1.0.0-v20120913-1441.jar</file>
 								<groupId>org.eclipse.uml2</groupId>
 								<artifactId>types</artifactId>
-								<version>1.0.0-v20120604-0919</version>
+								<version>1.0.0-v20120913-1441</version>
 								<packaging>jar</packaging>
 							</configuration>
 						</execution>
 						<execution>
-							<id>org.eclipse.uml2.uml.4.0.0-v20120604-0919</id>
+							<id>org.eclipse.uml2.uml.4.0.1-v20120913-1441</id>
 							<phase>validate</phase>
 							<goals>
 								<goal>install-file</goal>
 							</goals>
 							<configuration>
-								<file>${basedir}/org/eclipse/uml2/uml/4.0.0-v20120604-0919/uml-4.0.0-v20120604-0919.jar</file>
+								<file>${basedir}/org/eclipse/uml2/uml/4.0.1-v20120913-1441/uml-4.0.1-v20120913-1441.jar</file>
 								<groupId>org.eclipse.uml2</groupId>
 								<artifactId>uml</artifactId>
-								<version>4.0.0-v20120604-0919</version>
+								<version>4.0.1-v20120913-1441</version>
 								<packaging>jar</packaging>
 							</configuration>
 						</execution>
 						<execution>
-							<id>org.eclipse.uml2.uml.resources.4.0.0-v20120604-0919</id>
+							<id>org.eclipse.uml2.uml.resources.4.0.1-v20120913-1441</id>
 							<phase>validate</phase>
 							<goals>
 								<goal>install-file</goal>
 							</goals>
 							<configuration>
-								<file>${basedir}/org/eclipse/uml2/uml/resources/4.0.0-v20120604-0919/resources-4.0.0-v20120604-0919.jar</file>
+								<file>${basedir}/org/eclipse/uml2/uml/resources/4.0.1-v20120913-1441/resources-4.0.1-v20120913-1441.jar</file>
 								<groupId>org.eclipse.uml2.uml</groupId>
 								<artifactId>resources</artifactId>
-								<version>4.0.0-v20120604-0919</version>
+								<version>4.0.1-v20120913-1441</version>
 								<packaging>jar</packaging>
 							</configuration>
 						</execution>
 						<execution>
-							<id>org.eclipse.uml2.uml.profile.l2.1.0.0-v20120604-0919</id>
+							<id>org.eclipse.uml2.uml.profile.l2.1.0.1-v20120913-1441</id>
 							<phase>validate</phase>
 							<goals>
 								<goal>install-file</goal>
 							</goals>
 							<configuration>
-								<file>${basedir}/org/eclipse/uml2/uml/profile/l2/1.0.0-v20120604-0919/l2-1.0.0-v20120604-0919.jar</file>
+								<file>${basedir}/org/eclipse/uml2/uml/profile/l2/1.0.1-v20120913-1441/l2-1.0.1-v20120913-1441.jar</file>
 								<groupId>org.eclipse.uml2.uml.profile</groupId>
 								<artifactId>l2</artifactId>
-								<version>1.0.0-v20120604-0919</version>
+								<version>1.0.1-v20120913-1441</version>
 								<packaging>jar</packaging>
 							</configuration>
 						</execution>
 						<execution>
-							<id>org.eclipse.uml2.uml.profile.l3.1.0.0-v20120604-0919</id>
+							<id>org.eclipse.uml2.uml.profile.l3.1.0.1-v20120913-1441</id>
 							<phase>validate</phase>
 							<goals>
 								<goal>install-file</goal>
 							</goals>
 							<configuration>
-								<file>${basedir}/org/eclipse/uml2/uml/profile/l3/1.0.0-v20120604-0919/l3-1.0.0-v20120604-0919.jar</file>
+								<file>${basedir}/org/eclipse/uml2/uml/profile/l3/1.0.1-v20120913-1441/l3-1.0.1-v20120913-1441.jar</file>
 								<groupId>org.eclipse.uml2.uml.profile</groupId>
 								<artifactId>l3</artifactId>
-								<version>1.0.0-v20120604-0919</version>
+								<version>1.0.1-v20120913-1441</version>
 								<packaging>jar</packaging>
 							</configuration>
 						</execution>
@@ -320,20 +346,6 @@
 								<groupId>org.eclipse.core.runtime.compatibility</groupId>
 								<artifactId>auth</artifactId>
 								<version>3.2.200-v20110110</version>
-								<packaging>jar</packaging>
-							</configuration>
-						</execution>
-						<execution>
-							<id>org.eclipse.core.jobs.3.5.200-v20120521-2346</id>
-							<phase>validate</phase>
-							<goals>
-								<goal>install-file</goal>
-							</goals>
-							<configuration>
-								<file>${basedir}/org/eclipse/core/jobs/3.5.200-v20120521-2346/jobs-3.5.200-v20120521-2346.jar</file>
-								<groupId>org.eclipse.core</groupId>
-								<artifactId>jobs</artifactId>
-								<version>3.5.200-v20120521-2346</version>
 								<packaging>jar</packaging>
 							</configuration>
 						</execution>

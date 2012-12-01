@@ -3,6 +3,9 @@ package org.nakeuml.tinker.nonnavigable;
 import junit.framework.Assert;
 
 import org.junit.Test;
+import org.tuml.componenttest.Space;
+import org.tuml.componenttest.SpaceTime;
+import org.tuml.componenttest.Time;
 import org.tuml.concretetest.God;
 import org.tuml.concretetest.Universe;
 import org.tuml.navigability.NonNavigableMany;
@@ -13,6 +16,7 @@ import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 
 public class NonNavigableTest extends BaseLocalDbTest {
 
+	@SuppressWarnings("unused")
 	@Test
 	public void testNonNavigableOne() {
 		db.startTransaction();
@@ -20,6 +24,10 @@ public class NonNavigableTest extends BaseLocalDbTest {
 		god.setName("THEGOD");
 		Universe universe1 = new Universe(god);
 		universe1.setName("universe1");
+		SpaceTime st1 = new SpaceTime(universe1);
+		Space s1 = new Space(st1);
+		Time t1 = new Time(st1);
+
 		NonNavigableOne nonNavigableOne = new NonNavigableOne(god);
 		nonNavigableOne.setName("nonNovigableOne");
 		universe1.setNonNavigableOne(nonNavigableOne);
@@ -30,6 +38,7 @@ public class NonNavigableTest extends BaseLocalDbTest {
 		Assert.assertNotNull(testUniverse.getNonNavigableOne());
 	}
 	
+	@SuppressWarnings("unused")
 	@Test
 	public void testRemoveNonNavigableOne() {
 		db.startTransaction();
@@ -37,6 +46,10 @@ public class NonNavigableTest extends BaseLocalDbTest {
 		god.setName("THEGOD");
 		Universe universe1 = new Universe(god);
 		universe1.setName("universe1");
+		SpaceTime st1 = new SpaceTime(universe1);
+		Space s1 = new Space(st1);
+		Time t1 = new Time(st1);
+
 		NonNavigableOne nonNavigableOne = new NonNavigableOne(god);
 		nonNavigableOne.setName("nonNovigableOne");
 		universe1.setNonNavigableOne(nonNavigableOne);
@@ -55,6 +68,7 @@ public class NonNavigableTest extends BaseLocalDbTest {
 		Assert.assertNull(testUniverse.getNonNavigableOne());
 	}
 
+	@SuppressWarnings("unused")
 	@Test
 	public void testNonNavigableMany() {
 		db.startTransaction();
@@ -62,6 +76,10 @@ public class NonNavigableTest extends BaseLocalDbTest {
 		god.setName("THEGOD");
 		Universe universe1 = new Universe(god);
 		universe1.setName("universe1");
+		SpaceTime st1 = new SpaceTime(universe1);
+		Space s1 = new Space(st1);
+		Time t1 = new Time(st1);
+
 		NonNavigableMany nonNavigableMany = new NonNavigableMany(god);
 		nonNavigableMany.setName("nonNavigableMany");
 		universe1.addToNonNavigableMany(nonNavigableMany);

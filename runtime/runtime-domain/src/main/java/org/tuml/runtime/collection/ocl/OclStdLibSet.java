@@ -142,16 +142,16 @@ public interface OclStdLibSet<E> extends OclStdLibCollection<E> {
 	@Override
 	<R> TinkerSet<R> flatten();
 
-	/**
-	 * asSet() : Set(T)
-	 * 
-	 * <pre>
-	 * Redefines the Collection operation. A Set identical to self. This operation exists for convenience reasons.
-	 * 		post: result = self
-	 * </pre>
-	 */
-	@Override
-	TinkerSet<E> asSet();
+//	/**
+//	 * asSet() : Set(T)
+//	 * 
+//	 * <pre>
+//	 * Redefines the Collection operation. A Set identical to self. This operation exists for convenience reasons.
+//	 * 		post: result = self
+//	 * </pre>
+//	 */
+//	@Override
+//	TinkerSet<E> asSet();
 
 	/**
 	 * asOrderedSet() : OrderedSet(T)

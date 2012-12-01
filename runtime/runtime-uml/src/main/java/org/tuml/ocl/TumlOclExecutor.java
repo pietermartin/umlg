@@ -35,6 +35,7 @@ public class TumlOclExecutor {
 		oclClass.setSuperclass(TumlClassOperations.getPathName(contextClassifier));
 		OJPackage ojPackage = new OJPackage(Namer.name(contextClassifier.getNearestPackage()));
 		oclClass.setMyPackage(ojPackage);
+		oclClass.getDefaultConstructor();
 		OJConstructor constructor = new OJConstructor();
 		constructor.addParam("vertex", TinkerGenerationUtil.vertexPathName);
 		constructor.getBody().addToStatements("super(vertex)");

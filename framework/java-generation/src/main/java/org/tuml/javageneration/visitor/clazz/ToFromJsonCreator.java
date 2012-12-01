@@ -79,6 +79,8 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 				if (pWrap.isNumber() || pWrap.isBoolean()) {
 					toJson.getBody().addToStatements("sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + " + pWrap.getter() + "() + \"" + "\")");
 				} else if (!pWrap.isDataType()) {
+					// TODO need to implement display name interface or
+					// something
 					toJson.getBody().addToStatements(
 							"sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + (" + pWrap.getter() + "() != null ? \"{\\\"id\\\": \" + " + pWrap.getter()
 									+ "().getId() + \", \\\"displayName\\\": \\\"\" + " + pWrap.getter()
@@ -201,8 +203,13 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 							fromJson.getBody().addToLocals(fieldNumber);
 						} else if (!pWrap.isDataType()) {
 							// Primitives are data types
-							field = new OJField(pWrap.getName() + "Map", new OJPathName("Map<String, Number>"));
-							field.setInitExp("(Map<String, Number>)propertyMap.get(\"" + pWrap.getName() + "\")");
+							if (pWrap.isComponent() && pWrap.getUpper() == 1) {
+								field = new OJField(pWrap.getName() + "Map", new OJPathName("Map<String, Object>"));
+								field.setInitExp("(Map<String, Object>)propertyMap.get(\"" + pWrap.getName() + "\")");
+							} else {
+								field = new OJField(pWrap.getName() + "Map", new OJPathName("Map<String, Number>"));
+								field.setInitExp("(Map<String, Number>)propertyMap.get(\"" + pWrap.getName() + "\")");
+							}
 							TinkerGenerationUtil.addSuppressWarning(fromJson);
 						} else if (pWrap.isDate()) {
 							field = new OJField(pWrap.getName(), DataTypeEnum.Date.getPathName());
@@ -226,12 +233,10 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 							field.setInitExp("(" + pWrap.javaBaseTypePath() + ")propertyMap.get(\"" + pWrap.getName() + "\")");
 						}
 					}
-					// fromJson.getBody().addToLocals(field);
-					// if (!pWrap.isEnumeration()) {
 					OJIfStatement ifInMap = new OJIfStatement("propertyMap.containsKey(\"" + pWrap.fieldname() + "\")");
 					fromJson.getBody().addToStatements(ifInMap);
 					ifInMap.getThenPart().addToLocals(field);
-					if (pWrap.isOne() && !pWrap.isDataType() && !pWrap.isEnumeration()) {
+					if (pWrap.isOne() && !pWrap.isComponent() && !pWrap.isDataType() && !pWrap.isEnumeration()) {
 						OJIfStatement ifSetToNull = new OJIfStatement(field.getName() + ".isEmpty() || " + field.getName() + ".get(\"id\") == null",
 								pWrap.setter() + "(null)");
 						ifSetToNull.addToElsePart(pWrap.setter() + "((" + pWrap.javaBaseTypePath().getLast() + ")GraphDb.getDb().instantiateClassifier("
@@ -239,6 +244,17 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 						annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
 						ifInMap.addToThenPart(ifSetToNull);
 						fromJson.getBody().addToStatements(ifInMap);
+					} else if (pWrap.isComponent() && pWrap.isOne()) {
+
+						OJIfStatement ifNotEmpty = new OJIfStatement("!" + field.getName() + ".isEmpty()");
+						OJIfStatement ifPropertyNotEmpty = new OJIfStatement(pWrap.getter() + "() != null", "throw new RuntimeException(\"Compositional properties can not be updated from the composite parent!\")");
+						ifNotEmpty.addToThenPart(ifPropertyNotEmpty);
+						ifPropertyNotEmpty.addToElsePart(pWrap.javaBaseTypePath().getLast() + " " + pWrap.fieldname() + " = new " + pWrap.javaBaseTypePath().getLast() + "(this)");
+						ifPropertyNotEmpty.addToElsePart(pWrap.fieldname() + ".fromJson(" + field.getName() + ")");
+						annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
+						ifInMap.addToThenPart(ifNotEmpty);
+						fromJson.getBody().addToStatements(ifInMap);
+
 					} else if (pWrap.isOne() && pWrap.isDataType()) {
 						// Enumeration is a DataType
 						ifInMap.addToThenPart(pWrap.setter() + "(" + pWrap.fieldname() + ")");
@@ -252,7 +268,6 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 						ifInMap.addToThenPart(ifSetToNull);
 						fromJson.getBody().addToStatements(ifInMap);
 					}
-					// }
 				}
 			}
 		}

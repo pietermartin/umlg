@@ -47,7 +47,7 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
 			constructor.getBody().addToStatements("this.vertex = " + TinkerGenerationUtil.graphDbAccess + ".addVertex(this.getClass().getName())");
 			constructor.getBody().addToStatements("initialiseProperties()");
 			constructor.getBody().addToStatements(ClassBuilder.INIT_VARIABLES + "()");
-			constructor.getBody().addToStatements("createComponents()");
+//			constructor.getBody().addToStatements("createComponents()");
 
 			PropertyWrapper pWrap = new PropertyWrapper(TumlClassOperations.getOtherEndToComposite(clazz));
 			constructor.getBody().addToStatements(pWrap.adder() + "(compositeOwner)");

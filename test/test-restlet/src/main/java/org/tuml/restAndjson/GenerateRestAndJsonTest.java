@@ -9,6 +9,6 @@ public class GenerateRestAndJsonTest {
 	public static void main(String[] args) {
 		JavaGenerator javaGenerator = new JavaGenerator();
 		javaGenerator
-				.generate(new File("src/main/model/restANDjson.uml"), new File("/home/pieter/workspace-tuml/tuml/test/test-restlet"), RestletVisitors.getDefaultJavaVisitors());
+				.generate(new File("src/main/model/restANDjson.uml"), new File("./"), RestletVisitors.getDefaultJavaVisitors());
 	}
 }

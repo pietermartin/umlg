@@ -53,11 +53,11 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 			initialiseVertexInPersistentConstructor(annotatedClass, clazz);
 			addInitialisePropertiesInPersistentConstructor(annotatedClass);
 			addInitVariablesInPersistentConstructor(annotatedClass);
-			createComponentsInPersistentConstructor(annotatedClass);
+//			createComponentsInPersistentConstructor(annotatedClass);
 		} else {
 			addSuperWithPersistenceToDefaultConstructor(annotatedClass);
 		}
-		addCreateComponents(annotatedClass, clazz);
+//		addCreateComponents(annotatedClass, clazz);
 		addInitVariables(annotatedClass, clazz);
 		addDelete(annotatedClass, clazz);
 		addGetQualifiedName(annotatedClass, clazz);
@@ -528,15 +528,17 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 		sb.append(TumlClassOperations.getPathName(compositeEndPWrap.getOwningType()).getLast());
 		sb.append(" e) {\n");
 		sb.append("			return e.");
-		sb.append(compositeEndPWrap.getter());
+//		sb.append(compositeEndPWrap.getter());
 		// Deal with hierarchies
 		if (compositeEndPWrap.getType() instanceof Class && compositeEndPWrap.getOtherEnd().getType() instanceof Class
 				&& TumlClassOperations.isHierarchy((Class) compositeEndPWrap.getType())
 				&& TumlClassOperations.isHierarchy((Class) compositeEndPWrap.getOtherEnd().getType())) {
-			sb.append("().union((TinkerSet<? extends ");
-			sb.append(compositeEndPWrap.javaBaseTypePath().getLast());
-			sb.append(">) e.getAllChildren());\n	}}\n)");
+//			sb.append("().union((TinkerSet<? extends ");
+//			sb.append(compositeEndPWrap.javaBaseTypePath().getLast());
+//			sb.append(">) e.getAllChildren());\n	}}\n)");
+			sb.append("getAllChildren().<"+compositeEndPWrap.javaBaseTypePath().getLast()+">flatten();\n	}}\n)");
 		} else {
+			sb.append(compositeEndPWrap.getter());
 			sb.append("();\n		}}\n)");
 		}
 		return sb.toString();
