@@ -69,7 +69,9 @@ public class TumlRestletGenerationUtil {
 			default:
 				throw new RuntimeException("Unknown data type " + dataTypeEnum.name());
 			}
-		} else if (propertyWrapper.isOne()) {
+        } else if (propertyWrapper.isComponent()) {
+            return "FieldType.Object";
+        } else if (propertyWrapper.isOne()) {
 			// For the id
 			return "FieldType.Integer";
 		} else {

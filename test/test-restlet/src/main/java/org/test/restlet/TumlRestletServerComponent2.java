@@ -22,6 +22,7 @@ import org.tuml.test.Alien;
 import org.tuml.test.Finger;
 import org.tuml.test.Gender;
 import org.tuml.test.Hand;
+import org.tuml.test.Home;
 import org.tuml.test.Human;
 import org.tuml.test.Many1;
 import org.tuml.test.Many2;
@@ -43,7 +44,7 @@ public class TumlRestletServerComponent2 extends Component {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				ModelLoader.loadModel(new File("src/main/model/restANDjson.uml"));
+				ModelLoader.loadModel(new File("./test/test-restlet/src/main/model/restANDjson.uml"));
 				@SuppressWarnings("unused")
 				TumlOcl2Parser instance = TumlOcl2Parser.INSTANCE;
 			}
@@ -63,7 +64,8 @@ public class TumlRestletServerComponent2 extends Component {
 		setOwner("Noelios Technologies");
 		setAuthor("The Restlet Team");
 
-		getClients().add(Protocol.CLAP);
+        getClients().add(Protocol.FILE);
+        getClients().add(Protocol.CLAP);
 
 		// Add connectors
 		Server server = new Server(new Context(), Protocol.HTTP, 8111);
@@ -82,6 +84,8 @@ public class TumlRestletServerComponent2 extends Component {
 			human.setName("human1" + i);
 			human.setName2("human2" + i);
 			human.setGender(Gender.MALE);
+			Home home = new Home(human);
+			home.setName("home" + i);
 			
 			for (int j = 0; j < 10; j++) {
 				Many1 many1 = new Many1(human);
@@ -173,7 +177,7 @@ public class TumlRestletServerComponent2 extends Component {
 	protected NakedGraph createNakedGraph() {
 		Properties properties = new Properties();
 		try {
-			properties.load(new FileReader("src/test/resources/tuml.env.properties"));
+			properties.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("tuml.env.properties"));
 		} catch (FileNotFoundException e1) {
 			throw new RuntimeException(e1);
 		} catch (IOException e1) {

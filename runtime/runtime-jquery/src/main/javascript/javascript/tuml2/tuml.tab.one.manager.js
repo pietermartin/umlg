@@ -17,7 +17,7 @@
         }
 
         function refresh(data, metaForData, qualifiedName) {
-            var $contextVertexId = retrieveVertexId(tumlUri);
+            //var $contextVertexId = retrieveVertexId(tumlUri);
             $data = data;
             $metaForData = metaForData;
             $qualifiedName = qualifiedName;
@@ -79,55 +79,67 @@
             var $buttonDiv = $('<div class="onesavebuttondiv" />').appendTo($formDiv);
 
             var $saveButton = $('<button />').text('Save').click(function() {
-                var validationResults = [];
-                $.each($metaForData.properties, function(index, property) {
-                    if (!property.readOnly && isPropertyForOnePage(property)) {
-                        var validationResult = validateField(property);
-                        if (!validationResult.valid) {
-                            validationResults.push(validationResult);
-                        }
-                    }
-                });
-                if (validationResults.length === 0) {
-                    if (data !== undefined && data !== null) {
-                        $.ajax({
-                            url: metaForData.qualifiedName == qualifiedName ? tumlUri :tumlUri + '_' + $metaForData.name, 
-                            type: "PUT",
-                            dataType: "json",
-                            contentType: "json",
-                            data: fieldsToJson(),
-                            success: function(data, textStatus, jqXHR) {
-                                self.onPutOneSuccess.notify({tumlUri: tumlUri, data: data}, null, self);
-                            },
-                            error: function(jqXHR, textStatus, errorThrown) {
-                                $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-                                self.onPutOneFailure.notify({tumlUri: tumlUri, jqXHR: jqXHR, textStatus: textStatus, errorThrown: errorThrown}, null, self);
-                            }
-                        });
-                    } else {
-                        $.ajax({
-                            url: tumlUri + '_' + $metaForData.name,
-                            type: "POST",
-                            dataType: "json",
-                            contentType: "json",
-                            data: fieldsToJson(),
-                            success: function(data, textStatus, jqXHR) {
-                                self.onPostOneSuccess.notify({tumlUri: tumlUri, data: data}, null, self);
-                            },
-                            error: function(jqXHR, textStatus, errorThrown) {
-                                $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-                                self.onPostOneFailure.notify({tumlUri: tumlUri, jqXHR: jqXHR, textStatus: textStatus, errorThrown: errorThrown}, null, self);
-                            }
-                        });
-                    }
-                }
-                return false ;
+                self.doSave();
             }).appendTo($buttonDiv);
 
             var $cancelButton = $('<button />').text('Cancel').click(function() {
-                refresh($data, $metaForData, $qualifiedName);
+                self.doCancel();
             }).appendTo($buttonDiv);
 
+        }
+
+        this.validateFields = function() {
+            var validationResults = [];
+            $.each($metaForData.properties, function(index, property) {
+                if (!property.readOnly && isPropertyForOnePage(property)) {
+                    var validationResult = validateField(property);
+                    if (!validationResult.valid) {
+                        validationResults.push(validationResult);
+                    }
+                }
+            });
+            return validationResults;
+        }
+
+        this.doCancel = function() {
+            refresh($data, $metaForData, $qualifiedName);
+        }
+
+        this.doSave = function() {
+            if (self.validateFields().length === 0) {
+                if (data !== undefined && data !== null) {
+                    $.ajax({
+                        url: metaForData.qualifiedName == qualifiedName ? tumlUri :tumlUri + '_' + $metaForData.name, 
+                        type: "PUT",
+                        dataType: "json",
+                        contentType: "json",
+                        data: fieldsToJson(),
+                        success: function(data, textStatus, jqXHR) {
+                            self.onPutOneSuccess.notify({tumlUri: tumlUri, data: data}, null, self);
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
+                            self.onPutOneFailure.notify({tumlUri: tumlUri, jqXHR: jqXHR, textStatus: textStatus, errorThrown: errorThrown}, null, self);
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        url: tumlUri + '_' + $metaForData.name,
+                        type: "POST",
+                        dataType: "json",
+                        contentType: "json",
+                        data: fieldsToJson(),
+                        success: function(data, textStatus, jqXHR) {
+                            self.onPostOneSuccess.notify({tumlUri: tumlUri, data: data}, null, self);
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
+                            self.onPostOneFailure.notify({tumlUri: tumlUri, jqXHR: jqXHR, textStatus: textStatus, errorThrown: errorThrown}, null, self);
+                        }
+                    });
+                }
+            }
+            return false ;
         }
 
         function openEditorForMany($inputToSet, property, $manyDiv, $li) {
@@ -441,7 +453,11 @@
             }
         }
 
-        function fieldsToJson() {
+        this.fieldsToJson = function() {
+            return JSON.stringify(fieldsToObject());
+        }
+        
+        this.fieldsToObject = function() {
             var dataToSend = {};
             $.each($metaForData.properties, function(index, property) {
                 if (property.name === 'id') {
@@ -496,8 +512,7 @@
                         }
                     }
                 }});
-                var result = JSON.stringify(dataToSend);
-                return result;
+                return dataToSend;
         }
         //Public api
         $.extend(this, {

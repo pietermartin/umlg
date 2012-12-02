@@ -9,6 +9,7 @@
     $.extend(true, window, {
         "TumlSlick" : {
             "Validators" : {
+                "TumlObject" : TumlObjectValidator,
                 "TumlString" : TumlStringValidator,
                 "TumlDateTime" : TumlDateTimeValidator,
                 "RangeLength" : RangeLengthValidator,
@@ -32,6 +33,25 @@
             }
         }
     });
+
+    function TumlObjectValidator(property) {
+        //Public api
+        $.extend(this, {
+            "TumlObjectValidator": "1.0.0",
+            "validate": validate
+        });
+
+       function validate(value) {
+            result = TumlSlick.Validators.Required(property, value);
+            if (!result.valid){
+                return result;
+            }
+            return {
+                valid: true,
+                msg: null
+            };
+        }
+    };
 
     function TumlDateTimeValidator(property) {
         //Public api

@@ -9,7 +9,7 @@ public class GenerateTumlTest {
 
 	public static void main(String[] args) {
 		JavaGenerator javaGenerator = new JavaGenerator();
-		javaGenerator.generate(new File("src/main/model/tinker-test.uml"), new File("./"), DefaultVisitors.getDefaultJavaVisitors());
+		javaGenerator.generate(new File("test/tuml-test/src/main/model/tinker-test.uml"), new File("./test/tuml-test"), DefaultVisitors.getDefaultJavaVisitors());
 	}
 
 }

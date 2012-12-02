@@ -29,7 +29,7 @@ public class JavaGenerator {
 //		boolean audit = Boolean.parseBoolean(args[2]);
 //		logger.info(String.format("Generating code for %s into %s", modelFile.getAbsolutePath(), projectRoot.getAbsolutePath()));
 //	}
-	
+
 	public void generate(File modelFile, File projectRoot, List<Visitor<?>> visitors) {
 		logger.info(String.format("Generating code for %s into %s", modelFile.getAbsolutePath(), projectRoot.getAbsolutePath()));
 		Workspace workspace = Workspace.INSTANCE;

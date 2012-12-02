@@ -70,7 +70,7 @@
                             editor: selectEditor(property),
                             formatter: selectFormatter(property),
                             validator: selectFieldValidator(property),
-                            options: {required: property.lower > 0, tumlLookupUri: property.tumlLookupUri,rowEnumerationLookupMap: new RowEnumerationLookupMap(property.qualifiedName, "/restAndJson/tumlEnumLookup"),  rowLookupMap: new RowLookupMap(contextVertexId, property.tumlCompositeParentLookupUri, property.tumlCompositeParentLookupUriOnCompositeParent), compositeParentLookupMap: new CompositeParentLookupMap(contextVertexId, property.tumlLookupUri, property.tumlLookupOnCompositeParentUri), ordered: property.ordered, unique: property.unique},
+                            options: {required: property.lower > 0, tumlLookupUri: property.tumlLookupUri,rowEnumerationLookupMap: new RowEnumerationLookupMap(property.qualifiedName, "/restAndJson/tumlEnumLookup"),  rowLookupMap: new RowLookupMap(contextVertexId, property.tumlCompositeParentLookupUri, property.tumlCompositeParentLookupUriOnCompositeParent), compositeParentLookupMap: new CompositeParentLookupMap(contextVertexId, property.tumlLookupUri, property.tumlLookupOnCompositeParentUri), ordered: property.ordered, unique: property.unique, property: property},
                             width: 120
                         });
                     }
@@ -172,7 +172,7 @@
                         //post new items
                         if (dataView.getNewItems().length !== 0) {
                             $.ajax({
-                                url: tumlUri + '_' + localMetaForData.name,
+                                url: tumlUri,
                                 type: "POST",
                                 dataType: "json",
                                 contentType: "json",
@@ -188,7 +188,7 @@
                         //delete new items
                         if (dataView.getDeletedItems().length !== 0) {
                             $.ajax({
-                                url: tumlUri + '_' + localMetaForData.name,
+                                url: tumlUri,
                                 type: "DELETE",
                                 dataType: "json",
                                 contentType: "json",

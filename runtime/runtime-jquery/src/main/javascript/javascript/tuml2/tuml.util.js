@@ -16,6 +16,8 @@ function selectFormatter(property) {
         return null;
     } else if (property.oneEnumeration || property.manyEnumeration) {
         return  TumlSlick.Formatters.TumlRequired; 
+    } else if (property.composite && property.lower > 0) {
+        return  TumlSlick.Formatters.TumlRequired;
     } else if (!property.onePrimitive && !property.manyPrimitive) {
         return function waitingFormatter(row, cell, value, columnDef, dataContext) {
             if (value !== undefined && value !== null) {
@@ -55,6 +57,8 @@ function selectFieldValidator(property) {
         } else {
             alert('Unsupported dataType ' + property.dataTypeEnum);
         }
+    } else if (property.composite) {
+        return new TumlSlick.Validators.TumlObject(property).validate;
     } else if (!property.onePrimitive && !property.manyPrimitive && !property.composite) {
     } else if (property.name == 'id') {
     } else if (!property.manyPrimitive && property.fieldType == 'String') {
@@ -103,14 +107,16 @@ function selectEditor(property) {
         } else if (property.dataTypeEnum == 'Email') {
             return Tuml.Slick.Editors.Text; 
         } else if (property.dataTypeEnum == 'Video') {
-            return null; 
+            return Tuml.Slick.Editors.Text; 
         } else  if (property.dataTypeEnum == 'Audio') {
-            return null; 
+            return Tuml.Slick.Editors.Text; 
         } else if (property.dataTypeEnum == 'Image') {
-            return null; 
+            return Tuml.Slick.Editors.Text; 
         } else {
             alert('Unsupported dataType ' + property.dataTypeEnum);
         }
+    } else if (property.composite && property.lower === 1 && property.upper == 1 ) {
+        return  Tuml.Slick.Editors.OneEditor; 
     } else if (property.oneEnumeration) {
         return  Tuml.Slick.Editors.SelectEnumerationCellEditor; 
     } else if (property.manyEnumeration) {

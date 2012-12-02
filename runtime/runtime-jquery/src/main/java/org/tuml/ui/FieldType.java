@@ -2,7 +2,8 @@ package org.tuml.ui;
 
 public enum FieldType {
 
-	Date,
+    Object,
+    Date,
 	DateTime,
 	ShortString,
 	LongString,

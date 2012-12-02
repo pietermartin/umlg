@@ -104,18 +104,21 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
 		get.addToThrows(TumlRestletGenerationUtil.ResourceException);
 		annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
 		TinkerGenerationUtil.addOverrideAnnotation(get);
-		get.getBody().addToStatements(
+
+        get.getBody().addToStatements("StringBuilder json = new StringBuilder()");
+        OJIfStatement ojIfStatement = new OJIfStatement("!getReference().getLastSegment().endsWith(\"Meta\")");
+        ojIfStatement.addToThenPart(
 				"this." + getIdFieldName(clazz) + "= Integer.parseInt((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"))");
-		get.getBody().addToStatements(
+        ojIfStatement.addToThenPart(
 				TumlClassOperations.className(clazz) + " c = new " + TumlClassOperations.className(clazz) + "(GraphDb.getDb().getVertex(this."
 						+ getIdFieldName(clazz) + "))");
-		annotatedClass.addToImports(TumlClassOperations.getPathName(clazz));
+        annotatedClass.addToImports(TumlClassOperations.getPathName(clazz));
+        ojIfStatement.addToThenPart("json.append(\"[{\\\"data\\\": [\")");
+        ojIfStatement.addToThenPart("json.append(" + "c.toJson())");
+        ojIfStatement.addToElsePart("json.append(\"[{\\\"data\\\": [null\")");
 
-		get.getBody().addToStatements("StringBuilder json = new StringBuilder()");
-		get.getBody().addToStatements("json.append(\"[{\\\"data\\\": [\")");
-		get.getBody().addToStatements("json.append(" + "c.toJson())");
-
-		get.getBody().addToStatements("meta", "json.append(\"], \\\"meta\\\" : {\")");
+        get.getBody().addToStatements(ojIfStatement);
+        get.getBody().addToStatements("meta", "json.append(\"], \\\"meta\\\" : {\")");
 
 		get.getBody().addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + clazz.getQualifiedName() + "\\\"\")");
 		get.getBody().addToStatements("json.append(\", \\\"to\\\": \")");
@@ -138,18 +141,27 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
 		uri.setInitExp("\"/" + TumlClassOperations.className(clazz).toLowerCase() + "s/{" + TumlClassOperations.className(clazz).toLowerCase() + "Id}\"");
 		ojLiteral.addToAttributeValues(uri);
 
-		OJField serverResourceClassField = new OJField();
+        OJEnumLiteral ojLiteralMeta = new OJEnumLiteral(TumlClassOperations.className(clazz).toUpperCase() + "_META");
+        OJField uriMeta = new OJField();
+        uriMeta.setType(new OJPathName("String"));
+        uriMeta.setInitExp("\"/" + TumlClassOperations.className(clazz).toLowerCase() + "sMeta\"");
+        ojLiteralMeta.addToAttributeValues(uriMeta);
+
+        OJField serverResourceClassField = new OJField();
 		serverResourceClassField.setType(new OJPathName("java.lang.Class"));
 		serverResourceClassField.setInitExp(annotatedClass.getName() + ".class");
-		ojLiteral.addToAttributeValues(serverResourceClassField);
-		routerEnum.addToImports(annotatedClass.getPathName());
+        ojLiteralMeta.addToAttributeValues(serverResourceClassField);
+        ojLiteral.addToAttributeValues(serverResourceClassField);
+        routerEnum.addToImports(annotatedClass.getPathName());
 		routerEnum.addToImports(TumlRestletGenerationUtil.ServerResource);
 
 		routerEnum.addToLiterals(ojLiteral);
+        routerEnum.addToLiterals(ojLiteralMeta);
 
-		OJAnnotatedOperation attachAll = routerEnum.findOperation("attachAll", TumlRestletGenerationUtil.Router);
+        OJAnnotatedOperation attachAll = routerEnum.findOperation("attachAll", TumlRestletGenerationUtil.Router);
 		attachAll.getBody().addToStatements(routerEnum.getName() + "." + ojLiteral.getName() + ".attach(router)");
-	}
+        attachAll.getBody().addToStatements(routerEnum.getName() + "." + ojLiteralMeta.getName() + ".attach(router)");
+    }
 
 	private void addPrivateIdVariable(Class clazz, OJAnnotatedClass annotatedClass) {
 		OJField privateId = new OJField(getIdFieldName(clazz), new OJPathName("int"));

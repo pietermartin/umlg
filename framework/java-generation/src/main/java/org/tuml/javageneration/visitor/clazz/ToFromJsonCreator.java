@@ -246,7 +246,7 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 						fromJson.getBody().addToStatements(ifInMap);
 					} else if (pWrap.isComponent() && pWrap.isOne()) {
 
-						OJIfStatement ifNotEmpty = new OJIfStatement("!" + field.getName() + ".isEmpty()");
+						OJIfStatement ifNotEmpty = new OJIfStatement("field.getName() != null && !" + field.getName() + ".isEmpty()");
 						OJIfStatement ifPropertyNotEmpty = new OJIfStatement(pWrap.getter() + "() != null", "throw new RuntimeException(\"Compositional properties can not be updated from the composite parent!\")");
 						ifNotEmpty.addToThenPart(ifPropertyNotEmpty);
 						ifPropertyNotEmpty.addToElsePart(pWrap.javaBaseTypePath().getLast() + " " + pWrap.fieldname() + " = new " + pWrap.javaBaseTypePath().getLast() + "(this)");
