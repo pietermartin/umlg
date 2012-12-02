@@ -426,8 +426,8 @@
                     option['desc'] = obj.name;
                     options.push(option);
                 });
-                for each (var value in options){
-                    $select.append($('<option />)').val(value.value).html(value.desc));
+                for (var i = 0; i < options.length; i++) {
+                    $select.append($('<option />)').val(options[i].value).html(options[i].desc));
                 }
                 $select.val(currentValue.id);
                 $select.chosen({allow_single_deselect: true});
