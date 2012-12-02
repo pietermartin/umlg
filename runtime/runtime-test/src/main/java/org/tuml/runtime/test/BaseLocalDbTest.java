@@ -45,7 +45,8 @@ public class BaseLocalDbTest {
 	protected NakedGraph createNakedGraph() {
 		Properties properties = new Properties();
 		try {
-			properties.load(new FileReader("src/test/resources/tuml.env.properties"));
+            properties.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("tuml.env.properties"));
+//            properties.load(new FileReader("src/test/resources/tuml.env.properties"));
 		} catch (FileNotFoundException e1) {
 			throw new RuntimeException(e1);
 		} catch (IOException e1) {
