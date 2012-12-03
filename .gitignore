@@ -1,4 +1,7 @@
 /.settings
+/.idea
+*.iml
+!spec/*.iml
 /.project
 /.metadata
 framework/restlet/.settings
