@@ -448,7 +448,7 @@
             function isCellEditable(row, cell, item) {
                 for (var j = 0; j < grid.getColumns().length; j++) {
                     var column = grid.getColumns()[j];
-                    if (column.name !== 'id' && column.name !== 'uri' && column.name !== 'delete') {
+                    if (cell === j && column.name !== 'id' && column.name !== 'uri' && column.name !== 'delete') {
                         if (!column.options.property.readOnly) {
                             var property = column.options.property;
                             if (property.composite && property.lower === 1 && property.upper == 1) {
@@ -458,7 +458,11 @@
                             }
                         }
                     }
+                    if (j > cell) {
+                        break;
+                    }
                 }
+                return true;
             }
 
             function validateNewItems(newItems) {
