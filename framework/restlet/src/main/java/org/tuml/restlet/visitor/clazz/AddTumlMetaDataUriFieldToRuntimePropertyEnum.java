@@ -1,6 +1,6 @@
 package org.tuml.restlet.visitor.clazz;
 
-import com.sun.xml.internal.ws.util.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Property;
 import org.opaeum.java.metamodel.*;
@@ -59,7 +59,7 @@ public class AddTumlMetaDataUriFieldToRuntimePropertyEnum extends BaseVisitor im
     private void addTumlMetaDataUriToLiteral(Class clazz, PropertyWrapper pWrap, OJEnumLiteral literal) {
         String uri;
         if (clazz != null && pWrap != null) {
-            uri = "\"/" + clazz.getModel().getName() + "/" + StringUtils.decapitalize(pWrap.getType().getName()) + "MetaData\"";
+            uri = "\"/" + clazz.getModel().getName() + "/" + StringUtils.uncapitalize(pWrap.getType().getName()) + "MetaData\"";
         } else {
             uri = "\"\"";
         }
