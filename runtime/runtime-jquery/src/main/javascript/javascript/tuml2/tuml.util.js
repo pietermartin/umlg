@@ -116,7 +116,9 @@ function selectEditor(property) {
             alert('Unsupported dataType ' + property.dataTypeEnum);
         }
     } else if (property.composite && property.lower === 1 && property.upper == 1 ) {
-        return  Tuml.Slick.Editors.OneEditor; 
+        return  Tuml.Slick.Editors.OneEditor;
+    } else if (property.composite && property.lower >= 1 && (property.upper > 1 || property.upper == -1) ) {
+        return  Tuml.Slick.Editors.ComponentManyEditor;
     } else if (property.oneEnumeration) {
         return  Tuml.Slick.Editors.SelectEnumerationCellEditor; 
     } else if (property.manyEnumeration) {

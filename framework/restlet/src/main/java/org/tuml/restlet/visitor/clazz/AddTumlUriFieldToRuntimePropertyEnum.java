@@ -64,7 +64,7 @@ public class AddTumlUriFieldToRuntimePropertyEnum extends BaseVisitor implements
 		}
 	}
 
-	public static void addTumlUriToLiteral(Class clazz, PropertyWrapper pWrap, OJEnumLiteral literal) {
+	private void addTumlUriToLiteral(Class clazz, PropertyWrapper pWrap, OJEnumLiteral literal) {
 		String uri;
 		if (literal.getName().equals(clazz.getModel().getName())) {
 			uri = "\"/" + clazz.getModel().getName() + "\"";

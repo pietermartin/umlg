@@ -33,8 +33,7 @@
     function ComponentManyEditor(args) {
         //Public api
         $.extend(this, {
-            "ComponentManyEditor":"1.0.0",
-            "serializeValueWithValue":serializeValueWithValue
+            "ComponentManyEditor":"1.0.0"
         });
         var scope = this;
         var tumlTabGridManager = null;
@@ -116,15 +115,6 @@
             });
         }
 
-        function serializeValueWithValue(input) {
-            var value = input.val();
-            if (value == '') {
-                return null;
-            } else {
-                return value;
-            }
-        };
-
         this.applyValue = function (item, state) {
             item[args.column.field] = state;
         };
@@ -157,8 +147,7 @@
     function OneEditor(args) {
         //Public api
         $.extend(this, {
-            "TumlOneEditor":"1.0.0",
-            "serializeValueWithValue":serializeValueWithValue
+            "TumlOneEditor":"1.0.0"
         });
         var scope = this;
         var tumlTabOneManager = null;

@@ -18,18 +18,7 @@ import org.tuml.ocl.TumlOcl2Parser;
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.NakedGraph;
 import org.tuml.runtime.adaptor.NakedGraphFactory;
-import org.tuml.test.Alien;
-import org.tuml.test.Finger;
-import org.tuml.test.Gender;
-import org.tuml.test.Hand;
-import org.tuml.test.Home;
-import org.tuml.test.Human;
-import org.tuml.test.Many1;
-import org.tuml.test.Many2;
-import org.tuml.test.One;
-import org.tuml.test.Ring;
-import org.tuml.test.SpaceCraft;
-import org.tuml.test.TerrestialCraft;
+import org.tuml.test.*;
 
 import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 
@@ -86,7 +75,8 @@ public class TumlRestletServerComponent2 extends Component {
 			human.setGender(Gender.MALE);
 			Home home = new Home(human);
 			home.setName("home" + i);
-			
+            ComponentMany componentMany = new ComponentMany(human);
+            componentMany.setName("componentMany" + i);
 			for (int j = 0; j < 10; j++) {
 				Many1 many1 = new Many1(human);
 				many1.setName("many1" + j);
