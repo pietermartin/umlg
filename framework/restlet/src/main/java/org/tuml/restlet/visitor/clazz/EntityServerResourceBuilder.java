@@ -106,7 +106,7 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
 		TinkerGenerationUtil.addOverrideAnnotation(get);
 
         get.getBody().addToStatements("StringBuilder json = new StringBuilder()");
-        OJIfStatement ojIfStatement = new OJIfStatement("!getReference().getLastSegment().endsWith(\"Meta\")");
+        OJIfStatement ojIfStatement = new OJIfStatement("!getReference().getLastSegment().endsWith(\"MetaData\")");
         ojIfStatement.addToThenPart(
 				"this." + getIdFieldName(clazz) + "= Integer.parseInt((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"))");
         ojIfStatement.addToThenPart(
@@ -115,7 +115,7 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
         annotatedClass.addToImports(TumlClassOperations.getPathName(clazz));
         ojIfStatement.addToThenPart("json.append(\"[{\\\"data\\\": [\")");
         ojIfStatement.addToThenPart("json.append(" + "c.toJson())");
-        ojIfStatement.addToElsePart("json.append(\"[{\\\"data\\\": [null\")");
+        ojIfStatement.addToElsePart("json.append(\"[{\\\"data\\\": [\")");
 
         get.getBody().addToStatements(ojIfStatement);
         get.getBody().addToStatements("meta", "json.append(\"], \\\"meta\\\" : {\")");
@@ -144,7 +144,7 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
         OJEnumLiteral ojLiteralMeta = new OJEnumLiteral(TumlClassOperations.className(clazz).toUpperCase() + "_META");
         OJField uriMeta = new OJField();
         uriMeta.setType(new OJPathName("String"));
-        uriMeta.setInitExp("\"/" + TumlClassOperations.className(clazz).toLowerCase() + "sMeta\"");
+        uriMeta.setInitExp("\"/" + StringUtils.uncapitalize(TumlClassOperations.className(clazz)) + "MetaData\"");
         ojLiteralMeta.addToAttributeValues(uriMeta);
 
         OJField serverResourceClassField = new OJField();

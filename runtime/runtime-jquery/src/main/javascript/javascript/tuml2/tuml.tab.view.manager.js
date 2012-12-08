@@ -25,7 +25,23 @@
             }
             if (oneManyOrQuery.many) {
                 //Do not pass the div in, it causes issues with refreshing
-                tumlTabGridManager = new Tuml.TumlTabGridManager(tumlUri, oneManyOrQuery.propertyNavigatingTo);
+                if (oneManyOrQuery.forLookup) {
+                    tumlTabGridManager = new Tuml.TumlForManyLookupGridManager(tumlUri, oneManyOrQuery.propertyNavigatingTo, oneManyOrQuery.originalGrid, oneManyOrQuery.originalDataView);
+                    tumlTabGridManager.onSelectButtonSuccess.subscribe(function(e, args) {
+                        self.onSelectButtonSuccess.notify(args, e, self);
+                    });
+                    tumlTabGridManager.onSelectCancelButtonSuccess.subscribe(function(e, args) {
+                        self.onSelectCancelButtonSuccess.notify(args, e, self);
+                    });
+                } else {
+                    tumlTabGridManager = new Tuml.TumlTabGridManager(tumlUri, oneManyOrQuery.propertyNavigatingTo);
+                    tumlTabGridManager.onAddButtonSuccess.subscribe(function(e, args) {
+                        self.onAddButtonSuccess.notify(args, e, self);
+                    });
+                    tumlTabGridManager.onNeedOpenManyEditor.subscribe(function(e, args) {
+                        self.onNeedOpenManyEditor.notify(args, e, self);
+                    });
+                }
                 tumlTabGridManager.onPutSuccess.subscribe(function(e, args) {
                     self.onPutSuccess.notify(args, e, self);
                     createGridForResult(args.data, args.tabId);
@@ -86,7 +102,7 @@
                 var metaForData = result[i].meta.to;
                 if (metaForData.name === tabId) {
                     $('#' + tabDivName).children().remove();
-                    createGrid(result[i], false);
+                    createGrid(result[i]);
                     return;
                 }
             }
@@ -111,6 +127,10 @@
         $.extend(this, {
             "TumlTabViewManagerVersion": "1.0.0",
             //These events are propogated from the grid
+            "onAddButtonSuccess": new Tuml.Event(),
+            "onSelectButtonSuccess": new Tuml.Event(),
+            "onSelectCancelButtonSuccess": new Tuml.Event(),
+            "onNeedOpenManyEditor": new Tuml.Event(),
             "onPutSuccess": new Tuml.Event(),
             "onPutFailure": new Tuml.Event(),
             "onPostSuccess": new Tuml.Event(),

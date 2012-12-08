@@ -45,7 +45,7 @@
 
         this.init = function () {
             property = args.column.options.property;
-            tumlTabGridManager = new Tuml.TumlTabGridManager(property.tumlUri);
+            tumlTabGridManager = new Tuml.TumlTabGridManager(property.tumlUri, property);
             tumlTabGridManager.doSave = function () {
                 //TODO work out moving next or previous
                 onSave = true;
@@ -90,7 +90,7 @@
 
         this.getMetaData = function (data) {
             $.ajax({
-                url:'/restAndJson/' + property.name + 'sMeta',
+                url:property.tumlMetaDataUri,
                 type:"GET",
                 dataType:"json",
                 contentType:"json",
@@ -99,7 +99,7 @@
                     var tabContainer = $('#tab-container');
                     tabDivName = result[0].meta.to.name;
                     tabDiv = $('<div />', {id:tabDivName, title:tabDivName}).appendTo(tabContainer);
-                    tumlTabGridManager.refresh(data, result[0].meta.to, property.qualifiedName);
+                    tumlTabGridManager.refresh(result[0]);
                     $('#tab-container').tabs('add', {title:tabDivName, content:'<div id="' + tabDivName + '" />', closable:true});
                     $('#tab-container').tabs('disableTab', 0);
                     $('#tab-containter').tabs({
@@ -124,18 +124,23 @@
         };
 
         this.validate = function () {
-            var validationResults = tumlTabGridManager.validateFields();
-            if (validationResults.length === 0) {
-                return {
-                    valid:true,
-                    msg:null
-                };
-            } else {
-                return {
-                    valid:false,
-                    msg:null
-                };
-            }
+            return {
+                valid:true,
+                msg:null
+            };
+
+//            var validationResults = tumlTabGridManager.validateFields();
+//            if (validationResults.length === 0) {
+//                return {
+//                    valid:true,
+//                    msg:null
+//                };
+//            } else {
+//                return {
+//                    valid:false,
+//                    msg:null
+//                };
+//            }
         };
 
         //This is called from the grid, the one only uses the serializeValueWithValue function
@@ -204,7 +209,7 @@
 
         this.getMetaData = function (data) {
             $.ajax({
-                url:'/restAndJson/' + property.name + 'sMeta',
+                url:property.tumlMetaDataUri,
                 type:"GET",
                 dataType:"json",
                 contentType:"json",
@@ -212,16 +217,16 @@
                     //Create the tab
                     var tabContainer = $('#tab-container');
                     tabDivName = result[0].meta.to.name;
-                    tabDiv = $('<div />', {id:tabDivName, title:tabDivName}).appendTo(tabContainer);
-                    tumlTabOneManager.refresh(data, result[0].meta.to, property.qualifiedName);
-                    $('#tab-container').tabs('add', {title:tabDivName, content:'<div id="' + tabDivName + '" />', closable:true});
-                    $('#tab-container').tabs('disableTab', 0);
-                    $('#tab-containter').tabs({
+                    tabDiv = $('<div />', {id:tabDivName}).appendTo(tabContainer);
+                    $('#tab-container').tabs({
                         onClose:function (title) {
                             tabDiv.remove();
                             $('#tab-container').tabs('enableTab', 0);
                         }
                     });
+                    tumlTabOneManager.refresh(data, result[0].meta.to, property.qualifiedName);
+                    $('#tab-container').tabs('add', {title:tabDivName, content:'<div id="' + tabDivName + '" />', closable:true});
+                    $('#tab-container').tabs('disableTab', 0);
                 },
                 error:function (jqXHR, textStatus, errorThrown) {
                     alert('error getting ' + tumlUri + '\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)

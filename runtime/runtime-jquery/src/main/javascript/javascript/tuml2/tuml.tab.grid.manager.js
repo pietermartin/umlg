@@ -2,28 +2,284 @@
     // register namespace
     $.extend(true, window, {
         Tuml:{
+            TumlBaseGridManager:TumlBaseGridManager,
+            TumlManyComponentGridManager:TumlManyComponentGridManager,
+            TumlForManyLookupGridManager:TumlForManyLookupGridManager,
             TumlTabGridManager:TumlTabGridManager
         }
     });
 
+    function TumlManyComponentGridManager(tumlUri, propertyNavigatingTo) {
+        var self = this;
+        TumlBaseGridManager.call(this, tumlUri, propertyNavigatingTo);
+
+        //Public api
+        $.extend(this, {
+            "TumlTabGridManagerVersion":"1.0.0",
+            "onAddButtonSuccess":new Tuml.Event(),
+            "onNeedOpenManyEditor":new Tuml.Event()
+        });
+
+        this.setupColumns = function () {
+
+            TumlBaseGridManager.prototype.setupColumns.call(this, this.localMetaForData);
+
+            this.columns.push({id:"uri", name:"uri", field:"uri", sortable:false, formatter:TumlSlick.Formatters.Link});
+            this.columns.push(
+                {id:"delete", name:"delete", field:"delete", sortable:false,
+                    formatter:TumlSlick.Formatters.TumlDelete }
+            );
+        };
+
+        this.instantiateGrid = function () {
+            this.grid = new Slick.Grid("#myGrid" + this.localMetaForData.name, this.dataView, this.columns, this.options);
+            //Creating a pager for the component manies editor grid call commitCurrentEditor which buggers everything up
+            this.pager = new Slick.Controls.Pager(this.dataView, this.grid, $("#pager" + this.localMetaForData.name));
+            $("<div id='grid-button" + this.localMetaForData.name + "' class='grid-button'/>").appendTo('#pager' + this.localMetaForData.name + ' .slick-pager-settings');
+            TumlBaseGridManager.prototype.instantiateGrid.call(this);
+        };
+
+        this.addButtons = function () {
+            $('<button />').text('Select').click(function () {
+                if (self.grid.getEditorLock().commitCurrentEdit()) {
+                    var selectedRows = self.grid.getSelectedRows();
+                    for (var i = 0; i < selectedRows.length; i++) {
+                        var selectedRow = selectedRows[i];
+                        var item = self.dataView.getItem(selectedRow);
+//                        self.originalDataView.addItem(item);
+//                        self.originalDataView.getDeletedItems().remove(item);
+                    }
+//                    self.originalGrid.invalidateRows([self.data.length - 1]);
+//                    self.originalGrid.updateRowCount();
+//                    self.originalGrid.render();
+//                    self.onSelectButtonSuccess.notify({tabName:self.metaForData.name}, null, self);
+                }
+            }).appendTo('#grid-buttonLookup' + this.localMetaForData.name);
+
+            $('<button />').text('Cancel').click(function () {
+                if (self.grid.getEditorLock().commitCurrentEdit()) {
+                    self.onSelectCancelButtonSuccess.notify({tabName:self.metaForData.name}, null, self);
+                }
+            }).appendTo('#grid-buttonLookup' + this.localMetaForData.name);
+
+        }
+
+    }
+
+    TumlManyComponentGridManager.prototype = new TumlBaseGridManager;
+
+
+    function TumlForManyLookupGridManager(tumlUri, propertyNavigatingTo, originalGrid, originalDataView) {
+        var self = this;
+        this.originalGrid = originalGrid;
+        this.originalDataView = originalDataView;
+        TumlBaseGridManager.call(this, tumlUri, propertyNavigatingTo);
+
+        //Public api
+        $.extend(this, {
+            "TumlForManyLookupGridManager":"1.0.0",
+            "onSelectButtonSuccess":new Tuml.Event(),
+            "onSelectCancelButtonSuccess":new Tuml.Event()
+        });
+
+        this.setupOptions = function () {
+            TumlBaseGridManager.prototype.setupOptions.call(this);
+            this.options['editable'] = false;
+        }
+
+        this.refresh = function (result) {
+            this.metaForData = result.meta.to;
+            var tabDiv = $('#' + this.metaForData.name + "Lookup");
+            $('<div id="myGridLookupHeader" class="selectheader" />').append($('<p />').text('Select the values to add.')).appendTo(tabDiv);
+            $('<div id="myGridLookup' + this.metaForData.name + '" style="width:auto;height:90%;"></div>').appendTo(tabDiv);
+            $('<div id="pagerLookup' + this.metaForData.name + '" style="width:auto;height:20px;"></div>').appendTo(tabDiv);
+            $('#contextMenu' + this.metaForData.name).remove();
+            this.createGrid(result.data, this.metaForData, tumlUri, false);
+        };
+
+        this.instantiateGrid = function () {
+            this.grid = new Slick.Grid("#myGridLookup" + this.localMetaForData.name, this.dataView, this.columns, this.options);
+            this.pager = new Slick.Controls.Pager(this.dataView, this.grid, $("#pagerLookup" + this.localMetaForData.name));
+            $("<div id='grid-buttonLookup" + this.localMetaForData.name + "' class='grid-button'/>").appendTo('#pagerLookup' + this.localMetaForData.name + ' .slick-pager-settings');
+            TumlBaseGridManager.prototype.instantiateGrid.call(this);
+        };
+
+        this.addButtons = function () {
+            $('<button />').text('Select').click(function () {
+                if (self.grid.getEditorLock().commitCurrentEdit()) {
+                    var selectedRows = self.grid.getSelectedRows();
+                    for (var i = 0; i < selectedRows.length; i++) {
+                        var selectedRow = selectedRows[i];
+                        var item = self.dataView.getItem(selectedRow);
+                        self.originalDataView.addItem(item);
+                        self.originalDataView.getDeletedItems().remove(item);
+                    }
+                    self.originalGrid.invalidateRows([self.data.length - 1]);
+                    self.originalGrid.updateRowCount();
+                    self.originalGrid.render();
+                    self.onSelectButtonSuccess.notify({tabName:self.metaForData.name}, null, self);
+                }
+            }).appendTo('#grid-buttonLookup' + this.localMetaForData.name);
+
+            $('<button />').text('Cancel').click(function () {
+                if (self.grid.getEditorLock().commitCurrentEdit()) {
+                    self.onSelectCancelButtonSuccess.notify({tabName:self.metaForData.name}, null, self);
+                }
+            }).appendTo('#grid-buttonLookup' + this.localMetaForData.name);
+        };
+
+    }
+
+    TumlForManyLookupGridManager.prototype = new TumlBaseGridManager;
+
     function TumlTabGridManager(tumlUri, propertyNavigatingTo) {
+        var self = this;
+        TumlBaseGridManager.call(this, tumlUri, propertyNavigatingTo);
+
+        //Public api
+        $.extend(this, {
+            "TumlTabGridManagerVersion":"1.0.0",
+            "onAddButtonSuccess":new Tuml.Event(),
+            "onNeedOpenManyEditor":new Tuml.Event()
+        });
+
+        this.setupColumns = function () {
+
+            TumlBaseGridManager.prototype.setupColumns.call(this, this.localMetaForData);
+
+            this.columns.push({id:"uri", name:"uri", field:"uri", sortable:false, formatter:TumlSlick.Formatters.Link});
+            this.columns.push(
+                {id:"delete", name:"delete", field:"delete", sortable:false,
+                    formatter:TumlSlick.Formatters.TumlDelete }
+            );
+        };
+
+        this.instantiateGrid = function () {
+            this.grid = new Slick.Grid("#myGrid" + this.localMetaForData.name, this.dataView, this.columns, this.options);
+            //Creating a pager for the component manies editor grid call commitCurrentEditor which buggers everything up
+            this.pager = new Slick.Controls.Pager(this.dataView, this.grid, $("#pager" + this.localMetaForData.name));
+            $("<div id='grid-button" + this.localMetaForData.name + "' class='grid-button'/>").appendTo('#pager' + this.localMetaForData.name + ' .slick-pager-settings');
+            TumlBaseGridManager.prototype.instantiateGrid.call(this);
+        };
+
+        this.addButtons = function () {
+            if (!this.propertyNavigatingTo.composite) {
+                //if grid is for non composite many include a add button, this will bring up a grid with the values to add
+                var $addButton = $('<button />').text('Add').click(function () {
+                    if (self.grid.getEditorLock().commitCurrentEdit()) {
+                        var adjustedUri = propertyNavigatingTo.tumlLookupUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), self.contextVertexId);
+                        $.ajax({
+                            url:adjustedUri,
+                            type:"GET",
+                            dataType:"json",
+                            contentType:"json",
+                            success:function (lookupResult, textStatus, jqXHR) {
+                                lookupResult.data = self.removeElementsAlreadyInGrid(self.dataView.getNewItems(), lookupResult.data);
+                                lookupResult.data = lookupResult.data.concat(self.dataView.getDeletedItems());
+                                self.onAddButtonSuccess.notify({originalDataView:self.dataView, originalGrid:self.grid, propertyNavigatingTo:propertyNavigatingTo, tumlUri:tumlUri + '_' + self.localMetaForData.name, tabId:self.localMetaForData.name, data:lookupResult}, null, self);
+                            },
+                            error:function (jqXHR, textStatus, errorThrown) {
+                                //TODO handle error properly
+                                alert('fail for non composite lookup');
+                            }
+                        });
+                    }
+                }).appendTo('#grid-button' + this.localMetaForData.name);
+            }
+
+            var $saveButton = $('<button />').text('Save').click(function () {
+                if (self.grid.getEditorLock().commitCurrentEdit()) {
+                    //put updated items
+                    if (self.dataView.getUpdatedItems().length !== 0) {
+                        $.ajax({
+                            url:tumlUri,
+                            type:"PUT",
+                            dataType:"json",
+                            contentType:"json",
+                            data:JSON.stringify(self.dataView.getUpdatedItems()),
+                            success:function (data, textStatus, jqXHR) {
+                                self.onPutSuccess.notify({tumlUri:tumlUri + '_' + self.localMetaForData.name, tabId:self.localMetaForData.name, data:data}, null, self);
+                            },
+                            error:function (jqXHR, textStatus, errorThrown) {
+                                self.onPutFailure.notify({tumlUri:tumlUri, tabId:self.localMetaForData.name}, null, self);
+                            }
+                        });
+                    }
+                    //post new items
+                    if (self.dataView.getNewItems().length !== 0) {
+                        var validationResults = self.validateNewItems(self.dataView.getNewItems());
+                        if (validationResults.length == 0) {
+                            $.ajax({
+                                url:tumlUri,
+                                type:"POST",
+                                dataType:"json",
+                                contentType:"json",
+                                data:JSON.stringify(self.dataView.getNewItems()),
+                                success:function (data, textStatus, jqXHR) {
+                                    self.onPostSuccess.notify({tumlUri:tumlUri, tabId:self.localMetaForData.name, data:data}, null, self);
+                                },
+                                error:function (jqXHR, textStatus, errorThrown) {
+                                    self.onPostFailure.notify({tumlUri:tumlUri, tabId:self.localMetaForData.name}, null, self);
+                                }
+                            });
+                        } else {
+                            var errorMsg = '\n';
+                            for (var i = 0; i < validationResults.length; i++) {
+                                errorMsg += validationResults[i].msg + '\n';
+                            }
+                            alert('There are validation errors: ' + errorMsg);
+                        }
+                    }
+                    //delete new items
+                    if (self.dataView.getDeletedItems().length !== 0) {
+                        $.ajax({
+                            url:tumlUri,
+                            type:"DELETE",
+                            dataType:"json",
+                            contentType:"json",
+                            data:JSON.stringify(self.dataView.getDeletedItems()),
+                            success:function (data, textStatus, jqXHR) {
+                                self.onDeleteSuccess.notify({tumlUri:tumlUri, tabId:self.localMetaForData.name, data:data}, null, self);
+                            },
+                            error:function (jqXHR, textStatus, errorThrown) {
+                                self.onDeleteFailure.notify({tumlUri:tumlUri, tabId:self.localMetaForData.name}, null, self);
+                            }
+                        });
+                    }
+                } else {
+                    alert("Commit failed on current active cell!");
+                }
+            }).appendTo('#grid-button' + this.localMetaForData.name);
+
+            var $cancelButton = $('<button />').text('Cancel').click(function () {
+                if (self.grid.getEditorLock().commitCurrentEdit()) {
+                    $.ajax({
+                        url:tumlUri,
+                        type:"GET",
+                        dataType:"json",
+                        contentType:"json",
+                        data:JSON.stringify(self.dataView.getDeletedItems()),
+                        success:function (data, textStatus, jqXHR) {
+                            self.onCancel.notify({tumlUri:tumlUri, tabId:self.localMetaForData.name, data:data}, null, self);
+                        },
+                        error:function (jqXHR, textStatus, errorThrown) {
+                        }
+                    });
+                }
+            }).appendTo('#grid-button' + this.localMetaForData.name);
+
+        }
+
+    }
+
+    TumlTabGridManager.prototype = new TumlBaseGridManager;
+
+    function TumlBaseGridManager(tumlUri, propertyNavigatingTo) {
+        this.tumlUri = tumlUri;
+        this.propertyNavigatingTo = propertyNavigatingTo;
 
         var self = this;
-        var metaForData;
-        var mainDataView;
-        var mainGrid;
-
-        function init() {
-        }
-
-        function refresh(result) {
-            metaForData = result.meta.to;
-            var tabDiv = $('#' + metaForData.name);
-            var myGridDiv = $('<div id="myGrid' + metaForData.name + '" style="width:auto;height:90%;"></div>').appendTo(tabDiv);
-            var pagerDiv = $('<div id="pager' + metaForData.name + '" style="width:auto;height:20px;"></div>').appendTo(tabDiv);
-            $('#contextMenu' + metaForData.name).remove();
-            createGrid(result.data, metaForData, tumlUri, false);
-        }
+        this.columns = [];
 
         //Public api
         $.extend(this, {
@@ -38,267 +294,74 @@
             "onSelfCellClick":new Tuml.Event(),
             "onContextMenuClickLink":new Tuml.Event(),
             "onContextMenuClickDelete":new Tuml.Event(),
-            "onManyEditorKeyPress":new Tuml.Event(),
-            "refresh":refresh
+            "onManyEditorKeyPress":new Tuml.Event()
         });
 
-        function createGrid(data, localMetaForData, tumlUri, forManyLookup) {
-            var grid;
-            var columns = [];
+        this.refresh = function (result) {
+            this.metaForData = result.meta.to;
+            var tabDiv = $('#' + this.metaForData.name);
+            $('<div id="myGrid' + this.metaForData.name + '" style="width:auto;height:90%;"></div>').appendTo(tabDiv);
+            $('<div id="pager' + this.metaForData.name + '" style="width:auto;height:20px;"></div>').appendTo(tabDiv);
+            $('#contextMenu' + this.metaForData.name).remove();
+            this.createGrid(result.data, this.metaForData, tumlUri, false);
+        };
+
+        this.createGrid = function (data, localMetaForData, tumlUri) {
             var columnFilters = {};
             var lookupColumns;
-            var contextVertexId;
-            contextVertexId = retrieveVertexId(tumlUri);
+            this.data = data;
+            this.contextVertexId = retrieveVertexId(tumlUri);
+            this.localMetaForData = localMetaForData;
 
-            $.each(localMetaForData.properties, function (index, property) {
-                if ((property.composite && property.lower > 0) || !property.composite && !property.inverseComposite && ((property.oneToOne || property.manyToOne) || property.manyPrimitive || property.manyEnumeration)) {
-                    //Place the id column first
-                    if (property.name == "id") {
-                        columns.splice(0, 0, {
-                            id:property.name,
-                            name:property.name,
-                            field:property.name,
-                            sortable:true,
-                            formatter:selectFormatter(property)
-                        });
-                    } else {
-                        columns.push({
-                            id:property.name,
-                            name:property.name,
-                            field:property.name,
-                            sortable:true,
-                            editor:selectEditor(property),
-                            formatter:selectFormatter(property),
-                            validator:selectFieldValidator(property),
-                            options:{required:property.lower > 0, tumlLookupUri:property.tumlLookupUri, rowEnumerationLookupMap:new RowEnumerationLookupMap(property.qualifiedName, "/restAndJson/tumlEnumLookup"), rowLookupMap:new RowLookupMap(contextVertexId, property.tumlCompositeParentLookupUri, property.tumlCompositeParentLookupUriOnCompositeParent), compositeParentLookupMap:new CompositeParentLookupMap(contextVertexId, property.tumlLookupUri, property.tumlLookupOnCompositeParentUri), ordered:property.ordered, unique:property.unique, property:property},
-                            width:120
-                        });
-                    }
-                }
-            });
-            if (!forManyLookup) {
-                columns.push({id:"uri", name:"uri", field:"uri", sortable:false, formatter:TumlSlick.Formatters.Link});
-                columns.push(
-                    {id:"delete", name:"delete", field:"delete", sortable:false,
-                        formatter:TumlSlick.Formatters.TumlDelete }
-                );
-            }
+            this.setupColumns();
 
-            var options = {
-                showHeaderRow:true,
-                headerRowHeight:30,
-                editable:!forManyLookup,
-                enableAddRow:propertyNavigatingTo.composite,
-                enableCellNavigation:true,
-                asyncEditorLoading:false,
-                enableAsyncPostRender:true,
-                forceFitColumns:false,
-                topPanelHeight:25
-            };
+            this.setupOptions();
 
             var sortcol = "name";
             var sortdir = 1;
             var percentCompleteThreshold = 0;
             var searchString = "";
-            var dataView = new Tuml.Slick.Data.DataView();
-            if (!forManyLookup) {
-                grid = new Slick.Grid("#myGrid" + localMetaForData.name, dataView, columns, options);
-                var pager = new Slick.Controls.Pager(dataView, grid, $("#pager" + localMetaForData.name));
-                mainGrid = grid;
-                mainDataView = dataView;
-                $("<div id='grid-button" + localMetaForData.name + "' class='grid-button'/>").appendTo('#pager' + localMetaForData.name + ' .slick-pager-settings');
-            } else {
-                grid = new Slick.Grid("#myGridLookup" + localMetaForData.name, dataView, columns, options);
-                var pager = new Slick.Controls.Pager(dataView, grid, $("#pagerLookup" + localMetaForData.name));
-                $("<div id='grid-buttonLookup" + localMetaForData.name + "' class='grid-button'/>").appendTo('#pagerLookup' + localMetaForData.name + ' .slick-pager-settings');
-            }
+            this.dataView = new Tuml.Slick.Data.DataView();
 
-            //Add in a property on the grid to tell if a many editor is open
-            grid['manyEditorOpen'] = false;
+            this.instantiateGrid();
 
-            grid.setSelectionModel(new Slick.RowSelectionModel());
-            var columnpicker = new Slick.Controls.ColumnPicker(columns, grid, options);
-
-            if (!forManyLookup && !propertyNavigatingTo.composite) {
-                //if grid is for non composite many include a add button, this will bring up a grid with the values to add
-                var $addButton = $('<button />').text('Add').click(function () {
-                    if (grid.getEditorLock().commitCurrentEdit()) {
-                        //hide the current grid
-                        $('#myGrid' + localMetaForData.name).hide();
-                        $('#pager' + localMetaForData.name).hide();
-                        var adjustedUri = propertyNavigatingTo.tumlLookupUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
-                        $.ajax({
-                            url:adjustedUri,
-                            type:"GET",
-                            dataType:"json",
-                            contentType:"json",
-                            success:function (lookupResult, textStatus, jqXHR) {
-                                var tabContainer = $('#tab-container');
-                                var lookupMeta = lookupResult.meta.to;
-                                var tabDiv = $('<div />', {id:lookupMeta.name, title:lookupMeta.name}).appendTo(tabContainer);
-                                var selectHeader = $('<div id="myGridLookupHeader" class="selectheader" />').append($('<p />').text('Select the values to add.')).appendTo(tabDiv);
-                                var myGridDiv = $('<div id="myGridLookup' + lookupMeta.name + '" style="width:auto;height:84%;"></div>').appendTo(tabDiv);
-                                var pagerDiv = $('<div id="pagerLookup' + lookupMeta.name + '" style="width:auto;height:20px;"></div>').appendTo(tabDiv);
-                                removeElementsAlreadyInGrid(dataView.getNewItems(), lookupResult.data);
-                                createGrid(lookupResult.data, lookupMeta, adjustedUri, true);
-                            },
-                            error:function (jqXHR, textStatus, errorThrown) {
-                                alert('fail for non composite lookup');
-                            }
-                        });
-                    }
-                }).appendTo('#grid-button' + localMetaForData.name);
-                ;
-            }
-
-            if (!forManyLookup) {
-                var $saveButton = $('<button />').text('Save').click(function () {
-                    if (grid.getEditorLock().commitCurrentEdit()) {
-                        //put updated items
-                        if (dataView.getUpdatedItems().length !== 0) {
-                            $.ajax({
-                                url:tumlUri,
-                                type:"PUT",
-                                dataType:"json",
-                                contentType:"json",
-                                data:JSON.stringify(dataView.getUpdatedItems()),
-                                success:function (data, textStatus, jqXHR) {
-                                    self.onPutSuccess.notify({tumlUri:tumlUri + '_' + localMetaForData.name, tabId:localMetaForData.name, data:data}, null, self);
-                                },
-                                error:function (jqXHR, textStatus, errorThrown) {
-                                    self.onPutFailure.notify({tumlUri:tumlUri, tabId:localMetaForData.name}, null, self);
-                                }
-                            });
-                        }
-                        //post new items
-                        if (dataView.getNewItems().length !== 0) {
-                            var validationResults = validateNewItems(dataView.getNewItems());
-                            if (validationResults.length == 0) {
-                                $.ajax({
-                                    url:tumlUri,
-                                    type:"POST",
-                                    dataType:"json",
-                                    contentType:"json",
-                                    data:JSON.stringify(dataView.getNewItems()),
-                                    success:function (data, textStatus, jqXHR) {
-                                        self.onPostSuccess.notify({tumlUri:tumlUri, tabId:localMetaForData.name, data:data}, null, self);
-                                    },
-                                    error:function (jqXHR, textStatus, errorThrown) {
-                                        self.onPostFailure.notify({tumlUri:tumlUri, tabId:localMetaForData.name}, null, self);
-                                    }
-                                });
-                            } else {
-                                var errorMsg = '\n';
-                                for (var i = 0; i < validationResults.length; i++) {
-                                    errorMsg += validationResults[i].msg + '\n';
-                                }
-                                alert('There are validation errors: ' + errorMsg);
-                            }
-                        }
-                        //delete new items
-                        if (dataView.getDeletedItems().length !== 0) {
-                            $.ajax({
-                                url:tumlUri,
-                                type:"DELETE",
-                                dataType:"json",
-                                contentType:"json",
-                                data:JSON.stringify(dataView.getDeletedItems()),
-                                success:function (data, textStatus, jqXHR) {
-                                    self.onDeleteSuccess.notify({tumlUri:tumlUri, tabId:localMetaForData.name, data:data}, null, self);
-                                },
-                                error:function (jqXHR, textStatus, errorThrown) {
-                                    self.onDeleteFailure.notify({tumlUri:tumlUri, tabId:localMetaForData.name}, null, self);
-                                }
-                            });
-                        }
-                    } else {
-                        alert("Commit failed on current active cell!");
-                    }
-                }).appendTo('#grid-button' + localMetaForData.name);
-
-                var $cancelButton = $('<button />').text('Cancel').click(function () {
-                    if (grid.getEditorLock().commitCurrentEdit()) {
-                        $.ajax({
-                            url:tumlUri,
-                            type:"GET",
-                            dataType:"json",
-                            contentType:"json",
-                            data:JSON.stringify(dataView.getDeletedItems()),
-                            success:function (data, textStatus, jqXHR) {
-                                self.onCancel.notify({tumlUri:tumlUri, tabId:localMetaForData.name, data:data}, null, self);
-                            },
-                            error:function (jqXHR, textStatus, errorThrown) {
-                            }
-                        });
-                    }
-                }).appendTo('#grid-button' + localMetaForData.name);
-            }
-            if (forManyLookup) {
-                var $selectButton = $('<button />').text('Select').click(function () {
-                    if (grid.getEditorLock().commitCurrentEdit()) {
-                        var selectedRows = grid.getSelectedRows();
-                        for (var i = 0; i < selectedRows.length; i++) {
-                            var selectedRow = selectedRows[i];
-                            var item = dataView.getItem(selectedRow);
-                            mainDataView.addItem(item);
-                            mainGrid.invalidateRows([data.length - 1]);
-                            mainGrid.updateRowCount();
-                            mainGrid.render();
-                            $('#myGridLookupHeader').remove();
-                            $('#myGridLookup' + metaForData.name).remove();
-                            $('#pagerLookup' + metaForData.name).remove();
-                            $('#myGrid' + localMetaForData.name).show();
-                            $('#pager' + localMetaForData.name).show();
-                        }
-                    }
-                }).appendTo('#grid-buttonLookup' + localMetaForData.name);
-
-                var $cancelButton = $('<button />').text('Cancel').click(function () {
-                    if (grid.getEditorLock().commitCurrentEdit()) {
-                        $('#myGridLookupHeader').remove();
-                        $('#myGridLookup' + metaForData.name).remove();
-                        $('#pagerLookup' + metaForData.name).remove();
-                        $('#myGrid' + localMetaForData.name).show();
-                        $('#pager' + localMetaForData.name).show();
-                    }
-                }).appendTo('#grid-buttonLookup' + localMetaForData.name);
-            }
+            this.addButtons();
 
             //Create context menu
-            var contextMenuUl = $('<ul />', {id:'contextMenu' + localMetaForData.name, style:'display:none;position:absolute', class:'contextMenu'}).appendTo('body');
+            var contextMenuUl = $('<ul />', {id:'contextMenu' + this.localMetaForData.name, style:'display:none;position:absolute', class:'contextMenu'}).appendTo('body');
             $('<b />').text('Nav').appendTo(contextMenuUl);
-            $('<li data="' + localMetaForData.uri + '" />').text("self").appendTo(contextMenuUl);
-            $.each(localMetaForData.properties, function (index, property) {
+            $('<li data="' + this.localMetaForData.uri + '" />').text("self").appendTo(contextMenuUl);
+            $.each(this.localMetaForData.properties, function (index, property) {
                 if (property.inverseComposite || !((property.dataTypeEnum !== undefined && property.dataTypeEnum !== null) || property.onePrimitive || property.manyPrimitive || property.name == 'id' || property.name == 'uri')) {
                     $('<li data="' + property.tumlUri + '" />').text(property.name).appendTo(contextMenuUl);
                 }
             });
             $('<li data="delete" />').text("delete").appendTo(contextMenuUl);
 
-            grid.onContextMenu.subscribe(function (e) {
+            this.grid.onContextMenu.subscribe(function (e) {
                 e.preventDefault();
-                var cell = grid.getCellFromEvent(e);
-                $("#contextMenu" + localMetaForData.name)
+                var cell = self.grid.getCellFromEvent(e);
+                $("#contextMenu" + self.localMetaForData.name)
                     .data("row", cell.row)
                     .css("top", e.pageY)
                     .css("left", e.pageX)
                     .show();
 
                 $("body").one("click", function () {
-                    $("#contextMenu" + localMetaForData.name).hide();
+                    $("#contextMenu" + self.localMetaForData.name).hide();
                 });
-                $('#contextMenu' + localMetaForData.name).mouseleave(contextMenu_timer);
+                $('#contextMenu' + self.localMetaForData.name).mouseleave(contextMenu_timer);
             });
 
             function contextMenu_close() {
-                $("#contextMenu" + localMetaForData.name).hide();
-            }
+                $("#contextMenu" + self.localMetaForData.name).hide();
+            };
 
             function contextMenu_timer() {
-                closetimer = window.setTimeout(contextMenu_close, 200);
-            }
+                window.setTimeout(contextMenu_close, 200);
+            };
 
-            $("#contextMenu" + localMetaForData.name).click(function (e) {
+            $("#contextMenu" + this.localMetaForData.name).click(function (e) {
                 if (!$(e.target).is("li")) {
                     return;
                 }
@@ -308,50 +371,53 @@
                     var url = tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), data[row].id);
                     self.onContextMenuClickLink.notify({name:'unused', tumlUri:url}, null, self);
                 } else {
-                    var item = dataView.getItem(row);
-                    dataView.deleteItem(item.id);
+                    var item = this.dataView.getItem(row);
+                    self.dataView.deleteItem(item.id);
                 }
             });
 
-            grid.onClick.subscribe(function (e, args) {
-                if (grid.getColumns()[args.cell].name == 'delete') {
-                    var item = dataView.getItem(args.row);
-                    dataView.deleteItem(item.id);
+            this.grid.onClick.subscribe(function (e, args) {
+                var column = self.grid.getColumns()[args.cell];
+                if (column.name == 'delete') {
+                    var item = self.dataView.getItem(args.row);
+                    self.dataView.deleteItem(item.id);
                     e.stopImmediatePropagation();
-                } else if (grid.getColumns()[args.cell].name == 'uri') {
-                    var item = dataView.getItem(args.row);
+                } else if (column.name == 'uri') {
+                    var item = self.dataView.getItem(args.row);
                     var uri = item.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), item.id);
                     self.onSelfCellClick.notify({name:'unused', tumlUri:uri}, null, self);
+                } else if (column.options.property.composite && column.options.property.lower > 0 && (column.options.property.upper > 1) || column.options.property.upper === -1) {
+                    self.onNeedOpenManyEditor.notify({tumlUri:column.options.property.tumlUri, property:column.options.property}, null, self);
                 }
                 //unbind the document click event to close many editors
-                grid['clicked'] = true;
+                self.grid['clicked'] = true;
             });
 
-            grid.onCellChange.subscribe(function (e, args) {
-                dataView.updateItem(args.item.id, args.item, grid.getColumns()[args.cell]);
+            this.grid.onCellChange.subscribe(function (e, args) {
+                self.dataView.updateItem(args.item.id, args.item, self.grid.getColumns()[args.cell]);
             });
 
-            grid.onAddNewRow.subscribe(function (e, args) {
+            this.grid.onAddNewRow.subscribe(function (e, args) {
                 var $newItem = {};
-                for (i = 0; i < grid.getColumns().length; i++) {
-                    var column = grid.getColumns()[i];
+                for (i = 0; i < self.grid.getColumns().length; i++) {
+                    var column = self.grid.getColumns()[i];
                     $newItem[column.name] = null;
                 }
                 //Generate a fake id, its required for the grid to work nicely
-                $newItem.id = 'fake::' + data.length + dataView.getNewItems().length + 1;
+                $newItem.id = 'fake::' + data.length + self.dataView.getNewItems().length + 1;
 
                 //Default required booleans to false
-                $.each(localMetaForData.properties, function (index, property) {
+                $.each(self.localMetaForData.properties, function (index, property) {
                     if (property.fieldType == 'Boolean' && property.lower > 0) {
                         $newItem[property.name] = false;
                     }
                 });
-                dataView.addItem($.extend($newItem, args.item));
+                self.dataView.addItem($.extend($newItem, args.item));
             });
 
-            grid.onKeyDown.subscribe(function (e) {
-                if (grid['manyPrimitiveEditorOpen']) {
-                    grid['manyPrimitiveEditor'].handleKeyPress(e);
+            this.grid.onKeyDown.subscribe(function (e) {
+                if (self.grid['manyPrimitiveEditorOpen']) {
+                    self.grid['manyPrimitiveEditor'].handleKeyPress(e);
                 }
                 // select all rows on ctrl-a
                 if (e.which != 65 || !e.ctrlKey) {
@@ -359,15 +425,15 @@
                 }
 
                 var rows = [];
-                for (var i = 0; i < dataView.getLength(); i++) {
+                for (var i = 0; i < self.dataView.getLength(); i++) {
                     rows.push(i);
                 }
 
-                grid.setSelectedRows(rows);
+                self.grid.setSelectedRows(rows);
                 e.preventDefault();
             });
 
-            grid.onSort.subscribe(function (e, args) {
+            this.grid.onSort.subscribe(function (e, args) {
                 sortdir = args.sortAsc ? 1 : -1;
                 sortcol = args.sortCol.field;
 
@@ -386,11 +452,11 @@
                     };
 
                     // use numeric sort of % and lexicographic for everything else
-                    dataView.fastSort((sortcol == "percentComplete") ? percentCompleteValueFn : sortcol, args.sortAsc);
+                    self.dataView.fastSort((sortcol == "percentComplete") ? percentCompleteValueFn : sortcol, args.sortAsc);
                 } else {
                     // using native sort with comparer
                     // preferred method but can be very slow in IE with huge datasets
-                    dataView.sort(function comparer(a, b) {
+                    self.dataView.sort(function comparer(a, b) {
                         var x = a[sortcol],
                             y = b[sortcol];
                         return (x == y ? 0 : (x > y ? 1 : -1));
@@ -399,60 +465,60 @@
             });
 
             // wire up model events to drive the grid
-            dataView.onRowCountChanged.subscribe(function (e, args) {
-                grid.updateRowCount();
-                grid.render();
+            this.dataView.onRowCountChanged.subscribe(function (e, args) {
+                self.grid.updateRowCount();
+                self.grid.render();
             });
 
-            dataView.onRowsChanged.subscribe(function (e, args) {
-                grid.invalidateRows(args.rows);
-                grid.render();
+            this.dataView.onRowsChanged.subscribe(function (e, args) {
+                self.grid.invalidateRows(args.rows);
+                self.grid.render();
             });
 
-            dataView.onPagingInfoChanged.subscribe(function (e, pagingInfo) {
+            this.dataView.onPagingInfoChanged.subscribe(function (e, pagingInfo) {
                 var isLastPage = pagingInfo.pageNum == pagingInfo.totalPages - 1;
-                var options = grid.getOptions();
+                var options = self.grid.getOptions();
                 var enableAddRow = options.enableAddRow && (isLastPage || pagingInfo.pageSize == 0);
 
                 if (options.enableAddRow != enableAddRow) {
-                    grid.setOptions({
+                    self.grid.setOptions({
                         enableAddRow:enableAddRow
                     });
                 }
             });
 
-            $(grid.getHeaderRow()).delegate(":input", "change keyup", function (e) {
+            $(this.grid.getHeaderRow()).delegate(":input", "change keyup", function (e) {
                 columnFilters[$(this).data("columnId")] = $.trim($(this).val());
-                dataView.refresh();
+                self.dataView.refresh();
             });
 
-            grid.onColumnsReordered.subscribe(function (e, args) {
-                updateHeaderRow(localMetaForData);
+            this.grid.onColumnsReordered.subscribe(function (e, args) {
+                this.updateHeaderRow(self.localMetaForData);
             });
 
-            grid.onColumnsResized.subscribe(function (e, args) {
-                updateHeaderRow(localMetaForData);
+            this.grid.onColumnsResized.subscribe(function (e, args) {
+                this.updateHeaderRow(self.localMetaForData);
             });
 
-            grid.onViewportChanged.subscribe(function (e, args) {
-                var vp = grid.getViewport();
+            this.grid.onViewportChanged.subscribe(function (e, args) {
+                var vp = self.grid.getViewport();
             });
-            grid.onViewportChanged.notify();
+            this.grid.onViewportChanged.notify();
 
-            grid.onBeforeEditCell.subscribe(function(e,args) {
+            this.grid.onBeforeEditCell.subscribe(function (e, args) {
                 if (!isCellEditable(args.row, args.cell, args.item)) {
                     return false;
                 }
             });
 
             function isCellEditable(row, cell, item) {
-                for (var j = 0; j < grid.getColumns().length; j++) {
-                    var column = grid.getColumns()[j];
+                for (var j = 0; j < self.grid.getColumns().length; j++) {
+                    var column = self.grid.getColumns()[j];
                     if (cell === j && column.name !== 'id' && column.name !== 'uri' && column.name !== 'delete') {
                         if (!column.options.property.readOnly) {
                             var property = column.options.property;
                             if (property.composite && property.lower === 1 && property.upper == 1) {
-                                if (dataView.getItems().indexOf(item) !== -1) {
+                                if (self.dataView.getItems().indexOf(item) !== -1) {
                                     return false;
                                 }
                             }
@@ -463,14 +529,14 @@
                     }
                 }
                 return true;
-            }
+            };
 
-            function validateNewItems(newItems) {
+            this.validateNewItems = function (newItems) {
                 var validationResults = [];
                 for (var i = 0; i < newItems.length; i++) {
                     var item = newItems[i];
-                    for (var j = 0; j < grid.getColumns().length; j++) {
-                        var column = grid.getColumns()[j];
+                    for (var j = 0; j < this.grid.getColumns().length; j++) {
+                        var column = this.grid.getColumns()[j];
                         if (column.name !== 'id' && column.name !== 'uri' && column.name !== 'delete') {
                             if (!column.options.property.readOnly) {
                                 var validator = selectFieldValidator(column.options.property);
@@ -483,17 +549,17 @@
                     }
                 }
                 return validationResults;
-            }
+            };
 
-            function updateHeaderRow(metaForData) {
-                for (var i = 0; i < columns.length; i++) {
-                    if (columns[i].id !== "selector" && columns[i].id !== 'uri' && columns[i].id !== 'delete') {
-                        var header = grid.getHeaderRowColumn(columns[i].id);
+            this.updateHeaderRow = function (metaForData) {
+                for (var i = 0; i < this.columns.length; i++) {
+                    if (this.columns[i].id !== "selector" && this.columns[i].id !== 'uri' && this.columns[i].id !== 'delete') {
+                        var header = this.grid.getHeaderRowColumn(this.columns[i].id);
                         $(header).empty();
-                        $(constructHeaderRowBox(columns[i].id, metaForData)).data("columnId", columns[i].id).val(columnFilters[columns[i].id]).appendTo(header);
+                        $(constructHeaderRowBox(this.columns[i].id, metaForData)).data("columnId", this.columns[i].id).val(columnFilters[this.columns[i].id]).appendTo(header);
                     }
                 }
-            }
+            };
 
             function constructHeaderRowBox(columnId, metaForData) {
                 for (var i = 0; i < metaForData.properties.length; i++) {
@@ -510,12 +576,12 @@
                     }
                 }
                 return "<input type='text'>";
-            }
+            };
 
             function filter(item, metaForData) {
                 for (var columnId in columnFilters) {
                     if (columnId !== undefined && columnFilters[columnId] !== "") {
-                        var c = grid.getColumns()[grid.getColumnIndex(columnId)];
+                        var c = this.grid.getColumns()[this.grid.getColumnIndex(columnId)];
                         for (var i = 0; i < metaForData.metaForData.properties.length; i++) {
                             var property = metaForData.metaForData.properties[i];
                             if (property.name == columnId) {
@@ -584,43 +650,96 @@
                     $(e.target).removeClass("ui-state-hover")
                 });
 
-            grid.onValidationError.subscribe(function (e, args) {
+            this.grid.onValidationError.subscribe(function (e, args) {
                 alert(args.validationResults.msg);
             });
 
             // initialize the model after all the events have been hooked up
-            dataView.beginUpdate();
-            dataView.setItems(data);
-            dataView.setFilterArgs({
-                metaForData:localMetaForData
+            this.dataView.beginUpdate();
+            this.dataView.setItems(data);
+            this.dataView.setFilterArgs({
+                metaForData:this.localMetaForData
             });
-            dataView.setFilter(filter);
-            dataView.endUpdate();
-            updateHeaderRow(localMetaForData);
+            this.dataView.setFilter(filter);
+            this.dataView.endUpdate();
+            this.updateHeaderRow(this.localMetaForData);
 
             // if you don't want the items that are not visible (due to being filtered out
             // or being on a different page) to stay selected, pass 'false' to the second arg
-            dataView.syncGridSelection(grid, true);
+            this.dataView.syncGridSelection(this.grid, true);
 
             $("#gridContainer").resizable();
-        }
+        };
 
-        function removeElementsAlreadyInGrid(items, itemsToAdd) {
+        this.removeElementsAlreadyInGrid = function (items, itemsToAdd) {
             var elementsToRemoveIndex = [];
             for (var i = 0; i < items.length; i++) {
                 var newItem = items[i];
-                for (var j = 0; j < itemsToAdd.length; j++) {
-                    if (newItem.id == itemsToAdd[j].id) {
-                        elementsToRemoveIndex.push(i);
-                    }
+                elementsToRemoveIndex.push(newItem.id);
+            }
+            function needToRemove(element, index, array) {
+                return (elementsToRemoveIndex.indexOf(element.id) == -1);
+            }
+
+            return itemsToAdd.filter(needToRemove);
+        };
+
+    }
+
+    TumlBaseGridManager.prototype.setupColumns = function () {
+        var self = this;
+        this.columns = [];
+        $.each(this.localMetaForData.properties, function (index, property) {
+            if ((property.composite && property.lower > 0) || !property.composite && !property.inverseComposite && ((property.oneToOne || property.manyToOne) || property.manyPrimitive || property.manyEnumeration)) {
+                //Place the id column first
+                if (property.name == "id") {
+                    self.columns.splice(0, 0, {
+                        id:property.name,
+                        name:property.name,
+                        field:property.name,
+                        sortable:true,
+                        formatter:selectFormatter(property)
+                    });
+                } else {
+                    self.columns.push({
+                        id:property.name,
+                        name:property.name,
+                        field:property.name,
+                        sortable:true,
+                        editor:selectEditor(property),
+                        formatter:selectFormatter(property),
+                        validator:selectFieldValidator(property),
+                        options:{required:property.lower > 0, tumlLookupUri:property.tumlLookupUri, rowEnumerationLookupMap:new RowEnumerationLookupMap(property.qualifiedName, "/restAndJson/tumlEnumLookup"), rowLookupMap:new RowLookupMap(self.contextVertexId, property.tumlCompositeParentLookupUri, property.tumlCompositeParentLookupUriOnCompositeParent), compositeParentLookupMap:new CompositeParentLookupMap(self.contextVertexId, property.tumlLookupUri, property.tumlLookupOnCompositeParentUri), ordered:property.ordered, unique:property.unique, property:property},
+                        width:120
+                    });
                 }
             }
-            for (var i = 0; i < elementsToRemoveIndex.length; i++) {
-                itemsToAdd.splice(i, 1);
-            }
-        }
+        });
+    };
 
-        init();
+    TumlBaseGridManager.prototype.instantiateGrid = function () {
+        //Add in a property on the grid to tell if a many editor is open
+        this.grid['manyEditorOpen'] = false;
+        this.grid.setSelectionModel(new Slick.RowSelectionModel());
+        new Slick.Controls.ColumnPicker(this.columns, this.grid, this.options);
+    };
+
+    TumlBaseGridManager.prototype.addButtons = function () {
+        alert("addButtons must be overridden");
+    };
+
+    TumlBaseGridManager.prototype.setupOptions = function () {
+        this.options = {
+            showHeaderRow:true,
+            headerRowHeight:30,
+            editable:true,
+            enableAddRow:this.propertyNavigatingTo.composite,
+            enableCellNavigation:true,
+            asyncEditorLoading:false,
+            enableAsyncPostRender:true,
+            forceFitColumns:false,
+            topPanelHeight:25
+        };
     }
 
 })(jQuery);

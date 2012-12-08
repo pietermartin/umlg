@@ -1,8 +1,8 @@
 (function ($) {
     // register namespace
     $.extend(true, window, {
-        Tuml: {
-            MainViewManager: MainViewManager
+        Tuml:{
+            MainViewManager:MainViewManager
         }
     });
 
@@ -17,17 +17,17 @@
         function init() {
 
             tumlManyViewManager = new Tuml.TumlManyViewManager();
-            tumlManyViewManager.onPutSuccess.subscribe(function(e, args) {
+            tumlManyViewManager.onPutSuccess.subscribe(function (e, args) {
                 console.log('TumlMainViewManager onPutSuccess fired');
                 self.onPutSuccess.notify(args, e, self);
                 if (args.data[0].meta.to.qualifiedName === 'tumllib::org::tuml::query::Query') {
                     alert('update the tree!');
                 }
             });
-            tumlManyViewManager.onPutFailure.subscribe(function(e, args) {
+            tumlManyViewManager.onPutFailure.subscribe(function (e, args) {
                 self.onPutFailure.notify(args, e, self);
             });
-            tumlManyViewManager.onPostSuccess.subscribe(function(e, args) {
+            tumlManyViewManager.onPostSuccess.subscribe(function (e, args) {
                 self.onPostSuccess.notify(args, e, self);
                 if (args.data[0].meta.to.qualifiedName === 'tumllib::org::tuml::query::Query') {
                     var metaDataNavigatingTo = args.data[0].meta.to;
@@ -36,30 +36,30 @@
                     leftMenuManager.refresh(metaDataNavigatingFrom, metaDataNavigatingTo, contextVertexId);
                 }
             });
-            tumlManyViewManager.onPostFailure.subscribe(function(e, args) {
+            tumlManyViewManager.onPostFailure.subscribe(function (e, args) {
                 self.onPostFailure.notify(args, e, self);
             });
-            tumlManyViewManager.onDeleteSuccess.subscribe(function(e, args) {
+            tumlManyViewManager.onDeleteSuccess.subscribe(function (e, args) {
                 self.onDeleteSuccess.notify(args, e, self);
             });
-            tumlManyViewManager.onDeleteFailure.subscribe(function(e, args) {
+            tumlManyViewManager.onDeleteFailure.subscribe(function (e, args) {
                 self.onDeleteFailure.notify(args, e, self);
             });
-            tumlManyViewManager.onCancel.subscribe(function(e, args) {
+            tumlManyViewManager.onCancel.subscribe(function (e, args) {
                 self.onCancel.notify(args, e, self);
             });
-            tumlManyViewManager.onSelfCellClick.subscribe(function(e, args) {
+            tumlManyViewManager.onSelfCellClick.subscribe(function (e, args) {
                 self.onSelfCellClick.notify(args, e, self);
             });
-            tumlManyViewManager.onContextMenuClickLink.subscribe(function(e, args) {
+            tumlManyViewManager.onContextMenuClickLink.subscribe(function (e, args) {
                 self.onContextMenuClickLink.notify(args, e, self);
             });
-            tumlManyViewManager.onContextMenuClickDelete.subscribe(function(e, args) {
+            tumlManyViewManager.onContextMenuClickDelete.subscribe(function (e, args) {
                 self.onContextMenuClickDelete.notify(args, e, self);
             });
 
             tumlOneViewManager = new Tuml.TumlOneViewManager();
-            tumlOneViewManager.onPutOneSuccess.subscribe(function(e, args) {
+            tumlOneViewManager.onPutOneSuccess.subscribe(function (e, args) {
                 var metaDataNavigatingTo = args.data[0].meta.to;
                 var metaDataNavigatingFrom = args.data[0].meta.from;
                 var contextVertexId = retrieveVertexId(args.tumlUri);
@@ -74,10 +74,10 @@
                 refresh(args.tumlUri, args.data);
                 self.onPutOneSuccess.notify(args, e, self);
             });
-            tumlOneViewManager.onPutOneFailure.subscribe(function(e, args) {
+            tumlOneViewManager.onPutOneFailure.subscribe(function (e, args) {
                 self.onPutOneFailure.notify(args, e, self);
             });
-            tumlOneViewManager.onPostOneSuccess.subscribe(function(e, args) {
+            tumlOneViewManager.onPostOneSuccess.subscribe(function (e, args) {
                 var metaDataNavigatingTo = args.data[0].meta.to;
                 var metaDataNavigatingFrom = args.data[0].meta.from;
                 if (metaDataNavigatingFrom === undefined) {
@@ -89,7 +89,7 @@
                     refresh(args.tumlUri, args.data);
                 }
             });
-            tumlOneViewManager.onPostOneFailure.subscribe(function(e, args) {
+            tumlOneViewManager.onPostOneFailure.subscribe(function (e, args) {
                 self.onPostOneFailure.notify(args, e, self);
             });
         }
@@ -109,10 +109,20 @@
             var metaDataNavigatingTo = result[0].meta.to;
             var metaDataNavigatingFrom = result[0].meta.from;
             var propertyNavigatingTo = (metaDataNavigatingFrom == undefined ? null : findPropertyNavigatingTo(qualifiedName, metaDataNavigatingFrom));
+            recreateTabContainer();
+            tabContainer.tabs({border:false, onClose:function (title, index) {
+                if (isOne) {
+                    tumlOneViewManager.closeQuery(title, index);
+                } else {
+                    tumlManyViewManager.closeQuery(title, index);
+                }
+            }, onSelect:function (title, index) {
+                leftMenuManager.refreshQueryMenu(title);
+            }});
+
             if (propertyNavigatingTo != null && (propertyNavigatingTo.oneToMany || propertyNavigatingTo.manyToMany)) {
                 //Property is a many
                 isOne = false;
-                recreateTabContainer();
                 var contextVertexId = retrieveVertexId(tumlUri);
                 leftMenuManager.refresh(metaDataNavigatingFrom, metaDataNavigatingTo, contextVertexId);
                 tumlManyViewManager.refresh(tumlUri, result, propertyNavigatingTo);
@@ -131,7 +141,6 @@
                     //Only one element of the array contains data, i.e. for the return concrete type
                     for (var i = 0; i < result.length; i++) {
                         if (result[i].data.length > 0) {
-                            recreateTabContainer();
                             metaDataNavigatingTo = result[i].meta.to;
                             qualifiedName = result[i].meta.qualifiedName;
                             var contextVertexId = result[i].data[0].id;
@@ -144,7 +153,6 @@
                     }
                 } else {
                     //This is for creation of the one
-                    recreateTabContainer();
                     qualifiedName = result[0].meta.qualifiedName;
                     var contextVertexId = retrieveVertexId(tumlUri);
                     leftMenuManager.refresh(metaDataNavigatingFrom, metaDataNavigatingTo, contextVertexId);
@@ -154,22 +162,14 @@
             }
             $('#ui-layout-center-heading').children().remove();
             $('#ui-layout-center-heading').append($('<span />').text(qualifiedName));
-            tabContainer.tabs({border: false, onClose:function(title, index){  
-                if (isOne) {
-                    tumlOneViewManager.closeQuery(title, index);
-                } else {
-                    tumlManyViewManager.closeQuery(title, index);
-                }
-            }, onSelect: function(title, index){
-                leftMenuManager.refreshQueryMenu(title);
-            }});
+
             //This is the layout
             $('body').layout().resizeAll();
             return true;
         }
 
         function findPropertyNavigatingTo(qualifiedName, metaDataNavigatingFrom) {
-            if (metaDataNavigatingFrom  == undefined) {
+            if (metaDataNavigatingFrom == undefined) {
                 return null;
             } else {
                 //The property one is navigating from is in the metaDataNavigatingFrom,
@@ -189,29 +189,29 @@
             if (tabContainer !== undefined) {
                 tabContainer.remove();
             }
-            tabContainer = $('<div />', {id: 'tab-container', class: 'easyui-tabs' }).appendTo('.ui-layout-center');
+            tabContainer = $('<div />', {id:'tab-container', class:'easyui-tabs' }).appendTo('.ui-layout-center');
         }
 
         //Public api
         $.extend(this, {
-            "TumlMainViewManagerVersion": "1.0.0",
+            "TumlMainViewManagerVersion":"1.0.0",
             //These events are propogated from the grid
-            "onPutSuccess": new Tuml.Event(),
-            "onPutFailure": new Tuml.Event(),
-            "onPostSuccess": new Tuml.Event(),
-            "onPostFailure": new Tuml.Event(),
-            "onDeleteSuccess": new Tuml.Event(),
-            "onDeleteFailure": new Tuml.Event(),
-            "onCancel": new Tuml.Event(),
-            "onSelfCellClick": new Tuml.Event(),
-            "onContextMenuClickLink": new Tuml.Event(),
-            "onContextMenuClickDelete": new Tuml.Event(),
-            "onPutOneSuccess": new Tuml.Event(),
-            "onPutOneFailure": new Tuml.Event(),
-            "onPostOneSuccess": new Tuml.Event(),
-            "onPostOneFailure": new Tuml.Event(),
-            "refresh": refresh,
-            "openQuery": openQuery
+            "onPutSuccess":new Tuml.Event(),
+            "onPutFailure":new Tuml.Event(),
+            "onPostSuccess":new Tuml.Event(),
+            "onPostFailure":new Tuml.Event(),
+            "onDeleteSuccess":new Tuml.Event(),
+            "onDeleteFailure":new Tuml.Event(),
+            "onCancel":new Tuml.Event(),
+            "onSelfCellClick":new Tuml.Event(),
+            "onContextMenuClickLink":new Tuml.Event(),
+            "onContextMenuClickDelete":new Tuml.Event(),
+            "onPutOneSuccess":new Tuml.Event(),
+            "onPutOneFailure":new Tuml.Event(),
+            "onPostOneSuccess":new Tuml.Event(),
+            "onPostOneFailure":new Tuml.Event(),
+            "refresh":refresh,
+            "openQuery":openQuery
         });
 
         init();

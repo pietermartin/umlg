@@ -70,7 +70,7 @@ public class AddTumlMetaDataUriFieldToRuntimePropertyEnum extends BaseVisitor im
 
         OJField jsonField = literal.findAttributeValue("json");
         StringBuilder sb = new StringBuilder();
-        sb.append(", \\\"tumlMetatDataUri\\\": \\");
+        sb.append(", \\\"tumlMetaDataUri\\\": \\");
         sb.append(uri.substring(0, uri.length() - 1) + "\\\"");
         String initExp = jsonField.getInitExp();
         int indexOf = initExp.lastIndexOf("}");

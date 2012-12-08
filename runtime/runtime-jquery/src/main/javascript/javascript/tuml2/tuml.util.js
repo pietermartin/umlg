@@ -15,7 +15,7 @@ function selectFormatter(property) {
     } else if (property.dataTypeEnum !== undefined) {
         return null;
     } else if (property.oneEnumeration || property.manyEnumeration) {
-        return  TumlSlick.Formatters.TumlRequired; 
+        return  TumlSlick.Formatters.TumlRequired;
     } else if (property.composite && property.lower > 0) {
         return  TumlSlick.Formatters.TumlRequired;
     } else if (!property.onePrimitive && !property.manyPrimitive) {
@@ -28,13 +28,13 @@ function selectFormatter(property) {
         };
         return null;
     } else if (property.lower > 0 && property.fieldType == 'String') {
-        return  TumlSlick.Formatters.TumlRequired; 
+        return  TumlSlick.Formatters.TumlRequired;
     } else if (property.manyPrimitive && property.fieldType == 'Boolean') {
-        return  TumlSlick.Formatters.TumlManyBoolean; 
+        return  TumlSlick.Formatters.TumlManyBoolean;
     } else if (property.fieldType == 'Boolean') {
         return Slick.Formatters.Checkmark;
     } else {
-        return null; 
+        return null;
     }
 }
 
@@ -52,7 +52,7 @@ function selectFieldValidator(property) {
         } else if (property.dataTypeEnum == 'Email') {
             return new TumlSlick.Validators.TumlString(property).validate;
         } else if (property.dataTypeEnum == 'Video') {
-        } else  if (property.dataTypeEnum == 'Audio') {
+        } else if (property.dataTypeEnum == 'Audio') {
         } else if (property.dataTypeEnum == 'Image') {
         } else {
             alert('Unsupported dataType ' + property.dataTypeEnum);
@@ -79,10 +79,10 @@ function selectFieldValidator(property) {
         return new TumlSlick.Validators.TumlManyBoolean(property).validate;
     } else {
     }
-    return function() {
+    return function () {
         return {
-            valid: true,
-            msg: null}
+            valid:true,
+            msg:null}
     };
 }
 
@@ -93,50 +93,51 @@ function selectEditor(property) {
         return null;
     } else if (property.dataTypeEnum !== undefined) {
         if (property.dataTypeEnum == 'Date') {
-            return  Tuml.Slick.Editors.Date; 
+            return  Tuml.Slick.Editors.Date;
         } else if (property.dataTypeEnum == 'Time') {
-            return  Tuml.Slick.Editors.Time; 
+            return  Tuml.Slick.Editors.Time;
         } else if (property.dataTypeEnum == 'DateTime') {
-            return  Tuml.Slick.Editors.DateTime; 
+            return  Tuml.Slick.Editors.DateTime;
         } else if (property.dataTypeEnum == 'InternationalPhoneNumber') {
             //TODO
-            return Tuml.Slick.Editors.Text; 
+            return Tuml.Slick.Editors.Text;
         } else if (property.dataTypeEnum == 'LocalPhoneNumber') {
             //TODO
-            return Tuml.Slick.Editors.Text; 
+            return Tuml.Slick.Editors.Text;
         } else if (property.dataTypeEnum == 'Email') {
-            return Tuml.Slick.Editors.Text; 
+            return Tuml.Slick.Editors.Text;
         } else if (property.dataTypeEnum == 'Video') {
-            return Tuml.Slick.Editors.Text; 
-        } else  if (property.dataTypeEnum == 'Audio') {
-            return Tuml.Slick.Editors.Text; 
+            return Tuml.Slick.Editors.Text;
+        } else if (property.dataTypeEnum == 'Audio') {
+            return Tuml.Slick.Editors.Text;
         } else if (property.dataTypeEnum == 'Image') {
-            return Tuml.Slick.Editors.Text; 
+            return Tuml.Slick.Editors.Text;
         } else {
             alert('Unsupported dataType ' + property.dataTypeEnum);
         }
-    } else if (property.composite && property.lower === 1 && property.upper == 1 ) {
+    } else if (property.composite && property.lower === 1 && property.upper == 1) {
         return  Tuml.Slick.Editors.OneEditor;
-    } else if (property.composite && property.lower >= 1 && (property.upper > 1 || property.upper == -1) ) {
-        return  Tuml.Slick.Editors.ComponentManyEditor;
+    } else if (property.composite && property.lower >= 1 && (property.upper > 1 || property.upper == -1)) {
+//        return  Tuml.Slick.Editors.ComponentManyEditor;
+        return null;
     } else if (property.oneEnumeration) {
-        return  Tuml.Slick.Editors.SelectEnumerationCellEditor; 
+        return  Tuml.Slick.Editors.SelectEnumerationCellEditor;
     } else if (property.manyEnumeration) {
-        return  Tuml.Slick.Editors.ManyEnumerationEditor; 
+        return  Tuml.Slick.Editors.ManyEnumerationEditor;
     } else if (property.manyPrimitive && property.fieldType === 'String') {
-        return  Tuml.Slick.Editors.ManyStringPrimitiveEditor; 
+        return  Tuml.Slick.Editors.ManyStringPrimitiveEditor;
     } else if (property.manyPrimitive && property.fieldType === 'Integer') {
-        return  Tuml.Slick.Editors.ManyIntegerPrimitiveEditor; 
+        return  Tuml.Slick.Editors.ManyIntegerPrimitiveEditor;
     } else if (property.manyPrimitive && property.fieldType === 'Boolean') {
-        return  Tuml.Slick.Editors.ManyBooleanPrimitiveEditor; 
+        return  Tuml.Slick.Editors.ManyBooleanPrimitiveEditor;
     } else if (!property.onePrimitive && !property.manyPrimitive && !property.composite && property.oneToOne) {
-        return  Tuml.Slick.Editors.SelectOneToOneCellEditor; 
+        return  Tuml.Slick.Editors.SelectOneToOneCellEditor;
     } else if (!property.onePrimitive && !property.manyPrimitive && !property.composite && property.manyToOne) {
-        return  Tuml.Slick.Editors.SelectManyToOneCellEditor; 
+        return  Tuml.Slick.Editors.SelectManyToOneCellEditor;
     } else if (property.name == 'id') {
         return null;
     } else if (property.fieldType == 'String') {
-        return Tuml.Slick.Editors.Text; 
+        return Tuml.Slick.Editors.Text;
     } else if (property.fieldType == 'Integer') {
         return Tuml.Slick.Editors.Integer;
     } else if (property.fieldType == 'Long') {
@@ -144,7 +145,7 @@ function selectEditor(property) {
     } else if (property.fieldType == 'Boolean') {
         return Tuml.Slick.Editors.Checkbox;
     } else {
-        return  Slick.Editors.Text; 
+        return  Slick.Editors.Text;
     }
 
 }
