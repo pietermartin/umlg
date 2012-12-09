@@ -10,56 +10,92 @@
 
         var self = this;
         var tumlTabViewManagers = [];
+        var previousMetaForData;
 
         function init() {
-        }
-
-        function clear() {
-            tumlTabViewManagers = [];
         }
 
         function refresh(tumlUri, result, propertyNavigatingTo) {
             tumlTabViewManagers = [];
             //A tab is created for every element in the array,
             //i.e. for every concrete subset of the many property
-            for (i = 0; i < result.length; i++) {
+            for (var i = 0; i < result.length; i++) {
                 if (result[i].meta.from !== undefined) {
-                    addTab(result[i], tumlUri, propertyNavigatingTo);
+                    addTab(result[i], tumlUri, propertyNavigatingTo, {forLookup: false, forManyComponent: false});
                 } else {
                     alert('what is this about!!!');
                 }
             }
         }
 
-        function addTab(result, tumlUri, propertyNavigatingTo, forLookup, originalGrid, originalDataView) {
+        function addTab(result, tumlUri, propertyNavigatingTo, gridToChoose, cell) {
             var metaForData = result.meta.to;
             var tabContainer = $('#tab-container');
             var tabDiv;
-            if (forLookup) {
+            if (gridToChoose.forLookup) {
                 tabDiv = $('<div />', {id:metaForData.name + "Lookup"}).appendTo(tabContainer);
+            } else if (gridToChoose.forManyComponent) {
+                tabDiv = $('<div />', {id:metaForData.name + "ManyComponent"}).appendTo(tabContainer);
             } else {
                 tabDiv = $('<div />', {id:metaForData.name}).appendTo(tabContainer);
             }
-            var tumlTabViewManager = new Tuml.TumlTabViewManager({propertyNavigatingTo:propertyNavigatingTo, many:true, one:false, query:false, forLookup:forLookup, originalGrid: originalGrid, originalDataView: originalDataView}, tumlUri, result.meta.qualifiedName, metaForData.name);
+            var tumlTabViewManager = new Tuml.TumlTabViewManager(
+                {propertyNavigatingTo:propertyNavigatingTo,
+                    many:true,
+                    one:false,
+                    query:false,
+                    forLookup:gridToChoose.forLookup,
+                    forManyComponent:gridToChoose.forManyComponent
+                }, tumlUri, result.meta.qualifiedName, metaForData.name);
+
+            tumlTabViewManager.onManyComponentAddButtonSuccess.subscribe(function (e, args) {
+                console.log('TumlManyViewManager onManyComponentAddButtonSuccess fired');
+
+                tumlTabViewManager.getLinkedTumlTabViewManager().setCellValue(cell, args.value);
+
+                //Closing the tab fires closeTab event which removes the tumlTabViewManager from the array
+                $('#tab-container').tabs('close', args.tabName + " Many Add");
+                $('#' + args.tabName + "ManyComponent").remove();
+                $('#tab-container').tabs('enableTab', previousMetaForData.name);
+            });
+            tumlTabViewManager.onManyComponentCancelButtonSuccess.subscribe(function (e, args) {
+                console.log('TumlManyViewManager onManyComponentCancelButtonSuccess fired');
+                //Closing the tab fires closeTab event which removes the tumlTabViewManager from array
+                $('#tab-container').tabs('close', args.tabName + " Many Add");
+                $('#' + args.tabName + "ManyComponent").remove();
+                $('#tab-container').tabs('enableTab', previousMetaForData.name);
+            });
             tumlTabViewManager.onSelectButtonSuccess.subscribe(function (e, args) {
                 console.log('TumlManyViewManager onSelectButtonSuccess fired');
+
+                tumlTabViewManager.getLinkedTumlTabViewManager().addItems(args.items);
+
+                //Closing the tab fires closeTab event which removes the tumlTabViewManager from the array
                 $('#tab-container').tabs('close', args.tabName + " Select");
                 $('#' + args.tabName + "Lookup").remove();
-                $('#tab-container').tabs('enableTab', metaForData.name);
+                $('#tab-container').tabs('enableTab', previousMetaForData.name);
             });
             tumlTabViewManager.onSelectCancelButtonSuccess.subscribe(function (e, args) {
                 console.log('TumlManyViewManager onSelectCancelButtonSuccess fired');
+                //Closing the tab fires closeTab event which removes the tumlTabViewManager from the array
                 $('#tab-container').tabs('close', args.tabName + " Select");
                 $('#' + args.tabName + "Lookup").remove();
-                $('#tab-container').tabs('enableTab', metaForData.name);
+                $('#tab-container').tabs('enableTab', previousMetaForData.name);
             });
             tumlTabViewManager.onAddButtonSuccess.subscribe(function (e, args) {
                 console.log('TumlManyViewManager onAddButtonSuccess fired');
                 $('#tab-container').tabs('disableTab', metaForData.name);
-                addTab(args.data, args.tumlUri, args.propertyNavigatingTo, true, args.originalGrid, args.originalDataView);
+                previousMetaForData = metaForData;
+                var tumlLookupTabViewManager = addTab(
+                    args.data,
+                    args.tumlUri,
+                    args.propertyNavigatingTo,
+                    {forLookup: true, forManyComponent: false}
+                );
+                tumlLookupTabViewManager.setLinkedTumlTabViewManager(tumlTabViewManager);
             });
-            tumlTabViewManager.onNeedOpenManyEditor.subscribe(function (e, args) {
-                console.log('TumlManyViewManager onNeedOpenManyEditor fired');
+            tumlTabViewManager.onClickManyComponentCell.subscribe(function (e, args) {
+                console.log('TumlManyViewManager onClickManyComponentCell fired');
 
                 $.ajax({
                     url:args.property.tumlMetaDataUri,
@@ -67,19 +103,20 @@
                     dataType:"json",
                     contentType:"json",
                     success:function (result, textStatus, jqXHR) {
-                        //Create the tab
-                        var tabContainer = $('#tab-container');
-                        var tabDivName = result[0].meta.to.name;
-                        tabDiv = $('<div />', {id:tabDivName, title:tabDivName}).appendTo(tabContainer);
                         $('#tab-container').tabs('disableTab', metaForData.name);
-                        addTab(result[0], args.tumlUri, args.property);
+                        previousMetaForData = metaForData;
+                        var tumlManyComponentTabViewManager = addTab(
+                            result[0],
+                            args.tumlUri,
+                            args.property, {forLookup: false, forManyComponent: true},
+                            args.cell
+                        );
+                        tumlManyComponentTabViewManager.setLinkedTumlTabViewManager(tumlTabViewManager);
                     },
                     error:function (jqXHR, textStatus, errorThrown) {
                         alert('error getting ' + tumlUri + '\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
                     }
                 });
-
-
 
             });
             tumlTabViewManager.onPutSuccess.subscribe(function (e, args) {
@@ -122,8 +159,10 @@
                 console.log('TumlManyViewManager onContextMenuClickDelete fired');
                 self.onContextMenuClickDelete.notify(args, e, self);
             });
-            if (forLookup) {
+            if (gridToChoose.forLookup) {
                 $('#tab-container').tabs('add', {title:result.meta.to.name + " Select", content:'<div id="' + result.meta.to.name + 'Lookup" />', closable:true});
+            } else if (gridToChoose.forManyComponent) {
+                $('#tab-container').tabs('add', {title:result.meta.to.name + " Many Add", content:'<div id="' + result.meta.to.name + 'ManyComponent" />', closable:true});
             } else {
                 $('#tab-container').tabs('add', {title:result.meta.to.name, content:'<div id="' + result.meta.to.name + '" />', closable:true});
             }
@@ -133,9 +172,12 @@
             //Create the grid
             tumlTabViewManager.createGrid(result);
 
+            return tumlTabViewManager;
+
         }
 
-        function closeQuery(title, index) {
+        function closeTab(title, index) {
+            tumlTabViewManagers[index].clear();
             tumlTabViewManagers.splice(index, 1);
         }
 
@@ -185,7 +227,7 @@
             "onContextMenuClickDelete":new Tuml.Event(),
             "refresh":refresh,
             "openQuery":openQuery,
-            "closeQuery":closeQuery,
+            "closeTab":closeTab,
             "clear":clear
         });
 

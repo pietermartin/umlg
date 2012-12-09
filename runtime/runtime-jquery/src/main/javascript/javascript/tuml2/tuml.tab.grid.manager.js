@@ -16,8 +16,8 @@
         //Public api
         $.extend(this, {
             "TumlTabGridManagerVersion":"1.0.0",
-            "onAddButtonSuccess":new Tuml.Event(),
-            "onNeedOpenManyEditor":new Tuml.Event()
+            "onManyComponentAddButtonSuccess":new Tuml.Event(),
+            "onManyComponentCancelButtonSuccess":new Tuml.Event()
         });
 
         this.setupColumns = function () {
@@ -31,37 +31,36 @@
             );
         };
 
+        this.refresh = function (result) {
+            this.metaForData = result.meta.to;
+            var tabDiv = $('#' + this.metaForData.name + "ManyComponent");
+            $('<div id="myGridManyComponentHeader" class="selectheader" />').append($('<p />').text('Create the values to add.')).appendTo(tabDiv);
+            $('<div id="myGridManyComponent' + this.metaForData.name + '" style="width:auto;height:90%;"></div>').appendTo(tabDiv);
+            $('<div id="pagerManyComponent' + this.metaForData.name + '" style="width:auto;height:20px;"></div>').appendTo(tabDiv);
+            $('#contextMenu' + this.metaForData.name).remove();
+            this.createGrid(result.data, this.metaForData, tumlUri, false);
+        };
+
         this.instantiateGrid = function () {
-            this.grid = new Slick.Grid("#myGrid" + this.localMetaForData.name, this.dataView, this.columns, this.options);
+            this.grid = new Slick.Grid("#myGridManyComponent" + this.localMetaForData.name, this.dataView, this.columns, this.options);
             //Creating a pager for the component manies editor grid call commitCurrentEditor which buggers everything up
-            this.pager = new Slick.Controls.Pager(this.dataView, this.grid, $("#pager" + this.localMetaForData.name));
-            $("<div id='grid-button" + this.localMetaForData.name + "' class='grid-button'/>").appendTo('#pager' + this.localMetaForData.name + ' .slick-pager-settings');
+            this.pager = new Slick.Controls.Pager(this.dataView, this.grid, $("#pagerManyComponent" + this.localMetaForData.name));
+            $("<div id='grid-buttonManyComponent" + this.localMetaForData.name + "' class='grid-button'/>").appendTo('#pagerManyComponent' + this.localMetaForData.name + ' .slick-pager-settings');
             TumlBaseGridManager.prototype.instantiateGrid.call(this);
         };
 
         this.addButtons = function () {
-            $('<button />').text('Select').click(function () {
+            $('<button />').text('Add').click(function () {
                 if (self.grid.getEditorLock().commitCurrentEdit()) {
-                    var selectedRows = self.grid.getSelectedRows();
-                    for (var i = 0; i < selectedRows.length; i++) {
-                        var selectedRow = selectedRows[i];
-                        var item = self.dataView.getItem(selectedRow);
-//                        self.originalDataView.addItem(item);
-//                        self.originalDataView.getDeletedItems().remove(item);
-                    }
-//                    self.originalGrid.invalidateRows([self.data.length - 1]);
-//                    self.originalGrid.updateRowCount();
-//                    self.originalGrid.render();
-//                    self.onSelectButtonSuccess.notify({tabName:self.metaForData.name}, null, self);
+                    self.onManyComponentAddButtonSuccess.notify({value: self.dataView.getItems(), tabName:self.metaForData.name}, null, self);
                 }
-            }).appendTo('#grid-buttonLookup' + this.localMetaForData.name);
+            }).appendTo('#grid-buttonManyComponent' + this.localMetaForData.name);
 
             $('<button />').text('Cancel').click(function () {
                 if (self.grid.getEditorLock().commitCurrentEdit()) {
-                    self.onSelectCancelButtonSuccess.notify({tabName:self.metaForData.name}, null, self);
+                    self.onManyComponentCancelButtonSuccess.notify({tabName:self.metaForData.name}, null, self);
                 }
-            }).appendTo('#grid-buttonLookup' + this.localMetaForData.name);
-
+            }).appendTo('#grid-buttonManyComponent' + this.localMetaForData.name);
         }
 
     }
@@ -69,10 +68,8 @@
     TumlManyComponentGridManager.prototype = new TumlBaseGridManager;
 
 
-    function TumlForManyLookupGridManager(tumlUri, propertyNavigatingTo, originalGrid, originalDataView) {
+    function TumlForManyLookupGridManager(tumlUri, propertyNavigatingTo) {
         var self = this;
-        this.originalGrid = originalGrid;
-        this.originalDataView = originalDataView;
         TumlBaseGridManager.call(this, tumlUri, propertyNavigatingTo);
 
         //Public api
@@ -107,17 +104,14 @@
         this.addButtons = function () {
             $('<button />').text('Select').click(function () {
                 if (self.grid.getEditorLock().commitCurrentEdit()) {
+                    var items = [];
                     var selectedRows = self.grid.getSelectedRows();
                     for (var i = 0; i < selectedRows.length; i++) {
                         var selectedRow = selectedRows[i];
                         var item = self.dataView.getItem(selectedRow);
-                        self.originalDataView.addItem(item);
-                        self.originalDataView.getDeletedItems().remove(item);
+                        items.push(item);
                     }
-                    self.originalGrid.invalidateRows([self.data.length - 1]);
-                    self.originalGrid.updateRowCount();
-                    self.originalGrid.render();
-                    self.onSelectButtonSuccess.notify({tabName:self.metaForData.name}, null, self);
+                    self.onSelectButtonSuccess.notify({items: items, tabName:self.metaForData.name}, null, self);
                 }
             }).appendTo('#grid-buttonLookup' + this.localMetaForData.name);
 
@@ -140,7 +134,7 @@
         $.extend(this, {
             "TumlTabGridManagerVersion":"1.0.0",
             "onAddButtonSuccess":new Tuml.Event(),
-            "onNeedOpenManyEditor":new Tuml.Event()
+            "onClickManyComponentCell":new Tuml.Event()
         });
 
         this.setupColumns = function () {
@@ -294,7 +288,9 @@
             "onSelfCellClick":new Tuml.Event(),
             "onContextMenuClickLink":new Tuml.Event(),
             "onContextMenuClickDelete":new Tuml.Event(),
-            "onManyEditorKeyPress":new Tuml.Event()
+            "onManyEditorKeyPress":new Tuml.Event(),
+            "addItems": addItems,
+            "setCellValue": setCellValue
         });
 
         this.refresh = function (result) {
@@ -387,7 +383,7 @@
                     var uri = item.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), item.id);
                     self.onSelfCellClick.notify({name:'unused', tumlUri:uri}, null, self);
                 } else if (column.options.property.composite && column.options.property.lower > 0 && (column.options.property.upper > 1) || column.options.property.upper === -1) {
-                    self.onNeedOpenManyEditor.notify({tumlUri:column.options.property.tumlUri, property:column.options.property}, null, self);
+                    self.onClickManyComponentCell.notify({originalGrid:self.grid, originalDataView:self.dataView, cell:args, tumlUri:column.options.property.tumlUri, property:column.options.property}, null, self);
                 }
                 //unbind the document click event to close many editors
                 self.grid['clicked'] = true;
@@ -398,21 +394,7 @@
             });
 
             this.grid.onAddNewRow.subscribe(function (e, args) {
-                var $newItem = {};
-                for (i = 0; i < self.grid.getColumns().length; i++) {
-                    var column = self.grid.getColumns()[i];
-                    $newItem[column.name] = null;
-                }
-                //Generate a fake id, its required for the grid to work nicely
-                $newItem.id = 'fake::' + data.length + self.dataView.getNewItems().length + 1;
-
-                //Default required booleans to false
-                $.each(self.localMetaForData.properties, function (index, property) {
-                    if (property.fieldType == 'Boolean' && property.lower > 0) {
-                        $newItem[property.name] = false;
-                    }
-                });
-                self.dataView.addItem($.extend($newItem, args.item));
+                self.addNewRow(args);
             });
 
             this.grid.onKeyDown.subscribe(function (e) {
@@ -511,6 +493,24 @@
                 }
             });
 
+            this.addNewRow = function(args) {
+                var $newItem = {};
+                for (var i = 0; i < this.grid.getColumns().length; i++) {
+                    var column = this.grid.getColumns()[i];
+                    $newItem[column.name] = null;
+                }
+                //Generate a fake id, its required for the grid to work nicely
+                $newItem.id = 'fake::' + this.dataView.getItems().length + this.dataView.getNewItems().length + 1;
+
+                //Default required booleans to false
+                $.each(this.localMetaForData.properties, function (index, property) {
+                    if (property.fieldType == 'Boolean' && property.lower > 0) {
+                        $newItem[property.name] = false;
+                    }
+                });
+                this.dataView.addItem($.extend($newItem, args.item));
+            }
+
             function isCellEditable(row, cell, item) {
                 for (var j = 0; j < self.grid.getColumns().length; j++) {
                     var column = self.grid.getColumns()[j];
@@ -518,9 +518,14 @@
                         if (!column.options.property.readOnly) {
                             var property = column.options.property;
                             if (property.composite && property.lower === 1 && property.upper == 1) {
-                                if (self.dataView.getItems().indexOf(item) !== -1) {
+                                if (row >= self.dataView.getItems().length || self.dataView.getNewItems().indexOf(item) !== -1) {
+                                    return true;
+                                } else {
                                     return false;
                                 }
+//                                if (self.dataView.getNewItems().indexOf(item) === -1) {
+//                                    return false;
+//                                }
                             }
                         }
                     }
@@ -670,6 +675,30 @@
 
             $("#gridContainer").resizable();
         };
+
+        function addItems(items) {
+            for (var i = 0; i < items.length; i++) {
+                this.dataView.addItem(items[i]);
+                this.dataView.getDeletedItems().remove(items[i]);
+            }
+            this.grid.invalidateAllRows();
+            this.grid.updateRowCount();
+            this.grid.render();
+        }
+
+        function setCellValue(cell, value) {
+            var item = self.dataView.getItemByIdx(cell.row);
+            if (item !== undefined) {
+                item[self.grid.getColumns()[cell.cell].name] = value;
+            } else {
+                item = {};
+                item[self.grid.getColumns()[cell.cell].name] = value;
+                self.addNewRow({item:item});
+            }
+            self.grid.invalidateRows([cell.row]);
+            self.grid.updateRowCount();
+            self.grid.render();
+        }
 
         this.removeElementsAlreadyInGrid = function (items, itemsToAdd) {
             var elementsToRemoveIndex = [];

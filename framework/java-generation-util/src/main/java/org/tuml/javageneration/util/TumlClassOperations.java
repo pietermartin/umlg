@@ -33,7 +33,7 @@ public class TumlClassOperations extends ClassOperations {
 		}
 		return false;
 	}
-	
+
 	public static Set<Property> getChildPropertiesToDelete(org.eclipse.uml2.uml.Class clazz) {
 		Set<Property> result = new HashSet<Property>();
 		Set<Property> ownedProperties = getAllOwnedProperties(clazz);
@@ -78,7 +78,8 @@ public class TumlClassOperations extends ClassOperations {
 		for (Property p : getAllOwnedProperties(clazz)) {
 			PropertyWrapper pWrap = new PropertyWrapper(p);
 			if ((pWrap.isOne() && !pWrap.isDerived() && !pWrap.isQualifier())
-					|| (!pWrap.isDerived() && pWrap.isManyToMany() && (pWrap.isPrimitive() || pWrap.isEnumeration()))) {
+					|| (!pWrap.isDerived() && pWrap.isManyToMany() && (pWrap.isPrimitive() || pWrap.isEnumeration())) ||
+                    (pWrap.isComponent()))  {
 				result.add(p);
 			}
 		}
