@@ -114,7 +114,7 @@
                 if (isOne) {
                     tumlOneViewManager.closeQuery(title, index);
                 } else {
-                    tumlManyViewManager.closeQuery(title, index);
+                    tumlManyViewManager.closeTab(title, index);
                 }
             }, onSelect:function (title, index) {
                 leftMenuManager.refreshQueryMenu(title);
