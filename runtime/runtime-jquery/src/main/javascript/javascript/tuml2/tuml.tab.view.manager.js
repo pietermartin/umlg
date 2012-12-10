@@ -13,6 +13,8 @@
         var tumlTabOneManager;
         var tumlTabQueryManager;
         var linkedTumlTabViewManager;
+        var tabTitle;
+        var tabId;
 
         function clear() {
             tumlTabGridManager = null;
@@ -41,6 +43,9 @@
                     });
                     tumlTabGridManager.onManyComponentCancelButtonSuccess.subscribe(function (e, args) {
                         self.onManyComponentCancelButtonSuccess.notify(args, e, self);
+                    });
+                    tumlTabGridManager.onClickManyComponentCell.subscribe(function (e, args) {
+                        self.onClickManyComponentCell.notify(args, e, self);
                     });
                 } else {
                     tumlTabGridManager = new Tuml.TumlTabGridManager(tumlUri, oneManyOrQuery.propertyNavigatingTo);
@@ -181,7 +186,9 @@
             "setLinkedTumlTabViewManager":setLinkedTumlTabViewManager,
             "getLinkedTumlTabViewManager":getLinkedTumlTabViewManager,
             "addItems":addItems,
-            "setCellValue": setCellValue
+            "setCellValue": setCellValue,
+            "tabId":tabId,
+            "tabTitle":tabTitle
         });
 
         init();

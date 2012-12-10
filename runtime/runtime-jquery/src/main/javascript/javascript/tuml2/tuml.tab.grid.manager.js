@@ -17,7 +17,8 @@
         $.extend(this, {
             "TumlTabGridManagerVersion":"1.0.0",
             "onManyComponentAddButtonSuccess":new Tuml.Event(),
-            "onManyComponentCancelButtonSuccess":new Tuml.Event()
+            "onManyComponentCancelButtonSuccess":new Tuml.Event(),
+            "onClickManyComponentCell":new Tuml.Event()
         });
 
         this.setupColumns = function () {
@@ -523,9 +524,6 @@
                                 } else {
                                     return false;
                                 }
-//                                if (self.dataView.getNewItems().indexOf(item) === -1) {
-//                                    return false;
-//                                }
                             }
                         }
                     }
