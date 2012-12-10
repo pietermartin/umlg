@@ -119,6 +119,14 @@
             tumlTabGridManager.setCellValue(cell, value);
         }
 
+        function enableTab() {
+            $('#tab-container').tabs('enableTab', tabTitle);
+        }
+
+        function disableTab() {
+            $('#tab-container').tabs('disableTab', tabTitle);
+        }
+
         function createGridForResult(result, tabId) {
             for (i = 0; i < result.length; i++) {
                 var metaForData = result[i].meta.to;
@@ -186,7 +194,9 @@
             "setLinkedTumlTabViewManager":setLinkedTumlTabViewManager,
             "getLinkedTumlTabViewManager":getLinkedTumlTabViewManager,
             "addItems":addItems,
-            "setCellValue": setCellValue,
+            "setCellValue":setCellValue,
+            "enableTab":enableTab,
+            "disableTab":disableTab,
             "tabId":tabId,
             "tabTitle":tabTitle
         });

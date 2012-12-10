@@ -61,14 +61,17 @@
                 //Closing the tab fires closeTab event which removes the tumlTabViewManager from the array
                 $('#tab-container').tabs('close', args.tabName + " Many Add");
                 $('#' + args.tabName + "ManyComponent").remove();
-                $('#tab-container').tabs('enableTab', previousMetaForData.name);
+
+                tumlTabViewManager.getLinkedTumlTabViewManager().enableTab();
+//                $('#tab-container').tabs('enableTab', previousMetaForData.name);
             });
             tumlTabViewManager.onManyComponentCancelButtonSuccess.subscribe(function (e, args) {
                 console.log('TumlManyViewManager onManyComponentCancelButtonSuccess fired');
                 //Closing the tab fires closeTab event which removes the tumlTabViewManager from array
                 $('#tab-container').tabs('close', args.tabName + " Many Add");
                 $('#' + args.tabName + "ManyComponent").remove();
-                $('#tab-container').tabs('enableTab', previousMetaForData.name);
+                tumlTabViewManager.getLinkedTumlTabViewManager().enableTab();
+//                $('#tab-container').tabs('enableTab', previousMetaForData.name);
             });
             tumlTabViewManager.onSelectButtonSuccess.subscribe(function (e, args) {
                 console.log('TumlManyViewManager onSelectButtonSuccess fired');
@@ -78,14 +81,16 @@
                 //Closing the tab fires closeTab event which removes the tumlTabViewManager from the array
                 $('#tab-container').tabs('close', args.tabName + " Select");
                 $('#' + args.tabName + "Lookup").remove();
-                $('#tab-container').tabs('enableTab', previousMetaForData.name);
+                tumlTabViewManager.getLinkedTumlTabViewManager().enableTab();
+//                $('#tab-container').tabs('enableTab', previousMetaForData.name);
             });
             tumlTabViewManager.onSelectCancelButtonSuccess.subscribe(function (e, args) {
                 console.log('TumlManyViewManager onSelectCancelButtonSuccess fired');
                 //Closing the tab fires closeTab event which removes the tumlTabViewManager from the array
                 $('#tab-container').tabs('close', args.tabName + " Select");
                 $('#' + args.tabName + "Lookup").remove();
-                $('#tab-container').tabs('enableTab', previousMetaForData.name);
+                tumlTabViewManager.getLinkedTumlTabViewManager().enableTab();
+//                $('#tab-container').tabs('enableTab', previousMetaForData.name);
             });
             tumlTabViewManager.onAddButtonSuccess.subscribe(function (e, args) {
                 console.log('TumlManyViewManager onAddButtonSuccess fired');
