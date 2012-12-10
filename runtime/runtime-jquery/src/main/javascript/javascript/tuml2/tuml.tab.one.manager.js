@@ -107,15 +107,15 @@
 
         this.doSave = function() {
             if (self.validateFields().length === 0) {
-                if (data !== undefined && data !== null) {
+                if ($data !== undefined && $data !== null) {
                     $.ajax({
-                        url: metaForData.qualifiedName == qualifiedName ? tumlUri :tumlUri + '_' + $metaForData.name, 
+                        url: $metaForData.qualifiedName == $qualifiedName ? tumlUri :tumlUri + '_' + $metaForData.name,
                         type: "PUT",
                         dataType: "json",
                         contentType: "json",
-                        data: fieldsToJson(),
-                        success: function(data, textStatus, jqXHR) {
-                            self.onPutOneSuccess.notify({tumlUri: tumlUri, data: data}, null, self);
+                        data: self.fieldsToJson(),
+                        success: function($data, textStatus, jqXHR) {
+                            self.onPutOneSuccess.notify({tumlUri: tumlUri, data: $data}, null, self);
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
                             $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
@@ -128,9 +128,9 @@
                         type: "POST",
                         dataType: "json",
                         contentType: "json",
-                        data: fieldsToJson(),
-                        success: function(data, textStatus, jqXHR) {
-                            self.onPostOneSuccess.notify({tumlUri: tumlUri, data: data}, null, self);
+                        data: self.fieldsToJson(),
+                        success: function($data, textStatus, jqXHR) {
+                            self.onPostOneSuccess.notify({tumlUri: tumlUri, data: $data}, null, self);
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
                             $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
@@ -454,7 +454,7 @@
         }
 
         this.fieldsToJson = function() {
-            return JSON.stringify(fieldsToObject());
+            return JSON.stringify(self.fieldsToObject());
         }
         
         this.fieldsToObject = function() {

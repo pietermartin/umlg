@@ -12,10 +12,15 @@
                 "TumlRequired" : TumlRequiredFormatter,
                 "TumlDelete" : TumlDeleteFormatter,
                 "TumlManyBoolean" : TumlManyBooleanFormatter,
-                "Link" : LinkFormatter
+                "Link" : LinkFormatter,
+                "TumlRegularFormatter": TumlRegularFormatter
             }
         }
     });
+
+    function TumlRegularFormatter(row, cell, value, columnDef, dataContext) {
+        return value;
+    }
 
     function TumlRequiredFormatter(row, cell, value, columnDef, dataContext) {
         if (value == null || value === "") {

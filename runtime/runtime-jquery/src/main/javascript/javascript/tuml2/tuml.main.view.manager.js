@@ -163,7 +163,6 @@
             $('#ui-layout-center-heading').children().remove();
             $('#ui-layout-center-heading').append($('<span />').text(qualifiedName));
 
-            //This is the layout
             $('body').layout().resizeAll();
             return true;
         }

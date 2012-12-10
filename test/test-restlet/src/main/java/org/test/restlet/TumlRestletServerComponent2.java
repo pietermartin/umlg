@@ -104,6 +104,15 @@ public class TumlRestletServerComponent2 extends Component {
 				hand.setTestBoolean(false);
 				hand.setTestUnlimitedNatural(1 + j * 10000000L);
 
+                AnotherOne1 anotherOne1 = new AnotherOne1(hand);
+                anotherOne1.setName("anotherOne1" + j);
+
+                AnotherOne2 anotherOne2 = new AnotherOne2(anotherOne1);
+                anotherOne2.setName("anotherOne2" + j);
+
+                AnotherMany1 anotherMany1 = new AnotherMany1(anotherOne2);
+                anotherMany1.setName("anotherMany1" + j);
+
 				for (int k = 0; k < 5; k++) {
 					Finger finger = new Finger(hand);
 					finger.setName("finger" + k);

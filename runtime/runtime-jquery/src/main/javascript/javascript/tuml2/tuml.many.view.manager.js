@@ -10,7 +10,6 @@
 
         var self = this;
         var tumlTabViewManagers = [];
-        var previousMetaForData;
 
         function init() {
         }
@@ -38,32 +37,11 @@
                     query:false,
                     forLookup:gridToChoose.forLookup,
                     forManyComponent:gridToChoose.forManyComponent
-                }, tumlUri, result.meta.qualifiedName, metaForData.name);
+                }, tumlUri, result, cell);
 
-
-            var tabContainer = $('#tab-container');
-            var tabId;
-            if (gridToChoose.forLookup) {
-                tabId = metaForData.name + "Lookup";
-            } else if (gridToChoose.forManyComponent) {
-                tabId = metaForData.name + "ManyComponent";
-            } else {
-                tabId = metaForData.name;
-            }
-            tumlTabViewManager.tabId = tabId;
-            var tabDiv = $('<div />', {id:tabId}).appendTo(tabContainer);
 
             tumlTabViewManager.onManyComponentAddButtonSuccess.subscribe(function (e, args) {
                 console.log('TumlManyViewManager onManyComponentAddButtonSuccess fired');
-
-                tumlTabViewManager.getLinkedTumlTabViewManager().setCellValue(cell, args.value);
-
-                //Closing the tab fires closeTab event which removes the tumlTabViewManager from the array
-                $('#tab-container').tabs('close', args.tabName + " Many Add");
-                $('#' + args.tabName + "ManyComponent").remove();
-
-                tumlTabViewManager.getLinkedTumlTabViewManager().enableTab();
-//                $('#tab-container').tabs('enableTab', previousMetaForData.name);
             });
             tumlTabViewManager.onManyComponentCancelButtonSuccess.subscribe(function (e, args) {
                 console.log('TumlManyViewManager onManyComponentCancelButtonSuccess fired');
@@ -71,7 +49,6 @@
                 $('#tab-container').tabs('close', args.tabName + " Many Add");
                 $('#' + args.tabName + "ManyComponent").remove();
                 tumlTabViewManager.getLinkedTumlTabViewManager().enableTab();
-//                $('#tab-container').tabs('enableTab', previousMetaForData.name);
             });
             tumlTabViewManager.onSelectButtonSuccess.subscribe(function (e, args) {
                 console.log('TumlManyViewManager onSelectButtonSuccess fired');
@@ -82,7 +59,6 @@
                 $('#tab-container').tabs('close', args.tabName + " Select");
                 $('#' + args.tabName + "Lookup").remove();
                 tumlTabViewManager.getLinkedTumlTabViewManager().enableTab();
-//                $('#tab-container').tabs('enableTab', previousMetaForData.name);
             });
             tumlTabViewManager.onSelectCancelButtonSuccess.subscribe(function (e, args) {
                 console.log('TumlManyViewManager onSelectCancelButtonSuccess fired');
@@ -90,12 +66,10 @@
                 $('#tab-container').tabs('close', args.tabName + " Select");
                 $('#' + args.tabName + "Lookup").remove();
                 tumlTabViewManager.getLinkedTumlTabViewManager().enableTab();
-//                $('#tab-container').tabs('enableTab', previousMetaForData.name);
             });
             tumlTabViewManager.onAddButtonSuccess.subscribe(function (e, args) {
                 console.log('TumlManyViewManager onAddButtonSuccess fired');
                 $('#tab-container').tabs('disableTab', metaForData.name);
-                previousMetaForData = metaForData;
                 var tumlLookupTabViewManager = addTab(
                     args.data,
                     args.tumlUri,
@@ -107,6 +81,7 @@
             tumlTabViewManager.onClickManyComponentCell.subscribe(function (e, args) {
                 console.log('TumlManyViewManager onClickManyComponentCell fired');
 
+                //Get the meta data
                 $.ajax({
                     url:args.property.tumlMetaDataUri,
                     type:"GET",
@@ -114,11 +89,14 @@
                     contentType:"json",
                     success:function (result, textStatus, jqXHR) {
                         $('#tab-container').tabs('disableTab', tumlTabViewManager.tabTitle);
-                        previousMetaForData = metaForData;
+
+                        result[0].data = args.data;
+
                         var tumlManyComponentTabViewManager = addTab(
                             result[0],
                             args.tumlUri,
-                            args.property, {forLookup:false, forManyComponent:true},
+                            args.property,
+                            {forLookup:false, forManyComponent:true},
                             args.cell
                         );
                         tumlManyComponentTabViewManager.setLinkedTumlTabViewManager(tumlTabViewManager);
@@ -169,17 +147,8 @@
                 console.log('TumlManyViewManager onContextMenuClickDelete fired');
                 self.onContextMenuClickDelete.notify(args, e, self);
             });
-            var tabTitle;
-            if (gridToChoose.forLookup) {
-                tabTitle = result.meta.to.name + " Select";
-            } else if (gridToChoose.forManyComponent) {
-                tabTitle = result.meta.to.name + " Many Add";
-            } else {
-                tabTitle = result.meta.to.name;
-            }
-            tumlTabViewManager.tabTitle = tabTitle;
-            $('#tab-container').tabs('add', {title:tabTitle, content:'<div id="' + tabId + '" />', closable:true});
 
+            tumlTabViewManager.createTab();
             tumlTabViewManagers.push(tumlTabViewManager);
 
             //Create the grid

@@ -34,7 +34,7 @@ function selectFormatter(property) {
     } else if (property.fieldType == 'Boolean') {
         return Slick.Formatters.Checkmark;
     } else {
-        return null;
+        return TumlSlick.Formatters.TumlRegularFormatter;
     }
 }
 

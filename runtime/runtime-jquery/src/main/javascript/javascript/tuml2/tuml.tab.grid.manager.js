@@ -50,13 +50,27 @@
             TumlBaseGridManager.prototype.instantiateGrid.call(this);
         };
 
+        this.setData = function (data) {
+            for (var i = 0; i < data.length; i++) {
+                this.dataView.addItem(data[i]);
+            }
+        }
+
         this.addButtons = function () {
             $('<button />').text('Add').click(function () {
                 if (self.grid.getEditorLock().commitCurrentEdit()) {
-                    self.onManyComponentAddButtonSuccess.notify({value: self.dataView.getItems(), tabName:self.metaForData.name}, null, self);
+                    var validationResults = self.validateNewItems(self.dataView.getNewItems());
+                    if (validationResults.length == 0) {
+                        self.onManyComponentAddButtonSuccess.notify({value:self.dataView.getItems(), tabName:self.metaForData.name}, null, self);
+                    } else {
+                        var errorMsg = '\n';
+                        for (var i = 0; i < validationResults.length; i++) {
+                            errorMsg += validationResults[i].msg + '\n';
+                        }
+                        alert('There are validation errors: ' + errorMsg);
+                    }
                 }
             }).appendTo('#grid-buttonManyComponent' + this.localMetaForData.name);
-
             $('<button />').text('Cancel').click(function () {
                 if (self.grid.getEditorLock().commitCurrentEdit()) {
                     self.onManyComponentCancelButtonSuccess.notify({tabName:self.metaForData.name}, null, self);
@@ -112,7 +126,7 @@
                         var item = self.dataView.getItem(selectedRow);
                         items.push(item);
                     }
-                    self.onSelectButtonSuccess.notify({items: items, tabName:self.metaForData.name}, null, self);
+                    self.onSelectButtonSuccess.notify({items:items, tabName:self.metaForData.name}, null, self);
                 }
             }).appendTo('#grid-buttonLookup' + this.localMetaForData.name);
 
@@ -290,8 +304,8 @@
             "onContextMenuClickLink":new Tuml.Event(),
             "onContextMenuClickDelete":new Tuml.Event(),
             "onManyEditorKeyPress":new Tuml.Event(),
-            "addItems": addItems,
-            "setCellValue": setCellValue
+            "addItems":addItems,
+            "setCellValue":setCellValue
         });
 
         this.refresh = function (result) {
@@ -301,6 +315,26 @@
             $('<div id="pager' + this.metaForData.name + '" style="width:auto;height:20px;"></div>').appendTo(tabDiv);
             $('#contextMenu' + this.metaForData.name).remove();
             this.createGrid(result.data, this.metaForData, tumlUri, false);
+        };
+
+        this.validateNewItems = function (newItems) {
+            var validationResults = [];
+            for (var i = 0; i < newItems.length; i++) {
+                var item = newItems[i];
+                for (var j = 0; j < this.grid.getColumns().length; j++) {
+                    var column = this.grid.getColumns()[j];
+                    if (column.name !== 'id' && column.name !== 'uri' && column.name !== 'delete') {
+                        if (!column.options.property.readOnly) {
+                            var validator = selectFieldValidator(column.options.property);
+                            var valid = validator(item[column.name]);
+                            if (!valid.valid) {
+                                validationResults.push(valid);
+                            }
+                        }
+                    }
+                }
+            }
+            return validationResults;
         };
 
         this.createGrid = function (data, localMetaForData, tumlUri) {
@@ -384,7 +418,14 @@
                     var uri = item.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), item.id);
                     self.onSelfCellClick.notify({name:'unused', tumlUri:uri}, null, self);
                 } else if (column.options.property.composite && column.options.property.lower > 0 && (column.options.property.upper > 1) || column.options.property.upper === -1) {
-                    self.onClickManyComponentCell.notify({originalGrid:self.grid, originalDataView:self.dataView, cell:args, tumlUri:column.options.property.tumlUri, property:column.options.property}, null, self);
+                    var data = [];
+                    if (self.dataView.getItem(args.row) !== undefined && self.dataView.getItem(args.row) !== null) {
+                        data = self.dataView.getItem(args.row)[column.name]
+                    }
+                    if (data === null || data === undefined) {
+                        data = [];
+                    }
+                    self.onClickManyComponentCell.notify({data:data, cell:args, tumlUri:column.options.property.tumlUri, property:column.options.property}, null, self);
                 }
                 //unbind the document click event to close many editors
                 self.grid['clicked'] = true;
@@ -494,7 +535,7 @@
                 }
             });
 
-            this.addNewRow = function(args) {
+            this.addNewRow = function (args) {
                 var $newItem = {};
                 for (var i = 0; i < this.grid.getColumns().length; i++) {
                     var column = this.grid.getColumns()[i];
@@ -532,26 +573,6 @@
                     }
                 }
                 return true;
-            };
-
-            this.validateNewItems = function (newItems) {
-                var validationResults = [];
-                for (var i = 0; i < newItems.length; i++) {
-                    var item = newItems[i];
-                    for (var j = 0; j < this.grid.getColumns().length; j++) {
-                        var column = this.grid.getColumns()[j];
-                        if (column.name !== 'id' && column.name !== 'uri' && column.name !== 'delete') {
-                            if (!column.options.property.readOnly) {
-                                var validator = selectFieldValidator(column.options.property);
-                                var valid = validator(item[column.name]);
-                                if (!valid.valid) {
-                                    validationResults.push(valid);
-                                }
-                            }
-                        }
-                    }
-                }
-                return validationResults;
             };
 
             this.updateHeaderRow = function (metaForData) {
@@ -659,7 +680,7 @@
 
             // initialize the model after all the events have been hooked up
             this.dataView.beginUpdate();
-            this.dataView.setItems(data);
+            this.setData(data);
             this.dataView.setFilterArgs({
                 metaForData:this.localMetaForData
             });
@@ -767,6 +788,10 @@
             forceFitColumns:false,
             topPanelHeight:25
         };
+    }
+
+    TumlBaseGridManager.prototype.setData = function (data) {
+        this.dataView.setItems(data);
     }
 
 })(jQuery);

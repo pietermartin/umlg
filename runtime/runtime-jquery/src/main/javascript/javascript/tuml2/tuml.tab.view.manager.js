@@ -6,8 +6,11 @@
         }
     });
 
-    function TumlTabViewManager(oneManyOrQuery, tumlUri, qualifiedName, tabDivName) {
+//    function TumlTabViewManager(oneManyOrQuery, tumlUri, qualifiedName, tabDivName) {
+    function TumlTabViewManager(oneManyOrQuery, tumlUri, result, cell) {
 
+        var qualifiedName = result.meta.qualifiedName;
+        var tabDivName = result.meta.to.name;
         var self = this;
         var tumlTabGridManager;
         var tumlTabOneManager;
@@ -15,6 +18,7 @@
         var linkedTumlTabViewManager;
         var tabTitle;
         var tabId;
+        var cell = cell;
 
         function clear() {
             tumlTabGridManager = null;
@@ -39,6 +43,11 @@
                 } else if (oneManyOrQuery.forManyComponent) {
                     tumlTabGridManager = new Tuml.TumlManyComponentGridManager(tumlUri, oneManyOrQuery.propertyNavigatingTo);
                     tumlTabGridManager.onManyComponentAddButtonSuccess.subscribe(function (e, args) {
+                        self.getLinkedTumlTabViewManager().setCellValue(self.cell, args.value);
+                        //Closing the tab fires closeTab event which removes the tumlTabViewManager from the array
+                        $('#tab-container').tabs('close', args.tabName + " Many Add");
+                        $('#' + args.tabName + "ManyComponent").remove();
+                        self.getLinkedTumlTabViewManager().enableTab();
                         self.onManyComponentAddButtonSuccess.notify(args, e, self);
                     });
                     tumlTabGridManager.onManyComponentCancelButtonSuccess.subscribe(function (e, args) {
@@ -119,12 +128,29 @@
             tumlTabGridManager.setCellValue(cell, value);
         }
 
+        function createTab() {
+            var tabContainer = $('#tab-container');
+            if (oneManyOrQuery.forLookup) {
+                this.tabId = result.meta.to.name + "Lookup";
+                this.tabTitle = result.meta.to.name + " Select";
+            } else if (oneManyOrQuery.forManyComponent) {
+                this.tabId = result.meta.to.name + "ManyComponent";
+                this.tabTitle = result.meta.to.name + " Many Add";
+            } else {
+                this.tabId = result.meta.to.name;
+                this.tabTitle = result.meta.to.name;
+            }
+            var tabDiv = $('<div />', {id:this.tabId}).appendTo(tabContainer);
+            $('#tab-container').tabs('add', {title:this.tabTitle, content:'<div id="' + this.tabId + '" />', closable:true});
+
+        }
+
         function enableTab() {
-            $('#tab-container').tabs('enableTab', tabTitle);
+            $('#tab-container').tabs('enableTab', this.tabTitle);
         }
 
         function disableTab() {
-            $('#tab-container').tabs('disableTab', tabTitle);
+            $('#tab-container').tabs('disableTab', this.tabTitle);
         }
 
         function createGridForResult(result, tabId) {
@@ -194,11 +220,13 @@
             "setLinkedTumlTabViewManager":setLinkedTumlTabViewManager,
             "getLinkedTumlTabViewManager":getLinkedTumlTabViewManager,
             "addItems":addItems,
+            "createTab": createTab,
             "setCellValue":setCellValue,
             "enableTab":enableTab,
             "disableTab":disableTab,
             "tabId":tabId,
-            "tabTitle":tabTitle
+            "tabTitle":tabTitle,
+            "cell":cell
         });
 
         init();
