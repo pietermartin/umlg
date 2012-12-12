@@ -19,14 +19,14 @@
             tumlTabViewManagers = [];
         }
 
-        function refresh(tumlUri, result) {
-            var isForCreation = true;
-            for (var i = 0; i < result.length; i++) {
-                if (result[i].data.length > 0) {
-                    isForCreation = false;
-                    break;
-                }
-            }
+        function refresh(tumlUri, result, isForCreation) {
+            var isForCreation = isForCreation;
+//            for (var i = 0; i < result.length; i++) {
+//                if (result[i].data.length > 0) {
+//                    isForCreation = false;
+//                    break;
+//                }
+//            }
             for (var i = 0; i < result.length; i++) {
                 var response = result[i];
                 var metaForData = response.meta.to;
@@ -43,7 +43,7 @@
                     tumlTabViewManager.onPostOneFailure.subscribe(function(e, args) {
                     });
                     tumlTabViewManager.createTab();
-                    tumlTabViewManager.createOne(response.data[0], metaForData);
+                    tumlTabViewManager.createOne(response.data[0], metaForData, isForCreation);
                     tumlTabViewManagers.push(tumlTabViewManager);
                 }
             }

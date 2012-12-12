@@ -417,7 +417,7 @@
                     var item = self.dataView.getItem(args.row);
                     var uri = item.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), item.id);
                     self.onSelfCellClick.notify({name:'unused', tumlUri:uri}, null, self);
-                } else if (column.options.property.composite && column.options.property.lower > 0 && (column.options.property.upper > 1) || column.options.property.upper === -1) {
+                } else if (!column.options.property.manyPrimitive  && !column.options.property.manyEnumeration && column.options.property.composite && column.options.property.lower > 0 && ((column.options.property.upper > 1) || column.options.property.upper === -1)) {
                     var data = [];
                     if (self.dataView.getItem(args.row) !== undefined && self.dataView.getItem(args.row) !== null) {
                         data = self.dataView.getItem(args.row)[column.name]

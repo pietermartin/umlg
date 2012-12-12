@@ -63,6 +63,8 @@ function selectFieldValidator(property) {
         }
     } else if (property.composite) {
         return new TumlSlick.Validators.TumlObject(property).validate;
+    } else if (property.manyEnumeration) {
+        return new TumlSlick.Validators.TumlManyEnumerationValidator(property).validate;
     } else if (!property.onePrimitive && !property.manyPrimitive && !property.composite) {
     } else if (property.name == 'id') {
     } else if (!property.manyPrimitive && property.fieldType == 'String') {
@@ -82,6 +84,7 @@ function selectFieldValidator(property) {
     } else if (property.manyPrimitive && property.fieldType == 'Boolean') {
         return new TumlSlick.Validators.TumlManyBoolean(property).validate;
     } else {
+        alert('validator not found for property ' + property.name);
     }
     return function () {
         return {

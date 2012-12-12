@@ -102,7 +102,7 @@
                         tumlManyComponentTabViewManager.setLinkedTumlTabViewManager(tumlTabViewManager);
                     },
                     error:function (jqXHR, textStatus, errorThrown) {
-                        alert('error getting ' + tumlUri + '\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
+                        alert('error getting ' + property.tumlMetaDataUri + '\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
                     }
                 });
 

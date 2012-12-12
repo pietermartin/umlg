@@ -170,8 +170,8 @@
         }
 
         //Must be created after tabs have been created, else things look pretty bad like...
-        function createOne(result, metaForData) {
-            tumlTabOneManager.refresh(result, metaForData, qualifiedName);
+        function createOne(result, metaForData, isForCreation) {
+            tumlTabOneManager.refresh(result, metaForData, qualifiedName, isForCreation);
         }
 
         //Must be created after tabs have been created, else things look pretty bad like...

@@ -20,6 +20,7 @@
                 "DateTime" : DateTimeValidator,
                 "Date" : DateValidator,
                 "Time" : TimeValidator,
+                "TumlManyEnumerationValidator" : TumlManyEnumerationValidator,
                 "TumlNumber" : TumlNumberValidator,
                 "TumlBoolean" : TumlBooleanValidator,
                 "TumlManyNumber" : TumlManyNumberValidator,
@@ -162,7 +163,7 @@
                         if (tmp == value) {
                             return {
                                 valid: false,
-                                msg: 'The list must be unique, ' + value + ' is allready present.' 
+                                msg: 'The list must be unique, ' + value + ' is already present.' 
                             };
                         }
                     }
@@ -175,6 +176,35 @@
         }
     };
 
+    function TumlManyEnumerationValidator(property) {
+
+        //Public api
+        $.extend(this, {
+            "TumlManyEnumerationValidator": "1.0.0",
+            "validate": validate
+        });
+
+        function validate(arrayValue, value) {
+            if (arrayValue instanceof Array) {
+                if (property.unique && value !== undefined) {
+                    for (var i = 0; i < arrayValue.length; i++) {
+                        var tmp = arrayValue[i];
+                        if (tmp == value) {
+                            return {
+                                valid: false,
+                                msg: 'The list must be unique, ' + value + ' is already present.'
+                            };
+                        }
+                    }
+                }
+            }
+            return {
+                valid: true,
+                msg: null
+            };
+        }
+    };
+    
     function TumlManyBooleanValidator(property) {
 
         //Public api
@@ -191,7 +221,7 @@
                         if (tmp == value) {
                             return {
                                 valid: false,
-                                msg: 'The list must be unique, ' + value + ' is allready present.' 
+                                msg: 'The list must be unique, ' + value + ' is already present.' 
                             };
                         }
                     }
@@ -226,7 +256,7 @@
                         if (tmp == value) {
                             return {
                                 valid: false,
-                                msg: 'The list must be unique, ' + value + ' is allready present.' 
+                                msg: 'The list must be unique, ' + value + ' is already present.' 
                             };
                         }
                     }

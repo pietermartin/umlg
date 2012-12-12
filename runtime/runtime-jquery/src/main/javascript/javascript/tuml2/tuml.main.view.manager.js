@@ -156,7 +156,7 @@
                     qualifiedName = result[0].meta.qualifiedName;
                     var contextVertexId = retrieveVertexId(tumlUri);
                     leftMenuManager.refresh(metaDataNavigatingFrom, metaDataNavigatingTo, contextVertexId);
-                    tumlOneViewManager.refresh(tumlUri, result);
+                    tumlOneViewManager.refresh(tumlUri, result, isForCreation);
                     tumlManyViewManager.clear();
                 }
             }

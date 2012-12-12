@@ -184,7 +184,7 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                     PropertyWrapper pWrap = new PropertyWrapper(property);
                     OJField field;
                     if (pWrap.isMany()) {
-                        if (pWrap.isPrimitive()) {
+                        if (pWrap.isPrimitive() || pWrap.isEnumeration()) {
                             field = new OJField(pWrap.fieldname(), pWrap.javaTypePath());
                             field.setInitExp("new " + pWrap.javaTumlMemoryTypePath().getLast() + "((Collection<" + pWrap.javaBaseTypePath()
                                     + ">)propertyMap.get(\"" + pWrap.getName() + "\"))");
