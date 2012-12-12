@@ -46,6 +46,12 @@
                                 openEditorForMany($input, property, $manyDiv, li);
                             }
                         });
+                    } else if (property.composite && property.lower == 1 && property.upper == 1) {
+                        $input.click(function (e) {
+                            alert('hi there');
+                        });
+                    } else if (property.composite && property.lower >= 1 && (property.upper == -1 || property.upper > 1)) {
+
                     }
                     if ($input !== undefined) {
                         if (property.dataTypeEnum !== undefined) {
