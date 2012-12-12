@@ -27,6 +27,10 @@ function selectFormatter(property) {
             }
         };
         return null;
+    } else if (property.lower > 0 && property.fieldType == 'Long') {
+        return  TumlSlick.Formatters.TumlRequired;
+    } else if (property.lower > 0 && property.fieldType == 'Integer') {
+        return  TumlSlick.Formatters.TumlRequired;
     } else if (property.lower > 0 && property.fieldType == 'String') {
         return  TumlSlick.Formatters.TumlRequired;
     } else if (property.manyPrimitive && property.fieldType == 'Boolean') {

@@ -67,8 +67,7 @@ public class TumlRestletServerComponent2 extends Component {
 	}
 
 	private void createDefaultData() {
-		GraphDb.getDb().startTransaction();
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 5; i++) {
 			Human human = new Human(true);
 			human.setName("human1" + i);
 			human.setName2("human2" + i);
@@ -139,9 +138,9 @@ public class TumlRestletServerComponent2 extends Component {
 				spaceCraft.setName("spaceCraftShip" + j);
 				spaceCraft.setIntergalactic(true);
 
-				TerrestialCraft terrestialCraft = new TerrestialCraft(alien);
-				terrestialCraft.setName("terrestialCraftShip" + j);
-				terrestialCraft.setAquatic(true);
+				TerrestrialCraft terrestrialCraft = new TerrestrialCraft(alien);
+				terrestrialCraft.setName("terrestrialCraftShip" + j);
+				terrestrialCraft.setAquatic(true);
 			}
 		}
 

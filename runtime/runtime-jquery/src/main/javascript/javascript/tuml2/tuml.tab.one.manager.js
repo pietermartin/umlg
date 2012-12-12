@@ -234,7 +234,7 @@
         }
 
         function isPropertyForOnePage(property) {
-            return(!property.inverseComposite && !property.composite && ((property.oneToOne || property.manyToOne) || property.manyPrimitive || property.manyEnumeration) && property.name !== 'uri'); 
+            return(!property.inverseComposite && (!property.composite || (property.composite && property.lower > 0)) && ((property.oneToOne || property.manyToOne) || property.manyPrimitive || property.manyEnumeration) && property.name !== 'uri');
         }
 
         function removeServerErrorMessage() {

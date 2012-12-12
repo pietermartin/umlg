@@ -21,7 +21,7 @@ import org.tuml.test.Hand;
 import org.tuml.test.Human;
 import org.tuml.test.Ring;
 import org.tuml.test.SpaceCraft;
-import org.tuml.test.TerrestialCraft;
+import org.tuml.test.TerrestrialCraft;
 
 import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 
@@ -88,9 +88,9 @@ public class TumlRestletServerComponent extends Component {
 				spaceCraft.setName("spaceCraftShip" + j);
 				spaceCraft.setIntergalactic(true);
 
-				TerrestialCraft terrestialCraft = new TerrestialCraft(alien);
-				terrestialCraft.setName("terrestialCraftShip" + j);
-				terrestialCraft.setAquatic(true);
+				TerrestrialCraft terrestrialCraft = new TerrestrialCraft(alien);
+				terrestrialCraft.setName("terrestialCraftShip" + j);
+				terrestrialCraft.setAquatic(true);
 			}
 		}
 

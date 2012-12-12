@@ -71,7 +71,7 @@
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="__qESkAc7EeKnuck7rKo4mA" value="1"/>
             </ownedAttribute>
             <ownedAttribute xmi:id="__aLhIEL_EeKpM48zLjI12Q" name="anotherOne1" type="_vZtHIEL_EeKpM48zLjI12Q" aggregation="composite" association="__aMIMEL_EeKpM48zLjI12Q">
-              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="__aLhIUL_EeKpM48zLjI12Q" value="1"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="__aLhIUL_EeKpM48zLjI12Q"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="__aLhIkL_EeKpM48zLjI12Q" value="1"/>
             </ownedAttribute>
           </packagedElement>
@@ -283,7 +283,7 @@
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
             </ownedAttribute>
           </packagedElement>
-          <packagedElement xmi:type="uml:Class" xmi:id="_ml87UBtnEeKZO-l2Budqpw" name="TerrestialCraft">
+          <packagedElement xmi:type="uml:Class" xmi:id="_ml87UBtnEeKZO-l2Budqpw" name="TerrestrialCraft">
             <generalization xmi:id="_vmg84BtnEeKZO-l2Budqpw" general="_Z7usMOZFEeGrlbmObN1_Rg"/>
             <ownedAttribute xmi:id="_I3MW8BtoEeKZO-l2Budqpw" name="aquatic">
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>

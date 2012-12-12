@@ -50,6 +50,11 @@
   }
 
   function CheckmarkFormatter(row, cell, value, columnDef, dataContext) {
-    return value ? "<img src='/restAndJson/javascript/slickgrid/images/tick.png'>" : "<img src='/restAndJson/javascript/images/delete.png'>";
+      if (value !== undefined) {
+        return value ? "<img src='/restAndJson/javascript/slickgrid/images/tick.png'>" : "<img src='/restAndJson/javascript/images/delete.png'>";
+      } else {
+          return '';
+      }
+
   }
 })(jQuery);
