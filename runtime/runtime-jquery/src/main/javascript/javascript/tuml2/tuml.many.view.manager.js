@@ -27,7 +27,7 @@
             }
         }
 
-        function addTab(result, tumlUri, propertyNavigatingTo, gridToChoose, cell) {
+        function addTab(result, tumlUri, propertyNavigatingTo, gridToChoose) {
             var metaForData = result.meta.to;
 
             var tumlTabViewManager = new Tuml.TumlTabViewManager(
@@ -37,7 +37,7 @@
                     query:false,
                     forLookup:gridToChoose.forLookup,
                     forManyComponent:gridToChoose.forManyComponent
-                }, tumlUri, result, cell);
+                }, tumlUri, result);
 
 
             tumlTabViewManager.onManyComponentAddButtonSuccess.subscribe(function (e, args) {
@@ -96,9 +96,9 @@
                             result[0],
                             args.tumlUri,
                             args.property,
-                            {forLookup:false, forManyComponent:true},
-                            args.cell
+                            {forLookup:false, forManyComponent:true}
                         );
+                        tumlTabViewManager.setCell(args.cell);
                         tumlManyComponentTabViewManager.setLinkedTumlTabViewManager(tumlTabViewManager);
                     },
                     error:function (jqXHR, textStatus, errorThrown) {

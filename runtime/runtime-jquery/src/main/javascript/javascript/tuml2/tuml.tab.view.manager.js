@@ -6,7 +6,7 @@
         }
     });
 
-    function TumlTabViewManager(oneManyOrQuery, tumlUri, result, cell) {
+    function TumlTabViewManager(oneManyOrQuery, tumlUri, result) {
 
         var qualifiedName = result.meta.qualifiedName;
         var tabDivName = result.meta.to.name;
@@ -17,7 +17,11 @@
         var linkedTumlTabViewManager;
         var tabTitle;
         var tabId;
-        var cell = cell;
+        var cell;
+
+        function setCell(cell) {
+            this.cell = cell;
+        }
 
         function clear() {
             tumlTabGridManager = null;
@@ -42,7 +46,7 @@
                 } else if (oneManyOrQuery.forManyComponent) {
                     tumlTabGridManager = new Tuml.TumlManyComponentGridManager(tumlUri, oneManyOrQuery.propertyNavigatingTo);
                     tumlTabGridManager.onManyComponentAddButtonSuccess.subscribe(function (e, args) {
-                        self.getLinkedTumlTabViewManager().setCellValue(self.cell, args.value);
+                        self.getLinkedTumlTabViewManager().setCellValue(args.value);
                         //Closing the tab fires closeTab event which removes the tumlTabViewManager from the array
                         $('#tab-container').tabs('close', args.tabName + " Many Add");
                         $('#' + args.tabName + "ManyComponent").remove();
@@ -99,7 +103,14 @@
                     self.onContextMenuClickDelete.notify(args, e, self);
                 });
             } else if (oneManyOrQuery.one) {
-                tumlTabOneManager = new Tuml.TumlTabOneManager(tumlUri);
+                if (oneManyOrQuery.component) {
+                    tumlTabOneManager = new Tuml.TumlTabComponentOneManager(tumlUri);
+                    tumlTabOneManager.onOneComponentAddButtonSuccess.subscribe(function (e, args) {
+                        self.onOneComponentAddButtonSuccess.notify(args, e, self);
+                    });
+                } else {
+                    tumlTabOneManager = new Tuml.TumlTabOneManager(tumlUri);
+                }
                 tumlTabOneManager.onClickOneComponent.subscribe(function (e, args) {
                     self.onClickOneComponent.notify(args, e, self);
                 });
@@ -126,8 +137,12 @@
             tumlTabGridManager.addItems(items);
         }
 
-        function setCellValue(cell, value) {
-            tumlTabGridManager.setCellValue(cell, value);
+        function setCellValue(value) {
+            tumlTabGridManager.setCellValue(this.cell, value);
+        }
+
+        function setValue(value) {
+            tumlTabOneManager.setValue(this.cell, value);
         }
 
         function createTab() {
@@ -153,6 +168,10 @@
 
         function disableTab() {
             $('#tab-container').tabs('disableTab', this.tabTitle);
+        }
+
+        function closeTab() {
+            $('#tab-container').tabs('close', this.tabTitle);
         }
 
         function createGridForResult(result, tabId) {
@@ -192,6 +211,8 @@
         //Public api
         $.extend(this, {
             "TumlTabViewManagerVersion":"1.0.0",
+            //Event for one component on one ui
+            "onOneComponentAddButtonSuccess":new Tuml.Event(),
             //These events are propogated from the grid
             "onAddButtonSuccess":new Tuml.Event(),
             "onSelectButtonSuccess":new Tuml.Event(),
@@ -223,10 +244,13 @@
             "setLinkedTumlTabViewManager":setLinkedTumlTabViewManager,
             "getLinkedTumlTabViewManager":getLinkedTumlTabViewManager,
             "addItems":addItems,
-            "createTab": createTab,
+            "createTab":createTab,
             "setCellValue":setCellValue,
+            "setCell":setCell,
+            "setValue":setValue,
             "enableTab":enableTab,
             "disableTab":disableTab,
+            "closeTab":closeTab,
             "tabId":tabId,
             "tabTitle":tabTitle,
             "cell":cell
