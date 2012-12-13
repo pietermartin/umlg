@@ -21,17 +21,32 @@
 
         function refresh(tumlUri, result, isForCreation) {
             var isForCreation = isForCreation;
-//            for (var i = 0; i < result.length; i++) {
-//                if (result[i].data.length > 0) {
-//                    isForCreation = false;
-//                    break;
-//                }
-//            }
             for (var i = 0; i < result.length; i++) {
                 var response = result[i];
                 var metaForData = response.meta.to;
                 if (isForCreation || response.data.length > 0) {
                     var tumlTabViewManager = new Tuml.TumlTabViewManager({many: false, one: true, query: false}, tumlUri, response);
+                    tumlTabViewManager.onClickOneComponent.subscribe(function(e, args) {
+
+                        //Get the meta data
+                        $.ajax({
+                            url:args.property.tumlMetaDataUri,
+                            type:"GET",
+                            dataType:"json",
+                            contentType:"json",
+                            success:function (metaDataResponse, textStatus, jqXHR) {
+                                $('#tab-container').tabs('disableTab', tumlTabViewManager.tabTitle);
+                                metaDataResponse[0].data = args.data;
+                                tumlTabViewManager.createTab();
+                                tumlTabViewManager.createOne(metaDataResponse.data[0], metaForData, isForCreation);
+
+                            },
+                            error:function (jqXHR, textStatus, errorThrown) {
+                                alert('error getting ' + property.tumlMetaDataUri + '\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
+                            }
+                        });
+
+                    });
                     tumlTabViewManager.onPutOneSuccess.subscribe(function(e, args) {
                         self.onPutOneSuccess.notify(args, e, self);
                     });

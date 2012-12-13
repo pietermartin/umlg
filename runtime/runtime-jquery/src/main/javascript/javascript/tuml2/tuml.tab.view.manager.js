@@ -6,7 +6,6 @@
         }
     });
 
-//    function TumlTabViewManager(oneManyOrQuery, tumlUri, qualifiedName, tabDivName) {
     function TumlTabViewManager(oneManyOrQuery, tumlUri, result, cell) {
 
         var qualifiedName = result.meta.qualifiedName;
@@ -101,6 +100,9 @@
                 });
             } else if (oneManyOrQuery.one) {
                 tumlTabOneManager = new Tuml.TumlTabOneManager(tumlUri);
+                tumlTabOneManager.onClickOneComponent.subscribe(function (e, args) {
+                    self.onClickOneComponent.notify(args, e, self);
+                });
                 tumlTabOneManager.onPutOneSuccess.subscribe(function (e, args) {
                     self.onPutOneSuccess.notify(args, e, self);
                 });
@@ -195,6 +197,7 @@
             "onSelectButtonSuccess":new Tuml.Event(),
             "onSelectCancelButtonSuccess":new Tuml.Event(),
             "onClickManyComponentCell":new Tuml.Event(),
+            "onClickOneComponent":new Tuml.Event(),
             "onManyComponentAddButtonSuccess":new Tuml.Event(),
             "onManyComponentCancelButtonSuccess":new Tuml.Event(),
             "onPutSuccess":new Tuml.Event(),

@@ -47,8 +47,12 @@
                             }
                         });
                     } else if (property.composite && property.lower == 1 && property.upper == 1) {
-                        $input.click(function (e) {
-                            alert('hi there');
+                        $input.click(function (e, args) {
+                            self.onClickOneComponent.notify(
+                                {data:null, tumlUri:property.tumlUri, property:property},
+                                null,
+                                self
+                            );
                         });
                     } else if (property.composite && property.lower >= 1 && (property.upper == -1 || property.upper > 1)) {
 
@@ -301,6 +305,13 @@
                 } else {
                     appendLoopupOptionsToSelect(property.tumlLookupOnCompositeParentUri, property.lower > 0, data['id'], data[property.name], $input);
                 }
+            } else if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && property.manyToOne) {
+                $input = $('<select />', {class:'chzn-select', style:'width:350px;', id:property.name + $metaForData.name + 'Id', name:property.name});
+                if (data !== undefined && data !== null) {
+                    appendLoopupOptionsToSelect(property.tumlLookupUri, property.lower > 0, data['id'], data[property.name], $input);
+                } else {
+                    appendLoopupOptionsToSelect(property.tumlLookupOnCompositeParentUri, property.lower > 0, data['id'], data[property.name], $input);
+                }
             } else if (property.fieldType == 'String') {
                 $input = $('<input />', {type:'text', class:'field', id:property.name + $metaForData.name + 'Id', name:property.name});
                 if (data !== undefined && data !== null) {
@@ -428,7 +439,7 @@
             var adjustedUri = tumlLookupUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
             var jqxhr = $.getJSON(adjustedUri,function (response, b, c) {
                 var contextVertexId = retrieveVertexId(tumlUri);
-                //if not a required field add a black value
+                //if not a required field add a blank value
                 if (!required) {
                     $select.append($('<option />)').val("").html(""));
                 }
@@ -538,6 +549,7 @@
         //Public api
         $.extend(this, {
             "TumlTabOneManagerVersion":"1.0.0",
+            "onClickOneComponent":new Tuml.Event(),
             "onPutOneSuccess":new Tuml.Event(),
             "onPutOneFailure":new Tuml.Event(),
             "onPostOneSuccess":new Tuml.Event(),
