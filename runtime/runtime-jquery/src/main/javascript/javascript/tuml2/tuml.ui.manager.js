@@ -1,12 +1,12 @@
 (function ($) {
     // register namespace
     $.extend(true, window, {
-        Tuml: {
-            UiManager: UiManager,
+        Tuml:{
+            UiManager:UiManager,
             //Copied from Slick.Grid
-            Event: Event,
-            EventData: EventData,
-            EventHandler: EventHandler
+            Event:Event,
+            EventData:EventData,
+            EventHandler:EventHandler
         }
     });
 
@@ -20,87 +20,94 @@
 
         function init() {
             //Create layout
-            var myLayout = $('body').layout({livePaneResizing: true, north__minSize: 40, east: {initClosed: true}, south: {initClosed: true}, west: {minSize : 200}});
+            var myLayout = $('body').layout({livePaneResizing:true, north__minSize:40, east:{initClosed:true}, south:{initClosed:true}, west:{minSize:200}});
             myLayout.allowOverflow("north");
             //Create the menu
             menuManager = new Tuml.MenuManager();
 
             //Create the context manager
             contextManager = new Tuml.ContextManager();
-            contextManager.onClickContextMenu.subscribe(function(e, args) {
+            contextManager.onClickContextMenu.subscribe(function (e, args) {
                 refresh(args.uri);
                 changeMyUrl(args.name, args.uri);
             });
 
             //Create the context manager
             leftMenuManager = new Tuml.LeftMenuManager();
-            leftMenuManager.onMenuClick.subscribe(function(e, args) {
+            leftMenuManager.onMenuClick.subscribe(function (e, args) {
                 //Do something like refresh the page
                 refresh(args.uri);
                 changeMyUrl(args.name, args.uri);
             });
-            leftMenuManager.onQueryClick.subscribe(function(e, args) {
-                mainViewManager.openQuery(args.tumlUri, args.oclExecuteUri, args.qualifiedName, args.name, args.queryEnum, args.queryString);
+            leftMenuManager.onQueryClick.subscribe(function (e, args) {
+                mainViewManager.addQueryTab(args.post, args.tumlUri, args.oclExecuteUri, args.name, args.name, args.queryEnum, args.queryString);
             });
 
             //Create main view manager
-            mainViewManager = new Tuml.MainViewManager(leftMenuManager);
-            mainViewManager.onPutSuccess.subscribe(function(e, args) {
+            mainViewManager = new Tuml.TumlManyViewManager(leftMenuManager);
+            mainViewManager.onPutSuccess.subscribe(function (e, args) {
                 self.onPutSuccess.notify(args, e, self);
             });
-            mainViewManager.onPutFailure.subscribe(function(e, args) {
+            mainViewManager.onPutFailure.subscribe(function (e, args) {
                 self.onPutFailure.notify(args, e, self);
             });
-            mainViewManager.onPostSuccess.subscribe(function(e, args) {
+            mainViewManager.onPostSuccess.subscribe(function (e, args) {
                 self.onPostSuccess.notify(args, e, self);
             });
-            mainViewManager.onPostFailure.subscribe(function(e, args) {
+            mainViewManager.onPostFailure.subscribe(function (e, args) {
                 self.onPostFailure.notify(args, e, self);
             });
-            mainViewManager.onDeleteSuccess.subscribe(function(e, args) {
+            mainViewManager.onDeleteSuccess.subscribe(function (e, args) {
                 self.onDeleteSuccess.notify(args, e, self);
             });
-            mainViewManager.onDeleteFailure.subscribe(function(e, args) {
+            mainViewManager.onDeleteFailure.subscribe(function (e, args) {
                 self.onDeleteFailure.notify(args, e, self);
             });
-            mainViewManager.onCancel.subscribe(function(e, args) {
+            mainViewManager.onCancel.subscribe(function (e, args) {
                 self.onCancel.notify(args, e, self);
             });
-            mainViewManager.onSelfCellClick.subscribe(function(e, args) {
+
+            mainViewManager.onPostQuerySuccess.subscribe(function (e, args) {
+                var metaDataNavigatingTo = args.data[0].meta.to;
+                var metaDataNavigatingFrom = args.data[0].meta.from;
+                leftMenuManager.refreshQuery();
+            });
+
+            mainViewManager.onSelfCellClick.subscribe(function (e, args) {
                 self.onSelfCellClick.notify(args, e, self);
                 refresh(args.tumlUri);
                 changeMyUrl(args.name, args.tumlUri);
             });
-            mainViewManager.onContextMenuClickLink.subscribe(function(e, args) {
+            mainViewManager.onContextMenuClickLink.subscribe(function (e, args) {
                 self.onContextMenuClickLink.notify(args, e, self);
                 refresh(args.tumlUri);
                 changeMyUrl(args.name, args.tumlUri);
             });
-            mainViewManager.onContextMenuClickDelete.subscribe(function(e, args) {
+            mainViewManager.onContextMenuClickDelete.subscribe(function (e, args) {
                 self.onContextMenuClickDelete.notify(args, e, self);
             });
-            mainViewManager.onPutOneSuccess.subscribe(function(e, args) {
+            mainViewManager.onPutOneSuccess.subscribe(function (e, args) {
                 self.onPutOneSuccess.notify(args, e, self);
                 var contextMetaData = getContextMetaData(args.data, args.tumlUri);
                 contextManager.refresh(contextMetaData.name, contextMetaData.uri, contextMetaData.contextVertexId);
                 var adjustedUri = contextMetaData.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextMetaData.contextVertexId);
                 changeMyUrl(contextMetaData.name, adjustedUri);
             });
-            mainViewManager.onPutOneFailure.subscribe(function(e, args) {
+            mainViewManager.onPutOneFailure.subscribe(function (e, args) {
                 self.onPutOneFailure.notify(args, e, self);
             });
-            mainViewManager.onPostOneSuccess.subscribe(function(e, args) {
+            mainViewManager.onPostOneSuccess.subscribe(function (e, args) {
                 self.onPostOneSuccess.notify(args, e, self);
                 var contextMetaData = getContextMetaData(args.data, args.tumlUri);
                 contextManager.refresh(contextMetaData.name, contextMetaData.uri, contextMetaData.contextVertexId);
                 var adjustedUri = contextMetaData.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextMetaData.contextVertexId);
                 changeMyUrl(contextMetaData.name, adjustedUri);
             });
-            mainViewManager.onPostOneFailure.subscribe(function(e, args) {
+            mainViewManager.onPostOneFailure.subscribe(function (e, args) {
                 self.onPostOneFailure.notify(args, e, self);
             });
 
-            window.onpopstate = function(event) {
+            window.onpopstate = function (event) {
                 if (document.location.hash === "") {
                     var pathname = document.location.pathname.replace("/ui2", "");
                     refresh(pathname);
@@ -113,19 +120,18 @@
 
         function refresh(tumlUri) {
             //Call the server for the tumlUri
-            var urlId = retrieveVertexId(tumlUri);
+            var contextVertexId = retrieveVertexId(tumlUri);
             $.ajax({
-                url: tumlUri,
-                type: "GET",
-                dataType: "json",
-                contentType: "json",
-                success: function(result, textStatus, jqXHR) {
-                    if (mainViewManager.refresh(tumlUri, result)) {
-                        var contextMetaData = getContextMetaData(result, urlId);
-                        contextManager.refresh(contextMetaData.name, contextMetaData.uri, contextMetaData.contextVertexId);
-                    }
+                url:tumlUri,
+                type:"GET",
+                dataType:"json",
+                contentType:"json",
+                success:function (result, textStatus, jqXHR) {
+                    mainViewManager.refresh(tumlUri, result);
+                    var contextMetaData = getContextMetaData(result, contextVertexId);
+                    contextManager.refresh(contextMetaData.name, contextMetaData.uri, contextMetaData.contextVertexId);
                 },
-                error: function(jqXHR, textStatus, errorThrown) {
+                error:function (jqXHR, textStatus, errorThrown) {
                     alert('error getting ' + tumlUri + '\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
                 }
             });
@@ -140,7 +146,7 @@
             if (propertyNavigatingTo != null && (propertyNavigatingTo.oneToMany || propertyNavigatingTo.manyToMany)) {
                 //Property is a many
                 var contextMetaData = result[0].meta.to;
-                return {name: metaDataNavigatingFrom.name, uri: metaDataNavigatingFrom.uri, contextVertexId: urlId};
+                return {name:metaDataNavigatingFrom.name, uri:metaDataNavigatingFrom.uri, contextVertexId:urlId};
             } else {
                 //Property is a one
                 for (var i = 0; i < result.length; i++) {
@@ -148,19 +154,19 @@
                     if (response.data.length > 0) {
                         qualifiedName = response.meta.qualifiedName;
                         var contextMetaData = response.meta.to;
-                        return {name: contextMetaData.name, uri: contextMetaData.uri, contextVertexId: response.data[0].id};
+                        return {name:contextMetaData.name, uri:contextMetaData.uri, contextVertexId:response.data[0].id};
                     }
                 }
                 var response = result[0];
                 //If there is no data then the context remains that of the parent
                 qualifiedName = response.meta.qualifiedName;
                 var contextMetaData = response.meta.from;
-                return {name: contextMetaData.name, uri: contextMetaData.uri, contextVertexId: urlId};
+                return {name:contextMetaData.name, uri:contextMetaData.uri, contextVertexId:urlId};
             }
         }
 
         function findPropertyNavigatingTo(qualifiedName, metaDataNavigatingFrom) {
-            if (metaDataNavigatingFrom  == undefined) {
+            if (metaDataNavigatingFrom == undefined) {
                 return null;
             } else {
                 //The property one is navigating from is in the metaDataNavigatingFrom,
@@ -182,31 +188,31 @@
             var secondPart = url.substring(indexOfSecondBackSlash, url.length);
             var urlToPush;
             if (firstPart !== undefined && firstPart != '') {
-                urlToPush =  firstPart + '/ui2' + secondPart;
+                urlToPush = firstPart + '/ui2' + secondPart;
             } else {
-                urlToPush =  secondPart + '/ui2';
+                urlToPush = secondPart + '/ui2';
             }
             history.pushState({}, title, urlToPush);
         }
 
         //Public api
         $.extend(this, {
-            "TumlUiManagerVersion": "1.0.0",
+            "TumlUiManagerVersion":"1.0.0",
             //These events are propogated from the grid
-            "onPutSuccess": new Tuml.Event(),
-            "onPutFailure": new Tuml.Event(),
-            "onPostSuccess": new Tuml.Event(),
-            "onPostFailure": new Tuml.Event(),
-            "onDeleteSuccess": new Tuml.Event(),
-            "onDeleteFailure": new Tuml.Event(),
-            "onCancel": new Tuml.Event(),
-            "onSelfCellClick": new Tuml.Event(),
-            "onContextMenuClickLink": new Tuml.Event(),
-            "onContextMenuClickDelete": new Tuml.Event(),
-            "onPutOneSuccess": new Tuml.Event(),
-            "onPutOneFailure": new Tuml.Event(),
-            "onPostOneSuccess": new Tuml.Event(),
-            "onPostOneFailure": new Tuml.Event()
+            "onPutSuccess":new Tuml.Event(),
+            "onPutFailure":new Tuml.Event(),
+            "onPostSuccess":new Tuml.Event(),
+            "onPostFailure":new Tuml.Event(),
+            "onDeleteSuccess":new Tuml.Event(),
+            "onDeleteFailure":new Tuml.Event(),
+            "onCancel":new Tuml.Event(),
+            "onSelfCellClick":new Tuml.Event(),
+            "onContextMenuClickLink":new Tuml.Event(),
+            "onContextMenuClickDelete":new Tuml.Event(),
+            "onPutOneSuccess":new Tuml.Event(),
+            "onPutOneFailure":new Tuml.Event(),
+            "onPostOneSuccess":new Tuml.Event(),
+            "onPostOneFailure":new Tuml.Event()
         });
         init();
     }
@@ -319,8 +325,8 @@
 
         this.subscribe = function (event, handler) {
             handlers.push({
-                event: event,
-                handler: handler
+                event:event,
+                handler:handler
             });
             event.subscribe(handler);
 
@@ -333,8 +339,8 @@
                 if (handlers[i].event === event &&
                     handlers[i].handler === handler) {
                     handlers.splice(i, 1);
-                event.unsubscribe(handler);
-                return;
+                    event.unsubscribe(handler);
+                    return;
                 }
             }
 
@@ -354,9 +360,9 @@
 
     //Public api
     $.extend(this, {
-        "TumlUIVersion": "1.0.0",
+        "TumlUIVersion":"1.0.0",
         // Events
-        "refreshUri": new Tuml.Event()
+        "refreshUri":new Tuml.Event()
     });
 
 })(jQuery);

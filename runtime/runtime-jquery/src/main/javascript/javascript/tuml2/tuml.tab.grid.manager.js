@@ -38,6 +38,7 @@
             this.dataBeforeEdit = $.extend(true, [], result.data);
             this.metaForData = result.meta.to;
             var tabDiv = $('#' + this.metaForData.name + "ManyComponent");
+            $('<div id="serverErrorMsg" />').appendTo(tabDiv);
             $('<div id="myGridManyComponentHeader" class="selectheader" />').append($('<p />').text('Create the values to add.')).appendTo(tabDiv);
             $('<div id="myGridManyComponent' + this.metaForData.name + '" style="width:auto;height:90%;"></div>').appendTo(tabDiv);
             $('<div id="pagerManyComponent' + this.metaForData.name + '" style="width:auto;height:20px;"></div>').appendTo(tabDiv);
@@ -111,6 +112,7 @@
         this.refresh = function (result) {
             this.metaForData = result.meta.to;
             var tabDiv = $('#' + this.metaForData.name + "Lookup");
+            $('<div id="serverErrorMsg" />').appendTo(tabDiv);
             $('<div id="myGridLookupHeader" class="selectheader" />').append($('<p />').text('Select the values to add.')).appendTo(tabDiv);
             $('<div id="myGridLookup' + this.metaForData.name + '" style="width:auto;height:90%;"></div>').appendTo(tabDiv);
             $('<div id="pagerLookup' + this.metaForData.name + '" style="width:auto;height:20px;"></div>').appendTo(tabDiv);
@@ -198,8 +200,7 @@
                                 self.onAddButtonSuccess.notify({originalDataView:self.dataView, originalGrid:self.grid, propertyNavigatingTo:propertyNavigatingTo, tumlUri:tumlUri + '_' + self.localMetaForData.name, tabId:self.localMetaForData.name, data:lookupResult}, null, self);
                             },
                             error:function (jqXHR, textStatus, errorThrown) {
-                                //TODO handle error properly
-                                alert('fail for non composite lookup');
+                                $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
                             }
                         });
                     }
@@ -220,6 +221,7 @@
                                 self.onPutSuccess.notify({tumlUri:tumlUri + '_' + self.localMetaForData.name, tabId:self.localMetaForData.name, data:data}, null, self);
                             },
                             error:function (jqXHR, textStatus, errorThrown) {
+                                $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
                                 self.onPutFailure.notify({tumlUri:tumlUri, tabId:self.localMetaForData.name}, null, self);
                             }
                         });
@@ -238,6 +240,7 @@
                                     self.onPostSuccess.notify({tumlUri:tumlUri, tabId:self.localMetaForData.name, data:data}, null, self);
                                 },
                                 error:function (jqXHR, textStatus, errorThrown) {
+                                    $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
                                     self.onPostFailure.notify({tumlUri:tumlUri, tabId:self.localMetaForData.name}, null, self);
                                 }
                             });
@@ -261,6 +264,7 @@
                                 self.onDeleteSuccess.notify({tumlUri:tumlUri, tabId:self.localMetaForData.name, data:data}, null, self);
                             },
                             error:function (jqXHR, textStatus, errorThrown) {
+                                $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
                                 self.onDeleteFailure.notify({tumlUri:tumlUri, tabId:self.localMetaForData.name}, null, self);
                             }
                         });
@@ -288,6 +292,7 @@
                             }
                         },
                         error:function (jqXHR, textStatus, errorThrown) {
+                            $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
                         }
                     });
                 }
@@ -337,6 +342,7 @@
         this.refresh = function (result) {
             this.metaForData = result.meta.to;
             var tabDiv = $('#' + this.metaForData.name);
+            $('<div id="serverErrorMsg" />').appendTo(tabDiv);
             $('<div id="myGrid' + this.metaForData.name + '" style="width:auto;height:90%;"></div>').appendTo(tabDiv);
             $('<div id="pager' + this.metaForData.name + '" style="width:auto;height:20px;"></div>').appendTo(tabDiv);
             $('#contextMenu' + this.metaForData.name).remove();

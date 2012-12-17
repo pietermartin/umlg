@@ -184,10 +184,15 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                     PropertyWrapper pWrap = new PropertyWrapper(property);
                     OJField field;
                     if (pWrap.isMany()) {
-                        if (pWrap.isPrimitive() || pWrap.isEnumeration()) {
+                        if (pWrap.isPrimitive()) {
                             field = new OJField(pWrap.fieldname(), pWrap.javaTypePath());
                             field.setInitExp("new " + pWrap.javaTumlMemoryTypePath().getLast() + "((Collection<" + pWrap.javaBaseTypePath()
                                     + ">)propertyMap.get(\"" + pWrap.getName() + "\"))");
+                            annotatedClass.addToImports(pWrap.javaTumlMemoryTypePath());
+                            annotatedClass.addToImports(new OJPathName("java.util.Collection"));
+                        } else if (pWrap.isEnumeration()) {
+                            field = new OJField(pWrap.fieldname(), "Collection<String>");
+                            field.setInitExp("(Collection<String>)propertyMap.get(\"" + pWrap.getName() + "\")");
                             annotatedClass.addToImports(pWrap.javaTumlMemoryTypePath());
                             annotatedClass.addToImports(new OJPathName("java.util.Collection"));
                         } else {
@@ -280,6 +285,11 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                         ojForStatement.getBody().addToStatements(ojSimpleStatementConstructor);
                         OJSimpleStatement ojSimpleStatementFromJson = new OJSimpleStatement(pWrap.fieldname() + ".fromJson(row)");
                         ojForStatement.getBody().addToStatements(ojSimpleStatementFromJson);
+                    } else if (pWrap.isEnumeration() && pWrap.isMany()) {
+                        ifNotNull.addToThenPart(pWrap.clearer() + "()");
+                        OJForStatement ojForStatement = new OJForStatement("enumLiteral", new OJPathName("String"), pWrap.fieldname());
+                        ojForStatement.getBody().addToStatements(pWrap.adder() + "(" + pWrap.javaBaseTypePath().getLast() + ".valueOf(enumLiteral))");
+                        ifNotNull.addToThenPart(ojForStatement);
                     } else {
                         ifNotNull.addToThenPart(pWrap.setter() + "(" + field.getName() + ")");
                     }

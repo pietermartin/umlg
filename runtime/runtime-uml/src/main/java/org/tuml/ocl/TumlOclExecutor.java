@@ -100,7 +100,8 @@ public class TumlOclExecutor {
 			PersistentObject po = (PersistentObject) result;
 			return po.toJsonWithoutCompositeParent();
 		} else {
-			throw new IllegalStateException("wtf");
+            return result.toString();
+//			throw new IllegalStateException(String.format("Unhandled result from ocl query, result = %s", result.getClass().getName()));
 		}
 	}
 

@@ -605,6 +605,10 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
                     sb.append("\"");
                     sb.append(e);
                     sb.append("\"");
+                } else if (e instanceof TumlEnum) {
+                    sb.append("\"");
+                    sb.append(e);
+                    sb.append("\"");
                 } else {
                     sb.append(e);
                 }
