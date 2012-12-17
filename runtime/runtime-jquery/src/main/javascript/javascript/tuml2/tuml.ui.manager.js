@@ -40,7 +40,6 @@
                 changeMyUrl(args.name, args.uri);
             });
             leftMenuManager.onQueryClick.subscribe(function(e, args) {
-                //Do something like refresh the page
                 mainViewManager.openQuery(args.tumlUri, args.oclExecuteUri, args.qualifiedName, args.name, args.queryEnum, args.queryString);
             });
 

@@ -83,6 +83,9 @@ public class TumlRestletServerComponent2 extends Component {
             ComponentManyDeep2 componentManyDeep2 = new ComponentManyDeep2(componentManyDeep1);
             componentManyDeep2.setName("componentManyDeep2" + i);
 
+            ComponentOneDeep3 componentOneDeep3 = new ComponentOneDeep3(componentManyDeep2);
+            componentOneDeep3.setName("componentOneDeep3" + i);
+
 			for (int j = 0; j < 10; j++) {
 				Many1 many1 = new Many1(human);
 				many1.setName("many1" + j);

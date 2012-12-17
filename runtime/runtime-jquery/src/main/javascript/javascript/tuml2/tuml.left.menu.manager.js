@@ -55,7 +55,7 @@
         function refreshQueryMenu(queryTabName) {
             //Change the css activeproperty
             if (queryData !== undefined) {
-                for (i = 0; i < queryData[0].data.length; i++) {
+                for (var i = 0; i < queryData[0].data.length; i++) {
                     var query = queryData[0].data[i];
                     $('#queryMenu' + query.name + 'Id').removeClass('querymenuactive');
                     $('#queryMenu' + query.name + 'Id').addClass('querymenuinactive');
@@ -67,15 +67,15 @@
         }
 
         function internalCreateTree(contextVertexId) {
-            var topNode = {label: 'queries'};
+            var topNode = {label: 'queries', _name: 'queries'};
             var queryArray = [];
-            for (i = 0; i < queryData[0].data.length; i++) {
+            for (var i = 0; i < queryData[0].data.length; i++) {
                 var query = queryData[0].data[i];
                 var queryUri = query.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), query.id);
                 var oclExecuteUri = queryData[0].meta.oclExecuteUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
                 queryArray.push({label: query.name, tumlUri: queryUri, oclExecuteUri: oclExecuteUri, qualifiedName: queryProperty.qualifiedName, name: '<span id="queryMenu' + query.name + 'Id" class="querymenuinactive">' + query.name + '</span>', _name: query.name, queryEnum: query.queryEnum, queryString: query.queryString});
             }
-            var treeData = treedata = $.extend(topNode, {children: queryArray})
+            var treeData = $.extend(topNode, {children: queryArray})
 
             var treeDataArray = [];
             treeDataArray.push(treeData);

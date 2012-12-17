@@ -12,8 +12,7 @@
                 "Editors":{
                     "Integer":IntegerEditor,
                     "Text":TextEditor,
-                    "OneEditor":OneEditor,
-                    "ComponentManyEditor":ComponentManyEditor,
+//                    "OneEditor":OneEditor,
                     "SelectOneToOneCellEditor":SelectOneToOneCellEditor,
                     "SelectManyToOneCellEditor":SelectManyToOneCellEditor,
                     "SelectEnumerationCellEditor":SelectEnumerationCellEditor,
@@ -30,106 +29,101 @@
             }}
     });
 
-    function ComponentManyEditor(args) {
-        //Public api
-        $.extend(this, {
-            "ComponentManyEditor":"1.0.0"
-        });
-        var scope = this;
-        var tumlTabGridManager = null;
-        var tabDiv;
-        var property = null;
-        var tabDivName = null;
-        var onSave = false;
-        var onLoad = false;
-
-        this.init = function () {
-            property = args.column.options.property;
-            tumlTabGridManager = new Tuml.TumlTabGridManager(property.tumlUri, property);
-            tumlTabGridManager.doSave = function () {
-                //TODO work out moving next or previous
-                onSave = true;
-                args.grid.gotoCell(args.grid.getActiveCell().row, args.grid.getActiveCell().cell + 1);
-            };
-            tumlTabGridManager.doCancel = function () {
-                args.grid.getEditorLock().cancelCurrentEdit();
-                //args.grid.gotoCell(args.grid.getActiveCell().row, args.grid.getActiveCell().cell + 1);
-            }
-        };
-
-        this.destroy = function () {
-            $('#tab-container').tabs('close', tabDivName);
-            tabDiv.remove();
-            $('#tab-container').tabs('enableTab', 0);
-        };
-
-        this.focus = function () {
-            $input.focus();
-        };
-
-        this.loadValue = function (item) {
-            if (!onSave) {
-                this.getMetaData(item[args.column.field]);
-            }
-            onSave = false;
-            onLoad = true;
-        };
-
-        this.serializeValue = function () {
-            if (onSave) {
-                var json = tumlTabGridManager.fieldsToObject();
-                return json;
-            } else {
-                if (!onLoad) {
-                    this.getMetaData(null);
-                }
-                return null;
-            }
-            onLoad = false;
-        };
-
-        this.getMetaData = function (data) {
-            $.ajax({
-                url:property.tumlMetaDataUri,
-                type:"GET",
-                dataType:"json",
-                contentType:"json",
-                success:function (result, textStatus, jqXHR) {
-                    //Create the tab
-                    var tabContainer = $('#tab-container');
-                    tabDivName = result[0].meta.to.name;
-                    tabDiv = $('<div />', {id:tabDivName, title:tabDivName}).appendTo(tabContainer);
-                    tumlTabGridManager.refresh(result[0]);
-                    $('#tab-container').tabs('add', {title:tabDivName, content:'<div id="' + tabDivName + '" />', closable:true});
-                    $('#tab-container').tabs('disableTab', 0);
-                    $('#tab-containter').tabs({
-                        onClose:function (title) {
-                            tabDiv.remove();
-                            $('#tab-container').tabs('enableTab', 0);
-                        }
-                    });
-                },
-                error:function (jqXHR, textStatus, errorThrown) {
-                    alert('error getting ' + tumlUri + '\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
-                }
-            });
-        }
-
-        this.applyValue = function (item, state) {
-            item[args.column.field] = state;
-        };
-
-        this.isValueChanged = function () {
-            return true;
-        };
-
-        this.validate = function () {
-            return {
-                valid:true,
-                msg:null
-            };
-
-//            var validationResults = tumlTabGridManager.validateFields();
+//    function OneEditor(args) {
+//        //Public api
+//        $.extend(this, {
+//            "TumlOneEditor":"1.0.0"
+//        });
+//        var scope = this;
+//        var tumlTabOneManager = null;
+//        var tabDiv;
+//        var property = null;
+//        var tabDivName = null;
+//        var onSave = false;
+//        var onLoad = false;
+//
+//        this.init = function () {
+//            property = args.column.options.property;
+//            tumlTabOneManager = new Tuml.TumlTabOneManager(property.tumlUri);
+//            tumlTabOneManager.doSave = function () {
+//                //TODO work out moving next or previous
+//                onSave = true;
+//                args.grid.gotoCell(args.grid.getActiveCell().row, args.grid.getActiveCell().cell + 1);
+//            };
+//            tumlTabOneManager.doCancel = function () {
+//                args.grid.getEditorLock().cancelCurrentEdit();
+//                //args.grid.gotoCell(args.grid.getActiveCell().row, args.grid.getActiveCell().cell + 1);
+//            }
+//        };
+//
+//        this.destroy = function () {
+//            $('#tab-container').tabs('close', tabDivName);
+//            tabDiv.remove();
+//            $('#tab-container').tabs('enableTab', 0);
+//        };
+//
+//        this.focus = function () {
+//            $input.focus();
+//        };
+//
+//        this.loadValue = function (item) {
+//            if (!onSave) {
+//                this.getMetaData(item[args.column.field]);
+//            }
+//            onSave = false;
+//            onLoad = true;
+//        };
+//
+//        this.serializeValue = function () {
+//            if (onSave) {
+//                var json = tumlTabOneManager.fieldsToObject();
+//                return json;
+//            } else {
+//                if (!onLoad) {
+//                    this.getMetaData(null);
+//                }
+//                return null;
+//            }
+//            onLoad = false;
+//        };
+//
+//        this.getMetaData = function (data) {
+//            $.ajax({
+//                url:property.tumlMetaDataUri,
+//                type:"GET",
+//                dataType:"json",
+//                contentType:"json",
+//                success:function (result, textStatus, jqXHR) {
+//                    //Create the tab
+//                    var tabContainer = $('#tab-container');
+//                    tabDivName = result[0].meta.to.name;
+//                    tabDiv = $('<div />', {id:tabDivName}).appendTo(tabContainer);
+//                    $('#tab-container').tabs({
+//                        onClose:function (title) {
+//                            tabDiv.remove();
+//                            $('#tab-container').tabs('enableTab', 0);
+//                        }
+//                    });
+//                    tumlTabOneManager.refresh(data, result[0].meta.to, property.qualifiedName);
+//                    $('#tab-container').tabs('add', {title:tabDivName, content:'<div id="' + tabDivName + '" />', closable:true});
+//                    $('#tab-container').tabs('disableTab', 0);
+//                },
+//                error:function (jqXHR, textStatus, errorThrown) {
+//                    alert('error getting ' + tumlUri + '\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
+//                }
+//            });
+//        }
+//
+//        this.applyValue = function (item, state) {
+//            item[args.column.field] = state;
+//        };
+//
+//        this.isValueChanged = function () {
+//            return true;
+//        };
+//
+//        this.validate = function () {
+//            var validationResults = tumlTabOneManager.validateFields();
 //            if (validationResults.length === 0) {
 //                return {
 //                    valid:true,
@@ -141,136 +135,13 @@
 //                    msg:null
 //                };
 //            }
-        };
-
-        //This is called from the grid, the one only uses the serializeValueWithValue function
-        if (args !== undefined) {
-            this.init();
-        }
-    }
-
-    function OneEditor(args) {
-        //Public api
-        $.extend(this, {
-            "TumlOneEditor":"1.0.0"
-        });
-        var scope = this;
-        var tumlTabOneManager = null;
-        var tabDiv;
-        var property = null;
-        var tabDivName = null;
-        var onSave = false;
-        var onLoad = false;
-
-        this.init = function () {
-            property = args.column.options.property;
-            tumlTabOneManager = new Tuml.TumlTabOneManager(property.tumlUri);
-            tumlTabOneManager.doSave = function () {
-                //TODO work out moving next or previous
-                onSave = true;
-                args.grid.gotoCell(args.grid.getActiveCell().row, args.grid.getActiveCell().cell + 1);
-            };
-            tumlTabOneManager.doCancel = function () {
-                args.grid.getEditorLock().cancelCurrentEdit();
-                //args.grid.gotoCell(args.grid.getActiveCell().row, args.grid.getActiveCell().cell + 1);
-            }
-        };
-
-        this.destroy = function () {
-            $('#tab-container').tabs('close', tabDivName);
-            tabDiv.remove();
-            $('#tab-container').tabs('enableTab', 0);
-        };
-
-        this.focus = function () {
-            $input.focus();
-        };
-
-        this.loadValue = function (item) {
-            if (!onSave) {
-                this.getMetaData(item[args.column.field]);
-            }
-            onSave = false;
-            onLoad = true;
-        };
-
-        this.serializeValue = function () {
-            if (onSave) {
-                var json = tumlTabOneManager.fieldsToObject();
-                return json;
-            } else {
-                if (!onLoad) {
-                    this.getMetaData(null);
-                }
-                return null;
-            }
-            onLoad = false;
-        };
-
-        this.getMetaData = function (data) {
-            $.ajax({
-                url:property.tumlMetaDataUri,
-                type:"GET",
-                dataType:"json",
-                contentType:"json",
-                success:function (result, textStatus, jqXHR) {
-                    //Create the tab
-                    var tabContainer = $('#tab-container');
-                    tabDivName = result[0].meta.to.name;
-                    tabDiv = $('<div />', {id:tabDivName}).appendTo(tabContainer);
-                    $('#tab-container').tabs({
-                        onClose:function (title) {
-                            tabDiv.remove();
-                            $('#tab-container').tabs('enableTab', 0);
-                        }
-                    });
-                    tumlTabOneManager.refresh(data, result[0].meta.to, property.qualifiedName);
-                    $('#tab-container').tabs('add', {title:tabDivName, content:'<div id="' + tabDivName + '" />', closable:true});
-                    $('#tab-container').tabs('disableTab', 0);
-                },
-                error:function (jqXHR, textStatus, errorThrown) {
-                    alert('error getting ' + tumlUri + '\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
-                }
-            });
-        }
-
-//        function serializeValueWithValue(input) {
-//            var value = input.val();
-//            if (value == '') {
-//                return null;
-//            } else {
-//                return value;
-//            }
 //        };
-
-        this.applyValue = function (item, state) {
-            item[args.column.field] = state;
-        };
-
-        this.isValueChanged = function () {
-            return true;
-        };
-
-        this.validate = function () {
-            var validationResults = tumlTabOneManager.validateFields();
-            if (validationResults.length === 0) {
-                return {
-                    valid:true,
-                    msg:null
-                };
-            } else {
-                return {
-                    valid:false,
-                    msg:null
-                };
-            }
-        };
-
-        //This is called from the grid, the one only uses the serializeValueWithValue function
-        if (args !== undefined) {
-            this.init();
-        }
-    }
+//
+//        //This is called from the grid, the one only uses the serializeValueWithValue function
+//        if (args !== undefined) {
+//            this.init();
+//        }
+//    }
 
     function TextEditor(args) {
         //Public api

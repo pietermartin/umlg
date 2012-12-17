@@ -13,17 +13,22 @@
                 "TumlDelete" : TumlDeleteFormatter,
                 "TumlManyBoolean" : TumlManyBooleanFormatter,
                 "Link" : LinkFormatter,
-                "TumlRegularFormatter": TumlRegularFormatter
+                "TumlRegularFormatter": TumlRegularFormatter,
+                "TumlComponentFormatter": TumlComponentFormatter
             }
         }
     });
+
+    function TumlComponentFormatter(row, cell, value, columnDef, dataContext) {
+        return 'component';
+    }
 
     function TumlRegularFormatter(row, cell, value, columnDef, dataContext) {
         return value;
     }
 
     function TumlRequiredFormatter(row, cell, value, columnDef, dataContext) {
-        if (value == null || value === "") {
+        if (value == null || value === "" || value.length === 0) {
             return "<div style='color:red;'>required</div>";
         } else {
             return value;

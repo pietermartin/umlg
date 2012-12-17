@@ -17,7 +17,8 @@ function selectFormatter(property) {
     } else if (property.oneEnumeration || property.manyEnumeration) {
         return  TumlSlick.Formatters.TumlRequired;
     } else if (property.composite && property.lower > 0) {
-        return  TumlSlick.Formatters.TumlRequired;
+//        return  TumlSlick.Formatters.TumlComponentFormatter;
+        return  null;
     } else if (!property.onePrimitive && !property.manyPrimitive) {
         return function waitingFormatter(row, cell, value, columnDef, dataContext) {
             if (value !== undefined && value !== null) {
@@ -123,9 +124,8 @@ function selectEditor(property) {
             alert('Unsupported dataType ' + property.dataTypeEnum);
         }
     } else if (property.composite && property.lower === 1 && property.upper == 1) {
-        return  Tuml.Slick.Editors.OneEditor;
+        return null;
     } else if (property.composite && property.lower >= 1 && (property.upper > 1 || property.upper == -1)) {
-//        return  Tuml.Slick.Editors.ComponentManyEditor;
         return null;
     } else if (property.oneEnumeration) {
         return  Tuml.Slick.Editors.SelectEnumerationCellEditor;
@@ -148,7 +148,7 @@ function selectEditor(property) {
     } else if (property.fieldType == 'Integer') {
         return Tuml.Slick.Editors.Integer;
     } else if (property.fieldType == 'Long') {
-        return Slick.Editors.Integer;
+        return Tuml.Slick.Editors.Integer;
     } else if (property.fieldType == 'Boolean') {
         return Tuml.Slick.Editors.Checkbox;
     } else {

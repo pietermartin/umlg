@@ -55,11 +55,11 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
             }
         }
         int count = 1;
-        //Remove many components from propertiesForToJson
+        //Remove components from propertiesForToJson
         List<Property> propertiesForToJsonWithOutManyComponent = new ArrayList<Property>(propertiesForToJson);
         for (Property p : propertiesForToJson) {
             PropertyWrapper pWrap = new PropertyWrapper(p);
-            if (pWrap.isComponent() && pWrap.isMany()) {
+            if (pWrap.isComponent()) {
                 propertiesForToJsonWithOutManyComponent.remove(p);
             }
         }
@@ -246,14 +246,18 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                     }
                     OJIfStatement ifInMap = new OJIfStatement("propertyMap.containsKey(\"" + pWrap.fieldname() + "\")");
                     fromJson.getBody().addToStatements(ifInMap);
-                    ifInMap.getThenPart().addToLocals(field);
+
+                    OJIfStatement ifNotNull = new OJIfStatement("propertyMap.get(\"" + pWrap.fieldname() + "\") != null");
+                    ifInMap.addToThenPart(ifNotNull);
+                    ifNotNull.getThenPart().addToLocals(field);
+
                     if (pWrap.isOne() && !pWrap.isComponent() && !pWrap.isDataType() && !pWrap.isEnumeration()) {
                         OJIfStatement ifSetToNull = new OJIfStatement(field.getName() + ".isEmpty() || " + field.getName() + ".get(\"id\") == null",
                                 pWrap.setter() + "(null)");
                         ifSetToNull.addToElsePart(pWrap.setter() + "((" + pWrap.javaBaseTypePath().getLast() + ")GraphDb.getDb().instantiateClassifier("
                                 + pWrap.fieldname() + "Map.get(\"id\").longValue()))");
                         annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
-                        ifInMap.addToThenPart(ifSetToNull);
+                        ifNotNull.addToThenPart(ifSetToNull);
                         fromJson.getBody().addToStatements(ifInMap);
                     } else if (pWrap.isComponent() && pWrap.isOne()) {
 
@@ -263,29 +267,23 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                         ifPropertyNotEmpty.addToElsePart(pWrap.javaBaseTypePath().getLast() + " " + pWrap.fieldname() + " = new " + pWrap.javaBaseTypePath().getLast() + "(this)");
                         ifPropertyNotEmpty.addToElsePart(pWrap.fieldname() + ".fromJson(" + field.getName() + ")");
                         annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
-                        ifInMap.addToThenPart(ifNotEmpty);
+                        ifNotNull.addToThenPart(ifNotEmpty);
                         fromJson.getBody().addToStatements(ifInMap);
 
                     } else if (pWrap.isOne() && pWrap.isDataType()) {
                         // Enumeration is a DataType
-                        ifInMap.addToThenPart(pWrap.setter() + "(" + pWrap.fieldname() + ")");
+                        ifNotNull.addToThenPart(pWrap.setter() + "(" + pWrap.fieldname() + ")");
                     } else if (pWrap.isComponent() && pWrap.isMany()) {
                         OJForStatement ojForStatement = new OJForStatement("row", new OJPathName("Map<String,Object>"), pWrap.fieldname() + "Map");
-                        ifInMap.addToThenPart(ojForStatement);
+                        ifNotNull.addToThenPart(ojForStatement);
                         OJSimpleStatement ojSimpleStatementConstructor = new OJSimpleStatement(pWrap.javaBaseTypePath().getLast() + " " + pWrap.fieldname() + " = new " + pWrap.javaBaseTypePath().getLast() + "(this)");
                         ojForStatement.getBody().addToStatements(ojSimpleStatementConstructor);
                         OJSimpleStatement ojSimpleStatementFromJson = new OJSimpleStatement(pWrap.fieldname() + ".fromJson(row)");
                         ojForStatement.getBody().addToStatements(ojSimpleStatementFromJson);
                     } else {
-                        // TODO that null is not going to work with anything
-                        // other
-                        // than
-                        // a string
-                        OJIfStatement ifSetToNull = new OJIfStatement(field.getName() + ".equals(\"null\")", pWrap.setter() + "(null)");
-                        ifSetToNull.addToElsePart(pWrap.setter() + "(" + field.getName() + ")");
-                        ifInMap.addToThenPart(ifSetToNull);
-                        fromJson.getBody().addToStatements(ifInMap);
+                        ifNotNull.addToThenPart(pWrap.setter() + "(" + field.getName() + ")");
                     }
+                    ifNotNull.addToElsePart(pWrap.setter() + "(null)");
                 }
             }
         }

@@ -16,9 +16,11 @@
         //Public api
         $.extend(this, {
             "TumlTabGridManagerVersion":"1.0.0",
-            "onManyComponentAddButtonSuccess":new Tuml.Event(),
+            "onManyComponentSaveButtonSuccess":new Tuml.Event(),
+            "onManyComponentCloseButtonSuccess":new Tuml.Event(),
             "onManyComponentCancelButtonSuccess":new Tuml.Event(),
-            "onClickManyComponentCell":new Tuml.Event()
+            "onClickManyComponentCell":new Tuml.Event(),
+            "onClickOneComponentCell":new Tuml.Event()
         });
 
         this.setupColumns = function () {
@@ -33,6 +35,7 @@
         };
 
         this.refresh = function (result) {
+            this.dataBeforeEdit = $.extend(true, [], result.data);
             this.metaForData = result.meta.to;
             var tabDiv = $('#' + this.metaForData.name + "ManyComponent");
             $('<div id="myGridManyComponentHeader" class="selectheader" />').append($('<p />').text('Create the values to add.')).appendTo(tabDiv);
@@ -50,18 +53,12 @@
             TumlBaseGridManager.prototype.instantiateGrid.call(this);
         };
 
-        this.setData = function (data) {
-            for (var i = 0; i < data.length; i++) {
-                this.dataView.addItem(data[i]);
-            }
-        }
-
         this.addButtons = function () {
-            $('<button />').text('Add').click(function () {
+            $('<button />').text('Save').click(function () {
                 if (self.grid.getEditorLock().commitCurrentEdit()) {
                     var validationResults = self.validateNewItems(self.dataView.getNewItems());
                     if (validationResults.length == 0) {
-                        self.onManyComponentAddButtonSuccess.notify({value:self.dataView.getItems(), tabName:self.metaForData.name}, null, self);
+                        self.onManyComponentSaveButtonSuccess.notify({value:self.dataView.getItems(), tabName:self.metaForData.name}, null, self);
                     } else {
                         var errorMsg = '\n';
                         for (var i = 0; i < validationResults.length; i++) {
@@ -73,7 +70,14 @@
             }).appendTo('#grid-buttonManyComponent' + this.localMetaForData.name);
             $('<button />').text('Cancel').click(function () {
                 if (self.grid.getEditorLock().commitCurrentEdit()) {
-                    self.onManyComponentCancelButtonSuccess.notify({tabName:self.metaForData.name}, null, self);
+                    self.cancel(self.dataBeforeEdit);
+                    self.onManyComponentCancelButtonSuccess.notify({value:self.dataView.getItems(), tabName:self.metaForData.name}, null, self);
+                }
+            }).appendTo('#grid-buttonManyComponent' + this.localMetaForData.name);
+            $('<button />').text('Close').click(function () {
+                if (self.grid.getEditorLock().commitCurrentEdit()) {
+                    self.cancel(self.dataBeforeEdit);
+                    self.onManyComponentCloseButtonSuccess.notify({value:self.dataView.getItems(), tabName:self.metaForData.name}, null, self);
                 }
             }).appendTo('#grid-buttonManyComponent' + this.localMetaForData.name);
         }
@@ -82,6 +86,11 @@
 
     TumlManyComponentGridManager.prototype = new TumlBaseGridManager;
 
+    TumlManyComponentGridManager.prototype.initializeDataModel = function (data) {
+        this.dataView.beginUpdate();
+        this.dataView.setNewItems(data);
+        this.dataView.endUpdate();
+    }
 
     function TumlForManyLookupGridManager(tumlUri, propertyNavigatingTo) {
         var self = this;
@@ -149,7 +158,8 @@
         $.extend(this, {
             "TumlTabGridManagerVersion":"1.0.0",
             "onAddButtonSuccess":new Tuml.Event(),
-            "onClickManyComponentCell":new Tuml.Event()
+            "onClickManyComponentCell":new Tuml.Event(),
+            "onClickOneComponentCell":new Tuml.Event()
         });
 
         this.setupColumns = function () {
@@ -267,9 +277,15 @@
                         type:"GET",
                         dataType:"json",
                         contentType:"json",
-                        data:JSON.stringify(self.dataView.getDeletedItems()),
-                        success:function (data, textStatus, jqXHR) {
-                            self.onCancel.notify({tumlUri:tumlUri, tabId:self.localMetaForData.name, data:data}, null, self);
+                        success:function (result, textStatus, jqXHR) {
+                            //Only cancel this tab
+                            for (var i = 0; i < result.length; i++) {
+                                var metaForData = result[i].meta.to;
+                                if (metaForData.name === self.localMetaForData.name) {
+                                    self.cancel(result[i].data);
+                                    return;
+                                }
+                            }
                         },
                         error:function (jqXHR, textStatus, errorThrown) {
                         }
@@ -307,6 +323,16 @@
             "addItems":addItems,
             "setCellValue":setCellValue
         });
+
+        this.cancel = function (data) {
+            if (this.grid.getEditorLock().commitCurrentEdit()) {
+                this.grid.resetActiveCell();
+                this.setData(data);
+                this.grid.invalidateAllRows();
+                this.grid.updateRowCount();
+                this.grid.render();
+            }
+        }
 
         this.refresh = function (result) {
             this.metaForData = result.meta.to;
@@ -409,7 +435,9 @@
 
             this.grid.onClick.subscribe(function (e, args) {
                 var column = self.grid.getColumns()[args.cell];
-                if (column.name == 'delete') {
+                if (column.name == 'id') {
+                    e.stopImmediatePropagation();
+                } else if (column.name == 'delete') {
                     var item = self.dataView.getItem(args.row);
                     self.dataView.deleteItem(item.id);
                     e.stopImmediatePropagation();
@@ -417,15 +445,22 @@
                     var item = self.dataView.getItem(args.row);
                     var uri = item.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), item.id);
                     self.onSelfCellClick.notify({name:'unused', tumlUri:uri}, null, self);
-                } else if (!column.options.property.manyPrimitive  && !column.options.property.manyEnumeration && column.options.property.composite && column.options.property.lower > 0 && ((column.options.property.upper > 1) || column.options.property.upper === -1)) {
+                } else if (!column.options.property.manyPrimitive && !column.options.property.manyEnumeration && column.options.property.composite && column.options.property.lower > 0 && ((column.options.property.upper > 1) || column.options.property.upper === -1)) {
                     var data = [];
-                    if (self.dataView.getItem(args.row) !== undefined && self.dataView.getItem(args.row) !== null) {
-                        data = self.dataView.getItem(args.row)[column.name]
+                    if (isCellEditable(args.row, args.cell, self.dataView.getItem(args.row))) {
+                        if (self.dataView.getItem(args.row) !== undefined && self.dataView.getItem(args.row) !== null && self.dataView.getItem(args.row)[column.name] !== undefined && self.dataView.getItem(args.row)[column.name] !== null) {
+                            data.push(self.dataView.getItem(args.row)[column.name][0]);
+                        }
+                        self.onClickManyComponentCell.notify({data:data, cell:args, tumlUri:column.options.property.tumlUri, property:column.options.property}, null, self);
                     }
-                    if (data === null || data === undefined) {
-                        data = [];
+                } else if (!column.options.property.manyPrimitive && !column.options.property.manyEnumeration && column.options.property.composite && column.options.property.lower === 1 && column.options.property.upper === 1) {
+                    var data = [];
+                    if (isCellEditable(args.row, args.cell, self.dataView.getItem(args.row))) {
+                        if (self.dataView.getItem(args.row) !== undefined && self.dataView.getItem(args.row) !== null && self.dataView.getItem(args.row)[column.name] !== undefined && self.dataView.getItem(args.row)[column.name] !== null) {
+                            data.push(self.dataView.getItem(args.row)[column.name]);
+                        }
+                        self.onClickOneComponentCell.notify({data:data, cell:args, tumlUri:column.options.property.tumlUri, property:column.options.property}, null, self);
                     }
-                    self.onClickManyComponentCell.notify({data:data, cell:args, tumlUri:column.options.property.tumlUri, property:column.options.property}, null, self);
                 }
                 //unbind the document click event to close many editors
                 self.grid['clicked'] = true;
@@ -559,7 +594,7 @@
                     if (cell === j && column.name !== 'id' && column.name !== 'uri' && column.name !== 'delete') {
                         if (!column.options.property.readOnly) {
                             var property = column.options.property;
-                            if (property.composite && property.lower === 1 && property.upper == 1) {
+                            if (property.composite && property.lower >= 1) {
                                 if (row >= self.dataView.getItems().length || self.dataView.getNewItems().indexOf(item) !== -1) {
                                     return true;
                                 } else {
@@ -678,14 +713,14 @@
                 alert(args.validationResults.msg);
             });
 
-            // initialize the model after all the events have been hooked up
-            this.dataView.beginUpdate();
-            this.setData(data);
             this.dataView.setFilterArgs({
                 metaForData:this.localMetaForData
             });
             this.dataView.setFilter(filter);
-            this.dataView.endUpdate();
+
+            // initialize the model after all the events have been hooked up
+            this.setupColumnFormatter();
+            this.initializeDataModel(data);
             this.updateHeaderRow(this.localMetaForData);
 
             // if you don't want the items that are not visible (due to being filtered out
@@ -734,6 +769,36 @@
 
     }
 
+    TumlBaseGridManager.prototype.setupColumnFormatter = function () {
+        var self = this;
+        this.dataView.getItemMetadata = function (row) {
+            var item = this.getItem(row);
+            var result = {"columns":null};
+            var column = {};
+
+            for (var i = 0; i < self.localMetaForData.properties.length; i++) {
+                var property = self.localMetaForData.properties[i];
+                if (property.composite && property.lower > 0) {
+                    if (item === undefined || this.getNewItems().indexOf(item) !== -1) {
+                        column[property.name] = {"formatter":TumlSlick.Formatters.TumlRequired};
+                    } else {
+                        column[property.name] = {"formatter":TumlSlick.Formatters.TumlComponentFormatter};
+                    }
+                } else {
+                    column[property.name] = {"formatter":selectFormatter(property)};
+                }
+            }
+            result["columns"] = column;
+            return result;
+        };
+    }
+
+    TumlBaseGridManager.prototype.initializeDataModel = function (data) {
+        this.dataView.beginUpdate();
+        this.setData(data);
+        this.dataView.endUpdate();
+    }
+
     TumlBaseGridManager.prototype.setupColumns = function () {
         var self = this;
         this.columns = [];
@@ -745,8 +810,7 @@
                         id:property.name,
                         name:property.name,
                         field:property.name,
-                        sortable:true,
-                        formatter:selectFormatter(property)
+                        sortable:true
                     });
                 } else {
                     self.columns.push({
@@ -755,7 +819,6 @@
                         field:property.name,
                         sortable:true,
                         editor:selectEditor(property),
-                        formatter:selectFormatter(property),
                         validator:selectFieldValidator(property),
                         options:{required:property.lower > 0, tumlLookupUri:property.tumlLookupUri, rowEnumerationLookupMap:new RowEnumerationLookupMap(property.qualifiedName, "/restAndJson/tumlEnumLookup"), rowLookupMap:new RowLookupMap(self.contextVertexId, property.tumlCompositeParentLookupUri, property.tumlCompositeParentLookupUriOnCompositeParent), compositeParentLookupMap:new CompositeParentLookupMap(self.contextVertexId, property.tumlLookupUri, property.tumlLookupOnCompositeParentUri), ordered:property.ordered, unique:property.unique, property:property},
                         width:120

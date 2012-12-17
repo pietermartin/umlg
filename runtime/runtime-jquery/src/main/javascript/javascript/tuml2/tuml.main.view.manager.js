@@ -11,7 +11,6 @@
         var self = this;
         var tabContainer;
         var tumlManyViewManager;
-        var tumlOneViewManager;
         var isOne;
 
         function init() {
@@ -58,50 +57,38 @@
                 self.onContextMenuClickDelete.notify(args, e, self);
             });
 
-            tumlOneViewManager = new Tuml.TumlOneViewManager();
-            tumlOneViewManager.onPutOneSuccess.subscribe(function (e, args) {
-                var metaDataNavigatingTo = args.data[0].meta.to;
-                var metaDataNavigatingFrom = args.data[0].meta.from;
-                var contextVertexId = retrieveVertexId(args.tumlUri);
-                if (metaDataNavigatingFrom === undefined) {
-                    //Put directly on the resouce
-                    leftMenuManager.refresh(metaDataNavigatingTo, metaDataNavigatingTo, args.data[0].data[0].id);
-                } else {
+            tumlManyViewManager.onPutOneSuccess.subscribe(function (e, args) {
+//                var metaDataNavigatingTo = args.data[0].meta.to;
+//                var metaDataNavigatingFrom = args.data[0].meta.from;
+//                var contextVertexId = retrieveVertexId(args.tumlUri);
+//                if (metaDataNavigatingFrom === undefined) {
+                    //Put directly on the resource
+//                    leftMenuManager.refresh(metaDataNavigatingTo, metaDataNavigatingTo, args.data[0].data[0].id);
+//                } else {
                     //Put on the to one property
                     //First param is contextMetaDataFrom second contextMetaDataTo
-                    leftMenuManager.refresh(metaDataNavigatingTo, metaDataNavigatingTo, args.data[0].data[0].id);
-                }
+//                    leftMenuManager.refresh(metaDataNavigatingTo, metaDataNavigatingTo, args.data[0].data[0].id);
+//                }
                 refresh(args.tumlUri, args.data);
                 self.onPutOneSuccess.notify(args, e, self);
             });
-            tumlOneViewManager.onPutOneFailure.subscribe(function (e, args) {
-                self.onPutOneFailure.notify(args, e, self);
-            });
-            tumlOneViewManager.onPostOneSuccess.subscribe(function (e, args) {
-                var metaDataNavigatingTo = args.data[0].meta.to;
-                var metaDataNavigatingFrom = args.data[0].meta.from;
-                if (metaDataNavigatingFrom === undefined) {
-                    alert('metaDataNaviging is undefined, this should never happen!!');
-                } else {
-                    //First param is contextMetaDataFrom second contextMetaDataTo
-                    leftMenuManager.refresh(metaDataNavigatingTo, metaDataNavigatingTo, args.data[0].data.id);
-                    self.onPostOneSuccess.notify(args, e, self);
-                    refresh(args.tumlUri, args.data);
-                }
-            });
-            tumlOneViewManager.onPostOneFailure.subscribe(function (e, args) {
-                self.onPostOneFailure.notify(args, e, self);
+            tumlManyViewManager.onPostOneSuccess.subscribe(function (e, args) {
+//                var metaDataNavigatingTo = args.data[0].meta.to;
+//                var metaDataNavigatingFrom = args.data[0].meta.from;
+//                if (metaDataNavigatingFrom === undefined) {
+//                    alert('metaDataNavigating is undefined, this should never happen!!');
+//                } else {
+//                    //First param is contextMetaDataFrom second contextMetaDataTo
+//                    leftMenuManager.refresh(metaDataNavigatingTo, metaDataNavigatingTo, args.data[0].data.id);
+//                    self.onPostOneSuccess.notify(args, e, self);
+//                    refresh(args.tumlUri, args.data);
+//                }
+                refresh(args.tumlUri, args.data);
             });
         }
 
         function openQuery(tumlUri, oclExecuteUri, qualifiedName, name, queryEnum, queryString) {
-            if (isOne === undefined) {
-                alert('can not open the query as isOne is undefined!');
-            } else if (isOne) {
-                tumlOneViewManager.openQuery(tumlUri, oclExecuteUri, qualifiedName, name, queryEnum, queryString);
-            } else {
-                tumlManyViewManager.openQuery(tumlUri, oclExecuteUri, qualifiedName, name, queryEnum, queryString);
-            }
+            tumlManyViewManager.openQuery(tumlUri, oclExecuteUri, qualifiedName, name, queryEnum, queryString);
         }
 
         function refresh(tumlUri, result) {
@@ -111,11 +98,6 @@
             var propertyNavigatingTo = (metaDataNavigatingFrom == undefined ? null : findPropertyNavigatingTo(qualifiedName, metaDataNavigatingFrom));
             recreateTabContainer();
             tabContainer.tabs({border:false, onClose:function (title, index) {
-                if (isOne) {
-                    tumlOneViewManager.closeQuery(title, index);
-                } else {
-                    tumlManyViewManager.closeTab(title, index);
-                }
             }, onSelect:function (title, index) {
                 leftMenuManager.refreshQueryMenu(title);
             }});
@@ -125,8 +107,7 @@
                 isOne = false;
                 var contextVertexId = retrieveVertexId(tumlUri);
                 leftMenuManager.refresh(metaDataNavigatingFrom, metaDataNavigatingTo, contextVertexId);
-                tumlManyViewManager.refresh(tumlUri, result, propertyNavigatingTo);
-                tumlOneViewManager.clear();
+                tumlManyViewManager.refresh(tumlUri, result, propertyNavigatingTo, isOne);
             } else {
                 //Property is a one
                 isOne = true;
@@ -146,8 +127,7 @@
                             var contextVertexId = result[i].data[0].id;
                             //If property is a one then there is n navigating from
                             leftMenuManager.refresh(metaDataNavigatingTo, metaDataNavigatingTo, contextVertexId);
-                            tumlOneViewManager.refresh(tumlUri, result);
-                            tumlManyViewManager.clear();
+                            tumlManyViewManager.refresh(tumlUri, result, propertyNavigatingTo, isOne, false);
                             break;
                         }
                     }
@@ -156,8 +136,8 @@
                     qualifiedName = result[0].meta.qualifiedName;
                     var contextVertexId = retrieveVertexId(tumlUri);
                     leftMenuManager.refresh(metaDataNavigatingFrom, metaDataNavigatingTo, contextVertexId);
-                    tumlOneViewManager.refresh(tumlUri, result, isForCreation);
-                    tumlManyViewManager.clear();
+                    tumlManyViewManager.refresh(tumlUri, result, propertyNavigatingTo, isOne, true);
+
                 }
             }
             $('#ui-layout-center-heading').children().remove();
@@ -194,7 +174,7 @@
         //Public api
         $.extend(this, {
             "TumlMainViewManagerVersion":"1.0.0",
-            //These events are propogated from the grid
+            //These events are propagated from the grid
             "onPutSuccess":new Tuml.Event(),
             "onPutFailure":new Tuml.Event(),
             "onPostSuccess":new Tuml.Event(),

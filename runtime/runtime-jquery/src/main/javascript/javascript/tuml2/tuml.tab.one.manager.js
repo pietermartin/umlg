@@ -14,25 +14,46 @@
         //Public api
         $.extend(this, {
             "TumlTabComponentOneManager":"1.0.0",
-            "onOneComponentAddButtonSuccess":new Tuml.Event()
+            "onOneComponentSaveButtonSuccess":new Tuml.Event(),
+            "onOneComponentCloseButtonSuccess":new Tuml.Event()
         });
 
         this.doSave = function () {
             if (self.validateFields().length === 0) {
                 var oneObject = self.fieldsToObject();
-                self.onOneComponentAddButtonSuccess.notify({value:oneObject, tabName:self.metaForData.name}, null, self);
+                self.onOneComponentSaveButtonSuccess.notify({value:oneObject, tabName:self.metaForData.name}, null, self);
             }
         }
+
+        this.getDiv = function () {
+            return $('#' + this.metaForData.name + "OneComponent");
+        }
+
+        this.doClose = function() {
+            this.doCancel();
+            self.onOneComponentCloseButtonSuccess.notify({tabName:self.metaForData.name}, null, self);
+        }
+
     }
 
     TumlTabComponentOneManager.prototype = new TumlBaseTabOneManager;
+
+    TumlTabComponentOneManager.prototype.addButtons = function (buttonDiv) {
+        TumlBaseTabOneManager.prototype.addButtons.call(this, buttonDiv);
+        var self = this;
+        var closeButton = $('<button />').text('Close').click(function () {
+            self.doClose();
+        }).appendTo(buttonDiv);
+    };
+
 
     function TumlTabOneManager(tumlUri) {
         var self = this;
         TumlBaseTabOneManager.call(this, tumlUri);
 
         this.doSave = function () {
-            if (self.validateFields().length === 0) {
+            var validationResults = self.validateFields();
+            if (validationResults.length === 0) {
                 if (this.data !== undefined && this.data !== null) {
                     $.ajax({
                         url:this.metaForData.qualifiedName == this.qualifiedName ? tumlUri : tumlUri + '_' + this.metaForData.name,
@@ -64,11 +85,21 @@
                         }
                     });
                 }
+            } else {
+                var errorMsg = '\n';
+                for (var i = 0; i < validationResults.length; i++) {
+                    errorMsg += validationResults[i].msg + '\n';
+                }
+                alert('There are validation errors: ' + errorMsg);
             }
-            return false;
+        }
+
+        this.getDiv = function () {
+            return $('#' + this.metaForData.name);
         }
 
     }
+
 
     TumlTabOneManager.prototype = new TumlBaseTabOneManager;
 
@@ -96,10 +127,6 @@
                 }
             });
             return validationResults;
-        }
-
-        this.doCancel = function () {
-            refresh(this.data, this.metaForData, this.qualifiedName);
         }
 
         function findPropertyNavigatingTo(qualifiedName, metaDataNavigatingFrom) {
@@ -171,9 +198,9 @@
                         var inputValue = $('#' + property.name + self.metaForData.name + 'Id').val();
                         dataToSend[property.name] = inputValue;
                     } else if (property.composite && property.lower > 0) {
-                        var inputValue = $('#' + property.name + self.metaForData.name + 'Id');
-                        if (inputValue.length !== 0) {
-                            dataToSend[property.name] = $.data(inputValue[0], "componentValue");
+                        var input = $('#' + property.name + self.metaForData.name + 'Id');
+                        if (input.length !== 0) {
+                            dataToSend[property.name] = $.data(input[0], "componentValue");
                         }
                     } else if (!property.onePrimitive && !property.manyPrimitive && !property.inverseComposite) {
                         var $select = $('#' + property.name + self.metaForData.name + 'Id');
@@ -194,6 +221,7 @@
         $.extend(this, {
             "TumlTabOneManagerVersion":"1.0.0",
             "onClickOneComponent":new Tuml.Event(),
+            "onClickManyComponent":new Tuml.Event(),
             "onPutOneSuccess":new Tuml.Event(),
             "onPutOneFailure":new Tuml.Event(),
             "onPostOneSuccess":new Tuml.Event(),
@@ -203,13 +231,17 @@
         init();
     }
 
+    TumlBaseTabOneManager.prototype.getDiv = function () {
+        console.log('TumlBaseTabOneManager.prototype.getDiv must be overriden');
+    }
+
     TumlBaseTabOneManager.prototype.refresh = function (data, metaForData, qualifiedName, isForCreation) {
         var self = this;
         this.data = data;
         this.metaForData = metaForData;
         this.qualifiedName = qualifiedName;
         //Clear all elements
-        var tabDiv = $('#' + this.metaForData.name);
+        var tabDiv = this.getDiv();
         tabDiv.children().remove();
         $('<div id="serverErrorMsg" />').appendTo(tabDiv);
         var formDiv = $('<div />', {id:'formDiv'}).appendTo(tabDiv);
@@ -235,14 +267,30 @@
                     });
                 } else if (property.composite && property.lower == 1 && property.upper == 1) {
                     $input.click(function (e, args) {
+                        var data = [];
+                        var componentValue = $.data(this, "componentValue");
+                        if (componentValue !== undefined) {
+                            data.push(componentValue);
+                        }
                         self.onClickOneComponent.notify(
-                            {data:null, tumlUri:property.tumlUri, property:property},
+                            {data:data, tumlUri:property.tumlUri, property:property},
                             null,
                             self
                         );
                     });
-                } else if (property.composite && property.lower >= 1 && (property.upper == -1 || property.upper > 1)) {
-
+                } else if (property.composite && property.lower >= 1 && (property.upper > 1 || property.upper == -1)) {
+                    $input.click(function (e, args) {
+                        var data = [];
+                        var componentValue = $.data(this, "componentValue");
+                        if (componentValue !== undefined) {
+                            data = componentValue;
+                        }
+                        self.onClickManyComponent.notify(
+                            {data:data, tumlUri:property.tumlUri, property:property},
+                            null,
+                            self
+                        );
+                    });
                 }
                 if ($input !== undefined) {
                     if (property.dataTypeEnum !== undefined) {
@@ -275,6 +323,12 @@
 
         var buttonDiv = $('<div class="onesavebuttondiv" />').appendTo(formDiv);
 
+        this.addButtons(buttonDiv);
+
+    }
+
+    TumlBaseTabOneManager.prototype.addButtons = function (buttonDiv) {
+        var self = this;
         var saveButton = $('<button />').text('Save').click(function () {
             self.doSave();
         }).appendTo(buttonDiv);
@@ -282,18 +336,25 @@
         var cancelButton = $('<button />').text('Cancel').click(function () {
             self.doCancel();
         }).appendTo(buttonDiv);
-
-    }
+    };
 
     TumlBaseTabOneManager.prototype.doSave = function () {
         alert("doSave must be overridden");
     };
 
+    TumlBaseTabOneManager.prototype.doCancel = function () {
+        this.refresh(this.data, this.metaForData, this.qualifiedName);
+    }
+
     TumlBaseTabOneManager.prototype.isPropertyForOnePage = function (property, isForCreation) {
-        return(!property.inverseComposite && (!property.composite || (isForCreation && property.composite && property.lower > 0)) && ((property.oneToOne || property.manyToOne) || property.manyPrimitive || property.manyEnumeration) && property.name !== 'uri');
+        return(!property.inverseComposite
+            && (!property.composite && (property.oneToOne || property.manyToOne || property.manyPrimitive || property.manyEnumeration))
+            || (isForCreation && property.composite && property.lower > 0)
+            && property.name !== 'uri');
     }
 
     TumlBaseTabOneManager.prototype.constructInputForField = function (data, property, isForCreation) {
+        var self = this;
         var $input;
         if (property.name == 'id') {
             $input = $('<input />', {disabled:'disabled', type:'text', class:'field', id:property.name + this.metaForData.name + 'Id', name:property.name});
@@ -322,10 +383,11 @@
                 $input[0].defaultValue = data[property.name];
             }
         } else if (property.composite && property.lower > 0) {
-            if (!isForCreation) {
-                alert("this should only happen when isForCreation == true");
-            }
             $input = $("<input />", {type:'text', id:property.name + this.metaForData.name + 'Id', name:property.name});
+            if (data !== undefined && data !== null) {
+                $input[0].defaultValue = data[property.name];
+                $.data($input[0], "componentValue", data[property.name]);
+            }
 
         } else if (property.oneEnumeration) {
             $input = $('<select />', {class:'chzn-select', style:'width:350px;', id:property.name + this.metaForData.name + 'Id', name:property.name});
@@ -386,9 +448,9 @@
                 }
             }
         }
-        if (property.isComposite && property.lower >= 1) {
+        if (!(property.composite && property.lower > 0)) {
             $input.blur(function () {
-                this.validateField(property);
+                self.validateField(property);
             });
         }
         return $input;
@@ -511,7 +573,6 @@
     TumlBaseTabOneManager.prototype.appendLoopupOptionsToSelect = function (tumlLookupUri, required, contextVertexId, currentValue, $select) {
         var adjustedUri = tumlLookupUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
         var jqxhr = $.getJSON(adjustedUri,function (response, b, c) {
-            var contextVertexId = retrieveVertexId(tumlUri);
             //if not a required field add a blank value
             if (!required) {
                 $select.append($('<option />)').val("").html(""));

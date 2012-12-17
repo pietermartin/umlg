@@ -1,38 +1,55 @@
 package org.tuml.runtime.domain;
 
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
+
 public enum DataTypeEnum {
 
-	DateTime, Date, Time, InternationalPhoneNumber, LocalPhoneNumber, Email, Video, Audio, Image;
+    DateTime(DateTime.class), Date(LocalDate.class), Time(LocalTime.class), InternationalPhoneNumber(String.class), LocalPhoneNumber(String.class),
+    Email(String.class),
+    Video(Object.class), Audio(Object.class), Image(Object.class);
 
-	public boolean isDateTime() {
-		return this == DateTime;
-	}
+    Class type;
 
-	public boolean isDate() {
-		return this == Date;
-	}
+    private DataTypeEnum(Class type) {
+        this.type = type;
+    }
 
-	public boolean isTime() {
-		return this == Time;
-	}
+    public boolean isDateTime() {
+        return this == DateTime;
+    }
 
-	public boolean isInternationalPhoneNumber() {
-		return this == InternationalPhoneNumber;
-	}
+    public boolean isDate() {
+        return this == Date;
+    }
 
-	public boolean isLocalPhoneNumber() {
-		return this == LocalPhoneNumber;
-	}
+    public boolean isTime() {
+        return this == Time;
+    }
 
-	public boolean isEmail() {
-		return this == Email;
-	}
+    public boolean isInternationalPhoneNumber() {
+        return this == InternationalPhoneNumber;
+    }
 
-	public boolean isVideo() {
-		return this == Video;
-	}
+    public boolean isLocalPhoneNumber() {
+        return this == LocalPhoneNumber;
+    }
 
-	public boolean isAudio() {
-		return this == Audio;
-	}
+    public boolean isEmail() {
+        return this == Email;
+    }
+
+    public boolean isVideo() {
+        return this == Video;
+    }
+
+    public boolean isAudio() {
+        return this == Audio;
+    }
+
+    public Class getType() {
+        return this.type;
+    }
+
 }
