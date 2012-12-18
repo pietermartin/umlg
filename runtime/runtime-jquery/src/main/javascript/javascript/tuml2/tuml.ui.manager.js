@@ -40,8 +40,8 @@
                 changeMyUrl(args.name, args.uri);
             });
             leftMenuManager.onQueryClick.subscribe(function (e, args) {
-                var tabWithoutSpaces = args.name.replace(/\s/g, '');
-                mainViewManager.addQueryTab(args.post, args.tumlUri, args.oclExecuteUri, tabWithoutSpaces, args.name, args.queryEnum, args.queryString);
+                var queryTabDivName = args.name.replace(/\s/g, '');
+                mainViewManager.addQueryTab(args.post, args.tumlUri, args.oclExecuteUri, queryTabDivName, args.name, args.queryEnum, args.queryString);
             });
 
             //Create main view manager
@@ -69,8 +69,6 @@
             });
 
             mainViewManager.onPostQuerySuccess.subscribe(function (e, args) {
-                var metaDataNavigatingTo = args.data[0].meta.to;
-                var metaDataNavigatingFrom = args.data[0].meta.from;
                 leftMenuManager.refreshQuery();
             });
 
@@ -367,3 +365,4 @@
     });
 
 })(jQuery);
+//

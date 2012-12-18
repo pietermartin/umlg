@@ -9,12 +9,25 @@
         }
     });
 
-    function TumlTabQueryViewManager(post, tumlUri, tabDivName, queryName) {
+    function TumlTabQueryViewManager(post, tumlUri, tabDivName, tabTitleName) {
+
+        //Public api
+        $.extend(this, {
+            "TumlTabQueryViewManager":"1.0.0",
+            "onPostQuerySuccess":new Tuml.Event(),
+            "onPutQuerySuccess":new Tuml.Event()
+        });
+
         var self = this;
         this.tabDivName = tabDivName;
-        this.tabTitleName = queryName;
-        this.tumlTabQueryManager = new Tuml.TumlTabQueryManager(post, tumlUri, tabDivName, queryName);
+        this.tabTitleName = tabTitleName;
+        this.tumlTabQueryManager = new Tuml.TumlTabQueryManager(post, tumlUri);
         this.tumlTabQueryManager.onPutQuerySuccess.subscribe(function (e, args) {
+            self.closeTab()
+            self.tabTitleName = args.queryName;
+            self.tabDivName = args.queryName.replace(/\s/g, '');
+            self.createTab();
+            self.createQuery(args.oclExecuteUri, args.queryName, args.queryEnum, args.queryString);
             self.onPutQuerySuccess.notify(args, e, self);
         });
         this.tumlTabQueryManager.onPostQuerySuccess.subscribe(function (e, args) {
@@ -27,8 +40,8 @@
             "onClickManyComponent":new Tuml.Event()
         });
 
-        this.createQuery = function (oclExecuteUri, queryEnum, queryString) {
-            this.tumlTabQueryManager.createQuery(oclExecuteUri, queryEnum, queryString);
+        this.createQuery = function (oclExecuteUri, queryName, queryEnum, queryString) {
+            this.tumlTabQueryManager.createQuery(self.tabDivName, oclExecuteUri, queryName, queryEnum, queryString);
         }
 
     }
@@ -279,6 +292,17 @@
             $('#tab-container').tabs('enableTab', this.tabTitle);
         }
 
+        function getTab(title) {
+            return $('#tab-container').tabs('getTab', title);
+        }
+
+//        function updateTabTitle(title) {
+//            var tab = getTab(this.tabTitle);
+//            var div = $("#" + this.tabId);
+//            $('#tab-container').tabs('update', {tab:tab, options: {title: title, content: div}});
+//            tab.panel('refresh');
+//        }
+
         function disableTab() {
             $('#tab-container').tabs('disableTab', this.tabTitle);
         }
@@ -325,8 +349,6 @@
             "onPostOneSuccess":new Tuml.Event(),
             "onPostOneFailure":new Tuml.Event(),
 
-            "onPostQuerySuccess":new Tuml.Event(),
-            "onPutQuerySuccess":new Tuml.Event(),
 
             //Other events
             "setLinkedTumlTabViewManager":setLinkedTumlTabViewManager,
@@ -337,6 +359,7 @@
             "tabId":tabId,
             "tabTitle":tabTitle,
             "selectTab":selectTab
+//            "updateTabTitle":updateTabTitle
         });
 
     }
@@ -352,7 +375,6 @@
 
     TumlBaseTabViewManager.prototype.createTab = function () {
         var tabContainer = $('#tab-container');
-        var tabDiv = $('<div />', {id:this.tabId, title:this.tabTitle}).appendTo(tabContainer);
         $('#tab-container').tabs('add', {title:this.tabTitle, content:'<div id="' + this.tabId + '" />', closable:true});
     }
 

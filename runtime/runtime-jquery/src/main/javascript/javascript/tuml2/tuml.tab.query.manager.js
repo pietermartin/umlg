@@ -6,7 +6,7 @@
         }
     });
 
-    function TumlTabQueryManager(post, tumlUri, queryTabDivName, queryName) {
+    function TumlTabQueryManager(post, tumlUri) {
 
         var self = this;
         var tumlTabGridManager;
@@ -15,7 +15,7 @@
             tumlTabGridManager = new Tuml.TumlTabGridManager();
         }
 
-        function createQuery(oclExecuteUri, queryEnum, queryString) {
+        function createQuery(queryTabDivName, oclExecuteUri, queryName, queryEnum, queryString) {
             var queryTab = $('#' + queryTabDivName);
 
             $('<div />', {id:'serverErrorMsg_' + queryTabDivName}).appendTo(queryTab);
@@ -54,17 +54,24 @@
             var oclEditButtonDiv = $('<div />', {class:"ocleditbutton"}).appendTo(inputEditButtonDiv);
 
             $('<button />', {id:queryTabDivName + '_' + 'SaveButton'}).text('save').click(function () {
+                var query = queryToJson(queryTabDivName);
                 $.ajax({
                     url:tumlUri,
                     type:post ? "POST" : "PUT",
                     dataType:"json",
                     contentType:"json",
-                    data:JSON.stringify(queryToJson()),
+                    data:JSON.stringify(query),
                     success:function (data, textStatus, jqXHR) {
                         if (post) {
                             self.onPostQuerySuccess.notify({tumlUri:tumlUri, tabId:queryTabDivName, data:data}, null, self);
                         } else {
-                            self.onPutQuerySuccess.notify({tumlUri:tumlUri, tabId:queryTabDivName, data:data}, null, self);
+                            self.onPutQuerySuccess.notify(
+                                {tumlUri:tumlUri,
+                                    queryName:query.name,
+                                    oclExecuteUri:oclExecuteUri,
+                                    queryEnum:query.queryEnum,
+                                    queryString:query.queryString,
+                                    data:data}, null, self);
                         }
                     },
                     error:function (jqXHR, textStatus, errorThrown) {
@@ -83,7 +90,7 @@
             oclResult.appendTo(queryTab);
         }
 
-        function queryToJson() {
+        function queryToJson(queryTabDivName) {
             var query = {};
             query.name = $("#" + queryTabDivName + '_' + 'QueryName').val();
             query.queryString = $("#" + queryTabDivName + '_' + 'QueryString').val();

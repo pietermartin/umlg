@@ -36,12 +36,12 @@
             $('#tab-menu-container').tabs({border:false});
         }
 
-        function refreshQuery() {
+        function refreshQuery(selectedQueryTabName) {
             $("#queryTree").remove();
-            createQueryMenu();
+            createQueryMenu(selectedQueryTabName);
         }
 
-        function createQueryMenu() {
+        function createQueryMenu(selectedQueryTabName) {
             //Add query tree
             var li = $('<li class="ui-left-menu-li-query-tree /">');
             li.appendTo(ulMenu);
@@ -58,6 +58,9 @@
                     success:function (response, textStatus, jqXHR) {
                         queryData = response;
                         internalCreateTree();
+                        if (selectedQueryTabName !== undefined) {
+                            refreshQueryMenu(selectedQueryTabName);
+                        }
                     },
                     error:function (jqXHR, textStatus, errorThrown) {
                         alert('Error getting query data. textStatus: ' + textStatus + ' errorThrown: ' + errorThrown);
@@ -71,8 +74,9 @@
             if (queryData !== undefined) {
                 for (var i = 0; i < queryData[0].data.length; i++) {
                     var query = queryData[0].data[i];
-                    $('#queryMenu' + query.name + 'Id').removeClass('querymenuactive');
-                    $('#queryMenu' + query.name + 'Id').addClass('querymenuinactive');
+                    var queryTabDivName = query.name.replace(/\s/g, '');
+                    $('#queryMenu' + queryTabDivName + 'Id').removeClass('querymenuactive');
+                    $('#queryMenu' + queryTabDivName + 'Id').addClass('querymenuinactive');
                 }
                 var clickedNode = $('#queryMenu' + queryTabName + 'Id');
                 clickedNode.removeClass("querymenuinactive");
@@ -87,7 +91,8 @@
                 var query = queryData[0].data[i];
                 var queryUri = query.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), query.id);
                 var oclExecuteUri = queryData[0].meta.oclExecuteUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
-                queryArray.push({label:query.name, tumlUri:queryUri, oclExecuteUri:oclExecuteUri, qualifiedName:queryProperty.qualifiedName, name:'<span id="queryMenu' + query.name + 'Id" class="querymenuinactive">' + query.name + '</span>', _name:query.name, queryEnum:query.queryEnum, queryString:query.queryString});
+                var queryTabDivName = query.name.replace(/\s/g, '');
+                queryArray.push({label:query.name, tumlUri:queryUri, oclExecuteUri:oclExecuteUri, qualifiedName:queryProperty.qualifiedName, name:'<span id="queryMenu' + queryTabDivName + 'Id" class="querymenuinactive queryitem">' + query.name + '</span>', _name:query.name, queryEnum:query.queryEnum, queryString:query.queryString});
             }
             var treeData = $.extend(topNode, {children:queryArray})
 
