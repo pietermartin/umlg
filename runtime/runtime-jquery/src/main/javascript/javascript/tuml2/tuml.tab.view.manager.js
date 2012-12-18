@@ -9,11 +9,11 @@
         }
     });
 
-    function TumlTabQueryViewManager(post, tumlUri, tabDivName, tabTitleName) {
+    function TumlTabQueryViewManager(post, tumlUri, tabDivName, queryName) {
         var self = this;
         this.tabDivName = tabDivName;
-        this.tabTitleName = tabTitleName;
-        this.tumlTabQueryManager = new Tuml.TumlTabQueryManager(post, tumlUri, tabDivName);
+        this.tabTitleName = queryName;
+        this.tumlTabQueryManager = new Tuml.TumlTabQueryManager(post, tumlUri, tabDivName, queryName);
         this.tumlTabQueryManager.onPutQuerySuccess.subscribe(function (e, args) {
             self.onPutQuerySuccess.notify(args, e, self);
         });
@@ -352,7 +352,7 @@
 
     TumlBaseTabViewManager.prototype.createTab = function () {
         var tabContainer = $('#tab-container');
-        var tabDiv = $('<div />', {id:this.tabId}).appendTo(tabContainer);
+        var tabDiv = $('<div />', {id:this.tabId, title:this.tabTitle}).appendTo(tabContainer);
         $('#tab-container').tabs('add', {title:this.tabTitle, content:'<div id="' + this.tabId + '" />', closable:true});
     }
 

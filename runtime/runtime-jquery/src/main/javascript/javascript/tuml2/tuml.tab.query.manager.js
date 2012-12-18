@@ -6,7 +6,7 @@
         }
     });
 
-    function TumlTabQueryManager(post, tumlUri, queryTabDivName) {
+    function TumlTabQueryManager(post, tumlUri, queryTabDivName, queryName) {
 
         var self = this;
         var tumlTabGridManager;
@@ -49,7 +49,7 @@
             var inputEditButtonDiv = $('<div />', {class:'oclinputeditbutton'}).appendTo(oclInnerButton);
 
             var oclQueryNameInputDiv = $('<div />', {class:'oclqueryname'}).appendTo(inputEditButtonDiv);
-            $('<input >', {id:queryTabDivName + '_' + 'QueryName', type:'text'}).val(queryTabDivName).appendTo(oclQueryNameInputDiv);
+            $('<input >', {id:queryTabDivName + '_' + 'QueryName', type:'text'}).val(queryName).appendTo(oclQueryNameInputDiv);
 
             var oclEditButtonDiv = $('<div />', {class:"ocleditbutton"}).appendTo(inputEditButtonDiv);
 

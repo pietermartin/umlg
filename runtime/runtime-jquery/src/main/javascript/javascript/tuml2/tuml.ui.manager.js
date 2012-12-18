@@ -40,7 +40,8 @@
                 changeMyUrl(args.name, args.uri);
             });
             leftMenuManager.onQueryClick.subscribe(function (e, args) {
-                mainViewManager.addQueryTab(args.post, args.tumlUri, args.oclExecuteUri, args.name, args.name, args.queryEnum, args.queryString);
+                var tabWithoutSpaces = args.name.replace(/\s/g, '');
+                mainViewManager.addQueryTab(args.post, args.tumlUri, args.oclExecuteUri, tabWithoutSpaces, args.name, args.queryEnum, args.queryString);
             });
 
             //Create main view manager
