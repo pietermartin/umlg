@@ -6,7 +6,7 @@
         }
     });
 
-    function TumlTabQueryManager(post, tumlUri) {
+    function TumlTabQueryManager(tumlUri) {
 
         var self = this;
         var tumlTabGridManager;
@@ -15,7 +15,7 @@
             tumlTabGridManager = new Tuml.TumlTabGridManager();
         }
 
-        function createQuery(queryTabDivName, oclExecuteUri, queryName, queryEnum, queryString) {
+        function createQuery(post, queryTabDivName, oclExecuteUri, queryName, queryEnum, queryString) {
             var queryTab = $('#' + queryTabDivName);
 
             $('<div />', {id:'serverErrorMsg_' + queryTabDivName}).appendTo(queryTab);
@@ -63,7 +63,13 @@
                     data:JSON.stringify(query),
                     success:function (data, textStatus, jqXHR) {
                         if (post) {
-                            self.onPostQuerySuccess.notify({tumlUri:tumlUri, tabId:queryTabDivName, data:data}, null, self);
+                            self.onPostQuerySuccess.notify(
+                                {tumlUri:tumlUri,
+                                    queryName:query.name,
+                                    oclExecuteUri:oclExecuteUri,
+                                    queryEnum:query.queryEnum,
+                                    queryString:query.queryString,
+                                    data:data}, null, self);
                         } else {
                             self.onPutQuerySuccess.notify(
                                 {tumlUri:tumlUri,
@@ -82,7 +88,32 @@
             }).appendTo(oclEditButtonDiv);
             if (!post) {
                 $('<button />', {id:queryTabDivName + '_' + 'CancelButton'}).text('cancel').appendTo(oclEditButtonDiv);
-                $('<button />', {id:queryTabDivName + '_' + 'DeleteButton'}).text('delete').appendTo(oclEditButtonDiv);
+                $('<button />', {id:queryTabDivName + '_' + 'DeleteButton'}).text('delete').click(function () {
+
+                        var query = queryToJson(queryTabDivName);
+                        $.ajax({
+                            url:tumlUri,
+                            type:"DELETE",
+                            dataType:"json",
+                            contentType:"json",
+                            success:function (data, textStatus, jqXHR) {
+                                self.onDeleteQuerySuccess.notify(
+                                    {tumlUri:tumlUri,
+                                        queryName:query.name,
+                                        oclExecuteUri:oclExecuteUri,
+                                        queryEnum:query.queryEnum,
+                                        queryString:query.queryString,
+                                        data:data}, null, self);
+                            },
+                            error:function (jqXHR, textStatus, errorThrown) {
+                                $('#serverErrorMsg_' + queryTabDivName).addClass('server-error-msg').html(jqXHR.responseText);
+
+                            }
+                        });
+
+
+                    }
+                ).appendTo(oclEditButtonDiv);
             }
 
             //Outer div for results
@@ -106,6 +137,7 @@
             "onPostQuerySuccess":new Tuml.Event(),
             "onPutQueryFailure":new Tuml.Event(),
             "onPostQueryFailure":new Tuml.Event(),
+            "onDeleteQuerySuccess":new Tuml.Event(),
             "onDeleteSuccess":new Tuml.Event(),
             "onDeleteFailure":new Tuml.Event(),
             "onCancel":new Tuml.Event(),

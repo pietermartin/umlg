@@ -9,29 +9,39 @@
         }
     });
 
-    function TumlTabQueryViewManager(post, tumlUri, tabDivName, tabTitleName) {
+    function TumlTabQueryViewManager(tumlUri, tabDivName, tabTitleName) {
 
         //Public api
         $.extend(this, {
             "TumlTabQueryViewManager":"1.0.0",
             "onPostQuerySuccess":new Tuml.Event(),
-            "onPutQuerySuccess":new Tuml.Event()
+            "onPutQuerySuccess":new Tuml.Event(),
+            "onDeleteQuerySuccess":new Tuml.Event()
         });
 
         var self = this;
         this.tabDivName = tabDivName;
         this.tabTitleName = tabTitleName;
-        this.tumlTabQueryManager = new Tuml.TumlTabQueryManager(post, tumlUri);
+        this.tumlTabQueryManager = new Tuml.TumlTabQueryManager(tumlUri);
         this.tumlTabQueryManager.onPutQuerySuccess.subscribe(function (e, args) {
-            self.closeTab()
+            self.closeTab();
             self.tabTitleName = args.queryName;
             self.tabDivName = args.queryName.replace(/\s/g, '');
             self.createTab();
-            self.createQuery(args.oclExecuteUri, args.queryName, args.queryEnum, args.queryString);
+            self.createQuery(false, args.oclExecuteUri, args.queryName, args.queryEnum, args.queryString);
             self.onPutQuerySuccess.notify(args, e, self);
         });
         this.tumlTabQueryManager.onPostQuerySuccess.subscribe(function (e, args) {
+            self.closeTab();
+            self.tabTitleName = args.queryName;
+            self.tabDivName = args.queryName.replace(/\s/g, '');
+            self.createTab();
+            self.createQuery(false, args.oclExecuteUri, args.queryName, args.queryEnum, args.queryString);
             self.onPostQuerySuccess.notify(args, e, self);
+        });
+        this.tumlTabQueryManager.onDeleteQuerySuccess.subscribe(function (e, args) {
+            self.closeTab();
+//            self.onPostQuerySuccess.notify(args, e, self);
         });
         //Public api
         $.extend(this, {
@@ -40,8 +50,8 @@
             "onClickManyComponent":new Tuml.Event()
         });
 
-        this.createQuery = function (oclExecuteUri, queryName, queryEnum, queryString) {
-            this.tumlTabQueryManager.createQuery(self.tabDivName, oclExecuteUri, queryName, queryEnum, queryString);
+        this.createQuery = function (post, oclExecuteUri, queryName, queryEnum, queryString) {
+            this.tumlTabQueryManager.createQuery(post, self.tabDivName, oclExecuteUri, queryName, queryEnum, queryString);
         }
 
     }
@@ -296,13 +306,6 @@
             return $('#tab-container').tabs('getTab', title);
         }
 
-//        function updateTabTitle(title) {
-//            var tab = getTab(this.tabTitle);
-//            var div = $("#" + this.tabId);
-//            $('#tab-container').tabs('update', {tab:tab, options: {title: title, content: div}});
-//            tab.panel('refresh');
-//        }
-
         function disableTab() {
             $('#tab-container').tabs('disableTab', this.tabTitle);
         }
@@ -359,7 +362,6 @@
             "tabId":tabId,
             "tabTitle":tabTitle,
             "selectTab":selectTab
-//            "updateTabTitle":updateTabTitle
         });
 
     }
