@@ -46,16 +46,55 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
 			addGetRepresentation(clazz, annotatedInf, annotatedClass);
 			if (!clazz.isAbstract()) {
 				addPutRepresentation(clazz, annotatedInf, annotatedClass);
+                addDeletetRepresentation(clazz, annotatedInf, annotatedClass);
 			}
 			addToRouterEnum(clazz, annotatedClass);
 		}
 	}
 
-	@Override
+    @Override
 	public void visitAfter(Class clazz) {
 	}
 
-	private void addPutRepresentation(Class clazz, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass) {
+    private void addDeletetRepresentation(Class clazz, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass) {
+        OJAnnotatedOperation deleteInf = new OJAnnotatedOperation("delete", TumlRestletGenerationUtil.Representation);
+        deleteInf.addParam("entity", TumlRestletGenerationUtil.Representation);
+        annotatedInf.addToOperations(deleteInf);
+        deleteInf.addAnnotationIfNew(new OJAnnotationValue(TumlRestletGenerationUtil.Delete, "json"));
+
+        OJAnnotatedOperation delete = new OJAnnotatedOperation("delete", TumlRestletGenerationUtil.Representation);
+        delete.addParam("entity", TumlRestletGenerationUtil.Representation);
+        delete.addToThrows(TumlRestletGenerationUtil.ResourceException);
+        annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
+        TinkerGenerationUtil.addOverrideAnnotation(delete);
+        delete.getBody().addToStatements(
+                "this." + getIdFieldName(clazz) + "= Integer.parseInt((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"))");
+        delete.getBody().addToStatements(
+                TumlClassOperations.className(clazz) + " c = new " + TumlClassOperations.className(clazz) + "(GraphDb.getDb().getVertex(this."
+                        + getIdFieldName(clazz) + "))");
+        annotatedClass.addToImports(TumlClassOperations.getPathName(clazz));
+        delete.getBody().addToStatements("GraphDb.getDb().startTransaction()");
+        OJTryStatement ojTry = new OJTryStatement();
+        ojTry.getTryPart().addToStatements("c.delete()");
+        ojTry.getTryPart().addToStatements("GraphDb.getDb().stopTransaction(Conclusion.SUCCESS)");
+        annotatedClass.addToImports(TinkerGenerationUtil.tinkerConclusionPathName);
+        ojTry.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
+
+        ojTry.getCatchPart().addToStatements("GraphDb.getDb().stopTransaction(Conclusion.FAILURE)");
+        OJIfStatement ifRuntime = new OJIfStatement("e instanceof RuntimeException");
+        ifRuntime.addToThenPart("throw (RuntimeException)e");
+        ojTry.getCatchPart().addToStatements(ifRuntime);
+        ojTry.getCatchPart().addToStatements("throw new RuntimeException(e)");
+        delete.getBody().addToStatements(ojTry);
+
+        delete.getBody().addToStatements("return get()");
+
+        annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
+        annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);
+        annotatedClass.addToOperations(delete);
+    }
+
+    private void addPutRepresentation(Class clazz, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass) {
 
 		OJAnnotatedOperation putInf = new OJAnnotatedOperation("put", TumlRestletGenerationUtil.Representation);
 		putInf.addParam("entity", TumlRestletGenerationUtil.Representation);

@@ -15,7 +15,7 @@
             tumlTabGridManager = new Tuml.TumlTabGridManager();
         }
 
-        function createQuery(post, queryTabDivName, oclExecuteUri, queryName, queryEnum, queryString) {
+        function createQuery(queryTabDivName, oclExecuteUri, queryName, queryEnum, queryString, post, id) {
             var queryTab = $('#' + queryTabDivName);
 
             $('<div />', {id:'serverErrorMsg_' + queryTabDivName}).appendTo(queryTab);
@@ -54,7 +54,7 @@
             var oclEditButtonDiv = $('<div />', {class:"ocleditbutton"}).appendTo(inputEditButtonDiv);
 
             $('<button />', {id:queryTabDivName + '_' + 'SaveButton'}).text('save').click(function () {
-                var query = queryToJson(queryTabDivName);
+                var query = queryToJson(queryTabDivName, id);
                 $.ajax({
                     url:tumlUri,
                     type:post ? "POST" : "PUT",
@@ -90,12 +90,13 @@
                 $('<button />', {id:queryTabDivName + '_' + 'CancelButton'}).text('cancel').appendTo(oclEditButtonDiv);
                 $('<button />', {id:queryTabDivName + '_' + 'DeleteButton'}).text('delete').click(function () {
 
-                        var query = queryToJson(queryTabDivName);
+                        var query = queryToJson(queryTabDivName, id);
                         $.ajax({
                             url:tumlUri,
                             type:"DELETE",
                             dataType:"json",
                             contentType:"json",
+                            data:JSON.stringify(query),
                             success:function (data, textStatus, jqXHR) {
                                 self.onDeleteQuerySuccess.notify(
                                     {tumlUri:tumlUri,
@@ -121,11 +122,14 @@
             oclResult.appendTo(queryTab);
         }
 
-        function queryToJson(queryTabDivName) {
+        function queryToJson(queryTabDivName, id) {
             var query = {};
             query.name = $("#" + queryTabDivName + '_' + 'QueryName').val();
             query.queryString = $("#" + queryTabDivName + '_' + 'QueryString').val();
             query.queryEnum = "OCL";
+            if (id !== undefined) {
+                query.id = id;
+            }
             return query;
         }
 

@@ -28,7 +28,15 @@
             self.tabTitleName = args.queryName;
             self.tabDivName = args.queryName.replace(/\s/g, '');
             self.createTab();
-            self.createQuery(false, args.oclExecuteUri, args.queryName, args.queryEnum, args.queryString);
+            //Get the query just posted's id
+            var queryId;
+            for (var i = 0; i < args.data[0].data.length; i++) {
+                var query = args.data[0].data[i];
+                if (query.name === args.queryName) {
+                    queryId = query.id;
+                }
+            }
+            self.createQuery(args.oclExecuteUri, args.queryName, args.queryEnum, args.queryString, false, queryId);
             self.onPutQuerySuccess.notify(args, e, self);
         });
         this.tumlTabQueryManager.onPostQuerySuccess.subscribe(function (e, args) {
@@ -36,7 +44,15 @@
             self.tabTitleName = args.queryName;
             self.tabDivName = args.queryName.replace(/\s/g, '');
             self.createTab();
-            self.createQuery(false, args.oclExecuteUri, args.queryName, args.queryEnum, args.queryString);
+            //Get the query just posted's id
+            var queryId;
+            for (var i = 0; i < args.data[0].data.length; i++) {
+                var query = args.data[0].data[i];
+                if (query.name === args.queryName) {
+                    queryId = query.id;
+                }
+            }
+            self.createQuery(args.oclExecuteUri, args.queryName, args.queryEnum, args.queryString, false, queryId);
             self.onPostQuerySuccess.notify(args, e, self);
         });
         this.tumlTabQueryManager.onDeleteQuerySuccess.subscribe(function (e, args) {
@@ -50,8 +66,8 @@
             "onClickManyComponent":new Tuml.Event()
         });
 
-        this.createQuery = function (post, oclExecuteUri, queryName, queryEnum, queryString) {
-            this.tumlTabQueryManager.createQuery(post, self.tabDivName, oclExecuteUri, queryName, queryEnum, queryString);
+        this.createQuery = function (oclExecuteUri, queryName, queryEnum, queryString, post, id) {
+            this.tumlTabQueryManager.createQuery(self.tabDivName, oclExecuteUri, queryName, queryEnum, queryString, post, id);
         }
 
     }

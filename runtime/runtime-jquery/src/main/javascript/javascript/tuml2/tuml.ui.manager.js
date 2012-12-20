@@ -41,7 +41,7 @@
             });
             leftMenuManager.onQueryClick.subscribe(function (e, args) {
                 var queryTabDivName = args.name.replace(/\s/g, '');
-                mainViewManager.addQueryTab(args.post, args.tumlUri, args.oclExecuteUri, queryTabDivName, args.name, args.queryEnum, args.queryString);
+                mainViewManager.addQueryTab(args.tumlUri, args.oclExecuteUri, queryTabDivName, args.name, args.queryEnum, args.queryString, args.post, args.queryId);
             });
 
             //Create main view manager
