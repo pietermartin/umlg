@@ -5,9 +5,70 @@
             TumlBaseGridManager:TumlBaseGridManager,
             TumlManyComponentGridManager:TumlManyComponentGridManager,
             TumlForManyLookupGridManager:TumlForManyLookupGridManager,
+            "TumlQueryGridManager":TumlQueryGridManager,
             TumlTabGridManager:TumlTabGridManager
         }
     });
+
+    function TumlQueryGridManager(propertyNavigatingTo) {
+        var self = this;
+
+        //Public api
+        $.extend(this, {
+            "TumlQueryGridManager":"1.0.0"
+        });
+
+        this.setupColumns = function () {
+
+            TumlBaseGridManager.prototype.setupColumns.call(this, this.localMetaForData);
+
+            this.columns.push({id:"uri", name:"uri", field:"uri", sortable:false, formatter:TumlSlick.Formatters.Link});
+            this.columns.push(
+                {id:"delete", name:"delete", field:"delete", sortable:false,
+                    formatter:TumlSlick.Formatters.TumlDelete }
+            );
+        };
+
+        this.refresh = function (result, gridDivName) {
+            this.dataBeforeEdit = $.extend(true, [], result.data);
+            this.metaForData = result.meta.to;
+            this.gridDivName = gridDivName;
+            var tabDiv = $('#' + this.metaForData.name + "QueryComponent");
+            $('<div id="serverErrorMsg" />').appendTo(tabDiv);
+            $('<div id="' + this.gridDivName + '" style="width:auto;height:90%;"></div>').appendTo(tabDiv);
+            $('<div id="pager' + this.gridDivName + '" style="width:auto;height:20px;"></div>').appendTo(tabDiv);
+            $('#contextMenu' + this.gridDivName).remove();
+            this.createGrid(result.data, this.metaForData, -1);
+        };
+
+        this.instantiateGrid = function () {
+            this.grid = new Slick.Grid("#" + this.gridDivName, this.dataView, this.columns, this.options);
+            //Creating a pager for the component manies editor grid call commitCurrentEditor which buggers everything up
+            this.pager = new Slick.Controls.Pager(this.dataView, this.grid, $("#pager" + this.gridDivName));
+            $("<div id='grid-buttonQueryComponent" + this.localMetaForData.name + "' class='grid-button'/>").appendTo('#pager' + this.gridDivName + ' .slick-pager-settings');
+            TumlBaseGridManager.prototype.instantiateGrid.call(this);
+        };
+
+        this.addButtons = function () {
+        }
+
+    }
+
+    TumlQueryGridManager.prototype = new TumlBaseGridManager;
+
+    TumlQueryGridManager.prototype.setupOptions = function () {
+        this.options = {
+            showHeaderRow:true,
+            headerRowHeight:30,
+            editable:false,
+            enableAddRow:true,
+            enableCellNavigation:true,
+            asyncEditorLoading:false,
+            enableAsyncPostRender:true,
+            forceFitColumns:false,
+            topPanelHeight:25
+        };
+    }
 
     function TumlManyComponentGridManager(tumlUri, propertyNavigatingTo) {
         var self = this;
@@ -372,8 +433,14 @@
         this.createGrid = function (data, localMetaForData, tumlUri) {
             var columnFilters = {};
             var lookupColumns;
+            var self = this;
             this.data = data;
-            this.contextVertexId = retrieveVertexId(tumlUri);
+            //The query grid does not have a tumlUri or contextVertexId
+            if (tumlUri !== -1) {
+                this.contextVertexId = retrieveVertexId(tumlUri);
+            } else {
+                this.contextVertexId = -1;
+            }
             this.localMetaForData = localMetaForData;
 
             this.setupColumns();
@@ -803,6 +870,8 @@
         this.dataView.beginUpdate();
         this.setData(data);
         this.dataView.endUpdate();
+//        this.grid.invalidateAllRows();
+//        this.grid.render();
     }
 
     TumlBaseGridManager.prototype.setupColumns = function () {

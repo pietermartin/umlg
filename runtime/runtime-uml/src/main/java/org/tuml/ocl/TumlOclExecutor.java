@@ -105,7 +105,7 @@ public class TumlOclExecutor {
 		}
 	}
 
-	private static String tupleMapToJson(Map<String, Object> result) {
+	public static String tupleMapToJson(Map<String, Object> result) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
 		int count = 1;

@@ -12,10 +12,11 @@
         var tumlTabGridManager;
 
         function init() {
-            tumlTabGridManager = new Tuml.TumlTabGridManager();
+            tumlTabGridManager = new Tuml.TumlQueryGridManager();
         }
 
         function createQuery(queryTabDivName, oclExecuteUri, queryName, queryEnum, queryString, post, id) {
+            var self = this;
             var queryTab = $('#' + queryTabDivName);
 
             $('<div />', {id:'serverErrorMsg_' + queryTabDivName}).appendTo(queryTab);
@@ -38,7 +39,7 @@
                     dataType:"json",
                     contentType:"json",
                     success:function (data, textStatus, jqXHR) {
-                        alert('create the grid');
+                        tumlTabGridManager.refresh(data[0], queryTabDivName  + '_' + 'OclResult');
                     },
                     error:function (jqXHR, textStatus, errorThrown) {
                         $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);

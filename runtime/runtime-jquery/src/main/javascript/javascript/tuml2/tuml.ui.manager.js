@@ -97,13 +97,25 @@
             });
             mainViewManager.onPostOneSuccess.subscribe(function (e, args) {
                 self.onPostOneSuccess.notify(args, e, self);
+                var contextMetaData = getContextMetaData(args.data);
+                contextManager.refresh(contextMetaData.name, contextMetaData.uri, contextMetaData.contextVertexId);
+                var adjustedUri = contextMetaData.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextMetaData.contextVertexId);
+                changeMyUrl(contextMetaData.name, adjustedUri);
+                //This is like calling refresh only we already have the data
+                var contextVertexId = retrieveVertexId(adjustedUri);
+                mainViewManager.refresh(adjustedUri, args.data);
+            });
+            mainViewManager.onPostOneFailure.subscribe(function (e, args) {
+                self.onPostOneFailure.notify(args, e, self);
+            });
+            mainViewManager.onDeleteOneSuccess.subscribe(function (e, args) {
                 var contextMetaData = getContextMetaData(args.data, args.tumlUri);
                 contextManager.refresh(contextMetaData.name, contextMetaData.uri, contextMetaData.contextVertexId);
                 var adjustedUri = contextMetaData.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextMetaData.contextVertexId);
                 changeMyUrl(contextMetaData.name, adjustedUri);
-            });
-            mainViewManager.onPostOneFailure.subscribe(function (e, args) {
-                self.onPostOneFailure.notify(args, e, self);
+                //This is like calling refresh only we already have the data
+                var contextVertexId = retrieveVertexId(adjustedUri);
+                mainViewManager.refresh(adjustedUri, args.data);
             });
 
             window.onpopstate = function (event) {

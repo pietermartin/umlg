@@ -112,15 +112,6 @@
                     // The clicked node is 'event.node'
                     var node = event.node;
                     if (node._name !== 'queries') {
-                        //Change the css activeproperty
-                        for (i = 0; i < queryData[0].data.length; i++) {
-                            var query = queryData[0].data[i];
-                            $('#queryMenu' + query.name + 'Id').removeClass('querymenuactive');
-                            $('#queryMenu' + query.name + 'Id').addClass('querymenuinactive');
-                        }
-                        var clickedNode = $('#queryMenu' + node._name + 'Id');
-                        clickedNode.removeClass("querymenuinactive");
-                        clickedNode.addClass("querymenuactive");
                         self.onQueryClick.notify({post:false, tumlUri:node.tumlUri, oclExecuteUri:node.oclExecuteUri, qualifiedName:node.qualifiedName, name:node._name, queryEnum:node.queryEnum, queryString:node.queryString}, null, self);
                     }
                 }

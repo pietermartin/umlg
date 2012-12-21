@@ -10,9 +10,9 @@ public abstract class BaseOclExecutionServerResourceImpl extends ServerResource 
 	public BaseOclExecutionServerResourceImpl() {
 	}
 
-	protected String execute(String ocl, Integer contextId) {
+	protected Object execute(String ocl, Integer contextId) {
 		TumlNode context = GraphDb.getDb().<TumlNode>instantiateClassifier(Long.valueOf(contextId));
-		return TumlOclExecutor.executeOclQueryToJson(context.getQualifiedName(), context, ocl);
+		return TumlOclExecutor.executeOclQuery(context.getQualifiedName(), context, ocl);
 	}
 
 

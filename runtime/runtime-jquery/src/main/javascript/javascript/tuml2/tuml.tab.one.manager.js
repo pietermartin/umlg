@@ -49,6 +49,7 @@
 
     function TumlTabOneManager(tumlUri) {
         var self = this;
+        this.tumlUri = tumlUri;
         TumlBaseTabOneManager.call(this, tumlUri);
 
         this.doSave = function () {
@@ -94,14 +95,38 @@
             }
         }
 
+        this.doDelete = function() {
+            $.ajax({
+                url:self.tumlUri,
+                type:"DELETE",
+                dataType:"json",
+                contentType:"json",
+                data:self.fieldsToJson(),
+                success:function (data, textStatus, jqXHR) {
+                    self.onDeleteOneSuccess.notify({tumlUri:tumlUri, data:data}, null, self);
+                },
+                error:function (jqXHR, textStatus, errorThrown) {
+                    $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
+                    self.onDeleteOneFailure.notify({tumlUri:tumlUri, jqXHR:jqXHR, textStatus:textStatus, errorThrown:errorThrown}, null, self);
+                }
+            });
+        }
+
         this.getDiv = function () {
             return $('#' + this.metaForData.name);
         }
 
     }
 
-
     TumlTabOneManager.prototype = new TumlBaseTabOneManager;
+
+    TumlTabOneManager.prototype.addButtons = function (buttonDiv) {
+        var self = this;
+        TumlBaseTabOneManager.prototype.addButtons.call(this, buttonDiv);
+        var deleteButton = $('<button />').text('Delete').click(function () {
+            self.doDelete();
+        }).appendTo(buttonDiv);
+    };
 
     function TumlBaseTabOneManager(tumlUri) {
 
@@ -225,7 +250,9 @@
             "onPutOneSuccess":new Tuml.Event(),
             "onPutOneFailure":new Tuml.Event(),
             "onPostOneSuccess":new Tuml.Event(),
-            "onPostOneFailure":new Tuml.Event()
+            "onPostOneFailure":new Tuml.Event(),
+            "onDeleteOneSuccess":new Tuml.Event(),
+            "onDeleteOneFailure":new Tuml.Event()
         });
 
         init();
@@ -340,6 +367,10 @@
 
     TumlBaseTabOneManager.prototype.doSave = function () {
         alert("doSave must be overridden");
+    };
+
+    TumlBaseTabOneManager.prototype.doDelete = function () {
+        alert("doDelete must be overridden");
     };
 
     TumlBaseTabOneManager.prototype.doCancel = function () {
