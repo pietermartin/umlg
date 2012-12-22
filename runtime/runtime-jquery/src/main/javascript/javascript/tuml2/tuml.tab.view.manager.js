@@ -32,6 +32,12 @@
         this.tumlTabQueryManager.onDeleteQuerySuccess.subscribe(function (e, args) {
             self.onDeleteQuerySuccess.notify(args, e, self);
         });
+        this.tumlTabQueryManager.onContextMenuClickLink.subscribe(function (e, args) {
+            self.onContextMenuClickLink.notify(args, e, self);
+        });
+        this.tumlTabQueryManager.onSelfCellClick.subscribe(function (e, args) {
+            self.onSelfCellClick.notify(args, e, self);
+        });
         //Public api
         $.extend(this, {
             "TumlTabOneViewManager":"1.0.0",

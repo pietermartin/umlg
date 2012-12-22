@@ -5,7 +5,7 @@
             TumlBaseGridManager:TumlBaseGridManager,
             TumlManyComponentGridManager:TumlManyComponentGridManager,
             TumlForManyLookupGridManager:TumlForManyLookupGridManager,
-            "TumlQueryGridManager":TumlQueryGridManager,
+            TumlQueryGridManager:TumlQueryGridManager,
             TumlTabGridManager:TumlTabGridManager
         }
     });
@@ -15,43 +15,48 @@
 
         //Public api
         $.extend(this, {
-            "TumlQueryGridManager":"1.0.0"
+            "TumlQueryGridManager":"1.0.0",
+            "onPutSuccess":new Tuml.Event(),
+            "onPutFailure":new Tuml.Event(),
+            "onPostSuccess":new Tuml.Event(),
+            "onPostFailure":new Tuml.Event(),
+            "onDeleteSuccess":new Tuml.Event(),
+            "onDeleteFailure":new Tuml.Event(),
+            "onCancel":new Tuml.Event(),
+            "onSelfCellClick":new Tuml.Event(),
+            "onContextMenuClickLink":new Tuml.Event(),
+            "onContextMenuClickDelete":new Tuml.Event(),
+            "onManyEditorKeyPress":new Tuml.Event()
         });
 
         this.setupColumns = function () {
-
             TumlBaseGridManager.prototype.setupColumns.call(this, this.localMetaForData);
-
             this.columns.push({id:"uri", name:"uri", field:"uri", sortable:false, formatter:TumlSlick.Formatters.Link});
-            this.columns.push(
-                {id:"delete", name:"delete", field:"delete", sortable:false,
-                    formatter:TumlSlick.Formatters.TumlDelete }
-            );
         };
 
         this.refresh = function (result, gridDivName) {
             this.dataBeforeEdit = $.extend(true, [], result.data);
             this.metaForData = result.meta.to;
             this.gridDivName = gridDivName;
-            var tabDiv = $('#' + this.metaForData.name + "QueryComponent");
-            $('<div id="serverErrorMsg" />').appendTo(tabDiv);
-            $('<div id="' + this.gridDivName + '" style="width:auto;height:90%;"></div>').appendTo(tabDiv);
-            $('<div id="pager' + this.gridDivName + '" style="width:auto;height:20px;"></div>').appendTo(tabDiv);
+            var outerDivForResults = $('#' + this.gridDivName);
+            $('<div />', {id:"queryResultsDiv"})
+            $('<div id="serverErrorMsg' + this.gridDivName + '" />').appendTo(outerDivForResults);
+            $('<div id="queryResultsDiv" style="width:auto;height:90%;"></div>').appendTo(outerDivForResults);
+            $('<div id="pagerQueryResultsDiv" style="width:auto;height:20px;"></div>').appendTo(outerDivForResults);
             $('#contextMenu' + this.gridDivName).remove();
             this.createGrid(result.data, this.metaForData, -1);
         };
 
         this.instantiateGrid = function () {
-            this.grid = new Slick.Grid("#" + this.gridDivName, this.dataView, this.columns, this.options);
+            this.grid = new Slick.Grid("#queryResultsDiv", this.dataView, this.columns, this.options);
             //Creating a pager for the component manies editor grid call commitCurrentEditor which buggers everything up
-            this.pager = new Slick.Controls.Pager(this.dataView, this.grid, $("#pager" + this.gridDivName));
-            $("<div id='grid-buttonQueryComponent" + this.localMetaForData.name + "' class='grid-button'/>").appendTo('#pager' + this.gridDivName + ' .slick-pager-settings');
+            this.pager = new Slick.Controls.Pager(this.dataView, this.grid, $("#pagerQueryResultsDiv"));
+            $("<div id='grid-buttonQueryComponent" + this.localMetaForData.name + "' class='grid-button'/>").appendTo('#pagerQueryResultsDiv .slick-pager-settings');
             TumlBaseGridManager.prototype.instantiateGrid.call(this);
         };
 
         this.addButtons = function () {
         }
-
     }
 
     TumlQueryGridManager.prototype = new TumlBaseGridManager;
@@ -61,7 +66,7 @@
             showHeaderRow:true,
             headerRowHeight:30,
             editable:false,
-            enableAddRow:true,
+            enableAddRow:false,
             enableCellNavigation:true,
             asyncEditorLoading:false,
             enableAsyncPostRender:true,
@@ -81,7 +86,18 @@
             "onManyComponentCloseButtonSuccess":new Tuml.Event(),
             "onManyComponentCancelButtonSuccess":new Tuml.Event(),
             "onClickManyComponentCell":new Tuml.Event(),
-            "onClickOneComponentCell":new Tuml.Event()
+            "onClickOneComponentCell":new Tuml.Event(),
+            "onPutSuccess":new Tuml.Event(),
+            "onPutFailure":new Tuml.Event(),
+            "onPostSuccess":new Tuml.Event(),
+            "onPostFailure":new Tuml.Event(),
+            "onDeleteSuccess":new Tuml.Event(),
+            "onDeleteFailure":new Tuml.Event(),
+            "onCancel":new Tuml.Event(),
+            "onSelfCellClick":new Tuml.Event(),
+            "onContextMenuClickLink":new Tuml.Event(),
+            "onContextMenuClickDelete":new Tuml.Event(),
+            "onManyEditorKeyPress":new Tuml.Event()
         });
 
         this.setupColumns = function () {
@@ -154,6 +170,12 @@
         this.dataView.endUpdate();
     }
 
+    TumlManyComponentGridManager.prototype.createContextMenu = function () {
+        var contextMenuUl = TumlBaseGridManager.prototype.createContextMenu.call(this);
+        $('<li data="delete" />').text("delete").appendTo(contextMenuUl);
+        return contextMenuUl;
+    };
+
     function TumlForManyLookupGridManager(tumlUri, propertyNavigatingTo) {
         var self = this;
         TumlBaseGridManager.call(this, tumlUri, propertyNavigatingTo);
@@ -162,7 +184,18 @@
         $.extend(this, {
             "TumlForManyLookupGridManager":"1.0.0",
             "onSelectButtonSuccess":new Tuml.Event(),
-            "onSelectCancelButtonSuccess":new Tuml.Event()
+            "onSelectCancelButtonSuccess":new Tuml.Event(),
+            "onPutSuccess":new Tuml.Event(),
+            "onPutFailure":new Tuml.Event(),
+            "onPostSuccess":new Tuml.Event(),
+            "onPostFailure":new Tuml.Event(),
+            "onDeleteSuccess":new Tuml.Event(),
+            "onDeleteFailure":new Tuml.Event(),
+            "onCancel":new Tuml.Event(),
+            "onSelfCellClick":new Tuml.Event(),
+            "onContextMenuClickLink":new Tuml.Event(),
+            "onContextMenuClickDelete":new Tuml.Event(),
+            "onManyEditorKeyPress":new Tuml.Event()
         });
 
         this.setupOptions = function () {
@@ -213,6 +246,12 @@
 
     TumlForManyLookupGridManager.prototype = new TumlBaseGridManager;
 
+    TumlForManyLookupGridManager.prototype.createContextMenu = function () {
+        var contextMenuUl = TumlBaseGridManager.prototype.createContextMenu.call(this);
+        $('<li data="delete" />').text("delete").appendTo(contextMenuUl);
+        return contextMenuUl;
+    };
+
     function TumlTabGridManager(tumlUri, propertyNavigatingTo) {
         var self = this;
         TumlBaseGridManager.call(this, tumlUri, propertyNavigatingTo);
@@ -222,7 +261,18 @@
             "TumlTabGridManagerVersion":"1.0.0",
             "onAddButtonSuccess":new Tuml.Event(),
             "onClickManyComponentCell":new Tuml.Event(),
-            "onClickOneComponentCell":new Tuml.Event()
+            "onClickOneComponentCell":new Tuml.Event(),
+            "onPutSuccess":new Tuml.Event(),
+            "onPutFailure":new Tuml.Event(),
+            "onPostSuccess":new Tuml.Event(),
+            "onPostFailure":new Tuml.Event(),
+            "onDeleteSuccess":new Tuml.Event(),
+            "onDeleteFailure":new Tuml.Event(),
+            "onCancel":new Tuml.Event(),
+            "onSelfCellClick":new Tuml.Event(),
+            "onContextMenuClickLink":new Tuml.Event(),
+            "onContextMenuClickDelete":new Tuml.Event(),
+            "onManyEditorKeyPress":new Tuml.Event()
         });
 
         this.setupColumns = function () {
@@ -358,12 +408,16 @@
                     });
                 }
             }).appendTo('#grid-button' + this.localMetaForData.name);
-
         }
-
     }
 
     TumlTabGridManager.prototype = new TumlBaseGridManager;
+
+    TumlTabGridManager.prototype.createContextMenu = function () {
+        var contextMenuUl = TumlBaseGridManager.prototype.createContextMenu.call(this);
+        $('<li data="delete" />').text("delete").appendTo(contextMenuUl);
+        return contextMenuUl;
+    };
 
     function TumlBaseGridManager(tumlUri, propertyNavigatingTo) {
         this.tumlUri = tumlUri;
@@ -371,24 +425,6 @@
 
         var self = this;
         this.columns = [];
-
-        //Public api
-        $.extend(this, {
-            "TumlTabGridManagerVersion":"1.0.0",
-            "onPutSuccess":new Tuml.Event(),
-            "onPutFailure":new Tuml.Event(),
-            "onPostSuccess":new Tuml.Event(),
-            "onPostFailure":new Tuml.Event(),
-            "onDeleteSuccess":new Tuml.Event(),
-            "onDeleteFailure":new Tuml.Event(),
-            "onCancel":new Tuml.Event(),
-            "onSelfCellClick":new Tuml.Event(),
-            "onContextMenuClickLink":new Tuml.Event(),
-            "onContextMenuClickDelete":new Tuml.Event(),
-            "onManyEditorKeyPress":new Tuml.Event(),
-            "addItems":addItems,
-            "setCellValue":setCellValue
-        });
 
         this.cancel = function (data) {
             if (this.grid.getEditorLock().commitCurrentEdit()) {
@@ -458,15 +494,7 @@
             this.addButtons();
 
             //Create context menu
-            var contextMenuUl = $('<ul />', {id:'contextMenu' + this.localMetaForData.name, style:'display:none;position:absolute', class:'contextMenu'}).appendTo('body');
-            $('<b />').text('Nav').appendTo(contextMenuUl);
-            $('<li data="' + this.localMetaForData.uri + '" />').text("self").appendTo(contextMenuUl);
-            $.each(this.localMetaForData.properties, function (index, property) {
-                if (property.inverseComposite || !((property.dataTypeEnum !== undefined && property.dataTypeEnum !== null) || property.onePrimitive || property.manyPrimitive || property.name == 'id' || property.name == 'uri')) {
-                    $('<li data="' + property.tumlUri + '" />').text(property.name).appendTo(contextMenuUl);
-                }
-            });
-            $('<li data="delete" />').text("delete").appendTo(contextMenuUl);
+            this.createContextMenu();
 
             this.grid.onContextMenu.subscribe(function (e) {
                 e.preventDefault();
@@ -803,7 +831,7 @@
             $("#gridContainer").resizable();
         };
 
-        function addItems(items) {
+        this.addItems = function (items) {
             for (var i = 0; i < items.length; i++) {
                 this.dataView.addItem(items[i]);
                 this.dataView.getDeletedItems().remove(items[i]);
@@ -813,7 +841,7 @@
             this.grid.render();
         }
 
-        function setCellValue(cell, value) {
+        this.setCellValue = function(cell, value) {
             var item = self.dataView.getItemByIdx(cell.row);
             if (item !== undefined) {
                 item[self.grid.getColumns()[cell.cell].name] = value;
@@ -870,8 +898,6 @@
         this.dataView.beginUpdate();
         this.setData(data);
         this.dataView.endUpdate();
-//        this.grid.invalidateAllRows();
-//        this.grid.render();
     }
 
     TumlBaseGridManager.prototype.setupColumns = function () {
@@ -913,6 +939,19 @@
     TumlBaseGridManager.prototype.addButtons = function () {
         alert("addButtons must be overridden");
     };
+
+    TumlBaseGridManager.prototype.createContextMenu = function () {
+        var contextMenuUl = $('<ul />', {id:'contextMenu' + this.localMetaForData.name, style:'display:none;position:absolute', class:'contextMenu'}).appendTo('body');
+        $('<b />').text('Nav').appendTo(contextMenuUl);
+        $('<li data="' + this.localMetaForData.uri + '" />').text("self").appendTo(contextMenuUl);
+        $.each(this.localMetaForData.properties, function (index, property) {
+            if (property.inverseComposite || !((property.dataTypeEnum !== undefined && property.dataTypeEnum !== null) || property.onePrimitive || property.manyPrimitive || property.name == 'id' || property.name == 'uri')) {
+                $('<li data="' + property.tumlUri + '" />').text(property.name).appendTo(contextMenuUl);
+            }
+        });
+        return contextMenuUl;
+    };
+
 
     TumlBaseGridManager.prototype.setupOptions = function () {
         this.options = {

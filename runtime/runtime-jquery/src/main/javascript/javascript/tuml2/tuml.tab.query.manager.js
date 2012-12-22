@@ -13,6 +13,12 @@
 
         function init() {
             tumlTabGridManager = new Tuml.TumlQueryGridManager();
+            tumlTabGridManager.onContextMenuClickLink.subscribe(function (e, args) {
+                self.onContextMenuClickLink.notify(args, e, self);
+            });
+            tumlTabGridManager.onSelfCellClick.subscribe(function (e, args) {
+                self.onSelfCellClick.notify(args, e, self);
+            });
         }
 
         function createQuery(queryTabDivName, oclExecuteUri, queryName, queryEnum, queryString, post, id) {
@@ -40,6 +46,7 @@
                     contentType:"json",
                     success:function (data, textStatus, jqXHR) {
                         tumlTabGridManager.refresh(data[0], queryTabDivName  + '_' + 'OclResult');
+                        $('#tab-container').tabs('resize');
                     },
                     error:function (jqXHR, textStatus, errorThrown) {
                         $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
@@ -119,7 +126,7 @@
             }
 
             //Outer div for results
-            var oclResult = $('<div />', {id:queryTabDivName + '_' + 'OclResult', class:'oclresult'}).text('results');
+            var oclResult = $('<div />', {id:queryTabDivName + '_' + 'OclResult', class:'oclresult'});
             oclResult.appendTo(queryTab);
         }
 
@@ -148,7 +155,6 @@
             "onCancel":new Tuml.Event(),
             "onSelfCellClick":new Tuml.Event(),
             "onContextMenuClickLink":new Tuml.Event(),
-            "onContextMenuClickDelete":new Tuml.Event(),
             "createQuery":createQuery
         });
 
