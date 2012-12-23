@@ -23,11 +23,6 @@
             var metaDataNavigatingFrom = result[0].meta.from;
             var propertyNavigatingTo = (metaDataNavigatingFrom == undefined ? null : findPropertyNavigatingTo(qualifiedName, metaDataNavigatingFrom));
             recreateTabContainer();
-            tabContainer.tabs({border:false, onClose:function (title, index) {
-            }, onSelect:function (title, index) {
-                var queryTabDivName = title.replace(/\s/g, '');
-                leftMenuManager.refreshQueryMenu(queryTabDivName);
-            }});
             if (propertyNavigatingTo != null && (propertyNavigatingTo.oneToMany || propertyNavigatingTo.manyToMany)) {
                 //Property is a many
                 contextVertexId = retrieveVertexId(tumlUri);
@@ -84,7 +79,14 @@
             if (tabContainer !== undefined) {
                 tabContainer.remove();
             }
-            tabContainer = $('<div />', {id:'tab-container', class:'easyui-tabs' }).appendTo('.ui-layout-center');
+//            tabContainer = $('<div />', {id:'tab-container', class:'easyui-tabs' }).appendTo('.ui-layout-center');
+//            tabContainer.tabs({border:false, onClose:function (title, index) {
+//            }, onSelect:function (title, index) {
+//                var queryTabDivName = title.replace(/\s/g, '');
+//                leftMenuManager.refreshQueryMenu(queryTabDivName);
+//            }});
+
+            tabContainer = $('<div />', {id:'tabs'}).appendTo('.ui-layout-center');
         }
 
         function refreshInternal(tumlUri, result, propertyNavigatingTo, isOne, forCreation) {
@@ -130,7 +132,7 @@
                         dataType:"json",
                         contentType:"json",
                         success:function (metaDataResponse, textStatus, jqXHR) {
-                            $('#tab-container').tabs('disableTab', tumlTabViewManager.tabTitle);
+                            $('#tab-container').tabs('disableTab', tumlTabViewManager.tabTitleName);
                             if (args.data !== null) {
                                 metaDataResponse[0].data = args.data;
                             }
@@ -156,7 +158,7 @@
                         dataType:"json",
                         contentType:"json",
                         success:function (metaDataResponse, textStatus, jqXHR) {
-                            $('#tab-container').tabs('disableTab', tumlTabViewManager.tabTitle);
+                            $('#tab-container').tabs('disableTab', tumlTabViewManager.tabTitleName);
                             if (args.data !== null) {
                                 metaDataResponse[0].data = args.data;
                             }
@@ -215,7 +217,7 @@
                         dataType:"json",
                         contentType:"json",
                         success:function (result, textStatus, jqXHR) {
-                            $('#tab-container').tabs('disableTab', tumlTabViewManager.tabTitle);
+                            $('#tab-container').tabs('disableTab', tumlTabViewManager.tabTitleName);
                             result[0].data = args.data;
                             var tumlManyComponentTabViewManager = addTab(
                                 result[0],
@@ -241,7 +243,7 @@
                         dataType:"json",
                         contentType:"json",
                         success:function (result, textStatus, jqXHR) {
-                            $('#tab-container').tabs('disableTab', tumlTabViewManager.tabTitle);
+                            $('#tab-container').tabs('disableTab', tumlTabViewManager.tabTitleName);
                             if (args.data.length !== 0) {
                                 result[0].data = args.data;
                             }

@@ -111,7 +111,12 @@ public class SignalEvent extends Event {
 		return null;
 	}
 
-	@Override
+    @Override
+    public String getMetaDataAsJson() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
 	public List<TumlConstraintViolation> validateRequiredProperties() {
 		// TODO Auto-generated method stub
 		return null;

@@ -62,14 +62,16 @@ public class QueryExecuteResourceBuilder extends BaseServerResourceBuilder imple
 		OJField contextId = new OJField("contextId", "Integer");
 		contextId.setInitExp("Integer.parseInt((String)getRequestAttributes().get(\"contextId\"))");
 		
-		OJField oclResult = new OJField("oclResult", "String");
-		oclResult.setInitExp("execute(ocl, contextId)");
-		
+//		OJField oclResult = new OJField("oclResult", "String");
+//		oclResult.setInitExp("return execute(ocl, contextId)");
+
+        get.getBody().addToStatements("return execute(ocl, contextId)");
+
 		get.getBody().addToLocals(ocl);
 		get.getBody().addToLocals(contextId);
-		get.getBody().addToLocals(oclResult);
+//		get.getBody().addToLocals(oclResult);
 		
-		get.getBody().addToStatements("return new " + TumlRestletGenerationUtil.JsonRepresentation.getLast() + "(oclResult)");
+//		get.getBody().addToStatements("return new " + TumlRestletGenerationUtil.JsonRepresentation.getLast() + "(oclResult)");
 		queryExecute.addToImports(TumlRestletGenerationUtil.JsonRepresentation);
 
 	}

@@ -10,6 +10,7 @@ public interface PersistentObject extends Serializable {
 	int getObjectVersion();
 	String toJson();
 	String toJsonWithoutCompositeParent();
+    String getMetaDataAsJson();
 	void fromJson(String json);
 	void fromJson(Map<String,Object> propertyMap);
 }

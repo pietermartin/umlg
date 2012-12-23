@@ -39,6 +39,8 @@
             this.metaForData = result.meta.to;
             this.gridDivName = gridDivName;
             var outerDivForResults = $('#' + this.gridDivName);
+            outerDivForResults.children().remove();
+
             $('<div />', {id:"queryResultsDiv"})
             $('<div id="serverErrorMsg' + this.gridDivName + '" />').appendTo(outerDivForResults);
             $('<div id="queryResultsDiv" style="width:auto;height:90%;"></div>').appendTo(outerDivForResults);
@@ -437,8 +439,11 @@
         }
 
         this.refresh = function (result) {
+
             this.metaForData = result.meta.to;
             var tabDiv = $('#' + this.metaForData.name);
+            tabDiv.children().remove();
+
             $('<div id="serverErrorMsg" />').appendTo(tabDiv);
             $('<div id="myGrid' + this.metaForData.name + '" style="width:auto;height:90%;"></div>').appendTo(tabDiv);
             $('<div id="pager' + this.metaForData.name + '" style="width:auto;height:20px;"></div>').appendTo(tabDiv);

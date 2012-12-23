@@ -281,7 +281,6 @@
         for (i = 0; i < result.length; i++) {
             var metaForData = result[i].meta.to;
             if (metaForData.name === tabId) {
-                $('#' + this.tabDivName).children().remove();
                 this.createGrid(result[i]);
                 return;
             }
