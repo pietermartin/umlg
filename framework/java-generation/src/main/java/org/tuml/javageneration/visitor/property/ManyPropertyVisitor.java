@@ -89,7 +89,9 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
 		}
 		setter.addParam(pWrap.fieldname(), pWrap.javaTypePath());
 		setter.getBody().addToStatements(pWrap.clearer() + "()");
-		setter.getBody().addToStatements(pWrap.adder() + "(" + pWrap.fieldname() + ")");
+        OJIfStatement ifNotNull = new OJIfStatement(pWrap.fieldname() + " != null");
+        ifNotNull.addToThenPart(pWrap.adder() + "(" + pWrap.fieldname() + ")");
+		setter.getBody().addToStatements(ifNotNull);
 		owner.addToOperations(setter);
 	}
 
