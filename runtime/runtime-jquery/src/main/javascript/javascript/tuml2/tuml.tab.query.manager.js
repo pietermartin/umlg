@@ -6,10 +6,13 @@
         }
     });
 
-    function TumlTabQueryManager(tumlUri) {
+    function TumlTabQueryManager(tumlUri, queryId) {
 
         var self = this;
         var tumlTabGridManager;
+        if (queryId !== undefined) {
+            this.queryId = queryId;
+        }
 
         function init() {
             tumlTabGridManager = new Tuml.TumlQueryGridManager();
@@ -21,7 +24,7 @@
             });
         }
 
-        function createQuery(queryTabDivName, oclExecuteUri, queryName, queryEnum, queryString, post, id) {
+        function createQuery(queryTabDivName, oclExecuteUri, queryName, queryEnum, queryString, post) {
             var self = this;
             var queryTab = $('#' + queryTabDivName);
 
@@ -45,7 +48,7 @@
                     dataType:"json",
                     contentType:"json",
                     success:function (data, textStatus, jqXHR) {
-                        tumlTabGridManager.refresh(data[0], queryTabDivName  + '_' + 'OclResult');
+                        tumlTabGridManager.refresh(data[0], queryTabDivName + '_' + 'OclResult');
                         $('#tab-container').tabs('resize');
                     },
                     error:function (jqXHR, textStatus, errorThrown) {
@@ -62,7 +65,7 @@
             var oclEditButtonDiv = $('<div />', {class:"ocleditbutton"}).appendTo(inputEditButtonDiv);
 
             $('<button />', {id:queryTabDivName + '_' + 'SaveButton'}).text('save').click(function () {
-                var query = queryToJson(queryTabDivName, id);
+                var query = queryToJson(queryTabDivName, this.queryId);
                 $.ajax({
                     url:tumlUri,
                     type:post ? "POST" : "PUT",
@@ -144,7 +147,7 @@
         //Public api
         $.extend(this, {
             "TumlTabQueryManagerVersion":"1.0.0",
-            //These events are propogated from the grid
+            //These events are propagated from the grid
             "onPutQuerySuccess":new Tuml.Event(),
             "onPostQuerySuccess":new Tuml.Event(),
             "onPutQueryFailure":new Tuml.Event(),

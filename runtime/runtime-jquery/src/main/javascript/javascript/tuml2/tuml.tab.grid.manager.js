@@ -169,6 +169,10 @@
     TumlManyComponentGridManager.prototype.initializeDataModel = function (data) {
         this.dataView.beginUpdate();
         this.dataView.setNewItems(data);
+        this.dataView.setFilterArgs({
+            metaForData:this.localMetaForData
+        });
+        this.dataView.setFilter(filter);
         this.dataView.endUpdate();
     }
 
@@ -290,7 +294,6 @@
 
         this.instantiateGrid = function () {
             this.grid = new Slick.Grid("#myGrid" + this.localMetaForData.name, this.dataView, this.columns, this.options);
-            //Creating a pager for the component manies editor grid call commitCurrentEditor which buggers everything up
             this.pager = new Slick.Controls.Pager(this.dataView, this.grid, $("#pager" + this.localMetaForData.name));
             $("<div id='grid-button" + this.localMetaForData.name + "' class='grid-button'/>").appendTo('#pager' + this.localMetaForData.name + ' .slick-pager-settings');
             TumlBaseGridManager.prototype.instantiateGrid.call(this);
@@ -438,17 +441,19 @@
             }
         }
 
-        this.refresh = function (result) {
+        this.refresh = function (result, gridDiv) {
 
             this.metaForData = result.meta.to;
-            var tabDiv = $('#' + this.metaForData.name);
+            var tabDiv = gridDiv;
             tabDiv.children().remove();
 
             $('<div id="serverErrorMsg" />').appendTo(tabDiv);
-            $('<div id="myGrid' + this.metaForData.name + '" style="width:auto;height:90%;"></div>').appendTo(tabDiv);
-            $('<div id="pager' + this.metaForData.name + '" style="width:auto;height:20px;"></div>').appendTo(tabDiv);
+            $('<div />', {id:'myGrid' + this.metaForData.name, style: 'width:auto;height:80%;', class:'tumlSlickGrid'}).appendTo(tabDiv);
+            $('<div />', {id:'pager' + this.metaForData.name, style: 'width:auto;height:20px;'}).appendTo(tabDiv);
+
             $('#contextMenu' + this.metaForData.name).remove();
             this.createGrid(result.data, this.metaForData, tumlUri, false);
+
         };
 
         this.validateNewItems = function (newItems) {
@@ -658,11 +663,11 @@
             });
 
             this.grid.onColumnsReordered.subscribe(function (e, args) {
-                this.updateHeaderRow(self.localMetaForData);
+                self.updateHeaderRow(self.localMetaForData);
             });
 
             this.grid.onColumnsResized.subscribe(function (e, args) {
-                this.updateHeaderRow(self.localMetaForData);
+                self.updateHeaderRow(self.localMetaForData);
             });
 
             this.grid.onViewportChanged.subscribe(function (e, args) {
@@ -746,7 +751,7 @@
             function filter(item, metaForData) {
                 for (var columnId in columnFilters) {
                     if (columnId !== undefined && columnFilters[columnId] !== "") {
-                        var c = this.grid.getColumns()[this.grid.getColumnIndex(columnId)];
+                        var c = self.grid.getColumns()[self.grid.getColumnIndex(columnId)];
                         for (var i = 0; i < metaForData.metaForData.properties.length; i++) {
                             var property = metaForData.metaForData.properties[i];
                             if (property.name == columnId) {
@@ -819,21 +824,15 @@
                 alert(args.validationResults.msg);
             });
 
-            this.dataView.setFilterArgs({
-                metaForData:this.localMetaForData
-            });
-            this.dataView.setFilter(filter);
-
             // initialize the model after all the events have been hooked up
             this.setupColumnFormatter();
-            this.initializeDataModel(data);
+            this.initializeDataModel(data, filter);
             this.updateHeaderRow(this.localMetaForData);
 
             // if you don't want the items that are not visible (due to being filtered out
             // or being on a different page) to stay selected, pass 'false' to the second arg
             this.dataView.syncGridSelection(this.grid, true);
 
-            $("#gridContainer").resizable();
         };
 
         this.addItems = function (items) {
@@ -899,9 +898,13 @@
         };
     }
 
-    TumlBaseGridManager.prototype.initializeDataModel = function (data) {
+    TumlBaseGridManager.prototype.initializeDataModel = function (data, filter) {
         this.dataView.beginUpdate();
         this.setData(data);
+        this.dataView.setFilterArgs({
+            metaForData:this.localMetaForData
+        });
+        this.dataView.setFilter(filter);
         this.dataView.endUpdate();
     }
 
@@ -960,6 +963,7 @@
 
     TumlBaseGridManager.prototype.setupOptions = function () {
         this.options = {
+            autoHeight: false,
             showHeaderRow:true,
             headerRowHeight:30,
             editable:true,

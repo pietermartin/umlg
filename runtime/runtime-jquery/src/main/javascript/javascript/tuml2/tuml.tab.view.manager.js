@@ -9,7 +9,7 @@
         }
     });
 
-    function TumlTabQueryViewManager(tumlUri, tabDivName, tabTitleName) {
+    function TumlTabQueryViewManager(tabContainer, tumlUri, tabDivName, tabTitleName, queryId) {
 
         //Public api
         $.extend(this, {
@@ -20,9 +20,14 @@
         });
 
         var self = this;
+        this.tabContainer = tabContainer;
+        if (queryId !== undefined) {
+            this.queryId = queryId;
+        }
+
         this.tabDivName = tabDivName;
         this.tabTitleName = tabTitleName;
-        this.tumlTabQueryManager = new Tuml.TumlTabQueryManager(tumlUri);
+        this.tumlTabQueryManager = new Tuml.TumlTabQueryManager(tumlUri, this.queryId);
         this.tumlTabQueryManager.onPutQuerySuccess.subscribe(function (e, args) {
             self.onPutQuerySuccess.notify(args, e, self);
         });
@@ -45,11 +50,11 @@
             "onClickManyComponent":new Tuml.Event()
         });
 
-        this.createQuery = function (oclExecuteUri, queryName, queryEnum, queryString, post, id) {
-            this.tumlTabQueryManager.createQuery(self.tabDivName, oclExecuteUri, queryName, queryEnum, queryString, post, id);
+        this.createQuery = function (oclExecuteUri, queryName, queryEnum, queryString, post) {
+            this.tumlTabQueryManager.createQuery(self.tabDivName, oclExecuteUri, queryName, queryEnum, queryString, post);
         }
 
-        TumlBaseTabViewManager.call(this, tumlUri);
+        TumlBaseTabViewManager.call(this, this.tabContainer, tumlUri);
 
     }
 
@@ -57,12 +62,18 @@
 
     TumlTabQueryViewManager.prototype.createTab = function () {
         this.tabId = this.tabDivName;
-        TumlBaseTabViewManager.prototype.createTab.call(this);
+        var divPanel = TumlBaseTabViewManager.prototype.createTab.call(this);
+        if (this.queryId !== undefined) {
+            $.data(divPanel[0], 'queryId', this.queryId);
+        }
+
     }
 
-    function TumlTabOneViewManager(oneManyOrQuery, tumlUri, result) {
+    function TumlTabOneViewManager(tabContainer, oneManyOrQuery, tumlUri, result) {
         var self = this;
         this.oneManyOrQuery = oneManyOrQuery;
+        this.tabContainer = tabContainer;
+        this.result = result;
 
         //Public api
         $.extend(this, {
@@ -70,7 +81,7 @@
             "onClickOneComponent":new Tuml.Event(),
             "onClickManyComponent":new Tuml.Event()
         });
-        TumlBaseTabViewManager.call(this, tumlUri, result);
+        TumlBaseTabViewManager.call(this, this.tabContainer, tumlUri, result);
     }
 
     TumlTabOneViewManager.prototype = new Tuml.TumlBaseTabViewManager;
@@ -151,16 +162,18 @@
         this.tumlTabOneManager.refresh(result, metaForData, this.qualifiedName, isForCreation);
     }
 
-    function TumlTabManyViewManager(oneManyOrQuery, tumlUri, result) {
+    function TumlTabManyViewManager(tabContainer, oneManyOrQuery, tumlUri, result) {
         var self = this;
         this.oneManyOrQuery = oneManyOrQuery;
+        this.tabContainer = tabContainer;
+        this.result = result;
 
         //Public api
         $.extend(this, {
             "TumlTabManyViewManager":"1.0.0"
         });
         this.tumlTabGridManager;
-        TumlBaseTabViewManager.call(this, tumlUri, result);
+        TumlBaseTabViewManager.call(this, this.tabContainer, tumlUri, result);
     }
 
     TumlTabManyViewManager.prototype = new Tuml.TumlBaseTabViewManager;
@@ -287,18 +300,16 @@
         }
     }
     TumlTabManyViewManager.prototype.createGrid = function (result) {
-        this.tumlTabGridManager.refresh(result);
+        //Create an extra div, not displaying nice directly in the tab panel
+        var gridDiv = $('<div />', {id:'slickGrid' + this.tabId, class:'slickGridOuter'});
+        $('#' + this.tabId).append(gridDiv);
+        this.tumlTabGridManager.refresh(result, gridDiv);
     }
 
-    function TumlBaseTabViewManager(tumlUri, result) {
+    function TumlBaseTabViewManager(tabContainer, tumlUri, result) {
 
         var self = this;
         var tabId;
-        this.result = result;
-
-        function selectTab() {
-            $('#tab-container').tabs('select', this.tabTitleName);
-        }
 
         function enableTab() {
             $('#tab-container').tabs('enableTab', this.tabTitleName);
@@ -312,10 +323,6 @@
             $('#tab-container').tabs('disableTab', this.tabTitleName);
         }
 
-        function closeTab() {
-            $('#tab-container').tabs('close', this.tabTitleName);
-        }
-
         function setLinkedTumlTabViewManager(tumlTabViewManager) {
             this.linkedTumlTabViewManager = tumlTabViewManager;
         }
@@ -324,7 +331,7 @@
             return this.linkedTumlTabViewManager;
         }
 
-        if (result !== undefined) {
+        if (this.result !== undefined) {
             this.init(tumlUri, result);
         }
 
@@ -361,16 +368,22 @@
             "getLinkedTumlTabViewManager":getLinkedTumlTabViewManager,
             "enableTab":enableTab,
             "disableTab":disableTab,
-            "closeTab":closeTab,
-            "tabId":tabId,
-            "selectTab":selectTab
+            "tabId":tabId
         });
 
     }
 
     TumlBaseTabViewManager.prototype.clear = function () {
-        tumlTabQueryManager = null;
+        this.closeTab();
     }
+
+    TumlBaseTabViewManager.prototype.closeTab = function() {
+        // close icon: removing the tab on click
+        var panelId = this.li.remove().attr("aria-controls");
+        $("#" + panelId).remove();
+        this.tabContainer.tabs("refresh");
+    }
+
 
     TumlBaseTabViewManager.prototype.init = function (tumlUri, result) {
         this.qualifiedName = result.meta.qualifiedName;
@@ -378,8 +391,16 @@
     }
 
     TumlBaseTabViewManager.prototype.createTab = function () {
-        var tabContainer = $('#tab-container');
-        $('#tab-container').tabs('add', {title:this.tabTitleName, content:'<div id="' + this.tabId + '" />', closable:true});
+        var tabTemplate = "<li id='li" + this.tabId + "'><a href='#{href}'>#{label}</a> <span class='ui-icon ui-icon-close'>Remove Tab</span></li>";
+        var label = this.tabTitleName,
+            id = this.tabId;
+        this.li = $(tabTemplate.replace(/#\{href\}/g, "#" + id).replace(/#\{label\}/g, label));
+        this.tabContainer.find(".ui-tabs-nav").append(this.li);
+        var divPanel = $('<div />', {id: this.tabId});
+        this.tabContainer.append(divPanel);
+        this.tabContainer.tabs("refresh");
+        return divPanel;
     }
+
 
 })(jQuery);

@@ -1,17 +1,32 @@
 (function ($) {
-  $.extend(true, window, {
-    Slick: {
-      Data: {
-        DataView: DataView,
-        Aggregators: {
-          Avg: AvgAggregator,
-          Min: MinAggregator,
-          Max: MaxAggregator,
-          Sum: SumAggregator
-        }
-      }
-    }
-  });
+//  $.extend(true, window, {
+//    Slick: {
+//      Data: {
+//        DataView: DataView,
+//        Aggregators: {
+//          Avg: AvgAggregator,
+//          Min: MinAggregator,
+//          Max: MaxAggregator,
+//          Sum: SumAggregator
+//        }
+//      }
+//    }
+//  });
+
+    $.extend(true, window, {
+        Tuml:{
+            Slick:{
+                Data:{
+                    DataView:DataView,
+                    Aggregators:{
+                        Avg:AvgAggregator,
+                        Min:MinAggregator,
+                        Max:MaxAggregator,
+                        Sum:SumAggregator
+                    }
+                }
+            }
+        }});
 
 
   /***
@@ -32,9 +47,22 @@
     // private
     var idProperty = "id";  // property holding a unique row id
     var items = [];         // data by index
-    var rows = [];          // data by row
+
+    //tuml
+      var updatedItems = [];  // updated data by id
+      var newItems = [];      // new data by id
+      var deletedItems = [];  // deleted data by id
+    //tuml
+
+      var rows = [];          // data by row
     var idxById = {};       // indexes by id
-    var rowsById = null;    // rows by id; lazy-calculated
+
+      //tuml
+      var updatedIdxById = {} // updated indexes by id
+      var newIdxById = {}     // new indexes by id
+    //tuml
+
+      var rowsById = null;    // rows by id; lazy-calculated
     var filter = null;      // filter function
     var updated = null;     // updated item ids
     var suspend = false;    // suspends the recalculation
@@ -115,7 +143,28 @@
       return items;
     }
 
-    function setItems(data, objectIdProperty) {
+      //tuml
+
+      function getUpdatedItems() {
+          return updatedItems;
+      }
+
+      function getNewItems() {
+          return newItems;
+      }
+
+      function getDeletedItems() {
+          return deletedItems;
+      }
+
+      function setNewItems(items) {
+          for (var i = 0; i < items.length; i++) {
+              addItem(items[i]);
+          }
+      }
+    //tuml
+
+      function setItems(data, objectIdProperty) {
       if (objectIdProperty !== undefined) {
         idProperty = objectIdProperty;
       }
@@ -284,7 +333,7 @@
       return ids;
     }
 
-    function updateItem(id, item) {
+    function updateItem(id, item, column) {
       if (idxById[id] === undefined || id !== item[idProperty]) {
         throw "Invalid or non-matching id";
       }
@@ -294,6 +343,34 @@
       }
       updated[id] = true;
       refresh();
+
+        //cache of updates
+        if (!isNaN(id)) {
+            //updates of existing items
+            if (updatedIdxById[id] == undefined) {
+                updatedIdxById[id] = updatedItems.length;
+                updatedItems[updatedItems.length] = {id:id};
+            } else {
+                if (updatedItems[updatedIdxById[id]].id !== id) {
+                    throw "Non matching updated id";
+                }
+            }
+            var updatedField = {};
+            updatedField[column.name] = item[column.name];
+            updatedItems[updatedIdxById[id]] = $.extend(updatedItems[updatedIdxById[id]], updatedField);
+        } else {
+            //updates of new items
+            if (newItems[newIdxById[id]].id !== id) {
+                throw "Non matching new id";
+            }
+
+            var newField = {};
+            newField[column.name] = item[column.name];
+            newItems[newIdxById[id]] = $.extend(newItems[newIdxById[id]], newField);
+
+        }
+
+
     }
 
     function insertItem(insertBefore, item) {
@@ -305,7 +382,14 @@
     function addItem(item) {
       items.push(item);
       updateIdxById(items.length - 1);
-      refresh();
+
+//tuml
+        //cache of new items
+        newItems.push(item);
+        newIdxById[item[idProperty]] = newItems.length - 1;
+//tuml
+
+        refresh();
     }
 
     function deleteItem(id) {
@@ -313,7 +397,12 @@
       if (idx === undefined) {
         throw "Invalid id";
       }
-      delete idxById[id];
+        //tuml
+        var item = items[idx];
+        deletedItems.push(item);
+//tuml
+
+        delete idxById[id];
       items.splice(idx, 1);
       updateIdxById(idx);
       refresh();
@@ -776,7 +865,15 @@
       "getPagingInfo": getPagingInfo,
       "getItems": getItems,
       "setItems": setItems,
-      "setFilter": setFilter,
+
+        //tuml
+        "getUpdatedItems":getUpdatedItems,
+        "getNewItems":getNewItems,
+        "getDeletedItems":getDeletedItems,
+        "setNewItems":setNewItems,
+//tuml
+
+        "setFilter": setFilter,
       "sort": sort,
       "fastSort": fastSort,
       "reSort": reSort,

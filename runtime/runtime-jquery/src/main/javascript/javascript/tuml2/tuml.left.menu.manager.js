@@ -15,6 +15,7 @@
         var contextMetaDataFrom;
         var contextMetaDataTo;
         var contextVertexId;
+        var tabContainer;
 
         function init() {
         }
@@ -24,28 +25,65 @@
             contextMetaDataTo = _contextMetaDataTo;
             contextVertexId = _contextVertexId;
 
-
             $('.ui-layout-west').children().remove();
-            var tabs = $('<div />', {id:'tab-menu-container', class:'easyui-tabs'}).appendTo('.ui-layout-west');
-            var tabDiv = $('<div />', {title:'Standard'}).appendTo(tabs);
-            $('<div />', {title:'Tree'}).appendTo(tabs);
+            tabContainer = $('<div />', {id:'tabContainer-menu-container'}).appendTo('.ui-layout-west');
+            tabContainer.append('<ul />');
+            tabContainer.tabs();
 
-            ulMenu = createStdMenu(tabDiv);
+            ulMenu = createStdMenu();
             createQueryMenu();
+            createTree();
+            tabContainer.tabs("option", "active", 0);
 
-            $('#tab-menu-container').tabs({border:false});
         }
 
-        function refreshQuery(selectedQueryTabName) {
-            $("#queryTree").remove();
-            createQueryMenu(selectedQueryTabName);
+        function createTree() {
+            var tabTemplate = "<li><a href='#{href}'>#{label}</a></li>";
+            var label = "Tree",
+                id = "Tree",
+                li = $(tabTemplate.replace(/#\{href\}/g, "#" + id).replace(/#\{label\}/g, label));
+            tabContainer.find(".ui-tabs-nav").append(li);
+            var standardMenuDiv = $('<div />', {id:'Tree'});
+            tabContainer.append(standardMenuDiv);
+            tabContainer.tabs("refresh");
         }
+
+        function createStdMenu() {
+            var tabTemplate = "<li><a href='#{href}'>#{label}</a></li>";
+            var label = "Standard",
+                id = "Standard",
+                li = $(tabTemplate.replace(/#\{href\}/g, "#" + id).replace(/#\{label\}/g, label));
+            tabContainer.find(".ui-tabs-nav").append(li);
+            var standardMenuDiv = $('<div />', {id:'Standard'});
+            tabContainer.append(standardMenuDiv);
+            tabContainer.tabs("refresh");
+
+            var ulMenu = $('<ul />', {class:'ui-left-menu-link'}).appendTo(standardMenuDiv);
+            var menuArray = createLeftMenuDataArray(contextMetaDataFrom, contextMetaDataTo);
+            $.each(menuArray, function (index, value) {
+                var adjustedUri = value.tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
+                var li = $('<li class="ui-left-menu-li ' + value.menuCssClass + '"/>');
+                var a = $('<a>', {
+                    text:value.name,
+                    title:value.name,
+                    href:adjustedUri,
+                    click:function () {
+                        self.onMenuClick.notify({name:value.name, uri:adjustedUri}, null, self);
+                        return false;
+                    }
+                });
+                a.appendTo(li);
+                li.appendTo(ulMenu);
+            });
+            return ulMenu;
+        };
 
         function createQueryMenu(selectedQueryTabName) {
-            //Add query tree
             var li = $('<li class="ui-left-menu-li-query-tree /">');
             li.appendTo(ulMenu);
             $('<div />', {id:"queryTree"}).appendTo(li);
+
+            //Add query tree
             //Fetch the query data
             queryProperty = findQueryUrl();
             if (queryProperty != null) {
@@ -69,16 +107,20 @@
             }
         }
 
-        function refreshQueryMenu(queryTabName) {
+        function refreshQuery(queryId) {
+            $("#queryTree").remove();
+            createQueryMenu(queryId);
+        }
+
+        function refreshQueryMenu(queryId) {
             //Change the css activeproperty
             if (queryData !== undefined) {
                 for (var i = 0; i < queryData[0].data.length; i++) {
                     var query = queryData[0].data[i];
-                    var queryTabDivName = query.name.replace(/\s/g, '');
-                    $('#queryMenu' + queryTabDivName + 'Id').removeClass('querymenuactive');
-                    $('#queryMenu' + queryTabDivName + 'Id').addClass('querymenuinactive');
+                    $('#queryMenu' + query.id).removeClass('querymenuactive');
+                    $('#queryMenu' + query.id).addClass('querymenuinactive');
                 }
-                var clickedNode = $('#queryMenu' + queryTabName + 'Id');
+                var clickedNode = $('#queryMenu' + queryId);
                 clickedNode.removeClass("querymenuinactive");
                 clickedNode.addClass("querymenuactive");
             }
@@ -91,8 +133,16 @@
                 var query = queryData[0].data[i];
                 var queryUri = query.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), query.id);
                 var oclExecuteUri = queryData[0].meta.oclExecuteUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
-                var queryTabDivName = query.name.replace(/\s/g, '');
-                queryArray.push({label:query.name, tumlUri:queryUri, oclExecuteUri:oclExecuteUri, qualifiedName:queryProperty.qualifiedName, name:'<span id="queryMenu' + queryTabDivName + 'Id" class="querymenuinactive queryitem">' + query.name + '</span>', _name:query.name, queryEnum:query.queryEnum, queryString:query.queryString});
+                queryArray.push({
+                    label:query.name,
+                    tumlUri:queryUri,
+                    oclExecuteUri:oclExecuteUri,
+                    qualifiedName:queryProperty.qualifiedName,
+                    name:'<span id="queryMenu' + query.id + '" class="querymenuinactive queryitem">' + query.name + '</span>',
+                    _name:query.name,
+                    queryEnum:query.queryEnum,
+                    queryString:query.queryString,
+                    queryId:query.id});
             }
             var treeData = $.extend(topNode, {children:queryArray})
 
@@ -112,32 +162,19 @@
                     // The clicked node is 'event.node'
                     var node = event.node;
                     if (node._name !== 'queries') {
-                        self.onQueryClick.notify({post:false, tumlUri:node.tumlUri, oclExecuteUri:node.oclExecuteUri, qualifiedName:node.qualifiedName, name:node._name, queryEnum:node.queryEnum, queryString:node.queryString}, null, self);
+                        self.onQueryClick.notify({
+                            post:false,
+                            tumlUri:node.tumlUri,
+                            oclExecuteUri:node.oclExecuteUri,
+                            qualifiedName:node.qualifiedName,
+                            name:node._name,
+                            queryEnum:node.queryEnum,
+                            queryString:node.queryString,
+                            queryId:node.queryId}, null, self);
                     }
                 }
             );
         }
-
-        function createStdMenu(tabDiv) {
-            var ulMenu = $('<ul />', {class:'ui-left-menu-link'}).appendTo(tabDiv);
-            var menuArray = createLeftMenuDataArray(contextMetaDataFrom, contextMetaDataTo);
-            $.each(menuArray, function (index, value) {
-                var adjustedUri = value.tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
-                var li = $('<li class="ui-left-menu-li ' + value.menuCssClass + '"/>');
-                var a = $('<a>', {
-                    text:value.name,
-                    title:value.name,
-                    href:adjustedUri,
-                    click:function () {
-                        self.onMenuClick.notify({name:value.name, uri:adjustedUri}, null, self);
-                        return false;
-                    }
-                });
-                a.appendTo(li);
-                li.appendTo(ulMenu);
-            });
-            return ulMenu;
-        };
 
         function createLeftMenuDataArray(contextMetaDataFrom, contextMetaDataTo) {
             var menuArray = [];

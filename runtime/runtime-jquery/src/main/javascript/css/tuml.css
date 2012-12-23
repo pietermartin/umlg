@@ -374,6 +374,13 @@
     margin: auto
 }
 
+/*.slickGridOuter {*/
+    /*width: 2000px;*/
+/*}*/
+.tumlSlickGrid {
+    padding-bottom: 3px;
+}
+
 .slick-pager {
     width: auto;
 }
@@ -502,5 +509,4 @@
     #position: relative;
     #vertical-align: middle;
     padding: 2px;
-    #te
 }
