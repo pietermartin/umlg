@@ -77,7 +77,7 @@
         }
 
         function addDefaultQueryTab() {
-            addQueryTab(true, new Query(-1, 'New Query', 'New Query Description', 'self.name', 'ocl'));
+            addQueryTab(true, new Tuml.Query(-1, 'New Query', 'New Query Description', 'self.name', 'ocl'));
         }
 
         function recreateTabContainer() {
@@ -333,8 +333,7 @@
         }
 
         function closeTab(tumlTabViewManager) {
-            var index= tumlTabViewManagers.indexOf(tumlTabViewManager)
-//            var tumlTabViewManager = tumlTabViewManagers[index];
+            var index = tumlTabViewManagers.indexOf(tumlTabViewManager)
             tumlTabViewManagers[index].clear();
             tumlTabViewManagers.splice(index, 1);
         }
@@ -349,7 +348,6 @@
         }
 
         function addQueryTab(post, query) {
-//        function addQueryTab(tumlUri, oclExecuteUri, tabDivName, tabTitle, queryEnum, queryString, post, queryId) {
             //Check is there is already a tab open for this query
             var tumlTabViewManagerQuery;
             var tabIndex = 0;
@@ -363,7 +361,8 @@
             if (tumlTabViewManagerQuery === undefined) {
                 tumlTabViewManagerQuery = new Tuml.TumlTabQueryViewManager(tabContainer, queryTumlUri, query.getDivName(), query.name, query.id);
                 tumlTabViewManagerQuery.createTab();
-                if (queryId === undefined) {
+
+                if (query.id === -1) {
                     tumlTabViewManagers.push(tumlTabViewManagerQuery);
                 } else {
                     tumlTabViewManagers.splice(tumlTabViewManagers.length - 2, 0, tumlTabViewManagerQuery);
@@ -373,40 +372,26 @@
 
                 tumlTabViewManagerQuery.createQuery(oclExecuteUri, query.name, query.type, query.queryString, post);
                 tumlTabViewManagerQuery.onPutQuerySuccess.subscribe(function (e, args) {
-                    var index = tumlTabViewManagers.indexOf(tumlTabViewManagerQuery);
                     closeTab(tumlTabViewManagerQuery);
-                    //Get the query just puts, id
-                    var queryId;
-                    for (var i = 0; i < args.data[0].data.length; i++) {
-                        var query = args.data[0].data[i];
-                        if (query.name === args.queryName) {
-                            queryId = query.id;
-                        }
-                    }
-                    var queryTabDivName = args.queryName.replace(/\s/g, '');
-                    var newTumlTabViewManager = addQueryTab(queryTabDivName, args.queryName, false, args);
-                    leftMenuManager.refreshQuery(queryId);
+                    var newTumlTabViewManager = addQueryTab(false, new Tuml.Query(args.id, args.name, args.name, args.queryString, args.queryEnum));
+                    leftMenuManager.refreshQuery(args.id);
                 });
                 tumlTabViewManagerQuery.onPostQuerySuccess.subscribe(function (e, args) {
-                    var indexOf = tumlTabViewManagers.indexOf(tumlTabViewManagerQuery);
-                    closeTab(indexOf);
-                    var queryTabDivName = args.queryName.replace(/\s/g, '');
-                    //Get the query just posts, id
-                    var queryId;
-                    for (var i = 0; i < args.data[0].data.length; i++) {
-                        var query = args.data[0].data[i];
-                        if (query.name === args.queryName) {
-                            queryId = query.id;
-                        }
-                    }
-                    var newTumlTabViewManager = addQueryTab(tumlUri, oclExecuteUri, queryTabDivName, args.queryName, args.queryEnum, args.queryString, false, queryId);
+                    var previousIndex = tumlTabViewManagers.indexOf(tumlTabViewManagerQuery);
+                    closeTab(tumlTabViewManagerQuery);
+                    var newTumlTabViewManager = addQueryTab(false, new Tuml.Query(args.id, args.name, args.name, args.queryString, args.queryEnum));
                     addDefaultQueryTab();
-                    leftMenuManager.refreshQuery(queryId);
-                    tabContainer.tabs("option", "active", tumlTabViewManagers.indexOf(tumlTabViewManagerQuery));
+
+                    //place it back at the previousIndex
+                    var currentIndex = tumlTabViewManagers.indexOf(newTumlTabViewManager);
+                    tumlTabViewManagers.splice(currentIndex, 1);
+                    tumlTabViewManagers.splice(previousIndex, 0, newTumlTabViewManager);
+                    tabContainer.tabs("option", "active", previousIndex);
+
+                    leftMenuManager.refreshQuery(args.id);
                 });
                 tumlTabViewManagerQuery.onDeleteQuerySuccess.subscribe(function (e, args) {
-                    var indexOf = tumlTabViewManagers.indexOf(tumlTabViewManagerQuery);
-                    closeTab(indexOf);
+                    closeTab(tumlTabViewManagerQuery);
                     leftMenuManager.refreshQuery();
                 });
                 tumlTabViewManagerQuery.onContextMenuClickLink.subscribe(function (e, args) {

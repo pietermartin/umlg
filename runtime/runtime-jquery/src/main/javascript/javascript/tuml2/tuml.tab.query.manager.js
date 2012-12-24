@@ -73,22 +73,20 @@
                     contentType:"json",
                     data:JSON.stringify(query),
                     success:function (data, textStatus, jqXHR) {
+                        var queryFromDb;
+                        var queries = data[0].data;
+                        for (var i = 0; i < queries.length; i++) {
+                            queryFromDb = queries[i];
+                            if (queryFromDb.name == query.name) {
+                                break;
+                            }
+                        }
                         if (post) {
                             self.onPostQuerySuccess.notify(
-                                {tumlUri:tumlUri,
-                                    queryName:query.name,
-                                    oclExecuteUri:oclExecuteUri,
-                                    queryEnum:query.queryEnum,
-                                    queryString:query.queryString,
-                                    data:data}, null, self);
+                                queryFromDb, null, self);
                         } else {
                             self.onPutQuerySuccess.notify(
-                                {tumlUri:tumlUri,
-                                    queryName:query.name,
-                                    oclExecuteUri:oclExecuteUri,
-                                    queryEnum:query.queryEnum,
-                                    queryString:query.queryString,
-                                    data:data}, null, self);
+                                queryFromDb, null, self);
                         }
                     },
                     error:function (jqXHR, textStatus, errorThrown) {
