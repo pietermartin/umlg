@@ -50,8 +50,8 @@
             "onClickManyComponent":new Tuml.Event()
         });
 
-        this.createQuery = function (oclExecuteUri, queryName, queryEnum, queryString, post) {
-            this.tumlTabQueryManager.createQuery(self.tabDivName, oclExecuteUri, queryName, queryEnum, queryString, post);
+        this.createQuery = function (oclExecuteUri, query, post) {
+            this.tumlTabQueryManager.createQuery(self.tabDivName, oclExecuteUri, query, post);
         }
 
         TumlBaseTabViewManager.call(this, this.tabContainer, tumlUri);
@@ -112,17 +112,10 @@
         if (this.oneManyOrQuery.forOneComponent) {
             this.tumlTabOneManager = new Tuml.TumlTabComponentOneManager(tumlUri);
             this.tumlTabOneManager.onOneComponentSaveButtonSuccess.subscribe(function (e, args) {
-                self.getLinkedTumlTabViewManager().setValue(args.value);
-                //Closing the tab fires closeTab event which removes the tumlTabViewManager from the array
-                $('#tab-container').tabs('close', args.tabName + " One Add");
-                $('#' + args.tabName + "OneComponent").remove();
-                self.getLinkedTumlTabViewManager().enableTab();
+                self.onOneComponentSaveButtonSuccess.notify(args, e, self);
             });
             this.tumlTabOneManager.onOneComponentCloseButtonSuccess.subscribe(function (e, args) {
-                //Closing the tab fires closeTab event which removes the tumlTabViewManager from the array
-                $('#tab-container').tabs('close', args.tabName + " One Add");
-                $('#' + args.tabName + "OneComponent").remove();
-                self.getLinkedTumlTabViewManager().enableTab();
+                self.onOneComponentCloseButtonSuccess.notify(args, e, self);
             });
         } else {
             this.tumlTabOneManager = new Tuml.TumlTabOneManager(tumlUri);
@@ -214,22 +207,14 @@
         } else if (this.oneManyOrQuery.forManyComponent) {
             this.tumlTabGridManager = new Tuml.TumlManyComponentGridManager(tumlUri, this.oneManyOrQuery.propertyNavigatingTo);
             this.tumlTabGridManager.onManyComponentSaveButtonSuccess.subscribe(function (e, args) {
-                self.getLinkedTumlTabViewManager().setValue(args.value);
-                //Closing the tab fires closeTab event which removes the tumlTabViewManager from the array
-                $('#tab-container').tabs('close', args.tabName + " Many Add");
-                $('#' + args.tabName + "ManyComponent").remove();
-                self.getLinkedTumlTabViewManager().enableTab();
+                self.onManyComponentSaveButtonSuccess.notify(args, e, self);
+            });
+            this.tumlTabGridManager.onManyComponentCloseButtonSuccess.subscribe(function (e, args) {
+                self.onManyComponentCloseButtonSuccess.notify(args, e, self);
             });
             this.tumlTabGridManager.onManyComponentCancelButtonSuccess.subscribe(function (e, args) {
                 //This is needed else the cell has a pointer to the wrong array
                 self.getLinkedTumlTabViewManager().setValue(args.value);
-            });
-            this.tumlTabGridManager.onManyComponentCloseButtonSuccess.subscribe(function (e, args) {
-                //This is needed else the cell has a pointer to the wrong array
-                self.getLinkedTumlTabViewManager().setValue(args.value);
-                $('#tab-container').tabs('close', args.tabName + " Many Add");
-                $('#' + args.tabName + "ManyComponent").remove();
-                self.getLinkedTumlTabViewManager().enableTab();
             });
             this.tumlTabGridManager.onClickManyComponentCell.subscribe(function (e, args) {
                 self.onClickManyComponentCell.notify(args, e, self);
@@ -311,9 +296,10 @@
         var self = this;
         var tabId;
 
-        function enableTab() {
-            $('#tab-container').tabs('enableTab', this.tabTitleName);
-        }
+//        function enableTab() {
+////            $('#tab-container').tabs('enableTab', this.tabTitleName);
+//            tabContainer.tabs("option", "active", tumlTabViewManagers.length - 2);
+//        }
 
         function getTab(title) {
             return $('#tab-container').tabs('getTab', title);
@@ -345,6 +331,10 @@
             "onClickManyComponentCell":new Tuml.Event(),
             "onClickOneComponentCell":new Tuml.Event(),
             "onManyComponentCloseButtonSuccess":new Tuml.Event(),
+            "onOneComponentSaveButtonSuccess":new Tuml.Event(),
+            "onOneComponentCloseButtonSuccess":new Tuml.Event(),
+            "onManyComponentSaveButtonSuccess":new Tuml.Event(),
+            "onManyComponentCloseButtonSuccess":new Tuml.Event(),
             "onPutSuccess":new Tuml.Event(),
             "onPutFailure":new Tuml.Event(),
             "onPostSuccess":new Tuml.Event(),
@@ -366,7 +356,7 @@
             //Other events
             "setLinkedTumlTabViewManager":setLinkedTumlTabViewManager,
             "getLinkedTumlTabViewManager":getLinkedTumlTabViewManager,
-            "enableTab":enableTab,
+//            "enableTab":enableTab,
             "disableTab":disableTab,
             "tabId":tabId
         });

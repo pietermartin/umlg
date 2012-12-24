@@ -24,7 +24,7 @@
             });
         }
 
-        function createQuery(queryTabDivName, oclExecuteUri, queryName, queryEnum, queryString, post) {
+        function createQuery(queryTabDivName, oclExecuteUri, query, post) {
             var self = this;
             var queryTab = $('#' + queryTabDivName);
 
@@ -37,7 +37,7 @@
             //Inner div for entering ocl and buttons
             var oclInner = $('<div />', {id:queryTabDivName + '_' + 'OclInner', class:'oclinner'}).appendTo(oclOuter);
             var oclTextAreaDiv = $('<div />', {class:'ocltextarea'}).appendTo(oclInner);
-            $('<textarea />', {id:queryTabDivName + '_' + 'QueryString'}).text(queryString).appendTo(oclTextAreaDiv);
+            $('<textarea />', {id:queryTabDivName + '_' + 'QueryString'}).text(query.queryString).appendTo(oclTextAreaDiv);
             var oclInnerButton = $('<div />', {id:queryTabDivName + '+' + 'OclInnerButton', class:'oclinnerbutton'}).appendTo(oclInner);
 
             var oclExecuteButtonDiv = $('<div />', {class:"oclexecutebutton"}).appendTo(oclInnerButton);
@@ -58,14 +58,12 @@
             }).text('execute').appendTo(oclExecuteButtonDiv);
 
             var inputEditButtonDiv = $('<div />', {class:'oclinputeditbutton'}).appendTo(oclInnerButton);
-
             var oclQueryNameInputDiv = $('<div />', {class:'oclqueryname'}).appendTo(inputEditButtonDiv);
-            $('<input >', {id:queryTabDivName + '_' + 'QueryName', type:'text'}).val(queryName).appendTo(oclQueryNameInputDiv);
-
+            $('<input >', {id:queryTabDivName + '_' + 'QueryName', type:'text'}).val(query.name).appendTo(oclQueryNameInputDiv);
             var oclEditButtonDiv = $('<div />', {class:"ocleditbutton"}).appendTo(inputEditButtonDiv);
 
             $('<button />', {id:queryTabDivName + '_' + 'SaveButton'}).text('save').click(function () {
-                var query = queryToJson(queryTabDivName, this.queryId);
+                var query = queryToJson(queryTabDivName, self.queryId);
                 $.ajax({
                     url:tumlUri,
                     type:post ? "POST" : "PUT",
@@ -83,10 +81,10 @@
                         }
                         if (post) {
                             self.onPostQuerySuccess.notify(
-                                queryFromDb, null, self);
+                                {query:queryFromDb, gridData: tumlTabGridManager.getResult()}, null, self);
                         } else {
                             self.onPutQuerySuccess.notify(
-                                queryFromDb, null, self);
+                                {query:queryFromDb, gridData: tumlTabGridManager.getResult()}, null, self);
                         }
                     },
                     error:function (jqXHR, textStatus, errorThrown) {
@@ -129,6 +127,9 @@
             //Outer div for results
             var oclResult = $('<div />', {id:queryTabDivName + '_' + 'OclResult', class:'oclresult'});
             oclResult.appendTo(queryTab);
+            if (query.data !== undefined) {
+                tumlTabGridManager.refresh(query.data, queryTabDivName + '_' + 'OclResult');
+            }
         }
 
         function queryToJson(queryTabDivName, id) {

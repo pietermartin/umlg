@@ -170,7 +170,7 @@
                             name:node._name,
                             queryEnum:node.queryEnum,
                             queryString:node.queryString,
-                            queryId:node.queryId}, null, self);
+                            id:node.queryId}, null, self);
                     }
                 }
             );

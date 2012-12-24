@@ -17,7 +17,6 @@ function selectFormatter(property) {
     } else if (property.lower > 0 && (property.oneEnumeration || property.manyEnumeration)) {
         return  TumlSlick.Formatters.TumlRequired;
     } else if (property.composite && property.lower > 0) {
-//        return  TumlSlick.Formatters.TumlComponentFormatter;
         return  null;
     } else if (!property.onePrimitive && !property.manyPrimitive) {
         return function waitingFormatter(row, cell, value, columnDef, dataContext) {
@@ -66,6 +65,8 @@ function selectFieldValidator(property) {
         return new TumlSlick.Validators.TumlObject(property).validate;
     } else if (property.manyEnumeration) {
         return new TumlSlick.Validators.TumlManyEnumerationValidator(property).validate;
+    } else if (property.oneEnumeration) {
+        return new TumlSlick.Validators.TumlString(property).validate;
     } else if (!property.onePrimitive && !property.manyPrimitive && !property.composite) {
     } else if (property.name == 'id') {
     } else if (!property.manyPrimitive && property.fieldType == 'String') {

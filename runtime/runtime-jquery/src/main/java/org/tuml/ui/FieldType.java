@@ -12,6 +12,7 @@ public enum FieldType {
 	Long,
 	Float,
 	Real,
-	Boolean;
+	Boolean,
+    ByteArray;
 	
 }

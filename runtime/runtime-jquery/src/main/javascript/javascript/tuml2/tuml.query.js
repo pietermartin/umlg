@@ -15,13 +15,16 @@
         }
     });
 
-    function Query(id, name, description, queryString, type) {
+    function Query(id, name, description, queryString, type, data) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.queryString = queryString;
         this.type = type;
+        this.data = data;
     }
+
+    Query.prototype = new Query();
 
     Query.prototype.getDivName = function () {
         if (this.id !== undefined || this.id !== null || this.id !== -1) {

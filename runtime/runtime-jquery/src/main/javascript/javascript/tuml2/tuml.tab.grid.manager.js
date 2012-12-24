@@ -35,6 +35,7 @@
         };
 
         this.refresh = function (result, gridDivName) {
+            this.result = result;
             this.dataBeforeEdit = $.extend(true, [], result.data);
             this.metaForData = result.meta.to;
             this.gridDivName = gridDivName;
@@ -103,9 +104,7 @@
         });
 
         this.setupColumns = function () {
-
             TumlBaseGridManager.prototype.setupColumns.call(this, this.localMetaForData);
-
             this.columns.push({id:"uri", name:"uri", field:"uri", sortable:false, formatter:TumlSlick.Formatters.Link});
             this.columns.push(
                 {id:"delete", name:"delete", field:"delete", sortable:false,
@@ -127,7 +126,6 @@
 
         this.instantiateGrid = function () {
             this.grid = new Slick.Grid("#myGridManyComponent" + this.localMetaForData.name, this.dataView, this.columns, this.options);
-            //Creating a pager for the component manies editor grid call commitCurrentEditor which buggers everything up
             this.pager = new Slick.Controls.Pager(this.dataView, this.grid, $("#pagerManyComponent" + this.localMetaForData.name));
             $("<div id='grid-buttonManyComponent" + this.localMetaForData.name + "' class='grid-button'/>").appendTo('#pagerManyComponent' + this.localMetaForData.name + ' .slick-pager-settings');
             TumlBaseGridManager.prototype.instantiateGrid.call(this);
@@ -166,7 +164,7 @@
 
     TumlManyComponentGridManager.prototype = new TumlBaseGridManager;
 
-    TumlManyComponentGridManager.prototype.initializeDataModel = function (data) {
+    TumlManyComponentGridManager.prototype.initializeDataModel = function (data, filter) {
         this.dataView.beginUpdate();
         this.dataView.setNewItems(data);
         this.dataView.setFilterArgs({
@@ -560,7 +558,7 @@
                     var data = [];
                     if (isCellEditable(args.row, args.cell, self.dataView.getItem(args.row))) {
                         if (self.dataView.getItem(args.row) !== undefined && self.dataView.getItem(args.row) !== null && self.dataView.getItem(args.row)[column.name] !== undefined && self.dataView.getItem(args.row)[column.name] !== null) {
-                            data.push(self.dataView.getItem(args.row)[column.name][0]);
+                            data= self.dataView.getItem(args.row)[column.name];
                         }
                         self.onClickManyComponentCell.notify({data:data, cell:args, tumlUri:column.options.property.tumlUri, property:column.options.property}, null, self);
                     }
@@ -978,6 +976,10 @@
 
     TumlBaseGridManager.prototype.setData = function (data) {
         this.dataView.setItems(data);
+    }
+
+    TumlBaseGridManager.prototype.getResult = function (data) {
+        return this.result;
     }
 
 })(jQuery);

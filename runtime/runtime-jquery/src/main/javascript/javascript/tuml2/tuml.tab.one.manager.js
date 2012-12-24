@@ -203,6 +203,7 @@
                     } else if (property.dataTypeEnum !== undefined) {
                         if (property.dataTypeEnum == 'DateTime') {
                             dataToSend[property.name] = $('#' + property.name + self.metaForData.name + 'Id').val().replace(/ /g, "T");
+                        } else if (property.dataTypeEnum == 'Image') {
                         } else {
                             dataToSend[property.name] = $('#' + property.name + self.metaForData.name + 'Id').val();
                         }

@@ -61,11 +61,11 @@ public class TumlRestletGenerationUtil {
                 case Email:
                     return "FieldType.String";
                 case Video:
-                    return "FieldType.String";
+                    return "FieldType.ByteArray";
                 case Audio:
-                    return "FieldType.String";
+                    return "FieldType.ByteArray";
                 case Image:
-                    return "FieldType.String";
+                    return "FieldType.ByteArray";
                 default:
                     throw new RuntimeException("Unknown data type " + dataTypeEnum.name());
             }
