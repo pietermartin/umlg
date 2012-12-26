@@ -18,8 +18,8 @@ import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
 import org.eclipse.uml2.uml.VisibilityKind;
 import org.eclipse.uml2.uml.internal.operations.ClassOperations;
-import org.opaeum.java.metamodel.OJPathName;
-import org.opaeum.java.metamodel.OJVisibilityKind;
+import org.tuml.java.metamodel.OJPathName;
+import org.tuml.java.metamodel.OJVisibilityKind;
 import org.tuml.framework.ModelLoader;
 
 public class TumlClassOperations extends ClassOperations {
@@ -344,7 +344,21 @@ public class TumlClassOperations extends ClassOperations {
 		}
 	}
 
-	public static String propertyEnumName(Type type) {
+    public static String getMetaClassName(Classifier clazz) {
+        if (clazz instanceof CollectionType) {
+            CollectionType collectionType = (CollectionType) clazz;
+            StringBuilder sb = new StringBuilder();
+            sb.append(TumlCollectionKindEnum.from(collectionType.getKind()).getOjPathName().getLast());
+            sb.append("<");
+            sb.append(className(collectionType.getElementType()));
+            sb.append(">");
+            return sb.toString();
+        } else {
+            return Namer.getMetaName(clazz);
+        }
+    }
+
+    public static String propertyEnumName(Type type) {
 		return Namer.name(type) + "RuntimePropertyEnum";
 	}
 

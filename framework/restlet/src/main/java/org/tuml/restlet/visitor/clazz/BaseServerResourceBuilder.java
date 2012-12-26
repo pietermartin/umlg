@@ -2,12 +2,12 @@ package org.tuml.restlet.visitor.clazz;
 
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Class; 
-import org.opaeum.java.metamodel.OJField;
-import org.opaeum.java.metamodel.OJPathName;
-import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
-import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
-import org.opaeum.java.metamodel.annotation.OJEnum;
-import org.opaeum.java.metamodel.annotation.OJEnumLiteral;
+import org.tuml.java.metamodel.OJField;
+import org.tuml.java.metamodel.OJPathName;
+import org.tuml.java.metamodel.annotation.OJAnnotatedClass;
+import org.tuml.java.metamodel.annotation.OJAnnotatedOperation;
+import org.tuml.java.metamodel.annotation.OJEnum;
+import org.tuml.java.metamodel.annotation.OJEnumLiteral;
 import org.tuml.generation.Workspace;
 import org.tuml.javageneration.util.TumlClassOperations;
 import org.tuml.javageneration.visitor.BaseVisitor;

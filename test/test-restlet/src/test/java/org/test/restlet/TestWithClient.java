@@ -32,12 +32,12 @@ public class TestWithClient {
 
 	@BeforeClass
 	public static void beforeClass() throws Exception {
-		new TumlRestletServerComponent().start();
+		new TumlRestletServerComponent2().start();
 	}
 
 	@AfterClass
 	public static void afterClass() throws Exception {
-		new TumlRestletServerComponent().stop();
+		new TumlRestletServerComponent2().stop();
 	}
 
 	@Test

@@ -6,7 +6,7 @@ import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
-import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
+import org.tuml.java.metamodel.annotation.OJAnnotatedClass;
 import org.tuml.framework.Visitor;
 import org.tuml.generation.Workspace;
 import org.tuml.javageneration.util.PropertyWrapper;

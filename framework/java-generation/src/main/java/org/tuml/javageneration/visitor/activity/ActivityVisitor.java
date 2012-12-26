@@ -1,8 +1,8 @@
 package org.tuml.javageneration.visitor.activity;
 
 import org.eclipse.uml2.uml.Activity;
-import org.opaeum.java.metamodel.OJPackage;
-import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
+import org.tuml.java.metamodel.OJPackage;
+import org.tuml.java.metamodel.annotation.OJAnnotatedClass;
 import org.tuml.framework.Visitor;
 import org.tuml.generation.Workspace;
 import org.tuml.javageneration.util.Namer;

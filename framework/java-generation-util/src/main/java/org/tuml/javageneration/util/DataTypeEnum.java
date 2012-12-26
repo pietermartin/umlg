@@ -1,7 +1,7 @@
 package org.tuml.javageneration.util;
 
 import org.eclipse.uml2.uml.DataType;
-import org.opaeum.java.metamodel.OJPathName;
+import org.tuml.java.metamodel.OJPathName;
 
 public enum DataTypeEnum {
     DateTime("org.joda.time.DateTime", "DataTypeEnum.DateTime"), Date("org.joda.time.LocalDate", "DataTypeEnum.Date"), Time("org.joda.time.LocalTime", "DataTypeEnum.Time"), InternationalPhoneNumber(

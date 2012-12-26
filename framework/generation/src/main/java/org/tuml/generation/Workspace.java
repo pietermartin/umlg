@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import org.eclipse.uml2.uml.Model;
-import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
+import org.tuml.java.metamodel.annotation.OJAnnotatedClass;
 import org.tuml.framework.JavaModelPrinter;
 import org.tuml.framework.ModelLoader;
 import org.tuml.framework.ModelVisitor;

@@ -13,7 +13,7 @@ import org.tuml.inheritencetest.Mamal;
 import org.tuml.inheritencetest.Quadped;
 import org.tuml.interfacetest.ManyA;
 import org.tuml.interfacetest.ManyB;
-import org.tuml.query.Query;
+import org.tuml.query.InstanceQuery;
 import org.tuml.query.QueryEnum;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
@@ -88,63 +88,63 @@ public class AllInstancesTest extends BaseLocalDbTest {
 		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
-		Query query1 = new Query(god);
+        InstanceQuery query1 = new InstanceQuery(god);
 		query1.setQueryString("");
 		query1.setName("q1");
 		query1.setQueryEnum(QueryEnum.OCL);
 
 		RealRootFolder realRootFolder = new RealRootFolder(god);
 		realRootFolder.setName("realRootFolder");
-		Query query2 = new Query(realRootFolder);
+        InstanceQuery query2 = new InstanceQuery(realRootFolder);
 		query2.setQueryString("");
 		query2.setName("q2");
 		query2.setQueryEnum(QueryEnum.OCL);
 
 		Folder folder1 = new Folder(realRootFolder);
 		folder1.setName("folder1");
-		Query query3 = new Query(folder1);
+        InstanceQuery query3 = new InstanceQuery(folder1);
 		query3.setName("q3");
 		query3.setQueryString("");
 		query3.setQueryEnum(QueryEnum.OCL);
 
 		Folder folder1_1 = new Folder(folder1);
 		folder1_1.setName("folder1_1");
-		Query query4 = new Query(folder1_1);
+        InstanceQuery query4 = new InstanceQuery(folder1_1);
 		query4.setQueryString("");
 		query4.setName("q4");
 		query4.setQueryEnum(QueryEnum.OCL);
 
 		Folder folder2 = new Folder(realRootFolder);
 		folder2.setName("folder2");
-		Query query5 = new Query(folder2);
+        InstanceQuery query5 = new InstanceQuery(folder2);
 		query5.setQueryString("");
 		query5.setQueryEnum(QueryEnum.OCL);
 		query5.setName("q5");
 
 		Folder folder2_1 = new Folder(folder2);
 		folder2_1.setName("folder2_1");
-		Query query6 = new Query(folder2_1);
+        InstanceQuery query6 = new InstanceQuery(folder2_1);
 		query6.setQueryString("");
 		query6.setName("q6");
 		query6.setQueryEnum(QueryEnum.OCL);
 
 		Folder folder2_2 = new Folder(folder2);
 		folder2_2.setName("folder2_2");
-		Query query7 = new Query(folder2_2);
+        InstanceQuery query7 = new InstanceQuery(folder2_2);
 		query7.setQueryString("");
 		query7.setName("q7");
 		query7.setQueryEnum(QueryEnum.OCL);
 
 		Folder folder2_2_1 = new Folder(folder2_1);
 		folder2_2_1.setName("folder2_2_1");
-		Query query8 = new Query(folder2_2_1);
+        InstanceQuery query8 = new InstanceQuery(folder2_2_1);
 		query8.setQueryString("");
 		query8.setName("q8");
 		query8.setQueryEnum(QueryEnum.OCL);
 
 		Folder folder2_2_2 = new Folder(folder2_1);
 		folder2_2_2.setName("folder2_2_2");
-		Query query9 = new Query(folder2_2_2);
+        InstanceQuery query9 = new InstanceQuery(folder2_2_2);
 		query9.setQueryString("");
 		query9.setName("q9");
 		query9.setQueryEnum(QueryEnum.OCL);
@@ -152,7 +152,7 @@ public class AllInstancesTest extends BaseLocalDbTest {
 		db.stopTransaction(Conclusion.SUCCESS);
 
 		Assert.assertEquals(18, BaseModelTuml.allInstances().size());
-		Assert.assertEquals(9, Query.allInstances().size());
+		Assert.assertEquals(9, InstanceQuery.allInstances().size());
 
 	}
 

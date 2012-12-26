@@ -4,13 +4,13 @@ import org.eclipse.uml2.uml.DataType;
 import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.uml2.uml.Property;
-import org.opaeum.java.metamodel.OJPathName;
+import org.tuml.java.metamodel.OJPathName;
 import org.tuml.javageneration.util.DataTypeEnum;
 import org.tuml.javageneration.util.PropertyWrapper;
 
 public class TumlRestletGenerationUtil {
 
-    public final static String queryQualifiedName = "tumllib::org::tuml::query::Query";
+    public final static String queryQualifiedName = "tumllib::org::tuml::query::InstanceQuery";
     public final static OJPathName FieldType = new OJPathName("org.tuml.ui.FieldType");
     public final static OJPathName Get = new OJPathName("org.restlet.resource.Get");
     public final static OJPathName Put = new OJPathName("org.restlet.resource.Put");
@@ -29,6 +29,7 @@ public class TumlRestletGenerationUtil {
     public static final OJPathName BaseOclExecutionServerResourceImpl = new OJPathName("org.tuml.runtime.restlet.BaseOclExecutionServerResourceImpl");
     public static final OJPathName TumlRestletNode = new OJPathName("org.tuml.runtime.restlet.domain.TumlRestletNode");
     public static final OJPathName RestletToJsonUtil = new OJPathName("org.tuml.runtime.restlet.util.RestletToJsonUtil");
+    public static final OJPathName TumlMetaQueryServerResourceImpl = new OJPathName("org.tuml.runtime.restlet.TumlMetaQueryServerResourceImpl");
 
     public static String getFieldTypeForProperty(Property p) {
         PropertyWrapper propertyWrapper = new PropertyWrapper(p);

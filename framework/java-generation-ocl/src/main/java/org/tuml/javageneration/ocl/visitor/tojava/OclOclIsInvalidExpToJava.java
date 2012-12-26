@@ -5,11 +5,11 @@ import java.util.List;
 import org.eclipse.ocl.expressions.OperationCallExp;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Operation;
-import org.opaeum.java.metamodel.OJParameter;
-import org.opaeum.java.metamodel.OJPathName;
-import org.opaeum.java.metamodel.OJTryStatement;
-import org.opaeum.java.metamodel.OJVisibilityKind;
-import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
+import org.tuml.java.metamodel.OJParameter;
+import org.tuml.java.metamodel.OJPathName;
+import org.tuml.java.metamodel.OJTryStatement;
+import org.tuml.java.metamodel.OJVisibilityKind;
+import org.tuml.java.metamodel.annotation.OJAnnotatedOperation;
 import org.tuml.javageneration.util.TinkerGenerationUtil;
 
 public class OclOclIsInvalidExpToJava extends BaseHandleOperationExp {

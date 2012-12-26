@@ -1,6 +1,6 @@
 package org.tuml.javageneration.validation;
 
-import org.opaeum.java.metamodel.OJPathName;
+import org.tuml.java.metamodel.OJPathName;
 
 
 public class MaxLength implements Validation {

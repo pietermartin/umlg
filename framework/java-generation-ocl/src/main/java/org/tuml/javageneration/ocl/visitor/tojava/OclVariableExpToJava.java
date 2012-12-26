@@ -3,7 +3,7 @@ package org.tuml.javageneration.ocl.visitor.tojava;
 import org.eclipse.ocl.expressions.Variable;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Parameter;
-import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
+import org.tuml.java.metamodel.annotation.OJAnnotatedClass;
 import org.tuml.javageneration.ocl.visitor.HandleVariableExp;
 import org.tuml.javageneration.util.TumlClassOperations;
 

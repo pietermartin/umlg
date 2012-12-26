@@ -49,8 +49,8 @@ import org.eclipse.uml2.uml.TemplateSignature;
 import org.eclipse.uml2.uml.Type;
 import org.eclipse.uml2.uml.Usage;
 import org.eclipse.uml2.uml.VisibilityKind;
-import org.opaeum.java.metamodel.OJParameter;
-import org.opaeum.java.metamodel.OJPathName;
+import org.tuml.java.metamodel.OJParameter;
+import org.tuml.java.metamodel.OJPathName;
 
 public class OperationWrapper implements Operation {
 

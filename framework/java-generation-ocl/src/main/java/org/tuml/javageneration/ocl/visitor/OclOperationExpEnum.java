@@ -7,7 +7,7 @@ import org.eclipse.ocl.expressions.OperationCallExp;
 import org.eclipse.ocl.utilities.PredefinedType;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Operation;
-import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
+import org.tuml.java.metamodel.annotation.OJAnnotatedClass;
 import org.tuml.javageneration.ocl.visitor.tojava.OclAllInstancesExprToJava;
 import org.tuml.javageneration.ocl.visitor.tojava.OclAsBagExprToJava;
 import org.tuml.javageneration.ocl.visitor.tojava.OclAsOrderedSetExprToJava;

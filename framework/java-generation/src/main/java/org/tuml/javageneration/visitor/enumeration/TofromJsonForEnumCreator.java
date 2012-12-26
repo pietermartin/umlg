@@ -1,10 +1,10 @@
 package org.tuml.javageneration.visitor.enumeration;
 
 import org.eclipse.uml2.uml.Enumeration;
-import org.opaeum.java.metamodel.OJIfStatement;
-import org.opaeum.java.metamodel.OJPathName;
-import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
-import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
+import org.tuml.java.metamodel.OJIfStatement;
+import org.tuml.java.metamodel.OJPathName;
+import org.tuml.java.metamodel.annotation.OJAnnotatedClass;
+import org.tuml.java.metamodel.annotation.OJAnnotatedOperation;
 import org.tuml.framework.Visitor;
 import org.tuml.generation.Workspace;
 import org.tuml.javageneration.visitor.BaseVisitor;

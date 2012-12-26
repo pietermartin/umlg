@@ -3,9 +3,8 @@ package org.tuml.javageneration.ocl.visitor.tojava;
 import org.eclipse.ocl.expressions.TupleLiteralPart;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Property;
-import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
+import org.tuml.java.metamodel.annotation.OJAnnotatedClass;
 import org.tuml.javageneration.ocl.visitor.HandleTupleLiteralPart;
-import org.tuml.javageneration.util.TumlClassOperations;
 
 public class OclTupleLiteralPartToJava implements HandleTupleLiteralPart {
 

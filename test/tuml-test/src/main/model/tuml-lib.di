@@ -19,6 +19,9 @@
     <availablePage>
       <emfPageIdentifier href="tuml-lib.notation#_wlBKACQOEeKOmc56p_1Osg"/>
     </availablePage>
+    <availablePage>
+      <emfPageIdentifier href="tuml-lib.notation#_wJwsUE6KEeK4HckrDYI0ug"/>
+    </availablePage>
   </pageList>
   <sashModel currentSelection="//@sashModel/@windows.0/@children.0">
     <windows>
@@ -33,10 +36,13 @@
           <emfPageIdentifier href="tuml-lib.notation#_wlBKACQOEeKOmc56p_1Osg"/>
         </children>
         <children>
+          <emfPageIdentifier href="tuml-lib.notation#_vBwngCQOEeKOmc56p_1Osg"/>
+        </children>
+        <children>
           <emfPageIdentifier href="tuml-lib.notation#_c-m-cCM6EeK-Trh8Ll0qUQ"/>
         </children>
         <children>
-          <emfPageIdentifier href="tuml-lib.notation#_vBwngCQOEeKOmc56p_1Osg"/>
+          <emfPageIdentifier href="tuml-lib.notation#_wJwsUE6KEeK4HckrDYI0ug"/>
         </children>
       </children>
     </windows>

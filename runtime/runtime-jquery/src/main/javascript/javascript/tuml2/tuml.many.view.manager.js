@@ -64,7 +64,7 @@
             }
 
             oclExecuteUri = "/restAndJson/" + contextVertexId + "/oclExecuteQuery";
-            queryTumlUri = "/restAndJson/basetumlwithquerys/" + contextVertexId + "/query";
+            queryTumlUri = "/restAndJson/basetumlwithquerys/" + contextVertexId + "/instanceQuery";
 
             //This is the default query tab, always open
             addDefaultQueryTab();

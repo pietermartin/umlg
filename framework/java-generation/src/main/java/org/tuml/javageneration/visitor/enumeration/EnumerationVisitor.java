@@ -1,9 +1,9 @@
 package org.tuml.javageneration.visitor.enumeration;
 
 import org.eclipse.uml2.uml.EnumerationLiteral;
-import org.opaeum.java.metamodel.OJPackage;
-import org.opaeum.java.metamodel.annotation.OJEnum;
-import org.opaeum.java.metamodel.annotation.OJEnumLiteral;
+import org.tuml.java.metamodel.OJPackage;
+import org.tuml.java.metamodel.annotation.OJEnum;
+import org.tuml.java.metamodel.annotation.OJEnumLiteral;
 import org.tuml.framework.Visitor;
 import org.tuml.generation.Workspace;
 import org.tuml.javageneration.util.Namer;

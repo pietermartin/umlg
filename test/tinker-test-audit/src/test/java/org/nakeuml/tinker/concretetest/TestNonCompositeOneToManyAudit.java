@@ -3,7 +3,7 @@ package org.nakeuml.tinker.concretetest;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.opaeum.test.tinker.BaseLocalDbTest;
+import org.tuml.test.tinker.BaseLocalDbTest;
 import org.tinker.componenttest.SpaceTime;
 import org.tinker.concretetest.Demon;
 import org.tinker.concretetest.God;

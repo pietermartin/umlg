@@ -56,43 +56,49 @@ self.getChildren()->iterate(iter : tumllib::org::tuml::hierarchy::Hierarchy; acc
         </packagedElement>
       </packagedElement>
       <packagedElement xmi:type="uml:Package" xmi:id="_sPG5sCQOEeKOmc56p_1Osg" name="query">
-        <packagedElement xmi:type="uml:Class" xmi:id="_JkrskCQPEeKOmc56p_1Osg" name="Query">
+        <packagedElement xmi:type="uml:Class" xmi:id="_JkrskCQPEeKOmc56p_1Osg" clientDependency="_wK4jIE6JEeK4HckrDYI0ug" name="InstanceQuery">
           <generalization xmi:id="_4cJHkCRsEeKzTel_Vwmhog" general="_2GNhsCQOEeKOmc56p_1Osg"/>
-          <ownedAttribute xmi:id="_K0aPECQPEeKOmc56p_1Osg" name="queryString" visibility="public">
-            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
-            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_LIisACQPEeKOmc56p_1Osg" value="1"/>
-            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_LIjTECQPEeKOmc56p_1Osg" value="1"/>
-          </ownedAttribute>
-          <ownedAttribute xmi:id="_QMxa4CQPEeKOmc56p_1Osg" name="queryEnum" type="_NOrSECQPEeKOmc56p_1Osg" association="_QMyB8CQPEeKOmc56p_1Osg">
-            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_QMxa4SQPEeKOmc56p_1Osg" value="1"/>
-            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_QMxa4iQPEeKOmc56p_1Osg" value="1"/>
-          </ownedAttribute>
-          <ownedAttribute xmi:id="_tv9AcCXGEeKbPYSfIbmXag" name="name" visibility="public">
-            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
-            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_uYQWkCXGEeKbPYSfIbmXag" value="1"/>
-            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_uYQ9oCXGEeKbPYSfIbmXag" value="1"/>
-          </ownedAttribute>
+          <interfaceRealization xmi:id="_wK4jIE6JEeK4HckrDYI0ug" name="InterfaceRealization1" client="_JkrskCQPEeKOmc56p_1Osg" supplier="_djoUIE6JEeK4HckrDYI0ug" contract="_djoUIE6JEeK4HckrDYI0ug"/>
         </packagedElement>
         <packagedElement xmi:type="uml:Enumeration" xmi:id="_NOrSECQPEeKOmc56p_1Osg" name="QueryEnum">
           <ownedLiteral xmi:id="_OirQkCQPEeKOmc56p_1Osg" name="OCL"/>
         </packagedElement>
-        <packagedElement xmi:type="uml:Association" xmi:id="_QMyB8CQPEeKOmc56p_1Osg" name="query_queryEnum_1" memberEnd="_QMyB8SQPEeKOmc56p_1Osg _QMxa4CQPEeKOmc56p_1Osg">
-          <ownedEnd xmi:id="_QMyB8SQPEeKOmc56p_1Osg" name="query" type="_JkrskCQPEeKOmc56p_1Osg" association="_QMyB8CQPEeKOmc56p_1Osg">
-            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_QMyB8iQPEeKOmc56p_1Osg"/>
-            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_QMyB8yQPEeKOmc56p_1Osg" value="*"/>
-          </ownedEnd>
-        </packagedElement>
         <packagedElement xmi:type="uml:Class" xmi:id="_FAMz0CXHEeKbPYSfIbmXag" name="BaseTumlWithQuery" isAbstract="true">
           <generalization xmi:id="_Q4ZJ0CXHEeKbPYSfIbmXag" general="_2GNhsCQOEeKOmc56p_1Osg"/>
-          <ownedAttribute xmi:id="_RtHLUCXHEeKbPYSfIbmXag" name="query" type="_JkrskCQPEeKOmc56p_1Osg" aggregation="composite" association="_RtHyYCXHEeKbPYSfIbmXag">
-            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_RtHLUSXHEeKbPYSfIbmXag"/>
-            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_RtHLUiXHEeKbPYSfIbmXag" value="*"/>
+          <ownedAttribute xmi:id="_7L5ZgE6JEeK4HckrDYI0ug" name="instanceQuery" type="_JkrskCQPEeKOmc56p_1Osg" isOrdered="true" aggregation="composite" association="_7L6AkE6JEeK4HckrDYI0ug">
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_7L5ZgU6JEeK4HckrDYI0ug"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_7L5Zgk6JEeK4HckrDYI0ug" value="*"/>
           </ownedAttribute>
         </packagedElement>
-        <packagedElement xmi:type="uml:Association" xmi:id="_RtHyYCXHEeKbPYSfIbmXag" name="baseTumlWithQuery_query_1" memberEnd="_RtHyYSXHEeKbPYSfIbmXag _RtHLUCXHEeKbPYSfIbmXag" navigableOwnedEnd="_RtHyYSXHEeKbPYSfIbmXag">
-          <ownedEnd xmi:id="_RtHyYSXHEeKbPYSfIbmXag" name="baseTumlWithQuery" type="_FAMz0CXHEeKbPYSfIbmXag" association="_RtHyYCXHEeKbPYSfIbmXag">
-            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_RtHyYiXHEeKbPYSfIbmXag" value="1"/>
-            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_RtHyYyXHEeKbPYSfIbmXag" value="1"/>
+        <packagedElement xmi:type="uml:Interface" xmi:id="_djoUIE6JEeK4HckrDYI0ug" name="IQuery">
+          <ownedAttribute xmi:id="_gHafgE6JEeK4HckrDYI0ug" name="name">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+          </ownedAttribute>
+          <ownedAttribute xmi:id="_mST7gE6JEeK4HckrDYI0ug" name="description" visibility="public">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_mpVUYE6JEeK4HckrDYI0ug"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_mpV7cE6JEeK4HckrDYI0ug" value="1"/>
+          </ownedAttribute>
+          <ownedAttribute xmi:id="_qi9RUE6JEeK4HckrDYI0ug" name="queryString" visibility="public">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_q02SkE6JEeK4HckrDYI0ug" value="1"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_q025oE6JEeK4HckrDYI0ug" value="1"/>
+          </ownedAttribute>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Association" xmi:id="_7L6AkE6JEeK4HckrDYI0ug" name="baseTumlWithQuery_instanceQuery_1" memberEnd="_7L6AkU6JEeK4HckrDYI0ug _7L5ZgE6JEeK4HckrDYI0ug" navigableOwnedEnd="_7L6AkU6JEeK4HckrDYI0ug">
+          <ownedEnd xmi:id="_7L6AkU6JEeK4HckrDYI0ug" name="baseTumlWithQuery" type="_FAMz0CXHEeKbPYSfIbmXag" association="_7L6AkE6JEeK4HckrDYI0ug">
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_7L6Akk6JEeK4HckrDYI0ug" value="1"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_7L6Ak06JEeK4HckrDYI0ug" value="1"/>
+          </ownedEnd>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Association" xmi:id="_BdnZwE6LEeK4HckrDYI0ug" name="iQuery_queryEnum_1" memberEnd="_BdnZxE6LEeK4HckrDYI0ug _BdnZwU6LEeK4HckrDYI0ug" navigableOwnedEnd="_BdnZwU6LEeK4HckrDYI0ug">
+          <ownedEnd xmi:id="_BdnZwU6LEeK4HckrDYI0ug" name="queryEnum" type="_NOrSECQPEeKOmc56p_1Osg" association="_BdnZwE6LEeK4HckrDYI0ug">
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_BdnZwk6LEeK4HckrDYI0ug" value="1"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_BdnZw06LEeK4HckrDYI0ug" value="1"/>
+          </ownedEnd>
+          <ownedEnd xmi:id="_BdnZxE6LEeK4HckrDYI0ug" name="iQuery" type="_djoUIE6JEeK4HckrDYI0ug" association="_BdnZwE6LEeK4HckrDYI0ug">
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_BdnZxU6LEeK4HckrDYI0ug"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_BdnZxk6LEeK4HckrDYI0ug" value="*"/>
           </ownedEnd>
         </packagedElement>
       </packagedElement>
@@ -111,6 +117,25 @@ self.getChildren()->iterate(iter : tumllib::org::tuml::hierarchy::Hierarchy; acc
             <body>new DateTime()</body>
           </defaultValue>
         </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Package" xmi:id="_uPD6ME6KEeK4HckrDYI0ug" name="meta">
+        <packagedElement xmi:type="uml:Class" xmi:id="_xkJmsE6KEeK4HckrDYI0ug" name="BaseClassTuml">
+          <generalization xmi:id="_zd2TQE6KEeK4HckrDYI0ug" general="_2GNhsCQOEeKOmc56p_1Osg"/>
+          <ownedAttribute xmi:id="__iH-wE-NEeKwIp56YBZIxw" name="classQuery" type="_1o2LME6KEeK4HckrDYI0ug" isOrdered="true" aggregation="composite" association="__iJM4E-NEeKwIp56YBZIxw">
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="__iH-wU-NEeKwIp56YBZIxw"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="__iH-wk-NEeKwIp56YBZIxw" value="*"/>
+          </ownedAttribute>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Class" xmi:id="_1o2LME6KEeK4HckrDYI0ug" clientDependency="_9zji0E6KEeK4HckrDYI0ug" name="ClassQuery">
+          <generalization xmi:id="_QdOMoE6LEeK4HckrDYI0ug" general="_2GNhsCQOEeKOmc56p_1Osg"/>
+          <interfaceRealization xmi:id="_9zji0E6KEeK4HckrDYI0ug" name="InterfaceRealization1" client="_1o2LME6KEeK4HckrDYI0ug" supplier="_djoUIE6JEeK4HckrDYI0ug" contract="_djoUIE6JEeK4HckrDYI0ug"/>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Association" xmi:id="__iJM4E-NEeKwIp56YBZIxw" name="baseClassTuml_classQuery_1" memberEnd="__iJM4U-NEeKwIp56YBZIxw __iH-wE-NEeKwIp56YBZIxw" navigableOwnedEnd="__iJM4U-NEeKwIp56YBZIxw">
+          <ownedEnd xmi:id="__iJM4U-NEeKwIp56YBZIxw" name="baseClassTuml" type="_xkJmsE6KEeK4HckrDYI0ug" association="__iJM4E-NEeKwIp56YBZIxw">
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="__iJM4k-NEeKwIp56YBZIxw" value="1"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="__iJM40-NEeKwIp56YBZIxw" value="1"/>
+          </ownedEnd>
+        </packagedElement>
       </packagedElement>
     </packagedElement>
   </packagedElement>

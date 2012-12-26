@@ -21,6 +21,7 @@ import org.tuml.runtime.adaptor.NakedGraphFactory;
 import org.tuml.test.*;
 
 import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
+import org.tuml.test.meta.HumanMeta;
 
 public class TumlRestletServerComponent2 extends Component {
 	private static final Logger logger = Logger.getLogger(TumlRestletServerComponent2.class.getPackage().getName());
@@ -44,17 +45,19 @@ public class TumlRestletServerComponent2 extends Component {
 		logger.info("done creating graph");
 		logger.info("start creating default data");
 		createDefaultData();
+
 		logger.info("done creating default data");
 //		 create1000000();
 
 		// Set basic properties
-		setName("RESTful Mail Server component");
-		setDescription("Example for 'Restlet in Action' book");
-		setOwner("Noelios Technologies");
-		setAuthor("The Restlet Team");
+		setName("AAAAAAAAAAAA");
+		setDescription("XXXXXXXXXXXX");
+		setOwner("BBBBBBBBBBBB");
+		setAuthor("CCCCCCCCCC");
 
         getClients().add(Protocol.FILE);
         getClients().add(Protocol.CLAP);
+//        getClients().add(Protocol.RIAP);
 
 		// Add connectors
 		Server server = new Server(new Context(), Protocol.HTTP, 8111);
@@ -146,7 +149,7 @@ public class TumlRestletServerComponent2 extends Component {
 				terrestrialCraft.setAquatic(true);
 			}
 		}
-
+        HumanMeta h = HumanMeta.INSTANCE;
 		GraphDb.getDb().stopTransaction(Conclusion.SUCCESS);
 	}
 

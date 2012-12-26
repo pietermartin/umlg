@@ -4,12 +4,12 @@ import java.util.Set;
 
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Property;
-import org.opaeum.java.metamodel.OJConstructor;
-import org.opaeum.java.metamodel.OJField;
-import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
-import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
-import org.opaeum.java.metamodel.annotation.OJEnum;
-import org.opaeum.java.metamodel.annotation.OJEnumLiteral;
+import org.tuml.java.metamodel.OJConstructor;
+import org.tuml.java.metamodel.OJField;
+import org.tuml.java.metamodel.annotation.OJAnnotatedClass;
+import org.tuml.java.metamodel.annotation.OJAnnotatedOperation;
+import org.tuml.java.metamodel.annotation.OJEnum;
+import org.tuml.java.metamodel.annotation.OJEnumLiteral;
 import org.tuml.framework.Visitor;
 import org.tuml.generation.Workspace;
 import org.tuml.javageneration.util.PropertyWrapper;

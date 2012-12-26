@@ -8,7 +8,7 @@ import org.eclipse.ocl.uml.SequenceType;
 import org.eclipse.ocl.uml.SetType;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
-import org.opaeum.java.metamodel.OJPathName;
+import org.tuml.java.metamodel.OJPathName;
 
 public enum TumlCollectionKindEnum {
 

@@ -6,11 +6,11 @@ import java.util.Set;
 
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Property;
-import org.opaeum.java.metamodel.*;
-import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
-import org.opaeum.java.metamodel.annotation.OJAnnotatedField;
-import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
-import org.opaeum.java.metamodel.annotation.OJAnnotationValue;
+import org.tuml.java.metamodel.*;
+import org.tuml.java.metamodel.annotation.OJAnnotatedClass;
+import org.tuml.java.metamodel.annotation.OJAnnotatedField;
+import org.tuml.java.metamodel.annotation.OJAnnotatedOperation;
+import org.tuml.java.metamodel.annotation.OJAnnotationValue;
 import org.tuml.framework.Visitor;
 import org.tuml.generation.Workspace;
 import org.tuml.javageneration.util.DataTypeEnum;
@@ -46,6 +46,7 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
         if (clazz.getGenerals().isEmpty()) {
             toJson.getBody().addToStatements("StringBuilder sb = new StringBuilder()");
             toJson.getBody().addToStatements("sb.append(\"\\\"id\\\": \" + getId() + \", \")");
+            toJson.getBody().addToStatements("sb.append(\"\\\"metaNodeId\\\": \" + getMetaNode().getId() + \", \")");
         } else {
             toJson.getBody().addToStatements("String result = super." + operationName + "()");
             toJson.getBody().addToStatements("result = result.substring(1, result.length() - 1)");

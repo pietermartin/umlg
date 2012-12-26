@@ -193,7 +193,7 @@
       <children xmi:type="notation:BasicCompartment" xmi:id="_1aOlMwAOEeKpVr_ntT6cLA" type="7019"/>
       <children xmi:type="notation:DecorationNode" xmi:id="_1eYFYAAOEeKpVr_ntT6cLA" type="5029"/>
       <element xmi:type="uml:Class" href="tinker-test.uml#_YuD8sOwiEeCSwqyeEHd1tw"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_1aOlNAAOEeKpVr_ntT6cLA" x="257" y="19" width="161"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_1aOlNAAOEeKpVr_ntT6cLA" x="248" y="48" width="161"/>
     </children>
     <children xmi:type="notation:Shape" xmi:id="_1aUr0AAOEeKpVr_ntT6cLA" type="2004" fontHeight="8" lineColor="0">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_1e7fAQAOEeKpVr_ntT6cLA" source="QualifiedName">

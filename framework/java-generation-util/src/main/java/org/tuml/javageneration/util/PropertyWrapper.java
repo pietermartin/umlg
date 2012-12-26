@@ -37,7 +37,7 @@ import org.eclipse.uml2.uml.Type;
 import org.eclipse.uml2.uml.Usage;
 import org.eclipse.uml2.uml.ValueSpecification;
 import org.eclipse.uml2.uml.VisibilityKind;
-import org.opaeum.java.metamodel.OJPathName;
+import org.tuml.java.metamodel.OJPathName;
 import org.tuml.framework.ModelLoader;
 import org.tuml.javageneration.validation.Email;
 import org.tuml.javageneration.validation.Max;

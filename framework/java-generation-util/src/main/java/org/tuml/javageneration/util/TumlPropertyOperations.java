@@ -16,8 +16,8 @@ import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
 import org.eclipse.uml2.uml.internal.operations.PropertyOperations;
-import org.opaeum.java.metamodel.OJPathName;
-import org.opaeum.java.metamodel.OJSimpleStatement;
+import org.tuml.java.metamodel.OJPathName;
+import org.tuml.java.metamodel.OJSimpleStatement;
 
 public final class TumlPropertyOperations extends PropertyOperations {
 

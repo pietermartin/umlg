@@ -2,12 +2,12 @@ package org.tuml.javageneration.visitor.clazz;
 
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Property;
-import org.opaeum.java.metamodel.OJConstructor;
-import org.opaeum.java.metamodel.OJForStatement;
-import org.opaeum.java.metamodel.OJIfStatement;
-import org.opaeum.java.metamodel.OJPathName;
-import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
-import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
+import org.tuml.java.metamodel.OJConstructor;
+import org.tuml.java.metamodel.OJForStatement;
+import org.tuml.java.metamodel.OJIfStatement;
+import org.tuml.java.metamodel.OJPathName;
+import org.tuml.java.metamodel.annotation.OJAnnotatedClass;
+import org.tuml.java.metamodel.annotation.OJAnnotatedOperation;
 import org.tuml.framework.Visitor;
 import org.tuml.generation.Workspace;
 import org.tuml.javageneration.util.PropertyWrapper;

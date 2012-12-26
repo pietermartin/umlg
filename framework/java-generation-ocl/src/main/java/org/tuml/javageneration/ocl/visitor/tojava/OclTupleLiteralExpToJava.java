@@ -5,7 +5,7 @@ import java.util.List;
 import org.eclipse.ocl.expressions.TupleLiteralExp;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Property;
-import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
+import org.tuml.java.metamodel.annotation.OJAnnotatedClass;
 import org.tuml.javageneration.ocl.visitor.HandleTupleLiteralExp;
 
 public class OclTupleLiteralExpToJava implements HandleTupleLiteralExp {

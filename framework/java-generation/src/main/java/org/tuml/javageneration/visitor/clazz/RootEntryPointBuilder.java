@@ -1,11 +1,11 @@
 package org.tuml.javageneration.visitor.clazz;
 
 import org.eclipse.uml2.uml.Class;
-import org.opaeum.java.metamodel.OJField;
-import org.opaeum.java.metamodel.OJPathName;
-import org.opaeum.java.metamodel.OJWhileStatement;
-import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
-import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
+import org.tuml.java.metamodel.OJField;
+import org.tuml.java.metamodel.OJPathName;
+import org.tuml.java.metamodel.OJWhileStatement;
+import org.tuml.java.metamodel.annotation.OJAnnotatedClass;
+import org.tuml.java.metamodel.annotation.OJAnnotatedOperation;
 import org.tuml.framework.Visitor;
 import org.tuml.generation.Workspace;
 import org.tuml.javageneration.util.TinkerGenerationUtil;

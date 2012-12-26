@@ -215,7 +215,7 @@
             var result = null;
             for (var i = 0; i < contextMetaDataFrom.properties.length; i++) {
                 var metaProperty = contextMetaDataFrom.properties[i];
-                if (metaProperty.name == 'query') {
+                if (metaProperty.name == 'instanceQuery') {
                     result = metaProperty;
                     break;
                 }

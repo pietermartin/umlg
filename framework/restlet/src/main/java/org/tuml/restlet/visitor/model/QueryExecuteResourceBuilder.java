@@ -1,12 +1,10 @@
 package org.tuml.restlet.visitor.model;
 
 import org.eclipse.uml2.uml.Model;
-import org.opaeum.java.metamodel.OJField;
-import org.opaeum.java.metamodel.OJPackage;
-import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
-import org.opaeum.java.metamodel.annotation.OJAnnotatedInterface;
-import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
-import org.opaeum.java.metamodel.annotation.OJAnnotationValue;
+import org.tuml.java.metamodel.OJField;
+import org.tuml.java.metamodel.OJPackage;
+import org.tuml.java.metamodel.OJPathName;
+import org.tuml.java.metamodel.annotation.*;
 import org.tuml.framework.Visitor;
 import org.tuml.generation.Workspace;
 import org.tuml.javageneration.util.TinkerGenerationUtil;
@@ -35,12 +33,39 @@ public class QueryExecuteResourceBuilder extends BaseServerResourceBuilder imple
 		addDefaultConstructor(queryExecute);
 		
 		addGetRepresentation(queryExecuteInf, queryExecute);
-		
+
 		addToRouterEnum(model, queryExecute, "QUERY_EXECUTE", "\"/{contextId}/oclExecuteQuery\"");
-		
+
+
+        addToClassQueryRouterEnum(model, TumlRestletGenerationUtil.TumlMetaQueryServerResourceImpl, "CLASS_QUERY", "\"classquery/{contextId}/query\"");
+
 	}
 
-	@Override
+    protected void addToClassQueryRouterEnum(Model model, OJPathName ojPathName, String name, String path) {
+        OJEnum routerEnum = (OJEnum) this.workspace.findOJClass("restlet.RestletRouterEnum");
+        OJEnumLiteral ojLiteral = new OJEnumLiteral(name);
+
+        OJField uri = new OJField();
+        uri.setType(new OJPathName("String"));
+        uri.setInitExp(path);
+        ojLiteral.addToAttributeValues(uri);
+
+        OJField serverResourceClassField = new OJField();
+        serverResourceClassField.setType(new OJPathName("java.lang.Class"));
+        serverResourceClassField.setInitExp(ojPathName.getLast() + ".class");
+        ojLiteral.addToAttributeValues(serverResourceClassField);
+        routerEnum.addToImports(ojPathName);
+        routerEnum.addToImports(TumlRestletGenerationUtil.ServerResource);
+
+        routerEnum.addToLiterals(ojLiteral);
+
+        OJAnnotatedOperation attachAll = routerEnum.findOperation("attachAll", TumlRestletGenerationUtil.Router);
+        attachAll.getBody().addToStatements(routerEnum.getName() + "." + ojLiteral.getName() + ".attach(router)");
+    }
+
+
+
+    @Override
 	public void visitAfter(Model element) {
 		
 	}

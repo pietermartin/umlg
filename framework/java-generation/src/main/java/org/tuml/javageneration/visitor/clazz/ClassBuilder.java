@@ -9,16 +9,16 @@ import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.Property;
-import org.opaeum.java.metamodel.OJBlock;
-import org.opaeum.java.metamodel.OJConstructor;
-import org.opaeum.java.metamodel.OJField;
-import org.opaeum.java.metamodel.OJIfStatement;
-import org.opaeum.java.metamodel.OJOperation;
-import org.opaeum.java.metamodel.OJPathName;
-import org.opaeum.java.metamodel.OJSimpleStatement;
-import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
-import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
-import org.opaeum.java.metamodel.annotation.OJAnnotationValue;
+import org.tuml.java.metamodel.OJBlock;
+import org.tuml.java.metamodel.OJConstructor;
+import org.tuml.java.metamodel.OJField;
+import org.tuml.java.metamodel.OJIfStatement;
+import org.tuml.java.metamodel.OJOperation;
+import org.tuml.java.metamodel.OJPathName;
+import org.tuml.java.metamodel.OJSimpleStatement;
+import org.tuml.java.metamodel.annotation.OJAnnotatedClass;
+import org.tuml.java.metamodel.annotation.OJAnnotatedOperation;
+import org.tuml.java.metamodel.annotation.OJAnnotationValue;
 import org.tuml.framework.Visitor;
 import org.tuml.generation.Workspace;
 import org.tuml.javageneration.util.PropertyWrapper;
@@ -31,6 +31,10 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 	public ClassBuilder(Workspace workspace) {
 		super(workspace);
 	}
+
+    public ClassBuilder(Workspace workspace, String sourceDir) {
+        super(workspace, sourceDir);
+    }
 
 	public static final String INIT_VARIABLES = "initVariables";
 	public static final String INITIALISE_PROPERTIES = "initialiseProperties";
@@ -456,6 +460,10 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 				if (!owningType.isAbstract()) {
 					propertyList.add(TinkerGenerationUtil.Root.getCopy().getLast() + ".INSTANCE." + "get" + TumlClassOperations.className(owningType) + "()");
 				} else {
+                    //Convert it to the same collection type being union with
+                    if (compositeEndPWrap.isOrdered()) {
+                        propertyList.add(".asSequence()");
+                    }
 					propertyList.add("new " + TinkerGenerationUtil.tumlMemorySet.getLast() + "<" + TumlClassOperations.getPathName(owningType).getLast()
 							+ ">()");
 					annotatedClass.addToImports(TinkerGenerationUtil.tumlMemorySet);

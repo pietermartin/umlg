@@ -7,7 +7,7 @@ import org.tuml.componenttest.SpaceTime;
 import org.tuml.componenttest.Time;
 import org.tuml.concretetest.God;
 import org.tuml.concretetest.Universe;
-import org.tuml.query.Query;
+import org.tuml.query.InstanceQuery;
 import org.tuml.query.QueryEnum;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
@@ -27,11 +27,11 @@ public class TestQueryBaseModelTumlAssociation extends BaseLocalDbTest {
 		Space s = new Space(st);
 		Time t = new Time(st);
 
-		Query query1 = new Query(true);
+		InstanceQuery query1 = new InstanceQuery(true);
 		query1.setQueryEnum(QueryEnum.OCL);
 		query1.setQueryString("asd");
 		query1.setName("asd");
-		universe1.addToQuery(query1);
+		universe1.addToInstanceQuery(query1);
 		Assert.assertNotNull(query1.getBaseTumlWithQuery());
 		db.stopTransaction(Conclusion.SUCCESS);
 	}
@@ -47,11 +47,11 @@ public class TestQueryBaseModelTumlAssociation extends BaseLocalDbTest {
 		Space s = new Space(st);
 		Time t = new Time(st);
 
-		Query query1 = new Query(true);
+        InstanceQuery query1 = new InstanceQuery(true);
 		query1.setQueryEnum(QueryEnum.OCL);
 		query1.setQueryString("asd");
 		query1.setName("asd");
-		universe1.getQuery().add(query1);
+		universe1.getInstanceQuery().add(query1);
 		Assert.assertNotNull(query1.getBaseTumlWithQuery());
 		db.stopTransaction(Conclusion.SUCCESS);
 	}

@@ -1,12 +1,12 @@
 package org.tuml.javageneration.visitor.property;
 
 import org.eclipse.uml2.uml.Property;
-import org.opaeum.java.metamodel.OJForStatement;
-import org.opaeum.java.metamodel.OJIfStatement;
-import org.opaeum.java.metamodel.OJVisibilityKind;
-import org.opaeum.java.metamodel.annotation.OJAnnotatedClass;
-import org.opaeum.java.metamodel.annotation.OJAnnotatedInterface;
-import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
+import org.tuml.java.metamodel.OJForStatement;
+import org.tuml.java.metamodel.OJIfStatement;
+import org.tuml.java.metamodel.OJVisibilityKind;
+import org.tuml.java.metamodel.annotation.OJAnnotatedClass;
+import org.tuml.java.metamodel.annotation.OJAnnotatedInterface;
+import org.tuml.java.metamodel.annotation.OJAnnotatedOperation;
 import org.tuml.framework.Visitor;
 import org.tuml.generation.Workspace;
 import org.tuml.javageneration.util.PropertyWrapper;

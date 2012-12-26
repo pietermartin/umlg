@@ -27,7 +27,7 @@ public abstract class BaseOclExecutionServerResourceImpl extends ServerResource 
             //TODO
             return new JsonRepresentation(result.toString());
         } else if (result instanceof Collection) {
-            Collection<PersistentObject> poCollection = (Collection<PersistentObject>)result;
+            Collection<PersistentObject> poCollection = (Collection<PersistentObject>) result;
 
             StringBuilder json = new StringBuilder();
             json.append("[");

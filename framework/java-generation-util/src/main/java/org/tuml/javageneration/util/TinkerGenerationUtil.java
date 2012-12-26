@@ -4,13 +4,15 @@ import org.eclipse.uml2.uml.MultiplicityElement;
 import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
-import org.opaeum.java.metamodel.OJPathName;
-import org.opaeum.java.metamodel.annotation.OJAnnotatedOperation;
-import org.opaeum.java.metamodel.annotation.OJAnnotationValue;
+import org.tuml.java.metamodel.OJPathName;
+import org.tuml.java.metamodel.annotation.OJAnnotatedOperation;
+import org.tuml.java.metamodel.annotation.OJAnnotationValue;
 
 public class TinkerGenerationUtil {
 
-	public static String tinkeriseUmlName(String umlName) {
+    public static OJPathName BASE_CLASS_TUML = new OJPathName("org.tuml.meta.BaseClassTuml");
+
+    public static String tinkeriseUmlName(String umlName) {
 		return umlName.replace("::", "__");
 	}
 
@@ -19,6 +21,8 @@ public class TinkerGenerationUtil {
 	public static final String TINKER_DB_NULL = "__NULL__";
 	
 	public static final String QualifiedNameClassMapName = "qualifiedNameClassMap";
+    public static final OJPathName TumlLibNode = new OJPathName("org.tuml.runtime.domain.TumlLibNode");
+    public static final OJPathName TumlMetaNode = new OJPathName("org.tuml.runtime.domain.TumlMetaNode");
 	public static final OJPathName QualifiedNameClassMap = new OJPathName("org.tuml.root.QualifiedNameClassMap");
 	public static final OJPathName TumlRootPackage = new OJPathName("org.tuml.root");
 	public static final OJPathName TumlRootNode = new OJPathName("org.tuml.runtime.domain.TumlRootNode");

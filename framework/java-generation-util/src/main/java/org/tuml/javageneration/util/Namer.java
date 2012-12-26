@@ -17,7 +17,15 @@ public class Namer {
 		}
 	}
 
-	public static String nameIncludingModel(Package nearestPackage) {
+    public static String getMetaName(Type type) {
+        if (type instanceof TupleType) {
+            return "Map<String, Object>";
+        } else {
+            return type.getName() + "Meta";
+        }
+    }
+
+    public static String nameIncludingModel(Package nearestPackage) {
 		String[] packageParts = nearestPackage.getQualifiedName().split("::");
 		StringBuilder sb = new StringBuilder();
 		int i = 0;
