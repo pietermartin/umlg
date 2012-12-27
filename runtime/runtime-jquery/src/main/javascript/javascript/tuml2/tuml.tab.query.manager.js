@@ -6,7 +6,7 @@
         }
     });
 
-    function TumlTabQueryManager(tumlUri, queryId) {
+    function TumlTabQueryManager(instanceQueryUri, classQueryUri, queryId) {
 
         var self = this;
         var tumlTabGridManager;
@@ -49,10 +49,12 @@
                     contentType:"json",
                     success:function (data, textStatus, jqXHR) {
                         tumlTabGridManager.refresh(data[0], queryTabDivName + '_' + 'OclResult');
+                        $('#serverErrorMsg_' + queryTabDivName).removeClass('server-error-msg');
+                        $('#serverErrorMsg_' + queryTabDivName).children().remove();
                         $('#tab-container').tabs('resize');
                     },
                     error:function (jqXHR, textStatus, errorThrown) {
-                        $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
+                        $('#serverErrorMsg_' + queryTabDivName).addClass('server-error-msg').html(jqXHR.responseText);
                     }
                 });
             }).text('execute').appendTo(oclExecuteButtonDiv);
@@ -62,37 +64,73 @@
             $('<input >', {id:queryTabDivName + '_' + 'QueryName', type:'text'}).val(query.name).appendTo(oclQueryNameInputDiv);
             var oclEditButtonDiv = $('<div />', {class:"ocleditbutton"}).appendTo(inputEditButtonDiv);
 
-            $('<button />', {id:queryTabDivName + '_' + 'SaveButton'}).text('save').click(function () {
-                var query = queryToJson(queryTabDivName, self.queryId);
-                $.ajax({
-                    url:tumlUri,
-                    type:post ? "POST" : "PUT",
-                    dataType:"json",
-                    contentType:"json",
-                    data:JSON.stringify(query),
-                    success:function (data, textStatus, jqXHR) {
-                        var queryFromDb;
-                        var queries = data[0].data;
-                        for (var i = 0; i < queries.length; i++) {
-                            queryFromDb = queries[i];
-                            if (queryFromDb.name == query.name) {
-                                break;
+            if (instanceQueryUri !== '') {
+                $('<button />', {id:queryTabDivName + '_' + 'SaveButton'}).text('save to instance').click(function () {
+                    var query = queryToJson(queryTabDivName, self.queryId);
+                    $.ajax({
+                        url:instanceQueryUri,
+                        type:post ? "POST" : "PUT",
+                        dataType:"json",
+                        contentType:"json",
+                        data:JSON.stringify(query),
+                        success:function (data, textStatus, jqXHR) {
+                            var queryFromDb;
+                            var queries = data[0].data;
+                            for (var i = 0; i < queries.length; i++) {
+                                queryFromDb = queries[i];
+                                if (queryFromDb.name == query.name) {
+                                    break;
+                                }
                             }
-                        }
-                        if (post) {
-                            self.onPostQuerySuccess.notify(
-                                {query:queryFromDb, gridData: tumlTabGridManager.getResult()}, null, self);
-                        } else {
-                            self.onPutQuerySuccess.notify(
-                                {query:queryFromDb, gridData: tumlTabGridManager.getResult()}, null, self);
-                        }
-                    },
-                    error:function (jqXHR, textStatus, errorThrown) {
-                        $('#serverErrorMsg_' + queryTabDivName).addClass('server-error-msg').html(jqXHR.responseText);
+                            if (post) {
+                                self.onPostInstanceQuerySuccess.notify(
+                                    {queryType: 'instanceQuery',query:queryFromDb, gridData:tumlTabGridManager.getResult()}, null, self);
+                            } else {
+                                self.onPutInstanceQuerySuccess.notify(
+                                    {queryType: 'instanceQuery',query:queryFromDb, gridData:tumlTabGridManager.getResult()}, null, self);
+                            }
+                        },
+                        error:function (jqXHR, textStatus, errorThrown) {
+                            $('#serverErrorMsg_' + queryTabDivName).addClass('server-error-msg').html(jqXHR.responseText);
 
-                    }
-                });
-            }).appendTo(oclEditButtonDiv);
+                        }
+                    });
+                }).appendTo(oclEditButtonDiv);
+            }
+
+            if (classQueryUri !== '') {
+                $('<button />', {id:queryTabDivName + '_' + 'SaveButton'}).text('save to class').click(function () {
+                    var query = queryToJson(queryTabDivName, self.queryId);
+                    $.ajax({
+                        url:classQueryUri,
+                        type:post ? "POST" : "PUT",
+                        dataType:"json",
+                        contentType:"json",
+                        data:JSON.stringify(query),
+                        success:function (data, textStatus, jqXHR) {
+                            var queryFromDb;
+                            var queries = data[0].data;
+                            for (var i = 0; i < queries.length; i++) {
+                                queryFromDb = queries[i];
+                                if (queryFromDb.name == query.name) {
+                                    break;
+                                }
+                            }
+                            if (post) {
+                                self.onPostClassQuerySuccess.notify(
+                                    {queryType: 'classQuery',query:queryFromDb, gridData:tumlTabGridManager.getResult()}, null, self);
+                            } else {
+                                self.onPutClassQuerySuccess.notify(
+                                    {queryType: 'classQuery',query:queryFromDb, gridData:tumlTabGridManager.getResult()}, null, self);
+                            }
+                        },
+                        error:function (jqXHR, textStatus, errorThrown) {
+                            $('#serverErrorMsg_' + queryTabDivName).addClass('server-error-msg').html(jqXHR.responseText);
+
+                        }
+                    });
+                }).appendTo(oclEditButtonDiv);
+            }
             if (!post) {
                 $('<button />', {id:queryTabDivName + '_' + 'CancelButton'}).text('cancel').appendTo(oclEditButtonDiv);
                 $('<button />', {id:queryTabDivName + '_' + 'DeleteButton'}).text('delete').click(function () {
@@ -127,7 +165,7 @@
             //Outer div for results
             var oclResult = $('<div />', {id:queryTabDivName + '_' + 'OclResult', class:'oclresult'});
             oclResult.appendTo(queryTab);
-            if (query.data !== undefined) {
+            if (query.data !== undefined && query.data !== null) {
                 tumlTabGridManager.refresh(query.data, queryTabDivName + '_' + 'OclResult');
             }
         }
@@ -147,8 +185,10 @@
         $.extend(this, {
             "TumlTabQueryManagerVersion":"1.0.0",
             //These events are propagated from the grid
-            "onPutQuerySuccess":new Tuml.Event(),
-            "onPostQuerySuccess":new Tuml.Event(),
+            "onPutInstanceQuerySuccess":new Tuml.Event(),
+            "onPostInstanceQuerySuccess":new Tuml.Event(),
+            "onPutClassQuerySuccess":new Tuml.Event(),
+            "onPostClassQuerySuccess":new Tuml.Event(),
             "onPutQueryFailure":new Tuml.Event(),
             "onPostQueryFailure":new Tuml.Event(),
             "onDeleteQuerySuccess":new Tuml.Event(),

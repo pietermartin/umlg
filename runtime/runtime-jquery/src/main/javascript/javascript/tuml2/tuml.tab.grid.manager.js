@@ -44,17 +44,19 @@
 
             $('<div />', {id:"queryResultsDiv"})
             $('<div id="serverErrorMsg' + this.gridDivName + '" />').appendTo(outerDivForResults);
-            $('<div id="queryResultsDiv" style="width:auto;height:90%;"></div>').appendTo(outerDivForResults);
-            $('<div id="pagerQueryResultsDiv" style="width:auto;height:20px;"></div>').appendTo(outerDivForResults);
+
+            $('<div />', {id: 'queryResultsDiv' + this.gridDivName, style: 'width:auto;height:90%;'}).appendTo(outerDivForResults);
+            $('<div />', {id: 'pagerQueryResultsDiv' + this.gridDivName, style: 'width:auto;height:20px;'}).appendTo(outerDivForResults);
+
             $('#contextMenu' + this.gridDivName).remove();
             this.createGrid(result.data, this.metaForData, -1);
         };
 
         this.instantiateGrid = function () {
-            this.grid = new Slick.Grid("#queryResultsDiv", this.dataView, this.columns, this.options);
+            this.grid = new Slick.Grid('#queryResultsDiv' + this.gridDivName, this.dataView, this.columns, this.options);
             //Creating a pager for the component manies editor grid call commitCurrentEditor which buggers everything up
-            this.pager = new Slick.Controls.Pager(this.dataView, this.grid, $("#pagerQueryResultsDiv"));
-            $("<div id='grid-buttonQueryComponent" + this.localMetaForData.name + "' class='grid-button'/>").appendTo('#pagerQueryResultsDiv .slick-pager-settings');
+            this.pager = new Slick.Controls.Pager(this.dataView, this.grid, $('#pagerQueryResultsDiv' + this.gridDivName));
+            $("<div id='grid-buttonQueryComponent" + this.localMetaForData.name + "' class='grid-button'/>").appendTo('#pagerQueryResultsDiv' + this.gridDivName + ' .slick-pager-settings');
             TumlBaseGridManager.prototype.instantiateGrid.call(this);
         };
 

@@ -11,7 +11,13 @@
         var self = this;
         var queryProperty;
         var queryData;
-        var ulMenu;
+        var accordionDiv;
+        var umlPropertiesDiv;
+        var umlOperationsDiv;
+        var umlInstanceQueriesDiv;
+        var umlClassQueriesDiv;
+        var umlInstanceGroovyDiv;
+        var umlClassGroovyDiv;
         var contextMetaDataFrom;
         var contextMetaDataTo;
         var contextVertexId;
@@ -30,14 +36,55 @@
             tabContainer.append('<ul />');
             tabContainer.tabs();
 
-            ulMenu = createStdMenu();
-            createQueryMenu();
-            createTree();
+            setupTabsAndAccordian();
+
+            createStdMenu();
+            if (contextVertexId !== undefined && contextVertexId !== null) {
+                createInstanceQueryMenu();
+                createClassQueryMenu();
+            }
+//            createTree();
             tabContainer.tabs("option", "active", 0);
 
         }
 
-        function createTree() {
+        function setupTabsAndAccordian() {
+            var tabTemplate = "<li><a href='#{href}'>#{label}</a></li>";
+            var label = "Standard",
+                id = "Standard",
+                li = $(tabTemplate.replace(/#\{href\}/g, "#" + id).replace(/#\{label\}/g, label));
+            tabContainer.find(".ui-tabs-nav").append(li);
+            var standardMenuDiv = $('<div />', {id:'Standard'});
+            tabContainer.append(standardMenuDiv);
+            accordionDiv = standardMenuDiv;
+            accordionDiv.append($('<h3 />').text('Properties'));
+            umlPropertiesDiv = $('<div />', {id:'umlProperties'});
+            accordionDiv.append(umlPropertiesDiv);
+
+            accordionDiv.append($('<h3 />').text('Operations'));
+            umlOperationsDiv = $('<div />', {id:'umlOperations'});
+            accordionDiv.append(umlOperationsDiv);
+
+            if (contextVertexId !== undefined && contextVertexId !== null) {
+                accordionDiv.append($('<h3 />').text('Instance Queries'));
+                umlInstanceQueriesDiv = $('<div />', {id:'umlInstanceQueries'});
+                accordionDiv.append(umlInstanceQueriesDiv);
+                accordionDiv.append($('<h3 />').text('Class Queries'));
+                umlClassQueriesDiv = $('<div />', {id:'umlClassQueries'});
+                accordionDiv.append(umlClassQueriesDiv);
+
+                accordionDiv.append($('<h3 />').text('Instance Groovy'));
+                umlInstanceGroovyDiv = $('<div />', {id:'umlInstanceGroovy'});
+                accordionDiv.append(umlInstanceGroovyDiv);
+                accordionDiv.append($('<h3 />').text('Class Groovy'));
+                umlClassGroovyDiv = $('<div />', {id:'umlClassGroovy'});
+                accordionDiv.append(umlClassGroovyDiv);
+            }
+            accordionDiv.accordion({
+                heightStyle:"content",
+                collapsible:true
+            });
+
             var tabTemplate = "<li><a href='#{href}'>#{label}</a></li>";
             var label = "Tree",
                 id = "Tree",
@@ -48,17 +95,12 @@
             tabContainer.tabs("refresh");
         }
 
-        function createStdMenu() {
-            var tabTemplate = "<li><a href='#{href}'>#{label}</a></li>";
-            var label = "Standard",
-                id = "Standard",
-                li = $(tabTemplate.replace(/#\{href\}/g, "#" + id).replace(/#\{label\}/g, label));
-            tabContainer.find(".ui-tabs-nav").append(li);
-            var standardMenuDiv = $('<div />', {id:'Standard'});
-            tabContainer.append(standardMenuDiv);
-            tabContainer.tabs("refresh");
+        function createTree() {
+        }
 
-            var ulMenu = $('<ul />', {class:'ui-left-menu-link'}).appendTo(standardMenuDiv);
+        function createStdMenu() {
+
+            var ulMenu = $('<ul />', {class:'ui-left-menu-link'}).appendTo(umlPropertiesDiv);
             var menuArray = createLeftMenuDataArray(contextMetaDataFrom, contextMetaDataTo);
             $.each(menuArray, function (index, value) {
                 var adjustedUri = value.tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
@@ -78,14 +120,10 @@
             return ulMenu;
         };
 
-        function createQueryMenu(selectedQueryTabName) {
-            var li = $('<li class="ui-left-menu-li-query-tree /">');
-            li.appendTo(ulMenu);
-            $('<div />', {id:"queryTree"}).appendTo(li);
-
+        function createInstanceQueryMenu(queryId) {
             //Add query tree
             //Fetch the query data
-            queryProperty = findQueryUrl();
+            queryProperty = findQueryUrl('instanceQuery');
             if (queryProperty != null) {
                 var queryUri = queryProperty.tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
                 $.ajax({
@@ -95,9 +133,9 @@
                     contentType:"json",
                     success:function (response, textStatus, jqXHR) {
                         queryData = response;
-                        internalCreateTree();
-                        if (selectedQueryTabName !== undefined) {
-                            refreshQueryMenu(selectedQueryTabName);
+                        internalCreateTree(umlInstanceQueriesDiv, true);
+                        if (queryId !== undefined) {
+                            refreshQueryMenuCss(queryId);
                         }
                     },
                     error:function (jqXHR, textStatus, errorThrown) {
@@ -107,27 +145,68 @@
             }
         }
 
-        function refreshQuery(queryId) {
-            $("#queryTree").remove();
-            createQueryMenu(queryId);
-        }
-
-        function refreshQueryMenu(queryId) {
-            //Change the css activeproperty
-            if (queryData !== undefined) {
-                for (var i = 0; i < queryData[0].data.length; i++) {
-                    var query = queryData[0].data[i];
-                    $('#queryMenu' + query.id).removeClass('querymenuactive');
-                    $('#queryMenu' + query.id).addClass('querymenuinactive');
+        function createClassQueryMenu(queryId) {
+            //Add query tree
+            //Fetch the query data
+            if (contextVertexId !== undefined && contextVertexId !== null) {
+                var classQueryUri = "/restAndJson/classquery/" + contextVertexId + "/query";
+                if (classQueryUri != null) {
+                    var queryUri = classQueryUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
+                    $.ajax({
+                        url:queryUri,
+                        type:"GET",
+                        dataType:"json",
+                        contentType:"json",
+                        success:function (response, textStatus, jqXHR) {
+                            queryData = response;
+                            internalCreateTree(umlClassQueriesDiv, false);
+                            if (queryId !== undefined) {
+                                refreshQueryMenuCss(queryId);
+                            }
+                        },
+                        error:function (jqXHR, textStatus, errorThrown) {
+                            alert('Error getting query data. textStatus: ' + textStatus + ' errorThrown: ' + errorThrown);
+                        }
+                    });
                 }
-                var clickedNode = $('#queryMenu' + queryId);
-                clickedNode.removeClass("querymenuinactive");
-                clickedNode.addClass("querymenuactive");
             }
         }
 
-        function internalCreateTree() {
-            var topNode = {label:'queries', _name:'queries'};
+        function refreshInstanceQuery(queryId) {
+            umlInstanceQueriesDiv.children().remove();
+            createInstanceQueryMenu(queryId);
+            accordionDiv.accordion("option", "active", 2);
+        }
+
+        function refreshClassQuery(queryId) {
+            umlClassQueriesDiv.children().remove();
+            createClassQueryMenu(queryId);
+            accordionDiv.accordion("option", "active", 3);
+        }
+
+        function refreshQueryMenuCss(queryId, tabEnum) {
+            if (umlInstanceQueriesDiv !== undefined) {
+                //Change the css activeproperty
+                umlInstanceQueriesDiv.find('.ui-left-menu-query-li').removeClass('querymenuactive');
+                umlInstanceQueriesDiv.find('.ui-left-menu-query-li').addClass('querymenuinactive');
+                if (queryData !== undefined) {
+                    umlInstanceQueriesDiv.find('#' + queryId).removeClass("querymenuinactive");
+                    umlInstanceQueriesDiv.find('#' + queryId).addClass("querymenuactive");
+                }
+            }
+            if (umlClassQueriesDiv !== undefined) {
+                umlClassQueriesDiv.find('.ui-left-menu-query-li').removeClass('querymenuactive');
+                umlClassQueriesDiv.find('.ui-left-menu-query-li').addClass('querymenuinactive');
+                if (queryData !== undefined) {
+                    umlClassQueriesDiv.find('#' + queryId).removeClass("querymenuinactive");
+                    umlClassQueriesDiv.find('#' + queryId).addClass("querymenuactive");
+                }
+            }
+            //TODO link tabview manager with the accordion div to activate on tab select
+            accordionDiv.accordion("option", "active", tabEnum);
+        }
+
+        function internalCreateTree(queryDiv, instanceQuery) {
             var queryArray = [];
             for (var i = 0; i < queryData[0].data.length; i++) {
                 var query = queryData[0].data[i];
@@ -137,43 +216,42 @@
                     label:query.name,
                     tumlUri:queryUri,
                     oclExecuteUri:oclExecuteUri,
-                    qualifiedName:queryProperty.qualifiedName,
-                    name:'<span id="queryMenu' + query.id + '" class="querymenuinactive queryitem">' + query.name + '</span>',
+                    name:query.name,
                     _name:query.name,
                     queryEnum:query.queryEnum,
                     queryString:query.queryString,
-                    queryId:query.id});
+                    queryId:query.id,
+                    queryType:instanceQuery ? 'instanceQuery' : 'classQuery',
+                    menuCssClass:'querymenuinactive'});
             }
-            var treeData = $.extend(topNode, {children:queryArray})
 
-            var treeDataArray = [];
-            treeDataArray.push(treeData);
-
-            $('#queryTree').tree({
-                data:treeDataArray,
-                autoEscape:false,
-                autoOpen:true
-            });
-
-            // bind 'tree.click' event
-            $('#queryTree').bind(
-                'tree.click',
-                function (event) {
-                    // The clicked node is 'event.node'
-                    var node = event.node;
-                    if (node._name !== 'queries') {
+            var ulMenu = $('<ul />', {class:'ui-left-menu-query-link'}).appendTo(queryDiv);
+            $.each(queryArray, function (index, value) {
+                var adjustedUri = value.tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
+                var li = $('<li />', {id:value.queryId, class:'ui-left-menu-query-li' + ' ' + value.menuCssClass});
+                var a = $('<a>', {
+                    text:value.name,
+                    title:value.name,
+                    href:adjustedUri,
+                    click:function () {
                         self.onQueryClick.notify({
                             post:false,
-                            tumlUri:node.tumlUri,
-                            oclExecuteUri:node.oclExecuteUri,
-                            qualifiedName:node.qualifiedName,
-                            name:node._name,
-                            queryEnum:node.queryEnum,
-                            queryString:node.queryString,
-                            id:node.queryId}, null, self);
+                            tumlUri:$.data(this, "query").tumlUri,
+                            oclExecuteUri:$.data(this, "query").oclExecuteUri,
+                            qualifiedName:$.data(this, "query").qualifiedName,
+                            name:$.data(this, "query")._name,
+                            queryEnum:$.data(this, "query").queryEnum,
+                            queryString:$.data(this, "query").queryString,
+                            queryType:$.data(this, "query").queryType,
+                            id:$.data(this, "query").queryId}, null, self);
+
+                        return false;
                     }
-                }
-            );
+                });
+                $.data(a[0], 'query', value);
+                a.appendTo(li);
+                li.appendTo(ulMenu);
+            });
         }
 
         function createLeftMenuDataArray(contextMetaDataFrom, contextMetaDataTo) {
@@ -211,11 +289,11 @@
             return menuArray;
         }
 
-        function findQueryUrl() {
+        function findQueryUrl(queryPropertyName) {
             var result = null;
             for (var i = 0; i < contextMetaDataFrom.properties.length; i++) {
                 var metaProperty = contextMetaDataFrom.properties[i];
-                if (metaProperty.name == 'instanceQuery') {
+                if (metaProperty.name == queryPropertyName) {
                     result = metaProperty;
                     break;
                 }
@@ -228,8 +306,9 @@
             "onMenuClick":new Tuml.Event(),
             "onQueryClick":new Tuml.Event(),
             "refresh":refresh,
-            "refreshQueryMenu":refreshQueryMenu,
-            "refreshQuery":refreshQuery
+            "refreshQueryMenuCss":refreshQueryMenuCss,
+            "refreshInstanceQuery":refreshInstanceQuery,
+            "refreshClassQuery":refreshClassQuery
         });
 
         init();

@@ -15,13 +15,14 @@
         }
     });
 
-    function Query(id, name, description, queryString, type, data) {
+    function Query(id, name, description, queryString, type, data, queryType) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.queryString = queryString;
         this.type = type;
         this.data = data;
+        this.queryType = queryType;
     }
 
     Query.prototype = new Query();

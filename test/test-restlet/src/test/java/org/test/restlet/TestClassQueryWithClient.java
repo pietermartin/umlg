@@ -11,7 +11,6 @@ import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 import org.tuml.runtime.restlet.TumlMetaQueryServerResource;
 import org.tuml.runtime.restlet.TumlMetaQueryServerResourceImpl;
-import restlet.RootServerResource;
 
 import java.io.IOException;
 
@@ -35,11 +34,11 @@ public class TestClassQueryWithClient {
     }
 
     @org.junit.Test
-    public void testRoot() throws ResourceException, JSONException, IOException {
+    public void testClassQuery() throws ResourceException, JSONException, IOException {
         Client client = new Client(new Context(), Protocol.HTTP);
         ClientResource service = new ClientResource("http://localhost:8111/");
         service.setNext(client);
-        TumlMetaQueryServerResource rootServerResource = service.getChild("/restAndJson/meta/2/query", TumlMetaQueryServerResource.class);
+        TumlMetaQueryServerResource rootServerResource = service.getChild("/restAndJson/classquery/2/query", TumlMetaQueryServerResource.class);
         String s = rootServerResource.get().getText();
         System.out.println("halo == " + s);
     }

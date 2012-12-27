@@ -3,7 +3,7 @@
         <!-- /appRoot is resolved by freemarker to the application's name -->
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-        <link type="text/css" rel="stylesheet" href="/${app.rootUrl}/css/jquery-ui/ui-lightness/jquery-ui-1.9.2.custom.css.css" />
+        <link type="text/css" rel="stylesheet" href="/${app.rootUrl}/css/jquery-ui/ui-lightness/jquery-ui-1.9.2.custom.css" />
 
         <link type="text/css" rel="stylesheet" href="/${app.rootUrl}/javascript/layout/layout-default-latest.css" />
 
@@ -85,6 +85,7 @@
         <script src="/${app.rootUrl}/javascript/tuml/tuml.slick.formatters.js"></script>
         <script src="/${app.rootUrl}/javascript/tuml/tuml.slick.dataview2.js"></script>
         <script src="/${app.rootUrl}/javascript/tuml2/tuml.query.js"></script>
+        <script src="/${app.rootUrl}/javascript/tuml2/tuml.tab.enum.js"></script>
         <script>
             $(document).ready(function() {
                 //"${app.uri}" is replaced when the app starts up with the actual application url 
@@ -102,8 +103,8 @@
     <div class="ui-layout-south">South</div>
     <div class="ui-layout-east">East</div>
     <div class="ui-layout-west">
-        <ul class="ui-left-menu-link">
-        </ul>
+        <!--<ul class="ui-left-menu-link">-->
+        <!--</ul>-->
     </div>
 </body>
 </html>

@@ -372,7 +372,7 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
                 // The execute ocl query resource is only required if the below
                 // visitor is availeble
                 if (RestletVisitors.containsVisitorForClass(QueryExecuteResourceBuilder.class)
-                        && pWrap.getType().getQualifiedName().equals(TumlRestletGenerationUtil.queryQualifiedName)) {
+                        && (pWrap.getType().getQualifiedName().equals(TumlRestletGenerationUtil.instanceQueryQualifiedName) || pWrap.getType().getQualifiedName().equals(TumlRestletGenerationUtil.classQueryQualifiedName))) {
                     block.addToStatements("json.append(\"\\\"oclExecuteUri\\\": \\\"/" + pWrap.getModel().getName() + "/{contextId}/oclExecuteQuery\\\", \")");
                 }
                 block.addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + pWrap.getQualifiedName() + "\\\"\")");

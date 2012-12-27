@@ -1,3 +1,15 @@
+/*tabs*/
+#tabs { margin-top: 1em; }
+#tabs li .ui-icon-close { float: left; margin: 0.4em 0.2em 0 0; cursor: pointer; }
+
+/*Accordion*/
+.ui-accordion .ui-accordion-content {
+    padding-left: 0.5em;
+    padding-right: 1em;
+    padding-top: 1em;
+    padding-bottom: 1em;
+}
+
 .server-error-msg {
     border: 1px solid red;
     /* round the corners */
@@ -249,6 +261,11 @@
     width: auto;
 }
 
+.ui-left-menu-link {
+    padding: 0em;
+    margin: 0em;
+}
+
 .ui-left-menu-li {
     background: none;
     margin-bottom: 5px;
@@ -283,20 +300,6 @@
     padding-left: 5px;
 }
 
-/* edit jqtree.css */
-.jqtree-title {
-    cursor: pointer;
-    font-size: 120%;
-}
-
-.jqtree-folder ul li {
-    padding: 3px;
-}
-
-.jqtree-folder div {
-    padding: 3px;
-}
-
 .ui-left-menu-li-query-tree .jqtree-folder ul {
     margin-left: 2px;
 }
@@ -315,7 +318,18 @@
     margin-bottom: 5px
 }
 
-/** jqtree tuml **/
+.ui-left-menu-query-li {
+    background: none;
+    margin-bottom: 5px;
+    padding-left: 5px;
+}
+
+.ui-left-menu-query-li a {
+    color: black;
+    cursor: pointer;
+    font-size: 120%;
+}
+
 .querymenuactive {
     background-color: #fe4864;
 }

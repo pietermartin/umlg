@@ -57,7 +57,7 @@ public class TumlRestletServerComponent2 extends Component {
 
         getClients().add(Protocol.FILE);
         getClients().add(Protocol.CLAP);
-//        getClients().add(Protocol.RIAP);
+        getClients().add(Protocol.RIAP);
 
 		// Add connectors
 		Server server = new Server(new Context(), Protocol.HTTP, 8111);
@@ -149,7 +149,6 @@ public class TumlRestletServerComponent2 extends Component {
 				terrestrialCraft.setAquatic(true);
 			}
 		}
-        HumanMeta h = HumanMeta.INSTANCE;
 		GraphDb.getDb().stopTransaction(Conclusion.SUCCESS);
 	}
 

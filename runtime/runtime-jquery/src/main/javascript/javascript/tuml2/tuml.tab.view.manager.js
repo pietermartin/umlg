@@ -9,13 +9,15 @@
         }
     });
 
-    function TumlTabQueryViewManager(tabContainer, tumlUri, tabDivName, tabTitleName, queryId) {
+    function TumlTabQueryViewManager(tabEnum, tabContainer, instanceQueryUri, classQueryUri, tabDivName, tabTitleName, queryId) {
 
         //Public api
         $.extend(this, {
             "TumlTabQueryViewManager":"1.0.0",
-            "onPostQuerySuccess":new Tuml.Event(),
-            "onPutQuerySuccess":new Tuml.Event(),
+            "onPostInstanceQuerySuccess":new Tuml.Event(),
+            "onPutInstanceQuerySuccess":new Tuml.Event(),
+            "onPostClassQuerySuccess":new Tuml.Event(),
+            "onPutClassQuerySuccess":new Tuml.Event(),
             "onDeleteQuerySuccess":new Tuml.Event()
         });
 
@@ -27,12 +29,18 @@
 
         this.tabDivName = tabDivName;
         this.tabTitleName = tabTitleName;
-        this.tumlTabQueryManager = new Tuml.TumlTabQueryManager(tumlUri, this.queryId);
-        this.tumlTabQueryManager.onPutQuerySuccess.subscribe(function (e, args) {
-            self.onPutQuerySuccess.notify(args, e, self);
+        this.tumlTabQueryManager = new Tuml.TumlTabQueryManager(instanceQueryUri, classQueryUri, this.queryId);
+        this.tumlTabQueryManager.onPutInstanceQuerySuccess.subscribe(function (e, args) {
+            self.onPutInstanceQuerySuccess.notify(args, e, self);
         });
-        this.tumlTabQueryManager.onPostQuerySuccess.subscribe(function (e, args) {
-            self.onPostQuerySuccess.notify(args, e, self);
+        this.tumlTabQueryManager.onPostInstanceQuerySuccess.subscribe(function (e, args) {
+            self.onPostInstanceQuerySuccess.notify(args, e, self);
+        });
+        this.tumlTabQueryManager.onPutClassQuerySuccess.subscribe(function (e, args) {
+            self.onPutClassQuerySuccess.notify(args, e, self);
+        });
+        this.tumlTabQueryManager.onPostClassQuerySuccess.subscribe(function (e, args) {
+            self.onPostClassQuerySuccess.notify(args, e, self);
         });
         this.tumlTabQueryManager.onDeleteQuerySuccess.subscribe(function (e, args) {
             self.onDeleteQuerySuccess.notify(args, e, self);
@@ -54,7 +62,7 @@
             this.tumlTabQueryManager.createQuery(self.tabDivName, oclExecuteUri, query, post);
         }
 
-        TumlBaseTabViewManager.call(this, this.tabContainer, tumlUri);
+        TumlBaseTabViewManager.call(this, tabEnum, this.tabContainer);
 
     }
 
@@ -66,10 +74,9 @@
         if (this.queryId !== undefined) {
             $.data(divPanel[0], 'queryId', this.queryId);
         }
-
     }
 
-    function TumlTabOneViewManager(tabContainer, oneManyOrQuery, tumlUri, result) {
+    function TumlTabOneViewManager(tabEnum, tabContainer, oneManyOrQuery, tumlUri, result) {
         var self = this;
         this.oneManyOrQuery = oneManyOrQuery;
         this.tabContainer = tabContainer;
@@ -81,7 +88,7 @@
             "onClickOneComponent":new Tuml.Event(),
             "onClickManyComponent":new Tuml.Event()
         });
-        TumlBaseTabViewManager.call(this, this.tabContainer, tumlUri, result);
+        TumlBaseTabViewManager.call(this, tabEnum, this.tabContainer, tumlUri, result);
     }
 
     TumlTabOneViewManager.prototype = new Tuml.TumlBaseTabViewManager;
@@ -155,7 +162,7 @@
         this.tumlTabOneManager.refresh(result, metaForData, this.qualifiedName, isForCreation);
     }
 
-    function TumlTabManyViewManager(tabContainer, oneManyOrQuery, tumlUri, result) {
+    function TumlTabManyViewManager(tabEnum, tabContainer, oneManyOrQuery, tumlUri, result) {
         var self = this;
         this.oneManyOrQuery = oneManyOrQuery;
         this.tabContainer = tabContainer;
@@ -166,7 +173,7 @@
             "TumlTabManyViewManager":"1.0.0"
         });
         this.tumlTabGridManager;
-        TumlBaseTabViewManager.call(this, this.tabContainer, tumlUri, result);
+        TumlBaseTabViewManager.call(this, tabEnum, this.tabContainer, tumlUri, result);
     }
 
     TumlTabManyViewManager.prototype = new Tuml.TumlBaseTabViewManager;
@@ -291,15 +298,11 @@
         this.tumlTabGridManager.refresh(result, gridDiv);
     }
 
-    function TumlBaseTabViewManager(tabContainer, tumlUri, result) {
+    function TumlBaseTabViewManager(tabEnum, tabContainer, tumlUri, result) {
 
         var self = this;
+        this.tabEnum = tabEnum;
         var tabId;
-
-//        function enableTab() {
-////            $('#tab-container').tabs('enableTab', this.tabTitleName);
-//            tabContainer.tabs("option", "active", tumlTabViewManagers.length - 2);
-//        }
 
         function getTab(title) {
             return $('#tab-container').tabs('getTab', title);
@@ -367,7 +370,7 @@
         this.closeTab();
     }
 
-    TumlBaseTabViewManager.prototype.closeTab = function() {
+    TumlBaseTabViewManager.prototype.closeTab = function () {
         // close icon: removing the tab on click
         var panelId = this.li.remove().attr("aria-controls");
         $("#" + panelId).remove();
@@ -386,8 +389,9 @@
             id = this.tabId;
         this.li = $(tabTemplate.replace(/#\{href\}/g, "#" + id).replace(/#\{label\}/g, label));
         this.tabContainer.find(".ui-tabs-nav").append(this.li);
-        var divPanel = $('<div />', {id: this.tabId});
+        var divPanel = $('<div />', {id:this.tabId});
         this.tabContainer.append(divPanel);
+        $.data(divPanel[0], 'tabEnum', this.tabEnum);
         this.tabContainer.tabs("refresh");
         return divPanel;
     }

@@ -20,7 +20,7 @@
 
         function init() {
             //Create layout
-            var myLayout = $('body').layout({livePaneResizing:true, north__minSize:40, east:{initClosed:true}, south:{initClosed:true}, west:{minSize:200}});
+            var myLayout = $('body').layout({livePaneResizing:true, north__minSize:40, east:{initClosed:true}, south:{initClosed:true}, west:{minSize:300}});
             myLayout.allowOverflow("north");
             //Create the menu
             menuManager = new Tuml.MenuManager();
@@ -41,7 +41,7 @@
             });
             leftMenuManager.onQueryClick.subscribe(function (e, args) {
                 var queryTabDivName = args.name.replace(/\s/g, '');
-                manyViewManager.addQueryTab(false, new Tuml.Query(args.id, args.name, args.name, args.queryString, args.queryEnum));
+                manyViewManager.addQueryTab(false, new Tuml.Query(args.id, args.name, args.name, args.queryString, args.queryEnum, null, args.queryType));
             });
 
             //Create main view manager
@@ -68,8 +68,11 @@
                 self.onCancel.notify(args, e, self);
             });
 
-            manyViewManager.onPostQuerySuccess.subscribe(function (e, args) {
-                leftMenuManager.refreshQuery();
+            manyViewManager.onPostInstanceQuerySuccess.subscribe(function (e, args) {
+                leftMenuManager.refreshInstanceQuery();
+            });
+            manyViewManager.onPostClassQuerySuccess.subscribe(function (e, args) {
+                leftMenuManager.refreshClassQuery();
             });
 
             manyViewManager.onSelfCellClick.subscribe(function (e, args) {

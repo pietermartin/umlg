@@ -13,7 +13,8 @@
         var tabContainer;
         var contextVertexId;
         var oclExecuteUri;
-        var queryTumlUri;
+        var instanceQueryTumlUri;
+        var classQueryTumlUri;
 
         function init() {
         }
@@ -49,7 +50,7 @@
                             //If property is a one then there is n navigating from
                             leftMenuManager.refresh(metaDataNavigatingTo, metaDataNavigatingTo, contextVertexId);
                             //Do not call refreshInternal as it creates all tabs for the meta data
-                            addTab(result[i], tumlUri, propertyNavigatingTo, {forLookup:false, forManyComponent:false, isOne:true, forCreation:false});
+                            addTab(tuml.tab.Enum.Properties, result[i], tumlUri, propertyNavigatingTo, {forLookup:false, forManyComponent:false, isOne:true, forCreation:false});
                             break;
                         }
                     }
@@ -64,16 +65,40 @@
             }
 
             oclExecuteUri = "/restAndJson/" + contextVertexId + "/oclExecuteQuery";
-            queryTumlUri = "/restAndJson/basetumlwithquerys/" + contextVertexId + "/instanceQuery";
+            if (hasInstanceQuery(metaDataNavigatingTo, metaDataNavigatingFrom)) {
+                instanceQueryTumlUri = "/restAndJson/basetumlwithquerys/" + contextVertexId + "/instanceQuery";
+            } else {
+                instanceQueryTumlUri = '';
+            }
+            classQueryTumlUri = "/restAndJson/classquery/" + contextVertexId + "/query";
 
-            //This is the default query tab, always open
-            addDefaultQueryTab();
+
+            if (contextVertexId !== undefined) {
+                //This is the default query tab, always open
+                addDefaultQueryTab();
+            }
 
             tabContainer.tabs("option", "active", 0);
 
             $('#ui-layout-center-heading').children().remove();
             $('#ui-layout-center-heading').append($('<span />').text(qualifiedName));
             $('body').layout().resizeAll();
+        }
+
+        function hasInstanceQuery(metaDataNavigatingTo, metaDataNavigatingFrom) {
+            var properties;
+            if (metaDataNavigatingFrom !== undefined) {
+                properties = metaDataNavigatingFrom.properties;
+            } else {
+                properties = metaDataNavigatingTo.properties;
+            }
+            for (var i = 0; i < properties.length; i++) {
+                var property = properties[i];
+                if (property.name !== 'instanceQuery') {
+                    return true;
+                }
+            }
+            return false;
         }
 
         function addDefaultQueryTab(reorder) {
@@ -96,7 +121,8 @@
             tabContainer.tabs({
                 activate:function (event, ui) {
                     var queryId = $.data(ui.newPanel[0], 'queryId');
-                    leftMenuManager.refreshQueryMenu(queryId);
+                    var tabEnum = $.data(ui.newPanel[0], 'tabEnum');
+                    leftMenuManager.refreshQueryMenuCss(queryId, tabEnum);
                 }
             });
         }
@@ -106,16 +132,16 @@
             //A tab is created for every element in the array,
             //i.e. for every concrete subset of the many property
             for (var i = 0; i < result.length; i++) {
-                addTab(result[i], tumlUri, propertyNavigatingTo, {forLookup:false, forManyComponent:false, isOne:isOne, forCreation:forCreation});
+                addTab(tuml.tab.Enum.Properties, result[i], tumlUri, propertyNavigatingTo, {forLookup:false, forManyComponent:false, isOne:isOne, forCreation:forCreation});
             }
         }
 
-        function addTab(result, tumlUri, propertyNavigatingTo, options) {
+        function addTab(tabEnum, result, tumlUri, propertyNavigatingTo, options) {
             var metaForData = result.meta.to;
 
             var tumlTabViewManager;
             if (options.isOne) {
-                tumlTabViewManager = new Tuml.TumlTabOneViewManager(tabContainer,
+                tumlTabViewManager = new Tuml.TumlTabOneViewManager(tabEnum, tabContainer,
                     {propertyNavigatingTo:propertyNavigatingTo,
                         many:!options.isOne,
                         one:options.isOne,
@@ -160,6 +186,7 @@
                                 metaDataResponse[0].data = args.data;
                             }
                             var tumlOneComponentTabViewManager = addTab(
+                                tuml.tab.Enum.Properties,
                                 metaDataResponse[0],
                                 args.tumlUri,
                                 args.property,
@@ -186,6 +213,7 @@
                                 metaDataResponse[0].data = args.data;
                             }
                             var tumlOneComponentTabViewManager = addTab(
+                                tuml.tab.Enum.Properties,
                                 metaDataResponse[0],
                                 args.tumlUri,
                                 args.property,
@@ -200,7 +228,7 @@
                     });
                 });
             } else {
-                tumlTabViewManager = new Tuml.TumlTabManyViewManager(tabContainer,
+                tumlTabViewManager = new Tuml.TumlTabManyViewManager(tabEnum, tabContainer,
                     {propertyNavigatingTo:propertyNavigatingTo,
                         many:!options.isOne,
                         one:options.isOne,
@@ -236,6 +264,7 @@
                 tumlTabViewManager.onAddButtonSuccess.subscribe(function (e, args) {
                     $('#tab-container').tabs('disableTab', metaForData.name);
                     var tumlLookupTabViewManager = addTab(
+                        tuml.tab.Enum.Properties,
                         args.data,
                         args.tumlUri,
                         args.propertyNavigatingTo,
@@ -253,6 +282,7 @@
                         success:function (result, textStatus, jqXHR) {
                             result[0].data = args.data;
                             var tumlManyComponentTabViewManager = addTab(
+                                tuml.tab.Enum.Properties,
                                 result[0],
                                 args.tumlUri,
                                 args.property,
@@ -281,6 +311,7 @@
                                 result[0].data = args.data;
                             }
                             var tumlOneComponentTabViewManager = addTab(
+                                tuml.tab.Enum.Properties,
                                 result[0],
                                 args.tumlUri,
                                 args.property,
@@ -343,6 +374,16 @@
             tabContainer.tabs("option", "active", tumlTabViewManagers.length - 1);
             tabContainer.tabs("refresh");
 
+            // close icon: removing the tab on click
+            $("#tabs span.ui-icon-close").live("click", function () {
+                var panelId = $(this).closest("li").remove().attr("aria-controls");
+                for (var j = 0; j < tumlTabViewManagers.length; j++) {
+                    if (panelId === tumlTabViewManagers[j].tabDivName) {
+                        closeTab(tumlTabViewManagers[j]);
+                    }
+                }
+                tabContainer.tabs("refresh");
+            });
 
             //Create the grid
             if (!options.isOne) {
@@ -392,7 +433,13 @@
                 }
             }
             if (tumlTabViewManagerQuery === undefined) {
-                tumlTabViewManagerQuery = new Tuml.TumlTabQueryViewManager(tabContainer, queryTumlUri, query.getDivName(), query.name, query.id);
+                if (query.queryType === undefined) {
+                    tumlTabViewManagerQuery = new Tuml.TumlTabQueryViewManager(tuml.tab.Enum.Properties, tabContainer, instanceQueryTumlUri, classQueryTumlUri, query.getDivName(), query.name, query.id);
+                } else if (query.queryType === 'instanceQuery') {
+                    tumlTabViewManagerQuery = new Tuml.TumlTabQueryViewManager(tuml.tab.Enum.InstanceQueries, tabContainer, instanceQueryTumlUri, '', query.getDivName(), query.name, query.id);
+                } else {
+                    tumlTabViewManagerQuery = new Tuml.TumlTabQueryViewManager(tuml.tab.Enum.ClassQueries, tabContainer, '', classQueryTumlUri, query.getDivName(), query.name, query.id);
+                }
                 tumlTabViewManagerQuery.createTab();
 
                 if (query.id === -1) {
@@ -406,16 +453,16 @@
                 }
 
                 tumlTabViewManagerQuery.createQuery(oclExecuteUri, query, post);
-                tumlTabViewManagerQuery.onPutQuerySuccess.subscribe(function (e, args) {
+                tumlTabViewManagerQuery.onPutInstanceQuerySuccess.subscribe(function (e, args) {
                     closeTab(tumlTabViewManagerQuery);
-                    var newTumlTabViewManager = addQueryTab(false, new Tuml.Query(args.query.id, args.query.name, args.query.name, args.query.queryString, args.query.queryEnum, args.gridData));
-                    leftMenuManager.refreshQuery(args.query.id);
+                    var newTumlTabViewManager = addQueryTab(false, new Tuml.Query(args.query.id, args.query.name, args.query.name, args.query.queryString, args.query.queryEnum, args.gridData, args.queryType));
+                    leftMenuManager.refreshInstanceQuery(args.query.id);
                 });
-                tumlTabViewManagerQuery.onPostQuerySuccess.subscribe(function (e, args) {
+                tumlTabViewManagerQuery.onPostInstanceQuerySuccess.subscribe(function (e, args) {
                     var previousIndex = tumlTabViewManagers.indexOf(tumlTabViewManagerQuery);
                     closeTab(tumlTabViewManagerQuery);
                     addDefaultQueryTab(false);
-                    var newTumlTabViewManager = addQueryTab(false, new Tuml.Query(args.query.id, args.query.name, args.query.name, args.query.queryString, args.query.queryEnum, args.gridData));
+                    var newTumlTabViewManager = addQueryTab(false, new Tuml.Query(args.query.id, args.query.name, args.query.name, args.query.queryString, args.query.queryEnum, args.gridData, args.queryType));
 
                     //place it back at the previousIndex
                     var currentIndex = tumlTabViewManagers.indexOf(newTumlTabViewManager);
@@ -423,7 +470,26 @@
                     tumlTabViewManagers.splice(previousIndex, 0, newTumlTabViewManager);
                     tabContainer.tabs("option", "active", previousIndex);
 
-                    leftMenuManager.refreshQuery(args.query.id);
+                    leftMenuManager.refreshInstanceQuery(args.query.id);
+                });
+                tumlTabViewManagerQuery.onPutClassQuerySuccess.subscribe(function (e, args) {
+                    closeTab(tumlTabViewManagerQuery);
+                    var newTumlTabViewManager = addQueryTab(false, new Tuml.Query(args.query.id, args.query.name, args.query.name, args.query.queryString, args.query.queryEnum, args.gridData, args.queryType));
+                    leftMenuManager.refreshClassQuery(args.query.id);
+                });
+                tumlTabViewManagerQuery.onPostClassQuerySuccess.subscribe(function (e, args) {
+                    var previousIndex = tumlTabViewManagers.indexOf(tumlTabViewManagerQuery);
+                    closeTab(tumlTabViewManagerQuery);
+                    addDefaultQueryTab(false);
+                    var newTumlTabViewManager = addQueryTab(false, new Tuml.Query(args.query.id, args.query.name, args.query.name, args.query.queryString, args.query.queryEnum, args.gridData, args.queryType));
+
+                    //place it back at the previousIndex
+                    var currentIndex = tumlTabViewManagers.indexOf(newTumlTabViewManager);
+                    tumlTabViewManagers.splice(currentIndex, 1);
+                    tumlTabViewManagers.splice(previousIndex, 0, newTumlTabViewManager);
+                    tabContainer.tabs("option", "active", previousIndex);
+
+                    leftMenuManager.refreshClassQuery(args.query.id);
                 });
                 tumlTabViewManagerQuery.onDeleteQuerySuccess.subscribe(function (e, args) {
                     closeTab(tumlTabViewManagerQuery);
@@ -488,8 +554,10 @@
             "onDeleteOneSuccess":new Tuml.Event(),
             "onPutOneFailure":new Tuml.Event(),
             "onPostOneFailure":new Tuml.Event(),
-            "onPostQuerySuccess":new Tuml.Event(),
-            "onPutQuerySuccess":new Tuml.Event(),
+            "onPostInstanceQuerySuccess":new Tuml.Event(),
+            "onPutInstanceQuerySuccess":new Tuml.Event(),
+            "onPostClassQuerySuccess":new Tuml.Event(),
+            "onPutClassQuerySuccess":new Tuml.Event(),
 
             "refresh":refresh,
             "addQueryTab":addQueryTab,
