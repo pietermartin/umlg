@@ -10,6 +10,7 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
 import org.tuml.runtime.test.BaseLocalDbTest;
+import org.tuml.test.Alien;
 import org.tuml.test.Human;
 
 import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
@@ -19,7 +20,7 @@ public class TestToJson extends BaseLocalDbTest {
 	@Test
 	public void testToJson() throws JsonParseException, JsonMappingException, IOException {
 		db.startTransaction();
-		Human human = new Human(true);
+		Alien human = new Alien(true);
 		human.setName("human1");
 		db.stopTransaction(Conclusion.SUCCESS);
 		Assert.assertEquals(1, countVertices());

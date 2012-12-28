@@ -1,6 +1,5 @@
 package org.tuml.javageneration.visitor.clazz;
 
-import com.sun.xml.internal.ws.util.StringUtils;
 import org.eclipse.uml2.uml.Class;
 import org.tuml.java.metamodel.*;
 import org.tuml.java.metamodel.annotation.OJAnnotatedClass;
@@ -72,8 +71,7 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
         ifHasNext.addToElsePart("    ExecutorService es = Executors.newFixedThreadPool(1, " +
                 "new ThreadFactory() {\n        @Override\n        public Thread newThread(Runnable r) {\n            return new Thread(r, \"meta-class-creator-thread\");\n        }\n    })"
         );
-        ifHasNext.addToElsePart("\n");
-        ifHasNext.addToElsePart("    Future<" + TumlClassOperations.getMetaClassName(clazz) + "> f = es.submit(" +
+        ifHasNext.addToElsePart("\n    Future<" + TumlClassOperations.getMetaClassName(clazz) + "> f = es.submit(" +
                 "new Callable() {\n        @Override\n        public " + TumlClassOperations.getMetaClassName(clazz) + " call() {\n            " +
                 TumlClassOperations.getMetaClassName(clazz) + " result = new " + TumlClassOperations.getMetaClassName(clazz) + "();\n            " + TinkerGenerationUtil.graphDbAccess + ".stopTransaction(TransactionalGraph.Conclusion.SUCCESS);\n            return result;\n        }\n    })");
         ifHasNext.addToElsePart("    es.shutdown()");

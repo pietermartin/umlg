@@ -41,10 +41,14 @@ public class NakedNeo4jGraph implements NakedGraph {
     private TransactionEventHandler<PersistentObject> transactionEventHandler;
     private TinkerSchemaHelper schemaHelper;
 
-    public NakedNeo4jGraph(Neo4jGraph orientGraph, TinkerSchemaHelper schemaHelper) {
+    public NakedNeo4jGraph(Neo4jGraph neo4jGraph, TinkerSchemaHelper schemaHelper) {
         super();
-        this.neo4jGraph = orientGraph;
+        this.neo4jGraph = neo4jGraph;
         this.schemaHelper = schemaHelper;
+    }
+
+    public Neo4jGraph getNeo4jGraph() {
+        return this.neo4jGraph;
     }
 
     public NakedNeo4jGraph(Neo4jGraph orientGraph, TinkerSchemaHelper schemaHelper, boolean withSchema) {

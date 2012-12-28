@@ -6,9 +6,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Properties;
+import java.util.concurrent.*;
 import java.util.logging.Logger;
 
+import com.tinkerpop.blueprints.TransactionalGraph;
+import com.tinkerpop.blueprints.impls.neo4j.Neo4jGraph;
 import org.apache.commons.io.FileUtils;
+import org.neo4j.kernel.InternalAbstractGraphDatabase;
+import org.neo4j.server.WrappingNeoServerBootstrapper;
 import org.restlet.Component;
 import org.restlet.Context;
 import org.restlet.Server;
@@ -18,6 +23,7 @@ import org.tuml.ocl.TumlOcl2Parser;
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.NakedGraph;
 import org.tuml.runtime.adaptor.NakedGraphFactory;
+import org.tuml.runtime.domain.neo4j.NakedNeo4jGraph;
 import org.tuml.test.*;
 
 import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
@@ -26,7 +32,28 @@ import org.tuml.test.meta.HumanMeta;
 public class TumlRestletServerComponent2 extends Component {
 	private static final Logger logger = Logger.getLogger(TumlRestletServerComponent2.class.getPackage().getName());
 	public static void main(String[] args) throws Exception {
-		new TumlRestletServerComponent2().start();
+        TumlRestletServerComponent2 tumlRestletServerComponent2 = new TumlRestletServerComponent2();
+
+//        ExecutorService es = Executors.newFixedThreadPool(1, new ThreadFactory() {
+//            @Override
+//            public Thread newThread(Runnable r) {
+//                return new Thread(r, "neo4j-startup-thread");
+//            }
+//        });
+//        Future f = es.submit(new Runnable() {
+//            @Override
+//            public void run() {
+//                //Start the neo4j server
+//                InternalAbstractGraphDatabase graphdb = (InternalAbstractGraphDatabase) ((NakedNeo4jGraph)GraphDb.getDb()).getNeo4jGraph().getRawGraph();
+//                WrappingNeoServerBootstrapper srv;
+//                srv = new WrappingNeoServerBootstrapper( graphdb );
+//                logger.info("starting neo4j server");;
+//                srv.start();
+//            }
+//        });
+//        es.shutdown();
+
+        tumlRestletServerComponent2.start();
 	}
 
 	public TumlRestletServerComponent2() {
@@ -70,7 +97,7 @@ public class TumlRestletServerComponent2 extends Component {
 	}
 
 	private void createDefaultData() {
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 2; i++) {
 			Human human = new Human(true);
 			human.setName("human1" + i);
 			human.setName2("human2" + i);
@@ -89,7 +116,7 @@ public class TumlRestletServerComponent2 extends Component {
             ComponentOneDeep3 componentOneDeep3 = new ComponentOneDeep3(componentManyDeep2);
             componentOneDeep3.setName("componentOneDeep3" + i);
 
-			for (int j = 0; j < 10; j++) {
+			for (int j = 0; j < 2; j++) {
 				Many1 many1 = new Many1(human);
 				many1.setName("many1" + j);
 				Many2 many2 = new Many2(human);

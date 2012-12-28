@@ -12,10 +12,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import org.restlet.Client;
 import org.restlet.Context;
 import org.restlet.data.Protocol;
@@ -26,181 +23,178 @@ import org.restlet.resource.ResourceException;
 import org.tuml.restlet.RootServerResource;
 import org.tuml.test.restlet.Hand_hand_finger_Finger_ServerResource;
 import org.tuml.test.restlet.HumanServerResource;
+import org.tuml.test.restlet.Human_human_hand_Hand_ServerResource;
 
 public class TestWithClient {
 
-	@BeforeClass
-	public static void beforeClass() throws Exception {
-		new TumlRestletServerComponent2().start();
-	}
+    private final TumlRestletServerComponent2 tumlRestletServerComponent2 = new TumlRestletServerComponent2();
 
-	@AfterClass
-	public static void afterClass() throws Exception {
-		new TumlRestletServerComponent2().stop();
-	}
+    @Before
+    public void beforeClass() throws Exception {
+        tumlRestletServerComponent2.start();
+    }
 
-	@Test
-	public void testRoot() throws ResourceException, JSONException, IOException {
-		Client client = new Client(new Context(), Protocol.HTTP);
-		ClientResource service = new ClientResource("http://localhost:8111/");
-		service.setNext(client);
-		RootServerResource rootServerResource = service.getChild("/restAndJson", RootServerResource.class);
-		JSONObject jsonObject = new JSONObject(rootServerResource.get().getText());
-		Assert.assertNotNull(jsonObject.get("data"));
-		Assert.assertEquals(JSONArray.class, jsonObject.get("data").getClass());
-		Assert.assertNotNull(jsonObject.get("meta"));
-		Assert.assertEquals(JSONObject.class, jsonObject.get("meta").getClass());
-		JSONObject meta = (JSONObject) jsonObject.get("meta");
-		Assert.assertEquals(JSONArray.class, meta.get("properties").getClass());
-	}
+    @After
+    public void afterClass() throws Exception {
+        tumlRestletServerComponent2.stop();
+    }
 
-	@SuppressWarnings("unchecked")
-	@Test
-	public void testLoadAndPutPropertyHumanFromJson() throws ResourceException, JSONException, IOException {
-		Client client = new Client(new Context(), Protocol.HTTP);
-		ClientResource service = new ClientResource("http://localhost:8111/");
-		service.setNext(client);
-		HumanServerResource humanServerResource = service.getChild("/restAndJson/humans/2", HumanServerResource.class);
-		ObjectMapper objectMapper = new ObjectMapper();
-		Map<String, Object> humanMap = objectMapper.readValue(humanServerResource.get().getText(), Map.class);
-		Assert.assertEquals(2, humanMap.size());
-		Assert.assertNotNull(humanMap.get("data"));
-		Assert.assertNotNull(humanMap.get("meta"));
+    @org.junit.Test
+    public void testRoot() throws ResourceException, JSONException, IOException {
+        Client client = new Client(new Context(), Protocol.HTTP);
+        ClientResource service = new ClientResource("http://localhost:8111/");
+        service.setNext(client);
+        RootServerResource rootServerResource = service.getChild("/restAndJson", RootServerResource.class);
+        String text = rootServerResource.get().getText();
+        JSONArray jsonArray = new JSONArray(text);
+        JSONObject jsonObject = (JSONObject) jsonArray.get(0);
+        Assert.assertNotNull(jsonObject.get("data"));
+        Assert.assertEquals(JSONArray.class, jsonObject.get("data").getClass());
+        Assert.assertNotNull(jsonObject.get("meta"));
+        Assert.assertEquals(JSONObject.class, jsonObject.get("meta").getClass());
+        JSONObject meta = (JSONObject) jsonObject.get("meta");
+        Assert.assertEquals(JSONObject.class, meta.get("to").getClass());
+    }
 
-		Map<String, Object> humanDataMap = (Map<String, Object>) humanMap.get("data");
-		Assert.assertEquals("human10", humanDataMap.get("name"));
-		humanDataMap.put("name", "johnny");
-		humanMap.put("data", humanDataMap);
+    private JSONObject getJsonObject(String json) throws JSONException {
+        JSONArray jsonArray = new JSONArray(json);
+        JSONObject jsonData = (JSONObject) jsonArray.get(0);
+        jsonArray = (JSONArray) jsonData.get("data");
+        return (JSONObject) jsonArray.get(0);
+    }
 
-		// Write the new name to the server
-		humanServerResource.put(new JsonRepresentation(objectMapper.writeValueAsString(humanDataMap)));
+    @SuppressWarnings("unchecked")
+    @org.junit.Test
+    public void testPostFingerToHand() throws ResourceException, JSONException, IOException {
+        Client client = new Client(new Context(), Protocol.HTTP);
+        ClientResource service = new ClientResource("http://localhost:8111/");
+        service.setNext(client);
+        HumanServerResource humanServerResource = service.getChild("/restAndJson/humans/2", HumanServerResource.class);
+        String humanJson = humanServerResource.get().getText();
+        JSONObject humanJsonObject = getJsonObject(humanJson);
+        Human_human_hand_Hand_ServerResource human_human_hand_hand_serverResource = service.getChild("/restAndJson/humans/" + humanJsonObject.get("id") + "/hand", Human_human_hand_Hand_ServerResource.class);
+        JSONObject handJsonObject = getJsonObject(human_human_hand_hand_serverResource.get().getText());
+        Hand_hand_finger_Finger_ServerResource hand_finger_ServerResource = service.getChild("/restAndJson/hands/" + handJsonObject.get("id") + "/finger", Hand_hand_finger_Finger_ServerResource.class);
+        JSONObject fingerJsonObject = getJsonObject(hand_finger_ServerResource.get().getText());
 
-		// Fetch the data again
-		humanMap = objectMapper.readValue(humanServerResource.get().getText(), Map.class);
-		Assert.assertEquals(2, humanMap.size());
-		Assert.assertNotNull(humanMap.get("data"));
-		Assert.assertNotNull(humanMap.get("meta"));
+        Assert.assertNotNull(fingerJsonObject.get("id"));
+        Assert.assertNotSame("", fingerJsonObject.get("id"));
+        String name = (String) fingerJsonObject.get("name");
+        Assert.assertTrue(name.startsWith("finger"));
 
-		humanDataMap = (Map<String, Object>) humanMap.get("data");
-		Assert.assertEquals("johnny", humanDataMap.get("name"));
-	}
+        fingerJsonObject.put("name", "testFingerName");
+        Representation r = hand_finger_ServerResource.post(new JsonRepresentation(fingerJsonObject.toString()));
 
-	@SuppressWarnings("unchecked")
-	@Test
-	public void testPostFingerToHand() throws ResourceException, JSONException, IOException {
-		Client client = new Client(new Context(), Protocol.HTTP);
-		ClientResource service = new ClientResource("http://localhost:8111/");
-		service.setNext(client);
-		Hand_hand_finger_Finger_ServerResource hand_finger_ServerResource = service.getChild("/restAndJson/hands/3/finger", Hand_hand_finger_Finger_ServerResource.class);
+        JSONArray fingerArray = new JSONArray(r.getText());
+        boolean found = false;
+        JSONObject finger = (JSONObject) fingerArray.get(0);
+        JSONArray data = (JSONArray) finger.get("data");
+        for (int i = 0; i < data.length(); i++) {
+            finger = (JSONObject) data.get(i);
+            if (finger.get("name").equals("testFingerName")) {
+                found = true;
+                break;
+            }
+        }
+        Assert.assertTrue(found);
+    }
 
-		ObjectMapper objectMapper = new ObjectMapper();
-		Map<String, List<Map<String, Object>>> handFingerMap = objectMapper.readValue(hand_finger_ServerResource.get().getText(), Map.class);
+    @SuppressWarnings("unchecked")
+    @org.junit.Test
+    public void postNewFingersToHand() throws JsonGenerationException, JsonMappingException, IOException, JSONException {
+        Client client = new Client(new Context(), Protocol.HTTP);
+        ClientResource service = new ClientResource("http://localhost:8111/");
+        service.setNext(client);
+        HumanServerResource humanServerResource = service.getChild("/restAndJson/humans/2", HumanServerResource.class);
+        String humanJson = humanServerResource.get().getText();
+        JSONObject humanJsonObject = getJsonObject(humanJson);
+        Human_human_hand_Hand_ServerResource human_human_hand_hand_serverResource = service.getChild("/restAndJson/humans/" + humanJsonObject.get("id") + "/hand", Human_human_hand_Hand_ServerResource.class);
+        JSONObject handJsonObject = getJsonObject(human_human_hand_hand_serverResource.get().getText());
+        Hand_hand_finger_Finger_ServerResource hand_finger_ServerResource = service.getChild("/restAndJson/hands/" + handJsonObject.get("id") + "/finger", Hand_hand_finger_Finger_ServerResource.class);
 
-		Assert.assertEquals(5, handFingerMap.get("data").size());
+        List<Integer> manyRequiredIntegers = new ArrayList<Integer>();
+        manyRequiredIntegers.add(new Integer(1));
+        ObjectMapper fingerMapper = new ObjectMapper();
+        List<Map<String, Object>> fingers = new ArrayList<Map<String, Object>>();
+        Map<String, Object> f1Data = new HashMap<String, Object>();
+        f1Data.put("name", "f1");
+        f1Data.put("manyRequiredInteger", manyRequiredIntegers);
+        fingers.add(f1Data);
+        Map<String, Object> f2Data = new HashMap<String, Object>();
+        f2Data.put("name", "f2");
+        f2Data.put("manyRequiredInteger", manyRequiredIntegers);
+        fingers.add(f2Data);
+        Map<String, Object> f3Data = new HashMap<String, Object>();
+        f3Data.put("name", "f3");
+        f3Data.put("manyRequiredInteger", manyRequiredIntegers);
+        fingers.add(f3Data);
+        Map<String, Object> f4Data = new HashMap<String, Object>();
+        f4Data.put("name", "f4");
+        f4Data.put("manyRequiredInteger", manyRequiredIntegers);
+        fingers.add(f4Data);
+        Map<String, Object> f5Data = new HashMap<String, Object>();
+        f5Data.put("name", "f5");
+        f5Data.put("manyRequiredInteger", manyRequiredIntegers);
+        fingers.add(f5Data);
 
-		Map<String, Object> fingerPropertyMap = handFingerMap.get("data").get(0);
-		Assert.assertNotNull(fingerPropertyMap.get("id"));
-		Assert.assertNotSame("", fingerPropertyMap.get("id"));
-		Assert.assertEquals("finger0", fingerPropertyMap.get("name"));
+        Representation r = hand_finger_ServerResource.post(new JsonRepresentation(fingerMapper.writeValueAsString(fingers)));
+        JSONArray fingerArray = new JSONArray(r.getText());
+        JSONObject finger = (JSONObject) fingerArray.get(0);
+        JSONArray data = (JSONArray) finger.get("data");
+        Assert.assertTrue(data.length() > 5);
 
-		fingerPropertyMap.put("name", "testFingerName");
+    }
 
-		Representation r = hand_finger_ServerResource.post(new JsonRepresentation(objectMapper.writeValueAsString(fingerPropertyMap)));
-		handFingerMap = objectMapper.readValue(r.getText(), Map.class);
-		Assert.assertEquals(5, handFingerMap.get("data").size());
-		boolean found = false;
-		for (int i = 0; i < 5; i++) {
-			fingerPropertyMap = handFingerMap.get("data").get(i);
-			if (fingerPropertyMap.get("name").equals("testFingerName")) {
-				found = true;
-				break;
-			}
-		}
-		Assert.assertTrue(found);
-	}
+    @SuppressWarnings("unchecked")
+    @org.junit.Test
+    public void updateFingersOfHand() throws JsonGenerationException, JsonMappingException, IOException, JSONException {
+        Client client = new Client(new Context(), Protocol.HTTP);
+        ClientResource service = new ClientResource("http://localhost:8111/");
+        service.setNext(client);
+        HumanServerResource humanServerResource = service.getChild("/restAndJson/humans/2", HumanServerResource.class);
+        String humanJson = humanServerResource.get().getText();
+        JSONObject humanJsonObject = getJsonObject(humanJson);
+        Human_human_hand_Hand_ServerResource human_human_hand_hand_serverResource = service.getChild("/restAndJson/humans/" + humanJsonObject.get("id") + "/hand", Human_human_hand_Hand_ServerResource.class);
+        JSONObject handJsonObject = getJsonObject(human_human_hand_hand_serverResource.get().getText());
+        Hand_hand_finger_Finger_ServerResource hand_finger_ServerResource = service.getChild("/restAndJson/hands/" + handJsonObject.get("id") + "/finger", Hand_hand_finger_Finger_ServerResource.class);
 
-	@SuppressWarnings("unchecked")
-	@Test
-	public void postNewFingersToHand() throws JsonGenerationException, JsonMappingException, IOException {
-		Client client = new Client(new Context(), Protocol.HTTP);
-		ClientResource service = new ClientResource("http://localhost:8111/");
-		service.setNext(client);
-		Hand_hand_finger_Finger_ServerResource hand_finger_ServerResource = service.getChild("/restAndJson/hands/3/finger", Hand_hand_finger_Finger_ServerResource.class);
+        JSONArray fingersResult = new JSONArray(hand_finger_ServerResource.get().getText());
+        JSONObject fingers = (JSONObject) fingersResult.get(0);
+        JSONArray data = (JSONArray) fingers.get("data");
+        for (int i = 0; i < data.length(); i++) {
+            JSONObject finger = (JSONObject) data.get(i);
+            finger.put("name", "n" + i);
+        }
 
-		ObjectMapper finggerMapper = new ObjectMapper();
-		List<Map<String,Object>> fingers = new ArrayList<Map<String,Object>>();
-		Map<String,Object> f1Data = new HashMap<String,Object>();
-		f1Data.put("name", "f1");
-		fingers.add(f1Data);
-		Map<String,Object> f2Data = new HashMap<String,Object>();
-		f2Data.put("name", "f2");
-		fingers.add(f2Data);
-		Map<String,Object> f3Data = new HashMap<String,Object>();
-		f3Data.put("name", "f3");
-		fingers.add(f3Data);
-		Map<String,Object> f4Data = new HashMap<String,Object>();
-		f4Data.put("name", "f4");
-		fingers.add(f4Data);
-		Map<String,Object> f5Data = new HashMap<String,Object>();
-		f5Data.put("name", "f5");
-		fingers.add(f5Data);
-
-		Representation r = hand_finger_ServerResource.post(new JsonRepresentation(finggerMapper.writeValueAsString(fingers)));
-		
-		ObjectMapper objectMapper = new ObjectMapper();
-		Map<String, List<Map<String, Object>>> handFingerMap = objectMapper.readValue(r.getText(), Map.class);
-		Assert.assertEquals(10, handFingerMap.get("data").size());
-
-	}
-
-	@SuppressWarnings("unchecked")
-	@Test
-	public void updateFingersOfHand() throws JsonGenerationException, JsonMappingException, IOException {
-		Client client = new Client(new Context(), Protocol.HTTP);
-		ClientResource service = new ClientResource("http://localhost:8111/");
-		service.setNext(client);
-		Hand_hand_finger_Finger_ServerResource hand_finger_ServerResource = service.getChild("/restAndJson/hands/3/finger", Hand_hand_finger_Finger_ServerResource.class);
-
-		ObjectMapper objectMapper = new ObjectMapper();
-		Map<String, List<Map<String, Object>>> handFingerMap = objectMapper.readValue(hand_finger_ServerResource.get().getText(), Map.class);
-		Assert.assertEquals(5, handFingerMap.get("data").size());
-		List<Map<String, Object>> list = handFingerMap.get("data");
-		int count = 1;
-		for (Map<String, Object> map : list) {
-			map.put("name", "n" + count++);
-		}
-		Representation r = hand_finger_ServerResource.post(new JsonRepresentation(objectMapper.writeValueAsString(list)));
-		handFingerMap = objectMapper.readValue(r.getText(), Map.class);
-		Assert.assertEquals(5, handFingerMap.get("data").size());
-		list = handFingerMap.get("data");
-		boolean foundn1 = false;
-		boolean foundn2 = false;
-		boolean foundn3 = false;
-		boolean foundn4 = false;
-		boolean foundn5 = false;
-		for (Map<String, Object> map : list) {
-			if (map.get("name").equals("n1")) {
-				foundn1 = true;
-			}
-			if (map.get("name").equals("n2")) {
-				foundn2 = true;
-			}
-			if (map.get("name").equals("n3")) {
-				foundn3 = true;
-			}
-			if (map.get("name").equals("n4")) {
-				foundn4 = true;
-			}
-			if (map.get("name").equals("n5")) {
-				foundn5 = true;
-			}
-		}
-		Assert.assertTrue(foundn1 && foundn2 && foundn3 && foundn4 && foundn5 );
-		
-		hand_finger_ServerResource = service.getChild("/restAndJson/hands/3/finger", Hand_hand_finger_Finger_ServerResource.class);
-		handFingerMap = objectMapper.readValue(hand_finger_ServerResource.get().getText(), Map.class);
-		Assert.assertEquals(5, handFingerMap.get("data").size());
-		
-	}
+        Representation r = hand_finger_ServerResource.put(new JsonRepresentation(data.toString()));
+        JSONArray fingerArray = new JSONArray(r.getText());
+        JSONObject finger = (JSONObject) fingerArray.get(0);
+        data = (JSONArray) finger.get("data");
+        Assert.assertEquals(5, data.length());
+        boolean foundN1 = false;
+        boolean foundN2 = false;
+        boolean foundN3 = false;
+        boolean foundN4 = false;
+        boolean foundN5 = false;
+        for (int i = 0; i < data.length(); i++) {
+            finger = (JSONObject) data.get(i);
+            if (finger.get("name").equals("n0")) {
+                foundN1 = true;
+            }
+            if (finger.get("name").equals("n1")) {
+                foundN2 = true;
+            }
+            if (finger.get("name").equals("n2")) {
+                foundN3 = true;
+            }
+            if (finger.get("name").equals("n3")) {
+                foundN4 = true;
+            }
+            if (finger.get("name").equals("n4")) {
+                foundN5 = true;
+            }
+        }
+        Assert.assertTrue(foundN1 && foundN2 && foundN3 && foundN4 && foundN5);
+    }
 
 }

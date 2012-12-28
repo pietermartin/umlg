@@ -6,7 +6,6 @@ import org.restlet.Restlet;
 import org.restlet.resource.Directory;
 import org.restlet.routing.Router;
 import org.restlet.routing.Template;
-import org.tuml.runtime.restlet.BaseOclExecutionServerResourceImpl;
 import org.tuml.ui.TumlGuiServerResource2;
 
 public class TumlRestletServerApplication2 extends Application {

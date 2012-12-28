@@ -2,6 +2,8 @@ package org.tuml.runtime.domain.neo4j;
 
 import java.io.File;
 
+import org.neo4j.kernel.InternalAbstractGraphDatabase;
+import org.neo4j.server.WrappingNeoServerBootstrapper;
 import org.tuml.runtime.adaptor.NakedGraph;
 import org.tuml.runtime.adaptor.NakedGraphFactory;
 import org.tuml.runtime.adaptor.TinkerSchemaHelper;
