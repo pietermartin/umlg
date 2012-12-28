@@ -38,7 +38,7 @@ public class RootEntryPointCreator extends BaseVisitor implements Visitor<Model>
 	@Override
 	public void visitBefore(Model model) {
 		OJAnnotatedClass root = new OJAnnotatedClass("Root");
-		root.addToImplementedInterfaces(TinkerGenerationUtil.TumlRootNode);
+		root.addToImplementedInterfaces(TinkerGenerationUtil.TumlApplicationNode);
 		OJPackage ojPackage = new OJPackage(TinkerGenerationUtil.TumlRootPackage.toJavaString());
 		root.setMyPackage(ojPackage);
 		addToSource(root);

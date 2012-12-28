@@ -130,11 +130,6 @@ public class SignalEvent extends Event {
 	}
 
     @Override
-    public TumlMetaNode getMetaNode() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
 	public List<TumlNode> getPathToCompositionalRoot() {
 		// TODO Auto-generated method stub
 		return null;

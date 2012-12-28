@@ -78,5 +78,14 @@ public class Workspace {
 	public Model getModel() {
 		return model;
 	}
+
+    public boolean containsVisitor(Class<?> visitorClass) {
+        for (Visitor<?> v : this.visitors) {
+            if (v.getClass().equals(visitorClass)) {
+                return true;
+            }
+        }
+        return false;
+    }
 	
 }

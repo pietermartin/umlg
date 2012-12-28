@@ -14,6 +14,7 @@ import org.tuml.javageneration.visitor.BaseVisitor;
 
 public class RootEntryPointBuilder extends BaseVisitor implements Visitor<Class> {
 
+    public final static String ROOT_PATHNAME = "org.tuml.root.Root";
 	public RootEntryPointBuilder(Workspace workspace) {
 		super(workspace);
 	}
@@ -21,7 +22,7 @@ public class RootEntryPointBuilder extends BaseVisitor implements Visitor<Class>
 	@Override
 	public void visitBefore(Class clazz) {
 		if (!TumlClassOperations.hasCompositeOwner(clazz) && !clazz.isAbstract()) {
-			OJAnnotatedClass root = this.workspace.findOJClass("org.tuml.root.Root");
+			OJAnnotatedClass root = this.workspace.findOJClass(ROOT_PATHNAME);
 			addGetterToAppRootForRootEntity(clazz, root);
 		}
 	}

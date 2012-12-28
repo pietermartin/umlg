@@ -6,6 +6,7 @@ import java.util.List;
 import org.tuml.framework.Visitor;
 import org.tuml.generation.Workspace;
 import org.tuml.javageneration.DefaultVisitors;
+import org.tuml.javageneration.TumlLibVisitors;
 import org.tuml.restlet.router.RestletRouterEnumGenerator;
 import org.tuml.restlet.visitor.clazz.*;
 import org.tuml.restlet.visitor.model.AppResourceServerResourceBuilder;
@@ -19,6 +20,7 @@ public class RestletVisitors {
 	public static List<Visitor<?>> getDefaultJavaVisitors() {
 		List<Visitor<?>> result = new ArrayList<Visitor<?>>();
 		result.addAll(DefaultVisitors.getDefaultJavaVisitors());
+        result.addAll(TumlLibVisitors.getDefaultJavaVisitors());
 		result.add(new RestletRouterEnumGenerator(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
 		result.add(new EntityServerResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
 		result.add(new NavigatePropertyServerResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));

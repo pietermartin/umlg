@@ -128,11 +128,6 @@ public class CollectionObjectToken<O> extends ObjectToken<O> implements Composit
 	}
 
     @Override
-    public TumlMetaNode getMetaNode() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
 	public void delete() {
 		if (true) {
 			throw new RuntimeException("check this out");

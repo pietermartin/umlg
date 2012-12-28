@@ -13,10 +13,6 @@ public class TransactionThreadVar {
 
 	private static ThreadLocal<Map<String, Vertex>> transactionVar = new ThreadLocal<Map<String, Vertex>>() {
 
-		public Map<String, Vertex> get() {
-			return super.get();
-		}
-
 		@Override
 	    protected Map<String, Vertex> initialValue() {
 	        return new HashMap<String, Vertex>();

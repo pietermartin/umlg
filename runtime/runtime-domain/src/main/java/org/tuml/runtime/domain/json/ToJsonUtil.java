@@ -3,8 +3,8 @@ package org.tuml.runtime.domain.json;
 import java.util.Collection;
 
 import org.tuml.runtime.domain.PersistentObject;
+import org.tuml.runtime.domain.TumlApplicationNode;
 import org.tuml.runtime.domain.TumlEnum;
-import org.tuml.runtime.domain.TumlRootNode;
 
 public class ToJsonUtil {
 	
@@ -94,7 +94,7 @@ public class ToJsonUtil {
 		}
 	}
 
-	public static String toJson(TumlRootNode entity) {
+	public static String toJson(TumlApplicationNode entity) {
 		if (entity != null) {
 			StringBuilder json = new StringBuilder();
 			json.append(entity.toJson());

@@ -35,10 +35,10 @@ public class NakedTransactionEventHandler<T> implements TransactionEventHandler<
 					throw new TumlConstraintViolationException(requiredConstraintViolations);
 				}
 				if (!entity.isTinkerRoot() && entity.getOwningObject() == null) {
+					TransactionThreadEntityVar.clear();
 					if (entity instanceof BaseTinkerAuditable && ((BaseTinkerAuditable) entity).getDeletedOn().isBefore(new DateTime())) {
 						return null;
 					}
-					TransactionThreadEntityVar.clear();
 					throw new IllegalStateException(String.format("Entity %s %s does not have a composite owner", entity.getClass().getSimpleName(), entity.getId()));
 				}
 			}

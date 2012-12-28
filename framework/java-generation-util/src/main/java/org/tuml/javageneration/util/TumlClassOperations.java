@@ -317,6 +317,7 @@ public class TumlClassOperations extends ClassOperations {
 	public static Set<Classifier> getSpecializations(Classifier clazz) {
 		Set<Classifier> result = new HashSet<Classifier>();
 		getSpecializations(result, clazz);
+        result.remove(clazz);
 		return result;
 	}
 

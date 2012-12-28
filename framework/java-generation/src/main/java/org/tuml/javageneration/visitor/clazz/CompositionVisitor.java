@@ -27,17 +27,32 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
 		if (TumlClassOperations.hasCompositeOwner(clazz)) {
 			addConstructorWithOwnerAsParameter(annotatedClass, clazz);
 		} else {
-			if (!clazz.isAbstract()) {
+			if (TumlClassOperations.getSpecializations(clazz).isEmpty()) {
+                addImplementRootNodeInterface(annotatedClass);
 				addEdgeToRoot(annotatedClass, clazz);
 			}
+            if (!clazz.isAbstract()) {
+                implementRootNode(clazz, annotatedClass);
+            }
 		}
 		addGetOwningObject(annotatedClass, clazz);
 		addCompositeChildrenToDelete(annotatedClass, clazz);
 	}
 
-	@Override
-	public void visitAfter(Class clazz) {
-	}
+    @Override
+    public void visitAfter(Class clazz) {
+    }
+
+    private void implementRootNode(Class clazz, OJAnnotatedClass annotatedClass) {
+        OJAnnotatedOperation getEdgeToRootLabel = new OJAnnotatedOperation("getEdgeToRootLabel", new OJPathName("String"));
+        getEdgeToRootLabel.getBody().addToStatements("return \"" + TinkerGenerationUtil.getEdgeToRootLabelStrategy(clazz) + "\"");
+        annotatedClass.addToOperations(getEdgeToRootLabel);
+    }
+
+    private void addImplementRootNodeInterface(OJAnnotatedClass annotatedClass) {
+        annotatedClass.addToImplementedInterfaces(TinkerGenerationUtil.TUML_ROOT_NODE);
+        annotatedClass.addToImports(TinkerGenerationUtil.TUML_ROOT_NODE);
+    }
 
 	private void addConstructorWithOwnerAsParameter(OJAnnotatedClass annotatedClass, Class clazz) {
 		OJConstructor constructor = new OJConstructor();
@@ -76,7 +91,7 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
 		OJConstructor constructor = annotatedClass.findConstructor(new OJPathName("java.lang.Boolean"));
 		constructor.getBody().addToStatements(
 				TinkerGenerationUtil.edgePathName.getLast() + " edge = " + TinkerGenerationUtil.graphDbAccess + ".addEdge(null, " + TinkerGenerationUtil.graphDbAccess
-						+ ".getRoot(), this.vertex, \"root" + TumlClassOperations.className(clazz) + "\")");
+						+ ".getRoot(), this.vertex, getEdgeToRootLabel())");
 		constructor.getBody().addToStatements("edge.setProperty(\"inClass\", this.getClass().getName())");
 		annotatedClass.addToImports(TinkerGenerationUtil.edgePathName.getCopy());
 		annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName.getCopy());

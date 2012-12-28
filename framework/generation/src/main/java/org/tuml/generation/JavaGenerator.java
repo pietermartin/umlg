@@ -1,6 +1,7 @@
 package org.tuml.generation;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -36,5 +37,15 @@ public class JavaGenerator {
 		workspace.clear();
 		workspace.generate(projectRoot, modelFile, visitors);
 	}
-	
+
+    public void generate(File modelFile, File projectRoot, List<Visitor<?>> ... visitors) {
+        List<Visitor<?>> visitorsX = new ArrayList<Visitor<?>>();
+        for (List<Visitor<?>> v : visitors) {
+            visitorsX.addAll(v);
+
+        }
+        generate(modelFile, projectRoot, visitorsX);
+    }
+
+
 }

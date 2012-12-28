@@ -25,22 +25,75 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
     @Override
     public void visitBefore(Class clazz) {
         if (!clazz.isAbstract()) {
-            OJAnnotatedClass annotatedClass = new OJAnnotatedClass(TumlClassOperations.getMetaClassName(clazz));
+            OJAnnotatedClass metaClass = new OJAnnotatedClass(TumlClassOperations.getMetaClassName(clazz));
             OJPackage ojPackage = new OJPackage(Namer.name(clazz.getNearestPackage()) + ".meta");
-            annotatedClass.setMyPackage(ojPackage);
-            annotatedClass.setVisibility(TumlClassOperations.getVisibility(clazz.getVisibility()));
+            metaClass.setMyPackage(ojPackage);
+            metaClass.setVisibility(TumlClassOperations.getVisibility(clazz.getVisibility()));
 
-            annotatedClass.setSuperclass(TinkerGenerationUtil.BASE_CLASS_TUML);
-            addToSource(annotatedClass);
-            addDefaultConstructor(annotatedClass, clazz);
-            annotatedClass.getDefaultConstructor().setVisibility(OJVisibilityKind.PRIVATE);
-            addContructorWithVertex(annotatedClass, clazz);
-            addINSTANCE(annotatedClass, clazz);
-            addEdgeToRoot(annotatedClass, clazz);
-            addImplementsTumlMetaNode(annotatedClass);
+            metaClass.setSuperclass(TinkerGenerationUtil.BASE_CLASS_TUML);
+            addToSource(metaClass);
+            addDefaultConstructor(metaClass, clazz);
+            metaClass.getDefaultConstructor().setVisibility(OJVisibilityKind.PRIVATE);
+            addContructorWithVertex(metaClass, clazz);
+            addGetEdgeToRootLabel(metaClass, clazz);
+            addImplementsTumlMetaNode(metaClass);
+            OJAnnotatedClass annotatedClass = findOJClass(clazz);
+            addAndImplementTumlLibNodeOnOriginalClass(annotatedClass, clazz, metaClass.getPathName());
 
-            addAndImplementTumlLibNodeOnOriginalClass(annotatedClass, clazz);
+            addMetaClassGetterToRoot(clazz, metaClass);
+        } else {
+            OJAnnotatedClass annotatedClass = findOJClass(clazz);
+            addAndImplementTumlLibNodeOnOriginalClass(annotatedClass, clazz, null);
         }
+    }
+
+    private void addGetEdgeToRootLabel(OJAnnotatedClass metaClass, Class clazz) {
+        OJAnnotatedOperation getEdgeToRootLabel = new OJAnnotatedOperation("getEdgeToRootLabel", new OJPathName("String"));
+        getEdgeToRootLabel.getBody().addToStatements("return \"root" + TumlClassOperations.getMetaClassName(clazz) + "\"");
+        metaClass.addToOperations(getEdgeToRootLabel);
+    }
+
+    private void addMetaClassGetterToRoot(Class clazz, OJAnnotatedClass metaClass) {
+
+        OJAnnotatedOperation INSTANCE = new OJAnnotatedOperation("getInstance");
+        INSTANCE.setStatic(true);
+        INSTANCE.setReturnType(metaClass.getPathName());
+        metaClass.addToOperations(INSTANCE);
+        OJField result = new OJField("result", metaClass.getPathName());
+        result.setInitExp("null");
+        INSTANCE.getBody().addToLocals(result);
+
+        INSTANCE.getBody().addToStatements("Iterator<Edge> iter = " + TinkerGenerationUtil.graphDbAccess + ".getRoot().getEdges(Direction.OUT, \"" + TinkerGenerationUtil.getEdgeToRootLabelStrategyMeta(clazz) + "\").iterator()");
+        OJIfStatement ifHasNext = new OJIfStatement("iter.hasNext()");
+        ifHasNext.addToThenPart("result =  new " + TumlClassOperations.getMetaClassName(clazz) + "(iter.next().getVertex(Direction.IN))");
+        INSTANCE.getBody().addToStatements(ifHasNext);
+
+        ifHasNext.addToElsePart("synchronized (" + TumlClassOperations.getMetaClassName(clazz) + ".class) {");
+        ifHasNext.addToElsePart("    ExecutorService es = Executors.newFixedThreadPool(1, " +
+                "new ThreadFactory() {\n        @Override\n        public Thread newThread(Runnable r) {\n            return new Thread(r, \"meta-class-creator-thread\");\n        }\n    })"
+        );
+        ifHasNext.addToElsePart("\n");
+        ifHasNext.addToElsePart("    Future<" + TumlClassOperations.getMetaClassName(clazz) + "> f = es.submit(" +
+                "new Callable() {\n        @Override\n        public " + TumlClassOperations.getMetaClassName(clazz) + " call() {\n            " +
+                TumlClassOperations.getMetaClassName(clazz) + " result = new " + TumlClassOperations.getMetaClassName(clazz) + "();\n            " + TinkerGenerationUtil.graphDbAccess + ".stopTransaction(TransactionalGraph.Conclusion.SUCCESS);\n            return result;\n        }\n    })");
+        ifHasNext.addToElsePart("    es.shutdown()");
+        ifHasNext.addToElsePart("    try {\n        result = f.get(3, TimeUnit.SECONDS);\n    } catch (Exception e) {\n        throw new RuntimeException(e);\n    }");
+        ifHasNext.addToElsePart("}");
+        INSTANCE.getBody().addToStatements("return result");
+        metaClass.addToImports("java.util.concurrent.ExecutorService");
+        metaClass.addToImports("java.util.concurrent.Future");
+        metaClass.addToImports("java.util.concurrent.Executors");
+        metaClass.addToImports("java.util.concurrent.ThreadFactory");
+        metaClass.addToImports("java.util.concurrent.TimeUnit");
+        metaClass.addToImports("java.util.concurrent.Callable");
+        metaClass.addToImports("java.util.Iterator");
+
+        metaClass.addToImports("com.tinkerpop.blueprints.TransactionalGraph");
+        metaClass.addToImports("com.tinkerpop.blueprints.Direction");
+        metaClass.addToImports("com.tinkerpop.blueprints.Direction");
+        metaClass.addToImports("com.tinkerpop.blueprints.Edge");
+        metaClass.addToImports(TinkerGenerationUtil.graphDbPathName);
+
     }
 
     @Override
@@ -52,15 +105,17 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
     }
 
 
-    private void addAndImplementTumlLibNodeOnOriginalClass(OJAnnotatedClass metaClass, Class clazz) {
-        OJAnnotatedClass annotatedClass = findOJClass(clazz);
-        annotatedClass.addToImports(metaClass.getPathName());
+    private void addAndImplementTumlLibNodeOnOriginalClass(OJAnnotatedClass annotatedClass, Class clazz, OJPathName metaClassPathName) {
         annotatedClass.addToImplementedInterfaces(TinkerGenerationUtil.TumlLibNode);
         OJAnnotatedOperation getMetaNode = new OJAnnotatedOperation("getMetaNode");
         TinkerGenerationUtil.addOverrideAnnotation(getMetaNode);
         getMetaNode.setReturnType(TinkerGenerationUtil.TumlMetaNode);
-        getMetaNode.getBody().addToStatements("return " + TumlClassOperations.getMetaClassName(clazz) + ".getInstance()");
         annotatedClass.addToOperations(getMetaNode);
+        getMetaNode.setAbstract(clazz.isAbstract());
+        if (!clazz.isAbstract()) {
+            annotatedClass.addToImports(metaClassPathName);
+            getMetaNode.getBody().addToStatements("return " + TumlClassOperations.getMetaClassName(clazz) + ".getInstance()");
+        }
     }
 
     @Override
@@ -71,62 +126,9 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
         annotatedClass.addToImplementedInterfaces(TinkerGenerationUtil.TumlMetaNode);
     }
 
-    private void addEdgeToRoot(OJAnnotatedClass annotatedClass, Class clazz) {
-        OJConstructor constructor = annotatedClass.getDefaultConstructor();
-        constructor.getBody().addToStatements(
-                TinkerGenerationUtil.edgePathName.getLast() + " edge = " + TinkerGenerationUtil.graphDbAccess + ".addEdge(null, " + TinkerGenerationUtil.graphDbAccess
-                        + ".getRoot(), this.vertex, \"root" + TumlClassOperations.getMetaClassName(clazz) + "\")");
-        constructor.getBody().addToStatements("edge.setProperty(\"inClass\", this.getClass().getName())");
-        annotatedClass.addToImports(TinkerGenerationUtil.edgePathName.getCopy());
-        annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName.getCopy());
-    }
-
     private void addDefaultConstructor(OJAnnotatedClass annotatedClass, Class clazz) {
         annotatedClass.getDefaultConstructor().setVisibility(OJVisibilityKind.PRIVATE);
         annotatedClass.getDefaultConstructor().getBody().addToStatements("super(true)");
     }
 
-    private void addINSTANCE(OJAnnotatedClass ojClass, Class clazz) {
-        OJField field = new OJField(StringUtils.decapitalize(TumlClassOperations.getMetaClassName(clazz)), ojClass.getPathName());
-        field.setStatic(true);
-        field.setInitExp("null");
-        field.setVisibility(OJVisibilityKindGEN.PRIVATE);
-        ojClass.addToFields(field);
-
-        OJAnnotatedOperation INSTANCE = new OJAnnotatedOperation("getInstance");
-        INSTANCE.setStatic(true);
-        INSTANCE.setReturnType(ojClass.getPathName());
-        OJIfStatement ifNull = new OJIfStatement(StringUtils.decapitalize(TumlClassOperations.getMetaClassName(clazz)) + " == null");
-        ojClass.addToOperations(INSTANCE);
-
-
-        ifNull.addToThenPart("ExecutorService es = Executors.newFixedThreadPool(1)");
-        ifNull.addToThenPart("es.submit(new Runnable() {\n    @Override\n    public void run() {\n        " +
-                TumlClassOperations.getMetaClassName(clazz) + "." + StringUtils.decapitalize(TumlClassOperations.getMetaClassName(clazz)) + " = new " + TumlClassOperations.getMetaClassName(clazz) + "()");
-
-        ifNull.addToThenPart("        " + TinkerGenerationUtil.graphDbAccess + ".stopTransaction(TransactionalGraph.Conclusion.SUCCESS)");
-        ojClass.addToImports(TinkerGenerationUtil.tinkerTransactionalGraphPathName);
-        ifNull.addToThenPart("    }");
-        ifNull.addToThenPart("})");
-        ifNull.addToThenPart("es.shutdown()");
-
-        OJTryStatement ojTryStatement = new OJTryStatement();
-
-        OJIfStatement ifSuccess = new OJIfStatement("!es.awaitTermination(3, TimeUnit.SECONDS)");
-        ifSuccess.addToThenPart("throw new RuntimeException(\"Dang dog, 3 seconds to insert one miserable vertex is not enuf!!!!\")");
-        ojTryStatement.getTryPart().addToStatements(ifSuccess);
-
-        ojClass.addToImports(new OJPathName("java.util.concurrent.TimeUnit"));
-        ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.InterruptedException")));
-        ojTryStatement.getCatchPart().addToStatements("throw new RuntimeException(e)");
-        ifNull.addToThenPart(ojTryStatement);
-
-        ojClass.addToImports("java.util.concurrent.ExecutorService");
-        ojClass.addToImports("java.util.concurrent.Executors");
-        ojClass.addToImports("java.lang.Override");
-
-        INSTANCE.getBody().addToStatements(ifNull);
-        INSTANCE.getBody().addToStatements("return " + TumlClassOperations.getMetaClassName(clazz) + "." + StringUtils.decapitalize(TumlClassOperations.getMetaClassName(clazz)));
-
-    }
 }
