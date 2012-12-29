@@ -11,6 +11,7 @@
             "Formatters" : {
                 "TumlRequired" : TumlRequiredFormatter,
                 "TumlDelete" : TumlDeleteFormatter,
+                "TumlBoolean" : TumlBooleanFormatter,
                 "TumlManyBoolean" : TumlManyBooleanFormatter,
                 "Link" : LinkFormatter,
                 "TumlRegularFormatter": TumlRegularFormatter,
@@ -37,6 +38,10 @@
 
     function TumlDeleteFormatter(row, cell, value, columnDef, dataContext) {
         return "<img class='tuml-delete-img' src='/restAndJson/javascript/images/delete.png'>";
+    }
+
+    function TumlBooleanFormatter(row, cell, value, columnDef, dataContext) {
+        return value ? "<img src='/restAndJson/javascript/images/tick.png'>" : "";
     }
 
     function LinkFormatter(row, cell, value, columnDef, dataContext) {

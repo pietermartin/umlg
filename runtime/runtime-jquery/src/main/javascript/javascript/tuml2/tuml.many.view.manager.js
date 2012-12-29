@@ -15,22 +15,28 @@
         var oclExecuteUri;
         var instanceQueryTumlUri;
         var classQueryTumlUri;
+        var contextVertexId;
+        var contextChanged = true;
 
         function init() {
         }
 
         function refresh(tumlUri, result) {
-            self.clear();
             var qualifiedName = result[0].meta.qualifiedName;
             var metaDataNavigatingTo = result[0].meta.to;
             var metaDataNavigatingFrom = result[0].meta.from;
             var propertyNavigatingTo = (metaDataNavigatingFrom == undefined ? null : findPropertyNavigatingTo(qualifiedName, metaDataNavigatingFrom));
-            recreateTabContainer();
             if (propertyNavigatingTo != null && (propertyNavigatingTo.oneToMany || propertyNavigatingTo.manyToMany)) {
                 //Property is a many
-                contextVertexId = retrieveVertexId(tumlUri);
+
+                var newContextVertexId = retrieveVertexId(tumlUri);
+                var savedTumlTabViewManagers = clearTabsOnAddOneOrMany(newContextVertexId);
+
                 leftMenuManager.refresh(metaDataNavigatingFrom, metaDataNavigatingTo, contextVertexId);
                 refreshInternal(tumlUri, result, propertyNavigatingTo, false);
+
+                //reorder tabs, make sure new tabs are first
+                reorderTabsAfterAddOneOrMany(savedTumlTabViewManagers);
             } else {
                 //Property is a one
                 var isForCreation = true;
@@ -46,20 +52,31 @@
                         if (result[i].data.length > 0) {
                             metaDataNavigatingTo = result[i].meta.to;
                             qualifiedName = result[i].meta.qualifiedName;
-                            contextVertexId = result[i].data[0].id;
+                            var newContextVertexId = result[i].data[0].id;
+                            var savedTumlTabViewManagers = clearTabsOnAddOneOrMany(newContextVertexId);
+
                             //If property is a one then there is n navigating from
                             leftMenuManager.refresh(metaDataNavigatingTo, metaDataNavigatingTo, contextVertexId);
                             //Do not call refreshInternal as it creates all tabs for the meta data
                             addTab(tuml.tab.Enum.Properties, result[i], tumlUri, propertyNavigatingTo, {forLookup:false, forManyComponent:false, isOne:true, forCreation:false});
+
+                            //reorder tabs, make sure new tabs are first
+                            reorderTabsAfterAddOneOrMany(savedTumlTabViewManagers);
+
                             break;
                         }
                     }
                 } else {
                     //This is for creation of the one
                     qualifiedName = result[0].meta.qualifiedName;
-                    contextVertexId = retrieveVertexId(tumlUri);
+                    var newContextVertexId = retrieveVertexId(tumlUri);
+                    var savedTumlTabViewManagers = clearTabsOnAddOneOrMany(newContextVertexId);
+
                     leftMenuManager.refresh(metaDataNavigatingFrom, metaDataNavigatingTo, contextVertexId);
                     refreshInternal(tumlUri, result, propertyNavigatingTo, true, true);
+
+                    //reorder tabs, make sure new tabs are first
+                    reorderTabsAfterAddOneOrMany(savedTumlTabViewManagers);
 
                 }
             }
@@ -73,7 +90,7 @@
             classQueryTumlUri = "/restAndJson/classquery/" + contextVertexId + "/query";
 
 
-            if (contextVertexId !== undefined) {
+            if (contextVertexId !== undefined && contextVertexId !== null && contextChanged) {
                 //This is the default query tab, always open
                 addDefaultQueryTab();
             }
@@ -83,6 +100,54 @@
             $('#ui-layout-center-heading').children().remove();
             $('#ui-layout-center-heading').append($('<span />').text(qualifiedName));
             $('body').layout().resizeAll();
+        }
+
+        function clearTabsOnAddOneOrMany(newContextVertexId) {
+            if (newContextVertexId === undefined && contextVertexId === null) {
+                contextChanged = true;
+            } else if (contextVertexId === undefined && newContextVertexId === null) {
+                contextChanged = true;
+            } else if (contextVertexId === undefined && newContextVertexId === undefined) {
+                contextChanged = true;
+            } else {
+                contextChanged = newContextVertexId !== contextVertexId;
+            }
+            contextVertexId = newContextVertexId;
+            if (contextChanged) {
+                self.clear();
+                recreateTabContainer();
+            } else {
+                var tumlTabViewManagersToClose = [];
+                //Remove property tabs only, query tabs remain for the context
+                for (var i = 0; i < tumlTabViewManagers.length; i++) {
+                    var tumlTabViewManager = tumlTabViewManagers[i];
+                    if (tumlTabViewManager instanceof  Tuml.TumlTabOneViewManager || tumlTabViewManager instanceof  Tuml.TumlTabManyViewManager) {
+                        tumlTabViewManagersToClose.push(tumlTabViewManager);
+                    }
+                }
+                for (var i = 0; i < tumlTabViewManagersToClose.length; i++) {
+                    closeTab(tumlTabViewManagersToClose[i]);
+                }
+            }
+            //Save current tabs to help with reordering 2 lines down
+            var savedTumlTabViewManagers = [];
+            for (var i = 0; i < tumlTabViewManagers.length; i++) {
+                var tumlTabViewManager = tumlTabViewManagers[i];
+                savedTumlTabViewManagers.push(tumlTabViewManager);
+            }
+            return savedTumlTabViewManagers;
+        }
+
+        function reorderTabsAfterAddOneOrMany(savedTumlTabViewManagers) {
+            for (var i = 0; i < savedTumlTabViewManagers.length; i++) {
+                var tumlTabViewManager = savedTumlTabViewManagers[i];
+                var index = tumlTabViewManagers.indexOf(tumlTabViewManager)
+                tumlTabViewManagers.splice(index, 1);
+            }
+            for (var i = 0; i < savedTumlTabViewManagers.length; i++) {
+                tumlTabViewManagers.push(savedTumlTabViewManagers[i]);
+            }
+            reorderTabs();
         }
 
         function hasInstanceQuery(metaDataNavigatingTo, metaDataNavigatingFrom) {
@@ -128,7 +193,6 @@
         }
 
         function refreshInternal(tumlUri, result, propertyNavigatingTo, isOne, forCreation) {
-            tumlTabViewManagers = [];
             //A tab is created for every element in the array,
             //i.e. for every concrete subset of the many property
             for (var i = 0; i < result.length; i++) {

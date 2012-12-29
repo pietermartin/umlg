@@ -1,7 +1,8 @@
 function retrieveVertexId(url) {
     var urlId = url.match(/\/\d+/);
     if (urlId != null) {
-        return urlId[0].match(/\d+/);
+        var urlArray = urlId[0].match(/\d+/);
+        return parseInt(urlArray[0]);
     } else {
         return urlId;
     }
@@ -36,7 +37,7 @@ function selectFormatter(property) {
     } else if (property.manyPrimitive && property.fieldType == 'Boolean') {
         return  TumlSlick.Formatters.TumlManyBoolean;
     } else if (property.fieldType == 'Boolean') {
-        return Slick.Formatters.Checkmark;
+        return TumlSlick.Formatters.TumlBoolean;
     } else {
         return TumlSlick.Formatters.TumlRegularFormatter;
     }
