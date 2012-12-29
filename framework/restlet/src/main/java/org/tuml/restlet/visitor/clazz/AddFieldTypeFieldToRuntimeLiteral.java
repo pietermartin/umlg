@@ -59,6 +59,7 @@ public class AddFieldTypeFieldToRuntimeLiteral extends BaseVisitor implements Vi
 		OJField uriAttribute = new OJField();
 		uriAttribute.setType(TumlRestletGenerationUtil.FieldType);
 		uriAttribute.setInitExp(fieldType);
+        uriAttribute.setName("fieldType");
 		literal.addToAttributeValues(uriAttribute);
 
 		OJField jsonField = literal.findAttributeValue("json");

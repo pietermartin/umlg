@@ -2,18 +2,12 @@ package org.test.restlet;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Properties;
-import java.util.concurrent.*;
 import java.util.logging.Logger;
 
-import com.tinkerpop.blueprints.TransactionalGraph;
-import com.tinkerpop.blueprints.impls.neo4j.Neo4jGraph;
 import org.apache.commons.io.FileUtils;
-import org.neo4j.kernel.InternalAbstractGraphDatabase;
-import org.neo4j.server.WrappingNeoServerBootstrapper;
 import org.restlet.Component;
 import org.restlet.Context;
 import org.restlet.Server;
@@ -21,13 +15,11 @@ import org.restlet.data.Protocol;
 import org.tuml.framework.ModelLoader;
 import org.tuml.ocl.TumlOcl2Parser;
 import org.tuml.runtime.adaptor.GraphDb;
-import org.tuml.runtime.adaptor.NakedGraph;
-import org.tuml.runtime.adaptor.NakedGraphFactory;
-import org.tuml.runtime.domain.neo4j.NakedNeo4jGraph;
+import org.tuml.runtime.adaptor.TumlGraph;
+import org.tuml.runtime.adaptor.TumlGraphFactory;
 import org.tuml.test.*;
 
 import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
-import org.tuml.test.meta.HumanMeta;
 
 public class TumlRestletServerComponent2 extends Component {
 	private static final Logger logger = Logger.getLogger(TumlRestletServerComponent2.class.getPackage().getName());
@@ -44,7 +36,7 @@ public class TumlRestletServerComponent2 extends Component {
 //            @Override
 //            public void run() {
 //                //Start the neo4j server
-//                InternalAbstractGraphDatabase graphdb = (InternalAbstractGraphDatabase) ((NakedNeo4jGraph)GraphDb.getDb()).getNeo4jGraph().getRawGraph();
+//                InternalAbstractGraphDatabase graphdb = (InternalAbstractGraphDatabase) ((TumlNeo4jGraph)GraphDb.getDb()).getNeo4jGraph().getRawGraph();
 //                WrappingNeoServerBootstrapper srv;
 //                srv = new WrappingNeoServerBootstrapper( graphdb );
 //                logger.info("starting neo4j server");;
@@ -93,7 +85,7 @@ public class TumlRestletServerComponent2 extends Component {
 
 		// Attach the application to the default virtual host
 		getDefaultHost().attach("/restAndJson", new TumlRestletServerApplication2());
-		getDefaultHost().attach("/tumllib", new TumlRestletServerApplication2());
+//		getDefaultHost().attach("/restAndJson/tumllib", new TumlRestletServerApplication2());
 	}
 
 	private void createDefaultData() {
@@ -211,7 +203,7 @@ public class TumlRestletServerComponent2 extends Component {
 		GraphDb.getDb().stopTransaction(Conclusion.SUCCESS);
 	}
 
-	protected NakedGraph createNakedGraph() {
+	protected TumlGraph createNakedGraph() {
 		Properties properties = new Properties();
 		try {
 			properties.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("tuml.env.properties"));
@@ -235,13 +227,10 @@ public class TumlRestletServerComponent2 extends Component {
 		}
 		try {
 			@SuppressWarnings("unchecked")
-			Class<NakedGraphFactory> factory = (Class<NakedGraphFactory>) Class.forName(properties.getProperty("nakedgraph.factory"));
+			Class<TumlGraphFactory> factory = (Class<TumlGraphFactory>) Class.forName(properties.getProperty("nakedgraph.factory"));
 			Method m = factory.getDeclaredMethod("getInstance", new Class[0]);
-			NakedGraphFactory nakedGraphFactory = (NakedGraphFactory) m.invoke(null);
-			// TinkerSchemaHelper schemaHelper = (TinkerSchemaHelper)
-			// Class.forName(properties.getProperty("schema.generator")).newInstance();
-			String dbWithSchemata = properties.getProperty("tinkerdb.withschema", "false");
-			return nakedGraphFactory.getNakedGraph(dbUrl, null, new Boolean(dbWithSchemata));
+			TumlGraphFactory nakedGraphFactory = (TumlGraphFactory) m.invoke(null);
+			return nakedGraphFactory.getTumlGraph(dbUrl);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

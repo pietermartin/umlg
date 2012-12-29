@@ -1,25 +1,20 @@
 package org.tuml.runtime.domain.neo4j;
 
-import java.util.Iterator;
-
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.lucene.search.NumericRangeQuery;
 import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.index.lucene.QueryContext;
 import org.neo4j.index.lucene.ValueContext;
-import org.neo4j.kernel.ha.HaSettings;
-import org.tuml.runtime.adaptor.NakedTinkerIndex;
+import org.tuml.runtime.adaptor.TumlTinkerIndex;
 
 import com.tinkerpop.blueprints.CloseableIterable;
-import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Element;
 import com.tinkerpop.blueprints.Index;
-import com.tinkerpop.blueprints.impls.neo4j.Neo4jEdge;
 
-public class NakedNeo4jIndex<T extends Element, S extends PropertyContainer> implements NakedTinkerIndex<T> {
+public class TumlNeo4jIndex<T extends Element, S extends PropertyContainer> implements TumlTinkerIndex<T> {
 	private Index<T> index;
 
-	public NakedNeo4jIndex(Index<T> index) {
+	public TumlNeo4jIndex(Index<T> index) {
 		if (index == null) {
 			throw new IllegalArgumentException("Index can not be null");
 		}

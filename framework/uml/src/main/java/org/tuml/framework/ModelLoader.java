@@ -37,6 +37,7 @@ public class ModelLoader {
 	public static final ResourceSet RESOURCE_SET = new ResourceSetImpl();
 	private static Model model;
 	private static Profile tumlValidationProfile;
+    private static List<Model> importedModelLibraries = new ArrayList<Model>();
 	private static final Logger logger = Logger.getLogger(ModelLoader.class.getPackage().getName());
 
 	public static Model loadModel(File modelFile) {
@@ -49,6 +50,11 @@ public class ModelLoader {
 		URI dirUri = URI.createFileURI(dir.getAbsolutePath());
 		model = (Model) load(dirUri.appendSegment(modelFile.getName()));
 		tumlValidationProfile = model.getAppliedProfile("Tuml::Validation");
+        for (PackageImport pi : model.getPackageImports()) {
+            if (pi.getImportedPackage() instanceof Model) {
+                importedModelLibraries.add((Model) pi.getImportedPackage());
+            }
+        }
 		logger.info(String.format("Done loading the model"));
 		return model;
 	}
@@ -57,7 +63,11 @@ public class ModelLoader {
 		return model;
 	}
 
-	public static Stereotype findStereotype(String name) {
+    public static List<Model> getImportedModelLibraries() {
+        return importedModelLibraries;
+    }
+
+    public static Stereotype findStereotype(String name) {
 		if (tumlValidationProfile != null) {
 			return tumlValidationProfile.getOwnedStereotype(name);
 		} else {

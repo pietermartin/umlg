@@ -17,9 +17,8 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.event.TransactionEventHandler;
 import org.neo4j.kernel.AbstractGraphDatabase;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
-import org.tuml.runtime.adaptor.NakedGraph;
-import org.tuml.runtime.adaptor.NakedTinkerIndex;
-import org.tuml.runtime.adaptor.TinkerSchemaHelper;
+import org.tuml.runtime.adaptor.TumlGraph;
+import org.tuml.runtime.adaptor.TumlTinkerIndex;
 import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
 import org.tuml.runtime.domain.PersistentObject;
 
@@ -34,25 +33,19 @@ import com.tinkerpop.blueprints.impls.neo4j.Neo4jEdge;
 import com.tinkerpop.blueprints.impls.neo4j.Neo4jGraph;
 import com.tinkerpop.blueprints.impls.neo4j.Neo4jVertex;
 
-public class NakedNeo4jGraph implements NakedGraph {
+public class TumlNeo4jGraph implements TumlGraph {
 
     private static final long serialVersionUID = 7025198246796291511L;
     private Neo4jGraph neo4jGraph;
     private TransactionEventHandler<PersistentObject> transactionEventHandler;
-    private TinkerSchemaHelper schemaHelper;
 
-    public NakedNeo4jGraph(Neo4jGraph neo4jGraph, TinkerSchemaHelper schemaHelper) {
+    public TumlNeo4jGraph(Neo4jGraph neo4jGraph) {
         super();
         this.neo4jGraph = neo4jGraph;
-        this.schemaHelper = schemaHelper;
     }
 
     public Neo4jGraph getNeo4jGraph() {
         return this.neo4jGraph;
-    }
-
-    public NakedNeo4jGraph(Neo4jGraph orientGraph, TinkerSchemaHelper schemaHelper, boolean withSchema) {
-        this(orientGraph, schemaHelper);
     }
 
     @Override
@@ -113,16 +106,16 @@ public class NakedNeo4jGraph implements NakedGraph {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
-    public <T extends Element> NakedTinkerIndex<T> createIndex(String indexName, Class<T> indexClass) {
-        return new NakedNeo4jIndex(this.neo4jGraph.createIndex(indexName, indexClass));
+    public <T extends Element> TumlTinkerIndex<T> createIndex(String indexName, Class<T> indexClass) {
+        return new TumlNeo4jIndex(this.neo4jGraph.createIndex(indexName, indexClass));
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
-    public <T extends Element> NakedTinkerIndex<T> getIndex(String indexName, Class<T> indexClass) {
+    public <T extends Element> TumlTinkerIndex<T> getIndex(String indexName, Class<T> indexClass) {
         Index<T> index = this.neo4jGraph.getIndex(indexName, indexClass);
         if (index != null) {
-            return new NakedNeo4jIndex(index);
+            return new TumlNeo4jIndex(index);
         } else {
             return null;
         }
@@ -218,7 +211,7 @@ public class NakedNeo4jGraph implements NakedGraph {
     @Override
     public void registerListeners() {
         if (transactionEventHandler == null) {
-            transactionEventHandler = new NakedTransactionEventHandler<PersistentObject>();
+            transactionEventHandler = new TumlTransactionEventHandler<PersistentObject>();
             neo4jGraph.getRawGraph().registerTransactionEventHandler(transactionEventHandler);
         }
     }

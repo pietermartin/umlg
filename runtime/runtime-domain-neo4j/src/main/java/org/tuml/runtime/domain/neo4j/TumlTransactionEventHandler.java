@@ -14,10 +14,10 @@ import org.tuml.runtime.domain.TumlNode;
 import org.tuml.runtime.validation.TumlConstraintViolation;
 import org.tuml.runtime.validation.TumlConstraintViolationException;
 
-public class NakedTransactionEventHandler<T> implements TransactionEventHandler<T> {
+public class TumlTransactionEventHandler<T> implements TransactionEventHandler<T> {
 
 
-	public NakedTransactionEventHandler() {
+	public TumlTransactionEventHandler() {
 		super();
 	}
 

@@ -3,6 +3,7 @@ package org.tuml.restlet.visitor.clazz;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Property;
+import org.tuml.framework.ModelLoader;
 import org.tuml.java.metamodel.*;
 import org.tuml.java.metamodel.annotation.OJAnnotatedClass;
 import org.tuml.java.metamodel.annotation.OJAnnotatedOperation;
@@ -58,14 +59,21 @@ public class AddTumlMetaDataUriFieldToRuntimePropertyEnum extends BaseVisitor im
 
     private void addTumlMetaDataUriToLiteral(Class clazz, PropertyWrapper pWrap, OJEnumLiteral literal) {
         String uri;
+        String contextPath;
         if (clazz != null && pWrap != null) {
-            uri = "\"/" + clazz.getModel().getName() + "/" + StringUtils.uncapitalize(pWrap.getType().getName()) + "MetaData\"";
+//            if (ModelLoader.getImportedModelLibraries().contains(pWrap.getModel())) {
+//                contextPath = ModelLoader.getModel().getName() + "/" + pWrap.getModel().getName();
+//            } else {
+                contextPath = ModelLoader.getModel().getName();
+//            }
+            uri = "\"/" + contextPath + "/" + StringUtils.uncapitalize(pWrap.getType().getName()) + "MetaData\"";
         } else {
             uri = "\"\"";
         }
         OJField uriAttribute = new OJField();
         uriAttribute.setType(new OJPathName("String"));
         uriAttribute.setInitExp(uri);
+        uriAttribute.setName("tumlMetaDataUri");
         literal.addToAttributeValues(uriAttribute);
 
         OJField jsonField = literal.findAttributeValue("json");

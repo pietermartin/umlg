@@ -31,6 +31,18 @@ public class TumlRestletGenerationUtil {
     public static final OJPathName TumlRestletNode = new OJPathName("org.tuml.runtime.restlet.domain.TumlRestletNode");
     public static final OJPathName RestletToJsonUtil = new OJPathName("org.tuml.runtime.restlet.util.RestletToJsonUtil");
     public static final OJPathName TumlMetaQueryServerResourceImpl = new OJPathName("org.tuml.runtime.restlet.TumlMetaQueryServerResourceImpl");
+    public static final OJPathName Component = new OJPathName("org.restlet.Component");
+    public static final OJPathName Application = new OJPathName("org.restlet.Application");
+    public static final OJPathName Server = new OJPathName("org.restlet.Server");
+    public static final OJPathName Context = new OJPathName("org.restlet.Context");
+    public static final OJPathName Protocol = new OJPathName("org.restlet.data.Protocol");
+    public static final OJPathName Restlet = new OJPathName("org.restlet.Restlet");
+    public static final OJPathName Template = new OJPathName("org.restlet.routing.Template");
+    public static final OJPathName Directory = new OJPathName("org.restlet.resource.Directory");
+
+    public static final OJPathName TumlGuiServerResource2 = new OJPathName("org.tuml.ui.TumlGuiServerResource2");
+
+
 
     public static String getFieldTypeForProperty(Property p) {
         PropertyWrapper propertyWrapper = new PropertyWrapper(p);

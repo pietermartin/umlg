@@ -45,6 +45,7 @@
 							<resources>
 								<resource>
                                     <directory>src/main/generated-resources</directory>
+                                    <directory>src/main/model</directory>
                                 </resource>
 							</resources>
 						</configuration>

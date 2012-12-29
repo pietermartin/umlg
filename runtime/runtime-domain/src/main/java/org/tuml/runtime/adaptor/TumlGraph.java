@@ -16,7 +16,7 @@ import com.tinkerpop.blueprints.IndexableGraph;
 import com.tinkerpop.blueprints.TransactionalGraph;
 import com.tinkerpop.blueprints.Vertex;
 
-public interface NakedGraph extends TransactionalGraph, IndexableGraph, Serializable  {
+public interface TumlGraph extends TransactionalGraph, IndexableGraph, Serializable  {
 	void setCheckElementsInTransaction(boolean b);
 	void startTransaction();
 	void incrementTransactionCount();
@@ -37,7 +37,7 @@ public interface NakedGraph extends TransactionalGraph, IndexableGraph, Serializ
     void resume(Transaction tobj);
     Transaction suspend();
     Transaction getTransaction();
-    public <T extends Element> NakedTinkerIndex<T> getIndex(String indexName, Class<T> indexClass);
-    public <T extends Element> NakedTinkerIndex<T> createIndex(String indexName, Class<T> indexClass);
+    public <T extends Element> TumlTinkerIndex<T> getIndex(String indexName, Class<T> indexClass);
+    public <T extends Element> TumlTinkerIndex<T> createIndex(String indexName, Class<T> indexClass);
     boolean hasEdgeBeenDeleted(Edge edge);
 }

@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xmi:XMI xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:TumlValidation="http:///schemas/TumlValidation/_FLAf4CS6EeKLnOYxvH_zlw/9" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xsi:schemaLocation="http:///schemas/TumlValidation/_FLAf4CS6EeKLnOYxvH_zlw/9 validation.profile.uml#_FLCVECS6EeKLnOYxvH_zlw">
-  <uml:Model xmi:id="_qb8akM37EdqwVrslYOdUDA" name="restAndJson">
+  <uml:Model xmi:id="_qb8akM37EdqwVrslYOdUDA" name="restAndJson" URI="" viewpoint="">
+    <ownedComment xmi:id="_f7bO4FHfEeKwIp56YBZIxw">
+      <body>Halo, I am your first comment.</body>
+    </ownedComment>
     <elementImport xmi:id="_H7SxMN4kEeGdB9TPHp60mw">
       <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
     </elementImport>

@@ -5,6 +5,7 @@ import java.util.Set;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
+import org.tuml.framework.ModelLoader;
 import org.tuml.java.metamodel.OJConstructor;
 import org.tuml.java.metamodel.OJField;
 import org.tuml.java.metamodel.OJPathName;
@@ -82,25 +83,29 @@ public class AddTumlLookupCompositeParentUriToRuntimePropertyEnum extends BaseVi
 	private void doWithLiteral(String literalName, Class clazz, PropertyWrapper propertyWrapper, OJEnumLiteral literal, boolean onCompositeParent) {
 		String uri;
 		if (TumlClassOperations.getOtherEndToComposite(clazz) != null && propertyWrapper != null && propertyWrapper.hasLookup()) {
-			// if (literal.getName().equals(propertyWrapper.fieldname())) {
-			if (!onCompositeParent) {
-				uri = "\"/" + propertyWrapper.getModel().getName() + "/"
+            String contextPath;
+//            if (ModelLoader.getImportedModelLibraries().contains(propertyWrapper.getModel())) {
+//                contextPath = ModelLoader.getModel().getName() + "/" + propertyWrapper.getModel().getName();
+//            } else {
+                contextPath = ModelLoader.getModel().getName();
+//            }
+
+            if (!onCompositeParent) {
+				uri = "\"/" + contextPath + "/"
 						+ TumlClassOperations.getPathName(propertyWrapper.getOwningType()).getLast().toLowerCase() + "s/{"
 						+ TumlClassOperations.getPathName(propertyWrapper.getOwningType()).getLast().toLowerCase() + "Id}/"
 						+ propertyWrapper.lookupCompositeParent() + "\"";
 			} else {
 				Type type = TumlClassOperations.getOtherEndToComposite(clazz).getType();
-				uri = "\"/" + propertyWrapper.getModel().getName() + "/" + TumlClassOperations.getPathName(type).getLast().toLowerCase() + "s/{"
+				uri = "\"/" + contextPath + "/" + TumlClassOperations.getPathName(type).getLast().toLowerCase() + "s/{"
 						+ TumlClassOperations.getPathName(type).getLast().toLowerCase() + "Id}/" + propertyWrapper.lookupCompositeParent() + "\"";
 			}
 		} else {
 			// The non lookup fields carry a empty string
 			uri = "\"\"";
 		}
-		// } else {
-		// }
 		OJField uriAttribute = new OJField();
-		uriAttribute.setName(literalName);
+		uriAttribute.setName("tumlCompositeParentLookupUri");
 		uriAttribute.setType(new OJPathName("String"));
 		uriAttribute.setInitExp(uri);
 		literal.addToAttributeValues(uriAttribute);

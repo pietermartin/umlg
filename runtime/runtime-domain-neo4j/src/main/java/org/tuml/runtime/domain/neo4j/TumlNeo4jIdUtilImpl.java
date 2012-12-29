@@ -4,11 +4,11 @@ import org.tuml.runtime.adaptor.TinkerIdUtil;
 
 import com.tinkerpop.blueprints.Vertex;
 
-public class TinkerIdUtilImpl implements TinkerIdUtil {
+public class TumlNeo4jIdUtilImpl implements TinkerIdUtil {
 
-	private static TinkerIdUtil INSTANCE = new TinkerIdUtilImpl();
+	private static TinkerIdUtil INSTANCE = new TumlNeo4jIdUtilImpl();
 	
-	private TinkerIdUtilImpl() {
+	private TumlNeo4jIdUtilImpl() {
 		super();
 	}
 

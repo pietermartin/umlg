@@ -10,7 +10,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.tuml.runtime.adaptor.GraphDb;
-import org.tuml.runtime.adaptor.NakedTinkerIndex;
+import org.tuml.runtime.adaptor.TumlTinkerIndex;
 import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
 import org.tuml.runtime.adaptor.TransactionThreadVar;
 import org.tuml.runtime.collection.Qualifier;
@@ -37,7 +37,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 
     protected Collection<E> internalCollection;
     protected OclStdLibCollection<E> oclStdLibCollection;
-    protected NakedTinkerIndex<Edge> index;
+    protected TumlTinkerIndex<Edge> index;
     protected boolean loaded = false;
     protected TumlNode owner;
     // This is the vertex of the owner of the collection
@@ -562,7 +562,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
         if (!isInverseOrdered()) {
             throw new IllegalStateException("addOrderToInverseIndex can only be called where the inverse side of the association is ordered");
         }
-        NakedTinkerIndex<Edge> index = GraphDb.getDb().getIndex(node.getUid() + ":::" + getInverseQualifiedName(), Edge.class);
+        TumlTinkerIndex<Edge> index = GraphDb.getDb().getIndex(node.getUid() + ":::" + getInverseQualifiedName(), Edge.class);
         if (index == null) {
             index = GraphDb.getDb().createIndex(node.getUid() + ":::" + getInverseQualifiedName(), Edge.class);
         }

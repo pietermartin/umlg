@@ -1,33 +1,27 @@
 package org.tuml.runtime.adaptor;
 
 
-import com.tinkerpop.blueprints.Vertex;
-
-import java.util.HashMap;
-import java.util.Map;
-
 public class GraphDb {
 
-    private static NakedGraph staticdb;
+    private static TumlGraph staticdb;
 
     private GraphDb() {
     }
 
-    private static ThreadLocal<NakedGraph> dbVar = new ThreadLocal<NakedGraph>() {
+    private static ThreadLocal<TumlGraph> dbVar = new ThreadLocal<TumlGraph>() {
+//        @Override
+//        public void set(TumlGraph db) {
+//            super.set(db);
+//        }
         @Override
-        public void set(NakedGraph db) {
-            super.set(db);
-        }
-
-        @Override
-        protected NakedGraph initialValue() {
+        protected TumlGraph initialValue() {
             return staticdb;
         }
     };
 
-    public static NakedGraph getDb() {
+    public static TumlGraph getDb() {
         return dbVar.get();
-//		NakedGraph nakedGraph = dbVar.get();
+//		TumlGraph nakedGraph = dbVar.get();
 //		if (nakedGraph==null) {
 //			nakedGraph = staticdb;
 //			setDb(nakedGraph);
@@ -35,12 +29,12 @@ public class GraphDb {
 //		return nakedGraph;
     }
 
-    public static void setDb(NakedGraph db) {
+    public static void setDb(TumlGraph db) {
         staticdb = db;
-        dbVar.set(db);
-        if (db == null) {
-            dbVar.remove();
-        }
+//        dbVar.set(db);
+//        if (db == null) {
+//            dbVar.remove();
+//        }
     }
 
     public static void remove() {

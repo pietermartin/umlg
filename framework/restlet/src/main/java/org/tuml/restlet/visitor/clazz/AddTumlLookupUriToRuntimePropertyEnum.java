@@ -5,6 +5,7 @@ import java.util.Set;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
+import org.tuml.framework.ModelLoader;
 import org.tuml.java.metamodel.OJConstructor;
 import org.tuml.java.metamodel.OJField;
 import org.tuml.java.metamodel.OJPathName;
@@ -93,13 +94,20 @@ public class AddTumlLookupUriToRuntimePropertyEnum extends BaseVisitor implement
 		// Add tumlLookupUri to literal
 		String uri;
 		if (TumlClassOperations.getOtherEndToComposite(clazz) != null && propertyWrapper != null && propertyWrapper.hasLookup()) {
+            String contextPath;
+//            if (ModelLoader.getImportedModelLibraries().contains(propertyWrapper.getModel())) {
+//                contextPath = ModelLoader.getModel().getName() + "/" + propertyWrapper.getModel().getName();
+//            } else {
+                contextPath = ModelLoader.getModel().getName();
+//            }
 			if (!onCompositeParent) {
-				uri = "\"/" + propertyWrapper.getModel().getName() + "/"
+				uri = "\"/" + contextPath + "/"
 						+ TumlClassOperations.getPathName(propertyWrapper.getOwningType()).getLast().toLowerCase() + "s/{"
 						+ TumlClassOperations.getPathName(propertyWrapper.getOwningType()).getLast().toLowerCase() + "Id}/" + propertyWrapper.lookup() + "\"";
 			} else {
 				Type type = TumlClassOperations.getOtherEndToComposite(clazz).getType();
-				uri = "\"/" + propertyWrapper.getModel().getName() + "/" + TumlClassOperations.getPathName(type).getLast().toLowerCase() + "s/{"
+				uri = "\"/" + contextPath + "/" +
+                        TumlClassOperations.getPathName(type).getLast().toLowerCase() + "s/{"
 						+ TumlClassOperations.getPathName(type).getLast().toLowerCase() + "Id}/" + propertyWrapper.lookup() + "\"";
 			}
 		} else {
@@ -107,7 +115,7 @@ public class AddTumlLookupUriToRuntimePropertyEnum extends BaseVisitor implement
 			uri = "\"\"";
 		}
 		OJField uriAttribute = new OJField();
-		uriAttribute.setName(literalName);
+		uriAttribute.setName("tumlLookupUri");
 		uriAttribute.setType(new OJPathName("String"));
 		uriAttribute.setInitExp(uri);
 		literal.addToAttributeValues(uriAttribute);
@@ -119,19 +127,11 @@ public class AddTumlLookupUriToRuntimePropertyEnum extends BaseVisitor implement
 		} else {
 			sb.append(", \\\"tumlLookupOnCompositeParentUri\\\": \\");
 		}
-		// if (literal.getName().equals(propertyWrapper.fieldname())) {
 		sb.append(uri.substring(0, uri.length() - 1) + "\\\"");
 		String initExp = jsonField.getInitExp();
 		int indexOf = initExp.lastIndexOf("}");
 		initExp = initExp.substring(0, indexOf) + sb.toString() + "}\"";
 		jsonField.setInitExp(initExp);
-		// } else {
-		// sb.append("\"\\\"");
-		// String initExp = jsonField.getInitExp();
-		// int indexOf = initExp.lastIndexOf("}");
-		// initExp = initExp.substring(0, indexOf) + sb.toString() + "}\"";
-		// jsonField.setInitExp(initExp);
-		// }
 	}
 
 	@Override

@@ -20,7 +20,11 @@ public class TinkerGenerationUtil {
 
     public static final String TINKER_DB_NULL = "__NULL__";
 
+
     public static final String QualifiedNameClassMapName = "qualifiedNameClassMap";
+    public static final OJPathName TumlGraphCreator = new OJPathName("org.tuml.runtime.adaptor.TumlGraphCreator");
+    public static final OJPathName ModelLoader = new OJPathName("org.tuml.framework.ModelLoader");
+    public static final OJPathName TumlOcl2Parser = new OJPathName("org.tuml.ocl.TumlOcl2Parser");
     public static final OJPathName TumlLibNode = new OJPathName("org.tuml.runtime.domain.TumlLibNode");
     public static final OJPathName TumlMetaNode = new OJPathName("org.tuml.runtime.domain.TumlMetaNode");
     public static final OJPathName QualifiedNameClassMap = new OJPathName("org.tuml.root.QualifiedNameClassMap");

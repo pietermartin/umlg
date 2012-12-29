@@ -12,11 +12,12 @@ import org.tuml.restlet.visitor.clazz.*;
 import org.tuml.restlet.visitor.model.AppResourceServerResourceBuilder;
 import org.tuml.restlet.visitor.model.EnumLookupResourceServerResourceBuilder;
 import org.tuml.restlet.visitor.model.QueryExecuteResourceBuilder;
+import org.tuml.restlet.visitor.model.RestletComponentAndApplicationGenerator;
 
 public class RestletVisitors {
 
 	private static final String RESTLET_SOURCE_FOLDER = "src/main/generated-java-restlet";
-	
+
 	public static List<Visitor<?>> getDefaultJavaVisitors() {
 		List<Visitor<?>> result = new ArrayList<Visitor<?>>();
 		result.addAll(DefaultVisitors.getDefaultJavaVisitors());
@@ -43,6 +44,10 @@ public class RestletVisitors {
 		result.add(new EnumLookupResourceServerResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
 		result.add(new TumlRestletNodeBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
 		result.add(new QueryExecuteResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+
+        result.add(new RestletComponentAndApplicationGenerator(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+
+
 		return result;
 	}
 	

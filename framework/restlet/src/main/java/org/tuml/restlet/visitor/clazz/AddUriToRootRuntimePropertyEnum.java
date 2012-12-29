@@ -6,6 +6,7 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Model;
+import org.tuml.framework.ModelLoader;
 import org.tuml.java.metamodel.OJConstructor;
 import org.tuml.java.metamodel.OJField;
 import org.tuml.java.metamodel.OJPathName;
@@ -71,13 +72,20 @@ public class AddUriToRootRuntimePropertyEnum extends BaseVisitor implements Visi
 			}
 			String uri;
 			if (clazz != null) {
-				uri = "\"/" + clazz.getModel().getName() + "/" + TumlClassOperations.getPathName(clazz).getLast().toLowerCase() + "s\"";
+                String contextPath;
+//                if (ModelLoader.getImportedModelLibraries().contains(clazz.getModel())) {
+//                    contextPath = ModelLoader.getModel().getName() + "/" + clazz.getModel().getName();
+//                } else {
+                    contextPath = ModelLoader.getModel().getName();
+//                }
+				uri = "\"/" + contextPath + "/" + TumlClassOperations.getPathName(clazz).getLast().toLowerCase() + "s\"";
 			} else {
 				uri = "\"/" + model.getName() + "\"";
 			}
 			OJField uriAttribute = new OJField();
 			uriAttribute.setType(new OJPathName("String"));
 			uriAttribute.setInitExp(uri);
+            uriAttribute.setName("tumlUri");
 			literal.addToAttributeValues(uriAttribute);
 
 			OJField jsonField = literal.findAttributeValue("json");
