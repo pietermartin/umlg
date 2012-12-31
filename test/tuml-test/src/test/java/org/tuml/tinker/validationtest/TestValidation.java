@@ -1,4 +1,4 @@
-package org.nakeuml.tinker.validationtest;
+package org.tuml.tinker.validationtest;
 
 import org.junit.Test;
 import org.neo4j.graphdb.TransactionFailureException;

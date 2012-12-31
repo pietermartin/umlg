@@ -227,7 +227,7 @@ public class TumlRestletServerComponent2 extends Component {
 		}
 		try {
 			@SuppressWarnings("unchecked")
-			Class<TumlGraphFactory> factory = (Class<TumlGraphFactory>) Class.forName(properties.getProperty("nakedgraph.factory"));
+			Class<TumlGraphFactory> factory = (Class<TumlGraphFactory>) Class.forName(properties.getProperty("tumlgraph.factory"));
 			Method m = factory.getDeclaredMethod("getInstance", new Class[0]);
 			TumlGraphFactory nakedGraphFactory = (TumlGraphFactory) m.invoke(null);
 			return nakedGraphFactory.getTumlGraph(dbUrl);

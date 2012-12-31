@@ -30,6 +30,7 @@ public class GraphDb {
     }
 
     public static void setDb(TumlGraph db) {
+        dbVar.remove();
         staticdb = db;
 //        dbVar.set(db);
 //        if (db == null) {

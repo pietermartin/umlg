@@ -42,6 +42,7 @@ public class TestOrderedListKeepsIndex extends BaseLocalDbTest {
         Assert.assertEquals(0, handTest.getFinger().indexOf(fingerTest));
     }
 
+    //TODO think about the semantics of addToX
     @Test
     public void testOrderedListMoveIndex() {
         db.startTransaction();
@@ -65,6 +66,6 @@ public class TestOrderedListKeepsIndex extends BaseLocalDbTest {
         handTest.addToFinger(fingerTest);
         db.stopTransaction(TransactionalGraph.Conclusion.SUCCESS);
 
-        Assert.assertEquals(0, handTest.getFinger().indexOf(fingerTest));
+        Assert.assertEquals(2, handTest.getFinger().indexOf(fingerTest));
     }
 }
