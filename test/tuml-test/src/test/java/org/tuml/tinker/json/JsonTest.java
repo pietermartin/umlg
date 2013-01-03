@@ -27,12 +27,11 @@ public class JsonTest extends BaseLocalDbTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testEmbeddedManiesToJson() throws JsonParseException, JsonMappingException, IOException {
-		db.startTransaction();
 		God god = new God(true);
 		god.addToEmbeddedString("embeddedString1");
 		god.addToEmbeddedString("embeddedString2");
 		god.addToEmbeddedString("embeddedString3");
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(4, countVertices());
 
 		ObjectMapper mapper = new ObjectMapper();
@@ -60,7 +59,6 @@ public class JsonTest extends BaseLocalDbTest {
 
 	@Test
 	public void testEmbeddedManiesFromJson() throws JsonParseException, JsonMappingException, IOException {
-		db.startTransaction();
 		God god = new God(true);
 		god.addToEmbeddedString("embeddedString1");
 		god.addToEmbeddedString("embeddedString2");
@@ -68,7 +66,7 @@ public class JsonTest extends BaseLocalDbTest {
 		god.addToEmbeddedInteger(1);
 		god.addToEmbeddedInteger(2);
 		god.addToEmbeddedInteger(3);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(7, countVertices());
 
 		String json = god.toJson();
@@ -112,14 +110,13 @@ public class JsonTest extends BaseLocalDbTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testJsonToFromWithNulls() throws JsonParseException, JsonMappingException, IOException {
-		db.startTransaction();
 		God g1 = new God(true);
 		g1.setName("g1");
 		g1.setReason(REASON.BAD);
 		God g2 = new God(true);
 		g2.setName("g2");
 		g2.setReason(null);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		Map<String, Object> jsonMap = objectMapper.readValue(g1.toJson(), Map.class);
@@ -128,12 +125,11 @@ public class JsonTest extends BaseLocalDbTest {
 		jsonMap = objectMapper.readValue(g2.toJson(), Map.class);
 		Assert.assertEquals("null", jsonMap.get("reason"));
 
-		db.startTransaction();
 		God god1FromJson = new God(true);
 		god1FromJson.fromJson(g1.toJson());
 		God god2FromJson = new God(true);
 		god2FromJson.fromJson(g2.toJson());
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 
 		Assert.assertEquals(REASON.BAD, god1FromJson.getReason());
 		Assert.assertEquals("g1", god1FromJson.getName());
@@ -147,12 +143,11 @@ public class JsonTest extends BaseLocalDbTest {
 
 	@Test
 	public void testDates() throws JsonParseException, JsonMappingException, IOException {
-		db.startTransaction();
 		God g1 = new God(true);
 		g1.setName("g1");
 		DateTime beginning = new DateTime();
 		g1.setBeginning(beginning);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 
 		God testG = new God(g1.getVertex());
 		Assert.assertEquals(beginning, testG.getBeginning());
@@ -180,7 +175,6 @@ public class JsonTest extends BaseLocalDbTest {
 	
 	@Test
 	public void testWithInheritence() throws JsonParseException, JsonMappingException, IOException {
-		db.startTransaction();
 		God g1 = new God(true);
 		g1.setName("g1");
 		DateTime beginning = new DateTime();
@@ -191,7 +185,7 @@ public class JsonTest extends BaseLocalDbTest {
 		biped1.setName("biped1");
 		Quadped quadped1 = new Quadped(g1);
 		quadped1.setName("quadped1");
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		
 		System.out.println(quadped1.toJson());
 		ObjectMapper objectMapper = new ObjectMapper();

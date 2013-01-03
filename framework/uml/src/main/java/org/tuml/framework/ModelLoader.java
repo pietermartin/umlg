@@ -67,6 +67,15 @@ public class ModelLoader {
         return importedModelLibraries;
     }
 
+    public static boolean isTumlLibIncluded() {
+        for (Model importedModels : importedModelLibraries) {
+            if (importedModels.getQualifiedName().equals("tumllib")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static Stereotype findStereotype(String name) {
 		if (tumlValidationProfile != null) {
 			return tumlValidationProfile.getOwnedStereotype(name);

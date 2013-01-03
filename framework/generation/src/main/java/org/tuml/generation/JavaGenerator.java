@@ -42,7 +42,6 @@ public class JavaGenerator {
         List<Visitor<?>> visitorsX = new ArrayList<Visitor<?>>();
         for (List<Visitor<?>> v : visitors) {
             visitorsX.addAll(v);
-
         }
         generate(modelFile, projectRoot, visitorsX);
     }

@@ -24,23 +24,12 @@
 
         <link rel="stylesheet" href="/${app.rootUrl}/css/tuml.css" type="text/css">
 
-
-
-
         <script src="/${app.rootUrl}/javascript/jquery/jquery-1.8.3.js"></script>
 
         <script src="/${app.rootUrl}/javascript/jquery-ui/jquery-ui-1.9.2.custom.js"></script>
 
-
-
-        <!--<script src="/${app.rootUrl}/javascript/slickgrid/lib/jquery-1.7.2.js"></script>-->
-        <!--<script src="/${app.rootUrl}/javascript/slickgrid/lib/jquery-ui-1.8.16.custom.min.js"></script>-->
         <script src="/${app.rootUrl}/javascript/slickgrid/lib/jquery.event.drag-2.0.min.js"></script>
 
-        <!--<script src="/${app.rootUrl}/javascript/jquery-easyui/jquery.panel.js"></script>-->
-        <!--<script src="/${app.rootUrl}/javascript/jquery-easyui/jquery.linkbutton.js"></script>-->
-        <!--<script src="/${app.rootUrl}/javascript/jquery-easyui/jquery.parser.js"></script>-->
-        <!--<script src="/${app.rootUrl}/javascript/jquery-easyui/jquery.tabs.js"></script>-->
 
         <script src="/${app.rootUrl}/javascript/layout/jquery.layout-latest.js"></script>
 
@@ -90,6 +79,7 @@
             $(document).ready(function() {
                 //"${app.uri}" is replaced when the app starts up with the actual application url 
                 tumlModelName = "${app.rootUrl}";
+                isTumlLib = "${app.tumlLib?string}" == "true" ? true : false;
                 var uiManager = new Tuml.UiManager("${app.uri}");
             });
         </script>

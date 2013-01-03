@@ -39,7 +39,6 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
 	public void test() {
-		db.startTransaction();
 		Bank bank = new Bank(true);
 		bank.setName("thebank");
 		Employee employee1 = new Employee(true);
@@ -51,7 +50,7 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 		Employee employee3 = new Employee(true);
 		employee3.setName("employee3");
 		bank.addToEmployee(employee3);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 
 		Object result = TumlOclExecutor.executeOclQuery("testoclmodel::org::tuml::qualifier::Bank", bank, "self.employee->select(name='employee3')");
 		Assert.assertTrue(result instanceof TinkerOrderedSet<?>);
@@ -62,7 +61,6 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
 	public void testAllInstances() {
-		db.startTransaction();
 		Bank bank = new Bank(true);
 		bank.setName("thebank");
 		Employee employee1 = new Employee(true);
@@ -74,7 +72,7 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 		Employee employee3 = new Employee(true);
 		employee3.setName("employee3");
 		bank.addToEmployee(employee3);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 
 		Object result = TumlOclExecutor.executeOclQuery("testoclmodel::org::tuml::qualifier::Employee", "Employee.allInstances()");
 		Assert.assertTrue(result instanceof TinkerSet<?>);
@@ -84,7 +82,6 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 	
 	@Test
 	public void testToJson() {
-		db.startTransaction();
 		Bank bank = new Bank(true);
 		bank.setName("thebank");
 		Employee employee1 = new Employee(true);
@@ -96,7 +93,7 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 		Employee employee3 = new Employee(true);
 		employee3.setName("employee3");
 		bank.addToEmployee(employee3);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 
 		String json = TumlOclExecutor.executeOclQueryToJson("testoclmodel::org::tuml::qualifier::Bank", bank, "self.employee->select(name='employee3')");
 		System.out.println(json);
@@ -105,7 +102,6 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 
 	@Test
 	public void testTuples1() {
-		db.startTransaction();
 		Bank bank = new Bank(true);
 		bank.setName("thebank");
 		Employee employee1 = new Employee(true);
@@ -117,7 +113,7 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 		Employee employee3 = new Employee(true);
 		employee3.setName("employee3");
 		bank.addToEmployee(employee3);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 
 		Object result = TumlOclExecutor.executeOclQuery("testoclmodel::org::tuml::qualifier::Bank", bank, "Tuple{name: String = name, employeeSize: Integer = employeeSize}");
 		Assert.assertTrue(result instanceof Map);
@@ -130,7 +126,6 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 	
 	@Test
 	public void testTuples1ToJson() {
-		db.startTransaction();
 		Bank bank = new Bank(true);
 		bank.setName("thebank");
 		Employee employee1 = new Employee(true);
@@ -142,7 +137,7 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 		Employee employee3 = new Employee(true);
 		employee3.setName("employee3");
 		bank.addToEmployee(employee3);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 
 		String json = TumlOclExecutor.executeOclQueryToJson("testoclmodel::org::tuml::qualifier::Bank", bank, "Tuple{name: String = name, employeeSize: Integer = employeeSize}");
 		System.out.println(json);
@@ -150,7 +145,6 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 
 	@Test
 	public void testTuples2() {
-		db.startTransaction();
 		Bank bank = new Bank(true);
 		bank.setName("thebank");
 		Employee employee1 = new Employee(true);
@@ -162,7 +156,7 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 		Employee employee3 = new Employee(true);
 		employee3.setName("employee3");
 		bank.addToEmployee(employee3);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 
 		//The employee names should specify a Bag, bug in eclipse ocl
 		Object result = TumlOclExecutor.executeOclQuery("testoclmodel::org::tuml::qualifier::Bank", bank, "Tuple{bank: Bank = self, employeeNames: Sequence(String) = employee.name}");
@@ -178,7 +172,6 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 
 	@Test
 	public void testTuples2ToJSon() {
-		db.startTransaction();
 		Bank bank = new Bank(true);
 		bank.setName("thebank");
 		Employee employee1 = new Employee(true);
@@ -190,7 +183,7 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 		Employee employee3 = new Employee(true);
 		employee3.setName("employee3");
 		bank.addToEmployee(employee3);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 
 		//The employee names should specify a Bag, bug in eclipse ocl
 		String json = TumlOclExecutor.executeOclQueryToJson("testoclmodel::org::tuml::qualifier::Bank", bank, "Tuple{bank: Bank = self, employeeNames: Sequence(String) = employee.name}");

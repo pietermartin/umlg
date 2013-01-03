@@ -18,11 +18,10 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
 
 	@Test
 	public void testOneToManyEnum() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
 		god.addToREASON(REASON.GOOD);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(2, countVertices());
 		Assert.assertEquals(2, countEdges());
 		God g = new God(god.getVertex());
@@ -32,11 +31,10 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
 	
 	@Test
 	public void testOneToManyEmbeddedString() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
 		god.addToEmbeddedString("testthis");
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(2, countVertices());
 		Assert.assertEquals(2, countEdges());
 		God g = new God(god.getVertex());
@@ -46,11 +44,10 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
 	
 	@Test
 	public void testOneToManyEmbeddedInteger() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
 		god.addToEmbeddedInteger(1);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(2, countVertices());
 		Assert.assertEquals(2, countEdges());
 		God g = new God(god.getVertex());
@@ -60,11 +57,10 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
 	
 	@Test
 	public void testOneEmbeddedEnum() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
 		god.setReason(REASON.GOOD);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(2, countVertices());
 		Assert.assertEquals(2, countEdges());
 		God g = new God(god.getVertex());
@@ -73,13 +69,12 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
 	
 	@Test
 	public void testOneEmbeddedEntity() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
 		Mamal mamal = new Mamal(god);
 		mamal.setName("PET");
 		god.setPet(mamal);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(2, countVertices());
 		Assert.assertEquals(3, countEdges());
 		God g = new God(god.getVertex());
@@ -88,7 +83,6 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
 	
 	@Test
 	public void testManyEmbeddedEntity() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
 		Mamal mamal1 = new Mamal(god);
@@ -100,56 +94,50 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
 		Mamal mamal4 = new Mamal(god);
 		mamal4.setName("PET4");
 		god.addToAnimalFarm(mamal1);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(5, countVertices());
 		Assert.assertEquals(6, countEdges());
-		db.startTransaction();
 		god.addToAnimalFarm(mamal2);
 		god.addToAnimalFarm(mamal3);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(5, countVertices());
 		Assert.assertEquals(8, countEdges());
-		db.startTransaction();
 		god.addToAnimalFarm(mamal2);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(5, countVertices());
 		Assert.assertEquals(8, countEdges());
 	}
 	
 	@Test
 	public void testRemoveManyEnum() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
 		god.addToREASON(REASON.GOOD);
 		god.addToREASON(REASON.BAD);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(3, countVertices());
 		Assert.assertEquals(3, countEdges());
 		God g = new God(god.getVertex());
 		Assert.assertEquals(2, g.getREASON().size());
-		db.startTransaction();
 		g.removeFromREASON(REASON.GOOD);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(2, countVertices());
 		Assert.assertEquals(2, countEdges());
 	}
 	
 	@Test
 	public void testRemoveEmbeddedString() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
 		god.addToEmbeddedString("testthis");
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(2, countVertices());
 		Assert.assertEquals(2, countEdges());
 		God g = new God(god.getVertex());
 		Assert.assertEquals(1, g.getEmbeddedString().size());
 		Assert.assertEquals("testthis", g.getEmbeddedString().iterator().next());
-		db.startTransaction();
 		g.removeFromEmbeddedString("testthis");
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(1, countVertices());
 		Assert.assertEquals(1, countEdges());
 		God g2 = new God(god.getVertex());
@@ -161,12 +149,12 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
 		God g = new God(true);
 		g.setName("ANOTHERGOD");
 		org.tuml.embeddedtest.TestEmbedded testEmbedded = new org.tuml.embeddedtest.TestEmbedded(g);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		org.tuml.embeddedtest.TestEmbedded gt = new org.tuml.embeddedtest.TestEmbedded(testEmbedded.getVertex());
 		gt.setName("asd");
 		Assert.assertEquals(new Integer(1), gt.getManyOrderedRequiredInteger().iterator().next());
 		gt.clearManyOrderedRequiredInteger();
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 	}
 
 	@Test
@@ -175,14 +163,14 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
 		g.setName("ANOTHERGOD");
 		org.tuml.embeddedtest.TestEmbedded testEmbedded = new org.tuml.embeddedtest.TestEmbedded(g);
 		testEmbedded.setName("asd");
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		org.tuml.embeddedtest.TestEmbedded gt = new org.tuml.embeddedtest.TestEmbedded(testEmbedded.getVertex());
 		Assert.assertEquals(Integer.valueOf(1), gt.getManyOrderedRequiredInteger().get(0));
 		Assert.assertEquals(Integer.valueOf(2), gt.getManyOrderedRequiredInteger().get(1));
 		Assert.assertEquals(Integer.valueOf(3), gt.getManyOrderedRequiredInteger().get(2));
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		gt.getManyOrderedRequiredInteger().add(2, 4);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(4, gt.getManyOrderedRequiredInteger().size());
 		Assert.assertEquals(Integer.valueOf(1), gt.getManyOrderedRequiredInteger().get(0));
 		Assert.assertEquals(Integer.valueOf(2), gt.getManyOrderedRequiredInteger().get(1));
@@ -196,21 +184,21 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
 		g.setName("ANOTHERGOD");
 		org.tuml.embeddedtest.TestEmbedded testEmbedded = new org.tuml.embeddedtest.TestEmbedded(g);
 		testEmbedded.setName("asd");
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		org.tuml.embeddedtest.TestEmbedded gt = new org.tuml.embeddedtest.TestEmbedded(testEmbedded.getVertex());
 		Assert.assertEquals("a", gt.getManyRequiredOrderedUniqueString().get(0));
 		Assert.assertEquals("b", gt.getManyRequiredOrderedUniqueString().get(1));
 		Assert.assertEquals("c", gt.getManyRequiredOrderedUniqueString().get(2));
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		gt.getManyRequiredOrderedUniqueString().add(2, "d");
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals("a", gt.getManyRequiredOrderedUniqueString().get(0));
 		Assert.assertEquals("b", gt.getManyRequiredOrderedUniqueString().get(1));
 		Assert.assertEquals("d", gt.getManyRequiredOrderedUniqueString().get(2));
 		Assert.assertEquals("c", gt.getManyRequiredOrderedUniqueString().get(3));
 		
 		gt.addToManyRequiredOrderedUniqueString("a");
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(4, gt.getManyRequiredOrderedUniqueString().size());
 		Assert.assertEquals("a", gt.getManyRequiredOrderedUniqueString().get(0));
 		Assert.assertEquals("b", gt.getManyRequiredOrderedUniqueString().get(1));
@@ -224,14 +212,14 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
 		g.setName("ANOTHERGOD");
 		TestEmbedded testEmbedded = new TestEmbedded(g);
 		testEmbedded.setName("asd");
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		testEmbedded.addToManyBoolean(true);
 		testEmbedded.addToManyBoolean(false);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		TestEmbedded testEmbeddedX = new TestEmbedded(testEmbedded.getVertex());
 		Assert.assertEquals(2, testEmbeddedX.getManyBoolean().size());
 		testEmbeddedX.setManyBoolean(new TumlMemoryBag<Boolean>(Arrays.asList(new Boolean[]{true, true})));
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		TestEmbedded testEmbeddedY = new TestEmbedded(testEmbeddedX.getVertex());
 		Assert.assertEquals(2, testEmbeddedY.getManyBoolean().size());
 	}
@@ -242,14 +230,14 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
 		g.setName("ANOTHERGOD");
 		TestEmbedded testEmbedded = new TestEmbedded(g);
 		testEmbedded.setName("asd");
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		testEmbedded.addToManyBoolean(true);
 		testEmbedded.addToManyBoolean(true);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		TestEmbedded testEmbeddedX = new TestEmbedded(testEmbedded.getVertex());
 		Assert.assertEquals(2, testEmbeddedX.getManyBoolean().size());
 		testEmbeddedX.setManyBoolean(new TumlMemoryBag<Boolean>(Arrays.asList(new Boolean[]{false, false})));
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		TestEmbedded testEmbeddedY = new TestEmbedded(testEmbeddedX.getVertex());
 		Assert.assertEquals(2, testEmbeddedY.getManyBoolean().size());
 		boolean b1 = testEmbeddedY.getManyBoolean().asSequence().at(0);

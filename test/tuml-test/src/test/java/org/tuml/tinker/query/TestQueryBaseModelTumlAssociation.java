@@ -33,7 +33,7 @@ public class TestQueryBaseModelTumlAssociation extends BaseLocalDbTest {
 		query1.setName("asd");
 		universe1.addToInstanceQuery(query1);
 		Assert.assertNotNull(query1.getBaseTumlWithQuery());
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 	}
 
 	@SuppressWarnings("unused")
@@ -53,7 +53,7 @@ public class TestQueryBaseModelTumlAssociation extends BaseLocalDbTest {
 		query1.setName("asd");
 		universe1.getInstanceQuery().add(query1);
 		Assert.assertNotNull(query1.getBaseTumlWithQuery());
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 	}
 
 }

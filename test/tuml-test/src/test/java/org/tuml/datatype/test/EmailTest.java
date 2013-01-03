@@ -27,7 +27,7 @@ public class EmailTest extends BaseLocalDbTest {
         SpaceTime spaceTime = new SpaceTime(universe);
         Space space = new Space(spaceTime);
         Time time = new Time(spaceTime);
-        GraphDb.getDb().stopTransaction(TransactionalGraph.Conclusion.SUCCESS);
+        db.commit();
         Universe testUniverse1 = new Universe(universe.getVertex());
         Assert.assertEquals("ding.dong@lalaland.com", testUniverse1.getEmail());
     }

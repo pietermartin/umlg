@@ -79,7 +79,6 @@ public class RootResourceServerResourceBuilder extends BaseServerResourceBuilder
 
 		OJPathName parentPathName = TumlClassOperations.getPathName(concreteClassifier);
 
-		post.getBody().addToStatements("GraphDb.getDb().startTransaction()");
 		OJTryStatement ojTryStatement = new OJTryStatement();
 		OJField mapper = new OJField("mapper", TinkerGenerationUtil.ObjectMapper);
 		mapper.setInitExp("new ObjectMapper()");
@@ -106,11 +105,11 @@ public class RootResourceServerResourceBuilder extends BaseServerResourceBuilder
 
 		addPostResource(concreteClassifier, annotatedClass, parentPathName);
 
-		ojTryStatement.getTryPart().addToStatements("GraphDb.getDb().stopTransaction(Conclusion.SUCCESS)");
+		ojTryStatement.getTryPart().addToStatements("GraphDb.getDb().commit()");
 		annotatedClass.addToImports(TinkerGenerationUtil.tinkerConclusionPathName);
 
 		ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
-		ojTryStatement.getCatchPart().addToStatements("GraphDb.getDb().stopTransaction(Conclusion.FAILURE)");
+		ojTryStatement.getCatchPart().addToStatements("GraphDb.getDb().rollback()");
 		ojTryStatement.getCatchPart().addToStatements("throw new RuntimeException(e)");
 		post.getBody().addToStatements(ojTryStatement);
 
@@ -146,7 +145,6 @@ public class RootResourceServerResourceBuilder extends BaseServerResourceBuilder
 		TinkerGenerationUtil.addOverrideAnnotation(putOrDelete);
 		TinkerGenerationUtil.addSuppressWarning(putOrDelete);
 
-		putOrDelete.getBody().addToStatements("GraphDb.getDb().startTransaction()");
 		OJTryStatement ojTryStatement = new OJTryStatement();
 		OJField mapper = new OJField("mapper", TinkerGenerationUtil.ObjectMapper);
 		mapper.setInitExp("new ObjectMapper()");
@@ -179,11 +177,11 @@ public class RootResourceServerResourceBuilder extends BaseServerResourceBuilder
 			addDeleteResource(classifier, annotatedClass, parentPathName);
 		}
 
-		ojTryStatement.getTryPart().addToStatements("GraphDb.getDb().stopTransaction(Conclusion.SUCCESS)");
+		ojTryStatement.getTryPart().addToStatements("GraphDb.getDb().commit()");
 		annotatedClass.addToImports(TinkerGenerationUtil.tinkerConclusionPathName);
 
 		ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
-		ojTryStatement.getCatchPart().addToStatements("GraphDb.getDb().stopTransaction(Conclusion.FAILURE)");
+		ojTryStatement.getCatchPart().addToStatements("GraphDb.getDb().rollback()");
 		ojTryStatement.getCatchPart().addToStatements("throw new RuntimeException(e)");
 		putOrDelete.getBody().addToStatements(ojTryStatement);
 
@@ -235,7 +233,6 @@ public class RootResourceServerResourceBuilder extends BaseServerResourceBuilder
 		TinkerGenerationUtil.addOverrideAnnotation(post);
 		TinkerGenerationUtil.addSuppressWarning(post);
 
-		post.getBody().addToStatements("GraphDb.getDb().startTransaction()");
 		OJTryStatement ojTryStatement = new OJTryStatement();
 		OJField mapper = new OJField("mapper", TinkerGenerationUtil.ObjectMapper);
 		mapper.setInitExp("new ObjectMapper()");
@@ -268,11 +265,11 @@ public class RootResourceServerResourceBuilder extends BaseServerResourceBuilder
 		ifArray.getElsePart().addToStatements(classPathName.getLast() + " resource = new " + classPathName.getLast() + "(true)");
 		ifArray.getElsePart().addToStatements("resource.fromJson(map)");
 
-		ojTryStatement.getTryPart().addToStatements("GraphDb.getDb().stopTransaction(Conclusion.SUCCESS)");
+		ojTryStatement.getTryPart().addToStatements("GraphDb.getDb().commit()");
 		annotatedClass.addToImports(TinkerGenerationUtil.tinkerConclusionPathName);
 
 		ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
-		ojTryStatement.getCatchPart().addToStatements("GraphDb.getDb().stopTransaction(Conclusion.FAILURE)");
+		ojTryStatement.getCatchPart().addToStatements("GraphDb.getDb().rollback()");
 		ojTryStatement.getCatchPart().addToStatements("throw new RuntimeException(e)");
 		post.getBody().addToStatements(ojTryStatement);
 

@@ -171,8 +171,7 @@ public class AuditClassCreator extends BaseVisitor implements Visitor<Class> {
 		OJTryStatement ojTryStatement = new OJTryStatement();
 		ojTryStatement.setCatchPart(null);
 		isTransactionNotActive.addToThenPart(ojTryStatement);
-		ojTryStatement.getTryPart().addToStatements("GraphDb.getDb().startTransaction()");
-		ojTryStatement.getFinallyPart().addToStatements("GraphDb.getDb().stopTransaction(Conclusion.SUCCESS)");
+		ojTryStatement.getFinallyPart().addToStatements("GraphDb.getDb().commit()");
 		this.auditClass.addToImports(TinkerGenerationUtil.tinkerConclusionPathName);
 		if (previous) {
 			ojTryStatement.getTryPart().addToStatements(

@@ -14,7 +14,6 @@ public class TestQualifier extends BaseLocalDbTest {
 	
 	@Test
 	public void testQualifier() {
-		db.startTransaction();
 		God1 god = new God1(true);
 		god.setName("God");
 		Nature nature1 = new Nature(true);
@@ -26,7 +25,7 @@ public class TestQualifier extends BaseLocalDbTest {
 		Nature nature3 = new Nature(true);
 		nature3.setNatureName("natureName3");
 		nature3.addToGod(god);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		
 		God1 testGod = new God1(god.getVertex());
 		Nature testNature = testGod.getNatureForNatureQualifier1("natureName2");
@@ -37,7 +36,6 @@ public class TestQualifier extends BaseLocalDbTest {
 	
 	@Test
 	public void testQualifiedWithMultipleQualifiers() {
-		db.startTransaction();
 		God1 god = new God1(true);
 		god.setName("God");
 		Angel angel1 = new Angel(true);
@@ -52,7 +50,7 @@ public class TestQualifier extends BaseLocalDbTest {
 		angel3.setName("angelName3");
 		angel3.setRank(3);
 		angel3.addToGod(god);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		
 		God1 testGod = new God1(god.getVertex());
 		Angel testAngel = testGod.getAngelForAngelNameQualifierAngelRankQualifier("angelName1", 1);

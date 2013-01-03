@@ -18,7 +18,6 @@ import com.tinkerpop.blueprints.Vertex;
 
 public interface TumlGraph extends TransactionalGraph, IndexableGraph, Serializable  {
 	void setCheckElementsInTransaction(boolean b);
-	void startTransaction();
 	void incrementTransactionCount();
 	long getTransactionCount();
 	Vertex getRoot();

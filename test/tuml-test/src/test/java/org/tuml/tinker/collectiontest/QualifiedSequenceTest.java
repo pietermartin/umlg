@@ -13,7 +13,6 @@ public class QualifiedSequenceTest extends BaseLocalDbTest {
 
 	@Test
 	public void testQualifiedSequence() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
 		Foot foot1 = new Foot(true);
@@ -22,7 +21,7 @@ public class QualifiedSequenceTest extends BaseLocalDbTest {
 		Foot foot2 = new Foot(true);
 		foot2.setName("foot2");
 		foot2.addToGod(god);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		God godTest = new God(god.getVertex());
 		Assert.assertEquals("foot1", godTest.getFootForGodFootQualifier("foot1").getName());
 		Assert.assertEquals("foot2", godTest.getFootForGodFootQualifier("foot2").getName());
@@ -30,7 +29,6 @@ public class QualifiedSequenceTest extends BaseLocalDbTest {
 	
 	@Test(expected=IllegalStateException.class)
 	public void testQualifiedSequence2() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
 		Foot foot1 = new Foot(true);
@@ -39,7 +37,7 @@ public class QualifiedSequenceTest extends BaseLocalDbTest {
 		Foot foot2 = new Foot(true);
 		foot2.setName("foot1");
 		foot2.addToGod(god);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 	}	
 	
 }

@@ -24,7 +24,7 @@ public class TestValidation extends BaseLocalDbTest {
 		SpaceTime st = new SpaceTime(u1);
 		Space s = new Space(st);
 		Time t = new Time(st);
-			db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 	}
 
 	@SuppressWarnings("unused")
@@ -36,7 +36,7 @@ public class TestValidation extends BaseLocalDbTest {
 		Space s = new Space(st);
 		Time t = new Time(st);
 		u1.setMaxLength("1234567891");
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 	}
 
 	@SuppressWarnings("unused")
@@ -48,7 +48,7 @@ public class TestValidation extends BaseLocalDbTest {
 		SpaceTime st = new SpaceTime(u1);
 		Space s = new Space(st);
 		Time t = new Time(st);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 	}
 
 	@SuppressWarnings("unused")
@@ -60,7 +60,7 @@ public class TestValidation extends BaseLocalDbTest {
 		SpaceTime st = new SpaceTime(u1);
 		Space s = new Space(st);
 		Time t = new Time(st);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 	}
 
 	@SuppressWarnings("unused")
@@ -72,7 +72,7 @@ public class TestValidation extends BaseLocalDbTest {
 		SpaceTime st = new SpaceTime(u1);
 		Space s = new Space(st);
 		Time t = new Time(st);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 	}
 
 	@SuppressWarnings("unused")
@@ -84,7 +84,7 @@ public class TestValidation extends BaseLocalDbTest {
 		SpaceTime st = new SpaceTime(u1);
 		Space s = new Space(st);
 		Time t = new Time(st);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 	}
 
 	@SuppressWarnings("unused")
@@ -96,7 +96,7 @@ public class TestValidation extends BaseLocalDbTest {
 		SpaceTime st = new SpaceTime(u1);
 		Space s = new Space(st);
 		Time t = new Time(st);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 	}
 
 	@SuppressWarnings("unused")
@@ -108,7 +108,7 @@ public class TestValidation extends BaseLocalDbTest {
 		SpaceTime st = new SpaceTime(u1);
 		Space s = new Space(st);
 		Time t = new Time(st);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 	}
 
 	@SuppressWarnings("unused")
@@ -120,7 +120,7 @@ public class TestValidation extends BaseLocalDbTest {
 		SpaceTime st = new SpaceTime(u1);
 		Space s = new Space(st);
 		Time t = new Time(st);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 	}
 
 	@SuppressWarnings("unused")
@@ -132,7 +132,7 @@ public class TestValidation extends BaseLocalDbTest {
 		SpaceTime st = new SpaceTime(u1);
 		Space s = new Space(st);
 		Time t = new Time(st);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 	}
 
 	@SuppressWarnings("unused")
@@ -144,7 +144,7 @@ public class TestValidation extends BaseLocalDbTest {
 		SpaceTime st = new SpaceTime(u1);
 		Space s = new Space(st);
 		Time t = new Time(st);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 	}
 
 	@SuppressWarnings("unused")
@@ -156,7 +156,7 @@ public class TestValidation extends BaseLocalDbTest {
 		SpaceTime st = new SpaceTime(u1);
 		Space s = new Space(st);
 		Time t = new Time(st);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 	}
 
 	@SuppressWarnings("unused")
@@ -168,7 +168,7 @@ public class TestValidation extends BaseLocalDbTest {
 		SpaceTime st = new SpaceTime(u1);
 		Space s = new Space(st);
 		Time t = new Time(st);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 	}
 
 	@SuppressWarnings("unused")
@@ -180,7 +180,7 @@ public class TestValidation extends BaseLocalDbTest {
 		SpaceTime st = new SpaceTime(u1);
 		Space s = new Space(st);
 		Time t = new Time(st);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 	}
 
 	@SuppressWarnings("unused")
@@ -188,7 +188,7 @@ public class TestValidation extends BaseLocalDbTest {
 	public void testValidationRequiredFail() {
 		God g = new God(true);
 		ValidationTest validationTest = new ValidationTest(g);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 	}
 
 	@Test
@@ -196,7 +196,7 @@ public class TestValidation extends BaseLocalDbTest {
 		God g = new God(true);
 		ValidationTest validationTest = new ValidationTest(g);
 		validationTest.setRequiredName("asd");
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 	}
 
 	@SuppressWarnings("unused")
@@ -206,7 +206,7 @@ public class TestValidation extends BaseLocalDbTest {
 			God g = new God(true);
 			ValidationTest validationTest = new ValidationTest(g);
 			// validationTest.setRequiredName("asd");
-			db.stopTransaction(Conclusion.SUCCESS);
+            db.commit();
 		} catch (TransactionFailureException e) {
 			System.out.println(e.getCause());
 		}
@@ -222,7 +222,7 @@ public class TestValidation extends BaseLocalDbTest {
 		SpaceTime st = new SpaceTime(universe);
 		Space s = new Space(st);
 		Time t = new Time(st);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 	}
 
 	@SuppressWarnings("unused")
@@ -235,6 +235,6 @@ public class TestValidation extends BaseLocalDbTest {
 		SpaceTime st = new SpaceTime(universe);
 		Space s = new Space(st);
 		Time t = new Time(st);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 	}
 }

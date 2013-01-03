@@ -4,18 +4,18 @@
  * @namespace Slick
  */
 
-(function($) {
+(function ($) {
     // register namespace
     $.extend(true, window, {
-        "TumlSlick" : {
-            "Formatters" : {
-                "TumlRequired" : TumlRequiredFormatter,
-                "TumlDelete" : TumlDeleteFormatter,
-                "TumlBoolean" : TumlBooleanFormatter,
-                "TumlManyBoolean" : TumlManyBooleanFormatter,
-                "Link" : LinkFormatter,
-                "TumlRegularFormatter": TumlRegularFormatter,
-                "TumlComponentFormatter": TumlComponentFormatter
+        "TumlSlick":{
+            "Formatters":{
+                "TumlRequired":TumlRequiredFormatter,
+                "TumlDelete":TumlDeleteFormatter,
+                "TumlBoolean":TumlBooleanFormatter,
+                "TumlManyBoolean":TumlManyBooleanFormatter,
+                "Link":LinkFormatter,
+                "TumlRegularFormatter":TumlRegularFormatter,
+                "TumlComponentFormatter":TumlComponentFormatter
             }
         }
     });
@@ -37,11 +37,11 @@
     }
 
     function TumlDeleteFormatter(row, cell, value, columnDef, dataContext) {
-        return "<img class='tuml-delete-img' src='/restAndJson/javascript/images/delete.png'>";
+        return "<img class='tuml-delete-img' src='/"+tumlModelName+"/javascript/images/delete.png'>";
     }
 
     function TumlBooleanFormatter(row, cell, value, columnDef, dataContext) {
-        return value ? "<img src='/restAndJson/javascript/images/tick.png'>" : "";
+        return value ? "<img src='/"+tumlModelName+"/javascript/images/tick.png'>" : "";
     }
 
     function LinkFormatter(row, cell, value, columnDef, dataContext) {
@@ -60,9 +60,9 @@
         for (var i = 0; i < value.length; i++) {
             var booleanValue = value[i];
             if (booleanValue === 'true') {
-                result += "<img src='/restAndJson/javascript/slickgrid/images/tick.png'>";
+                result += "<img src='/"+tumlModelName+"/javascript/slickgrid/images/tick.png'>";
             } else {
-                result += "<img src='/restAndJson/javascript/images/delete.png'>";
+                result += "<img src='/"+tumlModelName+"/javascript/images/delete.png'>";
             }
         }
         return result;

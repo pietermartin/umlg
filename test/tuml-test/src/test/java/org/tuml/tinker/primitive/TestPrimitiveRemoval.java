@@ -12,15 +12,13 @@ public class TestPrimitiveRemoval extends BaseLocalDbTest {
 	
 	@Test
 	public void testNameRemoval() {
-		db.startTransaction();
 		God g = new God(true);
 		g.setName("G");
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		God gTest = new God(g.getVertex());
 		Assert.assertNotNull(gTest.getName());
-		db.startTransaction();
 		g.setName(null);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		gTest = new God(g.getVertex());
 		Assert.assertNull(gTest.getName());
 	}

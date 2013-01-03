@@ -17,7 +17,6 @@ public class TestComponent extends BaseLocalDbTest {
 	@SuppressWarnings("unused")
 	@Test
 	public void testComponent() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
 		Universe universe1 = new Universe(god);
@@ -26,7 +25,7 @@ public class TestComponent extends BaseLocalDbTest {
 		Space s1 = new Space(st1);
 		Time t1 = new Time(st1);
 
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(5, countEdges());
 		Assert.assertEquals(5, countVertices());
 	}

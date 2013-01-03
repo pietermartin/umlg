@@ -15,7 +15,6 @@ public class TestInheritance extends BaseLocalDbTest {
 
 	@Test
 	public void testInheritance() {
-		db.startTransaction();
 		God2 god = new God2(true);
 		god.setName("GOD");
 		god.setTestDatetime(new DateTime());
@@ -23,7 +22,7 @@ public class TestInheritance extends BaseLocalDbTest {
 		mamal.setName("mamal");
 		Biped biped = new Biped(god);
 		biped.setName("biped");
-		db.stopTransaction(Conclusion.SUCCESS);
+		db.commit();
 		Assert.assertEquals(3, countVertices());
 		Assert.assertEquals(3, countEdges());
 	}

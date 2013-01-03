@@ -13,7 +13,6 @@ public class TestOneToOne extends BaseLocalDbTest {
 
 	@Test(expected=IllegalStateException.class)
 	public void testOneToOne() {
-		db.startTransaction();
 		OneOne oneOne1 = new OneOne(true);
 		OneTwo oneTwo1 = new OneTwo(true);
 		OneOne oneOne2 = new OneOne(true);
@@ -22,29 +21,26 @@ public class TestOneToOne extends BaseLocalDbTest {
 		OneTwo oneTwo3 = new OneTwo(true);
 		OneOne oneOne4 = new OneOne(true);
 		OneTwo oneTwo4 = new OneTwo(true);
-		db.stopTransaction(Conclusion.SUCCESS);
+		db.commit();
 		Assert.assertEquals(8, countVertices());
 		
-		db.startTransaction();
 		oneOne1.addToOneTwo(oneTwo1);
 		oneOne2.addToOneTwo(oneTwo2);
 		oneOne3.addToOneTwo(oneTwo3);
 		oneOne4.addToOneTwo(oneTwo4);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(8, countVertices());
 		//There is an edge to the root node for every non composite vertex
 		Assert.assertEquals(12, countEdges());
 		
-		db.startTransaction();
 		oneOne1.addToOneTwo(oneTwo2);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(8, countVertices());
 		Assert.assertEquals(12, countEdges());
 	}
 	
 	@Test
 	public void testOneToOneCheckInverseSides() {
-		db.startTransaction();
 		OneOne oneOne1 = new OneOne(true);
 		oneOne1.setName("asd");
 		OneTwo oneTwo1 = new OneTwo(true);
@@ -54,23 +50,21 @@ public class TestOneToOne extends BaseLocalDbTest {
 		OneTwo oneTwo3 = new OneTwo(true);
 		OneOne oneOne4 = new OneOne(true);
 		OneTwo oneTwo4 = new OneTwo(true);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(8, countVertices());
 		
-		db.startTransaction();
 		oneOne1.addToOneTwo(oneTwo1);
 		oneOne2.addToOneTwo(oneTwo2);
 		oneOne3.addToOneTwo(oneTwo3);
 		oneOne4.addToOneTwo(oneTwo4);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(8, countVertices());
 		Assert.assertEquals(12, countEdges());
 		
-		db.startTransaction();
 		oneOne1.setOneTwo(oneTwo2);
 		Assert.assertEquals(oneOne1.getOneTwo(), oneTwo2);
 		Assert.assertEquals(oneTwo2.getOneOne(), oneOne1);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(8, countVertices());
 		Assert.assertEquals(11, countEdges());
 		

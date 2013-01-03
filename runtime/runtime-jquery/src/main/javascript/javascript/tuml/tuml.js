@@ -1,14 +1,14 @@
 //This adds in the /ui part after /${app.rootUrl}
 
 function change_my_url(title, url) {
-    var urlToPush = '/restAndJson/ui' + url.substring('restAndJson/'.length);
+    var urlToPush = '/' + tumlModelName + '/ui' + url.substring(tumlModelName + '/'.length);
     history.pushState({}, title, urlToPush);
 }
 
 function refreshPageTo(tumlUri, tabId) {
 
     var contextVertexId = retrieveVertexId(tumlUri);
-    var jqxhr = $.getJSON(tumlUri, function(result, b, c) {
+    var jqxhr = $.getJSON(tumlUri,function (result, b, c) {
         var classNameLowerCased;
         var menuArray = [];
         var metaForData = {};
@@ -16,10 +16,10 @@ function refreshPageTo(tumlUri, tabId) {
         var isOne;
 
         //only using the context metatData here so no need to be in the look
-        if (result instanceof Array && result[0].meta.length === 3) {   
+        if (result instanceof Array && result[0].meta.length === 3) {
             contextMeta = result[0].meta[1];
-            $.each(contextMeta.properties, function(index, metaProperty) {
-                if (metaProperty.inverseComposite || !((metaProperty.dataTypeEnum !== undefined &&  metaProperty.dataTypeEnum !== null) || metaProperty.onePrimitive || metaProperty.manyPrimitive || metaProperty.name == 'id' || metaProperty.name == 'uri')) {
+            $.each(contextMeta.properties, function (index, metaProperty) {
+                if (metaProperty.inverseComposite || !((metaProperty.dataTypeEnum !== undefined && metaProperty.dataTypeEnum !== null) || metaProperty.onePrimitive || metaProperty.manyPrimitive || metaProperty.name == 'id' || metaProperty.name == 'uri')) {
                     menuArray.push(metaProperty);
                 }
             });
@@ -31,8 +31,8 @@ function refreshPageTo(tumlUri, tabId) {
             if (tabId === undefined || tabId === null) {
                 //Clear the whole layout
                 $('.ui-layout-center').children().remove();
-                tabs = $('<div />', {id: 'tab-container', class: 'tab-container' }).appendTo('.ui-layout-center');
-                ul = $('<ul />', {id: 'tabsul', class: 'etabs'}).appendTo(tabs);
+                tabs = $('<div />', {id:'tab-container', class:'tab-container' }).appendTo('.ui-layout-center');
+                ul = $('<ul />', {id:'tabsul', class:'etabs'}).appendTo(tabs);
             } else {
                 tabs = $('#tab-container');
                 ul = $('#tabsul');
@@ -71,7 +71,7 @@ function refreshPageTo(tumlUri, tabId) {
                         metaForData = response.meta[2];
                         //Add in a tab
                         $('<li class="tab"><a href=#' + metaForData.name + '><span>' + response.meta[0].qualifiedName + '</span></a></li>').appendTo(ul);
-                        var tabDiv = $('<div />', {id: metaForData.name}).appendTo(tabs);
+                        var tabDiv = $('<div />', {id:metaForData.name}).appendTo(tabs);
                         $('<div id="myGrid' + metaForData.name + '" style="width:100%;height:90%;"></div>').appendTo(tabDiv);
                         $('<div id="pager' + metaForData.name + '" style="width:100%;height:20px;"></div>').appendTo(tabDiv);
                     }
@@ -89,9 +89,9 @@ function refreshPageTo(tumlUri, tabId) {
 
             //Add in a tab for queries
             $('<li class="tab"><a href=#query><span>Query</span></a></li>').appendTo(ul);
-            var tabQuery = $('<div />', {id: 'query'}).text('Write them queries here').appendTo(tabs);
+            var tabQuery = $('<div />', {id:'query'}).text('Write them queries here').appendTo(tabs);
 
-            $('#tab-container').easytabs({/*updateHash: false,*/ animate: false});
+            $('#tab-container').easytabs({/*updateHash: false,*/ animate:false});
         } else {
             //When navigating a property the result is an array, when accessing a entity by vertex its not, TODO refactor
             if (result instanceof Array) {
@@ -103,8 +103,8 @@ function refreshPageTo(tumlUri, tabId) {
             isOne = true;
             metaForData = response.meta[1];
             contextMeta = metaForData;
-            $.each(metaForData.properties, function(index, metaProperty) {
-                if (metaProperty.inverseComposite || !((metaProperty.dataTypeEnum !== undefined &&  metaProperty.dataTypeEnum !== null) || metaProperty.onePrimitive || metaProperty.manyPrimitive || metaProperty.name == 'id' || metaProperty.name == 'uri')) {
+            $.each(metaForData.properties, function (index, metaProperty) {
+                if (metaProperty.inverseComposite || !((metaProperty.dataTypeEnum !== undefined && metaProperty.dataTypeEnum !== null) || metaProperty.onePrimitive || metaProperty.manyPrimitive || metaProperty.name == 'id' || metaProperty.name == 'uri')) {
                     menuArray.push(metaProperty);
                 }
             });
@@ -113,7 +113,7 @@ function refreshPageTo(tumlUri, tabId) {
         }
         if (contextMeta.name !== 'Root') {
             //add a menu item to the context object
-            menuArray.push({tumlUri: contextMeta.uri, name: contextMeta.name});
+            menuArray.push({tumlUri:contextMeta.uri, name:contextMeta.name});
         }
 
         if (contextVertexId != null) {
@@ -124,15 +124,17 @@ function refreshPageTo(tumlUri, tabId) {
 
         //build context path to root
         if (contextMeta.name === 'Root') {
-            createContextPath([{name: 'Root', uri: contextMeta.uri}]);
+            createContextPath([
+                {name:'Root', uri:contextMeta.uri}
+            ]);
         } else {
             var pathToCompositeRootUri = contextMeta.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId) + '/compositePathToRoot';
-            var jqxhr = $.getJSON(pathToCompositeRootUri, function(response, b, c) {
+            var jqxhr = $.getJSON(pathToCompositeRootUri, function (response, b, c) {
                 createContextPath(response.data);
             });
         }
-    }).fail(function(a, b, c) {
-        alert("error " + a + ' ' + b + ' ' + c);
-    });
+    }).fail(function (a, b, c) {
+            alert("error " + a + ' ' + b + ' ' + c);
+        });
 
 }

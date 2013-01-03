@@ -24,7 +24,6 @@ public class AllInstancesTest extends BaseLocalDbTest {
 	@SuppressWarnings("unused")
 	@Test
 	public void testAllInstances1() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
 		Mamal mamal1 = new Mamal(god);
@@ -45,7 +44,7 @@ public class AllInstancesTest extends BaseLocalDbTest {
 		Quadped quadPed4 = new Quadped(god);
 		Quadped quadPed5 = new Quadped(god);
 
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(15, AbstractSpecies.allInstances().size());
 		Assert.assertEquals(15, Mamal.allInstances().size());
 		Assert.assertEquals(5, Biped.allInstances().size());
@@ -55,7 +54,6 @@ public class AllInstancesTest extends BaseLocalDbTest {
 
 	@Test
 	public void testHierarciesAllInstances() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
 		RealRootFolder realRootFolder = new RealRootFolder(god);
@@ -77,7 +75,7 @@ public class AllInstancesTest extends BaseLocalDbTest {
 		Folder folder2_2_2 = new Folder(folder2_1);
 		folder2_2_2.setName("folder2_2_2");
 
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 //		Assert.assertEquals(1, RealRootFolder.allInstances().size());
 		Assert.assertEquals(7, Folder.allInstances().size());
 //		Assert.assertEquals(9, BaseModelTuml.allInstances().size());
@@ -85,7 +83,6 @@ public class AllInstancesTest extends BaseLocalDbTest {
 
 	@Test
 	public void testAllInstancesOnQueries() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
         InstanceQuery query1 = new InstanceQuery(god);
@@ -149,7 +146,7 @@ public class AllInstancesTest extends BaseLocalDbTest {
 		query9.setName("q9");
 		query9.setQueryEnum(QueryEnum.OCL);
 
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 
 		Assert.assertEquals(18, BaseModelTuml.allInstances().size());
 		Assert.assertEquals(9, InstanceQuery.allInstances().size());
@@ -158,7 +155,6 @@ public class AllInstancesTest extends BaseLocalDbTest {
 
 	@Test
 	public void testAllInstancesOnInterfaces() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
 		ManyA manyA1 = new ManyA(god);
@@ -175,7 +171,7 @@ public class AllInstancesTest extends BaseLocalDbTest {
 		manyA2.addToIManyB(manyB1);
 		manyA2.addToIManyB(manyB2);
 
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(2, ManyA.allInstances().size());
 		Assert.assertEquals(2, ManyB.allInstances().size());
 		//TODO eish

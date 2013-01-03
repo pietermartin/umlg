@@ -1,4 +1,4 @@
-package org.tuml.ui;
+package org.tuml.runtime.restlet;
 
 public enum FieldType {
 

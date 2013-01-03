@@ -39,7 +39,7 @@
             setupTabsAndAccordian();
 
             createStdMenu();
-            if (contextVertexId !== undefined && contextVertexId !== null) {
+            if (isTumlLib && contextVertexId !== undefined && contextVertexId !== null) {
                 createInstanceQueryMenu();
                 createClassQueryMenu();
             }
@@ -65,7 +65,7 @@
             umlOperationsDiv = $('<div />', {id:'umlOperations'});
             accordionDiv.append(umlOperationsDiv);
 
-            if (contextVertexId !== undefined && contextVertexId !== null) {
+            if (isTumlLib && contextVertexId !== undefined && contextVertexId !== null) {
                 accordionDiv.append($('<h3 />').text('Instance Queries'));
                 umlInstanceQueriesDiv = $('<div />', {id:'umlInstanceQueries'});
                 accordionDiv.append(umlInstanceQueriesDiv);

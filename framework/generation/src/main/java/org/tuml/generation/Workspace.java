@@ -20,7 +20,7 @@ public class Workspace {
 	public final static String RESOURCE_FOLDER = "src/main/generated-resources";
 	private final Map<JavaModelPrinter.Source, OJAnnotatedClass> javaClassMap = new HashMap<JavaModelPrinter.Source, OJAnnotatedClass>();
 	private File projectRoot;
-	private File modelFile;
+    private File modelFile;
 	private Model model;
 	private List<Visitor<?>> visitors;
 	private JavaModelPrinter javaModelPrinter = new JavaModelPrinter();
@@ -29,8 +29,12 @@ public class Workspace {
 
 	private Workspace() {
 	}
-	
-	public void clear() {
+
+    public File getModelFile() {
+        return modelFile;
+    }
+
+    public void clear() {
 		javaClassMap.clear();
 		javaModelPrinter.clear();
 	}

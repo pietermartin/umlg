@@ -13,19 +13,17 @@ public class TestInterfaceProperties extends BaseLocalDbTest {
 
 	@Test
 	public void testOneToOne() {
-		db.startTransaction();
 		InterfaceRealization1 interfaceRealization1 = new InterfaceRealization1(true);
 		interfaceRealization1.setName("interfaceRealization1");
 		InterfaceRealization2 interfaceRealization2 = new InterfaceRealization2(interfaceRealization1);
 		interfaceRealization2.setName("interfaceRealization2");
-		db.stopTransaction(Conclusion.SUCCESS);
+		db.commit();
 		Assert.assertEquals(2, countVertices());
 		Assert.assertEquals(2, countEdges());
 
-		db.startTransaction();
 		InterfaceRealization2 interfaceRealization2_1 = new InterfaceRealization2(interfaceRealization1);
 		interfaceRealization2_1.setName("interfaceRealization2_1");
-		db.stopTransaction(Conclusion.SUCCESS);
+		db.commit();
 		Assert.assertEquals(3, countVertices());
 		Assert.assertEquals(3, countEdges());
 		

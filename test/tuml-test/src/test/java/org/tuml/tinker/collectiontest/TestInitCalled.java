@@ -18,13 +18,12 @@ public class TestInitCalled extends BaseLocalDbTest {
 
 	@Test
 	public void testInitCalled() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("God1");
 		Biped biped = new Biped(true);
 		biped.setName("thisisdodge");
 		god.getAbstractSpecies().add(biped);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(2, countEdges());
 		God g = new God(god.getVertex());
 		Assert.assertEquals("thisisdodge",g.getAbstractSpecies().iterate(new IterateExpressionAccumulator<List<Biped>, AbstractSpecies>() {

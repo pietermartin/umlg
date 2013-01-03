@@ -15,7 +15,6 @@ public class TestOcl extends BaseLocalDbTest {
 
 	@Test
 	public void testOcl1() {
-		db.startTransaction();
 		OclTest1 oclTest1 = new OclTest1(true);
 		oclTest1.setProperty1("property1");
 		
@@ -39,8 +38,8 @@ public class TestOcl extends BaseLocalDbTest {
 		oclTestCollection2_2_2.setName("2_2");
 		OclTestCollection2 oclTestCollection2_2_3 = new OclTestCollection2(oclTestCollection2);
 		oclTestCollection2_2_3.setName("2_3");
-		
-		db.stopTransaction(Conclusion.SUCCESS);
+
+        db.commit();
 		Assert.assertEquals(3, oclTest1.getOclTestCollection().size());
 		Assert.assertEquals(oclTest1.getProperty1(), oclTest1.getDerivedProperty1());
 		Assert.assertEquals(1, oclTest1.getOclSelect().size());
@@ -55,7 +54,6 @@ public class TestOcl extends BaseLocalDbTest {
 
 	@Test
 	public void testOcl2() {
-		db.startTransaction();
 		OclTest1 oclTest1 = new OclTest1(true);
 		oclTest1.setProperty1("property1");
 		
@@ -81,15 +79,14 @@ public class TestOcl extends BaseLocalDbTest {
 		oclTestCollection2_2_2.setName("2_2");
 		OclTestCollection2 oclTestCollection2_2_3 = new OclTestCollection2(oclTestCollection2);
 		oclTestCollection2_2_3.setName("2_3");
-		
-		db.stopTransaction(Conclusion.SUCCESS);
+
+        db.commit();
 		Assert.assertEquals(4, oclTest1.getOclSelectCollectAsSequence().size());
 		Assert.assertEquals("oclTestCollection1oclTestCollection2johnjohn".length(), oclTest1.getOclIterateExp().length());
 	}
 	
 	@Test
 	public void testOclIterate1() {
-		db.startTransaction();
 		OclTest1 oclTest1 = new OclTest1(true);
 		oclTest1.setProperty1("property1");
 		
@@ -104,8 +101,8 @@ public class TestOcl extends BaseLocalDbTest {
 		oclTestCollection2_1_2.setName("john");
 		OclTestCollection2 oclTestCollection2_1_3 = new OclTestCollection2(oclTestCollection1);
 		oclTestCollection2_1_3.setName("john3");
-		
-		db.stopTransaction(Conclusion.SUCCESS);
+
+        db.commit();
 		
 		Assert.assertEquals(2, oclTest1.getOclTestCollection().size());
 		Assert.assertEquals(1, oclTest1.getOclIterateExp2().size());
@@ -113,21 +110,19 @@ public class TestOcl extends BaseLocalDbTest {
 	
 	@Test
 	public void testOclFirst() {
-		db.startTransaction();
 		OclTest1 oclTest1 = new OclTest1(true);
 		oclTest1.setProperty1("property1");
 		OclTestCollection oclTestCollection1 = new OclTestCollection(oclTest1);
 		oclTestCollection1.setName("oclTestCollection1");
 		OclTestCollection oclTestCollection2 = new OclTestCollection(oclTest1);
 		oclTestCollection2.setName("oclTestCollection2");
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(2, oclTest1.getOclTestCollection().size());
 		Assert.assertNotNull(oclTest1.getTestOclFirst());
 	}
 
 	@Test(expected=OclIsInvalidException.class)
 	public void testOclFirstOclInvalid1() {
-		db.startTransaction();
 		OclTest1 oclTest1 = new OclTest1(true);
 		oclTest1.setProperty1("property1");
 		Assert.assertEquals(0, oclTest1.getOclTestCollection().size());
@@ -136,7 +131,6 @@ public class TestOcl extends BaseLocalDbTest {
 	
 	@Test()
 	public void testOclFirstOclInvalid2() {
-		db.startTransaction();
 		OclTest1 oclTest1 = new OclTest1(true);
 		oclTest1.setProperty1("property1");
 		Assert.assertEquals(0, oclTest1.getOclTestCollection().size());
@@ -145,7 +139,6 @@ public class TestOcl extends BaseLocalDbTest {
 
 	@Test()
 	public void testOclIfExp1() {
-		db.startTransaction();
 		OclTest1 oclTest1 = new OclTest1(true);
 		oclTest1.setProperty1("property1");
 		Assert.assertEquals("halo", oclTest1.getTestOclIfExp());
@@ -153,7 +146,6 @@ public class TestOcl extends BaseLocalDbTest {
 
 	@Test()
 	public void testOclIfExp2() {
-		db.startTransaction();
 		OclTest1 oclTest1 = new OclTest1(true);
 		oclTest1.setProperty1("property1");
 		Assert.assertNotNull(oclTest1.getTestOclExpResultMany());

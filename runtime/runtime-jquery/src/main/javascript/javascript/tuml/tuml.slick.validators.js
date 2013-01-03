@@ -464,7 +464,7 @@
     }
 
     function RequiredValidator(property, value) {
-        if (property.lower > 0 && value !== false && value !== true && (value == '' || value == undefined || value == null)) {
+        if (property.lower > 0 && value !== false && value !== true && (value === '' || value === undefined || value === null)) {
             return {
                 valid:false,
                 msg:property.name + " is a required field!"

@@ -20,7 +20,6 @@ public class DeletionTest extends BaseLocalDbTest {
 	@SuppressWarnings("unused")
 	@Test
 	public void testDeletion() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
 		Universe universe1 = new Universe(god);
@@ -29,14 +28,13 @@ public class DeletionTest extends BaseLocalDbTest {
 		Space s1 = new Space(st1);
 		Time t1 = new Time(st1);
 
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(5, countVertices());
 		Assert.assertEquals(5, countEdges());
-		db.startTransaction();
 		God godTest = new God(god.getVertex());
 		Universe testDeletion = godTest.getUniverse().iterator().next();
 		testDeletion.delete();
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(1, countVertices());
 		Assert.assertEquals(1, countEdges());
 	}
@@ -44,7 +42,6 @@ public class DeletionTest extends BaseLocalDbTest {
 	@SuppressWarnings("unused")
 	@Test
 	public void testDeletionManyToMany() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
 		Universe universe1 = new Universe(god);
@@ -92,48 +89,43 @@ public class DeletionTest extends BaseLocalDbTest {
 		manyA4.addToIManyB(manyB3);
 		manyA4.addToIManyB(manyB4);
 
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(13, countVertices());
 		Assert.assertEquals(29, countEdges());
 		ManyB manyBTest = new ManyB(manyB1.getVertex());
 		Assert.assertEquals(4, manyBTest.getIManyA().size());
-		db.startTransaction();
 		ManyA testDeletion = new ManyA(manyA1.getVertex());
 		testDeletion.delete();
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(12, countVertices());
 		Assert.assertEquals(24, countEdges());
 		manyBTest = new ManyB(manyB1.getVertex());
 		Assert.assertEquals(3, manyBTest.getIManyA().size());
 
-		db.startTransaction();
 		testDeletion = new ManyA(manyA2.getVertex());
 		testDeletion.delete();
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(11, countVertices());
 		Assert.assertEquals(19, countEdges());
 		manyBTest = new ManyB(manyB1.getVertex());
 		Assert.assertEquals(2, manyBTest.getIManyA().size());
 
-		db.startTransaction();
 		testDeletion = new ManyA(manyA3.getVertex());
 		testDeletion.delete();
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(10, countVertices());
 		Assert.assertEquals(14, countEdges());
 		manyBTest = new ManyB(manyB1.getVertex());
 		Assert.assertEquals(1, manyBTest.getIManyA().size());
 
-		db.startTransaction();
 		testDeletion = new ManyA(manyA4.getVertex());
 		testDeletion.delete();
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(9, countVertices());
 		Assert.assertEquals(9, countEdges());
 		God testGod = new God(god.getVertex());
 		Assert.assertEquals(4, testGod.getIMany().size());
 
-		db.startTransaction();
 		testGod.getIMany().clear();
 		ManyB manyB = new ManyB(manyB1.getVertex());
 		manyB.delete();
@@ -143,8 +135,8 @@ public class DeletionTest extends BaseLocalDbTest {
 		manyB.delete();
 		manyB = new ManyB(manyB4.getVertex());
 		manyB.delete();
-		
-		db.stopTransaction(Conclusion.SUCCESS);
+
+        db.commit();
 		Assert.assertEquals(5, countVertices());
 		Assert.assertEquals(5, countEdges());
 
@@ -152,7 +144,6 @@ public class DeletionTest extends BaseLocalDbTest {
 	
 	@Test
 	public void deleteOneToOneInverse() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("GODDER");
 		OneOne oneOne1 = new OneOne(god);
@@ -160,12 +151,11 @@ public class DeletionTest extends BaseLocalDbTest {
 		OneTwo oneTwo1 = new OneTwo(god);
 		oneTwo1.setName("onetwo1");
 		oneOne1.setOneTwo(oneTwo1);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(3, countVertices());
 		Assert.assertEquals(4, countEdges());
-		db.startTransaction();
 		oneOne1.delete();
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(2, countVertices());
 		Assert.assertEquals(2, countEdges());
 		Assert.assertNull(oneTwo1.getOneOne());
@@ -173,7 +163,6 @@ public class DeletionTest extends BaseLocalDbTest {
 
 	@Test
 	public void deleteOneToOneNonInverse() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("GODDER");
 		OneOne oneOne1 = new OneOne(god);
@@ -181,12 +170,11 @@ public class DeletionTest extends BaseLocalDbTest {
 		OneTwo oneTwo1 = new OneTwo(god);
 		oneTwo1.setName("onetwo1");
 		oneOne1.setOneTwo(oneTwo1);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(3, countVertices());
 		Assert.assertEquals(4, countEdges());
-		db.startTransaction();
 		oneTwo1.delete();
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(2, countVertices());
 		Assert.assertEquals(2, countEdges());
 		OneOne testOneOne1 = new OneOne(oneOne1.getVertex());

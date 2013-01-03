@@ -59,7 +59,6 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
         INSTANCE.setReturnType(metaClass.getPathName());
         metaClass.addToOperations(INSTANCE);
         OJField result = new OJField("result", metaClass.getPathName());
-        result.setInitExp("null");
         INSTANCE.getBody().addToLocals(result);
 
         INSTANCE.getBody().addToStatements("Iterator<Edge> iter = " + TinkerGenerationUtil.graphDbAccess + ".getRoot().getEdges(Direction.OUT, \"" + TinkerGenerationUtil.getEdgeToRootLabelStrategyMeta(clazz) + "\").iterator()");
@@ -73,7 +72,7 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
         );
         ifHasNext.addToElsePart("\n    Future<" + TumlClassOperations.getMetaClassName(clazz) + "> f = es.submit(" +
                 "new Callable() {\n        @Override\n        public " + TumlClassOperations.getMetaClassName(clazz) + " call() {\n            " +
-                TumlClassOperations.getMetaClassName(clazz) + " result = new " + TumlClassOperations.getMetaClassName(clazz) + "();\n            " + TinkerGenerationUtil.graphDbAccess + ".stopTransaction(TransactionalGraph.Conclusion.SUCCESS);\n            return result;\n        }\n    })");
+                TumlClassOperations.getMetaClassName(clazz) + " result = new " + TumlClassOperations.getMetaClassName(clazz) + "();\n            " + TinkerGenerationUtil.graphDbAccess + ".commit();\n            return result;\n        }\n    })");
         ifHasNext.addToElsePart("    es.shutdown()");
         ifHasNext.addToElsePart("    try {\n        result = f.get(3, TimeUnit.SECONDS);\n    } catch (Exception e) {\n        throw new RuntimeException(e);\n    }");
         ifHasNext.addToElsePart("}");
@@ -86,7 +85,6 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
         metaClass.addToImports("java.util.concurrent.Callable");
         metaClass.addToImports("java.util.Iterator");
 
-        metaClass.addToImports("com.tinkerpop.blueprints.TransactionalGraph");
         metaClass.addToImports("com.tinkerpop.blueprints.Direction");
         metaClass.addToImports("com.tinkerpop.blueprints.Direction");
         metaClass.addToImports("com.tinkerpop.blueprints.Edge");

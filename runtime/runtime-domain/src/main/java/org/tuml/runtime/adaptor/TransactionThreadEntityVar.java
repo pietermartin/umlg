@@ -26,8 +26,8 @@ public class TransactionThreadEntityVar {
         return newVertex == null;
     }
 
-    public static void clear() {
-        transactionEntityVar.get().clear();
+    public static void remove() {
+        transactionEntityVar.remove();
     }
 
     public static void setNewEntity(CompositionNode node) {

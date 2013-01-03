@@ -53,8 +53,8 @@ public class RestletComponentAndApplicationGenerator extends BaseVisitor impleme
         main.addParam("args", new OJPathName("String[]"));
         component.addToOperations(main);
 
-        main.getBody().addToStatements("URL modelFileURL = Thread.currentThread().getContextClassLoader().getResource(\"" + model.getName() + ".uml\")");
-        OJIfStatement ifFileExist = new OJIfStatement("modelFileURL == null", "throw new IllegalStateException(\"Model file " + model.getName() + ".uml not found. The model's file name must be the same as the model's name and be on the classpath.\")");
+        main.getBody().addToStatements("URL modelFileURL = Thread.currentThread().getContextClassLoader().getResource(\"" + this.workspace.getModelFile().getName() + "\")");
+        OJIfStatement ifFileExist = new OJIfStatement("modelFileURL == null", "throw new IllegalStateException(\"Model file " + this.workspace.getModelFile().getName() + " not found. The model's file name must be on the classpath.\")");
         main.getBody().addToStatements(ifFileExist);
         main.getBody().addToStatements("final File modelFile = new File(modelFileURL.toURI())");
         main.getBody().addToStatements("//Load the mode async\nnew Thread(new Runnable() {\n    @Override\n    public void run() {\n        ModelLoader.loadModel(modelFile);\n        TumlOcl2Parser tumlOcl2Parser = TumlOcl2Parser.INSTANCE;\n    }\n}).start()");

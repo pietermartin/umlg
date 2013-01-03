@@ -31,18 +31,18 @@ public class TumlTransactionEventHandler<T> implements TransactionEventHandler<T
 				TumlNode tumlNode = (TumlNode) entity;
 				List<TumlConstraintViolation> requiredConstraintViolations = tumlNode.validateRequiredProperties();
 				if (!requiredConstraintViolations.isEmpty()) {
-					TransactionThreadEntityVar.clear();
+					TransactionThreadEntityVar.remove();
 					throw new TumlConstraintViolationException(requiredConstraintViolations);
 				}
 				if (!entity.isTinkerRoot() && entity.getOwningObject() == null) {
-					TransactionThreadEntityVar.clear();
+					TransactionThreadEntityVar.remove();
 					if (entity instanceof BaseTinkerAuditable && ((BaseTinkerAuditable) entity).getDeletedOn().isBefore(new DateTime())) {
 						return null;
 					}
 					throw new IllegalStateException(String.format("Entity %s %s does not have a composite owner", entity.getClass().getSimpleName(), entity.getId()));
 				}
 			}
-			TransactionThreadEntityVar.clear();
+			TransactionThreadEntityVar.remove();
 		}
 		return null;
 	}

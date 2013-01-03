@@ -24,12 +24,11 @@ public class TumlNeo4jGraphFactory implements TumlGraphFactory {
 	public TumlGraph getTumlGraph(String url) {
 		File f = new File(url);
 		Neo4jGraph db = new Neo4jGraph(f.getAbsolutePath());
-		TransactionThreadEntityVar.clear();
+		TransactionThreadEntityVar.remove();
 		TumlGraph nakedGraph = new TumlNeo4jGraph(db);
 		nakedGraph.addRoot();
 		nakedGraph.registerListeners();		
-		nakedGraph.startTransaction();
-		nakedGraph.stopTransaction(Conclusion.SUCCESS);
+		nakedGraph.commit();
 		return nakedGraph;
 	}
 

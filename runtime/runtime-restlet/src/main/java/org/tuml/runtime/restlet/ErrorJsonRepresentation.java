@@ -1,10 +1,10 @@
-package org.tuml.ui;
-
-import java.io.IOException;
-import java.io.Writer;
+package org.tuml.runtime.restlet;
 
 import org.restlet.data.MediaType;
 import org.restlet.representation.WriterRepresentation;
+
+import java.io.IOException;
+import java.io.Writer;
 
 public class ErrorJsonRepresentation extends WriterRepresentation {
 

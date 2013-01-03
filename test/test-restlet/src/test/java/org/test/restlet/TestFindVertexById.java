@@ -14,10 +14,9 @@ public class TestFindVertexById extends BaseLocalDbTest {
 
 	@Test
 	public void findVertexById() {
-		db.startTransaction();
 		Alien alien = new Alien(true);
 		alien.setName("alien1");
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(1, countVertices());
 		
 		Vertex v = db.getVertex(2);

@@ -16,33 +16,39 @@ public class TumlProperties {
         this.properties = new Properties();
         try {
             this.properties.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("tuml.env.properties"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new RuntimeException("Expecting \"tuml.env.properties\" file on the classpath with ");
+        }
+        validateRequiredProperties();
+    }
+
+    private void validateRequiredProperties() {
+        if (!this.properties.containsKey("tuml.db.location")) {
+            throw new IllegalStateException("tuml.env.properties must have a property \"tuml.db.location\"");
+        }
+        if (!this.properties.containsKey("tinker.implementation")) {
+            throw new IllegalStateException("tuml.env.properties must have a property \"tinker.implementation\"");
         }
     }
 
-    public String getTumlDb() {
-        return this.properties.getProperty("tumldb");
+    public String getTumlDbLocation() {
+        return this.properties.getProperty("tuml.db.location");
     }
 
-    public String getTumlGraphFactory() {
-        return this.properties.getProperty("tumlgraph.factory");
-    }
-
-    public String getTumlIdUtil() {
-        return this.properties.getProperty("tuml.tinkeridutil");
+    public String getTinkerImplementation() {
+        return this.properties.getProperty("tinker.implementation");
     }
 
     public boolean isStartAdminApplication() {
-        return Boolean.parseBoolean(this.properties.getProperty("start.admin.application"));
+        return Boolean.parseBoolean(this.properties.getProperty("start.admin.application", "false"));
     }
 
     public boolean isClearDbOnStartUp() {
-        return Boolean.parseBoolean(this.properties.getProperty("start.clear.db"));
+        return Boolean.parseBoolean(this.properties.getProperty("start.clear.db", "false"));
     }
 
     public boolean isCreateDefaultData() {
-        return Boolean.parseBoolean(this.properties.getProperty("start.default.data"));
+        return Boolean.parseBoolean(this.properties.getProperty("start.default.data", "false"));
     }
 
     public String getDefaultDataLoaderClass() {

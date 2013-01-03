@@ -12,10 +12,9 @@ public class TestBooleanPrimitive extends BaseLocalDbTest {
 	
 	@Test
 	public void testBooleanDefaultsToFalse() {
-		db.startTransaction();
 		God g = new God(true);
 		g.setName("G");
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertFalse(g.getTestBoolean());
 	}
 

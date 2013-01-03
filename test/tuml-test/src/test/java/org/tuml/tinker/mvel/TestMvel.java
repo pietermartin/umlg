@@ -27,7 +27,6 @@ public class TestMvel extends BaseLocalDbTest {
 	@SuppressWarnings("unused")
 	@Test
 	public void testMvel() {
-		db.startTransaction();
 		God g = new God(true);
 		g.setBeginning(new DateTime());
 		g.setReason(REASON.BAD);
@@ -56,7 +55,7 @@ public class TestMvel extends BaseLocalDbTest {
 		h2.setName("h2");
 		Hand h3 = new Hand(g);
 		h3.setName("h3");
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Serializable compiled = MVEL.compileExpression("name");
 		String name = (String) MVEL.executeExpression(compiled, g);
 		Assert.assertEquals("god", name);

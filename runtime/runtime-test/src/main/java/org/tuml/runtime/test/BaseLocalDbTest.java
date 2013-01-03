@@ -15,6 +15,8 @@ import org.junit.BeforeClass;
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.TumlGraph;
 import org.tuml.runtime.adaptor.TumlGraphFactory;
+import org.tuml.runtime.util.TinkerImplementation;
+import org.tuml.runtime.util.TumlProperties;
 
 public class BaseLocalDbTest {
 
@@ -42,16 +44,7 @@ public class BaseLocalDbTest {
 	}
 
 	protected TumlGraph createNakedGraph() {
-		Properties properties = new Properties();
-		try {
-            properties.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("tuml.env.properties"));
-//            properties.load(new FileReader("src/test/resources/tuml.env.properties"));
-		} catch (FileNotFoundException e1) {
-			throw new RuntimeException(e1);
-		} catch (IOException e1) {
-			throw new RuntimeException(e1);
-		}
-		String dbUrl = properties.getProperty("tinkerdb");
+		String dbUrl = TumlProperties.INSTANCE.getTumlDbLocation();
 		String parsedUrl = dbUrl;
 		if (dbUrl.startsWith("local:")) {
 			parsedUrl = dbUrl.replace("local:", "");
@@ -65,8 +58,9 @@ public class BaseLocalDbTest {
 			}
 		}
 		try {
-			@SuppressWarnings("unchecked")
-			Class<TumlGraphFactory> factory = (Class<TumlGraphFactory>) Class.forName(properties.getProperty("tumlgraph.factory"));
+            TinkerImplementation tinkerImplementation = TinkerImplementation.fromName(TumlProperties.INSTANCE.getTinkerImplementation());
+            @SuppressWarnings("unchecked")
+			Class<TumlGraphFactory> factory = (Class<TumlGraphFactory>) Class.forName(tinkerImplementation.getTumlGraphFactory());
 			Method m = factory.getDeclaredMethod("getInstance", new Class[0]);
 			TumlGraphFactory nakedGraphFactory = (TumlGraphFactory) m.invoke(null);
 			// TinkerSchemaHelper schemaHelper = (TinkerSchemaHelper)

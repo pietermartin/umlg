@@ -28,7 +28,7 @@ public class ManyEnumerationTest extends BaseLocalDbTest {
         Object s = Arrays.asList(new Object[]{"asda", "asd"});
         TinkerSet<REASON> reasons = new TumlMemorySet<REASON>((Collection<REASON>) s);
         g.addToREASON(reasons);
-        db.stopTransaction(TransactionalGraph.Conclusion.SUCCESS);
+        db.commit();
     }
 
 }

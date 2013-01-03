@@ -18,7 +18,6 @@ public class TestOrderedListKeepsIndex extends BaseLocalDbTest {
 
     @Test
     public void testOrderedListKeepIndex() {
-        db.startTransaction();
         God g = new God(true);
         Hand hand = new Hand(g);
         hand.setName("left");
@@ -28,16 +27,15 @@ public class TestOrderedListKeepsIndex extends BaseLocalDbTest {
         finger2.setName("finger2");
         Finger finger3 = new Finger(hand);
         finger3.setName("finger3");
-        db.stopTransaction(TransactionalGraph.Conclusion.SUCCESS);
+        db.commit();
 
         Assert.assertEquals(5, countVertices());
         Assert.assertEquals(5, countEdges());
 
-        db.startTransaction();
         Hand handTest = new Hand(db.getVertex(hand.getId()));
         Finger fingerTest = new Finger(db.getVertex(finger1.getId()));
         handTest.getFinger().add(fingerTest);
-        db.stopTransaction(TransactionalGraph.Conclusion.SUCCESS);
+        db.commit();
 
         Assert.assertEquals(0, handTest.getFinger().indexOf(fingerTest));
     }
@@ -45,7 +43,6 @@ public class TestOrderedListKeepsIndex extends BaseLocalDbTest {
     //TODO think about the semantics of addToX
     @Test
     public void testOrderedListMoveIndex() {
-        db.startTransaction();
         God g = new God(true);
         Hand hand = new Hand(g);
         hand.setName("left");
@@ -55,16 +52,15 @@ public class TestOrderedListKeepsIndex extends BaseLocalDbTest {
         finger2.setName("finger2");
         Finger finger3 = new Finger(hand);
         finger3.setName("finger3");
-        db.stopTransaction(TransactionalGraph.Conclusion.SUCCESS);
+        db.commit();
 
         Assert.assertEquals(5, countVertices());
         Assert.assertEquals(5, countEdges());
 
-        db.startTransaction();
         Hand handTest = new Hand(db.getVertex(hand.getId()));
         Finger fingerTest = new Finger(db.getVertex(finger1.getId()));
         handTest.addToFinger(fingerTest);
-        db.stopTransaction(TransactionalGraph.Conclusion.SUCCESS);
+        db.commit();
 
         Assert.assertEquals(2, handTest.getFinger().indexOf(fingerTest));
     }

@@ -13,7 +13,6 @@ public class TestSequence extends BaseLocalDbTest {
 
 	@Test
 	public void testInheritance() {
-		db.startTransaction();
 		SequenceRoot sequenceRoot = new SequenceRoot(true);
 		sequenceRoot.setName("sequenceRoot");
 		SequenceTest sequenceTest1 = new SequenceTest(sequenceRoot);
@@ -22,7 +21,7 @@ public class TestSequence extends BaseLocalDbTest {
 		sequenceTest2.setName("sequenceTest2");
 		SequenceTest sequenceTest3 = new SequenceTest(sequenceRoot);
 		sequenceTest3.setName("sequenceTest3");
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		SequenceRoot sequenceRootTest = new SequenceRoot(sequenceRoot.getVertex());
 		Assert.assertEquals("sequenceTest3", sequenceRootTest.getSequenceTest().get(2).getName());
 		SequenceTest sequenceTestTest = new SequenceTest(sequenceTest2.getVertex());

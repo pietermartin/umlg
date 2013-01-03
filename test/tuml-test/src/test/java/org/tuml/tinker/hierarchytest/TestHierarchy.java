@@ -17,35 +17,31 @@ public class TestHierarchy extends BaseLocalDbTest {
 
 	@Test
 	public void testHierarchy() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
 		RealRootFolder realRootFolder = new RealRootFolder(god);
 		realRootFolder.setName("realRootFolder");
 		Folder folder1 = new Folder(realRootFolder);
 		folder1.setName("folder1");
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		assertEquals(3, countVertices());
 		assertEquals(3, countEdges());
-		db.startTransaction();
 		Folder folder2 = new Folder(realRootFolder);
 		folder2.setName("folder2");
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		assertEquals(4, countVertices());
 		assertEquals(4, countEdges());
-		db.startTransaction();
 		Folder folder11 = new Folder(folder1);
 		folder11.setName("folder11");
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		assertEquals(5, countVertices());
 		assertEquals(5, countEdges());
 		assertTrue(folder11.getParent().getParent() instanceof RealRootFolder);
-		db.startTransaction();
 		Folder folder111 = new Folder(folder11);
 		folder111.setName("folder111");
 		Folder folder1111 = new Folder(folder111);
 		folder1111.setName("folder1111");
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Hierarchy hierarchy = folder1111;
 		int countLevels = 0;
 		while (!hierarchy.isRoot()) {
@@ -60,7 +56,6 @@ public class TestHierarchy extends BaseLocalDbTest {
 
 	@Test
 	public void testGetAllChildren() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
 		RealRootFolder realRootFolder = new RealRootFolder(god);
@@ -90,7 +85,7 @@ public class TestHierarchy extends BaseLocalDbTest {
 		Folder folder2_2_1 = new Folder(folder2_1);
 		folder2_2_1.setName("folder2_2_1");
 
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		
 		Assert.assertEquals(10, realRootFolder.getAllChildren().size());
 	}

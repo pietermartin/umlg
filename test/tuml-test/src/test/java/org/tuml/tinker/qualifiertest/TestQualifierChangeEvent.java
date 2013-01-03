@@ -12,7 +12,6 @@ public class TestQualifierChangeEvent extends BaseLocalDbTest {
 
 	@Test
 	public void testQualifierNeedsChangeEvent() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
 		
@@ -25,12 +24,11 @@ public class TestQualifierChangeEvent extends BaseLocalDbTest {
 		nature2.setName1("nature2");
 		nature2.setName2("nature2");
 		nature2.addToGod(god);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		
-		db.startTransaction();
 		God g = new God(god.getVertex());
 		g.getNatureForQualifier2("nature2").iterator().next().setName1("nameSoGonaFail");
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		
 		God gg = new God(god.getVertex());
 		Assert.assertTrue(!gg.getNatureForQualifier2("nameSoGonaFail").isEmpty());

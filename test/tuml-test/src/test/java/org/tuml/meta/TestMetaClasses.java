@@ -20,7 +20,7 @@ public class TestMetaClasses extends BaseLocalDbTest {
         God g = new God(true);
         g.setName("g");
         Angel a = new Angel(g);
-        db.stopTransaction(TransactionalGraph.Conclusion.SUCCESS);
+        db.commit();
         Assert.assertEquals(2, countVertices());
         GodMeta gm = (GodMeta) g.getMetaNode();
         AngelMeta am = (AngelMeta) a.getMetaNode();

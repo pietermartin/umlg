@@ -14,7 +14,6 @@ public class ManyToManyInverseTest extends BaseLocalDbTest {
 
 	@Test
 	public void testManyToMany() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
 		ManyA manyA1 = new ManyA(god);
@@ -27,8 +26,8 @@ public class ManyToManyInverseTest extends BaseLocalDbTest {
 		manyB2.setName("manyB2");
 		
 		manyA1.addToIManyB(manyB1);
-		
-		db.stopTransaction(Conclusion.SUCCESS);
+
+        db.commit();
 		God godTest = new God(god.getVertex());
 		Assert.assertEquals(4, godTest.getIMany().size());
 		Assert.assertEquals(5, countVertices());
@@ -41,7 +40,6 @@ public class ManyToManyInverseTest extends BaseLocalDbTest {
 	
 	@Test
 	public void testManyManyToManies() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
 		ManyA manyA1 = new ManyA(god);
@@ -57,8 +55,8 @@ public class ManyToManyInverseTest extends BaseLocalDbTest {
 		manyA1.addToIManyB(manyB2);
 		manyA2.addToIManyB(manyB1);
 		manyA2.addToIManyB(manyB2);
-		
-		db.stopTransaction(Conclusion.SUCCESS);
+
+        db.commit();
 		God godTest = new God(god.getVertex());
 		Assert.assertEquals(4, godTest.getIMany().size());
 		Assert.assertEquals(5, countVertices());
@@ -76,7 +74,6 @@ public class ManyToManyInverseTest extends BaseLocalDbTest {
 	
 	@Test
 	public void testManyToManyInversed() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
 		ManyA manyA1 = new ManyA(god);
@@ -89,8 +86,8 @@ public class ManyToManyInverseTest extends BaseLocalDbTest {
 		manyB2.setName("manyB2");
 		
 		manyB1.addToIManyA(manyA1);
-		
-		db.stopTransaction(Conclusion.SUCCESS);
+
+        db.commit();
 		God godTest = new God(god.getVertex());
 		Assert.assertEquals(4, godTest.getIMany().size());
 		Assert.assertEquals(5, countVertices());
@@ -103,7 +100,6 @@ public class ManyToManyInverseTest extends BaseLocalDbTest {
 	
 	@Test
 	public void testManyManyToManiesInversed() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
 		ManyA manyA1 = new ManyA(god);
@@ -119,8 +115,8 @@ public class ManyToManyInverseTest extends BaseLocalDbTest {
 		manyB1.addToIManyA(manyA2);
 		manyB2.addToIManyA(manyA1);
 		manyB2.addToIManyA(manyA2);
-		
-		db.stopTransaction(Conclusion.SUCCESS);
+
+        db.commit();
 		God godTest = new God(god.getVertex());
 		Assert.assertEquals(4, godTest.getIMany().size());
 		Assert.assertEquals(5, countVertices());

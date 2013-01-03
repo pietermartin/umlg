@@ -16,7 +16,6 @@ public class TestQualifiers extends BaseLocalDbTest {
 	public void testQualifier1() {
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
-		db.startTransaction();
 		Bank bank = new Bank(true);
 		bank.setName("BADASS");
 		for (int i = 0; i < 1000; i++) {
@@ -31,7 +30,7 @@ public class TestQualifiers extends BaseLocalDbTest {
 		john1.setAccountNumber(1);
 		john1.setBank(bank);
 
-		db.stopTransaction(Conclusion.SUCCESS);
+		db.commit();
 		Assert.assertEquals(1001, new Bank(bank.getVertex()).getCustomer().size());
 		Assert.assertNotNull(new Bank(bank.getVertex()).getCustomerForNameQualifierAccountNumberQualifier("c1", 1));
 		Assert.assertNotNull(new Bank(bank.getVertex()).getCustomerJohn001());

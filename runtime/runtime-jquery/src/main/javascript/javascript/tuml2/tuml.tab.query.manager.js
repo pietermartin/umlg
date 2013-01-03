@@ -59,12 +59,17 @@
                 });
             }).text('execute').appendTo(oclExecuteButtonDiv);
 
-            var inputEditButtonDiv = $('<div />', {class:'oclinputeditbutton'}).appendTo(oclInnerButton);
-            var oclQueryNameInputDiv = $('<div />', {class:'oclqueryname'}).appendTo(inputEditButtonDiv);
-            $('<input >', {id:queryTabDivName + '_' + 'QueryName', type:'text'}).val(query.name).appendTo(oclQueryNameInputDiv);
-            var oclEditButtonDiv = $('<div />', {class:"ocleditbutton"}).appendTo(inputEditButtonDiv);
+            var inputEditButtonDiv;
+            var oclQueryNameInputDiv;
+            var oclEditButtonDiv;
+            if (isTumlLib) {
+                inputEditButtonDiv = $('<div />', {class:'oclinputeditbutton'}).appendTo(oclInnerButton);
+                oclQueryNameInputDiv = $('<div />', {class:'oclqueryname'}).appendTo(inputEditButtonDiv);
+                $('<input >', {id:queryTabDivName + '_' + 'QueryName', type:'text'}).val(query.name).appendTo(oclQueryNameInputDiv);
+                oclEditButtonDiv = $('<div />', {class:"ocleditbutton"}).appendTo(inputEditButtonDiv);
+            }
 
-            if (instanceQueryUri !== '') {
+            if (isTumlLib && instanceQueryUri !== '') {
                 $('<button />', {id:queryTabDivName + '_' + 'SaveButton'}).text('save to instance').click(function () {
                     var query = queryToJson(queryTabDivName, self.queryId);
                     $.ajax({
@@ -98,7 +103,7 @@
                 }).appendTo(oclEditButtonDiv);
             }
 
-            if (classQueryUri !== '') {
+            if (isTumlLib && classQueryUri !== '') {
                 $('<button />', {id:queryTabDivName + '_' + 'SaveButton'}).text('save to class').click(function () {
                     var query = queryToJson(queryTabDivName, self.queryId);
                     $.ajax({
@@ -131,7 +136,7 @@
                     });
                 }).appendTo(oclEditButtonDiv);
             }
-            if (!post) {
+            if (isTumlLib && !post) {
                 $('<button />', {id:queryTabDivName + '_' + 'CancelButton'}).text('cancel').appendTo(oclEditButtonDiv);
                 $('<button />', {id:queryTabDivName + '_' + 'DeleteButton'}).text('delete').click(function () {
 

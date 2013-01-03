@@ -13,7 +13,6 @@ public class TestAllInstances extends BaseLocalDbTest {
 
 	@Test
 	public void testAllInstancesWithInterfaceAsCompositionalOwner() {
-		db.startTransaction();
 		InterfaceRealization1 interfaceRealization1_1 = new InterfaceRealization1(true);
 		interfaceRealization1_1.setName("interfaceRealization1_1");
 		InterfaceRealization1 interfaceRealization1_2 = new InterfaceRealization1(true);
@@ -31,8 +30,8 @@ public class TestAllInstances extends BaseLocalDbTest {
 		interfaceRealization2_3.setName("interfaceRealization2_3");
 		InterfaceRealization2 interfaceRealization2_4 = new InterfaceRealization2(interfaceRealization1_4);
 		interfaceRealization2_4.setName("interfaceRealization2_4");
-		
-		db.stopTransaction(Conclusion.SUCCESS);
+
+        db.commit();
 		Assert.assertEquals(4, InterfaceRealization1.allInstances().size());
 		Assert.assertEquals(4, InterfaceRealization2.allInstances().size());
 	}

@@ -22,7 +22,6 @@ public class TestQualifiedDeletion extends BaseLocalDbTest {
 	@SuppressWarnings("unused")
 	@Test
 	public void testDeletionManyToMany() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
 		Universe universe1 = new Universe(god);
@@ -69,16 +68,15 @@ public class TestQualifiedDeletion extends BaseLocalDbTest {
 		many14.addToMany2(many23);
 		many14.addToMany2(many24);
 
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(13, countVertices());
 		Assert.assertEquals(29, countEdges());
 		Many2 many2Test = new Many2(many21.getVertex());
 		Assert.assertEquals(1, many2Test.getMany1ForQualifier1("many11").size());
 		
-		db.startTransaction();
 		Many1 many1Test = new Many1(many11.getVertex());
 		many1Test.delete();
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		
 		many2Test = new Many2(many21.getVertex());
 		Assert.assertTrue(many2Test.getMany1ForQualifier1("many11").isEmpty());
@@ -87,7 +85,6 @@ public class TestQualifiedDeletion extends BaseLocalDbTest {
 	@SuppressWarnings("unused")
 	@Test
 	public void testDeletionManyToManyList() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
 		Universe universe1 = new Universe(god);
@@ -134,16 +131,15 @@ public class TestQualifiedDeletion extends BaseLocalDbTest {
 		many14.addToMany2List(many23);
 		many14.addToMany2List(many24);
 
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(13, countVertices());
 		Assert.assertEquals(29, countEdges());
 		Many2 many2Test = new Many2(many21.getVertex());
 		Assert.assertEquals(1, many2Test.getMany1ListForListQualifier1("many11").size());
 		
-		db.startTransaction();
 		Many1 many1Test = new Many1(many11.getVertex());
 		many1Test.delete();
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		
 		many2Test = new Many2(many21.getVertex());
 		Assert.assertTrue(many2Test.getMany1ListForListQualifier1("many11").isEmpty());
@@ -155,74 +151,67 @@ public class TestQualifiedDeletion extends BaseLocalDbTest {
 	
 	@Test
 	public void testQualifiedManyDeletion() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
 		Nature nature = new Nature(true);
 		nature.setName1("name1_0");
 		nature.setName2("xxx");
 		nature.addToGod(god);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 
 		Assert.assertEquals(2, countVertices());
 		Assert.assertEquals(2, countEdges());
 		
-		db.startTransaction();
 		nature = new Nature(true);
 		nature.setName1("name1_1");
 		nature.setName2("xxx");
 		nature.addToGod(god);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 
 		Assert.assertEquals(3, countVertices());
 		Assert.assertEquals(3, countEdges());
 
-		db.startTransaction();
 		nature = new Nature(true);
 		nature.setName1("name1_2");
 		nature.setName2("xxx");
 		nature.addToGod(god);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 
 		Assert.assertEquals(4, countVertices());
 		Assert.assertEquals(4, countEdges());
 
-		db.startTransaction();
 		nature = new Nature(true);
 		nature.setName1("name1_3");
 		nature.setName2("xxx");
 		nature.addToGod(god);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 
 		Assert.assertEquals(5, countVertices());
 		Assert.assertEquals(5, countEdges());
 
-		db.startTransaction();
 		nature = new Nature(true);
 		nature.setName1("name1_4");
 		nature.setName2("yyy");
 		nature.addToGod(god);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 
 		Assert.assertEquals(6, countVertices());
 		Assert.assertEquals(6, countEdges());
 
-		db.startTransaction();
 		God godTest = new God(god.getVertex());
 		Set<Nature> natureForQualifier2 = godTest.getNatureForQualifier2("xxx");
 		Assert.assertEquals(4, natureForQualifier2.size());
 		natureForQualifier2 = godTest.getNatureForQualifier2("yyy");
 		Assert.assertEquals(1, natureForQualifier2.size());
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 
-		db.startTransaction();
 		God godTest2 = new God(god.getVertex());
 		TinkerSet<Nature> natures = godTest2.getNatureForQualifier2("xxx");
 		for (Nature nature2 : natures) {
 			nature2.delete();
 			break;
 		}
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 
 		Assert.assertEquals(5, countVertices());
 		Assert.assertEquals(5, countEdges());

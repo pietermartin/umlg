@@ -28,7 +28,7 @@ public class TestMetaQueries extends BaseLocalDbTest {
         d3.setName("d3");
         Dream d4 = new Dream(g);
         d4.setName("d4");
-        db.stopTransaction(TransactionalGraph.Conclusion.SUCCESS);
+        db.commit();
         Assert.assertEquals(5, countVertices());
         Assert.assertEquals(5, countEdges());
 
@@ -39,7 +39,7 @@ public class TestMetaQueries extends BaseLocalDbTest {
         q1.setQueryString("self.g.dream");
         DreamMeta.getInstance().addToClassQuery(q1);
 
-        db.stopTransaction(TransactionalGraph.Conclusion.SUCCESS);
+        db.commit();
         //One for the enum also
         Assert.assertEquals(8, countVertices());
         Assert.assertEquals(8, countEdges());
@@ -51,7 +51,7 @@ public class TestMetaQueries extends BaseLocalDbTest {
         q2.setQueryString("self.g.dream");
         DreamMeta.getInstance().addToClassQuery(q2);
 
-        db.stopTransaction(TransactionalGraph.Conclusion.SUCCESS);
+        db.commit();
         //One for the enum also
         Assert.assertEquals(10, countVertices());
         Assert.assertEquals(10, countEdges());

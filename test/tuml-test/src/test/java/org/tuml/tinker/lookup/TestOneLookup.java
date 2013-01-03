@@ -25,7 +25,6 @@ public class TestOneLookup extends BaseLocalDbTest {
 
 	@Test
 	public void testCompositeParent() {
-		db.startTransaction();
 		God g = new God(true);
 		g.setName("G");
 		Creature c1 = new Creature(g);
@@ -38,13 +37,12 @@ public class TestOneLookup extends BaseLocalDbTest {
 		s2.setName("s2");
 		c1.addToSpook(s1);
 		c2.addToSpook(s2);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(g, new Creature(c1.getVertex()).lookupFor_creature_spook_CompositeParent());
 	}
 	
 	@Test
 	public void testCompositeParentOfManyToManies() {
-		db.startTransaction();
 		God g = new God(true);
 		ManyA manyA1 = new ManyA(g);
 		ManyA manyA2 = new ManyA(g);
@@ -71,21 +69,20 @@ public class TestOneLookup extends BaseLocalDbTest {
 		manyA4.addToIManyB(manyB2);
 		manyA4.addToIManyB(manyB3);
 		manyA4.addToIManyB(manyB4);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(g, new ManyA(manyA4.getVertex()).lookupFor_iManyA_iManyB_CompositeParent());
 		Assert.assertEquals(g, new ManyB(manyB4.getVertex()).lookupFor_iManyB_iManyA_CompositeParent());
 	}
 	
 	@Test
 	public void testLookupStrategy() {
-		db.startTransaction();
 		God g = new God(true);
 		g.setName("G");
 		Creature c1 = new Creature(g);
 		c1.setName("c1");
 		Creature c2 = new Creature(g);
 		c2.setName("c2");
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 
 		TinkerSet<Creature> result = g.getBeing().<Creature, Creature> collect(new BodyExpressionEvaluator<Creature, Being>() {
 			@Override
@@ -109,7 +106,6 @@ public class TestOneLookup extends BaseLocalDbTest {
 
 	@Test
 	public void testLookup1() {
-		db.startTransaction();
 		God g = new God(true);
 		g.setName("G");
 		Creature c1 = new Creature(g);
@@ -124,7 +120,7 @@ public class TestOneLookup extends BaseLocalDbTest {
 		c2.addToSpook(s2);
 		Creature c3 = new Creature(g);
 		Spook s3 = new Spook(g);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 
 		Assert.assertEquals(1, c1.lookupFor_creature_spook().size());
 		Assert.assertEquals(1, c2.lookupFor_creature_spook().size());
@@ -134,7 +130,6 @@ public class TestOneLookup extends BaseLocalDbTest {
 
 	@Test
 	public void testLookupWithNonCompositeLookupInCompositeTree() {
-		db.startTransaction();
 		God g = new God(true);
 		g.setName("G");
 		Nightmare n1 = new Nightmare(true);
@@ -146,13 +141,12 @@ public class TestOneLookup extends BaseLocalDbTest {
 		Nightmare n3 = new Nightmare(true);
 		n3.setName("n3");
 		g.addToNightmare(n3);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(3, g.lookupFor_godOfMemory_memory().size());
 	}
 	
 	@Test
 	public void testUniqueManyLookup() {
-		db.startTransaction();
 		God g = new God(true);
 		Level1 l1_0 = new Level1(g);
 		Level1 l1_1 = new Level1(g);
@@ -185,13 +179,12 @@ public class TestOneLookup extends BaseLocalDbTest {
 		Devil2 d2_2_0 = new Devil2(d1_2);
 		Devil2 d2_2_1 = new Devil2(d1_2);
 		Devil2 d2_2_2 = new Devil2(d1_2);
-		
-		db.stopTransaction(Conclusion.SUCCESS);
+
+        db.commit();
 		Assert.assertEquals(9, l2_0_0.lookupFor_level2_devil2().size());
 		
-		db.startTransaction();
 		l2_0_0.addToDevil2(d2_0_0);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		
 		//TODO
 		l2_0_0.initialiseProperty(Level2.Level2RuntimePropertyEnum.level1, false);

@@ -22,7 +22,6 @@ public class SequenceTest extends BaseLocalDbTest {
 
 	@Test
 	public void testSequence() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
 		Hand hand = new Hand(god);
@@ -37,7 +36,7 @@ public class SequenceTest extends BaseLocalDbTest {
 		Hand hand4 = new Hand(god);
 		hand4.setLeft(true);
 		hand4.setName("hand4");
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		God godTest = new God(god.getVertex());
 		Assert.assertEquals(4, godTest.getHand().size());
 		godTest.getHand().get(3).getName().equals("hand4");
@@ -48,7 +47,6 @@ public class SequenceTest extends BaseLocalDbTest {
 	
 	@Test
 	public void testControllingSide() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
 		Hand hand = new Hand(true);
@@ -64,7 +62,7 @@ public class SequenceTest extends BaseLocalDbTest {
 		hand4.setLeft(true);
 		hand4.setName("hand4");
 		god.setHand(new TumlMemorySequence<Hand>(Arrays.asList(new Hand[]{hand, hand2, hand3, hand4})));
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 
 		Hand hand5 = new Hand(true);
 		hand5.setLeft(true);
@@ -74,7 +72,7 @@ public class SequenceTest extends BaseLocalDbTest {
 		hand6.setName("hand6");
 
 		god.setHand(new TumlMemorySequence<Hand>(Arrays.asList(new Hand[]{hand5, hand6})));
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		God gTest = new God(god.getVertex());
 		gTest.getHand().get(1);
 		Hand testHand = new Hand(hand2.getVertex());
@@ -84,7 +82,6 @@ public class SequenceTest extends BaseLocalDbTest {
 	
 	@Test
 	public void testSequenceMaintainsOrder() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
 		Hand hand = new Hand(god);
@@ -99,7 +96,7 @@ public class SequenceTest extends BaseLocalDbTest {
 		Hand hand4 = new Hand(god);
 		hand4.setLeft(true);
 		hand4.setName("hand4");
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		God godTest = new God(god.getVertex());
 		Assert.assertEquals(4, godTest.getHand().size());
 		godTest.getHand().get(3).getName().equals("hand4");
@@ -107,13 +104,11 @@ public class SequenceTest extends BaseLocalDbTest {
 		godTest.getHand().get(1).getName().equals("hand2");
 		godTest.getHand().get(0).getName().equals("hand1");
 		
-		db.startTransaction();
-		
 		Hand hand1_5 = new Hand(true);
 		hand1_5.setLeft(true);
 		hand1_5.setName("hand1_5");
 		god.getHand().add(1, hand1_5);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		
 		God godTest1 = new God(god.getVertex());
 		Assert.assertTrue(godTest1.getHand().get(4).getName().equals("hand4"));
@@ -144,7 +139,6 @@ public class SequenceTest extends BaseLocalDbTest {
 
 	@Test
 	public void testSequenceAddAll1() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
 		Hand hand = new Hand(god);
@@ -159,11 +153,10 @@ public class SequenceTest extends BaseLocalDbTest {
 		Hand hand4 = new Hand(god);
 		hand4.setLeft(true);
 		hand4.setName("hand4");
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		God godTest = new God(god.getVertex());
 		Assert.assertEquals(4, godTest.getHand().size());
 		
-		db.startTransaction();
 		Hand hand5 = new Hand(true);
 		hand5.setLeft(true);
 		hand5.setName("hand5");
@@ -182,7 +175,7 @@ public class SequenceTest extends BaseLocalDbTest {
 		moreHands.add(hand7);
 		moreHands.add(hand8);
 		god.getHand().addAll(moreHands);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 
 		godTest = new God(god.getVertex());
 		Assert.assertEquals(8, godTest.getHand().size());
@@ -198,7 +191,6 @@ public class SequenceTest extends BaseLocalDbTest {
 	
 	@Test
 	public void testSequenceAddAll2() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
 		Hand hand = new Hand(god);
@@ -213,9 +205,8 @@ public class SequenceTest extends BaseLocalDbTest {
 		Hand hand4 = new Hand(god);
 		hand4.setLeft(true);
 		hand4.setName("hand4");
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 
-		db.startTransaction();
 		Hand hand5 = new Hand(true);
 		hand5.setLeft(true);
 		hand5.setName("hand5");
@@ -234,7 +225,7 @@ public class SequenceTest extends BaseLocalDbTest {
 		moreHands.add(hand7);
 		moreHands.add(hand8);
 		god.getHand().addAll(2, moreHands);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 
 		God godTest = new God(god.getVertex());
 		Assert.assertEquals(8, godTest.getHand().size());
@@ -250,7 +241,6 @@ public class SequenceTest extends BaseLocalDbTest {
 
 	@Test
 	public void testSequenceAddObjectMoreThanOnce() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
 		Hand hand1 = new Hand(god);
@@ -259,13 +249,12 @@ public class SequenceTest extends BaseLocalDbTest {
 		Hand hand2 = new Hand(god);
 		hand2.setLeft(true);
 		hand2.setName("hand2");
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 
-		db.startTransaction();
 		God godTest = new God(god.getVertex());
 		godTest.getHand().add(hand1);
 		godTest.getHand().add(hand2);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		
 		God godTest2 = new God(god.getVertex());
 		Assert.assertEquals(4, godTest2.getHand().size());
@@ -279,7 +268,6 @@ public class SequenceTest extends BaseLocalDbTest {
 	
 	@Test
 	public void testManyToManySequenceWithDuplicates() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
 		
@@ -347,14 +335,13 @@ public class SequenceTest extends BaseLocalDbTest {
 		many2_1.addToMany1UnqualifiedList(many1_3);
 		many2_1.addToMany1UnqualifiedList(many1_4);
 
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(9, countVertices());
 		Assert.assertEquals(33, countEdges());
 	}
 
 	@Test
 	public void testRemovalOfEdgeFromIndex() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
 		Hand hand1 = new Hand(god);
@@ -363,13 +350,12 @@ public class SequenceTest extends BaseLocalDbTest {
 		Hand hand2 = new Hand(god);
 		hand2.setLeft(false);
 		hand2.setName("hand2");
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(3, countVertices());
 		Assert.assertEquals(3, countEdges());
 		
-		db.startTransaction();
 		god.addToHand(hand1);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(3, countVertices());
 		Assert.assertEquals(4, countEdges());
 		God gTest = new God(god.getVertex());
@@ -387,7 +373,6 @@ public class SequenceTest extends BaseLocalDbTest {
 	
 	@Test
 	public void testAddAtIndex() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
 		Hand hand1 = new Hand(god);
@@ -403,14 +388,13 @@ public class SequenceTest extends BaseLocalDbTest {
 		finger4.setName("finger4");
 		Finger finger5 = new Finger(hand1);
 		finger5.setName("finger5");
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(7, countVertices());
 		Assert.assertEquals(7, countEdges());
 		
-		db.startTransaction();
 		int indexToTest = 4;
 		hand1.getFinger().add(indexToTest, finger2);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(7, countVertices());
 		Assert.assertEquals(7, countEdges());
 		Finger fingerTest = new Finger(finger2.getVertex());

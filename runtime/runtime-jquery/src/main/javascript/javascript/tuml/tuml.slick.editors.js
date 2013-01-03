@@ -301,7 +301,7 @@
             var rowValue = $('<td class="many-primitive-editor-cell" />').text(value);
             row.append(rowValue);
             row.data('value', value);
-            var img = $('<img class="tuml-many-select-img" src="/restAndJson/javascript/images/delete.png">').click(function () {
+            var img = $('<img class="tuml-many-select-img" src="/' + tumlModelName + '/javascript/images/delete.png">').click(function () {
                 var liClicked = $(this).parent().parent();
                 liClicked.remove();
             });

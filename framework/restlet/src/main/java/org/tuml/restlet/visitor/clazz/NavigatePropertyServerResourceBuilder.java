@@ -120,7 +120,6 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 
         PropertyWrapper otherEndPWrap = new PropertyWrapper(pWrap.getOtherEnd());
 
-        putOrDelete.getBody().addToStatements("GraphDb.getDb().startTransaction()");
         OJTryStatement ojTryStatement = new OJTryStatement();
 
         OJPathName parentPathName = otherEndPWrap.javaBaseTypePath();
@@ -175,11 +174,11 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
             addDeleteResource(pWrap, annotatedClass, parentPathName);
         }
 
-        ojTryStatement.getTryPart().addToStatements("GraphDb.getDb().stopTransaction(Conclusion.SUCCESS)");
+        ojTryStatement.getTryPart().addToStatements("GraphDb.getDb().commit()");
         annotatedClass.addToImports(TinkerGenerationUtil.tinkerConclusionPathName);
 
         ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
-        ojTryStatement.getCatchPart().addToStatements("GraphDb.getDb().stopTransaction(Conclusion.FAILURE)");
+        ojTryStatement.getCatchPart().addToStatements("GraphDb.getDb().rollback()");
 
         OJIfStatement ifRuntime = new OJIfStatement("e instanceof RuntimeException");
         ifRuntime.addToThenPart("throw (RuntimeException)e");
@@ -246,7 +245,6 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
         post.getBody().addToStatements(
                 parentPathName.getLast() + " parentResource = GraphDb.getDb().instantiateClassifier(" + parentPathName.getLast().toLowerCase() + "Id" + ")");
 
-        post.getBody().addToStatements("GraphDb.getDb().startTransaction()");
         OJTryStatement ojTryStatement = new OJTryStatement();
         OJField mapper = new OJField("mapper", TinkerGenerationUtil.ObjectMapper);
         mapper.setInitExp("new ObjectMapper()");
@@ -273,11 +271,11 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 
         addPostResource(concreteClassifier, pWrap, annotatedClass, parentPathName);
 
-        ojTryStatement.getTryPart().addToStatements("GraphDb.getDb().stopTransaction(Conclusion.SUCCESS)");
+        ojTryStatement.getTryPart().addToStatements("GraphDb.getDb().commit()");
         annotatedClass.addToImports(TinkerGenerationUtil.tinkerConclusionPathName);
 
         ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
-        ojTryStatement.getCatchPart().addToStatements("GraphDb.getDb().stopTransaction(Conclusion.FAILURE)");
+        ojTryStatement.getCatchPart().addToStatements("GraphDb.getDb().rollback()");
 
         OJIfStatement ifRuntime = new OJIfStatement("e instanceof RuntimeException");
         ifRuntime.addToThenPart("throw (RuntimeException)e");

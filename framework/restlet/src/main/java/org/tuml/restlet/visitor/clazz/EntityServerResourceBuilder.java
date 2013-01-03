@@ -86,11 +86,11 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
 
         OJTryStatement ojTry = new OJTryStatement();
         ojTry.getTryPart().addToStatements("c.delete()");
-        ojTry.getTryPart().addToStatements("GraphDb.getDb().stopTransaction(Conclusion.SUCCESS)");
+        ojTry.getTryPart().addToStatements("GraphDb.getDb().commit()");
         annotatedClass.addToImports(TinkerGenerationUtil.tinkerConclusionPathName);
         ojTry.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
 
-        ojTry.getCatchPart().addToStatements("GraphDb.getDb().stopTransaction(Conclusion.FAILURE)");
+        ojTry.getCatchPart().addToStatements("GraphDb.getDb().rollback()");
         OJIfStatement ifRuntime = new OJIfStatement("e instanceof RuntimeException");
         ifRuntime.addToThenPart("throw (RuntimeException)e");
         ojTry.getCatchPart().addToStatements(ifRuntime);
@@ -129,14 +129,13 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
                 TumlClassOperations.className(clazz) + " c = new " + TumlClassOperations.className(clazz) + "(GraphDb.getDb().getVertex(this."
                         + getIdFieldName(clazz) + "))");
         annotatedClass.addToImports(TumlClassOperations.getPathName(clazz));
-        put.getBody().addToStatements("GraphDb.getDb().startTransaction()");
         OJTryStatement ojTry = new OJTryStatement();
         ojTry.getTryPart().addToStatements("c.fromJson(entity.getText());");
-        ojTry.getTryPart().addToStatements("GraphDb.getDb().stopTransaction(Conclusion.SUCCESS)");
+        ojTry.getTryPart().addToStatements("GraphDb.getDb().commit()");
         annotatedClass.addToImports(TinkerGenerationUtil.tinkerConclusionPathName);
         ojTry.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
 
-        ojTry.getCatchPart().addToStatements("GraphDb.getDb().stopTransaction(Conclusion.FAILURE)");
+        ojTry.getCatchPart().addToStatements("GraphDb.getDb().rollback()");
         OJIfStatement ifRuntime = new OJIfStatement("e instanceof RuntimeException");
         ifRuntime.addToThenPart("throw (RuntimeException)e");
         ojTry.getCatchPart().addToStatements(ifRuntime);

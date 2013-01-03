@@ -14,7 +14,6 @@ public class TestQualifierOnManyToMany extends BaseLocalDbTest {
 
 	@Test
 	public void testQualifierOnManyToManySet() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
 
@@ -70,7 +69,7 @@ public class TestQualifierOnManyToMany extends BaseLocalDbTest {
 		many1_4.addToMany2(many2_3);
 		many1_4.addToMany2(many2_4);
 
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(9, countVertices());
 		Assert.assertEquals(25, countEdges());
 
@@ -95,7 +94,6 @@ public class TestQualifierOnManyToMany extends BaseLocalDbTest {
 
 	@Test
 	public void testQualifierOnManyToManySequence() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
 
@@ -151,7 +149,7 @@ public class TestQualifierOnManyToMany extends BaseLocalDbTest {
 		many1_4.addToMany2List(many2_3);
 		many1_4.addToMany2List(many2_4);
 
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(9, countVertices());
 		Assert.assertEquals(25, countEdges());
 

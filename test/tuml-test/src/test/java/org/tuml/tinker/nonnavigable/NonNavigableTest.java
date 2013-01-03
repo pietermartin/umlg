@@ -19,7 +19,6 @@ public class NonNavigableTest extends BaseLocalDbTest {
 	@SuppressWarnings("unused")
 	@Test
 	public void testNonNavigableOne() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
 		Universe universe1 = new Universe(god);
@@ -31,7 +30,7 @@ public class NonNavigableTest extends BaseLocalDbTest {
 		NonNavigableOne nonNavigableOne = new NonNavigableOne(god);
 		nonNavigableOne.setName("nonNovigableOne");
 		universe1.setNonNavigableOne(nonNavigableOne);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(6, countVertices());
 		Assert.assertEquals(7, countEdges());
 		Universe testUniverse = new Universe(universe1.getVertex());
@@ -41,7 +40,6 @@ public class NonNavigableTest extends BaseLocalDbTest {
 	@SuppressWarnings("unused")
 	@Test
 	public void testRemoveNonNavigableOne() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
 		Universe universe1 = new Universe(god);
@@ -53,15 +51,14 @@ public class NonNavigableTest extends BaseLocalDbTest {
 		NonNavigableOne nonNavigableOne = new NonNavigableOne(god);
 		nonNavigableOne.setName("nonNovigableOne");
 		universe1.setNonNavigableOne(nonNavigableOne);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(6, countVertices());
 		Assert.assertEquals(7, countEdges());
 		Universe testUniverse = new Universe(universe1.getVertex());
 		Assert.assertNotNull(testUniverse.getNonNavigableOne());
 		
-		db.startTransaction();
 		universe1.setNonNavigableOne(null);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(6, countVertices());
 		Assert.assertEquals(6, countEdges());
 		testUniverse = new Universe(universe1.getVertex());
@@ -71,7 +68,6 @@ public class NonNavigableTest extends BaseLocalDbTest {
 	@SuppressWarnings("unused")
 	@Test
 	public void testNonNavigableMany() {
-		db.startTransaction();
 		God god = new God(true);
 		god.setName("THEGOD");
 		Universe universe1 = new Universe(god);
@@ -86,7 +82,7 @@ public class NonNavigableTest extends BaseLocalDbTest {
 		NonNavigableMany nonNavigableMany2 = new NonNavigableMany(god);
 		nonNavigableMany2.setName("nonNavigableMany2");
 		universe1.addToNonNavigableMany(nonNavigableMany2);
-		db.stopTransaction(Conclusion.SUCCESS);
+        db.commit();
 		Assert.assertEquals(7, countVertices());
 		Assert.assertEquals(9, countEdges());
 		Universe testUniverse = new Universe(universe1.getVertex());
