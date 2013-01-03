@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20110701" xmlns:xmi="http://www.omg.org/spec/XMI/20110701" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xmi:id="_n8luoFVxEeKYaem_7BA6sA" name="testRestletMinimal">
+  <packagedElement xmi:type="uml:Package" xmi:id="_IhV90FVzEeKYaem_7BA6sA" name="org">
+    <packagedElement xmi:type="uml:Package" xmi:id="_Nb5zUFVzEeKYaem_7BA6sA" name="tuml">
+      <packagedElement xmi:type="uml:Class" xmi:id="_Qr9O0FVzEeKYaem_7BA6sA" name="God">
+        <ownedAttribute xmi:id="_v8ijkFV4EeKYaem_7BA6sA" name="name" visibility="public">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+          <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_wj76wFV4EeKYaem_7BA6sA" value="1"/>
+          <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_wj9I4FV4EeKYaem_7BA6sA" value="1"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_Io69wFV5EeKYaem_7BA6sA" name="universe" type="_0Mc5kFV4EeKYaem_7BA6sA" aggregation="composite" association="_Io7k0FV5EeKYaem_7BA6sA">
+          <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Io69wVV5EeKYaem_7BA6sA"/>
+          <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Io69wlV5EeKYaem_7BA6sA" value="*"/>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_0Mc5kFV4EeKYaem_7BA6sA" name="Universe">
+        <ownedAttribute xmi:id="_2la8EFV4EeKYaem_7BA6sA" name="name" visibility="public">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+          <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_26t2oFV4EeKYaem_7BA6sA" value="1"/>
+          <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_26vEwFV4EeKYaem_7BA6sA" value="1"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_60pVkFV4EeKYaem_7BA6sA" name="universeSize" visibility="public">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+          <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_7NDOgFV4EeKYaem_7BA6sA" value="1"/>
+          <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_7NDOgVV4EeKYaem_7BA6sA" value="1"/>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="_Io7k0FV5EeKYaem_7BA6sA" name="god_universe_1" memberEnd="_Io7k0VV5EeKYaem_7BA6sA _Io69wFV5EeKYaem_7BA6sA" navigableOwnedEnd="_Io7k0VV5EeKYaem_7BA6sA">
+        <ownedEnd xmi:id="_Io7k0VV5EeKYaem_7BA6sA" name="god" type="_Qr9O0FVzEeKYaem_7BA6sA" association="_Io7k0FV5EeKYaem_7BA6sA">
+          <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Io7k0lV5EeKYaem_7BA6sA" value="1"/>
+          <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Io7k01V5EeKYaem_7BA6sA" value="1"/>
+        </ownedEnd>
+      </packagedElement>
+    </packagedElement>
+  </packagedElement>
+</uml:Model>
