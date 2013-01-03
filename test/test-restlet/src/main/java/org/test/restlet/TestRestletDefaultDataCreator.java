@@ -91,6 +91,6 @@ public class TestRestletDefaultDataCreator implements DefaultDataCreator {
                 terrestrialCraft.setAquatic(true);
             }
         }
-        GraphDb.getDb().stopTransaction(TransactionalGraph.Conclusion.SUCCESS);
+        GraphDb.getDb().commit();
     }
 }

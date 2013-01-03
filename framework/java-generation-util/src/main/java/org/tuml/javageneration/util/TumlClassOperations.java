@@ -252,7 +252,7 @@ public class TumlClassOperations extends ClassOperations {
 		if (!clazz.isAbstract()) {
 			result.add(clazz);
 		}
-		List<Generalization> generalizations = ModelLoader.getSpecifics(clazz);
+		List<Generalization> generalizations = ModelLoader.INSTANCE.getSpecifics(clazz);
 		for (Generalization generalization : generalizations) {
 			Classifier specific = generalization.getSpecific();
 			getConcreteImplementations(result, specific);
@@ -261,7 +261,7 @@ public class TumlClassOperations extends ClassOperations {
 
 	private static void getSpecializations(Set<Classifier> result, Classifier clazz) {
 		result.add(clazz);
-		List<Generalization> generalizations = ModelLoader.getSpecifics(clazz);
+		List<Generalization> generalizations = ModelLoader.INSTANCE.getSpecifics(clazz);
 		for (Generalization generalization : generalizations) {
 			Classifier specific = generalization.getSpecific();
 			getSpecializations(result, specific);
@@ -270,7 +270,7 @@ public class TumlClassOperations extends ClassOperations {
 
 	public static Set<Classifier> getRealizationWithCompositeOwner(Interface inf) {
 		Set<Classifier> result = new HashSet<Classifier>();
-		List<InterfaceRealization> interfaceRealizations = ModelLoader.getInterfaceRealization(inf);
+		List<InterfaceRealization> interfaceRealizations = ModelLoader.INSTANCE.getInterfaceRealization(inf);
 		for (InterfaceRealization interfaceRealization : interfaceRealizations) {
 			BehavioredClassifier c = interfaceRealization.getImplementingClassifier();
 			if (hasCompositeOwner(c)) {
@@ -282,7 +282,7 @@ public class TumlClassOperations extends ClassOperations {
 
 	public static Set<Classifier> getRealizationWithoutCompositeOwner(Interface inf) {
 		Set<Classifier> result = new HashSet<Classifier>();
-		List<InterfaceRealization> interfaceRealizations = ModelLoader.getInterfaceRealization(inf);
+		List<InterfaceRealization> interfaceRealizations = ModelLoader.INSTANCE.getInterfaceRealization(inf);
 		for (InterfaceRealization interfaceRealization : interfaceRealizations) {
 			BehavioredClassifier c = interfaceRealization.getImplementingClassifier();
 			if (!hasCompositeOwner(c)) {

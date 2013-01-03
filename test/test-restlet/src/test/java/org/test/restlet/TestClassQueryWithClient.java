@@ -1,8 +1,6 @@
 package org.test.restlet;
 
-import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
 import org.junit.*;
 import org.restlet.Client;
 import org.restlet.Context;
@@ -11,7 +9,6 @@ import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 import org.tuml.restandjson.RestAndJsonComponent;
 import org.tuml.runtime.restlet.TumlMetaQueryServerResource;
-import org.tuml.runtime.restlet.TumlMetaQueryServerResourceImpl;
 
 import java.io.IOException;
 
@@ -21,16 +18,16 @@ import java.io.IOException;
  */
 public class TestClassQueryWithClient {
 
-    private static RestAndJsonComponent tumlRestletServerComponent2 = new RestAndJsonComponent();
+    private static RestAndJsonComponent restAndJsonComponent = new RestAndJsonComponent();
 
     @BeforeClass
     public static void beforeClass() throws Exception {
-        tumlRestletServerComponent2.start();
+        restAndJsonComponent.start();
     }
 
     @AfterClass
     public static void afterClass() throws Exception {
-        tumlRestletServerComponent2.stop();
+        restAndJsonComponent.stop();
     }
 
     @org.junit.Test

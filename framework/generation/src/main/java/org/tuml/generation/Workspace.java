@@ -35,6 +35,8 @@ public class Workspace {
     }
 
     public void clear() {
+        ModelLoader.INSTANCE.clear();
+
 		javaClassMap.clear();
 		javaModelPrinter.clear();
 	}
@@ -72,7 +74,7 @@ public class Workspace {
 	}
 
 	private void visitModel() {
-		this.model = ModelLoader.loadModel(modelFile);
+		this.model = ModelLoader.INSTANCE.loadModel(modelFile);
 		logger.info(String.format("Start visiting the model"));
 		for (Visitor<?> v : visitors) {
 			ModelVisitor.visitModel(this.model, v);

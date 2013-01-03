@@ -32,18 +32,19 @@ public class BaseLocalDbTest {
 		}
 	}
 
-	@After
-	public void after() {
-		db.shutdown();
-	}
-
 	@Before
 	public void before() {
 		db = createNakedGraph();
 		GraphDb.setDb(db);
 	}
 
-	protected TumlGraph createNakedGraph() {
+    @After
+    public void after() {
+        db.shutdown();
+        GraphDb.remove();
+    }
+
+    protected TumlGraph createNakedGraph() {
 		String dbUrl = TumlProperties.INSTANCE.getTumlDbLocation();
 		String parsedUrl = dbUrl;
 		if (dbUrl.startsWith("local:")) {

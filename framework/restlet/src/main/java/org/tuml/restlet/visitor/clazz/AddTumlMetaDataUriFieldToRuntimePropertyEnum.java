@@ -64,7 +64,7 @@ public class AddTumlMetaDataUriFieldToRuntimePropertyEnum extends BaseVisitor im
 //            if (ModelLoader.getImportedModelLibraries().contains(pWrap.getModel())) {
 //                contextPath = ModelLoader.getModel().getName() + "/" + pWrap.getModel().getName();
 //            } else {
-                contextPath = ModelLoader.getModel().getName();
+                contextPath = ModelLoader.INSTANCE.getModel().getName();
 //            }
             uri = "\"/" + contextPath + "/" + StringUtils.uncapitalize(pWrap.getType().getName()) + "MetaData\"";
         } else {

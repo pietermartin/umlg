@@ -45,6 +45,18 @@ public class RestletComponentAndApplicationGenerator extends BaseVisitor impleme
 
         addComponentMainMethod(model, component);
         addComponentDefaultConstructor(model, component);
+        addStop(component);
+    }
+
+    private void addStop(OJAnnotatedClass component) {
+        OJAnnotatedOperation stop = new OJAnnotatedOperation("stop");
+        TinkerGenerationUtil.addOverrideAnnotation(stop);
+        stop.getBody().addToStatements("GraphDb.getDb().shutdown()");
+        stop.getBody().addToStatements("GraphDb.remove()");
+        stop.getBody().addToStatements("super.stop()");
+        component.addToImports(TinkerGenerationUtil.graphDbPathName);
+        stop.addToThrows(new OJPathName("java.lang.Exception"));
+        component.addToOperations(stop);
     }
 
     private void addComponentMainMethod(Model model, OJAnnotatedClass component) {
@@ -53,16 +65,6 @@ public class RestletComponentAndApplicationGenerator extends BaseVisitor impleme
         main.addParam("args", new OJPathName("String[]"));
         component.addToOperations(main);
 
-        main.getBody().addToStatements("URL modelFileURL = Thread.currentThread().getContextClassLoader().getResource(\"" + this.workspace.getModelFile().getName() + "\")");
-        OJIfStatement ifFileExist = new OJIfStatement("modelFileURL == null", "throw new IllegalStateException(\"Model file " + this.workspace.getModelFile().getName() + " not found. The model's file name must be on the classpath.\")");
-        main.getBody().addToStatements(ifFileExist);
-        main.getBody().addToStatements("final File modelFile = new File(modelFileURL.toURI())");
-        main.getBody().addToStatements("//Load the mode async\nnew Thread(new Runnable() {\n    @Override\n    public void run() {\n        ModelLoader.loadModel(modelFile);\n        TumlOcl2Parser tumlOcl2Parser = TumlOcl2Parser.INSTANCE;\n    }\n}).start()");
-        component.addToImports(TinkerGenerationUtil.ModelLoader);
-        component.addToImports(TinkerGenerationUtil.TumlOcl2Parser);
-        component.addToImports("java.io.File");
-        component.addToImports("java.net.URL");
-
         main.getBody().addToStatements(getComponentName(model) + " app = new " + getComponentName(model) + "()");
         main.getBody().addToStatements("app.start()");
         main.addToThrows("java.lang.Exception");
@@ -70,6 +72,22 @@ public class RestletComponentAndApplicationGenerator extends BaseVisitor impleme
 
     private void addComponentDefaultConstructor(Model model, OJAnnotatedClass component) {
         OJConstructor constructor = component.getDefaultConstructor();
+
+        constructor.getBody().addToStatements("URL modelFileURL = Thread.currentThread().getContextClassLoader().getResource(\"" + this.workspace.getModelFile().getName() + "\")");
+        OJIfStatement ifFileExist = new OJIfStatement("modelFileURL == null", "throw new IllegalStateException(\"Model file " + this.workspace.getModelFile().getName() + " not found. The model's file name must be on the classpath.\")");
+        constructor.getBody().addToStatements(ifFileExist);
+
+        OJTryStatement ojTryStatement = new OJTryStatement();
+
+        ojTryStatement.getTryPart().addToStatements("final File modelFile = new File(modelFileURL.toURI())");
+        ojTryStatement.getTryPart().addToStatements("//Load the mode async\nnew Thread(new Runnable() {\n    @Override\n    public void run() {\n        ModelLoader.INSTANCE.loadModel(modelFile);\n        TumlOcl2Parser tumlOcl2Parser = TumlOcl2Parser.INSTANCE;\n    }\n}).start()");
+        component.addToImports(TinkerGenerationUtil.ModelLoader);
+        component.addToImports(TinkerGenerationUtil.TumlOcl2Parser);
+        component.addToImports("java.io.File");
+        component.addToImports("java.net.URL");
+        ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
+        ojTryStatement.getCatchPart().addToStatements("throw new RuntimeException(e)");
+        constructor.getBody().addToStatements(ojTryStatement);
 
         constructor.getBody().addToStatements("TumlGraphCreator.INSTANCE.startupGraph()");
         component.addToImports(TinkerGenerationUtil.TumlGraphCreator);

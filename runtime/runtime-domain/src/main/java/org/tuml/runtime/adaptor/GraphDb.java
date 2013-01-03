@@ -9,10 +9,6 @@ public class GraphDb {
     }
 
     private static ThreadLocal<TumlGraph> dbVar = new ThreadLocal<TumlGraph>() {
-//        @Override
-//        public void set(TumlGraph db) {
-//            super.set(db);
-//        }
         @Override
         protected TumlGraph initialValue() {
             return staticdb;
@@ -21,24 +17,15 @@ public class GraphDb {
 
     public static TumlGraph getDb() {
         return dbVar.get();
-//		TumlGraph nakedGraph = dbVar.get();
-//		if (nakedGraph==null) {
-//			nakedGraph = staticdb;
-//			setDb(nakedGraph);
-//		}
-//		return nakedGraph;
     }
 
     public static void setDb(TumlGraph db) {
         dbVar.remove();
         staticdb = db;
-//        dbVar.set(db);
-//        if (db == null) {
-//            dbVar.remove();
-//        }
     }
 
     public static void remove() {
+        staticdb = null;
         dbVar.remove();
     }
 

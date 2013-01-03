@@ -31,7 +31,7 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		ModelLoader.loadModel(new File("test/tuml-test-ocl/src/main/model/test-ocl.uml"));
+		ModelLoader.INSTANCE.loadModel(new File("test/tuml-test-ocl/src/main/model/test-ocl.uml"));
 		@SuppressWarnings("unused")
 		TumlOcl2Parser instance = TumlOcl2Parser.INSTANCE;
 	}

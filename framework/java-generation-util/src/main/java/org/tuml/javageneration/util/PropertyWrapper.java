@@ -1270,7 +1270,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     }
 
     public boolean hasMaxLength() {
-        Stereotype stereotype = ModelLoader.findStereotype(TumlValidationEnum.MaxLength.name());
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(TumlValidationEnum.MaxLength.name());
         return property.isStereotypeApplied(stereotype);
     }
 
@@ -1301,7 +1301,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 
     public List<Validation> getValidations() {
         List<Validation> result = new ArrayList<Validation>();
-        List<Stereotype> stereoTypes = ModelLoader.getStereotypes();
+        List<Stereotype> stereoTypes = ModelLoader.INSTANCE.getStereotypes();
         for (Stereotype stereotype : stereoTypes) {
             if (property.isStereotypeApplied(stereotype)) {
                 result.add(TumlValidationEnum.fromStereotype(stereotype, this.property));
@@ -1341,37 +1341,37 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     }
 
     public MaxLength getMaxLength() {
-        Stereotype stereotype = ModelLoader.findStereotype(TumlValidationEnum.MaxLength.name());
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(TumlValidationEnum.MaxLength.name());
         return new MaxLength((Integer) property.getValue(stereotype, "length"));
     }
 
     public MinLength getMinLength() {
-        Stereotype stereotype = ModelLoader.findStereotype(TumlValidationEnum.MinLength.name());
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(TumlValidationEnum.MinLength.name());
         return new MinLength((Integer) property.getValue(stereotype, "length"));
     }
 
     public RangeLength getRangeLength() {
-        Stereotype stereotype = ModelLoader.findStereotype(TumlValidationEnum.RangeLength.name());
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(TumlValidationEnum.RangeLength.name());
         return new RangeLength((Integer) property.getValue(stereotype, "min"), (Integer) property.getValue(stereotype, "max"));
     }
 
     public Max getMax() {
-        Stereotype stereotype = ModelLoader.findStereotype(TumlValidationEnum.Max.name());
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(TumlValidationEnum.Max.name());
         return new Max((Integer) property.getValue(stereotype, "value"));
     }
 
     public Min getMin() {
-        Stereotype stereotype = ModelLoader.findStereotype(TumlValidationEnum.Min.name());
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(TumlValidationEnum.Min.name());
         return new Min((Integer) property.getValue(stereotype, "value"));
     }
 
     public Range getRange() {
-        Stereotype stereotype = ModelLoader.findStereotype(TumlValidationEnum.Range.name());
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(TumlValidationEnum.Range.name());
         return new Range((Integer) property.getValue(stereotype, "min"), (Integer) property.getValue(stereotype, "max"));
     }
 
     public Url getUrl() {
-        Stereotype stereotype = ModelLoader.findStereotype(TumlValidationEnum.URL.name());
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(TumlValidationEnum.URL.name());
         return new Url((String) property.getValue(stereotype, "protocol"), (String) property.getValue(stereotype, "host"), (Integer) property.getValue(stereotype, "port"),
                 (String) property.getValue(stereotype, "regexp"), (String) property.getValue(stereotype, "flags"));
     }
@@ -1381,32 +1381,32 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     }
 
     public boolean hasMinLength() {
-        Stereotype stereotype = ModelLoader.findStereotype(TumlValidationEnum.MinLength.name());
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(TumlValidationEnum.MinLength.name());
         return property.isStereotypeApplied(stereotype);
     }
 
     public boolean hasRangeLength() {
-        Stereotype stereotype = ModelLoader.findStereotype(TumlValidationEnum.RangeLength.name());
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(TumlValidationEnum.RangeLength.name());
         return property.isStereotypeApplied(stereotype);
     }
 
     public boolean hasMin() {
-        Stereotype stereotype = ModelLoader.findStereotype(TumlValidationEnum.Min.name());
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(TumlValidationEnum.Min.name());
         return property.isStereotypeApplied(stereotype);
     }
 
     public boolean hasMax() {
-        Stereotype stereotype = ModelLoader.findStereotype(TumlValidationEnum.Max.name());
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(TumlValidationEnum.Max.name());
         return property.isStereotypeApplied(stereotype);
     }
 
     public boolean hasRange() {
-        Stereotype stereotype = ModelLoader.findStereotype(TumlValidationEnum.Range.name());
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(TumlValidationEnum.Range.name());
         return property.isStereotypeApplied(stereotype);
     }
 
     public boolean hasUrl() {
-        Stereotype stereotype = ModelLoader.findStereotype(TumlValidationEnum.URL.name());
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(TumlValidationEnum.URL.name());
         return property.isStereotypeApplied(stereotype);
     }
 

@@ -76,7 +76,7 @@ public class AddUriToRootRuntimePropertyEnum extends BaseVisitor implements Visi
 //                if (ModelLoader.getImportedModelLibraries().contains(clazz.getModel())) {
 //                    contextPath = ModelLoader.getModel().getName() + "/" + clazz.getModel().getName();
 //                } else {
-                    contextPath = ModelLoader.getModel().getName();
+                    contextPath = ModelLoader.INSTANCE.getModel().getName();
 //                }
 				uri = "\"/" + contextPath + "/" + TumlClassOperations.getPathName(clazz).getLast().toLowerCase() + "s\"";
 			} else {

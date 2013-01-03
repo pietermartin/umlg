@@ -87,7 +87,7 @@ public class AddTumlLookupCompositeParentUriToRuntimePropertyEnum extends BaseVi
 //            if (ModelLoader.getImportedModelLibraries().contains(propertyWrapper.getModel())) {
 //                contextPath = ModelLoader.getModel().getName() + "/" + propertyWrapper.getModel().getName();
 //            } else {
-                contextPath = ModelLoader.getModel().getName();
+                contextPath = ModelLoader.INSTANCE.getModel().getName();
 //            }
 
             if (!onCompositeParent) {

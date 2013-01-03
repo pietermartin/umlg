@@ -25,9 +25,10 @@ import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.SendSignalAction;
 import org.eclipse.uml2.uml.State;
+import org.tuml.framework.ModelLoadedEvent;
 import org.tuml.framework.ModelLoader;
 
-public class TumlOcl2Parser {
+public class TumlOcl2Parser implements ModelLoadedEvent {
 
 	private OCL<Package, Classifier, Operation, Property, EnumerationLiteral, Parameter, State, CallOperationAction, SendSignalAction, Constraint, Class, EObject> ocl;
 	private Environment<Package, Classifier, Operation, Property, EnumerationLiteral, Parameter, State, CallOperationAction, SendSignalAction, Constraint, Class, EObject> environment;
@@ -35,8 +36,9 @@ public class TumlOcl2Parser {
 	public final static TumlOcl2Parser INSTANCE = new TumlOcl2Parser();
 
 	private TumlOcl2Parser() {
-		org.eclipse.ocl.uml.OCL.initialize(ModelLoader.RESOURCE_SET);
-		this.ocl = org.eclipse.ocl.uml.OCL.newInstance(ModelLoader.RESOURCE_SET);
+        ModelLoader.INSTANCE.subscribeModelLoaderEvent(this);
+		org.eclipse.ocl.uml.OCL.initialize(ModelLoader.INSTANCE.getRESOURCE_SET());
+		this.ocl = org.eclipse.ocl.uml.OCL.newInstance(ModelLoader.INSTANCE.getRESOURCE_SET());
 		this.environment = this.ocl.getEnvironment();
 		this.helper = this.ocl.createOCLHelper();
 //		NamedElement hierarchy = ModelLoader.findNamedElement("tumlLib::org::tuml::hierarchy::Hierarchy");
@@ -53,7 +55,7 @@ public class TumlOcl2Parser {
 	}
 
 	public static void main(String[] args) {
-		Model model = ModelLoader.loadModel(new File("/home/pieter/workspace-tuml/tuml/test/tuml-test-ocl/src/main/model/test-ocl.uml"));
+		Model model = ModelLoader.INSTANCE.loadModel(new File("/home/pieter/workspace-tuml/tuml/test/tuml-test-ocl/src/main/model/test-ocl.uml"));
 		TumlOcl2Parser parser = new TumlOcl2Parser();
 		StringBuilder sb = new StringBuilder();
 		sb.append("package testoclmodel::org::tuml::testocl\n");
@@ -80,7 +82,7 @@ public class TumlOcl2Parser {
 		expr = parser.parseOcl(sb.toString());
 		System.out.println("Success 3 " + expr);
 
-		NamedElement c = ModelLoader.findNamedElement("testoclmodel::org::tuml::qualifier::Bank");
+		NamedElement c = ModelLoader.INSTANCE.findNamedElement("testoclmodel::org::tuml::qualifier::Bank");
 		parser.helper.setContext((Classifier) c);
 		try {
 			expr = parser.helper.createQuery("employee");
@@ -144,4 +146,13 @@ public class TumlOcl2Parser {
 	private OCLExpression<Classifier> getBodyExpression(Constraint constraint) {
 		return ((ExpressionInOCL) constraint.getSpecification()).getBodyExpression();
 	}
+
+    @Override
+    public void loaded(Model model) {
+        //Reload the newly loaded model
+        org.eclipse.ocl.uml.OCL.initialize(ModelLoader.INSTANCE.getRESOURCE_SET());
+        this.ocl = org.eclipse.ocl.uml.OCL.newInstance(ModelLoader.INSTANCE.getRESOURCE_SET());
+        this.environment = this.ocl.getEnvironment();
+        this.helper = this.ocl.createOCLHelper();
+    }
 }
