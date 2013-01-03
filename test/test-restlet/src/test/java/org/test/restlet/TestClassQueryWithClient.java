@@ -9,6 +9,7 @@ import org.restlet.Context;
 import org.restlet.data.Protocol;
 import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
+import org.tuml.restandjson.RestAndJsonComponent;
 import org.tuml.runtime.restlet.TumlMetaQueryServerResource;
 import org.tuml.runtime.restlet.TumlMetaQueryServerResourceImpl;
 
@@ -20,11 +21,10 @@ import java.io.IOException;
  */
 public class TestClassQueryWithClient {
 
-    private static TumlRestletServerComponent2 tumlRestletServerComponent2;
+    private static RestAndJsonComponent tumlRestletServerComponent2 = new RestAndJsonComponent();
 
     @BeforeClass
     public static void beforeClass() throws Exception {
-        tumlRestletServerComponent2 = new TumlRestletServerComponent2();
         tumlRestletServerComponent2.start();
     }
 

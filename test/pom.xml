@@ -17,6 +17,7 @@
 		<module>tuml-test-basic</module>
 		<module>tuml-test-ocl</module>
 		<module>test-restlet</module>
+        <module>test-restlet-minimal</module>
 <!-- 		<module>instrumentdb</module> -->
 	</modules>
 	<reporting>

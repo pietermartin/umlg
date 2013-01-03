@@ -53,6 +53,30 @@ public class TumlNeo4jGraph implements TumlGraph {
     }
 
     @Override
+    public void rollback() {
+        TransactionManager tm = ((EmbeddedGraphDatabase) neo4jGraph.getRawGraph()).getTxManager();
+        try {
+            if (tm.getTransaction() != null) {
+                neo4jGraph.rollback();
+            }
+        } catch (SystemException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void commit() {
+        TransactionManager tm = ((EmbeddedGraphDatabase) neo4jGraph.getRawGraph()).getTxManager();
+        try {
+            if (tm.getTransaction() != null) {
+                neo4jGraph.commit();
+            }
+        } catch (SystemException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public void stopTransaction(Conclusion conclusion) {
         TransactionManager tm = ((EmbeddedGraphDatabase) neo4jGraph.getRawGraph()).getTxManager();
         try {

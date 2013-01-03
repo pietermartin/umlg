@@ -19,10 +19,9 @@ public class TestToJson extends BaseLocalDbTest {
 
 	@Test
 	public void testToJson() throws JsonParseException, JsonMappingException, IOException {
-		db.startTransaction();
 		Alien human = new Alien(true);
 		human.setName("human1");
-		db.stopTransaction(Conclusion.SUCCESS);
+		db.commit();
 		Assert.assertEquals(1, countVertices());
 		Assert.assertEquals(1, countEdges());
 		ObjectMapper objectMapper = new ObjectMapper();

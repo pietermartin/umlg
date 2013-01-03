@@ -929,7 +929,7 @@
                         sortable:true,
                         editor:selectEditor(property),
                         validator:selectFieldValidator(property),
-                        options:{required:property.lower > 0, tumlLookupUri:property.tumlLookupUri, rowEnumerationLookupMap:new RowEnumerationLookupMap(property.qualifiedName, "/restAndJson/tumlEnumLookup"), rowLookupMap:new RowLookupMap(self.contextVertexId, property.tumlCompositeParentLookupUri, property.tumlCompositeParentLookupUriOnCompositeParent), compositeParentLookupMap:new CompositeParentLookupMap(self.contextVertexId, property.tumlLookupUri, property.tumlLookupOnCompositeParentUri), ordered:property.ordered, unique:property.unique, property:property},
+                        options:{required:property.lower > 0, tumlLookupUri:property.tumlLookupUri, rowEnumerationLookupMap:new RowEnumerationLookupMap(property.qualifiedName, "/"+tumlModelName+"/tumlEnumLookup"), rowLookupMap:new RowLookupMap(self.contextVertexId, property.tumlCompositeParentLookupUri, property.tumlCompositeParentLookupUriOnCompositeParent), compositeParentLookupMap:new CompositeParentLookupMap(self.contextVertexId, property.tumlLookupUri, property.tumlLookupOnCompositeParentUri), ordered:property.ordered, unique:property.unique, property:property},
                         width:120
                     });
                 }

@@ -16,7 +16,7 @@ public class GenerateTestProjects {
 		JavaGenerator javaGenerator = new JavaGenerator();
 		javaGenerator.generate(new File(args[0] + "/test/tuml-test/src/main/model/tinker-test.uml"), new File(args[0] + "/test/tuml-test/"), DefaultVisitors.getDefaultJavaVisitors(), TumlLibVisitors.getDefaultJavaVisitors());
 		javaGenerator = new JavaGenerator();
-		javaGenerator.generate(new File(args[0] + "/test/test-restlet/src/main/model/restANDjson.uml"), new File(args[0] + "/test/test-restlet/"), RestletVisitors.getDefaultJavaVisitors());
+		javaGenerator.generate(new File(args[0] + "/test/test-restlet/src/main/model/restAndJson.uml"), new File(args[0] + "/test/test-restlet/"), RestletVisitors.getDefaultJavaVisitors());
 		javaGenerator = new JavaGenerator();
 		javaGenerator.generate(new File(args[0] + "/test/tuml-test-basic/src/main/model/tinker-test-basic.uml"), new File(args[0] + "/test/tuml-test-basic/"), DefaultVisitors.getDefaultJavaVisitors(), TumlLibVisitors.getDefaultJavaVisitors());
 		javaGenerator = new JavaGenerator();

@@ -149,7 +149,7 @@
             //Add query tree
             //Fetch the query data
             if (contextVertexId !== undefined && contextVertexId !== null) {
-                var classQueryUri = "/restAndJson/classquery/" + contextVertexId + "/query";
+                var classQueryUri = "/" + tumlModelName + "/classquery/" + contextVertexId + "/query";
                 if (classQueryUri != null) {
                     var queryUri = classQueryUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
                     $.ajax({

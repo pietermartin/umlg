@@ -40,8 +40,9 @@ public class TumlRestletGenerationUtil {
     public static final OJPathName Template = new OJPathName("org.restlet.routing.Template");
     public static final OJPathName Directory = new OJPathName("org.restlet.resource.Directory");
 
-    public static final OJPathName TumlGuiServerResource2 = new OJPathName("org.tuml.ui.TumlGuiServerResource2");
-
+    public static final OJPathName TumlGuiServerResource = new OJPathName("org.tuml.runtime.restlet.TumlGuiServerResource");
+    public static final OJPathName Neo4jAdminApp = new OJPathName("org.tuml.runtime.domain.neo4j.Neo4jAdminApp");
+    public static final OJPathName DefaultDataCreator = new OJPathName("org.tuml.runtime.adaptor.DefaultDataCreator");
 
 
     public static String getFieldTypeForProperty(Property p) {

@@ -1,6 +1,13 @@
 package org.tuml.runtime.adaptor;
 
+import org.apache.commons.io.FileUtils;
+import org.tuml.runtime.util.TumlProperties;
+
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Properties;
 
 /**
@@ -17,12 +24,25 @@ public class TumlGraphCreator {
 
     public TumlGraph startupGraph() {
         if (GraphDb.getDb() == null) {
-            Properties properties = new Properties();
             try {
-                properties.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("tuml.env.properties"));
-                String dbUrl = properties.getProperty("tinkerdb");
+                String dbUrl = TumlProperties.INSTANCE.getTumlDb();
+
+                if (TumlProperties.INSTANCE.isClearDbOnStartUp()) {
+                    String parsedUrl = dbUrl;
+                    if (dbUrl.startsWith("local:")) {
+                        parsedUrl = dbUrl.replace("local:", "");
+                    }
+                    File dir = new File(parsedUrl);
+                    if (dir.exists()) {
+                        try {
+                            FileUtils.moveDirectory(dir, new File(dir, "bak-" + new SimpleDateFormat("ddmmyyyy").format(new Date())));
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }
                 @SuppressWarnings("unchecked")
-                Class<TumlGraphFactory> factory = (Class<TumlGraphFactory>) Class.forName(properties.getProperty("tumlgraph.factory"));
+                Class<TumlGraphFactory> factory = (Class<TumlGraphFactory>) Class.forName(TumlProperties.INSTANCE.getTumlGraphFactory());
                 Method m = factory.getDeclaredMethod("getInstance", new Class[0]);
                 TumlGraphFactory nakedGraphFactory = (TumlGraphFactory) m.invoke(null);
                 TumlGraph tumlGraph = nakedGraphFactory.getTumlGraph(dbUrl);

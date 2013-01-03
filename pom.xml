@@ -11,7 +11,7 @@
 		<module>framework</module>
 		<module>runtime</module>
 		<module>test</module>
-	</modules>
+    </modules>
 	<build>
 		<pluginManagement>
 			<plugins>
@@ -49,6 +49,11 @@
 				<artifactId>commons-lang</artifactId>
 				<version>2.4</version>
 			</dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>2.4</version>
+            </dependency>
 			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>

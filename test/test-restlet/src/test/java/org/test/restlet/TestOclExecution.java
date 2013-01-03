@@ -16,6 +16,7 @@ import org.restlet.Context;
 import org.restlet.data.Protocol;
 import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
+import org.tuml.restandjson.RestAndJsonComponent;
 import org.tuml.root.QueryExecuteServerResource;
 import org.tuml.root.Root;
 import org.tuml.test.Hand;
@@ -23,7 +24,10 @@ import org.tuml.test.Human;
 
 public class TestOclExecution {
 
-    private static final TumlRestletServerComponent2 tumlRestletServerComponent2 = new TumlRestletServerComponent2();
+    private static final RestAndJsonComponent tumlRestletServerComponent2 = new RestAndJsonComponent();
+
+    public  TestOclExecution() throws Exception {
+    }
 
     @BeforeClass
     public static void beforeClass() throws Exception {

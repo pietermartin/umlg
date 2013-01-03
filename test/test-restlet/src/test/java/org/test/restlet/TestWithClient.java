@@ -20,6 +20,7 @@ import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
+import org.tuml.restandjson.RestAndJsonComponent;
 import org.tuml.restlet.RootServerResource;
 import org.tuml.test.restlet.Hand_hand_finger_Finger_ServerResource;
 import org.tuml.test.restlet.HumanServerResource;
@@ -27,7 +28,7 @@ import org.tuml.test.restlet.Human_human_hand_Hand_ServerResource;
 
 public class TestWithClient {
 
-    private final TumlRestletServerComponent2 tumlRestletServerComponent2 = new TumlRestletServerComponent2();
+    private final RestAndJsonComponent tumlRestletServerComponent2  = new RestAndJsonComponent();
 
     @Before
     public void beforeClass() throws Exception {

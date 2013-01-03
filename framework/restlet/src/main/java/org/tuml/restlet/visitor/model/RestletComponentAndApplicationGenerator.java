@@ -5,9 +5,7 @@ import org.eclipse.uml2.uml.Comment;
 import org.eclipse.uml2.uml.Model;
 import org.tuml.framework.Visitor;
 import org.tuml.generation.Workspace;
-import org.tuml.java.metamodel.OJConstructor;
-import org.tuml.java.metamodel.OJPackage;
-import org.tuml.java.metamodel.OJPathName;
+import org.tuml.java.metamodel.*;
 import org.tuml.java.metamodel.annotation.OJAnnotatedClass;
 import org.tuml.java.metamodel.annotation.OJAnnotatedOperation;
 import org.tuml.javageneration.util.TinkerGenerationUtil;
@@ -55,10 +53,10 @@ public class RestletComponentAndApplicationGenerator extends BaseVisitor impleme
         main.addParam("args", new OJPathName("String[]"));
         component.addToOperations(main);
 
-
-        main.getBody().addToStatements("URL modelFileURL = Thread.currentThread().getContextClassLoader().getResource(\"restANDjson.uml\")");
+        main.getBody().addToStatements("URL modelFileURL = Thread.currentThread().getContextClassLoader().getResource(\"" + model.getName() + ".uml\")");
+        OJIfStatement ifFileExist = new OJIfStatement("modelFileURL == null", "throw new IllegalStateException(\"Model file " + model.getName() + ".uml not found. The model's file name must be the same as the model's name and be on the classpath.\")");
+        main.getBody().addToStatements(ifFileExist);
         main.getBody().addToStatements("final File modelFile = new File(modelFileURL.toURI())");
-
         main.getBody().addToStatements("//Load the mode async\nnew Thread(new Runnable() {\n    @Override\n    public void run() {\n        ModelLoader.loadModel(modelFile);\n        TumlOcl2Parser tumlOcl2Parser = TumlOcl2Parser.INSTANCE;\n    }\n}).start()");
         component.addToImports(TinkerGenerationUtil.ModelLoader);
         component.addToImports(TinkerGenerationUtil.TumlOcl2Parser);
@@ -75,6 +73,21 @@ public class RestletComponentAndApplicationGenerator extends BaseVisitor impleme
 
         constructor.getBody().addToStatements("TumlGraphCreator.INSTANCE.startupGraph()");
         component.addToImports(TinkerGenerationUtil.TumlGraphCreator);
+
+        OJIfStatement ifStartAdmin = new OJIfStatement(TinkerGenerationUtil.TumlProperties.getLast() + ".INSTANCE.isStartAdminApplication()", TumlRestletGenerationUtil.Neo4jAdminApp.getLast() + ".startAdminApplication()");
+        constructor.getBody().addToStatements(ifStartAdmin);
+        component.addToImports(TumlRestletGenerationUtil.Neo4jAdminApp);
+        component.addToImports(TinkerGenerationUtil.TumlProperties);
+
+        OJTryStatement tryLoadClass = new OJTryStatement();
+        OJIfStatement ifCreateDefaultData = new OJIfStatement(TinkerGenerationUtil.TumlProperties.getLast() + ".INSTANCE.isCreateDefaultData()");
+        ifCreateDefaultData.addToThenPart(tryLoadClass);
+        tryLoadClass.getTryPart().addToStatements("DefaultDataCreator defaultDataCreator = (DefaultDataCreator)Class.forName(" + TinkerGenerationUtil.TumlProperties.getLast() + ".INSTANCE.getDefaultDataLoaderClass()).newInstance()");
+        tryLoadClass.getTryPart().addToStatements("defaultDataCreator.createData()");
+        tryLoadClass.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
+        tryLoadClass.getCatchPart().addToStatements("throw new RuntimeException(e)");
+        constructor.getBody().addToStatements(ifCreateDefaultData);
+        component.addToImports(TumlRestletGenerationUtil.DefaultDataCreator);
 
         constructor.getBody().addToStatements("setName(\"" + model.getName() + "\")");
         StringBuilder sb = new StringBuilder();
@@ -124,11 +137,11 @@ public class RestletComponentAndApplicationGenerator extends BaseVisitor impleme
 
         createInboundRoot.getBody().addToStatements("Router router = new Router(getContext())");
         createInboundRoot.getBody().addToStatements("restlet.RestletRouterEnum.attachAll(router)");
-        createInboundRoot.getBody().addToStatements("router.attach(\"/ui2\", TumlGuiServerResource2.class, Template.MODE_STARTS_WITH)");
+        createInboundRoot.getBody().addToStatements("router.attach(\"/ui2\", " + TumlRestletGenerationUtil.TumlGuiServerResource.getLast() + ".class, Template.MODE_STARTS_WITH)");
 
         application.addToImports(TumlRestletGenerationUtil.Router);
         application.addToImports(TumlRestletGenerationUtil.Template);
-        application.addToImports(TumlRestletGenerationUtil.TumlGuiServerResource2);
+        application.addToImports(TumlRestletGenerationUtil.TumlGuiServerResource);
 
         createInboundRoot.getBody().addToStatements("//Directory slickgrid = new Directory(getContext(), \"clap://javascript/javascript/\")");
         createInboundRoot.getBody().addToStatements("Directory slickgrid = new Directory(getContext(), \"file:///home/pieter/workspace-tuml/tuml/runtime/runtime-jquery/src/main/javascript/javascript\")");

@@ -81,13 +81,13 @@
                 }
             }
 
-            oclExecuteUri = "/restAndJson/" + contextVertexId + "/oclExecuteQuery";
+            oclExecuteUri = "/" + tumlModelName + "/" + contextVertexId + "/oclExecuteQuery";
             if (hasInstanceQuery(metaDataNavigatingTo, metaDataNavigatingFrom)) {
-                instanceQueryTumlUri = "/restAndJson/basetumlwithquerys/" + contextVertexId + "/instanceQuery";
+                instanceQueryTumlUri = "/"+tumlModelName+"/basetumlwithquerys/" + contextVertexId + "/instanceQuery";
             } else {
                 instanceQueryTumlUri = '';
             }
-            classQueryTumlUri = "/restAndJson/classquery/" + contextVertexId + "/query";
+            classQueryTumlUri = "/"+tumlModelName+"/classquery/" + contextVertexId + "/query";
 
 
             if (contextVertexId !== undefined && contextVertexId !== null && contextChanged) {

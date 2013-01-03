@@ -31,7 +31,13 @@ public class OJConstructor extends OJConstructorGEN {
 		addJavaDocComment(result);
 		result.append(visToJava(this) + " " + getOwner().getName());
 		// params 
-		result.append("(" + paramsToJava(this) + ") {\n");
+		result.append("(" + paramsToJava(this) + ") ");
+        //Throws
+        if (!getThrows().isEmpty())  {
+            result.append("throws " + exceptionsToJava(this) + " {\n");
+        } else {
+            result.append(" {\n");
+        }
 		// body
 		StringBuilder bodyStr = new StringBuilder();
 		bodyStr.append(JavaUtil.collectionToJavaString(getBody().getStatements(),"\n"));

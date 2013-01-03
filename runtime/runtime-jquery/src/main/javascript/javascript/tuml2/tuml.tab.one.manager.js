@@ -327,19 +327,19 @@
                                 showOn:"button",
                                 buttonImageOnly:true,
                                 dateFormat:"yy-mm-dd",
-                                buttonImage:"/restAndJson/javascript/slickgrid/images/calendar.gif"
+                                buttonImage:"/"+tumlModelName+"/javascript/slickgrid/images/calendar.gif"
                             });
                         } else if (property.dataTypeEnum == 'Time') {
                             $input.timepicker({
                                 showOn:"button",
                                 buttonImageOnly:true,
-                                buttonImage:"/restAndJson/javascript/slickgrid/images/calendar.gif"
+                                buttonImage:"/"+tumlModelName+"/javascript/slickgrid/images/calendar.gif"
                             });
                         } else if (property.dataTypeEnum == 'DateTime') {
                             $input.datetimepicker({
                                 showOn:"button",
                                 buttonImageOnly:true,
-                                buttonImage:"/restAndJson/javascript/slickgrid/images/calendar.gif",
+                                buttonImage:"/"+tumlModelName+"/javascript/slickgrid/images/calendar.gif",
                                 dateFormat:"yy-mm-dd",
                                 timeFormat:"hh:mm:ss"
                             });
@@ -424,16 +424,16 @@
         } else if (property.oneEnumeration) {
             $input = $('<select />', {class:'chzn-select', style:'width:350px;', id:property.name + this.metaForData.name + 'Id', name:property.name});
             if (data !== undefined && data !== null) {
-                this.appendEnumerationLoopupOptionsToSelect("/restAndJson/tumlEnumLookup", property.qualifiedName, property.lower > 0, data[property.name], $input);
+                this.appendEnumerationLoopupOptionsToSelect("/"+tumlModelName+"/tumlEnumLookup", property.qualifiedName, property.lower > 0, data[property.name], $input);
             } else {
-                this.appendEnumerationLoopupOptionsToSelect("/restAndJson/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, $input);
+                this.appendEnumerationLoopupOptionsToSelect("/"+tumlModelName+"/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, $input);
             }
         } else if (property.manyEnumeration) {
             $input = $('<select multiple id=' + property.name + this.metaForData.name + 'Id/>', {class:'chzn-select', style:'width:350px;', name:property.name});
             if (data !== undefined && data !== null) {
-                this.appendEnumerationLoopupOptionsToSelect("/restAndJson/tumlEnumLookup", property.qualifiedName, property.lower > 0, data[property.name], $input);
+                this.appendEnumerationLoopupOptionsToSelect("/"+tumlModelName+"/tumlEnumLookup", property.qualifiedName, property.lower > 0, data[property.name], $input);
             } else {
-                this.appendEnumerationLoopupOptionsToSelect("/restAndJson/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, $input);
+                this.appendEnumerationLoopupOptionsToSelect("/"+tumlModelName+"/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, $input);
             }
         } else if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && property.oneToOne) {
             $input = $('<select />', {class:'chzn-select', style:'width:350px;', id:property.name + this.metaForData.name + 'Id', name:property.name});
@@ -567,7 +567,7 @@
             var rowValue = $('<td class="many-primitive-editor-cell" />').text(value);
             row.append(rowValue);
             row.data('value', value);
-            var img = $('<img class="tuml-many-select-img" src="/restAndJson/javascript/images/delete.png">').click(function () {
+            var img = $('<img class="tuml-many-select-img" src="/"+tumlModelName+"/javascript/images/delete.png">').click(function () {
                 var liClicked = $(this).parent().parent();
                 liClicked.remove();
             });
