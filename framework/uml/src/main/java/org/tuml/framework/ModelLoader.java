@@ -30,6 +30,7 @@ import org.eclipse.uml2.uml.Profile;
 import org.eclipse.uml2.uml.Stereotype;
 import org.eclipse.uml2.uml.UMLPackage;
 import org.eclipse.uml2.uml.resource.UMLResource;
+import org.eclipse.uml2.uml.resources.ResourcesPlugin;
 import org.eclipse.uml2.uml.util.UMLUtil;
 
 public class ModelLoader {
@@ -58,8 +59,10 @@ public class ModelLoader {
         if (this.model == null) {
             logger.info(String.format("Loading model %s", modelFile.getName()));
             registerResourceFactories();
-            URLClassLoader loader = (URLClassLoader) Thread.currentThread().getContextClassLoader();
-            URI uri = URI.createURI(findLocation(loader, true, "org/eclipse/uml2/uml/resources", "org.eclipse.uml2.uml.resources"));
+            URLClassLoader loader = (URLClassLoader) getClass().getClassLoader();
+            String location = findPathJar(ResourcesPlugin.class);
+            location = "jar:file:///" + location + "!/";
+            URI uri = URI.createURI(location);
             registerPathmaps(uri);
             File dir = modelFile.getParentFile();
             URI dirUri = URI.createFileURI(dir.getAbsolutePath());
@@ -192,39 +195,12 @@ public class ModelLoader {
         URIConverter.URI_MAP.put(URI.createURI(UMLResource.PROFILES_PATHMAP), uri.appendSegment("profiles").appendSegment(""));
     }
 
-    public String findLocation(URLClassLoader s, boolean jar, String... names) {
-        try {
-            URL[] urls = s.getURLs();
-            String location = null;
-            outer:
-            for (URL url : urls) {
-                for (String string : names) {
-                    String ext = url.toExternalForm();
-                    if (ext.contains(string)) {
-                        File file = new File(url.getFile());
-                        if (ext.endsWith(".jar")) {
-                            if (jar) {
-                                location = "jar:file:///" + file.getAbsolutePath().replace('\\', '/') + "!/";
-                            }
-                        } else {
-                            if (!jar) {
-                                location = "file:///" + file.getAbsolutePath().replace('\\', '/');
-                            }
-                        }
-                        break outer;
-                    }
-                }
-            }
-            if (location == null && s.getParent() instanceof URLClassLoader && s.getParent() != s) {
-                location = findLocation((URLClassLoader) s.getParent(), jar, names);
-            }
-            return location;
-        } catch (Throwable t) {
-            System.out.println(t.toString());
-            return null;
-        }
+    public String findPathJar(Class<?> context) throws IllegalStateException {
+        URL location = context.getResource('/' + context.getName().replace(".", "/")
+                + ".class");
+        String jarPath = location.getPath();
+        return jarPath.substring("file:".length(), jarPath.lastIndexOf("!"));
     }
-
 
     @SuppressWarnings("unchecked")
     private static <T extends Element> void filter(List<T> result, Element element, Filter f) {

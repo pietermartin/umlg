@@ -9,11 +9,10 @@ import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.eclipse.uml2.uml.Model;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import org.junit.*;
 import org.junit.Test;
 import org.restlet.Client;
+import org.restlet.Component;
 import org.restlet.Context;
 import org.restlet.data.Protocol;
 import org.restlet.resource.ClientResource;
@@ -21,43 +20,17 @@ import org.restlet.resource.ResourceException;
 import org.tuml.framework.ModelLoadedEvent;
 import org.tuml.framework.ModelLoader;
 import org.tuml.restandjson.RestAndJsonComponent;
+import org.tuml.restlet.test.BaseRestletTest;
 import org.tuml.root.QueryExecuteServerResource;
 import org.tuml.root.Root;
 import org.tuml.test.Hand;
 import org.tuml.test.Human;
 
-public class TestOclExecution implements ModelLoadedEvent {
+public class TestOclExecution extends BaseRestletTest {
 
-    private static final RestAndJsonComponent restAndJsonComponent = new RestAndJsonComponent();
-    private boolean loaded = false;
-
-    public TestOclExecution() throws Exception {
-    }
-
-    @BeforeClass
-    public static void beforeClass() throws Exception {
-        restAndJsonComponent.start();
-    }
-
-    @AfterClass
-    public static void afterClass() throws Exception {
-        restAndJsonComponent.stop();
-    }
-
-    @Before
-    public void before() {
-        if (!ModelLoader.INSTANCE.isLoaded()) {
-            ModelLoader.INSTANCE.subscribeModelLoaderEvent(this);
-            while (true) {
-                try {
-                    if (!this.loaded) {
-                        Thread.sleep(500);
-                    }
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
+    @Override
+    protected Component instantiateComponent() {
+        return new RestAndJsonComponent();
     }
 
     @Test
@@ -84,8 +57,4 @@ public class TestOclExecution implements ModelLoadedEvent {
         Assert.assertEquals(theHand.getId().intValue(), jsonObject.get("id"));
     }
 
-    @Override
-    public void loaded(Model model) {
-        this.loaded = true;
-    }
 }

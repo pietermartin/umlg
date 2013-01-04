@@ -5,7 +5,7 @@
 		<artifactId>runtime</artifactId>
 		<groupId>org.tuml</groupId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>..</relativePath>
+        <relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>runtime-uml</artifactId>
 	<dependencies>
@@ -19,11 +19,11 @@
 			<artifactId>java-generation-ocl</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-		<dependency>
-			<groupId>org.tuml</groupId>
-			<artifactId>runtime-domain-neo4j</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>org.tuml</groupId>-->
+			<!--<artifactId>runtime-domain-neo4j</artifactId>-->
+			<!--<version>0.0.1-SNAPSHOT</version>-->
+		<!--</dependency>-->
 		<dependency>
 			<groupId>org.tuml</groupId>
 			<artifactId>runtime-groovy</artifactId>

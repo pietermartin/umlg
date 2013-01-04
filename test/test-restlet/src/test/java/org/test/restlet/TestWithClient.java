@@ -13,7 +13,9 @@ import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.junit.*;
+import org.junit.Test;
 import org.restlet.Client;
+import org.restlet.Component;
 import org.restlet.Context;
 import org.restlet.data.Protocol;
 import org.restlet.ext.json.JsonRepresentation;
@@ -22,25 +24,14 @@ import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 import org.tuml.restandjson.RestAndJsonComponent;
 import org.tuml.restlet.RootServerResource;
+import org.tuml.restlet.test.BaseRestletTest;
 import org.tuml.test.restlet.Hand_hand_finger_Finger_ServerResource;
 import org.tuml.test.restlet.HumanServerResource;
 import org.tuml.test.restlet.Human_human_hand_Hand_ServerResource;
 
-public class TestWithClient {
+public class TestWithClient extends BaseRestletTest {
 
-    private final RestAndJsonComponent tumlRestletServerComponent2  = new RestAndJsonComponent();
-
-    @Before
-    public void beforeClass() throws Exception {
-        tumlRestletServerComponent2.start();
-    }
-
-    @After
-    public void afterClass() throws Exception {
-        tumlRestletServerComponent2.stop();
-    }
-
-    @org.junit.Test
+    @Test
     public void testRoot() throws ResourceException, JSONException, IOException {
         Client client = new Client(new Context(), Protocol.HTTP);
         ClientResource service = new ClientResource("http://localhost:8111/");
@@ -65,7 +56,7 @@ public class TestWithClient {
     }
 
     @SuppressWarnings("unchecked")
-    @org.junit.Test
+    @Test
     public void testPostFingerToHand() throws ResourceException, JSONException, IOException {
         Client client = new Client(new Context(), Protocol.HTTP);
         ClientResource service = new ClientResource("http://localhost:8111/");
@@ -101,7 +92,7 @@ public class TestWithClient {
     }
 
     @SuppressWarnings("unchecked")
-    @org.junit.Test
+    @Test
     public void postNewFingersToHand() throws JsonGenerationException, JsonMappingException, IOException, JSONException {
         Client client = new Client(new Context(), Protocol.HTTP);
         ClientResource service = new ClientResource("http://localhost:8111/");
@@ -147,7 +138,7 @@ public class TestWithClient {
     }
 
     @SuppressWarnings("unchecked")
-    @org.junit.Test
+    @Test
     public void updateFingersOfHand() throws JsonGenerationException, JsonMappingException, IOException, JSONException {
         Client client = new Client(new Context(), Protocol.HTTP);
         ClientResource service = new ClientResource("http://localhost:8111/");
@@ -198,4 +189,8 @@ public class TestWithClient {
         Assert.assertTrue(foundN1 && foundN2 && foundN3 && foundN4 && foundN5);
     }
 
+    @Override
+    protected Component instantiateComponent() {
+        return new RestAndJsonComponent();
+    }
 }

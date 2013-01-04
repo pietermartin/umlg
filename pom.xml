@@ -30,6 +30,8 @@
                     <version>2.12.4</version>
                     <configuration>
                         <testFailureIgnore>true</testFailureIgnore>
+                        <perCoreThreadCount>false</perCoreThreadCount>
+                        <threadCount>1</threadCount>
                     </configuration>
                     <dependencies>
                         <dependency>

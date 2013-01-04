@@ -64,8 +64,6 @@ public class BaseLocalDbTest {
 			Class<TumlGraphFactory> factory = (Class<TumlGraphFactory>) Class.forName(tinkerImplementation.getTumlGraphFactory());
 			Method m = factory.getDeclaredMethod("getInstance", new Class[0]);
 			TumlGraphFactory nakedGraphFactory = (TumlGraphFactory) m.invoke(null);
-			// TinkerSchemaHelper schemaHelper = (TinkerSchemaHelper)
-			// Class.forName(properties.getProperty("schema.generator")).newInstance();
 			return nakedGraphFactory.getTumlGraph(dbUrl);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
