@@ -1,10 +1,7 @@
 package org.tuml.runtime.collection.memory;
 
-import java.util.Collection;
-import java.util.Set;
-
-import javax.annotation.Nullable;
-
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.Multiset;
 import org.tuml.runtime.collection.TinkerBag;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.ocl.BodyExpressionEvaluator;
@@ -12,8 +9,9 @@ import org.tuml.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.tuml.runtime.collection.ocl.OclStdLibBag;
 import org.tuml.runtime.collection.ocl.OclStdLibBagImpl;
 
-import com.google.common.collect.HashMultiset;
-import com.google.common.collect.Multiset;
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.Set;
 
 public class TumlMemoryBag <E> extends TumlMemoryCollection<E> implements TinkerBag<E> {
 

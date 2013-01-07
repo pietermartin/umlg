@@ -4,7 +4,6 @@ import org.tuml.runtime.util.TinkerImplementation;
 import org.tuml.runtime.util.TumlProperties;
 
 import java.lang.reflect.Method;
-import java.util.Properties;
 
 public class TinkerIdUtilFactory {
 

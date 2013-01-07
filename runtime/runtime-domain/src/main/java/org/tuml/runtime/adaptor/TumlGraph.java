@@ -1,21 +1,11 @@
 package org.tuml.runtime.adaptor;
 
-import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import com.tinkerpop.blueprints.*;
 
 import javax.transaction.Transaction;
 import javax.transaction.TransactionManager;
-
-import com.tinkerpop.blueprints.util.wrappers.event.listener.GraphChangedListener;
-import org.tuml.runtime.domain.PersistentObject;
-
-import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.Element;
-import com.tinkerpop.blueprints.IndexableGraph;
-import com.tinkerpop.blueprints.TransactionalGraph;
-import com.tinkerpop.blueprints.Vertex;
+import java.io.Serializable;
+import java.util.Set;
 
 public interface TumlGraph extends TransactionalGraph, IndexableGraph, Serializable  {
 	void incrementTransactionCount();

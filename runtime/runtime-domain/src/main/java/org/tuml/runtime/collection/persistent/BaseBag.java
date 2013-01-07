@@ -1,8 +1,9 @@
 package org.tuml.runtime.collection.persistent;
 
-import java.util.List;
-import java.util.Set;
-
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.LinkedListMultimap;
+import com.google.common.collect.Multiset;
+import com.tinkerpop.blueprints.Vertex;
 import org.tuml.runtime.collection.TinkerBag;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
@@ -12,10 +13,8 @@ import org.tuml.runtime.collection.ocl.OclStdLibBag;
 import org.tuml.runtime.collection.ocl.OclStdLibBagImpl;
 import org.tuml.runtime.domain.TumlNode;
 
-import com.google.common.collect.HashMultiset;
-import com.google.common.collect.LinkedListMultimap;
-import com.google.common.collect.Multiset;
-import com.tinkerpop.blueprints.Vertex;
+import java.util.List;
+import java.util.Set;
 
 public abstract class BaseBag<E> extends BaseCollection<E> implements TinkerBag<E>, OclStdLibBag<E> {
 

@@ -1,9 +1,8 @@
 package org.tuml.runtime.domain.activity;
 
-import org.tuml.runtime.adaptor.GraphDb;
-
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Vertex;
+import org.tuml.runtime.adaptor.GraphDb;
 
 public class ControlToken extends Token {
 

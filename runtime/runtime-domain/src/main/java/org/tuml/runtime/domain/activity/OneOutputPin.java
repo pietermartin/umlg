@@ -1,9 +1,9 @@
 package org.tuml.runtime.domain.activity;
 
+import com.tinkerpop.blueprints.Vertex;
+
 import java.util.Collections;
 import java.util.List;
-
-import com.tinkerpop.blueprints.Vertex;
 
 public abstract class OneOutputPin<O> extends OutputPin<O, SingleObjectToken<O>> {
 

@@ -1,9 +1,9 @@
 package org.tuml.runtime.domain.activity;
 
+import com.tinkerpop.blueprints.Vertex;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.tinkerpop.blueprints.Vertex;
 
 /*
  * The edges coming into and out of a merge node must be either all object flows or all control flows.

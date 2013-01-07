@@ -1,8 +1,6 @@
 package org.tuml.runtime.domain.activity;
 
-import java.util.Collections;
-import java.util.List;
-
+import com.tinkerpop.blueprints.Vertex;
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.domain.BaseTinkerBehavioredClassifier;
 import org.tuml.runtime.domain.IClassifierSignalEvent;
@@ -11,8 +9,8 @@ import org.tuml.runtime.domain.activity.interf.IOutputPin;
 import org.tuml.runtime.domain.activity.interf.ISendSignalAction;
 import org.tuml.runtime.util.TinkerClassifierBehaviorExecutorService;
 
-import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
-import com.tinkerpop.blueprints.Vertex;
+import java.util.Collections;
+import java.util.List;
 
 public abstract class SendSignalAction extends InvocationAction implements ISendSignalAction {
 

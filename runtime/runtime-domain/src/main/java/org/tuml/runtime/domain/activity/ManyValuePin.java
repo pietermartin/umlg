@@ -1,12 +1,11 @@
 package org.tuml.runtime.domain.activity;
 
+import com.tinkerpop.blueprints.Vertex;
+import org.tuml.runtime.domain.activity.interf.IManyValuePin;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-
-import org.tuml.runtime.domain.activity.interf.IManyValuePin;
-
-import com.tinkerpop.blueprints.Vertex;
 
 public abstract class ManyValuePin<O> extends ValuePin<O, CollectionObjectToken<O>> implements IManyValuePin<O> {
 

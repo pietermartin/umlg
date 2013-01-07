@@ -1,13 +1,12 @@
 package org.tuml.runtime.collection.persistent;
 
-import java.util.Iterator;
-
+import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Vertex;
 import org.tuml.runtime.collection.TinkerBag;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.domain.TumlNode;
 
-import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.Vertex;
+import java.util.Iterator;
 
 public class TinkerBagClosableIterableImpl<E> extends BaseBag<E> implements TinkerBag<E> {
 

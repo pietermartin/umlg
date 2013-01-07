@@ -1,11 +1,10 @@
 package org.tuml.runtime.domain.activity;
 
-import java.util.Collections;
-import java.util.List;
-
+import com.tinkerpop.blueprints.Vertex;
 import org.tuml.runtime.domain.activity.interf.IOneInActivityParameterNode;
 
-import com.tinkerpop.blueprints.Vertex;
+import java.util.Collections;
+import java.util.List;
 
 public abstract class OneInActivityParameterNode<O> extends InActivityParameterNode<O,SingleObjectToken<O>> implements IOneInActivityParameterNode<O> {
 

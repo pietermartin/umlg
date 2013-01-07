@@ -9,7 +9,6 @@ import com.tinkerpop.blueprints.impls.orient.OrientVertex;
 import org.tuml.runtime.adaptor.BaseTumlGraph;
 import org.tuml.runtime.adaptor.TumlGraph;
 import org.tuml.runtime.adaptor.TumlTinkerIndex;
-import sun.util.resources.LocaleNames_fi;
 
 import javax.transaction.Transaction;
 import javax.transaction.TransactionManager;

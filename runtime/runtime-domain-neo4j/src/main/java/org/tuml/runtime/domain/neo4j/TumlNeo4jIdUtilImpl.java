@@ -1,8 +1,7 @@
 package org.tuml.runtime.domain.neo4j;
 
-import org.tuml.runtime.adaptor.TinkerIdUtil;
-
 import com.tinkerpop.blueprints.Vertex;
+import org.tuml.runtime.adaptor.TinkerIdUtil;
 
 public class TumlNeo4jIdUtilImpl implements TinkerIdUtil {
 

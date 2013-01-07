@@ -1,10 +1,5 @@
 package org.tuml.runtime.collection.memory;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.ListIterator;
-
 import org.apache.commons.collections.set.ListOrderedSet;
 import org.tuml.runtime.collection.TinkerBag;
 import org.tuml.runtime.collection.TinkerOrderedSet;
@@ -12,6 +7,11 @@ import org.tuml.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.tuml.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.tuml.runtime.collection.ocl.OclStdLibOrderedSet;
 import org.tuml.runtime.collection.ocl.OclStdLibOrderedSetImpl;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.ListIterator;
 
 public class TumlMemoryOrderedSet<E> extends TumlMemoryCollection<E> implements TinkerOrderedSet<E> {
 

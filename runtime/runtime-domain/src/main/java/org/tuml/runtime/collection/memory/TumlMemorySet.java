@@ -1,15 +1,15 @@
 package org.tuml.runtime.collection.memory;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.tuml.runtime.collection.TinkerBag;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.tuml.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.tuml.runtime.collection.ocl.OclStdLibSet;
 import org.tuml.runtime.collection.ocl.OclStdLibSetImpl;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 public class TumlMemorySet<E> extends TumlMemoryCollection<E> implements TinkerSet<E> {
 

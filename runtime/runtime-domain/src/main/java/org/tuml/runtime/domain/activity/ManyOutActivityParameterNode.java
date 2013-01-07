@@ -1,12 +1,11 @@
 package org.tuml.runtime.domain.activity;
 
+import com.tinkerpop.blueprints.Vertex;
+import org.tuml.runtime.domain.activity.interf.IManyOutActivityParameterNode;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import org.tuml.runtime.domain.activity.interf.IManyOutActivityParameterNode;
-
-import com.tinkerpop.blueprints.Vertex;
 
 public abstract class ManyOutActivityParameterNode<O> extends OutActivityParameterNode<O,CollectionObjectToken<O>> implements IManyOutActivityParameterNode<O> {
 

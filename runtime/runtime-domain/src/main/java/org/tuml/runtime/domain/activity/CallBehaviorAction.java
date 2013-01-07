@@ -1,8 +1,7 @@
 package org.tuml.runtime.domain.activity;
 
-import org.tuml.runtime.domain.activity.interf.ICallBehaviorAction;
-
 import com.tinkerpop.blueprints.Vertex;
+import org.tuml.runtime.domain.activity.interf.ICallBehaviorAction;
 
 public abstract class CallBehaviorAction extends CallAction implements ICallBehaviorAction {
 

@@ -1,12 +1,11 @@
 package org.tuml.runtime.domain.activity;
 
+import com.tinkerpop.blueprints.Vertex;
+import org.tuml.runtime.domain.activity.interf.IOneOutActivityParameterNode;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import org.tuml.runtime.domain.activity.interf.IOneOutActivityParameterNode;
-
-import com.tinkerpop.blueprints.Vertex;
 
 public abstract class OneOutActivityParameterNode<O> extends OutActivityParameterNode<O,SingleObjectToken<O>> implements IOneOutActivityParameterNode<O> {
 

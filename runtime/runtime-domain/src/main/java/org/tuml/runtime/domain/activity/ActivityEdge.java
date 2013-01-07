@@ -1,15 +1,14 @@
 package org.tuml.runtime.domain.activity;
 
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-
+import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.pipes.AbstractPipe;
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.domain.activity.interf.IActivityEdge;
 
-import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.pipes.AbstractPipe;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 public abstract class ActivityEdge<T extends Token> extends AbstractPipe<T, Boolean> implements IActivityEdge<T> {
 

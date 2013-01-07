@@ -1,11 +1,10 @@
 package org.tuml.runtime.collection.persistent;
 
-import java.util.Iterator;
-
+import com.tinkerpop.blueprints.Edge;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
 
-import com.tinkerpop.blueprints.Edge;
+import java.util.Iterator;
 
 public class TinkerSetClosableIterableImpl<E> extends BaseSet<E> implements TinkerSet<E> {
 

@@ -1,13 +1,8 @@
 package org.tuml.runtime.util;
 
-import java.util.concurrent.CompletionService;
-import java.util.concurrent.ExecutorCompletionService;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-
 import org.tuml.runtime.domain.IClassifierEvent;
+
+import java.util.concurrent.*;
 
 public class TinkerClassifierBehaviorExecutorService {
 

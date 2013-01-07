@@ -1,12 +1,11 @@
 package org.tuml.runtime.domain;
 
-import java.io.Serializable;
-
+import com.tinkerpop.blueprints.Vertex;
 import org.joda.time.DateTime;
 import org.tuml.runtime.adaptor.TransactionThreadVar;
 import org.tuml.runtime.util.TumlFormatter;
 
-import com.tinkerpop.blueprints.Vertex;
+import java.io.Serializable;
 
 public abstract class BaseTumlAudit extends BaseTuml implements TinkerAuditableNode, Serializable {
 

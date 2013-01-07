@@ -1,7 +1,5 @@
 package org.tuml.runtime.domain.neo4j;
 
-import java.util.List;
-
 import org.joda.time.DateTime;
 import org.neo4j.graphdb.event.TransactionData;
 import org.neo4j.graphdb.event.TransactionEventHandler;
@@ -13,6 +11,8 @@ import org.tuml.runtime.domain.CompositionNode;
 import org.tuml.runtime.domain.TumlNode;
 import org.tuml.runtime.validation.TumlConstraintViolation;
 import org.tuml.runtime.validation.TumlConstraintViolationException;
+
+import java.util.List;
 
 public class TumlTransactionEventHandler<T> implements TransactionEventHandler<T> {
 

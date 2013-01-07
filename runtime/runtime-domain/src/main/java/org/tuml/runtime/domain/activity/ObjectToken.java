@@ -1,11 +1,10 @@
 package org.tuml.runtime.domain.activity;
 
-import java.util.Collection;
-
-import org.tuml.runtime.adaptor.GraphDb;
-
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
+import org.tuml.runtime.adaptor.GraphDb;
+
+import java.util.Collection;
 
 public abstract class ObjectToken<O> extends Token {
 

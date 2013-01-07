@@ -1,8 +1,5 @@
 package org.tuml.runtime.collection.persistent;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.tuml.runtime.collection.TinkerBag;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
@@ -11,6 +8,9 @@ import org.tuml.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.tuml.runtime.collection.ocl.OclStdLibSet;
 import org.tuml.runtime.collection.ocl.OclStdLibSetImpl;
 import org.tuml.runtime.domain.TumlNode;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public abstract class BaseSet<E> extends BaseCollection<E> implements TinkerSet<E>, OclStdLibSet<E> {
 

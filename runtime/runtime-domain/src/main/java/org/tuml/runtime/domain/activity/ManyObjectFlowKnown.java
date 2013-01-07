@@ -1,8 +1,8 @@
 package org.tuml.runtime.domain.activity;
 
-import java.util.Collection;
-
 import com.tinkerpop.blueprints.Edge;
+
+import java.util.Collection;
 
 public abstract class ManyObjectFlowKnown<O> extends ObjectFlowKnown<O, CollectionObjectToken<O>> {
 

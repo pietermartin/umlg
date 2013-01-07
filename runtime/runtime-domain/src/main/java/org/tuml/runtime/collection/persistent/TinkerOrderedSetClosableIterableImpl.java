@@ -1,10 +1,8 @@
 package org.tuml.runtime.collection.persistent;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-
+import com.tinkerpop.blueprints.CloseableIterable;
+import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Vertex;
 import org.apache.commons.collections.set.ListOrderedSet;
 import org.tuml.runtime.collection.TinkerBag;
 import org.tuml.runtime.collection.TinkerCollection;
@@ -15,9 +13,10 @@ import org.tuml.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.tuml.runtime.collection.ocl.OclStdLibOrderedSet;
 import org.tuml.runtime.domain.TumlNode;
 
-import com.tinkerpop.blueprints.CloseableIterable;
-import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.Vertex;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 public class TinkerOrderedSetClosableIterableImpl<E> extends BaseCollection<E> implements TinkerOrderedSet<E> {
 

@@ -1,21 +1,16 @@
 package org.tuml.runtime.domain.activity;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.tuml.runtime.adaptor.GraphDb;
-import org.tuml.runtime.domain.BaseTumlAudit;
-import org.tuml.runtime.domain.CompositionNode;
-import org.tuml.runtime.domain.activity.interf.IActivityEdge;
-import org.tuml.runtime.domain.activity.interf.IActivityNode;
-import org.tuml.runtime.domain.activity.interf.IEvent;
-import org.tuml.runtime.domain.activity.interf.IInputPin;
-import org.tuml.runtime.domain.activity.interf.IOutputPin;
-
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
+import org.tuml.runtime.adaptor.GraphDb;
+import org.tuml.runtime.domain.BaseTumlAudit;
+import org.tuml.runtime.domain.CompositionNode;
+import org.tuml.runtime.domain.activity.interf.*;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public abstract class AbstractActivity extends BaseTumlAudit implements CompositionNode {
 

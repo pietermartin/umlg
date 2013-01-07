@@ -1,9 +1,8 @@
 package org.tuml.runtime.domain.activity;
 
+import com.tinkerpop.blueprints.Vertex;
 import org.tuml.runtime.domain.activity.interf.ICallOperationAction;
 import org.tuml.runtime.domain.activity.interf.IInputPin;
-
-import com.tinkerpop.blueprints.Vertex;
 
 public abstract class CallOperationAction extends CallAction implements ICallOperationAction {
 

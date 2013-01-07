@@ -1,10 +1,10 @@
 package org.tuml.runtime.domain.json;
 
-import java.util.Collection;
-
 import org.tuml.runtime.domain.PersistentObject;
 import org.tuml.runtime.domain.TumlApplicationNode;
 import org.tuml.runtime.domain.TumlEnum;
+
+import java.util.Collection;
 
 public class ToJsonUtil {
 	

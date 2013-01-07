@@ -2,7 +2,6 @@ package org.tuml.runtime.adaptor;
 
 import com.tinkerpop.blueprints.IndexableGraph;
 import com.tinkerpop.blueprints.KeyIndexableGraph;
-import com.tinkerpop.blueprints.MetaGraph;
 import com.tinkerpop.blueprints.TransactionalGraph;
 
 /**

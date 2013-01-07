@@ -1,10 +1,9 @@
 package org.tuml.runtime.collection.persistent;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Set;
-
+import com.tinkerpop.blueprints.CloseableIterable;
+import com.tinkerpop.blueprints.Direction;
+import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Vertex;
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.collection.TinkerSequence;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
@@ -15,10 +14,10 @@ import org.tuml.runtime.collection.ocl.OclStdLibSequenceImpl;
 import org.tuml.runtime.domain.TinkerAuditableNode;
 import org.tuml.runtime.domain.TumlNode;
 
-import com.tinkerpop.blueprints.CloseableIterable;
-import com.tinkerpop.blueprints.Direction;
-import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.Vertex;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Set;
 
 public abstract class BaseSequence<E> extends BaseCollection<E> implements TinkerSequence<E> {
 

@@ -1,10 +1,9 @@
 package org.tuml.runtime.domain.activity;
 
+import com.tinkerpop.blueprints.Vertex;
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.domain.TumlNode;
 import org.tuml.runtime.domain.ocl.OclState;
-
-import com.tinkerpop.blueprints.Vertex;
 
 public abstract class Event implements TumlNode {
 

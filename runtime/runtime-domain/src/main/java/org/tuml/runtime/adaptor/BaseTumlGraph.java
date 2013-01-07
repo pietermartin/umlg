@@ -2,10 +2,6 @@ package org.tuml.runtime.adaptor;
 
 import com.tinkerpop.blueprints.*;
 
-import javax.transaction.Transaction;
-import javax.transaction.TransactionManager;
-import java.util.Set;
-
 /**
  * Date: 2013/01/06
  * Time: 4:41 PM

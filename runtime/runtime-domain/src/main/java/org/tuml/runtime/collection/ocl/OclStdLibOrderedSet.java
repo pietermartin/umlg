@@ -3,7 +3,6 @@ package org.tuml.runtime.collection.ocl;
 import org.tuml.runtime.collection.TinkerBag;
 import org.tuml.runtime.collection.TinkerOrderedSet;
 import org.tuml.runtime.collection.TinkerSequence;
-import org.tuml.runtime.collection.TinkerSet;
 
 
 public interface OclStdLibOrderedSet<E> extends OclStdLibCollection<E> {

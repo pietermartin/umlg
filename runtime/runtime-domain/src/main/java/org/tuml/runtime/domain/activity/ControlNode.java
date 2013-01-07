@@ -1,15 +1,14 @@
 package org.tuml.runtime.domain.activity;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.tinkerpop.blueprints.Direction;
+import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Vertex;
 import org.tuml.runtime.domain.CompositionNode;
 import org.tuml.runtime.domain.activity.interf.IActivityEdge;
 import org.tuml.runtime.domain.activity.interf.IControlNode;
 
-import com.tinkerpop.blueprints.Direction;
-import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.Vertex;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class ControlNode<IN extends Token, OUT extends Token> extends ActivityNode<IN, OUT> implements IControlNode<IN, OUT> {
 

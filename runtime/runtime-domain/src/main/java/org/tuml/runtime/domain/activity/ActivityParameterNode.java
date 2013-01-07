@@ -1,9 +1,8 @@
 package org.tuml.runtime.domain.activity;
 
+import com.tinkerpop.blueprints.Vertex;
 import org.tuml.runtime.domain.CompositionNode;
 import org.tuml.runtime.domain.activity.interf.IActivityParameterNode;
-
-import com.tinkerpop.blueprints.Vertex;
 
 public abstract class ActivityParameterNode<O,OUT extends ObjectToken<O>> extends ObjectNode<O,OUT,OUT> implements IActivityParameterNode<O,OUT> {
 

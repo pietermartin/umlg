@@ -1,8 +1,8 @@
 package org.tuml.runtime.domain.activity;
 
-import java.util.Collection;
-
 import com.tinkerpop.blueprints.Vertex;
+
+import java.util.Collection;
 
 public abstract class ManyOpaqueAction<R> extends OpaqueAction<R, CollectionObjectToken<R>> {
 

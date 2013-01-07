@@ -1,13 +1,12 @@
 package org.tuml.runtime.collection.persistent;
 
-import java.util.Collection;
-
+import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Vertex;
 import org.tuml.runtime.collection.TinkerSequence;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.domain.TumlNode;
 
-import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.Vertex;
+import java.util.Collection;
 
 public class TinkerSequenceImpl<E> extends BaseSequence<E> implements TinkerSequence<E> {
 

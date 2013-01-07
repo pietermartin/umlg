@@ -1,11 +1,11 @@
 package org.tuml.runtime.domain.activity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /*
  * Join node can have one in control flow and one in object flow. In this case an object flow flows out

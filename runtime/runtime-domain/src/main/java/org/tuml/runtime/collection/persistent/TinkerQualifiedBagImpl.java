@@ -1,17 +1,16 @@
 package org.tuml.runtime.collection.persistent;
 
-import java.util.List;
-import java.util.Set;
-
+import com.tinkerpop.blueprints.Direction;
+import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Vertex;
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.collection.Qualifier;
 import org.tuml.runtime.collection.TinkerQualifiedBag;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.domain.TumlNode;
 
-import com.tinkerpop.blueprints.Direction;
-import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.Vertex;
+import java.util.List;
+import java.util.Set;
 
 public class TinkerQualifiedBagImpl<E> extends BaseBag<E> implements TinkerQualifiedBag<E> {
 

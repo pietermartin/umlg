@@ -1,13 +1,12 @@
 package org.tuml.runtime.domain.activity;
 
+import com.tinkerpop.blueprints.Vertex;
+import org.tuml.runtime.domain.activity.interf.IOutputPin;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
-
-import org.tuml.runtime.domain.activity.interf.IOutputPin;
-
-import com.tinkerpop.blueprints.Vertex;
 
 public abstract class OutputPin<O, OUT extends ObjectToken<O>> extends Pin<O, OUT, OUT> implements IOutputPin<O, OUT> {
 

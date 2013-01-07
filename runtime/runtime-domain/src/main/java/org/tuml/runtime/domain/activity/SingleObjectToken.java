@@ -1,15 +1,14 @@
 package org.tuml.runtime.domain.activity;
 
-import java.util.Arrays;
-import java.util.Collection;
-
+import com.tinkerpop.blueprints.Direction;
+import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Vertex;
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.domain.CompositionNode;
 import org.tuml.runtime.domain.TumlNode;
 
-import com.tinkerpop.blueprints.Direction;
-import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.Vertex;
+import java.util.Arrays;
+import java.util.Collection;
 
 public class SingleObjectToken<O> extends ObjectToken<O> {
 

@@ -1,10 +1,9 @@
 package org.tuml.runtime.domain.activity;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.UUID;
-import java.util.logging.Logger;
-
+import com.tinkerpop.blueprints.Direction;
+import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Vertex;
+import com.tinkerpop.pipes.AbstractPipe;
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.TinkerIdUtilFactory;
 import org.tuml.runtime.domain.BaseTinkerBehavioredClassifier;
@@ -13,10 +12,10 @@ import org.tuml.runtime.domain.activity.interf.IActivityEdge;
 import org.tuml.runtime.domain.activity.interf.IActivityNode;
 import org.tuml.runtime.util.TinkerUtil;
 
-import com.tinkerpop.blueprints.Direction;
-import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.Vertex;
-import com.tinkerpop.pipes.AbstractPipe;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.UUID;
+import java.util.logging.Logger;
 
 public abstract class ActivityNode<IN extends Token, OUT extends Token> extends AbstractPipe<IN, Boolean> implements IActivityNode<IN, OUT> {
 

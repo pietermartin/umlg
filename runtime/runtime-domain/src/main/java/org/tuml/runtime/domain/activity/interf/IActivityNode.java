@@ -1,15 +1,14 @@
 package org.tuml.runtime.domain.activity.interf;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-
+import com.tinkerpop.blueprints.Vertex;
 import org.tuml.runtime.domain.BaseTinkerBehavioredClassifier;
 import org.tuml.runtime.domain.CompositionNode;
 import org.tuml.runtime.domain.activity.NodeStat;
 import org.tuml.runtime.domain.activity.NodeStatus;
 import org.tuml.runtime.domain.activity.Token;
 
-import com.tinkerpop.blueprints.Vertex;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 public interface IActivityNode<IN extends Token, OUT extends Token> extends CompositionNode, INamedElement {
 	boolean mayContinue();

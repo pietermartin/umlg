@@ -1,16 +1,13 @@
 package org.tuml.runtime.domain;
 
-import java.io.Serializable;
-
+import com.tinkerpop.blueprints.Vertex;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.joda.time.DateTime;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.memory.TumlMemorySet;
 import org.tuml.runtime.domain.ocl.OclState;
-import org.tuml.runtime.util.TumlFormatter;
 
-import com.tinkerpop.blueprints.Vertex;
+import java.io.Serializable;
 
 public abstract class BaseTuml implements TumlNode, Serializable {
 

@@ -1,10 +1,10 @@
 package org.tuml.runtime.domain;
 
-import java.io.Serializable;
-
 import org.joda.time.DateTime;
 import org.tuml.runtime.adaptor.TransactionThreadVar;
 import org.tuml.runtime.util.TumlFormatter;
+
+import java.io.Serializable;
 
 public abstract class BaseTinkerAuditable extends BaseTumlAudit implements TinkerAuditableNode, Serializable{
 

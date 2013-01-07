@@ -1,18 +1,17 @@
 package org.tuml.runtime.domain.activity;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.logging.Level;
-
+import com.tinkerpop.blueprints.Direction;
+import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Vertex;
 import org.tuml.runtime.domain.CompositionNode;
 import org.tuml.runtime.domain.activity.interf.IAction;
 import org.tuml.runtime.domain.activity.interf.IInputPin;
 import org.tuml.runtime.domain.activity.interf.IOutputPin;
 
-import com.tinkerpop.blueprints.Direction;
-import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.Vertex;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.logging.Level;
 
 public abstract class Action extends ExecutableNode implements IAction {
 

@@ -1,10 +1,10 @@
 package org.tuml.runtime.collection;
 
-import java.util.Set;
-
 import org.tuml.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.tuml.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.tuml.runtime.collection.ocl.OclStdLibSet;
+
+import java.util.Set;
 
 public interface TinkerSet<E> extends TinkerCollection<E>, Set<E>, OclStdLibSet<E> {
 	

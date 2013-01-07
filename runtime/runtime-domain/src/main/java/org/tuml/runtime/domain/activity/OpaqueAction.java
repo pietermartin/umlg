@@ -1,13 +1,12 @@
 package org.tuml.runtime.domain.activity;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
+import com.tinkerpop.blueprints.Vertex;
 import org.tuml.runtime.domain.activity.interf.IInputPin;
 import org.tuml.runtime.domain.activity.interf.IOutputPin;
 
-import com.tinkerpop.blueprints.Vertex;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public abstract class OpaqueAction<R, OUT extends ObjectToken<R>> extends Action {
 

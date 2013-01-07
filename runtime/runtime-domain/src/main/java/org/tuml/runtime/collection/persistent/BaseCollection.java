@@ -1,25 +1,17 @@
 package org.tuml.runtime.collection.persistent;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-
+import com.tinkerpop.blueprints.Direction;
+import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Index;
+import com.tinkerpop.blueprints.Vertex;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.tuml.runtime.adaptor.GraphDb;
-import org.tuml.runtime.adaptor.TumlTinkerIndex;
 import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
 import org.tuml.runtime.adaptor.TransactionThreadVar;
-import org.tuml.runtime.collection.Qualifier;
-import org.tuml.runtime.collection.TinkerBag;
-import org.tuml.runtime.collection.TinkerCollection;
-import org.tuml.runtime.collection.TinkerOrderedSet;
-import org.tuml.runtime.collection.TinkerSequence;
-import org.tuml.runtime.collection.TinkerSet;
-import org.tuml.runtime.collection.TumlRuntimeProperty;
+import org.tuml.runtime.adaptor.TumlTinkerIndex;
+import org.tuml.runtime.collection.*;
 import org.tuml.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.tuml.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.tuml.runtime.collection.ocl.IterateExpressionAccumulator;
@@ -28,10 +20,7 @@ import org.tuml.runtime.domain.*;
 import org.tuml.runtime.domain.ocl.OclState;
 import org.tuml.runtime.util.TumlFormatter;
 
-import com.tinkerpop.blueprints.Direction;
-import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.Index;
-import com.tinkerpop.blueprints.Vertex;
+import java.util.*;
 
 public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimeProperty, OclStdLibCollection<E> {
 

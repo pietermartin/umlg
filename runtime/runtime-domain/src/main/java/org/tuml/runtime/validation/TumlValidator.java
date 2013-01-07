@@ -1,9 +1,9 @@
 package org.tuml.runtime.validation;
 
+import org.tuml.runtime.util.EmailValidationUtils;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
-
-import org.tuml.runtime.util.EmailValidationUtils;
 
 public class TumlValidator {
 

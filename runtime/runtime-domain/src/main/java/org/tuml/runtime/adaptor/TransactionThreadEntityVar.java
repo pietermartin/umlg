@@ -1,11 +1,11 @@
 package org.tuml.runtime.adaptor;
 
+import org.tuml.runtime.domain.CompositionNode;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.tuml.runtime.domain.CompositionNode;
 
 
 public class TransactionThreadEntityVar {

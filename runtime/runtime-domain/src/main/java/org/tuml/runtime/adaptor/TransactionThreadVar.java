@@ -1,9 +1,9 @@
 package org.tuml.runtime.adaptor;
 
+import com.tinkerpop.blueprints.Vertex;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import com.tinkerpop.blueprints.Vertex;
 
 
 public class TransactionThreadVar {

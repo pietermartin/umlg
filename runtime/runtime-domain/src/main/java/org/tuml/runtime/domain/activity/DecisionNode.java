@@ -1,10 +1,10 @@
 package org.tuml.runtime.domain.activity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.pipes.util.iterators.SingleIterator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /*
  * The edges coming into and out of a decision node, other than the decision input flow (if any), must be either all 

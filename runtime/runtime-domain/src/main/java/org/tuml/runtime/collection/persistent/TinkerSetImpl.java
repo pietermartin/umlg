@@ -1,10 +1,10 @@
 package org.tuml.runtime.collection.persistent;
 
-import java.util.Set;
-
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.domain.TumlNode;
+
+import java.util.Set;
 
 public class TinkerSetImpl<E> extends BaseSet<E> implements TinkerSet<E> {
 

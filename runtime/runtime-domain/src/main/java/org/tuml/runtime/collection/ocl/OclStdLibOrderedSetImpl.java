@@ -1,18 +1,13 @@
 package org.tuml.runtime.collection.ocl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.Multiset;
 import org.apache.commons.collections.set.ListOrderedSet;
 import org.tuml.runtime.collection.TinkerBag;
 import org.tuml.runtime.collection.TinkerCollection;
 import org.tuml.runtime.collection.TinkerOrderedSet;
 
-import com.google.common.collect.HashMultiset;
-import com.google.common.collect.Multiset;
+import java.util.*;
 
 public class OclStdLibOrderedSetImpl<E> extends OclStdLibCollectionImpl<E> implements TinkerOrderedSet<E> {
 

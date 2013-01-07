@@ -1,10 +1,6 @@
 package org.tuml.runtime.domain.activity;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
+import com.tinkerpop.blueprints.Vertex;
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.collection.Qualifier;
 import org.tuml.runtime.collection.TinkerSet;
@@ -12,12 +8,14 @@ import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.collection.persistent.BaseCollection;
 import org.tuml.runtime.collection.persistent.TinkerSequenceImpl;
 import org.tuml.runtime.domain.CompositionNode;
-import org.tuml.runtime.domain.TumlMetaNode;
 import org.tuml.runtime.domain.TumlNode;
 import org.tuml.runtime.domain.ocl.OclState;
 import org.tuml.runtime.validation.TumlConstraintViolation;
 
-import com.tinkerpop.blueprints.Vertex;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class CollectionObjectToken<O> extends ObjectToken<O> implements CompositionNode {
 

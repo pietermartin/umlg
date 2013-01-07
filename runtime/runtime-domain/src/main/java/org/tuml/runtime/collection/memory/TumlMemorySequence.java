@@ -1,15 +1,15 @@
 package org.tuml.runtime.collection.memory;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.ListIterator;
-
 import org.tuml.runtime.collection.TinkerSequence;
 import org.tuml.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.tuml.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.tuml.runtime.collection.ocl.OclStdLibSequence;
 import org.tuml.runtime.collection.ocl.OclStdLibSequenceImpl;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.ListIterator;
 
 public class TumlMemorySequence<E> extends TumlMemoryCollection<E> implements TinkerSequence<E> {
 

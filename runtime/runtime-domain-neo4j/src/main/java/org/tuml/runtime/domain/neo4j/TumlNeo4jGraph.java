@@ -1,13 +1,9 @@
 package org.tuml.runtime.domain.neo4j;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.transaction.Transaction;
-import javax.transaction.TransactionManager;
-
+import com.tinkerpop.blueprints.*;
+import com.tinkerpop.blueprints.impls.neo4j.Neo4jEdge;
+import com.tinkerpop.blueprints.impls.neo4j.Neo4jGraph;
+import com.tinkerpop.blueprints.impls.neo4j.Neo4jVertex;
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.NotFoundException;
@@ -18,18 +14,14 @@ import org.neo4j.kernel.EmbeddedGraphDatabase;
 import org.tuml.runtime.adaptor.BaseTumlGraph;
 import org.tuml.runtime.adaptor.TumlGraph;
 import org.tuml.runtime.adaptor.TumlTinkerIndex;
-import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
 import org.tuml.runtime.domain.PersistentObject;
 
-import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.Element;
-import com.tinkerpop.blueprints.Features;
-import com.tinkerpop.blueprints.Index;
-import com.tinkerpop.blueprints.Parameter;
-import com.tinkerpop.blueprints.Vertex;
-import com.tinkerpop.blueprints.impls.neo4j.Neo4jEdge;
-import com.tinkerpop.blueprints.impls.neo4j.Neo4jGraph;
-import com.tinkerpop.blueprints.impls.neo4j.Neo4jVertex;
+import javax.transaction.Transaction;
+import javax.transaction.TransactionManager;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class TumlNeo4jGraph extends BaseTumlGraph implements TumlGraph {
 

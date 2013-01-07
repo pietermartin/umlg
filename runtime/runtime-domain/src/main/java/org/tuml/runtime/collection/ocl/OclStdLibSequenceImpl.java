@@ -1,14 +1,10 @@
 package org.tuml.runtime.collection.ocl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-
 import org.tuml.runtime.collection.TinkerCollection;
 import org.tuml.runtime.collection.TinkerSequence;
 import org.tuml.runtime.domain.ocl.OclIsInvalidException;
+
+import java.util.*;
 
 public class OclStdLibSequenceImpl<E> extends OclStdLibCollectionImpl<E> implements TinkerSequence<E> {
 

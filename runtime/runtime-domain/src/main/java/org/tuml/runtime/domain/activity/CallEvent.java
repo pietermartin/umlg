@@ -1,16 +1,14 @@
 package org.tuml.runtime.domain.activity;
 
-import java.util.List;
-import java.util.Map;
-
+import com.tinkerpop.blueprints.Vertex;
 import org.tuml.runtime.collection.Qualifier;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
-import org.tuml.runtime.domain.TumlMetaNode;
 import org.tuml.runtime.domain.TumlNode;
 import org.tuml.runtime.validation.TumlConstraintViolation;
 
-import com.tinkerpop.blueprints.Vertex;
+import java.util.List;
+import java.util.Map;
 
 public class CallEvent extends Event {
 

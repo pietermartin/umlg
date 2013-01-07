@@ -1,18 +1,14 @@
 package org.tuml.runtime.collection.memory;
 
-import java.util.Collection;
-import java.util.Iterator;
-
-import org.tuml.runtime.collection.TinkerBag;
-import org.tuml.runtime.collection.TinkerCollection;
-import org.tuml.runtime.collection.TinkerOrderedSet;
-import org.tuml.runtime.collection.TinkerSequence;
-import org.tuml.runtime.collection.TinkerSet;
+import org.tuml.runtime.collection.*;
 import org.tuml.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.tuml.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.tuml.runtime.collection.ocl.IterateExpressionAccumulator;
 import org.tuml.runtime.collection.ocl.OclStdLibCollection;
 import org.tuml.runtime.domain.ocl.OclState;
+
+import java.util.Collection;
+import java.util.Iterator;
 
 public class TumlMemoryCollection<E> implements TinkerCollection<E> {
 

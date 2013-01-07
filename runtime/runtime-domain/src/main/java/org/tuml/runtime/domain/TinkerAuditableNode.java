@@ -1,8 +1,8 @@
 package org.tuml.runtime.domain;
 
-import java.util.List;
-
 import com.tinkerpop.blueprints.Vertex;
+
+import java.util.List;
 
 public interface TinkerAuditableNode extends TumlNode {
 	void createAuditVertex(boolean createParentVertex);

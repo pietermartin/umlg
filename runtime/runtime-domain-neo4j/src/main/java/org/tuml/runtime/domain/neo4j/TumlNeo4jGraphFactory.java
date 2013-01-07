@@ -1,14 +1,11 @@
 package org.tuml.runtime.domain.neo4j;
 
-import java.io.File;
-
-import com.tinkerpop.blueprints.util.wrappers.event.EventGraph;
+import com.tinkerpop.blueprints.impls.neo4j.Neo4jGraph;
+import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
 import org.tuml.runtime.adaptor.TumlGraph;
 import org.tuml.runtime.adaptor.TumlGraphFactory;
-import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
 
-import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
-import com.tinkerpop.blueprints.impls.neo4j.Neo4jGraph;
+import java.io.File;
 
 public class TumlNeo4jGraphFactory implements TumlGraphFactory {
 	

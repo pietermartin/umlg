@@ -1,10 +1,9 @@
 package org.tuml.runtime.domain.activity;
 
-import java.util.Collection;
-
+import com.tinkerpop.blueprints.Vertex;
 import org.tuml.runtime.domain.activity.interf.IInputPin;
 
-import com.tinkerpop.blueprints.Vertex;
+import java.util.Collection;
 
 
 public abstract class CreateObjectAction<O> extends Action {

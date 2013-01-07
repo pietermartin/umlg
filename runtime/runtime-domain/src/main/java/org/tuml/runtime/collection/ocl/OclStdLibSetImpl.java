@@ -1,16 +1,15 @@
 package org.tuml.runtime.collection.ocl;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.Multiset;
 import org.tuml.runtime.collection.TinkerBag;
 import org.tuml.runtime.collection.TinkerCollection;
 import org.tuml.runtime.collection.TinkerSet;
 
-import com.google.common.collect.HashMultiset;
-import com.google.common.collect.Multiset;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 public class OclStdLibSetImpl<E> extends OclStdLibCollectionImpl<E> implements TinkerSet<E> {
 

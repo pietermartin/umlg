@@ -1,13 +1,12 @@
 package org.tuml.runtime.domain.activity;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.tuml.runtime.domain.activity.interf.IObjectNode;
-
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
+import org.tuml.runtime.domain.activity.interf.IObjectNode;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class ObjectNode<O, IN extends ObjectToken<O>, OUT extends ObjectToken<O>> extends ActivityNode<IN, OUT> implements IObjectNode<O, IN, OUT> {
 

@@ -1,14 +1,13 @@
 package org.tuml.runtime.domain.activity;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import org.tuml.runtime.domain.activity.interf.IInActivityParameterNode;
-
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
+import org.tuml.runtime.domain.activity.interf.IInActivityParameterNode;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public abstract class InActivityParameterNode<O, IN extends ObjectToken<O>> extends ActivityParameterNode<O, IN> implements IInActivityParameterNode<O, IN> {
 

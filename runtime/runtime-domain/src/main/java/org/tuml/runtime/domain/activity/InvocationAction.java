@@ -1,13 +1,12 @@
 package org.tuml.runtime.domain.activity;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
+import com.tinkerpop.blueprints.Vertex;
 import org.tuml.runtime.domain.activity.interf.IInputPin;
 import org.tuml.runtime.domain.activity.interf.IInvocationAction;
 
-import com.tinkerpop.blueprints.Vertex;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public abstract class InvocationAction extends Action implements IInvocationAction {
 

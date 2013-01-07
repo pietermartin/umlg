@@ -1,24 +1,14 @@
 package org.tuml.runtime.domain.activity;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.NoSuchElementException;
-
-import org.tuml.runtime.adaptor.GraphDb;
-import org.tuml.runtime.domain.ISignal;
-import org.tuml.runtime.domain.TumlNode;
-import org.tuml.runtime.domain.activity.interf.IAcceptEventAction;
-import org.tuml.runtime.domain.activity.interf.IEvent;
-import org.tuml.runtime.domain.activity.interf.IInputPin;
-import org.tuml.runtime.domain.activity.interf.IOutputPin;
-import org.tuml.runtime.domain.activity.interf.ISignalEvent;
-import org.tuml.runtime.domain.activity.interf.ITrigger;
-
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
+import org.tuml.runtime.adaptor.GraphDb;
+import org.tuml.runtime.domain.ISignal;
+import org.tuml.runtime.domain.TumlNode;
+import org.tuml.runtime.domain.activity.interf.*;
+
+import java.util.*;
 
 public abstract class AcceptEventAction extends Action implements IAcceptEventAction {
 

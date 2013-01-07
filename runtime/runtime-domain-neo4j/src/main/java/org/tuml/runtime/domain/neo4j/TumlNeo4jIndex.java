@@ -1,14 +1,13 @@
 package org.tuml.runtime.domain.neo4j;
 
+import com.tinkerpop.blueprints.CloseableIterable;
+import com.tinkerpop.blueprints.Element;
+import com.tinkerpop.blueprints.Index;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.lucene.search.NumericRangeQuery;
 import org.neo4j.index.lucene.QueryContext;
 import org.neo4j.index.lucene.ValueContext;
 import org.tuml.runtime.adaptor.TumlTinkerIndex;
-
-import com.tinkerpop.blueprints.CloseableIterable;
-import com.tinkerpop.blueprints.Element;
-import com.tinkerpop.blueprints.Index;
 
 public class TumlNeo4jIndex<T extends Element> implements TumlTinkerIndex<T> {
 	private Index<T> index;

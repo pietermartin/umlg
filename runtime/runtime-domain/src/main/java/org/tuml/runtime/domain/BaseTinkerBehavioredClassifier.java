@@ -1,9 +1,6 @@
 package org.tuml.runtime.domain;
 
-import java.io.Serializable;
-import java.util.List;
-import java.util.Set;
-
+import com.tinkerpop.blueprints.Edge;
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.collection.TinkerSequence;
 import org.tuml.runtime.domain.activity.AbstractActivity;
@@ -12,7 +9,9 @@ import org.tuml.runtime.domain.activity.interf.IActivityNode;
 import org.tuml.runtime.domain.activity.interf.IBehavioredClassifier;
 import org.tuml.runtime.domain.activity.interf.IEvent;
 
-import com.tinkerpop.blueprints.Edge;
+import java.io.Serializable;
+import java.util.List;
+import java.util.Set;
 
 public abstract class BaseTinkerBehavioredClassifier extends BaseTumlAudit implements Serializable, CompositionNode, IBehavioredClassifier {
 

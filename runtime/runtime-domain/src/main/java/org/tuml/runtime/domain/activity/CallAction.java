@@ -1,12 +1,11 @@
 package org.tuml.runtime.domain.activity;
 
-import java.util.List;
-import java.util.logging.Level;
-
+import com.tinkerpop.blueprints.Vertex;
 import org.tuml.runtime.domain.activity.interf.ICallAction;
 import org.tuml.runtime.domain.activity.interf.IOutputPin;
 
-import com.tinkerpop.blueprints.Vertex;
+import java.util.List;
+import java.util.logging.Level;
 
 public abstract class CallAction extends InvocationAction implements ICallAction {
 

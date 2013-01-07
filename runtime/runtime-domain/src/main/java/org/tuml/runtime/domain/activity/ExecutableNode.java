@@ -1,8 +1,7 @@
 package org.tuml.runtime.domain.activity;
 
-import org.tuml.runtime.domain.activity.interf.IExecutableNode;
-
 import com.tinkerpop.blueprints.Vertex;
+import org.tuml.runtime.domain.activity.interf.IExecutableNode;
 
 public abstract class ExecutableNode extends ActivityNode<ControlToken, ControlToken> implements IExecutableNode {
 

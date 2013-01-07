@@ -1,8 +1,8 @@
 package org.tuml.runtime.domain.activity;
 
-import java.util.List;
-
 import com.tinkerpop.blueprints.Vertex;
+
+import java.util.List;
 
 
 public abstract class ManyMergeNodeObjectTokenUnknownWithInControlToken extends MergeNodeObjectTokenUnknownWithInControlToken<CollectionObjectToken<?>> {

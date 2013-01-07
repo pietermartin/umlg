@@ -1,13 +1,9 @@
 package org.tuml.runtime.collection.ocl;
 
-import java.util.Collection;
-
-import org.tuml.runtime.collection.TinkerBag;
-import org.tuml.runtime.collection.TinkerCollection;
-import org.tuml.runtime.collection.TinkerOrderedSet;
-import org.tuml.runtime.collection.TinkerSequence;
-import org.tuml.runtime.collection.TinkerSet;
+import org.tuml.runtime.collection.*;
 import org.tuml.runtime.domain.ocl.OclState;
+
+import java.util.Collection;
 
 public class OclStdLibCollectionImpl<E> implements OclStdLibCollection<E> {
 
