@@ -153,11 +153,12 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
         }
         boolean result = this.internalCollection.add(e);
         if (result) {
+            TransactionThreadEntityVar.setNewEntity((CompositionNode) this.owner);
             Edge edge = addInternal(e);
 
             // Edge can only be null on a one primitive
             if (edge == null && !isOnePrimitive() && getDataTypeEnum() == null) {
-                throw new IllegalStateException("Edge can only be null on isOne which is a String, Interger, Boolean or primitive");
+                throw new IllegalStateException("Edge can only be null on isOne which is a String, Integer, Boolean or primitive");
             }
 
             if (isQualified() || isInverseQualified()) {
@@ -219,6 +220,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
         maybeLoad();
         boolean result = this.internalCollection.remove(o);
         if (result) {
+            TransactionThreadEntityVar.setNewEntity((CompositionNode) this.owner);
             @SuppressWarnings("unchecked")
             E e = (E) o;
             Vertex v;

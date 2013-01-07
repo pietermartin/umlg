@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.transaction.Transaction;
 import javax.transaction.TransactionManager;
 
+import com.tinkerpop.blueprints.util.wrappers.event.listener.GraphChangedListener;
 import org.tuml.runtime.domain.PersistentObject;
 
 import com.tinkerpop.blueprints.Edge;
@@ -17,7 +18,6 @@ import com.tinkerpop.blueprints.TransactionalGraph;
 import com.tinkerpop.blueprints.Vertex;
 
 public interface TumlGraph extends TransactionalGraph, IndexableGraph, Serializable  {
-	void setCheckElementsInTransaction(boolean b);
 	void incrementTransactionCount();
 	long getTransactionCount();
 	Vertex getRoot();
@@ -27,16 +27,17 @@ public interface TumlGraph extends TransactionalGraph, IndexableGraph, Serializa
 	long countVertices();
 	long countEdges();
 	void registerListeners();
-	void createSchema(Map<String, Class<?>> classNames);
-	void clearAutoIndices();
-	List<PersistentObject> getCompositeRoots(); 
-	<T> List<T> query(Class<?> className, int first, int pageSize);
+//	<T> List<T> query(Class<?> className, int first, int pageSize);
 	<T> T instantiateClassifier(Long id);
-	TransactionManager getTransactionManager();
-    void resume(Transaction tobj);
+
+    TransactionManager getTransactionManager();
+    void resume(Transaction t);
     Transaction suspend();
     Transaction getTransaction();
-    public <T extends Element> TumlTinkerIndex<T> getIndex(String indexName, Class<T> indexClass);
-    public <T extends Element> TumlTinkerIndex<T> createIndex(String indexName, Class<T> indexClass);
+
+    <T extends Element> TumlTinkerIndex<T> createIndex(String indexName, Class<T> indexClass);
+    <T extends Element> TumlTinkerIndex<T> getIndex(String indexName, Class<T> indexClass);
     boolean hasEdgeBeenDeleted(Edge edge);
+
+
 }

@@ -5,7 +5,8 @@ package org.tuml.runtime.util;
  * Time: 10:58 AM
  */
 public enum TinkerImplementation {
-    NEO4J("org.tuml.runtime.domain.neo4j.TumlNeo4jGraphFactory", "org.tuml.runtime.domain.neo4j.TumlNeo4jIdUtilImpl"), ORIENTDB("", "");
+    NEO4J("org.tuml.runtime.domain.neo4j.TumlNeo4jGraphFactory", "org.tuml.runtime.domain.neo4j.TumlNeo4jIdUtilImpl"),
+    ORIENTDB("org.tuml.runtime.domain.orientdb.TumlOrientDbGraphFactory", "org.tuml.runtime.domain.orientdb.TumlOrientDbIdUtilImpl");
     private String tumlGraphFactory;
     private String tumlIdUtil;
     private TinkerImplementation(String tumlGraphFactory, String tumlIdUtil) {

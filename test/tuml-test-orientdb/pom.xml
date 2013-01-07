@@ -6,7 +6,7 @@
 		<groupId>org.tuml</groupId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>tuml-test</artifactId>
+	<artifactId>tuml-test-orientdb</artifactId>
 	<build>
 		<plugins>
 			<plugin>
@@ -54,7 +54,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.tuml</groupId>
-			<artifactId>runtime-domain-neo4j</artifactId>
+			<artifactId>runtime-domain-orientdb</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>

@@ -2,6 +2,7 @@ package org.tuml.runtime.domain.neo4j;
 
 import java.io.File;
 
+import com.tinkerpop.blueprints.util.wrappers.event.EventGraph;
 import org.tuml.runtime.adaptor.TumlGraph;
 import org.tuml.runtime.adaptor.TumlGraphFactory;
 import org.tuml.runtime.adaptor.TransactionThreadEntityVar;

@@ -2,6 +2,7 @@ package org.tuml.tinker.deletiontest;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.tuml.collectiontest.Dream;
 import org.tuml.componenttest.Space;
 import org.tuml.componenttest.SpaceTime;
 import org.tuml.componenttest.Time;
@@ -11,6 +12,7 @@ import org.tuml.interfacetest.ManyA;
 import org.tuml.interfacetest.ManyB;
 import org.tuml.onetoone.OneOne;
 import org.tuml.onetoone.OneTwo;
+import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
 import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
@@ -180,5 +182,30 @@ public class DeletionTest extends BaseLocalDbTest {
 		OneOne testOneOne1 = new OneOne(oneOne1.getVertex());
 		Assert.assertNull(testOneOne1.getOneTwo());
 	}
+
+    @Test
+    public void testTransactionThreadVarRemove() {
+        God god = new God(true);
+        god.setName("GODDER");
+        Dream dream = new Dream(god);
+        dream.setName("dream1");
+        Assert.assertEquals(2, TransactionThreadEntityVar.get().size());
+        db.commit();
+        Assert.assertEquals(2, countVertices());
+        Assert.assertEquals(2, countEdges());
+        Assert.assertEquals(0, TransactionThreadEntityVar.get().size());
+
+        god.removeFromDream(dream);
+
+        Assert.assertTrue(TransactionThreadEntityVar.get().contains(dream));
+
+        Assert.assertEquals(2, TransactionThreadEntityVar.get().size());
+        dream.delete();
+        Assert.assertFalse(TransactionThreadEntityVar.get().contains(dream));
+        db.commit();
+        Assert.assertEquals(1, countVertices());
+        Assert.assertEquals(1, countEdges());
+        Assert.assertEquals(0, TransactionThreadEntityVar.get().size());
+    }
 
 }

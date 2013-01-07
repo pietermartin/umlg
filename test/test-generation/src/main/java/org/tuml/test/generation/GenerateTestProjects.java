@@ -24,5 +24,7 @@ public class GenerateTestProjects {
 		javaGenerator.generate(new File(args[0] + "/test/tuml-test-ocl/src/main/model/test-ocl.uml"), new File(args[0] + "/test/tuml-test-ocl/"), DefaultVisitors.getDefaultJavaVisitors());
         javaGenerator = new JavaGenerator();
         javaGenerator.generate(new File(args[0] + "/test/test-restlet-minimal/src/main/model/test-restlet-minimal.uml"), new File(args[0] + "/test/test-restlet-minimal/"), RestletVisitors.getDefaultJavaVisitors());
+        javaGenerator = new JavaGenerator();
+        javaGenerator.generate(new File(args[0] + "/test/tuml-test-orientdb/src/main/model/tuml-test-orientdb.uml"), new File(args[0] + "/test/tuml-test-orientdb/"), DefaultVisitors.getDefaultJavaVisitors());
     }
 }

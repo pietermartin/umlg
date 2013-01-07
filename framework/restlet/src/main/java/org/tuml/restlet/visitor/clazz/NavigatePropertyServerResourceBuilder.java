@@ -174,11 +174,11 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
             addDeleteResource(pWrap, annotatedClass, parentPathName);
         }
 
-        ojTryStatement.getTryPart().addToStatements("GraphDb.getDb().commit()");
+        ojTryStatement.getTryPart().addToStatements(TinkerGenerationUtil.graphDbAccess + ".commit()");
         annotatedClass.addToImports(TinkerGenerationUtil.tinkerConclusionPathName);
 
         ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
-        ojTryStatement.getCatchPart().addToStatements("GraphDb.getDb().rollback()");
+        ojTryStatement.getCatchPart().addToStatements(TinkerGenerationUtil.graphDbAccess + ".rollback()");
 
         OJIfStatement ifRuntime = new OJIfStatement("e instanceof RuntimeException");
         ifRuntime.addToThenPart("throw (RuntimeException)e");
@@ -189,13 +189,15 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 
         annotatedClass.addToImports(parentPathName);
 
-        putOrDelete.getBody().addToStatements(
-                "this." + parentPathName.getLast().toLowerCase() + "Id = Integer.parseInt((String)getRequestAttributes().get(\""
-                        + parentPathName.getLast().toLowerCase() + "Id\"))");
-        putOrDelete.getBody().addToStatements(
-                parentPathName.getLast() + " parentResource = GraphDb.getDb().instantiateClassifier( " + parentPathName.getLast().toLowerCase() + "Id" + ")");
+        putOrDelete.getBody().addToStatements("return get()");
 
-        buildToJson(pWrap, annotatedClass, putOrDelete.getBody());
+//        putOrDelete.getBody().addToStatements(
+//                "this." + parentPathName.getLast().toLowerCase() + "Id = Integer.parseInt((String)getRequestAttributes().get(\""
+//                        + parentPathName.getLast().toLowerCase() + "Id\"))");
+//        putOrDelete.getBody().addToStatements(
+//                parentPathName.getLast() + " parentResource = GraphDb.getDb().instantiateClassifier( " + parentPathName.getLast().toLowerCase() + "Id" + ")");
+//
+//        buildToJson(pWrap, annotatedClass, putOrDelete.getBody());
 
         annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
         annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);
@@ -286,7 +288,9 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 
         annotatedClass.addToImports(parentPathName);
 
-        buildToJson(pWrap, annotatedClass, post.getBody());
+        post.getBody().addToStatements("return get()");
+
+//        buildToJson(pWrap, annotatedClass, post.getBody());
 
         annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
         annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);

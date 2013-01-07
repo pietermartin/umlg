@@ -1,6 +1,7 @@
 package org.tuml.javageneration.visitor.clazz;
 
 import org.eclipse.uml2.uml.Class;
+import org.tuml.framework.ModelLoader;
 import org.tuml.java.metamodel.*;
 import org.tuml.java.metamodel.annotation.OJAnnotatedClass;
 import org.tuml.framework.Visitor;
@@ -23,6 +24,10 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
 
     @Override
     public void visitBefore(Class clazz) {
+        //Validate that tumllib is available
+        if (!ModelLoader.INSTANCE.isTumlLibIncluded()) {
+            throw new IllegalStateException("tumllib is not imported in the model. It is required for " + MetaClassBuilder.class.getName());
+        }
         if (!clazz.isAbstract()) {
             OJAnnotatedClass metaClass = new OJAnnotatedClass(TumlClassOperations.getMetaClassName(clazz));
             OJPackage ojPackage = new OJPackage(Namer.name(clazz.getNearestPackage()) + ".meta");

@@ -2,7 +2,6 @@ package org.tuml.runtime.domain.neo4j;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.lucene.search.NumericRangeQuery;
-import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.index.lucene.QueryContext;
 import org.neo4j.index.lucene.ValueContext;
 import org.tuml.runtime.adaptor.TumlTinkerIndex;
@@ -11,7 +10,7 @@ import com.tinkerpop.blueprints.CloseableIterable;
 import com.tinkerpop.blueprints.Element;
 import com.tinkerpop.blueprints.Index;
 
-public class TumlNeo4jIndex<T extends Element, S extends PropertyContainer> implements TumlTinkerIndex<T> {
+public class TumlNeo4jIndex<T extends Element> implements TumlTinkerIndex<T> {
 	private Index<T> index;
 
 	public TumlNeo4jIndex(Index<T> index) {
@@ -73,11 +72,6 @@ public class TumlNeo4jIndex<T extends Element, S extends PropertyContainer> impl
 			}
 		}
 		return null;
-//		if (iterator.hasNext()) {
-//			return iterator.next();
-//		} else {
-//			return null;
-//		}
 	}
 
 	private boolean hasEdgeBeenDeleted(T edge) {
@@ -99,10 +93,10 @@ public class TumlNeo4jIndex<T extends Element, S extends PropertyContainer> impl
 //		return false;
 	}
 
-	@Override
-	public CloseableIterable<T> get(Float value) {
-		return this.index.query("index", QueryContext.numericRange("index", value, value));
-	}
+//	@Override
+//	public CloseableIterable<T> get(Float value) {
+//		return this.index.query("index", QueryContext.numericRange("index", value, value));
+//	}
 
 	@Override
 	public CloseableIterable<T> queryList(Float from, boolean minInclusive, boolean reversed) {

@@ -29,23 +29,6 @@ public class TumlGraphCreator {
         if (GraphDb.getDb() == null) {
             try {
                 String dbUrl = TumlProperties.INSTANCE.getTumlDbLocation();
-
-                if (TumlProperties.INSTANCE.isClearDbOnStartUp()) {
-                    String parsedUrl = dbUrl;
-                    if (dbUrl.startsWith("local:")) {
-                        parsedUrl = dbUrl.replace("local:", "");
-                    }
-                    File dir = new File(parsedUrl);
-                    if (dir.exists()) {
-                        try {
-                            File backupDir = new File(dir.getParent(), dir.getName() + "-" + new SimpleDateFormat("ddMMyyyy_mmss").format(new Date()));
-                            logger.info(String.format("Moving dir %s to %s", new Object[]{dir.getAbsolutePath(), backupDir.getAbsolutePath()}));
-                            FileUtils.moveDirectory(dir, backupDir);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                }
                 TinkerImplementation tinkerImplementation = TinkerImplementation.fromName(TumlProperties.INSTANCE.getTinkerImplementation());
                 @SuppressWarnings("unchecked")
                 Class<TumlGraphFactory> factory = (Class<TumlGraphFactory>) Class.forName(tinkerImplementation.getTumlGraphFactory());

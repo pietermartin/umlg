@@ -6,8 +6,7 @@ import org.junit.Before;
 import org.tuml.framework.ModelLoadedEvent;
 import org.tuml.framework.ModelLoader;
 import org.restlet.Component;
-
-import java.awt.*;
+import org.tuml.runtime.adaptor.TumlGraphManager;
 
 /**
  * Date: 2013/01/04
@@ -20,6 +19,7 @@ public abstract class BaseRestletTest implements ModelLoadedEvent {
 
     @Before
     public void before() throws Exception {
+        TumlGraphManager.INSTANCE.deleteGraph();
         this.component = instantiateComponent();
         this.component.start();
         if (!ModelLoader.INSTANCE.isLoaded()) {

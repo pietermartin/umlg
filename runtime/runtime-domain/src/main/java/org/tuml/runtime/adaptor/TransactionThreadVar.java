@@ -35,6 +35,11 @@ public class TransactionThreadVar {
 		transactionVar.get().clear();
 	}
 
+    public static void remove() {
+        transactionVar.remove();
+
+    }
+
 	public static void putAuditVertexFalse(String clazzAndId, Vertex auditVertex) {
 		transactionVar.get().put(clazzAndId, auditVertex);
 	}

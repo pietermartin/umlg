@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.tuml.concretetest.God;
 import org.tuml.qualifiertest.Nature;
 import org.tuml.runtime.collection.TinkerSet;
+import org.tuml.runtime.domain.neo4j.TumlNeo4jGraph;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
 import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
@@ -34,7 +35,9 @@ public class TestQualifier extends BaseLocalDbTest {
 	
 	@Test
 	public void testQualifiedWithNull() {
-		db.setCheckElementsInTransaction(true);
+        if (db instanceof TumlNeo4jGraph) {
+		    ((TumlNeo4jGraph)db).setCheckElementsInTransaction(true);
+        }
 		God god = new God(true);
 		god.setName("THEGOD");
 		

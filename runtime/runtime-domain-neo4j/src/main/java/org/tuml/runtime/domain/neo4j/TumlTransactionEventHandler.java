@@ -17,50 +17,54 @@ import org.tuml.runtime.validation.TumlConstraintViolationException;
 public class TumlTransactionEventHandler<T> implements TransactionEventHandler<T> {
 
 
-	public TumlTransactionEventHandler() {
-		super();
-	}
+    public TumlTransactionEventHandler() {
+        super();
+    }
 
-	@Override
-	public T beforeCommit(TransactionData data) throws Exception {
-		if (!isEmpty(data) && GraphDb.getDb() != null) {
-			TransactionThreadVar.clear();
-			GraphDb.incrementTransactionCount();
-			List<CompositionNode> entities = TransactionThreadEntityVar.get();
-			for (CompositionNode entity : entities) {
-				TumlNode tumlNode = (TumlNode) entity;
-				List<TumlConstraintViolation> requiredConstraintViolations = tumlNode.validateRequiredProperties();
-				if (!requiredConstraintViolations.isEmpty()) {
-					TransactionThreadEntityVar.remove();
-					throw new TumlConstraintViolationException(requiredConstraintViolations);
-				}
-				if (!entity.isTinkerRoot() && entity.getOwningObject() == null) {
-					TransactionThreadEntityVar.remove();
-					if (entity instanceof BaseTinkerAuditable && ((BaseTinkerAuditable) entity).getDeletedOn().isBefore(new DateTime())) {
-						return null;
-					}
-					throw new IllegalStateException(String.format("Entity %s %s does not have a composite owner", entity.getClass().getSimpleName(), entity.getId()));
-				}
-			}
-			TransactionThreadEntityVar.remove();
-		}
-		return null;
-	}
+    @Override
+    public T beforeCommit(TransactionData data) throws Exception {
+        try {
+            if (!isEmpty(data) && GraphDb.getDb() != null) {
+                TransactionThreadVar.clear();
+                GraphDb.incrementTransactionCount();
+                List<CompositionNode> entities = TransactionThreadEntityVar.get();
+                for (CompositionNode entity : entities) {
+                    System.out.println("TransactionThreadEntityVar id = " + entity.getId());
+                }
+                for (CompositionNode entity : entities) {
+                    TumlNode tumlNode = (TumlNode) entity;
+                    List<TumlConstraintViolation> requiredConstraintViolations = tumlNode.validateRequiredProperties();
+                    if (!requiredConstraintViolations.isEmpty()) {
+                        throw new TumlConstraintViolationException(requiredConstraintViolations);
+                    }
+                    if (!entity.isTinkerRoot() && entity.getOwningObject() == null) {
+                        if (entity instanceof BaseTinkerAuditable && ((BaseTinkerAuditable) entity).getDeletedOn().isBefore(new DateTime())) {
+                            return null;
+                        }
+                        throw new IllegalStateException(String.format("Entity %s %s does not have a composite owner", entity.getClass().getSimpleName(), entity.getId()));
+                    }
+                }
+            }
+        } finally {
+            TransactionThreadEntityVar.remove();
+        }
+        return null;
+    }
 
-	private boolean isEmpty(TransactionData data) {
-		return !data.assignedNodeProperties().iterator().hasNext() && !data.assignedRelationshipProperties().iterator().hasNext() && !data.createdNodes().iterator().hasNext()
-				&& !data.createdRelationships().iterator().hasNext() && !data.deletedNodes().iterator().hasNext() && !data.deletedRelationships().iterator().hasNext()
-				&& !data.removedNodeProperties().iterator().hasNext() && !data.removedRelationshipProperties().iterator().hasNext();
-	}
+    private boolean isEmpty(TransactionData data) {
+        return !data.assignedNodeProperties().iterator().hasNext() && !data.assignedRelationshipProperties().iterator().hasNext() && !data.createdNodes().iterator().hasNext()
+                && !data.createdRelationships().iterator().hasNext() && !data.deletedNodes().iterator().hasNext() && !data.deletedRelationships().iterator().hasNext()
+                && !data.removedNodeProperties().iterator().hasNext() && !data.removedRelationshipProperties().iterator().hasNext();
+    }
 
-	@Override
-	public void afterCommit(TransactionData data, T state) {
+    @Override
+    public void afterCommit(TransactionData data, T state) {
 
-	}
+    }
 
-	@Override
-	public void afterRollback(TransactionData data, T state) {
-
-	}
+    @Override
+    public void afterRollback(TransactionData data, T state) {
+        TransactionThreadEntityVar.remove();
+    }
 
 }

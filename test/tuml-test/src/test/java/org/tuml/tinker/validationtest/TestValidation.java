@@ -2,6 +2,8 @@ package org.tuml.tinker.validationtest;
 
 import org.junit.Test;
 import org.neo4j.graphdb.TransactionFailureException;
+import org.tuml.collectiontest.Finger;
+import org.tuml.collectiontest.Hand;
 import org.tuml.componenttest.Space;
 import org.tuml.componenttest.SpaceTime;
 import org.tuml.componenttest.Time;
@@ -237,4 +239,27 @@ public class TestValidation extends BaseLocalDbTest {
 		Time t = new Time(st);
         db.commit();
 	}
+
+    @Test(expected = TransactionFailureException.class)
+    public void testRequired1() {
+        God g = new God(true);
+        g.setName("asda");
+        Hand hand = new Hand(g);
+        hand.setName("hand1");
+        Finger finger1 = new Finger(hand);
+        db.commit();
+    }
+
+    @Test(expected = TransactionFailureException.class)
+    public void testRequired2() {
+        God g = new God(true);
+        g.setName("asda");
+        Hand hand = new Hand(g);
+        hand.setName("hand1");
+        Finger finger1 = new Finger(hand);
+        finger1.setName("name1");
+        db.commit();
+        finger1.setName(null);
+        db.commit();
+    }
 }
