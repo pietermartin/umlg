@@ -11,8 +11,6 @@ import org.tuml.query.InstanceQuery;
 import org.tuml.query.QueryEnum;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
-import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
-
 public class TestQueryBaseModelTumlAssociation extends BaseLocalDbTest {
 
 	//This seems to be happening in restlet scenario

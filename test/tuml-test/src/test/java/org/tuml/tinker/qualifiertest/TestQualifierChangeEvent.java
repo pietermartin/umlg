@@ -6,8 +6,6 @@ import org.tuml.concretetest.God;
 import org.tuml.qualifiertest.Nature;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
-import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
-
 public class TestQualifierChangeEvent extends BaseLocalDbTest {
 
 	@Test

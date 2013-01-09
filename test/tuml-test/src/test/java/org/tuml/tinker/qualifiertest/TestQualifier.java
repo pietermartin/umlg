@@ -1,16 +1,13 @@
 package org.tuml.tinker.qualifiertest;
 
-import java.util.Set;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.tuml.concretetest.God;
 import org.tuml.qualifiertest.Nature;
 import org.tuml.runtime.collection.TinkerSet;
-import org.tuml.runtime.domain.neo4j.TumlNeo4jGraph;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
-import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
+import java.util.Set;
 
 public class TestQualifier extends BaseLocalDbTest {
 
@@ -32,26 +29,27 @@ public class TestQualifier extends BaseLocalDbTest {
 		Assert.assertTrue(natureForQualifier1.isEmpty());
         db.commit();
 	}
-	
-	@Test
-	public void testQualifiedWithNull() {
-        if (db instanceof TumlNeo4jGraph) {
-		    ((TumlNeo4jGraph)db).setCheckElementsInTransaction(true);
-        }
-		God god = new God(true);
-		god.setName("THEGOD");
-		
-		Nature nature = new Nature(true);
-		nature.addToGod(god);
-        db.commit();
-		
-		God godTest = new God(god.getVertex());
-		god.setName("ss");
-		TinkerSet<Nature> natureForQualifier1 = godTest.getNatureForQualifier2(null);
-		Assert.assertTrue(!natureForQualifier1.isEmpty());
-		Assert.assertNull(natureForQualifier1.iterator().next().getName1());
-        db.commit();
-	}
+
+    //TODO work out how todo tinker implementation specific tests
+//	@Test
+//	public void testQualifiedWithNull() {
+//        if (db instanceof TumlNeo4jGraph) {
+//		    ((TumlNeo4jGraph)db).setCheckElementsInTransaction(true);
+//        }
+//		God god = new God(true);
+//		god.setName("THEGOD");
+//
+//		Nature nature = new Nature(true);
+//		nature.addToGod(god);
+//        db.commit();
+//
+//		God godTest = new God(god.getVertex());
+//		god.setName("ss");
+//		TinkerSet<Nature> natureForQualifier1 = godTest.getNatureForQualifier2(null);
+//		Assert.assertTrue(!natureForQualifier1.isEmpty());
+//		Assert.assertNull(natureForQualifier1.iterator().next().getName1());
+//        db.commit();
+//	}
 	
 	@Test
 	public void testQualifiedMany() {

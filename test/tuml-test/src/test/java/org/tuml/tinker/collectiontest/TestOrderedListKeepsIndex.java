@@ -1,12 +1,9 @@
 package org.tuml.tinker.collectiontest;
 
-import com.tinkerpop.blueprints.TransactionalGraph;
 import junit.framework.Assert;
 import org.junit.Test;
-import org.tuml.collectiontest.Bag;
 import org.tuml.collectiontest.Finger;
 import org.tuml.collectiontest.Hand;
-import org.tuml.collectiontest.Nightmare;
 import org.tuml.concretetest.God;
 import org.tuml.runtime.test.BaseLocalDbTest;
 

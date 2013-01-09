@@ -1,4 +1,4 @@
-package org.tuml.runtime.domain.neo4j;
+package org.tuml.runtime.adaptor;
 
 import com.tinkerpop.blueprints.CloseableIterable;
 import com.tinkerpop.blueprints.Element;

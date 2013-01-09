@@ -1,4 +1,4 @@
-package org.tuml.runtime.domain.neo4j;
+package org.tuml.runtime.adaptor;
 
 import com.tinkerpop.blueprints.*;
 import com.tinkerpop.blueprints.impls.neo4j.Neo4jEdge;
@@ -11,9 +11,6 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.event.TransactionEventHandler;
 import org.neo4j.kernel.AbstractGraphDatabase;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
-import org.tuml.runtime.adaptor.BaseTumlGraph;
-import org.tuml.runtime.adaptor.TumlGraph;
-import org.tuml.runtime.adaptor.TumlTinkerIndex;
 import org.tuml.runtime.domain.PersistentObject;
 
 import javax.transaction.Transaction;

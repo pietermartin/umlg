@@ -1,6 +1,5 @@
 package org.tuml.datatype.test;
 
-import com.tinkerpop.blueprints.TransactionalGraph;
 import junit.framework.Assert;
 import org.junit.Test;
 import org.tuml.componenttest.Space;
@@ -8,7 +7,6 @@ import org.tuml.componenttest.SpaceTime;
 import org.tuml.componenttest.Time;
 import org.tuml.concretetest.God;
 import org.tuml.concretetest.Universe;
-import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
 /**

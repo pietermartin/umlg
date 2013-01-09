@@ -38,4 +38,24 @@ public class OrientDbSpeedTest {
         System.out.println(stopWatch.toString());
     }
 
+    @Test
+    public void testRaw() throws IOException {
+        File f = new File("/tmp/orientdb-raw-speed-test");
+        FileUtils.deleteDirectory(f);
+        OGraphDatabase database = new OGraphDatabase("local:/tmp/orientdb-raw-speed-test");
+        database.create();
+
+        ODocument rootNode = database.createVertex().field("id", 0);
+        ODocument currentNode = rootNode;
+
+        for (int i = 1; i < 1000; ++i) {
+            ODocument newNode = database.createVertex().field("id", i);
+            database.createEdge( currentNode, newNode);
+            currentNode = newNode;
+        }
+        database.setRoot("graph", rootNode);
+
+        database.close();
+    }
+
 }

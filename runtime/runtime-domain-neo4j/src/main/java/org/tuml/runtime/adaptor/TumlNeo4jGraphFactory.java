@@ -1,9 +1,6 @@
-package org.tuml.runtime.domain.neo4j;
+package org.tuml.runtime.adaptor;
 
 import com.tinkerpop.blueprints.impls.neo4j.Neo4jGraph;
-import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
-import org.tuml.runtime.adaptor.TumlGraph;
-import org.tuml.runtime.adaptor.TumlGraphFactory;
 
 import java.io.File;
 

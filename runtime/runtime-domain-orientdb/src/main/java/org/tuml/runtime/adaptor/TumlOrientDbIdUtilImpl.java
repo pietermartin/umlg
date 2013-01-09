@@ -1,8 +1,6 @@
-package org.tuml.runtime.domain.orientdb;
+package org.tuml.runtime.adaptor;
 
 import com.tinkerpop.blueprints.Vertex;
-import org.tuml.runtime.adaptor.GraphDb;
-import org.tuml.runtime.adaptor.TinkerIdUtil;
 
 public class TumlOrientDbIdUtilImpl implements TinkerIdUtil {
 
@@ -19,12 +17,8 @@ public class TumlOrientDbIdUtilImpl implements TinkerIdUtil {
 
     @Override
     public Long getId(Vertex v) {
-        Object id = v.getProperty(ORIENT_DB_ID);
-        if (id == null) {
-            return ((TumlOrientDbGraph)GraphDb.getDb()).getNextVertexId();
-        } else {
-            return (Long) id;
-        }
+        String id = (String)v.getId();
+        return Long.valueOf(id.substring(id.indexOf(":")));
     }
 
     @Override

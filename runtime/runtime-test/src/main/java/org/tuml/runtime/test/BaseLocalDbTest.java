@@ -1,20 +1,12 @@
 package org.tuml.runtime.test;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.lang.reflect.Method;
 import java.net.URL;
-import java.util.Properties;
 import java.util.logging.LogManager;
 
-import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.tuml.runtime.adaptor.*;
-import org.tuml.runtime.util.TinkerImplementation;
-import org.tuml.runtime.util.TumlProperties;
 
 public class BaseLocalDbTest {
 
@@ -50,5 +42,9 @@ public class BaseLocalDbTest {
 	protected long countEdges() {
 		return db.countEdges();
 	}
+
+    protected boolean isTransactionFailedException(Exception e) {
+        return TumlTestUtilFactory.getTestUtil().isTransactionFailedException(e);
+    }
 
 }

@@ -1,7 +1,6 @@
 package org.tuml.tinker.concretetest;
 
 import junit.framework.Assert;
-
 import org.junit.Test;
 import org.tuml.componenttest.Space;
 import org.tuml.componenttest.SpaceTime;
@@ -12,8 +11,6 @@ import org.tuml.concretetest.Universe;
 import org.tuml.onetoone.OneOne;
 import org.tuml.onetoone.OneTwo;
 import org.tuml.runtime.test.BaseLocalDbTest;
-
-import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 
 public class TestNonCompositeOneToOne extends BaseLocalDbTest {
 

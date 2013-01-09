@@ -1,4 +1,4 @@
-package org.tuml.runtime.domain.neo4j;
+package org.tuml.runtime.adaptor;
 
 import org.joda.time.DateTime;
 import org.neo4j.graphdb.event.TransactionData;

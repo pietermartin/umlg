@@ -1,7 +1,6 @@
 package org.tuml.tinker.nonnavigable;
 
 import junit.framework.Assert;
-
 import org.junit.Test;
 import org.tuml.componenttest.Space;
 import org.tuml.componenttest.SpaceTime;
@@ -11,8 +10,6 @@ import org.tuml.concretetest.Universe;
 import org.tuml.navigability.NonNavigableMany;
 import org.tuml.navigability.NonNavigableOne;
 import org.tuml.runtime.test.BaseLocalDbTest;
-
-import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 
 public class NonNavigableTest extends BaseLocalDbTest {
 

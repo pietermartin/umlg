@@ -15,8 +15,6 @@ import org.tuml.onetoone.OneTwo;
 import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
-import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
-
 public class DeletionTest extends BaseLocalDbTest {
 
 	@SuppressWarnings("unused")

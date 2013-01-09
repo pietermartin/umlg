@@ -1,10 +1,6 @@
 package org.tuml.tinker.collectiontest;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import junit.framework.Assert;
-
 import org.junit.Test;
 import org.tuml.concretetest.God;
 import org.tuml.inheritencetest.AbstractSpecies;
@@ -12,7 +8,8 @@ import org.tuml.inheritencetest.Biped;
 import org.tuml.runtime.collection.ocl.IterateExpressionAccumulator;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
-import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TestInitCalled extends BaseLocalDbTest {
 

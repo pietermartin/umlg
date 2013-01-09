@@ -1,19 +1,14 @@
 package org.tuml.enumeration.test;
 
-import com.tinkerpop.blueprints.TransactionalGraph;
-import junit.framework.Assert;
 import org.junit.Test;
 import org.tuml.concretetest.God;
 import org.tuml.embeddedtest.REASON;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.memory.TumlMemorySet;
 import org.tuml.runtime.test.BaseLocalDbTest;
-import scala.actors.threadpool.Arrays;
 
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Date: 2012/12/17

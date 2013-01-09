@@ -1,9 +1,6 @@
-package org.tuml.runtime.domain.orientdb;
+package org.tuml.runtime.adaptor;
 
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
-import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
-import org.tuml.runtime.adaptor.TumlGraph;
-import org.tuml.runtime.adaptor.TumlGraphFactory;
 
 import java.io.File;
 

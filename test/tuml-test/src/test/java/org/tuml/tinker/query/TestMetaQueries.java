@@ -1,6 +1,5 @@
 package org.tuml.tinker.query;
 
-import com.tinkerpop.blueprints.TransactionalGraph;
 import junit.framework.Assert;
 import org.junit.Test;
 import org.tuml.collectiontest.Dream;

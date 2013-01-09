@@ -1,6 +1,5 @@
 package org.tuml.meta;
 
-import com.tinkerpop.blueprints.TransactionalGraph;
 import junit.framework.Assert;
 import org.junit.Test;
 import org.tuml.concretetest.Angel;

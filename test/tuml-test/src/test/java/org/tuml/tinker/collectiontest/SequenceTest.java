@@ -1,10 +1,6 @@
 package org.tuml.tinker.collectiontest;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import junit.framework.Assert;
-
 import org.junit.Test;
 import org.tuml.collectiontest.Finger;
 import org.tuml.collectiontest.Hand;
@@ -14,9 +10,9 @@ import org.tuml.qualifiertest.Many2;
 import org.tuml.runtime.collection.memory.TumlMemorySequence;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
-import scala.actors.threadpool.Arrays;
-
-import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class SequenceTest extends BaseLocalDbTest {
 

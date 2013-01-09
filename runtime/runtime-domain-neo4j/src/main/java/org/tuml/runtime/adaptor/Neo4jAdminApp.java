@@ -1,8 +1,7 @@
-package org.tuml.runtime.domain.neo4j;
+package org.tuml.runtime.adaptor;
 
 import org.neo4j.kernel.InternalAbstractGraphDatabase;
 import org.neo4j.server.WrappingNeoServerBootstrapper;
-import org.tuml.runtime.adaptor.GraphDb;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

@@ -1,13 +1,10 @@
 package org.tuml.tinker.inheritencetest;
 
 import junit.framework.Assert;
-
 import org.junit.Test;
 import org.tuml.concretetest.God;
 import org.tuml.inheritencetest.Mamal;
 import org.tuml.runtime.test.BaseLocalDbTest;
-
-import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 
 public class TestInheritence extends BaseLocalDbTest {
 

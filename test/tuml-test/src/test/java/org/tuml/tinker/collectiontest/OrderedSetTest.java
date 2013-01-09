@@ -1,9 +1,6 @@
 package org.tuml.tinker.collectiontest;
 
-import java.util.Arrays;
-
 import junit.framework.Assert;
-
 import org.junit.Test;
 import org.tuml.collectiontest.World;
 import org.tuml.concretetest.God;
@@ -11,7 +8,7 @@ import org.tuml.embeddedtest.TestEmbedded;
 import org.tuml.runtime.collection.memory.TumlMemorySequence;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
-import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
+import java.util.Arrays;
 
 public class OrderedSetTest extends BaseLocalDbTest {
 

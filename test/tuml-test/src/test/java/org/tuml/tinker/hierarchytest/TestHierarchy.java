@@ -1,9 +1,6 @@
 package org.tuml.tinker.hierarchytest;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import junit.framework.Assert;
-
 import org.junit.Test;
 import org.tuml.concretetest.God;
 import org.tuml.hierarchy.Hierarchy;
@@ -11,7 +8,8 @@ import org.tuml.hierarchytest.Folder;
 import org.tuml.hierarchytest.RealRootFolder;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
-import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class TestHierarchy extends BaseLocalDbTest {
 

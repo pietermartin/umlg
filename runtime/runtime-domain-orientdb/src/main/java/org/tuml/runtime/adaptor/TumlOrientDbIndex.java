@@ -1,38 +1,53 @@
-package org.tuml.runtime.domain.orientdb;
+package org.tuml.runtime.adaptor;
 
+import com.orientechnologies.orient.core.db.record.OIdentifiable;
+import com.orientechnologies.orient.core.index.OIndex;
 import com.tinkerpop.blueprints.CloseableIterable;
-import com.tinkerpop.blueprints.Element;
 import com.tinkerpop.blueprints.Index;
+import com.tinkerpop.blueprints.impls.orient.OrientBaseGraph;
+import com.tinkerpop.blueprints.impls.orient.OrientElement;
+import com.tinkerpop.blueprints.impls.orient.OrientElementIterable;
+import com.tinkerpop.blueprints.impls.orient.OrientIndex;
 import org.apache.commons.lang.NotImplementedException;
 import org.tuml.runtime.adaptor.TumlTinkerIndex;
+
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Date: 2013/01/07
  * Time: 7:57 PM
  */
-public class TumlOrientDbIndex<T extends Element> implements TumlTinkerIndex<T> {
+public class TumlOrientDbIndex<T extends OrientElement> implements TumlTinkerIndex<T> {
 
-    private Index<T> index;
+    private OrientIndex<T> index;
+    private OrientBaseGraph orientBaseGraph;
 
-    public TumlOrientDbIndex(Index<T> index) {
+    public TumlOrientDbIndex(OrientBaseGraph orientBaseGraph, Index<T> index) {
         if (index == null) {
             throw new IllegalArgumentException("Index can not be null");
         }
-        this.index = index;
+        this.index = (OrientIndex<T>) index;
+        this.orientBaseGraph = orientBaseGraph;
     }
 
     @Override
     public CloseableIterable<T> queryList(Float from, boolean minInclusive, boolean reversed) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        OIndex<?> underlying = index.getRawIndex();
+        Collection<OIdentifiable> records = underlying.getValuesMajor(from, minInclusive);
+        return new OrientElementIterable<T>(this.orientBaseGraph, records);
     }
 
     @Override
     public T getEdgeToLastElementInSequence() {
-//        CloseableIterable<T> iter = this.index.query("index", QueryContext.numericRange("index", 0F, null).sortNumeric("index", true));
-//        for (T t : iter) {
-//            return t;
-//        }
-        return null;
+        OIndex<?> underlying = index.getRawIndex();
+        Iterator<? extends Map.Entry<Object, ?>> iter = underlying.inverseIterator();
+        if (iter.hasNext()) {
+            return (T) iter.next();
+        } else {
+            return null;
+        }
     }
 
     @Override

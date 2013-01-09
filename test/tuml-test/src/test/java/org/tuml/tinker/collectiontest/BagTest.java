@@ -1,14 +1,11 @@
 package org.tuml.tinker.collectiontest;
 
 import junit.framework.Assert;
-
 import org.junit.Test;
 import org.tuml.collectiontest.Bag;
 import org.tuml.collectiontest.Nightmare;
 import org.tuml.concretetest.God;
 import org.tuml.runtime.test.BaseLocalDbTest;
-
-import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 
 public class BagTest extends BaseLocalDbTest {
 

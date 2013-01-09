@@ -1,7 +1,5 @@
 package org.tuml.tinker.qualifiertest;
 
-import java.util.Set;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.tuml.componenttest.Space;
@@ -15,7 +13,7 @@ import org.tuml.qualifiertest.Nature;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
-import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
+import java.util.Set;
 
 public class TestQualifiedDeletion extends BaseLocalDbTest {
 

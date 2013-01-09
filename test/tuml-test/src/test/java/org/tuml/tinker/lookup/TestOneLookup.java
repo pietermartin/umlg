@@ -1,15 +1,10 @@
 package org.tuml.tinker.lookup;
 
 import junit.framework.Assert;
-
 import org.junit.Test;
 import org.tuml.collectiontest.Nightmare;
 import org.tuml.concretetest.God;
-import org.tuml.interfacetest.Being;
-import org.tuml.interfacetest.Creature;
-import org.tuml.interfacetest.ManyA;
-import org.tuml.interfacetest.ManyB;
-import org.tuml.interfacetest.Spook;
+import org.tuml.interfacetest.*;
 import org.tuml.lookup.Devil1;
 import org.tuml.lookup.Devil2;
 import org.tuml.lookup.Level1;
@@ -18,8 +13,6 @@ import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.tuml.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.tuml.runtime.test.BaseLocalDbTest;
-
-import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 
 public class TestOneLookup extends BaseLocalDbTest {
 

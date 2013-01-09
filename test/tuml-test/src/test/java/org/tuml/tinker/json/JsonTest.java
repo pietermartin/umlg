@@ -1,12 +1,6 @@
 package org.tuml.tinker.json;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import junit.framework.Assert;
-
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -20,7 +14,10 @@ import org.tuml.inheritencetest.Mamal;
 import org.tuml.inheritencetest.Quadped;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
-import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class JsonTest extends BaseLocalDbTest {
 

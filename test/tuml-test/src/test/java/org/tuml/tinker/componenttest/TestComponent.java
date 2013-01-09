@@ -1,7 +1,6 @@
 package org.tuml.tinker.componenttest;
 
 import junit.framework.Assert;
-
 import org.junit.Test;
 import org.tuml.componenttest.Space;
 import org.tuml.componenttest.SpaceTime;
@@ -9,8 +8,6 @@ import org.tuml.componenttest.Time;
 import org.tuml.concretetest.God;
 import org.tuml.concretetest.Universe;
 import org.tuml.runtime.test.BaseLocalDbTest;
-
-import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 
 public class TestComponent extends BaseLocalDbTest {
 

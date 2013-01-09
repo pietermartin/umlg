@@ -1,12 +1,12 @@
 package org.tuml.tumltest;
 
-import java.io.File;
-import java.util.List;
-
 import org.tuml.framework.Visitor;
 import org.tuml.generation.JavaGenerator;
 import org.tuml.javageneration.DefaultVisitors;
 import org.tuml.javageneration.TumlLibVisitors;
+
+import java.io.File;
+import java.util.List;
 
 public class GenerateTumlTest {
 

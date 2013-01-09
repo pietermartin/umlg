@@ -1,13 +1,6 @@
 package org.tuml.tinker.mvel;
 
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import junit.framework.Assert;
-
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.mvel2.MVEL;
@@ -20,7 +13,11 @@ import org.tuml.concretetest.Universe;
 import org.tuml.embeddedtest.REASON;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
-import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class TestMvel extends BaseLocalDbTest {
 

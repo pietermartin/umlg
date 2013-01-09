@@ -1,14 +1,9 @@
-package org.tuml.runtime.domain.orientdb;
+package org.tuml.runtime.adaptor;
 
 import com.orientechnologies.orient.core.db.record.OIdentifiable;
 import com.orientechnologies.orient.core.record.impl.ODocument;
 import com.tinkerpop.blueprints.*;
-import com.tinkerpop.blueprints.impls.orient.OrientEdge;
-import com.tinkerpop.blueprints.impls.orient.OrientGraph;
-import com.tinkerpop.blueprints.impls.orient.OrientVertex;
-import org.tuml.runtime.adaptor.BaseTumlGraph;
-import org.tuml.runtime.adaptor.TumlGraph;
-import org.tuml.runtime.adaptor.TumlTinkerIndex;
+import com.tinkerpop.blueprints.impls.orient.*;
 
 import javax.transaction.Transaction;
 import javax.transaction.TransactionManager;
@@ -102,7 +97,7 @@ public class TumlOrientDbGraph extends BaseTumlGraph implements TumlGraph {
 
     @Override
     public <T extends Element> TumlTinkerIndex<T> createIndex(String indexName, Class<T> indexClass) {
-        return new TumlOrientDbIndex<T>(this.orientGraph.createIndex(indexName, indexClass));
+        return new TumlOrientDbIndex(this.orientGraph, this.orientGraph.createIndex(indexName, indexClass));
     }
 
     @Override

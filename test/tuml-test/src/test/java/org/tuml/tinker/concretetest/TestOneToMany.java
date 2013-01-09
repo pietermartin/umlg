@@ -1,7 +1,5 @@
 package org.tuml.tinker.concretetest;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.tuml.componenttest.Space;
@@ -13,7 +11,7 @@ import org.tuml.concretetest.Universe;
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
-import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
+import static org.junit.Assert.assertEquals;
 
 public class TestOneToMany extends BaseLocalDbTest {
 

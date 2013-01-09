@@ -8,8 +8,6 @@ import org.tuml.interfacetest.Phantom;
 import org.tuml.interfacetest.Spook;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
-import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
-
 public class TestOneToManyInterface extends BaseLocalDbTest {
 
 	@Test

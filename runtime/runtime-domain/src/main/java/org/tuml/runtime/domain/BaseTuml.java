@@ -41,7 +41,7 @@ public abstract class BaseTuml implements TumlNode, Serializable {
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder(17, 37).append(getId()).toHashCode();
+		return new HashCodeBuilder(17, 37).append(getUid()).toHashCode();
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public abstract class BaseTuml implements TumlNode, Serializable {
 			return false;
 		}
 		BaseTuml rhs = (BaseTuml) obj;
-		return new EqualsBuilder().append(getId(), rhs.getId()).isEquals();
+		return new EqualsBuilder().append(getUid(), rhs.getUid()).isEquals();
 	}
 
 	@Override
