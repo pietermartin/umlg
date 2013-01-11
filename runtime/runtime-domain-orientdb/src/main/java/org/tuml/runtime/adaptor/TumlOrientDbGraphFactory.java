@@ -1,13 +1,12 @@
 package org.tuml.runtime.adaptor;
 
-import com.tinkerpop.blueprints.impls.orient.OrientGraph;
-
 import java.io.File;
 
 public class TumlOrientDbGraphFactory implements TumlGraphFactory {
 	
 	public static TumlOrientDbGraphFactory INSTANCE = new TumlOrientDbGraphFactory();
-	
+    private TumlGraph tumlGraph;
+
 	private TumlOrientDbGraphFactory() {
 	}
 	
@@ -15,16 +14,20 @@ public class TumlOrientDbGraphFactory implements TumlGraphFactory {
 		return INSTANCE;
 	}
 	
-	@Override
-	public TumlGraph getTumlGraph(String url) {
-		File f = new File(url);
-		OrientGraph db = new OrientGraph("local:" + f.getAbsolutePath());
-		TransactionThreadEntityVar.remove();
-		TumlGraph nakedGraph = new TumlOrientDbGraph(db);
-		nakedGraph.addRoot();
-		nakedGraph.registerListeners();		
-		nakedGraph.commit();
-		return nakedGraph;
-	}
+    @Override
+    public TumlGraph getTumlGraph(String url) {
+        File f = new File(url);
+        this.tumlGraph = new TumlOrientDbGraph("local:" + f.getAbsolutePath());
+        TransactionThreadEntityVar.remove();
+        this.tumlGraph.addRoot();
+        this.tumlGraph.registerListeners();
+        this.tumlGraph.commit();
+        return this.tumlGraph;
+    }
+
+    @Override
+    public void destroy() {
+        this.tumlGraph.shutdown();
+    }
 
 }

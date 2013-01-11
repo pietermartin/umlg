@@ -4,57 +4,78 @@ import com.tinkerpop.blueprints.*;
 import com.tinkerpop.blueprints.impls.neo4j.Neo4jEdge;
 import com.tinkerpop.blueprints.impls.neo4j.Neo4jGraph;
 import com.tinkerpop.blueprints.impls.neo4j.Neo4jVertex;
-import org.neo4j.graphdb.DynamicRelationshipType;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.NotFoundException;
-import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.*;
+import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.event.TransactionEventHandler;
 import org.neo4j.kernel.AbstractGraphDatabase;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
 import org.tuml.runtime.domain.PersistentObject;
 
-import javax.transaction.Transaction;
-import javax.transaction.TransactionManager;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import javax.transaction.*;
+import java.util.*;
 
-public class TumlNeo4jGraph extends BaseTumlGraph implements TumlGraph {
+/**
+ * Date: 2013/01/09
+ * Time: 8:09 PM
+ */
+public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
 
-    private static final long serialVersionUID = 7025198246796291511L;
-    private Neo4jGraph neo4jGraph;
     private TransactionEventHandler<PersistentObject> transactionEventHandler;
+    private BlueprintTransactionManager blueprintTransactionManager;
 
-    public TumlNeo4jGraph(Neo4jGraph neo4jGraph) {
-        super(neo4jGraph);
-        this.neo4jGraph = neo4jGraph;
+    public TumlNeo4jGraph(String directory) {
+        super(directory);
+        this.blueprintTransactionManager = new Neo4jBlueprintTransactionManager(this);
     }
 
-    public Neo4jGraph getNeo4jGraph() {
-        return this.neo4jGraph;
+    public TumlNeo4jGraph(GraphDatabaseService rawGraph) {
+        super(rawGraph);
+        this.blueprintTransactionManager = new Neo4jBlueprintTransactionManager(this);
+    }
+
+    public TumlNeo4jGraph(GraphDatabaseService rawGraph, boolean fresh) {
+        super(rawGraph, fresh);
+        this.blueprintTransactionManager = new Neo4jBlueprintTransactionManager(this);
+    }
+
+    public TumlNeo4jGraph(String directory, Map<String, String> configuration) {
+        super(directory, configuration);
+        this.blueprintTransactionManager = new Neo4jBlueprintTransactionManager(this);
     }
 
     @Override
-    public <T extends Element> Index<T> createIndex(String indexName, Class<T> indexClass, Parameter... indexParameters) {
-        return new TumlNeo4jIndex(this.neo4jGraph.createIndex(indexName, indexClass));
+    public Integer suspend() {
+        return this.blueprintTransactionManager.suspend();
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
-    public <T extends Element> TumlTinkerIndex<T> createIndex(String indexName, Class<T> indexClass) {
-        return new TumlNeo4jIndex(this.neo4jGraph.createIndex(indexName, indexClass));
+    public TransactionalGraph resume(Integer transactionNumber) {
+        return this.blueprintTransactionManager.resume(transactionNumber);
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+
     @Override
-    public <T extends Element> TumlTinkerIndex<T> getIndex(String indexName, Class<T> indexClass) {
-        Index<T> index = this.neo4jGraph.getIndex(indexName, indexClass);
-        if (index != null) {
-            return new TumlNeo4jIndex(index);
-        } else {
-            return null;
+    public void incrementTransactionCount() {
+        getRoot().setProperty("transactionCount", (Integer) getRoot().getProperty("transactionCount") + 1);
+    }
+
+    @Override
+    public long getTransactionCount() {
+        return (Integer) getRoot().getProperty("transactionCount");
+    }
+
+    @Override
+    public Vertex getRoot() {
+        return this.getVertex(1L);
+    }
+
+    @Override
+    public Vertex addVertex(String className) {
+        Vertex v = super.addVertex(null);
+        if (className != null) {
+            v.setProperty("className", className);
         }
+        return v;
     }
 
     @Override
@@ -71,7 +92,7 @@ public class TumlNeo4jGraph extends BaseTumlGraph implements TumlGraph {
             if ((relationship.getStartNode().equals(n1) && relationship.getEndNode().equals(n2))
                     || (relationship.getStartNode().equals(n2) && relationship.getEndNode().equals(n1))) {
 
-                result.add(this.neo4jGraph.getEdge(relationship.getId()));
+                result.add(this.getEdge(relationship.getId()));
             }
         }
         return result;
@@ -80,12 +101,12 @@ public class TumlNeo4jGraph extends BaseTumlGraph implements TumlGraph {
     @Override
     public void addRoot() {
         try {
-            this.neo4jGraph.getRawGraph().getNodeById(1);
+            this.getRawGraph().getNodeById(1);
         } catch (NotFoundException e) {
             try {
-                ((EmbeddedGraphDatabase) this.neo4jGraph.getRawGraph()).getTxManager().begin();
-                ((EmbeddedGraphDatabase) this.neo4jGraph.getRawGraph()).getNodeManager().setReferenceNodeId(this.neo4jGraph.getRawGraph().createNode().getId());
-                ((EmbeddedGraphDatabase) this.neo4jGraph.getRawGraph()).getTxManager().commit();
+                ((EmbeddedGraphDatabase) this.getRawGraph()).getTxManager().begin();
+                ((EmbeddedGraphDatabase) this.getRawGraph()).getNodeManager().setReferenceNodeId(this.getRawGraph().createNode().getId());
+                ((EmbeddedGraphDatabase) this.getRawGraph()).getTxManager().commit();
             } catch (Exception e1) {
                 throw new RuntimeException(e1);
             }
@@ -95,62 +116,52 @@ public class TumlNeo4jGraph extends BaseTumlGraph implements TumlGraph {
     }
 
     @Override
-    public Vertex getRoot() {
-        return this.neo4jGraph.getVertex(1L);
-    }
-
-    @Override
     public long countVertices() {
-        return ((EmbeddedGraphDatabase) this.neo4jGraph.getRawGraph()).getNodeManager().getNumberOfIdsInUse(Node.class) - 1;
+        return ((EmbeddedGraphDatabase) this.getRawGraph()).getNodeManager().getNumberOfIdsInUse(Node.class) - 1;
     }
 
     @Override
     public long countEdges() {
-        return ((EmbeddedGraphDatabase) this.neo4jGraph.getRawGraph()).getNodeManager().getNumberOfIdsInUse(Relationship.class);
+        return ((EmbeddedGraphDatabase) this.getRawGraph()).getNodeManager().getNumberOfIdsInUse(Relationship.class);
     }
 
     @Override
     public void registerListeners() {
         if (this.transactionEventHandler == null) {
             this.transactionEventHandler = new TumlTransactionEventHandler<PersistentObject>();
-            this.neo4jGraph.getRawGraph().registerTransactionEventHandler(this.transactionEventHandler);
+            this.getRawGraph().registerTransactionEventHandler(this.transactionEventHandler);
         }
     }
 
     @Override
-    public TransactionManager getTransactionManager() {
-        return ((AbstractGraphDatabase) this.neo4jGraph.getRawGraph()).getTxManager();
-    }
-
-    @Override
-    public void resume(Transaction t) {
+    public <T> T instantiateClassifier(Long id) {
         try {
-            getTransactionManager().resume(t);
+            Vertex v = this.getVertex(id);
+            // TODO reimplement schemaHelper
+            Class<?> c = Class.forName((String) v.getProperty("className"));
+            // Class<?> c = schemaHelper.getClassNames().get((String)
+            // v.getProperty("className"));
+            return (T) c.getConstructor(Vertex.class).newInstance(v);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
-    public Transaction suspend() {
-        try {
-            return getTransactionManager().suspend();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public <T extends Element> TumlTinkerIndex<T> createIndex(String indexName, Class<T> indexClass) {
+        return new TumlNeo4jIndex(super.createIndex(indexName, indexClass));
     }
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
-    public Transaction getTransaction() {
-        try {
-            return getTransactionManager().getTransaction();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+    public <T extends Element> TumlTinkerIndex<T> getIndex(String indexName, Class<T> indexClass) {
+        Index<T> index = super.getIndex(indexName, indexClass);
+        if (index != null) {
+            return new TumlNeo4jIndex(index);
+        } else {
+            return null;
         }
-    }
-
-    public void setCheckElementsInTransaction(boolean b) {
-        this.neo4jGraph.setCheckElementsInTransaction(b);
     }
 
     @Override

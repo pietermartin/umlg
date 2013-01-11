@@ -28,14 +28,6 @@ public abstract class BaseTumlGraph implements TumlGraph {
     @Override
     public void commit() {
         this.transactionalGraph.commit();
-//        TransactionManager tm = ((EmbeddedGraphDatabase) neo4jGraph.getRawGraph()).getTxManager();
-//        try {
-//            if (tm.getTransaction() != null) {
-//                neo4jGraph.rollback();
-//            }
-//        } catch (SystemException e) {
-//            throw new RuntimeException(e);
-//        }
     }
 
     @Override

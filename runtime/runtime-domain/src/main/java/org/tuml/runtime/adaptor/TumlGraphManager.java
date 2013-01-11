@@ -1,17 +1,19 @@
 package org.tuml.runtime.adaptor;
 
 import org.apache.commons.io.FileUtils;
+import org.tuml.runtime.util.TinkerImplementation;
 import org.tuml.runtime.util.TumlProperties;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Logger;
 
 /**
- * Date: 2013/01/04
- * Time: 6:26 PM
+ * Date: 2012/12/29
+ * Time: 9:23 PM
  */
 public class TumlGraphManager {
 
@@ -19,6 +21,35 @@ public class TumlGraphManager {
     private static final Logger logger = Logger.getLogger(TumlGraphManager.class.getPackage().getName());
 
     private TumlGraphManager() {
+
+    }
+
+    public TumlGraph startupGraph() {
+        try {
+            String dbUrl = TumlProperties.INSTANCE.getTumlDbLocation();
+            TinkerImplementation tinkerImplementation = TinkerImplementation.fromName(TumlProperties.INSTANCE.getTinkerImplementation());
+            @SuppressWarnings("unchecked")
+            Class<TumlGraphFactory> factory = (Class<TumlGraphFactory>) Class.forName(tinkerImplementation.getTumlGraphFactory());
+            Method m = factory.getDeclaredMethod("getInstance", new Class[0]);
+            TumlGraphFactory nakedGraphFactory = (TumlGraphFactory) m.invoke(null);
+            TumlGraph tumlGraph = nakedGraphFactory.getTumlGraph(dbUrl);
+            return tumlGraph;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void shutdown() {
+        try {
+            TinkerImplementation tinkerImplementation = TinkerImplementation.fromName(TumlProperties.INSTANCE.getTinkerImplementation());
+            @SuppressWarnings("unchecked")
+            Class<TumlGraphFactory> factory = (Class<TumlGraphFactory>) Class.forName(tinkerImplementation.getTumlGraphFactory());
+            Method m = factory.getDeclaredMethod("getInstance", new Class[0]);
+            TumlGraphFactory nakedGraphFactory = (TumlGraphFactory) m.invoke(null);
+            nakedGraphFactory.destroy();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void backupGraph() {
@@ -63,5 +94,6 @@ public class TumlGraphManager {
             throw new RuntimeException(e);
         }
     }
+
 
 }

@@ -1,13 +1,14 @@
 package org.tuml.runtime.adaptor;
 
-import com.tinkerpop.blueprints.*;
+import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Element;
+import com.tinkerpop.blueprints.IndexableGraph;
+import com.tinkerpop.blueprints.Vertex;
 
-import javax.transaction.Transaction;
-import javax.transaction.TransactionManager;
 import java.io.Serializable;
 import java.util.Set;
 
-public interface TumlGraph extends TransactionalGraph, IndexableGraph, Serializable  {
+public interface TumlGraph extends BlueprintTransactionManager, IndexableGraph, Serializable  {
 	void incrementTransactionCount();
 	long getTransactionCount();
 	Vertex getRoot();
@@ -20,10 +21,10 @@ public interface TumlGraph extends TransactionalGraph, IndexableGraph, Serializa
 //	<T> List<T> query(Class<?> className, int first, int pageSize);
 	<T> T instantiateClassifier(Long id);
 
-    TransactionManager getTransactionManager();
-    void resume(Transaction t);
-    Transaction suspend();
-    Transaction getTransaction();
+//    TransactionManager getTransactionManager();
+//    void resume(Transaction t);
+//    Transaction suspend();
+//    Transaction getTransaction();
 
     <T extends Element> TumlTinkerIndex<T> createIndex(String indexName, Class<T> indexClass);
     <T extends Element> TumlTinkerIndex<T> getIndex(String indexName, Class<T> indexClass);

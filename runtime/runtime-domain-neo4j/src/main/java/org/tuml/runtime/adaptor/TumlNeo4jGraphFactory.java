@@ -1,30 +1,39 @@
 package org.tuml.runtime.adaptor;
 
-import com.tinkerpop.blueprints.impls.neo4j.Neo4jGraph;
-
 import java.io.File;
 
+/**
+ * Neo4j db is a singleton
+ */
 public class TumlNeo4jGraphFactory implements TumlGraphFactory {
-	
-	public static TumlNeo4jGraphFactory INSTANCE = new TumlNeo4jGraphFactory();
-	
-	private TumlNeo4jGraphFactory() {
-	}
-	
-	public static TumlGraphFactory getInstance() {
-		return INSTANCE;
-	}
-	
-	@Override
-	public TumlGraph getTumlGraph(String url) {
-		File f = new File(url);
-		Neo4jGraph db = new Neo4jGraph(f.getAbsolutePath());
-		TransactionThreadEntityVar.remove();
-		TumlGraph nakedGraph = new TumlNeo4jGraph(db);
-		nakedGraph.addRoot();
-		nakedGraph.registerListeners();		
-		nakedGraph.commit();
-		return nakedGraph;
-	}
+
+    public static TumlNeo4jGraphFactory INSTANCE = new TumlNeo4jGraphFactory();
+    private TumlGraph tumlGraph;
+
+    private TumlNeo4jGraphFactory() {
+    }
+
+    public static TumlGraphFactory getInstance() {
+        return INSTANCE;
+    }
+
+    @Override
+    public TumlGraph getTumlGraph(String url) {
+        if (tumlGraph == null) {
+            File f = new File(url);
+            tumlGraph = new TumlNeo4jGraph(f.getAbsolutePath());
+            TransactionThreadEntityVar.remove();
+            tumlGraph.addRoot();
+            tumlGraph.registerListeners();
+            tumlGraph.commit();
+        }
+        return tumlGraph;
+    }
+
+
+    public void destroy() {
+        this.tumlGraph.shutdown();
+        this.tumlGraph = null;
+    }
 
 }

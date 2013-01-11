@@ -25,22 +25,22 @@ public class BaseLocalDbTest {
 	@Before
 	public void before() {
         TumlGraphManager.INSTANCE.deleteGraph();
-        this.db = TumlGraphCreator.INSTANCE.startupGraph();
-		GraphDb.setDb(this.db);
+		this.db = GraphDb.getDb();
 	}
 
     @After
     public void after() {
-        this.db.shutdown();
+        TumlGraphManager.INSTANCE.shutdown();
+        TumlGraphManager.INSTANCE.deleteGraph();
         GraphDb.remove();
     }
 
 	protected long countVertices() {
-		return db.countVertices();
+		return this.db.countVertices();
 	}
 
 	protected long countEdges() {
-		return db.countEdges();
+		return this.db.countEdges();
 	}
 
     protected boolean isTransactionFailedException(Exception e) {

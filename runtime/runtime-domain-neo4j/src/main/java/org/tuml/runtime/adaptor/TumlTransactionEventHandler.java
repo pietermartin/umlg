@@ -28,9 +28,9 @@ public class TumlTransactionEventHandler<T> implements TransactionEventHandler<T
                 TransactionThreadVar.clear();
                 GraphDb.incrementTransactionCount();
                 List<CompositionNode> entities = TransactionThreadEntityVar.get();
-                for (CompositionNode entity : entities) {
-                    System.out.println("TransactionThreadEntityVar id = " + entity.getId());
-                }
+//                for (CompositionNode entity : entities) {
+//                    System.out.println("TransactionThreadEntityVar id = " + entity.getId());
+//                }
                 for (CompositionNode entity : entities) {
                     TumlNode tumlNode = (TumlNode) entity;
                     List<TumlConstraintViolation> requiredConstraintViolations = tumlNode.validateRequiredProperties();

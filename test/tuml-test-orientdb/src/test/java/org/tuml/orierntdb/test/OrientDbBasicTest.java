@@ -20,6 +20,7 @@ public class OrientDbBasicTest extends BaseLocalDbTest {
 
     @Test
     public void testOrientDb() {
+        db.newTransaction();
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
 
