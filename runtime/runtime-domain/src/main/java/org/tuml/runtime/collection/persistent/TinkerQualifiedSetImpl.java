@@ -10,9 +10,9 @@ public class TinkerQualifiedSetImpl<E> extends BaseSet<E> implements TinkerQuali
 
 	public TinkerQualifiedSetImpl(TumlNode owner, TumlRuntimeProperty runtimeProperty) {
 		super(owner, runtimeProperty);
-		this.index = GraphDb.getDb().getIndex(owner.getUid() + ":::" + getQualifiedName(), Edge.class);
+		this.index = GraphDb.getDb().getIndex(owner.getUid() + INDEX_SEPARATOR + getQualifiedName(), Edge.class);
 		if (this.index == null) {
-			this.index = GraphDb.getDb().createIndex(owner.getUid() + ":::" + getQualifiedName(), Edge.class);
+			this.index = GraphDb.getDb().createIndex(owner.getUid() + INDEX_SEPARATOR + getQualifiedName(), Edge.class);
 		}
 	}
 	

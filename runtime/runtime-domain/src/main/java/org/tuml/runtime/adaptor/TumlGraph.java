@@ -1,14 +1,11 @@
 package org.tuml.runtime.adaptor;
 
-import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.Element;
-import com.tinkerpop.blueprints.IndexableGraph;
-import com.tinkerpop.blueprints.Vertex;
+import com.tinkerpop.blueprints.*;
 
 import java.io.Serializable;
 import java.util.Set;
 
-public interface TumlGraph extends BlueprintTransactionManager, IndexableGraph, Serializable  {
+public interface TumlGraph extends TransactionalGraph, IndexableGraph, Serializable  {
 	void incrementTransactionCount();
 	long getTransactionCount();
 	Vertex getRoot();
@@ -29,6 +26,8 @@ public interface TumlGraph extends BlueprintTransactionManager, IndexableGraph, 
     <T extends Element> TumlTinkerIndex<T> createIndex(String indexName, Class<T> indexClass);
     <T extends Element> TumlTinkerIndex<T> getIndex(String indexName, Class<T> indexClass);
     boolean hasEdgeBeenDeleted(Edge edge);
+
+
 
 
 }

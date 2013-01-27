@@ -34,6 +34,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
     protected Class<?> parentClass;
     protected Map<Object, Vertex> internalVertexMap = new HashMap<Object, Vertex>();
     protected TumlRuntimeProperty tumlRuntimeProperty;
+    protected final static String INDEX_SEPARATOR = ":::";
 
     public BaseCollection(TumlRuntimeProperty runtimeProperty) {
         this.tumlRuntimeProperty = runtimeProperty;
@@ -136,7 +137,8 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 
     @Override
     public boolean add(E e) {
-        validateMultiplicityForAdditionalElement();
+//        validateMultiplicityForAdditionalElement();
+        maybeLoad();
         if (isQualified() || isInverseQualified()) {
             validateQualifiedAssociation(e);
         }
@@ -187,9 +189,9 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
         }
         if (isInverseQualified()) {
             Index<Edge> tmpIndex;
-            tmpIndex = GraphDb.getDb().getIndex(((TumlNode) e).getUid() + ":::" + getInverseQualifiedName(), Edge.class);
+            tmpIndex = GraphDb.getDb().getIndex(((TumlNode) e).getUid() + INDEX_SEPARATOR + getInverseQualifiedName(), Edge.class);
             if (tmpIndex == null) {
-                tmpIndex = GraphDb.getDb().createIndex(((TumlNode) e).getUid() + ":::" + getInverseQualifiedName(), Edge.class);
+                tmpIndex = GraphDb.getDb().createIndex(((TumlNode) e).getUid() + INDEX_SEPARATOR + getInverseQualifiedName(), Edge.class);
             }
             for (Qualifier qualifier : node.getQualifiers(this.tumlRuntimeProperty, this.owner, true)) {
                 validateQualifiedMultiplicity(tmpIndex, qualifier);
@@ -197,12 +199,12 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
         }
     }
 
-    protected void validateMultiplicityForAdditionalElement() {
-        if (!isValid(size() + 1)) {
-            throw new IllegalStateException(String.format("The collection's multiplicity is (lower = %s, upper = %s). Current size = %s. It can not accept another element.",
-                    getLower(), getUpper(), size()));
-        }
-    }
+//    protected void validateMultiplicityForAdditionalElement() {
+//        if (!isValid(size() + 1)) {
+//            throw new IllegalStateException(String.format("The collection's multiplicity is (lower = %s, upper = %s). Current size = %s. It can not accept another element.",
+//                    getLower(), getUpper(), size()));
+//        }
+//    }
 
     @Override
     public boolean remove(Object o) {
@@ -227,7 +229,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
                         createAudit(e, true);
                     }
                     if (isInverseOrdered()) {
-                        Index<Edge> index = GraphDb.getDb().getIndex(node.getUid() + ":::" + getInverseQualifiedName(), Edge.class);
+                        Index<Edge> index = GraphDb.getDb().getIndex(node.getUid() + INDEX_SEPARATOR + getInverseQualifiedName(), Edge.class);
                         index.remove("index", this.owner.getVertex().getProperty("tinkerIndex"), edge);
                     }
                     GraphDb.getDb().removeEdge(edge);
@@ -524,9 +526,9 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 
         // if is qualified update index
         if (isInverseQualified()) {
-            Index<Edge> index = GraphDb.getDb().getIndex(node.getUid() + ":::" + getInverseQualifiedName(), Edge.class);
+            Index<Edge> index = GraphDb.getDb().getIndex(node.getUid() + INDEX_SEPARATOR + getInverseQualifiedName(), Edge.class);
             if (index == null) {
-                index = GraphDb.getDb().createIndex(node.getUid() + ":::" + getInverseQualifiedName(), Edge.class);
+                index = GraphDb.getDb().createIndex(node.getUid() + INDEX_SEPARATOR + getInverseQualifiedName(), Edge.class);
             }
             addQualifierToIndex(index, edge, node, this.owner, true);
         }
@@ -553,9 +555,9 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
         if (!isInverseOrdered()) {
             throw new IllegalStateException("addOrderToInverseIndex can only be called where the inverse side of the association is ordered");
         }
-        TumlTinkerIndex<Edge> index = GraphDb.getDb().getIndex(node.getUid() + ":::" + getInverseQualifiedName(), Edge.class);
+        TumlTinkerIndex<Edge> index = GraphDb.getDb().getIndex(node.getUid() + INDEX_SEPARATOR + getInverseQualifiedName(), Edge.class);
         if (index == null) {
-            index = GraphDb.getDb().createIndex(node.getUid() + ":::" + getInverseQualifiedName(), Edge.class);
+            index = GraphDb.getDb().createIndex(node.getUid() + INDEX_SEPARATOR + getInverseQualifiedName(), Edge.class);
         }
         Edge edgeToLastElementInSequence = index.getEdgeToLastElementInSequence();
         Float size;

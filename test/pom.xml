@@ -19,6 +19,8 @@
 		<module>tuml-test-ocl</module>
 		<module>test-restlet</module>
         <module>test-restlet-minimal</module>
+        <module>test-orientdb-blueprints</module>
+        <module>test-neo4j-blueprints</module>
 <!-- 		<module>instrumentdb</module> -->
 	</modules>
 	<reporting>

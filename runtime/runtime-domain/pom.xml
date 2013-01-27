@@ -94,5 +94,10 @@
 		<!-- <version>0.3-incubating</version> -->
 		<!-- </dependency> -->
 
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.9.7</version>
+		</dependency>
 	</dependencies>
 </project>

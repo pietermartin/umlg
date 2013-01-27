@@ -148,15 +148,16 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
         org.tuml.embeddedtest.TestEmbedded testEmbedded = new org.tuml.embeddedtest.TestEmbedded(g);
         testEmbedded.setName("asd");
         db.commit();
-        org.tuml.embeddedtest.TestEmbedded gt = new org.tuml.embeddedtest.TestEmbedded(testEmbedded.getVertex());
-        Assert.assertEquals(new Integer(1), gt.getManyOrderedRequiredInteger().iterator().next());
-        gt.clearManyOrderedRequiredInteger();
         try {
+            org.tuml.embeddedtest.TestEmbedded gt = new org.tuml.embeddedtest.TestEmbedded(testEmbedded.getVertex());
+            Assert.assertEquals(new Integer(1), gt.getManyOrderedRequiredInteger().iterator().next());
+            gt.clearManyOrderedRequiredInteger();
             db.commit();
-            Assert.fail("Expected TransactionFailureException");
         } catch (Exception e) {
-            Assert.assertTrue(isTransactionFailedException(e));
+            junit.framework.Assert.assertTrue(isTransactionFailedException(e));
+            return;
         }
+        junit.framework.Assert.fail("Expected transaction failed exception");
     }
 
     @Test

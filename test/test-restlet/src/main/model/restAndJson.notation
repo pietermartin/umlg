@@ -168,7 +168,7 @@
       <children xmi:type="notation:BasicCompartment" xmi:id="_q6eBwwAOEeKpVr_ntT6cLA" type="7019"/>
       <children xmi:type="notation:DecorationNode" xmi:id="_q8kTgAAOEeKpVr_ntT6cLA" type="5029"/>
       <element xmi:type="uml:Class" href="restAndJson.uml#_4sr5AN4jEeGdB9TPHp60mw"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_q6eBxAAOEeKpVr_ntT6cLA" x="564" y="576" width="261"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_q6eBxAAOEeKpVr_ntT6cLA" x="584" y="576" width="261"/>
     </children>
     <children xmi:type="notation:Shape" xmi:id="_q6t5YAAOEeKpVr_ntT6cLA" type="2008" fontName="Sans" fontHeight="10" bold="true" fillColor="16770760" lineColor="0">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_q8nW0AAOEeKpVr_ntT6cLA" source="QualifiedName">

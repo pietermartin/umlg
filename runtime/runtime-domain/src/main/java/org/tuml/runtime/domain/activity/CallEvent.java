@@ -76,7 +76,12 @@ public class CallEvent extends Event {
 		return null;
 	}
 
-	@Override
+    @Override
+    public List<TumlConstraintViolation> validateMultiplicities() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
 	public String toJsonWithoutCompositeParent() {
 		// TODO Auto-generated method stub
 		return null;
@@ -86,12 +91,6 @@ public class CallEvent extends Event {
     public String getMetaDataAsJson() {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
-
-    @Override
-	public List<TumlConstraintViolation> validateRequiredProperties() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public TumlNode getOwningObject() {

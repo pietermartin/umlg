@@ -7,9 +7,11 @@ import com.tinkerpop.blueprints.*;
 import com.tinkerpop.blueprints.impls.orient.OrientEdge;
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
 import com.tinkerpop.blueprints.impls.orient.OrientVertex;
+import org.tuml.runtime.domain.PersistentObject;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.*;
 
 /**
  * Date: 2013/01/09
@@ -29,16 +31,6 @@ public class TumlOrientDbGraph extends OrientGraph implements TumlGraph {
 
     public TumlOrientDbGraph(String url, String username, String password) {
         super(url, username, password);
-    }
-
-    @Override
-    public Integer suspend() {
-        return OrientDbBlueprintTransactionManager.INSTANCE.suspend();
-    }
-
-    @Override
-    public TransactionalGraph resume(Integer transactionNumber) {
-        return OrientDbBlueprintTransactionManager.INSTANCE.resume(transactionNumber);
     }
 
     @Override
@@ -100,7 +92,7 @@ public class TumlOrientDbGraph extends OrientGraph implements TumlGraph {
 
     @Override
     public void registerListeners() {
-        //To change body of implemented methods use File | Settings | File Templates.
+        getRawGraph().registerListener(new TumlOrientDbTransactionEventHandler<PersistentObject>());
     }
 
     @Override
@@ -118,13 +110,41 @@ public class TumlOrientDbGraph extends OrientGraph implements TumlGraph {
     }
 
     @Override
-    public <T extends Element> TumlTinkerIndex<T> createIndex(String indexName, Class<T> indexClass) {
-        return new TumlOrientDbIndex(this, this.createIndex(indexName, indexClass));
+    public <T extends Element> TumlTinkerIndex<T> createIndex(final String indexName, final Class<T> indexClass) {
+        //This needs to happen in a separate thread otherwise orientdb will commit the current transaction
+        ExecutorService es = Executors.newFixedThreadPool(1);
+        Future<Index<T>> f = es.submit(new Callable<Index<T>>() {
+            @Override
+            public Index<T> call() throws Exception {
+                TumlOrientDbGraph graph = (TumlOrientDbGraph)GraphDb.getDb();
+                //OrientDb does not like ':'
+                String transformedIndexName = indexName.replace(":", "_");
+                Index<T> index = graph.createIndexInternal(transformedIndexName, indexClass);
+                graph.shutdown();
+                return index;
+            }
+        });
+        es.shutdown();
+        try {
+            Index<T> index = f.get();
+            TumlTinkerIndex<T> index2 = getIndex(indexName, indexClass);
+            return index2;
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private <T extends Element> Index<T> createIndexInternal(final String indexName, final Class<T> indexClass) {
+         return super.createIndex(indexName, indexClass);
     }
 
     @Override
     public <T extends Element> TumlTinkerIndex<T> getIndex(String indexName, Class<T> indexClass) {
-        Index<T> index = super.getIndex(indexName, indexClass);
+        //OrientDb does not like ':'
+        String transformedIndexName = indexName.replace(":", "_");
+        Index<T> index = super.getIndex(transformedIndexName, indexClass);
         if (index != null) {
             return new TumlOrientDbIndex(this, index);
         } else {
@@ -136,6 +156,16 @@ public class TumlOrientDbGraph extends OrientGraph implements TumlGraph {
     public boolean hasEdgeBeenDeleted(Edge edge) {
         //This method is only a problem for neo4j indexes
         return false;
+    }
+
+    @Override
+    public void shutdown() {
+        try {
+            commit();
+        } catch (Exception e) {
+            rollback();
+        }
+        super.shutdown();
     }
 
 }

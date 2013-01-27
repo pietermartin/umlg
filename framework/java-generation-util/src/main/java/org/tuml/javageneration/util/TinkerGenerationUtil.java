@@ -24,7 +24,7 @@ public class TinkerGenerationUtil {
     public static final OJPathName TumlProperties = new OJPathName("org.tuml.runtime.util.TumlProperties");
 
     public static final String QualifiedNameClassMapName = "qualifiedNameClassMap";
-    public static final OJPathName TumlGraphCreator = new OJPathName("org.tuml.runtime.adaptor.TumlGraphCreator");
+    public static final OJPathName TumlGraphManager = new OJPathName("org.tuml.runtime.adaptor.TumlGraphManager");
     public static final OJPathName ModelLoader = new OJPathName("org.tuml.framework.ModelLoader");
     public static final OJPathName TumlOcl2Parser = new OJPathName("org.tuml.ocl.TumlOcl2Parser");
     public static final OJPathName TumlLibNode = new OJPathName("org.tuml.runtime.domain.TumlLibNode");
@@ -83,6 +83,9 @@ public class TinkerGenerationUtil {
     public static final String BASE_AUDIT_TINKER = "org.tuml.runtime.domain.BaseTinkerAuditable";
     public static final String PERSISTENT_CONSTRUCTOR_NAME = "persistentConstructor";
     public static final String PERSISTENT_CONSTRUCTOR_PARAM_NAME = "persistent";
+
+    public static final String INDEX_SEPARATOR = ":::";
+
 
     public static final String ORIGINAL_UID = "originalUid";
     public static OJPathName oGraphDatabase = new OJPathName("com.orientechnologies.orient.core.db.graph.OGraphDatabase");

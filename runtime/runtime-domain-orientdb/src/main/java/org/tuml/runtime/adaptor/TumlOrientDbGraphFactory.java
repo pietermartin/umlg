@@ -5,7 +5,6 @@ import java.io.File;
 public class TumlOrientDbGraphFactory implements TumlGraphFactory {
 	
 	public static TumlOrientDbGraphFactory INSTANCE = new TumlOrientDbGraphFactory();
-    private TumlGraph tumlGraph;
 
 	private TumlOrientDbGraphFactory() {
 	}
@@ -17,17 +16,17 @@ public class TumlOrientDbGraphFactory implements TumlGraphFactory {
     @Override
     public TumlGraph getTumlGraph(String url) {
         File f = new File(url);
-        this.tumlGraph = new TumlOrientDbGraph("local:" + f.getAbsolutePath());
+        TumlGraph tumlGraph = new TumlOrientDbGraph("local:" + f.getAbsolutePath());
         TransactionThreadEntityVar.remove();
-        this.tumlGraph.addRoot();
-        this.tumlGraph.registerListeners();
-        this.tumlGraph.commit();
-        return this.tumlGraph;
+        tumlGraph.addRoot();
+        tumlGraph.registerListeners();
+//        this.tumlGraph.commit();
+        return tumlGraph;
     }
 
     @Override
     public void destroy() {
-        this.tumlGraph.shutdown();
+        GraphDb.getDb().shutdown();
     }
 
 }

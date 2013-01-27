@@ -28,9 +28,9 @@ public class TinkerOrderedSetImpl<E> extends BaseCollection<E> implements Tinker
 		this.internalCollection = new ListOrderedSet();
 		this.oclStdLibOrderedSet = new OclStdLibOrderedSetImpl<E>((ListOrderedSet) this.internalCollection);
 		this.oclStdLibCollection = this.oclStdLibOrderedSet;
-		this.index = GraphDb.getDb().getIndex(owner.getUid() + ":::" + getQualifiedName(), Edge.class);
+		this.index = GraphDb.getDb().getIndex(owner.getUid() + INDEX_SEPARATOR + getQualifiedName(), Edge.class);
 		if (this.index == null) {
-			this.index = GraphDb.getDb().createIndex(owner.getUid() + ":::" + getQualifiedName(), Edge.class);
+			this.index = GraphDb.getDb().createIndex(owner.getUid() + INDEX_SEPARATOR + getQualifiedName(), Edge.class);
 		}
 	}
 
@@ -52,8 +52,8 @@ public class TinkerOrderedSetImpl<E> extends BaseCollection<E> implements Tinker
 	public void add(int indexOf, E e) {
 		// validateMultiplicityForAdditionalElement calls size() which loads the
 		// collection
-		validateMultiplicityForAdditionalElement();
-		// maybeCallInit(e);
+//		validateMultiplicityForAdditionalElement();
+        maybeLoad();
 		addToListAndListIndex(indexOf, e);
 	}
 

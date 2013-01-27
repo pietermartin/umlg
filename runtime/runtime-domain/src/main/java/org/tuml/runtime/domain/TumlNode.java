@@ -18,7 +18,7 @@ public interface TumlNode extends TumlEnum, OclAny, PersistentObject {
 	void delete();
 	int getSize(TumlRuntimeProperty tumlRuntimeProperty);
 	<E> TinkerSet<E> asSet();
-	List<TumlConstraintViolation> validateRequiredProperties();
+	List<TumlConstraintViolation> validateMultiplicities();
 	TumlNode getOwningObject();
 	<T extends TumlNode> List<T> getPathToCompositionalRoot();
 }

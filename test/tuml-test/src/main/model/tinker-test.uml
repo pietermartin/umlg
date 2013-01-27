@@ -213,8 +213,8 @@
               </qualifier>
             </ownedAttribute>
             <ownedAttribute xmi:id="_vJwX8BhnEeGyD6zYrs7NuQ" name="world" visibility="public" type="_n1FQcBhnEeGyD6zYrs7NuQ" isOrdered="true" aggregation="composite" association="_vJzbQBhnEeGyD6zYrs7NuQ">
-              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_vJwX8hhnEeGyD6zYrs7NuQ"/>
-              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_vJwX8RhnEeGyD6zYrs7NuQ" value="*"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_vJwX8hhnEeGyD6zYrs7NuQ" name=""/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_vJwX8RhnEeGyD6zYrs7NuQ" name="" value="*"/>
             </ownedAttribute>
             <ownedAttribute xmi:id="_yoF-sBh1EeGyD6zYrs7NuQ" name="fantasy" visibility="public" type="_w-VyoBh1EeGyD6zYrs7NuQ" isOrdered="true" aggregation="composite" association="_yoSzABh1EeGyD6zYrs7NuQ">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_yoF-shh1EeGyD6zYrs7NuQ"/>
@@ -771,8 +771,8 @@
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
             </ownedAttribute>
             <ownedAttribute xmi:id="_pie-cOOvEeGlQMtE5LHG3w" name="finger" visibility="public" type="_mJBvUOOvEeGlQMtE5LHG3w" isOrdered="true" aggregation="composite" association="_pigzquOvEeGlQMtE5LHG3w">
-              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_pie-cuOvEeGlQMtE5LHG3w"/>
-              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_pie-ceOvEeGlQMtE5LHG3w" value="*"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_pie-cuOvEeGlQMtE5LHG3w" name=""/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_pie-ceOvEeGlQMtE5LHG3w" name="" value="5"/>
             </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Association" xmi:id="_2wO48BFHEeGoRIAInCGFZA" name="A_&lt;god>_&lt;hand>" memberEnd="_2wO48RFHEeGoRIAInCGFZA _2wJZYBFHEeGoRIAInCGFZA" navigableOwnedEnd="_2wO48RFHEeGoRIAInCGFZA">
@@ -829,6 +829,10 @@
                 <language>ocl</language>
                 <body>self.name</body>
               </defaultValue>
+            </ownedAttribute>
+            <ownedAttribute xmi:id="_9GcRAGerEeKPEq6xNmQB5Q" name="fWomen" type="_0ECcYGerEeKPEq6xNmQB5Q" aggregation="composite" association="_9Gc4EmerEeKPEq6xNmQB5Q">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_9Gc4EGerEeKPEq6xNmQB5Q" name="" value="2"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_9Gc4EWerEeKPEq6xNmQB5Q" name="" value="4"/>
             </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Association" xmi:id="_yoSzABh1EeGyD6zYrs7NuQ" name="A_&lt;god>_&lt;fantasy>" memberEnd="_yoSzARh1EeGyD6zYrs7NuQ _yoF-sBh1EeGyD6zYrs7NuQ" navigableOwnedEnd="_yoSzARh1EeGyD6zYrs7NuQ">
@@ -930,6 +934,19 @@
             <ownedEnd xmi:id="_Fg2FBDYpEeK9AeutZ8kzPA" name="nightmare" type="_7zSvUBqsEeG2HY-TJLNivw" association="_Fg2FAzYpEeK9AeutZ8kzPA">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Fg2FBTYpEeK9AeutZ8kzPA" value="1"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Fg2FBjYpEeK9AeutZ8kzPA" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_0ECcYGerEeKPEq6xNmQB5Q" name="FWomen">
+            <ownedAttribute xmi:id="_3crzMGerEeKPEq6xNmQB5Q" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_4ARocGerEeKPEq6xNmQB5Q"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_4ATdoGerEeKPEq6xNmQB5Q" value="1"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_9Gc4EmerEeKPEq6xNmQB5Q" name="fantasy_fWomen_1" memberEnd="_9Gc4E2erEeKPEq6xNmQB5Q _9GcRAGerEeKPEq6xNmQB5Q" navigableOwnedEnd="_9Gc4E2erEeKPEq6xNmQB5Q">
+            <ownedEnd xmi:id="_9Gc4E2erEeKPEq6xNmQB5Q" name="fantasy" type="_w-VyoBh1EeGyD6zYrs7NuQ" association="_9Gc4EmerEeKPEq6xNmQB5Q">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_9Gc4FGerEeKPEq6xNmQB5Q" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_9Gc4FWerEeKPEq6xNmQB5Q" value="1"/>
             </ownedEnd>
           </packagedElement>
         </packagedElement>

@@ -382,22 +382,17 @@ public class SequenceTest extends BaseLocalDbTest {
 		finger3.setName("finger3");
 		Finger finger4 = new Finger(hand1);
 		finger4.setName("finger4");
-		Finger finger5 = new Finger(hand1);
-		finger5.setName("finger5");
         db.commit();
-		Assert.assertEquals(7, countVertices());
-		Assert.assertEquals(7, countEdges());
+		Assert.assertEquals(6, countVertices());
+		Assert.assertEquals(6, countEdges());
 		
-		int indexToTest = 4;
+		int indexToTest = 3;
 		hand1.getFinger().add(indexToTest, finger2);
         db.commit();
-		Assert.assertEquals(7, countVertices());
-		Assert.assertEquals(7, countEdges());
+		Assert.assertEquals(6, countVertices());
+		Assert.assertEquals(6, countEdges());
 		Finger fingerTest = new Finger(finger2.getVertex());
 		Hand handTest = new Hand(hand1.getVertex());
-		for (Finger f : handTest.getFinger()) {
-			System.out.println(f.getName());
-		}
 		Assert.assertEquals(handTest.getFinger().get(indexToTest).getId(), fingerTest.getId());
 		
 	}

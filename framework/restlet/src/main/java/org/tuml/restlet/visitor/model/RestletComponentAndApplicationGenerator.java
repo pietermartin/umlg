@@ -12,8 +12,6 @@ import org.tuml.javageneration.util.TinkerGenerationUtil;
 import org.tuml.javageneration.visitor.BaseVisitor;
 import org.tuml.restlet.util.TumlRestletGenerationUtil;
 
-import java.io.File;
-
 /**
  * Date: 2012/12/29
  * Time: 7:17 PM
@@ -89,8 +87,8 @@ public class RestletComponentAndApplicationGenerator extends BaseVisitor impleme
         ojTryStatement.getCatchPart().addToStatements("throw new RuntimeException(e)");
         constructor.getBody().addToStatements(ojTryStatement);
 
-        constructor.getBody().addToStatements("TumlGraphCreator.INSTANCE.startupGraph()");
-        component.addToImports(TinkerGenerationUtil.TumlGraphCreator);
+        constructor.getBody().addToStatements(TinkerGenerationUtil.TumlGraphManager.getLast() + ".INSTANCE.startupGraph()");
+        component.addToImports(TinkerGenerationUtil.TumlGraphManager);
 
         OJIfStatement ifStartAdmin = new OJIfStatement(TinkerGenerationUtil.TumlProperties.getLast() + ".INSTANCE.isStartAdminApplication()", TumlRestletGenerationUtil.Neo4jAdminApp.getLast() + ".startAdminApplication()");
         constructor.getBody().addToStatements(ifStartAdmin);

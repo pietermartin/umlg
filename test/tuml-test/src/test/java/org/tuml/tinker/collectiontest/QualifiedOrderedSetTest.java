@@ -2,6 +2,7 @@ package org.tuml.tinker.collectiontest;
 
 import junit.framework.Assert;
 import org.junit.Test;
+import org.tuml.collectiontest.FWomen;
 import org.tuml.collectiontest.Fantasy;
 import org.tuml.concretetest.God;
 import org.tuml.runtime.test.BaseLocalDbTest;
@@ -16,6 +17,11 @@ public class QualifiedOrderedSetTest extends BaseLocalDbTest {
 		fantasy1.setName("fantasy1");
 		fantasy1.addToGod(god);
 		god.getFantasy().add(fantasy1);
+
+        FWomen fWomen1 = new FWomen(fantasy1);
+        FWomen fWomen2 = new FWomen(fantasy1);
+
+
         db.commit();
 		God godTest = new God(god.getVertex());
 		Assert.assertEquals(1, godTest.getFantasy().size());
@@ -28,15 +34,28 @@ public class QualifiedOrderedSetTest extends BaseLocalDbTest {
 		Fantasy fantasy1 = new Fantasy(true);
 		fantasy1.setName("fantasy1");
 		god.getFantasy().add(fantasy1);
+        FWomen fWomen1 = new FWomen(fantasy1);
+        FWomen fWomen2 = new FWomen(fantasy1);
+
 		Fantasy fantasy2 = new Fantasy(true);
 		fantasy2.setName("fantasy2");
 		god.getFantasy().add(fantasy2);
+        FWomen fWomen1_2 = new FWomen(fantasy2);
+        FWomen fWomen2_2 = new FWomen(fantasy2);
+
 		Fantasy fantasy3 = new Fantasy(true);
 		fantasy3.setName("fantasy3");
 		god.getFantasy().add(fantasy3);
+        FWomen fWomen1_3 = new FWomen(fantasy3);
+        FWomen fWomen2_3 = new FWomen(fantasy3);
+
 		Fantasy fantasy4 = new Fantasy(true);
 		fantasy4.setName("fantasy4");
 		god.getFantasy().add(fantasy4);
+        FWomen fWomen1_4 = new FWomen(fantasy4);
+        FWomen fWomen2_4 = new FWomen(fantasy4);
+
+
         db.commit();
 		God godTest = new God(god.getVertex());
 		Assert.assertEquals(4, godTest.getFantasy().size());
@@ -48,6 +67,9 @@ public class QualifiedOrderedSetTest extends BaseLocalDbTest {
 		Fantasy fantasy5 = new Fantasy(true);
 		fantasy5.setName("fantasy5");
 		godTest2.getFantasy().add(2, fantasy5);
+        FWomen fWomen1_5 = new FWomen(fantasy5);
+        FWomen fWomen2_5 = new FWomen(fantasy5);
+
         db.commit();
 		God godTest3 = new God(god.getVertex());
 		Assert.assertEquals(5, godTest3.getFantasy().size());

@@ -1,78 +1,78 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<artifactId>test</artifactId>
-		<groupId>org.tuml</groupId>
-		<version>0.0.1-SNAPSHOT</version>
-	</parent>
-	<artifactId>tuml-test</artifactId>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>1.7</version>
-				<executions>
-					<execution>
-						<id>add-source</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>add-source</goal>
-						</goals>
-						<configuration>
-							<sources>
-								<source>src/main/generated-java</source>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>test</artifactId>
+        <groupId>org.tuml</groupId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <artifactId>tuml-test</artifactId>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>src/main/generated-java</source>
                                 <source>src/main/generated-java-meta</source>
-							</sources>
-						</configuration>
-					</execution>
-					<execution>
-						<id>add-resource</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>add-resource</goal>
-						</goals>
-						<configuration>
-							<resources>
-								<resource>
-									<directory>src/main/generated-resources</directory>
+                            </sources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>add-resource</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>add-resource</goal>
+                        </goals>
+                        <configuration>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/generated-resources</directory>
                                     <directory>src/main/model</directory>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
-	<dependencies>
-		<dependency>
-			<groupId>org.tuml</groupId>
-			<artifactId>java-generation</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>org.tuml</groupId>
-			<artifactId>runtime-domain-neo4j</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>org.tuml</groupId>
-			<artifactId>runtime-test-neo4j</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-			<scope>test</scope>
-		</dependency>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    <dependencies>
+        <dependency>
+            <groupId>org.tuml</groupId>
+            <artifactId>java-generation</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
         <!--<dependency>-->
-        <!--<groupId>org.tuml</groupId>-->
-        <!--<artifactId>runtime-domain-orientdb</artifactId>-->
-        <!--<version>0.0.1-SNAPSHOT</version>-->
+            <!--<groupId>org.tuml</groupId>-->
+            <!--<artifactId>runtime-domain-neo4j</artifactId>-->
+            <!--<version>0.0.1-SNAPSHOT</version>-->
         <!--</dependency>-->
         <!--<dependency>-->
             <!--<groupId>org.tuml</groupId>-->
-            <!--<artifactId>runtime-test-orientdb</artifactId>-->
+            <!--<artifactId>runtime-test-neo4j</artifactId>-->
             <!--<version>0.0.1-SNAPSHOT</version>-->
             <!--<scope>test</scope>-->
         <!--</dependency>-->
-	</dependencies>
+        <dependency>
+            <groupId>org.tuml</groupId>
+            <artifactId>runtime-domain-orientdb</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.tuml</groupId>
+            <artifactId>runtime-test-orientdb</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>

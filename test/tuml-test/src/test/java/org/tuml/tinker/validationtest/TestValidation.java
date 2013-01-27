@@ -2,6 +2,8 @@ package org.tuml.tinker.validationtest;
 
 import junit.framework.Assert;
 import org.junit.Test;
+import org.tuml.collectiontest.FWomen;
+import org.tuml.collectiontest.Fantasy;
 import org.tuml.collectiontest.Finger;
 import org.tuml.collectiontest.Hand;
 import org.tuml.componenttest.Space;
@@ -253,10 +255,11 @@ public class TestValidation extends BaseLocalDbTest {
             hand.setName("hand1");
             Finger finger1 = new Finger(hand);
             db.commit();
-            Assert.fail("Expected TransactionFailureException");
         } catch (Exception e) {
             Assert.assertTrue(isTransactionFailedException(e));
+            return;
         }
+        Assert.fail("Expected transaction failed exception");
     }
 
     @Test
@@ -268,12 +271,111 @@ public class TestValidation extends BaseLocalDbTest {
         Finger finger1 = new Finger(hand);
         finger1.setName("name1");
         db.commit();
-        finger1.setName(null);
         try {
+            finger1.setName(null);
             db.commit();
-            Assert.fail("Expected TransactionFailureException");
         } catch (Exception e) {
             Assert.assertTrue(isTransactionFailedException(e));
+            return;
         }
+        Assert.fail("Expected transaction failed exception");
+    }
+
+    @Test
+    public void testMultiplicity() {
+        try {
+            God g = new God(true);
+            g.setName("g");
+            Hand h = new Hand(g);
+            h.setName("hand");
+            Finger f1 = new Finger(h);
+            f1.setName("f1");
+            Finger f2 = new Finger(h);
+            f2.setName("f2");
+            Finger f3 = new Finger(h);
+            f3.setName("f3");
+            Finger f4 = new Finger(h);
+            f4.setName("f4");
+            Finger f5 = new Finger(h);
+            f5.setName("f5");
+            Finger f6 = new Finger(h);
+            f6.setName("f6");
+            db.commit();
+        } catch (Exception e) {
+            Assert.assertTrue(isTransactionFailedException(e));
+            return;
+        }
+        Assert.fail("Expected transaction failed exception");
+
+    }
+
+    @Test
+    public void testMultiplicityLower() {
+        try {
+            God g = new God(true);
+            g.setName("g");
+            Fantasy h = new Fantasy(g);
+            h.setName("hand");
+            FWomen f1 = new FWomen(h);
+            f1.setName("f1");
+            db.commit();
+        } catch (Exception e) {
+            Assert.assertTrue(isTransactionFailedException(e));
+            return;
+        }
+        Assert.fail("Expected transaction failed exception");
+    }
+
+    @Test
+    public void testMultiplicityUpper() {
+        try {
+            God g = new God(true);
+            g.setName("g");
+            Fantasy h = new Fantasy(g);
+            h.setName("hand");
+            FWomen f1 = new FWomen(h);
+            f1.setName("f1");
+            FWomen f2 = new FWomen(h);
+            f2.setName("f2");
+            FWomen f3 = new FWomen(h);
+            f3.setName("f3");
+            FWomen f4 = new FWomen(h);
+            f4.setName("f4");
+            FWomen f5 = new FWomen(h);
+            f5.setName("f5");
+            FWomen f6 = new FWomen(h);
+            f6.setName("f6");
+            db.commit();
+        } catch (Exception e) {
+            Assert.assertTrue(isTransactionFailedException(e));
+            return;
+        }
+        Assert.fail("Expected transaction failed exception");
+    }
+
+    @Test
+    public void testValidationFailureAndRollback() {
+        God g = new God(true);
+        g.setName("g");
+        Fantasy fantasy = new Fantasy(g);
+        fantasy.setName("hand");
+        FWomen w1 = new FWomen(fantasy);
+        w1.setName("f1");
+        FWomen w2 = new FWomen(fantasy);
+        w2.setName("f2");
+        FWomen w3 = new FWomen(fantasy);
+        w3.setName("f3");
+        FWomen w4 = new FWomen(fantasy);
+        w4.setName("f4");
+        db.commit();
+        try {
+            fantasy = new Fantasy(fantasy.getVertex());
+            FWomen w5 = new FWomen(fantasy);
+            w5.setName("f6");
+            db.commit();
+        } catch (Exception e) {
+            db.rollback();
+        }
+        Assert.assertEquals(6, countVertices());
     }
 }

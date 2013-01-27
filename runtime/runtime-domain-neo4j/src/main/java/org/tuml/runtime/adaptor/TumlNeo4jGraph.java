@@ -21,38 +21,22 @@ import java.util.*;
 public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
 
     private TransactionEventHandler<PersistentObject> transactionEventHandler;
-    private BlueprintTransactionManager blueprintTransactionManager;
 
     public TumlNeo4jGraph(String directory) {
         super(directory);
-        this.blueprintTransactionManager = new Neo4jBlueprintTransactionManager(this);
     }
 
     public TumlNeo4jGraph(GraphDatabaseService rawGraph) {
         super(rawGraph);
-        this.blueprintTransactionManager = new Neo4jBlueprintTransactionManager(this);
     }
 
     public TumlNeo4jGraph(GraphDatabaseService rawGraph, boolean fresh) {
         super(rawGraph, fresh);
-        this.blueprintTransactionManager = new Neo4jBlueprintTransactionManager(this);
     }
 
     public TumlNeo4jGraph(String directory, Map<String, String> configuration) {
         super(directory, configuration);
-        this.blueprintTransactionManager = new Neo4jBlueprintTransactionManager(this);
     }
-
-    @Override
-    public Integer suspend() {
-        return this.blueprintTransactionManager.suspend();
-    }
-
-    @Override
-    public TransactionalGraph resume(Integer transactionNumber) {
-        return this.blueprintTransactionManager.resume(transactionNumber);
-    }
-
 
     @Override
     public void incrementTransactionCount() {
