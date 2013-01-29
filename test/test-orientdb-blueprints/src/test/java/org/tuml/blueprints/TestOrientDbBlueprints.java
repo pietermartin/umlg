@@ -18,7 +18,7 @@ import java.util.concurrent.*;
 public class TestOrientDbBlueprints {
 
     @Test
-    public void test() throws IOException, InterruptedException, ExecutionException {
+    public void testIndexCreatedInAThreadUsedInAnother() throws IOException, InterruptedException, ExecutionException {
         final String url = "/tmp/blueprintstest2";
         File dir = new File(url);
         FileUtils.deleteDirectory(dir);
@@ -37,8 +37,8 @@ public class TestOrientDbBlueprints {
                 IndexableGraph graph = new OrientGraph("local:" + f.getAbsolutePath());
                 semaphore.acquire();
                 Index<Vertex> index = graph.getIndex("testIndex1", Vertex.class);
-                OrientVertex v = (OrientVertex) index.get("value", "value1");
-                Assert.assertNotNull(v);
+                CloseableIterable<Vertex> vertexIter = index.get("value", "value1");
+                Assert.assertTrue(vertexIter.iterator().hasNext());
                 graph.shutdown();
                 return true;
             }

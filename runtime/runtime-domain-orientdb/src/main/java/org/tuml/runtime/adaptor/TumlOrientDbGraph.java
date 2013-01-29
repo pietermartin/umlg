@@ -64,7 +64,7 @@ public class TumlOrientDbGraph extends OrientGraph implements TumlGraph {
         Set<OIdentifiable> rawResult = this.getRawGraph().getEdgesBetweenVertexes(ov1.getRawVertex(), ov2.getRawVertex(), labels);
         Set<Edge> result = new HashSet<Edge>(rawResult.size());
         for (OIdentifiable oIdentifiable : rawResult) {
-            rawResult.add(new OrientEdge(this, (ODocument) oIdentifiable));
+            result.add(new OrientEdge(this, (ODocument) oIdentifiable));
         }
         return result;
     }

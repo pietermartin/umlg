@@ -6,7 +6,7 @@
         <groupId>org.tuml</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <artifactId>tuml-test</artifactId>
+    <artifactId>tuml-test-blueprints</artifactId>
     <build>
         <plugins>
             <plugin>
@@ -49,30 +49,8 @@
     <dependencies>
         <dependency>
             <groupId>org.tuml</groupId>
-            <artifactId>java-generation</artifactId>
+            <artifactId>runtime-domain</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.tuml</groupId>-->
-            <!--<artifactId>runtime-domain-neo4j</artifactId>-->
-            <!--<version>0.0.1-SNAPSHOT</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.tuml</groupId>-->
-            <!--<artifactId>runtime-test-neo4j</artifactId>-->
-            <!--<version>0.0.1-SNAPSHOT</version>-->
-            <!--<scope>test</scope>-->
-        <!--</dependency>-->
-        <dependency>
-            <groupId>org.tuml</groupId>
-            <artifactId>runtime-domain-orientdb</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.tuml</groupId>
-            <artifactId>runtime-test-orientdb</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

@@ -18,7 +18,7 @@ import java.util.concurrent.*;
 public class TestNeo4jBlueprints {
 
     @Test
-    public void test() throws IOException, InterruptedException, ExecutionException {
+    public void testIndexCreatedInAThreadUsedInAnother() throws IOException, InterruptedException, ExecutionException {
         final String url = "/tmp/blueprintstest2";
         File dir = new File(url);
         FileUtils.deleteDirectory(dir);
