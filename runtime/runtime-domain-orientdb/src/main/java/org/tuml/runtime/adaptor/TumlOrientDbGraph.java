@@ -71,18 +71,20 @@ public class TumlOrientDbGraph extends OrientGraph implements TumlGraph {
 
     @Override
     public void addRoot() {
-        ODocument root = this.getRawGraph().createVertex();
-        root.field("transactionCount", 1);
-        this.getRawGraph().setRoot("root", root);
+        if (this.getRawGraph().getRoot("root") == null) {
+            ODocument root = this.getRawGraph().createVertex();
+            root.field("transactionCount", 1);
+            this.getRawGraph().setRoot("root", root);
 
-        ODocument vertexIdCountDoc = this.getRawGraph().createVertex();
-        vertexIdCountDoc.field("count", 1L);
-        this.getRawGraph().setRoot(VERTEX_ID_COUNT, vertexIdCountDoc);
+//            ODocument vertexIdCountDoc = this.getRawGraph().createVertex();
+//            vertexIdCountDoc.field("count", 1L);
+//            this.getRawGraph().setRoot(VERTEX_ID_COUNT, vertexIdCountDoc);
+        }
     }
 
     @Override
     public long countVertices() {
-        return this.getRawGraph().countVertexes() - 2;
+        return this.getRawGraph().countVertexes() - 1;
     }
 
     @Override
@@ -116,7 +118,7 @@ public class TumlOrientDbGraph extends OrientGraph implements TumlGraph {
         Future<Index<T>> f = es.submit(new Callable<Index<T>>() {
             @Override
             public Index<T> call() throws Exception {
-                TumlOrientDbGraph graph = (TumlOrientDbGraph)GraphDb.getDb();
+                TumlOrientDbGraph graph = (TumlOrientDbGraph) GraphDb.getDb();
                 //OrientDb does not like ':'
                 String transformedIndexName = indexName.replace(":", "_");
                 Index<T> index = graph.createIndexInternal(transformedIndexName, indexClass);
@@ -137,7 +139,7 @@ public class TumlOrientDbGraph extends OrientGraph implements TumlGraph {
     }
 
     private <T extends Element> Index<T> createIndexInternal(final String indexName, final Class<T> indexClass) {
-         return super.createIndex(indexName, indexClass);
+        return super.createIndex(indexName, indexClass);
     }
 
     @Override

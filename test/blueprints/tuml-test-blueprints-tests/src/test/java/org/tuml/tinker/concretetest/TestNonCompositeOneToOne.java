@@ -82,7 +82,7 @@ public class TestNonCompositeOneToOne extends BaseLocalDbTest {
 		Assert.assertNull(universeTest2.getAngel());
 		Assert.assertEquals(6, countEdges());
 	}
-	
+
 	@Test
 	public void testOneToOneOne() {
 		God god = new God(true);
