@@ -10,6 +10,15 @@ public class Url implements Validation {
 	private String regexp;
 	private String flags;
 
+    public Url(String protocol, String host, int port, String regexp, String flags) {
+        super();
+        this.protocol = protocol;
+        this.host = host;
+        this.port = port;
+        this.regexp = regexp;
+        this.flags = flags;
+    }
+
 	public String getProtocol() {
 		return protocol;
 	}
@@ -28,15 +37,6 @@ public class Url implements Validation {
 
 	public String getFlags() {
 		return flags;
-	}
-
-	public Url(String protocol, String host, int port, String regexp, String flags) {
-		super();
-		this.protocol = protocol;
-		this.host = host;
-		this.port = port;
-		this.regexp = regexp;
-		this.flags = flags;
 	}
 
 	@Override
