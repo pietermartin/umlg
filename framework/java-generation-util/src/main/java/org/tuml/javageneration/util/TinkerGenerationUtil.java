@@ -23,6 +23,8 @@ public class TinkerGenerationUtil {
 
     public static final OJPathName TumlProperties = new OJPathName("org.tuml.runtime.util.TumlProperties");
 
+    public static final OJPathName TransactionCache = new OJPathName("org.tuml.runtime.adaptor.TransactionCache");
+    public static final OJPathName TransactionIdentifier = new OJPathName("org.tuml.runtime.adaptor.TransactionIdentifier");
     public static final String QualifiedNameClassMapName = "qualifiedNameClassMap";
     public static final OJPathName TumlGraphManager = new OJPathName("org.tuml.runtime.adaptor.TumlGraphManager");
     public static final OJPathName ModelLoader = new OJPathName("org.tuml.framework.ModelLoader");
