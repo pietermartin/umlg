@@ -19,8 +19,9 @@ public interface TumlGraph extends TransactionalGraph, IndexableGraph, Serializa
 	<T> T instantiateClassifier(Long id);
 
 //    TransactionManager getTransactionManager();
-//    void resume(Transaction t);
-//    Transaction suspend();
+    void resume(TransactionIdentifier t);
+    TransactionIdentifier suspend();
+    void setRollbackOnly();
 //    Transaction getTransaction();
 
     <T extends Element> TumlTinkerIndex<T> createIndex(String indexName, Class<T> indexClass);
