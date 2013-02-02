@@ -49,10 +49,13 @@ public class RestletComponentAndApplicationGenerator extends BaseVisitor impleme
     private void addStop(OJAnnotatedClass component) {
         OJAnnotatedOperation stop = new OJAnnotatedOperation("stop");
         TinkerGenerationUtil.addOverrideAnnotation(stop);
-        stop.getBody().addToStatements("GraphDb.getDb().shutdown()");
-        stop.getBody().addToStatements("GraphDb.remove()");
+        stop.getBody().addToStatements(TinkerGenerationUtil.TumlGraphManager.getLast() + ".INSTANCE.shutdown()");
+        stop.getBody().addToStatements(TinkerGenerationUtil.TumlGraphManager.getLast() + ".INSTANCE.deleteGraph()");
+        stop.getBody().addToStatements(TinkerGenerationUtil.graphDbPathName.getLast() + ".remove()");
+
         stop.getBody().addToStatements("super.stop()");
         component.addToImports(TinkerGenerationUtil.graphDbPathName);
+        component.addToImports(TinkerGenerationUtil.TumlGraphManager);
         stop.addToThrows(new OJPathName("java.lang.Exception"));
         component.addToOperations(stop);
     }
