@@ -41,13 +41,14 @@ public class TumlOrientDbIndex<T extends OrientElement> implements TumlTinkerInd
 
     @Override
     public T getEdgeToLastElementInSequence() {
-        OIndex<?> underlying = index.getRawIndex();
-        Iterator<? extends Map.Entry<Object, ?>> iter = underlying.inverseIterator();
-        if (iter.hasNext()) {
-            return (T) iter.next();
-        } else {
-            return null;
+        //TODO all wrong
+        CloseableIterable<T> results = index.get("index", 0);
+        //Loop to end
+        T t = null;
+        while (results.iterator().hasNext()) {
+            t = results.iterator().next();
         }
+        return t;
     }
 
     @Override
