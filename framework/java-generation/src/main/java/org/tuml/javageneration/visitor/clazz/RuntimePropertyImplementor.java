@@ -444,7 +444,7 @@ public class RuntimePropertyImplementor {
 			sb.append(propertyDataTypeEnumField.getInitExp());
 			sb.append(".toString() + \"\\\", ");
 		} else {
-			sb.append("\\\"dateTypeEnum\\\": null, ");
+			sb.append("\\\"dataTypeEnum\\\": null, ");
 		}
 
 		if (!validations.isEmpty()) {
