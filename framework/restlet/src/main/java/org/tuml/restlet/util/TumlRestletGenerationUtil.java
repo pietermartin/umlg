@@ -31,6 +31,7 @@ public class TumlRestletGenerationUtil {
     public static final OJPathName TumlRestletNode = new OJPathName("org.tuml.runtime.restlet.domain.TumlRestletNode");
     public static final OJPathName RestletToJsonUtil = new OJPathName("org.tuml.runtime.restlet.util.RestletToJsonUtil");
     public static final OJPathName TumlMetaQueryServerResourceImpl = new OJPathName("org.tuml.runtime.restlet.TumlMetaQueryServerResourceImpl");
+    public static final OJPathName TumlTransactionResourceImpl = new OJPathName("org.tuml.runtime.restlet.TumlTransactionServerResourceImpl");
     public static final OJPathName Component = new OJPathName("org.restlet.Component");
     public static final OJPathName Application = new OJPathName("org.restlet.Application");
     public static final OJPathName Server = new OJPathName("org.restlet.Server");
