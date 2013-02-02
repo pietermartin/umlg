@@ -112,6 +112,21 @@ public class TumlOrientDbGraph extends OrientGraph implements TumlGraph {
     }
 
     @Override
+    public void resume(TransactionIdentifier t) {
+        throw new RuntimeException("Not yet implemented");
+    }
+
+    @Override
+    public TransactionIdentifier suspend() {
+        throw new RuntimeException("Not yet implemented");
+    }
+
+    @Override
+    public void setRollbackOnly() {
+        throw new RuntimeException("Not yet implemented");
+    }
+
+    @Override
     public <T extends Element> TumlTinkerIndex<T> createIndex(final String indexName, final Class<T> indexClass) {
         //This needs to happen in a separate thread otherwise orientdb will commit the current transaction
         ExecutorService es = Executors.newFixedThreadPool(1);
