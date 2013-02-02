@@ -23,5 +23,6 @@
         <module>runtime-groovy</module>
         <module>runtime-uml</module>
         <module>runtime-restlet</module>
+        <module>runtime-restlet-client</module>
     </modules>
 </project>

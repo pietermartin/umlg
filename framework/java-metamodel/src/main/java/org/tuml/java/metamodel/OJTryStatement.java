@@ -29,7 +29,11 @@ public class OJTryStatement extends OJTryStatementGEN {
 			result = result + "\n}";
 		}
 		if (getFinallyPart() != null && !getFinallyPart().getStatements().isEmpty()) {
-			result = result + "\n} finally {\n";
+            if (getCatchPart() == null) {
+                result = result + "\n} finally {\n";
+            } else {
+			    result = result + " finally {\n";
+            }
 			result = result + JavaStringHelpers.indent(getFinallyPart().toJavaString(), 1);
 			result = result + "\n}";
 		}
