@@ -5,13 +5,13 @@ import com.tinkerpop.blueprints.impls.neo4j.Neo4jEdge;
 import com.tinkerpop.blueprints.impls.neo4j.Neo4jGraph;
 import com.tinkerpop.blueprints.impls.neo4j.Neo4jVertex;
 import org.neo4j.graphdb.*;
-import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.event.TransactionEventHandler;
-import org.neo4j.kernel.AbstractGraphDatabase;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
+import org.neo4j.kernel.GraphDatabaseAPI;
 import org.tuml.runtime.domain.PersistentObject;
 
 import javax.transaction.*;
+import javax.transaction.Transaction;
 import java.util.*;
 
 /**
@@ -21,6 +21,7 @@ import java.util.*;
 public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
 
     private TransactionEventHandler<PersistentObject> transactionEventHandler;
+    private Map<TransactionIdentifier, Transaction> transactionMap = new HashMap<TransactionIdentifier, Transaction>();
 
     public TumlNeo4jGraph(String directory) {
         super(directory);
@@ -131,6 +132,47 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
         }
     }
 
+    @Override
+    public void resume(TransactionIdentifier transactionIdentifier) {
+        GraphDatabaseAPI graphDatabaseAPI = (GraphDatabaseAPI) getRawGraph();
+        TransactionManager transactionManager = graphDatabaseAPI.getTxManager();
+        Transaction t = null;
+        try {
+            transactionManager.resume(this.transactionMap.get(transactionIdentifier));
+        } catch (InvalidTransactionException e) {
+            throw new RuntimeException(e);
+        } catch (SystemException e) {
+            throw new RuntimeException(e);
+        } finally {
+            this.transactionMap.remove(transactionIdentifier);
+        }
+    }
+
+    @Override
+    public TransactionIdentifier suspend() {
+        TransactionIdentifier transactionIdentifier = new TransactionIdentifier();
+        GraphDatabaseAPI graphDatabaseAPI = (GraphDatabaseAPI) getRawGraph();
+        TransactionManager transactionManager = graphDatabaseAPI.getTxManager();
+        try {
+            Transaction t = transactionManager.suspend();
+            this.transactionMap.put(transactionIdentifier, t);
+        } catch (SystemException e) {
+            throw new RuntimeException(e);
+        }
+        return transactionIdentifier;
+    }
+
+    @Override
+    public void setRollbackOnly() {
+        GraphDatabaseAPI graphDatabaseAPI = (GraphDatabaseAPI) getRawGraph();
+        TransactionManager transactionManager = graphDatabaseAPI.getTxManager();
+        try {
+            transactionManager.setRollbackOnly();
+        } catch (SystemException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
     public <T extends Element> TumlTinkerIndex<T> createIndex(String indexName, Class<T> indexClass) {
@@ -158,7 +200,6 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
             return true;
         }
         // The way below requires a transaction to have been started.
-
         // Neo4jEdge neo4jEdge = (Neo4jEdge) edge;
         // EmbeddedGraphDatabase g =
         // (EmbeddedGraphDatabase)this.neo4jGraph.getRawGraph();
@@ -171,4 +212,25 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
         // return false;
     }
 
+    @Override
+    public void rollback() {
+        if (null == tx.get()) {
+            return;
+        }
+
+        GraphDatabaseAPI graphDatabaseAPI = (GraphDatabaseAPI)getRawGraph();
+        TransactionManager transactionManager = graphDatabaseAPI.getTxManager();
+        try {
+            javax.transaction.Transaction t = transactionManager.getTransaction();
+            if (t == null || t.getStatus() == Status.STATUS_ROLLEDBACK) {
+                return;
+            }
+            tx.get().failure();
+        } catch (SystemException e) {
+            throw new RuntimeException(e);
+        } finally {
+            tx.get().finish();
+            tx.remove();
+        }
+    }
 }
