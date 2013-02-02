@@ -10,10 +10,7 @@ import org.tuml.javageneration.DefaultVisitors;
 import org.tuml.javageneration.TumlLibVisitors;
 import org.tuml.restlet.router.RestletRouterEnumGenerator;
 import org.tuml.restlet.visitor.clazz.*;
-import org.tuml.restlet.visitor.model.AppResourceServerResourceBuilder;
-import org.tuml.restlet.visitor.model.EnumLookupResourceServerResourceBuilder;
-import org.tuml.restlet.visitor.model.QueryExecuteResourceBuilder;
-import org.tuml.restlet.visitor.model.RestletComponentAndApplicationGenerator;
+import org.tuml.restlet.visitor.model.*;
 
 public class RestletVisitors {
 
@@ -44,6 +41,8 @@ public class RestletVisitors {
         result.add(new EnumLookupResourceServerResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
         result.add(new TumlRestletNodeBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
         result.add(new QueryExecuteResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+        result.add(new TransactionResourceRouterAdder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+        result.add(new TransactionalNavigatePropertyServerResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
 
         result.add(new RestletComponentAndApplicationGenerator(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
 
