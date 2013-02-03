@@ -31,4 +31,8 @@ public class DataJson {
         return objects;
     }
 
+    public int count() {
+        return this.objects.size();
+    }
+
 }

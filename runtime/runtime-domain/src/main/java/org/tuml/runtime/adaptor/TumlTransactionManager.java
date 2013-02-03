@@ -7,13 +7,15 @@ import java.util.Map;
  * Date: 2013/02/01
  * Time: 8:21 PM
  */
-public class TransactionCache {
+public class TumlTransactionManager {
 
+    //TODO make blocking map, threads must wait for an entry to be available
+    //Map stores a uid as the key
     private Map<String, TransactionIdentifier> transactionIdentifierMap = new HashMap<String, TransactionIdentifier>();
 
-    public final static TransactionCache INSTANCE = new TransactionCache();
+    public final static TumlTransactionManager INSTANCE = new TumlTransactionManager();
 
-    private TransactionCache() {
+    private TumlTransactionManager() {
 
     }
 

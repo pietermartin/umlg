@@ -36,6 +36,7 @@ public class MetaPropertyJson {
     private Boolean inverseOrdered;
     private Boolean unique;
     private String tumlUri;
+    private String tumlTransactionalUri;
     private String tumlMetaDataUri;
     private String fieldType;
     private String tumlLookupUri;
@@ -102,6 +103,8 @@ public class MetaPropertyJson {
                 this.unique = (Boolean) properties.get(name);
             } else if (name.equals("tumlUri")) {
                 this.tumlUri = (String) properties.get(name);
+            } else if (name.equals("tumlTransactionalUri")) {
+                this.tumlTransactionalUri = (String) properties.get(name);
             } else if (name.equals("tumlMetaDataUri")) {
                 this.tumlMetaDataUri = (String) properties.get(name);
             } else if (name.equals("fieldType")) {
@@ -222,6 +225,10 @@ public class MetaPropertyJson {
 
     public String getTumlUri() {
         return tumlUri;
+    }
+
+    public String getTumlTransactionalUri() {
+        return tumlTransactionalUri;
     }
 
     public String getTumlMetaDataUri() {

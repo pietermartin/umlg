@@ -109,10 +109,10 @@ public class TransactionalNavigatePropertyServerResourceBuilder extends BaseServ
 
         //resume the transaction
         putOrDelete.getBody().addToStatements(
-                TinkerGenerationUtil.TransactionIdentifier.getLast() + " transactionIdentifier = " + TinkerGenerationUtil.TransactionCache.getLast() + ".INSTANCE.get(this.transactionUid)");
+                TinkerGenerationUtil.TransactionIdentifier.getLast() + " transactionIdentifier = new " + TinkerGenerationUtil.TransactionIdentifier.getLast() + "(this.transactionUid)");
         putOrDelete.getBody().addToStatements(TinkerGenerationUtil.graphDbAccess + ".resume(transactionIdentifier)");
         annotatedClass.addToImports(TinkerGenerationUtil.TransactionIdentifier);
-        annotatedClass.addToImports(TinkerGenerationUtil.TransactionCache);
+        annotatedClass.addToImports(TinkerGenerationUtil.TumlTransactionManager);
 
 
         OJTryStatement ojTryStatement = new OJTryStatement();
@@ -169,6 +169,8 @@ public class TransactionalNavigatePropertyServerResourceBuilder extends BaseServ
             addDeleteResource(pWrap, annotatedClass, parentPathName);
         }
 
+        ojTryStatement.getTryPart().addToStatements("return get()");
+
         ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
         ojTryStatement.getCatchPart().addToStatements(TinkerGenerationUtil.graphDbAccess + ".setRollbackOnly()");
 
@@ -178,13 +180,10 @@ public class TransactionalNavigatePropertyServerResourceBuilder extends BaseServ
         ojTryStatement.getCatchPart().addToStatements("throw new RuntimeException(e)");
 
         ojTryStatement.getFinallyPart().addToStatements(TinkerGenerationUtil.graphDbAccess + ".suspend()");
-        ojTryStatement.getFinallyPart().addToStatements(TinkerGenerationUtil.TransactionCache+ ".INSTANCE.put(transactionIdentifier)");
 
         putOrDelete.getBody().addToStatements(ojTryStatement);
 
         annotatedClass.addToImports(parentPathName);
-
-        putOrDelete.getBody().addToStatements("return get()");
 
 //        putOrDelete.getBody().addToStatements(
 //                "this." + parentPathName.getLast().toLowerCase() + "Id = Integer.parseInt((String)getRequestAttributes().get(\""
@@ -246,10 +245,10 @@ public class TransactionalNavigatePropertyServerResourceBuilder extends BaseServ
 
         //resume the transaction
         post.getBody().addToStatements(
-                TinkerGenerationUtil.TransactionIdentifier.getLast() + " transactionIdentifier = " + TinkerGenerationUtil.TransactionCache.getLast() + ".INSTANCE.get(this.transactionUid)");
+                TinkerGenerationUtil.TransactionIdentifier.getLast() + " transactionIdentifier = new " + TinkerGenerationUtil.TransactionIdentifier.getLast() + "(this.transactionUid)");
         post.getBody().addToStatements(TinkerGenerationUtil.graphDbAccess + ".resume(transactionIdentifier)");
         annotatedClass.addToImports(TinkerGenerationUtil.TransactionIdentifier);
-        annotatedClass.addToImports(TinkerGenerationUtil.TransactionCache);
+        annotatedClass.addToImports(TinkerGenerationUtil.TumlTransactionManager);
 
         post.getBody().addToStatements(
                 parentPathName.getLast() + " parentResource = GraphDb.getDb().instantiateClassifier(" + parentPathName.getLast().toLowerCase() + "Id" + ")");
@@ -279,25 +278,22 @@ public class TransactionalNavigatePropertyServerResourceBuilder extends BaseServ
         ifArray.getElsePart().addToStatements("add(parentResource, map)");
 
         addPostResource(concreteClassifier, pWrap, annotatedClass, parentPathName);
-
         annotatedClass.addToImports(TinkerGenerationUtil.tinkerConclusionPathName);
+
+        ojTryStatement.getTryPart().addToStatements("return get()");
 
         ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
         ojTryStatement.getCatchPart().addToStatements(TinkerGenerationUtil.graphDbAccess + ".setRollbackOnly()");
-
         OJIfStatement ifRuntime = new OJIfStatement("e instanceof RuntimeException");
         ifRuntime.addToThenPart("throw (RuntimeException)e");
         ojTryStatement.getCatchPart().addToStatements(ifRuntime);
         ojTryStatement.getCatchPart().addToStatements("throw new RuntimeException(e)");
 
         ojTryStatement.getFinallyPart().addToStatements(TinkerGenerationUtil.graphDbAccess + ".suspend()");
-        ojTryStatement.getFinallyPart().addToStatements(TinkerGenerationUtil.TransactionCache+ ".INSTANCE.put(transactionIdentifier)");
 
         post.getBody().addToStatements(ojTryStatement);
 
         annotatedClass.addToImports(parentPathName);
-
-        post.getBody().addToStatements("return get()");
 
 //        buildToJson(pWrap, annotatedClass, post.getBody());
 
@@ -438,7 +434,7 @@ public class TransactionalNavigatePropertyServerResourceBuilder extends BaseServ
 
         OJField uri = new OJField();
         uri.setType(new OJPathName("String"));
-        uri.setInitExp("\"/transactional/{transactionIdentifier}/" + TumlClassOperations.getPathName(pWrap.getOwningType()).getLast().toLowerCase() + "s/{"
+        uri.setInitExp("\"/transactional/{transactionUid}/" + TumlClassOperations.getPathName(pWrap.getOwningType()).getLast().toLowerCase() + "s/{"
                 + TumlClassOperations.getPathName(pWrap.getOwningType()).getLast().toLowerCase() + "Id}/" + pWrap.fieldname() + "\"");
         ojLiteral.addToAttributeValues(uri);
 
@@ -460,7 +456,7 @@ public class TransactionalNavigatePropertyServerResourceBuilder extends BaseServ
 
         uri = new OJField();
         uri.setType(new OJPathName("String"));
-        uri.setInitExp("\"/transactional/{transactionIdentifier}/" + TumlClassOperations.getPathName(pWrap.getOwningType()).getLast().toLowerCase() + "s/{"
+        uri.setInitExp("\"/transactional/{transactionUid}/" + TumlClassOperations.getPathName(pWrap.getOwningType()).getLast().toLowerCase() + "s/{"
                 + TumlClassOperations.getPathName(pWrap.getOwningType()).getLast().toLowerCase() + "Id}/" + pWrap.fieldname() + "_" + concreteClassifier.getName() + "\"");
         ojLiteral.addToAttributeValues(uri);
 

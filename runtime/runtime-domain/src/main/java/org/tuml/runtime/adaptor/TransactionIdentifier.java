@@ -13,6 +13,10 @@ public final class TransactionIdentifier {
 
     private String uid;
 
+    public TransactionIdentifier(String uid) {
+        this.uid = uid;
+    }
+
     public TransactionIdentifier() {
         uid = UUID.randomUUID().toString();
     }

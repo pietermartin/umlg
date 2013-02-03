@@ -40,16 +40,30 @@ public class AddUriToRootRuntimePropertyEnum extends BaseVisitor implements Visi
 		uriPrimitiveField.setName("tumlUri");
 		ojEnum.addToFields(uriPrimitiveField);
 
-		OJAnnotatedOperation getter = new OJAnnotatedOperation((uriPrimitiveField.getType().getLast().equals("boolean") ? "is" : "get")
+        OJField transactionalUriPrimitiveField = new OJField();
+        transactionalUriPrimitiveField.setType(new OJPathName("String"));
+        transactionalUriPrimitiveField.setName("tumlTransactionalUri");
+        ojEnum.addToFields(transactionalUriPrimitiveField);
+
+        OJAnnotatedOperation getter = new OJAnnotatedOperation("get"
 				+ StringUtils.capitalize(uriPrimitiveField.getName()), uriPrimitiveField.getType());
 		getter.getBody().addToStatements("return this." + uriPrimitiveField.getName());
 		ojEnum.addToOperations(getter);
 
-		OJConstructor constructor = ojEnum.getConstructors().iterator().next();
+        OJAnnotatedOperation transactionalGetter = new OJAnnotatedOperation("get"
+                + StringUtils.capitalize(transactionalUriPrimitiveField.getName()), transactionalUriPrimitiveField.getType());
+        transactionalGetter.getBody().addToStatements("return this." + transactionalUriPrimitiveField.getName());
+        ojEnum.addToOperations(transactionalGetter);
+
+        OJConstructor constructor = ojEnum.getConstructors().iterator().next();
 		constructor.addParam(uriPrimitiveField.getName(), uriPrimitiveField.getType());
 		constructor.getBody().addToStatements("this." + uriPrimitiveField.getName() + " = " + uriPrimitiveField.getName());
 
-		@SuppressWarnings("unchecked")
+        constructor = ojEnum.getConstructors().iterator().next();
+        constructor.addParam(transactionalUriPrimitiveField.getName(), transactionalUriPrimitiveField.getType());
+        constructor.getBody().addToStatements("this." + transactionalUriPrimitiveField.getName() + " = " + transactionalUriPrimitiveField.getName());
+
+        @SuppressWarnings("unchecked")
 		List<Class> result = (List<Class>) TumlModelOperations.findElements(model, new Condition() {
 			@Override
 			public boolean evaluateOn(Element e) {
@@ -72,32 +86,50 @@ public class AddUriToRootRuntimePropertyEnum extends BaseVisitor implements Visi
 			}
 			String uri;
 			if (clazz != null) {
-                String contextPath;
-//                if (ModelLoader.getImportedModelLibraries().contains(clazz.getModel())) {
-//                    contextPath = ModelLoader.getModel().getName() + "/" + clazz.getModel().getName();
-//                } else {
-                    contextPath = ModelLoader.INSTANCE.getModel().getName();
-//                }
+                String contextPath = ModelLoader.INSTANCE.getModel().getName();
 				uri = "\"/" + contextPath + "/" + TumlClassOperations.getPathName(clazz).getLast().toLowerCase() + "s\"";
 			} else {
 				uri = "\"/" + model.getName() + "\"";
 			}
-			OJField uriAttribute = new OJField();
+
+            String transactionalUri;
+            if (clazz != null) {
+                String contextPath = ModelLoader.INSTANCE.getModel().getName();
+                transactionalUri = "\"/" + contextPath + "/transactional/{transactionUid}/" + TumlClassOperations.getPathName(clazz).getLast().toLowerCase() + "s\"";
+            } else {
+                transactionalUri = "\"/" + model.getName() + "\"";
+            }
+
+            OJField uriAttribute = new OJField();
 			uriAttribute.setType(new OJPathName("String"));
 			uriAttribute.setInitExp(uri);
             uriAttribute.setName("tumlUri");
 			literal.addToAttributeValues(uriAttribute);
 
-			OJField jsonField = literal.findAttributeValue("json");
+            OJField transactionalUriAttribute = new OJField();
+            transactionalUriAttribute.setType(new OJPathName("String"));
+            transactionalUriAttribute.setInitExp(transactionalUri);
+            transactionalUriAttribute.setName("tumlTransactionalUri");
+            literal.addToAttributeValues(transactionalUriAttribute);
+
+            OJField jsonField = literal.findAttributeValue("json");
 			StringBuilder sb = new StringBuilder();
 			sb.append(", \\\"tumlUri\\\": \\");
 			sb.append(uri.substring(0, uri.length() - 1) + "\\\"");
 			String initExp = jsonField.getInitExp();
 			int indexOf = initExp.indexOf("}");
 			initExp = initExp.substring(0, indexOf) + sb.toString() + "}\"";
-
 			jsonField.setInitExp(initExp);
-		}
+
+            sb = new StringBuilder();
+            sb.append(", \\\"tumlTransactionalUri\\\": \\");
+            sb.append(transactionalUri.substring(0, transactionalUri.length() - 1) + "\\\"");
+            initExp = jsonField.getInitExp();
+            indexOf = initExp.indexOf("}");
+            initExp = initExp.substring(0, indexOf) + sb.toString() + "}\"";
+            jsonField.setInitExp(initExp);
+
+        }
 
 	}
 	

@@ -5,8 +5,8 @@ import java.util.Map;
 public class Min implements TumlValidation {
 	private int min;
 
-	public Min(Map<String, Integer> value) {
+	public Min(Integer value) {
 		super();
-		this.min = value.get("min");
+		this.min = value;
 	}
 }

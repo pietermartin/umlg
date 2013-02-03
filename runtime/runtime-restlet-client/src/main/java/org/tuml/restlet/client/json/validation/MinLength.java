@@ -5,8 +5,8 @@ import java.util.Map;
 public class MinLength implements TumlValidation {
 	private int minLength;
 
-	public MinLength(Map<String, Integer> value) {
+	public MinLength(Integer value) {
 		super();
-		this.minLength = value.get("minLength");
+		this.minLength = value;
 	}
 }

@@ -38,18 +38,18 @@ public class ObjectJson {
 
     public String toJson() {
         StringBuilder sb = new StringBuilder();
-        sb.append("[");
+        sb.append("{");
         int count = 0;
         for (PropertyJson propertyJson : this.properties) {
             count++;
-            if (count == this.properties.size()) {
+            if (count < this.properties.size()) {
                 sb.append(propertyJson.toJson());
                 sb.append(",");
             } else {
                 sb.append(propertyJson.toJson());
             }
         }
-        sb.append("]");
+        sb.append("}");
         return sb.toString();
     }
 

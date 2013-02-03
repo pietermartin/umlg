@@ -12,8 +12,12 @@ import org.tuml.componenttest.Time;
 import org.tuml.componenttest.ValidationTest;
 import org.tuml.concretetest.God;
 import org.tuml.concretetest.Universe;
+import org.tuml.runtime.adaptor.GraphDb;
+import org.tuml.runtime.adaptor.TransactionIdentifier;
 import org.tuml.runtime.test.BaseLocalDbTest;
 import org.tuml.runtime.validation.TumlConstraintViolationException;
+
+import java.util.concurrent.*;
 
 public class TestValidation extends BaseLocalDbTest {
 
@@ -378,4 +382,95 @@ public class TestValidation extends BaseLocalDbTest {
         }
         Assert.assertEquals(6, countVertices());
     }
+
+    @Test
+    public void testValidationMultipleThreadsFailsSuccesfully() throws ExecutionException, InterruptedException {
+        God g = new God(true);
+        g.setName("god");
+        Fantasy fantasy = new Fantasy(g);
+        fantasy.setName("hand");
+        final FWomen w1 = new FWomen(fantasy);
+        w1.setName("f1");
+        final FWomen w2 = new FWomen(fantasy);
+        w2.setName("f2");
+        FWomen w3 = new FWomen(fantasy);
+        w3.setName("f3");
+        FWomen w4 = new FWomen(fantasy);
+        w4.setName("f4");
+        db.commit();
+
+        FWomen w5 = new FWomen(fantasy);
+        w5.setName("f5");
+        FWomen w6 = new FWomen(fantasy);
+        w6.setName("f6");
+        final TransactionIdentifier transactionIdentifier = db.suspend();
+
+        ExecutorService es = Executors.newFixedThreadPool(1);
+        Future<Boolean> f = es.submit(new Callable<Boolean>() {
+            @Override
+            public Boolean call() throws Exception {
+                GraphDb.getDb().resume(transactionIdentifier);
+                FWomen w1ToDelete = new FWomen(w1.getVertex());
+                w1ToDelete.delete();
+                GraphDb.getDb().suspend();
+                return true;
+            }
+        });
+        es.shutdown();
+        Assert.assertTrue(f.get());
+        db.resume(transactionIdentifier);
+        boolean failed = false;
+        try {
+            db.commit();
+        } catch (Exception e) {
+            if (isTransactionFailedException(e)) {
+                failed = true;
+            }
+        }
+        Assert.assertTrue(failed);
+    }
+
+    @Test
+    public void testValidationMultipleThreads() throws ExecutionException, InterruptedException {
+        God g = new God(true);
+        g.setName("god");
+        Fantasy fantasy = new Fantasy(g);
+        fantasy.setName("hand");
+        final FWomen w1 = new FWomen(fantasy);
+        w1.setName("f1");
+        final FWomen w2 = new FWomen(fantasy);
+        w2.setName("f2");
+        FWomen w3 = new FWomen(fantasy);
+        w3.setName("f3");
+        FWomen w4 = new FWomen(fantasy);
+        w4.setName("f4");
+        db.commit();
+
+        FWomen w5 = new FWomen(fantasy);
+        w5.setName("f5");
+        FWomen w6 = new FWomen(fantasy);
+        w6.setName("f6");
+        final TransactionIdentifier transactionIdentifier = db.suspend();
+
+        ExecutorService es = Executors.newFixedThreadPool(1);
+        Future<Boolean> f = es.submit(new Callable<Boolean>() {
+            @Override
+            public Boolean call() throws Exception {
+                GraphDb.getDb().resume(transactionIdentifier);
+                FWomen w1ToDelete = new FWomen(w1.getVertex());
+                w1ToDelete.delete();
+
+                FWomen w2ToDelete = new FWomen(w2.getVertex());
+                w2ToDelete.delete();
+
+                GraphDb.getDb().suspend();
+                return true;
+            }
+        });
+        es.shutdown();
+        Assert.assertTrue(f.get());
+        db.resume(transactionIdentifier);
+        db.commit();
+    }
+
 }

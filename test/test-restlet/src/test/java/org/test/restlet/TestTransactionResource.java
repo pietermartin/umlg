@@ -65,10 +65,10 @@ public class TestTransactionResource extends BaseRestletTest {
 
         Assert.assertTrue(rootAsJson != null);
 
-        RootJson tumlJsonDto = new RootJson(rootAsJson);
-        Assert.assertEquals(1, tumlJsonDto.getDataAndMetas().size());
-        DataJson dataJson = tumlJsonDto.getDataAndMetas().get(0).getDataJson();
-        MetaJson metaJson = tumlJsonDto.getDataAndMetas().get(0).getMetaJson();
+        RootJson rootJson = new RootJson(rootAsJson);
+        Assert.assertEquals(1, rootJson.getDataAndMetas().size());
+        DataJson dataJson = rootJson.getDataAndMetas().get(0).getDataJson();
+        MetaJson metaJson = rootJson.getDataAndMetas().get(0).getMetaJson();
 
         Assert.assertEquals(1, dataJson.getObjects().size());
         Assert.assertTrue(metaJson.getFrom() == null);
@@ -95,10 +95,10 @@ public class TestTransactionResource extends BaseRestletTest {
         HumansServerResource humanServerResource = service.getChild(getHumansTumlUri, HumansServerResource.class);
         Representation humansRepresentation = humanServerResource.get();
         String humansAsJson = humansRepresentation.getText();
-        tumlJsonDto = new RootJson(humansAsJson);
+        RootJson humansJson = new RootJson(humansAsJson);
 
-        DataJson humanDataJson = tumlJsonDto.getDataAndMetas().get(0).getDataJson();
-        MetaJson humanMetaJson = tumlJsonDto.getDataAndMetas().get(0).getMetaJson();
+        DataJson humanDataJson = humansJson.getDataAndMetas().get(0).getDataJson();
+        MetaJson humanMetaJson = humansJson.getDataAndMetas().get(0).getMetaJson();
         ObjectJson humanJson = humanDataJson.getObjects().get(0);
 
         MetaToFrom humanMetaTo = humanMetaJson.getTo();
@@ -114,32 +114,49 @@ public class TestTransactionResource extends BaseRestletTest {
 
         //Get the human's id
         PropertyJson propertyJsonId = humanJson.get("id");
-        String handUri = metaHand.getTumlUri().replace("{humanId}", Integer.toString((Integer)propertyJsonId.getValue()));
+        String handTransactionalUri = metaHand.getTumlTransactionalUri().replace("{humanId}", Integer.toString((Integer) propertyJsonId.getValue()));
 
-        Human_human_hand_Hand_ServerResource human_human_hand_hand_serverResource = service.getChild(handUri, Human_human_hand_Hand_ServerResource.class);
-        Representation handsRepresentation = human_human_hand_hand_serverResource.get();
-        String handsAsJSon = handsRepresentation.getText();
+        String handUri = metaHand.getTumlUri().replace("{humanId}", Integer.toString((Integer) propertyJsonId.getValue()));
+        Human_human_hand_Hand_ServerResource humanHumanHandHandServerResource = service.getChild(handUri, Human_human_hand_Hand_ServerResource.class);
+        DataJson dataJson1 = new RootJson(humanHumanHandHandServerResource.get().getText()).getDataAndMetas().get(0).getDataJson();
+        Assert.assertEquals(2, dataJson1.count());
 
         //Wrap the insert update delete in a transactional resource
         TumlTransactionServerResource transactionServerResource = service.getChild("/restAndJson/transaction", TumlTransactionServerResource.class);
         Representation representation = transactionServerResource.post(new StringRepresentation(""));
         String uid = representation.getText();
 
+        handTransactionalUri = handTransactionalUri.replace("{transactionUid}", uid);
+
         //Create a new hand
         PropertyJson leftHandPropertyJson = new PropertyJson("name", "SpecialLeftHand");
         ObjectJson newHandObjectJson = new ObjectJson(Arrays.asList(leftHandPropertyJson));
-//        DataJson newHandDataJson = DataJson.createDataJsonFromObjectJsons(Arrays.asList(newHandObjectJson));
-//        DataMetaJsonPair newHandDataMetaJsonPair = new DataMetaJsonPair(null, newHandDataJson);
-//        RootJson rootJson = new RootJson(Arrays.asList(newHandDataMetaJsonPair));
 
-        Transaction_Human_human_hand_Hand_ServerResource transactionalHuman_human_hand_hand_serverResource = service.getChild(getHumansTumlUri, Transaction_Human_human_hand_Hand_ServerResource.class);
-        transactionalHuman_human_hand_hand_serverResource.post(new StringRepresentation(newHandObjectJson.toJson()));
+        Transaction_Human_human_hand_Hand_ServerResource transactionalHuman_human_hand_hand_serverResource = service.getChild(handTransactionalUri, Transaction_Human_human_hand_Hand_ServerResource.class);
+        Representation postRepresentation1 = transactionalHuman_human_hand_hand_serverResource.post(new StringRepresentation(newHandObjectJson.toJson()));
+        String postResult = postRepresentation1.getText();
+
+        RootJson handsRoot = new RootJson(postResult);
+        DataJson hands = handsRoot.getDataAndMetas().get(0).getDataJson();
+        Assert.assertEquals(3, hands.count());
+
+        //Delete an old hand
+        //This causes  Internal Connector Error (1002) - The calling thread timed out while waiting for a response to unblock it.
+        //Something to do with server and client in same vm
+//        PropertyJson oldHandPropertyJson = new PropertyJson("id", oldHandId);
+//        ObjectJson oldHandObjectJson = new ObjectJson(Arrays.asList(oldHandPropertyJson));
+//        transactionalHuman_human_hand_hand_serverResource = service.getChild(handTransactionalUri, Transaction_Human_human_hand_Hand_ServerResource.class);
+//        Representation deleteRepresentation1 = transactionalHuman_human_hand_hand_serverResource.delete(new StringRepresentation(oldHandObjectJson.toJson()));
+//        String deleteResult = postRepresentation1.getText();
+
+        handsRoot = new RootJson(postResult);
+        hands = handsRoot.getDataAndMetas().get(0).getDataJson();
+        Assert.assertEquals(2, hands.count());
 
         //Commit the transaction
         representation = transactionServerResource.put(new StringRepresentation("{\"" + TumlTransactionServerResource.COMMIT + "\": true}"));
         String result = representation.getText();
         Assert.assertEquals(TumlTransactionServerResource.COMMITTED, result);
-
     }
 
     @Override

@@ -142,7 +142,7 @@
             </generalization>
             <ownedAttribute xmi:id="_-UB8AN4jEeGdB9TPHp60mw" name="hand" visibility="public" type="_4a8owN4jEeGdB9TPHp60mw" aggregation="composite" association="_-UTBwN4jEeGdB9TPHp60mw">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_-UB8At4jEeGdB9TPHp60mw"/>
-              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_-UB8Ad4jEeGdB9TPHp60mw" value="*"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_-UB8Ad4jEeGdB9TPHp60mw" name="" value="2"/>
             </ownedAttribute>
             <ownedAttribute xmi:id="_-f6b4N4jEeGdB9TPHp60mw" name="ring" visibility="public" type="_47QggN4jEeGdB9TPHp60mw" isUnique="false" aggregation="composite" association="_-gBJkN4jEeGdB9TPHp60mw">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_-f6b4t4jEeGdB9TPHp60mw"/>

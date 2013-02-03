@@ -71,13 +71,13 @@ public enum ValidationEnum {
                 //TODO
                 return new Email();
             case MAX:
-                return new Max((Map<String, Integer>) value);
+                return new Max((Integer) value);
             case MAX_LENGTH:
-                return new MaxLength((Map<String, Integer>) value);
+                return new MaxLength((Integer) value);
             case MIN:
-                return new Min((Map<String, Integer>) value);
+                return new Min((Integer) value);
             case MIN_LENGTH:
-                return new MinLength((Map<String, Integer>) value);
+                return new MinLength((Integer)value);
             case RANGE:
                 return new Range((Map<String, Integer>)value);
             case RANGE_LENGTH:

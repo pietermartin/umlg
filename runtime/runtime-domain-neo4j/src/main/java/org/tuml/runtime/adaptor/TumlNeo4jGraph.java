@@ -21,22 +21,31 @@ import java.util.*;
 public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
 
     private TransactionEventHandler<PersistentObject> transactionEventHandler;
-    private Map<TransactionIdentifier, Transaction> transactionMap = new HashMap<TransactionIdentifier, Transaction>();
+    private Map<TransactionIdentifier, Transaction> transactionIdentifierTransactionMap;
+    private Map<Transaction, TransactionIdentifier> transactionTransactionIdentifierMap;
 
     public TumlNeo4jGraph(String directory) {
         super(directory);
+        this.transactionIdentifierTransactionMap = new HashMap<TransactionIdentifier, Transaction>();
+        this.transactionTransactionIdentifierMap = new HashMap<Transaction, TransactionIdentifier>();
     }
 
     public TumlNeo4jGraph(GraphDatabaseService rawGraph) {
         super(rawGraph);
+        this.transactionIdentifierTransactionMap = new HashMap<TransactionIdentifier, Transaction>();
+        this.transactionTransactionIdentifierMap = new HashMap<Transaction, TransactionIdentifier>();
     }
 
     public TumlNeo4jGraph(GraphDatabaseService rawGraph, boolean fresh) {
         super(rawGraph, fresh);
+        this.transactionIdentifierTransactionMap = new HashMap<TransactionIdentifier, Transaction>();
+        this.transactionTransactionIdentifierMap = new HashMap<Transaction, TransactionIdentifier>();
     }
 
     public TumlNeo4jGraph(String directory, Map<String, String> configuration) {
         super(directory, configuration);
+        this.transactionIdentifierTransactionMap = new HashMap<TransactionIdentifier, Transaction>();
+        this.transactionTransactionIdentifierMap = new HashMap<Transaction, TransactionIdentifier>();
     }
 
     @Override
@@ -97,6 +106,7 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
             }
             Vertex root = getRoot();
             root.setProperty("transactionCount", 1);
+            root.setProperty("className", ROOT_CLASS_NAME);
         }
     }
 
@@ -123,7 +133,8 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
         try {
             Vertex v = this.getVertex(id);
             // TODO reimplement schemaHelper
-            Class<?> c = Class.forName((String) v.getProperty("className"));
+            String className = (String) v.getProperty("className");
+            Class<?> c = Class.forName(className);
             // Class<?> c = schemaHelper.getClassNames().get((String)
             // v.getProperty("className"));
             return (T) c.getConstructor(Vertex.class).newInstance(v);
@@ -132,34 +143,53 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
         }
     }
 
+    protected void autoStartTransaction() {
+        if (tx.get() == null) {
+            tx.set(this.getRawGraph().beginTx());
+            GraphDatabaseAPI graphDatabaseAPI = (GraphDatabaseAPI) getRawGraph();
+            TransactionManager transactionManager = graphDatabaseAPI.getTxManager();
+            try {
+                Transaction t = transactionManager.getTransaction();
+                TransactionIdentifier transactionIdentifier = new TransactionIdentifier();
+                if (this.transactionIdentifierTransactionMap == null) {
+                    this.transactionIdentifierTransactionMap = new HashMap<TransactionIdentifier, Transaction>();
+                }
+                if (this.transactionTransactionIdentifierMap == null) {
+                    this.transactionTransactionIdentifierMap = new HashMap<Transaction, TransactionIdentifier>();
+                }
+                this.transactionIdentifierTransactionMap.put(transactionIdentifier, t);
+                this.transactionTransactionIdentifierMap.put(t, transactionIdentifier);
+            } catch (SystemException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
     @Override
     public void resume(TransactionIdentifier transactionIdentifier) {
         GraphDatabaseAPI graphDatabaseAPI = (GraphDatabaseAPI) getRawGraph();
         TransactionManager transactionManager = graphDatabaseAPI.getTxManager();
-        Transaction t = null;
         try {
-            transactionManager.resume(this.transactionMap.get(transactionIdentifier));
+            transactionManager.resume(this.transactionIdentifierTransactionMap.get(transactionIdentifier));
         } catch (InvalidTransactionException e) {
             throw new RuntimeException(e);
         } catch (SystemException e) {
             throw new RuntimeException(e);
-        } finally {
-            this.transactionMap.remove(transactionIdentifier);
         }
     }
 
     @Override
     public TransactionIdentifier suspend() {
-        TransactionIdentifier transactionIdentifier = new TransactionIdentifier();
+        this.autoStartTransaction();
         GraphDatabaseAPI graphDatabaseAPI = (GraphDatabaseAPI) getRawGraph();
         TransactionManager transactionManager = graphDatabaseAPI.getTxManager();
         try {
             Transaction t = transactionManager.suspend();
-            this.transactionMap.put(transactionIdentifier, t);
+            TransactionIdentifier transactionIdentifier = this.transactionTransactionIdentifierMap.get(t);
+            return transactionIdentifier;
         } catch (SystemException e) {
             throw new RuntimeException(e);
         }
-        return transactionIdentifier;
     }
 
     @Override
@@ -172,6 +202,56 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public void rollback() {
+        if (null == tx.get()) {
+            return;
+        }
+
+        GraphDatabaseAPI graphDatabaseAPI = (GraphDatabaseAPI) getRawGraph();
+        TransactionManager transactionManager = graphDatabaseAPI.getTxManager();
+        javax.transaction.Transaction t = null;
+        try {
+            t = transactionManager.getTransaction();
+            if (t == null || t.getStatus() == Status.STATUS_ROLLEDBACK) {
+                return;
+            }
+            tx.get().failure();
+        } catch (SystemException e) {
+            throw new RuntimeException(e);
+        } finally {
+            tx.get().finish();
+            tx.remove();
+            TransactionIdentifier transactionIdentifier = this.transactionTransactionIdentifierMap.remove(t);
+            this.transactionIdentifierTransactionMap.remove(transactionIdentifier);
+
+        }
+    }
+
+    @Override
+    public void commit() {
+        if (null == tx.get()) {
+            return;
+        }
+
+        try {
+            tx.get().success();
+        } finally {
+            tx.get().finish();
+            tx.remove();
+            GraphDatabaseAPI graphDatabaseAPI = (GraphDatabaseAPI) getRawGraph();
+            TransactionManager transactionManager = graphDatabaseAPI.getTxManager();
+            try {
+                javax.transaction.Transaction t = transactionManager.getTransaction();
+                TransactionIdentifier transactionIdentifier = this.transactionTransactionIdentifierMap.remove(t);
+                this.transactionIdentifierTransactionMap.remove(transactionIdentifier);
+            } catch (SystemException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
@@ -212,25 +292,4 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
         // return false;
     }
 
-    @Override
-    public void rollback() {
-        if (null == tx.get()) {
-            return;
-        }
-
-        GraphDatabaseAPI graphDatabaseAPI = (GraphDatabaseAPI)getRawGraph();
-        TransactionManager transactionManager = graphDatabaseAPI.getTxManager();
-        try {
-            javax.transaction.Transaction t = transactionManager.getTransaction();
-            if (t == null || t.getStatus() == Status.STATUS_ROLLEDBACK) {
-                return;
-            }
-            tx.get().failure();
-        } catch (SystemException e) {
-            throw new RuntimeException(e);
-        } finally {
-            tx.get().finish();
-            tx.remove();
-        }
-    }
 }

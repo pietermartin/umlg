@@ -5,8 +5,8 @@ import java.util.Map;
 public class Max implements TumlValidation {
     private int max;
 
-    public Max(Map<String, Integer> value) {
+    public Max(Integer value) {
         super();
-        this.max = value.get("max");
+        this.max = value;
     }
 }

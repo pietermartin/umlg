@@ -5,8 +5,8 @@ import java.util.Map;
 public class MaxLength implements TumlValidation {
 	private int maxLength;
 
-	public MaxLength(Map<String, Integer> value) {
+	public MaxLength(Integer value) {
 		super();
-		this.maxLength = value.get("maxLength");
+		this.maxLength = value;
 	}
 }

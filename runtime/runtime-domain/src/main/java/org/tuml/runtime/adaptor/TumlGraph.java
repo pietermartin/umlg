@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 public interface TumlGraph extends TransactionalGraph, IndexableGraph, Serializable  {
+    static final String ROOT_CLASS_NAME = "org.tuml.root.Root";
 	void incrementTransactionCount();
 	long getTransactionCount();
 	Vertex getRoot();
@@ -18,7 +19,7 @@ public interface TumlGraph extends TransactionalGraph, IndexableGraph, Serializa
 //	<T> List<T> query(Class<?> className, int first, int pageSize);
 	<T> T instantiateClassifier(Long id);
 
-//    TransactionManager getTransactionManager();
+//    TumlTransactionManager getTransactionManager();
     void resume(TransactionIdentifier t);
     TransactionIdentifier suspend();
     void setRollbackOnly();
