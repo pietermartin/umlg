@@ -3,6 +3,7 @@ package org.tuml.blueprints.test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.tuml.tinker.collectiontest.SequenceTest;
+import org.tuml.tinker.nonnavigable.NonNavigableTest;
 import org.tuml.tinker.validationtest.TestValidation;
 import org.tuml.transaction.test.TransactionSuspendResumeTest;
 
@@ -11,7 +12,7 @@ import org.tuml.transaction.test.TransactionSuspendResumeTest;
  * Time: 7:18 PM
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({SequenceTest.class})
+@Suite.SuiteClasses({NonNavigableTest.class})
 public class AnyTest {
 
 }
