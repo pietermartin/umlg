@@ -23,6 +23,12 @@ public class PropertyJson {
     }
 
     public String toJson() {
-        return "\"" + this.name + "\": \"" + this.value + "\"";
+        if (value instanceof Integer) {
+            return "\"" + this.name + "\": " + this.value ;
+        } else if (value instanceof Long) {
+                return "\"" + this.name + "\": " + this.value ;
+        } else {
+            return "\"" + this.name + "\": \"" + this.value + "\"";
+        }
     }
 }

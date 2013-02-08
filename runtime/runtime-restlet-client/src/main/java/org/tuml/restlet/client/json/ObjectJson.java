@@ -11,6 +11,7 @@ import java.util.Map;
 public class ObjectJson {
 
     private List<PropertyJson> properties = new ArrayList<PropertyJson>();
+    private DataJson dataJson;
 
     public ObjectJson(List<PropertyJson> properties) {
         this.properties = properties;

@@ -48,7 +48,7 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
                 addDefaultConstructor(annotatedClass);
 
                 addCompositeParentIdField(pWrap, annotatedClass);
-//                addGetObjectRepresentation(pWrap, annotatedInf, annotatedClass);
+                addGetObjectRepresentation(pWrap, annotatedInf, annotatedClass);
 
                 // Put must be Idempotence, i.e. calling it many times must make
                 // no
@@ -71,14 +71,9 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
 
     private void addGetObjectRepresentation(PropertyWrapper pWrap, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass) {
 
-        OJAnnotatedOperation getInf = new OJAnnotatedOperation("get", TumlRestletGenerationUtil.Representation);
-        annotatedInf.addToOperations(getInf);
-        getInf.addAnnotationIfNew(new OJAnnotationValue(TumlRestletGenerationUtil.Get, "json"));
-
         OJAnnotatedOperation get = new OJAnnotatedOperation("get", TumlRestletGenerationUtil.Representation);
         get.addToThrows(TumlRestletGenerationUtil.ResourceException);
         annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
-        TinkerGenerationUtil.addOverrideAnnotation(get);
 
         OJPathName parentPathName = TumlClassOperations.getPathName(pWrap.getOtherEnd().getType());
         get.getBody().addToStatements(
@@ -150,12 +145,14 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
         ojTryStatement.getTryPart().addToLocals(overloaded);
 
         //Insert
+        OJIfStatement ifInsert = new OJIfStatement("o != null");
         OJIfStatement ifArrayForInsert = new OJIfStatement("o instanceof ArrayList");
         OJPathName genericsForArray = new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object");
         OJField array = new OJField("array", new OJPathName("java.util.ArrayList").addToGenerics(genericsForArray));
         array.setInitExp("(ArrayList<Map<String, Object>>)o");
         ifArrayForInsert.getThenPart().addToLocals(array);
-        ojTryStatement.getTryPart().addToStatements(ifArrayForInsert);
+        ifInsert.addToThenPart(ifArrayForInsert);
+        ojTryStatement.getTryPart().addToStatements(ifInsert);
         OJForStatement forArray = new OJForStatement("map", new OJPathName("java.util.Map").addToGenerics(new OJPathName("String")).addToGenerics(
                 new OJPathName("Object")), "array");
         ifArrayForInsert.addToThenPart(forArray);
@@ -169,42 +166,50 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
 
         addPostResource(concreteClassifier, pWrap, annotatedClass, parentPathName);
 
-
-        ojTryStatement.getTryPart().addToStatements("o = overloaded.get(\"delete\")");
-
         //Delete
+        ojTryStatement.getTryPart().addToStatements("o = overloaded.get(\"delete\")");
+        OJIfStatement ifDelete = new OJIfStatement("o != null");
         OJIfStatement ifArrayForDelete = new OJIfStatement("o instanceof ArrayList");
         genericsForArray = new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object");
         array = new OJField("array", new OJPathName("java.util.ArrayList").addToGenerics(genericsForArray));
         array.setInitExp("(ArrayList<Map<String, Object>>)o");
         ifArrayForDelete.getThenPart().addToLocals(array);
-        ojTryStatement.getTryPart().addToStatements(ifArrayForDelete);
+        ifDelete.addToThenPart(ifArrayForDelete);
+        ojTryStatement.getTryPart().addToStatements(ifDelete);
         forArray = new OJForStatement("map", new OJPathName("java.util.Map").addToGenerics(new OJPathName("String")).addToGenerics(
                 new OJPathName("Object")), "array");
         ifArrayForDelete.addToThenPart(forArray);
-        forArray.getBody().addToStatements("add(parentResource, map)");
+        if (pWrap.isComposite()) {
+            forArray.getBody().addToStatements("delete(map)");
+        } else {
+            forArray.getBody().addToStatements("delete(parentResource, map)");
+        }
 
         map = new OJField("map", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object"));
         map.setInitExp("(Map<String, Object>) o");
         ifArrayForDelete.setElsePart(new OJBlock());
         ifArrayForDelete.getElsePart().addToLocals(map);
-        ifArrayForDelete.getElsePart().addToStatements("delete(map)");
-
+        if (pWrap.isComposite()) {
+            ifArrayForDelete.getElsePart().addToStatements("delete(map)");
+        } else {
+            ifArrayForDelete.getElsePart().addToStatements("delete(parentResource, map)");
+        }
         addDeleteResource(pWrap, annotatedClass, parentPathName);
 
-        ojTryStatement.getTryPart().addToStatements("o = overloaded.get(\"update\")");
-
         //Update
+        ojTryStatement.getTryPart().addToStatements("o = overloaded.get(\"update\")");
+        OJIfStatement ifUpdate = new OJIfStatement("o != null");
         OJIfStatement ifArrayForUpdate = new OJIfStatement("o instanceof ArrayList");
         genericsForArray = new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object");
         array = new OJField("array", new OJPathName("java.util.ArrayList").addToGenerics(genericsForArray));
         array.setInitExp("(ArrayList<Map<String, Object>>)o");
         ifArrayForUpdate.getThenPart().addToLocals(array);
-        ojTryStatement.getTryPart().addToStatements(ifArrayForUpdate);
+        ifUpdate.addToThenPart(ifArrayForUpdate);
+        ojTryStatement.getTryPart().addToStatements(ifUpdate);
         forArray = new OJForStatement("map", new OJPathName("java.util.Map").addToGenerics(new OJPathName("String")).addToGenerics(
                 new OJPathName("Object")), "array");
         ifArrayForUpdate.addToThenPart(forArray);
-        forArray.getBody().addToStatements("add(parentResource, map)");
+        forArray.getBody().addToStatements("put(map)");
 
         map = new OJField("map", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object"));
         map.setInitExp("(Map<String, Object>) o");
@@ -367,8 +372,8 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
 
         OJField uri = new OJField();
         uri.setType(new OJPathName("String"));
-        uri.setInitExp("\"/" + TumlClassOperations.getPathName(pWrap.getOwningType()).getLast().toLowerCase() + "s/{"
-                + TumlClassOperations.getPathName(pWrap.getOwningType()).getLast().toLowerCase() + "Id}/overloaded" + pWrap.fieldname() + "\"");
+        uri.setInitExp("\"/overloadedpost/" + TumlClassOperations.getPathName(pWrap.getOwningType()).getLast().toLowerCase() + "s/{"
+                + TumlClassOperations.getPathName(pWrap.getOwningType()).getLast().toLowerCase() + "Id}/" + pWrap.fieldname() + "\"");
         ojLiteral.addToAttributeValues(uri);
 
         OJField serverResourceClassField = new OJField();
@@ -389,8 +394,8 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
 
         uri = new OJField();
         uri.setType(new OJPathName("String"));
-        uri.setInitExp("\"/" + TumlClassOperations.getPathName(pWrap.getOwningType()).getLast().toLowerCase() + "s/{"
-                + TumlClassOperations.getPathName(pWrap.getOwningType()).getLast().toLowerCase() + "Id}/overloaded" + pWrap.fieldname() + "_" + concreteClassifier.getName() + "\"");
+        uri.setInitExp("\"/overloadedpost/" + TumlClassOperations.getPathName(pWrap.getOwningType()).getLast().toLowerCase() + "s/{"
+                + TumlClassOperations.getPathName(pWrap.getOwningType()).getLast().toLowerCase() + "Id}/" + pWrap.fieldname() + "_" + concreteClassifier.getName() + "\"");
         ojLiteral.addToAttributeValues(uri);
 
         serverResourceClassField = new OJField();

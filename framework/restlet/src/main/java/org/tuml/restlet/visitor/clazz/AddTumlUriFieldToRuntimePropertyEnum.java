@@ -41,25 +41,25 @@ public class AddTumlUriFieldToRuntimePropertyEnum extends BaseVisitor implements
 		uriPrimitiveField.setName("tumlUri");
 		ojEnum.addToFields(uriPrimitiveField);
 
-        OJField transactionalUriPrimitiveField = new OJField();
-        transactionalUriPrimitiveField.setType(new OJPathName("String"));
-        transactionalUriPrimitiveField.setName("tumlTransactionalUri");
-        ojEnum.addToFields(transactionalUriPrimitiveField);
+        OJField overloadedPostUriPrimitiveField = new OJField();
+        overloadedPostUriPrimitiveField.setType(new OJPathName("String"));
+        overloadedPostUriPrimitiveField.setName("tumlOverloadedPostUri");
+        ojEnum.addToFields(overloadedPostUriPrimitiveField);
 
         OJAnnotatedOperation getter = new OJAnnotatedOperation("getTumlUri", uriPrimitiveField.getType());
 		getter.getBody().addToStatements("return this." + uriPrimitiveField.getName());
 		ojEnum.addToOperations(getter);
 
-        OJAnnotatedOperation transactionalGetter = new OJAnnotatedOperation("getTumlTransactionalUri", transactionalUriPrimitiveField.getType());
-        transactionalGetter.getBody().addToStatements("return this." + transactionalUriPrimitiveField.getName());
-        ojEnum.addToOperations(transactionalGetter);
+        OJAnnotatedOperation overloadedPostUriGetter = new OJAnnotatedOperation("getTumlOverloadedPostUri", overloadedPostUriPrimitiveField.getType());
+        overloadedPostUriGetter.getBody().addToStatements("return this." + overloadedPostUriPrimitiveField.getName());
+        ojEnum.addToOperations(overloadedPostUriGetter);
 
         OJConstructor constructor = ojEnum.getConstructors().iterator().next();
 		constructor.addParam(uriPrimitiveField.getName(), uriPrimitiveField.getType());
 		constructor.getBody().addToStatements("this." + uriPrimitiveField.getName() + " = " + uriPrimitiveField.getName());
 
-        constructor.addParam(transactionalUriPrimitiveField.getName(), transactionalUriPrimitiveField.getType());
-        constructor.getBody().addToStatements("this." + transactionalUriPrimitiveField.getName() + " = " + transactionalUriPrimitiveField.getName());
+        constructor.addParam(overloadedPostUriPrimitiveField.getName(), overloadedPostUriPrimitiveField.getType());
+        constructor.getBody().addToStatements("this." + overloadedPostUriPrimitiveField.getName() + " = " + overloadedPostUriPrimitiveField.getName());
 
         Set<Property> properties = TumlClassOperations.getAllProperties(clazz);
 		for (Property property : properties) {
@@ -67,16 +67,16 @@ public class AddTumlUriFieldToRuntimePropertyEnum extends BaseVisitor implements
 			if (!(pWrap.isDerived() || pWrap.isDerivedUnion())) {
 				OJEnumLiteral literal = ojEnum.findLiteral(pWrap.fieldname());
 				addTumlUriToLiteral(clazz, pWrap, literal);
-                addTumlTransactionalUriToLiteral(clazz, pWrap, literal);
+                addTumlOverloadedPostUriToLiteral(clazz, pWrap, literal);
 			}
 		}
 		addTumlUriToLiteral(clazz, null, ojEnum.findLiteral("id"));
-        addTumlTransactionalUriToLiteral(clazz, null, ojEnum.findLiteral("id"));
+        addTumlOverloadedPostUriToLiteral(clazz, null, ojEnum.findLiteral("id"));
 		// This is for root objects that have a literal to to model
 		OJEnumLiteral modelLiteral = ojEnum.findLiteral(clazz.getModel().getName());
 		if (modelLiteral != null) {
 			addTumlUriToLiteral(clazz, null, modelLiteral);
-            addTumlTransactionalUriToLiteral(clazz, null, modelLiteral);
+            addTumlOverloadedPostUriToLiteral(clazz, null, modelLiteral);
 		}
 	}
 
@@ -111,7 +111,7 @@ public class AddTumlUriFieldToRuntimePropertyEnum extends BaseVisitor implements
 		jsonField.setInitExp(initExp);
 	}
 
-    private void addTumlTransactionalUriToLiteral(Class clazz, PropertyWrapper pWrap, OJEnumLiteral literal) {
+    private void addTumlOverloadedPostUriToLiteral(Class clazz, PropertyWrapper pWrap, OJEnumLiteral literal) {
         String uri;
         if (literal.getName().equals(clazz.getModel().getName())) {
             uri = "\"/" + clazz.getModel().getName() + "\"";
@@ -119,7 +119,7 @@ public class AddTumlUriFieldToRuntimePropertyEnum extends BaseVisitor implements
             if (clazz != null && pWrap != null) {
                 String contextPath;
                 contextPath = ModelLoader.INSTANCE.getModel().getName();
-                uri = "\"/" + contextPath + "/transactional/{transactionUid}/" + pWrap.getOwningType().getName().toLowerCase() + "s/{"
+                uri = "\"/" + contextPath + "/overloadedpost/" + pWrap.getOwningType().getName().toLowerCase() + "s/{"
                         + pWrap.getOwningType().getName().toLowerCase() + "Id}/" + literal.getName() + "\"";
             } else {
                 uri = "\"\"";
@@ -128,12 +128,12 @@ public class AddTumlUriFieldToRuntimePropertyEnum extends BaseVisitor implements
         OJField uriAttribute = new OJField();
         uriAttribute.setType(new OJPathName("String"));
         uriAttribute.setInitExp(uri);
-        uriAttribute.setName("tumlTransactionalUri");
+        uriAttribute.setName("tumlOverloadedPostUri");
         literal.addToAttributeValues(uriAttribute);
 
         OJField jsonField = literal.findAttributeValue("json");
         StringBuilder sb = new StringBuilder();
-        sb.append(", \\\"tumlTransactionalUri\\\": \\");
+        sb.append(", \\\"tumlOverloadedPostUri\\\": \\");
         sb.append(uri.substring(0, uri.length() - 1) + "\\\"");
         String initExp = jsonField.getInitExp();
         int indexOf = initExp.lastIndexOf("}");

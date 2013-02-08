@@ -45,7 +45,7 @@ function selectFormatter(property) {
 
 function selectFieldValidator(property) {
     if (property.name == 'uri') {
-    } else if (property.dataTypeEnum !== undefined) {
+    } else if (property.dataTypeEnum != null && property.dataTypeEnum !== undefined) {
         if (property.dataTypeEnum == 'Date') {
             return new TumlSlick.Validators.TumlDateTime(property).validate;
         } else if (property.dataTypeEnum == 'Time') {
@@ -101,7 +101,7 @@ function selectEditor(property) {
         return null;
     } else if (property.readOnly) {
         return null;
-    } else if (property.dataTypeEnum !== undefined) {
+    } else if (property.dataTypeEnum != null && property.dataTypeEnum !== undefined) {
         if (property.dataTypeEnum == 'Date') {
             return  Tuml.Slick.Editors.Date;
         } else if (property.dataTypeEnum == 'Time') {

@@ -40,28 +40,28 @@ public class AddUriToRootRuntimePropertyEnum extends BaseVisitor implements Visi
 		uriPrimitiveField.setName("tumlUri");
 		ojEnum.addToFields(uriPrimitiveField);
 
-        OJField transactionalUriPrimitiveField = new OJField();
-        transactionalUriPrimitiveField.setType(new OJPathName("String"));
-        transactionalUriPrimitiveField.setName("tumlTransactionalUri");
-        ojEnum.addToFields(transactionalUriPrimitiveField);
+        OJField overloadedPostUriPrimitiveField = new OJField();
+        overloadedPostUriPrimitiveField.setType(new OJPathName("String"));
+        overloadedPostUriPrimitiveField.setName("tumlOverloadedPostUri");
+        ojEnum.addToFields(overloadedPostUriPrimitiveField);
 
         OJAnnotatedOperation getter = new OJAnnotatedOperation("get"
 				+ StringUtils.capitalize(uriPrimitiveField.getName()), uriPrimitiveField.getType());
 		getter.getBody().addToStatements("return this." + uriPrimitiveField.getName());
 		ojEnum.addToOperations(getter);
 
-        OJAnnotatedOperation transactionalGetter = new OJAnnotatedOperation("get"
-                + StringUtils.capitalize(transactionalUriPrimitiveField.getName()), transactionalUriPrimitiveField.getType());
-        transactionalGetter.getBody().addToStatements("return this." + transactionalUriPrimitiveField.getName());
-        ojEnum.addToOperations(transactionalGetter);
+        OJAnnotatedOperation overloadedPostGetter = new OJAnnotatedOperation("get"
+                + StringUtils.capitalize(overloadedPostUriPrimitiveField.getName()), overloadedPostUriPrimitiveField.getType());
+        overloadedPostGetter.getBody().addToStatements("return this." + overloadedPostUriPrimitiveField.getName());
+        ojEnum.addToOperations(overloadedPostGetter);
 
         OJConstructor constructor = ojEnum.getConstructors().iterator().next();
 		constructor.addParam(uriPrimitiveField.getName(), uriPrimitiveField.getType());
 		constructor.getBody().addToStatements("this." + uriPrimitiveField.getName() + " = " + uriPrimitiveField.getName());
 
         constructor = ojEnum.getConstructors().iterator().next();
-        constructor.addParam(transactionalUriPrimitiveField.getName(), transactionalUriPrimitiveField.getType());
-        constructor.getBody().addToStatements("this." + transactionalUriPrimitiveField.getName() + " = " + transactionalUriPrimitiveField.getName());
+        constructor.addParam(overloadedPostUriPrimitiveField.getName(), overloadedPostUriPrimitiveField.getType());
+        constructor.getBody().addToStatements("this." + overloadedPostUriPrimitiveField.getName() + " = " + overloadedPostUriPrimitiveField.getName());
 
         @SuppressWarnings("unchecked")
 		List<Class> result = (List<Class>) TumlModelOperations.findElements(model, new Condition() {
@@ -95,7 +95,7 @@ public class AddUriToRootRuntimePropertyEnum extends BaseVisitor implements Visi
             String transactionalUri;
             if (clazz != null) {
                 String contextPath = ModelLoader.INSTANCE.getModel().getName();
-                transactionalUri = "\"/" + contextPath + "/transactional/{transactionUid}/" + TumlClassOperations.getPathName(clazz).getLast().toLowerCase() + "s\"";
+                transactionalUri = "\"/" + contextPath + "/overloadedpost/" + TumlClassOperations.getPathName(clazz).getLast().toLowerCase() + "s\"";
             } else {
                 transactionalUri = "\"/" + model.getName() + "\"";
             }
@@ -109,7 +109,7 @@ public class AddUriToRootRuntimePropertyEnum extends BaseVisitor implements Visi
             OJField transactionalUriAttribute = new OJField();
             transactionalUriAttribute.setType(new OJPathName("String"));
             transactionalUriAttribute.setInitExp(transactionalUri);
-            transactionalUriAttribute.setName("tumlTransactionalUri");
+            transactionalUriAttribute.setName("tumlOverloadedPostUri");
             literal.addToAttributeValues(transactionalUriAttribute);
 
             OJField jsonField = literal.findAttributeValue("json");
@@ -122,7 +122,7 @@ public class AddUriToRootRuntimePropertyEnum extends BaseVisitor implements Visi
 			jsonField.setInitExp(initExp);
 
             sb = new StringBuilder();
-            sb.append(", \\\"tumlTransactionalUri\\\": \\");
+            sb.append(", \\\"tumlOverloadedPostUri\\\": \\");
             sb.append(transactionalUri.substring(0, transactionalUri.length() - 1) + "\\\"");
             initExp = jsonField.getInitExp();
             indexOf = initExp.indexOf("}");

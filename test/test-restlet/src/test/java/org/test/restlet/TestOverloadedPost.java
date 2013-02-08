@@ -14,10 +14,12 @@ import org.tuml.restlet.RootServerResource;
 import org.tuml.restlet.client.json.*;
 import org.tuml.restlet.test.BaseRestletTest;
 import org.tuml.runtime.restlet.TumlTransactionServerResource;
+import org.tuml.test.restlet.Human_human_hand_Hand_OverloadedPost_ServerResource;
 import org.tuml.test.restlet.Human_human_hand_Hand_ServerResource;
 import org.tuml.test.restlet.HumansServerResource;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -87,51 +89,45 @@ public class TestOverloadedPost extends BaseRestletTest {
         Assert.assertNotNull(metaHand);
 
         //Get the human's id
-        PropertyJson propertyJsonId = humanJson.get("id");
-        String handTransactionalUri = metaHand.getTumlTransactionalUri().replace("{humanId}", Integer.toString((Integer) propertyJsonId.getValue()));
+        PropertyJson humanId = humanJson.get("id");
 
-        String handUri = metaHand.getTumlUri().replace("{humanId}", Integer.toString((Integer) propertyJsonId.getValue()));
+        String handUri = metaHand.getTumlUri().replace("{humanId}", Integer.toString((Integer) humanId.getValue()));
         Human_human_hand_Hand_ServerResource humanHumanHandHandServerResource = service.getChild(handUri, Human_human_hand_Hand_ServerResource.class);
-        DataJson dataJson1 = new RootJson(humanHumanHandHandServerResource.get().getText()).getDataAndMetas().get(0).getDataJson();
-        Assert.assertEquals(2, dataJson1.count());
-
-        //Create a new hand
-        PropertyJson leftHandPropertyJson = new PropertyJson("name", "SpecialLeftHand");
-        ObjectJson newHandObjectJson = new ObjectJson(Arrays.asList(leftHandPropertyJson));
-
-
-
-
-
-
-
-
-
-
-
-
-
-        RootJson handsRoot = new RootJson(postResult);
-        DataJson hands = handsRoot.getDataAndMetas().get(0).getDataJson();
-        Assert.assertEquals(3, hands.count());
-
-        //Delete an old hand
-        //This causes  Internal Connector Error (1002) - The calling thread timed out while waiting for a response to unblock it.
-        //Something to do with server and client in same vm
-//        PropertyJson oldHandPropertyJson = new PropertyJson("id", oldHandId);
-//        ObjectJson oldHandObjectJson = new ObjectJson(Arrays.asList(oldHandPropertyJson));
-//        transactionalHuman_human_hand_hand_serverResource = service.getChild(handTransactionalUri, Transaction_Human_human_hand_Hand_ServerResource.class);
-//        Representation deleteRepresentation1 = transactionalHuman_human_hand_hand_serverResource.delete(new StringRepresentation(oldHandObjectJson.toJson()));
-//        String deleteResult = postRepresentation1.getText();
-
-        handsRoot = new RootJson(postResult);
-        hands = handsRoot.getDataAndMetas().get(0).getDataJson();
+        DataJson hands = new RootJson(humanHumanHandHandServerResource.get().getText()).getDataAndMetas().get(0).getDataJson();
         Assert.assertEquals(2, hands.count());
 
-        //Commit the transaction
-        representation = transactionServerResource.put(new StringRepresentation("{\"" + TumlTransactionServerResource.COMMIT + "\": true}"));
-        String result = representation.getText();
-        Assert.assertEquals(TumlTransactionServerResource.COMMITTED, result);
+        //Create a new hand
+        PropertyJson handNamePropertyJson = new PropertyJson("name", "SpecialLeftHand");
+        PropertyJson handTestUnlimitedNaturalPropertyJson = new PropertyJson("testUnlimitedNatural", 1000000000000L);
+        PropertyJson handTestNumberPropertyJson = new PropertyJson("testNumber", 54);
+        ObjectJson newHandObjectJson = new ObjectJson(Arrays.asList(handNamePropertyJson, handTestUnlimitedNaturalPropertyJson, handTestNumberPropertyJson));
+
+        List<ObjectJson> objectJsonList = new ArrayList<ObjectJson>();
+        objectJsonList.add(newHandObjectJson);
+        DataJson newHandsDataJson = DataJson.createDataJsonFromObjectJsons(objectJsonList);
+        newHandsDataJson.moveToInsert();
+
+        //Delete a hand
+        ObjectJson handToDeleteObjectJson = hands.getObjects().get(0);
+        String deletedHandName = (String) handToDeleteObjectJson.get("name").getValue();
+        newHandsDataJson.setObjects(Arrays.asList(handToDeleteObjectJson));
+        newHandsDataJson.moveToDelete();
+
+        String handOverloadedPostUri = metaHand.getTumlOverloadedPostUri().replace("{humanId}", Integer.toString((Integer) humanId.getValue()));
+        Human_human_hand_Hand_OverloadedPost_ServerResource human_human_hand_hand_overloadedPost_serverResource = service.getChild(handOverloadedPostUri, Human_human_hand_Hand_OverloadedPost_ServerResource.class);
+
+        Representation overloadedPostRepresentation = human_human_hand_hand_overloadedPost_serverResource.post(new StringRepresentation(newHandsDataJson.toJson()));
+        String result = overloadedPostRepresentation.getText();
+        RootJson handsResult = new RootJson(result);
+        DataJson resultHandsDataJson = handsResult.getDataAndMetas().get(0).getDataJson();
+        Assert.assertEquals(2, resultHandsDataJson.getObjects().size());
+
+        ObjectJson hand1 = resultHandsDataJson.getObjects().get(0);
+        ObjectJson hand2 = resultHandsDataJson.getObjects().get(1);
+
+        Assert.assertTrue(hand1.get("name").getValue().equals("SpecialLeftHand") || hand2.get("name").getValue().equals("SpecialLeftHand"));
+        Assert.assertTrue(!hand1.get("name").getValue().equals(deletedHandName) && !hand2.get("name").getValue().equals(deletedHandName));
+
     }
 
     @Override

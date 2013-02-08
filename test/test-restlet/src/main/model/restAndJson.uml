@@ -33,7 +33,7 @@
               <general xmi:type="uml:Class" href="tuml-lib.uml#_FAMz0CXHEeKbPYSfIbmXag"/>
             </generalization>
             <ownedAttribute xmi:id="_-ufDYN4jEeGdB9TPHp60mw" name="finger" visibility="public" type="_4sr5AN4jEeGdB9TPHp60mw" isOrdered="true" aggregation="composite" association="_-uo0YN4jEeGdB9TPHp60mw">
-              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_-ufDYt4jEeGdB9TPHp60mw" name="" value="2"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_-ufDYt4jEeGdB9TPHp60mw" name=""/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_-ufDYd4jEeGdB9TPHp60mw" name="" value="5"/>
             </ownedAttribute>
             <ownedAttribute xmi:id="_Dg0J8N4kEeGdB9TPHp60mw" name="name" visibility="public">
