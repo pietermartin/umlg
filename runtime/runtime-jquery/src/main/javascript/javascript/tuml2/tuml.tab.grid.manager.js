@@ -755,7 +755,7 @@
                         for (var i = 0; i < metaForData.metaForData.properties.length; i++) {
                             var property = metaForData.metaForData.properties[i];
                             if (property.name == columnId) {
-                                if (property.dataTypeEnum !== undefined) {
+                                if (property.dataTypeEnum != null && property.dataTypeEnum !== undefined) {
                                     if (property.dataTypeEnum == 'Date') {
                                         if (item[c.field] == null || item[c.field].indexOf(columnFilters[columnId]) == -1) {
                                             return false;

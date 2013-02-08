@@ -13,7 +13,7 @@ function selectFormatter(property) {
         return new TumlSlick.Formatters.Link;
     } else if (property.name == 'id') {
         return TumlSlick.Formatters.Id;
-    } else if (property.dataTypeEnum !== undefined) {
+    } else if (property.dataTypeEnum !=null && property.dataTypeEnum !== undefined) {
         return null;
     } else if (property.lower > 0 && (property.oneEnumeration || property.manyEnumeration)) {
         return  TumlSlick.Formatters.TumlRequired;

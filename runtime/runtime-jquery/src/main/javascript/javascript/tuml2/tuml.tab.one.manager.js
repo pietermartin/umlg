@@ -200,7 +200,7 @@
                         } else if (property.fieldType == 'Boolean') {
                             dataToSend[property.name] = $('#' + property.name + self.metaForData.name + 'Id').attr("checked") == "checked";
                         }
-                    } else if (property.dataTypeEnum !== undefined) {
+                    } else if (property.dataTypeEnum !== null && property.dataTypeEnum !== undefined) {
                         if (property.dataTypeEnum == 'DateTime') {
                             dataToSend[property.name] = $('#' + property.name + self.metaForData.name + 'Id').val().replace(/ /g, "T");
                         } else if (property.dataTypeEnum == 'Image') {
@@ -321,7 +321,7 @@
                     });
                 }
                 if ($input !== undefined) {
-                    if (property.dataTypeEnum !== undefined) {
+                    if (property.dataTypeEnum != null && property.dataTypeEnum !== undefined) {
                         if (property.dataTypeEnum == 'Date') {
                             $input.datepicker({
                                 showOn:"button",
@@ -399,7 +399,7 @@
             } else {
                 $input = $('<p />');
             }
-        } else if (property.dataTypeEnum !== undefined) {
+        } else if (property.dataTypeEnum != null && property.dataTypeEnum !== undefined) {
             if (property.dataTypeEnum == 'Date' || property.dataTypeEnum == 'Time' || property.dataTypeEnum == 'DateTime' || property.dataTypeEnum == 'InternationalPhoneNumber' || property.dataTypeEnum == 'LocalPhoneNumber' || property.dataTypeEnum == 'Email') {
                 $input = $("<input />", {type:'text', id:property.name + this.metaForData.name + 'Id', name:property.name});
             } else if (property.dataTypeEnum == 'Video') {
