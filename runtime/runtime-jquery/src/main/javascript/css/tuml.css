@@ -1,6 +1,12 @@
 /*tabs*/
-#tabs { margin-top: 1em; }
-#tabs li .ui-icon-close { float: left; margin: 0.4em 0.2em 0 0; cursor: pointer; }
+#tabs {
+    /*float: left;*/
+    margin-top: 5px;
+}
+
+#tabs li .ui-icon-close {
+    float: left; margin: 0.2em 0.2em 0 0; cursor: pointer;
+}
 
 /*Accordion*/
 .ui-accordion .ui-accordion-content {
@@ -315,8 +321,21 @@
 
 .ui-layout-center-heading {
     background-color: #DDDDDD;
-    margin-bottom: 5px;
+    height: 20px;
+}
+
+#navigation-qualified-name {
+    float: left;
     line-height:20px;
+}
+
+#validation-warning {
+    width: 50%;
+    margin: 0px auto;
+    text-align: center;
+    padding-top: 5px;
+    color: #006400;
+    font: bold;
 }
 
 .ui-left-menu-query-li {

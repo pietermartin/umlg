@@ -49,7 +49,7 @@
             $('<div />', {id:'pagerQueryResultsDiv' + this.gridDivName, style:'width:auto;height:20px;'}).appendTo(outerDivForResults);
 
             $('#contextMenu' + this.gridDivName).remove();
-            this.createGrid(result.data, this.metaForData, -1);
+            this.createGrid(result.data/*, this.metaForData*/, -1);
         };
 
         this.instantiateGrid = function () {
@@ -123,7 +123,7 @@
             $('<div id="myGridManyComponent' + this.metaForData.name + '" style="width:auto;height:90%;"></div>').appendTo(tabDiv);
             $('<div id="pagerManyComponent' + this.metaForData.name + '" style="width:auto;height:20px;"></div>').appendTo(tabDiv);
             $('#contextMenu' + this.metaForData.name).remove();
-            this.createGrid(result.data, this.metaForData, tumlUri, false);
+            this.createGrid(result.data/*, this.metaForData*/, tumlUri, false);
         };
 
         this.instantiateGrid = function () {
@@ -217,7 +217,7 @@
             $('<div id="myGridLookup' + this.metaForData.name + '" style="width:auto;height:90%;"></div>').appendTo(tabDiv);
             $('<div id="pagerLookup' + this.metaForData.name + '" style="width:auto;height:20px;"></div>').appendTo(tabDiv);
             $('#contextMenu' + this.metaForData.name).remove();
-            this.createGrid(result.data, this.metaForData, tumlUri, false);
+            this.createGrid(result.data/*, this.metaForData*/, tumlUri, false);
         };
 
         this.instantiateGrid = function () {
@@ -325,101 +325,103 @@
 
             var $saveButton = $('<button />').text('Save').click(function () {
                 if (self.grid.getEditorLock().commitCurrentEdit()) {
-                    //put updated items
-                    if (self.dataView.getUpdatedItems().length !== 0 && self.dataView.getNewItems().length == 0 && self.dataView.getDeletedItems().length == 0) {
-                        $.ajax({
-                            url:tumlUri,
-                            type:"PUT",
-                            dataType:"json",
-                            contentType:"json",
-                            data:JSON.stringify(self.dataView.getUpdatedItems()),
-                            success:function (data, textStatus, jqXHR) {
-                                self.onPutSuccess.notify({tumlUri:tumlUri + '_' + self.localMetaForData.name, tabId:self.localMetaForData.name, data:data}, null, self);
-                            },
-                            error:function (jqXHR, textStatus, errorThrown) {
-                                $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-                                self.onPutFailure.notify({tumlUri:tumlUri, tabId:self.localMetaForData.name}, null, self);
-                            }
-                        });
-                    }
-                    //post new items
-                    if (self.dataView.getNewItems().length !== 0 && self.dataView.getUpdatedItems().length == 0 && self.dataView.getDeletedItems().length == 0) {
-                        var validationResults = self.validateNewItems(self.dataView.getNewItems());
-                        if (validationResults.length == 0) {
+                    if (self.validateMultiplicity()) {
+                        //put updated items
+                        if (self.dataView.getUpdatedItems().length !== 0 && self.dataView.getNewItems().length == 0 && self.dataView.getDeletedItems().length == 0) {
                             $.ajax({
                                 url:tumlUri,
-                                type:"POST",
+                                type:"PUT",
                                 dataType:"json",
                                 contentType:"json",
-                                data:JSON.stringify(self.dataView.getNewItems()),
+                                data:JSON.stringify(self.dataView.getUpdatedItems()),
                                 success:function (data, textStatus, jqXHR) {
-                                    self.onPostSuccess.notify({tumlUri:tumlUri, tabId:self.localMetaForData.name, data:data}, null, self);
+                                    self.onPutSuccess.notify({tumlUri:tumlUri + '_' + self.localMetaForData.name, tabId:self.localMetaForData.name, data:data}, null, self);
                                 },
                                 error:function (jqXHR, textStatus, errorThrown) {
                                     $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-                                    self.onPostFailure.notify({tumlUri:tumlUri, tabId:self.localMetaForData.name}, null, self);
+                                    self.onPutFailure.notify({tumlUri:tumlUri, tabId:self.localMetaForData.name}, null, self);
                                 }
                             });
-                        } else {
-                            var errorMsg = '\n';
-                            for (var i = 0; i < validationResults.length; i++) {
-                                errorMsg += validationResults[i].msg + '\n';
+                        }
+                        //post new items
+                        if (self.dataView.getNewItems().length !== 0 && self.dataView.getUpdatedItems().length == 0 && self.dataView.getDeletedItems().length == 0) {
+                            var validationResults = self.validateNewItems(self.dataView.getNewItems());
+                            if (validationResults.length == 0) {
+                                $.ajax({
+                                    url:tumlUri,
+                                    type:"POST",
+                                    dataType:"json",
+                                    contentType:"json",
+                                    data:JSON.stringify(self.dataView.getNewItems()),
+                                    success:function (data, textStatus, jqXHR) {
+                                        self.onPostSuccess.notify({tumlUri:tumlUri, tabId:self.localMetaForData.name, data:data}, null, self);
+                                    },
+                                    error:function (jqXHR, textStatus, errorThrown) {
+                                        $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
+                                        self.onPostFailure.notify({tumlUri:tumlUri, tabId:self.localMetaForData.name}, null, self);
+                                    }
+                                });
+                            } else {
+                                var errorMsg = '\n';
+                                for (var i = 0; i < validationResults.length; i++) {
+                                    errorMsg += validationResults[i].msg + '\n';
+                                }
+                                alert('There are validation errors: ' + errorMsg);
                             }
-                            alert('There are validation errors: ' + errorMsg);
                         }
-                    }
-                    //delete new items
-                    if (self.dataView.getDeletedItems().length !== 0 && self.dataView.getNewItems().length == 0 && self.dataView.getUpdatedItems().length == 0) {
-                        $.ajax({
-                            url:tumlUri,
-                            type:"DELETE",
-                            dataType:"json",
-                            contentType:"json",
-                            data:JSON.stringify(self.dataView.getDeletedItems()),
-                            success:function (data, textStatus, jqXHR) {
-                                self.onDeleteSuccess.notify({tumlUri:tumlUri, tabId:self.localMetaForData.name, data:data}, null, self);
-                            },
-                            error:function (jqXHR, textStatus, errorThrown) {
-                                $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-                                self.onDeleteFailure.notify({tumlUri:tumlUri, tabId:self.localMetaForData.name}, null, self);
+                        //delete new items
+                        if (self.dataView.getDeletedItems().length !== 0 && self.dataView.getNewItems().length == 0 && self.dataView.getUpdatedItems().length == 0) {
+                            $.ajax({
+                                url:tumlUri,
+                                type:"DELETE",
+                                dataType:"json",
+                                contentType:"json",
+                                data:JSON.stringify(self.dataView.getDeletedItems()),
+                                success:function (data, textStatus, jqXHR) {
+                                    self.onDeleteSuccess.notify({tumlUri:tumlUri, tabId:self.localMetaForData.name, data:data}, null, self);
+                                },
+                                error:function (jqXHR, textStatus, errorThrown) {
+                                    $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
+                                    self.onDeleteFailure.notify({tumlUri:tumlUri, tabId:self.localMetaForData.name}, null, self);
+                                }
+                            });
+                        }
+                        if ((self.dataView.getUpdatedItems().length != 0 && self.dataView.getNewItems().length != 0) ||
+                            (self.dataView.getUpdatedItems().length != 0 && self.dataView.getDeletedItems().length != 0) ||
+                            (self.dataView.getNewItems().length != 0 && self.dataView.getDeletedItems().length != 0)) {
+
+                            //TODO This is hack, should use the tumlOverloadedPost from the metadata
+                            var indexOf = tumlUri.indexOf("/", 1);
+                            var a = tumlUri.substring(0, indexOf + 1);
+                            var b = tumlUri.substr(indexOf);
+                            var overloadedPost = a + 'overloadedpost' + b;
+
+                            var overloadedPostData = {};
+                            if (self.dataView.getUpdatedItems().length > 0) {
+                                overloadedPostData['update'] = self.dataView.getUpdatedItems();
                             }
-                        });
-                    }
-                    if ((self.dataView.getUpdatedItems().length != 0 && self.dataView.getNewItems().length != 0) ||
-                        (self.dataView.getUpdatedItems().length != 0 && self.dataView.getDeletedItems().length != 0) ||
-                        (self.dataView.getNewItems().length != 0 && self.dataView.getDeletedItems().length != 0)) {
-
-                        //TODO This is hack, should use the tumlOverloadedPost from the metadata
-                        var indexOf = tumlUri.indexOf("/", 1);
-                        var a = tumlUri.substring(0, indexOf + 1);
-                        var b = tumlUri.substr(indexOf);
-                        var overloadedPost = a + 'overloadedpost' + b;
-
-                        var overloadedPostData = {};
-                        if (self.dataView.getUpdatedItems().length > 0) {
-                            overloadedPostData['update'] = self.dataView.getUpdatedItems();
-                        }
-                        if (self.dataView.getNewItems().length > 0) {
-                            overloadedPostData['insert'] = self.dataView.getNewItems();
-                        }
-                        if (self.dataView.getDeletedItems().length > 0) {
-                            overloadedPostData['delete'] = self.dataView.getDeletedItems();
-                        }
-                        $.ajax({
-                            url:overloadedPost,
-                            type:"POST",
-                            dataType:"json",
-                            contentType:"json",
-                            data:JSON.stringify(overloadedPostData),
-                            success:function (data, textStatus, jqXHR) {
-                                self.onDeleteSuccess.notify({tumlUri:tumlUri, tabId:self.localMetaForData.name, data:data}, null, self);
-                            },
-                            error:function (jqXHR, textStatus, errorThrown) {
-                                $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-                                self.onDeleteFailure.notify({tumlUri:tumlUri, tabId:self.localMetaForData.name}, null, self);
+                            if (self.dataView.getNewItems().length > 0) {
+                                overloadedPostData['insert'] = self.dataView.getNewItems();
                             }
-                        });
+                            if (self.dataView.getDeletedItems().length > 0) {
+                                overloadedPostData['delete'] = self.dataView.getDeletedItems();
+                            }
+                            $.ajax({
+                                url:overloadedPost,
+                                type:"POST",
+                                dataType:"json",
+                                contentType:"json",
+                                data:JSON.stringify(overloadedPostData),
+                                success:function (data, textStatus, jqXHR) {
+                                    self.onDeleteSuccess.notify({tumlUri:tumlUri, tabId:self.localMetaForData.name, data:data}, null, self);
+                                },
+                                error:function (jqXHR, textStatus, errorThrown) {
+                                    $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
+                                    self.onDeleteFailure.notify({tumlUri:tumlUri, tabId:self.localMetaForData.name}, null, self);
+                                }
+                            });
 
+                        }
                     }
                 } else {
                     alert("Commit failed on current active cell!");
@@ -488,7 +490,7 @@
             $('<div />', {id:'pager' + this.metaForData.name, style:'width:auto;height:20px;'}).appendTo(tabDiv);
 
             $('#contextMenu' + this.metaForData.name).remove();
-            this.createGrid(result.data, this.metaForData, tumlUri, false);
+            this.createGrid(result.data/*, this.metaForData*/, tumlUri, false);
 
         };
 
@@ -512,7 +514,17 @@
             return validationResults;
         };
 
-        this.createGrid = function (data, localMetaForData, tumlUri) {
+        this.validateMultiplicity = function () {
+            if (self.dataView.getItems().length < self.propertyNavigatingTo.lower || (self.propertyNavigatingTo.upper !== -1 && self.dataView.getItems().length > self.propertyNavigatingTo.upper)) {
+                alert('multiplicity falls outside the valid range [' + self.propertyNavigatingTo.lower + '..' + self.propertyNavigatingTo.upper + ']');
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+
+        this.createGrid = function (data /*, localMetaForData*/, tumlUri) {
             var columnFilters = {};
             var lookupColumns;
             var self = this;
@@ -523,7 +535,7 @@
             } else {
                 this.contextVertexId = -1;
             }
-            this.localMetaForData = localMetaForData;
+            this.localMetaForData = this.metaForData;
 
             this.setupColumns();
 
@@ -577,6 +589,7 @@
                 } else {
                     var item = this.dataView.getItem(row);
                     self.dataView.deleteItem(item.id);
+                    updateValidationWarningHeader();
                 }
             });
 
@@ -588,6 +601,7 @@
                     var item = self.dataView.getItem(args.row);
                     self.dataView.deleteItem(item.id);
                     e.stopImmediatePropagation();
+                    updateValidationWarningHeader();
                 } else if (column.name == 'uri') {
                     var item = self.dataView.getItem(args.row);
                     var uri = item.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), item.id);
@@ -733,6 +747,16 @@
                     }
                 });
                 this.dataView.addItem($.extend($newItem, args.item));
+
+                updateValidationWarningHeader();
+            }
+
+            function updateValidationWarningHeader() {
+                $('#validation-warning').children().remove();
+                if (self.dataView.getItems().length < self.propertyNavigatingTo.lower || (self.propertyNavigatingTo.upper !== -1 && self.dataView.getItems().length > self.propertyNavigatingTo.upper)) {
+                    $('#validation-warning').append($('<span />').text(
+                        'multiplicity falls outside the valid range [' + self.propertyNavigatingTo.lower + '..' + self.propertyNavigatingTo.upper + ']'));
+                }
             }
 
             function isCellEditable(row, cell, item) {

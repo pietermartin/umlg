@@ -137,4 +137,5 @@ public class TestNeo4jBlueprints {
         iterator.next();
         Assert.assertFalse(iterator.hasNext());
     }
+
 }

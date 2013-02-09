@@ -10,14 +10,10 @@
 
         var self = this;
 
-        function init() {
-        }
-
         function refresh(name, uri, contextVertexId) {
             //build context path to root
             if (name === 'Root') {
                 createContextPath([{name: 'Root', uri: uri}]);
-//                updateContextHeading('Root', 0);
             } else {
                 var replacedUri = uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
                 var pathToCompositeRootUri = replacedUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId) + '/compositePathToRoot';
@@ -28,7 +24,6 @@
                     contentType: "json",
                     success: function(response, textStatus, jqXHR) {
                         createContextPath(response.data);
-//                        updateContextHeading(name, contextVertexId, replacedUri);
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         alert('Error creating context path. textStatus: ' + textStatus + ' errorThrown: ' + errorThrown);
@@ -36,21 +31,6 @@
                 });
             }
         }
-
-//        function updateContextHeading(name, id, url) {
-//            $('#contextHeading').remove();
-//            var contextHeadingDiv = $('<div />', {id: "contextHeading"}).appendTo('.ui-layout-north');
-//            var b = $('<b data=' + url + ' class="contextHeadingB"/>').appendTo(contextHeadingDiv);
-//            var a = $('<a />', {href: url, text: name + '[' + id + ']', title: name + '[' + id + ']', click :
-//                function(e) {
-//                    var url = $.data(e.target).data;
-//                    self.onClickContextMenu.notify({uri: url, name: "unused"}, null, self);
-//                    return false;
-//                }
-//            });
-//            a.data('data', url);
-//            a.appendTo(b);
-//        }
 
         function createContextPath(data) {
             $('#contextRoot').remove();
@@ -83,7 +63,6 @@
             "refresh": refresh
         });
 
-        init();
     }
 
 })(jQuery);

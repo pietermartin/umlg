@@ -22,7 +22,7 @@
             <groupId>org.tuml</groupId>
             <artifactId>tuml-test-blueprints-tests</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-            <classifier>tests</classifier>
+            <!--<classifier>tests</classifier>-->
             <scope>test</scope>
         </dependency>
     </dependencies>

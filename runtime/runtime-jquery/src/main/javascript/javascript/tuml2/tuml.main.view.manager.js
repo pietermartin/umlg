@@ -97,8 +97,8 @@
 
             tabContainer.tabs("option", "active", 0);
 
-            $('#ui-layout-center-heading').children().remove();
-            $('#ui-layout-center-heading').append($('<span />').text(qualifiedName));
+            $('#navigation-qualified-name').children().remove();
+            $('#navigation-qualified-name').append($('<span />').text(qualifiedName));
             $('body').layout().resizeAll();
         }
 

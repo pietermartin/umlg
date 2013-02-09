@@ -155,27 +155,21 @@
             var qualifiedName = result[0].meta.qualifiedName;
             var metaDataNavigatingTo = result[0].meta.to;
             var metaDataNavigatingFrom = result[0].meta.from;
-            //var properties = metaDataNavigatingTo.properties;
             var propertyNavigatingTo = (metaDataNavigatingFrom == undefined ? null : findPropertyNavigatingTo(qualifiedName, metaDataNavigatingFrom));
             if (propertyNavigatingTo != null && (propertyNavigatingTo.oneToMany || propertyNavigatingTo.manyToMany)) {
                 //Property is a many
-                var contextMetaData = result[0].meta.to;
                 return {name:metaDataNavigatingFrom.name, uri:metaDataNavigatingFrom.uri, contextVertexId:urlId};
             } else {
                 //Property is a one
+                //This is to check if there is data, if not it is a creation and the context remains that of the parent
                 for (var i = 0; i < result.length; i++) {
                     var response = result[i];
+                    //There are many data(s) to cater for the multiple concrete types, as its a one take the first one
                     if (response.data.length > 0) {
-                        qualifiedName = response.meta.qualifiedName;
-                        var contextMetaData = response.meta.to;
-                        return {name:contextMetaData.name, uri:contextMetaData.uri, contextVertexId:response.data[0].id};
+                        return {name:metaDataNavigatingTo.name, uri:metaDataNavigatingTo.uri, contextVertexId:response.data[0].id};
                     }
                 }
-                var response = result[0];
-                //If there is no data then the context remains that of the parent
-                qualifiedName = response.meta.qualifiedName;
-                var contextMetaData = response.meta.from;
-                return {name:contextMetaData.name, uri:contextMetaData.uri, contextVertexId:urlId};
+                return {name:metaDataNavigatingFrom.name, uri:metaDataNavigatingFrom.uri, contextVertexId:urlId};
             }
         }
 
