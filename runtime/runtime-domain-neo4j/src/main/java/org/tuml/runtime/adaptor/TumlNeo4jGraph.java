@@ -83,8 +83,8 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
         Set<Edge> result = new HashSet<Edge>(dynaRel.size());
         Iterable<Relationship> relationships = n1.getRelationships(dynaRel.toArray(new DynamicRelationshipType[]{}));
         for (Relationship relationship : relationships) {
-            if ((relationship.getStartNode().equals(n1) && relationship.getEndNode().equals(n2))
-                    || (relationship.getStartNode().equals(n2) && relationship.getEndNode().equals(n1))) {
+            if ((/*relationship.getStartNode().equals(n1) && */relationship.getEndNode().equals(n2))
+                    || (relationship.getStartNode().equals(n2) /*&& relationship.getEndNode().equals(n1)*/)) {
 
                 result.add(this.getEdge(relationship.getId()));
             }

@@ -12,6 +12,8 @@ public class TumlRestletGenerationUtil {
 
     public final static String classQueryQualifiedName = "tumllib::org::tuml::meta::ClassQuery";
     public final static String instanceQueryQualifiedName = "tumllib::org::tuml::query::InstanceQuery";
+    public final static OJPathName TumlExceptionUtilFactory = new OJPathName("org.tuml.runtime.adaptor.TumlExceptionUtilFactory");
+    public final static OJPathName ErrorStatusService = new OJPathName("org.tuml.runtime.restlet.ErrorStatusService");
     public final static OJPathName FieldType = new OJPathName("org.tuml.runtime.restlet.FieldType");
     public final static OJPathName Get = new OJPathName("org.restlet.resource.Get");
     public final static OJPathName Put = new OJPathName("org.restlet.resource.Put");

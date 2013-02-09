@@ -29,357 +29,368 @@ import org.tuml.restlet.util.TumlRestletGenerationUtil;
 
 public class RootResourceServerResourceBuilder extends BaseServerResourceBuilder implements Visitor<Class> {
 
-	public RootResourceServerResourceBuilder(Workspace workspace, String sourceDir) {
-		super(workspace, sourceDir);
-	}
+    public RootResourceServerResourceBuilder(Workspace workspace, String sourceDir) {
+        super(workspace, sourceDir);
+    }
 
-	@Override
-	public void visitBefore(Class clazz) {
-		if (!clazz.isAbstract() && !TumlClassOperations.hasCompositeOwner(clazz)) {
+    @Override
+    public void visitBefore(Class clazz) {
+        if (!clazz.isAbstract() && !TumlClassOperations.hasCompositeOwner(clazz)) {
 
-			OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(TumlClassOperations.className(clazz) + "sServerResource");
-			OJPackage ojPackage = new OJPackage(Namer.name(clazz.getNearestPackage()) + ".restlet");
-			annotatedInf.setMyPackage(ojPackage);
-			addToSource(annotatedInf);
+            OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(TumlClassOperations.className(clazz) + "sServerResource");
+            OJPackage ojPackage = new OJPackage(Namer.name(clazz.getNearestPackage()) + ".restlet");
+            annotatedInf.setMyPackage(ojPackage);
+            addToSource(annotatedInf);
 
-			OJAnnotatedClass annotatedClass = new OJAnnotatedClass(TumlClassOperations.className(clazz) + "sServerResourceImpl");
-			annotatedClass.setSuperclass(TumlRestletGenerationUtil.ServerResource);
-			annotatedClass.setMyPackage(ojPackage);
-			annotatedClass.addToImplementedInterfaces(annotatedInf.getPathName());
-			annotatedClass.setVisibility(TumlClassOperations.getVisibility(clazz.getVisibility()));
-			addToSource(annotatedClass);
+            OJAnnotatedClass annotatedClass = new OJAnnotatedClass(TumlClassOperations.className(clazz) + "sServerResourceImpl");
+            annotatedClass.setSuperclass(TumlRestletGenerationUtil.ServerResource);
+            annotatedClass.setMyPackage(ojPackage);
+            annotatedClass.addToImplementedInterfaces(annotatedInf.getPathName());
+            annotatedClass.setVisibility(TumlClassOperations.getVisibility(clazz.getVisibility()));
+            addToSource(annotatedClass);
 
-			addDefaultConstructor(annotatedClass);
-			addGetRootObjectRepresentation(clazz, annotatedInf, annotatedClass);
-			addPutDeleteObjectRepresentation(clazz, annotatedInf, annotatedClass, true);
-			addPutDeleteObjectRepresentation(clazz, annotatedInf, annotatedClass, false);
+            addDefaultConstructor(annotatedClass);
+            addGetRootObjectRepresentation(clazz, annotatedInf, annotatedClass);
+            addPutDeleteObjectRepresentation(clazz, annotatedInf, annotatedClass, true);
+            addPutDeleteObjectRepresentation(clazz, annotatedInf, annotatedClass, false);
 //			addPostRootObjectRepresentation(clazz, annotatedInf, annotatedClass);
-			addPostObjectRepresentation(clazz, annotatedInf, annotatedClass);
-			addToRouterEnum(clazz, annotatedClass);
+            addPostObjectRepresentation(clazz, annotatedInf, annotatedClass);
+            addToRouterEnum(clazz, annotatedClass);
 
-		}
-	}
+        }
+    }
 
-	@Override
-	public void visitAfter(Class clazz) {
-	}
-	
-	private void addPostObjectRepresentation(Classifier concreteClassifier, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass) {
-		OJAnnotatedOperation postInf = new OJAnnotatedOperation("post", TumlRestletGenerationUtil.Representation);
-		postInf.addToParameters(new OJParameter("entity", TumlRestletGenerationUtil.Representation));
-		annotatedInf.addToOperations(postInf);
-		postInf.addAnnotationIfNew(new OJAnnotationValue(TumlRestletGenerationUtil.Post, "json"));
+    @Override
+    public void visitAfter(Class clazz) {
+    }
 
-		OJAnnotatedOperation post = new OJAnnotatedOperation("post", TumlRestletGenerationUtil.Representation);
-		post.addToParameters(new OJParameter("entity", TumlRestletGenerationUtil.Representation));
-		post.addToThrows(TumlRestletGenerationUtil.ResourceException);
-		annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
-		TinkerGenerationUtil.addOverrideAnnotation(post);
-		TinkerGenerationUtil.addSuppressWarning(post);
+    private void addPostObjectRepresentation(Classifier concreteClassifier, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass) {
+        OJAnnotatedOperation postInf = new OJAnnotatedOperation("post", TumlRestletGenerationUtil.Representation);
+        postInf.addToParameters(new OJParameter("entity", TumlRestletGenerationUtil.Representation));
+        annotatedInf.addToOperations(postInf);
+        postInf.addAnnotationIfNew(new OJAnnotationValue(TumlRestletGenerationUtil.Post, "json"));
 
-		OJPathName parentPathName = TumlClassOperations.getPathName(concreteClassifier);
+        OJAnnotatedOperation post = new OJAnnotatedOperation("post", TumlRestletGenerationUtil.Representation);
+        post.addToParameters(new OJParameter("entity", TumlRestletGenerationUtil.Representation));
+        post.addToThrows(TumlRestletGenerationUtil.ResourceException);
+        annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
+        TinkerGenerationUtil.addOverrideAnnotation(post);
+        TinkerGenerationUtil.addSuppressWarning(post);
 
-		OJTryStatement ojTryStatement = new OJTryStatement();
-		OJField mapper = new OJField("mapper", TinkerGenerationUtil.ObjectMapper);
-		mapper.setInitExp("new ObjectMapper()");
-		ojTryStatement.getTryPart().addToLocals(mapper);
-		OJAnnotatedField objectO = new OJAnnotatedField("o", new OJPathName("Object"));
-		objectO.setInitExp("mapper.readValue(entity.getText(), Object.class)");
-		ojTryStatement.getTryPart().addToLocals(objectO);
-		OJIfStatement ifArray = new OJIfStatement("o instanceof ArrayList");
-		OJPathName genericsForArray = new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object");
-		OJField array = new OJField("array", new OJPathName("java.util.ArrayList").addToGenerics(genericsForArray));
-		array.setInitExp("(ArrayList<Map<String, Object>>)o");
-		ifArray.getThenPart().addToLocals(array);
-		ojTryStatement.getTryPart().addToStatements(ifArray);
-		OJForStatement forArray = new OJForStatement("map", new OJPathName("java.util.Map").addToGenerics(new OJPathName("String")).addToGenerics(
-				new OJPathName("Object")), "array");
-		ifArray.addToThenPart(forArray);
-		forArray.getBody().addToStatements("add(map)");
+        OJPathName parentPathName = TumlClassOperations.getPathName(concreteClassifier);
 
-		OJField map = new OJField("map", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object"));
-		map.setInitExp("(Map<String, Object>) o");
-		ifArray.setElsePart(new OJBlock());
-		ifArray.getElsePart().addToLocals(map);
-		ifArray.getElsePart().addToStatements("add(map)");
+        OJTryStatement ojTryStatement = new OJTryStatement();
+        OJField mapper = new OJField("mapper", TinkerGenerationUtil.ObjectMapper);
+        mapper.setInitExp("new ObjectMapper()");
+        ojTryStatement.getTryPart().addToLocals(mapper);
 
-		addPostResource(concreteClassifier, annotatedClass, parentPathName);
+        OJAnnotatedField entityText = new OJAnnotatedField("entityText", "String");
+        entityText.setInitExp("entity.getText()");
+        ojTryStatement.getTryPart().addToLocals(entityText);
 
-		ojTryStatement.getTryPart().addToStatements("GraphDb.getDb().commit()");
-		annotatedClass.addToImports(TinkerGenerationUtil.tinkerConclusionPathName);
+        OJAnnotatedField objectO = new OJAnnotatedField("o", new OJPathName("Object"));
+        objectO.setInitExp("mapper.readValue(" + entityText.getName() + ", Object.class)");
+        ojTryStatement.getTryPart().addToLocals(objectO);
+        OJIfStatement ifArray = new OJIfStatement("o instanceof ArrayList");
+        OJPathName genericsForArray = new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object");
+        OJField array = new OJField("array", new OJPathName("java.util.ArrayList").addToGenerics(genericsForArray));
+        array.setInitExp("(ArrayList<Map<String, Object>>)o");
+        ifArray.getThenPart().addToLocals(array);
+        ojTryStatement.getTryPart().addToStatements(ifArray);
+        OJForStatement forArray = new OJForStatement("map", new OJPathName("java.util.Map").addToGenerics(new OJPathName("String")).addToGenerics(
+                new OJPathName("Object")), "array");
+        ifArray.addToThenPart(forArray);
+        forArray.getBody().addToStatements("add(map)");
 
-		ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
-		ojTryStatement.getCatchPart().addToStatements("GraphDb.getDb().rollback()");
-		ojTryStatement.getCatchPart().addToStatements("throw new RuntimeException(e)");
-		post.getBody().addToStatements(ojTryStatement);
+        OJField map = new OJField("map", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object"));
+        map.setInitExp("(Map<String, Object>) o");
+        ifArray.setElsePart(new OJBlock());
+        ifArray.getElsePart().addToLocals(map);
+        ifArray.getElsePart().addToStatements("add(map)");
 
-		annotatedClass.addToImports(parentPathName);
+        addPostResource(concreteClassifier, annotatedClass, parentPathName);
 
-		post.getBody().addToStatements("return get()");
+        ojTryStatement.getTryPart().addToStatements("GraphDb.getDb().commit()");
+        annotatedClass.addToImports(TinkerGenerationUtil.tinkerConclusionPathName);
 
-		annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
-		annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);
-		annotatedClass.addToOperations(post);
-	}
-	
-	private void addPostResource(Classifier concreteClassifier, OJAnnotatedClass annotatedClass, OJPathName parentPathName) {
-		OJAnnotatedOperation add = new OJAnnotatedOperation("add");
-		add.setVisibility(OJVisibilityKind.PRIVATE);
-		add.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
-		annotatedClass.addToOperations(add);
-		add.getBody().addToStatements(TumlClassOperations.getPathName(concreteClassifier).getLast() + " childResource = new " + TumlClassOperations.getPathName(concreteClassifier).getLast() + "(true)");
-		annotatedClass.addToImports(TumlClassOperations.getPathName(concreteClassifier));
-		add.getBody().addToStatements("childResource.fromJson(propertyMap)");
-	}
+        ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
+        ojTryStatement.getCatchPart().addToStatements("GraphDb.getDb().rollback()");
+        ojTryStatement.getCatchPart().addToStatements(TumlRestletGenerationUtil.TumlExceptionUtilFactory.getLast() + ".getTumlExceptionUtil().handle(e)");
+        annotatedClass.addToImports(TumlRestletGenerationUtil.TumlExceptionUtilFactory);
+        post.getBody().addToStatements(ojTryStatement);
 
-	private void addPutDeleteObjectRepresentation(Classifier classifier, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass, boolean put) {
-		OJAnnotatedOperation putOrDeleteInf = new OJAnnotatedOperation(put ? "put" : "delete", TumlRestletGenerationUtil.Representation);
-		putOrDeleteInf.addToParameters(new OJParameter("entity", TumlRestletGenerationUtil.Representation));
-		annotatedInf.addToOperations(putOrDeleteInf);
-		putOrDeleteInf.addAnnotationIfNew(new OJAnnotationValue(put ? TumlRestletGenerationUtil.Put : TumlRestletGenerationUtil.Delete, "json"));
+        annotatedClass.addToImports(parentPathName);
 
-		OJAnnotatedOperation putOrDelete = new OJAnnotatedOperation(put ? "put" : "delete", TumlRestletGenerationUtil.Representation);
-		putOrDelete.addToParameters(new OJParameter("entity", TumlRestletGenerationUtil.Representation));
-		putOrDelete.addToThrows(TumlRestletGenerationUtil.ResourceException);
-		annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
-		TinkerGenerationUtil.addOverrideAnnotation(putOrDelete);
-		TinkerGenerationUtil.addSuppressWarning(putOrDelete);
+        post.getBody().addToStatements("return get()");
 
-		OJTryStatement ojTryStatement = new OJTryStatement();
-		OJField mapper = new OJField("mapper", TinkerGenerationUtil.ObjectMapper);
-		mapper.setInitExp("new ObjectMapper()");
-		ojTryStatement.getTryPart().addToLocals(mapper);
-		OJAnnotatedField objectO = new OJAnnotatedField("o", new OJPathName("Object"));
-		objectO.setInitExp("mapper.readValue(entity.getText(), Object.class)");
-		ojTryStatement.getTryPart().addToLocals(objectO);
-		OJIfStatement ifArray = new OJIfStatement("o instanceof ArrayList");
-		OJPathName genericsForArray = new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object");
-		OJField array = new OJField("array", new OJPathName("java.util.ArrayList").addToGenerics(genericsForArray));
-		array.setInitExp("(ArrayList<Map<String, Object>>)o");
-		ifArray.getThenPart().addToLocals(array);
-		ojTryStatement.getTryPart().addToStatements(ifArray);
-		OJForStatement forArray = new OJForStatement("map", new OJPathName("java.util.Map").addToGenerics(new OJPathName("String")).addToGenerics(
-				new OJPathName("Object")), "array");
-		ifArray.addToThenPart(forArray);
-		forArray.getBody().addToStatements(put ? "put(map)" : "delete(map)");
+        annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
+        annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);
+        annotatedClass.addToOperations(post);
+    }
 
-		OJField map = new OJField("map", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object"));
-		map.setInitExp("(Map<String, Object>) o");
-		ifArray.setElsePart(new OJBlock());
-		ifArray.getElsePart().addToLocals(map);
-		ifArray.getElsePart().addToStatements(put ? "put(map)" : "delete(map)");
+    private void addPostResource(Classifier concreteClassifier, OJAnnotatedClass annotatedClass, OJPathName parentPathName) {
+        OJAnnotatedOperation add = new OJAnnotatedOperation("add");
+        add.setVisibility(OJVisibilityKind.PRIVATE);
+        add.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
+        annotatedClass.addToOperations(add);
+        add.getBody().addToStatements(TumlClassOperations.getPathName(concreteClassifier).getLast() + " childResource = new " + TumlClassOperations.getPathName(concreteClassifier).getLast() + "(true)");
+        annotatedClass.addToImports(TumlClassOperations.getPathName(concreteClassifier));
+        add.getBody().addToStatements("childResource.fromJson(propertyMap)");
+    }
 
-		OJPathName parentPathName = TumlClassOperations.getPathName(classifier);
+    private void addPutDeleteObjectRepresentation(Classifier classifier, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass, boolean put) {
+        OJAnnotatedOperation putOrDeleteInf = new OJAnnotatedOperation(put ? "put" : "delete", TumlRestletGenerationUtil.Representation);
+        putOrDeleteInf.addToParameters(new OJParameter("entity", TumlRestletGenerationUtil.Representation));
+        annotatedInf.addToOperations(putOrDeleteInf);
+        putOrDeleteInf.addAnnotationIfNew(new OJAnnotationValue(put ? TumlRestletGenerationUtil.Put : TumlRestletGenerationUtil.Delete, "json"));
 
-		if (put) {
-			addPutResource(classifier, annotatedClass, parentPathName);
-		} else {
-			addDeleteResource(classifier, annotatedClass, parentPathName);
-		}
+        OJAnnotatedOperation putOrDelete = new OJAnnotatedOperation(put ? "put" : "delete", TumlRestletGenerationUtil.Representation);
+        putOrDelete.addToParameters(new OJParameter("entity", TumlRestletGenerationUtil.Representation));
+        putOrDelete.addToThrows(TumlRestletGenerationUtil.ResourceException);
+        annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
+        TinkerGenerationUtil.addOverrideAnnotation(putOrDelete);
+        TinkerGenerationUtil.addSuppressWarning(putOrDelete);
 
-		ojTryStatement.getTryPart().addToStatements("GraphDb.getDb().commit()");
-		annotatedClass.addToImports(TinkerGenerationUtil.tinkerConclusionPathName);
+        OJTryStatement ojTryStatement = new OJTryStatement();
+        OJField mapper = new OJField("mapper", TinkerGenerationUtil.ObjectMapper);
+        mapper.setInitExp("new ObjectMapper()");
+        ojTryStatement.getTryPart().addToLocals(mapper);
 
-		ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
-		ojTryStatement.getCatchPart().addToStatements("GraphDb.getDb().rollback()");
-		ojTryStatement.getCatchPart().addToStatements("throw new RuntimeException(e)");
-		putOrDelete.getBody().addToStatements(ojTryStatement);
+        OJAnnotatedField entityText = new OJAnnotatedField("entityText", "String");
+        entityText.setInitExp("entity.getText()");
+        ojTryStatement.getTryPart().addToLocals(entityText);
 
-		annotatedClass.addToImports(parentPathName);
+        OJAnnotatedField objectO = new OJAnnotatedField("o", new OJPathName("Object"));
+        objectO.setInitExp("mapper.readValue(" + entityText.getName() + ", Object.class)");
+        ojTryStatement.getTryPart().addToLocals(objectO);
+        OJIfStatement ifArray = new OJIfStatement("o instanceof ArrayList");
+        OJPathName genericsForArray = new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object");
+        OJField array = new OJField("array", new OJPathName("java.util.ArrayList").addToGenerics(genericsForArray));
+        array.setInitExp("(ArrayList<Map<String, Object>>)o");
+        ifArray.getThenPart().addToLocals(array);
+        ojTryStatement.getTryPart().addToStatements(ifArray);
+        OJForStatement forArray = new OJForStatement("map", new OJPathName("java.util.Map").addToGenerics(new OJPathName("String")).addToGenerics(
+                new OJPathName("Object")), "array");
+        ifArray.addToThenPart(forArray);
+        forArray.getBody().addToStatements(put ? "put(map)" : "delete(map)");
 
-		putOrDelete.getBody().addToStatements("return get()");
+        OJField map = new OJField("map", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object"));
+        map.setInitExp("(Map<String, Object>) o");
+        ifArray.setElsePart(new OJBlock());
+        ifArray.getElsePart().addToLocals(map);
+        ifArray.getElsePart().addToStatements(put ? "put(map)" : "delete(map)");
 
-		annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
-		annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);
-		annotatedClass.addToOperations(putOrDelete);
-	}
+        OJPathName parentPathName = TumlClassOperations.getPathName(classifier);
 
-	private void addPutResource(Classifier classifier, OJAnnotatedClass annotatedClass, OJPathName parentPathName) {
-		OJAnnotatedOperation put = new OJAnnotatedOperation("put");
-		put.setVisibility(OJVisibilityKind.PRIVATE);
-		put.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
-		annotatedClass.addToOperations(put);
-		put.getBody().addToStatements("Integer id = (Integer)propertyMap.get(\"id\")");
-		put.getBody().addToStatements(
-				TumlClassOperations.getPathName(classifier).getLast() + " childResource = GraphDb.getDb().instantiateClassifier(Long.valueOf(id))");
-		annotatedClass.addToImports(TumlClassOperations.getPathName(classifier));
-		put.getBody().addToStatements("childResource.fromJson(propertyMap)");
-	}
+        if (put) {
+            addPutResource(classifier, annotatedClass, parentPathName);
+        } else {
+            addDeleteResource(classifier, annotatedClass, parentPathName);
+        }
 
-	private void addDeleteResource(Classifier classifier, OJAnnotatedClass annotatedClass, OJPathName parentPathName) {
+        ojTryStatement.getTryPart().addToStatements("GraphDb.getDb().commit()");
+        annotatedClass.addToImports(TinkerGenerationUtil.tinkerConclusionPathName);
 
-		OJAnnotatedOperation delete = new OJAnnotatedOperation("delete");
-		delete.setVisibility(OJVisibilityKind.PRIVATE);
-		delete.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
-		annotatedClass.addToOperations(delete);
-		delete.getBody().addToStatements("Integer id = (Integer)propertyMap.get(\"id\")");
-		delete.getBody().addToStatements(
-				TumlClassOperations.getPathName(classifier).getLast() + " childResource = GraphDb.getDb().instantiateClassifier(Long.valueOf(id))");
-		annotatedClass.addToImports(TumlClassOperations.getPathName(classifier));
-		delete.getBody().addToStatements("childResource.delete()");
+        ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
+        ojTryStatement.getCatchPart().addToStatements("GraphDb.getDb().rollback()");
+        ojTryStatement.getCatchPart().addToStatements("throw new RuntimeException(e)");
+        putOrDelete.getBody().addToStatements(ojTryStatement);
 
-	}
+        annotatedClass.addToImports(parentPathName);
 
-	private void addPostRootObjectRepresentation(Class clazz, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass) {
-		OJAnnotatedOperation postInf = new OJAnnotatedOperation("post", TumlRestletGenerationUtil.Representation);
-		postInf.addToParameters(new OJParameter("entity", TumlRestletGenerationUtil.Representation));
-		annotatedInf.addToOperations(postInf);
-		postInf.addAnnotationIfNew(new OJAnnotationValue(TumlRestletGenerationUtil.Post, "json"));
+        putOrDelete.getBody().addToStatements("return get()");
 
-		OJAnnotatedOperation post = new OJAnnotatedOperation("post", TumlRestletGenerationUtil.Representation);
-		post.addToParameters(new OJParameter("entity", TumlRestletGenerationUtil.Representation));
-		post.addToThrows(TumlRestletGenerationUtil.ResourceException);
-		annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
-		TinkerGenerationUtil.addOverrideAnnotation(post);
-		TinkerGenerationUtil.addSuppressWarning(post);
+        annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
+        annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);
+        annotatedClass.addToOperations(putOrDelete);
+    }
 
-		OJTryStatement ojTryStatement = new OJTryStatement();
-		OJField mapper = new OJField("mapper", TinkerGenerationUtil.ObjectMapper);
-		mapper.setInitExp("new ObjectMapper()");
-		ojTryStatement.getTryPart().addToLocals(mapper);
-		OJAnnotatedField objectO = new OJAnnotatedField("o", new OJPathName("Object"));
-		objectO.setInitExp("mapper.readValue(entity.getText(), Object.class)");
-		ojTryStatement.getTryPart().addToLocals(objectO);
-		OJIfStatement ifArray = new OJIfStatement("o instanceof ArrayList");
-		OJPathName genericsForArray = new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object");
-		OJField array = new OJField("array", new OJPathName("java.util.ArrayList").addToGenerics(genericsForArray));
-		array.setInitExp("(ArrayList<Map<String, Object>>)o");
-		ifArray.getThenPart().addToLocals(array);
-		ojTryStatement.getTryPart().addToStatements(ifArray);
-		OJForStatement forArray = new OJForStatement("map", new OJPathName("java.util.Map").addToGenerics(new OJPathName("String")).addToGenerics(
-				new OJPathName("Object")), "array");
-		ifArray.addToThenPart(forArray);
-		OJPathName classPathName = TumlClassOperations.getPathName(clazz);
-		OJField resource = new OJField("resource", classPathName);
-		forArray.getBody().addToLocals(resource);
-		OJIfStatement ifResourceExist = new OJIfStatement("map.get(\"id\") != null");
-		ifResourceExist.addToThenPart("resource = new " + classPathName.getLast() + "(GraphDb.getDb().getVertex(map.get(\"id\")))");
-		ifResourceExist.addToElsePart("resource = new " + classPathName.getLast() + "(true)");
-		forArray.getBody().addToStatements(ifResourceExist);
-		forArray.getBody().addToStatements("resource.fromJson(map)");
+    private void addPutResource(Classifier classifier, OJAnnotatedClass annotatedClass, OJPathName parentPathName) {
+        OJAnnotatedOperation put = new OJAnnotatedOperation("put");
+        put.setVisibility(OJVisibilityKind.PRIVATE);
+        put.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
+        annotatedClass.addToOperations(put);
+        put.getBody().addToStatements("Integer id = (Integer)propertyMap.get(\"id\")");
+        put.getBody().addToStatements(
+                TumlClassOperations.getPathName(classifier).getLast() + " childResource = GraphDb.getDb().instantiateClassifier(Long.valueOf(id))");
+        annotatedClass.addToImports(TumlClassOperations.getPathName(classifier));
+        put.getBody().addToStatements("childResource.fromJson(propertyMap)");
+    }
 
-		OJField map = new OJField("map", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object"));
-		map.setInitExp("(Map<String, Object>) o");
-		ifArray.setElsePart(new OJBlock());
-		ifArray.getElsePart().addToLocals(map);
-		ifArray.getElsePart().addToStatements(classPathName.getLast() + " resource = new " + classPathName.getLast() + "(true)");
-		ifArray.getElsePart().addToStatements("resource.fromJson(map)");
+    private void addDeleteResource(Classifier classifier, OJAnnotatedClass annotatedClass, OJPathName parentPathName) {
 
-		ojTryStatement.getTryPart().addToStatements("GraphDb.getDb().commit()");
-		annotatedClass.addToImports(TinkerGenerationUtil.tinkerConclusionPathName);
+        OJAnnotatedOperation delete = new OJAnnotatedOperation("delete");
+        delete.setVisibility(OJVisibilityKind.PRIVATE);
+        delete.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
+        annotatedClass.addToOperations(delete);
+        delete.getBody().addToStatements("Integer id = (Integer)propertyMap.get(\"id\")");
+        delete.getBody().addToStatements(
+                TumlClassOperations.getPathName(classifier).getLast() + " childResource = GraphDb.getDb().instantiateClassifier(Long.valueOf(id))");
+        annotatedClass.addToImports(TumlClassOperations.getPathName(classifier));
+        delete.getBody().addToStatements("childResource.delete()");
 
-		ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
-		ojTryStatement.getCatchPart().addToStatements("GraphDb.getDb().rollback()");
-		ojTryStatement.getCatchPart().addToStatements("throw new RuntimeException(e)");
-		post.getBody().addToStatements(ojTryStatement);
+    }
 
-		buildToJson(clazz, annotatedClass, post.getBody());
+    private void addPostRootObjectRepresentation(Class clazz, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass) {
+        OJAnnotatedOperation postInf = new OJAnnotatedOperation("post", TumlRestletGenerationUtil.Representation);
+        postInf.addToParameters(new OJParameter("entity", TumlRestletGenerationUtil.Representation));
+        annotatedInf.addToOperations(postInf);
+        postInf.addAnnotationIfNew(new OJAnnotationValue(TumlRestletGenerationUtil.Post, "json"));
 
-		annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
-		annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);
-		annotatedClass.addToOperations(post);
-	}
+        OJAnnotatedOperation post = new OJAnnotatedOperation("post", TumlRestletGenerationUtil.Representation);
+        post.addToParameters(new OJParameter("entity", TumlRestletGenerationUtil.Representation));
+        post.addToThrows(TumlRestletGenerationUtil.ResourceException);
+        annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
+        TinkerGenerationUtil.addOverrideAnnotation(post);
+        TinkerGenerationUtil.addSuppressWarning(post);
 
-	private void buildToJson(Class clazz, OJAnnotatedClass annotatedClass, OJBlock block) {
-		block.addToStatements("StringBuilder json = new StringBuilder()");
-		block.addToStatements("json.append(\"{\\\"data\\\": [\")");
-		block.addToStatements("json.append(ToJsonUtil.toJsonWithoutCompositeParent(Root.INSTANCE.get" + TumlClassOperations.className(clazz) + "()))");
-		annotatedClass.addToImports(TinkerGenerationUtil.ToJsonUtil);
-		block.addToStatements("json.append(\"],\")");
-		block.addToStatements("json.append(\" \\\"meta\\\" : [\")");
-		block.addToStatements("json.append(" + TinkerGenerationUtil.RootRuntimePropertyEnum.getLast() + ".asJson())");
-		annotatedClass.addToImports(TinkerGenerationUtil.RootRuntimePropertyEnum);
-		block.addToStatements("json.append(\", \")");
-		block.addToStatements("json.append(" + TumlClassOperations.propertyEnumName(clazz) + ".asJson())");
-		annotatedClass.addToImports(TumlClassOperations.getPathName(clazz).append(TumlClassOperations.propertyEnumName(clazz)));
-		block.addToStatements("json.append(\"]}\")");
-		block.addToStatements("return new " + TumlRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
-	}
+        OJTryStatement ojTryStatement = new OJTryStatement();
+        OJField mapper = new OJField("mapper", TinkerGenerationUtil.ObjectMapper);
+        mapper.setInitExp("new ObjectMapper()");
+        ojTryStatement.getTryPart().addToLocals(mapper);
+        OJAnnotatedField objectO = new OJAnnotatedField("o", new OJPathName("Object"));
+        objectO.setInitExp("mapper.readValue(entity.getText(), Object.class)");
+        ojTryStatement.getTryPart().addToLocals(objectO);
+        OJIfStatement ifArray = new OJIfStatement("o instanceof ArrayList");
+        OJPathName genericsForArray = new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object");
+        OJField array = new OJField("array", new OJPathName("java.util.ArrayList").addToGenerics(genericsForArray));
+        array.setInitExp("(ArrayList<Map<String, Object>>)o");
+        ifArray.getThenPart().addToLocals(array);
+        ojTryStatement.getTryPart().addToStatements(ifArray);
+        OJForStatement forArray = new OJForStatement("map", new OJPathName("java.util.Map").addToGenerics(new OJPathName("String")).addToGenerics(
+                new OJPathName("Object")), "array");
+        ifArray.addToThenPart(forArray);
+        OJPathName classPathName = TumlClassOperations.getPathName(clazz);
+        OJField resource = new OJField("resource", classPathName);
+        forArray.getBody().addToLocals(resource);
+        OJIfStatement ifResourceExist = new OJIfStatement("map.get(\"id\") != null");
+        ifResourceExist.addToThenPart("resource = new " + classPathName.getLast() + "(GraphDb.getDb().getVertex(map.get(\"id\")))");
+        ifResourceExist.addToElsePart("resource = new " + classPathName.getLast() + "(true)");
+        forArray.getBody().addToStatements(ifResourceExist);
+        forArray.getBody().addToStatements("resource.fromJson(map)");
 
-	private void addGetRootObjectRepresentation(Class clazz, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass) {
-		OJAnnotatedOperation getInf = new OJAnnotatedOperation("get", TumlRestletGenerationUtil.Representation);
-		annotatedInf.addToOperations(getInf);
-		getInf.addAnnotationIfNew(new OJAnnotationValue(TumlRestletGenerationUtil.Get, "json"));
+        OJField map = new OJField("map", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object"));
+        map.setInitExp("(Map<String, Object>) o");
+        ifArray.setElsePart(new OJBlock());
+        ifArray.getElsePart().addToLocals(map);
+        ifArray.getElsePart().addToStatements(classPathName.getLast() + " resource = new " + classPathName.getLast() + "(true)");
+        ifArray.getElsePart().addToStatements("resource.fromJson(map)");
 
-		OJAnnotatedOperation get = new OJAnnotatedOperation("get", TumlRestletGenerationUtil.Representation);
-		get.addToThrows(TumlRestletGenerationUtil.ResourceException);
-		annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
-		TinkerGenerationUtil.addOverrideAnnotation(get);
+        ojTryStatement.getTryPart().addToStatements("GraphDb.getDb().commit()");
+        annotatedClass.addToImports(TinkerGenerationUtil.tinkerConclusionPathName);
 
-		OJField json = new OJField("json", new OJPathName("java.lang.StringBuilder"));
-		json.setInitExp("new StringBuilder()");
-		get.getBody().addToLocals(json);
-		OJField resource = new OJField("resource", new OJPathName("java.util.List").addToGenerics(TumlClassOperations.getPathName(clazz)));
-		resource.setInitExp("Root.INSTANCE.get" + TumlClassOperations.className(clazz) + "()");
-		get.getBody().addToLocals(resource);
-		annotatedClass.addToImports("org.tuml.root.Root");
+        ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
+        ojTryStatement.getCatchPart().addToStatements("GraphDb.getDb().rollback()");
+        ojTryStatement.getCatchPart().addToStatements("throw new RuntimeException(e)");
+        post.getBody().addToStatements(ojTryStatement);
 
-		get.getBody().addToStatements("json.append(\"[\")");
-		Set<Classifier> concreteImplementations = TumlClassOperations.getConcreteImplementations(clazz);
-		int count = 1;
-		for (Classifier classifier : concreteImplementations) {
+        buildToJson(clazz, annotatedClass, post.getBody());
 
-			get.getBody().addToStatements("json.append(\"{\\\"data\\\": [\")");
+        annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
+        annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);
+        annotatedClass.addToOperations(post);
+    }
 
-			if (concreteImplementations.size() > 1) {
-				get.getBody().addToStatements(
-						"json.append(ToJsonUtil.toJson(resource.select(new "
-								+ TinkerGenerationUtil.BooleanExpressionEvaluator.getCopy().addToGenerics(TumlClassOperations.getPathName(clazz)).getLast()
-								+ "() {\n			@Override\n			public Boolean evaluate(" + TumlClassOperations.getPathName(clazz).getLast()
-								+ " e) {\n				return e instanceof " + TumlClassOperations.getPathName(classifier).getLast() + ";\n			}\n		})))");
-				annotatedClass.addToImports(TinkerGenerationUtil.BooleanExpressionEvaluator);
-				annotatedClass.addToImports(TumlClassOperations.getPathName(clazz));
-				annotatedClass.addToImports(TumlClassOperations.getPathName(classifier));
-			} else {
-				get.getBody().addToStatements("json.append(ToJsonUtil.toJson(resource))");
-			}
+    private void buildToJson(Class clazz, OJAnnotatedClass annotatedClass, OJBlock block) {
+        block.addToStatements("StringBuilder json = new StringBuilder()");
+        block.addToStatements("json.append(\"{\\\"data\\\": [\")");
+        block.addToStatements("json.append(ToJsonUtil.toJsonWithoutCompositeParent(Root.INSTANCE.get" + TumlClassOperations.className(clazz) + "()))");
+        annotatedClass.addToImports(TinkerGenerationUtil.ToJsonUtil);
+        block.addToStatements("json.append(\"],\")");
+        block.addToStatements("json.append(\" \\\"meta\\\" : [\")");
+        block.addToStatements("json.append(" + TinkerGenerationUtil.RootRuntimePropertyEnum.getLast() + ".asJson())");
+        annotatedClass.addToImports(TinkerGenerationUtil.RootRuntimePropertyEnum);
+        block.addToStatements("json.append(\", \")");
+        block.addToStatements("json.append(" + TumlClassOperations.propertyEnumName(clazz) + ".asJson())");
+        annotatedClass.addToImports(TumlClassOperations.getPathName(clazz).append(TumlClassOperations.propertyEnumName(clazz)));
+        block.addToStatements("json.append(\"]}\")");
+        block.addToStatements("return new " + TumlRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
+    }
 
-			annotatedClass.addToImports(TinkerGenerationUtil.ToJsonUtil);
+    private void addGetRootObjectRepresentation(Class clazz, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass) {
+        OJAnnotatedOperation getInf = new OJAnnotatedOperation("get", TumlRestletGenerationUtil.Representation);
+        annotatedInf.addToOperations(getInf);
+        getInf.addAnnotationIfNew(new OJAnnotationValue(TumlRestletGenerationUtil.Get, "json"));
 
-			get.getBody().addToStatements("meta", "json.append(\"], \\\"meta\\\": {\")");
+        OJAnnotatedOperation get = new OJAnnotatedOperation("get", TumlRestletGenerationUtil.Representation);
+        get.addToThrows(TumlRestletGenerationUtil.ResourceException);
+        annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
+        TinkerGenerationUtil.addOverrideAnnotation(get);
 
-			get.getBody().addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + clazz.getQualifiedName() + "\\\"\")");
-			get.getBody().addToStatements("json.append(\", \\\"to\\\": \")");
+        OJField json = new OJField("json", new OJPathName("java.lang.StringBuilder"));
+        json.setInitExp("new StringBuilder()");
+        get.getBody().addToLocals(json);
+        OJField resource = new OJField("resource", new OJPathName("java.util.List").addToGenerics(TumlClassOperations.getPathName(clazz)));
+        resource.setInitExp("Root.INSTANCE.get" + TumlClassOperations.className(clazz) + "()");
+        get.getBody().addToLocals(resource);
+        annotatedClass.addToImports("org.tuml.root.Root");
 
-			// Meta data remains for the root object as viewing a many list does
-			// not
-			// change the context
-			get.getBody().addToStatements("json.append(" + TumlClassOperations.propertyEnumName(clazz) + ".asJson())");
-			get.getBody().addToStatements("json.append(\", \\\"from\\\": \")");
-			get.getBody().addToStatements("json.append(" + TinkerGenerationUtil.RootRuntimePropertyEnum.getLast() + ".asJson())");
-			annotatedClass.addToImports(TinkerGenerationUtil.RootRuntimePropertyEnum);
-			annotatedClass.addToImports(TumlClassOperations.getPathName(clazz).append(TumlClassOperations.propertyEnumName(clazz)));
-			if (concreteImplementations.size() != 1 && count++ != concreteImplementations.size()) {
-				get.getBody().addToStatements("json.append(\",\")");
-			}
-		}
-		get.getBody().addToStatements("json.append(\"}}]\")");
-		get.getBody().addToStatements("return new " + TumlRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
+        get.getBody().addToStatements("json.append(\"[\")");
+        Set<Classifier> concreteImplementations = TumlClassOperations.getConcreteImplementations(clazz);
+        int count = 1;
+        for (Classifier classifier : concreteImplementations) {
 
-		annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);
-		annotatedClass.addToOperations(get);
-	}
+            get.getBody().addToStatements("json.append(\"{\\\"data\\\": [\")");
 
-	private void addToRouterEnum(Class clazz, OJAnnotatedClass annotatedClass) {
-		OJEnum routerEnum = (OJEnum) this.workspace.findOJClass("restlet.RestletRouterEnum");
-		OJEnumLiteral ojLiteral = new OJEnumLiteral(TumlClassOperations.className(clazz).toUpperCase() + "S");
+            if (concreteImplementations.size() > 1) {
+                get.getBody().addToStatements(
+                        "json.append(ToJsonUtil.toJson(resource.select(new "
+                                + TinkerGenerationUtil.BooleanExpressionEvaluator.getCopy().addToGenerics(TumlClassOperations.getPathName(clazz)).getLast()
+                                + "() {\n			@Override\n			public Boolean evaluate(" + TumlClassOperations.getPathName(clazz).getLast()
+                                + " e) {\n				return e instanceof " + TumlClassOperations.getPathName(classifier).getLast() + ";\n			}\n		})))");
+                annotatedClass.addToImports(TinkerGenerationUtil.BooleanExpressionEvaluator);
+                annotatedClass.addToImports(TumlClassOperations.getPathName(clazz));
+                annotatedClass.addToImports(TumlClassOperations.getPathName(classifier));
+            } else {
+                get.getBody().addToStatements("json.append(ToJsonUtil.toJson(resource))");
+            }
 
-		OJField uri = new OJField();
-		uri.setType(new OJPathName("String"));
-		uri.setInitExp("\"/" + TumlClassOperations.className(clazz).toLowerCase() + "s\"");
-		ojLiteral.addToAttributeValues(uri);
+            annotatedClass.addToImports(TinkerGenerationUtil.ToJsonUtil);
 
-		OJField serverResourceClassField = new OJField();
-		serverResourceClassField.setType(new OJPathName("java.lang.Class"));
-		serverResourceClassField.setInitExp(annotatedClass.getName() + ".class");
-		ojLiteral.addToAttributeValues(serverResourceClassField);
-		routerEnum.addToImports(annotatedClass.getPathName());
-		routerEnum.addToImports(TumlRestletGenerationUtil.ServerResource);
+            get.getBody().addToStatements("meta", "json.append(\"], \\\"meta\\\": {\")");
 
-		routerEnum.addToLiterals(ojLiteral);
+            get.getBody().addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + clazz.getQualifiedName() + "\\\"\")");
+            get.getBody().addToStatements("json.append(\", \\\"to\\\": \")");
 
-		OJAnnotatedOperation attachAll = routerEnum.findOperation("attachAll", TumlRestletGenerationUtil.Router);
-		attachAll.getBody().addToStatements(routerEnum.getName() + "." + ojLiteral.getName() + ".attach(router)");
-	}
+            // Meta data remains for the root object as viewing a many list does
+            // not
+            // change the context
+            get.getBody().addToStatements("json.append(" + TumlClassOperations.propertyEnumName(clazz) + ".asJson())");
+            get.getBody().addToStatements("json.append(\", \\\"from\\\": \")");
+            get.getBody().addToStatements("json.append(" + TinkerGenerationUtil.RootRuntimePropertyEnum.getLast() + ".asJson())");
+            annotatedClass.addToImports(TinkerGenerationUtil.RootRuntimePropertyEnum);
+            annotatedClass.addToImports(TumlClassOperations.getPathName(clazz).append(TumlClassOperations.propertyEnumName(clazz)));
+            if (concreteImplementations.size() != 1 && count++ != concreteImplementations.size()) {
+                get.getBody().addToStatements("json.append(\",\")");
+            }
+        }
+        get.getBody().addToStatements("json.append(\"}}]\")");
+        get.getBody().addToStatements("return new " + TumlRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
+
+        annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);
+        annotatedClass.addToOperations(get);
+    }
+
+    private void addToRouterEnum(Class clazz, OJAnnotatedClass annotatedClass) {
+        OJEnum routerEnum = (OJEnum) this.workspace.findOJClass("restlet.RestletRouterEnum");
+        OJEnumLiteral ojLiteral = new OJEnumLiteral(TumlClassOperations.className(clazz).toUpperCase() + "S");
+
+        OJField uri = new OJField();
+        uri.setType(new OJPathName("String"));
+        uri.setInitExp("\"/" + TumlClassOperations.className(clazz).toLowerCase() + "s\"");
+        ojLiteral.addToAttributeValues(uri);
+
+        OJField serverResourceClassField = new OJField();
+        serverResourceClassField.setType(new OJPathName("java.lang.Class"));
+        serverResourceClassField.setInitExp(annotatedClass.getName() + ".class");
+        ojLiteral.addToAttributeValues(serverResourceClassField);
+        routerEnum.addToImports(annotatedClass.getPathName());
+        routerEnum.addToImports(TumlRestletGenerationUtil.ServerResource);
+
+        routerEnum.addToLiterals(ojLiteral);
+
+        OJAnnotatedOperation attachAll = routerEnum.findOperation("attachAll", TumlRestletGenerationUtil.Router);
+        attachAll.getBody().addToStatements(routerEnum.getName() + "." + ojLiteral.getName() + ".attach(router)");
+    }
 
 }

@@ -178,7 +178,9 @@ public class RestletComponentAndApplicationGenerator extends BaseVisitor impleme
     }
 
     private void addApplicationDefaultConstructor(Model model, OJAnnotatedClass application) {
-        application.getDefaultConstructor();
+        OJConstructor constructor = application.getDefaultConstructor();
+        constructor.getBody().addToStatements("setStatusService(new " + TumlRestletGenerationUtil.ErrorStatusService.getLast() + "())");
+        application.addToImports(TumlRestletGenerationUtil.ErrorStatusService);
     }
 
 }

@@ -45,8 +45,8 @@
             $('<div />', {id:"queryResultsDiv"})
             $('<div id="serverErrorMsg' + this.gridDivName + '" />').appendTo(outerDivForResults);
 
-            $('<div />', {id: 'queryResultsDiv' + this.gridDivName, style: 'width:auto;height:90%;'}).appendTo(outerDivForResults);
-            $('<div />', {id: 'pagerQueryResultsDiv' + this.gridDivName, style: 'width:auto;height:20px;'}).appendTo(outerDivForResults);
+            $('<div />', {id:'queryResultsDiv' + this.gridDivName, style:'width:auto;height:90%;'}).appendTo(outerDivForResults);
+            $('<div />', {id:'pagerQueryResultsDiv' + this.gridDivName, style:'width:auto;height:20px;'}).appendTo(outerDivForResults);
 
             $('#contextMenu' + this.gridDivName).remove();
             this.createGrid(result.data, this.metaForData, -1);
@@ -326,7 +326,7 @@
             var $saveButton = $('<button />').text('Save').click(function () {
                 if (self.grid.getEditorLock().commitCurrentEdit()) {
                     //put updated items
-                    if (self.dataView.getUpdatedItems().length !== 0) {
+                    if (self.dataView.getUpdatedItems().length !== 0 && self.dataView.getNewItems().length == 0 && self.dataView.getDeletedItems().length == 0) {
                         $.ajax({
                             url:tumlUri,
                             type:"PUT",
@@ -343,7 +343,7 @@
                         });
                     }
                     //post new items
-                    if (self.dataView.getNewItems().length !== 0) {
+                    if (self.dataView.getNewItems().length !== 0 && self.dataView.getUpdatedItems().length == 0 && self.dataView.getDeletedItems().length == 0) {
                         var validationResults = self.validateNewItems(self.dataView.getNewItems());
                         if (validationResults.length == 0) {
                             $.ajax({
@@ -369,7 +369,7 @@
                         }
                     }
                     //delete new items
-                    if (self.dataView.getDeletedItems().length !== 0) {
+                    if (self.dataView.getDeletedItems().length !== 0 && self.dataView.getNewItems().length == 0 && self.dataView.getUpdatedItems().length == 0) {
                         $.ajax({
                             url:tumlUri,
                             type:"DELETE",
@@ -384,6 +384,42 @@
                                 self.onDeleteFailure.notify({tumlUri:tumlUri, tabId:self.localMetaForData.name}, null, self);
                             }
                         });
+                    }
+                    if ((self.dataView.getUpdatedItems().length != 0 && self.dataView.getNewItems().length != 0) ||
+                        (self.dataView.getUpdatedItems().length != 0 && self.dataView.getDeletedItems().length != 0) ||
+                        (self.dataView.getNewItems().length != 0 && self.dataView.getDeletedItems().length != 0)) {
+
+                        //TODO This is hack, should use the tumlOverloadedPost from the metadata
+                        var indexOf = tumlUri.indexOf("/", 1);
+                        var a = tumlUri.substring(0, indexOf + 1);
+                        var b = tumlUri.substr(indexOf);
+                        var overloadedPost = a + 'overloadedpost' + b;
+
+                        var overloadedPostData = {};
+                        if (self.dataView.getUpdatedItems().length > 0) {
+                            overloadedPostData['update'] = self.dataView.getUpdatedItems();
+                        }
+                        if (self.dataView.getNewItems().length > 0) {
+                            overloadedPostData['insert'] = self.dataView.getNewItems();
+                        }
+                        if (self.dataView.getDeletedItems().length > 0) {
+                            overloadedPostData['delete'] = self.dataView.getDeletedItems();
+                        }
+                        $.ajax({
+                            url:overloadedPost,
+                            type:"POST",
+                            dataType:"json",
+                            contentType:"json",
+                            data:JSON.stringify(overloadedPostData),
+                            success:function (data, textStatus, jqXHR) {
+                                self.onDeleteSuccess.notify({tumlUri:tumlUri, tabId:self.localMetaForData.name, data:data}, null, self);
+                            },
+                            error:function (jqXHR, textStatus, errorThrown) {
+                                $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
+                                self.onDeleteFailure.notify({tumlUri:tumlUri, tabId:self.localMetaForData.name}, null, self);
+                            }
+                        });
+
                     }
                 } else {
                     alert("Commit failed on current active cell!");
@@ -448,8 +484,8 @@
             tabDiv.children().remove();
 
             $('<div id="serverErrorMsg" />').appendTo(tabDiv);
-            $('<div />', {id:'myGrid' + this.metaForData.name, style: 'width:auto;height:80%;', class:'tumlSlickGrid'}).appendTo(tabDiv);
-            $('<div />', {id:'pager' + this.metaForData.name, style: 'width:auto;height:20px;'}).appendTo(tabDiv);
+            $('<div />', {id:'myGrid' + this.metaForData.name, style:'width:auto;height:80%;', class:'tumlSlickGrid'}).appendTo(tabDiv);
+            $('<div />', {id:'pager' + this.metaForData.name, style:'width:auto;height:20px;'}).appendTo(tabDiv);
 
             $('#contextMenu' + this.metaForData.name).remove();
             this.createGrid(result.data, this.metaForData, tumlUri, false);
@@ -560,7 +596,7 @@
                     var data = [];
                     if (isCellEditable(args.row, args.cell, self.dataView.getItem(args.row))) {
                         if (self.dataView.getItem(args.row) !== undefined && self.dataView.getItem(args.row) !== null && self.dataView.getItem(args.row)[column.name] !== undefined && self.dataView.getItem(args.row)[column.name] !== null) {
-                            data= self.dataView.getItem(args.row)[column.name];
+                            data = self.dataView.getItem(args.row)[column.name];
                         }
                         self.onClickManyComponentCell.notify({data:data, cell:args, tumlUri:column.options.property.tumlUri, property:column.options.property}, null, self);
                     }
@@ -845,11 +881,14 @@
             this.grid.render();
         }
 
-        this.setCellValue = function(cell, value) {
+        this.setCellValue = function (cell, value) {
             var item = self.dataView.getItemByIdx(cell.row);
             if (item !== undefined) {
                 item[self.grid.getColumns()[cell.cell].name] = value;
             } else {
+
+                alert("wtf, don't understand why this is here");
+
                 item = {};
                 item[self.grid.getColumns()[cell.cell].name] = value;
                 self.addNewRow({item:item});
@@ -929,7 +968,7 @@
                         sortable:true,
                         editor:selectEditor(property),
                         validator:selectFieldValidator(property),
-                        options:{required:property.lower > 0, tumlLookupUri:property.tumlLookupUri, rowEnumerationLookupMap:new RowEnumerationLookupMap(property.qualifiedName, "/"+tumlModelName+"/tumlEnumLookup"), rowLookupMap:new RowLookupMap(self.contextVertexId, property.tumlCompositeParentLookupUri, property.tumlCompositeParentLookupUriOnCompositeParent), compositeParentLookupMap:new CompositeParentLookupMap(self.contextVertexId, property.tumlLookupUri, property.tumlLookupOnCompositeParentUri), ordered:property.ordered, unique:property.unique, property:property},
+                        options:{required:property.lower > 0, tumlLookupUri:property.tumlLookupUri, rowEnumerationLookupMap:new RowEnumerationLookupMap(property.qualifiedName, "/" + tumlModelName + "/tumlEnumLookup"), rowLookupMap:new RowLookupMap(self.contextVertexId, property.tumlCompositeParentLookupUri, property.tumlCompositeParentLookupUriOnCompositeParent), compositeParentLookupMap:new CompositeParentLookupMap(self.contextVertexId, property.tumlLookupUri, property.tumlLookupOnCompositeParentUri), ordered:property.ordered, unique:property.unique, property:property},
                         width:120
                     });
                 }
@@ -963,7 +1002,7 @@
 
     TumlBaseGridManager.prototype.setupOptions = function () {
         this.options = {
-            autoHeight: false,
+            autoHeight:false,
             showHeaderRow:true,
             headerRowHeight:30,
             editable:true,

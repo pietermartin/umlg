@@ -5,14 +5,16 @@ package org.tuml.runtime.util;
  * Time: 10:58 AM
  */
 public enum TinkerImplementation {
-    NEO4J("org.tuml.runtime.adaptor.TumlNeo4jGraphFactory", "org.tuml.runtime.adaptor.TumlNeo4jIdUtilImpl", "org.tuml.runtime.adaptor.TumlNeo4jTestUtil"),
-    ORIENTDB("org.tuml.runtime.adaptor.TumlOrientDbGraphFactory", "org.tuml.runtime.adaptor.TumlOrientDbIdUtilImpl", "org.tuml.runtime.adaptor.TumlOrientDbTestUtil");
+    NEO4J("org.tuml.runtime.adaptor.TumlNeo4jGraphFactory", "org.tuml.runtime.adaptor.TumlNeo4jIdUtilImpl", "org.tuml.runtime.adaptor.TumlNeo4jExceptionUtilIml", "org.tuml.runtime.adaptor.TumlNeo4jTestUtil"),
+    ORIENTDB("org.tuml.runtime.adaptor.TumlOrientDbGraphFactory", "org.tuml.runtime.adaptor.TumlOrientDbIdUtilImpl", "TODO", "org.tuml.runtime.adaptor.TumlOrientDbTestUtil");
     private String tumlGraphFactory;
     private String tumlIdUtil;
+    private String tumlExceptionUtil;
     private String tumlTestUtil;
-    private TinkerImplementation(String tumlGraphFactory, String tumlIdUtil, String tumlTestUtil) {
+    private TinkerImplementation(String tumlGraphFactory, String tumlIdUtil, String tumlExceptionUtil, String tumlTestUtil) {
         this.tumlGraphFactory = tumlGraphFactory;
         this.tumlIdUtil = tumlIdUtil;
+        this.tumlExceptionUtil = tumlExceptionUtil;
         this.tumlTestUtil = tumlTestUtil;
     }
 
@@ -26,6 +28,10 @@ public enum TinkerImplementation {
 
     public String getTumlTestUtil() {
         return tumlTestUtil;
+    }
+
+    public String getTumlExceptionUtil() {
+        return tumlExceptionUtil;
     }
 
     public static TinkerImplementation fromName(String name) {

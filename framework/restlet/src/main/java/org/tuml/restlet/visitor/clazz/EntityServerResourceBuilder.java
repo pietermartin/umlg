@@ -10,12 +10,7 @@ import org.tuml.java.metamodel.OJParameter;
 import org.tuml.java.metamodel.OJPathName;
 import org.tuml.java.metamodel.OJTryStatement;
 import org.tuml.java.metamodel.OJVisibilityKind;
-import org.tuml.java.metamodel.annotation.OJAnnotatedClass;
-import org.tuml.java.metamodel.annotation.OJAnnotatedInterface;
-import org.tuml.java.metamodel.annotation.OJAnnotatedOperation;
-import org.tuml.java.metamodel.annotation.OJAnnotationValue;
-import org.tuml.java.metamodel.annotation.OJEnum;
-import org.tuml.java.metamodel.annotation.OJEnumLiteral;
+import org.tuml.java.metamodel.annotation.*;
 import org.tuml.framework.Visitor;
 import org.tuml.generation.Workspace;
 import org.tuml.javageneration.util.Namer;
@@ -91,10 +86,8 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
         ojTry.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
 
         ojTry.getCatchPart().addToStatements("GraphDb.getDb().rollback()");
-        OJIfStatement ifRuntime = new OJIfStatement("e instanceof RuntimeException");
-        ifRuntime.addToThenPart("throw (RuntimeException)e");
-        ojTry.getCatchPart().addToStatements(ifRuntime);
-        ojTry.getCatchPart().addToStatements("throw new RuntimeException(e)");
+        ojTry.getCatchPart().addToStatements(TumlRestletGenerationUtil.TumlExceptionUtilFactory.getLast() + ".getTumlExceptionUtil().handle(e)");
+        annotatedClass.addToImports(TumlRestletGenerationUtil.TumlExceptionUtilFactory);
         delete.getBody().addToStatements(ojTry);
 
         if (parentPathName != null) {
@@ -130,7 +123,12 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
                         + getIdFieldName(clazz) + "))");
         annotatedClass.addToImports(TumlClassOperations.getPathName(clazz));
         OJTryStatement ojTry = new OJTryStatement();
-        ojTry.getTryPart().addToStatements("c.fromJson(entity.getText());");
+
+        OJAnnotatedField entityText = new OJAnnotatedField("entityText", "String");
+        entityText.setInitExp("entity.getText()");
+        ojTry.getTryPart().addToLocals(entityText);
+
+        ojTry.getTryPart().addToStatements("c.fromJson(" + entityText.getName() + ");");
         ojTry.getTryPart().addToStatements("GraphDb.getDb().commit()");
         annotatedClass.addToImports(TinkerGenerationUtil.tinkerConclusionPathName);
         ojTry.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));

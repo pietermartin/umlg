@@ -45,7 +45,7 @@
             });
 
             //Create main view manager
-            manyViewManager = new Tuml.TumlManyViewManager(leftMenuManager);
+            manyViewManager = new Tuml.TumlMainViewManager(leftMenuManager);
             manyViewManager.onPutSuccess.subscribe(function (e, args) {
                 self.onPutSuccess.notify(args, e, self);
             });

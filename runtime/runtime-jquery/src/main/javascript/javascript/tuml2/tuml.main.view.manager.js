@@ -2,11 +2,11 @@
     // register namespace
     $.extend(true, window, {
         Tuml:{
-            TumlManyViewManager:TumlManyViewManager
+            TumlMainViewManager:TumlMainViewManager
         }
     });
 
-    function TumlManyViewManager(leftMenuManager) {
+    function TumlMainViewManager(leftMenuManager) {
 
         var self = this;
         var tumlTabViewManagers = [];
@@ -363,7 +363,7 @@
                 });
 
                 tumlTabViewManager.onClickOneComponentCell.subscribe(function (e, args) {
-                    console.log('TumlManyViewManager onClickOneComponentCell fired');
+                    console.log('TumlMainViewManager onClickOneComponentCell fired');
                     //Get the meta data
                     $.ajax({
                         url:args.property.tumlMetaDataUri,
@@ -600,7 +600,7 @@
 
         //Public api
         $.extend(this, {
-            "TumlManyViewManagerVersion":"1.0.0",
+            "TumlMainViewManager":"1.0.0",
             //These events are propogated from the grid
             "onPutSuccess":new Tuml.Event(),
             "onPutFailure":new Tuml.Event(),

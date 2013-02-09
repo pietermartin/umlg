@@ -315,7 +315,8 @@
 
 .ui-layout-center-heading {
     background-color: #DDDDDD;
-    margin-bottom: 5px
+    margin-bottom: 5px;
+    line-height:20px;
 }
 
 .ui-left-menu-query-li {

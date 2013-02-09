@@ -136,8 +136,13 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
         OJField mapper = new OJField("mapper", TinkerGenerationUtil.ObjectMapper);
         mapper.setInitExp("new ObjectMapper()");
         ojTryStatement.getTryPart().addToLocals(mapper);
+
+        OJAnnotatedField entityText = new OJAnnotatedField("entityText", "String");
+        entityText.setInitExp("entity.getText()");
+        ojTryStatement.getTryPart().addToLocals(entityText);
+
         OJAnnotatedField objectO = new OJAnnotatedField("o", new OJPathName("Object"));
-        objectO.setInitExp("mapper.readValue(entity.getText(), Object.class)");
+        objectO.setInitExp("mapper.readValue(" + entityText.getName() + ", Object.class)");
         ojTryStatement.getTryPart().addToLocals(objectO);
         OJIfStatement ifArray = new OJIfStatement("o instanceof ArrayList");
         OJPathName genericsForArray = new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object");
@@ -251,8 +256,11 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
         OJField mapper = new OJField("mapper", TinkerGenerationUtil.ObjectMapper);
         mapper.setInitExp("new ObjectMapper()");
         ojTryStatement.getTryPart().addToLocals(mapper);
+        OJAnnotatedField entityText = new OJAnnotatedField("entityText", "String");
+        entityText.setInitExp("entity.getText()");
+        ojTryStatement.getTryPart().addToLocals(entityText);
         OJAnnotatedField objectO = new OJAnnotatedField("o", new OJPathName("Object"));
-        objectO.setInitExp("mapper.readValue(entity.getText(), Object.class)");
+        objectO.setInitExp("mapper.readValue(" + entityText.getName() + ", Object.class)");
         ojTryStatement.getTryPart().addToLocals(objectO);
         OJIfStatement ifArray = new OJIfStatement("o instanceof ArrayList");
         OJPathName genericsForArray = new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object");
@@ -279,10 +287,8 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
         ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
         ojTryStatement.getCatchPart().addToStatements("GraphDb.getDb().rollback()");
 
-        OJIfStatement ifRuntime = new OJIfStatement("e instanceof RuntimeException");
-        ifRuntime.addToThenPart("throw (RuntimeException)e");
-        ojTryStatement.getCatchPart().addToStatements(ifRuntime);
-        ojTryStatement.getCatchPart().addToStatements("throw new RuntimeException(e)");
+        ojTryStatement.getCatchPart().addToStatements(TumlRestletGenerationUtil.TumlExceptionUtilFactory.getLast() + ".getTumlExceptionUtil().handle(e)");
+        annotatedClass.addToImports(TumlRestletGenerationUtil.TumlExceptionUtilFactory);
 
         post.getBody().addToStatements(ojTryStatement);
 

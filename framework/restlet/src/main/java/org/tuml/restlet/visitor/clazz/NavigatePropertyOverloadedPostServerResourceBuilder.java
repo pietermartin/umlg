@@ -136,8 +136,11 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
         mapper.setInitExp("new ObjectMapper()");
         ojTryStatement.getTryPart().addToLocals(mapper);
         OJPathName pathName = new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object");
+        OJAnnotatedField entityText = new OJAnnotatedField("entityText", "String");
+        entityText.setInitExp("entity.getText()");
+        ojTryStatement.getTryPart().addToLocals(entityText);
         OJAnnotatedField objectO = new OJAnnotatedField("overloaded", pathName);
-        objectO.setInitExp("mapper.readValue(entity.getText(), Map.class)");
+        objectO.setInitExp("mapper.readValue(" + entityText.getName() + ", Map.class)");
         ojTryStatement.getTryPart().addToLocals(objectO);
 
         OJField overloaded = new OJField("o", new OJPathName("Object"));
@@ -225,10 +228,8 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
         ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
         ojTryStatement.getCatchPart().addToStatements("GraphDb.getDb().rollback()");
 
-        OJIfStatement ifRuntime = new OJIfStatement("e instanceof RuntimeException");
-        ifRuntime.addToThenPart("throw (RuntimeException)e");
-        ojTryStatement.getCatchPart().addToStatements(ifRuntime);
-        ojTryStatement.getCatchPart().addToStatements("throw new RuntimeException(e)");
+        ojTryStatement.getCatchPart().addToStatements(TumlRestletGenerationUtil.TumlExceptionUtilFactory.getLast() + ".getTumlExceptionUtil().handle(e)");
+        annotatedClass.addToImports(TumlRestletGenerationUtil.TumlExceptionUtilFactory);
 
         post.getBody().addToStatements(ojTryStatement);
 
