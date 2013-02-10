@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>test</artifactId>
+        <artifactId>blueprints</artifactId>
         <groupId>org.tuml</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
@@ -26,19 +26,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>2.13</version>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>emma-maven-plugin</artifactId>
-                <version>1.0-alpha-3</version>
-                <inherited>true</inherited>
-            </plugin>
-        </plugins>
-    </reporting>
 </project>
