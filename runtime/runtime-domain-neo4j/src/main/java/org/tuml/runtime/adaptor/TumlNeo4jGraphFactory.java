@@ -32,8 +32,10 @@ public class TumlNeo4jGraphFactory implements TumlGraphFactory {
 
 
     public void destroy() {
-        this.tumlGraph.shutdown();
-        this.tumlGraph = null;
+        if (this.tumlGraph != null) {
+            this.tumlGraph.shutdown();
+            this.tumlGraph = null;
+        }
     }
 
 }
