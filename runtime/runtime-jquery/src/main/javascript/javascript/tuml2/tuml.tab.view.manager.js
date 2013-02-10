@@ -359,7 +359,6 @@
             //Other events
             "setLinkedTumlTabViewManager":setLinkedTumlTabViewManager,
             "getLinkedTumlTabViewManager":getLinkedTumlTabViewManager,
-//            "enableTab":enableTab,
             "disableTab":disableTab,
             "tabId":tabId
         });

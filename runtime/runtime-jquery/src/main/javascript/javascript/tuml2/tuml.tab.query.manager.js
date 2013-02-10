@@ -28,6 +28,12 @@
             var self = this;
             var queryTab = $('#' + queryTabDivName);
 
+//            //Create the layout's center and north pane
+//            var northDiv = $('<div />', {class: 'ui-layout-north'});
+//            var centerDiv = $('<div />', {class: 'ui-layout-center'});
+//            northDiv.appendTo(queryTab);
+//            centerDiv.appendTo(queryTab);
+
             $('<div />', {id:'serverErrorMsg_' + queryTabDivName}).appendTo(queryTab);
 
             //Outer div for entering ocl
@@ -50,7 +56,7 @@
                     success:function (data, textStatus, jqXHR) {
                         tumlTabGridManager.refresh(data[0], queryTabDivName + '_' + 'OclResult');
                         $('#serverErrorMsg_' + queryTabDivName).removeClass('server-error-msg');
-                        $('#serverErrorMsg_' + queryTabDivName).children().remove();
+                        $('#serverErrorMsg_' + queryTabDivName).empty();
                         $('#tab-container').tabs('resize');
                     },
                     error:function (jqXHR, textStatus, errorThrown) {
@@ -169,10 +175,13 @@
 
             //Outer div for results
             var oclResult = $('<div />', {id:queryTabDivName + '_' + 'OclResult', class:'oclresult'});
-            oclResult.appendTo(queryTab);
+            oclResult.appendTo(centerDiv);
             if (query.data !== undefined && query.data !== null) {
                 tumlTabGridManager.refresh(query.data, queryTabDivName + '_' + 'OclResult');
             }
+
+//            queryTab.layout({ resizable: true });
+
         }
 
         function queryToJson(queryTabDivName, id) {
