@@ -75,14 +75,19 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
         get.addToThrows(TumlRestletGenerationUtil.ResourceException);
         annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
 
+        OJTryStatement tryStatement = new OJTryStatement();
+
         OJPathName parentPathName = TumlClassOperations.getPathName(pWrap.getOtherEnd().getType());
-        get.getBody().addToStatements(
+        tryStatement.getTryPart().addToStatements(
                 "this." + parentPathName.getLast().toLowerCase() + "Id = Integer.parseInt((String)getRequestAttributes().get(\""
                         + parentPathName.getLast().toLowerCase() + "Id\"))");
-        get.getBody().addToStatements(
+        tryStatement.getTryPart().addToStatements(
                 parentPathName.getLast() + " parentResource = GraphDb.getDb().instantiateClassifier(" + parentPathName.getLast().toLowerCase() + "Id" + ")");
         annotatedClass.addToImports(parentPathName);
-        buildToJson(pWrap, annotatedClass, get.getBody());
+        buildToJson(pWrap, annotatedClass, tryStatement.getTryPart());
+        get.getBody().addToStatements(tryStatement);
+        tryStatement.getFinallyPart().addToStatements(TinkerGenerationUtil.graphDbAccess + ".rollback()");
+        tryStatement.setCatchPart(null);
         annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
         annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);
         annotatedClass.addToOperations(get);

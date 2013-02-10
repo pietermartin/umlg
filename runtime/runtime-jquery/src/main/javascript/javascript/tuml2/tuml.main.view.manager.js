@@ -306,7 +306,8 @@
                     //Closing the tab fires closeTab event which removes the tumlTabViewManager from the array
                     $('#tab-container').tabs('close', args.tabName + " Select");
                     $('#' + args.tabName + "Lookup").remove();
-                    tumlTabViewManager.getLinkedTumlTabViewManager().enableTab();
+                    tabContainer.tabs("enable", tumlTabViewManagers.indexOf(tumlTabViewManager.getLinkedTumlTabViewManager()));
+                    tabContainer.tabs("option", "active", tumlTabViewManagers.indexOf(tumlTabViewManager.getLinkedTumlTabViewManager()));
                 });
                 tumlTabViewManager.onManyComponentSaveButtonSuccess.subscribe(function (e, args) {
                     tumlTabViewManager.getLinkedTumlTabViewManager().setValue(args.value);
@@ -323,7 +324,8 @@
                     //Closing the tab fires closeTab event which removes the tumlTabViewManager from the array
                     $('#tab-container').tabs('close', args.tabName + " Select");
                     $('#' + args.tabName + "Lookup").remove();
-                    tumlTabViewManager.getLinkedTumlTabViewManager().enableTab();
+                    tabContainer.tabs("enable", tumlTabViewManagers.indexOf(tumlTabViewManager.getLinkedTumlTabViewManager()));
+                    tabContainer.tabs("option", "active", tumlTabViewManagers.indexOf(tumlTabViewManager.getLinkedTumlTabViewManager()));
                 });
                 tumlTabViewManager.onAddButtonSuccess.subscribe(function (e, args) {
                     $('#tab-container').tabs('disableTab', metaForData.name);

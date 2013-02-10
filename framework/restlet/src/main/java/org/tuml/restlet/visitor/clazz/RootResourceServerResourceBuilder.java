@@ -317,23 +317,25 @@ public class RootResourceServerResourceBuilder extends BaseServerResourceBuilder
         annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
         TinkerGenerationUtil.addOverrideAnnotation(get);
 
+        OJTryStatement tryStatement = new OJTryStatement();
+
         OJField json = new OJField("json", new OJPathName("java.lang.StringBuilder"));
         json.setInitExp("new StringBuilder()");
-        get.getBody().addToLocals(json);
+        tryStatement.getTryPart().addToLocals(json);
         OJField resource = new OJField("resource", new OJPathName("java.util.List").addToGenerics(TumlClassOperations.getPathName(clazz)));
         resource.setInitExp("Root.INSTANCE.get" + TumlClassOperations.className(clazz) + "()");
-        get.getBody().addToLocals(resource);
+        tryStatement.getTryPart().addToLocals(resource);
         annotatedClass.addToImports("org.tuml.root.Root");
 
-        get.getBody().addToStatements("json.append(\"[\")");
+        tryStatement.getTryPart().addToStatements("json.append(\"[\")");
         Set<Classifier> concreteImplementations = TumlClassOperations.getConcreteImplementations(clazz);
         int count = 1;
         for (Classifier classifier : concreteImplementations) {
 
-            get.getBody().addToStatements("json.append(\"{\\\"data\\\": [\")");
+            tryStatement.getTryPart().addToStatements("json.append(\"{\\\"data\\\": [\")");
 
             if (concreteImplementations.size() > 1) {
-                get.getBody().addToStatements(
+                tryStatement.getTryPart().addToStatements(
                         "json.append(ToJsonUtil.toJson(resource.select(new "
                                 + TinkerGenerationUtil.BooleanExpressionEvaluator.getCopy().addToGenerics(TumlClassOperations.getPathName(clazz)).getLast()
                                 + "() {\n			@Override\n			public Boolean evaluate(" + TumlClassOperations.getPathName(clazz).getLast()
@@ -342,30 +344,34 @@ public class RootResourceServerResourceBuilder extends BaseServerResourceBuilder
                 annotatedClass.addToImports(TumlClassOperations.getPathName(clazz));
                 annotatedClass.addToImports(TumlClassOperations.getPathName(classifier));
             } else {
-                get.getBody().addToStatements("json.append(ToJsonUtil.toJson(resource))");
+                tryStatement.getTryPart().addToStatements("json.append(ToJsonUtil.toJson(resource))");
             }
 
             annotatedClass.addToImports(TinkerGenerationUtil.ToJsonUtil);
 
-            get.getBody().addToStatements("meta", "json.append(\"], \\\"meta\\\": {\")");
+            tryStatement.getTryPart().addToStatements("meta", "json.append(\"], \\\"meta\\\": {\")");
 
-            get.getBody().addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + clazz.getQualifiedName() + "\\\"\")");
-            get.getBody().addToStatements("json.append(\", \\\"to\\\": \")");
+            tryStatement.getTryPart().addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + clazz.getQualifiedName() + "\\\"\")");
+            tryStatement.getTryPart().addToStatements("json.append(\", \\\"to\\\": \")");
 
             // Meta data remains for the root object as viewing a many list does
             // not
             // change the context
-            get.getBody().addToStatements("json.append(" + TumlClassOperations.propertyEnumName(clazz) + ".asJson())");
-            get.getBody().addToStatements("json.append(\", \\\"from\\\": \")");
-            get.getBody().addToStatements("json.append(" + TinkerGenerationUtil.RootRuntimePropertyEnum.getLast() + ".asJson())");
+            tryStatement.getTryPart().addToStatements("json.append(" + TumlClassOperations.propertyEnumName(clazz) + ".asJson())");
+            tryStatement.getTryPart().addToStatements("json.append(\", \\\"from\\\": \")");
+            tryStatement.getTryPart().addToStatements("json.append(" + TinkerGenerationUtil.RootRuntimePropertyEnum.getLast() + ".asJson())");
             annotatedClass.addToImports(TinkerGenerationUtil.RootRuntimePropertyEnum);
             annotatedClass.addToImports(TumlClassOperations.getPathName(clazz).append(TumlClassOperations.propertyEnumName(clazz)));
             if (concreteImplementations.size() != 1 && count++ != concreteImplementations.size()) {
-                get.getBody().addToStatements("json.append(\",\")");
+                tryStatement.getTryPart().addToStatements("json.append(\",\")");
             }
         }
-        get.getBody().addToStatements("json.append(\"}}]\")");
-        get.getBody().addToStatements("return new " + TumlRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
+        tryStatement.getTryPart().addToStatements("json.append(\"}}]\")");
+        tryStatement.getTryPart().addToStatements("return new " + TumlRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
+
+        get.getBody().addToStatements(tryStatement);
+        tryStatement.setCatchPart(null);
+        tryStatement.getFinallyPart().addToStatements(TinkerGenerationUtil.graphDbAccess + ".rollback()");
 
         annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);
         annotatedClass.addToOperations(get);

@@ -19,11 +19,11 @@ public class TestNeo4jSpeed {
     public void testSpeed() throws IOException {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
-        File f = new File("/tmp/orientdb-speed-test");
+        File f = new File("/tmp/neo4j-speed-test");
         FileUtils.deleteDirectory(f);
         Neo4jGraph graph = null;
         try {
-            graph = new Neo4jGraph("local:/tmp/graph");
+            graph = new Neo4jGraph(f.getAbsolutePath());
             for (int i = 0; i < 10000; i++) {
                 Vertex v1 = graph.addVertex(null);
             }

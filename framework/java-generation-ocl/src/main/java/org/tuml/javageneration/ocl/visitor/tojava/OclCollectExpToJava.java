@@ -5,12 +5,15 @@ import java.util.List;
 import org.eclipse.ocl.expressions.IteratorExp;
 import org.eclipse.ocl.expressions.OCLExpression;
 import org.eclipse.ocl.expressions.Variable;
+import org.eclipse.ocl.uml.CollectionType;
 import org.eclipse.ocl.uml.impl.CollectionTypeImpl;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Parameter;
+import org.tuml.java.metamodel.annotation.OJAnnotatedClass;
 import org.tuml.javageneration.ocl.util.TumlOclUtil;
 import org.tuml.javageneration.ocl.visitor.HandleIteratorExp;
 import org.tuml.javageneration.util.TumlClassOperations;
+import org.tuml.javageneration.util.TumlCollectionKindEnum;
 
 public class OclCollectExpToJava implements HandleIteratorExp {
 
@@ -25,7 +28,7 @@ public class OclCollectExpToJava implements HandleIteratorExp {
 	 * 			});
 	 * 		}
 	 */
-	public String handleIteratorExp(IteratorExp<Classifier, Parameter> callExp, String sourceResult, List<String> variableResults, String bodyResult) {
+	public String handleIteratorExp(OJAnnotatedClass ojClass, IteratorExp<Classifier, Parameter> callExp, String sourceResult, List<String> variableResults, String bodyResult) {
 		if (variableResults.size() != 1) {
 			throw new IllegalStateException("An ocl select iterator expression may only have on iterator, i.e. variable");
 		}
@@ -35,8 +38,13 @@ public class OclCollectExpToJava implements HandleIteratorExp {
 		
 		OCLExpression<Classifier> body = callExp.getBody();
 		String bodyType = TumlClassOperations.className(body.getType());
-		
-		String flattenedType;
+
+        if (body.getType() instanceof CollectionType) {
+            CollectionType collectionType = (CollectionType)body.getType();
+            ojClass.addToImports(TumlCollectionKindEnum.from(collectionType.getKind()).getOjPathName());
+        }
+
+        String flattenedType;
 		Classifier c = body.getType();
 		if (c instanceof CollectionTypeImpl) {
 			CollectionTypeImpl collectionTypeImpl = (CollectionTypeImpl)c;

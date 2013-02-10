@@ -19,8 +19,10 @@ public class TestRestletDefaultDataCreator implements DefaultDataCreator {
             human.setGender(Gender.MALE);
             Home home = new Home(human);
             home.setName("home" + i);
-            ComponentMany componentMany = new ComponentMany(human);
-            componentMany.setName("componentMany" + i);
+            ComponentMany componentMany1 = new ComponentMany(human);
+            componentMany1.setName("componentMany_1" + i);
+            ComponentMany componentMany2 = new ComponentMany(human);
+            componentMany2.setName("componentMany_2" + i);
 
             ComponentManyDeep1 componentManyDeep1 = new ComponentManyDeep1(human);
             componentManyDeep1.setName("componentManyDeep1" + i);

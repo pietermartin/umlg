@@ -6,6 +6,7 @@ import org.eclipse.ocl.expressions.IteratorExp;
 import org.eclipse.ocl.utilities.PredefinedType;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Parameter;
+import org.tuml.java.metamodel.annotation.OJAnnotatedClass;
 import org.tuml.javageneration.ocl.visitor.tojava.OclAnyExpToJava;
 import org.tuml.javageneration.ocl.visitor.tojava.OclCollectExpToJava;
 import org.tuml.javageneration.ocl.visitor.tojava.OclCollectNestedExpToJava;
@@ -34,7 +35,7 @@ public enum OclIteratorExpEnum implements HandleIteratorExp {
 		}
 	}
 	
-	public String handleIteratorExp(IteratorExp<Classifier, Parameter> callExp, String sourceResult, List<String> variableResults, String bodyResult) {
-		return implementor.handleIteratorExp(callExp, sourceResult, variableResults, bodyResult);
+	public String handleIteratorExp(OJAnnotatedClass ojClass, IteratorExp<Classifier, Parameter> callExp, String sourceResult, List<String> variableResults, String bodyResult) {
+		return implementor.handleIteratorExp(ojClass, callExp, sourceResult, variableResults, bodyResult);
 	}
 }

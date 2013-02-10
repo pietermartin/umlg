@@ -422,7 +422,7 @@ public class Tuml2JavaVisitor extends
 		this.ojClass.addToImports(TinkerGenerationUtil.tumlOclStdCollectionLib);
 		this.ojClass.addToImports("java.util.*");
 		String name = callExp.getName();
-		return OclIteratorExpEnum.from(name).handleIteratorExp(callExp, sourceResult, variableResults, bodyResult);
+		return OclIteratorExpEnum.from(name).handleIteratorExp(this.ojClass, callExp, sourceResult, variableResults, bodyResult);
 	}
 
 	/**

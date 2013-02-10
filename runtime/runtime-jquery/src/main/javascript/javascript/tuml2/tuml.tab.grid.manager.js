@@ -123,7 +123,7 @@
             $('<div id="myGridManyComponent' + this.metaForData.name + '" style="width:auto;height:90%;"></div>').appendTo(tabDiv);
             $('<div id="pagerManyComponent' + this.metaForData.name + '" style="width:auto;height:20px;"></div>').appendTo(tabDiv);
             $('#contextMenu' + this.metaForData.name).remove();
-            this.createGrid(result.data/*, this.metaForData*/, tumlUri, false);
+            this.createGrid(result.data/*, this.metaForData*/, tumlUri);
         };
 
         this.instantiateGrid = function () {
@@ -136,15 +136,17 @@
         this.addButtons = function () {
             $('<button />').text('Save').click(function () {
                 if (self.grid.getEditorLock().commitCurrentEdit()) {
-                    var validationResults = self.validateNewItems(self.dataView.getNewItems());
-                    if (validationResults.length == 0) {
-                        self.onManyComponentSaveButtonSuccess.notify({value:self.dataView.getItems(), tabName:self.metaForData.name}, null, self);
-                    } else {
-                        var errorMsg = '\n';
-                        for (var i = 0; i < validationResults.length; i++) {
-                            errorMsg += validationResults[i].msg + '\n';
+                    if (self.validateMultiplicity()) {
+                        var validationResults = self.validateNewItems(self.dataView.getNewItems());
+                        if (validationResults.length == 0) {
+                            self.onManyComponentSaveButtonSuccess.notify({value:self.dataView.getItems(), tabName:self.metaForData.name}, null, self);
+                        } else {
+                            var errorMsg = '\n';
+                            for (var i = 0; i < validationResults.length; i++) {
+                                errorMsg += validationResults[i].msg + '\n';
+                            }
+                            alert('There are validation errors: ' + errorMsg);
                         }
-                        alert('There are validation errors: ' + errorMsg);
                     }
                 }
             }).appendTo('#grid-buttonManyComponent' + this.localMetaForData.name);
@@ -217,7 +219,7 @@
             $('<div id="myGridLookup' + this.metaForData.name + '" style="width:auto;height:90%;"></div>').appendTo(tabDiv);
             $('<div id="pagerLookup' + this.metaForData.name + '" style="width:auto;height:20px;"></div>').appendTo(tabDiv);
             $('#contextMenu' + this.metaForData.name).remove();
-            this.createGrid(result.data/*, this.metaForData*/, tumlUri, false);
+            this.createGrid(result.data/*, this.metaForData*/, tumlUri);
         };
 
         this.instantiateGrid = function () {
@@ -366,7 +368,7 @@
                                 for (var i = 0; i < validationResults.length; i++) {
                                     errorMsg += validationResults[i].msg + '\n';
                                 }
-                                alert('There are validation errors: ' + errorMsg);
+                                alert('Validation errors: ' + errorMsg);
                             }
                         }
                         //delete new items
@@ -390,36 +392,45 @@
                             (self.dataView.getUpdatedItems().length != 0 && self.dataView.getDeletedItems().length != 0) ||
                             (self.dataView.getNewItems().length != 0 && self.dataView.getDeletedItems().length != 0)) {
 
-                            //TODO This is hack, should use the tumlOverloadedPost from the metadata
-                            var indexOf = tumlUri.indexOf("/", 1);
-                            var a = tumlUri.substring(0, indexOf + 1);
-                            var b = tumlUri.substr(indexOf);
-                            var overloadedPost = a + 'overloadedpost' + b;
+                            var overloadedPostUri = self.propertyNavigatingTo.tumlOverloadedPostUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), self.contextVertexId);
 
                             var overloadedPostData = {};
-                            if (self.dataView.getUpdatedItems().length > 0) {
-                                overloadedPostData['update'] = self.dataView.getUpdatedItems();
-                            }
+                            var validationErrors = true;
                             if (self.dataView.getNewItems().length > 0) {
-                                overloadedPostData['insert'] = self.dataView.getNewItems();
-                            }
-                            if (self.dataView.getDeletedItems().length > 0) {
-                                overloadedPostData['delete'] = self.dataView.getDeletedItems();
-                            }
-                            $.ajax({
-                                url:overloadedPost,
-                                type:"POST",
-                                dataType:"json",
-                                contentType:"json",
-                                data:JSON.stringify(overloadedPostData),
-                                success:function (data, textStatus, jqXHR) {
-                                    self.onDeleteSuccess.notify({tumlUri:tumlUri, tabId:self.localMetaForData.name, data:data}, null, self);
-                                },
-                                error:function (jqXHR, textStatus, errorThrown) {
-                                    $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-                                    self.onDeleteFailure.notify({tumlUri:tumlUri, tabId:self.localMetaForData.name}, null, self);
+                                var validationResults = self.validateNewItems(self.dataView.getNewItems());
+                                if (validationResults.length == 0) {
+                                    validationErrors = false;
+                                    overloadedPostData['insert'] = self.dataView.getNewItems();
+                                } else {
+                                    var errorMsg = '\n';
+                                    for (var i = 0; i < validationResults.length; i++) {
+                                        errorMsg += validationResults[i].msg + '\n';
+                                    }
+                                    alert('Validation errors: ' + errorMsg);
                                 }
-                            });
+                            }
+                            if (!validationErrors) {
+                                if (self.dataView.getUpdatedItems().length > 0) {
+                                    overloadedPostData['update'] = self.dataView.getUpdatedItems();
+                                }
+                                if (self.dataView.getDeletedItems().length > 0) {
+                                    overloadedPostData['delete'] = self.dataView.getDeletedItems();
+                                }
+                                $.ajax({
+                                    url:overloadedPostUri,
+                                    type:"POST",
+                                    dataType:"json",
+                                    contentType:"json",
+                                    data:JSON.stringify(overloadedPostData),
+                                    success:function (data, textStatus, jqXHR) {
+                                        self.onDeleteSuccess.notify({tumlUri:tumlUri, tabId:self.localMetaForData.name, data:data}, null, self);
+                                    },
+                                    error:function (jqXHR, textStatus, errorThrown) {
+                                        $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
+                                        self.onDeleteFailure.notify({tumlUri:tumlUri, tabId:self.localMetaForData.name}, null, self);
+                                    }
+                                });
+                            }
 
                         }
                     }
@@ -490,7 +501,7 @@
             $('<div />', {id:'pager' + this.metaForData.name, style:'width:auto;height:20px;'}).appendTo(tabDiv);
 
             $('#contextMenu' + this.metaForData.name).remove();
-            this.createGrid(result.data/*, this.metaForData*/, tumlUri, false);
+            this.createGrid(result.data/*, this.metaForData*/, tumlUri);
 
         };
 
@@ -910,9 +921,7 @@
             if (item !== undefined) {
                 item[self.grid.getColumns()[cell.cell].name] = value;
             } else {
-
-                alert("wtf, don't understand why this is here");
-
+                //This happens when the component is the first entry in the grid, i.e. it needs to add the row
                 item = {};
                 item[self.grid.getColumns()[cell.cell].name] = value;
                 self.addNewRow({item:item});

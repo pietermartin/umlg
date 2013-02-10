@@ -158,7 +158,9 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
         annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
         TinkerGenerationUtil.addOverrideAnnotation(get);
 
-        get.getBody().addToStatements("StringBuilder json = new StringBuilder()");
+        OJTryStatement tryStatement = new OJTryStatement();
+
+        tryStatement.getTryPart().addToStatements("StringBuilder json = new StringBuilder()");
         OJIfStatement ojIfStatement = new OJIfStatement("!getReference().getLastSegment().endsWith(\"MetaData\")");
         ojIfStatement.addToThenPart(
                 "this." + getIdFieldName(clazz) + "= Integer.parseInt((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"))");
@@ -170,15 +172,19 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
         ojIfStatement.addToThenPart("json.append(" + "c.toJson())");
         ojIfStatement.addToElsePart("json.append(\"[{\\\"data\\\": [\")");
 
-        get.getBody().addToStatements(ojIfStatement);
-        get.getBody().addToStatements("meta", "json.append(\"], \\\"meta\\\" : {\")");
+        tryStatement.getTryPart().addToStatements(ojIfStatement);
+        tryStatement.getTryPart().addToStatements("meta", "json.append(\"], \\\"meta\\\" : {\")");
 
-        get.getBody().addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + clazz.getQualifiedName() + "\\\"\")");
-        get.getBody().addToStatements("json.append(\", \\\"to\\\": \")");
-        get.getBody().addToStatements("json.append(" + TumlClassOperations.propertyEnumName(clazz) + ".asJson())");
+        tryStatement.getTryPart().addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + clazz.getQualifiedName() + "\\\"\")");
+        tryStatement.getTryPart().addToStatements("json.append(\", \\\"to\\\": \")");
+        tryStatement.getTryPart().addToStatements("json.append(" + TumlClassOperations.propertyEnumName(clazz) + ".asJson())");
         annotatedClass.addToImports(TumlClassOperations.getPathName(clazz).append(TumlClassOperations.propertyEnumName(clazz)));
-        get.getBody().addToStatements("json.append(\"}}]\")");
-        get.getBody().addToStatements("return new " + TumlRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
+        tryStatement.getTryPart().addToStatements("json.append(\"}}]\")");
+        tryStatement.getTryPart().addToStatements("return new " + TumlRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
+
+        get.getBody().addToStatements(tryStatement);
+        tryStatement.setCatchPart(null);
+        tryStatement.getFinallyPart().addToStatements(TinkerGenerationUtil.graphDbAccess + ".rollback()");
 
         annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
         annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);

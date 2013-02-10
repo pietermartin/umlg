@@ -212,8 +212,8 @@
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_O49nwjsHEeK9AeutZ8kzPA" value="1"/>
             </ownedAttribute>
             <ownedAttribute xmi:id="_U6H_ID_MEeKA79X_7SVJiA" name="componentMany" type="_PxOysD_MEeKA79X_7SVJiA" aggregation="composite" association="_U6ImMD_MEeKA79X_7SVJiA">
-              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_U6H_IT_MEeKA79X_7SVJiA" value="1"/>
-              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_U6H_Ij_MEeKA79X_7SVJiA" value="*"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_U6H_IT_MEeKA79X_7SVJiA" name="" value="2"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_U6H_Ij_MEeKA79X_7SVJiA" name="" value="4"/>
             </ownedAttribute>
             <ownedAttribute xmi:id="_GUTTUEI_EeKpM48zLjI12Q" name="componentManyDeep1" type="_6UItEEI-EeKpM48zLjI12Q" aggregation="composite" association="_GUT6YEI_EeKpM48zLjI12Q">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_GUTTUUI_EeKpM48zLjI12Q" value="1"/>
@@ -462,13 +462,13 @@
           </packagedElement>
           <packagedElement xmi:type="uml:Association" xmi:id="_GUT6YEI_EeKpM48zLjI12Q" name="human_componentManyDeep1_1" memberEnd="_GUT6YUI_EeKpM48zLjI12Q _GUTTUEI_EeKpM48zLjI12Q" navigableOwnedEnd="_GUT6YUI_EeKpM48zLjI12Q">
             <ownedEnd xmi:id="_GUT6YUI_EeKpM48zLjI12Q" name="human" type="_6R3uIN4jEeGdB9TPHp60mw" association="_GUT6YEI_EeKpM48zLjI12Q">
-              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_GUT6YkI_EeKpM48zLjI12Q" name="" value="2"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_GUT6YkI_EeKpM48zLjI12Q" name="" value="1"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_GUT6Y0I_EeKpM48zLjI12Q" value="1"/>
             </ownedEnd>
           </packagedElement>
           <packagedElement xmi:type="uml:Association" xmi:id="_GpoqIEI_EeKpM48zLjI12Q" name="componentManyDeep1_componentManyDeep2_1" memberEnd="_GpoqIUI_EeKpM48zLjI12Q _GpoDEEI_EeKpM48zLjI12Q" navigableOwnedEnd="_GpoqIUI_EeKpM48zLjI12Q">
             <ownedEnd xmi:id="_GpoqIUI_EeKpM48zLjI12Q" name="componentManyDeep1" type="_6UItEEI-EeKpM48zLjI12Q" association="_GpoqIEI_EeKpM48zLjI12Q">
-              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_GpoqIkI_EeKpM48zLjI12Q" name="" value="2"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_GpoqIkI_EeKpM48zLjI12Q" name="" value="1"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_GpoqI0I_EeKpM48zLjI12Q" value="1"/>
             </ownedEnd>
           </packagedElement>

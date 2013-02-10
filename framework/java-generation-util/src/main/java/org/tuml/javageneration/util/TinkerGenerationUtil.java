@@ -58,6 +58,7 @@ public class TinkerGenerationUtil {
     public static final OJPathName tumlTumlCollections = new OJPathName("org.tuml.runtime.util.TumlCollections");
     public static final OJPathName tumlOclStdCollectionLib = new OJPathName("org.tuml.runtime.collection.ocl.*");
     public static final OJPathName tumlMemoryCollectionLib = new OJPathName("org.tuml.runtime.collection.memory.*");
+    public static final OJPathName tumlRuntimeCollectionLib = new OJPathName("org.tuml.runtime.collection.*");
 
     public static final OJPathName tumlTinkerSequenceClosableIterableImpl = new OJPathName("org.tuml.runtime.collection.persistent.TinkerSequenceClosableIterableImpl");
     public static final OJPathName tumlTinkerSetClosableIterableImpl = new OJPathName("org.tuml.runtime.collection.persistent.TinkerSetClosableIterableImpl");
