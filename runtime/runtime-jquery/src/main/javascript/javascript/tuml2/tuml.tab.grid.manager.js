@@ -32,6 +32,14 @@
         this.setupColumns = function () {
             TumlBaseGridManager.prototype.setupColumns.call(this, this.localMetaForData);
             this.columns.push({id:"uri", name:"uri", field:"uri", sortable:false, formatter:TumlSlick.Formatters.Link});
+
+            self.columns.splice(0, 0, {
+                id:"row",
+                name:"row",
+                field:"row",
+                sortable:true
+            });
+
         };
 
         this.refresh = function (result, gridDivName) {
@@ -80,6 +88,10 @@
             forceFitColumns:false,
             topPanelHeight:25
         };
+    }
+
+    TumlQueryGridManager.prototype.setData = function (data) {
+        this.dataView.setItems(data, 'row');
     }
 
     function TumlManyComponentGridManager(tumlUri, propertyNavigatingTo) {
