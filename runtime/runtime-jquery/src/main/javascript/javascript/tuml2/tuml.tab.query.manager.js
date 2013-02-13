@@ -28,17 +28,23 @@
             var self = this;
             var queryTab = $('#' + queryTabDivName);
 
-//            //Create the layout's center and north pane
-//            var northDiv = $('<div />', {class: 'ui-layout-north'});
-//            var centerDiv = $('<div />', {class: 'ui-layout-center'});
-//            northDiv.appendTo(queryTab);
-//            centerDiv.appendTo(queryTab);
+            var windowHeight = $('.ui-layout-center').height() - 90;
 
-            $('<div />', {id:'serverErrorMsg_' + queryTabDivName}).appendTo(queryTab);
+            var layoutDiv = $('<div />', {id:'queryLayoutDiv', style:'height: ' + windowHeight + 'px; width" 100%; overflow: hidden;'});
+            layoutDiv.appendTo(queryTab);
+
+
+            //Create the layout's center and north pane
+            var northDiv = $('<div />', {class:'query-north'});
+            var centerDiv = $('<div />', {class:'query-center'});
+            northDiv.appendTo(layoutDiv);
+            centerDiv.appendTo(layoutDiv);
+
+            $('<div />', {id:'serverErrorMsg_' + queryTabDivName}).appendTo(northDiv);
 
             //Outer div for entering ocl
             var oclOuter = $('<div />', {id:queryTabDivName + '_' + 'OclOuter', class:'oclouter'});
-            oclOuter.appendTo(queryTab);
+            oclOuter.appendTo(northDiv);
 
             //Inner div for entering ocl and buttons
             var oclInner = $('<div />', {id:queryTabDivName + '_' + 'OclInner', class:'oclinner'}).appendTo(oclOuter);
@@ -180,7 +186,18 @@
                 tumlTabGridManager.refresh(query.data, queryTabDivName + '_' + 'OclResult');
             }
 
-//            queryTab.layout({ resizable: true });
+            layoutDiv.layout({
+                center__paneSelector:".query-center",
+                north__paneSelector:".query-north",
+                north__size:125,
+
+                onresize_end: function () {
+                    //Resize the textarea
+                    var northHeight = $('.query-north').height() - 15;
+                    $('.oclinner textarea').height(northHeight);
+                    return true;
+                }
+            });
 
         }
 

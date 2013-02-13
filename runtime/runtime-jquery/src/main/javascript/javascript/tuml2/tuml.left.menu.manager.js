@@ -105,6 +105,9 @@
             $.each(menuArray, function (index, value) {
                 var adjustedUri = value.tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
                 var li = $('<li class="ui-left-menu-li ' + value.menuCssClass + '"/>');
+
+
+
                 var a = $('<a>', {
                     text:value.name,
                     title:value.name,
@@ -115,6 +118,7 @@
                     }
                 });
                 a.appendTo(li);
+                $('<span />', {class: 'menu-multiplicity'}).text(value.multiplicityDisplay).appendTo(li);
                 li.appendTo(ulMenu);
             });
             return ulMenu;
@@ -263,18 +267,27 @@
             $.each(contextMetaDataFrom.properties, function (index, metaProperty) {
                 if (metaProperty.inverseComposite || !((metaProperty.dataTypeEnum !== undefined && metaProperty.dataTypeEnum !== null) || metaProperty.onePrimitive || metaProperty.oneEnumeration || metaProperty.manyPrimitive || metaProperty.name == 'id' || metaProperty.name == 'uri')) {
                     var menuMetaProperty = {};
-                    var menuCssClass;
+                    var menuCssClass = 'inactiveproperty';
                     $.each(contextMetaDataTo.properties, function (toIndex, toMetaProperty) {
                         if (toMetaProperty.inverseQualifiedName == metaProperty.qualifiedName) {
+                            //This makes the current active property red in the menu
                             menuCssClass = 'activeproperty';
                         }
                     });
+                    //add the icon
+                    if (metaProperty.composite) {
+                        menuCssClass = menuCssClass + ' menu-composite';
+                    } else {
+                        menuCssClass = menuCssClass + ' menu-noncomposite';
+                    }
                     menuMetaProperty['tumlUri'] = metaProperty.tumlUri;
                     menuMetaProperty['name'] = metaProperty.name;
-                    if (menuCssClass === undefined) {
-                        menuCssClass = 'inactiveproperty';
-                    }
                     menuMetaProperty['menuCssClass'] = menuCssClass;
+                    if (metaProperty.upper == -1) {
+                        menuMetaProperty['multiplicityDisplay'] = '[' + metaProperty.lower + '..*]';
+                    } else {
+                        menuMetaProperty['multiplicityDisplay'] = '[' + metaProperty.lower + '..' + metaProperty.upper + ']';
+                    }
                     menuArray.push(menuMetaProperty);
                 }
             });

@@ -45,7 +45,9 @@
             $('<div />', {id:"queryResultsDiv"})
             $('<div id="serverErrorMsg' + this.gridDivName + '" />').appendTo(outerDivForResults);
 
-            $('<div />', {id:'queryResultsDiv' + this.gridDivName, style:'width:auto;height:90%;'}).appendTo(outerDivForResults);
+            var windowHeight = $('.query-center').height() - 30;
+
+            $('<div />', {id:'queryResultsDiv' + this.gridDivName, style:'width:auto;height:' + windowHeight + 'px;'}).appendTo(outerDivForResults);
             $('<div />', {id:'pagerQueryResultsDiv' + this.gridDivName, style:'width:auto;height:20px;'}).appendTo(outerDivForResults);
 
             $('#contextMenu' + this.gridDivName).remove();
@@ -497,7 +499,9 @@
             tabDiv.children().remove();
 
             $('<div id="serverErrorMsg" />').appendTo(tabDiv);
-            $('<div />', {id:'myGrid' + this.metaForData.name, style:'width:auto;height:80%;', class:'tumlSlickGrid'}).appendTo(tabDiv);
+
+            var windowHeight = $('.ui-layout-center').height() - 115;
+            $('<div />', {id:'myGrid' + this.metaForData.name, style:'width:auto;height:' + windowHeight + 'px;', class:'tumlSlickGrid'}).appendTo(tabDiv);
             $('<div />', {id:'pager' + this.metaForData.name, style:'width:auto;height:20px;'}).appendTo(tabDiv);
 
             $('#contextMenu' + this.metaForData.name).remove();
