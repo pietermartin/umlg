@@ -63,6 +63,7 @@
                         contentType:"json",
                         data:self.fieldsToJson(),
                         success:function (data, textStatus, jqXHR) {
+                            self.data = data[0].data[0];
                             self.onPutOneSuccess.notify({tumlUri:tumlUri, data:data}, null, self);
                         },
                         error:function (jqXHR, textStatus, errorThrown) {
@@ -429,7 +430,7 @@
                 this.appendEnumerationLoopupOptionsToSelect("/"+tumlModelName+"/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, $input);
             }
         } else if (property.manyEnumeration) {
-            $input = $('<select multiple id=' + property.name + this.metaForData.name + 'Id/>', {class:'chzn-select', style:'width:350px;', name:property.name});
+            $input = $('<select />', {multiple: '', id: property.name + this.metaForData.name + 'Id',class:'chzn-select', style:'width:350px;', name:property.name});
             if (data !== undefined && data !== null) {
                 this.appendEnumerationLoopupOptionsToSelect("/"+tumlModelName+"/tumlEnumLookup", property.qualifiedName, property.lower > 0, data[property.name], $input);
             } else {
@@ -645,6 +646,9 @@
                 stringValueArray = validateInput.val().split(',');
             } else {
                 stringValueArray = validateInput.val();
+            }
+            if (stringValueArray == undefined || stringValueArray == null) {
+                stringValueArray = [];
             }
             //Remove empty strings
             stringValueArray.remove('');

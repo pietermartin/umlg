@@ -19,7 +19,7 @@ function selectFormatter(property) {
         return  TumlSlick.Formatters.TumlRequired;
     } else if (property.composite && property.lower > 0) {
         return  null;
-    } else if (!property.onePrimitive && !property.manyPrimitive) {
+    } else if (!property.onePrimitive && !property.manyPrimitive && !property.manyEnumeration) {
         return function waitingFormatter(row, cell, value, columnDef, dataContext) {
             if (value !== undefined && value !== null) {
                 return value.displayName;

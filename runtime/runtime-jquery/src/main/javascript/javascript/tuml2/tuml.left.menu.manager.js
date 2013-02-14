@@ -265,7 +265,14 @@
                 menuArray.push({tumlUri:contextMetaDataFrom.uri, name:contextMetaDataFrom.name, menuCssClass:'contextactiveproperty'});
             }
             $.each(contextMetaDataFrom.properties, function (index, metaProperty) {
-                if (metaProperty.inverseComposite || !((metaProperty.dataTypeEnum !== undefined && metaProperty.dataTypeEnum !== null) || metaProperty.onePrimitive || metaProperty.oneEnumeration || metaProperty.manyPrimitive || metaProperty.name == 'id' || metaProperty.name == 'uri')) {
+                if (metaProperty.inverseComposite ||
+                        !((metaProperty.dataTypeEnum !== undefined && metaProperty.dataTypeEnum !== null) ||
+                            metaProperty.onePrimitive ||
+                            metaProperty.oneEnumeration ||
+                            metaProperty.manyEnumeration ||
+                            metaProperty.manyPrimitive ||
+                            metaProperty.name == 'id' ||
+                            metaProperty.name == 'uri')) {
                     var menuMetaProperty = {};
                     var menuCssClass = 'inactiveproperty';
                     $.each(contextMetaDataTo.properties, function (toIndex, toMetaProperty) {

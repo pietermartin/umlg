@@ -156,7 +156,7 @@
         });
 
         function validateSingleProperty(tmp) {
-            return new TumlSlick.Validators.TumlStringValidator(property).validate(tmp);
+            return new TumlSlick.Validators.TumlString(property).validate(tmp);
         }
 
         function validate(currentValues, valueToAdd) {
@@ -174,7 +174,7 @@
         });
 
         function validateSingleProperty(tmp) {
-            return new TumlSlick.Validators.TumlStringValidator(property).validate(tmp);
+            return new TumlSlick.Validators.TumlString(property).validate(tmp);
         }
 
         function validate(currentValues, valueToAdd) {

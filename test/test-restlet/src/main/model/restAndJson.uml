@@ -127,6 +127,10 @@
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_fFR6ATjFEeK9AeutZ8kzPA"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_fFR6AjjFEeK9AeutZ8kzPA" value="*"/>
             </ownedAttribute>
+            <ownedAttribute xmi:id="_BGWGkHbKEeKXTvZLiS6_pA" name="testEnumList" type="_6DXMAHbJEeKXTvZLiS6_pA" isOrdered="true" isUnique="false" association="_BGXUsHbKEeKXTvZLiS6_pA">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_BGWtoHbKEeKXTvZLiS6_pA"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_BGWtoXbKEeKXTvZLiS6_pA" value="*"/>
+            </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Class" xmi:id="_47QggN4jEeGdB9TPHp60mw" name="Ring">
             <generalization xmi:id="_NBKjICXTEeKbPYSfIbmXag">
@@ -530,6 +534,17 @@
             <ownedEnd xmi:id="_jRELgUdLEeK1a-SG6VcP9g" name="componentManyDeep2" type="_BUH-AEI_EeKpM48zLjI12Q" association="_jRELgEdLEeK1a-SG6VcP9g">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_jRELgkdLEeK1a-SG6VcP9g" value="1"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_jRELg0dLEeK1a-SG6VcP9g" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Enumeration" xmi:id="_6DXMAHbJEeKXTvZLiS6_pA" name="TestEnumList">
+            <ownedLiteral xmi:id="_-p1n4HbJEeKXTvZLiS6_pA" name="EnumerationLiteral1"/>
+            <ownedLiteral xmi:id="__HhCYHbJEeKXTvZLiS6_pA" name="EnumerationLiteral2"/>
+            <ownedLiteral xmi:id="__oKRUHbJEeKXTvZLiS6_pA" name="EnumerationLiteral3"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_BGXUsHbKEeKXTvZLiS6_pA" name="finger_testEnumList_1" memberEnd="_BGXUsXbKEeKXTvZLiS6_pA _BGWGkHbKEeKXTvZLiS6_pA">
+            <ownedEnd xmi:id="_BGXUsXbKEeKXTvZLiS6_pA" name="finger" type="_4sr5AN4jEeGdB9TPHp60mw" association="_BGXUsHbKEeKXTvZLiS6_pA">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_BGXUsnbKEeKXTvZLiS6_pA" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_BGXUs3bKEeKXTvZLiS6_pA" value="1"/>
             </ownedEnd>
           </packagedElement>
         </packagedElement>
