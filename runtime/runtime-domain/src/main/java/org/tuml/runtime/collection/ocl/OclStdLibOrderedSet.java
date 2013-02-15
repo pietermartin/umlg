@@ -160,10 +160,10 @@ public interface OclStdLibOrderedSet<E> extends OclStdLibCollection<E> {
 	<R> TinkerSequence<R> collectNested(BodyExpressionEvaluator<R, E> e);
 	
 	@Override
-	<T, R> TinkerOrderedSet<T> collect(BodyExpressionEvaluator<R, E> e);
+	<T, R> TinkerSequence<T> collect(BodyExpressionEvaluator<R, E> e);
 
     @Override
-    <T2> TinkerOrderedSet<T2> flatten();
+    <T2> TinkerSequence<T2> flatten();
 
     /*************************************************
      *

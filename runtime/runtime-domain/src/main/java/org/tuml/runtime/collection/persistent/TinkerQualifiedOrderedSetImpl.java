@@ -224,19 +224,19 @@ public class TinkerQualifiedOrderedSetImpl<E> extends BaseCollection<E> implemen
 	}
 
 	@Override
-	public <R> TinkerBag<R> collectNested(BodyExpressionEvaluator<R, E> v) {
+	public <R> TinkerSequence<R> collectNested(BodyExpressionEvaluator<R, E> v) {
 		maybeLoad();
 		return this.oclStdLibOrderedSet.collectNested(v);
 	}
 
 	@Override
-	public <T, R> TinkerBag<T> collect(BodyExpressionEvaluator<R, E> v) {
+	public <T, R> TinkerSequence<T> collect(BodyExpressionEvaluator<R, E> v) {
 		maybeLoad();
 		return this.oclStdLibOrderedSet.collect(v);
 	}
 	
 	@Override
-	public <T2> TinkerCollection<T2> flatten() {
+	public <T2> TinkerSequence<T2> flatten() {
 		maybeLoad();
 		return this.oclStdLibOrderedSet.flatten();
 	}

@@ -1,5 +1,6 @@
 package org.test.restlet.ocl;
 
+import junit.framework.Assert;
 import org.junit.Test;
 import org.test.restlet.TestRestletDefaultDataCreator;
 import org.tuml.root.Root;
@@ -20,12 +21,12 @@ import org.tuml.test.Ring;
 public class TestOcl extends BaseLocalDbTest  {
 
     @Test
-    public void testocl() {
+    public void testocl1() {
         TestRestletDefaultDataCreator testRestletDefaultDataCreator = new TestRestletDefaultDataCreator();
         testRestletDefaultDataCreator.createData();
         Human human = Root.INSTANCE.getHuman().get(0);
         TinkerBag<Human> humans = execute(human);
-        System.out.println(humans.size());
+        Assert.assertEquals(10, humans.size());
 
     }
 
@@ -56,7 +57,7 @@ public class TestOcl extends BaseLocalDbTest  {
         Human human = Root.INSTANCE.getHuman().get(0);
         Hand hand = human.getHand().iterator().next();
         TinkerSequence<Ring> rings = execute(hand);
-        System.out.println(rings.size());
+        Assert.assertEquals(5, rings.size());
 
     }
 

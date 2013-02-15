@@ -97,9 +97,29 @@
 
             tabContainer.tabs("option", "active", 0);
 
+            $('#validation-warning').children().remove();
             $('#navigation-qualified-name').children().remove();
-            $('#navigation-qualified-name').append($('<span />').text(qualifiedName));
+            var propertyDescription = qualifiedName;
+            if (propertyNavigatingTo !== undefined || propertyNavigatingTo !== null) {
+                propertyDescription += '  -  ' + createPropertyDescriptionHeading(propertyNavigatingTo);
+            }
+            $('#navigation-qualified-name').append($('<span />').text(propertyDescription));
             $('body').layout().resizeAll();
+        }
+
+        function createPropertyDescriptionHeading(propertyNavigatingTo) {
+            var multiplicity;
+            if (propertyNavigatingTo.upper == -1) {
+                multiplicity = 'multiplicity: [' + propertyNavigatingTo.lower + '..*]';
+            } else {
+                multiplicity = 'multiplicity: [' + propertyNavigatingTo.lower + '..' + propertyNavigatingTo.upper + ']';
+            }
+            var unique = 'unique: ' + propertyNavigatingTo.unique;
+            var ordered = 'ordered: ' + propertyNavigatingTo.ordered;
+            //TODO
+//            var derived = 'derived: ' + propertyNavigatingTo.derived;
+            var association = 'association: ' + (propertyNavigatingTo.composite?'composite':'non composite');
+            return multiplicity + ', ' + unique + ', ' + ordered + ', ' + association;
         }
 
         function clearTabsOnAddOneOrMany(newContextVertexId) {

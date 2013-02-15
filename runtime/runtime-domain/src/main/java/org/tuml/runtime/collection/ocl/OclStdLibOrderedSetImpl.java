@@ -6,6 +6,7 @@ import org.apache.commons.collections.set.ListOrderedSet;
 import org.tuml.runtime.collection.TinkerBag;
 import org.tuml.runtime.collection.TinkerCollection;
 import org.tuml.runtime.collection.TinkerOrderedSet;
+import org.tuml.runtime.collection.TinkerSequence;
 
 import java.util.*;
 
@@ -86,34 +87,34 @@ public class OclStdLibOrderedSetImpl<E> extends OclStdLibCollectionImpl<E> imple
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <R> TinkerBag<R> collectNested(BodyExpressionEvaluator<R, E> v) {
-		Multiset<R> result = HashMultiset.create();
+	public <R> TinkerSequence<R> collectNested(BodyExpressionEvaluator<R, E> v) {
+        List<R> result = new ArrayList<R>();
 		for (Object e : this.orderedSet) {
 			R evaluate = v.evaluate((E)e);
 			if (evaluate != null) {
 				result.add(evaluate);
 			}
 		}
-		return new OclStdLibBagImpl<R>(result);
+		return new OclStdLibSequenceImpl<R>(result);
 	}
 	
 	@Override
-	public <T, R> TinkerBag<T> collect(BodyExpressionEvaluator<R, E> v) {
+	public <T, R> TinkerSequence<T> collect(BodyExpressionEvaluator<R, E> v) {
 		return collectNested(v).flatten();
 	}
 
 	@Override
-	public <R> TinkerOrderedSet<R> flatten() {
-		ListOrderedSet result = new ListOrderedSet();
+	public <R> TinkerSequence<R> flatten() {
+        List<R> result = new ArrayList<R>();
 		for (Object e : this.orderedSet) {
 			if (e instanceof TinkerCollection) {
 				TinkerCollection<?> collection = (TinkerCollection<?>) e;
 				result.addAll(collection.<R> flatten());
 			} else {
-				result.add(e);
+				result.add((R)e);
 			}
 		}
-		return new OclStdLibOrderedSetImpl<R>(result);
+		return new OclStdLibSequenceImpl<R>(result);
 	}
 
 	@Override

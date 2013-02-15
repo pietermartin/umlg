@@ -358,12 +358,12 @@
 }
 
 #validation-warning {
-    width: 50%;
-    margin: 0px auto;
-    text-align: center;
+    color: red;
+    float: right;
+    margin-right: 5px;
     padding-top: 5px;
-    color: #006400;
-    font: bold;
+    text-align: right;
+    width: 50%;
 }
 
 .ui-left-menu-query-li {

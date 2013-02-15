@@ -6,10 +6,7 @@ import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 import org.apache.commons.collections.set.ListOrderedSet;
 import org.tuml.runtime.adaptor.GraphDb;
-import org.tuml.runtime.collection.TinkerBag;
-import org.tuml.runtime.collection.TinkerCollection;
-import org.tuml.runtime.collection.TinkerOrderedSet;
-import org.tuml.runtime.collection.TumlRuntimeProperty;
+import org.tuml.runtime.collection.*;
 import org.tuml.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.tuml.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.tuml.runtime.collection.ocl.OclStdLibOrderedSet;
@@ -231,19 +228,19 @@ public class TinkerOrderedSetImpl<E> extends BaseCollection<E> implements Tinker
 	}
 
 	@Override
-	public <R> TinkerBag<R> collectNested(BodyExpressionEvaluator<R, E> v) {
+	public <R> TinkerSequence<R> collectNested(BodyExpressionEvaluator<R, E> v) {
 		maybeLoad();
 		return this.oclStdLibOrderedSet.collectNested(v);
 	}
 
 	@Override
-	public <T, R> TinkerBag<T> collect(BodyExpressionEvaluator<R, E> v) {
+	public <T, R> TinkerSequence<T> collect(BodyExpressionEvaluator<R, E> v) {
 		maybeLoad();
 		return this.oclStdLibOrderedSet.collect(v);
 	}
 
 	@Override
-	public <T2> TinkerCollection<T2> flatten() {
+	public <T2> TinkerSequence<T2> flatten() {
 		maybeLoad();
 		return this.oclStdLibOrderedSet.flatten();
 	}

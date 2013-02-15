@@ -2,7 +2,9 @@ package org.tuml.runtime.collection.memory;
 
 import org.apache.commons.collections.set.ListOrderedSet;
 import org.tuml.runtime.collection.TinkerBag;
+import org.tuml.runtime.collection.TinkerCollection;
 import org.tuml.runtime.collection.TinkerOrderedSet;
+import org.tuml.runtime.collection.TinkerSequence;
 import org.tuml.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.tuml.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.tuml.runtime.collection.ocl.OclStdLibOrderedSet;
@@ -43,14 +45,19 @@ public class TumlMemoryOrderedSet<E> extends TumlMemoryCollection<E> implements 
 	}
 
 	@Override
-	public <T, R> TinkerBag<T> collect(BodyExpressionEvaluator<R, E> e) {
+	public <T, R> TinkerSequence<T> collect(BodyExpressionEvaluator<R, E> e) {
 		return this.oclStdLibOrderedSet.collect(e);
 	}
 
 	@Override
-	public <R> TinkerBag<R> collectNested(BodyExpressionEvaluator<R, E> e) {
+	public <R> TinkerSequence<R> collectNested(BodyExpressionEvaluator<R, E> e) {
 		return this.oclStdLibOrderedSet.collectNested(e);
 	}
+
+    @Override
+    public <T2> TinkerSequence<T2> flatten() {
+        return this.oclStdLibOrderedSet.flatten();
+    }
 
 	@Override
 	public boolean addAll(int index, Collection<? extends E> c) {

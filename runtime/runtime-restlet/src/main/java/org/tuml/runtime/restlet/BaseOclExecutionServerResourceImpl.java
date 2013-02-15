@@ -34,11 +34,9 @@ public abstract class BaseOclExecutionServerResourceImpl extends ServerResource 
             json.append("{\"data\": [");
             int count = 0;
             PersistentObject poForMetaData = null;
-            //As queries can return duplicates mrename the id field and add the row number as the new id
             for (PersistentObject po : poCollection) {
                 count++;
                 String objectAsJson = po.toJsonWithoutCompositeParent();
-//                objectAsJson = objectAsJson.replace("\"id\"", "\"vertexId\"");
                 String objectAsJsonWithRow = "{\"row\": " + count + ", " + objectAsJson.substring(1);
                 json.append(objectAsJsonWithRow);
                 if (count != poCollection.size()) {
