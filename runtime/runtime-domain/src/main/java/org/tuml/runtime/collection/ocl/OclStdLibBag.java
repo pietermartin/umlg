@@ -114,23 +114,6 @@ public interface OclStdLibBag<E> extends OclStdLibCollection<E> {
 	int count(E object);
 	
 	/**
-	 * flatten() : Bag(T2)
-	 * <pre>
-	 * Redefines the Collection operation. If the element type is not a collection type, this results in the same bag as self. If the
-	 * element type is a collection type, the result is the bag containing all the elements of all the recursively flattened elements
-	 * of self.
-	 * 		post: result = if self.oclType().elementType.oclIsKindOf(CollectionType) then
-	 * 			self->iterate(c; acc : Bag(T2) = Bag{} |
-	 * 				acc->union(c->flatten()->asBag() ) )
-	 * 			else
-	 * 				self
-	 * 			endif
-	 * </pre>
-	 */
-	@Override
-	<T2> TinkerBag<T2> flatten();
-	
-	/**
 	 * asBag() : Bag(T)
 	 * <pre>
 	 * Redefines the Collection operation. A Bag identical to self. This operation exists for convenience reasons.
@@ -186,5 +169,22 @@ public interface OclStdLibBag<E> extends OclStdLibCollection<E> {
 
 	@Override
 	<T, R> TinkerBag<T> collect(BodyExpressionEvaluator<R, E> e);
-	
+
+    /**
+     * flatten() : Bag(T2)
+     * <pre>
+     * Redefines the Collection operation. If the element type is not a collection type, this results in the same bag as self. If the
+     * element type is a collection type, the result is the bag containing all the elements of all the recursively flattened elements
+     * of self.
+     * 		post: result = if self.oclType().elementType.oclIsKindOf(CollectionType) then
+     * 			self->iterate(c; acc : Bag(T2) = Bag{} |
+     * 				acc->union(c->flatten()->asBag() ) )
+     * 			else
+     * 				self
+     * 			endif
+     * </pre>
+     */
+    @Override
+    <T2> TinkerBag<T2> flatten();
+
 }

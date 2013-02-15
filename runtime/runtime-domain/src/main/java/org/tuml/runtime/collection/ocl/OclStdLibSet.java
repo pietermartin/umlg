@@ -124,24 +124,6 @@ public interface OclStdLibSet<E> extends OclStdLibCollection<E> {
 	 */
 	int count(E e);
 
-	/**
-	 * flatten() : Set(T2)
-	 * 
-	 * <pre>
-	 * Redefines the Collection operation. If the element type is not a collection type, this results in the same set as self. If the
-	 * element type is a collection type, the result is the set containing all the elements of all the recursively flattened elements
-	 * of self.
-	 * 		post: result = if self.oclType().elementType.oclIsKindOf(CollectionType) then
-	 * 						self->iterate(c; acc : Set(T2) = Set{} |
-	 * 							acc->union(c->flatten()->asSet() ) )
-	 * 						else
-	 * 							self
-	 * 						endif
-	 * </pre>
-	 */
-	@Override
-	<R> TinkerSet<R> flatten();
-
 //	/**
 //	 * asSet() : Set(T)
 //	 * 
@@ -200,4 +182,21 @@ public interface OclStdLibSet<E> extends OclStdLibCollection<E> {
 	@Override
 	<T, R> TinkerBag<T> collect(BodyExpressionEvaluator<R, E> e);
 
+    /**
+     * flatten() : Set(T2)
+     *
+     * <pre>
+     * Redefines the Collection operation. If the element type is not a collection type, this results in the same set as self. If the
+     * element type is a collection type, the result is the set containing all the elements of all the recursively flattened elements
+     * of self.
+     * 		post: result = if self.oclType().elementType.oclIsKindOf(CollectionType) then
+     * 						self->iterate(c; acc : Set(T2) = Set{} |
+     * 							acc->union(c->flatten()->asSet() ) )
+     * 						else
+     * 							self
+     * 						endif
+     * </pre>
+     */
+    @Override
+    <R> TinkerSet<R> flatten();
 }

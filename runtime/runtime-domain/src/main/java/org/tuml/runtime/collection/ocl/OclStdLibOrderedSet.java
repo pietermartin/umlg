@@ -157,16 +157,19 @@ public interface OclStdLibOrderedSet<E> extends OclStdLibCollection<E> {
 	TinkerOrderedSet<E> select(BooleanExpressionEvaluator<E> e);
 	
 	@Override
-	<R> TinkerBag<R> collectNested(BodyExpressionEvaluator<R, E> e);
+	<R> TinkerSequence<R> collectNested(BodyExpressionEvaluator<R, E> e);
 	
 	@Override
-	<T, R> TinkerBag<T> collect(BodyExpressionEvaluator<R, E> e);
-	
-	/*************************************************
-	 * 
-	 * Not in spec
-	 * 
-	 *************************************************/
+	<T, R> TinkerOrderedSet<T> collect(BodyExpressionEvaluator<R, E> e);
+
+    @Override
+    <T2> TinkerOrderedSet<T2> flatten();
+
+    /*************************************************
+     *
+     * Not in spec
+     *
+     *************************************************/
 	/**
 	 * including(object : T) : Set(T)
 	 * 
@@ -178,7 +181,5 @@ public interface OclStdLibOrderedSet<E> extends OclStdLibCollection<E> {
 	 * </pre>
 	 */
 	TinkerOrderedSet<E> including(E e);
-	
-	
-	
+
 }

@@ -42,24 +42,6 @@ public interface OclStdLibSequence<E> extends OclStdLibCollection<E> {
 	TinkerSequence<E> union(TinkerSequence<? extends E> s);
 	
 	/**
-	 * flatten() : Sequence(T2)
-	 * <pre>
-	 * Redefines the Collection operation. If the element type is not a collection type, this results in the same sequence as self.
-	 * If the element type is a collection type, the result is the sequence containing all the elements of all the recursively
-	 * flattened elements of self. The order of the elements is partial.
-	 * 		post: result = if self.oclType().elementType.oclIsKindOf(CollectionType) then
-	 * 			self->iterate(c; acc : Sequence(T2) = Sequence{} |
-	 * 				acc->union(c->flatten()->asSequence() ) )
-	 * 			else
-	 * 				self
-	 * 			endif
-	 * </pre>
-	 * 
-	 */
-	@Override
-	<T2> TinkerSequence<T2> flatten();
-
-	/**
 	 * append (object: T) : Sequence(T)
 	 * <pre>
 	 * The sequence of elements, consisting of all elements of self, followed by object.
@@ -257,5 +239,23 @@ public interface OclStdLibSequence<E> extends OclStdLibCollection<E> {
 	
 	@Override
 	<T, R> TinkerSequence<T> collect(BodyExpressionEvaluator<R, E> e);
-	
+
+    /**
+     * flatten() : Sequence(T2)
+     * <pre>
+     * Redefines the Collection operation. If the element type is not a collection type, this results in the same sequence as self.
+     * If the element type is a collection type, the result is the sequence containing all the elements of all the recursively
+     * flattened elements of self. The order of the elements is partial.
+     * 		post: result = if self.oclType().elementType.oclIsKindOf(CollectionType) then
+     * 			self->iterate(c; acc : Sequence(T2) = Sequence{} |
+     * 				acc->union(c->flatten()->asSequence() ) )
+     * 			else
+     * 				self
+     * 			endif
+     * </pre>
+     *
+     */
+    @Override
+    <T2> TinkerSequence<T2> flatten();
+
 }

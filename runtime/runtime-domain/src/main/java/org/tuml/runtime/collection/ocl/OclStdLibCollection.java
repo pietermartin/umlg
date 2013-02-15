@@ -209,20 +209,6 @@ public interface OclStdLibCollection<E> extends OclAny {
 	 */
 	TinkerBag<E> asBag();
 
-	/**
-	 * flatten() : Collection(T2)
-	 * <pre>
-	 * If the element type is not a collection type, this results in the same collection as self. If the element type is a collection
-	 * type, the result is a collection containing all the elements of all the recursively flattened elements of self.
-	 * [1] Well-formedness rules
-	 * [2] [1] A collection cannot contain invalid values.
-	 * 		context Collection
-	 * 		inv: self->forAll(not oclIsInvalid())
-	 * </pre> 
-	 * @return
-	 */
-	<T2> TinkerCollection<T2> flatten();
-
 	/***************************************************
 	 * Iterate goodies
 	 ***************************************************/
@@ -282,5 +268,19 @@ public interface OclStdLibCollection<E> extends OclAny {
 	 * @return
 	 */
 	<R> TinkerCollection<R> collectNested(BodyExpressionEvaluator<R, E> e);
+
+    /**
+     * flatten() : Collection(T2)
+     * <pre>
+     * If the element type is not a collection type, this results in the same collection as self. If the element type is a collection
+     * type, the result is a collection containing all the elements of all the recursively flattened elements of self.
+     * [1] Well-formedness rules
+     * [2] [1] A collection cannot contain invalid values.
+     * 		context Collection
+     * 		inv: self->forAll(not oclIsInvalid())
+     * </pre>
+     * @return
+     */
+    <T2> TinkerCollection<T2> flatten();
 
 }
