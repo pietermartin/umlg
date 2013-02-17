@@ -138,4 +138,26 @@ public class TestNeo4jBlueprints {
         Assert.assertFalse(iterator.hasNext());
     }
 
+    @Test
+    public void testMultipleEdgesBetweenNodes() throws IOException {
+        final String url = "/tmp/blueprintstest2";
+        File dir = new File(url);
+        FileUtils.deleteDirectory(dir);
+        final File f = new File(url);
+
+        Neo4jGraph graph = new Neo4jGraph(f.getAbsolutePath());
+        Vertex v1 = graph.addVertex(null);
+        Vertex v2 = graph.addVertex(null);
+        Edge edge1 = graph.addEdge(null, v1, v1, "test");
+        Edge edge2 = graph.addEdge(null, v1, v1, "test");
+        graph.commit();
+        Assert.assertNotSame(edge1, edge2);
+        v1 = graph.getVertex(v1.getId());
+        Iterator<Edge> iterator = v1.getEdges(Direction.OUT, "test").iterator();
+        Assert.assertEquals(edge1, iterator.next());
+        Assert.assertEquals(edge2, iterator.next());
+
+
+    }
+
 }

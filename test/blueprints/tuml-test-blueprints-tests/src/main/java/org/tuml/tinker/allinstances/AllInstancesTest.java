@@ -162,7 +162,7 @@ public class AllInstancesTest extends BaseLocalDbTest {
 		manyB1.setName("manyB1");
 		ManyB manyB2 = new ManyB(god);
 		manyB2.setName("manyB2");
-		
+
 		manyA1.addToIManyB(manyB1);
 		manyA1.addToIManyB(manyB2);
 		manyA2.addToIManyB(manyB1);

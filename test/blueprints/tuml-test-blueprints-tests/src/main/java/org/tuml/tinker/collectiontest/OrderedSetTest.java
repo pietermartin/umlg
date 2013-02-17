@@ -23,7 +23,7 @@ public class OrderedSetTest extends BaseLocalDbTest {
 		God godTest = new God(god.getVertex());
 		Assert.assertEquals(1, godTest.getWorld().size());
 	}
-	
+
 	@Test
 	public void testOrderedSetIsOrdered() {
 		God god = new God(true);

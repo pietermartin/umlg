@@ -3,6 +3,7 @@ package org.tuml.runtime.collection.persistent;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multiset;
+import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 import org.tuml.runtime.collection.TinkerBag;
 import org.tuml.runtime.collection.TinkerSet;
@@ -34,8 +35,13 @@ public abstract class BaseBag<E> extends BaseCollection<E> implements TinkerBag<
 		this.oclStdLibBag = new OclStdLibBagImpl<E>((Multiset<E>)this.internalCollection); 
 		this.oclStdLibCollection = this.oclStdLibBag;
 	}
+
+    @Override
+    protected void manageLinkedList(Edge edge, TumlNode e) {
+        throw new RuntimeException("manageLinkedList and manageLinkedListInverse should never be called for a BaseSet!");
+    }
 	
-	protected Vertex getFromInternalMap(Object o) {
+	protected Vertex removeFromInternalMap(Object o) {
 		List<Vertex> vertexList = this.internalVertexMultiMap.get(o);
 		if (!vertexList.isEmpty()) {
 			Vertex vertex = vertexList.get(0);

@@ -1,5 +1,6 @@
 package org.tuml.runtime.collection.persistent;
 
+import com.tinkerpop.blueprints.Edge;
 import org.tuml.runtime.collection.TinkerBag;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
@@ -29,6 +30,11 @@ public abstract class BaseSet<E> extends BaseCollection<E> implements TinkerSet<
 		this.oclStdLibSet = new OclStdLibSetImpl<E>((Set<E>)this.internalCollection);
 		this.oclStdLibCollection = this.oclStdLibSet;
 	}
+
+    @Override
+    protected void manageLinkedList(Edge edge, TumlNode e) {
+        throw new RuntimeException("manageLinkedList and manageLinkedListInverse should never be called for a BaseSet!");
+    }
 
 	protected Set<E> getInternalSet() {
 		return (Set<E>) this.internalCollection;

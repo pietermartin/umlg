@@ -26,5 +26,6 @@ public interface TumlRuntimeProperty {
 	boolean isOrdered();
 	boolean isInverseOrdered();
 	boolean isUnique();
+    boolean isInverseUnique();
 	String toJson();
 }

@@ -1,9 +1,11 @@
 package org.tuml.runtime.collection.persistent;
 
 import com.tinkerpop.blueprints.CloseableIterable;
+import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 import org.apache.commons.collections.set.ListOrderedSet;
+import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.collection.*;
 import org.tuml.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.tuml.runtime.collection.ocl.BooleanExpressionEvaluator;
@@ -30,6 +32,28 @@ public class TinkerOrderedSetClosableIterableImpl<E> extends BaseCollection<E> i
 	protected ListOrderedSet getInternalListOrderedSet() {
 		return (ListOrderedSet) this.internalCollection;
 	}
+
+    @Override
+    protected void manageLinkedList(Edge edge, TumlNode e) {
+        //Get the new vertex for the element
+        Vertex newElementVertex = getVertexForDirection(edge);
+        if (this.vertex.getEdges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE).iterator().hasNext()) {
+            Edge edgeToLastVertex = this.vertex.getEdges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE).iterator().next();
+            Vertex lastVertex = edgeToLastVertex.getVertex(Direction.IN);
+
+            //move the edge to the last vertex
+            GraphDb.getDb().removeEdge(edgeToLastVertex);
+            GraphDb.getDb().addEdge(null, this.vertex, newElementVertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE);
+
+            //add the element to the linked list
+            GraphDb.getDb().addEdge(null, lastVertex, newElementVertex, LABEL_TO_NEXT_IN_SEQUENCE);
+
+        } else {
+            //its the first element in the list
+            GraphDb.getDb().addEdge(null, this.vertex, newElementVertex, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE);
+            GraphDb.getDb().addEdge(null, this.vertex, newElementVertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE);
+        }
+    }
 
 	@Override
 	protected Iterator<Edge> getEdges() {

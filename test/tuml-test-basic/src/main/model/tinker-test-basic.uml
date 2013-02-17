@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<uml:Model xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xmi:id="_qb8akM37EdqwVrslYOdUDA" name="basicmodel">
+<uml:Model xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xmi:id="_qb8akM37EdqwVrslYOdUDA" name="basicmodel">
   <elementImport xmi:id="_hZz7UK1CEeG4sJlJhTM52A">
     <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
   </elementImport>
@@ -225,6 +225,31 @@
           <ownedEnd xmi:id="_axBqocNVEeGwsJEO56VJvw" name="sequenceRoot" visibility="public" type="_Ag4XoMNVEeGwsJEO56VJvw" isOrdered="true" association="_axBqoMNVEeGwsJEO56VJvw">
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_axBqo8NVEeGwsJEO56VJvw" value="1"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_axBqosNVEeGwsJEO56VJvw" value="1"/>
+          </ownedEnd>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Class" xmi:id="_yWr9QHgTEeKw0KTM3RH34A" name="SequenceNotUniqueRoot">
+          <ownedAttribute xmi:id="_2bpngHgTEeKw0KTM3RH34A" name="name">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+          </ownedAttribute>
+          <ownedAttribute xmi:id="_Dk8jkHgVEeKw0KTM3RH34A" name="sequenceNotUniqueTest" type="_9WGRIHgTEeKw0KTM3RH34A" isOrdered="true" isUnique="false" aggregation="composite" association="_Dk9KoHgVEeKw0KTM3RH34A">
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Dk8jkXgVEeKw0KTM3RH34A"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Dk8jkngVEeKw0KTM3RH34A" value="*"/>
+          </ownedAttribute>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Class" xmi:id="_9WGRIHgTEeKw0KTM3RH34A" name="SequenceNotUniqueTest">
+          <ownedAttribute xmi:id="_AQ3ZIHgUEeKw0KTM3RH34A" name="name" visibility="public">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_AfJswHgUEeKw0KTM3RH34A" value="1"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_AfK64HgUEeKw0KTM3RH34A" value="1"/>
+            <defaultValue xmi:type="uml:LiteralString" xmi:id="_AfMwEHgUEeKw0KTM3RH34A">
+              <value xsi:nil="true"/>
+            </defaultValue>
+          </ownedAttribute>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Association" xmi:id="_Dk9KoHgVEeKw0KTM3RH34A" name="sequenceNotUniqueRoot_sequenceNotUniqueTest_1" memberEnd="_Dk9KoXgVEeKw0KTM3RH34A _Dk8jkHgVEeKw0KTM3RH34A" navigableOwnedEnd="_Dk9KoXgVEeKw0KTM3RH34A">
+          <ownedEnd xmi:id="_Dk9KoXgVEeKw0KTM3RH34A" name="sequenceNotUniqueRoot" type="_yWr9QHgTEeKw0KTM3RH34A" association="_Dk9KoHgVEeKw0KTM3RH34A">
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Dk9KongVEeKw0KTM3RH34A" value="1"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Dk9Ko3gVEeKw0KTM3RH34A" value="1"/>
           </ownedEnd>
         </packagedElement>
       </packagedElement>

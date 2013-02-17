@@ -58,6 +58,14 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         this.property = property;
     }
 
+    public boolean isInverseUnique() {
+        if (getOtherEnd() != null) {
+            return new PropertyWrapper(getOtherEnd()).isUnique();
+        } else {
+            return false;
+        }
+    }
+
     public boolean isDataType() {
         return getType() instanceof DataType;
     }

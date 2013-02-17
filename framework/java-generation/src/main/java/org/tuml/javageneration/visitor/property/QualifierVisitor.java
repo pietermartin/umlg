@@ -100,25 +100,23 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
     }
 
     private void generateQualifiedGetter(PropertyWrapper qualified) {
-//		PropertyWrapper qualifiedPropertyWrapper = new PropertyWrapper(qualified);
-        PropertyWrapper qualifiedPropertyWrapper = qualified;
-        List<PropertyWrapper> qualifiers = qualifiedPropertyWrapper.getQualifiersAsPropertyWrappers();
+        List<PropertyWrapper> qualifiers = qualified.getQualifiersAsPropertyWrappers();
         for (PropertyWrapper qualifier : qualifiers) {
             validateHasCorrespondingDerivedProperty(qualifier);
         }
 
         //TODO might be a intermittent bug in getting owning type logic for many to manies
-        Type qualifiedClassifier = qualifiedPropertyWrapper.getOwningType();
+        Type qualifiedClassifier = qualified.getOwningType();
         OJAnnotatedClass ojClass = findOJClass(qualifiedClassifier);
 
-        OJAnnotatedOperation qualifierValue = new OJAnnotatedOperation(qualifiedPropertyWrapper.getQualifiedNameFor(qualifiers));
+        OJAnnotatedOperation qualifierValue = new OJAnnotatedOperation(qualified.getQualifiedNameFor(qualifiers));
         if (qualified.isUnqualifiedOne()) {
-            qualifierValue.setReturnType(qualifiedPropertyWrapper.javaBaseTypePath());
+            qualifierValue.setReturnType(qualified.javaBaseTypePath());
         } else {
             // This needs to only return a Set or Bag for now, not sorting the
             // result
             // by index as yet
-            qualifierValue.setReturnType(qualifiedPropertyWrapper.javaTypePath());
+            qualifierValue.setReturnType(qualified.javaTypePath());
         }
         for (PropertyWrapper qualifier : qualifiers) {
             qualifierValue.addParam(qualifier.fieldname(), qualifier.javaBaseTypePath());
@@ -128,7 +126,7 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
         ojClass.addToImports(TinkerGenerationUtil.tinkerDirection);
         ojClass.addToImports(TinkerGenerationUtil.edgePathName);
         qualifierValue.getBody().addToStatements(
-                "Index<Edge> index = GraphDb.getDb().getIndex(getUid() + \"" + TinkerGenerationUtil.INDEX_SEPARATOR + "\" + " + qualifiedPropertyWrapper.getTumlRuntimePropertyEnum() + ".getQualifiedName(), Edge.class)");
+                "Index<Edge> index = GraphDb.getDb().getIndex(getUid() + \"" + TinkerGenerationUtil.INDEX_SEPARATOR + "\" + " + qualified.getTumlRuntimePropertyEnum() + ".getQualifiedName(), Edge.class)");
         OJIfStatement ifIndexNull = new OJIfStatement("index==null", "return null");
 
         OJBlock elseBlock = new OJBlock();
@@ -158,17 +156,17 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
         ojClass.addToImports("java.util.Iterator");
         OJIfStatement ifHasNext = new OJIfStatement("iterator.hasNext()");
         if (qualified.isUnqualifiedOne()) {
-            ifHasNext.addToThenPart("return new " + qualifiedPropertyWrapper.javaBaseTypePath().getLast() + "(iterator.next().getVertex("
+            ifHasNext.addToThenPart("return new " + qualified.javaBaseTypePath().getLast() + "(iterator.next().getVertex("
                     + TinkerGenerationUtil.tinkerDirection.getLast() + ".IN))");
             ifHasNext.addToElsePart("return null");
         } else {
             OJSimpleStatement ojSimpleStatement;
             ojSimpleStatement = new OJSimpleStatement("return new "
-                    + qualifiedPropertyWrapper.javaClosableIteratorTypePath().getCopy().getLast());
-            ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + "(iterator, " + qualifiedPropertyWrapper.getTumlRuntimePropertyEnum() + ")");
-            ojClass.addToImports(qualifiedPropertyWrapper.javaClosableIteratorTypePath());
+                    + qualified.javaClosableIteratorTypePath().getCopy().getLast());
+            ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + "(iterator, " + qualified.getTumlRuntimePropertyEnum() + ")");
+            ojClass.addToImports(qualified.javaClosableIteratorTypePath());
             ifHasNext.addToThenPart(ojSimpleStatement);
-            ifHasNext.addToElsePart("return " + qualifiedPropertyWrapper.emptyCollection());
+            ifHasNext.addToElsePart("return " + qualified.emptyCollection());
             ojClass.addToImports(TinkerGenerationUtil.tumlTumlCollections);
         }
 

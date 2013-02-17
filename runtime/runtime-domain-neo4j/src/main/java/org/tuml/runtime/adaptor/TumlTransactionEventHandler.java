@@ -31,80 +31,85 @@ public class TumlTransactionEventHandler<T> implements TransactionEventHandler<T
 
     @Override
     public T beforeCommit(TransactionData data) throws Exception {
-        Set<Node> deletedNodes = new HashSet<Node>();
-        Iterable<Node> deletedNodeIterable = data.deletedNodes();
-        for (Node node : deletedNodeIterable) {
-            deletedNodes.add(node);
-        }
-
-        Set<Node> touchedNodes = new HashSet<Node>();
-        Iterable<PropertyEntry<Node>> propertyEntryIterable = data.assignedNodeProperties();
-        for (PropertyEntry<Node> propertyEntry : propertyEntryIterable) {
-            Node node = propertyEntry.entity();
-            touchedNodes.add(node);
-        }
-        propertyEntryIterable = data.removedNodeProperties();
-        for (PropertyEntry<Node> propertyEntry : propertyEntryIterable) {
-            Node node = propertyEntry.entity();
-            touchedNodes.add(node);
-        }
-        Iterable<Node> nodeIterable = data.createdNodes();
-        for (Node node : nodeIterable) {
-            touchedNodes.add(node);
-        }
-        Iterable<Relationship> relationshipIterable = data.createdRelationships();
-        for (Relationship relationship : relationshipIterable) {
-            Node startNode = relationship.getStartNode();
-            Node endNode = relationship.getEndNode();
-            touchedNodes.add(startNode);
-            touchedNodes.add(endNode);
-        }
-        relationshipIterable = data.deletedRelationships();
-        for (Relationship relationship : relationshipIterable) {
-            Node startNode = relationship.getStartNode();
-            Node endNode = relationship.getEndNode();
-            touchedNodes.add(startNode);
-            touchedNodes.add(endNode);
-        }
-        for (Node node : touchedNodes) {
-            if (deletedNodes.contains(node) || !node.hasProperty("className") || node.getProperty("className").equals(TumlGraph.ROOT_CLASS_NAME)) {
-                continue;
-            }
-            Neo4jVertex touchedVertex = new Neo4jVertex(node, (Neo4jGraph) GraphDb.getDb());
-            TumlNode tumlNode = GraphDb.getDb().instantiateClassifier((Long) touchedVertex.getId());
-            List<TumlConstraintViolation> requiredConstraintViolations = tumlNode.validateMultiplicities();
-            if (!requiredConstraintViolations.isEmpty()) {
-                throw new TumlConstraintViolationException(requiredConstraintViolations);
-            }
-            if (!tumlNode.isTinkerRoot() && tumlNode.getOwningObject() == null) {
-                if (tumlNode instanceof BaseTinkerAuditable && ((BaseTinkerAuditable) tumlNode).getDeletedOn().isBefore(new DateTime())) {
-                    return null;
-                }
-                throw new IllegalStateException(String.format("Entity %s %s does not have a composite owner", tumlNode.getClass().getSimpleName(), tumlNode.getId()));
-            }
-        }
-//        try {
-//            if (!isEmpty(data) && GraphDb.getDb() != null) {
-//                TransactionThreadVar.clear();
-//                GraphDb.incrementTransactionCount();
-//                List<CompositionNode> entities = TransactionThreadEntityVar.get();
-//                for (CompositionNode entity : entities) {
-//                    TumlNode tumlNode = (TumlNode) entity;
-//                    List<TumlConstraintViolation> requiredConstraintViolations = tumlNode.validateMultiplicities();
-//                    if (!requiredConstraintViolations.isEmpty()) {
-//                        throw new TumlConstraintViolationException(requiredConstraintViolations);
-//                    }
-//                    if (!entity.isTinkerRoot() && entity.getOwningObject() == null) {
-//                        if (entity instanceof BaseTinkerAuditable && ((BaseTinkerAuditable) entity).getDeletedOn().isBefore(new DateTime())) {
-//                            return null;
-//                        }
-//                        throw new IllegalStateException(String.format("Entity %s %s does not have a composite owner", entity.getClass().getSimpleName(), entity.getId()));
-//                    }
-//                }
-//            }
-//        } finally {
-//            TransactionThreadEntityVar.remove();
+//        Set<Node> deletedNodes = new HashSet<Node>();
+//        Iterable<Node> deletedNodeIterable = data.deletedNodes();
+//        for (Node node : deletedNodeIterable) {
+//            deletedNodes.add(node);
 //        }
+//
+//        Set<Node> touchedNodes = new HashSet<Node>();
+//        Iterable<PropertyEntry<Node>> propertyEntryIterable = data.assignedNodeProperties();
+//        for (PropertyEntry<Node> propertyEntry : propertyEntryIterable) {
+//            Node node = propertyEntry.entity();
+//            touchedNodes.add(node);
+//        }
+//        propertyEntryIterable = data.removedNodeProperties();
+//        for (PropertyEntry<Node> propertyEntry : propertyEntryIterable) {
+//            Node node = propertyEntry.entity();
+//            touchedNodes.add(node);
+//        }
+//        Iterable<Node> nodeIterable = data.createdNodes();
+//        for (Node node : nodeIterable) {
+//            touchedNodes.add(node);
+//        }
+//        Iterable<Relationship> relationshipIterable = data.createdRelationships();
+//        for (Relationship relationship : relationshipIterable) {
+//            Node startNode = relationship.getStartNode();
+//            Node endNode = relationship.getEndNode();
+//            touchedNodes.add(startNode);
+//            touchedNodes.add(endNode);
+//        }
+//        relationshipIterable = data.deletedRelationships();
+//        for (Relationship relationship : relationshipIterable) {
+//            Node startNode = relationship.getStartNode();
+//            Node endNode = relationship.getEndNode();
+//            touchedNodes.add(startNode);
+//            touchedNodes.add(endNode);
+//        }
+//        for (Node node : touchedNodes) {
+//            if (deletedNodes.contains(node) || !node.hasProperty("className") || node.getProperty("className").equals(TumlGraph.ROOT_CLASS_NAME)) {
+//                continue;
+//            }
+//            Class clazz = Class.forName((String) node.getProperty("className"));
+//            if (clazz.isEnum()) {
+//                continue;
+//            }
+//
+//            Neo4jVertex touchedVertex = new Neo4jVertex(node, (Neo4jGraph) GraphDb.getDb());
+//            TumlNode tumlNode = GraphDb.getDb().instantiateClassifier((Long) touchedVertex.getId());
+//            List<TumlConstraintViolation> requiredConstraintViolations = tumlNode.validateMultiplicities();
+//            if (!requiredConstraintViolations.isEmpty()) {
+//                throw new TumlConstraintViolationException(requiredConstraintViolations);
+//            }
+//            if (!tumlNode.isTinkerRoot() && tumlNode.getOwningObject() == null) {
+//                if (tumlNode instanceof BaseTinkerAuditable && ((BaseTinkerAuditable) tumlNode).getDeletedOn().isBefore(new DateTime())) {
+//                    return null;
+//                }
+//                throw new IllegalStateException(String.format("Entity %s %s does not have a composite owner", tumlNode.getClass().getSimpleName(), tumlNode.getId()));
+//            }
+//        }
+        try {
+            if (!isEmpty(data) && GraphDb.getDb() != null) {
+                TransactionThreadVar.clear();
+                GraphDb.incrementTransactionCount();
+                List<CompositionNode> entities = TransactionThreadEntityVar.get();
+                for (CompositionNode entity : entities) {
+                    TumlNode tumlNode = (TumlNode) entity;
+                    List<TumlConstraintViolation> requiredConstraintViolations = tumlNode.validateMultiplicities();
+                    if (!requiredConstraintViolations.isEmpty()) {
+                        throw new TumlConstraintViolationException(requiredConstraintViolations);
+                    }
+                    if (!entity.isTinkerRoot() && entity.getOwningObject() == null) {
+                        if (entity instanceof BaseTinkerAuditable && ((BaseTinkerAuditable) entity).getDeletedOn().isBefore(new DateTime())) {
+                            return null;
+                        }
+                        throw new IllegalStateException(String.format("Entity %s %s does not have a composite owner", entity.getClass().getSimpleName(), entity.getId()));
+                    }
+                }
+            }
+        } finally {
+            TransactionThreadEntityVar.remove();
+        }
         return null;
     }
 

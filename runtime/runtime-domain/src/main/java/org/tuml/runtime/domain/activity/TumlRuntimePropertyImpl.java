@@ -104,7 +104,12 @@ public class TumlRuntimePropertyImpl implements TumlRuntimeProperty {
 		return false;
 	}
 
-	@Override
+    @Override
+    public boolean isInverseUnique() {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
 	public String toJson() {
 		// TODO Auto-generated method stub
 		return null;

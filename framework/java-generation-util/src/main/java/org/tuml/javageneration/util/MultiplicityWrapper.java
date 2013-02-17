@@ -363,7 +363,7 @@ public class MultiplicityWrapper implements MultiplicityElement {
 		return this.multiplicityElement.isUnique();
 	}
 
-	@Override
+    @Override
 	public void setIsUnique(boolean value) {
 		throw new RuntimeException("Not supported");
 	}

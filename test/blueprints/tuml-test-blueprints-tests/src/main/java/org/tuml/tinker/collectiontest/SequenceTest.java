@@ -40,41 +40,52 @@ public class SequenceTest extends BaseLocalDbTest {
         Assert.assertEquals("hand2",godTest.getHand().get(1).getName());
         Assert.assertEquals("hand1",godTest.getHand().get(0).getName());
 	}
-	
-	@Test
-	public void testControllingSide() {
-		God god = new God(true);
-		god.setName("THEGOD");
-		Hand hand = new Hand(true);
-		hand.setLeft(true);
-		hand.setName("hand1");
-		Hand hand2 = new Hand(true);
-		hand2.setLeft(true);
-		hand2.setName("hand2");
-		Hand hand3 = new Hand(true);
-		hand3.setLeft(true);
-		hand3.setName("hand3");
-		Hand hand4 = new Hand(true);
-		hand4.setLeft(true);
-		hand4.setName("hand4");
-		god.setHand(new TumlMemorySequence<Hand>(Arrays.asList(new Hand[]{hand, hand2, hand3, hand4})));
+
+    @Test
+    public void testControllingSide() {
+        God god = new God(true);
+        god.setName("THEGOD");
+        Hand hand = new Hand(true);
+        hand.setLeft(true);
+        hand.setName("hand1");
+        Hand hand2 = new Hand(true);
+        hand2.setLeft(true);
+        hand2.setName("hand2");
+        Hand hand3 = new Hand(true);
+        hand3.setLeft(true);
+        hand3.setName("hand3");
+        Hand hand4 = new Hand(true);
+        hand4.setLeft(true);
+        hand4.setName("hand4");
+        god.setHand(new TumlMemorySequence<Hand>(Arrays.asList(new Hand[]{hand, hand2, hand3, hand4})));
         db.commit();
 
-		Hand hand5 = new Hand(true);
-		hand5.setLeft(true);
-		hand5.setName("hand5");
-		Hand hand6 = new Hand(true);
-		hand6.setLeft(true);
-		hand6.setName("hand6");
+        Hand hand5 = new Hand(true);
+        hand5.setLeft(true);
+        hand5.setName("hand5");
+        Hand hand6 = new Hand(true);
+        hand6.setLeft(true);
+        hand6.setName("hand6");
 
-		god.setHand(new TumlMemorySequence<Hand>(Arrays.asList(new Hand[]{hand5, hand6})));
-		God gTest = new God(god.getVertex());
-		gTest.getHand().get(1);
-		Hand testHand = new Hand(hand2.getVertex());
-		Assert.assertNull(testHand.getGod());
+        god.setHand(new TumlMemorySequence<Hand>(Arrays.asList(new Hand[]{hand5, hand6})));
+
+        db.commit();
+        Assert.assertEquals(3, countVertices());
+        Assert.assertEquals(6, countEdges());
+
+        God gTest = new God(god.getVertex());
+        gTest.getHand().get(1);
+        boolean illegalStateException = false;
+        try {
+            Hand testHand = new Hand(hand2.getVertex());
+            testHand.getName();
+        } catch (Exception e) {
+            illegalStateException = true;
+        }
+        Assert.assertTrue(illegalStateException);
         db.rollback();
 
-	}
+    }
 
 	@Test
 	public void testSequenceMaintainsOrder() {

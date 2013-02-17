@@ -28,6 +28,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
     protected OclStdLibCollection<E> oclStdLibCollection;
     protected TumlTinkerIndex<Edge> index;
     protected boolean loaded = false;
+    // This is the owner of the collection
     protected TumlNode owner;
     // This is the vertex of the owner of the collection
     protected Vertex vertex;
@@ -35,6 +36,14 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
     protected Map<Object, Vertex> internalVertexMap = new HashMap<Object, Vertex>();
     protected TumlRuntimeProperty tumlRuntimeProperty;
     protected final static String INDEX_SEPARATOR = ":::";
+    protected static final String LABEL_TO_FIRST_HYPER_VERTEX = "labelToFirstHyperVertex";
+    protected static final String LABEL_TO_LAST_HYPER_VERTEX = "labelToLastHyperVertex";
+    protected static final String LABEL_TO_NEXT_HYPER_VERTEX = "labelToNextHyperVertex";
+    protected static final String LABEL_TO_ELEMENT_FROM_HYPER_VERTEX = "labelToElementFromHyperVertex";
+
+    protected static final String LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE = "labelToFirstElementInSequence";
+    protected static final String LABEL_TO_NEXT_IN_SEQUENCE = "labelToNextElementInSequence";
+    protected static final String LABEL_TO_LAST_ELEMENT_IN_SEQUENCE = "labelToLastElementInSequence";
 
     public BaseCollection(TumlRuntimeProperty runtimeProperty) {
         this.tumlRuntimeProperty = runtimeProperty;
@@ -53,7 +62,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
         if (!isOnePrimitive() && getDataTypeEnum() == null) {
             for (Iterator<Edge> iter = getEdges(); iter.hasNext(); ) {
                 Edge edge = iter.next();
-                E node = null;
+                E node;
                 try {
                     Class<?> c = this.getClassToInstantiate(edge);
                     if (c.isEnum()) {
@@ -99,7 +108,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
         this.loaded = true;
     }
 
-    protected Vertex getFromInternalMap(Object key) {
+    protected Vertex removeFromInternalMap(Object key) {
         return this.internalVertexMap.remove(key);
     }
 
@@ -137,7 +146,6 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 
     @Override
     public boolean add(E e) {
-//        validateMultiplicityForAdditionalElement();
         maybeLoad();
         if (isQualified() || isInverseQualified()) {
             validateQualifiedAssociation(e);
@@ -162,20 +170,82 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 
             if (isOrdered() || isInverseOrdered()) {
                 if (isOrdered()) {
-                    addOrderToIndex(edge);
+                    manageLinkedList(edge, (TumlNode) e);
                 }
                 if (isInverseOrdered()) {
                     // Can only qualify TinkerNode's
                     if (!(e instanceof TumlNode)) {
                         throw new IllegalStateException("Primitive properties can not be qualified!");
                     }
-                    addOrderToInverseIndex(edge, (TumlNode) e);
+                    manageLinkedListInverse(edge, (TumlNode) e);
                 }
             }
 
         }
         return result;
     }
+
+
+    private void manageLinkedListInverse(Edge edge, TumlNode e) {
+        if (!isInverseUnique()) {
+            //Handle duplicates with hyper vertexes
+            //Get the new vertex for the element
+            Vertex newElementVertex = getVertexForDirection(edge);
+            if (newElementVertex.getEdges(Direction.OUT, LABEL_TO_LAST_HYPER_VERTEX).iterator().hasNext()) {
+                Edge edgeToLastHyperVertex = newElementVertex.getEdges(Direction.OUT, LABEL_TO_LAST_HYPER_VERTEX).iterator().next();
+                Vertex lastHyperVertex = edgeToLastHyperVertex.getVertex(Direction.IN);
+
+                //Check if it is a duplicate
+                Edge edgeToLastElement = lastHyperVertex.getEdges(Direction.OUT, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX).iterator().next();
+                Vertex lastVertex = edgeToLastElement.getVertex(Direction.IN);
+                if (lastVertex.equals(this.vertex)) {
+                    GraphDb.getDb().addEdge(null, lastHyperVertex, this.vertex, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX);
+                } else {
+                    //Create a new hyper vertex
+                    Vertex newHyperVertex = GraphDb.getDb().addVertex("hyperVertex");
+                    GraphDb.getDb().removeEdge(edgeToLastHyperVertex);
+                    GraphDb.getDb().addEdge(null, newElementVertex, newHyperVertex, LABEL_TO_LAST_HYPER_VERTEX);
+                    GraphDb.getDb().addEdge(null, newHyperVertex, this.vertex, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX);
+                    //add to the linked list
+                    GraphDb.getDb().addEdge(null, lastHyperVertex, newHyperVertex, LABEL_TO_NEXT_HYPER_VERTEX);
+                }
+            } else {
+                //its the first element in the list
+                //Create a new hyper vertex
+                Vertex newHyperVertex = GraphDb.getDb().addVertex("hyperVertex");
+                GraphDb.getDb().addEdge(null, newElementVertex, newHyperVertex, LABEL_TO_FIRST_HYPER_VERTEX);
+                GraphDb.getDb().addEdge(null, newElementVertex, newHyperVertex, LABEL_TO_LAST_HYPER_VERTEX);
+                //Add the new element to the hyper vertex
+                GraphDb.getDb().addEdge(null, newHyperVertex, this.vertex, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX);
+            }
+        } else {
+            //Get the new vertex for the element
+            Vertex newElementVertex = getVertexForDirection(edge);
+            if (newElementVertex.getEdges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE).iterator().hasNext()) {
+                Edge edgeToLastVertex = newElementVertex.getEdges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE).iterator().next();
+                Vertex lastVertex = edgeToLastVertex.getVertex(Direction.IN);
+
+                //move the edge to the last vertex
+                GraphDb.getDb().removeEdge(edgeToLastVertex);
+                GraphDb.getDb().addEdge(null, newElementVertex, this.vertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE);
+
+                //add the element to the linked list
+                GraphDb.getDb().addEdge(null, lastVertex, this.vertex, LABEL_TO_NEXT_IN_SEQUENCE);
+
+            } else {
+                //its the first element in the list
+                GraphDb.getDb().addEdge(null, newElementVertex, this.vertex, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE);
+                GraphDb.getDb().addEdge(null, newElementVertex, this.vertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE);
+            }
+        }
+    }
+
+    /**
+     * This must be implemented by the appropriate collection type
+     * @param edge
+     * @param e
+     */
+    protected abstract void manageLinkedList(Edge edge, TumlNode e);
 
     private void validateQualifiedAssociation(E e) {
         if (!(e instanceof TumlNode)) {
@@ -198,13 +268,6 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
             }
         }
     }
-
-//    protected void validateMultiplicityForAdditionalElement() {
-//        if (!isValid(size() + 1)) {
-//            throw new IllegalStateException(String.format("The collection's multiplicity is (lower = %s, upper = %s). Current size = %s. It can not accept another element.",
-//                    getLower(), getUpper(), size()));
-//        }
-//    }
 
     @Override
     public boolean remove(Object o) {
@@ -236,12 +299,12 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
                     break;
                 }
             } else if (o.getClass().isEnum()) {
-                v = getFromInternalMap(((Enum<?>) o).name());
+                v = removeFromInternalMap(((Enum<?>) o).name());
                 GraphDb.getDb().removeVertex(v);
             } else if (isOnePrimitive() || getDataTypeEnum() != null) {
                 this.vertex.removeProperty(getLabel());
             } else {
-                v = getFromInternalMap(o);
+                v = removeFromInternalMap(o);
                 if (this.owner instanceof TinkerAuditableNode) {
                     createAudit(e, true);
                 }
@@ -279,15 +342,16 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
         } else if (e.getClass().isEnum()) {
             v = GraphDb.getDb().addVertex(null);
             v.setProperty("value", ((Enum<?>) e).name());
+            v.setProperty("className", e.getClass().getName());
             putToInternalMap(((Enum<?>) e).name(), v);
         } else if (isOnePrimitive()) {
             this.vertex.setProperty(getLabel(), e);
         } else if (getDataTypeEnum() != null && getDataTypeEnum().isDateTime()) {
-            this.vertex.setProperty(getLabel(), ((DateTime) e).toString());
+            this.vertex.setProperty(getLabel(), e.toString());
         } else if (getDataTypeEnum() != null && getDataTypeEnum().isDate()) {
-            this.vertex.setProperty(getLabel(), ((LocalDate) e).toString());
+            this.vertex.setProperty(getLabel(), e.toString());
         } else if (getDataTypeEnum() != null && getDataTypeEnum().isTime()) {
-            this.vertex.setProperty(getLabel(), ((LocalTime) e).toString());
+            this.vertex.setProperty(getLabel(), e.toString());
         } else if (getDataTypeEnum() != null && getDataTypeEnum().isInternationalPhoneNumber()) {
             this.vertex.setProperty(getLabel(), e);
         } else if (getDataTypeEnum() != null && getDataTypeEnum().isLocalPhoneNumber()) {
@@ -297,16 +361,12 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
         } else {
             v = GraphDb.getDb().addVertex(null);
             v.setProperty("value", e);
+            v.setProperty("className", e.getClass().getName());
             putToInternalMap(e, v);
         }
         if (v != null) {
-            Edge edge = null;
-            boolean createdEdge = false;
-            if (edge == null) {
-                createdEdge = true;
-                edge = createEdge(e, v);
-            }
-            if (createdEdge && this.owner instanceof TinkerAuditableNode) {
+            Edge edge = createEdge(e, v);
+            if (this.owner instanceof TinkerAuditableNode) {
                 createAudit(e, false);
             }
             return edge;
@@ -319,19 +379,15 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 
     }
 
-    private Edge createEdge(E e, Vertex v) {
+    protected Edge createEdge(E e, Vertex v) {
         Edge edge;
         if (this.isControllingSide()) {
             edge = GraphDb.getDb().addEdge(null, this.vertex, v, this.getLabel());
-            edge.setProperty("outClass", this.parentClass.getName());
-            edge.setProperty("inClass", e.getClass().getName());
             if (this.isManyToMany()) {
                 edge.setProperty("manyToManyCorrelationInverseTRUE", "SETTED");
             }
         } else {
             edge = GraphDb.getDb().addEdge(null, v, this.vertex, this.getLabel());
-            edge.setProperty("outClass", e.getClass().getName());
-            edge.setProperty("inClass", this.parentClass.getName());
             if (this.isManyToMany()) {
                 edge.setProperty("manyToManyCorrelationInverseFALSE", "SETTED");
             }
@@ -428,9 +484,11 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
     protected Class<?> getClassToInstantiate(Edge edge) {
         try {
             if (this.isControllingSide()) {
-                return Class.forName((String) edge.getProperty("inClass"));
+                return Class.forName((String) edge.getVertex(Direction.IN).getProperty("className"));
+//                return Class.forName((String) edge.getProperty("inClass"));
             } else {
-                return Class.forName((String) edge.getProperty("outClass"));
+                return Class.forName((String) edge.getVertex(Direction.OUT).getProperty("className"));
+//                return Class.forName((String) edge.getProperty("outClass"));
             }
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
@@ -532,42 +590,6 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
             }
             addQualifierToIndex(index, edge, node, this.owner, true);
         }
-    }
-
-    protected void addOrderToIndex(Edge edge) {
-        // The element is always added to the end of the list
-        if (!isOrdered()) {
-            throw new IllegalStateException("addOrderToIndex can only be called where the association end is ordered");
-        }
-        Edge edgeToLastElementInSequence = index.getEdgeToLastElementInSequence();
-        Float size;
-        if (edgeToLastElementInSequence == null) {
-            size = 1F;
-        } else {
-            size = (Float) getVertexForDirection(edgeToLastElementInSequence).getProperty("tinkerIndex") + 1F;
-        }
-        this.index.put("index", size, edge);
-        getVertexForDirection(edge).setProperty("tinkerIndex", size);
-    }
-
-    protected void addOrderToInverseIndex(Edge edge, TumlNode node) {
-        // The element is always added to the end of the list
-        if (!isInverseOrdered()) {
-            throw new IllegalStateException("addOrderToInverseIndex can only be called where the inverse side of the association is ordered");
-        }
-        TumlTinkerIndex<Edge> index = GraphDb.getDb().getIndex(node.getUid() + INDEX_SEPARATOR + getInverseQualifiedName(), Edge.class);
-        if (index == null) {
-            index = GraphDb.getDb().createIndex(node.getUid() + INDEX_SEPARATOR + getInverseQualifiedName(), Edge.class);
-        }
-        Edge edgeToLastElementInSequence = index.getEdgeToLastElementInSequence();
-        Float size;
-        if (edgeToLastElementInSequence == null) {
-            size = 1F;
-        } else {
-            size = (Float) getOppositeVertexForDirection(edgeToLastElementInSequence).getProperty("tinkerIndex") + 1F;
-        }
-        index.put("index", size, edge);
-        getOppositeVertexForDirection(edge).setProperty("tinkerIndex", size);
     }
 
     /**
@@ -727,6 +749,11 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
     @Override
     public boolean isUnique() {
         return this.tumlRuntimeProperty.isUnique();
+    }
+
+    @Override
+    public boolean isInverseUnique() {
+        return this.tumlRuntimeProperty.isInverseUnique();
     }
 
     @Override

@@ -2,6 +2,7 @@ package org.tuml.runtime.collection.persistent;
 
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
+import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.collection.TinkerQualifiedSequence;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.domain.TumlNode;
@@ -12,13 +13,17 @@ public class TinkerQualifiedSequenceImpl<E> extends BaseSequence<E> implements T
 
 	public TinkerQualifiedSequenceImpl(TumlNode owner, TumlRuntimeProperty runtimeProperty) {
 		super(owner, runtimeProperty);
-	}
+        this.index = GraphDb.getDb().getIndex(owner.getUid() + INDEX_SEPARATOR + getQualifiedName(), Edge.class);
+        if (this.index == null) {
+            this.index = GraphDb.getDb().createIndex(owner.getUid() + INDEX_SEPARATOR + getQualifiedName(), Edge.class);
+        }
+    }
 
 	@Override
 	public void add(int indexOf, E e) {
 //		validateMultiplicityForAdditionalElement();
         maybeLoad();
-		Edge edge = addToListAndListIndex(indexOf, e);
+		Edge edge = addToListAtIndex(indexOf, e);
 		// Can only qualify TinkerNode's
 		if (!(e instanceof TumlNode)) {
 			throw new IllegalStateException("Primitive properties can not be qualified!");

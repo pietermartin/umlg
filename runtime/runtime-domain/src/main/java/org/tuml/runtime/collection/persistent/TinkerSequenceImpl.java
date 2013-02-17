@@ -20,7 +20,7 @@ public class TinkerSequenceImpl<E> extends BaseSequence<E> implements TinkerSequ
 		// collection
 //		validateMultiplicityForAdditionalElement();
         maybeLoad();
-		addToListAndListIndex(indexOf, e);
+		addToListAtIndex(indexOf, e);
 	}
 
 	@Override

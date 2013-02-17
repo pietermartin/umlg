@@ -1,6 +1,5 @@
 package org.tuml.runtime.collection.persistent;
 
-import com.tinkerpop.blueprints.CloseableIterable;
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
@@ -11,161 +10,260 @@ import org.tuml.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.tuml.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.tuml.runtime.collection.ocl.OclStdLibSequence;
 import org.tuml.runtime.collection.ocl.OclStdLibSequenceImpl;
-import org.tuml.runtime.domain.TinkerAuditableNode;
 import org.tuml.runtime.domain.TumlNode;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Set;
+import java.util.*;
 
 public abstract class BaseSequence<E> extends BaseCollection<E> implements TinkerSequence<E> {
 
     protected OclStdLibSequence<E> oclStdLibSequence;
+    protected Map<Integer, Vertex> hyperVertexIndex;
 
     public BaseSequence(TumlRuntimeProperty runtimeProperty) {
         super(runtimeProperty);
         this.internalCollection = new ArrayList<E>();
         this.oclStdLibSequence = new OclStdLibSequenceImpl<E>((List<E>) this.internalCollection);
         this.oclStdLibCollection = this.oclStdLibSequence;
+        this.hyperVertexIndex = new HashMap<Integer, Vertex>();
     }
+
 
     public BaseSequence(TumlNode owner, TumlRuntimeProperty runtimeProperty) {
         super(owner, runtimeProperty);
         this.internalCollection = new ArrayList<E>();
         this.oclStdLibSequence = new OclStdLibSequenceImpl<E>((List<E>) this.internalCollection);
         this.oclStdLibCollection = new OclStdLibSequenceImpl<E>((List<E>) this.internalCollection);
-        this.index = GraphDb.getDb().getIndex(owner.getUid() + INDEX_SEPARATOR + getQualifiedName(), Edge.class);
-        if (this.index == null) {
-            this.index = GraphDb.getDb().createIndex(owner.getUid() + INDEX_SEPARATOR + getQualifiedName(), Edge.class);
-        }
+        this.hyperVertexIndex = new HashMap<Integer, Vertex>();
     }
 
     protected List<E> getInternalList() {
         return (List<E>) this.internalCollection;
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    //By now the element is already added to the internal list
     @Override
-    protected void loadFromVertex() {
-        CloseableIterable<Edge> edges = this.index.queryList(0F, true, false);
-        for (Edge edge : edges) {
-            if (!GraphDb.getDb().hasEdgeBeenDeleted(edge)) {
-                E node = null;
-                try {
-                    Class<?> c = this.getClassToInstantiate(edge);
-                    Object value = this.getVertexForDirection(edge).getProperty("value");
-                    if (c.isEnum()) {
-                        node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
-                        this.internalVertexMap.put(value, this.getVertexForDirection(edge));
-                    } else if (TumlNode.class.isAssignableFrom(c)) {
-                        node = (E) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
-                    } else {
-                        node = (E) value;
-                        this.internalVertexMap.put(value, this.getVertexForDirection(edge));
-                    }
-                    this.getInternalList().add(node);
-                } catch (Exception ex) {
-                    throw new RuntimeException(ex);
-                }
+    protected void manageLinkedList(Edge edge, TumlNode e) {
+        //Get the new vertex for the element
+        Vertex newElementVertex = getVertexForDirection(edge);
+        //Get the last hyperVertex
+        //This is size - 2 as the hyperVertexIndex does not yet contain the entry for the new element and it is zero based
+        Vertex lastHyperVertex;
+        if (size() > 1) {
+            lastHyperVertex = this.hyperVertexIndex.get(size() - 2);
+            Vertex previousVertex = getVertexFromElement(this.getInternalList().get(size() - 2));
+            //Check is duplicate
+            if (previousVertex.equals(newElementVertex)) {
+                //Add to the hyper vertex
+                GraphDb.getDb().addEdge(null, lastHyperVertex, newElementVertex, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX);
+                this.hyperVertexIndex.put(size() - 1, lastHyperVertex);
+            } else {
+                //Create a new hyper vertex
+                Vertex newHyperVertex = GraphDb.getDb().addVertex("hyperVertex");
+                GraphDb.getDb().addEdge(null, newHyperVertex, newElementVertex, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX);
+                //Put the new hyper vertex in the linked list
+                GraphDb.getDb().addEdge(null, lastHyperVertex, newHyperVertex, LABEL_TO_NEXT_HYPER_VERTEX);
+                this.hyperVertexIndex.put(size() - 1, newHyperVertex);
+                //remove the lastHyperVertex edge to parent, add it to new last hyper vertex
+                Edge edgeToLastHyperVertex = this.vertex.getEdges(Direction.OUT, LABEL_TO_LAST_HYPER_VERTEX).iterator().next();
+                GraphDb.getDb().removeEdge(edgeToLastHyperVertex);
+                GraphDb.getDb().addEdge(null, this.vertex, newHyperVertex, LABEL_TO_LAST_HYPER_VERTEX);
             }
+        } else {
+            //Is the first element being added, create the hyper vertex
+            Vertex newHyperVertex = GraphDb.getDb().addVertex("hyperVertex");
+            GraphDb.getDb().addEdge(null, newHyperVertex, newElementVertex, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX);
+            //Put the new hyper vertex in the linked list
+            GraphDb.getDb().addEdge(null, this.vertex, newHyperVertex, LABEL_TO_FIRST_HYPER_VERTEX);
+            this.hyperVertexIndex.put(size() - 1, newHyperVertex);
+            //remove the lastHyperVertex edge to parent, add it to new last hyper vertex
+            GraphDb.getDb().addEdge(null, this.vertex, newHyperVertex, LABEL_TO_LAST_HYPER_VERTEX);
         }
-        this.loaded = true;
     }
 
-    /*
-     * This can only be added from the
-     */
-    protected Edge addToListAndListIndex(int indexOf, E e) {
-        E previous = null;
-        if (indexOf > 0) {
-            previous = (E) this.getInternalList().get(indexOf - 1);
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    protected void loadFromVertex() {
+        Direction direction;
+        if (isControllingSide()) {
+            direction = Direction.OUT;
+        } else {
+            direction = Direction.IN;
         }
-        E current = this.getInternalList().get(indexOf);
-        boolean itsAMoveInTheSequence = this.getInternalList().contains(e);
-        if (itsAMoveInTheSequence) {
-            remove(e);
-        }
-        this.getInternalList().add(indexOf, e);
-        Edge edge = addInternal(e);
-
-        // Edge can only be null on a one primitive
-        if (edge == null && !isOnePrimitive()) {
-            throw new IllegalStateException("Edge can only be null on isOne which is a String, Integer, Boolean or primitive");
-        }
-        if (edge != null) {
-            float min = 0;
-            float max = 0;
-            float elementToAddIndex = 0;
-            if (e instanceof TumlNode) {
-                elementToAddIndex = (itsAMoveInTheSequence ? (Float) ((TumlNode) e).getVertex().getProperty("tinkerIndex") : 0);
-                if (previous != null) {
-                    min = (Float) ((TumlNode) previous).getVertex().getProperty("tinkerIndex");
-                }
-                max = (Float) ((TumlNode) current).getVertex().getProperty("tinkerIndex");
-                if (isInverseOrdered()) {
-                    addOrderToInverseIndex(edge, (TumlNode) e);
-                }
-            } else if (e.getClass().isEnum()) {
-                elementToAddIndex = (itsAMoveInTheSequence ? (Float) this.internalVertexMap.get(((Enum<?>) e).name()).getProperty("tinkerIndex") : 0);
-                if (previous != null) {
-                    min = (Float) this.internalVertexMap.get(((Enum<?>) previous).name()).getProperty("tinkerIndex");
-                }
-                max = (Float) this.internalVertexMap.get(((Enum<?>) current).name()).getProperty("tinkerIndex");
+        //If the multiplicity is a one don't bother with the linked list jol
+        if (getUpper() == 1) {
+            Iterable<Edge> edgeIterable = this.vertex.getEdges(direction, getLabel());
+            if (!edgeIterable.iterator().hasNext()) {
+                this.loaded = true;
             } else {
-                elementToAddIndex = (itsAMoveInTheSequence ? (Float) this.internalVertexMap.get(e).getProperty("tinkerIndex") : 0);
-                if (previous != null) {
-                    min = (Float) this.internalVertexMap.get(previous).getProperty("tinkerIndex");
+                Edge edgeToElement = edgeIterable.iterator().next();
+                if (!GraphDb.getDb().hasEdgeBeenDeleted(edgeToElement)) {
+                    Vertex elementVertex = edgeToElement.getVertex(Direction.IN);
+                    loadNode(edgeToElement, elementVertex);
+                    this.loaded = true;
+                } else {
+                    this.loaded = true;
                 }
-                max = (Float) this.internalVertexMap.get(current).getProperty("tinkerIndex");
             }
-            float tinkerIndex = (min + max) / 2;
-            if (itsAMoveInTheSequence && (elementToAddIndex < tinkerIndex)) {
-                tinkerIndex++;
+        } else {
+            //Load via hyper vertex
+            if (this.vertex.getEdges(direction, LABEL_TO_FIRST_HYPER_VERTEX).iterator().hasNext()) {
+                Edge edgeToFirstHyperVertex = this.vertex.getEdges(direction, LABEL_TO_FIRST_HYPER_VERTEX).iterator().next();
+                Vertex hyperVertex = edgeToFirstHyperVertex.getVertex(Direction.IN);
+                int toIndex = loadFromHyperVertex(hyperVertex, 0);
+                while (hyperVertex.getEdges(Direction.OUT, LABEL_TO_NEXT_HYPER_VERTEX).iterator().hasNext()) {
+                    Edge edgeToNextHyperVertex = hyperVertex.getEdges(Direction.OUT, LABEL_TO_NEXT_HYPER_VERTEX).iterator().next();
+                    hyperVertex = edgeToNextHyperVertex.getVertex(Direction.IN);
+                    toIndex = loadFromHyperVertex(hyperVertex, toIndex);
+                }
+            } else {
+                this.loaded = true;
             }
-            this.index.put("index", tinkerIndex, edge);
-            getVertexForDirection(edge).setProperty("tinkerIndex", tinkerIndex);
         }
-        return edge;
+    }
+
+    private int loadFromHyperVertex(Vertex hyperVertex, int fromIndex) {
+        int toIndex = fromIndex;
+        for (Edge edgeToElement : hyperVertex.getEdges(Direction.OUT, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX)) {
+            Vertex vertexToLoad = edgeToElement.getVertex(Direction.IN);
+            loadNode(edgeToElement, vertexToLoad);
+            this.hyperVertexIndex.put(toIndex++, hyperVertex);
+        }
+        return toIndex;
+    }
+
+    private void loadNode(Edge edgeToElement, Vertex vertexToLoad) {
+        E node;
+        try {
+            Class<?> c = this.getClassToInstantiate(edgeToElement);
+            if (c.isEnum()) {
+                Object value = vertexToLoad.getProperty("value");
+                node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
+                this.internalVertexMap.put(value, vertexToLoad);
+            } else if (TumlNode.class.isAssignableFrom(c)) {
+                node = (E) c.getConstructor(Vertex.class).newInstance(vertexToLoad);
+            } else {
+                Object value = vertexToLoad.getProperty("value");
+                node = (E) value;
+                this.internalVertexMap.put(value, vertexToLoad);
+            }
+            this.getInternalList().add(node);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    //The list is loaded by the time this is called
+    @SuppressWarnings("unchecked")
+    protected Edge addToListAtIndex(int indexOf, E e) {
+        //Create the edge to the new element
+        Edge edgeFromParentToElementVertex = addInternal(e);
+        manageLinkedList(indexOf, edgeFromParentToElementVertex);
+        this.getInternalList().add(indexOf, e);
+        return edgeFromParentToElementVertex;
+    }
+
+    private void manageLinkedList(int indexOfNewElement, Edge edgeFromParentToElementVertex) {
+        //Get the new vertex for the element
+        Vertex newElementVertex = getVertexForDirection(edgeFromParentToElementVertex);
+        Vertex hyperVertexAtIndex = this.hyperVertexIndex.get(indexOfNewElement);
+        //Check if the hyperVertexAtIndex holds elements that are equal to the element being added
+
+        Vertex currentElementAtIndex = getVertexFromElement(this.getInternalList().get(indexOfNewElement));
+        if (currentElementAtIndex != null && currentElementAtIndex.equals(newElementVertex)) {
+            //Need to attach the newVertex to the current hyper vertex as its a duplicate
+            GraphDb.getDb().addEdge(null, hyperVertexAtIndex, newElementVertex, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX);
+        } else {
+            //Element is not a duplicate.
+            //Create a new hyper vertex to attach it to
+            Vertex newHyperVertex = GraphDb.getDb().addVertex("hyperVertex");
+            GraphDb.getDb().addEdge(null, newHyperVertex, newElementVertex, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX);
+            //place the hyper vertex in the linked list
+            if (indexOfNewElement == 0) {
+                if (!isEmpty()) {
+                    //Need to move the edge (LABEL_TO_FIRST_HYPER_VERTEX) to the parent
+                    //Remove the label to first
+                    Edge edgeFromParent = hyperVertexAtIndex.getEdges(Direction.IN, LABEL_TO_FIRST_HYPER_VERTEX).iterator().next();
+                    GraphDb.getDb().removeEdge(edgeFromParent);
+                }
+                //Add the edge (LABEL_TO_FIRST_HYPER_VERTEX) to the new hyper vertex in position 0
+                GraphDb.getDb().addEdge(null, this.vertex, newHyperVertex, LABEL_TO_FIRST_HYPER_VERTEX);
+                //Link the new hyper vertex to the next one
+                GraphDb.getDb().addEdge(null, newHyperVertex, hyperVertexAtIndex, LABEL_TO_NEXT_HYPER_VERTEX);
+            } else {
+                //Place the new hyper vertex in the list
+                //Break the link to the previous hyper edge
+                Edge edgeToPreviousHyperVertex = hyperVertexAtIndex.getEdges(Direction.IN, LABEL_TO_NEXT_HYPER_VERTEX).iterator().next();
+                Vertex previousHyperVertex = edgeToPreviousHyperVertex.getVertex(Direction.OUT);
+                GraphDb.getDb().removeEdge(edgeToPreviousHyperVertex);
+                //Recreate the link from the previous hyper vertex to the new one
+                GraphDb.getDb().addEdge(null, previousHyperVertex, newHyperVertex, LABEL_TO_NEXT_HYPER_VERTEX);
+                //Add a edge to the next hyper edge from the new one.
+                GraphDb.getDb().addEdge(null, newHyperVertex, hyperVertexAtIndex, LABEL_TO_NEXT_HYPER_VERTEX);
+            }
+        }
+    }
+
+    private Vertex getVertexFromElement(E e) {
+        Vertex previousVertex;
+        if (e instanceof TumlNode) {
+            TumlNode node = (TumlNode) e;
+            previousVertex = node.getVertex();
+        } else if (e.getClass().isEnum()) {
+            previousVertex = this.internalVertexMap.get(((Enum<?>) e).name());
+        } else {
+            previousVertex = this.internalVertexMap.get(((Enum<?>) e).name());
+        }
+        return previousVertex;
     }
 
     @Override
     public boolean remove(Object o) {
-        maybeLoad();
-        int indexOf = this.getInternalList().indexOf(o);
-        boolean result = this.getInternalList().remove(o);
-        if (result) {
-            @SuppressWarnings("unchecked")
-            E e = (E) o;
-            Vertex v;
-            if (o instanceof TumlNode) {
-                TumlNode node = (TumlNode) o;
-                v = node.getVertex();
-                Set<Edge> edges = GraphDb.getDb().getEdgesBetween(this.vertex, v, this.getLabel());
-                for (Edge edge : edges) {
-                    removeEdgefromIndex(v, edge, indexOf);
-                    GraphDb.getDb().removeEdge(edge);
-                    if (o instanceof TinkerAuditableNode) {
-                        createAudit(e, true);
-                    }
-                    break;
-                }
-            } else if (o.getClass().isEnum()) {
-                v = this.internalVertexMap.get(((Enum<?>) o).name());
-                Edge edge = v.getEdges(Direction.IN, this.getLabel()).iterator().next();
-                removeEdgefromIndex(v, edge, indexOf);
-                GraphDb.getDb().removeVertex(v);
-            } else {
-                v = this.internalVertexMap.get(o);
-                Edge edge = v.getEdges(Direction.IN, this.getLabel()).iterator().next();
-                removeEdgefromIndex(v, edge, indexOf);
-                if (o instanceof TinkerAuditableNode) {
-                    createAudit(e, true);
-                }
-                GraphDb.getDb().removeVertex(v);
-            }
-        }
-        return result;
+//        maybeLoad();
+//        int indexOf = this.getInternalList().indexOf(o);
+//        boolean result = this.getInternalList().remove(o);
+//        if (result) {
+//            Vertex vertexToDelete;
+//            if (o instanceof TumlNode) {
+//                TumlNode node = (TumlNode) o;
+//                vertexToDelete = node.getVertex();
+//            } else if (o.getClass().isEnum()) {
+//                vertexToDelete = this.internalVertexMap.get(((Enum<?>) o).name());
+//            } else {
+//                vertexToDelete = this.internalVertexMap.get(o);
+//            }
+//            //if first then move the edge LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE
+//            if (indexOf == 0) {
+//                Edge edgeToFirstElementInSequence = this.vertex.getEdges(Direction.OUT, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE).iterator().next();
+//                GraphDb.getDb().removeEdge(edgeToFirstElementInSequence);
+//                //If there are more than one element in the list the add the edge LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE
+//                if (size() > 0) {
+//                    Edge edgeToNext = vertexToDelete.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE).iterator().next();
+//                    GraphDb.getDb().addEdge(null, this.vertex, edgeToNext.getVertex(Direction.IN), LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE);
+//                }
+//            }
+//            //if last then move the edge LABEL_TO_LAST_ELEMENT_IN_SEQUENCE
+//            if (indexOf == size()) {
+//                Edge edgeToLastElementInSequence = this.vertex.getEdges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE).iterator().next();
+//                GraphDb.getDb().removeEdge(edgeToLastElementInSequence);
+//                //If there are more than one element in the list add the edge LABEL_TO_LAST_ELEMENT_IN_SEQUENCE
+//                if (size() > 0) {
+//                    Edge edgeToPrevious = vertexToDelete.getEdges(Direction.IN, LABEL_TO_NEXT_IN_SEQUENCE).iterator().next();
+//                    GraphDb.getDb().addEdge(null, this.vertex, edgeToPrevious.getVertex(Direction.OUT), LABEL_TO_LAST_ELEMENT_IN_SEQUENCE);
+//                }
+//            }
+//
+//            //reorder the edges LABEL_TO_NEXT_IN_SEQUENCE
+//            //If first or last then nothing to do
+//            if (indexOf != 0 && indexOf != size()) {
+//                Edge edgeToPrevious = vertexToDelete.getEdges(Direction.IN, LABEL_TO_NEXT_IN_SEQUENCE).iterator().next();
+//                Edge edgeToNext = vertexToDelete.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE).iterator().next();
+//                GraphDb.getDb().addEdge(null, edgeToPrevious.getVertex(Direction.OUT), edgeToNext.getVertex(Direction.IN), LABEL_TO_NEXT_IN_SEQUENCE);
+//            }
+//
+//            GraphDb.getDb().removeVertex(vertexToDelete);
+//
+//        }
+//        return result;
+        return false;
     }
 
     @Override

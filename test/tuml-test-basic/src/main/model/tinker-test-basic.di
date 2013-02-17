@@ -32,6 +32,9 @@
         <children>
           <emfPageIdentifier href="tinker-test-basic.notation#_LuJ6RAAPEeKpVr_ntT6cLA"/>
         </children>
+        <children>
+          <emfPageIdentifier href="tinker-test-basic.notation#_LuJ6SgAPEeKpVr_ntT6cLA"/>
+        </children>
       </children>
     </windows>
   </sashModel>

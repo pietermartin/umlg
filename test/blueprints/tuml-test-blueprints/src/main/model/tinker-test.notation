@@ -2581,7 +2581,7 @@
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_1dzdpwAOEeKpVr_ntT6cLA" source="CustomAppearance_Annotation">
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_1dzdqAAOEeKpVr_ntT6cLA" key="CustomAppearance_MaskValue" value="46"/>
         </eAnnotations>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_1dzdpQAOEeKpVr_ntT6cLA" x="10" y="10"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_1dzdpQAOEeKpVr_ntT6cLA" x="-18" y="19"/>
       </children>
       <element xmi:type="uml:Association" href="tinker-test.uml#_Krd8KhhKEeGoXdfOp4zUvw"/>
       <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_1dy2mAAOEeKpVr_ntT6cLA"/>

@@ -12,7 +12,7 @@ public class GenerateTestProjects {
 
 	public static void main(String[] args) throws URISyntaxException {
         if (args.length == 0) {
-            args = new String[]{"/home/pieter/workspace-tuml/tuml/"};
+            args = new String[]{"/home/pieter/intellij-projects/tuml/"};
         }
 		JavaGenerator javaGenerator = new JavaGenerator();
         javaGenerator.generate(new File(args[0] + "/test/blueprints/tuml-test-blueprints/src/main/model/tinker-test.uml"), new File(args[0] + "/test/blueprints/tuml-test-blueprints/"), DefaultVisitors.getDefaultJavaVisitors(), TumlLibVisitors.getDefaultJavaVisitors());
