@@ -48,7 +48,7 @@ public class TinkerQualifiedOrderedSetImpl<E> extends BaseCollection<E> implemen
 	}
 
     @Override
-    protected void manageLinkedList(Edge edge, TumlNode e) {
+    protected void addToLinkedList(Edge edge, TumlNode e) {
         //Get the new vertex for the element
         Vertex newElementVertex = getVertexForDirection(edge);
         if (this.vertex.getEdges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE).iterator().hasNext()) {
