@@ -170,14 +170,14 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 
             if (isOrdered() || isInverseOrdered()) {
                 if (isOrdered()) {
-                    manageLinkedList(edge, (TumlNode) e);
+                    addToLinkedList(edge, (TumlNode) e);
                 }
                 if (isInverseOrdered()) {
                     // Can only qualify TinkerNode's
                     if (!(e instanceof TumlNode)) {
                         throw new IllegalStateException("Primitive properties can not be qualified!");
                     }
-                    manageLinkedListInverse(edge, (TumlNode) e);
+                    addToInverseLinkedList(edge, (TumlNode) e);
                 }
             }
 
@@ -186,7 +186,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
     }
 
 
-    private void manageLinkedListInverse(Edge edge, TumlNode e) {
+    private void addToInverseLinkedList(Edge edge, TumlNode e) {
         if (!isInverseUnique()) {
             //Handle duplicates with hyper vertexes
             //Get the new vertex for the element
@@ -240,12 +240,109 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
         }
     }
 
+    protected void removeFromInverseLinkedList(Edge edge, TumlNode o) {
+        if (!isInverseUnique()) {
+            //Handle duplicates
+            //Find hyper vertex
+            Vertex vertexToRemove = o.getVertex();
+            //Vertex to remove is the parent in a inverse situation
+            Edge edgeToHyperVertex = vertexToRemove.getEdges(Direction.OUT, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX).iterator().next();
+            Vertex hyperVertex = edgeToHyperVertex.getVertex(Direction.OUT);
+            //Remove the edge to the hyper vertex
+            GraphDb.getDb().removeEdge(edgeToHyperVertex);
+            //Check if the are duplicates, i.e. the hyper vertex has remaining edges.
+            //If there are duplicates then there is nothing more to do
+            if (!hyperVertex.getEdges(Direction.OUT, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX).iterator().hasNext()) {
+                //No duplicates so remove the hyper vertex and fix the linked list
+
+                //Check if it is the first in the linked list
+                if (hyperVertex.getEdges(Direction.IN, LABEL_TO_NEXT_HYPER_VERTEX).iterator().hasNext()) {
+                    //Not the first in the linked list
+                    Edge edgeToPreviousHyperVertex = hyperVertex.getEdges(Direction.IN, LABEL_TO_NEXT_HYPER_VERTEX).iterator().next();
+                    Vertex previousHyperVertex = edgeToPreviousHyperVertex.getVertex(Direction.OUT);
+
+                    if (hyperVertex.getEdges(Direction.OUT, LABEL_TO_NEXT_HYPER_VERTEX).iterator().hasNext()) {
+                        //Not the last
+                        Edge edgeToNextHyperVertex = hyperVertex.getEdges(Direction.OUT, LABEL_TO_NEXT_HYPER_VERTEX).iterator().next();
+                        Vertex nextHyperVertex = edgeToNextHyperVertex.getVertex(Direction.IN);
+                        //Add in a link between previous and next
+                        GraphDb.getDb().removeVertex(hyperVertex);
+                        GraphDb.getDb().addEdge(null, previousHyperVertex, nextHyperVertex, LABEL_TO_NEXT_HYPER_VERTEX);
+
+                    } else {
+                        //Its the last, i.e. make the previous point to the parent
+                        GraphDb.getDb().removeVertex(hyperVertex);
+                        GraphDb.getDb().addEdge(null, vertexToRemove, previousHyperVertex, LABEL_TO_LAST_HYPER_VERTEX);
+                    }
+                } else {
+                    //The first in the linked list, make the next the first
+                    //Check if it is last
+                    if (hyperVertex.getEdges(Direction.OUT, LABEL_TO_NEXT_HYPER_VERTEX).iterator().hasNext()) {
+                        //Not last
+                        Edge edgeToNextHyperVertex = hyperVertex.getEdges(Direction.OUT, LABEL_TO_NEXT_HYPER_VERTEX).iterator().next();
+                        Vertex nextHyperVertex = edgeToNextHyperVertex.getVertex(Direction.IN);
+                        GraphDb.getDb().addEdge(null, vertexToRemove, nextHyperVertex, LABEL_TO_FIRST_HYPER_VERTEX);
+                        GraphDb.getDb().removeVertex(hyperVertex);
+                    } else {
+                        //Last
+                        //By this time it must be the only element in the list
+                        GraphDb.getDb().removeVertex(hyperVertex);
+                    }
+                }
+            }
+        } else {
+            //No duplicates to handle
+            Vertex vertexToRemove = o.getVertex();
+            //this.vertex has the next and previous links to manage in a inverse situation
+            //Check if it is first
+            if (this.vertex.getEdges(Direction.IN, LABEL_TO_NEXT_IN_SEQUENCE).iterator().hasNext()) {
+                //It is not first
+                Edge edgeToPrevious = this.vertex.getEdges(Direction.IN, LABEL_TO_NEXT_IN_SEQUENCE).iterator().next();
+                Vertex previousVertex = edgeToPrevious.getVertex(Direction.OUT);
+                GraphDb.getDb().removeEdge(edgeToPrevious);
+                //Check if it is last
+                if (this.vertex.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE).iterator().hasNext()) {
+                    //Not last
+                    Edge edgeToNext = this.vertex.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE).iterator().next();
+                    Vertex nextVertex = edgeToPrevious.getVertex(Direction.IN);
+                    GraphDb.getDb().removeEdge(edgeToNext);
+                    GraphDb.getDb().addEdge(null, previousVertex, nextVertex, LABEL_TO_NEXT_IN_SEQUENCE);
+                } else {
+                    //Last,
+                    //previous becomes to last
+                    Edge edgeToLast = this.vertex.getEdges(Direction.IN, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE).iterator().next();
+                    GraphDb.getDb().removeEdge(edgeToLast);
+                    GraphDb.getDb().addEdge(null, vertexToRemove, previousVertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE);
+                }
+            } else {
+                //It is first
+                Edge edgeToFirst = this.vertex.getEdges(Direction.IN, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE).iterator().next();
+                GraphDb.getDb().removeEdge(edgeToFirst);
+                //Check is it is last
+                if (this.vertex.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE).iterator().hasNext()) {
+                    //Not last
+                    //Move the edge to first
+                    Edge edgeToNext = this.vertex.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE).iterator().next();
+                    Vertex nextVertex = edgeToNext.getVertex(Direction.IN);
+                    GraphDb.getDb().removeEdge(edgeToNext);
+                    GraphDb.getDb().addEdge(null, vertexToRemove, nextVertex, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE);
+                } else {
+                    //Last
+                    //Only one element in the list
+                    Edge edgeToLast = this.vertex.getEdges(Direction.IN, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE).iterator().next();
+                    GraphDb.getDb().removeEdge(edgeToLast);
+                }
+            }
+        }
+    }
+
     /**
      * This must be implemented by the appropriate collection type
+     *
      * @param edge
      * @param e
      */
-    protected abstract void manageLinkedList(Edge edge, TumlNode e);
+    protected abstract void addToLinkedList(Edge edge, TumlNode e);
 
     private void validateQualifiedAssociation(E e) {
         if (!(e instanceof TumlNode)) {
@@ -292,8 +389,9 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
                         createAudit(e, true);
                     }
                     if (isInverseOrdered()) {
-                        Index<Edge> index = GraphDb.getDb().getIndex(node.getUid() + INDEX_SEPARATOR + getInverseQualifiedName(), Edge.class);
-                        index.remove("index", this.owner.getVertex().getProperty("tinkerIndex"), edge);
+                        removeFromInverseLinkedList(edge, (TumlNode) o);
+//                        Index<Edge> index = GraphDb.getDb().getIndex(node.getUid() + INDEX_SEPARATOR + getInverseQualifiedName(), Edge.class);
+//                        index.remove("index", this.owner.getVertex().getProperty("tinkerIndex"), edge);
                     }
                     GraphDb.getDb().removeEdge(edge);
                     break;
@@ -308,12 +406,10 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
                 if (this.owner instanceof TinkerAuditableNode) {
                     createAudit(e, true);
                 }
-                GraphDb.getDb().removeVertex(v);
             }
         }
         return result;
     }
-
 
     protected Edge addInternal(E e) {
         Vertex v = null;

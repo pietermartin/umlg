@@ -94,6 +94,31 @@ public class TestSequence extends BaseLocalDbTest {
     }
 
     @Test
+    public void testSequenceRemovalInverse() {
+        SequenceRoot sequenceRoot = new SequenceRoot(true);
+        sequenceRoot.setName("sequenceRoot");
+        SequenceTest sequenceTest1 = new SequenceTest(true);
+        sequenceTest1.setName("sequenceTest1");
+        sequenceRoot.getSequenceTest().add(0, sequenceTest1);
+        SequenceTest sequenceTest2 = new SequenceTest(true);
+        sequenceTest2.setName("sequenceTest2");
+        sequenceRoot.getSequenceTest().add(1,sequenceTest2);
+        SequenceTest sequenceTest3 = new SequenceTest(true);
+        sequenceTest3.setName("sequenceTest3");
+        sequenceRoot.getSequenceTest().add(2, sequenceTest3);
+        db.commit();
+
+        Assert.assertEquals(4, countVertices());
+        Assert.assertEquals(8, countEdges());
+
+        sequenceTest1 = new SequenceTest(sequenceTest1.getVertex());
+        sequenceTest1.removeFromSequenceRoot(sequenceRoot);
+
+        db.commit();
+
+    }
+
+    @Test
     public void testSequenceRemoval() {
         SequenceRoot sequenceRoot = new SequenceRoot(true);
         sequenceRoot.setName("sequenceRoot");

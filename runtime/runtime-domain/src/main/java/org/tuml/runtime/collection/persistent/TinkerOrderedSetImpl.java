@@ -97,7 +97,7 @@ public class TinkerOrderedSetImpl<E> extends BaseCollection<E> implements Tinker
     }
 
     @Override
-    protected void manageLinkedList(Edge edge, TumlNode e) {
+    protected void addToLinkedList(Edge edge, TumlNode e) {
         //Get the new vertex for the element
         Vertex newElementVertex = getVertexForDirection(edge);
         if (this.vertex.getEdges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE).iterator().hasNext()) {
@@ -202,55 +202,26 @@ public class TinkerOrderedSetImpl<E> extends BaseCollection<E> implements Tinker
         }
     }
 
-    @Override
-    public boolean remove(Object o) {
-        maybeLoad();
-        int indexOf = this.getInternalListOrderedSet().indexOf(o);
-        boolean result = this.getInternalListOrderedSet().remove(o);
-        if (result) {
-            Vertex vertexToDelete;
-            if (o instanceof TumlNode) {
-                TumlNode node = (TumlNode) o;
-                vertexToDelete = node.getVertex();
-            } else if (o.getClass().isEnum()) {
-                vertexToDelete = this.internalVertexMap.get(((Enum<?>) o).name());
-            } else {
-                vertexToDelete = this.internalVertexMap.get(o);
-            }
-            //if first then move the edge LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE
-            if (indexOf == 0) {
-                Edge edgeToFirstElementInSequence = this.vertex.getEdges(Direction.OUT, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE).iterator().next();
-                GraphDb.getDb().removeEdge(edgeToFirstElementInSequence);
-                //If there are more than one element in the list the add the edge LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE
-                if (size() > 0) {
-                    Edge edgeToNext = vertexToDelete.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE).iterator().next();
-                    GraphDb.getDb().addEdge(null, this.vertex, edgeToNext.getVertex(Direction.IN), LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE);
-                }
-            }
-            //if last then move the edge LABEL_TO_LAST_ELEMENT_IN_SEQUENCE
-            if (indexOf == size()) {
-                Edge edgeToLastElementInSequence = this.vertex.getEdges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE).iterator().next();
-                GraphDb.getDb().removeEdge(edgeToLastElementInSequence);
-                //If there are more than one element in the list add the edge LABEL_TO_LAST_ELEMENT_IN_SEQUENCE
-                if (size() > 0) {
-                    Edge edgeToPrevious = vertexToDelete.getEdges(Direction.IN, LABEL_TO_NEXT_IN_SEQUENCE).iterator().next();
-                    GraphDb.getDb().addEdge(null, this.vertex, edgeToPrevious.getVertex(Direction.OUT), LABEL_TO_LAST_ELEMENT_IN_SEQUENCE);
-                }
-            }
-
-            //reorder the edges LABEL_TO_NEXT_IN_SEQUENCE
-            //If first or last then nothing to do
-            if (indexOf != 0 && indexOf != size()) {
-                Edge edgeToPrevious = vertexToDelete.getEdges(Direction.IN, LABEL_TO_NEXT_IN_SEQUENCE).iterator().next();
-                Edge edgeToNext = vertexToDelete.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE).iterator().next();
-                GraphDb.getDb().addEdge(null, edgeToPrevious.getVertex(Direction.OUT), edgeToNext.getVertex(Direction.IN), LABEL_TO_NEXT_IN_SEQUENCE);
-            }
-
-            GraphDb.getDb().removeVertex(vertexToDelete);
-
-        }
-        return result;
-    }
+//    @Override
+//    public boolean remove(Object o) {
+//        maybeLoad();
+//        int indexOf = this.getInternalListOrderedSet().indexOf(o);
+//        boolean result = this.getInternalListOrderedSet().remove(o);
+//        if (result) {
+//            Vertex vertexToDelete;
+//            if (o instanceof TumlNode) {
+//                TumlNode node = (TumlNode) o;
+//                vertexToDelete = node.getVertex();
+//            } else if (o.getClass().isEnum()) {
+//                vertexToDelete = this.internalVertexMap.get(((Enum<?>) o).name());
+//                GraphDb.getDb().removeVertex(vertexToDelete);
+//            } else {
+//                vertexToDelete = this.internalVertexMap.get(o);
+//                GraphDb.getDb().removeVertex(vertexToDelete);
+//            }
+//        }
+//        return result;
+//    }
 
     @SuppressWarnings("unchecked")
     @Override

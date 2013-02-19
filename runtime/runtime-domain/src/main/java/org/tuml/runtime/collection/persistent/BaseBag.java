@@ -37,8 +37,8 @@ public abstract class BaseBag<E> extends BaseCollection<E> implements TinkerBag<
 	}
 
     @Override
-    protected void manageLinkedList(Edge edge, TumlNode e) {
-        throw new RuntimeException("manageLinkedList and manageLinkedListInverse should never be called for a BaseSet!");
+    protected void addToLinkedList(Edge edge, TumlNode e) {
+        throw new RuntimeException("addToLinkedList and manageLinkedListInverse should never be called for a BaseSet!");
     }
 	
 	protected Vertex removeFromInternalMap(Object o) {
