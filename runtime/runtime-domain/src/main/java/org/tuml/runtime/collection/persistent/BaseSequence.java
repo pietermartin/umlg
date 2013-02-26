@@ -17,6 +17,7 @@ import java.util.*;
 public abstract class BaseSequence<E> extends BaseCollection<E> implements TinkerSequence<E> {
 
     protected OclStdLibSequence<E> oclStdLibSequence;
+    //This is used in the logic for adding a node at a index
     protected Map<Integer, Vertex> hyperVertexIndex;
 
     public BaseSequence(TumlRuntimeProperty runtimeProperty) {
@@ -114,6 +115,7 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
                     hyperVertex = edgeToNextHyperVertex.getVertex(Direction.IN);
                     toIndex = loadFromHyperVertex(hyperVertex, toIndex);
                 }
+                this.loaded = true;
             } else {
                 this.loaded = true;
             }
@@ -213,26 +215,6 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
             previousVertex = this.internalVertexMap.get(((Enum<?>) e).name());
         }
         return previousVertex;
-    }
-
-    @Override
-    public boolean remove(Object o) {
-        maybeLoad();
-        int indexOf = this.getInternalList().indexOf(o);
-        boolean result = this.getInternalList().remove(o);
-        if (result) {
-            Vertex vertexToDelete;
-            if (o instanceof TumlNode) {
-                TumlNode node = (TumlNode) o;
-            } else if (o.getClass().isEnum()) {
-                vertexToDelete = this.internalVertexMap.get(((Enum<?>) o).name());
-                GraphDb.getDb().removeVertex(vertexToDelete);
-            } else {
-                vertexToDelete = this.internalVertexMap.get(o);
-                GraphDb.getDb().removeVertex(vertexToDelete);
-            }
-        }
-        return result;
     }
 
     @Override
