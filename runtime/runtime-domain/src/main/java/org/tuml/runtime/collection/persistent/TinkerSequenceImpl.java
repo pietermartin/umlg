@@ -16,7 +16,8 @@ public class TinkerSequenceImpl<E> extends BaseSequence<E> implements TinkerSequ
 
 	@Override
 	public void add(int indexOf, E e) {
-        maybeLoad();
+        //Do not load, it needs to be traversed every time
+//        maybeLoad();
 		addToListAtIndex(indexOf, e);
 	}
 

@@ -18,14 +18,14 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
 
     protected OclStdLibSequence<E> oclStdLibSequence;
     //This is used in the logic for adding a node at a index
-    protected Map<Integer, Vertex> hyperVertexIndex;
+//    protected Map<Integer, Vertex> hyperVertexIndex;
 
     public BaseSequence(TumlRuntimeProperty runtimeProperty) {
         super(runtimeProperty);
         this.internalCollection = new ArrayList<E>();
         this.oclStdLibSequence = new OclStdLibSequenceImpl<E>((List<E>) this.internalCollection);
         this.oclStdLibCollection = this.oclStdLibSequence;
-        this.hyperVertexIndex = new HashMap<Integer, Vertex>();
+//        this.hyperVertexIndex = new HashMap<Integer, Vertex>();
     }
 
 
@@ -34,7 +34,7 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
         this.internalCollection = new ArrayList<E>();
         this.oclStdLibSequence = new OclStdLibSequenceImpl<E>((List<E>) this.internalCollection);
         this.oclStdLibCollection = new OclStdLibSequenceImpl<E>((List<E>) this.internalCollection);
-        this.hyperVertexIndex = new HashMap<Integer, Vertex>();
+//        this.hyperVertexIndex = new HashMap<Integer, Vertex>();
     }
 
     protected List<E> getInternalList() {
@@ -50,22 +50,20 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
         //This is size - 2 as the hyperVertexIndex does not yet contain the entry for the new element and it is zero based
         Vertex lastHyperVertex;
         if (size() > 1) {
-            lastHyperVertex = this.hyperVertexIndex.get(size() - 2);
+            Edge edgeToLastHyperVertex = this.vertex.getEdges(Direction.OUT, LABEL_TO_LAST_HYPER_VERTEX).iterator().next();
+            lastHyperVertex = edgeToLastHyperVertex.getVertex(Direction.IN);
             Vertex previousVertex = getVertexFromElement(this.getInternalList().get(size() - 2));
             //Check is duplicate
             if (previousVertex.equals(newElementVertex)) {
                 //Add to the hyper vertex
                 GraphDb.getDb().addEdge(null, lastHyperVertex, newElementVertex, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX);
-                this.hyperVertexIndex.put(size() - 1, lastHyperVertex);
             } else {
                 //Create a new hyper vertex
                 Vertex newHyperVertex = GraphDb.getDb().addVertex("hyperVertex");
                 GraphDb.getDb().addEdge(null, newHyperVertex, newElementVertex, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX);
                 //Put the new hyper vertex in the linked list
                 GraphDb.getDb().addEdge(null, lastHyperVertex, newHyperVertex, LABEL_TO_NEXT_HYPER_VERTEX);
-                this.hyperVertexIndex.put(size() - 1, newHyperVertex);
                 //remove the lastHyperVertex edge to parent, add it to new last hyper vertex
-                Edge edgeToLastHyperVertex = this.vertex.getEdges(Direction.OUT, LABEL_TO_LAST_HYPER_VERTEX).iterator().next();
                 GraphDb.getDb().removeEdge(edgeToLastHyperVertex);
                 GraphDb.getDb().addEdge(null, this.vertex, newHyperVertex, LABEL_TO_LAST_HYPER_VERTEX);
             }
@@ -75,7 +73,6 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
             GraphDb.getDb().addEdge(null, newHyperVertex, newElementVertex, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX);
             //Put the new hyper vertex in the linked list
             GraphDb.getDb().addEdge(null, this.vertex, newHyperVertex, LABEL_TO_FIRST_HYPER_VERTEX);
-            this.hyperVertexIndex.put(size() - 1, newHyperVertex);
             //remove the lastHyperVertex edge to parent, add it to new last hyper vertex
             GraphDb.getDb().addEdge(null, this.vertex, newHyperVertex, LABEL_TO_LAST_HYPER_VERTEX);
         }
@@ -127,7 +124,6 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
         for (Edge edgeToElement : hyperVertex.getEdges(Direction.OUT, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX)) {
             Vertex vertexToLoad = edgeToElement.getVertex(Direction.IN);
             loadNode(edgeToElement, vertexToLoad);
-            this.hyperVertexIndex.put(toIndex++, hyperVertex);
         }
         return toIndex;
     }
@@ -159,48 +155,85 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
         //Create the edge to the new element
         Edge edgeFromParentToElementVertex = addInternal(e);
         manageLinkedList(indexOf, edgeFromParentToElementVertex);
-        this.getInternalList().add(indexOf, e);
         return edgeFromParentToElementVertex;
     }
 
+    private class Pair {
+        Vertex hyperVertex;
+        Vertex elementVertex;
+
+        public Pair(Vertex hyperVertex, Vertex elementVertex) {
+            this.hyperVertex = hyperVertex;
+            this.elementVertex = elementVertex;
+        }
+    }
+
+    //The element is not yet in the internal list
     private void manageLinkedList(int indexOfNewElement, Edge edgeFromParentToElementVertex) {
         //Get the new vertex for the element
         Vertex newElementVertex = getVertexForDirection(edgeFromParentToElementVertex);
-        Vertex hyperVertexAtIndex = this.hyperVertexIndex.get(indexOfNewElement);
-        //Check if the hyperVertexAtIndex holds elements that are equal to the element being added
 
-        Vertex currentElementAtIndex = getVertexFromElement(this.getInternalList().get(indexOfNewElement));
-        if (currentElementAtIndex != null && currentElementAtIndex.equals(newElementVertex)) {
-            //Need to attach the newVertex to the current hyper vertex as its a duplicate
-            GraphDb.getDb().addEdge(null, hyperVertexAtIndex, newElementVertex, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX);
-        } else {
-            //Element is not a duplicate.
-            //Create a new hyper vertex to attach it to
-            Vertex newHyperVertex = GraphDb.getDb().addVertex("hyperVertex");
-            GraphDb.getDb().addEdge(null, newHyperVertex, newElementVertex, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX);
-            //place the hyper vertex in the linked list
-            if (indexOfNewElement == 0) {
-                if (!isEmpty()) {
-                    //Need to move the edge (LABEL_TO_FIRST_HYPER_VERTEX) to the parent
-                    //Remove the label to first
-                    Edge edgeFromParent = hyperVertexAtIndex.getEdges(Direction.IN, LABEL_TO_FIRST_HYPER_VERTEX).iterator().next();
-                    GraphDb.getDb().removeEdge(edgeFromParent);
-                }
-                //Add the edge (LABEL_TO_FIRST_HYPER_VERTEX) to the new hyper vertex in position 0
-                GraphDb.getDb().addEdge(null, this.vertex, newHyperVertex, LABEL_TO_FIRST_HYPER_VERTEX);
-                //Link the new hyper vertex to the next one
-                GraphDb.getDb().addEdge(null, newHyperVertex, hyperVertexAtIndex, LABEL_TO_NEXT_HYPER_VERTEX);
+        if (this.vertex.getEdges(Direction.OUT, LABEL_TO_FIRST_HYPER_VERTEX).iterator().hasNext()) {
+            Edge edgeToFirstHyperVertex = this.vertex.getEdges(Direction.OUT, LABEL_TO_FIRST_HYPER_VERTEX).iterator().next();
+            Vertex firstHyperVertex = edgeToFirstHyperVertex.getVertex(Direction.IN);
+            Pair hyperVertexAtIndexPair = getHyperVertexForIndex(indexOfNewElement, firstHyperVertex, 0);
+            Vertex hyperVertexAtIndex = hyperVertexAtIndexPair.hyperVertex;
+            Vertex currentElementAtIndex = hyperVertexAtIndexPair.elementVertex;
+
+            //Check if the hyperVertexAtIndex holds elements that are equal to the element being added
+            if (currentElementAtIndex != null && currentElementAtIndex.equals(newElementVertex)) {
+                //Need to attach the newVertex to the current hyper vertex as its a duplicate
+                GraphDb.getDb().addEdge(null, hyperVertexAtIndex, newElementVertex, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX);
             } else {
-                //Place the new hyper vertex in the list
-                //Break the link to the previous hyper edge
-                Edge edgeToPreviousHyperVertex = hyperVertexAtIndex.getEdges(Direction.IN, LABEL_TO_NEXT_HYPER_VERTEX).iterator().next();
-                Vertex previousHyperVertex = edgeToPreviousHyperVertex.getVertex(Direction.OUT);
-                GraphDb.getDb().removeEdge(edgeToPreviousHyperVertex);
-                //Recreate the link from the previous hyper vertex to the new one
-                GraphDb.getDb().addEdge(null, previousHyperVertex, newHyperVertex, LABEL_TO_NEXT_HYPER_VERTEX);
-                //Add a edge to the next hyper edge from the new one.
-                GraphDb.getDb().addEdge(null, newHyperVertex, hyperVertexAtIndex, LABEL_TO_NEXT_HYPER_VERTEX);
+                //Element is not a duplicate.
+                //Create a new hyper vertex to attach it to
+                Vertex newHyperVertex = GraphDb.getDb().addVertex("hyperVertex");
+                GraphDb.getDb().addEdge(null, newHyperVertex, newElementVertex, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX);
+                //place the hyper vertex in the linked list
+                if (indexOfNewElement == 0) {
+                    if (!isEmpty()) {
+                        //Need to move the edge (LABEL_TO_FIRST_HYPER_VERTEX) to the parent
+                        //Remove the label to first
+                        Edge edgeFromParent = hyperVertexAtIndex.getEdges(Direction.IN, LABEL_TO_FIRST_HYPER_VERTEX).iterator().next();
+                        GraphDb.getDb().removeEdge(edgeFromParent);
+                    }
+                    //Add the edge (LABEL_TO_FIRST_HYPER_VERTEX) to the new hyper vertex in position 0
+                    GraphDb.getDb().addEdge(null, this.vertex, newHyperVertex, LABEL_TO_FIRST_HYPER_VERTEX);
+                    //Link the new hyper vertex to the next one
+                    GraphDb.getDb().addEdge(null, newHyperVertex, hyperVertexAtIndex, LABEL_TO_NEXT_HYPER_VERTEX);
+                } else {
+                    //Place the new hyper vertex in the list
+                    //Break the link to the previous hyper edge
+                    Edge edgeToPreviousHyperVertex = hyperVertexAtIndex.getEdges(Direction.IN, LABEL_TO_NEXT_HYPER_VERTEX).iterator().next();
+                    Vertex previousHyperVertex = edgeToPreviousHyperVertex.getVertex(Direction.OUT);
+                    GraphDb.getDb().removeEdge(edgeToPreviousHyperVertex);
+                    //Recreate the link from the previous hyper vertex to the new one
+                    GraphDb.getDb().addEdge(null, previousHyperVertex, newHyperVertex, LABEL_TO_NEXT_HYPER_VERTEX);
+                    //Add a edge to the next hyper edge from the new one.
+                    GraphDb.getDb().addEdge(null, newHyperVertex, hyperVertexAtIndex, LABEL_TO_NEXT_HYPER_VERTEX);
+                }
             }
+
+        } else {
+            //List is empty
+
+        }
+
+    }
+
+    private Pair getHyperVertexForIndex(int indexOfNewElement, Vertex hyperVertex, int count) {
+        for (Edge edgeToElementVertex : hyperVertex.getEdges(Direction.OUT, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX)) {
+            Vertex elementVertex = edgeToElementVertex.getVertex(Direction.IN);
+            if (indexOfNewElement == count++) {
+                return new Pair(hyperVertex, elementVertex);
+            }
+        }
+        if (hyperVertex.getEdges(Direction.OUT, LABEL_TO_NEXT_HYPER_VERTEX).iterator().hasNext()) {
+            Edge edgeToNextHyperVertex = hyperVertex.getEdges(Direction.OUT, LABEL_TO_NEXT_HYPER_VERTEX).iterator().next();
+            hyperVertex = edgeToNextHyperVertex.getVertex(Direction.IN);
+            return getHyperVertexForIndex(indexOfNewElement, hyperVertex, count);
+        } else {
+            return null;
         }
     }
 
