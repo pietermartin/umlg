@@ -43,7 +43,7 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
 
     //By now the element is already added to the internal list
     @Override
-    protected void addToLinkedList(Edge edge, TumlNode e) {
+    protected void addToLinkedList(Edge edge) {
         //Get the new vertex for the element
         Vertex newElementVertex = getVertexForDirection(edge);
         //Get the last hyperVertex
@@ -250,7 +250,7 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
         } else if (e.getClass().isEnum()) {
             previousVertex = this.internalVertexMap.get(((Enum<?>) e).name());
         } else {
-            previousVertex = this.internalVertexMap.get(((Enum<?>) e).name());
+            previousVertex = this.internalVertexMap.get(e);
         }
         return previousVertex;
     }

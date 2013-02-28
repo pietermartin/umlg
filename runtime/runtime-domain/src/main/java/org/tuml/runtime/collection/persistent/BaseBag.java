@@ -37,7 +37,7 @@ public abstract class BaseBag<E> extends BaseCollection<E> implements TinkerBag<
 	}
 
     @Override
-    protected void addToLinkedList(Edge edge, TumlNode e) {
+    protected void addToLinkedList(Edge edge) {
         throw new RuntimeException("addToLinkedList and manageLinkedListInverse should never be called for a BaseSet!");
     }
 	

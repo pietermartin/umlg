@@ -169,7 +169,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
             }
 
             if (isOrdered()) {
-                addToLinkedList(edge, (TumlNode) e);
+                addToLinkedList(edge);
             }
             if (isInverseOrdered()) {
                 // Can only qualify TinkerNode's
@@ -465,9 +465,8 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
      * This must be implemented by the appropriate collection type
      *
      * @param edge
-     * @param e
      */
-    protected abstract void addToLinkedList(Edge edge, TumlNode e);
+    protected abstract void addToLinkedList(Edge edge);
 
     private void validateQualifiedAssociation(E e) {
         if (!(e instanceof TumlNode)) {
