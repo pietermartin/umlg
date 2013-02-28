@@ -262,22 +262,33 @@ public class TestSequence extends BaseLocalDbTest {
         sequenceNotUniqueRoot = new SequenceNotUniqueRoot(sequenceNotUniqueRoot.getVertex());
         sequenceNotUniqueTest1 = new SequenceNotUniqueTest(sequenceNotUniqueTest1.getVertex());
         sequenceNotUniqueRoot.removeFromSequenceNotUniqueTest(sequenceNotUniqueTest1);
+        db.commit();
+
+        Assert.assertEquals(8, countVertices());
+        Assert.assertEquals(22, countEdges());
+
+        sequenceNotUniqueRoot = new SequenceNotUniqueRoot(sequenceNotUniqueRoot.getVertex());
+        sequenceNotUniqueTest2 = new SequenceNotUniqueTest(sequenceNotUniqueTest2.getVertex());
+        sequenceNotUniqueRoot.removeFromSequenceNotUniqueTest(sequenceNotUniqueTest2);
+
+        db.commit();
+        Assert.assertEquals(8, countVertices());
+        Assert.assertEquals(20, countEdges());
+
+        sequenceNotUniqueRoot = new SequenceNotUniqueRoot(sequenceNotUniqueRoot.getVertex());
+        sequenceNotUniqueTest1 = new SequenceNotUniqueTest(sequenceNotUniqueTest1.getVertex());
+        sequenceNotUniqueRoot.removeFromSequenceNotUniqueTest(sequenceNotUniqueTest1);
+        db.commit();
+
+        Assert.assertEquals(8, countVertices());
+        Assert.assertEquals(18, countEdges());
+
+        sequenceNotUniqueTest1 = new SequenceNotUniqueTest(sequenceNotUniqueTest1.getVertex());
         sequenceNotUniqueTest1.delete();
         db.commit();
+
         Assert.assertEquals(6, countVertices());
-        Assert.assertEquals(20, countEdges());
-//
-//        sequenceNotUniqueRoot = new SequenceNotUniqueRoot(sequenceNotUniqueRoot.getVertex());
-//        sequenceNotUniqueTest2 = new SequenceNotUniqueTest(sequenceNotUniqueTest2.getVertex());
-//        sequenceNotUniqueRoot.removeFromSequenceNotUniqueTest(sequenceNotUniqueTest2);
-//        sequenceNotUniqueTest2.delete();
-//        sequenceNotUniqueTest3 = new SequenceNotUniqueTest(sequenceNotUniqueTest3.getVertex());
-//        sequenceNotUniqueRoot.removeFromSequenceNotUniqueTest(sequenceNotUniqueTest3);
-//        sequenceNotUniqueTest3.delete();
-//
-//        db.commit();
-//        Assert.assertEquals(1, countVertices());
-//        Assert.assertEquals(1, countEdges());
+        Assert.assertEquals(15, countEdges());
 
     }
 

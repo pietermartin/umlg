@@ -309,8 +309,6 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
         return this.getInternalList().subList(fromIndex, toIndex);
     }
 
-    protected abstract void removeEdgefromIndex(Vertex v, Edge edge, int indexOf);
-
     @Override
     public <R> TinkerSequence<R> collectNested(BodyExpressionEvaluator<R, E> v) {
         maybeLoad();

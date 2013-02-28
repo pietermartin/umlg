@@ -39,11 +39,6 @@ public class TinkerSequenceClosableIterableImpl<E> extends BaseSequence<E> imple
 	}
 
 	@Override
-	protected void removeEdgefromIndex(Vertex v, Edge edge, int indexOf) {
-		throw new IllegalStateException("This set is read only! It is constructed from a indexed search result");
-	}
-
-	@Override
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected void loadFromVertex() {
 		for (Iterator<Edge> iter = getEdges(); iter.hasNext(); ) {

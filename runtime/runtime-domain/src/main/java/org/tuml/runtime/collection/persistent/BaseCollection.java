@@ -243,11 +243,12 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
             //Handle duplicates
             //Find hyper vertex
             Vertex vertexToRemove = o.getVertex();
-            //Vertex to remove is the parent in a inverse situation
-            Edge edgeToHyperVertex = vertexToRemove.getEdges(Direction.IN, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX).iterator().next();
-            Vertex hyperVertex = edgeToHyperVertex.getVertex(Direction.OUT);
+            Vertex hyperVertex = getFirstHyperVertexInListForVertex(vertexToRemove);
+
+            Edge edgeToVertexToRemove = hyperVertex.getEdges(Direction.OUT, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX).iterator().next();
+
             //Remove the edge to the hyper vertex
-            GraphDb.getDb().removeEdge(edgeToHyperVertex);
+            GraphDb.getDb().removeEdge(edgeToVertexToRemove);
             //Check if the are duplicates, i.e. the hyper vertex has remaining edges.
             //If there are duplicates then there is nothing more to do
             if (!hyperVertex.getEdges(Direction.OUT, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX).iterator().hasNext()) {
@@ -332,6 +333,36 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
                 }
             }
         }
+    }
+
+    /**
+     * Find all hyper vertexes from vertexToRemove. There can be many as the list could have duplicates.
+     * Out of all the hyper vertexes find the earliest one in the list. To do that iterate to the beginning of the list looking to see which hyper vertex is before another.
+     *
+     * @param vertex
+     * @return
+     */
+    private Vertex getFirstHyperVertexInListForVertex(Vertex vertex) {
+        Set<Vertex> hyperVertexes = new HashSet<Vertex>();
+        for (Edge edge : vertex.getEdges(Direction.IN, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX)) {
+            hyperVertexes.add(edge.getVertex(Direction.OUT));
+        }
+
+        //Take any hyper vertex and start iterating to the beginning.
+        Vertex firstHyperVertex = hyperVertexes.iterator().next();
+        hyperVertexes.remove(firstHyperVertex);
+        Iterator<Edge> iterator = firstHyperVertex.getEdges(Direction.IN, LABEL_TO_NEXT_HYPER_VERTEX).iterator();
+        while (iterator.hasNext()) {
+            Edge edge = iterator.next();
+            Vertex previousHyperVertex = edge.getVertex(Direction.OUT);
+            if (hyperVertexes.contains(previousHyperVertex)) {
+                firstHyperVertex = previousHyperVertex;
+                iterator = firstHyperVertex.getEdges(Direction.IN, LABEL_TO_NEXT_HYPER_VERTEX).iterator();
+                hyperVertexes.remove(previousHyperVertex);
+            }
+        }
+
+        return firstHyperVertex;
     }
 
     private void removeFromInverseLinkedList(TumlNode o) {
