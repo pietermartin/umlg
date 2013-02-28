@@ -216,6 +216,11 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
 
         } else {
             //List is empty
+            if (indexOfNewElement > 0) {
+                throw new IllegalArgumentException("List is empty, can only add an element at index 0");
+            }
+
+            throw new RuntimeException("Not yet implemented");
 
         }
 
