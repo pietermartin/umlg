@@ -519,6 +519,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
                         removeFromInverseLinkedList((TumlNode) o);
                     }
                     GraphDb.getDb().removeEdge(edge);
+                    node.initialiseProperty(tumlRuntimeProperty, true);
                     break;
                 }
             } else if (o.getClass().isEnum()) {

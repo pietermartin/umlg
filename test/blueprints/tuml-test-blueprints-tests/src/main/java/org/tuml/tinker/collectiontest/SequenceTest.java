@@ -40,37 +40,48 @@ public class SequenceTest extends BaseLocalDbTest {
 //        Assert.assertEquals("hand2",godTest.getHand().get(1).getName());
 //        Assert.assertEquals("hand1",godTest.getHand().get(0).getName());
 //	}
-
-    @Test
-    public void testClear() {
-        God god = new God(true);
-        god.setName("THEGOD");
-        Hand hand1 = new Hand(true);
-        hand1.setLeft(true);
-        hand1.setName("hand1");
-        Hand hand2 = new Hand(true);
-        hand2.setLeft(true);
-        hand2.setName("hand2");
-        Hand hand3 = new Hand(true);
-        hand3.setLeft(true);
-        hand3.setName("hand3");
-        Hand hand4 = new Hand(true);
-        hand4.setLeft(true);
-        hand4.setName("hand4");
-        god.setHand(new TumlMemorySequence<Hand>(Arrays.asList(new Hand[]{hand1, hand2, hand3, hand4})));
-        db.commit();
-
-        Assert.assertEquals(9, countVertices());
-        Assert.assertEquals(14, countEdges());
-
-        god.getHand().clear();
-        db.commit();
-
-        Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(1, countEdges());
-
-    }
-
+//
+//    @Test
+//    public void testClear() {
+//        God god = new God(true);
+//        god.setName("THEGOD");
+//        Hand hand1 = new Hand(true);
+//        hand1.setLeft(true);
+//        hand1.setName("hand1");
+//        Hand hand2 = new Hand(true);
+//        hand2.setLeft(true);
+//        hand2.setName("hand2");
+//        Hand hand3 = new Hand(true);
+//        hand3.setLeft(true);
+//        hand3.setName("hand3");
+//        Hand hand4 = new Hand(true);
+//        hand4.setLeft(true);
+//        hand4.setName("hand4");
+//        god.setHand(new TumlMemorySequence<Hand>(Arrays.asList(new Hand[]{hand1, hand2, hand3, hand4})));
+//        db.commit();
+//
+//        Assert.assertEquals(9, countVertices());
+//        Assert.assertEquals(14, countEdges());
+//
+//        god.getHand().clear();
+//
+//        Assert.assertTrue(god.getHand().isEmpty());
+//        Assert.assertNull(hand1.getGod());
+//        Assert.assertNull(hand2.getGod());
+//        Assert.assertNull(hand3.getGod());
+//        Assert.assertNull(hand4.getGod());
+//
+//        Exception transactionFailed = null;
+//        try {
+//            db.commit();
+//        } catch (Exception e) {
+//            db.rollback();
+//            transactionFailed = e;
+//        }
+//        Assert.assertNotNull(transactionFailed);
+//        Assert.assertTrue(isTransactionFailedException(transactionFailed));
+//    }
+//
 //    @Test
 //    public void testControllingSide() {
 //        God god = new God(true);
@@ -101,6 +112,11 @@ public class SequenceTest extends BaseLocalDbTest {
 //        hand6.setName("hand6");
 //
 //        god.setHand(new TumlMemorySequence<Hand>(Arrays.asList(new Hand[]{hand5, hand6})));
+//
+//        hand1.delete();
+//        hand2.delete();
+//        hand3.delete();
+//        hand4.delete();
 //
 //        db.commit();
 //        Assert.assertEquals(5, countVertices());
@@ -302,52 +318,56 @@ public class SequenceTest extends BaseLocalDbTest {
 //		Assert.assertEquals("hand2", godTest2.getHand().get(1).getName());
 //		Assert.assertEquals("hand1", godTest2.getHand().get(2).getName());
 //		Assert.assertEquals("hand2", godTest2.getHand().get(3).getName());
-//		Assert.assertEquals(3, countVertices());
-//		Assert.assertEquals(5, countEdges());
+//		Assert.assertEquals(7, countVertices());
+//		Assert.assertEquals(14, countEdges());
 //	}
-//
-//	@Test
-//	public void testManyToManySequenceWithDuplicates() {
-//		God god = new God(true);
-//		god.setName("THEGOD");
-//
-//		Many1 many1_1 = new Many1(true);
-//		many1_1.setName("many1_1");
-//		many1_1.addToGod(god);
-//
-//		Many1 many1_2 = new Many1(true);
-//		many1_2.setName("many1_1");
-//		many1_2.addToGod(god);
-//
-//		Many1 many1_3 = new Many1(true);
-//		many1_3.setName("many1_1");
-//		many1_3.addToGod(god);
-//
-//		Many1 many1_4 = new Many1(true);
-//		many1_4.setName("many1_4");
-//		many1_4.addToGod(god);
-//
-//		Many2 many2_1 = new Many2(true);
-//		many2_1.setName("many2_1");
-//		many2_1.addToGod(god);
-//
-//		Many2 many2_2 = new Many2(true);
-//		many2_2.setName("many2_2");
-//		many2_2.addToGod(god);
-//
-//		Many2 many2_3 = new Many2(true);
-//		many2_3.setName("many2_3");
-//		many2_3.addToGod(god);
-//
-//		Many2 many2_4 = new Many2(true);
-//		many2_4.setName("many2_4");
-//		many2_4.addToGod(god);
-//
-//		many1_1.addToMany2UnqualifiedList(many2_1);
-//		many1_1.addToMany2UnqualifiedList(many2_2);
-//		many1_1.addToMany2UnqualifiedList(many2_3);
-//		many1_1.addToMany2UnqualifiedList(many2_4);
-//
+
+	@Test
+	public void testManyToManySequenceWithDuplicates() {
+		God god = new God(true);
+		god.setName("THEGOD");
+
+		Many1 many1_1 = new Many1(true);
+		many1_1.setName("many1_1");
+		many1_1.addToGod(god);
+
+		Many1 many1_2 = new Many1(true);
+		many1_2.setName("many1_1");
+		many1_2.addToGod(god);
+
+		Many1 many1_3 = new Many1(true);
+		many1_3.setName("many1_1");
+		many1_3.addToGod(god);
+
+		Many1 many1_4 = new Many1(true);
+		many1_4.setName("many1_4");
+		many1_4.addToGod(god);
+
+		Many2 many2_1 = new Many2(true);
+		many2_1.setName("many2_1");
+		many2_1.addToGod(god);
+
+		Many2 many2_2 = new Many2(true);
+		many2_2.setName("many2_2");
+		many2_2.addToGod(god);
+
+		Many2 many2_3 = new Many2(true);
+		many2_3.setName("many2_3");
+		many2_3.addToGod(god);
+
+		Many2 many2_4 = new Many2(true);
+		many2_4.setName("many2_4");
+		many2_4.addToGod(god);
+
+        many1_1.addToMany2UnqualifiedList(many2_1);
+		many1_1.addToMany2UnqualifiedList(many2_2);
+		many1_1.addToMany2UnqualifiedList(many2_3);
+		many1_1.addToMany2UnqualifiedList(many2_4);
+
+        db.commit();
+        Assert.assertEquals(13, countVertices());
+        Assert.assertEquals(22, countEdges());
+
 //		many1_2.addToMany2UnqualifiedList(many2_1);
 //		many1_2.addToMany2UnqualifiedList(many2_2);
 //		many1_2.addToMany2UnqualifiedList(many2_3);
@@ -378,8 +398,8 @@ public class SequenceTest extends BaseLocalDbTest {
 //        db.commit();
 //		Assert.assertEquals(9, countVertices());
 //		Assert.assertEquals(33, countEdges());
-//	}
-//
+	}
+
 //	@Test
 //	public void testRemovalOfEdgeFromIndex() {
 //		God god = new God(true);
