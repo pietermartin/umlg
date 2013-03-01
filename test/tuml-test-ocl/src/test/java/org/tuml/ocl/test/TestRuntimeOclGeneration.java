@@ -1,6 +1,7 @@
 package org.tuml.ocl.test;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.net.URL;
 import java.util.Map;
 import java.util.logging.LogManager;
@@ -31,7 +32,7 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		ModelLoader.INSTANCE.loadModel(new File("src/main/model/test-ocl.uml"));
+		ModelLoader.INSTANCE.loadModel(new File("test/tuml-test-ocl/src/main/model/test-ocl.uml"));
 		@SuppressWarnings("unused")
 		TumlOcl2Parser instance = TumlOcl2Parser.INSTANCE;
 	}

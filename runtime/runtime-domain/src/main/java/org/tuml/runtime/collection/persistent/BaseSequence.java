@@ -50,7 +50,7 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
         //This is size - 2 as the hyperVertexIndex does not yet contain the entry for the new element and it is zero based
         Vertex lastHyperVertex;
         if (size() > 1) {
-            Edge edgeToLastHyperVertex = this.vertex.getEdges(Direction.OUT, LABEL_TO_LAST_HYPER_VERTEX).iterator().next();
+            Edge edgeToLastHyperVertex = this.vertex.getEdges(Direction.OUT, LABEL_TO_LAST_HYPER_VERTEX + getLabel()).iterator().next();
             lastHyperVertex = edgeToLastHyperVertex.getVertex(Direction.IN);
             Vertex previousVertex = getVertexFromElement(this.getInternalList().get(size() - 2));
             //Check is duplicate
@@ -65,16 +65,16 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
                 GraphDb.getDb().addEdge(null, lastHyperVertex, newHyperVertex, LABEL_TO_NEXT_HYPER_VERTEX);
                 //remove the lastHyperVertex edge to parent, add it to new last hyper vertex
                 GraphDb.getDb().removeEdge(edgeToLastHyperVertex);
-                GraphDb.getDb().addEdge(null, this.vertex, newHyperVertex, LABEL_TO_LAST_HYPER_VERTEX);
+                GraphDb.getDb().addEdge(null, this.vertex, newHyperVertex, LABEL_TO_LAST_HYPER_VERTEX + getLabel());
             }
         } else {
             //Is the first element being added, create the hyper vertex
             Vertex newHyperVertex = GraphDb.getDb().addVertex("hyperVertex");
             GraphDb.getDb().addEdge(null, newHyperVertex, newElementVertex, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX);
             //Put the new hyper vertex in the linked list
-            GraphDb.getDb().addEdge(null, this.vertex, newHyperVertex, LABEL_TO_FIRST_HYPER_VERTEX);
+            GraphDb.getDb().addEdge(null, this.vertex, newHyperVertex, LABEL_TO_FIRST_HYPER_VERTEX + getLabel());
             //remove the lastHyperVertex edge to parent, add it to new last hyper vertex
-            GraphDb.getDb().addEdge(null, this.vertex, newHyperVertex, LABEL_TO_LAST_HYPER_VERTEX);
+            GraphDb.getDb().addEdge(null, this.vertex, newHyperVertex, LABEL_TO_LAST_HYPER_VERTEX + getLabel());
         }
     }
 
@@ -103,8 +103,8 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
             }
         } else {
             //Load via hyper vertex
-            if (this.vertex.getEdges(Direction.OUT, LABEL_TO_FIRST_HYPER_VERTEX).iterator().hasNext()) {
-                Edge edgeToFirstHyperVertex = this.vertex.getEdges(Direction.OUT, LABEL_TO_FIRST_HYPER_VERTEX).iterator().next();
+            if (this.vertex.getEdges(Direction.OUT, LABEL_TO_FIRST_HYPER_VERTEX + getLabel()).iterator().hasNext()) {
+                Edge edgeToFirstHyperVertex = this.vertex.getEdges(Direction.OUT, LABEL_TO_FIRST_HYPER_VERTEX + getLabel()).iterator().next();
                 Vertex hyperVertex = edgeToFirstHyperVertex.getVertex(Direction.IN);
                 int toIndex = loadFromHyperVertex(hyperVertex, 0);
                 while (hyperVertex.getEdges(Direction.OUT, LABEL_TO_NEXT_HYPER_VERTEX).iterator().hasNext()) {
@@ -178,8 +178,8 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
         //Get the new vertex for the element
         Vertex newElementVertex = getVertexForDirection(edgeFromParentToElementVertex);
 
-        if (this.vertex.getEdges(Direction.OUT, LABEL_TO_FIRST_HYPER_VERTEX).iterator().hasNext()) {
-            Edge edgeToFirstHyperVertex = this.vertex.getEdges(Direction.OUT, LABEL_TO_FIRST_HYPER_VERTEX).iterator().next();
+        if (this.vertex.getEdges(Direction.OUT, LABEL_TO_FIRST_HYPER_VERTEX + getLabel()).iterator().hasNext()) {
+            Edge edgeToFirstHyperVertex = this.vertex.getEdges(Direction.OUT, LABEL_TO_FIRST_HYPER_VERTEX + getLabel()).iterator().next();
             Vertex firstHyperVertex = edgeToFirstHyperVertex.getVertex(Direction.IN);
             Pair hyperVertexAtIndexPair = getHyperVertexForIndex(indexOfNewElement, firstHyperVertex, 0);
             Vertex hyperVertexAtIndex = hyperVertexAtIndexPair.hyperVertex;
@@ -199,11 +199,11 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
                     if (!isEmpty()) {
                         //Need to move the edge (LABEL_TO_FIRST_HYPER_VERTEX) to the parent
                         //Remove the label to first
-                        Edge edgeFromParent = hyperVertexAtIndex.getEdges(Direction.IN, LABEL_TO_FIRST_HYPER_VERTEX).iterator().next();
+                        Edge edgeFromParent = hyperVertexAtIndex.getEdges(Direction.IN, LABEL_TO_FIRST_HYPER_VERTEX + getLabel()).iterator().next();
                         GraphDb.getDb().removeEdge(edgeFromParent);
                     }
                     //Add the edge (LABEL_TO_FIRST_HYPER_VERTEX) to the new hyper vertex in position 0
-                    GraphDb.getDb().addEdge(null, this.vertex, newHyperVertex, LABEL_TO_FIRST_HYPER_VERTEX);
+                    GraphDb.getDb().addEdge(null, this.vertex, newHyperVertex, LABEL_TO_FIRST_HYPER_VERTEX + getLabel());
                     //Link the new hyper vertex to the next one
                     GraphDb.getDb().addEdge(null, newHyperVertex, hyperVertexAtIndex, LABEL_TO_NEXT_HYPER_VERTEX);
                 } else {

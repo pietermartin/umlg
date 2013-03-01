@@ -35,6 +35,7 @@ public class MetaPropertyJson {
     private Boolean ordered;
     private Boolean inverseOrdered;
     private Boolean unique;
+    private Boolean inverseUnique;
     private String tumlUri;
     private String tumlOverloadedPostUri;
     private String tumlMetaDataUri;
@@ -101,6 +102,8 @@ public class MetaPropertyJson {
                 this.inverseOrdered = (Boolean) properties.get(name);
             } else if (name.equals("unique")) {
                 this.unique = (Boolean) properties.get(name);
+            } else if (name.equals("inverseUnique")) {
+                this.inverseUnique = (Boolean) properties.get(name);
             } else if (name.equals("tumlUri")) {
                 this.tumlUri = (String) properties.get(name);
             } else if (name.equals("tumlOverloadedPostUri")) {
@@ -221,6 +224,10 @@ public class MetaPropertyJson {
 
     public Boolean getUnique() {
         return unique;
+    }
+
+    public Boolean getInverseUnique() {
+        return inverseUnique;
     }
 
     public String getTumlUri() {

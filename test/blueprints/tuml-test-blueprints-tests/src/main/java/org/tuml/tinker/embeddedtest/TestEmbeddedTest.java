@@ -7,6 +7,7 @@ import org.tuml.embeddedtest.REASON;
 import org.tuml.embeddedtest.TestEmbedded;
 import org.tuml.inheritencetest.Mamal;
 import org.tuml.runtime.collection.memory.TumlMemoryBag;
+import org.tuml.runtime.collection.memory.TumlMemoryOrderedSet;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
 import java.util.Arrays;
@@ -250,6 +251,21 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
         boolean b2 = testEmbeddedY.getManyBoolean().asSequence().at(0);
         Assert.assertSame(false, b1);
         Assert.assertSame(false, b2);
+    }
+
+    @Test
+    public void testEmbeddedVertexAlreadyRemoved() {
+        God god = new God(true);
+        god.setName("name");
+        TestEmbedded testEmbedded = new TestEmbedded(god);
+        testEmbedded.setName("name");
+        testEmbedded.addToManyOrderedString("a");
+        testEmbedded.addToManyOrderedString("b");
+        testEmbedded.addToManyOrderedString("c");
+        testEmbedded.clearManyOrderedString();
+        testEmbedded.setManyRequiredOrderedUniqueString(new TumlMemoryOrderedSet<String>(Arrays.asList(new String[]{"a", "b"})));
+        db.commit();
+
     }
 
 }

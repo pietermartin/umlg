@@ -489,6 +489,11 @@
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_bPZuYDTEEeK9AeutZ8kzPA"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_bPa8gDTEEeK9AeutZ8kzPA" value="*"/>
             </ownedAttribute>
+            <ownedAttribute xmi:id="_AAas0IKdEeKT8t6_7PBWIQ" name="manyOrderedString" visibility="public" isOrdered="true">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_AoyUYIKdEeKT8t6_7PBWIQ"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Ao5pIIKdEeKT8t6_7PBWIQ" value="*"/>
+            </ownedAttribute>
           </packagedElement>
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_-S1C4O91EeC2XrXxx1atfA" name="hierarchytest">

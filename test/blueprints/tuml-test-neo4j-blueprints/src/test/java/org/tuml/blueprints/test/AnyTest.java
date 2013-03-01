@@ -2,6 +2,8 @@ package org.tuml.blueprints.test;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
+import org.tuml.tinker.collectiontest.SequenceTest;
+import org.tuml.tinker.embeddedtest.TestEmbeddedTest;
 import org.tuml.tinker.validationtest.TestValidation;
 
 /**
@@ -9,7 +11,7 @@ import org.tuml.tinker.validationtest.TestValidation;
  * Time: 7:18 PM
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({TestValidation.class})
+@Suite.SuiteClasses({TestEmbeddedTest.class})
 public class AnyTest {
 
 }

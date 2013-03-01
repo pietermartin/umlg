@@ -59,18 +59,18 @@ public class TinkerOrderedSetImpl<E> extends BaseCollection<E> implements Tinker
         Edge edge = addInternal(e);
         //If it is the first element then the edge (LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE) needs to be moved
         if (indexOf == 0) {
-            if (this.vertex.getEdges(Direction.OUT, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE).iterator().hasNext()) {
-                Edge edgeToFirstElement = this.vertex.getEdges(Direction.OUT, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE).iterator().next();
+            if (this.vertex.getEdges(Direction.OUT, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel()).iterator().hasNext()) {
+                Edge edgeToFirstElement = this.vertex.getEdges(Direction.OUT, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel()).iterator().next();
                 GraphDb.getDb().removeEdge(edgeToFirstElement);
             }
-            GraphDb.getDb().addEdge(null, this.vertex, edge.getVertex(Direction.IN), LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE);
+            GraphDb.getDb().addEdge(null, this.vertex, edge.getVertex(Direction.IN), LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel());
         }
         if (indexOf == size() - 1) {
-            if (this.vertex.getEdges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE).iterator().hasNext()) {
-                Edge edgeToLastElement = this.vertex.getEdges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE).iterator().next();
+            if (this.vertex.getEdges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel()).iterator().hasNext()) {
+                Edge edgeToLastElement = this.vertex.getEdges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel()).iterator().next();
                 GraphDb.getDb().removeEdge(edgeToLastElement);
             }
-            GraphDb.getDb().addEdge(null, this.vertex, edge.getVertex(Direction.IN), LABEL_TO_LAST_ELEMENT_IN_SEQUENCE);
+            GraphDb.getDb().addEdge(null, this.vertex, edge.getVertex(Direction.IN), LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel());
         }
         //Shift the linked list
         //Find the element at the index
@@ -100,21 +100,21 @@ public class TinkerOrderedSetImpl<E> extends BaseCollection<E> implements Tinker
     protected void addToLinkedList(Edge edge) {
         //Get the new vertex for the element
         Vertex newElementVertex = getVertexForDirection(edge);
-        if (this.vertex.getEdges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE).iterator().hasNext()) {
-            Edge edgeToLastVertex = this.vertex.getEdges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE).iterator().next();
+        if (this.vertex.getEdges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel()).iterator().hasNext()) {
+            Edge edgeToLastVertex = this.vertex.getEdges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel()).iterator().next();
             Vertex lastVertex = edgeToLastVertex.getVertex(Direction.IN);
 
             //move the edge to the last vertex
             GraphDb.getDb().removeEdge(edgeToLastVertex);
-            GraphDb.getDb().addEdge(null, this.vertex, newElementVertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE);
+            GraphDb.getDb().addEdge(null, this.vertex, newElementVertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel());
 
             //add the element to the linked list
             GraphDb.getDb().addEdge(null, lastVertex, newElementVertex, LABEL_TO_NEXT_IN_SEQUENCE);
 
         } else {
             //its the first element in the list
-            GraphDb.getDb().addEdge(null, this.vertex, newElementVertex, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE);
-            GraphDb.getDb().addEdge(null, this.vertex, newElementVertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE);
+            GraphDb.getDb().addEdge(null, this.vertex, newElementVertex, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel());
+            GraphDb.getDb().addEdge(null, this.vertex, newElementVertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel());
         }
     }
 
@@ -157,7 +157,7 @@ public class TinkerOrderedSetImpl<E> extends BaseCollection<E> implements Tinker
                 }
             }
         } else {
-            Iterable<Edge> edgeIterable = this.vertex.getEdges(direction, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE);
+            Iterable<Edge> edgeIterable = this.vertex.getEdges(direction, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel());
             if (!edgeIterable.iterator().hasNext()) {
                 this.loaded = true;
             } else {
@@ -201,27 +201,6 @@ public class TinkerOrderedSetImpl<E> extends BaseCollection<E> implements Tinker
             throw new RuntimeException(ex);
         }
     }
-
-//    @Override
-//    public boolean remove(Object o) {
-//        maybeLoad();
-//        int indexOf = this.getInternalListOrderedSet().indexOf(o);
-//        boolean result = this.getInternalListOrderedSet().remove(o);
-//        if (result) {
-//            Vertex vertexToDelete;
-//            if (o instanceof TumlNode) {
-//                TumlNode node = (TumlNode) o;
-//                vertexToDelete = node.getVertex();
-//            } else if (o.getClass().isEnum()) {
-//                vertexToDelete = this.internalVertexMap.get(((Enum<?>) o).name());
-//                GraphDb.getDb().removeVertex(vertexToDelete);
-//            } else {
-//                vertexToDelete = this.internalVertexMap.get(o);
-//                GraphDb.getDb().removeVertex(vertexToDelete);
-//            }
-//        }
-//        return result;
-//    }
 
     @SuppressWarnings("unchecked")
     @Override

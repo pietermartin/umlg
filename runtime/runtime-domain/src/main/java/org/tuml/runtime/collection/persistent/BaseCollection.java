@@ -189,8 +189,8 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
             //Handle duplicates with hyper vertexes
             //Get the new vertex for the element
             Vertex newElementVertex = getVertexForDirection(edge);
-            if (newElementVertex.getEdges(Direction.OUT, LABEL_TO_LAST_HYPER_VERTEX).iterator().hasNext()) {
-                Edge edgeToLastHyperVertex = newElementVertex.getEdges(Direction.OUT, LABEL_TO_LAST_HYPER_VERTEX).iterator().next();
+            if (newElementVertex.getEdges(Direction.OUT, LABEL_TO_LAST_HYPER_VERTEX + getLabel()).iterator().hasNext()) {
+                Edge edgeToLastHyperVertex = newElementVertex.getEdges(Direction.OUT, LABEL_TO_LAST_HYPER_VERTEX + getLabel()).iterator().next();
                 Vertex lastHyperVertex = edgeToLastHyperVertex.getVertex(Direction.IN);
 
                 //Check if it is a duplicate
@@ -202,7 +202,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
                     //Create a new hyper vertex
                     Vertex newHyperVertex = GraphDb.getDb().addVertex("hyperVertex");
                     GraphDb.getDb().removeEdge(edgeToLastHyperVertex);
-                    GraphDb.getDb().addEdge(null, newElementVertex, newHyperVertex, LABEL_TO_LAST_HYPER_VERTEX);
+                    GraphDb.getDb().addEdge(null, newElementVertex, newHyperVertex, LABEL_TO_LAST_HYPER_VERTEX + getLabel());
                     GraphDb.getDb().addEdge(null, newHyperVertex, this.vertex, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX);
                     //add to the linked list
                     GraphDb.getDb().addEdge(null, lastHyperVertex, newHyperVertex, LABEL_TO_NEXT_HYPER_VERTEX);
@@ -211,29 +211,29 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
                 //its the first element in the list
                 //Create a new hyper vertex
                 Vertex newHyperVertex = GraphDb.getDb().addVertex("hyperVertex");
-                GraphDb.getDb().addEdge(null, newElementVertex, newHyperVertex, LABEL_TO_FIRST_HYPER_VERTEX);
-                GraphDb.getDb().addEdge(null, newElementVertex, newHyperVertex, LABEL_TO_LAST_HYPER_VERTEX);
+                GraphDb.getDb().addEdge(null, newElementVertex, newHyperVertex, LABEL_TO_FIRST_HYPER_VERTEX + getLabel());
+                GraphDb.getDb().addEdge(null, newElementVertex, newHyperVertex, LABEL_TO_LAST_HYPER_VERTEX + getLabel());
                 //Add the new element to the hyper vertex
                 GraphDb.getDb().addEdge(null, newHyperVertex, this.vertex, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX);
             }
         } else {
             //Get the new vertex for the element
             Vertex newElementVertex = getVertexForDirection(edge);
-            if (newElementVertex.getEdges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE).iterator().hasNext()) {
-                Edge edgeToLastVertex = newElementVertex.getEdges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE).iterator().next();
+            if (newElementVertex.getEdges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel()).iterator().hasNext()) {
+                Edge edgeToLastVertex = newElementVertex.getEdges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel()).iterator().next();
                 Vertex lastVertex = edgeToLastVertex.getVertex(Direction.IN);
 
                 //move the edge to the last vertex
                 GraphDb.getDb().removeEdge(edgeToLastVertex);
-                GraphDb.getDb().addEdge(null, newElementVertex, this.vertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE);
+                GraphDb.getDb().addEdge(null, newElementVertex, this.vertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel());
 
                 //add the element to the linked list
                 GraphDb.getDb().addEdge(null, lastVertex, this.vertex, LABEL_TO_NEXT_IN_SEQUENCE);
 
             } else {
                 //its the first element in the list
-                GraphDb.getDb().addEdge(null, newElementVertex, this.vertex, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE);
-                GraphDb.getDb().addEdge(null, newElementVertex, this.vertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE);
+                GraphDb.getDb().addEdge(null, newElementVertex, this.vertex, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel());
+                GraphDb.getDb().addEdge(null, newElementVertex, this.vertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel());
             }
         }
     }
@@ -271,7 +271,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
                     } else {
                         //Its the last, i.e. make the previous point to the parent
                         GraphDb.getDb().removeVertex(hyperVertex);
-                        GraphDb.getDb().addEdge(null, this.vertex, previousHyperVertex, LABEL_TO_LAST_HYPER_VERTEX);
+                        GraphDb.getDb().addEdge(null, this.vertex, previousHyperVertex, LABEL_TO_LAST_HYPER_VERTEX + getLabel());
                     }
                 } else {
                     //The first in the linked list, make the next the first
@@ -280,7 +280,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
                         //Not last
                         Edge edgeToNextHyperVertex = hyperVertex.getEdges(Direction.OUT, LABEL_TO_NEXT_HYPER_VERTEX).iterator().next();
                         Vertex nextHyperVertex = edgeToNextHyperVertex.getVertex(Direction.IN);
-                        GraphDb.getDb().addEdge(null, this.vertex, nextHyperVertex, LABEL_TO_FIRST_HYPER_VERTEX);
+                        GraphDb.getDb().addEdge(null, this.vertex, nextHyperVertex, LABEL_TO_FIRST_HYPER_VERTEX + getLabel());
                         GraphDb.getDb().removeVertex(hyperVertex);
                     } else {
                         //Last
@@ -309,13 +309,13 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
                 } else {
                     //Last,
                     //previous becomes to last
-                    Edge edgeToLast = vertexToRemove.getEdges(Direction.IN, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE).iterator().next();
+                    Edge edgeToLast = vertexToRemove.getEdges(Direction.IN, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel()).iterator().next();
                     GraphDb.getDb().removeEdge(edgeToLast);
-                    GraphDb.getDb().addEdge(null, this.vertex, previousVertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE);
+                    GraphDb.getDb().addEdge(null, this.vertex, previousVertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel());
                 }
             } else {
                 //It is first
-                Edge edgeToFirst = vertexToRemove.getEdges(Direction.IN, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE).iterator().next();
+                Edge edgeToFirst = vertexToRemove.getEdges(Direction.IN, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel()).iterator().next();
                 GraphDb.getDb().removeEdge(edgeToFirst);
                 //Check is it is last
                 if (vertexToRemove.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE).iterator().hasNext()) {
@@ -324,11 +324,11 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
                     Edge edgeToNext = vertexToRemove.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE).iterator().next();
                     Vertex nextVertex = edgeToNext.getVertex(Direction.IN);
                     GraphDb.getDb().removeEdge(edgeToNext);
-                    GraphDb.getDb().addEdge(null, this.vertex, nextVertex, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE);
+                    GraphDb.getDb().addEdge(null, this.vertex, nextVertex, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel());
                 } else {
                     //Last
                     //Only one element in the list
-                    Edge edgeToLast = vertexToRemove.getEdges(Direction.IN, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE).iterator().next();
+                    Edge edgeToLast = vertexToRemove.getEdges(Direction.IN, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel()).iterator().next();
                     GraphDb.getDb().removeEdge(edgeToLast);
                 }
             }
@@ -397,7 +397,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
                     } else {
                         //Its the last, i.e. make the previous point to the parent
                         GraphDb.getDb().removeVertex(hyperVertex);
-                        GraphDb.getDb().addEdge(null, vertexToRemove, previousHyperVertex, LABEL_TO_LAST_HYPER_VERTEX);
+                        GraphDb.getDb().addEdge(null, vertexToRemove, previousHyperVertex, LABEL_TO_LAST_HYPER_VERTEX + getLabel());
                     }
                 } else {
                     //The first in the linked list, make the next the first
@@ -406,7 +406,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
                         //Not last
                         Edge edgeToNextHyperVertex = hyperVertex.getEdges(Direction.OUT, LABEL_TO_NEXT_HYPER_VERTEX).iterator().next();
                         Vertex nextHyperVertex = edgeToNextHyperVertex.getVertex(Direction.IN);
-                        GraphDb.getDb().addEdge(null, vertexToRemove, nextHyperVertex, LABEL_TO_FIRST_HYPER_VERTEX);
+                        GraphDb.getDb().addEdge(null, vertexToRemove, nextHyperVertex, LABEL_TO_FIRST_HYPER_VERTEX + getLabel());
                         GraphDb.getDb().removeVertex(hyperVertex);
                     } else {
                         //Last
@@ -435,13 +435,13 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
                 } else {
                     //Last,
                     //previous becomes to last
-                    Edge edgeToLast = this.vertex.getEdges(Direction.IN, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE).iterator().next();
+                    Edge edgeToLast = this.vertex.getEdges(Direction.IN, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel()).iterator().next();
                     GraphDb.getDb().removeEdge(edgeToLast);
-                    GraphDb.getDb().addEdge(null, vertexToRemove, previousVertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE);
+                    GraphDb.getDb().addEdge(null, vertexToRemove, previousVertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel());
                 }
             } else {
                 //It is first
-                Edge edgeToFirst = this.vertex.getEdges(Direction.IN, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE).iterator().next();
+                Edge edgeToFirst = this.vertex.getEdges(Direction.IN, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel()).iterator().next();
                 GraphDb.getDb().removeEdge(edgeToFirst);
                 //Check is it is last
                 if (this.vertex.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE).iterator().hasNext()) {
@@ -450,11 +450,11 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
                     Edge edgeToNext = this.vertex.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE).iterator().next();
                     Vertex nextVertex = edgeToNext.getVertex(Direction.IN);
                     GraphDb.getDb().removeEdge(edgeToNext);
-                    GraphDb.getDb().addEdge(null, vertexToRemove, nextVertex, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE);
+                    GraphDb.getDb().addEdge(null, vertexToRemove, nextVertex, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel());
                 } else {
                     //Last
                     //Only one element in the list
-                    Edge edgeToLast = this.vertex.getEdges(Direction.IN, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE).iterator().next();
+                    Edge edgeToLast = this.vertex.getEdges(Direction.IN, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel()).iterator().next();
                     GraphDb.getDb().removeEdge(edgeToLast);
                 }
             }

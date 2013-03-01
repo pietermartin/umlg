@@ -69,10 +69,16 @@ public class TestWithClient extends BaseRestletTest {
         Hand_hand_finger_Finger_ServerResource hand_finger_ServerResource = service.getChild("/restAndJson/hands/" + handJsonObject.get("id") + "/finger", Hand_hand_finger_Finger_ServerResource.class);
         JSONObject fingerJsonObject = getJsonObject(hand_finger_ServerResource.get().getText());
 
+
         Assert.assertNotNull(fingerJsonObject.get("id"));
         Assert.assertNotSame("", fingerJsonObject.get("id"));
         String name = (String) fingerJsonObject.get("name");
         Assert.assertTrue(name.startsWith("finger"));
+
+        //Delete a finger
+        Hand_hand_finger_Finger_ServerResource deletefinger_ServerResource = service.getChild("/restAndJson/hands/" + handJsonObject.get("id") + "/finger", Hand_hand_finger_Finger_ServerResource.class);
+        deletefinger_ServerResource.delete(new JsonRepresentation("id=2"));
+
 
         fingerJsonObject.put("name", "testFingerName");
         Representation r = hand_finger_ServerResource.post(new JsonRepresentation(fingerJsonObject.toString()));

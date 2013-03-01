@@ -53,4 +53,8 @@ public class TumlProperties {
     public String getDefaultDataLoaderClass() {
         return this.properties.getProperty("default.data.class");
     }
+
+    public boolean isTransactionsMutliThreaded() {
+        return Boolean.parseBoolean(this.properties.getProperty("transaction.multithreaded", "false"));
+    }
 }

@@ -1490,6 +1490,10 @@
           <element xmi:type="uml:Property" href="tinker-test.uml#_a-tnADTEEeK9AeutZ8kzPA"/>
           <layoutConstraint xmi:type="notation:Location" xmi:id="_a-wqUTTEEeK9AeutZ8kzPA"/>
         </children>
+        <children xmi:type="notation:Shape" xmi:id="_ABd1sIKdEeKT8t6_7PBWIQ" type="3012" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:Property" href="tinker-test.uml#_AAas0IKdEeKT8t6_7PBWIQ"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_ABecwIKdEeKT8t6_7PBWIQ"/>
+        </children>
         <styles xmi:type="notation:TitleStyle" xmi:id="_lY30xjAOEeK9AeutZ8kzPA"/>
         <styles xmi:type="notation:SortingStyle" xmi:id="_lY30xzAOEeK9AeutZ8kzPA"/>
         <styles xmi:type="notation:FilteringStyle" xmi:id="_lY30yDAOEeK9AeutZ8kzPA"/>
