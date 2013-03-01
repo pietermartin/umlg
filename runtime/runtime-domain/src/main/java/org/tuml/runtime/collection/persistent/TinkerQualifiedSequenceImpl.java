@@ -21,13 +21,16 @@ public class TinkerQualifiedSequenceImpl<E> extends BaseSequence<E> implements T
 
 	@Override
 	public void add(int indexOf, E e) {
-        maybeLoad();
+//        maybeLoad();
 		Edge edge = addToListAtIndex(indexOf, e);
 		// Can only qualify TinkerNode's
 		if (!(e instanceof TumlNode)) {
 			throw new IllegalStateException("Primitive properties can not be qualified!");
 		}
 		addQualifierToIndex(edge, (TumlNode)e);
+        if (this.loaded) {
+            getInternalList().add(indexOf, e);
+        }
 	}
 
 	@Override

@@ -48,7 +48,9 @@ public class TinkerOrderedSetImpl<E> extends BaseCollection<E> implements Tinker
     @Override
     public void add(int indexOf, E e) {
         maybeLoad();
-        addToListAtIndex(indexOf, e);
+        if (!this.getInternalListOrderedSet().contains(e)) {
+            addToListAtIndex(indexOf, e);
+        }
     }
 
     @SuppressWarnings("unchecked")

@@ -472,7 +472,6 @@ public class SequenceTest extends BaseLocalDbTest {
         Assert.assertEquals(5, countEdges());
     }
 
-    //TODO moving an element in a sequence
     @Test
 	public void testAddAtIndex() {
 		God god = new God(true);
@@ -492,14 +491,32 @@ public class SequenceTest extends BaseLocalDbTest {
 		Assert.assertEquals(7, countVertices());
 		Assert.assertEquals(14, countEdges());
 
-		int indexToTest = 3;
+		int indexToTest = 2;
 		hand1.getFinger().add(indexToTest, finger2);
         db.commit();
+        //Check nothing happened as the element is already in the set, first remove it then add
 		Assert.assertEquals(7, countVertices());
 		Assert.assertEquals(14, countEdges());
-//		Finger fingerTest = new Finger(finger2.getVertex());
-//		Hand handTest = new Hand(hand1.getVertex());
-//		Assert.assertEquals(handTest.getFinger().get(indexToTest).getId(), fingerTest.getId());
+
+        hand1.getFinger().remove(finger2);
+        hand1.getFinger().add(indexToTest, finger2);
+        db.commit();
+        Assert.assertEquals(7, countVertices());
+        Assert.assertEquals(14, countEdges());
+
+        hand1 = new Hand(hand1.getVertex());
+
+        Assert.assertEquals("finger1", hand1.getFinger().get(0).getName());
+        Assert.assertEquals("finger3", hand1.getFinger().get(1).getName());
+        Assert.assertEquals("finger2", hand1.getFinger().get(2).getName());
+        Assert.assertEquals("finger4", hand1.getFinger().get(3).getName());
+
+        Finger fingerTest = new Finger(finger2.getVertex());
+        Assert.assertEquals("finger2", fingerTest.getName());
+		Hand handTest = new Hand(hand1.getVertex());
+        Assert.assertEquals("hand1", handTest.getName());
+		Assert.assertEquals("finger2", handTest.getFinger().get(indexToTest).getName());
+        Assert.assertEquals("finger2", handTest.getFinger().get(indexToTest).getId(), fingerTest.getId());
 	}
 
 }

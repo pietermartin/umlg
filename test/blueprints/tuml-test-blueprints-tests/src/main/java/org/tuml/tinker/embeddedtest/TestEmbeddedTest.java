@@ -161,7 +161,6 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
         junit.framework.Assert.fail("Expected transaction failed exception");
     }
 
-    //TODO this fails as move on a sequence is not yet implemented
     @Test
     public void testRequiredEmbeddedManyIntegerOrder() {
         God g = new God(true);
