@@ -532,6 +532,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
                 if (this.owner instanceof TinkerAuditableNode) {
                     createAudit(e, true);
                 }
+                GraphDb.getDb().removeVertex(v);
             }
         }
         return result;

@@ -160,6 +160,7 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
         junit.framework.Assert.fail("Expected transaction failed exception");
     }
 
+    //TODO this fails as move on a sequence is not yet implemented
     @Test
     public void testRequiredEmbeddedManyIntegerOrder() {
         God g = new God(true);
@@ -167,7 +168,9 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
         org.tuml.embeddedtest.TestEmbedded testEmbedded = new org.tuml.embeddedtest.TestEmbedded(g);
         testEmbedded.setName("asd");
         db.commit();
+
         org.tuml.embeddedtest.TestEmbedded gt = new org.tuml.embeddedtest.TestEmbedded(testEmbedded.getVertex());
+        Assert.assertEquals(3, gt.getManyOrderedRequiredInteger().size());
         Assert.assertEquals(Integer.valueOf(1), gt.getManyOrderedRequiredInteger().get(0));
         Assert.assertEquals(Integer.valueOf(2), gt.getManyOrderedRequiredInteger().get(1));
         Assert.assertEquals(Integer.valueOf(3), gt.getManyOrderedRequiredInteger().get(2));

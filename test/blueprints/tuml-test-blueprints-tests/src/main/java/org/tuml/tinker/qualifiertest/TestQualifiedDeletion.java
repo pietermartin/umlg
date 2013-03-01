@@ -27,7 +27,7 @@ public class TestQualifiedDeletion extends BaseLocalDbTest {
 		SpaceTime st = new SpaceTime(universe1);
 		Space s = new Space(st);
 		Time t = new Time(st);
-		
+
 		Many1 many11 = new Many1(god);
 		many11.setName("many11");
 		Many1 many12 = new Many1(god);
@@ -71,11 +71,11 @@ public class TestQualifiedDeletion extends BaseLocalDbTest {
 		Assert.assertEquals(29, countEdges());
 		Many2 many2Test = new Many2(many21.getVertex());
 		Assert.assertEquals(1, many2Test.getMany1ForQualifier1("many11").size());
-		
+
 		Many1 many1Test = new Many1(many11.getVertex());
 		many1Test.delete();
         db.commit();
-		
+
 		many2Test = new Many2(many21.getVertex());
 		Assert.assertTrue(many2Test.getMany1ForQualifier1("many11").isEmpty());
 	}
@@ -85,12 +85,7 @@ public class TestQualifiedDeletion extends BaseLocalDbTest {
 	public void testDeletionManyToManyList() {
 		God god = new God(true);
 		god.setName("THEGOD");
-		Universe universe1 = new Universe(god);
-		universe1.setName("universe1");
-		SpaceTime st = new SpaceTime(universe1);
-		Space s = new Space(st);
-		Time t = new Time(st);
-		
+
 		Many1 many11 = new Many1(god);
 		many11.setName("many11");
 		Many1 many12 = new Many1(god);
@@ -130,8 +125,8 @@ public class TestQualifiedDeletion extends BaseLocalDbTest {
 		many14.addToMany2List(many24);
 
         db.commit();
-		Assert.assertEquals(13, countVertices());
-		Assert.assertEquals(29, countEdges());
+        Assert.assertEquals(41, countVertices());
+        Assert.assertEquals(97, countEdges());
 		Many2 many2Test = new Many2(many21.getVertex());
 		Assert.assertEquals(1, many2Test.getMany1ListForListQualifier1("many11").size());
 		
@@ -159,7 +154,7 @@ public class TestQualifiedDeletion extends BaseLocalDbTest {
 
 		Assert.assertEquals(2, countVertices());
 		Assert.assertEquals(2, countEdges());
-		
+
 		nature = new Nature(true);
 		nature.setName1("name1_1");
 		nature.setName2("xxx");
@@ -218,7 +213,7 @@ public class TestQualifiedDeletion extends BaseLocalDbTest {
 		natures = godTest3.getNatureForQualifier2("xxx");
 		Assert.assertEquals(3, natures.size());
 		Assert.assertEquals(1, godTest2.getNatureForQualifier2("yyy").size());
-		
-	}		
+
+	}
 
 }
