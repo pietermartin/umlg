@@ -364,15 +364,30 @@ public class SequenceTest extends BaseLocalDbTest {
 		many1_1.addToMany2UnqualifiedList(many2_3);
 		many1_1.addToMany2UnqualifiedList(many2_4);
 
-        db.commit();
-        Assert.assertEquals(13, countVertices());
-        Assert.assertEquals(22, countEdges());
+//        Assert.assertEquals(17, countVertices());
+//        Assert.assertEquals(34, countEdges());
 
-//		many1_2.addToMany2UnqualifiedList(many2_1);
-//		many1_2.addToMany2UnqualifiedList(many2_2);
-//		many1_2.addToMany2UnqualifiedList(many2_3);
-//		many1_2.addToMany2UnqualifiedList(many2_4);
-//
+        many1_2.addToMany2UnqualifiedList(many2_1);
+//        Assert.assertEquals(19, countVertices());
+//        Assert.assertEquals(40, countEdges());
+
+        many1_2.addToMany2UnqualifiedList(many2_2);
+
+//        Assert.assertEquals(21, countVertices());
+//        Assert.assertEquals(45, countEdges());
+
+		many1_2.addToMany2UnqualifiedList(many2_3);
+
+//        Assert.assertEquals(23, countVertices());
+//        Assert.assertEquals(50, countEdges());
+
+		many1_2.addToMany2UnqualifiedList(many2_4);
+
+        db.commit();
+        Assert.assertEquals(25, countVertices());
+        Assert.assertEquals(55, countEdges());
+
+
 //		many1_3.addToMany2UnqualifiedList(many2_1);
 //		many1_3.addToMany2UnqualifiedList(many2_2);
 //		many1_3.addToMany2UnqualifiedList(many2_3);
