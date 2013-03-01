@@ -26,8 +26,8 @@ public class TestOrderedListKeepsIndex extends BaseLocalDbTest {
         finger3.setName("finger3");
         db.commit();
 
-        Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(5, countEdges());
+        Assert.assertEquals(6, countVertices());
+        Assert.assertEquals(12, countEdges());
 
         Hand handTest = new Hand(db.getVertex(hand.getId()));
         Finger fingerTest = new Finger(db.getVertex(finger1.getId()));
@@ -37,7 +37,8 @@ public class TestOrderedListKeepsIndex extends BaseLocalDbTest {
         Assert.assertEquals(0, handTest.getFinger().indexOf(fingerTest));
     }
 
-    //TODO think about the semantics of addToX
+    //TODO think about the semantics of addToX, addToFinger removes the hand from the finger and then adds it to the hand
+    //addToX does not have the remove logic and readd logic
     @Test
     public void testOrderedListMoveIndex() {
         God g = new God(true);
@@ -51,8 +52,8 @@ public class TestOrderedListKeepsIndex extends BaseLocalDbTest {
         finger3.setName("finger3");
         db.commit();
 
-        Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(5, countEdges());
+        Assert.assertEquals(6, countVertices());
+        Assert.assertEquals(12, countEdges());
 
         Hand handTest = new Hand(db.getVertex(hand.getId()));
         Finger fingerTest = new Finger(db.getVertex(finger1.getId()));
