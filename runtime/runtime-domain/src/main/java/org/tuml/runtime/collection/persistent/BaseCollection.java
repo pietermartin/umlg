@@ -514,7 +514,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
                     }
                     if (isOrdered()) {
                         removeFromLinkedList((TumlNode) o);
-                    } 
+                    }
                     if (isInverseOrdered()) {
                         removeFromInverseLinkedList((TumlNode) o);
                     }
@@ -707,11 +707,17 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
         try {
             if (this.isControllingSide()) {
                 return Class.forName((String) edge.getVertex(Direction.IN).getProperty("className"));
-//                return Class.forName((String) edge.getProperty("inClass"));
             } else {
                 return Class.forName((String) edge.getVertex(Direction.OUT).getProperty("className"));
-//                return Class.forName((String) edge.getProperty("outClass"));
             }
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    protected Class<?> getClassToInstantiateFromHyperVertexEdge(Edge hyperVertexEdge) {
+        try {
+            return Class.forName((String) hyperVertexEdge.getVertex(Direction.IN).getProperty("className"));
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }

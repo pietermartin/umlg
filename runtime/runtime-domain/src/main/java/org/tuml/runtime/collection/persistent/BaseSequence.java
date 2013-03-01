@@ -95,7 +95,7 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
                 Edge edgeToElement = edgeIterable.iterator().next();
                 if (!GraphDb.getDb().hasEdgeBeenDeleted(edgeToElement)) {
                     Vertex elementVertex = edgeToElement.getVertex(Direction.IN);
-                    loadNode(edgeToElement, elementVertex);
+                    loadNode(edgeToElement, elementVertex, false);
                     this.loaded = true;
                 } else {
                     this.loaded = true;
@@ -103,8 +103,8 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
             }
         } else {
             //Load via hyper vertex
-            if (this.vertex.getEdges(direction, LABEL_TO_FIRST_HYPER_VERTEX).iterator().hasNext()) {
-                Edge edgeToFirstHyperVertex = this.vertex.getEdges(direction, LABEL_TO_FIRST_HYPER_VERTEX).iterator().next();
+            if (this.vertex.getEdges(Direction.OUT, LABEL_TO_FIRST_HYPER_VERTEX).iterator().hasNext()) {
+                Edge edgeToFirstHyperVertex = this.vertex.getEdges(Direction.OUT, LABEL_TO_FIRST_HYPER_VERTEX).iterator().next();
                 Vertex hyperVertex = edgeToFirstHyperVertex.getVertex(Direction.IN);
                 int toIndex = loadFromHyperVertex(hyperVertex, 0);
                 while (hyperVertex.getEdges(Direction.OUT, LABEL_TO_NEXT_HYPER_VERTEX).iterator().hasNext()) {
@@ -123,15 +123,20 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
         int toIndex = fromIndex;
         for (Edge edgeToElement : hyperVertex.getEdges(Direction.OUT, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX)) {
             Vertex vertexToLoad = edgeToElement.getVertex(Direction.IN);
-            loadNode(edgeToElement, vertexToLoad);
+            loadNode(edgeToElement, vertexToLoad, true);
         }
         return toIndex;
     }
 
-    private void loadNode(Edge edgeToElement, Vertex vertexToLoad) {
+    private void loadNode(Edge edgeToElement, Vertex vertexToLoad, boolean hyperVertexEdge) {
         E node;
         try {
-            Class<?> c = this.getClassToInstantiate(edgeToElement);
+            Class<?> c;
+            if (hyperVertexEdge) {
+                c = this.getClassToInstantiateFromHyperVertexEdge(edgeToElement);
+            } else {
+                c = this.getClassToInstantiate(edgeToElement);
+            }
             if (c.isEnum()) {
                 Object value = vertexToLoad.getProperty("value");
                 node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
