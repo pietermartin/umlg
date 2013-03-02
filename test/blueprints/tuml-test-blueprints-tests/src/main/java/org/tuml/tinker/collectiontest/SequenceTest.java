@@ -2,8 +2,7 @@ package org.tuml.tinker.collectiontest;
 
 import junit.framework.Assert;
 import org.junit.Test;
-import org.tuml.collectiontest.Finger;
-import org.tuml.collectiontest.Hand;
+import org.tuml.collectiontest.*;
 import org.tuml.concretetest.God;
 import org.tuml.qualifiertest.Many1;
 import org.tuml.qualifiertest.Many2;
@@ -518,5 +517,216 @@ public class SequenceTest extends BaseLocalDbTest {
 		Assert.assertEquals("finger2", handTest.getFinger().get(indexToTest).getName());
         Assert.assertEquals("finger2", handTest.getFinger().get(indexToTest).getId(), fingerTest.getId());
 	}
+
+    @Test
+    public void testSequenceMultiplicity1() {
+        SequenceRoot sequenceRoot = new SequenceRoot(true);
+        sequenceRoot.setName("sequenceRoot");
+        SequenceTest1 sequenceTest1 = new SequenceTest1(sequenceRoot);
+        sequenceTest1.setName("sequenceTest1");
+        db.commit();
+        Assert.assertNotNull(sequenceRoot.getSequenceTest1());
+        sequenceRoot = new SequenceRoot(sequenceRoot.getVertex());
+        Assert.assertNotNull(sequenceRoot.getSequenceTest1());
+    }
+
+    @Test
+    public void testSequenceInverseIsSequence() {
+        SequenceRoot sequenceRoot = new SequenceRoot(true);
+        sequenceRoot.setName("sequenceRoot");
+        SequenceList2 sequenceList2 = new SequenceList2(sequenceRoot);
+        sequenceList2.setName("sequenceList2");
+        db.commit();
+        Assert.assertEquals(1, sequenceRoot.getSequenceList2().size());
+        Assert.assertNotNull(sequenceList2.getSequenceRoot());
+        sequenceRoot = new SequenceRoot(sequenceRoot.getVertex());
+        sequenceList2 = new SequenceList2(sequenceList2.getVertex());
+        Assert.assertNotNull(sequenceList2.getSequenceRoot());
+        Assert.assertEquals(1, sequenceRoot.getSequenceList2().size());
+        Assert.assertEquals(3, countVertices());
+        Assert.assertEquals(5, countEdges());
+    }
+
+    //This test is primarily for coverage testing
+    @Test(expected = RuntimeException.class)
+    public void testSequenceMultiplicityOneOneThrowsExceptionForDuplicate() {
+        SequenceRoot sequenceRoot = new SequenceRoot(true);
+        sequenceRoot.setName("sequenceRoot");
+        SequenceTestListOne sequenceTestListOne = new SequenceTestListOne(true);
+        sequenceTestListOne.setName("sequenceTest1");
+        sequenceTestListOne.setSequenceRoot(sequenceRoot);
+        db.commit();
+        Assert.assertNotNull(sequenceRoot.getSequenceTestList());
+        sequenceRoot = new SequenceRoot(sequenceRoot.getVertex());
+        Assert.assertNotNull(sequenceRoot.getSequenceTestList());
+        sequenceRoot.addToSequenceTestList(sequenceTestListOne);
+        db.commit();
+    }
+
+    @Test
+    public void testSequenceDuplicates() {
+        SequenceRoot sequenceRoot = new SequenceRoot(true);
+        sequenceRoot.setName("sequenceRoot");
+        SequenceTestListMany sequenceTestListMany1 = new SequenceTestListMany(true);
+        sequenceTestListMany1.setName("sequenceTestListMany1");
+        sequenceRoot.addToSequenceTestListMany(sequenceTestListMany1);
+        sequenceRoot.addToSequenceTestListMany(sequenceTestListMany1);
+        db.commit();
+        Assert.assertEquals(2, sequenceRoot.getSequenceTestListMany().size());
+        sequenceRoot = new SequenceRoot(sequenceRoot.getVertex());
+        Assert.assertEquals(2, sequenceRoot.getSequenceTestListMany().size());
+        Assert.assertEquals(3, countVertices());
+        Assert.assertEquals(7, countEdges());
+
+        sequenceRoot.getSequenceTestListMany().add(0, sequenceTestListMany1);
+        db.commit();
+
+        Assert.assertEquals(3, sequenceRoot.getSequenceTestListMany().size());
+        sequenceRoot = new SequenceRoot(sequenceRoot.getVertex());
+        Assert.assertEquals(3, sequenceRoot.getSequenceTestListMany().size());
+        Assert.assertEquals(3, countVertices());
+        Assert.assertEquals(9, countEdges());
+
+        SequenceTestListMany sequenceTestListMany2 = new SequenceTestListMany(true);
+        sequenceTestListMany2.setName("sequenceTestListMany2");
+
+        sequenceRoot.getSequenceTestListMany().add(0, sequenceTestListMany2);
+        db.commit();
+
+        Assert.assertEquals(4, sequenceRoot.getSequenceTestListMany().size());
+        Assert.assertEquals("sequenceTestListMany2", sequenceRoot.getSequenceTestListMany().get(0).getName());
+        Assert.assertEquals("sequenceTestListMany1", sequenceRoot.getSequenceTestListMany().get(1).getName());
+        Assert.assertEquals("sequenceTestListMany1", sequenceRoot.getSequenceTestListMany().get(2).getName());
+        Assert.assertEquals("sequenceTestListMany1", sequenceRoot.getSequenceTestListMany().get(3).getName());
+
+        sequenceRoot = new SequenceRoot(sequenceRoot.getVertex());
+        Assert.assertEquals(4, sequenceRoot.getSequenceTestListMany().size());
+        Assert.assertEquals(5, countVertices());
+        Assert.assertEquals(12, countEdges());
+
+        Assert.assertEquals("sequenceTestListMany2", sequenceRoot.getSequenceTestListMany().get(0).getName());
+        Assert.assertEquals("sequenceTestListMany1", sequenceRoot.getSequenceTestListMany().get(1).getName());
+        Assert.assertEquals("sequenceTestListMany1", sequenceRoot.getSequenceTestListMany().get(2).getName());
+        Assert.assertEquals("sequenceTestListMany1", sequenceRoot.getSequenceTestListMany().get(3).getName());
+
+    }
+
+    @Test
+    public void testSequenceAddingElementAtSizePlusOne() {
+        SequenceRoot sequenceRoot = new SequenceRoot(true);
+        sequenceRoot.setName("sequenceRoot");
+        SequenceTestListMany sequenceTestListMany1 = new SequenceTestListMany(true);
+        sequenceTestListMany1.setName("sequenceTestListMany1");
+        sequenceRoot.addToSequenceTestListMany(sequenceTestListMany1);
+        db.commit();
+
+        SequenceTestListMany sequenceTestListMany2 = new SequenceTestListMany(true);
+        sequenceTestListMany2.setName("sequenceTestListMany2");
+        sequenceRoot.getSequenceTestListMany().add(1, sequenceTestListMany2);
+        db.commit();
+
+        Assert.assertEquals(2, sequenceRoot.getSequenceTestListMany().size());
+        Assert.assertEquals("sequenceTestListMany1", sequenceRoot.getSequenceTestListMany().get(0).getName());
+        Assert.assertEquals("sequenceTestListMany2", sequenceRoot.getSequenceTestListMany().get(1).getName());
+        sequenceRoot = new SequenceRoot(sequenceRoot.getVertex());
+        Assert.assertEquals(2, sequenceRoot.getSequenceTestListMany().size());
+        Assert.assertEquals("sequenceTestListMany1", sequenceRoot.getSequenceTestListMany().get(0).getName());
+        Assert.assertEquals("sequenceTestListMany2", sequenceRoot.getSequenceTestListMany().get(1).getName());
+
+        Assert.assertEquals(5, countVertices());
+        Assert.assertEquals(8, countEdges());
+
+        sequenceRoot.getSequenceTestListMany().add(2, sequenceTestListMany2);
+        db.commit();
+
+        Assert.assertEquals(3, sequenceRoot.getSequenceTestListMany().size());
+        Assert.assertEquals("sequenceTestListMany1", sequenceRoot.getSequenceTestListMany().get(0).getName());
+        Assert.assertEquals("sequenceTestListMany2", sequenceRoot.getSequenceTestListMany().get(1).getName());
+        Assert.assertEquals("sequenceTestListMany2", sequenceRoot.getSequenceTestListMany().get(2).getName());
+        sequenceRoot = new SequenceRoot(sequenceRoot.getVertex());
+        Assert.assertEquals(3, sequenceRoot.getSequenceTestListMany().size());
+        Assert.assertEquals("sequenceTestListMany1", sequenceRoot.getSequenceTestListMany().get(0).getName());
+        Assert.assertEquals("sequenceTestListMany2", sequenceRoot.getSequenceTestListMany().get(1).getName());
+        Assert.assertEquals("sequenceTestListMany2", sequenceRoot.getSequenceTestListMany().get(2).getName());
+
+        Assert.assertEquals(5, countVertices());
+        Assert.assertEquals(10, countEdges());
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testSequenceAddingElementAtIncorrectSizeThrowsException() {
+        SequenceRoot sequenceRoot = new SequenceRoot(true);
+        sequenceRoot.setName("sequenceRoot");
+        SequenceTestListMany sequenceTestListMany1 = new SequenceTestListMany(true);
+        sequenceTestListMany1.setName("sequenceTestListMany1");
+        sequenceRoot.addToSequenceTestListMany(sequenceTestListMany1);
+        db.commit();
+
+        SequenceTestListMany sequenceTestListMany2 = new SequenceTestListMany(true);
+        sequenceTestListMany2.setName("sequenceTestListMany2");
+        sequenceRoot.getSequenceTestListMany().add(2, sequenceTestListMany2);
+        db.commit();
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testSequenceAddingElementAtIncorrectSizeThrowsException2() {
+        SequenceRoot sequenceRoot = new SequenceRoot(true);
+        sequenceRoot.setName("sequenceRoot");
+        db.commit();
+
+        SequenceTestListMany sequenceTestListMany2 = new SequenceTestListMany(true);
+        sequenceTestListMany2.setName("sequenceTestListMany2");
+        sequenceRoot.getSequenceTestListMany().add(1, sequenceTestListMany2);
+        db.commit();
+    }
+
+    @Test
+    public void testRemoval() {
+        SequenceRoot sequenceRoot = new SequenceRoot(true);
+        sequenceRoot.setName("sequenceRoot");
+        SequenceTestListMany sequenceTestListMany1 = new SequenceTestListMany(sequenceRoot);
+        sequenceTestListMany1.setName("sequenceTestListMany1");
+        SequenceTestListMany sequenceTestListMany2 = new SequenceTestListMany(sequenceRoot);
+        sequenceTestListMany2.setName("sequenceTestListMany2");
+        SequenceTestListMany sequenceTestListMany3 = new SequenceTestListMany(sequenceRoot);
+        sequenceTestListMany3.setName("sequenceTestListMany3");
+        db.commit();
+        Assert.assertEquals(7, countVertices());
+        Assert.assertEquals(11, countEdges());
+
+        sequenceRoot.getSequenceTestListMany().remove(0);
+        sequenceTestListMany1.delete();
+        db.commit();
+        Assert.assertEquals(5, countVertices());
+        Assert.assertEquals(8, countEdges());
+
+        sequenceRoot.getSequenceTestListMany().remove(1);
+        sequenceTestListMany3.delete();
+        db.commit();
+        Assert.assertEquals(3, countVertices());
+        Assert.assertEquals(5, countEdges());
+    }
+
+    @Test
+    public void testRemoval2() {
+        SequenceRoot sequenceRoot = new SequenceRoot(true);
+        sequenceRoot.setName("sequenceRoot");
+        SequenceTestListMany sequenceTestListMany1 = new SequenceTestListMany(sequenceRoot);
+        sequenceTestListMany1.setName("sequenceTestListMany1");
+        SequenceTestListMany sequenceTestListMany2 = new SequenceTestListMany(sequenceRoot);
+        sequenceTestListMany2.setName("sequenceTestListMany2");
+        SequenceTestListMany sequenceTestListMany3 = new SequenceTestListMany(sequenceRoot);
+        sequenceTestListMany3.setName("sequenceTestListMany3");
+        db.commit();
+        Assert.assertEquals(7, countVertices());
+        Assert.assertEquals(11, countEdges());
+
+        sequenceRoot.getSequenceTestListMany().remove(1);
+        sequenceTestListMany2.delete();
+        db.commit();
+        Assert.assertEquals(5, countVertices());
+        Assert.assertEquals(8, countEdges());
+
+    }
 
 }

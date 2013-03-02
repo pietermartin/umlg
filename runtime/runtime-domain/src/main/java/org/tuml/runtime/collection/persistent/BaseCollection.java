@@ -290,7 +290,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
                 }
             }
         } else {
-            //No duplicates to handle
+            //No duplicates to handle, i.e the collection is an ordered set
             Vertex vertexToRemove = o.getVertex();
             //this.vertex has the next and previous links to manage in a inverse situation
             //Check if it is first
@@ -936,6 +936,11 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
     }
 
     @Override
+    public int getInverseUpper() {
+        return this.tumlRuntimeProperty.getInverseUpper();
+    }
+
+    @Override
     public boolean isControllingSide() {
         return this.tumlRuntimeProperty.isControllingSide();
     }
@@ -967,12 +972,20 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 
     @Override
     public boolean isOrdered() {
-        return this.tumlRuntimeProperty.isOrdered();
+        if (this.tumlRuntimeProperty.isOrdered() && this.tumlRuntimeProperty.isQualified() && getUpper() == 1) {
+            return true;
+        } else {
+            return this.tumlRuntimeProperty.isOrdered() && (getUpper() == -1 || getUpper() > 1);
+        }
     }
 
     @Override
     public boolean isInverseOrdered() {
-        return this.tumlRuntimeProperty.isInverseOrdered();
+        if (this.tumlRuntimeProperty.isInverseOrdered() && this.tumlRuntimeProperty.isInverseQualified() && getUpper() == 1) {
+            return true;
+        } else {
+            return this.tumlRuntimeProperty.isInverseOrdered() && (getInverseUpper() == -1 || getInverseUpper() > 1);
+        }
     }
 
     @Override
@@ -1199,4 +1212,5 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
         }
         return true;
     }
+
 }

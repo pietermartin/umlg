@@ -15,6 +15,7 @@ public interface TumlRuntimeProperty {
 	boolean isOneToMany(); 
 	boolean isManyToOne(); 
 	boolean isManyToMany();
+    int getInverseUpper();
 	int getUpper();
 	int getLower();
 	String getLabel();

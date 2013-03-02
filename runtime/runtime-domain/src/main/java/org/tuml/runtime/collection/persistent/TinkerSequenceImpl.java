@@ -17,7 +17,6 @@ public class TinkerSequenceImpl<E> extends BaseSequence<E> implements TinkerSequ
 	@Override
 	public void add(int indexOf, E e) {
         //Do not load, it needs to be traversed every time
-//        maybeLoad();
 		addToListAtIndex(indexOf, e);
         if (this.loaded) {
             getInternalList().add(indexOf, e);
@@ -51,10 +50,6 @@ public class TinkerSequenceImpl<E> extends BaseSequence<E> implements TinkerSequ
 		E removedElement = this.remove(index);
 		this.add(index, element);
 		return removedElement;
-	}
-
-	protected void removeEdgefromIndex(Vertex v, Edge edge, int indexOf) {
-		this.index.remove("index", v.getProperty("tinkerIndex"), edge);
 	}
 
 }

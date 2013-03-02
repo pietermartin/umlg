@@ -954,6 +954,104 @@
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_9Gc4FWerEeKPEq6xNmQB5Q" value="1"/>
             </ownedEnd>
           </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_uLmtUIMeEeKT8t6_7PBWIQ" name="SequenceRoot">
+            <ownedAttribute xmi:id="_0EHY0IMeEeKT8t6_7PBWIQ" name="sequenceTest1" type="_x0DasIMeEeKT8t6_7PBWIQ" isOrdered="true" aggregation="composite" association="_0EH_4IMeEeKT8t6_7PBWIQ">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_0EHY0YMeEeKT8t6_7PBWIQ"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_0EHY0oMeEeKT8t6_7PBWIQ" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:id="_AhbOEIMfEeKT8t6_7PBWIQ" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_A0XYMIMfEeKT8t6_7PBWIQ" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_A0X_QIMfEeKT8t6_7PBWIQ" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:id="_2UfUcIMoEeKT8t6_7PBWIQ" name="sequenceTestList" type="_vUte4IMoEeKT8t6_7PBWIQ" isOrdered="true" isUnique="false" aggregation="composite" association="_2Uf7gIMoEeKT8t6_7PBWIQ">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_2UfUcYMoEeKT8t6_7PBWIQ"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_2UfUcoMoEeKT8t6_7PBWIQ" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:id="_lPlFIIMsEeKT8t6_7PBWIQ" name="sequenceTestListMany" type="_fCwWgIMsEeKT8t6_7PBWIQ" isOrdered="true" isUnique="false" aggregation="composite" association="_lPlsMIMsEeKT8t6_7PBWIQ">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_lPlFIYMsEeKT8t6_7PBWIQ"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_lPlFIoMsEeKT8t6_7PBWIQ" value="*"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:id="_nX1iYIM9EeKT8t6_7PBWIQ" name="sequenceTestOrderedSet" type="_fu6CIIM9EeKT8t6_7PBWIQ" isOrdered="true" aggregation="composite" association="_nX1iY4M9EeKT8t6_7PBWIQ">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_nX1iYYM9EeKT8t6_7PBWIQ"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_nX1iYoM9EeKT8t6_7PBWIQ" value="*"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:id="_gcHw0INmEeKT8t6_7PBWIQ" name="sequenceList2" type="_aMGkQINmEeKT8t6_7PBWIQ" isOrdered="true" isUnique="false" aggregation="composite" association="_gcIX4INmEeKT8t6_7PBWIQ">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_gcHw0YNmEeKT8t6_7PBWIQ"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_gcHw0oNmEeKT8t6_7PBWIQ" value="*"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_x0DasIMeEeKT8t6_7PBWIQ" name="SequenceTest1">
+            <ownedAttribute xmi:id="_8TvFoIMeEeKT8t6_7PBWIQ" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_8yCLMIMeEeKT8t6_7PBWIQ" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_8yDZUIMeEeKT8t6_7PBWIQ" value="1"/>
+              <defaultValue xmi:type="uml:LiteralString" xmi:id="_8yFOgIMeEeKT8t6_7PBWIQ">
+                <value xsi:nil="true"/>
+              </defaultValue>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_0EH_4IMeEeKT8t6_7PBWIQ" name="sequenceRoot_sequenceTest1_1" memberEnd="_0EH_4YMeEeKT8t6_7PBWIQ _0EHY0IMeEeKT8t6_7PBWIQ" navigableOwnedEnd="_0EH_4YMeEeKT8t6_7PBWIQ">
+            <ownedEnd xmi:id="_0EH_4YMeEeKT8t6_7PBWIQ" name="sequenceRoot" type="_uLmtUIMeEeKT8t6_7PBWIQ" isOrdered="true" association="_0EH_4IMeEeKT8t6_7PBWIQ">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_0EH_4oMeEeKT8t6_7PBWIQ" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_0EH_44MeEeKT8t6_7PBWIQ" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_vUte4IMoEeKT8t6_7PBWIQ" name="SequenceTestListOne">
+            <ownedAttribute xmi:id="_yWkGUIMoEeKT8t6_7PBWIQ" name="name" visibility="public" isOrdered="true" isUnique="false">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_yqBN0IMoEeKT8t6_7PBWIQ" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_yqB04IMoEeKT8t6_7PBWIQ" value="1"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_2Uf7gIMoEeKT8t6_7PBWIQ" name="sequenceRoot_sequenceTestList_1" memberEnd="_2Uf7gYMoEeKT8t6_7PBWIQ _2UfUcIMoEeKT8t6_7PBWIQ" navigableOwnedEnd="_2Uf7gYMoEeKT8t6_7PBWIQ">
+            <ownedEnd xmi:id="_2Uf7gYMoEeKT8t6_7PBWIQ" name="sequenceRoot" type="_uLmtUIMeEeKT8t6_7PBWIQ" association="_2Uf7gIMoEeKT8t6_7PBWIQ">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_2Uf7goMoEeKT8t6_7PBWIQ" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_2Uf7g4MoEeKT8t6_7PBWIQ" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_fCwWgIMsEeKT8t6_7PBWIQ" name="SequenceTestListMany">
+            <ownedAttribute xmi:id="_iTRFAIMsEeKT8t6_7PBWIQ" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_igZiEIMsEeKT8t6_7PBWIQ" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_igaJIIMsEeKT8t6_7PBWIQ" value="1"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_lPlsMIMsEeKT8t6_7PBWIQ" name="sequenceRoot_sequenceTestListMany_1" memberEnd="_lPlsMYMsEeKT8t6_7PBWIQ _lPlFIIMsEeKT8t6_7PBWIQ" navigableOwnedEnd="_lPlsMYMsEeKT8t6_7PBWIQ">
+            <ownedEnd xmi:id="_lPlsMYMsEeKT8t6_7PBWIQ" name="sequenceRoot" type="_uLmtUIMeEeKT8t6_7PBWIQ" association="_lPlsMIMsEeKT8t6_7PBWIQ">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_lPlsMoMsEeKT8t6_7PBWIQ" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_lPlsM4MsEeKT8t6_7PBWIQ" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_fu6CIIM9EeKT8t6_7PBWIQ" name="SequenceTestOrderedSet">
+            <ownedAttribute xmi:id="_i4__kIM9EeKT8t6_7PBWIQ" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_jH4wIIM9EeKT8t6_7PBWIQ" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_jH5XMIM9EeKT8t6_7PBWIQ" value="1"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_nX1iY4M9EeKT8t6_7PBWIQ" name="sequenceRoot_sequenceTestOrderedSet_1" memberEnd="_nX1iZIM9EeKT8t6_7PBWIQ _nX1iYIM9EeKT8t6_7PBWIQ" navigableOwnedEnd="_nX1iZIM9EeKT8t6_7PBWIQ">
+            <ownedEnd xmi:id="_nX1iZIM9EeKT8t6_7PBWIQ" name="sequenceRoot" type="_uLmtUIMeEeKT8t6_7PBWIQ" association="_nX1iY4M9EeKT8t6_7PBWIQ">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_nX1iZYM9EeKT8t6_7PBWIQ" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_nX1iZoM9EeKT8t6_7PBWIQ" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_aMGkQINmEeKT8t6_7PBWIQ" name="SequenceList2">
+            <ownedAttribute xmi:id="_cARQkINmEeKT8t6_7PBWIQ" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_cPeKMINmEeKT8t6_7PBWIQ" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_cPfYUINmEeKT8t6_7PBWIQ" value="1"/>
+              <defaultValue xmi:type="uml:LiteralString" xmi:id="_cPgmcINmEeKT8t6_7PBWIQ">
+                <value xsi:nil="true"/>
+              </defaultValue>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_gcIX4INmEeKT8t6_7PBWIQ" name="sequenceRoot_sequenceList2_1" memberEnd="_gcIX4YNmEeKT8t6_7PBWIQ _gcHw0INmEeKT8t6_7PBWIQ" navigableOwnedEnd="_gcIX4YNmEeKT8t6_7PBWIQ">
+            <ownedEnd xmi:id="_gcIX4YNmEeKT8t6_7PBWIQ" name="sequenceRoot" type="_uLmtUIMeEeKT8t6_7PBWIQ" isOrdered="true" isUnique="false" association="_gcIX4INmEeKT8t6_7PBWIQ">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_gcIX4oNmEeKT8t6_7PBWIQ" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_gcIX44NmEeKT8t6_7PBWIQ" value="1"/>
+            </ownedEnd>
+          </packagedElement>
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_8JtCQBUcEeGL8p1g1fBHHA" name="componenttest">
           <packagedElement xmi:type="uml:Class" xmi:id="_BkczsBUdEeGL8p1g1fBHHA" name="SpaceTime">

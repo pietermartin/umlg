@@ -63,6 +63,9 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
 		singleAdder.addParam(propertyWrapper.fieldname(), propertyWrapper.javaBaseTypePath());
 		if (!propertyWrapper.isDataType()) {
 			OJIfStatement ifNotNull = new OJIfStatement(propertyWrapper.fieldname() + " != null");
+            OJIfStatement ifExist = new OJIfStatement("!this." + propertyWrapper.fieldname() + ".isEmpty()");
+            ifExist.addToThenPart("throw new RuntimeException(\"Property is a one and already has a value!\")");
+            ifNotNull.addToThenPart(ifExist);
 			ifNotNull.addToThenPart("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ")");
 			singleAdder.getBody().addToStatements(ifNotNull);
 		} else {

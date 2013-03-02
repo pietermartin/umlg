@@ -46,7 +46,12 @@ public class TumlRuntimePropertyImpl implements TumlRuntimeProperty {
 		return false;
 	}
 
-	@Override
+    @Override
+    public int getInverseUpper() {
+        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
 	public int getUpper() {
 		// TODO Auto-generated method stub
 		return 0;

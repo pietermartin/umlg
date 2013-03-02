@@ -48,13 +48,4 @@ public class TinkerQualifiedSequenceImpl<E> extends BaseSequence<E> implements T
 		throw new IllegalStateException("This method can not be called on a qualified association. Call add(E, List<Qualifier>) instead");
 	}
 
-	protected void removeEdgefromIndex(Vertex v, Edge edge, int indexOf) {
-		this.index.remove("index", v.getProperty("tinkerIndex"), edge);
-		for (String key : edge.getPropertyKeys()) {
-			if (key.startsWith("index")) {
-				this.index.remove(key, edge.getProperty(key), edge);
-			}
-		}
-	}
-
 }

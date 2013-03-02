@@ -59,7 +59,7 @@ public class TestWithClient extends BaseRestletTest {
     @Test
     public void testPostFingerToHand() throws ResourceException, JSONException, IOException {
         Client client = new Client(new Context(), Protocol.HTTP);
-        ClientResource service = new ClientResource("http://localhost:8111/");
+        ClientResource service = new ClientResource("riap://localhost:8111/");
         service.setNext(client);
         HumanServerResource humanServerResource = service.getChild("/restAndJson/humans/2", HumanServerResource.class);
         String humanJson = humanServerResource.get().getText();
@@ -76,9 +76,8 @@ public class TestWithClient extends BaseRestletTest {
         Assert.assertTrue(name.startsWith("finger"));
 
         //Delete a finger
-        Hand_hand_finger_Finger_ServerResource deletefinger_ServerResource = service.getChild("/restAndJson/hands/" + handJsonObject.get("id") + "/finger", Hand_hand_finger_Finger_ServerResource.class);
-        deletefinger_ServerResource.delete(new JsonRepresentation("id=2"));
-
+        Hand_hand_finger_Finger_ServerResource deletefinger_ServerResource = service.getChild("/restAndJson/hands/2/finger", Hand_hand_finger_Finger_ServerResource.class);
+        deletefinger_ServerResource.delete(new JsonRepresentation("{\"id\":2}"));
 
         fingerJsonObject.put("name", "testFingerName");
         Representation r = hand_finger_ServerResource.post(new JsonRepresentation(fingerJsonObject.toString()));

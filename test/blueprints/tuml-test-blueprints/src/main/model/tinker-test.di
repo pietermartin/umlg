@@ -46,6 +46,9 @@
     <availablePage xmi:id="_1chrVQAOEeKpVr_ntT6cLA">
       <emfPageIdentifier href="tinker-test.notation#_1chrVAAOEeKpVr_ntT6cLA"/>
     </availablePage>
+    <availablePage>
+      <emfPageIdentifier href="tinker-test.notation#_tvjqgIMeEeKT8t6_7PBWIQ"/>
+    </availablePage>
   </pageList>
   <sashModel xmi:id="_1dMZogAOEeKpVr_ntT6cLA" currentSelection="_1dMZoAAOEeKpVr_ntT6cLA">
     <windows xmi:id="_1dMZoQAOEeKpVr_ntT6cLA">
@@ -70,6 +73,9 @@
         </children>
         <children>
           <emfPageIdentifier href="tinker-test.notation#_1chrSAAOEeKpVr_ntT6cLA"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="tinker-test.notation#_tvjqgIMeEeKT8t6_7PBWIQ"/>
         </children>
       </children>
     </windows>

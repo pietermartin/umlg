@@ -383,8 +383,12 @@ public class TestSequence extends BaseLocalDbTest {
         for (int i = 0; i < 1000; i++) {
             SequenceTest sequenceTest1 = new SequenceTest(sequenceRoot);
             sequenceTest1.setName("sequenceTest" + i);
+
             if (i % 1000 == 0) {
                 db.commit();
+            }
+            if (i % 10000 == 0) {
+                System.out.println(i);
             }
         }
         db.commit();
@@ -393,7 +397,13 @@ public class TestSequence extends BaseLocalDbTest {
 
         stopWatch.reset();
         stopWatch.start();
-        sequenceRoot = new SequenceRoot(sequenceRoot.getVertex());
+//        sequenceRoot = new SequenceRoot(sequenceRoot.getVertex());
+        int i = 0;
+        for (SequenceTest st : sequenceRoot.getSequenceTest()) {
+            if (i++ % 10000 == 0) {
+                System.out.println(st.getName());
+            }
+        }
         Assert.assertEquals(1000, sequenceRoot.getSequenceTest().size());
         stopWatch.stop();
         System.out.println(stopWatch.toString());

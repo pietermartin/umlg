@@ -125,6 +125,11 @@ public class RuntimePropertyImplementor {
         lowerField.setName("_lower");
         ojEnum.addToFields(lowerField);
 
+        OJField inverseUpperField = new OJField();
+        inverseUpperField.setType(new OJPathName("int"));
+        inverseUpperField.setName("_inverseUpper");
+        ojEnum.addToFields(inverseUpperField);
+
         OJField qualifiedField = new OJField();
         qualifiedField.setType(new OJPathName("boolean"));
         qualifiedField.setName("_qualified");
@@ -216,31 +221,17 @@ public class RuntimePropertyImplementor {
         for (Property p : allOwnedProperties) {
             PropertyWrapper pWrap = new PropertyWrapper(p);
             if (!(pWrap.isDerived() || pWrap.isDerivedUnion())) {
-                //This is to prevent creating linked list edges for sequences when there is always only one
-                boolean ordered;
-                if (pWrap.isOrdered() && pWrap.isQualified() && pWrap.getUpper() == 1) {
-                    ordered = true;
-                } else if (pWrap.isOrdered() && !pWrap.isQualified() && pWrap.getUpper() == 1) {
-                    ordered = false;
-                } else {
-                    ordered = pWrap.isOrdered();
-                }
-                boolean isInverseOrdered;
-                if (pWrap.isInverseOrdered() && new PropertyWrapper(pWrap.getOtherEnd()).isQualified() && pWrap.getOtherEnd().getUpper() == 1) {
-                    isInverseOrdered = true;
-                } else if (pWrap.isInverseOrdered() && !new PropertyWrapper(pWrap.getOtherEnd()).isQualified() && pWrap.getOtherEnd().getUpper() == 1) {
-                    isInverseOrdered = false;
-                } else if (pWrap.getOtherEnd() != null){
-                    isInverseOrdered = pWrap.getOtherEnd().isOrdered();
-                } else {
-                    isInverseOrdered = false;
+
+                int inverseUpper = 1;
+                if (pWrap.getOtherEnd() != null) {
+                    inverseUpper = pWrap.getOtherEnd().getUpper();
                 }
 
                 addEnumLiteral(ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, pWrap.fieldname(), pWrap.getQualifiedName(),
                         pWrap.getInverseQualifiedName(), pWrap.isReadOnly(), pWrap.isPrimitive(), pWrap.getDataTypeEnum(), pWrap.getValidations(),
                         pWrap.isEnumeration(), pWrap.isManyToOne(), pWrap.isMany(), pWrap.isControllingSide(), pWrap.isComposite(), pWrap.isInverseComposite(),
-                        pWrap.isOneToOne(), pWrap.isOneToMany(), pWrap.isManyToMany(), pWrap.getUpper(), pWrap.getLower(), pWrap.isQualified(),
-                        pWrap.isInverseQualified(), ordered, isInverseOrdered, pWrap.isUnique(), pWrap.isInverseUnique(),
+                        pWrap.isOneToOne(), pWrap.isOneToMany(), pWrap.isManyToMany(), pWrap.getUpper(), pWrap.getLower(), inverseUpper, pWrap.isQualified(),
+                        pWrap.isInverseQualified(), pWrap.isOrdered(), pWrap.isInverseOrdered(), pWrap.isUnique(), pWrap.isInverseUnique(),
                         TinkerGenerationUtil.getEdgeName(pWrap.getProperty()));
             }
         }
@@ -248,7 +239,7 @@ public class RuntimePropertyImplementor {
         if (!hasCompositeOwner/* && !(className instanceof Model) */) {
             // Add in fake property to root
             addEnumLiteral(ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, modelName, modelName, "inverseOf" + modelName, false, false, null,
-                    Collections.<Validation>emptyList(), false, false, false, true, false, true, true, false, false, -1, 0, false, false, false, false, false, false,
+                    Collections.<Validation>emptyList(), false, false, false, true, false, true, true, false, false, -1, 0, 1, false, false, false, false, false, false,
                     "root" + className.getName());
         }
         asJson.getBody().addToStatements("sb.append(\"]}\")");
@@ -265,7 +256,7 @@ public class RuntimePropertyImplementor {
     public static OJEnumLiteral addEnumLiteral(OJEnum ojEnum, OJAnnotatedOperation fromLabel, OJAnnotatedOperation fromQualifiedName,
                                                OJAnnotatedOperation fromInverseQualifiedName, String fieldName, String qualifiedName, String inverseQualifiedName, boolean isReadOnly, boolean isPrimitive,
                                                DataTypeEnum dataTypeEnum, List<Validation> validations, boolean isEnumeration, boolean isManyToOne, boolean isMany, boolean isControllingSide,
-                                               boolean isComposite, boolean isInverseComposite, boolean isOneToOne, boolean isOneToMany, boolean isManyToMany, int getUpper, int getLower,
+                                               boolean isComposite, boolean isInverseComposite, boolean isOneToOne, boolean isOneToMany, boolean isManyToMany, int getUpper, int getLower, int getInverseUpper,
                                                boolean isQualified, boolean isInverseQualified, boolean isOrdered, boolean isInverseOrdered, boolean isUnique, boolean isInverseUnique, String edgeName) {
 
         OJIfStatement ifLabelEquals = new OJIfStatement(fieldName + ".getLabel().equals(label)");
@@ -417,6 +408,12 @@ public class RuntimePropertyImplementor {
         lowerAttribute.setInitExp(Integer.toString(getLower));
         ojLiteral.addToAttributeValues(lowerAttribute);
 
+        OJField inverseUpperAttribute = new OJField();
+        inverseUpperAttribute.setName("inverseUpper");
+        inverseUpperAttribute.setType(new OJPathName("int"));
+        inverseUpperAttribute.setInitExp(Integer.toString(getInverseUpper));
+        ojLiteral.addToAttributeValues(inverseUpperAttribute);
+
         OJField qualifiedAttribute = new OJField();
         qualifiedAttribute.setName("isQualified");
         qualifiedAttribute.setType(new OJPathName("boolean"));
@@ -531,6 +528,9 @@ public class RuntimePropertyImplementor {
         sb.append(", ");
         sb.append("\\\"lower\\\": ");
         sb.append(lowerAttribute.getInitExp());
+        sb.append(", ");
+        sb.append("\\\"inverseUpper\\\": ");
+        sb.append(inverseUpperAttribute.getInitExp());
         sb.append(", ");
         sb.append("\\\"label\\\": \\");
         sb.append(propertyLabelField.getInitExp().subSequence(0, propertyLabelField.getInitExp().length() - 1));

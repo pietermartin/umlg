@@ -187,12 +187,12 @@ public class TinkerOrderedSetImpl<E> extends BaseCollection<E> implements Tinker
         E node;
         try {
             Class<?> c = this.getClassToInstantiate(edgeToFirstElement);
-            if (c.isEnum()) {
+            if (TumlNode.class.isAssignableFrom(c)) {
+                node = (E) c.getConstructor(Vertex.class).newInstance(firstVertexInSequence);
+            } else if (c.isEnum()) {
                 Object value = firstVertexInSequence.getProperty("value");
                 node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
                 this.internalVertexMap.put(value, firstVertexInSequence);
-            } else if (TumlNode.class.isAssignableFrom(c)) {
-                node = (E) c.getConstructor(Vertex.class).newInstance(firstVertexInSequence);
             } else {
                 Object value = firstVertexInSequence.getProperty("value");
                 node = (E) value;
@@ -260,10 +260,6 @@ public class TinkerOrderedSetImpl<E> extends BaseCollection<E> implements Tinker
     @Override
     public List<E> subList(int fromIndex, int toIndex) {
         throw new RuntimeException("Not supported");
-    }
-
-    protected void removeEdgefromIndex(Vertex v, Edge edge, int indexOf) {
-        this.index.remove("index", v.getProperty("tinkerIndex"), edge);
     }
 
     @Override
