@@ -11,7 +11,6 @@ public class OclStdLibSequenceImpl<E> extends OclStdLibCollectionImpl<E> impleme
 	private List<E> list;
 
 	/**
-	 * A regular constructor compiles in eclipse but not in maven
 	 * @param collection
 	 * @return
 	 */
@@ -26,7 +25,16 @@ public class OclStdLibSequenceImpl<E> extends OclStdLibCollectionImpl<E> impleme
 
 	@Override
 	public Boolean equals(TinkerSequence<E> s) {
-		throw new RuntimeException("Not implemented");
+        if (size() != s.size()) {
+            return false;
+        }
+        int count = 0;
+        for (E e : s) {
+            if (!e.equals(get(count++))) {
+                return false;
+            }
+        }
+		return true;
 	}
 
 	@Override
@@ -37,22 +45,28 @@ public class OclStdLibSequenceImpl<E> extends OclStdLibCollectionImpl<E> impleme
 
 	@Override
 	public TinkerSequence<E> append(E object) {
-		throw new RuntimeException("Not implemented");
+        this.add(object);
+        return this;
 	}
 
 	@Override
 	public TinkerSequence<E> prepend(E object) {
-		throw new RuntimeException("Not implemented");
+        this.add(0, object);
+        return this;
 	}
 
 	@Override
 	public TinkerSequence<E> insertAt(Integer index, E object) {
-		throw new RuntimeException("Not implemented");
+        this.add(index, object);
+        return this;
 	}
 
 	@Override
 	public TinkerSequence<E> subSequence(Integer lower, Integer upper) {
-		throw new RuntimeException("Not implemented");
+        //Sublist excludes the upper element
+        TinkerSequence<E> subList = new OclStdLibSequenceImpl(this.list.subList(lower, upper));
+        subList.add(get(upper));
+        return subList;
 	}
 
 	@Override
@@ -62,18 +76,25 @@ public class OclStdLibSequenceImpl<E> extends OclStdLibCollectionImpl<E> impleme
 
 	@Override
 	public int indexOf(Object obj) {
-		throw new RuntimeException("Not implemented");
+        return this.list.indexOf(obj);
 	}
-	
-//	@Override
-//	public int indexOf(Object o) {
-//		return this.list.indexOf(o);
-//	}
 
+    @Override
+    public E first() {
+        if (this.list.isEmpty()) {
+            throw new OclIsInvalidException();
+        } else {
+            return this.list.get(0);
+        }
+    }
 
-	@Override
+    @Override
 	public E last() {
-		throw new RuntimeException("Not implemented");
+        if (this.list.isEmpty()) {
+            throw new OclIsInvalidException();
+        } else {
+            return this.list.get(this.list.size() - 1);
+        }
 	}
 
 	@Override
@@ -85,13 +106,17 @@ public class OclStdLibSequenceImpl<E> extends OclStdLibCollectionImpl<E> impleme
 	}
 
 	@Override
-	public TinkerSequence<E> excluding(E object) {
-		throw new RuntimeException("Not implemented");
+	public TinkerSequence<E> excluding(E e) {
+        if (e != null) {
+            this.list.remove(e);
+        }
+        return this;
 	}
 
 	@Override
 	public TinkerSequence<E> reverse() {
-		throw new RuntimeException("Not implemented");
+        Collections.reverse(this.list);
+		return this;
 	}	
 
 	/***************************************************
@@ -244,15 +269,6 @@ public class OclStdLibSequenceImpl<E> extends OclStdLibCollectionImpl<E> impleme
 	@Override
 	public List<E> subList(int fromIndex, int toIndex) {
 		return this.list.subList(fromIndex, toIndex);
-	}
-
-	@Override
-	public E first() {
-		if (this.list.isEmpty()) {
-			throw new OclIsInvalidException();
-		} else {
-			return this.list.get(0);
-		}
 	}
 
 	@Override

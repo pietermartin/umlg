@@ -21,8 +21,9 @@ public class TinkerQualifiedSequenceImpl<E> extends BaseSequence<E> implements T
 
 	@Override
 	public void add(int indexOf, E e) {
-//        maybeLoad();
-		Edge edge = addToListAtIndex(indexOf, e);
+        //Do not load, it needs to be traversed every time
+        //It needs to be traversed because it is not possible to find the hyper vertex via the index because of duplicates
+        Edge edge = addToListAtIndex(indexOf, e);
 		// Can only qualify TinkerNode's
 		if (!(e instanceof TumlNode)) {
 			throw new IllegalStateException("Primitive properties can not be qualified!");

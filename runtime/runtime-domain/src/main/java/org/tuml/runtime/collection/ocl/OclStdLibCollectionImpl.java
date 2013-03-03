@@ -3,6 +3,7 @@ package org.tuml.runtime.collection.ocl;
 import org.tuml.runtime.collection.*;
 import org.tuml.runtime.domain.ocl.OclState;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
 
 public class OclStdLibCollectionImpl<E> implements OclStdLibCollection<E> {
@@ -33,75 +34,168 @@ public class OclStdLibCollectionImpl<E> implements OclStdLibCollection<E> {
 
 	@Override
 	public boolean includes(E t) {
-		throw new RuntimeException("Not implemented");
+        return this.collection.contains(t);
 	}
 
 
 	@Override
 	public boolean excludes(E t) {
-		throw new RuntimeException("Not implemented");
+        return !includes(t);
 	}
 
 
 	@Override
 	public int count(E e) {
-		throw new RuntimeException("Not implemented");
+        int count = 0;
+        for (E element : this.collection) {
+            if (element.equals(e)) {
+                count++;
+            }
+        }
+		return count;
 	}
 
 
 	@Override
 	public Boolean includesAll(TinkerCollection<E> c) {
-		throw new RuntimeException("Not implemented");
+        for (E e : c) {
+            if (!includes(e)) {
+                 return false;
+            }
+        }
+		return true;
 	}
 
 
 	@Override
 	public Boolean excludesAll(TinkerCollection<E> c) {
-		throw new RuntimeException("Not implemented");
+        for (E e : c) {
+            if (includes(e)) {
+                return false;
+            }
+        }
+        return true;
 	}
 
 
 	@Override
 	public boolean isEmpty() {
-		throw new RuntimeException("Not implemented");
+        return this.collection.isEmpty();
 	}
-
 
 	@Override
 	public Boolean notEmpty() {
-		throw new RuntimeException("Not implemented");
+        return !isEmpty();
 	}
-
 
 	@Override
 	public E max() {
-		throw new RuntimeException("Not implemented");
+        if (isEmpty()) {
+            return null;
+        } else {
+            E e = this.collection.iterator().next();
+            if (!(e instanceof Integer || e instanceof Long || e instanceof Double || e instanceof Float)) {
+                throw new RuntimeException("max can only be called on a collection with elements of type Integer, Long or Double");
+            }
+        }
+        boolean first = true;
+        Number max = null;
+        for (E e : this.collection) {
+            if (first) {
+                first = false;
+                max = (Number)e;
+            }
+            if (e instanceof Integer) {
+                max = Math.max((Integer)max, (Integer)e);
+            } else if (e instanceof Long) {
+                max = Math.max((Long)max, (Long)e);
+            } else if (e instanceof Float) {
+                max = Math.max((Float)max, (Float)e);
+            } else {
+                max = Math.max((Double)max, (Double)e);
+            }
+        }
+		return (E)max;
 	}
 
 
 	@Override
 	public E min() {
-		throw new RuntimeException("Not implemented");
+        if (isEmpty()) {
+            return null;
+        } else {
+            E e = this.collection.iterator().next();
+            if (!(e instanceof Integer || e instanceof Long || e instanceof Double || e instanceof Float)) {
+                throw new RuntimeException("max can only be called on a collection with elements of type Integer, Long or Double");
+            }
+        }
+        boolean first = true;
+        Number min = null;
+        for (E e : this.collection) {
+            if (first) {
+                first = false;
+                min = (Number)e;
+            }
+            if (e instanceof Integer) {
+                min = Math.min((Integer)min, (Integer)e);
+            } else if (e instanceof Long) {
+                min = Math.min((Long)min, (Long)e);
+            } else if (e instanceof Float) {
+                min = Math.min((Float)min, (Float)e);
+            } else {
+                min = Math.min((Double)min, (Double)e);
+            }
+        }
+        return (E)min;
 	}
 
 
 	@Override
 	public E sum() {
-		throw new RuntimeException("Not implemented");
+        if (isEmpty()) {
+            return null;
+        } else {
+            E e = this.collection.iterator().next();
+            if (!(e instanceof Integer || e instanceof Long || e instanceof Double || e instanceof Float)) {
+                throw new RuntimeException("max can only be called on a collection with elements of type Integer, Long or Double");
+            }
+        }
+        Integer minInteger = 0;
+        Long minLong = 0L;
+        Float minFloat = 0F;
+        Double minDouble = 0D;
+        for (E e : this.collection) {
+            if (e instanceof Integer) {
+                minInteger = minInteger + (Integer)e;
+            } else if (e instanceof Long) {
+                minLong = minLong + (Long)e;
+            } else if (e instanceof Float) {
+                minFloat = minFloat + (Float)e;
+            } else {
+                minDouble = minDouble + (Double)e;
+            }
+        }
+        if (minInteger > 0) {
+            return (E)minInteger;
+        } else if (minLong > 0) {
+            return (E)minLong;
+        } else if (minFloat > 0) {
+            return (E)minFloat;
+        } else {
+            return (E)minDouble;
+        }
 	}
 
 
 	@Override
 	public TinkerSet<?> product(TinkerCollection<E> c) {
-		// TODO Auto-generated method stub
-		return null;
+        throw new RuntimeException("Not implemented");
 	}
 
 
 	@Override
 	public <T2> TinkerCollection<T2> flatten() {
-		// TODO Auto-generated method stub
-		return null;
+        throw new RuntimeException("Not implemented");
 	}
 
 	
@@ -138,22 +232,22 @@ public class OclStdLibCollectionImpl<E> implements OclStdLibCollection<E> {
 	
 	@Override
 	public TinkerSet<E> asSet() {
-		return OclStdLibSetImpl.<E>get(this.collection);
+		return OclStdLibSetImpl.get(this.collection);
 	}
 	
 	@Override
 	public TinkerOrderedSet<E> asOrderedSet() {
-		return OclStdLibOrderedSetImpl.<E>get(this.collection);
+		return OclStdLibOrderedSetImpl.get(this.collection);
 	}
 	
 	@Override
 	public TinkerSequence<E> asSequence() {
-		return OclStdLibSequenceImpl.<E>get(this.collection);
+		return OclStdLibSequenceImpl.get(this.collection);
 	}
 	
 	@Override
 	public TinkerBag<E> asBag() {
-		return OclStdLibBagImpl.<E>get(this.collection);
+		return OclStdLibBagImpl.get(this.collection);
 	}
 	
 	@Override
@@ -171,68 +265,57 @@ public class OclStdLibCollectionImpl<E> implements OclStdLibCollection<E> {
 	
 	@Override
 	public boolean equals(Object object) {
-		throw new RuntimeException("Not implemented");
-//		return null;
+		return this.equals(object);
 	}
 
 	@Override
 	public boolean notEquals(Object object) {
-		throw new RuntimeException("Not implemented");
-//		return null;
+		return !equals(object);
 	}
 
 	@Override
 	public Boolean oclIsNew() {
 		throw new RuntimeException("Not implemented");
-//		return null;
 	}
 
 	@Override
 	public Boolean oclIsUndefined() {
 		throw new RuntimeException("Not implemented");
-//		return null;
 	}
 
 	@Override
 	public Boolean oclIsInvalid() {
 		throw new RuntimeException("Not implemented");
-//		return null;
 	}
 
 	@Override
 	public <T> T oclAsType(T classifier) {
 		throw new RuntimeException("Not implemented");
-//		return null;
 	}
 
 	@Override
 	public Boolean oclIsTypeOf(Object object) {
 		throw new RuntimeException("Not implemented");
-//		return null;
 	}
 
 	@Override
 	public Boolean oclIsKindOf(Object object) {
 		throw new RuntimeException("Not implemented");
-//		return null;
 	}
 
 	@Override
 	public Boolean oclIsInState(OclState state) {
 		throw new RuntimeException("Not implemented");
-//		return null;
 	}
 
 	@Override
 	public <T  extends Object> Class<T> oclType() {
 		throw new RuntimeException("Not implemented");
-//		return null;
 	}
 
 	@Override
 	public String oclLocale() {
 		throw new RuntimeException("Not implemented");
-//		return null;
 	}
 
 }

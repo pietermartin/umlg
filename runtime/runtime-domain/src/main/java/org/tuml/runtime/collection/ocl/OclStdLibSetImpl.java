@@ -15,10 +15,6 @@ public class OclStdLibSetImpl<E> extends OclStdLibCollectionImpl<E> implements T
 
 	private Set<E> set;
 
-	// public OclStdLibSetImpl(Collection<E> collection) {
-	// this(new HashSet<E>(collection));
-	// }
-
 	/**
 	 * A regular constructor compiles in eclipse but not in maven
 	 * 

@@ -1,17 +1,12 @@
 package org.tuml.runtime.collection.persistent;
 
-import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.Vertex;
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.collection.TinkerQualifiedOrderedSet;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.domain.TumlNode;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.ListIterator;
 
 public class TinkerQualifiedOrderedSetImpl<E> extends TumlBaseOrderedSet<E> implements TinkerQualifiedOrderedSet<E> {
 

@@ -6,4 +6,5 @@ package org.tuml.runtime.adaptor;
  */
 public interface TumlExceptionUtil {
     void handle(Exception e);
+    boolean isNodeNotFoundException(Exception e);
 }

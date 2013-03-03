@@ -22,4 +22,5 @@ public class TumlNeo4jTestUtil implements TumlTestUtil {
     public boolean isTransactionFailedException(Exception e) {
         return e instanceof TransactionFailureException;
     }
+
 }

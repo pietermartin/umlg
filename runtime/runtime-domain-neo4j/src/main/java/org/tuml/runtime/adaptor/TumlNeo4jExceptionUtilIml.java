@@ -1,5 +1,6 @@
 package org.tuml.runtime.adaptor;
 
+import org.neo4j.graphdb.NotFoundException;
 import org.neo4j.graphdb.TransactionFailureException;
 
 import javax.transaction.RollbackException;
@@ -43,6 +44,11 @@ public class TumlNeo4jExceptionUtilIml implements TumlExceptionUtil {
         } else {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public boolean isNodeNotFoundException(Exception e) {
+        return e instanceof NotFoundException;
     }
 
 }
