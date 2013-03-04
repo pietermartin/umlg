@@ -5,6 +5,8 @@ import com.google.common.collect.Multiset;
 import org.tuml.runtime.collection.TinkerBag;
 import org.tuml.runtime.collection.TinkerCollection;
 import org.tuml.runtime.collection.TinkerSet;
+import org.tuml.runtime.collection.memory.TumlMemoryBag;
+import org.tuml.runtime.collection.memory.TumlMemorySet;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -38,32 +40,55 @@ public class OclStdLibSetImpl<E> extends OclStdLibCollectionImpl<E> implements T
 
 	@Override
 	public TinkerBag<E> union(TinkerBag<? extends E> bag) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+        TinkerBag<E> result = new TumlMemoryBag<E>();
+        result.addAll(this);
+        result.addAll(bag);
+        return result;
 	}
 
 	@Override
 	public Boolean equals(TinkerSet<E> s) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+        if (size() != s.size()) {
+            return false;
+        }
+        for (E e : s) {
+            if (!contains(e)) {
+                return false;
+            }
+        }
+        return true;
 	}
 
 	@Override
 	public TinkerSet<E> intersection(TinkerSet<E> s) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+        for (E e : s) {
+            if (contains(e)) {
+                add(e);
+            }
+        }
+        return this;
 	}
 
 	@Override
 	public TinkerSet<E> intersection(TinkerBag<E> bag) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+        for (E e : bag) {
+            if (contains(e)) {
+                add(e);
+            }
+        }
+        return this;
 	}
 
 	@Override
 	public TinkerSet<E> subtract(TinkerSet<E> s) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+        Iterator<E> iter = iterator();
+        while (iter.hasNext()) {
+            E e =  iter.next();
+            if (s.contains(e)) {
+                iter.remove();
+            }
+        }
+        return this;
 	}
 
 	@Override
@@ -74,14 +99,26 @@ public class OclStdLibSetImpl<E> extends OclStdLibCollectionImpl<E> implements T
 
 	@Override
 	public TinkerSet<E> excluding(E e) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+		remove(e);
+        return this;
 	}
 
 	@Override
 	public TinkerSet<E> symmetricDifference(TinkerSet<E> s) {
-		// TODO Implement
-		throw new RuntimeException("Not implemented");
+        TinkerSet<E> result = new TumlMemorySet<E>();
+        for (E e : s) {
+            if (!contains(e)) {
+                result.add(e);
+            }
+        }
+        Iterator<E> iter = iterator();
+        while (iter.hasNext()) {
+            E e = iter.next();
+            if (!s.contains(e)) {
+                result.add(e);
+            }
+        }
+        return result;
 	}
 
 	/***************************************************

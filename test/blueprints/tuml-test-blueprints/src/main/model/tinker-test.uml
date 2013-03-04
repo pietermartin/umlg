@@ -1052,6 +1052,57 @@
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_gcIX44NmEeKT8t6_7PBWIQ" value="1"/>
             </ownedEnd>
           </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_nuMhEIT3EeKeSZB9UA6Gvw" name="SetRoot">
+            <ownedAttribute xmi:id="_rafzsIT3EeKeSZB9UA6Gvw" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_r0Af4IT3EeKeSZB9UA6Gvw" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_r0Jp0IT3EeKeSZB9UA6Gvw" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:id="_kP5YwIT4EeKeSZB9UA6Gvw" name="setTest" type="_xeQF4IT3EeKeSZB9UA6Gvw" aggregation="composite" association="_kP5_0IT4EeKeSZB9UA6Gvw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_kP5YwYT4EeKeSZB9UA6Gvw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_kP5YwoT4EeKeSZB9UA6Gvw" value="*"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_xeQF4IT3EeKeSZB9UA6Gvw" name="SetTest">
+            <ownedAttribute xmi:id="_1HPl0IT3EeKeSZB9UA6Gvw" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_1WYOAIT3EeKeSZB9UA6Gvw" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_1WZcIIT3EeKeSZB9UA6Gvw" value="1"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_kP5_0IT4EeKeSZB9UA6Gvw" name="setRoot_setTest_1" memberEnd="_kP5_0YT4EeKeSZB9UA6Gvw _kP5YwIT4EeKeSZB9UA6Gvw" navigableOwnedEnd="_kP5_0YT4EeKeSZB9UA6Gvw">
+            <ownedEnd xmi:id="_kP5_0YT4EeKeSZB9UA6Gvw" name="setRoot" type="_nuMhEIT3EeKeSZB9UA6Gvw" association="_kP5_0IT4EeKeSZB9UA6Gvw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_kP5_0oT4EeKeSZB9UA6Gvw" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_kP5_04T4EeKeSZB9UA6Gvw" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_8GP38IT6EeKeSZB9UA6Gvw" name="BagRoot">
+            <ownedAttribute xmi:id="_-UTq8IT6EeKeSZB9UA6Gvw" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_-9ejwIT6EeKeSZB9UA6Gvw" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_-9fx4IT6EeKeSZB9UA6Gvw" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:id="_PaJKgIT7EeKeSZB9UA6Gvw" name="bagTest" type="_9DNPcIT6EeKeSZB9UA6Gvw" isUnique="false" aggregation="composite" association="_PaJxkIT7EeKeSZB9UA6Gvw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_PaJKgYT7EeKeSZB9UA6Gvw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_PaJKgoT7EeKeSZB9UA6Gvw" value="*"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_9DNPcIT6EeKeSZB9UA6Gvw" name="BagTest">
+            <ownedAttribute xmi:id="_CjTa8IT7EeKeSZB9UA6Gvw" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_L1CFAIT7EeKeSZB9UA6Gvw" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_L1CsEIT7EeKeSZB9UA6Gvw" value="1"/>
+              <defaultValue xmi:type="uml:LiteralString" xmi:id="_L1D6MIT7EeKeSZB9UA6Gvw">
+                <value xsi:nil="true"/>
+              </defaultValue>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_PaJxkIT7EeKeSZB9UA6Gvw" name="bagRoot_bagTest_1" memberEnd="_PaJxkYT7EeKeSZB9UA6Gvw _PaJKgIT7EeKeSZB9UA6Gvw" navigableOwnedEnd="_PaJxkYT7EeKeSZB9UA6Gvw">
+            <ownedEnd xmi:id="_PaJxkYT7EeKeSZB9UA6Gvw" name="bagRoot" type="_8GP38IT6EeKeSZB9UA6Gvw" association="_PaJxkIT7EeKeSZB9UA6Gvw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_PaJxkoT7EeKeSZB9UA6Gvw" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_PaJxk4T7EeKeSZB9UA6Gvw" value="1"/>
+            </ownedEnd>
+          </packagedElement>
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_8JtCQBUcEeGL8p1g1fBHHA" name="componenttest">
           <packagedElement xmi:type="uml:Class" xmi:id="_BkczsBUdEeGL8p1g1fBHHA" name="SpaceTime">

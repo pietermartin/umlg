@@ -49,6 +49,12 @@
     <availablePage>
       <emfPageIdentifier href="tinker-test.notation#_tvjqgIMeEeKT8t6_7PBWIQ"/>
     </availablePage>
+    <availablePage>
+      <emfPageIdentifier href="tinker-test.notation#_nGgO8IT3EeKeSZB9UA6Gvw"/>
+    </availablePage>
+    <availablePage>
+      <emfPageIdentifier href="tinker-test.notation#_7KbI4IT6EeKeSZB9UA6Gvw"/>
+    </availablePage>
   </pageList>
   <sashModel xmi:id="_1dMZogAOEeKpVr_ntT6cLA" currentSelection="_1dMZoAAOEeKpVr_ntT6cLA">
     <windows xmi:id="_1dMZoQAOEeKpVr_ntT6cLA">
@@ -76,6 +82,12 @@
         </children>
         <children>
           <emfPageIdentifier href="tinker-test.notation#_tvjqgIMeEeKT8t6_7PBWIQ"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="tinker-test.notation#_nGgO8IT3EeKeSZB9UA6Gvw"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="tinker-test.notation#_7KbI4IT6EeKeSZB9UA6Gvw"/>
         </children>
       </children>
     </windows>
