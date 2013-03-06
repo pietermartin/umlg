@@ -7,7 +7,7 @@ import org.tuml.collectiontest.Nightmare;
 import org.tuml.concretetest.God;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
-public class BagTest extends BaseLocalDbTest {
+public class BagTesttest extends BaseLocalDbTest {
 
 	@Test
 	public void testBag() {

@@ -39,7 +39,7 @@ import org.tuml.transaction.test.TransactionSuspendResumeTest;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({EmailTest.class, ManyEnumerationTest.class, TestMetaClasses.class, AllInstancesTest.class,
-        BagTest.class, OrderedSetTest.class, QualifiedBagTest.class, QualifiedOrderedSetTest.class, QualifiedSequenceTest.class, SequenceTest.class, TestInitCalled.class, TestOrderedListKeepsIndex.class,
+        BagTesttest.class, OrderedSetTest.class, QualifiedBagTest.class, QualifiedOrderedSetTest.class, QualifiedSequenceTest.class, SequenceTest.class, TestInitCalled.class, TestOrderedListKeepsIndex.class,
         TestComponent.class, TestNonCompositeOneToOne.class, TestOneToMany.class,
         DeletionInheritenceTest.class, DeletionTest.class, EmbeddedSetDeletionTest.class,
         TestEmbeddedTest.class,

@@ -2,6 +2,7 @@ package org.tuml.blueprints.test;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
+import org.tuml.tinker.collectiontest.OclStdLibBagTest;
 import org.tuml.tinker.collectiontest.OclStdLibCollectionTest;
 import org.tuml.tinker.collectiontest.OclStdLibSequenceTest;
 import org.tuml.tinker.collectiontest.OclStdLibSetTest;
@@ -11,7 +12,7 @@ import org.tuml.tinker.collectiontest.OclStdLibSetTest;
  * Time: 7:18 PM
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({OclStdLibSetTest.class})
+@Suite.SuiteClasses({OclStdLibBagTest.class})
 public class AnyTest {
 
 }

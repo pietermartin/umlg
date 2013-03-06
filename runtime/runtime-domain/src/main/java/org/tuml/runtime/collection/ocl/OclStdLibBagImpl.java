@@ -16,7 +16,7 @@ public class OclStdLibBagImpl<E> extends OclStdLibCollectionImpl<E> implements T
 
 	/**
 	 * A regular constructor compiles in eclipse but not in maven
-	 * @param collection
+	 * @param bag
 	 * @return
 	 */
 	public static <E> OclStdLibBagImpl<E> get(Collection<E> bag) {
@@ -30,7 +30,7 @@ public class OclStdLibBagImpl<E> extends OclStdLibCollectionImpl<E> implements T
 
 	@Override
 	public Boolean equals(TinkerBag<E> bag) {
-		throw new RuntimeException("Not implemented");
+        return this.bag.equals(bag);
 	}
 
 	@Override
