@@ -4,6 +4,8 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.tuml.collectiontest.FWomen;
 import org.tuml.collectiontest.Fantasy;
+import org.tuml.collectiontest.OrderedSetRoot;
+import org.tuml.collectiontest.OrderedSetTest;
 import org.tuml.concretetest.God;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
@@ -79,6 +81,5 @@ public class QualifiedOrderedSetTest extends BaseLocalDbTest {
 		Assert.assertEquals("fantasy3", godTest3.getFantasy().get(3).getName());
 		Assert.assertEquals("fantasy4", godTest3.getFantasy().get(4).getName());
 	}
-	
-	
+
 }

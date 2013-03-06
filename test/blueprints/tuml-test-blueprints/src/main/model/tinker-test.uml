@@ -1086,6 +1086,10 @@
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_PaJKgYT7EeKeSZB9UA6Gvw"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_PaJKgoT7EeKeSZB9UA6Gvw" value="*"/>
             </ownedAttribute>
+            <ownedAttribute xmi:id="_raHzYIZvEeKeSZB9UA6Gvw" name="setTest" type="_l9hAwIZvEeKeSZB9UA6Gvw" aggregation="composite" association="_raIacIZvEeKeSZB9UA6Gvw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_raHzYYZvEeKeSZB9UA6Gvw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_raHzYoZvEeKeSZB9UA6Gvw" value="*"/>
+            </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Class" xmi:id="_9DNPcIT6EeKeSZB9UA6Gvw" name="BagTest">
             <ownedAttribute xmi:id="_CjTa8IT7EeKeSZB9UA6Gvw" name="name" visibility="public">
@@ -1101,6 +1105,52 @@
             <ownedEnd xmi:id="_PaJxkYT7EeKeSZB9UA6Gvw" name="bagRoot" type="_8GP38IT6EeKeSZB9UA6Gvw" association="_PaJxkIT7EeKeSZB9UA6Gvw">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_PaJxkoT7EeKeSZB9UA6Gvw" value="1"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_PaJxk4T7EeKeSZB9UA6Gvw" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_l9hAwIZvEeKeSZB9UA6Gvw" name="SetTest1">
+            <ownedAttribute xmi:id="_n2cRQIZvEeKeSZB9UA6Gvw" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_oEAMIIZvEeKeSZB9UA6Gvw" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_oEBaQIZvEeKeSZB9UA6Gvw" value="1"/>
+              <defaultValue xmi:type="uml:LiteralString" xmi:id="_oEDPcIZvEeKeSZB9UA6Gvw">
+                <value xsi:nil="true"/>
+              </defaultValue>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_raIacIZvEeKeSZB9UA6Gvw" name="bagRoot_setTest_1" memberEnd="_raIacYZvEeKeSZB9UA6Gvw _raHzYIZvEeKeSZB9UA6Gvw" navigableOwnedEnd="_raIacYZvEeKeSZB9UA6Gvw">
+            <ownedEnd xmi:id="_raIacYZvEeKeSZB9UA6Gvw" name="bagRoot" type="_8GP38IT6EeKeSZB9UA6Gvw" association="_raIacIZvEeKeSZB9UA6Gvw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_raIacoZvEeKeSZB9UA6Gvw" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_raIac4ZvEeKeSZB9UA6Gvw" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_C0ZYkIaIEeKeSZB9UA6Gvw" name="OrderedSetRoot">
+            <ownedAttribute xmi:id="_EglNkIaIEeKeSZB9UA6Gvw" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_GBJBYIaIEeKeSZB9UA6Gvw" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_GBKPgIaIEeKeSZB9UA6Gvw" value="1"/>
+              <defaultValue xmi:type="uml:LiteralString" xmi:id="_GBXq4IaIEeKeSZB9UA6Gvw">
+                <value xsi:nil="true"/>
+              </defaultValue>
+            </ownedAttribute>
+            <ownedAttribute xmi:id="_Ll2nIIaIEeKeSZB9UA6Gvw" name="orderedSetTest" type="_GxPBkIaIEeKeSZB9UA6Gvw" isOrdered="true" aggregation="composite" association="_Ll3OMIaIEeKeSZB9UA6Gvw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Ll2nIYaIEeKeSZB9UA6Gvw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Ll2nIoaIEeKeSZB9UA6Gvw" value="*"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_GxPBkIaIEeKeSZB9UA6Gvw" name="OrderedSetTest">
+            <ownedAttribute xmi:id="_JEKtgIaIEeKeSZB9UA6Gvw" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_LHOxcIaIEeKeSZB9UA6Gvw" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_LHQmoIaIEeKeSZB9UA6Gvw" value="1"/>
+              <defaultValue xmi:type="uml:LiteralString" xmi:id="_LHgeQIaIEeKeSZB9UA6Gvw">
+                <value xsi:nil="true"/>
+              </defaultValue>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_Ll3OMIaIEeKeSZB9UA6Gvw" name="orderedSetRoot_orderedSetTest_1" memberEnd="_Ll3OMYaIEeKeSZB9UA6Gvw _Ll2nIIaIEeKeSZB9UA6Gvw" navigableOwnedEnd="_Ll3OMYaIEeKeSZB9UA6Gvw">
+            <ownedEnd xmi:id="_Ll3OMYaIEeKeSZB9UA6Gvw" name="orderedSetRoot" type="_C0ZYkIaIEeKeSZB9UA6Gvw" association="_Ll3OMIaIEeKeSZB9UA6Gvw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Ll3OMoaIEeKeSZB9UA6Gvw" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Ll3OM4aIEeKeSZB9UA6Gvw" value="1"/>
             </ownedEnd>
           </packagedElement>
         </packagedElement>

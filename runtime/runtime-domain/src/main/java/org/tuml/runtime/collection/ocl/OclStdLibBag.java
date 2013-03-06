@@ -43,24 +43,19 @@ public interface OclStdLibBag<E> extends OclStdLibCollection<E> {
 	 * intersection(bag : Bag(T)) : Bag(T)
 	 * <pre>
 	 * The intersection of self and bag.
-	 * 		post: result->forAll(elem |
-	 * 			result->count(elem) = self->count(elem).min(bag->count(elem)) )
-	 * 		post: self->forAll(elem |
-	 * 			result->count(elem) = self->count(elem).min(bag->count(elem)) )
-	 * 		post: bag->forAll(elem |
-	 * 			result->count(elem) = self->count(elem).min(bag->count(elem)) )
+	 * 		post: result->forAll(elem | result->count(elem) = self->count(elem).min(bag->count(elem)) )
+	 * 		post: self->forAll(elem | result->count(elem) = self->count(elem).min(bag->count(elem)) )
+	 * 		post: bag->forAll(elem | result->count(elem) = self->count(elem).min(bag->count(elem)) )
 	 * </pre>
 	 */
 	TinkerBag<E> intersection(TinkerBag<E> bag);
 	
 	/**
-	 * intersection(set : Set(T)) : Set(T)
-	 * <pre>
-	 * The intersection of self and set.
-	 * 		post: result->forAll(elem|result->count(elem) = self->count(elem).min(set->count(elem)) )
-	 * 		post: self ->forAll(elem|result->count(elem) = self->count(elem).min(set->count(elem)) )
-	 * 		post: set ->forAll(elem|result->count(elem) = self->count(elem).min(set->count(elem)) )
-	 * </pre>
+	 * intersection(bag : Bag(T)) : Bag(T)
+     *  The intersection of self and bag.
+     *      post: result->forAll(elem | result->count(elem) = self->count(elem).min(bag->count(elem)) )
+     *      post: self->forAll(elem | result->count(elem) = self->count(elem).min(bag->count(elem)) )
+     *      post: bag->forAll(elem | result->count(elem) = self->count(elem).min(bag->count(elem)) )
 	 */
 	TinkerSet<E> intersection(TinkerSet<E> set);
 	

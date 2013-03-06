@@ -55,6 +55,9 @@
     <availablePage>
       <emfPageIdentifier href="tinker-test.notation#_7KbI4IT6EeKeSZB9UA6Gvw"/>
     </availablePage>
+    <availablePage>
+      <emfPageIdentifier href="tinker-test.notation#_Bjw3IIaIEeKeSZB9UA6Gvw"/>
+    </availablePage>
   </pageList>
   <sashModel xmi:id="_1dMZogAOEeKpVr_ntT6cLA" currentSelection="_1dMZoAAOEeKpVr_ntT6cLA">
     <windows xmi:id="_1dMZoQAOEeKpVr_ntT6cLA">
@@ -88,6 +91,9 @@
         </children>
         <children>
           <emfPageIdentifier href="tinker-test.notation#_7KbI4IT6EeKeSZB9UA6Gvw"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="tinker-test.notation#_Bjw3IIaIEeKeSZB9UA6Gvw"/>
         </children>
       </children>
     </windows>

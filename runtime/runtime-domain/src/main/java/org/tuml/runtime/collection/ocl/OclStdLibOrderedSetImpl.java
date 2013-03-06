@@ -1,12 +1,11 @@
 package org.tuml.runtime.collection.ocl;
 
-import com.google.common.collect.HashMultiset;
-import com.google.common.collect.Multiset;
 import org.apache.commons.collections.set.ListOrderedSet;
-import org.tuml.runtime.collection.TinkerBag;
 import org.tuml.runtime.collection.TinkerCollection;
 import org.tuml.runtime.collection.TinkerOrderedSet;
 import org.tuml.runtime.collection.TinkerSequence;
+import org.tuml.runtime.collection.memory.TumlMemoryOrderedSet;
+import org.tuml.runtime.domain.ocl.OclIsInvalidException;
 
 import java.util.*;
 
@@ -31,42 +30,61 @@ public class OclStdLibOrderedSetImpl<E> extends OclStdLibCollectionImpl<E> imple
 	
 	@Override
 	public TinkerOrderedSet<E> append(E e) {
-		throw new RuntimeException("Not implemented");
+        TinkerOrderedSet<E> result = new TumlMemoryOrderedSet<E>(this);
+        result.add(e);
+        return result;
 	}
 
 	@Override
 	public TinkerOrderedSet<E> prepend(E e) {
-		throw new RuntimeException("Not implemented");
+        TinkerOrderedSet<E> result = new TumlMemoryOrderedSet<E>(this);
+        result.add(0, e);
+        return result;
 	}
 
 	@Override
 	public TinkerOrderedSet<E> insertAt(Integer index, E e) {
-		throw new RuntimeException("Not implemented");
+        TinkerOrderedSet<E> result = new TumlMemoryOrderedSet<E>(this);
+        result.add(index, e);
+        return result;
 	}
 
 	@Override
 	public TinkerOrderedSet<E> subOrderedSet(Integer lower, Integer upper) {
-		throw new RuntimeException("Not implemented");
+        //Sublist excludes the upper element
+        TinkerOrderedSet<E> subList = OclStdLibOrderedSetImpl.get(this.orderedSet.asList().subList(lower, upper));
+        subList.add(get(upper));
+        return subList;
 	}
 
 	@Override
 	public E at(Integer i) {
-		throw new RuntimeException("Not implemented");
+        return get(i);
 	}
 
 	@Override
 	public E first() {
-		throw new RuntimeException("Not implemented");
+        if (this.orderedSet.isEmpty()) {
+            throw new OclIsInvalidException();
+        } else {
+            return (E)this.orderedSet.get(0);
+        }
 	}
 
 	@Override
 	public E last() {
-		throw new RuntimeException("Not implemented");
+        if (this.orderedSet.isEmpty()) {
+            throw new OclIsInvalidException();
+        } else {
+            return (E)this.orderedSet.get(this.orderedSet.size() - 1);
+        }
 	}
 
 	@Override
 	public TinkerOrderedSet<E> reverse() {
-		throw new RuntimeException("Not implemented");
+        List<E> result = new ArrayList<E>(this);
+        Collections.reverse(result);
+        return new TumlMemoryOrderedSet(result);
 	}
 
 	
@@ -228,7 +246,7 @@ public class OclStdLibOrderedSetImpl<E> extends OclStdLibCollectionImpl<E> imple
 
 	@Override
 	public List<E> subList(int fromIndex, int toIndex) {
-		throw new RuntimeException("Not supported");
+        return this.orderedSet.asList().subList(fromIndex, toIndex);
 	}
 
 	@Override

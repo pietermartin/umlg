@@ -2,17 +2,16 @@ package org.tuml.tinker.collectiontest;
 
 import junit.framework.Assert;
 import org.junit.Test;
-import org.tuml.collectiontest.SequenceRoot;
-import org.tuml.collectiontest.SequenceTestOrderedSet;
-import org.tuml.collectiontest.World;
+import org.tuml.collectiontest.*;
 import org.tuml.concretetest.God;
 import org.tuml.embeddedtest.TestEmbedded;
+import org.tuml.runtime.collection.TinkerOrderedSet;
 import org.tuml.runtime.collection.memory.TumlMemorySequence;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
 import java.util.Arrays;
 
-public class OrderedSetTest extends BaseLocalDbTest {
+public class OrderedSetTestTest extends BaseLocalDbTest {
 
     @Test
     public void testOrderedSetIsUnique() {

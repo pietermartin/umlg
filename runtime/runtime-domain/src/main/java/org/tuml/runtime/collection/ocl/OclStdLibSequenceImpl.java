@@ -2,6 +2,7 @@ package org.tuml.runtime.collection.ocl;
 
 import org.tuml.runtime.collection.TinkerCollection;
 import org.tuml.runtime.collection.TinkerSequence;
+import org.tuml.runtime.collection.memory.TumlMemorySequence;
 import org.tuml.runtime.domain.ocl.OclIsInvalidException;
 
 import java.util.*;
@@ -39,32 +40,36 @@ public class OclStdLibSequenceImpl<E> extends OclStdLibCollectionImpl<E> impleme
 
 	@Override
 	public TinkerSequence<E> union(TinkerSequence<? extends E> s) {
-		addAll(s);
-		return this;
+        TinkerSequence<E> result = new TumlMemorySequence<E>(this);
+        result.addAll(s);
+		return result;
 	}
 
 	@Override
 	public TinkerSequence<E> append(E object) {
-        this.add(object);
-        return this;
+        TinkerSequence<E> result = new TumlMemorySequence<E>(this);
+        result.add(object);
+        return result;
 	}
 
 	@Override
 	public TinkerSequence<E> prepend(E object) {
-        this.add(0, object);
-        return this;
+        TinkerSequence<E> result = new TumlMemorySequence<E>(this);
+        result.add(0, object);
+        return result;
 	}
 
 	@Override
 	public TinkerSequence<E> insertAt(Integer index, E object) {
-        this.add(index, object);
-        return this;
+        TinkerSequence<E> result = new TumlMemorySequence<E>(this);
+        result.add(index, object);
+        return result;
 	}
 
 	@Override
 	public TinkerSequence<E> subSequence(Integer lower, Integer upper) {
         //Sublist excludes the upper element
-        TinkerSequence<E> subList = new OclStdLibSequenceImpl(this.list.subList(lower, upper));
+        TinkerSequence<E> subList = OclStdLibSequenceImpl.get(this.list.subList(lower, upper));
         subList.add(get(upper));
         return subList;
 	}
@@ -99,18 +104,20 @@ public class OclStdLibSequenceImpl<E> extends OclStdLibCollectionImpl<E> impleme
 
 	@Override
 	public TinkerSequence<E> including(E e) {
+        TinkerSequence<E> result = new TumlMemorySequence<E>(this);
 		if (e != null) {
-			this.list.add(e);
+			result.add(e);
 		}
-		return this;
+		return result;
 	}
 
 	@Override
 	public TinkerSequence<E> excluding(E e) {
+        TinkerSequence<E> result = new TumlMemorySequence<E>(this);
         if (e != null) {
-            this.list.remove(e);
+            result.remove(e);
         }
-        return this;
+        return result;
 	}
 
 	@Override

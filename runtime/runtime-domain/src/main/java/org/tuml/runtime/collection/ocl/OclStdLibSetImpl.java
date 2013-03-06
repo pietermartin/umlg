@@ -34,14 +34,14 @@ public class OclStdLibSetImpl<E> extends OclStdLibCollectionImpl<E> implements T
 
 	@Override
 	public TinkerSet<E> union(TinkerSet<? extends E> s) {
-		addAll(s);
-		return this;
+        TinkerSet<E> result = new TumlMemorySet<E>(this);
+        result.addAll(s);
+		return result;
 	}
 
 	@Override
 	public TinkerBag<E> union(TinkerBag<? extends E> bag) {
-        TinkerBag<E> result = new TumlMemoryBag<E>();
-        result.addAll(this);
+        TinkerBag<E> result = new TumlMemoryBag<E>(this);
         result.addAll(bag);
         return result;
 	}
@@ -61,46 +61,51 @@ public class OclStdLibSetImpl<E> extends OclStdLibCollectionImpl<E> implements T
 
 	@Override
 	public TinkerSet<E> intersection(TinkerSet<E> s) {
+        TinkerSet<E> result = new TumlMemorySet<E>();
         for (E e : s) {
             if (contains(e)) {
-                add(e);
+                result.add(e);
             }
         }
-        return this;
+        return result;
 	}
 
 	@Override
 	public TinkerSet<E> intersection(TinkerBag<E> bag) {
+        TinkerSet<E> result = new TumlMemorySet<E>();
         for (E e : bag) {
             if (contains(e)) {
-                add(e);
+                result.add(e);
             }
         }
-        return this;
+        return result;
 	}
 
 	@Override
 	public TinkerSet<E> subtract(TinkerSet<E> s) {
+        TinkerSet<E> result = new TumlMemorySet<E>();
         Iterator<E> iter = iterator();
         while (iter.hasNext()) {
             E e =  iter.next();
-            if (s.contains(e)) {
-                iter.remove();
+            if (!s.contains(e)) {
+                result.add(e);
             }
         }
-        return this;
+        return result;
 	}
 
 	@Override
 	public TinkerSet<E> including(E e) {
-		add(e);
-		return this;
+        TinkerSet<E> result = new TumlMemorySet<E>(this);
+        result.add(e);
+		return result;
 	}
 
 	@Override
 	public TinkerSet<E> excluding(E e) {
-		remove(e);
-        return this;
+        TinkerSet<E> result = new TumlMemorySet<E>(this);
+		result.remove(e);
+        return result;
 	}
 
 	@Override

@@ -125,38 +125,21 @@ public class OclStdLibSetTest extends BaseLocalDbTest {
         SetTest setTest4 = new SetTest(setRoot1);
         setTest4.setName("setTest4");
 
-        SetRoot setRoot2 = new SetRoot(true);
-        setRoot2.setName("setRoot");
-        SetTest setTest21 = new SetTest(setRoot2);
-        setTest21.setName("setTest21");
-        SetTest setTest22 = new SetTest(setRoot2);
-        setTest22.setName("setTest22");
-        SetTest setTest23 = new SetTest(setRoot2);
-        setTest23.setName("setTest23");
-        SetTest setTest24 = new SetTest(setRoot2);
-        setTest24.setName("setTest24");
-
         db.commit();
 
         TinkerSet<SetTest> other = new TumlMemorySet<SetTest>();
         other.add(setTest1);
         other.add(setTest2);
-        other.add(setTest3);
-        other.add(setTest4);
-        other.add(setTest21);
-        other.add(setTest22);
-        other.add(setTest23);
-        other.add(setTest24);
 
-        Assert.assertEquals(10, countVertices());
-        Assert.assertEquals(10, countEdges());
+        Assert.assertEquals(5, countVertices());
+        Assert.assertEquals(5, countEdges());
 
-        Assert.assertEquals(4, setRoot1.getSetTest().intersection(other).size());
+        Assert.assertEquals(2, setRoot1.getSetTest().intersection(other).size());
 
         db.commit();
 
-        Assert.assertEquals(10, countVertices());
-        Assert.assertEquals(10, countEdges());
+        Assert.assertEquals(5, countVertices());
+        Assert.assertEquals(5, countEdges());
     }
 
     @Test

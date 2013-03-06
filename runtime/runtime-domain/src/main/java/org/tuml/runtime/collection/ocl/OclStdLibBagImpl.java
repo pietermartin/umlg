@@ -5,6 +5,8 @@ import com.google.common.collect.Multiset;
 import org.tuml.runtime.collection.TinkerBag;
 import org.tuml.runtime.collection.TinkerCollection;
 import org.tuml.runtime.collection.TinkerSet;
+import org.tuml.runtime.collection.memory.TumlMemoryBag;
+import org.tuml.runtime.collection.memory.TumlMemorySet;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -33,35 +35,72 @@ public class OclStdLibBagImpl<E> extends OclStdLibCollectionImpl<E> implements T
         return this.bag.equals(bag);
 	}
 
+    //Important that the result, self and bag must be the union
 	@Override
 	public TinkerBag<E> union(TinkerBag<E> bag) {
-		throw new RuntimeException("Not implemented");
+        TinkerBag<E> copy = new TumlMemoryBag<E>();
+        Iterator<E> iter = iterator();
+        while (iter.hasNext()) {
+            copy.add(iter.next());
+        }
+        for (E e : bag) {
+            add(e);
+        }
+        iter = copy.iterator();
+        while (iter.hasNext()) {
+            bag.add(iter.next());
+        }
+		return this;
 	}
 
 	@Override
 	public TinkerBag<E> union(TinkerSet<E> set) {
-		throw new RuntimeException("Not implemented");
+        TinkerBag<E> result = new TumlMemoryBag<E>(this);
+        for (E e : set) {
+            result.add(e);
+        }
+        return result;
 	}
 
 	@Override
 	public TinkerBag<E> intersection(TinkerBag<E> bag) {
-		throw new RuntimeException("Not implemented");
+        TinkerBag<E> result = new TumlMemoryBag<E>();
+        for (E e : bag) {
+            if (contains(e)) {
+                result.add(e);
+            }
+        }
+        return result;
 	}
 
 	@Override
 	public TinkerSet<E> intersection(TinkerSet<E> set) {
-		throw new RuntimeException("Not implemented");
+        TinkerSet<E> result = new TumlMemorySet<E>();
+        for (E e : bag) {
+            if (contains(e)) {
+                result.add(e);
+            }
+        }
+        return result;
 	}
 
-	@Override
-	public TinkerBag<E> including(E object) {
-		throw new RuntimeException("Not implemented");
-	}
+    @Override
+    public TinkerBag<E> including(E e) {
+        TinkerBag<E> result = new TumlMemoryBag<E>(this);
+        if (e != null) {
+            result.add(e);
+        }
+        return result;
+    }
 
-	@Override
-	public TinkerBag<E> excluding(E object) {
-		throw new RuntimeException("Not implemented");
-	}
+    @Override
+    public TinkerBag<E> excluding(E e) {
+        TinkerBag<E> result = new TumlMemoryBag<E>(this);
+        if (e != null) {
+            result.remove(e);
+        }
+        return result;
+    }
 
 	/***************************************************
 	 * Iterate goodies
