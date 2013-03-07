@@ -61,7 +61,7 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
 //            result.add(GraphDb.getDb().<Universe>instantiateClassifier(TinkerIdUtilFactory.getIdUtil().getId(edge.getVertex(Direction.IN))));
 //        }
 //        return result;
-//    }
+//    }  //
 
     private void addAllInstances(Class clazz, OJAnnotatedClass metaClass) {
         OJAnnotatedOperation allInstances = new OJAnnotatedOperation("getAllInstances");
