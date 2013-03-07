@@ -43,6 +43,6 @@ public class InterfaceVisitor extends BaseVisitor implements Visitor<org.eclipse
 	}
 	
 	private void extendTumlNode(OJAnnotatedInterface annotatedInterface) {
-		annotatedInterface.addToSuperInterfaces(TinkerGenerationUtil.TINKER_NODE);
+		annotatedInterface.addToSuperInterfaces(TinkerGenerationUtil.TUML_NODE);
 	}
 }

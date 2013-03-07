@@ -82,7 +82,7 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
         TinkerGenerationUtil.addOverrideAnnotation(getQualifiers);
         getQualifiers.setComment("getQualifiers is called from the collection in order to update the index used to implement the qualifier");
         getQualifiers.addParam("tumlRuntimeProperty", TinkerGenerationUtil.tumlRuntimePropertyPathName.getCopy());
-        getQualifiers.addParam("node", TinkerGenerationUtil.TINKER_NODE);
+        getQualifiers.addParam("node", TinkerGenerationUtil.TUML_NODE);
         getQualifiers.addParam("inverse", "boolean");
         getQualifiers.setReturnType(new OJPathName("java.util.List").addToGenerics(TinkerGenerationUtil.TINKER_QUALIFIER_PATHNAME));
         annotatedClass.addToOperations(getQualifiers);

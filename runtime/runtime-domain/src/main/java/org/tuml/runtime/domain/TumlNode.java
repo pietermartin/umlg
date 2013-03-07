@@ -10,6 +10,7 @@ import org.tuml.runtime.validation.TumlConstraintViolation;
 import java.util.List;
 
 public interface TumlNode extends TumlEnum, OclAny, PersistentObject {
+    public static final String ALLINSTANCES_EDGE_LABEL = "allinstances";
 	Vertex getVertex();
 	boolean isTinkerRoot();
 	void initialiseProperties();

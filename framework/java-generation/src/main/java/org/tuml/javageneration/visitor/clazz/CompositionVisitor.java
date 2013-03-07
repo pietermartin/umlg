@@ -77,7 +77,7 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
 	}
 
 	private void addGetOwningObject(OJAnnotatedClass annotatedClass, Class clazz) {
-		OJAnnotatedOperation getOwningObject = new OJAnnotatedOperation("getOwningObject", TinkerGenerationUtil.TINKER_NODE.getCopy());
+		OJAnnotatedOperation getOwningObject = new OJAnnotatedOperation("getOwningObject", TinkerGenerationUtil.TUML_NODE.getCopy());
 		TinkerGenerationUtil.addOverrideAnnotation(getOwningObject);
 		if (TumlClassOperations.hasCompositeOwner(clazz)) {
 			getOwningObject.getBody().addToStatements("return " + new PropertyWrapper(TumlClassOperations.getOtherEndToComposite(clazz)).getter() + "()");

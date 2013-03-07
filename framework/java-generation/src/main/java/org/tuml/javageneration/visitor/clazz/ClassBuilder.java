@@ -68,7 +68,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 		addAllInstances(annotatedClass, clazz);
 	}
 
-	@Override
+    @Override
 	public void visitAfter(Class clazz) {
 	}
 
@@ -141,11 +141,10 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 		OJConstructor constructor = ojClass.findConstructor(new OJPathName("java.lang.Boolean"));
 		constructor.getBody().addToStatements("this.vertex = " + TinkerGenerationUtil.graphDbAccess + ".addVertex(this.getClass().getName())");
 		constructor.getBody().addToStatements("this.vertex.setProperty(\"className\", getClass().getName())");
-		// Do not understand this if statement
-		// if (TumlClassOperations.hasCompositeOwner(c)) {
+        //Link up to the meta instance for allInstances
+        constructor.getBody().addToStatements(TinkerGenerationUtil.graphDbAccess + ".addEdge(null, this.vertex, getMetaNode().getVertex(), " + TinkerGenerationUtil.TUML_NODE.getLast() + ".ALLINSTANCES_EDGE_LABEL)");
 		constructor.getBody().addToStatements(TinkerGenerationUtil.transactionThreadEntityVar.getLast() + ".setNewEntity(this)");
 		ojClass.addToImports(TinkerGenerationUtil.transactionThreadEntityVar);
-		// }
 		constructor.getBody().addToStatements("defaultCreate()");
 		ojClass.addToImports(TinkerGenerationUtil.graphDbPathName);
 	}
@@ -263,7 +262,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 		annotatedClass.addToOperations(getQualifiedName);
 	}
 
-	private void addAllInstances(OJAnnotatedClass annotatedClass, Class clazz) {
+	private void addAllInstancesWalkingTheTree(OJAnnotatedClass annotatedClass, Class clazz) {
 		OJAnnotatedOperation allInstances = new OJAnnotatedOperation("allInstances");
 		allInstances.setStatic(true);
 		if (TumlClassOperations.getSpecializations(clazz).isEmpty()) {
@@ -551,5 +550,18 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 		}
 		return sb.toString();
 	}
+
+    private void addAllInstances(OJAnnotatedClass annotatedClass, Class clazz) {
+        OJAnnotatedOperation allInstances = new OJAnnotatedOperation("allInstances");
+        allInstances.setStatic(true);
+        if (TumlClassOperations.getSpecializations(clazz).isEmpty()) {
+            allInstances.setReturnType(TinkerGenerationUtil.tinkerSet.getCopy().addToGenerics(TumlClassOperations.getPathName(clazz)));
+        } else {
+            String pathName = "? extends " + TumlClassOperations.getPathName(clazz).getLast();
+            allInstances.setReturnType(TinkerGenerationUtil.tinkerSet.getCopy().addToGenerics(pathName));
+        }
+        annotatedClass.addToImports(TinkerGenerationUtil.Root);
+        annotatedClass.addToOperations(allInstances);
+    }
 
 }

@@ -20,6 +20,7 @@ public class TinkerGenerationUtil {
 
     public static final String TINKER_DB_NULL = "__NULL__";
 
+    public static final String ALLINSTANCES_EDGE_LABEL = "ALLINSTANCES_EDGE_LABEL";
 
     public static final OJPathName TumlProperties = new OJPathName("org.tuml.runtime.util.TumlProperties");
 
@@ -131,7 +132,7 @@ public class TinkerGenerationUtil {
     public static OJPathName tinkerSchemaHelperPathName = new OJPathName("org.tuml.tinker.runtime.TinkerSchemaHelper");
     //	public static String TINKER_GET_CLASSNAME = "IntrospectionUtil.getOriginalClass(this.getClass()).getName()";
     public static OJPathName introspectionUtilPathName = new OJPathName("org.tuml.runtime.domain.IntrospectionUtil");
-    public static OJPathName TINKER_NODE = new OJPathName("org.tuml.runtime.domain.TumlNode");
+    public static OJPathName TUML_NODE = new OJPathName("org.tuml.runtime.domain.TumlNode");
     public static OJPathName TUML_ROOT_NODE = new OJPathName("org.tuml.runtime.domain.TumlRootNode");
 
     public static OJPathName TINKER_QUALIFIER_PATHNAME = new OJPathName("org.tuml.runtime.collection.Qualifier");

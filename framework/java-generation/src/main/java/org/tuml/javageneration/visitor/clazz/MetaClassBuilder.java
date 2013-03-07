@@ -109,6 +109,7 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
     private void addAndImplementTumlLibNodeOnOriginalClass(OJAnnotatedClass annotatedClass, Class clazz, OJPathName metaClassPathName) {
         annotatedClass.addToImplementedInterfaces(TinkerGenerationUtil.TumlLibNode);
         OJAnnotatedOperation getMetaNode = new OJAnnotatedOperation("getMetaNode");
+        getMetaNode.setStatic(true);
         TinkerGenerationUtil.addOverrideAnnotation(getMetaNode);
         getMetaNode.setReturnType(TinkerGenerationUtil.TumlMetaNode);
         annotatedClass.addToOperations(getMetaNode);

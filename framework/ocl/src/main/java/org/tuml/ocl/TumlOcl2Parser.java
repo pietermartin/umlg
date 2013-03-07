@@ -55,7 +55,7 @@ public class TumlOcl2Parser implements ModelLoadedEvent {
 	}
 
 	public static void main(String[] args) {
-		Model model = ModelLoader.INSTANCE.loadModel(new File("/home/pieter/workspace-tuml/tuml/test/tuml-test-ocl/src/main/model/test-ocl.uml"));
+		Model model = ModelLoader.INSTANCE.loadModel(new File("/home/pieter/intellij-projects/tuml/test/tuml-test-ocl/src/main/model/test-ocl.uml"));
 		TumlOcl2Parser parser = new TumlOcl2Parser();
 		StringBuilder sb = new StringBuilder();
 		sb.append("package testoclmodel::org::tuml::testocl\n");
