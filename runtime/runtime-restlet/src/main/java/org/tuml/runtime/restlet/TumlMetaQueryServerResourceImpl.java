@@ -1,15 +1,10 @@
 package org.tuml.runtime.restlet;
 
-import org.restlet.Client;
-import org.restlet.Context;
-import org.restlet.data.Protocol;
 import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 import org.restlet.resource.ServerResource;
 import org.tuml.runtime.adaptor.GraphDb;
-import org.tuml.runtime.domain.TumlLibNode;
-import org.tuml.runtime.domain.TumlNode;
 
 import java.io.IOException;
 

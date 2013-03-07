@@ -22,4 +22,5 @@ public interface TumlNode extends TumlEnum, OclAny, PersistentObject {
 	List<TumlConstraintViolation> validateMultiplicities();
 	TumlNode getOwningObject();
 	<T extends TumlNode> List<T> getPathToCompositionalRoot();
+    void addEdgeToMetaNode();
 }

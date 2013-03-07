@@ -45,10 +45,46 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
             addAndImplementTumlLibNodeOnOriginalClass(annotatedClass, clazz, metaClass.getPathName());
 
             addMetaClassGetterToRoot(clazz, metaClass);
-        } else {
-            OJAnnotatedClass annotatedClass = findOJClass(clazz);
-            addAndImplementTumlLibNodeOnOriginalClass(annotatedClass, clazz, null);
+
+            addAllInstances(clazz, metaClass);
+
+//        } else {
+//            OJAnnotatedClass annotatedClass = findOJClass(clazz);
+//            addAndImplementTumlLibNodeOnOriginalClass(annotatedClass, clazz, null);
         }
+    }
+
+//    public List<Universe> getAllInstances() {
+//        List<Universe> result = new ArrayList<Universe>();
+//        Iterable<Edge> iter = this.vertex.getEdges(Direction.OUT, TumlNode.ALLINSTANCES_EDGE_LABEL);
+//        for (Edge edge : iter) {
+//            result.add(GraphDb.getDb().<Universe>instantiateClassifier(TinkerIdUtilFactory.getIdUtil().getId(edge.getVertex(Direction.IN))));
+//        }
+//        return result;
+//    }
+
+    private void addAllInstances(Class clazz, OJAnnotatedClass metaClass) {
+        OJAnnotatedOperation allInstances = new OJAnnotatedOperation("getAllInstances");
+        TinkerGenerationUtil.addOverrideAnnotation(allInstances);
+        OJPathName classPathName = TumlClassOperations.getPathName(clazz);
+        allInstances.setReturnType(TinkerGenerationUtil.tinkerSet.getCopy().addToGenerics(classPathName));
+
+        OJField resultField = new OJField("result", TinkerGenerationUtil.tumlMemorySet.getCopy().addToGenerics(classPathName));
+        resultField.setInitExp("new " + TinkerGenerationUtil.tumlMemorySet.getCopy().addToGenerics(classPathName).getLast() + "()");
+        allInstances.getBody().addToLocals(resultField);
+        OJField iter = new OJField("iter", new OJPathName("java.lang.Iterable").addToGenerics(TinkerGenerationUtil.edgePathName));
+        iter.setInitExp("this.vertex.getEdges(Direction.OUT, TumlNode.ALLINSTANCES_EDGE_LABEL)");
+        allInstances.getBody().addToLocals(iter);
+
+        OJForStatement forIter = new OJForStatement("edge", TinkerGenerationUtil.edgePathName, "iter");
+        forIter.getBody().addToStatements("result.add(GraphDb.getDb().<" + classPathName.getLast() + ">instantiateClassifier(TinkerIdUtilFactory.getIdUtil().getId(edge.getVertex(Direction.IN))))");
+        allInstances.getBody().addToStatements(forIter);
+        allInstances.getBody().addToStatements("return result");
+
+        metaClass.addToImports(TinkerGenerationUtil.TUML_NODE);
+        metaClass.addToImports(TinkerGenerationUtil.tinkerIdUtilFactoryPathName);
+
+        metaClass.addToOperations(allInstances);
     }
 
     private void addGetEdgeToRootLabel(OJAnnotatedClass metaClass, Class clazz) {
@@ -107,10 +143,8 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
 
 
     private void addAndImplementTumlLibNodeOnOriginalClass(OJAnnotatedClass annotatedClass, Class clazz, OJPathName metaClassPathName) {
-        annotatedClass.addToImplementedInterfaces(TinkerGenerationUtil.TumlLibNode);
         OJAnnotatedOperation getMetaNode = new OJAnnotatedOperation("getMetaNode");
         getMetaNode.setStatic(true);
-        TinkerGenerationUtil.addOverrideAnnotation(getMetaNode);
         getMetaNode.setReturnType(TinkerGenerationUtil.TumlMetaNode);
         annotatedClass.addToOperations(getMetaNode);
         getMetaNode.setAbstract(clazz.isAbstract());

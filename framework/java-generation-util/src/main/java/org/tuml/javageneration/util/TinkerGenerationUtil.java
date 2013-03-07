@@ -30,7 +30,6 @@ public class TinkerGenerationUtil {
     public static final OJPathName TumlGraphManager = new OJPathName("org.tuml.runtime.adaptor.TumlGraphManager");
     public static final OJPathName ModelLoader = new OJPathName("org.tuml.framework.ModelLoader");
     public static final OJPathName TumlOcl2Parser = new OJPathName("org.tuml.ocl.TumlOcl2Parser");
-    public static final OJPathName TumlLibNode = new OJPathName("org.tuml.runtime.domain.TumlLibNode");
     public static final OJPathName TumlMetaNode = new OJPathName("org.tuml.runtime.domain.TumlMetaNode");
     public static final OJPathName QualifiedNameClassMap = new OJPathName("org.tuml.root.QualifiedNameClassMap");
     public static final OJPathName TumlRootPackage = new OJPathName("org.tuml.root");
