@@ -23,4 +23,5 @@ public interface TumlNode extends TumlEnum, OclAny, PersistentObject {
 	TumlNode getOwningObject();
 	<T extends TumlNode> List<T> getPathToCompositionalRoot();
     void addEdgeToMetaNode();
+    TumlMetaNode getMetaNode();
 }

@@ -46,12 +46,22 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
 
             addMetaClassGetterToRoot(clazz, metaClass);
 
+            //Ensure the meta class instance does not also try to create a edge to a meta class as it is also a normal entity
+            addEmptyAddEdgeToMetaNode(metaClass);
+
             addAllInstances(clazz, metaClass);
 
 //        } else {
 //            OJAnnotatedClass annotatedClass = findOJClass(clazz);
 //            addAndImplementTumlLibNodeOnOriginalClass(annotatedClass, clazz, null);
         }
+    }
+
+    private void addEmptyAddEdgeToMetaNode(OJAnnotatedClass metaClass) {
+        OJAnnotatedOperation addEdgeToMetaNode = new OJAnnotatedOperation("addEdgeToMetaNode");
+        TinkerGenerationUtil.addOverrideAnnotation(addEdgeToMetaNode);
+        metaClass.addToImports(TinkerGenerationUtil.graphDbPathName);
+        metaClass.addToOperations(addEdgeToMetaNode);
     }
 
 //    public List<Universe> getAllInstances() {
@@ -144,7 +154,7 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
 
     private void addAndImplementTumlLibNodeOnOriginalClass(OJAnnotatedClass annotatedClass, Class clazz, OJPathName metaClassPathName) {
         OJAnnotatedOperation getMetaNode = new OJAnnotatedOperation("getMetaNode");
-        getMetaNode.setStatic(true);
+//        getMetaNode.setStatic(true);
         getMetaNode.setReturnType(TinkerGenerationUtil.TumlMetaNode);
         annotatedClass.addToOperations(getMetaNode);
         getMetaNode.setAbstract(clazz.isAbstract());

@@ -2,6 +2,7 @@ package org.tuml.blueprints.test;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
+import org.tuml.datatype.test.EmailTest;
 import org.tuml.tinker.collectiontest.*;
 
 /**
@@ -9,7 +10,7 @@ import org.tuml.tinker.collectiontest.*;
  * Time: 7:18 PM
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({OclStdLibSetTest.class})
+@Suite.SuiteClasses({EmailTest.class})
 public class AnyTest {
 
 }

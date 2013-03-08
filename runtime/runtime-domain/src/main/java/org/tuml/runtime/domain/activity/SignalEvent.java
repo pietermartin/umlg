@@ -8,6 +8,7 @@ import org.tuml.runtime.collection.Qualifier;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.TumlRuntimeProperty;
 import org.tuml.runtime.domain.ISignal;
+import org.tuml.runtime.domain.TumlMetaNode;
 import org.tuml.runtime.domain.TumlNode;
 import org.tuml.runtime.validation.TumlConstraintViolation;
 
@@ -129,6 +130,11 @@ public class SignalEvent extends Event {
     @Override
     public void addEdgeToMetaNode() {
         //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public TumlMetaNode getMetaNode() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
