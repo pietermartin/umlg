@@ -99,6 +99,11 @@ public class CallEvent extends Event {
 	}
 
     @Override
+    public void addEdgeToMetaNode() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
 	public List<TumlNode> getPathToCompositionalRoot() {
 		// TODO Auto-generated method stub
 		return null;

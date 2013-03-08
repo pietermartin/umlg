@@ -558,6 +558,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
         OJAnnotatedOperation addEdgeToMetaNode = new OJAnnotatedOperation("addEdgeToMetaNode");
         TinkerGenerationUtil.addOverrideAnnotation(addEdgeToMetaNode);
         addEdgeToMetaNode.getBody().addToStatements(TinkerGenerationUtil.graphDbAccess + ".addEdge(null, this.vertex, getMetaNode().getVertex(), " + TinkerGenerationUtil.TUML_NODE.getLast() + ".ALLINSTANCES_EDGE_LABEL)");
+        annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
         annotatedClass.addToOperations(addEdgeToMetaNode);
     }
 
@@ -570,7 +571,18 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
             String pathName = "? extends " + TumlClassOperations.getPathName(clazz).getLast();
             allInstances.setReturnType(TinkerGenerationUtil.tinkerSet.getCopy().addToGenerics(pathName));
         }
-        allInstances.getBody().addToStatements("return getMetaNode().getAllInstances()");
+
+        OJField result = new OJField("result", TinkerGenerationUtil.tinkerSet.getCopy().addToGenerics(TumlClassOperations.getPathName(clazz)));
+        result.setInitExp("new " + TinkerGenerationUtil.tumlMemorySet.getCopy().addToGenerics(TumlClassOperations.getPathName(clazz)).getLast() + "()");
+        allInstances.getBody().addToLocals(result);
+        Set<Classifier> specializations = TumlClassOperations.getSpecializations(clazz);
+        for (Classifier c : specializations) {
+            annotatedClass.addToImports(TumlClassOperations.getPathName(c));
+            allInstances.getBody().addToStatements("result.addAll(" + TumlClassOperations.className(c) + ".allInstances())");
+        }
+
+        allInstances.getBody().addToStatements("return result");
+        annotatedClass.addToImports(TinkerGenerationUtil.tumlMemorySet);
         annotatedClass.addToImports(TinkerGenerationUtil.Root);
         annotatedClass.addToOperations(allInstances);
     }
