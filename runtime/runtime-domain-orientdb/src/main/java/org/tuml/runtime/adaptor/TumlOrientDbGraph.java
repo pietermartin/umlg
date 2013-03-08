@@ -176,6 +176,11 @@ public class TumlOrientDbGraph extends OrientGraph implements TumlGraph {
     }
 
     @Override
+    public boolean lockOnTransaction(Object object) {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
     public void shutdown() {
         try {
             commit();

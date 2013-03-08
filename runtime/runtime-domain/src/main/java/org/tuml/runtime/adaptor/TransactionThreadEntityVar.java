@@ -31,7 +31,7 @@ public class TransactionThreadEntityVar {
     }
 
     public static void setNewEntity(CompositionNode node) {
-        transactionEntityVar.get().put(((CompositionNode) node).getVertex().getId().toString(), node);
+        transactionEntityVar.get().put(node.getVertex().getId().toString(), node);
     }
 
     public static List<CompositionNode> get() {

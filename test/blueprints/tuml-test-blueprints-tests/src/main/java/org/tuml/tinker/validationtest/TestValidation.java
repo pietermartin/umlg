@@ -381,7 +381,7 @@ public class TestValidation extends BaseLocalDbTest {
         } catch (Exception e) {
             db.rollback();
         }
-        Assert.assertEquals(6, countVertices());
+        Assert.assertEquals(6 + 3, countVertices());
     }
 
     @Test

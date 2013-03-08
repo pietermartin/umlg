@@ -21,7 +21,7 @@ public class TestInitCalled extends BaseLocalDbTest {
 		biped.setName("thisisdodge");
 		god.getAbstractSpecies().add(biped);
         db.commit();
-		Assert.assertEquals(2, countEdges());
+		Assert.assertEquals(2 + 2 + 2, countEdges());
 		God g = new God(god.getVertex());
 		Assert.assertEquals("thisisdodge",g.getAbstractSpecies().iterate(new IterateExpressionAccumulator<List<Biped>, AbstractSpecies>() {
 			@Override

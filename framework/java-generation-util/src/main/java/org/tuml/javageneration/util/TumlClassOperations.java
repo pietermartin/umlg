@@ -18,9 +18,11 @@ import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
 import org.eclipse.uml2.uml.VisibilityKind;
 import org.eclipse.uml2.uml.internal.operations.ClassOperations;
+import org.tuml.java.metamodel.OJPackage;
 import org.tuml.java.metamodel.OJPathName;
 import org.tuml.java.metamodel.OJVisibilityKind;
 import org.tuml.framework.ModelLoader;
+import org.tuml.java.metamodel.annotation.OJAnnotatedClass;
 
 public class TumlClassOperations extends ClassOperations {
 
@@ -357,6 +359,13 @@ public class TumlClassOperations extends ClassOperations {
         } else {
             return Namer.getMetaName(clazz);
         }
+    }
+
+    public static OJPathName getMetaClassPathName(Classifier clazz) {
+        OJPackage ojPackage = new OJPackage(Namer.name(clazz.getNearestPackage()) + ".meta");
+        OJPathName result = ojPackage.getPathName().append(TumlClassOperations.getMetaClassName(clazz));
+        return result;
+
     }
 
     public static String propertyEnumName(Type type) {

@@ -20,9 +20,10 @@ public class TestMetaClasses extends BaseLocalDbTest {
         g.setName("g");
         Angel a = new Angel(g);
         db.commit();
-        Assert.assertEquals(2, countVertices());
-        GodMeta gm = (GodMeta) g.getMetaNode();
-        AngelMeta am = (AngelMeta) a.getMetaNode();
-        Assert.assertEquals(4, countVertices());
+        Assert.assertEquals(2 + 2, countVertices());
+        Assert.assertNotNull(g.getMetaNode());
+        Assert.assertNotNull(a.getMetaNode());
+        Assert.assertTrue(g.getMetaNode() instanceof  GodMeta);
+        Assert.assertTrue(a.getMetaNode() instanceof  AngelMeta);
     }
 }

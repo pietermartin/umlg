@@ -53,7 +53,7 @@ public class TransactionSuspendResumeTest extends BaseLocalDbTest {
         world.setName("universe2");
         db.commit();
 
-        Assert.assertEquals(3, countVertices());
+        Assert.assertEquals(3 + 2, countVertices());
 
     }
 

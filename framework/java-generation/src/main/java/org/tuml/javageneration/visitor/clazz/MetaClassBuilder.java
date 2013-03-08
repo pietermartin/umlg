@@ -37,7 +37,7 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
             metaClass.setSuperclass(TinkerGenerationUtil.BASE_CLASS_TUML);
             addToSource(metaClass);
             addDefaultConstructor(metaClass, clazz);
-            metaClass.getDefaultConstructor().setVisibility(OJVisibilityKind.PRIVATE);
+
             addContructorWithVertex(metaClass, clazz);
             addGetEdgeToRootLabel(metaClass, clazz);
             addImplementsTumlMetaNode(metaClass);
@@ -49,7 +49,7 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
             //Ensure the meta class instance does not also try to create a edge to a meta class as it is also a normal entity
             addEmptyAddEdgeToMetaNode(metaClass);
 
-            addAllInstances(clazz, metaClass);
+            addGetAllInstances(clazz, metaClass);
 
 //        } else {
 //            OJAnnotatedClass annotatedClass = findOJClass(clazz);
@@ -64,16 +64,7 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
         metaClass.addToOperations(addEdgeToMetaNode);
     }
 
-//    public List<Universe> getAllInstances() {
-//        List<Universe> result = new ArrayList<Universe>();
-//        Iterable<Edge> iter = this.vertex.getEdges(Direction.OUT, TumlNode.ALLINSTANCES_EDGE_LABEL);
-//        for (Edge edge : iter) {
-//            result.add(GraphDb.getDb().<Universe>instantiateClassifier(TinkerIdUtilFactory.getIdUtil().getId(edge.getVertex(Direction.IN))));
-//        }
-//        return result;
-//    }  //
-
-    private void addAllInstances(Class clazz, OJAnnotatedClass metaClass) {
+    private void addGetAllInstances(Class clazz, OJAnnotatedClass metaClass) {
         OJAnnotatedOperation allInstances = new OJAnnotatedOperation("getAllInstances");
         TinkerGenerationUtil.addOverrideAnnotation(allInstances);
         OJPathName classPathName = TumlClassOperations.getPathName(clazz);
@@ -117,23 +108,13 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
         ifHasNext.addToThenPart("result =  new " + TumlClassOperations.getMetaClassName(clazz) + "(iter.next().getVertex(Direction.IN))");
         INSTANCE.getBody().addToStatements(ifHasNext);
 
-        ifHasNext.addToElsePart("synchronized (" + TumlClassOperations.getMetaClassName(clazz) + ".class) {");
-        ifHasNext.addToElsePart("    ExecutorService es = Executors.newFixedThreadPool(1, " +
-                "new ThreadFactory() {\n        @Override\n        public Thread newThread(Runnable r) {\n            return new Thread(r, \"meta-class-creator-thread\");\n        }\n    })"
-        );
-        ifHasNext.addToElsePart("\n    Future<" + TumlClassOperations.getMetaClassName(clazz) + "> f = es.submit(" +
-                "new Callable() {\n        @Override\n        public " + TumlClassOperations.getMetaClassName(clazz) + " call() {\n            " +
-                TumlClassOperations.getMetaClassName(clazz) + " result = new " + TumlClassOperations.getMetaClassName(clazz) + "();\n            " + TinkerGenerationUtil.graphDbAccess + ".commit();\n            return result;\n        }\n    })");
-        ifHasNext.addToElsePart("    es.shutdown()");
-        ifHasNext.addToElsePart("    try {\n        result = f.get(3, TimeUnit.SECONDS);\n    } catch (Exception e) {\n        throw new RuntimeException(e);\n    }");
-        ifHasNext.addToElsePart("}");
+        OJIfStatement ifLock = new OJIfStatement(TinkerGenerationUtil.graphDbAccess + ".lockOnTransaction(" + metaClass.getName() + ".class)");
+        ifLock.addToThenPart("result = new " + metaClass.getName() + "()");
+        ifLock.addToElsePart("iter = " + TinkerGenerationUtil.graphDbAccess + ".getRoot().getEdges(Direction.OUT, \"" + TinkerGenerationUtil.getEdgeToRootLabelStrategyMeta(clazz) + "\").iterator()");
+        ifLock.addToElsePart("result = new " + metaClass.getName() + "(iter.next().getVertex(Direction.IN))");
+        ifHasNext.addToElsePart(ifLock);
+
         INSTANCE.getBody().addToStatements("return result");
-        metaClass.addToImports("java.util.concurrent.ExecutorService");
-        metaClass.addToImports("java.util.concurrent.Future");
-        metaClass.addToImports("java.util.concurrent.Executors");
-        metaClass.addToImports("java.util.concurrent.ThreadFactory");
-        metaClass.addToImports("java.util.concurrent.TimeUnit");
-        metaClass.addToImports("java.util.concurrent.Callable");
         metaClass.addToImports("java.util.Iterator");
 
         metaClass.addToImports("com.tinkerpop.blueprints.Direction");
@@ -175,6 +156,9 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
     private void addDefaultConstructor(OJAnnotatedClass annotatedClass, Class clazz) {
         annotatedClass.getDefaultConstructor().setVisibility(OJVisibilityKind.PRIVATE);
         annotatedClass.getDefaultConstructor().getBody().addToStatements("super(true)");
+        annotatedClass.getDefaultConstructor().setVisibility(OJVisibilityKind.PRIVATE);
+        annotatedClass.getDefaultConstructor().getBody().addToStatements(TinkerGenerationUtil.transactionThreadEntityVar.getLast() + ".remove(getVertex().getId().toString())");
+        annotatedClass.addToImports(TinkerGenerationUtil.transactionThreadEntityVar);
     }
 
 }

@@ -46,8 +46,8 @@ public class TestOneToMany extends BaseLocalDbTest {
 		Time t = new Time(st);
 
         db.commit();
-		assertEquals(6, countVertices());
-		assertEquals(7, countEdges());
+		assertEquals(6 + 6, countVertices());
+		assertEquals(7 + 6 + 6, countEdges());
 		Universe uni = new Universe(universe1.getVertex());
 		uni.setName("ddddddd");
         db.commit();
@@ -84,8 +84,8 @@ public class TestOneToMany extends BaseLocalDbTest {
 		Time t3 = new Time(st3);
 
         db.commit();
-		Assert.assertEquals(13, countVertices());
-		Assert.assertEquals(13, countEdges());
+		Assert.assertEquals(13 + 5, countVertices());
+		Assert.assertEquals(13 + 5 + 13, countEdges());
 		god.removeFromUniverse(universe1);
 		God god2 = new God(true);
 		god2.setName("god2");
@@ -93,8 +93,8 @@ public class TestOneToMany extends BaseLocalDbTest {
 //		universe1.init(god2);
 //		universe1.addToOwningObject();
         db.commit();
-		Assert.assertEquals(14, countVertices());
-		Assert.assertEquals(14, countEdges());
+		Assert.assertEquals(14 + 5, countVertices());
+		Assert.assertEquals(14 + 5 + 14, countEdges());
 		Assert.assertEquals("god2", universe1.getGod().getName());
 		Assert.assertEquals(2, new God(god.getVertex()).getUniverse().size());
 	}

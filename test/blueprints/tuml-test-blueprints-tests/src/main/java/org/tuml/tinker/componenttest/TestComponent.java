@@ -23,8 +23,8 @@ public class TestComponent extends BaseLocalDbTest {
 		Time t1 = new Time(st1);
 
         db.commit();
-		Assert.assertEquals(5, countEdges());
-		Assert.assertEquals(5, countVertices());
+		Assert.assertEquals(5 + 5, countVertices());
+		Assert.assertEquals(5 + 5 + 5, countEdges());
 	}
 	
 }

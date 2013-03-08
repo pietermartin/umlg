@@ -97,7 +97,7 @@ public class TumlTransactionEventHandler<T> implements TransactionEventHandler<T
                     GraphDb.incrementTransactionCount();
                     List<CompositionNode> entities = TransactionThreadEntityVar.get();
                     for (CompositionNode entity : entities) {
-                        TumlNode tumlNode = (TumlNode) entity;
+                        TumlNode tumlNode = entity;
                         List<TumlConstraintViolation> requiredConstraintViolations = tumlNode.validateMultiplicities();
                         if (!requiredConstraintViolations.isEmpty()) {
                             throw new TumlConstraintViolationException(requiredConstraintViolations);

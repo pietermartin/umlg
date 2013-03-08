@@ -29,7 +29,7 @@ public class JsonTest extends BaseLocalDbTest {
 		god.addToEmbeddedString("embeddedString2");
 		god.addToEmbeddedString("embeddedString3");
         db.commit();
-		Assert.assertEquals(4, countVertices());
+		Assert.assertEquals(4 + 1, countVertices());
 
 		ObjectMapper mapper = new ObjectMapper();
 		System.out.println(god.toJson());
@@ -64,7 +64,7 @@ public class JsonTest extends BaseLocalDbTest {
 		god.addToEmbeddedInteger(2);
 		god.addToEmbeddedInteger(3);
         db.commit();
-		Assert.assertEquals(7, countVertices());
+		Assert.assertEquals(7 + 1, countVertices());
 
 		String json = god.toJson();
 		God godtest = new God(true);

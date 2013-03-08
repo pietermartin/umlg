@@ -13,6 +13,10 @@ import org.tuml.runtime.domain.PersistentObject;
 import javax.transaction.*;
 import javax.transaction.Transaction;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Date: 2013/01/09
@@ -23,6 +27,9 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
     private TransactionEventHandler<PersistentObject> transactionEventHandler;
     private Map<TransactionIdentifier, Transaction> transactionIdentifierTransactionMap;
     private Map<Transaction, TransactionIdentifier> transactionTransactionIdentifierMap;
+    private ConcurrentMap<org.neo4j.graphdb.Transaction, ReentrantLock> transactionLockMap = new ConcurrentHashMap<org.neo4j.graphdb.Transaction, ReentrantLock>();
+    private ConcurrentMap<Object, org.neo4j.graphdb.Transaction> classTransactionMap = new ConcurrentHashMap<Object, org.neo4j.graphdb.Transaction>();
+    private ConcurrentMap<org.neo4j.graphdb.Transaction, Set<Object>> transactionClassMap = new ConcurrentHashMap<org.neo4j.graphdb.Transaction, Set<Object>>();
 
     public TumlNeo4jGraph(String directory) {
         super(directory);
@@ -237,6 +244,14 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
 
         try {
             tx.get().success();
+            ReentrantLock reentrantLock = this.transactionLockMap.remove(tx.get());
+            if (reentrantLock != null) {
+                Set<Object> objectSet = this.transactionClassMap.remove(tx.get());
+                for (Object object : objectSet) {
+                    this.classTransactionMap.remove(object);
+                }
+                reentrantLock.unlock();
+            }
         } finally {
             tx.get().finish();
             tx.remove();
@@ -290,6 +305,29 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
         // }
         // }
         // return false;
+    }
+
+    //TODO do this properly, all thread safe concurrent get put way
+    @Override
+    public boolean lockOnTransaction(Object object){
+        org.neo4j.graphdb.Transaction transaction = this.classTransactionMap.get(object);
+        if (transaction != null) {
+            //Already locked
+            this.transactionClassMap.get(transaction).add(object);
+            this.transactionLockMap.get(transaction).lock();
+            return false;
+        } else {
+            ReentrantLock reentrantLock = new ReentrantLock();
+            reentrantLock.lock();
+            if (tx.get()==null) {
+                autoStartTransaction();
+            }
+            this.transactionLockMap.put(tx.get(), reentrantLock);
+            Set<Object> objectSet = new HashSet<Object>();
+            objectSet.add(object);
+            this.transactionClassMap.put(tx.get(), objectSet);
+            return true;
+        }
     }
 
 }

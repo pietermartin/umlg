@@ -27,8 +27,8 @@ public class ManyToManyInverseTest extends BaseLocalDbTest {
         db.commit();
 		God godTest = new God(god.getVertex());
 		Assert.assertEquals(4, godTest.getIMany().size());
-		Assert.assertEquals(5, countVertices());
-		Assert.assertEquals(6, countEdges());
+		Assert.assertEquals(5 + 3, countVertices());
+		Assert.assertEquals(6 + 3 + 5, countEdges());
 		ManyA manyA1Test = new ManyA(manyA1.getVertex());
 		Assert.assertEquals(1, manyA1Test.getIManyB().size());
 		ManyB manyB1Test = new ManyB(manyB1.getVertex());
@@ -56,8 +56,8 @@ public class ManyToManyInverseTest extends BaseLocalDbTest {
         db.commit();
 		God godTest = new God(god.getVertex());
 		Assert.assertEquals(4, godTest.getIMany().size());
-		Assert.assertEquals(5, countVertices());
-		Assert.assertEquals(9, countEdges());
+		Assert.assertEquals(5 + 3, countVertices());
+		Assert.assertEquals(9 + 3 + 5, countEdges());
 		ManyA manyA1Test = new ManyA(manyA1.getVertex());
 		Assert.assertEquals(2, manyA1Test.getIManyB().size());
 		ManyB manyB1Test = new ManyB(manyB1.getVertex());
@@ -87,8 +87,8 @@ public class ManyToManyInverseTest extends BaseLocalDbTest {
         db.commit();
 		God godTest = new God(god.getVertex());
 		Assert.assertEquals(4, godTest.getIMany().size());
-		Assert.assertEquals(5, countVertices());
-		Assert.assertEquals(6, countEdges());
+		Assert.assertEquals(5 + 3, countVertices());
+		Assert.assertEquals(6 + 3 + 5, countEdges());
 		ManyA manyA1Test = new ManyA(manyA1.getVertex());
 		Assert.assertEquals(1, manyA1Test.getIManyB().size());
 		ManyB manyB1Test = new ManyB(manyB1.getVertex());
@@ -116,8 +116,8 @@ public class ManyToManyInverseTest extends BaseLocalDbTest {
         db.commit();
 		God godTest = new God(god.getVertex());
 		Assert.assertEquals(4, godTest.getIMany().size());
-		Assert.assertEquals(5, countVertices());
-		Assert.assertEquals(9, countEdges());
+		Assert.assertEquals(5 + 3, countVertices());
+		Assert.assertEquals(9 + 3 + 5, countEdges());
 		ManyA manyA1Test = new ManyA(manyA1.getVertex());
 		Assert.assertEquals(2, manyA1Test.getIManyB().size());
 		ManyB manyB1Test = new ManyB(manyB1.getVertex());

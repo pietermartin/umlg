@@ -557,7 +557,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
     private void addEdgeToMetaNode(OJAnnotatedClass annotatedClass, Class clazz) {
         OJAnnotatedOperation addEdgeToMetaNode = new OJAnnotatedOperation("addEdgeToMetaNode");
         TinkerGenerationUtil.addOverrideAnnotation(addEdgeToMetaNode);
-        addEdgeToMetaNode.getBody().addToStatements(TinkerGenerationUtil.graphDbAccess + ".addEdge(null, this.vertex, getMetaNode().getVertex(), " + TinkerGenerationUtil.TUML_NODE.getLast() + ".ALLINSTANCES_EDGE_LABEL)");
+        addEdgeToMetaNode.getBody().addToStatements(TinkerGenerationUtil.graphDbAccess + ".addEdge(null, getMetaNode().getVertex(), this.vertex, " + TinkerGenerationUtil.TUML_NODE.getLast() + ".ALLINSTANCES_EDGE_LABEL)");
         annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
         annotatedClass.addToOperations(addEdgeToMetaNode);
     }
@@ -565,7 +565,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
     private void addAllInstances(OJAnnotatedClass annotatedClass, Class clazz) {
         OJAnnotatedOperation allInstances = new OJAnnotatedOperation("allInstances");
         allInstances.setStatic(true);
-        if (TumlClassOperations.getSpecializations(clazz).isEmpty()) {
+        if (TumlClassOperations.getConcreteImplementations(clazz).isEmpty()) {
             allInstances.setReturnType(TinkerGenerationUtil.tinkerSet.getCopy().addToGenerics(TumlClassOperations.getPathName(clazz)));
         } else {
             String pathName = "? extends " + TumlClassOperations.getPathName(clazz).getLast();
@@ -575,10 +575,14 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
         OJField result = new OJField("result", TinkerGenerationUtil.tinkerSet.getCopy().addToGenerics(TumlClassOperations.getPathName(clazz)));
         result.setInitExp("new " + TinkerGenerationUtil.tumlMemorySet.getCopy().addToGenerics(TumlClassOperations.getPathName(clazz)).getLast() + "()");
         allInstances.getBody().addToLocals(result);
-        Set<Classifier> specializations = TumlClassOperations.getSpecializations(clazz);
+        Set<Classifier> specializations = TumlClassOperations.getConcreteImplementations(clazz);
+        if (!clazz.isAbstract()) {
+            specializations.add(clazz);
+        }
         for (Classifier c : specializations) {
             annotatedClass.addToImports(TumlClassOperations.getPathName(c));
-            allInstances.getBody().addToStatements("result.addAll(" + TumlClassOperations.className(c) + ".allInstances())");
+            allInstances.getBody().addToStatements("result.addAll(" + TumlClassOperations.getMetaClassName(c) + ".getInstance().getAllInstances())");
+            annotatedClass.addToImports(TumlClassOperations.getMetaClassPathName(c));
         }
 
         allInstances.getBody().addToStatements("return result");

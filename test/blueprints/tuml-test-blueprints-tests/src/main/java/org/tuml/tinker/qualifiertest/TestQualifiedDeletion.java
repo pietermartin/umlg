@@ -67,8 +67,8 @@ public class TestQualifiedDeletion extends BaseLocalDbTest {
 		many14.addToMany2(many24);
 
         db.commit();
-		Assert.assertEquals(13, countVertices());
-		Assert.assertEquals(29, countEdges());
+		Assert.assertEquals(13 + 7, countVertices());
+		Assert.assertEquals(29 + 7 + 13, countEdges());
 		Many2 many2Test = new Many2(many21.getVertex());
 		Assert.assertEquals(1, many2Test.getMany1ForQualifier1("many11").size());
 
@@ -125,18 +125,18 @@ public class TestQualifiedDeletion extends BaseLocalDbTest {
 		many14.addToMany2List(many24);
 
         db.commit();
-        Assert.assertEquals(41, countVertices());
-        Assert.assertEquals(97, countEdges());
+        Assert.assertEquals(41 + 3, countVertices());
+        Assert.assertEquals(97 + 3 + 9, countEdges());
 		Many2 many2Test = new Many2(many21.getVertex());
 		Assert.assertEquals(1, many2Test.getMany1ListForListQualifier1("many11").size());
-		
+
 		Many1 many1Test = new Many1(many11.getVertex());
 		many1Test.delete();
         db.commit();
-		
+
 		many2Test = new Many2(many21.getVertex());
 		Assert.assertTrue(many2Test.getMany1ListForListQualifier1("many11").isEmpty());
-		
+
 		Assert.assertEquals("many12", many2Test.getMany1List().get(0).getName());
 		Assert.assertEquals("many13", many2Test.getMany1List().get(1).getName());
 		Assert.assertEquals("many14", many2Test.getMany1List().get(2).getName());
@@ -152,8 +152,8 @@ public class TestQualifiedDeletion extends BaseLocalDbTest {
 		nature.addToGod(god);
         db.commit();
 
-		Assert.assertEquals(2, countVertices());
-		Assert.assertEquals(2, countEdges());
+		Assert.assertEquals(2 + 2, countVertices());
+		Assert.assertEquals(2 + 2 + 2, countEdges());
 
 		nature = new Nature(true);
 		nature.setName1("name1_1");
@@ -161,8 +161,8 @@ public class TestQualifiedDeletion extends BaseLocalDbTest {
 		nature.addToGod(god);
         db.commit();
 
-		Assert.assertEquals(3, countVertices());
-		Assert.assertEquals(3, countEdges());
+		Assert.assertEquals(3 + 2, countVertices());
+		Assert.assertEquals(3 + 2 + 3, countEdges());
 
 		nature = new Nature(true);
 		nature.setName1("name1_2");
@@ -170,8 +170,8 @@ public class TestQualifiedDeletion extends BaseLocalDbTest {
 		nature.addToGod(god);
         db.commit();
 
-		Assert.assertEquals(4, countVertices());
-		Assert.assertEquals(4, countEdges());
+		Assert.assertEquals(4 + 2, countVertices());
+		Assert.assertEquals(4 + 2 + 4, countEdges());
 
 		nature = new Nature(true);
 		nature.setName1("name1_3");
@@ -179,8 +179,8 @@ public class TestQualifiedDeletion extends BaseLocalDbTest {
 		nature.addToGod(god);
         db.commit();
 
-		Assert.assertEquals(5, countVertices());
-		Assert.assertEquals(5, countEdges());
+		Assert.assertEquals(5 + 2, countVertices());
+		Assert.assertEquals(5 + 2 + 5, countEdges());
 
 		nature = new Nature(true);
 		nature.setName1("name1_4");
@@ -188,8 +188,8 @@ public class TestQualifiedDeletion extends BaseLocalDbTest {
 		nature.addToGod(god);
         db.commit();
 
-		Assert.assertEquals(6, countVertices());
-		Assert.assertEquals(6, countEdges());
+		Assert.assertEquals(6 + 2, countVertices());
+		Assert.assertEquals(6 + 2 + 6, countEdges());
 
 		God godTest = new God(god.getVertex());
 		Set<Nature> natureForQualifier2 = godTest.getNatureForQualifier2("xxx");
@@ -206,8 +206,8 @@ public class TestQualifiedDeletion extends BaseLocalDbTest {
 		}
         db.commit();
 
-		Assert.assertEquals(5, countVertices());
-		Assert.assertEquals(5, countEdges());
+		Assert.assertEquals(5 + 2, countVertices());
+		Assert.assertEquals(5 + 2 + 5, countEdges());
 
 		God godTest3 = new God(god.getVertex());
 		natures = godTest3.getNatureForQualifier2("xxx");
