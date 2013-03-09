@@ -11,16 +11,7 @@ import org.tuml.javageneration.visitor.enumeration.TofromJsonForEnumCreator;
 import org.tuml.javageneration.visitor.interfaze.InterfaceVisitor;
 import org.tuml.javageneration.visitor.model.RootEntryPointCreator;
 import org.tuml.javageneration.visitor.operation.OperationImplementorSimple;
-import org.tuml.javageneration.visitor.property.ComponentProperyVisitor;
-import org.tuml.javageneration.visitor.property.DerivedPropertyVisitor;
-import org.tuml.javageneration.visitor.property.LookupGenerator;
-import org.tuml.javageneration.visitor.property.ManyPropertyVisitor;
-import org.tuml.javageneration.visitor.property.OnePropertyVisitor;
-import org.tuml.javageneration.visitor.property.PropertyValidatorBuilder;
-import org.tuml.javageneration.visitor.property.PropertyVisitor;
-import org.tuml.javageneration.visitor.property.QualifiedNameClassNameMapBuilder;
-import org.tuml.javageneration.visitor.property.QualifierValidator;
-import org.tuml.javageneration.visitor.property.QualifierVisitor;
+import org.tuml.javageneration.visitor.property.*;
 
 public class DefaultVisitors {
 
@@ -49,7 +40,8 @@ public class DefaultVisitors {
         result.add(new OperationImplementorSimple(Workspace.INSTANCE));
         result.add(new ToFromJsonCreator(Workspace.INSTANCE));
         result.add(new TofromJsonForEnumCreator(Workspace.INSTANCE));
-        result.add(new LookupGenerator(Workspace.INSTANCE));
+//        result.add(new LookupGenerator(Workspace.INSTANCE));
+        result.add(new LookupGenerator2(Workspace.INSTANCE));
         result.add(new ClassInterfacePropertyLookupGenerator(Workspace.INSTANCE));
         result.add(new PropertyValidatorBuilder(Workspace.INSTANCE));
         result.add(new ClassRequiredPropertyValidationBuilder(Workspace.INSTANCE));

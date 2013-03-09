@@ -23,6 +23,7 @@ import org.tuml.javageneration.util.TumlInterfaceOperations;
 import org.tuml.javageneration.util.TumlPropertyOperations;
 import org.tuml.javageneration.visitor.BaseVisitor;
 
+//This class is being deprecated, doing lookup alla uml now, allInstances.subtract(constained elements)
 public class LookupGenerator extends BaseVisitor implements Visitor<Property> {
 
 	public LookupGenerator(Workspace workspace) {
@@ -32,8 +33,10 @@ public class LookupGenerator extends BaseVisitor implements Visitor<Property> {
 	@Override
 	public void visitBefore(Property p) {
 		PropertyWrapper propertyWrapper = new PropertyWrapper(p);
-		if (!propertyWrapper.isComposite() && !(propertyWrapper.getType() instanceof Enumeration) && !propertyWrapper.isDerived() && !propertyWrapper.isQualifier()
-				&& propertyWrapper.getOtherEnd() != null && !(propertyWrapper.getOtherEnd().getType() instanceof Enumeration) && !propertyWrapper.getOtherEnd().isComposite()) {
+		if (!propertyWrapper.isComposite() && !(propertyWrapper.getType() instanceof Enumeration) && !propertyWrapper.isDerived()
+                && !propertyWrapper.isQualifier() && propertyWrapper.getOtherEnd() != null
+                && !(propertyWrapper.getOtherEnd().getType() instanceof Enumeration) && !propertyWrapper.getOtherEnd().isComposite()) {
+
 			Type compositeParent = findCompositeParent(propertyWrapper);
 			OJAnnotatedClass ojClass = findOJClass(propertyWrapper);
 			if (compositeParent != null) {

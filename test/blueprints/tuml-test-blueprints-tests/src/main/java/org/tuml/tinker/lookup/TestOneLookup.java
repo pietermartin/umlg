@@ -31,7 +31,7 @@ public class TestOneLookup extends BaseLocalDbTest {
 		c1.addToSpook(s1);
 		c2.addToSpook(s2);
         db.commit();
-		Assert.assertEquals(g, new Creature(c1.getVertex()).lookupFor_creature_spook_CompositeParent());
+		Assert.assertEquals(2, new Creature(c1.getVertex()).lookupFor_creature_spook().size());
 	}
 	
 	@Test
@@ -63,8 +63,8 @@ public class TestOneLookup extends BaseLocalDbTest {
 		manyA4.addToIManyB(manyB3);
 		manyA4.addToIManyB(manyB4);
         db.commit();
-		Assert.assertEquals(g, new ManyA(manyA4.getVertex()).lookupFor_iManyA_iManyB_CompositeParent());
-		Assert.assertEquals(g, new ManyB(manyB4.getVertex()).lookupFor_iManyB_iManyA_CompositeParent());
+		Assert.assertEquals(4, new ManyA(manyA4.getVertex()).lookupFor_iManyA_iManyB().size());
+		Assert.assertEquals(4, new ManyB(manyB4.getVertex()).lookupFor_iManyB_iManyA().size());
 	}
 	
 	@Test
@@ -115,10 +115,10 @@ public class TestOneLookup extends BaseLocalDbTest {
 		Spook s3 = new Spook(g);
         db.commit();
 
-		Assert.assertEquals(1, c1.lookupFor_creature_spook().size());
-		Assert.assertEquals(1, c2.lookupFor_creature_spook().size());
-		Assert.assertEquals(1, s1.lookupFor_spook_creature().size());
-		Assert.assertEquals(1, s2.lookupFor_spook_creature().size());
+		Assert.assertEquals(3, c1.lookupFor_creature_spook().size());
+		Assert.assertEquals(3, c2.lookupFor_creature_spook().size());
+		Assert.assertEquals(3, s1.lookupFor_spook_creature().size());
+		Assert.assertEquals(3, s2.lookupFor_spook_creature().size());
 	}
 
 	@Test
@@ -179,10 +179,7 @@ public class TestOneLookup extends BaseLocalDbTest {
 		l2_0_0.addToDevil2(d2_0_0);
         db.commit();
 		
-		//TODO
-		l2_0_0.initialiseProperty(Level2.Level2RuntimePropertyEnum.level1, false);
-		
-		Assert.assertEquals(8, l2_0_0.lookupFor_level2_devil2().size());
+		Assert.assertEquals(9, l2_0_0.lookupFor_level2_devil2().size());
 	}
 
 }

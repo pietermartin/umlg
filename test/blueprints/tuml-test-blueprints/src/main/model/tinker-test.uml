@@ -123,6 +123,9 @@
           <packagedElement xmi:type="uml:Class" xmi:id="_FFef4CQbEeKzTel_Vwmhog" name="SpecialCreature">
             <generalization xmi:id="_GrBhYCQbEeKzTel_Vwmhog" general="_Fv38AO3xEeCrW8ilxB8BWA"/>
           </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_vAT78IipEeKeSZB9UA6Gvw" clientDependency="_w4x5cIipEeKeSZB9UA6Gvw" name="ManyAA">
+            <interfaceRealization xmi:id="_w4x5cIipEeKeSZB9UA6Gvw" name="InterfaceRealization1" client="_vAT78IipEeKeSZB9UA6Gvw" supplier="_p2UC0O6uEeCKZsw1ityolg" contract="_p2UC0O6uEeCKZsw1ityolg"/>
+          </packagedElement>
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_XSCqoOwiEeCSwqyeEHd1tw" name="concretetest">
           <packagedElement xmi:type="uml:Class" xmi:id="_YuD8sOwiEeCSwqyeEHd1tw" name="God">
