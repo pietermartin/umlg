@@ -24,6 +24,8 @@ import org.tuml.javageneration.visitor.property.QualifierVisitor;
 
 public class DefaultVisitors {
 
+    private static final String META_SOURCE_FOLDER = "src/main/generated-java-meta";
+
     public static List<Visitor<?>> getDefaultJavaVisitors() {
         List<Visitor<?>> result = new ArrayList<Visitor<?>>();
         result.add(new InterfaceVisitor(Workspace.INSTANCE));
@@ -51,6 +53,7 @@ public class DefaultVisitors {
         result.add(new ClassInterfacePropertyLookupGenerator(Workspace.INSTANCE));
         result.add(new PropertyValidatorBuilder(Workspace.INSTANCE));
         result.add(new ClassRequiredPropertyValidationBuilder(Workspace.INSTANCE));
+        result.add(new MetaClassBuilder(Workspace.INSTANCE, META_SOURCE_FOLDER));
         return result;
 
 //		if (this.audit) {

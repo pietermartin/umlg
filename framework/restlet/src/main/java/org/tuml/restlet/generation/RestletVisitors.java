@@ -3,11 +3,9 @@ package org.tuml.restlet.generation;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.tuml.framework.ModelLoader;
 import org.tuml.framework.Visitor;
 import org.tuml.generation.Workspace;
 import org.tuml.javageneration.DefaultVisitors;
-import org.tuml.javageneration.TumlLibVisitors;
 import org.tuml.restlet.router.RestletRouterEnumGenerator;
 import org.tuml.restlet.visitor.clazz.*;
 import org.tuml.restlet.visitor.model.*;
