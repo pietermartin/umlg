@@ -27,6 +27,7 @@
 						<configuration>
 							<sources>
 								<source>src/main/generated-java</source>
+                                <source>src/main/generated-java-meta</source>
 							</sources>
 						</configuration>
 					</execution>

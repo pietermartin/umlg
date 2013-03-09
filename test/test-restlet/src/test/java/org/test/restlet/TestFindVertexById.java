@@ -17,7 +17,7 @@ public class TestFindVertexById extends BaseLocalDbTest {
 		Alien alien = new Alien(true);
 		alien.setName("alien1");
         db.commit();
-		Assert.assertEquals(1, countVertices());
+		Assert.assertEquals(1 + 1, countVertices());
 		
 		Vertex v = db.getVertex(2);
 		Assert.assertNotNull(v);

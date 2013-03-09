@@ -29,6 +29,7 @@ public class MetaPropertyJson {
     private Boolean manyToMany;
     private Integer upper;
     private Integer lower;
+    private Integer inverseUpper;
     private String label;
     private Boolean qualified;
     private Boolean inverseQualified;
@@ -90,6 +91,8 @@ public class MetaPropertyJson {
                 this.upper = (Integer) properties.get(name);
             } else if (name.equals("lower")) {
                 this.lower = (Integer) properties.get(name);
+            } else if (name.equals("inverseUpper")) {
+                this.inverseUpper = (Integer) properties.get(name);
             } else if (name.equals("label")) {
                 this.label = (String) properties.get(name);
             } else if (name.equals("qualified")) {
@@ -200,6 +203,10 @@ public class MetaPropertyJson {
 
     public Integer getLower() {
         return lower;
+    }
+
+    public Integer getInverseUpper() {
+        return inverseUpper;
     }
 
     public String getLabel() {

@@ -22,8 +22,8 @@ public class TestToJson extends BaseLocalDbTest {
 		Alien human = new Alien(true);
 		human.setName("human1");
 		db.commit();
-		Assert.assertEquals(1, countVertices());
-		Assert.assertEquals(1, countEdges());
+		Assert.assertEquals(1 + 1, countVertices());
+		Assert.assertEquals(1 + 1 + 1, countEdges());
 		ObjectMapper objectMapper = new ObjectMapper();
 		@SuppressWarnings("unchecked")
 		Map<String,Object> json = objectMapper.readValue(human.toJson(), Map.class);

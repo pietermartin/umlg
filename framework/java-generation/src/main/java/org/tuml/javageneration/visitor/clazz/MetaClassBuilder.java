@@ -7,7 +7,6 @@ import org.tuml.java.metamodel.annotation.OJAnnotatedClass;
 import org.tuml.framework.Visitor;
 import org.tuml.generation.Workspace;
 import org.tuml.java.metamodel.annotation.OJAnnotatedOperation;
-import org.tuml.java.metamodel.generated.OJVisibilityKindGEN;
 import org.tuml.javageneration.util.Namer;
 import org.tuml.javageneration.util.TinkerGenerationUtil;
 import org.tuml.javageneration.util.TumlClassOperations;
@@ -24,21 +23,24 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
 
     @Override
     public void visitBefore(Class clazz) {
-        //Validate that tumllib is available
-        if (!ModelLoader.INSTANCE.isTumlLibIncluded()) {
-            throw new IllegalStateException("tumllib is not imported in the model. It is required for " + MetaClassBuilder.class.getName());
-        }
         if (!clazz.isAbstract()) {
             OJAnnotatedClass metaClass = new OJAnnotatedClass(TumlClassOperations.getMetaClassName(clazz));
             OJPackage ojPackage = new OJPackage(Namer.name(clazz.getNearestPackage()) + ".meta");
             metaClass.setMyPackage(ojPackage);
             metaClass.setVisibility(TumlClassOperations.getVisibility(clazz.getVisibility()));
 
-            metaClass.setSuperclass(TinkerGenerationUtil.BASE_CLASS_TUML);
+            if (ModelLoader.INSTANCE.isTumlLibIncluded()) {
+                metaClass.setSuperclass(TinkerGenerationUtil.BASE_CLASS_TUML);
+                addDefaultConstructor(metaClass, clazz);
+                addContructorWithVertex(metaClass, clazz);
+                //Ensure the meta class instance does not also try to create a edge to a meta class as it is also a normal entity
+                addEmptyAddEdgeToMetaNode(metaClass);
+            } else {
+                metaClass.setSuperclass(TinkerGenerationUtil.BASE_META_NODE);
+                addDefaultConstructorStandAlone(metaClass, clazz);
+                addConstructorWithVertexStandAlone(metaClass, clazz);
+            }
             addToSource(metaClass);
-            addDefaultConstructor(metaClass, clazz);
-
-            addContructorWithVertex(metaClass, clazz);
             addGetEdgeToRootLabel(metaClass, clazz);
             addImplementsTumlMetaNode(metaClass);
             OJAnnotatedClass annotatedClass = findOJClass(clazz);
@@ -46,15 +48,23 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
 
             addMetaClassGetterToRoot(clazz, metaClass);
 
-            //Ensure the meta class instance does not also try to create a edge to a meta class as it is also a normal entity
-            addEmptyAddEdgeToMetaNode(metaClass);
-
             addGetAllInstances(clazz, metaClass);
 
-//        } else {
-//            OJAnnotatedClass annotatedClass = findOJClass(clazz);
-//            addAndImplementTumlLibNodeOnOriginalClass(annotatedClass, clazz, null);
         }
+    }
+
+    private void addConstructorWithVertexStandAlone(OJAnnotatedClass metaClass, Class clazz) {
+        OJConstructor constructor = new OJConstructor();
+        constructor.addParam("vertex", TinkerGenerationUtil.vertexPathName);
+        constructor.getBody().addToStatements("this.vertex= vertex");
+        metaClass.addToConstructors(constructor);
+    }
+
+    private void addDefaultConstructorStandAlone(OJAnnotatedClass metaClass, Class clazz) {
+        metaClass.getDefaultConstructor().getBody().addToStatements("this.vertex = " + TinkerGenerationUtil.graphDbAccess + ".addVertex(this.getClass().getName())");
+        metaClass.getDefaultConstructor().getBody().addToStatements("this.vertex.setProperty(\"className\", getClass().getName())");
+        metaClass.getDefaultConstructor().getBody().addToStatements("defaultCreate()");
+        metaClass.getDefaultConstructor().getBody().addToStatements("Edge edge = " + TinkerGenerationUtil.graphDbAccess + ".addEdge(null, " + TinkerGenerationUtil.graphDbAccess + ".getRoot(), this.vertex, getEdgeToRootLabel())");
     }
 
     private void addEmptyAddEdgeToMetaNode(OJAnnotatedClass metaClass) {

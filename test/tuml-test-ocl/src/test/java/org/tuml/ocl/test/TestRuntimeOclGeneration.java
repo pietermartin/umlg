@@ -17,6 +17,7 @@ import org.tuml.qualifier.Bank;
 import org.tuml.qualifier.Employee;
 import org.tuml.runtime.collection.TinkerBag;
 import org.tuml.runtime.collection.TinkerOrderedSet;
+import org.tuml.runtime.collection.TinkerSequence;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
@@ -165,7 +166,7 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		Map<String, Object> resultAsMap = (Map)result;
 		Assert.assertTrue(resultAsMap.get("bank") instanceof Bank);
-		Assert.assertTrue(resultAsMap.get("employeeNames") instanceof TinkerBag);
+		Assert.assertTrue(resultAsMap.get("employeeNames") instanceof TinkerSequence);
 		@SuppressWarnings({ "rawtypes", "unchecked" })
 		TinkerBag<String> employeeNameBag = (TinkerBag)resultAsMap.get("employeeNames");
 		Assert.assertEquals(3, employeeNameBag.size());
@@ -189,6 +190,6 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 		//The employee names should specify a Bag, bug in eclipse ocl
 		String json = TumlOclExecutor.executeOclQueryToJson("testoclmodel::org::tuml::qualifier::Bank", bank, "Tuple{bank: Bank = self, employeeNames: Sequence(String) = employee.name}");
 		System.out.println(json);
-	}	
+	}
 
 }

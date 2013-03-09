@@ -26,8 +26,8 @@ public class TestSequence extends BaseLocalDbTest {
         Assert.assertEquals("sequenceTest3", sequenceRootTest.getSequenceTest().get(2).getName());
         SequenceTest sequenceTestTest = new SequenceTest(sequenceTest2.getVertex());
         Assert.assertEquals("sequenceRoot", sequenceTestTest.getSequenceRoot().getName());
-        Assert.assertEquals(4, countVertices());
-        Assert.assertEquals(8, countEdges());
+        Assert.assertEquals(4 + 2, countVertices());
+        Assert.assertEquals(8 + 2 + 4, countEdges());
     }
 
     @Test
@@ -48,8 +48,8 @@ public class TestSequence extends BaseLocalDbTest {
         Assert.assertEquals("sequenceTest3", sequenceRootTest.getSequenceTest().get(2).getName());
         SequenceTest sequenceTestTest = new SequenceTest(sequenceTest2.getVertex());
         Assert.assertEquals("sequenceRoot", sequenceTestTest.getSequenceRoot().getName());
-        Assert.assertEquals(4, countVertices());
-        Assert.assertEquals(8, countEdges());
+        Assert.assertEquals(4 + 2, countVertices());
+        Assert.assertEquals(8 + 2 + 4, countEdges());
     }
 
     @Test
@@ -89,8 +89,8 @@ public class TestSequence extends BaseLocalDbTest {
         SequenceTest sequenceTestTest = new SequenceTest(sequenceTest2.getVertex());
         Assert.assertEquals("sequenceRoot", sequenceTestTest.getSequenceRoot().getName());
 
-        Assert.assertEquals(7, countVertices());
-        Assert.assertEquals(14, countEdges());
+        Assert.assertEquals(7 + 2, countVertices());
+        Assert.assertEquals(14 + 2 + 7, countEdges());
     }
 
     @Test
@@ -108,8 +108,8 @@ public class TestSequence extends BaseLocalDbTest {
         sequenceRoot.getSequenceTest().add(2, sequenceTest3);
         db.commit();
 
-        Assert.assertEquals(4, countVertices());
-        Assert.assertEquals(8, countEdges());
+        Assert.assertEquals(4 + 2, countVertices());
+        Assert.assertEquals(8 + 2 + 4, countEdges());
 
         sequenceTest1 = new SequenceTest(sequenceTest1.getVertex());
         sequenceTest1.removeFromSequenceRoot(sequenceRoot);
@@ -117,8 +117,8 @@ public class TestSequence extends BaseLocalDbTest {
 
         db.commit();
 
-        Assert.assertEquals(3, countVertices());
-        Assert.assertEquals(6, countEdges());
+        Assert.assertEquals(3 + 2, countVertices());
+        Assert.assertEquals(6 + 2 + 3, countEdges());
 
         sequenceRoot = new SequenceRoot(sequenceRoot.getVertex());
         Assert.assertEquals(2, sequenceRoot.getSequenceTest().size());
@@ -143,8 +143,8 @@ public class TestSequence extends BaseLocalDbTest {
         sequenceRoot.getSequenceTest().add(2, sequenceTest3);
         db.commit();
 
-        Assert.assertEquals(4, countVertices());
-        Assert.assertEquals(8, countEdges());
+        Assert.assertEquals(4 + 2, countVertices());
+        Assert.assertEquals(8 + 2 + 4, countEdges());
         Assert.assertEquals(3, sequenceRoot.getSequenceTest().size());
 
         sequenceRoot = new SequenceRoot(sequenceRoot.getVertex());
@@ -165,8 +165,8 @@ public class TestSequence extends BaseLocalDbTest {
         db.commit();
 
         sequenceRoot = new SequenceRoot(sequenceRoot.getVertex());
-        Assert.assertEquals(1, countVertices());
-        Assert.assertEquals(1, countEdges());
+        Assert.assertEquals(1 + 2, countVertices());
+        Assert.assertEquals(1 + 2 + 1, countEdges());
         Assert.assertEquals(0, sequenceRoot.getSequenceTest().size());
 
     }
@@ -180,16 +180,16 @@ public class TestSequence extends BaseLocalDbTest {
         sequenceNotUniqueTest1.setName("sequenceNotUniqueTest1");
 
         db.commit();
-        Assert.assertEquals(3, countVertices());
-        Assert.assertEquals(5, countEdges());
+        Assert.assertEquals(3 + 2, countVertices());
+        Assert.assertEquals(5 + 2 + 2, countEdges());
 
         SequenceNotUniqueTest sequenceNotUniqueTest2 = new SequenceNotUniqueTest(sequenceNotUniqueRoot);
         sequenceNotUniqueTest2.setName("sequenceNotUniqueTest2");
         SequenceNotUniqueTest sequenceNotUniqueTest3 = new SequenceNotUniqueTest(sequenceNotUniqueRoot);
         sequenceNotUniqueTest3.setName("sequenceNotUniqueTest3");
         db.commit();
-        Assert.assertEquals(7, countVertices());
-        Assert.assertEquals(11, countEdges());
+        Assert.assertEquals(7 + 2, countVertices());
+        Assert.assertEquals(11 + 2 + 4, countEdges());
         sequenceNotUniqueTest1 = new SequenceNotUniqueTest(sequenceNotUniqueTest1.getVertex());
         Assert.assertEquals("sequenceNotUniqueRoot", sequenceNotUniqueTest1.getSequenceNotUniqueRoot().getName());
         sequenceNotUniqueRoot = new SequenceNotUniqueRoot(sequenceNotUniqueRoot.getVertex());
@@ -202,8 +202,8 @@ public class TestSequence extends BaseLocalDbTest {
         sequenceNotUniqueRoot.removeFromSequenceNotUniqueTest(sequenceNotUniqueTest1);
         sequenceNotUniqueTest1.delete();
         db.commit();
-        Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(8, countEdges());
+        Assert.assertEquals(5 + 2, countVertices());
+        Assert.assertEquals(8 + 2 + 3, countEdges());
 
         sequenceNotUniqueRoot = new SequenceNotUniqueRoot(sequenceNotUniqueRoot.getVertex());
         sequenceNotUniqueTest2 = new SequenceNotUniqueTest(sequenceNotUniqueTest2.getVertex());
@@ -214,8 +214,8 @@ public class TestSequence extends BaseLocalDbTest {
         sequenceNotUniqueTest3.delete();
 
         db.commit();
-        Assert.assertEquals(1, countVertices());
-        Assert.assertEquals(1, countEdges());
+        Assert.assertEquals(1 + 2, countVertices());
+        Assert.assertEquals(1 + 2 + 1, countEdges());
 
     }
 
@@ -231,8 +231,8 @@ public class TestSequence extends BaseLocalDbTest {
         SequenceNotUniqueTest sequenceNotUniqueTest3 = new SequenceNotUniqueTest(sequenceNotUniqueRoot);
         sequenceNotUniqueTest3.setName("sequenceNotUniqueTest3");
         db.commit();
-        Assert.assertEquals(7, countVertices());
-        Assert.assertEquals(11, countEdges());
+        Assert.assertEquals(7 + 2, countVertices());
+        Assert.assertEquals(11 + 2 + 4, countEdges());
 
         sequenceNotUniqueRoot.getSequenceNotUniqueTest().add(2, sequenceNotUniqueTest1);
         sequenceNotUniqueRoot.getSequenceNotUniqueTest().add(2, sequenceNotUniqueTest1);
@@ -241,8 +241,8 @@ public class TestSequence extends BaseLocalDbTest {
         sequenceNotUniqueRoot.getSequenceNotUniqueTest().add(0, sequenceNotUniqueTest3);
         sequenceNotUniqueRoot.getSequenceNotUniqueTest().add(0, sequenceNotUniqueTest3);
         db.commit();
-        Assert.assertEquals(9, countVertices());
-        Assert.assertEquals(25, countEdges());
+        Assert.assertEquals(9 + 2, countVertices());
+        Assert.assertEquals(25 + 2 + 4, countEdges());
 
         sequenceNotUniqueTest1 = new SequenceNotUniqueTest(sequenceNotUniqueTest1.getVertex());
         sequenceNotUniqueRoot = sequenceNotUniqueTest1.getSequenceNotUniqueRoot();
@@ -264,31 +264,31 @@ public class TestSequence extends BaseLocalDbTest {
         sequenceNotUniqueRoot.removeFromSequenceNotUniqueTest(sequenceNotUniqueTest1);
         db.commit();
 
-        Assert.assertEquals(8, countVertices());
-        Assert.assertEquals(22, countEdges());
+        Assert.assertEquals(8 + 2, countVertices());
+        Assert.assertEquals(22 + 2 + 4, countEdges());
 
         sequenceNotUniqueRoot = new SequenceNotUniqueRoot(sequenceNotUniqueRoot.getVertex());
         sequenceNotUniqueTest2 = new SequenceNotUniqueTest(sequenceNotUniqueTest2.getVertex());
         sequenceNotUniqueRoot.removeFromSequenceNotUniqueTest(sequenceNotUniqueTest2);
 
         db.commit();
-        Assert.assertEquals(8, countVertices());
-        Assert.assertEquals(20, countEdges());
+        Assert.assertEquals(8 + 2, countVertices());
+        Assert.assertEquals(20 + 2 + 4, countEdges());
 
         sequenceNotUniqueRoot = new SequenceNotUniqueRoot(sequenceNotUniqueRoot.getVertex());
         sequenceNotUniqueTest1 = new SequenceNotUniqueTest(sequenceNotUniqueTest1.getVertex());
         sequenceNotUniqueRoot.removeFromSequenceNotUniqueTest(sequenceNotUniqueTest1);
         db.commit();
 
-        Assert.assertEquals(8, countVertices());
-        Assert.assertEquals(18, countEdges());
+        Assert.assertEquals(8 + 2, countVertices());
+        Assert.assertEquals(18 + 2 + 4, countEdges());
 
         sequenceNotUniqueTest1 = new SequenceNotUniqueTest(sequenceNotUniqueTest1.getVertex());
         sequenceNotUniqueTest1.delete();
         db.commit();
 
-        Assert.assertEquals(6, countVertices());
-        Assert.assertEquals(15, countEdges());
+        Assert.assertEquals(6 + 2, countVertices());
+        Assert.assertEquals(15 + 2 + 3, countEdges());
 
     }
 
@@ -304,8 +304,8 @@ public class TestSequence extends BaseLocalDbTest {
         SequenceNotUniqueTest sequenceNotUniqueTest3 = new SequenceNotUniqueTest(sequenceNotUniqueRoot);
         sequenceNotUniqueTest3.setName("sequenceNotUniqueTest3");
         db.commit();
-        Assert.assertEquals(7, countVertices());
-        Assert.assertEquals(11, countEdges());
+        Assert.assertEquals(7 + 2, countVertices());
+        Assert.assertEquals(11 + 2 + 4, countEdges());
         sequenceNotUniqueRoot = new SequenceNotUniqueRoot(sequenceNotUniqueRoot.getVertex());
         Assert.assertEquals("sequenceNotUniqueTest1", sequenceNotUniqueRoot.getSequenceNotUniqueTest().get(0).getName());
         Assert.assertEquals("sequenceNotUniqueTest2", sequenceNotUniqueRoot.getSequenceNotUniqueTest().get(1).getName());
@@ -316,8 +316,8 @@ public class TestSequence extends BaseLocalDbTest {
         sequenceNotUniqueTest1 = new SequenceNotUniqueTest(sequenceNotUniqueTest1.getVertex());
         sequenceNotUniqueTest1.delete();
         db.commit();
-        Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(8, countEdges());
+        Assert.assertEquals(5 + 2, countVertices());
+        Assert.assertEquals(8 + 2 + 3, countEdges());
 
         sequenceNotUniqueRoot = new SequenceNotUniqueRoot(sequenceNotUniqueRoot.getVertex());
         sequenceNotUniqueRoot.getSequenceNotUniqueTest().remove(1);
@@ -328,8 +328,8 @@ public class TestSequence extends BaseLocalDbTest {
         sequenceNotUniqueTest2.delete();
 
         db.commit();
-        Assert.assertEquals(1, countVertices());
-        Assert.assertEquals(1, countEdges());
+        Assert.assertEquals(1 + 2, countVertices());
+        Assert.assertEquals(1 + 2 + 1, countEdges());
 
     }
 
@@ -345,8 +345,8 @@ public class TestSequence extends BaseLocalDbTest {
         SequenceNotUniqueTest sequenceNotUniqueTest3 = new SequenceNotUniqueTest(sequenceNotUniqueRoot);
         sequenceNotUniqueTest3.setName("sequenceNotUniqueTest3");
         db.commit();
-        Assert.assertEquals(7, countVertices());
-        Assert.assertEquals(11, countEdges());
+        Assert.assertEquals(7 + 2, countVertices());
+        Assert.assertEquals(11 + 2 + 4, countEdges());
         sequenceNotUniqueRoot = new SequenceNotUniqueRoot(sequenceNotUniqueRoot.getVertex());
         Assert.assertEquals("sequenceNotUniqueTest1", sequenceNotUniqueRoot.getSequenceNotUniqueTest().get(0).getName());
         Assert.assertEquals("sequenceNotUniqueTest2", sequenceNotUniqueRoot.getSequenceNotUniqueTest().get(1).getName());
@@ -355,8 +355,8 @@ public class TestSequence extends BaseLocalDbTest {
         sequenceNotUniqueTest1 = new SequenceNotUniqueTest(sequenceNotUniqueTest1.getVertex());
         sequenceNotUniqueTest1.delete();
         db.commit();
-        Assert.assertEquals(5, countVertices());
-        Assert.assertEquals(8, countEdges());
+        Assert.assertEquals(5 + 2, countVertices());
+        Assert.assertEquals(8 + 2 + 3, countEdges());
 
         sequenceNotUniqueTest3 = new SequenceNotUniqueTest(sequenceNotUniqueTest3.getVertex());
         sequenceNotUniqueTest3.delete();
@@ -364,8 +364,8 @@ public class TestSequence extends BaseLocalDbTest {
         sequenceNotUniqueTest2.delete();
 
         db.commit();
-        Assert.assertEquals(1, countVertices());
-        Assert.assertEquals(1, countEdges());
+        Assert.assertEquals(1 + 2, countVertices());
+        Assert.assertEquals(1 + 2 + 1, countEdges());
     }
 
 
@@ -420,8 +420,8 @@ public class TestSequence extends BaseLocalDbTest {
         SequenceNotUniqueTest sequenceNotUniqueTest3 = new SequenceNotUniqueTest(sequenceNotUniqueRoot);
         sequenceNotUniqueTest3.setName("sequenceNotUniqueTest3");
         db.commit();
-        Assert.assertEquals(7, countVertices());
-        Assert.assertEquals(11, countEdges());
+        Assert.assertEquals(7 + 2, countVertices());
+        Assert.assertEquals(11 + 2 + 4, countEdges());
         sequenceNotUniqueRoot = new SequenceNotUniqueRoot(sequenceNotUniqueRoot.getVertex());
         Assert.assertEquals(3, sequenceNotUniqueRoot.getSequenceNotUniqueTest().size());
         Assert.assertEquals("sequenceNotUniqueTest3", sequenceNotUniqueRoot.getSequenceNotUniqueTest().get(2).getName());
@@ -443,8 +443,8 @@ public class TestSequence extends BaseLocalDbTest {
         sequenceNotUniqueTest3.setName("sequenceNotUniqueTest3");
         sequenceNotUniqueRoot.getSequenceNotUniqueTest().add(sequenceNotUniqueTest3);
         db.commit();
-        Assert.assertEquals(7, countVertices());
-        Assert.assertEquals(11, countEdges());
+        Assert.assertEquals(7 + 2, countVertices());
+        Assert.assertEquals(11 + 2 + 4, countEdges());
         sequenceNotUniqueRoot = new SequenceNotUniqueRoot(sequenceNotUniqueRoot.getVertex());
         Assert.assertEquals(3, sequenceNotUniqueRoot.getSequenceNotUniqueTest().size());
         Assert.assertEquals("sequenceNotUniqueTest3", sequenceNotUniqueRoot.getSequenceNotUniqueTest().get(2).getName());
