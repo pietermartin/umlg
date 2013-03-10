@@ -44,8 +44,13 @@ public class PropertyValidatorBuilder extends BaseVisitor implements Visitor<Pro
 		owner.addToImports(new OJPathName("java.util.ArrayList"));
 		validateProperty.getBody().addToLocals(result);
 
+        int count = 0;
 		for (TumlValidationEnum e : TumlValidationEnum.values()) {
 			if (propertyWrapper.hasValidation(e)) {
+                count++;
+                if (count == 2) {
+                    System.out.println("stop");
+                }
 				OJIfStatement ifValidate;
 				if (e.getAttributes().length > 0) {
 					ifValidate = new OJIfStatement("!" + TinkerGenerationUtil.TumlValidator.getLast() + "." + e.getMethodName() + "("

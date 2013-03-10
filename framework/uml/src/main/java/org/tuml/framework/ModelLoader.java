@@ -18,17 +18,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.ocl.Environment;
 import org.eclipse.ocl.uml.UMLEnvironment;
 import org.eclipse.ocl.uml.UMLEnvironmentFactory;
-import org.eclipse.uml2.uml.Classifier;
-import org.eclipse.uml2.uml.Element;
-import org.eclipse.uml2.uml.Generalization;
-import org.eclipse.uml2.uml.Interface;
-import org.eclipse.uml2.uml.InterfaceRealization;
-import org.eclipse.uml2.uml.Model;
-import org.eclipse.uml2.uml.NamedElement;
-import org.eclipse.uml2.uml.PackageImport;
-import org.eclipse.uml2.uml.Profile;
-import org.eclipse.uml2.uml.Stereotype;
-import org.eclipse.uml2.uml.UMLPackage;
+import org.eclipse.uml2.uml.*;
 import org.eclipse.uml2.uml.resource.UMLResource;
 import org.eclipse.uml2.uml.resources.ResourcesPlugin;
 import org.eclipse.uml2.uml.util.UMLUtil;
@@ -121,6 +111,17 @@ public class ModelLoader {
         }
     }
 
+    public List<Constraint> getConstraints(final Property p) {
+        List<Constraint> results = new ArrayList<Constraint>();
+        filter(results, this.model, new Filter() {
+            @Override
+            public boolean filter(Element e) {
+                return e instanceof Constraint && ((Constraint) e).getConstrainedElements().contains(p);
+            }
+        });
+        return results;
+    }
+
     public List<Generalization> getSpecifics(final Classifier c) {
         List<Generalization> results = new ArrayList<Generalization>();
         filter(results, this.model, new Filter() {
@@ -195,7 +196,7 @@ public class ModelLoader {
         URIConverter.URI_MAP.put(URI.createURI(UMLResource.PROFILES_PATHMAP), uri.appendSegment("profiles").appendSegment(""));
     }
 
-    public String findPathJar(Class<?> context) throws IllegalStateException {
+    public String findPathJar(java.lang.Class<?> context) throws IllegalStateException {
         URL location = context.getResource('/' + context.getName().replace(".", "/")
                 + ".class");
         String jarPath = location.getPath();

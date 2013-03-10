@@ -10,6 +10,7 @@ import org.tuml.tinker.collectiontest.*;
 import org.tuml.tinker.componenttest.TestComponent;
 import org.tuml.tinker.concretetest.TestNonCompositeOneToOne;
 import org.tuml.tinker.concretetest.TestOneToMany;
+import org.tuml.tinker.constraint.ConstrainedPropertyTest;
 import org.tuml.tinker.deletiontest.DeletionInheritenceTest;
 import org.tuml.tinker.deletiontest.DeletionTest;
 import org.tuml.tinker.deletiontest.EmbeddedSetDeletionTest;
@@ -55,7 +56,8 @@ import org.tuml.transaction.test.TransactionSuspendResumeTest;
         TestQualifiedDeletion.class, TestQualifier.class, TestQualifierChangeEvent.class, TestQualifierOnManyToMany.class,
         TestMetaQueries.class, TestQueryBaseModelTumlAssociation.class,
         TestValidation.class,
-        TransactionSuspendResumeTest.class})
+        TransactionSuspendResumeTest.class,
+        ConstrainedPropertyTest.class})
 public class AllTest {
 
 }

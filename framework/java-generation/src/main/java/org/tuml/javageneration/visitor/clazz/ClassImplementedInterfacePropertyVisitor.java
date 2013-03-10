@@ -15,6 +15,7 @@ import org.tuml.javageneration.util.TumlClassOperations;
 import org.tuml.javageneration.visitor.BaseVisitor;
 import org.tuml.javageneration.visitor.property.ManyPropertyVisitor;
 import org.tuml.javageneration.visitor.property.OnePropertyVisitor;
+import org.tuml.javageneration.visitor.property.PropertyConstraintBuilder;
 import org.tuml.javageneration.visitor.property.PropertyValidatorBuilder;
 
 public class ClassImplementedInterfacePropertyVisitor extends BaseVisitor implements Visitor<Class> {
@@ -61,6 +62,7 @@ public class ClassImplementedInterfacePropertyVisitor extends BaseVisitor implem
 					OnePropertyVisitor.buildOneAdder(owner, propertyWrapper);
 					OnePropertyVisitor.buildSetter(owner, propertyWrapper);
 					PropertyValidatorBuilder.buildValidator(owner, propertyWrapper);
+                    PropertyConstraintBuilder.buildCheckConstaint(owner, propertyWrapper);
 				}
 			}
 		}

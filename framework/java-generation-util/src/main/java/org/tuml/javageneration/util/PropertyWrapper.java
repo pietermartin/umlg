@@ -8,35 +8,9 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.uml2.uml.AggregationKind;
-import org.eclipse.uml2.uml.Association;
-import org.eclipse.uml2.uml.BehavioredClassifier;
+import org.eclipse.uml2.uml.*;
 import org.eclipse.uml2.uml.Class;
-import org.eclipse.uml2.uml.Classifier;
-import org.eclipse.uml2.uml.ConnectorEnd;
-import org.eclipse.uml2.uml.DataType;
-import org.eclipse.uml2.uml.Dependency;
-import org.eclipse.uml2.uml.Deployment;
-import org.eclipse.uml2.uml.Element;
-import org.eclipse.uml2.uml.Enumeration;
-import org.eclipse.uml2.uml.Interface;
-import org.eclipse.uml2.uml.LiteralString;
-import org.eclipse.uml2.uml.NamedElement;
-import org.eclipse.uml2.uml.Namespace;
-import org.eclipse.uml2.uml.OpaqueExpression;
 import org.eclipse.uml2.uml.Package;
-import org.eclipse.uml2.uml.PackageableElement;
-import org.eclipse.uml2.uml.ParameterableElement;
-import org.eclipse.uml2.uml.PrimitiveType;
-import org.eclipse.uml2.uml.Property;
-import org.eclipse.uml2.uml.RedefinableElement;
-import org.eclipse.uml2.uml.Stereotype;
-import org.eclipse.uml2.uml.StringExpression;
-import org.eclipse.uml2.uml.TemplateParameter;
-import org.eclipse.uml2.uml.Type;
-import org.eclipse.uml2.uml.Usage;
-import org.eclipse.uml2.uml.ValueSpecification;
-import org.eclipse.uml2.uml.VisibilityKind;
 import org.tuml.java.metamodel.OJPathName;
 import org.tuml.framework.ModelLoader;
 import org.tuml.javageneration.validation.Email;
@@ -364,6 +338,10 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 
     public String validator() {
         return TumlPropertyOperations.validator(this.property);
+    }
+
+    public String checkConstraint(Constraint constraint) {
+        return TumlPropertyOperations.checkConstraint(this.property, constraint);
     }
 
     public boolean isPrimitive() {

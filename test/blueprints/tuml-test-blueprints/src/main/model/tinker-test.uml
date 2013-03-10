@@ -129,6 +129,9 @@
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_XSCqoOwiEeCSwqyeEHd1tw" name="concretetest">
           <packagedElement xmi:type="uml:Class" xmi:id="_YuD8sOwiEeCSwqyeEHd1tw" name="God">
+            <ownedRule xmi:id="_rT7BYIi3EeKeSZB9UA6Gvw" name="ConstraintCheckNameNoX" constrainedElement="_le4goIi3EeKeSZB9UA6Gvw">
+              <specification xmi:type="uml:LiteralString" xmi:id="_rT9doIi3EeKeSZB9UA6Gvw" name="constraintSpec" value="self.constraintTest.indexOf('X')=-1"/>
+            </ownedRule>
             <generalization xmi:id="__YWlECXHEeKbPYSfIbmXag">
               <general xmi:type="uml:Class" href="tuml-lib.uml#_FAMz0CXHEeKbPYSfIbmXag"/>
             </generalization>
@@ -292,6 +295,11 @@
             <ownedAttribute xmi:id="_1BOpsDAOEeK9AeutZ8kzPA" name="testEmbedded" type="_lYrngDAOEeK9AeutZ8kzPA" aggregation="composite" association="_1BP30DAOEeK9AeutZ8kzPA">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_1BOpsTAOEeK9AeutZ8kzPA"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_1BOpsjAOEeK9AeutZ8kzPA" value="*"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:id="_le4goIi3EeKeSZB9UA6Gvw" name="constraintTest" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_l0EtgIi3EeKeSZB9UA6Gvw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_l0GisIi3EeKeSZB9UA6Gvw" value="1"/>
             </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Class" xmi:id="_FTxxYOzqEeCemKc79Sc_aw" name="Universe">
@@ -1475,6 +1483,74 @@
             <ownedEnd xmi:id="_4nd_bvcdEeG31Myz9ELsRQ" name="nevil1One" visibility="public" type="_fF8s8PcdEeG31Myz9ELsRQ" association="_4nd_avcdEeG31Myz9ELsRQ">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_4nd_cPcdEeG31Myz9ELsRQ" value="1"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_4nd_b_cdEeG31Myz9ELsRQ" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="_RoqAAIlaEeKeSZB9UA6Gvw" name="constraints">
+          <packagedElement xmi:type="uml:Class" xmi:id="_sxGM8IlaEeKeSZB9UA6Gvw" name="ConstraintRoot">
+            <ownedAttribute xmi:id="_Wfp5QIlcEeKeSZB9UA6Gvw" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Y9TAYIlcEeKeSZB9UA6Gvw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Y9TncIlcEeKeSZB9UA6Gvw" value="1"/>
+              <defaultValue xmi:type="uml:LiteralString" xmi:id="_Y9zWsIlcEeKeSZB9UA6Gvw">
+                <value xsi:nil="true"/>
+              </defaultValue>
+            </ownedAttribute>
+            <ownedAttribute xmi:id="_nmxyQIlcEeKeSZB9UA6Gvw" name="constraintChild1" type="_uGxmcIlaEeKeSZB9UA6Gvw" aggregation="composite" association="_nmyZUIlcEeKeSZB9UA6Gvw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_nmxyQYlcEeKeSZB9UA6Gvw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_nmxyQolcEeKeSZB9UA6Gvw" value="*"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:id="_q5uwwIlcEeKeSZB9UA6Gvw" name="constraintChild2" type="_vMbm8IlaEeKeSZB9UA6Gvw" aggregation="composite" association="_q5vX0IlcEeKeSZB9UA6Gvw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_q5uwwYlcEeKeSZB9UA6Gvw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_q5uwwolcEeKeSZB9UA6Gvw" value="*"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_uGxmcIlaEeKeSZB9UA6Gvw" name="ConstraintChild1">
+            <ownedRule xmi:id="_865QIIlcEeKeSZB9UA6Gvw" name="Constraint1" constrainedElement="_2tbBQIlcEeKeSZB9UA6Gvw">
+              <specification xmi:type="uml:OpaqueExpression" xmi:id="_RHoPMIldEeKeSZB9UA6Gvw" name="constraintForChild2">
+                <language>OCL</language>
+                <body>self.constraintRoot.constraintChild2->includes(self.constraintChild2)</body>
+              </specification>
+            </ownedRule>
+            <ownedAttribute xmi:id="_aC8Z0IlcEeKeSZB9UA6Gvw" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_dSPnYIlcEeKeSZB9UA6Gvw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_dSQ1gIlcEeKeSZB9UA6Gvw" value="1"/>
+              <defaultValue xmi:type="uml:LiteralString" xmi:id="_dSSqsIlcEeKeSZB9UA6Gvw">
+                <value xsi:nil="true"/>
+              </defaultValue>
+            </ownedAttribute>
+            <ownedAttribute xmi:id="_2tbBQIlcEeKeSZB9UA6Gvw" name="constraintChild2" type="_vMbm8IlaEeKeSZB9UA6Gvw" association="_2tboUIlcEeKeSZB9UA6Gvw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_2tbBQYlcEeKeSZB9UA6Gvw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_2tbBQolcEeKeSZB9UA6Gvw" value="1"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_vMbm8IlaEeKeSZB9UA6Gvw" name="ConstraintChild2">
+            <ownedAttribute xmi:id="_d3ELsIlcEeKeSZB9UA6Gvw" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_fJ0NAIlcEeKeSZB9UA6Gvw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_fJ00EIlcEeKeSZB9UA6Gvw" value="1"/>
+              <defaultValue xmi:type="uml:LiteralString" xmi:id="_fJ4ecIlcEeKeSZB9UA6Gvw">
+                <value xsi:nil="true"/>
+              </defaultValue>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_nmyZUIlcEeKeSZB9UA6Gvw" name="constraintRoot_constraintChild1_1" memberEnd="_nmyZUYlcEeKeSZB9UA6Gvw _nmxyQIlcEeKeSZB9UA6Gvw" navigableOwnedEnd="_nmyZUYlcEeKeSZB9UA6Gvw">
+            <ownedEnd xmi:id="_nmyZUYlcEeKeSZB9UA6Gvw" name="constraintRoot" type="_sxGM8IlaEeKeSZB9UA6Gvw" association="_nmyZUIlcEeKeSZB9UA6Gvw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_nmyZUolcEeKeSZB9UA6Gvw" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_nmyZU4lcEeKeSZB9UA6Gvw" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_q5vX0IlcEeKeSZB9UA6Gvw" name="constraintRoot_constraintChild2_1" memberEnd="_q5vX0YlcEeKeSZB9UA6Gvw _q5uwwIlcEeKeSZB9UA6Gvw" navigableOwnedEnd="_q5vX0YlcEeKeSZB9UA6Gvw">
+            <ownedEnd xmi:id="_q5vX0YlcEeKeSZB9UA6Gvw" name="constraintRoot" type="_sxGM8IlaEeKeSZB9UA6Gvw" association="_q5vX0IlcEeKeSZB9UA6Gvw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_q5vX0olcEeKeSZB9UA6Gvw" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_q5vX04lcEeKeSZB9UA6Gvw" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_2tboUIlcEeKeSZB9UA6Gvw" name="constraintChild1_constraintChild2_1" memberEnd="_2tboUYlcEeKeSZB9UA6Gvw _2tbBQIlcEeKeSZB9UA6Gvw" navigableOwnedEnd="_2tboUYlcEeKeSZB9UA6Gvw">
+            <ownedEnd xmi:id="_2tboUYlcEeKeSZB9UA6Gvw" name="constraintChild1" type="_uGxmcIlaEeKeSZB9UA6Gvw" association="_2tboUIlcEeKeSZB9UA6Gvw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_2tboUolcEeKeSZB9UA6Gvw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_2tboU4lcEeKeSZB9UA6Gvw" value="1"/>
             </ownedEnd>
           </packagedElement>
         </packagedElement>

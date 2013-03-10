@@ -20,4 +20,14 @@ public class TestPrimitiveRemoval extends BaseLocalDbTest {
 		Assert.assertNull(gTest.getName());
 	}
 
+    @Test(expected = RuntimeException.class)
+    public void testNameAddToOneAlreadySet() {
+        God g = new God(true);
+        g.setName("G");
+        db.commit();
+        God gTest = new God(g.getVertex());
+        Assert.assertNotNull(gTest.getName());
+        g.addToName("asdasdasd");
+    }
+
 }

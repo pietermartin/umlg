@@ -4,9 +4,6 @@
     <availablePage xmi:id="_1chEMQAOEeKpVr_ntT6cLA">
       <emfPageIdentifier href="tinker-test.notation#_1chEMAAOEeKpVr_ntT6cLA"/>
     </availablePage>
-    <availablePage xmi:id="_1chEMwAOEeKpVr_ntT6cLA">
-      <emfPageIdentifier href="tinker-test.notation#_1chEMgAOEeKpVr_ntT6cLA"/>
-    </availablePage>
     <availablePage xmi:id="_1chENQAOEeKpVr_ntT6cLA">
       <emfPageIdentifier href="tinker-test.notation#_1chENAAOEeKpVr_ntT6cLA"/>
     </availablePage>
@@ -58,13 +55,16 @@
     <availablePage>
       <emfPageIdentifier href="tinker-test.notation#_Bjw3IIaIEeKeSZB9UA6Gvw"/>
     </availablePage>
+    <availablePage>
+      <emfPageIdentifier href="tinker-test.notation#_HkiPsIlaEeKeSZB9UA6Gvw"/>
+    </availablePage>
+    <availablePage>
+      <emfPageIdentifier href="tinker-test.notation#_rs5lAIlaEeKeSZB9UA6Gvw"/>
+    </availablePage>
   </pageList>
   <sashModel xmi:id="_1dMZogAOEeKpVr_ntT6cLA" currentSelection="_1dMZoAAOEeKpVr_ntT6cLA">
     <windows xmi:id="_1dMZoQAOEeKpVr_ntT6cLA">
       <children xsi:type="di:TabFolder" xmi:id="_1dMZoAAOEeKpVr_ntT6cLA">
-        <children>
-          <emfPageIdentifier href="tinker-test.notation#_1chrQAAOEeKpVr_ntT6cLA"/>
-        </children>
         <children>
           <emfPageIdentifier href="tinker-test.notation#_1chrRAAOEeKpVr_ntT6cLA"/>
         </children>
@@ -94,6 +94,15 @@
         </children>
         <children>
           <emfPageIdentifier href="tinker-test.notation#_1chENgAOEeKpVr_ntT6cLA"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="tinker-test.notation#_1chrQAAOEeKpVr_ntT6cLA"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="tinker-test.notation#_HkiPsIlaEeKeSZB9UA6Gvw"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="tinker-test.notation#_rs5lAIlaEeKeSZB9UA6Gvw"/>
         </children>
       </children>
     </windows>

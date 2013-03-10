@@ -4,22 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.uml2.uml.Association;
-import org.eclipse.uml2.uml.BehavioredClassifier;
+import org.eclipse.uml2.uml.*;
 import org.eclipse.uml2.uml.Class;
-import org.eclipse.uml2.uml.Classifier;
-import org.eclipse.uml2.uml.DataType;
-import org.eclipse.uml2.uml.Element;
-import org.eclipse.uml2.uml.Enumeration;
-import org.eclipse.uml2.uml.Interface;
-import org.eclipse.uml2.uml.PrimitiveType;
-import org.eclipse.uml2.uml.Property;
-import org.eclipse.uml2.uml.Type;
 import org.eclipse.uml2.uml.internal.operations.PropertyOperations;
+import org.tuml.framework.ModelLoader;
 import org.tuml.java.metamodel.OJPathName;
 import org.tuml.java.metamodel.OJSimpleStatement;
 
 public final class TumlPropertyOperations extends PropertyOperations {
+
+    public static List<Constraint> getConstraints(Property p) {
+        return ModelLoader.INSTANCE.getConstraints(p);
+    }
 
 	public static Type findCompositeParent(PropertyWrapper propertyWrapper, PropertyWrapper otherEnd) {
 		List<Type> orderedListOfCompositeTypes = new ArrayList<Type>();
@@ -228,7 +224,11 @@ public final class TumlPropertyOperations extends PropertyOperations {
 		return "validate" + StringUtils.capitalize(property.getName());
 	}
 
-	public static String adder(Property property) {
+    public static String checkConstraint(Property property, Constraint constraint) {
+        return "checkConstraintForProperty" + StringUtils.capitalize(property.getName() + "AndConstraint" + StringUtils.capitalize(constraint.getName()));
+    }
+
+    public static String adder(Property property) {
 		return "addTo" + StringUtils.capitalize(property.getName());
 	}
 
