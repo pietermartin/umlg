@@ -1512,6 +1512,12 @@
             </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Class" xmi:id="_uGxmcIlaEeKeSZB9UA6Gvw" name="ConstraintChild1">
+            <ownedRule xmi:id="_865QIIlcEeKeSZB9UA6Gvw" name="Constraint1" constrainedElement="_2tbBQIlcEeKeSZB9UA6Gvw">
+              <specification xmi:type="uml:OpaqueExpression" xmi:id="_RHoPMIldEeKeSZB9UA6Gvw" name="constraintForChild2">
+                <language>OCL</language>
+                <body>self.constraintRoot.constraintChild2->includes(self.constraintChild2)</body>
+              </specification>
+            </ownedRule>
             <ownedAttribute xmi:id="_aC8Z0IlcEeKeSZB9UA6Gvw" name="name" visibility="public">
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_dSPnYIlcEeKeSZB9UA6Gvw"/>

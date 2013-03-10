@@ -1,15 +1,17 @@
 package org.tuml.javageneration.visitor.property;
 
+import org.eclipse.uml2.uml.Constraint;
 import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.Property;
 import org.tuml.framework.Visitor;
 import org.tuml.generation.Workspace;
+import org.tuml.java.metamodel.*;
 import org.tuml.java.metamodel.annotation.OJAnnotatedClass;
 import org.tuml.java.metamodel.annotation.OJAnnotatedOperation;
-import org.tuml.javageneration.util.PropertyWrapper;
-import org.tuml.javageneration.util.TinkerGenerationUtil;
-import org.tuml.javageneration.util.TumlClassOperations;
+import org.tuml.javageneration.util.*;
 import org.tuml.javageneration.visitor.BaseVisitor;
+
+import java.util.List;
 
 /**
  * Date: 2013/03/09
@@ -26,13 +28,46 @@ public class LookupGenerator2 extends BaseVisitor implements Visitor<Property> {
         PropertyWrapper propertyWrapper = new PropertyWrapper(p);
         if (propertyWrapper.needsLookup()) {
             OJAnnotatedClass ojClass = findOJClass(propertyWrapper);
-            OJAnnotatedOperation lookupOnParent = new OJAnnotatedOperation(propertyWrapper.lookup());
+            OJAnnotatedOperation lookUp = new OJAnnotatedOperation(propertyWrapper.lookup());
+
+            OJBlock ojBlock1 = new OJBlock();
+            lookUp.getBody().addToStatements(ojBlock1);
+            OJBlock ojBlock2 = new OJBlock();
+            lookUp.getBody().addToStatements(ojBlock2);
 
             String pathName = "? extends " + TumlClassOperations.getPathName(propertyWrapper.getType()).getLast();
-            lookupOnParent.setReturnType(TinkerGenerationUtil.tinkerSet.getCopy().addToGenerics(pathName));
+            lookUp.setReturnType("Set<" + propertyWrapper.javaBaseTypePath().getLast() + ">");
+            OJField result = new OJField("result", "Set<" + propertyWrapper.javaBaseTypePath().getLast() + ">");
+            result.setInitExp("new HashSet<" + propertyWrapper.javaBaseTypePath().getLast() + ">()");
+            ojClass.addToImports("java.util.HashSet");
+            ojClass.addToImports("java.util.Set");
+            ojBlock1.addToLocals(result);
+            ojBlock1.addToStatements("result.addAll(" + TumlClassOperations.getPathName(propertyWrapper.getType()).getLast() + ".allInstances())");
 
-            lookupOnParent.getBody().addToStatements("return " + TumlClassOperations.getPathName(propertyWrapper.getType()).getLast() + ".allInstances()");
-            ojClass.addToOperations(lookupOnParent);
+            List<Constraint> constraints = TumlPropertyOperations.getConstraints(propertyWrapper.getProperty());
+            if (!constraints.isEmpty()) {
+                //Filter out constrained element
+                OJField iter = new OJField("iter", "java.util.Iterator<" + propertyWrapper.javaBaseTypePath().getLast() + ">");
+                ojClass.addToImports("java.util.Iterator");
+                iter.setInitExp("result.iterator()");
+                ojBlock2.addToLocals(iter);
+
+                OJWhileStatement ojWhileStatement = new OJWhileStatement();
+                ojWhileStatement.setCondition("iter.hasNext()");
+                OJField next = new OJField(propertyWrapper.fieldname(), propertyWrapper.javaBaseTypePath());
+                next.setInitExp("iter.next()");
+                ojWhileStatement.getBody().addToLocals(next);
+                OJTryStatement tryTumlConstraintException = new OJTryStatement();
+                tryTumlConstraintException.getTryPart().addToStatements(propertyWrapper.adder() + "(" + propertyWrapper.fieldname() + ")");
+                tryTumlConstraintException.setCatchParam(new OJParameter("e", TinkerGenerationUtil.TumlConstraintViolationException));
+                tryTumlConstraintException.getCatchPart().addToStatements("iter.remove()");
+                ojWhileStatement.getBody().addToStatements(tryTumlConstraintException);
+                ojWhileStatement.getBody().addToStatements(propertyWrapper.remover() + "(" + propertyWrapper.fieldname() + ")");
+                ojBlock2.addToStatements(ojWhileStatement);
+            }
+
+            ojBlock2.addToStatements("return result");
+            ojClass.addToOperations(lookUp);
         }
     }
 

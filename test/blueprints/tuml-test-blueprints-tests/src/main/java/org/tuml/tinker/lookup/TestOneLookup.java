@@ -4,6 +4,9 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.tuml.collectiontest.Nightmare;
 import org.tuml.concretetest.God;
+import org.tuml.constraints.ConstraintChild1;
+import org.tuml.constraints.ConstraintChild2;
+import org.tuml.constraints.ConstraintRoot;
 import org.tuml.interfacetest.*;
 import org.tuml.lookup.Devil1;
 import org.tuml.lookup.Devil2;
@@ -33,7 +36,7 @@ public class TestOneLookup extends BaseLocalDbTest {
         db.commit();
 		Assert.assertEquals(2, new Creature(c1.getVertex()).lookupFor_creature_spook().size());
 	}
-	
+
 	@Test
 	public void testCompositeParentOfManyToManies() {
 		God g = new God(true);
@@ -41,7 +44,7 @@ public class TestOneLookup extends BaseLocalDbTest {
 		ManyA manyA2 = new ManyA(g);
 		ManyA manyA3 = new ManyA(g);
 		ManyA manyA4 = new ManyA(g);
-		
+
 		ManyB manyB1 = new ManyB(g);
 		ManyB manyB2 = new ManyB(g);
 		ManyB manyB3 = new ManyB(g);
@@ -66,7 +69,7 @@ public class TestOneLookup extends BaseLocalDbTest {
 		Assert.assertEquals(4, new ManyA(manyA4.getVertex()).lookupFor_iManyA_iManyB().size());
 		Assert.assertEquals(4, new ManyB(manyB4.getVertex()).lookupFor_iManyB_iManyA().size());
 	}
-	
+
 	@Test
 	public void testLookupStrategy() {
 		God g = new God(true);
@@ -137,49 +140,88 @@ public class TestOneLookup extends BaseLocalDbTest {
         db.commit();
 		Assert.assertEquals(3, g.lookupFor_godOfMemory_memory().size());
 	}
-	
+
 	@Test
 	public void testUniqueManyLookup() {
 		God g = new God(true);
 		Level1 l1_0 = new Level1(g);
 		Level1 l1_1 = new Level1(g);
 		Level1 l1_2 = new Level1(g);
-		
+
 		Level2 l2_0_0 = new Level2(l1_0);
 		Level2 l2_0_1 = new Level2(l1_0);
 		Level2 l2_0_2 = new Level2(l1_0);
-		
+
 		Level2 l2_1_0 = new Level2(l1_1);
 		Level2 l2_1_1 = new Level2(l1_1);
 		Level2 l2_1_2 = new Level2(l1_1);
-		
+
 		Level2 l2_2_0 = new Level2(l1_2);
 		Level2 l2_2_1 = new Level2(l1_2);
 		Level2 l2_2_2 = new Level2(l1_2);
-		
+
 		Devil1 d1_0 = new Devil1(g);
 		Devil1 d1_1 = new Devil1(g);
 		Devil1 d1_2 = new Devil1(g);
-		
+
 		Devil2 d2_0_0 = new Devil2(d1_0);
 		Devil2 d2_0_1 = new Devil2(d1_0);
 		Devil2 d2_0_2 = new Devil2(d1_0);
-		
+
 		Devil2 d2_1_0 = new Devil2(d1_1);
 		Devil2 d2_1_1 = new Devil2(d1_1);
 		Devil2 d2_1_2 = new Devil2(d1_1);
-		
+
 		Devil2 d2_2_0 = new Devil2(d1_2);
 		Devil2 d2_2_1 = new Devil2(d1_2);
 		Devil2 d2_2_2 = new Devil2(d1_2);
 
         db.commit();
 		Assert.assertEquals(9, l2_0_0.lookupFor_level2_devil2().size());
-		
+
 		l2_0_0.addToDevil2(d2_0_0);
         db.commit();
-		
+
 		Assert.assertEquals(9, l2_0_0.lookupFor_level2_devil2().size());
 	}
+
+    @Test
+    public void testLookupWithConstraint() {
+        ConstraintRoot constraintRoot1 = new ConstraintRoot(true);
+        constraintRoot1.setName("constraintRoot1");
+        ConstraintChild1 constraintChild11 = new ConstraintChild1(constraintRoot1);
+        constraintChild11.setName("constraintChild11");
+        ConstraintChild1 constraintChild12 = new ConstraintChild1(constraintRoot1);
+        constraintChild12.setName("constraintChild12");
+        ConstraintChild1 constraintChild13 = new ConstraintChild1(constraintRoot1);
+        constraintChild13.setName("constraintChild13");
+        ConstraintChild1 constraintChild14 = new ConstraintChild1(constraintRoot1);
+        constraintChild14.setName("constraintChild14");
+
+        ConstraintChild2 constraintChild21 = new ConstraintChild2(constraintRoot1);
+        constraintChild21.setName("constraintChild21");
+        ConstraintChild2 constraintChild22 = new ConstraintChild2(constraintRoot1);
+        constraintChild22.setName("constraintChild22");
+        ConstraintChild2 constraintChild23 = new ConstraintChild2(constraintRoot1);
+        constraintChild23.setName("constraintChild23");
+        ConstraintChild2 constraintChild24 = new ConstraintChild2(constraintRoot1);
+        constraintChild24.setName("constraintChild24");
+
+        ConstraintRoot constraintRoot2 = new ConstraintRoot(true);
+        constraintRoot1.setName("constraintRoot1");
+        ConstraintChild2 constraintChild212 = new ConstraintChild2(constraintRoot2);
+        constraintChild212.setName("constraintChild212");
+        ConstraintChild2 constraintChild222 = new ConstraintChild2(constraintRoot2);
+        constraintChild222.setName("constraintChild222");
+        ConstraintChild2 constraintChild232 = new ConstraintChild2(constraintRoot2);
+        constraintChild232.setName("constraintChild232");
+        ConstraintChild2 constraintChild242 = new ConstraintChild2(constraintRoot2);
+        constraintChild242.setName("constraintChild242");
+
+        db.commit();
+        Assert.assertEquals(4, constraintChild11.lookupFor_constraintChild1_constraintChild2().size());
+        Assert.assertEquals(4, constraintChild21.lookupFor_constraintChild2_constraintChild1().size());
+
+    }
 
 }

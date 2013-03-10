@@ -5173,6 +5173,7 @@
       </eAnnotations>
       <children xmi:type="notation:DecorationNode" xmi:id="_87E2UIlcEeKeSZB9UA6Gvw" type="5037"/>
       <children xmi:type="notation:DecorationNode" xmi:id="_87E2UYlcEeKeSZB9UA6Gvw" type="5159"/>
+      <element xmi:type="uml:Constraint" href="tinker-test.uml#_865QIIlcEeKeSZB9UA6Gvw"/>
       <layoutConstraint xmi:type="notation:Bounds" xmi:id="_87EPQYlcEeKeSZB9UA6Gvw" x="152" y="456"/>
     </children>
     <children xmi:type="notation:Shape" xmi:id="_M5fcAIl3EeKeSZB9UA6Gvw" type="2011" fontName="Sans" lineColor="0">
