@@ -1,7 +1,7 @@
 package org.tuml.tinker.constraint;
 
+import junit.framework.Assert;
 import org.junit.Test;
-import org.neo4j.graphdb.TransactionFailureException;
 import org.tuml.constraints.ConstraintRoot;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
@@ -11,11 +11,18 @@ import org.tuml.runtime.test.BaseLocalDbTest;
  */
 public class ConstrainedClassTest extends BaseLocalDbTest {
 
-    @Test(expected = TransactionFailureException.class)
+    @Test
     public void testClassConstraintFail() {
-        ConstraintRoot constraintRoot = new ConstraintRoot(true);
-        constraintRoot.setName("constraintRootX");
-        db.commit();
+        boolean exceptionHappened = false;
+        try {
+            ConstraintRoot constraintRoot = new ConstraintRoot(true);
+            constraintRoot.setName("constraintRootX");
+            db.commit();
+        } catch (Exception e) {
+            exceptionHappened = true;
+            Assert.assertTrue(isTransactionFailedException(e));
+        }
+        Assert.assertTrue(exceptionHappened);
     }
 
     @Test

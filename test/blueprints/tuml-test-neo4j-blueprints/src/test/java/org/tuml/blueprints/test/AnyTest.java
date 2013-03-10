@@ -2,6 +2,7 @@ package org.tuml.blueprints.test;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
+import org.tuml.tinker.constraint.ConstrainedClassTest;
 import org.tuml.tinker.lookup.TestOneLookup;
 
 /**
@@ -9,7 +10,7 @@ import org.tuml.tinker.lookup.TestOneLookup;
  * Time: 7:18 PM
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({TestOneLookup.class})
+@Suite.SuiteClasses({ConstrainedClassTest.class})
 public class AnyTest {
 
 }
