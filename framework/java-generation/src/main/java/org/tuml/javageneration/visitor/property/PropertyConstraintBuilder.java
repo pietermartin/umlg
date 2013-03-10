@@ -28,10 +28,6 @@ public class PropertyConstraintBuilder extends BaseVisitor implements Visitor<Pr
         super(workspace);
     }
 
-    public PropertyConstraintBuilder(Workspace workspace, String sourceDir) {
-        super(workspace, sourceDir);
-    }
-
     @Override
     public void visitBefore(Property p) {
         PropertyWrapper propertyWrapper = new PropertyWrapper(p);

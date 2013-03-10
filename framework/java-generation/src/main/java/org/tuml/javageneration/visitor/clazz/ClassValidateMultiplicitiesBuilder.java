@@ -14,9 +14,9 @@ import org.tuml.javageneration.util.TinkerGenerationUtil;
 import org.tuml.javageneration.util.TumlClassOperations;
 import org.tuml.javageneration.visitor.BaseVisitor;
 
-public class ClassRequiredPropertyValidationBuilder extends BaseVisitor implements Visitor<org.eclipse.uml2.uml.Class> {
+public class ClassValidateMultiplicitiesBuilder extends BaseVisitor implements Visitor<org.eclipse.uml2.uml.Class> {
 
-    public ClassRequiredPropertyValidationBuilder(Workspace workspace) {
+    public ClassValidateMultiplicitiesBuilder(Workspace workspace) {
         super(workspace);
     }
 
@@ -24,6 +24,7 @@ public class ClassRequiredPropertyValidationBuilder extends BaseVisitor implemen
     public void visitBefore(Class clazz) {
         OJAnnotatedClass annotatedClass = findOJClass(clazz);
         OJAnnotatedOperation validateMultiplicities = new OJAnnotatedOperation("validateMultiplicities", new OJPathName("java.util.List").addToGenerics(TinkerGenerationUtil.TumlConstraintViolation));
+        TinkerGenerationUtil.addOverrideAnnotation(validateMultiplicities);
         annotatedClass.addToOperations(validateMultiplicities);
         OJField result = new OJField("result", new OJPathName("java.util.List").addToGenerics(TinkerGenerationUtil.TumlConstraintViolation));
         result.setInitExp("new ArrayList<" + TinkerGenerationUtil.TumlConstraintViolation.getLast() + ">()");

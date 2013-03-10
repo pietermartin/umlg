@@ -80,6 +80,7 @@ public class TumlTransactionEventHandler<T> implements TransactionEventHandler<T
                 Neo4jVertex touchedVertex = new Neo4jVertex(node, (Neo4jGraph) GraphDb.getDb());
                 TumlNode tumlNode = GraphDb.getDb().instantiateClassifier((Long) touchedVertex.getId());
                 List<TumlConstraintViolation> requiredConstraintViolations = tumlNode.validateMultiplicities();
+                requiredConstraintViolations.addAll(tumlNode.checkClassConstraints());
                 if (!requiredConstraintViolations.isEmpty()) {
                     throw new TumlConstraintViolationException(requiredConstraintViolations);
                 }
@@ -99,9 +100,11 @@ public class TumlTransactionEventHandler<T> implements TransactionEventHandler<T
                     for (CompositionNode entity : entities) {
                         TumlNode tumlNode = entity;
                         List<TumlConstraintViolation> requiredConstraintViolations = tumlNode.validateMultiplicities();
+                        requiredConstraintViolations.addAll(tumlNode.checkClassConstraints());
                         if (!requiredConstraintViolations.isEmpty()) {
                             throw new TumlConstraintViolationException(requiredConstraintViolations);
                         }
+
                         if (!entity.isTinkerRoot() && entity.getOwningObject() == null) {
                             if (entity instanceof BaseTinkerAuditable && ((BaseTinkerAuditable) entity).getDeletedOn().isBefore(new DateTime())) {
                                 return null;

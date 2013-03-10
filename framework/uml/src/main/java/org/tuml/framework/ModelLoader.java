@@ -111,12 +111,12 @@ public class ModelLoader {
         }
     }
 
-    public List<Constraint> getConstraints(final Property p) {
+    public List<Constraint> getConstraints(final Element element) {
         List<Constraint> results = new ArrayList<Constraint>();
         filter(results, this.model, new Filter() {
             @Override
             public boolean filter(Element e) {
-                return e instanceof Constraint && ((Constraint) e).getConstrainedElements().contains(p);
+                return e instanceof Constraint && ((Constraint) e).getConstrainedElements().contains(element);
             }
         });
         return results;

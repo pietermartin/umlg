@@ -5,10 +5,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
+import org.eclipse.ocl.expressions.OCLExpression;
+import org.eclipse.uml2.uml.*;
 import org.eclipse.uml2.uml.Class;
-import org.eclipse.uml2.uml.Classifier;
-import org.eclipse.uml2.uml.Interface;
-import org.eclipse.uml2.uml.Property;
+import org.tuml.framework.ModelLoader;
 import org.tuml.java.metamodel.OJBlock;
 import org.tuml.java.metamodel.OJConstructor;
 import org.tuml.java.metamodel.OJField;
@@ -21,10 +22,13 @@ import org.tuml.java.metamodel.annotation.OJAnnotatedOperation;
 import org.tuml.java.metamodel.annotation.OJAnnotationValue;
 import org.tuml.framework.Visitor;
 import org.tuml.generation.Workspace;
+import org.tuml.javageneration.ocl.TumlOcl2Java;
+import org.tuml.javageneration.util.ConstraintWrapper;
 import org.tuml.javageneration.util.PropertyWrapper;
 import org.tuml.javageneration.util.TinkerGenerationUtil;
 import org.tuml.javageneration.util.TumlClassOperations;
 import org.tuml.javageneration.visitor.BaseVisitor;
+import org.tuml.ocl.TumlOcl2Parser;
 
 public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 
@@ -69,6 +73,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
             addEdgeToMetaNode(annotatedClass, clazz);
         }
         addAllInstances(annotatedClass, clazz);
+        addConstraints(annotatedClass, clazz);
     }
 
     @Override
@@ -589,6 +594,33 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
         annotatedClass.addToImports(TinkerGenerationUtil.tumlMemorySet);
         annotatedClass.addToImports(TinkerGenerationUtil.Root);
         annotatedClass.addToOperations(allInstances);
+    }
+
+    private void addConstraints(OJAnnotatedClass annotatedClass, Class clazz) {
+        List<Constraint> constraints = ModelLoader.INSTANCE.getConstraints(clazz);
+        for (Constraint constraint : constraints) {
+            ConstraintWrapper constraintWrapper = new ConstraintWrapper(constraint);
+            OJAnnotatedOperation checkClassConstraint = new OJAnnotatedOperation(TumlClassOperations.checkClassConstraintName(constraint));
+
+            checkClassConstraint.setReturnType(new OJPathName("java.util.List").addToGenerics(TinkerGenerationUtil.TumlConstraintViolation));
+            OJField result = new OJField("result", new OJPathName("java.util.List").addToGenerics(TinkerGenerationUtil.TumlConstraintViolation));
+            result.setInitExp("new ArrayList<" + TinkerGenerationUtil.TumlConstraintViolation.getLast() + ">()");
+
+            OJIfStatement ifConstraintFails = new OJIfStatement();
+            String ocl = constraintWrapper.getConstraintOclAsString();
+            checkClassConstraint.setComment(String.format("Implements the ocl statement for constraint '%s'\n<pre>\n%s\n</pre>", constraintWrapper.getName(), ocl));
+            OCLExpression<Classifier> oclExp = TumlOcl2Parser.INSTANCE.parseOcl(ocl);
+
+            ifConstraintFails.setCondition("(" + TumlOcl2Java.oclToJava(annotatedClass, oclExp) + ") == false");
+            ifConstraintFails.addToThenPart("result.add(new " + TinkerGenerationUtil.TumlConstraintViolation.getLast() + "(\"" + constraintWrapper.getName() + "\", \""
+                    + clazz.getQualifiedName() + "\", \"ocl\\n" + ocl.replace("\n", "\\n") + "\\nfails!\"))");
+
+            checkClassConstraint.getBody().addToStatements(ifConstraintFails);
+            checkClassConstraint.getBody().addToLocals(result);
+            checkClassConstraint.getBody().addToStatements("return result");
+
+            annotatedClass.addToOperations(checkClassConstraint);
+        }
     }
 
 }

@@ -111,6 +111,11 @@ public class SignalEvent extends Event {
     }
 
     @Override
+    public List<TumlConstraintViolation> checkClassConstraints() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
 	public String toJsonWithoutCompositeParent() {
 		// TODO Auto-generated method stub
 		return null;

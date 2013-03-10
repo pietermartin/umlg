@@ -1488,6 +1488,12 @@
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_RoqAAIlaEeKeSZB9UA6Gvw" name="constraints">
           <packagedElement xmi:type="uml:Class" xmi:id="_sxGM8IlaEeKeSZB9UA6Gvw" name="ConstraintRoot">
+            <ownedRule xmi:id="_M5SnsIl3EeKeSZB9UA6Gvw" name="ConstraintRootConstraint1" constrainedElement="_sxGM8IlaEeKeSZB9UA6Gvw">
+              <specification xmi:type="uml:OpaqueExpression" xmi:id="_SKdmYIl3EeKeSZB9UA6Gvw">
+                <language>OCL</language>
+                <body>self.name.indexOf('X') = -1</body>
+              </specification>
+            </ownedRule>
             <ownedAttribute xmi:id="_Wfp5QIlcEeKeSZB9UA6Gvw" name="name" visibility="public">
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Y9TAYIlcEeKeSZB9UA6Gvw"/>
@@ -1506,12 +1512,6 @@
             </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Class" xmi:id="_uGxmcIlaEeKeSZB9UA6Gvw" name="ConstraintChild1">
-            <ownedRule xmi:id="_865QIIlcEeKeSZB9UA6Gvw" name="Constraint1" constrainedElement="_2tbBQIlcEeKeSZB9UA6Gvw">
-              <specification xmi:type="uml:OpaqueExpression" xmi:id="_RHoPMIldEeKeSZB9UA6Gvw" name="constraintForChild2">
-                <language>OCL</language>
-                <body>self.constraintRoot.constraintChild2->includes(self.constraintChild2)</body>
-              </specification>
-            </ownedRule>
             <ownedAttribute xmi:id="_aC8Z0IlcEeKeSZB9UA6Gvw" name="name" visibility="public">
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_dSPnYIlcEeKeSZB9UA6Gvw"/>

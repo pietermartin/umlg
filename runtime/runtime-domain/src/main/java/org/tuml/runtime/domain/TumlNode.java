@@ -20,6 +20,7 @@ public interface TumlNode extends TumlEnum, OclAny, PersistentObject {
 	int getSize(TumlRuntimeProperty tumlRuntimeProperty);
 	<E> TinkerSet<E> asSet();
 	List<TumlConstraintViolation> validateMultiplicities();
+    List<TumlConstraintViolation> checkClassConstraints();
 	TumlNode getOwningObject();
 	<T extends TumlNode> List<T> getPathToCompositionalRoot();
     void addEdgeToMetaNode();

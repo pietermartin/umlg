@@ -5,18 +5,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.ocl.uml.CollectionType;
-import org.eclipse.uml2.uml.Association;
-import org.eclipse.uml2.uml.BehavioredClassifier;
+import org.eclipse.uml2.uml.*;
 import org.eclipse.uml2.uml.Class;
-import org.eclipse.uml2.uml.Classifier;
-import org.eclipse.uml2.uml.Enumeration;
-import org.eclipse.uml2.uml.Generalization;
-import org.eclipse.uml2.uml.Interface;
-import org.eclipse.uml2.uml.InterfaceRealization;
-import org.eclipse.uml2.uml.Property;
-import org.eclipse.uml2.uml.Type;
-import org.eclipse.uml2.uml.VisibilityKind;
 import org.eclipse.uml2.uml.internal.operations.ClassOperations;
 import org.tuml.java.metamodel.OJPackage;
 import org.tuml.java.metamodel.OJPathName;
@@ -450,4 +442,7 @@ public class TumlClassOperations extends ClassOperations {
         return owningType instanceof Enumeration;
     }
 
+    public static String checkClassConstraintName(Constraint constraint) {
+        return "checkClassConstraint" + StringUtils.capitalize(constraint.getName());
+    }
 }
