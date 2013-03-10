@@ -33,7 +33,11 @@ import org.tuml.restlet.util.TumlRestletGenerationUtil;
 public class LookupOnCompositeParentResourceBuilder extends BaseServerResourceBuilder implements Visitor<Property> {
 
 	public LookupOnCompositeParentResourceBuilder(Workspace workspace, String sourceDir) {
-		super(workspace, sourceDir);
+        super(workspace, sourceDir);
+        if (true) {
+            throw new RuntimeException("deprecated");
+        }
+
 	}
 
 	@Override

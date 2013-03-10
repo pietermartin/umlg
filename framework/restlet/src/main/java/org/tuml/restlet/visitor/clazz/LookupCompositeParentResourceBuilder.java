@@ -24,6 +24,9 @@ public class LookupCompositeParentResourceBuilder extends BaseServerResourceBuil
 
 	public LookupCompositeParentResourceBuilder(Workspace workspace, String sourceDir) {
 		super(workspace, sourceDir);
+        if (true) {
+            throw new RuntimeException("deprecated");
+        }
 	}
 
 	@Override

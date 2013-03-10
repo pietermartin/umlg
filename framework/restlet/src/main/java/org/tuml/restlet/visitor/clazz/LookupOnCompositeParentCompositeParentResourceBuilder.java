@@ -27,11 +27,14 @@ public class LookupOnCompositeParentCompositeParentResourceBuilder extends BaseS
 
 	public LookupOnCompositeParentCompositeParentResourceBuilder(Workspace workspace, String sourceDir) {
 		super(workspace, sourceDir);
+        if (true) {
+            throw new RuntimeException("deprecated");
+        }
 	}
 
 	@Override
 	public void visitBefore(Property p) {
-		PropertyWrapper pWrap = new PropertyWrapper(p);
+        PropertyWrapper pWrap = new PropertyWrapper(p);
 		if (pWrap.hasLookup()) {
 
 			OJAnnotatedClass owner = findOJClass(p);
