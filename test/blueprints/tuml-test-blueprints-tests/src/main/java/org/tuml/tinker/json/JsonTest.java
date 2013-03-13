@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.tuml.concretetest.God;
 import org.tuml.concretetest.Universe.UniverseRuntimePropertyEnum;
 import org.tuml.embeddedtest.REASON;
+import org.tuml.embeddedtest.TestEmbedded;
 import org.tuml.inheritencetest.Biped;
 import org.tuml.inheritencetest.Mamal;
 import org.tuml.inheritencetest.Quadped;
@@ -23,7 +24,7 @@ public class JsonTest extends BaseLocalDbTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testEmbeddedManiesToJson() throws JsonParseException, JsonMappingException, IOException {
+	public void testEmbeddedManiesToJson() throws IOException {
 		God god = new God(true);
 		god.addToEmbeddedString("embeddedString1");
 		god.addToEmbeddedString("embeddedString2");
@@ -55,7 +56,7 @@ public class JsonTest extends BaseLocalDbTest {
 	}
 
 	@Test
-	public void testEmbeddedManiesFromJson() throws JsonParseException, JsonMappingException, IOException {
+	public void testEmbeddedManiesFromJson() throws IOException {
 		God god = new God(true);
 		god.addToEmbeddedString("embeddedString1");
 		god.addToEmbeddedString("embeddedString2");
@@ -104,9 +105,133 @@ public class JsonTest extends BaseLocalDbTest {
 
 	}
 
+    @Test
+    public void testEmbeddedManyBooleans() throws IOException {
+        God god = new God(true);
+        god.setName("god");
+        TestEmbedded testEmbedded = new TestEmbedded(god);
+        testEmbedded.setName("testEmbedded");
+        testEmbedded.addToManyBoolean(true);
+        testEmbedded.addToManyBoolean(true);
+        testEmbedded.addToManyBoolean(true);
+        testEmbedded.addToManyBoolean(false);
+        testEmbedded.addToManyBoolean(false);
+        testEmbedded.addToManyBoolean(false);
+        db.commit();
+        Assert.assertEquals(6, testEmbedded.getManyBoolean().size());
+        String json = testEmbedded.toJson();
+
+        TestEmbedded testTestEmbedded = new TestEmbedded(true);
+        testTestEmbedded.addToManyBoolean(true);
+        testTestEmbedded.addToManyBoolean(true);
+        testTestEmbedded.addToManyBoolean(true);
+        testTestEmbedded.addToManyBoolean(true);
+        testTestEmbedded.addToManyBoolean(true);
+        testTestEmbedded.addToManyBoolean(true);
+        testTestEmbedded.addToManyBoolean(true);
+
+        testTestEmbedded.fromJson(json);
+        Assert.assertEquals(6, testTestEmbedded.getManyBoolean().size());
+
+        List<Boolean> trueList = new ArrayList<Boolean>();
+        List<Boolean> falseList = new ArrayList<Boolean>();
+        for (Boolean b : testTestEmbedded.getManyBoolean()) {
+            if (b) {
+                trueList.add(b);
+            } else {
+                falseList.add(b);
+            }
+        }
+        Assert.assertEquals(3, trueList.size());
+        Assert.assertEquals(3, falseList.size());
+        Assert.assertEquals("testEmbedded", testTestEmbedded.getName());
+        Assert.assertNotNull(testTestEmbedded.getGod());
+    }
+
+    @Test
+    public void testEmbeddedManyInteger() throws IOException {
+        God god = new God(true);
+        god.setName("god");
+        TestEmbedded testEmbedded = new TestEmbedded(god);
+        testEmbedded.setName("testEmbedded");
+        //Has default value of 1,2,3
+        testEmbedded.addToManyOrderedRequiredInteger(1);
+        testEmbedded.addToManyOrderedRequiredInteger(2);
+        testEmbedded.addToManyOrderedRequiredInteger(3);
+        testEmbedded.addToManyOrderedRequiredInteger(4);
+        testEmbedded.addToManyOrderedRequiredInteger(5);
+        testEmbedded.addToManyOrderedRequiredInteger(6);
+        db.commit();
+        Assert.assertEquals(9, testEmbedded.getManyOrderedRequiredInteger().size());
+        String json = testEmbedded.toJson();
+
+        TestEmbedded testTestEmbedded = new TestEmbedded(true);
+        testTestEmbedded.addToManyOrderedRequiredInteger(9);
+        testTestEmbedded.addToManyOrderedRequiredInteger(8);
+        testTestEmbedded.addToManyOrderedRequiredInteger(7);
+        testTestEmbedded.addToManyOrderedRequiredInteger(6);
+        testTestEmbedded.addToManyOrderedRequiredInteger(5);
+        testTestEmbedded.addToManyOrderedRequiredInteger(4);
+
+        testTestEmbedded.fromJson(json);
+        Assert.assertEquals(9, testTestEmbedded.getManyOrderedRequiredInteger().size());
+
+        Assert.assertEquals(new Integer(1), testTestEmbedded.getManyOrderedRequiredInteger().get(0));
+        Assert.assertEquals(new Integer(2), testTestEmbedded.getManyOrderedRequiredInteger().get(1));
+        Assert.assertEquals(new Integer(3), testTestEmbedded.getManyOrderedRequiredInteger().get(2));
+        Assert.assertEquals(new Integer(1), testTestEmbedded.getManyOrderedRequiredInteger().get(3));
+        Assert.assertEquals(new Integer(2), testTestEmbedded.getManyOrderedRequiredInteger().get(4));
+        Assert.assertEquals(new Integer(3), testTestEmbedded.getManyOrderedRequiredInteger().get(5));
+        Assert.assertEquals(new Integer(4), testTestEmbedded.getManyOrderedRequiredInteger().get(6));
+        Assert.assertEquals(new Integer(5), testTestEmbedded.getManyOrderedRequiredInteger().get(7));
+        Assert.assertEquals(new Integer(6), testTestEmbedded.getManyOrderedRequiredInteger().get(8));
+
+        Assert.assertEquals("testEmbedded", testTestEmbedded.getName());
+        Assert.assertNotNull(testTestEmbedded.getGod());
+    }
+
+    @Test
+    public void testEmbeddedManyString() throws IOException {
+        God god = new God(true);
+        god.setName("god");
+        TestEmbedded testEmbedded = new TestEmbedded(god);
+        testEmbedded.setName("testEmbedded");
+        //Has default value of 1,2,3
+        testEmbedded.addToManyOrderedString("a");
+        testEmbedded.addToManyOrderedString("b");
+        testEmbedded.addToManyOrderedString("c");
+        testEmbedded.addToManyOrderedString("d");
+        testEmbedded.addToManyOrderedString("e");
+        testEmbedded.addToManyOrderedString("f");
+        db.commit();
+        Assert.assertEquals(6, testEmbedded.getManyOrderedString().size());
+        String json = testEmbedded.toJson();
+
+        TestEmbedded testTestEmbedded = new TestEmbedded(true);
+        testTestEmbedded.addToManyOrderedString("");
+        testTestEmbedded.addToManyOrderedString("");
+        testTestEmbedded.addToManyOrderedString("");
+        testTestEmbedded.addToManyOrderedString("");
+        testTestEmbedded.addToManyOrderedString("");
+        testTestEmbedded.addToManyOrderedString("");
+
+        testTestEmbedded.fromJson(json);
+        Assert.assertEquals(6, testTestEmbedded.getManyOrderedString().size());
+
+        Assert.assertEquals("a", testTestEmbedded.getManyOrderedString().get(0));
+        Assert.assertEquals("b", testTestEmbedded.getManyOrderedString().get(1));
+        Assert.assertEquals("c", testTestEmbedded.getManyOrderedString().get(2));
+        Assert.assertEquals("d", testTestEmbedded.getManyOrderedString().get(3));
+        Assert.assertEquals("e", testTestEmbedded.getManyOrderedString().get(4));
+        Assert.assertEquals("f", testTestEmbedded.getManyOrderedString().get(5));
+
+        Assert.assertEquals("testEmbedded", testTestEmbedded.getName());
+        Assert.assertNotNull(testTestEmbedded.getGod());
+    }
+
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testJsonToFromWithNulls() throws JsonParseException, JsonMappingException, IOException {
+	public void testJsonToFromWithNulls() throws IOException {
 		God g1 = new God(true);
 		g1.setName("g1");
 		g1.setReason(REASON.BAD);
@@ -139,7 +264,7 @@ public class JsonTest extends BaseLocalDbTest {
 	}
 
 	@Test
-	public void testDates() throws JsonParseException, JsonMappingException, IOException {
+	public void testDates() throws IOException {
 		God g1 = new God(true);
 		g1.setName("g1");
 		DateTime beginning = new DateTime();
@@ -157,7 +282,7 @@ public class JsonTest extends BaseLocalDbTest {
 	}
 
 	@Test
-	public void testValidation() throws JsonParseException, JsonMappingException, IOException {
+	public void testValidation() throws IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		String json = UniverseRuntimePropertyEnum.asJson();
 		@SuppressWarnings("unchecked")
@@ -169,9 +294,9 @@ public class JsonTest extends BaseLocalDbTest {
 		}
 		Assert.assertTrue(foundValidations);
 	}
-	
+
 	@Test
-	public void testWithInheritence() throws JsonParseException, JsonMappingException, IOException {
+	public void testWithInheritence() throws IOException {
 		God g1 = new God(true);
 		g1.setName("g1");
 		DateTime beginning = new DateTime();
@@ -183,7 +308,7 @@ public class JsonTest extends BaseLocalDbTest {
 		Quadped quadped1 = new Quadped(g1);
 		quadped1.setName("quadped1");
         db.commit();
-		
+
 		System.out.println(quadped1.toJson());
 		ObjectMapper objectMapper = new ObjectMapper();
 		@SuppressWarnings("unchecked")
@@ -191,5 +316,22 @@ public class JsonTest extends BaseLocalDbTest {
 		Assert.assertEquals(7, jsonMap.size());
 		Assert.assertEquals(jsonMap.get("name"), "quadped1");
 	}
-	
+
+    @Test
+    public void testManyEnum() throws IOException {
+        God god = new God(true);
+        god.setName("god");
+        god.addToREASON(REASON.BAD);
+        god.addToREASON(REASON.GOOD);
+        db.commit();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.readValue(god.toJson(), Map.class);
+
+        God godTest = new God(true);
+        godTest.fromJson(god.toJson());
+
+        Assert.assertEquals(2, godTest.getREASON().size());
+    }
+
 }

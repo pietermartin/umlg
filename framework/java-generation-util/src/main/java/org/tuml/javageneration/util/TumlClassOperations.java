@@ -78,31 +78,29 @@ public class TumlClassOperations extends ClassOperations {
         return result;
     }
 
+    public static Set<Property> getPropertiesForToJson(org.eclipse.uml2.uml.Class clazz) {
+        Set<Property> result = new HashSet<Property>();
+        for (Property p : getAllOwnedProperties(clazz)) {
+            PropertyWrapper pWrap = new PropertyWrapper(p);
+            if (!pWrap.isDerived() && !pWrap.isQualified()) {
+                if (!pWrap.isComposite() && (pWrap.isDataType() || pWrap.isOne())) {
+                    result.add(p);
+                }
+            }
+        }
+        return result;
+    }
+
     public static Set<Property> getNonCompositeProperties(org.eclipse.uml2.uml.Class clazz) {
         Set<Property> result = new HashSet<Property>();
         for (Property p : getAllOwnedProperties(clazz)) {
             PropertyWrapper pWrap = new PropertyWrapper(p);
-            if (!pWrap.isDerived() && !pWrap.isQualifier()
-                    && !pWrap.isComposite()
-                    ) {
-
+            if (!pWrap.isDerived() && !pWrap.isQualifier() && !pWrap.isComposite()) {
                 result.add(p);
             }
         }
         return result;
     }
-
-    public static Set<Property> getNonCompositeAssociations(org.eclipse.uml2.uml.Class clazz) {
-        Set<Property> result = new HashSet<Property>();
-        for (Property p : getAllOwnedProperties(clazz)) {
-            PropertyWrapper pWrap = new PropertyWrapper(p);
-            if ((!pWrap.isDerived() && !pWrap.isQualifier() && !pWrap.isDataType() && !pWrap.isComposite())) {
-                result.add(p);
-            }
-        }
-        return result;
-    }
-
 
     public static Set<Property> getPrimitiveOrEnumOrComponentsPropertiesExcludingCompositeParent(org.eclipse.uml2.uml.Class clazz) {
         Set<Property> result = new HashSet<Property>();
@@ -433,10 +431,6 @@ public class TumlClassOperations extends ClassOperations {
 
     public static boolean isOnInterface(PropertyWrapper pWrap) {
         return pWrap.getOwningType() instanceof Interface;
-    }
-
-    public static List<Property> getPropertiesForToJson(Class clazz) {
-        return clazz.getAttributes();
     }
 
     public static boolean isHierarchy(org.eclipse.uml2.uml.Class clazz) {

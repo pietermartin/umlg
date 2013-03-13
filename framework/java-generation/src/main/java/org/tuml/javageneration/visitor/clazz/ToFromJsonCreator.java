@@ -29,7 +29,8 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 
     @Override
     public void visitBefore(Class clazz) {
-        addToJson(clazz, "toJson", TumlClassOperations.getPrimitiveOrEnumOrComponentsProperties(clazz));
+//        addToJson(clazz, "toJson", TumlClassOperations.getPrimitiveOrEnumOrComponentsProperties(clazz));
+        addToJson(clazz, "toJson", TumlClassOperations.getPropertiesForToJson(clazz));
         addToJson(clazz, "toJsonWithoutCompositeParent", TumlClassOperations.getPrimitiveOrEnumOrComponentsPropertiesExcludingCompositeParent(clazz));
         addFromJson(clazz);
         addFromJsonWithMapper(clazz);
@@ -58,21 +59,18 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
             }
         }
         int count = 1;
-        //Remove components from propertiesForToJson
-        List<Property> propertiesForToJsonWithOutManyComponent = new ArrayList<Property>(propertiesForToJson);
+//        //Remove components from propertiesForToJson
+//        List<Property> propertiesForToJsonWithOutManyComponent = new ArrayList<Property>(propertiesForToJson);
+//        for (Property p : propertiesForToJson) {
+//            PropertyWrapper pWrap = new PropertyWrapper(p);
+//            if (pWrap.isComponent()) {
+//                propertiesForToJsonWithOutManyComponent.remove(p);
+//            }
+//        }
         for (Property p : propertiesForToJson) {
             PropertyWrapper pWrap = new PropertyWrapper(p);
-            if (pWrap.isComponent()) {
-                propertiesForToJsonWithOutManyComponent.remove(p);
-            }
-        }
-        for (Property p : propertiesForToJsonWithOutManyComponent) {
-            PropertyWrapper pWrap = new PropertyWrapper(p);
-            if (pWrap.isMany() && !pWrap.isPrimitive()) {
-                OJIfStatement ifEmpty = new OJIfStatement(pWrap.getter() + "().isEmpty()");
-                ifEmpty.addToThenPart("sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + " + pWrap.getter() + "().toJson() + \"" + "\")");
-                ifEmpty.addToElsePart("sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + " + pWrap.getter() + "().toJson() + \"" + "\")");
-                toJson.getBody().addToStatements(ifEmpty);
+            if (pWrap.isMany() && !pWrap.isDataType()) {
+                throw new RuntimeException("Not suppose to come here no more!");
             } else if (pWrap.isMany() && pWrap.isPrimitive()) {
                 toJson.getBody().addToStatements(
                         "sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + " + TinkerGenerationUtil.ToJsonUtil.getLast() + ".primitivesToJson("
@@ -131,7 +129,7 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                     // "() + \"\\\"" + "\")");
                 }
             }
-            if (count++ != propertiesForToJsonWithOutManyComponent.size()) {
+            if (count++ != propertiesForToJson.size()) {
                 toJson.getBody().addToStatements("sb.append(\", \")");
             }
         }
@@ -274,10 +272,15 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                         ojForStatement.getBody().addToStatements(ojSimpleStatementConstructor);
                         OJSimpleStatement ojSimpleStatementFromJson = new OJSimpleStatement(pWrap.adder() + "(" + pWrap.fieldname() + ")");
                         ojForStatement.getBody().addToStatements(ojSimpleStatementFromJson);
-                    } else if (pWrap.isMany()) {
+                    } else if (pWrap.isMany() && pWrap.isEnumeration()) {
                         ifNotNull.addToThenPart(pWrap.clearer() + "()");
                         OJForStatement ojForStatement = new OJForStatement("enumLiteral", new OJPathName("String"), pWrap.fieldname());
                         ojForStatement.getBody().addToStatements(pWrap.adder() + "(" + pWrap.javaBaseTypePath().getLast() + ".valueOf(enumLiteral))");
+                        ifNotNull.addToThenPart(ojForStatement);
+                    } else if (pWrap.isMany() && pWrap.isDataType()) {
+                        ifNotNull.addToThenPart(pWrap.clearer() + "()");
+                        OJForStatement ojForStatement = new OJForStatement("value", pWrap.javaBaseTypePath(), pWrap.fieldname());
+                        ojForStatement.getBody().addToStatements(pWrap.adder() + "(" + pWrap.javaBaseTypePath().getLast() + ".valueOf(value))");
                         ifNotNull.addToThenPart(ojForStatement);
                     } else {
                         ifNotNull.addToThenPart(pWrap.setter() + "(" + field.getName() + ")");
