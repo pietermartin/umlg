@@ -1438,4 +1438,12 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 
     }
 
+    public boolean isOtherEndComposite() {
+        if (getOtherEnd() != null) {
+            PropertyWrapper otherEnd = new PropertyWrapper(getOtherEnd());
+            return otherEnd.isComposite();
+        } else {
+            return false;
+        }
+    }
 }

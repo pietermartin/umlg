@@ -1,14 +1,17 @@
 package org.tuml.restlet.visitor.clazz;
 
 import org.eclipse.uml2.uml.Model;
-import org.eclipse.uml2.uml.Class; 
+import org.eclipse.uml2.uml.Class;
+import org.tuml.java.metamodel.OJBlock;
 import org.tuml.java.metamodel.OJField;
+import org.tuml.java.metamodel.OJIfStatement;
 import org.tuml.java.metamodel.OJPathName;
 import org.tuml.java.metamodel.annotation.OJAnnotatedClass;
 import org.tuml.java.metamodel.annotation.OJAnnotatedOperation;
 import org.tuml.java.metamodel.annotation.OJEnum;
 import org.tuml.java.metamodel.annotation.OJEnumLiteral;
 import org.tuml.generation.Workspace;
+import org.tuml.javageneration.util.TinkerGenerationUtil;
 import org.tuml.javageneration.util.TumlClassOperations;
 import org.tuml.javageneration.visitor.BaseVisitor;
 import org.tuml.restlet.util.TumlRestletGenerationUtil;
@@ -22,8 +25,21 @@ public abstract class BaseServerResourceBuilder extends BaseVisitor {
 	protected void addDefaultConstructor(OJAnnotatedClass annotatedClass) {
 		annotatedClass.getDefaultConstructor().getBody().addToStatements("setNegotiated(false)");
 	}
-	
-	protected void addToRouterEnum(Model model, OJAnnotatedClass annotatedClass, String name, String path) {
+
+    protected void checkIfTransactionSuspended(OJAnnotatedOperation post) {
+        //Check if transaction needs resuming
+        OJIfStatement ifTransactionNeedsResuming = new OJIfStatement("getAttribute(\"" + TinkerGenerationUtil.transactionIdentifier + "\") != null");
+        ifTransactionNeedsResuming.addToThenPart(TinkerGenerationUtil.graphDbAccess + ".resume(" + TinkerGenerationUtil.TumlTransactionManager + ".INSTANCE.get(getAttribute(\"" + TinkerGenerationUtil.transactionIdentifier + "\")))");
+        post.getBody().addToStatements(ifTransactionNeedsResuming);
+    }
+
+    protected void commitIfNotFromResume(OJBlock block) {
+        OJIfStatement ifTransactionNeedsResuming = new OJIfStatement("getAttribute(\"" + TinkerGenerationUtil.transactionIdentifier + "\") == null");
+        ifTransactionNeedsResuming.addToThenPart(TinkerGenerationUtil.graphDbAccess + ".commit()");
+        block.addToStatements(ifTransactionNeedsResuming);
+    }
+
+    protected void addToRouterEnum(Model model, OJAnnotatedClass annotatedClass, String name, String path) {
 		OJEnum routerEnum = (OJEnum) this.workspace.findOJClass("restlet.RestletRouterEnum");
 		OJEnumLiteral ojLiteral = new OJEnumLiteral(name);
 

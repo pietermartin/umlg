@@ -1,24 +1,18 @@
 package org.test.restlet;
 
-import java.io.IOException;
-import java.util.Map;
-
 import junit.framework.Assert;
-
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
 import org.tuml.runtime.test.BaseLocalDbTest;
 import org.tuml.test.Alien;
-import org.tuml.test.Human;
 
-import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
+import java.io.IOException;
+import java.util.Map;
 
 public class TestToJson extends BaseLocalDbTest {
 
 	@Test
-	public void testToJson() throws JsonParseException, JsonMappingException, IOException {
+	public void testToJson() throws IOException {
 		Alien human = new Alien(true);
 		human.setName("human1");
 		db.commit();

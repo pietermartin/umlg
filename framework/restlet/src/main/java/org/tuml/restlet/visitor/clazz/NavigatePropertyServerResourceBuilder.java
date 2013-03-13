@@ -123,6 +123,9 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
         TinkerGenerationUtil.addOverrideAnnotation(putOrDelete);
         TinkerGenerationUtil.addSuppressWarning(putOrDelete);
 
+        //Check if transaction needs resuming
+        checkIfTransactionSuspended(putOrDelete);
+
         PropertyWrapper otherEndPWrap = new PropertyWrapper(pWrap.getOtherEnd());
 
         OJTryStatement ojTryStatement = new OJTryStatement();
@@ -185,7 +188,6 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
         }
 
         ojTryStatement.getTryPart().addToStatements(TinkerGenerationUtil.graphDbAccess + ".commit()");
-        annotatedClass.addToImports(TinkerGenerationUtil.tinkerConclusionPathName);
 
         ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
         ojTryStatement.getCatchPart().addToStatements(TinkerGenerationUtil.graphDbAccess + ".rollback()");
@@ -248,6 +250,9 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
         TinkerGenerationUtil.addOverrideAnnotation(post);
         TinkerGenerationUtil.addSuppressWarning(post);
 
+        //Check if transaction needs resuming
+        checkIfTransactionSuspended(post);
+
         PropertyWrapper otherEndPWrap = new PropertyWrapper(pWrap.getOtherEnd());
 
         OJPathName parentPathName = otherEndPWrap.javaBaseTypePath();
@@ -287,7 +292,6 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
         addPostResource(concreteClassifier, pWrap, annotatedClass, parentPathName);
 
         ojTryStatement.getTryPart().addToStatements("GraphDb.getDb().commit()");
-        annotatedClass.addToImports(TinkerGenerationUtil.tinkerConclusionPathName);
 
         ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
         ojTryStatement.getCatchPart().addToStatements("GraphDb.getDb().rollback()");

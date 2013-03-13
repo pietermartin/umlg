@@ -279,7 +279,6 @@ public class TransactionalNavigatePropertyServerResourceBuilder extends BaseServ
         ifArray.getElsePart().addToStatements("add(parentResource, map)");
 
         addPostResource(concreteClassifier, pWrap, annotatedClass, parentPathName);
-        annotatedClass.addToImports(TinkerGenerationUtil.tinkerConclusionPathName);
 
         ojTryStatement.getTryPart().addToStatements("return get()");
 

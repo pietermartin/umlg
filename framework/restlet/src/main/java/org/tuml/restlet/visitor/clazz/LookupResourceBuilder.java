@@ -2,11 +2,7 @@ package org.tuml.restlet.visitor.clazz;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.uml2.uml.Property;
-import org.tuml.java.metamodel.OJBlock;
-import org.tuml.java.metamodel.OJField;
-import org.tuml.java.metamodel.OJPackage;
-import org.tuml.java.metamodel.OJPathName;
-import org.tuml.java.metamodel.OJVisibilityKind;
+import org.tuml.java.metamodel.*;
 import org.tuml.java.metamodel.annotation.OJAnnotatedClass;
 import org.tuml.java.metamodel.annotation.OJAnnotatedInterface;
 import org.tuml.java.metamodel.annotation.OJAnnotatedOperation;
@@ -75,15 +71,21 @@ public class LookupResourceBuilder extends BaseServerResourceBuilder implements 
 		annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
 		TinkerGenerationUtil.addOverrideAnnotation(get);
 
+        OJTryStatement ojTryStatement = new OJTryStatement();
+
 		OJPathName parentPathName = TumlClassOperations.getPathName(pWrap.getOtherEnd().getType());
-		get.getBody().addToStatements(
+        ojTryStatement.getTryPart().addToStatements(
 				"this." + parentPathName.getLast().toLowerCase() + "Id = Integer.parseInt((String)getRequestAttributes().get(\""
 						+ parentPathName.getLast().toLowerCase() + "Id\"))");
-		get.getBody().addToStatements(
+        ojTryStatement.getTryPart().addToStatements(
 				parentPathName.getLast() + " resource = GraphDb.getDb().instantiateClassifier(Long.valueOf(this." + parentPathName.getLast().toLowerCase() + "Id"
 						+ "))");
 		annotatedClass.addToImports(parentPathName);
-		buildToJson(pWrap, annotatedClass, get.getBody());
+		buildToJson(pWrap, annotatedClass, ojTryStatement.getTryPart());
+        ojTryStatement.setCatchPart(null);
+        ojTryStatement.getFinallyPart().addToStatements(TinkerGenerationUtil.graphDbAccess + ".rollback()");
+        get.getBody().addToStatements(ojTryStatement);
+
 		annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
 		annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);
 		annotatedClass.addToOperations(get);

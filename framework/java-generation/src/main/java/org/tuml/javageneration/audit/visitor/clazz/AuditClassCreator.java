@@ -172,7 +172,6 @@ public class AuditClassCreator extends BaseVisitor implements Visitor<Class> {
 		ojTryStatement.setCatchPart(null);
 		isTransactionNotActive.addToThenPart(ojTryStatement);
 		ojTryStatement.getFinallyPart().addToStatements("GraphDb.getDb().commit()");
-		this.auditClass.addToImports(TinkerGenerationUtil.tinkerConclusionPathName);
 		if (previous) {
 			ojTryStatement.getTryPart().addToStatements(
 					"auditParentEdge = " + TinkerGenerationUtil.graphDbAccess + ".addEdge(null, this.vertex, previousAuditVertex, \"previous\")");

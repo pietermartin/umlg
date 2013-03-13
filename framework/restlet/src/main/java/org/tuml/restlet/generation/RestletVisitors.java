@@ -36,7 +36,7 @@ public class RestletVisitors {
 //        result.add(new LookupCompositeParentResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
 //        result.add(new LookupOnCompositeParentResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
 //        result.add(new LookupOnCompositeParentCompositeParentResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
-        result.add(new CompositePathServerResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+//        result.add(new CompositePathServerResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
         result.add(new EnumLookupResourceServerResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
         result.add(new TumlRestletNodeBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
         result.add(new QueryExecuteResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));

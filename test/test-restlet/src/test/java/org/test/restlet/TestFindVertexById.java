@@ -1,14 +1,10 @@
 package org.test.restlet;
 
+import com.tinkerpop.blueprints.Vertex;
 import junit.framework.Assert;
-
 import org.junit.Test;
 import org.tuml.runtime.test.BaseLocalDbTest;
 import org.tuml.test.Alien;
-import org.tuml.test.Human;
-
-import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
-import com.tinkerpop.blueprints.Vertex;
 
 public class TestFindVertexById extends BaseLocalDbTest {
 

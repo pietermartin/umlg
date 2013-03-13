@@ -111,7 +111,6 @@ public class RootResourceServerResourceBuilder extends BaseServerResourceBuilder
         addPostResource(concreteClassifier, annotatedClass, parentPathName);
 
         ojTryStatement.getTryPart().addToStatements("GraphDb.getDb().commit()");
-        annotatedClass.addToImports(TinkerGenerationUtil.tinkerConclusionPathName);
 
         ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
         ojTryStatement.getCatchPart().addToStatements("GraphDb.getDb().rollback()");
@@ -189,7 +188,6 @@ public class RootResourceServerResourceBuilder extends BaseServerResourceBuilder
         }
 
         ojTryStatement.getTryPart().addToStatements("GraphDb.getDb().commit()");
-        annotatedClass.addToImports(TinkerGenerationUtil.tinkerConclusionPathName);
 
         ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
         ojTryStatement.getCatchPart().addToStatements("GraphDb.getDb().rollback()");
@@ -277,7 +275,6 @@ public class RootResourceServerResourceBuilder extends BaseServerResourceBuilder
         ifArray.getElsePart().addToStatements("resource.fromJson(map)");
 
         ojTryStatement.getTryPart().addToStatements("GraphDb.getDb().commit()");
-        annotatedClass.addToImports(TinkerGenerationUtil.tinkerConclusionPathName);
 
         ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
         ojTryStatement.getCatchPart().addToStatements("GraphDb.getDb().rollback()");

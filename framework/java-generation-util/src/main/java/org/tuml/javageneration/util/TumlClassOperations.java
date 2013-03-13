@@ -1,14 +1,12 @@
 package org.tuml.javageneration.util;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.ocl.uml.CollectionType;
 import org.eclipse.uml2.uml.*;
 import org.eclipse.uml2.uml.Class;
+import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.internal.operations.ClassOperations;
 import org.tuml.java.metamodel.OJPackage;
 import org.tuml.java.metamodel.OJPathName;
@@ -79,6 +77,32 @@ public class TumlClassOperations extends ClassOperations {
         }
         return result;
     }
+
+    public static Set<Property> getNonCompositeProperties(org.eclipse.uml2.uml.Class clazz) {
+        Set<Property> result = new HashSet<Property>();
+        for (Property p : getAllOwnedProperties(clazz)) {
+            PropertyWrapper pWrap = new PropertyWrapper(p);
+            if (!pWrap.isDerived() && !pWrap.isQualifier()
+                    && !pWrap.isComposite()
+                    ) {
+
+                result.add(p);
+            }
+        }
+        return result;
+    }
+
+    public static Set<Property> getNonCompositeAssociations(org.eclipse.uml2.uml.Class clazz) {
+        Set<Property> result = new HashSet<Property>();
+        for (Property p : getAllOwnedProperties(clazz)) {
+            PropertyWrapper pWrap = new PropertyWrapper(p);
+            if ((!pWrap.isDerived() && !pWrap.isQualifier() && !pWrap.isDataType() && !pWrap.isComposite())) {
+                result.add(p);
+            }
+        }
+        return result;
+    }
+
 
     public static Set<Property> getPrimitiveOrEnumOrComponentsPropertiesExcludingCompositeParent(org.eclipse.uml2.uml.Class clazz) {
         Set<Property> result = new HashSet<Property>();
@@ -445,4 +469,5 @@ public class TumlClassOperations extends ClassOperations {
     public static String checkClassConstraintName(Constraint constraint) {
         return "checkClassConstraint" + StringUtils.capitalize(constraint.getName());
     }
+
 }

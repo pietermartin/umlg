@@ -529,6 +529,10 @@
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_uykxwEdJEeK1a-SG6VcP9g" value="1"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_uyn1EEdJEeK1a-SG6VcP9g" value="1"/>
             </ownedAttribute>
+            <ownedAttribute xmi:id="_ZEkk8Is8EeKeSZB9UA6Gvw" name="componentMany" type="_PxOysD_MEeKA79X_7SVJiA" association="_ZElMAIs8EeKeSZB9UA6Gvw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_ZEkk8Ys8EeKeSZB9UA6Gvw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_ZEkk8os8EeKeSZB9UA6Gvw" value="1"/>
+            </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Association" xmi:id="_jRELgEdLEeK1a-SG6VcP9g" name="componentManyDeep2_componentOneDeep3_1" memberEnd="_jRELgUdLEeK1a-SG6VcP9g _jRC9YEdLEeK1a-SG6VcP9g" navigableOwnedEnd="_jRELgUdLEeK1a-SG6VcP9g">
             <ownedEnd xmi:id="_jRELgUdLEeK1a-SG6VcP9g" name="componentManyDeep2" type="_BUH-AEI_EeKpM48zLjI12Q" association="_jRELgEdLEeK1a-SG6VcP9g">
@@ -545,6 +549,12 @@
             <ownedEnd xmi:id="_BGXUsXbKEeKXTvZLiS6_pA" name="finger" type="_4sr5AN4jEeGdB9TPHp60mw" association="_BGXUsHbKEeKXTvZLiS6_pA">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_BGXUsnbKEeKXTvZLiS6_pA" value="1"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_BGXUs3bKEeKXTvZLiS6_pA" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_ZElMAIs8EeKeSZB9UA6Gvw" name="componentOneDeep3_componentMany_1" memberEnd="_ZElMAYs8EeKeSZB9UA6Gvw _ZEkk8Is8EeKeSZB9UA6Gvw" navigableOwnedEnd="_ZElMAYs8EeKeSZB9UA6Gvw">
+            <ownedEnd xmi:id="_ZElMAYs8EeKeSZB9UA6Gvw" name="componentOneDeep3" type="_q1B-IEdJEeK1a-SG6VcP9g" association="_ZElMAIs8EeKeSZB9UA6Gvw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_ZElMAos8EeKeSZB9UA6Gvw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_ZElMA4s8EeKeSZB9UA6Gvw" value="1"/>
             </ownedEnd>
           </packagedElement>
         </packagedElement>

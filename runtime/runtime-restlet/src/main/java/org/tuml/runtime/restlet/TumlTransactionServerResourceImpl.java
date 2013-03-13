@@ -32,7 +32,7 @@ public class TumlTransactionServerResourceImpl extends ServerResource implements
     }
 
     /**
-     * This creates a transaction and suspends it immediatly
+     * This creates a transaction and suspends it immediately
      * @param entity
      * @return
      */

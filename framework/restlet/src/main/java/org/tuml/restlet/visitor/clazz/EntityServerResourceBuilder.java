@@ -3,13 +3,7 @@ package org.tuml.restlet.visitor.clazz;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Property;
-import org.tuml.java.metamodel.OJField;
-import org.tuml.java.metamodel.OJIfStatement;
-import org.tuml.java.metamodel.OJPackage;
-import org.tuml.java.metamodel.OJParameter;
-import org.tuml.java.metamodel.OJPathName;
-import org.tuml.java.metamodel.OJTryStatement;
-import org.tuml.java.metamodel.OJVisibilityKind;
+import org.tuml.java.metamodel.*;
 import org.tuml.java.metamodel.annotation.*;
 import org.tuml.framework.Visitor;
 import org.tuml.generation.Workspace;
@@ -64,6 +58,10 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
         delete.addToThrows(TumlRestletGenerationUtil.ResourceException);
         annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
         TinkerGenerationUtil.addOverrideAnnotation(delete);
+
+        //Check if transaction needs resuming
+        checkIfTransactionSuspended(delete);
+
         delete.getBody().addToStatements(
                 "this." + getIdFieldName(clazz) + "= Integer.parseInt((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"))");
         delete.getBody().addToStatements(
@@ -81,8 +79,9 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
 
         OJTryStatement ojTry = new OJTryStatement();
         ojTry.getTryPart().addToStatements("c.delete()");
-        ojTry.getTryPart().addToStatements("GraphDb.getDb().commit()");
-        annotatedClass.addToImports(TinkerGenerationUtil.tinkerConclusionPathName);
+//        ojTry.getTryPart().addToStatements("GraphDb.getDb().commit()");
+        commitIfNotFromResume(ojTry.getTryPart());
+
         ojTry.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
 
         ojTry.getCatchPart().addToStatements("GraphDb.getDb().rollback()");
@@ -116,6 +115,10 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
         put.addToThrows(TumlRestletGenerationUtil.ResourceException);
         annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
         TinkerGenerationUtil.addOverrideAnnotation(put);
+
+        //Check if transaction needs resuming
+        checkIfTransactionSuspended(put);
+
         put.getBody().addToStatements(
                 "this." + getIdFieldName(clazz) + "= Integer.parseInt((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"))");
         put.getBody().addToStatements(
@@ -129,8 +132,11 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
         ojTry.getTryPart().addToLocals(entityText);
 
         ojTry.getTryPart().addToStatements("c.fromJson(" + entityText.getName() + ");");
-        ojTry.getTryPart().addToStatements("GraphDb.getDb().commit()");
-        annotatedClass.addToImports(TinkerGenerationUtil.tinkerConclusionPathName);
+
+//        ojTry.getTryPart().addToStatements("GraphDb.getDb().commit()");
+        commitIfNotFromResume(ojTry.getTryPart());
+
+
         ojTry.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
 
         ojTry.getCatchPart().addToStatements("GraphDb.getDb().rollback()");
