@@ -77,8 +77,7 @@
     TumlQueryGridManager.prototype = new TumlBaseGridManager;
 
     TumlQueryGridManager.prototype.setupOptions = function () {
-        this.options = {
-            showHeaderRow:true,
+        this.options = {showHeaderRow:true,
             headerRowHeight:30,
             editable:false,
             enableAddRow:false,
@@ -633,7 +632,9 @@
                     var item = self.dataView.getItem(args.row);
                     var uri = item.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), item.id);
                     self.onSelfCellClick.notify({name:'unused', tumlUri:uri}, null, self);
-                } else if (!column.options.property.manyPrimitive && !column.options.property.manyEnumeration && column.options.property.composite && column.options.property.lower > 0 && ((column.options.property.upper > 1) || column.options.property.upper === -1)) {
+                } else if (!column.options.property.manyPrimitive && !column.options.property.manyEnumeration && column.options.property.composite &&
+                            column.options.property.lower > 0 && ((column.options.property.upper > 1) || column.options.property.upper === -1)) {
+                    //Component many
                     var data = [];
                     if (isCellEditable(args.row, args.cell, self.dataView.getItem(args.row))) {
                         if (self.dataView.getItem(args.row) !== undefined && self.dataView.getItem(args.row) !== null && self.dataView.getItem(args.row)[column.name] !== undefined && self.dataView.getItem(args.row)[column.name] !== null) {
@@ -641,7 +642,9 @@
                         }
                         self.onClickManyComponentCell.notify({data:data, cell:args, tumlUri:column.options.property.tumlUri, property:column.options.property}, null, self);
                     }
-                } else if (!column.options.property.manyPrimitive && !column.options.property.manyEnumeration && column.options.property.composite && column.options.property.lower === 1 && column.options.property.upper === 1) {
+                } else if (!column.options.property.manyPrimitive && !column.options.property.manyEnumeration && column.options.property.composite &&
+                            column.options.property.lower === 1 && column.options.property.upper === 1) {
+                    //Component one
                     var data = [];
                     if (isCellEditable(args.row, args.cell, self.dataView.getItem(args.row))) {
                         if (self.dataView.getItem(args.row) !== undefined && self.dataView.getItem(args.row) !== null && self.dataView.getItem(args.row)[column.name] !== undefined && self.dataView.getItem(args.row)[column.name] !== null) {

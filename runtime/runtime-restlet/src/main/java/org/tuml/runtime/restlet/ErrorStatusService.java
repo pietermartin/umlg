@@ -22,8 +22,12 @@ public class ErrorStatusService extends StatusService {
     public Representation getRepresentation(Status status, Request request, Response response) {
         StringBuilder sb = new StringBuilder();
         Throwable throwable = status.getThrowable();
-             sb.append(throwable.getMessage());
-        return new StringRepresentation(sb.toString());
+        if (throwable != null) {
+            sb.append(throwable.getMessage());
+            return new StringRepresentation(String.format("Http Status = %s\n + Error = %s", new Object[]{status.toString(), sb.toString()}));
+        } else {
+            return new StringRepresentation(String.format("Http Status = %s", new Object[]{status.toString()}));
+        }
     }
 
 }

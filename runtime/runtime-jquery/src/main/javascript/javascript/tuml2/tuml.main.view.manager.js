@@ -17,6 +17,8 @@
         var classQueryTumlUri;
         var contextVertexId;
         var contextChanged = true;
+        var transactionSuspended = false;
+        var transactionIdentifier;
 
         function init() {
         }
@@ -359,6 +361,20 @@
                     tumlLookupTabViewManager.setLinkedTumlTabViewManager(tumlTabViewManager);
                 });
                 tumlTabViewManager.onClickManyComponentCell.subscribe(function (e, args) {
+                    //Suspend the transaction
+                    $.ajax({
+                        url:'/' + tumlModelName + '/transaction',
+                        type:"POST",
+                        dataType:"json",
+                        contentType:"json",
+                        success:function (result, textStatus, jqXHR) {
+                            alert('success');
+                        },
+                        error:function (jqXHR, textStatus, errorThrown) {
+                            alert('error getting /' + tumlModelName + '/transaction\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
+                        }
+                    });
+
                     //Get the meta data
                     $.ajax({
                         url:args.property.tumlMetaDataUri,

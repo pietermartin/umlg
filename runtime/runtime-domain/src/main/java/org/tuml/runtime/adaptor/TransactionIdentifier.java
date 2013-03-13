@@ -46,4 +46,9 @@ public final class TransactionIdentifier {
         return this.uid;
     }
 
+    public String toJson() {
+        return "{\"transactionIdentifier\": \"" + this.uid + "\"}";
+    }
+
+
 }

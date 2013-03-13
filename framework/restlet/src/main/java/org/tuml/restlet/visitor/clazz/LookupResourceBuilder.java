@@ -83,7 +83,11 @@ public class LookupResourceBuilder extends BaseServerResourceBuilder implements 
 		annotatedClass.addToImports(parentPathName);
 		buildToJson(pWrap, annotatedClass, ojTryStatement.getTryPart());
         ojTryStatement.setCatchPart(null);
-        ojTryStatement.getFinallyPart().addToStatements(TinkerGenerationUtil.graphDbAccess + ".rollback()");
+
+        //Check if transaction needs resuming
+        OJIfStatement ifTransactionNeedsRollingBack = new OJIfStatement("getAttribute(\"" + TinkerGenerationUtil.transactionIdentifier + "\") == null");
+        ifTransactionNeedsRollingBack.addToThenPart(TinkerGenerationUtil.graphDbAccess + ".rollback()");
+        ojTryStatement.getFinallyPart().addToStatements(ifTransactionNeedsRollingBack);
         get.getBody().addToStatements(ojTryStatement);
 
 		annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);

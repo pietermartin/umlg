@@ -22,9 +22,6 @@ public class CompositePathServerResourceBuilder extends BaseServerResourceBuilde
 
 	public CompositePathServerResourceBuilder(Workspace workspace, String sourceDir) {
 		super(workspace, sourceDir);
-        if (true) {
-            throw new RuntimeException("Not needed for now!");
-        }
 	}
 
 	@Override

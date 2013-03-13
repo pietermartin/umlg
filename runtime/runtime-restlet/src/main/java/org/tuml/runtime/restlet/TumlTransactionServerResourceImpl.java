@@ -1,6 +1,7 @@
 package org.tuml.runtime.restlet;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ServerResource;
@@ -40,7 +41,7 @@ public class TumlTransactionServerResourceImpl extends ServerResource implements
     public Representation post(Representation entity) {
         TransactionIdentifier transactionIdentifier = GraphDb.getDb().suspend();
         TumlTransactionManager.INSTANCE.put(transactionIdentifier);
-        return new StringRepresentation(transactionIdentifier.toString());
+        return new JsonRepresentation(transactionIdentifier.toJson());
     }
 
     @Override
