@@ -29,13 +29,11 @@ public interface TumlGraph extends TransactionalGraph, IndexableGraph, Serializa
     //	<T> List<T> query(Class<?> className, int first, int pageSize);
     <T> T instantiateClassifier(Long id);
 
-    //    TumlTransactionManager getTransactionManager();
     void resume(TransactionIdentifier t);
 
     TransactionIdentifier suspend();
 
     void setRollbackOnly();
-//    Transaction getTransaction();
 
     <T extends Element> TumlTinkerIndex<T> createIndex(String indexName, Class<T> indexClass);
 
@@ -45,4 +43,5 @@ public interface TumlGraph extends TransactionalGraph, IndexableGraph, Serializa
 
     boolean lockOnTransaction(Object object);
 
+    void clearTxThreadVar();
 }

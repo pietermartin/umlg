@@ -17,6 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Logger;
 
 /**
  * Date: 2013/01/09
@@ -30,6 +31,8 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
     private ConcurrentMap<org.neo4j.graphdb.Transaction, ReentrantLock> transactionLockMap = new ConcurrentHashMap<org.neo4j.graphdb.Transaction, ReentrantLock>();
     private ConcurrentMap<Object, org.neo4j.graphdb.Transaction> classTransactionMap = new ConcurrentHashMap<Object, org.neo4j.graphdb.Transaction>();
     private ConcurrentMap<org.neo4j.graphdb.Transaction, Set<Object>> transactionClassMap = new ConcurrentHashMap<org.neo4j.graphdb.Transaction, Set<Object>>();
+    private static final Logger logger = Logger.getLogger(TumlNeo4jGraph.class.getPackage().getName());
+
 
     public TumlNeo4jGraph(String directory) {
         super(directory);
@@ -196,6 +199,8 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
             return transactionIdentifier;
         } catch (SystemException e) {
             throw new RuntimeException(e);
+        } finally {
+            this.tx.remove();
         }
     }
 
@@ -328,6 +333,16 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
             this.transactionClassMap.put(tx.get(), objectSet);
             return true;
         }
+    }
+
+    @Override
+    public void clearTxThreadVar() {
+        if (tx.get() != null) {
+            logger.warning("Transaction threadvar was not empty!!!!! Bug somewhere in clearing the transaction!!!");
+            rollback();
+            throw new IllegalStateException("Transaction thread var is not empty!!!");
+        }
+
     }
 
 }

@@ -150,16 +150,17 @@
             $('<button />').text('Save').click(function () {
                 if (self.grid.getEditorLock().commitCurrentEdit()) {
                     if (self.validateMultiplicity()) {
-                        var validationResults = self.validateNewItems(self.dataView.getNewItems());
-                        if (validationResults.length == 0) {
-                            self.onManyComponentSaveButtonSuccess.notify({value:self.dataView.getItems(), tabName:self.metaForData.name}, null, self);
-                        } else {
-                            var errorMsg = '\n';
-                            for (var i = 0; i < validationResults.length; i++) {
-                                errorMsg += validationResults[i].msg + '\n';
-                            }
-                            alert('There are validation errors: ' + errorMsg);
-                        }
+                        self.doSave();
+//                        var validationResults = self.validateNewItems(self.dataView.getNewItems());
+//                        if (validationResults.length == 0) {
+//                            self.onManyComponentSaveButtonSuccess.notify({value:self.dataView.getItems(), tabName:self.metaForData.name}, null, self);
+//                        } else {
+//                            var errorMsg = '\n';
+//                            for (var i = 0; i < validationResults.length; i++) {
+//                                errorMsg += validationResults[i].msg + '\n';
+//                            }
+//                            alert('There are validation errors: ' + errorMsg);
+//                        }
                     }
                 }
             }).appendTo('#grid-buttonManyComponent' + this.localMetaForData.name);
@@ -341,111 +342,7 @@
             var $saveButton = $('<button />').text('Save').click(function () {
                 if (self.grid.getEditorLock().commitCurrentEdit()) {
                     if (self.validateMultiplicity()) {
-                        //put updated items
-                        if (self.dataView.getUpdatedItems().length !== 0 && self.dataView.getNewItems().length == 0 && self.dataView.getDeletedItems().length == 0) {
-                            $.ajax({
-                                url:tumlUri,
-                                type:"PUT",
-                                dataType:"json",
-                                contentType:"json",
-                                data:JSON.stringify(self.dataView.getUpdatedItems()),
-                                success:function (data, textStatus, jqXHR) {
-                                    self.onPutSuccess.notify({tumlUri:tumlUri + '_' + self.localMetaForData.name, tabId:self.localMetaForData.name, data:data}, null, self);
-                                },
-                                error:function (jqXHR, textStatus, errorThrown) {
-                                    $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-                                    self.onPutFailure.notify({tumlUri:tumlUri, tabId:self.localMetaForData.name}, null, self);
-                                }
-                            });
-                        }
-                        //post new items
-                        if (self.dataView.getNewItems().length !== 0 && self.dataView.getUpdatedItems().length == 0 && self.dataView.getDeletedItems().length == 0) {
-                            var validationResults = self.validateNewItems(self.dataView.getNewItems());
-                            if (validationResults.length == 0) {
-                                $.ajax({
-                                    url:tumlUri,
-                                    type:"POST",
-                                    dataType:"json",
-                                    contentType:"json",
-                                    data:JSON.stringify(self.dataView.getNewItems()),
-                                    success:function (data, textStatus, jqXHR) {
-                                        self.onPostSuccess.notify({tumlUri:tumlUri, tabId:self.localMetaForData.name, data:data}, null, self);
-                                    },
-                                    error:function (jqXHR, textStatus, errorThrown) {
-                                        $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-                                        self.onPostFailure.notify({tumlUri:tumlUri, tabId:self.localMetaForData.name}, null, self);
-                                    }
-                                });
-                            } else {
-                                var errorMsg = '\n';
-                                for (var i = 0; i < validationResults.length; i++) {
-                                    errorMsg += validationResults[i].msg + '\n';
-                                }
-                                alert('Validation errors: ' + errorMsg);
-                            }
-                        }
-                        //delete new items
-                        if (self.dataView.getDeletedItems().length !== 0 && self.dataView.getNewItems().length == 0 && self.dataView.getUpdatedItems().length == 0) {
-                            $.ajax({
-                                url:tumlUri,
-                                type:"DELETE",
-                                dataType:"json",
-                                contentType:"json",
-                                data:JSON.stringify(self.dataView.getDeletedItems()),
-                                success:function (data, textStatus, jqXHR) {
-                                    self.onDeleteSuccess.notify({tumlUri:tumlUri, tabId:self.localMetaForData.name, data:data}, null, self);
-                                },
-                                error:function (jqXHR, textStatus, errorThrown) {
-                                    $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-                                    self.onDeleteFailure.notify({tumlUri:tumlUri, tabId:self.localMetaForData.name}, null, self);
-                                }
-                            });
-                        }
-                        if ((self.dataView.getUpdatedItems().length != 0 && self.dataView.getNewItems().length != 0) ||
-                            (self.dataView.getUpdatedItems().length != 0 && self.dataView.getDeletedItems().length != 0) ||
-                            (self.dataView.getNewItems().length != 0 && self.dataView.getDeletedItems().length != 0)) {
-
-                            var overloadedPostUri = self.propertyNavigatingTo.tumlOverloadedPostUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), self.contextVertexId);
-
-                            var overloadedPostData = {};
-                            var validationErrors = true;
-                            if (self.dataView.getNewItems().length > 0) {
-                                var validationResults = self.validateNewItems(self.dataView.getNewItems());
-                                if (validationResults.length == 0) {
-                                    validationErrors = false;
-                                    overloadedPostData['insert'] = self.dataView.getNewItems();
-                                } else {
-                                    var errorMsg = '\n';
-                                    for (var i = 0; i < validationResults.length; i++) {
-                                        errorMsg += validationResults[i].msg + '\n';
-                                    }
-                                    alert('Validation errors: ' + errorMsg);
-                                }
-                            }
-                            if (!validationErrors) {
-                                if (self.dataView.getUpdatedItems().length > 0) {
-                                    overloadedPostData['update'] = self.dataView.getUpdatedItems();
-                                }
-                                if (self.dataView.getDeletedItems().length > 0) {
-                                    overloadedPostData['delete'] = self.dataView.getDeletedItems();
-                                }
-                                $.ajax({
-                                    url:overloadedPostUri,
-                                    type:"POST",
-                                    dataType:"json",
-                                    contentType:"json",
-                                    data:JSON.stringify(overloadedPostData),
-                                    success:function (data, textStatus, jqXHR) {
-                                        self.onDeleteSuccess.notify({tumlUri:tumlUri, tabId:self.localMetaForData.name, data:data}, null, self);
-                                    },
-                                    error:function (jqXHR, textStatus, errorThrown) {
-                                        $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-                                        self.onDeleteFailure.notify({tumlUri:tumlUri, tabId:self.localMetaForData.name}, null, self);
-                                    }
-                                });
-                            }
-
-                        }
+                        self.doSave();
                     }
                 } else {
                     alert("Commit failed on current active cell!");
@@ -489,6 +386,8 @@
     function TumlBaseGridManager(tumlUri, propertyNavigatingTo) {
         this.tumlUri = tumlUri;
         this.propertyNavigatingTo = propertyNavigatingTo;
+        var transactionSuspended = false;
+        var transactionIdentifier;
 
         var self = this;
         this.columns = [];
@@ -519,6 +418,134 @@
             this.createGrid(result.data/*, this.metaForData*/, tumlUri);
 
         };
+
+        this.suspendTransactionAndSave = function() {
+            //Suspend the transaction
+            $.ajax({
+                url:'/' + tumlModelName + '/transaction',
+                type:"POST",
+                dataType:"json",
+                contentType:"json",
+                success:function (result, textStatus, jqXHR) {
+                    transactionSuspended = true;
+                    transactionIdentifier = result.transactionIdentifier;
+                    self.doSave();
+                },
+                error:function (jqXHR, textStatus, errorThrown) {
+                    alert('error getting /' + tumlModelName + '/transaction\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
+                }
+            });
+        }
+
+        this.doSave = function() {
+            if (transactionSuspended) {
+                tumlUri += "?transactionIdentifier=" + transactionIdentifier;
+            }
+            //put updated items
+            if (this.dataView.getUpdatedItems().length !== 0 && this.dataView.getNewItems().length == 0 && this.dataView.getDeletedItems().length == 0) {
+                $.ajax({
+                    url:tumlUri,
+                    type:"PUT",
+                    dataType:"json",
+                    contentType:"json",
+                    data:JSON.stringify(this.dataView.getUpdatedItems()),
+                    success:function (data, textStatus, jqXHR) {
+                        self.onPutSuccess.notify({tumlUri:tumlUri + '_' + this.localMetaForData.name, tabId:this.localMetaForData.name, data:data}, null, self);
+                    },
+                    error:function (jqXHR, textStatus, errorThrown) {
+                        $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
+                        self.onPutFailure.notify({tumlUri:tumlUri, tabId:this.localMetaForData.name}, null, this);
+                    }
+                });
+            }
+            //post new items
+            if (this.dataView.getNewItems().length !== 0 && this.dataView.getUpdatedItems().length == 0 && this.dataView.getDeletedItems().length == 0) {
+                var validationResults = self.validateNewItems(self.dataView.getNewItems());
+                if (validationResults.length == 0) {
+                    $.ajax({
+                        url:tumlUri,
+                        type:"POST",
+                        dataType:"json",
+                        contentType:"json",
+                        data:JSON.stringify(this.dataView.getNewItems()),
+                        success:function (data, textStatus, jqXHR) {
+                            this.onPostSuccess.notify({tumlUri:tumlUri, tabId:this.localMetaForData.name, data:data}, null, this);
+                        },
+                        error:function (jqXHR, textStatus, errorThrown) {
+                            $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
+                            this.onPostFailure.notify({tumlUri:tumlUri, tabId:this.localMetaForData.name}, null, this);
+                        }
+                    });
+                } else {
+                    var errorMsg = '\n';
+                    for (var i = 0; i < validationResults.length; i++) {
+                        errorMsg += validationResults[i].msg + '\n';
+                    }
+                    alert('Validation errors: ' + errorMsg);
+                }
+            }
+            //delete new items
+            if (this.dataView.getDeletedItems().length !== 0 && this.dataView.getNewItems().length == 0 && this.dataView.getUpdatedItems().length == 0) {
+                $.ajax({
+                    url:tumlUri,
+                    type:"DELETE",
+                    dataType:"json",
+                    contentType:"json",
+                    data:JSON.stringify(this.dataView.getDeletedItems()),
+                    success:function (data, textStatus, jqXHR) {
+                        this.onDeleteSuccess.notify({tumlUri:tumlUri, tabId:this.localMetaForData.name, data:data}, null, this);
+                    },
+                    error:function (jqXHR, textStatus, errorThrown) {
+                        $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
+                        this.onDeleteFailure.notify({tumlUri:tumlUri, tabId:this.localMetaForData.name}, null, this);
+                    }
+                });
+            }
+            if ((this.dataView.getUpdatedItems().length != 0 && this.dataView.getNewItems().length != 0) ||
+                (this.dataView.getUpdatedItems().length != 0 && this.dataView.getDeletedItems().length != 0) ||
+                (this.dataView.getNewItems().length != 0 && this.dataView.getDeletedItems().length != 0)) {
+
+                var overloadedPostUri = this.propertyNavigatingTo.tumlOverloadedPostUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), this.contextVertexId);
+
+                var overloadedPostData = {};
+                var validationErrors = true;
+                if (this.dataView.getNewItems().length > 0) {
+                    var validationResults = this.validateNewItems(this.dataView.getNewItems());
+                    if (validationResults.length == 0) {
+                        validationErrors = false;
+                        overloadedPostData['insert'] = this.dataView.getNewItems();
+                    } else {
+                        var errorMsg = '\n';
+                        for (var i = 0; i < validationResults.length; i++) {
+                            errorMsg += validationResults[i].msg + '\n';
+                        }
+                        alert('Validation errors: ' + errorMsg);
+                    }
+                }
+                if (!validationErrors) {
+                    if (this.dataView.getUpdatedItems().length > 0) {
+                        overloadedPostData['update'] = this.dataView.getUpdatedItems();
+                    }
+                    if (this.dataView.getDeletedItems().length > 0) {
+                        overloadedPostData['delete'] = this.dataView.getDeletedItems();
+                    }
+                    $.ajax({
+                        url:overloadedPostUri,
+                        type:"POST",
+                        dataType:"json",
+                        contentType:"json",
+                        data:JSON.stringify(overloadedPostData),
+                        success:function (data, textStatus, jqXHR) {
+                            this.onDeleteSuccess.notify({tumlUri:tumlUri, tabId:this.localMetaForData.name, data:data}, null, this);
+                        },
+                        error:function (jqXHR, textStatus, errorThrown) {
+                            $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
+                            this.onDeleteFailure.notify({tumlUri:tumlUri, tabId:this.localMetaForData.name}, null, this);
+                        }
+                    });
+                }
+            }
+        }
 
         this.validateNewItems = function (newItems) {
             var validationResults = [];
@@ -640,6 +667,11 @@
                         if (self.dataView.getItem(args.row) !== undefined && self.dataView.getItem(args.row) !== null && self.dataView.getItem(args.row)[column.name] !== undefined && self.dataView.getItem(args.row)[column.name] !== null) {
                             data = self.dataView.getItem(args.row)[column.name];
                         }
+                        //TODO Suspend the transaction
+                        //TODO Save the grid
+                        self.suspendTransactionAndSave();
+                        //TODO pass in the row's id
+                        var id = self.dataView.getItem(args.row)["id"];
                         self.onClickManyComponentCell.notify({data:data, cell:args, tumlUri:column.options.property.tumlUri, property:column.options.property}, null, self);
                     }
                 } else if (!column.options.property.manyPrimitive && !column.options.property.manyEnumeration && column.options.property.composite &&

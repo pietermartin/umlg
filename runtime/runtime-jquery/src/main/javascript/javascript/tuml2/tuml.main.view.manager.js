@@ -11,7 +11,6 @@
         var self = this;
         var tumlTabViewManagers = [];
         var tabContainer;
-        var contextVertexId;
         var oclExecuteUri;
         var instanceQueryTumlUri;
         var classQueryTumlUri;
@@ -332,7 +331,7 @@
                     tabContainer.tabs("option", "active", tumlTabViewManagers.indexOf(tumlTabViewManager.getLinkedTumlTabViewManager()));
                 });
                 tumlTabViewManager.onManyComponentSaveButtonSuccess.subscribe(function (e, args) {
-                    tumlTabViewManager.getLinkedTumlTabViewManager().setValue(args.value);
+//                    tumlTabViewManager.getLinkedTumlTabViewManager().setValue(args.value);
                     closeTab(tumlTabViewManager);
                     tabContainer.tabs("enable", tumlTabViewManagers.indexOf(tumlTabViewManager.getLinkedTumlTabViewManager()));
                     tabContainer.tabs("option", "active", tumlTabViewManagers.indexOf(tumlTabViewManager.getLinkedTumlTabViewManager()));
@@ -368,14 +367,16 @@
                         dataType:"json",
                         contentType:"json",
                         success:function (result, textStatus, jqXHR) {
-                            alert('success');
+                            transactionSuspended = true;
+                            transactionIdentifier = result.transactionIdentifier;
                         },
                         error:function (jqXHR, textStatus, errorThrown) {
                             alert('error getting /' + tumlModelName + '/transaction\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
                         }
                     });
 
-                    //Get the meta data
+                    //Get the data, for a first time there will be no data, only meta data.
+                    //On subsequent calls within the suspended transaction there might be data
                     $.ajax({
                         url:args.property.tumlMetaDataUri,
                         type:"GET",
