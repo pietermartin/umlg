@@ -419,6 +419,23 @@
 
         };
 
+        this.addNewRow = function(args) {
+            $.ajax({
+                url:tumlUri,
+                type:"POST",
+                dataType:"json",
+                contentType:"json",
+//                data:JSON.stringify(this.dataView.getNewItems()),
+                success:function (data, textStatus, jqXHR) {
+                    this.onPostSuccess.notify({tumlUri:tumlUri, tabId:this.localMetaForData.name, data:data}, null, this);
+                },
+                error:function (jqXHR, textStatus, errorThrown) {
+                    $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
+                    this.onPostFailure.notify({tumlUri:tumlUri, tabId:this.localMetaForData.name}, null, this);
+                }
+            });
+        }
+
         this.suspendTransactionAndSave = function() {
             //Suspend the transaction
             $.ajax({
@@ -647,6 +664,14 @@
             });
 
             this.grid.onClick.subscribe(function (e, args) {
+
+                //if new row call the server to create the object
+                if (isCellEditable(args.row, args.cell, self.dataView.getItem(args.row))) {
+                    if (self.dataView.getItem(args.row) == undefined || self.dataView.getItem(args.row) == null) {
+                        self.addNewRow(args);
+                    }
+                }
+
                 var column = self.grid.getColumns()[args.cell];
                 if (column.name == 'id') {
                     e.stopImmediatePropagation();
@@ -667,9 +692,10 @@
                         if (self.dataView.getItem(args.row) !== undefined && self.dataView.getItem(args.row) !== null && self.dataView.getItem(args.row)[column.name] !== undefined && self.dataView.getItem(args.row)[column.name] !== null) {
                             data = self.dataView.getItem(args.row)[column.name];
                         }
+                        //Ensure the row in the grid exist
                         //TODO Suspend the transaction
                         //TODO Save the grid
-                        self.suspendTransactionAndSave();
+//                        self.suspendTransactionAndSave();
                         //TODO pass in the row's id
                         var id = self.dataView.getItem(args.row)["id"];
                         self.onClickManyComponentCell.notify({data:data, cell:args, tumlUri:column.options.property.tumlUri, property:column.options.property}, null, self);
@@ -793,25 +819,25 @@
                 }
             });
 
-            this.addNewRow = function (args) {
-                var $newItem = {};
-                for (var i = 0; i < this.grid.getColumns().length; i++) {
-                    var column = this.grid.getColumns()[i];
-                    $newItem[column.name] = null;
-                }
-                //Generate a fake id, its required for the grid to work nicely
-                $newItem.id = 'fake::' + this.dataView.getItems().length + this.dataView.getNewItems().length + 1;
-
-                //Default required booleans to false
-                $.each(this.localMetaForData.properties, function (index, property) {
-                    if (property.fieldType == 'Boolean' && property.lower > 0) {
-                        $newItem[property.name] = false;
-                    }
-                });
-                this.dataView.addItem($.extend($newItem, args.item));
-
-                updateValidationWarningHeader();
-            }
+//            this.addNewRow = function (args) {
+//                var $newItem = {};
+//                for (var i = 0; i < this.grid.getColumns().length; i++) {
+//                    var column = this.grid.getColumns()[i];
+//                    $newItem[column.name] = null;
+//                }
+//                //Generate a fake id, its required for the grid to work nicely
+//                $newItem.id = 'fake::' + this.dataView.getItems().length + this.dataView.getNewItems().length + 1;
+//
+//                //Default required booleans to false
+//                $.each(this.localMetaForData.properties, function (index, property) {
+//                    if (property.fieldType == 'Boolean' && property.lower > 0) {
+//                        $newItem[property.name] = false;
+//                    }
+//                });
+//                this.dataView.addItem($.extend($newItem, args.item));
+//
+//                updateValidationWarningHeader();
+//            }
 
             function updateValidationWarningHeader() {
                 $('#validation-warning').children().remove();
