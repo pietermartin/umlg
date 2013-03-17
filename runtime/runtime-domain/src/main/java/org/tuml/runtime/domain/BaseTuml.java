@@ -3,6 +3,7 @@ package org.tuml.runtime.domain;
 import com.tinkerpop.blueprints.Vertex;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.runtime.adaptor.TumlExceptionUtilFactory;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.memory.TumlMemorySet;
@@ -30,6 +31,7 @@ public abstract class BaseTuml implements TumlNode, Serializable {
 
     public void defaultCreate() {
         getUid();
+        GraphDb.getDb().getIndex("uniqueVertex", Vertex.class).put("uniqueVertex", getId(), this.vertex);
     }
 
     public String getName() {

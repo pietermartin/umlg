@@ -41,7 +41,12 @@ public interface TumlGraph extends TransactionalGraph, IndexableGraph, Serializa
 
     boolean hasEdgeBeenDeleted(Edge edge);
 
-    boolean lockOnTransaction(Object object);
+    //TODO devise some timeout strategy
+    void acquireWriteLock(Vertex vertex);
 
     void clearTxThreadVar();
+
+    void createUniqueVertexIndex();
+
+    boolean isTransactionActive();
 }

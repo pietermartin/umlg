@@ -22,27 +22,27 @@ public class TumlNeo4jExceptionUtilIml implements TumlExceptionUtil {
     }
 
     @Override
-    public void handle(Exception e) {
+    public RuntimeException handle(Exception e) {
         if (e instanceof TransactionFailureException) {
             Throwable transactionFailureExceptionCause = e.getCause();
             if (transactionFailureExceptionCause != null && transactionFailureExceptionCause instanceof RollbackException) {
                 Throwable rollbackExceptionCause = transactionFailureExceptionCause.getCause();
                 if (rollbackExceptionCause.getCause() != null && (rollbackExceptionCause.getCause() instanceof RuntimeException)) {
-                    throw (RuntimeException) rollbackExceptionCause.getCause();
+                    return (RuntimeException) rollbackExceptionCause.getCause();
                 } else if (rollbackExceptionCause instanceof RuntimeException) {
-                    throw (RuntimeException) rollbackExceptionCause;
+                    return (RuntimeException) rollbackExceptionCause;
                 } else {
-                    throw new RuntimeException(rollbackExceptionCause);
+                    return new RuntimeException(rollbackExceptionCause);
                 }
             } else if (transactionFailureExceptionCause instanceof RuntimeException) {
-                throw (RuntimeException) transactionFailureExceptionCause;
+                return (RuntimeException) transactionFailureExceptionCause;
             } else {
-                throw new RuntimeException(transactionFailureExceptionCause);
+                return new RuntimeException(transactionFailureExceptionCause);
             }
         } else if (e instanceof RuntimeException) {
-            throw (RuntimeException) e;
+            return (RuntimeException) e;
         } else {
-            throw new RuntimeException(e);
+            return new RuntimeException(e);
         }
     }
 

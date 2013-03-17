@@ -53,7 +53,6 @@ public class RootResourceServerResourceBuilder extends BaseServerResourceBuilder
             addGetRootObjectRepresentation(clazz, annotatedInf, annotatedClass);
             addPutDeleteObjectRepresentation(clazz, annotatedInf, annotatedClass, true);
             addPutDeleteObjectRepresentation(clazz, annotatedInf, annotatedClass, false);
-//			addPostRootObjectRepresentation(clazz, annotatedInf, annotatedClass);
             addPostObjectRepresentation(clazz, annotatedInf, annotatedClass);
             addToRouterEnum(clazz, annotatedClass);
 
@@ -77,6 +76,9 @@ public class RootResourceServerResourceBuilder extends BaseServerResourceBuilder
         TinkerGenerationUtil.addOverrideAnnotation(post);
         TinkerGenerationUtil.addSuppressWarning(post);
 
+        //Check if transaction needs resuming
+        checkIfTransactionSuspended(post);
+
         OJPathName parentPathName = TumlClassOperations.getPathName(concreteClassifier);
 
         OJTryStatement ojTryStatement = new OJTryStatement();
@@ -88,39 +90,72 @@ public class RootResourceServerResourceBuilder extends BaseServerResourceBuilder
         entityText.setInitExp("entity.getText()");
         ojTryStatement.getTryPart().addToLocals(entityText);
 
+        OJField jsonData = new OJField("json", "java.lang.StringBuilder");
+        jsonData.setInitExp("new StringBuilder()");
+        ojTryStatement.getTryPart().addToLocals(jsonData);
+        ojTryStatement.getTryPart().addToStatements("json.append(\"[\")");
+        ojTryStatement.getTryPart().addToStatements("json.append(\"{\\\"data\\\": [\")");
+
+        OJIfStatement ifTextNull = new OJIfStatement("entityText != null");
+        ojTryStatement.getTryPart().addToStatements(ifTextNull);
+        ifTextNull.addToElsePart("json.append(add())");
+
         OJAnnotatedField objectO = new OJAnnotatedField("o", new OJPathName("Object"));
         objectO.setInitExp("mapper.readValue(" + entityText.getName() + ", Object.class)");
-        ojTryStatement.getTryPart().addToLocals(objectO);
+        ifTextNull.getThenPart().addToLocals(objectO);
         OJIfStatement ifArray = new OJIfStatement("o instanceof ArrayList");
         OJPathName genericsForArray = new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object");
-        OJField array = new OJField("array", new OJPathName("java.util.ArrayList").addToGenerics(genericsForArray));
+        OJField array = new OJField("array", new OJPathName("java.util.List").addToGenerics(genericsForArray));
         array.setInitExp("(ArrayList<Map<String, Object>>)o");
         ifArray.getThenPart().addToLocals(array);
-        ojTryStatement.getTryPart().addToStatements(ifArray);
+
+        OJField count = new OJField("count", "int");
+        count.setInitExp("0");
+        ifArray.getThenPart().addToLocals(count);
+
+        ifTextNull.getThenPart().addToStatements(ifArray);
         OJForStatement forArray = new OJForStatement("map", new OJPathName("java.util.Map").addToGenerics(new OJPathName("String")).addToGenerics(
                 new OJPathName("Object")), "array");
         ifArray.addToThenPart(forArray);
-        forArray.getBody().addToStatements("add(map)");
+        forArray.getBody().addToStatements("count++");
+        forArray.getBody().addToStatements("json.append(add(map))");
+        OJIfStatement ifToAddCommaToJson = new OJIfStatement("count < array.size()");
+        ifToAddCommaToJson.addToThenPart("json.append(\",\")");
+        forArray.getBody().addToStatements(ifToAddCommaToJson);
 
         OJField map = new OJField("map", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object"));
         map.setInitExp("(Map<String, Object>) o");
         ifArray.setElsePart(new OJBlock());
         ifArray.getElsePart().addToLocals(map);
-        ifArray.getElsePart().addToStatements("add(map)");
+        ifArray.getElsePart().addToStatements("json.append(add(map))");
 
         addPostResource(concreteClassifier, annotatedClass, parentPathName);
 
-        ojTryStatement.getTryPart().addToStatements("GraphDb.getDb().commit()");
+        //Check if transaction needs commiting
+        commitIfNotFromSuspendedTransaction(ojTryStatement.getTryPart());
+
+        ojTryStatement.getTryPart().addToStatements("meta", "json.append(\"], \\\"meta\\\": {\")");
+
+        ojTryStatement.getTryPart().addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + concreteClassifier.getQualifiedName() + "\\\"\")");
+        ojTryStatement.getTryPart().addToStatements("json.append(\", \\\"to\\\": \")");
+
+        // Meta data remains for the root object as viewing a many list does
+        // not
+        // change the context
+        ojTryStatement.getTryPart().addToStatements("json.append(" + TumlClassOperations.propertyEnumName(concreteClassifier) + ".asJson())");
+        ojTryStatement.getTryPart().addToStatements("json.append(\", \\\"from\\\": \")");
+        ojTryStatement.getTryPart().addToStatements("json.append(" + TinkerGenerationUtil.RootRuntimePropertyEnum.getLast() + ".asJson())");
+        ojTryStatement.getTryPart().addToStatements("json.append(\"}}]\")");
+        ojTryStatement.getTryPart().addToStatements("return new " + TumlRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
 
         ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
         ojTryStatement.getCatchPart().addToStatements("GraphDb.getDb().rollback()");
-        ojTryStatement.getCatchPart().addToStatements(TumlRestletGenerationUtil.TumlExceptionUtilFactory.getLast() + ".getTumlExceptionUtil().handle(e)");
+        ojTryStatement.getCatchPart().addToStatements("throw " + TumlRestletGenerationUtil.TumlExceptionUtilFactory.getLast() + ".getTumlExceptionUtil().handle(e)");
         annotatedClass.addToImports(TumlRestletGenerationUtil.TumlExceptionUtilFactory);
         post.getBody().addToStatements(ojTryStatement);
 
         annotatedClass.addToImports(parentPathName);
 
-        post.getBody().addToStatements("return get()");
 
         annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
         annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);
@@ -128,13 +163,21 @@ public class RootResourceServerResourceBuilder extends BaseServerResourceBuilder
     }
 
     private void addPostResource(Classifier concreteClassifier, OJAnnotatedClass annotatedClass, OJPathName parentPathName) {
-        OJAnnotatedOperation add = new OJAnnotatedOperation("add");
+        OJAnnotatedOperation add = new OJAnnotatedOperation("add", "String");
         add.setVisibility(OJVisibilityKind.PRIVATE);
         add.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
         annotatedClass.addToOperations(add);
         add.getBody().addToStatements(TumlClassOperations.getPathName(concreteClassifier).getLast() + " childResource = new " + TumlClassOperations.getPathName(concreteClassifier).getLast() + "(true)");
         annotatedClass.addToImports(TumlClassOperations.getPathName(concreteClassifier));
         add.getBody().addToStatements("childResource.fromJson(propertyMap)");
+        add.getBody().addToStatements("return childResource.toJson()");
+
+        OJAnnotatedOperation addWithoutData = new OJAnnotatedOperation("add", "String");
+        addWithoutData.setVisibility(OJVisibilityKind.PRIVATE);
+        annotatedClass.addToOperations(addWithoutData);
+        addWithoutData.getBody().addToStatements(TumlClassOperations.getPathName(concreteClassifier).getLast() + " childResource = new " + TumlClassOperations.getPathName(concreteClassifier).getLast() + "(true)");
+        annotatedClass.addToImports(TumlClassOperations.getPathName(concreteClassifier));
+        addWithoutData.getBody().addToStatements("return childResource.toJson()");
     }
 
     private void addPutDeleteObjectRepresentation(Classifier classifier, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass, boolean put) {
@@ -227,65 +270,6 @@ public class RootResourceServerResourceBuilder extends BaseServerResourceBuilder
         annotatedClass.addToImports(TumlClassOperations.getPathName(classifier));
         delete.getBody().addToStatements("childResource.delete()");
 
-    }
-
-    private void addPostRootObjectRepresentation(Class clazz, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass) {
-        OJAnnotatedOperation postInf = new OJAnnotatedOperation("post", TumlRestletGenerationUtil.Representation);
-        postInf.addToParameters(new OJParameter("entity", TumlRestletGenerationUtil.Representation));
-        annotatedInf.addToOperations(postInf);
-        postInf.addAnnotationIfNew(new OJAnnotationValue(TumlRestletGenerationUtil.Post, "json"));
-
-        OJAnnotatedOperation post = new OJAnnotatedOperation("post", TumlRestletGenerationUtil.Representation);
-        post.addToParameters(new OJParameter("entity", TumlRestletGenerationUtil.Representation));
-        post.addToThrows(TumlRestletGenerationUtil.ResourceException);
-        annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
-        TinkerGenerationUtil.addOverrideAnnotation(post);
-        TinkerGenerationUtil.addSuppressWarning(post);
-
-        OJTryStatement ojTryStatement = new OJTryStatement();
-        OJField mapper = new OJField("mapper", TinkerGenerationUtil.ObjectMapper);
-        mapper.setInitExp("new ObjectMapper()");
-        ojTryStatement.getTryPart().addToLocals(mapper);
-        OJAnnotatedField objectO = new OJAnnotatedField("o", new OJPathName("Object"));
-        objectO.setInitExp("mapper.readValue(entity.getText(), Object.class)");
-        ojTryStatement.getTryPart().addToLocals(objectO);
-        OJIfStatement ifArray = new OJIfStatement("o instanceof ArrayList");
-        OJPathName genericsForArray = new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object");
-        OJField array = new OJField("array", new OJPathName("java.util.ArrayList").addToGenerics(genericsForArray));
-        array.setInitExp("(ArrayList<Map<String, Object>>)o");
-        ifArray.getThenPart().addToLocals(array);
-        ojTryStatement.getTryPart().addToStatements(ifArray);
-        OJForStatement forArray = new OJForStatement("map", new OJPathName("java.util.Map").addToGenerics(new OJPathName("String")).addToGenerics(
-                new OJPathName("Object")), "array");
-        ifArray.addToThenPart(forArray);
-        OJPathName classPathName = TumlClassOperations.getPathName(clazz);
-        OJField resource = new OJField("resource", classPathName);
-        forArray.getBody().addToLocals(resource);
-        OJIfStatement ifResourceExist = new OJIfStatement("map.get(\"id\") != null");
-        ifResourceExist.addToThenPart("resource = new " + classPathName.getLast() + "(GraphDb.getDb().getVertex(map.get(\"id\")))");
-        ifResourceExist.addToElsePart("resource = new " + classPathName.getLast() + "(true)");
-        forArray.getBody().addToStatements(ifResourceExist);
-        forArray.getBody().addToStatements("resource.fromJson(map)");
-
-        OJField map = new OJField("map", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object"));
-        map.setInitExp("(Map<String, Object>) o");
-        ifArray.setElsePart(new OJBlock());
-        ifArray.getElsePart().addToLocals(map);
-        ifArray.getElsePart().addToStatements(classPathName.getLast() + " resource = new " + classPathName.getLast() + "(true)");
-        ifArray.getElsePart().addToStatements("resource.fromJson(map)");
-
-        ojTryStatement.getTryPart().addToStatements("GraphDb.getDb().commit()");
-
-        ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
-        ojTryStatement.getCatchPart().addToStatements("GraphDb.getDb().rollback()");
-        ojTryStatement.getCatchPart().addToStatements("throw new RuntimeException(e)");
-        post.getBody().addToStatements(ojTryStatement);
-
-        buildToJson(clazz, annotatedClass, post.getBody());
-
-        annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
-        annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);
-        annotatedClass.addToOperations(post);
     }
 
     private void buildToJson(Class clazz, OJAnnotatedClass annotatedClass, OJBlock block) {
@@ -394,6 +378,14 @@ public class RootResourceServerResourceBuilder extends BaseServerResourceBuilder
 
         OJAnnotatedOperation attachAll = routerEnum.findOperation("attachAll", TumlRestletGenerationUtil.Router);
         attachAll.getBody().addToStatements(routerEnum.getName() + "." + ojLiteral.getName() + ".attach(router)");
+    }
+
+    private void addPrivateGetter(org.eclipse.uml2.uml.Class clazz, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass) {
+        OJField jsonResult = new OJField("jsonEntityData", "java.lang.StringBuilder");
+        jsonResult.setInitExp("new StringBuilder()");
+        annotatedClass.addToFields(jsonResult);
+        OJAnnotatedOperation get = new OJAnnotatedOperation("internalGetJson", "String");
+        get.addToThrows(TumlRestletGenerationUtil.ResourceException);
     }
 
 }

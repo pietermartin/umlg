@@ -245,7 +245,7 @@ public class JsonTest extends BaseLocalDbTest {
 		Assert.assertEquals("BAD", jsonMap.get("reason"));
 
 		jsonMap = objectMapper.readValue(g2.toJson(), Map.class);
-		Assert.assertEquals("null", jsonMap.get("reason"));
+		Assert.assertEquals(null, jsonMap.get("reason"));
 
 		God god1FromJson = new God(true);
 		god1FromJson.fromJson(g1.toJson());

@@ -12,4 +12,5 @@ public interface TumlMetaNode<T> {
     Vertex getVertex();
     Long getId();
     String getUid();
+    Long getIdHigh();
 }

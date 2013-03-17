@@ -5,6 +5,6 @@ package org.tuml.runtime.adaptor;
  * Time: 8:30 PM
  */
 public interface TumlExceptionUtil {
-    void handle(Exception e);
+    RuntimeException handle(Exception e);
     boolean isNodeNotFoundException(Exception e);
 }

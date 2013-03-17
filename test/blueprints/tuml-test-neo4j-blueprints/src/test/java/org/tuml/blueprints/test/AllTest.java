@@ -31,6 +31,7 @@ import org.tuml.tinker.qualifiertest.TestQualifierChangeEvent;
 import org.tuml.tinker.qualifiertest.TestQualifierOnManyToMany;
 import org.tuml.tinker.query.TestMetaQueries;
 import org.tuml.tinker.query.TestQueryBaseModelTumlAssociation;
+import org.tuml.tinker.uniqueindextest.UniqueIndexTest;
 import org.tuml.tinker.validationtest.TestValidation;
 import org.tuml.transaction.test.TransactionSuspendResumeTest;
 
@@ -57,7 +58,8 @@ import org.tuml.transaction.test.TransactionSuspendResumeTest;
         TestMetaQueries.class, TestQueryBaseModelTumlAssociation.class,
         TestValidation.class,
         TransactionSuspendResumeTest.class,
-        ConstrainedPropertyTest.class})
+        ConstrainedPropertyTest.class,
+        UniqueIndexTest.class})
 public class AllTest {
 
 }

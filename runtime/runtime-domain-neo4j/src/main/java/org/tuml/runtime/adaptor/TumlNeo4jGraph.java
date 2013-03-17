@@ -8,7 +8,10 @@ import org.neo4j.graphdb.*;
 import org.neo4j.graphdb.event.TransactionEventHandler;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
 import org.neo4j.kernel.GraphDatabaseAPI;
+import org.neo4j.kernel.TopLevelTransaction;
+import org.neo4j.kernel.impl.transaction.AbstractTransactionManager;
 import org.tuml.runtime.domain.PersistentObject;
+import sun.util.resources.LocaleNames_lt;
 
 import javax.transaction.*;
 import javax.transaction.Transaction;
@@ -28,10 +31,11 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
     private TransactionEventHandler<PersistentObject> transactionEventHandler;
     private Map<TransactionIdentifier, Transaction> transactionIdentifierTransactionMap;
     private Map<Transaction, TransactionIdentifier> transactionTransactionIdentifierMap;
-    private ConcurrentMap<org.neo4j.graphdb.Transaction, ReentrantLock> transactionLockMap = new ConcurrentHashMap<org.neo4j.graphdb.Transaction, ReentrantLock>();
-    private ConcurrentMap<Object, org.neo4j.graphdb.Transaction> classTransactionMap = new ConcurrentHashMap<Object, org.neo4j.graphdb.Transaction>();
-    private ConcurrentMap<org.neo4j.graphdb.Transaction, Set<Object>> transactionClassMap = new ConcurrentHashMap<org.neo4j.graphdb.Transaction, Set<Object>>();
+    //    private ConcurrentMap<org.neo4j.graphdb.Transaction, ReentrantLock> transactionLockMap = new ConcurrentHashMap<org.neo4j.graphdb.Transaction, ReentrantLock>();
+//    private ConcurrentMap<Object, org.neo4j.graphdb.Transaction> classTransactionMap = new ConcurrentHashMap<Object, org.neo4j.graphdb.Transaction>();
+//    private ConcurrentMap<org.neo4j.graphdb.Transaction, Set<Object>> transactionClassMap = new ConcurrentHashMap<org.neo4j.graphdb.Transaction, Set<Object>>();
     private static final Logger logger = Logger.getLogger(TumlNeo4jGraph.class.getPackage().getName());
+    private TumlTinkerIndex<Vertex> uniqueVertexIndex;
 
 
     public TumlNeo4jGraph(String directory) {
@@ -103,6 +107,12 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
     }
 
     @Override
+    public void createUniqueVertexIndex() {
+        this.uniqueVertexIndex = createIndex("uniqueVertex", Vertex.class);
+        commit();
+    }
+
+    @Override
     public void addRoot() {
         try {
             this.getRawGraph().getNodeById(1);
@@ -141,13 +151,19 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
     @Override
     public <T> T instantiateClassifier(Long id) {
         try {
-            Vertex v = this.getVertex(id);
-            // TODO reimplement schemaHelper
-            String className = (String) v.getProperty("className");
-            Class<?> c = Class.forName(className);
-            // Class<?> c = schemaHelper.getClassNames().get((String)
-            // v.getProperty("className"));
-            return (T) c.getConstructor(Vertex.class).newInstance(v);
+            Iterator<Vertex> uniqueVertexIter = this.uniqueVertexIndex.get("uniqueVertex", id).iterator();
+            if (uniqueVertexIter.hasNext()) {
+                Vertex v = uniqueVertexIter.next();
+//            Vertex v = this.getVertex(id);
+                // TODO reimplement schemaHelper
+                String className = (String) v.getProperty("className");
+                Class<?> c = Class.forName(className);
+                // Class<?> c = schemaHelper.getClassNames().get((String)
+                // v.getProperty("className"));
+                return (T) c.getConstructor(Vertex.class).newInstance(v);
+            } else {
+                return null;
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -178,9 +194,11 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
     @Override
     public void resume(TransactionIdentifier transactionIdentifier) {
         GraphDatabaseAPI graphDatabaseAPI = (GraphDatabaseAPI) getRawGraph();
-        TransactionManager transactionManager = graphDatabaseAPI.getTxManager();
+        AbstractTransactionManager transactionManager = (AbstractTransactionManager) graphDatabaseAPI.getTxManager();
         try {
-            transactionManager.resume(this.transactionIdentifierTransactionMap.get(transactionIdentifier));
+            Transaction transaction = this.transactionIdentifierTransactionMap.get(transactionIdentifier);
+            this.tx.set(new TopLevelTransaction(transactionManager, graphDatabaseAPI.getLockManager(), transactionManager.getTransactionState()));
+            transactionManager.resume(transaction);
         } catch (InvalidTransactionException e) {
             throw new RuntimeException(e);
         } catch (SystemException e) {
@@ -220,7 +238,6 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
         if (null == tx.get()) {
             return;
         }
-
         GraphDatabaseAPI graphDatabaseAPI = (GraphDatabaseAPI) getRawGraph();
         TransactionManager transactionManager = graphDatabaseAPI.getTxManager();
         javax.transaction.Transaction t = null;
@@ -249,14 +266,14 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
 
         try {
             tx.get().success();
-            ReentrantLock reentrantLock = this.transactionLockMap.remove(tx.get());
-            if (reentrantLock != null) {
-                Set<Object> objectSet = this.transactionClassMap.remove(tx.get());
-                for (Object object : objectSet) {
-                    this.classTransactionMap.remove(object);
-                }
-                reentrantLock.unlock();
-            }
+//            ReentrantLock reentrantLock = this.transactionLockMap.remove(tx.get());
+//            if (reentrantLock != null) {
+//                Set<Object> objectSet = this.transactionClassMap.remove(tx.get());
+//                for (Object object : objectSet) {
+//                    this.classTransactionMap.remove(object);
+//                }
+//                reentrantLock.unlock();
+//            }
         } finally {
             tx.get().finish();
             tx.remove();
@@ -314,25 +331,27 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
 
     //TODO do this properly, all thread safe concurrent get put way
     @Override
-    public boolean lockOnTransaction(Object object){
-        org.neo4j.graphdb.Transaction transaction = this.classTransactionMap.get(object);
-        if (transaction != null) {
-            //Already locked
-            this.transactionClassMap.get(transaction).add(object);
-            this.transactionLockMap.get(transaction).lock();
-            return false;
-        } else {
-            ReentrantLock reentrantLock = new ReentrantLock();
-            reentrantLock.lock();
-            if (tx.get()==null) {
-                autoStartTransaction();
-            }
-            this.transactionLockMap.put(tx.get(), reentrantLock);
-            Set<Object> objectSet = new HashSet<Object>();
-            objectSet.add(object);
-            this.transactionClassMap.put(tx.get(), objectSet);
-            return true;
-        }
+    public void acquireWriteLock(Vertex vertex) {
+        autoStartTransaction();
+        Lock lock = tx.get().acquireWriteLock(((Neo4jVertex) vertex).getRawVertex());
+//        org.neo4j.graphdb.Transaction transaction = this.classTransactionMap.get(object);
+//        if (transaction != null) {
+//            //Already locked
+//            this.transactionClassMap.get(transaction).add(object);
+//            this.transactionLockMap.get(transaction).lock();
+//            return false;
+//        } else {
+//            ReentrantLock reentrantLock = new ReentrantLock();
+//            reentrantLock.lock();
+//            if (tx.get() == null) {
+//                autoStartTransaction();
+//            }
+//            this.transactionLockMap.put(tx.get(), reentrantLock);
+//            Set<Object> objectSet = new HashSet<Object>();
+//            objectSet.add(object);
+//            this.transactionClassMap.put(tx.get(), objectSet);
+//            return true;
+//        }
     }
 
     @Override
@@ -345,4 +364,8 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
 
     }
 
+    @Override
+    public boolean isTransactionActive() {
+        return tx.get() != null;
+    }
 }

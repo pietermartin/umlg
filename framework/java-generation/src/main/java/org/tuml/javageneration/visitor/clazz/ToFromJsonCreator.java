@@ -77,9 +77,15 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                                 + pWrap.getter() + "()) + \"" + "\")");
                 annotatedClass.addToImports(TinkerGenerationUtil.ToJsonUtil);
             } else if (pWrap.isEnumeration()) {
-                toJson.getBody().addToStatements(
-                        "sb.append(\"\\\"" + pWrap.getName() + "\\\": \\\"\" + (" + pWrap.getter() + "() == null ? \"null\" : " + pWrap.getter()
-                                + "().toJson()) + \"\\\"" + "\")");
+                if (pWrap.isMany()) {
+                    toJson.getBody().addToStatements(
+                            "sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + (" + pWrap.getter() + "() == null ? null : " + pWrap.getter()
+                                    + "().toJson()" + "))");
+                } else {
+                    toJson.getBody().addToStatements(
+                            "sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + (" + pWrap.getter() + "() == null ? null : \"\\\"\" + " + pWrap.getter()
+                                    + "().toJson() + \"\\\"" + "\"))");
+                }
             } else {
                 if (pWrap.isNumber() || pWrap.isBoolean()) {
                     toJson.getBody().addToStatements("sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + " + pWrap.getter() + "() + \"" + "\")");

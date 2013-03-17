@@ -141,11 +141,11 @@ public class TinkerGenerationUtil {
     public static OJPathName tinkerIdUtilFactoryPathName = new OJPathName("org.tuml.runtime.adaptor.TinkerIdUtilFactory");
 
     public static String getEdgeToRootLabelStrategyMeta(org.eclipse.uml2.uml.Class clazz) {
-        return "root" + TumlClassOperations.getMetaClassName(clazz);
+        return "root" + TumlClassOperations.getQualifiedName(clazz) + "Meta";
     }
 
     public static String getEdgeToRootLabelStrategy(org.eclipse.uml2.uml.Class clazz) {
-        return "root" + TumlClassOperations.className(clazz);
+        return "root" + TumlClassOperations.getQualifiedName(clazz);
     }
 
     public static String umlPrimitiveTypeToJava(Type type) {

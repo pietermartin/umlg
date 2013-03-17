@@ -33,6 +33,13 @@ public abstract class BaseServerResourceBuilder extends BaseVisitor {
         post.getBody().addToStatements(ifTransactionNeedsResuming);
     }
 
+    protected void commitIfNotFromSuspendedTransaction(OJBlock block) {
+        //Check if transaction needs resuming
+        OJIfStatement ifTransactionNeedsResuming = new OJIfStatement("getAttribute(\"" + TinkerGenerationUtil.transactionIdentifier + "\") != null");
+        ifTransactionNeedsResuming.addToThenPart(TinkerGenerationUtil.graphDbAccess + ".commit()");
+        block.addToStatements(ifTransactionNeedsResuming);
+    }
+
     protected void commitIfNotFromResume(OJBlock block) {
         OJIfStatement ifTransactionNeedsResuming = new OJIfStatement("getAttribute(\"" + TinkerGenerationUtil.transactionIdentifier + "\") == null");
         ifTransactionNeedsResuming.addToThenPart(TinkerGenerationUtil.graphDbAccess + ".commit()");

@@ -50,6 +50,8 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
 
             addGetAllInstances(clazz, metaClass);
 
+            addGetHighId(clazz, metaClass);
+
         }
     }
 
@@ -100,7 +102,7 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
 
     private void addGetEdgeToRootLabel(OJAnnotatedClass metaClass, Class clazz) {
         OJAnnotatedOperation getEdgeToRootLabel = new OJAnnotatedOperation("getEdgeToRootLabel", new OJPathName("String"));
-        getEdgeToRootLabel.getBody().addToStatements("return \"root" + TumlClassOperations.getMetaClassName(clazz) + "\"");
+        getEdgeToRootLabel.getBody().addToStatements("return \"" + TinkerGenerationUtil.getEdgeToRootLabelStrategyMeta(clazz) + "\"");
         metaClass.addToOperations(getEdgeToRootLabel);
     }
 
@@ -118,11 +120,14 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
         ifHasNext.addToThenPart("result =  new " + TumlClassOperations.getMetaClassName(clazz) + "(iter.next().getVertex(Direction.IN))");
         INSTANCE.getBody().addToStatements(ifHasNext);
 
-        OJIfStatement ifLock = new OJIfStatement(TinkerGenerationUtil.graphDbAccess + ".lockOnTransaction(" + metaClass.getName() + ".class)");
-        ifLock.addToThenPart("result = new " + metaClass.getName() + "()");
-        ifLock.addToElsePart("iter = " + TinkerGenerationUtil.graphDbAccess + ".getRoot().getEdges(Direction.OUT, \"" + TinkerGenerationUtil.getEdgeToRootLabelStrategyMeta(clazz) + "\").iterator()");
-        ifLock.addToElsePart("result = new " + metaClass.getName() + "(iter.next().getVertex(Direction.IN))");
-        ifHasNext.addToElsePart(ifLock);
+        ifHasNext.addToElsePart(TinkerGenerationUtil.graphDbAccess + ".acquireWriteLock(" + TinkerGenerationUtil.graphDbAccess + ".getRoot())");
+        ifHasNext.addToElsePart("iter = " + TinkerGenerationUtil.graphDbAccess + ".getRoot().getEdges(Direction.OUT, \"" + TinkerGenerationUtil.getEdgeToRootLabelStrategyMeta(clazz) + "\").iterator()");
+
+        OJIfStatement ifIter2 = new OJIfStatement("!iter.hasNext()");
+        ifIter2.addToThenPart("result = new " + metaClass.getName() + "()");
+
+        ifIter2.addToElsePart("result = new " + metaClass.getName() + "(iter.next().getVertex(Direction.IN))");
+        ifHasNext.addToElsePart(ifIter2);
 
         INSTANCE.getBody().addToStatements("return result");
         metaClass.addToImports("java.util.Iterator");
@@ -168,6 +173,13 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
         annotatedClass.getDefaultConstructor().setVisibility(OJVisibilityKind.PRIVATE);
         annotatedClass.getDefaultConstructor().getBody().addToStatements(TinkerGenerationUtil.transactionThreadEntityVar.getLast() + ".remove(getVertex().getId().toString())");
         annotatedClass.addToImports(TinkerGenerationUtil.transactionThreadEntityVar);
+    }
+
+    private void addGetHighId(Class clazz, OJAnnotatedClass metaClass) {
+        OJAnnotatedOperation getIdHigh = new OJAnnotatedOperation("getIdHigh", new OJPathName("java.lang.Long"));
+        TinkerGenerationUtil.addOverrideAnnotation(getIdHigh);
+        getIdHigh.getBody().addToStatements("return (Long)this.vertex.getProperty(\"highId\")");
+        metaClass.addToOperations(getIdHigh);
     }
 
 }

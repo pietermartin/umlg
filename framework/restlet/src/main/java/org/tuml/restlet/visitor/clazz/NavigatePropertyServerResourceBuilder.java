@@ -3,8 +3,7 @@ package org.tuml.restlet.visitor.clazz;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.uml2.uml.Classifier;
-import org.eclipse.uml2.uml.Property;
+import org.eclipse.uml2.uml.*;
 import org.tuml.java.metamodel.OJBlock;
 import org.tuml.java.metamodel.OJField;
 import org.tuml.java.metamodel.OJForStatement;
@@ -203,14 +202,6 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 
         putOrDelete.getBody().addToStatements("return get()");
 
-//        putOrDelete.getBody().addToStatements(
-//                "this." + parentPathName.getLast().toLowerCase() + "Id = Integer.parseInt((String)getRequestAttributes().get(\""
-//                        + parentPathName.getLast().toLowerCase() + "Id\"))");
-//        putOrDelete.getBody().addToStatements(
-//                parentPathName.getLast() + " parentResource = GraphDb.getDb().instantiateClassifier( " + parentPathName.getLast().toLowerCase() + "Id" + ")");
-//
-//        buildToJson(pWrap, annotatedClass, putOrDelete.getBody());
-
         annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
         annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);
         annotatedClass.addToOperations(putOrDelete);
@@ -304,8 +295,6 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
         annotatedClass.addToImports(parentPathName);
 
         post.getBody().addToStatements("return get()");
-
-//        buildToJson(pWrap, annotatedClass, post.getBody());
 
         annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
         annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);

@@ -1,5 +1,6 @@
 package org.tuml.tinker.speed;
 
+import junit.framework.Assert;
 import org.apache.commons.lang.time.StopWatch;
 import org.junit.Test;
 import org.tuml.collectiontest.Finger;
@@ -34,7 +35,5 @@ public class SpeedTest extends BaseLocalDbTest {
         db.commit();
         stopWatch.stop();
         System.out.println(stopWatch.toString());
-
-
     }
 }

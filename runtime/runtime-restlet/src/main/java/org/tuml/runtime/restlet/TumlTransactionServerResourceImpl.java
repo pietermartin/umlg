@@ -20,7 +20,7 @@ public class TumlTransactionServerResourceImpl extends ServerResource implements
 
     @Override
     public Representation delete(Representation entity) {
-        String uid = (String) getRequestAttributes().get("transactionId");
+        String uid = getQueryValue("transactionIdentifier");
         try {
             String commitValue = entity.getText();
             TransactionIdentifier transactionIdentifier = TumlTransactionManager.INSTANCE.get(uid);
@@ -46,7 +46,7 @@ public class TumlTransactionServerResourceImpl extends ServerResource implements
 
     @Override
     public Representation put(Representation entity) {
-        String uid = (String) getRequestAttributes().get("transactionId");
+        String uid = getQueryValue("transactionIdentifier");
         try {
             String commitValue = entity.getText();
             TransactionIdentifier transactionIdentifier = TumlTransactionManager.INSTANCE.get(uid);
@@ -55,10 +55,10 @@ public class TumlTransactionServerResourceImpl extends ServerResource implements
             Map<String, Boolean> commitValueAsMap = objectMapper.readValue(commitValue, Map.class);
             if (commitValueAsMap.get(TumlTransactionServerResource.COMMIT)) {
                 GraphDb.getDb().commit();
-                return new StringRepresentation(TumlTransactionServerResource.COMMITTED);
+                return new JsonRepresentation("{\"transaction\":\"COMMITTED\"}");
             } else {
                 GraphDb.getDb().rollback();
-                return new StringRepresentation(TumlTransactionServerResource.ROLLED_BACK);
+                return new JsonRepresentation("{\"transaction\":\"ROLLED_BACK\"}");
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

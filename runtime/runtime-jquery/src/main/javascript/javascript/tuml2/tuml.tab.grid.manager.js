@@ -1,12 +1,12 @@
 (function ($) {
     // register namespace
     $.extend(true, window, {
-        Tuml:{
-            TumlBaseGridManager:TumlBaseGridManager,
-            TumlManyComponentGridManager:TumlManyComponentGridManager,
-            TumlForManyLookupGridManager:TumlForManyLookupGridManager,
-            TumlQueryGridManager:TumlQueryGridManager,
-            TumlTabGridManager:TumlTabGridManager
+        Tuml: {
+            TumlBaseGridManager: TumlBaseGridManager,
+            TumlManyComponentGridManager: TumlManyComponentGridManager,
+            TumlForManyLookupGridManager: TumlForManyLookupGridManager,
+            TumlQueryGridManager: TumlQueryGridManager,
+            TumlTabGridManager: TumlTabGridManager
         }
     });
 
@@ -15,29 +15,29 @@
 
         //Public api
         $.extend(this, {
-            "TumlQueryGridManager":"1.0.0",
-            "onPutSuccess":new Tuml.Event(),
-            "onPutFailure":new Tuml.Event(),
-            "onPostSuccess":new Tuml.Event(),
-            "onPostFailure":new Tuml.Event(),
-            "onDeleteSuccess":new Tuml.Event(),
-            "onDeleteFailure":new Tuml.Event(),
-            "onCancel":new Tuml.Event(),
-            "onSelfCellClick":new Tuml.Event(),
-            "onContextMenuClickLink":new Tuml.Event(),
-            "onContextMenuClickDelete":new Tuml.Event(),
-            "onManyEditorKeyPress":new Tuml.Event()
+            "TumlQueryGridManager": "1.0.0",
+            "onPutSuccess": new Tuml.Event(),
+            "onPutFailure": new Tuml.Event(),
+            "onPostSuccess": new Tuml.Event(),
+            "onPostFailure": new Tuml.Event(),
+            "onDeleteSuccess": new Tuml.Event(),
+            "onDeleteFailure": new Tuml.Event(),
+            "onCancel": new Tuml.Event(),
+            "onSelfCellClick": new Tuml.Event(),
+            "onContextMenuClickLink": new Tuml.Event(),
+            "onContextMenuClickDelete": new Tuml.Event(),
+            "onManyEditorKeyPress": new Tuml.Event()
         });
 
         this.setupColumns = function () {
             TumlBaseGridManager.prototype.setupColumns.call(this, this.localMetaForData);
-            this.columns.push({id:"uri", name:"uri", field:"uri", sortable:false, formatter:TumlSlick.Formatters.Link});
+            this.columns.push({id: "uri", name: "uri", field: "uri", sortable: false, formatter: TumlSlick.Formatters.Link});
 
             self.columns.splice(0, 0, {
-                id:"row",
-                name:"row",
-                field:"row",
-                sortable:true
+                id: "row",
+                name: "row",
+                field: "row",
+                sortable: true
             });
 
         };
@@ -50,13 +50,13 @@
             var outerDivForResults = $('#' + this.gridDivName);
             outerDivForResults.children().remove();
 
-            $('<div />', {id:"queryResultsDiv"})
+            $('<div />', {id: "queryResultsDiv"})
             $('<div id="serverErrorMsg' + this.gridDivName + '" />').appendTo(outerDivForResults);
 
             var windowHeight = $('.query-center').height() - 30;
 
-            $('<div />', {id:'queryResultsDiv' + this.gridDivName, style:'width:auto;height:' + windowHeight + 'px;'}).appendTo(outerDivForResults);
-            $('<div />', {id:'pagerQueryResultsDiv' + this.gridDivName, style:'width:auto;height:20px;'}).appendTo(outerDivForResults);
+            $('<div />', {id: 'queryResultsDiv' + this.gridDivName, style: 'width:auto;height:' + windowHeight + 'px;'}).appendTo(outerDivForResults);
+            $('<div />', {id: 'pagerQueryResultsDiv' + this.gridDivName, style: 'width:auto;height:20px;'}).appendTo(outerDivForResults);
 
             $('#contextMenu' + this.gridDivName).remove();
             this.createGrid(result.data/*, this.metaForData*/, -1);
@@ -77,15 +77,15 @@
     TumlQueryGridManager.prototype = new TumlBaseGridManager;
 
     TumlQueryGridManager.prototype.setupOptions = function () {
-        this.options = {showHeaderRow:true,
-            headerRowHeight:30,
-            editable:false,
-            enableAddRow:false,
-            enableCellNavigation:true,
-            asyncEditorLoading:false,
-            enableAsyncPostRender:true,
-            forceFitColumns:false,
-            topPanelHeight:25
+        this.options = {showHeaderRow: true,
+            headerRowHeight: 30,
+            editable: false,
+            enableAddRow: false,
+            enableCellNavigation: true,
+            asyncEditorLoading: false,
+            enableAsyncPostRender: true,
+            forceFitColumns: false,
+            topPanelHeight: 25
         };
     }
 
@@ -99,31 +99,31 @@
 
         //Public api
         $.extend(this, {
-            "TumlTabGridManagerVersion":"1.0.0",
-            "onManyComponentSaveButtonSuccess":new Tuml.Event(),
-            "onManyComponentCloseButtonSuccess":new Tuml.Event(),
-            "onManyComponentCancelButtonSuccess":new Tuml.Event(),
-            "onClickManyComponentCell":new Tuml.Event(),
-            "onClickOneComponentCell":new Tuml.Event(),
-            "onPutSuccess":new Tuml.Event(),
-            "onPutFailure":new Tuml.Event(),
-            "onPostSuccess":new Tuml.Event(),
-            "onPostFailure":new Tuml.Event(),
-            "onDeleteSuccess":new Tuml.Event(),
-            "onDeleteFailure":new Tuml.Event(),
-            "onCancel":new Tuml.Event(),
-            "onSelfCellClick":new Tuml.Event(),
-            "onContextMenuClickLink":new Tuml.Event(),
-            "onContextMenuClickDelete":new Tuml.Event(),
-            "onManyEditorKeyPress":new Tuml.Event()
+            "TumlTabGridManagerVersion": "1.0.0",
+            "onManyComponentSaveButtonSuccess": new Tuml.Event(),
+            "onManyComponentCloseButtonSuccess": new Tuml.Event(),
+            "onManyComponentCancelButtonSuccess": new Tuml.Event(),
+            "onClickManyComponentCell": new Tuml.Event(),
+            "onClickOneComponentCell": new Tuml.Event(),
+            "onPutSuccess": new Tuml.Event(),
+            "onPutFailure": new Tuml.Event(),
+            "onPostSuccess": new Tuml.Event(),
+            "onPostFailure": new Tuml.Event(),
+            "onDeleteSuccess": new Tuml.Event(),
+            "onDeleteFailure": new Tuml.Event(),
+            "onCancel": new Tuml.Event(),
+            "onSelfCellClick": new Tuml.Event(),
+            "onContextMenuClickLink": new Tuml.Event(),
+            "onContextMenuClickDelete": new Tuml.Event(),
+            "onManyEditorKeyPress": new Tuml.Event()
         });
 
         this.setupColumns = function () {
             TumlBaseGridManager.prototype.setupColumns.call(this, this.localMetaForData);
-            this.columns.push({id:"uri", name:"uri", field:"uri", sortable:false, formatter:TumlSlick.Formatters.Link});
+            this.columns.push({id: "uri", name: "uri", field: "uri", sortable: false, formatter: TumlSlick.Formatters.Link});
             this.columns.push(
-                {id:"delete", name:"delete", field:"delete", sortable:false,
-                    formatter:TumlSlick.Formatters.TumlDelete }
+                {id: "delete", name: "delete", field: "delete", sortable: false,
+                    formatter: TumlSlick.Formatters.TumlDelete }
             );
         };
 
@@ -167,13 +167,13 @@
             $('<button />').text('Cancel').click(function () {
                 if (self.grid.getEditorLock().commitCurrentEdit()) {
                     self.cancel(self.dataBeforeEdit);
-                    self.onManyComponentCancelButtonSuccess.notify({value:self.dataView.getItems(), tabName:self.metaForData.name}, null, self);
+                    self.onManyComponentCancelButtonSuccess.notify({value: self.dataView.getItems(), tabName: self.metaForData.name}, null, self);
                 }
             }).appendTo('#grid-buttonManyComponent' + this.localMetaForData.name);
             $('<button />').text('Close').click(function () {
                 if (self.grid.getEditorLock().commitCurrentEdit()) {
                     self.cancel(self.dataBeforeEdit);
-                    self.onManyComponentCloseButtonSuccess.notify({value:self.dataView.getItems(), tabName:self.metaForData.name}, null, self);
+                    self.onManyComponentCloseButtonSuccess.notify({value: self.dataView.getItems(), tabName: self.metaForData.name}, null, self);
                 }
             }).appendTo('#grid-buttonManyComponent' + this.localMetaForData.name);
         }
@@ -186,7 +186,7 @@
         this.dataView.beginUpdate();
         this.dataView.setNewItems(data);
         this.dataView.setFilterArgs({
-            metaForData:this.localMetaForData
+            metaForData: this.localMetaForData
         });
         this.dataView.setFilter(filter);
         this.dataView.endUpdate();
@@ -204,20 +204,20 @@
 
         //Public api
         $.extend(this, {
-            "TumlForManyLookupGridManager":"1.0.0",
-            "onSelectButtonSuccess":new Tuml.Event(),
-            "onSelectCancelButtonSuccess":new Tuml.Event(),
-            "onPutSuccess":new Tuml.Event(),
-            "onPutFailure":new Tuml.Event(),
-            "onPostSuccess":new Tuml.Event(),
-            "onPostFailure":new Tuml.Event(),
-            "onDeleteSuccess":new Tuml.Event(),
-            "onDeleteFailure":new Tuml.Event(),
-            "onCancel":new Tuml.Event(),
-            "onSelfCellClick":new Tuml.Event(),
-            "onContextMenuClickLink":new Tuml.Event(),
-            "onContextMenuClickDelete":new Tuml.Event(),
-            "onManyEditorKeyPress":new Tuml.Event()
+            "TumlForManyLookupGridManager": "1.0.0",
+            "onSelectButtonSuccess": new Tuml.Event(),
+            "onSelectCancelButtonSuccess": new Tuml.Event(),
+            "onPutSuccess": new Tuml.Event(),
+            "onPutFailure": new Tuml.Event(),
+            "onPostSuccess": new Tuml.Event(),
+            "onPostFailure": new Tuml.Event(),
+            "onDeleteSuccess": new Tuml.Event(),
+            "onDeleteFailure": new Tuml.Event(),
+            "onCancel": new Tuml.Event(),
+            "onSelfCellClick": new Tuml.Event(),
+            "onContextMenuClickLink": new Tuml.Event(),
+            "onContextMenuClickDelete": new Tuml.Event(),
+            "onManyEditorKeyPress": new Tuml.Event()
         });
 
         this.setupOptions = function () {
@@ -253,13 +253,13 @@
                         var item = self.dataView.getItem(selectedRow);
                         items.push(item);
                     }
-                    self.onSelectButtonSuccess.notify({items:items, tabName:self.metaForData.name}, null, self);
+                    self.onSelectButtonSuccess.notify({items: items, tabName: self.metaForData.name}, null, self);
                 }
             }).appendTo('#grid-buttonLookup' + this.localMetaForData.name);
 
             $('<button />').text('Cancel').click(function () {
                 if (self.grid.getEditorLock().commitCurrentEdit()) {
-                    self.onSelectCancelButtonSuccess.notify({tabName:self.metaForData.name}, null, self);
+                    self.onSelectCancelButtonSuccess.notify({tabName: self.metaForData.name}, null, self);
                 }
             }).appendTo('#grid-buttonLookup' + this.localMetaForData.name);
         };
@@ -280,31 +280,31 @@
 
         //Public api
         $.extend(this, {
-            "TumlTabGridManagerVersion":"1.0.0",
-            "onAddButtonSuccess":new Tuml.Event(),
-            "onClickManyComponentCell":new Tuml.Event(),
-            "onClickOneComponentCell":new Tuml.Event(),
-            "onPutSuccess":new Tuml.Event(),
-            "onPutFailure":new Tuml.Event(),
-            "onPostSuccess":new Tuml.Event(),
-            "onPostFailure":new Tuml.Event(),
-            "onDeleteSuccess":new Tuml.Event(),
-            "onDeleteFailure":new Tuml.Event(),
-            "onCancel":new Tuml.Event(),
-            "onSelfCellClick":new Tuml.Event(),
-            "onContextMenuClickLink":new Tuml.Event(),
-            "onContextMenuClickDelete":new Tuml.Event(),
-            "onManyEditorKeyPress":new Tuml.Event()
+            "TumlTabGridManagerVersion": "1.0.0",
+            "onAddButtonSuccess": new Tuml.Event(),
+            "onClickManyComponentCell": new Tuml.Event(),
+            "onClickOneComponentCell": new Tuml.Event(),
+            "onPutSuccess": new Tuml.Event(),
+            "onPutFailure": new Tuml.Event(),
+            "onPostSuccess": new Tuml.Event(),
+            "onPostFailure": new Tuml.Event(),
+            "onDeleteSuccess": new Tuml.Event(),
+            "onDeleteFailure": new Tuml.Event(),
+            "onCancel": new Tuml.Event(),
+            "onSelfCellClick": new Tuml.Event(),
+            "onContextMenuClickLink": new Tuml.Event(),
+            "onContextMenuClickDelete": new Tuml.Event(),
+            "onManyEditorKeyPress": new Tuml.Event()
         });
 
         this.setupColumns = function () {
 
             TumlBaseGridManager.prototype.setupColumns.call(this, this.localMetaForData);
 
-            this.columns.push({id:"uri", name:"uri", field:"uri", sortable:false, formatter:TumlSlick.Formatters.Link});
+            this.columns.push({id: "uri", name: "uri", field: "uri", sortable: false, formatter: TumlSlick.Formatters.Link});
             this.columns.push(
-                {id:"delete", name:"delete", field:"delete", sortable:false,
-                    formatter:TumlSlick.Formatters.TumlDelete }
+                {id: "delete", name: "delete", field: "delete", sortable: false,
+                    formatter: TumlSlick.Formatters.TumlDelete }
             );
         };
 
@@ -322,16 +322,16 @@
                     if (self.grid.getEditorLock().commitCurrentEdit()) {
                         var adjustedUri = propertyNavigatingTo.tumlLookupUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), self.contextVertexId);
                         $.ajax({
-                            url:adjustedUri,
-                            type:"GET",
-                            dataType:"json",
-                            contentType:"json",
-                            success:function (lookupResult, textStatus, jqXHR) {
+                            url: adjustedUri,
+                            type: "GET",
+                            dataType: "json",
+                            contentType: "json",
+                            success: function (lookupResult, textStatus, jqXHR) {
                                 lookupResult.data = self.removeElementsAlreadyInGrid(self.dataView.getNewItems(), lookupResult.data);
                                 lookupResult.data = lookupResult.data.concat(self.dataView.getDeletedItems());
-                                self.onAddButtonSuccess.notify({originalDataView:self.dataView, originalGrid:self.grid, propertyNavigatingTo:propertyNavigatingTo, tumlUri:tumlUri + '_' + self.localMetaForData.name, tabId:self.localMetaForData.name, data:lookupResult}, null, self);
+                                self.onAddButtonSuccess.notify({originalDataView: self.dataView, originalGrid: self.grid, propertyNavigatingTo: propertyNavigatingTo, tumlUri: tumlUri + '_' + self.localMetaForData.name, tabId: self.localMetaForData.name, data: lookupResult}, null, self);
                             },
-                            error:function (jqXHR, textStatus, errorThrown) {
+                            error: function (jqXHR, textStatus, errorThrown) {
                                 $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
                             }
                         });
@@ -352,11 +352,11 @@
             var $cancelButton = $('<button />').text('Cancel').click(function () {
                 if (self.grid.getEditorLock().commitCurrentEdit()) {
                     $.ajax({
-                        url:tumlUri,
-                        type:"GET",
-                        dataType:"json",
-                        contentType:"json",
-                        success:function (result, textStatus, jqXHR) {
+                        url: tumlUri,
+                        type: "GET",
+                        dataType: "json",
+                        contentType: "json",
+                        success: function (result, textStatus, jqXHR) {
                             //Only cancel this tab
                             for (var i = 0; i < result.length; i++) {
                                 var metaForData = result[i].meta.to;
@@ -366,7 +366,7 @@
                                 }
                             }
                         },
-                        error:function (jqXHR, textStatus, errorThrown) {
+                        error: function (jqXHR, textStatus, errorThrown) {
                             $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
                         }
                     });
@@ -411,67 +411,112 @@
             $('<div id="serverErrorMsg" />').appendTo(tabDiv);
 
             var windowHeight = $('.ui-layout-center').height() - 115;
-            $('<div />', {id:'myGrid' + this.metaForData.name, style:'width:auto;height:' + windowHeight + 'px;', class:'tumlSlickGrid'}).appendTo(tabDiv);
-            $('<div />', {id:'pager' + this.metaForData.name, style:'width:auto;height:20px;'}).appendTo(tabDiv);
+            $('<div />', {id: 'myGrid' + this.metaForData.name, style: 'width:auto;height:' + windowHeight + 'px;', class: 'tumlSlickGrid'}).appendTo(tabDiv);
+            $('<div />', {id: 'pager' + this.metaForData.name, style: 'width:auto;height:20px;'}).appendTo(tabDiv);
 
             $('#contextMenu' + this.metaForData.name).remove();
             this.createGrid(result.data/*, this.metaForData*/, tumlUri);
 
         };
 
-        this.addNewRow = function(args) {
+        this.addNewRow = function () {
+            if (!transactionSuspended) {
+                alert("transaction must be suspended on addNewRow");
+            }
             $.ajax({
-                url:tumlUri,
-                type:"POST",
-                dataType:"json",
-                contentType:"json",
+                url: tumlUri + "?transactionIdentifier=" + transactionIdentifier,
+                type: "POST",
+                dataType: "json",
+                contentType: "json",
 //                data:JSON.stringify(this.dataView.getNewItems()),
-                success:function (data, textStatus, jqXHR) {
-                    this.onPostSuccess.notify({tumlUri:tumlUri, tabId:this.localMetaForData.name, data:data}, null, this);
+                success: function (data, textStatus, jqXHR) {
+                    self.rollbackTransaction();
+
+//                    var $newItem = {};
+//                    for (var i = 0; i < this.grid.getColumns().length; i++) {
+//                        var column = this.grid.getColumns()[i];
+//                        $newItem[column.name] = null;
+//                    }
+                    //Generate a fake id, its required for the grid to work nicely
+                    var fakeId = 'fake::' + self.dataView.getItems().length + self.dataView.getNewItems().length + 1;
+//
+//                    //Default required booleans to false
+//                    $.each(this.localMetaForData.properties, function (index, property) {
+//                        if (property.fieldType == 'Boolean' && property.lower > 0) {
+//                            $newItem[property.name] = false;
+//                        }
+//                    });
+//                    this.dataView.addItem($.extend($newItem, args.item));
+
+                    data[0].data[0].id = fakeId;
+                    self.grid.getEditController().cancelCurrentEdit();
+                    self.dataView.addItem(data[0].data[0]);
+                    self.grid.editActiveCell();
+
+//                    updateValidationWarningHeader();
+
+
                 },
-                error:function (jqXHR, textStatus, errorThrown) {
+                error: function (jqXHR, textStatus, errorThrown) {
                     $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-                    this.onPostFailure.notify({tumlUri:tumlUri, tabId:this.localMetaForData.name}, null, this);
                 }
             });
         }
 
-        this.suspendTransactionAndSave = function() {
+        this.suspendTransaction = function (callBack) {
             //Suspend the transaction
             $.ajax({
-                url:'/' + tumlModelName + '/transaction',
-                type:"POST",
-                dataType:"json",
-                contentType:"json",
-                success:function (result, textStatus, jqXHR) {
+                url: '/' + tumlModelName + '/transaction',
+                type: "POST",
+                dataType: "json",
+                contentType: "json",
+                success: function (result, textStatus, jqXHR) {
                     transactionSuspended = true;
                     transactionIdentifier = result.transactionIdentifier;
-                    self.doSave();
+                    callBack();
                 },
-                error:function (jqXHR, textStatus, errorThrown) {
+                error: function (jqXHR, textStatus, errorThrown) {
                     alert('error getting /' + tumlModelName + '/transaction\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
                 }
             });
         }
 
-        this.doSave = function() {
+        this.rollbackTransaction = function () {
+            //Suspend the transaction
+            $.ajax({
+                url: '/' + tumlModelName + '/transaction' + "?transactionIdentifier=" + transactionIdentifier,
+                type: "PUT",
+                dataType: "json",
+                contentType: "json",
+                data: JSON.stringify({commit: false}),
+                success: function (result, textStatus, jqXHR) {
+                    transactionSuspended = false;
+                    transactionIdentifier = null;
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert('error rolling back the transaction /' + tumlModelName + '/transaction\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
+                }
+            });
+        }
+
+        this.doSave = function () {
             if (transactionSuspended) {
                 tumlUri += "?transactionIdentifier=" + transactionIdentifier;
             }
             //put updated items
             if (this.dataView.getUpdatedItems().length !== 0 && this.dataView.getNewItems().length == 0 && this.dataView.getDeletedItems().length == 0) {
                 $.ajax({
-                    url:tumlUri,
-                    type:"PUT",
-                    dataType:"json",
-                    contentType:"json",
-                    data:JSON.stringify(this.dataView.getUpdatedItems()),
-                    success:function (data, textStatus, jqXHR) {
-                        self.onPutSuccess.notify({tumlUri:tumlUri + '_' + this.localMetaForData.name, tabId:this.localMetaForData.name, data:data}, null, self);
+                    url: tumlUri,
+                    type: "PUT",
+                    dataType: "json",
+                    contentType: "json",
+                    data: JSON.stringify(this.dataView.getUpdatedItems()),
+                    success: function (data, textStatus, jqXHR) {
+                        self.onPutSuccess.notify({tumlUri: tumlUri + '_' + self.localMetaForData.name, tabId: self.localMetaForData.name, data: data}, null, self);
                     },
-                    error:function (jqXHR, textStatus, errorThrown) {
+                    error: function (jqXHR, textStatus, errorThrown) {
                         $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-                        self.onPutFailure.notify({tumlUri:tumlUri, tabId:this.localMetaForData.name}, null, this);
+                        self.onPutFailure.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name}, null, self);
                     }
                 });
             }
@@ -480,17 +525,17 @@
                 var validationResults = self.validateNewItems(self.dataView.getNewItems());
                 if (validationResults.length == 0) {
                     $.ajax({
-                        url:tumlUri,
-                        type:"POST",
-                        dataType:"json",
-                        contentType:"json",
-                        data:JSON.stringify(this.dataView.getNewItems()),
-                        success:function (data, textStatus, jqXHR) {
-                            this.onPostSuccess.notify({tumlUri:tumlUri, tabId:this.localMetaForData.name, data:data}, null, this);
+                        url: tumlUri,
+                        type: "POST",
+                        dataType: "json",
+                        contentType: "json",
+                        data: JSON.stringify(this.dataView.getNewItems()),
+                        success: function (data, textStatus, jqXHR) {
+                            self.onPostSuccess.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name, data: data}, null, self);
                         },
-                        error:function (jqXHR, textStatus, errorThrown) {
+                        error: function (jqXHR, textStatus, errorThrown) {
                             $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-                            this.onPostFailure.notify({tumlUri:tumlUri, tabId:this.localMetaForData.name}, null, this);
+                            self.onPostFailure.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name}, null, self);
                         }
                     });
                 } else {
@@ -504,17 +549,17 @@
             //delete new items
             if (this.dataView.getDeletedItems().length !== 0 && this.dataView.getNewItems().length == 0 && this.dataView.getUpdatedItems().length == 0) {
                 $.ajax({
-                    url:tumlUri,
-                    type:"DELETE",
-                    dataType:"json",
-                    contentType:"json",
-                    data:JSON.stringify(this.dataView.getDeletedItems()),
-                    success:function (data, textStatus, jqXHR) {
-                        this.onDeleteSuccess.notify({tumlUri:tumlUri, tabId:this.localMetaForData.name, data:data}, null, this);
+                    url: tumlUri,
+                    type: "DELETE",
+                    dataType: "json",
+                    contentType: "json",
+                    data: JSON.stringify(this.dataView.getDeletedItems()),
+                    success: function (data, textStatus, jqXHR) {
+                        self.onDeleteSuccess.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name, data: data}, null, self);
                     },
-                    error:function (jqXHR, textStatus, errorThrown) {
+                    error: function (jqXHR, textStatus, errorThrown) {
                         $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-                        this.onDeleteFailure.notify({tumlUri:tumlUri, tabId:this.localMetaForData.name}, null, this);
+                        self.onDeleteFailure.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name}, null, self);
                     }
                 });
             }
@@ -547,17 +592,17 @@
                         overloadedPostData['delete'] = this.dataView.getDeletedItems();
                     }
                     $.ajax({
-                        url:overloadedPostUri,
-                        type:"POST",
-                        dataType:"json",
-                        contentType:"json",
-                        data:JSON.stringify(overloadedPostData),
-                        success:function (data, textStatus, jqXHR) {
-                            this.onDeleteSuccess.notify({tumlUri:tumlUri, tabId:this.localMetaForData.name, data:data}, null, this);
+                        url: overloadedPostUri,
+                        type: "POST",
+                        dataType: "json",
+                        contentType: "json",
+                        data: JSON.stringify(overloadedPostData),
+                        success: function (data, textStatus, jqXHR) {
+                            self.onDeleteSuccess.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name, data: data}, null, self);
                         },
-                        error:function (jqXHR, textStatus, errorThrown) {
+                        error: function (jqXHR, textStatus, errorThrown) {
                             $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-                            this.onDeleteFailure.notify({tumlUri:tumlUri, tabId:this.localMetaForData.name}, null, this);
+                            self.onDeleteFailure.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name}, null, self);
                         }
                     });
                 }
@@ -655,7 +700,7 @@
                 var tumlUri = $(e.target).attr("data");
                 if (tumlUri !== 'delete') {
                     var url = tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), data[row].id);
-                    self.onContextMenuClickLink.notify({name:'unused', tumlUri:url}, null, self);
+                    self.onContextMenuClickLink.notify({name: 'unused', tumlUri: url}, null, self);
                 } else {
                     var item = this.dataView.getItem(row);
                     self.dataView.deleteItem(item.id);
@@ -668,7 +713,7 @@
                 //if new row call the server to create the object
                 if (isCellEditable(args.row, args.cell, self.dataView.getItem(args.row))) {
                     if (self.dataView.getItem(args.row) == undefined || self.dataView.getItem(args.row) == null) {
-                        self.addNewRow(args);
+                        self.suspendTransaction(self.addNewRow);
                     }
                 }
 
@@ -683,9 +728,9 @@
                 } else if (column.name == 'uri') {
                     var item = self.dataView.getItem(args.row);
                     var uri = item.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), item.id);
-                    self.onSelfCellClick.notify({name:'unused', tumlUri:uri}, null, self);
+                    self.onSelfCellClick.notify({name: 'unused', tumlUri: uri}, null, self);
                 } else if (!column.options.property.manyPrimitive && !column.options.property.manyEnumeration && column.options.property.composite &&
-                            column.options.property.lower > 0 && ((column.options.property.upper > 1) || column.options.property.upper === -1)) {
+                    column.options.property.lower > 0 && ((column.options.property.upper > 1) || column.options.property.upper === -1)) {
                     //Component many
                     var data = [];
                     if (isCellEditable(args.row, args.cell, self.dataView.getItem(args.row))) {
@@ -698,17 +743,17 @@
 //                        self.suspendTransactionAndSave();
                         //TODO pass in the row's id
                         var id = self.dataView.getItem(args.row)["id"];
-                        self.onClickManyComponentCell.notify({data:data, cell:args, tumlUri:column.options.property.tumlUri, property:column.options.property}, null, self);
+                        self.onClickManyComponentCell.notify({data: data, cell: args, tumlUri: column.options.property.tumlUri, property: column.options.property}, null, self);
                     }
                 } else if (!column.options.property.manyPrimitive && !column.options.property.manyEnumeration && column.options.property.composite &&
-                            column.options.property.lower === 1 && column.options.property.upper === 1) {
+                    column.options.property.lower === 1 && column.options.property.upper === 1) {
                     //Component one
                     var data = [];
                     if (isCellEditable(args.row, args.cell, self.dataView.getItem(args.row))) {
                         if (self.dataView.getItem(args.row) !== undefined && self.dataView.getItem(args.row) !== null && self.dataView.getItem(args.row)[column.name] !== undefined && self.dataView.getItem(args.row)[column.name] !== null) {
                             data.push(self.dataView.getItem(args.row)[column.name]);
                         }
-                        self.onClickOneComponentCell.notify({data:data, cell:args, tumlUri:column.options.property.tumlUri, property:column.options.property}, null, self);
+                        self.onClickOneComponentCell.notify({data: data, cell: args, tumlUri: column.options.property.tumlUri, property: column.options.property}, null, self);
                     }
                 }
                 //unbind the document click event to close many editors
@@ -720,7 +765,7 @@
             });
 
             this.grid.onAddNewRow.subscribe(function (e, args) {
-                self.addNewRow(args);
+//                self.addNewRow(args);
             });
 
             this.grid.onKeyDown.subscribe(function (e) {
@@ -790,7 +835,7 @@
 
                 if (options.enableAddRow != enableAddRow) {
                     self.grid.setOptions({
-                        enableAddRow:enableAddRow
+                        enableAddRow: enableAddRow
                     });
                 }
             });
@@ -1001,7 +1046,7 @@
                 //This happens when the component is the first entry in the grid, i.e. it needs to add the row
                 item = {};
                 item[self.grid.getColumns()[cell.cell].name] = value;
-                self.addNewRow({item:item});
+                self.addNewRow({item: item});
             }
             self.grid.invalidateRows([cell.row]);
             self.grid.updateRowCount();
@@ -1027,19 +1072,19 @@
         var self = this;
         this.dataView.getItemMetadata = function (row) {
             var item = this.getItem(row);
-            var result = {"columns":null};
+            var result = {"columns": null};
             var column = {};
 
             for (var i = 0; i < self.localMetaForData.properties.length; i++) {
                 var property = self.localMetaForData.properties[i];
                 if (property.composite && property.lower > 0) {
                     if (item === undefined || this.getNewItems().indexOf(item) !== -1) {
-                        column[property.name] = {"formatter":TumlSlick.Formatters.TumlRequired};
+                        column[property.name] = {"formatter": TumlSlick.Formatters.TumlRequired};
                     } else {
-                        column[property.name] = {"formatter":TumlSlick.Formatters.TumlComponentFormatter};
+                        column[property.name] = {"formatter": TumlSlick.Formatters.TumlComponentFormatter};
                     }
                 } else {
-                    column[property.name] = {"formatter":selectFormatter(property)};
+                    column[property.name] = {"formatter": selectFormatter(property)};
                 }
             }
             result["columns"] = column;
@@ -1051,7 +1096,7 @@
         this.dataView.beginUpdate();
         this.setData(data);
         this.dataView.setFilterArgs({
-            metaForData:this.localMetaForData
+            metaForData: this.localMetaForData
         });
         this.dataView.setFilter(filter);
         this.dataView.endUpdate();
@@ -1065,29 +1110,29 @@
                 //Place the id column first
                 if (property.name == "id") {
                     self.columns.splice(0, 0, {
-                        id:property.name,
-                        name:property.name,
-                        field:property.name,
-                        sortable:true
+                        id: property.name,
+                        name: property.name,
+                        field: property.name,
+                        sortable: true
                     });
                 } else {
                     self.columns.push({
-                        id:property.name,
-                        name:property.name,
-                        field:property.name,
-                        sortable:true,
-                        editor:selectEditor(property),
-                        validator:selectFieldValidator(property),
-                        options:{
-                            required:property.lower > 0,
-                            tumlLookupUri:property.tumlLookupUri,
-                            rowEnumerationLookupMap:new RowEnumerationLookupMap(property.qualifiedName, "/" + tumlModelName + "/tumlEnumLookup"),
-                            rowLookupMap:new RowLookupMap(self.contextVertexId, property.tumlCompositeParentLookupUri, property.tumlCompositeParentLookupUriOnCompositeParent),
-                            compositeParentLookupMap:new CompositeParentLookupMap(self.contextVertexId, property.tumlLookupUri, property.tumlLookupOnCompositeParentUri),
-                            ordered:property.ordered,
-                            unique:property.unique,
-                            property:property},
-                        width:120
+                        id: property.name,
+                        name: property.name,
+                        field: property.name,
+                        sortable: true,
+                        editor: selectEditor(property),
+                        validator: selectFieldValidator(property),
+                        options: {
+                            required: property.lower > 0,
+                            tumlLookupUri: property.tumlLookupUri,
+                            rowEnumerationLookupMap: new RowEnumerationLookupMap(property.qualifiedName, "/" + tumlModelName + "/tumlEnumLookup"),
+                            rowLookupMap: new RowLookupMap(self.contextVertexId, property.tumlCompositeParentLookupUri, property.tumlCompositeParentLookupUriOnCompositeParent),
+                            compositeParentLookupMap: new CompositeParentLookupMap(self.contextVertexId, property.tumlLookupUri, property.tumlLookupOnCompositeParentUri),
+                            ordered: property.ordered,
+                            unique: property.unique,
+                            property: property},
+                        width: 120
                     });
                 }
             }
@@ -1106,7 +1151,7 @@
     };
 
     TumlBaseGridManager.prototype.createContextMenu = function () {
-        var contextMenuUl = $('<ul />', {id:'contextMenu' + this.localMetaForData.name, style:'display:none;position:absolute', class:'contextMenu'}).appendTo('body');
+        var contextMenuUl = $('<ul />', {id: 'contextMenu' + this.localMetaForData.name, style: 'display:none;position:absolute', class: 'contextMenu'}).appendTo('body');
         $('<b />').text('Nav').appendTo(contextMenuUl);
         $('<li data="' + this.localMetaForData.uri + '" />').text("self").appendTo(contextMenuUl);
         $.each(this.localMetaForData.properties, function (index, property) {
@@ -1120,16 +1165,16 @@
 
     TumlBaseGridManager.prototype.setupOptions = function () {
         this.options = {
-            autoHeight:false,
-            showHeaderRow:true,
-            headerRowHeight:30,
-            editable:true,
-            enableAddRow:this.propertyNavigatingTo.composite,
-            enableCellNavigation:true,
-            asyncEditorLoading:false,
-            enableAsyncPostRender:true,
-            forceFitColumns:false,
-            topPanelHeight:25
+            autoHeight: false,
+            showHeaderRow: true,
+            headerRowHeight: 30,
+            editable: true,
+            enableAddRow: this.propertyNavigatingTo.composite,
+            enableCellNavigation: true,
+            asyncEditorLoading: false,
+            enableAsyncPostRender: true,
+            forceFitColumns: false,
+            topPanelHeight: 25
         };
     }
 
