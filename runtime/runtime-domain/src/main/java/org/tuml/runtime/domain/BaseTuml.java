@@ -4,6 +4,7 @@ import com.tinkerpop.blueprints.Vertex;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.tuml.runtime.adaptor.GraphDb;
+import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
 import org.tuml.runtime.adaptor.TumlExceptionUtilFactory;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.memory.TumlMemorySet;
@@ -19,6 +20,24 @@ public abstract class BaseTuml implements TumlNode, Serializable {
 
     public BaseTuml() {
         super();
+    }
+
+    public BaseTuml(Vertex vertex) {
+        super();
+        this.vertex = vertex;
+        TransactionThreadEntityVar.setNewEntity(this);
+        initialiseProperties();
+    }
+
+    public BaseTuml(Boolean persistent) {
+        super();
+        this.vertex = GraphDb.getDb().addVertex(this.getClass().getName());
+        this.vertex.setProperty("className", getClass().getName());
+        TransactionThreadEntityVar.setNewEntity(this);
+        addEdgeToMetaNode();
+        defaultCreate();
+        initialiseProperties();
+        initVariables();
     }
 
     public Vertex getVertex() {

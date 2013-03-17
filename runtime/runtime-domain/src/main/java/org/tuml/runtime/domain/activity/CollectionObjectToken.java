@@ -149,7 +149,12 @@ public class CollectionObjectToken<O> extends ObjectToken<O> implements Composit
 		throw new RuntimeException("Not implemented");
 	}
 
-	@Override
+    @Override
+    public void initVariables() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
 	public List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, TumlNode node, boolean inverse) {
 		// TODO Implement
 		throw new RuntimeException("Not implemented");

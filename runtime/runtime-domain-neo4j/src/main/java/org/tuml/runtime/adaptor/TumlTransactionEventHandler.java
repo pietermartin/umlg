@@ -96,20 +96,19 @@ public class TumlTransactionEventHandler<T> implements TransactionEventHandler<T
                 if (!isEmpty(data) && GraphDb.getDb() != null) {
                     TransactionThreadVar.clear();
                     GraphDb.incrementTransactionCount();
-                    List<CompositionNode> entities = TransactionThreadEntityVar.get();
-                    for (CompositionNode entity : entities) {
-                        TumlNode tumlNode = entity;
+                    List<TumlNode> entities = TransactionThreadEntityVar.get();
+                    for (TumlNode tumlNode : entities) {
                         List<TumlConstraintViolation> requiredConstraintViolations = tumlNode.validateMultiplicities();
                         requiredConstraintViolations.addAll(tumlNode.checkClassConstraints());
                         if (!requiredConstraintViolations.isEmpty()) {
                             throw new TumlConstraintViolationException(requiredConstraintViolations);
                         }
 
-                        if (!entity.isTinkerRoot() && entity.getOwningObject() == null) {
-                            if (entity instanceof BaseTinkerAuditable && ((BaseTinkerAuditable) entity).getDeletedOn().isBefore(new DateTime())) {
-                                return null;
-                            }
-                            throw new IllegalStateException(String.format("Entity %s %s does not have a composite owner", entity.getClass().getSimpleName(), entity.getId()));
+                        if (!tumlNode.isTinkerRoot() && tumlNode instanceof CompositionNode && ((CompositionNode)tumlNode).getOwningObject() == null) {
+//                            if (entity instanceof BaseTinkerAuditable && ((BaseTinkerAuditable) entity).getDeletedOn().isBefore(new DateTime())) {
+//                                return null;
+//                            }
+                            throw new IllegalStateException(String.format("Entity %s %s does not have a composite owner", tumlNode.getClass().getSimpleName(), tumlNode.getId()));
                         }
                     }
                 }

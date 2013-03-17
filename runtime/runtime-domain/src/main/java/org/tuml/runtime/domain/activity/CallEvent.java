@@ -35,7 +35,12 @@ public class CallEvent extends Event {
 		
 	}
 
-	@Override
+    @Override
+    public void initVariables() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
 	public void delete() {
 		// TODO Auto-generated method stub
 		

@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.ocl.expressions.OCLExpression;
 import org.eclipse.uml2.uml.*;
 import org.eclipse.uml2.uml.Class;
@@ -53,17 +52,17 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
         addPersistentConstructor(annotatedClass);
         addInitialiseProperties(annotatedClass, clazz);
         addContructorWithVertex(annotatedClass, clazz);
-        addInitialisePropertiesInConstructorWithVertex(annotatedClass);
+//        addInitialisePropertiesInConstructorWithVertex(annotatedClass);
         if (clazz.getGeneralizations().isEmpty()) {
             persistUid(annotatedClass);
             addGetObjectVersion(annotatedClass);
             addGetSetId(annotatedClass);
-            initialiseVertexInPersistentConstructor(annotatedClass, clazz);
-            addInitialisePropertiesInPersistentConstructor(annotatedClass);
-            addInitVariablesInPersistentConstructor(annotatedClass);
+//            addCompositeNodeToTransactionThreadVar(annotatedClass, clazz);
+//            addInitialisePropertiesInPersistentConstructor(annotatedClass);
+//            addInitVariablesInPersistentConstructor(annotatedClass);
 //			createComponentsInPersistentConstructor(annotatedClass);
         } else {
-            addSuperWithPersistenceToDefaultConstructor(annotatedClass);
+//            addSuperWithPersistenceToDefaultConstructor(annotatedClass);
         }
 //		addCreateComponents(annotatedClass, clazz);
         addInitVariables(annotatedClass, clazz);
@@ -145,15 +144,15 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
         ojClass.addToOperations(setId);
     }
 
-    protected void initialiseVertexInPersistentConstructor(OJAnnotatedClass ojClass, Class c) {
+    protected void addCompositeNodeToTransactionThreadVar(OJAnnotatedClass ojClass, Class c) {
         OJConstructor constructor = ojClass.findConstructor(new OJPathName("java.lang.Boolean"));
-        constructor.getBody().addToStatements("this.vertex = " + TinkerGenerationUtil.graphDbAccess + ".addVertex(this.getClass().getName())");
-        constructor.getBody().addToStatements("this.vertex.setProperty(\"className\", getClass().getName())");
+//        constructor.getBody().addToStatements("this.vertex = " + TinkerGenerationUtil.graphDbAccess + ".addVertex(this.getClass().getName())");
+//        constructor.getBody().addToStatements("this.vertex.setProperty(\"className\", getClass().getName())");
         //Link up to the meta instance for allInstances
-        constructor.getBody().addToStatements("addEdgeToMetaNode()");
+//        constructor.getBody().addToStatements("addEdgeToMetaNode()");
         constructor.getBody().addToStatements(TinkerGenerationUtil.transactionThreadEntityVar.getLast() + ".setNewEntity(this)");
         ojClass.addToImports(TinkerGenerationUtil.transactionThreadEntityVar);
-        constructor.getBody().addToStatements("defaultCreate()");
+//        constructor.getBody().addToStatements("defaultCreate()");
         ojClass.addToImports(TinkerGenerationUtil.graphDbPathName);
     }
 
@@ -166,6 +165,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
         OJConstructor persistentConstructor = new OJConstructor();
         persistentConstructor.setName(TinkerGenerationUtil.PERSISTENT_CONSTRUCTOR_NAME);
         persistentConstructor.addParam(TinkerGenerationUtil.PERSISTENT_CONSTRUCTOR_PARAM_NAME, new OJPathName("java.lang.Boolean"));
+        persistentConstructor.getBody().addToStatements("super(" + TinkerGenerationUtil.PERSISTENT_CONSTRUCTOR_PARAM_NAME + ")");
         ojClass.addToConstructors(persistentConstructor);
     }
 
@@ -196,13 +196,13 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
     protected void addContructorWithVertex(OJAnnotatedClass ojClass, Class clazz) {
         OJConstructor constructor = new OJConstructor();
         constructor.addParam("vertex", TinkerGenerationUtil.vertexPathName);
-        if (clazz.getGeneralizations().isEmpty()) {
-            constructor.getBody().addToStatements("this.vertex=vertex");
-            constructor.getBody().addToStatements(TinkerGenerationUtil.transactionThreadEntityVar.getLast() + ".setNewEntity(this)");
-            ojClass.addToImports(TinkerGenerationUtil.transactionThreadEntityVar);
-        } else {
+//        if (clazz.getGeneralizations().isEmpty()) {
+//            constructor.getBody().addToStatements("this.vertex=vertex");
+//            constructor.getBody().addToStatements(TinkerGenerationUtil.transactionThreadEntityVar.getLast() + ".setNewEntity(this)");
+//            ojClass.addToImports(TinkerGenerationUtil.transactionThreadEntityVar);
+//        } else {
             constructor.getBody().addToStatements("super(vertex)");
-        }
+//        }
         ojClass.addToConstructors(constructor);
     }
 

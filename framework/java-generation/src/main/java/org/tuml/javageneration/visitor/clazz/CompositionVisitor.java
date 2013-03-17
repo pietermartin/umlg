@@ -124,6 +124,7 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
 		if (clazz.getGenerals().isEmpty()) {
             delete.getBody().addToStatements(TinkerGenerationUtil.transactionThreadEntityVar.getLast() + ".remove(this.vertex.getId().toString())");
 			delete.getBody().addToStatements(TinkerGenerationUtil.graphDbAccess + ".removeVertex(this.vertex)");
+            annotatedClass.addToImports(TinkerGenerationUtil.transactionThreadEntityVar);
 			annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName.getCopy());
 		} else {
 			delete.getBody().addToStatements("super.delete()");

@@ -197,8 +197,8 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
         AbstractTransactionManager transactionManager = (AbstractTransactionManager) graphDatabaseAPI.getTxManager();
         try {
             Transaction transaction = this.transactionIdentifierTransactionMap.get(transactionIdentifier);
-            this.tx.set(new TopLevelTransaction(transactionManager, graphDatabaseAPI.getLockManager(), transactionManager.getTransactionState()));
             transactionManager.resume(transaction);
+            this.tx.set(new TopLevelTransaction(transactionManager, graphDatabaseAPI.getLockManager(), transactionManager.getTransactionState()));
         } catch (InvalidTransactionException e) {
             throw new RuntimeException(e);
         } catch (SystemException e) {

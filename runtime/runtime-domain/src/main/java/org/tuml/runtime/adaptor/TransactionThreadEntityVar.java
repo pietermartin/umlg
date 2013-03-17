@@ -1,6 +1,6 @@
 package org.tuml.runtime.adaptor;
 
-import org.tuml.runtime.domain.CompositionNode;
+import org.tuml.runtime.domain.TumlNode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,16 +13,16 @@ public class TransactionThreadEntityVar {
     private TransactionThreadEntityVar() {
     }
 
-    private static ThreadLocal<Map<String, CompositionNode>> transactionEntityVar = new ThreadLocal<Map<String, CompositionNode>>() {
+    private static ThreadLocal<Map<String, TumlNode>> transactionEntityVar = new ThreadLocal<Map<String, TumlNode>>() {
         @Override
-        protected Map<String, CompositionNode> initialValue() {
-            return new HashMap<String, CompositionNode>();
+        protected Map<String, TumlNode> initialValue() {
+            return new HashMap<String, TumlNode>();
         }
     };
 
     public static boolean hasNoAuditEntry(String clazzAndId) {
-        Map<String, CompositionNode> newVertexMap = transactionEntityVar.get();
-        CompositionNode newVertex = newVertexMap.get(clazzAndId);
+        Map<String, TumlNode> newVertexMap = transactionEntityVar.get();
+        TumlNode newVertex = newVertexMap.get(clazzAndId);
         return newVertex == null;
     }
 
@@ -30,15 +30,15 @@ public class TransactionThreadEntityVar {
         transactionEntityVar.remove();
     }
 
-    public static void setNewEntity(CompositionNode node) {
+    public static void setNewEntity(TumlNode node) {
         transactionEntityVar.get().put(node.getVertex().getId().toString(), node);
     }
 
-    public static List<CompositionNode> get() {
-        return new ArrayList<CompositionNode>(transactionEntityVar.get().values());
+    public static List<TumlNode> get() {
+        return new ArrayList<TumlNode>(transactionEntityVar.get().values());
     }
 
-    public static CompositionNode remove(String key) {
+    public static TumlNode remove(String key) {
         return transactionEntityVar.get().remove(key);
     }
 
