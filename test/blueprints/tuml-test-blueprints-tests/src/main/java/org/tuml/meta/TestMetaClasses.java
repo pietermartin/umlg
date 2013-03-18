@@ -25,5 +25,7 @@ public class TestMetaClasses extends BaseLocalDbTest {
         Assert.assertNotNull(a.getMetaNode());
         Assert.assertTrue(g.getMetaNode() instanceof  GodMeta);
         Assert.assertTrue(a.getMetaNode() instanceof  AngelMeta);
+
+        Assert.assertEquals("tumltest::org::tuml::concretetest::GodMeta::1", g.getMetaNode().getId());
     }
 }

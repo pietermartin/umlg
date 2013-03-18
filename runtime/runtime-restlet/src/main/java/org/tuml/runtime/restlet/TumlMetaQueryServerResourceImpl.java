@@ -21,9 +21,9 @@ public class TumlMetaQueryServerResourceImpl extends ServerResource implements T
 
     @Override
     public Representation get() {
-        Integer id = Integer.parseInt((String) getRequestAttributes().get("contextId"));
-        TumlNode parentResource = GraphDb.getDb().instantiateClassifier(Long.valueOf(id));
-        Long metaNodeId = parentResource.getMetaNode().getId();
+        String id = (String) getRequestAttributes().get("contextId");
+        TumlNode parentResource = GraphDb.getDb().instantiateClassifier(id);
+        String metaNodeId = parentResource.getMetaNode().getId();
         String metaQueryUri = "riap://application/" + getRootRef().getLastSegment() + "/baseclasstumls/" + metaNodeId + "/classQuery";
         ClientResource service = new ClientResource(metaQueryUri);
         service.setNext(getContext().getServerDispatcher());
@@ -37,9 +37,9 @@ public class TumlMetaQueryServerResourceImpl extends ServerResource implements T
 
     @Override
     public Representation post(Representation entity) {
-        Integer id = Integer.parseInt((String) getRequestAttributes().get("contextId"));
-        TumlNode parentResource = GraphDb.getDb().instantiateClassifier(Long.valueOf(id));
-        Long metaNodeId = parentResource.getMetaNode().getId();
+        String id = (String) getRequestAttributes().get("contextId");
+        TumlNode parentResource = GraphDb.getDb().instantiateClassifier(id);
+        String metaNodeId = parentResource.getMetaNode().getId();
         String metaQueryUri = "riap://application/" + getRootRef().getLastSegment() + "/baseclasstumls/" + metaNodeId + "/classQuery";
         ClientResource service = new ClientResource(metaQueryUri);
         service.setNext(getContext().getServerDispatcher());
@@ -48,9 +48,9 @@ public class TumlMetaQueryServerResourceImpl extends ServerResource implements T
 
     @Override
     public Representation put(Representation entity) {
-        Integer id = Integer.parseInt((String) getRequestAttributes().get("contextId"));
-        TumlNode parentResource = GraphDb.getDb().instantiateClassifier(Long.valueOf(id));
-        Long metaNodeId = parentResource.getMetaNode().getId();
+        String id = (String) getRequestAttributes().get("contextId");
+        TumlNode parentResource = GraphDb.getDb().instantiateClassifier(id);
+        String metaNodeId = parentResource.getMetaNode().getId();
         String metaQueryUri = "riap://application/" + getRootRef().getLastSegment() + "/baseclasstumls/" + metaNodeId + "/classQuery";
         ClientResource service = new ClientResource(metaQueryUri);
         service.setNext(getContext().getServerDispatcher());

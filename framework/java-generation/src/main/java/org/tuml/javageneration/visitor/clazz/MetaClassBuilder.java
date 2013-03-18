@@ -52,11 +52,21 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
 
             addGetHighId(clazz, metaClass);
 
-            addInternalSetId(metaClass);
+            addInternalSetId(clazz, metaClass);
+
+            addAddToThreadEntityVar(metaClass);
 
             addDefaultCreate(metaClass);
 
         }
+    }
+
+    private void addAddToThreadEntityVar(OJAnnotatedClass metaClass) {
+        OJAnnotatedOperation addToThreadMetaEntityVar = new OJAnnotatedOperation("addToThreadEntityVar");
+        TinkerGenerationUtil.addOverrideAnnotation(addToThreadMetaEntityVar);
+        addToThreadMetaEntityVar.getBody().addToStatements(TinkerGenerationUtil.transactionThreadMetaNodeVar.getLast() + ".setNewEntity(this)");
+        metaClass.addToOperations(addToThreadMetaEntityVar);
+
     }
 
     private void addDefaultCreate(OJAnnotatedClass metaClass) {
@@ -66,10 +76,11 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
         metaClass.addToOperations(defaultCreate);
     }
 
-    private void addInternalSetId(OJAnnotatedClass metaClass) {
+    private void addInternalSetId(Class clazz, OJAnnotatedClass metaClass) {
         //This method does nothing as meta node's are not accessed via the id
         OJAnnotatedOperation internalSetId = new OJAnnotatedOperation("internalSetId");
         TinkerGenerationUtil.addOverrideAnnotation(internalSetId);
+        internalSetId.getBody().addToStatements("setId(\"" + clazz.getQualifiedName() + "Meta::1\")");
         metaClass.addToOperations(internalSetId);
     }
 
@@ -163,6 +174,7 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
         constructor.addParam("vertex", TinkerGenerationUtil.vertexPathName);
         constructor.getBody().addToStatements("super(vertex)");
         constructor.getBody().addToStatements(TinkerGenerationUtil.transactionThreadMetaNodeVar.getLast() + ".setNewEntity(this)");
+        constructor.getBody().addToStatements(TinkerGenerationUtil.transactionThreadEntityVar.getLast() + ".remove(this)");
         ojClass.addToImports(TinkerGenerationUtil.transactionThreadMetaNodeVar);
         ojClass.addToConstructors(constructor);
     }
@@ -190,8 +202,7 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
         annotatedClass.getDefaultConstructor().setVisibility(OJVisibilityKind.PRIVATE);
         annotatedClass.getDefaultConstructor().getBody().addToStatements("super(true)");
         annotatedClass.getDefaultConstructor().setVisibility(OJVisibilityKind.PRIVATE);
-        annotatedClass.getDefaultConstructor().getBody().addToStatements(TinkerGenerationUtil.transactionThreadEntityVar.getLast() + ".remove(getVertex().getId().toString())");
-        annotatedClass.getDefaultConstructor().getBody().addToStatements(TinkerGenerationUtil.transactionThreadMetaNodeVar.getLast() + ".setNewEntity(this)");
+        annotatedClass.getDefaultConstructor().getBody().addToStatements(TinkerGenerationUtil.transactionThreadEntityVar.getLast() + ".remove(this)");
         annotatedClass.addToImports(TinkerGenerationUtil.transactionThreadEntityVar);
     }
 

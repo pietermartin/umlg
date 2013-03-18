@@ -152,7 +152,9 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
         }
         boolean result = this.internalCollection.add(e);
         if (result) {
-            TransactionThreadEntityVar.setNewEntity((CompositionNode) this.owner);
+            if (!(this.owner instanceof TumlMetaNode)) {
+                TransactionThreadEntityVar.setNewEntity(this.owner);
+            }
             Edge edge = addInternal(e);
 
             // Edge can only be null on a one primitive
@@ -495,7 +497,9 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
         maybeLoad();
         boolean result = this.internalCollection.remove(o);
         if (result) {
-            TransactionThreadEntityVar.setNewEntity((CompositionNode) this.owner);
+            if (!(this.owner instanceof TumlMetaNode)) {
+                TransactionThreadEntityVar.setNewEntity(this.owner);
+            }
             @SuppressWarnings("unchecked")
             E e = (E) o;
             Vertex v;
@@ -503,8 +507,8 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
                 TumlNode node = (TumlNode) o;
                 v = node.getVertex();
 
-                if (node instanceof CompositionNode) {
-                    TransactionThreadEntityVar.setNewEntity((CompositionNode) node);
+                if (!(this.owner instanceof TumlMetaNode)) {
+                    TransactionThreadEntityVar.setNewEntity(node);
                 }
 
                 Set<Edge> edges = GraphDb.getDb().getEdgesBetween(this.vertex, v, this.getLabel());
@@ -543,8 +547,8 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
         validateElementType(e);
         if (e instanceof TumlNode) {
             TumlNode node = (TumlNode) e;
-            if (e instanceof CompositionNode) {
-                TransactionThreadEntityVar.setNewEntity((CompositionNode) node);
+            if (!(this.owner instanceof TumlMetaNode)) {
+                TransactionThreadEntityVar.setNewEntity(node);
             }
             v = node.getVertex();
             if (this.isUnique() && (this.isOneToMany() || this.isOneToOne())) {

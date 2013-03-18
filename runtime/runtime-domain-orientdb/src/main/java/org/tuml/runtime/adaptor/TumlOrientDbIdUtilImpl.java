@@ -21,14 +21,4 @@ public class TumlOrientDbIdUtilImpl implements TinkerIdUtil {
         return Long.valueOf(id.substring(id.indexOf(":")));
     }
 
-    @Override
-    public void setId(Vertex v, Long id) {
-        throw new IllegalStateException("Id can not be set using OrientDb");
-    }
-
-    @Override
-    public int getVersion(Vertex v) {
-        return -1;
-    }
-
 }

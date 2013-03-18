@@ -16,11 +16,27 @@ public class TumlIdTest extends BaseLocalDbTest {
         God g = new God(true);
         g.setName("god1");
         db.commit();
-        Assert.assertEquals(Long.valueOf(1L), g.getId());
+        Assert.assertEquals("tumltest::org::tuml::concretetest::God::1", g.getId());
         g = new God(true);
         g.setName("god2");
         db.commit();
-        Assert.assertEquals(Long.valueOf(2L), g.getId());
+        Assert.assertEquals("tumltest::org::tuml::concretetest::God::2", g.getId());
         Assert.assertEquals(Long.valueOf(2L), g.getMetaNode().getIdHigh());
     }
+
+    @Test
+    public void testIdGenerationWithRollback() {
+        God g = new God(true);
+        g.setName("god1");
+        db.commit();
+        Assert.assertEquals("tumltest::org::tuml::concretetest::God::1", g.getId());
+        g = new God(true);
+        g.setName("god2");
+        String id = g.getId();
+        Assert.assertEquals("tumltest::org::tuml::concretetest::God::2", id);
+        db.rollback();
+        Assert.assertNull(db.instantiateClassifier(id));
+        Assert.assertEquals(Long.valueOf(2L), g.getMetaNode().getIdHigh());
+    }
+
 }

@@ -55,9 +55,9 @@ public class TumlOrientDbTransactionEventHandler<T> implements ODatabaseListener
             if (!isEmpty(iDatabase) && GraphDb.getDb() != null) {
                 TransactionThreadVar.clear();
                 GraphDb.incrementTransactionCount();
-                List<CompositionNode> entities = TransactionThreadEntityVar.get();
-                for (CompositionNode entity : entities) {
-                    TumlNode tumlNode = (TumlNode) entity;
+                List<TumlNode> entities = TransactionThreadEntityVar.get();
+                for (TumlNode entity : entities) {
+                    TumlNode tumlNode = entity;
                     List<TumlConstraintViolation> requiredConstraintViolations = tumlNode.validateMultiplicities();
                     if (!requiredConstraintViolations.isEmpty()) {
                         throw new TumlConstraintViolationException(requiredConstraintViolations);

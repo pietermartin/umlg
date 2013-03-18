@@ -3,7 +3,10 @@ package org.tuml.runtime.adaptor;
 import com.orientechnologies.orient.core.db.graph.OGraphDatabase;
 import com.orientechnologies.orient.core.db.record.OIdentifiable;
 import com.orientechnologies.orient.core.record.impl.ODocument;
-import com.tinkerpop.blueprints.*;
+import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Element;
+import com.tinkerpop.blueprints.Index;
+import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.orient.OrientEdge;
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
 import com.tinkerpop.blueprints.impls.orient.OrientVertex;
@@ -98,18 +101,23 @@ public class TumlOrientDbGraph extends OrientGraph implements TumlGraph {
     }
 
     @Override
-    public <T> T instantiateClassifier(Long id) {
-        try {
-            Vertex v = this.getVertex(id);
-            // TODO reimplement schemaHelper
-            Class<?> c = Class.forName((String) v.getProperty("className"));
-            // Class<?> c = schemaHelper.getClassNames().get((String)
-            // v.getProperty("className"));
-            return (T) c.getConstructor(Vertex.class).newInstance(v);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public <T> T instantiateClassifier(String id) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
+
+//    @Override
+//    public <T> T instantiateClassifier(Long id) {
+//        try {
+//            Vertex v = this.getVertex(id);
+//            // TODO reimplement schemaHelper
+//            Class<?> c = Class.forName((String) v.getProperty("className"));
+//            // Class<?> c = schemaHelper.getClassNames().get((String)
+//            // v.getProperty("className"));
+//            return (T) c.getConstructor(Vertex.class).newInstance(v);
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
     @Override
     public void resume(TransactionIdentifier t) {
@@ -176,7 +184,22 @@ public class TumlOrientDbGraph extends OrientGraph implements TumlGraph {
     }
 
     @Override
-    public boolean lockOnTransaction(Object object) {
+    public void acquireWriteLock(Vertex vertex) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void clearTxThreadVar() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void createUniqueVertexIndex() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public boolean isTransactionActive() {
         return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
 

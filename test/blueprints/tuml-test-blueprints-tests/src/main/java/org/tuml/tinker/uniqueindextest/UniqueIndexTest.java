@@ -27,9 +27,10 @@ public class UniqueIndexTest extends BaseLocalDbTest {
         Assert.assertEquals(13, countEdges());
         Hand hand2Test = db.instantiateClassifier(hand2.getId());
         Assert.assertEquals(hand2Test, hand2);
+        String id = hand2Test.getId();
         hand2Test.delete();
         db.commit();
-        Hand hand2Test2 = db.instantiateClassifier(hand2.getId());
+        Hand hand2Test2 = db.instantiateClassifier(id);
         Assert.assertNull(hand2Test2);
     }
 }

@@ -32,11 +32,15 @@ public abstract class BaseTuml implements TumlNode, Serializable {
         this.vertex = GraphDb.getDb().addVertex(this.getClass().getName());
         this.vertex.setProperty("className", getClass().getName());
         internalSetId();
-        TransactionThreadEntityVar.setNewEntity(this);
+        addToThreadEntityVar();
         addEdgeToMetaNode();
         defaultCreate();
         initialiseProperties();
         initVariables();
+    }
+
+    public void addToThreadEntityVar() {
+        TransactionThreadEntityVar.setNewEntity(this);
     }
 
     @Override

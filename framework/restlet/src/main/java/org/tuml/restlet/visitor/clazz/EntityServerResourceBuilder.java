@@ -63,7 +63,7 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
         checkIfTransactionSuspended(delete);
 
         delete.getBody().addToStatements(
-                "this." + getIdFieldName(clazz) + "= Integer.parseInt((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"))");
+                "this." + getIdFieldName(clazz) + "= (String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\")");
         delete.getBody().addToStatements(
                 TumlClassOperations.className(clazz) + " c = new " + TumlClassOperations.className(clazz) + "(GraphDb.getDb().getVertex(this."
                         + getIdFieldName(clazz) + "))");
@@ -120,7 +120,7 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
         checkIfTransactionSuspended(put);
 
         put.getBody().addToStatements(
-                "this." + getIdFieldName(clazz) + "= Integer.parseInt((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"))");
+                "this." + getIdFieldName(clazz) + "= (String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\")");
         put.getBody().addToStatements(
                 TumlClassOperations.className(clazz) + " c = new " + TumlClassOperations.className(clazz) + "(GraphDb.getDb().getVertex(this."
                         + getIdFieldName(clazz) + "))");
@@ -169,7 +169,7 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
         tryStatement.getTryPart().addToStatements("StringBuilder json = new StringBuilder()");
         OJIfStatement ojIfStatement = new OJIfStatement("!getReference().getLastSegment().endsWith(\"MetaData\")");
         ojIfStatement.addToThenPart(
-                "this." + getIdFieldName(clazz) + "= Integer.parseInt((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"))");
+                "this." + getIdFieldName(clazz) + "= (String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\")");
         ojIfStatement.addToThenPart(
                 TumlClassOperations.className(clazz) + " c = new " + TumlClassOperations.className(clazz) + "(GraphDb.getDb().getVertex(this."
                         + getIdFieldName(clazz) + "))");
@@ -255,7 +255,7 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
     }
 
     private void addPrivateIdVariable(Class clazz, OJAnnotatedClass annotatedClass) {
-        OJField privateId = new OJField(getIdFieldName(clazz), new OJPathName("int"));
+        OJField privateId = new OJField(getIdFieldName(clazz), new OJPathName("String"));
         privateId.setVisibility(OJVisibilityKind.PRIVATE);
         annotatedClass.addToFields(privateId);
     }

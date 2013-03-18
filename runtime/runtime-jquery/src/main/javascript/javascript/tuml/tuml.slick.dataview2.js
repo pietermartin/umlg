@@ -345,7 +345,16 @@
       refresh();
 
         //cache of updates
-        if (!isNaN(id)) {
+        if (newIdxById[id] != undefined) {
+            //updates of new items
+            if (newItems[newIdxById[id]].id !== id) {
+                throw "Non matching new id";
+            }
+
+            var newField = {};
+            newField[column.name] = item[column.name];
+            newItems[newIdxById[id]] = $.extend(newItems[newIdxById[id]], newField);
+        } else {
             //updates of existing items
             if (updatedIdxById[id] == undefined) {
                 updatedIdxById[id] = updatedItems.length;
@@ -358,17 +367,32 @@
             var updatedField = {};
             updatedField[column.name] = item[column.name];
             updatedItems[updatedIdxById[id]] = $.extend(updatedItems[updatedIdxById[id]], updatedField);
-        } else {
-            //updates of new items
-            if (newItems[newIdxById[id]].id !== id) {
-                throw "Non matching new id";
-            }
-
-            var newField = {};
-            newField[column.name] = item[column.name];
-            newItems[newIdxById[id]] = $.extend(newItems[newIdxById[id]], newField);
-
         }
+
+//        if (!isNaN(id)) {
+//            //updates of existing items
+//            if (updatedIdxById[id] == undefined) {
+//                updatedIdxById[id] = updatedItems.length;
+//                updatedItems[updatedItems.length] = {id:id};
+//            } else {
+//                if (updatedItems[updatedIdxById[id]].id !== id) {
+//                    throw "Non matching updated id";
+//                }
+//            }
+//            var updatedField = {};
+//            updatedField[column.name] = item[column.name];
+//            updatedItems[updatedIdxById[id]] = $.extend(updatedItems[updatedIdxById[id]], updatedField);
+//        } else {
+//            //updates of new items
+//            if (newItems[newIdxById[id]].id !== id) {
+//                throw "Non matching new id";
+//            }
+//
+//            var newField = {};
+//            newField[column.name] = item[column.name];
+//            newItems[newIdxById[id]] = $.extend(newItems[newIdxById[id]], newField);
+//
+//        }
 
 
     }

@@ -30,9 +30,6 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
     private TransactionEventHandler<PersistentObject> transactionEventHandler;
     private Map<TransactionIdentifier, Transaction> transactionIdentifierTransactionMap;
     private Map<Transaction, TransactionIdentifier> transactionTransactionIdentifierMap;
-    //    private ConcurrentMap<org.neo4j.graphdb.Transaction, ReentrantLock> transactionLockMap = new ConcurrentHashMap<org.neo4j.graphdb.Transaction, ReentrantLock>();
-//    private ConcurrentMap<Object, org.neo4j.graphdb.Transaction> classTransactionMap = new ConcurrentHashMap<Object, org.neo4j.graphdb.Transaction>();
-//    private ConcurrentMap<org.neo4j.graphdb.Transaction, Set<Object>> transactionClassMap = new ConcurrentHashMap<org.neo4j.graphdb.Transaction, Set<Object>>();
     private static final Logger logger = Logger.getLogger(TumlNeo4jGraph.class.getPackage().getName());
     private TumlTinkerIndex<Vertex> uniqueVertexIndex;
 
@@ -152,12 +149,9 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
             Iterator<Vertex> uniqueVertexIter = this.uniqueVertexIndex.get("uniqueVertex", id).iterator();
             if (uniqueVertexIter.hasNext()) {
                 Vertex v = uniqueVertexIter.next();
-//            Vertex v = this.getVertex(id);
                 // TODO reimplement schemaHelper
                 String className = (String) v.getProperty("className");
                 Class<?> c = Class.forName(className);
-                // Class<?> c = schemaHelper.getClassNames().get((String)
-                // v.getProperty("className"));
                 return (T) c.getConstructor(Vertex.class).newInstance(v);
             } else {
                 return null;
@@ -252,8 +246,15 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
             tx.remove();
             TransactionIdentifier transactionIdentifier = this.transactionTransactionIdentifierMap.remove(t);
             this.transactionIdentifierTransactionMap.remove(transactionIdentifier);
-
         }
+        //Persist the highId of the MetaNode
+        for (TumlMetaNode tumlMetaNode : TransactionThreadMetaNodeVar.get()) {
+            TumlIdManager.INSTANCE.persistHighId(tumlMetaNode);
+        }
+        GraphDb.getDb().commit();
+        TransactionThreadEntityVar.remove();
+        TransactionThreadMetaNodeVar.remove();
+
     }
 
     @Override
@@ -268,14 +269,6 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
                 TumlIdManager.INSTANCE.persistHighId(tumlMetaNode);
             }
             tx.get().success();
-//            ReentrantLock reentrantLock = this.transactionLockMap.remove(tx.get());
-//            if (reentrantLock != null) {
-//                Set<Object> objectSet = this.transactionClassMap.remove(tx.get());
-//                for (Object object : objectSet) {
-//                    this.classTransactionMap.remove(object);
-//                }
-//                reentrantLock.unlock();
-//            }
         } finally {
             tx.get().finish();
             tx.remove();
@@ -335,25 +328,8 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
     @Override
     public void acquireWriteLock(Vertex vertex) {
         autoStartTransaction();
-        Lock lock = tx.get().acquireWriteLock(((Neo4jVertex) vertex).getRawVertex());
-//        org.neo4j.graphdb.Transaction transaction = this.classTransactionMap.get(object);
-//        if (transaction != null) {
-//            //Already locked
-//            this.transactionClassMap.get(transaction).add(object);
-//            this.transactionLockMap.get(transaction).lock();
-//            return false;
-//        } else {
-//            ReentrantLock reentrantLock = new ReentrantLock();
-//            reentrantLock.lock();
-//            if (tx.get() == null) {
-//                autoStartTransaction();
-//            }
-//            this.transactionLockMap.put(tx.get(), reentrantLock);
-//            Set<Object> objectSet = new HashSet<Object>();
-//            objectSet.add(object);
-//            this.transactionClassMap.put(tx.get(), objectSet);
-//            return true;
-//        }
+        //TODO hopefully neo4j is going to implement a timeout
+        tx.get().acquireWriteLock(((Neo4jVertex) vertex).getRawVertex());
     }
 
     @Override

@@ -54,7 +54,7 @@ public class TestOclExecution extends BaseRestletTest {
         JSONObject jsonObject = (JSONObject) jsonArray.get(0);
         jsonArray = (JSONArray) jsonObject.get("data");
         jsonObject = (JSONObject) jsonArray.get(0);
-        Assert.assertEquals(theHand.getId().intValue(), jsonObject.get("id"));
+        Assert.assertEquals(theHand.getId(), jsonObject.get("id"));
     }
 
 }

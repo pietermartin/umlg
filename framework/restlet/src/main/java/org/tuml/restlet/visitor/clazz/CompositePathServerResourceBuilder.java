@@ -59,9 +59,9 @@ public class CompositePathServerResourceBuilder extends BaseServerResourceBuilde
 		annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
 		TinkerGenerationUtil.addOverrideAnnotation(get);
 		get.getBody().addToStatements(
-				"this." + getIdFieldName(clazz) + "= Integer.parseInt((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"));");
+				"this." + getIdFieldName(clazz) + "= (String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\");");
 		get.getBody().addToStatements(
-				TumlClassOperations.className(clazz) + " c = GraphDb.getDb().instantiateClassifier(Long.valueOf(this." + getIdFieldName(clazz) + "))");
+				TumlClassOperations.className(clazz) + " c = GraphDb.getDb().instantiateClassifier(this." + getIdFieldName(clazz) + ")");
 		annotatedClass.addToImports(TumlClassOperations.getPathName(clazz));
 
 		get.getBody().addToStatements("StringBuilder json = new StringBuilder()");
@@ -106,7 +106,7 @@ public class CompositePathServerResourceBuilder extends BaseServerResourceBuilde
 	}
 
 	private void addPrivateIdVariable(Class clazz, OJAnnotatedClass annotatedClass) {
-		OJField privateId = new OJField(getIdFieldName(clazz), new OJPathName("int"));
+		OJField privateId = new OJField(getIdFieldName(clazz), new OJPathName("String"));
 		privateId.setVisibility(OJVisibilityKind.PRIVATE);
 		annotatedClass.addToFields(privateId);
 	}

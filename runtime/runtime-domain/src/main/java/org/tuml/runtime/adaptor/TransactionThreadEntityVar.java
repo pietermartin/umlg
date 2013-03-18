@@ -31,15 +31,15 @@ public class TransactionThreadEntityVar {
     }
 
     public static void setNewEntity(TumlNode node) {
-        transactionEntityVar.get().put(node.getVertex().getId().toString(), node);
+        transactionEntityVar.get().put(node.getId(), node);
     }
 
     public static List<TumlNode> get() {
         return new ArrayList<TumlNode>(transactionEntityVar.get().values());
     }
 
-    public static TumlNode remove(String key) {
-        return transactionEntityVar.get().remove(key);
+    public static TumlNode remove(TumlNode node) {
+        return transactionEntityVar.get().remove(node.getId());
     }
 
 

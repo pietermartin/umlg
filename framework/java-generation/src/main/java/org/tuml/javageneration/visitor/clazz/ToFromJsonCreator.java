@@ -93,8 +93,8 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                     // TODO need to implement display name interface or
                     // something
                     toJson.getBody().addToStatements(
-                            "sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + (" + pWrap.getter() + "() != null ? \"{\\\"id\\\": \" + " + pWrap.getter()
-                                    + "().getId() + \", \\\"displayName\\\": \\\"\" + " + pWrap.getter()
+                            "sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + (" + pWrap.getter() + "() != null ? \"{\\\"id\\\": \\\"\" + " + pWrap.getter()
+                                    + "().getId() + \"\\\", \\\"displayName\\\": \\\"\" + " + pWrap.getter()
                                     + "().getName() + \"\\\"}\" : \"{\\\"id\\\": \" + null + \", \\\"displayName\\\": \" + null + \"}\") + \"" + "\")");
                 } else if (pWrap.isDateTime()) {
                     toJson.getBody().addToStatements(

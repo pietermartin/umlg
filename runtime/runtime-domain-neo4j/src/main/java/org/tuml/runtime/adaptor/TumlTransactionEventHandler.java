@@ -133,13 +133,6 @@ public class TumlTransactionEventHandler<T> implements TransactionEventHandler<T
 
     @Override
     public void afterRollback(TransactionData data, T state) {
-//        //Persist the highId of the MetaNode
-//        for (TumlMetaNode tumlMetaNode : TransactionThreadMetaNodeVar.get()) {
-//            TumlIdManager.INSTANCE.persistHighId(tumlMetaNode);
-//        }
-//        GraphDb.getDb().commit();
-//        TransactionThreadEntityVar.remove();
-//        TransactionThreadMetaNodeVar.remove();
     }
 
 }
