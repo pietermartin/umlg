@@ -35,22 +35,17 @@ public abstract class Event implements TumlNode {
 	}
 
 	@Override
-	public Long getId() {
+	public String getId() {
 		return null;
 	}
 
 	@Override
-	public void setId(Long id) {
+	public void setId(String id) {
 	}
 
 	@Override
 	public String getUid() {
 		return null;
-	}
-
-	@Override
-	public int getObjectVersion() {
-		return 0;
 	}
 
 	@Override

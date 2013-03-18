@@ -98,6 +98,7 @@ public class TinkerGenerationUtil {
     public static OJPathName tumlFormatter = new OJPathName("org.tuml.runtime.util.TumlFormatter");
     public static OJPathName transactionThreadVar = new OJPathName("org.tuml.runtime.adaptor.TransactionThreadVar");
     public static OJPathName transactionThreadEntityVar = new OJPathName("org.tuml.runtime.adaptor.TransactionThreadEntityVar");
+    public static OJPathName transactionThreadMetaNodeVar = new OJPathName("org.tuml.runtime.adaptor.TransactionThreadMetaNodeVar");
     public static OJPathName graphDbPathName = new OJPathName("org.tuml.runtime.adaptor.GraphDb");
     public static OJPathName tinkerAuditNodePathName = new OJPathName("org.tuml.runtime.domain.TinkerAuditNode");
     //	public static OJPathName tinkerUtil = new OJPathName("org.util.TinkerUtil");

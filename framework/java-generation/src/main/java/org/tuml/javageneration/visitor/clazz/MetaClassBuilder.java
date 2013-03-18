@@ -52,7 +52,25 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
 
             addGetHighId(clazz, metaClass);
 
+            addInternalSetId(metaClass);
+
+            addDefaultCreate(metaClass);
+
         }
+    }
+
+    private void addDefaultCreate(OJAnnotatedClass metaClass) {
+        OJAnnotatedOperation defaultCreate = new OJAnnotatedOperation("defaultCreate");
+        TinkerGenerationUtil.addOverrideAnnotation(defaultCreate);
+        defaultCreate.getBody().addToStatements("getUid()");
+        metaClass.addToOperations(defaultCreate);
+    }
+
+    private void addInternalSetId(OJAnnotatedClass metaClass) {
+        //This method does nothing as meta node's are not accessed via the id
+        OJAnnotatedOperation internalSetId = new OJAnnotatedOperation("internalSetId");
+        TinkerGenerationUtil.addOverrideAnnotation(internalSetId);
+        metaClass.addToOperations(internalSetId);
     }
 
     private void addConstructorWithVertexStandAlone(OJAnnotatedClass metaClass, Class clazz) {
@@ -90,7 +108,7 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
         allInstances.getBody().addToLocals(iter);
 
         OJForStatement forIter = new OJForStatement("edge", TinkerGenerationUtil.edgePathName, "iter");
-        forIter.getBody().addToStatements("result.add(GraphDb.getDb().<" + classPathName.getLast() + ">instantiateClassifier(TinkerIdUtilFactory.getIdUtil().getId(edge.getVertex(Direction.IN))))");
+        forIter.getBody().addToStatements("result.add(GraphDb.getDb().<" + classPathName.getLast() + ">instantiateClassifier((String)edge.getVertex(Direction.IN).getProperty(\"tumlId\")))");
         allInstances.getBody().addToStatements(forIter);
         allInstances.getBody().addToStatements("return result");
 
@@ -144,9 +162,10 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
         OJConstructor constructor = new OJConstructor();
         constructor.addParam("vertex", TinkerGenerationUtil.vertexPathName);
         constructor.getBody().addToStatements("super(vertex)");
+        constructor.getBody().addToStatements(TinkerGenerationUtil.transactionThreadMetaNodeVar.getLast() + ".setNewEntity(this)");
+        ojClass.addToImports(TinkerGenerationUtil.transactionThreadMetaNodeVar);
         ojClass.addToConstructors(constructor);
     }
-
 
     private void addAndImplementTumlLibNodeOnOriginalClass(OJAnnotatedClass annotatedClass, Class clazz, OJPathName metaClassPathName) {
         OJAnnotatedOperation getMetaNode = new OJAnnotatedOperation("getMetaNode");
@@ -172,6 +191,7 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
         annotatedClass.getDefaultConstructor().getBody().addToStatements("super(true)");
         annotatedClass.getDefaultConstructor().setVisibility(OJVisibilityKind.PRIVATE);
         annotatedClass.getDefaultConstructor().getBody().addToStatements(TinkerGenerationUtil.transactionThreadEntityVar.getLast() + ".remove(getVertex().getId().toString())");
+        annotatedClass.getDefaultConstructor().getBody().addToStatements(TinkerGenerationUtil.transactionThreadMetaNodeVar.getLast() + ".setNewEntity(this)");
         annotatedClass.addToImports(TinkerGenerationUtil.transactionThreadEntityVar);
     }
 

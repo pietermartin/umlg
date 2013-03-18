@@ -34,16 +34,36 @@ import org.tuml.tinker.query.TestQueryBaseModelTumlAssociation;
 import org.tuml.tinker.uniqueindextest.UniqueIndexTest;
 import org.tuml.tinker.validationtest.TestValidation;
 import org.tuml.transaction.test.TransactionSuspendResumeTest;
+import org.tuml.transaction.test.TumlIdTest;
 
 /**
  * Date: 2013/01/28
  * Time: 7:18 PM
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({EmailTest.class, ManyEnumerationTest.class, TestMetaClasses.class, AllInstancesTest.class,
-        BagTesttest.class, OclStdLibBagTest.class, OclStdLibCollectionTest.class, OclStdLibSequenceTest.class, OclStdLibSetTest.class, OclStdLibOrderedSetTest.class,
-            OrderedSetTestTest.class, QualifiedBagTest.class, QualifiedOrderedSetTest.class, QualifiedSequenceTest.class, SequenceTest.class, TestInitCalled.class, TestOrderedListKeepsIndex.class,
-        TestComponent.class, TestNonCompositeOneToOne.class, TestOneToMany.class,
+@Suite.SuiteClasses({
+//        EmailTest.class,
+//        ManyEnumerationTest.class,
+//        TestMetaClasses.class,
+//        AllInstancesTest.class,
+//        BagTesttest.class,
+//        OclStdLibBagTest.class,
+//        OclStdLibCollectionTest.class,
+//        OclStdLibSequenceTest.class,
+//        OclStdLibSetTest.class,
+//        OclStdLibOrderedSetTest.class,
+//        OrderedSetTestTest.class,
+//        QualifiedBagTest.class,
+//        QualifiedOrderedSetTest.class,
+//        QualifiedSequenceTest.class,
+//        SequenceTest.class
+//        ,
+        TestInitCalled.class,
+        TestOrderedListKeepsIndex.class,
+        TestComponent.class,
+        TestNonCompositeOneToOne.class,
+        TestOneToMany.class
+        ,
         DeletionInheritenceTest.class, DeletionTest.class, EmbeddedSetDeletionTest.class,
         TestEmbeddedTest.class,
         TestHierarchy.class,
@@ -59,7 +79,9 @@ import org.tuml.transaction.test.TransactionSuspendResumeTest;
         TestValidation.class,
         TransactionSuspendResumeTest.class,
         ConstrainedPropertyTest.class,
-        UniqueIndexTest.class})
+        UniqueIndexTest.class,
+        TumlIdTest.class
+})
 public class AllTest {
 
 }

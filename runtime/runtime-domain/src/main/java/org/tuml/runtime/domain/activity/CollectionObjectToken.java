@@ -91,33 +91,22 @@ public class CollectionObjectToken<O> extends ObjectToken<O> implements Composit
 	public void initialiseProperties() {
 	}
 
-	@SuppressWarnings("unused")
-	@Override
-	public Long getId() {
-		if (true) {
-			throw new RuntimeException("check this out");
-		}
-		return null;
-	}
+    @Override
+    public String getId() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 
-	@Override
-	public void setId(Long id) {
-		if (true) {
-			throw new RuntimeException("check this out");
-		}
+    @Override
+    public void setId(String id) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
 
-	}
+    @Override
+    public void internalSetId() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
 
-	@SuppressWarnings("unused")
-	@Override
-	public int getObjectVersion() {
-		if (true) {
-			throw new RuntimeException("check this out");
-		}
-		return 0;
-	}
-
-	@SuppressWarnings("unused")
+    @SuppressWarnings("unused")
 	@Override
 	public CompositionNode getOwningObject() {
 		if (true) {

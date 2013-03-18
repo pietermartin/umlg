@@ -32,10 +32,10 @@ public abstract class BaseMetaNode implements TumlMetaNode {
         return getClass().getName() + "[" + getId() + "]";
     }
 
-    @Override
-    public Long getId() {
-        return TinkerIdUtilFactory.getIdUtil().getId(this.vertex);
-    }
+//    @Override
+//    public Long getId() {
+//        return TinkerIdUtilFactory.getIdUtil().getId(this.vertex);
+//    }
 
     @Override
     public String getUid() {

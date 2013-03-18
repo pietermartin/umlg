@@ -1,6 +1,9 @@
 package org.tuml.runtime.adaptor;
 
-import com.tinkerpop.blueprints.*;
+import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Element;
+import com.tinkerpop.blueprints.Index;
+import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.neo4j.Neo4jEdge;
 import com.tinkerpop.blueprints.impls.neo4j.Neo4jGraph;
 import com.tinkerpop.blueprints.impls.neo4j.Neo4jVertex;
@@ -11,15 +14,11 @@ import org.neo4j.kernel.GraphDatabaseAPI;
 import org.neo4j.kernel.TopLevelTransaction;
 import org.neo4j.kernel.impl.transaction.AbstractTransactionManager;
 import org.tuml.runtime.domain.PersistentObject;
-import sun.util.resources.LocaleNames_lt;
+import org.tuml.runtime.domain.TumlMetaNode;
 
 import javax.transaction.*;
 import javax.transaction.Transaction;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.Semaphore;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Logger;
 
 /**
@@ -109,7 +108,6 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
     @Override
     public void createUniqueVertexIndex() {
         this.uniqueVertexIndex = createIndex("uniqueVertex", Vertex.class);
-        commit();
     }
 
     @Override
@@ -149,7 +147,7 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
     }
 
     @Override
-    public <T> T instantiateClassifier(Long id) {
+    public <T> T instantiateClassifier(String id) {
         try {
             Iterator<Vertex> uniqueVertexIter = this.uniqueVertexIndex.get("uniqueVertex", id).iterator();
             if (uniqueVertexIter.hasNext()) {
@@ -265,6 +263,10 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
         }
 
         try {
+            //Persist the highId of the MetaNode
+            for (TumlMetaNode tumlMetaNode : TransactionThreadMetaNodeVar.get()) {
+                TumlIdManager.INSTANCE.persistHighId(tumlMetaNode);
+            }
             tx.get().success();
 //            ReentrantLock reentrantLock = this.transactionLockMap.remove(tx.get());
 //            if (reentrantLock != null) {

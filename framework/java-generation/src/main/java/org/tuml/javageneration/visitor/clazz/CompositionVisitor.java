@@ -58,27 +58,27 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
 		OJConstructor constructor = new OJConstructor();
 		constructor.addParam("compositeOwner", TumlClassOperations.getOtherEndToCompositePathName(clazz));
 		annotatedClass.addToConstructors(constructor);
-		if (clazz.getGeneralizations().isEmpty()) {
-			constructor.getBody().addToStatements("this.vertex = " + TinkerGenerationUtil.graphDbAccess + ".addVertex(this.getClass().getName())");
-
-            constructor.getBody().addToStatements("this.vertex.setProperty(\"className\", getClass().getName())");
-
-            //Link up to the meta instance for allInstances
-            constructor.getBody().addToStatements("addEdgeToMetaNode()");
-
-            constructor.getBody().addToStatements("initialiseProperties()");
-			constructor.getBody().addToStatements(ClassBuilder.INIT_VARIABLES + "()");
-
-			PropertyWrapper pWrap = new PropertyWrapper(TumlClassOperations.getOtherEndToComposite(clazz));
-			constructor.getBody().addToStatements(pWrap.adder() + "(compositeOwner)");
-			constructor.getBody().addToStatements(TinkerGenerationUtil.transactionThreadEntityVar.getLast() + ".setNewEntity(this)");
-			constructor.getBody().addToStatements("defaultCreate()");
-			annotatedClass.addToImports(TinkerGenerationUtil.transactionThreadEntityVar);
-		} else {
+//		if (clazz.getGeneralizations().isEmpty()) {
+//			constructor.getBody().addToStatements("this.vertex = " + TinkerGenerationUtil.graphDbAccess + ".addVertex(this.getClass().getName())");
+//
+//            constructor.getBody().addToStatements("this.vertex.setProperty(\"className\", getClass().getName())");
+//
+//            //Link up to the meta instance for allInstances
+//            constructor.getBody().addToStatements("addEdgeToMetaNode()");
+//
+//            constructor.getBody().addToStatements("initialiseProperties()");
+//			constructor.getBody().addToStatements(ClassBuilder.INIT_VARIABLES + "()");
+//
+//			PropertyWrapper pWrap = new PropertyWrapper(TumlClassOperations.getOtherEndToComposite(clazz));
+//			constructor.getBody().addToStatements(pWrap.adder() + "(compositeOwner)");
+//			constructor.getBody().addToStatements(TinkerGenerationUtil.transactionThreadEntityVar.getLast() + ".setNewEntity(this)");
+//			constructor.getBody().addToStatements("defaultCreate()");
+//			annotatedClass.addToImports(TinkerGenerationUtil.transactionThreadEntityVar);
+//		} else {
 			constructor.getBody().addToStatements("super(true)");
 			PropertyWrapper pWrap = new PropertyWrapper(TumlClassOperations.getOtherEndToComposite(clazz));
 			constructor.getBody().addToStatements(pWrap.adder() + "(compositeOwner)");
-		}
+//		}
 	}
 
 	private void addGetOwningObject(OJAnnotatedClass annotatedClass, Class clazz) {

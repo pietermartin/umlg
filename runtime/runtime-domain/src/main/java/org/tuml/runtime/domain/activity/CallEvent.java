@@ -58,7 +58,12 @@ public class CallEvent extends Event {
 		return 0;
 	}
 
-	@Override
+    @Override
+    public void internalSetId() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
 	public String toJson() {
 		// TODO Auto-generated method stub
 		return null;

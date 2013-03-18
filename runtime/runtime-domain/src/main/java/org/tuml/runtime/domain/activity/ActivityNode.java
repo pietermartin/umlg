@@ -177,20 +177,15 @@ public abstract class ActivityNode<IN extends Token, OUT extends Token> extends 
 		// TODO Auto-generated method stub
 	}
 
-	@Override
-	public Long getId() {
-		return TinkerIdUtilFactory.getIdUtil().getId(this.vertex);
-	}
-
-	@Override
-	public void setId(Long id) {
-		TinkerIdUtilFactory.getIdUtil().setId(this.vertex, id);
-	}
-
-	@Override
-	public int getObjectVersion() {
-		return TinkerIdUtilFactory.getIdUtil().getVersion(this.vertex);
-	}
+//	@Override
+//	public Long getId() {
+//		return TinkerIdUtilFactory.getIdUtil().getId(this.vertex);
+//	}
+//
+//	@Override
+//	public void setId(Long id) {
+//		TinkerIdUtilFactory.getIdUtil().setId(this.vertex, id);
+//	}
 
 	@Override
 	public abstract TumlNode getOwningObject();

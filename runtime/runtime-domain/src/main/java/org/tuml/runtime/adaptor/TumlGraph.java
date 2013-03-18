@@ -27,7 +27,7 @@ public interface TumlGraph extends TransactionalGraph, IndexableGraph, Serializa
     void registerListeners();
 
     //	<T> List<T> query(Class<?> className, int first, int pageSize);
-    <T> T instantiateClassifier(Long id);
+    <T> T instantiateClassifier(String id);
 
     void resume(TransactionIdentifier t);
 

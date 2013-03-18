@@ -3,9 +3,7 @@ package org.tuml.runtime.domain;
 import com.tinkerpop.blueprints.Vertex;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.tuml.runtime.adaptor.GraphDb;
-import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
-import org.tuml.runtime.adaptor.TumlExceptionUtilFactory;
+import org.tuml.runtime.adaptor.*;
 import org.tuml.runtime.collection.TinkerSet;
 import org.tuml.runtime.collection.memory.TumlMemorySet;
 import org.tuml.runtime.domain.ocl.OclState;
@@ -33,11 +31,27 @@ public abstract class BaseTuml implements TumlNode, Serializable {
         super();
         this.vertex = GraphDb.getDb().addVertex(this.getClass().getName());
         this.vertex.setProperty("className", getClass().getName());
+        internalSetId();
         TransactionThreadEntityVar.setNewEntity(this);
         addEdgeToMetaNode();
         defaultCreate();
         initialiseProperties();
         initVariables();
+    }
+
+    @Override
+    public final String getId() {
+        return (String)this.vertex.getProperty("tumlId");
+    }
+
+    @Override
+    public final void setId(String id) {
+        this.vertex.setProperty("tumlId", id);
+    }
+
+    @Override
+    public void internalSetId() {
+        setId(getQualifiedName() + "::" + TumlIdManager.INSTANCE.getNext(getMetaNode()));
     }
 
     public Vertex getVertex() {

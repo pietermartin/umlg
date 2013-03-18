@@ -23,6 +23,9 @@ public class TumlIdManager {
         Long result;
         if (this.vertexIdMap.get(tumlMetaNode) == null) {
             result = tumlMetaNode.getIdHigh();
+            if (result == null) {
+                result = 0L;
+            }
         } else {
             result = this.vertexIdMap.get(tumlMetaNode);
         }
@@ -30,14 +33,17 @@ public class TumlIdManager {
         return result + 1;
     }
 
-    //TODO work out the db specific locking
-    public synchronized void persistHighId(TumlMetaNode tumlMetaNode) {
-        if (GraphDb.getDb().isTransactionActive()) {
-            throw new IllegalStateException("TumlIdManager.persistHighId may not be called in an existing transaction!");
+    public void persistHighId(TumlMetaNode tumlMetaNode) {
+        Long highId = this.vertexIdMap.get(tumlMetaNode);
+        //This null check is because every commit calls this.
+        //It is possible for MetaNodes to be in the threadvar even tho no entities have been created
+        if (highId != null) {
+            tumlMetaNode.getVertex().setProperty("highId", highId);
         }
-        GraphDb.getDb().acquireWriteLock(tumlMetaNode.getVertex());
-        tumlMetaNode.getVertex().setProperty("highId", this.vertexIdMap.get(tumlMetaNode));
-        GraphDb.getDb().commit();
+    }
+
+    public void clear() {
+        this.vertexIdMap.clear();
     }
 
 }

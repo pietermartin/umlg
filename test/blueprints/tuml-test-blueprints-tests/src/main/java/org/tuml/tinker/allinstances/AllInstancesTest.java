@@ -73,9 +73,9 @@ public class AllInstancesTest extends BaseLocalDbTest {
 		folder2_2_2.setName("folder2_2_2");
 
         db.commit();
-//		Assert.assertEquals(1, RealRootFolder.allInstances().size());
+		Assert.assertEquals(1, RealRootFolder.allInstances().size());
 		Assert.assertEquals(7, Folder.allInstances().size());
-//		Assert.assertEquals(9, BaseModelTuml.allInstances().size());
+		Assert.assertEquals(9, BaseModelTuml.allInstances().size());
 	}
 
 	@Test

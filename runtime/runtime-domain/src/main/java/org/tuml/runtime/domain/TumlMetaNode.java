@@ -10,7 +10,7 @@ import org.tuml.runtime.collection.TinkerSet;
 public interface TumlMetaNode<T> {
     TinkerSet<T> getAllInstances();
     Vertex getVertex();
-    Long getId();
+    String getId();
     String getUid();
     Long getIdHigh();
 }

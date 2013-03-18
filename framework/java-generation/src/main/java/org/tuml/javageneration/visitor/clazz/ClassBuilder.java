@@ -55,8 +55,8 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 //        addInitialisePropertiesInConstructorWithVertex(annotatedClass);
         if (clazz.getGeneralizations().isEmpty()) {
             persistUid(annotatedClass);
-            addGetObjectVersion(annotatedClass);
-            addGetSetId(annotatedClass);
+//            addGetObjectVersion(annotatedClass);
+//            addGetSetId(annotatedClass);
 //            addCompositeNodeToTransactionThreadVar(annotatedClass, clazz);
 //            addInitialisePropertiesInPersistentConstructor(annotatedClass);
 //            addInitVariablesInPersistentConstructor(annotatedClass);

@@ -13,6 +13,7 @@ import org.tuml.runtime.adaptor.TransactionThreadEntityVar;
 import org.tuml.runtime.adaptor.TransactionThreadVar;
 import org.tuml.runtime.domain.BaseTinkerAuditable;
 import org.tuml.runtime.domain.CompositionNode;
+import org.tuml.runtime.domain.TumlMetaNode;
 import org.tuml.runtime.domain.TumlNode;
 import org.tuml.runtime.util.TumlProperties;
 import org.tuml.runtime.validation.TumlConstraintViolation;
@@ -78,7 +79,7 @@ public class TumlTransactionEventHandler<T> implements TransactionEventHandler<T
                 }
 
                 Neo4jVertex touchedVertex = new Neo4jVertex(node, (Neo4jGraph) GraphDb.getDb());
-                TumlNode tumlNode = GraphDb.getDb().instantiateClassifier((Long) touchedVertex.getId());
+                TumlNode tumlNode = GraphDb.getDb().instantiateClassifier((String) touchedVertex.getId());
                 List<TumlConstraintViolation> requiredConstraintViolations = tumlNode.validateMultiplicities();
                 requiredConstraintViolations.addAll(tumlNode.checkClassConstraints());
                 if (!requiredConstraintViolations.isEmpty()) {
@@ -104,7 +105,7 @@ public class TumlTransactionEventHandler<T> implements TransactionEventHandler<T
                             throw new TumlConstraintViolationException(requiredConstraintViolations);
                         }
 
-                        if (!tumlNode.isTinkerRoot() && tumlNode instanceof CompositionNode && ((CompositionNode)tumlNode).getOwningObject() == null) {
+                        if (!tumlNode.isTinkerRoot() && tumlNode instanceof CompositionNode && ((CompositionNode) tumlNode).getOwningObject() == null) {
 //                            if (entity instanceof BaseTinkerAuditable && ((BaseTinkerAuditable) entity).getDeletedOn().isBefore(new DateTime())) {
 //                                return null;
 //                            }
@@ -114,6 +115,7 @@ public class TumlTransactionEventHandler<T> implements TransactionEventHandler<T
                 }
             } finally {
                 TransactionThreadEntityVar.remove();
+                TransactionThreadMetaNodeVar.remove();
             }
         }
         return null;
@@ -127,12 +129,17 @@ public class TumlTransactionEventHandler<T> implements TransactionEventHandler<T
 
     @Override
     public void afterCommit(TransactionData data, T state) {
-
     }
 
     @Override
     public void afterRollback(TransactionData data, T state) {
-        TransactionThreadEntityVar.remove();
+//        //Persist the highId of the MetaNode
+//        for (TumlMetaNode tumlMetaNode : TransactionThreadMetaNodeVar.get()) {
+//            TumlIdManager.INSTANCE.persistHighId(tumlMetaNode);
+//        }
+//        GraphDb.getDb().commit();
+//        TransactionThreadEntityVar.remove();
+//        TransactionThreadMetaNodeVar.remove();
     }
 
 }

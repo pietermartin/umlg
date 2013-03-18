@@ -33,6 +33,9 @@ public class BaseLocalDbTest {
         TumlGraphManager.INSTANCE.shutdown();
         TumlGraphManager.INSTANCE.deleteGraph();
         GraphDb.remove();
+        TransactionThreadVar.remove();
+        TransactionThreadEntityVar.remove();
+        TransactionThreadMetaNodeVar.remove();
     }
 
 	protected long countVertices() {

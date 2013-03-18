@@ -4,10 +4,11 @@ import java.io.Serializable;
 import java.util.Map;
 
 public interface PersistentObject extends Serializable {
-	Long getId();
-	void setId(Long id);
+	String getId();
+	void setId(String id);
+    void internalSetId();
 	String getUid();
-	int getObjectVersion();
+//	int getObjectVersion();
 	String toJson();
 	String toJsonWithoutCompositeParent();
     String getMetaDataAsJson();
