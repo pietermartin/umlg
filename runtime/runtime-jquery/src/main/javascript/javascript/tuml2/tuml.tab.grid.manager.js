@@ -386,8 +386,6 @@
     function TumlBaseGridManager(tumlUri, propertyNavigatingTo) {
         this.tumlUri = tumlUri;
         this.propertyNavigatingTo = propertyNavigatingTo;
-        var transactionSuspended = false;
-        var transactionIdentifier;
 
         var self = this;
         this.columns = [];
@@ -420,9 +418,6 @@
         };
 
         this.addNewRow = function () {
-            if (!transactionSuspended) {
-                alert("transaction must be suspended on addNewRow");
-            }
             $.ajax({
                 url: tumlUri + "?transactionIdentifier=" + transactionIdentifier,
                 type: "POST",
@@ -463,23 +458,23 @@
             });
         }
 
-        this.suspendTransaction = function (callBack) {
-            //Suspend the transaction
-            $.ajax({
-                url: '/' + tumlModelName + '/transaction',
-                type: "POST",
-                dataType: "json",
-                contentType: "json",
-                success: function (result, textStatus, jqXHR) {
-                    transactionSuspended = true;
-                    transactionIdentifier = result.transactionIdentifier;
-                    callBack();
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert('error getting /' + tumlModelName + '/transaction\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
-                }
-            });
-        }
+//        this.suspendTransaction = function (callBack) {
+//            //Suspend the transaction
+//            $.ajax({
+//                url: '/' + tumlModelName + '/transaction',
+//                type: "POST",
+//                dataType: "json",
+//                contentType: "json",
+//                success: function (result, textStatus, jqXHR) {
+//                    transactionSuspended = true;
+//                    transactionIdentifier = result.transactionIdentifier;
+//                    callBack();
+//                },
+//                error: function (jqXHR, textStatus, errorThrown) {
+//                    alert('error getting /' + tumlModelName + '/transaction\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
+//                }
+//            });
+//        }
 
         this.rollbackTransaction = function () {
             //Suspend the transaction
@@ -709,14 +704,6 @@
             });
 
             this.grid.onClick.subscribe(function (e, args) {
-
-                //if new row call the server to create the object
-                if (isCellEditable(args.row, args.cell, self.dataView.getItem(args.row))) {
-                    if (self.dataView.getItem(args.row) == undefined || self.dataView.getItem(args.row) == null) {
-                        self.suspendTransaction(self.addNewRow);
-                    }
-                }
-
                 var column = self.grid.getColumns()[args.cell];
                 if (column.name == 'id') {
                     e.stopImmediatePropagation();
@@ -765,7 +752,7 @@
             });
 
             this.grid.onAddNewRow.subscribe(function (e, args) {
-//                self.addNewRow(args);
+                self.addNewRow(args);
             });
 
             this.grid.onKeyDown.subscribe(function (e) {

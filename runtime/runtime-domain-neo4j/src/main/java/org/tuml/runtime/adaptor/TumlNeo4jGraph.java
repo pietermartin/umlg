@@ -104,7 +104,10 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
 
     @Override
     public void createUniqueVertexIndex() {
-        this.uniqueVertexIndex = createIndex("uniqueVertex", Vertex.class);
+        this.uniqueVertexIndex = getIndex("uniqueVertex", Vertex.class);
+        if (this.uniqueVertexIndex == null) {
+            this.uniqueVertexIndex = createIndex("uniqueVertex", Vertex.class);
+        }
     }
 
     @Override
