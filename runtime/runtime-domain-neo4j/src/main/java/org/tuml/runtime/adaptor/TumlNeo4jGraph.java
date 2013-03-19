@@ -1,9 +1,6 @@
 package org.tuml.runtime.adaptor;
 
-import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.Element;
-import com.tinkerpop.blueprints.Index;
-import com.tinkerpop.blueprints.Vertex;
+import com.tinkerpop.blueprints.*;
 import com.tinkerpop.blueprints.impls.neo4j.Neo4jEdge;
 import com.tinkerpop.blueprints.impls.neo4j.Neo4jGraph;
 import com.tinkerpop.blueprints.impls.neo4j.Neo4jVertex;
@@ -32,7 +29,7 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
     private Map<Transaction, TransactionIdentifier> transactionTransactionIdentifierMap;
     private static final Logger logger = Logger.getLogger(TumlNeo4jGraph.class.getPackage().getName());
     private TumlTinkerIndex<Vertex> uniqueVertexIndex;
-
+    private final String DELETED_NODES = "deletednodes";
 
     public TumlNeo4jGraph(String directory) {
         super(directory);
@@ -130,12 +127,20 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
 
     @Override
     public long countVertices() {
-        return ((EmbeddedGraphDatabase) this.getRawGraph()).getNodeManager().getNumberOfIdsInUse(Node.class) - 1;
+        int countDeletedNodes = 0;
+        for (Edge edge : getRoot().getEdges(com.tinkerpop.blueprints.Direction.OUT, DELETED_NODES)) {
+            countDeletedNodes++;
+        }
+        return ((EmbeddedGraphDatabase) this.getRawGraph()).getNodeManager().getNumberOfIdsInUse(Node.class) - 1 - countDeletedNodes;
     }
 
     @Override
     public long countEdges() {
-        return ((EmbeddedGraphDatabase) this.getRawGraph()).getNodeManager().getNumberOfIdsInUse(Relationship.class);
+        int countDeletedNodes = 0;
+        for (Edge edge : getRoot().getEdges(com.tinkerpop.blueprints.Direction.OUT, DELETED_NODES)) {
+            countDeletedNodes++;
+        }
+        return ((EmbeddedGraphDatabase) this.getRawGraph()).getNodeManager().getNumberOfIdsInUse(Relationship.class) - countDeletedNodes;
     }
 
     @Override
@@ -147,18 +152,15 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
     }
 
     @Override
-    public <T> T instantiateClassifier(String id) {
+    public <T> T instantiateClassifier(Long id) {
         try {
-            Iterator<Vertex> uniqueVertexIter = this.uniqueVertexIndex.get("uniqueVertex", id).iterator();
-            if (uniqueVertexIter.hasNext()) {
-                Vertex v = uniqueVertexIter.next();
-                // TODO reimplement schemaHelper
-                String className = (String) v.getProperty("className");
-                Class<?> c = Class.forName(className);
-                return (T) c.getConstructor(Vertex.class).newInstance(v);
-            } else {
-                return null;
-            }
+            Vertex v = this.getVertex(id);
+            // TODO reimplement schemaHelper
+            String className = (String) v.getProperty("className");
+            Class<?> c = Class.forName(className);
+            // Class<?> c = schemaHelper.getClassNames().get((String)
+            // v.getProperty("className"));
+            return (T) c.getConstructor(Vertex.class).newInstance(v);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -245,10 +247,10 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
         } catch (SystemException e) {
             throw new RuntimeException(e);
         } finally {
-            tx.get().finish();
-            tx.remove();
             TransactionIdentifier transactionIdentifier = this.transactionTransactionIdentifierMap.remove(t);
             this.transactionIdentifierTransactionMap.remove(transactionIdentifier);
+            tx.get().finish();
+            tx.remove();
         }
         //Persist the highId of the MetaNode
         for (TumlMetaNode tumlMetaNode : TransactionThreadMetaNodeVar.get()) {
@@ -273,8 +275,6 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
             }
             tx.get().success();
         } finally {
-            tx.get().finish();
-            tx.remove();
             GraphDatabaseAPI graphDatabaseAPI = (GraphDatabaseAPI) getRawGraph();
             TransactionManager transactionManager = graphDatabaseAPI.getTxManager();
             try {
@@ -284,6 +284,8 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
             } catch (SystemException e) {
                 throw new RuntimeException(e);
             }
+            tx.get().finish();
+            tx.remove();
         }
     }
 
@@ -349,4 +351,26 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
     public boolean isTransactionActive() {
         return tx.get() != null;
     }
+
+    @Override
+    public void addDeletionNode() {
+        Vertex v = addVertex(null);
+        addEdge(null, getRoot(), v, DELETED_NODES);
+    }
+
+    @Override
+    public void removeVertex(final Vertex vertex) {
+        this.autoStartTransaction();
+        final Node node = ((Neo4jVertex) vertex).getRawVertex();
+        for (final Relationship relationship : node.getRelationships(org.neo4j.graphdb.Direction.BOTH)) {
+            relationship.delete();
+        }
+        if (!vertex.getId().equals(new Long(0))) {
+            getRoot().addEdge(DELETED_NODES, vertex);
+            vertex.setProperty("deleted", true);
+        } else {
+            node.delete();
+        }
+    }
+
 }

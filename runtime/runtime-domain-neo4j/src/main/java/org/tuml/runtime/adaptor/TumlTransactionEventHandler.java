@@ -79,7 +79,7 @@ public class TumlTransactionEventHandler<T> implements TransactionEventHandler<T
                 }
 
                 Neo4jVertex touchedVertex = new Neo4jVertex(node, (Neo4jGraph) GraphDb.getDb());
-                TumlNode tumlNode = GraphDb.getDb().instantiateClassifier((String) touchedVertex.getId());
+                TumlNode tumlNode = GraphDb.getDb().instantiateClassifier((Long) touchedVertex.getId());
                 List<TumlConstraintViolation> requiredConstraintViolations = tumlNode.validateMultiplicities();
                 requiredConstraintViolations.addAll(tumlNode.checkClassConstraints());
                 if (!requiredConstraintViolations.isEmpty()) {

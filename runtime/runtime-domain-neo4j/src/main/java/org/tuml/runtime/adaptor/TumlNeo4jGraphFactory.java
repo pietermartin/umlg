@@ -24,6 +24,7 @@ public class TumlNeo4jGraphFactory implements TumlGraphFactory {
             tumlGraph = new TumlNeo4jGraph(f.getAbsolutePath());
             TransactionThreadEntityVar.remove();
             tumlGraph.addRoot();
+            tumlGraph.addDeletionNode();
             tumlGraph.registerListeners();
             tumlGraph.commit();
             tumlGraph.createUniqueVertexIndex();

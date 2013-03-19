@@ -59,8 +59,8 @@ public class CallEvent extends Event {
 	}
 
     @Override
-    public void internalSetId() {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public Long getId() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override

@@ -22,6 +22,11 @@ public abstract class BaseTuml implements TumlNode, Serializable {
 
     public BaseTuml(Vertex vertex) {
         super();
+        //check if it has been deleted
+        Boolean deleted = vertex.getProperty("deleted");
+        if (deleted != null && deleted) {
+            throw new IllegalStateException("Vertex has been deleted!");
+        }
         this.vertex = vertex;
         TransactionThreadEntityVar.setNewEntity(this);
         initialiseProperties();
@@ -31,7 +36,6 @@ public abstract class BaseTuml implements TumlNode, Serializable {
         super();
         this.vertex = GraphDb.getDb().addVertex(this.getClass().getName());
         this.vertex.setProperty("className", getClass().getName());
-        internalSetId();
         addToThreadEntityVar();
         addEdgeToMetaNode();
         defaultCreate();
@@ -44,19 +48,20 @@ public abstract class BaseTuml implements TumlNode, Serializable {
     }
 
     @Override
-    public final String getId() {
-        return (String)this.vertex.getProperty("tumlId");
+    public final Long getId() {
+        return TinkerIdUtilFactory.getIdUtil().getId(this.vertex);
+//        return (String)this.vertex.getProperty("tumlId");
     }
 
-    @Override
-    public final void setId(String id) {
-        this.vertex.setProperty("tumlId", id);
-    }
+//    @Override
+//    public final void setId(String id) {
+//        this.vertex.setProperty("tumlId", id);
+//    }
 
-    @Override
-    public void internalSetId() {
-        setId(getQualifiedName() + "::" + TumlIdManager.INSTANCE.getNext(getMetaNode()));
-    }
+//    @Override
+//    public void internalSetId() {
+//        setId(getQualifiedName() + "::" + TumlIdManager.INSTANCE.getNext(getMetaNode()));
+//    }
 
     public Vertex getVertex() {
         return vertex;
@@ -67,8 +72,8 @@ public abstract class BaseTuml implements TumlNode, Serializable {
     }
 
     public void defaultCreate() {
-        getUid();
-//        GraphDb.getDb().getIndex("uniqueVertex", Vertex.class).put("uniqueVertex", getId(), this.vertex);
+//        getUid();
+        GraphDb.getDb().getIndex("uniqueVertex", Vertex.class).put("uniqueVertex", getId(), this.vertex);
     }
 
     public String getName() {

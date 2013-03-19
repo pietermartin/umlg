@@ -35,15 +35,6 @@ public abstract class Event implements TumlNode {
 	}
 
 	@Override
-	public String getId() {
-		return null;
-	}
-
-	@Override
-	public void setId(String id) {
-	}
-
-	@Override
 	public String getUid() {
 		return null;
 	}

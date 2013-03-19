@@ -73,7 +73,12 @@ public class CollectionObjectToken<O> extends ObjectToken<O> implements Composit
 		return sb.toString();
 	}
 
-	public String getUid() {
+    @Override
+    public Long getId() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public String getUid() {
 		String uid = (String) this.vertex.getProperty("uid");
 		if (uid == null || uid.trim().length() == 0) {
 			uid = UUID.randomUUID().toString();
@@ -90,21 +95,6 @@ public class CollectionObjectToken<O> extends ObjectToken<O> implements Composit
 	@Override
 	public void initialiseProperties() {
 	}
-
-    @Override
-    public String getId() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public void setId(String id) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public void internalSetId() {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
 
     @SuppressWarnings("unused")
 	@Override

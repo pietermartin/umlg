@@ -76,9 +76,9 @@ import org.tuml.transaction.test.TumlIdTest;
         TestMetaQueries.class, TestQueryBaseModelTumlAssociation.class,
         TestValidation.class,
         TransactionSuspendResumeTest.class,
-        ConstrainedPropertyTest.class,
-        UniqueIndexTest.class,
-        TumlIdTest.class
+        ConstrainedPropertyTest.class
+//        UniqueIndexTest.class,
+//        TumlIdTest.class
 })
 public class AllTest {
 

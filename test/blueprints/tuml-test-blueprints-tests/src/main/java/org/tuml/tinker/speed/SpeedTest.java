@@ -16,25 +16,22 @@ public class SpeedTest extends BaseLocalDbTest {
     //0:01:32.267
     @Test
     public void testSpeed() {
-
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         God god = new God(true);
         god.setName("god");
-
+        long previousSplitTime = 0;
         for (int i = 0; i < 1000000; i++) {
             Hand hand = new Hand(god);
             hand.setName("hand" + i);
-//            for (int j = 0; j < 5; j++) {
-//                Finger finger = new Finger(hand);
-//                finger.setName("finger" + i + "_" + j);
-//            }
             if (i % 1000 == 0) {
-                System.out.println(i + " " + stopWatch.toString());
+                stopWatch.split();
+                long splitTime = stopWatch.getSplitTime();
+                System.out.println(i + " " + stopWatch.toString() + " 1000 in " + (splitTime - previousSplitTime));
+                previousSplitTime = stopWatch.getSplitTime();
                 db.commit();
             }
         }
-
         db.commit();
         stopWatch.stop();
         System.out.println(stopWatch.toString());

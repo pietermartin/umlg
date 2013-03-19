@@ -13,15 +13,15 @@ public class TransactionThreadMetaNodeVar {
     private TransactionThreadMetaNodeVar() {
     }
 
-    private static ThreadLocal<Map<String, TumlMetaNode>> transactionEntityVar = new ThreadLocal<Map<String, TumlMetaNode>>() {
+    private static ThreadLocal<Map<Long, TumlMetaNode>> transactionEntityVar = new ThreadLocal<Map<Long, TumlMetaNode>>() {
         @Override
-        protected Map<String, TumlMetaNode> initialValue() {
-            return new HashMap<String, TumlMetaNode>();
+        protected Map<Long, TumlMetaNode> initialValue() {
+            return new HashMap<Long, TumlMetaNode>();
         }
     };
 
     public static boolean hasNoAuditEntry(String clazzAndId) {
-        Map<String, TumlMetaNode> newVertexMap = transactionEntityVar.get();
+        Map<Long, TumlMetaNode> newVertexMap = transactionEntityVar.get();
         TumlMetaNode newVertex = newVertexMap.get(clazzAndId);
         return newVertex == null;
     }

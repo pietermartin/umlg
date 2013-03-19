@@ -52,7 +52,7 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
 
             addGetHighId(clazz, metaClass);
 
-            addInternalSetId(clazz, metaClass);
+//            addInternalSetId(clazz, metaClass);
 
             addAddToThreadEntityVar(metaClass);
 
@@ -76,13 +76,13 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
         metaClass.addToOperations(defaultCreate);
     }
 
-    private void addInternalSetId(Class clazz, OJAnnotatedClass metaClass) {
-        //This method does nothing as meta node's are not accessed via the id
-        OJAnnotatedOperation internalSetId = new OJAnnotatedOperation("internalSetId");
-        TinkerGenerationUtil.addOverrideAnnotation(internalSetId);
-        internalSetId.getBody().addToStatements("setId(\"" + clazz.getQualifiedName() + "Meta::1\")");
-        metaClass.addToOperations(internalSetId);
-    }
+//    private void addInternalSetId(Class clazz, OJAnnotatedClass metaClass) {
+//        //This method does nothing as meta node's are not accessed via the id
+//        OJAnnotatedOperation internalSetId = new OJAnnotatedOperation("internalSetId");
+//        TinkerGenerationUtil.addOverrideAnnotation(internalSetId);
+//        internalSetId.getBody().addToStatements("setId(\"" + clazz.getQualifiedName() + "Meta::1\")");
+//        metaClass.addToOperations(internalSetId);
+//    }
 
     private void addConstructorWithVertexStandAlone(OJAnnotatedClass metaClass, Class clazz) {
         OJConstructor constructor = new OJConstructor();
@@ -119,7 +119,7 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
         allInstances.getBody().addToLocals(iter);
 
         OJForStatement forIter = new OJForStatement("edge", TinkerGenerationUtil.edgePathName, "iter");
-        forIter.getBody().addToStatements("result.add(GraphDb.getDb().<" + classPathName.getLast() + ">instantiateClassifier((String)edge.getVertex(Direction.IN).getProperty(\"tumlId\")))");
+        forIter.getBody().addToStatements("result.add(GraphDb.getDb().<" + classPathName.getLast() + ">instantiateClassifier((Long)edge.getVertex(Direction.IN).getId()))");
         allInstances.getBody().addToStatements(forIter);
         allInstances.getBody().addToStatements("return result");
 
