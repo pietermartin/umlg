@@ -68,7 +68,7 @@ public abstract class BaseTuml implements TumlNode, Serializable {
 
     public void defaultCreate() {
         getUid();
-        GraphDb.getDb().getIndex("uniqueVertex", Vertex.class).put("uniqueVertex", getId(), this.vertex);
+//        GraphDb.getDb().getIndex("uniqueVertex", Vertex.class).put("uniqueVertex", getId(), this.vertex);
     }
 
     public String getName() {

@@ -1,6 +1,5 @@
 package org.tuml.tinker.speed;
 
-import junit.framework.Assert;
 import org.apache.commons.lang.time.StopWatch;
 import org.junit.Test;
 import org.tuml.collectiontest.Finger;
@@ -23,12 +22,16 @@ public class SpeedTest extends BaseLocalDbTest {
         God god = new God(true);
         god.setName("god");
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 1000000; i++) {
             Hand hand = new Hand(god);
             hand.setName("hand" + i);
-            for (int j = 0; j < 5; j++) {
-                Finger finger = new Finger(hand);
-                finger.setName("finger" + i + "_" + j);
+//            for (int j = 0; j < 5; j++) {
+//                Finger finger = new Finger(hand);
+//                finger.setName("finger" + i + "_" + j);
+//            }
+            if (i % 1000 == 0) {
+                System.out.println(i + " " + stopWatch.toString());
+                db.commit();
             }
         }
 
