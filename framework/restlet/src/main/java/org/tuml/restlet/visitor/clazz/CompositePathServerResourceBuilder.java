@@ -59,7 +59,7 @@ public class CompositePathServerResourceBuilder extends BaseServerResourceBuilde
 		annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
 		TinkerGenerationUtil.addOverrideAnnotation(get);
 		get.getBody().addToStatements(
-				"this." + getIdFieldName(clazz) + "= (String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\");");
+				"this." + getIdFieldName(clazz) + "= Long.valueOf((Integer)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"));");
 		get.getBody().addToStatements(
 				TumlClassOperations.className(clazz) + " c = GraphDb.getDb().instantiateClassifier(this." + getIdFieldName(clazz) + ")");
 		annotatedClass.addToImports(TumlClassOperations.getPathName(clazz));
@@ -106,7 +106,7 @@ public class CompositePathServerResourceBuilder extends BaseServerResourceBuilde
 	}
 
 	private void addPrivateIdVariable(Class clazz, OJAnnotatedClass annotatedClass) {
-		OJField privateId = new OJField(getIdFieldName(clazz), new OJPathName("String"));
+		OJField privateId = new OJField(getIdFieldName(clazz), new OJPathName("Long"));
 		privateId.setVisibility(OJVisibilityKind.PRIVATE);
 		annotatedClass.addToFields(privateId);
 	}

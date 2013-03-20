@@ -79,8 +79,8 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
 
         OJPathName parentPathName = TumlClassOperations.getPathName(pWrap.getOtherEnd().getType());
         tryStatement.getTryPart().addToStatements(
-                "this." + parentPathName.getLast().toLowerCase() + "Id = (String)getRequestAttributes().get(\""
-                        + parentPathName.getLast().toLowerCase() + "Id\")");
+                "this." + parentPathName.getLast().toLowerCase() + "Id = Long.valueOf((Integer)getRequestAttributes().get(\""
+                        + parentPathName.getLast().toLowerCase() + "Id\"))");
         tryStatement.getTryPart().addToStatements(
                 parentPathName.getLast() + " parentResource = GraphDb.getDb().instantiateClassifier(" + parentPathName.getLast().toLowerCase() + "Id" + ")");
         annotatedClass.addToImports(parentPathName);
@@ -100,13 +100,13 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
         annotatedClass.addToImports(pWrap.javaBaseTypePath());
         if (pWrap.isComposite()) {
             delete.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
-            delete.getBody().addToStatements("String id = (String)propertyMap.get(\"id\")");
+            delete.getBody().addToStatements("Long id = Long.valueOf((Integer)propertyMap.get(\"id\"))");
             delete.getBody().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
             delete.getBody().addToStatements("childResource.delete()");
         } else {
             delete.addToParameters(new OJParameter("parentResource", parentPathName));
             delete.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
-            delete.getBody().addToStatements("String id = (String)propertyMap.get(\"id\")");
+            delete.getBody().addToStatements("Long id = Long.valueOf((Integer)propertyMap.get(\"id\"))");
             delete.getBody().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
             delete.getBody().addToStatements("parentResource." + pWrap.remover() + "(childResource)");
         }
@@ -133,8 +133,8 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
 
         OJPathName parentPathName = otherEndPWrap.javaBaseTypePath();
         post.getBody().addToStatements(
-                "this." + parentPathName.getLast().toLowerCase() + "Id = (String)getRequestAttributes().get(\""
-                        + parentPathName.getLast().toLowerCase() + "Id\")");
+                "this." + parentPathName.getLast().toLowerCase() + "Id = Long.valueOf((Integer)getRequestAttributes().get(\""
+                        + parentPathName.getLast().toLowerCase() + "Id\"))");
         post.getBody().addToStatements(
                 parentPathName.getLast() + " parentResource = GraphDb.getDb().instantiateClassifier(" + parentPathName.getLast().toLowerCase() + "Id" + ")");
 
@@ -254,7 +254,7 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
         put.setVisibility(OJVisibilityKind.PRIVATE);
         put.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
         annotatedClass.addToOperations(put);
-        put.getBody().addToStatements("String id = (String)propertyMap.get(\"id\")");
+        put.getBody().addToStatements("Long id = Long.valueOf((Integer)propertyMap.get(\"id\"))");
         put.getBody().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
         annotatedClass.addToImports(pWrap.javaBaseTypePath());
         put.getBody().addToStatements("childResource.fromJson(propertyMap)");
@@ -270,7 +270,7 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
             add.getBody().addToStatements(
                     pWrap.javaBaseTypePath().getLast() + " childResource = new " + TumlClassOperations.getPathName(concreteClassifier).getLast() + "(true)");
         } else {
-            add.getBody().addToStatements("String id = (String)propertyMap.get(\"id\")");
+            add.getBody().addToStatements("Long id = Long.valueOf((Integer)propertyMap.get(\"id\"))");
             add.getBody().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
         }
         annotatedClass.addToImports(pWrap.javaBaseTypePath());
@@ -421,7 +421,7 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
 
     private void addCompositeParentIdField(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass) {
         OJField compositeParentFieldId = new OJField(TumlClassOperations.getPathName(pWrap.getOtherEnd().getType()).getLast().toLowerCase() + "Id",
-                new OJPathName("String"));
+                new OJPathName("Long"));
         compositeParentFieldId.setVisibility(OJVisibilityKind.PRIVATE);
         annotatedClass.addToFields(compositeParentFieldId);
     }
