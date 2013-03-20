@@ -18,7 +18,7 @@ import org.tuml.transaction.test.TumlIdTest;
  * Time: 7:18 PM
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({JsonTest.class})
+@Suite.SuiteClasses({SpeedTest.class})
 public class AnyTest {
 
 }

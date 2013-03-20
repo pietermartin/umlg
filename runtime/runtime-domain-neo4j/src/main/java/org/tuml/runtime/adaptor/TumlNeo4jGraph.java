@@ -99,13 +99,13 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
         return result;
     }
 
-    @Override
-    public void createUniqueVertexIndex() {
-        this.uniqueVertexIndex = getIndex("uniqueVertex", Vertex.class);
-        if (this.uniqueVertexIndex == null) {
-            this.uniqueVertexIndex = createIndex("uniqueVertex", Vertex.class);
-        }
-    }
+//    @Override
+//    public void createUniqueVertexIndex() {
+//        this.uniqueVertexIndex = getIndex("uniqueVertex", Vertex.class);
+//        if (this.uniqueVertexIndex == null) {
+//            this.uniqueVertexIndex = createIndex("uniqueVertex", Vertex.class);
+//        }
+//    }
 
     @Override
     public void addRoot() {
