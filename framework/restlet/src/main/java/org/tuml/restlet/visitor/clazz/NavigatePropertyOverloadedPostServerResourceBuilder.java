@@ -48,7 +48,7 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
                 addDefaultConstructor(annotatedClass);
 
                 addCompositeParentIdField(pWrap, annotatedClass);
-                addGetObjectRepresentation(pWrap, annotatedInf, annotatedClass);
+//                addGetObjectRepresentation(pWrap, annotatedInf, annotatedClass);
 
                 // Put must be Idempotence, i.e. calling it many times must make
                 // no
@@ -131,7 +131,7 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
 
         OJPathName parentPathName = otherEndPWrap.javaBaseTypePath();
         post.getBody().addToStatements(
-                "this." + parentPathName.getLast().toLowerCase() + "Id = Long.valueOf((Integer)getRequestAttributes().get(\""
+                "this." + parentPathName.getLast().toLowerCase() + "Id = Long.valueOf(getQueryForm(\""
                         + parentPathName.getLast().toLowerCase() + "Id\"))");
         post.getBody().addToStatements(
                 parentPathName.getLast() + " parentResource = GraphDb.getDb().instantiateClassifier(" + parentPathName.getLast().toLowerCase() + "Id" + ")");
@@ -246,45 +246,45 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
         annotatedClass.addToOperations(post);
     }
 
-    private void addPutResource(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass, OJPathName parentPathName) {
-        OJAnnotatedOperation put = new OJAnnotatedOperation("put");
-        put.setVisibility(OJVisibilityKind.PRIVATE);
-        put.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
-        annotatedClass.addToOperations(put);
-        put.getBody().addToStatements("Long id = Long.valueOf((Integer)propertyMap.get(\"id\"))");
-        put.getBody().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
-        annotatedClass.addToImports(pWrap.javaBaseTypePath());
-        put.getBody().addToStatements("childResource.fromJson(propertyMap)");
-    }
-
-    private void addPostResource(Classifier concreteClassifier, PropertyWrapper pWrap, OJAnnotatedClass annotatedClass, OJPathName parentPathName) {
-        OJAnnotatedOperation add = new OJAnnotatedOperation("add");
-        add.setVisibility(OJVisibilityKind.PRIVATE);
-        add.addToParameters(new OJParameter("parentResource", parentPathName));
-        add.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
-        annotatedClass.addToOperations(add);
-        if (pWrap.isComposite()) {
-            add.getBody().addToStatements(
-                    pWrap.javaBaseTypePath().getLast() + " childResource = new " + TumlClassOperations.getPathName(concreteClassifier).getLast() + "(true)");
-        } else {
-            add.getBody().addToStatements("Long id = Long.valueOf((Integer)propertyMap.get(\"id\"))");
-            add.getBody().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
-        }
-        annotatedClass.addToImports(pWrap.javaBaseTypePath());
-        annotatedClass.addToImports(TumlClassOperations.getPathName(concreteClassifier));
-        add.getBody().addToStatements("childResource.fromJson(propertyMap)");
-        if (pWrap.isOrdered()) {
-            annotatedClass.addToImports(TumlRestletGenerationUtil.Parameter);
-            add.getBody().addToStatements("Parameter indexParameter = getQuery().getFirst(\"index\")");
-            OJIfStatement ifIndexNull = new OJIfStatement("indexParameter != null");
-            ifIndexNull.addToThenPart("int index = Integer.valueOf(indexParameter.getValue())");
-            ifIndexNull.addToThenPart("parentResource." + pWrap.getter() + "().add(index, childResource)");
-            ifIndexNull.addToElsePart("parentResource." + pWrap.adder() + "(childResource)");
-            add.getBody().addToStatements(ifIndexNull);
-        } else {
-            add.getBody().addToStatements("parentResource." + pWrap.adder() + "(childResource)");
-        }
-    }
+//    private void addPutResource(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass, OJPathName parentPathName) {
+//        OJAnnotatedOperation put = new OJAnnotatedOperation("put");
+//        put.setVisibility(OJVisibilityKind.PRIVATE);
+//        put.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
+//        annotatedClass.addToOperations(put);
+//        put.getBody().addToStatements("Long id = Long.valueOf((Integer)propertyMap.get(\"id\"))");
+//        put.getBody().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
+//        annotatedClass.addToImports(pWrap.javaBaseTypePath());
+//        put.getBody().addToStatements("childResource.fromJson(propertyMap)");
+//    }
+//
+//    private void addPostResource(Classifier concreteClassifier, PropertyWrapper pWrap, OJAnnotatedClass annotatedClass, OJPathName parentPathName) {
+//        OJAnnotatedOperation add = new OJAnnotatedOperation("add");
+//        add.setVisibility(OJVisibilityKind.PRIVATE);
+//        add.addToParameters(new OJParameter("parentResource", parentPathName));
+//        add.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
+//        annotatedClass.addToOperations(add);
+//        if (pWrap.isComposite()) {
+//            add.getBody().addToStatements(
+//                    pWrap.javaBaseTypePath().getLast() + " childResource = new " + TumlClassOperations.getPathName(concreteClassifier).getLast() + "(true)");
+//        } else {
+//            add.getBody().addToStatements("Long id = Long.valueOf((Integer)propertyMap.get(\"id\"))");
+//            add.getBody().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
+//        }
+//        annotatedClass.addToImports(pWrap.javaBaseTypePath());
+//        annotatedClass.addToImports(TumlClassOperations.getPathName(concreteClassifier));
+//        add.getBody().addToStatements("childResource.fromJson(propertyMap)");
+//        if (pWrap.isOrdered()) {
+//            annotatedClass.addToImports(TumlRestletGenerationUtil.Parameter);
+//            add.getBody().addToStatements("Parameter indexParameter = getQuery().getFirst(\"index\")");
+//            OJIfStatement ifIndexNull = new OJIfStatement("indexParameter != null");
+//            ifIndexNull.addToThenPart("int index = Integer.valueOf(indexParameter.getValue())");
+//            ifIndexNull.addToThenPart("parentResource." + pWrap.getter() + "().add(index, childResource)");
+//            ifIndexNull.addToElsePart("parentResource." + pWrap.adder() + "(childResource)");
+//            add.getBody().addToStatements(ifIndexNull);
+//        } else {
+//            add.getBody().addToStatements("parentResource." + pWrap.adder() + "(childResource)");
+//        }
+//    }
 
     private void buildToJson(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass, OJBlock block) {
 

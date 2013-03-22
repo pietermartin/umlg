@@ -194,58 +194,6 @@ public class RootResourceServerResourceBuilder extends BaseServerResourceBuilder
         annotatedClass.addToOperations(post);
     }
 
-    private void addPostResource(Classifier concreteClassifier, OJAnnotatedClass annotatedClass, OJPathName parentPathName) {
-        OJAnnotatedOperation add = new OJAnnotatedOperation("add", "String");
-        add.setComment("This method adds a single new instance. If and id already exist it passes the existing id back as a tmpId");
-        add.setVisibility(OJVisibilityKind.PRIVATE);
-        add.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
-        annotatedClass.addToOperations(add);
-        add.getBody().addToStatements(TumlClassOperations.getPathName(concreteClassifier).getLast() + " childResource = new " + TumlClassOperations.getPathName(concreteClassifier).getLast() + "(true)");
-        annotatedClass.addToImports(TumlClassOperations.getPathName(concreteClassifier));
-        add.getBody().addToStatements("childResource.fromJson(propertyMap)");
-        add.getBody().addToStatements("String jsonResult = childResource.toJson()");
-        OJIfStatement ifContainsId = new OJIfStatement("propertyMap.containsKey(\"id\")");
-        ifContainsId.addToThenPart("Long tmpId = Long.valueOf((Integer) propertyMap.get(\"id\"))");
-        ifContainsId.addToThenPart("jsonResult = jsonResult.substring(1);");
-        ifContainsId.addToThenPart("jsonResult = \"{\\\"tmpId\\\": \" + tmpId + \", \" + jsonResult;");
-        add.getBody().addToStatements(ifContainsId);
-        add.getBody().addToStatements("return jsonResult");
-
-        OJAnnotatedOperation addWithoutData = new OJAnnotatedOperation("add", "String");
-        addWithoutData.setVisibility(OJVisibilityKind.PRIVATE);
-        annotatedClass.addToOperations(addWithoutData);
-        addWithoutData.getBody().addToStatements(TumlClassOperations.getPathName(concreteClassifier).getLast() + " childResource = new " + TumlClassOperations.getPathName(concreteClassifier).getLast() + "(true)");
-        annotatedClass.addToImports(TumlClassOperations.getPathName(concreteClassifier));
-        addWithoutData.getBody().addToStatements("return childResource.toJson()");
-    }
-
-    private void addPutResource(Classifier classifier, OJAnnotatedClass annotatedClass, OJPathName parentPathName) {
-        OJAnnotatedOperation put = new OJAnnotatedOperation("put", "String");
-        put.setVisibility(OJVisibilityKind.PRIVATE);
-        put.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
-        annotatedClass.addToOperations(put);
-        put.getBody().addToStatements("Long id = Long.valueOf((Integer)propertyMap.get(\"id\"))");
-        put.getBody().addToStatements(
-                TumlClassOperations.getPathName(classifier).getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
-        annotatedClass.addToImports(TumlClassOperations.getPathName(classifier));
-        put.getBody().addToStatements("childResource.fromJson(propertyMap)");
-        put.getBody().addToStatements("return childResource.toJson()");
-    }
-
-    private void addDeleteResource(Classifier classifier, OJAnnotatedClass annotatedClass, OJPathName parentPathName) {
-
-        OJAnnotatedOperation delete = new OJAnnotatedOperation("delete");
-        delete.setVisibility(OJVisibilityKind.PRIVATE);
-        delete.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
-        annotatedClass.addToOperations(delete);
-        delete.getBody().addToStatements("Long id = Long.valueOf((Integer)propertyMap.get(\"id\"))");
-        delete.getBody().addToStatements(
-                TumlClassOperations.getPathName(classifier).getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
-        annotatedClass.addToImports(TumlClassOperations.getPathName(classifier));
-        delete.getBody().addToStatements("childResource.delete()");
-
-    }
-
     private void addPutDeleteObjectRepresentation(Classifier classifier, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass, boolean put) {
         OJAnnotatedOperation putOrDeleteInf = new OJAnnotatedOperation(put ? "put" : "delete", TumlRestletGenerationUtil.Representation);
         putOrDeleteInf.addToParameters(new OJParameter("entity", TumlRestletGenerationUtil.Representation));
