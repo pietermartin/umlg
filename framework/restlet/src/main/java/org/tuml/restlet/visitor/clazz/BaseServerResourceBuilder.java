@@ -26,25 +26,33 @@ public abstract class BaseServerResourceBuilder extends BaseVisitor {
 		annotatedClass.getDefaultConstructor().getBody().addToStatements("setNegotiated(false)");
 	}
 
-    protected void checkIfTransactionSuspended(OJAnnotatedOperation post) {
-        //Check if transaction needs resuming
-        OJIfStatement ifTransactionNeedsResuming = new OJIfStatement("getAttribute(\"" + TinkerGenerationUtil.transactionIdentifier + "\") != null");
-        ifTransactionNeedsResuming.addToThenPart(TinkerGenerationUtil.graphDbAccess + ".resume(" + TinkerGenerationUtil.TumlTransactionManager + ".INSTANCE.get(getAttribute(\"" + TinkerGenerationUtil.transactionIdentifier + "\")))");
-        post.getBody().addToStatements(ifTransactionNeedsResuming);
+//    protected void checkIfTransactionSuspended(OJAnnotatedOperation post) {
+//        //Check if transaction needs resuming
+//        OJIfStatement ifTransactionNeedsResuming = new OJIfStatement("getAttribute(\"" + TinkerGenerationUtil.transactionIdentifier + "\") != null");
+//        ifTransactionNeedsResuming.addToThenPart(TinkerGenerationUtil.graphDbAccess + ".resume(" + TinkerGenerationUtil.TumlTransactionManager + ".INSTANCE.get(getAttribute(\"" + TinkerGenerationUtil.transactionIdentifier + "\")))");
+//        post.getBody().addToStatements(ifTransactionNeedsResuming);
+//    }
+
+//    protected void commitIfNotFromSuspendedTransaction(OJBlock block) {
+//        //Check if transaction needs resuming
+//        OJIfStatement ifTransactionNeedsResuming = new OJIfStatement("getAttribute(\"" + TinkerGenerationUtil.transactionIdentifier + "\") != null");
+//        ifTransactionNeedsResuming.addToThenPart(TinkerGenerationUtil.graphDbAccess + ".commit()");
+//        block.addToStatements(ifTransactionNeedsResuming);
+//    }
+
+//    protected void commitIfNotFromResume(OJBlock block) {
+//        OJIfStatement ifTransactionNeedsResuming = new OJIfStatement("getAttribute(\"" + TinkerGenerationUtil.transactionIdentifier + "\") == null");
+//        ifTransactionNeedsResuming.addToThenPart(TinkerGenerationUtil.graphDbAccess + ".commit()");
+//        block.addToStatements(ifTransactionNeedsResuming);
+//    }
+
+    protected void commitOrRollback(OJBlock block) {
+        OJIfStatement ifTransactionNeedsCommitOrRollback = new OJIfStatement("getQueryValue(\"" + TinkerGenerationUtil.rollback+ "\") != null && Boolean.valueOf(getQueryValue(\"" + TinkerGenerationUtil.rollback + "\"))");
+        ifTransactionNeedsCommitOrRollback.addToThenPart(TinkerGenerationUtil.graphDbAccess + ".rollback()");
+        ifTransactionNeedsCommitOrRollback.addToElsePart(TinkerGenerationUtil.graphDbAccess + ".commit()");
+        block.addToStatements(ifTransactionNeedsCommitOrRollback);
     }
 
-    protected void commitIfNotFromSuspendedTransaction(OJBlock block) {
-        //Check if transaction needs resuming
-        OJIfStatement ifTransactionNeedsResuming = new OJIfStatement("getAttribute(\"" + TinkerGenerationUtil.transactionIdentifier + "\") != null");
-        ifTransactionNeedsResuming.addToThenPart(TinkerGenerationUtil.graphDbAccess + ".commit()");
-        block.addToStatements(ifTransactionNeedsResuming);
-    }
-
-    protected void commitIfNotFromResume(OJBlock block) {
-        OJIfStatement ifTransactionNeedsResuming = new OJIfStatement("getAttribute(\"" + TinkerGenerationUtil.transactionIdentifier + "\") == null");
-        ifTransactionNeedsResuming.addToThenPart(TinkerGenerationUtil.graphDbAccess + ".commit()");
-        block.addToStatements(ifTransactionNeedsResuming);
-    }
 
     protected void addToRouterEnum(Model model, OJAnnotatedClass annotatedClass, String name, String path) {
 		OJEnum routerEnum = (OJEnum) this.workspace.findOJClass("restlet.RestletRouterEnum");

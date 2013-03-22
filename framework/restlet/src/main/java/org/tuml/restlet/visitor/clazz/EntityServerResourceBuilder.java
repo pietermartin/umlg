@@ -59,9 +59,6 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
         annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
         TinkerGenerationUtil.addOverrideAnnotation(delete);
 
-        //Check if transaction needs resuming
-        checkIfTransactionSuspended(delete);
-
         delete.getBody().addToStatements(
                 "this." + getIdFieldName(clazz) + "= Long.valueOf((Integer)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"))");
         delete.getBody().addToStatements(
@@ -79,8 +76,7 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
 
         OJTryStatement ojTry = new OJTryStatement();
         ojTry.getTryPart().addToStatements("c.delete()");
-//        ojTry.getTryPart().addToStatements("GraphDb.getDb().commit()");
-        commitIfNotFromResume(ojTry.getTryPart());
+        ojTry.getTryPart().addToStatements("GraphDb.getDb().commit()");
 
         ojTry.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
 
@@ -116,9 +112,6 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
         annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
         TinkerGenerationUtil.addOverrideAnnotation(put);
 
-        //Check if transaction needs resuming
-        checkIfTransactionSuspended(put);
-
         put.getBody().addToStatements(
                 "this." + getIdFieldName(clazz) + "= Long.valueOf((Integer)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"))");
         put.getBody().addToStatements(
@@ -133,9 +126,7 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
 
         ojTry.getTryPart().addToStatements("c.fromJson(" + entityText.getName() + ");");
 
-//        ojTry.getTryPart().addToStatements("GraphDb.getDb().commit()");
-        commitIfNotFromResume(ojTry.getTryPart());
-
+        ojTry.getTryPart().addToStatements("GraphDb.getDb().commit()");
 
         ojTry.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
 
@@ -165,7 +156,6 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
         TinkerGenerationUtil.addOverrideAnnotation(get);
 
         OJTryStatement tryStatement = new OJTryStatement();
-
         tryStatement.getTryPart().addToStatements("StringBuilder json = new StringBuilder()");
         OJIfStatement ojIfStatement = new OJIfStatement("!getReference().getLastSegment().endsWith(\"MetaData\")");
         ojIfStatement.addToThenPart(

@@ -172,7 +172,7 @@
         $.extend(this, {
             "TumlTabManyViewManager":"1.0.0"
         });
-        this.tumlTabGridManager;
+        this.tumlTabGridManager = null;
         TumlBaseTabViewManager.call(this, tabEnum, this.tabContainer, tumlUri, result);
     }
 
@@ -243,14 +243,14 @@
         }
         this.tumlTabGridManager.onPutSuccess.subscribe(function (e, args) {
             self.onPutSuccess.notify(args, e, self);
-            self.createGridForResult(args.data, args.tabId);
+            self.updateGridForResult(args.data, args.tabId);
         });
         this.tumlTabGridManager.onPutFailure.subscribe(function (e, args) {
             self.onPutFailure.notify(args, e, self);
         });
         this.tumlTabGridManager.onPostSuccess.subscribe(function (e, args) {
             self.onPostSuccess.notify(args, e, self);
-            self.createGridForResult(args.data, args.tabId);
+            self.updateGridForResult(args.data, args.tabId);
         });
         this.tumlTabGridManager.onPostFailure.subscribe(function (e, args) {
             self.onPostFailure.notify(args, e, self);
@@ -297,7 +297,18 @@
         $('#' + this.tabId).append(gridDiv);
         this.tumlTabGridManager.refresh(result, gridDiv);
     }
-
+    TumlTabManyViewManager.prototype.updateGridForResult = function (result, tabId) {
+        for (var i = 0; i < result.length; i++) {
+            var metaForData = result[i].meta.to;
+            if (metaForData.name === tabId) {
+                this.updateGrid(result[i]);
+                return;
+            }
+        }
+    }
+    TumlTabManyViewManager.prototype.updateGrid = function (result) {
+        this.tumlTabGridManager.update(result);
+    }
     function TumlBaseTabViewManager(tabEnum, tabContainer, tumlUri, result) {
 
         var self = this;

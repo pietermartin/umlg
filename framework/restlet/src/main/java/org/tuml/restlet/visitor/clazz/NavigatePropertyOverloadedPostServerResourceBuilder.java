@@ -127,8 +127,6 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
         TinkerGenerationUtil.addOverrideAnnotation(post);
         TinkerGenerationUtil.addSuppressWarning(post);
 
-        checkIfTransactionSuspended(post);
-
         PropertyWrapper otherEndPWrap = new PropertyWrapper(pWrap.getOtherEnd());
 
         OJPathName parentPathName = otherEndPWrap.javaBaseTypePath();
@@ -229,8 +227,7 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
 
         addPutResource(pWrap, annotatedClass, parentPathName);
 
-//        ojTryStatement.getTryPart().addToStatements("GraphDb.getDb().commit()");
-        commitIfNotFromResume(ojTryStatement.getTryPart());
+        ojTryStatement.getTryPart().addToStatements("GraphDb.getDb().commit()");
 
         ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
         ojTryStatement.getCatchPart().addToStatements("GraphDb.getDb().rollback()");

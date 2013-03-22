@@ -95,7 +95,7 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 
         OJPathName parentPathName = TumlClassOperations.getPathName(pWrap.getOtherEnd().getType());
         tryStatement.getTryPart().addToStatements(
-                "this." + parentPathName.getLast().toLowerCase() + "Id = Long.valueOf((Integer)getRequestAttributes().get(\""
+                "this." + parentPathName.getLast().toLowerCase() + "Id = Long.valueOf(getQueryValue(\""
                         + parentPathName.getLast().toLowerCase() + "Id\"))");
         tryStatement.getTryPart().addToStatements(
                 parentPathName.getLast() + " parentResource = GraphDb.getDb().instantiateClassifier(" + parentPathName.getLast().toLowerCase() + "Id" + ")");
@@ -122,9 +122,6 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
         TinkerGenerationUtil.addOverrideAnnotation(putOrDelete);
         TinkerGenerationUtil.addSuppressWarning(putOrDelete);
 
-        //Check if transaction needs resuming
-        checkIfTransactionSuspended(putOrDelete);
-
         PropertyWrapper otherEndPWrap = new PropertyWrapper(pWrap.getOtherEnd());
 
         OJTryStatement ojTryStatement = new OJTryStatement();
@@ -132,7 +129,7 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
         OJPathName parentPathName = otherEndPWrap.javaBaseTypePath();
         if (!pWrap.isComposite() && !put) {
             ojTryStatement.getTryPart().addToStatements(
-                    "this." + parentPathName.getLast().toLowerCase() + "Id = Long.valueOf((Integer)getRequestAttributes().get(\""
+                    "this." + parentPathName.getLast().toLowerCase() + "Id = Long.valueOf(getQueryValue(\""
                             + parentPathName.getLast().toLowerCase() + "Id\"))");
             ojTryStatement.getTryPart()
                     .addToStatements(
@@ -241,14 +238,11 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
         TinkerGenerationUtil.addOverrideAnnotation(post);
         TinkerGenerationUtil.addSuppressWarning(post);
 
-        //Check if transaction needs resuming
-        checkIfTransactionSuspended(post);
-
         PropertyWrapper otherEndPWrap = new PropertyWrapper(pWrap.getOtherEnd());
 
         OJPathName parentPathName = otherEndPWrap.javaBaseTypePath();
         post.getBody().addToStatements(
-                "this." + parentPathName.getLast().toLowerCase() + "Id = Long.valueOf((Integer)getRequestAttributes().get(\""
+                "this." + parentPathName.getLast().toLowerCase() + "Id = Long.valueOf(getQueryValue(\""
                         + parentPathName.getLast().toLowerCase() + "Id\"))");
         post.getBody().addToStatements(
                 parentPathName.getLast() + " parentResource = GraphDb.getDb().instantiateClassifier(" + parentPathName.getLast().toLowerCase() + "Id" + ")");
@@ -282,7 +276,8 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
 
         addPostResource(concreteClassifier, pWrap, annotatedClass, parentPathName);
 
-        ojTryStatement.getTryPart().addToStatements("GraphDb.getDb().commit()");
+        commitOrRollback(ojTryStatement.getTryPart());
+//        ojTryStatement.getTryPart().addToStatements("GraphDb.getDb().commit()");
 
         ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
         ojTryStatement.getCatchPart().addToStatements("GraphDb.getDb().rollback()");

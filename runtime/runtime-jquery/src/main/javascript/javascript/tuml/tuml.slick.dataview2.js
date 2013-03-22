@@ -403,6 +403,37 @@
       refresh();
     }
 
+    //This is called from the grid on regular save.
+    //The itemsToRefresh contains the difference that were posted. New items an existing items.
+    function refreshItem(itemsToRefresh) {
+        for (var i = 0; i < itemsToRefresh.length; i++) {
+            var itemToRefresh = itemsToRefresh[i];
+            if (itemToRefresh.tmpId != undefined) {
+                //New item
+                if (idxById[itemToRefresh.tmpId] == undefined) {
+                    throw "Invalid id";
+                }
+                var index = idxById[itemToRefresh.tmpId];
+                items[index] = itemToRefresh;
+                idxById[itemToRefresh.tmpId] = null;
+                idxById[itemToRefresh.id] = index;
+            } else {
+                //Existing item
+                if (idxById[itemToRefresh.id] == undefined) {
+                    throw "Invalid id";
+                }
+                var index = idxById[itemToRefresh.id];
+                items[index] = itemToRefresh;
+            }
+        }
+        //Clear all new and updated items
+        updatedItems = [];
+        updatedIdxById = {};
+        newItems = [];
+        newIdxById = {};
+        refresh();
+    }
+
     function addItem(item) {
       items.push(item);
       updateIdxById(items.length - 1);
@@ -915,6 +946,7 @@
       "setRefreshHints": setRefreshHints,
       "setFilterArgs": setFilterArgs,
       "refresh": refresh,
+      "refreshItem": refreshItem,
       "updateItem": updateItem,
       "insertItem": insertItem,
       "addItem": addItem,

@@ -1,35 +1,23 @@
 package org.tuml.restlet.visitor.clazz;
 
-import java.util.Set;
-
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Classifier;
-import org.tuml.java.metamodel.OJBlock;
-import org.tuml.java.metamodel.OJField;
-import org.tuml.java.metamodel.OJForStatement;
-import org.tuml.java.metamodel.OJIfStatement;
-import org.tuml.java.metamodel.OJPackage;
-import org.tuml.java.metamodel.OJParameter;
-import org.tuml.java.metamodel.OJPathName;
-import org.tuml.java.metamodel.OJTryStatement;
-import org.tuml.java.metamodel.OJVisibilityKind;
-import org.tuml.java.metamodel.annotation.OJAnnotatedClass;
-import org.tuml.java.metamodel.annotation.OJAnnotatedField;
-import org.tuml.java.metamodel.annotation.OJAnnotatedInterface;
-import org.tuml.java.metamodel.annotation.OJAnnotatedOperation;
-import org.tuml.java.metamodel.annotation.OJAnnotationValue;
-import org.tuml.java.metamodel.annotation.OJEnum;
-import org.tuml.java.metamodel.annotation.OJEnumLiteral;
 import org.tuml.framework.Visitor;
 import org.tuml.generation.Workspace;
+import org.tuml.java.metamodel.*;
+import org.tuml.java.metamodel.annotation.*;
 import org.tuml.javageneration.util.Namer;
 import org.tuml.javageneration.util.TinkerGenerationUtil;
 import org.tuml.javageneration.util.TumlClassOperations;
 import org.tuml.restlet.util.TumlRestletGenerationUtil;
 
-public class RootResourceServerResourceBuilder extends BaseServerResourceBuilder implements Visitor<Class> {
+import java.util.Set;
 
-    public RootResourceServerResourceBuilder(Workspace workspace, String sourceDir) {
+public class RootOvereloadedPostResourceServerResourceBuilder extends BaseServerResourceBuilder implements Visitor<Class> {
+
+    private static final String OVERLOADED_POST = "OverloadedPost";
+
+    public RootOvereloadedPostResourceServerResourceBuilder(Workspace workspace, String sourceDir) {
         super(workspace, sourceDir);
     }
 
@@ -37,12 +25,12 @@ public class RootResourceServerResourceBuilder extends BaseServerResourceBuilder
     public void visitBefore(Class clazz) {
         if (!clazz.isAbstract() && !TumlClassOperations.hasCompositeOwner(clazz)) {
 
-            OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(TumlClassOperations.className(clazz) + "sServerResource");
+            OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(TumlClassOperations.className(clazz) + "s_" + OVERLOADED_POST + "_ServerResource");
             OJPackage ojPackage = new OJPackage(Namer.name(clazz.getNearestPackage()) + ".restlet");
             annotatedInf.setMyPackage(ojPackage);
             addToSource(annotatedInf);
 
-            OJAnnotatedClass annotatedClass = new OJAnnotatedClass(TumlClassOperations.className(clazz) + "sServerResourceImpl");
+            OJAnnotatedClass annotatedClass = new OJAnnotatedClass(TumlClassOperations.className(clazz) + "s_" + OVERLOADED_POST + "ServerResourceImpl");
             annotatedClass.setSuperclass(TumlRestletGenerationUtil.ServerResource);
             annotatedClass.setMyPackage(ojPackage);
             annotatedClass.addToImplementedInterfaces(annotatedInf.getPathName());
@@ -51,11 +39,7 @@ public class RootResourceServerResourceBuilder extends BaseServerResourceBuilder
 
             addDefaultConstructor(annotatedClass);
             addGetRootObjectRepresentation(clazz, annotatedInf, annotatedClass);
-//            addPutDeleteObjectRepresentation(clazz, annotatedInf, annotatedClass, true);
-//            addPutDeleteObjectRepresentation(clazz, annotatedInf, annotatedClass, false);
             addPostObjectRepresentation(clazz, annotatedInf, annotatedClass, REST.POST);
-            addPostObjectRepresentation(clazz, annotatedInf, annotatedClass, REST.PUT);
-            addPostObjectRepresentation(clazz, annotatedInf, annotatedClass, REST.DELETE);
             addToRouterEnum(clazz, annotatedClass);
 
         }
@@ -439,7 +423,7 @@ public class RootResourceServerResourceBuilder extends BaseServerResourceBuilder
         attachAll.getBody().addToStatements(routerEnum.getName() + "." + ojLiteral.getName() + ".attach(router)");
     }
 
-    private void addPrivateGetter(org.eclipse.uml2.uml.Class clazz, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass) {
+    private void addPrivateGetter(Class clazz, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass) {
         OJField jsonResult = new OJField("jsonEntityData", "java.lang.StringBuilder");
         jsonResult.setInitExp("new StringBuilder()");
         annotatedClass.addToFields(jsonResult);

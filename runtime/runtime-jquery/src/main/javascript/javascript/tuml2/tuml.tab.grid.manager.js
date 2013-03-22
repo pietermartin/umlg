@@ -339,7 +339,8 @@
                 }).appendTo('#grid-button' + this.localMetaForData.name);
             }
 
-            var $saveButton = $('<button />').text('Save').click(function () {
+            //Save button
+            $('<button />').text('Save').click(function () {
                 if (self.grid.getEditorLock().commitCurrentEdit()) {
                     if (self.validateMultiplicity()) {
                         self.doSave();
@@ -417,40 +418,24 @@
 
         };
 
+        //This is called from tuml.tab.view.manager.js, from the onPutSuccess and onPostSuccess events
+        this.update = function (result, gridDiv) {
+            this.metaForData = result.meta.to;
+            this.updateGrid(result.data);
+        };
+
         this.addNewRow = function () {
             $.ajax({
-                url: tumlUri + "?transactionIdentifier=" + transactionIdentifier,
+                url: tumlUri + "?rollback=true",
                 type: "POST",
                 dataType: "json",
                 contentType: "json",
-//                data:JSON.stringify(this.dataView.getNewItems()),
                 success: function (data, textStatus, jqXHR) {
-                    self.rollbackTransaction();
-
-//                    var $newItem = {};
-//                    for (var i = 0; i < this.grid.getColumns().length; i++) {
-//                        var column = this.grid.getColumns()[i];
-//                        $newItem[column.name] = null;
-//                    }
-                    //Generate a fake id, its required for the grid to work nicely
-                    var fakeId = 'fake::' + self.dataView.getItems().length + self.dataView.getNewItems().length + 1;
-//
-//                    //Default required booleans to false
-//                    $.each(this.localMetaForData.properties, function (index, property) {
-//                        if (property.fieldType == 'Boolean' && property.lower > 0) {
-//                            $newItem[property.name] = false;
-//                        }
-//                    });
-//                    this.dataView.addItem($.extend($newItem, args.item));
-
-                    data[0].data[0].id = fakeId;
+                    //Cancel prevent validation from happening
                     self.grid.getEditController().cancelCurrentEdit();
                     self.dataView.addItem(data[0].data[0]);
+                    //This ensures the cell is in edit mode, i.e. the cursor is ready for typing
                     self.grid.editActiveCell();
-
-//                    updateValidationWarningHeader();
-
-
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
@@ -458,46 +443,7 @@
             });
         }
 
-//        this.suspendTransaction = function (callBack) {
-//            //Suspend the transaction
-//            $.ajax({
-//                url: '/' + tumlModelName + '/transaction',
-//                type: "POST",
-//                dataType: "json",
-//                contentType: "json",
-//                success: function (result, textStatus, jqXHR) {
-//                    transactionSuspended = true;
-//                    transactionIdentifier = result.transactionIdentifier;
-//                    callBack();
-//                },
-//                error: function (jqXHR, textStatus, errorThrown) {
-//                    alert('error getting /' + tumlModelName + '/transaction\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
-//                }
-//            });
-//        }
-
-        this.rollbackTransaction = function () {
-            //Suspend the transaction
-            $.ajax({
-                url: '/' + tumlModelName + '/transaction' + "?transactionIdentifier=" + transactionIdentifier,
-                type: "PUT",
-                dataType: "json",
-                contentType: "json",
-                data: JSON.stringify({commit: false}),
-                success: function (result, textStatus, jqXHR) {
-                    transactionSuspended = false;
-                    transactionIdentifier = null;
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert('error rolling back the transaction /' + tumlModelName + '/transaction\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
-                }
-            });
-        }
-
         this.doSave = function () {
-            if (transactionSuspended) {
-                tumlUri += "?transactionIdentifier=" + transactionIdentifier;
-            }
             //put updated items
             if (this.dataView.getUpdatedItems().length !== 0 && this.dataView.getNewItems().length == 0 && this.dataView.getDeletedItems().length == 0) {
                 $.ajax({
@@ -633,6 +579,9 @@
             }
         }
 
+        this.updateGrid = function (data) {
+            this.dataView.refreshItem(data);
+        }
 
         this.createGrid = function (data /*, localMetaForData*/, tumlUri) {
             var columnFilters = {};
@@ -705,7 +654,11 @@
 
             this.grid.onClick.subscribe(function (e, args) {
                 var column = self.grid.getColumns()[args.cell];
-                if (column.name == 'id') {
+
+                if (isClickOnNewRow(args.row, args.cell, self.dataView.getItem(args.row))) {
+//                    //Add new row
+//                    self.addNewRow();
+                } else if (column.name == 'id') {
                     e.stopImmediatePropagation();
                 } else if (column.name == 'delete') {
                     var item = self.dataView.getItem(args.row);
@@ -751,9 +704,9 @@
                 self.dataView.updateItem(args.item.id, args.item, self.grid.getColumns()[args.cell]);
             });
 
-            this.grid.onAddNewRow.subscribe(function (e, args) {
-                self.addNewRow(args);
-            });
+//            this.grid.onAddNewRow.subscribe(function (e, args) {
+//                self.addNewRow(args);
+//            });
 
             this.grid.onKeyDown.subscribe(function (e) {
                 if (self.grid['manyPrimitiveEditorOpen']) {
@@ -851,25 +804,13 @@
                 }
             });
 
-//            this.addNewRow = function (args) {
-//                var $newItem = {};
-//                for (var i = 0; i < this.grid.getColumns().length; i++) {
-//                    var column = this.grid.getColumns()[i];
-//                    $newItem[column.name] = null;
-//                }
-//                //Generate a fake id, its required for the grid to work nicely
-//                $newItem.id = 'fake::' + this.dataView.getItems().length + this.dataView.getNewItems().length + 1;
-//
-//                //Default required booleans to false
-//                $.each(this.localMetaForData.properties, function (index, property) {
-//                    if (property.fieldType == 'Boolean' && property.lower > 0) {
-//                        $newItem[property.name] = false;
-//                    }
-//                });
-//                this.dataView.addItem($.extend($newItem, args.item));
-//
-//                updateValidationWarningHeader();
-//            }
+            this.grid.onActiveCellChanged.subscribe(function (e, args) {
+//                alert('onActiveCellChanged ' + args.row);
+                if (isClickOnNewRow(args.row, args.cell, self.dataView.getItem(args.row))) {
+                    //Add new row
+                    self.addNewRow();
+                }
+            });
 
             function updateValidationWarningHeader() {
                 $('#validation-warning').children().remove();
@@ -899,6 +840,14 @@
                     }
                 }
                 return true;
+            };
+
+            function isClickOnNewRow(row, cell, item) {
+                if (row >= self.dataView.getItems().length) {
+                    return true;
+                } else {
+                    return false;
+                }
             };
 
             this.updateHeaderRow = function (metaForData) {
@@ -1031,9 +980,10 @@
                 item[self.grid.getColumns()[cell.cell].name] = value;
             } else {
                 //This happens when the component is the first entry in the grid, i.e. it needs to add the row
-                item = {};
-                item[self.grid.getColumns()[cell.cell].name] = value;
-                self.addNewRow({item: item});
+//                item = {};
+//                item[self.grid.getColumns()[cell.cell].name] = value;
+//                self.addNewRow({item: item});
+                alert('This should not be happening no more');
             }
             self.grid.invalidateRows([cell.row]);
             self.grid.updateRowCount();
