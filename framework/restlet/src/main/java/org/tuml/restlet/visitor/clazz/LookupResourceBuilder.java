@@ -75,7 +75,7 @@ public class LookupResourceBuilder extends BaseServerResourceBuilder implements 
 
 		OJPathName parentPathName = TumlClassOperations.getPathName(pWrap.getOtherEnd().getType());
         ojTryStatement.getTryPart().addToStatements(
-				"this." + parentPathName.getLast().toLowerCase() + "Id = Long.valueOf((Integer)getRequestAttributes().get(\""
+				"this." + parentPathName.getLast().toLowerCase() + "Id = Long.valueOf((String)getRequestAttributes().get(\""
 						+ parentPathName.getLast().toLowerCase() + "Id\"))");
         ojTryStatement.getTryPart().addToStatements(
 				parentPathName.getLast() + " resource = GraphDb.getDb().instantiateClassifier(this." + parentPathName.getLast().toLowerCase() + "Id"

@@ -201,7 +201,6 @@
     }
     TumlTabManyViewManager.prototype.init = function (tumlUri, tabDivName) {
         var self = this;
-        //Do not pass the div in, it causes issues with refreshing
         TumlBaseTabViewManager.prototype.init.call(this, tumlUri, tabDivName);
         if (this.oneManyOrQuery.forLookup) {
             this.tumlTabGridManager = new Tuml.TumlForManyLookupGridManager(tumlUri, this.oneManyOrQuery.propertyNavigatingTo);

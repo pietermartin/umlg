@@ -13,11 +13,11 @@ import org.tuml.restlet.util.TumlRestletGenerationUtil;
 
 import java.util.Set;
 
-public class RootOvereloadedPostResourceServerResourceBuilder extends BaseServerResourceBuilder implements Visitor<Class> {
+public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerResourceBuilder implements Visitor<Class> {
 
     private static final String OVERLOADED_POST = "OverloadedPost";
 
-    public RootOvereloadedPostResourceServerResourceBuilder(Workspace workspace, String sourceDir) {
+    public RootOverLoadedPostResourceServerResourceBuilder(Workspace workspace, String sourceDir) {
         super(workspace, sourceDir);
     }
 
@@ -403,7 +403,7 @@ public class RootOvereloadedPostResourceServerResourceBuilder extends BaseServer
 
     private void addToRouterEnum(Class clazz, OJAnnotatedClass annotatedClass) {
         OJEnum routerEnum = (OJEnum) this.workspace.findOJClass("restlet.RestletRouterEnum");
-        OJEnumLiteral ojLiteral = new OJEnumLiteral(TumlClassOperations.className(clazz).toUpperCase() + "S");
+        OJEnumLiteral ojLiteral = new OJEnumLiteral(TumlClassOperations.className(clazz).toUpperCase() + "S_" + OVERLOADED_POST);
 
         OJField uri = new OJField();
         uri.setType(new OJPathName("String"));

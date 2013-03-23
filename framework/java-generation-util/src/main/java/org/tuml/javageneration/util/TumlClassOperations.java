@@ -265,7 +265,7 @@ public class TumlClassOperations extends ClassOperations {
     }
 
     private static void getConcreteImplementations(Set<Classifier> result, Classifier clazz) {
-        if (!clazz.isAbstract()) {
+        if (!clazz.isAbstract() && !(clazz instanceof Interface)) {
             result.add(clazz);
         }
         List<Generalization> generalizations = ModelLoader.INSTANCE.getSpecifics(clazz);
@@ -350,6 +350,9 @@ public class TumlClassOperations extends ClassOperations {
     public static Set<Classifier> getConcreteImplementations(Classifier clazz) {
         Set<Classifier> result = new HashSet<Classifier>();
         getConcreteImplementations(result, clazz);
+        if (clazz instanceof Interface) {
+            result.addAll(getConcreteRealization((Interface)clazz));
+        }
         return result;
     }
 

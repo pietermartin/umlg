@@ -60,7 +60,7 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
         TinkerGenerationUtil.addOverrideAnnotation(delete);
 
         delete.getBody().addToStatements(
-                "this." + getIdFieldName(clazz) + "= Long.valueOf((Integer)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"))");
+                "this." + getIdFieldName(clazz) + "= Long.valueOf((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"))");
         delete.getBody().addToStatements(
                 TumlClassOperations.className(clazz) + " c = new " + TumlClassOperations.className(clazz) + "(GraphDb.getDb().getVertex(this."
                         + getIdFieldName(clazz) + "))");
@@ -113,7 +113,7 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
         TinkerGenerationUtil.addOverrideAnnotation(put);
 
         put.getBody().addToStatements(
-                "this." + getIdFieldName(clazz) + "= Long.valueOf((Integer)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"))");
+                "this." + getIdFieldName(clazz) + "= Long.valueOf((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"))");
         put.getBody().addToStatements(
                 TumlClassOperations.className(clazz) + " c = new " + TumlClassOperations.className(clazz) + "(GraphDb.getDb().getVertex(this."
                         + getIdFieldName(clazz) + "))");
@@ -127,6 +127,7 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
         ojTry.getTryPart().addToStatements("c.fromJson(" + entityText.getName() + ");");
 
         ojTry.getTryPart().addToStatements("GraphDb.getDb().commit()");
+
 
         ojTry.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
 
@@ -159,7 +160,7 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
         tryStatement.getTryPart().addToStatements("StringBuilder json = new StringBuilder()");
         OJIfStatement ojIfStatement = new OJIfStatement("!getReference().getLastSegment().endsWith(\"MetaData\")");
         ojIfStatement.addToThenPart(
-                "this." + getIdFieldName(clazz) + "= Long.valueOf((Integer)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"))");
+                "this." + getIdFieldName(clazz) + "= Long.valueOf((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"))");
         ojIfStatement.addToThenPart(
                 TumlClassOperations.className(clazz) + " c = new " + TumlClassOperations.className(clazz) + "(GraphDb.getDb().getVertex(this."
                         + getIdFieldName(clazz) + "))");

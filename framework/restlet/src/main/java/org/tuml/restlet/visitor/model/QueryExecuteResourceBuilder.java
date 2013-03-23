@@ -85,7 +85,7 @@ public class QueryExecuteResourceBuilder extends BaseServerResourceBuilder imple
 		OJField ocl = new OJField("ocl", "String");
 		ocl.setInitExp("getQuery().getFirstValue(\"ocl\")");
 		OJField contextId = new OJField("contextId", "Long");
-		contextId.setInitExp("Long.valueOf((Integer)getRequestAttributes().get(\"contextId\"))");
+		contextId.setInitExp("Long.valueOf((String)getRequestAttributes().get(\"contextId\"))");
 		
 //		OJField oclResult = new OJField("oclResult", "String");
 //		oclResult.setInitExp("return execute(ocl, contextId)");

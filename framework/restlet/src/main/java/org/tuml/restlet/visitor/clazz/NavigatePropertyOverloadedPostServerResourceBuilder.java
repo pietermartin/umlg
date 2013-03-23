@@ -79,7 +79,7 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
 
         OJPathName parentPathName = TumlClassOperations.getPathName(pWrap.getOtherEnd().getType());
         tryStatement.getTryPart().addToStatements(
-                "this." + parentPathName.getLast().toLowerCase() + "Id = Long.valueOf((Integer)getRequestAttributes().get(\""
+                "this." + parentPathName.getLast().toLowerCase() + "Id = Long.valueOf((String)getRequestAttributes().get(\""
                         + parentPathName.getLast().toLowerCase() + "Id\"))");
         tryStatement.getTryPart().addToStatements(
                 parentPathName.getLast() + " parentResource = GraphDb.getDb().instantiateClassifier(" + parentPathName.getLast().toLowerCase() + "Id" + ")");
@@ -131,7 +131,7 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
 
         OJPathName parentPathName = otherEndPWrap.javaBaseTypePath();
         post.getBody().addToStatements(
-                "this." + parentPathName.getLast().toLowerCase() + "Id = Long.valueOf(getQueryForm(\""
+                "this." + parentPathName.getLast().toLowerCase() + "Id = Long.valueOf((String)getRequestAttributes().get(\""
                         + parentPathName.getLast().toLowerCase() + "Id\"))");
         post.getBody().addToStatements(
                 parentPathName.getLast() + " parentResource = GraphDb.getDb().instantiateClassifier(" + parentPathName.getLast().toLowerCase() + "Id" + ")");
@@ -140,6 +140,13 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
         OJField mapper = new OJField("mapper", TinkerGenerationUtil.ObjectMapper);
         mapper.setInitExp("new ObjectMapper()");
         ojTryStatement.getTryPart().addToLocals(mapper);
+
+        OJField jsonData = new OJField("json", "java.lang.StringBuilder");
+        jsonData.setInitExp("new StringBuilder()");
+        ojTryStatement.getTryPart().addToLocals(jsonData);
+        ojTryStatement.getTryPart().addToStatements("json.append(\"[\")");
+        ojTryStatement.getTryPart().addToStatements("json.append(\"{\\\"data\\\": [\")");
+
         OJPathName pathName = new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object");
         OJAnnotatedField entityText = new OJAnnotatedField("entityText", "String");
         entityText.setInitExp("entity.getText()");
@@ -164,7 +171,7 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
         OJForStatement forArray = new OJForStatement("map", new OJPathName("java.util.Map").addToGenerics(new OJPathName("String")).addToGenerics(
                 new OJPathName("Object")), "array");
         ifArrayForInsert.addToThenPart(forArray);
-        forArray.getBody().addToStatements("add(parentResource, map)");
+        forArray.getBody().addToStatements("json.append(add(parentResource, map))");
 
         OJField map = new OJField("map", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object"));
         map.setInitExp("(Map<String, Object>) o");
@@ -223,57 +230,80 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
         map.setInitExp("(Map<String, Object>) o");
         ifArrayForUpdate.setElsePart(new OJBlock());
         ifArrayForUpdate.getElsePart().addToLocals(map);
-        ifArrayForUpdate.getElsePart().addToStatements("put(map)");
+        ifArrayForUpdate.getElsePart().addToStatements("json.append(put(map))");
 
         addPutResource(pWrap, annotatedClass, parentPathName);
 
-        ojTryStatement.getTryPart().addToStatements("GraphDb.getDb().commit()");
+        //Check if transaction needs commiting
+        commitOrRollback(ojTryStatement.getTryPart());
+        ojTryStatement.getTryPart().addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + concreteClassifier.getQualifiedName() + "\\\"\")");
+        ojTryStatement.getTryPart().addToStatements("json.append(\", \\\"to\\\": \")");
+
+        ojTryStatement.getTryPart().addToStatements("json.append(" + TumlClassOperations.propertyEnumName(concreteClassifier) + ".asJson())");
+        ojTryStatement.getTryPart().addToStatements("json.append(\", \\\"from\\\": \")");
+
+        //TODO, handle inheritence
+        Classifier owningType = (Classifier)pWrap.getOwningType();
+
+        ojTryStatement.getTryPart().addToStatements("json.append(" + TumlClassOperations.propertyEnumName(owningType) + ".asJson())");
+        ojTryStatement.getTryPart().addToStatements("json.append(\"}}]\")");
+        annotatedClass.addToImports(TumlClassOperations.getPathName(owningType).append(TumlClassOperations.propertyEnumName(owningType)));
+        annotatedClass.addToImports(TumlClassOperations.getPathName(concreteClassifier).append(TumlClassOperations.propertyEnumName(concreteClassifier)));
+
+        ojTryStatement.getTryPart().addToStatements("return new " + TumlRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
+
 
         ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
         ojTryStatement.getCatchPart().addToStatements("GraphDb.getDb().rollback()");
 
-        ojTryStatement.getCatchPart().addToStatements(TumlRestletGenerationUtil.TumlExceptionUtilFactory.getLast() + ".getTumlExceptionUtil().handle(e)");
+        ojTryStatement.getCatchPart().addToStatements("throw " + TumlRestletGenerationUtil.TumlExceptionUtilFactory.getLast() + ".getTumlExceptionUtil().handle(e)");
         annotatedClass.addToImports(TumlRestletGenerationUtil.TumlExceptionUtilFactory);
 
         post.getBody().addToStatements(ojTryStatement);
 
         annotatedClass.addToImports(parentPathName);
 
-        post.getBody().addToStatements("return get()");
-
         annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
         annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);
         annotatedClass.addToOperations(post);
     }
 
-//    private void addPutResource(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass, OJPathName parentPathName) {
-//        OJAnnotatedOperation put = new OJAnnotatedOperation("put");
-//        put.setVisibility(OJVisibilityKind.PRIVATE);
-//        put.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
-//        annotatedClass.addToOperations(put);
-//        put.getBody().addToStatements("Long id = Long.valueOf((Integer)propertyMap.get(\"id\"))");
-//        put.getBody().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
-//        annotatedClass.addToImports(pWrap.javaBaseTypePath());
-//        put.getBody().addToStatements("childResource.fromJson(propertyMap)");
-//    }
-//
-//    private void addPostResource(Classifier concreteClassifier, PropertyWrapper pWrap, OJAnnotatedClass annotatedClass, OJPathName parentPathName) {
-//        OJAnnotatedOperation add = new OJAnnotatedOperation("add");
-//        add.setVisibility(OJVisibilityKind.PRIVATE);
-//        add.addToParameters(new OJParameter("parentResource", parentPathName));
-//        add.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
-//        annotatedClass.addToOperations(add);
-//        if (pWrap.isComposite()) {
-//            add.getBody().addToStatements(
-//                    pWrap.javaBaseTypePath().getLast() + " childResource = new " + TumlClassOperations.getPathName(concreteClassifier).getLast() + "(true)");
-//        } else {
-//            add.getBody().addToStatements("Long id = Long.valueOf((Integer)propertyMap.get(\"id\"))");
-//            add.getBody().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
-//        }
-//        annotatedClass.addToImports(pWrap.javaBaseTypePath());
-//        annotatedClass.addToImports(TumlClassOperations.getPathName(concreteClassifier));
-//        add.getBody().addToStatements("childResource.fromJson(propertyMap)");
-//        if (pWrap.isOrdered()) {
+    private void addPutResource(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass, OJPathName parentPathName) {
+        OJAnnotatedOperation put = new OJAnnotatedOperation("put", "String");
+        put.setVisibility(OJVisibilityKind.PRIVATE);
+        put.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
+        annotatedClass.addToOperations(put);
+        put.getBody().addToStatements("Long id = Long.valueOf((Integer)propertyMap.get(\"id\"))");
+        put.getBody().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
+        annotatedClass.addToImports(pWrap.javaBaseTypePath());
+        put.getBody().addToStatements("childResource.fromJson(propertyMap)");
+        put.getBody().addToStatements("return childResource.toJson()");
+    }
+
+    private void addPostResource(Classifier concreteClassifier, PropertyWrapper pWrap, OJAnnotatedClass annotatedClass, OJPathName parentPathName) {
+        OJAnnotatedOperation add = new OJAnnotatedOperation("add", "String");
+        add.setVisibility(OJVisibilityKind.PRIVATE);
+        add.addToParameters(new OJParameter("parentResource", parentPathName));
+        add.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
+        annotatedClass.addToOperations(add);
+        if (pWrap.isComposite()) {
+            add.getBody().addToStatements(
+                    pWrap.javaBaseTypePath().getLast() + " childResource = new " + TumlClassOperations.getPathName(concreteClassifier).getLast() + "(true)");
+        } else {
+            add.getBody().addToStatements("Long id = Long.valueOf((Integer)propertyMap.get(\"id\"))");
+            add.getBody().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
+        }
+        annotatedClass.addToImports(pWrap.javaBaseTypePath());
+        annotatedClass.addToImports(TumlClassOperations.getPathName(concreteClassifier));
+        add.getBody().addToStatements("childResource.fromJson(propertyMap)");
+        add.getBody().addToStatements("String jsonResult = childResource.toJson()");
+        OJIfStatement ifContainsId = new OJIfStatement("propertyMap.containsKey(\"id\")");
+        ifContainsId.addToThenPart("Long tmpId = Long.valueOf((Integer) propertyMap.get(\"id\"))");
+        ifContainsId.addToThenPart("jsonResult = jsonResult.substring(1);");
+        ifContainsId.addToThenPart("jsonResult = \"{\\\"tmpId\\\": \" + tmpId + \", \" + jsonResult;");
+        add.getBody().addToStatements(ifContainsId);
+        if (pWrap.isOrdered()) {
+            //TODO
 //            annotatedClass.addToImports(TumlRestletGenerationUtil.Parameter);
 //            add.getBody().addToStatements("Parameter indexParameter = getQuery().getFirst(\"index\")");
 //            OJIfStatement ifIndexNull = new OJIfStatement("indexParameter != null");
@@ -281,10 +311,11 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
 //            ifIndexNull.addToThenPart("parentResource." + pWrap.getter() + "().add(index, childResource)");
 //            ifIndexNull.addToElsePart("parentResource." + pWrap.adder() + "(childResource)");
 //            add.getBody().addToStatements(ifIndexNull);
-//        } else {
-//            add.getBody().addToStatements("parentResource." + pWrap.adder() + "(childResource)");
-//        }
-//    }
+        } else {
+            add.getBody().addToStatements("parentResource." + pWrap.adder() + "(childResource)");
+        }
+        add.getBody().addToStatements("return jsonResult");
+    }
 
     private void buildToJson(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass, OJBlock block) {
 
