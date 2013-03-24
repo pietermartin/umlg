@@ -447,13 +447,13 @@
             //put updated items
             if (this.dataView.getUpdatedItems().length !== 0 && this.dataView.getNewItems().length == 0 && this.dataView.getDeletedItems().length == 0) {
                 $.ajax({
-                    url: tumlUri,
+                    url: tumlUri + '_' + self.localMetaForData.name,
                     type: "PUT",
                     dataType: "json",
                     contentType: "json",
                     data: JSON.stringify(this.dataView.getUpdatedItems()),
                     success: function (data, textStatus, jqXHR) {
-                        self.onPutSuccess.notify({tumlUri: tumlUri + '_' + self.localMetaForData.name, tabId: self.localMetaForData.name, data: data}, null, self);
+                        self.onPutSuccess.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name, data: data}, null, self);
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
@@ -466,7 +466,7 @@
                 var validationResults = self.validateNewItems(self.dataView.getNewItems());
                 if (validationResults.length == 0) {
                     $.ajax({
-                        url: tumlUri,
+                        url: tumlUri + '_' + self.localMetaForData.name,
                         type: "POST",
                         dataType: "json",
                         contentType: "json",

@@ -51,4 +51,5 @@ public interface TumlGraph extends TransactionalGraph, IndexableGraph, Serializa
     boolean isTransactionActive();
 
     void addDeletionNode();
+
 }

@@ -282,6 +282,27 @@ public class RootResourceServerResourceBuilder extends BaseServerResourceBuilder
 
         OJAnnotatedOperation attachAll = routerEnum.findOperation("attachAll", TumlRestletGenerationUtil.Router);
         attachAll.getBody().addToStatements(routerEnum.getName() + "." + ojLiteral.getName() + ".attach(router)");
+
+        //Add the url for post/put to the resource
+        ojLiteral = new OJEnumLiteral(TumlClassOperations.className(clazz).toUpperCase() + "S_" + clazz.getName());
+
+        uri = new OJField();
+        uri.setType(new OJPathName("String"));
+        uri.setInitExp("\"/" + TumlClassOperations.className(clazz).toLowerCase() + "s" + "_" + clazz.getName() + "\"");
+        ojLiteral.addToAttributeValues(uri);
+
+        serverResourceClassField = new OJField();
+        serverResourceClassField.setType(new OJPathName("java.lang.Class"));
+        serverResourceClassField.setInitExp(annotatedClass.getName() + ".class");
+        ojLiteral.addToAttributeValues(serverResourceClassField);
+        routerEnum.addToImports(annotatedClass.getPathName());
+        routerEnum.addToImports(TumlRestletGenerationUtil.ServerResource);
+
+        routerEnum.addToLiterals(ojLiteral);
+
+        attachAll.getBody().addToStatements(routerEnum.getName() + "." + ojLiteral.getName() + ".attach(router)");
+
+
     }
 
     protected void addPostResource(Classifier concreteClassifier, OJAnnotatedClass annotatedClass, OJPathName parentPathName) {

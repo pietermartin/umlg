@@ -163,7 +163,13 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
                 new OJPathName("Object")), "array");
         ifArray.addToThenPart(forArray);
         if (put) {
+            OJField count = new OJField("count", "int");
+            count.setInitExp("1");
+            ifArray.getThenPart().addToLocals(count);
             forArray.getBody().addToStatements("json.append(put(map))");
+            OJIfStatement ifCount = new OJIfStatement("count++ != array.size()");
+            ifCount.getThenPart().addToStatements("json.append(\",\")");
+            forArray.getBody().addToStatements(ifCount);
         } else if (pWrap.isComposite()) {
             forArray.getBody().addToStatements("delete(map)");
         } else {
@@ -222,6 +228,9 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
             countFrom++;
         }
         ojTryStatement.getTryPart().addToStatements(ifStatementFrom);
+
+        ojTryStatement.getTryPart().addToStatements("json.append(\"}\")");
+        ojTryStatement.getTryPart().addToStatements("json.append(\"}]\")");
 
         commitOrRollback(ojTryStatement.getTryPart());
         ojTryStatement.getTryPart().addToStatements("return new JsonRepresentation(json.toString())");
@@ -293,10 +302,17 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
         array.setInitExp("(ArrayList<Map<String, Object>>)o");
         ifArray.getThenPart().addToLocals(array);
         ifEntityTextNull.addToThenPart(ifArray);
+
+        OJField count = new OJField("count", "int");
+        count.setInitExp("1");
+        ifArray.getThenPart().addToLocals(count);
         OJForStatement forArray = new OJForStatement("map", new OJPathName("java.util.Map").addToGenerics(new OJPathName("String")).addToGenerics(
                 new OJPathName("Object")), "array");
         ifArray.addToThenPart(forArray);
         forArray.getBody().addToStatements("json.append(add(parentResource, map))");
+        OJIfStatement ifCount = new OJIfStatement("count++ != array.size()");
+        ifCount.getThenPart().addToStatements("json.append(\",\")");
+        forArray.getBody().addToStatements(ifCount);
 
         OJField map = new OJField("map", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object"));
         map.setInitExp("(Map<String, Object>) o");
@@ -344,9 +360,7 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
         ojTryStatement.getTryPart().addToStatements("json.append(\"}\")");
         ojTryStatement.getTryPart().addToStatements("json.append(\"}]\")");
 
-
         commitOrRollback(ojTryStatement.getTryPart());
-//        ojTryStatement.getTryPart().addToStatements("GraphDb.getDb().commit()");
 
         ojTryStatement.getTryPart().addToStatements("return new JsonRepresentation(json.toString())");
 

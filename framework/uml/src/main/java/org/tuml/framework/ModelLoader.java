@@ -19,6 +19,7 @@ import org.eclipse.ocl.Environment;
 import org.eclipse.ocl.uml.UMLEnvironment;
 import org.eclipse.ocl.uml.UMLEnvironmentFactory;
 import org.eclipse.uml2.uml.*;
+import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.resource.UMLResource;
 import org.eclipse.uml2.uml.resources.ResourcesPlugin;
 import org.eclipse.uml2.uml.util.UMLUtil;
@@ -119,6 +120,18 @@ public class ModelLoader {
                 return e instanceof Constraint && ((Constraint) e).getConstrainedElements().contains(element);
             }
         });
+        return results;
+    }
+
+    public List<Class> getAllConcreteClasses() {
+        List<Class> results = new ArrayList<Class>();
+        filter(results, this.model, new Filter() {
+            @Override
+            public boolean filter(Element e) {
+                return e instanceof Class && !((Class)e).isAbstract();
+            }
+        });
+
         return results;
     }
 
