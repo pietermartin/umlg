@@ -4,9 +4,7 @@ import com.tinkerpop.blueprints.TransactionalGraph;
 import org.tuml.runtime.adaptor.DefaultDataCreator;
 import org.tuml.runtime.adaptor.GraphDb;
 import org.tuml.test.*;
-import org.tuml.test.manytomany.Class1;
-import org.tuml.test.manytomany.Class2;
-import org.tuml.test.manytomany.Root1;
+import org.tuml.test.manytomany.*;
 
 /**
  * Date: 2012/12/31
@@ -20,8 +18,10 @@ public class TestRestletDefaultDataCreator implements DefaultDataCreator {
         root1.setName("name");
         Class1 class1 = new Class1(root1);
         class1.setName("class1");
+        Component1 component1 = new Component1(class1);
         Class2 class2 = new Class2(root1);
         class2.setName("class2");
+        Component2 component2 = new Component2(class2);
 
         for (int i = 0; i < 2; i++) {
             Human human = new Human(true);

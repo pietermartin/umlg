@@ -409,8 +409,9 @@
 
             $('<div id="serverErrorMsg" />').appendTo(tabDiv);
 
-            var windowHeight = $('.ui-layout-center').height() - 115;
+            var windowHeight = $('.ui-layout-center').height() - 135;
             $('<div />', {id: 'myGrid' + this.metaForData.name, style: 'width:auto;height:' + windowHeight + 'px;', class: 'tumlSlickGrid'}).appendTo(tabDiv);
+//            $('<div />', {id: 'myGrid' + this.metaForData.name, style: 'width:auto;height:65%;', class: 'tumlSlickGrid'}).appendTo(tabDiv);
             $('<div />', {id: 'pager' + this.metaForData.name, style: 'width:auto;height:20px;'}).appendTo(tabDiv);
 
             $('#contextMenu' + this.metaForData.name).remove();
@@ -608,7 +609,7 @@
 
             this.instantiateGrid();
 
-            this.addButtons();
+//            this.addButtons();
 
             //Create context menu
             this.createContextMenu();

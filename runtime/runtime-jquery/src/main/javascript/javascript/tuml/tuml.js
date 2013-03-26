@@ -30,8 +30,8 @@ function refreshPageTo(tumlUri, tabId) {
             var ul = {};
             if (tabId === undefined || tabId === null) {
                 //Clear the whole layout
-                $('.ui-layout-center').children().remove();
-                tabs = $('<div />', {id:'tab-container', class:'tab-container' }).appendTo('.ui-layout-center');
+                $('#tabs-layout').children().remove();
+                tabs = $('<div />', {id:'tab-container', class:'tab-container' }).appendTo('#tabs-layout');
                 ul = $('<ul />', {id:'tabsul', class:'etabs'}).appendTo(tabs);
             } else {
                 tabs = $('#tab-container');

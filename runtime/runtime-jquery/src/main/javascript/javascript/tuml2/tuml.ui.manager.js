@@ -16,7 +16,7 @@
         var menuManager;
         var contextManager;
         var leftMenuManager;
-        var manyViewManager;
+        var mainViewManager;
 
         function init() {
             //Create layout
@@ -41,64 +41,64 @@
             });
             leftMenuManager.onQueryClick.subscribe(function (e, args) {
                 var queryTabDivName = args.name.replace(/\s/g, '');
-                manyViewManager.addQueryTab(false, new Tuml.Query(args.id, args.name, args.name, args.queryString, args.queryEnum, null, args.queryType));
+                mainViewManager.addQueryTab(false, new Tuml.Query(args.id, args.name, args.name, args.queryString, args.queryEnum, null, args.queryType));
             });
 
             //Create main view manager
-            manyViewManager = new Tuml.TumlMainViewManager(leftMenuManager);
-            manyViewManager.onPutSuccess.subscribe(function (e, args) {
+            mainViewManager = new Tuml.TumlMainViewManager(leftMenuManager);
+            mainViewManager.onPutSuccess.subscribe(function (e, args) {
                 self.onPutSuccess.notify(args, e, self);
             });
-            manyViewManager.onPutFailure.subscribe(function (e, args) {
+            mainViewManager.onPutFailure.subscribe(function (e, args) {
                 self.onPutFailure.notify(args, e, self);
             });
-            manyViewManager.onPostSuccess.subscribe(function (e, args) {
+            mainViewManager.onPostSuccess.subscribe(function (e, args) {
                 self.onPostSuccess.notify(args, e, self);
             });
-            manyViewManager.onPostFailure.subscribe(function (e, args) {
+            mainViewManager.onPostFailure.subscribe(function (e, args) {
                 self.onPostFailure.notify(args, e, self);
             });
-            manyViewManager.onDeleteSuccess.subscribe(function (e, args) {
+            mainViewManager.onDeleteSuccess.subscribe(function (e, args) {
                 self.onDeleteSuccess.notify(args, e, self);
             });
-            manyViewManager.onDeleteFailure.subscribe(function (e, args) {
+            mainViewManager.onDeleteFailure.subscribe(function (e, args) {
                 self.onDeleteFailure.notify(args, e, self);
             });
-            manyViewManager.onCancel.subscribe(function (e, args) {
+            mainViewManager.onCancel.subscribe(function (e, args) {
                 self.onCancel.notify(args, e, self);
             });
 
-            manyViewManager.onPostInstanceQuerySuccess.subscribe(function (e, args) {
+            mainViewManager.onPostInstanceQuerySuccess.subscribe(function (e, args) {
                 leftMenuManager.refreshInstanceQuery();
             });
-            manyViewManager.onPostClassQuerySuccess.subscribe(function (e, args) {
+            mainViewManager.onPostClassQuerySuccess.subscribe(function (e, args) {
                 leftMenuManager.refreshClassQuery();
             });
 
-            manyViewManager.onSelfCellClick.subscribe(function (e, args) {
+            mainViewManager.onSelfCellClick.subscribe(function (e, args) {
                 self.onSelfCellClick.notify(args, e, self);
                 refresh(args.tumlUri);
                 changeMyUrl(args.name, args.tumlUri);
             });
-            manyViewManager.onContextMenuClickLink.subscribe(function (e, args) {
+            mainViewManager.onContextMenuClickLink.subscribe(function (e, args) {
                 self.onContextMenuClickLink.notify(args, e, self);
                 refresh(args.tumlUri);
                 changeMyUrl(args.name, args.tumlUri);
             });
-            manyViewManager.onContextMenuClickDelete.subscribe(function (e, args) {
+            mainViewManager.onContextMenuClickDelete.subscribe(function (e, args) {
                 self.onContextMenuClickDelete.notify(args, e, self);
             });
-            manyViewManager.onPutOneSuccess.subscribe(function (e, args) {
+            mainViewManager.onPutOneSuccess.subscribe(function (e, args) {
                 self.onPutOneSuccess.notify(args, e, self);
                 var contextMetaData = getContextMetaData(args.data, args.tumlUri);
                 contextManager.refresh(contextMetaData.name, contextMetaData.uri, contextMetaData.contextVertexId);
                 var adjustedUri = contextMetaData.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextMetaData.contextVertexId);
                 changeMyUrl(contextMetaData.name, adjustedUri);
             });
-            manyViewManager.onPutOneFailure.subscribe(function (e, args) {
+            mainViewManager.onPutOneFailure.subscribe(function (e, args) {
                 self.onPutOneFailure.notify(args, e, self);
             });
-            manyViewManager.onPostOneSuccess.subscribe(function (e, args) {
+            mainViewManager.onPostOneSuccess.subscribe(function (e, args) {
                 self.onPostOneSuccess.notify(args, e, self);
                 var contextMetaData = getContextMetaData(args.data);
                 contextManager.refresh(contextMetaData.name, contextMetaData.uri, contextMetaData.contextVertexId);
@@ -106,19 +106,19 @@
                 changeMyUrl(contextMetaData.name, adjustedUri);
                 //This is like calling refresh only we already have the data
                 var contextVertexId = retrieveVertexId(adjustedUri);
-                manyViewManager.refresh(adjustedUri, args.data);
+                mainViewManager.refresh(adjustedUri, args.data);
             });
-            manyViewManager.onPostOneFailure.subscribe(function (e, args) {
+            mainViewManager.onPostOneFailure.subscribe(function (e, args) {
                 self.onPostOneFailure.notify(args, e, self);
             });
-            manyViewManager.onDeleteOneSuccess.subscribe(function (e, args) {
+            mainViewManager.onDeleteOneSuccess.subscribe(function (e, args) {
                 var contextMetaData = getContextMetaData(args.data, args.tumlUri);
                 contextManager.refresh(contextMetaData.name, contextMetaData.uri, contextMetaData.contextVertexId);
                 var adjustedUri = contextMetaData.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextMetaData.contextVertexId);
                 changeMyUrl(contextMetaData.name, adjustedUri);
                 //This is like calling refresh only we already have the data
                 var contextVertexId = retrieveVertexId(adjustedUri);
-                manyViewManager.refresh(adjustedUri, args.data);
+                mainViewManager.refresh(adjustedUri, args.data);
             });
 
             window.onpopstate = function (event) {
@@ -141,7 +141,7 @@
                 dataType:"json",
                 contentType:"json",
                 success:function (result, textStatus, jqXHR) {
-                    manyViewManager.refresh(tumlUri, result);
+                    mainViewManager.refresh(tumlUri, result);
                     var contextMetaData = getContextMetaData(result, contextVertexId);
                     contextManager.refresh(contextMetaData.name, contextMetaData.uri, contextMetaData.contextVertexId);
                 },

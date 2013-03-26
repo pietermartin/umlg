@@ -394,8 +394,7 @@
 
     TumlBaseTabViewManager.prototype.createTab = function () {
         var tabTemplate = "<li id='li" + this.tabId + "'><a href='#{href}'>#{label}</a> <span class='ui-icon ui-icon-close'>Remove Tab</span></li>";
-        var label = this.tabTitleName,
-            id = this.tabId;
+        var label = this.tabTitleName, id = this.tabId;
         this.li = $(tabTemplate.replace(/#\{href\}/g, "#" + id).replace(/#\{label\}/g, label));
         this.tabContainer.find(".ui-tabs-nav").append(this.li);
         var divPanel = $('<div />', {id:this.tabId});

@@ -1,3 +1,8 @@
+#buttons {
+    float: right;
+    margin-top: 4px;
+}
+
 /*tabs*/
 #tabs {
     /*float: left;*/

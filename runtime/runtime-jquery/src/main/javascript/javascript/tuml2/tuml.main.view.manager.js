@@ -16,8 +16,6 @@
         var classQueryTumlUri;
         var contextVertexId;
         var contextChanged = true;
-        var transactionSuspended = false;
-        var transactionIdentifier;
 
         function init() {
         }
@@ -105,6 +103,7 @@
                 propertyDescription += '  -  ' + createPropertyDescriptionHeading(propertyNavigatingTo);
             }
             $('#navigation-qualified-name').append($('<span />').text(propertyDescription));
+            addButtons();
             $('body').layout().resizeAll();
         }
 
@@ -195,7 +194,8 @@
             if (tabContainer !== undefined) {
                 tabContainer.remove();
             }
-            tabContainer = $('<div />', {id:'tabs'}).appendTo('.ui-layout-center');
+            var tabLayoutDiv = $('#tabs-layout');
+            tabContainer = $('<div />', {id:'tabs'}).appendTo(tabLayoutDiv);
             tabContainer.append('<ul />');
             tabContainer.tabs();
             tabContainer.find(".ui-tabs-nav").sortable({
@@ -211,6 +211,47 @@
                     leftMenuManager.refreshQueryMenuCss(queryId, tabEnum);
                 }
             });
+        }
+
+        function addButtons() {
+
+            $('#buttons').children().remove();
+
+            //Save button
+            $('<button />').text('Save').click(function () {
+                if (self.grid.getEditorLock().commitCurrentEdit()) {
+                    if (self.validateMultiplicity()) {
+                        self.doSave();
+                    }
+                } else {
+                    alert("Commit failed on current active cell!");
+                }
+            }).appendTo('#buttons');
+
+            var $cancelButton = $('<button />').text('Cancel').click(function () {
+                if (self.grid.getEditorLock().commitCurrentEdit()) {
+                    $.ajax({
+                        url: tumlUri,
+                        type: "GET",
+                        dataType: "json",
+                        contentType: "json",
+                        success: function (result, textStatus, jqXHR) {
+                            //Only cancel this tab
+                            for (var i = 0; i < result.length; i++) {
+                                var metaForData = result[i].meta.to;
+                                if (metaForData.name === self.localMetaForData.name) {
+                                    self.cancel(result[i].data);
+                                    return;
+                                }
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
+                        }
+                    });
+                }
+            }).appendTo('#buttons');
+
         }
 
         function refreshInternal(tumlUri, result, propertyNavigatingTo, isOne, forCreation) {
@@ -360,45 +401,48 @@
                     tumlLookupTabViewManager.setLinkedTumlTabViewManager(tumlTabViewManager);
                 });
                 tumlTabViewManager.onClickManyComponentCell.subscribe(function (e, args) {
-                    //Suspend the transaction
-                    $.ajax({
-                        url:'/' + tumlModelName + '/transaction',
-                        type:"POST",
-                        dataType:"json",
-                        contentType:"json",
-                        success:function (result, textStatus, jqXHR) {
-                            transactionSuspended = true;
-                            transactionIdentifier = result.transactionIdentifier;
-                        },
-                        error:function (jqXHR, textStatus, errorThrown) {
-                            alert('error getting /' + tumlModelName + '/transaction\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
-                        }
-                    });
 
-                    //Get the data, for a first time there will be no data, only meta data.
-                    //On subsequent calls within the suspended transaction there might be data
-                    $.ajax({
-                        url:args.property.tumlMetaDataUri,
-                        type:"GET",
-                        dataType:"json",
-                        contentType:"json",
-                        success:function (result, textStatus, jqXHR) {
-                            result[0].data = args.data;
-                            var tumlManyComponentTabViewManager = addTab(
-                                tuml.tab.Enum.Properties,
-                                result[0],
-                                args.tumlUri,
-                                args.property,
-                                {forLookup:false, forManyComponent:true, forOneComponent:false, isOne:false, forCreation:true}
-                            );
-                            tumlTabViewManager.setCell(args.cell);
-                            tumlManyComponentTabViewManager.setLinkedTumlTabViewManager(tumlTabViewManager);
-                            tabContainer.tabs("disable", tumlTabViewManagers.indexOf(tumlTabViewManager));
-                        },
-                        error:function (jqXHR, textStatus, errorThrown) {
-                            alert('error getting ' + property.tumlMetaDataUri + '\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
-                        }
-                    });
+                    alert("tuml.main.view.manager tumlTabViewManager.onClickManyComponentCell");
+
+//                    //Suspend the transaction
+//                    $.ajax({
+//                        url:'/' + tumlModelName + '/transaction',
+//                        type:"POST",
+//                        dataType:"json",
+//                        contentType:"json",
+//                        success:function (result, textStatus, jqXHR) {
+//                            transactionSuspended = true;
+//                            transactionIdentifier = result.transactionIdentifier;
+//                        },
+//                        error:function (jqXHR, textStatus, errorThrown) {
+//                            alert('error getting /' + tumlModelName + '/transaction\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
+//                        }
+//                    });
+//
+//                    //Get the data, for a first time there will be no data, only meta data.
+//                    //On subsequent calls within the suspended transaction there might be data
+//                    $.ajax({
+//                        url:args.property.tumlMetaDataUri,
+//                        type:"GET",
+//                        dataType:"json",
+//                        contentType:"json",
+//                        success:function (result, textStatus, jqXHR) {
+//                            result[0].data = args.data;
+//                            var tumlManyComponentTabViewManager = addTab(
+//                                tuml.tab.Enum.Properties,
+//                                result[0],
+//                                args.tumlUri,
+//                                args.property,
+//                                {forLookup:false, forManyComponent:true, forOneComponent:false, isOne:false, forCreation:true}
+//                            );
+//                            tumlTabViewManager.setCell(args.cell);
+//                            tumlManyComponentTabViewManager.setLinkedTumlTabViewManager(tumlTabViewManager);
+//                            tabContainer.tabs("disable", tumlTabViewManagers.indexOf(tumlTabViewManager));
+//                        },
+//                        error:function (jqXHR, textStatus, errorThrown) {
+//                            alert('error getting ' + property.tumlMetaDataUri + '\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
+//                        }
+//                    });
                 });
 
                 tumlTabViewManager.onClickOneComponentCell.subscribe(function (e, args) {
