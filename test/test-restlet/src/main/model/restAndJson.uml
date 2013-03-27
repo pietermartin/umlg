@@ -565,7 +565,7 @@
               </ownedAttribute>
               <ownedAttribute xmi:id="_urVd4JOTEeKVI4ITadnc-A" name="interface1" type="_bYU8IJOTEeKVI4ITadnc-A" aggregation="composite" association="_urWE8JOTEeKVI4ITadnc-A">
                 <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_urVd4ZOTEeKVI4ITadnc-A"/>
-                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_urVd4pOTEeKVI4ITadnc-A" value="*"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_urVd4pOTEeKVI4ITadnc-A" name="asd" value="3"/>
               </ownedAttribute>
               <ownedAttribute xmi:id="_ztoTEJOTEeKVI4ITadnc-A" name="interface2" type="_b3N3kJOTEeKVI4ITadnc-A" aggregation="composite" association="_zto6IJOTEeKVI4ITadnc-A">
                 <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_ztoTEZOTEeKVI4ITadnc-A"/>

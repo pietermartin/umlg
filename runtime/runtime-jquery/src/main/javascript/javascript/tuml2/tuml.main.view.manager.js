@@ -16,6 +16,7 @@
         var classQueryTumlUri;
         var contextVertexId;
         var contextChanged = true;
+        var propertyNavigatingTo = null;
 
         function init() {
         }
@@ -24,7 +25,7 @@
             var qualifiedName = result[0].meta.qualifiedName;
             var metaDataNavigatingTo = result[0].meta.to;
             var metaDataNavigatingFrom = result[0].meta.from;
-            var propertyNavigatingTo = (metaDataNavigatingFrom == undefined ? null : findPropertyNavigatingTo(qualifiedName, metaDataNavigatingFrom));
+            propertyNavigatingTo = (metaDataNavigatingFrom == undefined ? null : findPropertyNavigatingTo(qualifiedName, metaDataNavigatingFrom));
             if (propertyNavigatingTo != null && (propertyNavigatingTo.oneToMany || propertyNavigatingTo.manyToMany)) {
                 //Property is a many
 
@@ -213,59 +214,88 @@
             });
         }
 
+        function validateMultiplicity(tumlTabManyViewManagers) {
+            var rowCount = 0;
+            for (var i = 0; i < tumlTabManyViewManagers.length; i++) {
+                var dataView = tumlTabManyViewManagers[i].tumlTabGridManager.dataView;
+                rowCount += dataView.getItems().length;
+            }
+            if (rowCount < propertyNavigatingTo.lower || (propertyNavigatingTo.upper !== -1 && rowCount > propertyNavigatingTo.upper)) {
+                alert('multiplicity falls outside the valid range [' + propertyNavigatingTo.lower + '..' + propertyNavigatingTo.upper + ']');
+                return false;
+            } else {
+                return true;
+            }
+        }
+
         function doSave() {
 
+            var tumlTabManyViewManagers = [];
             for (var i = 0; i < tumlTabViewManagers.length; i++) {
                 var tumlTabViewManager = tumlTabViewManagers[i];
+                //Get all the many tab views
+                if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager) {
+                    tumlTabViewManager.tumlTabGridManager.grid.getEditorLock().commitCurrentEdit();
+                    tumlTabManyViewManagers.push(tumlTabViewManager);
+                }
+            }
+            if (validateMultiplicity(tumlTabManyViewManagers)) {
+                alert('dosave');
             }
 
-            if (self.grid.getEditorLock().commitCurrentEdit()) {
-                if (self.validateMultiplicity()) {
-                    self.doSave();
-                }
-            } else {
-                alert("Commit failed on current active cell!");
-            }
+//            for (var i = 0; i < tumlTabManyViewManagers.length; i++) {
+//                var tumlTabManyViewManager = tumlTabManyViewManagers[i];
+//                alert(tumlTabManyViewManager);
+//            }
 
-            var overloadedPostUri = this.propertyNavigatingTo.tumlOverloadedPostUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), this.contextVertexId);
 
-            var overloadedPostData = {};
-            var validationErrors = true;
-            if (this.dataView.getNewItems().length > 0) {
-                var validationResults = this.validateNewItems(this.dataView.getNewItems());
-                if (validationResults.length == 0) {
-                    validationErrors = false;
-                    overloadedPostData['insert'] = this.dataView.getNewItems();
-                } else {
-                    var errorMsg = '\n';
-                    for (var i = 0; i < validationResults.length; i++) {
-                        errorMsg += validationResults[i].msg + '\n';
-                    }
-                    alert('Validation errors: ' + errorMsg);
-                }
-            }
-            if (!validationErrors) {
-                if (this.dataView.getUpdatedItems().length > 0) {
-                    overloadedPostData['update'] = this.dataView.getUpdatedItems();
-                }
-                if (this.dataView.getDeletedItems().length > 0) {
-                    overloadedPostData['delete'] = this.dataView.getDeletedItems();
-                }
-                $.ajax({
-                    url: overloadedPostUri,
-                    type: "POST",
-                    dataType: "json",
-                    contentType: "json",
-                    data: JSON.stringify(overloadedPostData),
-                    success: function (data, textStatus, jqXHR) {
-                        self.onDeleteSuccess.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name, data: data}, null, self);
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-                        self.onDeleteFailure.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name}, null, self);
-                    }
-                });
-            }
+//            if (self.grid.getEditorLock().commitCurrentEdit()) {
+//                if (self.validateMultiplicity()) {
+//                    self.doSave();
+//                }
+//            } else {
+//                alert("Commit failed on current active cell!");
+//            }
+//
+//            var overloadedPostUri = this.propertyNavigatingTo.tumlOverloadedPostUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), this.contextVertexId);
+//
+//            var overloadedPostData = {};
+//            var validationErrors = true;
+//            if (this.dataView.getNewItems().length > 0) {
+//                var validationResults = this.validateNewItems(this.dataView.getNewItems());
+//                if (validationResults.length == 0) {
+//                    validationErrors = false;
+//                    overloadedPostData['insert'] = this.dataView.getNewItems();
+//                } else {
+//                    var errorMsg = '\n';
+//                    for (var i = 0; i < validationResults.length; i++) {
+//                        errorMsg += validationResults[i].msg + '\n';
+//                    }
+//                    alert('Validation errors: ' + errorMsg);
+//                }
+//            }
+//            if (!validationErrors) {
+//                if (this.dataView.getUpdatedItems().length > 0) {
+//                    overloadedPostData['update'] = this.dataView.getUpdatedItems();
+//                }
+//                if (this.dataView.getDeletedItems().length > 0) {
+//                    overloadedPostData['delete'] = this.dataView.getDeletedItems();
+//                }
+//                $.ajax({
+//                    url: overloadedPostUri,
+//                    type: "POST",
+//                    dataType: "json",
+//                    contentType: "json",
+//                    data: JSON.stringify(overloadedPostData),
+//                    success: function (data, textStatus, jqXHR) {
+//                        self.onDeleteSuccess.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name, data: data}, null, self);
+//                    },
+//                    error: function (jqXHR, textStatus, errorThrown) {
+//                        $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
+//                        self.onDeleteFailure.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name}, null, self);
+//                    }
+//                });
+//            }
         }
 
         function doCancel() {

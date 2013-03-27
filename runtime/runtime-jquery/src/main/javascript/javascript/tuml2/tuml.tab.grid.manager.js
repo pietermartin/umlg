@@ -464,14 +464,14 @@
             return validationResults;
         };
 
-        this.validateMultiplicity = function () {
-            if (self.dataView.getItems().length < self.propertyNavigatingTo.lower || (self.propertyNavigatingTo.upper !== -1 && self.dataView.getItems().length > self.propertyNavigatingTo.upper)) {
-                alert('multiplicity falls outside the valid range [' + self.propertyNavigatingTo.lower + '..' + self.propertyNavigatingTo.upper + ']');
-                return false;
-            } else {
-                return true;
-            }
-        }
+//        this.validateMultiplicity = function () {
+//            if (self.dataView.getItems().length < self.propertyNavigatingTo.lower || (self.propertyNavigatingTo.upper !== -1 && self.dataView.getItems().length > self.propertyNavigatingTo.upper)) {
+//                alert('multiplicity falls outside the valid range [' + self.propertyNavigatingTo.lower + '..' + self.propertyNavigatingTo.upper + ']');
+//                return false;
+//            } else {
+//                return true;
+//            }
+//        }
 
         this.updateGrid = function (data) {
             this.dataView.refreshItem(data);

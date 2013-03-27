@@ -326,7 +326,7 @@
         <layoutConstraint xmi:type="notation:Bounds" xmi:id="_mMcPKRtnEeKZO-l2Budqpw"/>
       </children>
       <element xmi:type="uml:Class" href="restAndJson.uml#_mMQB4BtnEeKZO-l2Budqpw"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_mMbBARtnEeKZO-l2Budqpw" x="880" y="484"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_mMbBARtnEeKZO-l2Budqpw" x="828" y="472"/>
     </children>
     <children xmi:type="notation:Shape" xmi:id="_mmIhgBtnEeKZO-l2Budqpw" type="2008" fontName="Sans" lineColor="0">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_mmIhghtnEeKZO-l2Budqpw" source="ShadowFigure">
