@@ -1,8 +1,8 @@
 (function ($) {
     // register namespace
     $.extend(true, window, {
-        Tuml:{
-            TumlMainViewManager:TumlMainViewManager
+        Tuml: {
+            TumlMainViewManager: TumlMainViewManager
         }
     });
 
@@ -57,7 +57,7 @@
                             //If property is a one then there is n navigating from
                             leftMenuManager.refresh(metaDataNavigatingTo, metaDataNavigatingTo, contextVertexId);
                             //Do not call refreshInternal as it creates all tabs for the meta data
-                            addTab(tuml.tab.Enum.Properties, result[i], tumlUri, propertyNavigatingTo, {forLookup:false, forManyComponent:false, isOne:true, forCreation:false});
+                            addTab(tuml.tab.Enum.Properties, result[i], tumlUri, propertyNavigatingTo, {forLookup: false, forManyComponent: false, isOne: true, forCreation: false});
 
                             //reorder tabs, make sure new tabs are first
                             reorderTabsAfterAddOneOrMany(savedTumlTabViewManagers);
@@ -82,11 +82,11 @@
 
             oclExecuteUri = "/" + tumlModelName + "/" + contextVertexId + "/oclExecuteQuery";
             if (hasInstanceQuery(metaDataNavigatingTo, metaDataNavigatingFrom)) {
-                instanceQueryTumlUri = "/"+tumlModelName+"/basetumlwithquerys/" + contextVertexId + "/instanceQuery";
+                instanceQueryTumlUri = "/" + tumlModelName + "/basetumlwithquerys/" + contextVertexId + "/instanceQuery";
             } else {
                 instanceQueryTumlUri = '';
             }
-            classQueryTumlUri = "/"+tumlModelName+"/classquery/" + contextVertexId + "/query";
+            classQueryTumlUri = "/" + tumlModelName + "/classquery/" + contextVertexId + "/query";
 
 
             if (contextVertexId !== undefined && contextVertexId !== null && contextChanged) {
@@ -118,7 +118,7 @@
             var ordered = 'ordered: ' + propertyNavigatingTo.ordered;
             //TODO
 //            var derived = 'derived: ' + propertyNavigatingTo.derived;
-            var association = 'association: ' + (propertyNavigatingTo.composite?'composite':'non composite');
+            var association = 'association: ' + (propertyNavigatingTo.composite ? 'composite' : 'non composite');
             return multiplicity + ', ' + unique + ', ' + ordered + ', ' + association;
         }
 
@@ -195,22 +195,101 @@
                 tabContainer.remove();
             }
             var tabLayoutDiv = $('#tabs-layout');
-            tabContainer = $('<div />', {id:'tabs'}).appendTo(tabLayoutDiv);
+            tabContainer = $('<div />', {id: 'tabs'}).appendTo(tabLayoutDiv);
             tabContainer.append('<ul />');
             tabContainer.tabs();
             tabContainer.find(".ui-tabs-nav").sortable({
-                axis:"x",
-                stop:function () {
+                axis: "x",
+                stop: function () {
                     tabContainer.tabs("refresh");
                 }
             });
             tabContainer.tabs({
-                activate:function (event, ui) {
+                activate: function (event, ui) {
                     var queryId = $.data(ui.newPanel[0], 'queryId');
                     var tabEnum = $.data(ui.newPanel[0], 'tabEnum');
                     leftMenuManager.refreshQueryMenuCss(queryId, tabEnum);
                 }
             });
+        }
+
+        function doSave() {
+
+            for (var i = 0; i < tumlTabViewManagers.length; i++) {
+                var tumlTabViewManager = tumlTabViewManagers[i];
+            }
+
+            if (self.grid.getEditorLock().commitCurrentEdit()) {
+                if (self.validateMultiplicity()) {
+                    self.doSave();
+                }
+            } else {
+                alert("Commit failed on current active cell!");
+            }
+
+            var overloadedPostUri = this.propertyNavigatingTo.tumlOverloadedPostUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), this.contextVertexId);
+
+            var overloadedPostData = {};
+            var validationErrors = true;
+            if (this.dataView.getNewItems().length > 0) {
+                var validationResults = this.validateNewItems(this.dataView.getNewItems());
+                if (validationResults.length == 0) {
+                    validationErrors = false;
+                    overloadedPostData['insert'] = this.dataView.getNewItems();
+                } else {
+                    var errorMsg = '\n';
+                    for (var i = 0; i < validationResults.length; i++) {
+                        errorMsg += validationResults[i].msg + '\n';
+                    }
+                    alert('Validation errors: ' + errorMsg);
+                }
+            }
+            if (!validationErrors) {
+                if (this.dataView.getUpdatedItems().length > 0) {
+                    overloadedPostData['update'] = this.dataView.getUpdatedItems();
+                }
+                if (this.dataView.getDeletedItems().length > 0) {
+                    overloadedPostData['delete'] = this.dataView.getDeletedItems();
+                }
+                $.ajax({
+                    url: overloadedPostUri,
+                    type: "POST",
+                    dataType: "json",
+                    contentType: "json",
+                    data: JSON.stringify(overloadedPostData),
+                    success: function (data, textStatus, jqXHR) {
+                        self.onDeleteSuccess.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name, data: data}, null, self);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
+                        self.onDeleteFailure.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name}, null, self);
+                    }
+                });
+            }
+        }
+
+        function doCancel() {
+            if (self.grid.getEditorLock().commitCurrentEdit()) {
+                $.ajax({
+                    url: tumlUri,
+                    type: "GET",
+                    dataType: "json",
+                    contentType: "json",
+                    success: function (result, textStatus, jqXHR) {
+                        //Only cancel this tab
+                        for (var i = 0; i < result.length; i++) {
+                            var metaForData = result[i].meta.to;
+                            if (metaForData.name === self.localMetaForData.name) {
+                                self.cancel(result[i].data);
+                                return;
+                            }
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
+                    }
+                });
+            }
         }
 
         function addButtons() {
@@ -219,37 +298,11 @@
 
             //Save button
             $('<button />').text('Save').click(function () {
-                if (self.grid.getEditorLock().commitCurrentEdit()) {
-                    if (self.validateMultiplicity()) {
-                        self.doSave();
-                    }
-                } else {
-                    alert("Commit failed on current active cell!");
-                }
+                doSave();
             }).appendTo('#buttons');
 
             var $cancelButton = $('<button />').text('Cancel').click(function () {
-                if (self.grid.getEditorLock().commitCurrentEdit()) {
-                    $.ajax({
-                        url: tumlUri,
-                        type: "GET",
-                        dataType: "json",
-                        contentType: "json",
-                        success: function (result, textStatus, jqXHR) {
-                            //Only cancel this tab
-                            for (var i = 0; i < result.length; i++) {
-                                var metaForData = result[i].meta.to;
-                                if (metaForData.name === self.localMetaForData.name) {
-                                    self.cancel(result[i].data);
-                                    return;
-                                }
-                            }
-                        },
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-                        }
-                    });
-                }
+                doCancel();
             }).appendTo('#buttons');
 
         }
@@ -258,7 +311,7 @@
             //A tab is created for every element in the array,
             //i.e. for every concrete subset of the many property
             for (var i = 0; i < result.length; i++) {
-                addTab(tuml.tab.Enum.Properties, result[i], tumlUri, propertyNavigatingTo, {forLookup:false, forManyComponent:false, isOne:isOne, forCreation:forCreation});
+                addTab(tuml.tab.Enum.Properties, result[i], tumlUri, propertyNavigatingTo, {forLookup: false, forManyComponent: false, isOne: isOne, forCreation: forCreation});
             }
         }
 
@@ -268,13 +321,13 @@
             var tumlTabViewManager;
             if (options.isOne) {
                 tumlTabViewManager = new Tuml.TumlTabOneViewManager(tabEnum, tabContainer,
-                    {propertyNavigatingTo:propertyNavigatingTo,
-                        many:!options.isOne,
-                        one:options.isOne,
-                        query:false,
-                        forLookup:options.forLookup,
-                        forManyComponent:options.forManyComponent,
-                        forOneComponent:options.forOneComponent
+                    {propertyNavigatingTo: propertyNavigatingTo,
+                        many: !options.isOne,
+                        one: options.isOne,
+                        query: false,
+                        forLookup: options.forLookup,
+                        forManyComponent: options.forManyComponent,
+                        forOneComponent: options.forOneComponent
                     }, tumlUri, result
                 );
                 tumlTabViewManager.onOneComponentSaveButtonSuccess.subscribe(function (e, args) {
@@ -302,11 +355,11 @@
                 tumlTabViewManager.onClickOneComponent.subscribe(function (e, args) {
                     //Get the meta data
                     $.ajax({
-                        url:args.property.tumlMetaDataUri,
-                        type:"GET",
-                        dataType:"json",
-                        contentType:"json",
-                        success:function (metaDataResponse, textStatus, jqXHR) {
+                        url: args.property.tumlMetaDataUri,
+                        type: "GET",
+                        dataType: "json",
+                        contentType: "json",
+                        success: function (metaDataResponse, textStatus, jqXHR) {
                             $('#tab-container').tabs('disableTab', tumlTabViewManager.tabTitleName);
                             if (args.data !== null) {
                                 metaDataResponse[0].data = args.data;
@@ -316,12 +369,12 @@
                                 metaDataResponse[0],
                                 args.tumlUri,
                                 args.property,
-                                {forLookup:false, forManyComponent:false, forOneComponent:true, isOne:true, forCreation:true}
+                                {forLookup: false, forManyComponent: false, forOneComponent: true, isOne: true, forCreation: true}
                             );
                             tumlTabViewManager.setProperty(args.property);
                             tumlOneComponentTabViewManager.setLinkedTumlTabViewManager(tumlTabViewManager);
                         },
-                        error:function (jqXHR, textStatus, errorThrown) {
+                        error: function (jqXHR, textStatus, errorThrown) {
                             alert('error getting ' + property.tumlMetaDataUri + '\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
                         }
                     });
@@ -329,11 +382,11 @@
                 tumlTabViewManager.onClickManyComponent.subscribe(function (e, args) {
                     //Get the meta data
                     $.ajax({
-                        url:args.property.tumlMetaDataUri,
-                        type:"GET",
-                        dataType:"json",
-                        contentType:"json",
-                        success:function (metaDataResponse, textStatus, jqXHR) {
+                        url: args.property.tumlMetaDataUri,
+                        type: "GET",
+                        dataType: "json",
+                        contentType: "json",
+                        success: function (metaDataResponse, textStatus, jqXHR) {
                             $('#tab-container').tabs('disableTab', tumlTabViewManager.tabTitleName);
                             if (args.data !== null) {
                                 metaDataResponse[0].data = args.data;
@@ -343,24 +396,24 @@
                                 metaDataResponse[0],
                                 args.tumlUri,
                                 args.property,
-                                {forLookup:false, forManyComponent:true, isOne:false, forCreation:true}
+                                {forLookup: false, forManyComponent: true, isOne: false, forCreation: true}
                             );
                             tumlTabViewManager.setProperty(args.property);
                             tumlOneComponentTabViewManager.setLinkedTumlTabViewManager(tumlTabViewManager);
                         },
-                        error:function (jqXHR, textStatus, errorThrown) {
+                        error: function (jqXHR, textStatus, errorThrown) {
                             alert('error getting ' + property.tumlMetaDataUri + '\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
                         }
                     });
                 });
             } else {
                 tumlTabViewManager = new Tuml.TumlTabManyViewManager(tabEnum, tabContainer,
-                    {propertyNavigatingTo:propertyNavigatingTo,
-                        many:!options.isOne,
-                        one:options.isOne,
-                        query:false,
-                        forLookup:options.forLookup,
-                        forManyComponent:options.forManyComponent
+                    {propertyNavigatingTo: propertyNavigatingTo,
+                        many: !options.isOne,
+                        one: options.isOne,
+                        query: false,
+                        forLookup: options.forLookup,
+                        forManyComponent: options.forManyComponent
                     }, tumlUri, result
                 );
                 tumlTabViewManager.onSelectButtonSuccess.subscribe(function (e, args) {
@@ -396,7 +449,7 @@
                         args.data,
                         args.tumlUri,
                         args.propertyNavigatingTo,
-                        {forLookup:true, forManyComponent:false}
+                        {forLookup: true, forManyComponent: false}
                     );
                     tumlLookupTabViewManager.setLinkedTumlTabViewManager(tumlTabViewManager);
                 });
@@ -449,11 +502,11 @@
                     console.log('TumlMainViewManager onClickOneComponentCell fired');
                     //Get the meta data
                     $.ajax({
-                        url:args.property.tumlMetaDataUri,
-                        type:"GET",
-                        dataType:"json",
-                        contentType:"json",
-                        success:function (result, textStatus, jqXHR) {
+                        url: args.property.tumlMetaDataUri,
+                        type: "GET",
+                        dataType: "json",
+                        contentType: "json",
+                        success: function (result, textStatus, jqXHR) {
                             if (args.data.length !== 0) {
                                 result[0].data = args.data;
                             }
@@ -462,13 +515,13 @@
                                 result[0],
                                 args.tumlUri,
                                 args.property,
-                                {forLookup:false, forManyComponent:false, forOneComponent:true, isOne:true, forCreation:true}
+                                {forLookup: false, forManyComponent: false, forOneComponent: true, isOne: true, forCreation: true}
                             );
                             tumlTabViewManager.setCell(args.cell);
                             tumlOneComponentTabViewManager.setLinkedTumlTabViewManager(tumlTabViewManager);
                             tabContainer.tabs("disable", tumlTabViewManagers.indexOf(tumlTabViewManager));
                         },
-                        error:function (jqXHR, textStatus, errorThrown) {
+                        error: function (jqXHR, textStatus, errorThrown) {
                             alert('error getting ' + property.tumlMetaDataUri + '\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
                         }
                     });
@@ -683,33 +736,33 @@
 
         //Public api
         $.extend(this, {
-            "TumlMainViewManager":"1.0.0",
+            "TumlMainViewManager": "1.0.0",
             //These events are propogated from the grid
-            "onPutSuccess":new Tuml.Event(),
-            "onPutFailure":new Tuml.Event(),
-            "onPostSuccess":new Tuml.Event(),
-            "onPostFailure":new Tuml.Event(),
-            "onDeleteSuccess":new Tuml.Event(),
-            "onDeleteFailure":new Tuml.Event(),
-            "onCancel":new Tuml.Event(),
-            "onSelfCellClick":new Tuml.Event(),
-            "onContextMenuClickLink":new Tuml.Event(),
-            "onContextMenuClickDelete":new Tuml.Event(),
+            "onPutSuccess": new Tuml.Event(),
+            "onPutFailure": new Tuml.Event(),
+            "onPostSuccess": new Tuml.Event(),
+            "onPostFailure": new Tuml.Event(),
+            "onDeleteSuccess": new Tuml.Event(),
+            "onDeleteFailure": new Tuml.Event(),
+            "onCancel": new Tuml.Event(),
+            "onSelfCellClick": new Tuml.Event(),
+            "onContextMenuClickLink": new Tuml.Event(),
+            "onContextMenuClickDelete": new Tuml.Event(),
 
-            "onPutOneSuccess":new Tuml.Event(),
-            "onPostOneSuccess":new Tuml.Event(),
-            "onDeleteOneSuccess":new Tuml.Event(),
-            "onPutOneFailure":new Tuml.Event(),
-            "onPostOneFailure":new Tuml.Event(),
-            "onPostInstanceQuerySuccess":new Tuml.Event(),
-            "onPutInstanceQuerySuccess":new Tuml.Event(),
-            "onPostClassQuerySuccess":new Tuml.Event(),
-            "onPutClassQuerySuccess":new Tuml.Event(),
+            "onPutOneSuccess": new Tuml.Event(),
+            "onPostOneSuccess": new Tuml.Event(),
+            "onDeleteOneSuccess": new Tuml.Event(),
+            "onPutOneFailure": new Tuml.Event(),
+            "onPostOneFailure": new Tuml.Event(),
+            "onPostInstanceQuerySuccess": new Tuml.Event(),
+            "onPutInstanceQuerySuccess": new Tuml.Event(),
+            "onPostClassQuerySuccess": new Tuml.Event(),
+            "onPutClassQuerySuccess": new Tuml.Event(),
 
-            "refresh":refresh,
-            "addQueryTab":addQueryTab,
-            "closeTab":closeTab,
-            "clear":clear
+            "refresh": refresh,
+            "addQueryTab": addQueryTab,
+            "closeTab": closeTab,
+            "clear": clear
         });
 
         init();
