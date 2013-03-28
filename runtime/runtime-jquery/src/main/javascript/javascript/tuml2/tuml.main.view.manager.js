@@ -240,7 +240,9 @@
                 }
             }
             if (validateMultiplicity(tumlTabManyViewManagers)) {
-                alert('dosave');
+                for (var i = 0; i < tumlTabManyViewManagers.length; i++) {
+                    tumlTabManyViewManagers[i].tumlTabGridManager.doSave();
+                }
             }
 
 //            for (var i = 0; i < tumlTabManyViewManagers.length; i++) {
