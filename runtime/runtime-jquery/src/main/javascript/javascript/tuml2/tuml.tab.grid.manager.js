@@ -284,6 +284,7 @@
             "onAddButtonSuccess": new Tuml.Event(),
             "onClickManyComponentCell": new Tuml.Event(),
             "onClickOneComponentCell": new Tuml.Event(),
+            "onAddRowSuccess": new Tuml.Event(),
             "onPutSuccess": new Tuml.Event(),
             "onPutFailure": new Tuml.Event(),
             "onPostSuccess": new Tuml.Event(),
@@ -437,6 +438,7 @@
                     self.dataView.addItem(data[0].data[0]);
                     //This ensures the cell is in edit mode, i.e. the cursor is ready for typing
                     self.grid.editActiveCell();
+                    self.onAddRowSuccess.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name, data: data}, null, self);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);

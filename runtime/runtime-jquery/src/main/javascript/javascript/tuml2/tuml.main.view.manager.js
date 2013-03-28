@@ -569,7 +569,9 @@
                     self.onContextMenuClickDelete.notify(args, e, self);
                 });
             }
-
+            tumlTabViewManager.onAddRowSuccess.subscribe(function (e, args) {
+                alert('validate multiplicities');
+            });
             tumlTabViewManager.onPutSuccess.subscribe(function (e, args) {
                 self.onPutSuccess.notify(args, e, self);
                 if (args.data[0].meta.to.qualifiedName === 'tumllib::org::tuml::query::Query') {
