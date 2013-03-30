@@ -15,7 +15,13 @@ public class OJParameter extends OJParameterGEN {
 		super();
 	}
 
-	public OJParameter(String string, OJPathName ojPathName) {
+    public OJParameter(String string, String ojPathName) {
+        this();
+        setName(string);
+        setType(new OJPathName(ojPathName));
+    }
+
+    public OJParameter(String string, OJPathName ojPathName) {
 		this();
 		setName(string);
 		setType(ojPathName);

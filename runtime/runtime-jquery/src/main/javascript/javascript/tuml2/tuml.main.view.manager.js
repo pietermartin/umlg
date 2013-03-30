@@ -17,6 +17,7 @@
         var contextVertexId;
         var contextChanged = true;
         var propertyNavigatingTo = null;
+        var tumlUri = null;
 
         function init() {
         }
@@ -25,6 +26,7 @@
             var qualifiedName = result[0].meta.qualifiedName;
             var metaDataNavigatingTo = result[0].meta.to;
             var metaDataNavigatingFrom = result[0].meta.from;
+            this.tumlUri = tumlUri;
             propertyNavigatingTo = (metaDataNavigatingFrom == undefined ? null : findPropertyNavigatingTo(qualifiedName, metaDataNavigatingFrom));
             if (propertyNavigatingTo != null && (propertyNavigatingTo.oneToMany || propertyNavigatingTo.manyToMany)) {
                 //Property is a many
@@ -214,6 +216,20 @@
             });
         }
 
+        function updateValidationWarningHeader() {
+            $('#validation-warning').children().remove();
+            var tumlTabManyViewManagers = getTumlTabManyViewManagers(false);
+            var rowCount = 0;
+            for (var i = 0; i < tumlTabManyViewManagers.length; i++) {
+                var dataView = tumlTabManyViewManagers[i].tumlTabGridManager.dataView;
+                rowCount += dataView.getItems().length;
+            }
+            if (rowCount < propertyNavigatingTo.lower || (propertyNavigatingTo.upper !== -1 && rowCount > propertyNavigatingTo.upper)) {
+                $('#validation-warning').append($('<span />').text(
+                    'multiplicity falls outside the valid range [' + propertyNavigatingTo.lower + '..' + propertyNavigatingTo.upper + ']'));
+            }
+        }
+
         function validateMultiplicity(tumlTabManyViewManagers) {
             var rowCount = 0;
             for (var i = 0; i < tumlTabManyViewManagers.length; i++) {
@@ -228,28 +244,77 @@
             }
         }
 
-        function doSave() {
-
+        function getTumlTabManyViewManagers(commitCurrentEdit) {
             var tumlTabManyViewManagers = [];
             for (var i = 0; i < tumlTabViewManagers.length; i++) {
                 var tumlTabViewManager = tumlTabViewManagers[i];
                 //Get all the many tab views
                 if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager) {
-                    tumlTabViewManager.tumlTabGridManager.grid.getEditorLock().commitCurrentEdit();
+                    if (commitCurrentEdit) {
+                        tumlTabViewManager.tumlTabGridManager.grid.getEditorLock().commitCurrentEdit();
+                    }
                     tumlTabManyViewManagers.push(tumlTabViewManager);
                 }
             }
+            return tumlTabManyViewManagers;
+        }
+
+        function addNewRow() {
+            alert('hi there addNewRow');
+//            var overloadedPostData = {};
+//            overloadedPostData['insert'] = {qualifiedName: self.localMetaForData.qualifiedName};
+//            $.ajax({
+//                url: tumlUri + "?rollback=true",
+//                type: "POST",
+//                dataType: "json",
+//                contentType: "json",
+//                data: JSON.stringify(overloadedPostData),
+//                success: function (data, textStatus, jqXHR) {
+//                    //Cancel prevent validation from happening
+//                    self.grid.getEditController().cancelCurrentEdit();
+//                    self.dataView.addItem(data[0].data[0]);
+//                    //This ensures the cell is in edit mode, i.e. the cursor is ready for typing
+//                    self.grid.editActiveCell();
+//                    self.onAddRowSuccess.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name, data: data}, null, self);
+//                },
+//                error: function (jqXHR, textStatus, errorThrown) {
+//                    $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
+//                }
+//            });
+        }
+
+        function doSave() {
+            var tumlTabManyViewManagers = getTumlTabManyViewManagers(true);
+            var overloadedPostData = {};
+            overloadedPostData['insert'] = [];
+            overloadedPostData['update'] = [];
+            overloadedPostData['delete'] = [];
+
             if (validateMultiplicity(tumlTabManyViewManagers)) {
                 for (var i = 0; i < tumlTabManyViewManagers.length; i++) {
-                    tumlTabManyViewManagers[i].tumlTabGridManager.doSave();
+                    var dataView = tumlTabManyViewManagers[i].tumlTabGridManager.dataView;
+                    overloadedPostData['insert'].push.apply(overloadedPostData['insert'], dataView.getNewItems());
+                    overloadedPostData['update'].push.apply(overloadedPostData['update'], dataView.getUpdatedItems());
+                    overloadedPostData['delete'].push.apply(overloadedPostData['delete'], dataView.getDeletedItems());
                 }
+
+                $.ajax({
+                    url: self.tumlUri,
+                    type: "POST",
+                    dataType: "json",
+                    contentType: "json",
+                    data: JSON.stringify(overloadedPostData),
+                    success: function (data, textStatus, jqXHR) {
+                        self.onPostSuccess.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name, data: data}, null, self);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
+                        self.onPostFailure.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name}, null, self);
+                    }
+                });
+
+
             }
-
-//            for (var i = 0; i < tumlTabManyViewManagers.length; i++) {
-//                var tumlTabManyViewManager = tumlTabManyViewManagers[i];
-//                alert(tumlTabManyViewManager);
-//            }
-
 
 //            if (self.grid.getEditorLock().commitCurrentEdit()) {
 //                if (self.validateMultiplicity()) {
@@ -325,18 +390,14 @@
         }
 
         function addButtons() {
-
             $('#buttons').children().remove();
-
             //Save button
             $('<button />').text('Save').click(function () {
                 doSave();
             }).appendTo('#buttons');
-
             var $cancelButton = $('<button />').text('Cancel').click(function () {
                 doCancel();
             }).appendTo('#buttons');
-
         }
 
         function refreshInternal(tumlUri, result, propertyNavigatingTo, isOne, forCreation) {
@@ -486,48 +547,31 @@
                     tumlLookupTabViewManager.setLinkedTumlTabViewManager(tumlTabViewManager);
                 });
                 tumlTabViewManager.onClickManyComponentCell.subscribe(function (e, args) {
+                    //Get the data, for a first time there will be no data, only meta data.
+                    //On subsequent calls within the suspended transaction there might be data
+                    $.ajax({
+                        url: args.property.tumlMetaDataUri,
+                        type: "GET",
+                        dataType: "json",
+                        contentType: "json",
+                        success: function (result, textStatus, jqXHR) {
+                            result[0].data = args.data;
+                            var tumlManyComponentTabViewManager = addTab(
+                                tuml.tab.Enum.Properties,
+                                result[0],
+                                args.tumlUri,
+                                args.property,
+                                {forLookup: false, forManyComponent: true, forOneComponent: false, isOne: false, forCreation: true}
+                            );
+                            tumlTabViewManager.setCell(args.cell);
+                            tumlManyComponentTabViewManager.setLinkedTumlTabViewManager(tumlTabViewManager);
+                            tabContainer.tabs("disable", tumlTabViewManagers.indexOf(tumlTabViewManager));
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            alert('error getting ' + property.tumlMetaDataUri + '\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
+                        }
+                    });
 
-                    alert("tuml.main.view.manager tumlTabViewManager.onClickManyComponentCell");
-
-//                    //Suspend the transaction
-//                    $.ajax({
-//                        url:'/' + tumlModelName + '/transaction',
-//                        type:"POST",
-//                        dataType:"json",
-//                        contentType:"json",
-//                        success:function (result, textStatus, jqXHR) {
-//                            transactionSuspended = true;
-//                            transactionIdentifier = result.transactionIdentifier;
-//                        },
-//                        error:function (jqXHR, textStatus, errorThrown) {
-//                            alert('error getting /' + tumlModelName + '/transaction\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
-//                        }
-//                    });
-//
-//                    //Get the data, for a first time there will be no data, only meta data.
-//                    //On subsequent calls within the suspended transaction there might be data
-//                    $.ajax({
-//                        url:args.property.tumlMetaDataUri,
-//                        type:"GET",
-//                        dataType:"json",
-//                        contentType:"json",
-//                        success:function (result, textStatus, jqXHR) {
-//                            result[0].data = args.data;
-//                            var tumlManyComponentTabViewManager = addTab(
-//                                tuml.tab.Enum.Properties,
-//                                result[0],
-//                                args.tumlUri,
-//                                args.property,
-//                                {forLookup:false, forManyComponent:true, forOneComponent:false, isOne:false, forCreation:true}
-//                            );
-//                            tumlTabViewManager.setCell(args.cell);
-//                            tumlManyComponentTabViewManager.setLinkedTumlTabViewManager(tumlTabViewManager);
-//                            tabContainer.tabs("disable", tumlTabViewManagers.indexOf(tumlTabViewManager));
-//                        },
-//                        error:function (jqXHR, textStatus, errorThrown) {
-//                            alert('error getting ' + property.tumlMetaDataUri + '\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
-//                        }
-//                    });
                 });
 
                 tumlTabViewManager.onClickOneComponentCell.subscribe(function (e, args) {
@@ -569,8 +613,14 @@
                     self.onContextMenuClickDelete.notify(args, e, self);
                 });
             }
+            tumlTabViewManager.onAddNewRow.subscribe(function (e, args) {
+                addNewRow();
+            });
             tumlTabViewManager.onAddRowSuccess.subscribe(function (e, args) {
-                alert('validate multiplicities');
+                updateValidationWarningHeader();
+            });
+            tumlTabViewManager.onRemoveRowSuccess.subscribe(function (e, args) {
+                updateValidationWarningHeader();
             });
             tumlTabViewManager.onPutSuccess.subscribe(function (e, args) {
                 self.onPutSuccess.notify(args, e, self);
@@ -583,6 +633,7 @@
             });
             tumlTabViewManager.onPostSuccess.subscribe(function (e, args) {
                 self.onPostSuccess.notify(args, e, self);
+                alert('update the tree!');
                 if (args.data[0].meta.to.qualifiedName === 'tumllib::org::tuml::query::Query') {
                     var metaDataNavigatingTo = args.data[0].meta.to;
                     var metaDataNavigatingFrom = args.data[0].meta.from;

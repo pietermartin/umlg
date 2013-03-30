@@ -15,7 +15,7 @@ import java.util.Set;
 
 public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerResourceBuilder implements Visitor<Class> {
 
-    private static final String OVERLOADED_POST = "OverloadedPost";
+//    private static final String OVERLOADED_POST = "OverloadedPost";
 
     public RootOverLoadedPostResourceServerResourceBuilder(Workspace workspace, String sourceDir) {
         super(workspace, sourceDir);
@@ -25,12 +25,12 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
     public void visitBefore(Class clazz) {
         if (!clazz.isAbstract() && !TumlClassOperations.hasCompositeOwner(clazz)) {
 
-            OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(TumlClassOperations.className(clazz) + "s_" + OVERLOADED_POST + "_ServerResource");
+            OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(TumlClassOperations.className(clazz) + "s_ServerResource");
             OJPackage ojPackage = new OJPackage(Namer.name(clazz.getNearestPackage()) + ".restlet");
             annotatedInf.setMyPackage(ojPackage);
             addToSource(annotatedInf);
 
-            OJAnnotatedClass annotatedClass = new OJAnnotatedClass(TumlClassOperations.className(clazz) + "s_" + OVERLOADED_POST + "ServerResourceImpl");
+            OJAnnotatedClass annotatedClass = new OJAnnotatedClass(TumlClassOperations.className(clazz) + "s_ServerResourceImpl");
             annotatedClass.setSuperclass(TumlRestletGenerationUtil.ServerResource);
             annotatedClass.setMyPackage(ojPackage);
             annotatedClass.addToImplementedInterfaces(annotatedInf.getPathName());
@@ -403,7 +403,7 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
 
     private void addToRouterEnum(Class clazz, OJAnnotatedClass annotatedClass) {
         OJEnum routerEnum = (OJEnum) this.workspace.findOJClass("restlet.RestletRouterEnum");
-        OJEnumLiteral ojLiteral = new OJEnumLiteral(TumlClassOperations.className(clazz).toUpperCase() + "S_" + OVERLOADED_POST);
+        OJEnumLiteral ojLiteral = new OJEnumLiteral(TumlClassOperations.className(clazz).toUpperCase() + "S");
 
         OJField uri = new OJField();
         uri.setType(new OJPathName("String"));

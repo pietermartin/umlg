@@ -105,6 +105,9 @@
             "onManyComponentCancelButtonSuccess": new Tuml.Event(),
             "onClickManyComponentCell": new Tuml.Event(),
             "onClickOneComponentCell": new Tuml.Event(),
+            "onAddNewRow": new Tuml.Event(),
+            "onAddRowSuccess": new Tuml.Event(),
+            "onRemoveRowSuccess": new Tuml.Event(),
             "onPutSuccess": new Tuml.Event(),
             "onPutFailure": new Tuml.Event(),
             "onPostSuccess": new Tuml.Event(),
@@ -284,6 +287,8 @@
             "onAddButtonSuccess": new Tuml.Event(),
             "onClickManyComponentCell": new Tuml.Event(),
             "onClickOneComponentCell": new Tuml.Event(),
+            "onRemoveRowSuccess": new Tuml.Event(),
+            "onAddNewRow": new Tuml.Event(),
             "onAddRowSuccess": new Tuml.Event(),
             "onPutSuccess": new Tuml.Event(),
             "onPutFailure": new Tuml.Event(),
@@ -425,26 +430,6 @@
             this.metaForData = result.meta.to;
             this.updateGrid(result.data);
         };
-
-        this.addNewRow = function () {
-            $.ajax({
-                url: tumlUri + "?rollback=true",
-                type: "POST",
-                dataType: "json",
-                contentType: "json",
-                success: function (data, textStatus, jqXHR) {
-                    //Cancel prevent validation from happening
-                    self.grid.getEditController().cancelCurrentEdit();
-                    self.dataView.addItem(data[0].data[0]);
-                    //This ensures the cell is in edit mode, i.e. the cursor is ready for typing
-                    self.grid.editActiveCell();
-                    self.onAddRowSuccess.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name, data: data}, null, self);
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-                }
-            });
-        }
 
         this.doSave = function () {
             //put updated items
@@ -650,9 +635,9 @@
                     var url = tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), data[row].id);
                     self.onContextMenuClickLink.notify({name: 'unused', tumlUri: url}, null, self);
                 } else {
-                    var item = this.dataView.getItem(row);
+                    var item = self.dataView.getItem(row);
                     self.dataView.deleteItem(item.id);
-                    updateValidationWarningHeader();
+                    self.onRemoveRowSuccess.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name, data: data}, null, self);
                 }
             });
 
@@ -660,15 +645,14 @@
                 var column = self.grid.getColumns()[args.cell];
 
                 if (isClickOnNewRow(args.row, args.cell, self.dataView.getItem(args.row))) {
-//                    //Add new row
-//                    self.addNewRow();
+                    //Add new row
                 } else if (column.name == 'id') {
                     e.stopImmediatePropagation();
                 } else if (column.name == 'delete') {
                     var item = self.dataView.getItem(args.row);
                     self.dataView.deleteItem(item.id);
+                    self.onRemoveRowSuccess.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name, data: data}, null, self);
                     e.stopImmediatePropagation();
-                    updateValidationWarningHeader();
                 } else if (column.name == 'uri') {
                     var item = self.dataView.getItem(args.row);
                     var uri = item.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), item.id);
@@ -679,6 +663,7 @@
                     var data = [];
                     if (isCellEditable(args.row, args.cell, self.dataView.getItem(args.row))) {
                         if (self.dataView.getItem(args.row) !== undefined && self.dataView.getItem(args.row) !== null && self.dataView.getItem(args.row)[column.name] !== undefined && self.dataView.getItem(args.row)[column.name] !== null) {
+                            //Get the data currently for the component
                             data = self.dataView.getItem(args.row)[column.name];
                         }
                         //Ensure the row in the grid exist
@@ -809,20 +794,37 @@
             });
 
             this.grid.onActiveCellChanged.subscribe(function (e, args) {
-//                alert('onActiveCellChanged ' + args.row);
                 if (isClickOnNewRow(args.row, args.cell, self.dataView.getItem(args.row))) {
                     //Add new row
-                    self.addNewRow();
+                    self.grid.getEditController().cancelCurrentEdit();
+                    self.dataView.addItem(data[0].data[0]);
+                    //This ensures the cell is in edit mode, i.e. the cursor is ready for typing
+                    self.grid.editActiveCell();
+
+//            var overloadedPostData = {};
+//            overloadedPostData['insert'] = {qualifiedName: self.localMetaForData.qualifiedName};
+//            $.ajax({
+//                url: tumlUri + "?rollback=true",
+//                type: "POST",
+//                dataType: "json",
+//                contentType: "json",
+//                data: JSON.stringify(overloadedPostData),
+//                success: function (data, textStatus, jqXHR) {
+//                    //Cancel prevent validation from happening
+//                    self.grid.getEditController().cancelCurrentEdit();
+//                    self.dataView.addItem(data[0].data[0]);
+//                    //This ensures the cell is in edit mode, i.e. the cursor is ready for typing
+//                    self.grid.editActiveCell();
+//                    self.onAddRowSuccess.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name, data: data}, null, self);
+//                },
+//                error: function (jqXHR, textStatus, errorThrown) {
+//                    $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
+//                }
+//            });
+
+                    self.onAddNewRow.notify(args, e, self);
                 }
             });
-
-            function updateValidationWarningHeader() {
-                $('#validation-warning').children().remove();
-                if (self.dataView.getItems().length < self.propertyNavigatingTo.lower || (self.propertyNavigatingTo.upper !== -1 && self.dataView.getItems().length > self.propertyNavigatingTo.upper)) {
-                    $('#validation-warning').append($('<span />').text(
-                        'multiplicity falls outside the valid range [' + self.propertyNavigatingTo.lower + '..' + self.propertyNavigatingTo.upper + ']'));
-                }
-            }
 
             function isCellEditable(row, cell, item) {
                 for (var j = 0; j < self.grid.getColumns().length; j++) {

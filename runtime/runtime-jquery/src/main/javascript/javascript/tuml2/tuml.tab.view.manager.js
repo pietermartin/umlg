@@ -240,8 +240,14 @@
                 self.onClickOneComponentCell.notify(args, e, self);
             });
         }
+        this.tumlTabGridManager.onAddNewRow.subscribe(function (e, args) {
+            self.onAddNewRow.notify(args, e, self);
+        });
         this.tumlTabGridManager.onAddRowSuccess.subscribe(function (e, args) {
             self.onAddRowSuccess.notify(args, e, self);
+        });
+        this.tumlTabGridManager.onRemoveRowSuccess.subscribe(function (e, args) {
+            self.onRemoveRowSuccess.notify(args, e, self);
         });
         this.tumlTabGridManager.onPutSuccess.subscribe(function (e, args) {
             self.onPutSuccess.notify(args, e, self);
@@ -351,7 +357,9 @@
             "onOneComponentCloseButtonSuccess":new Tuml.Event(),
             "onManyComponentSaveButtonSuccess":new Tuml.Event(),
             "onManyComponentCloseButtonSuccess":new Tuml.Event(),
+            "onAddNewRow":new Tuml.Event(),
             "onAddRowSuccess":new Tuml.Event(),
+            "onRemoveRowSuccess":new Tuml.Event(),
             "onPutSuccess":new Tuml.Event(),
             "onPutFailure":new Tuml.Event(),
             "onPostSuccess":new Tuml.Event(),

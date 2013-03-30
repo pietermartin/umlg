@@ -29,6 +29,7 @@ import org.tuml.restlet.generation.RestletVisitors;
 import org.tuml.restlet.util.TumlRestletGenerationUtil;
 import org.tuml.restlet.visitor.model.QueryExecuteResourceBuilder;
 
+@Deprecated
 public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBuilder implements Visitor<Property> {
 
     public NavigatePropertyServerResourceBuilder(Workspace workspace, String sourceDir) {
@@ -40,42 +41,40 @@ public class NavigatePropertyServerResourceBuilder extends BaseServerResourceBui
         PropertyWrapper pWrap = new PropertyWrapper(p);
         if (!pWrap.isDataType() && !pWrap.isEnumeration() && pWrap.isNavigable()) {
 
-//            Set<Classifier> concreteImplementationsFrom = TumlClassOperations.getConcreteImplementations((Classifier) pWrap.getOwningType());
-//            for (Classifier concreteClassifierFrom : concreteImplementationsFrom) {
-                Set<Classifier> concreteImplementations = TumlClassOperations.getConcreteImplementations((Classifier) pWrap.getType());
-                for (Classifier concreteClassifierTo : concreteImplementations) {
-                    OJAnnotatedClass owner = findOJClass(concreteClassifierTo);
+            Set<Classifier> concreteImplementations = TumlClassOperations.getConcreteImplementations((Classifier) pWrap.getType());
+            for (Classifier concreteClassifierTo : concreteImplementations) {
+                OJAnnotatedClass owner = findOJClass(concreteClassifierTo);
 
 
-                    OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_"
-                            + pWrap.getOtherEnd().getName() + "_" + pWrap.getName() + "_" + StringUtils.capitalize(concreteClassifierTo.getName()) + "_ServerResource");
-                    OJPackage ojPackage = new OJPackage(owner.getMyPackage().toString() + ".restlet");
-                    annotatedInf.setMyPackage(ojPackage);
-                    addToSource(annotatedInf);
+                OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_"
+                        + pWrap.getOtherEnd().getName() + "_" + pWrap.getName() + "_" + StringUtils.capitalize(concreteClassifierTo.getName()) + "_ServerResource");
+                OJPackage ojPackage = new OJPackage(owner.getMyPackage().toString() + ".restlet");
+                annotatedInf.setMyPackage(ojPackage);
+                addToSource(annotatedInf);
 
-                    OJAnnotatedClass annotatedClass = new OJAnnotatedClass(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_"
-                            + pWrap.getOtherEnd().getName() + "_" + pWrap.getName() + "_" + StringUtils.capitalize(concreteClassifierTo.getName()) + "_ServerResourceImpl");
-                    annotatedClass.setSuperclass(TumlRestletGenerationUtil.ServerResource);
-                    annotatedClass.addToImplementedInterfaces(annotatedInf.getPathName());
-                    annotatedClass.setMyPackage(ojPackage);
-                    addToSource(annotatedClass);
-                    addDefaultConstructor(annotatedClass);
+                OJAnnotatedClass annotatedClass = new OJAnnotatedClass(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_"
+                        + pWrap.getOtherEnd().getName() + "_" + pWrap.getName() + "_" + StringUtils.capitalize(concreteClassifierTo.getName()) + "_ServerResourceImpl");
+                annotatedClass.setSuperclass(TumlRestletGenerationUtil.ServerResource);
+                annotatedClass.addToImplementedInterfaces(annotatedInf.getPathName());
+                annotatedClass.setMyPackage(ojPackage);
+                addToSource(annotatedClass);
+                addDefaultConstructor(annotatedClass);
 
-                    addCompositeParentIdField(pWrap, annotatedClass);
-                    addGetObjectRepresentation(pWrap, annotatedInf, annotatedClass);
+                addCompositeParentIdField(pWrap, annotatedClass);
+                addGetObjectRepresentation(pWrap, annotatedInf, annotatedClass);
 
-                    // Put must be Idempotence, i.e. calling it many times must make
-                    // no
-                    // difference to server state
-                    // non unique sequence or a bag can not put as adding the same
-                    // value
-                    // more than once changes the state
-                    addPostObjectRepresentation(concreteClassifierTo, pWrap, annotatedInf, annotatedClass);
-                    addPutDeleteObjectRepresentation(concreteClassifierTo, pWrap, annotatedInf, annotatedClass, true);
-                    addPutDeleteObjectRepresentation(concreteClassifierTo, pWrap, annotatedInf, annotatedClass, false);
-                    addServerResourceToRouterEnum(concreteClassifierTo, pWrap, annotatedClass);
-                }
+                // Put must be Idempotence, i.e. calling it many times must make
+                // no
+                // difference to server state
+                // non unique sequence or a bag can not put as adding the same
+                // value
+                // more than once changes the state
+                addPostObjectRepresentation(concreteClassifierTo, pWrap, annotatedInf, annotatedClass);
+                addPutDeleteObjectRepresentation(concreteClassifierTo, pWrap, annotatedInf, annotatedClass, true);
+                addPutDeleteObjectRepresentation(concreteClassifierTo, pWrap, annotatedInf, annotatedClass, false);
+                addServerResourceToRouterEnum(concreteClassifierTo, pWrap, annotatedClass);
             }
+        }
 //        }
     }
 

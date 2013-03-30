@@ -27,6 +27,7 @@ import org.tuml.javageneration.util.TinkerGenerationUtil;
 import org.tuml.javageneration.util.TumlClassOperations;
 import org.tuml.restlet.util.TumlRestletGenerationUtil;
 
+@Deprecated
 public class RootResourceServerResourceBuilder extends BaseServerResourceBuilder implements Visitor<Class> {
 
     public RootResourceServerResourceBuilder(Workspace workspace, String sourceDir) {

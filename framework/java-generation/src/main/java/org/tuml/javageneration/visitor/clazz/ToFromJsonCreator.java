@@ -139,7 +139,12 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                 toJson.getBody().addToStatements("sb.append(\", \")");
             }
         }
+
+
         if (clazz.getGenerals().isEmpty()) {
+            //Add in qualified type name
+            toJson.getBody().addToStatements("sb.append(\", \")");
+            toJson.getBody().addToStatements("sb.append(\"\\\"qualifiedName\\\": \\\"\" + getQualifiedName() + \"\\\"\")");
             toJson.getBody().addToStatements("sb.append(\", \")");
             toJson.getBody().addToStatements(URI_FOR_RESTFULL, "//PlaceHolder for restful\nsb.append(\"\\\"uri\\\": {}\")");
         }

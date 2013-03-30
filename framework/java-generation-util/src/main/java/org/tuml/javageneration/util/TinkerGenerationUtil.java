@@ -36,7 +36,11 @@ public class TinkerGenerationUtil {
     public static final OJPathName TumlOcl2Parser = new OJPathName("org.tuml.ocl.TumlOcl2Parser");
     public static final OJPathName TumlMetaNode = new OJPathName("org.tuml.runtime.domain.TumlMetaNode");
     public static final OJPathName QualifiedNameClassMap = new OJPathName("org.tuml.root.QualifiedNameClassMap");
+    public static final OJPathName TumlAdaptorPackage = new OJPathName("org.tuml.runtime.adaptor");
     public static final OJPathName TumlRootPackage = new OJPathName("org.tuml.root");
+    public static final OJPathName TumlSchemaMap = new OJPathName("org.tuml.runtime.adaptor.TumlSchemaMap");
+    public static final OJPathName TumlSchemaFactory = new OJPathName("org.tuml.runtime.adaptor.TumlSchemaFactory");
+    public static final OJPathName TumlSchemaMapImpl = new OJPathName("org.tuml.runtime.adaptor.TumlSchemaMapImpl");
     public static final OJPathName TumlApplicationNode = new OJPathName("org.tuml.runtime.domain.TumlApplicationNode");
     public static final OJPathName TumlEnum = new OJPathName("org.tuml.runtime.domain.TumlEnum");
     public static final OJPathName TumlConstraintViolationException = new OJPathName("org.tuml.runtime.validation.TumlConstraintViolationException");
@@ -84,7 +88,7 @@ public class TinkerGenerationUtil {
     public static final OJPathName tinkerIdUtilPathName = new OJPathName("org.tuml.runtime.adaptor.TinkerIdUtil");
     public static final OJPathName BASE_TUML_AUDIT = new OJPathName("org.tuml.runtime.domain.BaseTumlAudit");
     public static final OJPathName BASE_BEHAVIORED_CLASSIFIER = new OJPathName("org.tuml.runtime.domain.BaseTinkerBehavioredClassifier");
-    public static final OJPathName BASE_TINKER = new OJPathName("org.tuml.runtime.domain.BaseTuml");
+    public static final OJPathName BaseTuml = new OJPathName("org.tuml.runtime.domain.BaseTuml");
     public static final OJPathName BASE_TUML_COMPOSITION_NODE = new OJPathName("org.tuml.runtime.domain.BaseTumlCompositionNode");
     public static final OJPathName BASE_META_NODE = new OJPathName("org.tuml.runtime.domain.BaseMetaNode");
     public static final String BASE_AUDIT_TINKER = "org.tuml.runtime.domain.BaseTinkerAuditable";

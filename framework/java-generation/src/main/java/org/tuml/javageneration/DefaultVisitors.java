@@ -26,6 +26,7 @@ public class DefaultVisitors {
         result.add(new RootEntryPointCreator(Workspace.INSTANCE));
         result.add(new RootEntryPointBuilder(Workspace.INSTANCE));
         result.add(new QualifiedNameClassNameMapBuilder(Workspace.INSTANCE));
+        result.add(new SchemaMapCreator(Workspace.INSTANCE));
         result.add(new ClassRuntimePropertyImplementorVisitor(Workspace.INSTANCE));
         result.add(new InterfaceRuntimePropertyImplementorVisitor(Workspace.INSTANCE));
         result.add(new EnumerationVisitor(Workspace.INSTANCE));
