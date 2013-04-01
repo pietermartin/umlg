@@ -1,16 +1,20 @@
 package org.tuml.javageneration.visitor.property;
 
+import java.util.Set;
 import java.util.logging.Logger;
 
 import org.eclipse.ocl.expressions.OCLExpression;
 import org.eclipse.uml2.uml.Classifier;
+import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.Property;
 import org.tuml.java.metamodel.annotation.OJAnnotatedClass;
+import org.tuml.java.metamodel.annotation.OJAnnotatedInterface;
 import org.tuml.java.metamodel.annotation.OJAnnotatedOperation;
 import org.tuml.framework.Visitor;
 import org.tuml.generation.Workspace;
 import org.tuml.javageneration.ocl.TumlOcl2Java;
 import org.tuml.javageneration.util.PropertyWrapper;
+import org.tuml.javageneration.util.TumlClassOperations;
 import org.tuml.javageneration.visitor.BaseVisitor;
 import org.tuml.javageneration.visitor.clazz.ClassBuilder;
 import org.tuml.ocl.TumlOcl2Parser;
@@ -42,8 +46,23 @@ public class PropertyVisitor extends BaseVisitor implements Visitor<Property> {
     }
 
     private void addInitialization(OJAnnotatedClass owner, PropertyWrapper propertyWrapper) {
+        OJAnnotatedOperation initVariables;
+        if (owner instanceof OJAnnotatedInterface) {
+            Interface inf = (Interface) propertyWrapper.getOwner();
+            Set<Classifier> concreteClassifiers = TumlClassOperations.getConcreteRealization(inf);
+            for (Classifier concreteClassifier : concreteClassifiers) {
+                OJAnnotatedClass infOwner = findOJClass(concreteClassifier);
+                initVariables = infOwner.findOperation(ClassBuilder.INIT_VARIABLES);
+                buildInitialization(propertyWrapper, initVariables, owner);
+            }
+        }  else {
+            initVariables = owner.findOperation(ClassBuilder.INIT_VARIABLES);
+            buildInitialization(propertyWrapper, initVariables, owner);
+        }
+    }
+
+    private void buildInitialization(PropertyWrapper propertyWrapper, OJAnnotatedOperation initVariables, OJAnnotatedClass owner) {
         String java;
-        OJAnnotatedOperation initVariables = owner.findOperation(ClassBuilder.INIT_VARIABLES);
         if (propertyWrapper.hasOclDefaultValue()) {
             String ocl = propertyWrapper.getOclDerivedValue();
             initVariables.setComment(String.format("Implements the ocl statement for initialization variable '%s'\n<pre>\n%s\n</pre>", propertyWrapper.getName(), ocl));

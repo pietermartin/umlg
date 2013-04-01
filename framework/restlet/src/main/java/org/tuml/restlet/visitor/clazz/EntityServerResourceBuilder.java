@@ -1,12 +1,11 @@
 package org.tuml.restlet.visitor.clazz;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Property;
-import org.tuml.java.metamodel.*;
-import org.tuml.java.metamodel.annotation.*;
 import org.tuml.framework.Visitor;
 import org.tuml.generation.Workspace;
+import org.tuml.java.metamodel.*;
+import org.tuml.java.metamodel.annotation.*;
 import org.tuml.javageneration.util.Namer;
 import org.tuml.javageneration.util.PropertyWrapper;
 import org.tuml.javageneration.util.TinkerGenerationUtil;
@@ -158,18 +157,15 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
 
         OJTryStatement tryStatement = new OJTryStatement();
         tryStatement.getTryPart().addToStatements("StringBuilder json = new StringBuilder()");
-        OJIfStatement ojIfStatement = new OJIfStatement("!getReference().getLastSegment().endsWith(\"MetaData\")");
-        ojIfStatement.addToThenPart(
+        tryStatement.getTryPart().addToStatements(
                 "this." + getIdFieldName(clazz) + "= Long.valueOf((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"))");
-        ojIfStatement.addToThenPart(
+        tryStatement.getTryPart().addToStatements(
                 TumlClassOperations.className(clazz) + " c = new " + TumlClassOperations.className(clazz) + "(GraphDb.getDb().getVertex(this."
                         + getIdFieldName(clazz) + "))");
         annotatedClass.addToImports(TumlClassOperations.getPathName(clazz));
-        ojIfStatement.addToThenPart("json.append(\"[{\\\"data\\\": [\")");
-        ojIfStatement.addToThenPart("json.append(" + "c.toJson())");
-        ojIfStatement.addToElsePart("json.append(\"[{\\\"data\\\": [\")");
+        tryStatement.getTryPart().addToStatements("json.append(\"[{\\\"data\\\": [\")");
+        tryStatement.getTryPart().addToStatements("json.append(" + "c.toJson())");
 
-        tryStatement.getTryPart().addToStatements(ojIfStatement);
         tryStatement.getTryPart().addToStatements("meta", "json.append(\"], \\\"meta\\\" : {\")");
 
         tryStatement.getTryPart().addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + clazz.getQualifiedName() + "\\\"\")");
@@ -223,36 +219,17 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
         uri.setInitExp("\"/" + TumlClassOperations.className(clazz).toLowerCase() + "s/{" + TumlClassOperations.className(clazz).toLowerCase() + "Id}\"");
         ojLiteral.addToAttributeValues(uri);
 
-        OJEnumLiteral ojLiteralMeta = new OJEnumLiteral(TumlClassOperations.className(clazz).toUpperCase() + "_META");
-        OJField uriMeta = new OJField();
-        uriMeta.setType(new OJPathName("String"));
-        uriMeta.setInitExp("\"/" + StringUtils.uncapitalize(TumlClassOperations.className(clazz)) + "MetaData\"");
-        ojLiteralMeta.addToAttributeValues(uriMeta);
-
         OJField serverResourceClassField = new OJField();
         serverResourceClassField.setType(new OJPathName("java.lang.Class"));
         serverResourceClassField.setInitExp(annotatedClass.getName() + ".class");
-        ojLiteralMeta.addToAttributeValues(serverResourceClassField);
         ojLiteral.addToAttributeValues(serverResourceClassField);
         routerEnum.addToImports(annotatedClass.getPathName());
         routerEnum.addToImports(TumlRestletGenerationUtil.ServerResource);
 
         routerEnum.addToLiterals(ojLiteral);
-        routerEnum.addToLiterals(ojLiteralMeta);
 
         OJAnnotatedOperation attachAll = routerEnum.findOperation("attachAll", TumlRestletGenerationUtil.Router);
         attachAll.getBody().addToStatements(routerEnum.getName() + "." + ojLiteral.getName() + ".attach(router)");
-        attachAll.getBody().addToStatements(routerEnum.getName() + "." + ojLiteralMeta.getName() + ".attach(router)");
-    }
-
-    private void addPrivateIdVariable(Class clazz, OJAnnotatedClass annotatedClass) {
-        OJField privateId = new OJField(getIdFieldName(clazz), new OJPathName("Long"));
-        privateId.setVisibility(OJVisibilityKind.PRIVATE);
-        annotatedClass.addToFields(privateId);
-    }
-
-    private String getIdFieldName(Class clazz) {
-        return StringUtils.uncapitalize(TumlClassOperations.className(clazz)).toLowerCase() + "Id";
     }
 
 }

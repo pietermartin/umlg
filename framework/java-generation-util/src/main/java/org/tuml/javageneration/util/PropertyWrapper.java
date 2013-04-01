@@ -307,7 +307,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     }
 
     public boolean isComponent() {
-        return !this.property.isDerived() && this.property.getType() instanceof org.eclipse.uml2.uml.Class && this.property.isComposite()
+        return !this.property.isDerived() && this.property.getType() instanceof Classifier && this.property.isComposite()
                 && this.property.getLower() >= 1;
     }
 

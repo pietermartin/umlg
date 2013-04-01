@@ -70,8 +70,8 @@
             TumlBaseGridManager.prototype.instantiateGrid.call(this);
         };
 
-        this.addButtons = function () {
-        }
+//        this.addButtons = function () {
+//        }
     }
 
     TumlQueryGridManager.prototype = new TumlBaseGridManager;
@@ -136,8 +136,11 @@
             var tabDiv = $('#' + this.metaForData.name + "ManyComponent");
             $('<div id="serverErrorMsg" />').appendTo(tabDiv);
             $('<div id="myGridManyComponentHeader" class="selectheader" />').append($('<p />').text('Create the values to add.')).appendTo(tabDiv);
-            $('<div id="myGridManyComponent' + this.metaForData.name + '" style="width:auto;height:90%;"></div>').appendTo(tabDiv);
-            $('<div id="pagerManyComponent' + this.metaForData.name + '" style="width:auto;height:20px;"></div>').appendTo(tabDiv);
+
+            var windowHeight = $('.ui-layout-center').height() - 160;
+            $('<div />', {id: 'myGridManyComponent' + this.metaForData.name, style: 'width:auto;height:' + windowHeight + 'px;', class: 'tumlSlickGrid'}).appendTo(tabDiv);
+            $('<div />', {id: 'pagerManyComponent' + this.metaForData.name, style: 'width:auto;height:20px;'}).appendTo(tabDiv);
+
             $('#contextMenu' + this.metaForData.name).remove();
             this.createGrid(result.data/*, this.metaForData*/, tumlUri);
         };
@@ -149,38 +152,38 @@
             TumlBaseGridManager.prototype.instantiateGrid.call(this);
         };
 
-        this.addButtons = function () {
-            $('<button />').text('Save').click(function () {
-                if (self.grid.getEditorLock().commitCurrentEdit()) {
-                    if (self.validateMultiplicity()) {
-                        self.doSave();
-//                        var validationResults = self.validateNewItems(self.dataView.getNewItems());
-//                        if (validationResults.length == 0) {
-//                            self.onManyComponentSaveButtonSuccess.notify({value:self.dataView.getItems(), tabName:self.metaForData.name}, null, self);
-//                        } else {
-//                            var errorMsg = '\n';
-//                            for (var i = 0; i < validationResults.length; i++) {
-//                                errorMsg += validationResults[i].msg + '\n';
-//                            }
-//                            alert('There are validation errors: ' + errorMsg);
-//                        }
-                    }
-                }
-            }).appendTo('#grid-buttonManyComponent' + this.localMetaForData.name);
-            $('<button />').text('Cancel').click(function () {
-                if (self.grid.getEditorLock().commitCurrentEdit()) {
-                    self.cancel(self.dataBeforeEdit);
-                    self.onManyComponentCancelButtonSuccess.notify({value: self.dataView.getItems(), tabName: self.metaForData.name}, null, self);
-                }
-            }).appendTo('#grid-buttonManyComponent' + this.localMetaForData.name);
-            $('<button />').text('Close').click(function () {
-                if (self.grid.getEditorLock().commitCurrentEdit()) {
-                    self.cancel(self.dataBeforeEdit);
-                    self.onManyComponentCloseButtonSuccess.notify({value: self.dataView.getItems(), tabName: self.metaForData.name}, null, self);
-                }
-            }).appendTo('#grid-buttonManyComponent' + this.localMetaForData.name);
-        }
-
+//        this.addButtons = function () {
+//            $('<button />').text('Save').click(function () {
+//                if (self.grid.getEditorLock().commitCurrentEdit()) {
+//                    if (self.validateMultiplicity()) {
+//                        self.doSave();
+////                        var validationResults = self.validateNewItems(self.dataView.getNewItems());
+////                        if (validationResults.length == 0) {
+////                            self.onManyComponentSaveButtonSuccess.notify({value:self.dataView.getItems(), tabName:self.metaForData.name}, null, self);
+////                        } else {
+////                            var errorMsg = '\n';
+////                            for (var i = 0; i < validationResults.length; i++) {
+////                                errorMsg += validationResults[i].msg + '\n';
+////                            }
+////                            alert('There are validation errors: ' + errorMsg);
+////                        }
+//                    }
+//                }
+//            }).appendTo('#grid-buttonManyComponent' + this.localMetaForData.name);
+//            $('<button />').text('Cancel').click(function () {
+//                if (self.grid.getEditorLock().commitCurrentEdit()) {
+//                    self.cancel(self.dataBeforeEdit);
+//                    self.onManyComponentCancelButtonSuccess.notify({value: self.dataView.getItems(), tabName: self.metaForData.name}, null, self);
+//                }
+//            }).appendTo('#grid-buttonManyComponent' + this.localMetaForData.name);
+//            $('<button />').text('Close').click(function () {
+//                if (self.grid.getEditorLock().commitCurrentEdit()) {
+//                    self.cancel(self.dataBeforeEdit);
+//                    self.onManyComponentCloseButtonSuccess.notify({value: self.dataView.getItems(), tabName: self.metaForData.name}, null, self);
+//                }
+//            }).appendTo('#grid-buttonManyComponent' + this.localMetaForData.name);
+//        }
+//
     }
 
     TumlManyComponentGridManager.prototype = new TumlBaseGridManager;
@@ -246,26 +249,26 @@
             TumlBaseGridManager.prototype.instantiateGrid.call(this);
         };
 
-        this.addButtons = function () {
-            $('<button />').text('Select').click(function () {
-                if (self.grid.getEditorLock().commitCurrentEdit()) {
-                    var items = [];
-                    var selectedRows = self.grid.getSelectedRows();
-                    for (var i = 0; i < selectedRows.length; i++) {
-                        var selectedRow = selectedRows[i];
-                        var item = self.dataView.getItem(selectedRow);
-                        items.push(item);
-                    }
-                    self.onSelectButtonSuccess.notify({items: items, tabName: self.metaForData.name}, null, self);
-                }
-            }).appendTo('#grid-buttonLookup' + this.localMetaForData.name);
-
-            $('<button />').text('Cancel').click(function () {
-                if (self.grid.getEditorLock().commitCurrentEdit()) {
-                    self.onSelectCancelButtonSuccess.notify({tabName: self.metaForData.name}, null, self);
-                }
-            }).appendTo('#grid-buttonLookup' + this.localMetaForData.name);
-        };
+//        this.addButtons = function () {
+//            $('<button />').text('Select').click(function () {
+//                if (self.grid.getEditorLock().commitCurrentEdit()) {
+//                    var items = [];
+//                    var selectedRows = self.grid.getSelectedRows();
+//                    for (var i = 0; i < selectedRows.length; i++) {
+//                        var selectedRow = selectedRows[i];
+//                        var item = self.dataView.getItem(selectedRow);
+//                        items.push(item);
+//                    }
+//                    self.onSelectButtonSuccess.notify({items: items, tabName: self.metaForData.name}, null, self);
+//                }
+//            }).appendTo('#grid-buttonLookup' + this.localMetaForData.name);
+//
+//            $('<button />').text('Cancel').click(function () {
+//                if (self.grid.getEditorLock().commitCurrentEdit()) {
+//                    self.onSelectCancelButtonSuccess.notify({tabName: self.metaForData.name}, null, self);
+//                }
+//            }).appendTo('#grid-buttonLookup' + this.localMetaForData.name);
+//        };
 
     }
 
@@ -321,65 +324,65 @@
             TumlBaseGridManager.prototype.instantiateGrid.call(this);
         };
 
-        this.addButtons = function () {
-            if (!this.propertyNavigatingTo.composite) {
-                //if grid is for non composite many include a add button, this will bring up a grid with the values to add
-                var $addButton = $('<button />').text('Add').click(function () {
-                    if (self.grid.getEditorLock().commitCurrentEdit()) {
-                        var adjustedUri = propertyNavigatingTo.tumlLookupUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), self.contextVertexId);
-                        $.ajax({
-                            url: adjustedUri,
-                            type: "GET",
-                            dataType: "json",
-                            contentType: "json",
-                            success: function (lookupResult, textStatus, jqXHR) {
-                                lookupResult.data = self.removeElementsAlreadyInGrid(self.dataView.getNewItems(), lookupResult.data);
-                                lookupResult.data = lookupResult.data.concat(self.dataView.getDeletedItems());
-                                self.onAddButtonSuccess.notify({originalDataView: self.dataView, originalGrid: self.grid, propertyNavigatingTo: propertyNavigatingTo, tumlUri: tumlUri + '_' + self.localMetaForData.name, tabId: self.localMetaForData.name, data: lookupResult}, null, self);
-                            },
-                            error: function (jqXHR, textStatus, errorThrown) {
-                                $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-                            }
-                        });
-                    }
-                }).appendTo('#grid-button' + this.localMetaForData.name);
-            }
-
-            //Save button
-            $('<button />').text('Save').click(function () {
-                if (self.grid.getEditorLock().commitCurrentEdit()) {
-                    if (self.validateMultiplicity()) {
-                        self.doSave();
-                    }
-                } else {
-                    alert("Commit failed on current active cell!");
-                }
-            }).appendTo('#grid-button' + this.localMetaForData.name);
-
-            var $cancelButton = $('<button />').text('Cancel').click(function () {
-                if (self.grid.getEditorLock().commitCurrentEdit()) {
-                    $.ajax({
-                        url: tumlUri,
-                        type: "GET",
-                        dataType: "json",
-                        contentType: "json",
-                        success: function (result, textStatus, jqXHR) {
-                            //Only cancel this tab
-                            for (var i = 0; i < result.length; i++) {
-                                var metaForData = result[i].meta.to;
-                                if (metaForData.name === self.localMetaForData.name) {
-                                    self.cancel(result[i].data);
-                                    return;
-                                }
-                            }
-                        },
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-                        }
-                    });
-                }
-            }).appendTo('#grid-button' + this.localMetaForData.name);
-        }
+//        this.addButtons = function () {
+//            if (!this.propertyNavigatingTo.composite) {
+//                //if grid is for non composite many include a add button, this will bring up a grid with the values to add
+//                var $addButton = $('<button />').text('Add').click(function () {
+//                    if (self.grid.getEditorLock().commitCurrentEdit()) {
+//                        var adjustedUri = propertyNavigatingTo.tumlLookupUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), self.contextVertexId);
+//                        $.ajax({
+//                            url: adjustedUri,
+//                            type: "GET",
+//                            dataType: "json",
+//                            contentType: "json",
+//                            success: function (lookupResult, textStatus, jqXHR) {
+//                                lookupResult.data = self.removeElementsAlreadyInGrid(self.dataView.getNewItems(), lookupResult.data);
+//                                lookupResult.data = lookupResult.data.concat(self.dataView.getDeletedItems());
+//                                self.onAddButtonSuccess.notify({originalDataView: self.dataView, originalGrid: self.grid, propertyNavigatingTo: propertyNavigatingTo, tumlUri: tumlUri + '_' + self.localMetaForData.name, tabId: self.localMetaForData.name, data: lookupResult}, null, self);
+//                            },
+//                            error: function (jqXHR, textStatus, errorThrown) {
+//                                $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
+//                            }
+//                        });
+//                    }
+//                }).appendTo('#grid-button' + this.localMetaForData.name);
+//            }
+//
+//            //Save button
+//            $('<button />').text('Save').click(function () {
+//                if (self.grid.getEditorLock().commitCurrentEdit()) {
+//                    if (self.validateMultiplicity()) {
+//                        self.doSave();
+//                    }
+//                } else {
+//                    alert("Commit failed on current active cell!");
+//                }
+//            }).appendTo('#grid-button' + this.localMetaForData.name);
+//
+//            var $cancelButton = $('<button />').text('Cancel').click(function () {
+//                if (self.grid.getEditorLock().commitCurrentEdit()) {
+//                    $.ajax({
+//                        url: tumlUri,
+//                        type: "GET",
+//                        dataType: "json",
+//                        contentType: "json",
+//                        success: function (result, textStatus, jqXHR) {
+//                            //Only cancel this tab
+//                            for (var i = 0; i < result.length; i++) {
+//                                var metaForData = result[i].meta.to;
+//                                if (metaForData.name === self.localMetaForData.name) {
+//                                    self.cancel(result[i].data);
+//                                    return;
+//                                }
+//                            }
+//                        },
+//                        error: function (jqXHR, textStatus, errorThrown) {
+//                            $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
+//                        }
+//                    });
+//                }
+//            }).appendTo('#grid-button' + this.localMetaForData.name);
+//        }
     }
 
     TumlTabGridManager.prototype = new TumlBaseGridManager;
@@ -431,113 +434,113 @@
             this.updateGrid(result.data);
         };
 
-        this.doSave = function () {
-            //put updated items
-            if (this.dataView.getUpdatedItems().length !== 0) {
-                $.ajax({
-                    url: tumlUri + '_' + self.localMetaForData.name,
-                    type: "PUT",
-                    dataType: "json",
-                    contentType: "json",
-                    data: JSON.stringify(this.dataView.getUpdatedItems()),
-                    success: function (data, textStatus, jqXHR) {
-                        self.onPutSuccess.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name, data: data}, null, self);
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-                        self.onPutFailure.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name}, null, self);
-                    }
-                });
-            }
-            //post new items
-            if (this.dataView.getNewItems().length !== 0) {
-                var validationResults = self.validateNewItems(self.dataView.getNewItems());
-                if (validationResults.length == 0) {
-                    $.ajax({
-                        url: tumlUri + '_' + self.localMetaForData.name,
-                        type: "POST",
-                        dataType: "json",
-                        contentType: "json",
-                        data: JSON.stringify(this.dataView.getNewItems()),
-                        success: function (data, textStatus, jqXHR) {
-                            self.onPostSuccess.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name, data: data}, null, self);
-                        },
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-                            self.onPostFailure.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name}, null, self);
-                        }
-                    });
-                } else {
-                    var errorMsg = '\n';
-                    for (var i = 0; i < validationResults.length; i++) {
-                        errorMsg += validationResults[i].msg + '\n';
-                    }
-                    alert('Validation errors: ' + errorMsg);
-                }
-            }
-            //delete new items
-            if (this.dataView.getDeletedItems().length !== 0) {
-                $.ajax({
-                    url: tumlUri,
-                    type: "DELETE",
-                    dataType: "json",
-                    contentType: "json",
-                    data: JSON.stringify(this.dataView.getDeletedItems()),
-                    success: function (data, textStatus, jqXHR) {
-                        self.onDeleteSuccess.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name, data: data}, null, self);
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-                        self.onDeleteFailure.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name}, null, self);
-                    }
-                });
-            }
-
-//            if ((this.dataView.getUpdatedItems().length != 0 && this.dataView.getNewItems().length != 0) ||
-//                (this.dataView.getUpdatedItems().length != 0 && this.dataView.getDeletedItems().length != 0) ||
-//                (this.dataView.getNewItems().length != 0 && this.dataView.getDeletedItems().length != 0)) {
-//
-//                var overloadedPostUri = this.propertyNavigatingTo.tumlOverloadedPostUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), this.contextVertexId);
-//
-//                var overloadedPostData = {};
-//                var validationErrors = true;
-//                if (this.dataView.getNewItems().length > 0) {
-//                    var validationResults = this.validateNewItems(this.dataView.getNewItems());
-//                    if (validationResults.length == 0) {
-//                        validationErrors = false;
-//                        overloadedPostData['insert'] = this.dataView.getNewItems();
-//                    } else {
-//                        var errorMsg = '\n';
-//                        for (var i = 0; i < validationResults.length; i++) {
-//                            errorMsg += validationResults[i].msg + '\n';
-//                        }
-//                        alert('Validation errors: ' + errorMsg);
+//        this.doSave = function () {
+//            //put updated items
+//            if (this.dataView.getUpdatedItems().length !== 0) {
+//                $.ajax({
+//                    url: tumlUri + '_' + self.localMetaForData.name,
+//                    type: "PUT",
+//                    dataType: "json",
+//                    contentType: "json",
+//                    data: JSON.stringify(this.dataView.getUpdatedItems()),
+//                    success: function (data, textStatus, jqXHR) {
+//                        self.onPutSuccess.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name, data: data}, null, self);
+//                    },
+//                    error: function (jqXHR, textStatus, errorThrown) {
+//                        $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
+//                        self.onPutFailure.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name}, null, self);
 //                    }
-//                }
-//                if (!validationErrors) {
-//                    if (this.dataView.getUpdatedItems().length > 0) {
-//                        overloadedPostData['update'] = this.dataView.getUpdatedItems();
-//                    }
-//                    if (this.dataView.getDeletedItems().length > 0) {
-//                        overloadedPostData['delete'] = this.dataView.getDeletedItems();
-//                    }
+//                });
+//            }
+//            //post new items
+//            if (this.dataView.getNewItems().length !== 0) {
+//                var validationResults = self.validateNewItems(self.dataView.getNewItems());
+//                if (validationResults.length == 0) {
 //                    $.ajax({
-//                        url: overloadedPostUri,
+//                        url: tumlUri + '_' + self.localMetaForData.name,
 //                        type: "POST",
 //                        dataType: "json",
 //                        contentType: "json",
-//                        data: JSON.stringify(overloadedPostData),
+//                        data: JSON.stringify(this.dataView.getNewItems()),
 //                        success: function (data, textStatus, jqXHR) {
-//                            self.onDeleteSuccess.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name, data: data}, null, self);
+//                            self.onPostSuccess.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name, data: data}, null, self);
 //                        },
 //                        error: function (jqXHR, textStatus, errorThrown) {
 //                            $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-//                            self.onDeleteFailure.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name}, null, self);
+//                            self.onPostFailure.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name}, null, self);
 //                        }
 //                    });
+//                } else {
+//                    var errorMsg = '\n';
+//                    for (var i = 0; i < validationResults.length; i++) {
+//                        errorMsg += validationResults[i].msg + '\n';
+//                    }
+//                    alert('Validation errors: ' + errorMsg);
 //                }
 //            }
-        }
+//            //delete new items
+//            if (this.dataView.getDeletedItems().length !== 0) {
+//                $.ajax({
+//                    url: tumlUri,
+//                    type: "DELETE",
+//                    dataType: "json",
+//                    contentType: "json",
+//                    data: JSON.stringify(this.dataView.getDeletedItems()),
+//                    success: function (data, textStatus, jqXHR) {
+//                        self.onDeleteSuccess.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name, data: data}, null, self);
+//                    },
+//                    error: function (jqXHR, textStatus, errorThrown) {
+//                        $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
+//                        self.onDeleteFailure.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name}, null, self);
+//                    }
+//                });
+//            }
+//
+////            if ((this.dataView.getUpdatedItems().length != 0 && this.dataView.getNewItems().length != 0) ||
+////                (this.dataView.getUpdatedItems().length != 0 && this.dataView.getDeletedItems().length != 0) ||
+////                (this.dataView.getNewItems().length != 0 && this.dataView.getDeletedItems().length != 0)) {
+////
+////                var overloadedPostUri = this.propertyNavigatingTo.tumlOverloadedPostUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), this.contextVertexId);
+////
+////                var overloadedPostData = {};
+////                var validationErrors = true;
+////                if (this.dataView.getNewItems().length > 0) {
+////                    var validationResults = this.validateNewItems(this.dataView.getNewItems());
+////                    if (validationResults.length == 0) {
+////                        validationErrors = false;
+////                        overloadedPostData['insert'] = this.dataView.getNewItems();
+////                    } else {
+////                        var errorMsg = '\n';
+////                        for (var i = 0; i < validationResults.length; i++) {
+////                            errorMsg += validationResults[i].msg + '\n';
+////                        }
+////                        alert('Validation errors: ' + errorMsg);
+////                    }
+////                }
+////                if (!validationErrors) {
+////                    if (this.dataView.getUpdatedItems().length > 0) {
+////                        overloadedPostData['update'] = this.dataView.getUpdatedItems();
+////                    }
+////                    if (this.dataView.getDeletedItems().length > 0) {
+////                        overloadedPostData['delete'] = this.dataView.getDeletedItems();
+////                    }
+////                    $.ajax({
+////                        url: overloadedPostUri,
+////                        type: "POST",
+////                        dataType: "json",
+////                        contentType: "json",
+////                        data: JSON.stringify(overloadedPostData),
+////                        success: function (data, textStatus, jqXHR) {
+////                            self.onDeleteSuccess.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name, data: data}, null, self);
+////                        },
+////                        error: function (jqXHR, textStatus, errorThrown) {
+////                            $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
+////                            self.onDeleteFailure.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name}, null, self);
+////                        }
+////                    });
+////                }
+////            }
+//        }
 
         this.validateNewItems = function (newItems) {
             var validationResults = [];
@@ -559,14 +562,14 @@
             return validationResults;
         };
 
-//        this.validateMultiplicity = function () {
-//            if (self.dataView.getItems().length < self.propertyNavigatingTo.lower || (self.propertyNavigatingTo.upper !== -1 && self.dataView.getItems().length > self.propertyNavigatingTo.upper)) {
-//                alert('multiplicity falls outside the valid range [' + self.propertyNavigatingTo.lower + '..' + self.propertyNavigatingTo.upper + ']');
-//                return false;
-//            } else {
-//                return true;
-//            }
-//        }
+        this.validateMultiplicity = function () {
+            if (self.dataView.getItems().length < self.propertyNavigatingTo.lower || (self.propertyNavigatingTo.upper !== -1 && self.dataView.getItems().length > self.propertyNavigatingTo.upper)) {
+                alert('multiplicity falls outside the valid range [' + self.propertyNavigatingTo.lower + '..' + self.propertyNavigatingTo.upper + ']');
+                return false;
+            } else {
+                return true;
+            }
+        }
 
         this.updateGrid = function (data) {
             this.dataView.refreshItem(data);
@@ -795,11 +798,21 @@
 
             this.grid.onActiveCellChanged.subscribe(function (e, args) {
                 if (isClickOnNewRow(args.row, args.cell, self.dataView.getItem(args.row))) {
-                    //Add new row
+
                     self.grid.getEditController().cancelCurrentEdit();
-                    self.dataView.addItem(data[0].data[0]);
-                    //This ensures the cell is in edit mode, i.e. the cursor is ready for typing
+                    var newItem = {};
+//                    for (var i = 0; i < self.grid.getColumns().length; i++) {
+//                        var column = self.grid.getColumns()[i];
+//                        newItem[column.name] = null;
+//                    }
+                    //Generate a fake id, its required for the grid to work nicely
+                    newItem.id = 'fake::' + self.dataView.getItems().length + self.dataView.getNewItems().length + 1;
+                    newItem.qualifiedName = self.localMetaForData.qualifiedName;
+//                    newItem = $.extend(newItem, args.item);
+                    self.dataView.addItem(newItem);
                     self.grid.editActiveCell();
+
+                    self.onAddNewRow.notify(self.dataView.getItems(), e, self);
 
 //            var overloadedPostData = {};
 //            overloadedPostData['insert'] = {qualifiedName: self.localMetaForData.qualifiedName};
@@ -822,7 +835,6 @@
 //                }
 //            });
 
-                    self.onAddNewRow.notify(args, e, self);
                 }
             });
 
@@ -1089,9 +1101,9 @@
         new Slick.Controls.ColumnPicker(this.columns, this.grid, this.options);
     };
 
-    TumlBaseGridManager.prototype.addButtons = function () {
-        alert("addButtons must be overridden");
-    };
+//    TumlBaseGridManager.prototype.addButtons = function () {
+//        alert("addButtons must be overridden");
+//    };
 
     TumlBaseGridManager.prototype.createContextMenu = function () {
         var contextMenuUl = $('<ul />', {id: 'contextMenu' + this.localMetaForData.name, style: 'display:none;position:absolute', class: 'contextMenu'}).appendTo('body');

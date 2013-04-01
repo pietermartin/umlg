@@ -18,10 +18,12 @@ public class TestRestletDefaultDataCreator implements DefaultDataCreator {
         root1.setName("name");
         Class1 class1 = new Class1(root1);
         class1.setName("class1");
-        Component1 component1 = new Component1(class1);
+        Component1AImpl component1 = new Component1AImpl(class1);
+        component1.setName("component1AImpl");
         Class2 class2 = new Class2(root1);
         class2.setName("class2");
-        Component2 component2 = new Component2(class2);
+        Component2AImpl component2 = new Component2AImpl(class2);
+        component2.setName("component2AImpl");
 
         for (int i = 0; i < 2; i++) {
             Human human = new Human(true);

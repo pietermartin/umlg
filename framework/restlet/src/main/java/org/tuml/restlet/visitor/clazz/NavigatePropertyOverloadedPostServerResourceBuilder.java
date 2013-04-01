@@ -396,9 +396,9 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
         tryInstantiate.getTryPart().addToStatements("childResource.fromJson(propertyMap)");
         tryInstantiate.getTryPart().addToStatements("String jsonResult = childResource.toJson()");
         OJIfStatement ifContainsId = new OJIfStatement("propertyMap.containsKey(\"id\")");
-        ifContainsId.addToThenPart("Long tmpId = Long.valueOf((Integer) propertyMap.get(\"id\"))");
+        ifContainsId.addToThenPart("String tmpId = (String)propertyMap.get(\"id\")");
         ifContainsId.addToThenPart("jsonResult = jsonResult.substring(1);");
-        ifContainsId.addToThenPart("jsonResult = \"{\\\"tmpId\\\": \" + tmpId + \", \" + jsonResult;");
+        ifContainsId.addToThenPart("jsonResult = \"{\\\"tmpId\\\": \\\"\" + tmpId + \"\\\", \" + jsonResult;");
         tryInstantiate.getTryPart().addToStatements(ifContainsId);
         if (pWrap.isOrdered()) {
             //TODO

@@ -144,10 +144,10 @@ public class AddTumlUriFieldToRuntimePropertyEnum extends BaseVisitor implements
 
     private void addUriToToJson(Class clazz, OJAnnotatedClass annotatedClass) {
 		if (clazz.getGeneralizations().isEmpty()) {
-			OJAnnotatedOperation toJson = annotatedClass.findOperation("toJson");
+			OJAnnotatedOperation toJson = annotatedClass.findOperation("toJson", new OJPathName("Boolean"));
 			OJSimpleStatement s = (OJSimpleStatement) toJson.getBody().findStatement(ToFromJsonCreator.URI_FOR_RESTFULL);
 			s.setExpression("sb.append(\"\\\"uri\\\": \" + getUri())");
-			OJAnnotatedOperation toJsonWithoutCompositeParent = annotatedClass.findOperation("toJsonWithoutCompositeParent");
+			OJAnnotatedOperation toJsonWithoutCompositeParent = annotatedClass.findOperation("toJsonWithoutCompositeParent", new OJPathName("Boolean"));
 			s = (OJSimpleStatement) toJsonWithoutCompositeParent.getBody().findStatement("uri");
 			s.setExpression("sb.append(\"\\\"uri\\\": \" + getUri())");
 		}

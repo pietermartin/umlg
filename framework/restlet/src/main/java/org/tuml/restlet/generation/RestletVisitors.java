@@ -19,6 +19,8 @@ public class RestletVisitors {
         result.addAll(DefaultVisitors.getDefaultJavaVisitors());
         result.add(new RestletRouterEnumGenerator(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
         result.add(new EntityServerResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+        result.add(new MetaDataResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+
 //        result.add(new NavigatePropertyServerResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
         result.add(new NavigatePropertyOverloadedPostServerResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
 //        result.add(new RootResourceServerResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));

@@ -71,21 +71,8 @@ public class TumlClassOperations extends ClassOperations {
             PropertyWrapper pWrap = new PropertyWrapper(p);
             if ((pWrap.isOne() && !pWrap.isDerived() && !pWrap.isQualifier())
                     || (!pWrap.isDerived() && pWrap.isMany() && (pWrap.isPrimitive() || pWrap.isEnumeration())) ||
-                    (pWrap.isComponent())) {
+                    pWrap.isComponent()) {
                 result.add(p);
-            }
-        }
-        return result;
-    }
-
-    public static Set<Property> getPropertiesForToJson(org.eclipse.uml2.uml.Class clazz) {
-        Set<Property> result = new HashSet<Property>();
-        for (Property p : getAllOwnedProperties(clazz)) {
-            PropertyWrapper pWrap = new PropertyWrapper(p);
-            if (!pWrap.isDerived() && !pWrap.isQualified()) {
-                if (!pWrap.isComposite() && (pWrap.isDataType() || pWrap.isOne())) {
-                    result.add(p);
-                }
             }
         }
         return result;
@@ -102,7 +89,20 @@ public class TumlClassOperations extends ClassOperations {
         return result;
     }
 
-    public static Set<Property> getPrimitiveOrEnumOrComponentsPropertiesExcludingCompositeParent(org.eclipse.uml2.uml.Class clazz) {
+    public static Set<Property> getPropertiesForToJson(org.eclipse.uml2.uml.Class clazz) {
+        Set<Property> result = new HashSet<Property>();
+        for (Property p : getAllOwnedProperties(clazz)) {
+            PropertyWrapper pWrap = new PropertyWrapper(p);
+            if (!pWrap.isDerived() && !pWrap.isQualified()) {
+//                if (!pWrap.isComposite() && (pWrap.isDataType() || pWrap.isOne())) {
+                    result.add(p);
+//                }
+            }
+        }
+        return result;
+    }
+
+    public static Set<Property> getPropertiesForToJsonExcludingCompositeParent(org.eclipse.uml2.uml.Class clazz) {
         Set<Property> result = new HashSet<Property>();
         for (Property p : getAllOwnedProperties(clazz)) {
             PropertyWrapper pWrap = new PropertyWrapper(p);

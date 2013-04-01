@@ -1,5 +1,6 @@
 package org.tuml.restlet.visitor.clazz;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Class;
@@ -78,8 +79,26 @@ public abstract class BaseServerResourceBuilder extends BaseVisitor {
 		return TumlClassOperations.className(clazz) + "ServerResourceImpl";
 	}
 
-	protected String getServerResourceName(Class clazz) {
+    protected String getServerResourceMetatDataImplName(Classifier clazz) {
+        return TumlClassOperations.className(clazz) + "MetaDataServerResourceImpl";
+    }
+
+    protected String getServerResourceName(Classifier clazz) {
 		return TumlClassOperations.className(clazz) + "ServerResource";
 	}
+
+    protected String getServerResourceMetaDataName(Classifier clazz) {
+        return TumlClassOperations.className(clazz) + "MetaDataServerResource";
+    }
+
+    protected void addPrivateIdVariable(Classifier clazz, OJAnnotatedClass annotatedClass) {
+        OJField privateId = new OJField(getIdFieldName(clazz), new OJPathName("Long"));
+        privateId.setVisibility(OJVisibilityKind.PRIVATE);
+        annotatedClass.addToFields(privateId);
+    }
+
+    protected String getIdFieldName(Classifier clazz) {
+        return StringUtils.uncapitalize(TumlClassOperations.className(clazz)).toLowerCase() + "Id";
+    }
 
 }
