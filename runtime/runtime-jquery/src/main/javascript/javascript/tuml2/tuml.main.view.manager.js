@@ -62,6 +62,8 @@
                             //Do not call refreshInternal as it creates all tabs for the meta data
                             var tumlTabViewManager = addTab(tuml.tab.Enum.Properties, result[i], tumlUri, propertyNavigatingTo, {forLookup: false, forManyComponent: false, isOne: true, forCreation: false});
 
+                            postTabCreate(tumlTabViewManager, result[i], true, result[i].meta.to, isForCreation);
+
                             //reorder tabs, make sure new tabs are first
                             reorderTabsAfterAddOneOrMany(savedTumlTabViewManagers);
 
@@ -417,6 +419,22 @@
             //i.e. for every concrete subset of the many property
             for (var i = 0; i < result.length; i++) {
                 var tumlTabViewManager = addTab(tuml.tab.Enum.Properties, result[i], tumlUri, propertyNavigatingTo, {forLookup: false, forManyComponent: false, isOne: isOne, forCreation: forCreation});
+                postTabCreate(tumlTabViewManager, result[i], false, result[i].meta.to, false);
+            }
+        }
+
+        function postTabCreate(tumlTabViewManager, result, isOne, metaForData, forCreation) {
+            tumlTabViewManager.createTab();
+            tabContainer.tabs("option", "active", tumlTabViewManagers.length - 1);
+            tabContainer.tabs("refresh");
+
+            //Create the grid
+//            if (!options.isOne) {
+            if (!isOne) {
+                tumlTabViewManager.createGrid(result);
+            } else {
+//                tumlTabViewManager.createOne(result.data[0], metaForData, options.forCreation);
+                tumlTabViewManager.createOne(result.data[0], metaForData, forCreation);
             }
         }
 
@@ -478,6 +496,7 @@
                                 args.property,
                                 {forLookup: false, forManyComponent: false, forOneComponent: true, isOne: true, forCreation: true}
                             );
+                            postTabCreate(tumlOneComponentTabViewManager, metaDataResponse[0], true, metaDataResponse[0].meta.to, false);
                             tumlTabViewManager.setProperty(args.property);
                             tumlOneComponentTabViewManager.setParentTumlTabViewManager(tumlTabViewManager);
                         },
@@ -505,6 +524,7 @@
                                 args.property,
                                 {forLookup: false, forManyComponent: true, isOne: false, forCreation: true}
                             );
+                            postTabCreate(tumlOneComponentTabViewManager, metaDataResponse[0], true, metaDataResponse[0].meta.to, false);
                             tumlTabViewManager.setProperty(args.property);
                             tumlOneComponentTabViewManager.setParentTumlTabViewManager(tumlTabViewManager);
                         },
@@ -573,6 +593,7 @@
                         args.propertyNavigatingTo,
                         {forLookup: true, forManyComponent: false}
                     );
+                    postTabCreate(tumlLookupTabViewManager, args.data, true, args.data.meta.to, false);
                     tumlLookupTabViewManager.setParentTumlTabViewManager(tumlTabViewManager);
                 });
                 tumlTabViewManager.onClickManyComponentCell.subscribe(function (e, args) {
@@ -593,12 +614,13 @@
                                     args.property,
                                     {forLookup: false, forManyComponent: true, forOneComponent: false, isOne: false, forCreation: true}
                                 );
+                                tumlManyComponentTabViewManager.recreateSubTabContainer(tumlTabViewManager.tabId);
+                                postTabCreate(tumlManyComponentTabViewManager, result[i], false, result[i].meta.to, false);
                                 tumlTabViewManager.setCell(args.cell);
                                 tumlManyComponentTabViewManager.setParentTumlTabViewManager(tumlTabViewManager);
                                 tumlTabViewManager.addToChildTabViewManager(tumlManyComponentTabViewManager);
                             }
-
-                            tabContainer.tabs("disable", tumlTabViewManagers.indexOf(tumlTabViewManager));
+//                            tabContainer.tabs("disable", tumlTabViewManagers.indexOf(tumlTabViewManager));
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
                             alert('error getting ' + property.tumlMetaDataUri + '\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
@@ -687,10 +709,6 @@
                 self.onCancel.notify(args, e, self);
             });
 
-            tumlTabViewManager.createTab();
-            tabContainer.tabs("option", "active", tumlTabViewManagers.length - 1);
-            tabContainer.tabs("refresh");
-
             tumlTabViewManager.onCloseTab.subscribe(function (e, panelId) {
                 for (var j = 0; j < tumlTabViewManagers.length; j++) {
                     if (panelId === tumlTabViewManagers[j].tabDivName) {
@@ -699,13 +717,6 @@
                 }
                 tabContainer.tabs("refresh");
             });
-
-            //Create the grid
-            if (!options.isOne) {
-                tumlTabViewManager.createGrid(result);
-            } else {
-                tumlTabViewManager.createOne(result.data[0], metaForData, options.forCreation);
-            }
 
             return tumlTabViewManager;
 

@@ -15,7 +15,6 @@
         this.tabEnum = tabEnum;
         var tabId;
         var childTumlTabViewManagers = [];
-        var tabContainer = tabContainer;
 
         function getTab(title) {
             return $('#tab-container').tabs('getTab', title);
@@ -35,29 +34,6 @@
 
         if (this.result !== undefined) {
             this.init(tumlUri, result);
-        }
-
-        function recreateSubTabContainer() {
-            if (subTabContainer !== undefined) {
-                subTabContainer.remove();
-            }
-            var tabLayoutDiv = $('#tabs-layout');
-            tabContainer = $('<div />', {id: 'tabs'}).appendTo(tabLayoutDiv);
-            tabContainer.append('<ul />');
-            tabContainer.tabs();
-            tabContainer.find(".ui-tabs-nav").sortable({
-                axis: "x",
-                stop: function () {
-                    tabContainer.tabs("refresh");
-                }
-            });
-            tabContainer.tabs({
-                activate: function (event, ui) {
-                    var queryId = $.data(ui.newPanel[0], 'queryId');
-                    var tabEnum = $.data(ui.newPanel[0], 'tabEnum');
-                    leftMenuManager.refreshQueryMenuCss(queryId, tabEnum);
-                }
-            });
         }
 
         //Public api
@@ -451,13 +427,37 @@
     }
 
     function TumlTabManyComponentViewManager(tabEnum, tabContainer, oneManyOrQuery, tumlUri, result) {
+
+        var subTabContainer = null;
+
         TumlTabManyViewManager.call(this, tabEnum, tabContainer, oneManyOrQuery, tumlUri, result);
 
-        this.setParentTumlTabViewManager = function(tumlTabViewManager) {
+        this.recreateSubTabContainer = function(parentTabId) {
+            var tabLayoutDiv = $('#' + parentTabId);
+            subTabContainer = $('<div />', {id: 'subTabs'}).appendTo(tabLayoutDiv);
+            subTabContainer.append('<ul />');
+            subTabContainer.tabs();
+            subTabContainer.find(".ui-tabs-nav").sortable({
+                axis: "x",
+                stop: function () {
+                    subTabContainer.tabs("refresh");
+                }
+            });
+            subTabContainer.tabs({
+                activate: function (event, ui) {
+                    var queryId = $.data(ui.newPanel[0], 'queryId');
+                    var tabEnum = $.data(ui.newPanel[0], 'tabEnum');
+                    leftMenuManager.refreshQueryMenuCss(queryId, tabEnum);
+                }
+            });
+        }
+
+
+        this.setParentTumlTabViewManager = function (tumlTabViewManager) {
             this.parentTumlTabViewManager = tumlTabViewManager;
         }
 
-        this.getParentTumlTabViewManager = function() {
+        this.getParentTumlTabViewManager = function () {
             return this.parentTumlTabViewManager;
         }
 
@@ -465,6 +465,16 @@
 
     TumlTabManyComponentViewManager.prototype = new Tuml.TumlTabManyViewManager();
     TumlTabManyComponentViewManager.prototype.constructor = Tuml.TumlTabManyViewManager;
+
+    TumlTabManyComponentViewManager.prototype.createTab = function () {
+        if (this.oneManyOrQuery.forManyComponent) {
+            this.tabId = this.result.meta.to.name + "ManyComponent";
+            this.tabTitleName = this.result.meta.to.name + " Many Add";
+        } else {
+            alert('this should not happen!');
+        }
+        TumlBaseTabViewManager.prototype.createTab.call(this);
+    }
 
     TumlTabManyComponentViewManager.prototype.closeTab = function () {
         //Save the many component's data into the parent tabs row's cell
