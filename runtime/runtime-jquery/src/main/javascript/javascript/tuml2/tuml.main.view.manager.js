@@ -62,7 +62,7 @@
                             //Do not call refreshInternal as it creates all tabs for the meta data
                             var tumlTabViewManager = addTab(tuml.tab.Enum.Properties, result[i], tumlUri, propertyNavigatingTo, {forLookup: false, forManyComponent: false, isOne: true, forCreation: false}, tabContainer);
 
-                            postTabCreate(tumlTabViewManager, result[i], true, result[i].meta.to, isForCreation);
+                            postTabCreate(tumlTabViewManager, tabContainer, result[i], true, result[i].meta.to, isForCreation, tumlTabViewManagers.length - 1);
 
                             //reorder tabs, make sure new tabs are first
                             reorderTabsAfterAddOneOrMany(savedTumlTabViewManagers);
@@ -419,21 +419,17 @@
             //i.e. for every concrete subset of the many property
             for (var i = 0; i < result.length; i++) {
                 var tumlTabViewManager = addTab(tuml.tab.Enum.Properties, result[i], tumlUri, propertyNavigatingTo, {forLookup: false, forManyComponent: false, isOne: isOne, forCreation: forCreation}, tabContainer);
-                postTabCreate(tumlTabViewManager, result[i], false, result[i].meta.to, false);
+                postTabCreate(tumlTabViewManager, tabContainer, result[i], false, result[i].meta.to, false, tumlTabViewManagers.length - 1);
             }
         }
 
-        function postTabCreate(tumlTabViewManager, result, isOne, metaForData, forCreation) {
+        function postTabCreate(tumlTabViewManager, tabContainer, result, isOne, metaForData, forCreation, activeIndex) {
             tumlTabViewManager.createTab();
-            tabContainer.tabs("option", "active", tumlTabViewManagers.length - 1);
-            tabContainer.tabs("refresh");
-
+            tabContainer.tabs("option", "active", activeIndex);
             //Create the grid
-//            if (!options.isOne) {
             if (!isOne) {
                 tumlTabViewManager.createGrid(result);
             } else {
-//                tumlTabViewManager.createOne(result.data[0], metaForData, options.forCreation);
                 tumlTabViewManager.createOne(result.data[0], metaForData, forCreation);
             }
         }
@@ -497,7 +493,7 @@
                                 {forLookup: false, forManyComponent: false, forOneComponent: true, isOne: true, forCreation: true},
                                 tumlTabViewManager.createSubTabContainer()
                             );
-                            postTabCreate(tumlOneComponentTabViewManager, metaDataResponse[0], true, metaDataResponse[0].meta.to, false);
+                            postTabCreate(tumlOneComponentTabViewManager, tabContainer, metaDataResponse[0], true, metaDataResponse[0].meta.to, false, tumlTabViewManagers.length - 1);
                             tumlTabViewManager.setProperty(args.property);
                             tumlOneComponentTabViewManager.setParentTumlTabViewManager(tumlTabViewManager);
                         },
@@ -525,7 +521,7 @@
                                 args.property,
                                 {forLookup: false, forManyComponent: true, isOne: false, forCreation: true}
                             );
-                            postTabCreate(tumlOneComponentTabViewManager, metaDataResponse[0], true, metaDataResponse[0].meta.to, false);
+                            postTabCreate(tumlOneComponentTabViewManager, tabContainer, metaDataResponse[0], true, metaDataResponse[0].meta.to, false, tumlTabViewManagers.length - 1);
                             tumlTabViewManager.setProperty(args.property);
                             tumlOneComponentTabViewManager.setParentTumlTabViewManager(tumlTabViewManager);
                         },
@@ -594,7 +590,7 @@
                         args.propertyNavigatingTo,
                         {forLookup: true, forManyComponent: false}
                     );
-                    postTabCreate(tumlLookupTabViewManager, args.data, true, args.data.meta.to, false);
+                    postTabCreate(tumlLookupTabViewManager, tabContainer, args.data, true, args.data.meta.to, false, tumlTabViewManagers.length - 1);
                     tumlLookupTabViewManager.setParentTumlTabViewManager(tumlTabViewManager);
                 });
                 tumlTabViewManager.onClickManyComponentCell.subscribe(function (e, args) {
@@ -607,6 +603,7 @@
                         success: function (result, textStatus, jqXHR) {
 
                             for (var i = 0; i < result.length; i++) {
+                                var subTabContainer = tumlTabViewManager.createOrReturnSubTabContainer();
                                 result[i].data = args.data;
                                 var tumlManyComponentTabViewManager = addTab(
                                     tuml.tab.Enum.Properties,
@@ -614,11 +611,11 @@
                                     args.tumlUri,
                                     args.property,
                                     {forLookup: false, forManyComponent: true, forOneComponent: false, isOne: false, forCreation: true},
-                                    tumlTabViewManager.createSubTabContainer()
+                                    subTabContainer
                                 );
-                                postTabCreate(tumlManyComponentTabViewManager, result[i], false, result[i].meta.to, false);
-                                tumlTabViewManager.setCell(args.cell);
                                 tumlManyComponentTabViewManager.setParentTumlTabViewManager(tumlTabViewManager);
+                                postTabCreate(tumlManyComponentTabViewManager, subTabContainer, result[i], false, result[i].meta.to, false, i);
+                                tumlTabViewManager.setCell(args.cell);
                                 tumlTabViewManager.addToChildTabViewManager(tumlManyComponentTabViewManager);
                             }
 //                            tabContainer.tabs("disable", tumlTabViewManagers.indexOf(tumlTabViewManager));
@@ -712,10 +709,11 @@
 
             tumlTabViewManager.onCloseTab.subscribe(function (e, panelId) {
                 for (var j = 0; j < tumlTabViewManagers.length; j++) {
-                    if (panelId === tumlTabViewManagers[j].tabDivName) {
-                        closeTab(tumlTabViewManagers[j]);
-                    }
+//                    if (panelId === tumlTabViewManagers[j].tabDivName) {
+//                        closeTab(tumlTabViewManagers[j]);
+//                    }
                 }
+                closeTab(tumlTabViewManager);
                 tabContainer.tabs("refresh");
             });
 
