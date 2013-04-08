@@ -60,7 +60,7 @@
                             //If property is a one then there is n navigating from
                             leftMenuManager.refresh(metaDataNavigatingTo, metaDataNavigatingTo, contextVertexId);
                             //Do not call refreshInternal as it creates all tabs for the meta data
-                            var tumlTabViewManager = addTab(tuml.tab.Enum.Properties, result[i], tumlUri, propertyNavigatingTo, {forLookup: false, forManyComponent: false, isOne: true, forCreation: false});
+                            var tumlTabViewManager = addTab(tuml.tab.Enum.Properties, result[i], tumlUri, propertyNavigatingTo, {forLookup: false, forManyComponent: false, isOne: true, forCreation: false}, tabContainer);
 
                             postTabCreate(tumlTabViewManager, result[i], true, result[i].meta.to, isForCreation);
 
@@ -418,7 +418,7 @@
             //A tab is created for every element in the array,
             //i.e. for every concrete subset of the many property
             for (var i = 0; i < result.length; i++) {
-                var tumlTabViewManager = addTab(tuml.tab.Enum.Properties, result[i], tumlUri, propertyNavigatingTo, {forLookup: false, forManyComponent: false, isOne: isOne, forCreation: forCreation});
+                var tumlTabViewManager = addTab(tuml.tab.Enum.Properties, result[i], tumlUri, propertyNavigatingTo, {forLookup: false, forManyComponent: false, isOne: isOne, forCreation: forCreation}, tabContainer);
                 postTabCreate(tumlTabViewManager, result[i], false, result[i].meta.to, false);
             }
         }
@@ -438,7 +438,7 @@
             }
         }
 
-        function addTab(tabEnum, result, tumlUri, propertyNavigatingTo, options) {
+        function addTab(tabEnum, result, tumlUri, propertyNavigatingTo, options, tabContainer) {
             var metaForData = result.meta.to;
 
             var tumlTabViewManager;
@@ -494,7 +494,8 @@
                                 metaDataResponse[0],
                                 args.tumlUri,
                                 args.property,
-                                {forLookup: false, forManyComponent: false, forOneComponent: true, isOne: true, forCreation: true}
+                                {forLookup: false, forManyComponent: false, forOneComponent: true, isOne: true, forCreation: true},
+                                tumlTabViewManager.createSubTabContainer()
                             );
                             postTabCreate(tumlOneComponentTabViewManager, metaDataResponse[0], true, metaDataResponse[0].meta.to, false);
                             tumlTabViewManager.setProperty(args.property);
@@ -612,9 +613,9 @@
                                     result[i],
                                     args.tumlUri,
                                     args.property,
-                                    {forLookup: false, forManyComponent: true, forOneComponent: false, isOne: false, forCreation: true}
+                                    {forLookup: false, forManyComponent: true, forOneComponent: false, isOne: false, forCreation: true},
+                                    tumlTabViewManager.createSubTabContainer()
                                 );
-                                tumlManyComponentTabViewManager.recreateSubTabContainer(tumlTabViewManager.tabId);
                                 postTabCreate(tumlManyComponentTabViewManager, result[i], false, result[i].meta.to, false);
                                 tumlTabViewManager.setCell(args.cell);
                                 tumlManyComponentTabViewManager.setParentTumlTabViewManager(tumlTabViewManager);

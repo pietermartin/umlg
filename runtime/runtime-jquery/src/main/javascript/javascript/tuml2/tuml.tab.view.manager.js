@@ -13,6 +13,7 @@
     function TumlBaseTabViewManager(tabEnum, tabContainer, tumlUri, result) {
 
         this.tabEnum = tabEnum;
+        this.parentTabContainer = tabContainer;
         var tabId;
         var childTumlTabViewManagers = [];
 
@@ -30,6 +31,27 @@
 
         function getChildTumlTabViewManagers() {
             return childTumlTabViewManagers;
+        }
+
+        this.createSubTabContainer = function() {
+            var tabLayoutDiv = $('#' + this.tabDivName);
+            var subTabContainer = $('<div />', {id: 'subTabs'}).appendTo(tabLayoutDiv);
+            subTabContainer.append('<ul />');
+            subTabContainer.tabs();
+            subTabContainer.find(".ui-tabs-nav").sortable({
+                axis: "x",
+                stop: function () {
+                    subTabContainer.tabs("refresh");
+                }
+            });
+            subTabContainer.tabs({
+                activate: function (event, ui) {
+                    var queryId = $.data(ui.newPanel[0], 'queryId');
+                    var tabEnum = $.data(ui.newPanel[0], 'tabEnum');
+                    leftMenuManager.refreshQueryMenuCss(queryId, tabEnum);
+                }
+            });
+            return subTabContainer;
         }
 
         if (this.result !== undefined) {
@@ -71,8 +93,6 @@
             "onDeleteOneSuccess": new Tuml.Event(),
 
             //Other events
-//            "setParentTumlTabViewManager": setParentTumlTabViewManager,
-//            "getParentTumlTabViewManager": getParentTumlTabViewManager,
             "addToChildTabViewManager": addToChildTabViewManager,
             "getChildTumlTabViewManagers": getChildTumlTabViewManagers,
             "disableTab": disableTab,
@@ -88,7 +108,7 @@
     TumlBaseTabViewManager.prototype.closeTab = function () {
         $("#" + this.tabId).remove();
         this.li.remove();
-        this.tabContainer.tabs("refresh");
+        this.parentTabContainer.tabs("refresh");
     }
 
     TumlBaseTabViewManager.prototype.init = function (tumlUri, result) {
@@ -108,11 +128,11 @@
             self.onCloseTab.notify(self.tabDivName);
         });
 
-        this.tabContainer.find(".ui-tabs-nav").append(this.li);
+        this.parentTabContainer.find(".ui-tabs-nav").append(this.li);
         var divPanel = $('<div />', {id: this.tabId});
-        this.tabContainer.append(divPanel);
+        this.parentTabContainer.append(divPanel);
         $.data(divPanel[0], 'tabEnum', this.tabEnum);
-        this.tabContainer.tabs("refresh");
+        this.parentTabContainer.tabs("refresh");
         return divPanel;
     }
 
@@ -129,7 +149,6 @@
         });
 
         var self = this;
-        this.tabContainer = tabContainer;
         if (queryId !== undefined) {
             this.queryId = queryId;
         }
@@ -169,7 +188,7 @@
             this.tumlTabQueryManager.createQuery(self.tabDivName, oclExecuteUri, query, post);
         }
 
-        TumlBaseTabViewManager.call(this, tabEnum, this.tabContainer);
+        TumlBaseTabViewManager.call(this, tabEnum, tabContainer);
 
     }
 
@@ -185,7 +204,6 @@
 
     function TumlTabOneViewManager(tabEnum, tabContainer, oneManyOrQuery, tumlUri, result) {
         this.oneManyOrQuery = oneManyOrQuery;
-        this.tabContainer = tabContainer;
         this.result = result;
 
         //Public api
@@ -194,7 +212,7 @@
             "onClickOneComponent": new Tuml.Event(),
             "onClickManyComponent": new Tuml.Event()
         });
-        TumlBaseTabViewManager.call(this, tabEnum, this.tabContainer, tumlUri, result);
+        TumlBaseTabViewManager.call(this, tabEnum, tabContainer, tumlUri, result);
     }
 
     TumlTabOneViewManager.prototype = new Tuml.TumlBaseTabViewManager;
@@ -271,10 +289,9 @@
     function TumlTabManyViewManager(tabEnum, tabContainer, oneManyOrQuery, tumlUri, result) {
         var self = this;
         this.oneManyOrQuery = oneManyOrQuery;
-        this.tabContainer = tabContainer;
         this.result = result;
         this.tumlTabGridManager = null;
-        TumlBaseTabViewManager.call(this, tabEnum, this.tabContainer, tumlUri, result);
+        TumlBaseTabViewManager.call(this, tabEnum, tabContainer, tumlUri, result);
     }
 
     TumlTabManyViewManager.prototype = new Tuml.TumlBaseTabViewManager();
@@ -428,30 +445,7 @@
 
     function TumlTabManyComponentViewManager(tabEnum, tabContainer, oneManyOrQuery, tumlUri, result) {
 
-        var subTabContainer = null;
-
         TumlTabManyViewManager.call(this, tabEnum, tabContainer, oneManyOrQuery, tumlUri, result);
-
-        this.recreateSubTabContainer = function(parentTabId) {
-            var tabLayoutDiv = $('#' + parentTabId);
-            subTabContainer = $('<div />', {id: 'subTabs'}).appendTo(tabLayoutDiv);
-            subTabContainer.append('<ul />');
-            subTabContainer.tabs();
-            subTabContainer.find(".ui-tabs-nav").sortable({
-                axis: "x",
-                stop: function () {
-                    subTabContainer.tabs("refresh");
-                }
-            });
-            subTabContainer.tabs({
-                activate: function (event, ui) {
-                    var queryId = $.data(ui.newPanel[0], 'queryId');
-                    var tabEnum = $.data(ui.newPanel[0], 'tabEnum');
-                    leftMenuManager.refreshQueryMenuCss(queryId, tabEnum);
-                }
-            });
-        }
-
 
         this.setParentTumlTabViewManager = function (tumlTabViewManager) {
             this.parentTumlTabViewManager = tumlTabViewManager;
@@ -473,7 +467,28 @@
         } else {
             alert('this should not happen!');
         }
-        TumlBaseTabViewManager.prototype.createTab.call(this);
+//        TumlBaseTabViewManager.prototype.createTab.call(this);
+
+        TumlBaseTabViewManager.prototype.createTab = function () {
+            var self = this;
+            var tabTemplate = "<li id='li" + this.tabId + "'><a href='#{href}'>#{label}</a> <span class='ui-icon ui-icon-close'>Remove Tab</span></li>";
+            var label = this.tabTitleName, id = this.tabId;
+            this.li = $(tabTemplate.replace(/#\{href\}/g, "#" + id).replace(/#\{label\}/g, label));
+
+            // close icon: removing the tab on click
+            this.li.find("span.ui-icon-close").click(function () {
+                self.onCloseTab.notify(self.tabDivName);
+            });
+
+            this.parentTabContainer.find(".ui-tabs-nav").append(this.li);
+            var divPanel = $('<div />', {id: this.tabId});
+            this.parentTabContainer.append(divPanel);
+            $.data(divPanel[0], 'tabEnum', this.tabEnum);
+            this.parentTabContainer.tabs("refresh");
+            return divPanel;
+        }
+
+
     }
 
     TumlTabManyComponentViewManager.prototype.closeTab = function () {
