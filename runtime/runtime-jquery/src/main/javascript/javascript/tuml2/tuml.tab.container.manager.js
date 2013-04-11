@@ -8,6 +8,7 @@
 
     function TumlTabContainerManager() {
 
+        self = this;
         this.tumlTabViewManagers = [];
         this.tabContainer = null;
 
@@ -20,7 +21,7 @@
     }
 
     TumlTabContainerManager.prototype.recreateTabContainer = function () {
-        if (this.tabContainer !== undefined) {
+        if (this.tabContainer !== null) {
             this.tabContainer.remove();
         }
         var tabLayoutDiv = $('#tabs-layout');
@@ -30,7 +31,7 @@
         this.tabContainer.find(".ui-tabs-nav").sortable({
             axis: "x",
             stop: function () {
-                tabContainer.tabs("refresh");
+                self.tabContainer.tabs("refresh");
             }
         });
         this.tabContainer.tabs({
@@ -41,5 +42,12 @@
             }
         });
     }
+
+    TumlTabContainerManager.prototype.clearAllTabs = function () {
+        for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
+            this.tumlTabViewManagers[i].clear();
+        }
+    }
+
 
 })(jQuery);

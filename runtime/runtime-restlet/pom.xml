@@ -15,7 +15,7 @@
 		</repository>
 	</repositories>
     <properties>
-        <restlet.version>2.2-M1</restlet.version>
+        <restlet.version>2.2-M3</restlet.version>
     </properties>
 	<dependencies>
 		<dependency>

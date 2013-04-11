@@ -20,7 +20,7 @@
         function init() {
         }
 
-        function refresh(tumlUri, result) {
+        this.refresh = function (tumlUri, result) {
             var qualifiedName = result[0].meta.qualifiedName;
             var metaDataNavigatingTo = result[0].meta.to;
             var metaDataNavigatingFrom = result[0].meta.from;
@@ -30,7 +30,7 @@
                 //Property is a many
 
                 var newContextVertexId = retrieveVertexId(tumlUri);
-                var savedTumlTabViewManagers = clearTabsOnAddOneOrMany(newContextVertexId);
+                var savedTumlTabViewManagers = this.clearTabsOnAddOneOrMany(newContextVertexId);
 
                 leftMenuManager.refresh(metaDataNavigatingFrom, metaDataNavigatingTo, contextVertexId);
                 refreshInternal(tumlUri, result, propertyNavigatingTo, false);
@@ -53,7 +53,7 @@
                             metaDataNavigatingTo = result[i].meta.to;
                             qualifiedName = result[i].meta.qualifiedName;
                             var newContextVertexId = result[i].data[0].id;
-                            var savedTumlTabViewManagers = clearTabsOnAddOneOrMany(newContextVertexId);
+                            var savedTumlTabViewManagers = this.clearTabsOnAddOneOrMany(newContextVertexId);
 
                             //If property is a one then there is n navigating from
                             leftMenuManager.refresh(metaDataNavigatingTo, metaDataNavigatingTo, contextVertexId);
@@ -97,17 +97,145 @@
                 addDefaultQueryTab();
             }
 
-            tabContainer.tabs("option", "active", 0);
+            this.tabContainer.tabs("option", "active", 0);
 
             $('#validation-warning').children().remove();
             $('#navigation-qualified-name').children().remove();
             var propertyDescription = qualifiedName;
-            if (propertyNavigatingTo !== undefined || propertyNavigatingTo !== null) {
+            if (propertyNavigatingTo !== undefined && propertyNavigatingTo !== null) {
                 propertyDescription += '  -  ' + createPropertyDescriptionHeading(propertyNavigatingTo);
             }
             $('#navigation-qualified-name').append($('<span />').text(propertyDescription));
             addButtons();
             $('body').layout().resizeAll();
+        }
+
+        this.clearTabsOnAddOneOrMany = function(newContextVertexId) {
+            if (newContextVertexId === undefined && contextVertexId === null) {
+                contextChanged = true;
+            } else if (contextVertexId === undefined && newContextVertexId === null) {
+                contextChanged = true;
+            } else if (contextVertexId === undefined && newContextVertexId === undefined) {
+                contextChanged = true;
+            } else {
+                contextChanged = newContextVertexId !== contextVertexId;
+            }
+            contextVertexId = newContextVertexId;
+            if (contextChanged) {
+                Tuml.TumlTabContainerManager.prototype.clearAllTabs.call(this);
+                Tuml.TumlTabContainerManager.prototype.recreateTabContainer.call(this);
+            } else {
+                var tumlTabViewManagersToClose = [];
+                //Remove property tabs only, query tabs remain for the context
+                for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
+                    var tumlTabViewManager = this.tumlTabViewManagers[i];
+                    if (tumlTabViewManager instanceof  Tuml.TumlTabOneViewManager || tumlTabViewManager instanceof  Tuml.TumlTabManyViewManager) {
+                        tumlTabViewManagersToClose.push(tumlTabViewManager);
+                    }
+                }
+                for (var i = 0; i < tumlTabViewManagersToClose.length; i++) {
+                    tumlTabViewManagersToClose[i].closeTab();
+                }
+            }
+            //Save current tabs to help with reordering 2 lines down
+            var savedTumlTabViewManagers = [];
+            for (var i = 0; i < self.tumlTabViewManagers.length; i++) {
+                var tumlTabViewManager = self.tumlTabViewManagers[i];
+                savedTumlTabViewManagers.push(tumlTabViewManager);
+            }
+            return savedTumlTabViewManagers;
+        }
+
+        this.addQueryTab = function(post, query, reorder) {
+            if (reorder === undefined) {
+                reorder = true;
+            }
+            //Check is there is already a tab open for this query
+            var tumlTabViewManagerQuery;
+            var tabIndex = 0;
+            for (var j = 0; j < this.tumlTabViewManagers.length; j++) {
+                if (this.tumlTabViewManagers[j].tabDivName == query.getDivName()) {
+                    tumlTabViewManagerQuery = this.tumlTabViewManagers[j];
+                    tabIndex = j;
+                    break;
+                }
+            }
+            if (tumlTabViewManagerQuery === undefined) {
+                if (query.queryType === undefined) {
+                    tumlTabViewManagerQuery = new Tuml.TumlTabQueryViewManager(tuml.tab.Enum.Properties, this.tabContainer, instanceQueryTumlUri, classQueryTumlUri, query.getDivName(), query.name, query.id);
+                } else if (query.queryType === 'instanceQuery') {
+                    tumlTabViewManagerQuery = new Tuml.TumlTabQueryViewManager(tuml.tab.Enum.InstanceQueries, this.tabContainer, instanceQueryTumlUri, '', query.getDivName(), query.name, query.id);
+                } else {
+                    tumlTabViewManagerQuery = new Tuml.TumlTabQueryViewManager(tuml.tab.Enum.ClassQueries, this.tabContainer, '', classQueryTumlUri, query.getDivName(), query.name, query.id);
+                }
+                tumlTabViewManagerQuery.createTab();
+
+                if (query.id === -1) {
+                    this.tumlTabViewManagers.push(tumlTabViewManagerQuery);
+                    reorderTabs();
+                    this.tabContainer.tabs("option", "active", this.tumlTabViewManagers.length - 1);
+                } else {
+                    this.tumlTabViewManagers.splice(this.tumlTabViewManagers.length - 1, 0, tumlTabViewManagerQuery);
+                    reorderTabs();
+                    this.tabContainer.tabs("option", "active", this.tumlTabViewManagers.length - 2);
+                }
+
+                tumlTabViewManagerQuery.createQuery(oclExecuteUri, query, post);
+                tumlTabViewManagerQuery.onPutInstanceQuerySuccess.subscribe(function (e, args) {
+                    tumlTabViewManagerQuery.closeTab();
+                    var newTumlTabViewManager = this.addQueryTab(false, new Tuml.Query(args.query.id, args.query.name, args.query.name, args.query.queryString, args.query.queryEnum, args.gridData, args.queryType));
+                    leftMenuManager.refreshInstanceQuery(args.query.id);
+                });
+                tumlTabViewManagerQuery.onPostInstanceQuerySuccess.subscribe(function (e, args) {
+                    var previousIndex = self.tumlTabViewManagers.indexOf(tumlTabViewManagerQuery);
+                    tumlTabViewManagerQuery.closeTab();
+                    addDefaultQueryTab(false);
+                    var newTumlTabViewManager = this.addQueryTab(false, new Tuml.Query(args.query.id, args.query.name, args.query.name, args.query.queryString, args.query.queryEnum, args.gridData, args.queryType));
+
+                    //place it back at the previousIndex
+                    var currentIndex = self.tumlTabViewManagers.indexOf(newTumlTabViewManager);
+                    this.tumlTabViewManagers.splice(currentIndex, 1);
+                    this.tumlTabViewManagers.splice(previousIndex, 0, newTumlTabViewManager);
+                    this.tabContainer.tabs("option", "active", previousIndex);
+
+                    leftMenuManager.refreshInstanceQuery(args.query.id);
+                });
+                tumlTabViewManagerQuery.onPutClassQuerySuccess.subscribe(function (e, args) {
+                    tumlTabViewManagerQuery.closeTab();
+                    var newTumlTabViewManager = this.addQueryTab(false, new Tuml.Query(args.query.id, args.query.name, args.query.name, args.query.queryString, args.query.queryEnum, args.gridData, args.queryType));
+                    leftMenuManager.refreshClassQuery(args.query.id);
+                });
+                tumlTabViewManagerQuery.onPostClassQuerySuccess.subscribe(function (e, args) {
+                    var previousIndex = self.tumlTabViewManagers.indexOf(tumlTabViewManagerQuery);
+                    closeTab(tumlTabViewManagerQuery);
+                    addDefaultQueryTab(false);
+                    var newTumlTabViewManager = addQueryTab(false, new Tuml.Query(args.query.id, args.query.name, args.query.name, args.query.queryString, args.query.queryEnum, args.gridData, args.queryType));
+
+                    //place it back at the previousIndex
+                    var currentIndex = self.tumlTabViewManagers.indexOf(newTumlTabViewManager);
+                    self.tumlTabViewManagers.splice(currentIndex, 1);
+                    self.tumlTabViewManagers.splice(previousIndex, 0, newTumlTabViewManager);
+                    tabContainer.tabs("option", "active", previousIndex);
+
+                    leftMenuManager.refreshClassQuery(args.query.id);
+                });
+                tumlTabViewManagerQuery.onDeleteQuerySuccess.subscribe(function (e, args) {
+                    closeTab(tumlTabViewManagerQuery);
+                    leftMenuManager.refreshQuery();
+                });
+                tumlTabViewManagerQuery.onContextMenuClickLink.subscribe(function (e, args) {
+                    self.onContextMenuClickLink.notify(args, e, self);
+                });
+                tumlTabViewManagerQuery.onSelfCellClick.subscribe(function (e, args) {
+                    self.onSelfCellClick.notify(args, e, self);
+                });
+
+            } else {
+                //Just make the tab active
+                tabContainer.tabs("option", "active", self.tumlTabViewManagers.indexOf(tumlTabViewManagerQuery));
+            }
+            return tumlTabViewManagerQuery;
+
         }
 
         function createPropertyDescriptionHeading(propertyNavigatingTo) {
@@ -123,42 +251,6 @@
 //            var derived = 'derived: ' + propertyNavigatingTo.derived;
             var association = 'association: ' + (propertyNavigatingTo.composite ? 'composite' : 'non composite');
             return multiplicity + ', ' + unique + ', ' + ordered + ', ' + association;
-        }
-
-        function clearTabsOnAddOneOrMany(newContextVertexId) {
-            if (newContextVertexId === undefined && contextVertexId === null) {
-                contextChanged = true;
-            } else if (contextVertexId === undefined && newContextVertexId === null) {
-                contextChanged = true;
-            } else if (contextVertexId === undefined && newContextVertexId === undefined) {
-                contextChanged = true;
-            } else {
-                contextChanged = newContextVertexId !== contextVertexId;
-            }
-            contextVertexId = newContextVertexId;
-            if (contextChanged) {
-                self.clear();
-                Tuml.TumlTabContainerManager.prototype.recreateTabContainer.call(this);
-            } else {
-                var tumlTabViewManagersToClose = [];
-                //Remove property tabs only, query tabs remain for the context
-                for (var i = 0; i < self.tumlTabViewManagers.length; i++) {
-                    var tumlTabViewManager = self.tumlTabViewManagers[i];
-                    if (tumlTabViewManager instanceof  Tuml.TumlTabOneViewManager || tumlTabViewManager instanceof  Tuml.TumlTabManyViewManager) {
-                        self.tumlTabViewManagersToClose.push(tumlTabViewManager);
-                    }
-                }
-                for (var i = 0; i < self.tumlTabViewManagersToClose.length; i++) {
-                    closeTab(tumlTabViewManagersToClose[i]);
-                }
-            }
-            //Save current tabs to help with reordering 2 lines down
-            var savedTumlTabViewManagers = [];
-            for (var i = 0; i < self.tumlTabViewManagers.length; i++) {
-                var tumlTabViewManager = self.tumlTabViewManagers[i];
-                savedTumlTabViewManagers.push(tumlTabViewManager);
-            }
-            return savedTumlTabViewManagers;
         }
 
         function reorderTabsAfterAddOneOrMany(savedTumlTabViewManagers) {
@@ -190,7 +282,7 @@
         }
 
         function addDefaultQueryTab(reorder) {
-            addQueryTab(true, new Tuml.Query(-1, 'New Query', 'New Query Description', 'self.name', 'ocl'), reorder);
+            self.addQueryTab(true, new Tuml.Query(-1, 'New Query', 'New Query Description', 'self.name', 'ocl'), reorder);
         }
 
         function updateValidationWarningHeader() {
@@ -393,8 +485,8 @@
             //A tab is created for every element in the array,
             //i.e. for every concrete subset of the many property
             for (var i = 0; i < result.length; i++) {
-                var tumlTabViewManager = addTab(tuml.tab.Enum.Properties, result[i], tumlUri, propertyNavigatingTo, {forLookup: false, forManyComponent: false, isOne: isOne, forCreation: forCreation}, tabContainer);
-                postTabCreate(tumlTabViewManager, tabContainer, result[i], false, result[i].meta.to, false, self.tumlTabViewManagers.length - 1);
+                var tumlTabViewManager = addTab(tuml.tab.Enum.Properties, result[i], tumlUri, propertyNavigatingTo, {forLookup: false, forManyComponent: false, isOne: isOne, forCreation: forCreation}, self.tabContainer);
+                postTabCreate(tumlTabViewManager, self.tabContainer, result[i], false, result[i].meta.to, false, self.tumlTabViewManagers.length - 1);
             }
         }
 
@@ -441,11 +533,11 @@
                     self.onPutOneSuccess.notify(args, e, self);
                 });
                 tumlTabViewManager.onPostOneSuccess.subscribe(function (e, args) {
-                    self.clear();
+                    Tuml.TumlTabContainerManager.prototype.clearAllTabs.call(this);
                     self.onPostOneSuccess.notify(args, e, self);
                 });
                 tumlTabViewManager.onDeleteOneSuccess.subscribe(function (e, args) {
-                    self.clear();
+                    Tuml.TumlTabContainerManager.prototype.clearAllTabs.call(this);
                     self.onDeleteOneSuccess.notify(args, e, self);
                 });
                 tumlTabViewManager.onClickOneComponent.subscribe(function (e, args) {
@@ -699,7 +791,7 @@
         }
 
         function reorderTabs() {
-            var tabsNav = tabContainer.find(".ui-tabs-nav");
+            var tabsNav = self.tabContainer.find(".ui-tabs-nav");
             var first = true;
             for (var j = 0; j < self.tumlTabViewManagers.length; j++) {
                 var li = $('#li' + self.tumlTabViewManagers[j].tabDivName);
@@ -711,99 +803,7 @@
                 tabsNav = li;
                 first = false;
             }
-            tabContainer.tabs("refresh");
-        }
-
-        function addQueryTab(post, query, reorder) {
-            if (reorder === undefined) {
-                reorder = true;
-            }
-            //Check is there is already a tab open for this query
-            var tumlTabViewManagerQuery;
-            var tabIndex = 0;
-            for (var j = 0; j < self.tumlTabViewManagers.length; j++) {
-                if (self.tumlTabViewManagers[j].tabDivName == query.getDivName()) {
-                    tumlTabViewManagerQuery = self.tumlTabViewManagers[j];
-                    tabIndex = j;
-                    break;
-                }
-            }
-            if (tumlTabViewManagerQuery === undefined) {
-                if (query.queryType === undefined) {
-                    tumlTabViewManagerQuery = new Tuml.TumlTabQueryViewManager(tuml.tab.Enum.Properties, tabContainer, instanceQueryTumlUri, classQueryTumlUri, query.getDivName(), query.name, query.id);
-                } else if (query.queryType === 'instanceQuery') {
-                    tumlTabViewManagerQuery = new Tuml.TumlTabQueryViewManager(tuml.tab.Enum.InstanceQueries, tabContainer, instanceQueryTumlUri, '', query.getDivName(), query.name, query.id);
-                } else {
-                    tumlTabViewManagerQuery = new Tuml.TumlTabQueryViewManager(tuml.tab.Enum.ClassQueries, tabContainer, '', classQueryTumlUri, query.getDivName(), query.name, query.id);
-                }
-                tumlTabViewManagerQuery.createTab();
-
-                if (query.id === -1) {
-                    self.tumlTabViewManagers.push(tumlTabViewManagerQuery);
-                    reorderTabs();
-                    tabContainer.tabs("option", "active", self.tumlTabViewManagers.length - 1);
-                } else {
-                    self.tumlTabViewManagers.splice(tumlTabViewManagers.length - 1, 0, tumlTabViewManagerQuery);
-                    reorderTabs();
-                    tabContainer.tabs("option", "active", self.tumlTabViewManagers.length - 2);
-                }
-
-                tumlTabViewManagerQuery.createQuery(oclExecuteUri, query, post);
-                tumlTabViewManagerQuery.onPutInstanceQuerySuccess.subscribe(function (e, args) {
-                    closeTab(tumlTabViewManagerQuery);
-                    var newTumlTabViewManager = addQueryTab(false, new Tuml.Query(args.query.id, args.query.name, args.query.name, args.query.queryString, args.query.queryEnum, args.gridData, args.queryType));
-                    leftMenuManager.refreshInstanceQuery(args.query.id);
-                });
-                tumlTabViewManagerQuery.onPostInstanceQuerySuccess.subscribe(function (e, args) {
-                    var previousIndex = self.tumlTabViewManagers.indexOf(tumlTabViewManagerQuery);
-                    closeTab(tumlTabViewManagerQuery);
-                    addDefaultQueryTab(false);
-                    var newTumlTabViewManager = addQueryTab(false, new Tuml.Query(args.query.id, args.query.name, args.query.name, args.query.queryString, args.query.queryEnum, args.gridData, args.queryType));
-
-                    //place it back at the previousIndex
-                    var currentIndex = self.tumlTabViewManagers.indexOf(newTumlTabViewManager);
-                    self.tumlTabViewManagers.splice(currentIndex, 1);
-                    self.tumlTabViewManagers.splice(previousIndex, 0, newTumlTabViewManager);
-                    tabContainer.tabs("option", "active", previousIndex);
-
-                    leftMenuManager.refreshInstanceQuery(args.query.id);
-                });
-                tumlTabViewManagerQuery.onPutClassQuerySuccess.subscribe(function (e, args) {
-                    closeTab(tumlTabViewManagerQuery);
-                    var newTumlTabViewManager = addQueryTab(false, new Tuml.Query(args.query.id, args.query.name, args.query.name, args.query.queryString, args.query.queryEnum, args.gridData, args.queryType));
-                    leftMenuManager.refreshClassQuery(args.query.id);
-                });
-                tumlTabViewManagerQuery.onPostClassQuerySuccess.subscribe(function (e, args) {
-                    var previousIndex = self.tumlTabViewManagers.indexOf(tumlTabViewManagerQuery);
-                    closeTab(tumlTabViewManagerQuery);
-                    addDefaultQueryTab(false);
-                    var newTumlTabViewManager = addQueryTab(false, new Tuml.Query(args.query.id, args.query.name, args.query.name, args.query.queryString, args.query.queryEnum, args.gridData, args.queryType));
-
-                    //place it back at the previousIndex
-                    var currentIndex = self.tumlTabViewManagers.indexOf(newTumlTabViewManager);
-                    self.tumlTabViewManagers.splice(currentIndex, 1);
-                    self.tumlTabViewManagers.splice(previousIndex, 0, newTumlTabViewManager);
-                    tabContainer.tabs("option", "active", previousIndex);
-
-                    leftMenuManager.refreshClassQuery(args.query.id);
-                });
-                tumlTabViewManagerQuery.onDeleteQuerySuccess.subscribe(function (e, args) {
-                    closeTab(tumlTabViewManagerQuery);
-                    leftMenuManager.refreshQuery();
-                });
-                tumlTabViewManagerQuery.onContextMenuClickLink.subscribe(function (e, args) {
-                    self.onContextMenuClickLink.notify(args, e, self);
-                });
-                tumlTabViewManagerQuery.onSelfCellClick.subscribe(function (e, args) {
-                    self.onSelfCellClick.notify(args, e, self);
-                });
-
-            } else {
-                //Just make the tab active
-                tabContainer.tabs("option", "active", self.tumlTabViewManagers.indexOf(tumlTabViewManagerQuery));
-            }
-            return tumlTabViewManagerQuery;
-
+            self.tabContainer.tabs("refresh");
         }
 
         function findPropertyNavigatingTo(qualifiedName, metaDataNavigatingFrom) {
@@ -820,12 +820,6 @@
                 }
                 alert('Property navigatingTo not found!!!');
                 return null;
-            }
-        }
-
-        function clear() {
-            for (var i = 0; i < self.tumlTabViewManagers.length; i++) {
-                self.tumlTabViewManagers[i].clear();
             }
         }
 
@@ -854,12 +848,10 @@
             "onPostInstanceQuerySuccess": new Tuml.Event(),
             "onPutInstanceQuerySuccess": new Tuml.Event(),
             "onPostClassQuerySuccess": new Tuml.Event(),
-            "onPutClassQuerySuccess": new Tuml.Event(),
+            "onPutClassQuerySuccess": new Tuml.Event()
 
-            "refresh": refresh,
-            "addQueryTab": addQueryTab,
-            "closeTab": closeTab,
-            "clear": clear
+//            "refresh": refresh,
+//            "addQueryTab": addQueryTab
         });
 
         init();
@@ -867,6 +859,7 @@
         Tuml.TumlTabContainerManager.call(this);
 
     }
+
 
 })
     (jQuery);
