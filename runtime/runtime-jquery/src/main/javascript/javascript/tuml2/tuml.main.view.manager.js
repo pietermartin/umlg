@@ -698,12 +698,6 @@
 
         }
 
-        function closeTab(tumlTabViewManager) {
-            var index = self.tumlTabViewManagers.indexOf(tumlTabViewManager)
-            self.tumlTabViewManagers[index].clear();
-            self.tumlTabViewManagers.splice(index, 1);
-        }
-
         function reorderTabs() {
             var tabsNav = tabContainer.find(".ui-tabs-nav");
             var first = true;
