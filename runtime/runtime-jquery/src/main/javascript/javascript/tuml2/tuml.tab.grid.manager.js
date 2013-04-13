@@ -1,5 +1,6 @@
 (function ($) {
-    // register namespace
+
+        // register namespace
     $.extend(true, window, {
         Tuml: {
             TumlBaseGridManager: TumlBaseGridManager,
@@ -10,21 +11,14 @@
         }
     });
 
-    function TumlQueryGridManager(propertyNavigatingTo) {
+    function TumlQueryGridManager(tumlTabViewManager ,propertyNavigatingTo) {
         var self = this;
+        this.tumlTabViewManager = tumlTabViewManager;
 
         //Public api
         $.extend(this, {
             "TumlQueryGridManager": "1.0.0",
-            "onPutSuccess": new Tuml.Event(),
-            "onPutFailure": new Tuml.Event(),
-            "onPostSuccess": new Tuml.Event(),
-            "onPostFailure": new Tuml.Event(),
-            "onDeleteSuccess": new Tuml.Event(),
-            "onDeleteFailure": new Tuml.Event(),
-            "onCancel": new Tuml.Event(),
             "onSelfCellClick": new Tuml.Event(),
-            "onContextMenuClickLink": new Tuml.Event(),
             "onContextMenuClickDelete": new Tuml.Event(),
             "onManyEditorKeyPress": new Tuml.Event()
         });
@@ -93,9 +87,9 @@
         this.dataView.setItems(data, 'row');
     }
 
-    function TumlManyComponentGridManager(tumlUri, propertyNavigatingTo) {
-        var self = this;
-        TumlBaseGridManager.call(this, tumlUri, propertyNavigatingTo);
+    function TumlManyComponentGridManager(tumlTabViewManager, tumlUri, propertyNavigatingTo) {
+
+        TumlBaseGridManager.call(this, tumlTabViewManager, tumlUri, propertyNavigatingTo);
 
         //Public api
         $.extend(this, {
@@ -108,15 +102,7 @@
             "onAddNewRow": new Tuml.Event(),
             "onAddRowSuccess": new Tuml.Event(),
             "onRemoveRowSuccess": new Tuml.Event(),
-            "onPutSuccess": new Tuml.Event(),
-            "onPutFailure": new Tuml.Event(),
-            "onPostSuccess": new Tuml.Event(),
-            "onPostFailure": new Tuml.Event(),
-            "onDeleteSuccess": new Tuml.Event(),
-            "onDeleteFailure": new Tuml.Event(),
-            "onCancel": new Tuml.Event(),
             "onSelfCellClick": new Tuml.Event(),
-            "onContextMenuClickLink": new Tuml.Event(),
             "onContextMenuClickDelete": new Tuml.Event(),
             "onManyEditorKeyPress": new Tuml.Event()
         });
@@ -204,24 +190,16 @@
         return contextMenuUl;
     };
 
-    function TumlForManyLookupGridManager(tumlUri, propertyNavigatingTo) {
+    function TumlForManyLookupGridManager(tumlTabViewManager, tumlUri, propertyNavigatingTo) {
         var self = this;
-        TumlBaseGridManager.call(this, tumlUri, propertyNavigatingTo);
+        TumlBaseGridManager.call(this, tumlTabViewManager, tumlUri, propertyNavigatingTo);
 
         //Public api
         $.extend(this, {
             "TumlForManyLookupGridManager": "1.0.0",
             "onSelectButtonSuccess": new Tuml.Event(),
             "onSelectCancelButtonSuccess": new Tuml.Event(),
-            "onPutSuccess": new Tuml.Event(),
-            "onPutFailure": new Tuml.Event(),
-            "onPostSuccess": new Tuml.Event(),
-            "onPostFailure": new Tuml.Event(),
-            "onDeleteSuccess": new Tuml.Event(),
-            "onDeleteFailure": new Tuml.Event(),
-            "onCancel": new Tuml.Event(),
             "onSelfCellClick": new Tuml.Event(),
-            "onContextMenuClickLink": new Tuml.Event(),
             "onContextMenuClickDelete": new Tuml.Event(),
             "onManyEditorKeyPress": new Tuml.Event()
         });
@@ -280,9 +258,9 @@
         return contextMenuUl;
     };
 
-    function TumlTabGridManager(tumlUri, propertyNavigatingTo) {
-        var self = this;
-        TumlBaseGridManager.call(this, tumlUri, propertyNavigatingTo);
+    function TumlTabGridManager(tumlTabViewManager, tumlUri, propertyNavigatingTo) {
+
+        TumlBaseGridManager.call(this, tumlTabViewManager, tumlUri, propertyNavigatingTo);
 
         //Public api
         $.extend(this, {
@@ -293,15 +271,7 @@
             "onRemoveRowSuccess": new Tuml.Event(),
             "onAddNewRow": new Tuml.Event(),
             "onAddRowSuccess": new Tuml.Event(),
-            "onPutSuccess": new Tuml.Event(),
-            "onPutFailure": new Tuml.Event(),
-            "onPostSuccess": new Tuml.Event(),
-            "onPostFailure": new Tuml.Event(),
-            "onDeleteSuccess": new Tuml.Event(),
-            "onDeleteFailure": new Tuml.Event(),
-            "onCancel": new Tuml.Event(),
             "onSelfCellClick": new Tuml.Event(),
-            "onContextMenuClickLink": new Tuml.Event(),
             "onContextMenuClickDelete": new Tuml.Event(),
             "onManyEditorKeyPress": new Tuml.Event()
         });
@@ -393,7 +363,9 @@
         return contextMenuUl;
     };
 
-    function TumlBaseGridManager(tumlUri, propertyNavigatingTo) {
+    function TumlBaseGridManager(tumlTabViewManager, tumlUri, propertyNavigatingTo) {
+
+        this.tumlTabViewManager = tumlTabViewManager;
         this.tumlUri = tumlUri;
         this.propertyNavigatingTo = propertyNavigatingTo;
 
@@ -434,114 +406,6 @@
             this.updateGrid(result.data);
         };
 
-//        this.doSave = function () {
-//            //put updated items
-//            if (this.dataView.getUpdatedItems().length !== 0) {
-//                $.ajax({
-//                    url: tumlUri + '_' + self.localMetaForData.name,
-//                    type: "PUT",
-//                    dataType: "json",
-//                    contentType: "json",
-//                    data: JSON.stringify(this.dataView.getUpdatedItems()),
-//                    success: function (data, textStatus, jqXHR) {
-//                        self.onPutSuccess.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name, data: data}, null, self);
-//                    },
-//                    error: function (jqXHR, textStatus, errorThrown) {
-//                        $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-//                        self.onPutFailure.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name}, null, self);
-//                    }
-//                });
-//            }
-//            //post new items
-//            if (this.dataView.getNewItems().length !== 0) {
-//                var validationResults = self.validateNewItems(self.dataView.getNewItems());
-//                if (validationResults.length == 0) {
-//                    $.ajax({
-//                        url: tumlUri + '_' + self.localMetaForData.name,
-//                        type: "POST",
-//                        dataType: "json",
-//                        contentType: "json",
-//                        data: JSON.stringify(this.dataView.getNewItems()),
-//                        success: function (data, textStatus, jqXHR) {
-//                            self.onPostSuccess.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name, data: data}, null, self);
-//                        },
-//                        error: function (jqXHR, textStatus, errorThrown) {
-//                            $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-//                            self.onPostFailure.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name}, null, self);
-//                        }
-//                    });
-//                } else {
-//                    var errorMsg = '\n';
-//                    for (var i = 0; i < validationResults.length; i++) {
-//                        errorMsg += validationResults[i].msg + '\n';
-//                    }
-//                    alert('Validation errors: ' + errorMsg);
-//                }
-//            }
-//            //delete new items
-//            if (this.dataView.getDeletedItems().length !== 0) {
-//                $.ajax({
-//                    url: tumlUri,
-//                    type: "DELETE",
-//                    dataType: "json",
-//                    contentType: "json",
-//                    data: JSON.stringify(this.dataView.getDeletedItems()),
-//                    success: function (data, textStatus, jqXHR) {
-//                        self.onDeleteSuccess.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name, data: data}, null, self);
-//                    },
-//                    error: function (jqXHR, textStatus, errorThrown) {
-//                        $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-//                        self.onDeleteFailure.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name}, null, self);
-//                    }
-//                });
-//            }
-//
-////            if ((this.dataView.getUpdatedItems().length != 0 && this.dataView.getNewItems().length != 0) ||
-////                (this.dataView.getUpdatedItems().length != 0 && this.dataView.getDeletedItems().length != 0) ||
-////                (this.dataView.getNewItems().length != 0 && this.dataView.getDeletedItems().length != 0)) {
-////
-////                var overloadedPostUri = this.propertyNavigatingTo.tumlOverloadedPostUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), this.contextVertexId);
-////
-////                var overloadedPostData = {};
-////                var validationErrors = true;
-////                if (this.dataView.getNewItems().length > 0) {
-////                    var validationResults = this.validateNewItems(this.dataView.getNewItems());
-////                    if (validationResults.length == 0) {
-////                        validationErrors = false;
-////                        overloadedPostData['insert'] = this.dataView.getNewItems();
-////                    } else {
-////                        var errorMsg = '\n';
-////                        for (var i = 0; i < validationResults.length; i++) {
-////                            errorMsg += validationResults[i].msg + '\n';
-////                        }
-////                        alert('Validation errors: ' + errorMsg);
-////                    }
-////                }
-////                if (!validationErrors) {
-////                    if (this.dataView.getUpdatedItems().length > 0) {
-////                        overloadedPostData['update'] = this.dataView.getUpdatedItems();
-////                    }
-////                    if (this.dataView.getDeletedItems().length > 0) {
-////                        overloadedPostData['delete'] = this.dataView.getDeletedItems();
-////                    }
-////                    $.ajax({
-////                        url: overloadedPostUri,
-////                        type: "POST",
-////                        dataType: "json",
-////                        contentType: "json",
-////                        data: JSON.stringify(overloadedPostData),
-////                        success: function (data, textStatus, jqXHR) {
-////                            self.onDeleteSuccess.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name, data: data}, null, self);
-////                        },
-////                        error: function (jqXHR, textStatus, errorThrown) {
-////                            $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-////                            self.onDeleteFailure.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name}, null, self);
-////                        }
-////                    });
-////                }
-////            }
-//        }
-
         this.validateNewItems = function (newItems) {
             var validationResults = [];
             for (var i = 0; i < newItems.length; i++) {
@@ -575,9 +439,16 @@
             this.dataView.refreshItem(data);
         }
 
-        this.createGrid = function (data /*, localMetaForData*/, tumlUri) {
+        this.handleContextMenuClickLink = function(tumlUri) {
+             this.tumlTabViewManager.refreshContext(tumlUri);
+        }
+
+        this.handleAddNewRow = function(dataViewItems, event) {
+            this.tumlTabViewManager.addNewRow(dataViewItems, event);
+        }
+
+        this.createGrid = function (data, tumlUri) {
             var columnFilters = {};
-            var lookupColumns;
             var self = this;
             this.data = data;
             //The query grid does not have a tumlUri or contextVertexId
@@ -636,7 +507,7 @@
                 var tumlUri = $(e.target).attr("data");
                 if (tumlUri !== 'delete') {
                     var url = tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), data[row].id);
-                    self.onContextMenuClickLink.notify({name: 'unused', tumlUri: url}, null, self);
+                    self.handleContextMenuClickLink(url);
                 } else {
                     var item = self.dataView.getItem(row);
                     self.dataView.deleteItem(item.id);
@@ -812,7 +683,10 @@
                     self.dataView.addItem(newItem);
                     self.grid.editActiveCell();
 
-                    self.onAddNewRow.notify(self.dataView.getItems(), e, self);
+//                    self.onAddNewRow.notify(self.dataView.getItems(), e, self);
+
+                    self.handleAddNewRow(self.dataView.getItems(), e);
+
 
 //            var overloadedPostData = {};
 //            overloadedPostData['insert'] = {qualifiedName: self.localMetaForData.qualifiedName};

@@ -18,7 +18,7 @@
         var leftMenuManager;
         var mainViewManager;
 
-        function init() {
+        this.init = function() {
             //Create layout
             var myLayout = $('body').layout({livePaneResizing:true, north__minSize:40, east:{initClosed:true}, south:{initClosed:true}, west:{minSize:300}});
             myLayout.allowOverflow("north");
@@ -28,7 +28,7 @@
             //Create the context manager
             contextManager = new Tuml.ContextManager();
             contextManager.onClickContextMenu.subscribe(function (e, args) {
-                refresh(args.uri);
+                self.refresh(args.uri);
                 changeMyUrl(args.name, args.uri);
             });
 
@@ -36,7 +36,7 @@
             leftMenuManager = new Tuml.LeftMenuManager();
             leftMenuManager.onMenuClick.subscribe(function (e, args) {
                 //Do something like refresh the page
-                refresh(args.uri);
+                self.refresh(args.uri);
                 changeMyUrl(args.name, args.uri);
             });
             leftMenuManager.onQueryClick.subscribe(function (e, args) {
@@ -45,7 +45,7 @@
             });
 
             //Create main view manager
-            mainViewManager = new Tuml.TumlMainViewManager(leftMenuManager);
+            mainViewManager = new Tuml.TumlMainViewManager(this, leftMenuManager);
             mainViewManager.onPutSuccess.subscribe(function (e, args) {
                 self.onPutSuccess.notify(args, e, self);
             });
@@ -77,12 +77,12 @@
 
             mainViewManager.onSelfCellClick.subscribe(function (e, args) {
                 self.onSelfCellClick.notify(args, e, self);
-                refresh(args.tumlUri);
+                self.refresh(args.tumlUri);
                 changeMyUrl(args.name, args.tumlUri);
             });
             mainViewManager.onContextMenuClickLink.subscribe(function (e, args) {
                 self.onContextMenuClickLink.notify(args, e, self);
-                refresh(args.tumlUri);
+                self.refresh(args.tumlUri);
                 changeMyUrl(args.name, args.tumlUri);
             });
             mainViewManager.onContextMenuClickDelete.subscribe(function (e, args) {
@@ -105,7 +105,6 @@
                 var adjustedUri = contextMetaData.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextMetaData.contextVertexId);
                 changeMyUrl(contextMetaData.name, adjustedUri);
                 //This is like calling refresh only we already have the data
-                var contextVertexId = retrieveVertexId(adjustedUri);
                 mainViewManager.refresh(adjustedUri, args.data);
             });
             mainViewManager.onPostOneFailure.subscribe(function (e, args) {
@@ -117,22 +116,21 @@
                 var adjustedUri = contextMetaData.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextMetaData.contextVertexId);
                 changeMyUrl(contextMetaData.name, adjustedUri);
                 //This is like calling refresh only we already have the data
-                var contextVertexId = retrieveVertexId(adjustedUri);
                 mainViewManager.refresh(adjustedUri, args.data);
             });
 
             window.onpopstate = function (event) {
                 if (document.location.hash === "") {
                     var pathname = document.location.pathname.replace("/ui2", "");
-                    refresh(pathname);
+                    self.refresh(pathname);
                 }
             };
 
-            refresh(tumlUri);
+            self.refresh(tumlUri);
 
         }
 
-        function refresh(tumlUri) {
+        this.refresh = function(tumlUri) {
             //Call the server for the tumlUri
             var contextVertexId = retrieveVertexId(tumlUri);
             $.ajax({
@@ -215,14 +213,14 @@
             "onDeleteFailure":new Tuml.Event(),
             "onCancel":new Tuml.Event(),
             "onSelfCellClick":new Tuml.Event(),
-            "onContextMenuClickLink":new Tuml.Event(),
             "onContextMenuClickDelete":new Tuml.Event(),
             "onPutOneSuccess":new Tuml.Event(),
             "onPutOneFailure":new Tuml.Event(),
             "onPostOneSuccess":new Tuml.Event(),
             "onPostOneFailure":new Tuml.Event()
         });
-        init();
+
+        this.init();
     }
 
     /***

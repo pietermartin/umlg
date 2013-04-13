@@ -13,24 +13,13 @@
     function TumlBaseTabViewManager(tabEnum, tabContainer, tumlUri, result) {
 
         this.tabEnum = tabEnum;
-        this.parentTabContainer = tabContainer;
-        var tabId;
-        var childTumlTabViewManagers = [];
 
         function getTab(title) {
             return $('#tab-container').tabs('getTab', title);
         }
 
-        function disableTab() {
+        this.disableTab = function () {
             $('#tab-container').tabs('disableTab', this.tabTitleName);
-        }
-
-        function addToChildTabViewManager(tumlChildTabViewManager) {
-            childTumlTabViewManagers.push(tumlChildTabViewManager);
-        }
-
-        function getChildTumlTabViewManagers() {
-            return childTumlTabViewManagers;
         }
 
         this.createOrReturnSubTabContainer = function () {
@@ -74,7 +63,6 @@
             "onOneComponentCloseButtonSuccess": new Tuml.Event(),
             "onManyComponentSaveButtonSuccess": new Tuml.Event(),
             "onManyComponentCloseButtonSuccess": new Tuml.Event(),
-            "onAddNewRow": new Tuml.Event(),
             "onAddRowSuccess": new Tuml.Event(),
             "onRemoveRowSuccess": new Tuml.Event(),
             "onPutSuccess": new Tuml.Event(),
@@ -85,23 +73,21 @@
             "onDeleteFailure": new Tuml.Event(),
             "onCancel": new Tuml.Event(),
             "onSelfCellClick": new Tuml.Event(),
-            "onContextMenuClickLink": new Tuml.Event(),
             "onContextMenuClickDelete": new Tuml.Event(),
             //Events for one
             "onPutOneSuccess": new Tuml.Event(),
             "onPutOneFailure": new Tuml.Event(),
             "onPostOneSuccess": new Tuml.Event(),
             "onPostOneFailure": new Tuml.Event(),
-            "onDeleteOneSuccess": new Tuml.Event(),
+            "onDeleteOneSuccess": new Tuml.Event()
 
-            //Other events
-            "addToChildTabViewManager": addToChildTabViewManager,
-            "getChildTumlTabViewManagers": getChildTumlTabViewManagers,
-            "disableTab": disableTab,
-            "tabId": tabId
         });
 
+        Tuml.TumlTabContainerManager.call(this, tabContainer);
+
     }
+
+    TumlBaseTabViewManager.prototype = new Tuml.TumlTabContainerManager;
 
     TumlBaseTabViewManager.prototype.clear = function () {
         this.closeTab();
@@ -110,7 +96,13 @@
     TumlBaseTabViewManager.prototype.closeTab = function () {
         $("#" + this.tabId).remove();
         this.li.remove();
+
+        var index = this.tumlTabViewManagers.indexOf(this)
+        this.tumlTabViewManagers[index].clear();
+        this.tumlTabViewManagers.splice(index, 1);
         this.parentTabContainer.tabs("refresh");
+
+
     }
 
     TumlBaseTabViewManager.prototype.init = function (tumlUri, result) {
@@ -127,7 +119,8 @@
 
         // close icon: removing the tab on click
         this.li.find("span.ui-icon-close").click(function () {
-            self.onCloseTab.notify(self.tabDivName);
+//            self.onCloseTab.notify(self.tabDivName);
+            self.closeTab();
         });
 
         this.parentTabContainer.find(".ui-tabs-nav").append(this.li);
@@ -172,9 +165,6 @@
         });
         this.tumlTabQueryManager.onDeleteQuerySuccess.subscribe(function (e, args) {
             self.onDeleteQuerySuccess.notify(args, e, self);
-        });
-        this.tumlTabQueryManager.onContextMenuClickLink.subscribe(function (e, args) {
-            self.onContextMenuClickLink.notify(args, e, self);
         });
         this.tumlTabQueryManager.onSelfCellClick.subscribe(function (e, args) {
             self.onSelfCellClick.notify(args, e, self);
@@ -297,7 +287,10 @@
     }
 
     TumlTabManyViewManager.prototype = new Tuml.TumlBaseTabViewManager();
-    TumlTabManyViewManager.prototype.constructor = Tuml.TumlBaseTabViewManager;
+
+    TumlTabManyViewManager.prototype.addNewRow = function (dataViewItems, event) {
+        this.getParentTabContainerManager().addNewRow(dataViewItems, event);
+    }
 
     TumlTabManyViewManager.prototype.createTab = function () {
         if (this.oneManyOrQuery.forLookup) {
@@ -324,7 +317,7 @@
         var self = this;
         TumlBaseTabViewManager.prototype.init.call(this, tumlUri, tabDivName);
         if (this.oneManyOrQuery.forLookup) {
-            this.tumlTabGridManager = new Tuml.TumlForManyLookupGridManager(tumlUri, this.oneManyOrQuery.propertyNavigatingTo);
+            this.tumlTabGridManager = new Tuml.TumlForManyLookupGridManager(this, tumlUri, this.oneManyOrQuery.propertyNavigatingTo);
             this.tumlTabGridManager.onSelectButtonSuccess.subscribe(function (e, args) {
                 self.onSelectButtonSuccess.notify(args, e, self);
             });
@@ -332,7 +325,7 @@
                 self.onSelectCancelButtonSuccess.notify(args, e, self);
             });
         } else if (this.oneManyOrQuery.forManyComponent) {
-            this.tumlTabGridManager = new Tuml.TumlManyComponentGridManager(tumlUri, this.oneManyOrQuery.propertyNavigatingTo);
+            this.tumlTabGridManager = new Tuml.TumlManyComponentGridManager(this, tumlUri, this.oneManyOrQuery.propertyNavigatingTo);
             this.tumlTabGridManager.onManyComponentSaveButtonSuccess.subscribe(function (e, args) {
                 self.onManyComponentSaveButtonSuccess.notify(args, e, self);
             });
@@ -349,14 +342,8 @@
             this.tumlTabGridManager.onClickOneComponentCell.subscribe(function (e, args) {
                 self.onClickOneComponentCell.notify(args, e, self);
             });
-            this.tumlTabGridManager.onAddNewRow.subscribe(function (e, args) {
-                //on a component's new row the value must be set on the parents compnent cell as the whole data set
-                //will be posted with rollback=true to initialize the new row from the backend.
-                self.getParentTumlTabViewManager().setValue(args);
-                self.onAddNewRow.notify(args, e, self);
-            });
         } else {
-            this.tumlTabGridManager = new Tuml.TumlTabGridManager(tumlUri, this.oneManyOrQuery.propertyNavigatingTo);
+            this.tumlTabGridManager = new Tuml.TumlTabGridManager(this, tumlUri, this.oneManyOrQuery.propertyNavigatingTo);
             this.tumlTabGridManager.onAddButtonSuccess.subscribe(function (e, args) {
                 self.onAddButtonSuccess.notify(args, e, self);
             });
@@ -366,9 +353,6 @@
             this.tumlTabGridManager.onClickOneComponentCell.subscribe(function (e, args) {
                 self.onClickOneComponentCell.notify(args, e, self);
             });
-            this.tumlTabGridManager.onAddNewRow.subscribe(function (e, args) {
-                self.onAddNewRow.notify(args, e, self);
-            });
         }
         this.tumlTabGridManager.onAddRowSuccess.subscribe(function (e, args) {
             self.onAddRowSuccess.notify(args, e, self);
@@ -376,36 +360,8 @@
         this.tumlTabGridManager.onRemoveRowSuccess.subscribe(function (e, args) {
             self.onRemoveRowSuccess.notify(args, e, self);
         });
-        this.tumlTabGridManager.onPutSuccess.subscribe(function (e, args) {
-            self.onPutSuccess.notify(args, e, self);
-            self.updateGridForResult(args.data, args.tabId);
-        });
-        this.tumlTabGridManager.onPutFailure.subscribe(function (e, args) {
-            self.onPutFailure.notify(args, e, self);
-        });
-        this.tumlTabGridManager.onPostSuccess.subscribe(function (e, args) {
-            self.onPostSuccess.notify(args, e, self);
-            self.updateGridForResult(args.data, args.tabId);
-        });
-        this.tumlTabGridManager.onPostFailure.subscribe(function (e, args) {
-            self.onPostFailure.notify(args, e, self);
-        });
-        this.tumlTabGridManager.onDeleteSuccess.subscribe(function (e, args) {
-            self.onDeleteSuccess.notify(args, e, self);
-            self.createGridForResult(args.data, args.tabId);
-        });
-        this.tumlTabGridManager.onDeleteFailure.subscribe(function (e, args) {
-            self.onDeleteFailure.notify(args, e, self);
-        });
-        this.tumlTabGridManager.onCancel.subscribe(function (e, args) {
-            self.onCancel.notify(args, e, self);
-            self.createGridForResult(args.data, args.tabId);
-        });
         this.tumlTabGridManager.onSelfCellClick.subscribe(function (e, args) {
             self.onSelfCellClick.notify(args, e, self);
-        });
-        this.tumlTabGridManager.onContextMenuClickLink.subscribe(function (e, args) {
-            self.onContextMenuClickLink.notify(args, e, self);
         });
         this.tumlTabGridManager.onContextMenuClickDelete.subscribe(function (e, args) {
             self.onContextMenuClickDelete.notify(args, e, self);
@@ -462,7 +418,13 @@
     }
 
     TumlTabManyComponentViewManager.prototype = new Tuml.TumlTabManyViewManager();
-    TumlTabManyComponentViewManager.prototype.constructor = Tuml.TumlTabManyViewManager;
+
+    TumlTabManyComponentViewManager.prototype.addNewRow = function (dataViewItems, event) {
+        //on a component's new row the value must be set on the parents component cell as the whole data set
+        //will be posted with rollback=true to initialize the new row from the backend.
+        this.getParentTumlTabViewManager().setValue(dataViewItems);
+        TumlTabManyViewManager.prototype.addNewRow.call(this, dataViewItems, event);
+    }
 
     TumlTabManyComponentViewManager.prototype.createTab = function () {
         if (this.oneManyOrQuery.forManyComponent) {
@@ -479,7 +441,7 @@
         //Save the many component's data into the parent tabs row's cell
         if (this.tumlTabGridManager.grid.getEditorLock().commitCurrentEdit()) {
 //            if (this.tumlTabGridManager.validateMultiplicity()) {
-            parentTumlTabViewManager.setValue(this.tumlTabGridManager.dataView.getItems());
+            this.parentTumlTabViewManager.setValue(this.tumlTabGridManager.dataView.getItems());
 
 //                self.doSave();
 //                        var validationResults = self.validateNewItems(self.dataView.getNewItems());
@@ -498,5 +460,6 @@
 
         TumlBaseTabViewManager.prototype.closeTab.call(this);
     }
+
 
 })(jQuery);

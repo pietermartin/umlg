@@ -16,9 +16,6 @@
 
         function init() {
             tumlTabGridManager = new Tuml.TumlQueryGridManager();
-            tumlTabGridManager.onContextMenuClickLink.subscribe(function (e, args) {
-                self.onContextMenuClickLink.notify(args, e, self);
-            });
             tumlTabGridManager.onSelfCellClick.subscribe(function (e, args) {
                 self.onSelfCellClick.notify(args, e, self);
             });
@@ -227,7 +224,6 @@
             "onDeleteFailure":new Tuml.Event(),
             "onCancel":new Tuml.Event(),
             "onSelfCellClick":new Tuml.Event(),
-            "onContextMenuClickLink":new Tuml.Event(),
             "createQuery":createQuery
         });
 

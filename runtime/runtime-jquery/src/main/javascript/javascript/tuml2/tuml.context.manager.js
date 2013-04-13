@@ -10,7 +10,7 @@
 
         var self = this;
 
-        function refresh(name, uri, contextVertexId) {
+        this.refresh = function(name, uri, contextVertexId) {
             //build context path to root
             if (name === 'Root') {
                 createContextPath([{name: 'Root', uri: uri}]);
@@ -21,7 +21,7 @@
                     url: pathToCompositeRootUri,
                     type: "GET",
                     dataType: "json",
-                    contentType: "json",
+                    contentType: "application/json",
                     success: function(response, textStatus, jqXHR) {
                         createContextPath(response.data);
                     },
@@ -59,8 +59,7 @@
         //Public api
         $.extend(this, {
             "TumlContextManagerVersion": "1.0.0",
-            "onClickContextMenu": new Tuml.Event(),
-            "refresh": refresh
+            "onClickContextMenu": new Tuml.Event()
         });
 
     }
