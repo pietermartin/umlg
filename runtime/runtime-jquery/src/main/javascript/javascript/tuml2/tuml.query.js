@@ -1,9 +1,6 @@
 /**
- * Created with JetBrains WebStorm.
  * User: pieter
  * Date: 2012/12/24
- * Time: 8:00 AM
- * To change this template use File | Settings | File Templates.
  */
 
 (function ($) {
@@ -25,7 +22,7 @@
         this.queryType = queryType;
     }
 
-    Query.prototype = new Query();
+    Query.prototype = new Query;
 
     Query.prototype.getDivName = function () {
         if (this.id !== undefined || this.id !== null || this.id !== -1) {

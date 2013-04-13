@@ -120,7 +120,6 @@
 
         // close icon: removing the tab on click
         this.li.find("span.ui-icon-close").click(function () {
-//            self.onCloseTab.notify(self.tabDivName);
             self.closeTab();
         });
 
@@ -134,7 +133,6 @@
 
     function TumlTabQueryViewManager(tabEnum, tabContainer, instanceQueryUri, classQueryUri, tabDivName, tabTitleName, queryId) {
 
-        alert('remove tabDivName');
         //Public api
         $.extend(this, {
             "TumlTabQueryViewManager": "1.0.0",
@@ -150,7 +148,7 @@
             this.queryId = queryId;
         }
 
-        this.tabDivName = tabDivName;
+        this.tabId = tabDivName;
         this.tabTitleName = tabTitleName;
         this.tumlTabQueryManager = new Tuml.TumlTabQueryManager(instanceQueryUri, classQueryUri, this.queryId);
         this.tumlTabQueryManager.onPutInstanceQuerySuccess.subscribe(function (e, args) {
@@ -179,7 +177,7 @@
         });
 
         this.createQuery = function (oclExecuteUri, query, post) {
-            this.tumlTabQueryManager.createQuery(this.tabDivName, oclExecuteUri, query, post);
+            this.tumlTabQueryManager.createQuery(this.tabId, oclExecuteUri, query, post);
         }
 
         TumlBaseTabViewManager.call(this, tabEnum, tabContainer);
@@ -315,9 +313,9 @@
         TumlBaseTabViewManager.prototype.clear.call(this);
         this.tumlTabGridManager = null;
     }
-    TumlTabManyViewManager.prototype.init = function (tumlUri, tabDivName) {
+    TumlTabManyViewManager.prototype.init = function (tumlUri, result) {
         var self = this;
-        TumlBaseTabViewManager.prototype.init.call(this, tumlUri, tabDivName);
+        TumlBaseTabViewManager.prototype.init.call(this, tumlUri, result);
         if (this.oneManyOrQuery.forLookup) {
             this.tumlTabGridManager = new Tuml.TumlForManyLookupGridManager(this, tumlUri, this.oneManyOrQuery.propertyNavigatingTo);
             this.tumlTabGridManager.onSelectButtonSuccess.subscribe(function (e, args) {
@@ -423,7 +421,7 @@
         } else {
             alert('this should not happen!');
         }
-        $('#slickGrid' + this.getParentTumlTabViewManager().tabDivName).hide();
+        $('#slickGrid' + this.getParentTumlTabViewManager().tabId).hide();
         TumlBaseTabViewManager.prototype.createTab.call(this);
     }
 

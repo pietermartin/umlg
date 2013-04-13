@@ -21,7 +21,7 @@
             });
         }
 
-        function createQuery(queryTabDivName, oclExecuteUri, query, post) {
+        this.createQuery = function(queryTabDivName, oclExecuteUri, query, post) {
             var self = this;
             var queryTab = $('#' + queryTabDivName);
 
@@ -29,7 +29,6 @@
 
             var layoutDiv = $('<div />', {id:'queryLayoutDiv', style:'height: ' + windowHeight + 'px; width" 100%; overflow: hidden;'});
             layoutDiv.appendTo(queryTab);
-
 
             //Create the layout's center and north pane
             var northDiv = $('<div />', {class:'query-north'});
@@ -223,8 +222,7 @@
             "onDeleteSuccess":new Tuml.Event(),
             "onDeleteFailure":new Tuml.Event(),
             "onCancel":new Tuml.Event(),
-            "onSelfCellClick":new Tuml.Event(),
-            "createQuery":createQuery
+            "onSelfCellClick":new Tuml.Event()
         });
 
         init();
