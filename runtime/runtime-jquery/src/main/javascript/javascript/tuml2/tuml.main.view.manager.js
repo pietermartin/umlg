@@ -57,7 +57,7 @@
                             leftMenuManager.refresh(metaDataNavigatingTo, metaDataNavigatingTo, contextVertexId);
                             //Do not call refreshInternal as it creates all tabs for the meta data
                             var tumlTabViewManager = this.addTab(tuml.tab.Enum.Properties, result[i], tumlUri, propertyNavigatingTo, {forLookup: false, forManyComponent: false, isOne: true, forCreation: false}, this.tabContainer);
-
+                            this.addToTumlTabViewManagers(tumlTabViewManager);
                             postTabCreate(tumlTabViewManager, this.tabContainer, result[i], true, result[i].meta.to, isForCreation, self.tumlTabViewManagers.length - 1);
 
                             //reorder tabs, make sure new tabs are first
@@ -108,7 +108,59 @@
             $('body').layout().resizeAll();
         }
 
-        this.clearTabsOnAddOneOrMany = function(newContextVertexId) {
+        this.doSave = function (commit) {
+            var tumlTabManyViewManagers = getTumlTabManyViewManagers(commit);
+            var overloadedPostData = {insert: [], update: [], delete: []};
+
+            if (validateMultiplicity(tumlTabManyViewManagers)) {
+                for (var i = 0; i < tumlTabManyViewManagers.length; i++) {
+                    if (!tumlTabManyViewManagers[i].oneManyOrQuery.forManyComponent) {
+                        var dataView = tumlTabManyViewManagers[i].tumlTabGridManager.dataView;
+                        overloadedPostData.insert.push.apply(overloadedPostData.insert, dataView.getNewItems());
+                        overloadedPostData.update.push.apply(overloadedPostData.update, dataView.getUpdatedItems());
+                        overloadedPostData.delete.push.apply(overloadedPostData.delete, dataView.getDeletedItems());
+                    }
+                }
+                var postUri;
+                if (!commit) {
+                    postUri = self.tumlUri + "?rollback=true";
+                } else {
+                    postUri = self.tumlUri;
+                }
+
+                $.ajax({
+                    url: postUri,
+                    type: "POST",
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify(overloadedPostData),
+                    success: function (result, textStatus, jqXHR) {
+                        self.updateTabsForResult(result);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
+                    }
+                });
+            }
+        }
+
+        this.updateTabsForResult = function (result) {
+            for (var i = 0; i < result.length; i++) {
+
+                for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
+                    var tumlTabViewManager = self.tumlTabViewManagers[i];
+                    var metaForData = result[i].meta.to;
+                    alert('ja wol');
+//                    if (metaForData.name === tabId) {
+//                        this.tumlTabGridManager.updateGrid(result[i]);
+//                        return;
+//                    }
+                }
+
+            }
+        }
+
+        this.clearTabsOnAddOneOrMany = function (newContextVertexId) {
             if (newContextVertexId === undefined && contextVertexId === null) {
                 contextChanged = true;
             } else if (contextVertexId === undefined && newContextVertexId === null) {
@@ -144,7 +196,7 @@
             return savedTumlTabViewManagers;
         }
 
-        this.addQueryTab = function(post, query, reorder) {
+        this.addQueryTab = function (post, query, reorder) {
             if (reorder === undefined) {
                 reorder = true;
             }
@@ -371,122 +423,6 @@
             return tumlTabManyViewManagers;
         }
 
-        function addNewRow() {
-//            alert('hi there addNewRow');
-            doSave(false);
-//            var overloadedPostData = {};
-//            overloadedPostData['insert'] = {qualifiedName: self.localMetaForData.qualifiedName};
-//            $.ajax({
-//                url: tumlUri + "?rollback=true",
-//                type: "POST",
-//                dataType: "json",
-//                contentType: "json",
-//                data: JSON.stringify(overloadedPostData),
-//                success: function (data, textStatus, jqXHR) {
-//                    //Cancel prevent validation from happening
-//                    self.grid.getEditController().cancelCurrentEdit();
-//                    self.dataView.addItem(data[0].data[0]);
-//                    //This ensures the cell is in edit mode, i.e. the cursor is ready for typing
-//                    self.grid.editActiveCell();
-//                    self.onAddRowSuccess.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name, data: data}, null, self);
-//                },
-//                error: function (jqXHR, textStatus, errorThrown) {
-//                    $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-//                }
-//            });
-        }
-
-        function doSave(commit) {
-            var tumlTabManyViewManagers = getTumlTabManyViewManagers(commit);
-            var overloadedPostData = {};
-            overloadedPostData['insert'] = [];
-            overloadedPostData['update'] = [];
-            overloadedPostData['delete'] = [];
-
-            if (validateMultiplicity(tumlTabManyViewManagers)) {
-                for (var i = 0; i < tumlTabManyViewManagers.length; i++) {
-                    if (!tumlTabManyViewManagers[i].oneManyOrQuery.forManyComponent) {
-                        var dataView = tumlTabManyViewManagers[i].tumlTabGridManager.dataView;
-                        overloadedPostData['insert'].push.apply(overloadedPostData['insert'], dataView.getNewItems());
-                        overloadedPostData['update'].push.apply(overloadedPostData['update'], dataView.getUpdatedItems());
-                        overloadedPostData['delete'].push.apply(overloadedPostData['delete'], dataView.getDeletedItems());
-                    }
-                }
-                var postUri;
-                if (!commit) {
-                    postUri = self.tumlUri + "?rollback=true";
-                } else {
-                    postUri = self.tumlUri;
-                }
-
-                $.ajax({
-                    url: postUri,
-                    type: "POST",
-                    dataType: "json",
-                    contentType: "application/json",
-                    data: JSON.stringify(overloadedPostData),
-                    success: function (data, textStatus, jqXHR) {
-//                        alert('onsavesuucess');
-//                        self.onPostSuccess.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name, data: data}, null, self);
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-//                        self.onPostFailure.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name}, null, self);
-                    }
-                });
-
-
-            }
-
-//            if (self.grid.getEditorLock().commitCurrentEdit()) {
-//                if (self.validateMultiplicity()) {
-//                    self.doSave();
-//                }
-//            } else {
-//                alert("Commit failed on current active cell!");
-//            }
-//
-//            var overloadedPostUri = this.propertyNavigatingTo.tumlOverloadedPostUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), this.contextVertexId);
-//
-//            var overloadedPostData = {};
-//            var validationErrors = true;
-//            if (this.dataView.getNewItems().length > 0) {
-//                var validationResults = this.validateNewItems(this.dataView.getNewItems());
-//                if (validationResults.length == 0) {
-//                    validationErrors = false;
-//                    overloadedPostData['insert'] = this.dataView.getNewItems();
-//                } else {
-//                    var errorMsg = '\n';
-//                    for (var i = 0; i < validationResults.length; i++) {
-//                        errorMsg += validationResults[i].msg + '\n';
-//                    }
-//                    alert('Validation errors: ' + errorMsg);
-//                }
-//            }
-//            if (!validationErrors) {
-//                if (this.dataView.getUpdatedItems().length > 0) {
-//                    overloadedPostData['update'] = this.dataView.getUpdatedItems();
-//                }
-//                if (this.dataView.getDeletedItems().length > 0) {
-//                    overloadedPostData['delete'] = this.dataView.getDeletedItems();
-//                }
-//                $.ajax({
-//                    url: overloadedPostUri,
-//                    type: "POST",
-//                    dataType: "json",
-//                    contentType: "json",
-//                    data: JSON.stringify(overloadedPostData),
-//                    success: function (data, textStatus, jqXHR) {
-//                        self.onDeleteSuccess.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name, data: data}, null, self);
-//                    },
-//                    error: function (jqXHR, textStatus, errorThrown) {
-//                        $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-//                        self.onDeleteFailure.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name}, null, self);
-//                    }
-//                });
-//            }
-        }
-
         function doCancel() {
             if (self.grid.getEditorLock().commitCurrentEdit()) {
                 $.ajax({
@@ -527,6 +463,7 @@
             //i.e. for every concrete subset of the many property
             for (var i = 0; i < result.length; i++) {
                 var tumlTabViewManager = self.addTab(tuml.tab.Enum.Properties, result[i], tumlUri, propertyNavigatingTo, {forLookup: false, forManyComponent: false, isOne: isOne, forCreation: forCreation}, self.tabContainer);
+                self.addToTumlTabViewManagers(tumlTabViewManager);
                 postTabCreate(tumlTabViewManager, self.tabContainer, result[i], false, result[i].meta.to, false, self.tumlTabViewManagers.length - 1);
             }
         }
@@ -581,14 +518,16 @@
 
     TumlMainViewManager.prototype = new Tuml.TumlTabContainerManager;
 
-    TumlMainViewManager.prototype.refreshContext = function(tumlUri) {
+    TumlMainViewManager.prototype.refreshContext = function (tumlUri) {
         this.uiManager.refresh(tumlUri);
     }
 
     TumlMainViewManager.prototype.addNewRow = function (dataViewItems, event) {
-        alert('hi there from TumlMainViewManager');
+        this.doSave(false);
     }
 
-
+    TumlMainViewManager.prototype.addTab = function (tabEnum, result, tumlUri, propertyNavigatingTo, options, tabContainer) {
+        return Tuml.TumlTabContainerManager.prototype.addTab.call(this, tabEnum, result, tumlUri, propertyNavigatingTo, options, tabContainer);
+    }
 })
     (jQuery);

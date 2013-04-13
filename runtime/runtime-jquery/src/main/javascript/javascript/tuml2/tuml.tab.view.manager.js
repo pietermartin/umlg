@@ -23,7 +23,7 @@
         }
 
         this.createOrReturnSubTabContainer = function () {
-            var tabLayoutDiv = $('#' + this.tabDivName);
+            var tabLayoutDiv = $('#' + this.tabId);
             var subTabContainer = $('#subTabs');
             if (subTabContainer.length == 0) {
                 subTabContainer = $('<div />', {id: 'subTabs'}).appendTo(tabLayoutDiv);
@@ -107,14 +107,15 @@
 
     TumlBaseTabViewManager.prototype.init = function (tumlUri, result) {
         this.qualifiedName = result.meta.qualifiedName;
-        this.tabDivName = result.meta.to.name;
+//        this.tabDivName = result.meta.to.name;
         TumlBaseTabViewManager.prototype.onCloseTab = new Tuml.Event();
     }
 
     TumlBaseTabViewManager.prototype.createTab = function () {
         var self = this;
         var tabTemplate = "<li id='li" + this.tabId + "'><a href='#{href}'>#{label}</a> <span class='ui-icon ui-icon-close'>Remove Tab</span></li>";
-        var label = this.tabTitleName, id = this.tabId;
+        var label = this.tabTitleName;
+        var id = this.tabId;
         this.li = $(tabTemplate.replace(/#\{href\}/g, "#" + id).replace(/#\{label\}/g, label));
 
         // close icon: removing the tab on click
@@ -133,6 +134,7 @@
 
     function TumlTabQueryViewManager(tabEnum, tabContainer, instanceQueryUri, classQueryUri, tabDivName, tabTitleName, queryId) {
 
+        alert('remove tabDivName');
         //Public api
         $.extend(this, {
             "TumlTabQueryViewManager": "1.0.0",
@@ -177,7 +179,7 @@
         });
 
         this.createQuery = function (oclExecuteUri, query, post) {
-            this.tumlTabQueryManager.createQuery(self.tabDivName, oclExecuteUri, query, post);
+            this.tumlTabQueryManager.createQuery(this.tabDivName, oclExecuteUri, query, post);
         }
 
         TumlBaseTabViewManager.call(this, tabEnum, tabContainer);
@@ -187,7 +189,7 @@
     TumlTabQueryViewManager.prototype = new Tuml.TumlBaseTabViewManager;
 
     TumlTabQueryViewManager.prototype.createTab = function () {
-        this.tabId = this.tabDivName;
+        this.tabId = this.result.meta.to.name;
         var divPanel = TumlBaseTabViewManager.prototype.createTab.call(this);
         if (this.queryId !== undefined) {
             $.data(divPanel[0], 'queryId', this.queryId);
@@ -387,18 +389,6 @@
         var gridDiv = $('<div />', {id: 'slickGrid' + this.tabId, class: 'slickGridOuter'});
         $('#' + this.tabId).append(gridDiv);
         this.tumlTabGridManager.refresh(result, gridDiv);
-    }
-    TumlTabManyViewManager.prototype.updateGridForResult = function (result, tabId) {
-        for (var i = 0; i < result.length; i++) {
-            var metaForData = result[i].meta.to;
-            if (metaForData.name === tabId) {
-                this.updateGrid(result[i]);
-                return;
-            }
-        }
-    }
-    TumlTabManyViewManager.prototype.updateGrid = function (result) {
-        this.tumlTabGridManager.update(result);
     }
 
     function TumlTabManyComponentViewManager(tabEnum, tabContainer, oneManyOrQuery, tumlUri, result) {

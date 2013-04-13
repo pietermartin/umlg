@@ -396,14 +396,8 @@
             $('<div />', {id: 'pager' + this.metaForData.name, style: 'width:auto;height:20px;'}).appendTo(tabDiv);
 
             $('#contextMenu' + this.metaForData.name).remove();
-            this.createGrid(result.data/*, this.metaForData*/, tumlUri);
+            this.createGrid(result.data, tumlUri);
 
-        };
-
-        //This is called from tuml.tab.view.manager.js, from the onPutSuccess and onPostSuccess events
-        this.update = function (result, gridDiv) {
-            this.metaForData = result.meta.to;
-            this.updateGrid(result.data);
         };
 
         this.validateNewItems = function (newItems) {
@@ -435,8 +429,9 @@
             }
         }
 
-        this.updateGrid = function (data) {
-            this.dataView.refreshItem(data);
+        this.updateGrid = function (result) {
+            this.metaForData = result.meta.to;
+            this.dataView.refreshItem(result.data);
         }
 
         this.handleContextMenuClickLink = function(tumlUri) {

@@ -29,7 +29,7 @@
             contextManager = new Tuml.ContextManager();
             contextManager.onClickContextMenu.subscribe(function (e, args) {
                 self.refresh(args.uri);
-                changeMyUrl(args.name, args.uri);
+                changeMyUrl(args.uri);
             });
 
             //Create the context manager
@@ -37,7 +37,7 @@
             leftMenuManager.onMenuClick.subscribe(function (e, args) {
                 //Do something like refresh the page
                 self.refresh(args.uri);
-                changeMyUrl(args.name, args.uri);
+                changeMyUrl(args.uri);
             });
             leftMenuManager.onQueryClick.subscribe(function (e, args) {
                 var queryTabDivName = args.name.replace(/\s/g, '');
@@ -46,27 +46,6 @@
 
             //Create main view manager
             mainViewManager = new Tuml.TumlMainViewManager(this, leftMenuManager);
-            mainViewManager.onPutSuccess.subscribe(function (e, args) {
-                self.onPutSuccess.notify(args, e, self);
-            });
-            mainViewManager.onPutFailure.subscribe(function (e, args) {
-                self.onPutFailure.notify(args, e, self);
-            });
-            mainViewManager.onPostSuccess.subscribe(function (e, args) {
-                self.onPostSuccess.notify(args, e, self);
-            });
-            mainViewManager.onPostFailure.subscribe(function (e, args) {
-                self.onPostFailure.notify(args, e, self);
-            });
-            mainViewManager.onDeleteSuccess.subscribe(function (e, args) {
-                self.onDeleteSuccess.notify(args, e, self);
-            });
-            mainViewManager.onDeleteFailure.subscribe(function (e, args) {
-                self.onDeleteFailure.notify(args, e, self);
-            });
-            mainViewManager.onCancel.subscribe(function (e, args) {
-                self.onCancel.notify(args, e, self);
-            });
 
             mainViewManager.onPostInstanceQuerySuccess.subscribe(function (e, args) {
                 leftMenuManager.refreshInstanceQuery();
@@ -78,12 +57,7 @@
             mainViewManager.onSelfCellClick.subscribe(function (e, args) {
                 self.onSelfCellClick.notify(args, e, self);
                 self.refresh(args.tumlUri);
-                changeMyUrl(args.name, args.tumlUri);
-            });
-            mainViewManager.onContextMenuClickLink.subscribe(function (e, args) {
-                self.onContextMenuClickLink.notify(args, e, self);
-                self.refresh(args.tumlUri);
-                changeMyUrl(args.name, args.tumlUri);
+                changeMyUrl(args.tumlUri);
             });
             mainViewManager.onContextMenuClickDelete.subscribe(function (e, args) {
                 self.onContextMenuClickDelete.notify(args, e, self);
@@ -93,7 +67,7 @@
                 var contextMetaData = getContextMetaData(args.data, args.tumlUri);
                 contextManager.refresh(contextMetaData.name, contextMetaData.uri, contextMetaData.contextVertexId);
                 var adjustedUri = contextMetaData.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextMetaData.contextVertexId);
-                changeMyUrl(contextMetaData.name, adjustedUri);
+                changeMyUrl(adjustedUri);
             });
             mainViewManager.onPutOneFailure.subscribe(function (e, args) {
                 self.onPutOneFailure.notify(args, e, self);
@@ -103,7 +77,7 @@
                 var contextMetaData = getContextMetaData(args.data);
                 contextManager.refresh(contextMetaData.name, contextMetaData.uri, contextMetaData.contextVertexId);
                 var adjustedUri = contextMetaData.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextMetaData.contextVertexId);
-                changeMyUrl(contextMetaData.name, adjustedUri);
+                changeMyUrl(adjustedUri);
                 //This is like calling refresh only we already have the data
                 mainViewManager.refresh(adjustedUri, args.data);
             });
@@ -114,7 +88,7 @@
                 var contextMetaData = getContextMetaData(args.data, args.tumlUri);
                 contextManager.refresh(contextMetaData.name, contextMetaData.uri, contextMetaData.contextVertexId);
                 var adjustedUri = contextMetaData.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextMetaData.contextVertexId);
-                changeMyUrl(contextMetaData.name, adjustedUri);
+                changeMyUrl(adjustedUri);
                 //This is like calling refresh only we already have the data
                 mainViewManager.refresh(adjustedUri, args.data);
             });
@@ -131,6 +105,8 @@
         }
 
         this.refresh = function(tumlUri) {
+            //Change the browsers url
+            changeMyUrl(tumlUri);
             //Call the server for the tumlUri
             var contextVertexId = retrieveVertexId(tumlUri);
             $.ajax({
@@ -188,7 +164,7 @@
             }
         }
 
-        function changeMyUrl(title, url) {
+        function changeMyUrl(url) {
             var indexOfSecondBackSlash = url.indexOf('/', 1);
             var firstPart = url.substring(0, indexOfSecondBackSlash);
             var secondPart = url.substring(indexOfSecondBackSlash, url.length);
@@ -198,19 +174,13 @@
             } else {
                 urlToPush = secondPart + '/ui2';
             }
-            history.pushState({}, title, urlToPush);
+            history.pushState({}, "firefox ignores this", urlToPush);
         }
 
         //Public api
         $.extend(this, {
             "TumlUiManagerVersion":"1.0.0",
             //These events are propogated from the grid
-            "onPutSuccess":new Tuml.Event(),
-            "onPutFailure":new Tuml.Event(),
-            "onPostSuccess":new Tuml.Event(),
-            "onPostFailure":new Tuml.Event(),
-            "onDeleteSuccess":new Tuml.Event(),
-            "onDeleteFailure":new Tuml.Event(),
             "onCancel":new Tuml.Event(),
             "onSelfCellClick":new Tuml.Event(),
             "onContextMenuClickDelete":new Tuml.Event(),

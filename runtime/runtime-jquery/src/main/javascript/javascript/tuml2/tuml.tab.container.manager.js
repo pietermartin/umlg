@@ -280,9 +280,6 @@
             tumlTabViewManager.onSelfCellClick.subscribe(function (e, args) {
                 self.onSelfCellClick.notify(args, e, self);
             });
-            tumlTabViewManager.onContextMenuClickLink.subscribe(function (e, args) {
-                self.onContextMenuClickLink.notify(args, e, self);
-            });
             tumlTabViewManager.onContextMenuClickDelete.subscribe(function (e, args) {
                 self.onContextMenuClickDelete.notify(args, e, self);
             });
