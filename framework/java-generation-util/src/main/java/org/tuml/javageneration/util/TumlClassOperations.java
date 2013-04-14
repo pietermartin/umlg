@@ -106,7 +106,8 @@ public class TumlClassOperations extends ClassOperations {
         Set<Property> result = new HashSet<Property>();
         for (Property p : getAllOwnedProperties(clazz)) {
             PropertyWrapper pWrap = new PropertyWrapper(p);
-            if (!pWrap.isDerived() && ((pWrap.isOne() && !pWrap.isQualifier()) || (pWrap.isMany() && (pWrap.isPrimitive() || pWrap.isEnumeration())))) {
+//            if (!pWrap.isDerived() && ((pWrap.isOne() && !pWrap.isQualifier()) || (pWrap.isMany() && (pWrap.isPrimitive() || pWrap.isEnumeration())))) {
+            if (!pWrap.isDerived() && !pWrap.isQualified()) {
                 // Exclude the composite parent
                 if (!(pWrap.getOtherEnd() != null && pWrap.getOtherEnd().isComposite())) {
                     result.add(p);

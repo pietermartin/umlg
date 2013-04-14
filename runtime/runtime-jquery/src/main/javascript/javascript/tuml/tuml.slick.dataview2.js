@@ -404,8 +404,8 @@
     }
 
     //This is called from the grid on regular save.
-    //The itemsToRefresh contains the difference that were posted. New items an existing items.
-    function refreshItem(itemsToRefresh) {
+    //The itemsToRefresh contains the difference that were posted. New items and existing items.
+    function refreshItemAfterCommit(itemsToRefresh) {
         for (var i = 0; i < itemsToRefresh.length; i++) {
             var itemToRefresh = itemsToRefresh[i];
             if (itemToRefresh.tmpId != undefined) {
@@ -434,7 +434,44 @@
         refresh();
     }
 
-    function addItem(item) {
+      //This is called from the grid on regular save.
+      //The itemsToRefresh contains the difference that were posted. New items and existing items.
+      function refreshItemAfterRollback(itemsToRefresh) {
+          for (var i = 0; i < itemsToRefresh.length; i++) {
+              var itemToRefresh = itemsToRefresh[i];
+              if (itemToRefresh.tmpId != undefined) {
+
+                  //Replace the id with the tmpId as the id is meaningless on a rolled back transaction
+                  itemToRefresh.id = itemToRefresh.tmpId;
+
+                  //New item
+                  if (idxById[itemToRefresh.tmpId] == undefined) {
+                      throw "Invalid id";
+                  }
+                  //Update the items array
+                  var index = idxById[itemToRefresh.tmpId];
+                  items[index] = itemToRefresh;
+                  //Update the new items array
+                  var newItemIndex = newIdxById[itemToRefresh.tmpId];
+                  newItems[newItemIndex] = itemToRefresh;
+
+              } else {
+                  //Existing item
+                  if (idxById[itemToRefresh.id] == undefined) {
+                      throw "Invalid id";
+                  }
+                  //Update the items array
+                  var index = idxById[itemToRefresh.id];
+                  items[index] = itemToRefresh;
+                  //Update the updated items array
+                  var updatedItemIndex = updatedIdxById[itemToRefresh.tmpId];
+                  newItems[updatedItemIndex] = itemToRefresh;
+              }
+          }
+          refresh();
+      }
+
+      function addItem(item) {
       items.push(item);
       updateIdxById(items.length - 1);
 
@@ -946,7 +983,8 @@
       "setRefreshHints": setRefreshHints,
       "setFilterArgs": setFilterArgs,
       "refresh": refresh,
-      "refreshItem": refreshItem,
+      "refreshItemAfterCommit": refreshItemAfterCommit,
+      "refreshItemAfterRollback": refreshItemAfterRollback,
       "updateItem": updateItem,
       "insertItem": insertItem,
       "addItem": addItem,

@@ -45,7 +45,7 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 
         OJAnnotatedOperation toJsonSimple = new OJAnnotatedOperation(operationName, new OJPathName("String"));
         TinkerGenerationUtil.addOverrideAnnotation(toJsonSimple);
-        toJsonSimple.getBody().addToStatements("return toJson(true)");
+        toJsonSimple.getBody().addToStatements("return " + operationName + "(true)");
         annotatedClass.addToOperations(toJsonSimple);
 
         OJAnnotatedOperation toJson = new OJAnnotatedOperation(operationName, new OJPathName("String"));
@@ -79,7 +79,7 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
             if (pWrap.isMany() && !pWrap.isDataType()) {
 
                 ifDeep = new OJIfStatement("deep");
-                ifDeep.addToThenPart("sb.append(\"\\\"" + pWrap.getName() + "\\\": [\" + " + TinkerGenerationUtil.ToJsonUtil.getLast() + ".toJson("
+                ifDeep.addToThenPart("sb.append(\"\\\"" + pWrap.getName() + "\\\": [\" + " + TinkerGenerationUtil.ToJsonUtil.getLast() + "."+operationName+"("
                         + pWrap.getter() + "()) + \"]" + "\")");
                 annotatedClass.addToImports(TinkerGenerationUtil.ToJsonUtil);
                 toJson.getBody().addToStatements(ifDeep);

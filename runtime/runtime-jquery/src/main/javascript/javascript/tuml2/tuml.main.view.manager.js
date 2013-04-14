@@ -58,7 +58,7 @@
                             //Do not call refreshInternal as it creates all tabs for the meta data
                             var tumlTabViewManager = this.addTab(tuml.tab.Enum.Properties, result[i], tumlUri, propertyNavigatingTo, {forLookup: false, forManyComponent: false, isOne: true, forCreation: false}, this.tabContainer);
                             this.addToTumlTabViewManagers(tumlTabViewManager);
-                            postTabCreate(tumlTabViewManager, this.tabContainer, result[i], true, result[i].meta.to, isForCreation, self.tumlTabViewManagers.length - 1);
+                            self.postTabCreate(tumlTabViewManager, this.tabContainer, result[i], true, result[i].meta.to, isForCreation, self.tumlTabViewManagers.length - 1);
 
                             //reorder tabs, make sure new tabs are first
                             reorderTabsAfterAddOneOrMany(savedTumlTabViewManagers);
@@ -135,7 +135,11 @@
                     contentType: "application/json",
                     data: JSON.stringify(overloadedPostData),
                     success: function (result, textStatus, jqXHR) {
-                        self.updateTabsForResult(result);
+                        if (commit) {
+                            self.updateTabsForResultAfterCommit(result);
+                        } else {
+                            self.updateTabsForResultAfterRollback(result);
+                        }
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
@@ -144,21 +148,32 @@
             }
         }
 
-        this.updateTabsForResult = function (result) {
+        this.updateTabsForResultAfterCommit = function (result) {
             for (var i = 0; i < result.length; i++) {
-
-                for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
-                    var tumlTabViewManager = self.tumlTabViewManagers[i];
+                for (var j = 0; j < this.tumlTabViewManagers.length; j++) {
+                    var tumlTabViewManager = this.tumlTabViewManagers[j];
                     var metaForData = result[i].meta.to;
-                    alert('ja wol');
-//                    if (metaForData.name === tabId) {
-//                        this.tumlTabGridManager.updateGrid(result[i]);
-//                        return;
-//                    }
+                    //TOTO use qualified name somehow
+                    if (tumlTabViewManager.tabId == metaForData.name) {
+                        tumlTabViewManager.updateGridAfterCommit(result[i].data);
+                    }
                 }
-
             }
         }
+
+        this.updateTabsForResultAfterRollback = function (result) {
+            for (var i = 0; i < result.length; i++) {
+                for (var j = 0; j < this.tumlTabViewManagers.length; j++) {
+                    var tumlTabViewManager = this.tumlTabViewManagers[j];
+                    var metaForData = result[i].meta.to;
+                    //TOTO use qualified name somehow
+                    if (tumlTabViewManager.tabId == metaForData.name) {
+                        tumlTabViewManager.updateGridAfterRollback(result[i].data);
+                    }
+                }
+            }
+        }
+
 
         this.clearTabsOnAddOneOrMany = function (newContextVertexId) {
             if (newContextVertexId === undefined && contextVertexId === null) {
@@ -378,20 +393,6 @@
             self.addQueryTab(true, new Tuml.Query(-1, 'New Query', 'New Query Description', 'self.name', 'ocl'), reorder);
         }
 
-        function updateValidationWarningHeader() {
-            $('#validation-warning').children().remove();
-            var tumlTabManyViewManagers = getTumlTabManyViewManagers(false);
-            var rowCount = 0;
-            for (var i = 0; i < tumlTabManyViewManagers.length; i++) {
-                var dataView = tumlTabManyViewManagers[i].tumlTabGridManager.dataView;
-                rowCount += dataView.getItems().length;
-            }
-            if (rowCount < propertyNavigatingTo.lower || (propertyNavigatingTo.upper !== -1 && rowCount > propertyNavigatingTo.upper)) {
-                $('#validation-warning').append($('<span />').text(
-                    'multiplicity falls outside the valid range [' + propertyNavigatingTo.lower + '..' + propertyNavigatingTo.upper + ']'));
-            }
-        }
-
         function validateMultiplicity(tumlTabManyViewManagers) {
             var rowCount = 0;
             for (var i = 0; i < tumlTabManyViewManagers.length; i++) {
@@ -406,21 +407,6 @@
             } else {
                 return true;
             }
-        }
-
-        function getTumlTabManyViewManagers(commitCurrentEdit) {
-            var tumlTabManyViewManagers = [];
-            for (var i = 0; i < self.tumlTabViewManagers.length; i++) {
-                var tumlTabViewManager = self.tumlTabViewManagers[i];
-                //Get all the many tab views
-                if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager) {
-                    if (commitCurrentEdit) {
-                        tumlTabViewManager.tumlTabGridManager.grid.getEditorLock().commitCurrentEdit();
-                    }
-                    tumlTabManyViewManagers.push(tumlTabViewManager);
-                }
-            }
-            return tumlTabManyViewManagers;
         }
 
         function doCancel() {
@@ -464,18 +450,7 @@
             for (var i = 0; i < result.length; i++) {
                 var tumlTabViewManager = self.addTab(tuml.tab.Enum.Properties, result[i], tumlUri, propertyNavigatingTo, {forLookup: false, forManyComponent: false, isOne: isOne, forCreation: forCreation}, self.tabContainer);
                 self.addToTumlTabViewManagers(tumlTabViewManager);
-                postTabCreate(tumlTabViewManager, self.tabContainer, result[i], false, result[i].meta.to, false, self.tumlTabViewManagers.length - 1);
-            }
-        }
-
-        function postTabCreate(tumlTabViewManager, tabContainer, result, isOne, metaForData, forCreation, activeIndex) {
-            tumlTabViewManager.createTab();
-            tabContainer.tabs("option", "active", activeIndex);
-            //Create the grid
-            if (!isOne) {
-                tumlTabViewManager.createGrid(result);
-            } else {
-                tumlTabViewManager.createOne(result.data[0], metaForData, forCreation);
+                self.postTabCreate(tumlTabViewManager, self.tabContainer, result[i], false, result[i].meta.to, false, self.tumlTabViewManagers.length - 1);
             }
         }
 

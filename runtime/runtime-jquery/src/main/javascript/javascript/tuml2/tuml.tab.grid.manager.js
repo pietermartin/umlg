@@ -429,9 +429,16 @@
             }
         }
 
-        this.updateGrid = function (result) {
-            this.metaForData = result.meta.to;
-            this.dataView.refreshItem(result.data);
+        this.updateGridAfterCommit = function (data) {
+            this.dataView.refreshItemAfterCommit(data);
+        }
+
+        this.updateGridAfterRollback = function (data) {
+            this.dataView.refreshItemAfterRollback(data);
+            this.grid.getEditController().cancelCurrentEdit();
+            this.grid.invalidateAllRows();
+            this.grid.render();
+            this.grid.editActiveCell();
         }
 
         this.handleContextMenuClickLink = function(tumlUri) {
@@ -535,13 +542,12 @@
                             //Get the data currently for the component
                             data = self.dataView.getItem(args.row)[column.name];
                         }
-                        //Ensure the row in the grid exist
-                        //TODO Suspend the transaction
-                        //TODO Save the grid
-//                        self.suspendTransactionAndSave();
-                        //TODO pass in the row's id
                         var id = self.dataView.getItem(args.row)["id"];
-                        self.onClickManyComponentCell.notify({data: data, cell: args, tumlUri: column.options.property.tumlUri, property: column.options.property}, null, self);
+//                        self.onClickManyComponentCell.notify({data: data, cell: args, tumlUri: column.options.property.tumlUri, property: column.options.property}, null, self);
+
+                        self.tumlTabViewManager.openManyComponent(data, args, column.options.property.tumlUri, column.options.property);
+
+
                     }
                 } else if (!column.options.property.manyPrimitive && !column.options.property.manyEnumeration && column.options.property.composite &&
                     column.options.property.lower === 1 && column.options.property.upper === 1) {
@@ -667,42 +673,13 @@
 
                     self.grid.getEditController().cancelCurrentEdit();
                     var newItem = {};
-//                    for (var i = 0; i < self.grid.getColumns().length; i++) {
-//                        var column = self.grid.getColumns()[i];
-//                        newItem[column.name] = null;
-//                    }
                     //Generate a fake id, its required for the grid to work nicely
                     newItem.id = 'fake::' + self.dataView.getItems().length + self.dataView.getNewItems().length + 1;
+                    newItem.tmpId = newItem.id;
                     newItem.qualifiedName = self.localMetaForData.qualifiedName;
-//                    newItem = $.extend(newItem, args.item);
                     self.dataView.addItem(newItem);
                     self.grid.editActiveCell();
-
-//                    self.onAddNewRow.notify(self.dataView.getItems(), e, self);
-
                     self.handleAddNewRow(self.dataView.getItems(), e);
-
-
-//            var overloadedPostData = {};
-//            overloadedPostData['insert'] = {qualifiedName: self.localMetaForData.qualifiedName};
-//            $.ajax({
-//                url: tumlUri + "?rollback=true",
-//                type: "POST",
-//                dataType: "json",
-//                contentType: "json",
-//                data: JSON.stringify(overloadedPostData),
-//                success: function (data, textStatus, jqXHR) {
-//                    //Cancel prevent validation from happening
-//                    self.grid.getEditController().cancelCurrentEdit();
-//                    self.dataView.addItem(data[0].data[0]);
-//                    //This ensures the cell is in edit mode, i.e. the cursor is ready for typing
-//                    self.grid.editActiveCell();
-//                    self.onAddRowSuccess.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name, data: data}, null, self);
-//                },
-//                error: function (jqXHR, textStatus, errorThrown) {
-//                    $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-//                }
-//            });
 
                 }
             });

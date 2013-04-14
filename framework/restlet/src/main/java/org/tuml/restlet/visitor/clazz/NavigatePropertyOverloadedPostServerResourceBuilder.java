@@ -345,7 +345,7 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
         put.getBody().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
         annotatedClass.addToImports(pWrap.javaBaseTypePath());
         put.getBody().addToStatements("childResource.fromJson(propertyMap)");
-        put.getBody().addToStatements("sb.append(childResource.toJson())");
+        put.getBody().addToStatements("sb.append(childResource.toJsonWithoutCompositeParent())");
     }
 
     private void addPostResource(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass, OJPathName parentPathName) {
@@ -394,12 +394,12 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
         }
         annotatedClass.addToImports(pWrap.javaBaseTypePath());
         tryInstantiate.getTryPart().addToStatements("childResource.fromJson(propertyMap)");
-        tryInstantiate.getTryPart().addToStatements("String jsonResult = childResource.toJson()");
-        OJIfStatement ifContainsId = new OJIfStatement("propertyMap.containsKey(\"id\")");
-        ifContainsId.addToThenPart("String tmpId = (String)propertyMap.get(\"id\")");
-        ifContainsId.addToThenPart("jsonResult = jsonResult.substring(1);");
-        ifContainsId.addToThenPart("jsonResult = \"{\\\"tmpId\\\": \\\"\" + tmpId + \"\\\", \" + jsonResult;");
-        tryInstantiate.getTryPart().addToStatements(ifContainsId);
+        tryInstantiate.getTryPart().addToStatements("String jsonResult = childResource.toJsonWithoutCompositeParent()");
+//        OJIfStatement ifContainsId = new OJIfStatement("propertyMap.containsKey(\"id\")");
+//        ifContainsId.addToThenPart("String tmpId = (String)propertyMap.get(\"id\")");
+//        ifContainsId.addToThenPart("jsonResult = jsonResult.substring(1);");
+//        ifContainsId.addToThenPart("jsonResult = \"{\\\"tmpId\\\": \\\"\" + tmpId + \"\\\", \" + jsonResult;");
+//        tryInstantiate.getTryPart().addToStatements(ifContainsId);
         if (pWrap.isOrdered()) {
             //TODO
 //            annotatedClass.addToImports(TumlRestletGenerationUtil.Parameter);
