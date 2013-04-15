@@ -6,14 +6,21 @@
         }
     });
 
-    function TumlTabContainerManager(tabContainer) {
+    function TumlTabContainerManager(tabContainer, propertyNavigatingTo) {
 
+        //This will be null for the root object only
+        this.propertyNavigatingTo = propertyNavigatingTo;
         this.tumlTabViewManagers = [];
         this.tabContainer = null;
         this.parentTabContainer = tabContainer;
         this.parentTabContainerManager = null;
-        this.lower = -1;
-        this.upper = -1;
+        if (this.propertyNavigatingTo !== undefined && this.propertyNavigatingTo !== null) {
+            this.lower = this.propertyNavigatingTo.lower;
+            this.upper = this.propertyNavigatingTo.upper;
+        } else {
+            this.lower = -1;
+            this.upper = -1;
+        }
 
         this.getTabContainer = function () {
             return this.tabContainer;
@@ -31,16 +38,16 @@
             this.parentTabContainerManager = parentTabContainerManager;
         }
 
-        this.removeTumlTabViewManager = function(tumlTabViewManager) {
+        this.removeTumlTabViewManager = function (tumlTabViewManager) {
             var index = this.tumlTabViewManagers.indexOf(tumlTabViewManager);
             this.tumlTabViewManagers.splice(index, 1);
         }
 
     }
 
-    TumlTabContainerManager.prototype.updateValidationWarningHeader = function() {
+    TumlTabContainerManager.prototype.updateValidationWarningHeader = function () {
         $('#validation-warning').children().remove();
-        var tumlTabManyViewManagers = this.getTumlTabManyViewManagers(false);
+        var tumlTabManyViewManagers = this.getParentTabContainerManager().getTumlTabManyViewManagers(false);
         var rowCount = 0;
         for (var i = 0; i < tumlTabManyViewManagers.length; i++) {
             var dataView = tumlTabManyViewManagers[i].tumlTabGridManager.dataView;
@@ -68,8 +75,7 @@
     }
 
 
-
-    TumlTabContainerManager.prototype.refreshContext = function(tumlUri) {
+    TumlTabContainerManager.prototype.refreshContext = function (tumlUri) {
         this.getParentTabContainerManager().refreshContext(tumlUri);
     }
 
@@ -87,7 +93,7 @@
         alert("TumlTabContainerManager.prototype.addNewRow must be overriden");
     }
 
-    TumlTabContainerManager.prototype.postTabCreate = function(tumlTabViewManager, tabContainer, result, isOne, metaForData, forCreation, activeIndex) {
+    TumlTabContainerManager.prototype.postTabCreate = function (tumlTabViewManager, tabContainer, result, isOne, metaForData, forCreation, activeIndex) {
         tumlTabViewManager.createTab();
         tabContainer.tabs("option", "active", activeIndex);
         //Create the grid
@@ -98,20 +104,20 @@
         }
     }
 
-    TumlTabContainerManager.prototype.addTab = function (tabEnum, result, tumlUri, propertyNavigatingTo, options, tabContainer) {
+    TumlTabContainerManager.prototype.addTab = function (tabEnum, result, tumlUri, options, tabContainer, propertyNavigatingTo) {
         var metaForData = result.meta.to;
 
         var tumlTabViewManager;
         if (options.isOne) {
             tumlTabViewManager = new Tuml.TumlTabOneViewManager(tabEnum, tabContainer,
-                {propertyNavigatingTo: propertyNavigatingTo,
+                {
                     many: !options.isOne,
                     one: options.isOne,
                     query: false,
                     forLookup: options.forLookup,
                     forManyComponent: options.forManyComponent,
                     forOneComponent: options.forOneComponent
-                }, tumlUri, result
+                }, tumlUri, result, propertyNavigatingTo
             );
             tumlTabViewManager.setParentTabContainerManager(this);
 
@@ -200,24 +206,28 @@
         } else {
             if (options.forManyComponent) {
                 tumlTabViewManager = new Tuml.TumlTabManyComponentViewManager(tabEnum, tabContainer,
-                    {propertyNavigatingTo: propertyNavigatingTo,
+                    {
                         many: !options.isOne,
                         one: options.isOne,
                         query: false,
                         forLookup: options.forLookup,
                         forManyComponent: options.forManyComponent
-                    }, tumlUri, result
+                    },
+                    tumlUri, result, propertyNavigatingTo
+
                 );
                 tumlTabViewManager.setParentTabContainerManager(this);
             } else {
                 tumlTabViewManager = new Tuml.TumlTabManyViewManager(tabEnum, tabContainer,
-                    {propertyNavigatingTo: propertyNavigatingTo,
+                    {
                         many: !options.isOne,
                         one: options.isOne,
                         query: false,
                         forLookup: options.forLookup,
                         forManyComponent: options.forManyComponent
-                    }, tumlUri, result
+                    },
+                    tumlUri, result, propertyNavigatingTo
+
                 );
                 tumlTabViewManager.setParentTabContainerManager(this);
             }

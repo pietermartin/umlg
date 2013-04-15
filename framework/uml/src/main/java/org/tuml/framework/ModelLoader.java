@@ -123,12 +123,16 @@ public class ModelLoader {
         return results;
     }
 
+    /**
+     * Filter out Behaviors for now
+     * @return
+     */
     public List<Class> getAllConcreteClasses() {
         List<Class> results = new ArrayList<Class>();
         filter(results, this.model, new Filter() {
             @Override
             public boolean filter(Element e) {
-                return e instanceof Class && !((Class)e).isAbstract();
+                return e instanceof Class && !((Class)e).isAbstract() && !(e instanceof Behavior);
             }
         });
 

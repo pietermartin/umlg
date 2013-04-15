@@ -15,7 +15,6 @@
         var classQueryTumlUri;
         var contextVertexId;
         var contextChanged = true;
-        var propertyNavigatingTo = null;
         var tumlUri = null;
 
         this.refresh = function (tumlUri, result) {
@@ -23,15 +22,15 @@
             var metaDataNavigatingTo = result[0].meta.to;
             var metaDataNavigatingFrom = result[0].meta.from;
             this.tumlUri = tumlUri;
-            propertyNavigatingTo = (metaDataNavigatingFrom == undefined ? null : findPropertyNavigatingTo(qualifiedName, metaDataNavigatingFrom));
-            if (propertyNavigatingTo != null && (propertyNavigatingTo.oneToMany || propertyNavigatingTo.manyToMany)) {
+            this.propertyNavigatingTo = (metaDataNavigatingFrom == undefined ? null : findPropertyNavigatingTo(qualifiedName, metaDataNavigatingFrom));
+            if (this.propertyNavigatingTo != null && (this.propertyNavigatingTo.oneToMany || this.propertyNavigatingTo.manyToMany)) {
                 //Property is a many
 
                 var newContextVertexId = retrieveVertexId(tumlUri);
                 var savedTumlTabViewManagers = this.clearTabsOnAddOneOrMany(newContextVertexId);
 
                 leftMenuManager.refresh(metaDataNavigatingFrom, metaDataNavigatingTo, contextVertexId);
-                refreshInternal(tumlUri, result, propertyNavigatingTo, false);
+                refreshInternal(tumlUri, result, false);
 
                 //reorder tabs, make sure new tabs are first
                 reorderTabsAfterAddOneOrMany(savedTumlTabViewManagers);
@@ -56,7 +55,7 @@
                             //If property is a one then there is n navigating from
                             leftMenuManager.refresh(metaDataNavigatingTo, metaDataNavigatingTo, contextVertexId);
                             //Do not call refreshInternal as it creates all tabs for the meta data
-                            var tumlTabViewManager = this.addTab(tuml.tab.Enum.Properties, result[i], tumlUri, propertyNavigatingTo, {forLookup: false, forManyComponent: false, isOne: true, forCreation: false}, this.tabContainer);
+                            var tumlTabViewManager = this.addTab(tuml.tab.Enum.Properties, result[i], tumlUri, {forLookup: false, forManyComponent: false, isOne: true, forCreation: false}, this.tabContainer);
                             this.addToTumlTabViewManagers(tumlTabViewManager);
                             self.postTabCreate(tumlTabViewManager, this.tabContainer, result[i], true, result[i].meta.to, isForCreation, self.tumlTabViewManagers.length - 1);
 
@@ -73,7 +72,7 @@
                     var savedTumlTabViewManagers = this.clearTabsOnAddOneOrMany(newContextVertexId);
 
                     leftMenuManager.refresh(metaDataNavigatingFrom, metaDataNavigatingTo, contextVertexId);
-                    refreshInternal(tumlUri, result, propertyNavigatingTo, true, true);
+                    refreshInternal(tumlUri, result, true, true);
 
                     //reorder tabs, make sure new tabs are first
                     reorderTabsAfterAddOneOrMany(savedTumlTabViewManagers);
@@ -100,8 +99,8 @@
             $('#validation-warning').children().remove();
             $('#navigation-qualified-name').children().remove();
             var propertyDescription = qualifiedName;
-            if (propertyNavigatingTo !== undefined && propertyNavigatingTo !== null) {
-                propertyDescription += '  -  ' + createPropertyDescriptionHeading(propertyNavigatingTo);
+            if (this.propertyNavigatingTo !== undefined && this.propertyNavigatingTo !== null) {
+                propertyDescription += '  -  ' + createPropertyDescriptionHeading(this.propertyNavigatingTo);
             }
             $('#navigation-qualified-name').append($('<span />').text(propertyDescription));
             addButtons();
@@ -109,7 +108,7 @@
         }
 
         this.doSave = function (commit) {
-            var tumlTabManyViewManagers = getTumlTabManyViewManagers(commit);
+            var tumlTabManyViewManagers = this.getTumlTabManyViewManagers(commit);
             var overloadedPostData = {insert: [], update: [], delete: []};
 
             if (validateMultiplicity(tumlTabManyViewManagers)) {
@@ -346,18 +345,18 @@
         this.onPostClassQuerySuccess = new Tuml.Event();
         this.onPutClassQuerySuccess = new Tuml.Event();
 
-        function createPropertyDescriptionHeading(propertyNavigatingTo) {
+        function createPropertyDescriptionHeading() {
             var multiplicity;
-            if (propertyNavigatingTo.upper == -1) {
-                multiplicity = 'multiplicity: [' + propertyNavigatingTo.lower + '..*]';
+            if (self.propertyNavigatingTo.upper == -1) {
+                multiplicity = 'multiplicity: [' + self.propertyNavigatingTo.lower + '..*]';
             } else {
-                multiplicity = 'multiplicity: [' + propertyNavigatingTo.lower + '..' + propertyNavigatingTo.upper + ']';
+                multiplicity = 'multiplicity: [' + self.propertyNavigatingTo.lower + '..' + self.propertyNavigatingTo.upper + ']';
             }
-            var unique = 'unique: ' + propertyNavigatingTo.unique;
-            var ordered = 'ordered: ' + propertyNavigatingTo.ordered;
+            var unique = 'unique: ' + self.propertyNavigatingTo.unique;
+            var ordered = 'ordered: ' + self.propertyNavigatingTo.ordered;
             //TODO
 //            var derived = 'derived: ' + propertyNavigatingTo.derived;
-            var association = 'association: ' + (propertyNavigatingTo.composite ? 'composite' : 'non composite');
+            var association = 'association: ' + (self.propertyNavigatingTo.composite ? 'composite' : 'non composite');
             return multiplicity + ', ' + unique + ', ' + ordered + ', ' + association;
         }
 
@@ -401,8 +400,8 @@
                     rowCount += dataView.getItems().length;
                 }
             }
-            if (rowCount < propertyNavigatingTo.lower || (propertyNavigatingTo.upper !== -1 && rowCount > propertyNavigatingTo.upper)) {
-                alert('multiplicity falls outside the valid range [' + propertyNavigatingTo.lower + '..' + propertyNavigatingTo.upper + ']');
+            if (rowCount < self.propertyNavigatingTo.lower || (self.propertyNavigatingTo.upper !== -1 && rowCount > self.propertyNavigatingTo.upper)) {
+                alert('multiplicity falls outside the valid range [' + self.propertyNavigatingTo.lower + '..' + self.propertyNavigatingTo.upper + ']');
                 return false;
             } else {
                 return true;
@@ -444,11 +443,11 @@
             }).appendTo('#buttons');
         }
 
-        function refreshInternal(tumlUri, result, propertyNavigatingTo, isOne, forCreation) {
+        function refreshInternal(tumlUri, result, isOne, forCreation) {
             //A tab is created for every element in the array,
             //i.e. for every concrete subset of the many property
             for (var i = 0; i < result.length; i++) {
-                var tumlTabViewManager = self.addTab(tuml.tab.Enum.Properties, result[i], tumlUri, propertyNavigatingTo, {forLookup: false, forManyComponent: false, isOne: isOne, forCreation: forCreation}, self.tabContainer);
+                var tumlTabViewManager = self.addTab(tuml.tab.Enum.Properties, result[i], tumlUri, {forLookup: false, forManyComponent: false, isOne: isOne, forCreation: forCreation}, self.tabContainer, self.propertyNavigatingTo);
                 self.addToTumlTabViewManagers(tumlTabViewManager);
                 self.postTabCreate(tumlTabViewManager, self.tabContainer, result[i], false, result[i].meta.to, false, self.tumlTabViewManagers.length - 1);
             }
@@ -501,8 +500,8 @@
         this.doSave(false);
     }
 
-    TumlMainViewManager.prototype.addTab = function (tabEnum, result, tumlUri, propertyNavigatingTo, options, tabContainer) {
-        return Tuml.TumlTabContainerManager.prototype.addTab.call(this, tabEnum, result, tumlUri, propertyNavigatingTo, options, tabContainer);
+    TumlMainViewManager.prototype.addTab = function (tabEnum, result, tumlUri, options, tabContainer, propertyNavigatingTo) {
+        return Tuml.TumlTabContainerManager.prototype.addTab.call(this, tabEnum, result, tumlUri, options, tabContainer, propertyNavigatingTo);
     }
 })
     (jQuery);
