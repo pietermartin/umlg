@@ -43,7 +43,59 @@
             this.tumlTabViewManagers.splice(index, 1);
         }
 
+        this.recreateTabContainer = function () {
+            var self = this;
+            if (this.tabContainer !== null) {
+                this.tabContainer.remove();
+            }
+            var tabLayoutDiv = $('#tabs-layout');
+            this.tabContainer = $('<div />', {id: 'tabs'}).appendTo(tabLayoutDiv);
+//            this.setTabContainer(tabContainer);
+            this.tabContainer.append('<ul />');
+            this.tabContainer.tabs();
+            this.tabContainer.find(".ui-tabs-nav").sortable({
+                axis: "x",
+                stop: function () {
+                    self.tabContainer.tabs("refresh");
+                }
+            });
+            this.tabContainer.tabs({
+                activate: function (event, ui) {
+                    var queryId = $.data(ui.newPanel[0], 'queryId');
+                    var tabEnum = $.data(ui.newPanel[0], 'tabEnum');
+//                leftMenuManager.refreshQueryMenuCss(queryId, tabEnum);
+                }
+            });
+            return this.tabContainer;
+        }
+
+        this.createOrReturnSubTabContainer = function () {
+            var self = this;
+            var tabLayoutDiv = $('#' + this.tabId);
+            var subTabContainer = $('#subTabs');
+            if (subTabContainer.length == 0) {
+                this.tabContainer = $('<div />', {id: 'subTabs'}).appendTo(tabLayoutDiv);
+                this.tabContainer.append('<ul />');
+                this.tabContainer.tabs();
+                this.tabContainer.find(".ui-tabs-nav").sortable({
+                    axis: "x",
+                    stop: function () {
+                        self.tabContainer.tabs("refresh");
+                    }
+                });
+                this.tabContainer.tabs({
+                    activate: function (event, ui) {
+                        var queryId = $.data(ui.newPanel[0], 'queryId');
+//                        var tabEnum = $.data(ui.newPanel[0], 'tabEnum');
+                    }
+                });
+            }
+        }
+
+
     }
+
+
 
     TumlTabContainerManager.prototype.updateValidationWarningHeader = function () {
         $('#validation-warning').children().remove();
@@ -93,9 +145,9 @@
         alert("TumlTabContainerManager.prototype.addNewRow must be overriden");
     }
 
-    TumlTabContainerManager.prototype.postTabCreate = function (tumlTabViewManager, tabContainer, result, isOne, metaForData, forCreation, activeIndex) {
+    TumlTabContainerManager.prototype.postTabCreate = function (tumlTabViewManager, result, isOne, metaForData, forCreation, activeIndex) {
         tumlTabViewManager.createTab();
-        tabContainer.tabs("option", "active", activeIndex);
+        this.tabContainer.tabs("option", "active", activeIndex);
         //Create the grid
         if (!isOne) {
             tumlTabViewManager.createGrid(result);
@@ -104,12 +156,14 @@
         }
     }
 
-    TumlTabContainerManager.prototype.addTab = function (tabEnum, result, tumlUri, options, tabContainer, propertyNavigatingTo) {
+    TumlTabContainerManager.prototype.addTab = function (tabEnum, result, tumlUri, options, propertyNavigatingTo) {
         var metaForData = result.meta.to;
 
         var tumlTabViewManager;
         if (options.isOne) {
-            tumlTabViewManager = new Tuml.TumlTabOneViewManager(tabEnum, tabContainer,
+            tumlTabViewManager = new Tuml.TumlTabOneViewManager(
+                tabEnum,
+                this.tabContainer,
                 {
                     many: !options.isOne,
                     one: options.isOne,
@@ -117,7 +171,10 @@
                     forLookup: options.forLookup,
                     forManyComponent: options.forManyComponent,
                     forOneComponent: options.forOneComponent
-                }, tumlUri, result, propertyNavigatingTo
+                },
+                tumlUri,
+                result,
+                propertyNavigatingTo
             );
             tumlTabViewManager.setParentTabContainerManager(this);
 
@@ -157,20 +214,20 @@
                         if (args.data !== null) {
                             metaDataResponse[0].data = args.data;
                         }
-                        var tumlOneComponentTabViewManager = addTab(
+//                        tabEnum, result, tumlUri, options, propertyNavigatingTo
+                        var tumlOneComponentTabViewManager = self.addTab(
                             tuml.tab.Enum.Properties,
                             metaDataResponse[0],
                             args.tumlUri,
-                            args.property,
                             {forLookup: false, forManyComponent: false, forOneComponent: true, isOne: true, forCreation: true},
-                            tumlTabViewManager.createSubTabContainer()
+                            args.property
                         );
-                        postTabCreate(tumlOneComponentTabViewManager, tabContainer, metaDataResponse[0], true, metaDataResponse[0].meta.to, false, self.tumlTabViewManagers.length - 1);
+                        self.postTabCreate(tumlOneComponentTabViewManager, metaDataResponse[0], true, metaDataResponse[0].meta.to, false, self.tumlTabViewManagers.length - 1);
                         tumlTabViewManager.setProperty(args.property);
                         tumlOneComponentTabViewManager.setParentTumlTabViewManager(tumlTabViewManager);
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
-                        alert('error getting ' + property.tumlMetaDataUri + '\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
+                        alert('error getting ' + args.property.tumlMetaDataUri + '\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
                     }
                 });
             });
@@ -186,26 +243,28 @@
                         if (args.data !== null) {
                             metaDataResponse[0].data = args.data;
                         }
-                        var tumlOneComponentTabViewManager = addTab(
+                        var tumlOneComponentTabViewManager = self.addTab(
                             tuml.tab.Enum.Properties,
                             metaDataResponse[0],
                             args.tumlUri,
                             args.property,
                             {forLookup: false, forManyComponent: true, isOne: false, forCreation: true}
                         );
-                        postTabCreate(tumlOneComponentTabViewManager, tabContainer, metaDataResponse[0], true, metaDataResponse[0].meta.to, false, self.tumlTabViewManagers.length - 1);
+                        self.postTabCreate(tumlOneComponentTabViewManager, metaDataResponse[0], true, metaDataResponse[0].meta.to, false, self.tumlTabViewManagers.length - 1);
                         //TODO fix below can not use tumlTabViewManager as a variable as it represent just the last varriable
 //                            tumlTabViewManager.setProperty(args.property);
                         tumlOneComponentTabViewManager.setParentTumlTabViewManager(tumlTabViewManager);
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
-                        alert('error getting ' + property.tumlMetaDataUri + '\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
+                        alert('error getting ' + args.property.tumlMetaDataUri + '\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
                     }
                 });
             });
         } else {
             if (options.forManyComponent) {
-                tumlTabViewManager = new Tuml.TumlTabManyComponentViewManager(tabEnum, tabContainer,
+                tumlTabViewManager = new Tuml.TumlTabManyComponentViewManager(
+                    tabEnum,
+                    this.tabContainer,
                     {
                         many: !options.isOne,
                         one: options.isOne,
@@ -213,12 +272,16 @@
                         forLookup: options.forLookup,
                         forManyComponent: options.forManyComponent
                     },
-                    tumlUri, result, propertyNavigatingTo
+                    tumlUri,
+                    result,
+                    propertyNavigatingTo
 
                 );
                 tumlTabViewManager.setParentTabContainerManager(this);
             } else {
-                tumlTabViewManager = new Tuml.TumlTabManyViewManager(tabEnum, tabContainer,
+                tumlTabViewManager = new Tuml.TumlTabManyViewManager(
+                    tabEnum,
+                    this.tabContainer,
                     {
                         many: !options.isOne,
                         one: options.isOne,
@@ -226,7 +289,9 @@
                         forLookup: options.forLookup,
                         forManyComponent: options.forManyComponent
                     },
-                    tumlUri, result, propertyNavigatingTo
+                    tumlUri,
+                    result,
+                    propertyNavigatingTo
 
                 );
                 tumlTabViewManager.setParentTabContainerManager(this);
@@ -236,8 +301,8 @@
                 //Closing the tab fires closeTab event which removes the tumlTabViewManager from the array
                 $('#tab-container').tabs('close', args.tabName + " Select");
                 $('#' + args.tabName + "Lookup").remove();
-                tabContainer.tabs("enable", self.tumlTabViewManagers.indexOf(tumlTabViewManager.getParentTumlTabViewManager()));
-                tabContainer.tabs("option", "active", self.tumlTabViewManagers.indexOf(tumlTabViewManager.getParentTumlTabViewManager()));
+                self.tabContainer.tabs("enable", self.tumlTabViewManagers.indexOf(tumlTabViewManager.getParentTumlTabViewManager()));
+                self.tabContainer.tabs("option", "active", self.tumlTabViewManagers.indexOf(tumlTabViewManager.getParentTumlTabViewManager()));
             });
             tumlTabViewManager.onManyComponentSaveButtonSuccess.subscribe(function (e, args) {
                 alert('commented out');
@@ -256,8 +321,8 @@
                 //Closing the tab fires closeTab event which removes the tumlTabViewManager from the array
                 $('#tab-container').tabs('close', args.tabName + " Select");
                 $('#' + args.tabName + "Lookup").remove();
-                tabContainer.tabs("enable", self.tumlTabViewManagers.indexOf(tumlTabViewManager.getParentTumlTabViewManager()));
-                tabContainer.tabs("option", "active", self.tumlTabViewManagers.indexOf(tumlTabViewManager.getParentTumlTabViewManager()));
+                self.tabContainer.tabs("enable", self.tumlTabViewManagers.indexOf(tumlTabViewManager.getParentTumlTabViewManager()));
+                self.tabContainer.tabs("option", "active", self.tumlTabViewManagers.indexOf(tumlTabViewManager.getParentTumlTabViewManager()));
             });
             tumlTabViewManager.onAddButtonSuccess.subscribe(function (e, args) {
                 $('#tab-container').tabs('disableTab', metaForData.name);
@@ -268,7 +333,7 @@
                     args.propertyNavigatingTo,
                     {forLookup: true, forManyComponent: false}
                 );
-                postTabCreate(tumlLookupTabViewManager, tabContainer, args.data, true, args.data.meta.to, false, self.tumlTabViewManagers.length - 1);
+                self.postTabCreate(tumlLookupTabViewManager, args.data, true, args.data.meta.to, false, self.tumlTabViewManagers.length - 1);
                 tumlLookupTabViewManager.setParentTumlTabViewManager(tumlTabViewManager);
             });
             tumlTabViewManager.onClickManyComponentCell.subscribe(function (e, args) {
@@ -287,19 +352,19 @@
                         if (args.data.length !== 0) {
                             result[0].data = args.data;
                         }
-                        var tumlOneComponentTabViewManager = addTab(
+                        var tumlOneComponentTabViewManager = self.addTab(
                             tuml.tab.Enum.Properties,
                             result[0],
                             args.tumlUri,
-                            args.property,
-                            {forLookup: false, forManyComponent: false, forOneComponent: true, isOne: true, forCreation: true}
+                            {forLookup: false, forManyComponent: false, forOneComponent: true, isOne: true, forCreation: true},
+                            args.property
                         );
                         tumlTabViewManager.setCell(args.cell);
                         tumlOneComponentTabViewManager.setParentTumlTabViewManager(tumlTabViewManager);
-                        tabContainer.tabs("disable", self.tumlTabViewManagers.indexOf(tumlTabViewManager));
+                        self.tabContainer.tabs("disable", self.tumlTabViewManagers.indexOf(tumlTabViewManager));
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
-                        alert('error getting ' + property.tumlMetaDataUri + '\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
+                        alert('error getting ' + args.property.tumlMetaDataUri + '\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
                     }
                 });
             });
@@ -312,10 +377,10 @@
             });
         }
         tumlTabViewManager.onAddRowSuccess.subscribe(function (e, args) {
-            updateValidationWarningHeader();
+            self.updateValidationWarningHeader();
         });
         tumlTabViewManager.onRemoveRowSuccess.subscribe(function (e, args) {
-            updateValidationWarningHeader();
+            self.updateValidationWarningHeader();
         });
         tumlTabViewManager.onPutSuccess.subscribe(function (e, args) {
             self.onPutSuccess.notify(args, e, self);

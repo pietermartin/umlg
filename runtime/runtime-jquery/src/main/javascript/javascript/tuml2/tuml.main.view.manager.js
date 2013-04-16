@@ -55,9 +55,9 @@
                             //If property is a one then there is n navigating from
                             leftMenuManager.refresh(metaDataNavigatingTo, metaDataNavigatingTo, contextVertexId);
                             //Do not call refreshInternal as it creates all tabs for the meta data
-                            var tumlTabViewManager = this.addTab(tuml.tab.Enum.Properties, result[i], tumlUri, {forLookup: false, forManyComponent: false, isOne: true, forCreation: false}, this.tabContainer);
+                            var tumlTabViewManager = this.addTab(tuml.tab.Enum.Properties, result[i], tumlUri, {forLookup: false, forManyComponent: false, isOne: true, forCreation: false}, this.propertyNavigatingTo);
                             this.addToTumlTabViewManagers(tumlTabViewManager);
-                            self.postTabCreate(tumlTabViewManager, this.tabContainer, result[i], true, result[i].meta.to, isForCreation, self.tumlTabViewManagers.length - 1);
+                            self.postTabCreate(tumlTabViewManager, result[i], true, result[i].meta.to, isForCreation, self.tumlTabViewManagers.length - 1);
 
                             //reorder tabs, make sure new tabs are first
                             reorderTabsAfterAddOneOrMany(savedTumlTabViewManagers);
@@ -299,30 +299,30 @@
 
         }
 
-        this.recreateTabContainer = function () {
-            var tabContainer = this.getTabContainer();
-            if (tabContainer !== null) {
-                tabContainer.remove();
-            }
-            var tabLayoutDiv = $('#tabs-layout');
-            tabContainer = $('<div />', {id: 'tabs'}).appendTo(tabLayoutDiv);
-            this.setTabContainer(tabContainer);
-            tabContainer.append('<ul />');
-            tabContainer.tabs();
-            tabContainer.find(".ui-tabs-nav").sortable({
-                axis: "x",
-                stop: function () {
-                    tabContainer.tabs("refresh");
-                }
-            });
-            tabContainer.tabs({
-                activate: function (event, ui) {
-                    var queryId = $.data(ui.newPanel[0], 'queryId');
-                    var tabEnum = $.data(ui.newPanel[0], 'tabEnum');
-//                leftMenuManager.refreshQueryMenuCss(queryId, tabEnum);
-                }
-            });
-        }
+//        this.recreateTabContainer = function () {
+//            var tabContainer = this.getTabContainer();
+//            if (tabContainer !== null) {
+//                tabContainer.remove();
+//            }
+//            var tabLayoutDiv = $('#tabs-layout');
+//            tabContainer = $('<div />', {id: 'tabs'}).appendTo(tabLayoutDiv);
+//            this.setTabContainer(tabContainer);
+//            tabContainer.append('<ul />');
+//            tabContainer.tabs();
+//            tabContainer.find(".ui-tabs-nav").sortable({
+//                axis: "x",
+//                stop: function () {
+//                    tabContainer.tabs("refresh");
+//                }
+//            });
+//            tabContainer.tabs({
+//                activate: function (event, ui) {
+//                    var queryId = $.data(ui.newPanel[0], 'queryId');
+//                    var tabEnum = $.data(ui.newPanel[0], 'tabEnum');
+////                leftMenuManager.refreshQueryMenuCss(queryId, tabEnum);
+//                }
+//            });
+//        }
 
 
         this.onPutSuccess = new Tuml.Event();
@@ -447,9 +447,12 @@
             //A tab is created for every element in the array,
             //i.e. for every concrete subset of the many property
             for (var i = 0; i < result.length; i++) {
-                var tumlTabViewManager = self.addTab(tuml.tab.Enum.Properties, result[i], tumlUri, {forLookup: false, forManyComponent: false, isOne: isOne, forCreation: forCreation}, self.tabContainer, self.propertyNavigatingTo);
+                var tumlTabViewManager = self.addTab(tuml.tab.Enum.Properties, result[i], tumlUri, {forLookup: false, forManyComponent: false, isOne: isOne, forCreation: forCreation}, self.propertyNavigatingTo);
                 self.addToTumlTabViewManagers(tumlTabViewManager);
-                self.postTabCreate(tumlTabViewManager, self.tabContainer, result[i], false, result[i].meta.to, false, self.tumlTabViewManagers.length - 1);
+
+//                tumlTabViewManager, result, isOne, metaForData, forCreation, activeIndex
+
+                self.postTabCreate(tumlTabViewManager, result[i], false, result[i].meta.to, false, self.tumlTabViewManagers.length - 1);
             }
         }
 
@@ -500,8 +503,8 @@
         this.doSave(false);
     }
 
-    TumlMainViewManager.prototype.addTab = function (tabEnum, result, tumlUri, options, tabContainer, propertyNavigatingTo) {
-        return Tuml.TumlTabContainerManager.prototype.addTab.call(this, tabEnum, result, tumlUri, options, tabContainer, propertyNavigatingTo);
+    TumlMainViewManager.prototype.addTab = function (tabEnum, result, tumlUri, options, propertyNavigatingTo) {
+        return Tuml.TumlTabContainerManager.prototype.addTab.call(this, tabEnum, result, tumlUri, options, propertyNavigatingTo);
     }
 })
     (jQuery);

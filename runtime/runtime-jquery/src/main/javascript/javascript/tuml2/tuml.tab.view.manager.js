@@ -22,29 +22,6 @@
             $('#tab-container').tabs('disableTab', this.tabTitleName);
         }
 
-        this.createOrReturnSubTabContainer = function () {
-            var tabLayoutDiv = $('#' + this.tabId);
-            var subTabContainer = $('#subTabs');
-            if (subTabContainer.length == 0) {
-                subTabContainer = $('<div />', {id: 'subTabs'}).appendTo(tabLayoutDiv);
-                subTabContainer.append('<ul />');
-                subTabContainer.tabs();
-                subTabContainer.find(".ui-tabs-nav").sortable({
-                    axis: "x",
-                    stop: function () {
-                        subTabContainer.tabs("refresh");
-                    }
-                });
-                subTabContainer.tabs({
-                    activate: function (event, ui) {
-                        var queryId = $.data(ui.newPanel[0], 'queryId');
-//                        var tabEnum = $.data(ui.newPanel[0], 'tabEnum');
-                    }
-                });
-            }
-            return subTabContainer;
-        }
-
         //Public api
         $.extend(this, {
             "TumlTabViewManagerVersion": "1.0.0",
@@ -137,18 +114,17 @@
             success: function (result, textStatus, jqXHR) {
 
                 for (var i = 0; i < result.length; i++) {
-                    var subTabContainer = self.createOrReturnSubTabContainer();
+                    self.createOrReturnSubTabContainer();
                     result[i].data = data;
                     var tumlManyComponentTabViewManager = self.addTab(
                         tuml.tab.Enum.Properties,
                         result[i],
                         tumlUri,
                         {forLookup: false, forManyComponent: true, forOneComponent: false, isOne: false, forCreation: true},
-                        subTabContainer,
                         property
                     );
                     tumlManyComponentTabViewManager.setParentTumlTabViewManager(self);
-                    self.postTabCreate(tumlManyComponentTabViewManager, subTabContainer, result[i], false, result[i].meta.to, false, i);
+                    self.postTabCreate(tumlManyComponentTabViewManager, result[i], false, result[i].meta.to, false, i);
                     self.setCell(cell);
                     self.addToTumlTabViewManagers(tumlManyComponentTabViewManager);
                 }
