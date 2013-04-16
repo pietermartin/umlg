@@ -100,7 +100,7 @@
             $('#navigation-qualified-name').children().remove();
             var propertyDescription = qualifiedName;
             if (this.propertyNavigatingTo !== undefined && this.propertyNavigatingTo !== null) {
-                propertyDescription += '  -  ' + createPropertyDescriptionHeading(this.propertyNavigatingTo);
+                propertyDescription += '  -  ' + this.createPropertyDescriptionHeading();
             }
             $('#navigation-qualified-name').append($('<span />').text(propertyDescription));
             addButtons();
@@ -320,21 +320,6 @@
         this.onPutInstanceQuerySuccess = new Tuml.Event();
         this.onPostClassQuerySuccess = new Tuml.Event();
         this.onPutClassQuerySuccess = new Tuml.Event();
-
-        function createPropertyDescriptionHeading() {
-            var multiplicity;
-            if (self.propertyNavigatingTo.upper == -1) {
-                multiplicity = 'multiplicity: [' + self.propertyNavigatingTo.lower + '..*]';
-            } else {
-                multiplicity = 'multiplicity: [' + self.propertyNavigatingTo.lower + '..' + self.propertyNavigatingTo.upper + ']';
-            }
-            var unique = 'unique: ' + self.propertyNavigatingTo.unique;
-            var ordered = 'ordered: ' + self.propertyNavigatingTo.ordered;
-            //TODO
-//            var derived = 'derived: ' + propertyNavigatingTo.derived;
-            var association = 'association: ' + (self.propertyNavigatingTo.composite ? 'composite' : 'non composite');
-            return multiplicity + ', ' + unique + ', ' + ordered + ', ' + association;
-        }
 
         function reorderTabsAfterAddOneOrMany(savedTumlTabViewManagers) {
             for (var i = 0; i < savedTumlTabViewManagers.length; i++) {

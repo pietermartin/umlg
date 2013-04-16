@@ -64,6 +64,22 @@
                 });
             }
         }
+
+        this.createPropertyDescriptionHeading = function() {
+            var multiplicity;
+            if (this.propertyNavigatingTo.upper == -1) {
+                multiplicity = 'multiplicity: [' + this.propertyNavigatingTo.lower + '..*]';
+            } else {
+                multiplicity = 'multiplicity: [' + this.propertyNavigatingTo.lower + '..' + this.propertyNavigatingTo.upper + ']';
+            }
+            var unique = 'unique: ' + this.propertyNavigatingTo.unique;
+            var ordered = 'ordered: ' + this.propertyNavigatingTo.ordered;
+            //TODO
+//            var derived = 'derived: ' + propertyNavigatingTo.derived;
+            var association = 'association: ' + (this.propertyNavigatingTo.composite ? 'composite' : 'non composite');
+            return multiplicity + ', ' + unique + ', ' + ordered + ', ' + association;
+        }
+
     }
 
     TumlTabContainerManager.prototype.getTabId = function() {

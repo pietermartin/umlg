@@ -87,11 +87,27 @@
 
     TumlBaseTabViewManager.prototype.createTab = function () {
         var self = this;
-        var tabTemplate = "<li id='li" + this.tabId + "'><a href='#{href}'>#{label}</a> <span class='ui-icon ui-icon-close'>Remove Tab</span></li>";
+        var tabTemplate;
+        if (this.getParentTabContainerManager() instanceof Tuml.TumlMainViewManager) {
+            tabTemplate = "<li id='li" + this.tabId + "'><a href='#{href}'>#{label}</a>";
+        } else {
+            tabTemplate = "<li id='li" + this.tabId + "'><a href='#{href}'>#{label}</a>" +
+                "<span class='ui-icon ui-icon-cancel'>Cancel Tab</span>" +
+                "<span class='ui-icon ui-icon-plus'>Save Tab</span>" +
+                "<span class='ui-icon ui-icon-close'>Close Tab</span></li>";
+        }
         var label = this.tabTitleName;
         var id = this.tabId;
         this.li = $(tabTemplate.replace(/#\{href\}/g, "#" + id).replace(/#\{label\}/g, label));
 
+        // cancel icon: refreshing the data
+        this.li.find("span.ui-icon-cancel").click(function () {
+            self.closeTab();
+        });
+        // save icon: save and close the tab on click
+        this.li.find("span.ui-icon-plus").click(function () {
+            self.closeTab();
+        });
         // close icon: removing the tab on click
         this.li.find("span.ui-icon-close").click(function () {
             self.closeTab();
