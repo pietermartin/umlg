@@ -129,6 +129,20 @@
       }
     }
 
+    //tuml
+      function updateNewIdxById(startingIndex) {
+          startingIndex = startingIndex || 0;
+          var id;
+          for (var i = startingIndex, l = newItems.length; i < l; i++) {
+              id = newItems[i][idProperty];
+              if (id === undefined) {
+                  throw "Each data element must implement a unique 'id' property";
+              }
+              newIdxById[id] = i;
+          }
+      }
+    //tuml
+
     function ensureIdUniqueness() {
       var id;
       for (var i = 0, l = items.length; i < l; i++) {
@@ -490,8 +504,16 @@
         throw "Invalid id";
       }
         //tuml
-        var item = items[idx];
-        deletedItems.push(item);
+
+        if (newIdxById[id] === undefined || newIdxById[id] === null) {
+            var item = items[idx];
+            deletedItems.push(item);
+        } else {
+            var newIdx = newIdxById[id];
+            delete newIdxById[id];
+            newItems.splice(newIdx, 1);
+            updateNewIdxById(newIdx);
+        }
 //tuml
 
         delete idxById[id];

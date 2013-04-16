@@ -111,7 +111,9 @@
             var tumlTabManyViewManagers = this.getTumlTabManyViewManagers(commit);
             var overloadedPostData = {insert: [], update: [], delete: []};
 
-            if (validateMultiplicity(tumlTabManyViewManagers)) {
+            if (commit && !validateMultiplicity(tumlTabManyViewManagers)) {
+                return;
+            } else {
                 for (var i = 0; i < tumlTabManyViewManagers.length; i++) {
                     if (!tumlTabManyViewManagers[i].oneManyOrQuery.forManyComponent) {
                         var dataView = tumlTabManyViewManagers[i].tumlTabGridManager.dataView;
@@ -186,8 +188,8 @@
             }
             contextVertexId = newContextVertexId;
             if (contextChanged) {
-                this.clearAllTabs();
-                this.recreateTabContainer();
+                this.destroyTabContainer();
+                this.createOrReturnSubTabContainer();
             } else {
                 var tumlTabViewManagersToClose = [];
                 //Remove property tabs only, query tabs remain for the context
@@ -298,32 +300,6 @@
             return tumlTabViewManagerQuery;
 
         }
-
-//        this.recreateTabContainer = function () {
-//            var tabContainer = this.getTabContainer();
-//            if (tabContainer !== null) {
-//                tabContainer.remove();
-//            }
-//            var tabLayoutDiv = $('#tabs-layout');
-//            tabContainer = $('<div />', {id: 'tabs'}).appendTo(tabLayoutDiv);
-//            this.setTabContainer(tabContainer);
-//            tabContainer.append('<ul />');
-//            tabContainer.tabs();
-//            tabContainer.find(".ui-tabs-nav").sortable({
-//                axis: "x",
-//                stop: function () {
-//                    tabContainer.tabs("refresh");
-//                }
-//            });
-//            tabContainer.tabs({
-//                activate: function (event, ui) {
-//                    var queryId = $.data(ui.newPanel[0], 'queryId');
-//                    var tabEnum = $.data(ui.newPanel[0], 'tabEnum');
-////                leftMenuManager.refreshQueryMenuCss(queryId, tabEnum);
-//                }
-//            });
-//        }
-
 
         this.onPutSuccess = new Tuml.Event();
         this.onPutFailure = new Tuml.Event();
@@ -449,9 +425,6 @@
             for (var i = 0; i < result.length; i++) {
                 var tumlTabViewManager = self.addTab(tuml.tab.Enum.Properties, result[i], tumlUri, {forLookup: false, forManyComponent: false, isOne: isOne, forCreation: forCreation}, self.propertyNavigatingTo);
                 self.addToTumlTabViewManagers(tumlTabViewManager);
-
-//                tumlTabViewManager, result, isOne, metaForData, forCreation, activeIndex
-
                 self.postTabCreate(tumlTabViewManager, result[i], false, result[i].meta.to, false, self.tumlTabViewManagers.length - 1);
             }
         }
@@ -497,6 +470,10 @@
 
     TumlMainViewManager.prototype.refreshContext = function (tumlUri) {
         this.uiManager.refresh(tumlUri);
+    }
+
+    TumlMainViewManager.prototype.getTabId = function () {
+        return 'tabs-layout';
     }
 
     TumlMainViewManager.prototype.addNewRow = function (dataViewItems, event) {

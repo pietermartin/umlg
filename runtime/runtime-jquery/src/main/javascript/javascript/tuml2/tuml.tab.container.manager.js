@@ -14,21 +14,6 @@
         this.tabContainer = null;
         this.parentTabContainer = tabContainer;
         this.parentTabContainerManager = null;
-        if (this.propertyNavigatingTo !== undefined && this.propertyNavigatingTo !== null) {
-            this.lower = this.propertyNavigatingTo.lower;
-            this.upper = this.propertyNavigatingTo.upper;
-        } else {
-            this.lower = -1;
-            this.upper = -1;
-        }
-
-        this.getTabContainer = function () {
-            return this.tabContainer;
-        }
-
-        this.setTabContainer = function (tabContainer) {
-            this.tabContainer = tabContainer;
-        }
 
         this.getParentTabContainerManager = function () {
             return this.parentTabContainerManager;
@@ -43,38 +28,26 @@
             this.tumlTabViewManagers.splice(index, 1);
         }
 
-        this.recreateTabContainer = function () {
-            var self = this;
+        this.destroyTabContainer = function() {
+            $('#' + this.getTabId() + 'ui-layout-center-heading').remove();
+            this.clearAllTabs();
             if (this.tabContainer !== null) {
                 this.tabContainer.remove();
             }
-            var tabLayoutDiv = $('#tabs-layout');
-            this.tabContainer = $('<div />', {id: 'tabs'}).appendTo(tabLayoutDiv);
-//            this.setTabContainer(tabContainer);
-            this.tabContainer.append('<ul />');
-            this.tabContainer.tabs();
-            this.tabContainer.find(".ui-tabs-nav").sortable({
-                axis: "x",
-                stop: function () {
-                    self.tabContainer.tabs("refresh");
-                }
-            });
-            this.tabContainer.tabs({
-                activate: function (event, ui) {
-                    var queryId = $.data(ui.newPanel[0], 'queryId');
-                    var tabEnum = $.data(ui.newPanel[0], 'tabEnum');
-//                leftMenuManager.refreshQueryMenuCss(queryId, tabEnum);
-                }
-            });
-            return this.tabContainer;
         }
 
         this.createOrReturnSubTabContainer = function () {
             var self = this;
-            var tabLayoutDiv = $('#' + this.tabId);
-            var subTabContainer = $('#subTabs');
+            var tabLayoutDiv = $('#' + this.getTabId());
+            var subTabContainer = $('#' + this.getTabId() + 'Tabs');
             if (subTabContainer.length == 0) {
-                this.tabContainer = $('<div />', {id: 'subTabs'}).appendTo(tabLayoutDiv);
+
+                //add in the div where the property info validation warning goes
+                var uiLayoutCenterHeading = $('<div />', {id: this.getTabId() + 'ui-layout-center-heading', class: 'ui-layout-center-heading'}).appendTo(tabLayoutDiv);
+                $('<div />', {id: this.getTabId() + 'navigation-qualified-name', class: 'navigation-qualified-name'}).appendTo(uiLayoutCenterHeading);
+                $('<div />', {id: this.getTabId() + 'validation-warning', class: 'validation-warning'}).appendTo(uiLayoutCenterHeading);
+
+                this.tabContainer = $('<div />', {id: this.getTabId() + 'Tabs'}).appendTo(tabLayoutDiv);
                 this.tabContainer.append('<ul />');
                 this.tabContainer.tabs();
                 this.tabContainer.find(".ui-tabs-nav").sortable({
@@ -91,23 +64,24 @@
                 });
             }
         }
+    }
 
-
+    TumlTabContainerManager.prototype.getTabId = function() {
+        alert('this must be overriden!');
     }
 
 
-
     TumlTabContainerManager.prototype.updateValidationWarningHeader = function () {
-        $('#validation-warning').children().remove();
-        var tumlTabManyViewManagers = this.getParentTabContainerManager().getTumlTabManyViewManagers(false);
+        $('#' + this.getTabId() + 'validation-warning').children().remove();
+        var tumlTabManyViewManagers = this.getTumlTabManyViewManagers(false);
         var rowCount = 0;
         for (var i = 0; i < tumlTabManyViewManagers.length; i++) {
             var dataView = tumlTabManyViewManagers[i].tumlTabGridManager.dataView;
             rowCount += dataView.getItems().length;
         }
-        if (rowCount < this.lower || (this.upper !== -1 && rowCount > this.upper)) {
-            $('#validation-warning').append($('<span />').text(
-                'multiplicity falls outside the valid range [' + this.lower + '..' + this.upper + ']'));
+        if (rowCount < this.propertyNavigatingTo.lower || (this.propertyNavigatingTo.upper !== -1 && rowCount > this.propertyNavigatingTo.upper)) {
+            $('#' + this.getTabId() + 'validation-warning').append($('<span />').text(
+                'multiplicity falls outside the valid range [' + this.propertyNavigatingTo.lower + '..' + this.propertyNavigatingTo.upper + ']'));
         }
     }
 
@@ -155,6 +129,11 @@
             tumlTabViewManager.createOne(result.data[0], metaForData, forCreation);
         }
     }
+
+    TumlTabContainerManager.prototype.handleDeleteRow = function() {
+        this.getParentTabContainerManager().updateValidationWarningHeader();
+    }
+
 
     TumlTabContainerManager.prototype.addTab = function (tabEnum, result, tumlUri, options, propertyNavigatingTo) {
         var metaForData = result.meta.to;

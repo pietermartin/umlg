@@ -66,6 +66,10 @@
 
     TumlBaseTabViewManager.prototype = new Tuml.TumlTabContainerManager;
 
+    TumlBaseTabViewManager.prototype.getTabId = function() {
+        return this.tabId;
+    }
+
     TumlBaseTabViewManager.prototype.clear = function () {
         this.closeTab();
     }
@@ -333,7 +337,7 @@
     }
 
     TumlTabManyViewManager.prototype.addNewRow = function (dataViewItems, event) {
-        this.updateValidationWarningHeader();
+        this.getParentTabContainerManager().updateValidationWarningHeader();
         this.getParentTabContainerManager().addNewRow(dataViewItems, event);
     }
 

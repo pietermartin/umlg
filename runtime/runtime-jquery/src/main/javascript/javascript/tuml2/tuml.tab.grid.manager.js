@@ -368,6 +368,7 @@
         this.tumlTabViewManager = tumlTabViewManager;
         this.tumlUri = tumlUri;
         this.propertyNavigatingTo = propertyNavigatingTo;
+        this.fakeIndex = 0;
 
         var self = this;
         this.columns = [];
@@ -449,6 +450,34 @@
             this.tumlTabViewManager.addNewRow(dataViewItems, event);
         }
 
+        this.handleDeleteRow = function(row, data) {
+            var moveCell = this.grid.getActiveCell().row >= row;
+            if (moveCell) {
+                var column = self.grid.getColumns()[this.grid.getActiveCell().cell];
+                var cellData = self.dataView.getItem(row)[column.name];
+                this.grid.getEditController().cancelCurrentEdit();
+            }
+            var currentItem = this.dataView.getItem(this.grid.getActiveCell().row);
+            var item = this.dataView.getItem(row);
+            this.dataView.deleteItem(item.id);
+//            self.onRemoveRowSuccess.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name, data: data}, null, self);
+            this.tumlTabViewManager.handleDeleteRow();
+
+            if (moveCell) {
+//                //Move the active cell one up
+                //TODO this needs to be done properly for newItems and Updated items array
+                self.dataView.getItem(this.grid.getActiveCell().row - 1)[column.name] = cellData;
+                this.grid.setActiveCell(this.grid.getActiveCell().row - 1, this.grid.getActiveCell().cell);
+                this.grid.editActiveCell();
+
+                var indexOfCurrentItemInNewItemsArray = self.dataView.getNewItems().indexOf(currentItem);
+                if (self.dataView.getNewItems().indexOf(indexOfCurrentItemInNewItemsArray) !== -1) {
+                    self.dataView.getNewItems()[indexOfCurrentItemInNewItemsArray] = currentItem;
+                }
+            }
+
+        }
+
         this.createGrid = function (data, tumlUri) {
             var columnFilters = {};
             var self = this;
@@ -511,9 +540,7 @@
                     var url = tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), data[row].id);
                     self.handleContextMenuClickLink(url);
                 } else {
-                    var item = self.dataView.getItem(row);
-                    self.dataView.deleteItem(item.id);
-                    self.onRemoveRowSuccess.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name, data: data}, null, self);
+                    self.handleDeleteRow(row, data);
                 }
             });
 
@@ -525,9 +552,7 @@
                 } else if (column.name == 'id') {
                     e.stopImmediatePropagation();
                 } else if (column.name == 'delete') {
-                    var item = self.dataView.getItem(args.row);
-                    self.dataView.deleteItem(item.id);
-                    self.onRemoveRowSuccess.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name, data: data}, null, self);
+                    self.handleDeleteRow(args.row, self.data);
                     e.stopImmediatePropagation();
                 } else if (column.name == 'uri') {
                     var item = self.dataView.getItem(args.row);
@@ -674,7 +699,9 @@
                     self.grid.getEditController().cancelCurrentEdit();
                     var newItem = {};
                     //Generate a fake id, its required for the grid to work nicely
-                    newItem.id = 'fake::' + self.dataView.getItems().length + self.dataView.getNewItems().length + 1;
+//                    newItem.id = 'fake::' + args.row + self.dataView.getItems().length + self.dataView.getNewItems().length + 1;
+                    newItem.id = 'fake::' + self.fakeIndex++;
+
                     newItem.tmpId = newItem.id;
                     newItem.qualifiedName = self.localMetaForData.qualifiedName;
                     self.dataView.addItem(newItem);
@@ -867,6 +894,17 @@
             return itemsToAdd.filter(needToRemove);
         };
 
+        function s4() {
+            return Math.floor((1 + Math.random()) * 0x10000)
+                .toString(16)
+                .substring(1);
+        };
+
+        function guid() {
+            return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+                s4() + '-' + s4() + s4() + s4();
+        }
+
     }
 
     TumlBaseGridManager.prototype.setupColumnFormatter = function () {
@@ -986,5 +1024,6 @@
     TumlBaseGridManager.prototype.getResult = function (data) {
         return this.result;
     }
+
 
 })(jQuery);
