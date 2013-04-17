@@ -184,7 +184,7 @@
             contextVertexId = newContextVertexId;
             if (contextChanged) {
                 this.destroyTabContainer();
-                this.createOrReturnSubTabContainer();
+                this.maybeCreateTabContainer();
             } else {
                 var tumlTabViewManagersToClose = [];
                 //Remove property tabs only, query tabs remain for the context
@@ -200,8 +200,8 @@
             }
             //Save current tabs to help with reordering 2 lines down
             var savedTumlTabViewManagers = [];
-            for (var i = 0; i < self.tumlTabViewManagers.length; i++) {
-                var tumlTabViewManager = self.tumlTabViewManagers[i];
+            for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
+                var tumlTabViewManager = this.tumlTabViewManagers[i];
                 savedTumlTabViewManagers.push(tumlTabViewManager);
             }
             return savedTumlTabViewManagers;

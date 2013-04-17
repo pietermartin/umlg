@@ -37,7 +37,6 @@
             "onManyComponentSaveButtonSuccess": new Tuml.Event(),
             "onManyComponentCloseButtonSuccess": new Tuml.Event(),
             "onAddRowSuccess": new Tuml.Event(),
-            "onRemoveRowSuccess": new Tuml.Event(),
             "onPutSuccess": new Tuml.Event(),
             "onPutFailure": new Tuml.Event(),
             "onPostSuccess": new Tuml.Event(),
@@ -70,14 +69,12 @@
         return this.tabId;
     }
 
-    TumlBaseTabViewManager.prototype.clear = function () {
-        this.closeTab();
-    }
-
     TumlBaseTabViewManager.prototype.closeTab = function () {
+        this.clearAllTabs();
         $("#" + this.tabId).remove();
         this.li.remove();
-        this.getParentTabContainerManager().removeTumlTabViewManager(this);
+        var indexOftab = this.getParentTabContainerManager().tumlTabViewManagers.indexOf(this);
+        this.getParentTabContainerManager().tumlTabViewManagers.splice(indexOftab, 1);
     }
 
     TumlBaseTabViewManager.prototype.init = function (tumlUri, result) {
@@ -134,7 +131,7 @@
             success: function (result, textStatus, jqXHR) {
 
                 for (var i = 0; i < result.length; i++) {
-                    self.createOrReturnSubTabContainer();
+                    self.maybeCreateTabContainer();
                     result[i].data = data;
                     var tumlManyComponentTabViewManager = self.addTab(
                         tuml.tab.Enum.Properties,
@@ -241,11 +238,6 @@
             this.tabTitleName = this.result.meta.to.name;
         }
         TumlBaseTabViewManager.prototype.createTab.call(this);
-    }
-
-    TumlTabOneViewManager.prototype.clear = function () {
-        this.tumlTabOneManager = null;
-        TumlBaseTabViewManager.prototype.clear.call(this);
     }
 
     TumlTabOneViewManager.prototype.setProperty = function (property) {
@@ -374,10 +366,6 @@
     TumlTabManyViewManager.prototype.setCell = function (cell) {
         this.componentCell = cell;
     }
-    TumlTabManyViewManager.prototype.clear = function () {
-        TumlBaseTabViewManager.prototype.clear.call(this);
-        this.tumlTabGridManager = null;
-    }
     TumlTabManyViewManager.prototype.init = function (tumlUri, result) {
         var self = this;
         TumlBaseTabViewManager.prototype.init.call(this, tumlUri, result);
@@ -422,9 +410,6 @@
         this.tumlTabGridManager.onAddRowSuccess.subscribe(function (e, args) {
             self.onAddRowSuccess.notify(args, e, self);
         });
-        this.tumlTabGridManager.onRemoveRowSuccess.subscribe(function (e, args) {
-            self.onRemoveRowSuccess.notify(args, e, self);
-        });
         this.tumlTabGridManager.onSelfCellClick.subscribe(function (e, args) {
             self.onSelfCellClick.notify(args, e, self);
         });
@@ -458,16 +443,6 @@
 
         TumlTabManyViewManager.call(this, tabEnum, tabContainer, oneManyOrQuery, tumlUri, result, propertyNavigatingTo);
 
-        this.parentTumlTabViewManager = null;
-
-        this.setParentTumlTabViewManager = function (tumlTabViewManager) {
-            this.parentTumlTabViewManager = tumlTabViewManager;
-        }
-
-        this.getParentTumlTabViewManager = function () {
-            return this.parentTumlTabViewManager;
-        }
-
     }
 
     TumlTabManyComponentViewManager.prototype = new Tuml.TumlTabManyViewManager();
@@ -475,7 +450,7 @@
     TumlTabManyComponentViewManager.prototype.addNewRow = function (dataViewItems, event) {
         //on a component's new row the value must be set on the parents component cell as the whole data set
         //will be posted with rollback=true to initialize the new row from the backend.
-        this.getParentTumlTabViewManager().setValue(dataViewItems);
+        this.getParentTabContainerManager().setValue(dataViewItems);
         TumlTabManyViewManager.prototype.addNewRow.call(this, dataViewItems, event);
     }
 
@@ -486,14 +461,14 @@
         } else {
             alert('this should not happen!');
         }
-        $('#slickGrid' + this.getParentTumlTabViewManager().tabId).hide();
+        $('#slickGrid' + this.getParentTabContainerManager().tabId).hide();
         TumlBaseTabViewManager.prototype.createTab.call(this);
     }
 
     TumlTabManyComponentViewManager.prototype.closeTab = function () {
         //Save the many component's data into the parent tabs row's cell
         if (this.tumlTabGridManager.grid.getEditorLock().commitCurrentEdit()) {
-            this.parentTumlTabViewManager.setValue(this.tumlTabGridManager.dataView.getItems());
+            this.getParentTabContainerManager.setValue(this.tumlTabGridManager.dataView.getItems());
         }
         TumlBaseTabViewManager.prototype.closeTab.call(this);
     }

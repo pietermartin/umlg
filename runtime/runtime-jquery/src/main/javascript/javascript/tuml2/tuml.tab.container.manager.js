@@ -36,11 +36,13 @@
             }
         }
 
-        this.createOrReturnSubTabContainer = function () {
+        this.maybeCreateTabContainer = function () {
             var self = this;
             var tabLayoutDiv = $('#' + this.getTabId());
-            var subTabContainer = $('#' + this.getTabId() + 'Tabs');
-            if (subTabContainer.length == 0) {
+            var tabContainer = $('#' + this.getTabId() + 'Tabs');
+            if (tabContainer.length == 0) {
+
+                this.tumlTabViewManagers = [];
 
                 //add in the div where the property info validation warning goes
                 var uiLayoutCenterHeading = $('<div />', {id: this.getTabId() + 'ui-layout-center-heading', class: 'ui-layout-center-heading'}).appendTo(tabLayoutDiv);
@@ -122,9 +124,12 @@
     }
 
     TumlTabContainerManager.prototype.clearAllTabs = function () {
-        for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
-            this.tumlTabViewManagers[i].clear();
+        //Do this in reverse as closeTab removes the tab from the array
+        var tabLength = this.tumlTabViewManagers.length;
+        while (tabLength--) {
+            this.tumlTabViewManagers[tabLength].closeTab();
         }
+        this.tumlTabViewManagers = null;
     }
 
     TumlTabContainerManager.prototype.addToTumlTabViewManagers = function (tumlChildTabViewManager) {

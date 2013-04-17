@@ -101,7 +101,6 @@
             "onClickOneComponentCell": new Tuml.Event(),
             "onAddNewRow": new Tuml.Event(),
             "onAddRowSuccess": new Tuml.Event(),
-            "onRemoveRowSuccess": new Tuml.Event(),
             "onSelfCellClick": new Tuml.Event(),
             "onContextMenuClickDelete": new Tuml.Event(),
             "onManyEditorKeyPress": new Tuml.Event()
@@ -268,7 +267,6 @@
             "onAddButtonSuccess": new Tuml.Event(),
             "onClickManyComponentCell": new Tuml.Event(),
             "onClickOneComponentCell": new Tuml.Event(),
-            "onRemoveRowSuccess": new Tuml.Event(),
             "onAddNewRow": new Tuml.Event(),
             "onAddRowSuccess": new Tuml.Event(),
             "onSelfCellClick": new Tuml.Event(),
@@ -460,7 +458,6 @@
             var currentItem = this.dataView.getItem(this.grid.getActiveCell().row);
             var item = this.dataView.getItem(row);
             this.dataView.deleteItem(item.id);
-//            self.onRemoveRowSuccess.notify({tumlUri: tumlUri, tabId: self.localMetaForData.name, data: data}, null, self);
             this.tumlTabViewManager.handleDeleteRow();
 
             if (moveCell) {
