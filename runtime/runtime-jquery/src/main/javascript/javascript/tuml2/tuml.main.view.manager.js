@@ -36,13 +36,8 @@
                 reorderTabsAfterAddOneOrMany(savedTumlTabViewManagers);
             } else {
                 //Property is a one
-                var isForCreation = true;
-                for (var i = 0; i < result.length; i++) {
-                    if (result[i].data.length > 0) {
-                        isForCreation = false;
-                        break;
-                    }
-                }
+                //If there are no data then it is for creation
+                var isForCreation = result.length > 1 && result[0].data.length > 0;
                 if (!isForCreation) {
                     //Only one element of the array contains data, i.e. for the return concrete type
                     for (var i = 0; i < result.length; i++) {
