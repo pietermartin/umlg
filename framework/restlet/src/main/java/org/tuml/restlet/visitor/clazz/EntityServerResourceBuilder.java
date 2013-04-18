@@ -164,7 +164,7 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
                         + getIdFieldName(clazz) + "))");
         annotatedClass.addToImports(TumlClassOperations.getPathName(clazz));
         tryStatement.getTryPart().addToStatements("json.append(\"[{\\\"data\\\": [\")");
-        tryStatement.getTryPart().addToStatements("json.append(" + "c.toJson())");
+        tryStatement.getTryPart().addToStatements("json.append(" + "c.toJsonWithoutCompositeParent())");
 
         tryStatement.getTryPart().addToStatements("meta", "json.append(\"], \\\"meta\\\" : {\")");
 
@@ -194,7 +194,7 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
         getParent.getBody().addToStatements("StringBuilder json = new StringBuilder()");
         annotatedClass.addToImports(TumlClassOperations.getPathName(clazz));
         getParent.getBody().addToStatements("json.append(\"[{\\\"data\\\": [\")");
-        getParent.getBody().addToStatements("json.append(" + "parent.toJson())");
+        getParent.getBody().addToStatements("json.append(" + "parent.toJsonWithoutCompositeParent())");
 
         getParent.getBody().addToStatements("meta", "json.append(\"], \\\"meta\\\" : {\")");
 

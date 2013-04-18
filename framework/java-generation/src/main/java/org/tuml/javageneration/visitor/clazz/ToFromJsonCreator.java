@@ -45,7 +45,7 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 
         OJAnnotatedOperation toJsonSimple = new OJAnnotatedOperation(operationName, new OJPathName("String"));
         TinkerGenerationUtil.addOverrideAnnotation(toJsonSimple);
-        toJsonSimple.getBody().addToStatements("return " + operationName + "(true)");
+        toJsonSimple.getBody().addToStatements("return " + operationName + "(false)");
         annotatedClass.addToOperations(toJsonSimple);
 
         OJAnnotatedOperation toJson = new OJAnnotatedOperation(operationName, new OJPathName("String"));
@@ -64,23 +64,26 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                 toJson.getBody().addToStatements("sb.append(\", \")");
             }
         }
-        int count = 1;
-//        //Remove components from propertiesForToJson
-//        List<Property> propertiesForToJsonWithOutManyComponent = new ArrayList<Property>(propertiesForToJson);
-//        for (Property p : propertiesForToJson) {
-//            PropertyWrapper pWrap = new PropertyWrapper(p);
-//            if (pWrap.isComponent()) {
-//                propertiesForToJsonWithOutManyComponent.remove(p);
-//            }
-//        }
-        OJIfStatement ifDeep = null;
+        int count = 0;
+        OJIfStatement ifDeep;
+        boolean deepIsLast = false;
+        boolean first = true;
         for (Property p : propertiesForToJson) {
+            count++;
+            if (!first) {
+                toJson.getBody().addToStatements("sb.append(\", \")");
+            }
             PropertyWrapper pWrap = new PropertyWrapper(p);
             if (pWrap.isMany() && !pWrap.isDataType()) {
 
                 ifDeep = new OJIfStatement("deep");
-                ifDeep.addToThenPart("sb.append(\"\\\"" + pWrap.getName() + "\\\": [\" + " + TinkerGenerationUtil.ToJsonUtil.getLast() + "."+operationName+"("
+
+                ifDeep.addToThenPart("sb.append(\"\\\"" + pWrap.getName() + "\\\": [\" + " + TinkerGenerationUtil.ToJsonUtil.getLast() + "." + operationName + "("
                         + pWrap.getter() + "()) + \"]" + "\")");
+//                if (!first) {
+                    ifDeep.addToElsePart("sb.delete(sb.length() - 2, sb.length())");
+//                }
+
                 annotatedClass.addToImports(TinkerGenerationUtil.ToJsonUtil);
                 toJson.getBody().addToStatements(ifDeep);
 
@@ -143,24 +146,26 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                     toJson.getBody().addToStatements(
                             "sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + (" + pWrap.getter() + "() != null ? \"\\\"\" + " + pWrap.getter()
                                     + "() + \"\\\"\" : null " + "))");
-                    // toJson.getBody().addToStatements("sb.append(\"\\\"" +
-                    // pWrap.getName() + "\\\": \\\"\" + " + pWrap.getter() +
-                    // "() + \"\\\"" + "\")");
                 }
             }
-            if (count++ != propertiesForToJson.size()) {
-                if (pWrap.isMany() && !pWrap.isDataType()) {
-                    ifDeep.addToThenPart("sb.append(\", \")");
-                } else {
-                    toJson.getBody().addToStatements("sb.append(\", \")");
-                }
-            }
-        }
+            first = false;
 
+//            if (count != propertiesForToJson.size()) {
+//                if (pWrap.isMany() && !pWrap.isDataType()) {
+//                } else {
+//                    toJson.getBody().addToStatements("sb.append(\", \")");
+//                }
+//            }
+        }
 
         if (clazz.getGenerals().isEmpty()) {
             //Add in qualified type name
-            toJson.getBody().addToStatements("sb.append(\", \")");
+//            if (deepIsLast) {
+//                OJIfStatement ifDeep2 = new OJIfStatement("deep", "sb.append(\", \")");
+//                toJson.getBody().addToStatements(ifDeep2);
+//            } else {
+                toJson.getBody().addToStatements("sb.append(\", \")");
+//            }
             toJson.getBody().addToStatements("sb.append(\"\\\"qualifiedName\\\": \\\"\" + getQualifiedName() + \"\\\"\")");
             toJson.getBody().addToStatements("sb.append(\", \")");
             toJson.getBody().addToStatements(URI_FOR_RESTFULL, "//PlaceHolder for restful\nsb.append(\"\\\"uri\\\": {}\")");

@@ -1,6 +1,6 @@
 (function ($) {
 
-        // register namespace
+    // register namespace
     $.extend(true, window, {
         Tuml: {
             TumlBaseGridManager: TumlBaseGridManager,
@@ -11,7 +11,7 @@
         }
     });
 
-    function TumlQueryGridManager(tumlTabViewManager ,propertyNavigatingTo) {
+    function TumlQueryGridManager(tumlTabViewManager, propertyNavigatingTo) {
         var self = this;
         this.tumlTabViewManager = tumlTabViewManager;
 
@@ -367,12 +367,13 @@
         this.tumlUri = tumlUri;
         this.propertyNavigatingTo = propertyNavigatingTo;
         this.fakeIndex = 0;
+        this.active = false;
 
         var self = this;
         this.columns = [];
 
         this.cancel = function (data) {
-            if (this.grid.getEditorLock().commitCurrentEdit()) {
+            if (Slick.GlobalEditorLock.commitCurrentEdit()) {
                 this.grid.resetActiveCell();
                 this.setData(data);
                 this.grid.invalidateAllRows();
@@ -434,45 +435,37 @@
 
         this.updateGridAfterRollback = function (data) {
             this.dataView.refreshItemAfterRollback(data);
-            this.grid.getEditController().cancelCurrentEdit();
             this.grid.invalidateAllRows();
             this.grid.render();
-            this.grid.editActiveCell();
+            if (this.active) {
+                this.grid.editActiveCell();
+            }
         }
 
-        this.handleContextMenuClickLink = function(tumlUri) {
-             this.tumlTabViewManager.refreshContext(tumlUri);
+        this.handleContextMenuClickLink = function (tumlUri) {
+            this.tumlTabViewManager.refreshContext(tumlUri);
         }
 
-        this.handleAddNewRow = function(dataViewItems, event) {
+        this.handleAddNewRow = function (dataViewItems, event) {
             this.tumlTabViewManager.addNewRow(dataViewItems, event);
         }
 
-        this.handleDeleteRow = function(row, data) {
-            var moveCell = this.grid.getActiveCell().row >= row;
-            if (moveCell) {
-                var column = self.grid.getColumns()[this.grid.getActiveCell().cell];
-                var cellData = self.dataView.getItem(row)[column.name];
-                this.grid.getEditController().cancelCurrentEdit();
-            }
-            var currentItem = this.dataView.getItem(this.grid.getActiveCell().row);
-            var item = this.dataView.getItem(row);
-            this.dataView.deleteItem(item.id);
-            this.tumlTabViewManager.handleDeleteRow();
-
-            if (moveCell) {
+        this.handleDeleteRow = function (row, data) {
+            if (Slick.GlobalEditorLock.commitCurrentEdit()) {
+                var moveCell = this.grid.getActiveCell().row >= row;
+                var currentItem = this.dataView.getItem(this.grid.getActiveCell().row);
+                var item = this.dataView.getItem(row);
+                this.dataView.deleteItem(item.id);
+                this.tumlTabViewManager.handleDeleteRow();
+                if (moveCell) {
 //                //Move the active cell one up
-                //TODO this needs to be done properly for newItems and Updated items array
-                self.dataView.getItem(this.grid.getActiveCell().row - 1)[column.name] = cellData;
-                this.grid.setActiveCell(this.grid.getActiveCell().row - 1, this.grid.getActiveCell().cell);
-                this.grid.editActiveCell();
-
-                var indexOfCurrentItemInNewItemsArray = self.dataView.getNewItems().indexOf(currentItem);
-                if (self.dataView.getNewItems().indexOf(indexOfCurrentItemInNewItemsArray) !== -1) {
-                    self.dataView.getNewItems()[indexOfCurrentItemInNewItemsArray] = currentItem;
+                    this.grid.setActiveCell(this.grid.getActiveCell().row - 1, this.grid.getActiveCell().cell);
+                    var indexOfCurrentItemInNewItemsArray = self.dataView.getNewItems().indexOf(currentItem);
+                    if (self.dataView.getNewItems().indexOf(indexOfCurrentItemInNewItemsArray) !== -1) {
+                        self.dataView.getNewItems()[indexOfCurrentItemInNewItemsArray] = currentItem;
+                    }
                 }
             }
-
         }
 
         this.createGrid = function (data, tumlUri) {
@@ -693,17 +686,18 @@
             this.grid.onActiveCellChanged.subscribe(function (e, args) {
                 if (isClickOnNewRow(args.row, args.cell, self.dataView.getItem(args.row))) {
 
-                    self.grid.getEditController().cancelCurrentEdit();
-                    var newItem = {};
-                    //Generate a fake id, its required for the grid to work nicely
+                    if (Slick.GlobalEditorLock.cancelCurrentEdit()) {
+                        var newItem = {};
+                        //Generate a fake id, its required for the grid to work nicely
 //                    newItem.id = 'fake::' + args.row + self.dataView.getItems().length + self.dataView.getNewItems().length + 1;
-                    newItem.id = 'fake::' + self.fakeIndex++;
+                        newItem.id = 'fake::' + self.fakeIndex++;
 
-                    newItem.tmpId = newItem.id;
-                    newItem.qualifiedName = self.localMetaForData.qualifiedName;
-                    self.dataView.addItem(newItem);
-                    self.grid.editActiveCell();
-                    self.handleAddNewRow(self.dataView.getItems(), e);
+                        newItem.tmpId = newItem.id;
+                        newItem.qualifiedName = self.localMetaForData.qualifiedName;
+                        self.dataView.addItem(newItem);
+//                        self.grid.editActiveCell();
+                        self.handleAddNewRow(self.dataView.getItems(), e);
+                    }
 
                 }
             });

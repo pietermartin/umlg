@@ -28,7 +28,7 @@
             this.tumlTabViewManagers.splice(index, 1);
         }
 
-        this.destroyTabContainer = function() {
+        this.destroyTabContainer = function () {
             $('#' + this.getTabId() + 'ui-layout-center-heading').remove();
             this.clearAllTabs();
             if (this.tabContainer !== null) {
@@ -58,16 +58,41 @@
                         self.tabContainer.tabs("refresh");
                     }
                 });
+
                 this.tabContainer.tabs({
                     activate: function (event, ui) {
                         var queryId = $.data(ui.newPanel[0], 'queryId');
 //                        var tabEnum = $.data(ui.newPanel[0], 'tabEnum');
+                        for (var i = 0; i < self.tumlTabViewManagers.length; i++) {
+                            var tumlTabViewManager = self.tumlTabViewManagers[i];
+                            if (ui.oldPanel['0'] !== undefined && ui.oldPanel['0'].id == tumlTabViewManager.getTabId()) {
+                                if (tumlTabViewManager.tumlTabGridManager !== undefined) {
+                                    tumlTabViewManager.tumlTabGridManager.active = false;
+                                }
+                            }
+                            if (ui.newPanel['0'].id == tumlTabViewManager.getTabId()) {
+                                if (tumlTabViewManager.tumlTabGridManager !== undefined) {
+                                    tumlTabViewManager.tumlTabGridManager.active = true;
+                                }
+                            }
+                        }
+                    }
+                });
+
+                this.tabContainer.tabs({
+                    beforeActivate: function (event, ui) {
+                        if (!Slick.GlobalEditorLock.commitCurrentEdit()) {
+                            return false;
+                        } else {
+                            return true;
+                        }
+
                     }
                 });
             }
         }
 
-        this.createPropertyDescriptionHeading = function() {
+        this.createPropertyDescriptionHeading = function () {
             var multiplicity;
             if (this.propertyNavigatingTo.upper == -1) {
                 multiplicity = 'multiplicity: [' + this.propertyNavigatingTo.lower + '..*]';
@@ -84,7 +109,7 @@
 
     }
 
-    TumlTabContainerManager.prototype.getTabId = function() {
+    TumlTabContainerManager.prototype.getTabId = function () {
         alert('this must be overriden!');
     }
 
@@ -110,7 +135,8 @@
             //Get all the many tab views
             if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager) {
                 if (commitCurrentEdit) {
-                    tumlTabViewManager.tumlTabGridManager.grid.getEditorLock().commitCurrentEdit();
+//                    tumlTabViewManager.tumlTabGridManager.grid.getEditorLock().commitCurrentEdit();
+                    Slick.GlobalEditorLock.commitCurrentEdit();
                 }
                 tumlTabManyViewManagers.push(tumlTabViewManager);
             }
@@ -151,7 +177,7 @@
         }
     }
 
-    TumlTabContainerManager.prototype.handleDeleteRow = function() {
+    TumlTabContainerManager.prototype.handleDeleteRow = function () {
         this.getParentTabContainerManager().updateValidationWarningHeader();
     }
 

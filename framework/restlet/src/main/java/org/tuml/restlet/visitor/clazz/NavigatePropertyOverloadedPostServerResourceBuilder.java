@@ -1,6 +1,5 @@
 package org.tuml.restlet.visitor.clazz;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Property;
 import org.tuml.framework.Visitor;
@@ -394,7 +393,7 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
         }
         annotatedClass.addToImports(pWrap.javaBaseTypePath());
         tryInstantiate.getTryPart().addToStatements("childResource.fromJson(propertyMap)");
-        tryInstantiate.getTryPart().addToStatements("String jsonResult = childResource.toJsonWithoutCompositeParent()");
+        tryInstantiate.getTryPart().addToStatements("String jsonResult = childResource.toJsonWithoutCompositeParent(true)");
 //        OJIfStatement ifContainsId = new OJIfStatement("propertyMap.containsKey(\"id\")");
 //        ifContainsId.addToThenPart("String tmpId = (String)propertyMap.get(\"id\")");
 //        ifContainsId.addToThenPart("jsonResult = jsonResult.substring(1);");
@@ -438,10 +437,10 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
                 if (pWrap.isOne()) {
                     OJIfStatement ifOneInstanceOf = new OJIfStatement("parentResource." + pWrap.getter() + "() instanceof "
                             + TumlClassOperations.getPathName(concreteClassifierTo).getLast());
-                    ifOneInstanceOf.addToThenPart("json.append(ToJsonUtil.toJsonWithoutCompositeParent(parentResource." + pWrap.getter() + "()))");
+                    ifOneInstanceOf.addToThenPart("json.append(" + TinkerGenerationUtil.ToJsonUtil.getLast() + ".toJsonWithoutCompositeParent(parentResource." + pWrap.getter() + "()))");
                     block.addToStatements(ifOneInstanceOf);
                 } else {
-                    block.addToStatements("json.append(ToJsonUtil.toJsonWithoutCompositeParent(parentResource." + pWrap.getter() + "().select(new "
+                    block.addToStatements("json.append(" + TinkerGenerationUtil.ToJsonUtil.getLast() + ".toJsonWithoutCompositeParent(parentResource." + pWrap.getter() + "().select(new "
                             + TinkerGenerationUtil.BooleanExpressionEvaluator.getCopy().addToGenerics(TumlClassOperations.getPathName(pWrap.getType())).getLast()
                             + "() {\n			@Override\n			public Boolean evaluate(" + TumlClassOperations.getPathName(pWrap.getType()).getLast()
                             + " e) {\n				return e instanceof " + TumlClassOperations.getPathName(concreteClassifierTo).getLast() + ";\n			}\n		})))");

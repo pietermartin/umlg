@@ -65,7 +65,7 @@
 
     TumlBaseTabViewManager.prototype = new Tuml.TumlTabContainerManager;
 
-    TumlBaseTabViewManager.prototype.getTabId = function() {
+    TumlBaseTabViewManager.prototype.getTabId = function () {
         return this.tabId;
     }
 
@@ -109,7 +109,6 @@
         this.li.find("span.ui-icon-close").click(function () {
             self.closeTab();
         });
-
         this.parentTabContainer.find(".ui-tabs-nav").append(this.li);
         var divPanel = $('<div />', {id: this.tabId});
         this.parentTabContainer.append(divPanel);
@@ -118,7 +117,7 @@
         return divPanel;
     }
 
-    TumlBaseTabViewManager.prototype.openManyComponent = function(data, cell, tumlUri, property) {
+    TumlBaseTabViewManager.prototype.openManyComponent = function (data, cell, tumlUri, property) {
 
         var self = this;
 
@@ -334,7 +333,7 @@
                 var rowClickedOnData = this.tumlTabGridManager.dataView.getItems()[this.componentCell.row];
                 var componentData = rowClickedOnData[tumlTabViewManager.propertyNavigatingTo.name];
 
-                if (tumlTabViewManager.metaForData.to.qualifiedName ===  componentData[0].qualifiedName) {
+                if (tumlTabViewManager.metaForData.to.qualifiedName === componentData[0].qualifiedName) {
                     tumlTabViewManager.updateGridAfterRollback(componentData);
                 }
 
@@ -467,11 +466,13 @@
 
     TumlTabManyComponentViewManager.prototype.closeTab = function () {
         //Save the many component's data into the parent tabs row's cell
-        if (this.tumlTabGridManager.grid.getEditorLock().commitCurrentEdit()) {
+//        if (this.tumlTabGridManager.grid.getEditorLock().commitCurrentEdit()) {
+        if (Slick.GlobalEditorLock.commitCurrentEdit()) {
             this.getParentTabContainerManager.setValue(this.tumlTabGridManager.dataView.getItems());
         }
         TumlBaseTabViewManager.prototype.closeTab.call(this);
     }
 
 
-})(jQuery);
+})
+    (jQuery);

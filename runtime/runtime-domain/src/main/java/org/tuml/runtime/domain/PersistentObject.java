@@ -9,6 +9,8 @@ public interface PersistentObject extends Serializable {
 //    void internalSetId();
 	String getUid();
 //	int getObjectVersion();
+    String toJson(Boolean deep);
+    String toJsonWithoutCompositeParent(Boolean deep);
 	String toJson();
 	String toJsonWithoutCompositeParent();
     String getMetaDataAsJson();

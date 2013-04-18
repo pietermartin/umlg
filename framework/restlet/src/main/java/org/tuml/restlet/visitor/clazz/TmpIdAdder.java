@@ -68,6 +68,5 @@ public class TmpIdAdder extends BaseVisitor implements Visitor<Class> {
 
     @Override
     public void visitAfter(Class element) {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 }

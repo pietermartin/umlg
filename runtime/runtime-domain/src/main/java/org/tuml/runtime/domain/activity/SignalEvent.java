@@ -92,6 +92,16 @@ public class SignalEvent extends Event {
     }
 
     @Override
+    public String toJson(Boolean deep) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public String toJsonWithoutCompositeParent(Boolean deep) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
 	public String toJson() {
 		// TODO Auto-generated method stub
 		return null;

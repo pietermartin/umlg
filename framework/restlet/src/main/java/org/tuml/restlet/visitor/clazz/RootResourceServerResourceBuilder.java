@@ -230,7 +230,7 @@ public class RootResourceServerResourceBuilder extends BaseServerResourceBuilder
                 annotatedClass.addToImports(TumlClassOperations.getPathName(clazz));
                 annotatedClass.addToImports(TumlClassOperations.getPathName(classifier));
             } else {
-                tryStatement.getTryPart().addToStatements("json.append(ToJsonUtil.toJson(resource))");
+                tryStatement.getTryPart().addToStatements("json.append(" + TinkerGenerationUtil.ToJsonUtil.getLast() + ".toJson(resource))");
             }
 
             annotatedClass.addToImports(TinkerGenerationUtil.ToJsonUtil);

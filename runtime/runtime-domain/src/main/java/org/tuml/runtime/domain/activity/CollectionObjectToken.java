@@ -87,7 +87,17 @@ public class CollectionObjectToken<O> extends ObjectToken<O> implements Composit
 		return uid;
 	}
 
-	@Override
+    @Override
+    public String toJson(Boolean deep) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public String toJsonWithoutCompositeParent(Boolean deep) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
 	public boolean isTinkerRoot() {
 		return false;
 	}

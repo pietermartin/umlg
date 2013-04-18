@@ -363,7 +363,7 @@
         }
 
         function doCancel() {
-            if (self.grid.getEditorLock().commitCurrentEdit()) {
+            if (Slick.GlobalEditorLock.commitCurrentEdit()) {
                 $.ajax({
                     url: tumlUri,
                     type: "GET",

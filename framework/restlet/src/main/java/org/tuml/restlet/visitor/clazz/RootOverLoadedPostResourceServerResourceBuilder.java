@@ -187,7 +187,7 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
         add.getBody().addToStatements(TumlClassOperations.getPathName(concreteClassifier).getLast() + " childResource = new " + TumlClassOperations.getPathName(concreteClassifier).getLast() + "(true)");
         annotatedClass.addToImports(TumlClassOperations.getPathName(concreteClassifier));
         add.getBody().addToStatements("childResource.fromJson(propertyMap)");
-        add.getBody().addToStatements("String jsonResult = childResource.toJson()");
+        add.getBody().addToStatements("String jsonResult = childResource.toJsonWithoutCompositeParent()");
         OJIfStatement ifContainsId = new OJIfStatement("propertyMap.containsKey(\"id\")");
         ifContainsId.addToThenPart("Long tmpId = Long.valueOf((Integer) propertyMap.get(\"id\"))");
         ifContainsId.addToThenPart("jsonResult = jsonResult.substring(1);");
@@ -200,7 +200,7 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
         annotatedClass.addToOperations(addWithoutData);
         addWithoutData.getBody().addToStatements(TumlClassOperations.getPathName(concreteClassifier).getLast() + " childResource = new " + TumlClassOperations.getPathName(concreteClassifier).getLast() + "(true)");
         annotatedClass.addToImports(TumlClassOperations.getPathName(concreteClassifier));
-        addWithoutData.getBody().addToStatements("return childResource.toJson()");
+        addWithoutData.getBody().addToStatements("return childResource.toJsonWithoutCompositeParent()");
     }
 
     private void addPutResource(Classifier classifier, OJAnnotatedClass annotatedClass, OJPathName parentPathName) {
@@ -213,7 +213,7 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
                 TumlClassOperations.getPathName(classifier).getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
         annotatedClass.addToImports(TumlClassOperations.getPathName(classifier));
         put.getBody().addToStatements("childResource.fromJson(propertyMap)");
-        put.getBody().addToStatements("return childResource.toJson()");
+        put.getBody().addToStatements("return childResource.toJsonWithoutCompositeParent()");
     }
 
     private void addDeleteResource(Classifier classifier, OJAnnotatedClass annotatedClass, OJPathName parentPathName) {
@@ -318,7 +318,7 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
     private void buildToJson(Class clazz, OJAnnotatedClass annotatedClass, OJBlock block) {
         block.addToStatements("StringBuilder json = new StringBuilder()");
         block.addToStatements("json.append(\"{\\\"data\\\": [\")");
-        block.addToStatements("json.append(ToJsonUtil.toJsonWithoutCompositeParent(Root.INSTANCE.get" + TumlClassOperations.className(clazz) + "()))");
+        block.addToStatements("json.append(ToJsonUtil.toJsonWithoutCompositeParent(Root.INSTANCE.get" + TumlClassOperations.className(clazz) + "(), deep))");
         annotatedClass.addToImports(TinkerGenerationUtil.ToJsonUtil);
         block.addToStatements("json.append(\"],\")");
         block.addToStatements("json.append(\" \\\"meta\\\" : [\")");
@@ -360,7 +360,7 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
 
             if (concreteImplementations.size() > 1) {
                 tryStatement.getTryPart().addToStatements(
-                        "json.append(ToJsonUtil.toJson(resource.select(new "
+                        "json.append(ToJsonUtil.toJsonWithoutCompositeParent(resource.select(new "
                                 + TinkerGenerationUtil.BooleanExpressionEvaluator.getCopy().addToGenerics(TumlClassOperations.getPathName(clazz)).getLast()
                                 + "() {\n			@Override\n			public Boolean evaluate(" + TumlClassOperations.getPathName(clazz).getLast()
                                 + " e) {\n				return e instanceof " + TumlClassOperations.getPathName(classifier).getLast() + ";\n			}\n		})))");
@@ -368,7 +368,7 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
                 annotatedClass.addToImports(TumlClassOperations.getPathName(clazz));
                 annotatedClass.addToImports(TumlClassOperations.getPathName(classifier));
             } else {
-                tryStatement.getTryPart().addToStatements("json.append(ToJsonUtil.toJson(resource))");
+                tryStatement.getTryPart().addToStatements("json.append(ToJsonUtil.toJsonWithoutCompositeParent(resource))");
             }
 
             annotatedClass.addToImports(TinkerGenerationUtil.ToJsonUtil);
