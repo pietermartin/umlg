@@ -140,7 +140,7 @@
                         {forLookup: false, forManyComponent: true, forOneComponent: false, isOne: false, forCreation: true},
                         property
                     );
-                    tumlManyComponentTabViewManager.setParentTumlTabViewManager(self);
+                    tumlManyComponentTabViewManager.setParentTabContainerManager(self);
                     self.postTabCreate(tumlManyComponentTabViewManager, result[i], false, result[i].meta.to, false, i);
                     self.setCell(cell);
                     self.addToTumlTabViewManagers(tumlManyComponentTabViewManager);

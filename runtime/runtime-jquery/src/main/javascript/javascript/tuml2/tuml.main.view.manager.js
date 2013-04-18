@@ -207,10 +207,7 @@
             return savedTumlTabViewManagers;
         }
 
-        this.addQueryTab = function (post, query, reorder) {
-            if (reorder === undefined) {
-                reorder = true;
-            }
+        this.addQueryTab = function (post, query) {
             //Check is there is already a tab open for this query
             var tumlTabViewManagerQuery;
             var tabIndex = 0;
@@ -230,6 +227,7 @@
                     tumlTabViewManagerQuery = new Tuml.TumlTabQueryViewManager(tuml.tab.Enum.ClassQueries, this.tabContainer, '', classQueryTumlUri, query.getDivName(), query.name, query.id);
                 }
                 tumlTabViewManagerQuery.createTab();
+                tumlTabViewManagerQuery.setParentTabContainerManager(this);
 
                 if (query.id === -1) {
                     this.tumlTabViewManagers.push(tumlTabViewManagerQuery);

@@ -379,9 +379,6 @@
         tumlTabViewManager.onAddRowSuccess.subscribe(function (e, args) {
             self.updateValidationWarningHeader();
         });
-        tumlTabViewManager.onRemoveRowSuccess.subscribe(function (e, args) {
-            self.updateValidationWarningHeader();
-        });
         tumlTabViewManager.onPutSuccess.subscribe(function (e, args) {
             self.onPutSuccess.notify(args, e, self);
             if (args.data[0].meta.to.qualifiedName === 'tumllib::org::tuml::query::Query') {

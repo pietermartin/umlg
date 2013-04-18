@@ -57,7 +57,7 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                 toJson.getBody().addToStatements("sb.append(\"\\\"metaNodeId\\\": \" + getMetaNode().getId() + \", \")");
             }
         } else {
-            toJson.getBody().addToStatements("String result = super." + operationName + "()");
+            toJson.getBody().addToStatements("String result = super." + operationName + "(deep)");
             toJson.getBody().addToStatements("result = result.substring(1, result.length() - 1)");
             toJson.getBody().addToStatements("StringBuilder sb = new StringBuilder(result)");
             if (!propertiesForToJson.isEmpty()) {
