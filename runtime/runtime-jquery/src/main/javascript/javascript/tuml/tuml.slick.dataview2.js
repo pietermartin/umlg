@@ -141,6 +141,19 @@
               newIdxById[id] = i;
           }
       }
+
+      function updateUpdatedIdxById(startingIndex) {
+          startingIndex = startingIndex || 0;
+          var id;
+          for (var i = startingIndex, l = updatedItems.length; i < l; i++) {
+              id = updatedItems[i][idProperty];
+              if (id === undefined) {
+                  throw "Each data element must implement a unique 'id' property";
+              }
+              updatedIdxById[id] = i;
+          }
+      }
+
     //tuml
 
     function ensureIdUniqueness() {
@@ -450,37 +463,34 @@
 
       //This is called from the grid on regular save.
       //The itemsToRefresh contains the difference that were posted. New items and existing items.
-      function refreshItemAfterRollback(itemsToRefresh) {
-          for (var i = 0; i < itemsToRefresh.length; i++) {
-              var itemToRefresh = itemsToRefresh[i];
-              if (itemToRefresh.tmpId != undefined) {
+      function refreshItemAfterRollback(itemToRefresh) {
+          if (itemToRefresh.tmpId !== undefined && itemToRefresh.tmpId !== null) {
 
-                  //Replace the id with the tmpId as the id is meaningless on a rolled back transaction
-                  itemToRefresh.id = itemToRefresh.tmpId;
+              //Replace the id with the tmpId as the id is meaningless on a rolled back transaction
+              itemToRefresh.id = itemToRefresh.tmpId;
 
-                  //New item
-                  if (idxById[itemToRefresh.tmpId] == undefined) {
-                      throw "Invalid id";
-                  }
-                  //Update the items array
-                  var index = idxById[itemToRefresh.tmpId];
-                  items[index] = itemToRefresh;
-                  //Update the new items array
-                  var newItemIndex = newIdxById[itemToRefresh.tmpId];
-                  newItems[newItemIndex] = itemToRefresh;
-
-              } else {
-                  //Existing item
-                  if (idxById[itemToRefresh.id] == undefined) {
-                      throw "Invalid id";
-                  }
-                  //Update the items array
-                  var index = idxById[itemToRefresh.id];
-                  items[index] = itemToRefresh;
-                  //Update the updated items array
-                  var updatedItemIndex = updatedIdxById[itemToRefresh.tmpId];
-                  newItems[updatedItemIndex] = itemToRefresh;
+              //New item
+              if (idxById[itemToRefresh.tmpId] == undefined) {
+                  throw "Invalid id";
               }
+              //Update the items array
+              var index = idxById[itemToRefresh.tmpId];
+              items[index] = itemToRefresh;
+              //Update the new items array
+              var newItemIndex = newIdxById[itemToRefresh.tmpId];
+              newItems[newItemIndex] = itemToRefresh;
+
+          } else {
+              //Existing item
+              if (idxById[itemToRefresh.id] == undefined) {
+                  throw "Invalid id";
+              }
+              //Update the items array
+              var index = idxById[itemToRefresh.id];
+              items[index] = itemToRefresh;
+              //Update the updated items array
+              var updatedItemIndex = updatedIdxById[itemToRefresh.tmpId];
+              newItems[updatedItemIndex] = itemToRefresh;
           }
           refresh();
       }
@@ -508,6 +518,13 @@
         if (newIdxById[id] === undefined || newIdxById[id] === null) {
             var item = items[idx];
             deletedItems.push(item);
+            //if item in updated array then remove it
+            if (updatedIdxById[id] !== undefined || updatedIdxById[id] !== null) {
+                var updatedIdx = updatedIdxById[id];
+                delete updatedIdxById[id];
+                updatedItems.splice(updatedIdx, 1);
+                updateUpdatedIdxById(updatedIdx);
+            }
         } else {
             var newIdx = newIdxById[id];
             delete newIdxById[id];

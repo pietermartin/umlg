@@ -139,8 +139,8 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
         entityText.setInitExp("entity.getText()");
         ojTryStatement.getTryPart().addToLocals(entityText);
 
-        OJField resultMap = new OJField("resultMap", new OJPathName("java.util.Map").addToGenerics(new OJPathName("Class").addToGenerics(pWrap.javaBaseTypePath())).addToGenerics("java.lang.StringBuilder"));
-        resultMap.setInitExp("new HashMap<Class<" + pWrap.javaBaseTypePath().getLast() + ">, StringBuilder>()");
+        OJField resultMap = new OJField("resultMap", new OJPathName("java.util.Map").addToGenerics(new OJPathName("Class<? extends " + pWrap.javaBaseTypePath().getLast() + ">")).addToGenerics("java.lang.StringBuilder"));
+        resultMap.setInitExp("new HashMap<Class<? extends " + pWrap.javaBaseTypePath().getLast() + ">, StringBuilder>()");
         annotatedClass.addToImports("java.util.HashMap");
         ojTryStatement.getTryPart().addToLocals(resultMap);
 
@@ -241,7 +241,7 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
         count.setInitExp("1");
         jsonResultBlock.addToLocals(count);
 
-        OJForStatement forConcreteClasifiers = new OJForStatement("baseClass", new OJPathName("Class").addToGenerics(pWrap.javaBaseTypePath()), "resultMap.keySet()");
+        OJForStatement forConcreteClasifiers = new OJForStatement("baseClass", new OJPathName("Class").addToGenerics("? extends " + pWrap.javaBaseTypePath().getLast()), "resultMap.keySet()");
         jsonResultBlock.addToStatements(forConcreteClasifiers);
         forConcreteClasifiers.getBody().addToStatements("result.append(\"{\\\"data\\\": [\")");
         forConcreteClasifiers.getBody().addToStatements("result.append(resultMap.get(baseClass))");
@@ -316,42 +316,43 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
     private void addPutResource(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass, OJPathName parentPathName) {
         OJAnnotatedOperation put = new OJAnnotatedOperation("put");
         put.setVisibility(OJVisibilityKind.PRIVATE);
-        put.addToParameters(new OJParameter("resultMap", new OJPathName("java.util.Map").addToGenerics(new OJPathName("Class").addToGenerics(pWrap.javaBaseTypePath())).addToGenerics("java.lang.StringBuilder")));
+        put.addToParameters(new OJParameter("resultMap", new OJPathName("java.util.Map").addToGenerics(new OJPathName("Class").addToGenerics("? extends " + pWrap.javaBaseTypePath().getLast())).addToGenerics("java.lang.StringBuilder")));
         put.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
         annotatedClass.addToOperations(put);
 
-        OJField qualifiedName = new OJField("qualifiedName", "String");
-        qualifiedName.setInitExp("(String)propertyMap.get(\"qualifiedName\")");
-        put.getBody().addToLocals(qualifiedName);
+        OJBlock firstBlock = new OJBlock();
+        firstBlock.addToStatements("Long id = Long.valueOf((Integer)propertyMap.get(\"id\"))");
+        firstBlock.addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
+        annotatedClass.addToImports(pWrap.javaBaseTypePath());
+        firstBlock.addToStatements("childResource.fromJson(propertyMap)");
+        put.getBody().addToStatements(firstBlock);
 
-        OJField baseTumlClass = new OJField("baseTumlClass", new OJPathName("Class").addToGenerics(pWrap.javaBaseTypePath()));
-        baseTumlClass.setInitExp(TinkerGenerationUtil.TumlSchemaFactory.getLast() + ".getTumlSchemaMap().get(qualifiedName)");
-        annotatedClass.addToImports(TinkerGenerationUtil.BaseTuml);
-        annotatedClass.addToImports(TinkerGenerationUtil.TumlSchemaFactory);
-        put.getBody().addToLocals(baseTumlClass);
+        OJBlock secondBlock = new OJBlock();
+
+        OJField baseTumlClass = new OJField("baseTumlClass", new OJPathName("Class").addToGenerics("? extends " + pWrap.javaBaseTypePath().getLast()));
+        baseTumlClass.setInitExp("childResource.getClass()");
+        secondBlock.addToLocals(baseTumlClass);
 
         OJField sb = new OJField("sb", "StringBuilder");
-        put.getBody().addToLocals(sb);
+        secondBlock.addToLocals(sb);
 
         OJIfStatement ifSbExist = new OJIfStatement("!resultMap.containsKey(baseTumlClass)");
         ifSbExist.addToThenPart("sb = new StringBuilder();");
         ifSbExist.addToThenPart("resultMap.put(baseTumlClass, sb)");
         ifSbExist.addToElsePart("sb = resultMap.get(baseTumlClass)");
         ifSbExist.addToElsePart("sb.append(\",\")");
-        put.getBody().addToStatements(ifSbExist);
+        secondBlock.addToStatements(ifSbExist);
 
-        put.getBody().addToStatements("Long id = Long.valueOf((Integer)propertyMap.get(\"id\"))");
-        put.getBody().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
-        annotatedClass.addToImports(pWrap.javaBaseTypePath());
-        put.getBody().addToStatements("childResource.fromJson(propertyMap)");
-        put.getBody().addToStatements("sb.append(childResource.toJsonWithoutCompositeParent())");
+        secondBlock.addToStatements("sb.append(childResource.toJsonWithoutCompositeParent())");
+        put.getBody().addToStatements(secondBlock);
+
     }
 
     private void addPostResource(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass, OJPathName parentPathName) {
         OJAnnotatedOperation add = new OJAnnotatedOperation("add");
         add.setVisibility(OJVisibilityKind.PRIVATE);
 
-        add.addToParameters(new OJParameter("resultMap", new OJPathName("java.util.Map").addToGenerics(new OJPathName("Class").addToGenerics(pWrap.javaBaseTypePath())).addToGenerics("java.lang.StringBuilder")));
+        add.addToParameters(new OJParameter("resultMap", new OJPathName("java.util.Map").addToGenerics(new OJPathName("Class").addToGenerics("? extends " + pWrap.javaBaseTypePath().getLast())).addToGenerics("java.lang.StringBuilder")));
         add.addToParameters(new OJParameter("parentResource", parentPathName));
         add.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
         annotatedClass.addToOperations(add);
@@ -362,7 +363,7 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
 
         OJField baseTumlClass = new OJField("baseTumlClass", new OJPathName("Class").addToGenerics(pWrap.javaBaseTypePath()));
         baseTumlClass.setInitExp(TinkerGenerationUtil.TumlSchemaFactory.getLast() + ".getTumlSchemaMap().get(qualifiedName)");
-        annotatedClass.addToImports(TinkerGenerationUtil.BaseTuml);
+//        annotatedClass.addToImports(TinkerGenerationUtil.BaseTuml);
         annotatedClass.addToImports(TinkerGenerationUtil.TumlSchemaFactory);
         add.getBody().addToLocals(baseTumlClass);
 

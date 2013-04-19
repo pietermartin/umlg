@@ -49,6 +49,7 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
         annotatedClass.addToOperations(toJsonSimple);
 
         OJAnnotatedOperation toJson = new OJAnnotatedOperation(operationName, new OJPathName("String"));
+        TinkerGenerationUtil.addOverrideAnnotation(toJson);
         toJson.addParam("deep", "Boolean");
         if (clazz.getGenerals().isEmpty()) {
             toJson.getBody().addToStatements("StringBuilder sb = new StringBuilder()");

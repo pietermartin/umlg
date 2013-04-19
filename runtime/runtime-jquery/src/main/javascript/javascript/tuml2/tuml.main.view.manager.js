@@ -22,6 +22,7 @@
             var metaDataNavigatingTo = result[0].meta.to;
             var metaDataNavigatingFrom = result[0].meta.from;
             this.tumlUri = tumlUri;
+            //propertyNavigatingTo is null when viewing a one
             this.propertyNavigatingTo = (metaDataNavigatingFrom == undefined ? null : findPropertyNavigatingTo(qualifiedName, metaDataNavigatingFrom));
             if (this.propertyNavigatingTo != null && (this.propertyNavigatingTo.oneToMany || this.propertyNavigatingTo.manyToMany)) {
                 //Property is a many
@@ -52,7 +53,7 @@
                             //Do not call refreshInternal as it creates all tabs for the meta data
                             var tumlTabViewManager = this.addTab(tuml.tab.Enum.Properties, result[i], tumlUri, {forLookup: false, forManyComponent: false, isOne: true, forCreation: false}, this.propertyNavigatingTo);
                             this.addToTumlTabViewManagers(tumlTabViewManager);
-                            self.postTabCreate(tumlTabViewManager, result[i], true, result[i].meta.to, isForCreation, self.tumlTabViewManagers.length - 1);
+                            tumlTabViewManager.createTab(result[i], isForCreation);
 
                             //reorder tabs, make sure new tabs are first
                             reorderTabsAfterAddOneOrMany(savedTumlTabViewManagers);
@@ -90,14 +91,7 @@
             }
 
             this.tabContainer.tabs("option", "active", 0);
-
-            $('#validation-warning').children().remove();
-            $('#navigation-qualified-name').children().remove();
-            var propertyDescription = qualifiedName;
-            if (this.propertyNavigatingTo !== undefined && this.propertyNavigatingTo !== null) {
-                propertyDescription += '  -  ' + this.createPropertyDescriptionHeading();
-            }
-            $('#navigation-qualified-name').append($('<span />').text(propertyDescription));
+            this.updateNavigationHeader(qualifiedName);
             addButtons();
             $('body').layout().resizeAll();
         }
@@ -164,7 +158,9 @@
                     var metaForData = result[i].meta.to;
                     //TOTO use qualified name somehow
                     if (tumlTabViewManager.tabId == metaForData.name) {
-                        tumlTabViewManager.updateGridAfterRollback(result[i].data);
+                        for (var k = 0; k < result[i].data.length; k++) {
+                            tumlTabViewManager.updateGridAfterRollback(result[i].data[k]);
+                        }
                     }
                 }
             }
@@ -186,6 +182,7 @@
                 this.destroyTabContainer();
                 this.maybeCreateTabContainer();
             } else {
+                this.removeValidationWarningHeader();
                 var tumlTabViewManagersToClose = [];
                 //Remove property tabs only, query tabs remain for the context
                 for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
@@ -227,7 +224,7 @@
                     tumlTabViewManagerQuery = new Tuml.TumlTabQueryViewManager(tuml.tab.Enum.ClassQueries, this.tabContainer, '', classQueryTumlUri, query.getDivName(), query.name, query.id);
                 }
                 tumlTabViewManagerQuery.createTab();
-                tumlTabViewManagerQuery.setParentTabContainerManager(this);
+                tumlTabViewManagerQuery.parentTabContainerManager = this;
 
                 if (query.id === -1) {
                     this.tumlTabViewManagers.push(tumlTabViewManagerQuery);
@@ -343,7 +340,7 @@
         }
 
         function addDefaultQueryTab(reorder) {
-            self.addQueryTab(true, new Tuml.Query(-1, 'New Query', 'New Query Description', 'self.name', 'ocl'), reorder);
+            self.addQueryTab(true, new Tuml.Query(-1, 'New Query', 'New Query Description', 'self.name', 'ocl'));
         }
 
         function validateMultiplicity(tumlTabManyViewManagers) {
@@ -403,7 +400,7 @@
             for (var i = 0; i < result.length; i++) {
                 var tumlTabViewManager = self.addTab(tuml.tab.Enum.Properties, result[i], tumlUri, {forLookup: false, forManyComponent: false, isOne: isOne, forCreation: forCreation}, self.propertyNavigatingTo);
                 self.addToTumlTabViewManagers(tumlTabViewManager);
-                self.postTabCreate(tumlTabViewManager, result[i], false, result[i].meta.to, false, self.tumlTabViewManagers.length - 1);
+                tumlTabViewManager.createTab(result[i], false);
             }
         }
 

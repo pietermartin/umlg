@@ -39,13 +39,14 @@ public class TmpIdAdder extends BaseVisitor implements Visitor<Class> {
 
     private void addTmpIdToToJson(OJAnnotatedClass annotatedClass) {
         OJAnnotatedOperation toJson = annotatedClass.findOperation("toJson", new OJPathName("Boolean"));
+        OJIfStatement ifTmpNull = new OJIfStatement("this.tmpId != null");
         //Insert the line at second line
-        toJson.getBody().getStatements().add(1, new OJSimpleStatement("sb.append(\"\\\"tmpId\\\": \\\"\" + this.tmpId + \"\\\", \")"));
+        ifTmpNull.addToThenPart("sb.append(\"\\\"tmpId\\\": \\\"\" + this.tmpId + \"\\\", \")");
+        toJson.getBody().getStatements().add(1, ifTmpNull);
 
         OJAnnotatedOperation toJsonWithoutCompositeParent = annotatedClass.findOperation("toJsonWithoutCompositeParent", new OJPathName("Boolean"));
         //Insert the line at second line
-        toJsonWithoutCompositeParent.getBody().getStatements().add(1, new OJSimpleStatement("sb.append(\"\\\"tmpId\\\": \\\"\" + this.tmpId + \"\\\", \")"));
-
+        toJsonWithoutCompositeParent.getBody().getStatements().add(1, ifTmpNull);
     }
 
     private void addTmpIdToFromJson(OJAnnotatedClass annotatedClass) {

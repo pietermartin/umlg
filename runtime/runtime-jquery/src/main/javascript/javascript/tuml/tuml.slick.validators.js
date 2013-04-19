@@ -43,7 +43,7 @@
         });
 
         function validate(value) {
-            result = TumlSlick.Validators.Required(property, value);
+            var result = TumlSlick.Validators.Required(property, value);
             if (!result.valid) {
                 return result;
             }
@@ -62,7 +62,7 @@
         });
 
         function validate(value) {
-            result = TumlSlick.Validators.Required(property, value);
+            var result = TumlSlick.Validators.Required(property, value);
             if (!result.valid) {
                 return result;
             }
@@ -102,7 +102,7 @@
         });
 
         function validate(value) {
-            result = TumlSlick.Validators.Required(property, value);
+            var result = TumlSlick.Validators.Required(property, value);
             if (!result.valid) {
                 return result;
             }
@@ -277,7 +277,7 @@
         });
 
         function validate(value) {
-            result = TumlSlick.Validators.Required(property, value);
+            var result = TumlSlick.Validators.Required(property, value);
             if (!result.valid) {
                 return result;
             }
@@ -300,7 +300,7 @@
             "validate":validate
         });
         function validate(value) {
-            result = TumlSlick.Validators.Required(property, value);
+            var result = TumlSlick.Validators.Required(property, value);
             if (!result.valid) {
                 return result;
             }

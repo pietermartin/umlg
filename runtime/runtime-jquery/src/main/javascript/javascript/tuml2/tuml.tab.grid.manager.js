@@ -99,7 +99,6 @@
             "onManyComponentCancelButtonSuccess": new Tuml.Event(),
             "onClickOneComponentCell": new Tuml.Event(),
             "onAddNewRow": new Tuml.Event(),
-            "onAddRowSuccess": new Tuml.Event(),
             "onSelfCellClick": new Tuml.Event(),
             "onContextMenuClickDelete": new Tuml.Event(),
             "onManyEditorKeyPress": new Tuml.Event()
@@ -266,7 +265,6 @@
             "onAddButtonSuccess": new Tuml.Event(),
             "onClickOneComponentCell": new Tuml.Event(),
             "onAddNewRow": new Tuml.Event(),
-            "onAddRowSuccess": new Tuml.Event(),
             "onSelfCellClick": new Tuml.Event(),
             "onContextMenuClickDelete": new Tuml.Event(),
             "onManyEditorKeyPress": new Tuml.Event()
@@ -418,21 +416,12 @@
             return validationResults;
         };
 
-        this.validateMultiplicity = function () {
-            if (self.dataView.getItems().length < self.propertyNavigatingTo.lower || (self.propertyNavigatingTo.upper !== -1 && self.dataView.getItems().length > self.propertyNavigatingTo.upper)) {
-                alert('multiplicity falls outside the valid range [' + self.propertyNavigatingTo.lower + '..' + self.propertyNavigatingTo.upper + ']');
-                return false;
-            } else {
-                return true;
-            }
-        }
-
         this.updateGridAfterCommit = function (data) {
             this.dataView.refreshItemAfterCommit(data);
         }
 
-        this.updateGridAfterRollback = function (data) {
-            this.dataView.refreshItemAfterRollback(data);
+        this.updateGridAfterRollback = function (item) {
+            this.dataView.refreshItemAfterRollback(item);
             this.grid.invalidateAllRows();
             this.grid.render();
             if (this.active) {
@@ -444,8 +433,8 @@
             this.tumlTabViewManager.refreshContext(tumlUri);
         }
 
-        this.handleAddNewRow = function (dataViewItems, event) {
-            this.tumlTabViewManager.addNewRow(dataViewItems, event);
+        this.handleAddNewRow = function (event) {
+            this.tumlTabViewManager.addNewRow(event);
         }
 
         this.handleDeleteRow = function (row, data) {
@@ -690,7 +679,7 @@
                         newItem.qualifiedName = self.localMetaForData.qualifiedName;
                         self.dataView.addItem(newItem);
 //                        self.grid.editActiveCell();
-                        self.handleAddNewRow(self.dataView.getItems(), e);
+                        self.handleAddNewRow(e);
                     }
 
                 }
@@ -1011,4 +1000,5 @@
     }
 
 
-})(jQuery);
+})
+    (jQuery);
