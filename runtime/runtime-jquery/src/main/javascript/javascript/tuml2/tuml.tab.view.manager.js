@@ -29,7 +29,6 @@
             "onAddButtonSuccess": new Tuml.Event(),
             "onSelectButtonSuccess": new Tuml.Event(),
             "onSelectCancelButtonSuccess": new Tuml.Event(),
-            "onClickManyComponentCell": new Tuml.Event(),
             "onClickOneComponentCell": new Tuml.Event(),
             "onManyComponentCloseButtonSuccess": new Tuml.Event(),
             "onOneComponentSaveButtonSuccess": new Tuml.Event(),
@@ -129,9 +128,11 @@
             contentType: "application/json",
             success: function (result, textStatus, jqXHR) {
 
+                var firstTumlManyComponentTabViewManager = null;
                 for (var i = 0; i < result.length; i++) {
                     self.maybeCreateTabContainer();
                     result[i].data = data;
+                    //This is wrong as it could be a one
                     var tumlManyComponentTabViewManager = self.addTab(
                         tuml.tab.Enum.Properties,
                         result[i],
@@ -143,7 +144,21 @@
                     self.postTabCreate(tumlManyComponentTabViewManager, result[i], false, result[i].meta.to, false, i);
                     self.setCell(cell);
                     self.addToTumlTabViewManagers(tumlManyComponentTabViewManager);
+                    self.tumlTabGridManager.active = false;
+                    if (i === 0) {
+                        firstTumlManyComponentTabViewManager = tumlManyComponentTabViewManager;
+                    }
                 }
+
+                //Set only the first tab to active
+                if (firstTumlManyComponentTabViewManager !== null) {
+                    self.tabContainer.tabs("option", "active", 0);
+                    if (tumlManyComponentTabViewManager instanceof Tuml.TumlTabManyComponentViewManager) {
+                        tumlManyComponentTabViewManager.tumlTabGridManager.active = true;
+                    }
+                }
+
+
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 alert('error getting ' + property.tumlMetaDataUri + '\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
@@ -192,8 +207,7 @@
         //Public api
         $.extend(this, {
             "TumlTabOneViewManager": "1.0.0",
-            "onClickOneComponent": new Tuml.Event(),
-            "onClickManyComponent": new Tuml.Event()
+            "onClickOneComponent": new Tuml.Event()
         });
 
         this.createQuery = function (oclExecuteUri, query, post) {
@@ -220,8 +234,7 @@
         //Public api
         $.extend(this, {
             "TumlTabOneViewManager": "1.0.0",
-            "onClickOneComponent": new Tuml.Event(),
-            "onClickManyComponent": new Tuml.Event()
+            "onClickOneComponent": new Tuml.Event()
         });
         TumlBaseTabViewManager.call(this, tabEnum, tabContainer, tumlUri, result, propertyNavigatingTo);
     }
@@ -259,9 +272,6 @@
         }
         this.tumlTabOneManager.onClickOneComponent.subscribe(function (e, args) {
             self.onClickOneComponent.notify(args, e, self);
-        });
-        this.tumlTabOneManager.onClickManyComponent.subscribe(function (e, args) {
-            self.onClickManyComponent.notify(args, e, self);
         });
         this.tumlTabOneManager.onPutOneSuccess.subscribe(function (e, args) {
             self.onPutOneSuccess.notify(args, e, self);
@@ -388,9 +398,6 @@
                 //This is needed else the cell has a pointer to the wrong array
                 self.getParentTumlTabViewManager().setValue(args.value);
             });
-            this.tumlTabGridManager.onClickManyComponentCell.subscribe(function (e, args) {
-                self.onClickManyComponentCell.notify(args, e, self);
-            });
             this.tumlTabGridManager.onClickOneComponentCell.subscribe(function (e, args) {
                 self.onClickOneComponentCell.notify(args, e, self);
             });
@@ -398,9 +405,6 @@
             this.tumlTabGridManager = new Tuml.TumlTabGridManager(this, tumlUri, this.propertyNavigatingTo);
             this.tumlTabGridManager.onAddButtonSuccess.subscribe(function (e, args) {
                 self.onAddButtonSuccess.notify(args, e, self);
-            });
-            this.tumlTabGridManager.onClickManyComponentCell.subscribe(function (e, args) {
-                self.onClickManyComponentCell.notify(args, e, self);
             });
             this.tumlTabGridManager.onClickOneComponentCell.subscribe(function (e, args) {
                 self.onClickOneComponentCell.notify(args, e, self);

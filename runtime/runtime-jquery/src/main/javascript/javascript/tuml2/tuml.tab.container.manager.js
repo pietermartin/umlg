@@ -362,9 +362,6 @@
                 self.postTabCreate(tumlLookupTabViewManager, args.data, true, args.data.meta.to, false, self.tumlTabViewManagers.length - 1);
                 tumlLookupTabViewManager.setParentTumlTabViewManager(tumlTabViewManager);
             });
-            tumlTabViewManager.onClickManyComponentCell.subscribe(function (e, args) {
-
-            });
 
             tumlTabViewManager.onClickOneComponentCell.subscribe(function (e, args) {
                 console.log('TumlMainViewManager onClickOneComponentCell fired');

@@ -97,7 +97,6 @@
             "onManyComponentSaveButtonSuccess": new Tuml.Event(),
             "onManyComponentCloseButtonSuccess": new Tuml.Event(),
             "onManyComponentCancelButtonSuccess": new Tuml.Event(),
-            "onClickManyComponentCell": new Tuml.Event(),
             "onClickOneComponentCell": new Tuml.Event(),
             "onAddNewRow": new Tuml.Event(),
             "onAddRowSuccess": new Tuml.Event(),
@@ -265,7 +264,6 @@
         $.extend(this, {
             "TumlTabGridManagerVersion": "1.0.0",
             "onAddButtonSuccess": new Tuml.Event(),
-            "onClickManyComponentCell": new Tuml.Event(),
             "onClickOneComponentCell": new Tuml.Event(),
             "onAddNewRow": new Tuml.Event(),
             "onAddRowSuccess": new Tuml.Event(),
@@ -558,11 +556,7 @@
                             data = self.dataView.getItem(args.row)[column.name];
                         }
                         var id = self.dataView.getItem(args.row)["id"];
-//                        self.onClickManyComponentCell.notify({data: data, cell: args, tumlUri: column.options.property.tumlUri, property: column.options.property}, null, self);
-
                         self.tumlTabViewManager.openManyComponent(data, args, column.options.property.tumlUri, column.options.property);
-
-
                     }
                 } else if (!column.options.property.manyPrimitive && !column.options.property.manyEnumeration && column.options.property.composite &&
                     column.options.property.lower === 1 && column.options.property.upper === 1) {
