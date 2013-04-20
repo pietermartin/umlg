@@ -1,3 +1,7 @@
+.ui-tabs-nav .tabs-button {
+    float: right;
+}
+
 #buttons {
     float: right;
     margin-top: 4px;

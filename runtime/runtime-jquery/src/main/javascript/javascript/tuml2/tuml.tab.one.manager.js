@@ -1,9 +1,9 @@
 (function ($) {
     // register namespace
     $.extend(true, window, {
-        Tuml:{
-            TumlTabOneManager:TumlTabOneManager,
-            TumlTabComponentOneManager:TumlTabComponentOneManager
+        Tuml: {
+            TumlTabOneManager: TumlTabOneManager,
+            TumlTabComponentOneManager: TumlTabComponentOneManager
         }
     });
 
@@ -13,15 +13,15 @@
 
         //Public api
         $.extend(this, {
-            "TumlTabComponentOneManager":"1.0.0",
-            "onOneComponentSaveButtonSuccess":new Tuml.Event(),
-            "onOneComponentCloseButtonSuccess":new Tuml.Event()
+            "TumlTabComponentOneManager": "1.0.0",
+            "onOneComponentSaveButtonSuccess": new Tuml.Event(),
+            "onOneComponentCloseButtonSuccess": new Tuml.Event()
         });
 
         this.doSave = function () {
             if (self.validateFields().length === 0) {
                 var oneObject = self.fieldsToObject();
-                self.onOneComponentSaveButtonSuccess.notify({value:oneObject, tabName:self.metaForData.name}, null, self);
+                self.onOneComponentSaveButtonSuccess.notify({value: oneObject, tabName: self.metaForData.name}, null, self);
             }
         }
 
@@ -29,9 +29,9 @@
             return $('#' + this.metaForData.name + "OneComponent");
         }
 
-        this.doClose = function() {
+        this.doClose = function () {
             this.doCancel();
-            self.onOneComponentCloseButtonSuccess.notify({tabName:self.metaForData.name}, null, self);
+            self.onOneComponentCloseButtonSuccess.notify({tabName: self.metaForData.name}, null, self);
         }
 
     }
@@ -57,33 +57,33 @@
             if (validationResults.length === 0) {
                 if (this.data !== undefined && this.data !== null) {
                     $.ajax({
-                        url:this.metaForData.qualifiedName == this.qualifiedName ? tumlUri : tumlUri + '_' + this.metaForData.name,
-                        type:"PUT",
-                        dataType:"json",
-                        contentType:"json",
-                        data:self.fieldsToJson(),
-                        success:function (data, textStatus, jqXHR) {
+                        url: this.metaForData.qualifiedName == this.qualifiedName ? tumlUri : tumlUri + '_' + this.metaForData.name,
+                        type: "PUT",
+                        dataType: "json",
+                        contentType: "json",
+                        data: self.fieldsToJson(),
+                        success: function (data, textStatus, jqXHR) {
                             self.data = data[0].data[0];
-                            self.onPutOneSuccess.notify({tumlUri:tumlUri, data:data}, null, self);
+                            self.onPutOneSuccess.notify({tumlUri: tumlUri, data: data}, null, self);
                         },
-                        error:function (jqXHR, textStatus, errorThrown) {
+                        error: function (jqXHR, textStatus, errorThrown) {
                             $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-                            self.onPutOneFailure.notify({tumlUri:tumlUri, jqXHR:jqXHR, textStatus:textStatus, errorThrown:errorThrown}, null, self);
+                            self.onPutOneFailure.notify({tumlUri: tumlUri, jqXHR: jqXHR, textStatus: textStatus, errorThrown: errorThrown}, null, self);
                         }
                     });
                 } else {
                     $.ajax({
-                        url:tumlUri + '_' + this.metaForData.name,
-                        type:"POST",
-                        dataType:"json",
-                        contentType:"json",
-                        data:self.fieldsToJson(),
-                        success:function (data, textStatus, jqXHR) {
-                            self.onPostOneSuccess.notify({tumlUri:tumlUri, data:data}, null, self);
+                        url: tumlUri + '_' + this.metaForData.name,
+                        type: "POST",
+                        dataType: "json",
+                        contentType: "json",
+                        data: self.fieldsToJson(),
+                        success: function (data, textStatus, jqXHR) {
+                            self.onPostOneSuccess.notify({tumlUri: tumlUri, data: data}, null, self);
                         },
-                        error:function (jqXHR, textStatus, errorThrown) {
+                        error: function (jqXHR, textStatus, errorThrown) {
                             $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-                            self.onPostOneFailure.notify({tumlUri:tumlUri, jqXHR:jqXHR, textStatus:textStatus, errorThrown:errorThrown}, null, self);
+                            self.onPostOneFailure.notify({tumlUri: tumlUri, jqXHR: jqXHR, textStatus: textStatus, errorThrown: errorThrown}, null, self);
                         }
                     });
                 }
@@ -96,19 +96,19 @@
             }
         }
 
-        this.doDelete = function() {
+        this.doDelete = function () {
             $.ajax({
-                url:self.tumlUri,
-                type:"DELETE",
-                dataType:"json",
-                contentType:"json",
-                data:self.fieldsToJson(),
-                success:function (data, textStatus, jqXHR) {
-                    self.onDeleteOneSuccess.notify({tumlUri:tumlUri, data:data}, null, self);
+                url: self.tumlUri,
+                type: "DELETE",
+                dataType: "json",
+                contentType: "json",
+                data: self.fieldsToJson(),
+                success: function (data, textStatus, jqXHR) {
+                    self.onDeleteOneSuccess.notify({tumlUri: tumlUri, data: data}, null, self);
                 },
-                error:function (jqXHR, textStatus, errorThrown) {
+                error: function (jqXHR, textStatus, errorThrown) {
                     $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-                    self.onDeleteOneFailure.notify({tumlUri:tumlUri, jqXHR:jqXHR, textStatus:textStatus, errorThrown:errorThrown}, null, self);
+                    self.onDeleteOneFailure.notify({tumlUri: tumlUri, jqXHR: jqXHR, textStatus: textStatus, errorThrown: errorThrown}, null, self);
                 }
             });
         }
@@ -234,7 +234,7 @@
                         var options = $select.children();
                         for (var i = 0; i < options.length; i++) {
                             if (options[i].selected) {
-                                dataToSend[property.name] = {id:parseInt($select.val()), displayName:options[i].label};
+                                dataToSend[property.name] = {id: parseInt($select.val()), displayName: options[i].label};
                                 break;
                             }
                         }
@@ -246,15 +246,15 @@
 
         //Public api
         $.extend(this, {
-            "TumlTabOneManagerVersion":"1.0.0",
-            "onClickOneComponent":new Tuml.Event(),
-            "onClickManyComponent":new Tuml.Event(),
-            "onPutOneSuccess":new Tuml.Event(),
-            "onPutOneFailure":new Tuml.Event(),
-            "onPostOneSuccess":new Tuml.Event(),
-            "onPostOneFailure":new Tuml.Event(),
-            "onDeleteOneSuccess":new Tuml.Event(),
-            "onDeleteOneFailure":new Tuml.Event()
+            "TumlTabOneManagerVersion": "1.0.0",
+            "onClickOneComponent": new Tuml.Event(),
+            "onClickManyComponent": new Tuml.Event(),
+            "onPutOneSuccess": new Tuml.Event(),
+            "onPutOneFailure": new Tuml.Event(),
+            "onPostOneSuccess": new Tuml.Event(),
+            "onPostOneFailure": new Tuml.Event(),
+            "onDeleteOneSuccess": new Tuml.Event(),
+            "onDeleteOneFailure": new Tuml.Event()
         });
 
         init();
@@ -273,82 +273,84 @@
         var tabDiv = this.getDiv();
         tabDiv.children().remove();
         $('<div id="serverErrorMsg" />').appendTo(tabDiv);
-        var formDiv = $('<div />', {id:'formDiv'}).appendTo(tabDiv);
+        var formDiv = $('<div />', {id: 'formDiv'}).appendTo(tabDiv);
 
         var ul = $('<ul class="oneUl" />')
         ul.appendTo(formDiv);
-        $.each(this.metaForData.properties, function (index, property) {
-            if (self.isPropertyForOnePage(property, isForCreation)) {
-                var li = $('<li>')
-                li.appendTo(ul);
-                $('<label />', {for:property.name + 'Id'}).text(property.name + ' :').appendTo(li);
-                var $input = self.constructInputForField(data, property, isForCreation);
-                $input.appendTo(li);
-                if (property.manyPrimitive) {
-                    var $manyDiv = $('<div />', {class:"many-primitive-one-img"}).appendTo(li);
-                    $manyDiv.click(function (e) {
-                        self.openEditorForMany($input, property, $manyDiv, li);
-                    });
-                    $input.keypress(function (e) {
-                        if (e.which == 13) {
+        if (this.metaForData.to.name !== 'Root') {
+            $.each(this.metaForData.properties, function (index, property) {
+                if (self.isPropertyForOnePage(property, isForCreation)) {
+                    var li = $('<li>')
+                    li.appendTo(ul);
+                    $('<label />', {for: property.name + 'Id'}).text(property.name + ' :').appendTo(li);
+                    var $input = self.constructInputForField(data, property, isForCreation);
+                    $input.appendTo(li);
+                    if (property.manyPrimitive) {
+                        var $manyDiv = $('<div />', {class: "many-primitive-one-img"}).appendTo(li);
+                        $manyDiv.click(function (e) {
                             self.openEditorForMany($input, property, $manyDiv, li);
-                        }
-                    });
-                } else if (property.composite && property.lower == 1 && property.upper == 1) {
-                    $input.click(function (e, args) {
-                        var data = [];
-                        var componentValue = $.data(this, "componentValue");
-                        if (componentValue !== undefined) {
-                            data.push(componentValue);
-                        }
-                        self.onClickOneComponent.notify(
-                            {data:data, tumlUri:property.tumlUri, property:property},
-                            null,
-                            self
-                        );
-                    });
-                } else if (property.composite && property.lower >= 1 && (property.upper > 1 || property.upper == -1)) {
-                    $input.click(function (e, args) {
-                        var data = [];
-                        var componentValue = $.data(this, "componentValue");
-                        if (componentValue !== undefined) {
-                            data = componentValue;
-                        }
-                        self.onClickManyComponent.notify(
-                            {data:data, tumlUri:property.tumlUri, property:property},
-                            null,
-                            self
-                        );
-                    });
-                }
-                if ($input !== undefined) {
-                    if (property.dataTypeEnum != null && property.dataTypeEnum !== undefined) {
-                        if (property.dataTypeEnum == 'Date') {
-                            $input.datepicker({
-                                showOn:"button",
-                                buttonImageOnly:true,
-                                dateFormat:"yy-mm-dd",
-                                buttonImage:"/"+tumlModelName+"/javascript/slickgrid/images/calendar.gif"
-                            });
-                        } else if (property.dataTypeEnum == 'Time') {
-                            $input.timepicker({
-                                showOn:"button",
-                                buttonImageOnly:true,
-                                buttonImage:"/"+tumlModelName+"/javascript/slickgrid/images/calendar.gif"
-                            });
-                        } else if (property.dataTypeEnum == 'DateTime') {
-                            $input.datetimepicker({
-                                showOn:"button",
-                                buttonImageOnly:true,
-                                buttonImage:"/"+tumlModelName+"/javascript/slickgrid/images/calendar.gif",
-                                dateFormat:"yy-mm-dd",
-                                timeFormat:"hh:mm:ss"
-                            });
+                        });
+                        $input.keypress(function (e) {
+                            if (e.which == 13) {
+                                self.openEditorForMany($input, property, $manyDiv, li);
+                            }
+                        });
+                    } else if (property.composite && property.lower == 1 && property.upper == 1) {
+                        $input.click(function (e, args) {
+                            var data = [];
+                            var componentValue = $.data(this, "componentValue");
+                            if (componentValue !== undefined) {
+                                data.push(componentValue);
+                            }
+                            self.onClickOneComponent.notify(
+                                {data: data, tumlUri: property.tumlUri, property: property},
+                                null,
+                                self
+                            );
+                        });
+                    } else if (property.composite && property.lower >= 1 && (property.upper > 1 || property.upper == -1)) {
+                        $input.click(function (e, args) {
+                            var data = [];
+                            var componentValue = $.data(this, "componentValue");
+                            if (componentValue !== undefined) {
+                                data = componentValue;
+                            }
+                            self.onClickManyComponent.notify(
+                                {data: data, tumlUri: property.tumlUri, property: property},
+                                null,
+                                self
+                            );
+                        });
+                    }
+                    if ($input !== undefined) {
+                        if (property.dataTypeEnum != null && property.dataTypeEnum !== undefined) {
+                            if (property.dataTypeEnum == 'Date') {
+                                $input.datepicker({
+                                    showOn: "button",
+                                    buttonImageOnly: true,
+                                    dateFormat: "yy-mm-dd",
+                                    buttonImage: "/" + tumlModelName + "/javascript/slickgrid/images/calendar.gif"
+                                });
+                            } else if (property.dataTypeEnum == 'Time') {
+                                $input.timepicker({
+                                    showOn: "button",
+                                    buttonImageOnly: true,
+                                    buttonImage: "/" + tumlModelName + "/javascript/slickgrid/images/calendar.gif"
+                                });
+                            } else if (property.dataTypeEnum == 'DateTime') {
+                                $input.datetimepicker({
+                                    showOn: "button",
+                                    buttonImageOnly: true,
+                                    buttonImage: "/" + tumlModelName + "/javascript/slickgrid/images/calendar.gif",
+                                    dateFormat: "yy-mm-dd",
+                                    timeFormat: "hh:mm:ss"
+                                });
+                            }
                         }
                     }
                 }
-            }
-        });
+            });
+        }
 
         var buttonDiv = $('<div class="onesavebuttondiv" />').appendTo(formDiv);
 
@@ -390,7 +392,7 @@
         var self = this;
         var $input;
         if (property.name == 'id') {
-            $input = $('<input />', {disabled:'disabled', type:'text', class:'field', id:property.name + this.metaForData.name + 'Id', name:property.name});
+            $input = $('<input />', {disabled: 'disabled', type: 'text', class: 'field', id: property.name + this.metaForData.name + 'Id', name: property.name});
             if (data !== undefined && data !== null) {
                 $input[0].defaultValue = data[property.name];
             }
@@ -402,13 +404,13 @@
             }
         } else if (property.dataTypeEnum != null && property.dataTypeEnum !== undefined) {
             if (property.dataTypeEnum == 'Date' || property.dataTypeEnum == 'Time' || property.dataTypeEnum == 'DateTime' || property.dataTypeEnum == 'InternationalPhoneNumber' || property.dataTypeEnum == 'LocalPhoneNumber' || property.dataTypeEnum == 'Email') {
-                $input = $("<input />", {type:'text', id:property.name + this.metaForData.name + 'Id', name:property.name});
+                $input = $("<input />", {type: 'text', id: property.name + this.metaForData.name + 'Id', name: property.name});
             } else if (property.dataTypeEnum == 'Video') {
-                $input = $("<input />", {type:'text', id:property.name + this.metaForData.name + 'Id', name:property.name});
+                $input = $("<input />", {type: 'text', id: property.name + this.metaForData.name + 'Id', name: property.name});
             } else if (property.dataTypeEnum == 'Audio') {
-                $input = $("<input />", {type:'text', id:property.name + this.metaForData.name + 'Id', name:property.name});
+                $input = $("<input />", {type: 'text', id: property.name + this.metaForData.name + 'Id', name: property.name});
             } else if (property.dataTypeEnum == 'Image') {
-                $input = $("<input />", {type:'text', id:property.name + this.metaForData.name + 'Id', name:property.name});
+                $input = $("<input />", {type: 'text', id: property.name + this.metaForData.name + 'Id', name: property.name});
             } else {
                 alert('Unsupported dataType ' + property.dataTypeEnum);
             }
@@ -416,66 +418,66 @@
                 $input[0].defaultValue = data[property.name];
             }
         } else if (property.composite && property.lower > 0) {
-            $input = $("<input />", {type:'text', id:property.name + this.metaForData.name + 'Id', name:property.name});
+            $input = $("<input />", {type: 'text', id: property.name + this.metaForData.name + 'Id', name: property.name});
             if (data !== undefined && data !== null) {
                 $input[0].defaultValue = data[property.name];
                 $.data($input[0], "componentValue", data[property.name]);
             }
 
         } else if (property.oneEnumeration) {
-            $input = $('<select />', {class:'chzn-select', style:'width:350px;', id:property.name + this.metaForData.name + 'Id', name:property.name});
+            $input = $('<select />', {class: 'chzn-select', style: 'width:350px;', id: property.name + this.metaForData.name + 'Id', name: property.name});
             if (data !== undefined && data !== null) {
-                this.appendEnumerationLoopupOptionsToSelect("/"+tumlModelName+"/tumlEnumLookup", property.qualifiedName, property.lower > 0, data[property.name], $input);
+                this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, data[property.name], $input);
             } else {
-                this.appendEnumerationLoopupOptionsToSelect("/"+tumlModelName+"/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, $input);
+                this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, $input);
             }
         } else if (property.manyEnumeration) {
-            $input = $('<select />', {multiple: '', id: property.name + this.metaForData.name + 'Id',class:'chzn-select', style:'width:350px;', name:property.name});
+            $input = $('<select />', {multiple: '', id: property.name + this.metaForData.name + 'Id', class: 'chzn-select', style: 'width:350px;', name: property.name});
             if (data !== undefined && data !== null) {
-                this.appendEnumerationLoopupOptionsToSelect("/"+tumlModelName+"/tumlEnumLookup", property.qualifiedName, property.lower > 0, data[property.name], $input);
+                this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, data[property.name], $input);
             } else {
-                this.appendEnumerationLoopupOptionsToSelect("/"+tumlModelName+"/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, $input);
+                this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, $input);
             }
         } else if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && property.oneToOne) {
-            $input = $('<select />', {class:'chzn-select', style:'width:350px;', id:property.name + this.metaForData.name + 'Id', name:property.name});
+            $input = $('<select />', {class: 'chzn-select', style: 'width:350px;', id: property.name + this.metaForData.name + 'Id', name: property.name});
             if (data !== undefined && data !== null) {
                 this.appendLoopupOptionsToSelect(property.tumlLookupUri, property.lower > 0, data['id'], data[property.name], $input);
             } else {
                 this.appendLoopupOptionsToSelect(property.tumlLookupOnCompositeParentUri, property.lower > 0, data['id'], data[property.name], $input);
             }
         } else if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && property.manyToOne) {
-            $input = $('<select />', {class:'chzn-select', style:'width:350px;', id:property.name + this.metaForData.name + 'Id', name:property.name});
+            $input = $('<select />', {class: 'chzn-select', style: 'width:350px;', id: property.name + this.metaForData.name + 'Id', name: property.name});
             if (data !== undefined && data !== null) {
                 this.appendLoopupOptionsToSelect(property.tumlLookupUri, property.lower > 0, data['id'], data[property.name], $input);
             } else {
                 this.appendLoopupOptionsToSelect(property.tumlLookupOnCompositeParentUri, property.lower > 0, data['id'], data[property.name], $input);
             }
         } else if (property.fieldType == 'String') {
-            $input = $('<input />', {type:'text', class:'field', id:property.name + this.metaForData.name + 'Id', name:property.name});
+            $input = $('<input />', {type: 'text', class: 'field', id: property.name + this.metaForData.name + 'Id', name: property.name});
             if (data !== undefined && data !== null) {
                 $input[0].defaultValue = data[property.name];
             }
         } else if (property.fieldType == 'Integer') {
-            $input = $('<input />', {type:'text', class:'field', id:property.name + this.metaForData.name + 'Id', name:property.name});
+            $input = $('<input />', {type: 'text', class: 'field', id: property.name + this.metaForData.name + 'Id', name: property.name});
             if (data !== undefined && data !== null) {
                 $input[0].defaultValue = data[property.name];
             }
         } else if (property.fieldType == 'Long') {
-            $input = $('<input />', {type:'text', class:'field', id:property.name + this.metaForData.name + 'Id', name:property.name});
+            $input = $('<input />', {type: 'text', class: 'field', id: property.name + this.metaForData.name + 'Id', name: property.name});
             if (data !== undefined && data !== null) {
                 $input[0].defaultValue = data[property.name];
             }
         } else if (property.fieldType == 'Boolean') {
             if (!property.manyPrimitive && data !== undefined && data !== null) {
                 if (data !== undefined && data !== null) {
-                    $input = $('<input />', {type:'checkbox', class:'editor-checkbox', id:property.name + this.metaForData.name + 'Id', name:property.name, checked:'checked'});
+                    $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: property.name + this.metaForData.name + 'Id', name: property.name, checked: 'checked'});
                 } else {
-                    $input = $('<input />', {type:'checkbox', class:'editor-checkbox', id:property.name + this.metaForData.name + 'Id', name:property.name });
+                    $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: property.name + this.metaForData.name + 'Id', name: property.name });
                 }
             } else if (!property.manyPrimitive) {
-                $input = $('<input />', {type:'checkbox', class:'editor-checkbox', id:property.name + this.metaForData.name + 'Id', name:property.name });
+                $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: property.name + this.metaForData.name + 'Id', name: property.name });
             } else {
-                $input = $('<input />', {type:'text', class:'field', id:property.name + this.metaForData.name + 'Id', name:property.name});
+                $input = $('<input />', {type: 'text', class: 'field', id: property.name + this.metaForData.name + 'Id', name: property.name});
                 if (data !== undefined && data !== null) {
                     $input[0].defaultValue = data[property.name];
                 }
@@ -568,7 +570,7 @@
             var rowValue = $('<td class="many-primitive-editor-cell" />').text(value);
             row.append(rowValue);
             row.data('value', value);
-            var img = $('<img/>', {class: 'tuml-many-select-img', src:'/'+tumlModelName+'/javascript/images/delete.png'}).click(function () {
+            var img = $('<img/>', {class: 'tuml-many-select-img', src: '/' + tumlModelName + '/javascript/images/delete.png'}).click(function () {
                 var liClicked = $(this).parent().parent();
                 liClicked.remove();
             });
@@ -592,7 +594,7 @@
                 select.val(currentValue);
             }
             if (!required) {
-                select.chosen({allow_single_deselect:true});
+                select.chosen({allow_single_deselect: true});
             } else {
                 select.chosen();
             }
@@ -625,7 +627,7 @@
                 $select.append($('<option />)').val(options[i].value).html(options[i].desc));
             }
             $select.val(currentValue.id);
-            $select.chosen({allow_single_deselect:true});
+            $select.chosen({allow_single_deselect: true});
         }).fail(function (a, b, c) {
                 alert("error " + a + ' ' + b + ' ' + c);
             }
@@ -657,21 +659,21 @@
                 var tmpValue = stringValueArray[i];
                 if (property.fieldType === 'Integer') {
                     if (isNaN(tmpValue)) {
-                        validationResult = {valid:false, msg:'Please enter a valid number.'};
+                        validationResult = {valid: false, msg: 'Please enter a valid number.'};
                     } else {
                         if (property.unique && tmpSerializedValue.indexOf(parseInt(stringValueArray[i])) !== -1) {
-                            validationResult = {valid:false, msg:'Duplicates are not allowed.'};
+                            validationResult = {valid: false, msg: 'Duplicates are not allowed.'};
                         } else {
                             tmpSerializedValue.push(parseInt(stringValueArray[i]));
                         }
                     }
                 } else if (property.fieldType === 'Boolean') {
                     if (tmpValue != 'true' && tmpValue != 'false') {
-                        validationResult = {valid:false, msg:'Value must be "true" or "false".'};
+                        validationResult = {valid: false, msg: 'Value must be "true" or "false".'};
                     }
                 } else {
                     if (property.unique && tmpSerializedValue.indexOf(stringValueArray[i]) !== -1) {
-                        validationResult = {valid:false, msg:'Duplicates are not allowed.'};
+                        validationResult = {valid: false, msg: 'Duplicates are not allowed.'};
                     } else {
                         tmpSerializedValue.push(stringValueArray[i]);
                     }

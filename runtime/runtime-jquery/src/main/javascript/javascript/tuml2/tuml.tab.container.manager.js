@@ -8,6 +8,9 @@
 
     function TumlTabContainerManager(tabContainer, propertyNavigatingTo) {
 
+        this.TumlTabContainerManager = "1.0.0";
+        var self = this;
+
         //This will be null for the root object only
         this.propertyNavigatingTo = propertyNavigatingTo;
         this.tumlTabViewManagers = [];
@@ -24,7 +27,6 @@
         }
 
         this.maybeCreateTabContainer = function () {
-            var self = this;
             var tabLayoutDiv = $('#' + this.getTabId());
             var tabContainer = $('#' + this.getTabId() + 'Tabs');
             if (tabContainer.length == 0) {
@@ -54,17 +56,34 @@
                         //first deactivate all grids
                         self.deactivateGrids();
 
-                        //find the current open tab and activate its grid
+                        //always set the old tab to being closed
                         for (var i = 0; i < self.tumlTabViewManagers.length; i++) {
                             var tumlTabViewManager = self.tumlTabViewManagers[i];
-                            if (ui.newPanel['0'].id == tumlTabViewManager.getTabId()) {
+                            if (ui.oldPanel['0'] !== undefined && ui.oldPanel['0'].id == tumlTabViewManager.getTabId()) {
                                 if (tumlTabViewManager.tumlTabGridManager !== undefined) {
-                                    //Fnd the open grid
-                                    tumlTabViewManager.tumlTabGridManager.active = true;
+                                    tumlTabViewManager.open = false;
                                     break;
                                 }
                             }
                         }
+
+                        var tumlTabViewManagerClickedOn = null;
+                        //if a leave node then set it to open
+                        for (var i = 0; i < self.tumlTabViewManagers.length; i++) {
+                            var tumlTabViewManager = self.tumlTabViewManagers[i];
+                            if (ui.newPanel['0'].id == tumlTabViewManager.getTabId()) {
+
+                                tumlTabViewManagerClickedOn = tumlTabViewManager;
+
+                                if (tumlTabViewManager.tumlTabViewManagers.length === 0) {
+                                    tumlTabViewManager.open = true;
+                                }
+                                break;
+                            }
+                        }
+
+                        tumlTabViewManagerClickedOn.activeOpenTabsGrid();
+
                     }
                 });
 
@@ -78,7 +97,28 @@
 
                     }
                 });
+
+                //add in button
+                this.addButtons();
             }
+        }
+
+        this.addButtons = function () {
+            var tabsNav = this.tabContainer.find('.ui-tabs-nav');
+            var tabsButtonDiv = $('<div />', {id: 'tabcontainer-button', class: 'tabs-button'}).appendTo(tabsNav);
+            var saveButton = $('<button />', {id: this.getTabId() + 'save'}).text('Save').appendTo(tabsButtonDiv);
+            saveButton.button().click(function (event) {
+                if (Slick.GlobalEditorLock.commitCurrentEdit()) {
+                    self.saveTabs();
+                }
+                event.preventDefault();
+            });
+            var cancelButton = $('<button />', {id: this.getTabId() + 'save'}).text('Cancel').appendTo(tabsButtonDiv);
+            cancelButton.button().click(function (event) {
+                alert('cancel');
+                event.preventDefault();
+            });
+
         }
 
         this.createPropertyDescriptionHeading = function () {
@@ -98,16 +138,38 @@
 
     }
 
-    TumlTabContainerManager.prototype.deactivateGrids = function() {
+    TumlTabContainerManager.prototype.saveTabs = function () {
+
+        //Save the child grids into the component's cell
+        if (this.tumlTabViewManagers.length > 0) {
+            var data = [];
+            for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
+                var tumlTabViewManager = this.tumlTabViewManagers[i];
+                if (tumlTabViewManager.tumlTabGridManager.dataView.getItems().length > 0) {
+                    data.push.apply(data, tumlTabViewManager.tumlTabGridManager.dataView.getItems());
+                }
+            }
+            this.setCellValue(data);
+        }
+
+    }
+
+    TumlTabContainerManager.prototype.deactivateGrids = function () {
         for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
             this.tumlTabViewManagers[i].deactivateGrids();
+        }
+    }
+
+    TumlTabContainerManager.prototype.activeOpenTabsGrid = function () {
+        for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
+            var tumlTabViewManager = this.tumlTabViewManagers[i];
+            tumlTabViewManager.activeOpenTabsGrid();
         }
     }
 
     TumlTabContainerManager.prototype.getTabId = function () {
         alert('this must be overriden!');
     }
-
 
     TumlTabContainerManager.prototype.removeValidationWarningHeader = function () {
         $('#' + this.getTabId() + 'validation-warning').children().remove();
@@ -184,9 +246,7 @@
     }
 
     TumlTabContainerManager.prototype.handleDeleteRow = function () {
-        this.parentTabContainerManager.updateValidationWarningHeader();
     }
-
 
     TumlTabContainerManager.prototype.addTab = function (tabEnum, result, tumlUri, options, propertyNavigatingTo) {
         var metaForData = result.meta.to;

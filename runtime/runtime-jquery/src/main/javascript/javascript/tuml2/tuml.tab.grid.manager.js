@@ -118,7 +118,7 @@
             this.metaForData = result.meta.to;
             var tabDiv = $('#' + this.metaForData.name + "ManyComponent");
             $('<div id="serverErrorMsg" />').appendTo(tabDiv);
-            $('<div id="myGridManyComponentHeader" class="selectheader" />').append($('<p />').text('Create the values to add.')).appendTo(tabDiv);
+//            $('<div id="myGridManyComponentHeader" class="selectheader" />').append($('<p />').text('Create the values to add.')).appendTo(tabDiv);
 
             var windowHeight = $('.ui-layout-center').height() - 160;
             $('<div />', {id: 'myGridManyComponent' + this.metaForData.name, style: 'width:auto;height:' + windowHeight + 'px;', class: 'tumlSlickGrid'}).appendTo(tabDiv);
@@ -388,7 +388,6 @@
 
             var windowHeight = $('.ui-layout-center').height() - 135;
             $('<div />', {id: 'myGrid' + this.metaForData.name, style: 'width:auto;height:' + windowHeight + 'px;', class: 'tumlSlickGrid'}).appendTo(tabDiv);
-//            $('<div />', {id: 'myGrid' + this.metaForData.name, style: 'width:auto;height:65%;', class: 'tumlSlickGrid'}).appendTo(tabDiv);
             $('<div />', {id: 'pager' + this.metaForData.name, style: 'width:auto;height:20px;'}).appendTo(tabDiv);
 
             $('#contextMenu' + this.metaForData.name).remove();
@@ -420,13 +419,24 @@
             this.dataView.refreshItemAfterCommit(data);
         }
 
-        this.updateGridAfterRollback = function (item) {
-            this.dataView.refreshItemAfterRollback(item);
+        this.beginUpdate = function () {
+            this.dataView.beginUpdate();
+        }
+
+        this.endUpdate = function () {
+            this.dataView.endUpdate();
             this.grid.invalidateAllRows();
             this.grid.render();
             if (this.active) {
                 this.grid.editActiveCell();
             }
+        }
+
+        this.updateGridAfterRollback = function (item) {
+            var startTime = new Date().getTime();
+            this.dataView.refreshItemAfterRollback(item);
+            var endTime = new Date().getTime();
+            console.log("TumlTabGridManager.updateGridAfterRollback took " + (endTime - startTime));
         }
 
         this.handleContextMenuClickLink = function (tumlUri) {
@@ -439,17 +449,17 @@
 
         this.handleDeleteRow = function (row, data) {
             if (Slick.GlobalEditorLock.commitCurrentEdit()) {
-                var moveCell = this.grid.getActiveCell().row >= row;
-                var currentItem = this.dataView.getItem(this.grid.getActiveCell().row);
+                var moveCell = this.grid.getActiveCell() != null && this.grid.getActiveCell().row >= row;
+//                var currentItem = this.dataView.getItem(this.grid.getActiveCell().row);
                 var item = this.dataView.getItem(row);
                 this.dataView.deleteItem(item.id);
                 this.tumlTabViewManager.handleDeleteRow();
                 if (moveCell) {
 //                //Move the active cell one up
-                    this.grid.setActiveCell(this.grid.getActiveCell().row - 1, this.grid.getActiveCell().cell);
-                    var indexOfCurrentItemInNewItemsArray = self.dataView.getNewItems().indexOf(currentItem);
-                    if (self.dataView.getNewItems().indexOf(indexOfCurrentItemInNewItemsArray) !== -1) {
-                        self.dataView.getNewItems()[indexOfCurrentItemInNewItemsArray] = currentItem;
+                    if (this.dataView.getItems().length > 0) {
+                        this.grid.setActiveCell(this.grid.getActiveCell().row - 1, this.grid.getActiveCell().cell);
+                    } else {
+                        this.grid.resetActiveCell();
                     }
                 }
             }
@@ -522,44 +532,48 @@
             });
 
             this.grid.onClick.subscribe(function (e, args) {
-                var column = self.grid.getColumns()[args.cell];
 
-                if (isClickOnNewRow(args.row, args.cell, self.dataView.getItem(args.row))) {
-                    //Add new row
-                } else if (column.name == 'id') {
-                    e.stopImmediatePropagation();
-                } else if (column.name == 'delete') {
-                    self.handleDeleteRow(args.row, self.data);
-                    e.stopImmediatePropagation();
-                } else if (column.name == 'uri') {
-                    var item = self.dataView.getItem(args.row);
-                    var uri = item.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), item.id);
-                    self.onSelfCellClick.notify({name: 'unused', tumlUri: uri}, null, self);
-                } else if (!column.options.property.manyPrimitive && !column.options.property.manyEnumeration && column.options.property.composite &&
-                    column.options.property.lower > 0 && ((column.options.property.upper > 1) || column.options.property.upper === -1)) {
-                    //Component many
-                    var data = [];
-                    if (isCellEditable(args.row, args.cell, self.dataView.getItem(args.row))) {
-                        if (self.dataView.getItem(args.row) !== undefined && self.dataView.getItem(args.row) !== null && self.dataView.getItem(args.row)[column.name] !== undefined && self.dataView.getItem(args.row)[column.name] !== null) {
-                            //Get the data currently for the component
-                            data = self.dataView.getItem(args.row)[column.name];
+                if (Slick.GlobalEditorLock.commitCurrentEdit()) {
+
+                    var column = self.grid.getColumns()[args.cell];
+
+                    if (isClickOnNewRow(args.row, args.cell, self.dataView.getItem(args.row))) {
+                        //Add new row
+                    } else if (column.name == 'id') {
+                        e.stopImmediatePropagation();
+                    } else if (column.name == 'delete') {
+                        self.handleDeleteRow(args.row, self.data);
+                        e.stopImmediatePropagation();
+                    } else if (column.name == 'uri') {
+                        var item = self.dataView.getItem(args.row);
+                        var uri = item.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), item.id);
+                        self.onSelfCellClick.notify({name: 'unused', tumlUri: uri}, null, self);
+                    } else if (!column.options.property.manyPrimitive && !column.options.property.manyEnumeration && column.options.property.composite &&
+                        column.options.property.lower > 0 && ((column.options.property.upper > 1) || column.options.property.upper === -1)) {
+                        //Component many
+                        var data = [];
+                        if (isCellEditable(args.row, args.cell, self.dataView.getItem(args.row))) {
+                            if (self.dataView.getItem(args.row) !== undefined && self.dataView.getItem(args.row) !== null && self.dataView.getItem(args.row)[column.name] !== undefined && self.dataView.getItem(args.row)[column.name] !== null) {
+                                //Get the data currently for the component
+                                data = self.dataView.getItem(args.row)[column.name];
+                            }
+                            var id = self.dataView.getItem(args.row)["id"];
+                            self.tumlTabViewManager.openManyComponent(data, args, column.options.property.tumlUri, column.options.property);
                         }
-                        var id = self.dataView.getItem(args.row)["id"];
-                        self.tumlTabViewManager.openManyComponent(data, args, column.options.property.tumlUri, column.options.property);
-                    }
-                } else if (!column.options.property.manyPrimitive && !column.options.property.manyEnumeration && column.options.property.composite &&
-                    column.options.property.lower === 1 && column.options.property.upper === 1) {
-                    //Component one
-                    var data = [];
-                    if (isCellEditable(args.row, args.cell, self.dataView.getItem(args.row))) {
-                        if (self.dataView.getItem(args.row) !== undefined && self.dataView.getItem(args.row) !== null && self.dataView.getItem(args.row)[column.name] !== undefined && self.dataView.getItem(args.row)[column.name] !== null) {
-                            data.push(self.dataView.getItem(args.row)[column.name]);
+                    } else if (!column.options.property.manyPrimitive && !column.options.property.manyEnumeration && column.options.property.composite &&
+                        column.options.property.lower === 1 && column.options.property.upper === 1) {
+                        //Component one
+                        var data = [];
+                        if (isCellEditable(args.row, args.cell, self.dataView.getItem(args.row))) {
+                            if (self.dataView.getItem(args.row) !== undefined && self.dataView.getItem(args.row) !== null && self.dataView.getItem(args.row)[column.name] !== undefined && self.dataView.getItem(args.row)[column.name] !== null) {
+                                data.push(self.dataView.getItem(args.row)[column.name]);
+                            }
+                            self.onClickOneComponentCell.notify({data: data, cell: args, tumlUri: column.options.property.tumlUri, property: column.options.property}, null, self);
                         }
-                        self.onClickOneComponentCell.notify({data: data, cell: args, tumlUri: column.options.property.tumlUri, property: column.options.property}, null, self);
                     }
+                    //unbind the document click event to close many editors
+                    self.grid['clicked'] = true;
                 }
-                //unbind the document click event to close many editors
-                self.grid['clicked'] = true;
             });
 
             this.grid.onCellChange.subscribe(function (e, args) {

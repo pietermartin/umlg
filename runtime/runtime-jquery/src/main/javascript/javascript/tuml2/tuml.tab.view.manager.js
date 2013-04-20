@@ -12,7 +12,12 @@
 
     function TumlBaseTabViewManager(tabEnum, tabContainer, tumlUri, result, propertyNavigatingTo) {
 
+        this.TumlBaseTabViewManager = "1.0.0";
+
         this.tabEnum = tabEnum;
+        //open is different to active, if there are nested tabs then a parent tab will be active but not open.
+        //This is needed when repopulating the grids from the server in order to find the visible grid.
+        this.open = false;
 
         function getTab(title) {
             return $('#tab-container').tabs('getTab', title);
@@ -24,7 +29,6 @@
 
         //Public api
         $.extend(this, {
-            "TumlTabViewManagerVersion": "1.0.0",
             //These events are propogated from the grid
             "onAddButtonSuccess": new Tuml.Event(),
             "onSelectButtonSuccess": new Tuml.Event(),
@@ -77,11 +81,11 @@
 
     TumlBaseTabViewManager.prototype.saveAndCloseTab = function () {
         this.saveAndClearAllTabs();
-        this.parentTabContainerManager.addToCellValue(this.tumlTabGridManager.dataView.getItems());
+        this.parentTabContainerManager.setCellValue(this.tumlTabGridManager.dataView.getItems());
         $("#" + this.tabId).remove();
         this.li.remove();
-        var indexOftab = this.parentTabContainerManager.tumlTabViewManagers.indexOf(this);
-        this.parentTabContainerManager.tumlTabViewManagers.splice(indexOftab, 1);
+        var indexOfTab = this.parentTabContainerManager.tumlTabViewManagers.indexOf(this);
+        this.parentTabContainerManager.tumlTabViewManagers.splice(indexOfTab, 1);
     }
 
     TumlBaseTabViewManager.prototype.init = function (tumlUri, result) {
@@ -97,36 +101,39 @@
             tabTemplate = "<li id='li" + this.tabId + "'><a href='#{href}'>#{label}</a>";
         } else {
             tabTemplate = "<li id='li" + this.tabId + "'><a href='#{href}'>#{label}</a>" +
-                "<span class='ui-icon ui-icon-cancel'>Cancel Tab</span>" +
-                "<span class='ui-icon ui-icon-plus'>Save Tab</span>" +
-                "<span class='ui-icon ui-icon-close'>Close Tab</span></li>";
+//                "<span class='ui-icon ui-icon-cancel'>Cancel Tab</span>" +
+//                "<span class='ui-icon ui-icon-plus'>Save Tab</span>" +
+//                "<span class='ui-icon ui-icon-close'>Close Tab</span>" +
+                "</li>";
         }
         var label = this.tabTitleName;
         var id = this.tabId;
         this.li = $(tabTemplate.replace(/#\{href\}/g, "#" + id).replace(/#\{label\}/g, label));
 
-        // cancel icon: refreshing the data
-        this.li.find("span.ui-icon-cancel").click(function () {
-            if (Slick.GlobalEditorLock.cancelCurrentEdit()) {
-                self.closeTab();
-            }
-        });
-        // save icon: save and close the tab on click
-        this.li.find("span.ui-icon-plus").click(function () {
-            if (Slick.GlobalEditorLock.commitCurrentEdit()) {
-                self.saveAndCloseTab();
-            }
-        });
-        // close icon: removing the tab on click
-        this.li.find("span.ui-icon-close").click(function () {
-            if (Slick.GlobalEditorLock.commitCurrentEdit()) {
-                self.closeTab();
-            }
-        });
+//        // cancel icon: refreshing the data
+//        this.li.find("span.ui-icon-cancel").click(function () {
+//            if (Slick.GlobalEditorLock.cancelCurrentEdit()) {
+//                self.closeTab();
+//            }
+//        });
+//        // save icon: save and close the tab on click
+//        this.li.find("span.ui-icon-plus").click(function () {
+//            if (Slick.GlobalEditorLock.commitCurrentEdit()) {
+//                self.saveAndCloseTab();
+//            }
+//        });
+//        // close icon: removing the tab on click
+//        this.li.find("span.ui-icon-close").click(function () {
+//            if (Slick.GlobalEditorLock.commitCurrentEdit()) {
+//                self.closeTab();
+//            }
+//        });
+
         this.parentTabContainer.find(".ui-tabs-nav").append(this.li);
         var divPanel = $('<div />', {id: this.tabId});
         this.parentTabContainer.append(divPanel);
         $.data(divPanel[0], 'tabEnum', this.tabEnum);
+
         this.parentTabContainer.tabs("refresh");
         return divPanel;
     }
@@ -165,6 +172,8 @@
                     }
                 }
 
+                self.open = false;
+
                 //Set only the first tab to active
                 if (firstTumlManyComponentTabViewManager !== null) {
                     self.tabContainer.tabs("option", "active", 0);
@@ -173,6 +182,8 @@
                     }
                 }
 
+                var qualifiedName = result[0].meta.qualifiedName;
+                self.updateNavigationHeader(qualifiedName);
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -181,11 +192,18 @@
         });
     }
 
+    TumlBaseTabViewManager.prototype.beginUpdate = function () {
+    }
+
+    TumlBaseTabViewManager.prototype.endUpdate = function () {
+    }
+
     function TumlTabQueryViewManager(tabEnum, tabContainer, instanceQueryUri, classQueryUri, tabDivName, tabTitleName, queryId) {
+
+        this.TumlTabQueryViewManager = "1.0.0";
 
         //Public api
         $.extend(this, {
-            "TumlTabQueryViewManager": "1.0.0",
             "onPostInstanceQuerySuccess": new Tuml.Event(),
             "onPutInstanceQuerySuccess": new Tuml.Event(),
             "onPostClassQuerySuccess": new Tuml.Event(),
@@ -244,6 +262,9 @@
     }
 
     function TumlTabOneViewManager(tabEnum, tabContainer, oneManyOrQuery, tumlUri, result, propertyNavigatingTo) {
+
+        this.TumlTabOneViewManager = "1.0.0";
+
         this.oneManyOrQuery = oneManyOrQuery;
         this.result = result;
 
@@ -321,6 +342,9 @@
     }
 
     function TumlTabManyViewManager(tabEnum, tabContainer, oneManyOrQuery, tumlUri, result, propertyNavigatingTo) {
+
+        this.TumlTabManyViewManager = "1.0.0";
+
         this.oneManyOrQuery = oneManyOrQuery;
         this.result = result;
         this.tumlTabGridManager = null;
@@ -329,8 +353,20 @@
 
     TumlTabManyViewManager.prototype = new Tuml.TumlBaseTabViewManager();
 
-    TumlTabManyViewManager.prototype.updateGridAfterCommit = function (data) {
-        this.tumlTabGridManager.updateGridAfterCommit(data);
+    TumlTabManyViewManager.prototype.deactivateGrids = function () {
+        this.tumlTabGridManager.active = false;
+        Tuml.TumlTabContainerManager.prototype.deactivateGrids.call(this);
+    }
+
+    TumlTabManyViewManager.prototype.activeOpenTabsGrid = function () {
+        if (this.tumlTabViewManagers.length === 0 && this.open === true) {
+            this.tumlTabGridManager.active = true;
+        }
+        Tuml.TumlTabContainerManager.prototype.activeOpenTabsGrid.call(this);
+    }
+
+    TumlTabManyViewManager.prototype.updateGridAfterCommit = function (item) {
+        this.tumlTabGridManager.updateGridAfterCommit(item);
 
         //Check if component tab is open
         if (this.tumlTabViewManagers.length > 0) {
@@ -338,23 +374,21 @@
             for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
 
                 var tumlTabViewManager = this.tumlTabViewManagers[i];
+
                 var rowClickedOnData = this.tumlTabGridManager.dataView.getItems()[this.componentCell.row];
                 var componentData = rowClickedOnData[tumlTabViewManager.propertyNavigatingTo.name];
-                tumlTabViewManager.updateGridAfterCommit(componentData);
 
+                for (var j = 0; j < componentData.length; j++) {
+                    var gridRow = componentData[j];
+                    if (tumlTabViewManager.metaForData.to.qualifiedName === gridRow.qualifiedName) {
+                        tumlTabViewManager.updateGridAfterCommit(gridRow);
+                    }
+                }
             }
-
         }
-
-    }
-
-    TumlTabManyViewManager.prototype.deactivateGrids = function() {
-        this.tumlTabGridManager.active = false;
-        Tuml.TumlTabContainerManager.prototype.deactivateGrids.call(this);
     }
 
     TumlTabManyViewManager.prototype.updateGridAfterRollback = function (item) {
-
         this.tumlTabGridManager.updateGridAfterRollback(item);
 
         //Check if component tab is open
@@ -363,6 +397,7 @@
             for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
 
                 var tumlTabViewManager = this.tumlTabViewManagers[i];
+
                 var rowClickedOnData = this.tumlTabGridManager.dataView.getItems()[this.componentCell.row];
                 var componentData = rowClickedOnData[tumlTabViewManager.propertyNavigatingTo.name];
 
@@ -372,11 +407,16 @@
                         tumlTabViewManager.updateGridAfterRollback(gridRow);
                     }
                 }
-
             }
-
         }
+    }
 
+    TumlTabManyViewManager.prototype.beginUpdate = function () {
+        this.tumlTabGridManager.beginUpdate();
+    }
+
+    TumlTabManyViewManager.prototype.endUpdate = function () {
+        this.tumlTabGridManager.endUpdate();
     }
 
     TumlTabManyViewManager.prototype.addNewRow = function (event) {
@@ -392,7 +432,22 @@
             }
             this.setCellValue(data);
         }
-        this.parentTabContainerManager.addNewRow(event);
+    }
+
+    TumlTabManyViewManager.prototype.handleDeleteRow = function () {
+        this.parentTabContainerManager.updateValidationWarningHeader();
+        //Save the child grids into the component's cell
+        if (this.tumlTabViewManagers.length > 0) {
+            var data = [];
+            for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
+                var tumlTabViewManager = this.tumlTabViewManagers[i];
+                if (tumlTabViewManager.tumlTabGridManager.dataView.getItems().length > 0) {
+                    data.push.apply(data, tumlTabViewManager.tumlTabGridManager.dataView.getItems());
+                }
+            }
+            this.setCellValue(data);
+        }
+        this.parentTabContainerManager.handleDeleteRow();
     }
 
     TumlTabManyViewManager.prototype.createTab = function (result, forCreation) {
@@ -401,7 +456,7 @@
             this.tabTitleName = this.result.meta.to.name + " Select";
         } else if (this.oneManyOrQuery.forManyComponent) {
             this.tabId = this.result.meta.to.name + "ManyComponent";
-            this.tabTitleName = this.result.meta.to.name + " Many Add";
+            this.tabTitleName = this.result.meta.to.name;
         } else {
             this.tabId = this.result.meta.to.name;
             this.tabTitleName = this.result.meta.to.name;
@@ -473,6 +528,9 @@
     }
 
     function TumlTabManyComponentViewManager(tabEnum, tabContainer, oneManyOrQuery, tumlUri, result, propertyNavigatingTo) {
+
+        this.TumlTabManyComponentViewManager = "1.0.0";
+
         TumlTabManyViewManager.call(this, tabEnum, tabContainer, oneManyOrQuery, tumlUri, result, propertyNavigatingTo);
     }
 
@@ -481,7 +539,7 @@
     TumlTabManyComponentViewManager.prototype.createTab = function (result, forCreation) {
         if (this.oneManyOrQuery.forManyComponent) {
             this.tabId = this.result.meta.to.name + "ManyComponent";
-            this.tabTitleName = this.result.meta.to.name + " Many Add";
+            this.tabTitleName = this.result.meta.to.name;
         } else {
             alert('this should not happen!');
         }
