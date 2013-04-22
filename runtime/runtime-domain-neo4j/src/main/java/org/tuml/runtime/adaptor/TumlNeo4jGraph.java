@@ -155,6 +155,9 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
     public <T> T instantiateClassifier(Long id) {
         try {
             Vertex v = this.getVertex(id);
+            if (v == null) {
+                throw new RuntimeException(String.format("No vertex found for id %d", new Object[]{id}));
+            }
             // TODO reimplement schemaHelper
             String className = (String) v.getProperty("className");
             Class<?> c = Class.forName(className);

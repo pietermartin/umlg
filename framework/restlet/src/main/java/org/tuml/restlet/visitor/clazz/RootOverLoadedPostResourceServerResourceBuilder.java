@@ -39,7 +39,7 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
 
             addDefaultConstructor(annotatedClass);
             addGetRootObjectRepresentation(clazz, annotatedInf, annotatedClass);
-            addPostObjectRepresentation(clazz, annotatedInf, annotatedClass, REST.POST);
+            addPostObjectRepresentation(clazz, annotatedInf, annotatedClass);
             addToRouterEnum(clazz, annotatedClass);
 
         }
@@ -49,28 +49,14 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
     public void visitAfter(Class clazz) {
     }
 
-    private void addPostObjectRepresentation(Classifier concreteClassifier, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass, REST action) {
-        OJAnnotatedOperation postInf;
-        if (action == REST.POST) {
-            postInf = new OJAnnotatedOperation("post", TumlRestletGenerationUtil.Representation);
-        } else if (action == REST.PUT) {
-            postInf = new OJAnnotatedOperation("put", TumlRestletGenerationUtil.Representation);
-        } else {
-            postInf = new OJAnnotatedOperation("delete", TumlRestletGenerationUtil.Representation);
-        }
+    private void addPostObjectRepresentation(Classifier concreteClassifier, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass) {
+        OJAnnotatedOperation postInf = new OJAnnotatedOperation("post", TumlRestletGenerationUtil.Representation);
 
         postInf.addToParameters(new OJParameter("entity", TumlRestletGenerationUtil.Representation));
         annotatedInf.addToOperations(postInf);
         postInf.addAnnotationIfNew(new OJAnnotationValue(TumlRestletGenerationUtil.Post, "json"));
 
-        OJAnnotatedOperation post;
-        if (action == REST.POST) {
-            post = new OJAnnotatedOperation("post", TumlRestletGenerationUtil.Representation);
-        } else if (action == REST.PUT) {
-            post = new OJAnnotatedOperation("put", TumlRestletGenerationUtil.Representation);
-        } else {
-            post = new OJAnnotatedOperation("delete", TumlRestletGenerationUtil.Representation);
-        }
+        OJAnnotatedOperation post = new OJAnnotatedOperation("post", TumlRestletGenerationUtil.Representation);
 
         post.addToParameters(new OJParameter("entity", TumlRestletGenerationUtil.Representation));
         post.addToThrows(TumlRestletGenerationUtil.ResourceException);
@@ -89,63 +75,89 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
         entityText.setInitExp("entity.getText()");
         ojTryStatement.getTryPart().addToLocals(entityText);
 
-        OJField jsonData = new OJField("json", "java.lang.StringBuilder");
-        jsonData.setInitExp("new StringBuilder()");
-        ojTryStatement.getTryPart().addToLocals(jsonData);
+        OJPathName pathName = new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object");
+        OJAnnotatedField overloaded = new OJAnnotatedField("overloaded", pathName);
+        overloaded.setInitExp("mapper.readValue(" + entityText.getName() + ", Map.class)");
+        ojTryStatement.getTryPart().addToLocals(overloaded);
+
+        ojTryStatement.getTryPart().addToStatements("StringBuilder json = new StringBuilder()");
         ojTryStatement.getTryPart().addToStatements("json.append(\"[\")");
         ojTryStatement.getTryPart().addToStatements("json.append(\"{\\\"data\\\": [\")");
 
-        OJIfStatement ifTextNull = new OJIfStatement("entityText != null");
-        ojTryStatement.getTryPart().addToStatements(ifTextNull);
-
-        OJAnnotatedField objectO = new OJAnnotatedField("o", new OJPathName("Object"));
-        objectO.setInitExp("mapper.readValue(" + entityText.getName() + ", Object.class)");
-        ifTextNull.getThenPart().addToLocals(objectO);
-        OJIfStatement ifArray = new OJIfStatement("o instanceof ArrayList");
+        //Insert
+        ojTryStatement.getTryPart().addToStatements("Object o = overloaded.get(\"insert\")");
+        OJIfStatement ifInsert = new OJIfStatement("o != null");
+        ojTryStatement.getTryPart().addToStatements(ifInsert);
+        OJIfStatement ifArrayForInsert = new OJIfStatement("o instanceof ArrayList");
         OJPathName genericsForArray = new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object");
-        OJField array = new OJField("array", new OJPathName("java.util.List").addToGenerics(genericsForArray));
-        array.setInitExp("(ArrayList<Map<String, Object>>)o");
+        OJField insertArray = new OJField("array", new OJPathName("java.util.List").addToGenerics(genericsForArray));
+        insertArray.setInitExp("(ArrayList<Map<String, Object>>)o");
         annotatedClass.addToImports("java.util.ArrayList");
-        ifArray.getThenPart().addToLocals(array);
-
-        OJField count = new OJField("count", "int");
-        count.setInitExp("0");
-        ifArray.getThenPart().addToLocals(count);
-
-        ifTextNull.getThenPart().addToStatements(ifArray);
-        OJForStatement forArray = new OJForStatement("map", new OJPathName("java.util.Map").addToGenerics(new OJPathName("String")).addToGenerics(
+        ifArrayForInsert.getThenPart().addToLocals(insertArray);
+        ifInsert.getThenPart().addToStatements(ifArrayForInsert);
+        ifArrayForInsert.getThenPart().addToStatements("int count = 1");
+        OJForStatement insertForArray = new OJForStatement("map", new OJPathName("java.util.Map").addToGenerics(new OJPathName("String")).addToGenerics(
                 new OJPathName("Object")), "array");
-        ifArray.addToThenPart(forArray);
-        forArray.getBody().addToStatements("count++");
-        if (action == REST.POST || action == REST.PUT) {
-            forArray.getBody().addToStatements("json.append(" + action.getMethodName() + "(map))");
-        } else {
-            forArray.getBody().addToStatements(action.getMethodName() + "(map)");
+        ifArrayForInsert.addToThenPart(insertForArray);
+        insertForArray.getBody().addToStatements("json.append(add(map))");
+        OJIfStatement insertIfCount = new OJIfStatement("count++ != array.size()");
+        insertIfCount.addToThenPart("json.append(\", \")");
+        insertForArray.getBody().addToStatements(insertIfCount);
+        OJField insertMap = new OJField("map", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object"));
+        insertMap.setInitExp("(Map<String, Object>) o");
+        ifArrayForInsert.setElsePart(new OJBlock());
+        ifArrayForInsert.getElsePart().addToLocals(insertMap);
+        ifArrayForInsert.getElsePart().addToStatements("json.append(add(map))");
 
-        }
-        OJIfStatement ifToAddCommaToJson = new OJIfStatement("count < array.size()");
-        ifToAddCommaToJson.addToThenPart("json.append(\",\")");
-        forArray.getBody().addToStatements(ifToAddCommaToJson);
+        //update
+        ojTryStatement.getTryPart().addToStatements("o = overloaded.get(\"update\")");
+        OJIfStatement ifUpdate = new OJIfStatement("o != null");
+        ojTryStatement.getTryPart().addToStatements(ifUpdate);
+        OJIfStatement ifArrayForUpdate = new OJIfStatement("o instanceof ArrayList");
+        genericsForArray = new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object");
+        OJField updateArray = new OJField("array", new OJPathName("java.util.List").addToGenerics(genericsForArray));
+        updateArray.setInitExp("(ArrayList<Map<String, Object>>)o");
+        annotatedClass.addToImports("java.util.ArrayList");
+        ifArrayForUpdate.getThenPart().addToLocals(updateArray);
+        ifUpdate.getThenPart().addToStatements(ifArrayForUpdate);
+        ifArrayForUpdate.getThenPart().addToStatements("int count = 1");
+        OJForStatement updateForArray = new OJForStatement("map", new OJPathName("java.util.Map").addToGenerics(new OJPathName("String")).addToGenerics(
+                new OJPathName("Object")), "array");
+        ifArrayForUpdate.addToThenPart(updateForArray);
+        updateForArray.getBody().addToStatements("json.append(put(map))");
+        OJIfStatement updateIfCount = new OJIfStatement("count++ != array.size()");
+        updateIfCount.addToThenPart("json.append(\", \")");
+        updateForArray.getBody().addToStatements(updateIfCount);
+        OJField updateMap = new OJField("map", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object"));
+        updateMap.setInitExp("(Map<String, Object>) o");
+        ifArrayForUpdate.setElsePart(new OJBlock());
+        ifArrayForUpdate.getElsePart().addToLocals(insertMap);
+        ifArrayForUpdate.getElsePart().addToStatements("json.append(put(map))");
 
-        OJField map = new OJField("map", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object"));
-        map.setInitExp("(Map<String, Object>) o");
-        ifArray.setElsePart(new OJBlock());
-        ifArray.getElsePart().addToLocals(map);
-        if (action == REST.POST || action == REST.PUT) {
-            ifArray.getElsePart().addToStatements("json.append(" + action.getMethodName() + "(map))");
-        } else {
-            ifArray.getElsePart().addToStatements(action.getMethodName() + "(map)");
-        }
+        //delete
+        ojTryStatement.getTryPart().addToStatements("o = overloaded.get(\"delete\")");
+        OJIfStatement ifDelete = new OJIfStatement("o != null");
+        ojTryStatement.getTryPart().addToStatements(ifDelete);
+        OJIfStatement ifArrayForDelete = new OJIfStatement("o instanceof ArrayList");
+        genericsForArray = new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object");
+        OJField deleteArray = new OJField("array", new OJPathName("java.util.List").addToGenerics(genericsForArray));
+        deleteArray.setInitExp("(ArrayList<Map<String, Object>>)o");
+        annotatedClass.addToImports("java.util.ArrayList");
+        ifArrayForDelete.getThenPart().addToLocals(deleteArray);
+        ifDelete.getThenPart().addToStatements(ifArrayForDelete);
+        OJForStatement deleteForArray = new OJForStatement("map", new OJPathName("java.util.Map").addToGenerics(new OJPathName("String")).addToGenerics(
+                new OJPathName("Object")), "array");
+        ifArrayForDelete.addToThenPart(deleteForArray);
+        deleteForArray.getBody().addToStatements("delete(map)");
+        OJField deleteMap = new OJField("map", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object"));
+        deleteMap.setInitExp("(Map<String, Object>) o");
+        ifArrayForDelete.setElsePart(new OJBlock());
+        ifArrayForDelete.getElsePart().addToLocals(insertMap);
+        ifArrayForDelete.getElsePart().addToStatements("delete(map)");
 
-        ifTextNull.addToElsePart("json.append(add())");
-
-        if (action == REST.POST) {
-            addPostResource(concreteClassifier, annotatedClass, parentPathName);
-        } else if (action == REST.PUT) {
-            addPutResource(concreteClassifier, annotatedClass, parentPathName);
-        } else {
-            addDeleteResource(concreteClassifier, annotatedClass, parentPathName);
-        }
+        addPostResource(concreteClassifier, annotatedClass, parentPathName);
+        addPutResource(concreteClassifier, annotatedClass, parentPathName);
+        addDeleteResource(concreteClassifier, annotatedClass, parentPathName);
 
         //Check if transaction needs commiting
         commitOrRollback(ojTryStatement.getTryPart());
@@ -187,20 +199,13 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
         add.getBody().addToStatements(TumlClassOperations.getPathName(concreteClassifier).getLast() + " childResource = new " + TumlClassOperations.getPathName(concreteClassifier).getLast() + "(true)");
         annotatedClass.addToImports(TumlClassOperations.getPathName(concreteClassifier));
         add.getBody().addToStatements("childResource.fromJson(propertyMap)");
-        add.getBody().addToStatements("String jsonResult = childResource.toJsonWithoutCompositeParent()");
-        OJIfStatement ifContainsId = new OJIfStatement("propertyMap.containsKey(\"id\")");
-        ifContainsId.addToThenPart("Long tmpId = Long.valueOf((Integer) propertyMap.get(\"id\"))");
-        ifContainsId.addToThenPart("jsonResult = jsonResult.substring(1);");
-        ifContainsId.addToThenPart("jsonResult = \"{\\\"tmpId\\\": \" + tmpId + \", \" + jsonResult;");
-        add.getBody().addToStatements(ifContainsId);
+        add.getBody().addToStatements("String jsonResult = childResource.toJsonWithoutCompositeParent(true)");
+//        OJIfStatement ifContainsId = new OJIfStatement("propertyMap.containsKey(\"id\")");
+//        ifContainsId.addToThenPart("Long tmpId = Long.valueOf((Integer) propertyMap.get(\"id\"))");
+//        ifContainsId.addToThenPart("jsonResult = jsonResult.substring(1);");
+//        ifContainsId.addToThenPart("jsonResult = \"{\\\"tmpId\\\": \" + tmpId + \", \" + jsonResult;");
+//        add.getBody().addToStatements(ifContainsId);
         add.getBody().addToStatements("return jsonResult");
-
-        OJAnnotatedOperation addWithoutData = new OJAnnotatedOperation("add", "String");
-        addWithoutData.setVisibility(OJVisibilityKind.PRIVATE);
-        annotatedClass.addToOperations(addWithoutData);
-        addWithoutData.getBody().addToStatements(TumlClassOperations.getPathName(concreteClassifier).getLast() + " childResource = new " + TumlClassOperations.getPathName(concreteClassifier).getLast() + "(true)");
-        annotatedClass.addToImports(TumlClassOperations.getPathName(concreteClassifier));
-        addWithoutData.getBody().addToStatements("return childResource.toJsonWithoutCompositeParent()");
     }
 
     private void addPutResource(Classifier classifier, OJAnnotatedClass annotatedClass, OJPathName parentPathName) {

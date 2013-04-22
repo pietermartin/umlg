@@ -65,12 +65,9 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                 toJson.getBody().addToStatements("sb.append(\", \")");
             }
         }
-        int count = 0;
         OJIfStatement ifDeep;
-        boolean deepIsLast = false;
         boolean first = true;
         for (Property p : propertiesForToJson) {
-            count++;
             if (!first) {
                 toJson.getBody().addToStatements("sb.append(\", \")");
             }
@@ -80,10 +77,8 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                 ifDeep = new OJIfStatement("deep");
 
                 ifDeep.addToThenPart("sb.append(\"\\\"" + pWrap.getName() + "\\\": [\" + " + TinkerGenerationUtil.ToJsonUtil.getLast() + "." + operationName + "("
-                        + pWrap.getter() + "()) + \"]" + "\")");
-//                if (!first) {
-                    ifDeep.addToElsePart("sb.delete(sb.length() - 2, sb.length())");
-//                }
+                        + pWrap.getter() + "(), true) + \"]" + "\")");
+                ifDeep.addToElsePart("sb.delete(sb.length() - 2, sb.length())");
 
                 annotatedClass.addToImports(TinkerGenerationUtil.ToJsonUtil);
                 toJson.getBody().addToStatements(ifDeep);
@@ -212,7 +207,6 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
         if (!clazz.getGenerals().isEmpty()) {
             fromJson.getBody().addToStatements("super.fromJson(propertyMap)");
         }
-//        List<Property> propertiesForToJson = new ArrayList<Property>(TumlClassOperations.getNonCompositeProperties(clazz));
         List<Property> propertiesForToJson = new ArrayList<Property>(TumlClassOperations.getPrimitiveOrEnumOrComponentsProperties(clazz));
         if (!propertiesForToJson.isEmpty()) {
             for (Property property : propertiesForToJson) {
@@ -322,7 +316,7 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                         ojForStatement.getBody().addToLocals(component);
                         OJIfStatement ojIfStatement = new OJIfStatement("row.get(\"id\") instanceof Number");
                         OJSimpleStatement ojSimpleStatementConstructor = new OJSimpleStatement(pWrap.fieldname() + " = " + TinkerGenerationUtil.graphDbAccess
-                                + ".instantiateClassifier((Long)row.get(\"id\"))");
+                                + ".instantiateClassifier(((Number)row.get(\"id\")).longValue())");
                         ojIfStatement.addToThenPart(ojSimpleStatementConstructor);
 
                         ojIfStatement.addToElsePart("Class<" + pWrap.javaBaseTypePath().getLast() + "> baseTumlClass = TumlSchemaFactory.getTumlSchemaMap().get((String)row.get(\"qualifiedName\"))");

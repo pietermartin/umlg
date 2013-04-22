@@ -150,6 +150,8 @@
             contentType: "application/json",
             success: function (result, textStatus, jqXHR) {
 
+                self.tabContainerProperty = property;
+
                 var firstTumlManyComponentTabViewManager = null;
                 for (var i = 0; i < result.length; i++) {
                     self.maybeCreateTabContainer();
@@ -164,8 +166,8 @@
                     );
                     self.setCell(cell);
                     self.addToTumlTabViewManagers(tumlManyComponentTabViewManager);
-                    self.tumlTabGridManager.active = false;
                     tumlManyComponentTabViewManager.parentTabContainerManager = self;
+                    $('#slickGrid' + self.tabId).hide();
                     tumlManyComponentTabViewManager.createTab(result[i], false);
                     if (i === 0) {
                         firstTumlManyComponentTabViewManager = tumlManyComponentTabViewManager;
@@ -177,9 +179,6 @@
                 //Set only the first tab to active
                 if (firstTumlManyComponentTabViewManager !== null) {
                     self.tabContainer.tabs("option", "active", 0);
-                    if (tumlManyComponentTabViewManager instanceof Tuml.TumlTabManyComponentViewManager) {
-                        tumlManyComponentTabViewManager.tumlTabGridManager.active = true;
-                    }
                 }
 
                 var qualifiedName = result[0].meta.qualifiedName;
@@ -388,23 +387,45 @@
         }
     }
 
+    TumlTabManyViewManager.prototype.clearArraysAfterCommit = function () {
+        this.tumlTabGridManager.clearArraysAfterCommit();
+    }
+
     TumlTabManyViewManager.prototype.updateGridAfterRollback = function (item) {
         this.tumlTabGridManager.updateGridAfterRollback(item);
 
-        //Check if component tab is open
+        //Check if component tab is open for this particular item
         if (this.tumlTabViewManagers.length > 0) {
 
-            for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
+            if (this.tumlTabGridManager.dataView.getItem(this.componentCell.row).tmpId === item.tmpId) {
+                for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
 
-                var tumlTabViewManager = this.tumlTabViewManagers[i];
+                    var tumlTabViewManager = this.tumlTabViewManagers[i];
+                    tumlTabViewManager.beginUpdate();
+                    var componentData = item[tumlTabViewManager.propertyNavigatingTo.name];
 
-                var rowClickedOnData = this.tumlTabGridManager.dataView.getItems()[this.componentCell.row];
-                var componentData = rowClickedOnData[tumlTabViewManager.propertyNavigatingTo.name];
+                    for (var j = 0; j < componentData.length; j++) {
+                        var gridRow = componentData[j];
+                        if (tumlTabViewManager.metaForData.to.qualifiedName === gridRow.qualifiedName) {
+                            tumlTabViewManager.updateGridAfterRollback(gridRow);
+                        }
+                    }
+                    tumlTabViewManager.endUpdate(true);
 
-                for (var j = 0; j < componentData.length; j++) {
-                    var gridRow = componentData[j];
-                    if (tumlTabViewManager.metaForData.to.qualifiedName === gridRow.qualifiedName) {
-                        tumlTabViewManager.updateGridAfterRollback(gridRow);
+                }
+            } else {
+                //Need to update the id's to the tmpId as the id no longer exist on a rolled back transaction
+                //Go through all the properties, for each composite property set the id = tmpId
+                for (var i = 0; i < this.metaForData.to.properties.length; i++) {
+                    var property = this.metaForData.to.properties[i];
+                    if (property.composite) {
+                        if (property.upper == -1 || property.upper > 1) {
+                            var componentArray = item[property.name];
+                            for (var j = 0; j < componentArray.length; j++) {
+                                var component = componentArray[j];
+                                component.id = component.tmpId;
+                            }
+                        }
                     }
                 }
             }
@@ -415,8 +436,8 @@
         this.tumlTabGridManager.beginUpdate();
     }
 
-    TumlTabManyViewManager.prototype.endUpdate = function () {
-        this.tumlTabGridManager.endUpdate();
+    TumlTabManyViewManager.prototype.endUpdate = function (editActiveCell) {
+        this.tumlTabGridManager.endUpdate(editActiveCell);
     }
 
     TumlTabManyViewManager.prototype.addNewRow = function (event) {
@@ -432,6 +453,7 @@
             }
             this.setCellValue(data);
         }
+        this.parentTabContainerManager.addNewRow(event);
     }
 
     TumlTabManyViewManager.prototype.handleDeleteRow = function () {
@@ -543,7 +565,7 @@
         } else {
             alert('this should not happen!');
         }
-        $('#slickGrid' + this.parentTabContainerManager.tabId).hide();
+//        $('#slickGrid' + this.parentTabContainerManager.tabId).hide();
         TumlBaseTabViewManager.prototype.createTab.call(this, result, forCreation);
         this.parentTabContainer.tabs("option", "active", this.parentTabContainerManager.tumlTabViewManagers.length - 1);
         this.createGrid(result);

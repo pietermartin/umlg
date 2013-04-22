@@ -432,9 +432,8 @@
 
     //This is called from the grid on regular save.
     //The itemsToRefresh contains the difference that were posted. New items and existing items.
-    function refreshItemAfterCommit(itemsToRefresh) {
-        var itemToRefresh = itemsToRefresh[i];
-        if (itemToRefresh.tmpId != undefined) {
+    function refreshItemAfterCommit(itemToRefresh) {
+        if (itemToRefresh.tmpId != undefined && itemToRefresh.tmpId !== null) {
             //New item
             if (idxById[itemToRefresh.tmpId] == undefined) {
                 throw "Invalid id";
@@ -451,13 +450,16 @@
             var index = idxById[itemToRefresh.id];
             items[index] = itemToRefresh;
         }
-        //Clear all new and updated items
-        updatedItems = [];
-        updatedIdxById = {};
-        newItems = [];
-        newIdxById = {};
         refresh();
     }
+
+      function clearArraysAfterCommit(itemToRefresh) {
+          //Clear all new and updated items
+          updatedItems = [];
+          updatedIdxById = {};
+          newItems = [];
+          newIdxById = {};
+      }
 
       //This is called from the grid on regular save.
       //The itemToRefresh contains a difference that were posted. New items and existing items.
@@ -1021,6 +1023,7 @@
       "setFilterArgs": setFilterArgs,
       "refresh": refresh,
       "refreshItemAfterCommit": refreshItemAfterCommit,
+      "clearArraysAfterCommit": clearArraysAfterCommit,
       "refreshItemAfterRollback": refreshItemAfterRollback,
       "updateItem": updateItem,
       "insertItem": insertItem,

@@ -13,6 +13,7 @@
 
         //This will be null for the root object only
         this.propertyNavigatingTo = propertyNavigatingTo;
+        this.tabContainerProperty = null;
         this.tumlTabViewManagers = [];
         this.tabContainer = null;
         this.parentTabContainer = tabContainer;
@@ -68,7 +69,7 @@
                         }
 
                         var tumlTabViewManagerClickedOn = null;
-                        //if a leave node then set it to open
+                        //if a leaf node then set it to open
                         for (var i = 0; i < self.tumlTabViewManagers.length; i++) {
                             var tumlTabViewManager = self.tumlTabViewManagers[i];
                             if (ui.newPanel['0'].id == tumlTabViewManager.getTabId()) {
@@ -123,16 +124,16 @@
 
         this.createPropertyDescriptionHeading = function () {
             var multiplicity;
-            if (this.propertyNavigatingTo.upper == -1) {
-                multiplicity = 'multiplicity: [' + this.propertyNavigatingTo.lower + '..*]';
+            if (this.tabContainerProperty.upper == -1) {
+                multiplicity = 'multiplicity: [' + this.tabContainerProperty.lower + '..*]';
             } else {
-                multiplicity = 'multiplicity: [' + this.propertyNavigatingTo.lower + '..' + this.propertyNavigatingTo.upper + ']';
+                multiplicity = 'multiplicity: [' + this.tabContainerProperty.lower + '..' + this.tabContainerProperty.upper + ']';
             }
-            var unique = 'unique: ' + this.propertyNavigatingTo.unique;
-            var ordered = 'ordered: ' + this.propertyNavigatingTo.ordered;
+            var unique = 'unique: ' + this.tabContainerProperty.unique;
+            var ordered = 'ordered: ' + this.tabContainerProperty.ordered;
             //TODO
 //            var derived = 'derived: ' + propertyNavigatingTo.derived;
-            var association = 'association: ' + (this.propertyNavigatingTo.composite ? 'composite' : 'non composite');
+            var association = 'association: ' + (this.tabContainerProperty.composite ? 'composite' : 'non composite');
             return multiplicity + ', ' + unique + ', ' + ordered + ', ' + association;
         }
 
@@ -145,12 +146,15 @@
             var data = [];
             for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
                 var tumlTabViewManager = this.tumlTabViewManagers[i];
-                if (tumlTabViewManager.tumlTabGridManager.dataView.getItems().length > 0) {
+                if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager && tumlTabViewManager.tumlTabGridManager.dataView.getItems().length > 0) {
                     data.push.apply(data, tumlTabViewManager.tumlTabGridManager.dataView.getItems());
                 }
             }
             this.setCellValue(data);
         }
+        this.destroyTabContainer();
+        this.tumlTabGridManager.active = true;
+        $('#slickGrid' + this.tabId).show();
 
     }
 
@@ -178,7 +182,7 @@
     TumlTabContainerManager.prototype.updateNavigationHeader = function (qualifiedName) {
         $('#' + this.getTabId() + 'navigation-qualified-name').children().remove();
         var propertyDescription = qualifiedName;
-        if (this.propertyNavigatingTo !== undefined && this.propertyNavigatingTo !== null) {
+        if (this.tabContainerProperty !== undefined && this.tabContainerProperty !== null) {
             propertyDescription += '  -  ' + this.createPropertyDescriptionHeading();
         }
         $('#' + this.getTabId() + 'navigation-qualified-name').append($('<span />').text(propertyDescription));
@@ -192,9 +196,9 @@
             var dataView = tumlTabManyViewManagers[i].tumlTabGridManager.dataView;
             rowCount += dataView.getItems().length;
         }
-        if (rowCount < this.propertyNavigatingTo.lower || (this.propertyNavigatingTo.upper !== -1 && rowCount > this.propertyNavigatingTo.upper)) {
+        if (rowCount < this.tabContainerProperty.lower || (this.tabContainerProperty.upper !== -1 && rowCount > this.tabContainerProperty.upper)) {
             $('#' + this.getTabId() + 'validation-warning').append($('<span />').text(
-                'multiplicity falls outside the valid range [' + this.propertyNavigatingTo.lower + '..' + this.propertyNavigatingTo.upper + ']'));
+                'multiplicity falls outside the valid range [' + this.tabContainerProperty.lower + '..' + this.tabContainerProperty.upper + ']'));
         }
     }
 
@@ -234,7 +238,7 @@
         while (tabLength--) {
             this.tumlTabViewManagers[tabLength].closeTab();
         }
-        this.tumlTabViewManagers = null;
+        this.tumlTabViewManagers = [];
     }
 
     TumlTabContainerManager.prototype.addToTumlTabViewManagers = function (tumlChildTabViewManager) {

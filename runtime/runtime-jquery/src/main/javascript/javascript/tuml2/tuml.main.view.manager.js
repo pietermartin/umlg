@@ -26,6 +26,7 @@
             this.tumlUri = tumlUri;
             //propertyNavigatingTo is null when viewing a one
             this.propertyNavigatingTo = (metaDataNavigatingFrom == undefined ? null : findPropertyNavigatingTo(qualifiedName, metaDataNavigatingFrom));
+            this.tabContainerProperty = this.propertyNavigatingTo;
             if (this.propertyNavigatingTo != null && (this.propertyNavigatingTo.oneToMany || this.propertyNavigatingTo.manyToMany)) {
                 //Property is a many
 
@@ -153,17 +154,20 @@
                 for (var j = 0; j < this.tumlTabViewManagers.length; j++) {
                     var tumlTabViewManager = this.tumlTabViewManagers[j];
 
-                    tumlTabViewManager.beginUpdate();
+                    if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager) {
+                        tumlTabViewManager.beginUpdate();
 
-                    var metaForData = result[i].meta.to;
-                    //TOTO use qualified name somehow
-                    if (tumlTabViewManager.tabId == metaForData.name) {
-                        for (var k = 0; k < result[i].data.length; k++) {
-                            tumlTabViewManager.updateGridAfterCommit(result[i].data[k]);
+                        var metaForData = result[i].meta.to;
+                        //TOTO use qualified name somehow
+                        if (tumlTabViewManager.tabId == metaForData.name) {
+                            for (var k = 0; k < result[i].data.length; k++) {
+                                tumlTabViewManager.updateGridAfterCommit(result[i].data[k]);
+                            }
                         }
-                    }
 
-                    tumlTabViewManager.endUpdate();
+                        tumlTabViewManager.clearArraysAfterCommit();
+                        tumlTabViewManager.endUpdate(false);
+                    }
                 }
             }
 
@@ -171,20 +175,25 @@
 
         this.updateTabsForResultAfterRollback = function (result) {
             for (var i = 0; i < result.length; i++) {
+
+                var resultForTab = result[i];
+
                 for (var j = 0; j < this.tumlTabViewManagers.length; j++) {
                     var tumlTabViewManager = this.tumlTabViewManagers[j];
+                    if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager) {
+                        tumlTabViewManager.beginUpdate();
 
-                    tumlTabViewManager.beginUpdate();
-
-                    var metaForData = result[i].meta.to;
-                    //TOTO use qualified name somehow
-                    if (tumlTabViewManager.tabId == metaForData.name) {
-                        for (var k = 0; k < result[i].data.length; k++) {
-                            tumlTabViewManager.updateGridAfterRollback(result[i].data[k]);
+                        var metaForData = resultForTab.meta.to;
+                        //TODO use qualified name somehow
+                        //Line up he result with the correct tab
+                        if (tumlTabViewManager.tabId == metaForData.name) {
+                            for (var k = 0; k < resultForTab.data.length; k++) {
+                                tumlTabViewManager.updateGridAfterRollback(resultForTab.data[k]);
+                            }
                         }
-                    }
 
-                    tumlTabViewManager.endUpdate();
+                        tumlTabViewManager.endUpdate(true);
+                    }
                 }
             }
         }
@@ -470,14 +479,6 @@
     }
 
     TumlMainViewManager.prototype.saveTabs = function () {
-        //this contains the root tabs that get set as it on doSave
-        //All component tabs must be saved up into their parentContainerTabs's grid
-        for (var i = 0; i< this.tumlTabViewManagers.length; i++) {
-            var tumlTabViewManager = this.tumlTabViewManagers[i];
-            if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager) {
-                tumlTabViewManager.saveTabs();
-            }
-        }
         this.doSave(true);
     }
 
@@ -485,7 +486,7 @@
         return 'tabs-layout';
     }
 
-    TumlMainViewManager.prototype.addNewRow = function (dataViewItems, event) {
+    TumlMainViewManager.prototype.addNewRow = function (event) {
         this.doSave(false);
     }
 
