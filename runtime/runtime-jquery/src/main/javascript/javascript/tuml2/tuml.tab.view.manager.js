@@ -307,7 +307,6 @@
         if (this.queryId !== undefined) {
             $.data(divPanel[0], 'queryId', this.queryId);
         }
-//        this.parentTabContainer.tabs("option", "active", this.parentTabContainerManager.tumlTabViewManagers.length - 1);
     }
 
     function TumlTabOneViewManager(tabEnum, tabContainer, oneManyOrQuery, tumlUri, result, propertyNavigatingTo) {
@@ -466,10 +465,6 @@
                     tumlTabViewManager.endUpdate(true);
 
                 }
-//            } else {
-//                //Need to update the id's to the tmpId as the id no longer exist on a rolled back transaction
-//                //Go through all the properties, for each composite property set the id = tmpId
-//                this.setComponentIdToTmpId(item);
             }
         }
     }
@@ -488,7 +483,7 @@
                             componentRow.id = componentRow.tmpId;
                         }
                     } else {
-                        if (component !== undefined || component !== null) {
+                        if (component !== undefined && component !== null) {
                             component.id = component.tmpId;
                         }
                     }

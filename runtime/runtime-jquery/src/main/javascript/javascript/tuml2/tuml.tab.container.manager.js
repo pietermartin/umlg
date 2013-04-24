@@ -32,6 +32,11 @@
             var tabContainer = $('#' + this.getTabId() + 'Tabs');
             if (tabContainer.length == 0) {
 
+                //disable the parents save button
+                if (!(this instanceof Tuml.TumlMainViewManager)) {
+                    this.parentTabContainerManager.disableButtons();
+                }
+
                 this.tumlTabViewManagers = [];
 
                 //add in the div where the property info validation warning goes
@@ -104,6 +109,16 @@
             }
         }
 
+        this.disableButtons = function () {
+            var tabsNav = this.tabContainer.find('.ui-tabs-nav');
+            tabsNav.find('#' + this.getTabId() + 'save').attr('disabled', 'disabled');
+        }
+
+        this.enableButtons = function () {
+            var tabsNav = this.tabContainer.find('.ui-tabs-nav');
+            tabsNav.find('#' + this.getTabId() + 'save').removeAttr('disabled');
+        }
+
         this.addButtons = function () {
             var tabsNav = this.tabContainer.find('.ui-tabs-nav');
             var tabsButtonDiv = $('<div />', {id: 'tabcontainer-button', class: 'tabs-button'}).appendTo(tabsNav);
@@ -116,7 +131,7 @@
             });
             var cancelButton = $('<button />', {id: this.getTabId() + 'save'}).text('Cancel').appendTo(tabsButtonDiv);
             cancelButton.button().click(function (event) {
-                alert('cancel');
+                self.doCancel();
                 event.preventDefault();
             });
 
@@ -137,6 +152,9 @@
             return multiplicity + ', ' + unique + ', ' + ordered + ', ' + association;
         }
 
+    }
+
+    TumlTabContainerManager.prototype.doCancel = function () {
     }
 
     TumlTabContainerManager.prototype.saveTabs = function () {
@@ -173,6 +191,8 @@
         this.tumlTabGridManager.active = true;
         $('#slickGrid' + this.tabId).show();
 
+        //enable the save button
+        this.parentTabContainerManager.enableButtons();
     }
 
     TumlTabContainerManager.prototype.deactivateGrids = function () {

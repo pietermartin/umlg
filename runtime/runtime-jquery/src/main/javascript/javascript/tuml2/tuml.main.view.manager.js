@@ -390,41 +390,6 @@
             }
         }
 
-        function doCancel() {
-            if (Slick.GlobalEditorLock.commitCurrentEdit()) {
-                $.ajax({
-                    url: tumlUri,
-                    type: "GET",
-                    dataType: "json",
-                    contentType: "application/json",
-                    success: function (result, textStatus, jqXHR) {
-                        //Only cancel this tab
-                        for (var i = 0; i < result.length; i++) {
-                            var metaForData = result[i].meta.to;
-                            if (metaForData.name === self.localMetaForData.name) {
-                                self.cancel(result[i].data);
-                                return;
-                            }
-                        }
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-                    }
-                });
-            }
-        }
-
-//        function addButtons() {
-//            $('#buttons').children().remove();
-//            //Save button
-//            $('<button />').text('Save').click(function () {
-//                doSave(true);
-//            }).appendTo('#buttons');
-//            var $cancelButton = $('<button />').text('Cancel').click(function () {
-//                doCancel();
-//            }).appendTo('#buttons');
-//        }
-
         function refreshInternal(tumlUri, result, isOne, forCreation) {
             //A tab is created for every element in the array,
             //i.e. for every concrete subset of the many property
@@ -476,6 +441,24 @@
 
     TumlMainViewManager.prototype.refreshContext = function (tumlUri) {
         this.uiManager.refresh(tumlUri);
+    }
+
+    TumlMainViewManager.prototype.doCancel = function () {
+        this.enableButtons();
+        var self = this;
+        Slick.GlobalEditorLock.cancelCurrentEdit();
+        $.ajax({
+            url: this.tumlUri,
+            type: "GET",
+            dataType: "json",
+            contentType: "application/json",
+            success: function (result, textStatus, jqXHR) {
+                self.refresh(self.tumlUri, result);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
+            }
+        });
     }
 
     TumlMainViewManager.prototype.saveTabs = function () {
