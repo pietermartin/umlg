@@ -143,14 +143,31 @@
 
         //Save the child grids into the component's cell
         if (this.tumlTabViewManagers.length > 0) {
-            var data = [];
-            for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
-                var tumlTabViewManager = this.tumlTabViewManagers[i];
-                if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager && tumlTabViewManager.tumlTabGridManager.dataView.getItems().length > 0) {
-                    data.push.apply(data, tumlTabViewManager.tumlTabGridManager.dataView.getItems());
+            if (this.tabContainerProperty.upper == -1 || this.tabContainerProperty.upper > 1) {
+                var data = [];
+                for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
+                    var tumlTabViewManager = this.tumlTabViewManagers[i];
+                    if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager && tumlTabViewManager.tumlTabGridManager.dataView.getItems().length > 0) {
+                        data.push.apply(data, tumlTabViewManager.tumlTabGridManager.dataView.getItems());
+                    }
                 }
+                this.setCellValue(data);
+            } else {
+                if (this.tabContainerProperty.upper !== 1) {
+                    alert("upper suppose to be a one");
+                }
+                var firstTumlTabViewManager = null;
+                for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
+                    var tumlTabViewManager = this.tumlTabViewManagers[i];
+                    if (tumlTabViewManager instanceof Tuml.TumlTabOneViewManager) {
+                        if (firstTumlTabViewManager !== null) {
+                            alert("tabs gone wrong!");
+                        }
+                        firstTumlTabViewManager = tumlTabViewManager;
+                    }
+                }
+                this.setCellValue(tumlTabViewManager.tumlTabOneManager.fieldsToObject());
             }
-            this.setCellValue(data);
         }
         this.destroyTabContainer();
         this.tumlTabGridManager.active = true;

@@ -93,10 +93,8 @@
         TumlBaseTabViewManager.prototype.onCloseTab = new Tuml.Event();
     }
 
-    TumlBaseTabViewManager.prototype.createTab = function (result, forCreation) {
-        var self = this;
+    TumlBaseTabViewManager.prototype.createTab = function () {
         var tabTemplate;
-
         if (this.parentTabContainerManager instanceof Tuml.TumlMainViewManager) {
             tabTemplate = "<li id='li" + this.tabId + "'><a href='#{href}'>#{label}</a>";
         } else {
@@ -178,6 +176,58 @@
 
                 //Set only the first tab to active
                 if (firstTumlManyComponentTabViewManager !== null) {
+                    self.tabContainer.tabs("option", "active", 0);
+                }
+
+                var qualifiedName = result[0].meta.qualifiedName;
+                self.updateNavigationHeader(qualifiedName);
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert('error getting ' + property.tumlMetaDataUri + '\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
+            }
+        });
+    }
+
+    TumlBaseTabViewManager.prototype.openOneComponent = function (data, cell, tumlUri, property) {
+
+        var self = this;
+
+        //Get the meta data.
+        $.ajax({
+            url: property.tumlMetaDataUri,
+            type: "GET",
+            dataType: "json",
+            contentType: "application/json",
+            success: function (result, textStatus, jqXHR) {
+
+                self.tabContainerProperty = property;
+
+                var firstTumlOneComponentTabViewManager = null;
+                for (var i = 0; i < result.length; i++) {
+                    self.maybeCreateTabContainer();
+                    result[i].data = data;
+                    var tumlOneComponentTabViewManager = self.addTab(
+                        tuml.tab.Enum.Properties,
+                        result[i],
+                        tumlUri,
+                        {forLookup: false, forManyComponent: false, forOneComponent: true, isOne: true, forCreation: true},
+                        property
+                    );
+                    self.setCell(cell);
+                    self.addToTumlTabViewManagers(tumlOneComponentTabViewManager);
+                    tumlOneComponentTabViewManager.parentTabContainerManager = self;
+                    $('#slickGrid' + self.tabId).hide();
+                    tumlOneComponentTabViewManager.createTab(result[i], true);
+                    if (i === 0) {
+                        firstTumlOneComponentTabViewManager = tumlOneComponentTabViewManager;
+                    }
+                }
+
+                self.open = false;
+
+                //Set only the first tab to active
+                if (firstTumlOneComponentTabViewManager !== null) {
                     self.tabContainer.tabs("option", "active", 0);
                 }
 
@@ -280,14 +330,14 @@
     TumlTabOneViewManager.prototype.createTab = function (result, forCreation) {
         if (this.oneManyOrQuery.forOneComponent) {
             this.tabId = this.result.meta.to.name + "OneComponent";
-            this.tabTitleName = this.result.meta.to.name + " One Add";
+            this.tabTitleName = this.result.meta.to.name;
         } else {
             this.tabId = this.result.meta.to.name;
             this.tabTitleName = this.result.meta.to.name;
         }
-        TumlBaseTabViewManager.prototype.createTab.call(this, result, forCreation);
+        TumlBaseTabViewManager.prototype.createTab.call(this);
         this.parentTabContainer.tabs("option", "active", this.parentTabContainerManager.tumlTabViewManagers.length - 1);
-        this.createOne(result.data[0]);
+        this.createOne(result.data, forCreation);
     }
 
     TumlTabOneViewManager.prototype.setProperty = function (property) {
@@ -336,8 +386,8 @@
     }
 
     //Must be created after tabs have been created, else things look pretty bad like...
-    TumlTabOneViewManager.prototype.createOne = function (result) {
-        this.tumlTabOneManager.refresh(result, this.metaForData, this.metaForData.qualifiedName, false);
+    TumlTabOneViewManager.prototype.createOne = function (result, forCreation) {
+        this.tumlTabOneManager.refresh(result, this.metaForData, this.metaForData.qualifiedName, forCreation);
     }
 
     function TumlTabManyViewManager(tabEnum, tabContainer, oneManyOrQuery, tumlUri, result, propertyNavigatingTo) {
@@ -393,6 +443,9 @@
 
     TumlTabManyViewManager.prototype.updateGridAfterRollback = function (item) {
         this.tumlTabGridManager.updateGridAfterRollback(item);
+        //Need to update the id's to the tmpId as the id no longer exist on a rolled back transaction
+        //Go through all the properties, for each composite property set the id = tmpId
+        this.setComponentIdToTmpId(item);
 
         //Check if component tab is open for this particular item
         if (this.tumlTabViewManagers.length > 0) {
@@ -413,18 +466,30 @@
                     tumlTabViewManager.endUpdate(true);
 
                 }
-            } else {
-                //Need to update the id's to the tmpId as the id no longer exist on a rolled back transaction
-                //Go through all the properties, for each composite property set the id = tmpId
-                for (var i = 0; i < this.metaForData.to.properties.length; i++) {
-                    var property = this.metaForData.to.properties[i];
-                    if (property.composite) {
-                        if (property.upper == -1 || property.upper > 1) {
-                            var componentArray = item[property.name];
-                            for (var j = 0; j < componentArray.length; j++) {
-                                var component = componentArray[j];
-                                component.id = component.tmpId;
-                            }
+//            } else {
+//                //Need to update the id's to the tmpId as the id no longer exist on a rolled back transaction
+//                //Go through all the properties, for each composite property set the id = tmpId
+//                this.setComponentIdToTmpId(item);
+            }
+        }
+    }
+
+    TumlTabManyViewManager.prototype.setComponentIdToTmpId = function (item) {
+        //Need to update the id's to the tmpId as the id no longer exist on a rolled back transaction
+        //Go through all the properties, for each composite property set the id = tmpId
+        for (var i = 0; i < this.metaForData.to.properties.length; i++) {
+            var property = this.metaForData.to.properties[i];
+            if (property.composite) {
+                if (property.lower !== -1 && property.lower > 0) {
+                    var component = item[property.name];
+                    if (property.upper === -1 || property.upper > 1) {
+                        for (var j = 0; j < component.length; j++) {
+                            var componentRow = component[j];
+                            componentRow.id = componentRow.tmpId;
+                        }
+                    } else {
+                        if (component !== undefined || component !== null) {
+                            component.id = component.tmpId;
                         }
                     }
                 }

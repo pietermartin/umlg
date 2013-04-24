@@ -469,12 +469,14 @@
                     } else if (!column.options.property.manyPrimitive && !column.options.property.manyEnumeration && column.options.property.composite &&
                         column.options.property.lower === 1 && column.options.property.upper === 1) {
                         //Component one
-                        var data = [];
+                        var data = null;
                         if (isCellEditable(args.row, args.cell, self.dataView.getItem(args.row))) {
                             if (self.dataView.getItem(args.row) !== undefined && self.dataView.getItem(args.row) !== null && self.dataView.getItem(args.row)[column.name] !== undefined && self.dataView.getItem(args.row)[column.name] !== null) {
-                                data.push(self.dataView.getItem(args.row)[column.name]);
+                                //Get the data currently for the component
+                                data = self.dataView.getItem(args.row)[column.name];
                             }
-                            self.onClickOneComponentCell.notify({data: data, cell: args, tumlUri: column.options.property.tumlUri, property: column.options.property}, null, self);
+                            var id = self.dataView.getItem(args.row)["id"];
+                            self.tumlTabViewManager.openOneComponent(data, args, column.options.property.tumlUri, column.options.property);
                         }
                     }
                     //unbind the document click event to close many editors

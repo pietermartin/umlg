@@ -26,7 +26,7 @@
         }
 
         this.getDiv = function () {
-            return $('#' + this.metaForData.name + "OneComponent");
+            return $('#' + this.metaForData.to.name + "OneComponent");
         }
 
         this.doClose = function () {
@@ -37,15 +37,6 @@
     }
 
     TumlTabComponentOneManager.prototype = new TumlBaseTabOneManager;
-
-    TumlTabComponentOneManager.prototype.addButtons = function (buttonDiv) {
-        TumlBaseTabOneManager.prototype.addButtons.call(this, buttonDiv);
-        var self = this;
-        var closeButton = $('<button />').text('Close').click(function () {
-            self.doClose();
-        }).appendTo(buttonDiv);
-    };
-
 
     function TumlTabOneManager(tumlUri) {
         var self = this;
@@ -121,14 +112,6 @@
 
     TumlTabOneManager.prototype = new TumlBaseTabOneManager;
 
-    TumlTabOneManager.prototype.addButtons = function (buttonDiv) {
-        var self = this;
-        TumlBaseTabOneManager.prototype.addButtons.call(this, buttonDiv);
-        var deleteButton = $('<button />').text('Delete').click(function () {
-            self.doDelete();
-        }).appendTo(buttonDiv);
-    };
-
     function TumlBaseTabOneManager(tumlUri) {
 
         var self = this;
@@ -172,78 +155,6 @@
             }
         }
 
-        this.fieldsToJson = function () {
-            return JSON.stringify(self.fieldsToObject());
-        }
-
-        this.fieldsToObject = function () {
-            var dataToSend = {};
-            $.each(this.metaForData.properties, function (index, property) {
-                if (property.name === 'id') {
-                    dataToSend[property.name] = parseInt($('#' + property.name + self.metaForData.name + 'Id').val());
-                } else if (property.readOnly) {
-                    //Do nothing
-                } else if (property.name !== 'uri') {
-                    if (property.onePrimitive) {
-                        var stringValue = $('#' + property.name + self.metaForData.name + 'Id').val();
-                        if (property.fieldType == 'Integer' || property.fieldType == 'Long') {
-                            if (stringValue == '') {
-                                dataToSend[property.name] = null;
-                            } else {
-                                dataToSend[property.name] = parseInt(stringValue);
-                            }
-                        } else if (property.fieldType == 'String') {
-                            if (stringValue == '') {
-                                dataToSend[property.name] = null;
-                            } else {
-                                dataToSend[property.name] = stringValue;
-                            }
-                        } else if (property.fieldType == 'Boolean') {
-                            dataToSend[property.name] = $('#' + property.name + self.metaForData.name + 'Id').attr("checked") == "checked";
-                        }
-                    } else if (property.dataTypeEnum !== null && property.dataTypeEnum !== undefined) {
-                        if (property.dataTypeEnum == 'DateTime') {
-                            dataToSend[property.name] = $('#' + property.name + self.metaForData.name + 'Id').val().replace(/ /g, "T");
-                        } else if (property.dataTypeEnum == 'Image') {
-                        } else {
-                            dataToSend[property.name] = $('#' + property.name + self.metaForData.name + 'Id').val();
-                        }
-                    } else if (property.oneEnumeration) {
-                        var $select = $('#' + property.name + self.metaForData.name + 'Id');
-                        var options = $select.children();
-                        for (var i = 0; i < options.length; i++) {
-                            if (options[i].selected) {
-                                dataToSend[property.name] = $select.val();
-                                break;
-                            }
-                        }
-                    } else if (property.manyPrimitive) {
-                        var inputValue = $('#' + property.name + self.metaForData.name + 'Id').val();
-                        var array = inputValue.split(',');
-                        dataToSend[property.name] = array;
-                    } else if (property.manyEnumeration) {
-                        var inputValue = $('#' + property.name + self.metaForData.name + 'Id').val();
-                        dataToSend[property.name] = inputValue;
-                    } else if (property.composite && property.lower > 0) {
-                        var input = $('#' + property.name + self.metaForData.name + 'Id');
-                        if (input.length !== 0) {
-                            dataToSend[property.name] = $.data(input[0], "componentValue");
-                        }
-                    } else if (!property.onePrimitive && !property.manyPrimitive && !property.inverseComposite) {
-                        var $select = $('#' + property.name + self.metaForData.name + 'Id');
-                        var options = $select.children();
-                        for (var i = 0; i < options.length; i++) {
-                            if (options[i].selected) {
-                                dataToSend[property.name] = {id: parseInt($select.val()), displayName: options[i].label};
-                                break;
-                            }
-                        }
-                    }
-                }
-            });
-            return dataToSend;
-        }
-
         //Public api
         $.extend(this, {
             "TumlTabOneManagerVersion": "1.0.0",
@@ -260,6 +171,85 @@
         init();
     }
 
+    TumlBaseTabOneManager.prototype.fieldsToJson = function () {
+        return JSON.stringify(this.fieldsToObject());
+    }
+
+    TumlBaseTabOneManager.prototype.fieldsToObject = function () {
+        var dataToSend = {};
+        dataToSend.qualifiedName = this.metaForData.qualifiedName;
+        if (this.isForCreation) {
+            dataToSend.tmpId = 'fake:0';
+        }
+        for (var i = 0; i < this.metaForData.to.properties.length; i++) {
+            var property = this.metaForData.to.properties[i];
+            if (property.name === 'id') {
+                dataToSend[property.name] = parseInt($('#' + property.name + this.metaForData.name + 'Id').val());
+            } else if (property.readOnly) {
+                //Do nothing
+            } else if (property.name !== 'uri') {
+                if (property.onePrimitive) {
+                    var stringValue = $('#' + property.name + this.metaForData.name + 'Id').val();
+                    if (property.fieldType == 'Integer' || property.fieldType == 'Long') {
+                        if (stringValue == '') {
+                            dataToSend[property.name] = null;
+                        } else {
+                            dataToSend[property.name] = parseInt(stringValue);
+                        }
+                    } else if (property.fieldType == 'String') {
+                        if (stringValue == '') {
+                            dataToSend[property.name] = null;
+                        } else {
+                            dataToSend[property.name] = stringValue;
+                        }
+                    } else if (property.fieldType == 'Boolean') {
+                        dataToSend[property.name] = $('#' + property.name + this.metaForData.name + 'Id').attr("checked") == "checked";
+                    }
+                } else if (property.dataTypeEnum !== null && property.dataTypeEnum !== undefined) {
+                    if (property.dataTypeEnum == 'DateTime') {
+                        dataToSend[property.name] = $('#' + property.name + this.metaForData.name + 'Id').val().replace(/ /g, "T");
+                    } else if (property.dataTypeEnum == 'Image') {
+                    } else {
+                        dataToSend[property.name] = $('#' + property.name + this.metaForData.name + 'Id').val();
+                    }
+                } else if (property.oneEnumeration) {
+                    var $select = $('#' + property.name + this.metaForData.name + 'Id');
+                    var options = $select.children();
+                    for (var i = 0; i < options.length; i++) {
+                        if (options[i].selected) {
+                            dataToSend[property.name] = $select.val();
+                            break;
+                        }
+                    }
+                } else if (property.manyPrimitive) {
+                    var inputValue = $('#' + property.name + this.metaForData.name + 'Id').val();
+                    var array = inputValue.split(',');
+                    dataToSend[property.name] = array;
+                } else if (property.manyEnumeration) {
+                    var inputValue = $('#' + property.name + this.metaForData.name + 'Id').val();
+                    dataToSend[property.name] = inputValue;
+                } else if (property.composite && property.lower > 0) {
+                    var input = $('#' + property.name + this.metaForData.name + 'Id');
+                    if (input.length !== 0) {
+                        dataToSend[property.name] = $.data(input[0], "componentValue");
+                    }
+                } else if (!property.onePrimitive && !property.manyPrimitive && !property.inverseComposite) {
+                    var $select = $('#' + property.name + this.metaForData.name + 'Id');
+                    var options = $select.children();
+                    for (var i = 0; i < options.length; i++) {
+                        if (options[i].selected) {
+                            dataToSend[property.name] = {id: parseInt($select.val()), displayName: options[i].label};
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        ;
+        return dataToSend;
+    }
+
+
     TumlBaseTabOneManager.prototype.getDiv = function () {
         console.log('TumlBaseTabOneManager.prototype.getDiv must be overriden');
     }
@@ -269,6 +259,7 @@
         this.data = data;
         this.metaForData = metaForData;
         this.qualifiedName = qualifiedName;
+        this.isForCreation = isForCreation;
         //Clear all elements
         var tabDiv = this.getDiv();
         tabDiv.children().remove();
@@ -278,12 +269,13 @@
         var ul = $('<ul class="oneUl" />')
         ul.appendTo(formDiv);
         if (this.metaForData.to.name !== 'Root') {
-            $.each(this.metaForData.properties, function (index, property) {
-                if (self.isPropertyForOnePage(property, isForCreation)) {
+            for (var i = 0; i < this.metaForData.to.properties.length; i++) {
+                var property = this.metaForData.to.properties[i];
+                if (this.isPropertyForOnePage(property, isForCreation)) {
                     var li = $('<li>')
                     li.appendTo(ul);
                     $('<label />', {for: property.name + 'Id'}).text(property.name + ' :').appendTo(li);
-                    var $input = self.constructInputForField(data, property, isForCreation);
+                    var $input = this.constructInputForField(data, property, isForCreation);
                     $input.appendTo(li);
                     if (property.manyPrimitive) {
                         var $manyDiv = $('<div />', {class: "many-primitive-one-img"}).appendTo(li);
@@ -302,7 +294,7 @@
                             if (componentValue !== undefined) {
                                 data.push(componentValue);
                             }
-                            self.onClickOneComponent.notify(
+                            this.onClickOneComponent.notify(
                                 {data: data, tumlUri: property.tumlUri, property: property},
                                 null,
                                 self
@@ -315,7 +307,7 @@
                             if (componentValue !== undefined) {
                                 data = componentValue;
                             }
-                            self.onClickManyComponent.notify(
+                            this.onClickManyComponent.notify(
                                 {data: data, tumlUri: property.tumlUri, property: property},
                                 null,
                                 self
@@ -349,25 +341,9 @@
                         }
                     }
                 }
-            });
+            }
         }
-
-        var buttonDiv = $('<div class="onesavebuttondiv" />').appendTo(formDiv);
-
-        this.addButtons(buttonDiv);
-
     }
-
-    TumlBaseTabOneManager.prototype.addButtons = function (buttonDiv) {
-        var self = this;
-        var saveButton = $('<button />').text('Save').click(function () {
-            self.doSave();
-        }).appendTo(buttonDiv);
-
-        var cancelButton = $('<button />').text('Cancel').click(function () {
-            self.doCancel();
-        }).appendTo(buttonDiv);
-    };
 
     TumlBaseTabOneManager.prototype.doSave = function () {
         alert("doSave must be overridden");
