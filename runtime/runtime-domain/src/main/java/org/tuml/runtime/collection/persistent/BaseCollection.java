@@ -82,25 +82,25 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
                 }
             }
         } else if (getDataTypeEnum() != null && getDataTypeEnum().isDateTime()) {
-            String s = (String) this.vertex.getProperty(getLabel());
+            String s = this.vertex.getProperty(getLabel());
             if (s != null) {
                 E property = (E) new DateTime(s);
                 this.internalCollection.add(property);
             }
         } else if (getDataTypeEnum() != null && getDataTypeEnum().isDate()) {
-            String s = (String) this.vertex.getProperty(getLabel());
+            String s = this.vertex.getProperty(getLabel());
             if (s != null) {
                 E property = (E) new LocalDate(s);
                 this.internalCollection.add(property);
             }
         } else if (getDataTypeEnum() != null && getDataTypeEnum().isTime()) {
-            String s = (String) this.vertex.getProperty(getLabel());
+            String s = this.vertex.getProperty(getLabel());
             if (s != null) {
                 E property = (E) new LocalTime(s);
                 this.internalCollection.add(property);
             }
         } else {
-            E property = (E) this.vertex.getProperty(getLabel());
+            E property = this.vertex.getProperty(getLabel());
             if (property != null) {
                 this.internalCollection.add(property);
             }
