@@ -155,6 +155,40 @@
     }
 
     TumlTabContainerManager.prototype.doCancel = function () {
+        //Save the child's backedup data into the component's cell
+        if (this.tumlTabViewManagers.length > 0) {
+            if (this.tabContainerProperty.upper == -1 || this.tabContainerProperty.upper > 1) {
+                var data = [];
+                for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
+                    var tumlTabViewManager = this.tumlTabViewManagers[i];
+                    if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager && tumlTabViewManager.tumlTabGridManager.dataView.getItems().length > 0) {
+                        data.push.apply(data, tumlTabViewManager.backupData);
+                    }
+                }
+                this.setCellValue(data);
+            } else {
+                if (this.tabContainerProperty.upper !== 1) {
+                    alert("upper suppose to be a one");
+                }
+                var firstTumlTabViewManager = null;
+                for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
+                    var tumlTabViewManager = this.tumlTabViewManagers[i];
+                    if (tumlTabViewManager instanceof Tuml.TumlTabOneViewManager) {
+                        if (firstTumlTabViewManager !== null) {
+                            alert("tabs gone wrong!");
+                        }
+                        firstTumlTabViewManager = tumlTabViewManager;
+                    }
+                }
+                this.setCellValue(tumlTabViewManager.backupData);
+            }
+        }
+        this.destroyTabContainer();
+        this.tumlTabGridManager.active = true;
+        $('#slickGrid' + this.tabId).show();
+
+        //enable the save button
+        this.parentTabContainerManager.enableButtons();
     }
 
     TumlTabContainerManager.prototype.saveTabs = function () {

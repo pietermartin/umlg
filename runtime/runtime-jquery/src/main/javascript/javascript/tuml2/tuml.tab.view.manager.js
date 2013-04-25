@@ -14,6 +14,8 @@
 
         this.TumlBaseTabViewManager = "1.0.0";
 
+        this.backupData = null;
+
         this.tabEnum = tabEnum;
         //open is different to active, if there are nested tabs then a parent tab will be active but not open.
         //This is needed when repopulating the grids from the server in order to find the visible grid.
@@ -154,7 +156,6 @@
                 for (var i = 0; i < result.length; i++) {
                     self.maybeCreateTabContainer();
                     result[i].data = data;
-                    //This is wrong as it could be a one
                     var tumlManyComponentTabViewManager = self.addTab(
                         tuml.tab.Enum.Properties,
                         result[i],
@@ -166,6 +167,7 @@
                     self.addToTumlTabViewManagers(tumlManyComponentTabViewManager);
                     tumlManyComponentTabViewManager.parentTabContainerManager = self;
                     $('#slickGrid' + self.tabId).hide();
+                    tumlManyComponentTabViewManager.backupData = $.extend(true, [], data);
                     tumlManyComponentTabViewManager.createTab(result[i], false);
                     if (i === 0) {
                         firstTumlManyComponentTabViewManager = tumlManyComponentTabViewManager;
@@ -218,6 +220,7 @@
                     self.addToTumlTabViewManagers(tumlOneComponentTabViewManager);
                     tumlOneComponentTabViewManager.parentTabContainerManager = self;
                     $('#slickGrid' + self.tabId).hide();
+                    tumlOneComponentTabViewManager.backupData = $.extend(true, {}, data);
                     tumlOneComponentTabViewManager.createTab(result[i], true);
                     if (i === 0) {
                         firstTumlOneComponentTabViewManager = tumlOneComponentTabViewManager;
