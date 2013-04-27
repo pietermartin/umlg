@@ -12,6 +12,7 @@ import org.tuml.java.metamodel.annotation.OJAnnotatedClass;
 import org.tuml.java.metamodel.annotation.OJAnnotatedOperation;
 import org.tuml.java.metamodel.generated.OJVisibilityKindGEN;
 import org.tuml.javageneration.visitor.BaseVisitor;
+import org.tuml.restlet.util.TumlRestletGenerationUtil;
 
 import java.util.List;
 
@@ -55,6 +56,8 @@ public class TmpIdAdder extends BaseVisitor implements Visitor<Class> {
         OJIfStatement ifStatement1 = new OJIfStatement("propertyMap.get(\"tmpId\") != null");
         ifStatement.addToThenPart(ifStatement1);
         ifStatement1.addToThenPart("this.tmpId = (String)propertyMap.get(\"tmpId\")");
+        ifStatement1.addToThenPart(TumlRestletGenerationUtil.TumlTmpIdManager.getLast() + ".INSTANCE.put(getQualifiedName() + \"::\" + this.tmpId, getId())");
+        annotatedClass.addToImports(TumlRestletGenerationUtil.TumlTmpIdManager);
         ifStatement1.addToElsePart("this.tmpId = null");
         fromJson.getBody().addToStatements(ifStatement);
     }

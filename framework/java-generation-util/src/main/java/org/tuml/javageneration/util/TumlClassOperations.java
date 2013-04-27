@@ -96,6 +96,8 @@ public class TumlClassOperations extends ClassOperations {
             if (!pWrap.isDerived() && !pWrap.isQualified()) {
                 if (pWrap.isComponent() || pWrap.isDataType()) {
                     result.add(p);
+                } else if (!pWrap.isDataType() && pWrap.isOne()) {
+                    result.add(p);
                 }
             }
         }
@@ -108,6 +110,10 @@ public class TumlClassOperations extends ClassOperations {
             PropertyWrapper pWrap = new PropertyWrapper(p);
             if (!pWrap.isDerived() && !pWrap.isQualified()) {
                 if (pWrap.isComponent() || pWrap.isDataType()) {
+                    if (!(pWrap.getOtherEnd() != null && pWrap.getOtherEnd().isComposite())) {
+                        result.add(p);
+                    }
+                } else if (!pWrap.isDataType() && pWrap.isOne()) {
                     if (!(pWrap.getOtherEnd() != null && pWrap.getOtherEnd().isComposite())) {
                         result.add(p);
                     }

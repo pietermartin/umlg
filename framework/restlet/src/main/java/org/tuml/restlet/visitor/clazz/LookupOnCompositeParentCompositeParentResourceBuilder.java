@@ -23,6 +23,7 @@ import org.tuml.javageneration.util.TinkerGenerationUtil;
 import org.tuml.javageneration.util.TumlClassOperations;
 import org.tuml.restlet.util.TumlRestletGenerationUtil;
 
+@Deprecated
 public class LookupOnCompositeParentCompositeParentResourceBuilder extends BaseServerResourceBuilder implements Visitor<Property> {
 
 	public LookupOnCompositeParentCompositeParentResourceBuilder(Workspace workspace, String sourceDir) {

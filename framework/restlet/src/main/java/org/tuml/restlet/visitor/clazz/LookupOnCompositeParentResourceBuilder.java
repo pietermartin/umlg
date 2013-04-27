@@ -24,12 +24,13 @@ import org.tuml.javageneration.util.TumlClassOperations;
 import org.tuml.restlet.util.TumlRestletGenerationUtil;
 
 /**
- * This class build the reslet resource that exposes the lookup on the
+ * This class build the restlet resource that exposes the lookup on the
  * properties composite parent. i.e. The finger->ring lookup on hand. This is to
  * cater for the case of creating a new finger where the lookup can not be
  * called on the finger itself.
  * 
  */
+@Deprecated
 public class LookupOnCompositeParentResourceBuilder extends BaseServerResourceBuilder implements Visitor<Property> {
 
 	public LookupOnCompositeParentResourceBuilder(Workspace workspace, String sourceDir) {

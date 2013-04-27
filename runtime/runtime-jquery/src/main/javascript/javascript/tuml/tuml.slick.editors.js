@@ -7,23 +7,23 @@
 (function ($) {
     // register namespace
     $.extend(true, window, {
-        "Tuml":{
-            "Slick":{
-                "Editors":{
-                    "Integer":IntegerEditor,
-                    "Text":TextEditor,
-                    "SelectOneToOneCellEditor":SelectOneToOneCellEditor,
-                    "SelectManyToOneCellEditor":SelectManyToOneCellEditor,
-                    "SelectEnumerationCellEditor":SelectEnumerationCellEditor,
-                    "ManyPrimitiveEditor":ManyPrimitiveEditor,
-                    "ManyStringPrimitiveEditor":ManyStringPrimitiveEditor,
-                    "ManyEnumerationEditor":ManyEnumerationEditor,
-                    "ManyIntegerPrimitiveEditor":ManyIntegerPrimitiveEditor,
-                    "ManyBooleanPrimitiveEditor":ManyBooleanPrimitiveEditor,
-                    "Checkbox":CheckboxEditor,
-                    "Date":DateEditor,
-                    "DateTime":DateTimeEditor,
-                    "Time":TimeEditor
+        "Tuml": {
+            "Slick": {
+                "Editors": {
+                    "Integer": IntegerEditor,
+                    "Text": TextEditor,
+                    "SelectOneToOneCellEditor": SelectOneToOneCellEditor,
+                    "SelectManyToOneCellEditor": SelectManyToOneCellEditor,
+                    "SelectEnumerationCellEditor": SelectEnumerationCellEditor,
+                    "ManyPrimitiveEditor": ManyPrimitiveEditor,
+                    "ManyStringPrimitiveEditor": ManyStringPrimitiveEditor,
+                    "ManyEnumerationEditor": ManyEnumerationEditor,
+                    "ManyIntegerPrimitiveEditor": ManyIntegerPrimitiveEditor,
+                    "ManyBooleanPrimitiveEditor": ManyBooleanPrimitiveEditor,
+                    "Checkbox": CheckboxEditor,
+                    "Date": DateEditor,
+                    "DateTime": DateTimeEditor,
+                    "Time": TimeEditor
                 }
             }}
     });
@@ -31,8 +31,8 @@
     function TextEditor(args) {
         //Public api
         $.extend(this, {
-            "TumlTextEditor":"1.0.0",
-            "serializeValueWithValue":serializeValueWithValue
+            "TumlTextEditor": "1.0.0",
+            "serializeValueWithValue": serializeValueWithValue
         });
         var $input;
         var defaultValue;
@@ -103,8 +103,8 @@
             }
 
             return {
-                valid:true,
-                msg:null
+                valid: true,
+                msg: null
             };
         };
 
@@ -155,7 +155,7 @@
             currentValue = $self.$item[$self.args.column.field];
             $select.val(currentValue);
             if (!$self.args.column.options.required) {
-                $select.chosen({allow_single_deselect:true});
+                $select.chosen({allow_single_deselect: true});
             } else {
                 $select.chosen();
             }
@@ -263,7 +263,7 @@
 
         //Public api
         $.extend(this, {
-            "TumlManyPrimitiveEditor":"1.0.0"
+            "TumlManyPrimitiveEditor": "1.0.0"
         });
 
         this.handleKeyPress = function (e) {
@@ -353,8 +353,8 @@
             }
 
             return {
-                valid:true,
-                msg:null
+                valid: true,
+                msg: null
             };
         };
         //This is called from the grid, the one only uses the serializeValueWithValue function
@@ -419,8 +419,8 @@
     function IntegerEditor(args) {
         //Public api
         $.extend(this, {
-            "TumlIntegerEditor":"1.0.0",
-            "serializeValueWithValue":serializeValueWithValue
+            "TumlIntegerEditor": "1.0.0",
+            "serializeValueWithValue": serializeValueWithValue
         });
         var $input;
         var defaultValue;
@@ -479,8 +479,8 @@
             }
 
             return {
-                valid:true,
-                msg:null
+                valid: true,
+                msg: null
             };
         };
 
@@ -493,8 +493,8 @@
     function DateEditor(args) {
         //Public api
         $.extend(this, {
-            "TumlDateEditor":"1.0.0",
-            "serializeValueWithValue":serializeValueWithValue
+            "TumlDateEditor": "1.0.0",
+            "serializeValueWithValue": serializeValueWithValue
         });
         var $input;
         var defaultValue;
@@ -506,14 +506,14 @@
             $input.appendTo(args.container);
             $input.focus().select();
             $input.datepicker({
-                showOn:"button",
-                buttonImageOnly:true,
-                buttonImage:"../javascript/slickgrid/images/calendar.gif",
-                dateFormat:"yy-mm-dd",
-                beforeShow:function () {
+                showOn: "button",
+                buttonImageOnly: true,
+                buttonImage: "../javascript/slickgrid/images/calendar.gif",
+                dateFormat: "yy-mm-dd",
+                beforeShow: function () {
                     calendarOpen = true
                 },
-                onClose:function () {
+                onClose: function () {
                     calendarOpen = false
                 }
             });
@@ -588,8 +588,8 @@
             }
 
             return {
-                valid:true,
-                msg:null
+                valid: true,
+                msg: null
             };
         };
 
@@ -602,8 +602,8 @@
     function DateTimeEditor(args) {
         //Public api
         $.extend(this, {
-            "TumlDateTimeEditor":"1.0.0",
-            "serializeValueWithValue":serializeValueWithValue
+            "TumlDateTimeEditor": "1.0.0",
+            "serializeValueWithValue": serializeValueWithValue
         });
         var $input;
         var defaultValue;
@@ -615,15 +615,15 @@
             $input.appendTo(args.container);
             $input.focus().select();
             $input.datetimepicker({
-                showOn:"button",
-                buttonImageOnly:true,
-                buttonImage:"../javascript/slickgrid/images/calendar.gif",
-                dateFormat:"yy-mm-dd",
-                timeFormat:"hh:mm:ss",
-                beforeShow:function () {
+                showOn: "button",
+                buttonImageOnly: true,
+                buttonImage: "../javascript/slickgrid/images/calendar.gif",
+                dateFormat: "yy-mm-dd",
+                timeFormat: "hh:mm:ss",
+                beforeShow: function () {
                     calendarOpen = true
                 },
-                onClose:function () {
+                onClose: function () {
                     calendarOpen = false
                 }
             });
@@ -698,8 +698,8 @@
             }
 
             return {
-                valid:true,
-                msg:null
+                valid: true,
+                msg: null
             };
         };
 
@@ -713,8 +713,8 @@
     function TimeEditor(args) {
         //Public api
         $.extend(this, {
-            "TumlTimeEditor":"1.0.0",
-            "serializeValueWithValue":serializeValueWithValue
+            "TumlTimeEditor": "1.0.0",
+            "serializeValueWithValue": serializeValueWithValue
         });
         var $input;
         var defaultValue;
@@ -726,13 +726,13 @@
             $input.appendTo(args.container);
             $input.focus().select();
             $input.timepicker({
-                showOn:"button",
-                buttonImageOnly:true,
-                buttonImage:"../javascript/slickgrid/images/calendar.gif",
-                beforeShow:function () {
+                showOn: "button",
+                buttonImageOnly: true,
+                buttonImage: "../javascript/slickgrid/images/calendar.gif",
+                beforeShow: function () {
                     calendarOpen = true
                 },
-                onClose:function () {
+                onClose: function () {
                     calendarOpen = false
                 }
             });
@@ -804,8 +804,8 @@
             }
 
             return {
-                valid:true,
-                msg:null
+                valid: true,
+                msg: null
             };
         };
 
@@ -818,8 +818,8 @@
     function CheckboxEditor(args) {
         //Public api
         $.extend(this, {
-            "TumlCheckBoxEditor":"1.0.0",
-            "serializeValueWithValue":serializeValueWithValue
+            "TumlCheckBoxEditor": "1.0.0",
+            "serializeValueWithValue": serializeValueWithValue
         });
         var $select;
         var defaultValue;
@@ -872,8 +872,8 @@
 
         this.validate = function () {
             return {
-                valid:true,
-                msg:null
+                valid: true,
+                msg: null
             };
         };
 
@@ -886,8 +886,8 @@
     function SelectEnumerationCellEditor(args) {
         //Public api
         $.extend(this, {
-            "TumlSelectEnumerationCellEditor":"1.0.0",
-            "serializeValueWithValue":serializeValueWithValue
+            "TumlSelectEnumerationCellEditor": "1.0.0",
+            "serializeValueWithValue": serializeValueWithValue
         });
         var $select;
         var currentValue;
@@ -908,7 +908,7 @@
                 currentValue = item[args.column.field];
                 $select.val(currentValue);
                 if (!args.column.options.required) {
-                    $select.chosen({allow_single_deselect:true});
+                    $select.chosen({allow_single_deselect: true});
                 } else {
                     $select.chosen();
                 }
@@ -963,8 +963,8 @@
             }
 
             return {
-                valid:true,
-                msg:null
+                valid: true,
+                msg: null
             };
         };
 
@@ -978,8 +978,8 @@
     function SelectOneToOneCellEditor(args) {
         //Public api
         $.extend(this, {
-            "TumlSelectOneToOneEditor":"1.0.0",
-            "serializeValueWithValue":serializeValueWithValue
+            "TumlSelectOneToOneEditor": "1.0.0",
+            "serializeValueWithValue": serializeValueWithValue
         });
         var $select;
         var currentValue;
@@ -989,15 +989,23 @@
         this.init = function (item) {
             $select = $("<SELECT tabIndex='0' class='editor-select' style='width:115px;'></SELECT>");
             $select.appendTo(args.container);
+            var lookupUri = args.column.options.property.tumlLookupUri;
+            //Fetch the lookup data
+            var id = item.id;
+            var adjustedUri = lookupUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), id);
 
-            args.column.options.rowLookupMap.getOrLoadMap(item['id'], function (compositeParentVertexId) {
-                args.column.options.compositeParentLookupMap.getOrLoadMap(compositeParentVertexId, item['id'], function (compositeParentMap) {
+
+            var tumlBaseGridManager = args.column.options.tumlBaseGridManager;
+            tumlBaseGridManager.handleLookup(adjustedUri, item.qualifiedName,
+                function (data) {
                     if (!args.column.options.required) {
                         $select.append($('<option />)').val("").html(""));
                     }
-                    $.each(compositeParentMap[compositeParentVertexId], function (index, obj) {
-                        $select.append($('<option />)').val(obj.id).html(obj.displayName));
-                    });
+                    for (var i = 0; i < data.length; i++) {
+                        var obj = data[i];
+                        $select.append($('<option />)').val(obj.id).html(obj.name));
+                    }
+                    ;
                     //currentValue is the vertex id of the oneToOne or manyToOne
                     currentValue = item[args.column.field];
                     //append the current value to the dropdown
@@ -1005,13 +1013,14 @@
                         $select.append($('<option selected="selected"/>)').val(currentValue.id).html(currentValue.displayName));
                     }
                     if (!args.column.options.required) {
-                        $select.chosen({allow_single_deselect:true});
+                        $select.chosen({allow_single_deselect: true});
                     } else {
                         $select.chosen();
                     }
                     $select.focus();
-                });
-            });
+                }
+            );
+
 
         };
 
@@ -1039,34 +1048,15 @@
             var options = select.children();
             for (var i = 0; i < options.length; i++) {
                 if (options[i].selected) {
-                    return {id:parseInt(select.val()), displayName:options[i].label};
+                    return {id: parseInt(select.val()), displayName: options[i].label};
                     break;
                 }
             }
         }
 
         this.applyValue = function (item, state) {
-            var previousValue = item[args.column.field];
             item[args.column.field] = state;
-            //remove state from the map and add the previousValue
-            args.column.options.rowLookupMap.getOrLoadMap(item['id'], function (compositeParentVertexId) {
-                args.column.options.compositeParentLookupMap.getOrLoadMap(compositeParentVertexId, item['id'], function (compositeParentMap) {
-                    removeByValue(compositeParentMap[compositeParentVertexId], state);
-                    if (previousValue !== undefined && previousValue !== null) {
-                        compositeParentMap[compositeParentVertexId].push(previousValue);
-                    }
-                });
-            });
         };
-
-        function removeByValue(compositeLookup, toRemove) {
-            for (var i = 0; i < compositeLookup.length; i++) {
-                if (compositeLookup[i].id == toRemove.id) {
-                    compositeLookup.splice(i, 1);
-                    break;
-                }
-            }
-        }
 
         this.isValueChanged = function () {
             if (currentValue === null || currentValue === undefined) {
@@ -1086,8 +1076,8 @@
             }
 
             return {
-                valid:true,
-                msg:null
+                valid: true,
+                msg: null
             };
         };
 
@@ -1100,8 +1090,8 @@
     function SelectManyToOneCellEditor(args) {
         //Public api
         $.extend(this, {
-            "TumlSelectManyToOneCellEditor":"1.0.0",
-            "serializeValueWithValue":serializeValueWithValue
+            "TumlSelectManyToOneCellEditor": "1.0.0",
+            "serializeValueWithValue": serializeValueWithValue
         });
         var $select;
         var currentValue;
@@ -1127,7 +1117,7 @@
                         $select.append($('<option selected="selected"/>)').val(currentValue.id).html(currentValue.displayName));
                     }
                     if (!args.column.options.required) {
-                        $select.chosen({allow_single_deselect:true});
+                        $select.chosen({allow_single_deselect: true});
                     } else {
                         $select.chosen();
                     }
@@ -1161,7 +1151,7 @@
             var options = select.children();
             for (var i = 0; i < options.length; i++) {
                 if (options[i].selected) {
-                    return {id:parseInt(select.val()), displayName:options[i].label};
+                    return {id: parseInt(select.val()), displayName: options[i].label};
                     break;
                 }
             }
@@ -1208,8 +1198,8 @@
             }
 
             return {
-                valid:true,
-                msg:null
+                valid: true,
+                msg: null
             };
         };
 

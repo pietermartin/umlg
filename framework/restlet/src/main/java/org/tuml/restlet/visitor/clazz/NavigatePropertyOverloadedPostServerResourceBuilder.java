@@ -17,8 +17,6 @@ import java.util.Set;
 
 public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseServerResourceBuilder implements Visitor<Property> {
 
-//    private static final String OVERLOADED_POST = "OverloadedPost";
-
     public NavigatePropertyOverloadedPostServerResourceBuilder(Workspace workspace, String sourceDir) {
         super(workspace, sourceDir);
     }
@@ -144,13 +142,8 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
         annotatedClass.addToImports("java.util.HashMap");
         ojTryStatement.getTryPart().addToLocals(resultMap);
 
-        OJAnnotatedField objectO = new OJAnnotatedField("overloaded", pathName);
-        objectO.setInitExp("mapper.readValue(" + entityText.getName() + ", Map.class)");
-        ojTryStatement.getTryPart().addToLocals(objectO);
-
-        OJField overloaded = new OJField("o", new OJPathName("Object"));
-        overloaded.setInitExp("overloaded.get(\"insert\")");
-        ojTryStatement.getTryPart().addToLocals(overloaded);
+        ojTryStatement.getTryPart().addToStatements(pathName.getLast() + " overloaded = mapper.readValue(" + entityText.getName() + ", Map.class)");
+        ojTryStatement.getTryPart().addToStatements("Object o = overloaded.get(\"insert\")");
 
         //Insert
         OJIfStatement ifInsert = new OJIfStatement("o != null");
@@ -363,7 +356,6 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
 
         OJField baseTumlClass = new OJField("baseTumlClass", new OJPathName("Class").addToGenerics(pWrap.javaBaseTypePath()));
         baseTumlClass.setInitExp(TinkerGenerationUtil.TumlSchemaFactory.getLast() + ".getTumlSchemaMap().get(qualifiedName)");
-//        annotatedClass.addToImports(TinkerGenerationUtil.BaseTuml);
         annotatedClass.addToImports(TinkerGenerationUtil.TumlSchemaFactory);
         add.getBody().addToLocals(baseTumlClass);
 

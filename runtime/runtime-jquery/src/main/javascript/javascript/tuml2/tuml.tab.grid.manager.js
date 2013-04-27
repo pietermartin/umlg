@@ -349,7 +349,19 @@
             this.tumlTabViewManager.refreshContext(tumlUri);
         }
 
+        this.handleLookup = function (lookupUri, qualifiedName, loadDataCallback) {
+            this.tumlTabViewManager.handleLookup(lookupUri, qualifiedName, loadDataCallback);
+        }
+
         this.handleAddNewRow = function (event) {
+            if (Slick.GlobalEditorLock.cancelCurrentEdit()) {
+                var newItem = {};
+                //Generate a fake id, its required for the grid to work nicely
+                newItem.id = 'fake::' + this.fakeIndex++;
+                newItem.tmpId = newItem.id;
+                newItem.qualifiedName = this.localMetaForData.qualifiedName;
+                this.dataView.addItem(newItem);
+            }
             this.tumlTabViewManager.addNewRow(event);
         }
 
@@ -474,8 +486,9 @@
                             if (self.dataView.getItem(args.row) !== undefined && self.dataView.getItem(args.row) !== null && self.dataView.getItem(args.row)[column.name] !== undefined && self.dataView.getItem(args.row)[column.name] !== null) {
                                 //Get the data currently for the component
                                 data = self.dataView.getItem(args.row)[column.name];
+                            } else {
+                                 data = {id: 'fake::0'};
                             }
-                            var id = self.dataView.getItem(args.row)["id"];
                             self.tumlTabViewManager.openOneComponent(data, args, column.options.property.tumlUri, column.options.property);
                         }
                     }
@@ -590,15 +603,7 @@
 
             this.grid.onActiveCellChanged.subscribe(function (e, args) {
                 if (isClickOnNewRow(args.row, args.cell, self.dataView.getItem(args.row))) {
-                    if (Slick.GlobalEditorLock.cancelCurrentEdit()) {
-                        var newItem = {};
-                        //Generate a fake id, its required for the grid to work nicely
-                        newItem.id = 'fake::' + self.fakeIndex++;
-                        newItem.tmpId = newItem.id;
-                        newItem.qualifiedName = self.localMetaForData.qualifiedName;
-                        self.dataView.addItem(newItem);
-                        self.handleAddNewRow(e);
-                    }
+                    self.handleAddNewRow(e);
                 }
             });
 
@@ -732,7 +737,7 @@
                 });
 
             this.grid.onValidationError.subscribe(function (e, args) {
-                alert(args.validationResults.msg);
+                alert('XXX' + args.validationResults.msg);
             });
 
             // initialize the model after all the events have been hooked up
@@ -761,10 +766,6 @@
             if (item !== undefined) {
                 item[self.grid.getColumns()[cell.cell].name] = value;
             } else {
-                //This happens when the component is the first entry in the grid, i.e. it needs to add the row
-//                item = {};
-//                item[self.grid.getColumns()[cell.cell].name] = value;
-//                self.addNewRow({item: item});
                 alert('This should not be happening no more');
             }
             self.grid.invalidateRows([cell.row]);
@@ -833,20 +834,20 @@
     }
 
     TumlBaseGridManager.prototype.setupColumns = function () {
-        var self = this;
         this.columns = [];
-        $.each(this.localMetaForData.properties, function (index, property) {
+        for (var i = 0; i < this.localMetaForData.properties.length; i++) {
+            var property = this.localMetaForData.properties[i];
             if ((property.composite && property.lower > 0) || !property.composite && !property.inverseComposite && ((property.oneToOne || property.manyToOne) || property.manyPrimitive || property.manyEnumeration)) {
                 //Place the id column first
                 if (property.name == "id") {
-                    self.columns.splice(0, 0, {
+                    this.columns.splice(0, 0, {
                         id: property.name,
                         name: property.name,
                         field: property.name,
                         sortable: true
                     });
                 } else {
-                    self.columns.push({
+                    this.columns.push({
                         id: property.name,
                         name: property.name,
                         field: property.name,
@@ -857,16 +858,17 @@
                             required: property.lower > 0,
                             tumlLookupUri: property.tumlLookupUri,
                             rowEnumerationLookupMap: new RowEnumerationLookupMap(property.qualifiedName, "/" + tumlModelName + "/tumlEnumLookup"),
-                            rowLookupMap: new RowLookupMap(self.contextVertexId, property.tumlCompositeParentLookupUri, property.tumlCompositeParentLookupUriOnCompositeParent),
-                            compositeParentLookupMap: new CompositeParentLookupMap(self.contextVertexId, property.tumlLookupUri, property.tumlLookupOnCompositeParentUri),
+                            rowLookupMap: new RowLookupMap(this.contextVertexId, property.tumlCompositeParentLookupUri, property.tumlCompositeParentLookupUriOnCompositeParent),
+                            compositeParentLookupMap: new CompositeParentLookupMap(this.contextVertexId, property.tumlLookupUri, property.tumlLookupOnCompositeParentUri),
                             ordered: property.ordered,
                             unique: property.unique,
-                            property: property},
+                            property: property,
+                            tumlBaseGridManager: this},
                         width: 120
                     });
                 }
             }
-        });
+        };
     };
 
     TumlBaseGridManager.prototype.instantiateGrid = function () {

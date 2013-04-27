@@ -102,6 +102,9 @@
         }
 
         this.doSave = function (commit) {
+            if (commit) {
+                throw "commit may not be true on a lookup!";
+            }
             var startTime = new Date().getTime();
             var tumlTabManyViewManagers = this.getTumlTabManyViewManagers(commit);
             var overloadedPostData = {insert: [], update: [], delete: []};
@@ -471,6 +474,40 @@
 
     TumlMainViewManager.prototype.addNewRow = function (event) {
         this.doSave(false);
+    }
+
+    TumlMainViewManager.prototype.handleLookup = function (lookupUri, qualifiedName, loadDataCallback) {
+        var startTime = new Date().getTime();
+        var tumlTabManyViewManagers = this.getTumlTabManyViewManagers(false);
+        var overloadedPostData = {insert: [], update: [], delete: []};
+
+        for (var i = 0; i < tumlTabManyViewManagers.length; i++) {
+            if (!tumlTabManyViewManagers[i].oneManyOrQuery.forManyComponent) {
+                var dataView = tumlTabManyViewManagers[i].tumlTabGridManager.dataView;
+                overloadedPostData.insert.push.apply(overloadedPostData.insert, dataView.getNewItems());
+                overloadedPostData.update.push.apply(overloadedPostData.update, dataView.getUpdatedItems());
+                overloadedPostData.delete.push.apply(overloadedPostData.delete, dataView.getDeletedItems());
+            }
+        }
+        var postUri = this.tumlUri + "_forwardToLookup?lookupUri=" + lookupUri + '&qualifiedName=' + qualifiedName;
+
+        $.ajax({
+            url: postUri,
+            type: "POST",
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify(overloadedPostData),
+            success: function (result, textStatus, jqXHR) {
+                var endTimeBeforeUpdateGrids = new Date().getTime();
+                console.log("Time taken in millis for server call before update drop down = " + (endTimeBeforeUpdateGrids - startTime));
+                loadDataCallback(result.data);
+                endTimeBeforeUpdateGrids = new Date().getTime();
+                console.log("Time taken in millis for server call after  update drop down = " + (endTimeBeforeUpdateGrids - startTime));
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
+            }
+        });
     }
 
 })

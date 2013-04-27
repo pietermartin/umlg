@@ -7,9 +7,9 @@
         }
     });
 
-    function TumlTabComponentOneManager(tumlUri) {
+    function TumlTabComponentOneManager(tumlUri, tumlTabViewManager) {
         var self = this;
-        TumlBaseTabOneManager.call(this, tumlUri);
+        TumlBaseTabOneManager.call(this, tumlUri, tumlTabViewManager);
 
         //Public api
         $.extend(this, {
@@ -112,9 +112,10 @@
 
     TumlTabOneManager.prototype = new TumlBaseTabOneManager;
 
-    function TumlBaseTabOneManager(tumlUri) {
+    function TumlBaseTabOneManager(tumlUri, tumlTabViewManager) {
 
         var self = this;
+        this.tumlTabViewManager = tumlTabViewManager;
 
         function init() {
         }
@@ -136,6 +137,10 @@
                 }
             });
             return validationResults;
+        }
+
+        this.updateGridAfterRollback = function (item) {
+            alert('update the one!');
         }
 
         function findPropertyNavigatingTo(qualifiedName, metaDataNavigatingFrom) {
@@ -416,10 +421,14 @@
             }
         } else if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && property.oneToOne) {
             $input = $('<select />', {class: 'chzn-select', style: 'width:350px;', id: property.name + this.metaForData.name + 'Id', name: property.name});
-            if (data !== undefined && data !== null) {
+            if (data.id.indexOf('fake') === -1) {
                 this.appendLoopupOptionsToSelect(property.tumlLookupUri, property.lower > 0, data['id'], data[property.name], $input);
             } else {
-                this.appendLoopupOptionsToSelect(property.tumlLookupOnCompositeParentUri, property.lower > 0, data['id'], data[property.name], $input);
+
+//                var adjustedUri = property.tumlLookupUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
+//                this.tumlTabViewManager.handleLookup(property.tumlLookupUri, property.qualifiedName, this.appendLoopupOptionsToSelect);
+//                this.appendLoopupOptionsToSelect(property.tumlLookupOnCompositeParentUri, property.lower > 0, data['id'], data[property.name], $input);
+
             }
         } else if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && property.manyToOne) {
             $input = $('<select />', {class: 'chzn-select', style: 'width:350px;', id: property.name + this.metaForData.name + 'Id', name: property.name});
@@ -497,7 +506,7 @@
                 validationResults = validator(currentValues, valueToAdd);
             }
             if (!validationResults.valid) {
-                alert(validationResults.msg);
+                alert('YYY' + validationResults.msg);
             } else {
                 addTr(valueToAdd);
                 //Need to reapply the drag and drop plugin if the table was empty
@@ -555,6 +564,11 @@
             row.append(imgValue);
             $table.append(row);
         }
+
+        this.handleLookup = function (lookupUri, qualifiedName, loadDataCallback) {
+            this.tumlTabViewManager.handleLookup(lookupUri, qualifiedName, loadDataCallback);
+        }
+
     }
 
     TumlBaseTabOneManager.prototype.appendEnumerationLoopupOptionsToSelect = function (tumlLookupUri, propertyJavaClassName, required, currentValue, select) {
@@ -582,6 +596,7 @@
     }
 
     TumlBaseTabOneManager.prototype.appendLoopupOptionsToSelect = function (tumlLookupUri, required, contextVertexId, currentValue, $select) {
+
         var adjustedUri = tumlLookupUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
         var jqxhr = $.getJSON(adjustedUri,function (response, b, c) {
             //if not a required field add a blank value
@@ -678,5 +693,6 @@
     TumlBaseTabOneManager.prototype.removeServerErrorMessage = function () {
         $('#serverErrorMsg').removeClass('server-error-msg').empty();
     }
+
 
 })(jQuery);
