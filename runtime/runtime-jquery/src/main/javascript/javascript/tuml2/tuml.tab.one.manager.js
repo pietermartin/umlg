@@ -140,7 +140,16 @@
         }
 
         this.updateGridAfterRollback = function (item) {
-            alert('update the one!');
+            for (var i = 0; i < this.metaForData.to.properties.length; i++) {
+                var property = this.metaForData.to.properties[i];
+                if (this.isPropertyForOnePage(property, false)) {
+                    this.setValueOfInputForField(item, property);
+                }
+            }
+        }
+
+        this.handleLookup = function (lookupUri, qualifiedName, loadDataCallback) {
+            this.tumlTabViewManager.handleLookup(lookupUri, qualifiedName, loadDataCallback);
         }
 
         function findPropertyNavigatingTo(qualifiedName, metaDataNavigatingFrom) {
@@ -183,18 +192,19 @@
     TumlBaseTabOneManager.prototype.fieldsToObject = function () {
         var dataToSend = {};
         dataToSend.qualifiedName = this.metaForData.qualifiedName;
-        if (this.isForCreation) {
-            dataToSend.tmpId = 'fake:0';
-        }
+//        if (this.isForCreation) {
+//            dataToSend.tmpId = 'fake:0';
+//        }
         for (var i = 0; i < this.metaForData.to.properties.length; i++) {
             var property = this.metaForData.to.properties[i];
             if (property.name === 'id') {
-                dataToSend[property.name] = parseInt($('#' + property.name + this.metaForData.name + 'Id').val());
+                dataToSend.id = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').val();
+                dataToSend.tmpId = dataToSend.id;
             } else if (property.readOnly) {
                 //Do nothing
             } else if (property.name !== 'uri') {
                 if (property.onePrimitive) {
-                    var stringValue = $('#' + property.name + this.metaForData.name + 'Id').val();
+                    var stringValue = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').val();
                     if (property.fieldType == 'Integer' || property.fieldType == 'Long') {
                         if (stringValue == '') {
                             dataToSend[property.name] = null;
@@ -208,42 +218,42 @@
                             dataToSend[property.name] = stringValue;
                         }
                     } else if (property.fieldType == 'Boolean') {
-                        dataToSend[property.name] = $('#' + property.name + this.metaForData.name + 'Id').attr("checked") == "checked";
+                        dataToSend[property.name] = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').attr("checked") == "checked";
                     }
                 } else if (property.dataTypeEnum !== null && property.dataTypeEnum !== undefined) {
                     if (property.dataTypeEnum == 'DateTime') {
-                        dataToSend[property.name] = $('#' + property.name + this.metaForData.name + 'Id').val().replace(/ /g, "T");
+                        dataToSend[property.name] = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').val().replace(/ /g, "T");
                     } else if (property.dataTypeEnum == 'Image') {
                     } else {
-                        dataToSend[property.name] = $('#' + property.name + this.metaForData.name + 'Id').val();
+                        dataToSend[property.name] = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').val();
                     }
                 } else if (property.oneEnumeration) {
-                    var $select = $('#' + property.name + this.metaForData.name + 'Id');
+                    var $select = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
                     var options = $select.children();
-                    for (var i = 0; i < options.length; i++) {
-                        if (options[i].selected) {
+                    for (var j = 0; i < options.length; j++) {
+                        if (options[j].selected) {
                             dataToSend[property.name] = $select.val();
                             break;
                         }
                     }
                 } else if (property.manyPrimitive) {
-                    var inputValue = $('#' + property.name + this.metaForData.name + 'Id').val();
+                    var inputValue = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').val();
                     var array = inputValue.split(',');
                     dataToSend[property.name] = array;
                 } else if (property.manyEnumeration) {
-                    var inputValue = $('#' + property.name + this.metaForData.name + 'Id').val();
+                    var inputValue = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').val();
                     dataToSend[property.name] = inputValue;
                 } else if (property.composite && property.lower > 0) {
-                    var input = $('#' + property.name + this.metaForData.name + 'Id');
+                    var input = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
                     if (input.length !== 0) {
                         dataToSend[property.name] = $.data(input[0], "componentValue");
                     }
                 } else if (!property.onePrimitive && !property.manyPrimitive && !property.inverseComposite) {
-                    var $select = $('#' + property.name + this.metaForData.name + 'Id');
+                    var $select = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
                     var options = $select.children();
-                    for (var i = 0; i < options.length; i++) {
-                        if (options[i].selected) {
-                            dataToSend[property.name] = {id: parseInt($select.val()), displayName: options[i].label};
+                    for (var j = 0; j < options.length; j++) {
+                        if (options[j].selected) {
+                            dataToSend[property.name] = {id: $select.val(), displayName: options[j].label};
                             break;
                         }
                     }
@@ -373,97 +383,91 @@
         var self = this;
         var $input;
         if (property.name == 'id') {
-            $input = $('<input />', {disabled: 'disabled', type: 'text', class: 'field', id: property.name + this.metaForData.name + 'Id', name: property.name});
-            if (data !== undefined && data !== null) {
+            $input = $('<input />', {disabled: 'disabled', type: 'text', class: 'field', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
+            if (data[property.name] !== undefined && data[property.name] !== null) {
                 $input[0].defaultValue = data[property.name];
             }
         } else if (property.readOnly) {
-            if (data !== undefined && data !== null) {
+            if (!isForCreation && data[property.name] !== undefined && data[property.name] !== null) {
                 $input = $('<p />').text(data[property.name]);
             } else {
                 $input = $('<p />');
             }
         } else if (property.dataTypeEnum != null && property.dataTypeEnum !== undefined) {
             if (property.dataTypeEnum == 'Date' || property.dataTypeEnum == 'Time' || property.dataTypeEnum == 'DateTime' || property.dataTypeEnum == 'InternationalPhoneNumber' || property.dataTypeEnum == 'LocalPhoneNumber' || property.dataTypeEnum == 'Email') {
-                $input = $("<input />", {type: 'text', id: property.name + this.metaForData.name + 'Id', name: property.name});
+                $input = $("<input />", {type: 'text', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
             } else if (property.dataTypeEnum == 'Video') {
-                $input = $("<input />", {type: 'text', id: property.name + this.metaForData.name + 'Id', name: property.name});
+                $input = $("<input />", {type: 'text', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
             } else if (property.dataTypeEnum == 'Audio') {
-                $input = $("<input />", {type: 'text', id: property.name + this.metaForData.name + 'Id', name: property.name});
+                $input = $("<input />", {type: 'text', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
             } else if (property.dataTypeEnum == 'Image') {
-                $input = $("<input />", {type: 'text', id: property.name + this.metaForData.name + 'Id', name: property.name});
+                $input = $("<input />", {type: 'text', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
             } else {
                 alert('Unsupported dataType ' + property.dataTypeEnum);
             }
-            if (data !== undefined && data !== null) {
+            if (!isForCreation && data[property.name] !== undefined && data[property.name] !== null) {
                 $input[0].defaultValue = data[property.name];
             }
         } else if (property.composite && property.lower > 0) {
-            $input = $("<input />", {type: 'text', id: property.name + this.metaForData.name + 'Id', name: property.name});
-            if (data !== undefined && data !== null) {
+            $input = $("<input />", {type: 'text', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
+            if (!isForCreation && data[property.name] !== undefined && data[property.name] !== null) {
                 $input[0].defaultValue = data[property.name];
                 $.data($input[0], "componentValue", data[property.name]);
             }
 
         } else if (property.oneEnumeration) {
-            $input = $('<select />', {class: 'chzn-select', style: 'width:350px;', id: property.name + this.metaForData.name + 'Id', name: property.name});
-            if (data !== undefined && data !== null) {
+            $input = $('<select />', {class: 'chzn-select', style: 'width:350px;', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
+            if (!isForCreation && data[property.name] !== undefined && data[property.name] !== null) {
                 this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, data[property.name], $input);
             } else {
                 this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, $input);
             }
         } else if (property.manyEnumeration) {
-            $input = $('<select />', {multiple: '', id: property.name + this.metaForData.name + 'Id', class: 'chzn-select', style: 'width:350px;', name: property.name});
-            if (data !== undefined && data !== null) {
+            $input = $('<select />', {multiple: '', id: property.name + this.metaForData.qualifiedName + 'Id', class: 'chzn-select', style: 'width:350px;', name: property.name});
+            if (!isForCreation && data[property.name] !== undefined && data[property.name] !== null) {
                 this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, data[property.name], $input);
             } else {
                 this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, $input);
             }
         } else if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && property.oneToOne) {
-            $input = $('<select />', {class: 'chzn-select', style: 'width:350px;', id: property.name + this.metaForData.name + 'Id', name: property.name});
-            if (data.id.indexOf('fake') === -1) {
-                this.appendLoopupOptionsToSelect(property.tumlLookupUri, property.lower > 0, data['id'], data[property.name], $input);
-            } else {
+            $input = $('<select />', {class: 'chzn-select', style: 'width:350px;', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
 
-//                var adjustedUri = property.tumlLookupUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
-//                this.tumlTabViewManager.handleLookup(property.tumlLookupUri, property.qualifiedName, this.appendLoopupOptionsToSelect);
-//                this.appendLoopupOptionsToSelect(property.tumlLookupOnCompositeParentUri, property.lower > 0, data['id'], data[property.name], $input);
-
+            if (!isForCreation) {
+                this.appendLoopupOptionsToSelect2(property, data['id'], $input, data[property.name]);
             }
+
         } else if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && property.manyToOne) {
-            $input = $('<select />', {class: 'chzn-select', style: 'width:350px;', id: property.name + this.metaForData.name + 'Id', name: property.name});
-            if (data !== undefined && data !== null) {
+            $input = $('<select />', {class: 'chzn-select', style: 'width:350px;', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
+            if (!isForCreation && data[property.name] !== undefined && data[property.name] !== null) {
                 this.appendLoopupOptionsToSelect(property.tumlLookupUri, property.lower > 0, data['id'], data[property.name], $input);
-            } else {
-                this.appendLoopupOptionsToSelect(property.tumlLookupOnCompositeParentUri, property.lower > 0, data['id'], data[property.name], $input);
             }
         } else if (property.fieldType == 'String') {
-            $input = $('<input />', {type: 'text', class: 'field', id: property.name + this.metaForData.name + 'Id', name: property.name});
-            if (data !== undefined && data !== null) {
+            $input = $('<input />', {type: 'text', class: 'field', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
+            if (!isForCreation && data[property.name] !== undefined && data[property.name] !== null) {
                 $input[0].defaultValue = data[property.name];
             }
         } else if (property.fieldType == 'Integer') {
-            $input = $('<input />', {type: 'text', class: 'field', id: property.name + this.metaForData.name + 'Id', name: property.name});
-            if (data !== undefined && data !== null) {
+            $input = $('<input />', {type: 'text', class: 'field', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
+            if (!isForCreation && data[property.name] !== undefined && data[property.name] !== null) {
                 $input[0].defaultValue = data[property.name];
             }
         } else if (property.fieldType == 'Long') {
-            $input = $('<input />', {type: 'text', class: 'field', id: property.name + this.metaForData.name + 'Id', name: property.name});
-            if (data !== undefined && data !== null) {
+            $input = $('<input />', {type: 'text', class: 'field', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
+            if (!isForCreation && data[property.name] !== undefined && data[property.name] !== null) {
                 $input[0].defaultValue = data[property.name];
             }
         } else if (property.fieldType == 'Boolean') {
             if (!property.manyPrimitive && data !== undefined && data !== null) {
-                if (data !== undefined && data !== null) {
-                    $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: property.name + this.metaForData.name + 'Id', name: property.name, checked: 'checked'});
+                if (!isForCreation && data[property.name] !== undefined) {
+                    $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name, checked: 'checked'});
                 } else {
-                    $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: property.name + this.metaForData.name + 'Id', name: property.name });
+                    $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name });
                 }
             } else if (!property.manyPrimitive) {
-                $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: property.name + this.metaForData.name + 'Id', name: property.name });
+                $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name });
             } else {
-                $input = $('<input />', {type: 'text', class: 'field', id: property.name + this.metaForData.name + 'Id', name: property.name});
-                if (data !== undefined && data !== null) {
+                $input = $('<input />', {type: 'text', class: 'field', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
+                if (!isForCreation && data[property.name] !== undefined && data[property.name] !== null) {
                     $input[0].defaultValue = data[property.name];
                 }
             }
@@ -474,6 +478,92 @@
             });
         }
         return $input;
+    }
+
+    TumlBaseTabOneManager.prototype.setValueOfInputForField = function (data, property) {
+        var self = this;
+        if (property.name == 'id') {
+            var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+            if (data[property.name] !== undefined && data[property.name] !== null) {
+                input[0].defaultValue = data[property.name];
+            }
+        } else if (property.readOnly) {
+            var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+            if (data[property.name] !== undefined && data[property.name] !== null) {
+                input.text(data[property.name]);
+            }
+        } else if (property.dataTypeEnum != null && property.dataTypeEnum !== undefined) {
+            var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+            if (data[property.name] !== undefined && data[property.name] !== null) {
+                input[0].defaultValue = data[property.name];
+            }
+        } else if (property.composite && property.lower > 0) {
+            var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+            if (data[property.name] !== undefined && data[property.name] !== null) {
+                input[0].defaultValue = data[property.name];
+                $.data($input[0], "componentValue", data[property.name]);
+            }
+        } else if (property.oneEnumeration) {
+            var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+            if (data[property.name] !== undefined && data[property.name] !== null) {
+                this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, data[property.name], $input);
+            } else {
+                this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, $input);
+            }
+        } else if (property.manyEnumeration) {
+            if (data[property.name] !== undefined && data[property.name] !== null) {
+                this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, data[property.name], $input);
+            } else {
+                this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, $input);
+            }
+        } else if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && property.oneToOne) {
+
+            var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+            this.appendLoopupOptionsToSelect2(property, data['tmpId'], input, data[property.name]);
+
+        } else if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && property.manyToOne) {
+            if (data[property.name] !== undefined && data[property.name] !== null) {
+                this.appendLoopupOptionsToSelect(property.tumlLookupUri, property.lower > 0, data['id'], data[property.name], input);
+            } else {
+                this.appendLoopupOptionsToSelect(property.tumlLookupOnCompositeParentUri, property.lower > 0, data['id'], data[property.name], input);
+            }
+        } else if (property.fieldType == 'String') {
+            var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+            if (data[property.name] !== undefined && data[property.name] !== null) {
+                input[0].defaultValue = data[property.name];
+            }
+        } else if (property.fieldType == 'Integer') {
+            var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+            if (data[property.name] !== undefined && data[property.name] !== null) {
+                input[0].defaultValue = data[property.name];
+            }
+        } else if (property.fieldType == 'Long') {
+            var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+            if (data[property.name] !== undefined && data[property.name] !== null) {
+                input[0].defaultValue = data[property.name];
+            }
+        } else if (property.fieldType == 'Boolean') {
+            if (!property.manyPrimitive) {
+                var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+                if (data[property.manyPrimitive] !== undefined && data[property.name] !== null) {
+                    input[0].attr('checked', 'checked');
+                } else {
+                    input[0].attr('checked', '');
+                }
+            } else if (property.manyPrimitive) {
+                var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+                if (data[property.name] !== undefined && data[property.name] !== null) {
+                    input[0].defaultValue = data[property.name];
+                }
+            }
+        }
+        if (!(property.composite && property.lower > 0)) {
+            var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+            input.blur(function () {
+                self.validateField(property);
+            });
+        }
+        return input;
     }
 
     TumlBaseTabOneManager.prototype.openEditorForMany = function ($inputToSet, property, $manyDiv, $li) {
@@ -565,10 +655,6 @@
             $table.append(row);
         }
 
-        this.handleLookup = function (lookupUri, qualifiedName, loadDataCallback) {
-            this.tumlTabViewManager.handleLookup(lookupUri, qualifiedName, loadDataCallback);
-        }
-
     }
 
     TumlBaseTabOneManager.prototype.appendEnumerationLoopupOptionsToSelect = function (tumlLookupUri, propertyJavaClassName, required, currentValue, select) {
@@ -598,31 +684,88 @@
     TumlBaseTabOneManager.prototype.appendLoopupOptionsToSelect = function (tumlLookupUri, required, contextVertexId, currentValue, $select) {
 
         var adjustedUri = tumlLookupUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
-        var jqxhr = $.getJSON(adjustedUri,function (response, b, c) {
-            //if not a required field add a blank value
-            if (!required) {
-                $select.append($('<option />)').val("").html(""));
-            }
-            //append the current value to the dropdown
-            $select.append($('<option />)').val(currentValue.id).html(currentValue.displayName));
-            //Property is a many, meta has 2 properties, one for both sides of the association
-            //The first one is the parent property, i.e. the context property for which the menu is built
-            var options = [];
-            $.each(response.data, function (index, obj) {
-                var option = {};
-                option['value'] = obj.id;
-                option['desc'] = obj.name;
-                options.push(option);
-            });
-            for (var i = 0; i < options.length; i++) {
-                $select.append($('<option />)').val(options[i].value).html(options[i].desc));
-            }
-            $select.val(currentValue.id);
-            $select.chosen({allow_single_deselect: true});
-        }).fail(function (a, b, c) {
-                alert("error " + a + ' ' + b + ' ' + c);
+
+        this.handleLookup(adjustedUri, item.qualifiedName,
+            function (data) {
+                if (!required) {
+                    $select.append($('<option />)').val("").html(""));
+                }
+                for (var i = 0; i < data.length; i++) {
+                    var obj = data[i];
+                    $select.append($('<option />)').val(obj.id).html(obj.name));
+                }
+                ;
+                //currentValue is the vertex id of the oneToOne or manyToOne
+                currentValue = item[args.column.field];
+                //append the current value to the dropdown
+                if (currentValue !== undefined && currentValue !== null) {
+                    $select.append($('<option selected="selected"/>)').val(currentValue.id).html(currentValue.displayName));
+                }
+                if (!required) {
+                    $select.chosen({allow_single_deselect: true});
+                } else {
+                    $select.chosen();
+                }
+                $select.focus();
             }
         );
+
+//        var adjustedUri = tumlLookupUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
+//        var jqxhr = $.getJSON(adjustedUri,function (response, b, c) {
+//            //if not a required field add a blank value
+//            if (!required) {
+//                $select.append($('<option />)').val("").html(""));
+//            }
+//            //append the current value to the dropdown
+//            $select.append($('<option />)').val(currentValue.id).html(currentValue.displayName));
+//            //Property is a many, meta has 2 properties, one for both sides of the association
+//            //The first one is the parent property, i.e. the context property for which the menu is built
+//            var options = [];
+//            $.each(response.data, function (index, obj) {
+//                var option = {};
+//                option['value'] = obj.id;
+//                option['desc'] = obj.name;
+//                options.push(option);
+//            });
+//            for (var i = 0; i < options.length; i++) {
+//                $select.append($('<option />)').val(options[i].value).html(options[i].desc));
+//            }
+//            $select.val(currentValue.id);
+//            $select.chosen({allow_single_deselect: true});
+//        }).fail(function (a, b, c) {
+//                alert("error " + a + ' ' + b + ' ' + c);
+//            }
+//        );
+    }
+
+    TumlBaseTabOneManager.prototype.appendLoopupOptionsToSelect2 = function (property, contextVertexId, $select, currentValue) {
+
+        var adjustedUri = property.tumlLookupUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
+        var required = property.lower > 0;
+
+        this.handleLookup(adjustedUri, this.metaForData.qualifiedName,
+            function (data) {
+                if (!required) {
+                    $select.append($('<option />)').val("").html(""));
+                }
+                for (var i = 0; i < data.length; i++) {
+                    var obj = data[i];
+                    $select.append($('<option />)').val(obj.id).html(obj.name));
+                }
+                ;
+                //append the current value to the dropdown
+                if (currentValue !== undefined && currentValue !== null) {
+                    $select.append($('<option selected="selected"/>)').val(currentValue.id).html(currentValue.displayName));
+                }
+                if (!required) {
+                    $select.chosen({allow_single_deselect: true});
+                } else {
+                    $select.chosen();
+                }
+                $select.focus();
+            }
+        );
+
     }
 
     TumlBaseTabOneManager.prototype.validateField = function (property) {

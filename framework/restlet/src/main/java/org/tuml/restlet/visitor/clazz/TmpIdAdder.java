@@ -56,7 +56,7 @@ public class TmpIdAdder extends BaseVisitor implements Visitor<Class> {
         OJIfStatement ifStatement1 = new OJIfStatement("propertyMap.get(\"tmpId\") != null");
         ifStatement.addToThenPart(ifStatement1);
         ifStatement1.addToThenPart("this.tmpId = (String)propertyMap.get(\"tmpId\")");
-        ifStatement1.addToThenPart(TumlRestletGenerationUtil.TumlTmpIdManager.getLast() + ".INSTANCE.put(getQualifiedName() + \"::\" + this.tmpId, getId())");
+        ifStatement1.addToThenPart(TumlRestletGenerationUtil.TumlTmpIdManager.getLast() + ".INSTANCE.put(getQualifiedName(), this.tmpId, getId())");
         annotatedClass.addToImports(TumlRestletGenerationUtil.TumlTmpIdManager);
         ifStatement1.addToElsePart("this.tmpId = null");
         fromJson.getBody().addToStatements(ifStatement);

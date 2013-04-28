@@ -487,7 +487,8 @@
                                 //Get the data currently for the component
                                 data = self.dataView.getItem(args.row)[column.name];
                             } else {
-                                 data = {id: 'fake::0'};
+//                                 data = {id: 'fake::0', tmpId: 'fake::0'};
+                                data = {};
                             }
                             self.tumlTabViewManager.openOneComponent(data, args, column.options.property.tumlUri, column.options.property);
                         }

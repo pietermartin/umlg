@@ -1,3 +1,7 @@
+function escapeColon(string) {
+    return string.replace(/(:|\.)/g,'\\$1');
+}
+
 function retrieveVertexId(url) {
     var urlId = url.match(/\/\d+/);
     if (urlId != null) {

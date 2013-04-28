@@ -102,11 +102,8 @@
         }
 
         this.doSave = function (commit) {
-            if (commit) {
-                throw "commit may not be true on a lookup!";
-            }
             var startTime = new Date().getTime();
-            var tumlTabManyViewManagers = this.getTumlTabManyViewManagers(commit);
+            var tumlTabManyViewManagers = this.getTumlTabManyOrOneViewManagers(commit);
             var overloadedPostData = {insert: [], update: [], delete: []};
 
             if (commit && !validateMultiplicity(tumlTabManyViewManagers)) {
@@ -477,8 +474,9 @@
     }
 
     TumlMainViewManager.prototype.handleLookup = function (lookupUri, qualifiedName, loadDataCallback) {
+        var self = this;
         var startTime = new Date().getTime();
-        var tumlTabManyViewManagers = this.getTumlTabManyViewManagers(false);
+        var tumlTabManyViewManagers = this.getTumlTabManyOrOneViewManagers(false);
         var overloadedPostData = {insert: [], update: [], delete: []};
 
         for (var i = 0; i < tumlTabManyViewManagers.length; i++) {
@@ -500,6 +498,14 @@
             success: function (result, textStatus, jqXHR) {
                 var endTimeBeforeUpdateGrids = new Date().getTime();
                 console.log("Time taken in millis for server call before update drop down = " + (endTimeBeforeUpdateGrids - startTime));
+
+                //Make sure id's are replaced with tmpId where needed
+                for (var i =0; i < result.data.length; i++) {
+                    var item = result.data[i];
+                    if (item.tmpId !== undefined && item.tmpId !== null) {
+                        item.id = item.tmpId;
+                    }
+                }
                 loadDataCallback(result.data);
                 endTimeBeforeUpdateGrids = new Date().getTime();
                 console.log("Time taken in millis for server call after  update drop down = " + (endTimeBeforeUpdateGrids - startTime));

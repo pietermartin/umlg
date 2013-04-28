@@ -65,6 +65,10 @@
             this.init(tumlUri, result);
         }
 
+        this.handleLookup = function (lookupUri, qualifiedName, loadDataCallback) {
+            this.parentTabContainerManager.handleLookup(lookupUri, qualifiedName, loadDataCallback);
+        }
+
     }
 
     TumlBaseTabViewManager.prototype = new Tuml.TumlTabContainerManager;
@@ -220,10 +224,12 @@
                     self.addToTumlTabViewManagers(tumlOneComponentTabViewManager);
                     tumlOneComponentTabViewManager.parentTabContainerManager = self;
                     $('#slickGrid' + self.tabId).hide();
-                    tumlOneComponentTabViewManager.backupData = $.extend(true, {}, data);
+                    tumlOneComponentTabViewManager.backupData = $.extend(true, {}, result[i].data);
 
-                    if (data.id.indexOf('fake') !== -1) {
+                    if (result[i].data.id === undefined || result[i].data.id === null) {
                         //Create the object server side for ocl to execute...
+                        result[i].data.id = 'fake::0';
+                        result[i].data.tmpId = 'fake::0';
                         tumlOneComponentTabViewManager.createTab(result[i], true);
                         self.addNewRow();
                     } else {
@@ -302,6 +308,23 @@
 
                     tumlTabViewManager.endUpdate(true);
 
+                }
+            }
+        }
+    }
+
+    TumlBaseTabViewManager.prototype.setComponentIdToTmpId = function (item) {
+        //Need to update the id's to the tmpId as the id no longer exist on a rolled back transaction
+        //Go through all the properties, for each composite property set the id = tmpId
+        item.id = item.tmpId;
+        for (var p in item) {
+            if (item[p] !== undefined && item[p] !== null) {
+                if (Array.isArray(item[p])) {
+                    for (var i = 0; i < item[p].length; i++) {
+                        this.setComponentIdToTmpId(item[p][i]);
+                    }
+                } else if (typeof item[p] === 'object') {
+                    this.setComponentIdToTmpId(item[p]);
                 }
             }
         }
@@ -528,39 +551,12 @@
         }
     }
 
-    TumlTabManyViewManager.prototype.setComponentIdToTmpId = function (item) {
-        //Need to update the id's to the tmpId as the id no longer exist on a rolled back transaction
-        //Go through all the properties, for each composite property set the id = tmpId
-        for (var i = 0; i < this.metaForData.to.properties.length; i++) {
-            var property = this.metaForData.to.properties[i];
-            if (property.composite) {
-                if (property.lower !== -1 && property.lower > 0) {
-                    var component = item[property.name];
-                    if (property.upper === -1 || property.upper > 1) {
-                        for (var j = 0; j < component.length; j++) {
-                            var componentRow = component[j];
-                            componentRow.id = componentRow.tmpId;
-                        }
-                    } else {
-                        if (component !== undefined && component !== null) {
-                            component.id = component.tmpId;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     TumlTabManyViewManager.prototype.beginUpdate = function () {
         this.tumlTabGridManager.beginUpdate();
     }
 
     TumlTabManyViewManager.prototype.endUpdate = function (editActiveCell) {
         this.tumlTabGridManager.endUpdate(editActiveCell);
-    }
-
-    TumlTabManyViewManager.prototype.handleLookup = function (lookupUri, qualifiedName, loadDataCallback) {
-        this.parentTabContainerManager.handleLookup(lookupUri, qualifiedName, loadDataCallback);
     }
 
     TumlTabManyViewManager.prototype.handleDeleteRow = function () {

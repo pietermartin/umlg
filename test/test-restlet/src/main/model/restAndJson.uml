@@ -527,6 +527,10 @@
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_uykxwEdJEeK1a-SG6VcP9g" value="1"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_uyn1EEdJEeK1a-SG6VcP9g" value="1"/>
+              <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_KdpBsK_kEeKGeM-BjACeUA" name="componentonedeep3Namedefault">
+                <language>OCL</language>
+                <body>'test123'</body>
+              </defaultValue>
             </ownedAttribute>
             <ownedAttribute xmi:id="_ZEkk8Is8EeKeSZB9UA6Gvw" name="componentMany" type="_PxOysD_MEeKA79X_7SVJiA" association="_ZElMAIs8EeKeSZB9UA6Gvw">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_ZEkk8Ys8EeKeSZB9UA6Gvw"/>

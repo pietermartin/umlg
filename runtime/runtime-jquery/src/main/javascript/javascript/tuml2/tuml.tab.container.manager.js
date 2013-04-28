@@ -192,41 +192,42 @@
     }
 
     TumlTabContainerManager.prototype.saveTabs = function () {
-
-        //Save the child grids into the component's cell
-        if (this.tumlTabViewManagers.length > 0) {
-            if (this.tabContainerProperty.upper == -1 || this.tabContainerProperty.upper > 1) {
-                var data = [];
-                for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
-                    var tumlTabViewManager = this.tumlTabViewManagers[i];
-                    if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager && tumlTabViewManager.tumlTabGridManager.dataView.getItems().length > 0) {
-                        data.push.apply(data, tumlTabViewManager.tumlTabGridManager.dataView.getItems());
-                    }
-                }
-                this.setCellValue(data);
-            } else {
-                if (this.tabContainerProperty.upper !== 1) {
-                    alert("upper suppose to be a one");
-                }
-                var firstTumlTabViewManager = null;
-                for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
-                    var tumlTabViewManager = this.tumlTabViewManagers[i];
-                    if (tumlTabViewManager instanceof Tuml.TumlTabOneViewManager) {
-                        if (firstTumlTabViewManager !== null) {
-                            alert("tabs gone wrong!");
+        if (this.validateMultiplicity()) {
+            //Save the child grids into the component's cell
+            if (this.tumlTabViewManagers.length > 0) {
+                if (this.tabContainerProperty.upper == -1 || this.tabContainerProperty.upper > 1) {
+                    var data = [];
+                    for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
+                        var tumlTabViewManager = this.tumlTabViewManagers[i];
+                        if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager && tumlTabViewManager.tumlTabGridManager.dataView.getItems().length > 0) {
+                            data.push.apply(data, tumlTabViewManager.tumlTabGridManager.dataView.getItems());
                         }
-                        firstTumlTabViewManager = tumlTabViewManager;
                     }
+                    this.setCellValue(data);
+                } else {
+                    if (this.tabContainerProperty.upper !== 1) {
+                        alert("upper suppose to be a one");
+                    }
+                    var firstTumlTabViewManager = null;
+                    for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
+                        var tumlTabViewManager = this.tumlTabViewManagers[i];
+                        if (tumlTabViewManager instanceof Tuml.TumlTabOneViewManager) {
+                            if (firstTumlTabViewManager !== null) {
+                                alert("tabs gone wrong!");
+                            }
+                            firstTumlTabViewManager = tumlTabViewManager;
+                        }
+                    }
+                    this.setCellValue(tumlTabViewManager.tumlTabOneManager.fieldsToObject());
                 }
-                this.setCellValue(tumlTabViewManager.tumlTabOneManager.fieldsToObject());
             }
-        }
-        this.destroyTabContainer();
-        this.tumlTabGridManager.active = true;
-        $('#slickGrid' + this.tabId).show();
+            this.destroyTabContainer();
+            this.tumlTabGridManager.active = true;
+            $('#slickGrid' + this.tabId).show();
 
-        //enable the save button
-        this.parentTabContainerManager.enableButtons();
+            //enable the save button
+            this.parentTabContainerManager.enableButtons();
+        }
     }
 
     TumlTabContainerManager.prototype.deactivateGrids = function () {
@@ -261,7 +262,7 @@
 
     TumlTabContainerManager.prototype.updateValidationWarningHeader = function () {
         $('#' + this.getTabId() + 'validation-warning').children().remove();
-        var tumlTabManyViewManagers = this.getTumlTabManyViewManagers(false);
+        var tumlTabManyViewManagers = this.getTumlTabManyOrOneViewManagers(false);
         var rowCount = 0;
         for (var i = 0; i < tumlTabManyViewManagers.length; i++) {
             var dataView = tumlTabManyViewManagers[i].tumlTabGridManager.dataView;
@@ -273,14 +274,34 @@
         }
     }
 
-    TumlTabContainerManager.prototype.getTumlTabManyViewManagers = function (commitCurrentEdit) {
+    TumlTabContainerManager.prototype.validateMultiplicity = function () {
+        var tumlTabViewManagers = this.getTumlTabManyOrOneViewManagers(false);
+        var rowCount = 0;
+        for (var i = 0; i < tumlTabViewManagers.length; i++) {
+            var tumlTabViewManager = tumlTabViewManagers[i];
+            if (tumlTabViewManager instanceof  Tuml.TumlTabManyViewManager) {
+                var dataView = tumlTabViewManager.tumlTabGridManager.dataView;
+                rowCount += dataView.getItems().length;
+            } else {
+                rowCount = 1;
+                break;
+            }
+        }
+        if (rowCount < this.tabContainerProperty.lower || (this.tabContainerProperty.upper !== -1 && rowCount > this.tabContainerProperty.upper)) {
+            alert('multiplicity falls outside the valid range [' + this.tabContainerProperty.lower + '..' + this.tabContainerProperty.upper + ']');
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    TumlTabContainerManager.prototype.getTumlTabManyOrOneViewManagers = function (commitCurrentEdit) {
         var tumlTabManyViewManagers = [];
         for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
             var tumlTabViewManager = this.tumlTabViewManagers[i];
             //Get all the many tab views
-            if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager) {
+            if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager || tumlTabViewManager instanceof Tuml.TumlTabOneViewManager) {
                 if (commitCurrentEdit) {
-//                    tumlTabViewManager.tumlTabGridManager.grid.getEditorLock().commitCurrentEdit();
                     Slick.GlobalEditorLock.commitCurrentEdit();
                 }
                 tumlTabManyViewManagers.push(tumlTabViewManager);
