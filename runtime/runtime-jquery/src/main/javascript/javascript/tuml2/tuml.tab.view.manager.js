@@ -228,8 +228,8 @@
 
                     if (result[i].data.id === undefined || result[i].data.id === null) {
                         //Create the object server side for ocl to execute...
-                        result[i].data.id = 'fake::0';
-                        result[i].data.tmpId = 'fake::0';
+                        result[i].data.id = 'fake::' + Tuml.TumlFakeIndex++;
+                        result[i].data.tmpId = result[i].data.id;
                         tumlOneComponentTabViewManager.createTab(result[i], true);
                         self.addNewRow();
                     } else {

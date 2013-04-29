@@ -51,6 +51,8 @@ public class RestletVisitors {
 
         result.add(new RestletComponentAndApplicationGenerator(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
         result.add(new TmpIdAdder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+        result.add(new RestletFromJsonCreator(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+
 
 
         return result;

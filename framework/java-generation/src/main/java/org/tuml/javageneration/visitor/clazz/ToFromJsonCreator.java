@@ -207,10 +207,10 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
         OJAnnotatedClass annotatedClass = findOJClass(clazz);
         OJAnnotatedOperation fromJson = new OJAnnotatedOperation("fromJsonDataTypeAndComposite");
         fromJson.addParam("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object"));
-        fromJson.setVisibility(OJVisibilityKindGEN.PROTECTED);
+        fromJson.setVisibility(OJVisibilityKindGEN.PUBLIC);
+        TinkerGenerationUtil.addOverrideAnnotation(fromJson);
         annotatedClass.addToOperations(fromJson);
         if (!clazz.getGenerals().isEmpty()) {
-            TinkerGenerationUtil.addOverrideAnnotation(fromJson);
             fromJson.getBody().addToStatements("super.fromJsonDataTypeAndComposite(propertyMap)");
         }
         List<Property> propertiesForToJson = new ArrayList<Property>(TumlClassOperations.getPrimitiveOrEnumOrComponentsExcludeOneProperties(clazz));
@@ -327,7 +327,7 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                         ojIfStatement.addToElsePart(ojTryStatement);
 
                         ifNotNull.addToThenPart(ojIfStatement);
-                        ifNotNull.addToThenPart(pWrap.fieldname() + ".fromJson("+pWrap.fieldname()+"Map)");
+                        ifNotNull.addToThenPart(pWrap.fieldname() + ".fromJsonDataTypeAndComposite("+pWrap.fieldname()+"Map)");
 
 
 
@@ -370,7 +370,7 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                         ojIfStatement.addToElsePart(ojTryStatement);
 
                         ojForStatement.getBody().addToStatements(ojIfStatement);
-                        ojForStatement.getBody().addToStatements(pWrap.fieldname() + ".fromJson(row)");
+                        ojForStatement.getBody().addToStatements(pWrap.fieldname() + ".fromJsonDataTypeAndComposite(row)");
                     } else if (pWrap.isMany() && pWrap.isEnumeration()) {
                         ifNotNull.addToThenPart(pWrap.clearer() + "()");
                         OJForStatement ojForStatement = new OJForStatement("enumLiteral", new OJPathName("String"), pWrap.fieldname());
@@ -394,10 +394,10 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
         OJAnnotatedClass annotatedClass = findOJClass(clazz);
         OJAnnotatedOperation fromJson = new OJAnnotatedOperation("fromJsonNonCompositeOne");
         fromJson.addParam("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object"));
-        fromJson.setVisibility(OJVisibilityKindGEN.PROTECTED);
+        fromJson.setVisibility(OJVisibilityKindGEN.PUBLIC);
+        TinkerGenerationUtil.addOverrideAnnotation(fromJson);
         annotatedClass.addToOperations(fromJson);
         if (!clazz.getGenerals().isEmpty()) {
-            TinkerGenerationUtil.addOverrideAnnotation(fromJson);
             fromJson.getBody().addToStatements("super.fromJsonNonCompositeOne(propertyMap)");
         }
         List<Property> propertiesForToJson = new ArrayList<Property>(TumlClassOperations.getOneProperties(clazz));
@@ -514,7 +514,7 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                         ojIfStatement.addToElsePart(ojTryStatement);
 
                         ifNotNull.addToThenPart(ojIfStatement);
-                        ifNotNull.addToThenPart(pWrap.fieldname() + ".fromJson("+pWrap.fieldname()+"Map)");
+                        ifNotNull.addToThenPart(pWrap.fieldname() + ".fromJsonNonCompositeOne("+pWrap.fieldname()+"Map)");
 
 
 
@@ -557,7 +557,7 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                         ojIfStatement.addToElsePart(ojTryStatement);
 
                         ojForStatement.getBody().addToStatements(ojIfStatement);
-                        ojForStatement.getBody().addToStatements(pWrap.fieldname() + ".fromJson(row)");
+                        ojForStatement.getBody().addToStatements(pWrap.fieldname() + ".fromJsonNonCompositeOne(row)");
                     } else if (pWrap.isMany() && pWrap.isEnumeration()) {
                         ifNotNull.addToThenPart(pWrap.clearer() + "()");
                         OJForStatement ojForStatement = new OJForStatement("enumLiteral", new OJPathName("String"), pWrap.fieldname());

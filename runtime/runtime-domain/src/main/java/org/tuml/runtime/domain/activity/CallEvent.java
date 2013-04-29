@@ -91,7 +91,17 @@ public class CallEvent extends Event {
 		
 	}
 
-	@Override
+    @Override
+    public void fromJsonDataTypeAndComposite(Map<String, Object> propertyMap) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void fromJsonNonCompositeOne(Map<String, Object> propertyMap) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
 	public <E> TinkerSet<E> asSet() {
 		// TODO Auto-generated method stub
 		return null;

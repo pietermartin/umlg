@@ -233,10 +233,10 @@ public class OJClassifier extends OJClassifierGEN {
 	}
 
 	public OJAnnotatedOperation findOperation(String name) {
-		return (OJAnnotatedOperation) findOperation(name, Collections.emptyList());
+		return (OJAnnotatedOperation) findOperation(name, Collections.<OJPathName>emptyList());
 	}
 
-	public OJOperation findOperation(String name, List /* (OJPathName) */types) {
+	public OJOperation findOperation(String name, List<OJPathName> types) {
 		OJOperation result = null;
 		Iterator it = getOperations().iterator();
 		while (it.hasNext()) {

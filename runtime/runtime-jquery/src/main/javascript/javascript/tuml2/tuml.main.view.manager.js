@@ -2,14 +2,14 @@
     // register namespace
     $.extend(true, window, {
         Tuml: {
-            TumlMainViewManager: TumlMainViewManager
+            TumlMainViewManager: TumlMainViewManager,
+            TumlFakeIndex: 0
         }
     });
 
     function TumlMainViewManager(uiManager, leftMenuManager) {
 
         this.TumlMainViewManager = "1.0.0";
-
         var self = this;
         this.uiManager = uiManager;
         var oclExecuteUri;

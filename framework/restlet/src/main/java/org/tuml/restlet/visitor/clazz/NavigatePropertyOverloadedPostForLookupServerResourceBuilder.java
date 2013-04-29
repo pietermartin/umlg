@@ -188,7 +188,7 @@ public class NavigatePropertyOverloadedPostForLookupServerResourceBuilder extend
         OJIfStatement ifFakeId = new OJIfStatement("fakeIdIndex != -1");
         ifFakeId.addToThenPart("int indexOfForwardSlash = lookupUri.indexOf(\"/\", fakeIdIndex)");
         ifFakeId.addToThenPart("String fakeId = lookupUri.substring(fakeIdIndex, indexOfForwardSlash)");
-        ifFakeId.addToThenPart("long id = " + TumlRestletGenerationUtil.TumlTmpIdManager.getLast() + ".INSTANCE.get(qualifiedName + \"::\" + fakeId)");
+        ifFakeId.addToThenPart("long id = " + TumlRestletGenerationUtil.TumlTmpIdManager.getLast() + ".INSTANCE.get(fakeId)");
         ifFakeId.addToThenPart("lookupUri = lookupUri.replace(fakeId, Long.toString(id))");
         ojTryStatement.getTryPart().addToStatements(ifFakeId);
         annotatedClass.addToImports(TumlRestletGenerationUtil.TumlTmpIdManager);

@@ -267,7 +267,6 @@
         this.tumlTabViewManager = tumlTabViewManager;
         this.tumlUri = tumlUri;
         this.propertyNavigatingTo = propertyNavigatingTo;
-        this.fakeIndex = 0;
         this.active = false;
 
         var self = this;
@@ -357,7 +356,7 @@
             if (Slick.GlobalEditorLock.cancelCurrentEdit()) {
                 var newItem = {};
                 //Generate a fake id, its required for the grid to work nicely
-                newItem.id = 'fake::' + this.fakeIndex++;
+                newItem.id = 'fake::' + Tuml.TumlFakeIndex++;
                 newItem.tmpId = newItem.id;
                 newItem.qualifiedName = this.localMetaForData.qualifiedName;
                 this.dataView.addItem(newItem);
@@ -879,10 +878,6 @@
         new Slick.Controls.ColumnPicker(this.columns, this.grid, this.options);
     };
 
-//    TumlBaseGridManager.prototype.addButtons = function () {
-//        alert("addButtons must be overridden");
-//    };
-
     TumlBaseGridManager.prototype.createContextMenu = function () {
         var contextMenuUl = $('<ul />', {id: 'contextMenu' + this.localMetaForData.name, style: 'display:none;position:absolute', class: 'contextMenu'}).appendTo('body');
         $('<b />').text('Nav').appendTo(contextMenuUl);
@@ -894,7 +889,6 @@
         });
         return contextMenuUl;
     };
-
 
     TumlBaseGridManager.prototype.setupOptions = function () {
         this.options = {

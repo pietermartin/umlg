@@ -15,7 +15,7 @@ public class TumlTmpIdManager {
     private TumlTmpIdManager() {
     }
 
-    private static ThreadLocal<Map<String, Long>> qualifiedNameAndFakeIdToIdMap = new ThreadLocal<Map<String, Long>>() {
+    private static ThreadLocal<Map<String, Long>> fakeIdToIdMap = new ThreadLocal<Map<String, Long>>() {
         @Override
         protected Map<String, Long> initialValue() {
             return new HashMap<String, Long>();
@@ -34,16 +34,16 @@ public class TumlTmpIdManager {
     }
 
     public Long get(String fakeId) {
-        return qualifiedNameAndFakeIdToIdMap.get().get(fakeId);
+        return fakeIdToIdMap.get().get(fakeId);
     }
 
-    public void put(String qualifiedName, String fakeId, long id) {
-        qualifiedNameAndFakeIdToIdMap.get().put(qualifiedName + "::" + fakeId, id);
+    public void put(String fakeId, long id) {
+        fakeIdToIdMap.get().put(fakeId, id);
         idToFakeIdMap.get().put(id, fakeId);
     }
 
     public static void remove() {
-        qualifiedNameAndFakeIdToIdMap.remove();
+        fakeIdToIdMap.remove();
         idToFakeIdMap.remove();
     }
 }
