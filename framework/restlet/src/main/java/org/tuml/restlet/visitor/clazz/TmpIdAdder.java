@@ -51,7 +51,7 @@ public class TmpIdAdder extends BaseVisitor implements Visitor<Class> {
     }
 
     private void addTmpIdToFromJson(OJAnnotatedClass annotatedClass) {
-        OJAnnotatedOperation fromJson = annotatedClass.findOperation("fromJson", new OJPathName("java.util.Map"));
+        OJAnnotatedOperation fromJson = annotatedClass.findOperation("fromJsonDataTypeAndComposite", new OJPathName("java.util.Map"));
         OJIfStatement  ifStatement = new OJIfStatement("propertyMap.containsKey(\"tmpId\")");
         OJIfStatement ifStatement1 = new OJIfStatement("propertyMap.get(\"tmpId\") != null");
         ifStatement.addToThenPart(ifStatement1);

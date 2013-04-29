@@ -37,7 +37,7 @@ public class AuditToJsonCreator extends BaseVisitor implements Visitor<Class> {
 			toJson.getBody().addToStatements("StringBuilder sb = new StringBuilder(result)");
 		}
 		toJson.getBody().addToStatements("sb.append(\"{\")");
-		Set<Property> propertiesForToJson = TumlClassOperations.getPrimitiveOrEnumOrComponentsProperties(clazz);
+		Set<Property> propertiesForToJson = TumlClassOperations.getPrimitiveOrEnumOrComponentsExcludeOneProperties(clazz);
 		int count = 0;
 		for (Property p : propertiesForToJson) {
 			count++;

@@ -65,14 +65,44 @@ public class TumlClassOperations extends ClassOperations {
         return result;
     }
 
-    public static Set<Property> getPrimitiveOrEnumOrComponentsProperties(org.eclipse.uml2.uml.Class clazz) {
+//    public static Set<Property> getPrimitiveOrEnumOrComponentsProperties(org.eclipse.uml2.uml.Class clazz) {
+//        Set<Property> result = new HashSet<Property>();
+//        for (Property p : getAllOwnedProperties(clazz)) {
+//            PropertyWrapper pWrap = new PropertyWrapper(p);
+//            if ((pWrap.isOne() && !pWrap.isDerived() && !pWrap.isQualifier())
+//                    || (!pWrap.isDerived() && pWrap.isMany() && (pWrap.isPrimitive() || pWrap.isEnumeration())) ||
+//                    pWrap.isComponent()) {
+//                result.add(p);
+//            }
+//        }
+//        return result;
+//    }
+
+    public static Set<Property> getPrimitiveOrEnumOrComponentsExcludeOneProperties(org.eclipse.uml2.uml.Class clazz) {
         Set<Property> result = new HashSet<Property>();
         for (Property p : getAllOwnedProperties(clazz)) {
             PropertyWrapper pWrap = new PropertyWrapper(p);
-            if ((pWrap.isOne() && !pWrap.isDerived() && !pWrap.isQualifier())
-                    || (!pWrap.isDerived() && pWrap.isMany() && (pWrap.isPrimitive() || pWrap.isEnumeration())) ||
-                    pWrap.isComponent()) {
-                result.add(p);
+            if (!pWrap.isDerived() && !pWrap.isQualifier()) {
+                if (pWrap.isDataType() || pWrap.isComponent()) {
+                    result.add(p);
+                }
+            }
+        }
+        return result;
+    }
+
+    public static Set<Property> getOneProperties(org.eclipse.uml2.uml.Class clazz) {
+        Set<Property> result = new HashSet<Property>();
+        for (Property p : getAllOwnedProperties(clazz)) {
+            PropertyWrapper pWrap = new PropertyWrapper(p);
+            if (!pWrap.isDerived() && !pWrap.isQualifier()) {
+                if (!pWrap.isDataType() && (pWrap.isComponent() || pWrap.isOne())) {
+                    //Skip composite owner
+                    if (pWrap.isOne() && pWrap.getOtherEnd() != null && pWrap.getOtherEnd().isComposite()) {
+                        continue;
+                    }
+                    result.add(p);
+                }
             }
         }
         return result;
@@ -358,7 +388,7 @@ public class TumlClassOperations extends ClassOperations {
         Set<Classifier> result = new HashSet<Classifier>();
         getConcreteImplementations(result, clazz);
         if (clazz instanceof Interface) {
-            result.addAll(getConcreteRealization((Interface)clazz));
+            result.addAll(getConcreteRealization((Interface) clazz));
         }
         return result;
     }
