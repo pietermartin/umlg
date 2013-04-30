@@ -107,7 +107,13 @@ public class RestletFromJsonCreator extends BaseVisitor implements Visitor<Class
                         OJIfStatement ifSetToNull = new OJIfStatement(field.getName() + ".isEmpty() || " + field.getName() + ".get(\"id\") == null",
                                 pWrap.setter() + "(null)");
 
-                        ifSetToNull.addToElsePart("Long id = " + TumlRestletGenerationUtil.TumlTmpIdManager.getLast() + ".INSTANCE.get((String)" + field.getName() + ".get(\"id\"))");
+                        ifSetToNull.addToElsePart("Long id");
+                        ifSetToNull.addToElsePart("Object idFromMap = " + field.getName() + ".get(\"id\")");
+                        OJIfStatement ifIdLong = new OJIfStatement("idFromMap instanceof Number");
+                        ifIdLong.addToThenPart("id = ((Number)idFromMap).longValue()");
+                        ifIdLong.addToElsePart("id = " + TumlRestletGenerationUtil.TumlTmpIdManager.getLast() + ".INSTANCE.get((String)idFromMap)");
+                        ifSetToNull.addToElsePart(ifIdLong);
+
                         annotatedClass.addToImports(TumlRestletGenerationUtil.TumlTmpIdManager);
 
                         ifSetToNull.addToElsePart(pWrap.setter() + "((" + pWrap.javaBaseTypePath().getLast() + ")" + TinkerGenerationUtil.graphDbAccess + ".instantiateClassifier(id))");

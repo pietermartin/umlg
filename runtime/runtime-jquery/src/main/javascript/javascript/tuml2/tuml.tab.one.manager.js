@@ -192,13 +192,15 @@
     TumlBaseTabOneManager.prototype.fieldsToObject = function () {
         var dataToSend = {};
         dataToSend.qualifiedName = this.metaForData.qualifiedName;
-//        if (this.isForCreation) {
-//            dataToSend.tmpId = 'fake:0';
-//        }
         for (var i = 0; i < this.metaForData.to.properties.length; i++) {
             var property = this.metaForData.to.properties[i];
             if (property.name === 'id') {
-                dataToSend.id = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').val();
+                var id = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').val();
+                if (id.indexOf('fake') === -1) {
+                    dataToSend.id = parseInt(id);
+                } else {
+                    dataToSend.id = id;
+                }
                 dataToSend.tmpId = dataToSend.id;
             } else if (property.readOnly) {
                 //Do nothing
@@ -253,7 +255,12 @@
                     var options = $select.children();
                     for (var j = 0; j < options.length; j++) {
                         if (options[j].selected) {
-                            dataToSend[property.name] = {id: $select.val(), displayName: options[j].label};
+                            var optionId = $select.val();
+                            if (optionId.indexOf('fake') === -1) {
+                                dataToSend[property.name] = {id: parseInt(optionId), displayName: options[j].label};
+                            } else {
+                                dataToSend[property.name] = {id: optionId, displayName: options[j].label};
+                            }
                             break;
                         }
                     }
