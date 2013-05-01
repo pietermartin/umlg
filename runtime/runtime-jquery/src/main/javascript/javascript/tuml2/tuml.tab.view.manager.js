@@ -232,6 +232,9 @@
                         result[i].data.tmpId = result[i].data.id;
                         tumlOneComponentTabViewManager.createTab(result[i], true);
                         self.addNewRow();
+                        if (tumlOneComponentTabViewManager.tumlTabOneManager.containsOneToOne) {
+                            tumlOneComponentTabViewManager.parentTabContainerManager.addToOneToOneIndex(result[i].data.id, {});
+                        }
                     } else {
                         tumlOneComponentTabViewManager.createTab(result[i], false);
                     }
@@ -281,10 +284,6 @@
     }
 
     TumlBaseTabViewManager.prototype.updateGridAfterRollback = function (item) {
-        //Need to update the id's to the tmpId as the id no longer exist on a rolled back transaction
-        //Go through all the properties, for each composite property set the id = tmpId
-        this.setComponentIdToTmpId(item);
-
         //Check if component tab is open for this particular item
         if (this.tumlTabViewManagers.length > 0) {
 
@@ -308,23 +307,6 @@
 
                     tumlTabViewManager.endUpdate(true);
 
-                }
-            }
-        }
-    }
-
-    TumlBaseTabViewManager.prototype.setComponentIdToTmpId = function (item) {
-        //Need to update the id's to the tmpId as the id no longer exist on a rolled back transaction
-        //Go through all the properties, for each composite property set the id = tmpId
-        item.id = item.tmpId;
-        for (var p in item) {
-            if (item[p] !== undefined && item[p] !== null) {
-                if (Array.isArray(item[p])) {
-                    for (var i = 0; i < item[p].length; i++) {
-                        this.setComponentIdToTmpId(item[p][i]);
-                    }
-                } else if (typeof item[p] === 'object') {
-                    this.setComponentIdToTmpId(item[p]);
                 }
             }
         }
@@ -499,6 +481,50 @@
 
     TumlTabManyViewManager.prototype = new Tuml.TumlBaseTabViewManager();
 
+    TumlTabManyViewManager.prototype.updateOne = function(fakeId, fieldName, one, indexForFakeId) {
+        var item = this.tumlTabGridManager.dataView.getItemById(indexForFakeId.id);
+        this.updateOneRecursive(item, fakeId, fieldName, one, indexForFakeId);
+    }
+
+    TumlTabManyViewManager.prototype.updateOneRecursive = function(item, fakeId, fieldName, one, indexForFakeId) {
+
+        var nextComponent = item[indexForFakeId.field];
+        if (Array.isArray(nextComponent)) {
+
+            for (var i = 0; i < nextComponent.length; i++) {
+
+                var nextItem = nextComponent[i];
+                if (nextItem.id === fakeId) {
+                    nextItem[fieldName].id = one.id;
+                    nextItem[fieldName].displayName = one.name;
+                    console.log('set one to one to in array ' + nextItem[fieldName].id + ' ' + nextItem[fieldName].displayName);
+                } else {
+                   this.updateOneRecursive(nextItem, fakeId, fieldName, one, indexForFakeId.next);
+                }
+
+            }
+
+        } else if (typeof nextComponent === 'object') {
+
+            var nextItem = nextComponent;
+            if (nextItem.id === fakeId) {
+                nextItem[fieldName].id = one.id;
+                nextItem[fieldName].displayName = one.name;
+                console.log('set one to one to from one ' + nextItem[fieldName].id + ' ' + nextItem[fieldName].displayName);
+            } else {
+                this.updateOneRecursive(nextItem, fakeId, fieldName, one, indexForFakeId.next);
+            }
+
+        }
+    }
+
+    TumlTabManyViewManager.prototype.addToOneToOneIndex = function(fakeId, item) {
+        var parentItem = this.tumlTabGridManager.dataView.getItem(this.componentCell.row);
+        var field = this.tumlTabGridManager.columns[this.componentCell.cell].name;
+        var newObject = {id: parentItem.id, field: field, next: item};
+        this.parentTabContainerManager.addToOneToOneIndex(fakeId, newObject);
+    }
+
     TumlTabManyViewManager.prototype.deactivateGrids = function () {
         this.tumlTabGridManager.active = false;
         Tuml.TumlTabContainerManager.prototype.deactivateGrids.call(this);
@@ -660,19 +686,6 @@
     }
 
     TumlTabManyComponentViewManager.prototype = new Tuml.TumlTabManyViewManager();
-
-    TumlTabManyComponentViewManager.prototype.createTab = function (result, forCreation) {
-        if (this.oneManyOrQuery.forManyComponent) {
-            this.tabId = this.result.meta.to.name + "ManyComponent";
-            this.tabTitleName = this.result.meta.to.name;
-        } else {
-            alert('this should not happen!');
-        }
-//        $('#slickGrid' + this.parentTabContainerManager.tabId).hide();
-        TumlBaseTabViewManager.prototype.createTab.call(this, result, forCreation);
-        this.parentTabContainer.tabs("option", "active", this.parentTabContainerManager.tumlTabViewManagers.length - 1);
-        this.createGrid(result);
-    }
 
     TumlTabManyComponentViewManager.prototype.closeTab = function () {
         //Save the many component's data into the parent tabs row's cell

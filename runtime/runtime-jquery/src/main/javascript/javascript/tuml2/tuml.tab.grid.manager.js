@@ -67,8 +67,6 @@
             TumlBaseGridManager.prototype.instantiateGrid.call(this);
         };
 
-//        this.addButtons = function () {
-//        }
     }
 
     TumlQueryGridManager.prototype = new TumlBaseGridManager;
@@ -116,34 +114,6 @@
                 {id: "delete", name: "delete", field: "delete", sortable: false,
                     formatter: TumlSlick.Formatters.TumlDelete }
             );
-        };
-
-        this.refresh = function (result, gridDiv) {
-            this.dataBeforeEdit = $.extend(true, [], result.data);
-
-//            this.metaForData = result.meta.to;
-//            var tabDiv = $('#' + this.metaForData.name + "ManyComponent");
-
-            this.metaForData = result.meta.to;
-            var tabDiv = gridDiv;
-            tabDiv.children().remove();
-
-            $('<div id="serverErrorMsg" />').appendTo(tabDiv);
-
-            var windowHeight = $('.ui-layout-center').height() - 160;
-            $('<div />', {id: 'myGridManyComponent' + this.metaForData.name, style: 'width:auto;height:' + windowHeight + 'px;', class: 'tumlSlickGrid'}).appendTo(tabDiv);
-            $('<div />', {id: 'pagerManyComponent' + this.metaForData.name, style: 'width:auto;height:20px;'}).appendTo(tabDiv);
-
-            $('#contextMenu' + this.metaForData.name).remove();
-            this.createGrid(result.data/*, this.metaForData*/, tumlUri);
-
-        };
-
-        this.instantiateGrid = function () {
-            this.grid = new Slick.Grid("#myGridManyComponent" + this.localMetaForData.name, this.dataView, this.columns, this.options);
-            this.pager = new Slick.Controls.Pager(this.dataView, this.grid, $("#pagerManyComponent" + this.localMetaForData.name));
-            $("<div id='grid-buttonManyComponent" + this.localMetaForData.name + "' class='grid-button'/>").appendTo('#pagerManyComponent' + this.localMetaForData.name + ' .slick-pager-settings');
-            TumlBaseGridManager.prototype.instantiateGrid.call(this);
         };
 
     }
@@ -243,13 +213,6 @@
             );
         };
 
-        this.instantiateGrid = function () {
-            this.grid = new Slick.Grid("#myGrid" + this.localMetaForData.name, this.dataView, this.columns, this.options);
-            this.pager = new Slick.Controls.Pager(this.dataView, this.grid, $("#pager" + this.localMetaForData.name));
-            $("<div id='grid-button" + this.localMetaForData.name + "' class='grid-button'/>").appendTo('#pager' + this.localMetaForData.name + ' .slick-pager-settings');
-            TumlBaseGridManager.prototype.instantiateGrid.call(this);
-        };
-
     }
 
     TumlTabGridManager.prototype = new TumlBaseGridManager;
@@ -272,6 +235,18 @@
         var self = this;
         this.columns = [];
 
+        this.containsOneToOne = false;
+
+        this.calculateContainsOne = function() {
+            for (var i = 0; i < this.metaForData.properties.length; i++) {
+                var property = this.metaForData.properties[i];
+                if (property.oneToOne && !property.onePrimitive) {
+                    this.containsOneToOne = true;
+                    break;
+                }
+            }
+        }
+
         this.cancel = function (data) {
             if (Slick.GlobalEditorLock.commitCurrentEdit()) {
                 this.grid.resetActiveCell();
@@ -281,23 +256,6 @@
                 this.grid.render();
             }
         }
-
-        this.refresh = function (result, gridDiv) {
-
-            this.metaForData = result.meta.to;
-            var tabDiv = gridDiv;
-            tabDiv.children().remove();
-
-            $('<div id="serverErrorMsg" />').appendTo(tabDiv);
-
-            var windowHeight = $('.ui-layout-center').height() - 135;
-            $('<div />', {id: 'myGrid' + this.metaForData.name, style: 'width:auto;height:' + windowHeight + 'px;', class: 'tumlSlickGrid'}).appendTo(tabDiv);
-            $('<div />', {id: 'pager' + this.metaForData.name, style: 'width:auto;height:20px;'}).appendTo(tabDiv);
-
-            $('#contextMenu' + this.metaForData.name).remove();
-            this.createGrid(result.data, tumlUri);
-
-        };
 
         this.validateNewItems = function (newItems) {
             var validationResults = [];
@@ -360,8 +318,29 @@
                 newItem.tmpId = newItem.id;
                 newItem.qualifiedName = this.localMetaForData.qualifiedName;
                 this.dataView.addItem(newItem);
+                this.tumlTabViewManager.addNewRow(event);
+                if (this.containsOneToOne) {
+                    this.tumlTabViewManager.parentTabContainerManager.addToOneToOneIndex(newItem.id, {});
+                }
             }
-            this.tumlTabViewManager.addNewRow(event);
+        }
+
+        this.updateDataModel = function() {
+            if (this.containsOneToOne) {
+                var newItems = this.dataView.getNewItems();
+                for (var i = 0; i < newItems.length; i++) {
+                    var data = newItems[i];
+
+                    for (var j = 0; j < this.metaForData.properties.length; j++) {
+                        var property = this.metaForData.properties[j];
+                        if (property.oneToOne && !property.composite && !property.inverseComposite && !property.onePrimitive && data[property.name] !== undefined && data[property.name] !== null && data[property.name].id !== undefined) {
+                            this.tumlTabViewManager.updateDataModel(data[property.name].previousId, property.inverseName, {});
+                            this.tumlTabViewManager.updateDataModel(data[property.name].id, property.inverseName, data);
+                        }
+                    }
+
+                }
+            }
         }
 
         this.handleDeleteRow = function (row, data) {
@@ -773,31 +752,26 @@
             self.grid.render();
         }
 
-        this.removeElementsAlreadyInGrid = function (items, itemsToAdd) {
-            var elementsToRemoveIndex = [];
-            for (var i = 0; i < items.length; i++) {
-                var newItem = items[i];
-                elementsToRemoveIndex.push(newItem.id);
-            }
-            function needToRemove(element, index, array) {
-                return (elementsToRemoveIndex.indexOf(element.id) == -1);
-            }
-
-            return itemsToAdd.filter(needToRemove);
-        };
-
-        function s4() {
-            return Math.floor((1 + Math.random()) * 0x10000)
-                .toString(16)
-                .substring(1);
-        };
-
-        function guid() {
-            return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-                s4() + '-' + s4() + s4() + s4();
-        }
-
     }
+
+    TumlBaseGridManager.prototype.refresh = function (result, gridDiv) {
+
+        this.metaForData = result.meta.to;
+        this.calculateContainsOne();
+
+        var tabDiv = gridDiv;
+        tabDiv.children().remove();
+
+        $('<div id="serverErrorMsg" />').appendTo(tabDiv);
+
+        var windowHeight = $('.ui-layout-center').height() - 135;
+        $('<div />', {id: 'myGrid' + this.metaForData.name, style: 'width:auto;height:' + windowHeight + 'px;', class: 'tumlSlickGrid'}).appendTo(tabDiv);
+        $('<div />', {id: 'pager' + this.metaForData.name, style: 'width:auto;height:20px;'}).appendTo(tabDiv);
+
+        $('#contextMenu' + this.metaForData.name).remove();
+        this.createGrid(result.data, this.tumlUri);
+
+    };
 
     TumlBaseGridManager.prototype.setupColumnFormatter = function () {
         var self = this;
@@ -872,6 +846,11 @@
     };
 
     TumlBaseGridManager.prototype.instantiateGrid = function () {
+
+        this.grid = new Slick.Grid("#myGrid" + this.localMetaForData.name, this.dataView, this.columns, this.options);
+        this.pager = new Slick.Controls.Pager(this.dataView, this.grid, $("#pager" + this.localMetaForData.name));
+        $("<div id='grid-button" + this.localMetaForData.name + "' class='grid-button'/>").appendTo('#pager' + this.localMetaForData.name + ' .slick-pager-settings');
+
         //Add in a property on the grid to tell if a many editor is open
         this.grid['manyEditorOpen'] = false;
         this.grid.setSelectionModel(new Slick.RowSelectionModel());

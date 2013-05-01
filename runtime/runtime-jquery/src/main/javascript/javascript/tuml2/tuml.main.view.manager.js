@@ -3,9 +3,29 @@
     $.extend(true, window, {
         Tuml: {
             TumlMainViewManager: TumlMainViewManager,
-            TumlFakeIndex: 0
+            TumlFakeIndex: 0,
+            GlobalOneToOneIndex: GlobalOneToOneIndex
         }
     });
+
+    function GlobalOneToOneIndex() {
+
+        var index = {};
+
+        this.addToOneToOneIndex = function (fakeId, item) {
+            item.marker = 'pietie' + fakeId;
+            index[fakeId] = item;
+        }
+
+        this.getIndex = function (fakeId) {
+
+            if (index[fakeId] !== undefined && index[fakeId] !== null) {
+                return index[fakeId];
+            }
+            return null;
+        }
+
+    }
 
     function TumlMainViewManager(uiManager, leftMenuManager) {
 
@@ -17,7 +37,7 @@
         var classQueryTumlUri;
         var contextVertexId;
         var contextChanged = true;
-        var tumlUri = null;
+        this.globalOneToOneIndex = new GlobalOneToOneIndex();
 
         this.refresh = function (tumlUri, result) {
             var qualifiedName = result[0].meta.qualifiedName;
@@ -174,6 +194,11 @@
         }
 
         this.updateTabsForResultAfterRollback = function (result) {
+
+            //Need to update the id's to the tmpId as the id no longer exist on a rolled back transaction
+            //Go through all the properties, for each composite property set the id = tmpId
+            this.setComponentIdToTmpId(result);
+
             for (var i = 0; i < result.length; i++) {
 
                 var resultForTab = result[i];
@@ -443,6 +468,20 @@
         this.uiManager.refresh(tumlUri);
     }
 
+    TumlMainViewManager.prototype.addToOneToOneIndex = function (fakeId, item) {
+        this.globalOneToOneIndex.addToOneToOneIndex(fakeId, item);
+    }
+
+    TumlMainViewManager.prototype.updateDataModel = function (fakeId, fieldName, one) {
+        var indexForFakeId = this.globalOneToOneIndex.getIndex(fakeId);
+        if (indexForFakeId !== null) {
+            for (var j = 0; j < this.tumlTabViewManagers.length; j++) {
+                var tumlTabViewManager = this.tumlTabViewManagers[j];
+                tumlTabViewManager.updateOne(fakeId, fieldName, one, indexForFakeId);
+            }
+        }
+    }
+
     TumlMainViewManager.prototype.doCancel = function () {
         this.enableButtons();
         var self = this;
@@ -500,7 +539,7 @@
                 console.log("Time taken in millis for server call before update drop down = " + (endTimeBeforeUpdateGrids - startTime));
 
                 //Make sure id's are replaced with tmpId where needed
-                for (var i =0; i < result.data.length; i++) {
+                for (var i = 0; i < result.data.length; i++) {
                     var item = result.data[i];
                     if (item.tmpId !== undefined && item.tmpId !== null) {
                         item.id = item.tmpId;

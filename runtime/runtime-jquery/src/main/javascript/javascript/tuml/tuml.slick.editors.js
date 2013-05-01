@@ -1048,7 +1048,7 @@
             var options = select.children();
             for (var i = 0; i < options.length; i++) {
                 if (options[i].selected) {
-                    return {id: parseInt(select.val()), displayName: options[i].label};
+                    return {id: parseInt(select.val()), displayName: options[i].label, previousId: currentValue.id};
                     break;
                 }
             }

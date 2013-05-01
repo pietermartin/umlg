@@ -33,6 +33,11 @@ public class RuntimePropertyImplementor {
         qualifiedName.setName("_qualifiedName");
         ojEnum.addToFields(qualifiedName);
 
+        OJField inverseName = new OJField();
+        inverseName.setType(new OJPathName("String"));
+        inverseName.setName("_inverseName");
+        ojEnum.addToFields(inverseName);
+
         OJField inverseQualifiedName = new OJField();
         inverseQualifiedName.setType(new OJPathName("String"));
         inverseQualifiedName.setName("_inverseQualifiedName");
@@ -228,7 +233,7 @@ public class RuntimePropertyImplementor {
                 }
 
                 addEnumLiteral(ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, pWrap.fieldname(), pWrap.getQualifiedName(),
-                        pWrap.getInverseQualifiedName(), pWrap.isReadOnly(), pWrap.isPrimitive(), pWrap.getDataTypeEnum(), pWrap.getValidations(),
+                        pWrap.getInverseName(), pWrap.getInverseQualifiedName(), pWrap.isReadOnly(), pWrap.isPrimitive(), pWrap.getDataTypeEnum(), pWrap.getValidations(),
                         pWrap.isEnumeration(), pWrap.isManyToOne(), pWrap.isMany(), pWrap.isControllingSide(), pWrap.isComposite(), pWrap.isInverseComposite(),
                         pWrap.isOneToOne(), pWrap.isOneToMany(), pWrap.isManyToMany(), pWrap.getUpper(), pWrap.getLower(), inverseUpper, pWrap.isQualified(),
                         pWrap.isInverseQualified(), pWrap.isOrdered(), pWrap.isInverseOrdered(), pWrap.isUnique(), pWrap.isInverseUnique(),
@@ -238,7 +243,7 @@ public class RuntimePropertyImplementor {
 
         if (!hasCompositeOwner/* && !(className instanceof Model) */) {
             // Add in fake property to root
-            addEnumLiteral(ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, modelName, modelName, "inverseOf" + modelName, false, false, null,
+            addEnumLiteral(ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, modelName, modelName, "inverseOf" + modelName, "inverseOf" + modelName, false, false, null,
                     Collections.<Validation>emptyList(), false, false, false, true, false, true, true, false, false, -1, 0, 1, false, false, false, false, false, false,
                     "root" + className.getName());
         }
@@ -253,8 +258,7 @@ public class RuntimePropertyImplementor {
     /**
      * Very important, the order of adding the attribut values to the literal must be the same as the order the fields were created ass that is the order of the constructor
      */
-    public static OJEnumLiteral addEnumLiteral(OJEnum ojEnum, OJAnnotatedOperation fromLabel, OJAnnotatedOperation fromQualifiedName,
-                                               OJAnnotatedOperation fromInverseQualifiedName, String fieldName, String qualifiedName, String inverseQualifiedName, boolean isReadOnly, boolean isPrimitive,
+    public static OJEnumLiteral addEnumLiteral(OJEnum ojEnum, OJAnnotatedOperation fromLabel, OJAnnotatedOperation fromQualifiedName,                                                OJAnnotatedOperation fromInverseQualifiedName, String fieldName, String qualifiedName, String inverseName, String inverseQualifiedName, boolean isReadOnly, boolean isPrimitive,
                                                DataTypeEnum dataTypeEnum, List<Validation> validations, boolean isEnumeration, boolean isManyToOne, boolean isMany, boolean isControllingSide,
                                                boolean isComposite, boolean isInverseComposite, boolean isOneToOne, boolean isOneToMany, boolean isManyToMany, int getUpper, int getLower, int getInverseUpper,
                                                boolean isQualified, boolean isInverseQualified, boolean isOrdered, boolean isInverseOrdered, boolean isUnique, boolean isInverseUnique, String edgeName) {
@@ -280,6 +284,12 @@ public class RuntimePropertyImplementor {
         propertyQualifiedNameField.setType(new OJPathName("String"));
         propertyQualifiedNameField.setInitExp("\"" + qualifiedName + "\"");
         ojLiteral.addToAttributeValues(propertyQualifiedNameField);
+
+        OJField propertyInverseNameField = new OJField();
+        propertyInverseNameField.setName("inverseName");
+        propertyInverseNameField.setType(new OJPathName("String"));
+        propertyInverseNameField.setInitExp("\"" + inverseName + "\"");
+        ojLiteral.addToAttributeValues(propertyInverseNameField);
 
         OJField propertyInverseQualifiedNameField = new OJField();
         propertyInverseQualifiedNameField.setName("inverseQualifiedName");
@@ -487,6 +497,10 @@ public class RuntimePropertyImplementor {
 
         sb.append("\\\"qualifiedName\\\": \\");
         sb.append(propertyQualifiedNameField.getInitExp().subSequence(0, propertyQualifiedNameField.getInitExp().length() - 1));
+        sb.append("\\\", ");
+
+        sb.append("\\\"inverseName\\\": \\");
+        sb.append(propertyInverseNameField.getInitExp().subSequence(0, propertyInverseNameField.getInitExp().length() - 1));
         sb.append("\\\", ");
 
         sb.append("\\\"inverseQualifiedName\\\": \\");

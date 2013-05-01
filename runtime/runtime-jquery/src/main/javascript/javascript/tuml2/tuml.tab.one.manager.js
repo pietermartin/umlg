@@ -169,6 +169,27 @@
             }
         }
 
+        this.calculateContainsOne = function() {
+            for (var i = 0; i < this.metaForData.to.properties.length; i++) {
+                var property = this.metaForData.to.properties[i];
+                if (property.oneToOne && !property.onePrimitive) {
+                    this.containsOneToOne = true;
+                    break;
+                }
+            }
+        }
+
+        this.updateDataModel = function(data) {
+            //update the global one to one index for every one
+            for (var i = 0; i < this.metaForData.to.properties.length; i++) {
+                var property = this.metaForData.to.properties[i];
+                if (data[property.name] !== undefined && data[property.name] !== null && property.oneToOne && !property.inverseComposite && !property.onePrimitive) {
+                    this.tumlTabViewManager.updateDataModel(data[property.name].id, property.inverseName, data);
+                }
+            }
+        }
+
+
         //Public api
         $.extend(this, {
             "TumlTabOneManagerVersion": "1.0.0",
@@ -266,11 +287,9 @@
                     }
                 }
             }
-        }
-        ;
+        };
         return dataToSend;
     }
-
 
     TumlBaseTabOneManager.prototype.getDiv = function () {
         console.log('TumlBaseTabOneManager.prototype.getDiv must be overriden');
@@ -281,7 +300,9 @@
         this.data = data;
         this.metaForData = metaForData;
         this.qualifiedName = qualifiedName;
-        this.isForCreation = isForCreation;
+
+        this.calculateContainsOne();
+
         //Clear all elements
         var tabDiv = this.getDiv();
         tabDiv.children().remove();

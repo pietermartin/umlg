@@ -36,8 +36,20 @@ public class AddIdLiteralsToRuntimeEnum extends BaseVisitor implements Visitor<C
 		OJAnnotatedOperation fromLabel = ojEnum.findOperation("fromLabel", new OJPathName("String"));
 		OJAnnotatedOperation fromQualifiedName = ojEnum.findOperation("fromQualifiedName", new OJPathName("String"));
 		OJAnnotatedOperation fromInverseQualifiedName = ojEnum.findOperation("fromInverseQualifiedName", new OJPathName("String"));
-		OJEnumLiteral literal = RuntimePropertyImplementor.addEnumLiteral(ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, fieldName, "not_applicable", "inverseOf::not_applicable", true, true, null,
-				Collections.<Validation> emptyList(), false, false, false, false, false, false, true, false, false, 1, 1, 1, false, false, false, false, false, true, "");
+		OJEnumLiteral literal = RuntimePropertyImplementor.addEnumLiteral(
+                ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, fieldName, "not_applicable",
+                "inverseOf::not_applicable", "inverseOf::not_applicable", true, true, null, Collections.<Validation> emptyList(), false, true,
+                false, false, false, false, true, false, false,
+                1, 1, 1, false, false, false, false,
+                false, true, ""
+        );
+
+
+//        OJEnum ojEnum, OJAnnotatedOperation fromLabel, OJAnnotatedOperation fromQualifiedName, OJAnnotatedOperation fromInverseQualifiedName, String fieldName, String qualifiedName,
+//                String inverseQualifiedName, boolean isReadOnly, boolean isPrimitive, DataTypeEnum dataTypeEnum, List<Validation> validations, boolean isEnumeration, boolean isManyToOne,
+//        boolean isMany, boolean isControllingSide, boolean isComposite, boolean isInverseComposite, boolean isOneToOne, boolean isOneToMany, boolean isManyToMany,
+//        int getUpper, int getLower, int getInverseUpper, boolean isQualified, boolean isInverseQualified, boolean isOrdered, boolean isInverseOrdered,
+//        boolean isUnique, boolean isInverseUnique, String edgeName
 	}
 	
 }

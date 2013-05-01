@@ -154,6 +154,10 @@
 
     }
 
+    TumlTabContainerManager.prototype.updateDataModel = function(fakeId, fieldName, one) {
+        this.parentTabContainerManager.updateDataModel(fakeId, fieldName, one);
+    }
+
     TumlTabContainerManager.prototype.doCancel = function () {
         //Save the child's backedup data into the component's cell
         if (this.tumlTabViewManagers.length > 0) {
@@ -191,6 +195,7 @@
         this.parentTabContainerManager.enableButtons();
     }
 
+    //This only gets called by component sub tabs
     TumlTabContainerManager.prototype.saveTabs = function () {
         if (this.validateMultiplicity()) {
             //Save the child grids into the component's cell
@@ -200,7 +205,8 @@
                     for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
                         var tumlTabViewManager = this.tumlTabViewManagers[i];
                         if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager && tumlTabViewManager.tumlTabGridManager.dataView.getItems().length > 0) {
-                            data.push.apply(data, tumlTabViewManager.tumlTabGridManager.dataView.getItems());
+                            data.push.apply(data, tumlTabViewManager.getTabData());
+                            tumlTabViewManager.tumlTabGridManager.updateDataModel();
                         }
                     }
                     this.setCellValue(data);
@@ -218,7 +224,10 @@
                             firstTumlTabViewManager = tumlTabViewManager;
                         }
                     }
-                    this.setCellValue(tumlTabViewManager.tumlTabOneManager.fieldsToObject());
+                    var data = tumlTabViewManager.tumlTabOneManager.fieldsToObject();
+                    this.setCellValue(data);
+                    tumlTabViewManager.tumlTabOneManager.updateDataModel(data);
+
                 }
             }
             this.destroyTabContainer();
@@ -227,6 +236,27 @@
 
             //enable the save button
             this.parentTabContainerManager.enableButtons();
+        }
+    }
+
+    TumlTabContainerManager.prototype.setComponentIdToTmpId = function (item) {
+        //Need to update the id's to the tmpId as the id no longer exist on a rolled back transaction
+        //Go through all the properties, for each composite property set the id = tmpId
+        item.id = item.tmpId;
+        for (var p in item) {
+            if (item[p] !== undefined && item[p] !== null) {
+                if (Array.isArray(item[p])) {
+
+                    for (var i = 0; i < item[p].length; i++) {
+                        this.setComponentIdToTmpId(item[p][i]);
+                    }
+
+                } else if (typeof item[p] === 'object') {
+
+                    this.setComponentIdToTmpId(item[p]);
+
+                }
+            }
         }
     }
 
