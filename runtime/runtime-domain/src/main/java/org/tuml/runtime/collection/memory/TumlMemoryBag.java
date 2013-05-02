@@ -9,7 +9,6 @@ import org.tuml.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.tuml.runtime.collection.ocl.OclStdLibBag;
 import org.tuml.runtime.collection.ocl.OclStdLibBagImpl;
 
-import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Set;
 
@@ -37,7 +36,7 @@ public class TumlMemoryBag <E> extends TumlMemoryCollection<E> implements Tinker
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public int count(@Nullable Object element){
+	public int count(Object element){
 		return oclStdLibBag.count((E)element);
 	}
 	

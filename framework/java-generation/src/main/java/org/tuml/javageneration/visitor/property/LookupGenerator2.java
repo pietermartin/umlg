@@ -35,14 +35,24 @@ public class LookupGenerator2 extends BaseVisitor implements Visitor<Property> {
             OJBlock ojBlock2 = new OJBlock();
             lookUp.getBody().addToStatements(ojBlock2);
 
-            String pathName = "? extends " + TumlClassOperations.getPathName(propertyWrapper.getType()).getLast();
             lookUp.setReturnType("Set<" + propertyWrapper.javaBaseTypePath().getLast() + ">");
             OJField result = new OJField("result", "Set<" + propertyWrapper.javaBaseTypePath().getLast() + ">");
             result.setInitExp("new HashSet<" + propertyWrapper.javaBaseTypePath().getLast() + ">()");
             ojClass.addToImports("java.util.HashSet");
             ojClass.addToImports("java.util.Set");
             ojBlock1.addToLocals(result);
-            ojBlock1.addToStatements("result.addAll(" + TumlClassOperations.getPathName(propertyWrapper.getType()).getLast() + ".allInstances())");
+
+            if (propertyWrapper.isOneToOne()) {
+
+                PropertyWrapper otherEnd = new PropertyWrapper(propertyWrapper.getOtherEnd());
+                ojBlock1.addToStatements("Filter<"+propertyWrapper.javaBaseTypePath().getLast()+"> filter = new Filter<"+propertyWrapper.javaBaseTypePath().getLast()+">() {\n    @Override\n    public boolean filter("+propertyWrapper.javaBaseTypePath().getLast()+" entity){\n        return entity."+otherEnd.getter()+"() == null;\n    }\n}");
+
+                ojBlock1.addToStatements("result.addAll(" + TumlClassOperations.getPathName(propertyWrapper.getType()).getLast() + ".allInstances(filter))");
+
+            } else {
+                ojBlock1.addToStatements("result.addAll(" + TumlClassOperations.getPathName(propertyWrapper.getType()).getLast() + ".allInstances())");
+            }
+
 
             List<Constraint> constraints = TumlPropertyOperations.getConstraints(propertyWrapper.getProperty());
             if (!constraints.isEmpty()) {

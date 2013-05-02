@@ -1048,7 +1048,16 @@
             var options = select.children();
             for (var i = 0; i < options.length; i++) {
                 if (options[i].selected) {
-                    return {id: parseInt(select.val()), displayName: options[i].label, previousId: currentValue.id};
+
+                    var value = select.val();
+                    if (!isNaN(value)) {
+                        return {id: parseInt(value), displayName: options[i].label, previousId: currentValue.id};
+                    } else {
+
+                        return {id: select.val(), displayName: options[i].label, previousId: currentValue.id};
+
+                    }
+
                     break;
                 }
             }

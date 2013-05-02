@@ -195,10 +195,6 @@
 
         this.updateTabsForResultAfterRollback = function (result) {
 
-            //Need to update the id's to the tmpId as the id no longer exist on a rolled back transaction
-            //Go through all the properties, for each composite property set the id = tmpId
-            this.setComponentIdToTmpId(result);
-
             for (var i = 0; i < result.length; i++) {
 
                 var resultForTab = result[i];
@@ -213,6 +209,9 @@
                         //Line up he result with the correct tab
                         if (tumlTabViewManager.tabId == metaForData.name) {
                             for (var k = 0; k < resultForTab.data.length; k++) {
+                                //Need to update the id's to the tmpId as the id no longer exist on a rolled back transaction
+                                //Go through all the properties, for each composite property set the id = tmpId
+                                this.setComponentIdToTmpId(resultForTab.data[k]);
                                 tumlTabViewManager.updateGridAfterRollback(resultForTab.data[k]);
                             }
                         }

@@ -242,7 +242,9 @@
     TumlTabContainerManager.prototype.setComponentIdToTmpId = function (item) {
         //Need to update the id's to the tmpId as the id no longer exist on a rolled back transaction
         //Go through all the properties, for each composite property set the id = tmpId
-        item.id = item.tmpId;
+        if (item.tmpId !== undefined) {
+            item.id = item.tmpId;
+        }
         for (var p in item) {
             if (item[p] !== undefined && item[p] !== null) {
                 if (Array.isArray(item[p])) {

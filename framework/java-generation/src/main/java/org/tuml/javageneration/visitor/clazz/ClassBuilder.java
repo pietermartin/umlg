@@ -9,13 +9,7 @@ import org.eclipse.ocl.expressions.OCLExpression;
 import org.eclipse.uml2.uml.*;
 import org.eclipse.uml2.uml.Class;
 import org.tuml.framework.ModelLoader;
-import org.tuml.java.metamodel.OJBlock;
-import org.tuml.java.metamodel.OJConstructor;
-import org.tuml.java.metamodel.OJField;
-import org.tuml.java.metamodel.OJIfStatement;
-import org.tuml.java.metamodel.OJOperation;
-import org.tuml.java.metamodel.OJPathName;
-import org.tuml.java.metamodel.OJSimpleStatement;
+import org.tuml.java.metamodel.*;
 import org.tuml.java.metamodel.annotation.OJAnnotatedClass;
 import org.tuml.java.metamodel.annotation.OJAnnotatedOperation;
 import org.tuml.java.metamodel.annotation.OJAnnotationValue;
@@ -598,7 +592,33 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
     }
 
     private void addAllInstancesWithFilter(OJAnnotatedClass annotatedClass, Class clazz) {
-        //To change body of created methods use File | Settings | File Templates.
+        OJAnnotatedOperation allInstances = new OJAnnotatedOperation("allInstances");
+        allInstances.addToParameters(new OJParameter("filter", TinkerGenerationUtil.Filter));
+        allInstances.setStatic(true);
+        if (TumlClassOperations.getConcreteImplementations(clazz).isEmpty()) {
+            allInstances.setReturnType(TinkerGenerationUtil.tinkerSet.getCopy().addToGenerics(TumlClassOperations.getPathName(clazz)));
+        } else {
+            String pathName = "? extends " + TumlClassOperations.getPathName(clazz).getLast();
+            allInstances.setReturnType(TinkerGenerationUtil.tinkerSet.getCopy().addToGenerics(pathName));
+        }
+
+        OJField result = new OJField("result", TinkerGenerationUtil.tinkerSet.getCopy().addToGenerics(TumlClassOperations.getPathName(clazz)));
+        result.setInitExp("new " + TinkerGenerationUtil.tumlMemorySet.getCopy().addToGenerics(TumlClassOperations.getPathName(clazz)).getLast() + "()");
+        allInstances.getBody().addToLocals(result);
+        Set<Classifier> specializations = TumlClassOperations.getConcreteImplementations(clazz);
+        if (!clazz.isAbstract()) {
+            specializations.add(clazz);
+        }
+        for (Classifier c : specializations) {
+            annotatedClass.addToImports(TumlClassOperations.getPathName(c));
+            allInstances.getBody().addToStatements("result.addAll(" + TumlClassOperations.getMetaClassName(c) + ".getInstance().getAllInstances(filter))");
+            annotatedClass.addToImports(TumlClassOperations.getMetaClassPathName(c));
+        }
+
+        allInstances.getBody().addToStatements("return result");
+        annotatedClass.addToImports(TinkerGenerationUtil.tumlMemorySet);
+        annotatedClass.addToImports(TinkerGenerationUtil.Root);
+        annotatedClass.addToOperations(allInstances);
     }
 
     private void addConstraints(OJAnnotatedClass annotatedClass, Class clazz) {

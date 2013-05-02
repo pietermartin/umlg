@@ -49,6 +49,7 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
             addMetaClassGetterToRoot(clazz, metaClass);
 
             addGetAllInstances(clazz, metaClass);
+            addGetAllInstancesWithFilter(clazz, metaClass);
 
             addGetHighId(clazz, metaClass);
 
@@ -120,6 +121,36 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
 
         OJForStatement forIter = new OJForStatement("edge", TinkerGenerationUtil.edgePathName, "iter");
         forIter.getBody().addToStatements("result.add(GraphDb.getDb().<" + classPathName.getLast() + ">instantiateClassifier((Long)edge.getVertex(Direction.IN).getId()))");
+        allInstances.getBody().addToStatements(forIter);
+        allInstances.getBody().addToStatements("return result");
+
+        metaClass.addToImports(TinkerGenerationUtil.TUML_NODE);
+        metaClass.addToImports(TinkerGenerationUtil.tinkerIdUtilFactoryPathName);
+
+        metaClass.addToOperations(allInstances);
+    }
+
+    private void addGetAllInstancesWithFilter(Class clazz, OJAnnotatedClass metaClass) {
+        OJAnnotatedOperation allInstances = new OJAnnotatedOperation("getAllInstances");
+        allInstances.addToParameters(new OJParameter("filter", TinkerGenerationUtil.Filter));
+
+        TinkerGenerationUtil.addOverrideAnnotation(allInstances);
+        OJPathName classPathName = TumlClassOperations.getPathName(clazz);
+        allInstances.setReturnType(TinkerGenerationUtil.tinkerSet.getCopy().addToGenerics(classPathName));
+
+        OJField resultField = new OJField("result", TinkerGenerationUtil.tumlMemorySet.getCopy().addToGenerics(classPathName));
+        resultField.setInitExp("new " + TinkerGenerationUtil.tumlMemorySet.getCopy().addToGenerics(classPathName).getLast() + "()");
+        allInstances.getBody().addToLocals(resultField);
+        OJField iter = new OJField("iter", new OJPathName("java.lang.Iterable").addToGenerics(TinkerGenerationUtil.edgePathName));
+        iter.setInitExp("this.vertex.getEdges(Direction.OUT, TumlNode.ALLINSTANCES_EDGE_LABEL)");
+        allInstances.getBody().addToLocals(iter);
+
+        OJForStatement forIter = new OJForStatement("edge", TinkerGenerationUtil.edgePathName, "iter");
+        forIter.getBody().addToStatements(classPathName.getLast() + " instance = GraphDb.getDb().instantiateClassifier((Long)edge.getVertex(Direction.IN).getId())");
+        OJIfStatement ifFilter = new OJIfStatement("filter.filter(instance)");
+        ifFilter.addToThenPart("result.add(instance)");
+        forIter.getBody().addToStatements(ifFilter);
+
         allInstances.getBody().addToStatements(forIter);
         allInstances.getBody().addToStatements("return result");
 

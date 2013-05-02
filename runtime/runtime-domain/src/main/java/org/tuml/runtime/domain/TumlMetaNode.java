@@ -1,6 +1,7 @@
 package org.tuml.runtime.domain;
 
 import com.tinkerpop.blueprints.Vertex;
+import org.tuml.runtime.collection.Filter;
 import org.tuml.runtime.collection.TinkerSet;
 
 /**
@@ -9,6 +10,7 @@ import org.tuml.runtime.collection.TinkerSet;
  */
 public interface TumlMetaNode<T> {
     TinkerSet<T> getAllInstances();
+    TinkerSet<T> getAllInstances(Filter<T> filter);
     Vertex getVertex();
     Long getId();
     String getUid();

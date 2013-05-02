@@ -24,6 +24,7 @@ import org.tuml.javageneration.util.TumlPropertyOperations;
 import org.tuml.javageneration.visitor.BaseVisitor;
 
 //This class is being deprecated, doing lookup alla uml now, allInstances.subtract(constained elements)
+@Deprecated
 public class LookupGenerator extends BaseVisitor implements Visitor<Property> {
 
 	public LookupGenerator(Workspace workspace) {
