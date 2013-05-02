@@ -72,6 +72,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
             addEdgeToMetaNode(annotatedClass, clazz);
         }
         addAllInstances(annotatedClass, clazz);
+        addAllInstancesWithFilter(annotatedClass, clazz);
         addConstraints(annotatedClass, clazz);
     }
 
@@ -594,6 +595,10 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
         annotatedClass.addToImports(TinkerGenerationUtil.tumlMemorySet);
         annotatedClass.addToImports(TinkerGenerationUtil.Root);
         annotatedClass.addToOperations(allInstances);
+    }
+
+    private void addAllInstancesWithFilter(OJAnnotatedClass annotatedClass, Class clazz) {
+        //To change body of created methods use File | Settings | File Templates.
     }
 
     private void addConstraints(OJAnnotatedClass annotatedClass, Class clazz) {
