@@ -407,7 +407,11 @@
         }
         TumlBaseTabViewManager.prototype.createTab.call(this);
         this.parentTabContainer.tabs("option", "active", this.parentTabContainerManager.tumlTabViewManagers.length - 1);
-        this.createOne(result.data, forCreation);
+        if (forCreation) {
+            this.createOne(result.data, forCreation);
+        } else {
+            this.createOne(result.data[0], forCreation);
+        }
     }
 
     TumlTabOneViewManager.prototype.getTabData = function () {
@@ -428,14 +432,8 @@
         TumlBaseTabViewManager.prototype.init.call(this, tumlUri, result);
         if (this.oneManyOrQuery.forOneComponent) {
             this.tumlTabOneManager = new Tuml.TumlTabComponentOneManager(tumlUri, this);
-            this.tumlTabOneManager.onOneComponentSaveButtonSuccess.subscribe(function (e, args) {
-                self.onOneComponentSaveButtonSuccess.notify(args, e, self);
-            });
-            this.tumlTabOneManager.onOneComponentCloseButtonSuccess.subscribe(function (e, args) {
-                self.onOneComponentCloseButtonSuccess.notify(args, e, self);
-            });
         } else {
-            this.tumlTabOneManager = new Tuml.TumlTabOneManager(tumlUri);
+            this.tumlTabOneManager = new Tuml.TumlTabOneManager(tumlUri, this);
         }
         this.tumlTabOneManager.onClickOneComponent.subscribe(function (e, args) {
             self.onClickOneComponent.notify(args, e, self);

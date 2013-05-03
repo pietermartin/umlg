@@ -310,7 +310,7 @@
             this.tumlTabViewManager.handleLookup(lookupUri, qualifiedName, loadDataCallback);
         }
 
-        this.handleAddNewRow = function (event) {
+        this.handleAddNewRow = function () {
             if (Slick.GlobalEditorLock.cancelCurrentEdit()) {
                 var newItem = {};
                 //Generate a fake id, its required for the grid to work nicely
@@ -318,7 +318,7 @@
                 newItem.tmpId = newItem.id;
                 newItem.qualifiedName = this.localMetaForData.qualifiedName;
                 this.dataView.addItem(newItem);
-                this.tumlTabViewManager.addNewRow(event);
+                this.tumlTabViewManager.addNewRow();
                 if (this.containsOneToOne) {
                     this.tumlTabViewManager.parentTabContainerManager.addToOneToOneIndex(newItem.id, {});
                 }
@@ -433,7 +433,7 @@
 
                     var column = self.grid.getColumns()[args.cell];
 
-                    if (isClickOnNewRow(args.row, args.cell, self.dataView.getItem(args.row))) {
+                    if (isClickOnNewRow(args.row)) {
                         //Add new row
                     } else if (column.name == 'id') {
                         e.stopImmediatePropagation();
@@ -581,8 +581,13 @@
             });
 
             this.grid.onActiveCellChanged.subscribe(function (e, args) {
-                if (isClickOnNewRow(args.row, args.cell, self.dataView.getItem(args.row))) {
-                    self.handleAddNewRow(e);
+                if (isClickOnNewRow(args.row)) {
+                    //If click on select one then the editor will call handleNewRow
+                    var column = self.grid.getColumns()[args.cell];
+                    var editor = selectEditor(column.options.property);
+                    if (editor !== Tuml.Slick.Editors.SelectOneToOneCellEditor) {
+                        self.handleAddNewRow();
+                    }
                 }
             });
 
@@ -608,7 +613,7 @@
                 return true;
             };
 
-            function isClickOnNewRow(row, cell, item) {
+            function isClickOnNewRow(row) {
                 if (row >= self.dataView.getItems().length) {
                     return true;
                 } else {

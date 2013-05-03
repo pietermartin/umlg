@@ -34,6 +34,10 @@
 
     <script src="/${app.rootUrl}/javascript/layout/jquery.layout-latest.js"></script>
 
+    <!--<script src="/${app.rootUrl}/javascript/super-theme-switcher/jquery.themeswitcher.js"></script>-->
+
+    <script src="/${app.rootUrl}/javascript/slickgrid/lib/jquery.event.drag-2.2.js"></script>
+    <script src="/${app.rootUrl}/javascript/slickgrid/lib/jquery.event.drop-2.2.js"></script>
     <script src="/${app.rootUrl}/javascript/slickgrid/slick.core.js"></script>
     <script src="/${app.rootUrl}/javascript/slickgrid/slick.grid.js"></script>
     <script src="/${app.rootUrl}/javascript/slickgrid/slick.formatters.js"></script>
@@ -83,6 +87,11 @@
             tumlModelName = "${app.rootUrl}";
             isTumlLib = "${app.tumlLib?string}" == "true" ? true : false;
             var uiManager = new Tuml.UiManager("${app.uri}");
+
+//            $("#switcher").themeswitcher({
+//                imgpath: "${app.rootUrl}/javascript/css/jquery-ui/images/ui-lightness",
+//                loadTheme: "ui-lightness"
+//            });
         });
     </script>
 </head>
@@ -97,7 +106,9 @@
         <!--<div id="buttons"></div>-->
     </div>
     </div>
-    <div class="ui-layout-north"></div>
+    <div class="ui-layout-north">
+        <!--<div id="switcher"></div>-->
+    </div>
     <div class="ui-layout-south">South</div>
     <div class="ui-layout-east">East</div>
 <div class="ui-layout-west">

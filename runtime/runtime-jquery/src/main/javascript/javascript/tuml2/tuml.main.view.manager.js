@@ -123,18 +123,40 @@
 
         this.doSave = function (commit) {
             var startTime = new Date().getTime();
-            var tumlTabManyViewManagers = this.getTumlTabManyOrOneViewManagers(commit);
+            var tumlTabViewManagers = this.getTumlTabManyOrOneViewManagers(commit);
             var overloadedPostData = {insert: [], update: [], delete: []};
 
-            if (commit && !validateMultiplicity(tumlTabManyViewManagers)) {
+            if (commit && !validateMultiplicity(tumlTabViewManagers)) {
                 return;
             } else {
-                for (var i = 0; i < tumlTabManyViewManagers.length; i++) {
-                    if (!tumlTabManyViewManagers[i].oneManyOrQuery.forManyComponent) {
-                        var dataView = tumlTabManyViewManagers[i].tumlTabGridManager.dataView;
+                var AJAX_TYPE;
+                for (var i = 0; i < tumlTabViewManagers.length; i++) {
+                    var tumlTabViewManager = tumlTabViewManagers[i];
+                    if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager && !tumlTabViewManager.oneManyOrQuery.forManyComponent) {
+                        AJAX_TYPE = "POST";
+                        var dataView = tumlTabViewManager.tumlTabGridManager.dataView;
                         overloadedPostData.insert.push.apply(overloadedPostData.insert, dataView.getNewItems());
                         overloadedPostData.update.push.apply(overloadedPostData.update, dataView.getUpdatedItems());
                         overloadedPostData.delete.push.apply(overloadedPostData.delete, dataView.getDeletedItems());
+                    } else {
+                        if (tumlTabViewManager.oneManyOrQuery.forCreation) {
+                            AJAX_TYPE = "POST";
+                            overloadedPostData = tumlTabViewManager.tumlTabOneManager.fieldsToObject();
+                        } else {
+                            var validationResults = tumlTabViewManager.tumlTabOneManager.validateFields();
+
+                            if (validationResults.length > 0) {
+                                var errorMsg = '\n';
+                                for (var i = 0; i < validationResults.length; i++) {
+                                    errorMsg += validationResults[i].msg + '\n';
+                                }
+                                alert('There are validation errors: ' + errorMsg);
+                                return;
+                            }
+                            AJAX_TYPE = "PUT";
+                            overloadedPostData = tumlTabViewManager.tumlTabOneManager.fieldsToObject();
+                            overloadedPostData.tmpId = null;
+                        }
                     }
                 }
                 var postUri;
@@ -146,7 +168,7 @@
 
                 $.ajax({
                     url: postUri,
-                    type: "POST",
+                    type: AJAX_TYPE,
                     dataType: "json",
                     contentType: "application/json",
                     data: JSON.stringify(overloadedPostData),
@@ -401,9 +423,11 @@
         function validateMultiplicity(tumlTabManyViewManagers) {
             var rowCount = 0;
             for (var i = 0; i < tumlTabManyViewManagers.length; i++) {
-                if (!tumlTabManyViewManagers[i].oneManyOrQuery.forManyComponent) {
+                if (tumlTabManyViewManagers[i] instanceof Tuml.TumlTabManyViewManager && !tumlTabManyViewManagers[i].oneManyOrQuery.forManyComponent) {
                     var dataView = tumlTabManyViewManagers[i].tumlTabGridManager.dataView;
                     rowCount += dataView.getItems().length;
+                } else {
+                    return true;
                 }
             }
             if (rowCount < self.propertyNavigatingTo.lower || (self.propertyNavigatingTo.upper !== -1 && rowCount > self.propertyNavigatingTo.upper)) {
@@ -512,24 +536,33 @@
     }
 
     TumlMainViewManager.prototype.handleLookup = function (lookupUri, qualifiedName, loadDataCallback) {
-        var self = this;
         var startTime = new Date().getTime();
-        var tumlTabManyViewManagers = this.getTumlTabManyOrOneViewManagers(false);
+        var tumlTabViewManagers = this.getTumlTabManyOrOneViewManagers(false);
         var overloadedPostData = {insert: [], update: [], delete: []};
 
-        for (var i = 0; i < tumlTabManyViewManagers.length; i++) {
-            if (!tumlTabManyViewManagers[i].oneManyOrQuery.forManyComponent) {
-                var dataView = tumlTabManyViewManagers[i].tumlTabGridManager.dataView;
-                overloadedPostData.insert.push.apply(overloadedPostData.insert, dataView.getNewItems());
-                overloadedPostData.update.push.apply(overloadedPostData.update, dataView.getUpdatedItems());
-                overloadedPostData.delete.push.apply(overloadedPostData.delete, dataView.getDeletedItems());
+        var AJAX_TYPE;
+
+        for (var i = 0; i < tumlTabViewManagers.length; i++) {
+
+            var tumlTabViewManager = tumlTabViewManagers[i];
+            if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager && !tumlTabViewManager.oneManyOrQuery.forManyComponent) {
+                AJAX_TYPE = "POST";
+                if (!tumlTabViewManager.oneManyOrQuery.forManyComponent) {
+                    var dataView = tumlTabViewManager.tumlTabGridManager.dataView;
+                    overloadedPostData.insert.push.apply(overloadedPostData.insert, dataView.getNewItems());
+                    overloadedPostData.update.push.apply(overloadedPostData.update, dataView.getUpdatedItems());
+                    overloadedPostData.delete.push.apply(overloadedPostData.delete, dataView.getDeletedItems());
+                }
+            } else {
+                AJAX_TYPE = "POST";
+                overloadedPostData = tumlTabViewManager.tumlTabOneManager.fieldsToObject();
             }
         }
         var postUri = this.tumlUri + "_forwardToLookup?lookupUri=" + lookupUri + '&qualifiedName=' + qualifiedName;
 
         $.ajax({
             url: postUri,
-            type: "POST",
+            type: AJAX_TYPE,
             dataType: "json",
             contentType: "application/json",
             data: JSON.stringify(overloadedPostData),

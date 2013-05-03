@@ -59,7 +59,7 @@
         }
         for (var i = 0; i < value.length; i++) {
             var booleanValue = value[i];
-            if (booleanValue === 'true') {
+            if (booleanValue) {
                 result += "<img src='/"+tumlModelName+"/javascript/slickgrid/images/tick.png'>";
             } else {
                 result += "<img src='/"+tumlModelName+"/javascript/images/delete.png'>";

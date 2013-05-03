@@ -1,3 +1,10 @@
+.ui-textfield {
+    font: inherit;
+    color: inherit;
+    text-align: inherit;
+    outline: none;
+}
+
 .ui-tabs-nav .tabs-button {
     float: right;
 }

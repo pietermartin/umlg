@@ -7,30 +7,30 @@
 (function ($) {
     // register namespace
     $.extend(true, window, {
-        "TumlSlick":{
-            "Validators":{
-                "TumlObject":TumlObjectValidator,
-                "TumlString":TumlStringValidator,
-                "TumlDateTime":TumlDateTimeValidator,
-                "RangeLength":RangeLengthValidator,
-                "MaxLength":MaxLengthValidator,
-                "MinLength":MinLengthValidator,
-                "Url":UrlValidator,
-                "Email":EmailValidator,
-                "DateTime":DateTimeValidator,
-                "Date":DateValidator,
-                "Time":TimeValidator,
-                "TumlManyEnumerationValidator":TumlManyEnumerationValidator,
-                "TumlNumber":TumlNumberValidator,
-                "TumlBoolean":TumlBooleanValidator,
-                "TumlManyNumber":TumlManyNumberValidator,
-                "TumlManyString":TumlManyStringValidator,
-                "TumlManyBoolean":TumlManyBooleanValidator,
-                "Range":RangeValidator,
-                "Max":MaxValidator,
-                "Min":MinValidator,
-                "Required":RequiredValidator,
-                "Number":NumberValidator
+        "TumlSlick": {
+            "Validators": {
+                "TumlObject": TumlObjectValidator,
+                "TumlString": TumlStringValidator,
+                "TumlDateTime": TumlDateTimeValidator,
+                "RangeLength": RangeLengthValidator,
+                "MaxLength": MaxLengthValidator,
+                "MinLength": MinLengthValidator,
+                "Url": UrlValidator,
+                "Email": EmailValidator,
+                "DateTime": DateTimeValidator,
+                "Date": DateValidator,
+                "Time": TimeValidator,
+                "TumlManyEnumerationValidator": TumlManyEnumerationValidator,
+                "TumlNumber": TumlNumberValidator,
+                "TumlBoolean": TumlBooleanValidator,
+                "TumlManyNumber": TumlManyNumberValidator,
+                "TumlManyString": TumlManyStringValidator,
+                "TumlManyBoolean": TumlManyBooleanValidator,
+                "Range": RangeValidator,
+                "Max": MaxValidator,
+                "Min": MinValidator,
+                "Required": RequiredValidator,
+                "Number": NumberValidator
             }
         }
     });
@@ -38,8 +38,8 @@
     function TumlObjectValidator(property) {
         //Public api
         $.extend(this, {
-            "TumlObjectValidator":"1.0.0",
-            "validate":validate
+            "TumlObjectValidator": "1.0.0",
+            "validate": validate
         });
 
         function validate(value) {
@@ -48,8 +48,8 @@
                 return result;
             }
             return {
-                valid:true,
-                msg:null
+                valid: true,
+                msg: null
             };
         }
     };
@@ -57,8 +57,8 @@
     function TumlDateTimeValidator(property) {
         //Public api
         $.extend(this, {
-            "TumlDateTimeValidator":"1.0.0",
-            "validate":validate
+            "TumlDateTimeValidator": "1.0.0",
+            "validate": validate
         });
 
         function validate(value) {
@@ -89,16 +89,16 @@
                 }
             }
             return {
-                valid:true,
-                msg:null
+                valid: true,
+                msg: null
             };
         }
     };
     function TumlStringValidator(property) {
         //Public api
         $.extend(this, {
-            "TumlStringValidator":"1.0.0",
-            "validate":validate
+            "TumlStringValidator": "1.0.0",
+            "validate": validate
         });
 
         function validate(value) {
@@ -141,8 +141,8 @@
                 }
             }
             return {
-                valid:true,
-                msg:null
+                valid: true,
+                msg: null
             };
         }
     };
@@ -151,8 +151,8 @@
 
         //Public api
         $.extend(this, {
-            "TumlManyStringValidator":"1.0.0",
-            "validate":validate
+            "TumlManyStringValidator": "1.0.0",
+            "validate": validate
         });
 
         function validateSingleProperty(tmp) {
@@ -169,8 +169,8 @@
 
         //Public api
         $.extend(this, {
-            "TumlManyEnumerationValidator":"1.0.0",
-            "validate":validate
+            "TumlManyEnumerationValidator": "1.0.0",
+            "validate": validate
         });
 
         function validateSingleProperty(tmp) {
@@ -187,8 +187,8 @@
 
         //Public api
         $.extend(this, {
-            "TumlManyBooleanValidator":"1.0.0",
-            "validate":validate
+            "TumlManyBooleanValidator": "1.0.0",
+            "validate": validate
         });
 
         function validateSingleProperty(tmp) {
@@ -205,8 +205,8 @@
 
         //Public api
         $.extend(this, {
-            "TumlManyNumberValidator":"1.0.0",
-            "validate":validate
+            "TumlManyNumberValidator": "1.0.0",
+            "validate": validate
         });
 
         function validateSingleProperty(tmp) {
@@ -226,31 +226,31 @@
                 var tmp = currentValues[i];
                 if (tmp == valueToAdd) {
                     return {
-                        valid:false,
-                        msg:'The list must be unique, ' + valueToAdd + ' is already present.'
+                        valid: false,
+                        msg: 'The list must be unique, ' + valueToAdd + ' is already present.'
                     };
                 }
             }
             return {
-                valid:true,
-                msg:null
+                valid: true,
+                msg: null
             };
         } else {
             //Validate the current values, this gets called for new items to post
             var result = {
-                valid:false,
-                msg:null
+                valid: false,
+                msg: null
             };
             if (property.lower > 0 && (currentValues == undefined || currentValues == null || currentValues.length == 0)) {
                 return {
-                    valid:false,
-                    msg:property.name + " is a required field!"
+                    valid: false,
+                    msg: property.name + " is a required field!"
                 };
             }
             if (property.lower == 0 && (currentValues == undefined || currentValues == null || currentValues.length == 0)) {
                 return {
-                    valid:true,
-                    msg:null
+                    valid: true,
+                    msg: null
                 };
             }
             for (var i = 0; i < currentValues.length; i++) {
@@ -263,8 +263,8 @@
             return result;
         }
         return {
-            valid:false,
-            msg:null
+            valid: false,
+            msg: null
         };
     }
 
@@ -272,8 +272,8 @@
     function TumlBooleanValidator(property) {
         //Public api
         $.extend(this, {
-            "TumlBooleanValidator":"1.0.0",
-            "validate":validate
+            "TumlBooleanValidator": "1.0.0",
+            "validate": validate
         });
 
         function validate(value) {
@@ -283,12 +283,12 @@
             }
             if (value !== undefined && value !== null && value !== '') {
                 if (!result == 'true' && result == 'false') {
-                    return {valid:false, msg:'Value must be "true" or "false"'};
+                    return {valid: false, msg: 'Value must be "true" or "false"'};
                 }
             }
             return {
-                valid:true,
-                msg:null
+                valid: true,
+                msg: null
             };
         }
     };
@@ -296,8 +296,8 @@
     function TumlNumberValidator(property) {
         //Public api
         $.extend(this, {
-            "TumlNumberValidator":"1.0.0",
-            "validate":validate
+            "TumlNumberValidator": "1.0.0",
+            "validate": validate
         });
         function validate(value) {
             var result = TumlSlick.Validators.Required(property, value);
@@ -331,8 +331,8 @@
                 }
             }
             return {
-                valid:true,
-                msg:null
+                valid: true,
+                msg: null
             };
         }
     };
@@ -340,44 +340,44 @@
     function NumberValidator(property, value) {
         if (value === undefined || value === null || value === '' || isNaN(value)) {
             return {
-                valid:false,
-                msg:"Please enter a valid positive number"
+                valid: false,
+                msg: "Please enter a valid positive number"
             };
         } else {
-            return {valid:true};
+            return {valid: true};
         }
     }
 
     function RangeLengthValidator(property, value) {
         if (value !== undefined && (value.length < property.validations.rangeLength.min || value.length > property.validations.rangeLength.max)) {
             return {
-                valid:false,
-                msg:"Value's length needs to be between " + property.validations.rangeLength.min + " and " + property.validations.rangeLength.max
+                valid: false,
+                msg: "Value's length needs to be between " + property.validations.rangeLength.min + " and " + property.validations.rangeLength.max
             }
         } else {
-            return {valid:true};
+            return {valid: true};
         }
     }
 
     function MaxLengthValidator(property, value) {
         if (value !== undefined && value.length > property.validations.maxLength) {
             return {
-                valid:false,
-                msg:"Value's length needs to be smaller than or equal to " + property.validations.maxLength
+                valid: false,
+                msg: "Value's length needs to be smaller than or equal to " + property.validations.maxLength
             }
         } else {
-            return {valid:true};
+            return {valid: true};
         }
     }
 
     function MinLengthValidator(property, value) {
         if (value !== undefined && value.length < property.validations.minLength) {
             return {
-                valid:false,
-                msg:"Value's length needs to be greater than or equal to " + property.validations.minLength
+                valid: false,
+                msg: "Value's length needs to be greater than or equal to " + property.validations.minLength
             }
         } else {
-            return {valid:true};
+            return {valid: true};
         }
     }
 
@@ -385,60 +385,74 @@
         var intValue = parseInt(value, 10);
         if (intValue < property.validations.range.min || intValue > property.validations.range.max) {
             return {
-                valid:false,
-                msg:"Value need to be between " + property.validations.range.min + " and " + property.validations.range.max + " (including)"
+                valid: false,
+                msg: "Value need to be between " + property.validations.range.min + " and " + property.validations.range.max + " (including)"
             }
         } else {
-            return {valid:true};
+            return {valid: true};
         }
     }
 
     function MaxValidator(property, value) {
-        var intValue = parseInt(value, 10);
-        if (intValue > property.validations.max) {
+        if (isNaN(value)) {
             return {
-                valid:false,
-                msg:"Value needs to be smaller than or equal to " + property.validations.max
+                valid: false,
+                msg: "Value must be anumber"
             }
         } else {
-            return {valid:true};
+            var intValue = parseInt(value, 10);
+            if (intValue > property.validations.max) {
+                return {
+                    valid: false,
+                    msg: "Value needs to be smaller than or equal to " + property.validations.max
+                }
+            } else {
+                return {valid: true};
+            }
         }
     }
 
     function MinValidator(property, value) {
-        var intValue = parseInt(value, 10);
-        if (intValue < property.validations.min) {
+        if (isNaN(value)) {
             return {
-                valid:false,
-                msg:"Value needs to be greater than or equal to " + property.validations.min
+                valid: false,
+                msg: "Value must be a number"
             }
         } else {
-            return {valid:true};
+            var intValue = parseInt(value, 10);
+            if (intValue < property.validations.min) {
+                return {
+                    valid: false,
+                    msg: "Value needs to be greater than or equal to " + property.validations.min
+                }
+            } else {
+                return {valid: true};
+            }
         }
     }
 
     function UrlValidator(property, value) {
-        return {valid:true};
+        return {valid: true};
     }
 
     function EmailValidator(property, value) {
         var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if (!re.test(value)) {
             return {
-                valid:false,
-                msg:"Value is not a valid email address!"
+                valid: false,
+                msg: "Value is not a valid email address!"
             }
         } else {
-            return {valid:true};
+            return {valid: true};
         }
     }
 
     function DateTimeValidator(property, value) {
         try {
             var result = $.datepicker.parseDateTime('yy-mm-dd', 'HH:mm:ss', value);
-            return {valid:true};
+            return {valid: true};
         } catch (error) {
-            return {valid:false, msg:value + "'s format is incorrect, the format is 'yy-mm-dd HH:mm:ss'"}
+            return {valid: false, msg: value + "'s format is incorrect, the format is 'yy-mm-dd HH:mm:ss'"}
         }
     }
 
@@ -448,29 +462,29 @@
         value = value + ' 00:00:00';
         try {
             var result = $.datepicker.parseDate('yy-mm-dd', value);
-            return {valid:true};
+            return {valid: true};
         } catch (error) {
-            return {valid:false, msg:value + "'s format is incorrect, the format is 'yy-mm-dd'"}
+            return {valid: false, msg: value + "'s format is incorrect, the format is 'yy-mm-dd'"}
         }
     }
 
     function TimeValidator(property, value) {
         var result = $.datepicker.parseTime('HH:mm', value, {});
         if (result) {
-            return {valid:true};
+            return {valid: true};
         } else {
-            return {valid:false, msg:value + "'s format is incorrect, the format is 'HH:mm'"}
+            return {valid: false, msg: value + "'s format is incorrect, the format is 'HH:mm'"}
         }
     }
 
     function RequiredValidator(property, value) {
         if (property.lower > 0 && value !== false && value !== true && (value === '' || value === undefined || value === null)) {
             return {
-                valid:false,
-                msg:property.name + " is a required field!"
+                valid: false,
+                msg: property.name + " is a required field!"
             };
         } else {
-            return {valid:true};
+            return {valid: true};
         }
     }
 })(jQuery);

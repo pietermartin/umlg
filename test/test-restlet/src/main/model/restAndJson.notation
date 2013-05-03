@@ -2005,7 +2005,7 @@
         <layoutConstraint xmi:type="notation:Location" xmi:id="_jRJEBUdLEeK1a-SG6VcP9g" y="-20"/>
       </children>
       <children xmi:type="notation:DecorationNode" xmi:id="_jRJEBkdLEeK1a-SG6VcP9g" type="6005">
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_jRJEB0dLEeK1a-SG6VcP9g" x="-9" y="39"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_jRJEB0dLEeK1a-SG6VcP9g" x="-46" y="53"/>
       </children>
       <children xmi:type="notation:DecorationNode" xmi:id="_jRJECEdLEeK1a-SG6VcP9g" type="6033">
         <layoutConstraint xmi:type="notation:Location" xmi:id="_jRJECUdLEeK1a-SG6VcP9g" y="20"/>

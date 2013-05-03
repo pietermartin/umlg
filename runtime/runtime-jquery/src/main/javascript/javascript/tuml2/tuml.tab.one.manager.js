@@ -26,7 +26,7 @@
         }
 
         this.getDiv = function () {
-            return $('#' + this.metaForData.to.name + "OneComponent");
+            return $('#' + this.metaForData.name + "OneComponent");
         }
 
         this.doClose = function () {
@@ -38,10 +38,10 @@
 
     TumlTabComponentOneManager.prototype = new TumlBaseTabOneManager;
 
-    function TumlTabOneManager(tumlUri) {
+    function TumlTabOneManager(tumlUri, tumlTabViewManager) {
         var self = this;
         this.tumlUri = tumlUri;
-        TumlBaseTabOneManager.call(this, tumlUri);
+        TumlBaseTabOneManager.call(this, tumlUri, tumlTabViewManager);
 
         this.doSave = function () {
             var validationResults = self.validateFields();
@@ -140,8 +140,8 @@
         }
 
         this.updateGridAfterRollback = function (item) {
-            for (var i = 0; i < this.metaForData.to.properties.length; i++) {
-                var property = this.metaForData.to.properties[i];
+            for (var i = 0; i < this.metaForData.properties.length; i++) {
+                var property = this.metaForData.properties[i];
                 if (this.isPropertyForOnePage(property, false)) {
                     this.setValueOfInputForField(item, property);
                 }
@@ -169,9 +169,9 @@
             }
         }
 
-        this.calculateContainsOne = function() {
-            for (var i = 0; i < this.metaForData.to.properties.length; i++) {
-                var property = this.metaForData.to.properties[i];
+        this.calculateContainsOne = function () {
+            for (var i = 0; i < this.metaForData.properties.length; i++) {
+                var property = this.metaForData.properties[i];
                 if (property.oneToOne && !property.onePrimitive) {
                     this.containsOneToOne = true;
                     break;
@@ -179,10 +179,10 @@
             }
         }
 
-        this.updateDataModel = function(data) {
+        this.updateDataModel = function (data) {
             //update the global one to one index for every one
-            for (var i = 0; i < this.metaForData.to.properties.length; i++) {
-                var property = this.metaForData.to.properties[i];
+            for (var i = 0; i < this.metaForData.properties.length; i++) {
+                var property = this.metaForData.properties[i];
                 if (data[property.name] !== undefined && data[property.name] !== null && property.oneToOne && !property.inverseComposite && !property.onePrimitive) {
                     this.tumlTabViewManager.updateDataModel(data[property.name].id, property.inverseName, data);
                 }
@@ -213,8 +213,8 @@
     TumlBaseTabOneManager.prototype.fieldsToObject = function () {
         var dataToSend = {};
         dataToSend.qualifiedName = this.metaForData.qualifiedName;
-        for (var i = 0; i < this.metaForData.to.properties.length; i++) {
-            var property = this.metaForData.to.properties[i];
+        for (var i = 0; i < this.metaForData.properties.length; i++) {
+            var property = this.metaForData.properties[i];
             if (property.name === 'id') {
                 var id = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').val();
                 if (id.indexOf('fake') === -1) {
@@ -287,7 +287,8 @@
                     }
                 }
             }
-        };
+        }
+        ;
         return dataToSend;
     }
 
@@ -298,7 +299,7 @@
     TumlBaseTabOneManager.prototype.refresh = function (data, metaForData, qualifiedName, isForCreation) {
         var self = this;
         this.data = data;
-        this.metaForData = metaForData;
+        this.metaForData = metaForData.to;
         this.qualifiedName = qualifiedName;
 
         this.calculateContainsOne();
@@ -311,9 +312,9 @@
 
         var ul = $('<ul class="oneUl" />')
         ul.appendTo(formDiv);
-        if (this.metaForData.to.name !== 'Root') {
-            for (var i = 0; i < this.metaForData.to.properties.length; i++) {
-                var property = this.metaForData.to.properties[i];
+        if (this.metaForData.name !== 'Root') {
+            for (var i = 0; i < this.metaForData.properties.length; i++) {
+                var property = this.metaForData.properties[i];
                 if (this.isPropertyForOnePage(property, isForCreation)) {
                     var li = $('<li>')
                     li.appendTo(ul);
@@ -412,6 +413,7 @@
         var $input;
         if (property.name == 'id') {
             $input = $('<input />', {disabled: 'disabled', type: 'text', class: 'field', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
+            $input.button().addClass('ui-textfield');
             if (data[property.name] !== undefined && data[property.name] !== null) {
                 $input[0].defaultValue = data[property.name];
             }
@@ -438,6 +440,7 @@
             }
         } else if (property.composite && property.lower > 0) {
             $input = $("<input />", {type: 'text', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
+            $input.button().addClass('ui-textfield');
             if (!isForCreation && data[property.name] !== undefined && data[property.name] !== null) {
                 $input[0].defaultValue = data[property.name];
                 $.data($input[0], "componentValue", data[property.name]);
@@ -471,16 +474,19 @@
             }
         } else if (property.fieldType == 'String') {
             $input = $('<input />', {type: 'text', class: 'field', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
+            $input.button().addClass('ui-textfield');
             if (!isForCreation && data[property.name] !== undefined && data[property.name] !== null) {
                 $input[0].defaultValue = data[property.name];
             }
         } else if (property.fieldType == 'Integer') {
             $input = $('<input />', {type: 'text', class: 'field', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
+            $input.button().addClass('ui-textfield');
             if (!isForCreation && data[property.name] !== undefined && data[property.name] !== null) {
                 $input[0].defaultValue = data[property.name];
             }
         } else if (property.fieldType == 'Long') {
             $input = $('<input />', {type: 'text', class: 'field', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
+            $input.button().addClass('ui-textfield');
             if (!isForCreation && data[property.name] !== undefined && data[property.name] !== null) {
                 $input[0].defaultValue = data[property.name];
             }
@@ -495,12 +501,13 @@
                 $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name });
             } else {
                 $input = $('<input />', {type: 'text', class: 'field', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
+                $input.button().addClass('ui-textfield');
                 if (!isForCreation && data[property.name] !== undefined && data[property.name] !== null) {
                     $input[0].defaultValue = data[property.name];
                 }
             }
         }
-        if (!(property.composite && property.lower > 0)) {
+        if (!property.composite) {
             $input.blur(function () {
                 self.validateField(property);
             });
@@ -799,10 +806,10 @@
     TumlBaseTabOneManager.prototype.validateField = function (property) {
         this.removeServerErrorMessage();
         var validateInput;
-        validateInput = $('#' + property.name + this.metaForData.name + 'Id');
+        validateInput = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
 
-        var serializedValue = [];
-        var editor = selectEditor(property);
+//        var serializedValue = [];
+//        var editor = selectEditor(property);
         var validationResult;
         if (property.manyPrimitive || property.manyEnumeration) {
             var stringValueArray;
@@ -845,8 +852,8 @@
                 validationResult = selectFieldValidator(property)(tmpSerializedValue);
             }
         } else {
-            serializedValue = new editor().serializeValueWithValue(validateInput);
-            validationResult = selectFieldValidator(property)(serializedValue);
+            validationResult = selectFieldValidator(property)(validateInput.val());
+//            serializedValue = new editor().serializeValueWithValue(validateInput);
         }
         //selectFieldValidator returns the validate function
         if (!validationResult.valid) {

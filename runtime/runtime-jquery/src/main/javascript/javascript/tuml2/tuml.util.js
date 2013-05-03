@@ -146,7 +146,8 @@ function selectEditor(property) {
     } else if (!property.onePrimitive && !property.manyPrimitive && !property.composite && property.oneToOne) {
         return  Tuml.Slick.Editors.SelectOneToOneCellEditor;
     } else if (!property.onePrimitive && !property.manyPrimitive && !property.composite && property.manyToOne) {
-        return  Tuml.Slick.Editors.SelectManyToOneCellEditor;
+//        return  Tuml.Slick.Editors.SelectManyToOneCellEditor;
+        return  Tuml.Slick.Editors.SelectOneToOneCellEditor;
     } else if (property.name == 'id') {
         return null;
     } else if (property.fieldType == 'String') {

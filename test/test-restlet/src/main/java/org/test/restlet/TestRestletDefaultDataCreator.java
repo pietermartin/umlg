@@ -50,9 +50,9 @@ public class TestRestletDefaultDataCreator implements DefaultDataCreator {
                 Many1 many1 = new Many1(human);
                 many1.setName("many1" + j);
                 Many2 many2 = new Many2(human);
-                many2.setName("many2" + j);
+                many2.setName("many2" + i + "::" + j);
                 One one = new One(human);
-                one.setName("one" + j);
+                one.setName("one" + i + "::" + j);
                 many1.addToMany2(many2);
                 if (j % 2 == 1) {
                     many1.addToOne(one);

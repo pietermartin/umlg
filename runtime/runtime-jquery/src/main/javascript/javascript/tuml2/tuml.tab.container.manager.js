@@ -390,7 +390,8 @@
                     query: false,
                     forLookup: options.forLookup,
                     forManyComponent: options.forManyComponent,
-                    forOneComponent: options.forOneComponent
+                    forOneComponent: options.forOneComponent,
+                    forCreation: options.forCreation
                 },
                 tumlUri,
                 result,
@@ -398,30 +399,6 @@
             );
             tumlTabViewManager.parentTabContainerManager = this;
 
-            tumlTabViewManager.onOneComponentSaveButtonSuccess.subscribe(function (e, args) {
-                alert('commented out');
-//                    tumlTabViewManager.getParentTumlTabViewManager().setValue(args.value);
-//                    closeTab(tumlTabViewManager);
-//                    tabContainer.tabs("enable", self.tumlTabViewManagers.indexOf(tumlTabViewManager.getParentTumlTabViewManager()));
-//                    tabContainer.tabs("option", "active", self.tumlTabViewManagers.indexOf(tumlTabViewManager.getParentTumlTabViewManager()));
-            });
-            tumlTabViewManager.onOneComponentCloseButtonSuccess.subscribe(function (e, args) {
-                alert('commented out');
-//                    closeTab(tumlTabViewManager);
-//                    tabContainer.tabs("enable", self.tumlTabViewManagers.indexOf(tumlTabViewManager.getParentTumlTabViewManager()));
-//                    tabContainer.tabs("option", "active", self.tumlTabViewManagers.indexOf(tumlTabViewManager.getParentTumlTabViewManager()));
-            });
-            tumlTabViewManager.onPutOneSuccess.subscribe(function (e, args) {
-                self.onPutOneSuccess.notify(args, e, self);
-            });
-            tumlTabViewManager.onPostOneSuccess.subscribe(function (e, args) {
-                Tuml.TumlTabContainerManager.prototype.clearAllTabs.call(this);
-                self.onPostOneSuccess.notify(args, e, self);
-            });
-            tumlTabViewManager.onDeleteOneSuccess.subscribe(function (e, args) {
-                Tuml.TumlTabContainerManager.prototype.clearAllTabs.call(this);
-                self.onDeleteOneSuccess.notify(args, e, self);
-            });
             tumlTabViewManager.onClickOneComponent.subscribe(function (e, args) {
                 //Get the meta data
                 $.ajax({
@@ -451,35 +428,6 @@
                     }
                 });
             });
-//            tumlTabViewManager.onClickManyComponent.subscribe(function (e, args) {
-//                //Get the meta data
-//                $.ajax({
-//                    url: args.property.tumlMetaDataUri,
-//                    type: "GET",
-//                    dataType: "json",
-//                    contentType: "application/json",
-//                    success: function (metaDataResponse, textStatus, jqXHR) {
-//                        $('#tab-container').tabs('disableTab', tumlTabViewManager.tabTitleName);
-//                        if (args.data !== null) {
-//                            metaDataResponse[0].data = args.data;
-//                        }
-//                        var tumlOneComponentTabViewManager = self.addTab(
-//                            tuml.tab.Enum.Properties,
-//                            metaDataResponse[0],
-//                            args.tumlUri,
-//                            args.property,
-//                            {forLookup: false, forManyComponent: true, isOne: false, forCreation: true}
-//                        );
-//                        self.postTabCreate(tumlOneComponentTabViewManager, metaDataResponse[0], true, metaDataResponse[0].meta.to, false, self.tumlTabViewManagers.length - 1);
-//                        //TODO fix below can not use tumlTabViewManager as a variable as it represent just the last varriable
-////                            tumlTabViewManager.setProperty(args.property);
-//                        tumlOneComponentTabViewManager.setParentTumlTabViewManager(tumlTabViewManager);
-//                    },
-//                    error: function (jqXHR, textStatus, errorThrown) {
-//                        alert('error getting ' + args.property.tumlMetaDataUri + '\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
-//                    }
-//                });
-//            });
         } else {
             if (options.forManyComponent) {
                 tumlTabViewManager = new Tuml.TumlTabManyComponentViewManager(

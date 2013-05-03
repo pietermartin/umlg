@@ -13,7 +13,7 @@
                     "Integer": IntegerEditor,
                     "Text": TextEditor,
                     "SelectOneToOneCellEditor": SelectOneToOneCellEditor,
-                    "SelectManyToOneCellEditor": SelectManyToOneCellEditor,
+//                    "SelectManyToOneCellEditor": SelectManyToOneCellEditor,
                     "SelectEnumerationCellEditor": SelectEnumerationCellEditor,
                     "ManyPrimitiveEditor": ManyPrimitiveEditor,
                     "ManyStringPrimitiveEditor": ManyStringPrimitiveEditor,
@@ -235,7 +235,8 @@
         var arrayToSerialize = [];
         for (var i = 0; i < rowArray.length; i++) {
             var row = rowArray[i];
-            arrayToSerialize.push($(row).data('value'));
+            var isTrueSet = ($(row).data('value') === 'true');
+            arrayToSerialize.push(isTrueSet);
         }
         return arrayToSerialize;
     }
@@ -244,7 +245,8 @@
         var arrayToSerialize = [];
         for (var i = 0; i < rowArray.length; i++) {
             var row = rowArray[i];
-            arrayToSerialize.push($(row).data('value'));
+            var isTrueSet = ($(row).data('value') === 'true');
+            arrayToSerialize.push(isTrueSet);
         }
         return arrayToSerialize;
     }
@@ -996,30 +998,37 @@
 
 
             var tumlBaseGridManager = args.column.options.tumlBaseGridManager;
-            tumlBaseGridManager.handleLookup(adjustedUri, item.qualifiedName,
-                function (data) {
-                    if (!args.column.options.required) {
-                        $select.append($('<option />)').val("").html(""));
+
+            var row = args.grid.getActiveCell().row;
+            if (row >= args.grid.getDataLength()) {
+                tumlBaseGridManager.handleAddNewRow();
+            } else {
+                tumlBaseGridManager.handleLookup(adjustedUri, item.qualifiedName,
+                    function (data) {
+                        if (!args.column.options.required) {
+                            $select.append($('<option />)').val("").html(""));
+                        }
+                        for (var i = 0; i < data.length; i++) {
+                            var obj = data[i];
+                            $select.append($('<option />)').val(obj.id).html(obj.name));
+                        }
+                        ;
+                        //currentValue is the vertex id of the oneToOne or manyToOne
+                        currentValue = item[args.column.field];
+                        //append the current value to the dropdown
+                        if (currentValue !== undefined && currentValue !== null) {
+                            $select.append($('<option selected="selected"/>)').val(currentValue.id).html(currentValue.displayName));
+                        }
+                        if (!args.column.options.required) {
+                            $select.chosen({allow_single_deselect: true});
+                        } else {
+                            $select.chosen();
+                        }
+                        $select.focus();
                     }
-                    for (var i = 0; i < data.length; i++) {
-                        var obj = data[i];
-                        $select.append($('<option />)').val(obj.id).html(obj.name));
-                    }
-                    ;
-                    //currentValue is the vertex id of the oneToOne or manyToOne
-                    currentValue = item[args.column.field];
-                    //append the current value to the dropdown
-                    if (currentValue !== undefined && currentValue !== null) {
-                        $select.append($('<option selected="selected"/>)').val(currentValue.id).html(currentValue.displayName));
-                    }
-                    if (!args.column.options.required) {
-                        $select.chosen({allow_single_deselect: true});
-                    } else {
-                        $select.chosen();
-                    }
-                    $select.focus();
-                }
-            );
+                );
+            }
+
 
 
         };
@@ -1096,127 +1105,127 @@
         }
     }
 
-    function SelectManyToOneCellEditor(args) {
-        //Public api
-        $.extend(this, {
-            "TumlSelectManyToOneCellEditor": "1.0.0",
-            "serializeValueWithValue": serializeValueWithValue
-        });
-        var $select;
-        var currentValue;
-        var scope = this;
-        var options;
-
-        this.init = function (item) {
-            $select = $("<SELECT tabIndex='0' class='editor-select' style='width:115px;'></SELECT>");
-            $select.appendTo(args.container);
-
-            args.column.options.rowLookupMap.getOrLoadMap(item['id'], function (compositeParentVertexId) {
-                args.column.options.compositeParentLookupMap.getOrLoadMap(compositeParentVertexId, item['id'], function (compositeParentMap) {
-                    if (!args.column.options.required) {
-                        $select.append($('<option />)').val("").html(""));
-                    }
-                    $.each(compositeParentMap[compositeParentVertexId], function (index, obj) {
-                        $select.append($('<option />)').val(obj.id).html(obj.displayName));
-                    });
-                    //currentValue is the vertex id of the oneToOne or manyToOne
-                    currentValue = item[args.column.field];
-                    //append the current value to the dropdown
-                    if (currentValue !== undefined && currentValue !== null) {
-                        $select.append($('<option selected="selected"/>)').val(currentValue.id).html(currentValue.displayName));
-                    }
-                    if (!args.column.options.required) {
-                        $select.chosen({allow_single_deselect: true});
-                    } else {
-                        $select.chosen();
-                    }
-                    $select.focus();
-                });
-            });
-
-        };
-
-        this.destroy = function () {
-            $select.remove();
-        };
-
-        this.focus = function () {
-            $select.focus();
-        };
-
-        this.loadValue = function (item) {
-        };
-
-        this.serializeValue = function () {
-            if (args.column.options) {
-                return serializeValueWithValue($select);
-            } else {
-                alert('why is this happening 3?');
-                //return ($select.val() == "yes");
-            }
-        };
-
-        function serializeValueWithValue(select) {
-            var options = select.children();
-            for (var i = 0; i < options.length; i++) {
-                if (options[i].selected) {
-                    return {id: parseInt(select.val()), displayName: options[i].label};
-                    break;
-                }
-            }
-        }
-
-        this.applyValue = function (item, state) {
-            var previousValue = item[args.column.field];
-            item[args.column.field] = state;
-            //remove state from the map and add the previousValue
-            //args.column.options.rowLookupMap.getOrLoadMap(item['id'], function(compositeParentVertexId){
-            //args.column.options.compositeParentLookupMap.getOrLoadMap(compositeParentVertexId, item['id'], function(compositeParentMap) {
-            //removeByValue(compositeParentMap[compositeParentVertexId], state);
-            //if (previousValue !== undefined && previousValue !== null) {
-            //compositeParentMap[compositeParentVertexId].push(previousValue);
-            //}
-            //});
-            //});
-        };
-
-        function removeByValue(compositeLookup, toRemove) {
-            for (var i = 0; i < compositeLookup.length; i++) {
-                if (compositeLookup[i].id == toRemove.id) {
-                    compositeLookup.splice(i, 1);
-                    break;
-                }
-            }
-        }
-
-        this.isValueChanged = function () {
-            if (currentValue === null || currentValue === undefined) {
-                return true;
-            } else {
-                return ($select.val() != currentValue.id);
-            }
-        };
-
-
-        this.validate = function () {
-            if (args.column.validator) {
-                var validationResults = args.column.validator($select.val());
-                if (!validationResults.valid) {
-                    return validationResults;
-                }
-            }
-
-            return {
-                valid: true,
-                msg: null
-            };
-        };
-
-        //This is called from the grid, the one only uses the serializeValueWithValue function
-        if (args !== undefined) {
-            this.init(args.item);
-        }
-    }
+//    function SelectManyToOneCellEditor(args) {
+//        //Public api
+//        $.extend(this, {
+//            "TumlSelectManyToOneCellEditor": "1.0.0",
+//            "serializeValueWithValue": serializeValueWithValue
+//        });
+//        var $select;
+//        var currentValue;
+//        var scope = this;
+//        var options;
+//
+//        this.init = function (item) {
+//            $select = $("<SELECT tabIndex='0' class='editor-select' style='width:115px;'></SELECT>");
+//            $select.appendTo(args.container);
+//
+//            args.column.options.rowLookupMap.getOrLoadMap(item['id'], function (compositeParentVertexId) {
+//                args.column.options.compositeParentLookupMap.getOrLoadMap(compositeParentVertexId, item['id'], function (compositeParentMap) {
+//                    if (!args.column.options.required) {
+//                        $select.append($('<option />)').val("").html(""));
+//                    }
+//                    $.each(compositeParentMap[compositeParentVertexId], function (index, obj) {
+//                        $select.append($('<option />)').val(obj.id).html(obj.displayName));
+//                    });
+//                    //currentValue is the vertex id of the oneToOne or manyToOne
+//                    currentValue = item[args.column.field];
+//                    //append the current value to the dropdown
+//                    if (currentValue !== undefined && currentValue !== null) {
+//                        $select.append($('<option selected="selected"/>)').val(currentValue.id).html(currentValue.displayName));
+//                    }
+//                    if (!args.column.options.required) {
+//                        $select.chosen({allow_single_deselect: true});
+//                    } else {
+//                        $select.chosen();
+//                    }
+//                    $select.focus();
+//                });
+//            });
+//
+//        };
+//
+//        this.destroy = function () {
+//            $select.remove();
+//        };
+//
+//        this.focus = function () {
+//            $select.focus();
+//        };
+//
+//        this.loadValue = function (item) {
+//        };
+//
+//        this.serializeValue = function () {
+//            if (args.column.options) {
+//                return serializeValueWithValue($select);
+//            } else {
+//                alert('why is this happening 3?');
+//                //return ($select.val() == "yes");
+//            }
+//        };
+//
+//        function serializeValueWithValue(select) {
+//            var options = select.children();
+//            for (var i = 0; i < options.length; i++) {
+//                if (options[i].selected) {
+//                    return {id: parseInt(select.val()), displayName: options[i].label};
+//                    break;
+//                }
+//            }
+//        }
+//
+//        this.applyValue = function (item, state) {
+//            var previousValue = item[args.column.field];
+//            item[args.column.field] = state;
+//            //remove state from the map and add the previousValue
+//            //args.column.options.rowLookupMap.getOrLoadMap(item['id'], function(compositeParentVertexId){
+//            //args.column.options.compositeParentLookupMap.getOrLoadMap(compositeParentVertexId, item['id'], function(compositeParentMap) {
+//            //removeByValue(compositeParentMap[compositeParentVertexId], state);
+//            //if (previousValue !== undefined && previousValue !== null) {
+//            //compositeParentMap[compositeParentVertexId].push(previousValue);
+//            //}
+//            //});
+//            //});
+//        };
+//
+//        function removeByValue(compositeLookup, toRemove) {
+//            for (var i = 0; i < compositeLookup.length; i++) {
+//                if (compositeLookup[i].id == toRemove.id) {
+//                    compositeLookup.splice(i, 1);
+//                    break;
+//                }
+//            }
+//        }
+//
+//        this.isValueChanged = function () {
+//            if (currentValue === null || currentValue === undefined) {
+//                return true;
+//            } else {
+//                return ($select.val() != currentValue.id);
+//            }
+//        };
+//
+//
+//        this.validate = function () {
+//            if (args.column.validator) {
+//                var validationResults = args.column.validator($select.val());
+//                if (!validationResults.valid) {
+//                    return validationResults;
+//                }
+//            }
+//
+//            return {
+//                valid: true,
+//                msg: null
+//            };
+//        };
+//
+//        //This is called from the grid, the one only uses the serializeValueWithValue function
+//        if (args !== undefined) {
+//            this.init(args.item);
+//        }
+//    }
 
 })
     (jQuery);
