@@ -19,7 +19,7 @@ public class TestOneToManyInterface extends BaseLocalDbTest {
 		Creature creature = new Creature(god);
 		creature.setName("creature1");
         db.commit();
-		Assert.assertEquals(3 + 3, countVertices());
+		Assert.assertEquals(3, countVertices());
 		God g = new God(god.getVertex());
 		Assert.assertEquals(1, g.getSpirit().size());
 		Phantom phantom = new Phantom(god);

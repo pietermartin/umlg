@@ -101,7 +101,7 @@ public class TumlOrientDbGraph extends OrientGraph implements TumlGraph {
     }
 
     @Override
-    public <T> T instantiateClassifier(String id) {
+    public <T> T instantiateClassifier(Long id) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
@@ -194,13 +194,13 @@ public class TumlOrientDbGraph extends OrientGraph implements TumlGraph {
     }
 
     @Override
-    public void createUniqueVertexIndex() {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public boolean isTransactionActive() {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    public boolean isTransactionActive() {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+    public void addDeletionNode() {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override

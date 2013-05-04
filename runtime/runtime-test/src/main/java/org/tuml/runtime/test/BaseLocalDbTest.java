@@ -39,11 +39,11 @@ public class BaseLocalDbTest {
     }
 
 	protected long countVertices() {
-		return this.db.countVertices();
+		return this.db.countVertices() - TumlMetaNodeFactory.getTumlMetaNodeManager().count();
 	}
 
 	protected long countEdges() {
-		return this.db.countEdges();
+		return this.db.countEdges() - TumlMetaNodeFactory.getTumlMetaNodeManager().count();
 	}
 
     protected boolean isTransactionFailedException(Exception e) {

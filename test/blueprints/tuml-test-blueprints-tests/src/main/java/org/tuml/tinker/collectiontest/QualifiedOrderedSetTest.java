@@ -23,7 +23,6 @@ public class QualifiedOrderedSetTest extends BaseLocalDbTest {
         FWomen fWomen1 = new FWomen(fantasy1);
         FWomen fWomen2 = new FWomen(fantasy1);
 
-
         db.commit();
 		God godTest = new God(god.getVertex());
 		Assert.assertEquals(1, godTest.getFantasy().size());

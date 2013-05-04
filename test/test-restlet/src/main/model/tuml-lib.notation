@@ -511,7 +511,7 @@
       </children>
       <styles xmi:type="notation:FontStyle" xmi:id="_4cK8wSRsEeKzTel_Vwmhog" fontName="Sans"/>
       <element xmi:type="uml:Generalization" href="tuml-lib.uml#_4cJHkCRsEeKzTel_Vwmhog"/>
-      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_4cK8wiRsEeKzTel_Vwmhog" points="[-24, 0, 274, 266]$[-298, 0, 0, 266]$[-298, -202, 0, 64]"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_4cK8wiRsEeKzTel_Vwmhog" points="[-16, 0, 258, 262]$[-274, 0, 0, 262]$[-274, -198, 0, 64]"/>
       <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_4cPOMCRsEeKzTel_Vwmhog" id="(0.16551724137931034,0.53)"/>
       <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_4cPOMSRsEeKzTel_Vwmhog" id="(0.7577639751552795,0.41284403669724773)"/>
     </edges>
@@ -763,7 +763,7 @@
       </children>
       <styles xmi:type="notation:FontStyle" xmi:id="_QdZy0U6LEeK4HckrDYI0ug" fontName="Sans"/>
       <element xmi:type="uml:Generalization" href="tuml-lib.uml#_QdOMoE6LEeK4HckrDYI0ug"/>
-      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_QdZy0k6LEeK4HckrDYI0ug" points="[-43, -6, 240, 226]$[-291, -6, -8, 226]$[-291, -193, -8, 39]"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_QdZy0k6LEeK4HckrDYI0ug" points="[-43, 0, 222, 232]$[-265, 0, 0, 232]$[-265, -193, 0, 39]"/>
       <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_QdpDYE6LEeK4HckrDYI0ug" id="(0.43,0.18)"/>
       <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_QdpDYU6LEeK4HckrDYI0ug" id="(0.8198757763975155,0.6422018348623854)"/>
     </edges>

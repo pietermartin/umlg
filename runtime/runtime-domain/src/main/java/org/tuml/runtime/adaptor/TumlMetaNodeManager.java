@@ -6,4 +6,5 @@ package org.tuml.runtime.adaptor;
  */
 public interface TumlMetaNodeManager {
     void createAllMetaNodes();
+    int count();
 }

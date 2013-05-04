@@ -50,18 +50,7 @@ public abstract class BaseTuml implements TumlNode, Serializable {
     @Override
     public final Long getId() {
         return TinkerIdUtilFactory.getIdUtil().getId(this.vertex);
-//        return (String)this.vertex.getProperty("tumlId");
     }
-
-//    @Override
-//    public final void setId(String id) {
-//        this.vertex.setProperty("tumlId", id);
-//    }
-
-//    @Override
-//    public void internalSetId() {
-//        setId(getQualifiedName() + "::" + TumlIdManager.INSTANCE.getNext(getMetaNode()));
-//    }
 
     public Vertex getVertex() {
         return vertex;
@@ -73,7 +62,6 @@ public abstract class BaseTuml implements TumlNode, Serializable {
 
     public void defaultCreate() {
         getUid();
-//        GraphDb.getDb().getIndex("uniqueVertex", Vertex.class).put("uniqueVertex", getId(), this.vertex);
     }
 
     public String getName() {

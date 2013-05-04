@@ -20,8 +20,8 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
         god.setName("THEGOD");
         god.addToREASON(REASON.GOOD);
         db.commit();
-        Assert.assertEquals(2 + 1, countVertices());
-        Assert.assertEquals(2 + 1 + 1, countEdges());
+        Assert.assertEquals(2, countVertices());
+        Assert.assertEquals(2 + 1, countEdges());
         God g = new God(god.getVertex());
         Assert.assertEquals(1, g.getREASON().size());
         Assert.assertEquals(REASON.GOOD, g.getREASON().iterator().next());
@@ -33,8 +33,8 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
         god.setName("THEGOD");
         god.addToEmbeddedString("testthis");
         db.commit();
-        Assert.assertEquals(2 + 1, countVertices());
-        Assert.assertEquals(2 + 1 + 1, countEdges());
+        Assert.assertEquals(2, countVertices());
+        Assert.assertEquals(2 + 1, countEdges());
         God g = new God(god.getVertex());
         Assert.assertEquals(1, g.getEmbeddedString().size());
         Assert.assertEquals("testthis", g.getEmbeddedString().iterator().next());
@@ -46,8 +46,8 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
         god.setName("THEGOD");
         god.addToEmbeddedInteger(1);
         db.commit();
-        Assert.assertEquals(2 + 1, countVertices());
-        Assert.assertEquals(2 + 1 + 1, countEdges());
+        Assert.assertEquals(2, countVertices());
+        Assert.assertEquals(2 + 1, countEdges());
         God g = new God(god.getVertex());
         Assert.assertEquals(1, g.getEmbeddedInteger().size());
         Assert.assertEquals(new Integer(1), g.getEmbeddedInteger().iterator().next());
@@ -59,8 +59,8 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
         god.setName("THEGOD");
         god.setReason(REASON.GOOD);
         db.commit();
-        Assert.assertEquals(2 + 1, countVertices());
-        Assert.assertEquals(2 + 1 + 1, countEdges());
+        Assert.assertEquals(2, countVertices());
+        Assert.assertEquals(2 + 1, countEdges());
         God g = new God(god.getVertex());
         Assert.assertEquals(REASON.GOOD, g.getReason());
     }
@@ -73,8 +73,8 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
         mamal.setName("PET");
         god.setPet(mamal);
         db.commit();
-        Assert.assertEquals(2 + 2, countVertices());
-        Assert.assertEquals(3 + 2 + 2, countEdges());
+        Assert.assertEquals(2, countVertices());
+        Assert.assertEquals(3 + 2, countEdges());
         God g = new God(god.getVertex());
         Assert.assertEquals("PET", g.getPet().getName());
     }
@@ -93,17 +93,17 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
         mamal4.setName("PET4");
         god.addToAnimalFarm(mamal1);
         db.commit();
-        Assert.assertEquals(5 + 2, countVertices());
-        Assert.assertEquals(6 + 2 + 5, countEdges());
+        Assert.assertEquals(5, countVertices());
+        Assert.assertEquals(6 + 5, countEdges());
         god.addToAnimalFarm(mamal2);
         god.addToAnimalFarm(mamal3);
         db.commit();
-        Assert.assertEquals(5 + 2, countVertices());
-        Assert.assertEquals(8 + 2 + 5, countEdges());
+        Assert.assertEquals(5, countVertices());
+        Assert.assertEquals(8 + 5, countEdges());
         god.addToAnimalFarm(mamal2);
         db.commit();
-        Assert.assertEquals(5 + 2, countVertices());
-        Assert.assertEquals(8 + 2 + 5, countEdges());
+        Assert.assertEquals(5, countVertices());
+        Assert.assertEquals(8 + 5, countEdges());
     }
 
     @Test
@@ -113,14 +113,14 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
         god.addToREASON(REASON.GOOD);
         god.addToREASON(REASON.BAD);
         db.commit();
-        Assert.assertEquals(3 + 1, countVertices());
-        Assert.assertEquals(3 + 1 + 1, countEdges());
+        Assert.assertEquals(3, countVertices());
+        Assert.assertEquals(3 + 1, countEdges());
         God g = new God(god.getVertex());
         Assert.assertEquals(2, g.getREASON().size());
         g.removeFromREASON(REASON.GOOD);
         db.commit();
-        Assert.assertEquals(2 + 1, countVertices());
-        Assert.assertEquals(2 + 1 + 1, countEdges());
+        Assert.assertEquals(2, countVertices());
+        Assert.assertEquals(2 + 1, countEdges());
     }
 
     @Test
@@ -129,15 +129,15 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
         god.setName("THEGOD");
         god.addToEmbeddedString("testthis");
         db.commit();
-        Assert.assertEquals(2 + 1, countVertices());
-        Assert.assertEquals(2 + 1 + 1, countEdges());
+        Assert.assertEquals(2 , countVertices());
+        Assert.assertEquals(2 + 1, countEdges());
         God g = new God(god.getVertex());
         Assert.assertEquals(1, g.getEmbeddedString().size());
         Assert.assertEquals("testthis", g.getEmbeddedString().iterator().next());
         g.removeFromEmbeddedString("testthis");
         db.commit();
-        Assert.assertEquals(1 + 1, countVertices());
-        Assert.assertEquals(1 + 1 + 1, countEdges());
+        Assert.assertEquals(1, countVertices());
+        Assert.assertEquals(1 + 1, countEdges());
         God g2 = new God(god.getVertex());
         Assert.assertEquals(0, g2.getEmbeddedString().size());
     }

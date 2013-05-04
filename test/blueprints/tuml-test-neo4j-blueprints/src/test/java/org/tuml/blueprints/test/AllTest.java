@@ -31,10 +31,8 @@ import org.tuml.tinker.qualifiertest.TestQualifierChangeEvent;
 import org.tuml.tinker.qualifiertest.TestQualifierOnManyToMany;
 import org.tuml.tinker.query.TestMetaQueries;
 import org.tuml.tinker.query.TestQueryBaseModelTumlAssociation;
-import org.tuml.tinker.uniqueindextest.UniqueIndexTest;
 import org.tuml.tinker.validationtest.TestValidation;
 import org.tuml.transaction.test.TransactionSuspendResumeTest;
-import org.tuml.transaction.test.TumlIdTest;
 
 /**
  * Date: 2013/01/28
@@ -46,7 +44,7 @@ import org.tuml.transaction.test.TumlIdTest;
         ManyEnumerationTest.class,
         TestMetaClasses.class,
         AllInstancesTest.class,
-        BagTesttest.class,
+        BagTestTest.class,
         OclStdLibBagTest.class,
         OclStdLibCollectionTest.class,
         OclStdLibSequenceTest.class,
@@ -77,8 +75,6 @@ import org.tuml.transaction.test.TumlIdTest;
         TestValidation.class,
         TransactionSuspendResumeTest.class,
         ConstrainedPropertyTest.class
-//        UniqueIndexTest.class,
-//        TumlIdTest.class
 })
 public class AllTest {
 

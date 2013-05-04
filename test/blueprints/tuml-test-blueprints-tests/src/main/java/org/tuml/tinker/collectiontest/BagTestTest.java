@@ -7,7 +7,7 @@ import org.tuml.collectiontest.Nightmare;
 import org.tuml.concretetest.God;
 import org.tuml.runtime.test.BaseLocalDbTest;
 
-public class BagTesttest extends BaseLocalDbTest {
+public class BagTestTest extends BaseLocalDbTest {
 
 	@Test
 	public void testBag() {
@@ -19,14 +19,14 @@ public class BagTesttest extends BaseLocalDbTest {
 		bag1.setName("bag1");
         db.commit();
 		
-		Assert.assertEquals(3 + 3, countVertices());
-		Assert.assertEquals(3 + 6, countEdges());
+		Assert.assertEquals(3, countVertices());
+		Assert.assertEquals(6, countEdges());
 		
 		nightmare.addToBag(bag1);
 
         db.commit();
-		Assert.assertEquals(3 + 3, countVertices());
-		Assert.assertEquals(4 + 6, countEdges());
+		Assert.assertEquals(3, countVertices());
+		Assert.assertEquals(1 + 6, countEdges());
 		Nightmare nTest = new Nightmare(nightmare.getVertex());
 		Assert.assertEquals(2, nTest.getBag().size());
 		Bag b1 = nTest.getBag().asSequence().at(0);

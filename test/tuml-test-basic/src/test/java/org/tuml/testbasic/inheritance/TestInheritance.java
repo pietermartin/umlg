@@ -23,8 +23,8 @@ public class TestInheritance extends BaseLocalDbTest {
 		Biped biped = new Biped(god);
 		biped.setName("biped");
 		db.commit();
-		Assert.assertEquals(3 + 3, countVertices());
-		Assert.assertEquals(3 + 3 + 3, countEdges());
+		Assert.assertEquals(3, countVertices());
+		Assert.assertEquals(3 + 3, countEdges());
 	}
 	
 }

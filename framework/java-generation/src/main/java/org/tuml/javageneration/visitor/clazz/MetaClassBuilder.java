@@ -35,6 +35,7 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
                 addContructorWithVertex(metaClass, clazz);
                 //Ensure the meta class instance does not also try to create a edge to a meta class as it is also a normal entity
                 addEmptyAddEdgeToMetaNode(metaClass);
+                addAddToThreadEntityVar(metaClass);
             } else {
                 metaClass.setSuperclass(TinkerGenerationUtil.BASE_META_NODE);
                 addDefaultConstructorStandAlone(metaClass, clazz);
@@ -53,9 +54,6 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
 
             addGetHighId(clazz, metaClass);
 
-//            addInternalSetId(clazz, metaClass);
-
-            addAddToThreadEntityVar(metaClass);
 
             addDefaultCreate(metaClass);
 
@@ -96,7 +94,7 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
         metaClass.getDefaultConstructor().getBody().addToStatements("this.vertex = " + TinkerGenerationUtil.graphDbAccess + ".addVertex(this.getClass().getName())");
         metaClass.getDefaultConstructor().getBody().addToStatements("this.vertex.setProperty(\"className\", getClass().getName())");
         metaClass.getDefaultConstructor().getBody().addToStatements("defaultCreate()");
-        metaClass.getDefaultConstructor().getBody().addToStatements("Edge edge = " + TinkerGenerationUtil.graphDbAccess + ".addEdge(null, " + TinkerGenerationUtil.graphDbAccess + ".getRoot(), this.vertex, getEdgeToRootLabel())");
+        metaClass.getDefaultConstructor().getBody().addToStatements(TinkerGenerationUtil.graphDbAccess + ".addEdge(null, " + TinkerGenerationUtil.graphDbAccess + ".getRoot(), this.vertex, getEdgeToRootLabel())");
     }
 
     private void addEmptyAddEdgeToMetaNode(OJAnnotatedClass metaClass) {
@@ -240,7 +238,7 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
     private void addGetHighId(Class clazz, OJAnnotatedClass metaClass) {
         OJAnnotatedOperation getIdHigh = new OJAnnotatedOperation("getIdHigh", new OJPathName("java.lang.Long"));
         TinkerGenerationUtil.addOverrideAnnotation(getIdHigh);
-        getIdHigh.getBody().addToStatements("return (Long)this.vertex.getProperty(\"highId\")");
+        getIdHigh.getBody().addToStatements("return this.vertex.getProperty(\"highId\")");
         metaClass.addToOperations(getIdHigh);
     }
 

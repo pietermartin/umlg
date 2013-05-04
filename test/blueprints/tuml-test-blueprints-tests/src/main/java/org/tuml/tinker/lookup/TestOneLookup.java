@@ -32,9 +32,9 @@ public class TestOneLookup extends BaseLocalDbTest {
 		Spook s2 = new Spook(g);
 		s2.setName("s2");
 		c1.addToSpook(s1);
-		c2.addToSpook(s2);
+//		c2.addToSpook(s2);
         db.commit();
-		Assert.assertEquals(2, new Creature(c1.getVertex()).lookupFor_creature_spook().size());
+		Assert.assertEquals(1, new Creature(c1.getVertex()).lookupFor_creature_spook().size());
 	}
 
 	@Test
@@ -118,10 +118,10 @@ public class TestOneLookup extends BaseLocalDbTest {
 		Spook s3 = new Spook(g);
         db.commit();
 
-		Assert.assertEquals(3, c1.lookupFor_creature_spook().size());
-		Assert.assertEquals(3, c2.lookupFor_creature_spook().size());
-		Assert.assertEquals(3, s1.lookupFor_spook_creature().size());
-		Assert.assertEquals(3, s2.lookupFor_spook_creature().size());
+		Assert.assertEquals(1, c1.lookupFor_creature_spook().size());
+		Assert.assertEquals(1, c2.lookupFor_creature_spook().size());
+		Assert.assertEquals(1, s1.lookupFor_spook_creature().size());
+		Assert.assertEquals(1, s2.lookupFor_spook_creature().size());
 	}
 
 	@Test

@@ -24,57 +24,23 @@ public abstract class BaseMetaNode implements TumlMetaNode {
         return vertex;
     }
 
-    public void defaultCreate() {
-        getUid();
+    @Override
+    public final Long getId() {
+        return TinkerIdUtilFactory.getIdUtil().getId(this.vertex);
     }
-
-    public String getName() {
-        return getClass().getName() + "[" + getId() + "]";
-    }
-
-//    @Override
-//    public Long getId() {
-//        return TinkerIdUtilFactory.getIdUtil().getId(this.vertex);
-//    }
 
     @Override
     public String getUid() {
-        String uid = (String) this.vertex.getProperty("uid");
+        String uid = this.vertex.getProperty("uid");
         if ( uid==null || uid.trim().length()==0 ) {
-            uid= UUID.randomUUID().toString();
+            uid=UUID.randomUUID().toString();
             this.vertex.setProperty("uid", uid);
         }
         return uid;
     }
 
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(getUid()).toHashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (obj == this) {
-            return true;
-        }
-        if (obj.getClass() != getClass()) {
-            return false;
-        }
-        BaseTuml rhs = (BaseTuml) obj;
-        try {
-            return new EqualsBuilder().append(getUid(), rhs.getUid()).isEquals();
-        } catch (RuntimeException e) {
-            //this is in case the node has been deleted
-            if (TumlExceptionUtilFactory.getTumlExceptionUtil().isNodeNotFoundException(e)) {
-                return false;
-            } else {
-                throw e;
-            }
-        }
+    public void defaultCreate() {
+        getUid();
     }
 
 

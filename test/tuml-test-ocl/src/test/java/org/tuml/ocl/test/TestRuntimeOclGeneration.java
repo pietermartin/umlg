@@ -168,7 +168,7 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 		Assert.assertTrue(resultAsMap.get("bank") instanceof Bank);
 		Assert.assertTrue(resultAsMap.get("employeeNames") instanceof TinkerSequence);
 		@SuppressWarnings({ "rawtypes", "unchecked" })
-		TinkerBag<String> employeeNameBag = (TinkerBag)resultAsMap.get("employeeNames");
+        TinkerSequence<String> employeeNameBag = (TinkerSequence)resultAsMap.get("employeeNames");
 		Assert.assertEquals(3, employeeNameBag.size());
 	}
 

@@ -1,8 +1,6 @@
 package org.tuml.tinker.json;
 
 import junit.framework.Assert;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.joda.time.DateTime;
 import org.junit.Test;
@@ -30,7 +28,7 @@ public class JsonTest extends BaseLocalDbTest {
 		god.addToEmbeddedString("embeddedString2");
 		god.addToEmbeddedString("embeddedString3");
         db.commit();
-		Assert.assertEquals(4 + 1, countVertices());
+		Assert.assertEquals(4, countVertices());
 
 		ObjectMapper mapper = new ObjectMapper();
 		System.out.println(god.toJson());
@@ -65,7 +63,7 @@ public class JsonTest extends BaseLocalDbTest {
 		god.addToEmbeddedInteger(2);
 		god.addToEmbeddedInteger(3);
         db.commit();
-		Assert.assertEquals(7 + 1, countVertices());
+		Assert.assertEquals(7, countVertices());
 
 		String json = god.toJson();
 		God godtest = new God(true);
@@ -145,7 +143,7 @@ public class JsonTest extends BaseLocalDbTest {
         Assert.assertEquals(3, trueList.size());
         Assert.assertEquals(3, falseList.size());
         Assert.assertEquals("testEmbedded", testTestEmbedded.getName());
-        Assert.assertNotNull(testTestEmbedded.getGod());
+        Assert.assertNull(testTestEmbedded.getGod());
     }
 
     @Test
@@ -187,7 +185,7 @@ public class JsonTest extends BaseLocalDbTest {
         Assert.assertEquals(new Integer(6), testTestEmbedded.getManyOrderedRequiredInteger().get(8));
 
         Assert.assertEquals("testEmbedded", testTestEmbedded.getName());
-        Assert.assertNotNull(testTestEmbedded.getGod());
+        Assert.assertNull(testTestEmbedded.getGod());
     }
 
     @Test
@@ -226,7 +224,7 @@ public class JsonTest extends BaseLocalDbTest {
         Assert.assertEquals("f", testTestEmbedded.getManyOrderedString().get(5));
 
         Assert.assertEquals("testEmbedded", testTestEmbedded.getName());
-        Assert.assertNotNull(testTestEmbedded.getGod());
+        Assert.assertNull(testTestEmbedded.getGod());
     }
 
 	@SuppressWarnings("unchecked")
@@ -313,7 +311,7 @@ public class JsonTest extends BaseLocalDbTest {
 		ObjectMapper objectMapper = new ObjectMapper();
 		@SuppressWarnings("unchecked")
 		Map<String, Object> jsonMap = objectMapper.readValue(quadped1.toJson(), Map.class);
-		Assert.assertEquals(7, jsonMap.size());
+		Assert.assertEquals(8, jsonMap.size());
 		Assert.assertEquals(jsonMap.get("name"), "quadped1");
 	}
 

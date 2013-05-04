@@ -40,7 +40,9 @@ public class MetaNodeCreator extends BaseVisitor implements Visitor<Model> {
             createAll.getBody().addToStatements(TumlClassOperations.getMetaClassName(c) + ".getInstance()");
             metaNodeCreator.addToImports(TumlClassOperations.getMetaClassPathName(c));
         }
-
+        OJAnnotatedOperation count = new OJAnnotatedOperation("count", "int");
+        count.getBody().addToStatements("return " + concreteClasses.size());
+        metaNodeCreator.addToOperations(count);
     }
 
     @Override
