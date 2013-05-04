@@ -90,9 +90,6 @@
           <emfPageIdentifier href="tinker-test.notation#_Bjw3IIaIEeKeSZB9UA6Gvw"/>
         </children>
         <children>
-          <emfPageIdentifier href="tinker-test.notation#_1chENAAOEeKpVr_ntT6cLA"/>
-        </children>
-        <children>
           <emfPageIdentifier href="tinker-test.notation#_1chENgAOEeKpVr_ntT6cLA"/>
         </children>
         <children>
@@ -103,6 +100,9 @@
         </children>
         <children>
           <emfPageIdentifier href="tinker-test.notation#_rs5lAIlaEeKeSZB9UA6Gvw"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="tinker-test.notation#_1chENAAOEeKpVr_ntT6cLA"/>
         </children>
       </children>
     </windows>

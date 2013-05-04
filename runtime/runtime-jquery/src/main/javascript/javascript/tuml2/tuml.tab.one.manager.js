@@ -213,6 +213,7 @@
     TumlBaseTabOneManager.prototype.fieldsToObject = function () {
         var dataToSend = {};
         dataToSend.qualifiedName = this.metaForData.qualifiedName;
+
         for (var i = 0; i < this.metaForData.properties.length; i++) {
             var property = this.metaForData.properties[i];
             if (property.name === 'id') {
@@ -313,9 +314,18 @@
         var ul = $('<ul class="oneUl" />')
         ul.appendTo(formDiv);
         if (this.metaForData.name !== 'Root') {
+            //Do everything except for select boxes that require lookups.
+            //Lookups need to do a server call and as such need the id field set.
             for (var i = 0; i < this.metaForData.properties.length; i++) {
                 var property = this.metaForData.properties[i];
                 if (this.isPropertyForOnePage(property, isForCreation)) {
+
+                    if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && property.oneToOne) {
+                        continue;
+                    } else if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && property.manyToOne) {
+                        continue;
+                    }
+
                     var li = $('<li>')
                     li.appendTo(ul);
                     $('<label />', {for: property.name + 'Id'}).text(property.name + ' :').appendTo(li);
@@ -386,6 +396,19 @@
                     }
                 }
             }
+
+            //Do lookups latest
+            for (var i = 0; i < this.metaForData.properties.length; i++) {
+                var property = this.metaForData.properties[i];
+                if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && (property.oneToOne || property.manyToOne)) {
+                    var li = $('<li>')
+                    li.appendTo(ul);
+                    $('<label />', {for: property.name + 'Id'}).text(property.name + ' :').appendTo(li);
+                    var $input = this.constructInputForField(data, property, isForCreation);
+                    $input.appendTo(li);
+                }
+            }
+
         }
     }
 
@@ -470,7 +493,8 @@
         } else if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && property.manyToOne) {
             $input = $('<select />', {class: 'chzn-select', style: 'width:350px;', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
             if (!isForCreation && data[property.name] !== undefined && data[property.name] !== null) {
-                this.appendLoopupOptionsToSelect(property.tumlLookupUri, property.lower > 0, data['id'], data[property.name], $input);
+//                this.appendLoopupOptionsToSelect(property.tumlLookupUri, property.lower > 0, data['id'], data[property.name], $input);
+                this.appendLoopupOptionsToSelect2(property, data['id'], $input, data[property.name]);
             }
         } else if (property.fieldType == 'String') {
             $input = $('<input />', {type: 'text', class: 'field', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
@@ -744,33 +768,6 @@
                 $select.focus();
             }
         );
-
-//        var adjustedUri = tumlLookupUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
-//        var jqxhr = $.getJSON(adjustedUri,function (response, b, c) {
-//            //if not a required field add a blank value
-//            if (!required) {
-//                $select.append($('<option />)').val("").html(""));
-//            }
-//            //append the current value to the dropdown
-//            $select.append($('<option />)').val(currentValue.id).html(currentValue.displayName));
-//            //Property is a many, meta has 2 properties, one for both sides of the association
-//            //The first one is the parent property, i.e. the context property for which the menu is built
-//            var options = [];
-//            $.each(response.data, function (index, obj) {
-//                var option = {};
-//                option['value'] = obj.id;
-//                option['desc'] = obj.name;
-//                options.push(option);
-//            });
-//            for (var i = 0; i < options.length; i++) {
-//                $select.append($('<option />)').val(options[i].value).html(options[i].desc));
-//            }
-//            $select.val(currentValue.id);
-//            $select.chosen({allow_single_deselect: true});
-//        }).fail(function (a, b, c) {
-//                alert("error " + a + ' ' + b + ' ' + c);
-//            }
-//        );
     }
 
     TumlBaseTabOneManager.prototype.appendLoopupOptionsToSelect2 = function (property, contextVertexId, $select, currentValue) {
