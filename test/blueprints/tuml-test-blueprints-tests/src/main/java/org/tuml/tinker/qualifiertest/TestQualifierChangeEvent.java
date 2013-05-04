@@ -30,7 +30,6 @@ public class TestQualifierChangeEvent extends BaseLocalDbTest {
 		
 		God gg = new God(god.getVertex());
 		Assert.assertTrue(!gg.getNatureForQualifier2("nameSoGonaFail").isEmpty());
-		
 	}
 
 }
