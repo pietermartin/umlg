@@ -182,7 +182,6 @@ public class NavigatePropertyOverloadedPostForLookupServerResourceBuilder extend
 
         //get the lookup uri
         ojTryStatement.getTryPart().addToStatements("String lookupUri = getQueryValue(\"lookupUri\")");
-        ojTryStatement.getTryPart().addToStatements("String qualifiedName = getQueryValue(\"qualifiedName\")");
         ojTryStatement.getTryPart().addToStatements("lookupUri = \"riap://host\" + lookupUri");
         ojTryStatement.getTryPart().addToStatements("int fakeIdIndex = lookupUri.indexOf(\"fake\")");
         OJIfStatement ifFakeId = new OJIfStatement("fakeIdIndex != -1");
@@ -203,7 +202,6 @@ public class NavigatePropertyOverloadedPostForLookupServerResourceBuilder extend
         ojTryStatement.getFinallyPart().addToStatements(TinkerGenerationUtil.graphDbAccess + ".rollback()");
 
         ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
-        ojTryStatement.getCatchPart().addToStatements("GraphDb.getDb().rollback()");
 
         ojTryStatement.getCatchPart().addToStatements("throw " + TumlRestletGenerationUtil.TumlExceptionUtilFactory.getLast() + ".getTumlExceptionUtil().handle(e)");
         annotatedClass.addToImports(TumlRestletGenerationUtil.TumlExceptionUtilFactory);

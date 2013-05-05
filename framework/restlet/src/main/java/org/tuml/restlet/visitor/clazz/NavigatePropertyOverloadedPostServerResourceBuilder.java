@@ -402,7 +402,7 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
 //            ifIndexNull.addToElsePart("parentResource." + pWrap.adder() + "(childResource)");
 //            add.getBody().addToStatements(ifIndexNull);
         } else {
-            tryInstantiate.getTryPart().addToStatements("parentResource." + pWrap.adder() + "(childResource)");
+//            tryInstantiate.getTryPart().addToStatements("parentResource." + pWrap.adder() + "(childResource)");
         }
         tryInstantiate.getTryPart().addToStatements("sb.append(jsonResult)");
         tryInstantiate.setCatchParam(new OJParameter("e", "Exception"));

@@ -222,8 +222,8 @@
                     dataToSend.id = parseInt(id);
                 } else {
                     dataToSend.id = id;
+                    dataToSend.tmpId = dataToSend.id;
                 }
-                dataToSend.tmpId = dataToSend.id;
             } else if (property.readOnly) {
                 //Do nothing
             } else if (property.name !== 'uri') {
@@ -263,6 +263,15 @@
                 } else if (property.manyPrimitive) {
                     var inputValue = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').val();
                     var array = inputValue.split(',');
+                    if (property.fieldType == 'Integer' || property.fieldType == 'Long') {
+                        for (var j = 0; j < array.length; j++) {
+                            array[j] = parseInt(array[j], 10);
+                        }
+                    } else if (property.fieldType == 'Boolean') {
+                        for (var j = 0; j < array.length; j++) {
+                            array[j] = array[j] === 'true';
+                        }
+                    }
                     dataToSend[property.name] = array;
                 } else if (property.manyEnumeration) {
                     var inputValue = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').val();
@@ -333,14 +342,33 @@
                     $input.appendTo(li);
                     if (property.manyPrimitive) {
                         var $manyDiv = $('<div />', {class: "many-primitive-one-img"}).appendTo(li);
-                        $manyDiv.click(function (e) {
-                            self.openEditorForMany($input, property, $manyDiv, li);
-                        });
-                        $input.keypress(function (e) {
-                            if (e.which == 13) {
-                                self.openEditorForMany($input, property, $manyDiv, li);
-                            }
-                        });
+
+                        $manyDiv.click(
+                            function (inputScoped, propertyScoped, manyDivScoped, liScoped) {
+                                return function () {
+                                    self.openEditorForMany(inputScoped, propertyScoped, manyDivScoped, liScoped)
+                                };
+
+                            }($input, property, $manyDiv, li));
+
+                        $input.keypress(
+
+                            function (inputScoped, propertyScoped, manyDivScoped, liScoped) {
+                                return function (e) {
+                                    if (e.which == 13) {
+                                        self.openEditorForMany(inputScoped, propertyScoped, manyDivScoped, liScoped)
+                                    }
+                                };
+
+                            }($input, property, $manyDiv, li));
+
+
+//                            function (e) {
+//                                if (e.which == 13) {
+//                                    self.openEditorForMany($input, property, $manyDiv, li);
+//                                }
+//                            });
+
                     } else if (property.composite && property.lower == 1 && property.upper == 1) {
                         $input.click(function (e, args) {
                             var data = [];
@@ -400,7 +428,7 @@
             //Do lookups latest
             for (var i = 0; i < this.metaForData.properties.length; i++) {
                 var property = this.metaForData.properties[i];
-                if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && (property.oneToOne || property.manyToOne)) {
+                if (this.isPropertyForOnePage(property, isForCreation) && !property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && (property.oneToOne || property.manyToOne)) {
                     var li = $('<li>')
                     li.appendTo(ul);
                     $('<label />', {for: property.name + 'Id'}).text(property.name + ' :').appendTo(li);
@@ -449,6 +477,7 @@
         } else if (property.dataTypeEnum != null && property.dataTypeEnum !== undefined) {
             if (property.dataTypeEnum == 'Date' || property.dataTypeEnum == 'Time' || property.dataTypeEnum == 'DateTime' || property.dataTypeEnum == 'InternationalPhoneNumber' || property.dataTypeEnum == 'LocalPhoneNumber' || property.dataTypeEnum == 'Email') {
                 $input = $("<input />", {type: 'text', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
+                $input.button().addClass('ui-textfield');
             } else if (property.dataTypeEnum == 'Video') {
                 $input = $("<input />", {type: 'text', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
             } else if (property.dataTypeEnum == 'Audio') {
@@ -493,7 +522,6 @@
         } else if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && property.manyToOne) {
             $input = $('<select />', {class: 'chzn-select', style: 'width:350px;', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
             if (!isForCreation && data[property.name] !== undefined && data[property.name] !== null) {
-//                this.appendLoopupOptionsToSelect(property.tumlLookupUri, property.lower > 0, data['id'], data[property.name], $input);
                 this.appendLoopupOptionsToSelect2(property, data['id'], $input, data[property.name]);
             }
         } else if (property.fieldType == 'String') {
@@ -667,7 +695,7 @@
                 $input.val('');
             }
         }).appendTo($div);
-        $input = this.constructInputForField(null, property);
+        $input = this.constructInputForField({}, property);
         $input.addClass("many-primitive-editor-input");
         $input.appendTo($div);
         $input.keypress(function (e) {

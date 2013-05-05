@@ -133,6 +133,8 @@ public class TumlTransactionEventHandler<T> implements TransactionEventHandler<T
 
     @Override
     public void afterRollback(TransactionData data, T state) {
+        TransactionThreadEntityVar.remove();
+        TransactionThreadMetaNodeVar.remove();
     }
 
 }

@@ -61,7 +61,7 @@
             } else {
                 //Property is a one
                 //If there are no data then it is for creation
-                var isForCreation = result.length > 1 && result[0].data.length > 0;
+                var isForCreation = result[0].data.length == 0;
                 if (!isForCreation) {
                     //Only one element of the array contains data, i.e. for the return concrete type
                     for (var i = 0; i < result.length; i++) {
@@ -129,34 +129,20 @@
             if (commit && !validateMultiplicity(tumlTabViewManagers)) {
                 return;
             } else {
-                var AJAX_TYPE;
                 for (var i = 0; i < tumlTabViewManagers.length; i++) {
                     var tumlTabViewManager = tumlTabViewManagers[i];
                     if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager && !tumlTabViewManager.oneManyOrQuery.forManyComponent) {
-                        AJAX_TYPE = "POST";
                         var dataView = tumlTabViewManager.tumlTabGridManager.dataView;
                         overloadedPostData.insert.push.apply(overloadedPostData.insert, dataView.getNewItems());
                         overloadedPostData.update.push.apply(overloadedPostData.update, dataView.getUpdatedItems());
                         overloadedPostData.delete.push.apply(overloadedPostData.delete, dataView.getDeletedItems());
                     } else {
                         if (tumlTabViewManager.oneManyOrQuery.forCreation) {
-                            AJAX_TYPE = "POST";
-                            overloadedPostData = tumlTabViewManager.tumlTabOneManager.fieldsToObject();
+                            overloadedPostData.insert.push(tumlTabViewManager.tumlTabOneManager.fieldsToObject());
                         } else {
-                            var validationResults = tumlTabViewManager.tumlTabOneManager.validateFields();
-
-                            if (validationResults.length > 0) {
-                                var errorMsg = '\n';
-                                for (var i = 0; i < validationResults.length; i++) {
-                                    errorMsg += validationResults[i].msg + '\n';
-                                }
-                                alert('There are validation errors: ' + errorMsg);
-                                return;
-                            }
-                            AJAX_TYPE = "PUT";
-                            overloadedPostData = tumlTabViewManager.tumlTabOneManager.fieldsToObject();
-                            overloadedPostData.tmpId = null;
+                            overloadedPostData.update.push(tumlTabViewManager.tumlTabOneManager.fieldsToObject());
                         }
+                        break;
                     }
                 }
                 var postUri;
@@ -168,7 +154,7 @@
 
                 $.ajax({
                     url: postUri,
-                    type: AJAX_TYPE,
+                    type: "POST",
                     dataType: "json",
                     contentType: "application/json",
                     data: JSON.stringify(overloadedPostData),
@@ -191,41 +177,38 @@
         }
 
         this.updateTabsForResultAfterCommit = function (result) {
-
             for (var i = 0; i < result.length; i++) {
+                var resultForTab = result[i];
                 for (var j = 0; j < this.tumlTabViewManagers.length; j++) {
                     var tumlTabViewManager = this.tumlTabViewManagers[j];
-
                     if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager) {
                         tumlTabViewManager.beginUpdate();
-
-                        var metaForData = result[i].meta.to;
+                        var metaForData = resultForTab.meta.to;
                         //TOTO use qualified name somehow
                         if (tumlTabViewManager.tabId == metaForData.name) {
-                            for (var k = 0; k < result[i].data.length; k++) {
-                                tumlTabViewManager.updateGridAfterCommit(result[i].data[k]);
+                            for (var k = 0; k < resultForTab.data.length; k++) {
+                                tumlTabViewManager.updateGridAfterCommitOrRollback(resultForTab.data[k]);
                             }
                         }
-
-                        tumlTabViewManager.clearArraysAfterCommit();
                         tumlTabViewManager.endUpdate(false);
                     }
                 }
             }
-
+            for (var j = 0; j < this.tumlTabViewManagers.length; j++) {
+                var tumlTabViewManager = this.tumlTabViewManagers[j];
+                if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager) {
+                    tumlTabViewManager.clearArraysAfterCommit();
+                }
+            }
         }
 
         this.updateTabsForResultAfterRollback = function (result) {
-
             for (var i = 0; i < result.length; i++) {
-
                 var resultForTab = result[i];
-
                 for (var j = 0; j < this.tumlTabViewManagers.length; j++) {
                     var tumlTabViewManager = this.tumlTabViewManagers[j];
                     if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager) {
                         tumlTabViewManager.beginUpdate();
-
                         var metaForData = resultForTab.meta.to;
                         //TODO use qualified name somehow
                         //Line up he result with the correct tab
@@ -234,10 +217,9 @@
                                 //Need to update the id's to the tmpId as the id no longer exist on a rolled back transaction
                                 //Go through all the properties, for each composite property set the id = tmpId
                                 this.setComponentIdToTmpId(resultForTab.data[k]);
-                                tumlTabViewManager.updateGridAfterRollback(resultForTab.data[k]);
+                                tumlTabViewManager.updateGridAfterCommitOrRollback(resultForTab.data[k]);
                             }
                         }
-
                         tumlTabViewManager.endUpdate(true);
                     }
                 }
@@ -444,7 +426,7 @@
             for (var i = 0; i < result.length; i++) {
                 var tumlTabViewManager = self.addTab(tuml.tab.Enum.Properties, result[i], tumlUri, {forLookup: false, forManyComponent: false, isOne: isOne, forCreation: forCreation}, self.propertyNavigatingTo);
                 self.addToTumlTabViewManagers(tumlTabViewManager);
-                tumlTabViewManager.createTab(result[i], false);
+                tumlTabViewManager.createTab(result[i], forCreation);
             }
         }
 
@@ -543,7 +525,6 @@
         var AJAX_TYPE;
 
         for (var i = 0; i < tumlTabViewManagers.length; i++) {
-
             var tumlTabViewManager = tumlTabViewManagers[i];
             if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager && !tumlTabViewManager.oneManyOrQuery.forManyComponent) {
                 AJAX_TYPE = "POST";
@@ -554,11 +535,17 @@
                     overloadedPostData.delete.push.apply(overloadedPostData.delete, dataView.getDeletedItems());
                 }
             } else {
-                AJAX_TYPE = "POST";
+                AJAX_TYPE = "PUT";
                 overloadedPostData = tumlTabViewManager.tumlTabOneManager.fieldsToObject();
+                break;
             }
         }
-        var postUri = this.tumlUri + "_forwardToLookup?lookupUri=" + lookupUri + '&qualifiedName=' + qualifiedName;
+        var postUri;
+        if (AJAX_TYPE === "POST") {
+            postUri = this.tumlUri + "_forwardToLookup?lookupUri=" + lookupUri + '&qualifiedName=' + qualifiedName;
+        } else {
+            postUri = this.tumlUri + "/forwardToLookup?lookupUri=" + lookupUri + '&qualifiedName=' + qualifiedName;
+        }
 
         $.ajax({
             url: postUri,

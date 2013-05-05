@@ -283,7 +283,7 @@
         this.parentTabContainerManager.addNewRow();
     }
 
-    TumlBaseTabViewManager.prototype.updateGridAfterRollback = function (item) {
+    TumlBaseTabViewManager.prototype.updateGridAfterCommitOrRollback = function (item) {
         //Check if component tab is open for this particular item
         if (this.tumlTabViewManagers.length > 0) {
 
@@ -295,12 +295,12 @@
                     var componentData = item[tumlTabViewManager.propertyNavigatingTo.name];
 
                     if (tumlTabViewManager instanceof TumlTabOneViewManager) {
-                        tumlTabViewManager.updateGridAfterRollback(componentData);
+                        tumlTabViewManager.updateGridAfterCommitOrRollback(componentData);
                     } else {
                         for (var j = 0; j < componentData.length; j++) {
                             var gridRow = componentData[j];
                             if (tumlTabViewManager.metaForData.to.qualifiedName === gridRow.qualifiedName) {
-                                tumlTabViewManager.updateGridAfterRollback(gridRow);
+                                tumlTabViewManager.updateGridAfterCommitOrRollback(gridRow);
                             }
                         }
                     }
@@ -418,9 +418,9 @@
         return this.tumlTabOneManager.fieldsToObject();
     }
 
-    TumlTabOneViewManager.prototype.updateGridAfterRollback = function (item) {
-        this.tumlTabOneManager.updateGridAfterRollback(item);
-        TumlBaseTabViewManager.prototype.updateGridAfterRollback.call(this, item);
+    TumlTabOneViewManager.prototype.updateGridAfterCommitOrRollback = function (item) {
+        this.tumlTabOneManager.updateGridAfterCommitOrRollback(item);
+        TumlBaseTabViewManager.prototype.updateGridAfterCommitOrRollback.call(this, item);
     }
 
     TumlTabOneViewManager.prototype.setProperty = function (property) {
@@ -535,32 +535,32 @@
         Tuml.TumlTabContainerManager.prototype.activeOpenTabsGrid.call(this);
     }
 
-    TumlTabManyViewManager.prototype.updateGridAfterCommit = function (item) {
-        this.tumlTabGridManager.updateGridAfterCommit(item);
+//    TumlTabManyViewManager.prototype.updateGridAfterCommit = function (item) {
+//        this.tumlTabGridManager.updateGridAfterCommit(item);
+//
+//        //Check if component tab is open
+//        if (this.tumlTabViewManagers.length > 0) {
+//
+//            for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
+//
+//                var tumlTabViewManager = this.tumlTabViewManagers[i];
+//
+//                var rowClickedOnData = this.tumlTabGridManager.dataView.getItems()[this.componentCell.row];
+//                var componentData = rowClickedOnData[tumlTabViewManager.propertyNavigatingTo.name];
+//
+//                for (var j = 0; j < componentData.length; j++) {
+//                    var gridRow = componentData[j];
+//                    if (tumlTabViewManager.metaForData.to.qualifiedName === gridRow.qualifiedName) {
+//                        tumlTabViewManager.updateGridAfterCommit(gridRow);
+//                    }
+//                }
+//            }
+//        }
+//    }
 
-        //Check if component tab is open
-        if (this.tumlTabViewManagers.length > 0) {
-
-            for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
-
-                var tumlTabViewManager = this.tumlTabViewManagers[i];
-
-                var rowClickedOnData = this.tumlTabGridManager.dataView.getItems()[this.componentCell.row];
-                var componentData = rowClickedOnData[tumlTabViewManager.propertyNavigatingTo.name];
-
-                for (var j = 0; j < componentData.length; j++) {
-                    var gridRow = componentData[j];
-                    if (tumlTabViewManager.metaForData.to.qualifiedName === gridRow.qualifiedName) {
-                        tumlTabViewManager.updateGridAfterCommit(gridRow);
-                    }
-                }
-            }
-        }
-    }
-
-    TumlTabManyViewManager.prototype.updateGridAfterRollback = function (item) {
-        this.tumlTabGridManager.updateGridAfterRollback(item);
-        TumlBaseTabViewManager.prototype.updateGridAfterRollback.call(this, item);
+    TumlTabManyViewManager.prototype.updateGridAfterCommitOrRollback = function (item) {
+        this.tumlTabGridManager.updateGridAfterCommitOrRollback(item);
+        TumlBaseTabViewManager.prototype.updateGridAfterCommitOrRollback.call(this, item);
     }
 
     TumlTabManyViewManager.prototype.clearArraysAfterCommit = function () {

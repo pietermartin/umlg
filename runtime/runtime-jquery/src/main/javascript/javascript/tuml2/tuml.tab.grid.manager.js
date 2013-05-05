@@ -277,10 +277,6 @@
             return validationResults;
         };
 
-        this.updateGridAfterCommit = function (data) {
-            this.dataView.refreshItemAfterCommit(data);
-        }
-
         this.clearArraysAfterCommit = function() {
             this.dataView.clearArraysAfterCommit();
         }
@@ -298,8 +294,12 @@
             }
         }
 
-        this.updateGridAfterRollback = function (item) {
-            this.dataView.refreshItemAfterRollback(item);
+//        this.updateGridAfterCommit = function (data) {
+//            this.dataView.refreshItemAfterCommit(data);
+//        }
+
+        this.updateGridAfterCommitOrRollback = function (item) {
+            this.dataView.refreshItemAfterCommitOrRollback(item);
         }
 
         this.handleContextMenuClickLink = function (tumlUri) {

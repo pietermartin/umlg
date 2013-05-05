@@ -75,12 +75,20 @@ public abstract class BaseServerResourceBuilder extends BaseVisitor {
 		attachAll.getBody().addToStatements(routerEnum.getName() + "." + ojLiteral.getName() + ".attach(router)");
 	}
 
+    protected String getLookupServerResourceImplName(Class clazz) {
+        return TumlClassOperations.className(clazz) + "LookupServerResourceImpl";
+    }
+
 	protected String getServerResourceImplName(Class clazz) {
 		return TumlClassOperations.className(clazz) + "ServerResourceImpl";
 	}
 
     protected String getServerResourceMetatDataImplName(Classifier clazz) {
         return TumlClassOperations.className(clazz) + "MetaDataServerResourceImpl";
+    }
+
+    protected String getLookupServerResourceName(Classifier clazz) {
+        return TumlClassOperations.className(clazz) + "LookupServerResource";
     }
 
     protected String getServerResourceName(Classifier clazz) {

@@ -21,11 +21,11 @@ public class EntityForLookupServerResourceBuilder extends BaseServerResourceBuil
     @Override
     public void visitBefore(Class clazz) {
         if (!clazz.isAbstract()) {
-            OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(getServerResourceName(clazz));
+            OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(getLookupServerResourceName(clazz));
             OJPackage ojPackage = new OJPackage(Namer.name(clazz.getNearestPackage()) + ".restlet");
             annotatedInf.setMyPackage(ojPackage);
             addToSource(annotatedInf);
-            OJAnnotatedClass annotatedClass = new OJAnnotatedClass(getServerResourceImplName(clazz));
+            OJAnnotatedClass annotatedClass = new OJAnnotatedClass(getLookupServerResourceImplName(clazz));
             annotatedClass.setSuperclass(TumlRestletGenerationUtil.ServerResource);
             annotatedClass.addToImplementedInterfaces(annotatedInf.getPathName());
             annotatedClass.setMyPackage(ojPackage);
@@ -33,10 +33,8 @@ public class EntityForLookupServerResourceBuilder extends BaseServerResourceBuil
             addToSource(annotatedClass);
             addPrivateIdVariable(clazz, annotatedClass);
             addDefaultConstructor(annotatedClass);
-            addGetRepresentation(clazz, annotatedInf, annotatedClass);
             if (!clazz.isAbstract()) {
                 addPutRepresentation(clazz, annotatedInf, annotatedClass);
-                addDeleteRepresentation(clazz, annotatedInf, annotatedClass);
             }
             addToRouterEnum(clazz, annotatedClass);
         }
@@ -44,58 +42,6 @@ public class EntityForLookupServerResourceBuilder extends BaseServerResourceBuil
 
     @Override
     public void visitAfter(Class clazz) {
-    }
-
-    private void addDeleteRepresentation(Class clazz, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass) {
-        OJAnnotatedOperation deleteInf = new OJAnnotatedOperation("delete", TumlRestletGenerationUtil.Representation);
-        deleteInf.addParam("entity", TumlRestletGenerationUtil.Representation);
-        annotatedInf.addToOperations(deleteInf);
-        deleteInf.addAnnotationIfNew(new OJAnnotationValue(TumlRestletGenerationUtil.Delete, "json"));
-
-        OJAnnotatedOperation delete = new OJAnnotatedOperation("delete", TumlRestletGenerationUtil.Representation);
-        delete.addParam("entity", TumlRestletGenerationUtil.Representation);
-        delete.addToThrows(TumlRestletGenerationUtil.ResourceException);
-        annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
-        TinkerGenerationUtil.addOverrideAnnotation(delete);
-
-        delete.getBody().addToStatements(
-                "this." + getIdFieldName(clazz) + "= Long.valueOf((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"))");
-        delete.getBody().addToStatements(
-                TumlClassOperations.className(clazz) + " c = new " + TumlClassOperations.className(clazz) + "(GraphDb.getDb().getVertex(this."
-                        + getIdFieldName(clazz) + "))");
-        annotatedClass.addToImports(TumlClassOperations.getPathName(clazz));
-
-        OJPathName parentPathName = TumlClassOperations.getOtherEndToCompositePathName(clazz);
-        if (parentPathName != null) {
-            annotatedClass.addToImports(parentPathName);
-            Property parentProperty = TumlClassOperations.getOtherEndToComposite(clazz);
-            PropertyWrapper parentWrap = new PropertyWrapper(parentProperty);
-            delete.getBody().addToStatements(parentPathName.getLast() + " " + parentWrap.fieldname() + " = c." + parentWrap.getter() + "()");
-        }
-
-        OJTryStatement ojTry = new OJTryStatement();
-        ojTry.getTryPart().addToStatements("c.delete()");
-        ojTry.getTryPart().addToStatements("GraphDb.getDb().commit()");
-
-        ojTry.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
-
-        ojTry.getCatchPart().addToStatements("GraphDb.getDb().rollback()");
-        ojTry.getCatchPart().addToStatements(TumlRestletGenerationUtil.TumlExceptionUtilFactory.getLast() + ".getTumlExceptionUtil().handle(e)");
-        annotatedClass.addToImports(TumlRestletGenerationUtil.TumlExceptionUtilFactory);
-        delete.getBody().addToStatements(ojTry);
-
-        if (parentPathName != null) {
-            Property parentProperty = TumlClassOperations.getOtherEndToComposite(clazz);
-            PropertyWrapper parentWrap = new PropertyWrapper(parentProperty);
-            addGetParentRepresentation((Class) parentProperty.getType(), annotatedClass);
-            delete.getBody().addToStatements("return getParent(" + parentWrap.fieldname() + ")");
-        } else {
-            delete.getBody().addToStatements("return new JsonRepresentation(\"\")");
-        }
-
-        annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
-        annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);
-        annotatedClass.addToOperations(delete);
     }
 
     private void addPutRepresentation(Class clazz, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass) {
@@ -123,100 +69,48 @@ public class EntityForLookupServerResourceBuilder extends BaseServerResourceBuil
         entityText.setInitExp("entity.getText()");
         ojTry.getTryPart().addToLocals(entityText);
 
-        ojTry.getTryPart().addToStatements("c.fromJson(" + entityText.getName() + ");");
+        ojTry.getTryPart().addToStatements("c.fromJson(" + entityText.getName() + ")");
 
-        ojTry.getTryPart().addToStatements("GraphDb.getDb().commit()");
+        //get the lookup uri
+        ojTry.getTryPart().addToStatements("String lookupUri = getQueryValue(\"lookupUri\")");
+        ojTry.getTryPart().addToStatements("lookupUri = \"riap://host\" + lookupUri");
+        ojTry.getTryPart().addToStatements("int fakeIdIndex = lookupUri.indexOf(\"fake\")");
+        OJIfStatement ifFakeId = new OJIfStatement("fakeIdIndex != -1");
+        ifFakeId.addToThenPart("int indexOfForwardSlash = lookupUri.indexOf(\"/\", fakeIdIndex)");
+        ifFakeId.addToThenPart("String fakeId = lookupUri.substring(fakeIdIndex, indexOfForwardSlash)");
+        ifFakeId.addToThenPart("long id = " + TumlRestletGenerationUtil.TumlTmpIdManager.getLast() + ".INSTANCE.get(fakeId)");
+        ifFakeId.addToThenPart("lookupUri = lookupUri.replace(fakeId, Long.toString(id))");
+        ojTry.getTryPart().addToStatements(ifFakeId);
+        annotatedClass.addToImports(TumlRestletGenerationUtil.TumlTmpIdManager);
 
+        ojTry.getTryPart().addToStatements(TumlRestletGenerationUtil.ClientResource.getLast() + " cr = new ClientResource(lookupUri)");
+        annotatedClass.addToImports(TumlRestletGenerationUtil.ClientResource);
+        ojTry.getTryPart().addToStatements(TumlRestletGenerationUtil.Representation.getLast() + " result = cr.get()");
+        ojTry.getTryPart().addToStatements("return result");
+
+        ojTry.getFinallyPart().addToStatements(TumlRestletGenerationUtil.TumlTmpIdManager.getLast() + ".INSTANCE.remove()");
+        ojTry.getFinallyPart().addToStatements(TinkerGenerationUtil.graphDbAccess + ".rollback()");
 
         ojTry.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
 
-        ojTry.getCatchPart().addToStatements("GraphDb.getDb().rollback()");
         OJIfStatement ifRuntime = new OJIfStatement("e instanceof RuntimeException");
         ifRuntime.addToThenPart("throw (RuntimeException)e");
         ojTry.getCatchPart().addToStatements(ifRuntime);
         ojTry.getCatchPart().addToStatements("throw new RuntimeException(e)");
         put.getBody().addToStatements(ojTry);
 
-        put.getBody().addToStatements("return get()");
 
         annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
-        annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);
         annotatedClass.addToOperations(put);
-    }
-
-    private void addGetRepresentation(Class clazz, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass) {
-
-        OJAnnotatedOperation getInf = new OJAnnotatedOperation("get", TumlRestletGenerationUtil.Representation);
-        annotatedInf.addToOperations(getInf);
-        getInf.addAnnotationIfNew(new OJAnnotationValue(TumlRestletGenerationUtil.Get, "json"));
-
-        OJAnnotatedOperation get = new OJAnnotatedOperation("get", TumlRestletGenerationUtil.Representation);
-        get.addToThrows(TumlRestletGenerationUtil.ResourceException);
-        annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
-        TinkerGenerationUtil.addOverrideAnnotation(get);
-
-        OJTryStatement tryStatement = new OJTryStatement();
-        tryStatement.getTryPart().addToStatements("StringBuilder json = new StringBuilder()");
-        tryStatement.getTryPart().addToStatements(
-                "this." + getIdFieldName(clazz) + "= Long.valueOf((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"))");
-        tryStatement.getTryPart().addToStatements(
-                TumlClassOperations.className(clazz) + " c = new " + TumlClassOperations.className(clazz) + "(GraphDb.getDb().getVertex(this."
-                        + getIdFieldName(clazz) + "))");
-        annotatedClass.addToImports(TumlClassOperations.getPathName(clazz));
-        tryStatement.getTryPart().addToStatements("json.append(\"[{\\\"data\\\": [\")");
-        tryStatement.getTryPart().addToStatements("json.append(" + "c.toJsonWithoutCompositeParent())");
-
-        tryStatement.getTryPart().addToStatements("meta", "json.append(\"], \\\"meta\\\" : {\")");
-
-        tryStatement.getTryPart().addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + clazz.getQualifiedName() + "\\\"\")");
-        tryStatement.getTryPart().addToStatements("json.append(\", \\\"to\\\": \")");
-        tryStatement.getTryPart().addToStatements("json.append(" + TumlClassOperations.propertyEnumName(clazz) + ".asJson())");
-        annotatedClass.addToImports(TumlClassOperations.getPathName(clazz).append(TumlClassOperations.propertyEnumName(clazz)));
-        tryStatement.getTryPart().addToStatements("json.append(\"}}]\")");
-        tryStatement.getTryPart().addToStatements("return new " + TumlRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
-
-        get.getBody().addToStatements(tryStatement);
-        tryStatement.setCatchPart(null);
-        tryStatement.getFinallyPart().addToStatements(TinkerGenerationUtil.graphDbAccess + ".rollback()");
-
-        annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
-        annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);
-        annotatedClass.addToOperations(get);
-    }
-
-    private void addGetParentRepresentation(Class clazz, OJAnnotatedClass annotatedClass) {
-
-        OJAnnotatedOperation getParent = new OJAnnotatedOperation("getParent", TumlRestletGenerationUtil.Representation);
-        getParent.addParam("parent", TumlClassOperations.getPathName(clazz));
-        getParent.addToThrows(TumlRestletGenerationUtil.ResourceException);
-        annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
-
-        getParent.getBody().addToStatements("StringBuilder json = new StringBuilder()");
-        annotatedClass.addToImports(TumlClassOperations.getPathName(clazz));
-        getParent.getBody().addToStatements("json.append(\"[{\\\"data\\\": [\")");
-        getParent.getBody().addToStatements("json.append(" + "parent.toJsonWithoutCompositeParent())");
-
-        getParent.getBody().addToStatements("meta", "json.append(\"], \\\"meta\\\" : {\")");
-
-        getParent.getBody().addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + clazz.getQualifiedName() + "\\\"\")");
-        getParent.getBody().addToStatements("json.append(\", \\\"to\\\": \")");
-        getParent.getBody().addToStatements("json.append(" + TumlClassOperations.propertyEnumName(clazz) + ".asJson())");
-        annotatedClass.addToImports(TumlClassOperations.getPathName(clazz).append(TumlClassOperations.propertyEnumName(clazz)));
-        getParent.getBody().addToStatements("json.append(\"}}]\")");
-        getParent.getBody().addToStatements("return new " + TumlRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
-
-        annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
-        annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);
-        annotatedClass.addToOperations(getParent);
     }
 
     private void addToRouterEnum(Class clazz, OJAnnotatedClass annotatedClass) {
         OJEnum routerEnum = (OJEnum) this.workspace.findOJClass("restlet.RestletRouterEnum");
-        OJEnumLiteral ojLiteral = new OJEnumLiteral(TumlClassOperations.className(clazz).toUpperCase());
+        OJEnumLiteral ojLiteral = new OJEnumLiteral(TumlClassOperations.className(clazz).toUpperCase() + "_forwardToLookup");
 
         OJField uri = new OJField();
         uri.setType(new OJPathName("String"));
-        uri.setInitExp("\"/" + TumlClassOperations.className(clazz).toLowerCase() + "s/{" + TumlClassOperations.className(clazz).toLowerCase() + "Id}\"");
+        uri.setInitExp("\"/" + TumlClassOperations.className(clazz).toLowerCase() + "s/{" + TumlClassOperations.className(clazz).toLowerCase() + "Id}/forwardToLookup\"");
         ojLiteral.addToAttributeValues(uri);
 
         OJField serverResourceClassField = new OJField();

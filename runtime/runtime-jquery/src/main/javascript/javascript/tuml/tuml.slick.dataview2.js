@@ -432,26 +432,26 @@
 
     //This is called from the grid on regular save.
     //The itemsToRefresh contains the difference that were posted. New items and existing items.
-    function refreshItemAfterCommit(itemToRefresh) {
-        if (itemToRefresh.tmpId != undefined && itemToRefresh.tmpId !== null) {
-            //New item
-            if (idxById[itemToRefresh.tmpId] == undefined) {
-                throw "Invalid id";
-            }
-            var index = idxById[itemToRefresh.tmpId];
-            items[index] = itemToRefresh;
-            idxById[itemToRefresh.tmpId] = null;
-            idxById[itemToRefresh.id] = index;
-        } else {
-            //Existing item
-            if (idxById[itemToRefresh.id] == undefined) {
-                throw "Invalid id";
-            }
-            var index = idxById[itemToRefresh.id];
-            items[index] = itemToRefresh;
-        }
-        refresh();
-    }
+//    function refreshItemAfterCommit(itemToRefresh) {
+//        if (itemToRefresh.tmpId != undefined && itemToRefresh.tmpId !== null) {
+//            //New item
+//            if (idxById[itemToRefresh.tmpId] == undefined) {
+//                throw "Invalid id";
+//            }
+//            var index = idxById[itemToRefresh.tmpId];
+//            items[index] = itemToRefresh;
+//            idxById[itemToRefresh.tmpId] = null;
+//            idxById[itemToRefresh.id] = index;
+//        } else {
+//            //Existing item
+//            if (idxById[itemToRefresh.id] == undefined) {
+//                throw "Invalid id";
+//            }
+//            var index = idxById[itemToRefresh.id];
+//            items[index] = itemToRefresh;
+//        }
+//        refresh();
+//    }
 
       function clearArraysAfterCommit(itemToRefresh) {
           //Clear all new and updated items
@@ -459,27 +459,72 @@
           updatedIdxById = {};
           newItems = [];
           newIdxById = {};
+          deletedItems = [];
       }
+
+//      //This is called from the grid on regular save.
+//      //The itemToRefresh contains a difference that were posted. New items and existing items.
+//      function refreshItemAfterCommitOrRollback(itemToRefresh) {
+//          if (itemToRefresh.tmpId !== undefined && itemToRefresh.tmpId !== null) {
+//
+//              //Replace the id with the tmpId as the id is meaningless on a rolled back transaction
+//              itemToRefresh.id = itemToRefresh.tmpId;
+//
+//              //New item
+//              if (idxById[itemToRefresh.tmpId] == undefined) {
+//                  throw "Invalid id";
+//              }
+//              //Update the items array
+//              var index = idxById[itemToRefresh.tmpId];
+//              items[index] = itemToRefresh;
+//              //Update the new items array
+//              var newItemIndex = newIdxById[itemToRefresh.tmpId];
+//              newItems[newItemIndex] = itemToRefresh;
+//
+//          } else {
+//              //Existing item
+//              if (idxById[itemToRefresh.id] == undefined) {
+//                  throw "Invalid id";
+//              }
+//              //Update the items array
+//              var index = idxById[itemToRefresh.id];
+//              items[index] = itemToRefresh;
+//              //Update the updated items array
+//              var updatedItemIndex = updatedIdxById[itemToRefresh.tmpId];
+//              newItems[updatedItemIndex] = itemToRefresh;
+//          }
+//          refresh();
+//      }
 
       //This is called from the grid on regular save.
       //The itemToRefresh contains a difference that were posted. New items and existing items.
-      function refreshItemAfterRollback(itemToRefresh) {
-          if (itemToRefresh.tmpId !== undefined && itemToRefresh.tmpId !== null) {
+      function refreshItemAfterCommitOrRollback(itemToRefresh) {
+          if (itemToRefresh.tmpId !== undefined) {
 
-              //Replace the id with the tmpId as the id is meaningless on a rolled back transaction
-              itemToRefresh.id = itemToRefresh.tmpId;
-
-              //New item
-              if (idxById[itemToRefresh.tmpId] == undefined) {
-                  throw "Invalid id";
+              if (isNaN(itemToRefresh.id)) {
+                  //rollback situation
+                  //New item
+                  if (idxById[itemToRefresh.id] == undefined) {
+                      throw "Invalid id";
+                  }
+                  //Update the items array
+                  var index = idxById[itemToRefresh.id];
+                  items[index] = itemToRefresh;
+                  //Update the new items array
+                  var newItemIndex = newIdxById[itemToRefresh.id];
+                  newItems[newItemIndex] = itemToRefresh;
+              } else {
+                  //New item
+                  if (idxById[itemToRefresh.tmpId] == undefined) {
+                      throw "Invalid id";
+                  }
+                  //Update the items array
+                  var index = idxById[itemToRefresh.tmpId];
+                  items[index] = itemToRefresh;
+                  //Update the new items array
+                  var newItemIndex = newIdxById[itemToRefresh.tmpId];
+                  newItems[newItemIndex] = itemToRefresh;
               }
-              //Update the items array
-              var index = idxById[itemToRefresh.tmpId];
-              items[index] = itemToRefresh;
-              //Update the new items array
-              var newItemIndex = newIdxById[itemToRefresh.tmpId];
-              newItems[newItemIndex] = itemToRefresh;
-
           } else {
               //Existing item
               if (idxById[itemToRefresh.id] == undefined) {
@@ -489,7 +534,7 @@
               var index = idxById[itemToRefresh.id];
               items[index] = itemToRefresh;
               //Update the updated items array
-              var updatedItemIndex = updatedIdxById[itemToRefresh.tmpId];
+              var updatedItemIndex = updatedIdxById[itemToRefresh.id];
               newItems[updatedItemIndex] = itemToRefresh;
           }
           refresh();
@@ -1022,9 +1067,8 @@
       "setRefreshHints": setRefreshHints,
       "setFilterArgs": setFilterArgs,
       "refresh": refresh,
-      "refreshItemAfterCommit": refreshItemAfterCommit,
+      "refreshItemAfterCommitOrRollback": refreshItemAfterCommitOrRollback,
       "clearArraysAfterCommit": clearArraysAfterCommit,
-      "refreshItemAfterRollback": refreshItemAfterRollback,
       "updateItem": updateItem,
       "insertItem": insertItem,
       "addItem": addItem,

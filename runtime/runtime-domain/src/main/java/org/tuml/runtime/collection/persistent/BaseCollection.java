@@ -431,7 +431,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
                 if (this.vertex.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE).iterator().hasNext()) {
                     //Not last
                     Edge edgeToNext = this.vertex.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE).iterator().next();
-                    Vertex nextVertex = edgeToPrevious.getVertex(Direction.IN);
+                    Vertex nextVertex = edgeToNext.getVertex(Direction.IN);
                     GraphDb.getDb().removeEdge(edgeToNext);
                     GraphDb.getDb().addEdge(null, previousVertex, nextVertex, LABEL_TO_NEXT_IN_SEQUENCE);
                 } else {
