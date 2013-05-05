@@ -521,9 +521,16 @@
                   //Update the items array
                   var index = idxById[itemToRefresh.tmpId];
                   items[index] = itemToRefresh;
-                  //Update the new items array
+
+                  delete idxById[itemToRefresh.tmpId];
+                  idxById[itemToRefresh.id] = index;
+
                   var newItemIndex = newIdxById[itemToRefresh.tmpId];
                   newItems[newItemIndex] = itemToRefresh;
+
+                  delete newIdxById[itemToRefresh.tmpId];
+                  newIdxById[itemToRefresh.id] = newItemIndex;
+
               }
           } else {
               //Existing item
@@ -535,7 +542,7 @@
               items[index] = itemToRefresh;
               //Update the updated items array
               var updatedItemIndex = updatedIdxById[itemToRefresh.id];
-              newItems[updatedItemIndex] = itemToRefresh;
+              updatedItems[updatedItemIndex] = itemToRefresh;
           }
           refresh();
       }
