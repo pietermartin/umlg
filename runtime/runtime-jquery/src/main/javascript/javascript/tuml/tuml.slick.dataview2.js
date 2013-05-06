@@ -52,6 +52,11 @@
       var updatedItems = [];  // updated data by id
       var newItems = [];      // new data by id
       var deletedItems = [];  // deleted data by id
+
+      //for coloring the gui after save
+      var postUpdatedIdxById = {};
+      var postNewIdxById = {};
+
     //tuml
 
       var rows = [];          // data by row
@@ -460,6 +465,8 @@
           newItems = [];
           newIdxById = {};
           deletedItems = [];
+          postUpdatedIdxById = {};
+          postNewIdxById = {};
       }
 
 //      //This is called from the grid on regular save.
@@ -531,6 +538,7 @@
                   delete newIdxById[itemToRefresh.tmpId];
                   newIdxById[itemToRefresh.id] = newItemIndex;
 
+                  postNewIdxById[index] = itemToRefresh.id;
               }
           } else {
               //Existing item
@@ -543,8 +551,20 @@
               //Update the updated items array
               var updatedItemIndex = updatedIdxById[itemToRefresh.id];
               updatedItems[updatedItemIndex] = itemToRefresh;
+
+              postUpdatedIdxById[index] = itemToRefresh.id;
+
           }
           refresh();
+      }
+
+      function isRowNew(index) {
+          return postNewIdxById[index] !== undefined && postNewIdxById[index] !== null;
+
+      }
+
+      function isRowUpdated(index) {
+          return postUpdatedIdxById[index] !== undefined && postUpdatedIdxById[index] !== null;
       }
 
       function addItem(item) {
@@ -1054,6 +1074,8 @@
         "getNewItems":getNewItems,
         "getDeletedItems":getDeletedItems,
         "setNewItems":setNewItems,
+        "isRowNew" : isRowNew,
+        "isRowUpdated" : isRowUpdated,
 //tuml
 
         "setFilter": setFilter,

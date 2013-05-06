@@ -782,8 +782,17 @@
         var self = this;
         this.dataView.getItemMetadata = function (row) {
             var item = this.getItem(row);
-            var result = {"columns": null};
+            var result = {cssClasses: null, columns: null};
             var column = {};
+
+            var isNew = self.dataView.isRowNew(row);
+            if (isNew) {
+                result.cssClasses = "tuml-row-new";
+            }
+            var isUpdated = self.dataView.isRowUpdated(row);
+            if (isUpdated) {
+                result.cssClasses = "tuml-row-updated";
+            }
 
             for (var i = 0; i < self.localMetaForData.properties.length; i++) {
                 var property = self.localMetaForData.properties[i];
