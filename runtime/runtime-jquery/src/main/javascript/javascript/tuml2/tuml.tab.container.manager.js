@@ -197,7 +197,7 @@
 
     //This only gets called by component sub tabs
     TumlTabContainerManager.prototype.saveTabs = function () {
-        if (this.validateMultiplicity()) {
+//        if (this.validateMultiplicity()) {
             //Save the child grids into the component's cell
             if (this.tumlTabViewManagers.length > 0) {
                 if (this.tabContainerProperty.upper == -1 || this.tabContainerProperty.upper > 1) {
@@ -236,7 +236,7 @@
 
             //enable the save button
             this.parentTabContainerManager.enableButtons();
-        }
+//        }
     }
 
     TumlTabContainerManager.prototype.setComponentIdToTmpId = function (item) {

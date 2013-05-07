@@ -257,26 +257,6 @@
             }
         }
 
-        this.validateNewItems = function (newItems) {
-            var validationResults = [];
-            for (var i = 0; i < newItems.length; i++) {
-                var item = newItems[i];
-                for (var j = 0; j < this.grid.getColumns().length; j++) {
-                    var column = this.grid.getColumns()[j];
-                    if (column.name !== 'id' && column.name !== 'uri' && column.name !== 'delete') {
-                        if (!column.options.property.readOnly) {
-                            var validator = selectFieldValidator(column.options.property);
-                            var valid = validator(item[column.name]);
-                            if (!valid.valid) {
-                                validationResults.push(valid);
-                            }
-                        }
-                    }
-                }
-            }
-            return validationResults;
-        };
-
         this.clearArraysAfterCommit = function() {
             this.dataView.clearArraysAfterCommit();
         }
@@ -293,10 +273,6 @@
                 this.grid.editActiveCell();
             }
         }
-
-//        this.updateGridAfterCommit = function (data) {
-//            this.dataView.refreshItemAfterCommit(data);
-//        }
 
         this.updateGridAfterCommitOrRollback = function (item) {
             this.dataView.refreshItemAfterCommitOrRollback(item);
@@ -786,13 +762,7 @@
             var column = {};
 
             var isNew = self.dataView.isRowNew(row);
-            if (isNew) {
-                result.cssClasses = "tuml-row-new";
-            }
             var isUpdated = self.dataView.isRowUpdated(row);
-            if (isUpdated) {
-                result.cssClasses = "tuml-row-updated";
-            }
 
             for (var i = 0; i < self.localMetaForData.properties.length; i++) {
                 var property = self.localMetaForData.properties[i];
@@ -803,7 +773,7 @@
                         column[property.name] = {"formatter": TumlSlick.Formatters.TumlComponentFormatter};
                     }
                 } else {
-                    column[property.name] = {"formatter": selectFormatter(property)};
+                    column[property.name] = {"formatter": selectFormatter(property, isNew, isUpdated)};
                 }
             }
             result["columns"] = column;

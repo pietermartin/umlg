@@ -139,7 +139,7 @@
             return validationResults;
         }
 
-        this.updateGridAfterRollback = function (item) {
+        this.updateGridAfterCommitOrRollback = function (item) {
             for (var i = 0; i < this.metaForData.properties.length; i++) {
                 var property = this.metaForData.properties[i];
                 if (this.isPropertyForOnePage(property, false)) {

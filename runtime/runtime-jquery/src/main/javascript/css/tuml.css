@@ -477,20 +477,12 @@
     width: auto;
 }
 
-.slick-row.odd.tuml-row-new {
-    background-color: green;
+.tuml-updated-id {
+    color: blue;
 }
 
-.slick-row.even.tuml-row-new {
-    background-color: green;
-}
-
-.slick-row.odd.tuml-row-updated {
-    background-color: blue;
-}
-
-.slick-row.even.tuml-row-updated {
-    background-color: blue;
+.tuml-new-id {
+    color: green;
 }
 
 .slick-row:hover {

@@ -145,7 +145,6 @@ public class RootOverLoadedPostForLookupResourceServerResourceBuilder extends Ba
 
         //get the lookup uri
         ojTryStatement.getTryPart().addToStatements("String lookupUri = getQueryValue(\"lookupUri\")");
-        ojTryStatement.getTryPart().addToStatements("String qualifiedName = getQueryValue(\"qualifiedName\")");
         ojTryStatement.getTryPart().addToStatements("lookupUri = \"riap://host\" + lookupUri");
         ojTryStatement.getTryPart().addToStatements("int fakeIdIndex = lookupUri.indexOf(\"fake\")");
         OJIfStatement ifFakeId = new OJIfStatement("fakeIdIndex != -1");

@@ -15,6 +15,8 @@
                 "TumlManyBoolean":TumlManyBooleanFormatter,
                 "Link":LinkFormatter,
                 "TumlRegularFormatter":TumlRegularFormatter,
+                "TumlIdNewFormatter": TumlIdNewFormatter,
+                "TumlIdUpdatedFormatter": TumlIdUpdatedFormatter,
                 "TumlComponentFormatter":TumlComponentFormatter
             }
         }
@@ -26,6 +28,14 @@
 
     function TumlRegularFormatter(row, cell, value, columnDef, dataContext) {
         return value;
+    }
+
+    function TumlIdNewFormatter(row, cell, value, columnDef, dataContext) {
+        return '<span class="tuml-new-id">' + value + '</span>';
+    }
+
+    function TumlIdUpdatedFormatter(row, cell, value, columnDef, dataContext) {
+        return '<span class="tuml-updated-id">' + value + '</span>';
     }
 
     function TumlRequiredFormatter(row, cell, value, columnDef, dataContext) {

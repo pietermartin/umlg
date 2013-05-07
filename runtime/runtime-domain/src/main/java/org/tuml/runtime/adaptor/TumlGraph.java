@@ -46,6 +46,8 @@ public interface TumlGraph extends TransactionalGraph, IndexableGraph, Serializa
 
     void clearTxThreadVar();
 
+    void clearThreadVars();
+
 //    void createUniqueVertexIndex();
 
     boolean isTransactionActive();

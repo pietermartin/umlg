@@ -235,60 +235,66 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
 
     @Override
     public void rollback() {
-        if (null == tx.get()) {
-            return;
-        }
-        GraphDatabaseAPI graphDatabaseAPI = (GraphDatabaseAPI) getRawGraph();
-        TransactionManager transactionManager = graphDatabaseAPI.getTxManager();
-        javax.transaction.Transaction t = null;
         try {
-            t = transactionManager.getTransaction();
-            if (t == null || t.getStatus() == Status.STATUS_ROLLEDBACK) {
+            if (null == tx.get()) {
                 return;
             }
-            tx.get().failure();
-        } catch (SystemException e) {
-            throw new RuntimeException(e);
-        } finally {
-            TransactionIdentifier transactionIdentifier = this.transactionTransactionIdentifierMap.remove(t);
-            this.transactionIdentifierTransactionMap.remove(transactionIdentifier);
-            tx.get().finish();
-            tx.remove();
-        }
-        //Persist the highId of the MetaNode
-        for (TumlMetaNode tumlMetaNode : TransactionThreadMetaNodeVar.get()) {
-            TumlIdManager.INSTANCE.persistHighId(tumlMetaNode);
-        }
-        GraphDb.getDb().commit();
-        TransactionThreadEntityVar.remove();
-        TransactionThreadMetaNodeVar.remove();
-
-    }
-
-    @Override
-    public void commit() {
-        if (null == tx.get()) {
-            return;
-        }
-
-        try {
+            GraphDatabaseAPI graphDatabaseAPI = (GraphDatabaseAPI) getRawGraph();
+            TransactionManager transactionManager = graphDatabaseAPI.getTxManager();
+            javax.transaction.Transaction t = null;
+            try {
+                t = transactionManager.getTransaction();
+                if (t == null || t.getStatus() == Status.STATUS_ROLLEDBACK) {
+                    return;
+                }
+                tx.get().failure();
+            } catch (SystemException e) {
+                throw new RuntimeException(e);
+            } finally {
+                TransactionIdentifier transactionIdentifier = this.transactionTransactionIdentifierMap.remove(t);
+                this.transactionIdentifierTransactionMap.remove(transactionIdentifier);
+                tx.get().finish();
+                tx.remove();
+            }
             //Persist the highId of the MetaNode
             for (TumlMetaNode tumlMetaNode : TransactionThreadMetaNodeVar.get()) {
                 TumlIdManager.INSTANCE.persistHighId(tumlMetaNode);
             }
-            tx.get().success();
+            GraphDb.getDb().commit();
         } finally {
-            GraphDatabaseAPI graphDatabaseAPI = (GraphDatabaseAPI) getRawGraph();
-            TransactionManager transactionManager = graphDatabaseAPI.getTxManager();
-            try {
-                javax.transaction.Transaction t = transactionManager.getTransaction();
-                TransactionIdentifier transactionIdentifier = this.transactionTransactionIdentifierMap.remove(t);
-                this.transactionIdentifierTransactionMap.remove(transactionIdentifier);
-            } catch (SystemException e) {
-                throw new RuntimeException(e);
+            TransactionThreadEntityVar.remove();
+            TransactionThreadMetaNodeVar.remove();
+        }
+    }
+
+    @Override
+    public void commit() {
+        try {
+            if (null == tx.get()) {
+                return;
             }
-            tx.get().finish();
-            tx.remove();
+            try {
+                //Persist the highId of the MetaNode
+                for (TumlMetaNode tumlMetaNode : TransactionThreadMetaNodeVar.get()) {
+                    TumlIdManager.INSTANCE.persistHighId(tumlMetaNode);
+                }
+                tx.get().success();
+            } finally {
+                GraphDatabaseAPI graphDatabaseAPI = (GraphDatabaseAPI) getRawGraph();
+                TransactionManager transactionManager = graphDatabaseAPI.getTxManager();
+                try {
+                    javax.transaction.Transaction t = transactionManager.getTransaction();
+                    TransactionIdentifier transactionIdentifier = this.transactionTransactionIdentifierMap.remove(t);
+                    this.transactionIdentifierTransactionMap.remove(transactionIdentifier);
+                } catch (SystemException e) {
+                    throw new RuntimeException(e);
+                }
+                tx.get().finish();
+                tx.remove();
+            }
+        } finally {
+            TransactionThreadEntityVar.remove();
+            TransactionThreadMetaNodeVar.remove();
         }
     }
 
@@ -348,6 +354,18 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
             throw new IllegalStateException("Transaction thread var is not empty!!!");
         }
 
+    }
+
+    @Override
+    public void clearThreadVars() {
+//        if (TransactionThreadEntityVar.get()!=null && TransactionThreadEntityVar.get().size()>0) {
+//            throw new RuntimeException("wtf");
+//        }
+//        if (TransactionThreadMetaNodeVar.get()!=null && TransactionThreadMetaNodeVar.get().size()>0) {
+//            throw new RuntimeException("wtf");
+//        }
+        TransactionThreadEntityVar.remove();
+        TransactionThreadMetaNodeVar.remove();
     }
 
     @Override

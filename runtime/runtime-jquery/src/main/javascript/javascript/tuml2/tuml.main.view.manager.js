@@ -405,8 +405,12 @@
         function validateMultiplicity(tumlTabManyViewManagers) {
             var rowCount = 0;
             for (var i = 0; i < tumlTabManyViewManagers.length; i++) {
-                if (tumlTabManyViewManagers[i] instanceof Tuml.TumlTabManyViewManager && !tumlTabManyViewManagers[i].oneManyOrQuery.forManyComponent) {
-                    var dataView = tumlTabManyViewManagers[i].tumlTabGridManager.dataView;
+                var tumlTabManyViewManager = tumlTabManyViewManagers[i];
+                //Need to travel down components and validate their multiplicities
+                if (tumlTabManyViewManager instanceof Tuml.TumlTabManyViewManager && !tumlTabManyViewManager.oneManyOrQuery.forManyComponent) {
+
+                    var dataView = tumlTabManyViewManager.tumlTabGridManager.dataView;
+
                     rowCount += dataView.getItems().length;
                 } else {
                     return true;

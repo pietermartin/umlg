@@ -12,11 +12,17 @@ function retrieveVertexId(url) {
     }
 }
 
-function selectFormatter(property) {
+function selectFormatter(property, newId, updatedId) {
     if (property.name == 'uri') {
         return new TumlSlick.Formatters.Link;
     } else if (property.name == 'id') {
-        return TumlSlick.Formatters.Id;
+        if (newId) {
+            return TumlSlick.Formatters.TumlIdNewFormatter;
+        } else if (updatedId) {
+            return TumlSlick.Formatters.TumlIdUpdatedFormatter;
+        } else {
+            return TumlSlick.Formatters.TumlRegularFormatter;
+        }
     } else if (property.dataTypeEnum !=null && property.dataTypeEnum !== undefined) {
         return null;
     } else if (property.lower > 0 && (property.oneEnumeration || property.manyEnumeration)) {

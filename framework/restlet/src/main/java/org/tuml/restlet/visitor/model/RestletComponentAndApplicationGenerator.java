@@ -174,7 +174,10 @@ public class RestletComponentAndApplicationGenerator extends BaseVisitor impleme
 
         application.addToImports(TumlRestletGenerationUtil.Directory);
 
-        createInboundRoot.getBody().addToStatements("return router");
+        createInboundRoot.getBody().addToStatements(TumlRestletGenerationUtil.TumlRestletFilter.getLast() + " tumlRestletFilter = new " + TumlRestletGenerationUtil.TumlRestletFilter.getLast() + "(getContext())");
+        application.addToImports(TumlRestletGenerationUtil.TumlRestletFilter);
+        createInboundRoot.getBody().addToStatements("tumlRestletFilter.setNext(router)");
+        createInboundRoot.getBody().addToStatements("return tumlRestletFilter");
     }
 
     private void addApplicationDefaultConstructor(Model model, OJAnnotatedClass application) {
