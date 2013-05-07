@@ -7,102 +7,24 @@
         }
     });
 
-    function TumlTabComponentOneManager(tumlUri, tumlTabViewManager) {
-        var self = this;
-        TumlBaseTabOneManager.call(this, tumlUri, tumlTabViewManager);
+    function TumlTabComponentOneManager(tumlTabViewManager) {
+        TumlBaseTabOneManager.call(this, tumlTabViewManager);
 
         //Public api
         $.extend(this, {
-            "TumlTabComponentOneManager": "1.0.0",
-            "onOneComponentSaveButtonSuccess": new Tuml.Event(),
-            "onOneComponentCloseButtonSuccess": new Tuml.Event()
+            "TumlTabComponentOneManager": "1.0.0"
         });
-
-        this.doSave = function () {
-            if (self.validateFields().length === 0) {
-                var oneObject = self.fieldsToObject();
-                self.onOneComponentSaveButtonSuccess.notify({value: oneObject, tabName: self.metaForData.name}, null, self);
-            }
-        }
 
         this.getDiv = function () {
             return $('#' + this.metaForData.name + "OneComponent");
-        }
-
-        this.doClose = function () {
-            this.doCancel();
-            self.onOneComponentCloseButtonSuccess.notify({tabName: self.metaForData.name}, null, self);
         }
 
     }
 
     TumlTabComponentOneManager.prototype = new TumlBaseTabOneManager;
 
-    function TumlTabOneManager(tumlUri, tumlTabViewManager) {
-        var self = this;
-        this.tumlUri = tumlUri;
-        TumlBaseTabOneManager.call(this, tumlUri, tumlTabViewManager);
-
-        this.doSave = function () {
-            var validationResults = self.validateFields();
-            if (validationResults.length === 0) {
-                if (this.data !== undefined && this.data !== null) {
-                    $.ajax({
-                        url: this.metaForData.qualifiedName == this.qualifiedName ? tumlUri : tumlUri + '_' + this.metaForData.name,
-                        type: "PUT",
-                        dataType: "json",
-                        contentType: "json",
-                        data: self.fieldsToJson(),
-                        success: function (data, textStatus, jqXHR) {
-                            self.data = data[0].data[0];
-                            self.onPutOneSuccess.notify({tumlUri: tumlUri, data: data}, null, self);
-                        },
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-                            self.onPutOneFailure.notify({tumlUri: tumlUri, jqXHR: jqXHR, textStatus: textStatus, errorThrown: errorThrown}, null, self);
-                        }
-                    });
-                } else {
-                    $.ajax({
-                        url: tumlUri + '_' + this.metaForData.name,
-                        type: "POST",
-                        dataType: "json",
-                        contentType: "json",
-                        data: self.fieldsToJson(),
-                        success: function (data, textStatus, jqXHR) {
-                            self.onPostOneSuccess.notify({tumlUri: tumlUri, data: data}, null, self);
-                        },
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-                            self.onPostOneFailure.notify({tumlUri: tumlUri, jqXHR: jqXHR, textStatus: textStatus, errorThrown: errorThrown}, null, self);
-                        }
-                    });
-                }
-            } else {
-                var errorMsg = '\n';
-                for (var i = 0; i < validationResults.length; i++) {
-                    errorMsg += validationResults[i].msg + '\n';
-                }
-                alert('There are validation errors: ' + errorMsg);
-            }
-        }
-
-        this.doDelete = function () {
-            $.ajax({
-                url: self.tumlUri,
-                type: "DELETE",
-                dataType: "json",
-                contentType: "json",
-                data: self.fieldsToJson(),
-                success: function (data, textStatus, jqXHR) {
-                    self.onDeleteOneSuccess.notify({tumlUri: tumlUri, data: data}, null, self);
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-                    self.onDeleteOneFailure.notify({tumlUri: tumlUri, jqXHR: jqXHR, textStatus: textStatus, errorThrown: errorThrown}, null, self);
-                }
-            });
-        }
+    function TumlTabOneManager(tumlTabViewManager) {
+        TumlBaseTabOneManager.call(this, tumlTabViewManager);
 
         this.getDiv = function () {
             return $('#' + this.metaForData.name);
@@ -112,18 +34,13 @@
 
     TumlTabOneManager.prototype = new TumlBaseTabOneManager;
 
-    function TumlBaseTabOneManager(tumlUri, tumlTabViewManager) {
+    function TumlBaseTabOneManager(tumlTabViewManager) {
 
         var self = this;
+        this.TumlBaseTabOneManager = "1.0.0";
         this.tumlTabViewManager = tumlTabViewManager;
 
         function init() {
-        }
-
-        this.setValue = function (property, value) {
-            var input = $("#" + property.name + this.metaForData.name + 'Id');
-            $.data(input[0], "componentValue", value);
-            input[0].defaultValue = value;
         }
 
         this.validateFields = function () {
@@ -142,7 +59,7 @@
         this.updateGridAfterCommitOrRollback = function (item) {
             for (var i = 0; i < this.metaForData.properties.length; i++) {
                 var property = this.metaForData.properties[i];
-                if (this.isPropertyForOnePage(property, false)) {
+                if (this.isPropertyForOnePage(property)) {
                     this.setValueOfInputForField(item, property);
                 }
             }
@@ -189,25 +106,7 @@
             }
         }
 
-
-        //Public api
-        $.extend(this, {
-            "TumlTabOneManagerVersion": "1.0.0",
-            "onClickOneComponent": new Tuml.Event(),
-            "onClickManyComponent": new Tuml.Event(),
-            "onPutOneSuccess": new Tuml.Event(),
-            "onPutOneFailure": new Tuml.Event(),
-            "onPostOneSuccess": new Tuml.Event(),
-            "onPostOneFailure": new Tuml.Event(),
-            "onDeleteOneSuccess": new Tuml.Event(),
-            "onDeleteOneFailure": new Tuml.Event()
-        });
-
         init();
-    }
-
-    TumlBaseTabOneManager.prototype.fieldsToJson = function () {
-        return JSON.stringify(this.fieldsToObject());
     }
 
     TumlBaseTabOneManager.prototype.fieldsToObject = function () {
@@ -298,7 +197,6 @@
                 }
             }
         }
-        ;
         return dataToSend;
     }
 
@@ -306,9 +204,25 @@
         console.log('TumlBaseTabOneManager.prototype.getDiv must be overriden');
     }
 
+    TumlBaseTabOneManager.prototype.updateData = function (property, value) {
+        var foundProperty = false;
+        for (var i = 0; i < this.metaForData.properties.length; i++) {
+            var metaProperty = this.metaForData.properties[i];
+            if (metaProperty.name == property.name) {
+                foundProperty = true;
+                break;
+            }
+        }
+        if (!foundProperty) {
+            throw 'Updating non existing property on one. Property = ' + property.name;
+        }
+        this.data[property.name] = value;
+    }
+
     TumlBaseTabOneManager.prototype.refresh = function (data, metaForData, qualifiedName, isForCreation) {
         var self = this;
         this.data = data;
+        this.isForCreation = isForCreation;
         this.metaForData = metaForData.to;
         this.qualifiedName = qualifiedName;
 
@@ -318,7 +232,7 @@
         var tabDiv = this.getDiv();
         tabDiv.children().remove();
         $('<div id="serverErrorMsg" />').appendTo(tabDiv);
-        var formDiv = $('<div />', {id: 'formDiv'}).appendTo(tabDiv);
+        var formDiv = $('<div />', {id: 'formDiv' + this.metaForData.name}).appendTo(tabDiv);
 
         var ul = $('<ul class="oneUl" />')
         ul.appendTo(formDiv);
@@ -327,7 +241,7 @@
             //Lookups need to do a server call and as such need the id field set.
             for (var i = 0; i < this.metaForData.properties.length; i++) {
                 var property = this.metaForData.properties[i];
-                if (this.isPropertyForOnePage(property, isForCreation)) {
+                if (this.isPropertyForOnePage(property)) {
 
                     if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && property.oneToOne) {
                         continue;
@@ -338,12 +252,13 @@
                     var li = $('<li>')
                     li.appendTo(ul);
                     $('<label />', {for: property.name + 'Id'}).text(property.name + ' :').appendTo(li);
-                    var $input = this.constructInputForField(data, property, isForCreation);
+                    var $input = this.constructInputForField(property);
                     $input.appendTo(li);
                     if (property.manyPrimitive) {
                         var $manyDiv = $('<div />', {class: "many-primitive-one-img"}).appendTo(li);
 
                         $manyDiv.click(
+
                             function (inputScoped, propertyScoped, manyDivScoped, liScoped) {
                                 return function () {
                                     self.openEditorForMany(inputScoped, propertyScoped, manyDivScoped, liScoped)
@@ -362,13 +277,6 @@
 
                             }($input, property, $manyDiv, li));
 
-
-//                            function (e) {
-//                                if (e.which == 13) {
-//                                    self.openEditorForMany($input, property, $manyDiv, li);
-//                                }
-//                            });
-
                     } else if (property.composite && property.lower == 1 && property.upper == 1) {
                         $input.click(function (e, args) {
                             var data = [];
@@ -376,25 +284,21 @@
                             if (componentValue !== undefined) {
                                 data.push(componentValue);
                             }
-                            this.onClickOneComponent.notify(
-                                {data: data, tumlUri: property.tumlUri, property: property},
-                                null,
-                                self
-                            );
                         });
                     } else if (property.composite && property.lower >= 1 && (property.upper > 1 || property.upper == -1)) {
-                        $input.click(function (e, args) {
-                            var data = [];
-                            var componentValue = $.data(this, "componentValue");
-                            if (componentValue !== undefined) {
-                                data = componentValue;
-                            }
-                            this.onClickManyComponent.notify(
-                                {data: data, tumlUri: property.tumlUri, property: property},
-                                null,
-                                self
-                            );
-                        });
+                        $input.click(
+
+                            function (dataScoped, tumlUriScoped, propertyScoped) {
+                                return function (e) {
+                                    var data = [];
+                                    var componentValue = $.data(this, "componentValue");
+                                    if (componentValue !== undefined) {
+                                        data = componentValue;
+                                    }
+                                    self.tumlTabViewManager.openManyComponent(dataScoped, tumlUriScoped, propertyScoped);
+                                };
+                            }(data, property.tumlUri, property));
+
                     }
                     if ($input !== undefined) {
                         if (property.dataTypeEnum != null && property.dataTypeEnum !== undefined) {
@@ -432,7 +336,7 @@
                     var li = $('<li>')
                     li.appendTo(ul);
                     $('<label />', {for: property.name + 'Id'}).text(property.name + ' :').appendTo(li);
-                    var $input = this.constructInputForField(data, property, isForCreation);
+                    var $input = this.constructInputForField(property, isForCreation);
                     $input.appendTo(li);
                 }
             }
@@ -444,33 +348,113 @@
         alert("doSave must be overridden");
     };
 
-    TumlBaseTabOneManager.prototype.doDelete = function () {
-        alert("doDelete must be overridden");
-    };
-
     TumlBaseTabOneManager.prototype.doCancel = function () {
         this.refresh(this.data, this.metaForData, this.qualifiedName);
     }
 
-    TumlBaseTabOneManager.prototype.isPropertyForOnePage = function (property, isForCreation) {
+    TumlBaseTabOneManager.prototype.isPropertyForOnePage = function (property) {
         return(!property.inverseComposite
             && (!property.composite && (property.oneToOne || property.manyToOne || property.manyPrimitive || property.manyEnumeration))
-            || (isForCreation && property.composite && property.lower > 0)
+            || (this.isForCreation && property.composite && property.lower > 0)
             && property.name !== 'uri');
     }
 
-    TumlBaseTabOneManager.prototype.constructInputForField = function (data, property, isForCreation) {
+    TumlBaseTabOneManager.prototype.synchronizeModel = function (property) {
+        if (property.name === 'id') {
+            var id = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').val();
+            if (id.indexOf('fake') === -1) {
+                this.data.id = parseInt(id);
+            } else {
+                this.data.id = id;
+                this.data.tmpId = this.data.id;
+            }
+        } else if (property.readOnly) {
+            //Do nothing
+        } else if (property.name !== 'uri') {
+            if (property.onePrimitive) {
+                var stringValue = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').val();
+                if (property.fieldType == 'Integer' || property.fieldType == 'Long') {
+                    if (stringValue == '') {
+                        this.data[property.name] = null;
+                    } else {
+                        this.data[property.name] = parseInt(stringValue);
+                    }
+                } else if (property.fieldType == 'String') {
+                    if (stringValue == '') {
+                        this.data[property.name] = null;
+                    } else {
+                        this.data[property.name] = stringValue;
+                    }
+                } else if (property.fieldType == 'Boolean') {
+                    this.data[property.name] = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').attr("checked") == "checked";
+                }
+            } else if (property.dataTypeEnum !== null && property.dataTypeEnum !== undefined) {
+                if (property.dataTypeEnum == 'DateTime') {
+                    this.data[property.name] = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').val().replace(/ /g, "T");
+                } else if (property.dataTypeEnum == 'Image') {
+                } else {
+                    this.data[property.name] = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').val();
+                }
+            } else if (property.oneEnumeration) {
+                var $select = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+                var options = $select.children();
+                for (var j = 0; i < options.length; j++) {
+                    if (options[j].selected) {
+                        this.data[property.name] = $select.val();
+                        break;
+                    }
+                }
+            } else if (property.manyPrimitive) {
+                var inputValue = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').val();
+                var array = inputValue.split(',');
+                if (property.fieldType == 'Integer' || property.fieldType == 'Long') {
+                    for (var j = 0; j < array.length; j++) {
+                        array[j] = parseInt(array[j], 10);
+                    }
+                } else if (property.fieldType == 'Boolean') {
+                    for (var j = 0; j < array.length; j++) {
+                        array[j] = array[j] === 'true';
+                    }
+                }
+                this.data[property.name] = array;
+            } else if (property.manyEnumeration) {
+                var inputValue = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').val();
+                this.data[property.name] = inputValue;
+            } else if (property.composite && property.lower > 0) {
+                var input = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+                if (input.length !== 0) {
+                    this.data[property.name] = $.data(input[0], "componentValue");
+                }
+            } else if (!property.onePrimitive && !property.manyPrimitive && !property.inverseComposite) {
+                var $select = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+                var options = $select.children();
+                for (var j = 0; j < options.length; j++) {
+                    if (options[j].selected) {
+                        var optionId = $select.val();
+                        if (optionId.indexOf('fake') === -1) {
+                            this.data[property.name] = {id: parseInt(optionId), displayName: options[j].label};
+                        } else {
+                            this.data[property.name] = {id: optionId, displayName: options[j].label};
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    TumlBaseTabOneManager.prototype.constructInputForField = function (property) {
         var self = this;
         var $input;
         if (property.name == 'id') {
             $input = $('<input />', {disabled: 'disabled', type: 'text', class: 'field', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
             $input.button().addClass('ui-textfield');
-            if (data[property.name] !== undefined && data[property.name] !== null) {
-                $input[0].defaultValue = data[property.name];
+            if (this.data[property.name] !== undefined && this.data[property.name] !== null) {
+                $input[0].defaultValue = this.data[property.name];
             }
         } else if (property.readOnly) {
-            if (!isForCreation && data[property.name] !== undefined && data[property.name] !== null) {
-                $input = $('<p />').text(data[property.name]);
+            if (!this.isForCreation && this.data[property.name] !== undefined && this.data[property.name] !== null) {
+                $input = $('<p />').text(this.data[property.name]);
             } else {
                 $input = $('<p />');
             }
@@ -487,64 +471,64 @@
             } else {
                 alert('Unsupported dataType ' + property.dataTypeEnum);
             }
-            if (!isForCreation && data[property.name] !== undefined && data[property.name] !== null) {
-                $input[0].defaultValue = data[property.name];
+            if (!this.isForCreation && this.data[property.name] !== undefined && this.data[property.name] !== null) {
+                $input[0].defaultValue = this.data[property.name];
             }
         } else if (property.composite && property.lower > 0) {
             $input = $("<input />", {type: 'text', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
             $input.button().addClass('ui-textfield');
-            if (!isForCreation && data[property.name] !== undefined && data[property.name] !== null) {
-                $input[0].defaultValue = data[property.name];
-                $.data($input[0], "componentValue", data[property.name]);
+            if (!this.isForCreation && this.data[property.name] !== undefined && this.data[property.name] !== null) {
+                $input[0].defaultValue = this.data[property.name];
+                $.data($input[0], "componentValue", this.data[property.name]);
             }
 
         } else if (property.oneEnumeration) {
             $input = $('<select />', {class: 'chzn-select', style: 'width:350px;', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
-            if (!isForCreation && data[property.name] !== undefined && data[property.name] !== null) {
-                this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, data[property.name], $input);
+            if (!this.isForCreation && this.data[property.name] !== undefined && this.data[property.name] !== null) {
+                this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, this.data[property.name], $input);
             } else {
                 this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, $input);
             }
         } else if (property.manyEnumeration) {
             $input = $('<select />', {multiple: '', id: property.name + this.metaForData.qualifiedName + 'Id', class: 'chzn-select', style: 'width:350px;', name: property.name});
-            if (!isForCreation && data[property.name] !== undefined && data[property.name] !== null) {
-                this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, data[property.name], $input);
+            if (!this.isForCreation && this.data[property.name] !== undefined && this.data[property.name] !== null) {
+                this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, this.data[property.name], $input);
             } else {
                 this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, $input);
             }
         } else if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && property.oneToOne) {
             $input = $('<select />', {class: 'chzn-select', style: 'width:350px;', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
 
-            if (!isForCreation) {
-                this.appendLoopupOptionsToSelect2(property, data['id'], $input, data[property.name]);
+            if (!this.isForCreation) {
+                this.appendLoopupOptionsToSelect2(property, this.data['id'], $input, this.data[property.name]);
             }
 
         } else if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && property.manyToOne) {
             $input = $('<select />', {class: 'chzn-select', style: 'width:350px;', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
-            if (!isForCreation && data[property.name] !== undefined && data[property.name] !== null) {
-                this.appendLoopupOptionsToSelect2(property, data['id'], $input, data[property.name]);
+            if (!this.isForCreation && this.data[property.name] !== undefined && this.data[property.name] !== null) {
+                this.appendLoopupOptionsToSelect2(property, this.data['id'], $input, this.data[property.name]);
             }
         } else if (property.fieldType == 'String') {
             $input = $('<input />', {type: 'text', class: 'field', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
             $input.button().addClass('ui-textfield');
-            if (!isForCreation && data[property.name] !== undefined && data[property.name] !== null) {
-                $input[0].defaultValue = data[property.name];
+            if (!this.isForCreation && this.data[property.name] !== undefined && this.data[property.name] !== null) {
+                $input[0].defaultValue = this.data[property.name];
             }
         } else if (property.fieldType == 'Integer') {
             $input = $('<input />', {type: 'text', class: 'field', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
             $input.button().addClass('ui-textfield');
-            if (!isForCreation && data[property.name] !== undefined && data[property.name] !== null) {
-                $input[0].defaultValue = data[property.name];
+            if (!this.isForCreation && this.data[property.name] !== undefined && this.data[property.name] !== null) {
+                $input[0].defaultValue = this.data[property.name];
             }
         } else if (property.fieldType == 'Long') {
             $input = $('<input />', {type: 'text', class: 'field', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
             $input.button().addClass('ui-textfield');
-            if (!isForCreation && data[property.name] !== undefined && data[property.name] !== null) {
-                $input[0].defaultValue = data[property.name];
+            if (!this.isForCreation && this.data[property.name] !== undefined && this.data[property.name] !== null) {
+                $input[0].defaultValue = this.data[property.name];
             }
         } else if (property.fieldType == 'Boolean') {
-            if (!property.manyPrimitive && data !== undefined && data !== null) {
-                if (!isForCreation && data[property.name] !== undefined) {
+            if (!property.manyPrimitive && this.data !== undefined && this.data !== null) {
+                if (!this.isForCreation && this.data[property.name] !== undefined) {
                     $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name, checked: 'checked'});
                 } else {
                     $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name });
@@ -554,14 +538,17 @@
             } else {
                 $input = $('<input />', {type: 'text', class: 'field', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
                 $input.button().addClass('ui-textfield');
-                if (!isForCreation && data[property.name] !== undefined && data[property.name] !== null) {
-                    $input[0].defaultValue = data[property.name];
+                if (!this.isForCreation && this.data[property.name] !== undefined && this.data[property.name] !== null) {
+                    $input[0].defaultValue = this.data[property.name];
                 }
             }
         }
         if (!property.composite) {
             $input.blur(function () {
-                self.validateField(property);
+                var validationResult = self.validateField(property);
+                if (validationResult.valid) {
+                    self.synchronizeModel(property)
+                }
             });
         }
         return $input;
@@ -588,7 +575,7 @@
             var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
             if (data[property.name] !== undefined && data[property.name] !== null) {
                 input[0].defaultValue = data[property.name];
-                $.data($input[0], "componentValue", data[property.name]);
+                $.data(input[0], "componentValue", data[property.name]);
             }
         } else if (property.oneEnumeration) {
             var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
@@ -695,7 +682,7 @@
                 $input.val('');
             }
         }).appendTo($div);
-        $input = this.constructInputForField({}, property);
+        $input = this.constructInputForField(property);
         $input.addClass("many-primitive-editor-input");
         $input.appendTo($div);
         $input.keypress(function (e) {
@@ -768,35 +755,35 @@
         );
     }
 
-    TumlBaseTabOneManager.prototype.appendLoopupOptionsToSelect = function (tumlLookupUri, required, contextVertexId, currentValue, $select) {
-
-        var adjustedUri = tumlLookupUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
-
-        this.handleLookup(adjustedUri, item.qualifiedName,
-            function (data) {
-                if (!required) {
-                    $select.append($('<option />)').val("").html(""));
-                }
-                for (var i = 0; i < data.length; i++) {
-                    var obj = data[i];
-                    $select.append($('<option />)').val(obj.id).html(obj.name));
-                }
-                ;
-                //currentValue is the vertex id of the oneToOne or manyToOne
-                currentValue = item[args.column.field];
-                //append the current value to the dropdown
-                if (currentValue !== undefined && currentValue !== null) {
-                    $select.append($('<option selected="selected"/>)').val(currentValue.id).html(currentValue.displayName));
-                }
-                if (!required) {
-                    $select.chosen({allow_single_deselect: true});
-                } else {
-                    $select.chosen();
-                }
-                $select.focus();
-            }
-        );
-    }
+//    TumlBaseTabOneManager.prototype.appendLoopupOptionsToSelect = function (tumlLookupUri, required, contextVertexId, currentValue, $select) {
+//
+//        var adjustedUri = tumlLookupUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
+//
+//        this.handleLookup(adjustedUri, item.qualifiedName,
+//            function (data) {
+//                if (!required) {
+//                    $select.append($('<option />)').val("").html(""));
+//                }
+//                for (var i = 0; i < data.length; i++) {
+//                    var obj = data[i];
+//                    $select.append($('<option />)').val(obj.id).html(obj.name));
+//                }
+//                ;
+//                //currentValue is the vertex id of the oneToOne or manyToOne
+//                currentValue = item[args.column.field];
+//                //append the current value to the dropdown
+//                if (currentValue !== undefined && currentValue !== null) {
+//                    $select.append($('<option selected="selected"/>)').val(currentValue.id).html(currentValue.displayName));
+//                }
+//                if (!required) {
+//                    $select.chosen({allow_single_deselect: true});
+//                } else {
+//                    $select.chosen();
+//                }
+//                $select.focus();
+//            }
+//        );
+//    }
 
     TumlBaseTabOneManager.prototype.appendLoopupOptionsToSelect2 = function (property, contextVertexId, $select, currentValue) {
 
@@ -833,8 +820,6 @@
         var validateInput;
         validateInput = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
 
-//        var serializedValue = [];
-//        var editor = selectEditor(property);
         var validationResult;
         if (property.manyPrimitive || property.manyEnumeration) {
             var stringValueArray;

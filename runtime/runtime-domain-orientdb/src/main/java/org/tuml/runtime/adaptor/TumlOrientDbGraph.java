@@ -194,6 +194,11 @@ public class TumlOrientDbGraph extends OrientGraph implements TumlGraph {
     }
 
     @Override
+    public void clearThreadVars() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
     public boolean isTransactionActive() {
         return false;  //To change body of implemented methods use File | Settings | File Templates.
     }

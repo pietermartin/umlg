@@ -100,7 +100,6 @@
             "onManyComponentSaveButtonSuccess": new Tuml.Event(),
             "onManyComponentCloseButtonSuccess": new Tuml.Event(),
             "onManyComponentCancelButtonSuccess": new Tuml.Event(),
-            "onClickOneComponentCell": new Tuml.Event(),
             "onAddNewRow": new Tuml.Event(),
             "onSelfCellClick": new Tuml.Event(),
             "onContextMenuClickDelete": new Tuml.Event(),
@@ -195,7 +194,6 @@
         $.extend(this, {
             "TumlTabGridManagerVersion": "1.0.0",
             "onAddButtonSuccess": new Tuml.Event(),
-            "onClickOneComponentCell": new Tuml.Event(),
             "onAddNewRow": new Tuml.Event(),
             "onSelfCellClick": new Tuml.Event(),
             "onContextMenuClickDelete": new Tuml.Event(),
@@ -237,7 +235,7 @@
 
         this.containsOneToOne = false;
 
-        this.calculateContainsOne = function() {
+        this.calculateContainsOne = function () {
             for (var i = 0; i < this.metaForData.properties.length; i++) {
                 var property = this.metaForData.properties[i];
                 if (property.oneToOne && !property.onePrimitive) {
@@ -257,7 +255,7 @@
             }
         }
 
-        this.clearArraysAfterCommit = function() {
+        this.clearArraysAfterCommit = function () {
             this.dataView.clearArraysAfterCommit();
         }
 
@@ -301,7 +299,7 @@
             }
         }
 
-        this.updateDataModel = function() {
+        this.updateDataModel = function () {
             if (this.containsOneToOne) {
                 var newItems = this.dataView.getNewItems();
                 for (var i = 0; i < newItems.length; i++) {
@@ -322,12 +320,11 @@
         this.handleDeleteRow = function (row, data) {
             if (Slick.GlobalEditorLock.commitCurrentEdit()) {
                 var moveCell = this.grid.getActiveCell() != null && this.grid.getActiveCell().row >= row;
-//                var currentItem = this.dataView.getItem(this.grid.getActiveCell().row);
                 var item = this.dataView.getItem(row);
                 this.dataView.deleteItem(item.id);
                 this.tumlTabViewManager.handleDeleteRow();
                 if (moveCell) {
-//                //Move the active cell one up
+                    //Move the active cell one up
                     if (this.dataView.getItems().length > 0) {
                         this.grid.setActiveCell(this.grid.getActiveCell().row - 1, this.grid.getActiveCell().cell);
                     } else {
@@ -355,13 +352,9 @@
 
             var sortcol = "name";
             var sortdir = 1;
-            var percentCompleteThreshold = 0;
-            var searchString = "";
             this.dataView = new Tuml.Slick.Data.DataView();
 
             this.instantiateGrid();
-
-//            this.addButtons();
 
             //Create context menu
             this.createContextMenu();
@@ -723,11 +716,10 @@
 
         this.setCellValue = function (cell, value) {
             var item = self.dataView.getItemByIdx(cell.row);
-            if (item !== undefined) {
-                item[self.grid.getColumns()[cell.cell].name] = value;
-            } else {
-                alert('This should not be happening no more');
+            if (item === undefined) {
+                throw 'item not found for given row in TumlBaseGridManager.setCellValue';
             }
+            item[self.grid.getColumns()[cell.cell].name] = value;
             self.grid.invalidateRows([cell.row]);
             self.grid.updateRowCount();
             self.grid.render();
@@ -826,7 +818,8 @@
                     });
                 }
             }
-        };
+        }
+        ;
     };
 
     TumlBaseGridManager.prototype.instantiateGrid = function () {

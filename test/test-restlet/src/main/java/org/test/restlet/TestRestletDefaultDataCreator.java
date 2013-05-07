@@ -32,6 +32,9 @@ public class TestRestletDefaultDataCreator implements DefaultDataCreator {
             human.setGender(Gender.MALE);
             Home home = new Home(human);
             home.setName("home" + i);
+            HomeOneComponent homeOneComponent = new HomeOneComponent(home);
+            homeOneComponent.setName("homeOneComponent::" + i);
+
             ComponentMany componentMany1 = new ComponentMany(human);
             componentMany1.setName("componentMany_1" + i);
             ComponentMany componentMany2 = new ComponentMany(human);
@@ -54,6 +57,8 @@ public class TestRestletDefaultDataCreator implements DefaultDataCreator {
                 One one = new One(human);
                 one.setName("one" + i + "::" + j);
                 many1.addToMany2(many2);
+                OneComponent oneComponent = new OneComponent(one);
+                oneComponent.setName("oneComponent::" + 1);
                 if (j % 2 == 1) {
                     many1.addToOne(one);
                 }

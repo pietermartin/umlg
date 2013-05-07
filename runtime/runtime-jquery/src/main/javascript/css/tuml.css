@@ -3,6 +3,7 @@
     color: inherit;
     text-align: inherit;
     outline: none;
+    cursor: default;
 }
 
 .ui-tabs-nav .tabs-button {
