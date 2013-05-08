@@ -57,12 +57,8 @@
         }
 
         this.updateGridAfterCommitOrRollback = function (item) {
-            for (var i = 0; i < this.metaForData.properties.length; i++) {
-                var property = this.metaForData.properties[i];
-                if (this.isPropertyForOnePage(property)) {
-                    this.setValueOfInputForField(item, property);
-                }
-            }
+            this.setDataModel(item);
+            this.refreshFromDataModel();
         }
 
         this.handleLookup = function (lookupUri, qualifiedName, loadDataCallback) {
@@ -109,97 +105,6 @@
         init();
     }
 
-    TumlBaseTabOneManager.prototype.fieldsToObject = function () {
-        var dataToSend = {};
-        dataToSend.qualifiedName = this.metaForData.qualifiedName;
-
-        for (var i = 0; i < this.metaForData.properties.length; i++) {
-            var property = this.metaForData.properties[i];
-            if (property.name === 'id') {
-                var id = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').val();
-                if (id.indexOf('fake') === -1) {
-                    dataToSend.id = parseInt(id);
-                } else {
-                    dataToSend.id = id;
-                    dataToSend.tmpId = dataToSend.id;
-                }
-            } else if (property.readOnly) {
-                //Do nothing
-            } else if (property.name !== 'uri') {
-                if (property.onePrimitive) {
-                    var stringValue = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').val();
-                    if (property.fieldType == 'Integer' || property.fieldType == 'Long') {
-                        if (stringValue == '') {
-                            dataToSend[property.name] = null;
-                        } else {
-                            dataToSend[property.name] = parseInt(stringValue);
-                        }
-                    } else if (property.fieldType == 'String') {
-                        if (stringValue == '') {
-                            dataToSend[property.name] = null;
-                        } else {
-                            dataToSend[property.name] = stringValue;
-                        }
-                    } else if (property.fieldType == 'Boolean') {
-                        dataToSend[property.name] = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').attr("checked") == "checked";
-                    }
-                } else if (property.dataTypeEnum !== null && property.dataTypeEnum !== undefined) {
-                    if (property.dataTypeEnum == 'DateTime') {
-                        dataToSend[property.name] = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').val().replace(/ /g, "T");
-                    } else if (property.dataTypeEnum == 'Image') {
-                    } else {
-                        dataToSend[property.name] = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').val();
-                    }
-                } else if (property.oneEnumeration) {
-                    var $select = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
-                    var options = $select.children();
-                    for (var j = 0; i < options.length; j++) {
-                        if (options[j].selected) {
-                            dataToSend[property.name] = $select.val();
-                            break;
-                        }
-                    }
-                } else if (property.manyPrimitive) {
-                    var inputValue = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').val();
-                    var array = inputValue.split(',');
-                    if (property.fieldType == 'Integer' || property.fieldType == 'Long') {
-                        for (var j = 0; j < array.length; j++) {
-                            array[j] = parseInt(array[j], 10);
-                        }
-                    } else if (property.fieldType == 'Boolean') {
-                        for (var j = 0; j < array.length; j++) {
-                            array[j] = array[j] === 'true';
-                        }
-                    }
-                    dataToSend[property.name] = array;
-                } else if (property.manyEnumeration) {
-                    var inputValue = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').val();
-                    dataToSend[property.name] = inputValue;
-                } else if (property.composite && property.lower > 0) {
-                    var input = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
-                    if (input.length !== 0) {
-                        dataToSend[property.name] = $.data(input[0], "componentValue");
-                    }
-                } else if (!property.onePrimitive && !property.manyPrimitive && !property.inverseComposite) {
-                    var $select = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
-                    var options = $select.children();
-                    for (var j = 0; j < options.length; j++) {
-                        if (options[j].selected) {
-                            var optionId = $select.val();
-                            if (optionId.indexOf('fake') === -1) {
-                                dataToSend[property.name] = {id: parseInt(optionId), displayName: options[j].label};
-                            } else {
-                                dataToSend[property.name] = {id: optionId, displayName: options[j].label};
-                            }
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-        return dataToSend;
-    }
-
     TumlBaseTabOneManager.prototype.getDiv = function () {
         console.log('TumlBaseTabOneManager.prototype.getDiv must be overriden');
     }
@@ -219,12 +124,13 @@
         this.data[property.name] = value;
     }
 
-    TumlBaseTabOneManager.prototype.refresh = function (data, metaForData, qualifiedName, isForCreation) {
+    TumlBaseTabOneManager.prototype.refresh = function (data, metaForData, isForCreation) {
         var self = this;
-        this.data = data;
-        this.isForCreation = isForCreation;
         this.metaForData = metaForData.to;
-        this.qualifiedName = qualifiedName;
+        this.qualifiedName = this.metaForData.qualifiedName;
+        this.data = data;
+        this.data.qualifiedName = this.qualifiedName;
+        this.isForCreation = isForCreation;
 
         this.calculateContainsOne();
 
@@ -279,25 +185,20 @@
 
                     } else if (property.composite && property.lower == 1 && property.upper == 1) {
                         $input.click(function (e, args) {
-                            var data = [];
-                            var componentValue = $.data(this, "componentValue");
-                            if (componentValue !== undefined) {
-                                data.push(componentValue);
-                            }
+                            alert('TumlBaseTabOneManager.prototype.refresh $input.click not implemented');
                         });
                     } else if (property.composite && property.lower >= 1 && (property.upper > 1 || property.upper == -1)) {
                         $input.click(
 
-                            function (dataScoped, tumlUriScoped, propertyScoped) {
+                            function (tumlUriScoped, propertyScoped) {
                                 return function (e) {
-                                    var data = [];
-                                    var componentValue = $.data(this, "componentValue");
-                                    if (componentValue !== undefined) {
-                                        data = componentValue;
+                                    if (self.data[propertyScoped.name] === undefined || self.data[propertyScoped.name] === null) {
+                                        self.tumlTabViewManager.openManyComponent([], tumlUriScoped, propertyScoped);
+                                    } else {
+                                        self.tumlTabViewManager.openManyComponent(self.data[propertyScoped.name], tumlUriScoped, propertyScoped);
                                     }
-                                    self.tumlTabViewManager.openManyComponent(dataScoped, tumlUriScoped, propertyScoped);
                                 };
-                            }(data, property.tumlUri, property));
+                            }(property.tumlUri, property));
 
                     }
                     if ($input !== undefined) {
@@ -355,7 +256,7 @@
     TumlBaseTabOneManager.prototype.isPropertyForOnePage = function (property) {
         return(!property.inverseComposite
             && (!property.composite && (property.oneToOne || property.manyToOne || property.manyPrimitive || property.manyEnumeration))
-            || (this.isForCreation && property.composite && property.lower > 0)
+            || (property.composite && property.lower > 0)
             && property.name !== 'uri');
     }
 
@@ -421,10 +322,7 @@
                 var inputValue = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').val();
                 this.data[property.name] = inputValue;
             } else if (property.composite && property.lower > 0) {
-                var input = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
-                if (input.length !== 0) {
-                    this.data[property.name] = $.data(input[0], "componentValue");
-                }
+                //This is already in the data model. the input is not editable
             } else if (!property.onePrimitive && !property.manyPrimitive && !property.inverseComposite) {
                 var $select = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
                 var options = $select.children();
@@ -479,9 +377,7 @@
             $input.button().addClass('ui-textfield');
             if (!this.isForCreation && this.data[property.name] !== undefined && this.data[property.name] !== null) {
                 $input[0].defaultValue = this.data[property.name];
-                $.data($input[0], "componentValue", this.data[property.name]);
             }
-
         } else if (property.oneEnumeration) {
             $input = $('<select />', {class: 'chzn-select', style: 'width:350px;', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
             if (!this.isForCreation && this.data[property.name] !== undefined && this.data[property.name] !== null) {
@@ -554,88 +450,182 @@
         return $input;
     }
 
-    TumlBaseTabOneManager.prototype.setValueOfInputForField = function (data, property) {
+//    TumlBaseTabOneManager.prototype.setValueOfInputForField = function (data, property) {
+//        var self = this;
+//        this.data = data;
+//        if (property.name == 'id') {
+//            var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+//            if (data[property.name] !== undefined && data[property.name] !== null) {
+//                input[0].defaultValue = this.data[property.name];
+//            }
+//        } else if (property.readOnly) {
+//            var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+//            if (data[property.name] !== undefined && data[property.name] !== null) {
+//                input.text(data[property.name]);
+//            }
+//        } else if (property.dataTypeEnum != null && property.dataTypeEnum !== undefined) {
+//            var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+//            if (data[property.name] !== undefined && data[property.name] !== null) {
+//                input[0].defaultValue = data[property.name];
+//            }
+//        } else if (property.composite && property.lower > 0) {
+//            var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+//            if (data[property.name] !== undefined && data[property.name] !== null) {
+//                input[0].defaultValue = data[property.name];
+//            }
+//        } else if (property.oneEnumeration) {
+//            var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+//            if (data[property.name] !== undefined && data[property.name] !== null) {
+//                this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, data[property.name], $input);
+//            } else {
+//                this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, $input);
+//            }
+//        } else if (property.manyEnumeration) {
+//            if (data[property.name] !== undefined && data[property.name] !== null) {
+//                this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, data[property.name], $input);
+//            } else {
+//                this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, $input);
+//            }
+//        } else if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && property.oneToOne) {
+//
+//            var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+//            this.appendLoopupOptionsToSelect2(property, data['tmpId'], input, data[property.name]);
+//
+//        } else if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && property.manyToOne) {
+//            if (data[property.name] !== undefined && data[property.name] !== null) {
+//                this.appendLoopupOptionsToSelect(property.tumlLookupUri, property.lower > 0, data['id'], data[property.name], input);
+//            } else {
+//                this.appendLoopupOptionsToSelect(property.tumlLookupOnCompositeParentUri, property.lower > 0, data['id'], data[property.name], input);
+//            }
+//        } else if (property.fieldType == 'String') {
+//            var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+//            if (data[property.name] !== undefined && data[property.name] !== null) {
+//                input[0].defaultValue = data[property.name];
+//            }
+//        } else if (property.fieldType == 'Integer') {
+//            var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+//            if (data[property.name] !== undefined && data[property.name] !== null) {
+//                input[0].defaultValue = data[property.name];
+//            }
+//        } else if (property.fieldType == 'Long') {
+//            var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+//            if (data[property.name] !== undefined && data[property.name] !== null) {
+//                input[0].defaultValue = data[property.name];
+//            }
+//        } else if (property.fieldType == 'Boolean') {
+//            if (!property.manyPrimitive) {
+//                var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+//                if (data[property.manyPrimitive] !== undefined && data[property.name] !== null) {
+//                    input[0].attr('checked', 'checked');
+//                } else {
+//                    input[0].attr('checked', '');
+//                }
+//            } else if (property.manyPrimitive) {
+//                var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+//                if (data[property.name] !== undefined && data[property.name] !== null) {
+//                    input[0].defaultValue = data[property.name];
+//                }
+//            }
+//        }
+//        if (!(property.composite && property.lower > 0)) {
+//            var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+//            input.blur(function () {
+//                self.validateField(property);
+//            });
+//        }
+//        return input;
+//    }
+
+    TumlBaseTabOneManager.prototype.setDataModel = function (dataModel) {
+        this.data = dataModel;
+    }
+
+    TumlBaseTabOneManager.prototype.refreshFromDataModel = function () {
         var self = this;
-        if (property.name == 'id') {
-            var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
-            if (data[property.name] !== undefined && data[property.name] !== null) {
-                input[0].defaultValue = data[property.name];
-            }
-        } else if (property.readOnly) {
-            var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
-            if (data[property.name] !== undefined && data[property.name] !== null) {
-                input.text(data[property.name]);
-            }
-        } else if (property.dataTypeEnum != null && property.dataTypeEnum !== undefined) {
-            var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
-            if (data[property.name] !== undefined && data[property.name] !== null) {
-                input[0].defaultValue = data[property.name];
-            }
-        } else if (property.composite && property.lower > 0) {
-            var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
-            if (data[property.name] !== undefined && data[property.name] !== null) {
-                input[0].defaultValue = data[property.name];
-                $.data(input[0], "componentValue", data[property.name]);
-            }
-        } else if (property.oneEnumeration) {
-            var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
-            if (data[property.name] !== undefined && data[property.name] !== null) {
-                this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, data[property.name], $input);
-            } else {
-                this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, $input);
-            }
-        } else if (property.manyEnumeration) {
-            if (data[property.name] !== undefined && data[property.name] !== null) {
-                this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, data[property.name], $input);
-            } else {
-                this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, $input);
-            }
-        } else if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && property.oneToOne) {
+        for (var i = 0; i < this.metaForData.properties.length; i++) {
+            var property = this.metaForData.properties[i];
+            if (this.isPropertyForOnePage(property)) {
+                if (property.name == 'id') {
+                    var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+                    if (this.data[property.name] !== undefined && this.data[property.name] !== null) {
+                        input[0].defaultValue = this.data[property.name];
+                    }
+                } else if (property.readOnly) {
+                    var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+                    if (this.data[property.name] !== undefined && this.data[property.name] !== null) {
+                        input.text(this.data[property.name]);
+                    }
+                } else if (property.dataTypeEnum != null && property.dataTypeEnum !== undefined) {
+                    var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+                    if (this.data[property.name] !== undefined && this.data[property.name] !== null) {
+                        input[0].defaultValue = this.data[property.name];
+                    }
+                } else if (property.composite && property.lower > 0) {
+                    var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+                    if (this.data[property.name] !== undefined && this.data[property.name] !== null) {
+                        input[0].defaultValue = this.data[property.name];
+                    }
+                } else if (property.oneEnumeration) {
+                    var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+                    if (this.data[property.name] !== undefined && this.data[property.name] !== null) {
+                        this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, this.data[property.name], $input);
+                    } else {
+                        this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, $input);
+                    }
+                } else if (property.manyEnumeration) {
+                    if (this.data[property.name] !== undefined && this.data[property.name] !== null) {
+                        this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, this.data[property.name], $input);
+                    } else {
+                        this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, $input);
+                    }
+                } else if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && property.oneToOne) {
 
-            var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
-            this.appendLoopupOptionsToSelect2(property, data['tmpId'], input, data[property.name]);
+                    var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+                    this.appendLoopupOptionsToSelect2(property, this.data['tmpId'], input, this.data[property.name]);
 
-        } else if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && property.manyToOne) {
-            if (data[property.name] !== undefined && data[property.name] !== null) {
-                this.appendLoopupOptionsToSelect(property.tumlLookupUri, property.lower > 0, data['id'], data[property.name], input);
-            } else {
-                this.appendLoopupOptionsToSelect(property.tumlLookupOnCompositeParentUri, property.lower > 0, data['id'], data[property.name], input);
-            }
-        } else if (property.fieldType == 'String') {
-            var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
-            if (data[property.name] !== undefined && data[property.name] !== null) {
-                input[0].defaultValue = data[property.name];
-            }
-        } else if (property.fieldType == 'Integer') {
-            var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
-            if (data[property.name] !== undefined && data[property.name] !== null) {
-                input[0].defaultValue = data[property.name];
-            }
-        } else if (property.fieldType == 'Long') {
-            var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
-            if (data[property.name] !== undefined && data[property.name] !== null) {
-                input[0].defaultValue = data[property.name];
-            }
-        } else if (property.fieldType == 'Boolean') {
-            if (!property.manyPrimitive) {
-                var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
-                if (data[property.manyPrimitive] !== undefined && data[property.name] !== null) {
-                    input[0].attr('checked', 'checked');
-                } else {
-                    input[0].attr('checked', '');
+                } else if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && property.manyToOne) {
+                    if (this.data[property.name] !== undefined && this.data[property.name] !== null) {
+                        this.appendLoopupOptionsToSelect(property.tumlLookupUri, property.lower > 0, this.data['id'], this.data[property.name], input);
+                    } else {
+                        this.appendLoopupOptionsToSelect(property.tumlLookupOnCompositeParentUri, property.lower > 0, this.data['id'], this.data[property.name], input);
+                    }
+                } else if (property.fieldType == 'String') {
+                    var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+                    if (this.data[property.name] !== undefined && this.data[property.name] !== null) {
+                        input[0].defaultValue = this.data[property.name];
+                    }
+                } else if (property.fieldType == 'Integer') {
+                    var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+                    if (this.data[property.name] !== undefined && this.data[property.name] !== null) {
+                        input[0].defaultValue = this.data[property.name];
+                    }
+                } else if (property.fieldType == 'Long') {
+                    var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+                    if (this.data[property.name] !== undefined && this.data[property.name] !== null) {
+                        input[0].defaultValue = this.data[property.name];
+                    }
+                } else if (property.fieldType == 'Boolean') {
+                    if (!property.manyPrimitive) {
+                        var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+                        if (this.data[property.manyPrimitive] !== undefined && this.data[property.name] !== null) {
+                            input[0].attr('checked', 'checked');
+                        } else {
+                            input[0].attr('checked', '');
+                        }
+                    } else if (property.manyPrimitive) {
+                        var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+                        if (this.data[property.name] !== undefined && this.data[property.name] !== null) {
+                            input[0].defaultValue = this.data[property.name];
+                        }
+                    }
                 }
-            } else if (property.manyPrimitive) {
-                var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
-                if (data[property.name] !== undefined && data[property.name] !== null) {
-                    input[0].defaultValue = data[property.name];
+                if (!(property.composite && property.lower > 0)) {
+                    var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+                    input.blur(function () {
+                        self.validateField(property);
+                    });
                 }
             }
-        }
-        if (!(property.composite && property.lower > 0)) {
-            var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
-            input.blur(function () {
-                self.validateField(property);
-            });
         }
         return input;
     }
@@ -754,36 +744,6 @@
             }
         );
     }
-
-//    TumlBaseTabOneManager.prototype.appendLoopupOptionsToSelect = function (tumlLookupUri, required, contextVertexId, currentValue, $select) {
-//
-//        var adjustedUri = tumlLookupUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
-//
-//        this.handleLookup(adjustedUri, item.qualifiedName,
-//            function (data) {
-//                if (!required) {
-//                    $select.append($('<option />)').val("").html(""));
-//                }
-//                for (var i = 0; i < data.length; i++) {
-//                    var obj = data[i];
-//                    $select.append($('<option />)').val(obj.id).html(obj.name));
-//                }
-//                ;
-//                //currentValue is the vertex id of the oneToOne or manyToOne
-//                currentValue = item[args.column.field];
-//                //append the current value to the dropdown
-//                if (currentValue !== undefined && currentValue !== null) {
-//                    $select.append($('<option selected="selected"/>)').val(currentValue.id).html(currentValue.displayName));
-//                }
-//                if (!required) {
-//                    $select.chosen({allow_single_deselect: true});
-//                } else {
-//                    $select.chosen();
-//                }
-//                $select.focus();
-//            }
-//        );
-//    }
 
     TumlBaseTabOneManager.prototype.appendLoopupOptionsToSelect2 = function (property, contextVertexId, $select, currentValue) {
 

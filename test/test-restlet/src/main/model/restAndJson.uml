@@ -424,6 +424,10 @@
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_LnJ4wDsHEeK9AeutZ8kzPA"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_LnKf0DsHEeK9AeutZ8kzPA" value="1"/>
+              <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_ggI0oLecEeKeCuai9f99dw" name="homeNamedefault">
+                <language>OCL</language>
+                <body>'homeInit1'</body>
+              </defaultValue>
             </ownedAttribute>
             <ownedAttribute xmi:id="_xCmaELbbEeKeCuai9f99dw" name="homeOneComponent" type="_tLUmgLbbEeKeCuai9f99dw" aggregation="composite" association="_xCnBILbbEeKeCuai9f99dw">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_xCmaEbbbEeKeCuai9f99dw" value="1"/>
@@ -749,9 +753,6 @@
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_wetC0LbbEeKeCuai9f99dw" value="1"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_weu4ALbbEeKeCuai9f99dw" value="1"/>
-              <defaultValue xmi:type="uml:LiteralString" xmi:id="_weyiYLbbEeKeCuai9f99dw">
-                <value xsi:nil="true"/>
-              </defaultValue>
             </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Association" xmi:id="_xCnBILbbEeKeCuai9f99dw" name="home_homeOneComponent_1" memberEnd="_xCnBIbbbEeKeCuai9f99dw _xCmaELbbEeKeCuai9f99dw" navigableOwnedEnd="_xCnBIbbbEeKeCuai9f99dw">

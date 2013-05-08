@@ -1894,6 +1894,10 @@
       </eAnnotations>
       <children xmi:type="notation:DecorationNode" xmi:id="_XOQo9ItPEeKeSZB9UA6Gvw" type="5029"/>
       <children xmi:type="notation:BasicCompartment" xmi:id="_XOQo9YtPEeKeSZB9UA6Gvw" type="7017">
+        <children xmi:type="notation:Shape" xmi:id="_ablRMLecEeKeCuai9f99dw" type="3012" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:Property" href="restAndJson.uml#_JHUZQDsHEeK9AeutZ8kzPA"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_ablRMbecEeKeCuai9f99dw" x="29" y="16"/>
+        </children>
         <styles xmi:type="notation:TitleStyle" xmi:id="_XOQo9otPEeKeSZB9UA6Gvw"/>
         <styles xmi:type="notation:SortingStyle" xmi:id="_XOQo94tPEeKeSZB9UA6Gvw"/>
         <styles xmi:type="notation:FilteringStyle" xmi:id="_XOQo-ItPEeKeSZB9UA6Gvw"/>
@@ -2172,7 +2176,7 @@
         <layoutConstraint xmi:type="notation:Location" xmi:id="_xC6jILbbEeKeCuai9f99dw" y="-20"/>
       </children>
       <children xmi:type="notation:DecorationNode" xmi:id="_xC6jIbbbEeKeCuai9f99dw" type="6005">
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_xC6jIrbbEeKeCuai9f99dw" y="20"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_xC6jIrbbEeKeCuai9f99dw" x="-21" y="35"/>
       </children>
       <children xmi:type="notation:DecorationNode" xmi:id="_xC6jI7bbEeKeCuai9f99dw" type="6033">
         <layoutConstraint xmi:type="notation:Location" xmi:id="_xC6jJLbbEeKeCuai9f99dw" y="20"/>

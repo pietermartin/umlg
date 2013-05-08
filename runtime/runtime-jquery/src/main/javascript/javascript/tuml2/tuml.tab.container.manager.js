@@ -197,7 +197,6 @@
 
     //This only gets called by component sub tabs
     TumlTabContainerManager.prototype.saveTabs = function () {
-//        if (this.validateMultiplicity()) {
         //Save the child grids into the component's cell
         if (this.tumlTabViewManagers.length > 0) {
             if (this.tabContainerProperty.upper == -1 || this.tabContainerProperty.upper > 1) {
@@ -224,19 +223,15 @@
                         firstTumlTabViewManager = tumlTabViewManager;
                     }
                 }
-                var data = tumlTabViewManager.tumlTabOneManager.fieldsToObject();
+                var data = tumlTabViewManager.tumlTabOneManager.data;
                 this.setCellValue(data);
                 tumlTabViewManager.tumlTabOneManager.updateDataModel(data);
 
             }
         }
         this.destroyTabContainer();
-        this.tumlTabGridManager.active = true;
-        $('#slickGrid' + this.tabId).show();
-
         //enable the save button
         this.parentTabContainerManager.enableButtons();
-//        }
     }
 
     TumlTabContainerManager.prototype.setComponentIdToTmpId = function (item) {
@@ -299,8 +294,9 @@
         for (var i = 0; i < tumlTabManyViewManagers.length; i++) {
             var tumlTabViewManager = tumlTabManyViewManagers[i];
             if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager) {
-                var dataView = tumlTabViewManager.tumlTabGridManager.dataView;
-                rowCount += dataView.getItems().length;
+                rowCount +=  tumlTabViewManager.getTabData().length;
+            } else {
+                rowCount++;
             }
         }
         if (rowCount < this.tabContainerProperty.lower || (this.tabContainerProperty.upper !== -1 && rowCount > this.tabContainerProperty.upper)) {
@@ -372,8 +368,8 @@
         this.tumlTabViewManagers.push(tumlChildTabViewManager);
     }
 
-    TumlTabContainerManager.prototype.addNewRow = function () {
-        alert("TumlTabContainerManager.prototype.addNewRow must be overriden");
+    TumlTabContainerManager.prototype.saveNewRow = function () {
+        alert("TumlTabContainerManager.prototype.saveNewRow must be overriden");
     }
 
     TumlTabContainerManager.prototype.handleDeleteRow = function () {

@@ -138,9 +138,9 @@
                         overloadedPostData.delete.push.apply(overloadedPostData.delete, dataView.getDeletedItems());
                     } else {
                         if (tumlTabViewManager.oneManyOrQuery.forCreation) {
-                            overloadedPostData.insert.push(tumlTabViewManager.tumlTabOneManager.fieldsToObject());
+                            overloadedPostData.insert.push(tumlTabViewManager.tumlTabOneManager.data);
                         } else {
-                            overloadedPostData.update.push(tumlTabViewManager.tumlTabOneManager.fieldsToObject());
+                            overloadedPostData.update.push(tumlTabViewManager.tumlTabOneManager.data);
                         }
                         break;
                     }
@@ -517,7 +517,7 @@
         return 'tabs-layout';
     }
 
-    TumlMainViewManager.prototype.addNewRow = function (event) {
+    TumlMainViewManager.prototype.saveNewRow = function (event) {
         this.doSave(false);
     }
 
@@ -540,7 +540,7 @@
                 }
             } else {
                 AJAX_TYPE = "PUT";
-                overloadedPostData = tumlTabViewManager.tumlTabOneManager.fieldsToObject();
+                overloadedPostData = tumlTabViewManager.tumlTabOneManager.data;
                 break;
             }
         }

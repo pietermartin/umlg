@@ -94,17 +94,17 @@
 
         TumlBaseGridManager.call(this, tumlTabViewManager, tumlUri, propertyNavigatingTo);
 
-        //Public api
-        $.extend(this, {
-            "TumlTabGridManagerVersion": "1.0.0",
-            "onManyComponentSaveButtonSuccess": new Tuml.Event(),
-            "onManyComponentCloseButtonSuccess": new Tuml.Event(),
-            "onManyComponentCancelButtonSuccess": new Tuml.Event(),
-            "onAddNewRow": new Tuml.Event(),
-            "onSelfCellClick": new Tuml.Event(),
-            "onContextMenuClickDelete": new Tuml.Event(),
-            "onManyEditorKeyPress": new Tuml.Event()
-        });
+//        //Public api
+//        $.extend(this, {
+//            "TumlTabGridManagerVersion": "1.0.0",
+//            "onManyComponentSaveButtonSuccess": new Tuml.Event(),
+//            "onManyComponentCloseButtonSuccess": new Tuml.Event(),
+//            "onManyComponentCancelButtonSuccess": new Tuml.Event(),
+//            "onAddNewRow": new Tuml.Event(),
+//            "onSelfCellClick": new Tuml.Event(),
+//            "onContextMenuClickDelete": new Tuml.Event(),
+//            "onManyEditorKeyPress": new Tuml.Event()
+//        });
 
         this.setupColumns = function () {
             TumlBaseGridManager.prototype.setupColumns.call(this, this.localMetaForData);
@@ -190,15 +190,15 @@
 
         TumlBaseGridManager.call(this, tumlTabViewManager, tumlUri, propertyNavigatingTo);
 
-        //Public api
-        $.extend(this, {
-            "TumlTabGridManagerVersion": "1.0.0",
-            "onAddButtonSuccess": new Tuml.Event(),
-            "onAddNewRow": new Tuml.Event(),
-            "onSelfCellClick": new Tuml.Event(),
-            "onContextMenuClickDelete": new Tuml.Event(),
-            "onManyEditorKeyPress": new Tuml.Event()
-        });
+//        //Public api
+//        $.extend(this, {
+//            "TumlTabGridManagerVersion": "1.0.0",
+//            "onAddButtonSuccess": new Tuml.Event(),
+//            "onAddNewRow": new Tuml.Event(),
+//            "onSelfCellClick": new Tuml.Event(),
+//            "onContextMenuClickDelete": new Tuml.Event(),
+//            "onManyEditorKeyPress": new Tuml.Event()
+//        });
 
         this.setupColumns = function () {
 
@@ -292,7 +292,7 @@
                 newItem.tmpId = newItem.id;
                 newItem.qualifiedName = this.localMetaForData.qualifiedName;
                 this.dataView.addItem(newItem);
-                this.tumlTabViewManager.addNewRow();
+                this.tumlTabViewManager.saveNewRow();
                 if (this.containsOneToOne) {
                     this.tumlTabViewManager.parentTabContainerManager.addToOneToOneIndex(newItem.id, {});
                 }
@@ -448,10 +448,6 @@
             this.grid.onCellChange.subscribe(function (e, args) {
                 self.dataView.updateItem(args.item.id, args.item, self.grid.getColumns()[args.cell]);
             });
-
-//            this.grid.onAddNewRow.subscribe(function (e, args) {
-//                self.addNewRow(args);
-//            });
 
             this.grid.onKeyDown.subscribe(function (e) {
                 if (self.grid['manyPrimitiveEditorOpen']) {
