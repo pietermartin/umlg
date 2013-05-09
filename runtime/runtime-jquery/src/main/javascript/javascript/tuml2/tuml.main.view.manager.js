@@ -61,28 +61,24 @@
             } else {
                 //Property is a one
                 //If there are no data then it is for creation
-                var isForCreation = result[0].data.length == 0;
+                var isForCreation = result[0].data == null;
                 if (!isForCreation) {
                     //Only one element of the array contains data, i.e. for the return concrete type
                     for (var i = 0; i < result.length; i++) {
-                        if (result[i].data.length > 0) {
-                            metaDataNavigatingTo = result[i].meta.to;
-                            qualifiedName = result[i].meta.qualifiedName;
-                            var newContextVertexId = result[i].data[0].id;
-                            var savedTumlTabViewManagers = this.clearTabsOnAddOneOrMany(newContextVertexId);
+                        metaDataNavigatingTo = result[i].meta.to;
+                        qualifiedName = result[i].meta.qualifiedName;
+                        var newContextVertexId = result[i].data.id;
+                        var savedTumlTabViewManagers = this.clearTabsOnAddOneOrMany(newContextVertexId);
 
-                            //If property is a one then there is n navigating from
-                            leftMenuManager.refresh(metaDataNavigatingTo, metaDataNavigatingTo, contextVertexId);
-                            //Do not call refreshInternal as it creates all tabs for the meta data
-                            var tumlTabViewManager = this.createTabContainer(tuml.tab.Enum.Properties, result[i], tumlUri, {forLookup: false, forManyComponent: false, isOne: true, forCreation: false}, this.propertyNavigatingTo);
-                            this.addToTumlTabViewManagers(tumlTabViewManager);
-                            tumlTabViewManager.createTab(result[i], isForCreation);
+                        //If property is a one then there is n navigating from
+                        leftMenuManager.refresh(metaDataNavigatingTo, metaDataNavigatingTo, contextVertexId);
+                        //Do not call refreshInternal as it creates all tabs for the meta data
+                        var tumlTabViewManager = this.createTabContainer(tuml.tab.Enum.Properties, result[i], tumlUri, {forLookup: false, forManyComponent: false, isOne: true, forCreation: false}, this.propertyNavigatingTo);
+                        this.addToTumlTabViewManagers(tumlTabViewManager);
+                        tumlTabViewManager.createTab(result[i], isForCreation);
 
-                            //reorder tabs, make sure new tabs are first
-                            reorderTabsAfterAddOneOrMany(savedTumlTabViewManagers);
-
-                            break;
-                        }
+                        //reorder tabs, make sure new tabs are first
+                        reorderTabsAfterAddOneOrMany(savedTumlTabViewManagers);
                     }
                 } else {
                     //This is for creation of the one
@@ -117,7 +113,6 @@
             this.tabContainer.tabs("option", "active", 0);
 
             this.updateNavigationHeader(qualifiedName);
-//            addButtons();
             $('body').layout().resizeAll();
         }
 
@@ -221,6 +216,13 @@
                             }
                         }
                         tumlTabViewManager.endUpdate(true);
+                    } else {
+
+                        tumlTabViewManager.beginUpdate();
+                        this.setComponentIdToTmpId(resultForTab.data);
+                        tumlTabViewManager.updateGridAfterCommitOrRollback(resultForTab.data);
+                        tumlTabViewManager.endUpdate(true);
+
                     }
                 }
             }
@@ -296,51 +298,51 @@
                 }
 
                 tumlTabViewManagerQuery.createQuery(oclExecuteUri, query, post);
-                tumlTabViewManagerQuery.onPutInstanceQuerySuccess.subscribe(function (e, args) {
-                    tumlTabViewManagerQuery.closeTab();
-                    var newTumlTabViewManager = this.addQueryTab(false, new Tuml.Query(args.query.id, args.query.name, args.query.name, args.query.queryString, args.query.queryEnum, args.gridData, args.queryType));
-                    leftMenuManager.refreshInstanceQuery(args.query.id);
-                });
-                tumlTabViewManagerQuery.onPostInstanceQuerySuccess.subscribe(function (e, args) {
-                    var previousIndex = self.tumlTabViewManagers.indexOf(tumlTabViewManagerQuery);
-                    tumlTabViewManagerQuery.closeTab();
-                    addDefaultQueryTab(false);
-                    var newTumlTabViewManager = this.addQueryTab(false, new Tuml.Query(args.query.id, args.query.name, args.query.name, args.query.queryString, args.query.queryEnum, args.gridData, args.queryType));
-
-                    //place it back at the previousIndex
-                    var currentIndex = self.tumlTabViewManagers.indexOf(newTumlTabViewManager);
-                    this.tumlTabViewManagers.splice(currentIndex, 1);
-                    this.tumlTabViewManagers.splice(previousIndex, 0, newTumlTabViewManager);
-                    this.tabContainer.tabs("option", "active", previousIndex);
-
-                    leftMenuManager.refreshInstanceQuery(args.query.id);
-                });
-                tumlTabViewManagerQuery.onPutClassQuerySuccess.subscribe(function (e, args) {
-                    tumlTabViewManagerQuery.closeTab();
-                    var newTumlTabViewManager = this.addQueryTab(false, new Tuml.Query(args.query.id, args.query.name, args.query.name, args.query.queryString, args.query.queryEnum, args.gridData, args.queryType));
-                    leftMenuManager.refreshClassQuery(args.query.id);
-                });
-                tumlTabViewManagerQuery.onPostClassQuerySuccess.subscribe(function (e, args) {
-                    var previousIndex = self.tumlTabViewManagers.indexOf(tumlTabViewManagerQuery);
-                    closeTab(tumlTabViewManagerQuery);
-                    addDefaultQueryTab(false);
-                    var newTumlTabViewManager = addQueryTab(false, new Tuml.Query(args.query.id, args.query.name, args.query.name, args.query.queryString, args.query.queryEnum, args.gridData, args.queryType));
-
-                    //place it back at the previousIndex
-                    var currentIndex = self.tumlTabViewManagers.indexOf(newTumlTabViewManager);
-                    self.tumlTabViewManagers.splice(currentIndex, 1);
-                    self.tumlTabViewManagers.splice(previousIndex, 0, newTumlTabViewManager);
-                    tabContainer.tabs("option", "active", previousIndex);
-
-                    leftMenuManager.refreshClassQuery(args.query.id);
-                });
-                tumlTabViewManagerQuery.onDeleteQuerySuccess.subscribe(function (e, args) {
-                    closeTab(tumlTabViewManagerQuery);
-                    leftMenuManager.refreshQuery();
-                });
-                tumlTabViewManagerQuery.onSelfCellClick.subscribe(function (e, args) {
-                    self.onSelfCellClick.notify(args, e, self);
-                });
+//                tumlTabViewManagerQuery.onPutInstanceQuerySuccess.subscribe(function (e, args) {
+//                    tumlTabViewManagerQuery.closeTab();
+//                    var newTumlTabViewManager = this.addQueryTab(false, new Tuml.Query(args.query.id, args.query.name, args.query.name, args.query.queryString, args.query.queryEnum, args.gridData, args.queryType));
+//                    leftMenuManager.refreshInstanceQuery(args.query.id);
+//                });
+//                tumlTabViewManagerQuery.onPostInstanceQuerySuccess.subscribe(function (e, args) {
+//                    var previousIndex = self.tumlTabViewManagers.indexOf(tumlTabViewManagerQuery);
+//                    tumlTabViewManagerQuery.closeTab();
+//                    addDefaultQueryTab(false);
+//                    var newTumlTabViewManager = this.addQueryTab(false, new Tuml.Query(args.query.id, args.query.name, args.query.name, args.query.queryString, args.query.queryEnum, args.gridData, args.queryType));
+//
+//                    //place it back at the previousIndex
+//                    var currentIndex = self.tumlTabViewManagers.indexOf(newTumlTabViewManager);
+//                    this.tumlTabViewManagers.splice(currentIndex, 1);
+//                    this.tumlTabViewManagers.splice(previousIndex, 0, newTumlTabViewManager);
+//                    this.tabContainer.tabs("option", "active", previousIndex);
+//
+//                    leftMenuManager.refreshInstanceQuery(args.query.id);
+//                });
+//                tumlTabViewManagerQuery.onPutClassQuerySuccess.subscribe(function (e, args) {
+//                    tumlTabViewManagerQuery.closeTab();
+//                    var newTumlTabViewManager = this.addQueryTab(false, new Tuml.Query(args.query.id, args.query.name, args.query.name, args.query.queryString, args.query.queryEnum, args.gridData, args.queryType));
+//                    leftMenuManager.refreshClassQuery(args.query.id);
+//                });
+//                tumlTabViewManagerQuery.onPostClassQuerySuccess.subscribe(function (e, args) {
+//                    var previousIndex = self.tumlTabViewManagers.indexOf(tumlTabViewManagerQuery);
+//                    closeTab(tumlTabViewManagerQuery);
+//                    addDefaultQueryTab(false);
+//                    var newTumlTabViewManager = addQueryTab(false, new Tuml.Query(args.query.id, args.query.name, args.query.name, args.query.queryString, args.query.queryEnum, args.gridData, args.queryType));
+//
+//                    //place it back at the previousIndex
+//                    var currentIndex = self.tumlTabViewManagers.indexOf(newTumlTabViewManager);
+//                    self.tumlTabViewManagers.splice(currentIndex, 1);
+//                    self.tumlTabViewManagers.splice(previousIndex, 0, newTumlTabViewManager);
+//                    tabContainer.tabs("option", "active", previousIndex);
+//
+//                    leftMenuManager.refreshClassQuery(args.query.id);
+//                });
+//                tumlTabViewManagerQuery.onDeleteQuerySuccess.subscribe(function (e, args) {
+//                    closeTab(tumlTabViewManagerQuery);
+//                    leftMenuManager.refreshQuery();
+//                });
+//                tumlTabViewManagerQuery.onSelfCellClick.subscribe(function (e, args) {
+//                    self.onSelfCellClick.notify(args, e, self);
+//                });
 
             } else {
                 //Just make the tab active
@@ -350,25 +352,25 @@
 
         }
 
-        this.onPutSuccess = new Tuml.Event();
-        this.onPutFailure = new Tuml.Event();
-        this.onPostSuccess = new Tuml.Event();
-        this.onPostFailure = new Tuml.Event();
-        this.onDeleteSuccess = new Tuml.Event();
-        this.onDeleteFailure = new Tuml.Event();
-        this.onCancel = new Tuml.Event();
-        this.onSelfCellClick = new Tuml.Event();
-        this.onContextMenuClickDelete = new Tuml.Event();
-
-        this.onPutOneSuccess = new Tuml.Event();
-        this.onPostOneSuccess = new Tuml.Event();
-        this.onDeleteOneSuccess = new Tuml.Event();
-        this.onPutOneFailure = new Tuml.Event();
-        this.onPostOneFailure = new Tuml.Event();
-        this.onPostInstanceQuerySuccess = new Tuml.Event();
-        this.onPutInstanceQuerySuccess = new Tuml.Event();
-        this.onPostClassQuerySuccess = new Tuml.Event();
-        this.onPutClassQuerySuccess = new Tuml.Event();
+//        this.onPutSuccess = new Tuml.Event();
+//        this.onPutFailure = new Tuml.Event();
+//        this.onPostSuccess = new Tuml.Event();
+//        this.onPostFailure = new Tuml.Event();
+//        this.onDeleteSuccess = new Tuml.Event();
+//        this.onDeleteFailure = new Tuml.Event();
+//        this.onCancel = new Tuml.Event();
+//        this.onSelfCellClick = new Tuml.Event();
+//        this.onContextMenuClickDelete = new Tuml.Event();
+//
+//        this.onPutOneSuccess = new Tuml.Event();
+//        this.onPostOneSuccess = new Tuml.Event();
+//        this.onDeleteOneSuccess = new Tuml.Event();
+//        this.onPutOneFailure = new Tuml.Event();
+//        this.onPostOneFailure = new Tuml.Event();
+//        this.onPostInstanceQuerySuccess = new Tuml.Event();
+//        this.onPutInstanceQuerySuccess = new Tuml.Event();
+//        this.onPostClassQuerySuccess = new Tuml.Event();
+//        this.onPutClassQuerySuccess = new Tuml.Event();
 
         function reorderTabsAfterAddOneOrMany(savedTumlTabViewManagers) {
             for (var i = 0; i < savedTumlTabViewManagers.length; i++) {
@@ -539,7 +541,11 @@
                     overloadedPostData.delete.push.apply(overloadedPostData.delete, dataView.getDeletedItems());
                 }
             } else {
-                AJAX_TYPE = "PUT";
+                if (this.propertyNavigatingTo == null) {
+                    AJAX_TYPE = "PUT";
+                } else {
+                    AJAX_TYPE = "POST";
+                }
                 overloadedPostData = tumlTabViewManager.tumlTabOneManager.data;
                 break;
             }

@@ -382,6 +382,10 @@
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_57L_8DGHEeK9AeutZ8kzPA"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_57MnADGHEeK9AeutZ8kzPA" value="1"/>
+              <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_q1SfgLjZEeKLQYi7y_IX-w" name="nailNameDefaultValue">
+                <language>OCL</language>
+                <body>'nailInit'</body>
+              </defaultValue>
             </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Association" xmi:id="_-FyYIDGHEeK9AeutZ8kzPA" name="finger_nail_1" memberEnd="_-FyYITGHEeK9AeutZ8kzPA _-FxxEDGHEeK9AeutZ8kzPA" navigableOwnedEnd="_-FyYITGHEeK9AeutZ8kzPA">

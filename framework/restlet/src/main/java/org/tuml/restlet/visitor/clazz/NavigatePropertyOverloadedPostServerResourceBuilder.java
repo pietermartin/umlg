@@ -126,11 +126,11 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
         mapper.setInitExp("new ObjectMapper()");
         ojTryStatement.getTryPart().addToLocals(mapper);
 
-        OJField jsonData = new OJField("json", "java.lang.StringBuilder");
-        jsonData.setInitExp("new StringBuilder()");
-        ojTryStatement.getTryPart().addToLocals(jsonData);
-        ojTryStatement.getTryPart().addToStatements("json.append(\"[\")");
-        ojTryStatement.getTryPart().addToStatements("json.append(\"{\\\"data\\\": [\")");
+//        OJField jsonData = new OJField("json", "java.lang.StringBuilder");
+//        jsonData.setInitExp("new StringBuilder()");
+//        ojTryStatement.getTryPart().addToLocals(jsonData);
+//        ojTryStatement.getTryPart().addToStatements("json.append(\"[\")");
+//        ojTryStatement.getTryPart().addToStatements("json.append(\"{\\\"data\\\": [\")");
 
         OJPathName pathName = new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object");
         OJAnnotatedField entityText = new OJAnnotatedField("entityText", "String");
@@ -236,9 +236,17 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
 
         OJForStatement forConcreteClasifiers = new OJForStatement("baseClass", new OJPathName("Class").addToGenerics("? extends " + pWrap.javaBaseTypePath().getLast()), "resultMap.keySet()");
         jsonResultBlock.addToStatements(forConcreteClasifiers);
-        forConcreteClasifiers.getBody().addToStatements("result.append(\"{\\\"data\\\": [\")");
+        if (pWrap.isOne()) {
+            forConcreteClasifiers.getBody().addToStatements("result.append(\"{\\\"data\\\": \")");
+        } else {
+            forConcreteClasifiers.getBody().addToStatements("result.append(\"{\\\"data\\\": [\")");
+        }
         forConcreteClasifiers.getBody().addToStatements("result.append(resultMap.get(baseClass))");
-        forConcreteClasifiers.getBody().addToStatements("result.append(\"],\")");
+        if (pWrap.isOne()) {
+            forConcreteClasifiers.getBody().addToStatements("result.append(\",\")");
+        } else {
+            forConcreteClasifiers.getBody().addToStatements("result.append(\"],\")");
+        }
         forConcreteClasifiers.getBody().addToStatements("result.append(\" \\\"meta\\\" : {\")");
         forConcreteClasifiers.getBody().addToStatements("result.append(\"\\\"qualifiedName\\\": \\\"" + pWrap.getQualifiedName() + "\\\"\")");
         forConcreteClasifiers.getBody().addToStatements("result.append(\", \\\"to\\\": \")");
@@ -426,11 +434,16 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
             // i.e. the first meta data in the array is the entity navigating to.
             for (Classifier concreteClassifierTo : concreteImplementations) {
                 annotatedClass.addToImports(TumlClassOperations.getPathName(concreteClassifierTo));
-                block.addToStatements("json.append(\"{\\\"data\\\": [\")");
+                if (pWrap.isOne()) {
+                    block.addToStatements("json.append(\"{\\\"data\\\": \")");
+                } else {
+                    block.addToStatements("json.append(\"{\\\"data\\\": [\")");
+                }
                 if (pWrap.isOne()) {
                     OJIfStatement ifOneInstanceOf = new OJIfStatement("parentResource." + pWrap.getter() + "() instanceof "
                             + TumlClassOperations.getPathName(concreteClassifierTo).getLast());
                     ifOneInstanceOf.addToThenPart("json.append(" + TinkerGenerationUtil.ToJsonUtil.getLast() + ".toJsonWithoutCompositeParent(parentResource." + pWrap.getter() + "()))");
+                    ifOneInstanceOf.addToElsePart("json.append(\"null\")");
                     block.addToStatements(ifOneInstanceOf);
                 } else {
                     block.addToStatements("json.append(" + TinkerGenerationUtil.ToJsonUtil.getLast() + ".toJsonWithoutCompositeParent(parentResource." + pWrap.getter() + "().select(new "
@@ -440,7 +453,11 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
                     annotatedClass.addToImports(TinkerGenerationUtil.BooleanExpressionEvaluator);
                 }
                 annotatedClass.addToImports(TumlClassOperations.getPathName(pWrap.getType()));
-                block.addToStatements("json.append(\"],\")");
+                if (pWrap.isOne()) {
+                    block.addToStatements("json.append(\",\")");
+                } else {
+                    block.addToStatements("json.append(\"],\")");
+                }
 
                 block.addToStatements("json.append(\" \\\"meta\\\" : {\")");
                 // The execute ocl query resource is only required if the below

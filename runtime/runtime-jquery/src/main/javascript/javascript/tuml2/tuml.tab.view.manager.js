@@ -235,7 +235,9 @@
         TumlBaseTabViewManager.prototype.createTab.call(this);
         this.parentTabContainer.tabs("option", "active", this.parentTabContainerManager.tumlTabViewManagers.length - 1);
         if (forCreation) {
-            this.createOne(result.data, forCreation);
+            var tmpId = Tuml.TumlFakeIndex++;
+            this.createOne({id: 'fake::' + tmpId, tmpId: 'fake::' + tmpId}, forCreation);
+            this.saveNewRow();
         } else {
             this.createOne(result.data, forCreation);
         }

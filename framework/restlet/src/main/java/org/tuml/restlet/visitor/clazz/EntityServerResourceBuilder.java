@@ -163,10 +163,10 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
                 TumlClassOperations.className(clazz) + " c = new " + TumlClassOperations.className(clazz) + "(GraphDb.getDb().getVertex(this."
                         + getIdFieldName(clazz) + "))");
         annotatedClass.addToImports(TumlClassOperations.getPathName(clazz));
-        tryStatement.getTryPart().addToStatements("json.append(\"[{\\\"data\\\": [\")");
+        tryStatement.getTryPart().addToStatements("json.append(\"[{\\\"data\\\": \")");
         tryStatement.getTryPart().addToStatements("json.append(" + "c.toJsonWithoutCompositeParent())");
 
-        tryStatement.getTryPart().addToStatements("meta", "json.append(\"], \\\"meta\\\" : {\")");
+        tryStatement.getTryPart().addToStatements("meta", "json.append(\", \\\"meta\\\" : {\")");
 
         tryStatement.getTryPart().addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + clazz.getQualifiedName() + "\\\"\")");
         tryStatement.getTryPart().addToStatements("json.append(\", \\\"to\\\": \")");

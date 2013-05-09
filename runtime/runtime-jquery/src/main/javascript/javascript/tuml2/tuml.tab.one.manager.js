@@ -233,7 +233,7 @@
             //Do lookups latest
             for (var i = 0; i < this.metaForData.properties.length; i++) {
                 var property = this.metaForData.properties[i];
-                if (this.isPropertyForOnePage(property, isForCreation) && !property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && (property.oneToOne || property.manyToOne)) {
+                if (this.isPropertyForOnePage(property) && !property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && (property.oneToOne || property.manyToOne)) {
                     var li = $('<li>')
                     li.appendTo(ul);
                     $('<label />', {for: property.name + 'Id'}).text(property.name + ' :').appendTo(li);
@@ -254,9 +254,8 @@
     }
 
     TumlBaseTabOneManager.prototype.isPropertyForOnePage = function (property) {
-        return(!property.inverseComposite
-            && (!property.composite && (property.oneToOne || property.manyToOne || property.manyPrimitive || property.manyEnumeration))
-            || (property.composite && property.lower > 0)
+        return(!property.inverseComposite && (!property.composite && (property.oneToOne || property.manyToOne || property.manyPrimitive || property.manyEnumeration))
+            || (this.isForCreation && property.composite && property.lower > 0)
             && property.name !== 'uri');
     }
 

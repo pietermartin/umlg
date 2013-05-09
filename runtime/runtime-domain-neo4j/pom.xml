@@ -51,7 +51,7 @@
         <dependency>
             <groupId>org.neo4j.app</groupId>
             <artifactId>neo4j-server</artifactId>
-            <version>1.9-SNAPSHOT</version>
+            <version>1.9.M05</version>
             <exclusions>
                 <exclusion>
                     <groupId>asm</groupId>
@@ -63,7 +63,7 @@
             <groupId>org.neo4j.app</groupId>
             <artifactId>neo4j-server</artifactId>
             <classifier>static-web</classifier>
-            <version>1.9-SNAPSHOT</version>
+            <version>1.9.M05</version>
         </dependency>
     </dependencies>
 </project>
