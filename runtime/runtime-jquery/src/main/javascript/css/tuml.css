@@ -111,6 +111,11 @@
     font-size: 130%;
 }
 
+.one-tabs-button {
+    padding-left: 180px;
+    margin-left: 5px;
+}
+
 .onesavebuttondiv {
     padding-left: 170px;
 }
@@ -484,6 +489,15 @@
 
 .tuml-new-id {
     color: green;
+}
+
+/*for one view*/
+.ui-state-default.tuml-new-id {
+    color: green;
+}
+
+.ui-state-default.tuml-updated-id {
+    color: blue;
 }
 
 .slick-row:hover {

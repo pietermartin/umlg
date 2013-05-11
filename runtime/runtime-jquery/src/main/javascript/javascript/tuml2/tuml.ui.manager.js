@@ -140,6 +140,7 @@
                     var response = result[i];
                     //There are many data(s) to cater for the multiple concrete types, as its a one take the first one
                     if (response.data !== undefined && response.data !== null) {
+                        metaDataNavigatingTo = result[i].meta.to;
                         return {name:metaDataNavigatingTo.name, uri:metaDataNavigatingTo.uri, contextVertexId:response.data.id};
                     }
                 }

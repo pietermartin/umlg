@@ -66,7 +66,7 @@
                         for (var i = 0; i < self.tumlTabViewManagers.length; i++) {
                             var tumlTabViewManager = self.tumlTabViewManagers[i];
                             if (ui.oldPanel['0'] !== undefined && ui.oldPanel['0'].id == tumlTabViewManager.getTabId()) {
-                                if (tumlTabViewManager.tumlTabGridManager !== undefined) {
+                                if (tumlTabViewManager.tumlTabGridManager !== undefined || tumlTabViewManager.tumlTabOneManager !== undefined) {
                                     tumlTabViewManager.open = false;
                                     break;
                                 }
@@ -104,37 +104,7 @@
                     }
                 });
 
-                //add in button
-                this.addButtons();
             }
-        }
-
-        this.disableButtons = function () {
-            var tabsNav = this.tabContainer.find('.ui-tabs-nav');
-            tabsNav.find('#' + this.getTabId() + 'save').attr('disabled', 'disabled');
-        }
-
-        this.enableButtons = function () {
-            var tabsNav = this.tabContainer.find('.ui-tabs-nav');
-            tabsNav.find('#' + this.getTabId() + 'save').removeAttr('disabled');
-        }
-
-        this.addButtons = function () {
-            var tabsNav = this.tabContainer.find('.ui-tabs-nav');
-            var tabsButtonDiv = $('<div />', {id: 'tabcontainer-button', class: 'tabs-button'}).appendTo(tabsNav);
-            var saveButton = $('<button />', {id: this.getTabId() + 'save'}).text('Save').appendTo(tabsButtonDiv);
-            saveButton.button().click(function (event) {
-                if (Slick.GlobalEditorLock.commitCurrentEdit()) {
-                    self.saveTabs();
-                }
-                event.preventDefault();
-            });
-            var cancelButton = $('<button />', {id: this.getTabId() + 'save'}).text('Cancel').appendTo(tabsButtonDiv);
-            cancelButton.button().click(function (event) {
-                self.doCancel();
-                event.preventDefault();
-            });
-
         }
 
         this.createPropertyDescriptionHeading = function () {
@@ -151,6 +121,35 @@
             var association = 'association: ' + (this.tabContainerProperty.composite ? 'composite' : 'non composite');
             return multiplicity + ', ' + unique + ', ' + ordered + ', ' + association;
         }
+
+    }
+
+    TumlTabContainerManager.prototype.disableButtons = function () {
+        var tabsNav = this.tabContainer.find('.ui-tabs-nav');
+        tabsNav.find('#' + this.getTabId() + 'save').attr('disabled', 'disabled');
+    }
+
+    TumlTabContainerManager.prototype.enableButtons = function () {
+        var tabsNav = this.tabContainer.find('.ui-tabs-nav');
+        tabsNav.find('#' + this.getTabId() + 'save').removeAttr('disabled');
+    }
+
+    TumlTabContainerManager.prototype.addButtons = function () {
+        var self = this;
+        var tabsNav = this.tabContainer.find('.ui-tabs-nav');
+        var tabsButtonDiv = $('<div />', {id: 'tabcontainer-button', class: 'tabs-button'}).appendTo(tabsNav);
+        var saveButton = $('<button />', {id: this.getTabId() + 'save'}).text('Save').appendTo(tabsButtonDiv);
+        saveButton.button().click(function (event) {
+            if (Slick.GlobalEditorLock.commitCurrentEdit()) {
+                self.saveTabs();
+            }
+            event.preventDefault();
+        });
+        var cancelButton = $('<button />', {id: this.getTabId() + 'save'}).text('Cancel').appendTo(tabsButtonDiv);
+        cancelButton.button().click(function (event) {
+            self.doCancel();
+            event.preventDefault();
+        });
 
     }
 

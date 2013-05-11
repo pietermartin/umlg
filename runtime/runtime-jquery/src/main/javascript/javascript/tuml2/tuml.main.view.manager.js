@@ -61,24 +61,32 @@
             } else {
                 //Property is a one
                 //If there are no data then it is for creation
-                var isForCreation = result[0].data == null;
+                var hasData = false;
+                for (var i = 0; i < result.length; i++) {
+                    if (result[i].data !== null) {
+                        hasData = true;
+                        break;
+                    }
+                }
+                var isForCreation = hasData === false;
                 if (!isForCreation) {
                     //Only one element of the array contains data, i.e. for the return concrete type
                     for (var i = 0; i < result.length; i++) {
-                        metaDataNavigatingTo = result[i].meta.to;
-                        qualifiedName = result[i].meta.qualifiedName;
-                        var newContextVertexId = result[i].data.id;
-                        var savedTumlTabViewManagers = this.clearTabsOnAddOneOrMany(newContextVertexId);
+                        if (result[i].data !== null) {
+                            metaDataNavigatingTo = result[i].meta.to;
+                            qualifiedName = result[i].meta.qualifiedName;
+                            var newContextVertexId = result[i].data.id;
+                            var savedTumlTabViewManagers = this.clearTabsOnAddOneOrMany(newContextVertexId);
 
-                        //If property is a one then there is n navigating from
-                        leftMenuManager.refresh(metaDataNavigatingTo, metaDataNavigatingTo, contextVertexId);
-                        //Do not call refreshInternal as it creates all tabs for the meta data
-                        var tumlTabViewManager = this.createTabContainer(tuml.tab.Enum.Properties, result[i], tumlUri, {forLookup: false, forManyComponent: false, isOne: true, forCreation: false}, this.propertyNavigatingTo);
-                        this.addToTumlTabViewManagers(tumlTabViewManager);
-                        tumlTabViewManager.createTab(result[i], isForCreation);
-
-                        //reorder tabs, make sure new tabs are first
-                        reorderTabsAfterAddOneOrMany(savedTumlTabViewManagers);
+                            //If property is a one then there is n navigating from
+                            leftMenuManager.refresh(metaDataNavigatingTo, metaDataNavigatingTo, contextVertexId);
+                            //Do not call refreshInternal as it creates all tabs for the meta data
+                            var tumlTabViewManager = this.createTabContainer(tuml.tab.Enum.Properties, result[i], tumlUri, {forLookup: false, forManyComponent: false, isOne: true, forCreation: false}, this.propertyNavigatingTo);
+                            this.addToTumlTabViewManagers(tumlTabViewManager);
+                            tumlTabViewManager.createTab(result[i], isForCreation);
+                            //reorder tabs, make sure new tabs are first
+                            reorderTabsAfterAddOneOrMany(savedTumlTabViewManagers);
+                        }
                     }
                 } else {
                     //This is for creation of the one
@@ -121,6 +129,10 @@
             var tumlTabViewManagers = this.getTumlTabManyOrOneViewManagers(commit);
             var overloadedPostData = {insert: [], update: [], delete: []};
 
+            if (commit) {
+                this.validate(tumlTabViewManagers);
+            }
+
             if (commit && !validateMultiplicity(tumlTabViewManagers)) {
                 return;
             } else {
@@ -133,11 +145,21 @@
                         overloadedPostData.delete.push.apply(overloadedPostData.delete, dataView.getDeletedItems());
                     } else {
                         if (tumlTabViewManager.oneManyOrQuery.forCreation) {
-                            overloadedPostData.insert.push(tumlTabViewManager.tumlTabOneManager.data);
+                            //in case of inheritence their might be multiple tabs, check for the active one
+                            if (tumlTabViewManager.open) {
+                                overloadedPostData.insert.push(tumlTabViewManager.tumlTabOneManager.data);
+                                break;
+                            }
                         } else {
-                            overloadedPostData.update.push(tumlTabViewManager.tumlTabOneManager.data);
+                            if (this.propertyNavigatingTo == null) {
+                                overloadedPostData = tumlTabViewManager.tumlTabOneManager.data;
+                            } else {
+                                overloadedPostData.update.push(tumlTabViewManager.tumlTabOneManager.data);
+                            }
+                            if (tumlTabViewManager.open > 1) {
+                                throw 'Update can not have more than one tab for an object with a multiplcity of one!';
+                            }
                         }
-                        break;
                     }
                 }
                 var postUri;
@@ -147,9 +169,16 @@
                     postUri = self.tumlUri;
                 }
 
+                var AJAX_TYPE;
+                if (this.propertyNavigatingTo == null) {
+                    AJAX_TYPE = "PUT";
+                } else {
+                    AJAX_TYPE = "POST";
+                }
+
                 $.ajax({
                     url: postUri,
-                    type: "POST",
+                    type: AJAX_TYPE,
                     dataType: "json",
                     contentType: "application/json",
                     data: JSON.stringify(overloadedPostData),
@@ -171,22 +200,43 @@
             }
         }
 
+
+
         this.updateTabsForResultAfterCommit = function (result) {
             for (var i = 0; i < result.length; i++) {
                 var resultForTab = result[i];
+                var metaForData = resultForTab.meta.to;
+                var indexesToRemove = [];
                 for (var j = 0; j < this.tumlTabViewManagers.length; j++) {
                     var tumlTabViewManager = this.tumlTabViewManagers[j];
                     if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager) {
                         tumlTabViewManager.beginUpdate();
-                        var metaForData = resultForTab.meta.to;
                         //TOTO use qualified name somehow
                         if (tumlTabViewManager.tabId == metaForData.name) {
                             for (var k = 0; k < resultForTab.data.length; k++) {
-                                tumlTabViewManager.updateGridAfterCommitOrRollback(resultForTab.data[k]);
+                                tumlTabViewManager.updateGridAfterCommit(resultForTab.data[k]);
                             }
                         }
                         tumlTabViewManager.endUpdate(false);
+                    } else if (tumlTabViewManager instanceof Tuml.TumlTabOneViewManager) {
+
+                        if (result.length > 1) {
+                            throw 'result array from server can not be bigger than one for a one!';
+                        }
+
+                        if (tumlTabViewManager.tabId == metaForData.name) {
+                            tumlTabViewManager.beginUpdate();
+                            tumlTabViewManager.updateGridAfterCommit(resultForTab.data);
+                            tumlTabViewManager.endUpdate(true);
+                        } else {
+                            //Close any other one tabs that may be open after a creation with multiple concrete tabs
+                            indexesToRemove.push(j);
+                        }
                     }
+                }
+                for (var j = 0; j < indexesToRemove.length > 0; j++) {
+                    var index = indexesToRemove[j];
+                    this.tumlTabViewManagers[index].closeTab();
                 }
             }
             for (var j = 0; j < this.tumlTabViewManagers.length; j++) {
@@ -200,11 +250,11 @@
         this.updateTabsForResultAfterRollback = function (result) {
             for (var i = 0; i < result.length; i++) {
                 var resultForTab = result[i];
+                var metaForData = resultForTab.meta.to;
                 for (var j = 0; j < this.tumlTabViewManagers.length; j++) {
                     var tumlTabViewManager = this.tumlTabViewManagers[j];
                     if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager) {
                         tumlTabViewManager.beginUpdate();
-                        var metaForData = resultForTab.meta.to;
                         //TODO use qualified name somehow
                         //Line up he result with the correct tab
                         if (tumlTabViewManager.tabId == metaForData.name) {
@@ -212,17 +262,17 @@
                                 //Need to update the id's to the tmpId as the id no longer exist on a rolled back transaction
                                 //Go through all the properties, for each composite property set the id = tmpId
                                 this.setComponentIdToTmpId(resultForTab.data[k]);
-                                tumlTabViewManager.updateGridAfterCommitOrRollback(resultForTab.data[k]);
+                                tumlTabViewManager.updateGridAfterRollback(resultForTab.data[k]);
                             }
                         }
                         tumlTabViewManager.endUpdate(true);
                     } else {
-
-                        tumlTabViewManager.beginUpdate();
-                        this.setComponentIdToTmpId(resultForTab.data);
-                        tumlTabViewManager.updateGridAfterCommitOrRollback(resultForTab.data);
-                        tumlTabViewManager.endUpdate(true);
-
+                        if (tumlTabViewManager.tabId == metaForData.name) {
+                            tumlTabViewManager.beginUpdate();
+                            this.setComponentIdToTmpId(resultForTab.data);
+                            tumlTabViewManager.updateGridAfterRollback(resultForTab.data);
+                            tumlTabViewManager.endUpdate(true);
+                        }
                     }
                 }
             }
@@ -429,10 +479,15 @@
         function refreshInternal(tumlUri, result, isOne, forCreation) {
             //A tab is created for every element in the array,
             //i.e. for every concrete subset of the many property
+            var previousTumlTabViewManager = null;
             for (var i = 0; i < result.length; i++) {
+                if (previousTumlTabViewManager !== null) {
+                    previousTumlTabViewManager.open = false;
+                }
                 var tumlTabViewManager = self.createTabContainer(tuml.tab.Enum.Properties, result[i], tumlUri, {forLookup: false, forManyComponent: false, isOne: isOne, forCreation: forCreation}, self.propertyNavigatingTo);
                 self.addToTumlTabViewManagers(tumlTabViewManager);
                 tumlTabViewManager.createTab(result[i], forCreation);
+                previousTumlTabViewManager = tumlTabViewManager;
             }
         }
 
@@ -490,6 +545,14 @@
                 var tumlTabViewManager = this.tumlTabViewManagers[j];
                 tumlTabViewManager.updateOne(fakeId, fieldName, one, indexForFakeId);
             }
+        }
+    }
+
+    TumlMainViewManager.prototype.validate = function (tumlTabViewManagers) {
+
+        for (var i = 0; i < tumlTabViewManagers.length; i++) {
+            var tumlTabViewManager = tumlTabViewManagers[i];
+            tumlTabViewManager.validate();
         }
     }
 
