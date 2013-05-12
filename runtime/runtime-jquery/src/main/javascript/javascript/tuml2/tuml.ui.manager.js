@@ -115,6 +115,16 @@
                 dataType:"json",
                 contentType:"json",
                 success:function (result, textStatus, jqXHR) {
+                    //put the meta data in the cache
+                    //this needs refactoring to use http OPTION to get the meta data only
+                    var metaDataArray = [];
+                    for (var i = 0; i < result.length; i++) {
+                        var metaData = {data: []};
+                        metaData.meta = result[i].meta;
+                        metaDataArray.push(metaData);
+                    }
+                    Tuml.Metadata.Cache.add(metaData.meta.qualifiedName, metaDataArray);
+
                     mainViewManager.refresh(tumlUri, result);
                     var contextMetaData = getContextMetaData(result, contextVertexId);
                     contextManager.refresh(contextMetaData.name, contextMetaData.uri, contextMetaData.contextVertexId);

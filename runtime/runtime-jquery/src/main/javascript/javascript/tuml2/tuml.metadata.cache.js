@@ -10,14 +10,22 @@
 
     function Cache() {
         var metaDataIdx = {};
-        this.getMetaDataIdx = function() {
+
+        this.getMetaDataIdx = function () {
             return metaDataIdx;
         }
-        this.add = function (uri, metaData) {
+
+        this.add = function (qualifiedName, metaData) {
+            metaDataIdx[qualifiedName] = metaData;
         }
-        this.get = function (uri, callback) {
+
+        this.getFromCache = function (qualifiedName) {
+            return metaDataIdx[qualifiedName];
+        }
+
+        this.get = function (qualifiedName, uri, callback) {
             var self = this;
-            var metaData = metaDataIdx[uri];
+            var metaData = metaDataIdx[qualifiedName];
             if (metaData === undefined) {
                 $.ajax({
                     url: uri,
@@ -25,7 +33,7 @@
                     dataType: "json",
                     contentType: "application/json",
                     success: function (result) {
-                        self.getMetaDataIdx()[uri] = result;
+                        self.getMetaDataIdx()[qualifiedName] = result;
                         callback.call(this, result);
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
@@ -35,7 +43,6 @@
             } else {
                 callback.call(this, metaData);
             }
-
         }
     }
 

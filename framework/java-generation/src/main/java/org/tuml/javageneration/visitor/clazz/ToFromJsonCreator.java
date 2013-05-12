@@ -23,6 +23,7 @@ import org.tuml.javageneration.visitor.BaseVisitor;
 public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 
     public static final String URI_FOR_RESTFULL = "uri";
+    public static final String METADATA_URI_FOR_RESTFULL = "uri";
 
     public ToFromJsonCreator(Workspace workspace) {
         super(workspace);
@@ -160,6 +161,8 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
             toJson.getBody().addToStatements("sb.append(\"\\\"qualifiedName\\\": \\\"\" + getQualifiedName() + \"\\\"\")");
             toJson.getBody().addToStatements("sb.append(\", \")");
             toJson.getBody().addToStatements(URI_FOR_RESTFULL, "//PlaceHolder for restful\nsb.append(\"\\\"uri\\\": {}\")");
+//            toJson.getBody().addToStatements("sb.append(\", \")");
+//            toJson.getBody().addToStatements(METADATA_URI_FOR_RESTFULL, "//PlaceHolder for restful\nsb.append(\"\\\"tumlMetaDataUri\\\": {}\")");
         }
         toJson.getBody().addToStatements("sb.insert(0, \"{\")");
         toJson.getBody().addToStatements("sb.append(\"}\")");

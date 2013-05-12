@@ -752,7 +752,6 @@
             }
         } else {
             validationResult = selectFieldValidator(property)(validateInput.val());
-//            serializedValue = new editor().serializeValueWithValue(validateInput);
         }
         //selectFieldValidator returns the validate function
         if (!validationResult.valid) {

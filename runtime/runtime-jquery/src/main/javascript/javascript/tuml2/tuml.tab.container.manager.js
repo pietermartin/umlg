@@ -14,6 +14,7 @@
         //This will be null for the root object only
         this.propertyNavigatingTo = propertyNavigatingTo;
         this.tabContainerProperty = null;
+        this.validationResults = null;
         this.tumlTabViewManagers = [];
         this.tabContainer = null;
         this.parentTabContainer = tabContainer;
@@ -205,6 +206,17 @@
                     if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager && tumlTabViewManager.tumlTabGridManager.dataView.getItems().length > 0) {
                         data.push.apply(data, tumlTabViewManager.getTabData());
                         tumlTabViewManager.tumlTabGridManager.updateDataModel();
+
+                        var validationResult = tumlTabViewManager.validate();
+
+                        if (tumlTabViewManager.validationResults != null) {
+                            for (var j = 0; j < tumlTabViewManager.validationResults.length; j++) {
+                                var componentValidationResult = tumlTabViewManager.validationResults[j];
+                                validationResult.push(componentValidationResult);
+                            }
+                        }
+
+                        this.setValidationResults(tumlTabViewManager.metaForData.qualifiedName, validationResult);
                     }
                 }
                 this.setCellValue(data);
@@ -222,7 +234,15 @@
                         firstTumlTabViewManager = tumlTabViewManager;
                     }
                 }
-                var data = tumlTabViewManager.tumlTabOneManager.data;
+                var data = tumlTabViewManager.getTabData();
+
+                var validationResult = tumlTabViewManager.validate();
+                validationResults.messages.push.apply(validationResults.messages, validationResult.messages);
+                if (tumlTabViewManager.validationResults !== null) {
+                    validationResults.validationResults = tumlTabViewManager.validationResults;
+                }
+                this.setValidationResults(validationResults)
+
                 this.setCellValue(data);
                 tumlTabViewManager.tumlTabOneManager.updateDataModel(data);
 
@@ -293,7 +313,7 @@
         for (var i = 0; i < tumlTabManyViewManagers.length; i++) {
             var tumlTabViewManager = tumlTabManyViewManagers[i];
             if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager) {
-                rowCount +=  tumlTabViewManager.getTabData().length;
+                rowCount += tumlTabViewManager.getTabData().length;
             } else {
                 rowCount++;
             }

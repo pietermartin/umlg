@@ -38,14 +38,15 @@
         var contextVertexId;
         var contextChanged = true;
         this.globalOneToOneIndex = new GlobalOneToOneIndex();
+        this.qualifiedName = null;
 
         this.refresh = function (tumlUri, result) {
-            var qualifiedName = result[0].meta.qualifiedName;
+            this.qualifiedName = result[0].meta.qualifiedName;
             var metaDataNavigatingTo = result[0].meta.to;
             var metaDataNavigatingFrom = result[0].meta.from;
             this.tumlUri = tumlUri;
             //propertyNavigatingTo is null when viewing a one
-            this.propertyNavigatingTo = (metaDataNavigatingFrom == undefined ? null : findPropertyNavigatingTo(qualifiedName, metaDataNavigatingFrom));
+            this.propertyNavigatingTo = (metaDataNavigatingFrom == undefined ? null : findPropertyNavigatingTo(this.qualifiedName, metaDataNavigatingFrom));
             this.tabContainerProperty = this.propertyNavigatingTo;
             if (this.propertyNavigatingTo != null && (this.propertyNavigatingTo.oneToMany || this.propertyNavigatingTo.manyToMany)) {
                 //Property is a many
@@ -70,11 +71,11 @@
                 }
                 var isForCreation = hasData === false;
                 if (!isForCreation) {
-                    //Only one element of the array contains data, i.e. for the return concrete type
+                    //Only element of the array contains data, i.e. for the return concrete type
                     for (var i = 0; i < result.length; i++) {
                         if (result[i].data !== null) {
                             metaDataNavigatingTo = result[i].meta.to;
-                            qualifiedName = result[i].meta.qualifiedName;
+                            this.qualifiedName = result[i].meta.qualifiedName;
                             var newContextVertexId = result[i].data.id;
                             var savedTumlTabViewManagers = this.clearTabsOnAddOneOrMany(newContextVertexId);
 
@@ -90,7 +91,7 @@
                     }
                 } else {
                     //This is for creation of the one
-                    qualifiedName = result[0].meta.qualifiedName;
+                    this.qualifiedName = result[0].meta.qualifiedName;
                     var newContextVertexId = retrieveVertexId(tumlUri);
                     var savedTumlTabViewManagers = this.clearTabsOnAddOneOrMany(newContextVertexId);
 
@@ -120,7 +121,7 @@
             this.tumlTabViewManagers[0].open = true;
             this.tabContainer.tabs("option", "active", 0);
 
-            this.updateNavigationHeader(qualifiedName);
+            this.updateNavigationHeader(this.qualifiedName);
             $('body').layout().resizeAll();
         }
 
@@ -129,77 +130,89 @@
             var tumlTabViewManagers = this.getTumlTabManyOrOneViewManagers(commit);
             var overloadedPostData = {insert: [], update: [], delete: []};
 
-            if (commit) {
-                this.validate(tumlTabViewManagers);
-            }
-
-            if (commit && !validateMultiplicity(tumlTabViewManagers)) {
-                return;
-            } else {
-                for (var i = 0; i < tumlTabViewManagers.length; i++) {
-                    var tumlTabViewManager = tumlTabViewManagers[i];
-                    if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager && !tumlTabViewManager.oneManyOrQuery.forManyComponent) {
-                        var dataView = tumlTabViewManager.tumlTabGridManager.dataView;
-                        overloadedPostData.insert.push.apply(overloadedPostData.insert, dataView.getNewItems());
-                        overloadedPostData.update.push.apply(overloadedPostData.update, dataView.getUpdatedItems());
-                        overloadedPostData.delete.push.apply(overloadedPostData.delete, dataView.getDeletedItems());
+            var validationResult = [];
+            var many = true;
+            for (var i = 0; i < tumlTabViewManagers.length; i++) {
+                var tumlTabViewManager = tumlTabViewManagers[i];
+                if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager) {
+                    var dataView = tumlTabViewManager.tumlTabGridManager.dataView;
+                    overloadedPostData.insert.push.apply(overloadedPostData.insert, dataView.getNewItems());
+                    overloadedPostData.update.push.apply(overloadedPostData.update, dataView.getUpdatedItems());
+                    overloadedPostData.delete.push.apply(overloadedPostData.delete, dataView.getDeletedItems());
+                } else {
+                    many = false;
+                    if (tumlTabViewManager.oneManyOrQuery.forCreation) {
+                        //in case of inheritence their might be multiple tabs, check for the active one
+                        if (tumlTabViewManager.open) {
+                            overloadedPostData.insert.push(tumlTabViewManager.tumlTabOneManager.data);
+                            if (commit) {
+                                validationResult.push.apply(validationResult, this.validateNewOne(overloadedPostData.insert));
+                            }
+                            break;
+                        }
                     } else {
-                        if (tumlTabViewManager.oneManyOrQuery.forCreation) {
-                            //in case of inheritence their might be multiple tabs, check for the active one
-                            if (tumlTabViewManager.open) {
-                                overloadedPostData.insert.push(tumlTabViewManager.tumlTabOneManager.data);
-                                break;
+                        if (this.propertyNavigatingTo == null) {
+                            overloadedPostData = tumlTabViewManager.tumlTabOneManager.data;
+                            if (commit) {
+                                validationResult.push.apply(validationResult, this.validateUpdateOne(overloadedPostData));
                             }
                         } else {
-                            if (this.propertyNavigatingTo == null) {
-                                overloadedPostData = tumlTabViewManager.tumlTabOneManager.data;
-                            } else {
-                                overloadedPostData.update.push(tumlTabViewManager.tumlTabOneManager.data);
-                            }
-                            if (tumlTabViewManager.open > 1) {
-                                throw 'Update can not have more than one tab for an object with a multiplcity of one!';
+                            overloadedPostData.update.push(tumlTabViewManager.tumlTabOneManager.data);
+                            if (commit) {
+                                validationResult.push.apply(validationResult, this.validateUpdateOne(overloadedPostData.update));
                             }
                         }
+                        break;
                     }
                 }
-                var postUri;
-                if (!commit) {
-                    postUri = self.tumlUri + "?rollback=true";
-                } else {
-                    postUri = self.tumlUri;
-                }
-
-                var AJAX_TYPE;
-                if (this.propertyNavigatingTo == null) {
-                    AJAX_TYPE = "PUT";
-                } else {
-                    AJAX_TYPE = "POST";
-                }
-
-                $.ajax({
-                    url: postUri,
-                    type: AJAX_TYPE,
-                    dataType: "json",
-                    contentType: "application/json",
-                    data: JSON.stringify(overloadedPostData),
-                    success: function (result, textStatus, jqXHR) {
-                        if (commit) {
-                            self.updateTabsForResultAfterCommit(result);
-                        } else {
-                            var endTimeBeforeUpdateGrids = new Date().getTime();
-                            console.log("Time taken in millis for server call before update grids = " + (endTimeBeforeUpdateGrids - startTime));
-                            self.updateTabsForResultAfterRollback(result);
-                            endTimeBeforeUpdateGrids = new Date().getTime();
-                            console.log("Time taken in millis for server call after  update grids = " + (endTimeBeforeUpdateGrids - startTime));
-                        }
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-                    }
-                });
             }
-        }
+            if (commit && many) {
+                validationResult.push.apply(validationResult, this.validateMany(overloadedPostData));
+            }
+            if (commit && validationResult.length > 0) {
+                var msg = '';
+                for (var i = 0; i < validationResult.length; i++) {
+                    msg += validationResult[i].msg + '\n';
+                }
+                alert(msg);
+                return;
+            }
+            var postUri;
+            if (!commit) {
+                postUri = self.tumlUri + "?rollback=true";
+            } else {
+                postUri = self.tumlUri;
+            }
 
+            var AJAX_TYPE;
+            if (this.propertyNavigatingTo == null) {
+                AJAX_TYPE = "PUT";
+            } else {
+                AJAX_TYPE = "POST";
+            }
+
+            $.ajax({
+                url: postUri,
+                type: AJAX_TYPE,
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(overloadedPostData),
+                success: function (result, textStatus, jqXHR) {
+                    if (commit) {
+                        self.updateTabsForResultAfterCommit(result);
+                    } else {
+                        var endTimeBeforeUpdateGrids = new Date().getTime();
+                        console.log("Time taken in millis for server call before update grids = " + (endTimeBeforeUpdateGrids - startTime));
+                        self.updateTabsForResultAfterRollback(result);
+                        endTimeBeforeUpdateGrids = new Date().getTime();
+                        console.log("Time taken in millis for server call after  update grids = " + (endTimeBeforeUpdateGrids - startTime));
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
+                }
+            });
+        }
 
 
         this.updateTabsForResultAfterCommit = function (result) {
@@ -548,12 +561,51 @@
         }
     }
 
-    TumlMainViewManager.prototype.validate = function (tumlTabViewManagers) {
+    TumlMainViewManager.prototype.validateNewOne = function (overloadedPostData) {
+    }
 
-        for (var i = 0; i < tumlTabViewManagers.length; i++) {
-            var tumlTabViewManager = tumlTabViewManagers[i];
-            tumlTabViewManager.validate();
+    TumlMainViewManager.prototype.validateUpdateOne = function (overloadedPostData) {
+    }
+
+    TumlMainViewManager.prototype.validateMany = function (overloadedPostData) {
+
+        var validationResult = [];
+        var toValidate = [];
+        var metaDataArray;
+
+        if (this.propertyNavigatingTo !== null) {
+            toValidate.push.apply(toValidate, overloadedPostData.insert);
+            toValidate.push.apply(toValidate, overloadedPostData.update);
+            metaDataArray = Tuml.Metadata.Cache.getFromCache(this.propertyNavigatingTo.qualifiedName);
+        } else {
+            toValidate.push(overloadedPostData);
+            metaDataArray = Tuml.Metadata.Cache.getFromCache(this.qualifiedName);
         }
+        for (var i = 0; i < toValidate.length; i++) {
+            var item = toValidate[i];
+            for (var j = 0; j < metaDataArray.length; j++) {
+                var metaData = metaDataArray[j].meta;
+                if (metaData.qualifiedName == item.qualifiedName) {
+                    for (var k = 0; k < metaData.to.properties.length; k++) {
+                        var property = metaData.to.properties[k];
+                        if (property.lower > 0) {
+                            if (property.upper === -1 || property.upper > 1) {
+                                if (item[property.name].length === 0) {
+                                    console.log(property.name + ' is required');
+                                    validationResult.push({valid: false, msg: property.name + " is a required field!"});
+                                }
+                            } else {
+                                if (item[property.name] == null) {
+                                    console.log(property.name + ' is required');
+                                    validationResult.push({valid: false, msg: property.name + " is a required field!"});
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return validationResult;
     }
 
     TumlMainViewManager.prototype.doCancel = function () {

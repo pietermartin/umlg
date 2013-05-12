@@ -35,8 +35,14 @@ public class RestletVisitors {
         result.add(new AddIdLiteralsToRuntimeEnum(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
         result.add(new AddTumlUriFieldToRuntimePropertyEnum(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
         result.add(new AddTumlMetaDataUriFieldToRuntimePropertyEnum(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+
+        //This must be before AddTumlMetaDataUriFieldToRootRuntimePropertyEnum and AddUriToRootRuntimePropertyEnum
+        //In order for the tumlMetaDataUri and uri to be added to the literal's constructor
         result.add(new AddIdLiteralsToRootRuntimeEnum(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+
+        result.add(new AddTumlMetaDataUriFieldToRootRuntimePropertyEnum(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
         result.add(new AddUriToRootRuntimePropertyEnum(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+
         result.add(new AddFieldTypeFieldToRuntimeLiteral(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
         result.add(new AddFieldTypeFieldToRootRuntimeLiteral(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
         result.add(new AddTumlLookupUriToRuntimePropertyEnum(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
