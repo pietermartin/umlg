@@ -94,18 +94,6 @@
 
         TumlBaseGridManager.call(this, tumlTabViewManager, tumlUri, propertyNavigatingTo);
 
-//        //Public api
-//        $.extend(this, {
-//            "TumlTabGridManagerVersion": "1.0.0",
-//            "onManyComponentSaveButtonSuccess": new Tuml.Event(),
-//            "onManyComponentCloseButtonSuccess": new Tuml.Event(),
-//            "onManyComponentCancelButtonSuccess": new Tuml.Event(),
-//            "onAddNewRow": new Tuml.Event(),
-//            "onSelfCellClick": new Tuml.Event(),
-//            "onContextMenuClickDelete": new Tuml.Event(),
-//            "onManyEditorKeyPress": new Tuml.Event()
-//        });
-
         this.setupColumns = function () {
             TumlBaseGridManager.prototype.setupColumns.call(this, this.localMetaForData);
             this.columns.push({id: "uri", name: "uri", field: "uri", sortable: false, formatter: TumlSlick.Formatters.Link});
@@ -189,16 +177,6 @@
         this.TumlTabGridManager = "1.0.0";
 
         TumlBaseGridManager.call(this, tumlTabViewManager, tumlUri, propertyNavigatingTo);
-
-//        //Public api
-//        $.extend(this, {
-//            "TumlTabGridManagerVersion": "1.0.0",
-//            "onAddButtonSuccess": new Tuml.Event(),
-//            "onAddNewRow": new Tuml.Event(),
-//            "onSelfCellClick": new Tuml.Event(),
-//            "onContextMenuClickDelete": new Tuml.Event(),
-//            "onManyEditorKeyPress": new Tuml.Event()
-//        });
 
         this.setupColumns = function () {
 
@@ -434,7 +412,6 @@
                                 //Get the data currently for the component
                                 data = self.dataView.getItem(args.row)[column.name];
                             } else {
-//                                 data = {id: 'fake::0', tmpId: 'fake::0'};
                                 data = {};
                             }
                             self.tumlTabViewManager.openOneComponent(data, args, column.options.property.tumlUri, column.options.property);
@@ -756,7 +733,12 @@
                 var property = self.localMetaForData.properties[i];
                 if (property.composite && property.lower > 0) {
                     if (item === undefined || this.getNewItems().indexOf(item) !== -1) {
-                        column[property.name] = {"formatter": TumlSlick.Formatters.TumlRequired};
+                        //Check if the component has validation errors
+                        if (self.tumlTabViewManager.validationResults !== null && self.tumlTabViewManager.validationResults.length > 0) {
+                            column[property.name] = {"formatter": TumlSlick.Formatters.TumlValidationFailedFormatter};
+                        } else {
+                            column[property.name] = {"formatter": TumlSlick.Formatters.TumlRequired};
+                        }
                     } else {
                         column[property.name] = {"formatter": TumlSlick.Formatters.TumlComponentFormatter};
                     }

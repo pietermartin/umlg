@@ -10,6 +10,7 @@
         "TumlSlick":{
             "Formatters":{
                 "TumlRequired":TumlRequiredFormatter,
+                "TumlValidationFailedFormatter": TumlValidationFailedFormatter,
                 "TumlDelete":TumlDeleteFormatter,
                 "TumlBoolean":TumlBooleanFormatter,
                 "TumlManyBoolean":TumlManyBooleanFormatter,
@@ -36,6 +37,14 @@
 
     function TumlIdUpdatedFormatter(row, cell, value, columnDef, dataContext) {
         return '<span class="tuml-updated-id">' + value + '</span>';
+    }
+
+    function TumlValidationFailedFormatter(row, cell, value, columnDef, dataContext) {
+        if (value == null || value === "" || value.length === 0) {
+            return "<div style='color:red;'>required</div>";
+        } else {
+            return "<div style='color:red;'>" + value + "</div>";
+        }
     }
 
     function TumlRequiredFormatter(row, cell, value, columnDef, dataContext) {

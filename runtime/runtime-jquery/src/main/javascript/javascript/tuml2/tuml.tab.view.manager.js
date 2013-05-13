@@ -43,6 +43,30 @@
 
     TumlBaseTabViewManager.prototype = new Tuml.TumlTabContainerManager;
 
+    TumlBaseTabViewManager.prototype.passOnValidationResults = function (tumlManyComponentTabViewManager, row, propertyName) {
+        var componentValidationResultsToRemove = [];
+        if (this.validationResults !== null) {
+            for (var j = 0; j < this.validationResults.length; j++) {
+                var validationResult = this.validationResults[j];
+                if (validationResult.row == row && validationResult.property == propertyName) {
+//                if (validationResult.row == cell.row && validationResult.property == this.tumlTabGridManager.grid.getColumns()[cell.cell].name) {
+
+                    for (var k = 0; k < validationResult.validationResults.length; k++) {
+                        var componentValidationResult = validationResult.validationResults[k];
+                        if (componentValidationResult.validationResults.length > 0) {
+                            tumlManyComponentTabViewManager.validationResults = validationResult.validationResults;
+                        }
+
+                    }
+                    componentValidationResultsToRemove.push(j);
+                }
+            }
+            for (var j = 0; j < componentValidationResultsToRemove.length; j++) {
+                this.validationResults.splice(componentValidationResultsToRemove[j], 1);
+            }
+        }
+    }
+
     TumlBaseTabViewManager.prototype.getTabId = function () {
         return this.tabId;
     }
@@ -318,7 +342,7 @@
                 }
             }
         }
-        return validationResult;
+        return validationResults;
     }
 
     TumlTabOneViewManager.prototype.getTabData = function () {
@@ -370,7 +394,7 @@
 
         Tuml.Metadata.Cache.get(property.qualifiedName, property.tumlMetaDataUri,
             function (result) {
-                var component = {};
+                var component = {meta: null, data: null};
                 self.tabContainerProperty = property;
                 var firstTumlManyComponentTabViewManager = null;
                 for (var i = 0; i < result.length; i++) {
@@ -393,6 +417,8 @@
                     if (i === 0) {
                         firstTumlManyComponentTabViewManager = tumlManyComponentTabViewManager;
                     }
+                    //pass through component's component validationResults
+                    self.passOnValidationResults(tumlManyComponentTabViewManager, 0, self.tabContainerProperty.name);
                 }
                 self.open = false;
                 //Set only the first tab to active
@@ -402,11 +428,19 @@
 
                 var qualifiedName = property.qualifiedName;
                 self.updateNavigationHeader(qualifiedName);
+                self.updateValidationWarningHeader();
             }
         );
     }
 
-    TumlTabOneViewManager.prototype.setValidationResults = function (qualifiedName, validationResult) {
+    TumlTabOneViewManager.prototype.setValidationResults = function (qualifiedName, validationResults) {
+        if (this.validationResults == null) {
+            this.validationResults = [];
+        }
+        var componentValidationResult = new Tuml.ValidationResult(0, this.tabContainerProperty.name);
+        componentValidationResult.qualifiedName = qualifiedName;
+        componentValidationResult.validationResults = validationResults;
+        this.validationResults.push(componentValidationResult);
     }
 
     TumlTabOneViewManager.prototype.openOneComponent = function (data, cell, tumlUri, property) {
@@ -414,7 +448,7 @@
         //Get the meta data.
         Tuml.Metadata.Cache.get(property.qualifiedName, property.tumlMetaDataUri,
             function (result) {
-                var component = {};
+                var component = {meta: null, data: null};
                 self.tabContainerProperty = property;
                 var firstTumlOneComponentTabViewManager = null;
                 for (var i = 0; i < result.length; i++) {
@@ -450,6 +484,9 @@
                     if (i === 0) {
                         firstTumlOneComponentTabViewManager = tumlOneComponentTabViewManager;
                     }
+
+                    self.passOnValidationResults(tumlOneComponentTabViewManager, 0, self.tabContainerProperty.name);
+
                 }
 
                 self.open = false;
@@ -461,6 +498,8 @@
 
                 var qualifiedName = property.qualifiedName;
                 self.updateNavigationHeader(qualifiedName);
+                self.updateValidationWarningHeader();
+
             }
         );
     }
@@ -673,7 +712,7 @@
         //Get the meta data.
         Tuml.Metadata.Cache.get(property.qualifiedName, property.tumlMetaDataUri,
             function (result) {
-                var component = {};
+                var component = {meta: null, data: null};
                 self.tabContainerProperty = property;
                 var firstTumlManyComponentTabViewManager = null;
                 for (var i = 0; i < result.length; i++) {
@@ -698,29 +737,7 @@
                     }
 
                     //pass through component's component validationResults
-                    var componentValidationResultsToRemove = [];
-                    if (self.validationResults !== null) {
-                        for (var j = 0; j < self.validationResults.length; j++) {
-                            var validationResult = self.validationResults[j];
-                            if (validationResult.row == cell.row && validationResult.property == self.tumlTabGridManager.grid.getColumns()[cell.cell].name) {
-
-                                var validationResultsToRemove = [];
-                                for (var k = 0; k < validationResult.validationResults.length; k++) {
-                                    var componentValidationResult = validationResult.validationResults[k];
-                                    if (componentValidationResult.validationResults.length > 0) {
-                                        tumlManyComponentTabViewManager.validationResults = validationResult.validationResults;
-                                        validationResultsToRemove.push(k);
-                                    }
-
-                                }
-                                componentValidationResultsToRemove.push(i);
-                            }
-                        }
-                        for (var i = 0; i < componentValidationResultsToRemove.length; i++) {
-                            self.validationResults.splice(componentValidationResultsToRemove[i], 1);
-                        }
-
-                    }
+                    self.passOnValidationResults(tumlManyComponentTabViewManager, cell.row, self.tumlTabGridManager.grid.getColumns()[cell.cell].name);
                 }
                 self.open = false;
                 //Set only the first tab to active
@@ -729,12 +746,12 @@
                 }
                 var qualifiedName = property.qualifiedName;
                 self.updateNavigationHeader(qualifiedName);
+                self.updateValidationWarningHeader();
             }
         );
     }
 
     TumlTabManyViewManager.prototype.setValidationResults = function (qualifiedName, validationResults) {
-        console.log('');
         if (this.validationResults == null) {
             this.validationResults = [];
         }
@@ -750,17 +767,16 @@
 
         Tuml.Metadata.Cache.get(property.qualifiedName, property.tumlMetaDataUri,
             function (result) {
-                var component = {};
+                var oneComponent = {meta: null, data: null};
                 self.tabContainerProperty = property;
                 var firstTumlOneComponentTabViewManager = null;
                 for (var i = 0; i < result.length; i++) {
-                    component.meta = result[i].meta
+                    oneComponent.meta = result[i].meta
                     self.maybeCreateTabContainer();
-//                    result[i].data = data;
-                    component.data = data;
+                    oneComponent.data = data;
                     var tumlOneComponentTabViewManager = self.createTabContainer(
                         tuml.tab.Enum.Properties,
-                        component,
+                        oneComponent,
                         tumlUri,
                         {forLookup: false, forManyComponent: false, forOneComponent: true, isOne: true, forCreation: true},
                         property
@@ -769,25 +785,29 @@
                     self.addToTumlTabViewManagers(tumlOneComponentTabViewManager);
                     tumlOneComponentTabViewManager.parentTabContainerManager = self;
                     $('#slickGrid' + self.tabId).hide();
-                    tumlOneComponentTabViewManager.backupData = $.extend(true, {}, component.data);
+                    tumlOneComponentTabViewManager.backupData = $.extend(true, {}, oneComponent.data);
 
-                    if (component.data.id === undefined || component.data.id === null) {
+                    if (oneComponent.data.id === undefined || oneComponent.data.id === null) {
                         //Create the object server side for ocl to execute...
-                        component.data.id = 'fake::' + Tuml.TumlFakeIndex++;
-                        component.data.tmpId = component.data.id;
-                        tumlOneComponentTabViewManager.createTab(component, true);
+                        oneComponent.data.id = 'fake::' + Tuml.TumlFakeIndex++;
+                        oneComponent.data.tmpId = oneComponent.data.id;
+                        tumlOneComponentTabViewManager.createTab(oneComponent, true);
                         tumlOneComponentTabViewManager.saveNewRow();
                         if (tumlOneComponentTabViewManager.tumlTabOneManager.containsOneToOne) {
-                            tumlOneComponentTabViewManager.parentTabContainerManager.addToOneToOneIndex(component.data.id, {});
+                            tumlOneComponentTabViewManager.parentTabContainerManager.addToOneToOneIndex(oneComponent.data.id, {});
                         }
                     } else {
-                        tumlOneComponentTabViewManager.createTab(component, component.data.id.indexOf('fake') !== -1);
+                        tumlOneComponentTabViewManager.createTab(oneComponent, oneComponent.data.id.indexOf('fake') !== -1);
                         tumlOneComponentTabViewManager.tumlTabOneManager.refreshFromDataModel();
                     }
 
                     if (i === 0) {
                         firstTumlOneComponentTabViewManager = tumlOneComponentTabViewManager;
                     }
+
+                    //pass through component's component validationResults
+                    self.passOnValidationResults(tumlOneComponentTabViewManager, cell.row, self.tumlTabGridManager.grid.getColumns()[cell.cell].name);
+
                 }
 
                 self.open = false;
@@ -800,6 +820,7 @@
 //                var qualifiedName = result[0].meta.qualifiedName;
                 var qualifiedName = property.qualifiedName;
                 self.updateNavigationHeader(qualifiedName);
+                self.updateValidationWarningHeader();
 
             }
         );

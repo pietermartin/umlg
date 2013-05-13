@@ -212,7 +212,9 @@
                                 validationResult.push(componentValidationResult);
                             }
                         }
-                        this.setValidationResults(tumlTabViewManager.metaForData.qualifiedName, validationResult);
+                        if (validationResult.length > 0) {
+                            this.setValidationResults(tumlTabViewManager.metaForData.qualifiedName, validationResult);
+                        }
 
                         data.push.apply(data, tumlTabViewManager.getTabData());
                         tumlTabViewManager.tumlTabGridManager.updateDataModel();
@@ -238,7 +240,9 @@
                         validationResult.push(componentValidationResult);
                     }
                 }
-                this.setValidationResults(tumlTabViewManager.metaForData.qualifiedName, validationResult);
+                if (validationResult.length > 0) {
+                    this.setValidationResults(tumlTabViewManager.metaForData.qualifiedName, validationResult);
+                }
                 var data = tumlTabViewManager.getTabData();
                 this.setCellValue(data);
                 tumlTabViewManager.tumlTabOneManager.updateDataModel(data);
@@ -248,6 +252,7 @@
         this.destroyTabContainer();
         //enable the save button
         this.parentTabContainerManager.enableButtons();
+//        this.updateValidationWarningHeader();
     }
 
     TumlTabContainerManager.prototype.setComponentIdToTmpId = function (item) {
@@ -319,6 +324,11 @@
             $('#' + this.getTabId() + 'validation-warning').append($('<span />').text(
                 'multiplicity falls outside the valid range [' + this.tabContainerProperty.lower + '..' + this.tabContainerProperty.upper + ']'));
         }
+
+//        if (this.validationResults !== null && this.validationResults.length > 0) {
+//            $('#' + this.getTabId() + 'validation-warning').append($('<span />').text(
+//                ' there are validation errors'));
+//        }
     }
 
     TumlTabContainerManager.prototype.validateMultiplicity = function () {
