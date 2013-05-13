@@ -296,7 +296,7 @@
     }
 
     TumlTabOneViewManager.prototype.validate = function () {
-        var validationResult = {messages: []};
+        var validationResults = [];
         var item = this.getTabData();
         if (this.metaForData.qualifiedName == item.qualifiedName) {
             for (var k = 0; k < this.metaForData.to.properties.length; k++) {
@@ -304,13 +304,15 @@
                 if (!property.inverseComposite && property.lower > 0) {
                     if (property.upper === -1 || property.upper > 1) {
                         if (item[property.name].length === 0) {
-                            console.log(property.name + ' is required');
-                            validationResult.messages.push(property.name + " is a required field!");
+                            var validationResult = new Tuml.ValidationResult(0, property.name);
+                            validationResult.message = property.name + " is a required field!";
+                            validationResults.push(validationResult);
                         }
                     } else {
                         if (item[property.name] == null) {
-                            console.log(property.name + ' is required');
-                            validationResult.messages.push(property.name + " is a required field!");
+                            var validationResult = new Tuml.ValidationResult(0, property.name);
+                            validationResult.message = property.name + " is a required field!";
+                            validationResults.push(validationResult);
                         }
                     }
                 }
@@ -489,14 +491,12 @@
                     if (!property.inverseComposite && property.lower > 0) {
                         if (property.upper === -1 || property.upper > 1) {
                             if (item[property.name].length === 0) {
-                                console.log(property.name + ' is required');
                                 var validationResult = new Tuml.ValidationResult(i, property.name);
                                 validationResult.message = property.name + " is a required field!";
                                 validationResults.push(validationResult);
                             }
                         } else {
                             if (item[property.name] == null) {
-                                console.log(property.name + ' is required');
                                 var validationResult = new Tuml.ValidationResult(i, property.name);
                                 validationResult.message = property.name + " is a required field!";
                                 validationResults.push(validationResult);

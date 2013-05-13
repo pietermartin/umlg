@@ -204,19 +204,18 @@
                 for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
                     var tumlTabViewManager = this.tumlTabViewManagers[i];
                     if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager && tumlTabViewManager.tumlTabGridManager.dataView.getItems().length > 0) {
-                        data.push.apply(data, tumlTabViewManager.getTabData());
-                        tumlTabViewManager.tumlTabGridManager.updateDataModel();
 
                         var validationResult = tumlTabViewManager.validate();
-
                         if (tumlTabViewManager.validationResults != null) {
                             for (var j = 0; j < tumlTabViewManager.validationResults.length; j++) {
                                 var componentValidationResult = tumlTabViewManager.validationResults[j];
                                 validationResult.push(componentValidationResult);
                             }
                         }
-
                         this.setValidationResults(tumlTabViewManager.metaForData.qualifiedName, validationResult);
+
+                        data.push.apply(data, tumlTabViewManager.getTabData());
+                        tumlTabViewManager.tumlTabGridManager.updateDataModel();
                     }
                 }
                 this.setCellValue(data);
@@ -224,25 +223,23 @@
                 if (this.tabContainerProperty.upper !== 1) {
                     alert("upper suppose to be a one");
                 }
-                var firstTumlTabViewManager = null;
+                var tumlTabViewManager;
                 for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
-                    var tumlTabViewManager = this.tumlTabViewManagers[i];
-                    if (tumlTabViewManager instanceof Tuml.TumlTabOneViewManager) {
-                        if (firstTumlTabViewManager !== null) {
-                            alert("tabs gone wrong!");
-                        }
-                        firstTumlTabViewManager = tumlTabViewManager;
+                    tumlTabViewManager = this.tumlTabViewManagers[i];
+                    if (tumlTabViewManager instanceof Tuml.TumlTabOneViewManager && tumlTabViewManager.open) {
+                        break;
                     }
                 }
-                var data = tumlTabViewManager.getTabData();
 
                 var validationResult = tumlTabViewManager.validate();
-                validationResults.messages.push.apply(validationResults.messages, validationResult.messages);
-                if (tumlTabViewManager.validationResults !== null) {
-                    validationResults.validationResults = tumlTabViewManager.validationResults;
+                if (tumlTabViewManager.validationResults != null) {
+                    for (var j = 0; j < tumlTabViewManager.validationResults.length; j++) {
+                        var componentValidationResult = tumlTabViewManager.validationResults[j];
+                        validationResult.push(componentValidationResult);
+                    }
                 }
-                this.setValidationResults(validationResults)
-
+                this.setValidationResults(tumlTabViewManager.metaForData.qualifiedName, validationResult);
+                var data = tumlTabViewManager.getTabData();
                 this.setCellValue(data);
                 tumlTabViewManager.tumlTabOneManager.updateDataModel(data);
 
