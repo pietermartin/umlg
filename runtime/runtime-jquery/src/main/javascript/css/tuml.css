@@ -399,7 +399,14 @@
     margin-right: 5px;
     padding-top: 5px;
     text-align: right;
-    width: 50%;
+}
+
+.multiplicity-warning {
+    color: red;
+    float: right;
+    margin-right: 5px;
+    padding-top: 5px;
+    text-align: right;
 }
 
 .ui-left-menu-query-li {

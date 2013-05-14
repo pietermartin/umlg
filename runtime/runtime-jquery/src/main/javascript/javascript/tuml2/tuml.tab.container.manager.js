@@ -43,6 +43,7 @@
                 //add in the div where the property info validation warning goes
                 var uiLayoutCenterHeading = $('<div />', {id: this.getTabId() + 'ui-layout-center-heading', class: 'ui-layout-center-heading'}).appendTo(tabLayoutDiv);
                 $('<div />', {id: this.getTabId() + 'navigation-qualified-name', class: 'navigation-qualified-name'}).appendTo(uiLayoutCenterHeading);
+                $('<div />', {id: this.getTabId() + 'multiplicity-warning', class: 'multiplicity-warning'}).appendTo(uiLayoutCenterHeading);
                 $('<div />', {id: this.getTabId() + 'validation-warning', class: 'validation-warning'}).appendTo(uiLayoutCenterHeading);
 
                 this.tabContainer = $('<div />', {id: this.getTabId() + 'Tabs'}).appendTo(tabLayoutDiv);
@@ -252,7 +253,7 @@
         this.destroyTabContainer();
         //enable the save button
         this.parentTabContainerManager.enableButtons();
-//        this.updateValidationWarningHeader();
+        this.parentTabContainerManager.updateValidationWarningHeader();
     }
 
     TumlTabContainerManager.prototype.setComponentIdToTmpId = function (item) {
@@ -295,8 +296,8 @@
         alert('this must be overriden!');
     }
 
-    TumlTabContainerManager.prototype.removeValidationWarningHeader = function () {
-        $('#' + this.getTabId() + 'validation-warning').children().remove();
+    TumlTabContainerManager.prototype.removeMultiplicityWarningHeader = function () {
+        $('#' + this.getTabId() + 'multiplicity-warning').children().remove();
     }
 
     TumlTabContainerManager.prototype.updateNavigationHeader = function (qualifiedName) {
@@ -308,8 +309,9 @@
         $('#' + this.getTabId() + 'navigation-qualified-name').append($('<span />').text(propertyDescription));
     }
 
-    TumlTabContainerManager.prototype.updateValidationWarningHeader = function () {
-        $('#' + this.getTabId() + 'validation-warning').children().remove();
+    TumlTabContainerManager.prototype.updateMultiplicityWarningHeader = function () {
+        var multiplicityWarning = $('#' + this.getTabId() + 'multiplicity-warning');
+        multiplicityWarning.children().remove();
         var tumlTabManyViewManagers = this.getTumlTabManyOrOneViewManagers(false);
         var rowCount = 0;
         for (var i = 0; i < tumlTabManyViewManagers.length; i++) {
@@ -321,7 +323,7 @@
             }
         }
         if (rowCount < this.tabContainerProperty.lower || (this.tabContainerProperty.upper !== -1 && rowCount > this.tabContainerProperty.upper)) {
-            $('#' + this.getTabId() + 'validation-warning').append($('<span />').text(
+            multiplicityWarning.append($('<span />').text(
                 'multiplicity falls outside the valid range [' + this.tabContainerProperty.lower + '..' + this.tabContainerProperty.upper + ']'));
         }
 
@@ -329,6 +331,23 @@
 //            $('#' + this.getTabId() + 'validation-warning').append($('<span />').text(
 //                ' there are validation errors'));
 //        }
+    }
+
+    TumlTabContainerManager.prototype.updateValidationWarningHeader = function () {
+        var validationWarning = $('#' + this.getTabId() + 'validation-warning');
+        validationWarning.children().remove();
+        var tumlTabManyViewManagers = this.getTumlTabManyOrOneViewManagers(false);
+        var fail = false;
+        for (var i = 0; i < tumlTabManyViewManagers.length; i++) {
+            var tumlTabViewManager = tumlTabManyViewManagers[i];
+            if (tumlTabViewManager.validationResults !== null && tumlTabViewManager.validationResults.length > 0) {
+                fail = true;
+                break;
+            }
+        }
+        if (fail) {
+            validationWarning.append($('<span />').text('there are validation errors'));
+        }
     }
 
     TumlTabContainerManager.prototype.validateMultiplicity = function () {

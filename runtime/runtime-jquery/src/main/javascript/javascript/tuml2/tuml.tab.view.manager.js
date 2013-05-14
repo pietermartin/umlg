@@ -152,7 +152,7 @@
     }
 
     TumlBaseTabViewManager.prototype.saveNewRow = function () {
-        this.parentTabContainerManager.updateValidationWarningHeader();
+        this.parentTabContainerManager.updateMultiplicityWarningHeader();
         //Save the child grids into the component's cell
         if (this.tumlTabViewManagers.length > 0) {
 
@@ -428,7 +428,7 @@
 
                 var qualifiedName = property.qualifiedName;
                 self.updateNavigationHeader(qualifiedName);
-                self.updateValidationWarningHeader();
+                self.updateMultiplicityWarningHeader();
             }
         );
     }
@@ -498,7 +498,7 @@
 
                 var qualifiedName = property.qualifiedName;
                 self.updateNavigationHeader(qualifiedName);
-                self.updateValidationWarningHeader();
+                self.updateMultiplicityWarningHeader();
 
             }
         );
@@ -645,7 +645,7 @@
     }
 
     TumlTabManyViewManager.prototype.handleDeleteRow = function () {
-        this.parentTabContainerManager.updateValidationWarningHeader();
+        this.parentTabContainerManager.updateMultiplicityWarningHeader();
         //Save the child grids into the component's cell
         if (this.tumlTabViewManagers.length > 0) {
             var data = [];
@@ -746,7 +746,7 @@
                 }
                 var qualifiedName = property.qualifiedName;
                 self.updateNavigationHeader(qualifiedName);
-                self.updateValidationWarningHeader();
+                self.updateMultiplicityWarningHeader();
             }
         );
     }
@@ -820,7 +820,7 @@
 //                var qualifiedName = result[0].meta.qualifiedName;
                 var qualifiedName = property.qualifiedName;
                 self.updateNavigationHeader(qualifiedName);
-                self.updateValidationWarningHeader();
+                self.updateMultiplicityWarningHeader();
 
             }
         );

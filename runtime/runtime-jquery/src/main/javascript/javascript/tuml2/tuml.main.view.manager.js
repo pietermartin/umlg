@@ -306,7 +306,7 @@
                 this.destroyTabContainer();
                 this.maybeCreateTabContainer();
             } else {
-                this.removeValidationWarningHeader();
+                this.removeMultiplicityWarningHeader();
                 var tumlTabViewManagersToClose = [];
                 //Remove property tabs only, query tabs remain for the context
                 for (var i = 0; i < this.tumlTabViewManagers.length; i++) {

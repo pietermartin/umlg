@@ -221,7 +221,7 @@
             </ownedAttribute>
             <ownedAttribute xmi:id="_GUTTUEI_EeKpM48zLjI12Q" name="componentManyDeep1" type="_6UItEEI-EeKpM48zLjI12Q" aggregation="composite" association="_GUT6YEI_EeKpM48zLjI12Q">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_GUTTUUI_EeKpM48zLjI12Q" value="1"/>
-              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_GUTTUkI_EeKpM48zLjI12Q" value="*"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_GUTTUkI_EeKpM48zLjI12Q" value="5"/>
             </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Association" xmi:id="_-UTBwN4jEeGdB9TPHp60mw" name="A_&lt;human>_&lt;hand>" memberEnd="_-UTBwd4jEeGdB9TPHp60mw _-UB8AN4jEeGdB9TPHp60mw" navigableOwnedEnd="_-UTBwd4jEeGdB9TPHp60mw">
