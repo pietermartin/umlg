@@ -491,15 +491,15 @@
                 } else if (property.oneEnumeration) {
                     var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
                     if (this.data[property.name] !== undefined) {
-                        this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, this.data[property.name], $input);
+                        this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, this.data[property.name], input);
                     } else {
-                        this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, $input);
+                        this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, input);
                     }
                 } else if (property.manyEnumeration) {
                     if (this.data[property.name] !== undefined) {
-                        this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, this.data[property.name], $input);
+                        this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, this.data[property.name], input);
                     } else {
-                        this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, $input);
+                        this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, input);
                     }
                 } else if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && property.oneToOne) {
 

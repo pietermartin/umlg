@@ -71,8 +71,12 @@
         return this.tabId;
     }
 
-    TumlBaseTabViewManager.prototype.validate = function () {
-        throw 'TumlBaseTabViewManager.prototype.validate must be overriden';
+    TumlBaseTabViewManager.prototype.validateUpdate = function () {
+        throw 'TumlBaseTabViewManager.prototype.validateUpdate must be overriden';
+    }
+
+    TumlBaseTabViewManager.prototype.validateNew = function () {
+        throw 'TumlBaseTabViewManager.prototype.validateNew must be overriden';
     }
 
     TumlBaseTabViewManager.prototype.closeTab = function () {
@@ -319,7 +323,33 @@
         });
     }
 
-    TumlTabOneViewManager.prototype.validate = function () {
+    TumlTabOneViewManager.prototype.validateUpdate = function () {
+        var validationResults = [];
+        var item = this.getTabData();
+        if (this.metaForData.qualifiedName == item.qualifiedName) {
+            for (var k = 0; k < this.metaForData.to.properties.length; k++) {
+                var property = this.metaForData.to.properties[k];
+                if (!property.composite && !property.inverseComposite && property.lower > 0) {
+                    if (property.upper === -1 || property.upper > 1) {
+                        if (item[property.name].length === 0) {
+                            var validationResult = new Tuml.ValidationResult(0, property.name);
+                            validationResult.message = property.name + " is a required field!";
+                            validationResults.push(validationResult);
+                        }
+                    } else {
+                        if (item[property.name] == null) {
+                            var validationResult = new Tuml.ValidationResult(0, property.name);
+                            validationResult.message = property.name + " is a required field!";
+                            validationResults.push(validationResult);
+                        }
+                    }
+                }
+            }
+        }
+        return validationResults;
+    }
+
+    TumlTabOneViewManager.prototype.validateInsert = function () {
         var validationResults = [];
         var item = this.getTabData();
         if (this.metaForData.qualifiedName == item.qualifiedName) {
@@ -340,6 +370,12 @@
                         }
                     }
                 }
+            }
+        }
+        if (this.validationResults != null) {
+            for (var j = 0; j < this.validationResults.length; j++) {
+                var componentValidationResult = this.validationResults[j];
+                validationResults.push(componentValidationResult);
             }
         }
         return validationResults;
@@ -519,9 +555,38 @@
 
     TumlTabManyViewManager.prototype = new Tuml.TumlBaseTabViewManager();
 
-    TumlTabManyViewManager.prototype.validate = function () {
+    TumlTabManyViewManager.prototype.validateUpdate = function () {
         var validationResults = [];
-        var toValidate = this.getTabData();
+        var toValidate = this.tumlTabGridManager.dataView.getUpdatedItems();
+        for (var i = 0; i < toValidate.length; i++) {
+            var item = toValidate[i];
+            if (this.metaForData.qualifiedName == item.qualifiedName) {
+                for (var k = 0; k < this.metaForData.to.properties.length; k++) {
+                    var property = this.metaForData.to.properties[k];
+                    if (!property.composite && !property.inverseComposite && property.lower > 0) {
+                        if (property.upper === -1 || property.upper > 1) {
+                            if (item[property.name].length === 0) {
+                                var validationResult = new Tuml.ValidationResult(i, property.name);
+                                validationResult.message = property.name + " is a required field!";
+                                validationResults.push(validationResult);
+                            }
+                        } else {
+                            if (item[property.name] == null) {
+                                var validationResult = new Tuml.ValidationResult(i, property.name);
+                                validationResult.message = property.name + " is a required field!";
+                                validationResults.push(validationResult);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return validationResults;
+    }
+
+    TumlTabManyViewManager.prototype.validateInsert = function () {
+        var validationResults = [];
+        var toValidate = this.tumlTabGridManager.dataView.getNewItems();
         for (var i = 0; i < toValidate.length; i++) {
             var item = toValidate[i];
             if (this.metaForData.qualifiedName == item.qualifiedName) {
@@ -543,6 +608,12 @@
                         }
                     }
                 }
+            }
+        }
+        if (this.validationResults != null) {
+            for (var j = 0; j < this.validationResults.length; j++) {
+                var componentValidationResult = this.validationResults[j];
+                validationResults.push(componentValidationResult);
             }
         }
         return validationResults;

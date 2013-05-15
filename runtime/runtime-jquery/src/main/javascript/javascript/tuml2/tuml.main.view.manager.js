@@ -128,14 +128,20 @@
         this.doSave = function (commit) {
             var startTime = new Date().getTime();
             var tumlTabViewManagers = this.getTumlTabManyOrOneViewManagers(commit);
-            var overloadedPostData = {insert: [], update: [], delete: []};
 
             var validationResult = [];
+            var overloadedPostData = {insert: [], update: [], delete: []};
             var many = true;
             for (var i = 0; i < tumlTabViewManagers.length; i++) {
                 var tumlTabViewManager = tumlTabViewManagers[i];
                 if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager) {
                     var dataView = tumlTabViewManager.tumlTabGridManager.dataView;
+
+                    if (commit) {
+                        validationResult.push.apply(validationResult, tumlTabViewManager.validateInsert())
+                        validationResult.push.apply(validationResult, tumlTabViewManager.validateUpdate())
+                    }
+
                     overloadedPostData.insert.push.apply(overloadedPostData.insert, dataView.getNewItems());
                     overloadedPostData.update.push.apply(overloadedPostData.update, dataView.getUpdatedItems());
                     overloadedPostData.delete.push.apply(overloadedPostData.delete, dataView.getDeletedItems());
@@ -146,7 +152,7 @@
                         if (tumlTabViewManager.open) {
                             overloadedPostData.insert.push(tumlTabViewManager.tumlTabOneManager.data);
                             if (commit) {
-                                validationResult.push.apply(validationResult, this.validateNewOne(overloadedPostData.insert));
+                                validationResult.push.apply(validationResult, tumlTabViewManager.validateInsert());
                             }
                             break;
                         }
@@ -154,29 +160,24 @@
                         if (this.propertyNavigatingTo == null) {
                             overloadedPostData = tumlTabViewManager.tumlTabOneManager.data;
                             if (commit) {
-                                validationResult.push.apply(validationResult, this.validateUpdateOne(overloadedPostData));
+                                validationResult.push.apply(validationResult, tumlTabViewManager.validateUpdate());
                             }
                         } else {
                             overloadedPostData.update.push(tumlTabViewManager.tumlTabOneManager.data);
                             if (commit) {
-                                validationResult.push.apply(validationResult, this.validateUpdateOne(overloadedPostData.update));
+                                validationResult.push.apply(validationResult, tumlTabViewManager.validateUpdate());
                             }
                         }
                         break;
                     }
                 }
             }
-            if (commit && many) {
-                validationResult.push.apply(validationResult, this.validateMany(overloadedPostData));
-            }
+
             if (commit && validationResult.length > 0) {
-                var msg = '';
-                for (var i = 0; i < validationResult.length; i++) {
-                    msg += validationResult[i].msg + '\n';
-                }
-                alert(msg);
+                alert('There are validation errors!');
                 return;
             }
+
             var postUri;
             if (!commit) {
                 postUri = self.tumlUri + "?rollback=true";
@@ -561,52 +562,52 @@
         }
     }
 
-    TumlMainViewManager.prototype.validateNewOne = function (overloadedPostData) {
-    }
-
-    TumlMainViewManager.prototype.validateUpdateOne = function (overloadedPostData) {
-    }
-
-    TumlMainViewManager.prototype.validateMany = function (overloadedPostData) {
-
-        var validationResult = [];
-        var toValidate = [];
-        var metaDataArray;
-
-        if (this.propertyNavigatingTo !== null) {
-            toValidate.push.apply(toValidate, overloadedPostData.insert);
-            toValidate.push.apply(toValidate, overloadedPostData.update);
-            metaDataArray = Tuml.Metadata.Cache.getFromCache(this.propertyNavigatingTo.qualifiedName);
-        } else {
-            toValidate.push(overloadedPostData);
-            metaDataArray = Tuml.Metadata.Cache.getFromCache(this.qualifiedName);
-        }
-        for (var i = 0; i < toValidate.length; i++) {
-            var item = toValidate[i];
-            for (var j = 0; j < metaDataArray.length; j++) {
-                var metaData = metaDataArray[j].meta;
-                if (metaData.qualifiedName == item.qualifiedName) {
-                    for (var k = 0; k < metaData.to.properties.length; k++) {
-                        var property = metaData.to.properties[k];
-                        if (property.lower > 0) {
-                            if (property.upper === -1 || property.upper > 1) {
-                                if (item[property.name].length === 0) {
-                                    console.log(property.name + ' is required');
-                                    validationResult.push({valid: false, msg: property.name + " is a required field!"});
-                                }
-                            } else {
-                                if (item[property.name] == null) {
-                                    console.log(property.name + ' is required');
-                                    validationResult.push({valid: false, msg: property.name + " is a required field!"});
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return validationResult;
-    }
+//    TumlMainViewManager.prototype.validateNewOne = function (overloadedPostData) {
+//    }
+//
+//    TumlMainViewManager.prototype.validateUpdateOne = function (overloadedPostData) {
+//    }
+//
+//    TumlMainViewManager.prototype.validateMany = function (overloadedPostData) {
+//
+//        var validationResult = [];
+//        var toValidate = [];
+//        var metaDataArray;
+//
+//        if (this.propertyNavigatingTo !== null) {
+//            toValidate.push.apply(toValidate, overloadedPostData.insert);
+//            toValidate.push.apply(toValidate, overloadedPostData.update);
+//            metaDataArray = Tuml.Metadata.Cache.getFromCache(this.propertyNavigatingTo.qualifiedName);
+//        } else {
+//            toValidate.push(overloadedPostData);
+//            metaDataArray = Tuml.Metadata.Cache.getFromCache(this.qualifiedName);
+//        }
+//        for (var i = 0; i < toValidate.length; i++) {
+//            var item = toValidate[i];
+//            for (var j = 0; j < metaDataArray.length; j++) {
+//                var metaData = metaDataArray[j].meta;
+//                if (metaData.qualifiedName == item.qualifiedName) {
+//                    for (var k = 0; k < metaData.to.properties.length; k++) {
+//                        var property = metaData.to.properties[k];
+//                        if (property.lower > 0) {
+//                            if (property.upper === -1 || property.upper > 1) {
+//                                if (item[property.name].length === 0) {
+//                                    console.log(property.name + ' is required');
+//                                    validationResult.push({valid: false, msg: property.name + " is a required field!"});
+//                                }
+//                            } else {
+//                                if (item[property.name] == null) {
+//                                    console.log(property.name + ' is required');
+//                                    validationResult.push({valid: false, msg: property.name + " is a required field!"});
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        return validationResult;
+//    }
 
     TumlMainViewManager.prototype.doCancel = function () {
         this.enableButtons();
