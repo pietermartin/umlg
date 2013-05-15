@@ -735,7 +735,20 @@
                     if (item === undefined || this.getNewItems().indexOf(item) !== -1) {
                         //Check if the component has validation errors
                         if (self.tumlTabViewManager.validationResults !== null && self.tumlTabViewManager.validationResults.length > 0) {
-                            column[property.name] = {"formatter": TumlSlick.Formatters.TumlValidationFailedFormatter};
+
+                            var found = false;
+                            for (var j = 0; j < self.tumlTabViewManager.validationResults.length; j++) {
+                                var validationResult = self.tumlTabViewManager.validationResults[j];
+                                if (validationResult.property === property.name) {
+                                    found = true;
+                                    column[property.name] = {"formatter": TumlSlick.Formatters.TumlValidationFailedFormatter};
+                                    break;
+                                }
+                            }
+                            if (!found) {
+                                column[property.name] = {"formatter": TumlSlick.Formatters.TumlRequired};
+                            }
+
                         } else {
                             column[property.name] = {"formatter": TumlSlick.Formatters.TumlRequired};
                         }

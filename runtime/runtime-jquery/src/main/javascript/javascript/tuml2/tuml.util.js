@@ -23,6 +23,8 @@ function selectFormatter(property, newId, updatedId) {
         } else {
             return TumlSlick.Formatters.TumlRegularFormatter;
         }
+    } else if (property.lower > 0 && property.dataTypeEnum !=null && property.dataTypeEnum !== undefined) {
+        return  TumlSlick.Formatters.TumlRequired;
     } else if (property.dataTypeEnum !=null && property.dataTypeEnum !== undefined) {
         return null;
     } else if (property.lower > 0 && (property.oneEnumeration || property.manyEnumeration)) {

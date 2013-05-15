@@ -126,6 +126,7 @@
 
     TumlBaseTabOneManager.prototype.refresh = function (data, metaForData, isForCreation) {
         var self = this;
+        this.currentActiveProperty = null;
         this.metaForData = metaForData.to;
         this.qualifiedName = this.metaForData.qualifiedName;
         this.data = data;
@@ -145,6 +146,7 @@
         if (this.metaForData.name !== 'Root') {
             //Do everything except for select boxes that require lookups.
             //Lookups need to do a server call and as such need the id field set.
+            var first = true;
             for (var i = 0; i < this.metaForData.properties.length; i++) {
                 var property = this.metaForData.properties[i];
                 if (this.isPropertyForOnePage(property)) {
@@ -157,8 +159,18 @@
 
                     var li = $('<li>')
                     li.appendTo(ul);
-                    $('<label />', {for: property.name + 'Id'}).text(property.name + ' :').appendTo(li);
+                    if (property.lower > 0) {
+                        var $label = $('<label />', {for: property.name + 'Id', class: "required-field"});
+                        $label.text(property.name + ' :').appendTo(li);
+                    } else {
+                        var $label = $('<label />', {for: property.name + 'Id'});
+                        $label.text(property.name + ' :').appendTo(li);
+                    }
                     var $input = this.constructInputForField(property);
+                    if (first) {
+                        first = false;
+                        this.currentActiveProperty = property;
+                    }
                     $input.appendTo(li);
                     if (property.manyPrimitive) {
                         var $manyDiv = $('<div />', {class: "many-primitive-one-img"}).appendTo(li);
@@ -440,21 +452,47 @@
             }
         }
         if (!property.composite) {
+            $input.focus(
+                function() {
+                    self.currentActiveProperty = property;
+                }
+            );
             if ($input.is('select')) {
                 $input.change(function () {
                     var validationResult = self.validateField(property);
                     if (validationResult.valid) {
                         self.synchronizeModel(property)
+                    } else {
+                        setTimeout(
+                            function () {
+                                $input.focus();
+                            }, 5
+                        );
                     }
+                    return false;
                 });
             } else {
                 $input.blur(function () {
                     var validationResult = self.validateField(property);
                     if (validationResult.valid) {
                         self.synchronizeModel(property)
+                    } else {
+                        setTimeout(
+                            function () {
+                                $input.focus();
+                            }, 5
+                        );
                     }
+                    return false;
                 });
             }
+            $input.keyup(function (e) {
+                if (e.keyCode == 27) {
+                    self.refreshFromDataModelForProperty(property);
+                    self.validateField(property);
+                    return false;
+                }
+            });
         }
         return $input;
     }
@@ -463,92 +501,96 @@
         this.data = dataModel;
     }
 
-    TumlBaseTabOneManager.prototype.refreshFromDataModel = function () {
+    TumlBaseTabOneManager.prototype.refreshFromDataModelForProperty = function (property) {
         var self = this;
-        for (var i = 0; i < this.metaForData.properties.length; i++) {
-            var property = this.metaForData.properties[i];
-            if (this.isPropertyForOnePage(property)) {
-                if (property.name == 'id') {
-                    var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
-                    if (this.data[property.name] !== undefined) {
-                        input.val(this.data[property.name]);
-                    }
-                } else if (property.readOnly) {
-                    var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
-                    if (this.data[property.name] !== undefined) {
-                        input.text(this.data[property.name]);
-                    }
-                } else if (property.dataTypeEnum != null && property.dataTypeEnum !== undefined) {
-                    var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
-                    if (this.data[property.name] !== undefined) {
-                        input.val(this.data[property.name]);
-                    }
-                } else if (property.composite && property.lower > 0) {
-                    var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
-                    if (this.data[property.name] !== undefined) {
-                        input.val(this.data[property.name]);
-                    }
-                } else if (property.oneEnumeration) {
-                    var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
-                    if (this.data[property.name] !== undefined) {
-                        this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, this.data[property.name], input);
-                    } else {
-                        this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, input);
-                    }
-                } else if (property.manyEnumeration) {
-                    if (this.data[property.name] !== undefined) {
-                        this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, this.data[property.name], input);
-                    } else {
-                        this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, input);
-                    }
-                } else if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && property.oneToOne) {
-
-                    var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
-                    this.appendLoopupOptionsToSelect2(property, this.data['id'], input, this.data[property.name]);
-
-                } else if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && property.manyToOne) {
-                    if (this.data[property.name] !== undefined) {
-                        this.appendLoopupOptionsToSelect2(property.tumlLookupUri, property.lower > 0, this.data['id'], this.data[property.name], input);
-                    } else {
-                        this.appendLoopupOptionsToSelect2(property.tumlLookupOnCompositeParentUri, property.lower > 0, this.data['id'], this.data[property.name], input);
-                    }
-                } else if (property.fieldType == 'String') {
-                    var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
-                    if (this.data[property.name] !== undefined) {
-                        input.val(this.data[property.name]);
-                    }
-                } else if (property.fieldType == 'Integer') {
-                    var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
-                    if (this.data[property.name] !== undefined) {
-                        input.val(this.data[property.name]);
-                    }
-                } else if (property.fieldType == 'Long') {
-                    var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
-                    if (this.data[property.name] !== undefined) {
-                        input.val(this.data[property.name]);
-                    }
-                } else if (property.fieldType == 'Boolean') {
-                    if (!property.manyPrimitive) {
-                        var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
-                        if (this.data[property.manyPrimitive] !== undefined) {
-                            input.attr('checked', 'checked');
-                        } else {
-                            input.attr('checked', '');
-                        }
-                    } else if (property.manyPrimitive) {
-                        var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
-                        if (this.data[property.name] !== undefined) {
-                            input.val(this.data[property.name]);
-                        }
-                    }
+        if (this.isPropertyForOnePage(property)) {
+            if (property.name == 'id') {
+                var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+                if (this.data[property.name] !== undefined) {
+                    input.val(this.data[property.name]);
                 }
-                if (!(property.composite && property.lower > 0)) {
+            } else if (property.readOnly) {
+                var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+                if (this.data[property.name] !== undefined) {
+                    input.text(this.data[property.name]);
+                }
+            } else if (property.dataTypeEnum != null && property.dataTypeEnum !== undefined) {
+                var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+                if (this.data[property.name] !== undefined) {
+                    input.val(this.data[property.name]);
+                }
+            } else if (property.composite && property.lower > 0) {
+                var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+                if (this.data[property.name] !== undefined) {
+                    input.val(this.data[property.name]);
+                }
+            } else if (property.oneEnumeration) {
+                var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+                if (this.data[property.name] !== undefined) {
+                    this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, this.data[property.name], input);
+                } else {
+                    this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, input);
+                }
+            } else if (property.manyEnumeration) {
+                if (this.data[property.name] !== undefined) {
+                    this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, this.data[property.name], input);
+                } else {
+                    this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, input);
+                }
+            } else if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && property.oneToOne) {
+
+                var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+                this.appendLoopupOptionsToSelect2(property, this.data['id'], input, this.data[property.name]);
+
+            } else if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && property.manyToOne) {
+                if (this.data[property.name] !== undefined) {
+                    this.appendLoopupOptionsToSelect2(property.tumlLookupUri, property.lower > 0, this.data['id'], this.data[property.name], input);
+                } else {
+                    this.appendLoopupOptionsToSelect2(property.tumlLookupOnCompositeParentUri, property.lower > 0, this.data['id'], this.data[property.name], input);
+                }
+            } else if (property.fieldType == 'String') {
+                var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+                if (this.data[property.name] !== undefined) {
+                    input.val(this.data[property.name]);
+                }
+            } else if (property.fieldType == 'Integer') {
+                var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+                if (this.data[property.name] !== undefined) {
+                    input.val(this.data[property.name]);
+                }
+            } else if (property.fieldType == 'Long') {
+                var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+                if (this.data[property.name] !== undefined) {
+                    input.val(this.data[property.name]);
+                }
+            } else if (property.fieldType == 'Boolean') {
+                if (!property.manyPrimitive) {
                     var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
-                    input.blur(function () {
-                        self.validateField(property);
-                    });
+                    if (this.data[property.manyPrimitive] !== undefined) {
+                        input.attr('checked', 'checked');
+                    } else {
+                        input.attr('checked', '');
+                    }
+                } else if (property.manyPrimitive) {
+                    var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+                    if (this.data[property.name] !== undefined) {
+                        input.val(this.data[property.name]);
+                    }
                 }
             }
+            if (!(property.composite && property.lower > 0)) {
+                var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+                input.blur(function () {
+                    self.validateField(property);
+                });
+            }
+        }
+    }
+
+    TumlBaseTabOneManager.prototype.refreshFromDataModel = function () {
+        for (var i = 0; i < this.metaForData.properties.length; i++) {
+            var property = this.metaForData.properties[i];
+            this.refreshFromDataModelForProperty(property);
         }
         var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
         if (this.isForCreation) {
@@ -704,12 +746,29 @@
 
     }
 
+    TumlBaseTabOneManager.prototype.commitCurrentEdit = function() {
+        //Check if it is a component
+        if (!(this.tumlTabViewManager.parentTabContainerManager instanceof Tuml.TumlMainViewManager)) {
+            //Only validate nthe field it it is non empty
+            var validateInput = $('#' + this.currentActiveProperty.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+            if (validateInput.val() != "") {
+                var validationResult = this.validateField(this.currentActiveProperty);
+                return validationResult.valid;
+            } else {
+                return true;
+            }
+        } else {
+            var validationResult = this.validateField(this.currentActiveProperty);
+            return validationResult.valid;
+        }
+    }
+
     TumlBaseTabOneManager.prototype.validateField = function (property) {
         this.removeServerErrorMessage();
         var validateInput;
         validateInput = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
 
-        var validationResult;
+        var validationResult = null;
         if (property.manyPrimitive || property.manyEnumeration) {
             var stringValueArray;
             if (property.manyPrimitive) {

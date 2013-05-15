@@ -307,11 +307,10 @@
     TumlTabOneViewManager.prototype.addButtonsToOne = function () {
         var self = this;
         var tabDiv = this.parentTabContainerManager.tabContainer.find('#' + this.getTabId()).find('.oneUl');
-//        var tabDiv = this.tabContainer.find('#' + this.getTabId()).find('.oneUl');
         var tabsButtonDiv = $('<div />', {id: 'tabcontainer-button', class: 'one-tabs-button'}).appendTo(tabDiv);
         var saveButton = $('<button />', {id: this.getTabId() + 'save'}).text('Save').appendTo(tabsButtonDiv);
         saveButton.button().click(function (event) {
-            if (Slick.GlobalEditorLock.commitCurrentEdit()) {
+            if (self.tumlTabOneManager.commitCurrentEdit()) {
                 self.parentTabContainerManager.saveTabs();
             }
             event.preventDefault();
@@ -449,12 +448,12 @@
                     tumlManyComponentTabViewManager.parentTabContainerManager = self;
                     $('#formDiv' + self.tabTitleName).hide();
                     tumlManyComponentTabViewManager.backupData = $.extend(true, [], data);
+                    //pass through component's component validationResults
+                    self.passOnValidationResults(tumlManyComponentTabViewManager, 0, self.tabContainerProperty.name);
                     tumlManyComponentTabViewManager.createTab(component, false);
                     if (i === 0) {
                         firstTumlManyComponentTabViewManager = tumlManyComponentTabViewManager;
                     }
-                    //pass through component's component validationResults
-                    self.passOnValidationResults(tumlManyComponentTabViewManager, 0, self.tabContainerProperty.name);
                 }
                 self.open = false;
                 //Set only the first tab to active
@@ -802,13 +801,12 @@
                     tumlManyComponentTabViewManager.parentTabContainerManager = self;
                     $('#slickGrid' + self.tabId).hide();
                     tumlManyComponentTabViewManager.backupData = $.extend(true, [], data);
+                    //pass through component's component validationResults
+                    self.passOnValidationResults(tumlManyComponentTabViewManager, cell.row, self.tumlTabGridManager.grid.getColumns()[cell.cell].name);
                     tumlManyComponentTabViewManager.createTab(component, false);
                     if (i === 0) {
                         firstTumlManyComponentTabViewManager = tumlManyComponentTabViewManager;
                     }
-
-                    //pass through component's component validationResults
-                    self.passOnValidationResults(tumlManyComponentTabViewManager, cell.row, self.tumlTabGridManager.grid.getColumns()[cell.cell].name);
                 }
                 self.open = false;
                 //Set only the first tab to active

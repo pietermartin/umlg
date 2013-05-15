@@ -481,10 +481,11 @@
         if (property.lower > 0 && value !== false && value !== true && (value === '' || value === undefined || value === null)) {
             return {
                 valid: false,
-                msg: property.name + " is a required field!"
+                msg: property.name + " is a required field!",
+                present: false
             };
         } else {
-            return {valid: true};
+            return {valid: true, present: true};
         }
     }
 })(jQuery);

@@ -221,7 +221,7 @@
             </ownedAttribute>
             <ownedAttribute xmi:id="_GUTTUEI_EeKpM48zLjI12Q" name="componentManyDeep1" type="_6UItEEI-EeKpM48zLjI12Q" aggregation="composite" association="_GUT6YEI_EeKpM48zLjI12Q">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_GUTTUUI_EeKpM48zLjI12Q" value="1"/>
-              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_GUTTUkI_EeKpM48zLjI12Q" value="5"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_GUTTUkI_EeKpM48zLjI12Q" name="" value="5"/>
             </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Association" xmi:id="_-UTBwN4jEeGdB9TPHp60mw" name="A_&lt;human>_&lt;hand>" memberEnd="_-UTBwd4jEeGdB9TPHp60mw _-UB8AN4jEeGdB9TPHp60mw" navigableOwnedEnd="_-UTBwd4jEeGdB9TPHp60mw">
@@ -426,7 +426,7 @@
           <packagedElement xmi:type="uml:Class" xmi:id="_GULjQDsHEeK9AeutZ8kzPA" name="Home">
             <ownedAttribute xmi:id="_JHUZQDsHEeK9AeutZ8kzPA" name="name">
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
-              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_LnJ4wDsHEeK9AeutZ8kzPA"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_LnJ4wDsHEeK9AeutZ8kzPA" value="1"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_LnKf0DsHEeK9AeutZ8kzPA" value="1"/>
               <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_ggI0oLecEeKeCuai9f99dw" name="homeNamedefault">
                 <language>OCL</language>
@@ -436,6 +436,11 @@
             <ownedAttribute xmi:id="_xCmaELbbEeKeCuai9f99dw" name="homeOneComponent" type="_tLUmgLbbEeKeCuai9f99dw" aggregation="composite" association="_xCnBILbbEeKeCuai9f99dw">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_xCmaEbbbEeKeCuai9f99dw" value="1"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_xCmaErbbEeKeCuai9f99dw" name="unnamed" value="5"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:id="_sDJBQL2QEeKLQYi7y_IX-w" name="email" visibility="public">
+              <type xmi:type="uml:DataType" href="tumldatatypes.uml#_PyFX8AD6EeKS1vh1F4YVWQ"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_ucca8L2QEeKLQYi7y_IX-w" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_uceQIL2QEeKLQYi7y_IX-w" value="1"/>
             </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Association" xmi:id="_O4-O0DsHEeK9AeutZ8kzPA" name="human_home_1" memberEnd="_O4-O0TsHEeK9AeutZ8kzPA _O49nwDsHEeK9AeutZ8kzPA" navigableOwnedEnd="_O4-O0TsHEeK9AeutZ8kzPA">
@@ -466,6 +471,11 @@
             <ownedAttribute xmi:id="_GpoDEEI_EeKpM48zLjI12Q" name="componentManyDeep2" type="_BUH-AEI_EeKpM48zLjI12Q" aggregation="composite" association="_GpoqIEI_EeKpM48zLjI12Q">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_GpoDEUI_EeKpM48zLjI12Q" value="1"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_GpoDEkI_EeKpM48zLjI12Q" value="*"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:id="_b8dmsL2SEeKLQYi7y_IX-w" name="email" visibility="public">
+              <type xmi:type="uml:DataType" href="tumldatatypes.uml#_PyFX8AD6EeKS1vh1F4YVWQ"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_d4XSsL2SEeKLQYi7y_IX-w" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_d4X5wL2SEeKLQYi7y_IX-w" value="1"/>
             </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Class" xmi:id="_BUH-AEI_EeKpM48zLjI12Q" name="ComponentManyDeep2">
