@@ -215,6 +215,16 @@
                         tumlTabViewManager.tumlTabGridManager.updateDataModel();
                     }
                 }
+                var validationResults = [];
+                var multiplicity = data.length;
+                if (multiplicity < this.tabContainerProperty.lower || (this.tabContainerProperty.upper !== -1 && multiplicity > this.tabContainerProperty.upper)) {
+                    var validationMultiplicityResult = new Tuml.ValidationResult(this.componentCell.row, this.tabContainerProperty);
+                    validationMultiplicityResult.row = this.componentCell.row;
+                    validationMultiplicityResult.property = this.tabContainerProperty;
+                    validationMultiplicityResult.message = 'multiplicity falls outside the valid range [' + this.tabContainerProperty.lower + '..' + this.tabContainerProperty.upper + ']';
+                    validationResults.push(validationMultiplicityResult);
+                    this.setValidationResults(this.tabContainerProperty.qualifiedName, validationResults);
+                }
                 this.setCellValue(data);
             } else {
                 if (this.tabContainerProperty.upper !== 1) {

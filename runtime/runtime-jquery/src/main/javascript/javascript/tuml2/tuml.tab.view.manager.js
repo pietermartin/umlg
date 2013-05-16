@@ -277,9 +277,6 @@
 
     TumlTabOneViewManager.prototype = new Tuml.TumlBaseTabViewManager;
 
-//    TumlTabOneViewManager.prototype.validate = function () {
-//    }
-
     TumlTabOneViewManager.prototype.createTab = function (result, forCreation) {
         if (this.oneManyOrQuery.forOneComponent) {
             this.tabId = this.result.meta.to.name + "OneComponent";
@@ -358,12 +355,18 @@
                     if (property.upper === -1 || property.upper > 1) {
                         if (item[property.name].length === 0) {
                             var validationResult = new Tuml.ValidationResult(0, property.name);
+                            validationResult.row = 0;
+                            validationResult.property = property;
+                            validationResult.qualifiedName = property.qualifiedName;
                             validationResult.message = property.name + " is a required field!";
                             validationResults.push(validationResult);
                         }
                     } else {
                         if (item[property.name] == null) {
                             var validationResult = new Tuml.ValidationResult(0, property.name);
+                            validationResult.row = 0;
+                            validationResult.property = property;
+                            validationResult.qualifiedName = property.qualifiedName;
                             validationResult.message = property.name + " is a required field!";
                             validationResults.push(validationResult);
                         }
@@ -468,13 +471,14 @@
         );
     }
 
-    TumlTabOneViewManager.prototype.setValidationResults = function (qualifiedName, validationResults) {
+    TumlTabOneViewManager.prototype.setValidationResults = function (qualifiedName, validationResults, count) {
         if (this.validationResults == null) {
             this.validationResults = [];
         }
         var componentValidationResult = new Tuml.ValidationResult(0, this.tabContainerProperty.name);
         componentValidationResult.qualifiedName = qualifiedName;
         componentValidationResult.validationResults = validationResults;
+        componentValidationResult.multiplicity = count;
         this.validationResults.push(componentValidationResult);
     }
 
@@ -588,19 +592,25 @@
         var toValidate = this.tumlTabGridManager.dataView.getNewItems();
         for (var i = 0; i < toValidate.length; i++) {
             var item = toValidate[i];
-            if (this.metaForData.qualifiedName == item.qualifiedName) {
+            if (this.metaForData.to.qualifiedName == item.qualifiedName) {
                 for (var k = 0; k < this.metaForData.to.properties.length; k++) {
                     var property = this.metaForData.to.properties[k];
                     if (!property.inverseComposite && property.lower > 0) {
                         if (property.upper === -1 || property.upper > 1) {
                             if (item[property.name].length === 0) {
                                 var validationResult = new Tuml.ValidationResult(i, property.name);
+                                validationResult.row = this.tumlTabGridManager.dataView.getIdxById(item.id);
+                                validationResult.property = property;
+                                validationResult.qualifiedName = property.qualifiedName;
                                 validationResult.message = property.name + " is a required field!";
                                 validationResults.push(validationResult);
                             }
                         } else {
                             if (item[property.name] == null) {
                                 var validationResult = new Tuml.ValidationResult(i, property.name);
+                                validationResult.row = this.tumlTabGridManager.dataView.getIdxById(item.id);
+                                validationResult.property = property;
+                                validationResult.qualifiedName = property.qualifiedName;
                                 validationResult.message = property.name + " is a required field!";
                                 validationResults.push(validationResult);
                             }
@@ -744,7 +754,6 @@
         TumlBaseTabViewManager.prototype.createTab.call(this, result, forCreation);
         this.parentTabContainer.tabs("option", "active", this.parentTabContainerManager.tumlTabViewManagers.length - 1);
         this.createGrid(result);
-        this.parentTabContainerManager.addButtons();
     }
 
     TumlTabManyViewManager.prototype.setCell = function (cell) {
@@ -820,13 +829,14 @@
         );
     }
 
-    TumlTabManyViewManager.prototype.setValidationResults = function (qualifiedName, validationResults) {
+    TumlTabManyViewManager.prototype.setValidationResults = function (qualifiedName, validationResults, count) {
         if (this.validationResults == null) {
             this.validationResults = [];
         }
-        var componentValidationResult = new Tuml.ValidationResult(this.componentCell.row, this.tumlTabGridManager.grid.getColumns()[this.componentCell.cell].name);
+        var componentValidationResult = new Tuml.ValidationResult(this.componentCell.row, this.tabContainerProperty.name);
         componentValidationResult.qualifiedName = qualifiedName;
         componentValidationResult.validationResults = validationResults;
+        componentValidationResult.multiplicity = count;
         this.validationResults.push(componentValidationResult);
     }
 

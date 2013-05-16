@@ -17,10 +17,12 @@ public class TestHandFinger extends BaseLocalDbTest {
         h1.setName("human1");
         h1.setGender(Gender.FEMALE);
         Home home = new Home(h1);
+        home.setEmail("aaa@aaa.aaa");
         HomeOneComponent homeOneComponent = new HomeOneComponent(home);
         homeOneComponent.setName("homeOneComponent");
         ComponentManyDeep1 componentManyDeep1 = new ComponentManyDeep1(h1);
         componentManyDeep1.setName("componentManyDeep1");
+        componentManyDeep1.setEmail("sss@sss.sss");
         ComponentManyDeep2 componentManyDeep2 = new ComponentManyDeep2(componentManyDeep1);
         componentManyDeep2.setName("componentManyDeep2");
         ComponentOneDeep3 componentOneDeep3 = new ComponentOneDeep3(componentManyDeep2);

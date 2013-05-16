@@ -129,7 +129,11 @@
         this.currentActiveProperty = null;
         this.metaForData = metaForData.to;
         this.qualifiedName = this.metaForData.qualifiedName;
-        this.data = data;
+        if (isForCreation) {
+            this.data = {};
+        } else {
+            this.data = data;
+        }
         this.data.qualifiedName = this.qualifiedName;
         this.isForCreation = isForCreation;
 

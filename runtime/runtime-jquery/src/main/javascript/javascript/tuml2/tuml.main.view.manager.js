@@ -129,7 +129,7 @@
             var startTime = new Date().getTime();
             var tumlTabViewManagers = this.getTumlTabManyOrOneViewManagers(commit);
 
-            var validationResult = [];
+            var validationResults = [];
             var overloadedPostData = {insert: [], update: [], delete: []};
             var many = true;
             for (var i = 0; i < tumlTabViewManagers.length; i++) {
@@ -138,8 +138,8 @@
                     var dataView = tumlTabViewManager.tumlTabGridManager.dataView;
 
                     if (commit) {
-                        validationResult.push.apply(validationResult, tumlTabViewManager.validateInsert())
-                        validationResult.push.apply(validationResult, tumlTabViewManager.validateUpdate())
+                        validationResults.push.apply(validationResults, tumlTabViewManager.validateInsert())
+                        validationResults.push.apply(validationResults, tumlTabViewManager.validateUpdate())
                     }
 
                     overloadedPostData.insert.push.apply(overloadedPostData.insert, dataView.getNewItems());
@@ -152,7 +152,7 @@
                         if (tumlTabViewManager.open) {
                             overloadedPostData.insert.push(tumlTabViewManager.tumlTabOneManager.data);
                             if (commit) {
-                                validationResult.push.apply(validationResult, tumlTabViewManager.validateInsert());
+                                validationResults.push.apply(validationResults, tumlTabViewManager.validateInsert());
                             }
                             break;
                         }
@@ -160,12 +160,12 @@
                         if (this.propertyNavigatingTo == null) {
                             overloadedPostData = tumlTabViewManager.tumlTabOneManager.data;
                             if (commit) {
-                                validationResult.push.apply(validationResult, tumlTabViewManager.validateUpdate());
+                                validationResults.push.apply(validationResults, tumlTabViewManager.validateUpdate());
                             }
                         } else {
                             overloadedPostData.update.push(tumlTabViewManager.tumlTabOneManager.data);
                             if (commit) {
-                                validationResult.push.apply(validationResult, tumlTabViewManager.validateUpdate());
+                                validationResults.push.apply(validationResults, tumlTabViewManager.validateUpdate());
                             }
                         }
                         break;
@@ -173,8 +173,13 @@
                 }
             }
 
-            if (commit && validationResult.length > 0) {
-                alert('There are validation errors!');
+            if (commit && validationResults.length > 0) {
+                var message = "";
+                for (var i = 0; i < validationResults.length; i++) {
+                    var validationResult = validationResults[i];
+                    message += validationResult.toString();
+                }
+                alert(message);
                 return;
             }
 
@@ -503,6 +508,7 @@
                 tumlTabViewManager.createTab(result[i], forCreation);
                 previousTumlTabViewManager = tumlTabViewManager;
             }
+            self.addButtons();
         }
 
         function reorderTabs() {
