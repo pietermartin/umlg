@@ -353,7 +353,7 @@
                 var property = this.metaForData.to.properties[k];
                 if (!property.inverseComposite && property.lower > 0) {
                     if (property.upper === -1 || property.upper > 1) {
-                        if (item[property.name].length === 0) {
+                        if (item[property.name] == undefined || item[property.name].length === 0) {
                             var validationResult = new Tuml.ValidationResult(0, property.name);
                             validationResult.row = 0;
                             validationResult.property = property;
@@ -459,6 +459,7 @@
                     }
                 }
                 self.open = false;
+                self.addButtons();
                 //Set only the first tab to active
                 if (firstTumlManyComponentTabViewManager !== null) {
                     self.tabContainer.tabs("option", "active", 0);
@@ -509,8 +510,8 @@
 
                     if (component.data.id === undefined || component.data.id === null) {
                         //Create the object server side for ocl to execute...
-                        component.data.id = 'fake::' + Tuml.TumlFakeIndex++;
-                        component.data.tmpId = component.data.id;
+//                        component.data.id = 'fake::' + Tuml.TumlFakeIndex++;
+//                        component.data.tmpId = component.data.id;
                         tumlOneComponentTabViewManager.createTab(component, true);
                         self.saveNewRow();
                         if (tumlOneComponentTabViewManager.tumlTabOneManager.containsOneToOne) {
@@ -597,7 +598,7 @@
                     var property = this.metaForData.to.properties[k];
                     if (!property.inverseComposite && property.lower > 0) {
                         if (property.upper === -1 || property.upper > 1) {
-                            if (item[property.name].length === 0) {
+                            if (item[property.name] == undefined || item[property.name].length === 0) {
                                 var validationResult = new Tuml.ValidationResult(i, property.name);
                                 validationResult.row = this.tumlTabGridManager.dataView.getIdxById(item.id);
                                 validationResult.property = property;
@@ -817,6 +818,7 @@
                         firstTumlManyComponentTabViewManager = tumlManyComponentTabViewManager;
                     }
                 }
+                self.addButtons();
                 self.open = false;
                 //Set only the first tab to active
                 if (firstTumlManyComponentTabViewManager !== null) {

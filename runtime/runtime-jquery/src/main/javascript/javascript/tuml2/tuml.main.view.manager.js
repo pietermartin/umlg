@@ -505,7 +505,16 @@
                 }
                 var tumlTabViewManager = self.createTabContainer(tuml.tab.Enum.Properties, result[i], tumlUri, {forLookup: false, forManyComponent: false, isOne: isOne, forCreation: forCreation}, self.propertyNavigatingTo);
                 self.addToTumlTabViewManagers(tumlTabViewManager);
+
+                if (forCreation) {
+                    var data = {id: 'fake::' + Tuml.TumlFakeIndex++};
+                    data.tmpId = data.id;
+                    result[i].data = data;
+                }
+
                 tumlTabViewManager.createTab(result[i], forCreation);
+
+                self.saveNewRow();
                 previousTumlTabViewManager = tumlTabViewManager;
             }
             self.addButtons();
@@ -641,7 +650,7 @@
         return 'tabs-layout';
     }
 
-    TumlMainViewManager.prototype.saveNewRow = function (event) {
+    TumlMainViewManager.prototype.saveNewRow = function () {
         this.doSave(false);
     }
 

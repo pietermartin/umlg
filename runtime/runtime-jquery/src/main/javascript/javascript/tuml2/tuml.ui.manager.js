@@ -47,52 +47,6 @@
             //Create main view manager
             mainViewManager = new Tuml.TumlMainViewManager(this, leftMenuManager);
 
-//            mainViewManager.onPostInstanceQuerySuccess.subscribe(function (e, args) {
-//                leftMenuManager.refreshInstanceQuery();
-//            });
-//            mainViewManager.onPostClassQuerySuccess.subscribe(function (e, args) {
-//                leftMenuManager.refreshClassQuery();
-//            });
-//
-//            mainViewManager.onSelfCellClick.subscribe(function (e, args) {
-//                self.onSelfCellClick.notify(args, e, self);
-//                self.refresh(args.tumlUri);
-//                changeMyUrl(args.tumlUri);
-//            });
-//            mainViewManager.onContextMenuClickDelete.subscribe(function (e, args) {
-//                self.onContextMenuClickDelete.notify(args, e, self);
-//            });
-//            mainViewManager.onPutOneSuccess.subscribe(function (e, args) {
-//                self.onPutOneSuccess.notify(args, e, self);
-//                var contextMetaData = getContextMetaData(args.data, args.tumlUri);
-//                contextManager.refresh(contextMetaData.name, contextMetaData.uri, contextMetaData.contextVertexId);
-//                var adjustedUri = contextMetaData.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextMetaData.contextVertexId);
-//                changeMyUrl(adjustedUri);
-//            });
-//            mainViewManager.onPutOneFailure.subscribe(function (e, args) {
-//                self.onPutOneFailure.notify(args, e, self);
-//            });
-//            mainViewManager.onPostOneSuccess.subscribe(function (e, args) {
-//                self.onPostOneSuccess.notify(args, e, self);
-//                var contextMetaData = getContextMetaData(args.data);
-//                contextManager.refresh(contextMetaData.name, contextMetaData.uri, contextMetaData.contextVertexId);
-//                var adjustedUri = contextMetaData.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextMetaData.contextVertexId);
-//                changeMyUrl(adjustedUri);
-//                //This is like calling refresh only we already have the data
-//                mainViewManager.refresh(adjustedUri, args.data);
-//            });
-//            mainViewManager.onPostOneFailure.subscribe(function (e, args) {
-//                self.onPostOneFailure.notify(args, e, self);
-//            });
-//            mainViewManager.onDeleteOneSuccess.subscribe(function (e, args) {
-//                var contextMetaData = getContextMetaData(args.data, args.tumlUri);
-//                contextManager.refresh(contextMetaData.name, contextMetaData.uri, contextMetaData.contextVertexId);
-//                var adjustedUri = contextMetaData.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextMetaData.contextVertexId);
-//                changeMyUrl(adjustedUri);
-//                //This is like calling refresh only we already have the data
-//                mainViewManager.refresh(adjustedUri, args.data);
-//            });
-
             window.onpopstate = function (event) {
                 if (document.location.hash === "") {
                     var pathname = document.location.pathname.replace("/ui2", "");
@@ -149,7 +103,11 @@
                 for (var i = 0; i < result.length; i++) {
                     var response = result[i];
                     //There are many data(s) to cater for the multiple concrete types, as its a one take the first one
-                    if (response.data !== undefined && response.data !== null) {
+                    if (response.data === undefined && response.data === null) {
+                        alert('UIManager.getContextMetaData response.data !== undefined && response.data !== null');
+                    }
+
+                    if (response.data.id.indexOf('fake') === -1) {
                         metaDataNavigatingTo = result[i].meta.to;
                         return {name:metaDataNavigatingTo.name, uri:metaDataNavigatingTo.uri, contextVertexId:response.data.id};
                     }
@@ -190,15 +148,7 @@
 
         //Public api
         $.extend(this, {
-            "TumlUiManagerVersion":"1.0.0",
-            //These events are propogated from the grid
-            "onCancel":new Tuml.Event(),
-            "onSelfCellClick":new Tuml.Event(),
-            "onContextMenuClickDelete":new Tuml.Event(),
-            "onPutOneSuccess":new Tuml.Event(),
-            "onPutOneFailure":new Tuml.Event(),
-            "onPostOneSuccess":new Tuml.Event(),
-            "onPostOneFailure":new Tuml.Event()
+            "TumlUiManagerVersion":"1.0.0"
         });
 
         this.init();
