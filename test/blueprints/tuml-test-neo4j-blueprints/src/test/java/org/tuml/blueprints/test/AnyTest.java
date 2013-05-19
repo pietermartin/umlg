@@ -6,13 +6,14 @@ import org.tuml.tinker.collectiontest.OclStdLibCollectionTest;
 import org.tuml.tinker.collectiontest.OrderedSetTestTest;
 import org.tuml.tinker.collectiontest.SequenceTest;
 import org.tuml.tinker.lookup.TestOneLookup;
+import org.tuml.tinker.qualifiertest.TestQualifier;
 
 /**
  * Date: 2013/01/28
  * Time: 7:18 PM
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({TestOneLookup.class})
+@Suite.SuiteClasses({TestQualifier.class})
 public class AnyTest {
 
 }

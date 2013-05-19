@@ -64,7 +64,11 @@
             //Creating a pager for the component manies editor grid call commitCurrentEditor which buggers everything up
             this.pager = new Slick.Controls.Pager(this.dataView, this.grid, $('#pagerQueryResultsDiv' + this.gridDivName));
             $("<div id='grid-buttonQueryComponent" + this.localMetaForData.name + "' class='grid-button'/>").appendTo('#pagerQueryResultsDiv' + this.gridDivName + ' .slick-pager-settings');
-            TumlBaseGridManager.prototype.instantiateGrid.call(this);
+
+            //Add in a property on the grid to tell if a many editor is open
+            this.grid['manyEditorOpen'] = false;
+            this.grid.setSelectionModel(new Slick.RowSelectionModel());
+            new Slick.Controls.ColumnPicker(this.columns, this.grid, this.options);
         };
 
     }

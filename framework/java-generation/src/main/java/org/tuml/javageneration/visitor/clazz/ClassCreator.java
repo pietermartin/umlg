@@ -22,6 +22,7 @@ public class ClassCreator extends BaseVisitor implements Visitor<org.eclipse.uml
 		annotatedClass.setMyPackage(ojPackage);
 		annotatedClass.setVisibility(TumlClassOperations.getVisibility(clazz.getVisibility()));
 		annotatedClass.setAbstract(clazz.isAbstract());
+        annotatedClass.getDefaultConstructor();
 		
 		// The super class will be set later after all classes have been created
 		if (TumlBehavioredClassifierOperations.hasBehavior(clazz)) {

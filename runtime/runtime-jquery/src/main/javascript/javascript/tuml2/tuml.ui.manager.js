@@ -107,7 +107,7 @@
                         alert('UIManager.getContextMetaData response.data !== undefined && response.data !== null');
                     }
 
-                    if (response.data.id.indexOf('fake') === -1) {
+                    if (!isNaN(response.data.id)) {
                         metaDataNavigatingTo = result[i].meta.to;
                         return {name:metaDataNavigatingTo.name, uri:metaDataNavigatingTo.uri, contextVertexId:response.data.id};
                     }

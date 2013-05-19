@@ -2,6 +2,7 @@ package org.tuml.restlet.visitor.model;
 
 import org.eclipse.uml2.uml.Model;
 import org.tuml.java.metamodel.OJField;
+import org.tuml.java.metamodel.OJIfStatement;
 import org.tuml.java.metamodel.OJPackage;
 import org.tuml.java.metamodel.OJPathName;
 import org.tuml.java.metamodel.annotation.*;
@@ -35,7 +36,7 @@ public class QueryExecuteResourceBuilder extends BaseServerResourceBuilder imple
 		addGetRepresentation(queryExecuteInf, queryExecute);
 
 		addToRouterEnum(model, queryExecute, "QUERY_EXECUTE", "\"/{contextId}/oclExecuteQuery\"");
-
+        addToRouterEnum(model, queryExecute, "QUERY_EXECUTE_STATIC", "\"/oclExecuteQuery\"");
 
         addToClassQueryRouterEnum(model, TumlRestletGenerationUtil.TumlMetaQueryServerResourceImpl, "CLASS_QUERY", "\"/classquery/{contextId}/query\"");
 
@@ -84,19 +85,16 @@ public class QueryExecuteResourceBuilder extends BaseServerResourceBuilder imple
 		
 		OJField ocl = new OJField("ocl", "String");
 		ocl.setInitExp("getQuery().getFirstValue(\"ocl\")");
-		OJField contextId = new OJField("contextId", "Long");
-		contextId.setInitExp("Long.valueOf((String)getRequestAttributes().get(\"contextId\"))");
-		
-//		OJField oclResult = new OJField("oclResult", "String");
-//		oclResult.setInitExp("return execute(ocl, contextId)");
-
-        get.getBody().addToStatements("return execute(ocl, contextId)");
+		OJField contextId = new OJField("context", "Object");
+        contextId.setInitExp("getRequestAttributes().get(\"contextId\")");
+        OJIfStatement ifContextNull = new OJIfStatement("context != null");
+        ifContextNull.addToThenPart("Long contextId = Long.valueOf((String)context)");
+        ifContextNull.addToThenPart("return execute(ocl, contextId)");
+        ifContextNull.addToElsePart("return execute(ocl)");
+        get.getBody().addToStatements(ifContextNull);
 
 		get.getBody().addToLocals(ocl);
 		get.getBody().addToLocals(contextId);
-//		get.getBody().addToLocals(oclResult);
-		
-//		get.getBody().addToStatements("return new " + TumlRestletGenerationUtil.JsonRepresentation.getLast() + "(oclResult)");
 		queryExecute.addToImports(TumlRestletGenerationUtil.JsonRepresentation);
 
 	}

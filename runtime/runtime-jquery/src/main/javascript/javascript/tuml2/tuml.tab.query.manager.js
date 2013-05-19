@@ -54,7 +54,7 @@
                     url:oclExecuteUri + '?ocl=' + $("#" + queryTabDivName + '_' + 'QueryString').val(),
                     type:"GET",
                     dataType:"json",
-                    contentType:"json",
+                    contentType: "application/json",
                     success:function (data, textStatus, jqXHR) {
                         tumlTabGridManager.refresh(data[0], queryTabDivName + '_' + 'OclResult');
                         $('#serverErrorMsg_' + queryTabDivName).removeClass('server-error-msg');
@@ -80,12 +80,19 @@
             if (isTumlLib && instanceQueryUri !== '') {
                 $('<button />', {id:queryTabDivName + '_' + 'SaveButton'}).text('save to instance').click(function () {
                     var query = queryToJson(queryTabDivName, self.queryId);
+                    query.qualifiedName = tumlTabGridManager.metaForData.qualifiedName;
+                    var overloadedPostData = {insert: [], update: [], delete: []};
+                    if (post) {
+                        overloadedPostData.insert.push(query);
+                    } else {
+                        overloadedPostData.update.push(query);
+                    }
                     $.ajax({
                         url:instanceQueryUri,
                         type:post ? "POST" : "PUT",
                         dataType:"json",
-                        contentType:"json",
-                        data:JSON.stringify(query),
+                        contentType: "application/json",
+                        data:JSON.stringify(overloadedPostData),
                         success:function (data, textStatus, jqXHR) {
                             var queryFromDb;
                             var queries = data[0].data;
@@ -118,7 +125,7 @@
                         url:classQueryUri,
                         type:post ? "POST" : "PUT",
                         dataType:"json",
-                        contentType:"json",
+                        contentType: "application/json",
                         data:JSON.stringify(query),
                         success:function (data, textStatus, jqXHR) {
                             var queryFromDb;
@@ -153,7 +160,7 @@
                             url:tumlUri,
                             type:"DELETE",
                             dataType:"json",
-                            contentType:"json",
+                            contentType: "application/json",
                             data:JSON.stringify(query),
                             success:function (data, textStatus, jqXHR) {
                                 self.onDeleteQuerySuccess.notify(

@@ -30,7 +30,7 @@ public class TestQualifier extends BaseLocalDbTest {
         db.commit();
 	}
 
-	@Test
+//	@Test
 	public void testQualifiedMany() {
 		God god = new God(true);
 		god.setName("THEGOD");

@@ -102,8 +102,11 @@
 
                 }
             }
-
-            oclExecuteUri = "/" + tumlModelName + "/" + this.contextVertexId + "/oclExecuteQuery";
+            if (this.contextVertexId == null) {
+                oclExecuteUri = "/" + tumlModelName + "/oclExecuteQuery";
+            } else {
+                oclExecuteUri = "/" + tumlModelName + "/" + this.contextVertexId + "/oclExecuteQuery";
+            }
             if (hasInstanceQuery(metaDataNavigatingTo, metaDataNavigatingFrom)) {
                 instanceQueryTumlUri = "/" + tumlModelName + "/basetumlwithquerys/" + this.contextVertexId + "/instanceQuery";
             } else {
@@ -421,26 +424,6 @@
 
         }
 
-//        this.onPutSuccess = new Tuml.Event();
-//        this.onPutFailure = new Tuml.Event();
-//        this.onPostSuccess = new Tuml.Event();
-//        this.onPostFailure = new Tuml.Event();
-//        this.onDeleteSuccess = new Tuml.Event();
-//        this.onDeleteFailure = new Tuml.Event();
-//        this.onCancel = new Tuml.Event();
-//        this.onSelfCellClick = new Tuml.Event();
-//        this.onContextMenuClickDelete = new Tuml.Event();
-//
-//        this.onPutOneSuccess = new Tuml.Event();
-//        this.onPostOneSuccess = new Tuml.Event();
-//        this.onDeleteOneSuccess = new Tuml.Event();
-//        this.onPutOneFailure = new Tuml.Event();
-//        this.onPostOneFailure = new Tuml.Event();
-//        this.onPostInstanceQuerySuccess = new Tuml.Event();
-//        this.onPutInstanceQuerySuccess = new Tuml.Event();
-//        this.onPostClassQuerySuccess = new Tuml.Event();
-//        this.onPutClassQuerySuccess = new Tuml.Event();
-
         function reorderTabsAfterAddOneOrMany(savedTumlTabViewManagers) {
             for (var i = 0; i < savedTumlTabViewManagers.length; i++) {
                 var tumlTabViewManager = savedTumlTabViewManagers[i];
@@ -525,7 +508,7 @@
             var tabsNav = self.tabContainer.find(".ui-tabs-nav");
             var first = true;
             for (var j = 0; j < self.tumlTabViewManagers.length; j++) {
-                var li = $('#li' + self.tumlTabViewManagers[j].tabDivName);
+                var li = $('#li' + self.tumlTabViewManagers[j].tabId);
                 if (first) {
                     tabsNav.append(li);
                 } else {

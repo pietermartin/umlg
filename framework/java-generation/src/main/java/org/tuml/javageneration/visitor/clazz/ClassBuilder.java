@@ -209,24 +209,8 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
         ojClass.addToOperations(isRoot);
     }
 
-    private void addInitialisePropertiesInPersistentConstructor(OJAnnotatedClass annotatedClass) {
-        OJConstructor constructor = annotatedClass.findConstructor(new OJPathName("java.lang.Boolean"));
-        constructor.getBody().addToStatements(INITIALISE_PROPERTIES + "()");
-    }
-
-    private void addInitVariablesInPersistentConstructor(OJAnnotatedClass annotatedClass) {
-        OJConstructor constructor = annotatedClass.findConstructor(new OJPathName("java.lang.Boolean"));
-        constructor.getBody().addToStatements(INIT_VARIABLES + "()");
-    }
-
-    private void createComponentsInPersistentConstructor(OJAnnotatedClass annotatedClass) {
-        OJConstructor constructor = annotatedClass.findConstructor(new OJPathName("java.lang.Boolean"));
-        constructor.getBody().addToStatements("createComponents()");
-    }
-
     private void addInitVariables(OJAnnotatedClass annotatedClass, Class clazz) {
         OJOperation initVariables = new OJAnnotatedOperation(INIT_VARIABLES);
-        initVariables.setBody(annotatedClass.getDefaultConstructor().getBody());
         if (TumlClassOperations.hasSupertype(clazz)) {
             OJSimpleStatement simpleStatement = new OJSimpleStatement("super.initVariables()");
             if (initVariables.getBody().getStatements().isEmpty()) {
@@ -236,15 +220,6 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
             }
         }
         annotatedClass.addToOperations(initVariables);
-    }
-
-    private void addCreateComponents(OJAnnotatedClass annotatedClass, Class clazz) {
-        OJOperation createComponents = new OJAnnotatedOperation("createComponents");
-        createComponents.setBody(new OJBlock());
-        if (TumlClassOperations.hasSupertype(clazz)) {
-            createComponents.getBody().addToStatements("super.createComponents()");
-        }
-        annotatedClass.addToOperations(createComponents);
     }
 
     private void addDelete(OJAnnotatedClass annotatedClass, Class clazz) {
