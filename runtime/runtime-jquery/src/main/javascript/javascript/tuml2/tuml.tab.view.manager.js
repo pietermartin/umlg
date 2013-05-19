@@ -626,6 +626,15 @@
         return validationResults;
     }
 
+    TumlTabManyViewManager.prototype.updateOneForUpdate = function (id, displayName, fieldName, one) {
+        var item = this.tumlTabGridManager.dataView.getItemById(id);
+        item[fieldName].id = one.id;
+        item[fieldName].displayName = displayName;
+        this.tumlTabGridManager.dataView.updateItem(item.id, item, fieldName);
+        this.tumlTabGridManager.grid.invalidateAllRows();
+        this.tumlTabGridManager.grid.render();
+    }
+
     TumlTabManyViewManager.prototype.updateOne = function (fakeId, fieldName, one, indexForFakeId) {
         var item = this.tumlTabGridManager.dataView.getItemById(indexForFakeId.id);
         this.updateOneRecursive(item, fakeId, fieldName, one, indexForFakeId);

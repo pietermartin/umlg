@@ -365,7 +365,7 @@
       return ids;
     }
 
-    function updateItem(id, item, column) {
+    function updateItem(id, item, columnName) {
       if (idxById[id] === undefined || id !== item[idProperty]) {
         throw "Invalid or non-matching id";
       }
@@ -384,7 +384,7 @@
             }
 
             var newField = {};
-            newField[column.name] = item[column.name];
+            newField[columnName] = item[columnName];
             newItems[newIdxById[id]] = $.extend(newItems[newIdxById[id]], newField);
         } else {
             //updates of existing items
@@ -397,7 +397,7 @@
                 }
             }
             var updatedField = {};
-            updatedField[column.name] = item[column.name];
+            updatedField[columnName] = item[columnName];
             updatedItems[updatedIdxById[id]] = $.extend(updatedItems[updatedIdxById[id]], updatedField);
         }
 

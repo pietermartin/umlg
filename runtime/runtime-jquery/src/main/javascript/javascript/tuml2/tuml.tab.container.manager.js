@@ -177,6 +177,10 @@
         this.parentTabContainerManager.updateDataModelForOneToOne(fakeId, fieldName, one);
     }
 
+    TumlTabContainerManager.prototype.updateDataModelForOneToOneForUpdatedItem = function(qualifiedName, id, displayName, fieldName, one) {
+        this.parentTabContainerManager.updateDataModelForOneToOneForUpdatedItem(qualifiedName, id, displayName, fieldName, one);
+    }
+
     TumlTabContainerManager.prototype.doCancel = function () {
         //Save the child's backedup data into the component's cell
         if (this.tumlTabViewManagers.length > 0) {
@@ -243,7 +247,6 @@
                         }
 
                         data.push.apply(data, tumlTabViewManager.getTabData());
-                        tumlTabViewManager.tumlTabGridManager.updateDataModelForOneToOne();
                     }
                 }
                 var validationResults = [];

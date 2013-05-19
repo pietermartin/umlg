@@ -220,7 +220,7 @@
         this.calculateContainsOne = function () {
             for (var i = 0; i < this.metaForData.properties.length; i++) {
                 var property = this.metaForData.properties[i];
-                if (property.oneToOne && !property.composite && !property.inverseComposite &&  !property.onePrimitive) {
+                if (property.oneToOne && !property.composite && !property.inverseComposite && !property.onePrimitive) {
                     this.containsOneToOne = true;
                     break;
                 }
@@ -287,7 +287,6 @@
                 var newItems = this.dataView.getNewItems();
                 for (var i = 0; i < newItems.length; i++) {
                     var data = newItems[i];
-
                     for (var j = 0; j < this.metaForData.properties.length; j++) {
                         var property = this.metaForData.properties[j];
                         if (property.oneToOne && !property.composite && !property.inverseComposite && !property.onePrimitive && data[property.name] !== undefined && data[property.name] !== null && data[property.name].id !== undefined) {
@@ -295,7 +294,22 @@
                             this.tumlTabViewManager.updateDataModelForOneToOne(data[property.name].id, property.inverseName, data);
                         }
                     }
+                }
+            }
+        }
 
+        this.updateDataModelForOneToOneForUpdate = function () {
+            var updatedItems = this.dataView.getUpdatedItems();
+            for (var i = 0; i < updatedItems.length; i++) {
+                var data = updatedItems[i];
+                for (var j = 0; j < this.metaForData.properties.length; j++) {
+                    var property = this.metaForData.properties[j];
+                    if (property.oneToOne && !property.composite && !property.inverseComposite && !property.onePrimitive && data[property.name] !== undefined && data[property.name] !== null && data[property.name].id !== undefined) {
+                        //TODO name needs to be displayName, some backend strategy required dude
+                        if (!isNaN(data[property.name].id)) {
+                            this.tumlTabViewManager.updateDataModelForOneToOneForUpdatedItem(this.metaForData.qualifiedName, data[property.name].id, data[property.name].displayName, property.inverseName, data);
+                        }
+                    }
                 }
             }
         }
@@ -428,7 +442,16 @@
             });
 
             this.grid.onCellChange.subscribe(function (e, args) {
-                self.dataView.updateItem(args.item.id, args.item, self.grid.getColumns()[args.cell]);
+                var column = self.grid.getColumns()[args.cell];
+                self.dataView.updateItem(args.item.id, args.item, column.name);
+                var property = column.options.property;
+                if (!property.composite && !property.inverseComposite && !property.onePrimitive && !property.oneEnumeration  && property.upper === 1) {
+                    if (self.tumlTabViewManager instanceof Tuml.TumlTabManyComponentViewManager) {
+                        self.updateDataModelForOneToOne();
+                    } else {
+                        self.updateDataModelForOneToOneForUpdate();
+                    }
+                }
             });
 
             this.grid.onKeyDown.subscribe(function (e) {

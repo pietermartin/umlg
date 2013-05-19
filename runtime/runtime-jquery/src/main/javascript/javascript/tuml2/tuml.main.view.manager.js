@@ -580,6 +580,17 @@
         }
     }
 
+    TumlMainViewManager.prototype.updateDataModelForOneToOneForUpdatedItem = function (qualifiedName, id, displayName, fieldName, one) {
+        for (var j = 0; j < this.tumlTabViewManagers.length; j++) {
+            var tumlTabViewManager = this.tumlTabViewManagers[j];
+            if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager) {
+                if (tumlTabViewManager.tumlTabGridManager.metaForData.qualifiedName !== qualifiedName) {
+                    tumlTabViewManager.updateOneForUpdate(id, displayName, fieldName, one);
+                }
+            }
+        }
+    }
+
     TumlMainViewManager.prototype.doCancel = function () {
         this.enableButtons();
         var self = this;
