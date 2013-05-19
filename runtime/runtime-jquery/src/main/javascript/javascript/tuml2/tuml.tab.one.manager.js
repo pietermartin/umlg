@@ -92,12 +92,13 @@
             }
         }
 
-        this.updateDataModel = function (data) {
+        this.updateDataModelForOneToOne = function (data) {
             //update the global one to one index for every one
             for (var i = 0; i < this.metaForData.properties.length; i++) {
                 var property = this.metaForData.properties[i];
                 if (data[property.name] !== undefined && data[property.name] !== null && property.oneToOne && !property.inverseComposite && !property.onePrimitive) {
-                    this.tumlTabViewManager.updateDataModel(data[property.name].id, property.inverseName, data);
+                    this.tumlTabViewManager.updateDataModelForOneToOne(data[property.name].previousId, property.inverseName, {});
+                    this.tumlTabViewManager.updateDataModelForOneToOne(data[property.name].id, property.inverseName, data);
                 }
             }
         }
@@ -341,9 +342,9 @@
                     if (options[j].selected) {
                         var optionId = $select.val();
                         if (optionId.indexOf('fake') === -1) {
-                            this.data[property.name] = {id: parseInt(optionId), displayName: options[j].label};
+                            this.data[property.name] = {id: parseInt(optionId), displayName: options[j].label, previousId: this.data[property.name].id};
                         } else {
-                            this.data[property.name] = {id: optionId, displayName: options[j].label};
+                            this.data[property.name] = {id: optionId, displayName: options[j].label, previousId: this.data[property.name].id};
                         }
                         break;
                     }

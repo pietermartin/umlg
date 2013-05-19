@@ -13,7 +13,6 @@
         var index = {};
 
         this.addToOneToOneIndex = function (fakeId, item) {
-            item.marker = 'pietie' + fakeId;
             index[fakeId] = item;
         }
 
@@ -35,7 +34,7 @@
         var oclExecuteUri;
         var instanceQueryTumlUri;
         var classQueryTumlUri;
-        var contextVertexId;
+        this.contextVertexId = -1;
         var contextChanged = true;
         this.globalOneToOneIndex = new GlobalOneToOneIndex();
         this.qualifiedName = null;
@@ -54,7 +53,7 @@
                 var newContextVertexId = retrieveVertexId(tumlUri);
                 var savedTumlTabViewManagers = this.clearTabsOnAddOneOrMany(newContextVertexId);
 
-                leftMenuManager.refresh(metaDataNavigatingFrom, metaDataNavigatingTo, contextVertexId);
+                leftMenuManager.refresh(metaDataNavigatingFrom, metaDataNavigatingTo, this.contextVertexId);
                 refreshInternal(tumlUri, result, false);
 
                 //reorder tabs, make sure new tabs are first
@@ -80,7 +79,7 @@
                             var savedTumlTabViewManagers = this.clearTabsOnAddOneOrMany(newContextVertexId);
 
                             //If property is a one then there is n navigating from
-                            leftMenuManager.refresh(metaDataNavigatingTo, metaDataNavigatingTo, contextVertexId);
+                            leftMenuManager.refresh(metaDataNavigatingTo, metaDataNavigatingTo, this.contextVertexId);
                             //Do not call refreshInternal as it creates all tabs for the meta data
                             var tumlTabViewManager = this.createTabContainer(tuml.tab.Enum.Properties, result[i], tumlUri, {forLookup: false, forManyComponent: false, isOne: true, forCreation: false}, this.propertyNavigatingTo);
                             this.addToTumlTabViewManagers(tumlTabViewManager);
@@ -95,7 +94,7 @@
                     var newContextVertexId = retrieveVertexId(tumlUri);
                     var savedTumlTabViewManagers = this.clearTabsOnAddOneOrMany(newContextVertexId);
 
-                    leftMenuManager.refresh(metaDataNavigatingFrom, metaDataNavigatingTo, contextVertexId);
+                    leftMenuManager.refresh(metaDataNavigatingFrom, metaDataNavigatingTo, this.contextVertexId);
                     refreshInternal(tumlUri, result, true, true);
 
                     //reorder tabs, make sure new tabs are first
@@ -104,16 +103,16 @@
                 }
             }
 
-            oclExecuteUri = "/" + tumlModelName + "/" + contextVertexId + "/oclExecuteQuery";
+            oclExecuteUri = "/" + tumlModelName + "/" + this.contextVertexId + "/oclExecuteQuery";
             if (hasInstanceQuery(metaDataNavigatingTo, metaDataNavigatingFrom)) {
-                instanceQueryTumlUri = "/" + tumlModelName + "/basetumlwithquerys/" + contextVertexId + "/instanceQuery";
+                instanceQueryTumlUri = "/" + tumlModelName + "/basetumlwithquerys/" + this.contextVertexId + "/instanceQuery";
             } else {
                 instanceQueryTumlUri = '';
             }
-            classQueryTumlUri = "/" + tumlModelName + "/classquery/" + contextVertexId + "/query";
+            classQueryTumlUri = "/" + tumlModelName + "/classquery/" + this.contextVertexId + "/query";
 
 
-            if (contextVertexId !== undefined && contextVertexId !== null && contextChanged) {
+            if (this.contextVertexId !== -1 && contextChanged) {
                 //This is the default query tab, always open
                 addDefaultQueryTab();
             }
@@ -215,6 +214,7 @@
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
+                    alert(textStatus);
                     $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
                 }
             });
@@ -298,16 +298,16 @@
         }
 
         this.clearTabsOnAddOneOrMany = function (newContextVertexId) {
-            if (newContextVertexId === undefined && contextVertexId === null) {
+            if (newContextVertexId === undefined && this.contextVertexId === -1) {
                 contextChanged = true;
-            } else if (contextVertexId === undefined && newContextVertexId === null) {
+            } else if (this.contextVertexId === -1 && newContextVertexId === null) {
                 contextChanged = true;
-            } else if (contextVertexId === undefined && newContextVertexId === undefined) {
+            } else if (this.contextVertexId === -1 && newContextVertexId === undefined) {
                 contextChanged = true;
             } else {
-                contextChanged = newContextVertexId !== contextVertexId;
+                contextChanged = newContextVertexId !== this.contextVertexId;
             }
-            contextVertexId = newContextVertexId;
+            this.contextVertexId = newContextVertexId;
             if (contextChanged) {
                 this.destroyTabContainer();
                 this.maybeCreateTabContainer();
@@ -513,11 +513,12 @@
                 }
 
                 tumlTabViewManager.createTab(result[i], forCreation);
-
-                self.saveNewRow();
+                if (forCreation) {
+                    self.saveNewRow();
+                }
                 previousTumlTabViewManager = tumlTabViewManager;
             }
-            self.addButtons();
+//            self.addButtons();
         }
 
         function reorderTabs() {
@@ -567,62 +568,17 @@
         this.globalOneToOneIndex.addToOneToOneIndex(fakeId, item);
     }
 
-    TumlMainViewManager.prototype.updateDataModel = function (fakeId, fieldName, one) {
+    TumlMainViewManager.prototype.updateDataModelForOneToOne = function (fakeId, fieldName, one) {
         var indexForFakeId = this.globalOneToOneIndex.getIndex(fakeId);
         if (indexForFakeId !== null) {
             for (var j = 0; j < this.tumlTabViewManagers.length; j++) {
                 var tumlTabViewManager = this.tumlTabViewManagers[j];
-                tumlTabViewManager.updateOne(fakeId, fieldName, one, indexForFakeId);
+                if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager) {
+                    tumlTabViewManager.updateOne(fakeId, fieldName, one, indexForFakeId);
+                }
             }
         }
     }
-
-//    TumlMainViewManager.prototype.validateNewOne = function (overloadedPostData) {
-//    }
-//
-//    TumlMainViewManager.prototype.validateUpdateOne = function (overloadedPostData) {
-//    }
-//
-//    TumlMainViewManager.prototype.validateMany = function (overloadedPostData) {
-//
-//        var validationResult = [];
-//        var toValidate = [];
-//        var metaDataArray;
-//
-//        if (this.propertyNavigatingTo !== null) {
-//            toValidate.push.apply(toValidate, overloadedPostData.insert);
-//            toValidate.push.apply(toValidate, overloadedPostData.update);
-//            metaDataArray = Tuml.Metadata.Cache.getFromCache(this.propertyNavigatingTo.qualifiedName);
-//        } else {
-//            toValidate.push(overloadedPostData);
-//            metaDataArray = Tuml.Metadata.Cache.getFromCache(this.qualifiedName);
-//        }
-//        for (var i = 0; i < toValidate.length; i++) {
-//            var item = toValidate[i];
-//            for (var j = 0; j < metaDataArray.length; j++) {
-//                var metaData = metaDataArray[j].meta;
-//                if (metaData.qualifiedName == item.qualifiedName) {
-//                    for (var k = 0; k < metaData.to.properties.length; k++) {
-//                        var property = metaData.to.properties[k];
-//                        if (property.lower > 0) {
-//                            if (property.upper === -1 || property.upper > 1) {
-//                                if (item[property.name].length === 0) {
-//                                    console.log(property.name + ' is required');
-//                                    validationResult.push({valid: false, msg: property.name + " is a required field!"});
-//                                }
-//                            } else {
-//                                if (item[property.name] == null) {
-//                                    console.log(property.name + ' is required');
-//                                    validationResult.push({valid: false, msg: property.name + " is a required field!"});
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        return validationResult;
-//    }
 
     TumlMainViewManager.prototype.doCancel = function () {
         this.enableButtons();
@@ -698,14 +654,28 @@
                 var endTimeBeforeUpdateGrids = new Date().getTime();
                 console.log("Time taken in millis for server call before update drop down = " + (endTimeBeforeUpdateGrids - startTime));
 
-                //Make sure id's are replaced with tmpId where needed
-                for (var i = 0; i < result.data.length; i++) {
-                    var item = result.data[i];
-                    if (item.tmpId !== undefined && item.tmpId !== null) {
-                        item.id = item.tmpId;
+                //For one lookup
+                if (Array.isArray(result)) {
+                    for (var j = 0; j < result.length; j++) {
+                        var r = result[j];
+                        for (var i = 0; i < r.data.length; i++) {
+                            var item = r.data[i];
+                            if (item.tmpId !== undefined && item.tmpId !== null) {
+                                item.id = item.tmpId;
+                            }
+                        }
                     }
+                    loadDataCallback(result);
+                } else {
+                    //Make sure id's are replaced with tmpId where needed
+                    for (var i = 0; i < result.data.length; i++) {
+                        var item = result.data[i];
+                        if (item.tmpId !== undefined && item.tmpId !== null) {
+                            item.id = item.tmpId;
+                        }
+                    }
+                    loadDataCallback(result.data);
                 }
-                loadDataCallback(result.data);
                 endTimeBeforeUpdateGrids = new Date().getTime();
                 console.log("Time taken in millis for server call after  update drop down = " + (endTimeBeforeUpdateGrids - startTime));
             },

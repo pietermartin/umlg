@@ -47,7 +47,8 @@ public class RestletVisitors {
         result.add(new AddFieldTypeFieldToRootRuntimeLiteral(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
         result.add(new AddTumlLookupUriToRuntimePropertyEnum(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
         result.add(new AddTumlLookupCompositeParentUriToRuntimePropertyEnum(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
-        result.add(new LookupResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+        result.add(new LookupForOneResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+        result.add(new LookupForManyResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
 //        result.add(new LookupCompositeParentResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
 //        result.add(new LookupOnCompositeParentResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
 //        result.add(new LookupOnCompositeParentCompositeParentResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
@@ -58,7 +59,6 @@ public class RestletVisitors {
         result.add(new TransactionResourceRouterAdder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
 
         result.add(new RestletComponentAndApplicationGenerator(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
-        result.add(new TmpIdAdder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
         result.add(new RestletFromJsonCreator(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
 
 

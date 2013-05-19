@@ -35,17 +35,28 @@ public class LookupGenerator2 extends BaseVisitor implements Visitor<Property> {
             OJBlock ojBlock2 = new OJBlock();
             lookUp.getBody().addToStatements(ojBlock2);
 
-            lookUp.setReturnType("Set<" + propertyWrapper.javaBaseTypePath().getLast() + ">");
-            OJField result = new OJField("result", "Set<" + propertyWrapper.javaBaseTypePath().getLast() + ">");
-            result.setInitExp("new HashSet<" + propertyWrapper.javaBaseTypePath().getLast() + ">()");
+            lookUp.setReturnType("TinkerSet<" + propertyWrapper.javaBaseTypePath().getLast() + ">");
+            OJField result = new OJField("result", "TinkerSet<" + propertyWrapper.javaBaseTypePath().getLast() + ">");
+            result.setInitExp("new " + TinkerGenerationUtil.tumlMemorySet.getLast() + "<" + propertyWrapper.javaBaseTypePath().getLast() + ">()");
             ojClass.addToImports("java.util.HashSet");
             ojClass.addToImports("java.util.Set");
             ojBlock1.addToLocals(result);
 
-            if (propertyWrapper.isOneToOne()) {
+            if (propertyWrapper.isUnique()) {
 
                 PropertyWrapper otherEnd = new PropertyWrapper(propertyWrapper.getOtherEnd());
-                ojBlock1.addToStatements("Filter<"+propertyWrapper.javaBaseTypePath().getLast()+"> filter = new Filter<"+propertyWrapper.javaBaseTypePath().getLast()+">() {\n    @Override\n    public boolean filter("+propertyWrapper.javaBaseTypePath().getLast()+" entity){\n        return entity."+otherEnd.getter()+"() == null;\n    }\n}");
+
+                if (propertyWrapper.isOneToOne() || otherEnd.isOne()) {
+                    ojBlock1.addToStatements("Filter<" + propertyWrapper.javaBaseTypePath().getLast() + "> filter = new Filter<" +
+                            propertyWrapper.javaBaseTypePath().getLast() + ">() {\n    @Override\n    public boolean filter(" +
+                            propertyWrapper.javaBaseTypePath().getLast() + " entity){\n        return entity." +
+                            otherEnd.getter() + "() == null;\n    }\n}");
+                } else {
+                    ojBlock1.addToStatements("Filter<" + propertyWrapper.javaBaseTypePath().getLast() + "> filter = new Filter<" +
+                            propertyWrapper.javaBaseTypePath().getLast() + ">() {\n    @Override\n    public boolean filter(" +
+                            propertyWrapper.javaBaseTypePath().getLast() + " entity){\n        return !entity." +
+                            otherEnd.getter() + "().contains(" + otherEnd.javaBaseTypePath().getLast() + ".this);\n    }\n}");
+                }
 
                 ojBlock1.addToStatements("result.addAll(" + TumlClassOperations.getPathName(propertyWrapper.getType()).getLast() + ".allInstances(filter))");
 

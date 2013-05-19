@@ -1,5 +1,6 @@
 package org.tuml.runtime.restlet;
 
+import org.tuml.runtime.adaptor.TumlTmpIdManager;
 import org.tuml.runtime.domain.PersistentObject;
 
 import java.util.Collection;

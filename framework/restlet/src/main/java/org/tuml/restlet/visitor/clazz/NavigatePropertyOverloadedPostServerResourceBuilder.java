@@ -126,12 +126,6 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
         mapper.setInitExp("new ObjectMapper()");
         ojTryStatement.getTryPart().addToLocals(mapper);
 
-//        OJField jsonData = new OJField("json", "java.lang.StringBuilder");
-//        jsonData.setInitExp("new StringBuilder()");
-//        ojTryStatement.getTryPart().addToLocals(jsonData);
-//        ojTryStatement.getTryPart().addToStatements("json.append(\"[\")");
-//        ojTryStatement.getTryPart().addToStatements("json.append(\"{\\\"data\\\": [\")");
-
         OJPathName pathName = new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object");
         OJAnnotatedField entityText = new OJAnnotatedField("entityText", "String");
         entityText.setInitExp("entity.getText()");
@@ -378,23 +372,21 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
         add.getBody().addToStatements(ifSbExist);
 
         OJTryStatement tryInstantiate = new OJTryStatement();
-
-        OJField constructor = new OJField("constructor", new OJPathName("java.lang.reflect.Constructor").addToGenerics(pWrap.javaBaseTypePath()));
-        constructor.setInitExp("baseTumlClass.getConstructor(parentResource.getClass())");
-
-        tryInstantiate.getTryPart().addToLocals(constructor);
-
         add.getBody().addToStatements(tryInstantiate);
 
         if (pWrap.isComposite()) {
+            OJField constructor = new OJField("constructor", new OJPathName("java.lang.reflect.Constructor").addToGenerics(pWrap.javaBaseTypePath()));
+            constructor.setInitExp("baseTumlClass.getConstructor(parentResource.getClass())");
+            tryInstantiate.getTryPart().addToLocals(constructor);
             tryInstantiate.getTryPart().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = constructor.newInstance(parentResource)");
+            tryInstantiate.getTryPart().addToStatements("childResource.fromJson(propertyMap)");
         } else {
             tryInstantiate.getTryPart().addToStatements("Long id = Long.valueOf((Integer)propertyMap.get(\"id\"))");
             tryInstantiate.getTryPart().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
+            tryInstantiate.getTryPart().addToStatements("parentResource." + pWrap.adder() + "(childResource)");
         }
-        annotatedClass.addToImports(pWrap.javaBaseTypePath());
-        tryInstantiate.getTryPart().addToStatements("childResource.fromJson(propertyMap)");
         tryInstantiate.getTryPart().addToStatements("String jsonResult = childResource.toJsonWithoutCompositeParent(true)");
+        annotatedClass.addToImports(pWrap.javaBaseTypePath());
 //        OJIfStatement ifContainsId = new OJIfStatement("propertyMap.containsKey(\"id\")");
 //        ifContainsId.addToThenPart("String tmpId = (String)propertyMap.get(\"id\")");
 //        ifContainsId.addToThenPart("jsonResult = jsonResult.substring(1);");

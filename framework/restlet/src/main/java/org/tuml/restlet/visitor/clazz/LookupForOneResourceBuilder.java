@@ -16,27 +16,27 @@ import org.tuml.javageneration.util.TinkerGenerationUtil;
 import org.tuml.javageneration.util.TumlClassOperations;
 import org.tuml.restlet.util.TumlRestletGenerationUtil;
 
-public class LookupResourceBuilder extends BaseServerResourceBuilder implements Visitor<Property> {
+public class LookupForOneResourceBuilder extends BaseServerResourceBuilder implements Visitor<Property> {
 
-    public LookupResourceBuilder(Workspace workspace, String sourceDir) {
+    public LookupForOneResourceBuilder(Workspace workspace, String sourceDir) {
         super(workspace, sourceDir);
     }
 
     @Override
     public void visitBefore(Property p) {
         PropertyWrapper pWrap = new PropertyWrapper(p);
-        if (pWrap.hasLookup()) {
+        if (pWrap.hasLookup() && pWrap.isOne()) {
 
             OJAnnotatedClass owner = findOJClass(p);
 
             OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_"
-                    + pWrap.getOtherEnd().getName() + "_lookUp" + StringUtils.capitalize(pWrap.getName()) + "_ServerResource");
+                    + pWrap.getOtherEnd().getName() + "_" + pWrap.getName() + "_lookUpForOne" + "_ServerResource");
             OJPackage ojPackage = new OJPackage(owner.getMyPackage().toString() + ".restlet");
             annotatedInf.setMyPackage(ojPackage);
             addToSource(annotatedInf);
 
             OJAnnotatedClass annotatedClass = new OJAnnotatedClass(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_"
-                    + pWrap.getOtherEnd().getName() + "_lookUp" + StringUtils.capitalize(pWrap.getName()) + "_ServerResourceImpl");
+                    + pWrap.getOtherEnd().getName() + "_" + pWrap.getName() + "_lookUpForOne" + "_ServerResourceImpl");
             annotatedClass.setSuperclass(TumlRestletGenerationUtil.ServerResource);
             annotatedClass.addToImplementedInterfaces(annotatedInf.getPathName());
             annotatedClass.setMyPackage(ojPackage);
@@ -97,7 +97,6 @@ public class LookupResourceBuilder extends BaseServerResourceBuilder implements 
         block.addToStatements("json.append(\"{\\\"data\\\": [\")");
         block.addToStatements("json.append(" + TumlRestletGenerationUtil.TumlRestletToJsonUtil.getLast() + ".toJson(resource." + pWrap.lookup() + "()))");
         annotatedClass.addToImports(TumlRestletGenerationUtil.TumlRestletToJsonUtil);
-//        annotatedClass.addToImports(TinkerGenerationUtil.ToJsonUtil);
         block.addToStatements("json.append(\"],\")");
         block.addToStatements("json.append(\" \\\"meta\\\" : {\")");
         block.addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + pWrap.getQualifiedName() + "\\\"\")");

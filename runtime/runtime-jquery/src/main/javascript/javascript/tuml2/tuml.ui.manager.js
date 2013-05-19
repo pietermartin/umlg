@@ -55,7 +55,6 @@
             };
 
             self.refresh(tumlUri);
-
         }
 
         this.refresh = function(tumlUri) {
@@ -80,6 +79,7 @@
                     Tuml.Metadata.Cache.add(metaData.meta.qualifiedName, metaDataArray);
 
                     mainViewManager.refresh(tumlUri, result);
+
                     var contextMetaData = getContextMetaData(result, contextVertexId);
                     contextManager.refresh(contextMetaData.name, contextMetaData.uri, contextMetaData.contextVertexId);
                 },

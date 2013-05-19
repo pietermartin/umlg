@@ -27,6 +27,7 @@ public class TinkerGenerationUtil {
     public static final String rollback = "rollback";
     public static final String transactionIdentifier = "transactionIdentifier";
 
+    public final static OJPathName TumlTmpIdManager = new OJPathName("org.tuml.runtime.adaptor.TumlTmpIdManager");
     public static final OJPathName Filter = new OJPathName("org.tuml.runtime.collection.Filter");
     public static final OJPathName TumlMetaNodeManager = new OJPathName("org.tuml.runtime.adaptor.TumlMetaNodeManager");
     public static final OJPathName TumlTransactionManager = new OJPathName("org.tuml.runtime.adaptor.TumlTransactionManager");

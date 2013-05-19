@@ -173,10 +173,11 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
         ojTryStatement.getTryPart().addToStatements("json.append(" + TinkerGenerationUtil.RootRuntimePropertyEnum.getLast() + ".asJson())");
         ojTryStatement.getTryPart().addToStatements("json.append(\"}}]\")");
         ojTryStatement.getTryPart().addToStatements("return new " + TumlRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
-
         ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
         ojTryStatement.getCatchPart().addToStatements("GraphDb.getDb().rollback()");
         ojTryStatement.getCatchPart().addToStatements("throw " + TumlRestletGenerationUtil.TumlExceptionUtilFactory.getLast() + ".getTumlExceptionUtil().handle(e)");
+        ojTryStatement.getFinallyPart().addToStatements(TinkerGenerationUtil.TumlTmpIdManager.getLast() + ".INSTANCE.remove()");
+        annotatedClass.addToImports(TinkerGenerationUtil.TumlTmpIdManager);
         annotatedClass.addToImports(TumlRestletGenerationUtil.TumlExceptionUtilFactory);
         post.getBody().addToStatements(ojTryStatement);
 

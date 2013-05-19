@@ -150,10 +150,10 @@ public class RootOverLoadedPostForLookupResourceServerResourceBuilder extends Ba
         OJIfStatement ifFakeId = new OJIfStatement("fakeIdIndex != -1");
         ifFakeId.addToThenPart("int indexOfForwardSlash = lookupUri.indexOf(\"/\", fakeIdIndex)");
         ifFakeId.addToThenPart("String fakeId = lookupUri.substring(fakeIdIndex, indexOfForwardSlash)");
-        ifFakeId.addToThenPart("long id = " + TumlRestletGenerationUtil.TumlTmpIdManager.getLast() + ".INSTANCE.get(fakeId)");
+        ifFakeId.addToThenPart("long id = " + TinkerGenerationUtil.TumlTmpIdManager.getLast() + ".INSTANCE.get(fakeId)");
         ifFakeId.addToThenPart("lookupUri = lookupUri.replace(fakeId, Long.toString(id))");
         ojTryStatement.getTryPart().addToStatements(ifFakeId);
-        annotatedClass.addToImports(TumlRestletGenerationUtil.TumlTmpIdManager);
+        annotatedClass.addToImports(TinkerGenerationUtil.TumlTmpIdManager);
 
         ojTryStatement.getTryPart().addToStatements(TumlRestletGenerationUtil.ClientResource.getLast() + " cr = new ClientResource(lookupUri)");
         annotatedClass.addToImports(TumlRestletGenerationUtil.ClientResource);
@@ -161,7 +161,7 @@ public class RootOverLoadedPostForLookupResourceServerResourceBuilder extends Ba
         ojTryStatement.getTryPart().addToStatements("return result");
 
         //Always rollback
-        ojTryStatement.getFinallyPart().addToStatements(TumlRestletGenerationUtil.TumlTmpIdManager.getLast() + ".INSTANCE.remove()");
+        ojTryStatement.getFinallyPart().addToStatements(TinkerGenerationUtil.TumlTmpIdManager.getLast() + ".INSTANCE.remove()");
         ojTryStatement.getFinallyPart().addToStatements(TinkerGenerationUtil.graphDbAccess + ".rollback()");
 
         ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));

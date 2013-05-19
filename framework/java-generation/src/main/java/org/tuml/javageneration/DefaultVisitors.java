@@ -42,6 +42,7 @@ public class DefaultVisitors {
         result.add(new OperationImplementorSimple(Workspace.INSTANCE));
         result.add(new ToFromJsonCreator(Workspace.INSTANCE));
         result.add(new TofromJsonForEnumCreator(Workspace.INSTANCE));
+        result.add(new TmpIdAdder(Workspace.INSTANCE));
 //        result.add(new LookupGenerator(Workspace.INSTANCE));
         result.add(new LookupGenerator2(Workspace.INSTANCE));
         result.add(new ClassInterfacePropertyLookupGenerator(Workspace.INSTANCE));

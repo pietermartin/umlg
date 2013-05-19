@@ -1,4 +1,4 @@
-package org.tuml.restlet.visitor.clazz;
+package org.tuml.javageneration.visitor.clazz;
 
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Classifier;
@@ -7,12 +7,11 @@ import org.tuml.generation.Workspace;
 import org.tuml.java.metamodel.OJField;
 import org.tuml.java.metamodel.OJIfStatement;
 import org.tuml.java.metamodel.OJPathName;
-import org.tuml.java.metamodel.OJSimpleStatement;
 import org.tuml.java.metamodel.annotation.OJAnnotatedClass;
 import org.tuml.java.metamodel.annotation.OJAnnotatedOperation;
 import org.tuml.java.metamodel.generated.OJVisibilityKindGEN;
+import org.tuml.javageneration.util.TinkerGenerationUtil;
 import org.tuml.javageneration.visitor.BaseVisitor;
-import org.tuml.restlet.util.TumlRestletGenerationUtil;
 
 import java.util.List;
 
@@ -22,8 +21,8 @@ import java.util.List;
  */
 public class TmpIdAdder extends BaseVisitor implements Visitor<Class> {
 
-    public TmpIdAdder(Workspace workspace, String sourceDir) {
-        super(workspace, sourceDir);
+    public TmpIdAdder(Workspace workspace) {
+        super(workspace);
     }
 
     @Override
@@ -56,8 +55,8 @@ public class TmpIdAdder extends BaseVisitor implements Visitor<Class> {
         OJIfStatement ifStatement1 = new OJIfStatement("propertyMap.get(\"tmpId\") != null");
         ifStatement.addToThenPart(ifStatement1);
         ifStatement1.addToThenPart("this.tmpId = (String)propertyMap.get(\"tmpId\")");
-        ifStatement1.addToThenPart(TumlRestletGenerationUtil.TumlTmpIdManager.getLast() + ".INSTANCE.put(this.tmpId, getId())");
-        annotatedClass.addToImports(TumlRestletGenerationUtil.TumlTmpIdManager);
+        ifStatement1.addToThenPart(TinkerGenerationUtil.TumlTmpIdManager.getLast() + ".INSTANCE.put(this.tmpId, getId())");
+        annotatedClass.addToImports(TinkerGenerationUtil.TumlTmpIdManager);
         ifStatement1.addToElsePart("this.tmpId = null");
         fromJson.getBody().addToStatements(ifStatement);
     }

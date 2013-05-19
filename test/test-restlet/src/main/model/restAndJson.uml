@@ -294,6 +294,10 @@
             <ownedAttribute xmi:id="_I3MW8BtoEeKZO-l2Budqpw" name="aquatic">
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
             </ownedAttribute>
+            <ownedAttribute xmi:id="_YBzEIMBUEeKz49-v52otyA" name="spaceCraft" type="_mMQB4BtnEeKZO-l2Budqpw" association="_YB0SQMBUEeKz49-v52otyA">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_YBzEIcBUEeKz49-v52otyA"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_YBzEIsBUEeKz49-v52otyA" value="1"/>
+            </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Enumeration" xmi:id="_426FoCJ3EeK_2-gEeTkcgw" name="Gender">
             <ownedLiteral xmi:id="_8HuWICJ3EeK_2-gEeTkcgw" name="MALE"/>
@@ -773,6 +777,12 @@
             <ownedEnd xmi:id="_xCnBIbbbEeKeCuai9f99dw" name="home" type="_GULjQDsHEeK9AeutZ8kzPA" association="_xCnBILbbEeKeCuai9f99dw">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_xCnBIrbbEeKeCuai9f99dw" value="1"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_xCnBI7bbEeKeCuai9f99dw" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_YB0SQMBUEeKz49-v52otyA" name="terrestrialCraft_spaceCraft_1" memberEnd="_YB0SQcBUEeKz49-v52otyA _YBzEIMBUEeKz49-v52otyA" navigableOwnedEnd="_YB0SQcBUEeKz49-v52otyA">
+            <ownedEnd xmi:id="_YB0SQcBUEeKz49-v52otyA" name="terrestrialCraft" type="_ml87UBtnEeKZO-l2Budqpw" association="_YB0SQMBUEeKz49-v52otyA">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_YB0SQsBUEeKz49-v52otyA"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_YB0SQ8BUEeKz49-v52otyA" value="1"/>
             </ownedEnd>
           </packagedElement>
         </packagedElement>

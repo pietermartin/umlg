@@ -182,7 +182,7 @@ public class TestOneLookup extends BaseLocalDbTest {
 		l2_0_0.addToDevil2(d2_0_0);
         db.commit();
 
-		Assert.assertEquals(9, l2_0_0.lookupFor_level2_devil2().size());
+		Assert.assertEquals(8, l2_0_0.lookupFor_level2_devil2().size());
 	}
 
     @Test

@@ -15,7 +15,6 @@ public class TumlRestletGenerationUtil {
 
     public final static OJPathName TumlRestletFilter = new OJPathName("org.tuml.runtime.restlet.TumlRestletFilter");
     public final static OJPathName TumlRestletToJsonUtil = new OJPathName("org.tuml.runtime.restlet.TumlRestletToJsonUtil");
-    public final static OJPathName TumlTmpIdManager = new OJPathName("org.tuml.runtime.restlet.TumlTmpIdManager");
     public final static OJPathName ClientResource = new OJPathName("org.restlet.resource.ClientResource");
     public final static OJPathName TumlExceptionUtilFactory = new OJPathName("org.tuml.runtime.adaptor.TumlExceptionUtilFactory");
     public final static OJPathName ErrorStatusService = new OJPathName("org.tuml.runtime.restlet.ErrorStatusService");

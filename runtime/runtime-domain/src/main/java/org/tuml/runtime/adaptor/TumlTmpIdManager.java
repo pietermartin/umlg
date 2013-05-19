@@ -1,4 +1,4 @@
-package org.tuml.runtime.restlet;
+package org.tuml.runtime.adaptor;
 
 import java.util.HashMap;
 import java.util.Map;

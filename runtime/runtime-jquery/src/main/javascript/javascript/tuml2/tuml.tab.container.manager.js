@@ -49,6 +49,9 @@
                 this.tabContainer = $('<div />', {id: this.getTabId() + 'Tabs'}).appendTo(tabLayoutDiv);
                 this.tabContainer.append('<ul />');
                 this.tabContainer.tabs();
+
+                this.addButtons();
+
                 this.tabContainer.find(".ui-tabs-nav").sortable({
                     axis: "x",
                     stop: function () {
@@ -136,6 +139,21 @@
         tabsNav.find('#' + this.getTabId() + 'save').removeAttr('disabled');
     }
 
+    TumlTabContainerManager.prototype.addSelectButton = function () {
+        var self = this;
+        var tabsNav = this.parentTabContainer.find('.ui-tabs-nav');
+        var tabsButtonDiv = tabsNav.find('#' + this.getTabId() + 'OpenMany');
+        tabsButtonDiv.remove();
+        tabsButtonDiv = $('<div />', {id: 'tabcontainer-button', class: 'tabs-button'}).appendTo(tabsNav);
+        var chooseOpenMany = $('<button />', {id: this.getTabId() + 'OpenMany'}).text('Open ' + this.tabTitleName).appendTo(tabsButtonDiv);
+        chooseOpenMany.button().click(function (event) {
+            if (Slick.GlobalEditorLock.commitCurrentEdit()) {
+                self.openNonCompositeMany(self.propertyNavigatingTo, self.metaForData.to.qualifiedName);
+            }
+            event.preventDefault();
+        });
+    }
+
     TumlTabContainerManager.prototype.addButtons = function () {
         var self = this;
         var tabsNav = this.tabContainer.find('.ui-tabs-nav');
@@ -155,8 +173,8 @@
 
     }
 
-    TumlTabContainerManager.prototype.updateDataModel = function (fakeId, fieldName, one) {
-        this.parentTabContainerManager.updateDataModel(fakeId, fieldName, one);
+    TumlTabContainerManager.prototype.updateDataModelForOneToOne = function (fakeId, fieldName, one) {
+        this.parentTabContainerManager.updateDataModelForOneToOne(fakeId, fieldName, one);
     }
 
     TumlTabContainerManager.prototype.doCancel = function () {
@@ -200,7 +218,20 @@
     TumlTabContainerManager.prototype.saveTabs = function () {
         //Save the child grids into the component's cell
         if (this.tumlTabViewManagers.length > 0) {
-            if (this.tabContainerProperty.upper == -1 || this.tabContainerProperty.upper > 1) {
+            if (this.tabContainerProperty == undefined || this.tabContainerProperty == null) {
+                //forLookup
+                if (this.tumlTabViewManagers.length > 1) {
+                    throw 'TumlTabContainerManager.prototype.saveTabs for lookup can only have one tab!';
+                }
+                var tumlTabViewManager = this.tumlTabViewManagers[0];
+                var selectedRows = tumlTabViewManager.tumlTabGridManager.grid.getSelectedRows();
+                var selectedItems = [];
+                for (var i = 0; i < selectedRows.length; i++) {
+                    var row = selectedRows[i];
+                    selectedItems.push(tumlTabViewManager.tumlTabGridManager.dataView.getItem(row));
+                }
+                this.tumlTabGridManager.addItems(selectedItems);
+            } else if (this.tabContainerProperty.upper == -1 || this.tabContainerProperty.upper > 1) {
                 var data = [];
                 for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
                     var tumlTabViewManager = this.tumlTabViewManagers[i];
@@ -212,7 +243,7 @@
                         }
 
                         data.push.apply(data, tumlTabViewManager.getTabData());
-                        tumlTabViewManager.tumlTabGridManager.updateDataModel();
+                        tumlTabViewManager.tumlTabGridManager.updateDataModelForOneToOne();
                     }
                 }
                 var validationResults = [];
@@ -245,7 +276,7 @@
 
                 var data = tumlTabViewManager.getTabData();
                 this.setCellValue(data);
-                tumlTabViewManager.tumlTabOneManager.updateDataModel(data);
+                tumlTabViewManager.tumlTabOneManager.updateDataModelForOneToOne(data);
 
             }
         }
@@ -288,6 +319,9 @@
         for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
             var tumlTabViewManager = this.tumlTabViewManagers[i];
             tumlTabViewManager.activeOpenTabsGrid();
+        }
+        if (this.propertyNavigatingTo !== undefined && this.propertyNavigatingTo !== null && !this.propertyNavigatingTo.composite && !this.oneManyOrQuery.forLookup) {
+            this.addSelectButton();
         }
     }
 

@@ -159,7 +159,11 @@
             this.grid = new Slick.Grid("#myGridLookup" + this.localMetaForData.name, this.dataView, this.columns, this.options);
             this.pager = new Slick.Controls.Pager(this.dataView, this.grid, $("#pagerLookup" + this.localMetaForData.name));
             $("<div id='grid-buttonLookup" + this.localMetaForData.name + "' class='grid-button'/>").appendTo('#pagerLookup' + this.localMetaForData.name + ' .slick-pager-settings');
-            TumlBaseGridManager.prototype.instantiateGrid.call(this);
+
+            //Add in a property on the grid to tell if a many editor is open
+            this.grid['manyEditorOpen'] = false;
+            this.grid.setSelectionModel(new Slick.RowSelectionModel());
+            new Slick.Controls.ColumnPicker(this.columns, this.grid, this.options);
         };
 
     }
@@ -216,7 +220,7 @@
         this.calculateContainsOne = function () {
             for (var i = 0; i < this.metaForData.properties.length; i++) {
                 var property = this.metaForData.properties[i];
-                if (property.oneToOne && !property.onePrimitive) {
+                if (property.oneToOne && !property.composite && !property.inverseComposite &&  !property.onePrimitive) {
                     this.containsOneToOne = true;
                     break;
                 }
@@ -264,20 +268,21 @@
 
         this.handleAddNewRow = function () {
             if (Slick.GlobalEditorLock.cancelCurrentEdit()) {
-                var newItem = {};
+                var nextId = Tuml.TumlFakeIndex++;
+                var newItem = {id: 'fake::' + nextId, tmpId: 'fake::' + nextId};
                 //Generate a fake id, its required for the grid to work nicely
-                newItem.id = 'fake::' + Tuml.TumlFakeIndex++;
-                newItem.tmpId = newItem.id;
+//                newItem.id = 'fake::' + Tuml.TumlFakeIndex++;
+//                newItem.tmpId = newItem.id;
                 newItem.qualifiedName = this.localMetaForData.qualifiedName;
                 this.dataView.addItem(newItem);
                 this.tumlTabViewManager.saveNewRow();
                 if (this.containsOneToOne) {
-                    this.tumlTabViewManager.parentTabContainerManager.addToOneToOneIndex(newItem.id, {});
+                    this.tumlTabViewManager.parentTabContainerManager.addToOneToOneIndex(newItem.id, {id: newItem.id, qualifiedName: newItem.qualifiedName});
                 }
             }
         }
 
-        this.updateDataModel = function () {
+        this.updateDataModelForOneToOne = function () {
             if (this.containsOneToOne) {
                 var newItems = this.dataView.getNewItems();
                 for (var i = 0; i < newItems.length; i++) {
@@ -286,8 +291,8 @@
                     for (var j = 0; j < this.metaForData.properties.length; j++) {
                         var property = this.metaForData.properties[j];
                         if (property.oneToOne && !property.composite && !property.inverseComposite && !property.onePrimitive && data[property.name] !== undefined && data[property.name] !== null && data[property.name].id !== undefined) {
-                            this.tumlTabViewManager.updateDataModel(data[property.name].previousId, property.inverseName, {});
-                            this.tumlTabViewManager.updateDataModel(data[property.name].id, property.inverseName, data);
+                            this.tumlTabViewManager.updateDataModelForOneToOne(data[property.name].previousId, property.inverseName, {});
+                            this.tumlTabViewManager.updateDataModelForOneToOne(data[property.name].id, property.inverseName, data);
                         }
                     }
 
