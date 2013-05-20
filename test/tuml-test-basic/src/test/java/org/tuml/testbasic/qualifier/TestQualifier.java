@@ -51,7 +51,7 @@ public class TestQualifier extends BaseLocalDbTest {
 		angel3.setRank(3);
 		angel3.addToGod(god);
         db.commit();
-		
+
 		God1 testGod = new God1(god.getVertex());
 		Angel testAngel = testGod.getAngelForAngelNameQualifierAngelRankQualifier("angelName1", 1);
 		Assert.assertNotNull(testAngel);

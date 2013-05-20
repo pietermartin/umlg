@@ -258,7 +258,7 @@ public class RuntimePropertyImplementor {
     /**
      * Very important, the order of adding the attribut values to the literal must be the same as the order the fields were created ass that is the order of the constructor
      */
-    public static OJEnumLiteral addEnumLiteral(OJEnum ojEnum, OJAnnotatedOperation fromLabel, OJAnnotatedOperation fromQualifiedName,                                                OJAnnotatedOperation fromInverseQualifiedName, String fieldName, String qualifiedName, String inverseName, String inverseQualifiedName, boolean isReadOnly, boolean isPrimitive,
+    public static OJEnumLiteral addEnumLiteral(OJEnum ojEnum, OJAnnotatedOperation fromLabel, OJAnnotatedOperation fromQualifiedName, OJAnnotatedOperation fromInverseQualifiedName, String fieldName, String qualifiedName, String inverseName, String inverseQualifiedName, boolean isReadOnly, boolean isPrimitive,
                                                DataTypeEnum dataTypeEnum, List<Validation> validations, boolean isEnumeration, boolean isManyToOne, boolean isMany, boolean isControllingSide,
                                                boolean isComposite, boolean isInverseComposite, boolean isOneToOne, boolean isOneToMany, boolean isManyToMany, int getUpper, int getLower, int getInverseUpper,
                                                boolean isQualified, boolean isInverseQualified, boolean isOrdered, boolean isInverseOrdered, boolean isUnique, boolean isInverseUnique, String edgeName) {

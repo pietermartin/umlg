@@ -29,6 +29,7 @@ public class TinkerGenerationUtil {
 
     public final static OJPathName TumlTmpIdManager = new OJPathName("org.tuml.runtime.adaptor.TumlTmpIdManager");
     public static final OJPathName Filter = new OJPathName("org.tuml.runtime.collection.Filter");
+    public static final OJPathName TumlIndexManager = new OJPathName("org.tuml.runtime.adaptor.TumlIndexManager");
     public static final OJPathName TumlMetaNodeManager = new OJPathName("org.tuml.runtime.adaptor.TumlMetaNodeManager");
     public static final OJPathName TumlTransactionManager = new OJPathName("org.tuml.runtime.adaptor.TumlTransactionManager");
     public static final OJPathName TransactionIdentifier = new OJPathName("org.tuml.runtime.adaptor.TransactionIdentifier");

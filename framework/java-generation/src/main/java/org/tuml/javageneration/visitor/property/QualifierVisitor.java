@@ -67,7 +67,8 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
 
         for (Iterator<Property> iterator = qualified.getQualifiers().iterator(); iterator.hasNext(); ) {
             PropertyWrapper qWrap = new PropertyWrapper(iterator.next());
-            sb.append("\"");
+            sb.append("getId() + \"");
+            sb.append("::");
             sb.append(qWrap.getName());
             sb.append("\"");
             if (iterator.hasNext()) {
@@ -126,16 +127,23 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
         ojClass.addToImports(TinkerGenerationUtil.tinkerDirection);
         ojClass.addToImports(TinkerGenerationUtil.edgePathName);
         qualifierValue.getBody().addToStatements(
-                "Index<Edge> index = GraphDb.getDb().getIndex(getUid() + \"" + TinkerGenerationUtil.INDEX_SEPARATOR + "\" + " + qualified.getTumlRuntimePropertyEnum() + ".getQualifiedName(), Edge.class)");
-        OJIfStatement ifIndexNull = new OJIfStatement("index==null", "return null");
+                TinkerGenerationUtil.tinkerIndexPathName.getLast() + "<" + TinkerGenerationUtil.edgePathName.getLast() + "> index = " + TinkerGenerationUtil.graphDbAccess + ".getIndex(" + qualified.getTumlRuntimePropertyEnum() + ".getQualifiedName(), Edge.class)");
+//        OJIfStatement ifIndexNull = new OJIfStatement("index==null", "return null");
 
         OJBlock elseBlock = new OJBlock();
         OJField indexKey = new OJField(elseBlock, "indexKey", new OJPathName("String"));
-        String init = "";
+        StringBuilder init = new StringBuilder();
+        int count = 0;
+
         for (PropertyWrapper qualifier : qualifiers) {
-            init += qualifier.fieldname();
+            count++;
+            init.append("getId() + ");
+            init.append("\"::" + qualifier.fieldname() + "\"");
+            if (count != qualifiers.size()) {
+                init.append(" + ");
+            }
         }
-        indexKey.setInitExp("\"" + init + "\"");
+        indexKey.setInitExp(init.toString());
         elseBlock.addToLocals(indexKey);
 
         OJField indexValue = new OJField(elseBlock, "indexValue", new OJPathName("String"));
@@ -150,9 +158,11 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
         }
         elseBlock.addToStatements(TinkerGenerationUtil.tinkerCloseableIterablePathName.getCopy().addToGenerics(TinkerGenerationUtil.edgePathName).getLast()
                 + " closeableIterable = index.get(" + "indexKey" + ", indexValue)");
-        ifIndexNull.setElsePart(elseBlock);
+//        ifIndexNull.setElsePart(elseBlock);
+        qualifierValue.getBody().addToStatements(elseBlock);
 
-        ifIndexNull.addToElsePart("Iterator<Edge> iterator = closeableIterable.iterator()");
+//        ifIndexNull.addToElsePart("Iterator<Edge> iterator = closeableIterable.iterator()");
+        qualifierValue.getBody().addToStatements("Iterator<Edge> iterator = closeableIterable.iterator()");
         ojClass.addToImports("java.util.Iterator");
         OJIfStatement ifHasNext = new OJIfStatement("iterator.hasNext()");
         if (qualified.isUnqualifiedOne()) {
@@ -170,8 +180,9 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
             ojClass.addToImports(TinkerGenerationUtil.tumlTumlCollections);
         }
 
-        ifIndexNull.addToElsePart(ifHasNext);
-        qualifierValue.getBody().addToStatements(ifIndexNull);
+//        ifIndexNull.addToElsePart(ifHasNext);
+        qualifierValue.getBody().addToStatements(ifHasNext);
+//        qualifierValue.getBody().addToStatements(ifIndexNull);
         ojClass.addToOperations(qualifierValue);
     }
 }

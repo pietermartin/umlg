@@ -35,7 +35,6 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
     protected Class<?> parentClass;
     protected Map<Object, Vertex> internalVertexMap = new HashMap<Object, Vertex>();
     protected TumlRuntimeProperty tumlRuntimeProperty;
-    protected final static String INDEX_SEPARATOR = ":::";
     protected static final String LABEL_TO_FIRST_HYPER_VERTEX = "labelToFirstHyperVertex";
     protected static final String LABEL_TO_LAST_HYPER_VERTEX = "labelToLastHyperVertex";
     protected static final String LABEL_TO_NEXT_HYPER_VERTEX = "labelToNextHyperVertex";
@@ -482,10 +481,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
         }
         if (isInverseQualified()) {
             Index<Edge> tmpIndex;
-            tmpIndex = GraphDb.getDb().getIndex(((TumlNode) e).getUid() + INDEX_SEPARATOR + getInverseQualifiedName(), Edge.class);
-            if (tmpIndex == null) {
-                tmpIndex = GraphDb.getDb().createIndex(((TumlNode) e).getUid() + INDEX_SEPARATOR + getInverseQualifiedName(), Edge.class);
-            }
+            tmpIndex = GraphDb.getDb().getIndex(getInverseQualifiedName(), Edge.class);
             for (Qualifier qualifier : node.getQualifiers(this.tumlRuntimeProperty, this.owner, true)) {
                 validateQualifiedMultiplicity(tmpIndex, qualifier);
             }
@@ -817,10 +813,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
 
         // if is qualified update index
         if (isInverseQualified()) {
-            Index<Edge> index = GraphDb.getDb().getIndex(node.getUid() + INDEX_SEPARATOR + getInverseQualifiedName(), Edge.class);
-            if (index == null) {
-                index = GraphDb.getDb().createIndex(node.getUid() + INDEX_SEPARATOR + getInverseQualifiedName(), Edge.class);
-            }
+            Index<Edge> index = GraphDb.getDb().getIndex(getInverseQualifiedName(), Edge.class);
             addQualifierToIndex(index, edge, node, this.owner, true);
         }
     }

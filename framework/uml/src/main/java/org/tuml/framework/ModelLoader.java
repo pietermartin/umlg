@@ -139,6 +139,32 @@ public class ModelLoader {
         return results;
     }
 
+    /**
+     * @return
+     */
+    public List<Property> getAllQualifiers() {
+        List<Property> results = new ArrayList<Property>();
+        filter(results, this.model, new Filter() {
+            @Override
+            public boolean filter(Element e) {
+                if (e instanceof Property) {
+                    Property qualifier = (Property)e;
+                    Element owner = qualifier.getOwner();
+                    if (owner instanceof Property) {
+                        Property qualifierOwner = (Property)owner;
+                        return qualifierOwner.getQualifiers().contains(qualifier);
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            }
+        });
+
+        return results;
+    }
+
     public List<Generalization> getSpecifics(final Classifier c) {
         List<Generalization> results = new ArrayList<Generalization>();
         filter(results, this.model, new Filter() {

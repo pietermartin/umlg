@@ -16,10 +16,7 @@ public class TinkerQualifiedBagImpl<E> extends BaseBag<E> implements TinkerQuali
 
 	public TinkerQualifiedBagImpl(TumlNode owner, TumlRuntimeProperty runtimeProperty) {
 		super(owner, runtimeProperty);
-		this.index = GraphDb.getDb().getIndex(owner.getUid() + INDEX_SEPARATOR + getQualifiedName(), Edge.class);
-		if (this.index == null) {
-			this.index = GraphDb.getDb().createIndex(owner.getUid() + INDEX_SEPARATOR + getQualifiedName(), Edge.class);
-		}
+		this.index = GraphDb.getDb().getIndex(getQualifiedName(), Edge.class);
 	}
 
 	@Override

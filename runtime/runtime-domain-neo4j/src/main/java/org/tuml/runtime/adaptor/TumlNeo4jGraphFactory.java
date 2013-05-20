@@ -28,6 +28,7 @@ public class TumlNeo4jGraphFactory implements TumlGraphFactory {
             tumlGraph.registerListeners();
             tumlGraph.commit();
             TumlMetaNodeFactory.getTumlMetaNodeManager().createAllMetaNodes();
+            TumlIndexFactory.getTumlIndexManager().createIndexes();
             tumlGraph.commit();
         }
         return tumlGraph;

@@ -9,6 +9,7 @@ import org.tuml.javageneration.visitor.clazz.*;
 import org.tuml.javageneration.visitor.enumeration.EnumerationVisitor;
 import org.tuml.javageneration.visitor.enumeration.TofromJsonForEnumCreator;
 import org.tuml.javageneration.visitor.interfaze.InterfaceVisitor;
+import org.tuml.javageneration.visitor.model.IndexCreator;
 import org.tuml.javageneration.visitor.model.MetaNodeCreator;
 import org.tuml.javageneration.visitor.model.RootEntryPointCreator;
 import org.tuml.javageneration.visitor.operation.OperationImplementorSimple;
@@ -53,6 +54,7 @@ public class DefaultVisitors {
         result.add(new ClassCheckConstraintsBuilder(Workspace.INSTANCE));
         result.add(new MetaClassBuilder(Workspace.INSTANCE, META_SOURCE_FOLDER));
         result.add(new MetaNodeCreator(Workspace.INSTANCE, META_SOURCE_FOLDER));
+        result.add(new IndexCreator(Workspace.INSTANCE));
         return result;
 
 //		if (this.audit) {
