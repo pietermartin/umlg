@@ -390,7 +390,8 @@
             };
 
             $("#contextMenu" + this.localMetaForData.name).click(function (e) {
-                if (!$(e.target).is("li")) {
+                var target = $(e.target);
+                if (!target.is("li") && !target.is("span")) {
                     return;
                 }
                 var row = $(this).data("row");
@@ -877,7 +878,7 @@
                 } else {
                     li.addClass('menu-noncomposite');
                 }
-                var text = $('<span />').text(property.name);
+                var text = $('<span data="' + property.tumlUri + '" />').text(property.name);
                 li.append(text);
             }
         });
