@@ -107,7 +107,7 @@
                         alert('UIManager.getContextMetaData response.data !== undefined && response.data !== null');
                     }
 
-                    if (!isNaN(response.data.id)) {
+                    if (!isNaN(response.data.id) || metaDataNavigatingTo.name === 'Root') {
                         metaDataNavigatingTo = result[i].meta.to;
                         return {name:metaDataNavigatingTo.name, uri:metaDataNavigatingTo.uri, contextVertexId:response.data.id};
                     }

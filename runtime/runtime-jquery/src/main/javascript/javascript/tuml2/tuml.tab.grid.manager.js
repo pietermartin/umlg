@@ -123,7 +123,9 @@
 
     TumlManyComponentGridManager.prototype.createContextMenu = function () {
         var contextMenuUl = TumlBaseGridManager.prototype.createContextMenu.call(this);
-        $('<li data="delete" />').text("delete").appendTo(contextMenuUl);
+        var li = $('<li data="delete" />').appendTo(contextMenuUl);
+        var text = $('<span />').text('delete');
+        li.append(text);
         return contextMenuUl;
     };
 
@@ -176,7 +178,9 @@
 
     TumlForManyLookupGridManager.prototype.createContextMenu = function () {
         var contextMenuUl = TumlBaseGridManager.prototype.createContextMenu.call(this);
-        $('<li data="delete" />').text("delete").appendTo(contextMenuUl);
+        var li = $('<li data="delete" />').appendTo(contextMenuUl);
+        var text = $('<span />').text('delete');
+        li.append(text);
         return contextMenuUl;
     };
 
@@ -203,7 +207,9 @@
 
     TumlTabGridManager.prototype.createContextMenu = function () {
         var contextMenuUl = TumlBaseGridManager.prototype.createContextMenu.call(this);
-        $('<li data="delete" />').text("delete").appendTo(contextMenuUl);
+        var li = $('<li data="delete" />').appendTo(contextMenuUl);
+        var text = $('<span />').text('delete');
+        li.append(text);
         return contextMenuUl;
     };
 
@@ -860,10 +866,19 @@
     TumlBaseGridManager.prototype.createContextMenu = function () {
         var contextMenuUl = $('<ul />', {id: 'contextMenu' + this.localMetaForData.name, style: 'display:none;position:absolute', class: 'contextMenu'}).appendTo('body');
         $('<b />').text('Nav').appendTo(contextMenuUl);
-        $('<li data="' + this.localMetaForData.uri + '" />').text("self").appendTo(contextMenuUl);
+        var li = $('<li data="' + this.localMetaForData.uri + '" />').appendTo(contextMenuUl);
+        var text = $('<span />').text('self');
+        li.append(text);
         $.each(this.localMetaForData.properties, function (index, property) {
             if (property.inverseComposite || !((property.dataTypeEnum !== undefined && property.dataTypeEnum !== null) || property.onePrimitive || property.manyPrimitive || property.name == 'id' || property.name == 'uri')) {
-                $('<li data="' + property.tumlUri + '" />').text(property.name).appendTo(contextMenuUl);
+                var li = $('<li data="' + property.tumlUri + '" />').appendTo(contextMenuUl);
+                if (property.composite) {
+                    li.addClass('menu-composite');
+                } else {
+                    li.addClass('menu-noncomposite');
+                }
+                var text = $('<span />').text(property.name);
+                li.append(text);
             }
         });
         return contextMenuUl;

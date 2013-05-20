@@ -354,13 +354,13 @@
 }
 
 .ui-left-menu-li.menu-composite{
-    background-image: url(../javascript/images/diamond.png);
+    background-image: url(../javascript/images/UMLComposition.png);
     background-repeat: no-repeat;
     background-position: 0 50%;
 }
 
 .ui-left-menu-li.menu-noncomposite{
-    background-image: url(../javascript/images/delete.png);
+    background-image: url(../javascript/images/UMLAssociation.png);
     background-repeat: no-repeat;
     background-position: 0 50%;
 }
@@ -566,9 +566,26 @@
 
 .contextMenu li {
     padding: 4px 4px 4px 14px;
+    margin: 5px;
     list-style: none;
     cursor: pointer;
     background: url("../javascript/slickgrid/images/arrow_right_peppermint.png") no-repeat center left;
+}
+
+.contextMenu li span {
+    margin-left: 10px;
+}
+
+.contextMenu li.menu-composite {
+    background-image: url(../javascript/images/UMLComposition.png);
+    background-repeat: no-repeat;
+    background-position: 0 50%;
+}
+
+.contextMenu li.menu-noncomposite {
+    background-image: url(../javascript/images/UMLAssociation.png);
+    background-repeat: no-repeat;
+    background-position: 0 50%;
 }
 
 .contextMenu li:hover {
