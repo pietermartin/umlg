@@ -60,7 +60,7 @@
     }
 
     function TumlBooleanFormatter(row, cell, value, columnDef, dataContext) {
-        return value ? "<img src='/"+tumlModelName+"/javascript/images/tick.png'>" : "<img src='/"+tumlModelName+"/javascript/images/delete.png'>";
+        return value ? "<img src='/"+tumlModelName+"/javascript/images/tick.png'>" : "<img src='/"+tumlModelName+"/javascript/images/cross.png'>";
     }
 
     function LinkFormatter(row, cell, value, columnDef, dataContext) {

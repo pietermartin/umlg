@@ -395,7 +395,7 @@
                     return;
                 }
                 var row = $(this).data("row");
-                var tumlUri = $(e.target).attr("data");
+                var tumlUri = target.attr("data");
                 if (tumlUri !== 'delete') {
                     var url = tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), data[row].id);
                     self.handleContextMenuClickLink(url);
@@ -420,7 +420,7 @@
                     } else if (column.name == 'uri') {
                         var item = self.dataView.getItem(args.row);
                         var uri = item.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), item.id);
-                        self.onSelfCellClick.notify({name: 'unused', tumlUri: uri}, null, self);
+                        self.tumlTabViewManager.refreshContext(uri);
                     } else if (!column.options.property.manyPrimitive && !column.options.property.manyEnumeration && column.options.property.composite &&
                         column.options.property.lower > 0 && ((column.options.property.upper > 1) || column.options.property.upper === -1)) {
                         //Component many
@@ -868,7 +868,7 @@
         var contextMenuUl = $('<ul />', {id: 'contextMenu' + this.localMetaForData.name, style: 'display:none;position:absolute', class: 'contextMenu'}).appendTo('body');
         $('<b />').text('Nav').appendTo(contextMenuUl);
         var li = $('<li data="' + this.localMetaForData.uri + '" />').appendTo(contextMenuUl);
-        var text = $('<span />').text('self');
+        var text = $('<span data="' + this.localMetaForData.uri + '" />').text('self');
         li.append(text);
         $.each(this.localMetaForData.properties, function (index, property) {
             if (property.inverseComposite || !((property.dataTypeEnum !== undefined && property.dataTypeEnum !== null) || property.onePrimitive || property.manyPrimitive || property.name == 'id' || property.name == 'uri')) {
