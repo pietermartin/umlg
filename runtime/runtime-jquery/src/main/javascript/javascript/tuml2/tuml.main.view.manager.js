@@ -51,7 +51,22 @@
                 //Property is a many
 
                 var newContextVertexId = retrieveVertexId(tumlUri);
+
+                //Check if we coming from a one
+                var wasOne = false;
+                for (var j = 0; j < this.tumlTabViewManagers.length; j++) {
+                    var tumlTabViewManager = this.tumlTabViewManagers[j];
+                    if (tumlTabViewManager instanceof  Tuml.TumlTabOneViewManager) {
+                        wasOne = true;
+                    }
+                }
+
                 var savedTumlTabViewManagers = this.clearTabsOnAddOneOrMany(newContextVertexId);
+
+                //If the context changed then a new container would have been created with buttons
+                if (!contextChanged && wasOne) {
+                    this.addButtons();
+                }
 
                 leftMenuManager.refresh(metaDataNavigatingFrom, metaDataNavigatingTo, this.contextVertexId);
                 refreshInternal(tumlUri, result, false);
@@ -217,7 +232,6 @@
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    alert(textStatus);
                     $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
                 }
             });
@@ -328,6 +342,7 @@
                     tumlTabViewManagersToClose[i].closeTab();
                 }
             }
+
             //Save current tabs to help with reordering 2 lines down
             var savedTumlTabViewManagers = [];
             for (var i = 0; i < this.tumlTabViewManagers.length; i++) {

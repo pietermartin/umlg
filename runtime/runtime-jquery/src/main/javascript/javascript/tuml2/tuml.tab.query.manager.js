@@ -8,7 +8,6 @@
 
     function TumlTabQueryManager(instanceQueryUri, classQueryUri, queryId) {
 
-        var self = this;
         var tumlTabGridManager;
         if (queryId !== undefined) {
             this.queryId = queryId;
@@ -16,9 +15,6 @@
 
         function init() {
             tumlTabGridManager = new Tuml.TumlQueryGridManager();
-            tumlTabGridManager.onSelfCellClick.subscribe(function (e, args) {
-                self.onSelfCellClick.notify(args, e, self);
-            });
         }
 
         this.createQuery = function(queryTabDivName, oclExecuteUri, query, post) {

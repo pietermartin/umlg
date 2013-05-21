@@ -296,7 +296,7 @@
 
     TumlTabOneViewManager.prototype.addButtonsToOne = function () {
         var self = this;
-        //Remove constainer buttons
+        //Remove container buttons
         var tabsNav = this.parentTabContainerManager.tabContainer.find('.ui-tabs-nav');
         tabsNav.find('#tabcontainer-button').remove();
 

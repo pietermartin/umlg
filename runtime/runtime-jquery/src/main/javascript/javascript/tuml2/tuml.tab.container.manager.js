@@ -144,8 +144,10 @@
         var tabsNav = this.parentTabContainer.find('.ui-tabs-nav');
         var tabsButtonDiv = tabsNav.find('#' + this.getTabId() + 'OpenMany');
         tabsButtonDiv.remove();
-        tabsButtonDiv = $('<div />', {id: 'tabcontainer-button', class: 'tabs-button'}).appendTo(tabsNav);
-        var chooseOpenMany = $('<button />', {id: this.getTabId() + 'OpenMany'}).text('Open ' + this.tabTitleName).appendTo(tabsButtonDiv);
+//        tabsButtonDiv = $('<div />', {id: 'tabcontainer-button', class: 'tabs-button'}).appendTo(tabsNav);
+//        var chooseOpenMany = $('<button />', {id: this.getTabId() + 'OpenMany'}).text('Open ' + this.tabTitleName).appendTo(tabsButtonDiv);
+        var tabContainerButton = tabsNav.find('#tabcontainer-button');
+        var chooseOpenMany = $('<button />', {id: this.getTabId() + 'OpenMany'}).text('Open ' + this.tabTitleName).prependTo(tabContainerButton);
         chooseOpenMany.button().click(function (event) {
             if (Slick.GlobalEditorLock.commitCurrentEdit()) {
                 self.openNonCompositeMany(self.propertyNavigatingTo, self.metaForData.to.qualifiedName);
@@ -323,7 +325,7 @@
             var tumlTabViewManager = this.tumlTabViewManagers[i];
             tumlTabViewManager.activeOpenTabsGrid();
         }
-        if (this.propertyNavigatingTo !== undefined && this.propertyNavigatingTo !== null && !this.propertyNavigatingTo.composite && !this.oneManyOrQuery.forLookup) {
+        if (this.propertyNavigatingTo !== undefined && this.propertyNavigatingTo !== null && !this.propertyNavigatingTo.composite && (this.propertyNavigatingTo.upper === -1 || this.propertyNavigatingTo.upper > 1)  && !this.oneManyOrQuery.forLookup) {
             this.addSelectButton();
         }
     }

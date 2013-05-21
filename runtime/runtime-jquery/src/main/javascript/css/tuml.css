@@ -389,13 +389,17 @@
 }
 
 .ui-layout-center-heading {
-    background-color: #DDDDDD;
+    background-color: #EEEEEE;
     height: 20px;
 }
 
 .navigation-qualified-name {
     float: left;
     line-height:20px;
+    padding-left: 5px;
+    font-family: arial;
+    font-size: 8pt;
+    font-weight: bold;
 }
 
 .validation-warning {
@@ -404,6 +408,9 @@
     margin-right: 5px;
     padding-top: 5px;
     text-align: right;
+    font-family: arial;
+    font-size: 8pt;
+    font-weight: bold;
 }
 
 .multiplicity-warning {
@@ -412,6 +419,9 @@
     margin-right: 5px;
     padding-top: 5px;
     text-align: right;
+    font-family: arial;
+    font-size: 8pt;
+    font-weight: bold;
 }
 
 .ui-left-menu-query-li {
@@ -554,42 +564,45 @@
 }
 
 .contextMenu {
-    background: #e1efc7;
-    border: 1px solid gray;
+    background: #EEEEEE;
     padding: 2px;
     display: inline-block;
     min-width: 100px;
-    -moz-box-shadow: 2px 2px 2px silver;
-    -webkit-box-shadow: 2px 2px 2px silver;
     z-index: 99999;
 }
 
+/*override ui state defaults border*/
+.contextMenu li.ui-state-default {
+    border: none;
+}
+
 .contextMenu li {
+    background: #EEEEEE;
     padding: 4px 4px 4px 14px;
     margin: 5px;
     list-style: none;
     cursor: pointer;
-    background: url("../javascript/slickgrid/images/arrow_right_peppermint.png") no-repeat center left;
 }
 
 .contextMenu li span {
-    margin-left: 10px;
+    margin-left: 5px;
 }
 
-.contextMenu li.menu-composite {
+.contextMenu li span.menu-composite {
     background-image: url(../javascript/images/UMLComposition.png);
     background-repeat: no-repeat;
     background-position: 0 50%;
 }
 
-.contextMenu li.menu-noncomposite {
+.contextMenu li span.menu-noncomposite {
     background-image: url(../javascript/images/UMLAssociation.png);
     background-repeat: no-repeat;
     background-position: 0 50%;
 }
 
+
 .contextMenu li:hover {
-    background-color: white;
+    background-color: #FDF5CE;
 }
 
 /* Menu styles */

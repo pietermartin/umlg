@@ -18,14 +18,6 @@
         var self = this;
         this.tumlTabViewManager = tumlTabViewManager;
 
-        //Public api
-        $.extend(this, {
-            "TumlQueryGridManager": "1.0.0",
-            "onSelfCellClick": new Tuml.Event(),
-            "onContextMenuClickDelete": new Tuml.Event(),
-            "onManyEditorKeyPress": new Tuml.Event()
-        });
-
         this.setupColumns = function () {
             TumlBaseGridManager.prototype.setupColumns.call(this, this.localMetaForData);
             this.columns.push({id: "uri", name: "uri", field: "uri", sortable: false, formatter: TumlSlick.Formatters.Link});
@@ -125,6 +117,8 @@
         var contextMenuUl = TumlBaseGridManager.prototype.createContextMenu.call(this);
         var li = $('<li data="delete" />').appendTo(contextMenuUl);
         var text = $('<span />').text('delete');
+        var icon = $('<img />', {src: '/' + tumlModelName + '/javascript/images/delete_object.png'});
+        li.append(icon);
         li.append(text);
         return contextMenuUl;
     };
@@ -134,16 +128,6 @@
         this.TumlForManyLookupGridManager = "1.0.0";
 
         TumlBaseGridManager.call(this, tumlTabViewManager, tumlUri, propertyNavigatingTo);
-
-        //Public api
-        $.extend(this, {
-            "TumlForManyLookupGridManager": "1.0.0",
-            "onSelectButtonSuccess": new Tuml.Event(),
-            "onSelectCancelButtonSuccess": new Tuml.Event(),
-            "onSelfCellClick": new Tuml.Event(),
-            "onContextMenuClickDelete": new Tuml.Event(),
-            "onManyEditorKeyPress": new Tuml.Event()
-        });
 
         this.setupOptions = function () {
             TumlBaseGridManager.prototype.setupOptions.call(this);
@@ -180,6 +164,8 @@
         var contextMenuUl = TumlBaseGridManager.prototype.createContextMenu.call(this);
         var li = $('<li data="delete" />').appendTo(contextMenuUl);
         var text = $('<span />').text('delete');
+        var icon = $('<img />', {src: '/' + tumlModelName + '/javascript/images/delete_object.png'});
+        li.append(icon);
         li.append(text);
         return contextMenuUl;
     };
@@ -209,6 +195,8 @@
         var contextMenuUl = TumlBaseGridManager.prototype.createContextMenu.call(this);
         var li = $('<li data="delete" />').appendTo(contextMenuUl);
         var text = $('<span />').text('delete');
+        var icon = $('<img />', {src: '/' + tumlModelName + '/javascript/images/delete_object.png'});
+        li.append(icon);
         li.append(text);
         return contextMenuUl;
     };
@@ -702,7 +690,7 @@
                 });
 
             this.grid.onValidationError.subscribe(function (e, args) {
-                alert('XXX' + args.validationResults.msg);
+                alert(args.validationResults.msg);
             });
 
             // initialize the model after all the events have been hooked up
@@ -865,20 +853,45 @@
     };
 
     TumlBaseGridManager.prototype.createContextMenu = function () {
-        var contextMenuUl = $('<ul />', {id: 'contextMenu' + this.localMetaForData.name, style: 'display:none;position:absolute', class: 'contextMenu'}).appendTo('body');
+        var contextMenuUl = $('<ul />', {
+            id: 'contextMenu' + this.localMetaForData.name,
+            style: 'display:none;position:absolute',
+            class: 'ui-widget ui-state-default ui-corner-all contextMenu'
+        }).appendTo('body');
+
         $('<b />').text('Nav').appendTo(contextMenuUl);
-        var li = $('<li data="' + this.localMetaForData.uri + '" />').appendTo(contextMenuUl);
+
+        var li = $('<li data="' + this.localMetaForData.uri + '" class="ui-state-default" />').appendTo(contextMenuUl);
+        li.hover(
+            function(){
+                $(this).addClass("ui-state-hover");
+            }, function() {
+                $(this).removeClass("ui-state-hover");
+            });
+        var icon = $('<img />', {src: '/' + tumlModelName + '/javascript/images/UMLSendMessage.png'});
+        li.append(icon);
         var text = $('<span data="' + this.localMetaForData.uri + '" />').text('self');
         li.append(text);
         $.each(this.localMetaForData.properties, function (index, property) {
             if (property.inverseComposite || !((property.dataTypeEnum !== undefined && property.dataTypeEnum !== null) || property.onePrimitive || property.manyPrimitive || property.name == 'id' || property.name == 'uri')) {
-                var li = $('<li data="' + property.tumlUri + '" />').appendTo(contextMenuUl);
+                var li = $('<li data="' + property.tumlUri + '" class="ui-state-default" />').appendTo(contextMenuUl);
+
+                li.hover(
+                    function(){
+                        $(this).addClass("ui-state-hover");
+                    }, function() {
+                        $(this).removeClass("ui-state-hover");
+                    });
+                var icon;
                 if (property.composite) {
-                    li.addClass('menu-composite');
+//                    li.addClass('menu-composite');
+                    icon = $('<img />', {src: '/' + tumlModelName + '/javascript/images/UMLComposition.png'});
                 } else {
-                    li.addClass('menu-noncomposite');
+//                    li.addClass('menu-noncomposite');
+                    icon = $('<img />', {src: '/' + tumlModelName + '/javascript/images/UMLAssociation.png'});
                 }
                 var text = $('<span data="' + property.tumlUri + '" />').text(property.name);
+                li.append(icon);
                 li.append(text);
             }
         });
