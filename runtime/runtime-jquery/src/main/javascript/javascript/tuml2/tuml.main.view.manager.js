@@ -371,7 +371,7 @@
                 } else {
                     tumlTabViewManagerQuery = new Tuml.TumlTabQueryViewManager(tuml.tab.Enum.ClassQueries, this.tabContainer, '', classQueryTumlUri, query.getDivName(), query.name, query.id);
                 }
-                tumlTabViewManagerQuery.createTab();
+                tumlTabViewManagerQuery.createTab(post);
                 tumlTabViewManagerQuery.parentTabContainerManager = this;
 
                 if (query.id === -1) {

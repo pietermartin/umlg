@@ -257,40 +257,42 @@
 
     TumlTabQueryViewManager.prototype = new Tuml.TumlBaseTabViewManager;
 
-    TumlTabQueryViewManager.prototype.createTab = function () {
+    TumlTabQueryViewManager.prototype.createTab = function (post) {
         var self = this;
-
         var tabTemplate;
         if (this.parentTabContainerManager instanceof Tuml.TumlMainViewManager) {
             tabTemplate = "<li id='li" + this.tabId + "'><a href='#{href}'>#{label}</a>";
         } else {
-            tabTemplate = "<li id='li" + this.tabId + "'><a href='#{href}'>#{label}</a>" +
-                "<span class='ui-icon ui-icon-close'>Close Tab</span>" +
-                "</li>";
+            if (post) {
+                tabTemplate = "<li id='li" + this.tabId + "'><a href='#{href}'>#{label}</a></li>";
+            } else {
+                tabTemplate = "<li id='li" + this.tabId + "'><a href='#{href}'>#{label}</a><span class='ui-icon ui-icon-close'>Close Tab</span></li>";
+            }
         }
         var label = this.tabTitleName;
         var id = this.tabId;
         this.li = $(tabTemplate.replace(/#\{href\}/g, "#" + id).replace(/#\{label\}/g, label));
 
-        // close icon: removing the tab on click
-        this.li.find("span.ui-icon-close").click(function () {
-            if (Slick.GlobalEditorLock.commitCurrentEdit()) {
-                self.closeTab();
-            }
-        });
+        if (!post) {
+            // close icon: removing the tab on click
+            this.li.find("span.ui-icon-close").click(function () {
+                if (Slick.GlobalEditorLock.commitCurrentEdit()) {
+                    self.closeTab();
+                }
+            });
+        }
 
         this.parentTabContainer.find(".ui-tabs-nav").append(this.li);
-
         var divPanel = $('<div />', {id: this.tabId});
         this.parentTabContainer.append(divPanel);
         $.data(divPanel[0], 'tabEnum', this.tabEnum);
-
         this.parentTabContainer.tabs("refresh");
-        return divPanel;
 
         if (this.queryId !== undefined) {
             $.data(divPanel[0], 'queryId', this.queryId);
         }
+
+        return divPanel;
     }
 
     function TumlTabOneViewManager(tabEnum, tabContainer, oneManyOrQuery, tumlUri, result, propertyNavigatingTo) {
