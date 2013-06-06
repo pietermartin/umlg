@@ -105,9 +105,6 @@
             $.each(menuArray, function (index, value) {
                 var adjustedUri = value.tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
                 var li = $('<li class="ui-left-menu-li ' + value.menuCssClass + '"/>');
-
-
-
                 var a = $('<a>', {
                     text:value.name,
                     title:value.name,

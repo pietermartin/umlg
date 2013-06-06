@@ -256,14 +256,12 @@ public class NavigatePropertyOverloadedPostForLookupServerResourceBuilder extend
 
         OJTryStatement tryInstantiate = new OJTryStatement();
 
-        OJField constructor = new OJField("constructor", new OJPathName("java.lang.reflect.Constructor").addToGenerics(pWrap.javaBaseTypePath()));
-        constructor.setInitExp("baseTumlClass.getConstructor(parentResource.getClass())");
-
-        tryInstantiate.getTryPart().addToLocals(constructor);
-
-        add.getBody().addToStatements(tryInstantiate);
-
         if (pWrap.isComposite()) {
+            PropertyWrapper otherEndPWrap = new PropertyWrapper(pWrap.getOtherEnd());
+            OJField constructor = new OJField("constructor", new OJPathName("java.lang.reflect.Constructor").addToGenerics(pWrap.javaBaseTypePath()));
+            constructor.setInitExp("baseTumlClass.getConstructor(" + otherEndPWrap.javaBaseTypePath().getLast() + ".class)");
+            tryInstantiate.getTryPart().addToLocals(constructor);
+            add.getBody().addToStatements(tryInstantiate);
             tryInstantiate.getTryPart().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = constructor.newInstance(parentResource)");
         } else {
             tryInstantiate.getTryPart().addToStatements("Long id = Long.valueOf((Integer)propertyMap.get(\"id\"))");

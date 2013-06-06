@@ -375,8 +375,9 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
         add.getBody().addToStatements(tryInstantiate);
 
         if (pWrap.isComposite()) {
+            PropertyWrapper otherEndPWrap = new PropertyWrapper(pWrap.getOtherEnd());
             OJField constructor = new OJField("constructor", new OJPathName("java.lang.reflect.Constructor").addToGenerics(pWrap.javaBaseTypePath()));
-            constructor.setInitExp("baseTumlClass.getConstructor(parentResource.getClass())");
+            constructor.setInitExp("baseTumlClass.getConstructor(" + otherEndPWrap.javaBaseTypePath().getLast() + ".class)");
             tryInstantiate.getTryPart().addToLocals(constructor);
             tryInstantiate.getTryPart().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = constructor.newInstance(parentResource)");
             tryInstantiate.getTryPart().addToStatements("childResource.fromJson(propertyMap)");

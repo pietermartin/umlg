@@ -6,12 +6,14 @@
         }
     });
 
-    function TumlTabQueryManager(instanceQueryUri, classQueryUri, queryId) {
+    function TumlTabQueryManager(parentTumlTabViewManager, instanceQueryUri, classQueryUri, queryId) {
 
         var tumlTabGridManager;
         if (queryId !== undefined) {
             this.queryId = queryId;
         }
+
+        this.tumlTabViewManager = parentTumlTabViewManager;
 
         function init() {
             tumlTabGridManager = new Tuml.TumlQueryGridManager();
@@ -40,9 +42,10 @@
             $('#tab-container').tabs('resize');
         }
 
-        this.saveToInstance = function() {
+        this.saveToInstance = function(post) {
+            var self = this;
             var query = queryToJson(this.queryTabDivName, this.queryId);
-//            query.qualifiedName = tumlTabGridManager.metaForData.qualifiedName;
+            query.qualifiedName = 'tumllib::org::tuml::query::InstanceQuery';
             var overloadedPostData = {insert: [], update: [], delete: []};
             if (post) {
                 overloadedPostData.insert.push(query);
@@ -51,7 +54,7 @@
             }
             $.ajax({
                 url: instanceQueryUri,
-                type: post ? "POST" : "PUT",
+                type: "POST",
                 dataType: "json",
                 contentType: "application/json",
                 data: JSON.stringify(overloadedPostData),
@@ -65,22 +68,27 @@
                         }
                     }
                     if (post) {
-                        self.onPostInstanceQuerySuccess.notify(
-                            {queryType: 'instanceQuery', query: queryFromDb, gridData: tumlTabGridManager.getResult()}, null, self);
+                        self.afterSaveInstance({queryType: 'instanceQuery', query: queryFromDb, gridData: tumlTabGridManager.getResult()});
                     } else {
-                        self.onPutInstanceQuerySuccess.notify(
-                            {queryType: 'instanceQuery', query: queryFromDb, gridData: tumlTabGridManager.getResult()}, null, self);
+                        self.afterUpdateInstance({queryType: 'instanceQuery', query: queryFromDb, gridData: tumlTabGridManager.getResult()});
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    $('#serverErrorMsg_' + queryTabDivName).addClass('server-error-msg').html(jqXHR.responseText);
+                    $('#serverErrorMsg_' + this.queryTabDivName).addClass('server-error-msg').html(jqXHR.responseText);
 
                 }
             });
         }
 
-        this.saveToClass = function() {
+        this.afterSaveInstance = function(result) {
+            this.tumlTabViewManager.afterSaveInstance(result);
+        }
 
+        this.afterUpdateInstance = function(result) {
+            this.tumlTabViewManager.afterUpdateInstance(result);
+        }
+
+        this.saveToClass = function() {
         }
 
         this.createQuery = function (queryTabDivName, oclExecuteUri, query, post) {
@@ -133,7 +141,7 @@
             if (isTumlLib && instanceQueryUri !== '') {
                 $('<button />', {id: queryTabDivName + '_' + 'SaveButton'}).text('save to instance').click(
                     function () {
-                        self.saveToInstance();
+                        self.saveToInstance(post);
                     }).appendTo(oclEditButtonDiv);
             }
 

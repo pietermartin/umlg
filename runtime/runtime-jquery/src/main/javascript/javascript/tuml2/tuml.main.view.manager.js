@@ -357,7 +357,7 @@
             var tumlTabViewManagerQuery;
             var tabIndex = 0;
             for (var j = 0; j < this.tumlTabViewManagers.length; j++) {
-                if (this.tumlTabViewManagers[j].tabDivName == query.getDivName()) {
+                if (this.tumlTabViewManagers[j].tabId == query.getDivName()) {
                     tumlTabViewManagerQuery = this.tumlTabViewManagers[j];
                     tabIndex = j;
                     break;
@@ -433,10 +433,26 @@
 
             } else {
                 //Just make the tab active
-                tabContainer.tabs("option", "active", self.tumlTabViewManagers.indexOf(tumlTabViewManagerQuery));
+                this.tabContainer.tabs("option", "active", self.tumlTabViewManagers.indexOf(tumlTabViewManagerQuery));
             }
             return tumlTabViewManagerQuery;
 
+        }
+
+        this.afterSaveInstance = function(args, previousIndex) {
+            addDefaultQueryTab(false);
+            var newTumlTabViewManager = this.addQueryTab(false, new Tuml.Query(args.query.id, args.query.name, args.query.name, args.query.queryString, args.query.queryEnum, args.gridData, args.queryType));
+            //place it back at the previousIndex
+            var currentIndex = self.tumlTabViewManagers.indexOf(newTumlTabViewManager);
+            this.tumlTabViewManagers.splice(currentIndex, 1);
+            this.tumlTabViewManagers.splice(previousIndex, 0, newTumlTabViewManager);
+            this.tabContainer.tabs("option", "active", previousIndex);
+            leftMenuManager.refreshInstanceQuery(args.query.id);
+        }
+
+        this.afterUpdateInstance = function(args) {
+            this.addQueryTab(false, new Tuml.Query(args.query.id, args.query.name, args.query.name, args.query.queryString, args.query.queryEnum, args.gridData, args.queryType));
+            leftMenuManager.refreshInstanceQuery(args.query.id);
         }
 
         function reorderTabsAfterAddOneOrMany(savedTumlTabViewManagers) {

@@ -40,7 +40,7 @@
                 changeMyUrl(args.uri);
             });
             leftMenuManager.onQueryClick.subscribe(function (e, args) {
-                var queryTabDivName = args.name.replace(/\s/g, '');
+//                var queryTabDivName = args.name.replace(/\s/g, '');
                 mainViewManager.addQueryTab(false, new Tuml.Query(args.id, args.name, args.name, args.queryString, args.queryEnum, null, args.queryType));
             });
 

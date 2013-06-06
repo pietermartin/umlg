@@ -391,6 +391,10 @@
                 <body>'nailInit'</body>
               </defaultValue>
             </ownedAttribute>
+            <ownedAttribute xmi:id="_k6jFMM5rEeKXW_LoBIdmWg" name="testAbstractParentComposition" type="_f_Q28M5rEeKXW_LoBIdmWg" aggregation="composite" association="_k6kTUM5rEeKXW_LoBIdmWg">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_k6jFMc5rEeKXW_LoBIdmWg"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_k6jFMs5rEeKXW_LoBIdmWg" value="*"/>
+            </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Association" xmi:id="_-FyYIDGHEeK9AeutZ8kzPA" name="finger_nail_1" memberEnd="_-FyYITGHEeK9AeutZ8kzPA _-FxxEDGHEeK9AeutZ8kzPA" navigableOwnedEnd="_-FyYITGHEeK9AeutZ8kzPA">
             <ownedEnd xmi:id="_-FyYITGHEeK9AeutZ8kzPA" name="finger" type="_4sr5AN4jEeGdB9TPHp60mw" association="_-FyYIDGHEeK9AeutZ8kzPA">
@@ -783,6 +787,22 @@
             <ownedEnd xmi:id="_YB0SQcBUEeKz49-v52otyA" name="terrestrialCraft" type="_ml87UBtnEeKZO-l2Budqpw" association="_YB0SQMBUEeKz49-v52otyA">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_YB0SQsBUEeKz49-v52otyA"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_YB0SQ8BUEeKz49-v52otyA" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_f_Q28M5rEeKXW_LoBIdmWg" name="TestAbstractParentComposition">
+            <ownedAttribute xmi:id="_r4mccM5rEeKXW_LoBIdmWg" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_tvPN8M5rEeKXW_LoBIdmWg" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_tvSRQM5rEeKXW_LoBIdmWg" value="1"/>
+              <defaultValue xmi:type="uml:LiteralString" xmi:id="_tvZmAM5rEeKXW_LoBIdmWg">
+                <value xsi:nil="true"/>
+              </defaultValue>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_k6kTUM5rEeKXW_LoBIdmWg" name="abstractNail_testAbstractParentComposition_1" memberEnd="_k6kTUc5rEeKXW_LoBIdmWg _k6jFMM5rEeKXW_LoBIdmWg" navigableOwnedEnd="_k6kTUc5rEeKXW_LoBIdmWg">
+            <ownedEnd xmi:id="_k6kTUc5rEeKXW_LoBIdmWg" name="abstractNail" type="_38F2ADGHEeK9AeutZ8kzPA" association="_k6kTUM5rEeKXW_LoBIdmWg">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_k6kTUs5rEeKXW_LoBIdmWg" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_k6kTU85rEeKXW_LoBIdmWg" value="1"/>
             </ownedEnd>
           </packagedElement>
         </packagedElement>

@@ -13,6 +13,7 @@ public class TumlRestletGenerationUtil {
     public final static String classQueryQualifiedName = "tumllib::org::tuml::meta::ClassQuery";
     public final static String instanceQueryQualifiedName = "tumllib::org::tuml::query::InstanceQuery";
 
+    public final static OJPathName TumlSchemaFactory = new OJPathName("org.tuml.runtime.adaptor.TumlSchemaFactory");
     public final static OJPathName TumlRestletFilter = new OJPathName("org.tuml.runtime.restlet.TumlRestletFilter");
     public final static OJPathName TumlRestletToJsonUtil = new OJPathName("org.tuml.runtime.restlet.TumlRestletToJsonUtil");
     public final static OJPathName ClientResource = new OJPathName("org.restlet.resource.ClientResource");
