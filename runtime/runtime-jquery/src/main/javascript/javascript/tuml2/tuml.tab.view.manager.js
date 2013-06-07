@@ -73,10 +73,6 @@
         throw 'TumlBaseTabViewManager.prototype.validateUpdate must be overriden';
     }
 
-    TumlBaseTabViewManager.prototype.validateNew = function () {
-        throw 'TumlBaseTabViewManager.prototype.validateNew must be overriden';
-    }
-
     TumlBaseTabViewManager.prototype.closeTab = function () {
         this.clearAllTabs();
         $("#" + this.tabId).remove();
@@ -252,6 +248,19 @@
             this.parentTabContainerManager.afterUpdateInstance(result);
         }
 
+        this.afterDeleteInstance = function (result) {
+            var previousIndex = this.parentTabContainerManager.tumlTabViewManagers.indexOf(this);
+            this.parentTabContainerManager.afterDeleteInstance(result);
+            this.closeTab();
+            this.parentTabContainer.tabs("option", "active", previousIndex - 1);
+//            var currentTab = this.parentTabContainerManager.tumlTabViewManagers[previousIndex - 1];
+//            if (currentTab instanceof TumlTabQueryViewManager) {
+//                this.parentTabContainerManager.refreshQueryMenuCss(currentTab.queryId);
+//            } else {
+//                this.parentTabContainerManager.refreshQueryMenuCss(-1, 0);
+//            }
+        }
+
         TumlBaseTabViewManager.call(this, tabEnum, tabContainer);
     }
 
@@ -262,6 +271,12 @@
         var nextIndex = previousIndex - 1;
         TumlBaseTabViewManager.prototype.closeTab.call(this);
         this.parentTabContainer.tabs("option", "active", nextIndex);
+        var currentTab = this.parentTabContainerManager.tumlTabViewManagers[nextIndex];
+        if (currentTab instanceof TumlTabQueryViewManager) {
+            this.parentTabContainerManager.refreshQueryMenuCss(currentTab.queryId);
+        } else {
+            this.parentTabContainerManager.refreshQueryMenuCss(-1, 0);
+        }
     }
 
     TumlTabQueryViewManager.prototype.createTab = function (post) {

@@ -39,6 +39,10 @@
         this.globalOneToOneIndex = new GlobalOneToOneIndex();
         this.qualifiedName = null;
 
+        this.refreshQueryMenuCss = function(queryId) {
+            leftMenuManager.refreshQueryMenuCss(queryId);
+        }
+
         this.refresh = function (tumlUri, result) {
             this.qualifiedName = result[0].meta.qualifiedName;
             var metaDataNavigatingTo = result[0].meta.to;
@@ -453,6 +457,10 @@
         this.afterUpdateInstance = function(args) {
             this.addQueryTab(false, new Tuml.Query(args.query.id, args.query.name, args.query.name, args.query.queryString, args.query.queryEnum, args.gridData, args.queryType));
             leftMenuManager.refreshInstanceQuery(args.query.id);
+        }
+
+        this.afterDeleteInstance = function(args) {
+            leftMenuManager.deleteInstanceQuery(args.query.id);
         }
 
         function reorderTabsAfterAddOneOrMany(savedTumlTabViewManagers) {

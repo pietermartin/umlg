@@ -42,7 +42,7 @@
             $('#tab-container').tabs('resize');
         }
 
-        this.saveToInstance = function(post) {
+        this.saveToInstance = function (post) {
             var self = this;
             var query = queryToJson(this.queryTabDivName, this.queryId);
             query.qualifiedName = 'tumllib::org::tuml::query::InstanceQuery';
@@ -80,15 +80,44 @@
             });
         }
 
-        this.afterSaveInstance = function(result) {
+        this.deleteQuery = function () {
+            var self = this;
+            var query = queryToJson(this.queryTabDivName, this.queryId);
+            query.qualifiedName = 'tumllib::org::tuml::query::InstanceQuery';
+            var overloadedPostData = {insert: [], update: [], delete: []};
+            overloadedPostData.delete.push(query);
+            $.ajax({
+                url: instanceQueryUri,
+                type: "POST",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(overloadedPostData),
+                success: function (data, textStatus, jqXHR) {
+                    self.afterDeleteInstance({queryType: 'instanceQuery', query: query, gridData: tumlTabGridManager.getResult()});
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    $('#serverErrorMsg_' + queryTabDivName).addClass('server-error-msg').html(jqXHR.responseText);
+                }
+            });
+        }
+
+        this.cancelQuery = function () {
+            $('#' + this.queryTabDivName + '_' + 'QueryString').val(this.query.queryString);
+        }
+
+        this.afterSaveInstance = function (result) {
             this.tumlTabViewManager.afterSaveInstance(result);
         }
 
-        this.afterUpdateInstance = function(result) {
+        this.afterUpdateInstance = function (result) {
             this.tumlTabViewManager.afterUpdateInstance(result);
         }
 
-        this.saveToClass = function() {
+        this.afterDeleteInstance = function (result) {
+            this.tumlTabViewManager.afterDeleteInstance(result);
+        }
+
+        this.saveToClass = function () {
         }
 
         this.createQuery = function (queryTabDivName, oclExecuteUri, query, post) {
@@ -179,32 +208,12 @@
                 }).appendTo(oclEditButtonDiv);
             }
             if (isTumlLib && !post) {
-                $('<button />', {id: queryTabDivName + '_' + 'CancelButton'}).text('cancel').appendTo(oclEditButtonDiv);
+                $('<button />', {id: queryTabDivName + '_' + 'CancelButton'}).text('cancel').click(function () {
+                        self.cancelQuery();
+                    }
+                ).appendTo(oclEditButtonDiv);
                 $('<button />', {id: queryTabDivName + '_' + 'DeleteButton'}).text('delete').click(function () {
-
-                        var query = queryToJson(queryTabDivName, id);
-                        $.ajax({
-                            url: tumlUri,
-                            type: "DELETE",
-                            dataType: "json",
-                            contentType: "application/json",
-                            data: JSON.stringify(query),
-                            success: function (data, textStatus, jqXHR) {
-                                self.onDeleteQuerySuccess.notify(
-                                    {tumlUri: tumlUri,
-                                        queryName: query.name,
-                                        oclExecuteUri: oclExecuteUri,
-                                        queryEnum: query.queryEnum,
-                                        queryString: query.queryString,
-                                        data: data}, null, self);
-                            },
-                            error: function (jqXHR, textStatus, errorThrown) {
-                                $('#serverErrorMsg_' + queryTabDivName).addClass('server-error-msg').html(jqXHR.responseText);
-
-                            }
-                        });
-
-
+                        self.deleteQuery();
                     }
                 ).appendTo(oclEditButtonDiv);
             }

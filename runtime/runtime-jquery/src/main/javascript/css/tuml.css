@@ -425,15 +425,21 @@
 }
 
 .ui-left-menu-query-li {
-    background: none;
-    margin-bottom: 5px;
-    padding-left: 5px;
+    padding: 3px 0 3px 20px;
+    margin: .4em 0;
+    background-image: url(../javascript/images/questionmark1.png);
+    background-repeat: no-repeat;
+    background-position: 0 50%;
 }
 
 .ui-left-menu-query-li a {
     color: black;
     cursor: pointer;
     font-size: 120%;
+}
+
+.ui-left-menu-query-li a:hover {
+    color: blue;
 }
 
 .querymenuactive {

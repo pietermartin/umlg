@@ -48,7 +48,7 @@
             mainViewManager = new Tuml.TumlMainViewManager(this, leftMenuManager);
 
             window.onpopstate = function (event) {
-                if (document.location.hash === "") {
+                if (event.state !== null && document.location.hash === "") {
                     var pathname = document.location.pathname.replace("/ui2", "");
                     self.refresh(pathname);
                 }

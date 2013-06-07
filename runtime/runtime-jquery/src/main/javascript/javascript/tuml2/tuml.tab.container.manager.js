@@ -62,6 +62,9 @@
                 this.tabContainer.tabs({
                     activate: function (event, ui) {
                         var queryId = $.data(ui.newPanel[0], 'queryId');
+                        if (queryId !== undefined && queryId !== null) {
+                            self.refreshQueryMenuCss(queryId);
+                        }
 //                        var tabEnum = $.data(ui.newPanel[0], 'tabEnum');
 
                         //first deactivate all grids

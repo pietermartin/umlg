@@ -1,8 +1,8 @@
 (function ($) {
     // register namespace
     $.extend(true, window, {
-        Tuml:{
-            LeftMenuManager:LeftMenuManager
+        Tuml: {
+            LeftMenuManager: LeftMenuManager
         }
     });
 
@@ -32,7 +32,7 @@
             contextVertexId = _contextVertexId;
 
             $('.ui-layout-west').children().remove();
-            tabContainer = $('<div />', {id:'tabContainer-menu-container'}).appendTo('.ui-layout-west');
+            tabContainer = $('<div />', {id: 'tabContainer-menu-container'}).appendTo('.ui-layout-west');
             tabContainer.append('<ul />');
             tabContainer.tabs();
 
@@ -54,35 +54,35 @@
                 id = "Standard",
                 li = $(tabTemplate.replace(/#\{href\}/g, "#" + id).replace(/#\{label\}/g, label));
             tabContainer.find(".ui-tabs-nav").append(li);
-            var standardMenuDiv = $('<div />', {id:'Standard'});
+            var standardMenuDiv = $('<div />', {id: 'Standard'});
             tabContainer.append(standardMenuDiv);
             accordionDiv = standardMenuDiv;
             accordionDiv.append($('<h3 />').text('Properties'));
-            umlPropertiesDiv = $('<div />', {id:'umlProperties'});
+            umlPropertiesDiv = $('<div />', {id: 'umlProperties'});
             accordionDiv.append(umlPropertiesDiv);
 
             accordionDiv.append($('<h3 />').text('Operations'));
-            umlOperationsDiv = $('<div />', {id:'umlOperations'});
+            umlOperationsDiv = $('<div />', {id: 'umlOperations'});
             accordionDiv.append(umlOperationsDiv);
 
             if (isTumlLib && contextVertexId !== undefined && contextVertexId !== null) {
                 accordionDiv.append($('<h3 />').text('Instance Queries'));
-                umlInstanceQueriesDiv = $('<div />', {id:'umlInstanceQueries'});
+                umlInstanceQueriesDiv = $('<div />', {id: 'umlInstanceQueries'});
                 accordionDiv.append(umlInstanceQueriesDiv);
                 accordionDiv.append($('<h3 />').text('Class Queries'));
-                umlClassQueriesDiv = $('<div />', {id:'umlClassQueries'});
+                umlClassQueriesDiv = $('<div />', {id: 'umlClassQueries'});
                 accordionDiv.append(umlClassQueriesDiv);
 
                 accordionDiv.append($('<h3 />').text('Instance Groovy'));
-                umlInstanceGroovyDiv = $('<div />', {id:'umlInstanceGroovy'});
+                umlInstanceGroovyDiv = $('<div />', {id: 'umlInstanceGroovy'});
                 accordionDiv.append(umlInstanceGroovyDiv);
                 accordionDiv.append($('<h3 />').text('Class Groovy'));
-                umlClassGroovyDiv = $('<div />', {id:'umlClassGroovy'});
+                umlClassGroovyDiv = $('<div />', {id: 'umlClassGroovy'});
                 accordionDiv.append(umlClassGroovyDiv);
             }
             accordionDiv.accordion({
-                heightStyle:"content",
-                collapsible:true
+                heightStyle: "content",
+                collapsible: true
             });
 
             var tabTemplate = "<li><a href='#{href}'>#{label}</a></li>";
@@ -90,7 +90,7 @@
                 id = "Tree",
                 li = $(tabTemplate.replace(/#\{href\}/g, "#" + id).replace(/#\{label\}/g, label));
             tabContainer.find(".ui-tabs-nav").append(li);
-            var standardMenuDiv = $('<div />', {id:'Tree'});
+            var standardMenuDiv = $('<div />', {id: 'Tree'});
             tabContainer.append(standardMenuDiv);
             tabContainer.tabs("refresh");
         }
@@ -100,17 +100,17 @@
 
         function createStdMenu() {
 
-            var ulMenu = $('<ul />', {class:'ui-left-menu-link'}).appendTo(umlPropertiesDiv);
+            var ulMenu = $('<ul />', {class: 'ui-left-menu-link'}).appendTo(umlPropertiesDiv);
             var menuArray = createLeftMenuDataArray(contextMetaDataFrom, contextMetaDataTo);
             $.each(menuArray, function (index, value) {
                 var adjustedUri = value.tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
                 var li = $('<li class="ui-left-menu-li ' + value.menuCssClass + '"/>');
                 var a = $('<a>', {
-                    text:value.name,
-                    title:value.name,
-                    href:adjustedUri,
-                    click:function () {
-                        self.onMenuClick.notify({name:value.name, uri:adjustedUri}, null, self);
+                    text: value.name,
+                    title: value.name,
+                    href: adjustedUri,
+                    click: function () {
+                        self.onMenuClick.notify({name: value.name, uri: adjustedUri}, null, self);
                         return false;
                     }
                 });
@@ -128,18 +128,18 @@
             if (queryProperty != null) {
                 var queryUri = queryProperty.tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
                 $.ajax({
-                    url:queryUri,
-                    type:"GET",
-                    dataType:"json",
-                    contentType:"json",
-                    success:function (response, textStatus, jqXHR) {
+                    url: queryUri,
+                    type: "GET",
+                    dataType: "json",
+                    contentType: "json",
+                    success: function (response, textStatus, jqXHR) {
                         queryData = response;
                         internalCreateTree(umlInstanceQueriesDiv, true);
                         if (queryId !== undefined) {
                             refreshQueryMenuCss(queryId);
                         }
                     },
-                    error:function (jqXHR, textStatus, errorThrown) {
+                    error: function (jqXHR, textStatus, errorThrown) {
                         alert('Error getting query data. textStatus: ' + textStatus + ' errorThrown: ' + errorThrown);
                     }
                 });
@@ -154,23 +154,27 @@
                 if (classQueryUri != null) {
                     var queryUri = classQueryUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
                     $.ajax({
-                        url:queryUri,
-                        type:"GET",
-                        dataType:"json",
-                        contentType:"json",
-                        success:function (response, textStatus, jqXHR) {
+                        url: queryUri,
+                        type: "GET",
+                        dataType: "json",
+                        contentType: "json",
+                        success: function (response, textStatus, jqXHR) {
                             queryData = response;
                             internalCreateTree(umlClassQueriesDiv, false);
                             if (queryId !== undefined) {
                                 refreshQueryMenuCss(queryId);
                             }
                         },
-                        error:function (jqXHR, textStatus, errorThrown) {
+                        error: function (jqXHR, textStatus, errorThrown) {
                             alert('Error getting query data. textStatus: ' + textStatus + ' errorThrown: ' + errorThrown);
                         }
                     });
                 }
             }
+        }
+
+        function deleteInstanceQuery(queryId) {
+            umlInstanceQueriesDiv.find('#' + queryId).remove();
         }
 
         function refreshInstanceQuery(queryId) {
@@ -186,6 +190,9 @@
         }
 
         function refreshQueryMenuCss(queryId, tabEnum) {
+
+            console.log('queryId = ' + queryId);
+
             if (umlInstanceQueriesDiv !== undefined) {
                 //Change the css activeproperty
                 umlInstanceQueriesDiv.find('.ui-left-menu-query-li').removeClass('querymenuactive');
@@ -214,37 +221,44 @@
                 var queryUri = query.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), query.id);
                 var oclExecuteUri = queryData[0].meta.oclExecuteUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
                 queryArray.push({
-                    label:query.name,
-                    tumlUri:queryUri,
-                    oclExecuteUri:oclExecuteUri,
-                    name:query.name,
-                    _name:query.name,
-                    queryEnum:query.queryEnum,
-                    queryString:query.queryString,
-                    queryId:query.id,
-                    queryType:instanceQuery ? 'instanceQuery' : 'classQuery',
-                    menuCssClass:'querymenuinactive'});
+                    label: query.name,
+                    tumlUri: queryUri,
+                    oclExecuteUri: oclExecuteUri,
+                    name: query.name,
+                    _name: query.name,
+                    queryEnum: query.queryEnum,
+                    queryString: query.queryString,
+                    queryId: query.id,
+                    queryType: instanceQuery ? 'instanceQuery' : 'classQuery',
+                    menuCssClass: 'querymenuinactive'});
             }
 
-            var ulMenu = $('<ul />', {class:'ui-left-menu-query-link'}).appendTo(queryDiv);
+            var ulMenu = $('<ul />', {class: 'ui-left-menu-query-link'}).appendTo(queryDiv);
             $.each(queryArray, function (index, value) {
                 var adjustedUri = value.tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
-                var li = $('<li />', {id:value.queryId, class:'ui-left-menu-query-li' + ' ' + value.menuCssClass});
+                var li = $('<li />', {id: value.queryId, class: 'ui-left-menu-query-li' + ' ' + value.menuCssClass});
                 var a = $('<a>', {
-                    text:value.name,
-                    title:value.name,
-                    href:adjustedUri,
-                    click:function () {
-                        self.onQueryClick.notify({
-                            post:false,
-                            tumlUri:$.data(this, "query").tumlUri,
-                            oclExecuteUri:$.data(this, "query").oclExecuteUri,
-                            qualifiedName:$.data(this, "query").qualifiedName,
-                            name:$.data(this, "query")._name,
-                            queryEnum:$.data(this, "query").queryEnum,
-                            queryString:$.data(this, "query").queryString,
-                            queryType:$.data(this, "query").queryType,
-                            id:$.data(this, "query").queryId}, null, self);
+                    text: value.name,
+                    title: value.name,
+                    href: adjustedUri,
+                    click: function () {
+
+                        var query = {
+                            post: false,
+                            tumlUri: $.data(this, "query").tumlUri,
+                            oclExecuteUri: $.data(this, "query").oclExecuteUri,
+                            qualifiedName: $.data(this, "query").qualifiedName,
+                            name: $.data(this, "query")._name,
+                            queryEnum: $.data(this, "query").queryEnum,
+                            queryString: $.data(this, "query").queryString,
+                            queryType: $.data(this, "query").queryType,
+                            id: $.data(this, "query").queryId
+                        };
+
+                        self.onQueryClick.notify(query, null, self);
+
+
+                        self.refreshQueryMenuCss(query.id);
 
                         return false;
                     }
@@ -259,17 +273,16 @@
             var menuArray = [];
             if (contextMetaDataFrom.name !== 'Root') {
                 //add a menu item to the context object
-                menuArray.push({tumlUri:contextMetaDataFrom.uri, name:contextMetaDataFrom.name, menuCssClass:'contextactiveproperty'});
+                menuArray.push({tumlUri: contextMetaDataFrom.uri, name: contextMetaDataFrom.name, menuCssClass: 'contextactiveproperty'});
             }
             $.each(contextMetaDataFrom.properties, function (index, metaProperty) {
-                if (metaProperty.inverseComposite ||
-                        !((metaProperty.dataTypeEnum !== undefined && metaProperty.dataTypeEnum !== null) ||
-                            metaProperty.onePrimitive ||
-                            metaProperty.oneEnumeration ||
-                            metaProperty.manyEnumeration ||
-                            metaProperty.manyPrimitive ||
-                            metaProperty.name == 'id' ||
-                            metaProperty.name == 'uri')) {
+                if (metaProperty.inverseComposite || !((metaProperty.dataTypeEnum !== undefined && metaProperty.dataTypeEnum !== null) ||
+                    metaProperty.onePrimitive ||
+                    metaProperty.oneEnumeration ||
+                    metaProperty.manyEnumeration ||
+                    metaProperty.manyPrimitive ||
+                    metaProperty.name == 'id' ||
+                    metaProperty.name == 'uri')) {
                     var menuMetaProperty = {};
                     var menuCssClass = 'inactiveproperty';
                     $.each(contextMetaDataTo.properties, function (toIndex, toMetaProperty) {
@@ -319,13 +332,14 @@
         }
 
         $.extend(this, {
-            "TumlLeftMenuManagerVersion":"1.0.0",
-            "onMenuClick":new Tuml.Event(),
-            "onQueryClick":new Tuml.Event(),
-            "refresh":refresh,
-            "refreshQueryMenuCss":refreshQueryMenuCss,
-            "refreshInstanceQuery":refreshInstanceQuery,
-            "refreshClassQuery":refreshClassQuery
+            "TumlLeftMenuManagerVersion": "1.0.0",
+            "onMenuClick": new Tuml.Event(),
+            "onQueryClick": new Tuml.Event(),
+            "refresh": refresh,
+            "refreshQueryMenuCss": refreshQueryMenuCss,
+            "refreshInstanceQuery": refreshInstanceQuery,
+            "refreshClassQuery": refreshClassQuery,
+            "deleteInstanceQuery": deleteInstanceQuery
         });
 
         init();
