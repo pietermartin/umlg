@@ -191,8 +191,6 @@
 
         function refreshQueryMenuCss(queryId, tabEnum) {
 
-            console.log('queryId = ' + queryId);
-
             if (umlInstanceQueriesDiv !== undefined) {
                 //Change the css activeproperty
                 umlInstanceQueriesDiv.find('.ui-left-menu-query-li').removeClass('querymenuactive');
