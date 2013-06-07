@@ -39,8 +39,8 @@
         this.globalOneToOneIndex = new GlobalOneToOneIndex();
         this.qualifiedName = null;
 
-        this.refreshQueryMenuCss = function(queryId) {
-            leftMenuManager.refreshQueryMenuCss(queryId);
+        this.refreshQueryMenuCss = function(queryId, accordionIndex) {
+            leftMenuManager.refreshQueryMenuCss(queryId, accordionIndex);
         }
 
         this.refresh = function (tumlUri, result) {

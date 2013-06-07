@@ -95,7 +95,7 @@ public class QueryExecuteResourceBuilder extends BaseServerResourceBuilder imple
 
 		get.getBody().addToLocals(ocl);
 		get.getBody().addToLocals(contextId);
-		queryExecute.addToImports(TumlRestletGenerationUtil.JsonRepresentation);
+//		queryExecute.addToImports(TumlRestletGenerationUtil.JsonRepresentation);
 
 	}
 

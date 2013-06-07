@@ -31,6 +31,11 @@ public class TumlOclExecutor {
 	 */
 	public static Object executeOclQuery(String contextQualifiedName, String query) {
 		Classifier contextClassifier = (Classifier) ModelLoader.INSTANCE.findNamedElement(contextQualifiedName);
+
+        if (contextClassifier == null) {
+            throw new RuntimeException("ocl \"" + query + "\" has no context!");
+        }
+
 		OJAnnotatedClass oclClass = new OJAnnotatedClass("OclQuery");
 		oclClass.setSuperclass(TumlClassOperations.getPathName(contextClassifier));
 		OJPackage ojPackage = new OJPackage(Namer.name(contextClassifier.getNearestPackage()));

@@ -29,8 +29,8 @@
                 success: function (data) {
                     self.afterExecuteQuery(data);
                 },
-                error: function (jqXHR) {
-                    $('#serverErrorMsg_' + this.queryTabDivName).addClass('server-error-msg').html(jqXHR.responseText);
+                error: function (jqXHR, textStatus, errorThrown) {
+                    $('#serverErrorMsg_' + self.queryTabDivName).addClass('server-error-msg').html(jqXHR.responseText);
                 }
             });
         }
