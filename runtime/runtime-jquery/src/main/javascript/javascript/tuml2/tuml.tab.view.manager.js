@@ -257,6 +257,13 @@
 
     TumlTabQueryViewManager.prototype = new Tuml.TumlBaseTabViewManager;
 
+    TumlTabQueryViewManager.prototype.closeTab = function () {
+        var previousIndex = this.parentTabContainerManager.tumlTabViewManagers.indexOf(this);
+        var nextIndex = previousIndex - 1;
+        TumlBaseTabViewManager.prototype.closeTab.call(this);
+        this.parentTabContainer.tabs("option", "active", nextIndex);
+    }
+
     TumlTabQueryViewManager.prototype.createTab = function (post) {
         var self = this;
         var tabTemplate;

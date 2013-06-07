@@ -144,8 +144,6 @@
         var tabsNav = this.parentTabContainer.find('.ui-tabs-nav');
         var tabsButtonDiv = tabsNav.find('#' + this.getTabId() + 'OpenMany');
         tabsButtonDiv.remove();
-//        tabsButtonDiv = $('<div />', {id: 'tabcontainer-button', class: 'tabs-button'}).appendTo(tabsNav);
-//        var chooseOpenMany = $('<button />', {id: this.getTabId() + 'OpenMany'}).text('Open ' + this.tabTitleName).appendTo(tabsButtonDiv);
         var tabContainerButton = tabsNav.find('#tabcontainer-button');
         var chooseOpenMany = $('<button />', {id: this.getTabId() + 'OpenMany'}).text('Open ' + this.tabTitleName).prependTo(tabContainerButton);
         chooseOpenMany.button().click(function (event) {
