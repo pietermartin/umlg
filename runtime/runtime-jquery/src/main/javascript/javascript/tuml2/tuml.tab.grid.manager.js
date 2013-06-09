@@ -43,12 +43,10 @@
             $('<div id="serverErrorMsg' + this.gridDivName + '" />').appendTo(outerDivForResults);
 
             var windowHeight = $('.query-center').height() - 30;
-
             $('<div />', {id: 'queryResultsDiv' + this.gridDivName, style: 'width:auto;height:' + windowHeight + 'px;'}).appendTo(outerDivForResults);
             $('<div />', {id: 'pagerQueryResultsDiv' + this.gridDivName, style: 'width:auto;height:20px;'}).appendTo(outerDivForResults);
-
             $('#contextMenu' + this.gridDivName).remove();
-            this.createGrid(result.data/*, this.metaForData*/, -1);
+            this.createGrid(result.data, -1);
         };
 
         this.instantiateGrid = function () {

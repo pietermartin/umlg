@@ -43,19 +43,6 @@
         function init() {
         }
 
-        this.validateFields = function () {
-            var validationResults = [];
-            $.each(this.metaForData.properties, function (index, property) {
-                if (!property.readOnly && self.isPropertyForOnePage(property)) {
-                    var validationResult = self.validateField(property);
-                    if (!validationResult.valid) {
-                        validationResults.push(validationResult);
-                    }
-                }
-            });
-            return validationResults;
-        }
-
         this.updateGridAfterCommitOrRollback = function (item) {
             this.setDataModel(item);
             this.refreshFromDataModel();
@@ -65,22 +52,22 @@
             this.tumlTabViewManager.handleLookup(lookupUri, qualifiedName, loadDataCallback);
         }
 
-        function findPropertyNavigatingTo(qualifiedName, metaDataNavigatingFrom) {
-            if (metaDataNavigatingFrom == undefined) {
-                return null;
-            } else {
-                //The property one is navigating from is in the metaDataNavigatingFrom,
-                //Find the property with the qualifiedName for the metaDataNavigatingTo.qualifiedName
-                for (var i = 0; i < metaDataNavigatingFrom.properties.length; i++) {
-                    var property = metaDataNavigatingFrom.properties[i];
-                    if (property.qualifiedName == qualifiedName) {
-                        return property;
-                    }
-                }
-                alert('Property navigatingTo not found!!!');
-                return null;
-            }
-        }
+//        function findPropertyNavigatingTo(qualifiedName, metaDataNavigatingFrom) {
+//            if (metaDataNavigatingFrom == undefined) {
+//                return null;
+//            } else {
+//                //The property one is navigating from is in the metaDataNavigatingFrom,
+//                //Find the property with the qualifiedName for the metaDataNavigatingTo.qualifiedName
+//                for (var i = 0; i < metaDataNavigatingFrom.properties.length; i++) {
+//                    var property = metaDataNavigatingFrom.properties[i];
+//                    if (property.qualifiedName == qualifiedName) {
+//                        return property;
+//                    }
+//                }
+//                alert('Property navigatingTo not found!!!');
+//                return null;
+//            }
+//        }
 
         this.calculateContainsOne = function () {
             for (var i = 0; i < this.metaForData.properties.length; i++) {

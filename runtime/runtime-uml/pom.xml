@@ -19,16 +19,10 @@
 			<artifactId>java-generation-ocl</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-		<!--<dependency>-->
-			<!--<groupId>org.tuml</groupId>-->
-			<!--<artifactId>runtime-domain-neo4j</artifactId>-->
-			<!--<version>0.0.1-SNAPSHOT</version>-->
-		<!--</dependency>-->
 		<dependency>
 			<groupId>org.tuml</groupId>
 			<artifactId>runtime-groovy</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
-
 </project>

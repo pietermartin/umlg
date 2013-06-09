@@ -177,6 +177,10 @@
             umlInstanceQueriesDiv.find('#' + queryId).remove();
         }
 
+        function deleteClassQuery(queryId) {
+            umlClassQueriesDiv.find('#' + queryId).remove();
+        }
+
         function refreshInstanceQuery(queryId) {
             umlInstanceQueriesDiv.children().remove();
             createInstanceQueryMenu(queryId);
@@ -189,7 +193,7 @@
             accordionDiv.accordion("option", "active", 3);
         }
 
-        function refreshQueryMenuCss(queryId, tabEnum) {
+        function refreshQueryMenuCss(queryId, leftAccordionIndex) {
 
             if (umlInstanceQueriesDiv !== undefined) {
                 //Change the css activeproperty
@@ -209,10 +213,10 @@
                 }
             }
             //TODO link tabview manager with the accordion div to activate on tab select
-            accordionDiv.accordion("option", "active", tabEnum);
+            accordionDiv.accordion("option", "active", leftAccordionIndex);
         }
 
-        function internalCreateTree(queryDiv, instanceQuery) {
+        function internalCreateTree(queryDiv, isInstanceQuery) {
             var queryArray = [];
             for (var i = 0; i < queryData[0].data.length; i++) {
                 var query = queryData[0].data[i];
@@ -227,12 +231,14 @@
                     queryEnum: query.queryEnum,
                     queryString: query.queryString,
                     queryId: query.id,
-                    queryType: instanceQuery ? 'instanceQuery' : 'classQuery',
-                    menuCssClass: 'querymenuinactive'});
+                    queryType: isInstanceQuery ? 'instanceQuery' : 'classQuery',
+                    menuCssClass: 'querymenuinactive ' + (isInstanceQuery ? 'instance-query' : 'class-query')});
             }
 
             var ulMenu = $('<ul />', {class: 'ui-left-menu-query-link'}).appendTo(queryDiv);
-            $.each(queryArray, function (index, value) {
+
+            for (var i = 0; i < queryArray.length; i++) {
+                var value = queryArray[i];
                 var adjustedUri = value.tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
                 var li = $('<li />', {id: value.queryId, class: 'ui-left-menu-query-li' + ' ' + value.menuCssClass});
                 var a = $('<a>', {
@@ -255,7 +261,6 @@
 
                         self.onQueryClick.notify(query, null, self);
 
-
                         self.refreshQueryMenuCss(query.id);
 
                         return false;
@@ -264,7 +269,9 @@
                 $.data(a[0], 'query', value);
                 a.appendTo(li);
                 li.appendTo(ulMenu);
-            });
+
+            }
+
         }
 
         function createLeftMenuDataArray(contextMetaDataFrom, contextMetaDataTo) {
@@ -337,7 +344,8 @@
             "refreshQueryMenuCss": refreshQueryMenuCss,
             "refreshInstanceQuery": refreshInstanceQuery,
             "refreshClassQuery": refreshClassQuery,
-            "deleteInstanceQuery": deleteInstanceQuery
+            "deleteInstanceQuery": deleteInstanceQuery,
+            "deleteClassQuery": deleteClassQuery
         });
 
         init();

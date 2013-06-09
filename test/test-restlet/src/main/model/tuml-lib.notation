@@ -379,6 +379,10 @@
           <element xmi:type="uml:EnumerationLiteral" href="tuml-lib.uml#_OirQkCQPEeKOmc56p_1Osg"/>
           <layoutConstraint xmi:type="notation:Location" xmi:id="_OixXMSQPEeKOmc56p_1Osg"/>
         </children>
+        <children xmi:type="notation:Shape" xmi:id="_NrHTsNDoEeKsjK8mgr7YWA" type="3017" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:EnumerationLiteral" href="tuml-lib.uml#_Nq4DINDoEeKsjK8mgr7YWA"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_NrHTsdDoEeKsjK8mgr7YWA"/>
+        </children>
         <styles xmi:type="notation:TitleStyle" xmi:id="_NOym1iQPEeKOmc56p_1Osg"/>
         <styles xmi:type="notation:SortingStyle" xmi:id="_NOym1yQPEeKOmc56p_1Osg"/>
         <styles xmi:type="notation:FilteringStyle" xmi:id="_NOym2CQPEeKOmc56p_1Osg"/>

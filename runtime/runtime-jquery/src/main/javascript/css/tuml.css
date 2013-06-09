@@ -1,3 +1,12 @@
+.CodeMirror {
+    font-size: 15pt;
+    height: 100%;
+}
+
+.query-north {
+    padding: 0px
+}
+
 .required-field:before {
     content : "* ";
     color   : red;
@@ -22,9 +31,17 @@
 
 /*tabs*/
 #tabs-layoutTabs {
+    font-family: arial;
+    font-size: 8pt;
+
     /*float: left;*/
     margin-top: 5px;
     height: auto;
+}
+
+.ui-layout-west {
+    font-family: arial;
+    font-size: 8pt;
 }
 
 #tabs-layoutTabs li .ui-icon-cancel {
@@ -97,6 +114,7 @@
 
 .oneUl {
     margin-top: 30px;
+    list-style: none;
 }
 
 .oneUl li {
@@ -254,58 +272,76 @@
 
 .ocltextarea {
     float: left;
-    width: 80%;
-    height: 90%;
-    padding-bottom: 5px;
-    padding-top: 5px;
+    width: 75%;
+    /*height: 90%;*/
+    /*padding-right: 5px;*/
+    /*padding-bottom: 5px;*/
+    /*padding-top: 5px;*/
 }
 
 .oclinnerbutton {
-    float: right;
-    width: 20%
+    background-color: #EEEEEE;
+    float: left;
+    width: 25%;
+    height: 100%;
 }
 
 .oclinner textarea {
-    width: 100%;
-    height: 100%;
     -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
     -moz-box-sizing: border-box; /* Firefox, other Gecko */
     box-sizing: border-box; /* Opera/IE 8+ */
-}
-
-.oclinnerbutton {
-    float: right;
-    width: 20%;
 }
 
 .oclexecutebutton {
     float: left;
     width: 20%;
     height: 70%;
-    padding-bottom: 10px;
-    padding-top: 10px;
+    margin: 10px;
 }
 
 .oclexecutebutton button {
-    height: 80px;
+    height: 100%;
+    padding: 5px;
 }
 
 .oclinputeditbutton {
-    float: right;
-    width: 80%;
+    float: left;
+    width: 70%;
     height: 80%;
     padding-bottom: 5px;
     padding-top: 5px;
 }
 
+.oclinputeditbutton button {
+    padding: 5px;
+}
+
+.oclqueryname {
+    float: left;
+    padding-bottom: 5px;
+}
+
 .oclqueryname input[type=text] {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+    width: 60%;
+    float: left;
+    /*margin-left: auto;*/
+    /*margin-right: auto;*/
+}
+
+.oclqueryname .chzn-container {
+    float: left;
 }
 
 .ocleditbutton {
     text-align: center;
+}
+
+#queryButtonUl {
+    list-style: none;
+}
+
+#queryButtonUl li {
+    padding: 2px;
 }
 
 .oclresult {
@@ -344,9 +380,6 @@
 .ui-left-menu-li a {
     color: black;
     cursor: pointer;
-    font-size: 120%;
-    /*font-weight: bold;*/
-    /*font-weight: 500;*/
 }
 
 .ui-left-menu-li a:hover {
@@ -424,10 +457,18 @@
     font-weight: bold;
 }
 
-.ui-left-menu-query-li {
+.ui-left-menu-query-li.instance-query {
     padding: 3px 0 3px 20px;
     margin: .4em 0;
-    background-image: url(../javascript/images/questionmark1.png);
+    background-image: url(../javascript/images/instancequery.png);
+    background-repeat: no-repeat;
+    background-position: 0 50%;
+}
+
+.ui-left-menu-query-li.class-query {
+    padding: 3px 0 3px 20px;
+    margin: .4em 0;
+    background-image: url(../javascript/images/classquery.png);
     background-repeat: no-repeat;
     background-position: 0 50%;
 }
@@ -435,7 +476,6 @@
 .ui-left-menu-query-li a {
     color: black;
     cursor: pointer;
-    font-size: 120%;
 }
 
 .ui-left-menu-query-li a:hover {

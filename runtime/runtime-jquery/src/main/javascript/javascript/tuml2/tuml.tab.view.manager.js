@@ -253,12 +253,24 @@
             this.parentTabContainerManager.afterDeleteInstance(result);
             this.closeTab();
             this.parentTabContainer.tabs("option", "active", previousIndex - 1);
-//            var currentTab = this.parentTabContainerManager.tumlTabViewManagers[previousIndex - 1];
-//            if (currentTab instanceof TumlTabQueryViewManager) {
-//                this.parentTabContainerManager.refreshQueryMenuCss(currentTab.queryId);
-//            } else {
-//                this.parentTabContainerManager.refreshQueryMenuCss(-1, 0);
-//            }
+        }
+
+        this.afterSaveClassQuery = function (result) {
+            var previousIndex = this.parentTabContainerManager.tumlTabViewManagers.indexOf(this);
+            this.closeTab();
+            this.parentTabContainerManager.afterSaveClassQuery(result, previousIndex);
+        }
+
+        this.afterUpdateClassQuery = function (result) {
+            this.closeTab();
+            this.parentTabContainerManager.afterUpdateClassQuery(result);
+        }
+
+        this.afterDeleteClassQuery = function (result) {
+            var previousIndex = this.parentTabContainerManager.tumlTabViewManagers.indexOf(this);
+            this.parentTabContainerManager.afterDeleteClassQuery(result);
+            this.closeTab();
+            this.parentTabContainer.tabs("option", "active", previousIndex - 1);
         }
 
         TumlBaseTabViewManager.call(this, tabEnum, tabContainer);

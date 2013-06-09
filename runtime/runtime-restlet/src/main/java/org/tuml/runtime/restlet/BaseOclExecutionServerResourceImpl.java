@@ -10,6 +10,7 @@ import org.tuml.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.tuml.runtime.domain.PersistentObject;
 import org.tuml.runtime.domain.TumlNode;
 import org.tuml.runtime.domain.json.ToJsonUtil;
+import org.tuml.runtime.gremlin.GremlinExecutor;
 
 import java.util.Collection;
 import java.util.Map;
@@ -19,49 +20,57 @@ public abstract class BaseOclExecutionServerResourceImpl extends ServerResource 
     public BaseOclExecutionServerResourceImpl() {
     }
 
-    protected Representation execute(String ocl, Long contextId) {
-        TumlNode context = GraphDb.getDb().instantiateClassifier(contextId);
-        Object result = TumlOclExecutor.executeOclQuery(context.getQualifiedName(), context, ocl);
-        if (result instanceof Map) {
+    protected Representation execute(String query, Long contextId, String type) {
+        if (type.equalsIgnoreCase("ocl")) {
+            TumlNode context = GraphDb.getDb().instantiateClassifier(contextId);
+            Object result = TumlOclExecutor.executeOclQuery(context.getQualifiedName(), context, query);
+            if (result instanceof Map) {
 //            return TumlOclExecutor.tupleMapToJson((Map<String, Object>) result);
-            //TODO
-            return new JsonRepresentation(result.toString());
-        } else if (result instanceof Collection) {
-            Collection<PersistentObject> poCollection = (Collection<PersistentObject>) result;
+                //TODO
+                return new JsonRepresentation(result.toString());
+            } else if (result instanceof Collection) {
 
-            StringBuilder json = new StringBuilder();
-            json.append("[");
-            json.append("{\"data\": [");
-            int count = 0;
-            PersistentObject poForMetaData = null;
-            for (PersistentObject po : poCollection) {
-                count++;
-                String objectAsJson = po.toJsonWithoutCompositeParent();
-                String objectAsJsonWithRow = "{\"row\": " + count + ", " + objectAsJson.substring(1);
-                json.append(objectAsJsonWithRow);
-                if (count != poCollection.size()) {
-                    json.append(",");
-                } else {
-                    poForMetaData = po;
+                //TODO need to sort out polymorphic queries
+                Collection<PersistentObject> poCollection = (Collection<PersistentObject>) result;
+
+                StringBuilder json = new StringBuilder();
+                json.append("[");
+                json.append("{\"data\": [");
+                int count = 0;
+                PersistentObject poForMetaData = null;
+                for (PersistentObject po : poCollection) {
+                    count++;
+                    String objectAsJson = po.toJsonWithoutCompositeParent();
+                    String objectAsJsonWithRow = "{\"row\": " + count + ", " + objectAsJson.substring(1);
+                    json.append(objectAsJsonWithRow);
+                    if (count != poCollection.size()) {
+                        json.append(",");
+                    } else {
+                        poForMetaData = po;
+                    }
                 }
-            }
-            json.append("],");
-            json.append(" \"meta\" : {");
-            json.append("\"qualifiedName\": \"restAndJson::org::tuml::test::Hand::finger\"");
-            json.append(", \"to\": ");
-            if (poForMetaData != null) {
-                json.append(poForMetaData.getMetaDataAsJson());
+                json.append("],");
+                json.append(" \"meta\" : {");
+                json.append("\"qualifiedName\": \"restAndJson::org::tuml::test::Hand::finger\"");
+                json.append(", \"to\": ");
+                if (poForMetaData != null) {
+                    json.append(poForMetaData.getMetaDataAsJson());
+                } else {
+                    json.append("null");
+                }
+                json.append("}");
+                json.append("}]");
+                return new JsonRepresentation(json.toString());
+            } else if (result instanceof PersistentObject) {
+                PersistentObject po = (PersistentObject) result;
+                return getRepresentation(po);
             } else {
-                json.append("null");
+                return new JsonRepresentation("{\"result\": " + "\"" + result.toString() + "\"}");
             }
-            json.append("}");
-            json.append("}]");
-            return new JsonRepresentation(json.toString());
-        } else if (result instanceof PersistentObject) {
-            PersistentObject po = (PersistentObject) result;
-            return getRepresentation(po);
         } else {
-            return new JsonRepresentation(result.toString());
+//            ExecutionEngine
+            String result =  GremlinExecutor.executeGremlinQuery(contextId, query);
+            return new JsonRepresentation("{\"result\": " + "\"" + result + "\"}");
         }
 
     }
@@ -120,7 +129,8 @@ public abstract class BaseOclExecutionServerResourceImpl extends ServerResource 
     protected Representation getRepresentation(PersistentObject po) throws ResourceException {
         StringBuilder json = new StringBuilder();
         json.append("[{\"data\": [");
-        json.append(po.toJson());
+        String poAsJson = po.toJson();
+        json.append(poAsJson.substring(0, poAsJson.length() - 1) + ", \"row\": 1}");
         json.append("], \"meta\" : {");
         json.append("\"qualifiedName\": \"restAndJson::org::tuml::test::Human\"");
         json.append(", \"to\": ");

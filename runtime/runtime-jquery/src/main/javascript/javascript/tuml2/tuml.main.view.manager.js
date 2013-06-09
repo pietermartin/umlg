@@ -369,6 +369,7 @@
             }
             if (tumlTabViewManagerQuery === undefined) {
                 if (query.queryType === undefined) {
+                    //This is for the new query tab
                     tumlTabViewManagerQuery = new Tuml.TumlTabQueryViewManager(tuml.tab.Enum.Properties, this.tabContainer, instanceQueryTumlUri, classQueryTumlUri, query.getDivName(), query.name, query.id);
                 } else if (query.queryType === 'instanceQuery') {
                     tumlTabViewManagerQuery = new Tuml.TumlTabQueryViewManager(tuml.tab.Enum.InstanceQueries, this.tabContainer, instanceQueryTumlUri, '', query.getDivName(), query.name, query.id);
@@ -461,6 +462,26 @@
 
         this.afterDeleteInstance = function(args) {
             leftMenuManager.deleteInstanceQuery(args.query.id);
+        }
+
+        this.afterSaveClassQuery = function(args, previousIndex) {
+            addDefaultQueryTab(false);
+            var newTumlTabViewManager = this.addQueryTab(false, new Tuml.Query(args.query.id, args.query.name, args.query.name, args.query.queryString, args.query.queryEnum, args.gridData, args.queryType));
+            //place it back at the previousIndex
+            var currentIndex = self.tumlTabViewManagers.indexOf(newTumlTabViewManager);
+            this.tumlTabViewManagers.splice(currentIndex, 1);
+            this.tumlTabViewManagers.splice(previousIndex, 0, newTumlTabViewManager);
+            this.tabContainer.tabs("option", "active", previousIndex);
+            leftMenuManager.refreshClassQuery(args.query.id);
+        }
+
+        this.afterUpdateClassQuery = function(args) {
+            this.addQueryTab(false, new Tuml.Query(args.query.id, args.query.name, args.query.name, args.query.queryString, args.query.queryEnum, args.gridData, args.queryType));
+            leftMenuManager.refreshClassQuery(args.query.id);
+        }
+
+        this.afterDeleteClassQuery = function(args) {
+            leftMenuManager.deleteClassQuery(args.query.id);
         }
 
         function reorderTabsAfterAddOneOrMany(savedTumlTabViewManagers) {

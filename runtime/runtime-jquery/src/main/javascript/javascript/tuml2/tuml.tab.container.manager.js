@@ -61,11 +61,15 @@
 
                 this.tabContainer.tabs({
                     activate: function (event, ui) {
-                        var queryId = $.data(ui.newPanel[0], 'queryId');
-                        if (queryId !== undefined && queryId !== null) {
-                            self.refreshQueryMenuCss(queryId);
+
+                        if (self instanceof Tuml.TumlMainViewManager) {
+                            var queryId = $.data(ui.newPanel[0], 'queryId');
+                            var tabEnum = $.data(ui.newPanel[0], 'tabEnum');
+                            if (queryId === undefined || queryId === null) {
+                                queryId = -1;
+                            }
+                            self.refreshQueryMenuCss(queryId, tabEnum);
                         }
-//                        var tabEnum = $.data(ui.newPanel[0], 'tabEnum');
 
                         //first deactivate all grids
                         self.deactivateGrids();
@@ -258,7 +262,7 @@
                     var validationMultiplicityResult = new Tuml.ValidationResult(this.componentCell.row, this.tabContainerProperty);
                     validationMultiplicityResult.row = this.componentCell.row;
                     validationMultiplicityResult.property = this.tabContainerProperty;
-                    validationMultiplicityResult.message = 'multiplicity falls outside the valid range [' + this.tabContainerProperty.lower + '..' + this.tabContainerProperty.upper + ']';
+                    validationMultiplicityResult.message = 'multiplicity falls outside the valid range [' + this.tabContainerProperty.lower + '..' + (this.tabContainerProperty.upper !== -1 ? this.tabContainerProperty.upper : '*') + ']';
                     validationResults.push(validationMultiplicityResult);
                     this.setValidationResults(this.tabContainerProperty.qualifiedName, validationResults);
                 }
@@ -363,7 +367,7 @@
         }
         if (rowCount < this.tabContainerProperty.lower || (this.tabContainerProperty.upper !== -1 && rowCount > this.tabContainerProperty.upper)) {
             multiplicityWarning.append($('<span />').text(
-                'multiplicity falls outside the valid range [' + this.tabContainerProperty.lower + '..' + this.tabContainerProperty.upper + ']'));
+                'multiplicity falls outside the valid range [' + this.tabContainerProperty.lower + '..' + (this.tabContainerProperty.upper !== -1 ? this.tabContainerProperty.upper : '*') + ']'));
         }
 
 //        if (this.validationResults !== null && this.validationResults.length > 0) {
@@ -403,7 +407,7 @@
             }
         }
         if (rowCount < this.tabContainerProperty.lower || (this.tabContainerProperty.upper !== -1 && rowCount > this.tabContainerProperty.upper)) {
-            alert('multiplicity falls outside the valid range [' + this.tabContainerProperty.lower + '..' + this.tabContainerProperty.upper + ']');
+            alert('multiplicity falls outside the valid range [' + this.tabContainerProperty.lower + '..' + (this.tabContainerProperty.upper !== -1 ? this.tabContainerProperty.upper : '*') + ']');
             return false;
         } else {
             return true;
