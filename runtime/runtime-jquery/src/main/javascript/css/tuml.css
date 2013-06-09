@@ -272,7 +272,7 @@
 
 .ocltextarea {
     float: left;
-    width: 75%;
+    width: 70%;
     /*height: 90%;*/
     /*padding-right: 5px;*/
     /*padding-bottom: 5px;*/
@@ -282,7 +282,7 @@
 .oclinnerbutton {
     background-color: #EEEEEE;
     float: left;
-    width: 25%;
+    width: 30%;
     height: 100%;
 }
 
@@ -345,10 +345,6 @@
 }
 
 .oclresult {
-    /*float: left;*/
-    /*clear: both;*/
-    /*display: block;*/
-    /*width: auto;*/
     height: 100%;
     width: 100%;
     overflow: hidden;

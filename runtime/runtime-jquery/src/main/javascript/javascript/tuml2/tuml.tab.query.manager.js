@@ -211,7 +211,11 @@
             var textArea = $('<textarea />', {id: queryTabDivName + '_' + 'QueryString'});
             textArea.text(query.queryString).appendTo(oclTextAreaDiv);
 
-            codeMirror = CodeMirror.fromTextArea(textArea[0], {mode: 'text/x-mysql'});
+            codeMirror = CodeMirror.fromTextArea(textArea[0], {mode: 'text/x-mysql', onKeyEvent: function(o, e) {
+                if ((e.which === 13 && e.altKey) || (e.which === 13 && e.ctrlKey)) {
+                    self.executeQuery();
+                }
+            }});
 
             var oclInnerButton = $('<div />', {id: queryTabDivName + '+' + 'OclInnerButton', class: 'oclinnerbutton'}).appendTo(oclInner);
 
@@ -236,12 +240,12 @@
             }
 
             //create query type select box
-            querySelect = $('<select />', {class: 'chzn-select queryEnum'});
+            querySelect = $('<select />', {class: 'chzn-select queryEnum', style: 'width: 100px;'});
             querySelect.append($('<option selected="selected"/>)').val('OCL').html('OCL'));
             querySelect.append($('<option />)').val('GREMLIN').html('GREMLIN'));
+            querySelect.append($('<option />)').val('NATIVE').html('NATIVE'));
             querySelect.appendTo(oclQueryNameInputDiv);
             querySelect.chosen({disable_search: true});
-
 
             var ul = $('<ul />', {id: 'queryButtonUl'});
             ul.appendTo(oclEditButtonDiv)
@@ -265,13 +269,15 @@
             if (isTumlLib && !post) {
                 var li = $('<li />', {id: 'queryCancelButtonLi'}).appendTo(ul);
                 var cancelButton = $('<button />', {id: queryTabDivName + '_' + 'CancelButton'}).appendTo(li);
-                cancelButton.button().text('cancel').click(function () {
+                cancelButton.button().text('cancel').click(
+                    function () {
                         self.cancelQuery();
                     }
                 );
                 li = $('<li />', {id: 'queryDeleteButtonLi'}).appendTo(ul);
                 var deleteButton = $('<button />', {id: queryTabDivName + '_' + 'DeleteButton'}).appendTo(li);
-                deleteButton.button().text('delete').click(function () {
+                deleteButton.button().text('delete').click(
+                    function () {
                         self.deleteQuery();
                     }
                 );
@@ -292,7 +298,6 @@
                 onresize_end: function () {
                     //Resize the textarea
                     var northHeight = $('.query-north').height() - 15;
-//                    $('.oclinner textarea').height(northHeight);
                     $('.CodeMirror').height(northHeight);
                     return true;
                 }

@@ -63,6 +63,7 @@ self.getChildren()->iterate(iter : tumllib::org::tuml::hierarchy::Hierarchy; acc
         <packagedElement xmi:type="uml:Enumeration" xmi:id="_NOrSECQPEeKOmc56p_1Osg" name="QueryEnum">
           <ownedLiteral xmi:id="_OirQkCQPEeKOmc56p_1Osg" name="OCL"/>
           <ownedLiteral xmi:id="_Nq4DINDoEeKsjK8mgr7YWA" name="GREMLIN"/>
+          <ownedLiteral xmi:id="_E1WfANELEeKsjK8mgr7YWA" name="NATIVE"/>
         </packagedElement>
         <packagedElement xmi:type="uml:Class" xmi:id="_FAMz0CXHEeKbPYSfIbmXag" name="BaseTumlWithQuery" isAbstract="true">
           <generalization xmi:id="_Q4ZJ0CXHEeKbPYSfIbmXag" general="_2GNhsCQOEeKOmc56p_1Osg"/>

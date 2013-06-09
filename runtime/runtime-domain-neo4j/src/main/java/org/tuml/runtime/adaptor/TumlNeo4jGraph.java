@@ -1,20 +1,29 @@
 package org.tuml.runtime.adaptor;
 
-import com.tinkerpop.blueprints.*;
+import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Element;
+import com.tinkerpop.blueprints.Index;
+import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.neo4j.Neo4jEdge;
 import com.tinkerpop.blueprints.impls.neo4j.Neo4jGraph;
 import com.tinkerpop.blueprints.impls.neo4j.Neo4jVertex;
+import org.neo4j.cypher.ExecutionEngine;
+import org.neo4j.cypher.ExecutionResult;
 import org.neo4j.graphdb.*;
 import org.neo4j.graphdb.event.TransactionEventHandler;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
 import org.neo4j.kernel.GraphDatabaseAPI;
 import org.neo4j.kernel.TopLevelTransaction;
 import org.neo4j.kernel.impl.transaction.AbstractTransactionManager;
+import org.neo4j.kernel.impl.util.StringLogger;
 import org.tuml.runtime.domain.PersistentObject;
 import org.tuml.runtime.domain.TumlMetaNode;
+import org.tuml.runtime.domain.TumlNode;
 
 import javax.transaction.*;
 import javax.transaction.Transaction;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -377,6 +386,35 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
     public void addDeletionNode() {
         Vertex v = addVertex(null);
         addEdge(null, getRoot(), v, DELETED_NODES);
+    }
+
+    @Override
+    public String executeQuery(TumlQueryEnum tumlQueryEnum, Long contextId, String query) {
+
+        switch (tumlQueryEnum) {
+            case OCL:
+                try {
+                    Class<?> tumlOclExecutor = Class.forName("org.tuml.ocl.TumlOclExecutor");
+                    Method method = tumlOclExecutor.getMethod("executeOclQueryToJson", String.class, TumlNode.class, String.class);
+                    TumlNode context = GraphDb.getDb().instantiateClassifier(contextId);
+                    String json = (String)method.invoke(null, context.getQualifiedName(), context, query);
+                    return json;
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException("TumlOclExecutor is not on the class path.");
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            case GREMLIN:
+                String result = GremlinExecutor.executeGremlinQuery(contextId, query);
+                return "{\"result\": " + "\"" + result + "\"}";
+            case NATIVE:
+                ExecutionEngine engine = new ExecutionEngine( getRawGraph(), StringLogger.SYSTEM );
+                ExecutionResult executionResult = engine.execute(query);
+                return "{\"result\": " + "\"" + executionResult.dumpToString().replace("\"", "\\\"").replace("\n", "\\n") + "\"}";
+        }
+
+        throw new RuntimeException("Unknown query enum");
+
     }
 
     @Override

@@ -54,4 +54,6 @@ public interface TumlGraph extends TransactionalGraph, IndexableGraph, Serializa
 
     void addDeletionNode();
 
+    String executeQuery(TumlQueryEnum tumlQueryEnum, Long contextId, String query);
+
 }

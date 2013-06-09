@@ -6,11 +6,9 @@ import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 import org.tuml.ocl.TumlOclExecutor;
 import org.tuml.runtime.adaptor.GraphDb;
-import org.tuml.runtime.collection.ocl.BooleanExpressionEvaluator;
+import org.tuml.runtime.adaptor.GremlinExecutor;
 import org.tuml.runtime.domain.PersistentObject;
 import org.tuml.runtime.domain.TumlNode;
-import org.tuml.runtime.domain.json.ToJsonUtil;
-import org.tuml.runtime.gremlin.GremlinExecutor;
 
 import java.util.Collection;
 import java.util.Map;
@@ -51,6 +49,7 @@ public abstract class BaseOclExecutionServerResourceImpl extends ServerResource 
                 }
                 json.append("],");
                 json.append(" \"meta\" : {");
+                //TODO some hardcoding to sort out
                 json.append("\"qualifiedName\": \"restAndJson::org::tuml::test::Hand::finger\"");
                 json.append(", \"to\": ");
                 if (poForMetaData != null) {
@@ -67,12 +66,12 @@ public abstract class BaseOclExecutionServerResourceImpl extends ServerResource 
             } else {
                 return new JsonRepresentation("{\"result\": " + "\"" + result.toString() + "\"}");
             }
-        } else {
-//            ExecutionEngine
+        } else if (type.equalsIgnoreCase("gremlin")) {
             String result =  GremlinExecutor.executeGremlinQuery(contextId, query);
             return new JsonRepresentation("{\"result\": " + "\"" + result + "\"}");
+        } else {
+            throw new RuntimeException("Unknown query type " + type);
         }
-
     }
 
     //static

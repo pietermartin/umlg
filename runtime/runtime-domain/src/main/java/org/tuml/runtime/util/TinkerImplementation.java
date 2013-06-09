@@ -11,6 +11,7 @@ public enum TinkerImplementation {
     private String tumlIdUtil;
     private String tumlExceptionUtil;
     private String tumlTestUtil;
+
     private TinkerImplementation(String tumlGraphFactory, String tumlIdUtil, String tumlExceptionUtil, String tumlTestUtil) {
         this.tumlGraphFactory = tumlGraphFactory;
         this.tumlIdUtil = tumlIdUtil;

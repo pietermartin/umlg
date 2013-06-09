@@ -39,10 +39,10 @@
           <emfPageIdentifier href="tuml-lib.notation#_vBwngCQOEeKOmc56p_1Osg"/>
         </children>
         <children>
-          <emfPageIdentifier href="tuml-lib.notation#_c-m-cCM6EeK-Trh8Ll0qUQ"/>
+          <emfPageIdentifier href="tuml-lib.notation#_wJwsUE6KEeK4HckrDYI0ug"/>
         </children>
         <children>
-          <emfPageIdentifier href="tuml-lib.notation#_wJwsUE6KEeK4HckrDYI0ug"/>
+          <emfPageIdentifier href="tuml-lib.notation#_c-m-cCM6EeK-Trh8Ll0qUQ"/>
         </children>
       </children>
     </windows>

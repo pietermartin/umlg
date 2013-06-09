@@ -94,19 +94,50 @@ public class TumlOclExecutor {
 		return result;
 	}
 
+    //This is called via reflection from TumlGraph
 	@SuppressWarnings("unchecked")
 	public static String executeOclQueryToJson(String contextQualifiedName, TumlNode contextTumlNode, String query) {
 		Object result = executeOclQuery(contextQualifiedName, contextTumlNode, query);
 		if (result instanceof Map) {
 			return tupleMapToJson((Map<String, Object>) result);
 		} else if (result instanceof Collection) {
-			return ToJsonUtil.toJsonWithoutCompositeParent((Collection<? extends PersistentObject>) result);
-		} else if (result instanceof PersistentObject) {
+
+            //TODO need to sort out polymorphic queries
+            Collection<PersistentObject> poCollection = (Collection<PersistentObject>) result;
+            StringBuilder json = new StringBuilder();
+            json.append("[");
+            json.append("{\"data\": [");
+            int count = 0;
+            PersistentObject poForMetaData = null;
+            for (PersistentObject po : poCollection) {
+                count++;
+                String objectAsJson = po.toJsonWithoutCompositeParent();
+                String objectAsJsonWithRow = "{\"row\": " + count + ", " + objectAsJson.substring(1);
+                json.append(objectAsJsonWithRow);
+                if (count != poCollection.size()) {
+                    json.append(",");
+                } else {
+                    poForMetaData = po;
+                }
+            }
+            json.append("],");
+            json.append(" \"meta\" : {");
+            //TODO some hardcoding to sort out
+            json.append("\"qualifiedName\": \"restAndJson::org::tuml::test::Hand::finger\"");
+            json.append(", \"to\": ");
+            if (poForMetaData != null) {
+                json.append(poForMetaData.getMetaDataAsJson());
+            } else {
+                json.append("null");
+            }
+            json.append("}");
+            json.append("}]");
+            return json.toString();
+        } else if (result instanceof PersistentObject) {
 			PersistentObject po = (PersistentObject) result;
 			return po.toJsonWithoutCompositeParent();
 		} else {
-            return result.toString();
-//			throw new IllegalStateException(String.format("Unhandled result from ocl query, result = %s", result.getClass().getName()));
+            return "{\"result\": " + "\"" + result.toString() + "\"}";
 		}
 	}
 

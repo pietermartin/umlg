@@ -201,16 +201,13 @@ public class TinkerGenerationUtil {
             // !inverse.
             // This is to ensure that the edge on both sides has the same name.
             if (!isControllingSide) {
-                // if (p.getOtherEnd()!=null) {
                 return tinkeriseUmlName(p.getOtherEnd().getQualifiedName() + "__" + p.getQualifiedName());
-                // } else {
-                // return tinkeriseUmlName(p.getQualifiedName());
-                // }
             } else {
                 if (p.getOtherEnd() != null) {
                     return tinkeriseUmlName(p.getQualifiedName() + "__" + p.getOtherEnd().getQualifiedName());
                 } else {
-                    return tinkeriseUmlName(p.getQualifiedName());
+//                    return tinkeriseUmlName(p.getQualifiedName());
+                    return tinkeriseUmlName(p.getName());
                 }
             }
         }

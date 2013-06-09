@@ -21,7 +21,6 @@
         <module>runtime-domain-orientdb</module>
         <module>runtime-jquery</module>
         <module>runtime-groovy</module>
-        <module>runtime-gremlin</module>
         <module>runtime-uml</module>
         <module>runtime-restlet</module>
         <module>runtime-restlet-client</module>
