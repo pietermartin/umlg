@@ -241,9 +241,18 @@
 
             //create query type select box
             querySelect = $('<select />', {class: 'chzn-select queryEnum', style: 'width: 100px;'});
-            querySelect.append($('<option selected="selected"/>)').val('OCL').html('OCL'));
-            querySelect.append($('<option />)').val('GREMLIN').html('GREMLIN'));
-            querySelect.append($('<option />)').val('NATIVE').html('NATIVE'));
+            if (query.type.toUpperCase() === 'OCL') {
+
+            } else if (query.type.toUpperCase() === 'GREMLIN') {
+
+            } else if (query.type.toUpperCase() === 'NATIVE') {
+
+            } else {
+                throw 'Unknown query type ' + query.type;
+            }
+            querySelect.append($('<option ' + (query.type.toUpperCase() === 'OCL' ? 'selected="selected"' : '') + '/>)').val('OCL').html('OCL'));
+            querySelect.append($('<option ' + (query.type.toUpperCase() === 'GREMLIN' ? 'selected="selected"' : '') + '/>)').val('GREMLIN').html('GREMLIN'));
+            querySelect.append($('<option ' + (query.type.toUpperCase() === 'NATIVE' ? 'selected="selected"' : '') + '/>)').val('NATIVE').html('NATIVE'));
             querySelect.appendTo(oclQueryNameInputDiv);
             querySelect.chosen({disable_search: true});
 
