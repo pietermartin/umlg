@@ -45,7 +45,7 @@
                 outerDivForResults.children().remove();
                 var textAreaResult = $('<textarea />', {id: 'queryResultId'});
                 textAreaResult.text(data.result).appendTo(outerDivForResults);
-                CodeMirror.fromTextArea(textAreaResult[0], {mode: 'text/x-less'});
+                CodeMirror.fromTextArea(textAreaResult[0], {mode: 'text/x-less', readOnly: true});
             }
             $('#serverErrorMsg_' + this.queryTabDivName).removeClass('server-error-msg');
             $('#serverErrorMsg_' + this.queryTabDivName).empty();

@@ -7,8 +7,6 @@ import com.tinkerpop.gremlin.groovy.Gremlin;
 import com.tinkerpop.pipes.Pipe;
 import com.tinkerpop.pipes.util.iterators.SingleIterator;
 
-import java.util.Map;
-
 /**
  * Date: 2013/06/09
  * Time: 8:34 PM
@@ -20,20 +18,10 @@ public class GremlinExecutor {
         Graph graph = new ReadOnlyGraph(GraphDb.getDb());
         Pipe pipe = Gremlin.compile("_()." + gremlin);
         pipe.setStarts(new SingleIterator<Vertex>(graph.getVertex(contextId)));
-        for(Object o : pipe) {
-            if (o instanceof String) {
-                result.append((String) o);
-            } else if (o instanceof Map) {
-                Map map = (Map)o;
-                for (Object key : map.keySet()) {
-                    result.append(key);
-                    result.append(": ");
-                    result.append(map.get(key));
-                    result.append("\\n");
-                }
-            } else {
-                result.append(o.toString());
-            }
+        GremlinToStringPipe gremlinToStringPipe = new GremlinToStringPipe();
+        gremlinToStringPipe.setStarts(pipe);
+        for(String s : gremlinToStringPipe) {
+            result.append(s);
         }
         return result.toString();
     }
