@@ -406,11 +406,12 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
                 }
             case GREMLIN:
                 String result = GremlinExecutor.executeGremlinQuery(contextId, query);
-                return "{\"result\": " + "\"" + result + "\"}";
+                return result;
             case NATIVE:
                 ExecutionEngine engine = new ExecutionEngine( getRawGraph(), StringLogger.SYSTEM );
                 ExecutionResult executionResult = engine.execute(query);
-                return "{\"result\": " + "\"" + executionResult.dumpToString().replace("\"", "\\\"").replace("\n", "\\n") + "\"}";
+                result = executionResult.dumpToString();
+                return result;
         }
 
         throw new RuntimeException("Unknown query enum");

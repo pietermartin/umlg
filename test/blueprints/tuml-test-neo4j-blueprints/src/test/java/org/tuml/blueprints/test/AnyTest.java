@@ -2,6 +2,7 @@ package org.tuml.blueprints.test;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
+import org.tuml.gremlin.TestGremlinExecutor;
 import org.tuml.tinker.collectiontest.OclStdLibCollectionTest;
 import org.tuml.tinker.collectiontest.OrderedSetTestTest;
 import org.tuml.tinker.collectiontest.SequenceTest;
@@ -13,7 +14,7 @@ import org.tuml.tinker.qualifiertest.TestQualifier;
  * Time: 7:18 PM
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({TestQualifier.class})
+@Suite.SuiteClasses({TestGremlinExecutor.class})
 public class AnyTest {
 
 }

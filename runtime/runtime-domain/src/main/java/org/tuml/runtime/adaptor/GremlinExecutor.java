@@ -4,8 +4,11 @@ import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.util.wrappers.readonly.ReadOnlyGraph;
 import com.tinkerpop.gremlin.groovy.Gremlin;
+import com.tinkerpop.gremlin.java.GremlinToStringPipe;
 import com.tinkerpop.pipes.Pipe;
+import com.tinkerpop.pipes.util.Pipeline;
 import com.tinkerpop.pipes.util.iterators.SingleIterator;
+import org.apache.commons.lang.time.StopWatch;
 
 /**
  * Date: 2013/06/09
@@ -17,12 +20,19 @@ public class GremlinExecutor {
         StringBuilder result = new StringBuilder();
         Graph graph = new ReadOnlyGraph(GraphDb.getDb());
         Pipe pipe = Gremlin.compile("_()." + gremlin);
-        pipe.setStarts(new SingleIterator<Vertex>(graph.getVertex(contextId)));
-        GremlinToStringPipe gremlinToStringPipe = new GremlinToStringPipe();
-        gremlinToStringPipe.setStarts(pipe);
-        for(String s : gremlinToStringPipe) {
-            result.append(s);
+        GremlinToStringPipe<String> toStringPipe = new GremlinToStringPipe<String>();
+        Pipeline<Vertex,String> pipeline = new Pipeline<Vertex,String>(pipe, toStringPipe);
+        pipeline.setStarts(new SingleIterator<Vertex>(graph.getVertex(contextId)));
+
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        while (pipeline.hasNext()) {
+            result.append(pipeline.next());
+            result.append("\n");
         }
+        stopWatch.stop();
+        result.append("Time taken: ");
+        result.append(stopWatch.toString());
         return result.toString();
     }
 }

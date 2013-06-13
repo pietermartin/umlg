@@ -26,7 +26,6 @@
             $.ajax({
                 url: this.oclExecuteUri + '?query=' + codeMirror.getValue() + '&type=' + querySelect.val(),
                 type: "GET",
-                dataType: "json",
                 contentType: "application/json",
                 success: function (data) {
                     self.afterExecuteQuery(data);
@@ -44,7 +43,7 @@
                 var outerDivForResults = $('#' + this.queryTabDivName + '_' + 'OclResult');
                 outerDivForResults.children().remove();
                 var textAreaResult = $('<textarea />', {id: 'queryResultId'});
-                textAreaResult.text(data.result).appendTo(outerDivForResults);
+                textAreaResult.text(data).appendTo(outerDivForResults);
                 CodeMirror.fromTextArea(textAreaResult[0], {mode: 'text/x-less', readOnly: true});
             }
             $('#serverErrorMsg_' + this.queryTabDivName).removeClass('server-error-msg');
