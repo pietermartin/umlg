@@ -4,7 +4,6 @@ import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.util.wrappers.readonly.ReadOnlyGraph;
 import com.tinkerpop.gremlin.groovy.Gremlin;
-import com.tinkerpop.gremlin.java.GremlinToStringPipe;
 import com.tinkerpop.pipes.Pipe;
 import com.tinkerpop.pipes.util.Pipeline;
 import com.tinkerpop.pipes.util.iterators.SingleIterator;
