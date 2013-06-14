@@ -1,6 +1,5 @@
 package org.tuml.runtime.adaptor;
 
-import com.tinkerpop.gremlin.java.ArrayIterator;
 import com.tinkerpop.pipes.AbstractPipe;
 import com.tinkerpop.pipes.transform.TransformPipe;
 import com.tinkerpop.pipes.util.PipeHelper;
