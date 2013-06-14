@@ -10,22 +10,22 @@
     <artifactId>java-generation</artifactId>
     <dependencies>
         <dependency>
-            <groupId>org.tuml</groupId>
+            <groupId>org.umlg</groupId>
             <artifactId>generation</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>org.tuml</groupId>
+            <groupId>org.umlg</groupId>
             <artifactId>java-generation-util</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>org.tuml</groupId>
+            <groupId>org.umlg</groupId>
             <artifactId>java-generation-ocl</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>org.tuml</groupId>
+            <groupId>org.umlg</groupId>
             <artifactId>ocl</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>

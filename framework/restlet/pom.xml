@@ -10,7 +10,7 @@
 	<artifactId>restlet</artifactId>
 	<dependencies>
 		<dependency>
-			<groupId>org.tuml</groupId>
+			<groupId>org.umlg</groupId>
 			<artifactId>java-generation</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>

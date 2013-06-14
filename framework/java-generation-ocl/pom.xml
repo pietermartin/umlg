@@ -9,17 +9,17 @@
 	<artifactId>java-generation-ocl</artifactId>
 	<dependencies>
 		<dependency>
-			<groupId>org.tuml</groupId>
+			<groupId>org.umlg</groupId>
 			<artifactId>java-metamodel</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>org.tuml</groupId>
+			<groupId>org.umlg</groupId>
 			<artifactId>java-generation-util</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>		
 		<dependency>
-			<groupId>org.tuml</groupId>
+			<groupId>org.umlg</groupId>
 			<artifactId>uml</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>

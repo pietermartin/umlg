@@ -9,17 +9,17 @@
     <artifactId>tuml-test-neo4j-blueprints</artifactId>
     <dependencies>
         <dependency>
-            <groupId>org.tuml</groupId>
+            <groupId>org.umlg</groupId>
             <artifactId>runtime-domain-neo4j</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>org.tuml</groupId>
+            <groupId>org.umlg</groupId>
             <artifactId>runtime-test-neo4j</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>org.tuml</groupId>
+            <groupId>org.umlg</groupId>
             <artifactId>tuml-test-blueprints-tests</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <!--<classifier>tests</classifier>-->

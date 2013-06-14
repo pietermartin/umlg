@@ -26,17 +26,17 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.tuml</groupId>
+            <groupId>org.umlg</groupId>
             <artifactId>runtime-domain</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>org.tuml</groupId>
+            <groupId>org.umlg</groupId>
             <artifactId>runtime-test</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>org.tuml</groupId>
+            <groupId>org.umlg</groupId>
             <artifactId>tuml-test-blueprints</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>

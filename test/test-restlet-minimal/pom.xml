@@ -56,27 +56,27 @@
 	</build>
 	<dependencies>
 		<dependency>
-			<groupId>org.tuml</groupId>
+			<groupId>org.umlg</groupId>
 			<artifactId>restlet</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>org.tuml</groupId>
+			<groupId>org.umlg</groupId>
 			<artifactId>runtime-restlet</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>		
 		<dependency>
-			<groupId>org.tuml</groupId>
+			<groupId>org.umlg</groupId>
 			<artifactId>runtime-domain-neo4j</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>org.tuml</groupId>
+			<groupId>org.umlg</groupId>
 			<artifactId>runtime-jquery</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>		
 		<dependency>
-			<groupId>org.tuml</groupId>
+			<groupId>org.umlg</groupId>
 			<artifactId>runtime-test</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>		

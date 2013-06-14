@@ -33,20 +33,20 @@
 			<artifactId>org.restlet.ext.json</artifactId>
 			<version>${restlet.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.tuml</groupId>
-			<artifactId>runtime-domain</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-        <dependency>
-            <groupId>org.tuml</groupId>
-            <artifactId>runtime-uml</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
         <dependency>
             <groupId>org.restlet.jse</groupId>
             <artifactId>org.restlet.ext.freemarker</artifactId>
             <version>${restlet.version}</version>
+        </dependency>
+		<dependency>
+			<groupId>org.umlg</groupId>
+			<artifactId>runtime-domain</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+        <dependency>
+            <groupId>org.umlg</groupId>
+            <artifactId>runtime-uml</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
