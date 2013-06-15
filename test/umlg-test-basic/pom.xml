@@ -6,7 +6,7 @@
 		<artifactId>test</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>tuml-test-basic</artifactId>
+	<artifactId>umlg-test-basic</artifactId>
 	<build>
 		<plugins>
 			<plugin>

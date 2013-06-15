@@ -9,7 +9,7 @@
 	</parent>
 	<artifactId>tuml-test-ocl</artifactId>
 
-	<name>tuml-test-ocl</name>
+	<name>umlg-test-ocl</name>
 	<url>http://maven.apache.org</url>
 	<build>
 		<plugins>
