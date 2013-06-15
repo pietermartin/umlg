@@ -7,13 +7,6 @@ import java.util.Set;
 import org.umlg.java.metamodel.OJElement;
 import org.umlg.java.metamodel.OJPathName;
 
-/**
- * A helper class that provides common operations for elements that have annotations, i.e. <br>
- * implementations of the OJAnnotatedElement interface
- * 
- * @author abarnard
- * 
- */
 public class AnnotationHelper {
 	public static Set<OJPathName> getImportsFrom(Collection<? extends OJElement> sources) {
 		Set<OJPathName> result = new HashSet<OJPathName>();
