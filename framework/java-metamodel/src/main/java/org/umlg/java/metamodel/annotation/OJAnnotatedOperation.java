@@ -22,6 +22,7 @@ public class OJAnnotatedOperation extends OJOperation implements OJAnnotatedElem
         setReturnType(new OJPathName(returnPathName));
     }
 
+
     public OJAnnotatedOperation(String string, OJPathName returnPathName) {
         this(string);
         setReturnType(returnPathName);

@@ -21,6 +21,7 @@ public class OJAnnotatedPackageInfo extends OJElement implements OJAnnotatedElem
 		setName("");
 	}
 
+
 	public boolean addAnnotationIfNew(OJAnnotationValue value){
 		if(f_annotations.containsKey(value.getType())){
 			return false;

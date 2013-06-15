@@ -16,6 +16,7 @@ public class OJAnnotatedInterface extends OJAnnotatedClass {
 		super(string);
 	}
 
+
 	@Override
 	public String toJavaString() {
 		this.calcImports();

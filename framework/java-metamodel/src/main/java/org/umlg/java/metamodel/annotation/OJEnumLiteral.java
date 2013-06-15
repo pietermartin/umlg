@@ -32,6 +32,7 @@ public class OJEnumLiteral extends OJElement  implements OJAnnotatedElement{
 		super();
 	}
 
+
 	@Override
 	public String toJavaString() {
 		if(this.attributeValues.isEmpty()){

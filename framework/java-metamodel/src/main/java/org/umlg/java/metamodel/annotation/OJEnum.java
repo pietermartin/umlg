@@ -23,6 +23,7 @@ public class OJEnum extends OJAnnotatedClass {
 		f_literals.clear();
 	}
 
+
 	public void addToLiterals(OJEnumLiteral literal) {
 		this.f_literals.add(literal);
 	}

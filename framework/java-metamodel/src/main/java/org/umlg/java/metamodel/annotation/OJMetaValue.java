@@ -21,6 +21,7 @@ public abstract class OJMetaValue extends OJElement {
 	public boolean isImportType(){
 		return importType;
 	}
+
 	public void setImportType(boolean importType){
 		this.importType = importType;
 	}

@@ -31,6 +31,7 @@ public class OJAnnotationValue extends OJMetaValue{
 		super.setName(type.getLast());
 		this.type = type;
 	}
+
 	public OJAnnotationValue(OJPathName type,Number value){
 		super(value);
 		super.setName(type.getLast());

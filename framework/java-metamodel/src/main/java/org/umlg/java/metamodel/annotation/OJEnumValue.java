@@ -14,6 +14,7 @@ import org.umlg.java.metamodel.OJPathName;
 public class OJEnumValue extends OJElement{
 	private OJPathName type;
 	private String literalName;
+
 	public OJEnumValue(OJPathName type,String literalName){
 		super();
 		this.type = type;

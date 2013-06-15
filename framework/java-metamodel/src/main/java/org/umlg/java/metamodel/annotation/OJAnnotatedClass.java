@@ -34,6 +34,7 @@ public class OJAnnotatedClass extends OJClass implements OJAnnotatedElement {
 		setName(string);
 	}
 
+
 	public void organizeImports() {
 
 	}

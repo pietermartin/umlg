@@ -19,6 +19,7 @@ public class OJAnnotatedField extends OJField implements OJAnnotatedElement {
         this.setType(new OJPathName(ojPathName));
     }
 
+
     public OJAnnotatedField(String string, OJPathName ojPathName) {
         this.setName(string);
         this.setType(ojPathName);

@@ -14,6 +14,7 @@ public class OJAnnotationAttributeValue extends OJMetaValue{
 		super(value);
 		super.setName(name);
 	}
+
 	public OJAnnotationAttributeValue(String name,OJAnnotationValue value){
 		super(value);
 		super.setName(name);

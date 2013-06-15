@@ -9,6 +9,7 @@ public interface OJAnnotatedElement {
 
 	String toJavaString();
 
+
 	OJAnnotationValue putAnnotation(OJAnnotationValue an);
 
 	OJAnnotationValue removeAnnotation(OJPathName type);
