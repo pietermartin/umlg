@@ -7,7 +7,7 @@ import java.util.Set;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.tuml.test.tinker.BaseLocalDbTest;
+import org.umlg.test.tinker.BaseLocalDbTest;
 import org.tinker.concretetest.God;
 import org.tinker.concretetest.GodAudit;
 import org.tinker.embeddedtest.REASON;

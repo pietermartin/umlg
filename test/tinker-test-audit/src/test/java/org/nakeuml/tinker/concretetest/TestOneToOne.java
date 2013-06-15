@@ -3,7 +3,7 @@ package org.nakeuml.tinker.concretetest;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.tuml.test.tinker.BaseLocalDbTest;
+import org.umlg.test.tinker.BaseLocalDbTest;
 import org.tinker.concretetest.God;
 import org.tinker.onetoone.OneOne;
 import org.tinker.onetoone.OneTwo;

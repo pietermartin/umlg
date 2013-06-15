@@ -54,7 +54,7 @@
         this.saveToInstance = function (post) {
             var self = this;
             var query = queryToJson(this.queryTabDivName, this.queryId);
-            query.qualifiedName = 'tumllib::org::tuml::query::InstanceQuery';
+            query.qualifiedName = 'tumllib::org::umlg::query::InstanceQuery';
             var overloadedPostData = {insert: [], update: [], delete: []};
             if (post) {
                 overloadedPostData.insert.push(query);
@@ -92,7 +92,7 @@
         this.deleteQuery = function () {
             var self = this;
             var query = queryToJson(this.queryTabDivName, this.queryId);
-            query.qualifiedName = 'tumllib::org::tuml::query::InstanceQuery';
+            query.qualifiedName = 'tumllib::org::umlg::query::InstanceQuery';
             var overloadedPostData = {insert: [], update: [], delete: []};
             overloadedPostData.delete.push(query);
             $.ajax({
@@ -142,7 +142,7 @@
         this.saveToClass = function (post) {
             var self = this;
             var query = queryToJson(this.queryTabDivName, this.queryId);
-            query.qualifiedName = 'tumllib::org::tuml::meta::ClassQuery';
+            query.qualifiedName = 'tumllib::org::umlg::meta::ClassQuery';
             var overloadedPostData = {insert: [], update: [], delete: []};
             if (post) {
                 overloadedPostData.insert.push(query);

@@ -1,18 +1,15 @@
-package org.tuml.blueprints;
+package org.umlg.blueprints;
 
 import com.tinkerpop.blueprints.*;
 import com.tinkerpop.blueprints.impls.neo4j.Neo4jGraph;
-import com.tinkerpop.blueprints.impls.neo4j.Neo4jVertex;
 import junit.framework.Assert;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.time.StopWatch;
 import org.junit.Test;
-import org.neo4j.graphalgo.impl.util.StopAfterWeightIterator;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.event.TransactionData;
 import org.neo4j.graphdb.event.TransactionEventHandler;
-import org.neo4j.kernel.lifecycle.LifecycleException;
 import org.neo4j.tooling.GlobalGraphOperations;
 
 import java.io.File;

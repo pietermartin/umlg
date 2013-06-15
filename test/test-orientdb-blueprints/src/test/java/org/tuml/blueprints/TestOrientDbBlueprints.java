@@ -1,4 +1,4 @@
-package org.tuml.blueprints;
+package org.umlg.blueprints;
 
 import com.orientechnologies.orient.core.db.graph.OGraphDatabase;
 import com.orientechnologies.orient.core.db.record.OIdentifiable;
@@ -19,7 +19,6 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.concurrent.*;
 
 /**

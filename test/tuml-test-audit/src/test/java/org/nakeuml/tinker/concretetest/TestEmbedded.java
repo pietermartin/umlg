@@ -7,10 +7,10 @@ import java.util.Set;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.tuml.concretetest.God;
-import org.tuml.concretetest.GodAudit;
-import org.tuml.embeddedtest.REASON;
-import org.tuml.runtime.test.BaseLocalDbTest;
+import org.umlg.concretetest.God;
+import org.umlg.concretetest.GodAudit;
+import org.umlg.embeddedtest.REASON;
+import org.umlg.runtime.test.BaseLocalDbTest;
 
 import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 

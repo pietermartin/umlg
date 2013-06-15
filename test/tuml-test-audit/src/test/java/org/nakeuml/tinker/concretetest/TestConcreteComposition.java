@@ -4,10 +4,10 @@ import static org.junit.Assert.assertEquals;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.tuml.collectiontest.Hand;
-import org.tuml.concretetest.God;
-import org.tuml.inheritencetest.Biped;
-import org.tuml.runtime.test.BaseLocalDbTest;
+import org.umlg.collectiontest.Hand;
+import org.umlg.concretetest.God;
+import org.umlg.inheritencetest.Biped;
+import org.umlg.runtime.test.BaseLocalDbTest;
 
 import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 

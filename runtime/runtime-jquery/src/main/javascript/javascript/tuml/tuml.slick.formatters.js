@@ -32,11 +32,11 @@
     }
 
     function TumlIdNewFormatter(row, cell, value, columnDef, dataContext) {
-        return '<span class="tuml-new-id">' + value + '</span>';
+        return '<span class="umlg-new-id">' + value + '</span>';
     }
 
     function TumlIdUpdatedFormatter(row, cell, value, columnDef, dataContext) {
-        return '<span class="tuml-updated-id">' + value + '</span>';
+        return '<span class="umlg-updated-id">' + value + '</span>';
     }
 
     function TumlValidationFailedFormatter(row, cell, value, columnDef, dataContext) {
@@ -56,7 +56,7 @@
     }
 
     function TumlDeleteFormatter(row, cell, value, columnDef, dataContext) {
-        return "<img class='tuml-delete-img' src='/"+tumlModelName+"/javascript/images/delete.png'>";
+        return "<img class='umlg-delete-img' src='/"+tumlModelName+"/javascript/images/delete.png'>";
     }
 
     function TumlBooleanFormatter(row, cell, value, columnDef, dataContext) {

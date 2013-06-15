@@ -3,10 +3,10 @@ package org.nakeuml.tinker.concretetest;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.tuml.concretetest.God;
-import org.tuml.onetoone.OneOne;
-import org.tuml.onetoone.OneTwo;
-import org.tuml.runtime.test.BaseLocalDbTest;
+import org.umlg.concretetest.God;
+import org.umlg.onetoone.OneOne;
+import org.umlg.onetoone.OneTwo;
+import org.umlg.runtime.test.BaseLocalDbTest;
 
 import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 

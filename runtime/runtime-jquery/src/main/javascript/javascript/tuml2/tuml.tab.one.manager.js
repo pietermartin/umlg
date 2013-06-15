@@ -582,9 +582,9 @@
         }
         var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
         if (this.isForCreation) {
-            input.addClass("tuml-new-id");
+            input.addClass("umlg-new-id");
         } else {
-            input.addClass("tuml-updated-id");
+            input.addClass("umlg-updated-id");
         }
         return input;
     }
@@ -668,7 +668,7 @@
             var rowValue = $('<td class="many-primitive-editor-cell" />').text(value);
             row.append(rowValue);
             row.data('value', value);
-            var img = $('<img/>', {class: 'tuml-many-select-img', src: '/' + tumlModelName + '/javascript/images/delete.png'}).click(function () {
+            var img = $('<img/>', {class: 'umlg-many-select-img', src: '/' + tumlModelName + '/javascript/images/delete.png'}).click(function () {
                 var liClicked = $(this).parent().parent();
                 liClicked.remove();
             });

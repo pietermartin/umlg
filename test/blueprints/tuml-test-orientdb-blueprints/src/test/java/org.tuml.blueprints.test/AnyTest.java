@@ -1,8 +1,8 @@
-package org.tuml.blueprints.test;
+package org.umlg.blueprints.test;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
-import org.tuml.tinker.collectiontest.OrderedSetTest;
+import org.umlg.tinker.collectiontest.OrderedSetTest;
 
 /**
  * Date: 2013/01/28

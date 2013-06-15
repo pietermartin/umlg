@@ -15,6 +15,6 @@
         <module>tuml-test-blueprints</module>
         <module>tuml-test-blueprints-tests</module>
         <module>tuml-test-neo4j-blueprints</module>
-        <!--<module>tuml-test-orientdb-blueprints</module>-->
+        <!--<module>umlg-test-orientdb-blueprints</module>-->
 	</modules>
 </project>

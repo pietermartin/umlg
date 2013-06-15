@@ -4,9 +4,9 @@ import static org.junit.Assert.assertEquals;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.tuml.concretetest.God;
-import org.tuml.concretetest.GodAudit;
-import org.tuml.runtime.test.BaseLocalDbTest;
+import org.umlg.concretetest.God;
+import org.umlg.concretetest.GodAudit;
+import org.umlg.runtime.test.BaseLocalDbTest;
 
 import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 

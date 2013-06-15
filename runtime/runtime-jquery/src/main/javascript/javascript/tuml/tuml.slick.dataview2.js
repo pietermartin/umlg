@@ -48,7 +48,7 @@
     var idProperty = "id";  // property holding a unique row id
     var items = [];         // data by index
 
-    //tuml
+    //umlg
       var updatedItems = [];  // updated data by id
       var newItems = [];      // new data by id
       var deletedItems = [];  // deleted data by id
@@ -57,15 +57,15 @@
       var postUpdatedIdxById = {};
       var postNewIdxById = {};
 
-    //tuml
+    //umlg
 
       var rows = [];          // data by row
     var idxById = {};       // indexes by id
 
-      //tuml
+      //umlg
       var updatedIdxById = {} // updated indexes by id
       var newIdxById = {}     // new indexes by id
-    //tuml
+    //umlg
 
       var rowsById = null;    // rows by id; lazy-calculated
     var filter = null;      // filter function
@@ -134,7 +134,7 @@
       }
     }
 
-    //tuml
+    //umlg
       function updateNewIdxById(startingIndex) {
           startingIndex = startingIndex || 0;
           var id;
@@ -159,7 +159,7 @@
           }
       }
 
-    //tuml
+    //umlg
 
     function ensureIdUniqueness() {
       var id;
@@ -175,7 +175,7 @@
       return items;
     }
 
-      //tuml
+      //umlg
 
       function getUpdatedItems() {
           return updatedItems;
@@ -194,7 +194,7 @@
               addItem(items[i]);
           }
       }
-    //tuml
+    //umlg
 
       function setItems(data, objectIdProperty) {
       if (objectIdProperty !== undefined) {
@@ -571,11 +571,11 @@
       items.push(item);
       updateIdxById(items.length - 1);
 
-//tuml
+//umlg
         //cache of new items
         newItems.push(item);
         newIdxById[item[idProperty]] = newItems.length - 1;
-//tuml
+//umlg
 
         refresh();
     }
@@ -585,7 +585,7 @@
       if (idx === undefined) {
         throw "Invalid id";
       }
-        //tuml
+        //umlg
 
         if (newIdxById[id] === undefined || newIdxById[id] === null) {
             var item = items[idx];
@@ -603,7 +603,7 @@
             newItems.splice(newIdx, 1);
             updateNewIdxById(newIdx);
         }
-//tuml
+//umlg
 
         delete idxById[id];
       items.splice(idx, 1);
@@ -1069,14 +1069,14 @@
       "getItems": getItems,
       "setItems": setItems,
 
-        //tuml
+        //umlg
         "getUpdatedItems":getUpdatedItems,
         "getNewItems":getNewItems,
         "getDeletedItems":getDeletedItems,
         "setNewItems":setNewItems,
         "isRowNew" : isRowNew,
         "isRowUpdated" : isRowUpdated,
-//tuml
+//umlg
 
         "setFilter": setFilter,
       "sort": sort,

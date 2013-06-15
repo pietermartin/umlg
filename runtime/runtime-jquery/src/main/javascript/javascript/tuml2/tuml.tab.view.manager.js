@@ -978,7 +978,7 @@
 //                    self.maybeCreateTabContainer();
 //                    component.data = data;
 //                    var tumlManyComponentTabViewManager = self.createTabContainer(
-//                        tuml.tab.Enum.Properties,
+//                        umlg.tab.Enum.Properties,
 //                        component,
 //                        tumlUri,
 //                        {forLookup: false, forManyComponent: true, forOneComponent: false, isOne: false, forCreation: true},

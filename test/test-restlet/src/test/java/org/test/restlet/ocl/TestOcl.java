@@ -3,16 +3,16 @@ package org.test.restlet.ocl;
 import junit.framework.Assert;
 import org.junit.Test;
 import org.test.restlet.TestRestletDefaultDataCreator;
-import org.tuml.root.Root;
-import org.tuml.runtime.collection.TinkerBag;
-import org.tuml.runtime.collection.TinkerOrderedSet;
-import org.tuml.runtime.collection.TinkerSequence;
-import org.tuml.runtime.collection.ocl.BodyExpressionEvaluator;
-import org.tuml.runtime.test.BaseLocalDbTest;
-import org.tuml.test.Finger;
-import org.tuml.test.Hand;
-import org.tuml.test.Human;
-import org.tuml.test.Ring;
+import org.umlg.root.Root;
+import org.umlg.runtime.collection.TinkerBag;
+import org.umlg.runtime.collection.TinkerOrderedSet;
+import org.umlg.runtime.collection.TinkerSequence;
+import org.umlg.runtime.collection.ocl.BodyExpressionEvaluator;
+import org.umlg.runtime.test.BaseLocalDbTest;
+import org.umlg.test.Finger;
+import org.umlg.test.Hand;
+import org.umlg.test.Human;
+import org.umlg.test.Ring;
 
 /**
  * Date: 2013/02/13

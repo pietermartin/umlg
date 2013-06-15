@@ -32,7 +32,7 @@
 							<goal>java</goal>
 						</goals>
 						<configuration>
-							<mainClass>org.tuml.test.generation.GenerateTestProjects</mainClass>
+							<mainClass>org.umlg.test.generation.GenerateTestProjects</mainClass>
 							<arguments>
 -								<argument>${session.executionRootDirectory}</argument>
 							</arguments>

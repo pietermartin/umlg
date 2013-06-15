@@ -61,13 +61,13 @@
     <availablePage>
       <emfPageIdentifier href="tinker-test.notation#_rs5lAIlaEeKeSZB9UA6Gvw"/>
     </availablePage>
+    <availablePage>
+      <emfPageIdentifier href="tinker-test.notation#_-FfkkNUXEeK7NLjWHR0vxw"/>
+    </availablePage>
   </pageList>
   <sashModel xmi:id="_1dMZogAOEeKpVr_ntT6cLA" currentSelection="_1dMZoAAOEeKpVr_ntT6cLA">
     <windows xmi:id="_1dMZoQAOEeKpVr_ntT6cLA">
       <children xsi:type="di:TabFolder" xmi:id="_1dMZoAAOEeKpVr_ntT6cLA">
-        <children>
-          <emfPageIdentifier href="tinker-test.notation#_1chrRAAOEeKpVr_ntT6cLA"/>
-        </children>
         <children>
           <emfPageIdentifier href="tinker-test.notation#_1chrSgAOEeKpVr_ntT6cLA"/>
         </children>
@@ -90,9 +90,6 @@
           <emfPageIdentifier href="tinker-test.notation#_1chENgAOEeKpVr_ntT6cLA"/>
         </children>
         <children>
-          <emfPageIdentifier href="tinker-test.notation#_HkiPsIlaEeKeSZB9UA6Gvw"/>
-        </children>
-        <children>
           <emfPageIdentifier href="tinker-test.notation#_rs5lAIlaEeKeSZB9UA6Gvw"/>
         </children>
         <children>
@@ -106,6 +103,15 @@
         </children>
         <children>
           <emfPageIdentifier href="tinker-test.notation#_1chrSAAOEeKpVr_ntT6cLA"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="tinker-test.notation#_HkiPsIlaEeKeSZB9UA6Gvw"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="tinker-test.notation#_-FfkkNUXEeK7NLjWHR0vxw"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="tinker-test.notation#_1chrRAAOEeKpVr_ntT6cLA"/>
         </children>
       </children>
     </windows>

@@ -3,11 +3,11 @@ package org.nakeuml.tinker.concretetest;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.tuml.componenttest.SpaceTime;
-import org.tuml.concretetest.Demon;
-import org.tuml.concretetest.God;
-import org.tuml.concretetest.Universe;
-import org.tuml.runtime.test.BaseLocalDbTest;
+import org.umlg.componenttest.SpaceTime;
+import org.umlg.concretetest.Demon;
+import org.umlg.concretetest.God;
+import org.umlg.concretetest.Universe;
+import org.umlg.runtime.test.BaseLocalDbTest;
 
 import com.tinkerpop.blueprints.TransactionalGraph.Conclusion;
 

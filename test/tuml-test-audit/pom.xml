@@ -53,7 +53,7 @@
 							<goal>java</goal>
 						</goals>
 						<configuration>
-							<mainClass>org.tuml.javageneration.JavaGenerator</mainClass>
+							<mainClass>org.umlg.javageneration.JavaGenerator</mainClass>
 							<arguments>
 								<argument>test/tuml-test-audit/src/main/model/tinker-test.uml</argument>
 								<argument>test/tuml-test-audit/</argument>

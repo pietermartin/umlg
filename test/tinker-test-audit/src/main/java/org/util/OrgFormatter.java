@@ -1,6 +1,6 @@
 package org.util;
 
-import org.tuml.runtime.domain.AbstractFormatter;
+import org.umlg.runtime.domain.AbstractFormatter;
 
 public class OrgFormatter extends AbstractFormatter implements IOrgFormatter {
 	static final private ThreadLocal<OrgFormatter> INSTANCE = new ThreadLocal<OrgFormatter>();

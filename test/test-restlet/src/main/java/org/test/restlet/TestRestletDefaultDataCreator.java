@@ -1,10 +1,9 @@
 package org.test.restlet;
 
-import com.tinkerpop.blueprints.TransactionalGraph;
-import org.tuml.runtime.adaptor.DefaultDataCreator;
-import org.tuml.runtime.adaptor.GraphDb;
-import org.tuml.test.*;
-import org.tuml.test.manytomany.*;
+import org.umlg.runtime.adaptor.DefaultDataCreator;
+import org.umlg.runtime.adaptor.GraphDb;
+import org.umlg.test.*;
+import org.umlg.test.manytomany.*;
 
 /**
  * Date: 2012/12/31
