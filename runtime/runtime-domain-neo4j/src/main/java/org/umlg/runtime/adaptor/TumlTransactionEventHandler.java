@@ -11,7 +11,7 @@ import org.neo4j.graphdb.event.TransactionEventHandler;
 import org.umlg.runtime.domain.BaseTinkerAuditable;
 import org.umlg.runtime.domain.CompositionNode;
 import org.umlg.runtime.domain.TumlNode;
-import org.umlg.runtime.util.TumlProperties;
+import org.umlg.runtime.util.UmlgProperties;
 import org.umlg.runtime.validation.TumlConstraintViolation;
 import org.umlg.runtime.validation.TumlConstraintViolationException;
 
@@ -28,7 +28,7 @@ public class TumlTransactionEventHandler<T> implements TransactionEventHandler<T
 
     @Override
     public T beforeCommit(TransactionData data) throws Exception {
-        if (TumlProperties.INSTANCE.isTransactionsMutliThreaded()) {
+        if (UmlgProperties.INSTANCE.isTransactionsMutliThreaded()) {
             Set<Node> deletedNodes = new HashSet<Node>();
             Iterable<Node> deletedNodeIterable = data.deletedNodes();
             for (Node node : deletedNodeIterable) {

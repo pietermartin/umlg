@@ -2,7 +2,9 @@ package org.umlg.restlet.visitor.clazz;
 
 import java.util.Collections;
 
+import org.eclipse.uml2.uml.AssociationClass;
 import org.eclipse.uml2.uml.Class;
+import org.umlg.framework.VisitSubclasses;
 import org.umlg.java.metamodel.OJPathName;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
@@ -22,6 +24,7 @@ public class AddIdLiteralsToRuntimeEnum extends BaseVisitor implements Visitor<C
 	}
 
 	@Override
+    @VisitSubclasses({Class.class, AssociationClass.class})
 	public void visitBefore(Class clazz) {
 		OJAnnotatedClass annotatedClass = findOJClass(clazz);
 		OJEnum ojEnum = annotatedClass.findEnum(TumlClassOperations.propertyEnumName(clazz));

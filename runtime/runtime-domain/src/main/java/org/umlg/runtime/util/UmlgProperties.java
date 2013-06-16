@@ -6,12 +6,12 @@ import java.util.Properties;
  * Date: 2013/01/02
  * Time: 3:08 PM
  */
-public class TumlProperties {
+public class UmlgProperties {
 
-    public static TumlProperties INSTANCE = new TumlProperties();
+    public static UmlgProperties INSTANCE = new UmlgProperties();
     private Properties properties;
 
-    private TumlProperties() {
+    private UmlgProperties() {
         this.properties = new Properties();
         try {
             this.properties.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("umlg.env.properties"));

@@ -6,7 +6,7 @@
         <artifactId>blueprints</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <artifactId>tuml-test-neo4j-blueprints</artifactId>
+    <artifactId>umlg-test-neo4j-blueprints</artifactId>
     <dependencies>
         <dependency>
             <groupId>org.umlg</groupId>
@@ -20,7 +20,7 @@
         </dependency>
         <dependency>
             <groupId>org.umlg</groupId>
-            <artifactId>tuml-test-blueprints-tests</artifactId>
+            <artifactId>umlg-test-blueprints-tests</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <!--<classifier>tests</classifier>-->
             <scope>test</scope>

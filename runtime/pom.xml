@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>runtime</artifactId>
     <packaging>pom</packaging>
-    <name>tuml runtime pom</name>
+    <name>umlg runtime pom</name>
     <modules>
         <module>runtime-domain</module>
         <module>runtime-test</module>

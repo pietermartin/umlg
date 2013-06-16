@@ -3,9 +3,11 @@ package org.umlg.javageneration.visitor.clazz;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.uml2.uml.AssociationClass;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.Property;
+import org.umlg.framework.VisitSubclasses;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedInterface;
 import org.umlg.framework.Visitor;
@@ -25,6 +27,7 @@ public class ClassImplementedInterfacePropertyVisitor extends BaseVisitor implem
 	}
 
 	@Override
+    @VisitSubclasses({Class.class, AssociationClass.class})
 	public void visitBefore(Class clazz) {
 		OJAnnotatedClass annotatedClass = findOJClass(clazz);
 		addImplementedInterfaces(annotatedClass, clazz);

@@ -93,15 +93,15 @@ public class RestletComponentAndApplicationGenerator extends BaseVisitor impleme
         constructor.getBody().addToStatements(TinkerGenerationUtil.TumlGraphManager.getLast() + ".INSTANCE.startupGraph()");
         component.addToImports(TinkerGenerationUtil.TumlGraphManager);
 
-        OJIfStatement ifStartAdmin = new OJIfStatement(TinkerGenerationUtil.TumlProperties.getLast() + ".INSTANCE.isStartAdminApplication()", TumlRestletGenerationUtil.Neo4jAdminApp.getLast() + ".startAdminApplication()");
+        OJIfStatement ifStartAdmin = new OJIfStatement(TinkerGenerationUtil.UmlgProperties.getLast() + ".INSTANCE.isStartAdminApplication()", TumlRestletGenerationUtil.Neo4jAdminApp.getLast() + ".startAdminApplication()");
         constructor.getBody().addToStatements(ifStartAdmin);
         component.addToImports(TumlRestletGenerationUtil.Neo4jAdminApp);
-        component.addToImports(TinkerGenerationUtil.TumlProperties);
+        component.addToImports(TinkerGenerationUtil.UmlgProperties);
 
         OJTryStatement tryLoadClass = new OJTryStatement();
-        OJIfStatement ifCreateDefaultData = new OJIfStatement(TinkerGenerationUtil.TumlProperties.getLast() + ".INSTANCE.isCreateDefaultData()");
+        OJIfStatement ifCreateDefaultData = new OJIfStatement(TinkerGenerationUtil.UmlgProperties.getLast() + ".INSTANCE.isCreateDefaultData()");
         ifCreateDefaultData.addToThenPart(tryLoadClass);
-        tryLoadClass.getTryPart().addToStatements("DefaultDataCreator defaultDataCreator = (DefaultDataCreator)Class.forName(" + TinkerGenerationUtil.TumlProperties.getLast() + ".INSTANCE.getDefaultDataLoaderClass()).newInstance()");
+        tryLoadClass.getTryPart().addToStatements("DefaultDataCreator defaultDataCreator = (DefaultDataCreator)Class.forName(" + TinkerGenerationUtil.UmlgProperties.getLast() + ".INSTANCE.getDefaultDataLoaderClass()).newInstance()");
         tryLoadClass.getTryPart().addToStatements("defaultDataCreator.createData()");
         tryLoadClass.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
         tryLoadClass.getCatchPart().addToStatements("throw new RuntimeException(e)");

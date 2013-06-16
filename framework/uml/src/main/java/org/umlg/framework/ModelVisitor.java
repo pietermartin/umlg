@@ -1,8 +1,11 @@
 package org.umlg.framework;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Arrays;
+import java.util.List;
 
 import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.PackageImport;
@@ -27,14 +30,28 @@ public class ModelVisitor {
 			Class<?> visitingTypeClass = (Class<?>) visitingType;
 			Method method = visitor.getClass().getMethod("visitBefore", visitingTypeClass);
 			if (method != null && method.isAnnotationPresent(VisitSubclasses.class)) {
-				if (visitingTypeClass.isAssignableFrom(element.getClass())) {
-					visitor.visitBefore(element);
-				}
+                VisitSubclasses visitSubclasses = method.getAnnotation(VisitSubclasses.class);
+                if (visitingTypeClass.isAssignableFrom(element.getClass())) {
+                    List<Class<?>> umlClasses = Arrays.asList(visitSubclasses.value());
+                    for (Class<?> umlClass : umlClasses) {
+                        Class<?>[] elementInterfaces = element.getClass().getInterfaces();
+                        for (Class<?> elementInterface : elementInterfaces) {
+                            if (umlClass.equals(elementInterface) || umlClass.equals(Element.class)) {
+                                visitor.visitBefore(element);
+                                break;
+                            }
+                        }
+                    }
+                }
+//				if (visitingTypeClass.isAssignableFrom(element.getClass())) {
+//					visitor.visitBefore(element);
+//				}
 			} else {
 				Class<?>[] elementInterfaces = element.getClass().getInterfaces();
 				for (Class<?> elementInterface : elementInterfaces) {
 					if (visitingTypeClass.equals(elementInterface)) {
 						visitor.visitBefore(element);
+                        break;
 					}
 				}
 			}
@@ -49,19 +66,19 @@ public class ModelVisitor {
 					visitModel(e, visitor);
 				}
 			}
-			method = visitor.getClass().getMethod("visitAfter", visitingTypeClass);
-			if (method != null && method.isAnnotationPresent(VisitSubclasses.class)) {
-				if (visitingTypeClass.isAssignableFrom(element.getClass())) {
-					visitor.visitAfter(element);
-				}
-			} else {
-				Class<?>[] elementInterfaces = element.getClass().getInterfaces();
-				for (Class<?> elementInterface : elementInterfaces) {
-					if (visitingTypeClass.equals(elementInterface)) {
-						visitor.visitAfter(element);
-					}
-				}
-			}
+//			method = visitor.getClass().getMethod("visitAfter", visitingTypeClass);
+//			if (method != null && method.isAnnotationPresent(VisitSubclasses.class)) {
+//				if (visitingTypeClass.isAssignableFrom(element.getClass())) {
+//					visitor.visitAfter(element);
+//				}
+//			} else {
+//				Class<?>[] elementInterfaces = element.getClass().getInterfaces();
+//				for (Class<?> elementInterface : elementInterfaces) {
+//					if (visitingTypeClass.equals(elementInterface)) {
+//						visitor.visitAfter(element);
+//					}
+//				}
+//			}
 		} catch (SecurityException e1) {
 			throw new RuntimeException(e1);
 		} catch (NoSuchMethodException e1) {

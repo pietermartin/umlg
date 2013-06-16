@@ -13,7 +13,7 @@
     <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#UnlimitedNatural"/>
   </elementImport>
   <packagedElement xmi:type="uml:Package" xmi:id="_D7WIQMB0EeGJPdxBi7GiSw" name="org">
-    <packagedElement xmi:type="uml:Package" xmi:id="_w8IxIM37EdqwVrslYOdUDA" name="tuml">
+    <packagedElement xmi:type="uml:Package" xmi:id="_w8IxIM37EdqwVrslYOdUDA" name="umlg">
       <packagedElement xmi:type="uml:Package" xmi:id="_MqqkwL7zEeG5Bt_b3EGOQQ" name="testocl">
         <packagedElement xmi:type="uml:Class" xmi:id="_OUDkcL7zEeG5Bt_b3EGOQQ" name="OclTest1">
           <ownedAttribute xmi:id="_QS-IML7zEeG5Bt_b3EGOQQ" name="property1" visibility="public">

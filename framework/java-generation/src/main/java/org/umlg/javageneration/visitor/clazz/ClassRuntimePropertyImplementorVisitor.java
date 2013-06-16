@@ -1,7 +1,9 @@
 package org.umlg.javageneration.visitor.clazz;
 
+import org.eclipse.uml2.uml.AssociationClass;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Property;
+import org.umlg.framework.VisitSubclasses;
 import org.umlg.java.metamodel.OJField;
 import org.umlg.java.metamodel.OJIfStatement;
 import org.umlg.java.metamodel.OJPathName;
@@ -24,6 +26,7 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
     }
 
     @Override
+    @VisitSubclasses({Class.class, AssociationClass.class})
     public void visitBefore(Class clazz) {
         OJAnnotatedClass annotatedClass = findOJClass(clazz);
         addInitialiseProperty(annotatedClass, clazz);

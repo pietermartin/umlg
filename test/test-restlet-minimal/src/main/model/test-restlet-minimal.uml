@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <uml:Model xmi:version="20110701" xmlns:xmi="http://www.omg.org/spec/XMI/20110701" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xmi:id="_n8luoFVxEeKYaem_7BA6sA" name="testRestletMinimal">
   <packagedElement xmi:type="uml:Package" xmi:id="_IhV90FVzEeKYaem_7BA6sA" name="org">
-    <packagedElement xmi:type="uml:Package" xmi:id="_Nb5zUFVzEeKYaem_7BA6sA" name="tuml">
+    <packagedElement xmi:type="uml:Package" xmi:id="_Nb5zUFVzEeKYaem_7BA6sA" name="umlg">
       <packagedElement xmi:type="uml:Class" xmi:id="_Qr9O0FVzEeKYaem_7BA6sA" name="God">
         <ownedAttribute xmi:id="_v8ijkFV4EeKYaem_7BA6sA" name="name" visibility="public">
           <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>

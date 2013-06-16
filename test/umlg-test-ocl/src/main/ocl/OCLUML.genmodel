@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<genmodel:GenModel xmi:version="2.0"
-    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:genmodel="http://www.eclipse.org/uml2/2.2.0/GenModel" modelDirectory="/org.eclipse.ocl.uml/src"
-    creationIcons="false" modelPluginID="org.eclipse.ocl.uml" templateDirectory="/org.eclipse.ocl/templates"
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:genmodel="http://www.eclipse.org/uml2/2.2.0/GenModel"
+    modelDirectory="/org.eclipse.ocl.uml/src" creationIcons="false"
+    modelPluginID="org.eclipse.ocl.uml" templateDirectory="/org.eclipse.ocl/templates"
     dynamicTemplates="true" modelName="OCLUML" modelPluginClass="org.eclipse.ocl.uml.internal.OCLUMLPlugin"
     editPluginClass="org.eclipse.ocl.uml.edit.OCLUMLEditPlugin" editorPluginClass="org.eclipse.ocl.uml.editor.OCLUMLEditorPlugin"
     nonNLSMarkers="true" codeFormatting="true" booleanFlagsField="eFlags" booleanFlagsReservedBits="8"

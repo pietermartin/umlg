@@ -1,5 +1,8 @@
 package org.umlg.javageneration.visitor.clazz;
 
+import org.eclipse.uml2.uml.AssociationClass;
+import org.eclipse.uml2.uml.Class;
+import org.umlg.framework.VisitSubclasses;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.java.metamodel.*;
@@ -13,7 +16,7 @@ import org.umlg.javageneration.visitor.BaseVisitor;
  * Date: 2013/03/29
  * Time: 9:31 AM
  */
-public class SchemaMapCreator extends BaseVisitor implements Visitor<org.eclipse.uml2.uml.Class> {
+public class SchemaMapCreator extends BaseVisitor implements Visitor<Class> {
 
     public SchemaMapCreator(Workspace workspace) {
         super(workspace);
@@ -21,6 +24,7 @@ public class SchemaMapCreator extends BaseVisitor implements Visitor<org.eclipse
 
 
     @Override
+    @VisitSubclasses({Class.class, AssociationClass.class})
     public void visitBefore(org.eclipse.uml2.uml.Class clazz) {
         OJAnnotatedClass schemaMapImpl = this.workspace.findOJClass(TinkerGenerationUtil.TumlSchemaMapImpl.toJavaString());
         if (schemaMapImpl == null) {

@@ -10,7 +10,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>framework</artifactId>
 	<packaging>pom</packaging>
-	<name>tuml framework pom</name>
+	<name>umlg framework pom</name>
 	<modules>
 		<module>uml</module>
 		<module>java-generation</module>

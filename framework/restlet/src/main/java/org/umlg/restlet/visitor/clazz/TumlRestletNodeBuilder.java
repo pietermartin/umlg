@@ -1,6 +1,8 @@
 package org.umlg.restlet.visitor.clazz;
 
+import org.eclipse.uml2.uml.AssociationClass;
 import org.eclipse.uml2.uml.Class;
+import org.umlg.framework.VisitSubclasses;
 import org.umlg.java.metamodel.OJPathName;
 import org.umlg.java.metamodel.OJVisibilityKind;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
@@ -17,6 +19,7 @@ public class TumlRestletNodeBuilder extends BaseServerResourceBuilder implements
 	}
 
 	@Override
+    @VisitSubclasses({Class.class, AssociationClass.class})
 	public void visitBefore(Class clazz) {
 		OJAnnotatedClass annotatedClass = findOJClass(clazz);
 		if (clazz.getGenerals().isEmpty()) {

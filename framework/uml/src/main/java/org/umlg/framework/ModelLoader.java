@@ -29,7 +29,7 @@ public class ModelLoader {
     public final static ModelLoader INSTANCE = new ModelLoader();
     private ResourceSet RESOURCE_SET;
     private Model model;
-    private Profile tumlValidationProfile;
+    private Profile umlgValidationProfile;
     private List<Model> importedModelLibraries = new ArrayList<Model>();
     private List<ModelLoadedEvent> events = new ArrayList<ModelLoadedEvent>();
     private final Logger logger = Logger.getLogger(ModelLoader.class.getPackage().getName());
@@ -58,7 +58,7 @@ public class ModelLoader {
             File dir = modelFile.getParentFile();
             URI dirUri = URI.createFileURI(dir.getAbsolutePath());
             model = (Model) load(dirUri.appendSegment(modelFile.getName()));
-            tumlValidationProfile = model.getAppliedProfile("Tuml::Validation");
+            umlgValidationProfile = model.getAppliedProfile("Umlg::Validation");
             for (PackageImport pi : model.getPackageImports()) {
                 if (pi.getImportedPackage() instanceof Model) {
                     importedModelLibraries.add((Model) pi.getImportedPackage());
@@ -83,9 +83,9 @@ public class ModelLoader {
         return this.importedModelLibraries;
     }
 
-    public boolean isTumlLibIncluded() {
+    public boolean isUmlGLibIncluded() {
         for (Model importedModels : this.importedModelLibraries) {
-            if (importedModels.getQualifiedName().equals("tumllib")) {
+            if (importedModels.getQualifiedName().equals("umlglib")) {
                 return true;
             }
         }
@@ -93,8 +93,8 @@ public class ModelLoader {
     }
 
     public Stereotype findStereotype(String name) {
-        if (this.tumlValidationProfile != null) {
-            return this.tumlValidationProfile.getOwnedStereotype(name);
+        if (this.umlgValidationProfile != null) {
+            return this.umlgValidationProfile.getOwnedStereotype(name);
         } else {
             return null;
         }
@@ -210,8 +210,8 @@ public class ModelLoader {
     }
 
     public List<Stereotype> getStereotypes() {
-        if (this.tumlValidationProfile != null) {
-            return this.tumlValidationProfile.getOwnedStereotypes();
+        if (this.umlgValidationProfile != null) {
+            return this.umlgValidationProfile.getOwnedStereotypes();
         } else {
             return Collections.emptyList();
         }
@@ -267,7 +267,7 @@ public class ModelLoader {
     public void clear() {
         this.model = null;
         this.RESOURCE_SET = new ResourceSetImpl();
-        this.tumlValidationProfile = null;
+        this.umlgValidationProfile = null;
         this.importedModelLibraries = new ArrayList<Model>();
     }
 

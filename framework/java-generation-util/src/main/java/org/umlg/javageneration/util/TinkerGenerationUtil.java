@@ -22,7 +22,7 @@ public class TinkerGenerationUtil {
 
     public static final String ALLINSTANCES_EDGE_LABEL = "ALLINSTANCES_EDGE_LABEL";
 
-    public static final OJPathName TumlProperties = new OJPathName("org.umlg.runtime.util.TumlProperties");
+    public static final OJPathName UmlgProperties = new OJPathName("org.umlg.runtime.util.UmlgProperties");
 
     public static final String rollback = "rollback";
     public static final String transactionIdentifier = "transactionIdentifier";

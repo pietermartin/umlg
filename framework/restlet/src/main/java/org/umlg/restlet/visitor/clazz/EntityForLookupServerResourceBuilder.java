@@ -1,6 +1,8 @@
 package org.umlg.restlet.visitor.clazz;
 
+import org.eclipse.uml2.uml.AssociationClass;
 import org.eclipse.uml2.uml.Class;
+import org.umlg.framework.VisitSubclasses;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.java.metamodel.*;
@@ -17,6 +19,7 @@ public class EntityForLookupServerResourceBuilder extends BaseServerResourceBuil
     }
 
     @Override
+    @VisitSubclasses({Class.class, AssociationClass.class})
     public void visitBefore(Class clazz) {
         if (!clazz.isAbstract()) {
             OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(getLookupServerResourceName(clazz));

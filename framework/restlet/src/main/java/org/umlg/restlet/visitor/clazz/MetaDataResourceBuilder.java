@@ -1,8 +1,7 @@
 package org.umlg.restlet.visitor.clazz;
 
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.uml2.uml.Classifier;
-import org.eclipse.uml2.uml.Interface;
+import org.eclipse.uml2.uml.*;
 import org.umlg.framework.VisitSubclasses;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
@@ -25,8 +24,8 @@ public class MetaDataResourceBuilder extends BaseServerResourceBuilder implement
         super(workspace, sourceDir);
     }
 
-    @VisitSubclasses
     @Override
+    @VisitSubclasses({org.eclipse.uml2.uml.Class.class, AssociationClass.class})
     public void visitBefore(Classifier c) {
         if (c instanceof Interface || c instanceof org.eclipse.uml2.uml.Class) {
             OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(getServerResourceMetaDataName(c));

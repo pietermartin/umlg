@@ -1,9 +1,8 @@
 package org.umlg.javageneration.visitor.clazz;
 
+import org.eclipse.uml2.uml.*;
 import org.eclipse.uml2.uml.Class;
-import org.eclipse.uml2.uml.Classifier;
-import org.eclipse.uml2.uml.Interface;
-import org.eclipse.uml2.uml.Property;
+import org.umlg.framework.VisitSubclasses;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.java.metamodel.OJField;
@@ -23,6 +22,7 @@ public class ClassInterfacePropertyLookupGenerator extends BaseVisitor implement
     }
 
     @Override
+    @VisitSubclasses({Class.class, AssociationClass.class})
     public void visitBefore(Class clazz) {
         OJAnnotatedClass annotatedClass = findOJClass(clazz);
         addLookupPropertiesFromInterfaces(annotatedClass, clazz);

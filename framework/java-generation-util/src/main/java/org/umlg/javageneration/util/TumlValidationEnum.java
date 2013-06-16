@@ -17,9 +17,13 @@ import org.umlg.javageneration.validation.Url;
 import org.umlg.javageneration.validation.Validation;
 
 public enum TumlValidationEnum {
-    MinLength("validateMinLength", new String[]{"length"}), MaxLength("validateMaxLength", new String[]{"length"}), RangeLength("validateRangeLength",
-            new String[]{"min", "max"}), Min("validateMin", new String[]{"value"}), Max("validateMax", new String[]{"value"}), Range("validateRange",
-            new String[]{"min", "max"}), URL("validateUrl", new String[]{"protocol", "host", "port", "regexp", "flags"}),
+    MinLength("validateMinLength", new String[]{"length"}),
+    MaxLength("validateMaxLength", new String[]{"length"}),
+    RangeLength("validateRangeLength", new String[]{"min", "max"}),
+    Min("validateMin", new String[]{"value"}),
+    Max("validateMax", new String[]{"value"}),
+    Range("validateRange", new String[]{"min", "max"}),
+    URL("validateUrl", new String[]{"protocol", "host", "port", "regexp", "flags"}),
     Email("validateEmail", new String[]{}),
     DateTime("validateDateTime", new String[]{}),
     Date("validateDate", new String[]{}),

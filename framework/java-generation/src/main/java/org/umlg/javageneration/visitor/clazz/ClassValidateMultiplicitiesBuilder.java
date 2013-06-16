@@ -1,26 +1,29 @@
 package org.umlg.javageneration.visitor.clazz;
 
+import org.eclipse.uml2.uml.AssociationClass;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Property;
+import org.umlg.framework.VisitSubclasses;
+import org.umlg.framework.Visitor;
+import org.umlg.generation.Workspace;
 import org.umlg.java.metamodel.OJField;
 import org.umlg.java.metamodel.OJIfStatement;
 import org.umlg.java.metamodel.OJPathName;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
-import org.umlg.framework.Visitor;
-import org.umlg.generation.Workspace;
 import org.umlg.javageneration.util.PropertyWrapper;
 import org.umlg.javageneration.util.TinkerGenerationUtil;
 import org.umlg.javageneration.util.TumlClassOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
 
-public class ClassValidateMultiplicitiesBuilder extends BaseVisitor implements Visitor<org.eclipse.uml2.uml.Class> {
+public class ClassValidateMultiplicitiesBuilder extends BaseVisitor implements Visitor<Class> {
 
     public ClassValidateMultiplicitiesBuilder(Workspace workspace) {
         super(workspace);
     }
 
     @Override
+    @VisitSubclasses({Class.class, AssociationClass.class})
     public void visitBefore(Class clazz) {
         OJAnnotatedClass annotatedClass = findOJClass(clazz);
         OJAnnotatedOperation validateMultiplicities = new OJAnnotatedOperation("validateMultiplicities", new OJPathName("java.util.List").addToGenerics(TinkerGenerationUtil.TumlConstraintViolation));

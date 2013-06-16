@@ -248,7 +248,7 @@ public class AuditClassCreator extends BaseVisitor implements Visitor<Class> {
 		OJOperation getUid = new OJOperation();
 		getUid.setName("getUid");
 		getUid.setReturnType(new OJPathName("String"));
-		getUid.getBody().addToStatements("String uid = (String) this.vertex.getProperty(\"uid\")");
+		getUid.getBody().addToStatements("String uid = this.vertex.getProperty(\"uid\")");
 		OJIfStatement ifStatement = new OJIfStatement("uid==null || uid.trim().length()==0");
 		ifStatement.addToThenPart("uid=UUID.randomUUID().toString()");
 		ifStatement.addToThenPart("this.vertex.setProperty(\"uid\", uid)");

@@ -15,7 +15,7 @@ import org.umlg.concretetest.Universe;
 import org.umlg.runtime.adaptor.GraphDb;
 import org.umlg.runtime.adaptor.TransactionIdentifier;
 import org.umlg.runtime.test.BaseLocalDbTest;
-import org.umlg.runtime.util.TumlProperties;
+import org.umlg.runtime.util.UmlgProperties;
 import org.umlg.runtime.validation.TumlConstraintViolationException;
 
 import java.util.concurrent.*;
@@ -386,7 +386,7 @@ public class TestValidation extends BaseLocalDbTest {
 
     @Test
     public void testValidationMultipleThreadsFailsSuccessfully() throws ExecutionException, InterruptedException {
-        if (TumlProperties.INSTANCE.isTransactionsMutliThreaded()) {
+        if (UmlgProperties.INSTANCE.isTransactionsMutliThreaded()) {
             God g = new God(true);
             g.setName("god");
             Fantasy fantasy = new Fantasy(g);

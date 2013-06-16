@@ -41,7 +41,7 @@ public class TumlGuiServerResource extends ServerResource {
         }
 
         //TODO work this hard coding out
-        dataModel.put("app", new App().setRootUrl(ModelLoader.INSTANCE.getModel().getName()).setUri(uri).setTumlLib(ModelLoader.INSTANCE.isTumlLibIncluded()));
+        dataModel.put("app", new App().setRootUrl(ModelLoader.INSTANCE.getModel().getName()).setUri(uri).setTumlLib(ModelLoader.INSTANCE.isUmlGLibIncluded()));
 
         Representation tumlUiFtl = new ClientResource("clap:///org/umlg/ui/tumlui2.html").get();
         return new TemplateRepresentation(tumlUiFtl, dataModel, MediaType.TEXT_HTML);

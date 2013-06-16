@@ -1,8 +1,10 @@
 package org.umlg.javageneration.visitor.clazz;
 
+import org.eclipse.uml2.uml.AssociationClass;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Constraint;
 import org.umlg.framework.ModelLoader;
+import org.umlg.framework.VisitSubclasses;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.java.metamodel.OJField;
@@ -26,6 +28,7 @@ public class ClassCheckConstraintsBuilder extends BaseVisitor implements Visitor
     }
 
     @Override
+    @VisitSubclasses({Class.class, AssociationClass.class})
     public void visitBefore(Class clazz) {
         OJAnnotatedClass annotatedClass = findOJClass(clazz);
         addCheckConstraints(annotatedClass, clazz);

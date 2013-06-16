@@ -2,8 +2,10 @@ package org.umlg.restlet.visitor.clazz;
 
 import java.util.Set;
 
+import org.eclipse.uml2.uml.AssociationClass;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Property;
+import org.umlg.framework.VisitSubclasses;
 import org.umlg.java.metamodel.OJConstructor;
 import org.umlg.java.metamodel.OJField;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
@@ -24,6 +26,7 @@ public class AddFieldTypeFieldToRuntimeLiteral extends BaseVisitor implements Vi
 	}
 
 	@Override
+    @VisitSubclasses({Class.class, AssociationClass.class})
 	public void visitBefore(Class clazz) {
 		OJAnnotatedClass annotatedClass = findOJClass(clazz);
 		OJEnum ojEnum = annotatedClass.findEnum(TumlClassOperations.propertyEnumName(clazz));

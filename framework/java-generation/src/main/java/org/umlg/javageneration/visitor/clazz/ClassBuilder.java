@@ -9,6 +9,7 @@ import org.eclipse.ocl.expressions.OCLExpression;
 import org.eclipse.uml2.uml.*;
 import org.eclipse.uml2.uml.Class;
 import org.umlg.framework.ModelLoader;
+import org.umlg.framework.VisitSubclasses;
 import org.umlg.java.metamodel.*;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
@@ -37,6 +38,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
     }
 
     @Override
+    @VisitSubclasses({Class.class, AssociationClass.class})
     public void visitBefore(Class clazz) {
         OJAnnotatedClass annotatedClass = findOJClass(clazz);
         setSuperClass(annotatedClass, clazz);
@@ -91,7 +93,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
         getUid.setReturnType(new OJPathName("String"));
         getUid.addAnnotationIfNew(new OJAnnotationValue(new OJPathName("java.lang.Override")));
         getUid.getBody().removeAllFromStatements();
-        getUid.getBody().addToStatements("String uid = (String) this.vertex.getProperty(\"uid\")");
+        getUid.getBody().addToStatements("String uid = this.vertex.getProperty(\"uid\")");
         OJIfStatement ifStatement = new OJIfStatement("uid==null || uid.trim().length()==0");
         ifStatement.setCondition("uid==null || uid.trim().length()==0");
         ifStatement.addToThenPart("uid=UUID.randomUUID().toString()");
@@ -474,6 +476,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
         TinkerGenerationUtil.addOverrideAnnotation(addEdgeToMetaNode);
         addEdgeToMetaNode.getBody().addToStatements(TinkerGenerationUtil.graphDbAccess + ".addEdge(null, getMetaNode().getVertex(), this.vertex, " + TinkerGenerationUtil.TUML_NODE.getLast() + ".ALLINSTANCES_EDGE_LABEL)");
         annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
+        annotatedClass.addToImports(TinkerGenerationUtil.TUML_NODE);
         annotatedClass.addToOperations(addEdgeToMetaNode);
     }
 

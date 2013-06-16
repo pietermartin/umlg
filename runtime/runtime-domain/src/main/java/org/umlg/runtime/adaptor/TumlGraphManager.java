@@ -2,7 +2,7 @@ package org.umlg.runtime.adaptor;
 
 import org.apache.commons.io.FileUtils;
 import org.umlg.runtime.util.TinkerImplementation;
-import org.umlg.runtime.util.TumlProperties;
+import org.umlg.runtime.util.UmlgProperties;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,8 +26,8 @@ public class TumlGraphManager {
 
     public TumlGraph startupGraph() {
         try {
-            String dbUrl = TumlProperties.INSTANCE.getTumlDbLocation();
-            TinkerImplementation tinkerImplementation = TinkerImplementation.fromName(TumlProperties.INSTANCE.getTinkerImplementation());
+            String dbUrl = UmlgProperties.INSTANCE.getTumlDbLocation();
+            TinkerImplementation tinkerImplementation = TinkerImplementation.fromName(UmlgProperties.INSTANCE.getTinkerImplementation());
             @SuppressWarnings("unchecked")
             Class<TumlGraphFactory> factory = (Class<TumlGraphFactory>) Class.forName(tinkerImplementation.getTumlGraphFactory());
             Method m = factory.getDeclaredMethod("getInstance", new Class[0]);
@@ -41,7 +41,7 @@ public class TumlGraphManager {
 
     public void shutdown() {
         try {
-            TinkerImplementation tinkerImplementation = TinkerImplementation.fromName(TumlProperties.INSTANCE.getTinkerImplementation());
+            TinkerImplementation tinkerImplementation = TinkerImplementation.fromName(UmlgProperties.INSTANCE.getTinkerImplementation());
             @SuppressWarnings("unchecked")
             Class<TumlGraphFactory> factory = (Class<TumlGraphFactory>) Class.forName(tinkerImplementation.getTumlGraphFactory());
             Method m = factory.getDeclaredMethod("getInstance", new Class[0]);
@@ -54,7 +54,7 @@ public class TumlGraphManager {
 
     public void backupGraph() {
         try {
-            String dbUrl = TumlProperties.INSTANCE.getTumlDbLocation();
+            String dbUrl = UmlgProperties.INSTANCE.getTumlDbLocation();
             String parsedUrl = dbUrl;
             if (dbUrl.startsWith("local:")) {
                 parsedUrl = dbUrl.replace("local:", "");
@@ -76,7 +76,7 @@ public class TumlGraphManager {
 
     public void deleteGraph() {
         try {
-            String dbUrl = TumlProperties.INSTANCE.getTumlDbLocation();
+            String dbUrl = UmlgProperties.INSTANCE.getTumlDbLocation();
             String parsedUrl = dbUrl;
             if (dbUrl.startsWith("local:")) {
                 parsedUrl = dbUrl.replace("local:", "");

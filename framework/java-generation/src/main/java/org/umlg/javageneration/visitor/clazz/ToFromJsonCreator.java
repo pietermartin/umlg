@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.uml2.uml.AssociationClass;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Property;
+import org.umlg.framework.VisitSubclasses;
 import org.umlg.java.metamodel.*;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedField;
@@ -30,6 +32,7 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
     }
 
     @Override
+    @VisitSubclasses({Class.class, AssociationClass.class})
     public void visitBefore(Class clazz) {
 //        addToJson(clazz, "toJson", TumlClassOperations.getPrimitiveOrEnumOrComponentsProperties(clazz));
         addToJson(clazz, "toJson", TumlClassOperations.getPropertiesForToJson(clazz));

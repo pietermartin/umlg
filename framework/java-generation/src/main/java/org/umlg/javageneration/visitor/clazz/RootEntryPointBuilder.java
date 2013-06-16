@@ -1,13 +1,13 @@
 package org.umlg.javageneration.visitor.clazz;
 
 import org.eclipse.uml2.uml.Class;
+import org.umlg.framework.Visitor;
+import org.umlg.generation.Workspace;
 import org.umlg.java.metamodel.OJField;
 import org.umlg.java.metamodel.OJPathName;
 import org.umlg.java.metamodel.OJWhileStatement;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
-import org.umlg.framework.Visitor;
-import org.umlg.generation.Workspace;
 import org.umlg.javageneration.util.TinkerGenerationUtil;
 import org.umlg.javageneration.util.TumlClassOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;

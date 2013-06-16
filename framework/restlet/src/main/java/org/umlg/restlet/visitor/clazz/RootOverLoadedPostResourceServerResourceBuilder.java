@@ -1,7 +1,9 @@
 package org.umlg.restlet.visitor.clazz;
 
+import org.eclipse.uml2.uml.AssociationClass;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Classifier;
+import org.umlg.framework.VisitSubclasses;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.java.metamodel.*;
@@ -20,6 +22,7 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
     }
 
     @Override
+    @VisitSubclasses({Class.class, AssociationClass.class})
     public void visitBefore(Class clazz) {
         if (!clazz.isAbstract() && !TumlClassOperations.hasCompositeOwner(clazz)) {
 

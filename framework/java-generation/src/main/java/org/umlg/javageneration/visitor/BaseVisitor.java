@@ -60,7 +60,7 @@ public class BaseVisitor {
             Element owner = p.getOwner();
             // Association must come first in this if statement as Association
             // is also a Classifier
-            if (owner instanceof AssociationClass) {
+            if (owner instanceof AssociationClass && ((AssociationClass)owner).getOwnedAttributes().contains(p)) {
                 return this.workspace.findOJClass(Namer.qualifiedName((NamedElement) owner));
             } else if (owner instanceof Association) {
                 Association a = (Association) owner;

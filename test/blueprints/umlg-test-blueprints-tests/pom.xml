@@ -6,7 +6,7 @@
         <artifactId>blueprints</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <artifactId>tuml-test-blueprints-tests</artifactId>
+    <artifactId>umlg-test-blueprints-tests</artifactId>
     <build>
         <plugins>
             <plugin>
@@ -37,7 +37,7 @@
         </dependency>
         <dependency>
             <groupId>org.umlg</groupId>
-            <artifactId>tuml-test-blueprints</artifactId>
+            <artifactId>umlg-test-blueprints</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>

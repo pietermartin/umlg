@@ -1,6 +1,8 @@
 package org.umlg.restlet.visitor.clazz;
 
+import org.eclipse.uml2.uml.AssociationClass;
 import org.eclipse.uml2.uml.Class;
+import org.umlg.framework.VisitSubclasses;
 import org.umlg.java.metamodel.OJField;
 import org.umlg.java.metamodel.OJPackage;
 import org.umlg.java.metamodel.OJPathName;
@@ -25,6 +27,7 @@ public class CompositePathServerResourceBuilder extends BaseServerResourceBuilde
 	}
 
 	@Override
+    @VisitSubclasses({Class.class, AssociationClass.class})
 	public void visitBefore(Class clazz) {
 		// if (!clazz.isAbstract()) {
 		OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(TumlClassOperations.className(clazz) + "CompositePathServerResource");

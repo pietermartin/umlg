@@ -1,11 +1,13 @@
 package org.umlg.javageneration.visitor.clazz;
 
+import org.eclipse.uml2.uml.AssociationClass;
 import org.eclipse.uml2.uml.Class;
 import org.umlg.framework.ModelLoader;
-import org.umlg.java.metamodel.*;
-import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
+import org.umlg.framework.VisitSubclasses;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
+import org.umlg.java.metamodel.*;
+import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.javageneration.util.Namer;
 import org.umlg.javageneration.util.TinkerGenerationUtil;
@@ -15,13 +17,14 @@ import org.umlg.javageneration.util.TumlClassOperations;
  * Date: 2012/12/25
  * Time: 2:47 PM
  */
-public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclipse.uml2.uml.Class> {
+public class MetaClassBuilder extends ClassBuilder implements Visitor<Class> {
 
     public MetaClassBuilder(Workspace workspace, String sourceDir) {
         super(workspace, sourceDir);
     }
 
     @Override
+    @VisitSubclasses({Class.class, AssociationClass.class})
     public void visitBefore(Class clazz) {
         if (!clazz.isAbstract()) {
             OJAnnotatedClass metaClass = new OJAnnotatedClass(TumlClassOperations.getMetaClassName(clazz));
@@ -29,7 +32,7 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<org.eclips
             metaClass.setMyPackage(ojPackage);
             metaClass.setVisibility(TumlClassOperations.getVisibility(clazz.getVisibility()));
 
-            if (ModelLoader.INSTANCE.isTumlLibIncluded()) {
+            if (ModelLoader.INSTANCE.isUmlGLibIncluded()) {
                 metaClass.setSuperclass(TinkerGenerationUtil.BASE_CLASS_TUML);
                 addDefaultConstructor(metaClass, clazz);
                 addContructorWithVertex(metaClass, clazz);

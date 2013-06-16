@@ -1,9 +1,11 @@
 package org.umlg.restlet.visitor.clazz;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.uml2.uml.AssociationClass;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Property;
 import org.umlg.framework.ModelLoader;
+import org.umlg.framework.VisitSubclasses;
 import org.umlg.java.metamodel.*;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
@@ -24,6 +26,7 @@ public class AddTumlMetaDataUriFieldToRuntimePropertyEnum extends BaseVisitor im
     }
 
     @Override
+    @VisitSubclasses({Class.class, AssociationClass.class})
     public void visitBefore(Class clazz) {
         OJAnnotatedClass annotatedClass = findOJClass(clazz);
         OJEnum ojEnum = annotatedClass.findEnum(TumlClassOperations.propertyEnumName(clazz));

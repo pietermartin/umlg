@@ -9,4 +9,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface VisitSubclasses {
 
+    Class<?>[] value() default org.eclipse.uml2.uml.Element.class;
+
 }

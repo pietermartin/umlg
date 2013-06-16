@@ -1,7 +1,9 @@
 package org.umlg.javageneration.visitor.clazz;
 
+import org.eclipse.uml2.uml.AssociationClass;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Property;
+import org.umlg.framework.VisitSubclasses;
 import org.umlg.java.metamodel.OJConstructor;
 import org.umlg.java.metamodel.OJForStatement;
 import org.umlg.java.metamodel.OJIfStatement;
@@ -22,6 +24,7 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
 	}
 
 	@Override
+    @VisitSubclasses({Class.class, AssociationClass.class})
 	public void visitBefore(Class clazz) {
 		OJAnnotatedClass annotatedClass = findOJClass(clazz);
 		if (TumlClassOperations.hasCompositeOwner(clazz)) {
