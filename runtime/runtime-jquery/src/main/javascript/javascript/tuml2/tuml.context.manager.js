@@ -54,6 +54,12 @@
                 a.data('data', property.uri);
                 a.appendTo(b);
             });
+
+            $('.embossed').remove();
+            var p = $('<div />', {class: 'embossed'});
+            $('<span />').text("UmlG").appendTo(p);
+            p.appendTo('.ui-layout-north');
+
         }
 
         //Public api

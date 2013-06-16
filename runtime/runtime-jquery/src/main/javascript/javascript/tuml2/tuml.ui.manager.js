@@ -22,6 +22,7 @@
             //Create layout
             var myLayout = $('body').layout({livePaneResizing:true, north__minSize:40, east:{initClosed:true}, south:{initClosed:true}, west:{minSize:300}});
             myLayout.allowOverflow("north");
+
             //Create the menu
             menuManager = new Tuml.MenuManager();
 
@@ -55,6 +56,7 @@
             };
 
             self.refresh(tumlUri);
+
         }
 
         this.refresh = function(tumlUri) {

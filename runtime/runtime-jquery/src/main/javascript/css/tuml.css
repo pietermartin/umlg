@@ -1,3 +1,14 @@
+.ui-layout-north .embossed {
+    margin: 0 auto; width: 60px;
+}
+
+.embossed span {
+    text-shadow: -1px -1px 1px #fff, 1px 1px 1px #000;
+    color: #9c8468;
+    opacity: 0.3;
+    font: 20px 'Museo700';
+}
+
 .CodeMirror {
     font-size: 15pt;
     height: 100%;
@@ -531,7 +542,7 @@
     float: left;
 }
 
-.tuml-delete-img {
+.umlg-delete-img {
     display: block;
     margin: auto
 }
@@ -547,20 +558,20 @@
     width: auto;
 }
 
-.tuml-updated-id {
+.umlg-updated-id {
     color: blue;
 }
 
-.tuml-new-id {
+.umlg-new-id {
     color: green;
 }
 
 /*for one view*/
-.ui-state-default.tuml-new-id {
+.ui-state-default.umlg-new-id {
     color: green;
 }
 
-.ui-state-default.tuml-updated-id {
+.ui-state-default.umlg-updated-id {
     color: blue;
 }
 
