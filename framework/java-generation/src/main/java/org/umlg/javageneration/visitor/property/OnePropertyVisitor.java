@@ -1,5 +1,6 @@
 package org.umlg.javageneration.visitor.property;
 
+import com.sun.xml.internal.ws.util.StringUtils;
 import org.eclipse.uml2.uml.Constraint;
 import org.eclipse.uml2.uml.Property;
 import org.umlg.java.metamodel.*;
@@ -62,8 +63,11 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
     public static void buildOneAdder(OJAnnotatedClass owner, PropertyWrapper propertyWrapper) {
         OJAnnotatedOperation singleAdder = new OJAnnotatedOperation(propertyWrapper.adder());
         singleAdder.addParam(propertyWrapper.fieldname(), propertyWrapper.javaBaseTypePath());
-        if (!propertyWrapper.isDataType()) {
+        if (propertyWrapper.isAssociationClass()) {
+            singleAdder.addParam(StringUtils.decapitalize(propertyWrapper.getAssociationClass().getName()), TumlClassOperations.getPathName(propertyWrapper.getAssociationClass()));
+        }
 
+        if (!propertyWrapper.isDataType()) {
 
             OJIfStatement ifNotNull = new OJIfStatement(propertyWrapper.fieldname() + " != null");
 
@@ -139,6 +143,9 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
     public static void buildSetter(OJAnnotatedClass owner, PropertyWrapper pWrap) {
         OJAnnotatedOperation setter = new OJAnnotatedOperation(pWrap.setter());
         setter.addParam(pWrap.fieldname(), pWrap.javaBaseTypePath());
+        if (pWrap.isAssociationClass()) {
+            setter.addParam(StringUtils.decapitalize(pWrap.getAssociationClass().getName()), TumlClassOperations.getPathName(pWrap.getAssociationClass()));
+        }
         if (pWrap.isReadOnly()) {
             setter.setVisibility(OJVisibilityKind.PROTECTED);
         }
@@ -152,7 +159,11 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
             setter.getBody().addToStatements(ifNotNull);
         }
         setter.getBody().addToStatements(pWrap.clearer() + "()");
-        setter.getBody().addToStatements(pWrap.adder() + "(" + pWrap.fieldname() + ")");
+        if (!pWrap.isAssociationClass()) {
+            setter.getBody().addToStatements(pWrap.adder() + "(" + pWrap.fieldname()  + ")");
+        } else {
+            setter.getBody().addToStatements(pWrap.adder() + "(" + pWrap.fieldname()  + ", " + StringUtils.decapitalize(pWrap.getAssociationClass().getName()) + ")");
+        }
         owner.addToOperations(setter);
     }
 }

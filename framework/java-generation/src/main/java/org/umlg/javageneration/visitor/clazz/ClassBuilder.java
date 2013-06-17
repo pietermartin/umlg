@@ -50,7 +50,6 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
         addContructorWithVertex(annotatedClass, clazz);
         if (clazz.getGeneralizations().isEmpty()) {
             persistUid(annotatedClass);
-        } else {
         }
         addInitVariables(annotatedClass, clazz);
         addDelete(annotatedClass, clazz);
@@ -132,6 +131,24 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
                     initialiseProperties.getBody().addToStatements(ifEmpty);
                 }
                 annotatedClass.addToImports(pWrap.javaImplTypePath());
+
+                if (pWrap.isAssociationClass()) {
+                    statement = new OJSimpleStatement("this." + pWrap.getAssociationClassFakePropertyName() + " = " + pWrap.javaDefaultInitialisationForAssociationClass(clazz));
+                    statement.setName(pWrap.getAssociationClassFakePropertyName());
+                    initialiseProperties.getBody().addToStatements(statement);
+                }
+            }
+        }
+
+        if (clazz instanceof AssociationClass) {
+            //Do the property for the association class
+            AssociationClass associationClass = (AssociationClass)clazz;
+            List<Property> memberEnds = associationClass.getMemberEnds();
+            for (Property memberEnd : memberEnds) {
+                PropertyWrapper pWrap = new PropertyWrapper(memberEnd);
+                OJSimpleStatement statement = new OJSimpleStatement("this." + pWrap.fieldname() + " = " + pWrap.javaDefaultInitialisation(clazz));
+                statement.setName(pWrap.fieldname());
+                initialiseProperties.getBody().addToStatements(statement);
             }
         }
     }

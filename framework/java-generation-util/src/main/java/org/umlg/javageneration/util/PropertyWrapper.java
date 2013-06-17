@@ -289,11 +289,6 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         }
     }
 
-    /**
-     * @param stereotype
-     * @return Returns true is the property's owner is an association
-     *         stereotyped with <<QualifierAssociation>>
-     */
     public boolean isForQualifier() {
         return !this.property.getOwner().getAppliedStereotypes().isEmpty();
     }
@@ -459,6 +454,36 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         return fieldType;
     }
 
+    public OJPathName javaTypePathWithAssociationClass() {
+        OJPathName fieldType;
+        if (!isOrdered() && isUnique()) {
+            fieldType = TumlCollectionKindEnum.SET.getInterfacePathName();
+        } else if (isOrdered() && !isUnique()) {
+            fieldType = TumlCollectionKindEnum.SEQUENCE.getInterfacePathName();
+        } else if (!isOrdered() && !isUnique()) {
+            fieldType = TumlCollectionKindEnum.BAG.getInterfacePathName();
+        } else if (isOrdered() && isUnique()) {
+            fieldType = TumlCollectionKindEnum.ORDERED_SET.getInterfacePathName();
+        } else {
+            throw new RuntimeException("wtf");
+        }
+        fieldType.addToGenerics(getAssociationClassPair());
+        return fieldType;
+    }
+
+    public OJPathName getAssociationClassPair() {
+        OJPathName pair = TinkerGenerationUtil.Pair.getCopy();
+        pair.addToGenerics(javaBaseTypePath()).addToGenerics(TumlClassOperations.getPathName(getAssociationClass()));
+        return pair;
+    }
+
+    public String getAssociationClassFakePropertyName() {
+        if (!isAssociationClass()) {
+            throw new IllegalStateException("Can not call getAssociationClassFakePropertyName on a property that does not belong to an AssociationClass!");
+        }
+        return fieldname() + "_" + TumlClassOperations.getPathName(getAssociationClass()).getLast();
+    }
+
     public OJPathName javaTumlMemoryTypePath() {
         OJPathName memoryCollectionPathName = TumlCollectionKindEnum.from(this).getMemoryCollection();
         memoryCollectionPathName.addToGenerics(TumlClassOperations.getPathName(this.getType()));
@@ -531,6 +556,10 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
      */
     public String javaDefaultInitialisation(BehavioredClassifier propertyConcreteOwner) {
         return TumlPropertyOperations.getDefaultTinkerCollectionInitalisation(this.property, propertyConcreteOwner).getExpression();
+    }
+
+    public String javaDefaultInitialisationForAssociationClass(BehavioredClassifier propertyConcreteOwner) {
+        return TumlPropertyOperations.getDefaultTinkerCollectionInitalisationForAssociationClass(this.property, propertyConcreteOwner).getExpression();
     }
 
     public boolean isOne() {
@@ -1453,5 +1482,89 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         } else {
             return false;
         }
+    }
+
+    public boolean isAssociationClass() {
+        Element owner = this.property.getOwner();
+        if (owner instanceof AssociationClass) {
+            AssociationClass ownerClass = (AssociationClass)owner;
+            List<Property> memberEnds = ownerClass.getMemberEnds();
+            for (Property p : memberEnds) {
+                if (p == this.property) {
+                    return true;
+                }
+            }
+            return false;
+        } else if (owner instanceof Class) {
+            Class ownerClass = (Class)owner;
+            List<Association> associations = ownerClass.getAssociations();
+            for (Association association : associations) {
+                List<Property> memberEnds = association.getMemberEnds();
+                for (Property p : memberEnds) {
+                    if (p == this.property && (association instanceof AssociationClass)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        return false;
+    }
+
+    public AssociationClass getAssociationClass() {
+        Element owner = this.property.getOwner();
+        if (owner instanceof AssociationClass) {
+            return (AssociationClass)owner;
+        } else if (owner instanceof Class) {
+            Class ownerClass = (Class)owner;
+            List<Association> associations = ownerClass.getAssociations();
+            for (Association association : associations) {
+                List<Property> memberEnds = association.getMemberEnds();
+                for (Property p : memberEnds) {
+                    if (p == this.property && (association instanceof AssociationClass)) {
+                        return (AssociationClass)association;
+                    }
+                }
+            }
+            return null;
+        }
+        return null;
+    }
+
+    public OJPathName getAssociationClassPathName() {
+        return TumlClassOperations.getPathName(getAssociationClass());
+    }
+
+    public OJPathName getAssociationClassJavaTumlTypePath() {
+        OJPathName fieldType;
+        if (isOrdered() && isUnique()) {
+            if (hasQualifiers()) {
+                fieldType = TumlCollectionKindEnum.QUALIFIED_ORDERED_SET.getInterfacePathName();
+            } else {
+                fieldType = TumlCollectionKindEnum.ORDERED_SET.getInterfacePathName();
+            }
+        } else if (isOrdered() && !isUnique()) {
+            if (hasQualifiers()) {
+                fieldType = TumlCollectionKindEnum.QUALIFIED_SEQUENCE.getInterfacePathName();
+            } else {
+                fieldType = TumlCollectionKindEnum.SEQUENCE.getInterfacePathName();
+            }
+        } else if (!isOrdered() && !isUnique()) {
+            if (hasQualifiers()) {
+                fieldType = TumlCollectionKindEnum.QUALIFIED_BAG.getInterfacePathName();
+            } else {
+                fieldType = TumlCollectionKindEnum.BAG.getInterfacePathName();
+            }
+        } else if (!isOrdered() && isUnique()) {
+            if (hasQualifiers()) {
+                fieldType = TumlCollectionKindEnum.QUALIFIED_SET.getInterfacePathName();
+            } else {
+                fieldType = TumlCollectionKindEnum.SET.getInterfacePathName();
+            }
+        } else {
+            throw new RuntimeException("wtf");
+        }
+        fieldType.addToGenerics(getAssociationClassPathName());
+        return fieldType;
     }
 }

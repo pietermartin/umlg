@@ -181,7 +181,7 @@
         <layoutConstraint xmi:type="notation:Bounds" xmi:id="_BAq7RdXnEeK3orlf5ZrL2w"/>
       </children>
       <element xmi:type="uml:AssociationClass" href="tinkergraph.uml#_BAf8ENXnEeK3orlf5ZrL2w"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_BAqUIdXnEeK3orlf5ZrL2w" x="349" y="28"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_BAqUIdXnEeK3orlf5ZrL2w" x="328" y="28"/>
     </children>
     <styles xmi:type="notation:DiagramStyle" xmi:id="_Uk3dwdWeEeKvx-CpQtHgtA"/>
     <element xmi:type="uml:Package" href="tinkergraph.uml#_SB7m8NWeEeKvx-CpQtHgtA"/>

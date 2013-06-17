@@ -1,5 +1,6 @@
 package org.umlg.javageneration.visitor.clazz;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.uml2.uml.AssociationClass;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Property;
@@ -60,28 +61,20 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
 	private void addConstructorWithOwnerAsParameter(OJAnnotatedClass annotatedClass, Class clazz) {
 		OJConstructor constructor = new OJConstructor();
 		constructor.addParam("compositeOwner", TumlClassOperations.getOtherEndToCompositePathName(clazz));
+        PropertyWrapper pWrap = new PropertyWrapper(TumlClassOperations.getOtherEndToComposite(clazz));
+        if (pWrap.isAssociationClass()) {
+            constructor.addParam(StringUtils.uncapitalize(pWrap.getAssociationClass().getName()), pWrap.getAssociationClassPathName());
+        }
 		annotatedClass.addToConstructors(constructor);
-//		if (clazz.getGeneralizations().isEmpty()) {
-//			constructor.getBody().addToStatements("this.vertex = " + TinkerGenerationUtil.graphDbAccess + ".addVertex(this.getClass().getName())");
-//
-//            constructor.getBody().addToStatements("this.vertex.setProperty(\"className\", getClass().getName())");
-//
-//            //Link up to the meta instance for allInstances
-//            constructor.getBody().addToStatements("addEdgeToMetaNode()");
-//
-//            constructor.getBody().addToStatements("initialiseProperties()");
-//			constructor.getBody().addToStatements(ClassBuilder.INIT_VARIABLES + "()");
-//
-//			PropertyWrapper pWrap = new PropertyWrapper(TumlClassOperations.getOtherEndToComposite(clazz));
-//			constructor.getBody().addToStatements(pWrap.adder() + "(compositeOwner)");
-//			constructor.getBody().addToStatements(TinkerGenerationUtil.transactionThreadEntityVar.getLast() + ".setNewEntity(this)");
-//			constructor.getBody().addToStatements("defaultCreate()");
-//			annotatedClass.addToImports(TinkerGenerationUtil.transactionThreadEntityVar);
-//		} else {
-			constructor.getBody().addToStatements("super(true)");
-			PropertyWrapper pWrap = new PropertyWrapper(TumlClassOperations.getOtherEndToComposite(clazz));
-			constructor.getBody().addToStatements(pWrap.adder() + "(compositeOwner)");
-//		}
+        constructor.getBody().addToStatements("super(true)");
+
+        if (!pWrap.isAssociationClass()) {
+            constructor.getBody().addToStatements(pWrap.adder() + "(compositeOwner)");
+        } else {
+            constructor.getBody().addToStatements(pWrap.adder() + "(compositeOwner, " + StringUtils.uncapitalize(pWrap.getAssociationClass().getName()) + ")");
+        }
+
+
 	}
 
 	private void addGetOwningObject(OJAnnotatedClass annotatedClass, Class clazz) {

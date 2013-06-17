@@ -192,19 +192,65 @@ public final class TumlPropertyOperations extends PropertyOperations {
 		return collectionPathName;
 	}
 
-	public static OJSimpleStatement getDefaultTinkerCollectionInitalisation(Property p, BehavioredClassifier propertyConcreteOwner) {
+    public static OJPathName getDefaultTinkerCollectionForAssociationClass(Property p) {
+        OJPathName collectionPathName;
+        if (p.isOrdered() && p.isUnique()) {
+            if (!p.getQualifiers().isEmpty()) {
+                collectionPathName = TumlCollectionKindEnum.QUALIFIED_ORDERED_SET.getImplementationPathName();
+            } else {
+                collectionPathName = TumlCollectionKindEnum.ORDERED_SET.getImplementationPathName();
+            }
+        } else if (p.isOrdered() && !p.isUnique()) {
+            if (!p.getQualifiers().isEmpty()) {
+                collectionPathName = TumlCollectionKindEnum.QUALIFIED_SEQUENCE.getImplementationPathName();
+            } else {
+                collectionPathName = TumlCollectionKindEnum.SEQUENCE.getImplementationPathName();
+            }
+        } else if (!p.isOrdered() && !p.isUnique()) {
+            if (!p.getQualifiers().isEmpty()) {
+                collectionPathName = TumlCollectionKindEnum.QUALIFIED_BAG.getImplementationPathName();
+            } else {
+                collectionPathName = TumlCollectionKindEnum.BAG.getImplementationPathName();
+            }
+        } else if (!p.isOrdered() && p.isUnique()) {
+            if (!p.getQualifiers().isEmpty()) {
+                collectionPathName = TumlCollectionKindEnum.QUALIFIED_SET.getImplementationPathName();
+            } else {
+                collectionPathName = TumlCollectionKindEnum.SET.getImplementationPathName();
+            }
+        } else {
+            throw new RuntimeException("wtf");
+        }
+        collectionPathName.addToGenerics(new PropertyWrapper(p).getAssociationClassPathName());
+        return collectionPathName;
+    }
+
+
+    public static OJSimpleStatement getDefaultTinkerCollectionInitalisation(Property p, BehavioredClassifier propertyConcreteOwner) {
 		OJSimpleStatement s = getDefaultTinkerCollectionInitalisation(p, propertyConcreteOwner, getDefaultTinkerCollection(p));
 		return s;
 	}
 
-	private static OJSimpleStatement getDefaultTinkerCollectionInitalisation(Property p, BehavioredClassifier propertyConcreteOwner, OJPathName collectionPathName) {
+    public static OJSimpleStatement getDefaultTinkerCollectionInitalisationForAssociationClass(Property p, BehavioredClassifier propertyConcreteOwner) {
+        OJSimpleStatement s = getDefaultTinkerCollectionInitalisationForAssociationClass(p, propertyConcreteOwner, getDefaultTinkerCollectionForAssociationClass(p));
+        return s;
+    }
+
+    private static OJSimpleStatement getDefaultTinkerCollectionInitalisation(Property p, BehavioredClassifier propertyConcreteOwner, OJPathName collectionPathName) {
 		OJSimpleStatement ojSimpleStatement = new OJSimpleStatement(" new " + collectionPathName.getCollectionTypeName() + "(this");
-		ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", " + TumlClassOperations.propertyEnumName(propertyConcreteOwner) + "." + fieldName(p));
+		ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", " + TumlClassOperations.propertyEnumName(propertyConcreteOwner) + "." + new PropertyWrapper(p).fieldname());
 		ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ")");
 		return ojSimpleStatement;
 	}
 
-	public static OJPathName getTypePath(Property p) {
+    private static OJSimpleStatement getDefaultTinkerCollectionInitalisationForAssociationClass(Property p, BehavioredClassifier propertyConcreteOwner, OJPathName collectionPathName) {
+        OJSimpleStatement ojSimpleStatement = new OJSimpleStatement(" new " + collectionPathName.getCollectionTypeName() + "(this");
+        ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", " + TumlClassOperations.propertyEnumName(propertyConcreteOwner) + "." + new PropertyWrapper(p).getAssociationClassFakePropertyName());
+        ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ")");
+        return ojSimpleStatement;
+    }
+
+    public static OJPathName getTypePath(Property p) {
 		if (!(p.getType() instanceof PrimitiveType) && !(p.getType() instanceof Enumeration) && p.getType() instanceof DataType) {
 			return DataTypeEnum.getPathNameFromDataType((DataType) p.getType());
 		} else {

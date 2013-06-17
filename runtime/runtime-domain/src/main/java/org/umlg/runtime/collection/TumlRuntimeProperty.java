@@ -3,6 +3,7 @@ package org.umlg.runtime.collection;
 import org.umlg.runtime.domain.DataTypeEnum;
 
 public interface TumlRuntimeProperty {
+    boolean isAssociationClass();
 	boolean isOnePrimitive();
 	DataTypeEnum getDataTypeEnum();
 	boolean isManyPrimitive();

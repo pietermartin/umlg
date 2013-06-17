@@ -2,9 +2,13 @@
     margin: 0 auto; width: 60px;
 }
 
+.ui-layout-north {
+    background-color: #EEEEEE;
+}
+
 .embossed span {
     text-shadow: -1px -1px 1px #fff, 1px 1px 1px #000;
-    color: #9c8468;
+    color: #EEEEEE;
     opacity: 0.3;
     font: 20px 'Museo700';
 }
