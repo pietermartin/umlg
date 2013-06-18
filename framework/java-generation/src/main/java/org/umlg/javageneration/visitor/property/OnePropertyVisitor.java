@@ -30,7 +30,14 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
         if (propertyWrapper.isOne() && !propertyWrapper.isDerived() && !propertyWrapper.isQualifier()) {
             OJAnnotatedClass owner = findOJClass(p);
             buildGetter(owner, propertyWrapper);
-            buildOneAdder(owner, propertyWrapper);
+
+            if (propertyWrapper.isAssociationClass()) {
+                buildGetterForAssociationClass(findAssociationClassOJClass(propertyWrapper), propertyWrapper);
+                OJAnnotatedClass associationOJClass = findAssociationClassOJClass(propertyWrapper);
+                OnePropertyVisitor.buildOneAdder(associationOJClass, propertyWrapper, true);
+            }
+
+            buildOneAdder(owner, propertyWrapper, false);
             buildSetter(owner, propertyWrapper);
         }
     }
@@ -60,10 +67,27 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
         owner.addToOperations(getter);
     }
 
-    public static void buildOneAdder(OJAnnotatedClass owner, PropertyWrapper propertyWrapper) {
+    public static void buildGetterForAssociationClass(OJAnnotatedClass ac, PropertyWrapper propertyWrapper) {
+        PropertyWrapper otherEnd = new PropertyWrapper(propertyWrapper.getOtherEnd());
+        OJAnnotatedOperation getter = new OJAnnotatedOperation(otherEnd.getter(), otherEnd.javaBaseTypePath());
+        OJAnnotatedField tmpField = new OJAnnotatedField("tmp", otherEnd.javaTumlTypePath());
+        getter.getBody().addToLocals(tmpField);
+        tmpField.setInitExp("this." + otherEnd.fieldname());
+        OJIfStatement ifFieldNotEmpty = new OJIfStatement("!" + tmpField.getName() + ".isEmpty()");
+        if (otherEnd.isOrdered()) {
+            ifFieldNotEmpty.addToThenPart("return " + tmpField.getName() + ".get(0)");
+        } else {
+            ifFieldNotEmpty.addToThenPart("return " + tmpField.getName() + ".iterator().next()");
+        }
+        ifFieldNotEmpty.addToElsePart("return null");
+        getter.getBody().addToStatements(ifFieldNotEmpty);
+        ac.addToOperations(getter);
+    }
+
+    public static void buildOneAdder(OJAnnotatedClass owner, PropertyWrapper propertyWrapper, boolean isAssociationClass) {
         OJAnnotatedOperation singleAdder = new OJAnnotatedOperation(propertyWrapper.adder());
         singleAdder.addParam(propertyWrapper.fieldname(), propertyWrapper.javaBaseTypePath());
-        if (propertyWrapper.isAssociationClass()) {
+        if (!isAssociationClass && propertyWrapper.isAssociationClass()) {
             singleAdder.addParam(StringUtils.decapitalize(propertyWrapper.getAssociationClass().getName()), TumlClassOperations.getPathName(propertyWrapper.getAssociationClass()));
         }
 

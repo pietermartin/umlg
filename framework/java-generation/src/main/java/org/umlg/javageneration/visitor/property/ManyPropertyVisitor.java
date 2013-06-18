@@ -29,6 +29,8 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
             buildGetter(owner, propertyWrapper);
             if (propertyWrapper.isAssociationClass()) {
                 buildGetterForAssociationClass(findAssociationClassOJClass(propertyWrapper), propertyWrapper);
+                OJAnnotatedClass associationOJClass = findAssociationClassOJClass(propertyWrapper);
+                OnePropertyVisitor.buildOneAdder(associationOJClass, propertyWrapper, true);
             }
             buildManyAdder(owner, propertyWrapper);
             buildSetter(owner, propertyWrapper);
