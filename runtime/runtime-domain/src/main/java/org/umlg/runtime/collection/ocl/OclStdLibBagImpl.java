@@ -211,7 +211,12 @@ public class OclStdLibBagImpl<E> extends OclStdLibCollectionImpl<E> implements T
 		return this.bag.containsAll(elements);
 	}
 
-	@Override
+    @Override
+    public boolean internalAdd(E element) {
+        return this.bag.add(element);
+    }
+
+    @Override
 	public boolean add(E element) {
 		return this.bag.add(element);
 	}

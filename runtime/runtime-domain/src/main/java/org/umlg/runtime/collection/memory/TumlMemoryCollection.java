@@ -45,7 +45,12 @@ public class TumlMemoryCollection<E> implements TinkerCollection<E> {
 		return this.internalCollection.toArray(a);
 	}
 
-	@Override
+    @Override
+    public boolean internalAdd(E e) {
+        return this.internalCollection.add(e);
+    }
+
+    @Override
 	public boolean add(E e) {
 		return this.internalCollection.add(e);
 	}

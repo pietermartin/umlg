@@ -162,7 +162,12 @@ public class OclStdLibOrderedSetImpl<E> extends OclStdLibCollectionImpl<E> imple
 		return (T[]) this.orderedSet.toArray(a);
 	}
 
-	@Override
+    @Override
+    public boolean internalAdd(E e) {
+        return this.orderedSet.add(e);
+    }
+
+    @Override
 	public boolean add(E e) {
 		return this.orderedSet.add(e);
 	}

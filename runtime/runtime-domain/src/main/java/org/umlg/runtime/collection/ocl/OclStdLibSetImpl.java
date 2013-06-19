@@ -198,7 +198,12 @@ public class OclStdLibSetImpl<E> extends OclStdLibCollectionImpl<E> implements T
 		return this.set.toArray(a);
 	}
 
-	@Override
+    @Override
+    public boolean internalAdd(E e) {
+        return this.set.add(e);
+    }
+
+    @Override
 	public boolean add(E e) {
 		return this.set.add(e);
 	}

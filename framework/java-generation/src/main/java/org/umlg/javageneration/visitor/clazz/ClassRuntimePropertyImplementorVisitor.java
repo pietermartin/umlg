@@ -4,12 +4,7 @@ import org.eclipse.uml2.uml.AssociationClass;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Property;
 import org.umlg.framework.VisitSubclasses;
-import org.umlg.java.metamodel.OJField;
-import org.umlg.java.metamodel.OJIfStatement;
-import org.umlg.java.metamodel.OJPathName;
-import org.umlg.java.metamodel.OJSimpleStatement;
-import org.umlg.java.metamodel.OJSwitchCase;
-import org.umlg.java.metamodel.OJSwitchStatement;
+import org.umlg.java.metamodel.*;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.framework.Visitor;
@@ -30,6 +25,7 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
     public void visitBefore(Class clazz) {
         OJAnnotatedClass annotatedClass = findOJClass(clazz);
         addInitialiseProperty(annotatedClass, clazz);
+        addInternalAdder(annotatedClass, clazz);
         addGetMetaDataAsJson(annotatedClass, clazz);
         RuntimePropertyImplementor.addTumlRuntimePropertyEnum(annotatedClass, TumlClassOperations.propertyEnumName(clazz), clazz,
                 TumlClassOperations.getAllProperties(clazz), TumlClassOperations.hasCompositeOwner(clazz), clazz.getModel().getName());
@@ -39,6 +35,67 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
 
     @Override
     public void visitAfter(Class clazz) {
+    }
+
+    private void addInternalAdder(OJAnnotatedClass annotatedClass, Class clazz) {
+        OJAnnotatedOperation initialiseProperty = new OJAnnotatedOperation("internalAdder");
+        TinkerGenerationUtil.addOverrideAnnotation(initialiseProperty);
+        initialiseProperty.setReturnType(TinkerGenerationUtil.tumlRuntimePropertyPathName.getCopy());
+        initialiseProperty.addParam("tumlRuntimeProperty", TinkerGenerationUtil.tumlRuntimePropertyPathName.getCopy());
+        initialiseProperty.addParam("inverse", "boolean");
+        initialiseProperty.addParam("umlgNode", TinkerGenerationUtil.TUML_NODE);
+        annotatedClass.addToOperations(initialiseProperty);
+
+        OJField runtimeProperty = new OJField("runtimeProperty", new OJPathName(TumlClassOperations.propertyEnumName(clazz)));
+        if (!clazz.getGeneralizations().isEmpty()) {
+
+            OJField fromSuperRuntimeProperty = new OJField("fromSuperRuntimeProperty", TinkerGenerationUtil.tumlRuntimePropertyPathName.getCopy());
+            fromSuperRuntimeProperty.setInitExp("super.internalAdder(tumlRuntimeProperty, inverse, umlgNode)");
+            initialiseProperty.getBody().addToLocals(fromSuperRuntimeProperty);
+
+        }
+        initialiseProperty.getBody().addToLocals(runtimeProperty);
+
+        OJIfStatement ifRuntimeNull = null;
+        if (!clazz.getGeneralizations().isEmpty()) {
+            ifRuntimeNull = new OJIfStatement("fromSuperRuntimeProperty != null", "return fromSuperRuntimeProperty");
+        }
+
+        OJIfStatement ifInverse = new OJIfStatement("!inverse");
+        ifInverse.addToThenPart("runtimeProperty = " + "(" + TumlClassOperations.propertyEnumName(clazz)
+                + ".fromQualifiedName(tumlRuntimeProperty.getQualifiedName()))");
+        ifInverse.addToElsePart("runtimeProperty = " + "(" + TumlClassOperations.propertyEnumName(clazz)
+                + ".fromQualifiedName(tumlRuntimeProperty.getInverseQualifiedName()))");
+
+        OJIfStatement ifNotNull = new OJIfStatement("runtimeProperty != null");
+        OJSwitchStatement ojSwitchStatement = new OJSwitchStatement();
+        ojSwitchStatement.setCondition("runtimeProperty");
+        ifNotNull.addToThenPart(ojSwitchStatement);
+        ifNotNull.addToThenPart("return runtimeProperty");
+//        ifNotNull.addToElsePart("throw new RuntimeException(\"Property not found for \" + tumlRuntimeProperty.getQualifiedName())");
+        ifNotNull.addToElsePart("return null");
+
+        for (Property p : TumlClassOperations.getAllOwnedProperties(clazz)) {
+            PropertyWrapper pWrap = new PropertyWrapper(p);
+            if (!(pWrap.isDerived() || pWrap.isDerivedUnion()) && pWrap.getOtherEnd() != null && !pWrap.isEnumeration()) {
+                OJSwitchCase ojSwitchCase = new OJSwitchCase();
+                ojSwitchCase.setLabel(pWrap.fieldname());
+                OJSimpleStatement statement = new OJSimpleStatement("this." + pWrap.fieldname() + ".internalAdd((" + pWrap.javaBaseTypePath().getLast() + ")umlgNode)");
+                statement.setName(pWrap.fieldname());
+                ojSwitchCase.getBody().addToStatements(statement);
+                annotatedClass.addToImports(pWrap.javaImplTypePath());
+                ojSwitchStatement.addToCases(ojSwitchCase);
+            }
+        }
+
+        if (!clazz.getGeneralizations().isEmpty()) {
+            ifRuntimeNull.addToElsePart(ifInverse);
+            ifRuntimeNull.addToElsePart(ifNotNull);
+            initialiseProperty.getBody().addToStatements(ifRuntimeNull);
+        } else {
+            initialiseProperty.getBody().addToStatements(ifInverse);
+            initialiseProperty.getBody().addToStatements(ifNotNull);
+        }
     }
 
     private void addInitialiseProperty(OJAnnotatedClass annotatedClass, Class clazz) {

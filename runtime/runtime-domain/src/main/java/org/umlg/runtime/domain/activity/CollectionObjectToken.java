@@ -139,6 +139,12 @@ public class CollectionObjectToken<O> extends ObjectToken<O> implements Composit
 	}
 
     @Override
+    public TumlRuntimeProperty internalAdder(TumlRuntimeProperty tumlRuntimeProperty, boolean inverse, TumlNode umlgNode) {
+        //To change body of implemented methods use File | Settings | File Templates.
+        return null;
+    }
+
+    @Override
     public void initVariables() {
         //To change body of implemented methods use File | Settings | File Templates.
     }

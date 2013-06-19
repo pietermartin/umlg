@@ -18,8 +18,14 @@ public class TumlRestletFilter extends Filter {
 
     @Override
     protected int beforeHandle(Request request, Response response) {
+        GraphDb.getDb().clearTxThreadVar();
         GraphDb.getDb().clearThreadVars();
         return CONTINUE;
+    }
+
+    @Override
+    protected void afterHandle(Request request, Response response) {
+        GraphDb.getDb().clearTxThreadVar();
     }
 
 }

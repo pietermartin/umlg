@@ -22,7 +22,7 @@ import org.umlg.runtime.util.TumlFormatter;
 
 import java.util.*;
 
-public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimeProperty, OclStdLibCollection<E> {
+public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRuntimeProperty, OclStdLibCollection<E> {
 
     protected Collection<E> internalCollection;
     protected OclStdLibCollection<E> oclStdLibCollection;
@@ -144,6 +144,11 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
     }
 
     @Override
+    public boolean internalAdd(E e) {
+        return this.internalCollection.add(e);
+    }
+
+        @Override
     public boolean add(E e) {
         maybeLoad();
         if (isQualified() || isInverseQualified()) {
@@ -154,6 +159,7 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
             if (!(this.owner instanceof TumlMetaNode)) {
                 TransactionThreadEntityVar.setNewEntity(this.owner);
             }
+
             Edge edge = addInternal(e);
 
             // Edge can only be null on a one primitive
@@ -179,7 +185,6 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
                 }
                 addToInverseLinkedList(edge);
             }
-
         }
         return result;
     }
@@ -561,6 +566,10 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
                 // one
                 node.initialiseProperty(tumlRuntimeProperty, true);
 
+            } else {
+
+                node.internalAdder(tumlRuntimeProperty, true, this.owner);
+
             }
         } else if (e.getClass().isEnum()) {
             v = GraphDb.getDb().addVertex(null);
@@ -693,14 +702,6 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
             return edge.getVertex(Direction.IN);
         } else {
             return edge.getVertex(Direction.OUT);
-        }
-    }
-
-    protected Vertex getOppositeVertexForDirection(Edge edge) {
-        if (this.isControllingSide()) {
-            return edge.getVertex(Direction.OUT);
-        } else {
-            return edge.getVertex(Direction.IN);
         }
     }
 
@@ -860,6 +861,11 @@ public abstract class BaseCollection<E> implements Collection<E>, TumlRuntimePro
             sb.append("]");
         }
         return sb.toString();
+    }
+
+    @Override
+    public boolean isAssociationClass() {
+        return this.tumlRuntimeProperty.isAssociationClass();
     }
 
     @Override

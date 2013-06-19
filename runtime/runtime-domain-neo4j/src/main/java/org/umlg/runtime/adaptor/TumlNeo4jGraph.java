@@ -361,7 +361,6 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
             rollback();
             throw new IllegalStateException("Transaction thread var is not empty!!!");
         }
-
     }
 
     @Override

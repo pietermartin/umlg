@@ -161,6 +161,7 @@ public final class TumlPropertyOperations extends PropertyOperations {
 
 	public static OJPathName getDefaultTinkerCollection(Property p) {
 		OJPathName collectionPathName;
+        PropertyWrapper pWrap = new PropertyWrapper(p);
 		if (p.isOrdered() && p.isUnique()) {
 			if (!p.getQualifiers().isEmpty()) {
 				collectionPathName = TumlCollectionKindEnum.QUALIFIED_ORDERED_SET.getImplementationPathName();
@@ -183,12 +184,19 @@ public final class TumlPropertyOperations extends PropertyOperations {
 			if (!p.getQualifiers().isEmpty()) {
 				collectionPathName = TumlCollectionKindEnum.QUALIFIED_SET.getImplementationPathName();
 			} else {
-				collectionPathName = TumlCollectionKindEnum.SET.getImplementationPathName();
+                if (!pWrap.isAssociationClass()) {
+				    collectionPathName = TumlCollectionKindEnum.SET.getImplementationPathName();
+                } else {
+                    collectionPathName = TumlCollectionKindEnum.ASSOCIATION_CLASS_SET.getImplementationPathName();
+                }
 			}
 		} else {
 			throw new RuntimeException("wtf");
 		}
 		collectionPathName.addToGenerics(getTypePath(p));
+        if (pWrap.isAssociationClass()) {
+            collectionPathName.addToGenerics(pWrap.getAssociationClassPathName());
+        }
 		return collectionPathName;
 	}
 

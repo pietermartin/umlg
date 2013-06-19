@@ -65,6 +65,12 @@ public class SignalEvent extends Event {
 	}
 
     @Override
+    public TumlRuntimeProperty internalAdder(TumlRuntimeProperty tumlRuntimeProperty, boolean inverse, TumlNode umlgNode) {
+        //To change body of implemented methods use File | Settings | File Templates.
+        return null;
+    }
+
+    @Override
     public void initVariables() {
         //To change body of implemented methods use File | Settings | File Templates.
     }

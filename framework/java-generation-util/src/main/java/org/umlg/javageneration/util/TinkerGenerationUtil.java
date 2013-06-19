@@ -123,6 +123,8 @@ public class TinkerGenerationUtil {
     public static OJPathName tinkerCollection = new OJPathName("org.umlg.runtime.collection.TinkerCollection");
     public static OJPathName tinkerSet = new OJPathName("org.umlg.runtime.collection.TinkerSet");
     public static OJPathName tinkerSetImpl = new OJPathName("org.umlg.runtime.collection.persistent.TinkerSetImpl");
+    public static OJPathName umlgAssociationClassSet = new OJPathName("org.umlg.runtime.collection.UmlgAssociationClassSet");
+    public static OJPathName umlgAssociationClassSetImpl = new OJPathName("org.umlg.runtime.collection.persistent.UmlgAssociationClassSetImpl");
     public static OJPathName tinkerQualifiedSet = new OJPathName("org.umlg.runtime.collection.TinkerQualifiedSet");
     public static OJPathName tinkerQualifiedSetImpl = new OJPathName("org.umlg.runtime.collection.persistent.TinkerQualifiedSetImpl");
     public static OJPathName tinkerSequence = new OJPathName("org.umlg.runtime.collection.TinkerSequence");

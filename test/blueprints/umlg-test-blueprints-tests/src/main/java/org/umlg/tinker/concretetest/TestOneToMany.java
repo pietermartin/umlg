@@ -33,6 +33,35 @@ public class TestOneToMany extends BaseLocalDbTest {
 
     @SuppressWarnings("unused")
     @Test
+    public void testCollectionOtherEndClearsAndReloadsInverse() {
+        God god = new God(true);
+        god.setName("THEGOD");
+        Universe universe1 = new Universe(true);
+        universe1.setName("universe1");
+        SpaceTime st = new SpaceTime(universe1);
+        Space s = new Space(st);
+        Time t = new Time(st);
+
+        universe1.addToGod(god);
+
+        db.commit();
+        Assert.assertEquals(1, god.getUniverse().size());
+
+        Universe universe2 = new Universe(true);
+        universe2.setName("universe2");
+        SpaceTime st2 = new SpaceTime(universe2);
+        Space s2 = new Space(st2);
+        Time t2 = new Time(st2);
+
+        universe2.addToGod(god);
+
+        db.commit();
+        Assert.assertEquals(2, god.getUniverse().size());
+
+    }
+
+    @SuppressWarnings("unused")
+    @Test
     public void testCompositeCreation() {
         God god = new God(true);
         god.setName("THEGOD");

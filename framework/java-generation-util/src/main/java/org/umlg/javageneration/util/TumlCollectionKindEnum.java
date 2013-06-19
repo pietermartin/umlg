@@ -14,8 +14,9 @@ public enum TumlCollectionKindEnum {
 
 	COLLECTION(TinkerGenerationUtil.tinkerCollection.getCopy(), null, TinkerGenerationUtil.tumlMemoryCollection.getCopy(), null), 
 	SET(TinkerGenerationUtil.tinkerSet.getCopy(), TinkerGenerationUtil.tinkerSetImpl.getCopy(), TinkerGenerationUtil.tumlMemorySet.getCopy(), TinkerGenerationUtil.tumlSetCloseableIterablePathName.getCopy()),
-	QUALIFIED_SET(TinkerGenerationUtil.tinkerQualifiedSet.getCopy(), TinkerGenerationUtil.tinkerQualifiedSetImpl.getCopy(), TinkerGenerationUtil.tumlMemorySet.getCopy(), TinkerGenerationUtil.tumlSetCloseableIterablePathName.getCopy()), 
-	SEQUENCE(TinkerGenerationUtil.tinkerSequence.getCopy(), TinkerGenerationUtil.tinkerSequenceImpl.getCopy(), TinkerGenerationUtil.tumlMemorySequence.getCopy(), TinkerGenerationUtil.tumlSequenceCloseableIterablePathName.getCopy()), 
+	QUALIFIED_SET(TinkerGenerationUtil.tinkerQualifiedSet.getCopy(), TinkerGenerationUtil.tinkerQualifiedSetImpl.getCopy(), TinkerGenerationUtil.tumlMemorySet.getCopy(), TinkerGenerationUtil.tumlSetCloseableIterablePathName.getCopy()),
+    ASSOCIATION_CLASS_SET(TinkerGenerationUtil.umlgAssociationClassSet.getCopy(), TinkerGenerationUtil.umlgAssociationClassSetImpl.getCopy(), TinkerGenerationUtil.tumlMemorySet.getCopy(), TinkerGenerationUtil.tumlSetCloseableIterablePathName.getCopy()),
+	SEQUENCE(TinkerGenerationUtil.tinkerSequence.getCopy(), TinkerGenerationUtil.tinkerSequenceImpl.getCopy(), TinkerGenerationUtil.tumlMemorySequence.getCopy(), TinkerGenerationUtil.tumlSequenceCloseableIterablePathName.getCopy()),
 	QUALIFIED_SEQUENCE(TinkerGenerationUtil.tinkerQualifiedSequence.getCopy(), TinkerGenerationUtil.tinkerQualifiedSequenceImpl.getCopy(), TinkerGenerationUtil.tumlMemorySequence.getCopy(), TinkerGenerationUtil.tumlSequenceCloseableIterablePathName.getCopy()),
 	BAG(TinkerGenerationUtil.tinkerBag.getCopy(), TinkerGenerationUtil.tinkerBagImpl.getCopy(), TinkerGenerationUtil.tumlMemoryBag.getCopy(), TinkerGenerationUtil.tumlBagCloseableIterablePathName.getCopy()), 
 	QUALIFIED_BAG(TinkerGenerationUtil.tinkerQualifiedBag.getCopy(), TinkerGenerationUtil.tinkerQualifiedBagImpl.getCopy(), TinkerGenerationUtil.tumlMemoryBag.getCopy(), TinkerGenerationUtil.tumlBagCloseableIterablePathName.getCopy()), 

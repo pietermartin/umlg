@@ -26,7 +26,7 @@ public class OJSwitchStatement extends OJSwitchStatementGEN {
 		OJSwitchCase c = getDefCase();
 		if (c != null) {
 			result = result + JavaStringHelpers.indent("default", 1) + c.getLabel() + ":\n" + JavaStringHelpers.indent(c.getBody().toJavaString(), 2) + "\n"
-					+ JavaStringHelpers.indent("break;\n", 1);
+					;
 
 		}
 		result = result + "}\n";

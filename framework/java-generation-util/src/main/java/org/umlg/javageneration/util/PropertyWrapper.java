@@ -424,12 +424,19 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
             if (hasQualifiers()) {
                 fieldType = TumlCollectionKindEnum.QUALIFIED_SET.getInterfacePathName();
             } else {
-                fieldType = TumlCollectionKindEnum.SET.getInterfacePathName();
+                if (!isAssociationClass()) {
+                    fieldType = TumlCollectionKindEnum.SET.getInterfacePathName();
+                } else {
+                    fieldType = TumlCollectionKindEnum.ASSOCIATION_CLASS_SET.getInterfacePathName();
+                }
             }
         } else {
             throw new RuntimeException("wtf");
         }
         fieldType.addToGenerics(javaBaseTypePath());
+        if (isAssociationClass()) {
+            fieldType.addToGenerics(getAssociationClassPathName());
+        }
         return fieldType;
     }
 

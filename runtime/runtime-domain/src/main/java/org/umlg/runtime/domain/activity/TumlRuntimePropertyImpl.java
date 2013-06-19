@@ -74,7 +74,12 @@ public class TumlRuntimePropertyImpl implements TumlRuntimeProperty {
 		return (getUpper() == -1 || elementCount <= getUpper()) && elementCount >= getLower();
 	}
 
-	@Override
+    @Override
+    public boolean isAssociationClass() {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
 	public boolean isOnePrimitive() {
 		return false;
 	}

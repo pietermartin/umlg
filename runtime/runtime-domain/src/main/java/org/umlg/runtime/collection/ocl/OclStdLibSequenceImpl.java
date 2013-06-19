@@ -198,7 +198,12 @@ public class OclStdLibSequenceImpl<E> extends OclStdLibCollectionImpl<E> impleme
 		return this.list.toArray(a);
 	}
 
-	@Override
+    @Override
+    public boolean internalAdd(E e) {
+        return this.list.add(e);
+    }
+
+    @Override
 	public boolean add(E e) {
 		return this.list.add(e);
 	}
