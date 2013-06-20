@@ -114,7 +114,7 @@ public class BaseVisitor {
 
             OJAnnotatedClass associationClassOJClass = findAssociationClassOJClass(propertyWrapper);
             PropertyWrapper otherEnd = new PropertyWrapper(propertyWrapper.getOtherEnd());
-            acField = new OJAnnotatedField(otherEnd.fieldname(), otherEnd.javaTumlTypePath());
+            acField = new OJAnnotatedField(otherEnd.fieldname(), otherEnd.javaTumlTypePath(true));
             associationClassOJClass.addToFields(acField);
         }
     }

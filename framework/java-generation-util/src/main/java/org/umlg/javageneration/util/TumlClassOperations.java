@@ -503,4 +503,7 @@ public class TumlClassOperations extends ClassOperations {
         return "checkClassConstraint" + StringUtils.capitalize(constraint.getName());
     }
 
+    public static boolean isAssociationClass(Class clazz) {
+        return clazz instanceof AssociationClass;
+    }
 }

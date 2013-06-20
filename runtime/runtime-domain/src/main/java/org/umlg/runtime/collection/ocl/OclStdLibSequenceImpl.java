@@ -199,7 +199,7 @@ public class OclStdLibSequenceImpl<E> extends OclStdLibCollectionImpl<E> impleme
 	}
 
     @Override
-    public boolean internalAdd(E e) {
+    public boolean inverseAdder(E e) {
         return this.list.add(e);
     }
 

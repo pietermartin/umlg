@@ -70,7 +70,7 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
     public static void buildGetterForAssociationClass(OJAnnotatedClass ac, PropertyWrapper propertyWrapper) {
         PropertyWrapper otherEnd = new PropertyWrapper(propertyWrapper.getOtherEnd());
         OJAnnotatedOperation getter = new OJAnnotatedOperation(otherEnd.getter(), otherEnd.javaBaseTypePath());
-        OJAnnotatedField tmpField = new OJAnnotatedField("tmp", otherEnd.javaTumlTypePath());
+        OJAnnotatedField tmpField = new OJAnnotatedField("tmp", otherEnd.javaTumlTypePath(true));
         getter.getBody().addToLocals(tmpField);
         tmpField.setInitExp("this." + otherEnd.fieldname());
         OJIfStatement ifFieldNotEmpty = new OJIfStatement("!" + tmpField.getName() + ".isEmpty()");
@@ -105,7 +105,11 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
             ifExist.addToThenPart("throw new RuntimeException(\"Property is a one and already has a value!\")");
             ojBlock1.addToStatements(ifExist);
 
-            ojBlock2.addToStatements("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ")");
+            if (isAssociationClass || !propertyWrapper.isAssociationClass()) {
+                ojBlock2.addToStatements("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ")");
+            } else {
+                ojBlock2.addToStatements("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ", " + StringUtils.decapitalize(propertyWrapper.getAssociationClass().getName()) + ")");
+            }
             List<Constraint> constraints = TumlPropertyOperations.getConstraints(propertyWrapper.getProperty());
             if (!constraints.isEmpty()) {
 

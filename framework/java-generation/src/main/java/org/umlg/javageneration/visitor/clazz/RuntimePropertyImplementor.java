@@ -243,7 +243,8 @@ public class RuntimePropertyImplementor {
                         pWrap.isEnumeration(), pWrap.isManyToOne(), pWrap.isMany(), pWrap.isControllingSide(), pWrap.isComposite(), pWrap.isInverseComposite(),
                         pWrap.isOneToOne(), pWrap.isOneToMany(), pWrap.isManyToMany(), pWrap.getUpper(), pWrap.getLower(), inverseUpper, pWrap.isQualified(),
                         pWrap.isInverseQualified(), pWrap.isOrdered(), pWrap.isInverseOrdered(), pWrap.isUnique(), pWrap.isInverseUnique(),
-                        TinkerGenerationUtil.getEdgeName(pWrap.getProperty()));
+                        ((className instanceof AssociationClass) ? TinkerGenerationUtil.getEdgeName(pWrap.getProperty()) + "_AC" : TinkerGenerationUtil.getEdgeName(pWrap.getProperty()))
+                );
 
                 if (pWrap.isAssociationClass() && !(className instanceof AssociationClass)) {
                     addEnumLiteral(true, ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, pWrap.getAssociationClassFakePropertyName(), pWrap.getQualifiedName(),

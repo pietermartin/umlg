@@ -15,7 +15,7 @@ public interface TumlNode extends TumlEnum, OclAny, PersistentObject {
 	boolean isTinkerRoot();
 	void initialiseProperties();
 	void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty, boolean inverse);
-    TumlRuntimeProperty internalAdder(TumlRuntimeProperty tumlRuntimeProperty, boolean inverse, TumlNode umlgNode);
+    TumlRuntimeProperty inverseAdder(TumlRuntimeProperty tumlRuntimeProperty, boolean inverse, TumlNode umlgNode);
     void initVariables();
 	List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, TumlNode node, boolean inverse);
 	void delete();

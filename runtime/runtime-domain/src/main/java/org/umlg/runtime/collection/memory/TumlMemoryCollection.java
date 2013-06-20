@@ -46,7 +46,7 @@ public class TumlMemoryCollection<E> implements TinkerCollection<E> {
 	}
 
     @Override
-    public boolean internalAdd(E e) {
+    public boolean inverseAdder(E e) {
         return this.internalCollection.add(e);
     }
 

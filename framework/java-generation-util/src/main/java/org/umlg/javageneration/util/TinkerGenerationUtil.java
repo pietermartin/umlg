@@ -88,6 +88,7 @@ public class TinkerGenerationUtil {
 
 
     public static final OJPathName tinkerDirection = new OJPathName("com.tinkerpop.blueprints.Direction");
+    public static final OJPathName AssociationClassNode = new OJPathName("org.umlg.runtime.domain.AssociationClassNode");
     public static final OJPathName tinkerCompositionNodePathName = new OJPathName("org.umlg.runtime.domain.CompositionNode");
     public static final OJPathName compositionNodePathName = new OJPathName("org.umlg.runtime.domain.CompositionNode");
     public static final OJPathName tinkerIdUtilPathName = new OJPathName("org.umlg.runtime.adaptor.TinkerIdUtil");

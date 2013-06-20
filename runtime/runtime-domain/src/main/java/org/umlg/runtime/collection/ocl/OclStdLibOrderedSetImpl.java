@@ -163,7 +163,7 @@ public class OclStdLibOrderedSetImpl<E> extends OclStdLibCollectionImpl<E> imple
 	}
 
     @Override
-    public boolean internalAdd(E e) {
+    public boolean inverseAdder(E e) {
         return this.orderedSet.add(e);
     }
 

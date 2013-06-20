@@ -143,12 +143,21 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
         return result;
     }
 
+    /**
+     * This gets invoked from the opposite side in addInternal.
+     * It is called before the edge is created so the new element will not be loaded by loadFromVertex
+     * @param e
+     * @return
+     */
     @Override
-    public boolean internalAdd(E e) {
+    public boolean inverseAdder(E e) {
+        if (!this.loaded) {
+            loadFromVertex();
+        }
         return this.internalCollection.add(e);
     }
 
-        @Override
+    @Override
     public boolean add(E e) {
         maybeLoad();
         if (isQualified() || isInverseQualified()) {
@@ -568,7 +577,7 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
 
             } else {
 
-                node.internalAdder(tumlRuntimeProperty, true, this.owner);
+                node.inverseAdder(tumlRuntimeProperty, true, this.owner);
 
             }
         } else if (e.getClass().isEnum()) {

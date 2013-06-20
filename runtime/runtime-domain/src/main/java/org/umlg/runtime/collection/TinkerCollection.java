@@ -6,5 +6,5 @@ import java.util.Collection;
 
 public interface TinkerCollection<E> extends Collection<E>, OclStdLibCollection<E> {
 	String toJson();
-    boolean internalAdd(E e);
+    boolean inverseAdder(E e);
 }

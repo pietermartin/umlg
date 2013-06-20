@@ -22,7 +22,17 @@ public class OclStdLibBagTest extends BaseLocalDbTest {
         BagRoot bagRoot = new BagRoot(true);
         bagRoot.setName("bagRoot");
         BagTest bagTest1 = new BagTest(bagRoot);
+
+        if (bagRoot.getBagTest().size()==2) {
+            System.out.println("aaaaaaaaaaaaaaaa");
+        }
+
         bagTest1.setName("bagTest1");
+
+        if (bagRoot.getBagTest().size()==2) {
+            System.out.println("bbbbbbbbbbbbbb");
+        }
+
         BagTest bagTest2 = new BagTest(bagRoot);
         bagTest2.setName("bagTest2");
         BagTest bagTest3 = new BagTest(bagRoot);
@@ -31,6 +41,10 @@ public class OclStdLibBagTest extends BaseLocalDbTest {
         bagTest4.setName("bagTest4");
         bagRoot.getBagTest().add(bagTest2);
         db.commit();
+
+        if (bagRoot.getBagTest().size() > 5) {
+            System.out.println("ssssssssssssssssss");
+        }
 
         test.add(bagTest4);
         test.add(bagTest3);

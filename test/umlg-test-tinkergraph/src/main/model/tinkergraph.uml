@@ -17,7 +17,7 @@
           </ownedAttribute>
           <ownedAttribute xmi:id="_Zfrx8NWeEeKvx-CpQtHgtA" name="age" visibility="public">
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
-            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_asj0wNWeEeKvx-CpQtHgtA" value="1"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_asj0wNWeEeKvx-CpQtHgtA"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_askb0NWeEeKvx-CpQtHgtA" value="1"/>
           </ownedAttribute>
           <ownedAttribute xmi:id="_BAet8NXnEeK3orlf5ZrL2w" name="project" type="_WEtf4NWeEeKvx-CpQtHgtA" aggregation="composite" association="_BAf8ENXnEeK3orlf5ZrL2w">
@@ -36,7 +36,7 @@
           </ownedAttribute>
           <ownedAttribute xmi:id="_gYzl4NWeEeKvx-CpQtHgtA" name="lang" visibility="public">
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
-            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_iKtoYNWeEeKvx-CpQtHgtA" value="1"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_iKtoYNWeEeKvx-CpQtHgtA"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_iKu2gNWeEeKvx-CpQtHgtA" value="1"/>
             <defaultValue xmi:type="uml:LiteralString" xmi:id="_iKwrsNWeEeKvx-CpQtHgtA">
               <value xsi:nil="true"/>

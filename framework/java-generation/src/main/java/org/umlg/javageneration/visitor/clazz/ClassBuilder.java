@@ -60,6 +60,9 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
         addAllInstances(annotatedClass, clazz);
         addAllInstancesWithFilter(annotatedClass, clazz);
         addConstraints(annotatedClass, clazz);
+        if (TumlClassOperations.isAssociationClass(clazz)) {
+            annotatedClass.addToImplementedInterfaces(TinkerGenerationUtil.AssociationClassNode);
+        }
     }
 
     @Override
@@ -78,7 +81,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
         List<Classifier> generals = clazz.getGenerals();
         if (generals.size() > 1) {
             throw new IllegalStateException(
-                    String.format("Multiple inheritence is not supported! Class %s has more than on genereralization.", clazz.getName()));
+                    String.format("Multiple inheritance is not supported! Class %s has more than on genereralization.", clazz.getName()));
         }
         if (!generals.isEmpty()) {
             Classifier superClassifier = generals.get(0);
@@ -146,9 +149,10 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
             List<Property> memberEnds = associationClass.getMemberEnds();
             for (Property memberEnd : memberEnds) {
                 PropertyWrapper pWrap = new PropertyWrapper(memberEnd);
-                OJSimpleStatement statement = new OJSimpleStatement("this." + pWrap.fieldname() + " = " + pWrap.javaDefaultInitialisation(clazz));
+                OJSimpleStatement statement = new OJSimpleStatement("this." + pWrap.fieldname() + " = " + pWrap.javaDefaultInitialisation(clazz, true));
                 statement.setName(pWrap.fieldname());
                 initialiseProperties.getBody().addToStatements(statement);
+                annotatedClass.addToImports(pWrap.javaImplTypePath());
             }
         }
     }

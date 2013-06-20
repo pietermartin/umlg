@@ -51,7 +51,7 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
     public static void buildGetterForAssociationClass(OJAnnotatedClass ac, PropertyWrapper propertyWrapper) {
         PropertyWrapper otherEnd = new PropertyWrapper(propertyWrapper.getOtherEnd());
         OJAnnotatedOperation getter = new OJAnnotatedOperation(otherEnd.getter(), otherEnd.javaBaseTypePath());
-        OJAnnotatedField tmpField = new OJAnnotatedField("tmp", otherEnd.javaTumlTypePath());
+        OJAnnotatedField tmpField = new OJAnnotatedField("tmp", otherEnd.javaTumlTypePath(true));
         getter.getBody().addToLocals(tmpField);
         tmpField.setInitExp("this." + otherEnd.fieldname());
         OJIfStatement ifFieldNotEmpty = new OJIfStatement("!" + tmpField.getName() + ".isEmpty()");
@@ -112,9 +112,10 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
                 singleAdder.getBody().addToStatements(ifNotNull2);
             }
             OJIfStatement ifNotNull = new OJIfStatement(propertyWrapper.fieldname() + " != null");
-            ifNotNull.addToThenPart("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ")");
-            if (propertyWrapper.isAssociationClass()) {
-                ifNotNull.addToThenPart("this." + propertyWrapper.getAssociationClassFakePropertyName() + ".add(" + StringUtils.decapitalize(propertyWrapper.getAssociationClass().getName()) + ")");
+            if (!propertyWrapper.isAssociationClass()) {
+                ifNotNull.addToThenPart("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ")");
+            } else {
+                ifNotNull.addToThenPart("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ", " + StringUtils.decapitalize(propertyWrapper.getAssociationClass().getName()) + ")");
             }
             singleAdder.getBody().addToStatements(ifNotNull);
         }

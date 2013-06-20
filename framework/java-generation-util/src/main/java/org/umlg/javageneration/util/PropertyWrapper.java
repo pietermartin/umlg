@@ -396,11 +396,20 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     }
 
     /*
+ * Attempting set semantics so the path is always a collection Call
+ * javaBaseTypePath to get the type of set This method return umlg special
+ * collection interface
+ */
+    public OJPathName javaTumlTypePath() {
+        return javaTumlTypePath(false);
+    }
+
+    /*
      * Attempting set semantics so the path is always a collection Call
      * javaBaseTypePath to get the type of set This method return umlg special
      * collection interface
      */
-    public OJPathName javaTumlTypePath() {
+    public OJPathName javaTumlTypePath(boolean ignoreAssociationClass) {
         OJPathName fieldType;
         if (isOrdered() && isUnique()) {
             if (hasQualifiers()) {
@@ -424,7 +433,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
             if (hasQualifiers()) {
                 fieldType = TumlCollectionKindEnum.QUALIFIED_SET.getInterfacePathName();
             } else {
-                if (!isAssociationClass()) {
+                if (ignoreAssociationClass || !isAssociationClass()) {
                     fieldType = TumlCollectionKindEnum.SET.getInterfacePathName();
                 } else {
                     fieldType = TumlCollectionKindEnum.ASSOCIATION_CLASS_SET.getInterfacePathName();
@@ -434,7 +443,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
             throw new RuntimeException("wtf");
         }
         fieldType.addToGenerics(javaBaseTypePath());
-        if (isAssociationClass()) {
+        if (!ignoreAssociationClass && isAssociationClass()) {
             fieldType.addToGenerics(getAssociationClassPathName());
         }
         return fieldType;
@@ -557,12 +566,16 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     // return impl;
     // }
 
+    public String javaDefaultInitialisation(BehavioredClassifier propertyConcreteOwner) {
+        return javaDefaultInitialisation(propertyConcreteOwner, false);
+    }
+
     /*
      * The property might be owned by an interface but the initialisation is for
      * a realization on a BehavioredClassifier
      */
-    public String javaDefaultInitialisation(BehavioredClassifier propertyConcreteOwner) {
-        return TumlPropertyOperations.getDefaultTinkerCollectionInitalisation(this.property, propertyConcreteOwner).getExpression();
+    public String javaDefaultInitialisation(BehavioredClassifier propertyConcreteOwner, boolean ignoreAssociationClass) {
+        return TumlPropertyOperations.getDefaultTinkerCollectionInitalisation(this.property, propertyConcreteOwner, ignoreAssociationClass).getExpression();
     }
 
     public String javaDefaultInitialisationForAssociationClass(BehavioredClassifier propertyConcreteOwner) {
@@ -1494,7 +1507,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     public boolean isAssociationClass() {
         Element owner = this.property.getOwner();
         if (owner instanceof AssociationClass) {
-            AssociationClass ownerClass = (AssociationClass)owner;
+            AssociationClass ownerClass = (AssociationClass) owner;
             List<Property> memberEnds = ownerClass.getMemberEnds();
             for (Property p : memberEnds) {
                 if (p == this.property) {
@@ -1503,7 +1516,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
             }
             return false;
         } else if (owner instanceof Class) {
-            Class ownerClass = (Class)owner;
+            Class ownerClass = (Class) owner;
             List<Association> associations = ownerClass.getAssociations();
             for (Association association : associations) {
                 List<Property> memberEnds = association.getMemberEnds();
@@ -1521,15 +1534,15 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     public AssociationClass getAssociationClass() {
         Element owner = this.property.getOwner();
         if (owner instanceof AssociationClass) {
-            return (AssociationClass)owner;
+            return (AssociationClass) owner;
         } else if (owner instanceof Class) {
-            Class ownerClass = (Class)owner;
+            Class ownerClass = (Class) owner;
             List<Association> associations = ownerClass.getAssociations();
             for (Association association : associations) {
                 List<Property> memberEnds = association.getMemberEnds();
                 for (Property p : memberEnds) {
                     if (p == this.property && (association instanceof AssociationClass)) {
-                        return (AssociationClass)association;
+                        return (AssociationClass) association;
                     }
                 }
             }

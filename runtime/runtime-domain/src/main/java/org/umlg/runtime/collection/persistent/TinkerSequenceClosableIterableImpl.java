@@ -43,7 +43,7 @@ public class TinkerSequenceClosableIterableImpl<E> extends BaseSequence<E> imple
 	protected void loadFromVertex() {
 		for (Iterator<Edge> iter = getEdges(); iter.hasNext(); ) {
 			Edge edge = iter.next();
-			E node = null;
+			E node;
 			try {
 				Class<?> c = this.getClassToInstantiate(edge);
 				if (c.isEnum()) {

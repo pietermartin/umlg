@@ -159,7 +159,11 @@ public final class TumlPropertyOperations extends PropertyOperations {
 		}
 	}
 
-	public static OJPathName getDefaultTinkerCollection(Property p) {
+    public static OJPathName getDefaultTinkerCollection(Property p) {
+        return getDefaultTinkerCollection(p, false);
+    }
+
+    public static OJPathName getDefaultTinkerCollection(Property p, boolean ignoreAssociationClass) {
 		OJPathName collectionPathName;
         PropertyWrapper pWrap = new PropertyWrapper(p);
 		if (p.isOrdered() && p.isUnique()) {
@@ -184,7 +188,7 @@ public final class TumlPropertyOperations extends PropertyOperations {
 			if (!p.getQualifiers().isEmpty()) {
 				collectionPathName = TumlCollectionKindEnum.QUALIFIED_SET.getImplementationPathName();
 			} else {
-                if (!pWrap.isAssociationClass()) {
+                if (ignoreAssociationClass || !pWrap.isAssociationClass()) {
 				    collectionPathName = TumlCollectionKindEnum.SET.getImplementationPathName();
                 } else {
                     collectionPathName = TumlCollectionKindEnum.ASSOCIATION_CLASS_SET.getImplementationPathName();
@@ -194,7 +198,7 @@ public final class TumlPropertyOperations extends PropertyOperations {
 			throw new RuntimeException("wtf");
 		}
 		collectionPathName.addToGenerics(getTypePath(p));
-        if (pWrap.isAssociationClass()) {
+        if (!ignoreAssociationClass && pWrap.isAssociationClass()) {
             collectionPathName.addToGenerics(pWrap.getAssociationClassPathName());
         }
 		return collectionPathName;
@@ -235,7 +239,11 @@ public final class TumlPropertyOperations extends PropertyOperations {
 
 
     public static OJSimpleStatement getDefaultTinkerCollectionInitalisation(Property p, BehavioredClassifier propertyConcreteOwner) {
-		OJSimpleStatement s = getDefaultTinkerCollectionInitalisation(p, propertyConcreteOwner, getDefaultTinkerCollection(p));
+        return getDefaultTinkerCollectionInitalisation(p, propertyConcreteOwner, false);
+    }
+
+    public static OJSimpleStatement getDefaultTinkerCollectionInitalisation(Property p, BehavioredClassifier propertyConcreteOwner, boolean ignoreAssociationClass) {
+		OJSimpleStatement s = getDefaultTinkerCollectionInitalisation(p, propertyConcreteOwner, getDefaultTinkerCollection(p, ignoreAssociationClass));
 		return s;
 	}
 

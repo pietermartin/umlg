@@ -21,7 +21,7 @@ public class OJSwitchCase extends OJSwitchCaseGEN {
 	public String toJavaString() {
 		String result = "case " + getLabel() + ":\n" + 
 						JavaStringHelpers.indent(getBody().toJavaString(), 1) + "\n" +
-						"break;\n";
+                        JavaStringHelpers.indent("break;", 1) + "\n";
 		return result;
 	}
 

@@ -212,7 +212,7 @@ public class OclStdLibBagImpl<E> extends OclStdLibCollectionImpl<E> implements T
 	}
 
     @Override
-    public boolean internalAdd(E element) {
+    public boolean inverseAdder(E element) {
         return this.bag.add(element);
     }
 
