@@ -1,6 +1,6 @@
 package org.umlg.javageneration.visitor.property;
 
-import com.sun.xml.internal.ws.util.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.uml2.uml.Property;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
@@ -103,7 +103,7 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
         OJAnnotatedOperation singleAdder = new OJAnnotatedOperation(propertyWrapper.adder());
         singleAdder.addParam(propertyWrapper.fieldname(), propertyWrapper.javaBaseTypePath());
         if (propertyWrapper.isAssociationClass()) {
-            singleAdder.addParam(StringUtils.decapitalize(propertyWrapper.getAssociationClass().getName()), TumlClassOperations.getPathName(propertyWrapper.getAssociationClass()));
+            singleAdder.addParam(StringUtils.uncapitalize(propertyWrapper.getAssociationClass().getName()), TumlClassOperations.getPathName(propertyWrapper.getAssociationClass()));
         }
         if (!(owner instanceof OJAnnotatedInterface)) {
 
@@ -121,7 +121,7 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
             if (!propertyWrapper.isAssociationClass()) {
                 ifNotNull.addToThenPart("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ")");
             } else {
-                ifNotNull.addToThenPart("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ", " + StringUtils.decapitalize(propertyWrapper.getAssociationClass().getName()) + ")");
+                ifNotNull.addToThenPart("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ", " + StringUtils.uncapitalize(propertyWrapper.getAssociationClass().getName()) + ")");
             }
             singleAdder.getBody().addToStatements(ifNotNull);
         }

@@ -95,40 +95,39 @@ public class TestAssociationClassForBag extends BaseLocalDbTest {
 
     }
 
-//    @Test
-//    public void testAssociationClass1_Removal() {
-//        Human human = new Human(true);
-//        human.setName("human1");
-//        AssociationClassOrderedSet associationClassOrderedSet1 = new AssociationClassOrderedSet(true);
-//        associationClassOrderedSet1.setWeight(1);
-//        ProjectOrderedSet projectOrderedSet1 = new ProjectOrderedSet(human, associationClassOrderedSet1);
-//        projectOrderedSet1.setName("projectOrderedSet1");
-//
-//        AssociationClassOrderedSet associationClassOrderedSet2 = new AssociationClassOrderedSet(true);
-//        associationClassOrderedSet2.setWeight(2);
-//        ProjectOrderedSet projectOrderedSet2 = new ProjectOrderedSet(human, associationClassOrderedSet2);
-//        projectOrderedSet2.setName("projectOrderedSet2");
-//
-//        AssociationClassOrderedSet associationClassOrderedSet3 = new AssociationClassOrderedSet(true);
-//        associationClassOrderedSet3.setWeight(3);
-//        ProjectOrderedSet projectOrderedSet3 = new ProjectOrderedSet(human, associationClassOrderedSet3);
-//        projectOrderedSet3.setName("projectOrderedSet3");
-//
-//        db.commit();
-//
-//        human = new Human(human.getVertex());
-//        Assert.assertEquals(3, human.getProjectorderedset().size());
-//
-//        projectOrderedSet1 = new ProjectOrderedSet(projectOrderedSet1.getVertex());
-//        human.removeFromProjectorderedset(projectOrderedSet1);
-//        projectOrderedSet1.delete();
-//
-//        db.commit();
-//
-//        human = new Human(human.getVertex());
-//        Assert.assertEquals(2, human.getProjectorderedset().size());
-//        Assert.assertEquals(2, human.getAssociationClassOrderedSet().size());
-//        Assert.assertEquals(new Integer(2), human.getAssociationClassOrderedSet().get(0).getWeight());
-//
-//    }
+    @Test
+    public void testAssociationClass1_Removal() {
+        Human human = new Human(true);
+        human.setName("human1");
+        AssociationClassBag associationClassBag1 = new AssociationClassBag(true);
+        associationClassBag1.setWeight(1);
+        ProjectBag projectBag1 = new ProjectBag(human, associationClassBag1);
+        projectBag1.setName("projectBag1");
+
+        AssociationClassBag associationClassBag2 = new AssociationClassBag(true);
+        associationClassBag2.setWeight(2);
+        ProjectBag projectBag2 = new ProjectBag(human, associationClassBag2);
+        projectBag2.setName("projectBag2");
+
+        AssociationClassBag associationClassBag3 = new AssociationClassBag(true);
+        associationClassBag3.setWeight(3);
+        ProjectBag projectBag3 = new ProjectBag(human, associationClassBag3);
+        projectBag3.setName("projectBag3");
+
+        db.commit();
+
+        human = new Human(human.getVertex());
+        Assert.assertEquals(3, human.getProjectbag().size());
+
+        projectBag1 = new ProjectBag(projectBag1.getVertex());
+        human.removeFromProjectbag(projectBag1);
+        projectBag1.delete();
+
+        db.commit();
+
+        human = new Human(human.getVertex());
+        Assert.assertEquals(2, human.getProjectbag().size());
+        Assert.assertEquals(2, human.getAssociationClassBag().size());
+
+    }
 }

@@ -76,7 +76,7 @@ public abstract class BaseOclExecutionServerResourceImpl extends ServerResource 
 
     //static
     protected Representation execute(String ocl) {
-        //TODO This will only wotk for allInstances
+        //TODO This will only work for allInstances
         int startOfAllInstances = ocl.indexOf(".");
         String context = ocl.substring(0, startOfAllInstances);
 

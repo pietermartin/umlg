@@ -14,9 +14,7 @@ public class TumlGroovyShell {
 		Object value = shell.evaluate("println 'Hello World!'; x = 123; return foo * 10");
 		assert value.equals(new Integer(20));
 		assert binding.getVariable("x").equals(new Integer(123));
-		
 		shell.evaluate("public class Hello {public String sayIt(){return \"wtf this is almost kewl!!!\";}}; def hello = new Hello(); println hello.sayIt();");
-		
 	}
 	
 	public static Object executeQuery(String javaClassAsString, Vertex v) {

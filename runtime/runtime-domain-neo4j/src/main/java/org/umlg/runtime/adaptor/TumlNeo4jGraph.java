@@ -403,7 +403,12 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
                     throw new RuntimeException(e);
                 }
             case GREMLIN:
-                String result = GremlinExecutor.executeGremlinQuery(contextId, query);
+                String result;
+                if (contextId != null) {
+                    result = GremlinExecutor.executeGremlinViaGroovy(contextId, query);
+                } else {
+                    result = GremlinExecutor.executeGremlinViaGroovy(null, query);
+                }
                 return result;
             case NATIVE:
                 ExecutionEngine engine = new ExecutionEngine( getRawGraph(), StringLogger.SYSTEM );

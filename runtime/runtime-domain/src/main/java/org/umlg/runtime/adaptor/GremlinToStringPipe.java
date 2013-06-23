@@ -3,6 +3,7 @@ package org.umlg.runtime.adaptor;
 import com.tinkerpop.pipes.AbstractPipe;
 import com.tinkerpop.pipes.transform.TransformPipe;
 import com.tinkerpop.pipes.util.PipeHelper;
+import com.tinkerpop.pipes.util.iterators.SingleIterator;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -16,6 +17,10 @@ import java.util.NoSuchElementException;
 public class GremlinToStringPipe<S> extends AbstractPipe<S, String> implements TransformPipe<S, String> {
 
     private Iterator<Object> tempIterator = PipeHelper.emptyIterator();
+
+    public GremlinToStringPipe(final Iterator<S> starts) {
+        setStarts(starts);
+    }
 
     @Override
     protected String processNextStart() throws NoSuchElementException {
@@ -44,5 +49,16 @@ public class GremlinToStringPipe<S> extends AbstractPipe<S, String> implements T
         this.tempIterator = PipeHelper.emptyIterator();
         super.reset();
     }
+
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        while (hasNext()) {
+            result.append(next());
+            result.append("\n");
+        }
+        return result.toString();
+    }
+
 
 }
