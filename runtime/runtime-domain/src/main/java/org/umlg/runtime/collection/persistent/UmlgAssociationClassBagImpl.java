@@ -12,9 +12,9 @@ import org.umlg.runtime.domain.TumlNode;
  * Date: 2013/06/22
  * Time: 10:08 AM
  */
-public class UmlgAssociationClassSetImpl<AssociationClassNode> extends TinkerSetImpl<AssociationClassNode> {
+public class UmlgAssociationClassBagImpl<AssociationClassNode> extends TinkerBagImpl<AssociationClassNode> {
 
-    public UmlgAssociationClassSetImpl(TumlNode owner, TumlRuntimeProperty runtimeProperty) {
+    public UmlgAssociationClassBagImpl(TumlNode owner, TumlRuntimeProperty runtimeProperty) {
         super(owner, runtimeProperty);
     }
 

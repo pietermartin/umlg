@@ -13,15 +13,27 @@ import org.umlg.java.metamodel.OJPathName;
 public enum TumlCollectionKindEnum {
 
 	COLLECTION(TinkerGenerationUtil.tinkerCollection.getCopy(), null, TinkerGenerationUtil.tumlMemoryCollection.getCopy(), null), 
+
 	SET(TinkerGenerationUtil.tinkerSet.getCopy(), TinkerGenerationUtil.tinkerSetImpl.getCopy(), TinkerGenerationUtil.tumlMemorySet.getCopy(), TinkerGenerationUtil.tumlSetCloseableIterablePathName.getCopy()),
 	QUALIFIED_SET(TinkerGenerationUtil.tinkerQualifiedSet.getCopy(), TinkerGenerationUtil.tinkerQualifiedSetImpl.getCopy(), TinkerGenerationUtil.tumlMemorySet.getCopy(), TinkerGenerationUtil.tumlSetCloseableIterablePathName.getCopy()),
-    ASSOCIATION_CLASS_SET(TinkerGenerationUtil.umlgAssociationClassSet.getCopy(), TinkerGenerationUtil.umlgAssociationClassSetImpl.getCopy(), TinkerGenerationUtil.tumlMemorySet.getCopy(), TinkerGenerationUtil.tumlSetCloseableIterablePathName.getCopy()),
-	SEQUENCE(TinkerGenerationUtil.tinkerSequence.getCopy(), TinkerGenerationUtil.tinkerSequenceImpl.getCopy(), TinkerGenerationUtil.tumlMemorySequence.getCopy(), TinkerGenerationUtil.tumlSequenceCloseableIterablePathName.getCopy()),
+    ASSOCIATION_CLASS_SET(TinkerGenerationUtil.umlgPropertyAssociationClassSet.getCopy(), TinkerGenerationUtil.umlgPropertyAssociationClassSetImpl.getCopy(), TinkerGenerationUtil.tumlMemorySet.getCopy(), TinkerGenerationUtil.tumlSetCloseableIterablePathName.getCopy()),
+    AC_SET(TinkerGenerationUtil.tinkerSet.getCopy(), TinkerGenerationUtil.umlgAssociationClassSetImpl.getCopy(), TinkerGenerationUtil.tumlMemorySet.getCopy(), TinkerGenerationUtil.tumlSetCloseableIterablePathName.getCopy()),
+
+    SEQUENCE(TinkerGenerationUtil.tinkerSequence.getCopy(), TinkerGenerationUtil.tinkerSequenceImpl.getCopy(), TinkerGenerationUtil.tumlMemorySequence.getCopy(), TinkerGenerationUtil.tumlSequenceCloseableIterablePathName.getCopy()),
 	QUALIFIED_SEQUENCE(TinkerGenerationUtil.tinkerQualifiedSequence.getCopy(), TinkerGenerationUtil.tinkerQualifiedSequenceImpl.getCopy(), TinkerGenerationUtil.tumlMemorySequence.getCopy(), TinkerGenerationUtil.tumlSequenceCloseableIterablePathName.getCopy()),
-	BAG(TinkerGenerationUtil.tinkerBag.getCopy(), TinkerGenerationUtil.tinkerBagImpl.getCopy(), TinkerGenerationUtil.tumlMemoryBag.getCopy(), TinkerGenerationUtil.tumlBagCloseableIterablePathName.getCopy()), 
-	QUALIFIED_BAG(TinkerGenerationUtil.tinkerQualifiedBag.getCopy(), TinkerGenerationUtil.tinkerQualifiedBagImpl.getCopy(), TinkerGenerationUtil.tumlMemoryBag.getCopy(), TinkerGenerationUtil.tumlBagCloseableIterablePathName.getCopy()), 
+    ASSOCIATION_CLASS_SEQUENCE(TinkerGenerationUtil.umlgPropertyAssociationClassSequence.getCopy(), TinkerGenerationUtil.umlgPropertyAssociationClassSequenceImpl.getCopy(), TinkerGenerationUtil.tumlMemorySequence.getCopy(), TinkerGenerationUtil.tumlSequenceCloseableIterablePathName.getCopy()),
+    AC_SEQUENCE(TinkerGenerationUtil.tinkerSequence.getCopy(), TinkerGenerationUtil.umlgAssociationClassSequenceImpl.getCopy(), TinkerGenerationUtil.tumlMemorySequence.getCopy(), TinkerGenerationUtil.tumlSequenceCloseableIterablePathName.getCopy()),
+
+
+    BAG(TinkerGenerationUtil.tinkerBag.getCopy(), TinkerGenerationUtil.tinkerBagImpl.getCopy(), TinkerGenerationUtil.tumlMemoryBag.getCopy(), TinkerGenerationUtil.tumlBagCloseableIterablePathName.getCopy()),
+	QUALIFIED_BAG(TinkerGenerationUtil.tinkerQualifiedBag.getCopy(), TinkerGenerationUtil.tinkerQualifiedBagImpl.getCopy(), TinkerGenerationUtil.tumlMemoryBag.getCopy(), TinkerGenerationUtil.tumlBagCloseableIterablePathName.getCopy()),
+    ASSOCIATION_CLASS_BAG(TinkerGenerationUtil.umlgPropertyAssociationClassBag.getCopy(), TinkerGenerationUtil.umlgPropertyAssociationClassBagImpl.getCopy(), TinkerGenerationUtil.tumlMemoryBag.getCopy(), TinkerGenerationUtil.tumlBagCloseableIterablePathName.getCopy()),
+    AC_BAG(TinkerGenerationUtil.tinkerBag.getCopy(), TinkerGenerationUtil.umlgAssociationClassBagImpl.getCopy(), TinkerGenerationUtil.tumlMemoryBag.getCopy(), TinkerGenerationUtil.tumlBagCloseableIterablePathName.getCopy()),
+
 	ORDERED_SET(TinkerGenerationUtil.tinkerOrderedSet.getCopy(), TinkerGenerationUtil.tinkerOrderedSetImpl.getCopy(), TinkerGenerationUtil.tumlMemoryOrderedSet.getCopy(), TinkerGenerationUtil.tumlOrderedSetCloseableIterablePathName.getCopy()),
-	QUALIFIED_ORDERED_SET(TinkerGenerationUtil.tinkerQualifiedOrderedSet.getCopy(), TinkerGenerationUtil.tinkerQualifiedOrderedSetImpl.getCopy(), TinkerGenerationUtil.tumlMemoryOrderedSet.getCopy(), TinkerGenerationUtil.tumlOrderedSetCloseableIterablePathName.getCopy());
+	QUALIFIED_ORDERED_SET(TinkerGenerationUtil.tinkerQualifiedOrderedSet.getCopy(), TinkerGenerationUtil.tinkerQualifiedOrderedSetImpl.getCopy(), TinkerGenerationUtil.tumlMemoryOrderedSet.getCopy(), TinkerGenerationUtil.tumlOrderedSetCloseableIterablePathName.getCopy()),
+    ASSOCIATION_CLASS_ORDERED_SET(TinkerGenerationUtil.umlgPropertyAssociationClassOrderedSet.getCopy(), TinkerGenerationUtil.umlgPropertyAssociationClassOrderedSetImpl.getCopy(), TinkerGenerationUtil.tumlMemoryOrderedSet.getCopy(), TinkerGenerationUtil.tumlOrderedSetCloseableIterablePathName.getCopy()),
+    AC_ORDERED_SET(TinkerGenerationUtil.tinkerOrderedSet.getCopy(), TinkerGenerationUtil.umlgAssociationClassOrderedSetImpl.getCopy(), TinkerGenerationUtil.tumlMemoryOrderedSet.getCopy(), TinkerGenerationUtil.tumlOrderedSetCloseableIterablePathName.getCopy());
 
 	private OJPathName interfacePathName;
 	private OJPathName implPathName;

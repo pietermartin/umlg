@@ -65,6 +65,24 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
         ifFieldNotEmpty.addToElsePart("return null");
         getter.getBody().addToStatements(ifFieldNotEmpty);
         owner.addToOperations(getter);
+
+        if (propertyWrapper.isAssociationClass()) {
+
+            getter = new OJAnnotatedOperation("get" + propertyWrapper.getAssociationClassPathName().getLast(), propertyWrapper.getAssociationClassPathName());
+            tmpField = new OJAnnotatedField("tmp", propertyWrapper.getAssociationClassJavaTumlTypePath());
+            getter.getBody().addToLocals(tmpField);
+            tmpField.setInitExp("this." + propertyWrapper.getAssociationClassFakePropertyName());
+            ifFieldNotEmpty = new OJIfStatement("!" + tmpField.getName() + ".isEmpty()");
+            if (propertyWrapper.isOrdered()) {
+                ifFieldNotEmpty.addToThenPart("return " + tmpField.getName() + ".get(0)");
+            } else {
+                ifFieldNotEmpty.addToThenPart("return " + tmpField.getName() + ".iterator().next()");
+            }
+            ifFieldNotEmpty.addToElsePart("return null");
+            getter.getBody().addToStatements(ifFieldNotEmpty);
+            owner.addToOperations(getter);
+
+        }
     }
 
     public static void buildGetterForAssociationClass(OJAnnotatedClass ac, PropertyWrapper propertyWrapper) {

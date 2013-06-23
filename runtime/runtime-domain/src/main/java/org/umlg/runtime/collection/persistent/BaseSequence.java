@@ -127,12 +127,18 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
         return toIndex;
     }
 
-    private void loadNode(Edge edgeToElement, Vertex vertexToLoad, boolean hyperVertexEdge) {
+    protected void loadNode(Edge edgeToElement, Vertex vertexToLoad, boolean hyperVertexEdge) {
         E node;
         try {
             Class<?> c;
             if (hyperVertexEdge) {
                 c = this.getClassToInstantiateFromHyperVertexEdge(edgeToElement);
+                //This is a debug check
+                //TODO optimize
+                Vertex debugVertex = edgeToElement.getVertex(Direction.IN);
+                if (!debugVertex.equals(vertexToLoad)) {
+                     throw new IllegalStateException("Vertexes should be the same, what is going on?");
+                }
             } else {
                 c = this.getClassToInstantiate(edgeToElement);
             }

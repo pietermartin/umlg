@@ -32,6 +32,7 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
     protected TumlNode owner;
     // This is the vertex of the owner of the collection
     protected Vertex vertex;
+    protected Edge edge;
     protected Class<?> parentClass;
     protected Map<Object, Vertex> internalVertexMap = new HashMap<Object, Vertex>();
     protected TumlRuntimeProperty tumlRuntimeProperty;
@@ -169,10 +170,11 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
                 TransactionThreadEntityVar.setNewEntity(this.owner);
             }
 
-            Edge edge = addInternal(e);
+            //This is saved on the collection as the edge is needed on UmlgPropertyAssociationClassSet to set the id of the association class vertex
+            this.edge = addInternal(e);
 
             // Edge can only be null on a one primitive
-            if (edge == null && !isOnePrimitive() && getDataTypeEnum() == null) {
+            if (this.edge == null && !isOnePrimitive() && getDataTypeEnum() == null) {
                 throw new IllegalStateException("Edge can only be null on isOne which is a String, Integer, Boolean or primitive");
             }
 
@@ -181,18 +183,18 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
                 if (!(e instanceof TumlNode)) {
                     throw new IllegalStateException("Primitive properties can not be qualified!");
                 }
-                addQualifierToIndex(edge, (TumlNode) e);
+                addQualifierToIndex(this.edge, (TumlNode) e);
             }
 
             if (isOrdered()) {
-                addToLinkedList(edge);
+                addToLinkedList(this.edge);
             }
             if (isInverseOrdered()) {
                 // Can only qualify TinkerNode's
                 if (!(e instanceof TumlNode)) {
                     throw new IllegalStateException("Primitive properties can not be qualified!");
                 }
-                addToInverseLinkedList(edge);
+                addToInverseLinkedList(this.edge);
             }
         }
         return result;
@@ -534,6 +536,7 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
                     }
                     GraphDb.getDb().removeEdge(edge);
                     node.initialiseProperty(tumlRuntimeProperty, true);
+                    //Need to break here for bag logic. There will only be more than one edge in the case of the collection being a bag.
                     break;
                 }
             } else if (o.getClass().isEnum()) {

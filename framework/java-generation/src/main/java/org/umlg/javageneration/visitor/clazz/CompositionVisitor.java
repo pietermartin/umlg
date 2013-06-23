@@ -31,7 +31,7 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
 		if (TumlClassOperations.hasCompositeOwner(clazz)) {
 			addConstructorWithOwnerAsParameter(annotatedClass, clazz);
 		} else {
-			if (TumlClassOperations.getSpecializations(clazz).isEmpty()) {
+			if (TumlClassOperations.getSpecializations(clazz).isEmpty() && !(clazz instanceof AssociationClass)) {
                 addImplementRootNodeInterface(annotatedClass);
 				addEdgeToRoot(annotatedClass, clazz);
 			}

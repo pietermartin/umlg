@@ -297,20 +297,20 @@ public abstract class TumlBaseOrderedSet<E> extends BaseCollection<E> implements
         return previousVertex;
     }
 
-    private void loadNode(Edge edgeToFirstElement, Vertex firstVertexInSequence) {
+    protected void loadNode(Edge edgeToFirstElement, Vertex vertex) {
         E node;
         try {
             Class<?> c = this.getClassToInstantiate(edgeToFirstElement);
             if (TumlNode.class.isAssignableFrom(c)) {
-                node = (E) c.getConstructor(Vertex.class).newInstance(firstVertexInSequence);
+                node = (E) c.getConstructor(Vertex.class).newInstance(vertex);
             } else if (c.isEnum()) {
-                Object value = firstVertexInSequence.getProperty("value");
+                Object value = vertex.getProperty("value");
                 node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
-                this.internalVertexMap.put(value, firstVertexInSequence);
+                this.internalVertexMap.put(value, vertex);
             } else {
-                Object value = firstVertexInSequence.getProperty("value");
+                Object value = vertex.getProperty("value");
                 node = (E) value;
-                this.internalVertexMap.put(value, firstVertexInSequence);
+                this.internalVertexMap.put(value, vertex);
             }
             this.getInternalListOrderedSet().add(node);
         } catch (Exception ex) {

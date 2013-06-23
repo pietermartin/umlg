@@ -395,11 +395,15 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         }
     }
 
+    public OJPathName javaImplTypePath() {
+        return TumlPropertyOperations.getDefaultTinkerCollection(this.property);
+    }
+
     /*
- * Attempting set semantics so the path is always a collection Call
- * javaBaseTypePath to get the type of set This method return umlg special
- * collection interface
- */
+     * Attempting set semantics so the path is always a collection Call
+     * javaBaseTypePath to get the type of set This method return umlg special
+     * collection interface
+     */
     public OJPathName javaTumlTypePath() {
         return javaTumlTypePath(false);
     }
@@ -415,19 +419,31 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
             if (hasQualifiers()) {
                 fieldType = TumlCollectionKindEnum.QUALIFIED_ORDERED_SET.getInterfacePathName();
             } else {
-                fieldType = TumlCollectionKindEnum.ORDERED_SET.getInterfacePathName();
+                if (ignoreAssociationClass || !isAssociationClass()) {
+                    fieldType = TumlCollectionKindEnum.ORDERED_SET.getInterfacePathName();
+                } else {
+                    fieldType = TumlCollectionKindEnum.ASSOCIATION_CLASS_ORDERED_SET.getInterfacePathName();
+                }
             }
         } else if (isOrdered() && !isUnique()) {
             if (hasQualifiers()) {
                 fieldType = TumlCollectionKindEnum.QUALIFIED_SEQUENCE.getInterfacePathName();
             } else {
-                fieldType = TumlCollectionKindEnum.SEQUENCE.getInterfacePathName();
+                if (ignoreAssociationClass || !isAssociationClass()) {
+                    fieldType = TumlCollectionKindEnum.SEQUENCE.getInterfacePathName();
+                } else {
+                    fieldType = TumlCollectionKindEnum.ASSOCIATION_CLASS_SEQUENCE.getInterfacePathName();
+                }
             }
         } else if (!isOrdered() && !isUnique()) {
             if (hasQualifiers()) {
                 fieldType = TumlCollectionKindEnum.QUALIFIED_BAG.getInterfacePathName();
             } else {
-                fieldType = TumlCollectionKindEnum.BAG.getInterfacePathName();
+                if (ignoreAssociationClass || !isAssociationClass()) {
+                    fieldType = TumlCollectionKindEnum.BAG.getInterfacePathName();
+                } else {
+                    fieldType = TumlCollectionKindEnum.ASSOCIATION_CLASS_BAG.getInterfacePathName();
+                }
             }
         } else if (!isOrdered() && isUnique()) {
             if (hasQualifiers()) {
@@ -552,10 +568,6 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         }
         fieldType.addToGenerics(javaBaseTypePath());
         return fieldType;
-    }
-
-    public OJPathName javaImplTypePath() {
-        return TumlPropertyOperations.getDefaultTinkerCollection(this.property);
     }
 
     // public OJPathName javaAuditImplTypePath() {

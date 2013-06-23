@@ -124,20 +124,34 @@ public class TinkerGenerationUtil {
     public static OJPathName tinkerCollection = new OJPathName("org.umlg.runtime.collection.TinkerCollection");
     public static OJPathName tinkerSet = new OJPathName("org.umlg.runtime.collection.TinkerSet");
     public static OJPathName tinkerSetImpl = new OJPathName("org.umlg.runtime.collection.persistent.TinkerSetImpl");
-    public static OJPathName umlgAssociationClassSet = new OJPathName("org.umlg.runtime.collection.UmlgAssociationClassSet");
+    public static OJPathName umlgPropertyAssociationClassSet = new OJPathName("org.umlg.runtime.collection.UmlgPropertyAssociationClassSet");
+    public static OJPathName umlgPropertyAssociationClassSetImpl = new OJPathName("org.umlg.runtime.collection.persistent.UmlgPropertyAssociationClassSetImpl");
     public static OJPathName umlgAssociationClassSetImpl = new OJPathName("org.umlg.runtime.collection.persistent.UmlgAssociationClassSetImpl");
     public static OJPathName tinkerQualifiedSet = new OJPathName("org.umlg.runtime.collection.TinkerQualifiedSet");
     public static OJPathName tinkerQualifiedSetImpl = new OJPathName("org.umlg.runtime.collection.persistent.TinkerQualifiedSetImpl");
+
     public static OJPathName tinkerSequence = new OJPathName("org.umlg.runtime.collection.TinkerSequence");
     public static OJPathName tinkerSequenceImpl = new OJPathName("org.umlg.runtime.collection.persistent.TinkerSequenceImpl");
+    public static OJPathName umlgPropertyAssociationClassSequence = new OJPathName("org.umlg.runtime.collection.UmlgPropertyAssociationClassSequence");
+    public static OJPathName umlgPropertyAssociationClassSequenceImpl = new OJPathName("org.umlg.runtime.collection.persistent.UmlgPropertyAssociationClassSequenceImpl");
+    public static OJPathName umlgAssociationClassSequenceImpl = new OJPathName("org.umlg.runtime.collection.persistent.UmlgAssociationClassSequenceImpl");
+
+
     public static OJPathName tinkerQualifiedSequence = new OJPathName("org.umlg.runtime.collection.TinkerQualifiedSequence");
     public static OJPathName tinkerQualifiedSequenceImpl = new OJPathName("org.umlg.runtime.collection.persistent.TinkerQualifiedSequenceImpl");
     public static OJPathName tinkerOrderedSet = new OJPathName("org.umlg.runtime.collection.TinkerOrderedSet");
     public static OJPathName tinkerOrderedSetImpl = new OJPathName("org.umlg.runtime.collection.persistent.TinkerOrderedSetImpl");
     public static OJPathName tinkerQualifiedOrderedSet = new OJPathName("org.umlg.runtime.collection.TinkerQualifiedOrderedSet");
     public static OJPathName tinkerQualifiedOrderedSetImpl = new OJPathName("org.umlg.runtime.collection.persistent.TinkerQualifiedOrderedSetImpl");
+    public static OJPathName umlgPropertyAssociationClassOrderedSet = new OJPathName("org.umlg.runtime.collection.UmlgPropertyAssociationClassOrderedSet");
+    public static OJPathName umlgPropertyAssociationClassOrderedSetImpl = new OJPathName("org.umlg.runtime.collection.persistent.UmlgPropertyAssociationClassOrderedSetImpl");
+    public static OJPathName umlgAssociationClassOrderedSetImpl = new OJPathName("org.umlg.runtime.collection.persistent.UmlgAssociationClassOrderedSetImpl");
+
     public static OJPathName tinkerBag = new OJPathName("org.umlg.runtime.collection.TinkerBag");
     public static OJPathName tinkerBagImpl = new OJPathName("org.umlg.runtime.collection.persistent.TinkerBagImpl");
+    public static OJPathName umlgPropertyAssociationClassBag = new OJPathName("org.umlg.runtime.collection.UmlgPropertyAssociationClassBag");
+    public static OJPathName umlgPropertyAssociationClassBagImpl = new OJPathName("org.umlg.runtime.collection.persistent.UmlgPropertyAssociationClassBagImpl");
+    public static OJPathName umlgAssociationClassBagImpl = new OJPathName("org.umlg.runtime.collection.persistent.UmlgAssociationClassBagImpl");
 
     public static OJPathName tinkerQualifiedBag = new OJPathName("org.umlg.runtime.collection.TinkerQualifiedBag");
     public static OJPathName tinkerQualifiedBagImpl = new OJPathName("org.umlg.runtime.collection.persistent.TinkerQualifiedBagImpl");

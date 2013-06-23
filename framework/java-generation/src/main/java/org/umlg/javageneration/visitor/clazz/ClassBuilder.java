@@ -17,10 +17,7 @@ import org.umlg.java.metamodel.annotation.OJAnnotationValue;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.javageneration.ocl.TumlOcl2Java;
-import org.umlg.javageneration.util.ConstraintWrapper;
-import org.umlg.javageneration.util.PropertyWrapper;
-import org.umlg.javageneration.util.TinkerGenerationUtil;
-import org.umlg.javageneration.util.TumlClassOperations;
+import org.umlg.javageneration.util.*;
 import org.umlg.javageneration.visitor.BaseVisitor;
 import org.umlg.ocl.TumlOcl2Parser;
 
@@ -139,6 +136,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
                     statement = new OJSimpleStatement("this." + pWrap.getAssociationClassFakePropertyName() + " = " + pWrap.javaDefaultInitialisationForAssociationClass(clazz));
                     statement.setName(pWrap.getAssociationClassFakePropertyName());
                     initialiseProperties.getBody().addToStatements(statement);
+                    annotatedClass.addToImports(TumlPropertyOperations.getDefaultTinkerCollectionForAssociationClass(pWrap.getProperty()));
                 }
             }
         }
@@ -152,7 +150,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
                 OJSimpleStatement statement = new OJSimpleStatement("this." + pWrap.fieldname() + " = " + pWrap.javaDefaultInitialisation(clazz, true));
                 statement.setName(pWrap.fieldname());
                 initialiseProperties.getBody().addToStatements(statement);
-                annotatedClass.addToImports(pWrap.javaImplTypePath());
+                annotatedClass.addToImports(TumlPropertyOperations.getDefaultTinkerCollection(memberEnd, true));
             }
         }
     }
@@ -526,7 +524,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 
         allInstances.getBody().addToStatements("return result");
         annotatedClass.addToImports(TinkerGenerationUtil.tumlMemorySet);
-        annotatedClass.addToImports(TinkerGenerationUtil.Root);
+//        annotatedClass.addToImports(TinkerGenerationUtil.Root);
         annotatedClass.addToOperations(allInstances);
     }
 
@@ -556,7 +554,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 
         allInstances.getBody().addToStatements("return result");
         annotatedClass.addToImports(TinkerGenerationUtil.tumlMemorySet);
-        annotatedClass.addToImports(TinkerGenerationUtil.Root);
+//        annotatedClass.addToImports(TinkerGenerationUtil.Root);
         annotatedClass.addToOperations(allInstances);
     }
 

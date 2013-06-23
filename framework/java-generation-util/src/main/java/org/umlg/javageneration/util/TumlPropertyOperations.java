@@ -170,19 +170,31 @@ public final class TumlPropertyOperations extends PropertyOperations {
 			if (!p.getQualifiers().isEmpty()) {
 				collectionPathName = TumlCollectionKindEnum.QUALIFIED_ORDERED_SET.getImplementationPathName();
 			} else {
-				collectionPathName = TumlCollectionKindEnum.ORDERED_SET.getImplementationPathName();
+                if (ignoreAssociationClass || !pWrap.isAssociationClass()) {
+                    collectionPathName = TumlCollectionKindEnum.ORDERED_SET.getImplementationPathName();
+                } else {
+                    collectionPathName = TumlCollectionKindEnum.ASSOCIATION_CLASS_ORDERED_SET.getImplementationPathName();
+                }
 			}
 		} else if (p.isOrdered() && !p.isUnique()) {
 			if (!p.getQualifiers().isEmpty()) {
 				collectionPathName = TumlCollectionKindEnum.QUALIFIED_SEQUENCE.getImplementationPathName();
 			} else {
-				collectionPathName = TumlCollectionKindEnum.SEQUENCE.getImplementationPathName();
+                if (ignoreAssociationClass || !pWrap.isAssociationClass()) {
+				    collectionPathName = TumlCollectionKindEnum.SEQUENCE.getImplementationPathName();
+                } else {
+                    collectionPathName = TumlCollectionKindEnum.ASSOCIATION_CLASS_SEQUENCE.getImplementationPathName();
+                }
 			}
 		} else if (!p.isOrdered() && !p.isUnique()) {
 			if (!p.getQualifiers().isEmpty()) {
 				collectionPathName = TumlCollectionKindEnum.QUALIFIED_BAG.getImplementationPathName();
 			} else {
-				collectionPathName = TumlCollectionKindEnum.BAG.getImplementationPathName();
+                if (ignoreAssociationClass || !pWrap.isAssociationClass()) {
+				    collectionPathName = TumlCollectionKindEnum.BAG.getImplementationPathName();
+                } else {
+                    collectionPathName = TumlCollectionKindEnum.ASSOCIATION_CLASS_BAG.getImplementationPathName();
+                }
 			}
 		} else if (!p.isOrdered() && p.isUnique()) {
 			if (!p.getQualifiers().isEmpty()) {
@@ -210,25 +222,25 @@ public final class TumlPropertyOperations extends PropertyOperations {
             if (!p.getQualifiers().isEmpty()) {
                 collectionPathName = TumlCollectionKindEnum.QUALIFIED_ORDERED_SET.getImplementationPathName();
             } else {
-                collectionPathName = TumlCollectionKindEnum.ORDERED_SET.getImplementationPathName();
+                collectionPathName = TumlCollectionKindEnum.AC_ORDERED_SET.getImplementationPathName();
             }
         } else if (p.isOrdered() && !p.isUnique()) {
             if (!p.getQualifiers().isEmpty()) {
                 collectionPathName = TumlCollectionKindEnum.QUALIFIED_SEQUENCE.getImplementationPathName();
             } else {
-                collectionPathName = TumlCollectionKindEnum.SEQUENCE.getImplementationPathName();
+                collectionPathName = TumlCollectionKindEnum.AC_SEQUENCE.getImplementationPathName();
             }
         } else if (!p.isOrdered() && !p.isUnique()) {
             if (!p.getQualifiers().isEmpty()) {
                 collectionPathName = TumlCollectionKindEnum.QUALIFIED_BAG.getImplementationPathName();
             } else {
-                collectionPathName = TumlCollectionKindEnum.BAG.getImplementationPathName();
+                collectionPathName = TumlCollectionKindEnum.AC_BAG.getImplementationPathName();
             }
         } else if (!p.isOrdered() && p.isUnique()) {
             if (!p.getQualifiers().isEmpty()) {
                 collectionPathName = TumlCollectionKindEnum.QUALIFIED_SET.getImplementationPathName();
             } else {
-                collectionPathName = TumlCollectionKindEnum.SET.getImplementationPathName();
+                collectionPathName = TumlCollectionKindEnum.AC_SET.getImplementationPathName();
             }
         } else {
             throw new RuntimeException("wtf");
@@ -261,7 +273,7 @@ public final class TumlPropertyOperations extends PropertyOperations {
 
     private static OJSimpleStatement getDefaultTinkerCollectionInitalisationForAssociationClass(Property p, BehavioredClassifier propertyConcreteOwner, OJPathName collectionPathName) {
         OJSimpleStatement ojSimpleStatement = new OJSimpleStatement(" new " + collectionPathName.getCollectionTypeName() + "(this");
-        ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", " + TumlClassOperations.propertyEnumName(propertyConcreteOwner) + "." + new PropertyWrapper(p).getAssociationClassFakePropertyName());
+        ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", " + TumlClassOperations.propertyEnumName(propertyConcreteOwner) + "." + new PropertyWrapper(p).fieldname());
         ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ")");
         return ojSimpleStatement;
     }
