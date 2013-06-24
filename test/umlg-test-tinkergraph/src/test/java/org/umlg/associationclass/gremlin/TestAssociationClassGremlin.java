@@ -24,22 +24,22 @@ public class TestAssociationClassGremlin extends BaseLocalDbTest {
         ProjectSet project = new ProjectSet(human, associationClass1);
         project.setName("project1");
 
-        AssociationClassSet associationClass2 = new AssociationClassSet(true);
-        associationClass2.setWeight(2);
-        ProjectSet project2 = new ProjectSet(human, associationClass2);
-        project2.setName("project2");
-
-        AssociationClassSet associationClass3 = new AssociationClassSet(true);
-        associationClass3.setWeight(3);
-        ProjectSet project3 = new ProjectSet(human, associationClass3);
-        project3.setName("project3");
+//        AssociationClassSet associationClass2 = new AssociationClassSet(true);
+//        associationClass2.setWeight(2);
+//        ProjectSet project2 = new ProjectSet(human, associationClass2);
+//        project2.setName("project2");
+//
+//        AssociationClassSet associationClass3 = new AssociationClassSet(true);
+//        associationClass3.setWeight(3);
+//        ProjectSet project3 = new ProjectSet(human, associationClass3);
+//        project3.setName("project3");
 
         db.commit();
 
-        Assert.assertEquals(7, countVertices());
-        Assert.assertEquals(17, countEdges());
+//        Assert.assertEquals(7, countVertices());
+//        Assert.assertEquals(17, countEdges());
 
-        String result = GraphDb.getDb().executeQuery(TumlQueryEnum.GREMLIN, human.getId(), "this.outE");
+        String result = GraphDb.getDb().executeQuery(TumlQueryEnum.GREMLIN, human.getId(), "this.outE.hasG('x')");
         System.out.println(result);
         result = GraphDb.getDb().executeQuery(TumlQueryEnum.GREMLIN, human.getId(), "g.V.map");
         System.out.println(result);
