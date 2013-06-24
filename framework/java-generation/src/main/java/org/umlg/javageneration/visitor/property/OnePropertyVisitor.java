@@ -1,6 +1,6 @@
 package org.umlg.javageneration.visitor.property;
 
-import com.sun.xml.internal.ws.util.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.uml2.uml.Constraint;
 import org.eclipse.uml2.uml.Property;
 import org.umlg.java.metamodel.*;
@@ -106,7 +106,7 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
         OJAnnotatedOperation singleAdder = new OJAnnotatedOperation(propertyWrapper.adder());
         singleAdder.addParam(propertyWrapper.fieldname(), propertyWrapper.javaBaseTypePath());
         if (!isAssociationClass && propertyWrapper.isAssociationClass()) {
-            singleAdder.addParam(StringUtils.decapitalize(propertyWrapper.getAssociationClass().getName()), TumlClassOperations.getPathName(propertyWrapper.getAssociationClass()));
+            singleAdder.addParam(StringUtils.uncapitalize(propertyWrapper.getAssociationClass().getName()), TumlClassOperations.getPathName(propertyWrapper.getAssociationClass()));
         }
 
         if (!propertyWrapper.isDataType()) {
@@ -126,7 +126,7 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
             if (isAssociationClass || !propertyWrapper.isAssociationClass()) {
                 ojBlock2.addToStatements("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ")");
             } else {
-                ojBlock2.addToStatements("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ", " + StringUtils.decapitalize(propertyWrapper.getAssociationClass().getName()) + ")");
+                ojBlock2.addToStatements("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ", " + StringUtils.uncapitalize(propertyWrapper.getAssociationClass().getName()) + ")");
             }
             List<Constraint> constraints = TumlPropertyOperations.getConstraints(propertyWrapper.getProperty());
             if (!constraints.isEmpty()) {
@@ -190,7 +190,7 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
         OJAnnotatedOperation setter = new OJAnnotatedOperation(pWrap.setter());
         setter.addParam(pWrap.fieldname(), pWrap.javaBaseTypePath());
         if (pWrap.isAssociationClass()) {
-            setter.addParam(StringUtils.decapitalize(pWrap.getAssociationClass().getName()), TumlClassOperations.getPathName(pWrap.getAssociationClass()));
+            setter.addParam(StringUtils.uncapitalize(pWrap.getAssociationClass().getName()), TumlClassOperations.getPathName(pWrap.getAssociationClass()));
         }
         if (pWrap.isReadOnly()) {
             setter.setVisibility(OJVisibilityKind.PROTECTED);
@@ -208,7 +208,7 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
         if (!pWrap.isAssociationClass()) {
             setter.getBody().addToStatements(pWrap.adder() + "(" + pWrap.fieldname()  + ")");
         } else {
-            setter.getBody().addToStatements(pWrap.adder() + "(" + pWrap.fieldname()  + ", " + StringUtils.decapitalize(pWrap.getAssociationClass().getName()) + ")");
+            setter.getBody().addToStatements(pWrap.adder() + "(" + pWrap.fieldname()  + ", " + StringUtils.uncapitalize(pWrap.getAssociationClass().getName()) + ")");
         }
         owner.addToOperations(setter);
     }

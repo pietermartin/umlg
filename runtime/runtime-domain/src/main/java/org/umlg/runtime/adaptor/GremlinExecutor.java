@@ -1,15 +1,11 @@
 package org.umlg.runtime.adaptor;
 
 import com.tinkerpop.blueprints.Graph;
-import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.util.wrappers.readonly.ReadOnlyGraph;
 import com.tinkerpop.gremlin.groovy.Gremlin;
 import com.tinkerpop.pipes.Pipe;
-import com.tinkerpop.pipes.util.Pipeline;
-import com.tinkerpop.pipes.util.iterators.SingleIterator;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
-import org.apache.commons.lang.time.StopWatch;
 import org.codehaus.groovy.control.CompilerConfiguration;
 
 /**
@@ -21,7 +17,7 @@ public class GremlinExecutor {
     public static String executeGremlinQuery(Long contextId, String gremlin) {
         StringBuilder result = new StringBuilder();
         Pipe pipe = Gremlin.compile("_()." + gremlin);
-        GremlinToStringPipe<String> toStringPipe = new GremlinToStringPipe(new SingleIterator<Object>(pipe));
+        GremlinToStringPipe<String> toStringPipe = new GremlinToStringPipe(pipe);
         return toStringPipe.toString();
     }
 
@@ -43,7 +39,7 @@ public class GremlinExecutor {
         binding.setVariable("g", graph);
         GroovyShell shell = new GroovyShell(binding, compilerConfiguration);
         Object pipe = shell.evaluate("return " + gremlin + ";");
-        GremlinToStringPipe<String> toStringPipe = new GremlinToStringPipe(new SingleIterator<Object>(pipe));
+        GremlinToStringPipe<String> toStringPipe = new GremlinToStringPipe(pipe);
         return toStringPipe.toString();
     }
 

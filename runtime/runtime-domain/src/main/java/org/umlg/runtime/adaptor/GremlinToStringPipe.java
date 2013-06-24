@@ -18,8 +18,8 @@ public class GremlinToStringPipe<S> extends AbstractPipe<S, String> implements T
 
     private Iterator<Object> tempIterator = PipeHelper.emptyIterator();
 
-    public GremlinToStringPipe(final Iterator<S> starts) {
-        setStarts(starts);
+    public GremlinToStringPipe(S starts) {
+        setStarts(new SingleIterator<S>(starts));
     }
 
     @Override
