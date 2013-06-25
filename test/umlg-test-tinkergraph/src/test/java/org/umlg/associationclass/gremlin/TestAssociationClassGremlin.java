@@ -39,7 +39,7 @@ public class TestAssociationClassGremlin extends BaseLocalDbTest {
 //        Assert.assertEquals(7, countVertices());
 //        Assert.assertEquals(17, countEdges());
 
-        String result = GraphDb.getDb().executeQuery(TumlQueryEnum.GREMLIN, human.getId(), "this.outE.hasG('x')");
+        String result = GraphDb.getDb().executeQuery(TumlQueryEnum.GREMLIN, human.getId(), "this.outE.hasU('x')");
         System.out.println(result);
 
     }

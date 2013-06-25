@@ -19,7 +19,7 @@ abstract class GremlinExecutorBaseClass extends Script {
     }
 
     GremlinExecutorBaseClass() {
-        Gremlin.defineStep("hasG", [Pipe, Edge],
+        Gremlin.defineStep("hasU", [Pipe, Edge],
                 {final String... params -> _()}
         );
     }
