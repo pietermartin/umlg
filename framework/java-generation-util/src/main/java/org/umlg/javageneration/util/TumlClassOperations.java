@@ -488,7 +488,7 @@ public class TumlClassOperations extends ClassOperations {
     private static boolean realizesHierarchy(org.eclipse.uml2.uml.Class clazz) {
         List<Interface> realizedInterfaces = clazz.getImplementedInterfaces();
         for (Interface interface1 : realizedInterfaces) {
-            if (interface1.getQualifiedName().equals("tumllib::org::umlg::hierarchy::Hierarchy")) {
+            if (interface1.getQualifiedName().equals("umlglib::org::umlg::hierarchy::Hierarchy")) {
                 return true;
             }
         }

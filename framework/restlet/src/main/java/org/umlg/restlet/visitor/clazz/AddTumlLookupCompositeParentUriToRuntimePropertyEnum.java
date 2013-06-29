@@ -46,63 +46,50 @@ public class AddTumlLookupCompositeParentUriToRuntimePropertyEnum extends BaseVi
 			constructor.addParam(uriPrimitiveField.getName(), uriPrimitiveField.getType());
 			constructor.getBody().addToStatements("this." + uriPrimitiveField.getName() + " = " + uriPrimitiveField.getName());
 
-			uriPrimitiveField = new OJField();
-			uriPrimitiveField.setType(new OJPathName("String"));
-			uriPrimitiveField.setName("tumlCompositeParentLookupOnCompositeParentUri");
-			ojEnum.addToFields(uriPrimitiveField);
-
-			constructor = ojEnum.getConstructors().iterator().next();
-			constructor.addParam(uriPrimitiveField.getName(), uriPrimitiveField.getType());
-			constructor.getBody().addToStatements("this." + uriPrimitiveField.getName() + " = " + uriPrimitiveField.getName());
-
 			for (Property p : allOwnedProperties) {
 				PropertyWrapper propertyWrapper = new PropertyWrapper(p);
 				if (!TumlClassOperations.isEnumeration(propertyWrapper.getOwningType()) && propertyWrapper.hasLookup()) {
 					OJAnnotatedOperation getter = new OJAnnotatedOperation("getTumlCompositeParentLookupUri", uriPrimitiveField.getType());
 					getter.getBody().addToStatements("return this." + uriPrimitiveField.getName());
 					ojEnum.addToOperations(getter);
-
-					getter = new OJAnnotatedOperation("getTumlCompositeParentLookupOnCompositeParentUri", uriPrimitiveField.getType());
-					getter.getBody().addToStatements("return this." + uriPrimitiveField.getName());
-					ojEnum.addToOperations(getter);
-					
 				}
-				doWithLiteral("tumlCompositeParentLookupUri", clazz, propertyWrapper, ojEnum.findLiteral(propertyWrapper.fieldname()), false);
-				doWithLiteral("tumlCompositeParentLookupOnCompositeParentUri", clazz, propertyWrapper, ojEnum.findLiteral(propertyWrapper.fieldname()), true);
+				doWithLiteral(clazz, propertyWrapper, ojEnum.findLiteral(propertyWrapper.fieldname()));
+
+                if (propertyWrapper.isAssociationClass() && !(clazz instanceof AssociationClass)) {
+                    doWithLiteral(clazz, propertyWrapper, ojEnum.findLiteral(propertyWrapper.getAssociationClassFakePropertyName()), true);
+                }
 			}
 
 			// Add the lookups to the id property
-			doWithLiteral("tumlCompositeParentLookupUri", clazz, null, ojEnum.findLiteral("id"), false);
-			doWithLiteral("tumlCompositeParentLookupUriOnCompositeParent", clazz, null, ojEnum.findLiteral("id"), false);
+			doWithLiteral(clazz, null, ojEnum.findLiteral("id"));
 
 			if (!TumlClassOperations.hasCompositeOwner(clazz)) {
 				// Add the lookups to the root property
-				doWithLiteral("tumlCompositeParentLookupUri", clazz, null, ojEnum.findLiteral(clazz.getModel().getName()), false);
-				doWithLiteral("tumlCompositeParentLookupUriOnCompositeParent", clazz, null, ojEnum.findLiteral(clazz.getModel().getName()), false);
+				doWithLiteral(clazz, null, ojEnum.findLiteral(clazz.getModel().getName()));
 			}
 		}
 	}
 
-	private void doWithLiteral(String literalName, Class clazz, PropertyWrapper propertyWrapper, OJEnumLiteral literal, boolean onCompositeParent) {
+    private void doWithLiteral(Class clazz, PropertyWrapper propertyWrapper, OJEnumLiteral literal) {
+        doWithLiteral(clazz, propertyWrapper, literal, false);
+    }
+
+    private void doWithLiteral(Class clazz, PropertyWrapper propertyWrapper, OJEnumLiteral literal, boolean asAssociationClass) {
 		String uri;
 		if (TumlClassOperations.getOtherEndToComposite(clazz) != null && propertyWrapper != null && propertyWrapper.hasLookup()) {
             String contextPath;
-//            if (ModelLoader.getImportedModelLibraries().contains(propertyWrapper.getModel())) {
-//                contextPath = ModelLoader.getModel().getName() + "/" + propertyWrapper.getModel().getName();
-//            } else {
-                contextPath = ModelLoader.INSTANCE.getModel().getName();
-//            }
-
-            if (!onCompositeParent) {
-				uri = "\"/" + contextPath + "/"
-						+ TumlClassOperations.getPathName(propertyWrapper.getOwningType()).getLast().toLowerCase() + "s/{"
-						+ TumlClassOperations.getPathName(propertyWrapper.getOwningType()).getLast().toLowerCase() + "Id}/"
-						+ propertyWrapper.lookupCompositeParent() + "\"";
-			} else {
-				Type type = TumlClassOperations.getOtherEndToComposite(clazz).getType();
-				uri = "\"/" + contextPath + "/" + TumlClassOperations.getPathName(type).getLast().toLowerCase() + "s/{"
-						+ TumlClassOperations.getPathName(type).getLast().toLowerCase() + "Id}/" + propertyWrapper.lookupCompositeParent() + "\"";
-			}
+            contextPath = ModelLoader.INSTANCE.getModel().getName();
+            if (!asAssociationClass) {
+                uri = "\"/" + contextPath + "/"
+                        + TumlClassOperations.getPathName(propertyWrapper.getOwningType()).getLast().toLowerCase() + "s/{"
+                        + TumlClassOperations.getPathName(propertyWrapper.getOwningType()).getLast().toLowerCase() + "Id}/"
+                        + propertyWrapper.lookupCompositeParent() + "\"";
+            } else {
+                uri = "\"/" + contextPath + "/"
+                        + propertyWrapper.getAssociationClassPathName().getLast().toLowerCase() + "s/{"
+                        + propertyWrapper.getAssociationClassPathName().getLast().toLowerCase() + "Id}/"
+                        + propertyWrapper.lookupCompositeParent() + "\"";
+            }
 		} else {
 			// The non lookup fields carry a empty string
 			uri = "\"\"";
@@ -115,11 +102,7 @@ public class AddTumlLookupCompositeParentUriToRuntimePropertyEnum extends BaseVi
 
 		OJField jsonField = literal.findAttributeValue("json");
 		StringBuilder sb = new StringBuilder();
-		if (!onCompositeParent) {
-			sb.append(", \\\"tumlCompositeParentLookupUri\\\": \\");
-		} else {
-			sb.append(", \\\"tumlCompositeParentLookupUriOnCompositeParent\\\": \\");
-		}
+        sb.append(", \\\"tumlCompositeParentLookupUri\\\": \\");
 		// if (literal.getName().equals(propertyWrapper.fieldname())) {
 		sb.append(uri.substring(0, uri.length() - 1) + "\\\"");
 		String initExp = jsonField.getInitExp();

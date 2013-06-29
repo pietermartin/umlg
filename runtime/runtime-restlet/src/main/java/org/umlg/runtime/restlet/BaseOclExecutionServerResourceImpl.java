@@ -2,6 +2,7 @@ package org.umlg.runtime.restlet;
 
 import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.representation.Representation;
+import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 import org.umlg.ocl.TumlOclExecutor;
@@ -67,8 +68,8 @@ public abstract class BaseOclExecutionServerResourceImpl extends ServerResource 
                 return new JsonRepresentation("{\"result\": " + "\"" + result.toString() + "\"}");
             }
         } else if (type.equalsIgnoreCase("gremlin")) {
-            String result =  GremlinExecutor.executeGremlinQuery(contextId, query);
-            return new JsonRepresentation("{\"result\": " + "\"" + result + "\"}");
+            String result =  GremlinExecutor.executeGremlinViaGroovy(contextId, query);
+            return new StringRepresentation(result);
         } else {
             throw new RuntimeException("Unknown query type " + type);
         }

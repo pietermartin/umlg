@@ -41,13 +41,6 @@ public class TumlOcl2Parser implements ModelLoadedEvent {
 		this.ocl = org.eclipse.ocl.uml.OCL.newInstance(ModelLoader.INSTANCE.getRESOURCE_SET());
 		this.environment = this.ocl.getEnvironment();
 		this.helper = this.ocl.createOCLHelper();
-//		NamedElement hierarchy = ModelLoader.findNamedElement("tumlLib::org::umlg::hierarchy::Hierarchy");
-//		System.out.println(hierarchy);
-//		NamedElement god = ModelLoader.findNamedElement("tumltest::org::umlg::concretetest::God");
-//		System.out.println(god);
-//		Package p = OCLUMLUtil.findPackage(Collections.singletonList("tumlLib::org::umlg::hierarchy"), ModelLoader.RESOURCE_SET);
-//		Package p = OCLUMLUtil.findPackage(Arrays.asList("tumlLib","org","umlg","hierarchy"), ModelLoader.RESOURCE_SET);
-//		System.out.println(p);
 	}
 
 	public OCLHelper<Classifier, Operation, Property, Constraint> getHelper() {

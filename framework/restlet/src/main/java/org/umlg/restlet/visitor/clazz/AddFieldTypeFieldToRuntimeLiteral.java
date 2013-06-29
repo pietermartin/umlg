@@ -45,8 +45,14 @@ public class AddFieldTypeFieldToRuntimeLiteral extends BaseVisitor implements Vi
 		
 		Set<Property> properties = TumlClassOperations.getAllProperties(clazz);
 		for (Property property : properties) {
-			OJEnumLiteral literal = ojEnum.findLiteral(new PropertyWrapper(property).fieldname());
+            PropertyWrapper propertyWrapper = new PropertyWrapper(property);
+			OJEnumLiteral literal = ojEnum.findLiteral(propertyWrapper.fieldname());
 			addFieldTypePropertyToLiteral(literal, TumlRestletGenerationUtil.getFieldTypeForProperty(property));
+
+            if (propertyWrapper.isAssociationClass() && !(clazz instanceof AssociationClass)) {
+                literal = ojEnum.findLiteral(propertyWrapper.getAssociationClassFakePropertyName());
+                addFieldTypePropertyToLiteral(literal, TumlRestletGenerationUtil.getFieldTypeForProperty(property));
+            }
 		}
 
 		addFieldTypePropertyToLiteral(ojEnum.findLiteral("id"), "FieldType.Integer");
@@ -58,7 +64,7 @@ public class AddFieldTypeFieldToRuntimeLiteral extends BaseVisitor implements Vi
 
 	}
 
-	static void addFieldTypePropertyToLiteral(OJEnumLiteral literal, String fieldType) {
+    static void addFieldTypePropertyToLiteral(OJEnumLiteral literal, String fieldType) {
 		OJField uriAttribute = new OJField();
 		uriAttribute.setType(TumlRestletGenerationUtil.FieldType);
 		uriAttribute.setInitExp(fieldType);

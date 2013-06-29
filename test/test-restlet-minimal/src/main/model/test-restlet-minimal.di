@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ASCII"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <di:SashWindowsMngr xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.eclipse.org/papyrus/0.7.0/sashdi">
   <pageList>
     <availablePage>
@@ -9,6 +9,9 @@
     </availablePage>
     <availablePage>
       <emfPageIdentifier href="test-restlet-minimal.notation#_PabVgFVzEeKYaem_7BA6sA"/>
+    </availablePage>
+    <availablePage>
+      <emfPageIdentifier href="test-restlet-minimal.notation#_fdk9kN2-EeK7O_6WBh_v7w"/>
     </availablePage>
   </pageList>
   <sashModel currentSelection="//@sashModel/@windows.0/@children.0">
@@ -22,6 +25,9 @@
         </children>
         <children>
           <emfPageIdentifier href="test-restlet-minimal.notation#_PabVgFVzEeKYaem_7BA6sA"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="test-restlet-minimal.notation#_fdk9kN2-EeK7O_6WBh_v7w"/>
         </children>
       </children>
     </windows>

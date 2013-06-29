@@ -24,9 +24,9 @@ import org.umlg.javageneration.util.TumlClassOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
 import org.umlg.javageneration.visitor.clazz.ToFromJsonCreator;
 
-public class AddTumlUriFieldToRuntimePropertyEnum extends BaseVisitor implements Visitor<Class> {
+public class AddUmlgUriFieldToRuntimePropertyEnum extends BaseVisitor implements Visitor<Class> {
 
-	public AddTumlUriFieldToRuntimePropertyEnum(Workspace workspace, String sourceDir) {
+	public AddUmlgUriFieldToRuntimePropertyEnum(Workspace workspace, String sourceDir) {
 		super(workspace, sourceDir);
 	}
 
@@ -36,8 +36,8 @@ public class AddTumlUriFieldToRuntimePropertyEnum extends BaseVisitor implements
 		OJAnnotatedClass annotatedClass = findOJClass(clazz);
 		OJEnum ojEnum = annotatedClass.findEnum(TumlClassOperations.propertyEnumName(clazz));
 
-		addUriToObject(clazz, ojEnum);
-		addUriToToJson(clazz, annotatedClass);
+		add_getUriToObject(clazz, ojEnum);
+		add_getUriToObject_to_ToJson(clazz, annotatedClass);
 
 		OJField uriPrimitiveField = new OJField();
 		uriPrimitiveField.setType(new OJPathName("String"));
@@ -71,7 +71,18 @@ public class AddTumlUriFieldToRuntimePropertyEnum extends BaseVisitor implements
 				OJEnumLiteral literal = ojEnum.findLiteral(pWrap.fieldname());
 				addTumlUriToLiteral(clazz, pWrap, literal);
                 addTumlOverloadedPostUriToLiteral(clazz, pWrap, literal);
-			}
+
+                //For association classes
+                if (pWrap.isAssociationClass() && !(clazz instanceof AssociationClass)) {
+
+                    literal = ojEnum.findLiteral(pWrap.getAssociationClassFakePropertyName());
+                    addTumlUriToLiteral(clazz, pWrap, literal, true);
+                    addTumlOverloadedPostUriToLiteral(clazz, pWrap, literal, true);
+
+                }
+
+
+            }
 		}
 		addTumlUriToLiteral(clazz, null, ojEnum.findLiteral("id"));
         addTumlOverloadedPostUriToLiteral(clazz, null, ojEnum.findLiteral("id"));
@@ -83,7 +94,11 @@ public class AddTumlUriFieldToRuntimePropertyEnum extends BaseVisitor implements
 		}
 	}
 
-	private void addTumlUriToLiteral(Class clazz, PropertyWrapper pWrap, OJEnumLiteral literal) {
+    private void addTumlUriToLiteral(Class clazz, PropertyWrapper pWrap, OJEnumLiteral literal) {
+        addTumlUriToLiteral(clazz, pWrap, literal, false);
+    }
+
+    private void addTumlUriToLiteral(Class clazz, PropertyWrapper pWrap, OJEnumLiteral literal, boolean asAssociationClass) {
 		String uri;
 		if (literal.getName().equals(clazz.getModel().getName())) {
 			uri = "\"/" + clazz.getModel().getName() + "\"";
@@ -91,8 +106,13 @@ public class AddTumlUriFieldToRuntimePropertyEnum extends BaseVisitor implements
 			if (clazz != null && pWrap != null) {
                 String contextPath;
                     contextPath = ModelLoader.INSTANCE.getModel().getName();
-				uri = "\"/" + contextPath + "/" + pWrap.getOwningType().getName().toLowerCase() + "s/{"
-						+ pWrap.getOwningType().getName().toLowerCase() + "Id}/" + literal.getName() + "\"";
+                if (!asAssociationClass) {
+                    uri = "\"/" + contextPath + "/" + pWrap.getOwningType().getName().toLowerCase() + "s/{"
+                            + pWrap.getOwningType().getName().toLowerCase() + "Id}/" + literal.getName() + "\"";
+                } else {
+                    uri = "\"/" + contextPath + "/" + pWrap.getAssociationClass().getName().toLowerCase() + "s/{"
+                            + pWrap.getAssociationClass().getName().toLowerCase() + "Id}/" + literal.getName() + "\"";
+                }
 			} else {
 				uri = "\"\"";
 			}
@@ -115,6 +135,10 @@ public class AddTumlUriFieldToRuntimePropertyEnum extends BaseVisitor implements
 	}
 
     private void addTumlOverloadedPostUriToLiteral(Class clazz, PropertyWrapper pWrap, OJEnumLiteral literal) {
+        addTumlOverloadedPostUriToLiteral(clazz, pWrap, literal, false);
+    }
+
+    private void addTumlOverloadedPostUriToLiteral(Class clazz, PropertyWrapper pWrap, OJEnumLiteral literal, boolean asAssociationClas) {
         String uri;
         if (literal.getName().equals(clazz.getModel().getName())) {
             uri = "\"/" + clazz.getModel().getName() + "\"";
@@ -122,8 +146,15 @@ public class AddTumlUriFieldToRuntimePropertyEnum extends BaseVisitor implements
             if (clazz != null && pWrap != null) {
                 String contextPath;
                 contextPath = ModelLoader.INSTANCE.getModel().getName();
-                uri = "\"/" + contextPath + "/overloadedpost/" + pWrap.getOwningType().getName().toLowerCase() + "s/{"
-                        + pWrap.getOwningType().getName().toLowerCase() + "Id}/" + literal.getName() + "\"";
+
+                if (!asAssociationClas) {
+                    uri = "\"/" + contextPath + "/overloadedpost/" + pWrap.getOwningType().getName().toLowerCase() + "s/{"
+                            + pWrap.getOwningType().getName().toLowerCase() + "Id}/" + literal.getName() + "\"";
+                } else {
+                    uri = "\"/" + contextPath + "/overloadedpost/" + pWrap.getAssociationClass().getName().toLowerCase() + "s/{"
+                            + pWrap.getAssociationClass().getName().toLowerCase() + "Id}/" + literal.getName() + "\"";
+                }
+
             } else {
                 uri = "\"\"";
             }
@@ -145,7 +176,7 @@ public class AddTumlUriFieldToRuntimePropertyEnum extends BaseVisitor implements
         jsonField.setInitExp(initExp);
     }
 
-    private void addUriToToJson(Class clazz, OJAnnotatedClass annotatedClass) {
+    private void add_getUriToObject_to_ToJson(Class clazz, OJAnnotatedClass annotatedClass) {
 		if (clazz.getGeneralizations().isEmpty()) {
 			OJAnnotatedOperation toJson = annotatedClass.findOperation("toJson", new OJPathName("Boolean"));
 			OJSimpleStatement s = (OJSimpleStatement) toJson.getBody().findStatement(ToFromJsonCreator.URI_FOR_RESTFULL);
@@ -164,7 +195,7 @@ public class AddTumlUriFieldToRuntimePropertyEnum extends BaseVisitor implements
 		}
 	}
 
-	private void addUriToObject(Class clazz, OJEnum ojEnum) {
+	private void add_getUriToObject(Class clazz, OJEnum ojEnum) {
 		OJAnnotatedOperation getUriToObject = new OJAnnotatedOperation("getUriToObject", new OJPathName("String"));
 		getUriToObject.setStatic(true);
 		getUriToObject.getBody().addToStatements(

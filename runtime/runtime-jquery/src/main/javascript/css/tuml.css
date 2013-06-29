@@ -315,7 +315,7 @@
 }
 
 .oclexecutebutton button {
-    height: 100%;
+    /*height: 100%;*/
     padding: 5px;
 }
 
@@ -332,15 +332,8 @@
 }
 
 .oclqueryname {
-    float: left;
-    padding-bottom: 5px;
-}
-
-.oclqueryname input[type=text] {
-    width: 60%;
-    float: left;
-    /*margin-left: auto;*/
-    /*margin-right: auto;*/
+    text-align: center;
+    padding: 5px;
 }
 
 .oclqueryname .chzn-container {
@@ -349,6 +342,10 @@
 
 .ocleditbutton {
     text-align: center;
+}
+
+.ocleditbutton .query-save-button {
+    margin-left: auto;
 }
 
 #queryButtonUl {

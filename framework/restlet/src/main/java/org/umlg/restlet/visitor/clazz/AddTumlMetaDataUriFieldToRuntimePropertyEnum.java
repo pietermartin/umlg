@@ -50,6 +50,11 @@ public class AddTumlMetaDataUriFieldToRuntimePropertyEnum extends BaseVisitor im
             if (!(pWrap.isDerived() || pWrap.isDerivedUnion())) {
                 OJEnumLiteral literal = ojEnum.findLiteral(pWrap.fieldname());
                 addTumlMetaDataUriToLiteral(clazz, pWrap, literal);
+
+                if (pWrap.isAssociationClass() && !(clazz instanceof AssociationClass)) {
+                    literal = ojEnum.findLiteral(pWrap.getAssociationClassFakePropertyName());
+                    addTumlMetaDataUriToLiteral(clazz, pWrap, literal, true);
+                }
             }
         }
         addTumlMetaDataUriToLiteral(clazz, null, ojEnum.findLiteral("id"));
@@ -61,11 +66,19 @@ public class AddTumlMetaDataUriFieldToRuntimePropertyEnum extends BaseVisitor im
     }
 
     private void addTumlMetaDataUriToLiteral(Class clazz, PropertyWrapper pWrap, OJEnumLiteral literal) {
+        addTumlMetaDataUriToLiteral(clazz, pWrap, literal, false);
+    }
+
+    private void addTumlMetaDataUriToLiteral(Class clazz, PropertyWrapper pWrap, OJEnumLiteral literal, boolean asAssociationClass) {
         String uri;
         String contextPath;
         if (clazz != null && pWrap != null) {
             contextPath = ModelLoader.INSTANCE.getModel().getName();
-            uri = "\"/" + contextPath + "/" + StringUtils.uncapitalize(pWrap.getType().getName()) + "MetaData\"";
+            if (!asAssociationClass) {
+                uri = "\"/" + contextPath + "/" + StringUtils.uncapitalize(pWrap.getType().getName()) + "MetaData\"";
+            } else {
+                uri = "\"/" + contextPath + "/" + StringUtils.uncapitalize(pWrap.getAssociationClass().getName()) + "MetaData\"";
+            }
         } else {
             uri = "\"\"";
         }

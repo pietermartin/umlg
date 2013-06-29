@@ -48,7 +48,7 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<Class> {
             addGetEdgeToRootLabel(metaClass, clazz);
             addImplementsTumlMetaNode(metaClass);
             OJAnnotatedClass annotatedClass = findOJClass(clazz);
-            addAndImplementTumlLibNodeOnOriginalClass(annotatedClass, clazz, metaClass.getPathName());
+            addAndImplementUmlgLibNodeOnOriginalClass(annotatedClass, clazz, metaClass.getPathName());
 
             addMetaClassGetterToRoot(clazz, metaClass);
 
@@ -211,7 +211,7 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<Class> {
         ojClass.addToConstructors(constructor);
     }
 
-    private void addAndImplementTumlLibNodeOnOriginalClass(OJAnnotatedClass annotatedClass, Class clazz, OJPathName metaClassPathName) {
+    private void addAndImplementUmlgLibNodeOnOriginalClass(OJAnnotatedClass annotatedClass, Class clazz, OJPathName metaClassPathName) {
         OJAnnotatedOperation getMetaNode = new OJAnnotatedOperation("getMetaNode");
         getMetaNode.setReturnType(TinkerGenerationUtil.TumlMetaNode);
         annotatedClass.addToOperations(getMetaNode);

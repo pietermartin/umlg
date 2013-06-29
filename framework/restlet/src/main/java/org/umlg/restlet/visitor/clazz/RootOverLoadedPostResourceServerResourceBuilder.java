@@ -24,7 +24,7 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
     @Override
     @VisitSubclasses({Class.class, AssociationClass.class})
     public void visitBefore(Class clazz) {
-        if (!clazz.isAbstract() && !TumlClassOperations.hasCompositeOwner(clazz)) {
+        if (!clazz.isAbstract() && !TumlClassOperations.hasCompositeOwner(clazz) && !(clazz instanceof AssociationClass)) {
 
             OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(TumlClassOperations.className(clazz) + "s_ServerResource");
             OJPackage ojPackage = new OJPackage(Namer.name(clazz.getNearestPackage()) + ".restlet");

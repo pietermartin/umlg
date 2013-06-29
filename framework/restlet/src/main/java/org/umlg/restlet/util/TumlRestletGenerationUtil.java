@@ -10,8 +10,8 @@ import org.umlg.javageneration.util.PropertyWrapper;
 
 public class TumlRestletGenerationUtil {
 
-    public final static String classQueryQualifiedName = "tumllib::org::umlg::meta::ClassQuery";
-    public final static String instanceQueryQualifiedName = "tumllib::org::umlg::query::InstanceQuery";
+    public final static String classQueryQualifiedName = "umlglib::org::umlg::meta::ClassQuery";
+    public final static String instanceQueryQualifiedName = "umlglib::org::umlg::query::InstanceQuery";
 
     public final static OJPathName TumlSchemaFactory = new OJPathName("org.umlg.runtime.adaptor.TumlSchemaFactory");
     public final static OJPathName TumlRestletFilter = new OJPathName("org.umlg.runtime.restlet.TumlRestletFilter");

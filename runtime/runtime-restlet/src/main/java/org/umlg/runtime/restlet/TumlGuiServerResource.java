@@ -39,25 +39,22 @@ public class TumlGuiServerResource extends ServerResource {
         } else {
             uri = withHostRef.replace("/ui2", "");
         }
-
-        //TODO work this hard coding out
-        dataModel.put("app", new App().setRootUrl(ModelLoader.INSTANCE.getModel().getName()).setUri(uri).setTumlLib(ModelLoader.INSTANCE.isUmlGLibIncluded()));
-
-        Representation tumlUiFtl = new ClientResource("clap:///org/umlg/ui/tumlui2.html").get();
-        return new TemplateRepresentation(tumlUiFtl, dataModel, MediaType.TEXT_HTML);
+        dataModel.put("app", new App().setRootUrl(ModelLoader.INSTANCE.getModel().getName()).setUri(uri).setUmlgLib(ModelLoader.INSTANCE.isUmlGLibIncluded()));
+        Representation umlgUiFtl = new ClientResource("clap:///org/umlg/ui/umlgui2.html").get();
+        return new TemplateRepresentation(umlgUiFtl, dataModel, MediaType.TEXT_HTML);
     }
 
     public class App {
         private String rootUrl;
         private String uri;
-        private boolean tumlLib;
+        private boolean umlgLib;
 
-        public boolean isTumlLib() {
-            return tumlLib;
+        public boolean isUmlgLib() {
+            return umlgLib;
         }
 
-        public App setTumlLib(boolean tumlLib) {
-            this.tumlLib = tumlLib;
+        public App setUmlgLib(boolean umlgLib) {
+            this.umlgLib = umlgLib;
             return this;
         }
 

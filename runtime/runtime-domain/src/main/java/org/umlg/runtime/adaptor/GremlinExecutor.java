@@ -6,6 +6,7 @@ import com.tinkerpop.gremlin.groovy.Gremlin;
 import com.tinkerpop.pipes.Pipe;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
+import org.apache.commons.lang.time.StopWatch;
 import org.codehaus.groovy.control.CompilerConfiguration;
 
 /**
@@ -29,6 +30,8 @@ public class GremlinExecutor {
      * @return
      */
     public static String executeGremlinViaGroovy(Long contextId, String gremlin) {
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
         if (contextId != null) {
             gremlin = gremlin.replace("this", "g.v(" + contextId + ")");
         }
@@ -40,7 +43,10 @@ public class GremlinExecutor {
         GroovyShell shell = new GroovyShell(binding, compilerConfiguration);
         Object pipe = shell.evaluate("return " + gremlin + ";");
         GremlinToStringPipe<String> toStringPipe = new GremlinToStringPipe(pipe);
-        return toStringPipe.toString();
+        String result = toStringPipe.toString();
+        stopWatch.stop();
+        result += "\nTime to execute query = " + stopWatch.toString();
+        return result;
     }
 
 }

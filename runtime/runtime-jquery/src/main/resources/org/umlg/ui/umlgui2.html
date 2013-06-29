@@ -85,7 +85,7 @@
         $(document).ready(function () {
             //"${app.uri}" is replaced when the app starts up with the actual application url
             tumlModelName = "${app.rootUrl}";
-            isTumlLib = "${app.tumlLib?string}" == "true" ? true : false;
+            isUmlgLib = "${app.umlgLib?string}" == "true" ? true : false;
             var uiManager = new Tuml.UiManager("${app.uri}");
 
 //            $("#switcher").themeswitcher({

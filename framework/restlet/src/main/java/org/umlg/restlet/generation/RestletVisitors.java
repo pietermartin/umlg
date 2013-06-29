@@ -33,7 +33,7 @@ public class RestletVisitors {
 
         result.add(new AppResourceServerResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
         result.add(new AddIdLiteralsToRuntimeEnum(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
-        result.add(new AddTumlUriFieldToRuntimePropertyEnum(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+        result.add(new AddUmlgUriFieldToRuntimePropertyEnum(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
         result.add(new AddTumlMetaDataUriFieldToRuntimePropertyEnum(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
 
         //This must be before AddTumlMetaDataUriFieldToRootRuntimePropertyEnum and AddUriToRootRuntimePropertyEnum

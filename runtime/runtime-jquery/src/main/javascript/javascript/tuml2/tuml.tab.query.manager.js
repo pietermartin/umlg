@@ -54,7 +54,7 @@
         this.saveToInstance = function (post) {
             var self = this;
             var query = queryToJson(this.queryTabDivName, this.queryId);
-            query.qualifiedName = 'tumllib::org::umlg::query::InstanceQuery';
+            query.qualifiedName = 'umlglib::org::umlg::query::InstanceQuery';
             var overloadedPostData = {insert: [], update: [], delete: []};
             if (post) {
                 overloadedPostData.insert.push(query);
@@ -92,7 +92,7 @@
         this.deleteQuery = function () {
             var self = this;
             var query = queryToJson(this.queryTabDivName, this.queryId);
-            query.qualifiedName = 'tumllib::org::umlg::query::InstanceQuery';
+            query.qualifiedName = 'umlglib::org::umlg::query::InstanceQuery';
             var overloadedPostData = {insert: [], update: [], delete: []};
             overloadedPostData.delete.push(query);
             $.ajax({
@@ -142,7 +142,7 @@
         this.saveToClass = function (post) {
             var self = this;
             var query = queryToJson(this.queryTabDivName, this.queryId);
-            query.qualifiedName = 'tumllib::org::umlg::meta::ClassQuery';
+            query.qualifiedName = 'umlglib::org::umlg::meta::ClassQuery';
             var overloadedPostData = {insert: [], update: [], delete: []};
             if (post) {
                 overloadedPostData.insert.push(query);
@@ -229,7 +229,7 @@
             var inputEditButtonDiv;
             var oclQueryNameInputDiv;
             var oclEditButtonDiv;
-            if (isTumlLib) {
+            if (isUmlgLib) {
                 inputEditButtonDiv = $('<div />', {class: 'oclinputeditbutton'}).appendTo(oclInnerButton);
                 oclQueryNameInputDiv = $('<div />', {class: 'oclqueryname'}).appendTo(inputEditButtonDiv);
                 var $input = $('<input >', {id: queryTabDivName + '_' + 'QueryName', type: 'text'});
@@ -252,38 +252,38 @@
             querySelect.append($('<option ' + (query.type.toUpperCase() === 'OCL' ? 'selected="selected"' : '') + '/>)').val('OCL').html('OCL'));
             querySelect.append($('<option ' + (query.type.toUpperCase() === 'GREMLIN' ? 'selected="selected"' : '') + '/>)').val('GREMLIN').html('GREMLIN'));
             querySelect.append($('<option ' + (query.type.toUpperCase() === 'NATIVE' ? 'selected="selected"' : '') + '/>)').val('NATIVE').html('NATIVE'));
-            querySelect.appendTo(oclQueryNameInputDiv);
+            querySelect.appendTo(oclExecuteButtonDiv);
             querySelect.chosen({disable_search: true});
 
-            var ul = $('<ul />', {id: 'queryButtonUl'});
-            ul.appendTo(oclEditButtonDiv)
+//            var ul = $('<ul />', {id: 'queryButtonUl'});
+//            ul.appendTo(oclEditButtonDiv)
 
-            if (isTumlLib && instanceQueryUri !== '') {
-                var li = $('<li />', {id: 'querySaveInstanceButtonLi'}).appendTo(ul);
-                var saveInstanceButton = $('<button />', {id: queryTabDivName + '_' + 'SaveButton', class: 'query-save-button'}).appendTo(li);
+            if (isUmlgLib && instanceQueryUri !== '') {
+//                var li = $('<li />', {id: 'querySaveInstanceButtonLi'}).appendTo(ul);
+                var saveInstanceButton = $('<button />', {id: queryTabDivName + '_' + 'SaveButton', class: 'query-save-button'}).appendTo(oclEditButtonDiv);
                 saveInstanceButton.button().text('save to instance').click(
                     function () {
                         self.saveToInstance(post);
                     });
             }
-            if (isTumlLib && classQueryUri !== '') {
-                var li = $('<li />', {id: 'querySaveClassButtonLi'}).appendTo(ul);
-                var saveClassButton = $('<button />', {id: queryTabDivName + '_' + 'SaveButton'}).appendTo(li);
+            if (isUmlgLib && classQueryUri !== '') {
+//                var li = $('<li />', {id: 'querySaveClassButtonLi'}).appendTo(ul);
+                var saveClassButton = $('<button />', {id: queryTabDivName + '_' + 'SaveButton'}).appendTo(oclEditButtonDiv);
                 saveClassButton.button().text('save to class').click(
                     function () {
                         self.saveToClass(post);
                     });
             }
-            if (isTumlLib && !post) {
-                var li = $('<li />', {id: 'queryCancelButtonLi'}).appendTo(ul);
-                var cancelButton = $('<button />', {id: queryTabDivName + '_' + 'CancelButton'}).appendTo(li);
+            if (isUmlgLib && !post) {
+//                var li = $('<li />', {id: 'queryCancelButtonLi'}).appendTo(ul);
+                var cancelButton = $('<button />', {id: queryTabDivName + '_' + 'CancelButton'}).appendTo(oclEditButtonDiv);
                 cancelButton.button().text('cancel').click(
                     function () {
                         self.cancelQuery();
                     }
                 );
-                li = $('<li />', {id: 'queryDeleteButtonLi'}).appendTo(ul);
-                var deleteButton = $('<button />', {id: queryTabDivName + '_' + 'DeleteButton'}).appendTo(li);
+//                li = $('<li />', {id: 'queryDeleteButtonLi'}).appendTo(ul);
+                var deleteButton = $('<button />', {id: queryTabDivName + '_' + 'DeleteButton'}).appendTo(oclEditButtonDiv);
                 deleteButton.button().text('delete').click(
                     function () {
                         self.deleteQuery();
