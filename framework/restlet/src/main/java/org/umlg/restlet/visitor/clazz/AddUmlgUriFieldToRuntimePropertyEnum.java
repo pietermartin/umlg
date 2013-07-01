@@ -69,15 +69,15 @@ public class AddUmlgUriFieldToRuntimePropertyEnum extends BaseVisitor implements
 			PropertyWrapper pWrap = new PropertyWrapper(property);
 			if (!(pWrap.isDerived() || pWrap.isDerivedUnion())) {
 				OJEnumLiteral literal = ojEnum.findLiteral(pWrap.fieldname());
-				addTumlUriToLiteral(clazz, pWrap, literal);
-                addTumlOverloadedPostUriToLiteral(clazz, pWrap, literal);
+				addTumlUriToLiteral(clazz, pWrap, literal, clazz instanceof AssociationClass);
+                addTumlOverloadedPostUriToLiteral(clazz, pWrap, literal, clazz instanceof AssociationClass);
 
                 //For association classes
                 if (pWrap.isAssociationClass() && !(clazz instanceof AssociationClass)) {
 
                     literal = ojEnum.findLiteral(pWrap.getAssociationClassFakePropertyName());
-                    addTumlUriToLiteral(clazz, pWrap, literal, true);
-                    addTumlOverloadedPostUriToLiteral(clazz, pWrap, literal, true);
+                    addTumlUriToLiteral(clazz, pWrap, literal);
+                    addTumlOverloadedPostUriToLiteral(clazz, pWrap, literal);
 
                 }
 
@@ -98,15 +98,14 @@ public class AddUmlgUriFieldToRuntimePropertyEnum extends BaseVisitor implements
         addTumlUriToLiteral(clazz, pWrap, literal, false);
     }
 
-    private void addTumlUriToLiteral(Class clazz, PropertyWrapper pWrap, OJEnumLiteral literal, boolean asAssociationClass) {
+    private void addTumlUriToLiteral(Class clazz, PropertyWrapper pWrap, OJEnumLiteral literal, boolean forAssociationClass) {
 		String uri;
 		if (literal.getName().equals(clazz.getModel().getName())) {
 			uri = "\"/" + clazz.getModel().getName() + "\"";
 		} else {
 			if (clazz != null && pWrap != null) {
-                String contextPath;
-                    contextPath = ModelLoader.INSTANCE.getModel().getName();
-                if (!asAssociationClass) {
+                String contextPath = ModelLoader.INSTANCE.getModel().getName();
+                if (!forAssociationClass) {
                     uri = "\"/" + contextPath + "/" + pWrap.getOwningType().getName().toLowerCase() + "s/{"
                             + pWrap.getOwningType().getName().toLowerCase() + "Id}/" + literal.getName() + "\"";
                 } else {
@@ -138,16 +137,14 @@ public class AddUmlgUriFieldToRuntimePropertyEnum extends BaseVisitor implements
         addTumlOverloadedPostUriToLiteral(clazz, pWrap, literal, false);
     }
 
-    private void addTumlOverloadedPostUriToLiteral(Class clazz, PropertyWrapper pWrap, OJEnumLiteral literal, boolean asAssociationClas) {
+    private void addTumlOverloadedPostUriToLiteral(Class clazz, PropertyWrapper pWrap, OJEnumLiteral literal, boolean forAssociationClass) {
         String uri;
         if (literal.getName().equals(clazz.getModel().getName())) {
             uri = "\"/" + clazz.getModel().getName() + "\"";
         } else {
             if (clazz != null && pWrap != null) {
-                String contextPath;
-                contextPath = ModelLoader.INSTANCE.getModel().getName();
-
-                if (!asAssociationClas) {
+                String contextPath = ModelLoader.INSTANCE.getModel().getName();
+                if (!forAssociationClass) {
                     uri = "\"/" + contextPath + "/overloadedpost/" + pWrap.getOwningType().getName().toLowerCase() + "s/{"
                             + pWrap.getOwningType().getName().toLowerCase() + "Id}/" + literal.getName() + "\"";
                 } else {

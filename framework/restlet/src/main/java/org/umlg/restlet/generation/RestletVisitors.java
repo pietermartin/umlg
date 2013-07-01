@@ -27,6 +27,8 @@ public class RestletVisitors {
         result.add(new NavigatePropertyOverloadedPostServerResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
         result.add(new NavigatePropertyOverloadedPostForLookupServerResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
 
+        result.add(new AssociationClassOverloadedPostServerResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+
 //        result.add(new RootResourceServerResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
         result.add(new RootOverLoadedPostResourceServerResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
         result.add(new RootOverLoadedPostForLookupResourceServerResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));

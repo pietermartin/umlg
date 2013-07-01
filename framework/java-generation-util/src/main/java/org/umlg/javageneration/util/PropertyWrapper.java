@@ -323,6 +323,13 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         return this.property.getName();
     }
 
+    public String associationClassGetter() {
+        if (!isAssociationClass()) {
+            throw new IllegalStateException("Can not call associationClassGetter on a property that is not a member end of an association class. Property = " + getQualifiedName());
+        }
+        return "get" + getAssociationClassPathName().getLast();
+    }
+
     public String getter() {
         return TumlPropertyOperations.getter(this.property);
     }

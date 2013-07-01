@@ -23,7 +23,7 @@ public class RootOverLoadedPostForLookupResourceServerResourceBuilder extends Ba
     @Override
     @VisitSubclasses({Class.class, AssociationClass.class})
     public void visitBefore(Class clazz) {
-        if (!clazz.isAbstract() && !TumlClassOperations.hasCompositeOwner(clazz)) {
+        if (!clazz.isAbstract() && !TumlClassOperations.hasCompositeOwner(clazz) && !(clazz instanceof AssociationClass)) {
 
             OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(TumlClassOperations.className(clazz) + "s_LookupServerResource");
             OJPackage ojPackage = new OJPackage(Namer.name(clazz.getNearestPackage()) + ".restlet");

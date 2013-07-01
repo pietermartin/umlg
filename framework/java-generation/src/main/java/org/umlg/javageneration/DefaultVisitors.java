@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
-import org.umlg.javageneration.visitor.associationclass.AssociationClassBuilder;
 import org.umlg.javageneration.visitor.clazz.*;
 import org.umlg.javageneration.visitor.enumeration.EnumerationVisitor;
 import org.umlg.javageneration.visitor.enumeration.TofromJsonForEnumCreator;
@@ -25,7 +24,6 @@ public class DefaultVisitors {
         result.add(new InterfaceVisitor(Workspace.INSTANCE));
         result.add(new ClassCreator(Workspace.INSTANCE));
         result.add(new ClassBuilder(Workspace.INSTANCE));
-        result.add(new AssociationClassBuilder(Workspace.INSTANCE));
         result.add(new RootEntryPointCreator(Workspace.INSTANCE));
         result.add(new RootEntryPointBuilder(Workspace.INSTANCE));
         result.add(new QualifiedNameClassNameMapBuilder(Workspace.INSTANCE));

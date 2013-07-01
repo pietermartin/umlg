@@ -106,16 +106,15 @@ public class AddTumlLookupUriToRuntimePropertyEnum extends BaseVisitor implement
         // Add tumlLookupUri to literal
         String uri;
         if (TumlClassOperations.getOtherEndToComposite(clazz) != null && propertyWrapper != null && propertyWrapper.hasLookup()) {
-            String contextPath;
-            contextPath = ModelLoader.INSTANCE.getModel().getName();
+            String contextPath = ModelLoader.INSTANCE.getModel().getName();
             if (!asAssociationClass) {
                 uri = "\"/" + contextPath + "/"
                         + TumlClassOperations.getPathName(propertyWrapper.getOwningType()).getLast().toLowerCase() + "s/{"
                         + TumlClassOperations.getPathName(propertyWrapper.getOwningType()).getLast().toLowerCase() + "Id}/" + propertyWrapper.lookup() + "\"";
             } else {
                 uri = "\"/" + contextPath + "/"
-                        + propertyWrapper.getAssociationClassPathName().getLast().toLowerCase() + "s/{"
-                        + propertyWrapper.getAssociationClassPathName().getLast().toLowerCase() + "Id}/" + propertyWrapper.lookup() + "\"";
+                        + TumlClassOperations.getPathName(propertyWrapper.getOwningType()).getLast().toLowerCase() + "s/{"
+                        + TumlClassOperations.getPathName(propertyWrapper.getOwningType()).getLast().toLowerCase() + "Id}/" + propertyWrapper.lookup() + "\"";
             }
         } else {
             // The non lookup fields carry a empty string

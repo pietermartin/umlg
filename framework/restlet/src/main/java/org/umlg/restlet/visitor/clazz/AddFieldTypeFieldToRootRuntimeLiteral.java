@@ -3,6 +3,7 @@ package org.umlg.restlet.visitor.clazz;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.uml2.uml.AssociationClass;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Model;
@@ -53,7 +54,7 @@ public class AddFieldTypeFieldToRootRuntimeLiteral extends BaseVisitor implement
 					return false;
 				}
 				Class clazz = (Class) e;
-				return !clazz.isAbstract() && !TumlClassOperations.hasCompositeOwner(clazz);
+				return !clazz.isAbstract() && !TumlClassOperations.hasCompositeOwner(clazz) && !(clazz instanceof AssociationClass);
 			}
 		});
 		

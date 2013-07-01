@@ -6,10 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.uml2.uml.*;
 import org.eclipse.uml2.uml.Class;
-import org.eclipse.uml2.uml.Element;
-import org.eclipse.uml2.uml.Model;
-import org.eclipse.uml2.uml.Property;
 import org.umlg.java.metamodel.OJField;
 import org.umlg.java.metamodel.OJPackage;
 import org.umlg.java.metamodel.OJPathName;
@@ -90,17 +88,17 @@ public class RootEntryPointCreator extends BaseVisitor implements Visitor<Model>
 		List<Class> result = findRootEntities(model);
 		// Add root entities as though they are fake properties to App root
 		for (Class clazz : result) {
-			count++;
-			RuntimePropertyImplementor.addEnumLiteral(false, ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName,
-					StringUtils.uncapitalize(TumlClassOperations.className(clazz)), clazz.getQualifiedName(), "inverseOf::" + clazz.getName(), "inverseOf::" + clazz.getQualifiedName(), false, false,
-					null, Collections.<Validation> emptyList(), true, false, false, false, true, false, false, true, false, -1, 0, 1, false, false, true, false, true,
-					true, "root" + TumlClassOperations.className(clazz));
+            count++;
+            RuntimePropertyImplementor.addEnumLiteral(false, ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName,
+                    StringUtils.uncapitalize(TumlClassOperations.className(clazz)), clazz.getQualifiedName(), "inverseOf::" + clazz.getName(), "inverseOf::" + clazz.getQualifiedName(), false, false,
+                    null, Collections.<Validation> emptyList(), true, false, false, false, true, false, false, true, false, -1, 0, 1, false, false, true, false, true,
+                    true, "root" + TumlClassOperations.className(clazz));
 
-			asJson.getBody().addToStatements(
-					"sb.append(" + ojEnum.getName() + "." + StringUtils.uncapitalize(TumlClassOperations.className(clazz)) + ".toJson())");
-			if (count != result.size()) {
-				asJson.getBody().addToStatements("sb.append(\",\")");
-			}
+            asJson.getBody().addToStatements(
+                    "sb.append(" + ojEnum.getName() + "." + StringUtils.uncapitalize(TumlClassOperations.className(clazz)) + ".toJson())");
+            if (count != result.size()) {
+                asJson.getBody().addToStatements("sb.append(\",\")");
+            }
 		}
 		asJson.getBody().addToStatements("sb.append(\"]}\")");
 		asJson.getBody().addToStatements("return sb.toString()");
@@ -144,7 +142,7 @@ public class RootEntryPointCreator extends BaseVisitor implements Visitor<Model>
 					return false;
 				}
 				Class clazz = (Class) e;
-				return !clazz.isAbstract() && !TumlClassOperations.hasCompositeOwner(clazz);
+				return !clazz.isAbstract() && !TumlClassOperations.hasCompositeOwner(clazz) && !(clazz instanceof AssociationClass);
 			}
 		});
 		return result;
