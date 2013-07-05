@@ -72,7 +72,7 @@
                     this.addButtons();
                 }
 
-                leftMenuManager.refresh(metaDataNavigatingFrom, metaDataNavigatingTo, this.contextVertexId);
+                leftMenuManager.refresh(metaDataNavigatingFrom, metaDataNavigatingTo, this.contextVertexId, this.propertyNavigatingTo);
                 refreshInternal(tumlUri, result, false);
 
                 //reorder tabs, make sure new tabs are first

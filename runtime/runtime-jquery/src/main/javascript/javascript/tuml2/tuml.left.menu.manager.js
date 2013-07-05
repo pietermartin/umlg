@@ -26,7 +26,7 @@
         function init() {
         }
 
-        function refresh(_contextMetaDataFrom, _contextMetaDataTo, _contextVertexId) {
+        function refresh(_contextMetaDataFrom, _contextMetaDataTo, _contextVertexId, propertyNavigatingTo) {
             contextMetaDataFrom = _contextMetaDataFrom;
             contextMetaDataTo = _contextMetaDataTo;
             contextVertexId = _contextVertexId;
@@ -38,7 +38,7 @@
 
             setupTabsAndAccordian();
 
-            createStdMenu();
+            createStdMenu(propertyNavigatingTo);
             if (isUmlgLib && contextVertexId !== undefined && contextVertexId !== null) {
                 createInstanceQueryMenu();
                 createClassQueryMenu();
@@ -98,10 +98,10 @@
         function createTree() {
         }
 
-        function createStdMenu() {
+        function createStdMenu(propertyNavigatingTo) {
 
             var ulMenu = $('<ul />', {class: 'ui-left-menu-link'}).appendTo(umlPropertiesDiv);
-            var menuArray = createLeftMenuDataArray(contextMetaDataFrom, contextMetaDataTo);
+            var menuArray = createLeftMenuDataArray(contextMetaDataFrom, contextMetaDataTo, propertyNavigatingTo);
             $.each(menuArray, function (index, value) {
                 var adjustedUri = value.tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
                 var li = $('<li class="ui-left-menu-li ' + value.menuCssClass + '"/>');
@@ -274,13 +274,15 @@
 
         }
 
-        function createLeftMenuDataArray(contextMetaDataFrom, contextMetaDataTo) {
+        function createLeftMenuDataArray(contextMetaDataFrom, contextMetaDataTo, propertyNavigatingTo) {
             var menuArray = [];
             if (contextMetaDataFrom.name !== 'Root') {
                 //add a menu item to the context object
                 menuArray.push({tumlUri: contextMetaDataFrom.uri, name: contextMetaDataFrom.name, menuCssClass: 'contextactiveproperty'});
             }
-            $.each(contextMetaDataFrom.properties, function (index, metaProperty) {
+
+            for (var i = 0; i < contextMetaDataFrom.properties.length; i++) {
+                var metaProperty = contextMetaDataFrom.properties[i];
                 if (metaProperty.inverseComposite || !((metaProperty.dataTypeEnum !== undefined && metaProperty.dataTypeEnum !== null) ||
                     metaProperty.onePrimitive ||
                     metaProperty.oneEnumeration ||
@@ -290,12 +292,20 @@
                     metaProperty.name == 'uri')) {
                     var menuMetaProperty = {};
                     var menuCssClass = 'inactiveproperty';
-                    $.each(contextMetaDataTo.properties, function (toIndex, toMetaProperty) {
-                        if (toMetaProperty.inverseQualifiedName == metaProperty.qualifiedName) {
-                            //This makes the current active property red in the menu
-                            menuCssClass = 'activeproperty';
-                        }
-                    });
+
+                    if (propertyNavigatingTo !== undefined && propertyNavigatingTo.qualifiedName == metaProperty.qualifiedName) {
+                        //This makes the current active property red in the menu
+                        menuCssClass = 'activeproperty';
+                    }
+
+//                    for (var j = 0; j < contextMetaDataTo.properties.length; j++) {
+//                        var toMetaProperty = contextMetaDataTo.properties[j];
+//                        if (toMetaProperty.inverseQualifiedName == metaProperty.qualifiedName) {
+//                            //This makes the current active property red in the menu
+//                            menuCssClass = 'activeproperty';
+//                        }
+//                    }
+
                     //add the icon
                     if (metaProperty.composite) {
                         menuCssClass = menuCssClass + ' menu-composite';
@@ -312,7 +322,7 @@
                     }
                     menuArray.push(menuMetaProperty);
                 }
-            });
+            };
 
             function compare(a, b) {
                 if (a.name < b.name) return -1;

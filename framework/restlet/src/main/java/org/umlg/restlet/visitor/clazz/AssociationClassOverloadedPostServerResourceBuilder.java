@@ -63,13 +63,13 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
             OJAnnotatedClass owner = findOJClass(pWrap.getType());
 
             OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(pWrap.getAssociationClassPathName().getLast()
-                    + "_" + otherEndWrap.getName() + "_ServerResource");
+                    + "_" + pWrap.getName() + "_ServerResource");
             OJPackage ojPackage = new OJPackage(owner.getMyPackage().toString() + ".restlet");
             annotatedInf.setMyPackage(ojPackage);
             addToSource(annotatedInf);
 
             OJAnnotatedClass annotatedClass = new OJAnnotatedClass(pWrap.getAssociationClassPathName().getLast()
-                    + "_" + otherEndWrap.getName() + "_ServerResourceImpl");
+                    + "_" + pWrap.getName() + "_ServerResourceImpl");
             annotatedClass.setSuperclass(TumlRestletGenerationUtil.ServerResource);
             annotatedClass.addToImplementedInterfaces(annotatedInf.getPathName());
             annotatedClass.setMyPackage(ojPackage);
@@ -80,7 +80,7 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
             addGetObjectRepresentation(pWrap, annotatedInf, annotatedClass, true);
 
             addPostObjectRepresentation(otherEndWrap, annotatedInf, annotatedClass, true);
-            addAssociationClassServerResourceToRouterEnum(otherEndWrap, annotatedClass);
+            addAssociationClassServerResourceToRouterEnum(pWrap, annotatedClass);
         }
     }
 
@@ -464,7 +464,7 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
             // i.e. the first meta data in the array is the entity navigating to.
             for (Classifier concreteClassifierTo : concreteImplementations) {
                 annotatedClass.addToImports(TumlClassOperations.getPathName(concreteClassifierTo));
-                if (pWrap.isOne()) {
+                if (pWrap.isOne() || asAssociationClass) {
                     block.addToStatements("json.append(\"{\\\"data\\\": \")");
                 } else {
                     block.addToStatements("json.append(\"{\\\"data\\\": [\")");
@@ -483,7 +483,7 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
                     annotatedClass.addToImports(TinkerGenerationUtil.BooleanExpressionEvaluator);
                 }
                 annotatedClass.addToImports(TumlClassOperations.getPathName(pWrap.getType()));
-                if (pWrap.isOne()) {
+                if (pWrap.isOne() || asAssociationClass) {
                     block.addToStatements("json.append(\",\")");
                 } else {
                     block.addToStatements("json.append(\"],\")");
@@ -496,7 +496,11 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
                         && (pWrap.getType().getQualifiedName().equals(TumlRestletGenerationUtil.instanceQueryQualifiedName) || pWrap.getType().getQualifiedName().equals(TumlRestletGenerationUtil.classQueryQualifiedName))) {
                     block.addToStatements("json.append(\"\\\"oclExecuteUri\\\": \\\"/" + pWrap.getModel().getName() + "/{contextId}/oclExecuteQuery\\\", \")");
                 }
-                block.addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + pWrap.getQualifiedName() + "AC\\\"\")");
+                if (!asAssociationClass) {
+                    block.addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + pWrap.getQualifiedName() + "AC\\\"\")");
+                } else {
+                    block.addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + pWrap.getQualifiedName() + "\\\"\")");
+                }
                 block.addToStatements("json.append(\", \\\"to\\\": \")");
                 int countFrom = 1;
                 OJIfStatement ifStatementFrom = new OJIfStatement();

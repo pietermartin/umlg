@@ -392,7 +392,8 @@
                     var url;
                     if (contextData.name !== 'self') {
                         //If non composite one check if the element exist
-                        if (!contextData.property.composite && contextData.property.upper == 1) {
+//                        if (!contextData.property.composite && contextData.property.upper == 1) {
+                        if (!contextData.property.inverseComposite && contextData.property.upper == 1) {
                             if (data[row][contextData.property.name].id == null) {
                                 alert('Property ' + contextData.property.qualifiedName + ' on ' + self.metaForData.name + ' does not exist!\nIt can not be created as it is a non composite property.');
                                 return;
