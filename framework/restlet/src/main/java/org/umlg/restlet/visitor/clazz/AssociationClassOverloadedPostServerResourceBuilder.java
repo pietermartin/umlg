@@ -181,83 +181,52 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
         entityText.setInitExp("entity.getText()");
         ojTryStatement.getTryPart().addToLocals(entityText);
 
-        OJField resultMap = new OJField("resultMap", new OJPathName("java.util.Map").addToGenerics(new OJPathName("Class<? extends " + pWrap.javaBaseTypePath().getLast() + ">")).addToGenerics("java.lang.StringBuilder"));
-        resultMap.setInitExp("new HashMap<Class<? extends " + pWrap.javaBaseTypePath().getLast() + ">, StringBuilder>()");
+        OJField resultMap = new OJField("resultMap", new OJPathName("java.util.Map").addToGenerics(new OJPathName("Class<? extends " + pWrap.getAssociationClassPathName().getLast() + ">")).addToGenerics("java.lang.StringBuilder"));
+        resultMap.setInitExp("new HashMap<Class<? extends " + pWrap.getAssociationClassPathName().getLast() + ">, StringBuilder>()");
         annotatedClass.addToImports("java.util.HashMap");
         ojTryStatement.getTryPart().addToLocals(resultMap);
 
         ojTryStatement.getTryPart().addToStatements(pathName.getLast() + " overloaded = mapper.readValue(" + entityText.getName() + ", Map.class)");
-        ojTryStatement.getTryPart().addToStatements("Object o = overloaded.get(\"insert\")");
 
         //Insert
+        ojTryStatement.getTryPart().addToStatements("Object o = overloaded.get(\"insert\")");
         OJIfStatement ifInsert = new OJIfStatement("o != null");
         OJIfStatement ifArrayForInsert = new OJIfStatement("o instanceof ArrayList");
-        OJPathName genericsForArray = new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object");
-        OJField array = new OJField("array", new OJPathName("java.util.ArrayList").addToGenerics(genericsForArray));
-        array.setInitExp("(ArrayList<Map<String, Object>>)o");
-        ifArrayForInsert.getThenPart().addToLocals(array);
+        OJIfStatement ifEmpty = new OJIfStatement("!((List)o).isEmpty()");
+        ifArrayForInsert.addToThenPart(ifEmpty);
+        annotatedClass.addToImports("java.util.List");
+        ifEmpty.addToThenPart("throw new IllegalStateException(\"Adding an association class happens from the association member end!\")");
+        ifArrayForInsert.addToElsePart("throw new IllegalStateException(\"Adding an association class happens from the association member end!\")");
         ifInsert.addToThenPart(ifArrayForInsert);
-
         ojTryStatement.getTryPart().addToStatements(ifInsert);
-        OJForStatement forArray = new OJForStatement("map", new OJPathName("java.util.Map").addToGenerics(new OJPathName("String")).addToGenerics(
-                new OJPathName("Object")), "array");
-        ifArrayForInsert.addToThenPart(forArray);
-        forArray.getBody().addToStatements("add(resultMap, parentResource, map)");
-
-        OJField map = new OJField("map", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object"));
-        map.setInitExp("(Map<String, Object>) o");
-        ifArrayForInsert.setElsePart(new OJBlock());
-        ifArrayForInsert.getElsePart().addToLocals(map);
-        ifArrayForInsert.getElsePart().addToStatements("add(resultMap, parentResource, map)");
-
-        addPostResource(pWrap, annotatedClass, parentPathName, asAssociationClass);
 
         //Delete
         ojTryStatement.getTryPart().addToStatements("o = overloaded.get(\"delete\")");
         OJIfStatement ifDelete = new OJIfStatement("o != null");
         OJIfStatement ifArrayForDelete = new OJIfStatement("o instanceof ArrayList");
-        genericsForArray = new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object");
-        array = new OJField("array", new OJPathName("java.util.ArrayList").addToGenerics(genericsForArray));
-        array.setInitExp("(ArrayList<Map<String, Object>>)o");
-        ifArrayForDelete.getThenPart().addToLocals(array);
+        ifEmpty = new OJIfStatement("!((List)o).isEmpty()");
+        ifArrayForDelete.addToThenPart(ifEmpty);
+        ifEmpty.addToThenPart("throw new IllegalStateException(\"Deleting an association class happens from the association member end!\")");
+        ifArrayForDelete.addToElsePart("throw new IllegalStateException(\"Deleting an association class happens from the association member end!\")");
         ifDelete.addToThenPart(ifArrayForDelete);
         ojTryStatement.getTryPart().addToStatements(ifDelete);
-        forArray = new OJForStatement("map", new OJPathName("java.util.Map").addToGenerics(new OJPathName("String")).addToGenerics(
-                new OJPathName("Object")), "array");
-        ifArrayForDelete.addToThenPart(forArray);
-        if (pWrap.isComposite()) {
-            forArray.getBody().addToStatements("delete(map)");
-        } else {
-            forArray.getBody().addToStatements("delete(parentResource, map)");
-        }
-
-        map = new OJField("map", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object"));
-        map.setInitExp("(Map<String, Object>) o");
-        ifArrayForDelete.setElsePart(new OJBlock());
-        ifArrayForDelete.getElsePart().addToLocals(map);
-        if (pWrap.isComposite()) {
-            ifArrayForDelete.getElsePart().addToStatements("delete(map)");
-        } else {
-            ifArrayForDelete.getElsePart().addToStatements("delete(parentResource, map)");
-        }
-        addDeleteResource(pWrap, annotatedClass, parentPathName);
 
         //Update
         ojTryStatement.getTryPart().addToStatements("o = overloaded.get(\"update\")");
         OJIfStatement ifUpdate = new OJIfStatement("o != null");
         OJIfStatement ifArrayForUpdate = new OJIfStatement("o instanceof ArrayList");
-        genericsForArray = new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object");
-        array = new OJField("array", new OJPathName("java.util.ArrayList").addToGenerics(genericsForArray));
+        OJPathName genericsForArray = new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object");
+        OJField array = new OJField("array", new OJPathName("java.util.ArrayList").addToGenerics(genericsForArray));
         array.setInitExp("(ArrayList<Map<String, Object>>)o");
         ifArrayForUpdate.getThenPart().addToLocals(array);
         ifUpdate.addToThenPart(ifArrayForUpdate);
         ojTryStatement.getTryPart().addToStatements(ifUpdate);
 
-        forArray = new OJForStatement("map", new OJPathName("java.util.Map").addToGenerics(new OJPathName("String")).addToGenerics(
+        OJForStatement forArray = new OJForStatement("map", new OJPathName("java.util.Map").addToGenerics(new OJPathName("String")).addToGenerics(
                 new OJPathName("Object")), "array");
         ifArrayForUpdate.addToThenPart(forArray);
         forArray.getBody().addToStatements("put(resultMap, map)");
-        map = new OJField("map", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object"));
+        OJField map = new OJField("map", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object"));
         map.setInitExp("(Map<String, Object>) o");
         ifArrayForUpdate.setElsePart(new OJBlock());
         ifArrayForUpdate.getElsePart().addToLocals(map);
@@ -278,7 +247,7 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
         count.setInitExp("1");
         jsonResultBlock.addToLocals(count);
 
-        OJForStatement forConcreteClassifiers = new OJForStatement("baseClass", new OJPathName("Class").addToGenerics("? extends " + pWrap.javaBaseTypePath().getLast()), "resultMap.keySet()");
+        OJForStatement forConcreteClassifiers = new OJForStatement("baseClass", new OJPathName("Class").addToGenerics("? extends " + pWrap.getAssociationClassPathName().getLast()), "resultMap.keySet()");
         jsonResultBlock.addToStatements(forConcreteClassifiers);
         if (pWrap.isOne()) {
             forConcreteClassifiers.getBody().addToStatements("result.append(\"{\\\"data\\\": \")");
@@ -342,20 +311,20 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
     private void addPutResource(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass, OJPathName parentPathName) {
         OJAnnotatedOperation put = new OJAnnotatedOperation("put");
         put.setVisibility(OJVisibilityKind.PRIVATE);
-        put.addToParameters(new OJParameter("resultMap", new OJPathName("java.util.Map").addToGenerics(new OJPathName("Class").addToGenerics("? extends " + pWrap.javaBaseTypePath().getLast())).addToGenerics("java.lang.StringBuilder")));
+        put.addToParameters(new OJParameter("resultMap", new OJPathName("java.util.Map").addToGenerics(new OJPathName("Class").addToGenerics("? extends " + pWrap.getAssociationClassPathName().getLast())).addToGenerics("java.lang.StringBuilder")));
         put.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
         annotatedClass.addToOperations(put);
 
         OJBlock firstBlock = new OJBlock();
         firstBlock.addToStatements("Long id = Long.valueOf((Integer)propertyMap.get(\"id\"))");
-        firstBlock.addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
+        firstBlock.addToStatements(pWrap.getAssociationClassPathName().getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
         annotatedClass.addToImports(pWrap.javaBaseTypePath());
         firstBlock.addToStatements("childResource.fromJson(propertyMap)");
         put.getBody().addToStatements(firstBlock);
 
         OJBlock secondBlock = new OJBlock();
 
-        OJField baseTumlClass = new OJField("baseTumlClass", new OJPathName("Class").addToGenerics("? extends " + pWrap.javaBaseTypePath().getLast()));
+        OJField baseTumlClass = new OJField("baseTumlClass", new OJPathName("Class").addToGenerics("? extends " + pWrap.getAssociationClassPathName().getLast()));
         baseTumlClass.setInitExp("childResource.getClass()");
         secondBlock.addToLocals(baseTumlClass);
 
