@@ -248,7 +248,7 @@ public class RuntimePropertyImplementor {
                     );
                 } else {
                     if (!pWrap.isPrimitive() && !pWrap.isDataType()) {
-                        addEnumLiteral(false, ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, pWrap.fieldname(), pWrap.getQualifiedName(),
+                        addEnumLiteral(true, ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, pWrap.fieldname(), pWrap.getQualifiedName(),
                                 pWrap.getInverseName(), pWrap.getInverseQualifiedName() + "AC", pWrap.isReadOnly(), pWrap.isPrimitive(), pWrap.getDataTypeEnum(),
                                 pWrap.getValidations(), pWrap.isEnumeration(), /*manyToOne*/pWrap.isACManyToOne(), /*many*/pWrap.isACMany(), pWrap.isControllingSide(),
                                 /*composite*/true, /*inverseComposite*/true, /*oneToOne*/pWrap.isACOneToOne(), /*oneToMany*/pWrap.isACOneToMany(),
@@ -257,7 +257,7 @@ public class RuntimePropertyImplementor {
                                 TinkerGenerationUtil.getEdgeName(pWrap.getProperty()) + "_" + pWrap.getName() + "_AC"
                         );
                     } else {
-                        addEnumLiteral(false, ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, pWrap.fieldname(), pWrap.getQualifiedName(),
+                        addEnumLiteral(true, ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, pWrap.fieldname(), pWrap.getQualifiedName(),
                                 pWrap.getInverseName(), pWrap.getInverseQualifiedName() + "AC", pWrap.isReadOnly(), pWrap.isPrimitive(), pWrap.getDataTypeEnum(), pWrap.getValidations(),
                                 pWrap.isEnumeration(), pWrap.isManyToOne(), pWrap.isMany(), pWrap.isControllingSide(), pWrap.isComposite(), pWrap.isInverseComposite(),
                                 pWrap.isOneToOne(), pWrap.isOneToMany(), pWrap.isManyToMany(), pWrap.getUpper(), pWrap.getLower(), inverseUpper, pWrap.isQualified(),
