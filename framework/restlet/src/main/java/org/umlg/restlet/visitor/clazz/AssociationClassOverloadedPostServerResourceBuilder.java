@@ -165,11 +165,11 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
         } else {
             parentPathName = pWrap.getAssociationClassPathName();
         }
-        post.getBody().addToStatements(
-                "this." + parentPathName.getLast().toLowerCase() + "Id = Long.valueOf((String)getRequestAttributes().get(\""
-                        + parentPathName.getLast().toLowerCase() + "Id\"))");
-        post.getBody().addToStatements(
-                parentPathName.getLast() + " parentResource = GraphDb.getDb().instantiateClassifier(" + parentPathName.getLast().toLowerCase() + "Id" + ")");
+//        post.getBody().addToStatements(
+//                "this." + parentPathName.getLast().toLowerCase() + "Id = Long.valueOf((String)getRequestAttributes().get(\""
+//                        + parentPathName.getLast().toLowerCase() + "Id\"))");
+//        post.getBody().addToStatements(
+//                parentPathName.getLast() + " parentResource = GraphDb.getDb().instantiateClassifier(" + parentPathName.getLast().toLowerCase() + "Id" + ")");
 
         OJTryStatement ojTryStatement = new OJTryStatement();
         OJField mapper = new OJField("mapper", TinkerGenerationUtil.ObjectMapper);

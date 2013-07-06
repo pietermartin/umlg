@@ -822,7 +822,7 @@
         this.columns = [];
         for (var i = 0; i < this.localMetaForData.properties.length; i++) {
             var property = this.localMetaForData.properties[i];
-            if ((property.composite && property.lower > 0) || !property.composite && !property.inverseComposite && ((property.oneToOne || property.manyToOne) || property.manyPrimitive || property.manyEnumeration)) {
+            if (property.isAssociationClass && (property.composite && property.lower > 0) || !property.composite && !property.inverseComposite && ((property.oneToOne || property.manyToOne) || property.manyPrimitive || property.manyEnumeration)) {
                 //Place the id column first
                 if (property.name == "id") {
                     this.columns.splice(0, 0, {
