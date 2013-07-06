@@ -48,7 +48,7 @@ public enum TumlCollectionKindEnum {
 	}
 
 	public OJPathName getOjPathName() {
-		return interfacePathName;
+		return interfacePathName.getCopy();
 	}
 
 	public static TumlCollectionKindEnum from(CollectionKind collectionKind) {
