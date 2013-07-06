@@ -354,6 +354,31 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         return TumlPropertyOperations.isEnumeration(this.property);
     }
 
+    public boolean isACUnique() {
+        return isACManyToOne() || isACOneToOne();
+    }
+
+    public boolean isACMany() {
+        return false;
+    }
+
+    public boolean isACOneToMany() {
+        return false;
+    }
+
+    public boolean isACManyToMany() {
+        return false;
+    }
+
+    public boolean isACManyToOne() {
+        return TumlPropertyOperations.isManyToOne(this.property);
+    }
+
+    public boolean isACOneToOne() {
+        //Association classes have a manyToOne relationship with bags and lists
+        return ((isOneToMany() && isUnique()) || isOneToOne());
+    }
+
     public boolean isOneToMany() {
         return TumlPropertyOperations.isOneToMany(this.property);
     }

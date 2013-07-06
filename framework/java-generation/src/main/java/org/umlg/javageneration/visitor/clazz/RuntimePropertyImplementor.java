@@ -249,11 +249,12 @@ public class RuntimePropertyImplementor {
                 } else {
                     if (!pWrap.isPrimitive() && !pWrap.isDataType()) {
                         addEnumLiteral(false, ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, pWrap.fieldname(), pWrap.getQualifiedName(),
-                                pWrap.getInverseName(), pWrap.getInverseQualifiedName() + "AC", pWrap.isReadOnly(), pWrap.isPrimitive(), pWrap.getDataTypeEnum(), pWrap.getValidations(),
-                                pWrap.isEnumeration(), /*manyToOne*/false, /*many*/false, pWrap.isControllingSide(), /*composite*/true, /*inverseComposite*/true,
-                                /*oneToOne*/true, /*oneToMany*/false, /*manyToMany*/false, /*upper*/1, /*lower*/1, inverseUpper, pWrap.isQualified(),
-                                pWrap.isInverseQualified(), pWrap.isOrdered(), pWrap.isInverseOrdered(), pWrap.isUnique(), pWrap.isInverseUnique(),
-                                TinkerGenerationUtil.getEdgeName(pWrap.getProperty()) + "_AC"
+                                pWrap.getInverseName(), pWrap.getInverseQualifiedName() + "AC", pWrap.isReadOnly(), pWrap.isPrimitive(), pWrap.getDataTypeEnum(),
+                                pWrap.getValidations(), pWrap.isEnumeration(), /*manyToOne*/pWrap.isACManyToOne(), /*many*/pWrap.isACMany(), pWrap.isControllingSide(),
+                                /*composite*/true, /*inverseComposite*/true, /*oneToOne*/pWrap.isACOneToOne(), /*oneToMany*/pWrap.isACOneToMany(),
+                                /*manyToMany*/pWrap.isACManyToMany(), /*upper*/1, /*lower*/1, inverseUpper, pWrap.isQualified(),
+                                pWrap.isInverseQualified(), pWrap.isOrdered(), pWrap.isInverseOrdered(), pWrap.isACUnique(), pWrap.isInverseUnique(),
+                                TinkerGenerationUtil.getEdgeName(pWrap.getProperty()) + "_" + pWrap.getName() + "_AC"
                         );
                     } else {
                         addEnumLiteral(false, ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, pWrap.fieldname(), pWrap.getQualifiedName(),
@@ -294,10 +295,12 @@ public class RuntimePropertyImplementor {
     /**
      * Very important, the order of adding the attribut values to the literal must be the same as the order the fields were created ass that is the order of the constructor
      */
-    public static OJEnumLiteral addEnumLiteral(boolean isAssociationClass, OJEnum ojEnum, OJAnnotatedOperation fromLabel, OJAnnotatedOperation fromQualifiedName, OJAnnotatedOperation fromInverseQualifiedName, String fieldName, String qualifiedName, String inverseName, String inverseQualifiedName, boolean isReadOnly, boolean isPrimitive,
-                                               DataTypeEnum dataTypeEnum, List<Validation> validations, boolean isEnumeration, boolean isManyToOne, boolean isMany, boolean isControllingSide,
-                                               boolean isComposite, boolean isInverseComposite, boolean isOneToOne, boolean isOneToMany, boolean isManyToMany, int getUpper, int getLower, int getInverseUpper,
-                                               boolean isQualified, boolean isInverseQualified, boolean isOrdered, boolean isInverseOrdered, boolean isUnique, boolean isInverseUnique, String edgeName) {
+    public static OJEnumLiteral addEnumLiteral(
+            boolean isAssociationClass, OJEnum ojEnum, OJAnnotatedOperation fromLabel, OJAnnotatedOperation fromQualifiedName, OJAnnotatedOperation fromInverseQualifiedName,
+            String fieldName, String qualifiedName, String inverseName, String inverseQualifiedName, boolean isReadOnly, boolean isPrimitive,
+            DataTypeEnum dataTypeEnum, List<Validation> validations, boolean isEnumeration, boolean isManyToOne, boolean isMany, boolean isControllingSide,
+            boolean isComposite, boolean isInverseComposite, boolean isOneToOne, boolean isOneToMany, boolean isManyToMany, int getUpper, int getLower, int getInverseUpper,
+            boolean isQualified, boolean isInverseQualified, boolean isOrdered, boolean isInverseOrdered, boolean isUnique, boolean isInverseUnique, String edgeName) {
 
         OJIfStatement ifLabelEquals = new OJIfStatement(fieldName + ".getLabel().equals(label)");
         // Do not make upper case, leave with java case sensitive
