@@ -48,24 +48,6 @@ public class AddTumlLookupUriToRuntimePropertyEnum extends BaseVisitor implement
                 throw new RuntimeException("wtf");
             }
 
-            // Need to create a lookup uri on the immediate composite
-            // parent, to
-            // be called by new
-            // objects, Seeing as the new object has not yet been persisted
-            // it
-            // can not call the lookup on itself.
-//            tumlUriLookup = ojEnum.findField("tumlLookupOnCompositeParentUri");
-//            if (tumlUriLookup == null) {
-//                tumlUriLookup = new OJField();
-//                tumlUriLookup.setType(new OJPathName("String"));
-//                tumlUriLookup.setName("tumlLookupOnCompositeParentUri");
-//                ojEnum.addToFields(tumlUriLookup);
-//
-//                OJConstructor constructor = ojEnum.getConstructors().iterator().next();
-//                constructor.addParam(tumlUriLookup.getName(), tumlUriLookup.getType());
-//                constructor.getBody().addToStatements("this." + tumlUriLookup.getName() + " = " + tumlUriLookup.getName());
-//            }
-
             Set<Property> allOwnedProperties = TumlClassOperations.getAllProperties(clazz);
             for (Property p : allOwnedProperties) {
                 PropertyWrapper pWrap = new PropertyWrapper(p);
@@ -74,11 +56,6 @@ public class AddTumlLookupUriToRuntimePropertyEnum extends BaseVisitor implement
                     OJAnnotatedOperation getter = new OJAnnotatedOperation(pWrap.lookupGetter(), tumlUriLookup.getType());
                     getter.getBody().addToStatements("return this." + tumlUriLookup.getName());
                     ojEnum.addToOperations(getter);
-
-//                    getter = new OJAnnotatedOperation(pWrap.lookupOnCompositeParentGetter(), tumlUriLookup.getType());
-//                    getter.getBody().addToStatements("return this." + tumlUriLookup.getName());
-//                    ojEnum.addToOperations(getter);
-
                 }
                 doWithLiteral(clazz, pWrap, ojEnum.findLiteral(pWrap.fieldname()));
 
@@ -93,7 +70,6 @@ public class AddTumlLookupUriToRuntimePropertyEnum extends BaseVisitor implement
             if (!TumlClassOperations.hasCompositeOwner(clazz)) {
                 // Add the lookups to the root property
                 doWithLiteral(clazz, null, ojEnum.findLiteral(clazz.getModel().getName()));
-//                doWithLiteral(clazz, null, ojEnum.findLiteral(clazz.getModel().getName()), false);
             }
         }
     }
@@ -105,7 +81,8 @@ public class AddTumlLookupUriToRuntimePropertyEnum extends BaseVisitor implement
     private void doWithLiteral(Class clazz, PropertyWrapper propertyWrapper, OJEnumLiteral literal, boolean asAssociationClass) {
         // Add tumlLookupUri to literal
         String uri;
-        if (TumlClassOperations.getOtherEndToComposite(clazz) != null && propertyWrapper != null && propertyWrapper.hasLookup()) {
+//        if (TumlClassOperations.getOtherEndToComposite(clazz) != null && propertyWrapper != null && propertyWrapper.hasLookup()) {
+        if (propertyWrapper != null && propertyWrapper.hasLookup()) {
             String contextPath = ModelLoader.INSTANCE.getModel().getName();
             if (!asAssociationClass) {
                 uri = "\"/" + contextPath + "/"

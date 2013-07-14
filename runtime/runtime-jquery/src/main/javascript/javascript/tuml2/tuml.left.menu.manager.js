@@ -298,14 +298,6 @@
                         menuCssClass = 'activeproperty';
                     }
 
-//                    for (var j = 0; j < contextMetaDataTo.properties.length; j++) {
-//                        var toMetaProperty = contextMetaDataTo.properties[j];
-//                        if (toMetaProperty.inverseQualifiedName == metaProperty.qualifiedName) {
-//                            //This makes the current active property red in the menu
-//                            menuCssClass = 'activeproperty';
-//                        }
-//                    }
-
                     //add the icon
                     if (metaProperty.composite) {
                         menuCssClass = menuCssClass + ' menu-composite';

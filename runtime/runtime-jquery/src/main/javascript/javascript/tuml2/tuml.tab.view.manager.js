@@ -773,7 +773,7 @@
     }
 
     TumlTabManyViewManager.prototype.updateGridAfterRollback = function (item) {
-        this.tumlTabGridManager.updateGridAfterCommitOrRollback(item);
+        this.tumlTabGridManager.updateGridAfterRollback(item);
         //Check if component tab is open for this particular item
         if (this.tumlTabViewManagers.length > 0) {
             if (this.tumlTabGridManager.dataView.getItem(this.componentCell.row).tmpId === item.tmpId) {
@@ -783,7 +783,7 @@
     }
 
     TumlTabManyViewManager.prototype.updateGridAfterCommit = function (item) {
-        this.tumlTabGridManager.updateGridAfterCommitOrRollback(item);
+        this.tumlTabGridManager.updateGridAfterCommit(item);
         //Check if component tab is open for this particular item
         if (this.tumlTabViewManagers.length > 0) {
             if (this.tumlTabGridManager.dataView.getItem(this.componentCell.row).tmpId === item.tmpId) {

@@ -255,24 +255,30 @@ public class NavigatePropertyOverloadedPostForLookupServerResourceBuilder extend
         add.getBody().addToLocals(baseTumlClass);
 
         OJTryStatement tryInstantiate = new OJTryStatement();
+        add.getBody().addToStatements(tryInstantiate);
 
         if (pWrap.isComposite()) {
             PropertyWrapper otherEndPWrap = new PropertyWrapper(pWrap.getOtherEnd());
             OJField constructor = new OJField("constructor", new OJPathName("java.lang.reflect.Constructor").addToGenerics(pWrap.javaBaseTypePath()));
             constructor.setInitExp("baseTumlClass.getConstructor(" + otherEndPWrap.javaBaseTypePath().getLast() + ".class)");
             tryInstantiate.getTryPart().addToLocals(constructor);
-            add.getBody().addToStatements(tryInstantiate);
             tryInstantiate.getTryPart().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = constructor.newInstance(parentResource)");
+            tryInstantiate.getTryPart().addToStatements("parentResource." + pWrap.adder() + "(childResource)");
         } else {
             tryInstantiate.getTryPart().addToStatements("Long id = Long.valueOf((Integer)propertyMap.get(\"id\"))");
             tryInstantiate.getTryPart().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
+            if (!pWrap.isAssociationClass()) {
+                tryInstantiate.getTryPart().addToStatements("parentResource." + pWrap.adder() + "(childResource)");
+            } else {
+                tryInstantiate.getTryPart().addToStatements("parentResource." + pWrap.adder() + "(childResource, null)");
+            }
         }
         annotatedClass.addToImports(pWrap.javaBaseTypePath());
         tryInstantiate.getTryPart().addToStatements("childResource.fromJson(propertyMap)");
         if (pWrap.isOrdered()) {
             //TODO
         } else {
-            tryInstantiate.getTryPart().addToStatements("parentResource." + pWrap.adder() + "(childResource)");
+            //TODO
         }
         tryInstantiate.setCatchParam(new OJParameter("e", "Exception"));
         tryInstantiate.getCatchPart().addToStatements("throw new RuntimeException(e)");

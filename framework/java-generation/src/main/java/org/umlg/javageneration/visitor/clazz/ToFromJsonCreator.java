@@ -25,7 +25,6 @@ import org.umlg.javageneration.visitor.BaseVisitor;
 public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 
     public static final String URI_FOR_RESTFULL = "uri";
-    public static final String METADATA_URI_FOR_RESTFULL = "uri";
 
     public ToFromJsonCreator(Workspace workspace) {
         super(workspace);
@@ -34,7 +33,6 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
     @Override
     @VisitSubclasses({Class.class, AssociationClass.class})
     public void visitBefore(Class clazz) {
-//        addToJson(clazz, "toJson", TumlClassOperations.getPrimitiveOrEnumOrComponentsProperties(clazz));
         addToJson(clazz, "toJson", TumlClassOperations.getPropertiesForToJson(clazz));
         addToJson(clazz, "toJsonWithoutCompositeParent", TumlClassOperations.getPropertiesForToJsonExcludingCompositeParent(clazz));
         addFromJson(clazz);
@@ -58,6 +56,7 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
         OJAnnotatedOperation toJson = new OJAnnotatedOperation(operationName, new OJPathName("String"));
         TinkerGenerationUtil.addOverrideAnnotation(toJson);
         toJson.addParam("deep", "Boolean");
+        toJson.setComment("deep indicates that components also be serialized.");
         if (clazz.getGenerals().isEmpty()) {
             toJson.getBody().addToStatements("StringBuilder sb = new StringBuilder()");
             toJson.getBody().addToStatements("sb.append(\"\\\"id\\\": \" + getId() + \", \")");
@@ -111,7 +110,6 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                 if (pWrap.isNumber() || pWrap.isBoolean()) {
                     toJson.getBody().addToStatements("sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + " + pWrap.getter() + "() + \"" + "\")");
                 } else if (!pWrap.isDataType()) {
-
                     // TODO need to implement display name interface or something
                     OJIfStatement ifOneNotNull = new OJIfStatement(pWrap.getter() + "() != null");
                     OJIfStatement ifHasTmpId = new OJIfStatement(TinkerGenerationUtil.TumlTmpIdManager.getLast() + ".INSTANCE.get(" + pWrap.getter() + "().getId()) != null");
@@ -121,12 +119,6 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                     ifOneNotNull.addToElsePart("sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + \"{\\\"id\\\": \" + null + \", \\\"displayName\\\": \" + null + \"}\")");
                     toJson.getBody().addToStatements(ifOneNotNull);
                     annotatedClass.addToImports(TinkerGenerationUtil.TumlTmpIdManager);
-
-//                    toJson.getBody().addToStatements(
-//                            "sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + (" + pWrap.getter() + "() != null ? \"{\\\"id\\\": \" + " + pWrap.getter()
-//                                    + "().getId() + \", \\\"displayName\\\": \\\"\" + " + pWrap.getter()
-//                                    + "().getName() + \"\\\"}\" : \"{\\\"id\\\": \" + null + \", \\\"displayName\\\": \" + null + \"}\") + \"" + "\")");
-
                 } else if (pWrap.isDateTime()) {
                     toJson.getBody().addToStatements(
                             "sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + (" + pWrap.getter() + "() != null ? \"\\\"\" + "
@@ -172,8 +164,6 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
             toJson.getBody().addToStatements("sb.append(\"\\\"qualifiedName\\\": \\\"\" + getQualifiedName() + \"\\\"\")");
             toJson.getBody().addToStatements("sb.append(\", \")");
             toJson.getBody().addToStatements(URI_FOR_RESTFULL, "//PlaceHolder for restful\nsb.append(\"\\\"uri\\\": {}\")");
-//            toJson.getBody().addToStatements("sb.append(\", \")");
-//            toJson.getBody().addToStatements(METADATA_URI_FOR_RESTFULL, "//PlaceHolder for restful\nsb.append(\"\\\"tumlMetaDataUri\\\": {}\")");
         }
         toJson.getBody().addToStatements("sb.insert(0, \"{\")");
         toJson.getBody().addToStatements("sb.append(\"}\")");

@@ -67,7 +67,6 @@
 
                 var savedTumlTabViewManagers = this.clearTabsOnAddOneOrMany(newContextVertexId);
 
-                //If the context changed then a new container would have been created with buttons
                 if (!contextChanged && wasOne) {
                     this.addButtons();
                 }
@@ -516,28 +515,6 @@
             self.addQueryTab(true, new Tuml.Query(-1, 'New Query', 'New Query Description', 'self.name', 'ocl'));
         }
 
-        function validateMultiplicity(tumlTabManyViewManagers) {
-            var rowCount = 0;
-            for (var i = 0; i < tumlTabManyViewManagers.length; i++) {
-                var tumlTabManyViewManager = tumlTabManyViewManagers[i];
-                //Need to travel down components and validate their multiplicities
-                if (tumlTabManyViewManager instanceof Tuml.TumlTabManyViewManager && !tumlTabManyViewManager.oneManyOrQuery.forManyComponent) {
-
-                    var dataView = tumlTabManyViewManager.tumlTabGridManager.dataView;
-
-                    rowCount += dataView.getItems().length;
-                } else {
-                    return true;
-                }
-            }
-            if (rowCount < self.propertyNavigatingTo.lower || (self.propertyNavigatingTo.upper !== -1 && rowCount > self.propertyNavigatingTo.upper)) {
-                alert('multiplicity falls outside the valid range [' + self.propertyNavigatingTo.lower + '..' + self.propertyNavigatingTo.upper + ']');
-                return false;
-            } else {
-                return true;
-            }
-        }
-
         function refreshInternal(tumlUri, result, isOne, forCreation) {
             //A tab is created for every element in the array,
             //i.e. for every concrete subset of the many property
@@ -559,9 +536,9 @@
                 if (forCreation) {
                     self.saveNewRow();
                 }
+
                 previousTumlTabViewManager = tumlTabViewManager;
             }
-//            self.addButtons();
         }
 
         function reorderTabs() {

@@ -36,7 +36,6 @@
 
     function TumlBaseTabOneManager(tumlTabViewManager) {
 
-        var self = this;
         this.TumlBaseTabOneManager = "1.0.0";
         this.tumlTabViewManager = tumlTabViewManager;
 
@@ -51,23 +50,6 @@
         this.handleLookup = function (lookupUri, qualifiedName, loadDataCallback) {
             this.tumlTabViewManager.handleLookup(lookupUri, qualifiedName, loadDataCallback);
         }
-
-//        function findPropertyNavigatingTo(qualifiedName, metaDataNavigatingFrom) {
-//            if (metaDataNavigatingFrom == undefined) {
-//                return null;
-//            } else {
-//                //The property one is navigating from is in the metaDataNavigatingFrom,
-//                //Find the property with the qualifiedName for the metaDataNavigatingTo.qualifiedName
-//                for (var i = 0; i < metaDataNavigatingFrom.properties.length; i++) {
-//                    var property = metaDataNavigatingFrom.properties[i];
-//                    if (property.qualifiedName == qualifiedName) {
-//                        return property;
-//                    }
-//                }
-//                alert('Property navigatingTo not found!!!');
-//                return null;
-//            }
-//        }
 
         this.calculateContainsOne = function () {
             for (var i = 0; i < this.metaForData.properties.length; i++) {
@@ -254,9 +236,10 @@
     }
 
     TumlBaseTabOneManager.prototype.isPropertyForOnePage = function (property) {
-        return(!property.inverseComposite && (!property.composite && (property.oneToOne || property.manyToOne || property.manyPrimitive || property.manyEnumeration))
-            || (this.isForCreation && property.composite && property.lower > 0)
-            && property.name !== 'uri');
+        return (
+            (!property.associationClass && !property.inverseComposite && (!property.composite && (property.oneToOne || property.manyToOne || property.manyPrimitive || property.manyEnumeration)))
+            ||
+            (!property.associationClass && (this.isForCreation && property.composite && property.lower > 0) && property.name !== 'uri'));
     }
 
     TumlBaseTabOneManager.prototype.synchronizeModel = function (property) {
@@ -441,7 +424,7 @@
         }
         if (!property.composite) {
             $input.focus(
-                function() {
+                function () {
                     self.currentActiveProperty = property;
                 }
             );
@@ -734,7 +717,7 @@
 
     }
 
-    TumlBaseTabOneManager.prototype.commitCurrentEdit = function() {
+    TumlBaseTabOneManager.prototype.commitCurrentEdit = function () {
         //Check if it is a component
         if (!(this.tumlTabViewManager.parentTabContainerManager instanceof Tuml.TumlMainViewManager)) {
             //Only validate nthe field it it is non empty

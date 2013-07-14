@@ -146,11 +146,25 @@
         tabsNav.find('#' + this.getTabId() + 'save').removeAttr('disabled');
     }
 
+    TumlTabContainerManager.prototype.removeSelectButton = function () {
+        var tabsNav = this.parentTabContainer.find('.ui-tabs-nav');
+        //Remove all existing open many buttons
+        var buttons = tabsNav.find('.ui-button');
+        for (var i = 0; i < buttons.length; i++) {
+            var button = buttons[i];
+            if (button.id.indexOf('OpenMany', this.length - 'OpenMany'.length) !== -1) {
+                button.remove();
+            }
+        }
+    }
+
     TumlTabContainerManager.prototype.addSelectButton = function () {
         var self = this;
         var tabsNav = this.parentTabContainer.find('.ui-tabs-nav');
-        var tabsButtonDiv = tabsNav.find('#' + this.getTabId() + 'OpenMany');
-        tabsButtonDiv.remove();
+
+        //Remove all existing open many buttons
+        this.removeSelectButton();
+
         var tabContainerButton = tabsNav.find('#tabcontainer-button');
         var chooseOpenMany = $('<button />', {id: this.getTabId() + 'OpenMany'}).text('Open ' + this.tabTitleName).prependTo(tabContainerButton);
         chooseOpenMany.button().click(function (event) {
@@ -191,30 +205,40 @@
     TumlTabContainerManager.prototype.doCancel = function () {
         //Save the child's backedup data into the component's cell
         if (this.tumlTabViewManagers.length > 0) {
-            if (this.tabContainerProperty.upper == -1 || this.tabContainerProperty.upper > 1) {
-                var data = [];
+            if (this.tabContainerProperty == undefined) {
+                //Check that it is for a lookup
                 for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
                     var tumlTabViewManager = this.tumlTabViewManagers[i];
-                    if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager && tumlTabViewManager.tumlTabGridManager.dataView.getItems().length > 0) {
-                        data.push.apply(data, tumlTabViewManager.backupData);
+                    if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager && !tumlTabViewManager.oneManyOrQuery.forLookup) {
+                        throw 'A non lookup must have the tabContainerProperty set!';
                     }
                 }
-                this.setCellValue(data);
             } else {
-                if (this.tabContainerProperty.upper !== 1) {
-                    alert("upper suppose to be a one");
-                }
-                var firstTumlTabViewManager = null;
-                for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
-                    var tumlTabViewManager = this.tumlTabViewManagers[i];
-                    if (tumlTabViewManager instanceof Tuml.TumlTabOneViewManager) {
-                        if (firstTumlTabViewManager !== null) {
-                            alert("tabs gone wrong!");
+                if (this.tabContainerProperty.upper == -1 || this.tabContainerProperty.upper > 1) {
+                    var data = [];
+                    for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
+                        var tumlTabViewManager = this.tumlTabViewManagers[i];
+                        if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager && tumlTabViewManager.tumlTabGridManager.dataView.getItems().length > 0) {
+                            data.push.apply(data, tumlTabViewManager.backupData);
                         }
-                        firstTumlTabViewManager = tumlTabViewManager;
                     }
+                    this.setCellValue(data);
+                } else {
+                    if (this.tabContainerProperty.upper !== 1) {
+                        alert("upper suppose to be a one");
+                    }
+                    var firstTumlTabViewManager = null;
+                    for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
+                        var tumlTabViewManager = this.tumlTabViewManagers[i];
+                        if (tumlTabViewManager instanceof Tuml.TumlTabOneViewManager) {
+                            if (firstTumlTabViewManager !== null) {
+                                alert("tabs gone wrong!");
+                            }
+                            firstTumlTabViewManager = tumlTabViewManager;
+                        }
+                    }
+                    this.setCellValue(tumlTabViewManager.backupData);
                 }
-                this.setCellValue(tumlTabViewManager.backupData);
             }
         }
         this.destroyTabContainer();
@@ -242,7 +266,7 @@
                     selectedItems.push(tumlTabViewManager.tumlTabGridManager.dataView.getItem(row));
                 }
                 this.tumlTabGridManager.addItems(selectedItems);
-            } else if (this.tabContainerProperty.upper == -1 || this.tabContainerProperty.upper > 1) {
+            } else if (!this.tabContainerProperty.associationClass && (this.tabContainerProperty.upper == -1 || this.tabContainerProperty.upper > 1)) {
                 var data = [];
                 for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
                     var tumlTabViewManager = this.tumlTabViewManagers[i];
@@ -268,7 +292,7 @@
                 }
                 this.setCellValue(data);
             } else {
-                if (this.tabContainerProperty.upper !== 1) {
+                if (!this.tabContainerProperty.associationClass && this.tabContainerProperty.upper !== 1) {
                     alert("upper suppose to be a one");
                 }
                 var tumlTabViewManager;
@@ -330,8 +354,13 @@
             var tumlTabViewManager = this.tumlTabViewManagers[i];
             tumlTabViewManager.activeOpenTabsGrid();
         }
-        if (this.propertyNavigatingTo !== undefined && this.propertyNavigatingTo !== null && !this.propertyNavigatingTo.composite && (this.propertyNavigatingTo.upper === -1 || this.propertyNavigatingTo.upper > 1)  && !this.oneManyOrQuery.forLookup) {
+        if (this.propertyNavigatingTo !== undefined && this.propertyNavigatingTo !== null &&
+            !this.propertyNavigatingTo.associationClass && !this.propertyNavigatingTo.composite &&
+            (this.propertyNavigatingTo.upper === -1 || this.propertyNavigatingTo.upper > 1)  && !this.oneManyOrQuery.forLookup) {
+
             this.addSelectButton();
+        } else {
+            this.removeSelectButton();
         }
     }
 

@@ -362,23 +362,35 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
             tryInstantiate.getTryPart().addToLocals(constructor);
             tryInstantiate.getTryPart().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = constructor.newInstance(parentResource)");
             tryInstantiate.getTryPart().addToStatements("childResource.fromJson(propertyMap)");
+            tryInstantiate.getTryPart().addToStatements("StringBuilder jsonResult = new StringBuilder(childResource.toJsonWithoutCompositeParent(true))");
         } else {
             tryInstantiate.getTryPart().addToStatements("Long id = Long.valueOf((Integer)propertyMap.get(\"id\"))");
             tryInstantiate.getTryPart().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
             if (!pWrap.isAssociationClass()) {
                 tryInstantiate.getTryPart().addToStatements("parentResource." + pWrap.adder() + "(childResource)");
+                tryInstantiate.getTryPart().addToStatements("StringBuilder jsonResult = new StringBuilder(childResource.toJsonWithoutCompositeParent(true))");
             } else {
-                tryInstantiate.getTryPart().addToStatements("parentResource." + pWrap.adder() + "(childResource, null)");
+                PropertyWrapper otherEnd = new PropertyWrapper(pWrap.getOtherEnd());
+                tryInstantiate.getTryPart().addToStatements(otherEnd.getAssociationClassPathName().getLast() + " " + otherEnd.getAssociationClassFakePropertyName() +
+                        " = new " + otherEnd.getAssociationClassPathName().getLast() + "(true)");
+                tryInstantiate.getTryPart().addToStatements(otherEnd.getAssociationClassFakePropertyName() + ".fromJson((Map<String, Object>) propertyMap.get(\"" + otherEnd.getAssociationClassFakePropertyName() + "\"))");
+                tryInstantiate.getTryPart().addToStatements("parentResource." + pWrap.adder() + "(childResource, " + otherEnd.getAssociationClassFakePropertyName() + ")");
+                annotatedClass.addToImports(otherEnd.getAssociationClassPathName());
+                tryInstantiate.getTryPart().addToStatements("StringBuilder jsonResult = new StringBuilder(childResource.toJsonWithoutCompositeParent(true))");
+                tryInstantiate.getTryPart().addToStatements("jsonResult.delete(jsonResult.length() - 1, jsonResult.length())");
+                tryInstantiate.getTryPart().addToStatements("jsonResult.append(\", \\\"" + otherEnd.getAssociationClassFakePropertyName() + "\\\": \")");
+                tryInstantiate.getTryPart().addToStatements("jsonResult.append(" + otherEnd.getAssociationClassFakePropertyName() + ".toJsonWithoutCompositeParent(true))");
+                tryInstantiate.getTryPart().addToStatements("jsonResult.append(\"}\")");
             }
         }
-        tryInstantiate.getTryPart().addToStatements("String jsonResult = childResource.toJsonWithoutCompositeParent(true)");
+
         annotatedClass.addToImports(pWrap.javaBaseTypePath());
         if (pWrap.isOrdered()) {
             //TODO
         } else {
             //TODO
         }
-        tryInstantiate.getTryPart().addToStatements("sb.append(jsonResult)");
+        tryInstantiate.getTryPart().addToStatements("sb.append(jsonResult.toString())");
         tryInstantiate.setCatchParam(new OJParameter("e", "Exception"));
         tryInstantiate.getCatchPart().addToStatements("throw new RuntimeException(e)");
     }
