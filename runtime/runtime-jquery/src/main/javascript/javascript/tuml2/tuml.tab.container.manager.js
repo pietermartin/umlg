@@ -186,7 +186,7 @@
             }
             event.preventDefault();
         });
-        var cancelButton = $('<button />', {id: this.getTabId() + 'save'}).text('Cancel').appendTo(tabsButtonDiv);
+        var cancelButton = $('<button />', {id: this.getTabId() + 'cancel'}).text('Cancel').appendTo(tabsButtonDiv);
         cancelButton.button().click(function (event) {
             self.doCancel();
             event.preventDefault();

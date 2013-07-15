@@ -703,11 +703,13 @@
 
     TumlTabManyViewManager.prototype.updateOneForUpdate = function (id, displayName, fieldName, one) {
         var item = this.tumlTabGridManager.dataView.getItemById(id);
-        item[fieldName].id = one.id;
-        item[fieldName].displayName = displayName;
-        this.tumlTabGridManager.dataView.updateItem(item.id, item, fieldName);
-        this.tumlTabGridManager.grid.invalidateAllRows();
-        this.tumlTabGridManager.grid.render();
+        if (item !== undefined) {
+            item[fieldName].id = one.id;
+            item[fieldName].displayName = displayName;
+            this.tumlTabGridManager.dataView.updateItem(item.id, item, fieldName);
+            this.tumlTabGridManager.grid.invalidateAllRows();
+            this.tumlTabGridManager.grid.render();
+        }
     }
 
     TumlTabManyViewManager.prototype.updateOne = function (fakeId, fieldName, one, indexForFakeId) {
@@ -840,6 +842,15 @@
             this.tabTitleName = this.result.meta.to.name;
         }
         TumlBaseTabViewManager.prototype.createTab.call(this, result, forCreation);
+
+        if (this.oneManyOrQuery.forLookup) {
+            //Change the save button's label to select
+            var tabsNav = this.parentTabContainer.find('.ui-tabs-nav');
+            var tabContainerButton = tabsNav.find('#tabcontainer-button');
+            var saveButton = tabContainerButton.find('#' + this.parentTabContainerManager.getTabId() + 'save');
+            saveButton.find('span').text('Select');
+        }
+
         this.parentTabContainer.tabs("option", "active", this.parentTabContainerManager.tumlTabViewManagers.length - 1);
         this.createGrid(result);
     }

@@ -842,7 +842,9 @@
 
     TumlBaseGridManager.prototype.isPropertyForGrid = function (property) {
 
-        return (property.associationClass ||
+        //this.contextVertexId  !== null && property.associationClass ensures that associationClass properties appear but not from the root.
+        //from the root there is no association
+        return ((this.contextVertexId  !== null && property.associationClass) ||
                 (property.composite && property.lower > 0) ||
                 (!property.composite && !property.inverseComposite &&
                     ((property.oneToOne || property.manyToOne) || property.manyPrimitive || property.manyEnumeration)));

@@ -48,6 +48,7 @@ public class ClassInterfacePropertyLookupGenerator extends BaseVisitor implement
                 Set<Classifier> concreteImplementations = TumlClassOperations.getConcreteRealization((Interface) propertyWrapper.getType());
                 for (Classifier c : concreteImplementations) {
                     annotatedClass.addToImports(TumlClassOperations.getPathName(c));
+                    //TODO implement filter out elements if one already taken
                     lookupOnParent.getBody().addToStatements("result.addAll(" + TumlClassOperations.getMetaClassName(c) + ".getInstance().getAllInstances())");
                     annotatedClass.addToImports(TumlClassOperations.getMetaClassPathName(c));
                 }
