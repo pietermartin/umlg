@@ -668,7 +668,7 @@
             if (this.metaForData.to.qualifiedName == item.qualifiedName) {
                 for (var k = 0; k < this.metaForData.to.properties.length; k++) {
                     var property = this.metaForData.to.properties[k];
-                    if (!property.inverseComposite && property.lower > 0) {
+                    if ((!property.inverseComposite && property.lower > 0) || property.associationClass) {
                         if (property.upper === -1 || property.upper > 1) {
                             if (item[property.name] == undefined || item[property.name].length === 0) {
                                 var validationResult = new Tuml.ValidationResult(i, property.name);

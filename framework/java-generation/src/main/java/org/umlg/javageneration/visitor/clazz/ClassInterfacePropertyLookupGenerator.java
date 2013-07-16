@@ -46,10 +46,29 @@ public class ClassInterfacePropertyLookupGenerator extends BaseVisitor implement
                 result.setInitExp("new " + TinkerGenerationUtil.tumlMemorySet.getCopy().addToGenerics(TumlClassOperations.getPathName(propertyWrapper.getType()).getLast()).getLast() + "()");
                 lookupOnParent.getBody().addToLocals(result);
                 Set<Classifier> concreteImplementations = TumlClassOperations.getConcreteRealization((Interface) propertyWrapper.getType());
+                int cnt = 1;
                 for (Classifier c : concreteImplementations) {
                     annotatedClass.addToImports(TumlClassOperations.getPathName(c));
-                    //TODO implement filter out elements if one already taken
-                    lookupOnParent.getBody().addToStatements("result.addAll(" + TumlClassOperations.getMetaClassName(c) + ".getInstance().getAllInstances())");
+
+                    if (propertyWrapper.isUnique()) {
+                        PropertyWrapper otherEnd = new PropertyWrapper(propertyWrapper.getOtherEnd());
+                        if (propertyWrapper.isOneToOne() || otherEnd.isOne()) {
+                            lookupOnParent.getBody().addToStatements("Filter<" + propertyWrapper.javaBaseTypePath().getLast() + "> filter" + cnt + " = new Filter<" +
+                                    propertyWrapper.javaBaseTypePath().getLast() + ">() {\n    @Override\n    public boolean filter(" +
+                                    propertyWrapper.javaBaseTypePath().getLast() + " entity){\n        return entity." +
+                                    otherEnd.getter() + "() == null;\n    }\n}");
+                        } else {
+                            lookupOnParent.getBody().addToStatements("Filter<" + propertyWrapper.javaBaseTypePath().getLast() + "> filter" + cnt + " = new Filter<" +
+                                    propertyWrapper.javaBaseTypePath().getLast() + ">() {\n    @Override\n    public boolean filter(" +
+                                    propertyWrapper.javaBaseTypePath().getLast() + " entity){\n        return !entity." +
+                                    otherEnd.getter() + "().contains(" + otherEnd.javaBaseTypePath().getLast() + ".this);\n    }\n}");
+                        }
+                        lookupOnParent.getBody().addToStatements("result.addAll(" + TumlClassOperations.getMetaClassName(c) + ".getInstance().getAllInstances(filter" + cnt++ + "))");
+
+                    } else {
+                        lookupOnParent.getBody().addToStatements("result.addAll(" + TumlClassOperations.getMetaClassName(c) + ".getInstance().getAllInstances())");
+                    }
+
                     annotatedClass.addToImports(TumlClassOperations.getMetaClassPathName(c));
                 }
                 lookupOnParent.getBody().addToStatements("return result");
