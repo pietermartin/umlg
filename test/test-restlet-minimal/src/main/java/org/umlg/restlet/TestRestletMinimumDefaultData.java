@@ -1,6 +1,9 @@
 package org.umlg.restlet;
 
 import org.umlg.*;
+import org.umlg.associationclass.Company;
+import org.umlg.associationclass.Job;
+import org.umlg.associationclass.Person;
 import org.umlg.runtime.adaptor.DefaultDataCreator;
 import org.umlg.runtime.adaptor.GraphDb;
 

@@ -11,7 +11,10 @@
       <emfPageIdentifier href="test-restlet-minimal.notation#_PabVgFVzEeKYaem_7BA6sA"/>
     </availablePage>
     <availablePage>
-      <emfPageIdentifier href="test-restlet-minimal.notation#_fdk9kN2-EeK7O_6WBh_v7w"/>
+      <emfPageIdentifier href="test-restlet-minimal.notation#_rJlEwO6gEeKXi9pM4yg14w"/>
+    </availablePage>
+    <availablePage>
+      <emfPageIdentifier href="test-restlet-minimal.notation#_wyLsAO6gEeKXi9pM4yg14w"/>
     </availablePage>
   </pageList>
   <sashModel currentSelection="//@sashModel/@windows.0/@children.0">
@@ -27,7 +30,10 @@
           <emfPageIdentifier href="test-restlet-minimal.notation#_PabVgFVzEeKYaem_7BA6sA"/>
         </children>
         <children>
-          <emfPageIdentifier href="test-restlet-minimal.notation#_fdk9kN2-EeK7O_6WBh_v7w"/>
+          <emfPageIdentifier href="test-restlet-minimal.notation#_rJlEwO6gEeKXi9pM4yg14w"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="test-restlet-minimal.notation#_wyLsAO6gEeKXi9pM4yg14w"/>
         </children>
       </children>
     </windows>

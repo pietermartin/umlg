@@ -439,11 +439,20 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
                     block.addToStatements("json.append(\"{\\\"data\\\": [\")");
                 }
                 if (pWrap.isOne() || asAssociationClass) {
-                    OJIfStatement ifOneInstanceOf = new OJIfStatement("parentResource." + pWrap.getter() + "() instanceof "
-                            + TumlClassOperations.getPathName(concreteClassifierTo).getLast());
-                    ifOneInstanceOf.addToThenPart("json.append(" + TinkerGenerationUtil.ToJsonUtil.getLast() + ".toJsonWithoutCompositeParent(parentResource." + pWrap.getter() + "()))");
-                    ifOneInstanceOf.addToElsePart("json.append(\"null\")");
-                    block.addToStatements(ifOneInstanceOf);
+
+                    if (asAssociationClass) {
+                        OJIfStatement ifOneInstanceOf = new OJIfStatement("parentResource." + pWrap.getter() + "() instanceof "
+                                + TumlClassOperations.getPathName(concreteClassifierTo).getLast());
+                        ifOneInstanceOf.addToThenPart("json.append(" + TinkerGenerationUtil.ToJsonUtil.getLast() + ".toJsonWithoutCompositeParent(parentResource." + pWrap.getter() + "()))");
+                        ifOneInstanceOf.addToElsePart("json.append(\"null\")");
+                        block.addToStatements(ifOneInstanceOf);
+                    } else {
+                        OJIfStatement ifOneInstanceOf = new OJIfStatement("parentResource." + pWrap.associationClassGetter() + "() instanceof "
+                                + TumlClassOperations.getPathName(concreteClassifierTo).getLast());
+                        ifOneInstanceOf.addToThenPart("json.append(" + TinkerGenerationUtil.ToJsonUtil.getLast() + ".toJsonWithoutCompositeParent(parentResource." + pWrap.associationClassGetter() + "()))");
+                        ifOneInstanceOf.addToElsePart("json.append(\"null\")");
+                        block.addToStatements(ifOneInstanceOf);
+                    }
                 } else {
                     block.addToStatements("json.append(" + TinkerGenerationUtil.ToJsonUtil.getLast() + ".toJsonWithoutCompositeParent(parentResource.get" + pWrap.getAssociationClassPathName().getLast() + "().select(new "
                             + TinkerGenerationUtil.BooleanExpressionEvaluator.getCopy().addToGenerics(pWrap.getAssociationClassPathName()).getLast()

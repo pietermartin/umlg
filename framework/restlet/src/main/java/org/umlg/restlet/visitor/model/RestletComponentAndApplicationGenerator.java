@@ -163,12 +163,12 @@ public class RestletComponentAndApplicationGenerator extends BaseVisitor impleme
         application.addToImports(TumlRestletGenerationUtil.TumlGuiServerResource);
 
         createInboundRoot.getBody().addToStatements("//Directory slickgrid = new Directory(getContext(), \"clap://javascript/javascript/\")");
-        createInboundRoot.getBody().addToStatements("Directory slickgrid = new Directory(getContext(), \"file:///home/pieter/Downloads/umlg/runtime/runtime-jquery/src/main/javascript/javascript\")");
+        createInboundRoot.getBody().addToStatements("Directory slickgrid = new Directory(getContext(), \"file:///home/pieter/Downloads/umlg/runtime/runtime-ui/src/main/javascript/javascript\")");
         createInboundRoot.getBody().addToStatements("slickgrid.setListingAllowed(true)");
         createInboundRoot.getBody().addToStatements("router.attach(\"/javascript/\", slickgrid)");
 
         createInboundRoot.getBody().addToStatements("//Directory css = new Directory(getContext(), \"clap://javascript/css\")");
-        createInboundRoot.getBody().addToStatements("Directory css = new Directory(getContext(), \"file:///home/pieter/Downloads/umlg/runtime/runtime-jquery/src/main/javascript/css\")");
+        createInboundRoot.getBody().addToStatements("Directory css = new Directory(getContext(), \"file:///home/pieter/Downloads/umlg/runtime/runtime-ui/src/main/javascript/css\")");
         createInboundRoot.getBody().addToStatements("css.setListingAllowed(true)");
         createInboundRoot.getBody().addToStatements("router.attach(\"/css/\", css)");
 

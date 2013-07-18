@@ -483,11 +483,19 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                     ifNotNull.getThenPart().addToLocals(field);
 
                     if (pWrap.isOne() && !pWrap.isDataType() && !pWrap.isEnumeration() && !pWrap.isComponent()) {
-
-                        OJIfStatement ifSetToNull = new OJIfStatement(field.getName() + ".isEmpty() || " + field.getName() + ".get(\"id\") == null",
-                                pWrap.setter() + "(null)");
-                        ifSetToNull.addToElsePart(pWrap.setter() + "((" + pWrap.javaBaseTypePath().getLast() + ")" + TinkerGenerationUtil.graphDbAccess + ".instantiateClassifier(((Number)"
-                                + pWrap.fieldname() + "Map.get(\"id\")).longValue()))");
+                        OJIfStatement ifSetToNull;
+                        if (pWrap.isAssociationClass()) {
+                            //TODO maybe this should be a remover instead???
+                            ifSetToNull = new OJIfStatement(field.getName() + ".isEmpty() || " + field.getName() + ".get(\"id\") == null",
+                                    pWrap.setter() + "(null, null)");
+                            ifSetToNull.addToElsePart(pWrap.setter() + "((" + pWrap.javaBaseTypePath().getLast() + ")" + TinkerGenerationUtil.graphDbAccess + ".instantiateClassifier(((Number)"
+                                    + pWrap.fieldname() + "Map.get(\"id\")).longValue()), //TODO)");
+                        } else {
+                            ifSetToNull = new OJIfStatement(field.getName() + ".isEmpty() || " + field.getName() + ".get(\"id\") == null",
+                                    pWrap.setter() + "(null)");
+                            ifSetToNull.addToElsePart(pWrap.setter() + "((" + pWrap.javaBaseTypePath().getLast() + ")" + TinkerGenerationUtil.graphDbAccess + ".instantiateClassifier(((Number)"
+                                    + pWrap.fieldname() + "Map.get(\"id\")).longValue()))");
+                        }
                         annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
                         ifNotNull.addToThenPart(ifSetToNull);
                         fromJson.getBody().addToStatements(ifInMap);
@@ -573,7 +581,11 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                     } else {
                         ifNotNull.addToThenPart(pWrap.setter() + "(" + field.getName() + ")");
                     }
-                    ifNotNull.addToElsePart(pWrap.setter() + "(null)");
+                    if (pWrap.isAssociationClass()) {
+                        ifNotNull.addToElsePart(pWrap.setter() + "(null, null)");
+                    } else {
+                        ifNotNull.addToElsePart(pWrap.setter() + "(null)");
+                    }
                 }
             }
         }

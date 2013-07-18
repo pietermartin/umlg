@@ -106,19 +106,37 @@ public class RestletFromJsonCreator extends BaseVisitor implements Visitor<Class
 
                     if (pWrap.isOne() && !pWrap.isDataType() && !pWrap.isEnumeration() && !pWrap.isComponent()) {
 
-                        OJIfStatement ifSetToNull = new OJIfStatement(field.getName() + ".isEmpty() || " + field.getName() + ".get(\"id\") == null",
-                                pWrap.setter() + "(null)");
+                        OJIfStatement ifSetToNull;
+                        if (pWrap.isAssociationClass()) {
+                            ifSetToNull = new OJIfStatement(field.getName() + ".isEmpty() || " + field.getName() + ".get(\"id\") == null",
+                                    pWrap.setter() + "(null, null)");
 
-                        ifSetToNull.addToElsePart("Long id");
-                        ifSetToNull.addToElsePart("Object idFromMap = " + field.getName() + ".get(\"id\")");
-                        OJIfStatement ifIdLong = new OJIfStatement("idFromMap instanceof Number");
-                        ifIdLong.addToThenPart("id = ((Number)idFromMap).longValue()");
-                        ifIdLong.addToElsePart("id = " + TinkerGenerationUtil.TumlTmpIdManager.getLast() + ".INSTANCE.get((String)idFromMap)");
-                        ifSetToNull.addToElsePart(ifIdLong);
+                            ifSetToNull.addToElsePart("Long id");
+                            ifSetToNull.addToElsePart("Object idFromMap = " + field.getName() + ".get(\"id\")");
+                            OJIfStatement ifIdLong = new OJIfStatement("idFromMap instanceof Number");
+                            ifIdLong.addToThenPart("id = ((Number)idFromMap).longValue()");
+                            ifIdLong.addToElsePart("id = " + TinkerGenerationUtil.TumlTmpIdManager.getLast() + ".INSTANCE.get((String)idFromMap)");
+                            ifSetToNull.addToElsePart(ifIdLong);
+
+                            //Create an association class instance
+                            ifSetToNull.addToElsePart(pWrap.getAssociationClassPathName().getLast() + " " + pWrap.getAssociationClassFakePropertyName() + " = new "
+                                    + pWrap.getAssociationClassPathName().getLast() + "(true)");
+                            ifSetToNull.addToElsePart(pWrap.getAssociationClassFakePropertyName() + ".fromJson((Map<String, Object>) propertyMap.get(\"" + pWrap.getAssociationClassFakePropertyName() + "\"))");
+                            ifSetToNull.addToElsePart(pWrap.setter() + "((" + pWrap.javaBaseTypePath().getLast() + ")" + TinkerGenerationUtil.graphDbAccess + ".instantiateClassifier(id), " + pWrap.getAssociationClassFakePropertyName() + ")");
+                        } else {
+                            ifSetToNull = new OJIfStatement(field.getName() + ".isEmpty() || " + field.getName() + ".get(\"id\") == null",
+                                    pWrap.setter() + "(null)");
+
+                            ifSetToNull.addToElsePart("Long id");
+                            ifSetToNull.addToElsePart("Object idFromMap = " + field.getName() + ".get(\"id\")");
+                            OJIfStatement ifIdLong = new OJIfStatement("idFromMap instanceof Number");
+                            ifIdLong.addToThenPart("id = ((Number)idFromMap).longValue()");
+                            ifIdLong.addToElsePart("id = " + TinkerGenerationUtil.TumlTmpIdManager.getLast() + ".INSTANCE.get((String)idFromMap)");
+                            ifSetToNull.addToElsePart(ifIdLong);
+                            ifSetToNull.addToElsePart(pWrap.setter() + "((" + pWrap.javaBaseTypePath().getLast() + ")" + TinkerGenerationUtil.graphDbAccess + ".instantiateClassifier(id))");
+                        }
 
                         annotatedClass.addToImports(TinkerGenerationUtil.TumlTmpIdManager);
-
-                        ifSetToNull.addToElsePart(pWrap.setter() + "((" + pWrap.javaBaseTypePath().getLast() + ")" + TinkerGenerationUtil.graphDbAccess + ".instantiateClassifier(id))");
                         annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
                         ifNotNull.addToThenPart(ifSetToNull);
                         fromJson.getBody().addToStatements(ifInMap);
@@ -128,7 +146,15 @@ public class RestletFromJsonCreator extends BaseVisitor implements Visitor<Class
 
                         OJField component = new OJField(pWrap.fieldname(), pWrap.javaBaseTypePath());
                         ifNotNull.getThenPart().addToLocals(component);
-                        OJIfStatement ojIfStatement = new OJIfStatement(pWrap.fieldname() + "Map.get(\"id\") instanceof Number");
+
+                        OJIfStatement ojIfStatement;
+                        //TODO
+                        if (pWrap.isAssociationClass()) {
+
+                        } else {
+
+                        }
+                        ojIfStatement = new OJIfStatement(pWrap.fieldname() + "Map.get(\"id\") instanceof Number");
                         OJSimpleStatement ojSimpleStatementConstructor = new OJSimpleStatement(pWrap.fieldname() + " = " + TinkerGenerationUtil.graphDbAccess
                                 + ".instantiateClassifier(((Number)" + pWrap.fieldname() + "Map.get(\"id\")).longValue())");
                         annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
@@ -178,7 +204,11 @@ public class RestletFromJsonCreator extends BaseVisitor implements Visitor<Class
                     } else {
                         throw new IllegalStateException("Should not happen");
                     }
-                    ifNotNull.addToElsePart(pWrap.setter() + "(null)");
+                    if (pWrap.isAssociationClass()) {
+                        ifNotNull.addToElsePart(pWrap.setter() + "(null, null)");
+                    } else {
+                        ifNotNull.addToElsePart(pWrap.setter() + "(null)");
+                    }
                 }
             }
         }

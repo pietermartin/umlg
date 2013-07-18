@@ -668,7 +668,18 @@
             if (this.metaForData.to.qualifiedName == item.qualifiedName) {
                 for (var k = 0; k < this.metaForData.to.properties.length; k++) {
                     var property = this.metaForData.to.properties[k];
-                    if ((!property.inverseComposite && property.lower > 0) || property.associationClass) {
+
+                    var validateRequired = false;
+                    //Root level association classes are skipped as from the root there is no association
+                    if (this.metaForData.from.name == 'Root' && property.associationClass) {
+                        validateRequired = false;
+                    } else  if (this.metaForData.from.name !== 'Root' && property.associationClass) {
+                        validateRequired = true;
+                    } else if (!property.inverseComposite && property.lower > 0) {
+                        validateRequired = true;
+                    }
+
+                    if (validateRequired) {
                         if (property.upper === -1 || property.upper > 1) {
                             if (item[property.name] == undefined || item[property.name].length === 0) {
                                 var validationResult = new Tuml.ValidationResult(i, property.name);
@@ -689,6 +700,28 @@
                             }
                         }
                     }
+
+//                    if ((!property.inverseComposite && property.lower > 0) || (this.metaForData.from.name !== 'Root' && property.associationClass)) {
+//                        if (property.upper === -1 || property.upper > 1) {
+//                            if (item[property.name] == undefined || item[property.name].length === 0) {
+//                                var validationResult = new Tuml.ValidationResult(i, property.name);
+//                                validationResult.row = this.tumlTabGridManager.dataView.getIdxById(item.id);
+//                                validationResult.property = property;
+//                                validationResult.qualifiedName = property.qualifiedName;
+//                                validationResult.message = property.name + " is a required field!";
+//                                validationResults.push(validationResult);
+//                            }
+//                        } else {
+//                            if (item[property.name] == null) {
+//                                var validationResult = new Tuml.ValidationResult(i, property.name);
+//                                validationResult.row = this.tumlTabGridManager.dataView.getIdxById(item.id);
+//                                validationResult.property = property;
+//                                validationResult.qualifiedName = property.qualifiedName;
+//                                validationResult.message = property.name + " is a required field!";
+//                                validationResults.push(validationResult);
+//                            }
+//                        }
+//                    }
                 }
             }
         }

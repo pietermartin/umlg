@@ -844,10 +844,21 @@
 
         //this.contextVertexId  !== null && property.associationClass ensures that associationClass properties appear but not from the root.
         //from the root there is no association
-        return ((this.contextVertexId  !== null && property.associationClass) ||
-                (property.composite && property.lower > 0) ||
-                (!property.composite && !property.inverseComposite &&
-                    ((property.oneToOne || property.manyToOne) || property.manyPrimitive || property.manyEnumeration)));
+        if (this.contextVertexId !== null && property.associationClass) {
+            return true;
+        } else if (this.contextVertexId === null && property.associationClass) {
+            return false;
+        } else if (((property.composite && property.lower > 0) ||
+            (!property.composite && !property.inverseComposite && ((property.oneToOne || property.manyToOne) || property.manyPrimitive || property.manyEnumeration)))) {
+
+            return true;
+        } else {
+            return false;
+        }
+
+//        return (this.contextVertexId !== null && property.associationClass) ||
+//                    ((property.composite && property.lower > 0) ||
+//                     (!property.composite && !property.inverseComposite && ((property.oneToOne || property.manyToOne) || property.manyPrimitive || property.manyEnumeration)));
 
 
     }
