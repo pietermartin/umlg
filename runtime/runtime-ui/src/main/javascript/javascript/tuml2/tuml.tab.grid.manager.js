@@ -440,7 +440,7 @@
                         column.options.property.lower > 0 && ((column.options.property.upper > 1) || column.options.property.upper === -1)) {
                         //Component many
                         var data = [];
-                        if (isCellEditable(args.row, args.cell, self.dataView.getItem(args.row))) {
+                        if (isCellEditableWithColumn(column, args.row, self.dataView.getItem(args.row))) {
                             if (self.dataView.getItem(args.row) !== undefined && self.dataView.getItem(args.row) !== null && self.dataView.getItem(args.row)[column.name] !== undefined && self.dataView.getItem(args.row)[column.name] !== null) {
                                 //Get the data currently for the component
                                 data = self.dataView.getItem(args.row)[column.name];
@@ -452,7 +452,7 @@
                         column.options.property.lower === 1 && column.options.property.upper === 1) {
                         //Component one
                         var data = null;
-                        if (isCellEditable(args.row, args.cell, self.dataView.getItem(args.row))) {
+                        if (isCellEditableWithColumn(column, args.row, self.dataView.getItem(args.row))) {
                             if (self.dataView.getItem(args.row) !== undefined && self.dataView.getItem(args.row) !== null && self.dataView.getItem(args.row)[column.name] !== undefined && self.dataView.getItem(args.row)[column.name] !== null) {
                                 //Get the data currently for the component
                                 data = self.dataView.getItem(args.row)[column.name];
@@ -461,10 +461,10 @@
                             }
                             self.tumlTabViewManager.openOneComponent(data, args, column.options.property.tumlUri, column.options.property);
                         }
-                    } else if (column.options.property.associationClass) {
+                    } else if (column.options.property.associationClassOne) {
                         //Component one
                         var data = null;
-                        if (isCellEditable(args.row, args.cell, self.dataView.getItem(args.row))) {
+                        if (isCellEditableWithColumn(column, args.row, self.dataView.getItem(args.row))) {
                             if (self.dataView.getItem(args.row) !== undefined && self.dataView.getItem(args.row) !== null && self.dataView.getItem(args.row)[column.name] !== undefined && self.dataView.getItem(args.row)[column.name] !== null) {
                                 //Get the data currently for the component
                                 data = self.dataView.getItem(args.row)[column.name];
@@ -483,6 +483,12 @@
                 var column = self.grid.getColumns()[args.cell];
                 self.dataView.updateItem(args.item.id, args.item, column.name);
                 var property = column.options.property;
+
+                //For a to one that is an association class the association class must be cleared.
+                //This is because setting the one means a new association/class needs to be created
+                if (!property.associationClassOne && property.memberEndOfAssociationClass) {
+                    self.dataView.updateItem(args.item.id, args.item, property.associationClassPropertyName);
+                }
                 if (!property.composite && !property.inverseComposite && !property.onePrimitive && !property.oneEnumeration && property.upper === 1) {
                     if (self.tumlTabViewManager instanceof Tuml.TumlTabManyComponentViewManager) {
                         self.updateDataModelForOneToOne();
@@ -599,20 +605,35 @@
                 }
             });
 
-            function isCellEditable(row, cell, item) {
-                for (var j = 0; j < self.grid.getColumns().length; j++) {
-                    var column = self.grid.getColumns()[j];
-                    if (cell === j && column.name !== 'id' && column.name !== 'uri' && column.name !== 'delete') {
-                        if (!column.options.property.readOnly) {
-                            var property = column.options.property;
-                            if ((property.composite && property.lower >= 1) || property.associationClass) {
-                                if (row >= self.dataView.getItems().length || self.dataView.getNewItems().indexOf(item) !== -1) {
+            function isCellEditableWithColumn(column, row, item) {
+                if (column.name !== 'id' && column.name !== 'uri' && column.name !== 'delete' && !column.options.property.readOnly) {
+                    var property = column.options.property;
+                    if ((property.composite && property.lower >= 1) || property.associationClassOne) {
+                        if (row >= self.dataView.getItems().length || self.dataView.getNewItems().indexOf(item) !== -1) {
+                            return true;
+                        } else {
+                            if (property.associationClassOne) {
+                                //Check if the association class has been cleared
+                                var associationClass = item[property.associationClassPropertyName];
+                                if (associationClass !== undefined && (associationClass.id == null ||  (isNaN(associationClass.id) && associationClass.id.indexOf('fake') !== -1))) {
                                     return true;
                                 } else {
                                     return false;
                                 }
+                            } else {
+                                return false;
                             }
                         }
+                    }
+                }
+                return true;
+            };
+
+            function isCellEditable(row, cell, item) {
+                for (var j = 0; j < self.grid.getColumns().length; j++) {
+                    var column = self.grid.getColumns()[j];
+                    if (cell === j) {
+                        return isCellEditableWithColumn(column, row, item);
                     }
                     if (j > cell) {
                         break;
@@ -620,6 +641,28 @@
                 }
                 return true;
             };
+
+//            function isCellEditable(row, cell, item) {
+//                for (var j = 0; j < self.grid.getColumns().length; j++) {
+//                    var column = self.grid.getColumns()[j];
+//                    if (cell === j && column.name !== 'id' && column.name !== 'uri' && column.name !== 'delete') {
+//                        if (!column.options.property.readOnly) {
+//                            var property = column.options.property;
+//                            if ((property.composite && property.lower >= 1) || property.associationClass) {
+//                                if (row >= self.dataView.getItems().length || self.dataView.getNewItems().indexOf(item) !== -1) {
+//                                    return true;
+//                                } else {
+//                                    return false;
+//                                }
+//                            }
+//                        }
+//                    }
+//                    if (j > cell) {
+//                        break;
+//                    }
+//                }
+//                return true;
+//            };
 
             function isClickOnNewRow(row) {
                 if (row >= self.dataView.getItems().length) {
@@ -797,29 +840,44 @@
 
             for (var i = 0; i < self.localMetaForData.properties.length; i++) {
                 var property = self.localMetaForData.properties[i];
-                if (property.associationClass || (property.composite && property.lower > 0)) {
-                    if (item === undefined || this.getNewItems().indexOf(item) !== -1) {
-                        //Check if the component has validation errors
-                        if (self.tumlTabViewManager.validationResults !== null && self.tumlTabViewManager.validationResults.length > 0) {
+                //skip primitive properties
+                if (!property.onePrimitive && !property.manyPrimitive && !property.oneEnumeration && !property.manyEnumeration && property.dataTypeEnum === null) {
 
-                            var found = false;
-                            for (var j = 0; j < self.tumlTabViewManager.validationResults.length; j++) {
-                                var validationResult = self.tumlTabViewManager.validationResults[j];
-                                if (validationResult.property === property.name) {
-                                    found = true;
-                                    column[property.name] = {"formatter": TumlSlick.Formatters.TumlValidationFailedFormatter};
-                                    break;
+                    if (property.associationClassOne || (property.composite && property.lower > 0)) {
+                        if (item === undefined || this.getNewItems().indexOf(item) !== -1) {
+                            //Check if the component has validation errors
+                            if (self.tumlTabViewManager.validationResults !== null && self.tumlTabViewManager.validationResults.length > 0) {
+
+                                var found = false;
+                                for (var j = 0; j < self.tumlTabViewManager.validationResults.length; j++) {
+                                    var validationResult = self.tumlTabViewManager.validationResults[j];
+                                    if (validationResult.property === property.name) {
+                                        found = true;
+                                        column[property.name] = {"formatter": TumlSlick.Formatters.TumlValidationFailedFormatter};
+                                        break;
+                                    }
+                                }
+                                if (!found) {
+                                    column[property.name] = {"formatter": TumlSlick.Formatters.TumlRequired};
+                                }
+
+                            } else {
+                                if (property.associationClassOne) {
+                                    column[property.name] = {"formatter": TumlSlick.Formatters.TumlToAssociationClassRequiredFormatter};
+                                } else {
+                                    column[property.name] = {"formatter": TumlSlick.Formatters.TumlRequired};
                                 }
                             }
-                            if (!found) {
-                                column[property.name] = {"formatter": TumlSlick.Formatters.TumlRequired};
-                            }
-
                         } else {
-                            column[property.name] = {"formatter": TumlSlick.Formatters.TumlRequired};
+                            if (property.associationClassOne && !property.memberEndOfAssociationClass && (property.manyToOne || property.oneToOne)) {
+                                //this is the fake property pointing to the association class
+                                column[property.name] = {"formatter": TumlSlick.Formatters.TumlToAssociationClassRequiredFormatter};
+                            } else {
+                                column[property.name] = {"formatter": TumlSlick.Formatters.TumlComponentFormatter};
+                            }
                         }
                     } else {
-                        column[property.name] = {"formatter": TumlSlick.Formatters.TumlComponentFormatter};
+                        column[property.name] = {"formatter": selectFormatter(property, isNew, isUpdated)};
                     }
                 } else {
                     column[property.name] = {"formatter": selectFormatter(property, isNew, isUpdated)};
@@ -844,22 +902,18 @@
 
         //this.contextVertexId  !== null && property.associationClass ensures that associationClass properties appear but not from the root.
         //from the root there is no association
-        if (this.contextVertexId !== null && property.associationClass) {
+        if (this.contextVertexId !== null && property.associationClassOne) {
             return true;
-        } else if (this.contextVertexId === null && property.associationClass) {
+        } else if (!property.composite && property.lower > 0 && !property.associationClassOne) {
+            return true;
+        } else if (this.contextVertexId === null && !property.associationClassOne) {
             return false;
         } else if (((property.composite && property.lower > 0) ||
             (!property.composite && !property.inverseComposite && ((property.oneToOne || property.manyToOne) || property.manyPrimitive || property.manyEnumeration)))) {
-
             return true;
         } else {
             return false;
         }
-
-//        return (this.contextVertexId !== null && property.associationClass) ||
-//                    ((property.composite && property.lower > 0) ||
-//                     (!property.composite && !property.inverseComposite && ((property.oneToOne || property.manyToOne) || property.manyPrimitive || property.manyEnumeration)));
-
 
     }
 

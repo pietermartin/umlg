@@ -202,7 +202,7 @@
         this.parentTabContainerManager.updateDataModelForOneToOneForUpdatedItem(qualifiedName, id, displayName, fieldName, one);
     }
 
-    TumlTabContainerManager.prototype.doCancel = function () {
+    TumlTabContainerManager.prototype.doInternalCancel = function () {
         //Save the child's backedup data into the component's cell
         if (this.tumlTabViewManagers.length > 0) {
             if (this.tabContainerProperty == undefined) {
@@ -242,9 +242,10 @@
             }
         }
         this.destroyTabContainer();
-        this.tumlTabGridManager.active = true;
+        if (this instanceof Tuml.TumlTabManyViewManager) {
+            this.tumlTabGridManager.active = true;
+        }
         $('#slickGrid' + this.tabId).show();
-
         //enable the save button
         this.parentTabContainerManager.enableButtons();
     }
@@ -266,7 +267,7 @@
                     selectedItems.push(tumlTabViewManager.tumlTabGridManager.dataView.getItem(row));
                 }
                 this.tumlTabGridManager.addItems(selectedItems);
-            } else if (!this.tabContainerProperty.associationClass && (this.tabContainerProperty.upper == -1 || this.tabContainerProperty.upper > 1)) {
+            } else if (!this.tabContainerProperty.associationClassOne && (this.tabContainerProperty.upper == -1 || this.tabContainerProperty.upper > 1)) {
                 var data = [];
                 for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
                     var tumlTabViewManager = this.tumlTabViewManagers[i];
@@ -292,7 +293,7 @@
                 }
                 this.setCellValue(data);
             } else {
-                if (!this.tabContainerProperty.associationClass && this.tabContainerProperty.upper !== 1) {
+                if (!this.tabContainerProperty.associationClassOne && this.tabContainerProperty.upper !== 1) {
                     alert("upper suppose to be a one");
                 }
                 var tumlTabViewManager;
@@ -355,7 +356,8 @@
             tumlTabViewManager.activeOpenTabsGrid();
         }
         if (this.propertyNavigatingTo !== undefined && this.propertyNavigatingTo !== null &&
-            !this.propertyNavigatingTo.associationClass && !this.propertyNavigatingTo.composite &&
+            !this.propertyNavigatingTo.associationClassOne &&
+            !this.propertyNavigatingTo.composite &&
             (this.propertyNavigatingTo.upper === -1 || this.propertyNavigatingTo.upper > 1)  && !this.oneManyOrQuery.forLookup) {
 
             this.addSelectButton();

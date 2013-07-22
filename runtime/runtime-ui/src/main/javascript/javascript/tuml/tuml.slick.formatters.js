@@ -10,6 +10,8 @@
         "TumlSlick":{
             "Formatters":{
                 "TumlRequired":TumlRequiredFormatter,
+                "TumlToOneRequiredFormatter": TumlToOneRequiredFormatter,
+                "TumlToAssociationClassRequiredFormatter": TumlToAssociationClassRequiredFormatter,
                 "TumlValidationFailedFormatter": TumlValidationFailedFormatter,
                 "TumlDelete":TumlDeleteFormatter,
                 "TumlBoolean":TumlBooleanFormatter,
@@ -44,6 +46,32 @@
             return "<div style='color:red;'>required</div>";
         } else {
             return "<div style='color:red;'>" + value + "</div>";
+        }
+    }
+
+    function TumlToOneRequiredFormatter(row, cell, value, columnDef, dataContext) {
+        if (value == null || value === undefined) {
+            return "<div style='color:red;'>required</div>";
+        } else if (value.id == null) {
+            return "<div style='color:red;'>required</div>";
+        } else {
+            return value.displayName;
+        }
+    }
+
+    function TumlToAssociationClassRequiredFormatter(row, cell, value, columnDef, dataContext) {
+        if (value == null || value === undefined) {
+            return "<div style='color:red;'>required</div>";
+        } else if (value.id == null) {
+            return "<div style='color:red;'>required</div>";
+        } else {
+            if (value.displayName !== undefined && value.displayName !== 'null') {
+                return value.id + ' | ' + value.displayName;
+            } else if (value.name !== undefined) {
+                return value.id + ' | ' + value.name;
+            } else {
+                return value.id;
+            }
         }
     }
 

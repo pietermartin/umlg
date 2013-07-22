@@ -27,7 +27,7 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
         if (propertyWrapper.isMany() && !propertyWrapper.isDerived() && !propertyWrapper.isQualifier()) {
             OJAnnotatedClass owner = findOJClass(p);
             buildGetter(owner, propertyWrapper);
-            if (propertyWrapper.isAssociationClass()) {
+            if (propertyWrapper.isMemberOfAssociationClass()) {
                 buildGetterForAssociationClass(findAssociationClassOJClass(propertyWrapper), propertyWrapper);
                 OJAnnotatedClass associationOJClass = findAssociationClassOJClass(propertyWrapper);
                 OnePropertyVisitor.buildOneAdder(associationOJClass, propertyWrapper, true);
@@ -47,7 +47,7 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
         getter.getBody().addToStatements("return this." + propertyWrapper.fieldname());
         owner.addToOperations(getter);
 
-        if (propertyWrapper.isAssociationClass()) {
+        if (propertyWrapper.isMemberOfAssociationClass()) {
             getter = new OJAnnotatedOperation("get" + propertyWrapper.getAssociationClassPathName().getLast(), propertyWrapper.getAssociationClassJavaTumlTypePath());
             getter.getBody().addToStatements("return this." + propertyWrapper.getAssociationClassFakePropertyName());
             owner.addToOperations(getter);
@@ -73,7 +73,7 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
 
     public static void buildManyAdder(OJAnnotatedClass owner, PropertyWrapper propertyWrapper) {
         OJAnnotatedOperation adder = new OJAnnotatedOperation(propertyWrapper.adder());
-        if (!propertyWrapper.isAssociationClass()) {
+        if (!propertyWrapper.isMemberOfAssociationClass()) {
             adder.addParam(propertyWrapper.fieldname(), propertyWrapper.javaTypePath());
         } else {
             adder.addParam(propertyWrapper.getAssociationClassFakePropertyName(), propertyWrapper.javaTypePathWithAssociationClass());
@@ -81,7 +81,7 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
 
         if (!(owner instanceof OJAnnotatedInterface)) {
             if (!propertyWrapper.hasQualifiers()) {
-                if (!propertyWrapper.isAssociationClass()) {
+                if (!propertyWrapper.isMemberOfAssociationClass()) {
                     OJIfStatement ifNotNull = new OJIfStatement("!" + propertyWrapper.fieldname() + ".isEmpty()");
                     ifNotNull.addToThenPart("this." + propertyWrapper.fieldname() + ".addAll(" + propertyWrapper.fieldname() + ")");
                     adder.getBody().addToStatements(ifNotNull);
@@ -102,7 +102,7 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
 
         OJAnnotatedOperation singleAdder = new OJAnnotatedOperation(propertyWrapper.adder());
         singleAdder.addParam(propertyWrapper.fieldname(), propertyWrapper.javaBaseTypePath());
-        if (propertyWrapper.isAssociationClass()) {
+        if (propertyWrapper.isMemberOfAssociationClass()) {
             singleAdder.addParam(StringUtils.uncapitalize(propertyWrapper.getAssociationClass().getName()), TumlClassOperations.getPathName(propertyWrapper.getAssociationClass()));
         }
         if (!(owner instanceof OJAnnotatedInterface)) {
@@ -118,7 +118,7 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
                 singleAdder.getBody().addToStatements(ifNotNull2);
             }
             OJIfStatement ifNotNull = new OJIfStatement(propertyWrapper.fieldname() + " != null");
-            if (!propertyWrapper.isAssociationClass()) {
+            if (!propertyWrapper.isMemberOfAssociationClass()) {
                 ifNotNull.addToThenPart("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ")");
             } else {
                 ifNotNull.addToThenPart("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ", " + StringUtils.uncapitalize(propertyWrapper.getAssociationClass().getName()) + ")");
@@ -134,14 +134,14 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
         if (pWrap.isReadOnly()) {
             setter.setVisibility(OJVisibilityKind.PROTECTED);
         }
-        if (!pWrap.isAssociationClass()) {
+        if (!pWrap.isMemberOfAssociationClass()) {
             setter.addParam(pWrap.fieldname(), pWrap.javaTypePath());
         } else {
             setter.addParam(pWrap.getAssociationClassFakePropertyName(), pWrap.javaTypePathWithAssociationClass());
         }
         setter.getBody().addToStatements(pWrap.clearer() + "()");
         OJIfStatement ifNotNull;
-        if (!pWrap.isAssociationClass()) {
+        if (!pWrap.isMemberOfAssociationClass()) {
             ifNotNull = new OJIfStatement(pWrap.fieldname() + " != null");
             ifNotNull.addToThenPart(pWrap.adder() + "(" + pWrap.fieldname() + ")");
         } else {

@@ -73,7 +73,7 @@ public class AddUmlgUriFieldToRuntimePropertyEnum extends BaseVisitor implements
                 addTumlOverloadedPostUriToLiteral(clazz, pWrap, literal, clazz instanceof AssociationClass);
 
                 //For association classes
-                if (pWrap.isAssociationClass() && !(clazz instanceof AssociationClass)) {
+                if (pWrap.isMemberOfAssociationClass() && !(clazz instanceof AssociationClass)) {
 
                     literal = ojEnum.findLiteral(pWrap.getAssociationClassFakePropertyName());
                     addTumlUriToLiteral(clazz, pWrap, literal);

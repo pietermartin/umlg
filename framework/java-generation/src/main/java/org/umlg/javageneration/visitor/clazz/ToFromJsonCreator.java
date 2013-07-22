@@ -119,6 +119,19 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                     ifOneNotNull.addToElsePart("sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + \"{\\\"id\\\": \" + null + \", \\\"displayName\\\": \" + null + \"}\")");
                     toJson.getBody().addToStatements(ifOneNotNull);
                     annotatedClass.addToImports(TinkerGenerationUtil.TumlTmpIdManager);
+
+                    //Check association class
+                    if (pWrap.isOne() && pWrap.isMemberOfAssociationClass()) {
+                        // TODO need to implement display name interface or something
+                        ifOneNotNull = new OJIfStatement(pWrap.associationClassGetter() + "() != null");
+                        ifHasTmpId = new OJIfStatement(TinkerGenerationUtil.TumlTmpIdManager.getLast() + ".INSTANCE.get(" + pWrap.associationClassGetter() + "().getId()) != null");
+                        ifHasTmpId.addToThenPart("sb.append(\", \\\"" + pWrap.getAssociationClassFakePropertyName() + "\\\": \" + \"{\\\"id\\\": \" + " + pWrap.associationClassGetter() + "().getId() + \", \\\"tmpId\\\": \\\"\" + " + TinkerGenerationUtil.TumlTmpIdManager.getLast() + ".INSTANCE.get(" + pWrap.associationClassGetter() + "().getId())  + \"\\\",\\\"displayName\\\": \\\"\" + " + pWrap.associationClassGetter() + "().getName() + \"\\\"}\" + \"" + "\")");
+                        ifOneNotNull.addToThenPart(ifHasTmpId);
+                        ifHasTmpId.addToElsePart("sb.append(\", \\\"" + pWrap.getAssociationClassFakePropertyName() + "\\\": \" + \"{\\\"id\\\": \" + " + pWrap.associationClassGetter() + "().getId() + \", \\\"displayName\\\": \\\"\" + " + pWrap.associationClassGetter() + "().getName() + \"\\\"}\" + \"" + "\")");
+                        ifOneNotNull.addToElsePart("sb.append(\", \\\"" + pWrap.getAssociationClassFakePropertyName() + "\\\": \" + \"{\\\"id\\\": \" + null + \", \\\"displayName\\\": \" + null + \"}\")");
+                        toJson.getBody().addToStatements(ifOneNotNull);
+                    }
+
                 } else if (pWrap.isDateTime()) {
                     toJson.getBody().addToStatements(
                             "sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + (" + pWrap.getter() + "() != null ? \"\\\"\" + "
@@ -484,7 +497,7 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 
                     if (pWrap.isOne() && !pWrap.isDataType() && !pWrap.isEnumeration() && !pWrap.isComponent()) {
                         OJIfStatement ifSetToNull;
-                        if (pWrap.isAssociationClass()) {
+                        if (pWrap.isMemberOfAssociationClass()) {
                             //TODO maybe this should be a remover instead???
                             ifSetToNull = new OJIfStatement(field.getName() + ".isEmpty() || " + field.getName() + ".get(\"id\") == null",
                                     pWrap.setter() + "(null, null)");
@@ -581,7 +594,7 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                     } else {
                         ifNotNull.addToThenPart(pWrap.setter() + "(" + field.getName() + ")");
                     }
-                    if (pWrap.isAssociationClass()) {
+                    if (pWrap.isMemberOfAssociationClass()) {
                         ifNotNull.addToElsePart(pWrap.setter() + "(null, null)");
                     } else {
                         ifNotNull.addToElsePart(pWrap.setter() + "(null)");

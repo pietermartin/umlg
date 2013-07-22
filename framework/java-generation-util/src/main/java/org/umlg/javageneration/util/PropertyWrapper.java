@@ -324,7 +324,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     }
 
     public String associationClassGetter() {
-        if (!isAssociationClass()) {
+        if (!isMemberOfAssociationClass()) {
             throw new IllegalStateException("Can not call associationClassGetter on a property that is not a member end of an association class. Property = " + getQualifiedName());
         }
         return "get" + getAssociationClassPathName().getLast();
@@ -451,7 +451,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
             if (hasQualifiers()) {
                 fieldType = TumlCollectionKindEnum.QUALIFIED_ORDERED_SET.getInterfacePathName();
             } else {
-                if (ignoreAssociationClass || !isAssociationClass()) {
+                if (ignoreAssociationClass || !isMemberOfAssociationClass()) {
                     fieldType = TumlCollectionKindEnum.ORDERED_SET.getInterfacePathName();
                 } else {
                     fieldType = TumlCollectionKindEnum.ASSOCIATION_CLASS_ORDERED_SET.getInterfacePathName();
@@ -461,7 +461,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
             if (hasQualifiers()) {
                 fieldType = TumlCollectionKindEnum.QUALIFIED_SEQUENCE.getInterfacePathName();
             } else {
-                if (ignoreAssociationClass || !isAssociationClass()) {
+                if (ignoreAssociationClass || !isMemberOfAssociationClass()) {
                     fieldType = TumlCollectionKindEnum.SEQUENCE.getInterfacePathName();
                 } else {
                     fieldType = TumlCollectionKindEnum.ASSOCIATION_CLASS_SEQUENCE.getInterfacePathName();
@@ -471,7 +471,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
             if (hasQualifiers()) {
                 fieldType = TumlCollectionKindEnum.QUALIFIED_BAG.getInterfacePathName();
             } else {
-                if (ignoreAssociationClass || !isAssociationClass()) {
+                if (ignoreAssociationClass || !isMemberOfAssociationClass()) {
                     fieldType = TumlCollectionKindEnum.BAG.getInterfacePathName();
                 } else {
                     fieldType = TumlCollectionKindEnum.ASSOCIATION_CLASS_BAG.getInterfacePathName();
@@ -481,7 +481,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
             if (hasQualifiers()) {
                 fieldType = TumlCollectionKindEnum.QUALIFIED_SET.getInterfacePathName();
             } else {
-                if (ignoreAssociationClass || !isAssociationClass()) {
+                if (ignoreAssociationClass || !isMemberOfAssociationClass()) {
                     fieldType = TumlCollectionKindEnum.SET.getInterfacePathName();
                 } else {
                     fieldType = TumlCollectionKindEnum.ASSOCIATION_CLASS_SET.getInterfacePathName();
@@ -491,7 +491,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
             throw new RuntimeException("wtf");
         }
         fieldType.addToGenerics(javaBaseTypePath());
-        if (!ignoreAssociationClass && isAssociationClass()) {
+        if (!ignoreAssociationClass && isMemberOfAssociationClass()) {
             fieldType.addToGenerics(getAssociationClassPathName());
         }
         return fieldType;
@@ -542,7 +542,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     }
 
     public String getAssociationClassFakePropertyName() {
-        if (!isAssociationClass()) {
+        if (!isMemberOfAssociationClass()) {
             throw new IllegalStateException("Can not call getAssociationClassFakePropertyName on a property that does not belong to an AssociationClass!");
         }
         return fieldname() + "_" + new PropertyWrapper(getOtherEnd()).fieldname() + "_" + TumlClassOperations.getPathName(getAssociationClass()).getLast();
@@ -1548,7 +1548,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         }
     }
 
-    public boolean isAssociationClass() {
+    public boolean isMemberOfAssociationClass() {
         Element owner = this.property.getOwner();
         if (owner instanceof AssociationClass) {
             AssociationClass ownerClass = (AssociationClass) owner;

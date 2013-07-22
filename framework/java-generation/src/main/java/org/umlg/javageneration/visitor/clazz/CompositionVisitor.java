@@ -62,13 +62,13 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
 		OJConstructor constructor = new OJConstructor();
 		constructor.addParam("compositeOwner", TumlClassOperations.getOtherEndToCompositePathName(clazz));
         PropertyWrapper pWrap = new PropertyWrapper(TumlClassOperations.getOtherEndToComposite(clazz));
-        if (pWrap.isAssociationClass()) {
+        if (pWrap.isMemberOfAssociationClass()) {
             constructor.addParam(StringUtils.uncapitalize(pWrap.getAssociationClass().getName()), pWrap.getAssociationClassPathName());
         }
 		annotatedClass.addToConstructors(constructor);
         constructor.getBody().addToStatements("super(true)");
 
-        if (!pWrap.isAssociationClass()) {
+        if (!pWrap.isMemberOfAssociationClass()) {
             constructor.getBody().addToStatements(pWrap.adder() + "(compositeOwner)");
         } else {
             constructor.getBody().addToStatements(pWrap.adder() + "(compositeOwner, " + StringUtils.uncapitalize(pWrap.getAssociationClass().getName()) + ")");

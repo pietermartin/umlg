@@ -5,7 +5,6 @@ import java.util.Set;
 import org.eclipse.uml2.uml.AssociationClass;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Property;
-import org.eclipse.uml2.uml.Type;
 import org.umlg.framework.ModelLoader;
 import org.umlg.framework.VisitSubclasses;
 import org.umlg.java.metamodel.OJConstructor;
@@ -55,7 +54,7 @@ public class AddTumlLookupCompositeParentUriToRuntimePropertyEnum extends BaseVi
 				}
 				doWithLiteral(clazz, propertyWrapper, ojEnum.findLiteral(propertyWrapper.fieldname()));
 
-                if (propertyWrapper.isAssociationClass() && !(clazz instanceof AssociationClass)) {
+                if (propertyWrapper.isMemberOfAssociationClass() && !(clazz instanceof AssociationClass)) {
                     doWithLiteral(clazz, propertyWrapper, ojEnum.findLiteral(propertyWrapper.getAssociationClassFakePropertyName()), true);
                 }
 			}

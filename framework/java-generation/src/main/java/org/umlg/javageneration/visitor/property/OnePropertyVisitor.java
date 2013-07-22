@@ -31,7 +31,7 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
             OJAnnotatedClass owner = findOJClass(p);
             buildGetter(owner, propertyWrapper);
 
-            if (propertyWrapper.isAssociationClass()) {
+            if (propertyWrapper.isMemberOfAssociationClass()) {
                 buildGetterForAssociationClass(findAssociationClassOJClass(propertyWrapper), propertyWrapper);
                 OJAnnotatedClass associationOJClass = findAssociationClassOJClass(propertyWrapper);
                 OnePropertyVisitor.buildOneAdder(associationOJClass, propertyWrapper, true);
@@ -66,7 +66,7 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
         getter.getBody().addToStatements(ifFieldNotEmpty);
         owner.addToOperations(getter);
 
-        if (propertyWrapper.isAssociationClass()) {
+        if (propertyWrapper.isMemberOfAssociationClass()) {
 
             getter = new OJAnnotatedOperation("get" + propertyWrapper.getAssociationClassPathName().getLast(), propertyWrapper.getAssociationClassPathName());
             tmpField = new OJAnnotatedField("tmp", propertyWrapper.getAssociationClassJavaTumlTypePath());
@@ -105,7 +105,7 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
     public static void buildOneAdder(OJAnnotatedClass owner, PropertyWrapper propertyWrapper, boolean isAssociationClass) {
         OJAnnotatedOperation singleAdder = new OJAnnotatedOperation(propertyWrapper.adder());
         singleAdder.addParam(propertyWrapper.fieldname(), propertyWrapper.javaBaseTypePath());
-        if (!isAssociationClass && propertyWrapper.isAssociationClass()) {
+        if (!isAssociationClass && propertyWrapper.isMemberOfAssociationClass()) {
             singleAdder.addParam(StringUtils.uncapitalize(propertyWrapper.getAssociationClass().getName()), TumlClassOperations.getPathName(propertyWrapper.getAssociationClass()));
         }
 
@@ -123,7 +123,7 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
             ifExist.addToThenPart("throw new RuntimeException(\"Property is a one and already has a value!\")");
             ojBlock1.addToStatements(ifExist);
 
-            if (isAssociationClass || !propertyWrapper.isAssociationClass()) {
+            if (isAssociationClass || !propertyWrapper.isMemberOfAssociationClass()) {
                 ojBlock2.addToStatements("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ")");
             } else {
                 ojBlock2.addToStatements("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ", " + StringUtils.uncapitalize(propertyWrapper.getAssociationClass().getName()) + ")");
@@ -189,7 +189,7 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
     public static void buildSetter(OJAnnotatedClass owner, PropertyWrapper pWrap) {
         OJAnnotatedOperation setter = new OJAnnotatedOperation(pWrap.setter());
         setter.addParam(pWrap.fieldname(), pWrap.javaBaseTypePath());
-        if (pWrap.isAssociationClass()) {
+        if (pWrap.isMemberOfAssociationClass()) {
             setter.addParam(StringUtils.uncapitalize(pWrap.getAssociationClass().getName()), TumlClassOperations.getPathName(pWrap.getAssociationClass()));
         }
         if (pWrap.isReadOnly()) {
@@ -205,7 +205,7 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
             setter.getBody().addToStatements(ifNotNull);
         }
         setter.getBody().addToStatements(pWrap.clearer() + "()");
-        if (!pWrap.isAssociationClass()) {
+        if (!pWrap.isMemberOfAssociationClass()) {
             setter.getBody().addToStatements(pWrap.adder() + "(" + pWrap.fieldname()  + ")");
         } else {
             setter.getBody().addToStatements(pWrap.adder() + "(" + pWrap.fieldname()  + ", " + StringUtils.uncapitalize(pWrap.getAssociationClass().getName()) + ")");

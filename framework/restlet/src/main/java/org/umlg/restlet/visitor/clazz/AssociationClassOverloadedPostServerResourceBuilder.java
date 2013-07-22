@@ -388,7 +388,7 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
         } else {
             tryInstantiate.getTryPart().addToStatements("Long id = Long.valueOf((Integer)propertyMap.get(\"id\"))");
             tryInstantiate.getTryPart().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
-            if (!pWrap.isAssociationClass() || asAssociationClass) {
+            if (!pWrap.isMemberOfAssociationClass() || asAssociationClass) {
                 tryInstantiate.getTryPart().addToStatements("parentResource." + pWrap.adder() + "(childResource)");
             } else {
                 tryInstantiate.getTryPart().addToStatements("parentResource." + pWrap.adder() + "(childResource, null)");

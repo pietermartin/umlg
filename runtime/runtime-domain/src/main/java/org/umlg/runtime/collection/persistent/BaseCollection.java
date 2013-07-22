@@ -876,8 +876,8 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
     }
 
     @Override
-    public boolean isAssociationClass() {
-        return this.tumlRuntimeProperty.isAssociationClass();
+    public boolean isAssociationClassProperty() {
+        return this.tumlRuntimeProperty.isAssociationClassProperty();
     }
 
     @Override

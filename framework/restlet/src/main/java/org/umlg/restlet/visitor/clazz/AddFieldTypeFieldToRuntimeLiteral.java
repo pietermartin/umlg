@@ -49,7 +49,7 @@ public class AddFieldTypeFieldToRuntimeLiteral extends BaseVisitor implements Vi
 			OJEnumLiteral literal = ojEnum.findLiteral(propertyWrapper.fieldname());
 			addFieldTypePropertyToLiteral(literal, TumlRestletGenerationUtil.getFieldTypeForProperty(property));
 
-            if (propertyWrapper.isAssociationClass() && !(clazz instanceof AssociationClass)) {
+            if (propertyWrapper.isMemberOfAssociationClass() && !(clazz instanceof AssociationClass)) {
                 literal = ojEnum.findLiteral(propertyWrapper.getAssociationClassFakePropertyName());
                 addFieldTypePropertyToLiteral(literal, TumlRestletGenerationUtil.getFieldTypeForProperty(property));
             }

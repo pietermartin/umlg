@@ -421,61 +421,6 @@
             postNewIdxById = {};
         }
 
-//        //This is called from the grid on regular save.
-//        //The itemToRefresh contains a difference that were posted. New items and existing items.
-//        function refreshItemAfterCommitOrRollback(itemToRefresh) {
-//            if (itemToRefresh.tmpId !== undefined) {
-//
-//                if (isNaN(itemToRefresh.id)) {
-//                    //rollback situation
-//                    //New item
-//                    if (idxById[itemToRefresh.id] == undefined) {
-//                        throw "Invalid id";
-//                    }
-//                    //Update the items array
-//                    var index = idxById[itemToRefresh.id];
-//                    items[index] = itemToRefresh;
-//                    //Update the new items array
-//                    var newItemIndex = newIdxById[itemToRefresh.id];
-//                    newItems[newItemIndex] = itemToRefresh;
-//                } else {
-//                    //New item
-//                    if (idxById[itemToRefresh.tmpId] == undefined) {
-//                        throw "Invalid id";
-//                    }
-//                    //Update the items array
-//                    var index = idxById[itemToRefresh.tmpId];
-//                    items[index] = itemToRefresh;
-//
-//                    delete idxById[itemToRefresh.tmpId];
-//                    idxById[itemToRefresh.id] = index;
-//
-//                    var newItemIndex = newIdxById[itemToRefresh.tmpId];
-//                    newItems[newItemIndex] = itemToRefresh;
-//
-//                    delete newIdxById[itemToRefresh.tmpId];
-//                    newIdxById[itemToRefresh.id] = newItemIndex;
-//
-//                    postNewIdxById[index] = itemToRefresh.id;
-//                }
-//            } else {
-//                //Existing item
-//                if (idxById[itemToRefresh.id] == undefined) {
-//                    throw "Invalid id";
-//                }
-//                //Update the items array
-//                var index = idxById[itemToRefresh.id];
-//                items[index] = itemToRefresh;
-//                //Update the updated items array
-//                var updatedItemIndex = updatedIdxById[itemToRefresh.id];
-//                updatedItems[updatedItemIndex] = itemToRefresh;
-//
-//                postUpdatedIdxById[index] = itemToRefresh.id;
-//
-//            }
-//            refresh();
-//        }
-
         function refreshItemAfterRollback(itemToRefresh, composite) {
             if (itemToRefresh.tmpId !== undefined) {
 
@@ -517,21 +462,28 @@
                 }
             } else {
 
-                if (composite) {
-                    throw 'After a rollback composite entries must have a tmpId';
-                }
-
-                //Existing item added to a non composite property
+                //Updates Existing item
                 if (idxById[itemToRefresh.id] == undefined) {
                     throw "Invalid id";
                 }
-
                 //Update the items array
                 var index = idxById[itemToRefresh.id];
                 items[index] = itemToRefresh;
 
-                var newItemIndex = newIdxById[itemToRefresh.id];
-                newItems[newItemIndex] = itemToRefresh;
+                //Check if it is new or updated item
+                if (updatedIdxById[itemToRefresh.id] !== undefined) {
+                    //Update the updated items array
+                    //This is for a regular update
+                    var updatedItemIndex = updatedIdxById[itemToRefresh.id];
+                    updatedItems[updatedItemIndex] = itemToRefresh;
+                } else if (newIdxById[itemToRefresh.id] !== undefined) {
+                    //Update the new items array
+                    //This happens on non composite many properties that is an association class
+                    var newItemIndex = newIdxById[itemToRefresh.id];
+                    newItems[newItemIndex] = itemToRefresh;
+                } else {
+                    throw 'updatedIdxById and newIdxById can not both be undefined!!!!';
+                }
 
             }
             refresh();
@@ -579,22 +531,22 @@
                 var index = idxById[itemToRefresh.id];
                 items[index] = itemToRefresh;
 
-                if (composite) {
+                //Check if it is new or updated item
+                if (updatedIdxById[itemToRefresh.id] !== undefined) {
                     //Update the updated items array
                     //This is for a regular update
                     var updatedItemIndex = updatedIdxById[itemToRefresh.id];
                     updatedItems[updatedItemIndex] = itemToRefresh;
-
                     postUpdatedIdxById[index] = itemToRefresh.id;
-                } else {
+                } else if (newIdxById[itemToRefresh.id] !== undefined) {
                     //Update the new items array
                     //This happens on non composite many properties that is an association class
                     var newItemIndex = newIdxById[itemToRefresh.id];
                     newItems[newItemIndex] = itemToRefresh;
-
                     postNewIdxById[index] = itemToRefresh.id;
+                } else {
+                    throw 'updatedIdxById and newIdxById can not both be undefined!!!!';
                 }
-
             }
             refresh();
         }

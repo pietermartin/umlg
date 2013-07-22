@@ -51,7 +51,7 @@ public class AddTumlMetaDataUriFieldToRuntimePropertyEnum extends BaseVisitor im
                 OJEnumLiteral literal = ojEnum.findLiteral(pWrap.fieldname());
                 addTumlMetaDataUriToLiteral(clazz, pWrap, literal);
 
-                if (pWrap.isAssociationClass() && !(clazz instanceof AssociationClass)) {
+                if (pWrap.isMemberOfAssociationClass() && !(clazz instanceof AssociationClass)) {
                     literal = ojEnum.findLiteral(pWrap.getAssociationClassFakePropertyName());
                     addTumlMetaDataUriToLiteral(clazz, pWrap, literal, true);
                 }

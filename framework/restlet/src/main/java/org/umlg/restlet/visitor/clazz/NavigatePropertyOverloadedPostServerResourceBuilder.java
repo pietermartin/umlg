@@ -366,7 +366,7 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
         } else {
             tryInstantiate.getTryPart().addToStatements("Long id = Long.valueOf((Integer)propertyMap.get(\"id\"))");
             tryInstantiate.getTryPart().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
-            if (!pWrap.isAssociationClass()) {
+            if (!pWrap.isMemberOfAssociationClass()) {
                 tryInstantiate.getTryPart().addToStatements("parentResource." + pWrap.adder() + "(childResource)");
                 tryInstantiate.getTryPart().addToStatements("StringBuilder jsonResult = new StringBuilder(childResource.toJsonWithoutCompositeParent(true))");
             } else {

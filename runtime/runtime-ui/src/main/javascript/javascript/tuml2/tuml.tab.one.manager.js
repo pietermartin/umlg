@@ -237,9 +237,9 @@
 
     TumlBaseTabOneManager.prototype.isPropertyForOnePage = function (property) {
         return (
-            (!property.associationClass && !property.inverseComposite && (!property.composite && (property.oneToOne || property.manyToOne || property.manyPrimitive || property.manyEnumeration)))
+            (!property.associationClassOne && !property.inverseComposite && (!property.composite && (property.oneToOne || property.manyToOne || property.manyPrimitive || property.manyEnumeration)))
             ||
-            (!property.associationClass && (this.isForCreation && property.composite && property.lower > 0) && property.name !== 'uri'));
+            (!property.associationClassOne && (this.isForCreation && property.composite && property.lower > 0) && property.name !== 'uri'));
     }
 
     TumlBaseTabOneManager.prototype.synchronizeModel = function (property) {

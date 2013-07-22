@@ -805,6 +805,68 @@
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_k6kTU85rEeKXW_LoBIdmWg" value="1"/>
             </ownedEnd>
           </packagedElement>
+          <packagedElement xmi:type="uml:Package" xmi:id="_xXq_IPCXEeKXi9pM4yg14w" name="onetoone">
+            <packagedElement xmi:type="uml:Class" xmi:id="_jV5RAPCYEeKXi9pM4yg14w" name="OneToOneParent">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_k3UngPCYEeKXi9pM4yg14w" name="name" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_mSb6oPCYEeKXi9pM4yg14w" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_mShaMPCYEeKXi9pM4yg14w" value="1"/>
+                <defaultValue xmi:type="uml:LiteralString" xmi:id="_mSvcoPCYEeKXi9pM4yg14w">
+                  <value xsi:nil="true"/>
+                </defaultValue>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_vWk0oPCYEeKXi9pM4yg14w" name="oneToOneChild1" type="_nmkcAPCYEeKXi9pM4yg14w" aggregation="composite" association="_vWsJYPCYEeKXi9pM4yg14w">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_vWk0ofCYEeKXi9pM4yg14w"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_vWk0ovCYEeKXi9pM4yg14w" value="*"/>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_vk0E8PCYEeKXi9pM4yg14w" name="oneToOneChild2" type="_pqPj8PCYEeKXi9pM4yg14w" aggregation="composite" association="_vk3IQPCYEeKXi9pM4yg14w">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_vk0E8fCYEeKXi9pM4yg14w"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_vk0E8vCYEeKXi9pM4yg14w" value="*"/>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_nmkcAPCYEeKXi9pM4yg14w" name="OneToOneChild1">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_tUnj8PCYEeKXi9pM4yg14w" name="name" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_utKrQPCYEeKXi9pM4yg14w" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_utRY8PCYEeKXi9pM4yg14w" value="1"/>
+                <defaultValue xmi:type="uml:LiteralString" xmi:id="_utgpgPCYEeKXi9pM4yg14w">
+                  <value xsi:nil="true"/>
+                </defaultValue>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_6r9YgPCYEeKXi9pM4yg14w" name="oneToOneChild2" type="_pqPj8PCYEeKXi9pM4yg14w" association="_6sDfIPCYEeKXi9pM4yg14w">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_6r9YgfCYEeKXi9pM4yg14w"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_6r9YgvCYEeKXi9pM4yg14w" value="1"/>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_pqPj8PCYEeKXi9pM4yg14w" name="OneToOneChild2">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_ruFD8PCYEeKXi9pM4yg14w" name="name" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_s7qRYPCYEeKXi9pM4yg14w" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_s7yNMPCYEeKXi9pM4yg14w" value="1"/>
+                <defaultValue xmi:type="uml:LiteralString" xmi:id="_s8ILcPCYEeKXi9pM4yg14w">
+                  <value xsi:nil="true"/>
+                </defaultValue>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_vWsJYPCYEeKXi9pM4yg14w" name="oneToOneParent_oneToOneChild1_1" memberEnd="_vWsJYfCYEeKXi9pM4yg14w _vWk0oPCYEeKXi9pM4yg14w" navigableOwnedEnd="_vWsJYfCYEeKXi9pM4yg14w">
+              <ownedEnd xmi:type="uml:Property" xmi:id="_vWsJYfCYEeKXi9pM4yg14w" name="oneToOneParent" type="_jV5RAPCYEeKXi9pM4yg14w" association="_vWsJYPCYEeKXi9pM4yg14w">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_vWsJYvCYEeKXi9pM4yg14w" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_vWsJY_CYEeKXi9pM4yg14w" value="1"/>
+              </ownedEnd>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_vk3IQPCYEeKXi9pM4yg14w" name="oneToOneParent_oneToOneChild2_1" memberEnd="_vk3vUPCYEeKXi9pM4yg14w _vk0E8PCYEeKXi9pM4yg14w" navigableOwnedEnd="_vk3vUPCYEeKXi9pM4yg14w">
+              <ownedEnd xmi:type="uml:Property" xmi:id="_vk3vUPCYEeKXi9pM4yg14w" name="oneToOneParent" type="_jV5RAPCYEeKXi9pM4yg14w" association="_vk3IQPCYEeKXi9pM4yg14w">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_vk3vUfCYEeKXi9pM4yg14w" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_vk3vUvCYEeKXi9pM4yg14w" value="1"/>
+              </ownedEnd>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_6sDfIPCYEeKXi9pM4yg14w" name="oneToOneChild1_oneToOneChild2_1" memberEnd="_6sDfIfCYEeKXi9pM4yg14w _6r9YgPCYEeKXi9pM4yg14w" navigableOwnedEnd="_6sDfIfCYEeKXi9pM4yg14w">
+              <ownedEnd xmi:type="uml:Property" xmi:id="_6sDfIfCYEeKXi9pM4yg14w" name="oneToOneChild1" type="_nmkcAPCYEeKXi9pM4yg14w" association="_6sDfIPCYEeKXi9pM4yg14w">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_6sDfIvCYEeKXi9pM4yg14w" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_6sDfI_CYEeKXi9pM4yg14w" value="1"/>
+              </ownedEnd>
+            </packagedElement>
+          </packagedElement>
         </packagedElement>
       </packagedElement>
     </packagedElement>

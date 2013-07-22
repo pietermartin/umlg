@@ -23,7 +23,7 @@ function selectFormatter(property, newId, updatedId) {
         } else {
             return TumlSlick.Formatters.TumlRegularFormatter;
         }
-    } else if (property.lower > 0 && property.dataTypeEnum !=null && property.dataTypeEnum !== undefined) {
+    } else if (property.lower > 0 && property.dataTypeEnum != null && property.dataTypeEnum !== undefined) {
         return  TumlSlick.Formatters.TumlRequired;
     } else if (property.dataTypeEnum !=null && property.dataTypeEnum !== undefined) {
         return null;
@@ -31,6 +31,8 @@ function selectFormatter(property, newId, updatedId) {
         return  TumlSlick.Formatters.TumlRequired;
     } else if (property.composite && property.lower > 0) {
         return  null;
+    } else if (!property.onePrimitive && !property.manyPrimitive && !property.composite && (property.manyToOne || property.oneToOne) && property.lower > 0) {
+        return  TumlSlick.Formatters.TumlToOneRequiredFormatter;
     } else if (!property.onePrimitive && !property.manyPrimitive && !property.manyEnumeration) {
         return function waitingFormatter(row, cell, value, columnDef, dataContext) {
             if (value !== undefined && value !== null) {
@@ -151,11 +153,12 @@ function selectEditor(property) {
         return  Tuml.Slick.Editors.ManyIntegerPrimitiveEditor;
     } else if (property.manyPrimitive && property.fieldType === 'Boolean') {
         return  Tuml.Slick.Editors.ManyBooleanPrimitiveEditor;
-    } else if (!property.onePrimitive && !property.manyPrimitive && !property.composite && property.oneToOne) {
+    } else if (!property.onePrimitive && !property.manyPrimitive && !property.composite && !property.associationClassOne && property.memberEndOfAssociationClass && (property.oneToOne || property.manyToOne)) {
+        return  Tuml.Slick.Editors.SelectToOneAssociationClassCellEditor;
+    } else if (!property.onePrimitive && !property.manyPrimitive && !property.composite && !property.associationClassOne && (property.oneToOne || property.manyToOne)) {
         return  Tuml.Slick.Editors.SelectOneToOneCellEditor;
-    } else if (!property.onePrimitive && !property.manyPrimitive && !property.composite && property.manyToOne) {
-//        return  Tuml.Slick.Editors.SelectManyToOneCellEditor;
-        return  Tuml.Slick.Editors.SelectOneToOneCellEditor;
+    } else if (!property.composite && property.lower > 0 && property.associationClassOne) {
+        return null;
     } else if (property.name == 'id') {
         return null;
     } else if (property.fieldType == 'String') {

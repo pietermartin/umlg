@@ -75,7 +75,7 @@ public class TumlRuntimePropertyImpl implements TumlRuntimeProperty {
 	}
 
     @Override
-    public boolean isAssociationClass() {
+    public boolean isAssociationClassProperty() {
         return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
 

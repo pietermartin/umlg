@@ -170,7 +170,7 @@ public final class TumlPropertyOperations extends PropertyOperations {
 			if (!p.getQualifiers().isEmpty()) {
 				collectionPathName = TumlCollectionKindEnum.QUALIFIED_ORDERED_SET.getImplementationPathName();
 			} else {
-                if (ignoreAssociationClass || !pWrap.isAssociationClass()) {
+                if (ignoreAssociationClass || !pWrap.isMemberOfAssociationClass()) {
                     collectionPathName = TumlCollectionKindEnum.ORDERED_SET.getImplementationPathName();
                 } else {
                     collectionPathName = TumlCollectionKindEnum.ASSOCIATION_CLASS_ORDERED_SET.getImplementationPathName();
@@ -180,7 +180,7 @@ public final class TumlPropertyOperations extends PropertyOperations {
 			if (!p.getQualifiers().isEmpty()) {
 				collectionPathName = TumlCollectionKindEnum.QUALIFIED_SEQUENCE.getImplementationPathName();
 			} else {
-                if (ignoreAssociationClass || !pWrap.isAssociationClass()) {
+                if (ignoreAssociationClass || !pWrap.isMemberOfAssociationClass()) {
 				    collectionPathName = TumlCollectionKindEnum.SEQUENCE.getImplementationPathName();
                 } else {
                     collectionPathName = TumlCollectionKindEnum.ASSOCIATION_CLASS_SEQUENCE.getImplementationPathName();
@@ -190,7 +190,7 @@ public final class TumlPropertyOperations extends PropertyOperations {
 			if (!p.getQualifiers().isEmpty()) {
 				collectionPathName = TumlCollectionKindEnum.QUALIFIED_BAG.getImplementationPathName();
 			} else {
-                if (ignoreAssociationClass || !pWrap.isAssociationClass()) {
+                if (ignoreAssociationClass || !pWrap.isMemberOfAssociationClass()) {
 				    collectionPathName = TumlCollectionKindEnum.BAG.getImplementationPathName();
                 } else {
                     collectionPathName = TumlCollectionKindEnum.ASSOCIATION_CLASS_BAG.getImplementationPathName();
@@ -200,7 +200,7 @@ public final class TumlPropertyOperations extends PropertyOperations {
 			if (!p.getQualifiers().isEmpty()) {
 				collectionPathName = TumlCollectionKindEnum.QUALIFIED_SET.getImplementationPathName();
 			} else {
-                if (ignoreAssociationClass || !pWrap.isAssociationClass()) {
+                if (ignoreAssociationClass || !pWrap.isMemberOfAssociationClass()) {
 				    collectionPathName = TumlCollectionKindEnum.SET.getImplementationPathName();
                 } else {
                     collectionPathName = TumlCollectionKindEnum.ASSOCIATION_CLASS_SET.getImplementationPathName();
@@ -210,7 +210,7 @@ public final class TumlPropertyOperations extends PropertyOperations {
 			throw new RuntimeException("wtf");
 		}
 		collectionPathName.addToGenerics(getTypePath(p));
-        if (!ignoreAssociationClass && pWrap.isAssociationClass()) {
+        if (!ignoreAssociationClass && pWrap.isMemberOfAssociationClass()) {
             collectionPathName.addToGenerics(pWrap.getAssociationClassPathName());
         }
 		return collectionPathName;

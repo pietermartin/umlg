@@ -49,7 +49,7 @@ public class BaseVisitor {
     }
 
     protected OJAnnotatedClass findAssociationClassOJClass(PropertyWrapper pWrap) {
-        if (!pWrap.isAssociationClass()) {
+        if (!pWrap.isMemberOfAssociationClass()) {
              throw new IllegalStateException("property " + pWrap.getQualifiedName() + " is not a member of an association class!");
         }
         AssociationClass associationClass = pWrap.getAssociationClass();
@@ -108,7 +108,7 @@ public class BaseVisitor {
         OJAnnotatedField field = new OJAnnotatedField(propertyWrapper.fieldname(), propertyWrapper.javaTumlTypePath());
         field.setStatic(propertyWrapper.isStatic());
         owner.addToFields(field);
-        if (propertyWrapper.isAssociationClass()) {
+        if (propertyWrapper.isMemberOfAssociationClass()) {
             OJAnnotatedField acField = new OJAnnotatedField(propertyWrapper.getAssociationClassFakePropertyName(), propertyWrapper.getAssociationClassJavaTumlTypePath());
             owner.addToFields(acField);
 

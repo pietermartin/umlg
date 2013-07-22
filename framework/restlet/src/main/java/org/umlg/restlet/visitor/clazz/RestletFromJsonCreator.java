@@ -107,7 +107,7 @@ public class RestletFromJsonCreator extends BaseVisitor implements Visitor<Class
                     if (pWrap.isOne() && !pWrap.isDataType() && !pWrap.isEnumeration() && !pWrap.isComponent()) {
 
                         OJIfStatement ifSetToNull;
-                        if (pWrap.isAssociationClass()) {
+                        if (pWrap.isMemberOfAssociationClass()) {
                             ifSetToNull = new OJIfStatement(field.getName() + ".isEmpty() || " + field.getName() + ".get(\"id\") == null",
                                     pWrap.setter() + "(null, null)");
 
@@ -149,7 +149,7 @@ public class RestletFromJsonCreator extends BaseVisitor implements Visitor<Class
 
                         OJIfStatement ojIfStatement;
                         //TODO
-                        if (pWrap.isAssociationClass()) {
+                        if (pWrap.isMemberOfAssociationClass()) {
 
                         } else {
 
@@ -204,7 +204,7 @@ public class RestletFromJsonCreator extends BaseVisitor implements Visitor<Class
                     } else {
                         throw new IllegalStateException("Should not happen");
                     }
-                    if (pWrap.isAssociationClass()) {
+                    if (pWrap.isMemberOfAssociationClass()) {
                         ifNotNull.addToElsePart(pWrap.setter() + "(null, null)");
                     } else {
                         ifNotNull.addToElsePart(pWrap.setter() + "(null)");
