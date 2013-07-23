@@ -321,27 +321,57 @@
         this.parentTabContainerManager.updateValidationWarningHeader();
     }
 
-    TumlTabContainerManager.prototype.setComponentIdToTmpId = function (item) {
+
+    TumlTabContainerManager.prototype.internalSetComponentIdToTmpId = function (property, object) {
+        var self = this;
+        Tuml.Metadata.Cache.get(property.qualifiedName, property.tumlMetaDataUri,
+            function (result) {
+                for (var k = 0; k < result.length; k++) {
+                    self.setComponentIdToTmpId(object, property, result[k].meta.to);
+                }
+            }
+        );
+    }
+
+    TumlTabContainerManager.prototype.setComponentIdToTmpId = function (item, from, metaDataTo) {
         //Need to update the id's to the tmpId as the id no longer exist on a rolled back transaction
         //Go through all the properties, for each composite property set the id = tmpId
-        if (item.tmpId !== undefined) {
+        if ((from.composite && from.lower > 0) || from.associationClassOne) {
             item.id = item.tmpId;
         }
-        for (var p in item) {
-            if (item[p] !== undefined && item[p] !== null) {
-                if (Array.isArray(item[p])) {
-
-                    for (var i = 0; i < item[p].length; i++) {
-                        this.setComponentIdToTmpId(item[p][i]);
+        for (var i = 0; i < metaDataTo.properties.length; i++) {
+            var property = metaDataTo.properties[i];
+            var object = item[property.name];
+            if (object !== undefined && object !== null) {
+                if (Array.isArray(object)) {
+                    for (var j = 0; j < object.length; j++) {
+                        this.internalSetComponentIdToTmpId(property, object[j]);
                     }
-
-                } else if (typeof item[p] === 'object') {
-
-                    this.setComponentIdToTmpId(item[p]);
-
+                } else if (typeof object === 'object') {
+                    this.internalSetComponentIdToTmpId(property, object);
                 }
             }
         }
+
+
+//        if (item.tmpId !== undefined) {
+//            item.id = item.tmpId;
+//        }
+//        for (var p in item) {
+//            if (item[p] !== undefined && item[p] !== null) {
+//                if (Array.isArray(item[p])) {
+//
+//                    for (var i = 0; i < item[p].length; i++) {
+//                        this.setComponentIdToTmpId(item[p][i]);
+//                    }
+//
+//                } else if (typeof item[p] === 'object') {
+//
+//                    this.setComponentIdToTmpId(item[p]);
+//
+//                }
+//            }
+//        }
     }
 
     TumlTabContainerManager.prototype.deactivateGrids = function () {

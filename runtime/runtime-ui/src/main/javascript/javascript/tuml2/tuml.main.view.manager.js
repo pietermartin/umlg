@@ -300,7 +300,7 @@
                             for (var k = 0; k < resultForTab.data.length; k++) {
                                 //Need to update the id's to the tmpId as the id no longer exist on a rolled back transaction
                                 //Go through all the properties, for each composite property set the id = tmpId
-                                this.setComponentIdToTmpId(resultForTab.data[k]);
+                                this.setComponentIdToTmpId(resultForTab.data[k], this.propertyNavigatingTo, metaForData);
                                 tumlTabViewManager.updateGridAfterRollback(resultForTab.data[k]);
                             }
                         }
@@ -308,7 +308,7 @@
                     } else {
                         if (tumlTabViewManager.tabId == metaForData.name) {
                             tumlTabViewManager.beginUpdate();
-                            this.setComponentIdToTmpId(resultForTab.data);
+                            this.setComponentIdToTmpId(resultForTab.data, this.propertyNavigatingTo, metaForData);
                             tumlTabViewManager.updateGridAfterRollback(resultForTab.data);
                             tumlTabViewManager.endUpdate(true);
                         }
