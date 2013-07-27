@@ -122,6 +122,14 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 
                     //Check association class
                     if (pWrap.isOne() && pWrap.isMemberOfAssociationClass()) {
+
+                        ifDeep = new OJIfStatement("deep || (" + pWrap.associationClassGetter() + "() != null && " + TinkerGenerationUtil.UmlgAssociationClassManager.getLast() + ".INSTANCE.has(\"" + pWrap.getAssociationClassFakePropertyName() + "\", " + pWrap.getter() + "().getId()))");
+                        ifDeep.addToThenPart("sb.append(\", \")");
+                        ifDeep.addToThenPart("sb.append(\"\\\"" + pWrap.getAssociationClassFakePropertyName() + "\\\": \" + (" + pWrap.associationClassGetter() + "() == null ? \"null\" : " + pWrap.associationClassGetter() + "()." + operationName + "(true)) + \"" + "\")");
+                        annotatedClass.addToImports(TinkerGenerationUtil.ToJsonUtil);
+                        annotatedClass.addToImports(TinkerGenerationUtil.UmlgAssociationClassManager);
+                        toJson.getBody().addToStatements(ifDeep);
+
                         // TODO need to implement display name interface or something
                         ifOneNotNull = new OJIfStatement(pWrap.associationClassGetter() + "() != null");
                         ifHasTmpId = new OJIfStatement(TinkerGenerationUtil.TumlTmpIdManager.getLast() + ".INSTANCE.get(" + pWrap.associationClassGetter() + "().getId()) != null");
@@ -129,7 +137,8 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                         ifOneNotNull.addToThenPart(ifHasTmpId);
                         ifHasTmpId.addToElsePart("sb.append(\", \\\"" + pWrap.getAssociationClassFakePropertyName() + "\\\": \" + \"{\\\"id\\\": \" + " + pWrap.associationClassGetter() + "().getId() + \", \\\"displayName\\\": \\\"\" + " + pWrap.associationClassGetter() + "().getName() + \"\\\"}\" + \"" + "\")");
                         ifOneNotNull.addToElsePart("sb.append(\", \\\"" + pWrap.getAssociationClassFakePropertyName() + "\\\": \" + \"{\\\"id\\\": \" + null + \", \\\"displayName\\\": \" + null + \"}\")");
-                        toJson.getBody().addToStatements(ifOneNotNull);
+                        ifDeep.addToElsePart(ifOneNotNull);
+                        toJson.getBody().addToStatements(ifDeep);
                     }
 
                 } else if (pWrap.isDateTime()) {
@@ -498,11 +507,33 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                     if (pWrap.isOne() && !pWrap.isDataType() && !pWrap.isEnumeration() && !pWrap.isComponent()) {
                         OJIfStatement ifSetToNull;
                         if (pWrap.isMemberOfAssociationClass()) {
+
                             //TODO maybe this should be a remover instead???
                             ifSetToNull = new OJIfStatement(field.getName() + ".isEmpty() || " + field.getName() + ".get(\"id\") == null",
                                     pWrap.setter() + "(null, null)");
-                            ifSetToNull.addToElsePart(pWrap.setter() + "((" + pWrap.javaBaseTypePath().getLast() + ")" + TinkerGenerationUtil.graphDbAccess + ".instantiateClassifier(((Number)"
-                                    + pWrap.fieldname() + "Map.get(\"id\")).longValue()), //TODO)");
+
+//                            ifSetToNull.addToElsePart("Long id");
+//                            ifSetToNull.addToElsePart("Object idFromMap = " + field.getName() + ".get(\"id\")");
+//                            OJIfStatement ifIdLong = new OJIfStatement("idFromMap instanceof Number");
+//                            ifIdLong.addToThenPart("id = ((Number)idFromMap).longValue()");
+//                            ifIdLong.addToElsePart("id = " + TinkerGenerationUtil.TumlTmpIdManager.getLast() + ".INSTANCE.get((String)idFromMap)");
+//                            ifSetToNull.addToElsePart(ifIdLong);
+
+                            //Validate that association class json is in the map
+                            OJIfStatement ifMapHasAssociationClassJson = new OJIfStatement("propertyMap.get(\"" + pWrap.getAssociationClassFakePropertyName() + "\") == null");
+                            ifMapHasAssociationClassJson.addToThenPart("throw new IllegalStateException(\"Association class " + pWrap.getAssociationClassFakePropertyName() + " must be in the map!\")");
+                            ifSetToNull.addToElsePart(ifMapHasAssociationClassJson);
+
+                            //Create an association class instance
+                            ifSetToNull.addToElsePart(pWrap.getAssociationClassPathName().getLast() + " " + pWrap.getAssociationClassFakePropertyName() + " = new "
+                                    + pWrap.getAssociationClassPathName().getLast() + "(true)");
+                            ifSetToNull.addToElsePart(pWrap.getAssociationClassFakePropertyName() + ".fromJson((Map<String, Object>) propertyMap.get(\"" + pWrap.getAssociationClassFakePropertyName() + "\"))");
+                            ifSetToNull.addToElsePart(pWrap.setter() + "((" + pWrap.javaBaseTypePath().getLast() + ")" + TinkerGenerationUtil.graphDbAccess + ".instantiateClassifier(((Number)" + field.getName() + ".get(\"id\")).longValue()), " + pWrap.getAssociationClassFakePropertyName() + ")");
+
+                            ifSetToNull.addToElsePart("//Store the association class property name in a ThreadVar.");
+                            ifSetToNull.addToElsePart("//The corresponding toJson checks the ThreadVar to know whether it should return this association class's data");
+                            ifSetToNull.addToElsePart(TinkerGenerationUtil.UmlgAssociationClassManager.getLast() + ".INSTANCE.put(\"" + pWrap.getAssociationClassFakePropertyName() + "\", " + pWrap.getter() + "().getId())");
+
                         } else {
                             ifSetToNull = new OJIfStatement(field.getName() + ".isEmpty() || " + field.getName() + ".get(\"id\") == null",
                                     pWrap.setter() + "(null)");

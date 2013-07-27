@@ -47,6 +47,7 @@ public class UmlgPropertyAssociationClassSetImpl<E, AC extends AssociationClassN
             TumlNode node = (TumlNode) o;
             v = node.getVertex();
             removeEdge(v);
+            node.initialiseProperty();
         } else if (o.getClass().isEnum()) {
             v = removeFromInternalMap(((Enum<?>) o).name());
             removeEdge(v);
@@ -68,6 +69,7 @@ public class UmlgPropertyAssociationClassSetImpl<E, AC extends AssociationClassN
             Vertex associationClassVertex = GraphDb.getDb().getVertex(edge.getProperty(TinkerCollection.ASSOCIATION_CLASS_VERTEX_ID));
             //The remove code will delete all in and out edges
             GraphDb.getDb().removeVertex(associationClassVertex);
+
         }
     }
 

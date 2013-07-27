@@ -61,7 +61,7 @@ public class ClassInterfacePropertyLookupGenerator extends BaseVisitor implement
                             lookupOnParent.getBody().addToStatements("Filter<" + propertyWrapper.javaBaseTypePath().getLast() + "> filter" + cnt + " = new Filter<" +
                                     propertyWrapper.javaBaseTypePath().getLast() + ">() {\n    @Override\n    public boolean filter(" +
                                     propertyWrapper.javaBaseTypePath().getLast() + " entity){\n        return !entity." +
-                                    otherEnd.getter() + "().contains(" + otherEnd.javaBaseTypePath().getLast() + ".this);\n    }\n}");
+                                    otherEnd.getter() + "().contains(" + TumlClassOperations.getPathName(clazz).getLast() + ".this);\n    }\n}");
                         }
                         lookupOnParent.getBody().addToStatements("result.addAll(" + TumlClassOperations.getMetaClassName(c) + ".getInstance().getAllInstances(filter" + cnt++ + "))");
 

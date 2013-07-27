@@ -3,9 +3,7 @@ package org.umlg.associationclass.test;
 import junit.framework.Assert;
 import org.junit.Test;
 import org.umlg.runtime.test.BaseLocalDbTest;
-import org.umlg.tinkergraph.AssociationClassSet;
-import org.umlg.tinkergraph.Human;
-import org.umlg.tinkergraph.ProjectSet;
+import org.umlg.tinkergraph.*;
 
 /**
  * Date: 2013/06/20
@@ -24,10 +22,9 @@ public class TestAssociationClassForSet extends BaseLocalDbTest {
         db.commit();
 
         Assert.assertEquals(3, countVertices());
-        //Human and AssociationClass has edges to root
+        //Human has edge to root
         //3 edges between Human, Project and AssociationClass1
         //3 edges to meta
-        //1 to root
         Assert.assertEquals(7, countEdges());
 
         human = new Human(human.getVertex());
@@ -273,6 +270,72 @@ public class TestAssociationClassForSet extends BaseLocalDbTest {
 
         Assert.assertEquals(5, countVertices());
         Assert.assertEquals(12, countEdges());
+
+    }
+
+    @Test
+    public void testAssociationClassSetOneRemovesAC() {
+        Human human = new Human(true);
+        human.setName("human1");
+
+        NonComposite nonComposite1 = new NonComposite(true);
+        nonComposite1.setName("nonComposite1");
+
+        ACNonComposite acNonComposite1 = new ACNonComposite(true);
+        acNonComposite1.setName("acNonComposite1");
+        human.addToNoncomposite(nonComposite1, acNonComposite1);
+
+        db.commit();
+
+        Assert.assertEquals(3, countVertices());
+
+        //Human and NonComposite has edges to root
+        //3 edges between Human, NonComposite and ACNonComposite
+        //3 edges to meta
+        //2 to root
+        Assert.assertEquals(8, countEdges());
+
+        NonComposite nonComposite2 = new NonComposite(true);
+        nonComposite2.setName("nonComposite");
+
+        ACNonComposite acNonComposite2 = new ACNonComposite(true);
+        acNonComposite2.setName("acNonComposite2");
+        human.addToNoncomposite(nonComposite2, acNonComposite2);
+        db.commit();
+
+        Assert.assertNotNull(nonComposite2.getACNonComposite());
+        Assert.assertEquals(nonComposite2.getACNonComposite(), acNonComposite2);
+
+        //Another 3 edges for the association
+        //another 2 edges to meta
+        //another 1 to root
+        Assert.assertEquals(5, countVertices());
+        Assert.assertEquals(14, countEdges());
+
+        //Create another
+        Human human2 = new Human(true);
+        human2.setName("human2");
+
+        db.commit();
+        Assert.assertEquals(6, countVertices());
+        Assert.assertEquals(16, countEdges());
+
+
+        ACNonComposite acNonComposite3 = new ACNonComposite(true);
+        acNonComposite3.setName("acNonComposite3");
+        nonComposite2.setHuman(human2, acNonComposite3);
+        db.commit();
+
+        Assert.assertNotNull(nonComposite2.getACNonComposite());
+        Assert.assertEquals(nonComposite2.getHuman().getName(), human2.getName());
+        Assert.assertEquals(nonComposite2.getACNonComposite().getName(), acNonComposite3.getName());
+        Assert.assertEquals(nonComposite2.getACNonComposite(), acNonComposite3);
+
+        //acNonComposite2 should have been deleted
+        Assert.assertEquals(6, countVertices());
+        Assert.assertEquals(16, countEdges());
+
+
 
     }
 

@@ -535,6 +535,8 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
                         removeFromInverseLinkedList((TumlNode) o);
                     }
                     GraphDb.getDb().removeEdge(edge);
+
+                    //TODO optimize this to remove only the node, not initialize the collection
                     node.initialiseProperty(tumlRuntimeProperty, true);
                     //Need to break here for bag logic. There will only be more than one edge in the case of the collection being a bag.
                     break;

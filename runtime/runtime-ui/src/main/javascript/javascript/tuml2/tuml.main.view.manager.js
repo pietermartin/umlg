@@ -289,26 +289,26 @@
         this.updateTabsForResultAfterRollback = function (result) {
             for (var i = 0; i < result.length; i++) {
                 var resultForTab = result[i];
-                var metaForData = resultForTab.meta.to;
+                var metaForDataTo = resultForTab.meta.to;
                 for (var j = 0; j < this.tumlTabViewManagers.length; j++) {
                     var tumlTabViewManager = this.tumlTabViewManagers[j];
                     if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager) {
                         tumlTabViewManager.beginUpdate();
                         //TODO use qualified name somehow
                         //Line up he result with the correct tab
-                        if (tumlTabViewManager.tabId == metaForData.name) {
+                        if (tumlTabViewManager.tabId == metaForDataTo.name) {
                             for (var k = 0; k < resultForTab.data.length; k++) {
                                 //Need to update the id's to the tmpId as the id no longer exist on a rolled back transaction
                                 //Go through all the properties, for each composite property set the id = tmpId
-                                this.setComponentIdToTmpId(resultForTab.data[k], this.propertyNavigatingTo, metaForData);
+                                this.setComponentIdToTmpId(resultForTab.data[k], metaForDataTo);
                                 tumlTabViewManager.updateGridAfterRollback(resultForTab.data[k]);
                             }
                         }
                         tumlTabViewManager.endUpdate(true);
                     } else {
-                        if (tumlTabViewManager.tabId == metaForData.name) {
+                        if (tumlTabViewManager.tabId == metaForDataTo.name) {
                             tumlTabViewManager.beginUpdate();
-                            this.setComponentIdToTmpId(resultForTab.data, this.propertyNavigatingTo, metaForData);
+                            this.setComponentIdToTmpId(resultForTab.data, metaForDataTo);
                             tumlTabViewManager.updateGridAfterRollback(resultForTab.data);
                             tumlTabViewManager.endUpdate(true);
                         }

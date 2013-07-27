@@ -373,6 +373,7 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
 //        }
         TransactionThreadEntityVar.remove();
         TransactionThreadMetaNodeVar.remove();
+        UmlgAssociationClassManager.remove();
     }
 
     @Override

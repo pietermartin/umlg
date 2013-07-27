@@ -902,11 +902,11 @@
 
         //this.contextVertexId  !== null && property.associationClass ensures that associationClass properties appear but not from the root.
         //from the root there is no association
-        if (this.contextVertexId !== null && property.associationClassOne) {
+        if (this.contextVertexId !== null && property.associationClassOne && property.memberEndOfAssociationClass) {
             return true;
-        } else if (!property.composite && property.lower > 0 && !property.associationClassOne) {
+        } else if (!property.composite && !property.inverseComposite && property.lower > 0 && !property.associationClassOne) {
             return true;
-        } else if (this.contextVertexId === null && !property.associationClassOne) {
+        } else if (property.associationClassProperty) {
             return false;
         } else if (((property.composite && property.lower > 0) ||
             (!property.composite && !property.inverseComposite && ((property.oneToOne || property.manyToOne) || property.manyPrimitive || property.manyEnumeration)))) {

@@ -29,6 +29,7 @@ public class TinkerGenerationUtil {
 
     public final static OJPathName Pair = new OJPathName("org.umlg.runtime.util.Pair");
 
+    public final static OJPathName UmlgAssociationClassManager = new OJPathName("org.umlg.runtime.adaptor.UmlgAssociationClassManager");
     public final static OJPathName TumlTmpIdManager = new OJPathName("org.umlg.runtime.adaptor.TumlTmpIdManager");
     public static final OJPathName Filter = new OJPathName("org.umlg.runtime.collection.Filter");
     public static final OJPathName TumlIndexManager = new OJPathName("org.umlg.runtime.adaptor.TumlIndexManager");

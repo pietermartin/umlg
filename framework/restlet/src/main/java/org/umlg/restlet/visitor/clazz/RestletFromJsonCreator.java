@@ -118,11 +118,21 @@ public class RestletFromJsonCreator extends BaseVisitor implements Visitor<Class
                             ifIdLong.addToElsePart("id = " + TinkerGenerationUtil.TumlTmpIdManager.getLast() + ".INSTANCE.get((String)idFromMap)");
                             ifSetToNull.addToElsePart(ifIdLong);
 
+                            //Validate that association class json is in the map
+                            OJIfStatement ifMapHasAssociationClassJson = new OJIfStatement("propertyMap.get(\"" + pWrap.getAssociationClassFakePropertyName() + "\") == null");
+                            ifMapHasAssociationClassJson.addToThenPart("throw new IllegalStateException(\"Association class " + pWrap.getAssociationClassFakePropertyName() + " must be in the map!\")");
+                            ifSetToNull.addToElsePart(ifMapHasAssociationClassJson);
+
                             //Create an association class instance
                             ifSetToNull.addToElsePart(pWrap.getAssociationClassPathName().getLast() + " " + pWrap.getAssociationClassFakePropertyName() + " = new "
                                     + pWrap.getAssociationClassPathName().getLast() + "(true)");
                             ifSetToNull.addToElsePart(pWrap.getAssociationClassFakePropertyName() + ".fromJson((Map<String, Object>) propertyMap.get(\"" + pWrap.getAssociationClassFakePropertyName() + "\"))");
                             ifSetToNull.addToElsePart(pWrap.setter() + "((" + pWrap.javaBaseTypePath().getLast() + ")" + TinkerGenerationUtil.graphDbAccess + ".instantiateClassifier(id), " + pWrap.getAssociationClassFakePropertyName() + ")");
+
+                            ifSetToNull.addToElsePart("//Store the association class property name in a ThreadVar.");
+                            ifSetToNull.addToElsePart("//The corresponding toJson checks the ThreadVar to know whether it should return this association class's data");
+                            ifSetToNull.addToElsePart(TinkerGenerationUtil.UmlgAssociationClassManager.getLast() + ".INSTANCE.put(\"" + pWrap.getAssociationClassFakePropertyName() + "\", " + pWrap.getter() + "().getId())");
+
                         } else {
                             ifSetToNull = new OJIfStatement(field.getName() + ".isEmpty() || " + field.getName() + ".get(\"id\") == null",
                                     pWrap.setter() + "(null)");
