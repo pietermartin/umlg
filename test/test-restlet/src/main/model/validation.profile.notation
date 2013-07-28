@@ -49,7 +49,7 @@
       <layoutConstraint xmi:type="notation:Bounds" xmi:id="_gRsHAAV5EeK9oIwdQfC0-w"/>
     </children>
     <element xmi:type="uml:Stereotype" href="validation.profile.uml#_gRqRwAV5EeK9oIwdQfC0-w"/>
-    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_gRrf4QV5EeK9oIwdQfC0-w" x="24" y="44" height="72"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_gRrf4QV5EeK9oIwdQfC0-w" x="28" y="80" height="72"/>
   </children>
   <children xmi:type="notation:Shape" xmi:id="_Zj4VsAV6EeK9oIwdQfC0-w" type="1026" fontName="Sans" lineColor="0">
     <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_Zj48wAV6EeK9oIwdQfC0-w" source="ShadowFigure">

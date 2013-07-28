@@ -220,7 +220,8 @@
     };
 
     function manyValidate(property, validateSingleProperty, currentValues, valueToAdd) {
-        //Validate the value to add
+        //Validate that the property is not already present for a unique set.
+        //The value itself has already been validated to be correct.
         if (currentValues instanceof Array && valueToAdd !== undefined && property.unique) {
             for (var i = 0; i < currentValues.length; i++) {
                 var tmp = currentValues[i];
@@ -241,18 +242,21 @@
                 valid: false,
                 msg: null
             };
+            //Nothing to validate but the property is required
             if (property.lower > 0 && (currentValues == undefined || currentValues == null || currentValues.length == 0)) {
                 return {
                     valid: false,
                     msg: property.name + " is a required field!"
                 };
             }
+            //Nothing to validate and the property is not required
             if (property.lower == 0 && (currentValues == undefined || currentValues == null || currentValues.length == 0)) {
                 return {
                     valid: true,
                     msg: null
                 };
             }
+            //Validate each property
             for (var i = 0; i < currentValues.length; i++) {
                 var tmp = currentValues[i];
                 result = validateSingleProperty(tmp);
@@ -282,8 +286,8 @@
                 return result;
             }
             if (value !== undefined && value !== null && value !== '') {
-                if (!result == 'true' && result == 'false') {
-                    return {valid: false, msg: 'Value must be "true" or "false"'};
+                if (!(value === 'true' || value === 't' || value === '1' || value === 'false' || value === 'f' || value === '0')) {
+                    return {valid: false, msg: 'Value must be "true" or "t" or "1" or "false" or "f" or "0"'};
                 }
             }
             return {

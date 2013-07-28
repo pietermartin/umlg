@@ -123,6 +123,9 @@
     }
 
     ManyEnumerationEditor.prototype = new Tuml.Slick.Editors.ManyPrimitiveEditor();
+    ManyEnumerationEditor.prototype.serializeEditorValue = function (value) {
+        return value;
+    };
     ManyEnumerationEditor.prototype.serializeValueForOne = function (table) {
         var rowArray = table.find('.many-primitive-editor-row');
         var arrayToSerialize = [];
@@ -175,6 +178,9 @@
     }
 
     ManyStringPrimitiveEditor.prototype = new Tuml.Slick.Editors.ManyPrimitiveEditor();
+    ManyStringPrimitiveEditor.prototype.serializeEditorValue = function (value) {
+        return value;
+    };
     ManyStringPrimitiveEditor.prototype.serializeValueForOne = function (table) {
         var rowArray = table.find('.many-primitive-editor-row');
         var arrayToSerialize = [];
@@ -203,6 +209,9 @@
     }
 
     ManyIntegerPrimitiveEditor.prototype = new Tuml.Slick.Editors.ManyPrimitiveEditor();
+    ManyIntegerPrimitiveEditor.prototype.serializeEditorValue = function (value) {
+        return parseInt(value, 10);
+    };
     ManyIntegerPrimitiveEditor.prototype.serializeValueForOne = function (table) {
         var rowArray = table.find('.many-primitive-editor-row');
         var arrayToSerialize = [];
@@ -230,12 +239,25 @@
     }
 
     ManyBooleanPrimitiveEditor.prototype = new Tuml.Slick.Editors.ManyPrimitiveEditor();
+    ManyBooleanPrimitiveEditor.prototype.serializeEditorValue = function (value) {
+        var valueTrue = (value === 'true') || (value === 't') || (value === '1');
+        var valueFalse = (value === 'false') || (value === 'f')  || (value === '0');
+        if (valueTrue) {
+            return true;
+        } else if (valueFalse) {
+            return false;
+        } else {
+            //This should only be called on a already validated value
+            throw 'Incorrect value for ManyBooleanPrimitiveEditor.prototype.serializeEditorValue: ' + value;
+        }
+    };
     ManyBooleanPrimitiveEditor.prototype.serializeValueForOne = function (table) {
         var rowArray = table.find('.many-primitive-editor-row');
         var arrayToSerialize = [];
         for (var i = 0; i < rowArray.length; i++) {
             var row = rowArray[i];
-            var isTrueSet = ($(row).data('value') === 'true');
+            var value = $(row).data('value');
+            var isTrueSet = value === 'true' || value === 't' || value === '1';
             arrayToSerialize.push(isTrueSet);
         }
         return arrayToSerialize;
@@ -245,7 +267,8 @@
         var arrayToSerialize = [];
         for (var i = 0; i < rowArray.length; i++) {
             var row = rowArray[i];
-            var isTrueSet = ($(row).data('value') === 'true');
+            var value = $(row).data('value');
+            var isTrueSet = value === 'true' || value === 't' || value === '1';
             arrayToSerialize.push(isTrueSet);
         }
         return arrayToSerialize;
@@ -365,6 +388,9 @@
         }
     }
 
+    ManyPrimitiveEditor.prototype.serializeEditorValue = function (value) {
+        alert('serializeEditorValue must be overriden');
+    };
     ManyPrimitiveEditor.prototype.serializeValue = function () {
         alert('this must be overriden');
     };
@@ -388,7 +414,8 @@
             testArray.push(valueToAdd);
             var validationResults = $self.args.column.validator(testArray);
             if (currentValues.length !== 0 && validationResults.valid && $self.args.column.options.unique) {
-                validationResults = $self.args.column.validator(currentValues, valueToAdd);
+                var serializedValueToAdd = $self.serializeEditorValue(valueToAdd);
+                validationResults = $self.args.column.validator(currentValues, serializedValueToAdd);
             }
             if (!validationResults.valid) {
                 alert(validationResults.msg);
