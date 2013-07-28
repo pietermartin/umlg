@@ -124,6 +124,11 @@ public class BaseVisitor {
         remover.addParam(propertyWrapper.fieldname(), propertyWrapper.javaTypePath());
         OJIfStatement ifNotNull = new OJIfStatement("!" + propertyWrapper.fieldname() + ".isEmpty()");
         ifNotNull.addToThenPart("this." + propertyWrapper.fieldname() + ".removeAll(" + propertyWrapper.fieldname() + ")");
+
+        if (propertyWrapper.isMemberOfAssociationClass()) {
+            ifNotNull.addToThenPart("this." + propertyWrapper.getAssociationClassFakePropertyName() + " = " + propertyWrapper.javaDefaultInitialisationForAssociationClass((BehavioredClassifier)propertyWrapper.getOtherEnd().getType()));
+        }
+
         remover.getBody().addToStatements(ifNotNull);
         owner.addToOperations(remover);
 
@@ -131,6 +136,9 @@ public class BaseVisitor {
         singleRemover.addParam(propertyWrapper.fieldname(), propertyWrapper.javaBaseTypePath());
         ifNotNull = new OJIfStatement(propertyWrapper.fieldname() + " != null");
         ifNotNull.addToThenPart("this." + propertyWrapper.fieldname() + ".remove(" + propertyWrapper.fieldname() + ")");
+        if (propertyWrapper.isMemberOfAssociationClass()) {
+            ifNotNull.addToThenPart("this." + propertyWrapper.getAssociationClassFakePropertyName() + " = " + propertyWrapper.javaDefaultInitialisationForAssociationClass((BehavioredClassifier)propertyWrapper.getOtherEnd().getType()));
+        }
         singleRemover.getBody().addToStatements(ifNotNull);
         owner.addToOperations(singleRemover);
     }
@@ -139,6 +147,11 @@ public class BaseVisitor {
         OJAnnotatedOperation remover = new OJAnnotatedOperation(propertyWrapper.clearer());
         remover.getBody().addToStatements("this." + propertyWrapper.fieldname() + ".clear()");
         owner.addToOperations(remover);
+        if (propertyWrapper.isMemberOfAssociationClass()) {
+            //Wack the association classes also
+            remover.getBody().addToStatements("this." + propertyWrapper.getAssociationClassFakePropertyName() + " = " + propertyWrapper.javaDefaultInitialisationForAssociationClass((BehavioredClassifier)propertyWrapper.getOtherEnd().getType()));
+            owner.addToOperations(remover);
+        }
     }
 
 }

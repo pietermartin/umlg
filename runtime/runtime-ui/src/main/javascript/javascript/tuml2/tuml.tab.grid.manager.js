@@ -471,7 +471,7 @@
                             } else {
                                 data = {};
                             }
-                            self.tumlTabViewManager.openOneComponent(data, args, column.options.property.tumlUri, column.options.property);
+                            self.tumlTabViewManager.openAssociationClass(data, args, column.options.property.tumlUri, column.options.property);
                         }
                     }
                     //unbind the document click event to close many editors

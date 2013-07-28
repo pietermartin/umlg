@@ -87,6 +87,8 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
 
         //Insert
         ojTryStatement.getTryPart().addToStatements("Object o = overloaded.get(\"insert\")");
+        ojTryStatement.getTryPart().addToStatements("boolean insertedSomething = false");
+
         OJIfStatement ifInsert = new OJIfStatement("o != null");
         ojTryStatement.getTryPart().addToStatements(ifInsert);
         OJIfStatement ifArrayForInsert = new OJIfStatement("o instanceof ArrayList");
@@ -95,6 +97,7 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
         insertArray.setInitExp("(ArrayList<Map<String, Object>>)o");
         annotatedClass.addToImports("java.util.ArrayList");
         ifArrayForInsert.getThenPart().addToLocals(insertArray);
+        ifArrayForInsert.getThenPart().addToStatements("insertedSomething = !array.isEmpty()");
         ifInsert.getThenPart().addToStatements(ifArrayForInsert);
         ifArrayForInsert.getThenPart().addToStatements("int count = 1");
         OJForStatement insertForArray = new OJForStatement("map", new OJPathName("java.util.Map").addToGenerics(new OJPathName("String")).addToGenerics(
@@ -108,10 +111,12 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
         insertMap.setInitExp("(Map<String, Object>) o");
         ifArrayForInsert.setElsePart(new OJBlock());
         ifArrayForInsert.getElsePart().addToLocals(insertMap);
+        ifArrayForInsert.getElsePart().addToStatements("insertedSomething = true");
         ifArrayForInsert.getElsePart().addToStatements("json.append(add(map))");
 
         //update
         ojTryStatement.getTryPart().addToStatements("o = overloaded.get(\"update\")");
+        ojTryStatement.getTryPart().addToStatements("boolean updatedSomething = false");
         OJIfStatement ifUpdate = new OJIfStatement("o != null");
         ojTryStatement.getTryPart().addToStatements(ifUpdate);
         OJIfStatement ifArrayForUpdate = new OJIfStatement("o instanceof ArrayList");
@@ -120,6 +125,9 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
         updateArray.setInitExp("(ArrayList<Map<String, Object>>)o");
         annotatedClass.addToImports("java.util.ArrayList");
         ifArrayForUpdate.getThenPart().addToLocals(updateArray);
+        ifArrayForUpdate.getThenPart().addToStatements("updatedSomething = !array.isEmpty()");
+        OJIfStatement ifInsertedSomething = new OJIfStatement("insertedSomething && updatedSomething", "json.append(\", \")");
+        ifArrayForUpdate.getThenPart().addToStatements(ifInsertedSomething);
         ifUpdate.getThenPart().addToStatements(ifArrayForUpdate);
         ifArrayForUpdate.getThenPart().addToStatements("int count = 1");
         OJForStatement updateForArray = new OJForStatement("map", new OJPathName("java.util.Map").addToGenerics(new OJPathName("String")).addToGenerics(
@@ -133,6 +141,8 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
         updateMap.setInitExp("(Map<String, Object>) o");
         ifArrayForUpdate.setElsePart(new OJBlock());
         ifArrayForUpdate.getElsePart().addToLocals(insertMap);
+        ifArrayForUpdate.getElsePart().addToStatements("updatedSomething = true");
+        ifArrayForUpdate.getElsePart().addToStatements(ifInsertedSomething);
         ifArrayForUpdate.getElsePart().addToStatements("json.append(put(map))");
 
         //delete
@@ -145,6 +155,11 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
         deleteArray.setInitExp("(ArrayList<Map<String, Object>>)o");
         annotatedClass.addToImports("java.util.ArrayList");
         ifArrayForDelete.getThenPart().addToLocals(deleteArray);
+
+        OJIfStatement iInsertedOrUpdated = new OJIfStatement("(insertedSomething || updatedSomething) && !array.isEmpty()");
+        iInsertedOrUpdated.addToThenPart("json.append(\", \")");
+        ifArrayForDelete.addToThenPart(iInsertedOrUpdated);
+
         ifDelete.getThenPart().addToStatements(ifArrayForDelete);
         OJForStatement deleteForArray = new OJForStatement("map", new OJPathName("java.util.Map").addToGenerics(new OJPathName("String")).addToGenerics(
                 new OJPathName("Object")), "array");
@@ -154,6 +169,10 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
         deleteMap.setInitExp("(Map<String, Object>) o");
         ifArrayForDelete.setElsePart(new OJBlock());
         ifArrayForDelete.getElsePart().addToLocals(insertMap);
+
+        iInsertedOrUpdated = new OJIfStatement("insertedSomething || updatedSomething");
+        iInsertedOrUpdated.addToThenPart("json.append(\", \")");
+        ifArrayForDelete.addToElsePart(iInsertedOrUpdated);
         ifArrayForDelete.getElsePart().addToStatements("delete(map)");
 
         addPostResource(concreteClassifier, annotatedClass, parentPathName);

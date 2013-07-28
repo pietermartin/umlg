@@ -16,6 +16,8 @@ import org.umlg.javageneration.visitor.BaseVisitor;
 
 public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implements Visitor<Class> {
 
+    public static final String INITIALISE_PROPERTY = "initialiseProperty";
+
     public ClassRuntimePropertyImplementorVisitor(Workspace workspace) {
         super(workspace);
     }
@@ -162,7 +164,7 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
     }
 
     private void addInitialiseProperty(OJAnnotatedClass annotatedClass, Class clazz) {
-        OJAnnotatedOperation initialiseProperty = new OJAnnotatedOperation("initialiseProperty");
+        OJAnnotatedOperation initialiseProperty = new OJAnnotatedOperation(INITIALISE_PROPERTY);
         TinkerGenerationUtil.addOverrideAnnotation(initialiseProperty);
         initialiseProperty.addParam("tumlRuntimeProperty", TinkerGenerationUtil.tumlRuntimePropertyPathName.getCopy());
         initialiseProperty.addParam("inverse", "boolean");
@@ -194,6 +196,13 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
                 OJSimpleStatement statement = new OJSimpleStatement("this." + pWrap.fieldname() + " = " + pWrap.javaDefaultInitialisation(clazz));
                 statement.setName(pWrap.fieldname());
                 ojSwitchCase.getBody().addToStatements(statement);
+
+                if (pWrap.isMemberOfAssociationClass()) {
+                    statement = new OJSimpleStatement("this." + pWrap.getAssociationClassFakePropertyName() + " = " + pWrap.javaDefaultInitialisationForAssociationClass(clazz));
+                    statement.setName(pWrap.getAssociationClassFakePropertyName());
+                    ojSwitchCase.getBody().addToStatements(statement);
+                }
+
                 annotatedClass.addToImports(pWrap.javaImplTypePath());
                 ojSwitchStatement.addToCases(ojSwitchCase);
             }

@@ -47,7 +47,6 @@ public class UmlgPropertyAssociationClassSetImpl<E, AC extends AssociationClassN
             TumlNode node = (TumlNode) o;
             v = node.getVertex();
             removeEdge(v);
-            node.initialiseProperty();
         } else if (o.getClass().isEnum()) {
             v = removeFromInternalMap(((Enum<?>) o).name());
             removeEdge(v);

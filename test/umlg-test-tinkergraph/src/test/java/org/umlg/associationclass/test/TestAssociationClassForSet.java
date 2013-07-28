@@ -296,7 +296,7 @@ public class TestAssociationClassForSet extends BaseLocalDbTest {
         Assert.assertEquals(8, countEdges());
 
         NonComposite nonComposite2 = new NonComposite(true);
-        nonComposite2.setName("nonComposite");
+        nonComposite2.setName("nonComposite2");
 
         ACNonComposite acNonComposite2 = new ACNonComposite(true);
         acNonComposite2.setName("acNonComposite2");
@@ -334,8 +334,35 @@ public class TestAssociationClassForSet extends BaseLocalDbTest {
         //acNonComposite2 should have been deleted
         Assert.assertEquals(6, countVertices());
         Assert.assertEquals(16, countEdges());
+    }
 
+    @Test
+    public void testInverseSides() {
+        Human human1 = new Human(true);
+        human1.setName("human1");
+        NonComposite nonComposite1 = new NonComposite(true);
+        nonComposite1.setName("nonComposite1");
+        ACNonComposite acNonComposite1 = new ACNonComposite(true);
+        acNonComposite1.setName("acNonComposite1");
+        human1.addToNoncomposite(nonComposite1, acNonComposite1);
+        db.commit();
+        Assert.assertEquals(3, countVertices());
 
+        //Human and NonComposite has edges to root
+        //3 edges between Human, NonComposite and ACNonComposite
+        //3 edges to meta
+        //2 to root
+        Assert.assertEquals(8, countEdges());
+        Assert.assertEquals(1, human1.getACNonComposite().size());
+
+        NonComposite nonComposite2 = new NonComposite(true);
+        nonComposite2.setName("nonComposite2");
+        ACNonComposite acNonComposite2 = new ACNonComposite(true);
+        acNonComposite2.setName("acNonComposite2");
+        human1.addToNoncomposite(nonComposite2, acNonComposite2);
+        db.commit();
+
+        Assert.assertEquals(2, human1.getACNonComposite().size());
 
     }
 

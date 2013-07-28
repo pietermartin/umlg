@@ -1193,7 +1193,9 @@
         //Need to unset the associationClass
         this.applyValue = function (item, state) {
             item[args.column.field] = state;
-            item[args.column.options.property.associationClassPropertyName] = {id: null, displayName: null};
+            var fakeId = 'fake::' + Tuml.TumlFakeIndex++;
+            item[args.column.options.property.associationClassPropertyName] = {id: fakeId, tmpId: fakeId, displayName: null, refreshFromDb: true};
+//            item[args.column.options.property.associationClassPropertyName] = {id: null, tmpId: null, displayName: null};
         };
 
         this.isValueChanged = function () {

@@ -829,9 +829,15 @@
         this.tumlTabGridManager.updateGridAfterRollback(item);
         //Check if component tab is open for this particular item
         if (this.tumlTabViewManagers.length > 0) {
-            if (this.tumlTabGridManager.dataView.getItem(this.componentCell.row).tmpId === item.tmpId) {
+
+            //For new items there must be a tmpId
+            if (item.tmpId !== undefined && this.tumlTabGridManager.dataView.getItem(this.componentCell.row).tmpId === item.tmpId) {
+                TumlBaseTabViewManager.prototype.updateGridAfterRollback.call(this, item);
+            } else if (this.tumlTabGridManager.dataView.getItem(this.componentCell.row).id === item.id) {
+                //Updated items, currently this is only suppose to happen for association classes
                 TumlBaseTabViewManager.prototype.updateGridAfterRollback.call(this, item);
             }
+
         }
     }
 
@@ -1112,6 +1118,71 @@
                         //Create the object server side for ocl to execute...
                         oneComponent.data.id = 'fake::' + Tuml.TumlFakeIndex++;
                         oneComponent.data.tmpId = oneComponent.data.id;
+                        tumlOneComponentTabViewManager.createTab(oneComponent, true);
+                        tumlOneComponentTabViewManager.saveNewRow();
+                        if (tumlOneComponentTabViewManager.tumlTabOneManager.containsOneToOne) {
+                            tumlOneComponentTabViewManager.parentTabContainerManager.addToOneToOneIndex(oneComponent.data.id, {});
+                        }
+                    } else {
+                        tumlOneComponentTabViewManager.createTab(oneComponent, oneComponent.data.id.indexOf('fake') !== -1);
+                        tumlOneComponentTabViewManager.tumlTabOneManager.refreshFromDataModel();
+                    }
+
+                    if (i === 0) {
+                        firstTumlOneComponentTabViewManager = tumlOneComponentTabViewManager;
+                    }
+
+                    //pass through component's component validationResults
+                    self.passOnValidationResults(tumlOneComponentTabViewManager, cell.row, self.tumlTabGridManager.grid.getColumns()[cell.cell].name);
+
+                }
+
+                self.open = false;
+
+                //Set only the first tab to active
+                if (firstTumlOneComponentTabViewManager !== null) {
+                    self.tabContainer.tabs("option", "active", 0);
+                }
+
+//                var qualifiedName = result[0].meta.qualifiedName;
+                var qualifiedName = property.qualifiedName;
+                self.updateNavigationHeader(qualifiedName);
+                self.updateMultiplicityWarningHeader();
+
+            }
+        );
+    }
+
+    TumlTabManyViewManager.prototype.openAssociationClass = function (data, cell, tumlUri, property) {
+        var self = this;
+        //Get the meta data.
+
+        Tuml.Metadata.Cache.get(property.qualifiedName, property.tumlMetaDataUri,
+            function (result) {
+                var oneComponent = {meta: null, data: null};
+                self.tabContainerProperty = property;
+                var firstTumlOneComponentTabViewManager = null;
+                for (var i = 0; i < result.length; i++) {
+                    oneComponent.meta = result[i].meta
+                    self.maybeCreateTabContainer();
+                    oneComponent.data = data;
+                    var tumlOneComponentTabViewManager = self.createTabContainer(
+                        tuml.tab.Enum.Properties,
+                        oneComponent,
+                        tumlUri,
+                        {forLookup: false, forManyComponent: false, forOneComponent: true, isOne: true, forCreation: true},
+                        property
+                    );
+                    self.setCell(cell);
+                    self.addToTumlTabViewManagers(tumlOneComponentTabViewManager);
+                    tumlOneComponentTabViewManager.parentTabContainerManager = self;
+                    $('#slickGrid' + self.tabId).hide();
+                    tumlOneComponentTabViewManager.backupData = $.extend(true, {}, oneComponent.data);
+
+                    if (oneComponent.data.refreshFromDb !== undefined && oneComponent.data.refreshFromDb) {
+                        //Create the object server side for ocl to execute...
+//                        oneComponent.data.id = 'fake::' + Tuml.TumlFakeIndex++;
+//                        oneComponent.data.tmpId = oneComponent.data.id;
                         tumlOneComponentTabViewManager.createTab(oneComponent, true);
                         tumlOneComponentTabViewManager.saveNewRow();
                         if (tumlOneComponentTabViewManager.tumlTabOneManager.containsOneToOne) {

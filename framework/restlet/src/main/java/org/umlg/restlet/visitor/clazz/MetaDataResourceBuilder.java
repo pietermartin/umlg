@@ -25,7 +25,7 @@ public class MetaDataResourceBuilder extends BaseServerResourceBuilder implement
     }
 
     @Override
-    @VisitSubclasses({org.eclipse.uml2.uml.Class.class, AssociationClass.class})
+    @VisitSubclasses({org.eclipse.uml2.uml.Interface.class,  org.eclipse.uml2.uml.Class.class, AssociationClass.class})
     public void visitBefore(Classifier c) {
         if (c instanceof Interface || c instanceof org.eclipse.uml2.uml.Class) {
             OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(getServerResourceMetaDataName(c));
