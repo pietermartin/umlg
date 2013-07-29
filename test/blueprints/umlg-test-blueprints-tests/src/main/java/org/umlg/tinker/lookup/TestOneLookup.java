@@ -66,8 +66,8 @@ public class TestOneLookup extends BaseLocalDbTest {
 		manyA4.addToIManyB(manyB3);
 		manyA4.addToIManyB(manyB4);
         db.commit();
-		Assert.assertEquals(4, new ManyA(manyA4.getVertex()).lookupFor_iManyA_iManyB().size());
-		Assert.assertEquals(4, new ManyB(manyB4.getVertex()).lookupFor_iManyB_iManyA().size());
+		Assert.assertEquals(0, new ManyA(manyA4.getVertex()).lookupFor_iManyA_iManyB().size());
+		Assert.assertEquals(0, new ManyB(manyB4.getVertex()).lookupFor_iManyB_iManyA().size());
 	}
 
 	@Test

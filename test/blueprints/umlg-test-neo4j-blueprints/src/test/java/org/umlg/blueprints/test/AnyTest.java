@@ -2,6 +2,7 @@ package org.umlg.blueprints.test;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
+import org.umlg.tinker.lookup.TestOneLookup;
 import org.umlg.tinker.qualifiertest.TestQualifier;
 
 /**
@@ -9,7 +10,7 @@ import org.umlg.tinker.qualifiertest.TestQualifier;
  * Time: 7:18 PM
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({TestQualifier.class})
+@Suite.SuiteClasses({TestOneLookup.class})
 public class AnyTest {
 
 }
