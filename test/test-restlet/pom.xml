@@ -65,7 +65,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.umlg</groupId>
-			<artifactId>runtime-jquery</artifactId>
+			<artifactId>runtime-ui</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>		
 		<dependency>
