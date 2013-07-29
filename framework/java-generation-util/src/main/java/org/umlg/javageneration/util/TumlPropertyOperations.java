@@ -267,6 +267,10 @@ public final class TumlPropertyOperations extends PropertyOperations {
     private static OJSimpleStatement getDefaultTinkerCollectionInitalisation(Property p, BehavioredClassifier propertyConcreteOwner, OJPathName collectionPathName) {
 		OJSimpleStatement ojSimpleStatement = new OJSimpleStatement(" new " + collectionPathName.getCollectionTypeName() + "(this");
 		ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", " + TumlClassOperations.propertyEnumName(propertyConcreteOwner) + "." + new PropertyWrapper(p).fieldname());
+        if (new PropertyWrapper(p).isMemberOfAssociationClass() && !(propertyConcreteOwner instanceof AssociationClass)) {
+            //The constructor for an UmlgPropertyAssociationClassSet takes 2 runtime properties, one to the property end and one to the fake property end to the association class
+            ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ", " + TumlClassOperations.propertyEnumName(propertyConcreteOwner) + "." + new PropertyWrapper(p).getAssociationClassFakePropertyName());
+        }
 		ojSimpleStatement.setExpression(ojSimpleStatement.getExpression() + ")");
 		return ojSimpleStatement;
 	}

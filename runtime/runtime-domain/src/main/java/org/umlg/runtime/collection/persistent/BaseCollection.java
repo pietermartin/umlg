@@ -582,7 +582,7 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
 
             } else {
 
-                node.inverseAdder(tumlRuntimeProperty, true, this.owner);
+                this.handleInverseSide(node, tumlRuntimeProperty, true, this.owner);
 
             }
         } else if (e.getClass().isEnum()) {
@@ -623,6 +623,10 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
             return null;
         }
 
+    }
+
+    protected void handleInverseSide(TumlNode node, TumlRuntimeProperty tumlRuntimeProperty, boolean b, TumlNode owner) {
+        node.inverseAdder(tumlRuntimeProperty, true, this.owner);
     }
 
     protected Edge createEdge(E e, Vertex v) {

@@ -17,21 +17,35 @@ import java.util.Set;
  */
 public class UmlgPropertyAssociationClassSetImpl<E, AC extends AssociationClassNode> extends TinkerSetImpl<E> implements UmlgPropertyAssociationClassSet<E, AC> {
 
-    public UmlgPropertyAssociationClassSetImpl(TumlNode owner, TumlRuntimeProperty runtimeProperty) {
+    private TumlRuntimeProperty associationClassRuntimeProperty;
+    private AC associationClass;
+
+    public UmlgPropertyAssociationClassSetImpl(TumlNode owner, TumlRuntimeProperty runtimeProperty, TumlRuntimeProperty associationClassRuntimeProperty) {
         super(owner, runtimeProperty);
+        this.associationClassRuntimeProperty = associationClassRuntimeProperty;
     }
 
     @Override
     public boolean add(E e, AC associationClass) {
+        //This is needed in handleInverseSide
+        this.associationClass = associationClass;
         if (super.add(e)) {
-            associationClass.internalAdder(tumlRuntimeProperty, true, this.owner);
-            associationClass.internalAdder(tumlRuntimeProperty, false, (TumlNode) e);
+            this.associationClass = null;
+            associationClass.internalAdder(this.tumlRuntimeProperty, true, this.owner);
+            associationClass.internalAdder(this.tumlRuntimeProperty, false, (TumlNode) e);
             this.edge.setProperty(TinkerCollection.ASSOCIATION_CLASS_VERTEX_ID, associationClass.getId());
             this.edge.setProperty("className", associationClass.getClass().getName());
             return true;
         } else {
+            this.associationClass = null;
             return false;
         }
+    }
+
+    @Override
+    protected void handleInverseSide(TumlNode node, TumlRuntimeProperty tumlRuntimeProperty, boolean b, TumlNode owner) {
+        super.handleInverseSide(node, tumlRuntimeProperty, b, owner);
+        this.owner.inverseAdder(this.associationClassRuntimeProperty, true, this.associationClass);
     }
 
     @Override
