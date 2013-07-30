@@ -1,13 +1,12 @@
 package org.umlg.associationclass.gremlin;
 
-import junit.framework.Assert;
 import org.junit.Test;
 import org.umlg.runtime.adaptor.GraphDb;
 import org.umlg.runtime.adaptor.TumlQueryEnum;
 import org.umlg.runtime.test.BaseLocalDbTest;
-import org.umlg.tinkergraph.AssociationClassSet;
+import org.umlg.tinkergraph.AssociationClassSetTest;
 import org.umlg.tinkergraph.Human;
-import org.umlg.tinkergraph.ProjectSet;
+import org.umlg.tinkergraph.ProjectSetTest;
 
 /**
  * Date: 2013/06/23
@@ -19,19 +18,19 @@ public class TestAssociationClassGremlin extends BaseLocalDbTest {
     public void testGremlinOnAssociationClass() {
         Human human = new Human(true);
         human.setName("human1");
-        AssociationClassSet associationClass1 = new AssociationClassSet(true);
+        AssociationClassSetTest associationClass1 = new AssociationClassSetTest(true);
         associationClass1.setWeight(1);
-        ProjectSet project = new ProjectSet(human, associationClass1);
+        ProjectSetTest project = new ProjectSetTest(human, associationClass1);
         project.setName("project1");
 
-        AssociationClassSet associationClass2 = new AssociationClassSet(true);
+        AssociationClassSetTest associationClass2 = new AssociationClassSetTest(true);
         associationClass2.setWeight(2);
-        ProjectSet project2 = new ProjectSet(human, associationClass2);
+        ProjectSetTest project2 = new ProjectSetTest(human, associationClass2);
         project2.setName("project2");
 
-        AssociationClassSet associationClass3 = new AssociationClassSet(true);
+        AssociationClassSetTest associationClass3 = new AssociationClassSetTest(true);
         associationClass3.setWeight(3);
-        ProjectSet project3 = new ProjectSet(human, associationClass3);
+        ProjectSetTest project3 = new ProjectSetTest(human, associationClass3);
         project3.setName("project3");
 
         db.commit();

@@ -578,7 +578,8 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
                 // side may remain in memory.
                 // Clearing this property is not performance issue as it is a
                 // one
-                node.initialiseProperty(tumlRuntimeProperty, true);
+//                node.initialiseProperty(tumlRuntimeProperty, true);
+                this.handleInverseSide(node, tumlRuntimeProperty, true, this.owner);
 
             } else {
 

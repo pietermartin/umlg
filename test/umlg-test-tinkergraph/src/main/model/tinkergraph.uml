@@ -41,7 +41,7 @@
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_lUY_UPZ9EeKXi9pM4yg14w" value="*"/>
           </ownedAttribute>
         </packagedElement>
-        <packagedElement xmi:type="uml:Class" xmi:id="_WEtf4NWeEeKvx-CpQtHgtA" name="ProjectSet">
+        <packagedElement xmi:type="uml:Class" xmi:id="_WEtf4NWeEeKvx-CpQtHgtA" name="ProjectSetTest">
           <ownedAttribute xmi:type="uml:Property" xmi:id="_c5WccNWeEeKvx-CpQtHgtA" name="name" visibility="public">
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_eUtnMNWeEeKvx-CpQtHgtA" value="1"/>
@@ -59,7 +59,7 @@
             </defaultValue>
           </ownedAttribute>
         </packagedElement>
-        <packagedElement xmi:type="uml:AssociationClass" xmi:id="_BAf8ENXnEeK3orlf5ZrL2w" name="AssociationClassSet" memberEnd="_BAf8EdXnEeK3orlf5ZrL2w _BAet8NXnEeK3orlf5ZrL2w" navigableOwnedEnd="_BAf8EdXnEeK3orlf5ZrL2w">
+        <packagedElement xmi:type="uml:AssociationClass" xmi:id="_BAf8ENXnEeK3orlf5ZrL2w" name="AssociationClassSetTest" memberEnd="_BAf8EdXnEeK3orlf5ZrL2w _BAet8NXnEeK3orlf5ZrL2w" navigableOwnedEnd="_BAf8EdXnEeK3orlf5ZrL2w">
           <ownedAttribute xmi:type="uml:Property" xmi:id="_pG5NMNXnEeK3orlf5ZrL2w" name="weight" visibility="public">
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_qjqtMNXnEeK3orlf5ZrL2w" value="1"/>
@@ -70,7 +70,7 @@
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_BAf8E9XnEeK3orlf5ZrL2w" value="1"/>
           </ownedEnd>
         </packagedElement>
-        <packagedElement xmi:type="uml:Class" xmi:id="_zLvmkNsnEeK9CpmlFL_zvQ" name="ProjectList">
+        <packagedElement xmi:type="uml:Class" xmi:id="_zLvmkNsnEeK9CpmlFL_zvQ" name="ProjectListTest">
           <ownedAttribute xmi:type="uml:Property" xmi:id="_7rLusNtAEeK7O_6WBh_v7w" name="name" visibility="public">
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_9ZxXcNtAEeK7O_6WBh_v7w" value="1"/>
@@ -80,7 +80,7 @@
             </defaultValue>
           </ownedAttribute>
         </packagedElement>
-        <packagedElement xmi:type="uml:AssociationClass" xmi:id="_04Sn8NsnEeK9CpmlFL_zvQ" name="AssociationClassSequence" memberEnd="_04Sn8dsnEeK9CpmlFL_zvQ _04QLsNsnEeK9CpmlFL_zvQ" navigableOwnedEnd="_04Sn8dsnEeK9CpmlFL_zvQ">
+        <packagedElement xmi:type="uml:AssociationClass" xmi:id="_04Sn8NsnEeK9CpmlFL_zvQ" name="AssociationClassSequenceTest" memberEnd="_04Sn8dsnEeK9CpmlFL_zvQ _04QLsNsnEeK9CpmlFL_zvQ" navigableOwnedEnd="_04Sn8dsnEeK9CpmlFL_zvQ">
           <ownedAttribute xmi:type="uml:Property" xmi:id="_04n1wNtAEeK7O_6WBh_v7w" name="weight" visibility="public">
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_2W6_wNtAEeK7O_6WBh_v7w" value="1"/>
@@ -91,7 +91,7 @@
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_04Sn89snEeK9CpmlFL_zvQ" value="1"/>
           </ownedEnd>
         </packagedElement>
-        <packagedElement xmi:type="uml:Class" xmi:id="_u28AINtAEeK7O_6WBh_v7w" name="ProjectOrderedSet">
+        <packagedElement xmi:type="uml:Class" xmi:id="_u28AINtAEeK7O_6WBh_v7w" name="ProjectOrderedSetTest">
           <ownedAttribute xmi:type="uml:Property" xmi:id="_92aQINtAEeK7O_6WBh_v7w" name="name" visibility="public">
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_-9tPYNtAEeK7O_6WBh_v7w" value="1"/>
@@ -101,7 +101,7 @@
             </defaultValue>
           </ownedAttribute>
         </packagedElement>
-        <packagedElement xmi:type="uml:Class" xmi:id="_wXnvwNtAEeK7O_6WBh_v7w" name="ProjectBag">
+        <packagedElement xmi:type="uml:Class" xmi:id="_wXnvwNtAEeK7O_6WBh_v7w" name="ProjectBagTest">
           <ownedAttribute xmi:type="uml:Property" xmi:id="_QUIIoNtBEeK7O_6WBh_v7w" name="name" visibility="public">
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Rhi-ANtBEeK7O_6WBh_v7w" value="1"/>
@@ -111,7 +111,7 @@
             </defaultValue>
           </ownedAttribute>
         </packagedElement>
-        <packagedElement xmi:type="uml:AssociationClass" xmi:id="_3TmDYNtAEeK7O_6WBh_v7w" name="AssociationClassOrderedSet" memberEnd="_3TmDYdtAEeK7O_6WBh_v7w _3Tk1QNtAEeK7O_6WBh_v7w" navigableOwnedEnd="_3TmDYdtAEeK7O_6WBh_v7w">
+        <packagedElement xmi:type="uml:AssociationClass" xmi:id="_3TmDYNtAEeK7O_6WBh_v7w" name="AssociationClassOrderedSetTest" memberEnd="_3TmDYdtAEeK7O_6WBh_v7w _3Tk1QNtAEeK7O_6WBh_v7w" navigableOwnedEnd="_3TmDYdtAEeK7O_6WBh_v7w">
           <ownedAttribute xmi:type="uml:Property" xmi:id="_5ADlMNtAEeK7O_6WBh_v7w" name="weight" visibility="public">
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_6cuXgNtAEeK7O_6WBh_v7w" value="1"/>
@@ -122,7 +122,7 @@
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_3TmDY9tAEeK7O_6WBh_v7w" value="1"/>
           </ownedEnd>
         </packagedElement>
-        <packagedElement xmi:type="uml:AssociationClass" xmi:id="_K4zvcNtBEeK7O_6WBh_v7w" name="AssociationClassBag" memberEnd="_K4zvcdtBEeK7O_6WBh_v7w _K4x6QNtBEeK7O_6WBh_v7w" navigableOwnedEnd="_K4zvcdtBEeK7O_6WBh_v7w">
+        <packagedElement xmi:type="uml:AssociationClass" xmi:id="_K4zvcNtBEeK7O_6WBh_v7w" name="AssociationClassBagTest" memberEnd="_K4zvcdtBEeK7O_6WBh_v7w _K4x6QNtBEeK7O_6WBh_v7w" navigableOwnedEnd="_K4zvcdtBEeK7O_6WBh_v7w">
           <ownedAttribute xmi:type="uml:Property" xmi:id="_R46VINtBEeK7O_6WBh_v7w" name="weight" visibility="public">
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_TM5FgNtBEeK7O_6WBh_v7w" value="1"/>

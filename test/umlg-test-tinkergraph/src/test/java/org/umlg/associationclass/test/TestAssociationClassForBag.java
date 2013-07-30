@@ -20,24 +20,24 @@ public class TestAssociationClassForBag extends BaseLocalDbTest {
         Human human = new Human(true);
         human.setName("human");
 
-        AssociationClassBag associationClassBag1 = new AssociationClassBag(true);
+        AssociationClassBagTest associationClassBag1 = new AssociationClassBagTest(true);
         associationClassBag1.setWeight(1);
-        ProjectBag projectBag1 = new ProjectBag(human, associationClassBag1);
+        ProjectBagTest projectBag1 = new ProjectBagTest(human, associationClassBag1);
         projectBag1.setName("projectBag1");
 
-        AssociationClassBag associationClassBag2 = new AssociationClassBag(true);
+        AssociationClassBagTest associationClassBag2 = new AssociationClassBagTest(true);
         associationClassBag2.setWeight(2);
-        ProjectBag projectBag2 = new ProjectBag(human, associationClassBag2);
+        ProjectBagTest projectBag2 = new ProjectBagTest(human, associationClassBag2);
         projectBag2.setName("projectBag2");
 
-        AssociationClassBag associationClassBag3 = new AssociationClassBag(true);
+        AssociationClassBagTest associationClassBag3 = new AssociationClassBagTest(true);
         associationClassBag3.setWeight(3);
-        ProjectBag projectBag3 = new ProjectBag(human, associationClassBag3);
+        ProjectBagTest projectBag3 = new ProjectBagTest(human, associationClassBag3);
         projectBag3.setName("projectBag3");
 
-        AssociationClassBag associationClassBag4 = new AssociationClassBag(true);
+        AssociationClassBagTest associationClassBag4 = new AssociationClassBagTest(true);
         associationClassBag4.setWeight(4);
-        ProjectBag projectBag4 = new ProjectBag(human, associationClassBag4);
+        ProjectBagTest projectBag4 = new ProjectBagTest(human, associationClassBag4);
         projectBag4.setName("projectBag4");
 
         db.commit();
@@ -58,24 +58,24 @@ public class TestAssociationClassForBag extends BaseLocalDbTest {
         Human human = new Human(true);
         human.setName("human");
 
-        AssociationClassBag associationClassBag1 = new AssociationClassBag(true);
+        AssociationClassBagTest associationClassBag1 = new AssociationClassBagTest(true);
         associationClassBag1.setWeight(1);
-        ProjectBag projectBag1 = new ProjectBag(human, associationClassBag1);
+        ProjectBagTest projectBag1 = new ProjectBagTest(human, associationClassBag1);
         projectBag1.setName("projectBag1");
 
-        AssociationClassBag associationClassBag2 = new AssociationClassBag(true);
+        AssociationClassBagTest associationClassBag2 = new AssociationClassBagTest(true);
         associationClassBag2.setWeight(2);
-        ProjectBag projectBag2 = new ProjectBag(human, associationClassBag2);
+        ProjectBagTest projectBag2 = new ProjectBagTest(human, associationClassBag2);
         projectBag2.setName("projectBag2");
 
-        AssociationClassBag associationClassBag3 = new AssociationClassBag(true);
+        AssociationClassBagTest associationClassBag3 = new AssociationClassBagTest(true);
         associationClassBag3.setWeight(3);
-        ProjectBag projectBag3 = new ProjectBag(human, associationClassBag3);
+        ProjectBagTest projectBag3 = new ProjectBagTest(human, associationClassBag3);
         projectBag3.setName("projectBag3");
 
-        AssociationClassBag associationClassBag4 = new AssociationClassBag(true);
+        AssociationClassBagTest associationClassBag4 = new AssociationClassBagTest(true);
         associationClassBag4.setWeight(4);
-        ProjectBag projectBag4 = new ProjectBag(human, associationClassBag4);
+        ProjectBagTest projectBag4 = new ProjectBagTest(human, associationClassBag4);
         projectBag4.setName("projectBag4");
 
         db.commit();
@@ -85,7 +85,7 @@ public class TestAssociationClassForBag extends BaseLocalDbTest {
         Assert.assertEquals(4, human.getProjectbag().size());
 
 
-        AssociationClassBag associationClassBag5 = new AssociationClassBag(true);
+        AssociationClassBagTest associationClassBag5 = new AssociationClassBagTest(true);
         associationClassBag5.setWeight(5);
         boolean added = human.getProjectbag().add(projectBag1, associationClassBag5);
         Assert.assertTrue(added);
@@ -99,19 +99,19 @@ public class TestAssociationClassForBag extends BaseLocalDbTest {
     public void testAssociationClass1_Removal() {
         Human human = new Human(true);
         human.setName("human1");
-        AssociationClassBag associationClassBag1 = new AssociationClassBag(true);
+        AssociationClassBagTest associationClassBag1 = new AssociationClassBagTest(true);
         associationClassBag1.setWeight(1);
-        ProjectBag projectBag1 = new ProjectBag(human, associationClassBag1);
+        ProjectBagTest projectBag1 = new ProjectBagTest(human, associationClassBag1);
         projectBag1.setName("projectBag1");
 
-        AssociationClassBag associationClassBag2 = new AssociationClassBag(true);
+        AssociationClassBagTest associationClassBag2 = new AssociationClassBagTest(true);
         associationClassBag2.setWeight(2);
-        ProjectBag projectBag2 = new ProjectBag(human, associationClassBag2);
+        ProjectBagTest projectBag2 = new ProjectBagTest(human, associationClassBag2);
         projectBag2.setName("projectBag2");
 
-        AssociationClassBag associationClassBag3 = new AssociationClassBag(true);
+        AssociationClassBagTest associationClassBag3 = new AssociationClassBagTest(true);
         associationClassBag3.setWeight(3);
-        ProjectBag projectBag3 = new ProjectBag(human, associationClassBag3);
+        ProjectBagTest projectBag3 = new ProjectBagTest(human, associationClassBag3);
         projectBag3.setName("projectBag3");
 
         db.commit();
@@ -119,7 +119,7 @@ public class TestAssociationClassForBag extends BaseLocalDbTest {
         human = new Human(human.getVertex());
         Assert.assertEquals(3, human.getProjectbag().size());
 
-        projectBag1 = new ProjectBag(projectBag1.getVertex());
+        projectBag1 = new ProjectBagTest(projectBag1.getVertex());
         human.removeFromProjectbag(projectBag1);
         projectBag1.delete();
 
@@ -127,7 +127,7 @@ public class TestAssociationClassForBag extends BaseLocalDbTest {
 
         human = new Human(human.getVertex());
         Assert.assertEquals(2, human.getProjectbag().size());
-        Assert.assertEquals(2, human.getAssociationClassBag().size());
+        Assert.assertEquals(2, human.getAssociationClassBagTest().size());
 
     }
 }

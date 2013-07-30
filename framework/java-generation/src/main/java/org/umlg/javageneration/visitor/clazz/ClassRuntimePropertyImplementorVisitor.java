@@ -102,7 +102,12 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
         }
     }
 
-
+    /**
+     * inverseAdded is called from the collection classes to manage the inverse side of an association.
+     * It must be called before the edge is created. It will attempt to load the collection. Then it will add the element without creating an edge to it.
+     * @param annotatedClass
+     * @param clazz
+     */
     private void addInternalInverseAdder(OJAnnotatedClass annotatedClass, Class clazz) {
         OJAnnotatedOperation initialiseProperty = new OJAnnotatedOperation("inverseAdder");
         TinkerGenerationUtil.addOverrideAnnotation(initialiseProperty);
@@ -150,6 +155,16 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
                 ojSwitchCase.getBody().addToStatements(statement);
                 annotatedClass.addToImports(pWrap.javaImplTypePath());
                 ojSwitchStatement.addToCases(ojSwitchCase);
+
+                if (pWrap.isMemberOfAssociationClass()) {
+                    ojSwitchCase = new OJSwitchCase();
+                    ojSwitchCase.setLabel(pWrap.getAssociationClassFakePropertyName());
+                    statement = new OJSimpleStatement("this." + pWrap.getAssociationClassFakePropertyName() + ".inverseAdder((" + pWrap.getAssociationClassPathName().getLast() + ")umlgNode)");
+                    statement.setName(pWrap.fieldname());
+                    ojSwitchCase.getBody().addToStatements(statement);
+                    annotatedClass.addToImports(pWrap.javaImplTypePath());
+                    ojSwitchStatement.addToCases(ojSwitchCase);
+                }
             }
         }
 
