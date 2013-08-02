@@ -2,11 +2,15 @@ package org.umlg.runtime.collection.persistent;
 
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 import org.umlg.runtime.adaptor.GraphDb;
 import org.umlg.runtime.collection.TinkerCollection;
 import org.umlg.runtime.collection.TumlRuntimeProperty;
 import org.umlg.runtime.domain.TumlNode;
 
+import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -18,6 +22,79 @@ public class UmlgAssociationClassOrderedSetImpl<AssociationClassNode> extends Ti
 
     public UmlgAssociationClassOrderedSetImpl(TumlNode owner, TumlRuntimeProperty runtimeProperty) {
         super(owner, runtimeProperty);
+    }
+
+    /**
+     * This gets invoked from the opposite side in addInternal.
+     * It is called before the edge is created so the new element will not be loaded by loadFromVertex
+     *
+     * @param e
+     * @return
+     */
+    @Override
+    public boolean inverseAdder(AssociationClassNode e) {
+        if (!this.loaded) {
+            //Do not call the regular loadFromVertex
+            //Association classes are loaded via the edge to the member end.
+            //On inverseAdder that edge exist but the association class vertex has not yet been set as we do not want
+            //to load the AssociationClass from the db.
+            //The point of the inverseAdder is to keep the current object in memory
+            associationClassLoadFromVertex();
+        }
+        return this.internalCollection.add(e);
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private void associationClassLoadFromVertex() {
+        if (!isOnePrimitive() && getDataTypeEnum() == null) {
+            for (Iterator<Edge> iter = getEdges(); iter.hasNext(); ) {
+                Edge edge = iter.next();
+                if (edge.getPropertyKeys().contains(TinkerCollection.ASSOCIATION_CLASS_VERTEX_ID)) {
+                    AssociationClassNode node;
+                    try {
+                        Class<?> c = this.getClassToInstantiate(edge);
+                        if (c.isEnum()) {
+                            Object value = this.getVertexForDirection(edge).getProperty("value");
+                            node = (AssociationClassNode) Enum.valueOf((Class<? extends Enum>) c, (String) value);
+                            putToInternalMap(value, this.getVertexForDirection(edge));
+                        } else if (TumlNode.class.isAssignableFrom(c)) {
+                            node = (AssociationClassNode) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
+                        } else {
+                            Object value = this.getVertexForDirection(edge).getProperty("value");
+                            node = (AssociationClassNode) value;
+                            putToInternalMap(value, this.getVertexForDirection(edge));
+                        }
+                        this.internalCollection.add(node);
+                    } catch (Exception ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            }
+        } else if (getDataTypeEnum() != null && getDataTypeEnum().isDateTime()) {
+            String s = this.vertex.getProperty(getLabel());
+            if (s != null) {
+                AssociationClassNode property = (AssociationClassNode) new DateTime(s);
+                this.internalCollection.add(property);
+            }
+        } else if (getDataTypeEnum() != null && getDataTypeEnum().isDate()) {
+            String s = this.vertex.getProperty(getLabel());
+            if (s != null) {
+                AssociationClassNode property = (AssociationClassNode) new LocalDate(s);
+                this.internalCollection.add(property);
+            }
+        } else if (getDataTypeEnum() != null && getDataTypeEnum().isTime()) {
+            String s = this.vertex.getProperty(getLabel());
+            if (s != null) {
+                AssociationClassNode property = (AssociationClassNode) new LocalTime(s);
+                this.internalCollection.add(property);
+            }
+        } else {
+            AssociationClassNode property = this.vertex.getProperty(getLabel());
+            if (property != null) {
+                this.internalCollection.add(property);
+            }
+        }
+        this.loaded = true;
     }
 
     @Override

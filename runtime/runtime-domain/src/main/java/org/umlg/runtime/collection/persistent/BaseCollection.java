@@ -578,11 +578,12 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
                 // side may remain in memory.
                 // Clearing this property is not performance issue as it is a
                 // one
-                node.initialiseProperty(tumlRuntimeProperty, true);
+//                node.initialiseProperty(tumlRuntimeProperty, true);
+                this.handleInverseSide(node, tumlRuntimeProperty, true, this.owner);
 
             } else {
 
-                node.inverseAdder(tumlRuntimeProperty, true, this.owner);
+                this.handleInverseSide(node, tumlRuntimeProperty, true, this.owner);
 
             }
         } else if (e.getClass().isEnum()) {
@@ -623,6 +624,10 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
             return null;
         }
 
+    }
+
+    protected void handleInverseSide(TumlNode node, TumlRuntimeProperty tumlRuntimeProperty, boolean b, TumlNode owner) {
+        node.inverseAdder(tumlRuntimeProperty, true, this.owner);
     }
 
     protected Edge createEdge(E e, Vertex v) {

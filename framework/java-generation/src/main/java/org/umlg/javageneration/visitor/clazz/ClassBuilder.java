@@ -133,6 +133,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
                 annotatedClass.addToImports(pWrap.javaImplTypePath());
 
                 if (pWrap.isMemberOfAssociationClass()) {
+                    //Initialize the collection to the association class
                     statement = new OJSimpleStatement("this." + pWrap.getAssociationClassFakePropertyName() + " = " + pWrap.javaDefaultInitialisationForAssociationClass(clazz));
                     statement.setName(pWrap.getAssociationClassFakePropertyName());
                     initialiseProperties.getBody().addToStatements(statement);

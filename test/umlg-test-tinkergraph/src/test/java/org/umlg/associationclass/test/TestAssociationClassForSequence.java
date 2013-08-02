@@ -17,24 +17,24 @@ public class TestAssociationClassForSequence extends BaseLocalDbTest {
         Human human = new Human(true);
         human.setName("human");
 
-        AssociationClassSequence associationClassSequence1 = new AssociationClassSequence(true);
+        AssociationClassSequenceTest associationClassSequence1 = new AssociationClassSequenceTest(true);
         associationClassSequence1.setWeight(1);
-        ProjectList projectList1 = new ProjectList(human, associationClassSequence1);
+        ProjectListTest projectList1 = new ProjectListTest(human, associationClassSequence1);
         projectList1.setName("projectList1");
 
-        AssociationClassSequence associationClassSequence2 = new AssociationClassSequence(true);
+        AssociationClassSequenceTest associationClassSequence2 = new AssociationClassSequenceTest(true);
         associationClassSequence2.setWeight(2);
-        ProjectList projectList2 = new ProjectList(human, associationClassSequence2);
+        ProjectListTest projectList2 = new ProjectListTest(human, associationClassSequence2);
         projectList2.setName("projectList2");
 
-        AssociationClassSequence associationClassSequence3 = new AssociationClassSequence(true);
+        AssociationClassSequenceTest associationClassSequence3 = new AssociationClassSequenceTest(true);
         associationClassSequence3.setWeight(3);
-        ProjectList projectList3 = new ProjectList(human, associationClassSequence3);
+        ProjectListTest projectList3 = new ProjectListTest(human, associationClassSequence3);
         projectList3.setName("projectList3");
 
-        AssociationClassSequence associationClassSequence4 = new AssociationClassSequence(true);
+        AssociationClassSequenceTest associationClassSequence4 = new AssociationClassSequenceTest(true);
         associationClassSequence4.setWeight(4);
-        ProjectList projectList4 = new ProjectList(human, associationClassSequence4);
+        ProjectListTest projectList4 = new ProjectListTest(human, associationClassSequence4);
         projectList4.setName("projectList4");
 
         db.commit();
@@ -48,10 +48,10 @@ public class TestAssociationClassForSequence extends BaseLocalDbTest {
         Assert.assertEquals("projectList3", human.getProjectlist().get(2).getName());
         Assert.assertEquals("projectList4", human.getProjectlist().get(3).getName());
 
-        Assert.assertEquals(new Integer(1), human.getAssociationClassSequence().get(0).getWeight());
-        Assert.assertEquals(new Integer(2), human.getAssociationClassSequence().get(1).getWeight());
-        Assert.assertEquals(new Integer(3), human.getAssociationClassSequence().get(2).getWeight());
-        Assert.assertEquals(new Integer(4), human.getAssociationClassSequence().get(3).getWeight());
+        Assert.assertEquals(new Integer(1), human.getAssociationClassSequenceTest().get(0).getWeight());
+        Assert.assertEquals(new Integer(2), human.getAssociationClassSequenceTest().get(1).getWeight());
+        Assert.assertEquals(new Integer(3), human.getAssociationClassSequenceTest().get(2).getWeight());
+        Assert.assertEquals(new Integer(4), human.getAssociationClassSequenceTest().get(3).getWeight());
 
     }
 
@@ -59,19 +59,19 @@ public class TestAssociationClassForSequence extends BaseLocalDbTest {
     public void testAssociationClass1_Removal() {
         Human human = new Human(true);
         human.setName("human1");
-        AssociationClassSequence associationClassSequence1 = new AssociationClassSequence(true);
+        AssociationClassSequenceTest associationClassSequence1 = new AssociationClassSequenceTest(true);
         associationClassSequence1.setWeight(1);
-        ProjectList projectList1 = new ProjectList(human, associationClassSequence1);
+        ProjectListTest projectList1 = new ProjectListTest(human, associationClassSequence1);
         projectList1.setName("project1");
 
-        AssociationClassSequence associationClassSequence2 = new AssociationClassSequence(true);
+        AssociationClassSequenceTest associationClassSequence2 = new AssociationClassSequenceTest(true);
         associationClassSequence2.setWeight(2);
-        ProjectList projectList2 = new ProjectList(human, associationClassSequence2);
+        ProjectListTest projectList2 = new ProjectListTest(human, associationClassSequence2);
         projectList2.setName("projectList2");
 
-        AssociationClassSequence associationClassSequence3 = new AssociationClassSequence(true);
+        AssociationClassSequenceTest associationClassSequence3 = new AssociationClassSequenceTest(true);
         associationClassSequence3.setWeight(3);
-        ProjectList projectList3 = new ProjectList(human, associationClassSequence3);
+        ProjectListTest projectList3 = new ProjectListTest(human, associationClassSequence3);
         projectList3.setName("projectList3");
 
         db.commit();
@@ -79,7 +79,7 @@ public class TestAssociationClassForSequence extends BaseLocalDbTest {
         human = new Human(human.getVertex());
         Assert.assertEquals(3, human.getProjectlist().size());
 
-        projectList1 = new ProjectList(projectList1.getVertex());
+        projectList1 = new ProjectListTest(projectList1.getVertex());
         human.removeFromProjectlist(projectList1);
         projectList1.delete();
 
@@ -87,8 +87,8 @@ public class TestAssociationClassForSequence extends BaseLocalDbTest {
 
         human = new Human(human.getVertex());
         Assert.assertEquals(2, human.getProjectlist().size());
-        Assert.assertEquals(2, human.getAssociationClassSequence().size());
-        Assert.assertEquals(new Integer(2), human.getAssociationClassSequence().get(0).getWeight());
+        Assert.assertEquals(2, human.getAssociationClassSequenceTest().size());
+        Assert.assertEquals(new Integer(2), human.getAssociationClassSequenceTest().get(0).getWeight());
 
     }
 

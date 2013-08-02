@@ -18,7 +18,7 @@ import java.util.Set;
  */
 public class UmlgPropertyAssociationClassOrderedSetImpl<E, AC extends AssociationClassNode> extends TinkerOrderedSetImpl<E> implements UmlgPropertyAssociationClassOrderedSet<E, AC> {
 
-    public UmlgPropertyAssociationClassOrderedSetImpl(TumlNode owner, TumlRuntimeProperty runtimeProperty) {
+    public UmlgPropertyAssociationClassOrderedSetImpl(TumlNode owner, TumlRuntimeProperty runtimeProperty, TumlRuntimeProperty associationClassRuntimeProperty) {
         super(owner, runtimeProperty);
     }
 

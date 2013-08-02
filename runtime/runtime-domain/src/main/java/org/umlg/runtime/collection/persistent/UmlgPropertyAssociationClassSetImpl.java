@@ -17,15 +17,16 @@ import java.util.Set;
  */
 public class UmlgPropertyAssociationClassSetImpl<E, AC extends AssociationClassNode> extends TinkerSetImpl<E> implements UmlgPropertyAssociationClassSet<E, AC> {
 
-    public UmlgPropertyAssociationClassSetImpl(TumlNode owner, TumlRuntimeProperty runtimeProperty) {
+    public UmlgPropertyAssociationClassSetImpl(TumlNode owner, TumlRuntimeProperty runtimeProperty, TumlRuntimeProperty associationClassRuntimeProperty) {
         super(owner, runtimeProperty);
     }
 
     @Override
     public boolean add(E e, AC associationClass) {
+        //This is needed in handleInverseSide
         if (super.add(e)) {
-            associationClass.internalAdder(tumlRuntimeProperty, true, this.owner);
-            associationClass.internalAdder(tumlRuntimeProperty, false, (TumlNode) e);
+            associationClass.internalAdder(this.tumlRuntimeProperty, true, this.owner);
+            associationClass.internalAdder(this.tumlRuntimeProperty, false, (TumlNode) e);
             this.edge.setProperty(TinkerCollection.ASSOCIATION_CLASS_VERTEX_ID, associationClass.getId());
             this.edge.setProperty("className", associationClass.getClass().getName());
             return true;
@@ -68,7 +69,6 @@ public class UmlgPropertyAssociationClassSetImpl<E, AC extends AssociationClassN
             Vertex associationClassVertex = GraphDb.getDb().getVertex(edge.getProperty(TinkerCollection.ASSOCIATION_CLASS_VERTEX_ID));
             //The remove code will delete all in and out edges
             GraphDb.getDb().removeVertex(associationClassVertex);
-
         }
     }
 

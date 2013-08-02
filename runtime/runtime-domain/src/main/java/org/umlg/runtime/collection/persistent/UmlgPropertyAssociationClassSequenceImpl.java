@@ -18,7 +18,7 @@ import java.util.Set;
  */
 public class UmlgPropertyAssociationClassSequenceImpl<E, AC extends AssociationClassNode> extends TinkerSequenceImpl<E> implements UmlgPropertyAssociationClassSequence<E, AC> {
 
-    public UmlgPropertyAssociationClassSequenceImpl(TumlNode owner, TumlRuntimeProperty runtimeProperty) {
+    public UmlgPropertyAssociationClassSequenceImpl(TumlNode owner, TumlRuntimeProperty runtimeProperty, TumlRuntimeProperty associationClassRuntimeProperty) {
         super(owner, runtimeProperty);
     }
 

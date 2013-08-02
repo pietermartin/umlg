@@ -18,7 +18,7 @@ import java.util.Set;
  */
 public class UmlgPropertyAssociationClassBagImpl<E, AC extends AssociationClassNode> extends TinkerBagImpl<E> implements UmlgPropertyAssociationClassBag<E, AC> {
 
-    public UmlgPropertyAssociationClassBagImpl(TumlNode owner, TumlRuntimeProperty runtimeProperty) {
+    public UmlgPropertyAssociationClassBagImpl(TumlNode owner, TumlRuntimeProperty runtimeProperty, TumlRuntimeProperty associationClassRuntimeProperty) {
         super(owner, runtimeProperty);
     }
 
