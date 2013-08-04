@@ -12,6 +12,7 @@
                 "TumlRequired":TumlRequiredFormatter,
                 "TumlToOneRequiredFormatter": TumlToOneRequiredFormatter,
                 "TumlToAssociationClassRequiredFormatter": TumlToAssociationClassRequiredFormatter,
+                "TumlToAssociationClassFormatter": TumlToAssociationClassFormatter,
                 "TumlValidationFailedFormatter": TumlValidationFailedFormatter,
                 "TumlDelete":TumlDeleteFormatter,
                 "TumlBoolean":TumlBooleanFormatter,
@@ -64,6 +65,22 @@
             return "<div style='color:red;'>required</div>";
         } else if (value.id == null) {
             return "<div style='color:red;'>required</div>";
+        } else {
+            if (value.displayName !== undefined && value.displayName !== 'null') {
+                return value.id + ' | ' + value.displayName;
+            } else if (value.name !== undefined) {
+                return value.id + ' | ' + value.name;
+            } else {
+                return value.id;
+            }
+        }
+    }
+
+    function TumlToAssociationClassFormatter(row, cell, value, columnDef, dataContext) {
+        if (value == null || value === undefined) {
+            return "";
+        } else if (value.id == null) {
+            return "";
         } else {
             if (value.displayName !== undefined && value.displayName !== 'null') {
                 return value.id + ' | ' + value.displayName;

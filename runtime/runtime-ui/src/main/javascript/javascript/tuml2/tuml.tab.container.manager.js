@@ -255,6 +255,7 @@
         //Save the child grids into the component's cell
         if (this.tumlTabViewManagers.length > 0) {
             if (this.tabContainerProperty == undefined || this.tabContainerProperty == null) {
+                //This code executes for non composite many properties. When adding the selected instances to the association
                 //forLookup
                 if (this.tumlTabViewManagers.length > 1) {
                     throw 'TumlTabContainerManager.prototype.saveTabs for lookup can only have one tab!';
@@ -264,7 +265,12 @@
                 var selectedItems = [];
                 for (var i = 0; i < selectedRows.length; i++) {
                     var row = selectedRows[i];
-                    selectedItems.push(tumlTabViewManager.tumlTabGridManager.dataView.getItem(row));
+                    var item = tumlTabViewManager.tumlTabGridManager.dataView.getItem(row);
+                    if (tumlTabViewManager.propertyNavigatingTo.memberEndOfAssociationClass) {
+                        var fakeId = 'fake::' + Tuml.TumlFakeIndex++;
+                        item[tumlTabViewManager.propertyNavigatingTo.inverseAssociationClassPropertyName] = {id: fakeId, tmpId: fakeId, displayName: null, refreshFromDb: true};
+                    }
+                    selectedItems.push(item);
                 }
                 this.tumlTabGridManager.addItems(selectedItems);
             } else if (!this.tabContainerProperty.associationClassOne && (this.tabContainerProperty.upper == -1 || this.tabContainerProperty.upper > 1)) {
@@ -349,6 +355,46 @@
                     }
                 } else if (typeof object === 'object') {
                     this.internalSetComponentIdToTmpId(object, property);
+                }
+            }
+        }
+    }
+
+    TumlTabContainerManager.prototype.internalClearComponentAndAssociationClassTmpId = function (object, property) {
+        var self = this;
+        Tuml.Metadata.Cache.get(property.qualifiedName, property.tumlMetaDataUri,
+            function (result) {
+                for (var k = 0; k < result.length; k++) {
+                    self.clearComponentAndAssociationClassTmpId(object, result[k].meta.to, false);
+                }
+            }
+        );
+    }
+
+    /**
+     * @param item
+     * @param metaDataTo
+     * @param skip only used true for the first time the mthod is called as the root item is neither a component nor an association class
+     */
+    TumlTabContainerManager.prototype.clearComponentAndAssociationClassTmpId = function (item, metaDataTo, skip) {
+        //Need to update the id's to the tmpId as the id no longer exist on a rolled back transaction
+        if (!skip && item.tmpId !== undefined) {
+            item.tmpId = undefined;
+        }
+        for (var i = 0; i < metaDataTo.properties.length; i++) {
+            var property = metaDataTo.properties[i];
+            var object = item[property.name];
+            if (object !== undefined && object !== null) {
+                if (Array.isArray(object)) {
+                    for (var j = 0; j < object.length; j++) {
+                        if (property.associationClassOne && !property.memberEndOfAssociationClass) {
+                            this.internalClearComponentAndAssociationClassTmpId(object[j], property);
+                        }
+                    }
+                } else if (typeof object === 'object') {
+                    if (property.associationClassOne && !property.memberEndOfAssociationClass) {
+                        this.internalClearComponentAndAssociationClassTmpId(object, property);
+                    }
                 }
             }
         }
