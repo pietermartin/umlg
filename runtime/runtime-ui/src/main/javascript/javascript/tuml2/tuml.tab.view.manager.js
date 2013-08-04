@@ -1181,8 +1181,6 @@
 
                     if (oneComponent.data.refreshFromDb !== undefined && oneComponent.data.refreshFromDb) {
                         //Create the object server side for ocl to execute...
-//                        oneComponent.data.id = 'fake::' + Tuml.TumlFakeIndex++;
-//                        oneComponent.data.tmpId = oneComponent.data.id;
                         tumlOneComponentTabViewManager.createTab(oneComponent, true);
                         tumlOneComponentTabViewManager.saveNewRow();
                         if (tumlOneComponentTabViewManager.tumlTabOneManager.containsOneToOne) {

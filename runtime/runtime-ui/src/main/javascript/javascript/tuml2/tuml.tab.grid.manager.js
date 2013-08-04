@@ -447,6 +447,8 @@
                             }
                             var id = self.dataView.getItem(args.row)["id"];
                             self.tumlTabViewManager.openManyComponent(data, args, column.options.property.tumlUri, column.options.property);
+                        } else {
+                            e.stopImmediatePropagation();
                         }
                     } else if (!column.options.property.manyPrimitive && !column.options.property.manyEnumeration && column.options.property.composite &&
                         column.options.property.lower === 1 && column.options.property.upper === 1) {
@@ -460,6 +462,8 @@
                                 data = {};
                             }
                             self.tumlTabViewManager.openOneComponent(data, args, column.options.property.tumlUri, column.options.property);
+                        } else {
+                            e.stopImmediatePropagation();
                         }
                     } else if (column.options.property.associationClassOne) {
                         //Component one
@@ -468,10 +472,14 @@
                             if (self.dataView.getItem(args.row) !== undefined && self.dataView.getItem(args.row) !== null && self.dataView.getItem(args.row)[column.name] !== undefined && self.dataView.getItem(args.row)[column.name] !== null) {
                                 //Get the data currently for the component
                                 data = self.dataView.getItem(args.row)[column.name];
+                            } else if (self.dataView.getItem(args.row)[column.name] !== null && self.dataView.getItem(args.row)[column.name].tmpId !== undefined) {
+                                data = self.dataView.getItem(args.row)[column.name];
                             } else {
                                 data = {};
                             }
                             self.tumlTabViewManager.openAssociationClass(data, args, column.options.property.tumlUri, column.options.property);
+                        } else {
+                            e.stopImmediatePropagation();
                         }
                     }
                     //unbind the document click event to close many editors
@@ -610,14 +618,26 @@
                     var property = column.options.property;
                     if ((property.composite && property.lower >= 1) || property.associationClassOne) {
                         if (row >= self.dataView.getItems().length || self.dataView.getNewItems().indexOf(item) !== -1) {
-                            return true;
-                        } else {
-                            if (property.associationClassOne) {
-                                //Check if the association class has been cleared
-                                var associationClass = item[property.associationClassPropertyName];
-                                if (associationClass !== undefined && (associationClass.id == null ||  (isNaN(associationClass.id) && associationClass.id.indexOf('fake') !== -1))) {
+                            //New rows
+                            //Only click on a non composite association class once the non composite association has been selected
+                            if (property.associationClassOne && !property.memberEndOfAssociationClass && !property.composite && (property.oneToOne || property.manyToOne)) {
+                                //If the association class has been set then the association class will have an tmpId
+                                if (self.dataView.getItem(row)[column.name] !== undefined && self.dataView.getItem(row)[column.name] !== null && self.dataView.getItem(row)[column.name].tmpId !== undefined) {
                                     return true;
                                 } else {
+                                    alert('Select an association before setting the association class!');
+                                    return false;
+                                }
+                            } else {
+                                return true;
+                            }
+                        } else {
+                            if (property.associationClassOne && !property.memberEndOfAssociationClass && !property.composite && (property.oneToOne || property.manyToOne)) {
+                                //If the association class has been set then the association class will have an tmpId
+                                if (self.dataView.getItem(row)[column.name] !== undefined && self.dataView.getItem(row)[column.name] !== null && self.dataView.getItem(row)[column.name].tmpId !== undefined) {
+                                    return true;
+                                } else {
+                                    alert('Select an association before setting the association class!');
                                     return false;
                                 }
                             } else {
@@ -863,7 +883,11 @@
 
                             } else {
                                 if (property.associationClassOne) {
-                                    column[property.name] = {"formatter": TumlSlick.Formatters.TumlToAssociationClassRequiredFormatter};
+                                    if (property.lower > 0) {
+                                        column[property.name] = {"formatter": TumlSlick.Formatters.TumlToAssociationClassRequiredFormatter};
+                                    } else {
+                                        column[property.name] = {"formatter": TumlSlick.Formatters.TumlToAssociationClassFormatter};
+                                    }
                                 } else {
                                     column[property.name] = {"formatter": TumlSlick.Formatters.TumlRequired};
                                 }
@@ -871,7 +895,11 @@
                         } else {
                             if (property.associationClassOne && !property.memberEndOfAssociationClass && (property.manyToOne || property.oneToOne)) {
                                 //this is the fake property pointing to the association class
-                                column[property.name] = {"formatter": TumlSlick.Formatters.TumlToAssociationClassRequiredFormatter};
+                                if (property.lower > 0) {
+                                    column[property.name] = {"formatter": TumlSlick.Formatters.TumlToAssociationClassRequiredFormatter};
+                                } else {
+                                    column[property.name] = {"formatter": TumlSlick.Formatters.TumlToAssociationClassFormatter};
+                                }
                             } else {
                                 column[property.name] = {"formatter": TumlSlick.Formatters.TumlComponentFormatter};
                             }
@@ -900,9 +928,11 @@
 
     TumlBaseGridManager.prototype.isPropertyForGrid = function (property) {
 
-        //this.contextVertexId  !== null && property.associationClass ensures that associationClass properties appear but not from the root.
+        //this.contextVertexId  !== null && property.associationClassOne ensures that associationClass properties appear but not from the root.
         //from the root there is no association
         if (this.contextVertexId !== null && property.associationClassOne && property.memberEndOfAssociationClass) {
+            return true;
+        } else if (this.contextVertexId != null && property.associationClassOne) {
             return true;
         } else if (!property.composite && !property.inverseComposite && property.lower > 0 && !property.associationClassOne) {
             return true;

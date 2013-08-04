@@ -253,6 +253,7 @@
                         //TOTO use qualified name somehow
                         if (tumlTabViewManager.tabId == metaForData.name) {
                             for (var k = 0; k < resultForTab.data.length; k++) {
+                                this.clearComponentAndAssociationClassTmpId(resultForTab.data[k], metaForData, true);
                                 tumlTabViewManager.updateGridAfterCommit(resultForTab.data[k]);
                             }
                         }
@@ -265,6 +266,7 @@
 
                         if (tumlTabViewManager.tabId == metaForData.name) {
                             tumlTabViewManager.beginUpdate();
+                            this.clearComponentAndAssociationClassTmpId(resultForTab.data[k], metaForData, true);
                             tumlTabViewManager.updateGridAfterCommit(resultForTab.data);
                             tumlTabViewManager.endUpdate(true);
                         } else {
@@ -281,6 +283,7 @@
             for (var j = 0; j < this.tumlTabViewManagers.length; j++) {
                 var tumlTabViewManager = this.tumlTabViewManagers[j];
                 if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager) {
+                    //This will clear the update, insert arrays in slick grid's data view
                     tumlTabViewManager.clearArraysAfterCommit();
                 }
             }

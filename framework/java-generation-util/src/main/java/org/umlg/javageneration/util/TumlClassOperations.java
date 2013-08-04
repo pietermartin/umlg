@@ -196,12 +196,6 @@ public class TumlClassOperations extends ClassOperations {
             if (!isSpecializationOf(clazz, memberEnd2.getType())) {
                 result.add(memberEnd2);
             }
-
-            // for (Property property : memberEnds) {
-            // if (!isSpecializationOf(clazz, property.getType())) {
-            // result.add(property);
-            // }
-            // }
         }
         result.addAll(getPropertiesOnRealizedInterfaces(clazz));
         return result;

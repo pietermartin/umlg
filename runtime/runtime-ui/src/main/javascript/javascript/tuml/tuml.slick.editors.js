@@ -1135,8 +1135,6 @@
         });
         var $select;
         var currentValue;
-        var scope = this;
-        var options;
 
         this.init = function (item) {
             $select = $("<SELECT tabIndex='0' class='editor-select' style='width:115px;'></SELECT>");
@@ -1220,16 +1218,23 @@
         //Need to unset the associationClass
         this.applyValue = function (item, state) {
             item[args.column.field] = state;
-            var fakeId = 'fake::' + Tuml.TumlFakeIndex++;
-            item[args.column.options.property.associationClassPropertyName] = {id: fakeId, tmpId: fakeId, displayName: null, refreshFromDb: true};
-//            item[args.column.options.property.associationClassPropertyName] = {id: null, tmpId: null, displayName: null};
+            if (item[args.column.field].id !== null) {
+                var fakeId = 'fake::' + Tuml.TumlFakeIndex++;
+                item[args.column.options.property.associationClassPropertyName] = {id: fakeId, tmpId: fakeId, displayName: null, refreshFromDb: true};
+            } else {
+                item[args.column.options.property.associationClassPropertyName] = {id: null, tmpId: null, displayName: null, refreshFromDb: false};
+            }
         };
 
         this.isValueChanged = function () {
-            if (currentValue === null || currentValue === undefined) {
+            if (currentValue === null || currentValue === undefined)  {
                 return true;
             } else {
-                return ($select.val() != currentValue.id);
+                if ((currentValue.id === undefined || currentValue.id === null) && $select.val() == "") {
+                    return false;
+                } else {
+                    return ($select.val() != currentValue.id);
+                }
             }
         };
 

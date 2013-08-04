@@ -59,6 +59,11 @@ public class RuntimePropertyImplementor {
         associationClassPropertyNameField.setName("_associationClassPropertyName");
         ojEnum.addToFields(associationClassPropertyNameField);
 
+        OJField inverseAssociationClassPropertyNameField = new OJField();
+        inverseAssociationClassPropertyNameField.setType(new OJPathName("String"));
+        inverseAssociationClassPropertyNameField.setName("_inverseAssociationClassPropertyName");
+        ojEnum.addToFields(inverseAssociationClassPropertyNameField);
+
         OJField isAssociationClassPropertyField = new OJField();
         isAssociationClassPropertyField.setType(new OJPathName("boolean"));
         isAssociationClassPropertyField.setName("_associationClassProperty");
@@ -258,6 +263,7 @@ public class RuntimePropertyImplementor {
                             false,
                             pWrap.isMemberOfAssociationClass(),
                             pWrap.isMemberOfAssociationClass() ? pWrap.getAssociationClassFakePropertyName() : null,
+                            pWrap.isMemberOfAssociationClass() ? new PropertyWrapper(pWrap.getOtherEnd()).getAssociationClassFakePropertyName() : null,
                             false,
                             ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, pWrap.fieldname(), pWrap.getQualifiedName(),
                             pWrap.getInverseName(), pWrap.getInverseQualifiedName(), pWrap.isReadOnly(), pWrap.isPrimitive(), pWrap.getDataTypeEnum(), pWrap.getValidations(),
@@ -274,6 +280,7 @@ public class RuntimePropertyImplementor {
                                 true,
                                 false,
                                 pWrap.isMemberOfAssociationClass() ? pWrap.getAssociationClassFakePropertyName() : null,
+                                pWrap.isMemberOfAssociationClass() ? new PropertyWrapper(pWrap.getOtherEnd()).getAssociationClassFakePropertyName() : null,
                                 true,
                                 ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, pWrap.fieldname(), pWrap.getQualifiedName(),
                                 pWrap.getInverseName(), pWrap.getInverseQualifiedName() + "AC", pWrap.isReadOnly(), pWrap.isPrimitive(), pWrap.getDataTypeEnum(),
@@ -287,6 +294,7 @@ public class RuntimePropertyImplementor {
                         addEnumLiteral(
                                 false,
                                 false,
+                                null,
                                 null,
                                 false,
                                 ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, pWrap.fieldname(), pWrap.getQualifiedName(),
@@ -305,6 +313,7 @@ public class RuntimePropertyImplementor {
                             true,
                             false,
                             pWrap.getAssociationClassFakePropertyName(),
+                            new PropertyWrapper(pWrap.getOtherEnd()).getAssociationClassFakePropertyName(),
                             false,
                             ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, pWrap.getAssociationClassFakePropertyName(), pWrap.getQualifiedName() + "AC",
                             pWrap.getInverseName(), pWrap.getInverseQualifiedName() + "AC", pWrap.isReadOnly(), pWrap.isPrimitive(), pWrap.getDataTypeEnum(), pWrap.getValidations(),
@@ -318,7 +327,7 @@ public class RuntimePropertyImplementor {
 
         if (!hasCompositeOwner/* && !(className instanceof Model) */) {
             // Add in fake property to root
-            addEnumLiteral(false, false, null, false, ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, modelName, modelName, "inverseOf" + modelName, "inverseOf" + modelName, false, false, null,
+            addEnumLiteral(false, false, null, null, false, ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, modelName, modelName, "inverseOf" + modelName, "inverseOf" + modelName, false, false, null,
                     Collections.<Validation>emptyList(), false, false, false, true, false, true, true, false, false, -1, 0, 1, false, false, false, false, false, false,
                     "root" + className.getName());
         }
@@ -334,12 +343,30 @@ public class RuntimePropertyImplementor {
      * Very important, the order of adding the attribut values to the literal must be the same as the order the fields were created ass that is the order of the constructor
      */
     public static OJEnumLiteral addEnumLiteral(
-            boolean isAssociationClassOne,
-            boolean isMemberEndOfAssociationClass, String associationClassPropertyName,
-            boolean isAssociationClassProperty, OJEnum ojEnum, OJAnnotatedOperation fromLabel, OJAnnotatedOperation fromQualifiedName, OJAnnotatedOperation fromInverseQualifiedName,
-            String fieldName, String qualifiedName, String inverseName, String inverseQualifiedName, boolean isReadOnly, boolean isPrimitive,
-            DataTypeEnum dataTypeEnum, List<Validation> validations, boolean isEnumeration, boolean isManyToOne, boolean isMany, boolean isControllingSide,
-            boolean isComposite, boolean isInverseComposite, boolean isOneToOne, boolean isOneToMany, boolean isManyToMany, int getUpper, int getLower, int getInverseUpper,
+            boolean isAssociationClassOne /*This is true for the fake properties to and from the association class*/,
+            boolean isMemberEndOfAssociationClass,
+            String associationClassPropertyName,
+            String inverseAssociationClassPropertyName,
+            boolean isAssociationClassProperty /*Ths is true for the fake property from the asslciation class to the member end*/,
+            OJEnum ojEnum,
+            OJAnnotatedOperation fromLabel,
+            OJAnnotatedOperation fromQualifiedName,
+            OJAnnotatedOperation fromInverseQualifiedName,
+            String fieldName,
+            String qualifiedName,
+            String inverseName,
+            String inverseQualifiedName,
+            boolean isReadOnly,
+            boolean isPrimitive,
+            DataTypeEnum dataTypeEnum,
+            List<Validation> validations,
+            boolean isEnumeration,
+            boolean isManyToOne,
+            boolean isMany,
+            boolean isControllingSide,
+            boolean isComposite,
+            boolean isInverseComposite,
+            boolean isOneToOne, boolean isOneToMany, boolean isManyToMany, int getUpper, int getLower, int getInverseUpper,
             boolean isQualified, boolean isInverseQualified, boolean isOrdered, boolean isInverseOrdered, boolean isUnique, boolean isInverseUnique, String edgeName) {
 
         OJIfStatement ifLabelEquals = new OJIfStatement(fieldName + ".getLabel().equals(label)");
@@ -393,6 +420,12 @@ public class RuntimePropertyImplementor {
         propertyAssociationClassPropertyNameField.setType(new OJPathName("String"));
         propertyAssociationClassPropertyNameField.setInitExp("\"" + associationClassPropertyName + "\"");
         ojLiteral.addToAttributeValues(propertyAssociationClassPropertyNameField);
+
+        OJField propertyInverseAssociationClassPropertyNameField = new OJField();
+        propertyInverseAssociationClassPropertyNameField.setName("inverseAssociationClassPropertyNameField");
+        propertyInverseAssociationClassPropertyNameField.setType(new OJPathName("String"));
+        propertyInverseAssociationClassPropertyNameField.setInitExp("\"" + inverseAssociationClassPropertyName + "\"");
+        ojLiteral.addToAttributeValues(propertyInverseAssociationClassPropertyNameField);
 
         OJField isAssociationClassPropertyField = new OJField();
         isAssociationClassPropertyField.setName("isAssociationClassProperty");
@@ -587,6 +620,14 @@ public class RuntimePropertyImplementor {
             sb.append("\\\", ");
         } else {
             sb.append("\\\"associationClassPropertyName\\\": null, ");
+        }
+
+        if (inverseAssociationClassPropertyName != null) {
+            sb.append("\\\"inverseAssociationClassPropertyName\\\": \\");
+            sb.append(propertyInverseAssociationClassPropertyNameField.getInitExp().subSequence(0, propertyInverseAssociationClassPropertyNameField.getInitExp().length() - 1));
+            sb.append("\\\", ");
+        } else {
+            sb.append("\\\"inverseAssociationClassPropertyName\\\": null, ");
         }
 
         sb.append("\\\"associationClassProperty\\\": ");
