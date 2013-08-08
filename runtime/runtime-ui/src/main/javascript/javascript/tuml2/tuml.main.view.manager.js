@@ -266,7 +266,7 @@
 
                         if (tumlTabViewManager.tabId == metaForData.name) {
                             tumlTabViewManager.beginUpdate();
-                            this.clearComponentAndAssociationClassTmpId(resultForTab.data[k], metaForData, true);
+                            this.clearComponentAndAssociationClassTmpId(resultForTab.data, metaForData, true);
                             tumlTabViewManager.updateGridAfterCommit(resultForTab.data);
                             tumlTabViewManager.endUpdate(true);
                         } else {

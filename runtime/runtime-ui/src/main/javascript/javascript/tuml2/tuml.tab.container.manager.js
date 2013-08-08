@@ -167,12 +167,14 @@
 
         var tabContainerButton = tabsNav.find('#tabcontainer-button');
         var chooseOpenMany = $('<button />', {id: this.getTabId() + 'OpenMany'}).text('Open ' + this.tabTitleName).prependTo(tabContainerButton);
-        chooseOpenMany.button().click(function (event) {
-            if (Slick.GlobalEditorLock.commitCurrentEdit()) {
-                self.openNonCompositeMany(self.propertyNavigatingTo, self.metaForData.to.qualifiedName);
+        chooseOpenMany.button().click(
+            function (event) {
+                if (Slick.GlobalEditorLock.commitCurrentEdit()) {
+                    self.openNonCompositeMany(self.propertyNavigatingTo, self.metaForData.to.qualifiedName);
+                }
+                event.preventDefault();
             }
-            event.preventDefault();
-        });
+        );
     }
 
     TumlTabContainerManager.prototype.addButtons = function () {
@@ -180,12 +182,14 @@
         var tabsNav = this.tabContainer.find('.ui-tabs-nav');
         var tabsButtonDiv = $('<div />', {id: 'tabcontainer-button', class: 'tabs-button'}).appendTo(tabsNav);
         var saveButton = $('<button />', {id: this.getTabId() + 'save'}).text('Save').appendTo(tabsButtonDiv);
-        saveButton.button().click(function (event) {
-            if (Slick.GlobalEditorLock.commitCurrentEdit()) {
-                self.saveTabs();
+        saveButton.button().click(
+            function (event) {
+                if (Slick.GlobalEditorLock.commitCurrentEdit()) {
+                    self.saveTabs();
+                }
+                event.preventDefault();
             }
-            event.preventDefault();
-        });
+        );
         var cancelButton = $('<button />', {id: this.getTabId() + 'cancel'}).text('Cancel').appendTo(tabsButtonDiv);
         cancelButton.button().click(function (event) {
             self.doCancel();
@@ -198,7 +202,7 @@
         this.parentTabContainerManager.updateDataModelForOneToOne(fakeId, fieldName, one);
     }
 
-    TumlTabContainerManager.prototype.updateDataModelForOneToOneForUpdatedItem = function(qualifiedName, id, displayName, fieldName, one) {
+    TumlTabContainerManager.prototype.updateDataModelForOneToOneForUpdatedItem = function (qualifiedName, id, displayName, fieldName, one) {
         this.parentTabContainerManager.updateDataModelForOneToOneForUpdatedItem(qualifiedName, id, displayName, fieldName, one);
     }
 
@@ -250,7 +254,7 @@
         this.parentTabContainerManager.enableButtons();
     }
 
-    //This only gets called by component sub tabs
+    //This only gets called by component or association class sub tabs
     TumlTabContainerManager.prototype.saveTabs = function () {
         //Save the child grids into the component's cell
         if (this.tumlTabViewManagers.length > 0) {
@@ -320,6 +324,10 @@
                 tumlTabViewManager.tumlTabOneManager.updateDataModelForOneToOne(data);
 
             }
+
+            //Clear the property. It gets set when the component or association class is opened.
+            this.tabContainerProperty = null;
+
         }
         this.destroyTabContainer();
         //enable the save button
@@ -411,10 +419,8 @@
             var tumlTabViewManager = this.tumlTabViewManagers[i];
             tumlTabViewManager.activeOpenTabsGrid();
         }
-        if (this.propertyNavigatingTo !== undefined && this.propertyNavigatingTo !== null &&
-            !this.propertyNavigatingTo.associationClassOne &&
-            !this.propertyNavigatingTo.composite &&
-            (this.propertyNavigatingTo.upper === -1 || this.propertyNavigatingTo.upper > 1)  && !this.oneManyOrQuery.forLookup) {
+        if (this.propertyNavigatingTo !== undefined && this.propertyNavigatingTo !== null && !this.propertyNavigatingTo.associationClassOne && !this.propertyNavigatingTo.composite &&
+            (this.propertyNavigatingTo.upper === -1 || this.propertyNavigatingTo.upper > 1) && !this.oneManyOrQuery.forLookup) {
 
             this.addSelectButton();
         } else {

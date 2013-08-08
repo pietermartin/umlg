@@ -33,8 +33,16 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
     @Override
     @VisitSubclasses({Class.class, AssociationClass.class})
     public void visitBefore(Class clazz) {
-        addToJson(clazz, "toJson", TumlClassOperations.getPropertiesForToJson(clazz));
-        addToJson(clazz, "toJsonWithoutCompositeParent", TumlClassOperations.getPropertiesForToJsonExcludingCompositeParent(clazz));
+        Set<Property> propertiesForToJson = TumlClassOperations.getPropertiesForToJson(clazz);
+        if (clazz instanceof AssociationClass) {
+            propertiesForToJson.addAll(((AssociationClass)clazz).getMemberEnds());
+        }
+        addToJson(clazz, "toJson", propertiesForToJson);
+        Set<Property> propertiesForToJsonExcludingCompositeParent = TumlClassOperations.getPropertiesForToJsonExcludingCompositeParent(clazz);
+        if (clazz instanceof AssociationClass) {
+            propertiesForToJsonExcludingCompositeParent.addAll(((AssociationClass)clazz).getMemberEnds());
+        }
+        addToJson(clazz, "toJsonWithoutCompositeParent", propertiesForToJsonExcludingCompositeParent);
         addFromJson(clazz);
         addFromJsonWithMapper(clazz);
         addFromJsonDataTypeAndComposite(clazz);
@@ -121,7 +129,7 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                     annotatedClass.addToImports(TinkerGenerationUtil.TumlTmpIdManager);
 
                     //Check association class
-                    if (pWrap.isOne() && pWrap.isMemberOfAssociationClass()) {
+                    if (pWrap.isOne() && pWrap.isMemberOfAssociationClass() && !(clazz instanceof AssociationClass)) {
 
                         ifDeep = new OJIfStatement("deep || (" + pWrap.associationClassGetter() + "() != null && " + TinkerGenerationUtil.UmlgAssociationClassManager.getLast() + ".INSTANCE.has(\"" + pWrap.getAssociationClassFakePropertyName() + "\", " + pWrap.getter() + "().getId()))");
                         ifDeep.addToThenPart("sb.append(\", \")");
@@ -139,6 +147,11 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                         ifOneNotNull.addToElsePart("sb.append(\", \\\"" + pWrap.getAssociationClassFakePropertyName() + "\\\": \" + \"{\\\"id\\\": \" + null + \", \\\"displayName\\\": \" + null + \"}\")");
                         ifDeep.addToElsePart(ifOneNotNull);
                         toJson.getBody().addToStatements(ifDeep);
+                    } else if (pWrap.isMemberOfAssociationClass() && clazz instanceof AssociationClass) {
+
+//                        PropertyWrapper otherEnd = new PropertyWrapper(pWrap.getOtherEnd());
+//                        toJson.getBody().addToStatements("sb.append(\", \\\"" + otherEnd.fieldname() + "\\\": \" + \"{\\\"id\\\": \" + " + pWrap.associationClassGetter() + "().getId() + \", \\\"tmpId\\\": \\\"\" + " + TinkerGenerationUtil.TumlTmpIdManager.getLast() + ".INSTANCE.get(" + pWrap.associationClassGetter() + "().getId())  + \"\\\",\\\"displayName\\\": \\\"\" + " + otherEnd.getter() + "().getName() + \"\\\"}\" + \"" + "\")");
+
                     }
 
                 } else if (pWrap.isDateTime()) {

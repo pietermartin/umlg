@@ -2,6 +2,7 @@ package org.umlg.associationclass.test;
 
 import junit.framework.Assert;
 import org.junit.Test;
+import org.umlg.runtime.adaptor.GraphDb;
 import org.umlg.runtime.test.BaseLocalDbTest;
 import org.umlg.tinkergraph.*;
 

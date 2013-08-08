@@ -238,8 +238,8 @@
     TumlBaseTabOneManager.prototype.isPropertyForOnePage = function (property) {
         return (
             (!property.associationClassOne && !property.inverseComposite && (!property.composite && (property.oneToOne || property.manyToOne || property.manyPrimitive || property.manyEnumeration)))
-            ||
-            (!property.associationClassOne && (this.isForCreation && property.composite && property.lower > 0) && property.name !== 'uri'));
+                ||
+                (!property.associationClassOne && (this.isForCreation && property.composite && property.lower > 0) && property.name !== 'uri'));
     }
 
     TumlBaseTabOneManager.prototype.synchronizeModel = function (property) {
@@ -638,6 +638,7 @@
         selectButtonDiv.append($('<button class="many-primitive-editor-select"/>').click(function () {
             var currentValues = serializer($table);
             $inputToSet.val(currentValues.join(","));
+            $inputToSet.blur();
             $div.remove();
         }).text('Select'));
         selectButtonDiv.append($('<button class="many-primitive-editor-cancel"/>').click(function () {
@@ -664,24 +665,25 @@
     }
 
     TumlBaseTabOneManager.prototype.appendEnumerationLoopupOptionsToSelect = function (tumlLookupUri, propertyJavaClassName, required, currentValue, select) {
-        var jqxhr = $.getJSON(tumlLookupUri + '?enumQualifiedName=' + propertyJavaClassName,function (response, b, c) {
-            //if not a required field add a black value
-            if (!required) {
-                select.append($('<option />)').val("").html(""));
-            }
-            for (var i = 0; i < response.data.length; i++) {
-                select.append($('<option />)').val(response.data[i]).html(response.data[i]));
-            }
-            if (currentValue !== null) {
-                select.val(currentValue);
-            }
-            if (!required) {
-                select.chosen({allow_single_deselect: true});
-            } else {
-                select.chosen();
-            }
-            select.focus();
-        }).fail(function (a, b, c) {
+        var jqxhr = $.getJSON(tumlLookupUri + '?enumQualifiedName=' + propertyJavaClassName,
+            function (response, b, c) {
+                //if not a required field add a black value
+                if (!required) {
+                    select.append($('<option />)').val("").html(""));
+                }
+                for (var i = 0; i < response.data.length; i++) {
+                    select.append($('<option />)').val(response.data[i]).html(response.data[i]));
+                }
+                if (currentValue !== null) {
+                    select.val(currentValue);
+                }
+                if (!required) {
+                    select.chosen({allow_single_deselect: true});
+                } else {
+                    select.chosen();
+                }
+                select.focus();
+            }).fail(function (a, b, c) {
                 alert("error " + a + ' ' + b + ' ' + c);
             }
         );
@@ -777,7 +779,7 @@
                     }
                 }
             }
-            if (validationResult === undefined) {
+            if (validationResult === undefined || validationResult === null) {
                 validationResult = selectFieldValidator(property)(tmpSerializedValue);
             }
         } else {

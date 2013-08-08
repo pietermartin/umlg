@@ -33,8 +33,8 @@
 
         this.refresh = function (result, gridDivName) {
             this.result = result;
-            this.dataBeforeEdit = $.extend(true, [], result.data);
-            this.metaForData = result.meta.to;
+//            this.dataBeforeEdit = $.extend(true, [], result.data);
+            this.metaForDataTo = result.meta.to;
             this.gridDivName = gridDivName;
             var outerDivForResults = $('#' + this.gridDivName);
             outerDivForResults.children().remove();
@@ -135,14 +135,15 @@
         }
 
         this.refresh = function (result) {
-            this.metaForData = result.meta.to;
-            var tabDiv = $('#' + this.metaForData.name + "Lookup");
+            this.metaForDataFrom = result.meta.from;
+            this.metaForDataTo = result.meta.to;
+            var tabDiv = $('#' + this.metaForDataTo.name + "Lookup");
             $('<div id="serverErrorMsg" />').appendTo(tabDiv);
 //            $('<div id="myGridLookupHeader" class="selectheader" />').append($('<p />').text('Select the values to add.')).appendTo(tabDiv);
-            $('<div id="myGridLookup' + this.metaForData.name + '" style="width:auto;height:90%;"></div>').appendTo(tabDiv);
-            $('<div id="pagerLookup' + this.metaForData.name + '" style="width:auto;height:20px;"></div>').appendTo(tabDiv);
-            $('#contextMenu' + this.metaForData.name).remove();
-            this.createGrid(result.data/*, this.metaForData*/, tumlUri);
+            $('<div id="myGridLookup' + this.metaForDataTo.name + '" style="width:auto;height:90%;"></div>').appendTo(tabDiv);
+            $('<div id="pagerLookup' + this.metaForDataTo.name + '" style="width:auto;height:20px;"></div>').appendTo(tabDiv);
+            $('#contextMenu' + this.metaForDataTo.name).remove();
+            this.createGrid(result.data/*, this.metaForDataTo*/, tumlUri);
         };
 
         this.instantiateGrid = function () {
@@ -192,10 +193,13 @@
             TumlBaseGridManager.prototype.setupColumns.call(this, this.localMetaForData);
 
             this.columns.push({id: "uri", name: "uri", field: "uri", sortable: false, formatter: TumlSlick.Formatters.Link});
-            this.columns.push(
-                {id: "delete", name: "delete", field: "delete", sortable: false,
-                    formatter: TumlSlick.Formatters.TumlDelete }
-            );
+            //Association class property can not have a deleted column
+            if (!(this.propertyNavigatingTo.associationClassOne && !this.propertyNavigatingTo.memberEndOfAssociationClass)) {
+                this.columns.push(
+                    {id: "delete", name: "delete", field: "delete", sortable: false,
+                        formatter: TumlSlick.Formatters.TumlDelete }
+                );
+            }
         };
 
     }
@@ -229,8 +233,8 @@
         this.containsOneToOne = false;
 
         this.calculateContainsOne = function () {
-            for (var i = 0; i < this.metaForData.properties.length; i++) {
-                var property = this.metaForData.properties[i];
+            for (var i = 0; i < this.metaForDataTo.properties.length; i++) {
+                var property = this.metaForDataTo.properties[i];
                 if (property.oneToOne && !property.composite && !property.inverseComposite && !property.onePrimitive) {
                     this.containsOneToOne = true;
                     break;
@@ -299,8 +303,8 @@
                 var newItems = this.dataView.getNewItems();
                 for (var i = 0; i < newItems.length; i++) {
                     var data = newItems[i];
-                    for (var j = 0; j < this.metaForData.properties.length; j++) {
-                        var property = this.metaForData.properties[j];
+                    for (var j = 0; j < this.metaForDataTo.properties.length; j++) {
+                        var property = this.metaForDataTo.properties[j];
                         if (property.oneToOne && !property.composite && !property.inverseComposite && !property.onePrimitive && data[property.name] !== undefined && data[property.name] !== null && data[property.name].id !== undefined) {
                             this.tumlTabViewManager.updateDataModelForOneToOne(data[property.name].previousId, property.inverseName, {});
                             this.tumlTabViewManager.updateDataModelForOneToOne(data[property.name].id, property.inverseName, data);
@@ -314,12 +318,12 @@
             var updatedItems = this.dataView.getUpdatedItems();
             for (var i = 0; i < updatedItems.length; i++) {
                 var data = updatedItems[i];
-                for (var j = 0; j < this.metaForData.properties.length; j++) {
-                    var property = this.metaForData.properties[j];
+                for (var j = 0; j < this.metaForDataTo.properties.length; j++) {
+                    var property = this.metaForDataTo.properties[j];
                     if (property.oneToOne && !property.composite && !property.inverseComposite && !property.onePrimitive && data[property.name] !== undefined && data[property.name] !== null && data[property.name].id !== undefined) {
                         //TODO name needs to be displayName, some backend strategy required dude
                         if (!isNaN(data[property.name].id)) {
-                            this.tumlTabViewManager.updateDataModelForOneToOneForUpdatedItem(this.metaForData.qualifiedName, data[property.name].id, data[property.name].displayName, property.inverseName, data);
+                            this.tumlTabViewManager.updateDataModelForOneToOneForUpdatedItem(this.metaForDataTo.qualifiedName, data[property.name].id, data[property.name].displayName, property.inverseName, data);
                         }
                     }
                 }
@@ -353,7 +357,7 @@
             } else {
                 this.contextVertexId = -1;
             }
-            this.localMetaForData = this.metaForData;
+            this.localMetaForData = this.metaForDataTo;
 
             this.setupColumns();
 
@@ -403,7 +407,7 @@
                     if (contextData.name !== 'self') {
                         //If non composite one check if the element exist
 //                        if (!contextData.property.composite && contextData.property.upper == 1) {
-                        if (!contextData.property.inverseComposite && contextData.property.upper == 1) {
+                        if (!contextData.property.composite && contextData.property.upper == 1) {
                             if (data[row][contextData.property.name].id == null) {
                                 alert('Property ' + contextData.property.qualifiedName + ' on ' + self.metaForData.name + ' does not exist!\nIt can not be created as it is a non composite property.');
                                 return;
@@ -625,7 +629,10 @@
                                 if (self.dataView.getItem(row)[column.name] !== undefined && self.dataView.getItem(row)[column.name] !== null && self.dataView.getItem(row)[column.name].tmpId !== undefined) {
                                     return true;
                                 } else {
-                                    alert('Select an association before setting the association class!');
+                                    if (!(self instanceof Tuml.TumlForManyLookupGridManager)) {
+                                        //TumlForManyLookupGridManager are read only, clicked on to select the row
+                                        alert('Select an association before setting the association class!');
+                                    }
                                     return false;
                                 }
                             } else {
@@ -637,7 +644,10 @@
                                 if (self.dataView.getItem(row)[column.name] !== undefined && self.dataView.getItem(row)[column.name] !== null && self.dataView.getItem(row)[column.name].tmpId !== undefined) {
                                     return true;
                                 } else {
-                                    alert('Select an association before setting the association class!');
+                                    if (!(self instanceof Tuml.TumlForManyLookupGridManager)) {
+                                        //TumlForManyLookupGridManager are read only, clicked on to select the row
+                                        alert('Select an association before setting the association class!');
+                                    }
                                     return false;
                                 }
                             } else {
@@ -831,7 +841,8 @@
 
     TumlBaseGridManager.prototype.refresh = function (result, gridDiv) {
 
-        this.metaForData = result.meta.to;
+        this.metaForDataFrom = result.meta.from;
+        this.metaForDataTo = result.meta.to;
         this.calculateContainsOne();
 
         var tabDiv = gridDiv;
@@ -840,10 +851,10 @@
         $('<div id="serverErrorMsg" />').appendTo(tabDiv);
 
         var windowHeight = $('.ui-layout-center').height() - 135;
-        $('<div />', {id: 'myGrid' + this.metaForData.name, style: 'width:auto;height:' + windowHeight + 'px;', class: 'tumlSlickGrid'}).appendTo(tabDiv);
-        $('<div />', {id: 'pager' + this.metaForData.name, style: 'width:auto;height:20px;'}).appendTo(tabDiv);
+        $('<div />', {id: 'myGrid' + this.metaForDataTo.name, style: 'width:auto;height:' + windowHeight + 'px;', class: 'tumlSlickGrid'}).appendTo(tabDiv);
+        $('<div />', {id: 'pager' + this.metaForDataTo.name, style: 'width:auto;height:20px;'}).appendTo(tabDiv);
 
-        $('#contextMenu' + this.metaForData.name).remove();
+        $('#contextMenu' + this.metaForDataTo.name).remove();
         this.createGrid(result.data, this.tumlUri);
 
     };
@@ -938,8 +949,16 @@
             return true;
         } else if (property.associationClassProperty) {
             return false;
-        } else if (((property.composite && property.lower > 0) ||
-            (!property.composite && !property.inverseComposite && ((property.oneToOne || property.manyToOne) || property.manyPrimitive || property.manyEnumeration)))) {
+        } else if (property.composite && property.lower > 0) {
+            return true;
+        } else if (property.inverseQualifiedName === this.propertyNavigatingTo.qualifiedName) {
+            //This prevents the one displaying on a non composite one to many relationship.
+            //Its value is implicit seeing that one navigated from the one.
+            //If one were to edit the one it would disappear from the grid as it is no longer part of the association.
+
+            //This is must occur before the next if.
+            return false;
+        } else if (!property.composite && !property.inverseComposite && ((property.oneToOne || (property.manyToOne)) || property.manyPrimitive || property.manyEnumeration)) {
             return true;
         } else {
             return false;

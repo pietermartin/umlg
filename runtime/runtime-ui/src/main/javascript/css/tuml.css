@@ -1,3 +1,7 @@
+.ui-tabs .ui-tabs-panel {
+    padding: 0.5em 0.2em;
+}
+
 .ui-layout-north .embossed {
     margin: 0 auto; width: 60px;
 }

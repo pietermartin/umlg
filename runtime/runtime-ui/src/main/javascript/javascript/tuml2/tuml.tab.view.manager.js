@@ -378,12 +378,14 @@
         var tabDiv = this.parentTabContainerManager.tabContainer.find('#' + this.getTabId()).find('.oneUl');
         var tabsButtonDiv = $('<div />', {id: 'tabcontainer-button', class: 'one-tabs-button'}).appendTo(tabDiv);
         var saveButton = $('<button />', {id: this.getTabId() + 'save'}).text('Save').appendTo(tabsButtonDiv);
-        saveButton.button().click(function (event) {
-            if (self.tumlTabOneManager.commitCurrentEdit()) {
-                self.parentTabContainerManager.saveTabs();
+        saveButton.button().click(
+            function (event) {
+                if (self.tumlTabOneManager.commitCurrentEdit()) {
+                    self.parentTabContainerManager.saveTabs();
+                }
+                event.preventDefault();
             }
-            event.preventDefault();
-        });
+        );
         var cancelButton = $('<button />', {id: this.getTabId() + 'save'}).text('Cancel').appendTo(tabsButtonDiv);
         cancelButton.button().click(function (event) {
             self.doCancel();
