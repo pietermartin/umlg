@@ -31,7 +31,7 @@ public abstract class BaseTumlCompositionNode extends BaseTuml implements Compos
 	
 	<T extends TumlNode> void walkToRoot(List<T> nodes) {
 		nodes.add((T) this);
-		if (getOwningObject() != null && getOwningObject() instanceof CompositionNode) {
+        if (getOwningObject() != null && getOwningObject() instanceof CompositionNode) {
 			((BaseTumlCompositionNode) getOwningObject()).walkToRoot(nodes);
 		}
 	}

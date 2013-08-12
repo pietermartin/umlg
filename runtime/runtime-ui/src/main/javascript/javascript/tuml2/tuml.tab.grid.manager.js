@@ -162,11 +162,26 @@
     TumlForManyLookupGridManager.prototype = new TumlBaseGridManager;
 
     TumlForManyLookupGridManager.prototype.isPropertyForGrid = function (property) {
+        if (property.composite && property.lower > 0) {
+            return true;
+        } else if (property.inverseQualifiedName === this.propertyNavigatingTo.qualifiedName) {
+            //This prevents the one displaying on a non composite one to many relationship.
+            //Its value is implicit seeing that one navigated from the one.
+            //If one were to edit the one it would disappear from the grid as it is no longer part of the association.
 
-        return ((property.composite && property.lower > 0) ||
-            (!property.composite && !property.inverseComposite &&
-                ((property.oneToOne || property.manyToOne) || property.manyPrimitive || property.manyEnumeration)));
-
+            //This is must occur before the next if.
+            return false;
+        } else if (!property.composite && !property.inverseComposite) {
+            if (property.associationClassOne && !property.memberEndOfAssociationClass) {
+                return false;
+            } else if (property.oneToOne || property.manyToOne || property.manyPrimitive || property.manyEnumeration) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
 
     }
 
@@ -644,7 +659,7 @@
                                 if (self.dataView.getItem(row)[column.name] !== undefined && self.dataView.getItem(row)[column.name] !== null && self.dataView.getItem(row)[column.name].tmpId !== undefined) {
                                     return true;
                                 } else {
-                                    if (!(self instanceof Tuml.TumlForManyLookupGridManager)) {
+                                    if (!(self instanceof Tuml.TumlForManyLookupGridManager) && property.inverseQualifiedName !== this.propertyNavigatingTo.qualifiedName) {
                                         //TumlForManyLookupGridManager are read only, clicked on to select the row
                                         alert('Select an association before setting the association class!');
                                     }
@@ -657,7 +672,7 @@
                     }
                 }
                 return true;
-            };
+            }
 
             function isCellEditable(row, cell, item) {
                 for (var j = 0; j < self.grid.getColumns().length; j++) {
@@ -670,7 +685,7 @@
                     }
                 }
                 return true;
-            };
+            }
 
 //            function isCellEditable(row, cell, item) {
 //                for (var j = 0; j < self.grid.getColumns().length; j++) {
@@ -700,7 +715,7 @@
                 } else {
                     return false;
                 }
-            };
+            }
 
             this.updateHeaderRow = function (metaForData) {
                 for (var i = 0; i < this.columns.length; i++) {

@@ -55,17 +55,26 @@ public final class TumlPropertyOperations extends PropertyOperations {
 		if (owner instanceof Association) {
 			Association a = (Association) owner;
 			List<Property> members = a.getMemberEnds();
-			Property otherEnd = null;
-			for (Property member : members) {
-				if (member != p) {
-					otherEnd = member;
-					break;
-				}
-			}
-			if (otherEnd == null) {
-				throw new IllegalStateException("Oy, where is the other end gone to!!!");
-			}
-			return otherEnd.getType();
+
+            //Check if the property p is a member end, if not owner must be an association class
+            if (!members.contains(p)) {
+                if (!(owner instanceof AssociationClass)) {
+                    throw new IllegalStateException("Expected owner to be an association class");
+                }
+                return (AssociationClass)owner;
+            } else {
+			    Property otherEnd = null;
+                for (Property member : members) {
+                    if (member != p) {
+                        otherEnd = member;
+                        break;
+                    }
+                }
+                if (otherEnd == null) {
+                    throw new IllegalStateException("Oy, where is the other end gone to!!!");
+                }
+                return otherEnd.getType();
+            }
 		} else if (owner instanceof Classifier) {
 			return (Classifier) owner;
 		} else if (owner instanceof Property && isQualifier(p)) {
@@ -106,7 +115,7 @@ public final class TumlPropertyOperations extends PropertyOperations {
 	public static boolean isControllingSide(Property p) {
 		boolean result = p.isComposite();
 		if (p.getOtherEnd() == null) {
-			return result = true;
+			result = true;
 		} else if (isOneToOne(p) && !p.isComposite() && !p.getOtherEnd().isComposite()) {
 			// If association is OneToOne and both sides are non composite then
 			// take the 1-1 side as inverse=true else compare alphabetically

@@ -274,7 +274,7 @@ public class RuntimePropertyImplementor {
                     );
                 } else {
                     //This is for properties of the association class itself
-                    if (!pWrap.isPrimitive() && !pWrap.isDataType()) {
+                    if (pWrap.isMemberOfAssociationClass()) {
                         //These are fake properties, simulating navigating from the association class to its member ends
                         addEnumLiteral(
                                 true,
@@ -292,17 +292,17 @@ public class RuntimePropertyImplementor {
                         );
                     } else {
                         addEnumLiteral(
-                                false,
-                                false,
-                                null,
-                                null,
-                                false,
+                                false /*isAssociationClassOne*/,
+                                false/*isMemberEndOfAssociationClass*/,
+                                null/*associationClassPropertyName*/,
+                                null/*inverseAssociationClassPropertyName*/,
+                                false/*isAssociationClassProperty*/,
                                 ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, pWrap.fieldname(), pWrap.getQualifiedName(),
-                                pWrap.getInverseName(), pWrap.getInverseQualifiedName() + "AC", pWrap.isReadOnly(), pWrap.isPrimitive(), pWrap.getDataTypeEnum(), pWrap.getValidations(),
+                                pWrap.getInverseName(), pWrap.getInverseQualifiedName(), pWrap.isReadOnly(), pWrap.isPrimitive(), pWrap.getDataTypeEnum(), pWrap.getValidations(),
                                 pWrap.isEnumeration(), pWrap.isManyToOne(), pWrap.isMany(), pWrap.isControllingSide(), pWrap.isComposite(), pWrap.isInverseComposite(),
                                 pWrap.isOneToOne(), pWrap.isOneToMany(), pWrap.isManyToMany(), pWrap.getUpper(), pWrap.getLower(), inverseUpper, pWrap.isQualified(),
                                 pWrap.isInverseQualified(), pWrap.isOrdered(), pWrap.isInverseOrdered(), pWrap.isUnique(), pWrap.isInverseUnique(),
-                                TinkerGenerationUtil.getEdgeName(pWrap.getProperty()) + "_AC"
+                                TinkerGenerationUtil.getEdgeName(pWrap.getProperty())
                         );
                     }
                 }

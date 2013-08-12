@@ -82,6 +82,23 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
 		TinkerGenerationUtil.addOverrideAnnotation(getOwningObject);
 		if (TumlClassOperations.hasCompositeOwner(clazz)) {
 			getOwningObject.getBody().addToStatements("return " + new PropertyWrapper(TumlClassOperations.getOtherEndToComposite(clazz)).getter() + "()");
+        } else if (clazz instanceof AssociationClass) {
+            boolean foundOwningObject = false;
+            //Make the controlling side the owning object
+            AssociationClass associationClass = (AssociationClass)clazz;
+            for (Property memberEnd : associationClass.getMemberEnds()) {
+                PropertyWrapper pWrap = new PropertyWrapper(memberEnd);
+                //In a regular one to many the many is the controlling side of the association.
+                //So the non controlling side is the owning end.
+                if (!pWrap.isControllingSide()) {
+                    getOwningObject.getBody().addToStatements("return " + pWrap.getter() + "()");
+                    foundOwningObject = true;
+                    break;
+                }
+            }
+            if (!foundOwningObject) {
+                throw new IllegalStateException("Must find owning object for an association class!");
+            }
 		} else {
 			getOwningObject.getBody().addToStatements("return null");
 		}

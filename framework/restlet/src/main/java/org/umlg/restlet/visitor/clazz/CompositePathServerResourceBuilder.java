@@ -29,7 +29,6 @@ public class CompositePathServerResourceBuilder extends BaseServerResourceBuilde
     @Override
     @VisitSubclasses({Class.class, AssociationClass.class})
     public void visitBefore(Class clazz) {
-        // if (!clazz.isAbstract()) {
         OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(TumlClassOperations.className(clazz) + "CompositePathServerResource");
         OJPackage ojPackage = new OJPackage(Namer.name(clazz.getNearestPackage()) + ".restlet");
         annotatedInf.setMyPackage(ojPackage);
@@ -44,7 +43,6 @@ public class CompositePathServerResourceBuilder extends BaseServerResourceBuilde
         addDefaultConstructor(annotatedClass);
         addGetRepresentation(clazz, annotatedInf, annotatedClass);
         addToRouterEnum(clazz, annotatedClass);
-        // }
     }
 
     @Override

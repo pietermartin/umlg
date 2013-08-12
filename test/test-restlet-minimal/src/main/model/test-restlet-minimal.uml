@@ -114,6 +114,14 @@
               <value xsi:nil="true"/>
             </defaultValue>
           </ownedAttribute>
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_5r26QAJbEeO9bYUowtpiHA" name="classE" type="_2Z7PcAJbEeO9bYUowtpiHA" aggregation="composite" association="_5r9n8AJbEeO9bYUowtpiHA">
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_5r26QQJbEeO9bYUowtpiHA"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_5r26QgJbEeO9bYUowtpiHA" value="*"/>
+          </ownedAttribute>
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_q3IYEAMTEeO9bYUowtpiHA" name="classF" type="_pvzjoAMTEeO9bYUowtpiHA" aggregation="composite" association="_q3MCcAMTEeO9bYUowtpiHA">
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_q3IYEQMTEeO9bYUowtpiHA" value="1"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_q3IYEgMTEeO9bYUowtpiHA" value="*"/>
+          </ownedAttribute>
           <ownedEnd xmi:type="uml:Property" xmi:id="_DC8FcfxpEeKXi9pM4yg14w" name="classc" type="_BVz1QPxpEeKXi9pM4yg14w" association="_DC8FcPxpEeKXi9pM4yg14w">
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_DC8FcvxpEeKXi9pM4yg14w"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_DC8Fc_xpEeKXi9pM4yg14w" value="1"/>
@@ -121,6 +129,33 @@
           <ownedEnd xmi:type="uml:Property" xmi:id="_DCdkUPxpEeKXi9pM4yg14w" name="classd" type="_CLI6wPxpEeKXi9pM4yg14w" association="_DC8FcPxpEeKXi9pM4yg14w">
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_DCxGUPxpEeKXi9pM4yg14w"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_DC1XwPxpEeKXi9pM4yg14w" value="*"/>
+          </ownedEnd>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Class" xmi:id="_2Z7PcAJbEeO9bYUowtpiHA" name="ClassE">
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_3jTSUAJbEeO9bYUowtpiHA" name="name" visibility="public">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_5BWksAJbEeO9bYUowtpiHA" value="1"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_5BdSYAJbEeO9bYUowtpiHA" value="1"/>
+            <defaultValue xmi:type="uml:LiteralString" xmi:id="_5BtxEAJbEeO9bYUowtpiHA">
+              <value xsi:nil="true"/>
+            </defaultValue>
+          </ownedAttribute>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Association" xmi:id="_5r9n8AJbEeO9bYUowtpiHA" name="aC2_classE_1" memberEnd="_5r9n8QJbEeO9bYUowtpiHA _5r26QAJbEeO9bYUowtpiHA" navigableOwnedEnd="_5r9n8QJbEeO9bYUowtpiHA">
+          <ownedEnd xmi:type="uml:Property" xmi:id="_5r9n8QJbEeO9bYUowtpiHA" name="aC2" type="_DC8FcPxpEeKXi9pM4yg14w" association="_5r9n8AJbEeO9bYUowtpiHA">
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_5r9n8gJbEeO9bYUowtpiHA" value="1"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_5r9n8wJbEeO9bYUowtpiHA" value="1"/>
+          </ownedEnd>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Class" xmi:id="_pvzjoAMTEeO9bYUowtpiHA" name="ClassF">
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_vGlbEAMTEeO9bYUowtpiHA" name="name">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+          </ownedAttribute>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Association" xmi:id="_q3MCcAMTEeO9bYUowtpiHA" name="aC2_classF_1" memberEnd="_q3MCcQMTEeO9bYUowtpiHA _q3IYEAMTEeO9bYUowtpiHA" navigableOwnedEnd="_q3MCcQMTEeO9bYUowtpiHA">
+          <ownedEnd xmi:type="uml:Property" xmi:id="_q3MCcQMTEeO9bYUowtpiHA" name="aC2" type="_DC8FcPxpEeKXi9pM4yg14w" association="_q3MCcAMTEeO9bYUowtpiHA">
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_q3MCcgMTEeO9bYUowtpiHA" value="1"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_q3MCcwMTEeO9bYUowtpiHA" value="1"/>
           </ownedEnd>
         </packagedElement>
       </packagedElement>

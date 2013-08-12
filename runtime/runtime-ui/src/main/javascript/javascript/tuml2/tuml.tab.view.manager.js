@@ -701,14 +701,40 @@
                                 validationResults.push(validationResult);
                             }
                         } else if (!property.onePrimitive && !property.manyPrimitive && !property.oneEnumeration && property.dataTypeEnum == null && !property.composite && (property.manyToOne || property.oneToOne)) {
-                            if (item[property.name].id == null) {
-                                var validationResult = new Tuml.ValidationResult(i, property.name);
-                                validationResult.row = this.tumlTabGridManager.dataView.getIdxById(item.id);
-                                validationResult.property = property;
-                                validationResult.qualifiedName = property.qualifiedName;
-                                validationResult.message = property.name + " is a required field!";
-                                validationResults.push(validationResult);
+
+                            if (property.associationClassOne && !property.memberEndOfAssociationClass) {
+                                if (item[property.name] == null) {
+                                    var validationResult = new Tuml.ValidationResult(i, property.name);
+                                    validationResult.row = this.tumlTabGridManager.dataView.getIdxById(item.id);
+                                    validationResult.property = property;
+                                    validationResult.qualifiedName = property.qualifiedName;
+                                    validationResult.message = property.name + " is a required field!";
+                                    validationResults.push(validationResult);
+                                } else {
+                                    Tuml.Metadata.Cache.get(property.qualifiedName, property.tumlMetaDataUri,
+                                        function (result) {
+                                            for (var k = 0; k < result.length; k++) {
+
+                                                for (var l = 0; l < result[k].meta.to.properties.length; l++) {
+                                                    var associationClassProperty = result[k].meta.to.properties[l];
+                                                    console.log(associationClassProperty);
+                                                }
+//                                                self.setComponentIdToTmpId(object, result[k].meta.to);
+                                            }
+                                        }
+                                    )
+                                }
+                            } else {
+                                if (item[property.name].id == null) {
+                                    var validationResult = new Tuml.ValidationResult(i, property.name);
+                                    validationResult.row = this.tumlTabGridManager.dataView.getIdxById(item.id);
+                                    validationResult.property = property;
+                                    validationResult.qualifiedName = property.qualifiedName;
+                                    validationResult.message = property.name + " is a required field!";
+                                    validationResults.push(validationResult);
+                                }
                             }
+
                         } else {
                             if (item[property.name] == null) {
                                 var validationResult = new Tuml.ValidationResult(i, property.name);
@@ -994,7 +1020,6 @@
         var contextvertexId = this.parentTabContainerManager.contextVertexId;
         var adjustedUri = property.tumlLookupUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextvertexId);
 
-        //this.handleLookup = function (lookupUri, qualifiedName, loadDataCallback) {
         this.handleLookup(adjustedUri, qualifiedName,
 
             function (data) {
@@ -1037,46 +1062,6 @@
 
         );
 
-//        //Get the meta data.
-//        Tuml.Metadata.Cache.get(property.qualifiedName, property.tumlMetaDataUri,
-//            function (result) {
-//                var component = {meta: null, data: null};
-//                self.tabContainerProperty = property;
-//                var firstTumlManyComponentTabViewManager = null;
-//                for (var i = 0; i < result.length; i++) {
-//                    component.meta = result[i].meta;
-//                    self.maybeCreateTabContainer();
-//                    component.data = data;
-//                    var tumlManyComponentTabViewManager = self.createTabContainer(
-//                        umlg.tab.Enum.Properties,
-//                        component,
-//                        tumlUri,
-//                        {forLookup: false, forManyComponent: true, forOneComponent: false, isOne: false, forCreation: true},
-//                        property
-//                    );
-////                    self.setCell(cell);
-//                    self.addToTumlTabViewManagers(tumlManyComponentTabViewManager);
-//                    tumlManyComponentTabViewManager.parentTabContainerManager = self;
-//                    $('#slickGrid' + self.tabId).hide();
-////                    tumlManyComponentTabViewManager.backupData = $.extend(true, [], data);
-//                    //pass through component's component validationResults
-////                    self.passOnValidationResults(tumlManyComponentTabViewManager, cell.row, self.tumlTabGridManager.grid.getColumns()[cell.cell].name);
-//                    tumlManyComponentTabViewManager.createTab(component, false);
-//                    if (i === 0) {
-//                        firstTumlManyComponentTabViewManager = tumlManyComponentTabViewManager;
-//                    }
-//                }
-//                self.addButtons();
-//                self.open = false;
-//                //Set only the first tab to active
-//                if (firstTumlManyComponentTabViewManager !== null) {
-//                    self.tabContainer.tabs("option", "active", 0);
-//                }
-//                var qualifiedName = property.qualifiedName;
-//                self.updateNavigationHeader(qualifiedName);
-////                self.updateMultiplicityWarningHeader();
-//            }
-//        );
     }
 
     TumlTabManyViewManager.prototype.setValidationResults = function (qualifiedName, validationResults, count) {
