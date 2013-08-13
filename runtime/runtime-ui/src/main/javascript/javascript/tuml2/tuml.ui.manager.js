@@ -55,6 +55,15 @@
                 }
             };
 
+            $(window).keypress(function(event) {
+                if (!(event.which == 115 && event.ctrlKey && event.shiftKey) && !(event.which == 19)) {
+                    return true;
+                }
+                alert("Ctrl-Shift-S pressed");
+                event.preventDefault();
+                return false;
+            });
+
             self.refresh(tumlUri);
 
         }

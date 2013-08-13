@@ -429,9 +429,14 @@
     padding-left: 0px;
 }
 
+.ui-layout-pane {
+    padding: 5px;
+}
+
 .ui-layout-pane-center {
     padding: 5px
 }
+
 
 .ui-layout-center-heading {
     background-color: #EEEEEE;

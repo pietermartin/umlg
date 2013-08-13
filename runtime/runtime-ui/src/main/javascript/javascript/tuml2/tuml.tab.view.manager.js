@@ -673,104 +673,87 @@
     TumlTabManyViewManager.prototype.validateInsert = function () {
         var validationResults = [];
         var toValidate = this.tumlTabGridManager.dataView.getNewItems();
-        for (var i = 0; i < toValidate.length; i++) {
-            var item = toValidate[i];
+        for (var row = 0; row < toValidate.length; row++) {
+            var item = toValidate[row];
             if (this.metaForData.to.qualifiedName == item.qualifiedName) {
                 for (var k = 0; k < this.metaForData.to.properties.length; k++) {
                     var property = this.metaForData.to.properties[k];
 
                     var validateRequired = false;
+                    var validateAssociationClass = false;
                     //Root level association classes are skipped as from the root there is no association
 //                    if (this.metaForData.from.name == 'Root' && property.associationClass) {
 //                        validateRequired = false;
 //                    } else  if (this.metaForData.from.name !== 'Root' && property.associationClass) {
-                    if (this.metaForData.from.name !== 'Root' && property.associationClassOne) {
+                    if (property.associationClassOne) {
+                        validateRequired = false;
+                    } else if (property.memberEndOfAssociationClass && (property.inverseQualifiedName === this.propertyNavigatingTo.qualifiedName)) {
+                        //Need to validate that the association class has been captured and is valid
                         validateRequired = true;
+                        validateAssociationClass = true;
                     } else if (!property.inverseComposite && property.lower > 0) {
                         validateRequired = true;
                     }
 
-                    if (validateRequired) {
-                        if (property.upper === -1 || property.upper > 1) {
-                            if (item[property.name] == undefined || item[property.name].length === 0) {
-                                var validationResult = new Tuml.ValidationResult(i, property.name);
-                                validationResult.row = this.tumlTabGridManager.dataView.getIdxById(item.id);
-                                validationResult.property = property;
-                                validationResult.qualifiedName = property.qualifiedName;
-                                validationResult.message = property.name + " is a required field!";
-                                validationResults.push(validationResult);
-                            }
-                        } else if (!property.onePrimitive && !property.manyPrimitive && !property.oneEnumeration && property.dataTypeEnum == null && !property.composite && (property.manyToOne || property.oneToOne)) {
+                    if (validateRequired && !validateAssociationClass) {
 
-                            if (property.associationClassOne && !property.memberEndOfAssociationClass) {
-                                if (item[property.name] == null) {
-                                    var validationResult = new Tuml.ValidationResult(i, property.name);
-                                    validationResult.row = this.tumlTabGridManager.dataView.getIdxById(item.id);
-                                    validationResult.property = property;
-                                    validationResult.qualifiedName = property.qualifiedName;
-                                    validationResult.message = property.name + " is a required field!";
-                                    validationResults.push(validationResult);
-                                } else {
-                                    Tuml.Metadata.Cache.get(property.qualifiedName, property.tumlMetaDataUri,
-                                        function (result) {
-                                            for (var k = 0; k < result.length; k++) {
+                        this.validateInsertNonAssociationClass(property, item, row, validationResults);
 
-                                                for (var l = 0; l < result[k].meta.to.properties.length; l++) {
-                                                    var associationClassProperty = result[k].meta.to.properties[l];
-                                                    console.log(associationClassProperty);
-                                                }
-//                                                self.setComponentIdToTmpId(object, result[k].meta.to);
-                                            }
-                                        }
-                                    )
-                                }
-                            } else {
-                                if (item[property.name].id == null) {
-                                    var validationResult = new Tuml.ValidationResult(i, property.name);
-                                    validationResult.row = this.tumlTabGridManager.dataView.getIdxById(item.id);
-                                    validationResult.property = property;
-                                    validationResult.qualifiedName = property.qualifiedName;
-                                    validationResult.message = property.name + " is a required field!";
-                                    validationResults.push(validationResult);
-                                }
-                            }
+                    } else if (validateAssociationClass) {
 
+                        if (item[property.associationClassPropertyName] == null) {
+                            var validationResult = new Tuml.ValidationResult(i, property.name);
+                            validationResult.row = this.tumlTabGridManager.dataView.getIdxById(item.id);
+                            validationResult.property = property;
+                            validationResult.qualifiedName = property.qualifiedName;
+                            validationResult.message = "The association class for " + property.name + " is required!";
+                            validationResults.push(validationResult);
                         } else {
-                            if (item[property.name] == null) {
-                                var validationResult = new Tuml.ValidationResult(i, property.name);
-                                validationResult.row = this.tumlTabGridManager.dataView.getIdxById(item.id);
-                                validationResult.property = property;
-                                validationResult.qualifiedName = property.qualifiedName;
-                                validationResult.message = property.name + " is a required field!";
-                                validationResults.push(validationResult);
+
+                            //Get the association class property
+                            var associationClassProperty;
+                            for (var l = 0; l < this.metaForData.to.properties.length; l++) {
+                                associationClassProperty = this.metaForData.to.properties[l];
+                                if (associationClassProperty.name === property.associationClassPropertyName) {
+                                    break;
+                                }
+                            }
+                            //Check that it has no already been validated, i.e. the association classes's ui has been
+                            // opened and closed which would have executed the validation code.
+                            var alreadyValidated = false;
+                            if (this.validationResults != null) {
+                                for (var m = 0; m < this.validationResults.length; m++) {
+                                    var validationResult = this.validationResults[m];
+                                    if (validationResult.property === associationClassProperty.name) {
+                                        alreadyValidated = true;
+                                        break;
+                                    }
+                                }
+                            }
+
+                            if (!alreadyValidated) {
+
+                                var result = Tuml.Metadata.Cache.getFromCache(associationClassProperty.qualifiedName);
+                                if (result === undefined) {
+                                    throw 'Meta data for association class must be available in the cache!';
+                                }
+                                for (var k = 0; k < result.length; k++) {
+
+                                    for (var l = 0; l < result[k].meta.to.properties.length; l++) {
+                                        var associationClassPropertyProperty = result[k].meta.to.properties[l];
+                                        //Do not validate the one back to the member end again
+                                        if (!associationClassPropertyProperty.associationClassProperty && associationClassPropertyProperty.lower > 0) {
+                                            this.validateInsertNonAssociationClass(associationClassPropertyProperty, item[associationClassProperty.name], row, validationResults);
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
-
-//                    if ((!property.inverseComposite && property.lower > 0) || (this.metaForData.from.name !== 'Root' && property.associationClass)) {
-//                        if (property.upper === -1 || property.upper > 1) {
-//                            if (item[property.name] == undefined || item[property.name].length === 0) {
-//                                var validationResult = new Tuml.ValidationResult(i, property.name);
-//                                validationResult.row = this.tumlTabGridManager.dataView.getIdxById(item.id);
-//                                validationResult.property = property;
-//                                validationResult.qualifiedName = property.qualifiedName;
-//                                validationResult.message = property.name + " is a required field!";
-//                                validationResults.push(validationResult);
-//                            }
-//                        } else {
-//                            if (item[property.name] == null) {
-//                                var validationResult = new Tuml.ValidationResult(i, property.name);
-//                                validationResult.row = this.tumlTabGridManager.dataView.getIdxById(item.id);
-//                                validationResult.property = property;
-//                                validationResult.qualifiedName = property.qualifiedName;
-//                                validationResult.message = property.name + " is a required field!";
-//                                validationResults.push(validationResult);
-//                            }
-//                        }
-//                    }
                 }
             }
         }
+
         if (this.validationResults != null) {
             for (var j = 0; j < this.validationResults.length; j++) {
                 var componentValidationResult = this.validationResults[j];
@@ -778,6 +761,40 @@
             }
         }
         return validationResults;
+    }
+
+    TumlTabManyViewManager.prototype.validateInsertNonAssociationClass = function (property, item, row, validationResults) {
+        if (property.upper === -1 || property.upper > 1) {
+            if (item[property.name] == undefined || item[property.name].length === 0) {
+                var validationResult = new Tuml.ValidationResult(row, property.name);
+                validationResult.row = this.tumlTabGridManager.dataView.getIdxById(item.id);
+                validationResult.property = property;
+                validationResult.qualifiedName = property.qualifiedName;
+                validationResult.message = property.name + " is a required field!";
+                validationResults.push(validationResult);
+            }
+        } else if (!property.onePrimitive && !property.manyPrimitive && !property.oneEnumeration && property.dataTypeEnum == null && !property.composite && (property.manyToOne || property.oneToOne)) {
+
+            if (item[property.name].id == null) {
+                var validationResult = new Tuml.ValidationResult(row, property.name);
+                validationResult.row = this.tumlTabGridManager.dataView.getIdxById(item.id);
+                validationResult.property = property;
+                validationResult.qualifiedName = property.qualifiedName;
+                validationResult.message = property.name + " is a required field!";
+                validationResults.push(validationResult);
+            }
+
+        } else {
+            if (item[property.name] == null) {
+                var validationResult = new Tuml.ValidationResult(row, property.name);
+                validationResult.row = this.tumlTabGridManager.dataView.getIdxById(item.id);
+                validationResult.property = property;
+                validationResult.qualifiedName = property.qualifiedName;
+                validationResult.message = property.name + " is a required field!";
+                validationResults.push(validationResult);
+            }
+        }
+
     }
 
     TumlTabManyViewManager.prototype.updateOneForUpdate = function (id, displayName, fieldName, one) {

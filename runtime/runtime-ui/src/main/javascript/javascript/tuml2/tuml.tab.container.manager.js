@@ -271,6 +271,20 @@
                     var row = selectedRows[i];
                     var item = tumlTabViewManager.tumlTabGridManager.dataView.getItem(row);
                     if (tumlTabViewManager.propertyNavigatingTo.memberEndOfAssociationClass) {
+
+                        //Need to eagerly fetch the association class's meta data.
+                        //By the time the validate code runs it must already be there as the validate code must execute synchronously
+
+                        var associationClassProperty;
+                        for (var l = 0; l < this.metaForData.to.properties.length; l++) {
+                            associationClassProperty = this.metaForData.to.properties[l];
+                            if (associationClassProperty.name === tumlTabViewManager.propertyNavigatingTo.inverseAssociationClassPropertyName) {
+                                break;
+                            }
+                            associationClassProperty = null;
+                        }
+                        Tuml.Metadata.Cache.get(associationClassProperty.qualifiedName, associationClassProperty.tumlMetaDataUri, function(){});
+
                         var fakeId = 'fake::' + Tuml.TumlFakeIndex++;
                         item[tumlTabViewManager.propertyNavigatingTo.inverseAssociationClassPropertyName] = {id: fakeId, tmpId: fakeId, displayName: null, refreshFromDb: true};
                     }

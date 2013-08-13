@@ -110,9 +110,6 @@
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_JaKtQPxpEeKXi9pM4yg14w" value="1"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_JaRa8PxpEeKXi9pM4yg14w" value="1"/>
-            <defaultValue xmi:type="uml:LiteralString" xmi:id="_Jae2UPxpEeKXi9pM4yg14w">
-              <value xsi:nil="true"/>
-            </defaultValue>
           </ownedAttribute>
           <ownedAttribute xmi:type="uml:Property" xmi:id="_5r26QAJbEeO9bYUowtpiHA" name="classE" type="_2Z7PcAJbEeO9bYUowtpiHA" aggregation="composite" association="_5r9n8AJbEeO9bYUowtpiHA">
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_5r26QQJbEeO9bYUowtpiHA"/>
