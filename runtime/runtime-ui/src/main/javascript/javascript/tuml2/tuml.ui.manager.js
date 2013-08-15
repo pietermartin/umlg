@@ -59,8 +59,7 @@
                 if (!(event.which == 115 && event.ctrlKey && event.shiftKey) && !(event.which == 19)) {
                     return true;
                 }
-                alert("Ctrl-Shift-S pressed");
-                self.save();
+                self.saveViaKeyPress();
                 return false;
             });
 
@@ -68,8 +67,8 @@
 
         }
 
-        function save() {
-            mainViewManager.save();
+        this.saveViaKeyPress = function() {
+            mainViewManager.saveViaKeyPress();
         }
 
         this.refresh = function(tumlUri) {

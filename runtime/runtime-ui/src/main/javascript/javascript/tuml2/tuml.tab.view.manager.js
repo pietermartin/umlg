@@ -278,6 +278,15 @@
 
     TumlTabQueryViewManager.prototype = new Tuml.TumlBaseTabViewManager;
 
+    TumlTabQueryViewManager.prototype.saveViaKeyPress = function() {
+        if (this.open) {
+            alert("TumlTabQueryViewManager.prototype.saveViaKeyPress  saving " + this.tabTitleName);
+            return true;
+        } else {
+            return TumlBaseTabViewManager.prototype.saveViaKeyPress.call(this);
+        }
+    }
+
     TumlTabQueryViewManager.prototype.closeTab = function () {
         var previousIndex = this.parentTabContainerManager.tumlTabViewManagers.indexOf(this);
         var nextIndex = previousIndex - 1;
@@ -344,6 +353,18 @@
     }
 
     TumlTabOneViewManager.prototype = new Tuml.TumlBaseTabViewManager;
+
+    TumlTabOneViewManager.prototype.saveViaKeyPress = function() {
+        if (this.open) {
+            alert("TumlTabOneViewManager.prototype.saveViaKeyPress  saving  " + this.tabTitleName);
+            if (Slick.GlobalEditorLock.commitCurrentEdit()) {
+                this.parentTabContainerManager.saveTabs();
+            }
+            return true;
+        } else {
+            return TumlBaseTabViewManager.prototype.saveViaKeyPress.call(this);
+        }
+    }
 
     TumlTabOneViewManager.prototype.createTab = function (result, forCreation) {
         if (this.oneManyOrQuery.forOneComponent) {
@@ -811,6 +832,18 @@
     TumlTabManyViewManager.prototype.updateOne = function (fakeId, fieldName, one, indexForFakeId) {
         var item = this.tumlTabGridManager.dataView.getItemById(indexForFakeId.id);
         this.updateOneRecursive(item, fakeId, fieldName, one, indexForFakeId);
+    }
+
+    TumlTabManyViewManager.prototype.saveViaKeyPress = function() {
+        if (this.open) {
+            if (Slick.GlobalEditorLock.commitCurrentEdit()) {
+                alert("TumlTabOneViewManager.prototype.saveViaKeyPress saving " + this.tabTitleName);
+                this.parentTabContainerManager.saveTabs();
+            }
+            return true;
+        } else {
+            return TumlBaseTabViewManager.prototype.saveViaKeyPress.call(this);
+        }
     }
 
     TumlTabManyViewManager.prototype.updateOneRecursive = function (item, fakeId, fieldName, one, indexForFakeId) {

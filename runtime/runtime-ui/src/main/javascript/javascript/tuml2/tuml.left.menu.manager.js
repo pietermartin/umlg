@@ -31,7 +31,14 @@
             contextMetaDataTo = _contextMetaDataTo;
             contextVertexId = _contextVertexId;
 
-            $('.ui-layout-west').children().remove();
+            var uiLayoutWest = $('.ui-layout-west');
+            uiLayoutWest.children().remove();
+
+            //add in the div where the property info and validation warning goes
+            var uiLayoutWestHeading = $('<div />', {id: 'ui-layout-west-heading', class: 'ui-layout-west-heading'}).appendTo(uiLayoutWest);
+            var westHeading = $('<div />', {id: 'ui-layout-west-heading-navigation-qualified-name', class: 'navigation-qualified-name'}).appendTo(uiLayoutWestHeading);
+            westHeading.text(_contextMetaDataFrom.qualifiedName);
+
             tabContainer = $('<div />', {id: 'tabContainer-menu-container'}).appendTo('.ui-layout-west');
             tabContainer.append('<ul />');
             tabContainer.tabs();

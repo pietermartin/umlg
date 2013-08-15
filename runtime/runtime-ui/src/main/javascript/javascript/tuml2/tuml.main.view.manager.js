@@ -145,13 +145,6 @@
             $('body').layout().resizeAll();
         }
 
-        /**
-         * This executes when the user presses cntrl shift save
-         */
-        this.save = function() {
-
-        }
-
         this.doSave = function (commit) {
             var startTime = new Date().getTime();
             var tumlTabViewManagers = this.getTumlTabManyOrOneViewManagers(commit);

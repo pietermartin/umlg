@@ -2,7 +2,7 @@
     margin: 5px;
 
     position: absolute;
-    top: 0px;
+    top: 25px;
     left: 0px;
     right: 0px;
     bottom: 0px;
@@ -467,6 +467,11 @@
 }
 
 .ui-layout-center-heading {
+    background-color: #EEEEEE;
+    height: 20px;
+}
+
+.ui-layout-west-heading {
     background-color: #EEEEEE;
     height: 20px;
 }

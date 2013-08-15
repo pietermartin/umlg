@@ -40,7 +40,7 @@
 
                 this.tumlTabViewManagers = [];
 
-                //add in the div where the property info validation warning goes
+                //add in the div where the property info and validation warning goes
                 var uiLayoutCenterHeading = $('<div />', {id: this.getTabId() + 'ui-layout-center-heading', class: 'ui-layout-center-heading'}).appendTo(tabLayoutDiv);
                 $('<div />', {id: this.getTabId() + 'navigation-qualified-name', class: 'navigation-qualified-name'}).appendTo(uiLayoutCenterHeading);
                 $('<div />', {id: this.getTabId() + 'multiplicity-warning', class: 'multiplicity-warning'}).appendTo(uiLayoutCenterHeading);
@@ -439,6 +439,20 @@
         }
     }
 
+    /**
+     * This executes when the user presses cntrl shift save
+     * Find the open tab with a save button and click it
+     */
+    TumlTabContainerManager.prototype.saveViaKeyPress = function() {
+        for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
+            var tumlTabViewManager = this.tumlTabViewManagers[i];
+            if (tumlTabViewManager.saveViaKeyPress()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     TumlTabContainerManager.prototype.activeOpenTabsGrid = function () {
         for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
             var tumlTabViewManager = this.tumlTabViewManagers[i];
@@ -488,10 +502,6 @@
                 'multiplicity falls outside the valid range [' + this.tabContainerProperty.lower + '..' + (this.tabContainerProperty.upper !== -1 ? this.tabContainerProperty.upper : '*') + ']'));
         }
 
-//        if (this.validationResults !== null && this.validationResults.length > 0) {
-//            $('#' + this.getTabId() + 'validation-warning').append($('<span />').text(
-//                ' there are validation errors'));
-//        }
     }
 
     TumlTabContainerManager.prototype.updateValidationWarningHeader = function () {
@@ -508,27 +518,6 @@
         }
         if (fail) {
             validationWarning.append($('<span />').text('there are validation errors'));
-        }
-    }
-
-    TumlTabContainerManager.prototype.validateMultiplicity = function () {
-        var tumlTabViewManagers = this.getTumlTabManyOrOneViewManagers(false);
-        var rowCount = 0;
-        for (var i = 0; i < tumlTabViewManagers.length; i++) {
-            var tumlTabViewManager = tumlTabViewManagers[i];
-            if (tumlTabViewManager instanceof  Tuml.TumlTabManyViewManager) {
-                var dataView = tumlTabViewManager.tumlTabGridManager.dataView;
-                rowCount += dataView.getItems().length;
-            } else {
-                rowCount = 1;
-                break;
-            }
-        }
-        if (rowCount < this.tabContainerProperty.lower || (this.tabContainerProperty.upper !== -1 && rowCount > this.tabContainerProperty.upper)) {
-            alert('multiplicity falls outside the valid range [' + this.tabContainerProperty.lower + '..' + (this.tabContainerProperty.upper !== -1 ? this.tabContainerProperty.upper : '*') + ']');
-            return false;
-        } else {
-            return true;
         }
     }
 
