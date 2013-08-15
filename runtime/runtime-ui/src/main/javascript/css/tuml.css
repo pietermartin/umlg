@@ -1,9 +1,20 @@
+#tabContainer-menu-container {
+    margin: 5px;
+
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+}
+
 .ui-tabs .ui-tabs-panel {
-    padding: 0.5em 0.2em;
+    padding: 0.5em 0.5em 0.5px 0.5em;
 }
 
 .ui-layout-north .embossed {
-    margin: 0 auto; width: 60px;
+    margin: 0 auto;
+    width: 60px;
 }
 
 .ui-layout-north {
@@ -26,9 +37,17 @@
     padding: 0px
 }
 
+.query-center.ui-layout-pane.ui-layout-pane-center {
+    background-color: #EEEEEE;
+    border: none;
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+}
+
 .required-field:before {
-    content : "* ";
-    color   : red;
+    content: "* ";
+    color: red;
 }
 
 .ui-textfield {
@@ -43,19 +62,34 @@
     float: right;
 }
 
+.ui-tabs-nav .tabs-button .ui-button {
+    /*90% prevents chrome from displaying a line under the selected tab*/
+    font-size: 90%;
+    /*90% crap way of making the buttons appear in the middle vertically*/
+    margin-top: 1px;
+}
+
 #buttons {
     float: right;
     margin-top: 4px;
+}
+
+#tabs-layout {
+    height: auto;
+    width: auto;
 }
 
 /*tabs*/
 #tabs-layoutTabs {
     font-family: arial;
     font-size: 8pt;
+    margin: 5px;
 
-    /*float: left;*/
-    margin-top: 5px;
-    height: auto;
+    position: absolute;
+    top: 25px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
 }
 
 .ui-layout-west {
@@ -274,7 +308,7 @@
 }
 
 .pane {
-    display:	none; /* will appear when layout inits */
+    display: none; /* will appear when layout inits */
 }
 
 .oclouter {
@@ -292,10 +326,6 @@
 .ocltextarea {
     float: left;
     width: 70%;
-    /*height: 90%;*/
-    /*padding-right: 5px;*/
-    /*padding-bottom: 5px;*/
-    /*padding-top: 5px;*/
 }
 
 .oclinnerbutton {
@@ -319,7 +349,6 @@
 }
 
 .oclexecutebutton button {
-    /*height: 100%;*/
     padding: 5px;
 }
 
@@ -398,13 +427,13 @@
     color: blue;
 }
 
-.ui-left-menu-li.menu-composite{
+.ui-left-menu-li.menu-composite {
     background-image: url(../javascript/images/UMLComposition.png);
     background-repeat: no-repeat;
     background-position: 0 50%;
 }
 
-.ui-left-menu-li.menu-noncomposite{
+.ui-left-menu-li.menu-noncomposite {
     background-image: url(../javascript/images/UMLAssociation.png);
     background-repeat: no-repeat;
     background-position: 0 50%;
@@ -437,7 +466,6 @@
     padding: 5px
 }
 
-
 .ui-layout-center-heading {
     background-color: #EEEEEE;
     height: 20px;
@@ -445,7 +473,7 @@
 
 .navigation-qualified-name {
     float: left;
-    line-height:20px;
+    line-height: 20px;
     padding-left: 5px;
     font-family: arial;
     font-size: 8pt;
@@ -557,15 +585,12 @@
     margin: auto
 }
 
-/*.slickGridOuter {*/
-    /*width: 2000px;*/
-/*}*/
-.tumlSlickGrid {
-    padding-bottom: 3px;
+#serverErrorMsg {
+    height: 0px;
 }
 
-.slick-pager {
-    width: auto;
+.tumlSlickGrid {
+    padding-bottom: 3px;
 }
 
 .umlg-updated-id {
@@ -662,7 +687,6 @@
     background-repeat: no-repeat;
     background-position: 0 50%;
 }
-
 
 .contextMenu li:hover {
     background-color: #FDF5CE;

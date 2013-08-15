@@ -135,7 +135,6 @@
         }
 
         this.refresh = function (result) {
-            this.metaForDataFrom = result.meta.from;
             this.metaForDataTo = result.meta.to;
             var tabDiv = $('#' + this.metaForDataTo.name + "Lookup");
             $('<div id="serverErrorMsg" />').appendTo(tabDiv);
@@ -424,7 +423,7 @@
 //                        if (!contextData.property.composite && contextData.property.upper == 1) {
                         if (!contextData.property.composite && contextData.property.upper == 1) {
                             if (data[row][contextData.property.name].id == null) {
-                                alert('Property ' + contextData.property.qualifiedName + ' on ' + self.metaForData.name + ' does not exist!\nIt can not be created as it is a non composite property.');
+                                alert('Property ' + contextData.property.qualifiedName + ' on ' + self.localMetaForData.name + ' does not exist!\nIt can not be created as it is a non composite property.');
                                 return;
                             }
                         }
@@ -865,7 +864,7 @@
 
         $('<div id="serverErrorMsg" />').appendTo(tabDiv);
 
-        var windowHeight = $('.ui-layout-center').height() - 135;
+        var windowHeight = $('.ui-layout-center').height() - 103;
         $('<div />', {id: 'myGrid' + this.metaForDataTo.name, style: 'width:auto;height:' + windowHeight + 'px;', class: 'tumlSlickGrid'}).appendTo(tabDiv);
         $('<div />', {id: 'pager' + this.metaForDataTo.name, style: 'width:auto;height:20px;'}).appendTo(tabDiv);
 
@@ -966,7 +965,7 @@
             return false;
         } else if (property.composite && property.lower > 0) {
             return true;
-        } else if (property.inverseQualifiedName === this.propertyNavigatingTo.qualifiedName) {
+        } else if (this.propertyNavigatingTo !== undefined && property.inverseQualifiedName === this.propertyNavigatingTo.qualifiedName) {
             //This prevents the one displaying on a non composite one to many relationship.
             //Its value is implicit seeing that one navigated from the one.
             //If one were to edit the one it would disappear from the grid as it is no longer part of the association.

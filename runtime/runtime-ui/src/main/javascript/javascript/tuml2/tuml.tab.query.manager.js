@@ -187,7 +187,7 @@
             this.oclExecuteUri = oclExecuteUri;
             var queryTab = $('#' + queryTabDivName);
 
-            var windowHeight = $('.ui-layout-center').height() - 90;
+            var windowHeight = $('.ui-layout-center').height() - 70;
 
             var layoutDiv = $('<div />', {id: 'queryLayoutDiv', style: 'height: ' + windowHeight + 'px; width" 100%; overflow: hidden;'});
             layoutDiv.appendTo(queryTab);
@@ -211,8 +211,9 @@
             textArea.text(query.queryString).appendTo(oclTextAreaDiv);
 
             codeMirror = CodeMirror.fromTextArea(textArea[0], {mode: 'text/x-mysql', onKeyEvent: function(o, e) {
-                if ((e.which === 13 && e.altKey) || (e.which === 13 && e.ctrlKey)) {
+                if ((e.which === 13 && e.altKey && e.type === "keydown") || (e.which === 13 && e.ctrlKey && e.type === "keydown")) {
                     self.executeQuery();
+                    e.preventDefault();
                 }
             }});
 

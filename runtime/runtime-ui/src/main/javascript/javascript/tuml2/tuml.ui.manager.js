@@ -60,12 +60,16 @@
                     return true;
                 }
                 alert("Ctrl-Shift-S pressed");
-                event.preventDefault();
+                self.save();
                 return false;
             });
 
             self.refresh(tumlUri);
 
+        }
+
+        function save() {
+            mainViewManager.save();
         }
 
         this.refresh = function(tumlUri) {

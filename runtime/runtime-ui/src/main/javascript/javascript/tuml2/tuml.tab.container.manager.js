@@ -153,7 +153,8 @@
         for (var i = 0; i < buttons.length; i++) {
             var button = buttons[i];
             if (button.id.indexOf('OpenMany', this.length - 'OpenMany'.length) !== -1) {
-                button.remove();
+                //button.remove() this does not work in firefox
+                $('#' + button.id).remove();
             }
         }
     }
@@ -425,6 +426,16 @@
     TumlTabContainerManager.prototype.deactivateGrids = function () {
         for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
             this.tumlTabViewManagers[i].deactivateGrids();
+        }
+    }
+
+    /**
+     * This executes when the user presses cntrl shift save
+     */
+    TumlTabContainerManager.prototype.save = function () {
+        for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
+            var tumlTabViewManager = this.tumlTabViewManagers[i];
+            tumlTabViewManager.save();
         }
     }
 
