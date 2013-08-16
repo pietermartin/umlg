@@ -263,7 +263,7 @@ public class NavigatePropertyOverloadedPostForLookupServerResourceBuilder extend
             constructor.setInitExp("baseTumlClass.getConstructor(" + otherEndPWrap.javaBaseTypePath().getLast() + ".class)");
             tryInstantiate.getTryPart().addToLocals(constructor);
             tryInstantiate.getTryPart().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = constructor.newInstance(parentResource)");
-            tryInstantiate.getTryPart().addToStatements("parentResource." + pWrap.adder() + "(childResource)");
+//            tryInstantiate.getTryPart().addToStatements("parentResource." + pWrap.adder() + "(childResource)");
         } else {
             tryInstantiate.getTryPart().addToStatements("Long id = Long.valueOf((Integer)propertyMap.get(\"id\"))");
             tryInstantiate.getTryPart().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");

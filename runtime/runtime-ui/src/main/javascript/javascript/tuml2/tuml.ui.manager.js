@@ -56,13 +56,13 @@
             };
 
             $(document).keypress(function (event) {
-                if (!(event.which == 19 || event.which == 67)) {
+                if (!(event.which == 19 || event.which == 5)) {
                     return true;
                 }
                 if (event.ctrlKey && event.shiftKey && (event.which == 19)) {
                     self.saveViaKeyPress();
                     return false;
-                } else  if (event.shiftKey && event.which == 67) {
+                } else  if (event.ctrlKey && event.shiftKey && event.which == 5) {
                     self.cancelViaKeyPress();
                     return false;
                 } else {

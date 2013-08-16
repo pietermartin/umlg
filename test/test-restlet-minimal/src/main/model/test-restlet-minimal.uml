@@ -155,6 +155,44 @@
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_q3MCcwMTEeO9bYUowtpiHA" value="1"/>
           </ownedEnd>
         </packagedElement>
+        <packagedElement xmi:type="uml:Class" xmi:id="_Np0usAaoEeO9bYUowtpiHA" name="ClassG">
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_4-BYkAaoEeO9bYUowtpiHA" name="name" visibility="public">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_6P5QIAaoEeO9bYUowtpiHA" value="1"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_6P-vsAaoEeO9bYUowtpiHA" value="1"/>
+            <defaultValue xmi:type="uml:LiteralString" xmi:id="_6QOAQAaoEeO9bYUowtpiHA">
+              <value xsi:nil="true"/>
+            </defaultValue>
+          </ownedAttribute>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Class" xmi:id="_pevAEAaoEeO9bYUowtpiHA" name="ClassH">
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_633PEAaoEeO9bYUowtpiHA" name="name" visibility="public">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_8QTBoAaoEeO9bYUowtpiHA" value="1"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_8QX6IAaoEeO9bYUowtpiHA" value="1"/>
+            <defaultValue xmi:type="uml:LiteralString" xmi:id="_8Qo_4AaoEeO9bYUowtpiHA">
+              <value xsi:nil="true"/>
+            </defaultValue>
+          </ownedAttribute>
+        </packagedElement>
+        <packagedElement xmi:type="uml:AssociationClass" xmi:id="_rR3xoAaoEeO9bYUowtpiHA" name="AssociationClass1" memberEnd="_rR3xoQaoEeO9bYUowtpiHA _rRf-MAaoEeO9bYUowtpiHA" navigableOwnedEnd="_rR3xoQaoEeO9bYUowtpiHA _rRf-MAaoEeO9bYUowtpiHA">
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_8m8nEAaoEeO9bYUowtpiHA" name="name" visibility="public">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_90AQEAaoEeO9bYUowtpiHA" value="1"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_90FIkAaoEeO9bYUowtpiHA" value="1"/>
+            <defaultValue xmi:type="uml:LiteralString" xmi:id="_90QuwAaoEeO9bYUowtpiHA">
+              <value xsi:nil="true"/>
+            </defaultValue>
+          </ownedAttribute>
+          <ownedEnd xmi:type="uml:Property" xmi:id="_rR3xoQaoEeO9bYUowtpiHA" name="classg" type="_Np0usAaoEeO9bYUowtpiHA" association="_rR3xoAaoEeO9bYUowtpiHA">
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_rR4YsAaoEeO9bYUowtpiHA" value="1"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_rR4YsQaoEeO9bYUowtpiHA" value="1"/>
+          </ownedEnd>
+          <ownedEnd xmi:type="uml:Property" xmi:id="_rRf-MAaoEeO9bYUowtpiHA" name="classh" type="_pevAEAaoEeO9bYUowtpiHA" aggregation="composite" association="_rR3xoAaoEeO9bYUowtpiHA">
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_rRsLcAaoEeO9bYUowtpiHA"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_rRxD8AaoEeO9bYUowtpiHA" value="*"/>
+          </ownedEnd>
+        </packagedElement>
       </packagedElement>
     </packagedElement>
   </packagedElement>

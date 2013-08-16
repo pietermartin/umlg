@@ -433,6 +433,7 @@
 
     TumlTabOneViewManager.prototype.doCancel = function () {
         this.parentTabContainerManager.doInternalCancel();
+        this.open = true;
     }
 
     TumlTabOneViewManager.prototype.validateUpdate = function () {
@@ -678,6 +679,7 @@
 
     TumlTabManyViewManager.prototype.doCancel = function () {
         this.doInternalCancel.call(this);
+        this.open = true;
     }
 
     TumlTabManyViewManager.prototype.validateUpdate = function () {
