@@ -280,10 +280,17 @@
 
     TumlTabQueryViewManager.prototype.saveViaKeyPress = function() {
         if (this.open) {
-            alert("TumlTabQueryViewManager.prototype.saveViaKeyPress  saving " + this.tabTitleName);
             return true;
         } else {
             return TumlBaseTabViewManager.prototype.saveViaKeyPress.call(this);
+        }
+    }
+
+    TumlTabQueryViewManager.prototype.cancelViaKeyPress = function() {
+        if (this.open) {
+            return true;
+        } else {
+            return TumlBaseTabViewManager.prototype.cancelViaKeyPress.call(this);
         }
     }
 
@@ -356,13 +363,23 @@
 
     TumlTabOneViewManager.prototype.saveViaKeyPress = function() {
         if (this.open) {
-            alert("TumlTabOneViewManager.prototype.saveViaKeyPress  saving  " + this.tabTitleName);
             if (Slick.GlobalEditorLock.commitCurrentEdit()) {
                 this.parentTabContainerManager.saveTabs();
             }
             return true;
         } else {
             return TumlBaseTabViewManager.prototype.saveViaKeyPress.call(this);
+        }
+    }
+
+    TumlTabOneViewManager.prototype.cancelViaKeyPress = function() {
+        if (this.open) {
+            if (Slick.GlobalEditorLock.commitCurrentEdit()) {
+                this.parentTabContainerManager.doCancel();
+            }
+            return true;
+        } else {
+            return TumlBaseTabViewManager.prototype.cancelViaKeyPress.call(this);
         }
     }
 
@@ -646,6 +663,7 @@
     TumlTabOneViewManager.prototype.saveTabs = function () {
         Tuml.TumlTabContainerManager.prototype.saveTabs.call(this);
         $('#formDiv' + this.tabTitleName).show();
+        this.open = true;
     }
 
     function TumlTabManyViewManager(tabEnum, tabContainer, oneManyOrQuery, tumlUri, result, propertyNavigatingTo) {
@@ -837,12 +855,22 @@
     TumlTabManyViewManager.prototype.saveViaKeyPress = function() {
         if (this.open) {
             if (Slick.GlobalEditorLock.commitCurrentEdit()) {
-                alert("TumlTabOneViewManager.prototype.saveViaKeyPress saving " + this.tabTitleName);
                 this.parentTabContainerManager.saveTabs();
             }
             return true;
         } else {
             return TumlBaseTabViewManager.prototype.saveViaKeyPress.call(this);
+        }
+    }
+
+    TumlTabManyViewManager.prototype.cancelViaKeyPress = function() {
+        if (this.open) {
+            if (Slick.GlobalEditorLock.commitCurrentEdit()) {
+                this.parentTabContainerManager.doCancel();
+            }
+            return true;
+        } else {
+            return TumlBaseTabViewManager.prototype.cancelViaKeyPress.call(this);
         }
     }
 
@@ -1257,6 +1285,7 @@
         Tuml.TumlTabContainerManager.prototype.saveTabs.call(this);
         this.tumlTabGridManager.active = true;
         $('#slickGrid' + this.tabId).show();
+        this.open = true;
     }
 
     function TumlTabManyComponentViewManager(tabEnum, tabContainer, oneManyOrQuery, tumlUri, result, propertyNavigatingTo) {

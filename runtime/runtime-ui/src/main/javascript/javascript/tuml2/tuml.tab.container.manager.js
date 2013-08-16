@@ -453,6 +453,20 @@
         return false;
     }
 
+    /**
+     * This executes when the user presses esc
+     * Find the open tab with a cancel button and click it
+     */
+    TumlTabContainerManager.prototype.cancelViaKeyPress = function() {
+        for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
+            var tumlTabViewManager = this.tumlTabViewManagers[i];
+            if (tumlTabViewManager.cancelViaKeyPress()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     TumlTabContainerManager.prototype.activeOpenTabsGrid = function () {
         for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
             var tumlTabViewManager = this.tumlTabViewManagers[i];

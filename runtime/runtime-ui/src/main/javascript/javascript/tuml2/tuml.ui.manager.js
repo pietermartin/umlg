@@ -1,12 +1,12 @@
 (function ($) {
     // register namespace
     $.extend(true, window, {
-        Tuml:{
-            UiManager:UiManager,
+        Tuml: {
+            UiManager: UiManager,
             //Copied from Slick.Grid
-            Event:Event,
-            EventData:EventData,
-            EventHandler:EventHandler
+            Event: Event,
+            EventData: EventData,
+            EventHandler: EventHandler
         }
     });
 
@@ -18,9 +18,9 @@
         var leftMenuManager;
         var mainViewManager;
 
-        this.init = function() {
+        this.init = function () {
             //Create layout
-            var myLayout = $('body').layout({livePaneResizing:true, north__minSize:40, east:{initClosed:true}, south:{initClosed:true}, west:{minSize:300}});
+            var myLayout = $('body').layout({livePaneResizing: true, north__minSize: 40, east: {initClosed: true}, south: {initClosed: true}, west: {minSize: 300}});
             myLayout.allowOverflow("north");
 
             //Create the menu
@@ -55,33 +55,44 @@
                 }
             };
 
-            $(window).keypress(function(event) {
-                if (!(event.which == 115 && event.ctrlKey && event.shiftKey) && !(event.which == 19)) {
+            $(document).keypress(function (event) {
+                if (!(event.which == 19 || event.which == 67)) {
                     return true;
                 }
-                self.saveViaKeyPress();
-                return false;
+                if (event.ctrlKey && event.shiftKey && (event.which == 19)) {
+                    self.saveViaKeyPress();
+                    return false;
+                } else  if (event.shiftKey && event.which == 67) {
+                    self.cancelViaKeyPress();
+                    return false;
+                } else {
+                    return true;
+                }
             });
 
             self.refresh(tumlUri);
 
         }
 
-        this.saveViaKeyPress = function() {
+        this.saveViaKeyPress = function () {
             mainViewManager.saveViaKeyPress();
         }
 
-        this.refresh = function(tumlUri) {
+        this.cancelViaKeyPress = function () {
+            mainViewManager.cancelViaKeyPress();
+        }
+
+        this.refresh = function (tumlUri) {
             //Change the browsers url
             changeMyUrl(tumlUri);
             //Call the server for the tumlUri
             var contextVertexId = retrieveVertexId(tumlUri);
             $.ajax({
-                url:tumlUri,
-                type:"GET",
-                dataType:"json",
-                contentType:"json",
-                success:function (result, textStatus, jqXHR) {
+                url: tumlUri,
+                type: "GET",
+                dataType: "json",
+                contentType: "json",
+                success: function (result, textStatus, jqXHR) {
                     //put the meta data in the cache
                     //this needs refactoring to use http OPTION to get the meta data only
                     var metaDataArray = [];
@@ -97,7 +108,7 @@
                     var contextMetaData = getContextMetaData(result, contextVertexId);
                     contextManager.refresh(contextMetaData.name, contextMetaData.uri, contextMetaData.contextVertexId);
                 },
-                error:function (jqXHR, textStatus, errorThrown) {
+                error: function (jqXHR, textStatus, errorThrown) {
                     alert('error getting ' + tumlUri + '\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
                 }
             });
@@ -110,7 +121,7 @@
             var propertyNavigatingTo = (metaDataNavigatingFrom == undefined ? null : findPropertyNavigatingTo(qualifiedName, metaDataNavigatingFrom));
             if (propertyNavigatingTo != null && (propertyNavigatingTo.oneToMany || propertyNavigatingTo.manyToMany)) {
                 //Property is a many
-                return {name:metaDataNavigatingFrom.name, uri:metaDataNavigatingFrom.uri, contextVertexId:urlId};
+                return {name: metaDataNavigatingFrom.name, uri: metaDataNavigatingFrom.uri, contextVertexId: urlId};
             } else {
                 //Property is a one
                 //This is to check if there is data, if not it is a creation and the context remains that of the parent
@@ -123,10 +134,10 @@
 
                     if (!isNaN(response.data.id) || metaDataNavigatingTo.name === 'Root') {
                         metaDataNavigatingTo = result[i].meta.to;
-                        return {name:metaDataNavigatingTo.name, uri:metaDataNavigatingTo.uri, contextVertexId:response.data.id};
+                        return {name: metaDataNavigatingTo.name, uri: metaDataNavigatingTo.uri, contextVertexId: response.data.id};
                     }
                 }
-                return {name:metaDataNavigatingFrom.name, uri:metaDataNavigatingFrom.uri, contextVertexId:urlId};
+                return {name: metaDataNavigatingFrom.name, uri: metaDataNavigatingFrom.uri, contextVertexId: urlId};
             }
         }
 
@@ -162,7 +173,7 @@
 
         //Public api
         $.extend(this, {
-            "TumlUiManagerVersion":"1.0.0"
+            "TumlUiManagerVersion": "1.0.0"
         });
 
         this.init();
@@ -221,7 +232,7 @@
     function Event() {
         var handlers = [];
 
-        this.getHandlers = function() {
+        this.getHandlers = function () {
             return handlers;
         }
 
@@ -280,8 +291,8 @@
 
         this.subscribe = function (event, handler) {
             handlers.push({
-                event:event,
-                handler:handler
+                event: event,
+                handler: handler
             });
             event.subscribe(handler);
 
@@ -315,9 +326,9 @@
 
     //Public api
     $.extend(this, {
-        "TumlUIVersion":"1.0.0",
+        "TumlUIVersion": "1.0.0",
         // Events
-        "refreshUri":new Tuml.Event()
+        "refreshUri": new Tuml.Event()
     });
 
 })(jQuery);
