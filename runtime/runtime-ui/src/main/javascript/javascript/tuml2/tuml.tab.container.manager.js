@@ -275,7 +275,6 @@
 
                         //Need to eagerly fetch the association class's meta data.
                         //By the time the validate code runs it must already be there as the validate code must execute synchronously
-
                         var associationClassProperty;
                         for (var l = 0; l < this.metaForData.to.properties.length; l++) {
                             associationClassProperty = this.metaForData.to.properties[l];
@@ -329,6 +328,7 @@
                     }
                 }
 
+                tumlTabViewManager.commitCurrentEdit();
                 var validationResult = tumlTabViewManager.validateInsert();
                 if (validationResult.length > 0) {
                     this.setValidationResults(tumlTabViewManager.metaForData.qualifiedName, validationResult);
@@ -350,6 +350,26 @@
         this.parentTabContainerManager.updateValidationWarningHeader();
     }
 
+//    TumlTabContainerManager.prototype.validateMultiplicity = function () {
+//        var tumlTabViewManagers = this.getTumlTabManyOrOneViewManagers(false);
+//        var rowCount = 0;
+//        for (var i = 0; i < tumlTabViewManagers.length; i++) {
+//            var tumlTabViewManager = tumlTabViewManagers[i];
+//            if (tumlTabViewManager instanceof  Tuml.TumlTabManyViewManager) {
+//                var dataView = tumlTabViewManager.tumlTabGridManager.dataView;
+//                rowCount += dataView.getItems().length;
+//            } else {
+//                rowCount = 1;
+//                break;
+//            }
+//        }
+//        if (rowCount < this.tabContainerProperty.lower || (this.tabContainerProperty.upper !== -1 && rowCount > this.tabContainerProperty.upper)) {
+//            alert('multiplicity falls outside the valid range [' + this.tabContainerProperty.lower + '..' + (this.tabContainerProperty.upper !== -1 ? this.tabContainerProperty.upper : '*') + ']');
+//            return false;
+//        } else {
+//            return true;
+//        }
+//    }
 
     TumlTabContainerManager.prototype.internalSetComponentIdToTmpId = function (object, property) {
         var self = this;
@@ -370,14 +390,16 @@
         }
         for (var i = 0; i < metaDataTo.properties.length; i++) {
             var property = metaDataTo.properties[i];
-            var object = item[property.name];
-            if (object !== undefined && object !== null) {
-                if (Array.isArray(object)) {
-                    for (var j = 0; j < object.length; j++) {
-                        this.internalSetComponentIdToTmpId(object[j], property);
+            if (!property.onePrimitive && !property.manyPrimitive) {
+                var object = item[property.name];
+                if (object !== undefined && object !== null) {
+                    if (Array.isArray(object)) {
+                        for (var j = 0; j < object.length; j++) {
+                            this.internalSetComponentIdToTmpId(object[j], property);
+                        }
+                    } else if (!property.primitive && typeof object === 'object') {
+                        this.internalSetComponentIdToTmpId(object, property);
                     }
-                } else if (typeof object === 'object') {
-                    this.internalSetComponentIdToTmpId(object, property);
                 }
             }
         }

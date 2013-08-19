@@ -10,6 +10,10 @@
 
         var self = this;
 
+        this.goBackOne = function() {
+
+        }
+
         this.refresh = function(name, uri, contextVertexId) {
             //build context path to root
             if (name === 'Root') {
@@ -22,7 +26,7 @@
                     type: "GET",
                     dataType: "json",
                     contentType: "application/json",
-                    success: function(response, textStatus, jqXHR) {
+                    success: function(response) {
                         createContextPath(response.data);
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
@@ -35,7 +39,7 @@
         function createContextPath(data) {
             $('#contextRoot').remove();
             $('<div />', {id: 'contextRoot'}).appendTo('.ui-layout-north');
-            var menu = data.reverse();
+            data.reverse();
             $.each(data, function(index, property) {
                 var b = {};
                 if (index === 0) {
@@ -59,7 +63,6 @@
             var p = $('<div />', {class: 'embossed'});
             $('<span />').text("UmlG").appendTo(p);
             p.appendTo('.ui-layout-north');
-
         }
 
         //Public api

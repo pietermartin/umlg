@@ -30,7 +30,7 @@
                 success: function (data) {
                     self.afterExecuteQuery(data);
                 },
-                error: function (jqXHR, textStatus, errorThrown) {
+                error: function (jqXHR) {
                     $('#serverErrorMsg_' + self.queryTabDivName).addClass('server-error-msg').html(jqXHR.responseText);
                 }
             });
@@ -67,7 +67,7 @@
                 dataType: "json",
                 contentType: "application/json",
                 data: JSON.stringify(overloadedPostData),
-                success: function (data, textStatus, jqXHR) {
+                success: function (data) {
                     var queryFromDb;
                     var queries = data[0].data;
                     for (var i = 0; i < queries.length; i++) {
@@ -155,7 +155,7 @@
                 dataType: "json",
                 contentType: "application/json",
                 data: JSON.stringify(overloadedPostData),
-                success: function (data, textStatus, jqXHR) {
+                success: function (data) {
                     var queryFromDb;
                     var queries = data[0].data;
                     for (var i = 0; i < queries.length; i++) {

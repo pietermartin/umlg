@@ -113,7 +113,7 @@
 
     TumlManyComponentGridManager.prototype.createContextMenu = function () {
         var contextMenuUl = TumlBaseGridManager.prototype.createContextMenu.call(this);
-        var li = $('<li />').appendTo(contextMenuUl);
+        var li = $('<li />', {class: "ui-state-default"}).appendTo(contextMenuUl);
         li.data('contextData', {name: 'delete'});
         var text = $('<span />').text('delete');
         text.data('contextData', {name: 'delete'});
@@ -138,7 +138,6 @@
             this.metaForDataTo = result.meta.to;
             var tabDiv = $('#' + this.metaForDataTo.name + "Lookup");
             $('<div id="serverErrorMsg" />').appendTo(tabDiv);
-//            $('<div id="myGridLookupHeader" class="selectheader" />').append($('<p />').text('Select the values to add.')).appendTo(tabDiv);
             $('<div id="myGridLookup' + this.metaForDataTo.name + '" style="width:auto;height:90%;"></div>').appendTo(tabDiv);
             $('<div id="pagerLookup' + this.metaForDataTo.name + '" style="width:auto;height:20px;"></div>').appendTo(tabDiv);
             $('#contextMenu' + this.metaForDataTo.name).remove();
@@ -222,7 +221,8 @@
 
     TumlTabGridManager.prototype.createContextMenu = function () {
         var contextMenuUl = TumlBaseGridManager.prototype.createContextMenu.call(this);
-        var li = $('<li />').appendTo(contextMenuUl);
+        var tabIndex = this.localMetaForData.properties.length + 2;
+        var li = $('<li />', {class: "ui-state-default", tabindex: tabIndex}).appendTo(contextMenuUl);
         li.data('contextData', {name: 'delete'});
         var text = $('<span />').text('delete');
         text.data('contextData', {name: 'delete'});
@@ -302,7 +302,16 @@
         this.handleAddNewRow = function () {
             if (Slick.GlobalEditorLock.cancelCurrentEdit()) {
                 var nextId = Tuml.TumlFakeIndex++;
-                var newItem = {id: 'fake::' + nextId, tmpId: 'fake::' + nextId};
+                var newItem;
+                //Check if the row is a memberEndOfAnAssociationClass, if so initialize the association class
+                if (this.propertyNavigatingTo.memberEndOfAssociationClass) {
+                    // {id: fakeId, tmpId: fakeId, displayName: null, refreshFromDb: true};
+                    newItem = {id: 'fake::' + nextId, tmpId: 'fake::' + nextId};
+                    var associationClassFakeId = 'fake::' + Tuml.TumlFakeIndex++;
+                    newItem[this.propertyNavigatingTo.inverseAssociationClassPropertyName] = {id: associationClassFakeId, tmpId: associationClassFakeId, displayName: null, refreshFromDb: true};
+                } else {
+                    newItem = {id: 'fake::' + nextId, tmpId: 'fake::' + nextId};
+                }
                 newItem.qualifiedName = this.localMetaForData.qualifiedName;
                 this.dataView.addItem(newItem);
                 this.tumlTabViewManager.saveNewRow();
@@ -384,58 +393,22 @@
             this.instantiateGrid();
 
             //Create context menu
-            this.createContextMenu();
+            var contextMenu = this.createContextMenu();
 
-            this.grid.onContextMenu.subscribe(function (e) {
-                e.preventDefault();
-                var cell = self.grid.getCellFromEvent(e);
-                $("#contextMenu" + self.localMetaForData.name)
-                    .data("row", cell.row)
-                    .css("top", e.pageY)
-                    .css("left", e.pageX)
-                    .show();
-
-                $("body").one("click", function () {
-                    $("#contextMenu" + self.localMetaForData.name).hide();
-                });
-                $('#contextMenu' + self.localMetaForData.name).mouseleave(contextMenu_timer);
-            });
-
-            function contextMenu_close() {
-                $("#contextMenu" + self.localMetaForData.name).hide();
-            };
-
-            function contextMenu_timer() {
-                window.setTimeout(contextMenu_close, 200);
-            };
-
-            $("#contextMenu" + this.localMetaForData.name).click(function (e) {
-                var target = $(e.target);
-                if (!target.is("li") && !target.is("span")) {
-                    return;
+            this.grid.onContextMenu.subscribe(
+                function (e) {
+                    e.preventDefault();
+                    var cell = self.grid.getCellFromEvent(e);
+                    self.showContextMenu(cell, e.pageX, e.pageY);
                 }
-                var contextData = target.data("contextData");
-                var row = $(this).data("row");
-                if (contextData.name !== 'delete') {
-                    var url;
-                    if (contextData.name !== 'self') {
-                        //If non composite one check if the element exist
-//                        if (!contextData.property.composite && contextData.property.upper == 1) {
-                        if (!contextData.property.composite && contextData.property.upper == 1) {
-                            if (data[row][contextData.property.name].id == null) {
-                                alert('Property ' + contextData.property.qualifiedName + ' on ' + self.localMetaForData.name + ' does not exist!\nIt can not be created as it is a non composite property.');
-                                return;
-                            }
-                        }
-                        url = contextData.property.tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), data[row].id);
-                    } else {
-                        url = contextData.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), data[row].id);
-                    }
-                    self.handleContextMenuClickLink(url);
-                } else {
-                    self.handleDeleteRow(row, data);
-                }
-            });
+            );
+
+//            $(document).keydown(function(e){
+//                if (e.keyCode == 37) {
+//                    alert( "left pressed" );
+//                    return false;
+//                }
+//            });
 
             this.grid.onClick.subscribe(function (e, args) {
 
@@ -528,18 +501,30 @@
                 if (self.grid['manyPrimitiveEditorOpen']) {
                     self.grid['manyPrimitiveEditor'].handleKeyPress(e);
                 }
-                // select all rows on ctrl-a
-                if (e.which != 65 || !e.ctrlKey) {
-                    return false;
+
+
+                //Catch cntrl right arrow
+                if (e.which == 39 && e.ctrlKey) {
+                    e.preventDefault();
+                    var cell = self.grid.getActiveCell();
+                    var activeCellPosition = self.grid.getActiveCellPosition();
+                    self.showContextMenu(cell, activeCellPosition.left + activeCellPosition.width, activeCellPosition.top);
+                } else {
+                    //if not cntrl A return
+                    if (e.which != 65 || !e.ctrlKey) {
+                        return false;
+                    }
+
+                    // select all rows on ctrl-a
+                    var rows = [];
+                    for (var i = 0; i < self.dataView.getLength(); i++) {
+                        rows.push(i);
+                    }
+
+                    self.grid.setSelectedRows(rows);
+                    e.preventDefault();
                 }
 
-                var rows = [];
-                for (var i = 0; i < self.dataView.getLength(); i++) {
-                    rows.push(i);
-                }
-
-                self.grid.setSelectedRows(rows);
-                e.preventDefault();
             });
 
             this.grid.onSort.subscribe(function (e, args) {
@@ -918,12 +903,18 @@
                                 }
                             }
                         } else {
-                            if (property.associationClassOne && !property.memberEndOfAssociationClass && (property.manyToOne || property.oneToOne)) {
-                                //this is the fake property pointing to the association class
-                                if (property.lower > 0) {
-                                    column[property.name] = {"formatter": TumlSlick.Formatters.TumlToAssociationClassRequiredFormatter};
+                            if (property.associationClassOne && !property.memberEndOfAssociationClass) {
+                                if (property.manyToOne || property.oneToOne) {
+                                    //this is the fake property pointing to the association class
+                                    if (property.inverseComposite) {
+                                        column[property.name] = {"formatter": TumlSlick.Formatters.TumlAssociationComponentFormatter};
+                                    } else if (property.lower > 0) {
+                                        column[property.name] = {"formatter": TumlSlick.Formatters.TumlToAssociationClassRequiredFormatter};
+                                    } else {
+                                        column[property.name] = {"formatter": TumlSlick.Formatters.TumlToAssociationClassFormatter};
+                                    }
                                 } else {
-                                    column[property.name] = {"formatter": TumlSlick.Formatters.TumlToAssociationClassFormatter};
+                                    column[property.name] = {"formatter": TumlSlick.Formatters.TumlAssociationComponentFormatter};
                                 }
                             } else {
                                 column[property.name] = {"formatter": TumlSlick.Formatters.TumlComponentFormatter};
@@ -1006,8 +997,8 @@
                             required: property.lower > 0,
                             tumlLookupUri: property.tumlLookupUri,
                             rowEnumerationLookupMap: new RowEnumerationLookupMap(property.qualifiedName, "/" + tumlModelName + "/tumlEnumLookup"),
-                            rowLookupMap: new RowLookupMap(this.contextVertexId, property.tumlCompositeParentLookupUri, property.tumlCompositeParentLookupUriOnCompositeParent),
-                            compositeParentLookupMap: new CompositeParentLookupMap(this.contextVertexId, property.tumlLookupUri, property.tumlLookupOnCompositeParentUri),
+//                            rowLookupMap: new RowLookupMap(this.contextVertexId, property.tumlCompositeParentLookupUri, property.tumlCompositeParentLookupUriOnCompositeParent),
+//                            compositeParentLookupMap: new CompositeParentLookupMap(this.contextVertexId, property.tumlLookupUri, property.tumlLookupOnCompositeParentUri),
                             ordered: property.ordered,
                             unique: property.unique,
                             property: property,
@@ -1035,12 +1026,14 @@
         var contextMenuUl = $('<ul />', {
             id: 'contextMenu' + this.localMetaForData.name,
             style: 'display:none;position:absolute',
-            class: 'ui-widget ui-state-default ui-corner-all contextMenu'
+            class: 'ui-widget ui-state-default ui-corner-all contextMenu',
+            tabindex: 1
         }).appendTo('body');
 
         $('<b />').text('Nav').appendTo(contextMenuUl);
 
-        var li = $('<li class="ui-state-default" />').appendTo(contextMenuUl);
+        var tabindex = 2;
+        var li = $('<li class="ui-state-default" tabindex="' + tabindex++ + '" />').appendTo(contextMenuUl);
         li.data("contextData", {name: 'self', uri: this.localMetaForData.uri});
         li.hover(
             function () {
@@ -1057,7 +1050,7 @@
         for (var i = 0; i < this.localMetaForData.properties.length; i++) {
             var property = this.localMetaForData.properties[i];
             if (property.inverseComposite || !((property.dataTypeEnum !== undefined && property.dataTypeEnum !== null) || property.onePrimitive || property.manyPrimitive || property.name == 'id' || property.name == 'uri')) {
-                var li = $('<li class="ui-state-default" />').appendTo(contextMenuUl);
+                var li = $('<li class="ui-state-default" tabindex="' + tabindex++ + '" />').appendTo(contextMenuUl);
                 li.data("contextData", {name: property.name, property: property});
                 li.hover(
                     function () {
@@ -1084,8 +1077,98 @@
                 li.append(span);
             }
         }
+
+        var self = this;
+        contextMenuUl.click(
+            function (e) {
+                //the grid's row is captured in showContextMenu
+                //this here is the contextMenu, i.e. the first ul
+                var row = $(this).data("row");
+                self.handleContextMenuSelection(e, row);
+            }
+        );
+
+        /**
+         * Need to handle arrow keys for navigation and enter key for selection
+         */
+        contextMenuUl.keydown(function (e) {
+            var target = $(e.target);
+            if (!target.is("li") && !target.is("span")) {
+                return;
+            }
+            var contextData = target.data("contextData");
+            if (e.which == 38) {
+                target.prev().focus();
+                return false;
+            } else if (e.which == 40) {
+                target.next().focus();
+                return false;
+            } else if (e.which == 27) {
+                contextMenuUl.hide();
+                self.grid.focus();
+                return false;
+            } else if (e.which == 13) {
+                //the grid's row is captured in showContextMenu
+                //this here is the contextMenu, i.e. the first ul
+                var row = $(this).data("row");
+                self.handleContextMenuSelection(e, row);
+                contextMenuUl.hide();
+                return false;
+            }
+        });
+
         return contextMenuUl;
     };
+
+    TumlBaseGridManager.prototype.handleContextMenuSelection = function(e, gridRow) {
+        var target = $(e.target);
+        if (!target.is("li") && !target.is("span")) {
+            return;
+        }
+        var contextData = target.data("contextData");
+        if (contextData.name !== 'delete') {
+            var url;
+            if (contextData.name !== 'self') {
+                //If non composite one check if the element exist
+                if (!contextData.property.composite && contextData.property.upper == 1) {
+                    //For the composite parent property
+                    if (!contextData.property.inverseComposite && this.data[gridRow][contextData.property.name].id == null) {
+                        alert('Property ' + contextData.property.qualifiedName + ' on ' + this.localMetaForData.name + ' does not exist!\nIt can not be created as it is a non composite property.');
+                        return;
+                    } else {
+                        url = contextData.property.tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), this.data[gridRow].id);
+                    }
+                } else {
+                    url = contextData.property.tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), this.data[gridRow].id);
+                }
+            } else {
+                url = contextData.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), this.data[gridRow].id);
+            }
+            this.handleContextMenuClickLink(url);
+        } else {
+            this.handleDeleteRow(gridRow, this.data);
+        }
+    }
+
+    TumlBaseGridManager.prototype.showContextMenu = function (cell, x, y) {
+        var self = this;
+        var contextMenu = $("#contextMenu" + this.localMetaForData.name);
+        contextMenu.data("row", cell.row).css("top", y).css("left", x).show();
+        contextMenu.find('li')[0].focus();
+        $("body").one("click", function () {
+            contextMenu.hide();
+        });
+        contextMenu.mouseleave(contextMenu_timer);
+
+        function contextMenu_close() {
+            $("#contextMenu" + self.localMetaForData.name).hide();
+        };
+
+        function contextMenu_timer() {
+            window.setTimeout(contextMenu_close, 200);
+        };
+    }
+
 
     TumlBaseGridManager.prototype.setupOptions = function () {
         this.options = {
@@ -1093,12 +1176,13 @@
             showHeaderRow: true,
             headerRowHeight: 30,
             editable: true,
-            enableAddRow: this.propertyNavigatingTo.composite,
+            enableAddRow: (this.propertyNavigatingTo.composite && !this.propertyNavigatingTo.associationClassOne) ? true : false,
             enableCellNavigation: true,
             asyncEditorLoading: false,
             enableAsyncPostRender: true,
             forceFitColumns: false,
-            topPanelHeight: 25
+            topPanelHeight: 25,
+            autoEdit: false
         };
     }
 

@@ -363,9 +363,7 @@
 
     TumlTabOneViewManager.prototype.saveViaKeyPress = function() {
         if (this.open) {
-            if (Slick.GlobalEditorLock.commitCurrentEdit()) {
-                this.parentTabContainerManager.saveTabs();
-            }
+            this.parentTabContainerManager.saveTabs();
             return true;
         } else {
             return TumlBaseTabViewManager.prototype.saveViaKeyPress.call(this);
@@ -374,9 +372,7 @@
 
     TumlTabOneViewManager.prototype.cancelViaKeyPress = function() {
         if (this.open) {
-            if (Slick.GlobalEditorLock.commitCurrentEdit()) {
-                this.parentTabContainerManager.doCancel();
-            }
+            this.parentTabContainerManager.doCancel();
             return true;
         } else {
             return TumlBaseTabViewManager.prototype.cancelViaKeyPress.call(this);
@@ -405,6 +401,13 @@
     TumlTabOneViewManager.prototype.enableButtons = function () {
         var tabsNav = this.tabContainer.find('.ui-tabs-nav');
         tabsNav.find('#' + this.getTabId() + 'save').removeAttr('disabled');
+    }
+
+    /**
+     * this is called which in turn calls onBlur which in turn synchronizes the current focused property to the data model
+     */
+    TumlTabOneViewManager.prototype.commitCurrentEdit = function () {
+        this.tumlTabOneManager.commitCurrentEdit();
     }
 
     TumlTabOneViewManager.prototype.addButtonsToOne = function () {
@@ -576,7 +579,6 @@
                     }
                 }
                 self.open = false;
-//                self.addButtons();
                 //Set only the first tab to active
                 if (firstTumlManyComponentTabViewManager !== null) {
                     self.tabContainer.tabs("option", "active", 0);
@@ -722,10 +724,6 @@
 
                     var validateRequired = false;
                     var validateAssociationClass = false;
-                    //Root level association classes are skipped as from the root there is no association
-//                    if (this.metaForData.from.name == 'Root' && property.associationClass) {
-//                        validateRequired = false;
-//                    } else  if (this.metaForData.from.name !== 'Root' && property.associationClass) {
                     if (property.associationClassOne) {
                         validateRequired = false;
                     } else if (property.memberEndOfAssociationClass && (property.inverseQualifiedName === this.propertyNavigatingTo.qualifiedName)) {
@@ -858,6 +856,7 @@
         if (this.open) {
             if (Slick.GlobalEditorLock.commitCurrentEdit()) {
                 this.parentTabContainerManager.saveTabs();
+                this.tumlTabGridManager.grid.focus();
             }
             return true;
         } else {
@@ -1127,7 +1126,6 @@
                         firstTumlManyComponentTabViewManager = tumlManyComponentTabViewManager;
                     }
                 }
-//                self.addButtons();
                 self.open = false;
                 //Set only the first tab to active
                 if (firstTumlManyComponentTabViewManager !== null) {
@@ -1135,13 +1133,8 @@
                 }
                 var qualifiedName = property.qualifiedName;
                 self.updateNavigationHeader(qualifiedName);
-                //                self.updateMultiplicityWarningHeader();
-
-
             }
-
         );
-
     }
 
     TumlTabManyViewManager.prototype.setValidationResults = function (qualifiedName, validationResults, count) {
@@ -1274,7 +1267,6 @@
                     self.tabContainer.tabs("option", "active", 0);
                 }
 
-//                var qualifiedName = result[0].meta.qualifiedName;
                 var qualifiedName = property.qualifiedName;
                 self.updateNavigationHeader(qualifiedName);
                 self.updateMultiplicityWarningHeader();

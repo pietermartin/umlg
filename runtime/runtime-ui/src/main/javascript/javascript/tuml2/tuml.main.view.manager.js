@@ -145,6 +145,19 @@
             $('body').layout().resizeAll();
         }
 
+        /**
+         * This executes when the user presses cntrl shift save
+         * Find the open tab with a save button and click it
+         */
+        this.saveViaKeyPress = function() {
+            for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
+                var tumlTabViewManager = this.tumlTabViewManagers[i];
+                if (tumlTabViewManager.saveViaKeyPress()) {
+                    return;
+                }
+            }
+        }
+
         this.doSave = function (commit) {
             var startTime = new Date().getTime();
             var tumlTabViewManagers = this.getTumlTabManyOrOneViewManagers(commit);
@@ -155,6 +168,12 @@
             for (var i = 0; i < tumlTabViewManagers.length; i++) {
                 var tumlTabViewManager = tumlTabViewManagers[i];
                 if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager) {
+
+                    var multiplicityValidationResult = this.validateMultiplicity(tumlTabViewManagers);
+                    if (multiplicityValidationResult !== null) {
+                        validationResults.push(multiplicityValidationResult);
+                    }
+
                     var dataView = tumlTabViewManager.tumlTabGridManager.dataView;
 
                     if (commit) {
@@ -223,15 +242,16 @@
                 dataType: "json",
                 contentType: "application/json",
                 data: JSON.stringify(overloadedPostData),
-                success: function (result, textStatus, jqXHR) {
+                success: function (result) {
                     if (commit) {
-                        self.updateTabsForResultAfterCommit(result);
+                        var contextVertexId = retrieveVertexId(postUri);
+                        retrieveMetaDataIfNotInCache(postUri, contextVertexId, result, continueUpdateTabsForResultAfterCommit);
                     } else {
                         var endTimeBeforeUpdateGrids = new Date().getTime();
                         console.log("Time taken in millis for server call before update grids = " + (endTimeBeforeUpdateGrids - startTime));
-                        self.updateTabsForResultAfterRollback(result);
-                        endTimeBeforeUpdateGrids = new Date().getTime();
-                        console.log("Time taken in millis for server call after  update grids = " + (endTimeBeforeUpdateGrids - startTime));
+                        retrieveMetaDataIfNotInCache(postUri, contextVertexId, result, continueUpdateTabsForResultAfterRollback);
+                        var endTimeAfterUpdateGrids = new Date().getTime();
+                        console.log("Time taken in millis to update grids = " + (endTimeAfterUpdateGrids - endTimeBeforeUpdateGrids));
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -240,6 +260,33 @@
             });
         }
 
+        function continueUpdateTabsForResultAfterCommit(tumlUri, result, metaDataResult, contextVertexId) {
+            if (result.length !== metaDataResult.length) {
+                throw 'get and options must return the same number of meta data!';
+            }
+            for (var i = 0; i < result.length; i++) {
+                //Copy the meta data from options into the data result
+                if (result[i].meta.qualifiedName !== metaDataResult[i].meta.qualifiedName) {
+                    throw 'options and get must return the same qualified name!';
+                }
+                result[i].meta = metaDataResult[i].meta;
+            }
+            self.updateTabsForResultAfterCommit(result);
+        }
+
+        function continueUpdateTabsForResultAfterRollback(tumlUri, result, metaDataResult, contextVertexId) {
+            if (result.length !== metaDataResult.length) {
+                throw 'get and options must return the same number of meta data!';
+            }
+            for (var i = 0; i < result.length; i++) {
+                //Copy the meta data from options into the data result
+                if (result[i].meta.qualifiedName !== metaDataResult[i].meta.qualifiedName) {
+                    throw 'options and get must return the same qualified name!';
+                }
+                result[i].meta = metaDataResult[i].meta;
+            }
+            self.updateTabsForResultAfterRollback(result);
+        }
 
         this.updateTabsForResultAfterCommit = function (result) {
             for (var i = 0; i < result.length; i++) {
@@ -320,6 +367,29 @@
             }
         }
 
+        this.validateMultiplicity = function (tumlTabViewManagers) {
+            var rowCount = 0;
+            for (var i = 0; i < tumlTabViewManagers.length; i++) {
+                var tumlTabViewManager = tumlTabViewManagers[i];
+                if (tumlTabViewManager instanceof  Tuml.TumlTabManyViewManager) {
+                    var dataView = tumlTabViewManager.tumlTabGridManager.dataView;
+                    rowCount += dataView.getItems().length;
+                } else {
+                    rowCount = 1;
+                    break;
+                }
+            }
+            if (rowCount < this.tabContainerProperty.lower || (this.tabContainerProperty.upper !== -1 && rowCount > this.tabContainerProperty.upper)) {
+                var validationResult = new Tuml.ValidationResult(-1, this.tabContainerProperty.name);
+                validationResult.property = this.tabContainerProperty;
+                validationResult.qualifiedName = this.tabContainerProperty.qualifiedName;
+                validationResult.message = 'multiplicity falls outside the valid range [' + this.tabContainerProperty.lower + '..' + (this.tabContainerProperty.upper !== -1 ? this.tabContainerProperty.upper : '*') + ']';
+                return validationResult;
+            } else {
+                return null;
+            }
+        }
+
         this.clearTabsOnAddOneOrMany = function (newContextVertexId) {
             if (newContextVertexId === undefined && this.contextVertexId === -1) {
                 contextChanged = true;
@@ -392,51 +462,6 @@
                 }
 
                 tumlTabViewManagerQuery.createQuery(oclExecuteUri, query, post);
-//                tumlTabViewManagerQuery.onPutInstanceQuerySuccess.subscribe(function (e, args) {
-//                    tumlTabViewManagerQuery.closeTab();
-//                    var newTumlTabViewManager = this.addQueryTab(false, new Tuml.Query(args.query.id, args.query.name, args.query.name, args.query.queryString, args.query.queryEnum, args.gridData, args.queryType));
-//                    leftMenuManager.refreshInstanceQuery(args.query.id);
-//                });
-//                tumlTabViewManagerQuery.onPostInstanceQuerySuccess.subscribe(function (e, args) {
-//                    var previousIndex = self.tumlTabViewManagers.indexOf(tumlTabViewManagerQuery);
-//                    tumlTabViewManagerQuery.closeTab();
-//                    addDefaultQueryTab(false);
-//                    var newTumlTabViewManager = this.addQueryTab(false, new Tuml.Query(args.query.id, args.query.name, args.query.name, args.query.queryString, args.query.queryEnum, args.gridData, args.queryType));
-//
-//                    //place it back at the previousIndex
-//                    var currentIndex = self.tumlTabViewManagers.indexOf(newTumlTabViewManager);
-//                    this.tumlTabViewManagers.splice(currentIndex, 1);
-//                    this.tumlTabViewManagers.splice(previousIndex, 0, newTumlTabViewManager);
-//                    this.tabContainer.tabs("option", "active", previousIndex);
-//
-//                    leftMenuManager.refreshInstanceQuery(args.query.id);
-//                });
-//                tumlTabViewManagerQuery.onPutClassQuerySuccess.subscribe(function (e, args) {
-//                    tumlTabViewManagerQuery.closeTab();
-//                    var newTumlTabViewManager = this.addQueryTab(false, new Tuml.Query(args.query.id, args.query.name, args.query.name, args.query.queryString, args.query.queryEnum, args.gridData, args.queryType));
-//                    leftMenuManager.refreshClassQuery(args.query.id);
-//                });
-//                tumlTabViewManagerQuery.onPostClassQuerySuccess.subscribe(function (e, args) {
-//                    var previousIndex = self.tumlTabViewManagers.indexOf(tumlTabViewManagerQuery);
-//                    closeTab(tumlTabViewManagerQuery);
-//                    addDefaultQueryTab(false);
-//                    var newTumlTabViewManager = addQueryTab(false, new Tuml.Query(args.query.id, args.query.name, args.query.name, args.query.queryString, args.query.queryEnum, args.gridData, args.queryType));
-//
-//                    //place it back at the previousIndex
-//                    var currentIndex = self.tumlTabViewManagers.indexOf(newTumlTabViewManager);
-//                    self.tumlTabViewManagers.splice(currentIndex, 1);
-//                    self.tumlTabViewManagers.splice(previousIndex, 0, newTumlTabViewManager);
-//                    tabContainer.tabs("option", "active", previousIndex);
-//
-//                    leftMenuManager.refreshClassQuery(args.query.id);
-//                });
-//                tumlTabViewManagerQuery.onDeleteQuerySuccess.subscribe(function (e, args) {
-//                    closeTab(tumlTabViewManagerQuery);
-//                    leftMenuManager.refreshQuery();
-//                });
-//                tumlTabViewManagerQuery.onSelfCellClick.subscribe(function (e, args) {
-//                    self.onSelfCellClick.notify(args, e, self);
-//                });
 
             } else {
                 //Just make the tab active
@@ -616,20 +641,8 @@
 
     TumlMainViewManager.prototype.doCancel = function () {
         this.enableButtons();
-        var self = this;
         Slick.GlobalEditorLock.cancelCurrentEdit();
-        $.ajax({
-            url: this.tumlUri,
-            type: "GET",
-            dataType: "json",
-            contentType: "application/json",
-            success: function (result, textStatus, jqXHR) {
-                self.refresh(self.tumlUri, result);
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
-            }
-        });
+        this.uiManager.refresh(this.tumlUri);
     }
 
     TumlMainViewManager.prototype.saveTabs = function () {
@@ -684,7 +697,7 @@
             dataType: "json",
             contentType: "application/json",
             data: JSON.stringify(overloadedPostData),
-            success: function (result, textStatus, jqXHR) {
+            success: function (result) {
                 var endTimeBeforeUpdateGrids = new Date().getTime();
                 console.log("Time taken in millis for server call before update drop down = " + (endTimeBeforeUpdateGrids - startTime));
 

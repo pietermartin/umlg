@@ -180,9 +180,6 @@
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_90AQEAaoEeO9bYUowtpiHA" value="1"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_90FIkAaoEeO9bYUowtpiHA" value="1"/>
-            <defaultValue xmi:type="uml:LiteralString" xmi:id="_90QuwAaoEeO9bYUowtpiHA">
-              <value xsi:nil="true"/>
-            </defaultValue>
           </ownedAttribute>
           <ownedEnd xmi:type="uml:Property" xmi:id="_rR3xoQaoEeO9bYUowtpiHA" name="classg" type="_Np0usAaoEeO9bYUowtpiHA" association="_rR3xoAaoEeO9bYUowtpiHA">
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_rR4YsAaoEeO9bYUowtpiHA" value="1"/>

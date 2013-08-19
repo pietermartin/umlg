@@ -139,7 +139,7 @@
                     type: "GET",
                     dataType: "json",
                     contentType: "json",
-                    success: function (response, textStatus, jqXHR) {
+                    success: function (response) {
                         queryData = response;
                         internalCreateTree(umlInstanceQueriesDiv, true);
                         if (queryId !== undefined) {
@@ -165,7 +165,7 @@
                         type: "GET",
                         dataType: "json",
                         contentType: "json",
-                        success: function (response, textStatus, jqXHR) {
+                        success: function (response) {
                             queryData = response;
                             internalCreateTree(umlClassQueriesDiv, false);
                             if (queryId !== undefined) {

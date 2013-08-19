@@ -259,18 +259,34 @@ public class NavigatePropertyOverloadedPostForLookupServerResourceBuilder extend
 
         if (pWrap.isComposite()) {
             PropertyWrapper otherEndPWrap = new PropertyWrapper(pWrap.getOtherEnd());
-            OJField constructor = new OJField("constructor", new OJPathName("java.lang.reflect.Constructor").addToGenerics(pWrap.javaBaseTypePath()));
-            constructor.setInitExp("baseTumlClass.getConstructor(" + otherEndPWrap.javaBaseTypePath().getLast() + ".class)");
-            tryInstantiate.getTryPart().addToLocals(constructor);
-            tryInstantiate.getTryPart().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = constructor.newInstance(parentResource)");
-//            tryInstantiate.getTryPart().addToStatements("parentResource." + pWrap.adder() + "(childResource)");
+            if (!pWrap.isMemberOfAssociationClass()) {
+                OJField constructor = new OJField("constructor", new OJPathName("java.lang.reflect.Constructor").addToGenerics(pWrap.javaBaseTypePath()));
+                constructor.setInitExp("baseTumlClass.getConstructor(" + otherEndPWrap.javaBaseTypePath().getLast() + ".class)");
+                tryInstantiate.getTryPart().addToLocals(constructor);
+                tryInstantiate.getTryPart().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = constructor.newInstance(parentResource)");
+            } else {
+                PropertyWrapper otherEnd = new PropertyWrapper(pWrap.getOtherEnd());
+                OJField constructor = new OJField("constructor", new OJPathName("java.lang.reflect.Constructor").addToGenerics(pWrap.javaBaseTypePath()));
+                constructor.setInitExp("baseTumlClass.getConstructor(" + otherEndPWrap.javaBaseTypePath().getLast() + ".class, " + otherEnd.getAssociationClassPathName().getLast() + ".class)");
+                tryInstantiate.getTryPart().addToLocals(constructor);
+                tryInstantiate.getTryPart().addToStatements(otherEnd.getAssociationClassPathName().getLast() + " " + otherEnd.getAssociationClassFakePropertyName() +
+                        " = new " + otherEnd.getAssociationClassPathName().getLast() + "(true)");
+                tryInstantiate.getTryPart().addToStatements(otherEnd.getAssociationClassFakePropertyName() + ".fromJson((Map<String, Object>) propertyMap.get(\"" + otherEnd.getAssociationClassFakePropertyName() + "\"))");
+                tryInstantiate.getTryPart().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = constructor.newInstance(parentResource, " + otherEnd.getAssociationClassFakePropertyName() + ")");
+                annotatedClass.addToImports(otherEnd.getAssociationClassPathName());
+            }
         } else {
             tryInstantiate.getTryPart().addToStatements("Long id = Long.valueOf((Integer)propertyMap.get(\"id\"))");
             tryInstantiate.getTryPart().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
             if (!pWrap.isMemberOfAssociationClass()) {
                 tryInstantiate.getTryPart().addToStatements("parentResource." + pWrap.adder() + "(childResource)");
             } else {
-                tryInstantiate.getTryPart().addToStatements("parentResource." + pWrap.adder() + "(childResource, null)");
+                PropertyWrapper otherEnd = new PropertyWrapper(pWrap.getOtherEnd());
+                tryInstantiate.getTryPart().addToStatements(otherEnd.getAssociationClassPathName().getLast() + " " + otherEnd.getAssociationClassFakePropertyName() +
+                        " = new " + otherEnd.getAssociationClassPathName().getLast() + "(true)");
+                tryInstantiate.getTryPart().addToStatements(otherEnd.getAssociationClassFakePropertyName() + ".fromJson((Map<String, Object>) propertyMap.get(\"" + otherEnd.getAssociationClassFakePropertyName() + "\"))");
+                tryInstantiate.getTryPart().addToStatements("parentResource." + pWrap.adder() + "(childResource, " + otherEnd.getAssociationClassFakePropertyName() + ")");
+                annotatedClass.addToImports(otherEnd.getAssociationClassPathName());
             }
         }
         annotatedClass.addToImports(pWrap.javaBaseTypePath());

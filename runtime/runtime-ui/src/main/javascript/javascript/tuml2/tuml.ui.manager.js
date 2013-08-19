@@ -20,7 +20,16 @@
 
         this.init = function () {
             //Create layout
-            var myLayout = $('body').layout({livePaneResizing: true, north__minSize: 40, east: {initClosed: true}, south: {initClosed: true}, west: {minSize: 300}});
+            var myLayout = $('body').layout(
+                {
+                    enableCursorHotkey: false,
+                    livePaneResizing: true,
+                    north__minSize: 40,
+                    east: {initClosed: true},
+                    south: {initClosed: true},
+                    west: {minSize: 300}
+                }
+            );
             myLayout.allowOverflow("north");
 
             //Create the menu
@@ -30,7 +39,6 @@
             contextManager = new Tuml.ContextManager();
             contextManager.onClickContextMenu.subscribe(function (e, args) {
                 self.refresh(args.uri);
-                changeMyUrl(args.uri);
             });
 
             //Create the context manager
@@ -38,10 +46,8 @@
             leftMenuManager.onMenuClick.subscribe(function (e, args) {
                 //Do something like refresh the page
                 self.refresh(args.uri);
-                changeMyUrl(args.uri);
             });
             leftMenuManager.onQueryClick.subscribe(function (e, args) {
-//                var queryTabDivName = args.name.replace(/\s/g, '');
                 mainViewManager.addQueryTab(false, new Tuml.Query(args.id, args.name, args.name, args.queryString, args.queryEnum, null, args.queryType));
             });
 
@@ -51,12 +57,12 @@
             window.onpopstate = function (event) {
                 if (event.state !== null && document.location.hash === "") {
                     var pathname = document.location.pathname.replace("/ui2", "");
-                    self.refresh(pathname);
+                    self.refresh(pathname, false);
                 }
             };
 
             $(document).keypress(function (event) {
-                if (!(event.which == 19 || event.which == 5)) {
+                if (!(event.which == 19 || event.which == 5 || event.which == 8)) {
                     return true;
                 }
                 if (event.ctrlKey && event.shiftKey && (event.which == 19)) {
@@ -65,6 +71,19 @@
                 } else  if (event.ctrlKey && event.shiftKey && event.which == 5) {
                     self.cancelViaKeyPress();
                     return false;
+                } else  if (event.ctrlKey && event.which == 8) {
+                    alert('go back');
+                } else {
+                    return true;
+                }
+            });
+
+            $(document).keydown(function (event) {
+                if (!(event.which == 8)) {
+                    return true;
+                }
+                if (event.ctrlKey && event.which == 8) {
+                    alert('go back');
                 } else {
                     return true;
                 }
@@ -82,36 +101,45 @@
             mainViewManager.cancelViaKeyPress();
         }
 
-        this.refresh = function (tumlUri) {
+        this.refresh = function (tumlUri, pushUrl) {
+            var self = this;
             //Change the browsers url
-            changeMyUrl(tumlUri);
-            //Call the server for the tumlUri
+            if (pushUrl === undefined || pushUrl) {
+                pushUrlToBrowser(tumlUri);
+            }
             var contextVertexId = retrieveVertexId(tumlUri);
             $.ajax({
                 url: tumlUri,
                 type: "GET",
                 dataType: "json",
                 contentType: "json",
-                success: function (result, textStatus, jqXHR) {
-                    //put the meta data in the cache
-                    //this needs refactoring to use http OPTION to get the meta data only
-                    var metaDataArray = [];
-                    for (var i = 0; i < result.length; i++) {
-                        var metaData = {data: []};
-                        metaData.meta = result[i].meta;
-                        metaDataArray.push(metaData);
-                    }
-                    Tuml.Metadata.Cache.add(metaData.meta.qualifiedName, metaDataArray);
-
-                    mainViewManager.refresh(tumlUri, result);
-
-                    var contextMetaData = getContextMetaData(result, contextVertexId);
-                    contextManager.refresh(contextMetaData.name, contextMetaData.uri, contextMetaData.contextVertexId);
+                success: function (result) {
+                    //This will first look in the cache for the meta data else it will get it from the server
+                    //The meta data will be added to the result
+                    retrieveMetaDataIfNotInCache(tumlUri, contextVertexId, result, continueRefresh);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     alert('error getting ' + tumlUri + '\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
                 }
             });
+        }
+
+        function continueRefresh(tumlUri, result, metaDataResult, contextVertexId) {
+            if (result.length !== metaDataResult.length) {
+                throw 'get and options must return the same number of meta data!';
+            }
+
+            for (var i = 0; i < result.length; i++) {
+                //Copy the meta data from options into the data result
+                if (result[i].meta.qualifiedName !== metaDataResult[i].meta.qualifiedName) {
+                    throw 'options and get must return the same qualified name!';
+                }
+                result[i].meta = metaDataResult[i].meta;
+            }
+
+            mainViewManager.refresh(tumlUri, result);
+            var contextMetaData = getContextMetaData(result, contextVertexId);
+            contextManager.refresh(contextMetaData.name, contextMetaData.uri, contextMetaData.contextVertexId);
         }
 
         function getContextMetaData(result, urlId) {
@@ -158,7 +186,7 @@
             }
         }
 
-        function changeMyUrl(url) {
+        function pushUrlToBrowser(url) {
             var indexOfSecondBackSlash = url.indexOf('/', 1);
             var firstPart = url.substring(0, indexOfSecondBackSlash);
             var secondPart = url.substring(indexOfSecondBackSlash, url.length);

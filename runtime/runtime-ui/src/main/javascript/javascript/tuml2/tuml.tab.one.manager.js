@@ -720,9 +720,10 @@
     }
 
     TumlBaseTabOneManager.prototype.commitCurrentEdit = function () {
+        this.synchronizeModel(this.currentActiveProperty);
         //Check if it is a component
         if (!(this.tumlTabViewManager.parentTabContainerManager instanceof Tuml.TumlMainViewManager)) {
-            //Only validate nthe field it it is non empty
+            //Only validate the field it it is non empty
             var validateInput = $('#' + this.currentActiveProperty.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
             if (validateInput.val() != "") {
                 var validationResult = this.validateField(this.currentActiveProperty);

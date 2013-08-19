@@ -24,22 +24,19 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
     @VisitSubclasses({Class.class, AssociationClass.class})
     public void visitBefore(Class clazz) {
         if (!clazz.isAbstract()) {
-            OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(getServerResourceName(clazz));
             OJPackage ojPackage = new OJPackage(Namer.name(clazz.getNearestPackage()) + ".restlet");
-            annotatedInf.setMyPackage(ojPackage);
-            addToSource(annotatedInf);
             OJAnnotatedClass annotatedClass = new OJAnnotatedClass(getServerResourceImplName(clazz));
             annotatedClass.setSuperclass(TumlRestletGenerationUtil.ServerResource);
-            annotatedClass.addToImplementedInterfaces(annotatedInf.getPathName());
             annotatedClass.setMyPackage(ojPackage);
             annotatedClass.setVisibility(TumlClassOperations.getVisibility(clazz.getVisibility()));
             addToSource(annotatedClass);
             addPrivateIdVariable(clazz, annotatedClass);
             addDefaultConstructor(annotatedClass);
-            addGetRepresentation(clazz, annotatedInf, annotatedClass);
+            addGetRepresentation(clazz, annotatedClass);
+            addOptionsRepresentation(clazz, annotatedClass);
             if (!clazz.isAbstract()) {
-                addPutRepresentation(clazz, annotatedInf, annotatedClass);
-                addDeleteRepresentation(clazz, annotatedInf, annotatedClass);
+                addPutRepresentation(clazz, annotatedClass);
+                addDeleteRepresentation(clazz, annotatedClass);
             }
             addToRouterEnum(clazz, annotatedClass);
         }
@@ -49,14 +46,8 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
     public void visitAfter(Class clazz) {
     }
 
-    private void addDeleteRepresentation(Class clazz, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass) {
-        OJAnnotatedOperation deleteInf = new OJAnnotatedOperation("delete", TumlRestletGenerationUtil.Representation);
-        deleteInf.addParam("entity", TumlRestletGenerationUtil.Representation);
-        annotatedInf.addToOperations(deleteInf);
-        deleteInf.addAnnotationIfNew(new OJAnnotationValue(TumlRestletGenerationUtil.Delete, "json"));
-
+    private void addDeleteRepresentation(Class clazz, OJAnnotatedClass annotatedClass) {
         OJAnnotatedOperation delete = new OJAnnotatedOperation("delete", TumlRestletGenerationUtil.Representation);
-        delete.addParam("entity", TumlRestletGenerationUtil.Representation);
         delete.addToThrows(TumlRestletGenerationUtil.ResourceException);
         annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
         TinkerGenerationUtil.addOverrideAnnotation(delete);
@@ -101,18 +92,13 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
         annotatedClass.addToOperations(delete);
     }
 
-    private void addPutRepresentation(Class clazz, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass) {
-
-        OJAnnotatedOperation putInf = new OJAnnotatedOperation("put", TumlRestletGenerationUtil.Representation);
-        putInf.addParam("entity", TumlRestletGenerationUtil.Representation);
-        annotatedInf.addToOperations(putInf);
-        putInf.addAnnotationIfNew(new OJAnnotationValue(TumlRestletGenerationUtil.Put, "json"));
-
+    private void addPutRepresentation(Class clazz, OJAnnotatedClass annotatedClass) {
         OJAnnotatedOperation put = new OJAnnotatedOperation("put", TumlRestletGenerationUtil.Representation);
         put.addParam("entity", TumlRestletGenerationUtil.Representation);
         put.addToThrows(TumlRestletGenerationUtil.ResourceException);
-        annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
         TinkerGenerationUtil.addOverrideAnnotation(put);
+
+        annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
 
         put.getBody().addToStatements(
                 "this." + getIdFieldName(clazz) + "= Long.valueOf((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"))");
@@ -147,12 +133,7 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
         annotatedClass.addToOperations(put);
     }
 
-    private void addGetRepresentation(Class clazz, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass) {
-
-        OJAnnotatedOperation getInf = new OJAnnotatedOperation("get", TumlRestletGenerationUtil.Representation);
-        annotatedInf.addToOperations(getInf);
-        getInf.addAnnotationIfNew(new OJAnnotationValue(TumlRestletGenerationUtil.Get, "json"));
-
+    private void addGetRepresentation(Class clazz, OJAnnotatedClass annotatedClass) {
         OJAnnotatedOperation get = new OJAnnotatedOperation("get", TumlRestletGenerationUtil.Representation);
         get.addToThrows(TumlRestletGenerationUtil.ResourceException);
         annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
@@ -172,9 +153,6 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
         tryStatement.getTryPart().addToStatements("meta", "json.append(\", \\\"meta\\\" : {\")");
 
         tryStatement.getTryPart().addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + clazz.getQualifiedName() + "\\\"\")");
-        tryStatement.getTryPart().addToStatements("json.append(\", \\\"to\\\": \")");
-        tryStatement.getTryPart().addToStatements("json.append(" + TumlClassOperations.propertyEnumName(clazz) + ".asJson())");
-        annotatedClass.addToImports(TumlClassOperations.getPathName(clazz).append(TumlClassOperations.propertyEnumName(clazz)));
         tryStatement.getTryPart().addToStatements("json.append(\"}}]\")");
         tryStatement.getTryPart().addToStatements("return new " + TumlRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
 
@@ -187,8 +165,38 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
         annotatedClass.addToOperations(get);
     }
 
-    private void addGetParentRepresentation(Class clazz, OJAnnotatedClass annotatedClass) {
+    private void addOptionsRepresentation(Class clazz, OJAnnotatedClass annotatedClass) {
+        OJAnnotatedOperation options = new OJAnnotatedOperation("options", TumlRestletGenerationUtil.Representation);
+        options.addToThrows(TumlRestletGenerationUtil.ResourceException);
+        annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
+        TinkerGenerationUtil.addOverrideAnnotation(options);
 
+        OJTryStatement tryStatement = new OJTryStatement();
+        tryStatement.getTryPart().addToStatements("StringBuilder json = new StringBuilder()");
+//Maybe add this back in much much later to add in features like keeping list size on the owning side
+//        tryStatement.getTryPart().addToStatements(
+//                "this." + getIdFieldName(clazz) + "= Long.valueOf((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"))");
+//        tryStatement.getTryPart().addToStatements(
+//                TumlClassOperations.className(clazz) + " c = new " + TumlClassOperations.className(clazz) + "(GraphDb.getDb().getVertex(this."
+//                        + getIdFieldName(clazz) + "))");
+        annotatedClass.addToImports(TumlClassOperations.getPathName(clazz));
+        tryStatement.getTryPart().addToStatements("meta", "json.append(\"[{\\\"meta\\\" : {\")");
+        tryStatement.getTryPart().addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + clazz.getQualifiedName() + "\\\"\")");
+        tryStatement.getTryPart().addToStatements("json.append(\", \\\"to\\\": \")");
+        tryStatement.getTryPart().addToStatements("json.append(" + TumlClassOperations.propertyEnumName(clazz) + ".asJson())");
+        annotatedClass.addToImports(TumlClassOperations.getPathName(clazz).append(TumlClassOperations.propertyEnumName(clazz)));
+        tryStatement.getTryPart().addToStatements("json.append(\"}}]\")");
+        tryStatement.getTryPart().addToStatements("return new " + TumlRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
+        options.getBody().addToStatements(tryStatement);
+        tryStatement.setCatchPart(null);
+        tryStatement.getFinallyPart().addToStatements(TinkerGenerationUtil.graphDbAccess + ".rollback()");
+
+        annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
+        annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);
+        annotatedClass.addToOperations(options);
+    }
+
+    private void addGetParentRepresentation(Class clazz, OJAnnotatedClass annotatedClass) {
         OJAnnotatedOperation getParent = new OJAnnotatedOperation("getParent", TumlRestletGenerationUtil.Representation);
         getParent.addParam("parent", TumlClassOperations.getPathName(clazz));
         getParent.addToThrows(TumlRestletGenerationUtil.ResourceException);

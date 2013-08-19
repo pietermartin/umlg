@@ -8,6 +8,12 @@
         }
     });
 
+    /**
+     * This caches the meta data for a class.
+     * it call ClassNameMetaDataServerResourceImpl which returns the meta data.
+     * The meta.to and meta.from are identical
+     * @constructor
+     */
     function Cache() {
         var metaDataIdx = {};
 
@@ -33,7 +39,7 @@
                     dataType: "json",
                     contentType: "application/json",
                     success: function (result) {
-                        self.getMetaDataIdx()[qualifiedName] = result;
+                        self.add(qualifiedName, result);
                         callback.call(this, result);
                     },
                     error: function (jqXHR, textStatus, errorThrown) {

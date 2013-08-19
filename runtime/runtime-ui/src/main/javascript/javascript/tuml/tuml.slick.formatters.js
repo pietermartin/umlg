@@ -21,6 +21,7 @@
                 "TumlRegularFormatter":TumlRegularFormatter,
                 "TumlIdNewFormatter": TumlIdNewFormatter,
                 "TumlIdUpdatedFormatter": TumlIdUpdatedFormatter,
+                "TumlAssociationComponentFormatter":TumlAssociationComponentFormatter,
                 "TumlComponentFormatter":TumlComponentFormatter
             }
         }
@@ -28,6 +29,10 @@
 
     function TumlComponentFormatter(row, cell, value, columnDef, dataContext) {
         return 'component';
+    }
+
+    function TumlAssociationComponentFormatter(row, cell, value, columnDef, dataContext) {
+        return 'association class';
     }
 
     function TumlRegularFormatter(row, cell, value, columnDef, dataContext) {

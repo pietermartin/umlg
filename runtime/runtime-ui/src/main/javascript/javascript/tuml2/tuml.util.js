@@ -1,3 +1,51 @@
+function retrieveMetaDataIfNotInCache(tumlUri, contextVertexId, result, callback) {
+
+    //when viewing the root entities the qualified name is that of the root entity
+    //This clashes when viewing the root entity as a one, i.e. not from the root.
+    //this ensures that the 2 different scenarios are mapped separately in the cache
+    var isFromRoot = contextVertexId == null;
+
+    //put the meta data in the cache
+    //this needs refactoring to use http OPTION to get the meta data only
+    var metaQualifiedName;
+    for (var i = 0; i < result.length; i++) {
+        //The qualified name is the same for all object in the array.
+        //It is the qualified name of the property navigated to.
+        metaQualifiedName = result[i].meta.qualifiedName;
+        break;
+    }
+    if (isFromRoot) {
+        metaQualifiedName = "root_" + metaQualifiedName;
+    }
+
+    var metaDataFromCache = Tuml.Metadata.Cache.getFromCache(metaQualifiedName);
+    if (metaDataFromCache === undefined || metaDataFromCache === null) {
+        //Get the meta data via the http OPTIONS method
+        $.ajax({
+            url: tumlUri,
+            type: "OPTIONS",
+            dataType: "json",
+            contentType: "json",
+            success: function (metaDataResult) {
+                var metaDataArray = [];
+                for (var i = 0; i < metaDataResult.length; i++) {
+                    var metaData = {data: []};
+                    metaData.meta = metaDataResult[i].meta;
+                    isFromRoot = (metaData.meta.from === undefined ? false : (metaData.meta.from.name === "Root"));
+                    metaDataArray.push(metaData);
+                }
+                Tuml.Metadata.Cache.add(metaQualifiedName, metaDataArray);
+                callback(tumlUri, result, metaDataResult, contextVertexId);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert('error getting ' + tumlUri + '\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
+            }
+        });
+    } else {
+        callback(tumlUri, result, metaDataFromCache, contextVertexId);
+    }
+}
+
 function escapeColon(string) {
     return string.replace(/(:|\.)/g,'\\$1');
 }

@@ -15,7 +15,13 @@
         this.count = null;
 
         this.internalToString = function() {
-            var result = "Validation errors for:\n    row = " + this.row + "\n    property = " + this.property.name + "\n    qualified name = " + this.qualifiedName;
+            var result;
+            if (row !== -1) {
+                result = "Validation errors for:\n    row = " + this.row + "\n";
+            } else {
+                result = "Validation errors for:\n    ";
+            }
+            result += "property = " + this.property.name + "\n    qualified name = " + this.qualifiedName;
             result += "\n    message = " + this.message + "\n\n";
             for (var i = 0; i < this.validationResults.length; i++) {
                 var validationResult = this.validationResults[i];
