@@ -222,7 +222,7 @@ select.editor-yesno {
 /* Slick.Editors.Checkbox */
 input.editor-checkbox {
   margin: 0;
-  height: 100%;
+  height: auto;
   padding: 0;
   border: 0;
 }

@@ -79,8 +79,8 @@ public abstract class BaseServerResourceBuilder extends BaseVisitor {
         return TumlClassOperations.className(clazz) + "LookupServerResourceImpl";
     }
 
-	protected String getServerResourceImplName(Class clazz) {
-		return TumlClassOperations.className(clazz) + "ServerResourceImpl";
+	protected String getServerResourceImplName(Classifier classifier) {
+		return TumlClassOperations.className(classifier) + "ServerResourceImpl";
 	}
 
     protected String getServerResourceMetatDataImplName(Classifier clazz) {

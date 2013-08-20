@@ -21,7 +21,8 @@ public class RestletVisitors {
         result.add(new EntityServerResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
         result.add(new EntityForLookupServerResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
 
-        result.add(new MetaDataResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+        //TODO remove this after testing calling OPTIONS on EntityServerResource
+//        result.add(new MetaDataResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
 
 //        result.add(new NavigatePropertyServerResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
         result.add(new NavigatePropertyOverloadedPostServerResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));

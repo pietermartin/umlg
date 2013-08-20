@@ -14,6 +14,7 @@ import org.umlg.javageneration.util.TumlClassOperations;
 import org.umlg.restlet.util.TumlRestletGenerationUtil;
 
 import java.util.Set;
+import java.util.SortedSet;
 
 public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerResourceBuilder implements Visitor<Class> {
 
@@ -262,13 +263,13 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
         annotatedClass.addToImports("org.umlg.root.Root");
 
         tryStatement.getTryPart().addToStatements("json.append(\"[\")");
-        Set<Classifier> concreteImplementations = TumlClassOperations.getConcreteImplementations(clazz);
+        SortedSet<Classifier> sortedConcreteImplementations = TumlClassOperations.getConcreteImplementations(clazz);
         int count = 1;
-        for (Classifier classifier : concreteImplementations) {
+        for (Classifier classifier : sortedConcreteImplementations) {
 
             tryStatement.getTryPart().addToStatements("json.append(\"{\\\"data\\\": [\")");
 
-            if (concreteImplementations.size() > 1) {
+            if (sortedConcreteImplementations.size() > 1) {
                 tryStatement.getTryPart().addToStatements(
                         "json.append(ToJsonUtil.toJsonWithoutCompositeParent(resource.select(new "
                                 + TinkerGenerationUtil.BooleanExpressionEvaluator.getCopy().addToGenerics(TumlClassOperations.getPathName(clazz)).getLast()
@@ -288,7 +289,7 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
             tryStatement.getTryPart().addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + clazz.getQualifiedName() + "\\\"\")");
             annotatedClass.addToImports(TinkerGenerationUtil.RootRuntimePropertyEnum);
             annotatedClass.addToImports(TumlClassOperations.getPathName(clazz).append(TumlClassOperations.propertyEnumName(clazz)));
-            if (concreteImplementations.size() != 1 && count++ != concreteImplementations.size()) {
+            if (sortedConcreteImplementations.size() != 1 && count++ != sortedConcreteImplementations.size()) {
                 tryStatement.getTryPart().addToStatements("json.append(\",\")");
             }
         }
@@ -316,9 +317,9 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
         annotatedClass.addToImports("org.umlg.root.Root");
 
         tryStatement.getTryPart().addToStatements("json.append(\"[\")");
-        Set<Classifier> concreteImplementations = TumlClassOperations.getConcreteImplementations(clazz);
+        SortedSet<Classifier> sortedConcreteImplementations = TumlClassOperations.getConcreteImplementations(clazz);
         int count = 1;
-        for (Classifier classifier : concreteImplementations) {
+        for (Classifier classifier : sortedConcreteImplementations) {
             annotatedClass.addToImports(TinkerGenerationUtil.ToJsonUtil);
             tryStatement.getTryPart().addToStatements("meta", "json.append(\"{\\\"meta\\\" : {\")");
             tryStatement.getTryPart().addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + clazz.getQualifiedName() + "\\\"\")");
@@ -332,7 +333,7 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
             tryStatement.getTryPart().addToStatements("json.append(" + TinkerGenerationUtil.RootRuntimePropertyEnum.getLast() + ".asJson())");
             annotatedClass.addToImports(TinkerGenerationUtil.RootRuntimePropertyEnum);
             annotatedClass.addToImports(TumlClassOperations.getPathName(clazz).append(TumlClassOperations.propertyEnumName(clazz)));
-            if (concreteImplementations.size() != 1 && count++ != concreteImplementations.size()) {
+            if (sortedConcreteImplementations.size() != 1 && count++ != sortedConcreteImplementations.size()) {
                 tryStatement.getTryPart().addToStatements("json.append(\",\")");
             }
         }

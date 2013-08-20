@@ -6,6 +6,7 @@ import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.java.metamodel.*;
 import org.umlg.java.metamodel.annotation.*;
+import org.umlg.java.metamodel.utilities.OJPathNameComparator;
 import org.umlg.javageneration.util.PropertyWrapper;
 import org.umlg.javageneration.util.TinkerGenerationUtil;
 import org.umlg.javageneration.util.TumlClassOperations;
@@ -13,7 +14,7 @@ import org.umlg.restlet.generation.RestletVisitors;
 import org.umlg.restlet.util.TumlRestletGenerationUtil;
 import org.umlg.restlet.visitor.model.QueryExecuteResourceBuilder;
 
-import java.util.Set;
+import java.util.*;
 
 public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseServerResourceBuilder implements Visitor<Property> {
 
@@ -27,27 +28,20 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
         if (!pWrap.isDataType() && !pWrap.isEnumeration() && pWrap.isNavigable()) {
 
             OJAnnotatedClass owner = findOJClass(pWrap.getType());
-
-            OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_"
-                    + pWrap.getOtherEnd().getName() + "_" + pWrap.getName() + "_ServerResource");
             OJPackage ojPackage = new OJPackage(owner.getMyPackage().toString() + ".restlet");
-            annotatedInf.setMyPackage(ojPackage);
-            addToSource(annotatedInf);
 
             OJAnnotatedClass annotatedClass = new OJAnnotatedClass(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_"
                     + pWrap.getOtherEnd().getName() + "_" + pWrap.getName() + "_ServerResourceImpl");
             annotatedClass.setSuperclass(TumlRestletGenerationUtil.ServerResource);
-            annotatedClass.addToImplementedInterfaces(annotatedInf.getPathName());
             annotatedClass.setMyPackage(ojPackage);
             addToSource(annotatedClass);
             addDefaultConstructor(annotatedClass);
 
             addCompositeParentIdField(pWrap, annotatedClass);
-            addGetObjectRepresentation(pWrap, annotatedInf, annotatedClass);
+            addGetObjectRepresentation(pWrap, annotatedClass);
+            addOptionsObjectRepresentation(pWrap, annotatedClass);
+            addPostObjectRepresentation(pWrap, annotatedClass);
 
-            addOptionsObjectRepresentation(pWrap, annotatedInf, annotatedClass);
-
-            addPostObjectRepresentation(pWrap, annotatedInf, annotatedClass);
             addServerResourceToRouterEnum(pWrap, annotatedClass);
 
         }
@@ -57,7 +51,7 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
     public void visitAfter(Property p) {
     }
 
-    private void addGetObjectRepresentation(PropertyWrapper pWrap, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass) {
+    private void addGetObjectRepresentation(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass) {
 
         OJAnnotatedOperation get = new OJAnnotatedOperation("get", TumlRestletGenerationUtil.Representation);
         TinkerGenerationUtil.addOverrideAnnotation(get);
@@ -72,7 +66,6 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
                 "this." + parentPathName.getLast().toLowerCase() + "Id = Long.valueOf((String)getRequestAttributes().get(\""
                         + parentPathName.getLast().toLowerCase() + "Id\"))");
 
-        tryStatement.getTryPart().addToStatements("String returnMetaDataValue = this.getQueryValue(\"returnMetaData\")");
         tryStatement.getTryPart().addToStatements(
                 parentPathName.getLast() + " parentResource = GraphDb.getDb().instantiateClassifier(" + parentPathName.getLast().toLowerCase() + "Id" + ")");
         annotatedClass.addToImports(parentPathName);
@@ -85,7 +78,7 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
         annotatedClass.addToOperations(get);
     }
 
-    private void addOptionsObjectRepresentation(PropertyWrapper pWrap, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass) {
+    private void addOptionsObjectRepresentation(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass) {
         OJAnnotatedOperation option = new OJAnnotatedOperation("options", TumlRestletGenerationUtil.Representation);
         TinkerGenerationUtil.addOverrideAnnotation(option);
         option.addToThrows(TumlRestletGenerationUtil.ResourceException);
@@ -131,11 +124,7 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
 
     }
 
-    private void addPostObjectRepresentation(PropertyWrapper pWrap, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass) {
-        OJAnnotatedOperation postInf = new OJAnnotatedOperation("post", TumlRestletGenerationUtil.Representation);
-        postInf.addToParameters(new OJParameter("entity", TumlRestletGenerationUtil.Representation));
-        annotatedInf.addToOperations(postInf);
-        postInf.addAnnotationIfNew(new OJAnnotationValue(TumlRestletGenerationUtil.Post, "json"));
+    private void addPostObjectRepresentation(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass) {
 
         OJAnnotatedOperation post = new OJAnnotatedOperation("post", TumlRestletGenerationUtil.Representation);
         post.addToParameters(new OJParameter("entity", TumlRestletGenerationUtil.Representation));
@@ -449,11 +438,13 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
 
     private void buildToJson(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass, OJBlock block) {
 
-        Set<Classifier> concreteImplementations = TumlClassOperations.getConcreteImplementations((Classifier) pWrap.getType());
+        //This is very important to be a sorted set. The get and options method need to return the meta data in the same order.
+        //This allows the client to merge them easily
+        SortedSet<Classifier> sortedConcreteImplementations = TumlClassOperations.getConcreteImplementations((Classifier) pWrap.getType());
         Set<Classifier> concreteImplementationsFrom = TumlClassOperations.getConcreteImplementations((Classifier) pWrap.getOwningType());
         if (!concreteImplementationsFrom.isEmpty()) {
             annotatedClass.addToImports(TinkerGenerationUtil.ToJsonUtil);
-            //blok get reassigned for the meta data if statement
+            //block get reassigned for the meta data if statement
             OJBlock returnBlock = block;
             block.addToStatements("StringBuilder json = new StringBuilder()");
             block.addToStatements("json.append(\"[\")");
@@ -464,7 +455,7 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
             // This is consistent with navigating to a entity with a vertex where
             // there is no navigating from.
             // i.e. the first meta data in the array is the entity navigating to.
-            for (Classifier concreteClassifierTo : concreteImplementations) {
+            for (Classifier concreteClassifierTo : sortedConcreteImplementations) {
                 annotatedClass.addToImports(TumlClassOperations.getPathName(concreteClassifierTo));
                 if (pWrap.isOne()) {
                     block.addToStatements("json.append(\"{\\\"data\\\": \")");
@@ -495,7 +486,7 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
                 block.addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + pWrap.getQualifiedName() + "\\\"\")");
 
                 block.addToStatements("json.append(\"}\")");
-                if (concreteImplementations.size() != 1 && count != concreteImplementations.size()) {
+                if (sortedConcreteImplementations.size() != 1 && count != sortedConcreteImplementations.size()) {
                     block.addToStatements("json.append(\"}, \")");
                 }
                 block = returnBlock;

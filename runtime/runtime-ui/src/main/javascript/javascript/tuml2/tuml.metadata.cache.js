@@ -17,10 +17,6 @@
     function Cache() {
         var metaDataIdx = {};
 
-        this.getMetaDataIdx = function () {
-            return metaDataIdx;
-        }
-
         this.add = function (qualifiedName, metaData) {
             metaDataIdx[qualifiedName] = metaData;
         }
@@ -35,7 +31,7 @@
             if (metaData === undefined) {
                 $.ajax({
                     url: uri,
-                    type: "GET",
+                    type: "OPTIONS",
                     dataType: "json",
                     contentType: "application/json",
                     success: function (result) {

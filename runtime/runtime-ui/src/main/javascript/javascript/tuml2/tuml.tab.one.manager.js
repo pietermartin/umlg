@@ -269,7 +269,7 @@
                         this.data[property.name] = stringValue;
                     }
                 } else if (property.fieldType == 'Boolean') {
-                    this.data[property.name] = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').attr("checked") == "checked";
+                    this.data[property.name] = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').is(':checked');
                 }
             } else if (property.dataTypeEnum !== null && property.dataTypeEnum !== undefined) {
                 if (property.dataTypeEnum == 'DateTime') {
@@ -442,6 +442,20 @@
                     }
                     return false;
                 });
+            } else if (property.fieldType === 'Boolean') {
+                $input.change(function () {
+                    var validationResult = self.validateField(property);
+                    if (validationResult.valid) {
+                        self.synchronizeModel(property)
+                    } else {
+                        setTimeout(
+                            function () {
+                                $input.focus();
+                            }, 5
+                        );
+                    }
+                    return false;
+                });
             } else {
                 $input.blur(function () {
                     var validationResult = self.validateField(property);
@@ -537,10 +551,10 @@
             } else if (property.fieldType == 'Boolean') {
                 if (!property.manyPrimitive) {
                     var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
-                    if (this.data[property.manyPrimitive] !== undefined) {
+                    if (this.data[property.name]) {
                         input.attr('checked', 'checked');
                     } else {
-                        input.attr('checked', '');
+                        input.attr('checked', false);
                     }
                 } else if (property.manyPrimitive) {
                     var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
@@ -784,7 +798,11 @@
                 validationResult = selectFieldValidator(property)(tmpSerializedValue);
             }
         } else {
-            validationResult = selectFieldValidator(property)(validateInput.val());
+            if (property.fieldType === 'Boolean') {
+                validationResult = selectFieldValidator(property)((validateInput.is(':checked') ? 't' : 'f'));
+            } else {
+                validationResult = selectFieldValidator(property)(validateInput.val());
+            }
         }
         //selectFieldValidator returns the validate function
         if (!validationResult.valid) {

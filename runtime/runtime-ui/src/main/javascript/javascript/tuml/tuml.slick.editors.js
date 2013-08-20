@@ -277,14 +277,8 @@
     function ManyPrimitiveEditor(args) {
         this.args = args;
         this.$input;
-        var $div;
-        var $addButton;
         this.$table;
-        var $select;
-        var $cancel;
         var defaultValue;
-        var scope = this;
-        this.justOpened = true;
 
         //Public api
         $.extend(this, {

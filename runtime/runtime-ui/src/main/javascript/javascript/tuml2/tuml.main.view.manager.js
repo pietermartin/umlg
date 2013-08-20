@@ -44,38 +44,19 @@
         }
 
         this.refresh = function (tumlUri, result) {
-            this.qualifiedName = result[0].meta.qualifiedName;
             var metaDataNavigatingTo = result[0].meta.to;
             var metaDataNavigatingFrom = result[0].meta.from;
-            this.tumlUri = tumlUri;
             //propertyNavigatingTo is null when viewing a one
-            this.propertyNavigatingTo = (metaDataNavigatingFrom == undefined ? null : findPropertyNavigatingTo(this.qualifiedName, metaDataNavigatingFrom));
-            this.tabContainerProperty = this.propertyNavigatingTo;
+            this.propertyNavigatingTo = (metaDataNavigatingFrom == undefined ? null : findPropertyNavigatingTo(result[0].meta.qualifiedName, metaDataNavigatingFrom));
+
             if (this.propertyNavigatingTo != null && (this.propertyNavigatingTo.oneToMany || this.propertyNavigatingTo.manyToMany)) {
                 //Property is a many
+                this.qualifiedName = result[0].meta.qualifiedName;
+                this.tumlUri = tumlUri;
+                this.tabContainerProperty = this.propertyNavigatingTo;
 
-                var newContextVertexId = retrieveVertexId(tumlUri);
+                this.handleMany(metaDataNavigatingFrom, metaDataNavigatingTo, result);
 
-                //Check if we coming from a one
-                var wasOne = false;
-                for (var j = 0; j < this.tumlTabViewManagers.length; j++) {
-                    var tumlTabViewManager = this.tumlTabViewManagers[j];
-                    if (tumlTabViewManager instanceof  Tuml.TumlTabOneViewManager) {
-                        wasOne = true;
-                    }
-                }
-
-                var savedTumlTabViewManagers = this.clearTabsOnAddOneOrMany(newContextVertexId);
-
-                if (!contextChanged && wasOne) {
-                    this.addButtons();
-                }
-
-                leftMenuManager.refresh(metaDataNavigatingFrom, metaDataNavigatingTo, this.contextVertexId, this.propertyNavigatingTo);
-                refreshInternal(tumlUri, result, false);
-
-                //reorder tabs, make sure new tabs are first
-                reorderTabsAfterAddOneOrMany(savedTumlTabViewManagers);
             } else {
                 //Property is a one
                 //If there are no data then it is for creation
@@ -88,35 +69,26 @@
                 }
                 var isForCreation = hasData === false;
                 if (!isForCreation) {
-                    //Only element of the array contains data, i.e. for the return concrete type
-                    for (var i = 0; i < result.length; i++) {
-                        if (result[i].data !== null) {
-                            metaDataNavigatingTo = result[i].meta.to;
-                            this.qualifiedName = result[i].meta.qualifiedName;
-                            var newContextVertexId = result[i].data.id;
-                            var savedTumlTabViewManagers = this.clearTabsOnAddOneOrMany(newContextVertexId);
-
-                            //If property is a one then there is n navigating from
-                            leftMenuManager.refresh(metaDataNavigatingTo, metaDataNavigatingTo, this.contextVertexId);
-                            //Do not call refreshInternal as it creates all tabs for the meta data
-                            var tumlTabViewManager = this.createTabContainer(tuml.tab.Enum.Properties, result[i], tumlUri, {forLookup: false, forManyComponent: false, isOne: true, forCreation: false}, this.propertyNavigatingTo);
-                            this.addToTumlTabViewManagers(tumlTabViewManager);
-                            tumlTabViewManager.createTab(result[i], isForCreation);
-                            //reorder tabs, make sure new tabs are first
-                            reorderTabsAfterAddOneOrMany(savedTumlTabViewManagers);
-                        }
-                    }
-                } else {
-                    //This is for creation of the one
                     this.qualifiedName = result[0].meta.qualifiedName;
-                    var newContextVertexId = retrieveVertexId(tumlUri);
-                    var savedTumlTabViewManagers = this.clearTabsOnAddOneOrMany(newContextVertexId);
+                    this.tumlUri = tumlUri;
+                    this.tabContainerProperty = this.propertyNavigatingTo;
 
-                    leftMenuManager.refresh(metaDataNavigatingFrom, metaDataNavigatingTo, this.contextVertexId);
-                    refreshInternal(tumlUri, result, true, true);
+                    metaDataNavigatingTo = this.handleOneNotForCreation(result);
 
-                    //reorder tabs, make sure new tabs are first
-                    reorderTabsAfterAddOneOrMany(savedTumlTabViewManagers);
+                } else {
+                    //Check if property navigating frmo is the composite owner.
+                    //Creation is only possible from the composite owner
+                    if (this.propertyNavigatingTo.composite) {
+                        this.qualifiedName = result[0].meta.qualifiedName;
+                        this.tumlUri = tumlUri;
+                        this.tabContainerProperty = this.propertyNavigatingTo;
+
+                        this.handleOneForCreation(metaDataNavigatingFrom, metaDataNavigatingTo, result);
+
+                    } else {
+                        alert('Property ' + this.propertyNavigatingTo.name + ' has no data and can not be created as it is not composite!');
+                        return false;
+                    }
 
                 }
             }
@@ -143,6 +115,63 @@
 
             this.updateNavigationHeader(this.qualifiedName);
             $('body').layout().resizeAll();
+            return true;
+        }
+
+        this.handleMany = function(metaDataNavigatingFrom, metaDataNavigatingTo, result) {
+            var newContextVertexId = retrieveVertexId(this.tumlUri);
+            //Check if we coming from a one
+            var wasOne = false;
+            for (var j = 0; j < this.tumlTabViewManagers.length; j++) {
+                var tumlTabViewManager = this.tumlTabViewManagers[j];
+                if (tumlTabViewManager instanceof  Tuml.TumlTabOneViewManager) {
+                    wasOne = true;
+                }
+            }
+            var savedTumlTabViewManagers = this.clearTabsOnAddOneOrMany(newContextVertexId);
+            if (!contextChanged && wasOne) {
+                this.addButtons();
+            }
+            leftMenuManager.refresh(metaDataNavigatingFrom, metaDataNavigatingTo, this.contextVertexId, this.propertyNavigatingTo);
+            refreshInternal(this.tumlUri, result, false);
+            //reorder tabs, make sure new tabs are first
+            reorderTabsAfterAddOneOrMany(savedTumlTabViewManagers);
+        }
+
+        this.handleOneNotForCreation = function(result) {
+            //Only one element of the array contains data, i.e. for the return concrete type
+            var metaDataNavigatingTo;
+            for (var i = 0; i < result.length; i++) {
+                if (result[i].data !== null) {
+                    metaDataNavigatingTo = result[i].meta.to;
+                    this.qualifiedName = result[i].meta.qualifiedName;
+                    var newContextVertexId = result[i].data.id;
+                    var savedTumlTabViewManagers = this.clearTabsOnAddOneOrMany(newContextVertexId);
+
+                    //If property is a one then there is n navigating from
+                    leftMenuManager.refresh(metaDataNavigatingTo, metaDataNavigatingTo, this.contextVertexId);
+                    //Do not call refreshInternal as it creates all tabs for the meta data
+                    var tumlTabViewManager = this.createTabContainer(tuml.tab.Enum.Properties, result[i], this.tumlUri, {forLookup: false, forManyComponent: false, isOne: true, forCreation: false}, this.propertyNavigatingTo);
+                    this.addToTumlTabViewManagers(tumlTabViewManager);
+                    tumlTabViewManager.createTab(result[i], /*isForCreation*/false);
+                    //reorder tabs, make sure new tabs are first
+                    reorderTabsAfterAddOneOrMany(savedTumlTabViewManagers);
+                    break;
+                }
+            }
+            return metaDataNavigatingTo;
+        }
+
+        this.handleOneForCreation = function(metaDataNavigatingFrom, metaDataNavigatingTo, result) {
+            //This is for creation of the one
+            var newContextVertexId = retrieveVertexId(this.tumlUri);
+            var savedTumlTabViewManagers = this.clearTabsOnAddOneOrMany(newContextVertexId);
+
+            leftMenuManager.refresh(metaDataNavigatingFrom, metaDataNavigatingTo, this.contextVertexId);
+            refreshInternal(this.tumlUri, result, true, true);
+
+            //reorder tabs, make sure new tabs are first
+            reorderTabsAfterAddOneOrMany(savedTumlTabViewManagers);
         }
 
         /**
@@ -244,48 +273,23 @@
                 data: JSON.stringify(overloadedPostData),
                 success: function (result) {
                     if (commit) {
-                        var contextVertexId = retrieveVertexId(postUri);
-                        retrieveMetaDataIfNotInCache(postUri, contextVertexId, result, continueUpdateTabsForResultAfterCommit);
+                        //post returns the meta data with, unlike get which does not
+                        self.updateTabsForResultAfterCommit(result);
                     } else {
-                        var endTimeBeforeUpdateGrids = new Date().getTime();
-                        console.log("Time taken in millis for server call before update grids = " + (endTimeBeforeUpdateGrids - startTime));
-                        retrieveMetaDataIfNotInCache(postUri, contextVertexId, result, continueUpdateTabsForResultAfterRollback);
-                        var endTimeAfterUpdateGrids = new Date().getTime();
-                        console.log("Time taken in millis to update grids = " + (endTimeAfterUpdateGrids - endTimeBeforeUpdateGrids));
+//                        var endTimeBeforeUpdateGrids = new Date().getTime();
+//                        console.log("Time taken in millis for server call before update grids = " + (endTimeBeforeUpdateGrids - startTime));
+
+                        //post returns the meta data with, unlike get which does not
+                        self.updateTabsForResultAfterRollback(result);
+
+//                        var endTimeAfterUpdateGrids = new Date().getTime();
+//                        console.log("Time taken in millis to update grids = " + (endTimeAfterUpdateGrids - endTimeBeforeUpdateGrids));
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
                 }
             });
-        }
-
-        function continueUpdateTabsForResultAfterCommit(tumlUri, result, metaDataResult, contextVertexId) {
-            if (result.length !== metaDataResult.length) {
-                throw 'get and options must return the same number of meta data!';
-            }
-            for (var i = 0; i < result.length; i++) {
-                //Copy the meta data from options into the data result
-                if (result[i].meta.qualifiedName !== metaDataResult[i].meta.qualifiedName) {
-                    throw 'options and get must return the same qualified name!';
-                }
-                result[i].meta = metaDataResult[i].meta;
-            }
-            self.updateTabsForResultAfterCommit(result);
-        }
-
-        function continueUpdateTabsForResultAfterRollback(tumlUri, result, metaDataResult, contextVertexId) {
-            if (result.length !== metaDataResult.length) {
-                throw 'get and options must return the same number of meta data!';
-            }
-            for (var i = 0; i < result.length; i++) {
-                //Copy the meta data from options into the data result
-                if (result[i].meta.qualifiedName !== metaDataResult[i].meta.qualifiedName) {
-                    throw 'options and get must return the same qualified name!';
-                }
-                result[i].meta = metaDataResult[i].meta;
-            }
-            self.updateTabsForResultAfterRollback(result);
         }
 
         this.updateTabsForResultAfterCommit = function (result) {
@@ -632,7 +636,7 @@
         for (var j = 0; j < this.tumlTabViewManagers.length; j++) {
             var tumlTabViewManager = this.tumlTabViewManagers[j];
             if (tumlTabViewManager instanceof Tuml.TumlTabManyViewManager) {
-                if (tumlTabViewManager.tumlTabGridManager.metaForData.qualifiedName !== qualifiedName) {
+                if (tumlTabViewManager.tumlTabGridManager.localMetaForData.qualifiedName !== qualifiedName) {
                     tumlTabViewManager.updateOneForUpdate(id, displayName, fieldName, one);
                 }
             }
@@ -698,8 +702,8 @@
             contentType: "application/json",
             data: JSON.stringify(overloadedPostData),
             success: function (result) {
-                var endTimeBeforeUpdateGrids = new Date().getTime();
-                console.log("Time taken in millis for server call before update drop down = " + (endTimeBeforeUpdateGrids - startTime));
+//                var endTimeBeforeUpdateGrids = new Date().getTime();
+//                console.log("Time taken in millis for server call before update drop down = " + (endTimeBeforeUpdateGrids - startTime));
 
                 //For one lookup
                 if (Array.isArray(result)) {
@@ -723,8 +727,8 @@
                     }
                     loadDataCallback(result.data);
                 }
-                endTimeBeforeUpdateGrids = new Date().getTime();
-                console.log("Time taken in millis for server call after  update drop down = " + (endTimeBeforeUpdateGrids - startTime));
+//                endTimeBeforeUpdateGrids = new Date().getTime();
+//                console.log("Time taken in millis for server call after  update drop down = " + (endTimeBeforeUpdateGrids - startTime));
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);

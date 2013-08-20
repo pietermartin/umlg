@@ -429,13 +429,14 @@
         );
         var cancelButton = $('<button />', {id: this.getTabId() + 'save'}).text('Cancel').appendTo(tabsButtonDiv);
         cancelButton.button().click(function (event) {
-            self.doCancel();
+            self.parentTabContainerManager.doCancel();
             event.preventDefault();
         });
     }
 
     TumlTabOneViewManager.prototype.doCancel = function () {
-        this.parentTabContainerManager.doInternalCancel();
+        Tuml.TumlTabContainerManager.prototype.doInternalCancel.call(this);
+        $('#formDiv' + this.tabTitleName).show();
         this.open = true;
     }
 
@@ -1054,13 +1055,19 @@
         //Get the meta data.
         Tuml.Metadata.Cache.get(property.qualifiedName, property.tumlMetaDataUri,
             function (result) {
-                var component = {meta: null, data: null};
                 self.tabContainerProperty = property;
                 var firstTumlManyComponentTabViewManager = null;
                 for (var i = 0; i < result.length; i++) {
-                    component.meta = result[i].meta;
+
+                    var component = {meta: result[i].meta, data: []};
                     self.maybeCreateTabContainer();
-                    component.data = data;
+
+                    //Need to filter out the data per concrete class as returned in the meta data
+                    for (var j = 0; j < data.length; j++) {
+                        if (data[j].qualifiedName === component.meta.to.qualifiedName) {
+                            component.data.push(data[j]);
+                        }
+                    }
                     var tumlManyComponentTabViewManager = self.createTabContainer(
                         tuml.tab.Enum.Properties,
                         component,
@@ -1080,7 +1087,6 @@
                         firstTumlManyComponentTabViewManager = tumlManyComponentTabViewManager;
                     }
                 }
-//                self.addButtons();
                 self.open = false;
                 //Set only the first tab to active
                 if (firstTumlManyComponentTabViewManager !== null) {

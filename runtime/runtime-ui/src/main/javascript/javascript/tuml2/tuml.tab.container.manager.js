@@ -249,8 +249,8 @@
         this.destroyTabContainer();
         if (this instanceof Tuml.TumlTabManyViewManager) {
             this.tumlTabGridManager.active = true;
+            $('#slickGrid' + this.tabId).show();
         }
-        $('#slickGrid' + this.tabId).show();
         //enable the save button
         this.parentTabContainerManager.enableButtons();
     }
@@ -260,8 +260,8 @@
         //Save the child grids into the component's cell
         if (this.tumlTabViewManagers.length > 0) {
             if (this.tabContainerProperty == undefined || this.tabContainerProperty == null) {
-                //This code executes for non composite many properties. When adding the selected instances to the association
-                //forLookup
+                //This code executes for non composite and non primitive many properties. When adding the selected instances to the association
+                //i.e. for look ups
                 if (this.tumlTabViewManagers.length > 1) {
                     throw 'TumlTabContainerManager.prototype.saveTabs for lookup can only have one tab!';
                 }
@@ -349,27 +349,6 @@
         this.parentTabContainerManager.enableButtons();
         this.parentTabContainerManager.updateValidationWarningHeader();
     }
-
-//    TumlTabContainerManager.prototype.validateMultiplicity = function () {
-//        var tumlTabViewManagers = this.getTumlTabManyOrOneViewManagers(false);
-//        var rowCount = 0;
-//        for (var i = 0; i < tumlTabViewManagers.length; i++) {
-//            var tumlTabViewManager = tumlTabViewManagers[i];
-//            if (tumlTabViewManager instanceof  Tuml.TumlTabManyViewManager) {
-//                var dataView = tumlTabViewManager.tumlTabGridManager.dataView;
-//                rowCount += dataView.getItems().length;
-//            } else {
-//                rowCount = 1;
-//                break;
-//            }
-//        }
-//        if (rowCount < this.tabContainerProperty.lower || (this.tabContainerProperty.upper !== -1 && rowCount > this.tabContainerProperty.upper)) {
-//            alert('multiplicity falls outside the valid range [' + this.tabContainerProperty.lower + '..' + (this.tabContainerProperty.upper !== -1 ? this.tabContainerProperty.upper : '*') + ']');
-//            return false;
-//        } else {
-//            return true;
-//        }
-//    }
 
     TumlTabContainerManager.prototype.internalSetComponentIdToTmpId = function (object, property) {
         var self = this;

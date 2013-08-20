@@ -377,8 +377,18 @@ public class TumlClassOperations extends ClassOperations {
         return result;
     }
 
-    public static Set<Classifier> getConcreteImplementations(Classifier clazz) {
-        Set<Classifier> result = new HashSet<Classifier>();
+    /**
+     * Returns all concrete implementations sorted by the clissifier's name
+     * @param clazz
+     * @return
+     */
+    public static SortedSet<Classifier> getConcreteImplementations(Classifier clazz) {
+        SortedSet<Classifier> result = new TreeSet<Classifier>(new Comparator<Classifier>() {
+            @Override
+            public int compare(Classifier o1, Classifier o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
         getConcreteImplementations(result, clazz);
         if (clazz instanceof Interface) {
             result.addAll(getConcreteRealization((Interface) clazz));

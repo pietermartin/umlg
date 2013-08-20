@@ -36,7 +36,6 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
     private Map<TransactionIdentifier, Transaction> transactionIdentifierTransactionMap;
     private Map<Transaction, TransactionIdentifier> transactionTransactionIdentifierMap;
     private static final Logger logger = Logger.getLogger(TumlNeo4jGraph.class.getPackage().getName());
-    private TumlTinkerIndex<Vertex> uniqueVertexIndex;
     private final String DELETED_NODES = "deletednodes";
 
     public TumlNeo4jGraph(String directory) {

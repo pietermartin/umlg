@@ -102,7 +102,6 @@
         }
 
         this.refresh = function (tumlUri, pushUrl) {
-            var self = this;
             //Change the browsers url
             if (pushUrl === undefined || pushUrl) {
                 pushUrlToBrowser(tumlUri);
@@ -131,15 +130,22 @@
 
             for (var i = 0; i < result.length; i++) {
                 //Copy the meta data from options into the data result
-                if (result[i].meta.qualifiedName !== metaDataResult[i].meta.qualifiedName) {
-                    throw 'options and get must return the same qualified name!';
+                if (result[i].data !== null && result[i].data.length > 0) {
+                    if (result[i].data[0].qualifiedName !== metaDataResult[i].meta.to.qualifiedName) {
+                        throw 'options and get must return the same qualified name!';
+                    }
                 }
                 result[i].meta = metaDataResult[i].meta;
             }
 
-            mainViewManager.refresh(tumlUri, result);
-            var contextMetaData = getContextMetaData(result, contextVertexId);
-            contextManager.refresh(contextMetaData.name, contextMetaData.uri, contextMetaData.contextVertexId);
+            //Need to validate here if we can continue.
+            //Only valid request can continue else the ui gets awfully confused.
+
+            //Non composite ones with no data can not be navigated to
+            if (mainViewManager.refresh(tumlUri, result)) {
+                var contextMetaData = getContextMetaData(result, contextVertexId);
+                contextManager.refresh(contextMetaData.name, contextMetaData.uri, contextMetaData.contextVertexId);
+            }
         }
 
         function getContextMetaData(result, urlId) {
