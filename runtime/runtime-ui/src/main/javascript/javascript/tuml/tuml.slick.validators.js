@@ -345,7 +345,7 @@
         if (value === undefined || value === null || value === '' || isNaN(value)) {
             return {
                 valid: false,
-                msg: "Please enter a valid positive number"
+                msg: "Please enter a number!"
             };
         } else {
             return {valid: true};

@@ -1,3 +1,7 @@
+#switcher {
+    float: right;
+}
+
 #tabContainer-menu-container {
     margin: 5px;
 
@@ -672,6 +676,7 @@
 
 .contextMenu li span {
     margin-left: 5px;
+    color: #333333;
 }
 
 .contextMenu li span.menu-composite {

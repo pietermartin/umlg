@@ -391,26 +391,28 @@
             $input = $('<input />', {type: 'text', class: 'field', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
             $input.button().addClass('ui-textfield');
             if (!this.isForCreation) {
-                $input[0].defaultValue = this.data[property.name];
+                $input[0].defaultValue = (this.data[property.name] === null ? '' : this.data[property.name]);
             }
         } else if (property.fieldType == 'Integer') {
             $input = $('<input />', {type: 'text', class: 'field', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
             $input.button().addClass('ui-textfield');
             if (!this.isForCreation) {
-                $input[0].defaultValue = this.data[property.name];
+//                $input[0].defaultValue = this.data[property.name];
+                $input[0].defaultValue = (this.data[property.name] === null ? '' : this.data[property.name]);
             }
         } else if (property.fieldType == 'Long') {
             $input = $('<input />', {type: 'text', class: 'field', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
             $input.button().addClass('ui-textfield');
             if (!this.isForCreation) {
-                $input[0].defaultValue = this.data[property.name];
+//                $input[0].defaultValue = this.data[property.name];
+                $input[0].defaultValue = (this.data[property.name] === null ? '' : this.data[property.name]);
             }
         } else if (property.fieldType == 'Boolean') {
             if (!property.manyPrimitive && this.data !== undefined && this.data !== null) {
                 if (!this.isForCreation) {
-                    $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name, checked: 'checked'});
+                    $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name, checked: (this.data[property.name] ? 'checked' : false)});
                 } else {
-                    $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name });
+                    $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name, checked: false });
                 }
             } else if (!property.manyPrimitive) {
                 $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name });

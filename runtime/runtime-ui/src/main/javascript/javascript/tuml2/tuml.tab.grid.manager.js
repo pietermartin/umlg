@@ -1158,7 +1158,7 @@
         $("body").one("click", function () {
             contextMenu.hide();
         });
-        contextMenu.mouseleave(contextMenu_timer);
+//        contextMenu.mouseleave(contextMenu_timer);
 
         function contextMenu_close() {
             $("#contextMenu" + self.localMetaForData.name).hide();

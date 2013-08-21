@@ -9,7 +9,7 @@
     function MenuManager() {
 
         function init() {
-            //Create the meny
+            //Create the menu
             var usersMenuUl = $('<ul />', {id: 'jsddm'}).appendTo('.ui-layout-north');
             var usersLi = $('<li />').appendTo(usersMenuUl);
             $('<a />', {href: '#'}).text('Users').appendTo(usersLi);

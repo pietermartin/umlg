@@ -27,7 +27,7 @@
 
     <script src="/${app.rootUrl}/javascript/layout/jquery.layout-latest.js"></script>
 
-    <!--<script src="/${app.rootUrl}/javascript/super-theme-switcher/jquery.themeswitcher.js"></script>-->
+    <script src="/${app.rootUrl}/javascript/super-theme-switcher/jquery.themeswitcher.js"></script>
 
     <script src="/${app.rootUrl}/javascript/slickgrid/lib/jquery.event.drag-2.0.min.js"></script>
     <script src="/${app.rootUrl}/javascript/slickgrid/lib/jquery.event.drop-2.0.min.js"></script>
@@ -82,17 +82,20 @@
     <script src="/${app.rootUrl}/javascript/tuml2/tuml.query.js"></script>
     <script src="/${app.rootUrl}/javascript/tuml2/tuml.tab.enum.js"></script>
     <script>
-        $(document).ready(function () {
-            //"${app.uri}" is replaced when the app starts up with the actual application url
-            tumlModelName = "${app.rootUrl}";
-            isUmlgLib = "${app.umlgLib?string}" == "true" ? true : false;
-            var uiManager = new Tuml.UiManager("${app.uri}");
+        $(document).ready(
+            function () {
+                //"${app.uri}" is replaced when the app starts up with the actual application url
+                tumlModelName = "${app.rootUrl}";
+                isUmlgLib = "${app.umlgLib?string}" == "true" ? true : false;
+                var uiManager = new Tuml.UiManager("${app.uri}");
 
-//            $("#switcher").themeswitcher({
-//                imgpath: "${app.rootUrl}/javascript/css/jquery-ui/images/ui-lightness",
-//                loadTheme: "ui-lightness"
-//            });
-        });
+                $("#switcher").themeswitcher({
+                    imgpath: "/${app.rootUrl}/javascript/super-theme-switcher/images/",
+                    loadTheme: "ui-lightness"
+                });
+
+            }
+        );
     </script>
 </head>
 <body>
@@ -102,6 +105,7 @@
 </div>
 </div>
 <div class="ui-layout-north">
+    <div id="switcher"></div>
 </div>
 <div class="ui-layout-south">South</div>
 <div class="ui-layout-east">East</div>
