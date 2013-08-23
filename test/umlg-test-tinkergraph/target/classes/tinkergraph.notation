@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<notation:Diagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xmi:id="_vuFDkNWaEeK7NLjWHR0vxw" type="PapyrusUMLClassDiagram" name="NewDiagram" measurementUnit="Pixel">
+  <children xmi:type="notation:Shape" xmi:id="_vAw1INWbEeK7NLjWHR0vxw" type="2007" fontName="Sans" lineColor="0">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vAxcMNWbEeK7NLjWHR0vxw" source="ShadowFigure">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vAxcMdWbEeK7NLjWHR0vxw" key="ShadowFigure_Value" value="false"/>
+    </eAnnotations>
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vAyDQNWbEeK7NLjWHR0vxw" source="displayNameLabelIcon">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vAyDQdWbEeK7NLjWHR0vxw" key="displayNameLabelIcon_value" value="false"/>
+    </eAnnotations>
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vAyDQtWbEeK7NLjWHR0vxw" source="QualifiedName">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vAyDQ9WbEeK7NLjWHR0vxw" key="QualifiedNameDepth" value="1000"/>
+    </eAnnotations>
+    <children xmi:type="notation:DecorationNode" xmi:id="_vAyDRNWbEeK7NLjWHR0vxw" type="5026"/>
+    <children xmi:type="notation:DecorationNode" xmi:id="_vAyDRdWbEeK7NLjWHR0vxw" type="7016">
+      <styles xmi:type="notation:TitleStyle" xmi:id="_vAyDRtWbEeK7NLjWHR0vxw"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_vAyDR9WbEeK7NLjWHR0vxw"/>
+    </children>
+    <element xmi:type="uml:Package" href="tinkergraph.uml#_vAu_8NWbEeK7NLjWHR0vxw"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_vAw1IdWbEeK7NLjWHR0vxw" x="158" y="124"/>
+  </children>
+  <styles xmi:type="notation:DiagramStyle" xmi:id="_vuFDkdWaEeK7NLjWHR0vxw"/>
+  <element xmi:type="uml:Model" href="tinkergraph.uml#_vuEcgNWaEeK7NLjWHR0vxw"/>
+</notation:Diagram>
