@@ -1,17 +1,18 @@
 /**
  * @preserve
- * jquery.layout 1.3.0 - Release Candidate 30.77
- * $Date: 2012-12-17 08:00:00 (Mon, 17 Dec 2012) $
+ * jquery.layout 1.3.0 - Release Candidate 30.79
+ * $Date: 2013-01-12 08:00:00 (Sat, 12 Jan 2013) $
  * $Rev: 303007 $
  *
- * Copyright (c) 2012
- *   Fabrizio Balliano (http://www.fabrizioballiano.net)
- *   Kevin Dalman (http://allpro.net)
+ * Copyright (c) 2013 Kevin Dalman (http://allpro.net)
+ * Based on work by Fabrizio Balliano (http://www.fabrizioballiano.net)
  *
  * Dual licensed under the GPL (http://www.gnu.org/licenses/gpl.html)
  * and MIT (http://www.opensource.org/licenses/mit-license.php) licenses.
  *
- * Changelog: http://layout.jquery-dev.net/changelog.cfm#1.3.0.rc30.77
+ * SEE: http://layout.jquery-dev.net/LICENSE.txt
+ *
+ * Changelog: http://layout.jquery-dev.net/changelog.cfm#1.3.0.rc30.79
  *
  * Docs: http://layout.jquery-dev.net/documentation.html
  * Tips: http://layout.jquery-dev.net/tips.html
@@ -23,6 +24,10 @@
  * {?string}	nullable type (sometimes NULL) - default for {Object}
  * {number=}	optional parameter
  * {*}			ALL types
+ */
+/*	TODO for jQ 2.0 
+ *	change .andSelf() to .addBack()
+ *	$.fn.disableSelection won't work
  */
 
 // NOTE: For best readability, view with a fixed-width font and tabs equal to 4-chars
@@ -53,27 +58,18 @@
                 }
             function g (f) { return f; }; // compiler hack
         }
-
         ;
-
 
     /*
      *	GENERIC $.layout METHODS - used by all layouts
      */
     $.layout = {
 
-        version:	"1.3.rc30.77"
+        version:	"1.3.rc30.79"
         ,	revision:	0.033007 // 1.3.0 final = 1.0300 - major(n+).minor(nn)+patch(nn+)
 
-        // can update code here if $.browser is phased out or logic changes
-        ,	browser: {
-            mozilla:	!!$.browser.mozilla
-            ,	webkit:		!!$.browser.webkit || !!$.browser.safari // webkit = jQ 1.4
-            ,	msie:		!!$.browser.msie
-            ,	isIE6:		$.browser.msie && $.browser.version == 6
-            ,	boxModel:	$.support.boxModel !== false || !$.browser.msie // ONLY IE reverts to old box-model - update for older jQ onReady
-            ,	version:	$.browser.version // not used in Layout core, but may be used by plugins
-        }
+        // $.layout.browser REPLACES $.browser
+        ,	browser:	{} // set below
 
         // *PREDEFINED* EFFECTS & DEFAULTS 
         // MUST list effect here - OR MUST set an fxSettings option (can be an empty hash: {})
@@ -385,7 +381,7 @@
                 i[ei] = d.inset[ei] + b; // total offset of content from outer side
             });
 
-            x.width		= $E.css("width");
+            x.width		= $E.width();
             x.height	= $E.height();
             x.top		= N($E,"top",true);
             x.bottom	= N($E,"bottom",true);
@@ -606,6 +602,37 @@
 
     };
 
+
+    /*
+     *	$.layout.browser REPLACES removed $.browser, with extra data
+     *	Parsing code here adapted from jQuery 1.8 $.browse
+     */
+    var u = navigator.userAgent.toLowerCase()
+        ,	m = /(chrome)[ \/]([\w.]+)/.exec( u )
+            ||	/(webkit)[ \/]([\w.]+)/.exec( u )
+            ||	/(opera)(?:.*version|)[ \/]([\w.]+)/.exec( u )
+            ||	/(msie) ([\w.]+)/.exec( u )
+            ||	u.indexOf("compatible") < 0 && /(mozilla)(?:.*? rv:([\w.]+)|)/.exec( u )
+            ||	[]
+        ,	b = m[1] || ""
+        ,	v = m[2] || 0
+        ,	ie = b === "msie"
+        ;
+    $.layout.browser = {
+        version:	v
+        ,	safari:		b === "webkit"	// webkit (NOT chrome) = safari
+        ,	webkit:		b === "chrome"	// chrome = webkit
+        ,	msie:		ie
+        ,	isIE6:		ie && v == 6
+        // ONLY IE reverts to old box-model - update for older jQ onReady
+        ,	boxModel:	!ie || $.support.boxModel !== false
+    };
+    if (b) $.layout.browser[b] = true; // set CURRENT browser
+    /*	OLD versions of jQuery only set $.support.boxModel after page is loaded
+     *	so if this is IE, use support.boxModel to test for quirks-mode (ONLY IE changes boxModel) */
+    if (ie) $(function(){ $.layout.browser.boxModel = $.support.boxModel; });
+
+
 // DEFAULT OPTIONS
     $.layout.defaults = {
         /*
@@ -643,11 +670,11 @@
         ,	errors: {
             pane:					"pane"		// description of "layout pane element" - used only in error messages
             ,	selector:				"selector"	// description of "jQuery-selector" - used only in error messages
-            ,	addButtonError:			"Error Adding Button \n\nInvalid "
-            ,	containerMissing:		"UI Layout Initialization Error\n\nThe specified layout-container does not exist."
-            ,	centerPaneMissing:		"UI Layout Initialization Error\n\nThe center-pane element does not exist.\n\nThe center-pane is a required element."
-            ,	noContainerHeight:		"UI Layout Initialization Warning\n\nThe layout-container \"CONTAINER\" has no height.\n\nTherefore the layout is 0-height and hence 'invisible'!"
-            ,	callbackError:			"UI Layout Callback Error\n\nThe EVENT callback is not a valid function."
+            ,	addButtonError:			"Error Adding Button\nInvalid "
+            ,	containerMissing:		"UI Layout Initialization Error\nThe specified layout-container does not exist."
+            ,	centerPaneMissing:		"UI Layout Initialization Error\nThe center-pane element does not exist.\nThe center-pane is a required element."
+            ,	noContainerHeight:		"UI Layout Initialization Warning\nThe layout-container \"CONTAINER\" has no height.\nTherefore the layout is 0-height and hence 'invisible'!"
+            ,	callbackError:			"UI Layout Callback Error\nThe EVENT callback is not a valid function."
         }
         /*
          *	PANE DEFAULT SETTINGS
@@ -3238,7 +3265,7 @@
                 _hidePane(pane);
                 s.isClosed = true;
                 s.isVisible = false;
-                if (setHandles) setAsClosed(pane, true); // true = force
+                if (setHandles) setAsClosed(pane);
             }
 
         /**
@@ -5063,15 +5090,6 @@
             return Instance; // return the Instance object
 
     }
-
-
-    /*	OLD versions of jQuery only set $.support.boxModel after page is loaded
-     *	so if this is IE, use support.boxModel to test for quirks-mode (ONLY IE changes boxModel).
-     */
-    $(function(){
-        var b = $.layout.browser;
-        if (b.msie) b.boxModel = $.support.boxModel;
-    });
 
 
 })( jQuery );

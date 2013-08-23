@@ -17,7 +17,7 @@
             $('<li><a href="#">Admin1</a></li>').appendTo(userAdminUl);
             $('<li><a href="#">Admin2</a></li>').appendTo(userAdminUl);
 
-            
+
             var searchMenuUl = $('<ul />', {id: 'jsddm'}).appendTo('.ui-layout-north');
             var searchLi = $('<li />').appendTo(searchMenuUl);
             $('<a />', {href: '#'}).text('Search').appendTo(searchLi);
@@ -34,22 +34,22 @@
         var closetimer = 0;
         var ddmenuitem = 0;
 
-        function jsddm_open() {  
+        function jsddm_open() {
             jsddm_canceltimer();
             jsddm_close();
             ddmenuitem = $(this).find('ul').css('visibility', 'visible');
         }
 
-        function jsddm_close() {  
+        function jsddm_close() {
             if(ddmenuitem) ddmenuitem.css('visibility', 'hidden');
         }
 
-        function jsddm_timer() {  
+        function jsddm_timer() {
             closetimer = window.setTimeout(jsddm_close, timeout);
         }
 
-        function jsddm_canceltimer() {  
-            if(closetimer) {  
+        function jsddm_canceltimer() {
+            if(closetimer) {
                 window.clearTimeout(closetimer);
                 closetimer = null;
             }

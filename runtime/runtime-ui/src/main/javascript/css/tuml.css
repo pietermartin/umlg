@@ -1,3 +1,8 @@
+.ui-menu {
+    width: 250px;
+    position: absolute;
+}
+
 #switcher {
     float: right;
 }
@@ -445,7 +450,7 @@
 }
 
 .ui-left-menu-li-query-tree {
-    /* this removes slickgrid arrow */
+     /*this removes slickgrid arrow*/
     background: none;
     padding-left: 5px;
 }
@@ -653,47 +658,64 @@
     background-color: transparent; /* show default selected row background */
 }
 
-.contextMenu {
-    background: #EEEEEE;
-    padding: 2px;
-    display: inline-block;
-    min-width: 100px;
-    z-index: 99999;
-}
+/*.contextMenu {*/
+    /*background: #EEEEEE;*/
+    /*padding: 2px;*/
+    /*display: inline-block;*/
+    /*min-width: 100px;*/
+    /*z-index: 99999;*/
+/*}*/
 
 /*override ui state defaults border*/
-.contextMenu li.ui-state-default {
-    border: none;
+/*.contextMenu li.ui-state-default {*/
+    /*border: none;*/
+/*}*/
+
+/*.contextMenu li {*/
+    /*background: #EEEEEE;*/
+    /*padding: 4px 4px 4px 14px;*/
+    /*margin: 5px;*/
+    /*list-style: none;*/
+    /*cursor: pointer;*/
+/*}*/
+
+/*.contextMenu li span {*/
+    /*margin-left: 5px;*/
+    /*color: #333333;*/
+/*}*/
+
+/*.contextMenu li span.menu-composite {*/
+    /*background-image: url(../javascript/images/UMLComposition.png);*/
+    /*background-repeat: no-repeat;*/
+    /*background-position: 0 50%;*/
+/*}*/
+
+/*.contextMenu li span.menu-noncomposite {*/
+    /*background-image: url(../javascript/images/UMLAssociation.png);*/
+    /*background-repeat: no-repeat;*/
+    /*background-position: 0 50%;*/
+/*}*/
+
+/*.contextMenu li:hover {*/
+    /*background-color: #FDF5CE;*/
+/*}*/
+
+.ui-icon.ui-icon-self {
+    background-image: url(../javascript/images/UMLSendMessage.png);
 }
 
-.contextMenu li {
-    background: #EEEEEE;
-    padding: 4px 4px 4px 14px;
-    margin: 5px;
-    list-style: none;
-    cursor: pointer;
+.ui-icon.ui-icon-delete {
+    background-image: url(../javascript/images/delete_object.png);
 }
 
-.contextMenu li span {
-    margin-left: 5px;
-    color: #333333;
-}
-
-.contextMenu li span.menu-composite {
-    background-image: url(../javascript/images/UMLComposition.png);
-    background-repeat: no-repeat;
-    background-position: 0 50%;
-}
-
-.contextMenu li span.menu-noncomposite {
+.ui-icon.ui-icon-umlassociation {
     background-image: url(../javascript/images/UMLAssociation.png);
-    background-repeat: no-repeat;
-    background-position: 0 50%;
 }
 
-.contextMenu li:hover {
-    background-color: #FDF5CE;
+.ui-icon.ui-icon-umlcomposition {
+    background-image: url(../javascript/images/UMLComposition.png);
 }
+
 
 /* Menu styles */
 #jsddm {

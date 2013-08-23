@@ -3,14 +3,14 @@
     <!-- /appRoot is resolved by freemarker to the application's name -->
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-    <link type="text/css" rel="stylesheet"
-          href="/${app.rootUrl}/css/jquery-ui/ui-lightness/jquery-ui-1.9.2.custom.css"/>
+    <link rel="stylesheet" href="/${app.rootUrl}/javascript/slickgrid/slick.grid.css" type="text/css"/>
+    <link type="text/css" rel="stylesheet" href="/${app.rootUrl}/css/jquery-ui/themes/base/jquery.ui.all.css"/>
 
     <link type="text/css" rel="stylesheet" href="/${app.rootUrl}/javascript/layout/layout-default-latest.css"/>
 
-    <link rel="stylesheet" href="/${app.rootUrl}/javascript/slickgrid/slick.grid.css" type="text/css"/>
+    <link rel="stylesheet" href="/${app.rootUrl}/javascript/slickgrid/slick-default-theme.css" type="text/css"/>
     <link rel="stylesheet" href="/${app.rootUrl}/javascript/slickgrid/controls/slick.pager.css" type="text/css"/>
-    <link rel="stylesheet" href="/${app.rootUrl}/javascript/slickgrid/examples/examples.css" type="text/css"/>
+    <!--<link rel="stylesheet" href="/${app.rootUrl}/javascript/slickgrid/examples/examples.css" type="text/css"/>-->
     <link rel="stylesheet" href="/${app.rootUrl}/javascript/slickgrid/controls/slick.columnpicker.css" type="text/css"/>
 
     <link rel="stylesheet" href="/${app.rootUrl}/javascript/chosen/chosen.css" type="text/css"/>
@@ -21,16 +21,18 @@
 
     <link rel="stylesheet" href="/${app.rootUrl}/css/tuml.css" type="text/css">
 
-    <script src="/${app.rootUrl}/javascript/jquery/jquery-1.8.3.js"></script>
-    <script src="/${app.rootUrl}/javascript/jquery-ui/jquery-ui-1.9.2.custom.js"></script>
-    <script src="/${app.rootUrl}/javascript/slickgrid/lib/jquery.event.drag-2.0.min.js"></script>
+    <!--<script src="/${app.rootUrl}/javascript/jquery/jquery-1.8.3.js"></script>-->
+    <script src="/${app.rootUrl}/javascript/jquery/jquery-1.9.1.js"></script>
+
+    <script src="/${app.rootUrl}/javascript/jquery-ui/jquery-ui-1.10.3.js"></script>
+    <script src="/${app.rootUrl}/javascript/slickgrid/lib/jquery.event.drag-2.2.js"></script>
 
     <script src="/${app.rootUrl}/javascript/layout/jquery.layout-latest.js"></script>
 
     <script src="/${app.rootUrl}/javascript/super-theme-switcher/jquery.themeswitcher.js"></script>
 
-    <script src="/${app.rootUrl}/javascript/slickgrid/lib/jquery.event.drag-2.0.min.js"></script>
-    <script src="/${app.rootUrl}/javascript/slickgrid/lib/jquery.event.drop-2.0.min.js"></script>
+    <script src="/${app.rootUrl}/javascript/slickgrid/lib/jquery.event.drag-2.2.js"></script>
+    <script src="/${app.rootUrl}/javascript/slickgrid/lib/jquery.event.drop-2.2.js"></script>
     <script src="/${app.rootUrl}/javascript/slickgrid/slick.core.js"></script>
     <script src="/${app.rootUrl}/javascript/slickgrid/slick.grid.js"></script>
     <script src="/${app.rootUrl}/javascript/slickgrid/slick.formatters.js"></script>
@@ -83,33 +85,36 @@
     <script src="/${app.rootUrl}/javascript/tuml2/tuml.tab.enum.js"></script>
     <script>
         $(document).ready(
-            function () {
-                //"${app.uri}" is replaced when the app starts up with the actual application url
-                tumlModelName = "${app.rootUrl}";
-                isUmlgLib = "${app.umlgLib?string}" == "true" ? true : false;
-                var uiManager = new Tuml.UiManager("${app.uri}");
+                function () {
+                    //"${app.uri}" is replaced when the app starts up with the actual application url
+                    tumlModelName = "${app.rootUrl}";
+                    isUmlgLib = "${app.umlgLib?string}" == "true" ? true : false;
+                    var uiManager = new Tuml.UiManager("${app.uri}");
 
-                $("#switcher").themeswitcher({
-                    imgpath: "/${app.rootUrl}/javascript/super-theme-switcher/images/",
-                    loadTheme: "ui-lightness"
-                });
-
-            }
+//                    setTimeout(
+//                            function () {
+//                                $("#switcher").themeswitcher({
+//                                    imgpath: "/${app.rootUrl}/javascript/super-theme-switcher/images/",
+//                                    loadTheme: "pepper-grinder"
+//                                });
+//                            },
+//                            50
+//                    );
+                }
         );
     </script>
 </head>
 <body>
-<div class="ui-layout-center">
-    <div id="tabs-layout">
-    </div>
+<div id="div-context-menu">
 </div>
+<div class="ui-layout-center">
+    <div id="tabs-layout"></div>
 </div>
 <div class="ui-layout-north">
-    <div id="switcher"></div>
+    <!--<div id="switcher"></div>-->
 </div>
 <div class="ui-layout-south">South</div>
 <div class="ui-layout-east">East</div>
-<div class="ui-layout-west">
-</div>
+<div class="ui-layout-west"></div>
 </body>
 </html>

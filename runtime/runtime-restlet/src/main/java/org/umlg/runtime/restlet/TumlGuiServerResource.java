@@ -1,12 +1,15 @@
 package org.umlg.runtime.restlet;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.restlet.data.MediaType;
 import org.restlet.ext.freemarker.TemplateRepresentation;
+import org.restlet.representation.FileRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
+import org.restlet.resource.Directory;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 import org.umlg.framework.ModelLoader;
@@ -41,7 +44,16 @@ public class TumlGuiServerResource extends ServerResource {
         }
         dataModel.put("app", new App().setRootUrl(ModelLoader.INSTANCE.getModel().getName()).setUri(uri).setUmlgLib(ModelLoader.INSTANCE.isUmlGLibIncluded()));
         Representation umlgUiFtl = new ClientResource("clap:///org/umlg/ui/umlgui2.html").get();
-        return new TemplateRepresentation(umlgUiFtl, dataModel, MediaType.TEXT_HTML);
+
+        File umlgui2 = new File("/home/pieter/Downloads/umlg/runtime/runtime-ui/src/main/resources/org/umlg/ui/umlgui2.html");
+        FileRepresentation fileRepresentation = new FileRepresentation(umlgui2, MediaType.APPLICATION_XHTML);
+
+//        //Directory css = new Directory(getContext(), "clap://javascript/css");
+//        Directory css = new Directory(getContext(), "file:///home/pieter/Downloads/umlg/runtime/runtime-ui/src/main/resources/org/umlg/ui/");
+//        css.setListingAllowed(true);
+//        router.attach("/css/", css);
+
+        return new TemplateRepresentation(fileRepresentation, dataModel, MediaType.TEXT_HTML);
     }
 
     public class App {

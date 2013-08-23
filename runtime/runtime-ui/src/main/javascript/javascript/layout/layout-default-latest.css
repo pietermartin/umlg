@@ -180,3 +180,45 @@ body {
 div.ui-layout-mask {}		/* standard mask for iframes */
 iframe.ui-layout-mask {}	/* extra mask for objects/applets */
 
+/*
+ *	Default printing styles
+ */
+@media print {
+    /*
+     *	Unless you want to print the layout as it appears onscreen,
+     *	these html/body styles are needed to allow the content to 'flow'
+     */
+    html {
+        height:		auto !important;
+        overflow:	visible !important;
+    }
+    body.ui-layout-container {
+        position:	static !important;
+        top:		auto !important;
+        bottom:		auto !important;
+        left:		auto !important;
+        right:		auto !important;
+        /* only IE6 has container width & height set by Layout */
+        _width:		auto !important;
+        _height:	auto !important;
+    }
+    .ui-layout-resizer, .ui-layout-toggler {
+        display:	none !important;
+    }
+    /*
+     *	Default pane print styles disables positioning, borders and backgrounds.
+     *	You can modify these styles however it suit your needs.
+     */
+    .ui-layout-pane {
+        border:		none !important;
+        background:	 transparent !important;
+        position:	relative !important;
+        top:		auto !important;
+        bottom:		auto !important;
+        left:		auto !important;
+        right:		auto !important;
+        width:		auto !important;
+        height:		auto !important;
+        overflow:	visible !important;
+    }
+}
