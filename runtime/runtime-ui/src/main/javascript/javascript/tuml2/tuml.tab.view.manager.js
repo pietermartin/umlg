@@ -356,6 +356,10 @@
             this.componentProperty = property;
         }
 
+        this.setFocus = function() {
+            this.li.focus();
+        }
+
         TumlBaseTabViewManager.call(this, tabEnum, tabContainer, tumlUri, result, propertyNavigatingTo);
     }
 
@@ -676,6 +680,17 @@
         this.result = result;
         this.tumlTabGridManager = null;
         TumlBaseTabViewManager.call(this, tabEnum, tabContainer, tumlUri, result, propertyNavigatingTo);
+
+        this.setFocus = function(currentFocus) {
+            if (currentFocus == Tuml.FocusEnum.CENTER_TAB) {
+                this.li.focus();
+            } else if (currentFocus == Tuml.FocusEnum.CENTER_GRID) {
+                this.tumlTabGridManager.setFocus();
+            } else {
+                throw Error('Can not call TumlTabManyViewManager.setFocus for ' + currentFocus);
+            }
+        }
+
     }
 
     TumlTabManyViewManager.prototype = new Tuml.TumlBaseTabViewManager();

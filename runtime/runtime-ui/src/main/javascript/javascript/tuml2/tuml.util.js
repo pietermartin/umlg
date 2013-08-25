@@ -35,19 +35,40 @@ function retrieveMetaDataIfNotInCache(tumlUri, contextVertexId, result, callback
                     metaDataArray.push(metaData);
                 }
                 Tuml.Metadata.Cache.add(metaQualifiedName, metaDataArray);
-                callback(tumlUri, result, metaDataResult, contextVertexId);
+
+                combineMetaDataWithResult(result, metaDataResult);
+
+                callback(tumlUri, result, contextVertexId);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 alert('error getting ' + tumlUri + '\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
             }
         });
     } else {
-        callback(tumlUri, result, metaDataFromCache, contextVertexId);
+        combineMetaDataWithResult(result, metaDataFromCache);
+        callback(tumlUri, result, contextVertexId);
+    }
+}
+
+function combineMetaDataWithResult(result, metaDataResult) {
+    //Combine the meta data with the data
+    if (result.length !== metaDataResult.length) {
+        throw Error('get and options must return the same number of meta data!');
+    }
+
+    for (var i = 0; i < result.length; i++) {
+        //Copy the meta data from options into the data result
+        if (result[i].data !== null && result[i].data.length > 0) {
+            if (result[i].data[0].qualifiedName !== metaDataResult[i].meta.to.qualifiedName) {
+                throw 'options and get must return the same qualified name!';
+            }
+        }
+        result[i].meta = metaDataResult[i].meta;
     }
 }
 
 function escapeColon(string) {
-    return string.replace(/(:|\.)/g,'\\$1');
+    return string.replace(/(:|\.)/g, '\\$1');
 }
 
 function retrieveVertexId(url) {
@@ -73,7 +94,7 @@ function selectFormatter(property, newId, updatedId) {
         }
     } else if (property.lower > 0 && property.dataTypeEnum != null && property.dataTypeEnum !== undefined) {
         return  TumlSlick.Formatters.TumlRequired;
-    } else if (property.dataTypeEnum !=null && property.dataTypeEnum !== undefined) {
+    } else if (property.dataTypeEnum != null && property.dataTypeEnum !== undefined) {
         return null;
     } else if (property.lower > 0 && (property.oneEnumeration || property.manyEnumeration)) {
         return  TumlSlick.Formatters.TumlRequired;
@@ -153,8 +174,8 @@ function selectFieldValidator(property) {
     }
     return function () {
         return {
-            valid:true,
-            msg:null}
+            valid: true,
+            msg: null}
     };
 }
 
@@ -220,5 +241,23 @@ function selectEditor(property) {
     } else {
         return  Slick.Editors.Text;
     }
+
+}
+
+function addUiToUrl(url) {
+    var indexOfSecondBackSlash = url.indexOf('/', 1);
+    var firstPart = url.substring(0, indexOfSecondBackSlash);
+    var secondPart = url.substring(indexOfSecondBackSlash, url.length);
+    var result;
+    if (firstPart !== undefined && firstPart != '') {
+        result = firstPart + '/ui2' + secondPart;
+    } else {
+        result = secondPart + '/ui2';
+    }
+    return result;
+}
+
+function removeUiFromUrl(url){
+    return url.replace("/ui2", "");
 
 }

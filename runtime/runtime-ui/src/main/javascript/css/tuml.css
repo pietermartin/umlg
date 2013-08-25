@@ -1,4 +1,8 @@
-.ui-menu {
+#leftMenu.ui-menu {
+    border: none;
+}
+
+.contextMenu.ui-menu {
     width: 250px;
     position: absolute;
 }
@@ -69,13 +73,6 @@
 
 .ui-tabs-nav .tabs-button {
     float: right;
-}
-
-.ui-tabs-nav .tabs-button .ui-button {
-    /*90% prevents chrome from displaying a line under the selected tab*/
-    font-size: 90%;
-    /*90% crap way of making the buttons appear in the middle vertically*/
-    margin-top: 1px;
 }
 
 #buttons {
@@ -401,69 +398,6 @@
     overflow: hidden;
 }
 
-.ui-left-menu-link {
-    padding: 0em;
-    margin: 0em;
-}
-
-.ui-left-menu-li {
-    background: none;
-    padding: 3px 0 3px 20px;
-    margin: .4em 0;
-}
-
-.ui-left-menu-li.activeproperty {
-    background: #fe4864;
-}
-
-.ui-left-menu-li.inactiveproperty {
-    /*background: #8d83f6;*/
-}
-
-.ui-left-menu-li.contextactiveproperty {
-    background: #efa9f4;
-}
-
-.ui-left-menu-li a {
-    color: black;
-    cursor: pointer;
-}
-
-.ui-left-menu-li a:hover {
-    color: blue;
-}
-
-.ui-left-menu-li.menu-composite {
-    background-image: url(../javascript/images/UMLComposition.png);
-    background-repeat: no-repeat;
-    background-position: 0 50%;
-}
-
-.ui-left-menu-li.menu-noncomposite {
-    background-image: url(../javascript/images/UMLAssociation.png);
-    background-repeat: no-repeat;
-    background-position: 0 50%;
-}
-
-.ui-left-menu-li span {
-    padding-left: 5px;
-}
-
-.ui-left-menu-li-query-tree {
-     /*this removes slickgrid arrow*/
-    background: none;
-    padding-left: 5px;
-}
-
-.ui-left-menu-li-query-tree .jqtree-folder ul {
-    margin-left: 2px;
-}
-
-.ui-left-menu-li-query-tree li {
-    background: none;
-    padding-left: 0px;
-}
-
 .ui-layout-pane {
     padding: 5px;
 }
@@ -513,74 +447,37 @@
     font-weight: bold;
 }
 
-.ui-left-menu-query-li.instance-query {
-    padding: 3px 0 3px 20px;
-    margin: .4em 0;
-    background-image: url(../javascript/images/instancequery.png);
-    background-repeat: no-repeat;
-    background-position: 0 50%;
-}
-
-.ui-left-menu-query-li.class-query {
-    padding: 3px 0 3px 20px;
-    margin: .4em 0;
-    background-image: url(../javascript/images/classquery.png);
-    background-repeat: no-repeat;
-    background-position: 0 50%;
-}
-
-.ui-left-menu-query-li a {
-    color: black;
-    cursor: pointer;
-}
-
-.ui-left-menu-query-li a:hover {
-    color: blue;
-}
-
-.querymenuactive {
-    background-color: #fe4864;
-}
-
-.querymenuinactive {
-    /*background-color: blue;*/
-}
-
-#contextHeading {
-    width: 50%;
-    margin: 0px auto;
-    text-align: center;
-    padding-top: 5px;
-}
-
-#contextHeading .contextHeadingB {
-    text-align: center;
-    font-weight: bold;
-    font-size: 120%;
-    cursor: pointer;
-}
-
-.contextHeadingB:hover {
-    color: blue;
-}
-
 #contextRoot {
     /* padding-top is same as jddm menu */
-    padding-top: 5px;
     float: left;
-}
-
-#contextRoot b {
     vertical-align: middle;
-    text-align: center;
+    margin-top: 2px;
 }
 
-.contextPath:hover {
-    color: blue;
-}
-
-.contextPath {
+#contextRoot span {
+    float: left;
+    display: block;
     cursor: pointer;
+    position: relative;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    padding: 0em .2em 0em .2em;
+    min-height: 0;
+}
+
+#contextRoot h3 a {
+    padding: 0em .3em 0em .3em;
+}
+
+#contextRoot h3 {
+    float: left;
+    display: block;
+    cursor: pointer;
+    position: relative;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    padding: 0em .7em 0em .7em;
+    min-height: 0;
 }
 
 .selfUrl {
@@ -658,56 +555,6 @@
     background-color: transparent; /* show default selected row background */
 }
 
-/*.contextMenu {*/
-    /*background: #EEEEEE;*/
-    /*padding: 2px;*/
-    /*display: inline-block;*/
-    /*min-width: 100px;*/
-    /*z-index: 99999;*/
-/*}*/
-
-/*override ui state defaults border*/
-/*.contextMenu li.ui-state-default {*/
-    /*border: none;*/
-/*}*/
-
-/*.contextMenu li {*/
-    /*background: #EEEEEE;*/
-    /*padding: 4px 4px 4px 14px;*/
-    /*margin: 5px;*/
-    /*list-style: none;*/
-    /*cursor: pointer;*/
-/*}*/
-
-/*.contextMenu li span {*/
-    /*margin-left: 5px;*/
-    /*color: #333333;*/
-/*}*/
-
-/*.contextMenu li span.menu-composite {*/
-    /*background-image: url(../javascript/images/UMLComposition.png);*/
-    /*background-repeat: no-repeat;*/
-    /*background-position: 0 50%;*/
-/*}*/
-
-/*.contextMenu li span.menu-noncomposite {*/
-    /*background-image: url(../javascript/images/UMLAssociation.png);*/
-    /*background-repeat: no-repeat;*/
-    /*background-position: 0 50%;*/
-/*}*/
-
-/*.contextMenu li:hover {*/
-    /*background-color: #FDF5CE;*/
-/*}*/
-
-.ui-icon.ui-icon-self {
-    background-image: url(../javascript/images/UMLSendMessage.png);
-}
-
-.ui-icon.ui-icon-delete {
-    background-image: url(../javascript/images/delete_object.png);
-}
-
 .ui-icon.ui-icon-umlassociation {
     background-image: url(../javascript/images/UMLAssociation.png);
 }
@@ -715,7 +562,6 @@
 .ui-icon.ui-icon-umlcomposition {
     background-image: url(../javascript/images/UMLComposition.png);
 }
-
 
 /* Menu styles */
 #jsddm {

@@ -406,10 +406,6 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
         tryInstantiate.getCatchPart().addToStatements("throw new RuntimeException(e)");
     }
 
-    private void buildToJson(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass, OJBlock block) {
-        buildToJson(pWrap, annotatedClass, block, false);
-    }
-
     private void buildToJson(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass, OJBlock block, boolean asAssociationClass) {
         Set<Classifier> concreteImplementations;
         Set<Classifier> concreteImplementationsFrom;

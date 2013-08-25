@@ -529,7 +529,7 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
                 // visitor is availeble
                 if (RestletVisitors.containsVisitorForClass(QueryExecuteResourceBuilder.class)
                         && (pWrap.getType().getQualifiedName().equals(TumlRestletGenerationUtil.instanceQueryQualifiedName) || pWrap.getType().getQualifiedName().equals(TumlRestletGenerationUtil.classQueryQualifiedName))) {
-                    block.addToStatements("json.append(\"\\\", oclExecuteUri\\\": \\\"/" + pWrap.getModel().getName() + "/{contextId}/oclExecuteQuery\\\"\")");
+                    block.addToStatements("json.append(\", \\\"oclExecuteUri\\\": \\\"/" + pWrap.getModel().getName() + "/{contextId}/oclExecuteQuery\\\"\")");
                 }
                 block.addToStatements("json.append(\", \\\"to\\\": \")");
                 int countFrom = 1;

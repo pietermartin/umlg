@@ -39,8 +39,20 @@
         this.globalOneToOneIndex = new GlobalOneToOneIndex();
         this.qualifiedName = null;
 
-        this.refreshQueryMenuCss = function(queryId, accordionIndex) {
-            leftMenuManager.refreshQueryMenuCss(queryId, accordionIndex);
+        this.setFocus= function(currentFocus) {
+            if (currentFocus == Tuml.FocusEnum.LEFT_MENU) {
+                //currentFocus == 0
+                leftMenuManager.setFocus();
+            } else if (currentFocus == Tuml.FocusEnum.TOP_CONTEXT) {
+                //currentFocus == 1
+//                this.tumlTabViewManagers[0].setFocus();
+            } else {
+                this.tumlTabViewManagers[0].setFocus(currentFocus);
+            }
+        }
+
+        this.refreshQueryMenuCss = function(queryToHighlightId, accordionIndex) {
+            leftMenuManager.refreshQueryMenuCss(queryToHighlightId, accordionIndex);
         }
 
         this.refresh = function (tumlUri, result) {
@@ -55,6 +67,7 @@
                 this.tumlUri = tumlUri;
                 this.tabContainerProperty = this.propertyNavigatingTo;
 
+                //This also takes care of the leftMenuManager
                 this.handleMany(metaDataNavigatingFrom, metaDataNavigatingTo, result);
 
             } else {

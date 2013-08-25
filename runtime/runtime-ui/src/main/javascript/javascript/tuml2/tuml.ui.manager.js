@@ -6,7 +6,8 @@
             //Copied from Slick.Grid
             Event: Event,
             EventData: EventData,
-            EventHandler: EventHandler
+            EventHandler: EventHandler,
+            FocusEnum: {LEFT_MENU: 0, TOP_CONTEXT : 1, CENTER_TAB: 2, CENTER_GRID: 3}
         }
     });
 
@@ -17,6 +18,7 @@
         var contextManager;
         var leftMenuManager;
         var mainViewManager;
+        var currentFocus;
 
         this.init = function () {
             //Create layout
@@ -51,28 +53,44 @@
                 mainViewManager.addQueryTab(false, new Tuml.Query(args.id, args.name, args.name, args.queryString, args.queryEnum, null, args.queryType));
             });
 
+            currentFocus = Tuml.FocusEnum.LEFT_MENU;
+
             //Create main view manager
             mainViewManager = new Tuml.TumlMainViewManager(this, leftMenuManager);
 
             window.onpopstate = function (event) {
                 if (event.state !== null && document.location.hash === "") {
-                    var pathname = document.location.pathname.replace("/ui2", "");
+                    var pathname = removeUiFromUrl(document.location.pathname);
                     self.refresh(pathname, false);
                 }
             };
 
-            $(document).keypress(function (event) {
-                if (!(event.which == 19 || event.which == 5 || event.which == 8)) {
+            $(document).keydown(function (event) {
+                if (!(event.which == 17 || event.which == 117 || event.which == 27 || event.which == 8 || event.which == 83)) {
                     return true;
                 }
-                if (event.ctrlKey && event.shiftKey && (event.which == 19)) {
+                if (event.ctrlKey && event.which == 83) {
+                    //83 = s
                     self.saveViaKeyPress();
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
                     return false;
-                } else  if (event.ctrlKey && event.shiftKey && event.which == 5) {
+                } else  if (event.which == 27) {
+                    //27 = esc
                     self.cancelViaKeyPress();
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
                     return false;
                 } else  if (event.ctrlKey && event.which == 8) {
+                    //8 = <- back
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
                     alert('go back');
+                } else  if (event.which == 117) {
+                    //F6
+                    self.moveFocus();
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
                 } else {
                     return true;
                 }
@@ -90,7 +108,20 @@
             });
 
             self.refresh(tumlUri);
+        }
 
+        this.moveFocus = function () {
+            if (currentFocus == Tuml.FocusEnum.LEFT_MENU) {
+                currentFocus = Tuml.FocusEnum.TOP_CONTEXT;
+                contextManager.setFocus();
+            } else if (currentFocus == Tuml.FocusEnum.TOP_CONTEXT) {
+                currentFocus = Tuml.FocusEnum.CENTER_TAB;
+            } else if (currentFocus == Tuml.FocusEnum.CENTER_TAB) {
+                currentFocus = Tuml.FocusEnum.CENTER_GRID;
+            } else {
+                currentFocus = Tuml.FocusEnum.LEFT_MENU;
+            }
+            mainViewManager.setFocus(currentFocus);
         }
 
         this.saveViaKeyPress = function () {
@@ -123,20 +154,7 @@
             });
         }
 
-        function continueRefresh(tumlUri, result, metaDataResult, contextVertexId) {
-            if (result.length !== metaDataResult.length) {
-                throw 'get and options must return the same number of meta data!';
-            }
-
-            for (var i = 0; i < result.length; i++) {
-                //Copy the meta data from options into the data result
-                if (result[i].data !== null && result[i].data.length > 0) {
-                    if (result[i].data[0].qualifiedName !== metaDataResult[i].meta.to.qualifiedName) {
-                        throw 'options and get must return the same qualified name!';
-                    }
-                }
-                result[i].meta = metaDataResult[i].meta;
-            }
+        function continueRefresh(tumlUri, result, contextVertexId) {
 
             //Need to validate here if we can continue.
             //Only valid request can continue else the ui gets awfully confused.
@@ -193,16 +211,7 @@
         }
 
         function pushUrlToBrowser(url) {
-            var indexOfSecondBackSlash = url.indexOf('/', 1);
-            var firstPart = url.substring(0, indexOfSecondBackSlash);
-            var secondPart = url.substring(indexOfSecondBackSlash, url.length);
-            var urlToPush;
-            if (firstPart !== undefined && firstPart != '') {
-                urlToPush = firstPart + '/ui2' + secondPart;
-            } else {
-                urlToPush = secondPart + '/ui2';
-            }
-            history.pushState({}, "firefox ignores this", urlToPush);
+            history.pushState({}, "firefox ignores this", addUiToUrl(url));
         }
 
         //Public api

@@ -36,7 +36,6 @@
         });
         var $input;
         var defaultValue;
-        var scope = this;
 
         this.init = function () {
             $input = $("<INPUT type=text class='editor-text' />")
@@ -241,7 +240,7 @@
     ManyBooleanPrimitiveEditor.prototype = new Tuml.Slick.Editors.ManyPrimitiveEditor();
     ManyBooleanPrimitiveEditor.prototype.serializeEditorValue = function (value) {
         var valueTrue = (value === 'true') || (value === 't') || (value === '1');
-        var valueFalse = (value === 'false') || (value === 'f')  || (value === '0');
+        var valueFalse = (value === 'false') || (value === 'f') || (value === '0');
         if (valueTrue) {
             return true;
         } else if (valueFalse) {
@@ -1006,8 +1005,6 @@
         });
         var $select;
         var currentValue;
-        var scope = this;
-        var options;
 
         this.init = function (item) {
             $select = $("<SELECT tabIndex='0' class='editor-select' style='width:115px;'></SELECT>");
@@ -1221,7 +1218,7 @@
         };
 
         this.isValueChanged = function () {
-            if (currentValue === null || currentValue === undefined)  {
+            if (currentValue === null || currentValue === undefined) {
                 return true;
             } else {
                 if ((currentValue.id === undefined || currentValue.id === null) && $select.val() == "") {
