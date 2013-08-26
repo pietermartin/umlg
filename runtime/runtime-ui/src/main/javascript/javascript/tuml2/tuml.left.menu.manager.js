@@ -140,14 +140,14 @@
             var ulMenu = $('<ul />', {id: 'propertiesMenu'}).appendTo(this.umlPropertiesDiv);
             var menuArray = createLeftMenuDataArray(this.contextMetaDataFrom, propertyNavigatingTo);
 
-            var tabindex = 0;
+            var tabindex = 21;
             for (var i = 0; i < menuArray.length; i++) {
                 var value = menuArray[i];
                 var adjustedUri = value.tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), this.contextVertexId);
                 adjustedUri = addUiToUrl(adjustedUri)
                 var li = $('<li />', {tabindex: tabindex++}).appendTo(ulMenu);
                 li.data("contextData", {name: value.name, uri: adjustedUri});
-                var a = $('<a />', {title: value.name, href: adjustedUri, class: value.aCssClass}).appendTo(li);
+                var a = $('<a />', {title: value.name, href: adjustedUri, class: value.aCssClass, tabindex: tabindex++}).appendTo(li);
                 a.on('click', function (e) {
                     var link = $(e.target);
                     var contextData = link.parent().data("contextData");

@@ -46,22 +46,26 @@
 
         function createContextPath(data) {
             $('#contextRoot').remove();
-            $('<div />', {id: 'contextRoot', class: 'ui-widget ui-widget-default ui-state-default ui-corner-all'}).appendTo('.ui-layout-north');
+            $('<ul />', {id: 'contextRoot', class: 'ui-widget ui-widget-default ui-state-default ui-corner-all'}).appendTo('.ui-layout-north');
             data.reverse();
             $.each(data, function (index, property) {
                 var b = {};
                 if (index === 0) {
-                    b = $('<h3 data=' + property.uri + ' class=' + "ui-helper-reset" + '/>').appendTo("#contextRoot");
+                    b = $('<li data=' + property.uri + ' class=' + "ui-helper-reset" + '/>').appendTo("#contextRoot");
                 } else {
                     $('<span />').text(' | ').appendTo($('#contextRoot'));
-                    b = $('<h3 data=' + property.uri + ' class=' + "ui-helper-reset" + '/>').appendTo("#contextRoot");
+                    b = $('<li data=' + property.uri + ' class=' + "ui-helper-reset" + '/>').appendTo("#contextRoot");
                 }
-                var a = $('<a />', {href: property.uri, text: property.name, title: property.name, tabindex: index + 1, class: 'ui-corner-all', click: function (e) {
-                    var url = $.data(e.target).data;
-                    self.onClickContextMenu.notify({uri: url, name: "unused"}, null, self);
-                    return false;
-                }
+                var a = $('<a />', {href: property.uri, text: property.name, title: property.name, tabindex: index + 1, class: 'ui-corner-all',
+                    click: function (e) {
+                        var url = $.data(e.target).data;
+                        self.onClickContextMenu.notify({uri: url, name: "unused"}, null, self);
+                        e.preventDefault();
+                        return false;
+                    }
                 });
+                a.on('mouseover focus', function() {$(this).addClass('ui-state-hover')});
+                a.on('mouseleave blur', function() {$(this).removeClass('ui-state-hover ui-state-focus')});
                 a.data('data', property.uri);
                 a.appendTo(b);
             });

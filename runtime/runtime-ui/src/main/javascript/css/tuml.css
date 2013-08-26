@@ -452,6 +452,15 @@
     float: left;
     vertical-align: middle;
     margin-top: 2px;
+    margin-left: 1em;
+    padding-left: 0px;
+}
+
+#contextRoot li {
+    /* padding-top is same as jddm menu */
+    float: left;
+    vertical-align: middle;
+    margin-top: 2px;
 }
 
 #contextRoot span {
@@ -465,11 +474,8 @@
     min-height: 0;
 }
 
-#contextRoot h3 a {
-    padding: 0em .3em 0em .3em;
-}
 
-#contextRoot h3 {
+#contextRoot li {
     float: left;
     display: block;
     cursor: pointer;
@@ -478,6 +484,10 @@
     margin-bottom: 2px;
     padding: 0em .7em 0em .7em;
     min-height: 0;
+}
+
+#contextRoot li a {
+    padding: 0em .3em 0em .3em;
 }
 
 .selfUrl {
