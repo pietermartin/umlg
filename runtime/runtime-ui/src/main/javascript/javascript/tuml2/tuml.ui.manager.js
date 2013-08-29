@@ -66,7 +66,7 @@
             };
 
             $(document).keydown(function (event) {
-                if (!(event.which == 17 || event.which == 117 || event.which == 27 || event.which == 8 || event.which == 83)) {
+                if (!(event.which == 17 || event.which == 117 || event.which == 27 || event.which == 8 || event.which == 83 || event.which == 39)) {
                     return true;
                 }
                 if (event.ctrlKey && event.which == 83) {
@@ -81,16 +81,19 @@
                     event.preventDefault();
                     event.stopImmediatePropagation();
                     return false;
-                } else  if (event.ctrlKey && event.which == 8) {
+                } else  if (event.which == 8) {
                     //8 = <- back
+                    self.goBackOne();
                     event.preventDefault();
                     event.stopImmediatePropagation();
-                    alert('go back');
                 } else  if (event.which == 117) {
                     //F6
                     self.moveFocus();
                     event.preventDefault();
                     event.stopImmediatePropagation();
+                } else  if (event.which == 39) {
+                    //right arrow
+//                    alert('right arrow');
                 } else {
                     return true;
                 }
@@ -110,18 +113,24 @@
             self.refresh(tumlUri);
         }
 
+        this.goBackOne = function() {
+            contextManager.goBackOne();
+        }
+
         this.moveFocus = function () {
             if (currentFocus == Tuml.FocusEnum.LEFT_MENU) {
+                currentFocus = Tuml.FocusEnum.CENTER_GRID;
+                mainViewManager.setFocus(currentFocus);
+            } else if (currentFocus == Tuml.FocusEnum.CENTER_GRID) {
                 currentFocus = Tuml.FocusEnum.TOP_CONTEXT;
                 contextManager.setFocus();
             } else if (currentFocus == Tuml.FocusEnum.TOP_CONTEXT) {
-                currentFocus = Tuml.FocusEnum.CENTER_TAB;
-            } else if (currentFocus == Tuml.FocusEnum.CENTER_TAB) {
-                currentFocus = Tuml.FocusEnum.CENTER_GRID;
+                currentFocus = Tuml.FocusEnum.LEFT_MENU;
+                mainViewManager.setFocus(currentFocus);
             } else {
                 currentFocus = Tuml.FocusEnum.LEFT_MENU;
+                mainViewManager.setFocus(currentFocus);
             }
-            mainViewManager.setFocus(currentFocus);
         }
 
         this.saveViaKeyPress = function () {

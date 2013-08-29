@@ -39,15 +39,15 @@
         this.globalOneToOneIndex = new GlobalOneToOneIndex();
         this.qualifiedName = null;
 
-        this.setFocus= function(currentFocus) {
-            if (currentFocus == Tuml.FocusEnum.LEFT_MENU) {
+        this.setFocus= function(focusTo) {
+            if (focusTo == Tuml.FocusEnum.LEFT_MENU) {
                 //currentFocus == 0
                 leftMenuManager.setFocus();
-            } else if (currentFocus == Tuml.FocusEnum.TOP_CONTEXT) {
+            } else if (focusTo == Tuml.FocusEnum.TOP_CONTEXT) {
                 //currentFocus == 1
-//                this.tumlTabViewManagers[0].setFocus();
+                this.tumlTabViewManagers[0].setFocus(focusTo);
             } else {
-                this.tumlTabViewManagers[0].setFocus(currentFocus);
+                this.tumlTabViewManagers[0].setFocus(focusTo);
             }
         }
 
@@ -624,6 +624,10 @@
     }
 
     TumlMainViewManager.prototype = new Tuml.TumlTabContainerManager;
+
+    TumlMainViewManager.prototype.nestedCount = function (count) {
+        return count;
+    }
 
     TumlMainViewManager.prototype.refreshContext = function (tumlUri) {
         this.uiManager.refresh(tumlUri);

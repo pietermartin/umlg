@@ -54,9 +54,6 @@
           <emfPageIdentifier href="restAndJson.notation#_00TAQEI-EeKpM48zLjI12Q"/>
         </children>
         <children>
-          <emfPageIdentifier href="restAndJson.notation#_wUPMMPCXEeKXi9pM4yg14w"/>
-        </children>
-        <children>
           <emfPageIdentifier href="restAndJson.notation#_1wdkUPCXEeKXi9pM4yg14w"/>
         </children>
       </children>

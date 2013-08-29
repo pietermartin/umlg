@@ -427,35 +427,13 @@
                         var item = self.dataView.getItem(args.row);
                         var uri = item.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), item.id);
                         self.tumlTabViewManager.refreshContext(uri);
-                    } else if (!column.options.property.manyPrimitive && !column.options.property.manyEnumeration && column.options.property.composite &&
-                        column.options.property.lower > 0 && ((column.options.property.upper > 1) || column.options.property.upper === -1)) {
-                        //Component many
-                        var data = [];
-                        if (isCellEditableWithColumn(column, args.row, self.dataView.getItem(args.row))) {
-                            if (self.dataView.getItem(args.row) !== undefined && self.dataView.getItem(args.row) !== null && self.dataView.getItem(args.row)[column.name] !== undefined && self.dataView.getItem(args.row)[column.name] !== null) {
-                                //Get the data currently for the component
-                                data = self.dataView.getItem(args.row)[column.name];
-                            }
-                            var id = self.dataView.getItem(args.row)["id"];
-                            self.tumlTabViewManager.openManyComponent(data, args, column.options.property.tumlUri, column.options.property);
-                        } else {
-                            e.stopImmediatePropagation();
-                        }
-                    } else if (!column.options.property.manyPrimitive && !column.options.property.manyEnumeration && column.options.property.composite &&
-                        column.options.property.lower === 1 && column.options.property.upper === 1) {
+                    } else if (isComponentMany(column)) {
+                        doComponentMany(column, args);
+                        e.stopImmediatePropagation();
+                    } else if (isComponentOne(column)) {
                         //Component one
-                        var data = null;
-                        if (isCellEditableWithColumn(column, args.row, self.dataView.getItem(args.row))) {
-                            if (self.dataView.getItem(args.row) !== undefined && self.dataView.getItem(args.row) !== null && self.dataView.getItem(args.row)[column.name] !== undefined && self.dataView.getItem(args.row)[column.name] !== null) {
-                                //Get the data currently for the component
-                                data = self.dataView.getItem(args.row)[column.name];
-                            } else {
-                                data = {};
-                            }
-                            self.tumlTabViewManager.openOneComponent(data, args, column.options.property.tumlUri, column.options.property);
-                        } else {
-                            e.stopImmediatePropagation();
-                        }
+                        doComponentOne(column, args);
+                        e.stopImmediatePropagation();
                     } else if (column.options.property.associationClassOne) {
                         //Component one
                         var data = null;
@@ -469,14 +447,49 @@
                                 data = {};
                             }
                             self.tumlTabViewManager.openAssociationClass(data, args, column.options.property.tumlUri, column.options.property);
-                        } else {
-                            e.stopImmediatePropagation();
                         }
+                        e.stopImmediatePropagation();
                     }
                     //unbind the document click event to close many editors
                     self.grid['clicked'] = true;
                 }
             });
+
+            function isComponentMany(column) {
+                return !column.options.property.manyPrimitive && !column.options.property.manyEnumeration && column.options.property.composite &&
+                    column.options.property.lower > 0 && ((column.options.property.upper > 1) || column.options.property.upper === -1);
+            }
+
+            function doComponentMany(column, args) {
+                //Component many
+                var data = [];
+                if (isCellEditableWithColumn(column, args.row, self.dataView.getItem(args.row))) {
+                    if (self.dataView.getItem(args.row) !== undefined && self.dataView.getItem(args.row) !== null && self.dataView.getItem(args.row)[column.name] !== undefined && self.dataView.getItem(args.row)[column.name] !== null) {
+                        //Get the data currently for the component
+                        data = self.dataView.getItem(args.row)[column.name];
+                    }
+                    var id = self.dataView.getItem(args.row)["id"];
+                    self.tumlTabViewManager.openManyComponent(data, args, column.options.property.tumlUri, column.options.property);
+                }
+            }
+
+            function isComponentOne(column) {
+                return !column.options.property.manyPrimitive && !column.options.property.manyEnumeration && column.options.property.composite &&
+                    column.options.property.lower === 1 && column.options.property.upper === 1;
+            }
+
+            function doComponentOne(column, args) {
+                var data = null;
+                if (isCellEditableWithColumn(column, args.row, self.dataView.getItem(args.row))) {
+                    if (self.dataView.getItem(args.row) !== undefined && self.dataView.getItem(args.row) !== null && self.dataView.getItem(args.row)[column.name] !== undefined && self.dataView.getItem(args.row)[column.name] !== null) {
+                        //Get the data currently for the component
+                        data = self.dataView.getItem(args.row)[column.name];
+                    } else {
+                        data = {};
+                    }
+                    self.tumlTabViewManager.openOneComponent(data, args, column.options.property.tumlUri, column.options.property);
+                }
+            }
 
             this.grid.onCellChange.subscribe(function (e, args) {
                 var column = self.grid.getColumns()[args.cell];
@@ -502,12 +515,20 @@
                     self.grid['manyPrimitiveEditor'].handleKeyPress(e);
                 }
 
-
                 if (e.which == 39 && e.ctrlKey) {
                     e.preventDefault();
                     var cell = self.grid.getActiveCell();
                     var activeCellPosition = self.grid.getActiveCellPosition();
                     self.showContextMenu(cell, activeCellPosition.left + activeCellPosition.width, activeCellPosition.top);
+                    e.stopImmediatePropagation();
+                } else if (e.which === 13) {
+                    var cell = self.grid.getActiveCell();
+                    var column = self.grid.getColumns()[cell.cell];
+                    if (isComponentMany(column)) {
+                        doComponentMany(column, {row: cell.row ,cell: cell.cell, grid: self.grid});
+                    } else if (isComponentOne(column)) {
+                        doComponentOne(column, {row: cell.row ,cell: cell.cell, grid: self.grid});
+                    }
                 } else {
                     //if not cntrl A return
                     if (e.which != 65 || !e.ctrlKey) {
@@ -522,8 +543,8 @@
 
                     self.grid.setSelectedRows(rows);
                     e.preventDefault();
+                    e.stopImmediatePropagation();
                 }
-                e.stopImmediatePropagation();
             });
 
             this.grid.onSort.subscribe(function (e, args) {
@@ -673,28 +694,6 @@
                 }
                 return true;
             }
-
-//            function isCellEditable(row, cell, item) {
-//                for (var j = 0; j < self.grid.getColumns().length; j++) {
-//                    var column = self.grid.getColumns()[j];
-//                    if (cell === j && column.name !== 'id' && column.name !== 'uri' && column.name !== 'delete') {
-//                        if (!column.options.property.readOnly) {
-//                            var property = column.options.property;
-//                            if ((property.composite && property.lower >= 1) || property.associationClass) {
-//                                if (row >= self.dataView.getItems().length || self.dataView.getNewItems().indexOf(item) !== -1) {
-//                                    return true;
-//                                } else {
-//                                    return false;
-//                                }
-//                            }
-//                        }
-//                    }
-//                    if (j > cell) {
-//                        break;
-//                    }
-//                }
-//                return true;
-//            };
 
             function isClickOnNewRow(row) {
                 if (row >= self.dataView.getItems().length) {
@@ -851,14 +850,20 @@
 
         $('<div id="serverErrorMsg" />').appendTo(tabDiv);
 
-        var windowHeight = $('.ui-layout-center').height() - 103;
-        $('<div />', {id: 'myGrid' + this.metaForDataTo.name, style: 'width:auto;height:' + windowHeight + 'px;', class: 'tumlSlickGrid'}).appendTo(tabDiv);
+        var count = this.calculateGridWindowHeight(0);
+        var windowHeight = count * 125;
+        windowHeight = $('.ui-layout-center').height() - windowHeight;
+        $('<div />', {id: 'myGrid' + this.metaForDataTo.name, style: 'width:auto;height:' + windowHeight + 'px;', class: 'umlg-slick-grid'}).appendTo(tabDiv);
         $('<div />', {id: 'pager' + this.metaForDataTo.name, style: 'width:auto;height:20px;'}).appendTo(tabDiv);
 
         $('#contextMenu' + this.metaForDataTo.name).remove();
         this.createGrid(result.data, this.tumlUri);
 
     };
+
+    TumlBaseGridManager.prototype.calculateGridWindowHeight = function (count) {
+         return this.tumlTabViewManager.nestedCount(count);
+    }
 
     TumlBaseGridManager.prototype.setupColumnFormatter = function () {
         var self = this;
@@ -1108,7 +1113,7 @@
                     text += ' [' + property.lower + '..' + property.upper + ']';
                 }
 
-                var li = $('<li></li>').appendTo(contextMenuUl);
+                var li = $('<li />').appendTo(contextMenuUl);
 //                var adjustedUri = property.tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), this.contextVertexId);
                 var adjustedUri = addUiToUrl(property.tumlUri);
                 var a = $('<a />', {href: adjustedUri}).appendTo(li);
@@ -1123,7 +1128,7 @@
                         e.stopImmediatePropagation();
                     }
                 );
-                var span = $('<span class="ui-icon ' + (property.composite ? 'ui-icon-umlcomposition' : 'ui-icon-umlassociation') + '"></span>').appendTo(a);
+                var span = $('<span class="contextMenu ui-icon ' + (property.composite ? 'ui-icon-umlcomposition' : 'ui-icon-umlassociation') + '"></span>').appendTo(a);
                 a.append(text);
                 a.data("contextData", {name: property.name, property: property});
             }

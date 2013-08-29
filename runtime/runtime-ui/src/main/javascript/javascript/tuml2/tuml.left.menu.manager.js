@@ -40,9 +40,10 @@
             uiLayoutWest.children().remove();
 
             //add in the div where the property info and validation warning goes
-            var uiLayoutWestHeading = $('<div />', {id: 'ui-layout-west-heading', class: 'ui-layout-west-heading'}).appendTo(uiLayoutWest);
-            var westHeading = $('<div />', {id: 'ui-layout-west-heading-navigation-qualified-name', class: 'navigation-qualified-name'}).appendTo(uiLayoutWestHeading);
-            westHeading.text(this.contextMetaDataFrom.qualifiedName);
+            var uiLayoutWestHeading = $('<div />', {id: 'ui-layout-west-heading'}).appendTo(uiLayoutWest);
+            var westHeading = $('<div />', {id: 'ui-layout-west-heading-navigation-qualified-name', class: 'ui-layout-west-heading ui-state-default'}).appendTo(uiLayoutWestHeading);
+            var span = $('<span />').appendTo(westHeading);
+            span.text(this.contextMetaDataFrom.qualifiedName);
 
             this.tabContainer = $('<div />', {id: 'tabContainer-menu-container'}).appendTo('.ui-layout-west');
             this.tabContainer.append('<ul />');
@@ -59,6 +60,7 @@
         }
 
         this.setupTabsAndAccordian = function () {
+            //Do not bother with tabindex as the components sets the first one to 0 and the rest to -1 automatically
             var tabTemplate = "<li><a href='#{href}'>#{label}</a></li>";
             var label = "Standard",
                 id = "Standard",
@@ -67,26 +69,26 @@
             var standardMenuDiv = $('<div />', {id: 'Standard'});
             this.tabContainer.append(standardMenuDiv);
             this.accordionDiv = standardMenuDiv;
-            this.accordionDiv.append($('<h3 />', {tabindex: Tuml.AccordionEnum.PROPERTIES.index}).text(Tuml.AccordionEnum.PROPERTIES.label));
+            this.accordionDiv.append($('<h3 />').text(Tuml.AccordionEnum.PROPERTIES.label));
             this.umlPropertiesDiv = $('<div />', {id: 'umlProperties'});
             this.accordionDiv.append(this.umlPropertiesDiv);
 
-            this.accordionDiv.append($('<h3 />', {tabindex: Tuml.AccordionEnum.OPERATIONS.index}).text(Tuml.AccordionEnum.OPERATIONS.label));
+            this.accordionDiv.append($('<h3 />').text(Tuml.AccordionEnum.OPERATIONS.label));
             this.umlOperationsDiv = $('<div />', {id: 'umlOperations'});
             this.accordionDiv.append(this.umlOperationsDiv);
 
             if (isUmlgLib && this.contextVertexId !== undefined && this.contextVertexId !== null) {
-                this.accordionDiv.append($('<h3 />', {tabindex: Tuml.AccordionEnum.INSTANCE_QUERIES.index}).text(Tuml.AccordionEnum.INSTANCE_QUERIES.label));
+                this.accordionDiv.append($('<h3 />').text(Tuml.AccordionEnum.INSTANCE_QUERIES.label));
                 this.umlInstanceQueriesDiv = $('<div />', {id: 'umlInstanceQueries'});
                 this.accordionDiv.append(this.umlInstanceQueriesDiv);
-                this.accordionDiv.append($('<h3 />', {tabindex: Tuml.AccordionEnum.CLASS_QUERIES.index}).text(Tuml.AccordionEnum.CLASS_QUERIES.label));
+                this.accordionDiv.append($('<h3 />').text(Tuml.AccordionEnum.CLASS_QUERIES.label));
                 this.umlClassQueriesDiv = $('<div />', {id: 'umlClassQueries'});
                 this.accordionDiv.append(this.umlClassQueriesDiv);
 
-                this.accordionDiv.append($('<h3 />', {tabindex: Tuml.AccordionEnum.INSTANCE_GROOVY.index}).text(Tuml.AccordionEnum.INSTANCE_GROOVY.label));
+                this.accordionDiv.append($('<h3 />').text(Tuml.AccordionEnum.INSTANCE_GROOVY.label));
                 this.umlInstanceGroovyDiv = $('<div />', {id: 'umlInstanceGroovy'});
                 this.accordionDiv.append(this.umlInstanceGroovyDiv);
-                this.accordionDiv.append($('<h3 />', {tabindex: Tuml.AccordionEnum.CLASS_GROOVY.index}).text(Tuml.AccordionEnum.CLASS_GROOVY.label));
+                this.accordionDiv.append($('<h3 />').text(Tuml.AccordionEnum.CLASS_GROOVY.label));
                 this.umlClassGroovyDiv = $('<div />', {id: 'umlClassGroovy'});
                 this.accordionDiv.append(this.umlClassGroovyDiv);
             }
@@ -140,14 +142,13 @@
             var ulMenu = $('<ul />', {id: 'propertiesMenu'}).appendTo(this.umlPropertiesDiv);
             var menuArray = createLeftMenuDataArray(this.contextMetaDataFrom, propertyNavigatingTo);
 
-            var tabindex = 21;
             for (var i = 0; i < menuArray.length; i++) {
                 var value = menuArray[i];
                 var adjustedUri = value.tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), this.contextVertexId);
                 adjustedUri = addUiToUrl(adjustedUri)
-                var li = $('<li />', {tabindex: tabindex++}).appendTo(ulMenu);
+                var li = $('<li />').appendTo(ulMenu);
                 li.data("contextData", {name: value.name, uri: adjustedUri});
-                var a = $('<a />', {title: value.name, href: adjustedUri, class: value.aCssClass, tabindex: tabindex++}).appendTo(li);
+                var a = $('<a />', {title: value.name, href: adjustedUri, class: value.aCssClass}).appendTo(li);
                 a.on('click', function (e) {
                     var link = $(e.target);
                     var contextData = link.parent().data("contextData");
@@ -378,7 +379,6 @@
                     if (propertyNavigatingTo !== undefined && propertyNavigatingTo.qualifiedName == metaProperty.qualifiedName) {
                         //This makes the current active property red in the menu
                         menuMetaProperty.active = true;
-//                        menuMetaProperty['aCssClass'] = 'ui-state-highlight';
                         menuMetaProperty['aCssClass'] = 'ui-state-highlight';
                     } else {
                         menuMetaProperty['aCssClass'] = '';

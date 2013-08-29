@@ -681,13 +681,13 @@
         this.tumlTabGridManager = null;
         TumlBaseTabViewManager.call(this, tabEnum, tabContainer, tumlUri, result, propertyNavigatingTo);
 
-        this.setFocus = function(currentFocus) {
-            if (currentFocus == Tuml.FocusEnum.CENTER_TAB) {
+        this.setFocus = function(focusTo) {
+            if (focusTo == Tuml.FocusEnum.CENTER_TAB) {
                 this.li.focus();
-            } else if (currentFocus == Tuml.FocusEnum.CENTER_GRID) {
+            } else if (focusTo == Tuml.FocusEnum.CENTER_GRID) {
                 this.tumlTabGridManager.setFocus();
             } else {
-                throw Error('Can not call TumlTabManyViewManager.setFocus for ' + currentFocus);
+                throw Error('Can not call TumlTabManyViewManager.setFocus for ' + focusTo);
             }
         }
 

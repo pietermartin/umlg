@@ -41,12 +41,12 @@
                 this.tumlTabViewManagers = [];
 
                 //add in the div where the property info and validation warning goes
-                var uiLayoutCenterHeading = $('<div />', {id: this.getTabId() + 'ui-layout-center-heading', class: 'ui-layout-center-heading'}).appendTo(tabLayoutDiv);
+                var uiLayoutCenterHeading = $('<div />', {id: this.getTabId() + 'ui-layout-center-heading', class: 'ui-layout-center-heading ui-state-default'}).appendTo(tabLayoutDiv);
                 $('<div />', {id: this.getTabId() + 'navigation-qualified-name', class: 'navigation-qualified-name'}).appendTo(uiLayoutCenterHeading);
-                $('<div />', {id: this.getTabId() + 'multiplicity-warning', class: 'multiplicity-warning'}).appendTo(uiLayoutCenterHeading);
-                $('<div />', {id: this.getTabId() + 'validation-warning', class: 'validation-warning'}).appendTo(uiLayoutCenterHeading);
+                $('<div />', {id: this.getTabId() + 'multiplicity-warning', class: 'multiplicity-warning ui-state-error-text'}).appendTo(uiLayoutCenterHeading);
+                $('<div />', {id: this.getTabId() + 'validation-warning', class: 'validation-warning ui-state-error-text'}).appendTo(uiLayoutCenterHeading);
 
-                this.tabContainer = $('<div />', {id: this.getTabId() + 'Tabs'}).appendTo(tabLayoutDiv);
+                this.tabContainer = $('<div />', {id: this.getTabId() + 'Tabs', class: 'umlg-tabs'}).appendTo(tabLayoutDiv);
                 this.tabContainer.append('<ul />');
                 this.tabContainer.tabs();
 
@@ -134,6 +134,10 @@
             return multiplicity + ', ' + unique + ', ' + ordered + ', ' + association;
         }
 
+    }
+
+    TumlTabContainerManager.prototype.nestedCount = function (count) {
+        return this.parentTabContainerManager.nestedCount(++count);
     }
 
     TumlTabContainerManager.prototype.disableButtons = function () {

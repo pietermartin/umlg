@@ -187,7 +187,7 @@
             this.oclExecuteUri = oclExecuteUri;
             var queryTab = $('#' + queryTabDivName);
 
-            var windowHeight = $('.ui-layout-center').height() - 70;
+            var windowHeight = $('.ui-layout-center').height() - 85;
 
             var layoutDiv = $('<div />', {id: 'queryLayoutDiv', style: 'height: ' + windowHeight + 'px; width" 100%; overflow: hidden;'});
             layoutDiv.appendTo(queryTab);

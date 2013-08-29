@@ -45,11 +45,11 @@
     	
     	if( ! settings.themes.length ){
     		var themes = [
-    			{
-    				title: "Black Tie",
-    				name: "black-tie",
-    				icon: "theme_90_black_tie.png"
-    			},
+//    			{
+//    				title: "Black Tie",
+//    				name: "black-tie",
+//    				icon: "theme_90_black_tie.png"
+//    			},
     			{
     				title: "Blitzer",
     				name: "blitzer",
@@ -60,51 +60,51 @@
     				name: "cupertino",
     				icon: "theme_90_cupertino.png"
     			},
-    			{
-    				title: "Dark Hive",
-    				name: "dark-hive",
-    				icon: "theme_90_dark_hive.png"
-    			},
-    			{
-    				title: "Dot Luv",
-    				name: "dot-luv",
-    				icon: "theme_90_dot_luv.png"
-    			},
-    			{
-    				title: "Eggplant",
-    				name: "eggplant",
-    				icon: "theme_90_eggplant.png"
-    			},
-    			{
-    				title: "Excite Bike",
-    				name: "excite-bike",
-    				icon: "theme_90_excite_bike.png"
-    			},
-    			{
-    				title: "Flick",
-    				name: "flick",
-    				icon: "theme_90_flick.png"
-    			},
-    			{
-    				title: "Hot Sneaks",
-    				name: "hot-sneaks",
-    				icon: "theme_90_hot_sneaks.png"
-    			},
+//    			{
+//    				title: "Dark Hive",
+//    				name: "dark-hive",
+//    				icon: "theme_90_dark_hive.png"
+//    			},
+//    			{
+//    				title: "Dot Luv",
+//    				name: "dot-luv",
+//    				icon: "theme_90_dot_luv.png"
+//    			},
+//    			{
+//    				title: "Eggplant",
+//    				name: "eggplant",
+//    				icon: "theme_90_eggplant.png"
+//    			},
+//    			{
+//    				title: "Excite Bike",
+//    				name: "excite-bike",
+//    				icon: "theme_90_excite_bike.png"
+//    			},
+//    			{
+//    				title: "Flick",
+//    				name: "flick",
+//    				icon: "theme_90_flick.png"
+//    			},
+//    			{
+//    				title: "Hot Sneaks",
+//    				name: "hot-sneaks",
+//    				icon: "theme_90_hot_sneaks.png"
+//    			},
     			{
     				title: "Humanity",
     				name: "humanity",
     				icon: "theme_90_humanity.png"
     			},
-    			{
-    				title: "Le Frog",
-    				name: "le-frog",
-    				icon: "theme_90_le_frog.png"
-    			},
-    			{
-    				title: "Mint Choc",
-    				name: "mint-choc",
-    				icon: "theme_90_mint_choco.png"
-    			},
+//    			{
+//    				title: "Le Frog",
+//    				name: "le-frog",
+//    				icon: "theme_90_le_frog.png"
+//    			},
+//    			{
+//    				title: "Mint Choc",
+//    				name: "mint-choc",
+//    				icon: "theme_90_mint_choco.png"
+//    			},
     			{
     				title: "Overcast",
     				name: "overcast",
@@ -125,46 +125,46 @@
     				name: "smoothness",
     				icon: "theme_90_smoothness.png"
     			},
-    			{
-    				title: "South Street",
-    				name: "south-street",
-    				icon: "theme_90_south_street.png"
-    			},
-    			{
-    				title: "Start",
-    				name: "start",
-    				icon: "theme_90_start_menu.png"
-    			},
-    			{
-    				title: "Sunny",
-    				name: "sunny",
-    				icon: "theme_90_sunny.png"
-    			},
-    			{
-    				title: "Swanky Purse",
-    				name: "swanky-purse",
-    				icon: "theme_90_swanky_purse.png"
-    			},
-    			{
-    				title: "Trontastic",
-    				name: "trontastic",
-    				icon: "theme_90_trontastic.png"
-    			},
-    			{
-    				title: "UI Darkness",
-    				name: "ui-darkness",
-    				icon: "theme_90_ui_dark.png"
-    			},
+//    			{
+//    				title: "South Street",
+//    				name: "south-street",
+//    				icon: "theme_90_south_street.png"
+//    			},
+//    			{
+//    				title: "Start",
+//    				name: "start",
+//    				icon: "theme_90_start_menu.png"
+//    			},
+//    			{
+//    				title: "Sunny",
+//    				name: "sunny",
+//    				icon: "theme_90_sunny.png"
+//    			},
+//    			{
+//    				title: "Swanky Purse",
+//    				name: "swanky-purse",
+//    				icon: "theme_90_swanky_purse.png"
+//    			},
+//    			{
+//    				title: "Trontastic",
+//    				name: "trontastic",
+//    				icon: "theme_90_trontastic.png"
+//    			},
+//    			{
+//    				title: "UI Darkness",
+//    				name: "ui-darkness",
+//    				icon: "theme_90_ui_dark.png"
+//    			},
     			{
     				title: "UI Lightness",
     				name: "ui-lightness",
     				icon: "theme_90_ui_light.png"
     			},
-    			{
-    				title: "Vader",
-    				name: "vader",
-    				icon: "theme_90_black_matte.png"
-    			}
+//    			{
+//    				title: "Vader",
+//    				name: "vader",
+//    				icon: "theme_90_black_matte.png"
+//    			}
     		]
     	}else{
     		var themes = settings.themes;

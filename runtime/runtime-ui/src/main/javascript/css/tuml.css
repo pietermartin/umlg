@@ -7,6 +7,14 @@
     position: absolute;
 }
 
+.contextMenu.ui-icon.ui-icon-umlassociation {
+    background-image: url(../javascript/images/UMLAssociation.png);
+}
+
+.contextMenu.ui-icon.ui-icon-umlcomposition {
+    background-image: url(../javascript/images/UMLComposition.png);
+}
+
 #switcher {
     float: right;
 }
@@ -15,23 +23,15 @@
     margin: 5px;
 
     position: absolute;
-    top: 25px;
+    top: 2em;
     left: 0px;
     right: 0px;
     bottom: 0px;
 }
 
-.ui-tabs .ui-tabs-panel {
-    padding: 0.5em 0.5em 0.5px 0.5em;
-}
-
 .ui-layout-north .embossed {
     margin: 0 auto;
     width: 60px;
-}
-
-.ui-layout-north {
-    background-color: #EEEEEE;
 }
 
 .embossed span {
@@ -80,28 +80,23 @@
     margin-top: 4px;
 }
 
-#tabs-layout {
-    height: auto;
-    width: auto;
-}
 
 /*tabs*/
-#tabs-layoutTabs {
-    font-family: arial;
-    font-size: 8pt;
-    margin: 5px;
-
-    position: absolute;
-    top: 25px;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
+#tabs-layout {
+    margin: 0.3em;
+    position:absolute;
+    left:0;
+    right:0;
+    height: 98%;
 }
 
-.ui-layout-west {
-    font-family: arial;
-    font-size: 8pt;
-}
+/*.umlg-tabs {*/
+    /*margin: 0.3em;*/
+    /*position:absolute;*/
+    /*left:0;*/
+    /*right:0;*/
+    /*height: 100%;*/
+/*}*/
 
 #tabs-layoutTabs li .ui-icon-cancel {
     float: left;
@@ -122,12 +117,17 @@
 }
 
 /*Accordion*/
-.ui-accordion .ui-accordion-content {
-    padding-left: 0.5em;
-    padding-right: 1em;
-    padding-top: 1em;
-    padding-bottom: 1em;
+#Standard {
+    padding: 0.2em;
 }
+
+#Standard .ui-accordion-content {
+    padding: 0.5em;
+}
+
+/*#umlProperties {*/
+    /*padding: 0.5em;*/
+/*}*/
 
 .server-error-msg {
     border: 1px solid red;
@@ -399,95 +399,86 @@
 }
 
 .ui-layout-pane {
-    padding: 5px;
-}
-
-.ui-layout-pane-center {
-    padding: 5px
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-left: 0px;
+    padding-bottom: 5px;
 }
 
 .ui-layout-center-heading {
-    background-color: #EEEEEE;
-    height: 20px;
+    height: 25px;
+    padding-top: 0.3em;
+    padding-left: 0.5em;
 }
 
-.ui-layout-west-heading {
-    background-color: #EEEEEE;
-    height: 20px;
+.ui-layout-center-heading.ui-state-default {
+    border: none;
+}
+
+#ui-layout-west-heading-navigation-qualified-name.ui-layout-west-heading {
+    height: 1.7em;
+    border: none;
+    padding-top: 0.3em;
+    padding-left: 0.5em;
 }
 
 .navigation-qualified-name {
     float: left;
-    line-height: 20px;
-    padding-left: 5px;
-    font-family: arial;
-    font-size: 8pt;
-    font-weight: bold;
 }
 
 .validation-warning {
-    color: red;
     float: right;
-    margin-right: 5px;
-    padding-top: 5px;
-    text-align: right;
-    font-family: arial;
-    font-size: 8pt;
-    font-weight: bold;
+    padding-right: 0.5em;
 }
 
 .multiplicity-warning {
-    color: red;
     float: right;
-    margin-right: 5px;
-    padding-top: 5px;
-    text-align: right;
-    font-family: arial;
-    font-size: 8pt;
-    font-weight: bold;
+    padding-right: 0.5em;
+}
+
+.ui-icon.ui-icon-chevron {
+    background-image: url(../javascript/images/Chevron.gif);
+}
+
+.ui-layout-north #contextRoot {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#contextRoot .embossed {
+    padding-top: 0.5em;
+    margin-left: auto;
+    margin-right: auto;
+    width: 5em;
 }
 
 #contextRoot {
-    /* padding-top is same as jddm menu */
+    margin: 0;
+    position: absolute;
+    z-index: -1;
+    border: none;
+}
+
+#contextRootUl {
     float: left;
-    vertical-align: middle;
-    margin-top: 2px;
+    border: none;
+    margin-top: 0.5em;
     margin-left: 1em;
-    padding-left: 0px;
+    padding-left: 0;
 }
 
-#contextRoot li {
-    /* padding-top is same as jddm menu */
+#contextRootUl li {
     float: left;
-    vertical-align: middle;
-    margin-top: 2px;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+    padding-left: 0;
+    padding-right: 0;
+    border: none;
 }
 
-#contextRoot span {
+#contextRootUl li a span {
     float: left;
-    display: block;
-    cursor: pointer;
-    position: relative;
-    margin-top: 2px;
-    margin-bottom: 2px;
-    padding: 0em .2em 0em .2em;
-    min-height: 0;
-}
-
-
-#contextRoot li {
-    float: left;
-    display: block;
-    cursor: pointer;
-    position: relative;
-    margin-top: 2px;
-    margin-bottom: 2px;
-    padding: 0em .7em 0em .7em;
-    min-height: 0;
-}
-
-#contextRoot li a {
-    padding: 0em .3em 0em .3em;
 }
 
 .selfUrl {
@@ -503,9 +494,9 @@
     margin: auto
 }
 
-.tumlSlickGrid {
-    padding-bottom: 3px;
-}
+/*.tumlSlickGrid {*/
+    /*margin-bottom: -0.5em;*/
+/*}*/
 
 .umlg-updated-id {
     color: blue;
@@ -565,11 +556,11 @@
     background-color: transparent; /* show default selected row background */
 }
 
-.ui-icon.ui-icon-umlassociation {
+#propertiesMenu .ui-icon.ui-icon-umlassociation {
     background-image: url(../javascript/images/UMLAssociation.png);
 }
 
-.ui-icon.ui-icon-umlcomposition {
+#propertiesMenu .ui-icon.ui-icon-umlcomposition {
     background-image: url(../javascript/images/UMLComposition.png);
 }
 
