@@ -1,16 +1,21 @@
 package org.umlg.runtime.adaptor;
 
-import com.tinkerpop.blueprints.*;
+import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Graph;
+import com.tinkerpop.blueprints.Vertex;
 
-import java.io.Serializable;
 import java.util.Set;
 
-public interface TumlGraph extends TransactionalGraph, IndexableGraph, Serializable {
+public interface TumlGraph extends Graph {
     static final String ROOT_CLASS_NAME = "org.umlg.root.Root";
 
+    //Used for auditing
     void incrementTransactionCount();
 
+    //Used for auditing
     long getTransactionCount();
+
+    void addRoot();
 
     Vertex getRoot();
 
@@ -18,39 +23,19 @@ public interface TumlGraph extends TransactionalGraph, IndexableGraph, Serializa
 
     Set<Edge> getEdgesBetween(Vertex v1, Vertex v2, String... labels);
 
-    void addRoot();
-
     long countVertices();
 
     long countEdges();
 
     void registerListeners();
 
-    //	<T> List<T> query(Class<?> className, int first, int pageSize);
     <T> T instantiateClassifier(Long id);
 
-    void resume(TransactionIdentifier t);
-
-    TransactionIdentifier suspend();
-
-    void setRollbackOnly();
-
-    <T extends Element> TumlTinkerIndex<T> createIndex(String indexName, Class<T> indexClass);
-
-    <T extends Element> TumlTinkerIndex<T> getIndex(String indexName, Class<T> indexClass);
-
     boolean hasEdgeBeenDeleted(Edge edge);
-
-    //TODO devise some timeout strategy
-    void acquireWriteLock(Vertex vertex);
 
     void clearTxThreadVar();
 
     void clearThreadVars();
-
-//    void createUniqueVertexIndex();
-
-    boolean isTransactionActive();
 
     void addDeletionNode();
 

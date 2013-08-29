@@ -1,7 +1,6 @@
 package org.umlg.runtime.collection.persistent;
 
 import com.tinkerpop.blueprints.Edge;
-import org.umlg.runtime.adaptor.GraphDb;
 import org.umlg.runtime.collection.TinkerQualifiedSequence;
 import org.umlg.runtime.collection.TumlRuntimeProperty;
 import org.umlg.runtime.domain.TumlNode;
@@ -12,7 +11,7 @@ public class TinkerQualifiedSequenceImpl<E> extends BaseSequence<E> implements T
 
 	public TinkerQualifiedSequenceImpl(TumlNode owner, TumlRuntimeProperty runtimeProperty) {
 		super(owner, runtimeProperty);
-        this.index = GraphDb.getDb().getIndex(getQualifiedName(), Edge.class);
+//        this.index = GraphDb.getDb().getIndex(getQualifiedName(), Edge.class);
     }
 
 	@Override

@@ -59,7 +59,7 @@ public class RestletVisitors {
         result.add(new EnumLookupResourceServerResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
         result.add(new TumlRestletNodeBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
         result.add(new QueryExecuteResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
-        result.add(new TransactionResourceRouterAdder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+//        result.add(new TransactionResourceRouterAdder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
 
         result.add(new RestletComponentAndApplicationGenerator(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
         result.add(new RestletFromJsonCreator(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));

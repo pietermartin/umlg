@@ -31,7 +31,6 @@ import org.umlg.tinker.qualifiertest.TestQualifierOnManyToMany;
 import org.umlg.tinker.query.TestMetaQueries;
 import org.umlg.tinker.query.TestQueryBaseModelTumlAssociation;
 import org.umlg.tinker.validationtest.TestValidation;
-import org.umlg.transaction.test.TransactionSuspendResumeTest;
 
 /**
  * Date: 2013/01/28
@@ -74,7 +73,7 @@ import org.umlg.transaction.test.TransactionSuspendResumeTest;
         TestQualifierOnManyToMany.class,
         TestMetaQueries.class, TestQueryBaseModelTumlAssociation.class,
         TestValidation.class,
-        TransactionSuspendResumeTest.class,
+//        TransactionSuspendResumeTest.class,
         ConstrainedPropertyTest.class
 })
 public class AllTest {

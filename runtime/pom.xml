@@ -19,6 +19,8 @@
         <module>runtime-test-restlet</module>
         <module>runtime-domain-neo4j</module>
         <module>runtime-domain-orientdb</module>
+        <module>runtime-domain-titan</module>
+        <module>runtime-domain-bitsy</module>
         <module>runtime-ui</module>
         <module>runtime-groovy</module>
         <module>runtime-uml</module>

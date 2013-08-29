@@ -16,7 +16,7 @@ public class TinkerQualifiedBagImpl<E> extends BaseBag<E> implements TinkerQuali
 
 	public TinkerQualifiedBagImpl(TumlNode owner, TumlRuntimeProperty runtimeProperty) {
 		super(owner, runtimeProperty);
-		this.index = GraphDb.getDb().getIndex(getQualifiedName(), Edge.class);
+//		this.index = GraphDb.getDb().getIndex(getQualifiedName(), Edge.class);
 	}
 
 	@Override
@@ -33,42 +33,42 @@ public class TinkerQualifiedBagImpl<E> extends BaseBag<E> implements TinkerQuali
 				v = node.getVertex();
 				Set<Edge> edges = GraphDb.getDb().getEdgesBetween(this.vertex, v, this.getLabel());
 				for (Edge edge : edges) {
-					removeEdgefromIndex(edge);
+//					removeEdgefromIndex(edge);
 					GraphDb.getDb().removeEdge(edge);
 				}
 			} else if (o.getClass().isEnum()) {
 				v = this.internalVertexMap.get(((Enum<?>) o).name());
 				Edge edge = v.getEdges(Direction.IN, this.getLabel()).iterator().next();
-				removeEdgefromIndex(edge);
+//				removeEdgefromIndex(edge);
 				GraphDb.getDb().removeVertex(v);
 			} else {
 				v = this.internalVertexMap.get(o);
 				Edge edge = v.getEdges(Direction.IN, this.getLabel()).iterator().next();
-				removeEdgefromIndex(edge);
+//				removeEdgefromIndex(edge);
 				GraphDb.getDb().removeVertex(v);
 			}
 		}
 		return result;
 	}
 
-	private void removeEdgefromIndex(Edge edge) {
-		for (String key : edge.getPropertyKeys()) {
-			if (key.startsWith("index")) {
-				this.index.remove(key, edge.getProperty(key), edge);
-			}
-		}
-	}
+//	private void removeEdgefromIndex(Edge edge) {
+//		for (String key : edge.getPropertyKeys()) {
+//			if (key.startsWith("index")) {
+//				this.index.remove(key, edge.getProperty(key), edge);
+//			}
+//		}
+//	}
 
-	protected void validateQualifiedMultiplicity(List<Qualifier> qualifiers) {
-		for (Qualifier qualifier : qualifiers) {
-			if (qualifier.isOne()) {
-				long count = this.index.count(qualifier.getKey(), qualifier.getValue());
-				if (count > 0) {
-					// Add info to exception
-					throw new IllegalStateException("qualifier fails, entry for qualifier already exist");
-				}
-			}
-		}
-	}
+//	protected void validateQualifiedMultiplicity(List<Qualifier> qualifiers) {
+//		for (Qualifier qualifier : qualifiers) {
+//			if (qualifier.isOne()) {
+//				long count = this.index.count(qualifier.getKey(), qualifier.getValue());
+//				if (count > 0) {
+//					// Add info to exception
+//					throw new IllegalStateException("qualifier fails, entry for qualifier already exist");
+//				}
+//			}
+//		}
+//	}
 
 }

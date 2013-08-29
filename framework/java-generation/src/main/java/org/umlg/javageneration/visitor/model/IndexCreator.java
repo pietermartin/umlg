@@ -5,8 +5,6 @@ import org.eclipse.uml2.uml.Property;
 import org.umlg.framework.ModelLoader;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
-import org.umlg.java.metamodel.OJField;
-import org.umlg.java.metamodel.OJIfStatement;
 import org.umlg.java.metamodel.OJPackage;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
@@ -40,15 +38,7 @@ public class IndexCreator extends BaseVisitor implements Visitor<Model> {
         List<Property> qualifiers = ModelLoader.INSTANCE.getAllQualifiers();
         for (Property q : qualifiers) {
             PropertyWrapper ownerWrap = new PropertyWrapper((Property) q.getOwner());
-
-            OJField index = new OJField("index", TinkerGenerationUtil.tinkerIndexPathName);
-            createIndexes.getBody().addToLocals(index);
-            createIndexes.getBody().addToStatements("index  = " + TinkerGenerationUtil.graphDbAccess + ".getIndex(\"" + ownerWrap.getQualifiedName() + "\", " + TinkerGenerationUtil.edgePathName.getLast() + ".class)");
-            OJIfStatement ifIndexNull = new OJIfStatement("index == null");
-            ifIndexNull.addToThenPart(TinkerGenerationUtil.graphDbAccess + ".createIndex(\"" + ownerWrap.getQualifiedName() + "\", " + TinkerGenerationUtil.edgePathName.getLast() + ".class)");
-            createIndexes.getBody().addToStatements(ifIndexNull);
-
-            indexCreator.addToImports(TinkerGenerationUtil.tinkerIndexPathName);
+            createIndexes.getBody().addToStatements(TinkerGenerationUtil.graphDbAccess + ".createIndex(\"" + ownerWrap.getQualifiedName() + "\", " + TinkerGenerationUtil.edgePathName.getLast() + ".class)");
             indexCreator.addToImports(TinkerGenerationUtil.edgePathName);
             indexCreator.addToImports(TinkerGenerationUtil.graphDbPathName);
         }

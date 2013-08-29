@@ -79,7 +79,7 @@ public class TinkerGenerationUtil {
 
     public static final OJPathName tumlRuntimePropertyPathName = new OJPathName("org.umlg.runtime.collection.TumlRuntimeProperty");
     public static final OJPathName tinkerTransactionalGraphPathName = new OJPathName("com.tinkerpop.blueprints.TransactionalGraph");
-    public static final OJPathName tinkerIndexPathName = new OJPathName("com.tinkerpop.blueprints.Index");
+//    public static final OJPathName tinkerIndexPathName = new OJPathName("com.tinkerpop.blueprints.Index");
     public static final OJPathName tinkerCloseableIterablePathName = new OJPathName("com.tinkerpop.blueprints.CloseableIterable");
 
     public static final OJPathName tumlBagCloseableIterablePathName = new OJPathName("org.umlg.runtime.collection.persistent.TinkerBagClosableIterableImpl");
@@ -102,7 +102,7 @@ public class TinkerGenerationUtil {
     public static final String PERSISTENT_CONSTRUCTOR_NAME = "persistentConstructor";
     public static final String PERSISTENT_CONSTRUCTOR_PARAM_NAME = "persistent";
 
-    public static final String INDEX_SEPARATOR = ":::";
+//    public static final String INDEX_SEPARATOR = ":::";
 
 
     public static final String ORIGINAL_UID = "originalUid";

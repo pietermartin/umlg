@@ -12,7 +12,7 @@ import org.umlg.runtime.collection.ocl.OclStdLibBagImpl;
 import java.util.Collection;
 import java.util.Set;
 
-public class TumlMemoryBag <E> extends TumlMemoryCollection<E> implements TinkerBag<E> {
+public class TumlMemoryBag<E> extends TumlMemoryCollection<E> implements TinkerBag<E> {
 
 	protected OclStdLibBag<E> oclStdLibBag;
 

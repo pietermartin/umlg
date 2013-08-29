@@ -12,13 +12,8 @@ import org.umlg.componenttest.Time;
 import org.umlg.componenttest.ValidationTest;
 import org.umlg.concretetest.God;
 import org.umlg.concretetest.Universe;
-import org.umlg.runtime.adaptor.GraphDb;
-import org.umlg.runtime.adaptor.TransactionIdentifier;
 import org.umlg.runtime.test.BaseLocalDbTest;
-import org.umlg.runtime.util.UmlgProperties;
 import org.umlg.runtime.validation.TumlConstraintViolationException;
-
-import java.util.concurrent.*;
 
 public class TestValidation extends BaseLocalDbTest {
 
@@ -384,54 +379,54 @@ public class TestValidation extends BaseLocalDbTest {
         Assert.assertEquals(6, countVertices());
     }
 
-    @Test
-    public void testValidationMultipleThreadsFailsSuccessfully() throws ExecutionException, InterruptedException {
-        if (UmlgProperties.INSTANCE.isTransactionsMutliThreaded()) {
-            God g = new God(true);
-            g.setName("god");
-            Fantasy fantasy = new Fantasy(g);
-            fantasy.setName("hand");
-            final FWomen w1 = new FWomen(fantasy);
-            w1.setName("f1");
-            final FWomen w2 = new FWomen(fantasy);
-            w2.setName("f2");
-            FWomen w3 = new FWomen(fantasy);
-            w3.setName("f3");
-            FWomen w4 = new FWomen(fantasy);
-            w4.setName("f4");
-            db.commit();
-
-            FWomen w5 = new FWomen(fantasy);
-            w5.setName("f5");
-            FWomen w6 = new FWomen(fantasy);
-            w6.setName("f6");
-            final TransactionIdentifier transactionIdentifier = db.suspend();
-
-            ExecutorService es = Executors.newFixedThreadPool(1);
-            Future<Boolean> f = es.submit(new Callable<Boolean>() {
-                @Override
-                public Boolean call() throws Exception {
-                    GraphDb.getDb().resume(transactionIdentifier);
-                    FWomen w1ToDelete = new FWomen(w1.getVertex());
-                    w1ToDelete.delete();
-                    GraphDb.getDb().suspend();
-                    return true;
-                }
-            });
-            es.shutdown();
-            Assert.assertTrue(f.get());
-            db.resume(transactionIdentifier);
-            boolean failed = false;
-            try {
-                db.commit();
-            } catch (Exception e) {
-                if (isTransactionFailedException(e)) {
-                    failed = true;
-                }
-            }
-            Assert.assertTrue(failed);
-        }
-    }
+//    @Test
+//    public void testValidationMultipleThreadsFailsSuccessfully() throws ExecutionException, InterruptedException {
+//        if (UmlgProperties.INSTANCE.isTransactionsMutliThreaded()) {
+//            God g = new God(true);
+//            g.setName("god");
+//            Fantasy fantasy = new Fantasy(g);
+//            fantasy.setName("hand");
+//            final FWomen w1 = new FWomen(fantasy);
+//            w1.setName("f1");
+//            final FWomen w2 = new FWomen(fantasy);
+//            w2.setName("f2");
+//            FWomen w3 = new FWomen(fantasy);
+//            w3.setName("f3");
+//            FWomen w4 = new FWomen(fantasy);
+//            w4.setName("f4");
+//            db.commit();
+//
+//            FWomen w5 = new FWomen(fantasy);
+//            w5.setName("f5");
+//            FWomen w6 = new FWomen(fantasy);
+//            w6.setName("f6");
+//            final TransactionIdentifier transactionIdentifier = db.suspend();
+//
+//            ExecutorService es = Executors.newFixedThreadPool(1);
+//            Future<Boolean> f = es.submit(new Callable<Boolean>() {
+//                @Override
+//                public Boolean call() throws Exception {
+//                    GraphDb.getDb().resume(transactionIdentifier);
+//                    FWomen w1ToDelete = new FWomen(w1.getVertex());
+//                    w1ToDelete.delete();
+//                    GraphDb.getDb().suspend();
+//                    return true;
+//                }
+//            });
+//            es.shutdown();
+//            Assert.assertTrue(f.get());
+//            db.resume(transactionIdentifier);
+//            boolean failed = false;
+//            try {
+//                db.commit();
+//            } catch (Exception e) {
+//                if (isTransactionFailedException(e)) {
+//                    failed = true;
+//                }
+//            }
+//            Assert.assertTrue(failed);
+//        }
+//    }
 
     //TODO rethink this.
 //    @Test

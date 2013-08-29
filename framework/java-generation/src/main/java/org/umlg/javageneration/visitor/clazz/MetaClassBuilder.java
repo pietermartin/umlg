@@ -181,7 +181,6 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<Class> {
         ifHasNext.addToThenPart("result =  new " + TumlClassOperations.getMetaClassName(clazz) + "(iter.next().getVertex(Direction.IN))");
         INSTANCE.getBody().addToStatements(ifHasNext);
 
-        ifHasNext.addToElsePart(TinkerGenerationUtil.graphDbAccess + ".acquireWriteLock(" + TinkerGenerationUtil.graphDbAccess + ".getRoot())");
         ifHasNext.addToElsePart("iter = " + TinkerGenerationUtil.graphDbAccess + ".getRoot().getEdges(Direction.OUT, \"" + TinkerGenerationUtil.getEdgeToRootLabelStrategyMeta(clazz) + "\").iterator()");
 
         OJIfStatement ifIter2 = new OJIfStatement("!iter.hasNext()");

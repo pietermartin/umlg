@@ -120,72 +120,9 @@ public class TumlOrientDbGraph extends OrientGraph implements TumlGraph {
 //    }
 
     @Override
-    public void resume(TransactionIdentifier t) {
-        throw new RuntimeException("Not yet implemented");
-    }
-
-    @Override
-    public TransactionIdentifier suspend() {
-        throw new RuntimeException("Not yet implemented");
-    }
-
-    @Override
-    public void setRollbackOnly() {
-        throw new RuntimeException("Not yet implemented");
-    }
-
-    @Override
-    public <T extends Element> TumlTinkerIndex<T> createIndex(final String indexName, final Class<T> indexClass) {
-        //This needs to happen in a separate thread otherwise orientdb will commit the current transaction
-        ExecutorService es = Executors.newFixedThreadPool(1);
-        Future<Index<T>> f = es.submit(new Callable<Index<T>>() {
-            @Override
-            public Index<T> call() throws Exception {
-                TumlOrientDbGraph graph = (TumlOrientDbGraph) GraphDb.getDb();
-                //OrientDb does not like ':'
-                String transformedIndexName = indexName.replace(":", "_");
-                Index<T> index = graph.createIndexInternal(transformedIndexName, indexClass);
-                graph.shutdown();
-                return index;
-            }
-        });
-        es.shutdown();
-        try {
-            Index<T> index = f.get();
-            TumlTinkerIndex<T> index2 = getIndex(indexName, indexClass);
-            return index2;
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private <T extends Element> Index<T> createIndexInternal(final String indexName, final Class<T> indexClass) {
-        return super.createIndex(indexName, indexClass);
-    }
-
-    @Override
-    public <T extends Element> TumlTinkerIndex<T> getIndex(String indexName, Class<T> indexClass) {
-        //OrientDb does not like ':'
-        String transformedIndexName = indexName.replace(":", "_");
-        Index<T> index = super.getIndex(transformedIndexName, indexClass);
-        if (index != null) {
-            return new TumlOrientDbIndex(this, index);
-        } else {
-            return null;
-        }
-    }
-
-    @Override
     public boolean hasEdgeBeenDeleted(Edge edge) {
         //This method is only a problem for neo4j indexes
         return false;
-    }
-
-    @Override
-    public void acquireWriteLock(Vertex vertex) {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
@@ -196,11 +133,6 @@ public class TumlOrientDbGraph extends OrientGraph implements TumlGraph {
     @Override
     public void clearThreadVars() {
         //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public boolean isTransactionActive() {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override

@@ -1,8 +1,6 @@
 package org.umlg.runtime.adaptor;
 
 import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.Element;
-import com.tinkerpop.blueprints.Index;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.neo4j.Neo4jEdge;
 import com.tinkerpop.blueprints.impls.neo4j.Neo4jGraph;
@@ -13,15 +11,15 @@ import org.neo4j.graphdb.*;
 import org.neo4j.graphdb.event.TransactionEventHandler;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
 import org.neo4j.kernel.GraphDatabaseAPI;
-import org.neo4j.kernel.TopLevelTransaction;
-import org.neo4j.kernel.impl.transaction.AbstractTransactionManager;
 import org.neo4j.kernel.impl.util.StringLogger;
 import org.umlg.runtime.domain.PersistentObject;
 import org.umlg.runtime.domain.TumlMetaNode;
 import org.umlg.runtime.domain.TumlNode;
 
-import javax.transaction.*;
+import javax.transaction.Status;
+import javax.transaction.SystemException;
 import javax.transaction.Transaction;
+import javax.transaction.TransactionManager;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.logging.Logger;
@@ -69,7 +67,7 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
 
     @Override
     public long getTransactionCount() {
-        return (Integer) getRoot().getProperty("transactionCount");
+        return getRoot().getProperty("transactionCount");
     }
 
     @Override
@@ -105,14 +103,6 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
         }
         return result;
     }
-
-//    @Override
-//    public void createUniqueVertexIndex() {
-//        this.uniqueVertexIndex = getIndex("uniqueVertex", Vertex.class);
-//        if (this.uniqueVertexIndex == null) {
-//            this.uniqueVertexIndex = createIndex("uniqueVertex", Vertex.class);
-//        }
-//    }
 
     @Override
     public void addRoot() {
@@ -166,10 +156,8 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
                 throw new RuntimeException(String.format("No vertex found for id %d", new Object[]{id}));
             }
             // TODO reimplement schemaHelper
-            String className = (String) v.getProperty("className");
+            String className = v.getProperty("className");
             Class<?> c = Class.forName(className);
-            // Class<?> c = schemaHelper.getClassNames().get((String)
-            // v.getProperty("className"));
             return (T) c.getConstructor(Vertex.class).newInstance(v);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -195,48 +183,6 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
             } catch (SystemException e) {
                 throw new RuntimeException(e);
             }
-        }
-    }
-
-    @Override
-    public void resume(TransactionIdentifier transactionIdentifier) {
-        GraphDatabaseAPI graphDatabaseAPI = (GraphDatabaseAPI) getRawGraph();
-        AbstractTransactionManager transactionManager = (AbstractTransactionManager) graphDatabaseAPI.getTxManager();
-        try {
-            Transaction transaction = this.transactionIdentifierTransactionMap.get(transactionIdentifier);
-            transactionManager.resume(transaction);
-            this.tx.set(new TopLevelTransaction(transactionManager, graphDatabaseAPI.getLockManager(), transactionManager.getTransactionState()));
-        } catch (InvalidTransactionException e) {
-            throw new RuntimeException(e);
-        } catch (SystemException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public TransactionIdentifier suspend() {
-        this.autoStartTransaction();
-        GraphDatabaseAPI graphDatabaseAPI = (GraphDatabaseAPI) getRawGraph();
-        TransactionManager transactionManager = graphDatabaseAPI.getTxManager();
-        try {
-            Transaction t = transactionManager.suspend();
-            TransactionIdentifier transactionIdentifier = this.transactionTransactionIdentifierMap.get(t);
-            return transactionIdentifier;
-        } catch (SystemException e) {
-            throw new RuntimeException(e);
-        } finally {
-            this.tx.remove();
-        }
-    }
-
-    @Override
-    public void setRollbackOnly() {
-        GraphDatabaseAPI graphDatabaseAPI = (GraphDatabaseAPI) getRawGraph();
-        TransactionManager transactionManager = graphDatabaseAPI.getTxManager();
-        try {
-            transactionManager.setRollbackOnly();
-        } catch (SystemException e) {
-            throw new RuntimeException(e);
         }
     }
 
@@ -305,24 +251,6 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
         }
     }
 
-
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    @Override
-    public <T extends Element> TumlTinkerIndex<T> createIndex(String indexName, Class<T> indexClass) {
-        return new TumlNeo4jIndex(super.createIndex(indexName, indexClass));
-    }
-
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    @Override
-    public <T extends Element> TumlTinkerIndex<T> getIndex(String indexName, Class<T> indexClass) {
-        Index<T> index = super.getIndex(indexName, indexClass);
-        if (index != null) {
-            return new TumlNeo4jIndex(index);
-        } else {
-            return null;
-        }
-    }
-
     @Override
     public boolean hasEdgeBeenDeleted(Edge edge) {
         Neo4jEdge neo4jEdge = (Neo4jEdge) edge;
@@ -343,14 +271,6 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
         // }
         // }
         // return false;
-    }
-
-    //TODO do this properly, all thread safe concurrent get put way
-    @Override
-    public void acquireWriteLock(Vertex vertex) {
-        autoStartTransaction();
-        //TODO hopefully neo4j is going to implement a timeout
-        tx.get().acquireWriteLock(((Neo4jVertex) vertex).getRawVertex());
     }
 
     @Override
@@ -376,11 +296,6 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
     }
 
     @Override
-    public boolean isTransactionActive() {
-        return tx.get() != null;
-    }
-
-    @Override
     public void addDeletionNode() {
         Vertex v = addVertex(null);
         addEdge(null, getRoot(), v, DELETED_NODES);
@@ -394,7 +309,7 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
                 try {
                     Class<?> tumlOclExecutor = Class.forName("org.umlg.ocl.TumlOclExecutor");
                     Method method = tumlOclExecutor.getMethod("executeOclQueryToJson", String.class, TumlNode.class, String.class);
-                    TumlNode context = GraphDb.getDb().instantiateClassifier(contextId);
+                    TumlNode context = (TumlNode)GraphDb.getDb().instantiateClassifier(contextId);
                     String json = (String)method.invoke(null, context.getQualifiedName(), context, query);
                     return json;
                 } catch (ClassNotFoundException e) {

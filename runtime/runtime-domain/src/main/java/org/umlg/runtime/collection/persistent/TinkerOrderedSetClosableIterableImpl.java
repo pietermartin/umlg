@@ -209,29 +209,30 @@ public class TinkerOrderedSetClosableIterableImpl<E> extends BaseCollection<E> i
 		return this.oclStdLibOrderedSet.including(e);
 	}
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected void loadFromVertex() {
-		CloseableIterable<Edge> edges = this.index.queryList(0F, true, false);
-		for (Edge edge : edges) {
-			E node = null;
-			try {
-				Class<?> c = this.getClassToInstantiate(edge);
-				Object value = this.getVertexForDirection(edge).getProperty("value");
-				if (c.isEnum()) {
-					node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
-					this.internalVertexMap.put(value, this.getVertexForDirection(edge));
-				} else if (TumlNode.class.isAssignableFrom(c)) {
-					node = (E) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
-				} else {
-					node = (E) value;
-					this.internalVertexMap.put(value, this.getVertexForDirection(edge));
-				}
-				this.getInternalListOrderedSet().add(node);
-			} catch (Exception ex) {
-				throw new RuntimeException(ex);
-			}
-		}
-		this.loaded = true;
-	}
+    @Override
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    protected void loadFromVertex() {
+        for (Iterator<Edge> iter = getEdges(); iter.hasNext(); ) {
+            Edge edge = iter.next();
+            E node;
+            try {
+                Class<?> c = this.getClassToInstantiate(edge);
+                if (c.isEnum()) {
+                    Object value = this.getVertexForDirection(edge).getProperty("value");
+                    node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
+                    this.internalVertexMap.put(value, this.getVertexForDirection(edge));
+                } else if (TumlNode.class.isAssignableFrom(c)) {
+                    node = (E) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
+                } else {
+                    Object value = this.getVertexForDirection(edge).getProperty("value");
+                    node = (E) value;
+                    this.internalVertexMap.put(value, this.getVertexForDirection(edge));
+                }
+                this.internalCollection.add(node);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+    }
 
 }

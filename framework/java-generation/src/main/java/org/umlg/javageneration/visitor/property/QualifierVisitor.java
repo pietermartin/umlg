@@ -67,9 +67,8 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
 
         for (Iterator<Property> iterator = qualified.getQualifiers().iterator(); iterator.hasNext(); ) {
             PropertyWrapper qWrap = new PropertyWrapper(iterator.next());
-            sb.append("getId() + \"");
-            sb.append("::");
-            sb.append(qWrap.getName());
+            sb.append("\"");
+            sb.append(qWrap.getQualifiedName());
             sb.append("\"");
             if (iterator.hasNext()) {
                 sb.append(", ");
@@ -81,7 +80,7 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
             sb.append("context.");
             sb.append(qWrap.getter());
             sb.append("() == null ? ");
-            sb.append("\"___NULL___\" : ");
+            sb.append("getId() + \"___NULL___\" : getId() + ");
             sb.append("context.");
             sb.append(qWrap.getter());
             sb.append("().toString() ");
@@ -122,12 +121,11 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
         for (PropertyWrapper qualifier : qualifiers) {
             qualifierValue.addParam(qualifier.fieldname(), qualifier.javaBaseTypePath());
         }
-        ojClass.addToImports(TinkerGenerationUtil.tinkerIndexPathName);
         ojClass.addToImports(TinkerGenerationUtil.tinkerCloseableIterablePathName);
         ojClass.addToImports(TinkerGenerationUtil.tinkerDirection);
         ojClass.addToImports(TinkerGenerationUtil.edgePathName);
-        qualifierValue.getBody().addToStatements(
-                TinkerGenerationUtil.tinkerIndexPathName.getLast() + "<" + TinkerGenerationUtil.edgePathName.getLast() + "> index = " + TinkerGenerationUtil.graphDbAccess + ".getIndex(" + qualified.getTumlRuntimePropertyEnum() + ".getQualifiedName(), Edge.class)");
+//        qualifierValue.getBody().addToStatements(
+//                TinkerGenerationUtil.tinkerIndexPathName.getLast() + "<" + TinkerGenerationUtil.edgePathName.getLast() + "> index = " + TinkerGenerationUtil.graphDbAccess + ".getIndex(" + qualified.getTumlRuntimePropertyEnum() + ".getQualifiedName(), Edge.class)");
 //        OJIfStatement ifIndexNull = new OJIfStatement("index==null", "return null");
 
         OJBlock elseBlock = new OJBlock();
@@ -137,8 +135,7 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
 
         for (PropertyWrapper qualifier : qualifiers) {
             count++;
-            init.append("getId() + ");
-            init.append("\"::" + qualifier.fieldname() + "\"");
+            init.append("\"" + qualifier.getQualifiedName() + "\"");
             if (count != qualifiers.size()) {
                 init.append(" + ");
             }
@@ -151,18 +148,19 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
         for (PropertyWrapper qualifier : qualifiers) {
             if (first) {
                 first = false;
-                indexValue.setInitExp(qualifier.fieldname() + "==null?\"___NULL___\":" + qualifier.fieldname());
+                indexValue.setInitExp(qualifier.fieldname() + " == null ? getId() + \"___NULL___\" : getId() + " + qualifier.fieldname());
             } else {
-                elseBlock.addToStatements("indexValue += " + qualifier.fieldname() + "==null?\"___NULL___\":" + qualifier.fieldname());
+                elseBlock.addToStatements("indexValue += " + qualifier.fieldname() + " == null ? getId() + \"___NULL___\" : getId() + " + qualifier.fieldname());
             }
         }
-        elseBlock.addToStatements(TinkerGenerationUtil.tinkerCloseableIterablePathName.getCopy().addToGenerics(TinkerGenerationUtil.edgePathName).getLast()
-                + " closeableIterable = index.get(" + "indexKey" + ", indexValue)");
-//        ifIndexNull.setElsePart(elseBlock);
-        qualifierValue.getBody().addToStatements(elseBlock);
 
-//        ifIndexNull.addToElsePart("Iterator<Edge> iterator = closeableIterable.iterator()");
-        qualifierValue.getBody().addToStatements("Iterator<Edge> iterator = closeableIterable.iterator()");
+//        Iterator<Edge> iterator = GraphDb.getDb().query().has(indexKey, indexValue).edges().iterator();
+        elseBlock.addToStatements("Iterator<Edge> iterator = " + TinkerGenerationUtil.graphDbAccess + ".query().has(indexKey, indexValue).edges().iterator()");
+
+//        elseBlock.addToStatements(TinkerGenerationUtil.tinkerCloseableIterablePathName.getCopy().addToGenerics(TinkerGenerationUtil.edgePathName).getLast()
+//                + " closeableIterable = index.get(" + "indexKey" + ", indexValue)");
+        qualifierValue.getBody().addToStatements(elseBlock);
+//        qualifierValue.getBody().addToStatements("Iterator<Edge> iterator = closeableIterable.iterator()");
         ojClass.addToImports("java.util.Iterator");
         OJIfStatement ifHasNext = new OJIfStatement("iterator.hasNext()");
         if (qualified.isUnqualifiedOne()) {
@@ -180,9 +178,7 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
             ojClass.addToImports(TinkerGenerationUtil.tumlTumlCollections);
         }
 
-//        ifIndexNull.addToElsePart(ifHasNext);
         qualifierValue.getBody().addToStatements(ifHasNext);
-//        qualifierValue.getBody().addToStatements(ifIndexNull);
         ojClass.addToOperations(qualifierValue);
     }
 }

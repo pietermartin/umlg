@@ -2,7 +2,6 @@ package org.umlg.runtime.collection.persistent;
 
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.Index;
 import com.tinkerpop.blueprints.Vertex;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -10,7 +9,6 @@ import org.joda.time.LocalTime;
 import org.umlg.runtime.adaptor.GraphDb;
 import org.umlg.runtime.adaptor.TransactionThreadEntityVar;
 import org.umlg.runtime.adaptor.TransactionThreadVar;
-import org.umlg.runtime.adaptor.TumlTinkerIndex;
 import org.umlg.runtime.collection.*;
 import org.umlg.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator;
@@ -26,7 +24,7 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
 
     protected Collection<E> internalCollection;
     protected OclStdLibCollection<E> oclStdLibCollection;
-    protected TumlTinkerIndex<Edge> index;
+//    protected TumlTinkerIndex<Edge> index;
     protected boolean loaded = false;
     // This is the owner of the collection
     protected TumlNode owner;
@@ -492,14 +490,14 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
         TumlNode node = (TumlNode) e;
         if (isQualified()) {
             for (Qualifier qualifier : this.owner.getQualifiers(this.tumlRuntimeProperty, node, false)) {
-                validateQualifiedMultiplicity(index, qualifier);
+                validateQualifiedMultiplicity(/*index, */qualifier);
             }
         }
         if (isInverseQualified()) {
-            Index<Edge> tmpIndex;
-            tmpIndex = GraphDb.getDb().getIndex(getInverseQualifiedName(), Edge.class);
+//            Index<Edge> tmpIndex;
+//            tmpIndex = GraphDb.getDb().getIndex(getInverseQualifiedName(), Edge.class);
             for (Qualifier qualifier : node.getQualifiers(this.tumlRuntimeProperty, this.owner, true)) {
-                validateQualifiedMultiplicity(tmpIndex, qualifier);
+                validateQualifiedMultiplicity(/*tmpIndex, */qualifier);
             }
         }
     }
@@ -814,9 +812,14 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
         return result;
     }
 
-    private void validateQualifiedMultiplicity(Index<Edge> index, Qualifier qualifier) {
+    private void validateQualifiedMultiplicity(/*Index<Edge> index,*/ Qualifier qualifier) {
         if (qualifier.isOne()) {
-            long count = index.count(qualifier.getKey(), qualifier.getValue());
+            Iterable<Edge> edgesToCount = GraphDb.getDb().query().has(qualifier.getKey(), qualifier.getValue()).edges();
+            long count = 0;
+            for (final Edge edge : edgesToCount) {
+                count++;
+            }
+//            long count = index.count(qualifier.getKey(), qualifier.getValue());
             if (count > 0) {
                 // Add info to exception
                 throw new IllegalStateException(String.format("Qualifier fails, qualifier multiplicity is one and an entry for key '%s' and value '%s' already exist",
@@ -828,13 +831,13 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
     protected void addQualifierToIndex(Edge edge, TumlNode node) {
         // if is qualified update index
         if (isQualified()) {
-            addQualifierToIndex(this.index, edge, this.owner, node, false);
+            addQualifierToIndex(/*this.index, */edge, this.owner, node, false);
         }
 
         // if is qualified update index
         if (isInverseQualified()) {
-            Index<Edge> index = GraphDb.getDb().getIndex(getInverseQualifiedName(), Edge.class);
-            addQualifierToIndex(index, edge, node, this.owner, true);
+//            Index<Edge> index = GraphDb.getDb().getIndex(getInverseQualifiedName(), Edge.class);
+            addQualifierToIndex(/*index, */edge, node, this.owner, true);
         }
     }
 
@@ -842,14 +845,15 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
      * element is the context for the ocl expression representing the qualifier
      * value
      *
-     * @param index
+//     * @param index
      * @param qualifiedNode
      * @param qualifierNode
      */
-    private void addQualifierToIndex(Index<Edge> index, Edge edge, TumlNode qualifiedNode, TumlNode qualifierNode, boolean inverse) {
+    private void addQualifierToIndex(/*Index<Edge> index, */Edge edge, TumlNode qualifiedNode, TumlNode qualifierNode, boolean inverse) {
         for (Qualifier qualifier : qualifiedNode.getQualifiers(this.tumlRuntimeProperty, qualifierNode, inverse)) {
-            index.put(qualifier.getKey(), qualifier.getValue(), edge);
-            edge.setProperty("index" + qualifier.getKey(), qualifier.getValue());
+//            index.put(qualifier.getKey(), qualifier.getValue(), edge);
+//            edge.setProperty("index" + qualifier.getKey(), qualifier.getValue());
+            edge.setProperty(qualifier.getKey(), qualifier.getValue());
         }
     }
 
