@@ -2170,6 +2170,7 @@ if (typeof Slick === "undefined") {
               return; // no editing mode to cancel, allow bubbling and default processing (exit without cancelling the event)
             }
             cancelEditAndSetFocus();
+            handled = true;
           } else if (e.which == 34) {
             navigatePageDown();
             handled = true;           
