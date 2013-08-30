@@ -787,7 +787,11 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 
     @Override
     public String getQualifiedName() {
-        return this.property.getQualifiedName();
+        if (isQualifier()) {
+            return ((NamedElement)this.property.getOwner()).getQualifiedName() + "::" + this.property.getQualifiedName();
+        } else {
+            return this.property.getQualifiedName();
+        }
     }
 
     public String getInverseName() {

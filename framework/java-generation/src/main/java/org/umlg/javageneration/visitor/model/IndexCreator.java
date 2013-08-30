@@ -37,8 +37,8 @@ public class IndexCreator extends BaseVisitor implements Visitor<Model> {
 
         List<Property> qualifiers = ModelLoader.INSTANCE.getAllQualifiers();
         for (Property q : qualifiers) {
-            PropertyWrapper ownerWrap = new PropertyWrapper((Property) q.getOwner());
-            createIndexes.getBody().addToStatements(TinkerGenerationUtil.graphDbAccess + ".createIndex(\"" + ownerWrap.getQualifiedName() + "\", " + TinkerGenerationUtil.edgePathName.getLast() + ".class)");
+            PropertyWrapper qualifierWrap = new PropertyWrapper(q);
+            createIndexes.getBody().addToStatements(TinkerGenerationUtil.graphDbAccess + ".createIndex(\"" + qualifierWrap.getQualifiedName() + "\", " + TinkerGenerationUtil.edgePathName.getLast() + ".class)");
             indexCreator.addToImports(TinkerGenerationUtil.edgePathName);
             indexCreator.addToImports(TinkerGenerationUtil.graphDbPathName);
         }

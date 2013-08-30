@@ -1912,7 +1912,7 @@
         <layoutConstraint xmi:type="notation:Location" xmi:id="_1dxBYAAOEeKpVr_ntT6cLA" x="10" y="10"/>
       </children>
       <element xmi:type="uml:Association" href="umlg-test.uml#_h0dj8BnqEeGZfswubjlR9Q"/>
-      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_1dvzTAAOEeKpVr_ntT6cLA" points="[184, 92, -269, 61]$[237, 92, -216, 61]"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_1dvzTAAOEeKpVr_ntT6cLA" points="[142, 46, -311, 15]$[227, 74, -226, 43]$[324, 55, -129, 24]"/>
       <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_1dwaUAAOEeKpVr_ntT6cLA"/>
       <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_1dwaUQAOEeKpVr_ntT6cLA"/>
     </edges>

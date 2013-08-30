@@ -11,7 +11,7 @@ import org.umlg.tinker.qualifiertest.TestQualifierOnManyToMany;
  * Time: 7:18 PM
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({TestQualifierOnManyToMany.class})
+@Suite.SuiteClasses({TestQualifier.class})
 public class AnyTest {
 
 }
