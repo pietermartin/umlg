@@ -74,7 +74,7 @@ public class CollectionObjectToken<O> extends ObjectToken<O> implements Composit
 	}
 
     @Override
-    public Long getId() {
+    public Object getId() {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 

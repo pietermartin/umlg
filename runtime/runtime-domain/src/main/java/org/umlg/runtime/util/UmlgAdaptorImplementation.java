@@ -8,28 +8,28 @@ public enum UmlgAdaptorImplementation {
     NEO4J(
             "org.umlg.runtime.adaptor.UmlgNeo4jGraphFactory",
             "org.umlg.runtime.adaptor.TumlNeo4jIdUtilImpl",
-            "org.umlg.runtime.adaptor.TumlNeo4jExceptionUtilIml",
+            "org.umlg.runtime.adaptor.UmlgNeo4jExceptionUtilIml",
             "org.umlg.runtime.adaptor.TumlNeo4jTestUtil",
             "org.umlg.runtime.adaptor.UmlgNeo4jLabelConverter",
             "org.umlg.runtime.adaptor.Neo4jAdminApp"),
     ORIENTDB(
             "org.umlg.runtime.adaptor.UmlgOrientDbGraphFactory",
             "org.umlg.runtime.adaptor.TumlOrientDbIdUtilImpl",
-            "TODO",
+            "org.umlg.runtime.adaptor.UmlgOrientDbExceptionUtilIml",
             "org.umlg.runtime.adaptor.TumlOrientDbTestUtil",
             "org.umlg.runtime.adaptor.UmlgOrientDbLabelConverter",
             "//TODO");
     private String tumlGraphFactory;
     private String tumlIdUtil;
-    private String tumlExceptionUtil;
+    private String umlgExceptionUtil;
     private String tumlTestUtil;
     private String umlgLabelConverter;
     private String umlgAdminApp;
 
-    private UmlgAdaptorImplementation(String tumlGraphFactory, String tumlIdUtil, String tumlExceptionUtil, String tumlTestUtil, String umlgLabelConverter, String umlgAdminApp) {
+    private UmlgAdaptorImplementation(String tumlGraphFactory, String tumlIdUtil, String umlgExceptionUtil, String tumlTestUtil, String umlgLabelConverter, String umlgAdminApp) {
         this.tumlGraphFactory = tumlGraphFactory;
         this.tumlIdUtil = tumlIdUtil;
-        this.tumlExceptionUtil = tumlExceptionUtil;
+        this.umlgExceptionUtil = umlgExceptionUtil;
         this.tumlTestUtil = tumlTestUtil;
         this.umlgLabelConverter = umlgLabelConverter;
         this.umlgAdminApp = umlgAdminApp;
@@ -47,8 +47,8 @@ public enum UmlgAdaptorImplementation {
         return tumlTestUtil;
     }
 
-    public String getTumlExceptionUtil() {
-        return tumlExceptionUtil;
+    public String getUmlgExceptionUtil() {
+        return umlgExceptionUtil;
     }
 
     public String getUmlgLabelConverter() {

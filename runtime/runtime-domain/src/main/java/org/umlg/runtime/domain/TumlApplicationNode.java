@@ -1,6 +1,6 @@
 package org.umlg.runtime.domain;
 
 public interface TumlApplicationNode {
-	Long getId();
+	Object getId();
 	String toJson();
 }

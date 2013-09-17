@@ -16,9 +16,9 @@ public class TumlOrientDbIdUtilImpl implements TinkerIdUtil {
     }
 
     @Override
-    public Long getId(Vertex v) {
+    public String getId(Vertex v) {
         ORecordId oRecordId = (ORecordId)v.getId();
-        return oRecordId.getIdentity().getClusterPosition().longValue();
+        return oRecordId.toString();
     }
 
 }

@@ -15,8 +15,8 @@ public class TumlNeo4jIdUtilImpl implements TinkerIdUtil {
 	}
 	
 	@Override
-	public Long getId(Vertex v) {
-		return (Long)v.getId();
+	public String getId(Vertex v) {
+		return v.getId().toString();
 	}
 
 }

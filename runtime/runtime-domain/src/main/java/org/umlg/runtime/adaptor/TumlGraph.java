@@ -36,7 +36,7 @@ public interface TumlGraph extends TransactionalGraph, IndexableGraph {
 
     void addDeletionNode();
 
-    String executeQuery(TumlQueryEnum tumlQueryEnum, Long contextId, String query);
+    String executeQuery(TumlQueryEnum tumlQueryEnum, Object contextId, String query);
 
     void drop();
 

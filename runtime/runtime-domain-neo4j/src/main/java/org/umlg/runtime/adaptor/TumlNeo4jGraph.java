@@ -276,7 +276,7 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
     }
 
     @Override
-    public String executeQuery(TumlQueryEnum tumlQueryEnum, Long contextId, String query) {
+    public String executeQuery(TumlQueryEnum tumlQueryEnum, Object contextId, String query) {
 
         switch (tumlQueryEnum) {
             case OCL:

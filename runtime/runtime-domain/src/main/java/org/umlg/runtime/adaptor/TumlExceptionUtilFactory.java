@@ -11,20 +11,20 @@ import java.lang.reflect.Method;
  */
 public class TumlExceptionUtilFactory {
 
-    private static TumlExceptionUtil tumlExceptionUtil;
+    private static UmlgExceptionUtil umlgExceptionUtil;
 
     @SuppressWarnings("unchecked")
-    public static TumlExceptionUtil getTumlExceptionUtil() {
-        if (tumlExceptionUtil == null) {
+    public static UmlgExceptionUtil getTumlExceptionUtil() {
+        if (umlgExceptionUtil == null) {
             try {
                 UmlgAdaptorImplementation umlgAdaptorImplementation = UmlgAdaptorImplementation.fromName(UmlgProperties.INSTANCE.getTinkerImplementation());
-                Class<TumlExceptionUtil> factory = (Class<TumlExceptionUtil>) Class.forName(umlgAdaptorImplementation.getTumlExceptionUtil());
+                Class<UmlgExceptionUtil> factory = (Class<UmlgExceptionUtil>) Class.forName(umlgAdaptorImplementation.getUmlgExceptionUtil());
                 Method m = factory.getDeclaredMethod("getInstance", new Class[0]);
-                tumlExceptionUtil = (TumlExceptionUtil) m.invoke(null);
+                umlgExceptionUtil = (UmlgExceptionUtil) m.invoke(null);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }
-        return tumlExceptionUtil;
+        return umlgExceptionUtil;
     }
 }

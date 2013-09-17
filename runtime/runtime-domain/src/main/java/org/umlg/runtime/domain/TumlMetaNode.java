@@ -12,7 +12,7 @@ public interface TumlMetaNode<T> {
     TinkerSet<T> getAllInstances();
     TinkerSet<T> getAllInstances(Filter<T> filter);
     Vertex getVertex();
-    Long getId();
+    Object getId();
     String getUid();
     Long getIdHigh();
 }

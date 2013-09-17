@@ -48,7 +48,7 @@ public abstract class BaseTuml implements TumlNode, Serializable {
     }
 
     @Override
-    public final Long getId() {
+    public final Object getId() {
         return TinkerIdUtilFactory.getIdUtil().getId(this.vertex);
     }
 

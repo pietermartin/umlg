@@ -64,12 +64,7 @@ public class UmlgTitanGraph extends StandardTitanGraph implements TumlGraph {
     }
 
     @Override
-    public void registerListeners() {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public <T> T instantiateClassifier(Long id) {
+    public <T> T instantiateClassifier(Object id) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
@@ -94,7 +89,7 @@ public class UmlgTitanGraph extends StandardTitanGraph implements TumlGraph {
     }
 
     @Override
-    public String executeQuery(TumlQueryEnum tumlQueryEnum, Long contextId, String query) {
+    public String executeQuery(TumlQueryEnum tumlQueryEnum, Object contextId, String query) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 

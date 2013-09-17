@@ -198,7 +198,7 @@ public class TumlOrientDbGraph extends OrientGraph implements TumlGraph {
     }
 
     @Override
-    public String executeQuery(TumlQueryEnum tumlQueryEnum, Long contextId, String query) {
+    public String executeQuery(TumlQueryEnum tumlQueryEnum, Object contextId, String query) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 

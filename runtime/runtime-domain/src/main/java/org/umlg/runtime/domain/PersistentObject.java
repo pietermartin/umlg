@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 public interface PersistentObject extends Serializable {
-	Long getId();
+	Object getId();
 	String getUid();
     String toJson(Boolean deep);
     String toJsonWithoutCompositeParent(Boolean deep);

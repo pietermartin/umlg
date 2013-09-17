@@ -13,15 +13,15 @@ public class TransactionThreadEntityVar {
     private TransactionThreadEntityVar() {
     }
 
-    private static ThreadLocal<Map<Long, TumlNode>> transactionEntityVar = new ThreadLocal<Map<Long, TumlNode>>() {
+    private static ThreadLocal<Map<Object, TumlNode>> transactionEntityVar = new ThreadLocal<Map<Object, TumlNode>>() {
         @Override
-        protected Map<Long, TumlNode> initialValue() {
-            return new HashMap<Long, TumlNode>();
+        protected Map<Object, TumlNode> initialValue() {
+            return new HashMap<Object, TumlNode>();
         }
     };
 
     public static boolean hasNoAuditEntry(String clazzAndId) {
-        Map<Long, TumlNode> newVertexMap = transactionEntityVar.get();
+        Map<Object, TumlNode> newVertexMap = transactionEntityVar.get();
         TumlNode newVertex = newVertexMap.get(clazzAndId);
         return newVertex == null;
     }

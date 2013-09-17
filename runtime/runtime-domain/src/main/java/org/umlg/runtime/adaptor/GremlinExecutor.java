@@ -32,7 +32,7 @@ public class GremlinExecutor {
      * @param gremlin
      * @return
      */
-    public static String executeGremlinViaGroovy(Long contextId, String gremlin) {
+    public static String executeGremlinViaGroovy(Object contextId, String gremlin) {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         if (contextId != null) {

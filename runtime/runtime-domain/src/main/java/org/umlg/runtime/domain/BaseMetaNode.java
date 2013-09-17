@@ -22,7 +22,7 @@ public abstract class BaseMetaNode implements TumlMetaNode {
     }
 
     @Override
-    public final Long getId() {
+    public final Object getId() {
         return TinkerIdUtilFactory.getIdUtil().getId(this.vertex);
     }
 
