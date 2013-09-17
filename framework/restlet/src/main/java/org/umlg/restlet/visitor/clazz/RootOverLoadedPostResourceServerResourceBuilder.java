@@ -224,7 +224,7 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
         put.setVisibility(OJVisibilityKind.PRIVATE);
         put.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
         annotatedClass.addToOperations(put);
-        put.getBody().addToStatements("Long id = Long.valueOf((Integer)propertyMap.get(\"id\"))");
+        put.getBody().addToStatements("Object id = propertyMap.get(\"id\")");
         put.getBody().addToStatements(
                 TumlClassOperations.getPathName(classifier).getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
         annotatedClass.addToImports(TumlClassOperations.getPathName(classifier));
@@ -238,7 +238,7 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
         delete.setVisibility(OJVisibilityKind.PRIVATE);
         delete.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
         annotatedClass.addToOperations(delete);
-        delete.getBody().addToStatements("Long id = Long.valueOf((Integer)propertyMap.get(\"id\"))");
+        delete.getBody().addToStatements("Object id = propertyMap.get(\"id\")");
         delete.getBody().addToStatements(
                 TumlClassOperations.getPathName(classifier).getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
         annotatedClass.addToImports(TumlClassOperations.getPathName(classifier));

@@ -335,8 +335,8 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 
                         OJIfStatement ifSetToNull = new OJIfStatement(field.getName() + ".isEmpty() || " + field.getName() + ".get(\"id\") == null",
                                 pWrap.setter() + "(null)");
-                        ifSetToNull.addToElsePart(pWrap.setter() + "((" + pWrap.javaBaseTypePath().getLast() + ")" + TinkerGenerationUtil.graphDbAccess + ".instantiateClassifier(((Number)"
-                                + pWrap.fieldname() + "Map.get(\"id\")).longValue()))");
+                        ifSetToNull.addToElsePart(pWrap.setter() + "((" + pWrap.javaBaseTypePath().getLast() + ")" + TinkerGenerationUtil.graphDbAccess + ".instantiateClassifier(("
+                                + pWrap.fieldname() + "Map.get(\"id\"))))");
                         annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
                         ifNotNull.addToThenPart(ifSetToNull);
                         fromJson.getBody().addToStatements(ifInMap);
@@ -346,9 +346,9 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 
                         OJField component = new OJField(pWrap.fieldname(), pWrap.javaBaseTypePath());
                         ifNotNull.getThenPart().addToLocals(component);
-                        OJIfStatement ojIfStatement = new OJIfStatement(pWrap.fieldname() + "Map.get(\"id\") instanceof Number");
+                        OJIfStatement ojIfStatement = new OJIfStatement(pWrap.fieldname() + "Map.get(\"id\") != null");
                         OJSimpleStatement ojSimpleStatementConstructor = new OJSimpleStatement(pWrap.fieldname() + " = " + TinkerGenerationUtil.graphDbAccess
-                                + ".instantiateClassifier(((Number)" + pWrap.fieldname() + "Map.get(\"id\")).longValue())");
+                                + ".instantiateClassifier((" + pWrap.fieldname() + "Map.get(\"id\")))");
                         annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
                         ojIfStatement.addToThenPart(ojSimpleStatementConstructor);
 
@@ -377,7 +377,7 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                         OJForStatement ojForStatement = new OJForStatement("row", new OJPathName("Map<String,Integer>"), pWrap.fieldname() + "Map");
                         ifNotNull.addToThenPart(ojForStatement);
                         OJSimpleStatement ojSimpleStatementConstructor = new OJSimpleStatement(pWrap.javaBaseTypePath().getLast() + " " + pWrap.fieldname() + " = " + TinkerGenerationUtil.graphDbAccess
-                                + ".instantiateClassifier(Long.valueOf(row.get(\"id\")))");
+                                + ".instantiateClassifier(row.get(\"id\"))");
                         ojForStatement.getBody().addToStatements(ojSimpleStatementConstructor);
                         OJSimpleStatement ojSimpleStatementFromJson = new OJSimpleStatement(pWrap.adder() + "(" + pWrap.fieldname() + ")");
                         ojForStatement.getBody().addToStatements(ojSimpleStatementFromJson);
@@ -389,9 +389,9 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 
                         OJField component = new OJField(pWrap.fieldname(), pWrap.javaBaseTypePath());
                         ojForStatement.getBody().addToLocals(component);
-                        OJIfStatement ojIfStatement = new OJIfStatement("row.get(\"id\") instanceof Number");
+                        OJIfStatement ojIfStatement = new OJIfStatement("row.get(\"id\") != null");
                         OJSimpleStatement ojSimpleStatementConstructor = new OJSimpleStatement(pWrap.fieldname() + " = " + TinkerGenerationUtil.graphDbAccess
-                                + ".instantiateClassifier(((Number)row.get(\"id\")).longValue())");
+                                + ".instantiateClassifier((row.get(\"id\")))");
                         ojIfStatement.addToThenPart(ojSimpleStatementConstructor);
 
                         ojIfStatement.addToElsePart("Class<" + pWrap.javaBaseTypePath().getLast() + "> baseTumlClass = TumlSchemaFactory.getTumlSchemaMap().get((String)row.get(\"qualifiedName\"))");
@@ -525,13 +525,6 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                             ifSetToNull = new OJIfStatement(field.getName() + ".isEmpty() || " + field.getName() + ".get(\"id\") == null",
                                     pWrap.setter() + "(null, null)");
 
-//                            ifSetToNull.addToElsePart("Long id");
-//                            ifSetToNull.addToElsePart("Object idFromMap = " + field.getName() + ".get(\"id\")");
-//                            OJIfStatement ifIdLong = new OJIfStatement("idFromMap instanceof Number");
-//                            ifIdLong.addToThenPart("id = ((Number)idFromMap).longValue()");
-//                            ifIdLong.addToElsePart("id = " + TinkerGenerationUtil.TumlTmpIdManager.getLast() + ".INSTANCE.get((String)idFromMap)");
-//                            ifSetToNull.addToElsePart(ifIdLong);
-
                             //Validate that association class json is in the map
                             OJIfStatement ifMapHasAssociationClassJson = new OJIfStatement("propertyMap.get(\"" + pWrap.getAssociationClassFakePropertyName() + "\") == null");
                             ifMapHasAssociationClassJson.addToThenPart("throw new IllegalStateException(\"Association class " + pWrap.getAssociationClassFakePropertyName() + " must be in the map!\")");
@@ -541,7 +534,7 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                             ifSetToNull.addToElsePart(pWrap.getAssociationClassPathName().getLast() + " " + pWrap.getAssociationClassFakePropertyName() + " = new "
                                     + pWrap.getAssociationClassPathName().getLast() + "(true)");
                             ifSetToNull.addToElsePart(pWrap.getAssociationClassFakePropertyName() + ".fromJson((Map<String, Object>) propertyMap.get(\"" + pWrap.getAssociationClassFakePropertyName() + "\"))");
-                            ifSetToNull.addToElsePart(pWrap.setter() + "((" + pWrap.javaBaseTypePath().getLast() + ")" + TinkerGenerationUtil.graphDbAccess + ".instantiateClassifier(((Number)" + field.getName() + ".get(\"id\")).longValue()), " + pWrap.getAssociationClassFakePropertyName() + ")");
+                            ifSetToNull.addToElsePart(pWrap.setter() + "((" + pWrap.javaBaseTypePath().getLast() + ")" + TinkerGenerationUtil.graphDbAccess + ".instantiateClassifier((" + field.getName() + ".get(\"id\"))), " + pWrap.getAssociationClassFakePropertyName() + ")");
 
                             ifSetToNull.addToElsePart("//Store the association class property name in a ThreadVar.");
                             ifSetToNull.addToElsePart("//The corresponding toJson checks the ThreadVar to know whether it should return this association class's data");
@@ -550,8 +543,8 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                         } else {
                             ifSetToNull = new OJIfStatement(field.getName() + ".isEmpty() || " + field.getName() + ".get(\"id\") == null",
                                     pWrap.setter() + "(null)");
-                            ifSetToNull.addToElsePart(pWrap.setter() + "((" + pWrap.javaBaseTypePath().getLast() + ")" + TinkerGenerationUtil.graphDbAccess + ".instantiateClassifier(((Number)"
-                                    + pWrap.fieldname() + "Map.get(\"id\")).longValue()))");
+                            ifSetToNull.addToElsePart(pWrap.setter() + "((" + pWrap.javaBaseTypePath().getLast() + ")" + TinkerGenerationUtil.graphDbAccess + ".instantiateClassifier(("
+                                    + pWrap.fieldname() + "Map.get(\"id\"))))");
                         }
                         annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
                         ifNotNull.addToThenPart(ifSetToNull);
@@ -562,9 +555,9 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 
                         OJField component = new OJField(pWrap.fieldname(), pWrap.javaBaseTypePath());
                         ifNotNull.getThenPart().addToLocals(component);
-                        OJIfStatement ojIfStatement = new OJIfStatement(pWrap.fieldname() + "Map.get(\"id\") instanceof Number");
+                        OJIfStatement ojIfStatement = new OJIfStatement(pWrap.fieldname() + "Map.get(\"id\") != null");
                         OJSimpleStatement ojSimpleStatementConstructor = new OJSimpleStatement(pWrap.fieldname() + " = " + TinkerGenerationUtil.graphDbAccess
-                                + ".instantiateClassifier(((Number)" + pWrap.fieldname() + "Map.get(\"id\")).longValue())");
+                                + ".instantiateClassifier((" + pWrap.fieldname() + "Map.get(\"id\")))");
                         annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
                         ojIfStatement.addToThenPart(ojSimpleStatementConstructor);
 
@@ -593,7 +586,7 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                         OJForStatement ojForStatement = new OJForStatement("row", new OJPathName("Map<String,Integer>"), pWrap.fieldname() + "Map");
                         ifNotNull.addToThenPart(ojForStatement);
                         OJSimpleStatement ojSimpleStatementConstructor = new OJSimpleStatement(pWrap.javaBaseTypePath().getLast() + " " + pWrap.fieldname() + " = " + TinkerGenerationUtil.graphDbAccess
-                                + ".instantiateClassifier(Long.valueOf(row.get(\"id\")))");
+                                + ".instantiateClassifier(row.get(\"id\"))");
                         ojForStatement.getBody().addToStatements(ojSimpleStatementConstructor);
                         OJSimpleStatement ojSimpleStatementFromJson = new OJSimpleStatement(pWrap.adder() + "(" + pWrap.fieldname() + ")");
                         ojForStatement.getBody().addToStatements(ojSimpleStatementFromJson);
@@ -605,9 +598,9 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 
                         OJField component = new OJField(pWrap.fieldname(), pWrap.javaBaseTypePath());
                         ojForStatement.getBody().addToLocals(component);
-                        OJIfStatement ojIfStatement = new OJIfStatement("row.get(\"id\") instanceof Number");
+                        OJIfStatement ojIfStatement = new OJIfStatement("row.get(\"id\") != null");
                         OJSimpleStatement ojSimpleStatementConstructor = new OJSimpleStatement(pWrap.fieldname() + " = " + TinkerGenerationUtil.graphDbAccess
-                                + ".instantiateClassifier(((Number)row.get(\"id\")).longValue())");
+                                + ".instantiateClassifier((row.get(\"id\")))");
                         ojIfStatement.addToThenPart(ojSimpleStatementConstructor);
 
                         ojIfStatement.addToElsePart("Class<" + pWrap.javaBaseTypePath().getLast() + "> baseTumlClass = TumlSchemaFactory.getTumlSchemaMap().get((String)row.get(\"qualifiedName\"))");

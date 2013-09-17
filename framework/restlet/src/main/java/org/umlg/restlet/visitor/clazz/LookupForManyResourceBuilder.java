@@ -25,22 +25,22 @@ public class LookupForManyResourceBuilder extends BaseServerResourceBuilder impl
         if (pWrap.hasLookup() && pWrap.isMany()) {
             OJAnnotatedClass owner = findOJClass(p);
 
-            OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_"
-                    + pWrap.getOtherEnd().getName() + "_" + pWrap.getName() + "_lookUpForMany" + "_ServerResource");
+//            OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_"
+//                    + pWrap.getOtherEnd().getName() + "_" + pWrap.getName() + "_lookUpForMany" + "_ServerResource");
             OJPackage ojPackage = new OJPackage(owner.getMyPackage().toString() + ".restlet");
-            annotatedInf.setMyPackage(ojPackage);
-            addToSource(annotatedInf);
+//            annotatedInf.setMyPackage(ojPackage);
+//            addToSource(annotatedInf);
 
             OJAnnotatedClass annotatedClass = new OJAnnotatedClass(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_"
                     + pWrap.getOtherEnd().getName() + "_" + pWrap.getName() + "_lookUpForMany" + "_ServerResourceImpl");
             annotatedClass.setSuperclass(TumlRestletGenerationUtil.ServerResource);
-            annotatedClass.addToImplementedInterfaces(annotatedInf.getPathName());
+//            annotatedClass.addToImplementedInterfaces(annotatedInf.getPathName());
             annotatedClass.setMyPackage(ojPackage);
             addToSource(annotatedClass);
             addDefaultConstructor(annotatedClass);
 
             addCompositeParentIdField(pWrap, annotatedClass);
-            addGetObjectRepresentation(pWrap, annotatedInf, annotatedClass);
+            addGetObjectRepresentation(pWrap/*, annotatedInf*/, annotatedClass);
             addServerResourceToRouterEnum(pWrap, annotatedClass);
         }
     }
@@ -51,16 +51,16 @@ public class LookupForManyResourceBuilder extends BaseServerResourceBuilder impl
 
     private void addCompositeParentIdField(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass) {
         OJField compositeParentFieldId = new OJField(TumlClassOperations.getPathName(pWrap.getOtherEnd().getType()).getLast().toLowerCase() + "Id",
-                new OJPathName("Long"));
+                new OJPathName("Object"));
         compositeParentFieldId.setVisibility(OJVisibilityKind.PRIVATE);
         annotatedClass.addToFields(compositeParentFieldId);
     }
 
-    private void addGetObjectRepresentation(PropertyWrapper pWrap, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass) {
+    private void addGetObjectRepresentation(PropertyWrapper pWrap/*, OJAnnotatedInterface annotatedInf*/, OJAnnotatedClass annotatedClass) {
 
-        OJAnnotatedOperation getInf = new OJAnnotatedOperation("get", TumlRestletGenerationUtil.Representation);
-        annotatedInf.addToOperations(getInf);
-        getInf.addAnnotationIfNew(new OJAnnotationValue(TumlRestletGenerationUtil.Get, "json"));
+//        OJAnnotatedOperation getInf = new OJAnnotatedOperation("get", TumlRestletGenerationUtil.Representation);
+//        annotatedInf.addToOperations(getInf);
+//        getInf.addAnnotationIfNew(new OJAnnotationValue(TumlRestletGenerationUtil.Get, "json"));
 
         OJAnnotatedOperation get = new OJAnnotatedOperation("get", TumlRestletGenerationUtil.Representation);
         get.addToThrows(TumlRestletGenerationUtil.ResourceException);
@@ -71,8 +71,8 @@ public class LookupForManyResourceBuilder extends BaseServerResourceBuilder impl
 
         OJPathName parentPathName = TumlClassOperations.getPathName(pWrap.getOtherEnd().getType());
         ojTryStatement.getTryPart().addToStatements(
-                "this." + parentPathName.getLast().toLowerCase() + "Id = Long.valueOf((String)getRequestAttributes().get(\""
-                        + parentPathName.getLast().toLowerCase() + "Id\"))");
+                "this." + parentPathName.getLast().toLowerCase() + "Id = getRequestAttributes().get(\""
+                        + parentPathName.getLast().toLowerCase() + "Id\")");
         ojTryStatement.getTryPart().addToStatements(
                 parentPathName.getLast() + " resource = GraphDb.getDb().instantiateClassifier(this." + parentPathName.getLast().toLowerCase() + "Id"
                         + ")");

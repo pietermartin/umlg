@@ -23,22 +23,22 @@ public class NavigatePropertyOverloadedPostForLookupServerResourceBuilder extend
 
             OJAnnotatedClass owner = findOJClass(pWrap.getType());
 
-            OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_"
-                    + pWrap.getOtherEnd().getName() + "_" + pWrap.getName() + "_LookupServerResource");
+//            OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_"
+//                    + pWrap.getOtherEnd().getName() + "_" + pWrap.getName() + "_LookupServerResource");
             OJPackage ojPackage = new OJPackage(owner.getMyPackage().toString() + ".restlet");
-            annotatedInf.setMyPackage(ojPackage);
-            addToSource(annotatedInf);
+//            annotatedInf.setMyPackage(ojPackage);
+//            addToSource(annotatedInf);
 
             OJAnnotatedClass annotatedClass = new OJAnnotatedClass(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_"
                     + pWrap.getOtherEnd().getName() + "_" + pWrap.getName() + "_LookupServerResourceImpl");
             annotatedClass.setSuperclass(TumlRestletGenerationUtil.ServerResource);
-            annotatedClass.addToImplementedInterfaces(annotatedInf.getPathName());
+//            annotatedClass.addToImplementedInterfaces(annotatedInf.getPathName());
             annotatedClass.setMyPackage(ojPackage);
             addToSource(annotatedClass);
             addDefaultConstructor(annotatedClass);
 
             addCompositeParentIdField(pWrap, annotatedClass);
-            addPostObjectRepresentation(pWrap, annotatedInf, annotatedClass);
+            addPostObjectRepresentation(pWrap/*, annotatedInf*/, annotatedClass);
             addServerResourceToRouterEnum(pWrap, annotatedClass);
 
         }
@@ -55,24 +55,24 @@ public class NavigatePropertyOverloadedPostForLookupServerResourceBuilder extend
         annotatedClass.addToImports(pWrap.javaBaseTypePath());
         if (pWrap.isComposite()) {
             delete.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
-            delete.getBody().addToStatements("Long id = Long.valueOf((Integer)propertyMap.get(\"id\"))");
+            delete.getBody().addToStatements("Object id = propertyMap.get(\"id\")");
             delete.getBody().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
             delete.getBody().addToStatements("childResource.delete()");
         } else {
             delete.addToParameters(new OJParameter("parentResource", parentPathName));
             delete.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
-            delete.getBody().addToStatements("Long id = Long.valueOf((Integer)propertyMap.get(\"id\"))");
+            delete.getBody().addToStatements("Object id = propertyMap.get(\"id\")");
             delete.getBody().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
             delete.getBody().addToStatements("parentResource." + pWrap.remover() + "(childResource)");
         }
 
     }
 
-    private void addPostObjectRepresentation(PropertyWrapper pWrap, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass) {
-        OJAnnotatedOperation postInf = new OJAnnotatedOperation("post", TumlRestletGenerationUtil.Representation);
-        postInf.addToParameters(new OJParameter("entity", TumlRestletGenerationUtil.Representation));
-        annotatedInf.addToOperations(postInf);
-        postInf.addAnnotationIfNew(new OJAnnotationValue(TumlRestletGenerationUtil.Post, "json"));
+    private void addPostObjectRepresentation(PropertyWrapper pWrap/*, OJAnnotatedInterface annotatedInf*/, OJAnnotatedClass annotatedClass) {
+//        OJAnnotatedOperation postInf = new OJAnnotatedOperation("post", TumlRestletGenerationUtil.Representation);
+//        postInf.addToParameters(new OJParameter("entity", TumlRestletGenerationUtil.Representation));
+//        annotatedInf.addToOperations(postInf);
+//        postInf.addAnnotationIfNew(new OJAnnotationValue(TumlRestletGenerationUtil.Post, "json"));
 
         OJAnnotatedOperation post = new OJAnnotatedOperation("post", TumlRestletGenerationUtil.Representation);
         post.addToParameters(new OJParameter("entity", TumlRestletGenerationUtil.Representation));
@@ -85,8 +85,8 @@ public class NavigatePropertyOverloadedPostForLookupServerResourceBuilder extend
 
         OJPathName parentPathName = otherEndPWrap.javaBaseTypePath();
         post.getBody().addToStatements(
-                "this." + parentPathName.getLast().toLowerCase() + "Id = Long.valueOf((String)getRequestAttributes().get(\""
-                        + parentPathName.getLast().toLowerCase() + "Id\"))");
+                "this." + parentPathName.getLast().toLowerCase() + "Id = getRequestAttributes().get(\""
+                        + parentPathName.getLast().toLowerCase() + "Id\")");
         post.getBody().addToStatements(
                 parentPathName.getLast() + " parentResource = GraphDb.getDb().instantiateClassifier(" + parentPathName.getLast().toLowerCase() + "Id" + ")");
 
@@ -187,8 +187,8 @@ public class NavigatePropertyOverloadedPostForLookupServerResourceBuilder extend
         OJIfStatement ifFakeId = new OJIfStatement("fakeIdIndex != -1");
         ifFakeId.addToThenPart("int indexOfForwardSlash = lookupUri.indexOf(\"/\", fakeIdIndex)");
         ifFakeId.addToThenPart("String fakeId = lookupUri.substring(fakeIdIndex, indexOfForwardSlash)");
-        ifFakeId.addToThenPart("long id = " + TinkerGenerationUtil.TumlTmpIdManager.getLast() + ".INSTANCE.get(fakeId)");
-        ifFakeId.addToThenPart("lookupUri = lookupUri.replace(fakeId, Long.toString(id))");
+        ifFakeId.addToThenPart("Object id = " + TinkerGenerationUtil.TumlTmpIdManager.getLast() + ".INSTANCE.get(fakeId)");
+        ifFakeId.addToThenPart("lookupUri = lookupUri.replace(fakeId, id.toString())");
         ojTryStatement.getTryPart().addToStatements(ifFakeId);
         annotatedClass.addToImports(TinkerGenerationUtil.TumlTmpIdManager);
 
@@ -222,7 +222,7 @@ public class NavigatePropertyOverloadedPostForLookupServerResourceBuilder extend
         annotatedClass.addToOperations(put);
 
         OJBlock firstBlock = new OJBlock();
-        firstBlock.addToStatements("Long id = Long.valueOf((Integer)propertyMap.get(\"id\"))");
+        firstBlock.addToStatements("Object id = propertyMap.get(\"id\")");
         firstBlock.addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
         annotatedClass.addToImports(pWrap.javaBaseTypePath());
         firstBlock.addToStatements("childResource.fromJson(propertyMap)");
@@ -276,7 +276,7 @@ public class NavigatePropertyOverloadedPostForLookupServerResourceBuilder extend
                 annotatedClass.addToImports(otherEnd.getAssociationClassPathName());
             }
         } else {
-            tryInstantiate.getTryPart().addToStatements("Long id = Long.valueOf((Integer)propertyMap.get(\"id\"))");
+            tryInstantiate.getTryPart().addToStatements("Object id = propertyMap.get(\"id\")");
             tryInstantiate.getTryPart().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
             if (!pWrap.isMemberOfAssociationClass()) {
                 tryInstantiate.getTryPart().addToStatements("parentResource." + pWrap.adder() + "(childResource)");
@@ -327,7 +327,7 @@ public class NavigatePropertyOverloadedPostForLookupServerResourceBuilder extend
 
     private void addCompositeParentIdField(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass) {
         OJField compositeParentFieldId = new OJField(TumlClassOperations.getPathName(pWrap.getOtherEnd().getType()).getLast().toLowerCase() + "Id",
-                new OJPathName("Long"));
+                new OJPathName("Object"));
         compositeParentFieldId.setVisibility(OJVisibilityKind.PRIVATE);
         annotatedClass.addToFields(compositeParentFieldId);
     }

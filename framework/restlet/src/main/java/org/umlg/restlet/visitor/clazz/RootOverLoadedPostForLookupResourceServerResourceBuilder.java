@@ -153,8 +153,8 @@ public class RootOverLoadedPostForLookupResourceServerResourceBuilder extends Ba
         OJIfStatement ifFakeId = new OJIfStatement("fakeIdIndex != -1");
         ifFakeId.addToThenPart("int indexOfForwardSlash = lookupUri.indexOf(\"/\", fakeIdIndex)");
         ifFakeId.addToThenPart("String fakeId = lookupUri.substring(fakeIdIndex, indexOfForwardSlash)");
-        ifFakeId.addToThenPart("long id = " + TinkerGenerationUtil.TumlTmpIdManager.getLast() + ".INSTANCE.get(fakeId)");
-        ifFakeId.addToThenPart("lookupUri = lookupUri.replace(fakeId, Long.toString(id))");
+        ifFakeId.addToThenPart("Object id = " + TinkerGenerationUtil.TumlTmpIdManager.getLast() + ".INSTANCE.get(fakeId)");
+        ifFakeId.addToThenPart("lookupUri = lookupUri.replace(fakeId, id.toString())");
         ojTryStatement.getTryPart().addToStatements(ifFakeId);
         annotatedClass.addToImports(TinkerGenerationUtil.TumlTmpIdManager);
 
@@ -196,7 +196,7 @@ public class RootOverLoadedPostForLookupResourceServerResourceBuilder extends Ba
         put.setVisibility(OJVisibilityKind.PRIVATE);
         put.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
         annotatedClass.addToOperations(put);
-        put.getBody().addToStatements("Long id = Long.valueOf((Integer)propertyMap.get(\"id\"))");
+        put.getBody().addToStatements("Object id = propertyMap.get(\"id\")");
         put.getBody().addToStatements(
                 TumlClassOperations.getPathName(classifier).getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
         annotatedClass.addToImports(TumlClassOperations.getPathName(classifier));
@@ -209,7 +209,7 @@ public class RootOverLoadedPostForLookupResourceServerResourceBuilder extends Ba
         delete.setVisibility(OJVisibilityKind.PRIVATE);
         delete.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
         annotatedClass.addToOperations(delete);
-        delete.getBody().addToStatements("Long id = Long.valueOf((Integer)propertyMap.get(\"id\"))");
+        delete.getBody().addToStatements("Object id = propertyMap.get(\"id\")");
         delete.getBody().addToStatements(
                 TumlClassOperations.getPathName(classifier).getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
         annotatedClass.addToImports(TumlClassOperations.getPathName(classifier));

@@ -24,6 +24,9 @@ public class RuntimePropertyImplementor {
 
     public static OJEnum addTumlRuntimePropertyEnum(OJAnnotatedClass annotatedClass, String enumName, NamedElement className, Set<Property> allOwnedProperties,
                                                     boolean hasCompositeOwner, String modelName) {
+
+        annotatedClass.addToImports(TinkerGenerationUtil.UmlgLabelConverterFactoryPathName);
+
         OJEnum ojEnum = new OJEnum(enumName);
         ojEnum.setStatic(true);
         ojEnum.addToImplementedInterfaces(TinkerGenerationUtil.tumlRuntimePropertyPathName.getCopy());
@@ -340,14 +343,14 @@ public class RuntimePropertyImplementor {
     }
 
     /**
-     * Very important, the order of adding the attribut values to the literal must be the same as the order the fields were created ass that is the order of the constructor
+     * Very important, the order of adding the attribute values to the literal must be the same as the order the fields were created as that is the order of the constructor
      */
     public static OJEnumLiteral addEnumLiteral(
             boolean isAssociationClassOne /*This is true for the fake properties to and from the association class*/,
             boolean isMemberEndOfAssociationClass,
             String associationClassPropertyName,
             String inverseAssociationClassPropertyName,
-            boolean isAssociationClassProperty /*Ths is true for the fake property from the asslciation class to the member end*/,
+            boolean isAssociationClassProperty /*Ths is true for the fake property from the association class to the member end*/,
             OJEnum ojEnum,
             OJAnnotatedOperation fromLabel,
             OJAnnotatedOperation fromQualifiedName,
@@ -515,7 +518,8 @@ public class RuntimePropertyImplementor {
         OJField propertyLabelField = new OJField();
         propertyLabelField.setName("label");
         propertyLabelField.setType(new OJPathName("String"));
-        propertyLabelField.setInitExp("\"" + edgeName + "\"");
+        propertyLabelField.setInitExp(TinkerGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() + ".getUmlgLabelConverter().convert(\"" + edgeName + "\")");
+//        propertyLabelField.setInitExp("\"" + edgeName + "\"");
         ojLiteral.addToAttributeValues(propertyLabelField);
 
         OJField isOneToOneAttribute = new OJField();
@@ -712,7 +716,7 @@ public class RuntimePropertyImplementor {
         sb.append(inverseUpperAttribute.getInitExp());
         sb.append(", ");
         sb.append("\\\"label\\\": \\");
-        sb.append(propertyLabelField.getInitExp().subSequence(0, propertyLabelField.getInitExp().length() - 1));
+        sb.append(("\"" + edgeName + "\"").subSequence(0, ("\"" + edgeName + "\"").length() - 1));
         sb.append("\\\", ");
         sb.append("\\\"qualified\\\": ");
         sb.append(qualifiedAttribute.getInitExp());

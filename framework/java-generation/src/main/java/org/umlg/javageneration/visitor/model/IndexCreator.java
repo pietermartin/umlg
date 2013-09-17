@@ -38,11 +38,14 @@ public class IndexCreator extends BaseVisitor implements Visitor<Model> {
         List<Property> qualifiers = ModelLoader.INSTANCE.getAllQualifiers();
         for (Property q : qualifiers) {
             PropertyWrapper qualifierWrap = new PropertyWrapper(q);
-            createIndexes.getBody().addToStatements(TinkerGenerationUtil.graphDbAccess + ".createIndex(\"" + qualifierWrap.getQualifiedName() + "\", " + TinkerGenerationUtil.edgePathName.getLast() + ".class)");
+            createIndexes.getBody().addToStatements(TinkerGenerationUtil.graphDbAccess + ".createIndex(" + TinkerGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() + ".getUmlgLabelConverter().convert(\"" + qualifierWrap.getQualifiedName() + "\"), " + TinkerGenerationUtil.edgePathName.getLast() + ".class)");
             indexCreator.addToImports(TinkerGenerationUtil.edgePathName);
-            indexCreator.addToImports(TinkerGenerationUtil.graphDbPathName);
         }
-
+        indexCreator.addToImports(TinkerGenerationUtil.UmlgLabelConverterFactoryPathName);
+        //Create index for the application root
+        createIndexes.getBody().addToStatements(TinkerGenerationUtil.graphDbAccess + ".createIndex(\"UmlGRoot\", " + TinkerGenerationUtil.vertexPathName.getLast() + ".class)");
+        indexCreator.addToImports(TinkerGenerationUtil.vertexPathName);
+        indexCreator.addToImports(TinkerGenerationUtil.graphDbPathName);
     }
 
     @Override

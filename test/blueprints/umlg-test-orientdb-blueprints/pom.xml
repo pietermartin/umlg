@@ -6,7 +6,7 @@
         <artifactId>blueprints</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <artifactId>tuml-test-orientdb-blueprints</artifactId>
+    <artifactId>umlg-test-orientdb-blueprints</artifactId>
     <dependencies>
         <dependency>
             <groupId>org.umlg</groupId>
@@ -20,9 +20,9 @@
         </dependency>
         <dependency>
             <groupId>org.umlg</groupId>
-            <artifactId>tuml-test-blueprints-tests</artifactId>
+            <artifactId>umlg-test-blueprints-tests</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-            <classifier>tests</classifier>
+            <!--<classifier>tests</classifier>-->
             <scope>test</scope>
         </dependency>
     </dependencies>

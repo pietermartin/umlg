@@ -23,7 +23,7 @@ public class TestQualifier extends BaseLocalDbTest {
 		
 		God godTest = new God(god.getVertex());
 		TinkerSet<Nature> natureForQualifier1 = godTest.getNatureForQualifier2("nature2");
-		Assert.assertTrue(!natureForQualifier1.isEmpty());
+		Assert.assertFalse(natureForQualifier1.isEmpty());
 		Assert.assertEquals("nature1", natureForQualifier1.iterator().next().getName1());
 		natureForQualifier1 = godTest.getNatureForQualifier2("nature1");
 		Assert.assertTrue(natureForQualifier1.isEmpty());

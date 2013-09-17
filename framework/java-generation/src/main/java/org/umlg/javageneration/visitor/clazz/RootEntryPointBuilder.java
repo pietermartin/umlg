@@ -37,7 +37,7 @@ public class RootEntryPointBuilder extends BaseVisitor implements Visitor<Class>
 		root.addToImports(new OJPathName("java.util.ArrayList"));
 		getter.getBody().addToLocals(result);
 		OJField iter = new OJField("iter", new OJPathName("java.util.Iterator").addToGenerics(TinkerGenerationUtil.edgePathName));
-		iter.setInitExp("getRootVertex().getEdges(Direction.OUT, \"root" + TumlClassOperations.getQualifiedName(clazz) + "\").iterator()");
+		iter.setInitExp("getRootVertex().getEdges(Direction.OUT, "+TinkerGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() +".getUmlgLabelConverter().convert(\"root" + TumlClassOperations.getQualifiedName(clazz) + "\")).iterator()");
 		getter.getBody().addToLocals(iter);
 		OJWhileStatement ojWhileStatement = new OJWhileStatement();
 		ojWhileStatement.setCondition("iter.hasNext()");
@@ -46,6 +46,7 @@ public class RootEntryPointBuilder extends BaseVisitor implements Visitor<Class>
 		getter.getBody().addToStatements(ojWhileStatement);
 		getter.getBody().addToStatements("return result");
 		root.addToImports(TinkerGenerationUtil.tinkerDirection);
+        root.addToImports(TinkerGenerationUtil.UmlgLabelConverterFactoryPathName);
 	}
 
 	@Override

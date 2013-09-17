@@ -20,28 +20,28 @@ import org.umlg.javageneration.visitor.BaseVisitor;
 
 public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
 
-	public CompositionVisitor(Workspace workspace) {
-		super(workspace);
-	}
+    public CompositionVisitor(Workspace workspace) {
+        super(workspace);
+    }
 
-	@Override
+    @Override
     @VisitSubclasses({Class.class, AssociationClass.class})
-	public void visitBefore(Class clazz) {
-		OJAnnotatedClass annotatedClass = findOJClass(clazz);
-		if (TumlClassOperations.hasCompositeOwner(clazz)) {
-			addConstructorWithOwnerAsParameter(annotatedClass, clazz);
-		} else {
-			if (TumlClassOperations.getSpecializations(clazz).isEmpty() && !(clazz instanceof AssociationClass)) {
+    public void visitBefore(Class clazz) {
+        OJAnnotatedClass annotatedClass = findOJClass(clazz);
+        if (TumlClassOperations.hasCompositeOwner(clazz)) {
+            addConstructorWithOwnerAsParameter(annotatedClass, clazz);
+        } else {
+            if (TumlClassOperations.getSpecializations(clazz).isEmpty() && !(clazz instanceof AssociationClass)) {
                 addImplementRootNodeInterface(annotatedClass);
-				addEdgeToRoot(annotatedClass, clazz);
-			}
+                addEdgeToRoot(annotatedClass, clazz);
+            }
             if (!clazz.isAbstract()) {
                 implementRootNode(clazz, annotatedClass);
             }
-		}
-		addGetOwningObject(annotatedClass, clazz);
-		addCompositeChildrenToDelete(annotatedClass, clazz);
-	}
+        }
+        addGetOwningObject(annotatedClass, clazz);
+        addCompositeChildrenToDelete(annotatedClass, clazz);
+    }
 
     @Override
     public void visitAfter(Class clazz) {
@@ -49,7 +49,8 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
 
     private void implementRootNode(Class clazz, OJAnnotatedClass annotatedClass) {
         OJAnnotatedOperation getEdgeToRootLabel = new OJAnnotatedOperation("getEdgeToRootLabel", new OJPathName("String"));
-        getEdgeToRootLabel.getBody().addToStatements("return \"" + TinkerGenerationUtil.getEdgeToRootLabelStrategy(clazz) + "\"");
+        getEdgeToRootLabel.getBody().addToStatements("return " + TinkerGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() + ".getUmlgLabelConverter().convert(\"" + TinkerGenerationUtil.getEdgeToRootLabelStrategy(clazz) + "\")");
+        annotatedClass.addToImports(TinkerGenerationUtil.UmlgLabelConverterFactoryPathName);
         annotatedClass.addToOperations(getEdgeToRootLabel);
     }
 
@@ -58,14 +59,14 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
         annotatedClass.addToImports(TinkerGenerationUtil.TUML_ROOT_NODE);
     }
 
-	private void addConstructorWithOwnerAsParameter(OJAnnotatedClass annotatedClass, Class clazz) {
-		OJConstructor constructor = new OJConstructor();
-		constructor.addParam("compositeOwner", TumlClassOperations.getOtherEndToCompositePathName(clazz));
+    private void addConstructorWithOwnerAsParameter(OJAnnotatedClass annotatedClass, Class clazz) {
+        OJConstructor constructor = new OJConstructor();
+        constructor.addParam("compositeOwner", TumlClassOperations.getOtherEndToCompositePathName(clazz));
         PropertyWrapper pWrap = new PropertyWrapper(TumlClassOperations.getOtherEndToComposite(clazz));
         if (pWrap.isMemberOfAssociationClass()) {
             constructor.addParam(StringUtils.uncapitalize(pWrap.getAssociationClass().getName()), pWrap.getAssociationClassPathName());
         }
-		annotatedClass.addToConstructors(constructor);
+        annotatedClass.addToConstructors(constructor);
         constructor.getBody().addToStatements("super(true)");
 
         if (!pWrap.isMemberOfAssociationClass()) {
@@ -75,17 +76,17 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
         }
 
 
-	}
+    }
 
-	private void addGetOwningObject(OJAnnotatedClass annotatedClass, Class clazz) {
-		OJAnnotatedOperation getOwningObject = new OJAnnotatedOperation("getOwningObject", TinkerGenerationUtil.TUML_NODE.getCopy());
-		TinkerGenerationUtil.addOverrideAnnotation(getOwningObject);
-		if (TumlClassOperations.hasCompositeOwner(clazz)) {
-			getOwningObject.getBody().addToStatements("return " + new PropertyWrapper(TumlClassOperations.getOtherEndToComposite(clazz)).getter() + "()");
+    private void addGetOwningObject(OJAnnotatedClass annotatedClass, Class clazz) {
+        OJAnnotatedOperation getOwningObject = new OJAnnotatedOperation("getOwningObject", TinkerGenerationUtil.TUML_NODE.getCopy());
+        TinkerGenerationUtil.addOverrideAnnotation(getOwningObject);
+        if (TumlClassOperations.hasCompositeOwner(clazz)) {
+            getOwningObject.getBody().addToStatements("return " + new PropertyWrapper(TumlClassOperations.getOtherEndToComposite(clazz)).getter() + "()");
         } else if (clazz instanceof AssociationClass) {
             boolean foundOwningObject = false;
             //Make the controlling side the owning object
-            AssociationClass associationClass = (AssociationClass)clazz;
+            AssociationClass associationClass = (AssociationClass) clazz;
             for (Property memberEnd : associationClass.getMemberEnds()) {
                 PropertyWrapper pWrap = new PropertyWrapper(memberEnd);
                 //In a regular one to many the many is the controlling side of the association.
@@ -99,49 +100,49 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
             if (!foundOwningObject) {
                 throw new IllegalStateException("Must find owning object for an association class!");
             }
-		} else {
-			getOwningObject.getBody().addToStatements("return null");
-		}
-		annotatedClass.addToOperations(getOwningObject);
-	}
+        } else {
+            getOwningObject.getBody().addToStatements("return null");
+        }
+        annotatedClass.addToOperations(getOwningObject);
+    }
 
-	private void addEdgeToRoot(OJAnnotatedClass annotatedClass, Class clazz) {
-		OJConstructor constructor = annotatedClass.findConstructor(new OJPathName("java.lang.Boolean"));
-		constructor.getBody().addToStatements(
-				TinkerGenerationUtil.edgePathName.getLast() + " edge = " + TinkerGenerationUtil.graphDbAccess + ".addEdge(null, " + TinkerGenerationUtil.graphDbAccess
-						+ ".getRoot(), this.vertex, getEdgeToRootLabel())");
-		constructor.getBody().addToStatements("edge.setProperty(\"inClass\", this.getClass().getName())");
-		annotatedClass.addToImports(TinkerGenerationUtil.edgePathName.getCopy());
-		annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName.getCopy());
-	}
+    private void addEdgeToRoot(OJAnnotatedClass annotatedClass, Class clazz) {
+        OJConstructor constructor = annotatedClass.findConstructor(new OJPathName("java.lang.Boolean"));
+        constructor.getBody().addToStatements(
+                TinkerGenerationUtil.edgePathName.getLast() + " edge = " + TinkerGenerationUtil.graphDbAccess + ".addEdge(null, " + TinkerGenerationUtil.graphDbAccess
+                        + ".getRoot(), this.vertex, getEdgeToRootLabel())");
+        constructor.getBody().addToStatements("edge.setProperty(\"inClass\", this.getClass().getName())");
+        annotatedClass.addToImports(TinkerGenerationUtil.edgePathName.getCopy());
+        annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName.getCopy());
+    }
 
-	private void addCompositeChildrenToDelete(OJAnnotatedClass annotatedClass, Class clazz) {
-		OJAnnotatedOperation delete = annotatedClass.findOperation("delete");
-		for (Property p : TumlClassOperations.getChildPropertiesToDelete(clazz)) {
-			PropertyWrapper pWrap = new PropertyWrapper(p);
-			if (pWrap.isMany()) {
-				OJForStatement forChildToDelete = new OJForStatement("child", pWrap.javaBaseTypePath(), pWrap.getter() + "()");
-				forChildToDelete.getBody().addToStatements("child.delete()");
-				delete.getBody().addToStatements(forChildToDelete);
-			} else if (!pWrap.isDataType()) {
-				OJIfStatement ifChildToDeleteNotNull = new OJIfStatement(pWrap.getter() + "() != null");
-				ifChildToDeleteNotNull.addToThenPart(pWrap.getter() + "().delete()");
-				delete.getBody().addToStatements(ifChildToDeleteNotNull);
-			}
-		}
+    private void addCompositeChildrenToDelete(OJAnnotatedClass annotatedClass, Class clazz) {
+        OJAnnotatedOperation delete = annotatedClass.findOperation("delete");
+        for (Property p : TumlClassOperations.getChildPropertiesToDelete(clazz)) {
+            PropertyWrapper pWrap = new PropertyWrapper(p);
+            if (pWrap.isMany()) {
+                OJForStatement forChildToDelete = new OJForStatement("child", pWrap.javaBaseTypePath(), pWrap.getter() + "()");
+                forChildToDelete.getBody().addToStatements("child.delete()");
+                delete.getBody().addToStatements(forChildToDelete);
+            } else if (!pWrap.isDataType()) {
+                OJIfStatement ifChildToDeleteNotNull = new OJIfStatement(pWrap.getter() + "() != null");
+                ifChildToDeleteNotNull.addToThenPart(pWrap.getter() + "().delete()");
+                delete.getBody().addToStatements(ifChildToDeleteNotNull);
+            }
+        }
 
-		for (Property p : TumlClassOperations.getPropertiesToClearOnDeletion(clazz)) {
-			PropertyWrapper pWrap = new PropertyWrapper(p);
-			delete.getBody().addToStatements("this." + pWrap.fieldname() + ".clear()");
-		}
-		if (clazz.getGenerals().isEmpty()) {
+        for (Property p : TumlClassOperations.getPropertiesToClearOnDeletion(clazz)) {
+            PropertyWrapper pWrap = new PropertyWrapper(p);
+            delete.getBody().addToStatements("this." + pWrap.fieldname() + ".clear()");
+        }
+        if (clazz.getGenerals().isEmpty()) {
             delete.getBody().addToStatements(TinkerGenerationUtil.transactionThreadEntityVar.getLast() + ".remove(this)");
-			delete.getBody().addToStatements(TinkerGenerationUtil.graphDbAccess + ".removeVertex(this.vertex)");
+            delete.getBody().addToStatements(TinkerGenerationUtil.graphDbAccess + ".removeVertex(this.vertex)");
             annotatedClass.addToImports(TinkerGenerationUtil.transactionThreadEntityVar);
-			annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName.getCopy());
-		} else {
-			delete.getBody().addToStatements("super.delete()");
-		}
-	}
+            annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName.getCopy());
+        } else {
+            delete.getBody().addToStatements("super.delete()");
+        }
+    }
 
 }

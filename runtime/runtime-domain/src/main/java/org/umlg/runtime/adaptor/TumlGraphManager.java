@@ -1,7 +1,7 @@
 package org.umlg.runtime.adaptor;
 
 import org.apache.commons.io.FileUtils;
-import org.umlg.runtime.util.TinkerImplementation;
+import org.umlg.runtime.util.UmlgAdaptorImplementation;
 import org.umlg.runtime.util.UmlgProperties;
 
 import java.io.File;
@@ -27,11 +27,11 @@ public class TumlGraphManager {
     public TumlGraph startupGraph() {
         try {
             String dbUrl = UmlgProperties.INSTANCE.getTumlDbLocation();
-            TinkerImplementation tinkerImplementation = TinkerImplementation.fromName(UmlgProperties.INSTANCE.getTinkerImplementation());
+            UmlgAdaptorImplementation umlgAdaptorImplementation = UmlgAdaptorImplementation.fromName(UmlgProperties.INSTANCE.getTinkerImplementation());
             @SuppressWarnings("unchecked")
-            Class<TumlGraphFactory> factory = (Class<TumlGraphFactory>) Class.forName(tinkerImplementation.getTumlGraphFactory());
+            Class<UmlgGraphFactory> factory = (Class<UmlgGraphFactory>) Class.forName(umlgAdaptorImplementation.getTumlGraphFactory());
             Method m = factory.getDeclaredMethod("getInstance", new Class[0]);
-            TumlGraphFactory nakedGraphFactory = (TumlGraphFactory) m.invoke(null);
+            UmlgGraphFactory nakedGraphFactory = (UmlgGraphFactory) m.invoke(null);
             TumlGraph tumlGraph = nakedGraphFactory.getTumlGraph(dbUrl);
             return tumlGraph;
         } catch (Exception e) {
@@ -41,12 +41,40 @@ public class TumlGraphManager {
 
     public void shutdown() {
         try {
-            TinkerImplementation tinkerImplementation = TinkerImplementation.fromName(UmlgProperties.INSTANCE.getTinkerImplementation());
+            UmlgAdaptorImplementation umlgAdaptorImplementation = UmlgAdaptorImplementation.fromName(UmlgProperties.INSTANCE.getTinkerImplementation());
             @SuppressWarnings("unchecked")
-            Class<TumlGraphFactory> factory = (Class<TumlGraphFactory>) Class.forName(tinkerImplementation.getTumlGraphFactory());
+            Class<UmlgGraphFactory> factory = (Class<UmlgGraphFactory>) Class.forName(umlgAdaptorImplementation.getTumlGraphFactory());
             Method m = factory.getDeclaredMethod("getInstance", new Class[0]);
-            TumlGraphFactory nakedGraphFactory = (TumlGraphFactory) m.invoke(null);
-            nakedGraphFactory.destroy();
+            UmlgGraphFactory nakedGraphFactory = (UmlgGraphFactory) m.invoke(null);
+            nakedGraphFactory.shutdown();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void deleteGraph() {
+        try {
+            UmlgAdaptorImplementation umlgAdaptorImplementation = UmlgAdaptorImplementation.fromName(UmlgProperties.INSTANCE.getTinkerImplementation());
+            @SuppressWarnings("unchecked")
+            Class<UmlgGraphFactory> factory = (Class<UmlgGraphFactory>) Class.forName(umlgAdaptorImplementation.getTumlGraphFactory());
+            Method m = factory.getDeclaredMethod("getInstance", new Class[0]);
+            UmlgGraphFactory nakedGraphFactory = (UmlgGraphFactory) m.invoke(null);
+            nakedGraphFactory.drop();
+            //Delete the files
+            String dbUrl = UmlgProperties.INSTANCE.getTumlDbLocation();
+            String parsedUrl = dbUrl;
+            if (dbUrl.startsWith("local:")) {
+                parsedUrl = dbUrl.replace("local:", "");
+            }
+            File dir = new File(parsedUrl);
+            if (dir.exists()) {
+                try {
+                    logger.info(String.format("Deleting dir %s", new Object[]{dir.getAbsolutePath()}));
+                    FileUtils.deleteDirectory(dir);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -65,27 +93,6 @@ public class TumlGraphManager {
                     File backupDir = new File(dir.getParent(), dir.getName() + "-" + new SimpleDateFormat("ddMMyyyy_mmss").format(new Date()));
                     logger.info(String.format("Moving dir %s to %s", new Object[]{dir.getAbsolutePath(), backupDir.getAbsolutePath()}));
                     FileUtils.moveDirectory(dir, backupDir);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void deleteGraph() {
-        try {
-            String dbUrl = UmlgProperties.INSTANCE.getTumlDbLocation();
-            String parsedUrl = dbUrl;
-            if (dbUrl.startsWith("local:")) {
-                parsedUrl = dbUrl.replace("local:", "");
-            }
-            File dir = new File(parsedUrl);
-            if (dir.exists()) {
-                try {
-                    logger.info(String.format("Deleting dir %s", new Object[]{dir.getAbsolutePath()}));
-                    FileUtils.deleteDirectory(dir);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

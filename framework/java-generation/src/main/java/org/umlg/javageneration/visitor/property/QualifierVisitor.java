@@ -67,13 +67,16 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
 
         for (Iterator<Property> iterator = qualified.getQualifiers().iterator(); iterator.hasNext(); ) {
             PropertyWrapper qWrap = new PropertyWrapper(iterator.next());
+            sb.append(TinkerGenerationUtil.UmlgLabelConverterFactoryPathName.getLast());
+            sb.append(".getUmlgLabelConverter().convert(");
             sb.append("\"");
             sb.append(qWrap.getQualifiedName());
-            sb.append("\"");
+            sb.append("\")");
             if (iterator.hasNext()) {
                 sb.append(", ");
             }
         }
+        ojClass.addToImports(TinkerGenerationUtil.UmlgLabelConverterFactoryPathName);
         sb.append("}, new String[]{");
         for (Iterator<Property> iterator = qualified.getQualifiers().iterator(); iterator.hasNext(); ) {
             PropertyWrapper qWrap = new PropertyWrapper(iterator.next());
@@ -124,9 +127,6 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
         ojClass.addToImports(TinkerGenerationUtil.tinkerCloseableIterablePathName);
         ojClass.addToImports(TinkerGenerationUtil.tinkerDirection);
         ojClass.addToImports(TinkerGenerationUtil.edgePathName);
-//        qualifierValue.getBody().addToStatements(
-//                TinkerGenerationUtil.tinkerIndexPathName.getLast() + "<" + TinkerGenerationUtil.edgePathName.getLast() + "> index = " + TinkerGenerationUtil.graphDbAccess + ".getIndex(" + qualified.getTumlRuntimePropertyEnum() + ".getQualifiedName(), Edge.class)");
-//        OJIfStatement ifIndexNull = new OJIfStatement("index==null", "return null");
 
         OJBlock elseBlock = new OJBlock();
         OJField indexKey = new OJField(elseBlock, "indexKey", new OJPathName("String"));
@@ -135,7 +135,9 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
 
         for (PropertyWrapper qualifier : qualifiers) {
             count++;
-            init.append("\"" + qualifier.getQualifiedName() + "\"");
+            init.append(TinkerGenerationUtil.UmlgLabelConverterFactoryPathName.getLast());
+            init.append(".getUmlgLabelConverter().convert(");
+            init.append("\"" + qualifier.getQualifiedName() + "\")");
             if (count != qualifiers.size()) {
                 init.append(" + ");
             }
@@ -154,13 +156,9 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
             }
         }
 
-//        Iterator<Edge> iterator = GraphDb.getDb().query().has(indexKey, indexValue).edges().iterator();
         elseBlock.addToStatements("Iterator<Edge> iterator = " + TinkerGenerationUtil.graphDbAccess + ".query().has(indexKey, indexValue).edges().iterator()");
 
-//        elseBlock.addToStatements(TinkerGenerationUtil.tinkerCloseableIterablePathName.getCopy().addToGenerics(TinkerGenerationUtil.edgePathName).getLast()
-//                + " closeableIterable = index.get(" + "indexKey" + ", indexValue)");
         qualifierValue.getBody().addToStatements(elseBlock);
-//        qualifierValue.getBody().addToStatements("Iterator<Edge> iterator = closeableIterable.iterator()");
         ojClass.addToImports("java.util.Iterator");
         OJIfStatement ifHasNext = new OJIfStatement("iterator.hasNext()");
         if (qualified.isUnqualifiedOne()) {

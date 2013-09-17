@@ -1,8 +1,8 @@
 package org.umlg.runtime.adaptor;
 
 
-public interface TumlGraphFactory {
+public interface UmlgGraphFactory {
 	TumlGraph getTumlGraph(String url);
-    void destroy();
-
+    void shutdown();
+    void drop();
 }

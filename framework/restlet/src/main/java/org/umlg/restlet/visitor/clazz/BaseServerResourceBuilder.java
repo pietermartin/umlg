@@ -100,7 +100,7 @@ public abstract class BaseServerResourceBuilder extends BaseVisitor {
     }
 
     protected void addPrivateIdVariable(Classifier clazz, OJAnnotatedClass annotatedClass) {
-        OJField privateId = new OJField(getIdFieldName(clazz), new OJPathName("Long"));
+        OJField privateId = new OJField(getIdFieldName(clazz), new OJPathName("Object"));
         privateId.setVisibility(OJVisibilityKind.PRIVATE);
         annotatedClass.addToFields(privateId);
     }

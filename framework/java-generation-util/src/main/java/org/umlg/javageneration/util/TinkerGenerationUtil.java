@@ -170,6 +170,7 @@ public class TinkerGenerationUtil {
     public static OJPathName tinkerMultiplicityPathName = new OJPathName("org.umlg.runtime.collection.Multiplicity");
 
     public static OJPathName tinkerIdUtilFactoryPathName = new OJPathName("org.umlg.runtime.adaptor.TinkerIdUtilFactory");
+    public static OJPathName UmlgLabelConverterFactoryPathName = new OJPathName("org.umlg.runtime.adaptor.UmlgLabelConverterFactory");
 
     public static String getEdgeToRootLabelStrategyMeta(org.eclipse.uml2.uml.Class clazz) {
         return "root" + TumlClassOperations.getQualifiedName(clazz) + "Meta";

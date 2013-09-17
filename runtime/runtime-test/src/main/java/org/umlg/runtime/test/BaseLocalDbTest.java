@@ -30,7 +30,6 @@ public class BaseLocalDbTest {
 
     @After
     public void after() {
-        TumlGraphManager.INSTANCE.shutdown();
         TumlGraphManager.INSTANCE.deleteGraph();
         GraphDb.remove();
         TransactionThreadVar.remove();

@@ -1,12 +1,11 @@
 package org.umlg.runtime.adaptor;
 
-import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.Graph;
-import com.tinkerpop.blueprints.Vertex;
+import com.tinkerpop.blueprints.*;
 
 import java.util.Set;
 
-public interface TumlGraph extends Graph {
+public interface TumlGraph extends TransactionalGraph, IndexableGraph {
+    static final String DELETED_NODES = "deletednodes";
     static final String ROOT_CLASS_NAME = "org.umlg.root.Root";
 
     //Used for auditing
@@ -27,9 +26,7 @@ public interface TumlGraph extends Graph {
 
     long countEdges();
 
-    void registerListeners();
-
-    <T> T instantiateClassifier(Long id);
+    <T> T instantiateClassifier(Object id);
 
     boolean hasEdgeBeenDeleted(Edge edge);
 
@@ -40,5 +37,7 @@ public interface TumlGraph extends Graph {
     void addDeletionNode();
 
     String executeQuery(TumlQueryEnum tumlQueryEnum, Long contextId, String query);
+
+    void drop();
 
 }

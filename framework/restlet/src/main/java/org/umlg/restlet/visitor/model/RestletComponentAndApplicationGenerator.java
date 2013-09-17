@@ -93,9 +93,9 @@ public class RestletComponentAndApplicationGenerator extends BaseVisitor impleme
         constructor.getBody().addToStatements(TinkerGenerationUtil.TumlGraphManager.getLast() + ".INSTANCE.startupGraph()");
         component.addToImports(TinkerGenerationUtil.TumlGraphManager);
 
-        OJIfStatement ifStartAdmin = new OJIfStatement(TinkerGenerationUtil.UmlgProperties.getLast() + ".INSTANCE.isStartAdminApplication()", TumlRestletGenerationUtil.Neo4jAdminApp.getLast() + ".startAdminApplication()");
+        OJIfStatement ifStartAdmin = new OJIfStatement(TinkerGenerationUtil.UmlgProperties.getLast() + ".INSTANCE.isStartAdminApplication()", TumlRestletGenerationUtil.UmlgAdminAppFactory.getLast() + ".getUmlgAdminApp().startAdminApplication()");
         constructor.getBody().addToStatements(ifStartAdmin);
-        component.addToImports(TumlRestletGenerationUtil.Neo4jAdminApp);
+        component.addToImports(TumlRestletGenerationUtil.UmlgAdminAppFactory);
         component.addToImports(TinkerGenerationUtil.UmlgProperties);
 
         OJTryStatement tryLoadClass = new OJTryStatement();

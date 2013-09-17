@@ -1,25 +1,25 @@
 package org.umlg.runtime.adaptor;
 
+import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.neo4j.Neo4jEdge;
 import com.tinkerpop.blueprints.impls.neo4j.Neo4jGraph;
 import com.tinkerpop.blueprints.impls.neo4j.Neo4jVertex;
+import org.apache.commons.io.FileUtils;
 import org.neo4j.cypher.ExecutionEngine;
 import org.neo4j.cypher.ExecutionResult;
-import org.neo4j.graphdb.*;
-import org.neo4j.graphdb.event.TransactionEventHandler;
+import org.neo4j.graphdb.DynamicRelationshipType;
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
-import org.neo4j.kernel.GraphDatabaseAPI;
 import org.neo4j.kernel.impl.util.StringLogger;
-import org.umlg.runtime.domain.PersistentObject;
-import org.umlg.runtime.domain.TumlMetaNode;
 import org.umlg.runtime.domain.TumlNode;
+import org.umlg.runtime.util.UmlgProperties;
 
-import javax.transaction.Status;
-import javax.transaction.SystemException;
-import javax.transaction.Transaction;
-import javax.transaction.TransactionManager;
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.logging.Logger;
@@ -30,34 +30,27 @@ import java.util.logging.Logger;
  */
 public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
 
-    private TransactionEventHandler<PersistentObject> transactionEventHandler;
-    private Map<TransactionIdentifier, Transaction> transactionIdentifierTransactionMap;
-    private Map<Transaction, TransactionIdentifier> transactionTransactionIdentifierMap;
+    private UmlgTransactionEventHandler transactionEventHandler;
     private static final Logger logger = Logger.getLogger(TumlNeo4jGraph.class.getPackage().getName());
-    private final String DELETED_NODES = "deletednodes";
 
     public TumlNeo4jGraph(String directory) {
         super(directory);
-        this.transactionIdentifierTransactionMap = new HashMap<TransactionIdentifier, Transaction>();
-        this.transactionTransactionIdentifierMap = new HashMap<Transaction, TransactionIdentifier>();
+        this.transactionEventHandler = new UmlgTransactionEventHandlerImpl();
     }
 
     public TumlNeo4jGraph(GraphDatabaseService rawGraph) {
         super(rawGraph);
-        this.transactionIdentifierTransactionMap = new HashMap<TransactionIdentifier, Transaction>();
-        this.transactionTransactionIdentifierMap = new HashMap<Transaction, TransactionIdentifier>();
+        this.transactionEventHandler = new UmlgTransactionEventHandlerImpl();
     }
 
     public TumlNeo4jGraph(GraphDatabaseService rawGraph, boolean fresh) {
         super(rawGraph, fresh);
-        this.transactionIdentifierTransactionMap = new HashMap<TransactionIdentifier, Transaction>();
-        this.transactionTransactionIdentifierMap = new HashMap<Transaction, TransactionIdentifier>();
+        this.transactionEventHandler = new UmlgTransactionEventHandlerImpl();
     }
 
     public TumlNeo4jGraph(String directory, Map<String, String> configuration) {
         super(directory, configuration);
-        this.transactionIdentifierTransactionMap = new HashMap<TransactionIdentifier, Transaction>();
-        this.transactionTransactionIdentifierMap = new HashMap<Transaction, TransactionIdentifier>();
+        this.transactionEventHandler = new UmlgTransactionEventHandlerImpl();
     }
 
     @Override
@@ -106,20 +99,25 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
 
     @Override
     public void addRoot() {
-        try {
-            this.getRawGraph().getNodeById(1);
-        } catch (NotFoundException e) {
-            try {
-                ((EmbeddedGraphDatabase) this.getRawGraph()).getTxManager().begin();
-                ((EmbeddedGraphDatabase) this.getRawGraph()).getNodeManager().setReferenceNodeId(this.getRawGraph().createNode().getId());
-                ((EmbeddedGraphDatabase) this.getRawGraph()).getTxManager().commit();
-            } catch (Exception e1) {
-                throw new RuntimeException(e1);
-            }
-            Vertex root = getRoot();
-            root.setProperty("transactionCount", 1);
-            root.setProperty("className", ROOT_CLASS_NAME);
-        }
+
+        Vertex root = addVertex("root");
+        root.setProperty("transactionCount", 1);
+        root.setProperty("className", ROOT_CLASS_NAME);
+
+//        try {
+//            this.getRawGraph().getNodeById(1);
+//        } catch (NotFoundException e) {
+//            try {
+//                ((EmbeddedGraphDatabase) this.getRawGraph()).getTxManager().begin();
+//                ((EmbeddedGraphDatabase) this.getRawGraph()).getNodeManager().setReferenceNodeId(this.getRawGraph().createNode().getId());
+//                ((EmbeddedGraphDatabase) this.getRawGraph()).getTxManager().commit();
+//            } catch (Exception e1) {
+//                throw new RuntimeException(e1);
+//            }
+//            Vertex root = getRoot();
+//            root.setProperty("transactionCount", 1);
+//            root.setProperty("className", ROOT_CLASS_NAME);
+//        }
     }
 
     @Override
@@ -141,15 +139,7 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
     }
 
     @Override
-    public void registerListeners() {
-        if (this.transactionEventHandler == null) {
-            this.transactionEventHandler = new TumlTransactionEventHandler<PersistentObject>();
-            this.getRawGraph().registerTransactionEventHandler(this.transactionEventHandler);
-        }
-    }
-
-    @Override
-    public <T> T instantiateClassifier(Long id) {
+    public <T> T instantiateClassifier(Object id) {
         try {
             Vertex v = this.getVertex(id);
             if (v == null) {
@@ -164,56 +154,57 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
         }
     }
 
-    protected void autoStartTransaction() {
-        if (tx.get() == null) {
-            tx.set(this.getRawGraph().beginTx());
-            GraphDatabaseAPI graphDatabaseAPI = (GraphDatabaseAPI) getRawGraph();
-            TransactionManager transactionManager = graphDatabaseAPI.getTxManager();
-            try {
-                Transaction t = transactionManager.getTransaction();
-                TransactionIdentifier transactionIdentifier = new TransactionIdentifier();
-                if (this.transactionIdentifierTransactionMap == null) {
-                    this.transactionIdentifierTransactionMap = new HashMap<TransactionIdentifier, Transaction>();
-                }
-                if (this.transactionTransactionIdentifierMap == null) {
-                    this.transactionTransactionIdentifierMap = new HashMap<Transaction, TransactionIdentifier>();
-                }
-                this.transactionIdentifierTransactionMap.put(transactionIdentifier, t);
-                this.transactionTransactionIdentifierMap.put(t, transactionIdentifier);
-            } catch (SystemException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
+//    protected void autoStartTransaction() {
+//        if (tx.get() == null) {
+//            tx.set(this.getRawGraph().beginTx());
+//            GraphDatabaseAPI graphDatabaseAPI = (GraphDatabaseAPI) getRawGraph();
+//            TransactionManager transactionManager = graphDatabaseAPI.getTxManager();
+//            try {
+//                Transaction t = transactionManager.getTransaction();
+//                TransactionIdentifier transactionIdentifier = new TransactionIdentifier();
+//                if (this.transactionIdentifierTransactionMap == null) {
+//                    this.transactionIdentifierTransactionMap = new HashMap<TransactionIdentifier, Transaction>();
+//                }
+//                if (this.transactionTransactionIdentifierMap == null) {
+//                    this.transactionTransactionIdentifierMap = new HashMap<Transaction, TransactionIdentifier>();
+//                }
+//                this.transactionIdentifierTransactionMap.put(transactionIdentifier, t);
+//                this.transactionTransactionIdentifierMap.put(t, transactionIdentifier);
+//            } catch (SystemException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
+//    }
 
     @Override
     public void rollback() {
         try {
-            if (null == tx.get()) {
-                return;
-            }
-            GraphDatabaseAPI graphDatabaseAPI = (GraphDatabaseAPI) getRawGraph();
-            TransactionManager transactionManager = graphDatabaseAPI.getTxManager();
-            javax.transaction.Transaction t = null;
-            try {
-                t = transactionManager.getTransaction();
-                if (t == null || t.getStatus() == Status.STATUS_ROLLEDBACK) {
-                    return;
-                }
-                tx.get().failure();
-            } catch (SystemException e) {
-                throw new RuntimeException(e);
-            } finally {
-                TransactionIdentifier transactionIdentifier = this.transactionTransactionIdentifierMap.remove(t);
-                this.transactionIdentifierTransactionMap.remove(transactionIdentifier);
-                tx.get().finish();
-                tx.remove();
-            }
-            //Persist the highId of the MetaNode
-            for (TumlMetaNode tumlMetaNode : TransactionThreadMetaNodeVar.get()) {
-                TumlIdManager.INSTANCE.persistHighId(tumlMetaNode);
-            }
-            GraphDb.getDb().commit();
+            super.rollback();
+//            if (null == tx.get()) {
+//                return;
+//            }
+//            GraphDatabaseAPI graphDatabaseAPI = (GraphDatabaseAPI) getRawGraph();
+//            TransactionManager transactionManager = graphDatabaseAPI.getTxManager();
+//            javax.transaction.Transaction t = null;
+//            try {
+//                t = transactionManager.getTransaction();
+//                if (t == null || t.getStatus() == Status.STATUS_ROLLEDBACK) {
+//                    return;
+//                }
+//                tx.get().failure();
+//            } catch (SystemException e) {
+//                throw new RuntimeException(e);
+//            } finally {
+//                TransactionIdentifier transactionIdentifier = this.transactionTransactionIdentifierMap.remove(t);
+//                this.transactionIdentifierTransactionMap.remove(transactionIdentifier);
+//                tx.get().finish();
+//                tx.remove();
+//            }
+//            //Persist the highId of the MetaNode
+//            for (TumlMetaNode tumlMetaNode : TransactionThreadMetaNodeVar.get()) {
+//                TumlIdManager.INSTANCE.persistHighId(tumlMetaNode);
+//            }
+//            GraphDb.getDb().commit();
         } finally {
             TransactionThreadEntityVar.remove();
             TransactionThreadMetaNodeVar.remove();
@@ -223,28 +214,11 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
     @Override
     public void commit() {
         try {
-            if (null == tx.get()) {
-                return;
+            //This null check is here for when a graph is created. It calls commit before the listener has been set.
+            if (this.transactionEventHandler != null) {
+                this.transactionEventHandler.beforeCommit();
             }
-            try {
-                //Persist the highId of the MetaNode
-                for (TumlMetaNode tumlMetaNode : TransactionThreadMetaNodeVar.get()) {
-                    TumlIdManager.INSTANCE.persistHighId(tumlMetaNode);
-                }
-                tx.get().success();
-            } finally {
-                GraphDatabaseAPI graphDatabaseAPI = (GraphDatabaseAPI) getRawGraph();
-                TransactionManager transactionManager = graphDatabaseAPI.getTxManager();
-                try {
-                    javax.transaction.Transaction t = transactionManager.getTransaction();
-                    TransactionIdentifier transactionIdentifier = this.transactionTransactionIdentifierMap.remove(t);
-                    this.transactionIdentifierTransactionMap.remove(transactionIdentifier);
-                } catch (SystemException e) {
-                    throw new RuntimeException(e);
-                }
-                tx.get().finish();
-                tx.remove();
-            }
+            super.commit();
         } finally {
             TransactionThreadEntityVar.remove();
             TransactionThreadMetaNodeVar.remove();
@@ -309,8 +283,8 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
                 try {
                     Class<?> tumlOclExecutor = Class.forName("org.umlg.ocl.TumlOclExecutor");
                     Method method = tumlOclExecutor.getMethod("executeOclQueryToJson", String.class, TumlNode.class, String.class);
-                    TumlNode context = (TumlNode)GraphDb.getDb().instantiateClassifier(contextId);
-                    String json = (String)method.invoke(null, context.getQualifiedName(), context, query);
+                    TumlNode context = (TumlNode) GraphDb.getDb().instantiateClassifier(contextId);
+                    String json = (String) method.invoke(null, context.getQualifiedName(), context, query);
                     return json;
                 } catch (ClassNotFoundException e) {
                     throw new RuntimeException("TumlOclExecutor is not on the class path.");
@@ -326,7 +300,7 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
                 }
                 return result;
             case NATIVE:
-                ExecutionEngine engine = new ExecutionEngine( getRawGraph(), StringLogger.SYSTEM );
+                ExecutionEngine engine = new ExecutionEngine(getRawGraph(), StringLogger.SYSTEM);
                 ExecutionResult executionResult = engine.execute(query);
                 result = executionResult.dumpToString();
                 return result;
@@ -338,16 +312,49 @@ public class TumlNeo4jGraph extends Neo4jGraph implements TumlGraph {
 
     @Override
     public void removeVertex(final Vertex vertex) {
+//        this.autoStartTransaction();
+//        final Node node = ((Neo4jVertex) vertex).getRawVertex();
+//        for (final Relationship relationship : node.getRelationships(org.neo4j.graphdb.Direction.BOTH)) {
+//            relationship.delete();
+//        }
+//        if (!vertex.getId().equals(new Long(0))) {
+//            getRoot().addEdge(DELETED_NODES, vertex);
+//            vertex.setProperty("deleted", true);
+//        } else {
+//            node.delete();
+//        }
+
         this.autoStartTransaction();
-        final Node node = ((Neo4jVertex) vertex).getRawVertex();
-        for (final Relationship relationship : node.getRelationships(org.neo4j.graphdb.Direction.BOTH)) {
-            relationship.delete();
+        Iterable<Edge> edges = vertex.getEdges(Direction.BOTH);
+        for (final Edge edge : edges) {
+            edge.remove();
         }
         if (!vertex.getId().equals(new Long(0))) {
             getRoot().addEdge(DELETED_NODES, vertex);
             vertex.setProperty("deleted", true);
         } else {
-            node.delete();
+            super.removeVertex(vertex);
+        }
+
+    }
+
+    @Override
+    public void drop() {
+        this.shutdown();
+        //Delete the files
+        String dbUrl = UmlgProperties.INSTANCE.getTumlDbLocation();
+        String parsedUrl = dbUrl;
+        if (dbUrl.startsWith("local:")) {
+            parsedUrl = dbUrl.replace("local:", "");
+        }
+        File dir = new File(parsedUrl);
+        if (dir.exists()) {
+            try {
+                logger.info(String.format("Deleting dir %s", new Object[]{dir.getAbsolutePath()}));
+                FileUtils.deleteDirectory(dir);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 

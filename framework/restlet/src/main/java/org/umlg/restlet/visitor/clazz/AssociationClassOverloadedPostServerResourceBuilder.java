@@ -106,8 +106,8 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
             parentPathName = pWrap.getAssociationClassPathName();
         }
         tryStatement.getTryPart().addToStatements(
-                "this." + parentPathName.getLast().toLowerCase() + "Id = Long.valueOf((String)getRequestAttributes().get(\""
-                        + parentPathName.getLast().toLowerCase() + "Id\"))");
+                "this." + parentPathName.getLast().toLowerCase() + "Id = (String)getRequestAttributes().get(\""
+                        + parentPathName.getLast().toLowerCase() + "Id\")");
         tryStatement.getTryPart().addToStatements(
                 parentPathName.getLast() + " parentResource = GraphDb.getDb().instantiateClassifier(" + parentPathName.getLast().toLowerCase() + "Id" + ")");
         annotatedClass.addToImports(parentPathName);
@@ -127,13 +127,13 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
         annotatedClass.addToImports(pWrap.javaBaseTypePath());
         if (pWrap.isComposite()) {
             delete.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
-            delete.getBody().addToStatements("Long id = Long.valueOf((Integer)propertyMap.get(\"id\"))");
+            delete.getBody().addToStatements("Object id = propertyMap.get(\"id\")");
             delete.getBody().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
             delete.getBody().addToStatements("childResource.delete()");
         } else {
             delete.addToParameters(new OJParameter("parentResource", parentPathName));
             delete.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
-            delete.getBody().addToStatements("Long id = Long.valueOf((Integer)propertyMap.get(\"id\"))");
+            delete.getBody().addToStatements("Object id = propertyMap.get(\"id\")");
             delete.getBody().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
             delete.getBody().addToStatements("parentResource." + pWrap.remover() + "(childResource)");
         }
@@ -165,11 +165,6 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
         } else {
             parentPathName = pWrap.getAssociationClassPathName();
         }
-//        post.getBody().addToStatements(
-//                "this." + parentPathName.getLast().toLowerCase() + "Id = Long.valueOf((String)getRequestAttributes().get(\""
-//                        + parentPathName.getLast().toLowerCase() + "Id\"))");
-//        post.getBody().addToStatements(
-//                parentPathName.getLast() + " parentResource = GraphDb.getDb().instantiateClassifier(" + parentPathName.getLast().toLowerCase() + "Id" + ")");
 
         OJTryStatement ojTryStatement = new OJTryStatement();
         OJField mapper = new OJField("mapper", TinkerGenerationUtil.ObjectMapper);
@@ -316,7 +311,7 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
         annotatedClass.addToOperations(put);
 
         OJBlock firstBlock = new OJBlock();
-        firstBlock.addToStatements("Long id = Long.valueOf((Integer)propertyMap.get(\"id\"))");
+        firstBlock.addToStatements("Object id = propertyMap.get(\"id\")");
         firstBlock.addToStatements(pWrap.getAssociationClassPathName().getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
         annotatedClass.addToImports(pWrap.javaBaseTypePath());
         firstBlock.addToStatements("childResource.fromJson(propertyMap)");
@@ -386,7 +381,7 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
             tryInstantiate.getTryPart().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = constructor.newInstance(parentResource)");
             tryInstantiate.getTryPart().addToStatements("childResource.fromJson(propertyMap)");
         } else {
-            tryInstantiate.getTryPart().addToStatements("Long id = Long.valueOf((Integer)propertyMap.get(\"id\"))");
+            tryInstantiate.getTryPart().addToStatements("Object id = propertyMap.get(\"id\")");
             tryInstantiate.getTryPart().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
             if (!pWrap.isMemberOfAssociationClass() || asAssociationClass) {
                 tryInstantiate.getTryPart().addToStatements("parentResource." + pWrap.adder() + "(childResource)");
@@ -573,10 +568,10 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
         OJField compositeParentFieldId;
         if (!asAssociationClass) {
             compositeParentFieldId = new OJField(TumlClassOperations.getPathName(pWrap.getOtherEnd().getType()).getLast().toLowerCase() + "Id",
-                new OJPathName("Long"));
+                new OJPathName("Object"));
         } else {
             compositeParentFieldId = new OJField(pWrap.getAssociationClassPathName().getLast().toLowerCase() + "Id",
-                    new OJPathName("Long"));
+                    new OJPathName("Object"));
 
         }
         compositeParentFieldId.setVisibility(OJVisibilityKind.PRIVATE);

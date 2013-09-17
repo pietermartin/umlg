@@ -57,7 +57,6 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<Class> {
 
             addGetHighId(clazz, metaClass);
 
-
             addDefaultCreate(metaClass);
 
         }
@@ -121,7 +120,7 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<Class> {
         allInstances.getBody().addToLocals(iter);
 
         OJForStatement forIter = new OJForStatement("edge", TinkerGenerationUtil.edgePathName, "iter");
-        forIter.getBody().addToStatements("result.add(GraphDb.getDb().<" + classPathName.getLast() + ">instantiateClassifier((Long)edge.getVertex(Direction.IN).getId()))");
+        forIter.getBody().addToStatements("result.add(GraphDb.getDb().<" + classPathName.getLast() + ">instantiateClassifier(edge.getVertex(Direction.IN).getId()))");
         allInstances.getBody().addToStatements(forIter);
         allInstances.getBody().addToStatements("return result");
 
@@ -147,7 +146,7 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<Class> {
         allInstances.getBody().addToLocals(iter);
 
         OJForStatement forIter = new OJForStatement("edge", TinkerGenerationUtil.edgePathName, "iter");
-        forIter.getBody().addToStatements(classPathName.getLast() + " instance = GraphDb.getDb().instantiateClassifier((Long)edge.getVertex(Direction.IN).getId())");
+        forIter.getBody().addToStatements(classPathName.getLast() + " instance = GraphDb.getDb().instantiateClassifier(edge.getVertex(Direction.IN).getId())");
         OJIfStatement ifFilter = new OJIfStatement("filter.filter(instance)");
         ifFilter.addToThenPart("result.add(instance)");
         forIter.getBody().addToStatements(ifFilter);
@@ -163,7 +162,8 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<Class> {
 
     private void addGetEdgeToRootLabel(OJAnnotatedClass metaClass, Class clazz) {
         OJAnnotatedOperation getEdgeToRootLabel = new OJAnnotatedOperation("getEdgeToRootLabel", new OJPathName("String"));
-        getEdgeToRootLabel.getBody().addToStatements("return \"" + TinkerGenerationUtil.getEdgeToRootLabelStrategyMeta(clazz) + "\"");
+        getEdgeToRootLabel.getBody().addToStatements("return " + TinkerGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() + ".getUmlgLabelConverter().convert(\"" + TinkerGenerationUtil.getEdgeToRootLabelStrategyMeta(clazz) + "\")");
+        metaClass.addToImports(TinkerGenerationUtil.UmlgLabelConverterFactoryPathName);
         metaClass.addToOperations(getEdgeToRootLabel);
     }
 
@@ -176,12 +176,12 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<Class> {
         OJField result = new OJField("result", metaClass.getPathName());
         INSTANCE.getBody().addToLocals(result);
 
-        INSTANCE.getBody().addToStatements("Iterator<Edge> iter = " + TinkerGenerationUtil.graphDbAccess + ".getRoot().getEdges(Direction.OUT, \"" + TinkerGenerationUtil.getEdgeToRootLabelStrategyMeta(clazz) + "\").iterator()");
+        INSTANCE.getBody().addToStatements("Iterator<Edge> iter = " + TinkerGenerationUtil.graphDbAccess + ".getRoot().getEdges(Direction.OUT, " + TinkerGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() + ".getUmlgLabelConverter().convert(\"" + TinkerGenerationUtil.getEdgeToRootLabelStrategyMeta(clazz) + "\")).iterator()");
         OJIfStatement ifHasNext = new OJIfStatement("iter.hasNext()");
         ifHasNext.addToThenPart("result =  new " + TumlClassOperations.getMetaClassName(clazz) + "(iter.next().getVertex(Direction.IN))");
         INSTANCE.getBody().addToStatements(ifHasNext);
 
-        ifHasNext.addToElsePart("iter = " + TinkerGenerationUtil.graphDbAccess + ".getRoot().getEdges(Direction.OUT, \"" + TinkerGenerationUtil.getEdgeToRootLabelStrategyMeta(clazz) + "\").iterator()");
+        ifHasNext.addToElsePart("iter = " + TinkerGenerationUtil.graphDbAccess + ".getRoot().getEdges(Direction.OUT, " + TinkerGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() + ".getUmlgLabelConverter().convert(\"" + TinkerGenerationUtil.getEdgeToRootLabelStrategyMeta(clazz) + "\")).iterator()");
 
         OJIfStatement ifIter2 = new OJIfStatement("!iter.hasNext()");
         ifIter2.addToThenPart("result = new " + metaClass.getName() + "()");
