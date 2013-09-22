@@ -2,13 +2,13 @@ package org.umlg.runtime.collection.persistent;
 
 import org.umlg.runtime.collection.TinkerSequence;
 import org.umlg.runtime.collection.TumlRuntimeProperty;
-import org.umlg.runtime.domain.TumlNode;
+import org.umlg.runtime.domain.UmlgNode;
 
 import java.util.Collection;
 
 public class TinkerSequenceImpl<E> extends BaseSequence<E> implements TinkerSequence<E> {
 
-	public TinkerSequenceImpl(TumlNode owner, TumlRuntimeProperty runtimeProperty) {
+	public TinkerSequenceImpl(UmlgNode owner, TumlRuntimeProperty runtimeProperty) {
 		super(owner, runtimeProperty);
 	}
 

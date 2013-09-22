@@ -194,7 +194,7 @@ public class TestValidation extends BaseLocalDbTest {
             db.commit();
             Assert.fail("Expected TransactionFailureException");
         } catch (Exception e) {
-            Assert.assertTrue(isTransactionFailedException(e));
+            Assert.assertTrue("excepting TumlConstraintViolationException", e instanceof TumlConstraintViolationException);
         }
     }
 
@@ -216,7 +216,7 @@ public class TestValidation extends BaseLocalDbTest {
             db.commit();
             Assert.fail("Expected TransactionFailureException");
         } catch (Exception e) {
-            Assert.assertTrue(isTransactionFailedException(e));
+            Assert.assertTrue("excepting TumlConstraintViolationException", e instanceof TumlConstraintViolationException);
         }
     }
 
@@ -256,7 +256,7 @@ public class TestValidation extends BaseLocalDbTest {
             Finger finger1 = new Finger(hand);
             db.commit();
         } catch (Exception e) {
-            Assert.assertTrue(isTransactionFailedException(e));
+            Assert.assertTrue("excepting TumlConstraintViolationException", e instanceof TumlConstraintViolationException);
             return;
         }
         Assert.fail("Expected transaction failed exception");
@@ -275,7 +275,7 @@ public class TestValidation extends BaseLocalDbTest {
             finger1.setName(null);
             db.commit();
         } catch (Exception e) {
-            Assert.assertTrue(isTransactionFailedException(e));
+            Assert.assertTrue("excepting TumlConstraintViolationException", e instanceof TumlConstraintViolationException);
             return;
         }
         Assert.fail("Expected transaction failed exception");
@@ -302,7 +302,7 @@ public class TestValidation extends BaseLocalDbTest {
             f6.setName("f6");
             db.commit();
         } catch (Exception e) {
-            Assert.assertTrue(isTransactionFailedException(e));
+            Assert.assertTrue("excepting TumlConstraintViolationException", e instanceof TumlConstraintViolationException);
             return;
         }
         Assert.fail("Expected transaction failed exception");
@@ -320,7 +320,7 @@ public class TestValidation extends BaseLocalDbTest {
             f1.setName("f1");
             db.commit();
         } catch (Exception e) {
-            Assert.assertTrue(isTransactionFailedException(e));
+            Assert.assertTrue("excepting TumlConstraintViolationException", e instanceof TumlConstraintViolationException);
             return;
         }
         Assert.fail("Expected transaction failed exception");
@@ -347,7 +347,7 @@ public class TestValidation extends BaseLocalDbTest {
             f6.setName("f6");
             db.commit();
         } catch (Exception e) {
-            Assert.assertTrue(isTransactionFailedException(e));
+            Assert.assertTrue("excepting TumlConstraintViolationException", e instanceof TumlConstraintViolationException);
             return;
         }
         Assert.fail("Expected transaction failed exception");

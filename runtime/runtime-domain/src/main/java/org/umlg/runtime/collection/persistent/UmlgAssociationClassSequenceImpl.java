@@ -9,8 +9,10 @@ import org.joda.time.LocalTime;
 import org.umlg.runtime.adaptor.GraphDb;
 import org.umlg.runtime.collection.TinkerCollection;
 import org.umlg.runtime.collection.TumlRuntimeProperty;
-import org.umlg.runtime.domain.TumlNode;
+import org.umlg.runtime.domain.TumlMetaNode;
+import org.umlg.runtime.domain.UmlgNode;
 
+import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -21,7 +23,7 @@ import java.util.Set;
  */
 public class UmlgAssociationClassSequenceImpl<AssociationClassNode> extends TinkerSequenceImpl<AssociationClassNode> {
 
-    public UmlgAssociationClassSequenceImpl(TumlNode owner, TumlRuntimeProperty runtimeProperty) {
+    public UmlgAssociationClassSequenceImpl(UmlgNode owner, TumlRuntimeProperty runtimeProperty) {
         super(owner, runtimeProperty);
     }
 
@@ -58,7 +60,7 @@ public class UmlgAssociationClassSequenceImpl<AssociationClassNode> extends Tink
                             Object value = this.getVertexForDirection(edge).getProperty("value");
                             node = (AssociationClassNode) Enum.valueOf((Class<? extends Enum>) c, (String) value);
                             putToInternalMap(value, this.getVertexForDirection(edge));
-                        } else if (TumlNode.class.isAssignableFrom(c)) {
+                        } else if (UmlgNode.class.isAssignableFrom(c)) {
                             node = (AssociationClassNode) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
                         } else {
                             Object value = this.getVertexForDirection(edge).getProperty("value");
@@ -131,7 +133,10 @@ public class UmlgAssociationClassSequenceImpl<AssociationClassNode> extends Tink
                 Object value = vertexToLoad.getProperty("value");
                 node = (AssociationClassNode) Enum.valueOf((Class<? extends Enum>) c, (String) value);
                 this.internalVertexMap.put(value, vertexToLoad);
-            } else if (TumlNode.class.isAssignableFrom(c)) {
+            } else if (TumlMetaNode.class.isAssignableFrom(c)) {
+                Method m = c.getDeclaredMethod("getInstance", new Class[0]);
+                node = (AssociationClassNode) m.invoke(null);
+            } else if (UmlgNode.class.isAssignableFrom(c)) {
                 node = (AssociationClassNode) c.getConstructor(Vertex.class).newInstance(associationClassVertex);
             } else {
                 Object value = vertexToLoad.getProperty("value");

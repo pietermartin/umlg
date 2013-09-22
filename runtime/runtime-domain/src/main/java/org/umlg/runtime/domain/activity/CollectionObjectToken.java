@@ -9,7 +9,7 @@ import org.umlg.runtime.collection.persistent.BaseCollection;
 import org.umlg.runtime.collection.persistent.TinkerSequenceImpl;
 import org.umlg.runtime.domain.CompositionNode;
 import org.umlg.runtime.domain.TumlMetaNode;
-import org.umlg.runtime.domain.TumlNode;
+import org.umlg.runtime.domain.UmlgNode;
 import org.umlg.runtime.domain.ocl.OclState;
 import org.umlg.runtime.validation.TumlConstraintViolation;
 
@@ -139,7 +139,7 @@ public class CollectionObjectToken<O> extends ObjectToken<O> implements Composit
 	}
 
     @Override
-    public TumlRuntimeProperty inverseAdder(TumlRuntimeProperty tumlRuntimeProperty, boolean inverse, TumlNode umlgNode) {
+    public TumlRuntimeProperty inverseAdder(TumlRuntimeProperty tumlRuntimeProperty, boolean inverse, UmlgNode umlgNode) {
         //To change body of implemented methods use File | Settings | File Templates.
         return null;
     }
@@ -150,7 +150,7 @@ public class CollectionObjectToken<O> extends ObjectToken<O> implements Composit
     }
 
     @Override
-	public List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, TumlNode node, boolean inverse) {
+	public List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, UmlgNode node, boolean inverse) {
 		// TODO Implement
 		throw new RuntimeException("Not implemented");
 	}
@@ -283,7 +283,7 @@ public class CollectionObjectToken<O> extends ObjectToken<O> implements Composit
     }
 
 	@Override
-	public List<TumlNode> getPathToCompositionalRoot() {
+	public List<UmlgNode> getPathToCompositionalRoot() {
 		// TODO Auto-generated method stub
 		return null;
 	}

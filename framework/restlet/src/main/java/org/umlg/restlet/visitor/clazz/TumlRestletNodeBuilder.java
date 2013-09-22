@@ -44,8 +44,8 @@ public class TumlRestletNodeBuilder extends BaseServerResourceBuilder implements
 	}
 
 	private void addImplementsTumlRestletNode(OJAnnotatedClass annotatedClass) {
-		annotatedClass.addToImports(TumlRestletGenerationUtil.TumlRestletNode);
-		annotatedClass.addToImplementedInterfaces(TumlRestletGenerationUtil.TumlRestletNode);
+		annotatedClass.addToImports(TumlRestletGenerationUtil.UmlgRestletNode);
+		annotatedClass.addToImplementedInterfaces(TumlRestletGenerationUtil.UmlgRestletNode);
 	}
 
 }

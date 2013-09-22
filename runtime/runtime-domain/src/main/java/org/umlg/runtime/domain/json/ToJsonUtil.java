@@ -1,8 +1,8 @@
 package org.umlg.runtime.domain.json;
 
 import org.umlg.runtime.domain.PersistentObject;
-import org.umlg.runtime.domain.TumlApplicationNode;
-import org.umlg.runtime.domain.TumlEnum;
+import org.umlg.runtime.domain.UmlgApplicationNode;
+import org.umlg.runtime.domain.UmlgEnum;
 
 import java.util.Collection;
 
@@ -12,11 +12,11 @@ public class ToJsonUtil {
         System.out.println("restAndJson/humans/{humanId}".replaceAll("\\{(\\s*?.*?)*?\\}", String.valueOf(5)));
     }
 
-    public static String enumsToJson(Collection<? extends TumlEnum> enums) {
+    public static String enumsToJson(Collection<? extends UmlgEnum> enums) {
         StringBuilder json = new StringBuilder();
         if (enums != null) {
             int count = 0;
-            for (TumlEnum p : enums) {
+            for (UmlgEnum p : enums) {
                 count++;
                 json.append("\"");
                 json.append(p.toJson());
@@ -121,7 +121,7 @@ public class ToJsonUtil {
         }
     }
 
-    public static String toJson(TumlApplicationNode entity) {
+    public static String toJson(UmlgApplicationNode entity) {
         if (entity != null) {
             StringBuilder json = new StringBuilder();
             json.append(entity.toJson());

@@ -4,6 +4,7 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.umlg.constraints.ConstraintRoot;
 import org.umlg.runtime.test.BaseLocalDbTest;
+import org.umlg.runtime.validation.TumlConstraintViolationException;
 
 /**
  * Date: 2013/03/10
@@ -20,7 +21,7 @@ public class ConstrainedClassTest extends BaseLocalDbTest {
             db.commit();
         } catch (Exception e) {
             exceptionHappened = true;
-            Assert.assertTrue(isTransactionFailedException(e));
+            Assert.assertTrue("excepting TumlConstraintViolationException", e instanceof TumlConstraintViolationException);
         }
         Assert.assertTrue(exceptionHappened);
     }

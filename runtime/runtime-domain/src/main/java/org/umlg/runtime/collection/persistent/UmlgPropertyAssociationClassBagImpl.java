@@ -6,9 +6,8 @@ import org.umlg.runtime.adaptor.GraphDb;
 import org.umlg.runtime.collection.TinkerCollection;
 import org.umlg.runtime.collection.TumlRuntimeProperty;
 import org.umlg.runtime.collection.UmlgPropertyAssociationClassBag;
-import org.umlg.runtime.collection.UmlgPropertyAssociationClassSet;
 import org.umlg.runtime.domain.AssociationClassNode;
-import org.umlg.runtime.domain.TumlNode;
+import org.umlg.runtime.domain.UmlgNode;
 
 import java.util.Set;
 
@@ -18,7 +17,7 @@ import java.util.Set;
  */
 public class UmlgPropertyAssociationClassBagImpl<E, AC extends AssociationClassNode> extends TinkerBagImpl<E> implements UmlgPropertyAssociationClassBag<E, AC> {
 
-    public UmlgPropertyAssociationClassBagImpl(TumlNode owner, TumlRuntimeProperty runtimeProperty, TumlRuntimeProperty associationClassRuntimeProperty) {
+    public UmlgPropertyAssociationClassBagImpl(UmlgNode owner, TumlRuntimeProperty runtimeProperty, TumlRuntimeProperty associationClassRuntimeProperty) {
         super(owner, runtimeProperty);
     }
 
@@ -26,7 +25,7 @@ public class UmlgPropertyAssociationClassBagImpl<E, AC extends AssociationClassN
     public boolean add(E e, AC associationClass) {
         if (super.add(e)) {
             associationClass.internalAdder(tumlRuntimeProperty, true, this.owner);
-            associationClass.internalAdder(tumlRuntimeProperty, false, (TumlNode) e);
+            associationClass.internalAdder(tumlRuntimeProperty, false, (UmlgNode) e);
             this.edge.setProperty(TinkerCollection.ASSOCIATION_CLASS_VERTEX_ID, associationClass.getId());
             this.edge.setProperty("className", associationClass.getClass().getName());
             return true;
@@ -44,8 +43,8 @@ public class UmlgPropertyAssociationClassBagImpl<E, AC extends AssociationClassN
     public boolean remove(Object o) {
         maybeLoad();
         Vertex v;
-        if (o instanceof TumlNode) {
-            TumlNode node = (TumlNode) o;
+        if (o instanceof UmlgNode) {
+            UmlgNode node = (UmlgNode) o;
             v = node.getVertex();
             removeEdge(v);
         } else if (o.getClass().isEnum()) {

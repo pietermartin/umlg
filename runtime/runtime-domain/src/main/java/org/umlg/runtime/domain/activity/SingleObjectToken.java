@@ -5,7 +5,7 @@ import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 import org.umlg.runtime.adaptor.GraphDb;
 import org.umlg.runtime.domain.CompositionNode;
-import org.umlg.runtime.domain.TumlNode;
+import org.umlg.runtime.domain.UmlgNode;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -27,8 +27,8 @@ public class SingleObjectToken<O> extends ObjectToken<O> {
 
 	private void addEdgeToObject(O object) {
 		Vertex v;
-		if (object instanceof TumlNode) {
-			TumlNode node = (TumlNode) object;
+		if (object instanceof UmlgNode) {
+			UmlgNode node = (UmlgNode) object;
 			v = node.getVertex();
 		} else if (object.getClass().isEnum()) {
 			v = GraphDb.getDb().addVertex(null);
@@ -44,7 +44,7 @@ public class SingleObjectToken<O> extends ObjectToken<O> {
 	protected void removeEdgeToObject() {
 		O object = getObject();
 		Edge edge = this.vertex.getEdges(Direction.OUT, TOKEN + "toObject").iterator().next();
-		if (object instanceof TumlNode) {
+		if (object instanceof UmlgNode) {
 			GraphDb.getDb().removeEdge(edge);
 		} else if (object.getClass().isEnum()) {
 			GraphDb.getDb().removeVertex(edge.getVertex(Direction.IN));

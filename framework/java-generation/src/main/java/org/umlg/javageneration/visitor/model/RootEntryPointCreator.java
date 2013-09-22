@@ -36,8 +36,8 @@ public class RootEntryPointCreator extends BaseVisitor implements Visitor<Model>
 	@Override
 	public void visitBefore(Model model) {
 		OJAnnotatedClass root = new OJAnnotatedClass("Root");
-		root.addToImplementedInterfaces(TinkerGenerationUtil.TumlApplicationNode);
-		OJPackage ojPackage = new OJPackage(TinkerGenerationUtil.TumlRootPackage.toJavaString());
+		root.addToImplementedInterfaces(TinkerGenerationUtil.UmlgApplicationNode);
+		OJPackage ojPackage = new OJPackage(TinkerGenerationUtil.UmlgRootPackage.toJavaString());
 		root.setMyPackage(ojPackage);
 		addToSource(root);
 
@@ -54,10 +54,12 @@ public class RootEntryPointCreator extends BaseVisitor implements Visitor<Model>
 	private void implementTumlRootNode(OJAnnotatedClass root) {
 		OJAnnotatedOperation getId = new OJAnnotatedOperation("getId");
 		getId.addAnnotationIfNew(new OJAnnotationValue(new OJPathName("java.lang.Override")));
-		getId.setReturnType(new OJPathName("String"));
-		getId.getBody().addToStatements("return TinkerIdUtilFactory.getIdUtil().getId(getRootVertex())");
+//		getId.setReturnType(new OJPathName("String"));
+        getId.setReturnType(new OJPathName("Object"));
+//		getId.getBody().addToStatements("return UmlgIdUtilFactory.getIdUtil().getId(getRootVertex())");
+        getId.getBody().addToStatements("return getRootVertex().getId()");
 		root.addToOperations(getId);
-		root.addToImports(TinkerGenerationUtil.tinkerIdUtilFactoryPathName);
+//		root.addToImports(TinkerGenerationUtil.UmlgIdUtilFactoryPathName);
 
 		OJAnnotatedOperation toJson = new OJAnnotatedOperation("toJson");
 		toJson.setReturnType("String");

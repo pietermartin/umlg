@@ -19,7 +19,7 @@ import org.umlg.generation.Workspace;
 import org.umlg.javageneration.ocl.TumlOcl2Java;
 import org.umlg.javageneration.util.*;
 import org.umlg.javageneration.visitor.BaseVisitor;
-import org.umlg.ocl.TumlOcl2Parser;
+import org.umlg.ocl.UmlgOcl2Parser;
 
 public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 
@@ -494,9 +494,9 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
     private void addEdgeToMetaNode(OJAnnotatedClass annotatedClass, Class clazz) {
         OJAnnotatedOperation addEdgeToMetaNode = new OJAnnotatedOperation("addEdgeToMetaNode");
         TinkerGenerationUtil.addOverrideAnnotation(addEdgeToMetaNode);
-        addEdgeToMetaNode.getBody().addToStatements(TinkerGenerationUtil.graphDbAccess + ".addEdge(null, getMetaNode().getVertex(), this.vertex, " + TinkerGenerationUtil.TUML_NODE.getLast() + ".ALLINSTANCES_EDGE_LABEL)");
+        addEdgeToMetaNode.getBody().addToStatements(TinkerGenerationUtil.graphDbAccess + ".addEdge(null, getMetaNode().getVertex(), this.vertex, " + TinkerGenerationUtil.UMLG_NODE.getLast() + ".ALLINSTANCES_EDGE_LABEL)");
         annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
-        annotatedClass.addToImports(TinkerGenerationUtil.TUML_NODE);
+        annotatedClass.addToImports(TinkerGenerationUtil.UMLG_NODE);
         annotatedClass.addToOperations(addEdgeToMetaNode);
     }
 
@@ -572,7 +572,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
             OJIfStatement ifConstraintFails = new OJIfStatement();
             String ocl = constraintWrapper.getConstraintOclAsString();
             checkClassConstraint.setComment(String.format("Implements the ocl statement for constraint '%s'\n<pre>\n%s\n</pre>", constraintWrapper.getName(), ocl));
-            OCLExpression<Classifier> oclExp = TumlOcl2Parser.INSTANCE.parseOcl(ocl);
+            OCLExpression<Classifier> oclExp = UmlgOcl2Parser.INSTANCE.parseOcl(ocl);
 
             ifConstraintFails.setCondition("(" + TumlOcl2Java.oclToJava(annotatedClass, oclExp) + ") == false");
             ifConstraintFails.addToThenPart("result.add(new " + TinkerGenerationUtil.TumlConstraintViolation.getLast() + "(\"" + constraintWrapper.getName() + "\", \""

@@ -30,7 +30,7 @@ public class QualifiedNameClassNameMapBuilder extends BaseVisitor implements Vis
 		OJAnnotatedClass globalMap = this.workspace.findOJClass(TinkerGenerationUtil.QualifiedNameClassMap.toJavaString());
 		if (globalMap == null) {
 			globalMap = new OJAnnotatedClass(TinkerGenerationUtil.QualifiedNameClassMap.getLast());
-			OJPackage ojPackage = new OJPackage(TinkerGenerationUtil.TumlRootPackage.toJavaString());
+			OJPackage ojPackage = new OJPackage(TinkerGenerationUtil.UmlgRootPackage.toJavaString());
 			globalMap.setMyPackage(ojPackage);
 			addINSTANCE(globalMap);
 			addMap(globalMap);

@@ -19,7 +19,7 @@ public class EnumerationVisitor extends BaseVisitor implements Visitor<org.eclip
 
 	public void visitBefore(org.eclipse.uml2.uml.Enumeration enumeration) {
 		OJEnum ojEnum = new OJEnum(enumeration.getName());
-		ojEnum.addToImplementedInterfaces(TinkerGenerationUtil.TumlEnum);
+		ojEnum.addToImplementedInterfaces(TinkerGenerationUtil.UmlgEnum);
 		OJPackage ojPackage = new OJPackage(Namer.name(enumeration.getNearestPackage()));
 		ojEnum.setMyPackage(ojPackage);
 		for (EnumerationLiteral literal : enumeration.getOwnedLiterals()) {

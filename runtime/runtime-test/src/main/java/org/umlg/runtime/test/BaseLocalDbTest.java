@@ -10,7 +10,7 @@ import org.umlg.runtime.adaptor.*;
 
 public class BaseLocalDbTest {
 
-	protected TumlGraph db;
+	protected UmlgGraph db;
 
 	@BeforeClass
 	public static void beforeClass() {
@@ -24,13 +24,14 @@ public class BaseLocalDbTest {
 
 	@Before
 	public void before() {
-        TumlGraphManager.INSTANCE.deleteGraph();
+        UmlgGraphManager.INSTANCE.deleteGraph();
 		this.db = GraphDb.getDb();
 	}
 
     @After
     public void after() {
-        TumlGraphManager.INSTANCE.deleteGraph();
+        this.db.rollback();
+        UmlgGraphManager.INSTANCE.deleteGraph();
         GraphDb.remove();
         TransactionThreadVar.remove();
         TransactionThreadEntityVar.remove();
@@ -38,15 +39,11 @@ public class BaseLocalDbTest {
     }
 
 	protected long countVertices() {
-		return this.db.countVertices() - TumlMetaNodeFactory.getTumlMetaNodeManager().count();
+		return this.db.countVertices() - UmlgMetaNodeFactory.getUmlgMetaNodeManager().count();
 	}
 
 	protected long countEdges() {
-		return this.db.countEdges() - TumlMetaNodeFactory.getTumlMetaNodeManager().count();
+		return this.db.countEdges() - UmlgMetaNodeFactory.getUmlgMetaNodeManager().count();
 	}
-
-    protected boolean isTransactionFailedException(Exception e) {
-        return TumlTestUtilFactory.getTestUtil().isTransactionFailedException(e);
-    }
 
 }

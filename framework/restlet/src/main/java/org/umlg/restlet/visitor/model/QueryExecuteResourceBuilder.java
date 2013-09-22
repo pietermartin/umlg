@@ -21,7 +21,7 @@ public class QueryExecuteResourceBuilder extends BaseServerResourceBuilder imple
 	@Override
 	public void visitBefore(Model model) {
 		OJAnnotatedInterface queryExecuteInf = new OJAnnotatedInterface(TumlRestletGenerationUtil.QueryExecuteServerResource.getLast());
-		OJPackage ojPackage = new OJPackage(TinkerGenerationUtil.TumlRootPackage.toJavaString());
+		OJPackage ojPackage = new OJPackage(TinkerGenerationUtil.UmlgRootPackage.toJavaString());
 		queryExecuteInf.setMyPackage(ojPackage);
 		addToSource(queryExecuteInf);
 

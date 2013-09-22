@@ -7,7 +7,7 @@ import org.umlg.runtime.collection.TinkerCollection;
 import org.umlg.runtime.collection.TumlRuntimeProperty;
 import org.umlg.runtime.collection.UmlgPropertyAssociationClassSet;
 import org.umlg.runtime.domain.AssociationClassNode;
-import org.umlg.runtime.domain.TumlNode;
+import org.umlg.runtime.domain.UmlgNode;
 
 import java.util.Set;
 
@@ -17,7 +17,7 @@ import java.util.Set;
  */
 public class UmlgPropertyAssociationClassSetImpl<E, AC extends AssociationClassNode> extends TinkerSetImpl<E> implements UmlgPropertyAssociationClassSet<E, AC> {
 
-    public UmlgPropertyAssociationClassSetImpl(TumlNode owner, TumlRuntimeProperty runtimeProperty, TumlRuntimeProperty associationClassRuntimeProperty) {
+    public UmlgPropertyAssociationClassSetImpl(UmlgNode owner, TumlRuntimeProperty runtimeProperty, TumlRuntimeProperty associationClassRuntimeProperty) {
         super(owner, runtimeProperty);
     }
 
@@ -26,7 +26,7 @@ public class UmlgPropertyAssociationClassSetImpl<E, AC extends AssociationClassN
         //This is needed in handleInverseSide
         if (super.add(e)) {
             associationClass.internalAdder(this.tumlRuntimeProperty, true, this.owner);
-            associationClass.internalAdder(this.tumlRuntimeProperty, false, (TumlNode) e);
+            associationClass.internalAdder(this.tumlRuntimeProperty, false, (UmlgNode) e);
             this.edge.setProperty(TinkerCollection.ASSOCIATION_CLASS_VERTEX_ID, associationClass.getId());
             this.edge.setProperty("className", associationClass.getClass().getName());
             return true;
@@ -44,8 +44,8 @@ public class UmlgPropertyAssociationClassSetImpl<E, AC extends AssociationClassN
     public boolean remove(Object o) {
         maybeLoad();
         Vertex v;
-        if (o instanceof TumlNode) {
-            TumlNode node = (TumlNode) o;
+        if (o instanceof UmlgNode) {
+            UmlgNode node = (UmlgNode) o;
             v = node.getVertex();
             removeEdge(v);
         } else if (o.getClass().isEnum()) {

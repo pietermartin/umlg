@@ -9,7 +9,7 @@ import org.umlg.ocl.TumlOclExecutor;
 import org.umlg.runtime.adaptor.GraphDb;
 import org.umlg.runtime.adaptor.GremlinExecutor;
 import org.umlg.runtime.domain.PersistentObject;
-import org.umlg.runtime.domain.TumlNode;
+import org.umlg.runtime.domain.UmlgNode;
 
 import java.util.Collection;
 import java.util.Map;
@@ -21,7 +21,7 @@ public abstract class BaseOclExecutionServerResourceImpl extends ServerResource 
 
     protected Representation execute(String query, Long contextId, String type) {
         if (type.equalsIgnoreCase("ocl")) {
-            TumlNode context = GraphDb.getDb().instantiateClassifier(contextId);
+            UmlgNode context = GraphDb.getDb().instantiateClassifier(contextId);
             Object result = TumlOclExecutor.executeOclQuery(context.getQualifiedName(), context, query);
             if (result instanceof Map) {
 //            return TumlOclExecutor.tupleMapToJson((Map<String, Object>) result);

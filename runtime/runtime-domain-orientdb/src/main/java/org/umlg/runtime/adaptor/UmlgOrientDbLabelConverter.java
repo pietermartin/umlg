@@ -18,6 +18,6 @@ public class UmlgOrientDbLabelConverter implements UmlgLabelConverter {
 
     @Override
     public String convert(String label) {
-        return label.replace("::", "__").replace("<", "__").replace(">", "__");
+        return label.replace("::", "_").replace("<", "__").replace(">", "__");
     }
 }

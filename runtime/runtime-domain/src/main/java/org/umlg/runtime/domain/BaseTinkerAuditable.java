@@ -6,7 +6,7 @@ import org.umlg.runtime.util.TumlFormatter;
 
 import java.io.Serializable;
 
-public abstract class BaseTinkerAuditable extends BaseTumlAudit implements TinkerAuditableNode, Serializable{
+public abstract class BaseTinkerAuditable extends BaseUmlgAudit implements TinkerAuditableNode, Serializable{
 
 	private static final long serialVersionUID = 3751023772087546585L;
 	

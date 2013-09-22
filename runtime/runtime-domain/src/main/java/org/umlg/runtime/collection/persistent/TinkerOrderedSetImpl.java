@@ -2,7 +2,7 @@ package org.umlg.runtime.collection.persistent;
 
 import org.umlg.runtime.collection.TinkerOrderedSet;
 import org.umlg.runtime.collection.TumlRuntimeProperty;
-import org.umlg.runtime.domain.TumlNode;
+import org.umlg.runtime.domain.UmlgNode;
 
 import java.util.Collection;
 
@@ -10,7 +10,7 @@ public class TinkerOrderedSetImpl<E> extends TumlBaseOrderedSet<E> implements Ti
 
 
     @SuppressWarnings("unchecked")
-    public TinkerOrderedSetImpl(TumlNode owner, TumlRuntimeProperty runtimeProperty) {
+    public TinkerOrderedSetImpl(UmlgNode owner, TumlRuntimeProperty runtimeProperty) {
         super(owner, runtimeProperty);
     }
 

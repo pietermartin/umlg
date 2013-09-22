@@ -15,7 +15,6 @@ import org.umlg.javageneration.util.TinkerGenerationUtil;
 import org.umlg.javageneration.util.TumlClassOperations;
 import org.umlg.restlet.util.TumlRestletGenerationUtil;
 
-import java.util.Set;
 import java.util.SortedSet;
 
 public class EntityServerResourceBuilder extends BaseServerResourceBuilder implements Visitor<Classifier> {
@@ -80,8 +79,8 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
         ojTry.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
 
         ojTry.getCatchPart().addToStatements("GraphDb.getDb().rollback()");
-        ojTry.getCatchPart().addToStatements("throw " + TumlRestletGenerationUtil.TumlExceptionUtilFactory.getLast() + ".getTumlExceptionUtil().handle(e)");
-        annotatedClass.addToImports(TumlRestletGenerationUtil.TumlExceptionUtilFactory);
+        ojTry.getCatchPart().addToStatements("throw " + TumlRestletGenerationUtil.UmlgExceptionUtilFactory.getLast() + ".getTumlExceptionUtil().handle(e)");
+        annotatedClass.addToImports(TumlRestletGenerationUtil.UmlgExceptionUtilFactory);
         delete.getBody().addToStatements(ojTry);
 
         if (parentPathName != null) {

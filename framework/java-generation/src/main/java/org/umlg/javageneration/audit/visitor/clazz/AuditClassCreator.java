@@ -271,7 +271,7 @@ public class AuditClassCreator extends BaseVisitor implements Visitor<Class> {
 		getId.addAnnotationIfNew(new OJAnnotationValue(new OJPathName("java.lang.Override")));
 		getId.setReturnType(new OJPathName("java.lang.Long"));
 		getId.getBody().addToStatements("return TinkerIdUtilFactory.getIdUtil().getId(this.vertex)");
-		this.auditClass.addToImports(TinkerGenerationUtil.tinkerIdUtilFactoryPathName);
+//		this.auditClass.addToImports(TinkerGenerationUtil.UmlgIdUtilFactoryPathName);
 		this.auditClass.addToOperations(getId);
 
 		OJAnnotatedOperation setId = new OJAnnotatedOperation("setId");
@@ -286,7 +286,7 @@ public class AuditClassCreator extends BaseVisitor implements Visitor<Class> {
 		getObjectVersion.addAnnotationIfNew(new OJAnnotationValue(new OJPathName("java.lang.Override")));
 		getObjectVersion.setReturnType(new OJPathName("int"));
 		getObjectVersion.getBody().addToStatements("return TinkerIdUtilFactory.getIdUtil().getVersion(this.vertex)");
-		this.auditClass.addToImports(TinkerGenerationUtil.tinkerIdUtilFactoryPathName);
+//		this.auditClass.addToImports(TinkerGenerationUtil.UmlgIdUtilFactoryPathName);
 		this.auditClass.addToOperations(getObjectVersion);
 	}
 

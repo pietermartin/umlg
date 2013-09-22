@@ -2,10 +2,10 @@ package org.umlg.runtime.domain.activity;
 
 import com.tinkerpop.blueprints.Vertex;
 import org.umlg.runtime.adaptor.GraphDb;
-import org.umlg.runtime.domain.TumlNode;
+import org.umlg.runtime.domain.UmlgNode;
 import org.umlg.runtime.domain.ocl.OclState;
 
-public abstract class Event implements TumlNode {
+public abstract class Event implements UmlgNode {
 
 	private static final long serialVersionUID = 546409593170432165L;
 	protected Vertex vertex;

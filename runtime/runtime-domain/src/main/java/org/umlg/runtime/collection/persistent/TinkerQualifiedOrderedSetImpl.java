@@ -3,14 +3,14 @@ package org.umlg.runtime.collection.persistent;
 import com.tinkerpop.blueprints.Edge;
 import org.umlg.runtime.collection.TinkerQualifiedOrderedSet;
 import org.umlg.runtime.collection.TumlRuntimeProperty;
-import org.umlg.runtime.domain.TumlNode;
+import org.umlg.runtime.domain.UmlgNode;
 
 import java.util.Collection;
 
 public class TinkerQualifiedOrderedSetImpl<E> extends TumlBaseOrderedSet<E> implements TinkerQualifiedOrderedSet<E> {
 
     @SuppressWarnings("unchecked")
-    public TinkerQualifiedOrderedSetImpl(TumlNode owner, TumlRuntimeProperty runtimeProperty) {
+    public TinkerQualifiedOrderedSetImpl(UmlgNode owner, TumlRuntimeProperty runtimeProperty) {
         super(owner, runtimeProperty);
 //        this.index = GraphDb.getDb().getIndex(getQualifiedName(), Edge.class);
     }
@@ -21,10 +21,10 @@ public class TinkerQualifiedOrderedSetImpl<E> extends TumlBaseOrderedSet<E> impl
         if (!this.getInternalListOrderedSet().contains(e)) {
             Edge edge = addToListAtIndex(indexOf, e);
             // Can only qualify TinkerNode's
-            if (!(e instanceof TumlNode)) {
+            if (!(e instanceof UmlgNode)) {
                 throw new IllegalStateException("Primitive properties can not be qualified!");
             }
-            addQualifierToIndex(edge, (TumlNode) e);
+            addQualifierToIndex(edge, (UmlgNode) e);
         }
     }
 

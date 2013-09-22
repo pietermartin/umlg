@@ -53,8 +53,8 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
         OJField result = new OJField();
         result.setName("result");
         result.setType(new OJPathName("java.util.List"));
-        result.getType().addToElementTypes(TinkerGenerationUtil.TINKER_QUALIFIER_PATHNAME);
-        result.setInitExp("new ArrayList<" + TinkerGenerationUtil.TINKER_QUALIFIER_PATHNAME.getLast() + ">()");
+        result.getType().addToElementTypes(TinkerGenerationUtil.UmlgQualifierPathName);
+        result.setInitExp("new ArrayList<" + TinkerGenerationUtil.UmlgQualifierPathName.getLast() + ">()");
         ojClass.addToImports("java.util.ArrayList");
         qualifierGetter.setReturnType(result.getType());
         qualifierGetter.getBody().addToLocals(result);
@@ -62,7 +62,7 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
         StringBuilder sb = new StringBuilder();
         sb.append("result.add(");
         sb.append("new ");
-        sb.append(TinkerGenerationUtil.TINKER_QUALIFIER_PATHNAME.getLast());
+        sb.append(TinkerGenerationUtil.UmlgQualifierPathName.getLast());
         sb.append("(new String[]{");
 
         for (Iterator<Property> iterator = qualified.getQualifiers().iterator(); iterator.hasNext(); ) {
@@ -83,7 +83,8 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
             sb.append("context.");
             sb.append(qWrap.getter());
             sb.append("() == null ? ");
-            sb.append("getId() + \"___NULL___\" : getId() + ");
+//            sb.append("getId() + \"___NULL___\" : getId() + ");
+            sb.append(TinkerGenerationUtil.UmlgQualifierIdFactory.getLast() + ".getUmlgQualifierId().getId(this) + \"___NULL___\" : " + TinkerGenerationUtil.UmlgQualifierIdFactory.getLast() + ".getUmlgQualifierId().getId(this) + ");
             sb.append("context.");
             sb.append(qWrap.getter());
             sb.append("().toString() ");
@@ -98,8 +99,9 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
         qualifierGetter.getBody().addToStatements(sb.toString());
 
         qualifierGetter.getBody().addToStatements("return result");
-        ojClass.addToImports(TinkerGenerationUtil.TINKER_QUALIFIER_PATHNAME);
-        ojClass.addToImports(TinkerGenerationUtil.tinkerMultiplicityPathName);
+        ojClass.addToImports(TinkerGenerationUtil.UmlgQualifierIdFactory);
+        ojClass.addToImports(TinkerGenerationUtil.UmlgQualifierPathName);
+        ojClass.addToImports(TinkerGenerationUtil.umlgMultiplicityPathName);
     }
 
     private void generateQualifiedGetter(PropertyWrapper qualified) {
@@ -150,9 +152,9 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
         for (PropertyWrapper qualifier : qualifiers) {
             if (first) {
                 first = false;
-                indexValue.setInitExp(qualifier.fieldname() + " == null ? getId() + \"___NULL___\" : getId() + " + qualifier.fieldname());
+                indexValue.setInitExp(qualifier.fieldname() + " == null ? " + TinkerGenerationUtil.UmlgQualifierIdFactory.getLast() + ".getUmlgQualifierId().getId(this) + \"___NULL___\" : " + TinkerGenerationUtil.UmlgQualifierIdFactory.getLast() + ".getUmlgQualifierId().getId(this) + " + qualifier.fieldname());
             } else {
-                elseBlock.addToStatements("indexValue += " + qualifier.fieldname() + " == null ? getId() + \"___NULL___\" : getId() + " + qualifier.fieldname());
+                elseBlock.addToStatements("indexValue += " + qualifier.fieldname() + " == null ? " + TinkerGenerationUtil.UmlgQualifierIdFactory.getLast() + ".getUmlgQualifierId().getId(this) + \"___NULL___\" : " + TinkerGenerationUtil.UmlgQualifierIdFactory.getLast() + ".getUmlgQualifierId().getId(this) + " + qualifier.fieldname());
             }
         }
 

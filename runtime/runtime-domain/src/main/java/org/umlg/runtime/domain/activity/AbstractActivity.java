@@ -4,7 +4,7 @@ import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 import org.umlg.runtime.adaptor.GraphDb;
-import org.umlg.runtime.domain.BaseTumlAudit;
+import org.umlg.runtime.domain.BaseUmlgAudit;
 import org.umlg.runtime.domain.CompositionNode;
 import org.umlg.runtime.domain.activity.interf.*;
 
@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public abstract class AbstractActivity extends BaseTumlAudit implements CompositionNode {
+public abstract class AbstractActivity extends BaseUmlgAudit implements CompositionNode {
 
 	private static final long serialVersionUID = 7647066355373095288L;
 

@@ -10,8 +10,10 @@ import org.umlg.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.OclStdLibSequence;
 import org.umlg.runtime.collection.ocl.OclStdLibSequenceImpl;
-import org.umlg.runtime.domain.TumlNode;
+import org.umlg.runtime.domain.TumlMetaNode;
+import org.umlg.runtime.domain.UmlgNode;
 
+import java.lang.reflect.Method;
 import java.util.*;
 
 public abstract class BaseSequence<E> extends BaseCollection<E> implements TinkerSequence<E> {
@@ -26,7 +28,7 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
     }
 
 
-    public BaseSequence(TumlNode owner, TumlRuntimeProperty runtimeProperty) {
+    public BaseSequence(UmlgNode owner, TumlRuntimeProperty runtimeProperty) {
         super(owner, runtimeProperty);
         this.internalCollection = new ArrayList<E>();
         this.oclStdLibSequence = new OclStdLibSequenceImpl<E>((List<E>) this.internalCollection);
@@ -146,7 +148,10 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
                 Object value = vertexToLoad.getProperty("value");
                 node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
                 this.internalVertexMap.put(value, vertexToLoad);
-            } else if (TumlNode.class.isAssignableFrom(c)) {
+            } else if (TumlMetaNode.class.isAssignableFrom(c)) {
+                Method m = c.getDeclaredMethod("getInstance", new Class[0]);
+                node = (E) m.invoke(null);
+            } else if (UmlgNode.class.isAssignableFrom(c)) {
                 node = (E) c.getConstructor(Vertex.class).newInstance(vertexToLoad);
             } else {
                 Object value = vertexToLoad.getProperty("value");
@@ -282,8 +287,8 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
 
     private Vertex getVertexFromElement(E e) {
         Vertex previousVertex;
-        if (e instanceof TumlNode) {
-            TumlNode node = (TumlNode) e;
+        if (e instanceof UmlgNode) {
+            UmlgNode node = (UmlgNode) e;
             previousVertex = node.getVertex();
         } else if (e.getClass().isEnum()) {
             previousVertex = this.internalVertexMap.get(((Enum<?>) e).name());

@@ -13,7 +13,6 @@ import org.umlg.javageneration.util.TinkerGenerationUtil;
 import org.umlg.javageneration.util.TumlClassOperations;
 import org.umlg.restlet.util.TumlRestletGenerationUtil;
 
-import java.util.Set;
 import java.util.SortedSet;
 
 public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerResourceBuilder implements Visitor<Class> {
@@ -192,10 +191,10 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
         ojTryStatement.getTryPart().addToStatements("return new " + TumlRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
         ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
         ojTryStatement.getCatchPart().addToStatements("GraphDb.getDb().rollback()");
-        ojTryStatement.getCatchPart().addToStatements("throw " + TumlRestletGenerationUtil.TumlExceptionUtilFactory.getLast() + ".getTumlExceptionUtil().handle(e)");
-        ojTryStatement.getFinallyPart().addToStatements(TinkerGenerationUtil.TumlTmpIdManager.getLast() + ".INSTANCE.remove()");
-        annotatedClass.addToImports(TinkerGenerationUtil.TumlTmpIdManager);
-        annotatedClass.addToImports(TumlRestletGenerationUtil.TumlExceptionUtilFactory);
+        ojTryStatement.getCatchPart().addToStatements("throw " + TumlRestletGenerationUtil.UmlgExceptionUtilFactory.getLast() + ".getTumlExceptionUtil().handle(e)");
+        ojTryStatement.getFinallyPart().addToStatements(TinkerGenerationUtil.UmlgTmpIdManager.getLast() + ".INSTANCE.remove()");
+        annotatedClass.addToImports(TinkerGenerationUtil.UmlgTmpIdManager);
+        annotatedClass.addToImports(TumlRestletGenerationUtil.UmlgExceptionUtilFactory);
         post.getBody().addToStatements(ojTryStatement);
 
         annotatedClass.addToImports(parentPathName);

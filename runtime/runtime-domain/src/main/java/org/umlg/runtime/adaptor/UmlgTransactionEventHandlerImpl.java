@@ -1,7 +1,7 @@
 package org.umlg.runtime.adaptor;
 
 import org.umlg.runtime.domain.CompositionNode;
-import org.umlg.runtime.domain.TumlNode;
+import org.umlg.runtime.domain.UmlgNode;
 import org.umlg.runtime.validation.TumlConstraintViolation;
 import org.umlg.runtime.validation.TumlConstraintViolationException;
 
@@ -20,8 +20,8 @@ public class UmlgTransactionEventHandlerImpl implements UmlgTransactionEventHand
             if (GraphDb.getDb() != null) {
                 TransactionThreadVar.clear();
                 GraphDb.incrementTransactionCount();
-                List<TumlNode> entities = TransactionThreadEntityVar.get();
-                for (TumlNode tumlNode : entities) {
+                List<UmlgNode> entities = TransactionThreadEntityVar.get();
+                for (UmlgNode tumlNode : entities) {
                     List<TumlConstraintViolation> requiredConstraintViolations = tumlNode.validateMultiplicities();
                     requiredConstraintViolations.addAll(tumlNode.checkClassConstraints());
                     if (!requiredConstraintViolations.isEmpty()) {

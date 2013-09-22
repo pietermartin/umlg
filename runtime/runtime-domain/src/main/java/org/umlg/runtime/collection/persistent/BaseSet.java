@@ -8,7 +8,7 @@ import org.umlg.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.OclStdLibSet;
 import org.umlg.runtime.collection.ocl.OclStdLibSetImpl;
-import org.umlg.runtime.domain.TumlNode;
+import org.umlg.runtime.domain.UmlgNode;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -24,7 +24,7 @@ public abstract class BaseSet<E> extends BaseCollection<E> implements TinkerSet<
 		this.oclStdLibCollection = this.oclStdLibSet;
 	}
 	
-	public BaseSet(TumlNode owner, TumlRuntimeProperty runtimeProperty) {
+	public BaseSet(UmlgNode owner, TumlRuntimeProperty runtimeProperty) {
 		super(owner, runtimeProperty);
 		this.internalCollection = new HashSet<E>();
 		this.oclStdLibSet = new OclStdLibSetImpl<E>((Set<E>)this.internalCollection);

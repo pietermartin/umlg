@@ -90,6 +90,19 @@ public class TumlClassOperations extends ClassOperations {
         return result;
     }
 
+    public static Set<Property> getPropertiesThatHaveAndEdge(Class clazz) {
+        Set<Property> result = new HashSet<Property>();
+        for (Property p : getAllOwnedProperties(clazz)) {
+            PropertyWrapper pWrap = new PropertyWrapper(p);
+            if (!pWrap.isDerived() && !pWrap.isQualifier()) {
+                if (pWrap.isMany() || !pWrap.isPrimitive()) {
+                    result.add(p);
+                }
+            }
+        }
+        return result;
+    }
+
     public static Set<Property> getOneProperties(org.eclipse.uml2.uml.Class clazz) {
         Set<Property> result = new HashSet<Property>();
         for (Property p : getAllOwnedProperties(clazz)) {
@@ -509,5 +522,24 @@ public class TumlClassOperations extends ClassOperations {
 
     public static boolean isAssociationClass(Class clazz) {
         return clazz instanceof AssociationClass;
+    }
+
+    public static List<Classifier> getGeneralizationHierarchy(Class clazz) {
+        List<Classifier> result = new ArrayList<Classifier>();
+        result.add(clazz);
+        getGeneralizationHierarchy(result, clazz);
+        return result;
+    }
+
+    private static void getGeneralizationHierarchy(List<Classifier> hierarchy, Classifier clazz) {
+        List<Classifier> generals = clazz.getGenerals();
+        if (generals.size() > 1) {
+            throw new IllegalStateException(
+                    String.format("Multiple inheritance is not supported! Class %s has more than on generalization.", clazz.getName()));
+        }
+        if (!generals.isEmpty()) {
+            hierarchy.add(generals.get(0));
+            getGeneralizationHierarchy(hierarchy, generals.get(0));
+        }
     }
 }

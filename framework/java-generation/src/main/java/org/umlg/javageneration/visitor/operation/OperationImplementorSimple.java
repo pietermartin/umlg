@@ -15,7 +15,7 @@ import org.umlg.generation.Workspace;
 import org.umlg.javageneration.ocl.TumlOcl2Java;
 import org.umlg.javageneration.util.OperationWrapper;
 import org.umlg.javageneration.visitor.BaseVisitor;
-import org.umlg.ocl.TumlOcl2Parser;
+import org.umlg.ocl.UmlgOcl2Parser;
 
 public class OperationImplementorSimple extends BaseVisitor implements Visitor<org.eclipse.uml2.uml.Operation> {
 
@@ -64,7 +64,7 @@ public class OperationImplementorSimple extends BaseVisitor implements Visitor<o
 		String ocl = operWrapper.getOclBodyCondition();
 		ojOper.setComment(String.format("Implements the ocl statement for operation body condition '%s'\n<pre>\n%s\n</pre>", operWrapper.getName(), ocl));
 		logger.info(String.format("About to parse ocl expression \n%s", new Object[] { ocl }));
-		OCLExpression<Classifier> oclExp = TumlOcl2Parser.INSTANCE.parseOcl(ocl);
+		OCLExpression<Classifier> oclExp = UmlgOcl2Parser.INSTANCE.parseOcl(ocl);
 		ojOper.getBody().addToStatements("return " + TumlOcl2Java.oclToJava(ojClass, oclExp));
 	}
 }

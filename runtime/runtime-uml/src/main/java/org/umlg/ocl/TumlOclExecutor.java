@@ -18,7 +18,7 @@ import org.umlg.javageneration.util.Namer;
 import org.umlg.javageneration.util.TinkerGenerationUtil;
 import org.umlg.javageneration.util.TumlClassOperations;
 import org.umlg.runtime.domain.PersistentObject;
-import org.umlg.runtime.domain.TumlNode;
+import org.umlg.runtime.domain.UmlgNode;
 
 public class TumlOclExecutor {
 
@@ -47,9 +47,9 @@ public class TumlOclExecutor {
 
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
-		TumlOcl2Parser.INSTANCE.getHelper().setContext(contextClassifier);
+		UmlgOcl2Parser.INSTANCE.getHelper().setContext(contextClassifier);
 		try {
-			OCLExpression<Classifier> expr = TumlOcl2Parser.INSTANCE.getHelper().createQuery(query);
+			OCLExpression<Classifier> expr = UmlgOcl2Parser.INSTANCE.getHelper().createQuery(query);
 			OJAnnotatedOperation getter = new OJAnnotatedOperation("execute");
 			getter.setStatic(true);
 			getter.setReturnType(TumlOcl2Java.calcReturnType(expr));
@@ -64,7 +64,7 @@ public class TumlOclExecutor {
 		return result;
 	}
 
-	public static Object executeOclQuery(String contextQualifiedName, TumlNode contextTumlNode, String query) {
+	public static Object executeOclQuery(String contextQualifiedName, UmlgNode contextTumlNode, String query) {
 		Classifier contextClassifier = (Classifier) ModelLoader.INSTANCE.findNamedElement(contextQualifiedName);
 		OJAnnotatedClass oclClass = new OJAnnotatedClass("OclQuery");
 		oclClass.setSuperclass(TumlClassOperations.getPathName(contextClassifier));
@@ -77,9 +77,9 @@ public class TumlOclExecutor {
 
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
-		TumlOcl2Parser.INSTANCE.getHelper().setContext(contextClassifier);
+		UmlgOcl2Parser.INSTANCE.getHelper().setContext(contextClassifier);
 		try {
-			OCLExpression<Classifier> expr = TumlOcl2Parser.INSTANCE.getHelper().createQuery(query);
+			OCLExpression<Classifier> expr = UmlgOcl2Parser.INSTANCE.getHelper().createQuery(query);
 			OJAnnotatedOperation getter = new OJAnnotatedOperation("execute");
 			getter.setReturnType(TumlOcl2Java.calcReturnType(expr));
 			getter.getBody().addToStatements(getter.getReturnType().getLast() + " result = " + TumlOcl2Java.oclToJava(oclClass, expr));
@@ -93,9 +93,9 @@ public class TumlOclExecutor {
 		return result;
 	}
 
-    //This is called via reflection from TumlGraph
+    //This is called via reflection from UmlgGraph
 	@SuppressWarnings("unchecked")
-	public static String executeOclQueryToJson(String contextQualifiedName, TumlNode contextTumlNode, String query) {
+	public static String executeOclQueryToJson(String contextQualifiedName, UmlgNode contextTumlNode, String query) {
 		Object result = executeOclQuery(contextQualifiedName, contextTumlNode, query);
 		if (result instanceof Map) {
 			return tupleMapToJson((Map<String, Object>) result);

@@ -16,6 +16,8 @@ public class TinkerGenerationUtil {
         return umlName.replace("::", "__");
     }
 
+    public static final String UmlgRootVertex = "UmlgRootVertex";
+
     public static final String INIT_VERTEX = "initVertex";
 
     public static final String TINKER_DB_NULL = "__NULL__";
@@ -30,25 +32,30 @@ public class TinkerGenerationUtil {
     public final static OJPathName Pair = new OJPathName("org.umlg.runtime.util.Pair");
 
     public final static OJPathName UmlgAssociationClassManager = new OJPathName("org.umlg.runtime.adaptor.UmlgAssociationClassManager");
-    public final static OJPathName TumlTmpIdManager = new OJPathName("org.umlg.runtime.adaptor.TumlTmpIdManager");
+    public final static OJPathName UmlgTmpIdManager = new OJPathName("org.umlg.runtime.adaptor.UmlgTmpIdManager");
     public static final OJPathName Filter = new OJPathName("org.umlg.runtime.collection.Filter");
-    public static final OJPathName TumlIndexManager = new OJPathName("org.umlg.runtime.adaptor.TumlIndexManager");
-    public static final OJPathName TumlMetaNodeManager = new OJPathName("org.umlg.runtime.adaptor.TumlMetaNodeManager");
-    public static final OJPathName TumlTransactionManager = new OJPathName("org.umlg.runtime.adaptor.TumlTransactionManager");
-    public static final OJPathName TransactionIdentifier = new OJPathName("org.umlg.runtime.adaptor.TransactionIdentifier");
+    public static final OJPathName UmlgIndexManager = new OJPathName("org.umlg.runtime.adaptor.UmlgIndexManager");
+    public static final OJPathName UmlgMetaNodeManager = new OJPathName("org.umlg.runtime.adaptor.UmlgMetaNodeManager");
     public static final String QualifiedNameClassMapName = "qualifiedNameClassMap";
-    public static final OJPathName TumlGraphManager = new OJPathName("org.umlg.runtime.adaptor.TumlGraphManager");
+    public static final OJPathName UmlgGraphManager = new OJPathName("org.umlg.runtime.adaptor.UmlgGraphManager");
     public static final OJPathName ModelLoader = new OJPathName("org.umlg.framework.ModelLoader");
-    public static final OJPathName TumlOcl2Parser = new OJPathName("org.umlg.ocl.TumlOcl2Parser");
+    public static final OJPathName UmlgOcl2Parser = new OJPathName("org.umlg.ocl.UmlgOcl2Parser");
     public static final OJPathName TumlMetaNode = new OJPathName("org.umlg.runtime.domain.TumlMetaNode");
     public static final OJPathName QualifiedNameClassMap = new OJPathName("org.umlg.root.QualifiedNameClassMap");
-    public static final OJPathName TumlAdaptorPackage = new OJPathName("org.umlg.runtime.adaptor");
-    public static final OJPathName TumlRootPackage = new OJPathName("org.umlg.root");
-    public static final OJPathName TumlSchemaMap = new OJPathName("org.umlg.runtime.adaptor.TumlSchemaMap");
-    public static final OJPathName TumlSchemaFactory = new OJPathName("org.umlg.runtime.adaptor.TumlSchemaFactory");
-    public static final OJPathName TumlSchemaMapImpl = new OJPathName("org.umlg.runtime.adaptor.TumlSchemaMapImpl");
-    public static final OJPathName TumlApplicationNode = new OJPathName("org.umlg.runtime.domain.TumlApplicationNode");
-    public static final OJPathName TumlEnum = new OJPathName("org.umlg.runtime.domain.TumlEnum");
+    public static final OJPathName UmlgAdaptorPackage = new OJPathName("org.umlg.runtime.adaptor");
+    public static final OJPathName UmlgRootPackage = new OJPathName("org.umlg.root");
+    public static final OJPathName UmlgSchemaMap = new OJPathName("org.umlg.runtime.adaptor.UmlgSchemaMap");
+    public static final OJPathName UmlgSchemaFactory = new OJPathName("org.umlg.runtime.adaptor.UmlgSchemaFactory");
+    public static final OJPathName UmlgSchemaMapImpl = new OJPathName("org.umlg.runtime.adaptor.UmlgSchemaMapImpl");
+    public static final OJPathName UmlgSchemaCreatorImpl = new OJPathName("org.umlg.runtime.adaptor.UmlgSchemaCreatorImpl");
+    public static final OJPathName UmlgSchemaCreator = new OJPathName("org.umlg.runtime.adaptor.UmlgSchemaCreator");
+    public static final OJPathName VertexSchemaCreator = new OJPathName("org.umlg.runtime.adaptor.VertexSchemaCreator");
+    public static final OJPathName EdgeSchemaCreator = new OJPathName("org.umlg.runtime.adaptor.EdgeSchemaCreator");
+
+    public static final String QualifiedNameVertexSchemaSet = "qualifiedNameVertexSchemaSet";
+    public static final String QualifiedNameEdgeSchemaSet = "qualifiedNameEdgeSchemaSet";
+    public static final OJPathName UmlgApplicationNode = new OJPathName("org.umlg.runtime.domain.UmlgApplicationNode");
+    public static final OJPathName UmlgEnum = new OJPathName("org.umlg.runtime.domain.UmlgEnum");
     public static final OJPathName TumlConstraintViolationException = new OJPathName("org.umlg.runtime.validation.TumlConstraintViolationException");
     public static final OJPathName TumlValidator = new OJPathName("org.umlg.runtime.validation.TumlValidator");
     public static final OJPathName TumlConstraintViolation = new OJPathName("org.umlg.runtime.validation.TumlConstraintViolation");
@@ -95,19 +102,14 @@ public class TinkerGenerationUtil {
     public static final OJPathName tinkerIdUtilPathName = new OJPathName("org.umlg.runtime.adaptor.TinkerIdUtil");
     public static final OJPathName BASE_TUML_AUDIT = new OJPathName("org.umlg.runtime.domain.BaseTumlAudit");
     public static final OJPathName BASE_BEHAVIORED_CLASSIFIER = new OJPathName("org.umlg.runtime.domain.BaseTinkerBehavioredClassifier");
-    public static final OJPathName BaseTuml = new OJPathName("org.umlg.runtime.domain.BaseTuml");
-    public static final OJPathName BASE_TUML_COMPOSITION_NODE = new OJPathName("org.umlg.runtime.domain.BaseTumlCompositionNode");
+    public static final String BASE_BEHAVIORED_CLASSIFIER_QUALIFIEDNAME = "org::umlg::runtime::domain::BaseTinkerBehavioredClassifier";
+    public static final OJPathName BaseUmlgCompositionNode = new OJPathName("org.umlg.runtime.domain.BaseUmlgCompositionNode");
+    public static final String BaseUmlgCompositionNodeQualifiedName = "org::umlg::runtime::domain::BaseUmlgCompositionNode";
     public static final OJPathName BASE_META_NODE = new OJPathName("org.umlg.runtime.domain.BaseMetaNode");
-    public static final String BASE_AUDIT_TINKER = "org.umlg.runtime.domain.BaseTinkerAuditable";
     public static final String PERSISTENT_CONSTRUCTOR_NAME = "persistentConstructor";
     public static final String PERSISTENT_CONSTRUCTOR_PARAM_NAME = "persistent";
 
-//    public static final String INDEX_SEPARATOR = ":::";
-
-
     public static final String ORIGINAL_UID = "originalUid";
-    public static OJPathName oGraphDatabase = new OJPathName("com.orientechnologies.orient.core.db.graph.OGraphDatabase");
-    public static OJPathName schemaPathName = new OJPathName("com.orientechnologies.orient.core.metadata.schema.OSchema");
     public static OJPathName vertexPathName = new OJPathName("com.tinkerpop.blueprints.Vertex");
     public static OJPathName tumlFormatter = new OJPathName("org.umlg.runtime.util.TumlFormatter");
     public static OJPathName transactionThreadVar = new OJPathName("org.umlg.runtime.adaptor.TransactionThreadVar");
@@ -115,12 +117,6 @@ public class TinkerGenerationUtil {
     public static OJPathName transactionThreadMetaNodeVar = new OJPathName("org.umlg.runtime.adaptor.TransactionThreadMetaNodeVar");
     public static OJPathName graphDbPathName = new OJPathName("org.umlg.runtime.adaptor.GraphDb");
     public static OJPathName tinkerAuditNodePathName = new OJPathName("org.umlg.runtime.domain.TinkerAuditNode");
-    //	public static OJPathName tinkerUtil = new OJPathName("org.util.TinkerUtil");
-    public static OJPathName tinkerHashSetImpl = new OJPathName("org.util.TinkerSet");
-    public static OJPathName tinkerJsfHashSetImpl = new OJPathName("org.util.TinkerJsfHashSet");
-    public static OJPathName tinkerArrayListImpl = new OJPathName("org.util.TinkerArrayList");
-    public static OJPathName tinkerEmbeddedHashSetImpl = new OJPathName("org.util.TinkerEmbeddedHashSet");
-    public static OJPathName tinkerEmbeddedArrayListImpl = new OJPathName("org.util.TinkerEmbeddedArrayList");
 
     public static OJPathName tinkerCollection = new OJPathName("org.umlg.runtime.collection.TinkerCollection");
     public static OJPathName tinkerSet = new OJPathName("org.umlg.runtime.collection.TinkerSet");
@@ -158,19 +154,16 @@ public class TinkerGenerationUtil {
     public static OJPathName tinkerQualifiedBagImpl = new OJPathName("org.umlg.runtime.collection.persistent.TinkerQualifiedBagImpl");
 
     public static OJPathName edgePathName = new OJPathName("com.tinkerpop.blueprints.Edge");
-    public static OJPathName storagePathName = new OJPathName("com.orientechnologies.orient.core.storage.OStorage");
     public static String graphDbAccess = "GraphDb.getDb()";
-    public static OJPathName tinkerSchemaHelperPathName = new OJPathName("org.umlg.tinker.runtime.TinkerSchemaHelper");
-    //	public static String TINKER_GET_CLASSNAME = "IntrospectionUtil.getOriginalClass(this.getClass()).getName()";
-    public static OJPathName introspectionUtilPathName = new OJPathName("org.umlg.runtime.domain.IntrospectionUtil");
-    public static OJPathName TUML_NODE = new OJPathName("org.umlg.runtime.domain.TumlNode");
-    public static OJPathName TUML_ROOT_NODE = new OJPathName("org.umlg.runtime.domain.TumlRootNode");
+    public static OJPathName UMLG_NODE = new OJPathName("org.umlg.runtime.domain.UmlgNode");
+    public static OJPathName UMLG_ROOT_NODE = new OJPathName("org.umlg.runtime.domain.UmlgRootNode");
 
-    public static OJPathName TINKER_QUALIFIER_PATHNAME = new OJPathName("org.umlg.runtime.collection.Qualifier");
-    public static OJPathName tinkerMultiplicityPathName = new OJPathName("org.umlg.runtime.collection.Multiplicity");
+    public static OJPathName UmlgQualifierPathName = new OJPathName("org.umlg.runtime.collection.Qualifier");
+    public static OJPathName umlgMultiplicityPathName = new OJPathName("org.umlg.runtime.collection.Multiplicity");
 
-    public static OJPathName tinkerIdUtilFactoryPathName = new OJPathName("org.umlg.runtime.adaptor.TinkerIdUtilFactory");
+//    public static OJPathName UmlgIdUtilFactoryPathName = new OJPathName("org.umlg.runtime.adaptor.UmlgIdUtilFactory");
     public static OJPathName UmlgLabelConverterFactoryPathName = new OJPathName("org.umlg.runtime.adaptor.UmlgLabelConverterFactory");
+    public static OJPathName UmlgQualifierIdFactory = new OJPathName("org.umlg.runtime.adaptor.UmlgQualifierIdFactory");
 
     public static String getEdgeToRootLabelStrategyMeta(org.eclipse.uml2.uml.Class clazz) {
         return "root" + TumlClassOperations.getQualifiedName(clazz) + "Meta";

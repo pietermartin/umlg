@@ -49,13 +49,13 @@ public class RestletComponentAndApplicationGenerator extends BaseVisitor impleme
     private void addStop(OJAnnotatedClass component) {
         OJAnnotatedOperation stop = new OJAnnotatedOperation("stop");
         TinkerGenerationUtil.addOverrideAnnotation(stop);
-        stop.getBody().addToStatements(TinkerGenerationUtil.TumlGraphManager.getLast() + ".INSTANCE.shutdown()");
-        stop.getBody().addToStatements(TinkerGenerationUtil.TumlGraphManager.getLast() + ".INSTANCE.deleteGraph()");
+        stop.getBody().addToStatements(TinkerGenerationUtil.UmlgGraphManager.getLast() + ".INSTANCE.shutdown()");
+        stop.getBody().addToStatements(TinkerGenerationUtil.UmlgGraphManager.getLast() + ".INSTANCE.deleteGraph()");
         stop.getBody().addToStatements(TinkerGenerationUtil.graphDbPathName.getLast() + ".remove()");
 
         stop.getBody().addToStatements("super.stop()");
         component.addToImports(TinkerGenerationUtil.graphDbPathName);
-        component.addToImports(TinkerGenerationUtil.TumlGraphManager);
+        component.addToImports(TinkerGenerationUtil.UmlgGraphManager);
         stop.addToThrows(new OJPathName("java.lang.Exception"));
         component.addToOperations(stop);
     }
@@ -81,17 +81,17 @@ public class RestletComponentAndApplicationGenerator extends BaseVisitor impleme
         OJTryStatement ojTryStatement = new OJTryStatement();
 
         ojTryStatement.getTryPart().addToStatements("final File modelFile = new File(modelFileURL.toURI())");
-        ojTryStatement.getTryPart().addToStatements("//Load the mode async\nnew Thread(new Runnable() {\n    @Override\n    public void run() {\n        ModelLoader.INSTANCE.loadModel(modelFile);\n        TumlOcl2Parser tumlOcl2Parser = TumlOcl2Parser.INSTANCE;\n    }\n}).start()");
+        ojTryStatement.getTryPart().addToStatements("//Load the mode async\nnew Thread(new Runnable() {\n    @Override\n    public void run() {\n        ModelLoader.INSTANCE.loadModel(modelFile);\n        UmlgOcl2Parser tumlOcl2Parser = UmlgOcl2Parser.INSTANCE;\n    }\n}).start()");
         component.addToImports(TinkerGenerationUtil.ModelLoader);
-        component.addToImports(TinkerGenerationUtil.TumlOcl2Parser);
+        component.addToImports(TinkerGenerationUtil.UmlgOcl2Parser);
         component.addToImports("java.io.File");
         component.addToImports("java.net.URL");
         ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
         ojTryStatement.getCatchPart().addToStatements("throw new RuntimeException(e)");
         constructor.getBody().addToStatements(ojTryStatement);
 
-        constructor.getBody().addToStatements(TinkerGenerationUtil.TumlGraphManager.getLast() + ".INSTANCE.startupGraph()");
-        component.addToImports(TinkerGenerationUtil.TumlGraphManager);
+        constructor.getBody().addToStatements(TinkerGenerationUtil.UmlgGraphManager.getLast() + ".INSTANCE.startupGraph()");
+        component.addToImports(TinkerGenerationUtil.UmlgGraphManager);
 
         OJIfStatement ifStartAdmin = new OJIfStatement(TinkerGenerationUtil.UmlgProperties.getLast() + ".INSTANCE.isStartAdminApplication()", TumlRestletGenerationUtil.UmlgAdminAppFactory.getLast() + ".getUmlgAdminApp().startAdminApplication()");
         constructor.getBody().addToStatements(ifStartAdmin);

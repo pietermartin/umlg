@@ -115,7 +115,7 @@ public class RestletFromJsonCreator extends BaseVisitor implements Visitor<Class
                             ifSetToNull.addToElsePart("Object idFromMap = " + field.getName() + ".get(\"id\")");
                             OJIfStatement ifIdLong = new OJIfStatement("(idFromMap instanceof String) && ((String)idFromMap).startsWith(\"fake\")");
                             ifIdLong.addToElsePart("id = idFromMap");
-                            ifIdLong.addToThenPart("id = " + TinkerGenerationUtil.TumlTmpIdManager.getLast() + ".INSTANCE.get((String)idFromMap)");
+                            ifIdLong.addToThenPart("id = " + TinkerGenerationUtil.UmlgTmpIdManager.getLast() + ".INSTANCE.get((String)idFromMap)");
                             ifSetToNull.addToElsePart(ifIdLong);
 
                             //Validate that association class json is in the map
@@ -141,12 +141,12 @@ public class RestletFromJsonCreator extends BaseVisitor implements Visitor<Class
                             ifSetToNull.addToElsePart("Object idFromMap = " + field.getName() + ".get(\"id\")");
                             OJIfStatement ifIdLong = new OJIfStatement("(idFromMap instanceof String) && ((String)idFromMap).startsWith(\"fake\")");
                             ifIdLong.addToElsePart("id = idFromMap");
-                            ifIdLong.addToThenPart("id = " + TinkerGenerationUtil.TumlTmpIdManager.getLast() + ".INSTANCE.get((String)idFromMap)");
+                            ifIdLong.addToThenPart("id = " + TinkerGenerationUtil.UmlgTmpIdManager.getLast() + ".INSTANCE.get((String)idFromMap)");
                             ifSetToNull.addToElsePart(ifIdLong);
                             ifSetToNull.addToElsePart(pWrap.setter() + "((" + pWrap.javaBaseTypePath().getLast() + ")" + TinkerGenerationUtil.graphDbAccess + ".instantiateClassifier(id))");
                         }
 
-                        annotatedClass.addToImports(TinkerGenerationUtil.TumlTmpIdManager);
+                        annotatedClass.addToImports(TinkerGenerationUtil.UmlgTmpIdManager);
                         annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
                         ifNotNull.addToThenPart(ifSetToNull);
                         fromJson.getBody().addToStatements(ifInMap);
@@ -171,12 +171,12 @@ public class RestletFromJsonCreator extends BaseVisitor implements Visitor<Class
                                 + ".instantiateClassifier(" + pWrap.fieldname() + "Map.get(\"id\"))");
                         ojIfStatement.addToElsePart(ojSimpleStatementConstructor);
 
-                        ojIfStatement.addToThenPart("Object id = " + TinkerGenerationUtil.TumlTmpIdManager.getLast() + ".INSTANCE.get((String)" + pWrap.fieldname() + "Map.get(\"tmpId\"))");
+                        ojIfStatement.addToThenPart("Object id = " + TinkerGenerationUtil.UmlgTmpIdManager.getLast() + ".INSTANCE.get((String)" + pWrap.fieldname() + "Map.get(\"tmpId\"))");
                         ojIfStatement.addToThenPart(pWrap.fieldname() + " = GraphDb.getDb().instantiateClassifier(id)");
 
-                        annotatedClass.addToImports(TinkerGenerationUtil.TumlTmpIdManager);
+                        annotatedClass.addToImports(TinkerGenerationUtil.UmlgTmpIdManager);
                         annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
-                        annotatedClass.addToImports(TinkerGenerationUtil.TumlSchemaFactory);
+                        annotatedClass.addToImports(TinkerGenerationUtil.UmlgSchemaFactory);
                         annotatedClass.addToImports("java.lang.reflect.Constructor");
 
 
@@ -202,11 +202,11 @@ public class RestletFromJsonCreator extends BaseVisitor implements Visitor<Class
                                 + ".instantiateClassifier(row.get(\"id\"))");
                         ojIfStatement.addToElsePart(ojSimpleStatementConstructor);
 
-                        ojIfStatement.addToThenPart("Object id = " + TinkerGenerationUtil.TumlTmpIdManager.getLast() + ".INSTANCE.get((String)row.get(\"tmpId\"))");
+                        ojIfStatement.addToThenPart("Object id = " + TinkerGenerationUtil.UmlgTmpIdManager.getLast() + ".INSTANCE.get((String)row.get(\"tmpId\"))");
                         ojIfStatement.addToThenPart(pWrap.fieldname() + " = GraphDb.getDb().instantiateClassifier(id)");
 
-                        annotatedClass.addToImports(TinkerGenerationUtil.TumlTmpIdManager);
-                        annotatedClass.addToImports(TinkerGenerationUtil.TumlSchemaFactory);
+                        annotatedClass.addToImports(TinkerGenerationUtil.UmlgTmpIdManager);
+                        annotatedClass.addToImports(TinkerGenerationUtil.UmlgSchemaFactory);
                         annotatedClass.addToImports("java.lang.reflect.Constructor");
 
                         ojForStatement.getBody().addToStatements(ojIfStatement);

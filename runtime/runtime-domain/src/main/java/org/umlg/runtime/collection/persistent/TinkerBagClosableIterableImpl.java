@@ -4,8 +4,10 @@ import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 import org.umlg.runtime.collection.TinkerBag;
 import org.umlg.runtime.collection.TumlRuntimeProperty;
-import org.umlg.runtime.domain.TumlNode;
+import org.umlg.runtime.domain.TumlMetaNode;
+import org.umlg.runtime.domain.UmlgNode;
 
+import java.lang.reflect.Method;
 import java.util.Iterator;
 
 public class TinkerBagClosableIterableImpl<E> extends BaseBag<E> implements TinkerBag<E> {
@@ -34,7 +36,10 @@ public class TinkerBagClosableIterableImpl<E> extends BaseBag<E> implements Tink
 					Object value = this.getVertexForDirection(edge).getProperty("value");
 					node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
 					this.internalVertexMap.put(value, this.getVertexForDirection(edge));
-				} else if (TumlNode.class.isAssignableFrom(c)) {
+                } else if (TumlMetaNode.class.isAssignableFrom(c)) {
+                    Method m = c.getDeclaredMethod("getInstance", new Class[0]);
+                    node = (E) m.invoke(null);
+				} else if (UmlgNode.class.isAssignableFrom(c)) {
 					node = (E) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
 				} else {
 					Object value = this.getVertexForDirection(edge).getProperty("value");

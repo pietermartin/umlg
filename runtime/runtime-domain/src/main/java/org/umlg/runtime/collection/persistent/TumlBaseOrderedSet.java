@@ -12,8 +12,10 @@ import org.umlg.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.OclStdLibOrderedSet;
 import org.umlg.runtime.collection.ocl.OclStdLibOrderedSetImpl;
-import org.umlg.runtime.domain.TumlNode;
+import org.umlg.runtime.domain.TumlMetaNode;
+import org.umlg.runtime.domain.UmlgNode;
 
+import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
@@ -27,7 +29,7 @@ public abstract class TumlBaseOrderedSet<E> extends BaseCollection<E> implements
     protected OclStdLibOrderedSet<E> oclStdLibOrderedSet;
 
     @SuppressWarnings("unchecked")
-    public TumlBaseOrderedSet(TumlNode owner, TumlRuntimeProperty runtimeProperty) {
+    public TumlBaseOrderedSet(UmlgNode owner, TumlRuntimeProperty runtimeProperty) {
         super(owner, runtimeProperty);
         this.internalCollection = new ListOrderedSet();
         this.oclStdLibOrderedSet = new OclStdLibOrderedSetImpl<E>((ListOrderedSet) this.internalCollection);
@@ -286,8 +288,8 @@ public abstract class TumlBaseOrderedSet<E> extends BaseCollection<E> implements
 
     private Vertex getVertexFromElement(E previous, E e) {
         Vertex previousVertex;
-        if (previous instanceof TumlNode) {
-            TumlNode node = (TumlNode) previous;
+        if (previous instanceof UmlgNode) {
+            UmlgNode node = (UmlgNode) previous;
             previousVertex = node.getVertex();
         } else if (e.getClass().isEnum()) {
             previousVertex = this.internalVertexMap.get(((Enum<?>) previous).name());
@@ -301,12 +303,15 @@ public abstract class TumlBaseOrderedSet<E> extends BaseCollection<E> implements
         E node;
         try {
             Class<?> c = this.getClassToInstantiate(edgeToFirstElement);
-            if (TumlNode.class.isAssignableFrom(c)) {
-                node = (E) c.getConstructor(Vertex.class).newInstance(vertex);
-            } else if (c.isEnum()) {
+            if (c.isEnum()) {
                 Object value = vertex.getProperty("value");
                 node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
                 this.internalVertexMap.put(value, vertex);
+            } else if (TumlMetaNode.class.isAssignableFrom(c)) {
+                Method m = c.getDeclaredMethod("getInstance", new Class[0]);
+                node = (E) m.invoke(null);
+            } else if (UmlgNode.class.isAssignableFrom(c)) {
+                node = (E) c.getConstructor(Vertex.class).newInstance(vertex);
             } else {
                 Object value = vertex.getProperty("value");
                 node = (E) value;

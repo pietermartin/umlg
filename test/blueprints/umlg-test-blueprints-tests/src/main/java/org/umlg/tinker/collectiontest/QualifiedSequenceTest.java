@@ -35,6 +35,6 @@ public class QualifiedSequenceTest extends BaseLocalDbTest {
 		foot2.setName("foot1");
 		foot2.addToGod(god);
         db.commit();
-	}	
+	}
 	
 }

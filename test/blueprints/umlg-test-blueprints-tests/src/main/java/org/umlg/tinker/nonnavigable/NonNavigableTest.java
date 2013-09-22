@@ -10,6 +10,7 @@ import org.umlg.concretetest.Universe;
 import org.umlg.navigability.NonNavigableMany;
 import org.umlg.navigability.NonNavigableOne;
 import org.umlg.runtime.test.BaseLocalDbTest;
+import org.umlg.runtime.validation.TumlConstraintViolationException;
 
 public class NonNavigableTest extends BaseLocalDbTest {
 
@@ -62,7 +63,7 @@ public class NonNavigableTest extends BaseLocalDbTest {
 
             db.commit();
         } catch (Exception e) {
-            Assert.assertTrue(isTransactionFailedException(e));
+            Assert.assertTrue("excepting TumlConstraintViolationException", e instanceof TumlConstraintViolationException);
             failed = true;
             db.rollback();
         }

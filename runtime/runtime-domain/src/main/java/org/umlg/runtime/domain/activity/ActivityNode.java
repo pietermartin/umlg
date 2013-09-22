@@ -6,7 +6,7 @@ import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.pipes.AbstractPipe;
 import org.umlg.runtime.adaptor.GraphDb;
 import org.umlg.runtime.domain.BaseTinkerBehavioredClassifier;
-import org.umlg.runtime.domain.TumlNode;
+import org.umlg.runtime.domain.UmlgNode;
 import org.umlg.runtime.domain.activity.interf.IActivityEdge;
 import org.umlg.runtime.domain.activity.interf.IActivityNode;
 import org.umlg.runtime.util.TinkerUtil;
@@ -178,16 +178,16 @@ public abstract class ActivityNode<IN extends Token, OUT extends Token> extends 
 
 //	@Override
 //	public Long getId() {
-//		return TinkerIdUtilFactory.getIdUtil().getId(this.vertex);
+//		return UmlgIdUtilFactory.getIdUtil().getId(this.vertex);
 //	}
 //
 //	@Override
 //	public void setId(Long id) {
-//		TinkerIdUtilFactory.getIdUtil().setId(this.vertex, id);
+//		UmlgIdUtilFactory.getIdUtil().setId(this.vertex, id);
 //	}
 
 	@Override
-	public abstract TumlNode getOwningObject();
+	public abstract UmlgNode getOwningObject();
 
   	@Override
 	public void delete() {

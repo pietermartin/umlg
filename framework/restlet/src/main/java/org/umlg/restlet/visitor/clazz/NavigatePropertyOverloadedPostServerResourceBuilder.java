@@ -6,7 +6,6 @@ import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.java.metamodel.*;
 import org.umlg.java.metamodel.annotation.*;
-import org.umlg.java.metamodel.utilities.OJPathNameComparator;
 import org.umlg.javageneration.util.PropertyWrapper;
 import org.umlg.javageneration.util.TinkerGenerationUtil;
 import org.umlg.javageneration.util.TumlClassOperations;
@@ -298,8 +297,8 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
         ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
         ojTryStatement.getCatchPart().addToStatements("GraphDb.getDb().rollback()");
 
-        ojTryStatement.getCatchPart().addToStatements("throw " + TumlRestletGenerationUtil.TumlExceptionUtilFactory.getLast() + ".getTumlExceptionUtil().handle(e)");
-        annotatedClass.addToImports(TumlRestletGenerationUtil.TumlExceptionUtilFactory);
+        ojTryStatement.getCatchPart().addToStatements("throw " + TumlRestletGenerationUtil.UmlgExceptionUtilFactory.getLast() + ".getTumlExceptionUtil().handle(e)");
+        annotatedClass.addToImports(TumlRestletGenerationUtil.UmlgExceptionUtilFactory);
 
         post.getBody().addToStatements(ojTryStatement);
 
@@ -359,8 +358,8 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
         add.getBody().addToLocals(qualifiedName);
 
         OJField baseTumlClass = new OJField("baseTumlClass", new OJPathName("Class").addToGenerics(pWrap.javaBaseTypePath()));
-        baseTumlClass.setInitExp(TinkerGenerationUtil.TumlSchemaFactory.getLast() + ".getTumlSchemaMap().get(qualifiedName)");
-        annotatedClass.addToImports(TinkerGenerationUtil.TumlSchemaFactory);
+        baseTumlClass.setInitExp(TinkerGenerationUtil.UmlgSchemaFactory.getLast() + ".getUmlgSchemaMap().get(qualifiedName)");
+        annotatedClass.addToImports(TinkerGenerationUtil.UmlgSchemaFactory);
         add.getBody().addToLocals(baseTumlClass);
 
         OJField sb = new OJField("sb", "StringBuilder");

@@ -12,7 +12,7 @@ import org.umlg.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.OclStdLibBag;
 import org.umlg.runtime.collection.ocl.OclStdLibBagImpl;
-import org.umlg.runtime.domain.TumlNode;
+import org.umlg.runtime.domain.UmlgNode;
 
 import java.util.List;
 import java.util.Set;
@@ -29,7 +29,7 @@ public abstract class BaseBag<E> extends BaseCollection<E> implements TinkerBag<
 		this.oclStdLibCollection = this.oclStdLibBag;
 	}
 	
-	public BaseBag(TumlNode owner, TumlRuntimeProperty runtimeProperty) {
+	public BaseBag(UmlgNode owner, TumlRuntimeProperty runtimeProperty) {
 		super(owner, runtimeProperty);
 		this.internalCollection = HashMultiset.create();
 		this.oclStdLibBag = new OclStdLibBagImpl<E>((Multiset<E>)this.internalCollection); 

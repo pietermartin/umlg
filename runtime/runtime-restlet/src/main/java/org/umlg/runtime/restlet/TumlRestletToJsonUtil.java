@@ -1,6 +1,6 @@
 package org.umlg.runtime.restlet;
 
-import org.umlg.runtime.adaptor.TumlTmpIdManager;
+import org.umlg.runtime.adaptor.UmlgTmpIdManager;
 import org.umlg.runtime.domain.PersistentObject;
 
 import java.util.Collection;
@@ -21,7 +21,7 @@ public class TumlRestletToJsonUtil {
             int count = 0;
             for (PersistentObject p : entities) {
                 count++;
-                String fakeId = TumlTmpIdManager.INSTANCE.get(p.getId());
+                String fakeId = UmlgTmpIdManager.INSTANCE.get(p.getId());
                 if (fakeId != null) {
                     json.append(p.toJsonWithoutCompositeParent(deep));
                     json.insert(json.length() - 1, ", \"tmpId\": \"" + fakeId + "\"");

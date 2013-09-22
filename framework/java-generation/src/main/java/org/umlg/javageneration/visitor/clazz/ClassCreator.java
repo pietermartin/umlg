@@ -33,7 +33,7 @@ public class ClassCreator extends BaseVisitor implements Visitor<Class> {
 		if (TumlBehavioredClassifierOperations.hasBehavior(clazz)) {
 			annotatedClass.setSuperclass(TinkerGenerationUtil.BASE_BEHAVIORED_CLASSIFIER);
 		} else {
-			annotatedClass.setSuperclass(TinkerGenerationUtil.BASE_TUML_COMPOSITION_NODE);
+			annotatedClass.setSuperclass(TinkerGenerationUtil.BaseUmlgCompositionNode);
 		}
 		addToSource(annotatedClass);
 	}

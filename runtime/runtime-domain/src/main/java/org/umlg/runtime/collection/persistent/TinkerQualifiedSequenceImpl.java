@@ -3,13 +3,13 @@ package org.umlg.runtime.collection.persistent;
 import com.tinkerpop.blueprints.Edge;
 import org.umlg.runtime.collection.TinkerQualifiedSequence;
 import org.umlg.runtime.collection.TumlRuntimeProperty;
-import org.umlg.runtime.domain.TumlNode;
+import org.umlg.runtime.domain.UmlgNode;
 
 import java.util.Collection;
 
 public class TinkerQualifiedSequenceImpl<E> extends BaseSequence<E> implements TinkerQualifiedSequence<E> {
 
-	public TinkerQualifiedSequenceImpl(TumlNode owner, TumlRuntimeProperty runtimeProperty) {
+	public TinkerQualifiedSequenceImpl(UmlgNode owner, TumlRuntimeProperty runtimeProperty) {
 		super(owner, runtimeProperty);
 //        this.index = GraphDb.getDb().getIndex(getQualifiedName(), Edge.class);
     }
@@ -20,10 +20,10 @@ public class TinkerQualifiedSequenceImpl<E> extends BaseSequence<E> implements T
         //It needs to be traversed because it is not possible to find the hyper vertex via the index because of duplicates
         Edge edge = addToListAtIndex(indexOf, e);
 		// Can only qualify TinkerNode's
-		if (!(e instanceof TumlNode)) {
+		if (!(e instanceof UmlgNode)) {
 			throw new IllegalStateException("Primitive properties can not be qualified!");
 		}
-		addQualifierToIndex(edge, (TumlNode)e);
+		addQualifierToIndex(edge, (UmlgNode)e);
         if (this.loaded) {
             getInternalList().add(indexOf, e);
         }

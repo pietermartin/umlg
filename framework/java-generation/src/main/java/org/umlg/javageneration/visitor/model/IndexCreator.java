@@ -27,9 +27,9 @@ public class IndexCreator extends BaseVisitor implements Visitor<Model> {
     @Override
     public void visitBefore(Model element) {
         OJAnnotatedClass indexCreator = new OJAnnotatedClass("IndexCreator");
-        OJPackage ojPackage = new OJPackage(TinkerGenerationUtil.TumlRootPackage.toJavaString());
+        OJPackage ojPackage = new OJPackage(TinkerGenerationUtil.UmlgRootPackage.toJavaString());
         indexCreator.setMyPackage(ojPackage);
-        indexCreator.addToImplementedInterfaces(TinkerGenerationUtil.TumlIndexManager);
+        indexCreator.addToImplementedInterfaces(TinkerGenerationUtil.UmlgIndexManager);
         addToSource(indexCreator);
 
         OJAnnotatedOperation createIndexes = new OJAnnotatedOperation("createIndexes");
@@ -38,12 +38,12 @@ public class IndexCreator extends BaseVisitor implements Visitor<Model> {
         List<Property> qualifiers = ModelLoader.INSTANCE.getAllQualifiers();
         for (Property q : qualifiers) {
             PropertyWrapper qualifierWrap = new PropertyWrapper(q);
-            createIndexes.getBody().addToStatements(TinkerGenerationUtil.graphDbAccess + ".createIndex(" + TinkerGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() + ".getUmlgLabelConverter().convert(\"" + qualifierWrap.getQualifiedName() + "\"), " + TinkerGenerationUtil.edgePathName.getLast() + ".class)");
+            createIndexes.getBody().addToStatements(TinkerGenerationUtil.graphDbAccess + ".createKeyIndex(" + TinkerGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() + ".getUmlgLabelConverter().convert(\"" + qualifierWrap.getQualifiedName() + "\"), " + TinkerGenerationUtil.edgePathName.getLast() + ".class)");
             indexCreator.addToImports(TinkerGenerationUtil.edgePathName);
         }
         indexCreator.addToImports(TinkerGenerationUtil.UmlgLabelConverterFactoryPathName);
         //Create index for the application root
-        createIndexes.getBody().addToStatements(TinkerGenerationUtil.graphDbAccess + ".createIndex(\"UmlGRoot\", " + TinkerGenerationUtil.vertexPathName.getLast() + ".class)");
+        createIndexes.getBody().addToStatements(TinkerGenerationUtil.graphDbAccess + ".createKeyIndex(\"" + TinkerGenerationUtil.UmlgRootVertex + "\", " + TinkerGenerationUtil.vertexPathName.getLast() + ".class)");
         indexCreator.addToImports(TinkerGenerationUtil.vertexPathName);
         indexCreator.addToImports(TinkerGenerationUtil.graphDbPathName);
     }

@@ -9,6 +9,7 @@ import org.umlg.inheritencetest.Mamal;
 import org.umlg.runtime.collection.memory.TumlMemoryBag;
 import org.umlg.runtime.collection.memory.TumlMemoryOrderedSet;
 import org.umlg.runtime.test.BaseLocalDbTest;
+import org.umlg.runtime.validation.TumlConstraintViolationException;
 
 import java.util.Arrays;
 
@@ -155,7 +156,7 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
             gt.clearManyOrderedRequiredInteger();
             db.commit();
         } catch (Exception e) {
-            junit.framework.Assert.assertTrue(isTransactionFailedException(e));
+            junit.framework.Assert.assertTrue("excepting TumlConstraintViolationException", e instanceof TumlConstraintViolationException);
             return;
         }
         junit.framework.Assert.fail("Expected transaction failed exception");

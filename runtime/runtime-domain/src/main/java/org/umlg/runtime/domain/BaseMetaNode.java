@@ -1,7 +1,6 @@
 package org.umlg.runtime.domain;
 
 import com.tinkerpop.blueprints.Vertex;
-import org.umlg.runtime.adaptor.TinkerIdUtilFactory;
 
 import java.util.UUID;
 
@@ -23,7 +22,7 @@ public abstract class BaseMetaNode implements TumlMetaNode {
 
     @Override
     public final Object getId() {
-        return TinkerIdUtilFactory.getIdUtil().getId(this.vertex);
+        return this.vertex.getId();
     }
 
     @Override

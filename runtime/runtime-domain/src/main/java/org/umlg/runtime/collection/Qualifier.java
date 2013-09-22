@@ -1,6 +1,6 @@
 package org.umlg.runtime.collection;
 
-import org.umlg.runtime.domain.TumlNode;
+import org.umlg.runtime.domain.UmlgNode;
 
 public class Qualifier {
 	private String key;
@@ -30,8 +30,8 @@ public class Qualifier {
 	}
 
 	public String getValue() {
-		if (value instanceof TumlNode) {
-			return ((TumlNode) value).getUid();
+		if (value instanceof UmlgNode) {
+			return ((UmlgNode) value).getUid();
 		} else {
 			if (this.value == null) {
 				return "___NULL___";

@@ -29,7 +29,7 @@ public class Neo4jAdminApp {
             public void run() {
                 try {
                     //Start the neo4j server
-                    InternalAbstractGraphDatabase graphdb = (InternalAbstractGraphDatabase) ((TumlNeo4jGraph) GraphDb.getDb()).getRawGraph();
+                    InternalAbstractGraphDatabase graphdb = (InternalAbstractGraphDatabase) ((UmlgNeo4jGraph) GraphDb.getDb()).getRawGraph();
                     WrappingNeoServerBootstrapper srv;
                     srv = new WrappingNeoServerBootstrapper(graphdb);
                     logger.info("starting neo4j server");

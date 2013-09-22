@@ -8,6 +8,7 @@ import org.umlg.qualifiertest.Many1;
 import org.umlg.qualifiertest.Many2;
 import org.umlg.runtime.collection.memory.TumlMemorySequence;
 import org.umlg.runtime.test.BaseLocalDbTest;
+import org.umlg.runtime.validation.TumlConstraintViolationException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -78,7 +79,7 @@ public class SequenceTest extends BaseLocalDbTest {
             transactionFailed = e;
         }
         Assert.assertNotNull(transactionFailed);
-        Assert.assertTrue(isTransactionFailedException(transactionFailed));
+        Assert.assertTrue("excepting TumlConstraintViolationException", transactionFailed instanceof TumlConstraintViolationException);
     }
 
     @Test

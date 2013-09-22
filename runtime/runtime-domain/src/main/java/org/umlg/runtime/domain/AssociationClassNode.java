@@ -8,6 +8,6 @@ import org.umlg.runtime.collection.TumlRuntimeProperty;
  */
 public interface AssociationClassNode extends CompositionNode {
 
-    TumlRuntimeProperty internalAdder(TumlRuntimeProperty tumlRuntimeProperty, boolean inverse, TumlNode umlgNode);
+    TumlRuntimeProperty internalAdder(TumlRuntimeProperty tumlRuntimeProperty, boolean inverse, UmlgNode umlgNode);
 
 }

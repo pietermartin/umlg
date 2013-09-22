@@ -153,10 +153,10 @@ public class RootOverLoadedPostForLookupResourceServerResourceBuilder extends Ba
         OJIfStatement ifFakeId = new OJIfStatement("fakeIdIndex != -1");
         ifFakeId.addToThenPart("int indexOfForwardSlash = lookupUri.indexOf(\"/\", fakeIdIndex)");
         ifFakeId.addToThenPart("String fakeId = lookupUri.substring(fakeIdIndex, indexOfForwardSlash)");
-        ifFakeId.addToThenPart("Object id = " + TinkerGenerationUtil.TumlTmpIdManager.getLast() + ".INSTANCE.get(fakeId)");
+        ifFakeId.addToThenPart("Object id = " + TinkerGenerationUtil.UmlgTmpIdManager.getLast() + ".INSTANCE.get(fakeId)");
         ifFakeId.addToThenPart("lookupUri = lookupUri.replace(fakeId, id.toString())");
         ojTryStatement.getTryPart().addToStatements(ifFakeId);
-        annotatedClass.addToImports(TinkerGenerationUtil.TumlTmpIdManager);
+        annotatedClass.addToImports(TinkerGenerationUtil.UmlgTmpIdManager);
 
         ojTryStatement.getTryPart().addToStatements(TumlRestletGenerationUtil.ClientResource.getLast() + " cr = new ClientResource(lookupUri)");
         annotatedClass.addToImports(TumlRestletGenerationUtil.ClientResource);
@@ -164,13 +164,13 @@ public class RootOverLoadedPostForLookupResourceServerResourceBuilder extends Ba
         ojTryStatement.getTryPart().addToStatements("return result");
 
         //Always rollback
-        ojTryStatement.getFinallyPart().addToStatements(TinkerGenerationUtil.TumlTmpIdManager.getLast() + ".INSTANCE.remove()");
+        ojTryStatement.getFinallyPart().addToStatements(TinkerGenerationUtil.UmlgTmpIdManager.getLast() + ".INSTANCE.remove()");
         ojTryStatement.getFinallyPart().addToStatements(TinkerGenerationUtil.graphDbAccess + ".rollback()");
 
         ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
         ojTryStatement.getCatchPart().addToStatements("GraphDb.getDb().rollback()");
-        ojTryStatement.getCatchPart().addToStatements("throw " + TumlRestletGenerationUtil.TumlExceptionUtilFactory.getLast() + ".getTumlExceptionUtil().handle(e)");
-        annotatedClass.addToImports(TumlRestletGenerationUtil.TumlExceptionUtilFactory);
+        ojTryStatement.getCatchPart().addToStatements("throw " + TumlRestletGenerationUtil.UmlgExceptionUtilFactory.getLast() + ".getTumlExceptionUtil().handle(e)");
+        annotatedClass.addToImports(TumlRestletGenerationUtil.UmlgExceptionUtilFactory);
         post.getBody().addToStatements(ojTryStatement);
 
         annotatedClass.addToImports(parentPathName);

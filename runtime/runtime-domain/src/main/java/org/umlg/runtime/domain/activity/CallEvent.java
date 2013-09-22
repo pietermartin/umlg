@@ -5,7 +5,7 @@ import org.umlg.runtime.collection.Qualifier;
 import org.umlg.runtime.collection.TinkerSet;
 import org.umlg.runtime.collection.TumlRuntimeProperty;
 import org.umlg.runtime.domain.TumlMetaNode;
-import org.umlg.runtime.domain.TumlNode;
+import org.umlg.runtime.domain.UmlgNode;
 import org.umlg.runtime.validation.TumlConstraintViolation;
 
 import java.util.List;
@@ -36,7 +36,7 @@ public class CallEvent extends Event {
 	}
 
     @Override
-    public TumlRuntimeProperty inverseAdder(TumlRuntimeProperty tumlRuntimeProperty, boolean inverse, TumlNode umlgNode) {
+    public TumlRuntimeProperty inverseAdder(TumlRuntimeProperty tumlRuntimeProperty, boolean inverse, UmlgNode umlgNode) {
         //To change body of implemented methods use File | Settings | File Templates.
         return null;
     }
@@ -53,7 +53,7 @@ public class CallEvent extends Event {
 	}
 
 	@Override
-	public List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, TumlNode node, boolean inverse) {
+	public List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, UmlgNode node, boolean inverse) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -135,7 +135,7 @@ public class CallEvent extends Event {
     }
 
 	@Override
-	public TumlNode getOwningObject() {
+	public UmlgNode getOwningObject() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -151,7 +151,7 @@ public class CallEvent extends Event {
     }
 
     @Override
-	public List<TumlNode> getPathToCompositionalRoot() {
+	public List<UmlgNode> getPathToCompositionalRoot() {
 		// TODO Auto-generated method stub
 		return null;
 	}

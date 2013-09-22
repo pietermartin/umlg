@@ -21,7 +21,7 @@ public class EnumLookupResourceServerResourceBuilder extends BaseServerResourceB
 	@Override
 	public void visitBefore(Model model) {
 		OJAnnotatedInterface enumLookupInf = new OJAnnotatedInterface(TumlRestletGenerationUtil.EnumerationLookupServerResource.getLast());
-		OJPackage ojPackage = new OJPackage(TinkerGenerationUtil.TumlRootPackage.toJavaString());
+		OJPackage ojPackage = new OJPackage(TinkerGenerationUtil.UmlgRootPackage.toJavaString());
 		enumLookupInf.setMyPackage(ojPackage);
 		addToSource(enumLookupInf);
 
@@ -58,8 +58,8 @@ public class EnumLookupResourceServerResourceBuilder extends BaseServerResourceB
 		get.getBody().addToStatements("Class<?> enumClass = " + TinkerGenerationUtil.QualifiedNameClassMap.getLast() + ".INSTANCE.get(enumQualifiedName)");
 		enumLookup.addToImports(TinkerGenerationUtil.QualifiedNameClassMap);
 
-		get.getBody().addToStatements(TinkerGenerationUtil.TumlEnum.getLast() + "[] enumConstants = (" + TinkerGenerationUtil.TumlEnum.getLast() + "[])enumClass.getEnumConstants()");
-		enumLookup.addToImports(TinkerGenerationUtil.TumlEnum);
+		get.getBody().addToStatements(TinkerGenerationUtil.UmlgEnum.getLast() + "[] enumConstants = (" + TinkerGenerationUtil.UmlgEnum.getLast() + "[])enumClass.getEnumConstants()");
+		enumLookup.addToImports(TinkerGenerationUtil.UmlgEnum);
 		get.getBody().addToStatements("StringBuilder json = new StringBuilder()");
 		get.getBody().addToStatements("json.append(\"{\\\"data\\\": [\")");
 		get.getBody().addToStatements("json.append(" + TinkerGenerationUtil.ToJsonUtil.getLast() + ".enumsToJson(Arrays.asList(enumConstants)))");

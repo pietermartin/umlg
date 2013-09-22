@@ -17,7 +17,7 @@ import org.umlg.javageneration.util.PropertyWrapper;
 import org.umlg.javageneration.util.TumlClassOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
 import org.umlg.javageneration.visitor.clazz.ClassBuilder;
-import org.umlg.ocl.TumlOcl2Parser;
+import org.umlg.ocl.UmlgOcl2Parser;
 
 public class PropertyVisitor extends BaseVisitor implements Visitor<Property> {
 
@@ -67,7 +67,7 @@ public class PropertyVisitor extends BaseVisitor implements Visitor<Property> {
             String ocl = propertyWrapper.getOclDerivedValue();
             initVariables.setComment(String.format("Implements the ocl statement for initialization variable '%s'\n<pre>\n%s\n</pre>", propertyWrapper.getName(), ocl));
             logger.info(String.format("About to parse ocl expression \n%s", new Object[]{ocl}));
-            OCLExpression<Classifier> constraint = TumlOcl2Parser.INSTANCE.parseOcl(ocl);
+            OCLExpression<Classifier> constraint = UmlgOcl2Parser.INSTANCE.parseOcl(ocl);
             java = TumlOcl2Java.oclToJava(owner, constraint);
             if (propertyWrapper.isMany()) {
                 //This is used in the initial value

@@ -55,8 +55,8 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
     }
 
     private void addImplementRootNodeInterface(OJAnnotatedClass annotatedClass) {
-        annotatedClass.addToImplementedInterfaces(TinkerGenerationUtil.TUML_ROOT_NODE);
-        annotatedClass.addToImports(TinkerGenerationUtil.TUML_ROOT_NODE);
+        annotatedClass.addToImplementedInterfaces(TinkerGenerationUtil.UMLG_ROOT_NODE);
+        annotatedClass.addToImports(TinkerGenerationUtil.UMLG_ROOT_NODE);
     }
 
     private void addConstructorWithOwnerAsParameter(OJAnnotatedClass annotatedClass, Class clazz) {
@@ -79,7 +79,7 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
     }
 
     private void addGetOwningObject(OJAnnotatedClass annotatedClass, Class clazz) {
-        OJAnnotatedOperation getOwningObject = new OJAnnotatedOperation("getOwningObject", TinkerGenerationUtil.TUML_NODE.getCopy());
+        OJAnnotatedOperation getOwningObject = new OJAnnotatedOperation("getOwningObject", TinkerGenerationUtil.UMLG_NODE.getCopy());
         TinkerGenerationUtil.addOverrideAnnotation(getOwningObject);
         if (TumlClassOperations.hasCompositeOwner(clazz)) {
             getOwningObject.getBody().addToStatements("return " + new PropertyWrapper(TumlClassOperations.getOtherEndToComposite(clazz)).getter() + "()");

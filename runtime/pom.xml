@@ -16,6 +16,8 @@
         <module>runtime-test</module>
         <module>runtime-test-neo4j</module>
         <module>runtime-test-orientdb</module>
+        <module>runtime-test-titan</module>
+        <module>runtime-test-bitsy</module>
         <module>runtime-test-restlet</module>
         <module>runtime-domain-neo4j</module>
         <module>runtime-domain-orientdb</module>

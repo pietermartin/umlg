@@ -6,14 +6,14 @@ public class GraphDb {
     private GraphDb() {
     }
 
-    private static ThreadLocal<TumlGraph> dbVar = new ThreadLocal<TumlGraph>() {
+    private static ThreadLocal<UmlgGraph> dbVar = new ThreadLocal<UmlgGraph>() {
         @Override
-        protected TumlGraph initialValue() {
-            return TumlGraphManager.INSTANCE.startupGraph();
+        protected UmlgGraph initialValue() {
+            return UmlgGraphManager.INSTANCE.startupGraph();
         }
     };
 
-    public static TumlGraph getDb() {
+    public static UmlgGraph getDb() {
         return dbVar.get();
     }
 

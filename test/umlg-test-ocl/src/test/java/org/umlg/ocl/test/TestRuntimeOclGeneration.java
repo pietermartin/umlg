@@ -10,7 +10,7 @@ import junit.framework.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.umlg.framework.ModelLoader;
-import org.umlg.ocl.TumlOcl2Parser;
+import org.umlg.ocl.UmlgOcl2Parser;
 import org.umlg.ocl.TumlOclExecutor;
 import org.umlg.qualifier.Bank;
 import org.umlg.qualifier.Employee;
@@ -31,7 +31,7 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 		}
 		ModelLoader.INSTANCE.loadModel(new File("./src/main/model/test-ocl.uml"));
 		@SuppressWarnings("unused")
-		TumlOcl2Parser instance = TumlOcl2Parser.INSTANCE;
+        UmlgOcl2Parser instance = UmlgOcl2Parser.INSTANCE;
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })

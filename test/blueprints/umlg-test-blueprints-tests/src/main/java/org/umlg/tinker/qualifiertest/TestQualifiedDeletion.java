@@ -17,6 +17,28 @@ import java.util.Set;
 
 public class TestQualifiedDeletion extends BaseLocalDbTest {
 
+    @Test
+    public void testTitanException() {
+        God god = new God(true);
+        god.setName("THEGOD");
+        Universe universe1 = new Universe(god);
+        universe1.setName("universe1");
+        SpaceTime st = new SpaceTime(universe1);
+        Space s = new Space(st);
+        Time t = new Time(st);
+        Many1 many11 = new Many1(god);
+        many11.setName("many11");
+        Many2 many21 = new Many2(god);
+        many21.setName("many21");
+        many11.addToMany2(many21);
+
+        db.commit();
+        Many1 many1Test = new Many1(many11.getVertex());
+        many1Test.delete();
+        db.commit();
+
+    }
+
 	@SuppressWarnings("unused")
 	@Test
 	public void testDeletionManyToMany() {
@@ -141,7 +163,7 @@ public class TestQualifiedDeletion extends BaseLocalDbTest {
 		Assert.assertEquals("many13", many2Test.getMany1List().get(1).getName());
 		Assert.assertEquals("many14", many2Test.getMany1List().get(2).getName());
 	}
-	
+
 	@Test
 	public void testQualifiedManyDeletion() {
 		God god = new God(true);

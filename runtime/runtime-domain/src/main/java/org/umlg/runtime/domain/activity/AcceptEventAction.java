@@ -5,7 +5,7 @@ import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 import org.umlg.runtime.adaptor.GraphDb;
 import org.umlg.runtime.domain.ISignal;
-import org.umlg.runtime.domain.TumlNode;
+import org.umlg.runtime.domain.UmlgNode;
 import org.umlg.runtime.domain.activity.interf.*;
 
 import java.util.*;
@@ -77,11 +77,11 @@ public abstract class AcceptEventAction extends Action implements IAcceptEventAc
 	protected void removeEvent(IEvent event) {
 		if (event instanceof ISignalEvent) {
 			ISignal signal = ((ISignalEvent)event).getSignal();
-			if (signal instanceof TumlNode) {
-				GraphDb.getDb().removeVertex(((TumlNode) signal).getVertex());
+			if (signal instanceof UmlgNode) {
+				GraphDb.getDb().removeVertex(((UmlgNode) signal).getVertex());
 			}
 		}
-		GraphDb.getDb().removeVertex(((TumlNode)event).getVertex());
+		GraphDb.getDb().removeVertex(((UmlgNode)event).getVertex());
 	}	
 	
 	@Override

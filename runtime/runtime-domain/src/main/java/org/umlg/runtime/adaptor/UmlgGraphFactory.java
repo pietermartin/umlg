@@ -2,7 +2,7 @@ package org.umlg.runtime.adaptor;
 
 
 public interface UmlgGraphFactory {
-	TumlGraph getTumlGraph(String url);
+	UmlgGraph getTumlGraph(String url);
     void shutdown();
     void drop();
 }

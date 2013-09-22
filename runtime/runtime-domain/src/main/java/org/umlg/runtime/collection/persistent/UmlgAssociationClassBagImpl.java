@@ -8,7 +8,7 @@ import org.joda.time.LocalTime;
 import org.umlg.runtime.adaptor.GraphDb;
 import org.umlg.runtime.collection.TinkerCollection;
 import org.umlg.runtime.collection.TumlRuntimeProperty;
-import org.umlg.runtime.domain.TumlNode;
+import org.umlg.runtime.domain.UmlgNode;
 
 import java.util.Iterator;
 
@@ -19,7 +19,7 @@ import java.util.Iterator;
  */
 public class UmlgAssociationClassBagImpl<AssociationClassNode> extends TinkerBagImpl<AssociationClassNode> {
 
-    public UmlgAssociationClassBagImpl(TumlNode owner, TumlRuntimeProperty runtimeProperty) {
+    public UmlgAssociationClassBagImpl(UmlgNode owner, TumlRuntimeProperty runtimeProperty) {
         super(owner, runtimeProperty);
     }
 
@@ -56,7 +56,7 @@ public class UmlgAssociationClassBagImpl<AssociationClassNode> extends TinkerBag
                             Object value = this.getVertexForDirection(edge).getProperty("value");
                             node = (AssociationClassNode) Enum.valueOf((Class<? extends Enum>) c, (String) value);
                             putToInternalMap(value, this.getVertexForDirection(edge));
-                        } else if (TumlNode.class.isAssignableFrom(c)) {
+                        } else if (UmlgNode.class.isAssignableFrom(c)) {
                             node = (AssociationClassNode) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
                         } else {
                             Object value = this.getVertexForDirection(edge).getProperty("value");

@@ -4,17 +4,15 @@ import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 import org.umlg.runtime.adaptor.GraphDb;
-import org.umlg.runtime.collection.Qualifier;
 import org.umlg.runtime.collection.TinkerQualifiedBag;
 import org.umlg.runtime.collection.TumlRuntimeProperty;
-import org.umlg.runtime.domain.TumlNode;
+import org.umlg.runtime.domain.UmlgNode;
 
-import java.util.List;
 import java.util.Set;
 
 public class TinkerQualifiedBagImpl<E> extends BaseBag<E> implements TinkerQualifiedBag<E> {
 
-	public TinkerQualifiedBagImpl(TumlNode owner, TumlRuntimeProperty runtimeProperty) {
+	public TinkerQualifiedBagImpl(UmlgNode owner, TumlRuntimeProperty runtimeProperty) {
 		super(owner, runtimeProperty);
 //		this.index = GraphDb.getDb().getIndex(getQualifiedName(), Edge.class);
 	}
@@ -28,8 +26,8 @@ public class TinkerQualifiedBagImpl<E> extends BaseBag<E> implements TinkerQuali
 		boolean result = this.getInternalBag().remove(o);
 		if (result) {
 			Vertex v;
-			if (o instanceof TumlNode) {
-				TumlNode node = (TumlNode) o;
+			if (o instanceof UmlgNode) {
+				UmlgNode node = (UmlgNode) o;
 				v = node.getVertex();
 				Set<Edge> edges = GraphDb.getDb().getEdgesBetween(this.vertex, v, this.getLabel());
 				for (Edge edge : edges) {

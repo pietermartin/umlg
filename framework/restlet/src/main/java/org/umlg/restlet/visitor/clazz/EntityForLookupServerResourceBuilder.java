@@ -79,17 +79,17 @@ public class EntityForLookupServerResourceBuilder extends BaseServerResourceBuil
         OJIfStatement ifFakeId = new OJIfStatement("fakeIdIndex != -1");
         ifFakeId.addToThenPart("int indexOfForwardSlash = lookupUri.indexOf(\"/\", fakeIdIndex)");
         ifFakeId.addToThenPart("String fakeId = lookupUri.substring(fakeIdIndex, indexOfForwardSlash)");
-        ifFakeId.addToThenPart("Object id = " + TinkerGenerationUtil.TumlTmpIdManager.getLast() + ".INSTANCE.get(fakeId)");
+        ifFakeId.addToThenPart("Object id = " + TinkerGenerationUtil.UmlgTmpIdManager.getLast() + ".INSTANCE.get(fakeId)");
         ifFakeId.addToThenPart("lookupUri = lookupUri.replace(fakeId, id.toString())");
         ojTry.getTryPart().addToStatements(ifFakeId);
-        annotatedClass.addToImports(TinkerGenerationUtil.TumlTmpIdManager);
+        annotatedClass.addToImports(TinkerGenerationUtil.UmlgTmpIdManager);
 
         ojTry.getTryPart().addToStatements(TumlRestletGenerationUtil.ClientResource.getLast() + " cr = new ClientResource(lookupUri)");
         annotatedClass.addToImports(TumlRestletGenerationUtil.ClientResource);
         ojTry.getTryPart().addToStatements(TumlRestletGenerationUtil.Representation.getLast() + " result = cr.get()");
         ojTry.getTryPart().addToStatements("return result");
 
-        ojTry.getFinallyPart().addToStatements(TinkerGenerationUtil.TumlTmpIdManager.getLast() + ".INSTANCE.remove()");
+        ojTry.getFinallyPart().addToStatements(TinkerGenerationUtil.UmlgTmpIdManager.getLast() + ".INSTANCE.remove()");
         ojTry.getFinallyPart().addToStatements(TinkerGenerationUtil.graphDbAccess + ".rollback()");
 
         ojTry.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));

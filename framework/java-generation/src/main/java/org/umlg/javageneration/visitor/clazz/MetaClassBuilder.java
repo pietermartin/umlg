@@ -9,6 +9,7 @@ import org.umlg.generation.Workspace;
 import org.umlg.java.metamodel.*;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
+import org.umlg.java.metamodel.generated.OJVisibilityKindGEN;
 import org.umlg.javageneration.util.Namer;
 import org.umlg.javageneration.util.TinkerGenerationUtil;
 import org.umlg.javageneration.util.TumlClassOperations;
@@ -116,7 +117,7 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<Class> {
         resultField.setInitExp("new " + TinkerGenerationUtil.tumlMemorySet.getCopy().addToGenerics(classPathName).getLast() + "()");
         allInstances.getBody().addToLocals(resultField);
         OJField iter = new OJField("iter", new OJPathName("java.lang.Iterable").addToGenerics(TinkerGenerationUtil.edgePathName));
-        iter.setInitExp("this.vertex.getEdges(Direction.OUT, TumlNode.ALLINSTANCES_EDGE_LABEL)");
+        iter.setInitExp("this.vertex.getEdges(Direction.OUT, " + TinkerGenerationUtil.UMLG_NODE.getLast() + ".ALLINSTANCES_EDGE_LABEL)");
         allInstances.getBody().addToLocals(iter);
 
         OJForStatement forIter = new OJForStatement("edge", TinkerGenerationUtil.edgePathName, "iter");
@@ -124,8 +125,8 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<Class> {
         allInstances.getBody().addToStatements(forIter);
         allInstances.getBody().addToStatements("return result");
 
-        metaClass.addToImports(TinkerGenerationUtil.TUML_NODE);
-        metaClass.addToImports(TinkerGenerationUtil.tinkerIdUtilFactoryPathName);
+        metaClass.addToImports(TinkerGenerationUtil.UMLG_NODE);
+//        metaClass.addToImports(TinkerGenerationUtil.UmlgIdUtilFactoryPathName);
 
         metaClass.addToOperations(allInstances);
     }
@@ -142,7 +143,7 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<Class> {
         resultField.setInitExp("new " + TinkerGenerationUtil.tumlMemorySet.getCopy().addToGenerics(classPathName).getLast() + "()");
         allInstances.getBody().addToLocals(resultField);
         OJField iter = new OJField("iter", new OJPathName("java.lang.Iterable").addToGenerics(TinkerGenerationUtil.edgePathName));
-        iter.setInitExp("this.vertex.getEdges(Direction.OUT, TumlNode.ALLINSTANCES_EDGE_LABEL)");
+        iter.setInitExp("this.vertex.getEdges(Direction.OUT, " + TinkerGenerationUtil.UMLG_NODE.getLast() + ".ALLINSTANCES_EDGE_LABEL)");
         allInstances.getBody().addToLocals(iter);
 
         OJForStatement forIter = new OJForStatement("edge", TinkerGenerationUtil.edgePathName, "iter");
@@ -154,8 +155,8 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<Class> {
         allInstances.getBody().addToStatements(forIter);
         allInstances.getBody().addToStatements("return result");
 
-        metaClass.addToImports(TinkerGenerationUtil.TUML_NODE);
-        metaClass.addToImports(TinkerGenerationUtil.tinkerIdUtilFactoryPathName);
+        metaClass.addToImports(TinkerGenerationUtil.UMLG_NODE);
+//        metaClass.addToImports(TinkerGenerationUtil.UmlgIdUtilFactoryPathName);
 
         metaClass.addToOperations(allInstances);
     }
@@ -202,6 +203,7 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<Class> {
     @Override
     protected void addContructorWithVertex(OJAnnotatedClass ojClass, Class clazz) {
         OJConstructor constructor = new OJConstructor();
+        constructor.setVisibility(OJVisibilityKindGEN.PRIVATE);
         constructor.addParam("vertex", TinkerGenerationUtil.vertexPathName);
         constructor.getBody().addToStatements("super(vertex)");
         constructor.getBody().addToStatements(TinkerGenerationUtil.transactionThreadMetaNodeVar.getLast() + ".setNewEntity(this)");

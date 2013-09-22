@@ -7,7 +7,7 @@ import org.umlg.componenttest.SpaceTime;
 import org.umlg.componenttest.Time;
 import org.umlg.concretetest.God;
 import org.umlg.concretetest.Universe;
-import org.umlg.runtime.adaptor.TumlQueryEnum;
+import org.umlg.runtime.adaptor.UmlgQueryEnum;
 import org.umlg.runtime.test.BaseLocalDbTest;
 
 /**
@@ -30,7 +30,7 @@ public class TestGremlinExecutor extends BaseLocalDbTest {
         db.commit();
         Assert.assertNotNull(universe1.getGod());
 
-        String result = db.executeQuery(TumlQueryEnum.GREMLIN, god.getId(), "out");
+        String result = db.executeQuery(UmlgQueryEnum.GREMLIN, god.getId(), "out");
         System.out.println(result);
     }
 }

@@ -2,15 +2,15 @@ package org.umlg.runtime.restlet.util;
 
 import java.util.List;
 
-import org.umlg.runtime.restlet.domain.TumlRestletNode;
+import org.umlg.runtime.restlet.domain.UmlgRestletNode;
 
 public class RestletToJsonUtil {
 
-	public static String pathToCompositionRootAsJson(List<TumlRestletNode> entities, String rootName, String rootUri) {
+	public static String pathToCompositionRootAsJson(List<UmlgRestletNode> entities, String rootName, String rootUri) {
 		StringBuilder json = new StringBuilder();
 		if (entities != null) {
 			int count = 0;
-			for (TumlRestletNode p : entities) {
+			for (UmlgRestletNode p : entities) {
 				count++;
 				json.append("{");
 				json.append("\"name\": ");

@@ -2,7 +2,7 @@ package org.umlg.associationclass.gremlin;
 
 import org.junit.Test;
 import org.umlg.runtime.adaptor.GraphDb;
-import org.umlg.runtime.adaptor.TumlQueryEnum;
+import org.umlg.runtime.adaptor.UmlgQueryEnum;
 import org.umlg.runtime.test.BaseLocalDbTest;
 import org.umlg.tinkergraph.AssociationClassSetTest;
 import org.umlg.tinkergraph.Human;
@@ -38,7 +38,7 @@ public class TestAssociationClassGremlin extends BaseLocalDbTest {
 //        Assert.assertEquals(7, countVertices());
 //        Assert.assertEquals(17, countEdges());
 
-        String result = GraphDb.getDb().executeQuery(TumlQueryEnum.GREMLIN, human.getId(), "this.outE.hasU('x')");
+        String result = GraphDb.getDb().executeQuery(UmlgQueryEnum.GREMLIN, human.getId(), "this.outE.hasU('x')");
         System.out.println(result);
 
     }

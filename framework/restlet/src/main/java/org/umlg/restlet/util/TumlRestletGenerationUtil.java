@@ -13,11 +13,11 @@ public class TumlRestletGenerationUtil {
     public final static String classQueryQualifiedName = "umlglib::org::umlg::meta::ClassQuery";
     public final static String instanceQueryQualifiedName = "umlglib::org::umlg::query::InstanceQuery";
 
-    public final static OJPathName TumlSchemaFactory = new OJPathName("org.umlg.runtime.adaptor.TumlSchemaFactory");
+    public final static OJPathName TumlSchemaFactory = new OJPathName("org.umlg.runtime.adaptor.UmlgSchemaFactory");
     public final static OJPathName TumlRestletFilter = new OJPathName("org.umlg.runtime.restlet.TumlRestletFilter");
     public final static OJPathName TumlRestletToJsonUtil = new OJPathName("org.umlg.runtime.restlet.TumlRestletToJsonUtil");
     public final static OJPathName ClientResource = new OJPathName("org.restlet.resource.ClientResource");
-    public final static OJPathName TumlExceptionUtilFactory = new OJPathName("org.umlg.runtime.adaptor.TumlExceptionUtilFactory");
+    public final static OJPathName UmlgExceptionUtilFactory = new OJPathName("org.umlg.runtime.adaptor.UmlgExceptionUtilFactory");
     public final static OJPathName ErrorStatusService = new OJPathName("org.umlg.runtime.restlet.ErrorStatusService");
     public final static OJPathName FieldType = new OJPathName("org.umlg.runtime.restlet.FieldType");
     public final static OJPathName Get = new OJPathName("org.restlet.resource.Get");
@@ -35,7 +35,7 @@ public class TumlRestletGenerationUtil {
     public static final OJPathName QueryExecuteServerResource = new OJPathName("org.umlg.root.QueryExecuteServerResource");
     public static final OJPathName QueryExecuteServerResourceImpl = new OJPathName("org.umlg.root.QueryExecuteServerResourceImpl");
     public static final OJPathName BaseOclExecutionServerResourceImpl = new OJPathName("org.umlg.runtime.restlet.BaseOclExecutionServerResourceImpl");
-    public static final OJPathName TumlRestletNode = new OJPathName("org.umlg.runtime.restlet.domain.TumlRestletNode");
+    public static final OJPathName UmlgRestletNode = new OJPathName("org.umlg.runtime.restlet.domain.UmlgRestletNode");
     public static final OJPathName RestletToJsonUtil = new OJPathName("org.umlg.runtime.restlet.util.RestletToJsonUtil");
     public static final OJPathName TumlMetaQueryServerResourceImpl = new OJPathName("org.umlg.runtime.restlet.TumlMetaQueryServerResourceImpl");
 //    public static final OJPathName TumlTransactionResourceImpl = new OJPathName("org.umlg.runtime.restlet.TumlTransactionServerResourceImpl");

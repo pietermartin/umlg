@@ -12,7 +12,7 @@ import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.javageneration.ocl.TumlOcl2Java;
 import org.umlg.javageneration.util.*;
 import org.umlg.javageneration.visitor.BaseVisitor;
-import org.umlg.ocl.TumlOcl2Parser;
+import org.umlg.ocl.UmlgOcl2Parser;
 
 import java.util.List;
 
@@ -52,7 +52,7 @@ public class PropertyConstraintBuilder extends BaseVisitor implements Visitor<Pr
             OJIfStatement ifConstraintFails = new OJIfStatement();
             String ocl = contraintWrapper.getConstraintOclAsString();
             checkConstraint.setComment(String.format("Implements the ocl statement for constraint '%s'\n<pre>\n%s\n</pre>", contraintWrapper.getName(), ocl));
-            OCLExpression<Classifier> oclExp = TumlOcl2Parser.INSTANCE.parseOcl(ocl);
+            OCLExpression<Classifier> oclExp = UmlgOcl2Parser.INSTANCE.parseOcl(ocl);
 
             ifConstraintFails.setCondition("(" + TumlOcl2Java.oclToJava(owner, oclExp) + ") == false");
             ifConstraintFails.addToThenPart("result.add(new " + TinkerGenerationUtil.TumlConstraintViolation.getLast() + "(\"" + contraintWrapper.getName() + "\", \""

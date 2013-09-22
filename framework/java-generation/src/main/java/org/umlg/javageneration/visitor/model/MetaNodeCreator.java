@@ -27,9 +27,9 @@ public class MetaNodeCreator extends BaseVisitor implements Visitor<Model> {
     @Override
     public void visitBefore(Model element) {
         OJAnnotatedClass metaNodeCreator = new OJAnnotatedClass("MetaNodeCreator");
-        OJPackage ojPackage = new OJPackage(TinkerGenerationUtil.TumlRootPackage.toJavaString());
+        OJPackage ojPackage = new OJPackage(TinkerGenerationUtil.UmlgRootPackage.toJavaString());
         metaNodeCreator.setMyPackage(ojPackage);
-        metaNodeCreator.addToImplementedInterfaces(TinkerGenerationUtil.TumlMetaNodeManager);
+        metaNodeCreator.addToImplementedInterfaces(TinkerGenerationUtil.UmlgMetaNodeManager);
         addToSource(metaNodeCreator);
 
         OJAnnotatedOperation createAll = new OJAnnotatedOperation("createAllMetaNodes");

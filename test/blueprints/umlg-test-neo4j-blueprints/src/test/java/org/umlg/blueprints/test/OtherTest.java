@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.concretetest.God;
 import org.umlg.qualifiertest.Nature;
-import org.umlg.runtime.adaptor.TumlNeo4jGraph;
+import org.umlg.runtime.adaptor.UmlgNeo4jGraph;
 import org.umlg.runtime.collection.TinkerSet;
 import org.umlg.runtime.test.BaseLocalDbTest;
 
@@ -16,8 +16,8 @@ public class OtherTest extends BaseLocalDbTest {
 
 	@Test
 	public void testQualifiedWithNull() {
-        if (db instanceof TumlNeo4jGraph) {
-		    ((TumlNeo4jGraph)db).setCheckElementsInTransaction(true);
+        if (db instanceof UmlgNeo4jGraph) {
+		    ((UmlgNeo4jGraph)db).setCheckElementsInTransaction(true);
         }
 		God god = new God(true);
 		god.setName("THEGOD");

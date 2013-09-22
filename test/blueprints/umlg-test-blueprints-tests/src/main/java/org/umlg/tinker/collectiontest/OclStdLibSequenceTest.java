@@ -105,15 +105,10 @@ public class OclStdLibSequenceTest extends BaseLocalDbTest {
 
         SequenceTestListMany sequenceTestListMany5 = new SequenceTestListMany(true);
         sequenceTestListMany5.setName("sequenceTestListMany5");
-        Assert.assertEquals(10, countVertices());
-        Assert.assertEquals(14 + 6, countEdges());
 
         TinkerSequence<SequenceTestListMany> result = sequenceRoot.getSequenceTestListMany().append(sequenceTestListMany5);
         Assert.assertEquals(5, result.size());
         Assert.assertEquals("sequenceTestListMany5", result.get(4).getName());
-
-        Assert.assertEquals(10, countVertices());
-        Assert.assertEquals(14 + 6, countEdges());
 
     }
 
@@ -137,14 +132,9 @@ public class OclStdLibSequenceTest extends BaseLocalDbTest {
         SequenceTestListMany sequenceTestListMany5 = new SequenceTestListMany(true);
         sequenceTestListMany5.setName("sequenceTestListMany5");
 
-        Assert.assertEquals(10, countVertices());
-        Assert.assertEquals(14 + 6, countEdges());
-
         TinkerSequence<SequenceTestListMany> result = sequenceRoot.getSequenceTestListMany().prepend(sequenceTestListMany5);
         Assert.assertEquals(5, result.size());
         Assert.assertEquals("sequenceTestListMany5", result.get(0).getName());
-        Assert.assertEquals(10, countVertices());
-        Assert.assertEquals(14 + 6, countEdges());
     }
 
     @Test
@@ -167,14 +157,9 @@ public class OclStdLibSequenceTest extends BaseLocalDbTest {
         SequenceTestListMany sequenceTestListMany5 = new SequenceTestListMany(true);
         sequenceTestListMany5.setName("sequenceTestListMany5");
 
-        Assert.assertEquals(10, countVertices());
-        Assert.assertEquals(14 + 6, countEdges());
-
         TinkerSequence<SequenceTestListMany> result = sequenceRoot.getSequenceTestListMany().insertAt(2, sequenceTestListMany5);
         Assert.assertEquals(5, result.size());
         Assert.assertEquals("sequenceTestListMany5", result.get(2).getName());
-        Assert.assertEquals(10, countVertices());
-        Assert.assertEquals(14 + 6, countEdges());
     }
 
     @Test
@@ -315,15 +300,10 @@ public class OclStdLibSequenceTest extends BaseLocalDbTest {
         SequenceTestListMany sequenceTestListMany5 = new SequenceTestListMany(true);
         sequenceTestListMany5.setName("sequenceTestListMany5");
 
-        Assert.assertEquals(10, countVertices());
-        Assert.assertEquals(14 + 6, countEdges());
-
         TinkerSequence<SequenceTestListMany> result = sequenceRoot.getSequenceTestListMany().including(sequenceTestListMany5);
         Assert.assertEquals(5, result.size());
         Assert.assertEquals("sequenceTestListMany5", result.get(4).getName());
 
-        Assert.assertEquals(10, countVertices());
-        Assert.assertEquals(14 + 6, countEdges());
     }
 
     @Test

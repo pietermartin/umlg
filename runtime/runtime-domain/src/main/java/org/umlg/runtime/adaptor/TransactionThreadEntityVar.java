@@ -1,6 +1,6 @@
 package org.umlg.runtime.adaptor;
 
-import org.umlg.runtime.domain.TumlNode;
+import org.umlg.runtime.domain.UmlgNode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,16 +13,16 @@ public class TransactionThreadEntityVar {
     private TransactionThreadEntityVar() {
     }
 
-    private static ThreadLocal<Map<Object, TumlNode>> transactionEntityVar = new ThreadLocal<Map<Object, TumlNode>>() {
+    private static ThreadLocal<Map<Object, UmlgNode>> transactionEntityVar = new ThreadLocal<Map<Object, UmlgNode>>() {
         @Override
-        protected Map<Object, TumlNode> initialValue() {
-            return new HashMap<Object, TumlNode>();
+        protected Map<Object, UmlgNode> initialValue() {
+            return new HashMap<Object, UmlgNode>();
         }
     };
 
     public static boolean hasNoAuditEntry(String clazzAndId) {
-        Map<Object, TumlNode> newVertexMap = transactionEntityVar.get();
-        TumlNode newVertex = newVertexMap.get(clazzAndId);
+        Map<Object, UmlgNode> newVertexMap = transactionEntityVar.get();
+        UmlgNode newVertex = newVertexMap.get(clazzAndId);
         return newVertex == null;
     }
 
@@ -30,15 +30,15 @@ public class TransactionThreadEntityVar {
         transactionEntityVar.remove();
     }
 
-    public static void setNewEntity(TumlNode node) {
+    public static void setNewEntity(UmlgNode node) {
         transactionEntityVar.get().put(node.getId(), node);
     }
 
-    public static List<TumlNode> get() {
-        return new ArrayList<TumlNode>(transactionEntityVar.get().values());
+    public static List<UmlgNode> get() {
+        return new ArrayList<UmlgNode>(transactionEntityVar.get().values());
     }
 
-    public static TumlNode remove(TumlNode node) {
+    public static UmlgNode remove(UmlgNode node) {
         return transactionEntityVar.get().remove(node.getId());
     }
 

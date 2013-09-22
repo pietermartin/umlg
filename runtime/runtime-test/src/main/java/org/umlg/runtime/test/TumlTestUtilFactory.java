@@ -1,6 +1,6 @@
 package org.umlg.runtime.test;
 
-import org.umlg.runtime.util.UmlgAdaptorImplementation;
+import org.umlg.runtime.adaptor.UmlgAdaptorImplementation;
 import org.umlg.runtime.util.UmlgProperties;
 
 import java.lang.reflect.Method;

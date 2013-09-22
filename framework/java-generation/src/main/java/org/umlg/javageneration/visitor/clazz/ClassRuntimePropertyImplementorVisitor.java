@@ -48,7 +48,7 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
         initialiseProperty.setReturnType(TinkerGenerationUtil.tumlRuntimePropertyPathName.getCopy());
         initialiseProperty.addParam("tumlRuntimeProperty", TinkerGenerationUtil.tumlRuntimePropertyPathName.getCopy());
         initialiseProperty.addParam("inverse", "boolean");
-        initialiseProperty.addParam("umlgNode", TinkerGenerationUtil.TUML_NODE);
+        initialiseProperty.addParam("umlgNode", TinkerGenerationUtil.UMLG_NODE);
         annotatedClass.addToOperations(initialiseProperty);
 
         OJField runtimeProperty = new OJField("runtimeProperty", new OJPathName(TumlClassOperations.propertyEnumName(associationClass)));
@@ -114,7 +114,7 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
         initialiseProperty.setReturnType(TinkerGenerationUtil.tumlRuntimePropertyPathName.getCopy());
         initialiseProperty.addParam("tumlRuntimeProperty", TinkerGenerationUtil.tumlRuntimePropertyPathName.getCopy());
         initialiseProperty.addParam("inverse", "boolean");
-        initialiseProperty.addParam("umlgNode", TinkerGenerationUtil.TUML_NODE);
+        initialiseProperty.addParam("umlgNode", TinkerGenerationUtil.UMLG_NODE);
         annotatedClass.addToOperations(initialiseProperty);
 
         OJField runtimeProperty = new OJField("runtimeProperty", new OJPathName(TumlClassOperations.propertyEnumName(clazz)));
@@ -229,9 +229,9 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
         TinkerGenerationUtil.addOverrideAnnotation(getQualifiers);
         getQualifiers.setComment("getQualifiers is called from the collection in order to update the index used to implement the qualifier");
         getQualifiers.addParam("tumlRuntimeProperty", TinkerGenerationUtil.tumlRuntimePropertyPathName.getCopy());
-        getQualifiers.addParam("node", TinkerGenerationUtil.TUML_NODE);
+        getQualifiers.addParam("node", TinkerGenerationUtil.UMLG_NODE);
         getQualifiers.addParam("inverse", "boolean");
-        getQualifiers.setReturnType(new OJPathName("java.util.List").addToGenerics(TinkerGenerationUtil.TINKER_QUALIFIER_PATHNAME));
+        getQualifiers.setReturnType(new OJPathName("java.util.List").addToGenerics(TinkerGenerationUtil.UmlgQualifierPathName));
         annotatedClass.addToOperations(getQualifiers);
 
         OJField result = null;

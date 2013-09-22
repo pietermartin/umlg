@@ -9,7 +9,7 @@ import org.umlg.runtime.collection.TinkerSet;
 import org.umlg.runtime.collection.TumlRuntimeProperty;
 import org.umlg.runtime.domain.ISignal;
 import org.umlg.runtime.domain.TumlMetaNode;
-import org.umlg.runtime.domain.TumlNode;
+import org.umlg.runtime.domain.UmlgNode;
 import org.umlg.runtime.validation.TumlConstraintViolation;
 
 import java.util.List;
@@ -47,7 +47,7 @@ public class SignalEvent extends Event {
 	}
 	
 	public void setSignal(ISignal signal) {
-		Edge edge = GraphDb.getDb().addEdge(null, ((TumlNode)signal).getVertex(), this.vertex,"event_signal");
+		Edge edge = GraphDb.getDb().addEdge(null, ((UmlgNode)signal).getVertex(), this.vertex,"event_signal");
 		edge.setProperty("outClass", signal.getClass().getName());
 		edge.setProperty("inClass", this.getClass().getName());
 	}
@@ -65,7 +65,7 @@ public class SignalEvent extends Event {
 	}
 
     @Override
-    public TumlRuntimeProperty inverseAdder(TumlRuntimeProperty tumlRuntimeProperty, boolean inverse, TumlNode umlgNode) {
+    public TumlRuntimeProperty inverseAdder(TumlRuntimeProperty tumlRuntimeProperty, boolean inverse, UmlgNode umlgNode) {
         //To change body of implemented methods use File | Settings | File Templates.
         return null;
     }
@@ -82,7 +82,7 @@ public class SignalEvent extends Event {
 	}
 
 	@Override
-	public List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, TumlNode node, boolean inverse) {
+	public List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, UmlgNode node, boolean inverse) {
 		return null;
 	}
 
@@ -163,7 +163,7 @@ public class SignalEvent extends Event {
     }
 
 	@Override
-	public TumlNode getOwningObject() {
+	public UmlgNode getOwningObject() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -179,7 +179,7 @@ public class SignalEvent extends Event {
     }
 
     @Override
-	public List<TumlNode> getPathToCompositionalRoot() {
+	public List<UmlgNode> getPathToCompositionalRoot() {
 		// TODO Auto-generated method stub
 		return null;
 	}

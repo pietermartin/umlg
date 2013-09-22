@@ -11,7 +11,7 @@ public class TumlTransactionServerResourceImpl /*extends ServerResource implemen
 //        String uid = getQueryValue("transactionIdentifier");
 //        try {
 //            String commitValue = entity.getText();
-//            TransactionIdentifier transactionIdentifier = TumlTransactionManager.INSTANCE.get(uid);
+//            TransactionIdentifier transactionIdentifier = UmlgTransactionManager.INSTANCE.get(uid);
 //            GraphDb.getDb().resume(transactionIdentifier);
 //            GraphDb.getDb().rollback();
 //            return new StringRepresentation("rolled back");
@@ -28,7 +28,7 @@ public class TumlTransactionServerResourceImpl /*extends ServerResource implemen
 //    @Override
 //    public Representation post(Representation entity) {
 //        TransactionIdentifier transactionIdentifier = GraphDb.getDb().suspend();
-//        TumlTransactionManager.INSTANCE.put(transactionIdentifier);
+//        UmlgTransactionManager.INSTANCE.put(transactionIdentifier);
 //        return new JsonRepresentation(transactionIdentifier.toJson());
 //    }
 //
@@ -37,7 +37,7 @@ public class TumlTransactionServerResourceImpl /*extends ServerResource implemen
 //        String uid = getQueryValue("transactionIdentifier");
 //        try {
 //            String commitValue = entity.getText();
-//            TransactionIdentifier transactionIdentifier = TumlTransactionManager.INSTANCE.get(uid);
+//            TransactionIdentifier transactionIdentifier = UmlgTransactionManager.INSTANCE.get(uid);
 //            GraphDb.getDb().resume(transactionIdentifier);
 //            ObjectMapper objectMapper = new ObjectMapper();
 //            Map<String, Boolean> commitValueAsMap = objectMapper.readValue(commitValue, Map.class);

@@ -6,7 +6,6 @@ import org.umlg.framework.VisitSubclasses;
 import org.umlg.java.metamodel.OJField;
 import org.umlg.java.metamodel.OJPackage;
 import org.umlg.java.metamodel.OJPathName;
-import org.umlg.java.metamodel.OJVisibilityKind;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedInterface;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
@@ -71,8 +70,8 @@ public class CompositePathServerResourceBuilder extends BaseServerResourceBuilde
         StringBuilder pathToCompositionRootCalc = new StringBuilder("json.append(RestletToJsonUtil.pathToCompositionRootAsJson(");
         annotatedClass.addToImports(TumlRestletGenerationUtil.RestletToJsonUtil);
 
-        pathToCompositionRootCalc.append("c.<" + TumlRestletGenerationUtil.TumlRestletNode.getLast() + ">getPathToCompositionalRoot(), ");
-        annotatedClass.addToImports(TumlRestletGenerationUtil.TumlRestletNode);
+        pathToCompositionRootCalc.append("c.<" + TumlRestletGenerationUtil.UmlgRestletNode.getLast() + ">getPathToCompositionalRoot(), ");
+        annotatedClass.addToImports(TumlRestletGenerationUtil.UmlgRestletNode);
         pathToCompositionRootCalc.append("\"Root\", \"/" + clazz.getModel().getName() + "\"))");
         get.getBody().addToStatements(pathToCompositionRootCalc.toString());
         get.getBody().addToStatements("json.append(\"]}\")");
