@@ -16,21 +16,21 @@ public class UmlgAssociationClassManager {
     private UmlgAssociationClassManager() {
     }
 
-    private static ThreadLocal<Map<String, Set<Long>>> associationClassMap = new ThreadLocal<Map<String, Set<Long>>>() {
+    private static ThreadLocal<Map<String, Set<Object>>> associationClassMap = new ThreadLocal<Map<String, Set<Object>>>() {
         @Override
-        protected Map<String, Set<Long>> initialValue() {
-            return new HashMap<String, Set<Long>>();
+        protected Map<String, Set<Object>> initialValue() {
+            return new HashMap<String, Set<Object>>();
         }
     };
 
-    public synchronized void put(String associationClassName, Long associationToObjectId) {
+    public synchronized void put(String associationClassName, Object associationToObjectId) {
         if (UmlgAssociationClassManager.associationClassMap.get().get(associationClassName) == null) {
-            UmlgAssociationClassManager.associationClassMap.get().put(associationClassName, new HashSet<Long>());
+            UmlgAssociationClassManager.associationClassMap.get().put(associationClassName, new HashSet<Object>());
         }
         UmlgAssociationClassManager.associationClassMap.get().get(associationClassName).add(associationToObjectId);
     }
 
-    public boolean has(String associationClassName, Long associationToObjectId) {
+    public boolean has(String associationClassName, Object associationToObjectId) {
         return UmlgAssociationClassManager.associationClassMap.get().get(associationClassName) != null &&
                 UmlgAssociationClassManager.associationClassMap.get().get(associationClassName).contains(associationToObjectId);
     }
