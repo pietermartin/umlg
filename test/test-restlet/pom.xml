@@ -60,8 +60,8 @@
 		</dependency>		
 		<dependency>
 			<groupId>org.umlg</groupId>
-			<!--<artifactId>runtime-domain-neo4j</artifactId>-->
-            <artifactId>runtime-domain-orientdb</artifactId>
+			<artifactId>runtime-domain-neo4j</artifactId>
+            <!--<artifactId>runtime-domain-orientdb</artifactId>-->
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
