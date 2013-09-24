@@ -203,7 +203,7 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<Class> {
     @Override
     protected void addContructorWithVertex(OJAnnotatedClass ojClass, Class clazz) {
         OJConstructor constructor = new OJConstructor();
-        constructor.setVisibility(OJVisibilityKindGEN.PRIVATE);
+        constructor.setVisibility(OJVisibilityKindGEN.PUBLIC);
         constructor.addParam("vertex", TinkerGenerationUtil.vertexPathName);
         constructor.getBody().addToStatements("super(vertex)");
         constructor.getBody().addToStatements(TinkerGenerationUtil.transactionThreadMetaNodeVar.getLast() + ".setNewEntity(this)");
