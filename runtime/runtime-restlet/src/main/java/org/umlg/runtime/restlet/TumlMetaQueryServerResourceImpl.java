@@ -38,7 +38,7 @@ public class TumlMetaQueryServerResourceImpl extends ServerResource implements T
     @Override
     public Representation options() {
         String id = (String) getRequestAttributes().get("contextId");
-        UmlgNode parentResource = GraphDb.getDb().instantiateClassifier(Long.valueOf(id));
+        UmlgNode parentResource = GraphDb.getDb().instantiateClassifier(id);
         Object metaNodeId = parentResource.getMetaNode().getId();
         String metaQueryUri = "riap://application/" + getRootRef().getLastSegment() + "/baseclasstumls/" + metaNodeId + "/classQuery";
         ClientResource service = new ClientResource(metaQueryUri);

@@ -3,6 +3,7 @@ package org.umlg.blueprints.test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.umlg.meta.TestMetaClasses;
+import org.umlg.tinker.collectiontest.BagTestTest;
 import org.umlg.tinker.collectiontest.OrderedSetTestTest;
 import org.umlg.tinker.collectiontest.QualifiedBagTest;
 import org.umlg.tinker.collectiontest.QualifiedSequenceTest;
@@ -17,7 +18,7 @@ import org.umlg.tinker.qualifiertest.TestQualifierOnManyToMany;
  * Time: 7:18 PM
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({TestOneToMany.class})
+@Suite.SuiteClasses({BagTestTest.class})
 public class OrientDbAnyTest {
 
 }
