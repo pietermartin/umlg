@@ -59,7 +59,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.umlg</groupId>
-			<artifactId>runtime-test</artifactId>
+			<artifactId>runtime-test-neo4j</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
