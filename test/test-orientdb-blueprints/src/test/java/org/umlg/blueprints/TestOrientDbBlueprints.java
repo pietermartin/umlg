@@ -17,12 +17,14 @@ public class TestOrientDbBlueprints {
 
     @Test
     public void emptyTest() throws IOException, InterruptedException, ExecutionException {
+
         final String url = "/tmp/test-orientdb-blueprints";
         File dir = new File(url);
         FileUtils.deleteDirectory(dir);
         final File f = new File(url);
         final IndexableGraph graph = new OrientGraph("local:" + f.getAbsolutePath());
         graph.shutdown();
+
     }
 
 }
