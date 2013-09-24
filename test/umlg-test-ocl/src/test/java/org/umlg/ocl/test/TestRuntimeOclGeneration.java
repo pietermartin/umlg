@@ -1,23 +1,22 @@
 package org.umlg.ocl.test;
 
-import java.io.File;
-import java.net.URL;
-import java.util.Map;
-import java.util.logging.LogManager;
-
 import junit.framework.Assert;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.umlg.framework.ModelLoader;
-import org.umlg.ocl.UmlgOcl2Parser;
 import org.umlg.ocl.TumlOclExecutor;
+import org.umlg.ocl.UmlgOcl2Parser;
 import org.umlg.qualifier.Bank;
 import org.umlg.qualifier.Employee;
 import org.umlg.runtime.collection.TinkerOrderedSet;
 import org.umlg.runtime.collection.TinkerSequence;
 import org.umlg.runtime.collection.TinkerSet;
 import org.umlg.runtime.test.BaseLocalDbTest;
+
+import java.io.File;
+import java.net.URL;
+import java.util.Map;
+import java.util.logging.LogManager;
 
 public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 
@@ -26,12 +25,13 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 		try {
 			URL url = BaseLocalDbTest.class.getResource("/logging.properties");
 			LogManager.getLogManager().readConfiguration(url.openStream());
+            URL umlUrl = BaseLocalDbTest.class.getResource("/test-ocl.uml");
+            ModelLoader.INSTANCE.loadModel(new File(umlUrl.toURI()));
+            @SuppressWarnings("unused")
+            UmlgOcl2Parser instance = UmlgOcl2Parser.INSTANCE;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			throw new RuntimeException(ex);
 		}
-		ModelLoader.INSTANCE.loadModel(new File("./src/main/model/test-ocl.uml"));
-		@SuppressWarnings("unused")
-        UmlgOcl2Parser instance = UmlgOcl2Parser.INSTANCE;
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
