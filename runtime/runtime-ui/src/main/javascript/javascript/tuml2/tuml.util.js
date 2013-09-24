@@ -71,13 +71,33 @@ function escapeColon(string) {
     return string.replace(/(:|\.)/g, '\\$1');
 }
 
+//function retrieveVertexId(url) {
+//    var urlId = url.match(/\/\d+/);
+//    if (urlId != null) {
+//        var urlArray = urlId[0].match(/\d+/);
+//        return parseInt(urlArray[0]);
+//    } else {
+//        return urlId;
+//    }
+//}
+
 function retrieveVertexId(url) {
-    var urlId = url.match(/\/\d+/);
-    if (urlId != null) {
-        var urlArray = urlId[0].match(/\d+/);
-        return parseInt(urlArray[0]);
+    var trimmedUrl = url.replace('/' + tumlModelName + '/', '');
+    var lastIndexOfForwardSlash = trimmedUrl.lastIndexOf('/');
+    if (lastIndexOfForwardSlash !== -1) {
+        var tempUrl = trimmedUrl.substring(0, lastIndexOfForwardSlash);
+        var secondLastIndexOfForwardSlash = tempUrl.lastIndexOf('/');
+        var urlId = trimmedUrl.substring(secondLastIndexOfForwardSlash + 1, lastIndexOfForwardSlash);
+        if (urlId != null) {
+            //OrientDb needs some attention
+            urlId = urlId.replace('#', '\\#');
+            urlId = urlId.replace(':', '\\:');
+            return urlId;
+        } else {
+            return null;
+        }
     } else {
-        return urlId;
+        return null;
     }
 }
 
