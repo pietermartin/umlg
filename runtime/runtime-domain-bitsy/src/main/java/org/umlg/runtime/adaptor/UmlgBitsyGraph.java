@@ -1,6 +1,7 @@
 package org.umlg.runtime.adaptor;
 
 import com.lambdazen.bitsy.BitsyGraph;
+import com.lambdazen.bitsy.wrapper.BitsyAutoReloadingGraph;
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
@@ -20,15 +21,20 @@ import java.util.logging.Logger;
  * Date: 2013/01/09
  * Time: 8:09 PM
  */
-public class UmlgBitsyGraph extends BitsyGraph implements UmlgGraph {
+public class UmlgBitsyGraph extends BitsyAutoReloadingGraph implements UmlgGraph {
 
     private UmlgTransactionEventHandler transactionEventHandler;
     private static final Logger logger = Logger.getLogger(UmlgBitsyGraph.class.getPackage().getName());
 
-    public UmlgBitsyGraph(Path directory) {
-        super(directory);
+    public UmlgBitsyGraph(BitsyGraph wrappedGraph) {
+        super(wrappedGraph);
         this.transactionEventHandler = new UmlgTransactionEventHandlerImpl();
     }
+
+//    public UmlgBitsyGraph(Path directory) {
+//        super(directory);
+//        this.transactionEventHandler = new UmlgTransactionEventHandlerImpl();
+//    }
 
     /** Generic for all graphs start */
     @Override
@@ -186,7 +192,7 @@ public class UmlgBitsyGraph extends BitsyGraph implements UmlgGraph {
 
     @Override
     public void removeVertex(final Vertex vertex) {
-        this.getTx();
+//        this.wrappedGraph.getTx();
         Iterable<Edge> edges = vertex.getEdges(Direction.BOTH);
         for (final Edge edge : edges) {
             edge.remove();

@@ -1,5 +1,8 @@
 package org.umlg.runtime.adaptor;
 
+import com.lambdazen.bitsy.BitsyGraph;
+import com.lambdazen.bitsy.wrapper.BitsyAutoReloadingGraph;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -28,7 +31,8 @@ public class UmlgBitsyGraphFactory implements UmlgGraphFactory {
             if (!f.exists()) {
                 f.mkdir();
                 Path dbPath = Paths.get(f.getAbsolutePath());
-                this.umlgGraph = new UmlgBitsyGraph(dbPath);
+                BitsyGraph bitsyGraph = new BitsyGraph(dbPath);
+                this.umlgGraph = new UmlgBitsyGraph(bitsyGraph);
                 this.umlgGraph.addRoot();
                 this.umlgGraph.addDeletionNode();
                 this.umlgGraph.commit();
@@ -37,7 +41,8 @@ public class UmlgBitsyGraphFactory implements UmlgGraphFactory {
                 this.umlgGraph.commit();
             } else {
                 Path dbPath = Paths.get(f.getAbsolutePath());
-                this.umlgGraph = new UmlgBitsyGraph(dbPath);
+                BitsyGraph bitsyGraph = new BitsyGraph(dbPath);
+                this.umlgGraph = new UmlgBitsyGraph(bitsyGraph);
             }
         }
         return this.umlgGraph;

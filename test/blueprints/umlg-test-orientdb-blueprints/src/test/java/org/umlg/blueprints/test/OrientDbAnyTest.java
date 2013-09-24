@@ -6,6 +6,7 @@ import org.umlg.meta.TestMetaClasses;
 import org.umlg.tinker.collectiontest.OrderedSetTestTest;
 import org.umlg.tinker.collectiontest.QualifiedBagTest;
 import org.umlg.tinker.collectiontest.QualifiedSequenceTest;
+import org.umlg.tinker.concretetest.TestOneToMany;
 import org.umlg.tinker.deletiontest.DeletionTest;
 import org.umlg.tinker.qualifiertest.TestQualifiedDeletion;
 import org.umlg.tinker.qualifiertest.TestQualifier;
@@ -16,7 +17,7 @@ import org.umlg.tinker.qualifiertest.TestQualifierOnManyToMany;
  * Time: 7:18 PM
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({TestQualifiedDeletion.class, TestQualifier.class, TestQualifierOnManyToMany.class})
+@Suite.SuiteClasses({TestOneToMany.class})
 public class OrientDbAnyTest {
 
 }

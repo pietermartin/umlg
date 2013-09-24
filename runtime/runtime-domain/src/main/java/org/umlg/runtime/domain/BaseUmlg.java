@@ -3,7 +3,9 @@ package org.umlg.runtime.domain;
 import com.tinkerpop.blueprints.Vertex;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.umlg.runtime.adaptor.*;
+import org.umlg.runtime.adaptor.GraphDb;
+import org.umlg.runtime.adaptor.TransactionThreadEntityVar;
+import org.umlg.runtime.adaptor.UmlgExceptionUtilFactory;
 import org.umlg.runtime.collection.TinkerSet;
 import org.umlg.runtime.collection.memory.TumlMemorySet;
 import org.umlg.runtime.domain.ocl.OclState;
@@ -32,6 +34,18 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
         initialiseProperties();
     }
 
+    public BaseUmlg(Object id) {
+        super();
+        //check if it has been deleted
+        this.vertex = GraphDb.getDb().getVertex(id);
+        Boolean deleted = this.vertex.getProperty("deleted");
+        if (deleted != null && deleted) {
+            throw new IllegalStateException("Vertex has been deleted!");
+        }
+        TransactionThreadEntityVar.setNewEntity(this);
+        initialiseProperties();
+    }
+
     public BaseUmlg(Boolean persistent) {
         super();
         this.vertex = GraphDb.getDb().addVertex(this.getClass().getName());
@@ -41,6 +55,11 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
         defaultCreate();
         initialiseProperties();
         initVariables();
+    }
+
+    public void reload() {
+        this.vertex = GraphDb.getDb().getVertex(this.vertex.getId());
+        initialiseProperties();
     }
 
     public void addToThreadEntityVar() {

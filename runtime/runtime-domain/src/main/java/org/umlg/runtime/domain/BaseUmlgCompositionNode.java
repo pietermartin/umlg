@@ -16,6 +16,10 @@ public abstract class BaseUmlgCompositionNode extends BaseUmlg implements Compos
         super(persistent);
     }
 
+    public BaseUmlgCompositionNode(Object id)  {
+        super(id);
+    }
+
     public BaseUmlgCompositionNode(Vertex vertex)  {
         super(vertex);
     }

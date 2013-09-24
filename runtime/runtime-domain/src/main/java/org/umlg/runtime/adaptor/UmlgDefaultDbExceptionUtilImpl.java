@@ -1,14 +1,14 @@
 package org.umlg.runtime.adaptor;
 
 /**
- * Date: 2013/02/08
- * Time: 8:36 PM
+ * Date: 2013/09/17
+ * Time: 7:35 AM
  */
-public class UmlgTitanExceptionUtilIml implements UmlgExceptionUtil {
+public class UmlgDefaultDbExceptionUtilImpl implements UmlgExceptionUtil {
 
-    private static UmlgExceptionUtil INSTANCE = new UmlgTitanExceptionUtilIml();
+    private static UmlgExceptionUtil INSTANCE = new UmlgDefaultDbExceptionUtilImpl();
 
-    private UmlgTitanExceptionUtilIml() {
+    private UmlgDefaultDbExceptionUtilImpl() {
         super();
     }
 
@@ -27,7 +27,11 @@ public class UmlgTitanExceptionUtilIml implements UmlgExceptionUtil {
 
     @Override
     public boolean isNodeNotFoundException(Exception e) {
-        throw new RuntimeException("Not yet implemented!");
+        if (e instanceof RuntimeException) {
+            throw (RuntimeException)e;
+        } else {
+            throw new RuntimeException(e);
+        }
     }
 
 }

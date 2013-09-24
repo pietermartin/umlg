@@ -158,9 +158,15 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 
     protected void addContructorWithVertex(OJAnnotatedClass ojClass, Class clazz) {
         OJConstructor constructor = new OJConstructor();
-        constructor.addParam("vertex", TinkerGenerationUtil.vertexPathName);
-        constructor.getBody().addToStatements("super(vertex)");
+        constructor.addParam("id", "Object");
+        constructor.getBody().addToStatements("super(id)");
         ojClass.addToConstructors(constructor);
+
+        OJConstructor vertexConstructor = new OJConstructor();
+        vertexConstructor.addParam("vertex", TinkerGenerationUtil.vertexPathName);
+        vertexConstructor.getBody().addToStatements("super(vertex)");
+        ojClass.addToConstructors(vertexConstructor);
+
     }
 
     protected void implementIsRoot(OJAnnotatedClass ojClass, boolean b) {

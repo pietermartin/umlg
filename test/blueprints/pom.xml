@@ -17,6 +17,6 @@
         <module>umlg-test-neo4j-blueprints</module>
         <module>umlg-test-orientdb-blueprints</module>
         <!--<module>umlg-test-titan-blueprints</module>-->
-        <!--<module>umlg-test-bitsy-blueprints</module>-->
+        <module>umlg-test-bitsy-blueprints</module>
 	</modules>
 </project>
