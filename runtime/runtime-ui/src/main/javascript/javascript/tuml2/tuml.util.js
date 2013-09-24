@@ -88,7 +88,7 @@ function retrieveVertexId(url) {
         var tempUrl = trimmedUrl.substring(0, lastIndexOfForwardSlash);
         var secondLastIndexOfForwardSlash = tempUrl.lastIndexOf('/');
         var urlId = trimmedUrl.substring(secondLastIndexOfForwardSlash + 1, lastIndexOfForwardSlash);
-        if (urlId != null) {
+        if (urlId != null && urlId !== '') {
             //OrientDb needs some attention
             urlId = urlId.replace('#', '\\#');
             urlId = urlId.replace(':', '\\:');
