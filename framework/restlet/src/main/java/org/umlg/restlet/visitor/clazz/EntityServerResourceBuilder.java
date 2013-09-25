@@ -58,7 +58,7 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
         TinkerGenerationUtil.addOverrideAnnotation(delete);
 
         delete.getBody().addToStatements(
-                "this." + getIdFieldName(clazz) + "= (String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\")");
+                "this." + getIdFieldName(clazz) + "= getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\")");
         delete.getBody().addToStatements(
                 TumlClassOperations.className(clazz) + " c = new " + TumlClassOperations.className(clazz) + "(GraphDb.getDb().getVertex(this."
                         + getIdFieldName(clazz) + "))");
@@ -106,7 +106,7 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
         annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
 
         put.getBody().addToStatements(
-                "this." + getIdFieldName(clazz) + "= (String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\")");
+                "this." + getIdFieldName(clazz) + "= getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\")");
         put.getBody().addToStatements(
                 TumlClassOperations.className(clazz) + " c = new " + TumlClassOperations.className(clazz) + "(GraphDb.getDb().getVertex(this."
                         + getIdFieldName(clazz) + "))");
@@ -157,7 +157,7 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
         OJTryStatement tryStatement = new OJTryStatement();
         tryStatement.getTryPart().addToStatements("StringBuilder json = new StringBuilder()");
         tryStatement.getTryPart().addToStatements(
-                "this." + getIdFieldName(clazz) + "= (String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\")");
+                "this." + getIdFieldName(clazz) + "= getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\")");
         tryStatement.getTryPart().addToStatements(
                 TumlClassOperations.className(clazz) + " c = new " + TumlClassOperations.className(clazz) + "(GraphDb.getDb().getVertex(this."
                         + getIdFieldName(clazz) + "))");

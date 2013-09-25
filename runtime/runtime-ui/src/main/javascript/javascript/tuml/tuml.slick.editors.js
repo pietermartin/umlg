@@ -1077,7 +1077,7 @@
                         return {id: null, displayName: null, previousId: currentValue.id};
 //                    } else if (!isNaN(value)) {
 //                        return {id: parseInt(value), displayName: options[i].label, previousId: currentValue.id};
-//                    } else {
+                    } else {
                         return {id: select.val(), displayName: options[i].label, previousId: currentValue.id};
                     }
                     break;
@@ -1198,7 +1198,7 @@
                         return {id: null, displayName: null, previousId: currentValue.id};
 //                    } else if (!isNaN(value)) {
 //                        return {id: parseInt(value), displayName: options[i].label, previousId: currentValue.id};
-//                    } else {
+                    } else {
                         return {id: select.val(), displayName: options[i].label, previousId: currentValue.id};
                     }
                     break;

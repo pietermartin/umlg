@@ -106,7 +106,7 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
             parentPathName = pWrap.getAssociationClassPathName();
         }
         tryStatement.getTryPart().addToStatements(
-                "this." + parentPathName.getLast().toLowerCase() + "Id = (String)getRequestAttributes().get(\""
+                "this." + parentPathName.getLast().toLowerCase() + "Id = getRequestAttributes().get(\""
                         + parentPathName.getLast().toLowerCase() + "Id\")");
         tryStatement.getTryPart().addToStatements(
                 parentPathName.getLast() + " parentResource = GraphDb.getDb().instantiateClassifier(" + parentPathName.getLast().toLowerCase() + "Id" + ")");

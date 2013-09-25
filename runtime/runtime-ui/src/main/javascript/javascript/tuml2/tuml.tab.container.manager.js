@@ -287,7 +287,7 @@
                             }
                             associationClassProperty = null;
                         }
-                        Tuml.Metadata.Cache.get(associationClassProperty.qualifiedName, associationClassProperty.tumlMetaDataUri, function(){});
+                        Tuml.Metadata.Cache.get(associationClassProperty.qualifiedName + 'metaToOnly', associationClassProperty.tumlMetaDataUri, function(){});
 
                         var fakeId = 'fake::' + Tuml.TumlFakeIndex++;
                         item[tumlTabViewManager.propertyNavigatingTo.inverseAssociationClassPropertyName] = {id: fakeId, tmpId: fakeId, displayName: null, refreshFromDb: true};
@@ -356,7 +356,7 @@
 
     TumlTabContainerManager.prototype.internalSetComponentIdToTmpId = function (object, property) {
         var self = this;
-        Tuml.Metadata.Cache.get(property.qualifiedName, property.tumlMetaDataUri,
+        Tuml.Metadata.Cache.get(property.qualifiedName + 'metaToOnly', property.tumlMetaDataUri,
             function (result) {
                 for (var k = 0; k < result.length; k++) {
                     self.setComponentIdToTmpId(object, result[k].meta.to);
@@ -390,7 +390,7 @@
 
     TumlTabContainerManager.prototype.internalClearComponentAndAssociationClassTmpId = function (object, property) {
         var self = this;
-        Tuml.Metadata.Cache.get(property.qualifiedName, property.tumlMetaDataUri,
+        Tuml.Metadata.Cache.get(property.qualifiedName + 'metaToOnly', property.tumlMetaDataUri,
             function (result) {
                 for (var k = 0; k < result.length; k++) {
                     self.clearComponentAndAssociationClassTmpId(object, result[k].meta.to, false);
