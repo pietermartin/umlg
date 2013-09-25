@@ -107,7 +107,7 @@ public class UmlgBitsyGraph extends BitsyAutoReloadingGraph implements UmlgGraph
         try {
             Vertex v = this.getVertex(id);
             if (v == null) {
-                throw new RuntimeException(String.format("No vertex found for id %d", new Object[]{id}));
+                throw new RuntimeException(String.format("No vertex found for id %s", new Object[]{id}));
             }
             // TODO reimplement schemaHelper
             String className = v.getProperty("className");

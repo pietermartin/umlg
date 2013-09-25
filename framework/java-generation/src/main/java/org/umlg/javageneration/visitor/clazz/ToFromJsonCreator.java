@@ -346,7 +346,10 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 
                         OJField component = new OJField(pWrap.fieldname(), pWrap.javaBaseTypePath());
                         ifNotNull.getThenPart().addToLocals(component);
-                        OJIfStatement ojIfStatement = new OJIfStatement(pWrap.fieldname() + "Map.get(\"id\") != null");
+                        OJField idField = new OJField("idField", "String");
+                        idField.setInitExp("(String)" + pWrap.fieldname() + "Map.get(\"id\")");
+                        ifNotNull.getThenPart().addToLocals(idField);
+                        OJIfStatement ojIfStatement = new OJIfStatement("idField != null && !idField.startsWith(\"fake\")");
                         OJSimpleStatement ojSimpleStatementConstructor = new OJSimpleStatement(pWrap.fieldname() + " = " + TinkerGenerationUtil.graphDbAccess
                                 + ".instantiateClassifier((" + pWrap.fieldname() + "Map.get(\"id\")))");
                         annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
@@ -389,7 +392,10 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 
                         OJField component = new OJField(pWrap.fieldname(), pWrap.javaBaseTypePath());
                         ojForStatement.getBody().addToLocals(component);
-                        OJIfStatement ojIfStatement = new OJIfStatement("row.get(\"id\") != null");
+                        OJField idField = new OJField("idField", "String");
+                        idField.setInitExp("(String)row.get(\"id\")");
+                        ojForStatement.getBody().addToLocals(idField);
+                        OJIfStatement ojIfStatement = new OJIfStatement("idField != null && !idField.startsWith(\"fake\")");
                         OJSimpleStatement ojSimpleStatementConstructor = new OJSimpleStatement(pWrap.fieldname() + " = " + TinkerGenerationUtil.graphDbAccess
                                 + ".instantiateClassifier((row.get(\"id\")))");
                         ojIfStatement.addToThenPart(ojSimpleStatementConstructor);
@@ -598,7 +604,10 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 
                         OJField component = new OJField(pWrap.fieldname(), pWrap.javaBaseTypePath());
                         ojForStatement.getBody().addToLocals(component);
-                        OJIfStatement ojIfStatement = new OJIfStatement("row.get(\"id\") != null");
+                        OJField idField = new OJField("idField", "String");
+                        idField.setInitExp("(String)row.get(\"id\")");
+                        ojForStatement.getBody().addToLocals(idField);
+                        OJIfStatement ojIfStatement = new OJIfStatement("idField != null && !idField.startsWith(\"fake\")");
                         OJSimpleStatement ojSimpleStatementConstructor = new OJSimpleStatement(pWrap.fieldname() + " = " + TinkerGenerationUtil.graphDbAccess
                                 + ".instantiateClassifier((row.get(\"id\")))");
                         ojIfStatement.addToThenPart(ojSimpleStatementConstructor);

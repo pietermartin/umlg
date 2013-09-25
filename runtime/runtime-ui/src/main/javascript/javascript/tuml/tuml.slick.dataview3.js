@@ -455,7 +455,7 @@
                     throw 'After a rollback only composite properties can have a tmpId';
                 }
 
-                if (isNaN(itemToRefresh.id)) {
+                if (itemToRefresh.id.indexOf('fake') !== -1) {
                     //rollback situation
                     //New item
                     if (idxById[itemToRefresh.id] == undefined) {
@@ -526,7 +526,7 @@
                 }
 
                 //New items
-                if (isNaN(itemToRefresh.id)) {
+                if (itemToRefresh.id.indexOf('fake') !== -1) {
                     throw 'Item must have an id after a commit!';
                 } else {
                     //New item

@@ -90,7 +90,7 @@ public class QueryExecuteResourceBuilder extends BaseServerResourceBuilder imple
 		OJField contextId = new OJField("context", "Object");
         contextId.setInitExp("getRequestAttributes().get(\"contextId\")");
         OJIfStatement ifContextNull = new OJIfStatement("context != null");
-        ifContextNull.addToThenPart("Long contextId = Long.valueOf((String)context)");
+        ifContextNull.addToThenPart("Object contextId = (String)context");
         ifContextNull.addToThenPart("return execute(query, contextId, type)");
         ifContextNull.addToElsePart("return execute(query)");
         get.getBody().addToStatements(ifContextNull);

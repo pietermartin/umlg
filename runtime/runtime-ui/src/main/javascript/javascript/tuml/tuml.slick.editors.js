@@ -1075,9 +1075,9 @@
                     var value = select.val();
                     if (value === '') {
                         return {id: null, displayName: null, previousId: currentValue.id};
-                    } else if (!isNaN(value)) {
-                        return {id: parseInt(value), displayName: options[i].label, previousId: currentValue.id};
-                    } else {
+//                    } else if (!isNaN(value)) {
+//                        return {id: parseInt(value), displayName: options[i].label, previousId: currentValue.id};
+//                    } else {
                         return {id: select.val(), displayName: options[i].label, previousId: currentValue.id};
                     }
                     break;
@@ -1196,9 +1196,9 @@
                     var value = select.val();
                     if (value === '') {
                         return {id: null, displayName: null, previousId: currentValue.id};
-                    } else if (!isNaN(value)) {
-                        return {id: parseInt(value), displayName: options[i].label, previousId: currentValue.id};
-                    } else {
+//                    } else if (!isNaN(value)) {
+//                        return {id: parseInt(value), displayName: options[i].label, previousId: currentValue.id};
+//                    } else {
                         return {id: select.val(), displayName: options[i].label, previousId: currentValue.id};
                     }
                     break;

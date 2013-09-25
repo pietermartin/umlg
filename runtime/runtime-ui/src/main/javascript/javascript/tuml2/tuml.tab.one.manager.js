@@ -246,7 +246,8 @@
         if (property.name === 'id') {
             var id = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').val();
             if (id.indexOf('fake') === -1) {
-                this.data.id = parseInt(id);
+//                this.data.id = parseInt(id);
+                this.data.id = id;
             } else {
                 this.data.id = id;
                 this.data.tmpId = this.data.id;
@@ -312,7 +313,8 @@
                     if (options[j].selected) {
                         var optionId = $select.val();
                         if (optionId.indexOf('fake') === -1) {
-                            this.data[property.name] = {id: parseInt(optionId), displayName: options[j].label, previousId: this.data[property.name].id};
+//                            this.data[property.name] = {id: parseInt(optionId), displayName: options[j].label, previousId: this.data[property.name].id};
+                            this.data[property.name] = {id: optionId, displayName: options[j].label, previousId: this.data[property.name].id};
                         } else {
                             this.data[property.name] = {id: optionId, displayName: options[j].label, previousId: this.data[property.name].id};
                         }
