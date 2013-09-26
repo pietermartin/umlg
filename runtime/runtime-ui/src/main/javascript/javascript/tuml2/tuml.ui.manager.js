@@ -81,7 +81,7 @@
                     event.preventDefault();
                     event.stopImmediatePropagation();
                     return false;
-                } else  if (event.which == 8) {
+                } else  if (event.ctrlKey && event.which == 8) {
                     //8 = <- back
                     self.goBackOne();
                     event.preventDefault();

@@ -1036,7 +1036,7 @@
         var links = contextMenu.find('a');
         for (var i = 0; i < links.length; i++) {
             var link = $(links[i]);
-            var adjustedUri = link.attr('href').replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), this.data[cell.row].id);
+            var adjustedUri = link.attr('href').replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), encodeURIComponent(this.data[cell.row].id));
             link.attr('href', adjustedUri);
         }
 
@@ -1158,13 +1158,13 @@
                         alert('Property ' + contextData.property.qualifiedName + ' on ' + this.localMetaForData.name + ' does not exist!\nIt can not be created as it is a non composite property.');
                         return;
                     } else {
-                        url = contextData.property.tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), this.data[gridRow].id);
+                        url = contextData.property.tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), encodeURIComponent(this.data[gridRow].id));
                     }
                 } else {
-                    url = contextData.property.tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), this.data[gridRow].id);
+                    url = contextData.property.tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), encodeURIComponent(this.data[gridRow].id));
                 }
             } else {
-                url = contextData.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), this.data[gridRow].id);
+                url = contextData.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), encodeURIComponent(this.data[gridRow].id));
             }
             this.handleContextMenuClickLink(url);
         } else {
