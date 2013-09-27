@@ -1,7 +1,10 @@
 package org.umlg.blueprints;
 
-import com.tinkerpop.blueprints.IndexableGraph;
+import com.orientechnologies.orient.core.id.ORecordId;
+import com.tinkerpop.blueprints.TransactionalGraph;
+import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
+import junit.framework.Assert;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
@@ -16,15 +19,18 @@ import java.util.concurrent.ExecutionException;
 public class TestOrientDbBlueprints {
 
     @Test
-    public void emptyTest() throws IOException, InterruptedException, ExecutionException {
-
+    public void testIdChangesAfterCommit() throws IOException, InterruptedException, ExecutionException {
         final String url = "/tmp/test-orientdb-blueprints";
         File dir = new File(url);
         FileUtils.deleteDirectory(dir);
         final File f = new File(url);
-        final IndexableGraph graph = new OrientGraph("local:" + f.getAbsolutePath());
+        final TransactionalGraph graph = new OrientGraph("local:" + f.getAbsolutePath());
+        Vertex v = graph.addVertex(null);
+        v.setProperty("name", "Joe");
+        graph.commit();
+        ORecordId oRecordId = (ORecordId)v.getId();
+        Assert.assertTrue(oRecordId.getClusterId() >= 0);
         graph.shutdown();
-
     }
 
 }
