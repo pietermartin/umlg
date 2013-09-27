@@ -85,8 +85,10 @@ public class NavigatePropertyOverloadedPostForLookupServerResourceBuilder extend
 
         OJPathName parentPathName = otherEndPWrap.javaBaseTypePath();
         post.getBody().addToStatements(
-                "this." + parentPathName.getLast().toLowerCase() + "Id = getRequestAttributes().get(\""
-                        + parentPathName.getLast().toLowerCase() + "Id\")");
+                "this." + parentPathName.getLast().toLowerCase() + "Id = "+TumlRestletGenerationUtil.UmlgURLDecoder.getLast()+".decode((String)getRequestAttributes().get(\""
+                        + parentPathName.getLast().toLowerCase() + "Id\"))");
+        annotatedClass.addToImports(TumlRestletGenerationUtil.UmlgURLDecoder);
+
         post.getBody().addToStatements(
                 parentPathName.getLast() + " parentResource = GraphDb.getDb().instantiateClassifier(" + parentPathName.getLast().toLowerCase() + "Id" + ")");
 

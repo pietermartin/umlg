@@ -59,7 +59,8 @@ public class CompositePathServerResourceBuilder extends BaseServerResourceBuilde
         annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
         TinkerGenerationUtil.addOverrideAnnotation(get);
         get.getBody().addToStatements(
-                "this." + getIdFieldName(clazz) + "= getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\");");
+                "this." + getIdFieldName(clazz) + "= "+TumlRestletGenerationUtil.UmlgURLDecoder.getLast()+".decode((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"));");
+        annotatedClass.addToImports(TumlRestletGenerationUtil.UmlgURLDecoder);
         get.getBody().addToStatements(
                 TumlClassOperations.className(clazz) + " c = GraphDb.getDb().instantiateClassifier(this." + getIdFieldName(clazz) + ")");
         annotatedClass.addToImports(TumlClassOperations.getPathName(clazz));

@@ -10,6 +10,7 @@ import org.umlg.javageneration.util.PropertyWrapper;
 
 public class TumlRestletGenerationUtil {
 
+    public final static OJPathName UmlgURLDecoder = new OJPathName("org.umlg.runtime.restlet.util.UmlgURLDecoder");
     public final static String classQueryQualifiedName = "umlglib::org::umlg::meta::ClassQuery";
     public final static String instanceQueryQualifiedName = "umlglib::org::umlg::query::InstanceQuery";
 

@@ -58,7 +58,8 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
         TinkerGenerationUtil.addOverrideAnnotation(delete);
 
         delete.getBody().addToStatements(
-                "this." + getIdFieldName(clazz) + "= getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\")");
+                "this." + getIdFieldName(clazz) + "= "+TumlRestletGenerationUtil.UmlgURLDecoder.getLast()+".decode((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"))");
+        annotatedClass.addToImports(TumlRestletGenerationUtil.UmlgURLDecoder);
         delete.getBody().addToStatements(
                 TumlClassOperations.className(clazz) + " c = new " + TumlClassOperations.className(clazz) + "(GraphDb.getDb().getVertex(this."
                         + getIdFieldName(clazz) + "))");
@@ -106,7 +107,9 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
         annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
 
         put.getBody().addToStatements(
-                "this." + getIdFieldName(clazz) + "= getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\")");
+                "this." + getIdFieldName(clazz) + "= "+TumlRestletGenerationUtil.UmlgURLDecoder.getLast()+".decode((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"))");
+        annotatedClass.addToImports(TumlRestletGenerationUtil.UmlgURLDecoder);
+
         put.getBody().addToStatements(
                 TumlClassOperations.className(clazz) + " c = new " + TumlClassOperations.className(clazz) + "(GraphDb.getDb().getVertex(this."
                         + getIdFieldName(clazz) + "))");
@@ -157,7 +160,9 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
         OJTryStatement tryStatement = new OJTryStatement();
         tryStatement.getTryPart().addToStatements("StringBuilder json = new StringBuilder()");
         tryStatement.getTryPart().addToStatements(
-                "this." + getIdFieldName(clazz) + "= getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\")");
+                "this." + getIdFieldName(clazz) + "= "+TumlRestletGenerationUtil.UmlgURLDecoder.getLast()+".decode((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"))");
+        annotatedClass.addToImports(TumlRestletGenerationUtil.UmlgURLDecoder);
+
         tryStatement.getTryPart().addToStatements(
                 TumlClassOperations.className(clazz) + " c = new " + TumlClassOperations.className(clazz) + "(GraphDb.getDb().getVertex(this."
                         + getIdFieldName(clazz) + "))");

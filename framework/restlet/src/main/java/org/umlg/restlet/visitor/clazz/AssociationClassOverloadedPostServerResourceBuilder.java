@@ -106,8 +106,9 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
             parentPathName = pWrap.getAssociationClassPathName();
         }
         tryStatement.getTryPart().addToStatements(
-                "this." + parentPathName.getLast().toLowerCase() + "Id = getRequestAttributes().get(\""
-                        + parentPathName.getLast().toLowerCase() + "Id\")");
+                "this." + parentPathName.getLast().toLowerCase() + "Id = " + TumlRestletGenerationUtil.UmlgURLDecoder.getLast() + ".decode((String)getRequestAttributes().get(\""
+                        + parentPathName.getLast().toLowerCase() + "Id\"))");
+        annotatedClass.addToImports(TumlRestletGenerationUtil.UmlgURLDecoder);
         tryStatement.getTryPart().addToStatements(
                 parentPathName.getLast() + " parentResource = GraphDb.getDb().instantiateClassifier(" + parentPathName.getLast().toLowerCase() + "Id" + ")");
         annotatedClass.addToImports(parentPathName);
@@ -408,7 +409,7 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
             concreteImplementations = TumlClassOperations.getConcreteImplementations(pWrap.getAssociationClass());
             concreteImplementationsFrom = TumlClassOperations.getConcreteImplementations((Classifier) pWrap.getOwningType());
         } else {
-            concreteImplementations = TumlClassOperations.getConcreteImplementations((Classifier)pWrap.getType());
+            concreteImplementations = TumlClassOperations.getConcreteImplementations((Classifier) pWrap.getType());
             concreteImplementationsFrom = TumlClassOperations.getConcreteImplementations(pWrap.getAssociationClass());
         }
         if (!concreteImplementationsFrom.isEmpty()) {
@@ -568,7 +569,7 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
         OJField compositeParentFieldId;
         if (!asAssociationClass) {
             compositeParentFieldId = new OJField(TumlClassOperations.getPathName(pWrap.getOtherEnd().getType()).getLast().toLowerCase() + "Id",
-                new OJPathName("Object"));
+                    new OJPathName("Object"));
         } else {
             compositeParentFieldId = new OJField(pWrap.getAssociationClassPathName().getLast().toLowerCase() + "Id",
                     new OJPathName("Object"));

@@ -425,7 +425,7 @@
                         e.stopImmediatePropagation();
                     } else if (column.name == 'uri') {
                         var item = self.dataView.getItem(args.row);
-                        var uri = item.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), item.id);
+                        var uri = item.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), encodeURIComponent(item.id));
                         self.tumlTabViewManager.refreshContext(uri);
                     } else if (isComponentMany(column)) {
                         doComponentMany(column, args);

@@ -74,8 +74,10 @@ public class LookupForOneResourceBuilder extends BaseServerResourceBuilder imple
 
         OJPathName parentPathName = TumlClassOperations.getPathName(pWrap.getOtherEnd().getType());
         ojTryStatement.getTryPart().addToStatements(
-                "this." + parentPathName.getLast().toLowerCase() + "Id = getRequestAttributes().get(\""
-                        + parentPathName.getLast().toLowerCase() + "Id\")");
+                "this." + parentPathName.getLast().toLowerCase() + "Id = "+TumlRestletGenerationUtil.UmlgURLDecoder.getLast()+".decode((String)getRequestAttributes().get(\""
+                        + parentPathName.getLast().toLowerCase() + "Id\"))");
+        annotatedClass.addToImports(TumlRestletGenerationUtil.UmlgURLDecoder);
+
         ojTryStatement.getTryPart().addToStatements(
                 parentPathName.getLast() + " resource = GraphDb.getDb().instantiateClassifier(this." + parentPathName.getLast().toLowerCase() + "Id"
                         + ")");

@@ -178,7 +178,7 @@
             var queryArray = [];
             for (var i = 0; i < queryData[0].data.length; i++) {
                 var query = queryData[0].data[i];
-                var queryUri = query.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), query.id);
+                var queryUri = query.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), encodeURIComponent(query.id));
                 var oclExecuteUri = queryData[0].meta.oclExecuteUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), this.contextVertexId);
                 queryArray.push({
                     label: query.name,
@@ -270,7 +270,7 @@
                         retrieveMetaDataIfNotInCache(queryUri, this.contextVertexId, response, self.continueCreateInstanceQueryMenu);
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
-                        alert('Error getting query data. textStatus: ' + textStatus + ' errorThrown: ' + errorThrown);
+                        alert('Error getting instance query data. textStatus: ' + textStatus + ' errorThrown: ' + errorThrown);
                     }
                 });
             }
@@ -301,7 +301,7 @@
                             retrieveMetaDataIfNotInCache(classQueryUri, this.contextVertexId, response, self.continueCreateClassQueryMenu);
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
-                            alert('Error getting query data. textStatus: ' + textStatus + ' errorThrown: ' + errorThrown);
+                            alert('Error getting class query data. textStatus: ' + textStatus + ' errorThrown: ' + errorThrown);
                         }
                     });
                 }
