@@ -1,7 +1,7 @@
 package org.umlg.tinker.json;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import junit.framework.Assert;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.umlg.concretetest.God;
