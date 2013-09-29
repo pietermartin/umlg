@@ -25,7 +25,7 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
     @VisitSubclasses({Class.class, AssociationClass.class})
     public void visitBefore(Class clazz) {
         if (!clazz.isAbstract() && !TumlClassOperations.hasCompositeOwner(clazz) && !(clazz instanceof AssociationClass)) {
-            OJPackage ojPackage = new OJPackage(Namer.name(clazz.getNearestPackage()) + ".restlet");
+            OJPackage ojPackage = new OJPackage(Namer.name(clazz.getNearestPackage()));
 
             OJAnnotatedClass annotatedClass = new OJAnnotatedClass(TumlClassOperations.className(clazz) + "s_ServerResourceImpl");
             annotatedClass.setSuperclass(TumlRestletGenerationUtil.ServerResource);
@@ -46,10 +46,6 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
     }
 
     private void addPostObjectRepresentation(Classifier concreteClassifier, OJAnnotatedClass annotatedClass) {
-        OJAnnotatedOperation postInf = new OJAnnotatedOperation("post", TumlRestletGenerationUtil.Representation);
-
-        postInf.addToParameters(new OJParameter("entity", TumlRestletGenerationUtil.Representation));
-        postInf.addAnnotationIfNew(new OJAnnotationValue(TumlRestletGenerationUtil.Post, "json"));
 
         OJAnnotatedOperation post = new OJAnnotatedOperation("post", TumlRestletGenerationUtil.Representation);
 
@@ -75,13 +71,13 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
         overloaded.setInitExp("mapper.readValue(" + entityText.getName() + ", Map.class)");
         ojTryStatement.getTryPart().addToLocals(overloaded);
 
-        ojTryStatement.getTryPart().addToStatements("StringBuilder json = new StringBuilder()");
-        ojTryStatement.getTryPart().addToStatements("json.append(\"[\")");
-        ojTryStatement.getTryPart().addToStatements("json.append(\"{\\\"data\\\": [\")");
-
         //Insert
         ojTryStatement.getTryPart().addToStatements("Object o = overloaded.get(\"insert\")");
-        ojTryStatement.getTryPart().addToStatements("boolean insertedSomething = false");
+//        ojTryStatement.getTryPart().addToStatements("boolean insertedSomething = false");
+
+        OJField objectList = new OJField("objectList", new OJPathName("java.util.List").addToGenerics(TinkerGenerationUtil.UMLG_NODE));
+        objectList.setInitExp("new ArrayList<"+TinkerGenerationUtil.UMLG_NODE.getLast()+">()");
+        ojTryStatement.getTryPart().addToLocals(objectList);
 
         OJIfStatement ifInsert = new OJIfStatement("o != null");
         ojTryStatement.getTryPart().addToStatements(ifInsert);
@@ -91,26 +87,28 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
         insertArray.setInitExp("(ArrayList<Map<String, Object>>)o");
         annotatedClass.addToImports("java.util.ArrayList");
         ifArrayForInsert.getThenPart().addToLocals(insertArray);
-        ifArrayForInsert.getThenPart().addToStatements("insertedSomething = !array.isEmpty()");
+//        ifArrayForInsert.getThenPart().addToStatements("insertedSomething = !array.isEmpty()");
         ifInsert.getThenPart().addToStatements(ifArrayForInsert);
-        ifArrayForInsert.getThenPart().addToStatements("int count = 1");
+//        ifArrayForInsert.getThenPart().addToStatements("int count = 1");
         OJForStatement insertForArray = new OJForStatement("map", new OJPathName("java.util.Map").addToGenerics(new OJPathName("String")).addToGenerics(
                 new OJPathName("Object")), "array");
         ifArrayForInsert.addToThenPart(insertForArray);
-        insertForArray.getBody().addToStatements("json.append(add(map))");
-        OJIfStatement insertIfCount = new OJIfStatement("count++ != array.size()");
-        insertIfCount.addToThenPart("json.append(\", \")");
-        insertForArray.getBody().addToStatements(insertIfCount);
+//        insertForArray.getBody().addToStatements("json.append(add(map))");
+        insertForArray.getBody().addToStatements("objectList.add(add(map))");
+//        OJIfStatement insertIfCount = new OJIfStatement("count++ != array.size()");
+//        insertIfCount.addToThenPart("json.append(\", \")");
+//        insertForArray.getBody().addToStatements(insertIfCount);
         OJField insertMap = new OJField("map", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object"));
         insertMap.setInitExp("(Map<String, Object>) o");
         ifArrayForInsert.setElsePart(new OJBlock());
         ifArrayForInsert.getElsePart().addToLocals(insertMap);
-        ifArrayForInsert.getElsePart().addToStatements("insertedSomething = true");
-        ifArrayForInsert.getElsePart().addToStatements("json.append(add(map))");
+//        ifArrayForInsert.getElsePart().addToStatements("insertedSomething = true");
+//        ifArrayForInsert.getElsePart().addToStatements("json.append(add(map))");
+        ifArrayForInsert.getElsePart().addToStatements("objectList.add(add(map))");
 
         //update
         ojTryStatement.getTryPart().addToStatements("o = overloaded.get(\"update\")");
-        ojTryStatement.getTryPart().addToStatements("boolean updatedSomething = false");
+//        ojTryStatement.getTryPart().addToStatements("boolean updatedSomething = false");
         OJIfStatement ifUpdate = new OJIfStatement("o != null");
         ojTryStatement.getTryPart().addToStatements(ifUpdate);
         OJIfStatement ifArrayForUpdate = new OJIfStatement("o instanceof ArrayList");
@@ -119,25 +117,27 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
         updateArray.setInitExp("(ArrayList<Map<String, Object>>)o");
         annotatedClass.addToImports("java.util.ArrayList");
         ifArrayForUpdate.getThenPart().addToLocals(updateArray);
-        ifArrayForUpdate.getThenPart().addToStatements("updatedSomething = !array.isEmpty()");
-        OJIfStatement ifInsertedSomething = new OJIfStatement("insertedSomething && updatedSomething", "json.append(\", \")");
-        ifArrayForUpdate.getThenPart().addToStatements(ifInsertedSomething);
+//        ifArrayForUpdate.getThenPart().addToStatements("updatedSomething = !array.isEmpty()");
+//        OJIfStatement ifInsertedSomething = new OJIfStatement("insertedSomething && updatedSomething", "json.append(\", \")");
+//        ifArrayForUpdate.getThenPart().addToStatements(ifInsertedSomething);
         ifUpdate.getThenPart().addToStatements(ifArrayForUpdate);
-        ifArrayForUpdate.getThenPart().addToStatements("int count = 1");
+//        ifArrayForUpdate.getThenPart().addToStatements("int count = 1");
         OJForStatement updateForArray = new OJForStatement("map", new OJPathName("java.util.Map").addToGenerics(new OJPathName("String")).addToGenerics(
                 new OJPathName("Object")), "array");
         ifArrayForUpdate.addToThenPart(updateForArray);
-        updateForArray.getBody().addToStatements("json.append(put(map))");
-        OJIfStatement updateIfCount = new OJIfStatement("count++ != array.size()");
-        updateIfCount.addToThenPart("json.append(\", \")");
-        updateForArray.getBody().addToStatements(updateIfCount);
+//        updateForArray.getBody().addToStatements("json.append(put(map))");
+        updateForArray.getBody().addToStatements("objectList.add(put(map))");
+//        OJIfStatement updateIfCount = new OJIfStatement("count++ != array.size()");
+//        updateIfCount.addToThenPart("json.append(\", \")");
+//        updateForArray.getBody().addToStatements(updateIfCount);
         OJField updateMap = new OJField("map", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object"));
         updateMap.setInitExp("(Map<String, Object>) o");
         ifArrayForUpdate.setElsePart(new OJBlock());
         ifArrayForUpdate.getElsePart().addToLocals(insertMap);
-        ifArrayForUpdate.getElsePart().addToStatements("updatedSomething = true");
-        ifArrayForUpdate.getElsePart().addToStatements(ifInsertedSomething);
-        ifArrayForUpdate.getElsePart().addToStatements("json.append(put(map))");
+//        ifArrayForUpdate.getElsePart().addToStatements("updatedSomething = true");
+//        ifArrayForUpdate.getElsePart().addToStatements(ifInsertedSomething);
+//        ifArrayForUpdate.getElsePart().addToStatements("json.append(put(map))");
+        ifArrayForUpdate.getElsePart().addToStatements("objectList.add(put(map))");
 
         //delete
         ojTryStatement.getTryPart().addToStatements("o = overloaded.get(\"delete\")");
@@ -150,9 +150,9 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
         annotatedClass.addToImports("java.util.ArrayList");
         ifArrayForDelete.getThenPart().addToLocals(deleteArray);
 
-        OJIfStatement iInsertedOrUpdated = new OJIfStatement("(insertedSomething || updatedSomething) && !array.isEmpty()");
-        iInsertedOrUpdated.addToThenPart("json.append(\", \")");
-        ifArrayForDelete.addToThenPart(iInsertedOrUpdated);
+//        OJIfStatement iInsertedOrUpdated = new OJIfStatement("(insertedSomething || updatedSomething) && !array.isEmpty()");
+//        iInsertedOrUpdated.addToThenPart("json.append(\", \")");
+//        ifArrayForDelete.addToThenPart(iInsertedOrUpdated);
 
         ifDelete.getThenPart().addToStatements(ifArrayForDelete);
         OJForStatement deleteForArray = new OJForStatement("map", new OJPathName("java.util.Map").addToGenerics(new OJPathName("String")).addToGenerics(
@@ -164,17 +164,30 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
         ifArrayForDelete.setElsePart(new OJBlock());
         ifArrayForDelete.getElsePart().addToLocals(insertMap);
 
-        iInsertedOrUpdated = new OJIfStatement("insertedSomething || updatedSomething");
-        iInsertedOrUpdated.addToThenPart("json.append(\", \")");
-        ifArrayForDelete.addToElsePart(iInsertedOrUpdated);
+//        iInsertedOrUpdated = new OJIfStatement("insertedSomething || updatedSomething");
+//        iInsertedOrUpdated.addToThenPart("json.append(\", \")");
+//        ifArrayForDelete.addToElsePart(iInsertedOrUpdated);
         ifArrayForDelete.getElsePart().addToStatements("delete(map)");
 
-        addPostResource(concreteClassifier, annotatedClass, parentPathName);
-        addPutResource(concreteClassifier, annotatedClass, parentPathName);
-        addDeleteResource(concreteClassifier, annotatedClass, parentPathName);
+        addPostResource(concreteClassifier, annotatedClass);
+        addPutResource(concreteClassifier, annotatedClass);
+        addDeleteResource(concreteClassifier, annotatedClass);
 
         //Check if transaction needs commiting
-        commitOrRollback(ojTryStatement.getTryPart());
+        commitOrRollback(ojTryStatement);
+
+        OJField count = new OJField("count", "int");
+        count.setInitExp("0");
+        ojTryStatement.getTryPart().addToLocals(count);
+        ojTryStatement.getTryPart().addToStatements("StringBuilder json = new StringBuilder()");
+        ojTryStatement.getTryPart().addToStatements("json.append(\"[\")");
+        ojTryStatement.getTryPart().addToStatements("json.append(\"{\\\"data\\\": [\")");
+
+        OJForStatement forObjectList = new OJForStatement("umlgNode", TinkerGenerationUtil.UMLG_NODE, "objectList");
+        forObjectList.getBody().addToStatements("json.append(umlgNode.toJsonWithoutCompositeParent(true))");
+        OJIfStatement ifCountSize = new OJIfStatement("++count < objectList.size()", "json.append(\",\")");
+        forObjectList.getBody().addToStatements(ifCountSize);
+        ojTryStatement.getTryPart().addToStatements(forObjectList);
 
         ojTryStatement.getTryPart().addToStatements("meta", "json.append(\"], \\\"meta\\\": {\")");
 
@@ -205,8 +218,8 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
         annotatedClass.addToOperations(post);
     }
 
-    private void addPostResource(Classifier concreteClassifier, OJAnnotatedClass annotatedClass, OJPathName parentPathName) {
-        OJAnnotatedOperation add = new OJAnnotatedOperation("add", "String");
+    private void addPostResource(Classifier concreteClassifier, OJAnnotatedClass annotatedClass) {
+        OJAnnotatedOperation add = new OJAnnotatedOperation("add", TinkerGenerationUtil.UMLG_NODE);
         add.setComment("This method adds a single new instance. If and id already exist it passes the existing id back as a tmpId");
         add.setVisibility(OJVisibilityKind.PRIVATE);
         add.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
@@ -214,12 +227,13 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
         add.getBody().addToStatements(TumlClassOperations.getPathName(concreteClassifier).getLast() + " childResource = new " + TumlClassOperations.getPathName(concreteClassifier).getLast() + "(true)");
         annotatedClass.addToImports(TumlClassOperations.getPathName(concreteClassifier));
         add.getBody().addToStatements("childResource.fromJson(propertyMap)");
-        add.getBody().addToStatements("String jsonResult = childResource.toJsonWithoutCompositeParent(true)");
-        add.getBody().addToStatements("return jsonResult");
+        add.getBody().addToStatements("return childResource");
+//        add.getBody().addToStatements("String jsonResult = childResource.toJsonWithoutCompositeParent(true)");
+//        add.getBody().addToStatements("return jsonResult");
     }
 
-    private void addPutResource(Classifier classifier, OJAnnotatedClass annotatedClass, OJPathName parentPathName) {
-        OJAnnotatedOperation put = new OJAnnotatedOperation("put", "String");
+    private void addPutResource(Classifier classifier, OJAnnotatedClass annotatedClass) {
+        OJAnnotatedOperation put = new OJAnnotatedOperation("put", TinkerGenerationUtil.UMLG_NODE);
         put.setVisibility(OJVisibilityKind.PRIVATE);
         put.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
         annotatedClass.addToOperations(put);
@@ -228,10 +242,11 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
                 TumlClassOperations.getPathName(classifier).getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
         annotatedClass.addToImports(TumlClassOperations.getPathName(classifier));
         put.getBody().addToStatements("childResource.fromJson(propertyMap)");
-        put.getBody().addToStatements("return childResource.toJsonWithoutCompositeParent()");
+//        put.getBody().addToStatements("return childResource.toJsonWithoutCompositeParent()");
+        put.getBody().addToStatements("return childResource");
     }
 
-    private void addDeleteResource(Classifier classifier, OJAnnotatedClass annotatedClass, OJPathName parentPathName) {
+    private void addDeleteResource(Classifier classifier, OJAnnotatedClass annotatedClass) {
 
         OJAnnotatedOperation delete = new OJAnnotatedOperation("delete");
         delete.setVisibility(OJVisibilityKind.PRIVATE);
@@ -348,7 +363,7 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
     }
 
     private void addToRouterEnum(Class clazz, OJAnnotatedClass annotatedClass) {
-        OJEnum routerEnum = (OJEnum) this.workspace.findOJClass("restlet.RestletRouterEnum");
+        OJEnum routerEnum = (OJEnum) this.workspace.findOJClass(TumlRestletGenerationUtil.RestletRouterEnum.toJavaString());
         OJEnumLiteral ojLiteral = new OJEnumLiteral(TumlClassOperations.className(clazz).toUpperCase() + "S");
 
         OJField uri = new OJField();

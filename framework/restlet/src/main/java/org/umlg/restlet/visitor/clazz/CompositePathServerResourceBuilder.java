@@ -6,6 +6,7 @@ import org.umlg.framework.VisitSubclasses;
 import org.umlg.java.metamodel.OJField;
 import org.umlg.java.metamodel.OJPackage;
 import org.umlg.java.metamodel.OJPathName;
+import org.umlg.java.metamodel.OJTryStatement;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedInterface;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
@@ -28,19 +29,15 @@ public class CompositePathServerResourceBuilder extends BaseServerResourceBuilde
     @Override
     @VisitSubclasses({Class.class, AssociationClass.class})
     public void visitBefore(Class clazz) {
-        OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(TumlClassOperations.className(clazz) + "CompositePathServerResource");
-        OJPackage ojPackage = new OJPackage(Namer.name(clazz.getNearestPackage()) + ".restlet");
-        annotatedInf.setMyPackage(ojPackage);
-        addToSource(annotatedInf);
+        OJPackage ojPackage = new OJPackage(Namer.name(clazz.getNearestPackage()));
         OJAnnotatedClass annotatedClass = new OJAnnotatedClass(TumlClassOperations.className(clazz) + "CompositePathServerResourceImpl");
         annotatedClass.setSuperclass(TumlRestletGenerationUtil.ServerResource);
-        annotatedClass.addToImplementedInterfaces(annotatedInf.getPathName());
         annotatedClass.setMyPackage(ojPackage);
         annotatedClass.setVisibility(TumlClassOperations.getVisibility(clazz.getVisibility()));
         addToSource(annotatedClass);
         addPrivateIdVariable(clazz, annotatedClass);
         addDefaultConstructor(annotatedClass);
-        addGetRepresentation(clazz, annotatedInf, annotatedClass);
+        addGetRepresentation(clazz, annotatedClass);
         addToRouterEnum(clazz, annotatedClass);
     }
 
@@ -48,25 +45,27 @@ public class CompositePathServerResourceBuilder extends BaseServerResourceBuilde
     public void visitAfter(Class clazz) {
     }
 
-    private void addGetRepresentation(Class clazz, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass) {
-
-        OJAnnotatedOperation getInf = new OJAnnotatedOperation("get", TumlRestletGenerationUtil.Representation);
-        annotatedInf.addToOperations(getInf);
-        getInf.addAnnotationIfNew(new OJAnnotationValue(TumlRestletGenerationUtil.Get, "json"));
+    private void addGetRepresentation(Class clazz, OJAnnotatedClass annotatedClass) {
 
         OJAnnotatedOperation get = new OJAnnotatedOperation("get", TumlRestletGenerationUtil.Representation);
         get.addToThrows(TumlRestletGenerationUtil.ResourceException);
         annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
         TinkerGenerationUtil.addOverrideAnnotation(get);
-        get.getBody().addToStatements(
+
+        OJTryStatement ojTryStatement = new OJTryStatement();
+        ojTryStatement.setCatchPart(null);
+        ojTryStatement.getFinallyPart().addToStatements(TinkerGenerationUtil.graphDbAccess + ".rollback()");
+        get.getBody().addToStatements(ojTryStatement);
+
+        ojTryStatement.getTryPart().addToStatements(
                 "this." + getIdFieldName(clazz) + "= "+TumlRestletGenerationUtil.UmlgURLDecoder.getLast()+".decode((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"));");
         annotatedClass.addToImports(TumlRestletGenerationUtil.UmlgURLDecoder);
-        get.getBody().addToStatements(
+        ojTryStatement.getTryPart().addToStatements(
                 TumlClassOperations.className(clazz) + " c = GraphDb.getDb().instantiateClassifier(this." + getIdFieldName(clazz) + ")");
         annotatedClass.addToImports(TumlClassOperations.getPathName(clazz));
 
-        get.getBody().addToStatements("StringBuilder json = new StringBuilder()");
-        get.getBody().addToStatements("json.append(\"{\\\"data\\\": [\")");
+        ojTryStatement.getTryPart().addToStatements("StringBuilder json = new StringBuilder()");
+        ojTryStatement.getTryPart().addToStatements("json.append(\"{\\\"data\\\": [\")");
 
         StringBuilder pathToCompositionRootCalc = new StringBuilder("json.append(RestletToJsonUtil.pathToCompositionRootAsJson(");
         annotatedClass.addToImports(TumlRestletGenerationUtil.RestletToJsonUtil);
@@ -74,9 +73,9 @@ public class CompositePathServerResourceBuilder extends BaseServerResourceBuilde
         pathToCompositionRootCalc.append("c.<" + TumlRestletGenerationUtil.UmlgRestletNode.getLast() + ">getPathToCompositionalRoot(), ");
         annotatedClass.addToImports(TumlRestletGenerationUtil.UmlgRestletNode);
         pathToCompositionRootCalc.append("\"Root\", \"/" + clazz.getModel().getName() + "\"))");
-        get.getBody().addToStatements(pathToCompositionRootCalc.toString());
-        get.getBody().addToStatements("json.append(\"]}\")");
-        get.getBody().addToStatements("return new " + TumlRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
+        ojTryStatement.getTryPart().addToStatements(pathToCompositionRootCalc.toString());
+        ojTryStatement.getTryPart().addToStatements("json.append(\"]}\")");
+        ojTryStatement.getTryPart().addToStatements("return new " + TumlRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
 
         annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
         annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);
@@ -84,7 +83,7 @@ public class CompositePathServerResourceBuilder extends BaseServerResourceBuilde
     }
 
     private void addToRouterEnum(Class clazz, OJAnnotatedClass annotatedClass) {
-        OJEnum routerEnum = (OJEnum) this.workspace.findOJClass("restlet.RestletRouterEnum");
+        OJEnum routerEnum = (OJEnum) this.workspace.findOJClass(TumlRestletGenerationUtil.RestletRouterEnum.toJavaString());
         OJEnumLiteral ojLiteral = new OJEnumLiteral(TumlClassOperations.className(clazz).toUpperCase() + "_compositePath");
 
         OJField uri = new OJField();

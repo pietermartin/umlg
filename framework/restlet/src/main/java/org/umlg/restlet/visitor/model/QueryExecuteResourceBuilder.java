@@ -43,7 +43,7 @@ public class QueryExecuteResourceBuilder extends BaseServerResourceBuilder imple
 	}
 
     protected void addToClassQueryRouterEnum(Model model, OJPathName ojPathName, String name, String path) {
-        OJEnum routerEnum = (OJEnum) this.workspace.findOJClass("restlet.RestletRouterEnum");
+        OJEnum routerEnum = (OJEnum) this.workspace.findOJClass(TumlRestletGenerationUtil.RestletRouterEnum.toJavaString());
         OJEnumLiteral ojLiteral = new OJEnumLiteral(name);
 
         OJField uri = new OJField();

@@ -29,7 +29,7 @@ public class MetaDataResourceBuilder extends BaseServerResourceBuilder implement
     public void visitBefore(Classifier c) {
         if (c instanceof Interface || c instanceof org.eclipse.uml2.uml.Class) {
             OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(getServerResourceMetaDataName(c));
-            OJPackage ojPackage = new OJPackage(Namer.name(c.getNearestPackage()) + ".restlet");
+            OJPackage ojPackage = new OJPackage(Namer.name(c.getNearestPackage()));
             annotatedInf.setMyPackage(ojPackage);
             addToSource(annotatedInf);
             OJAnnotatedClass annotatedClass = new OJAnnotatedClass(getServerResourceMetatDataImplName(c));
@@ -93,7 +93,7 @@ public class MetaDataResourceBuilder extends BaseServerResourceBuilder implement
     }
 
     private void addToRouterEnum(Classifier clazz, OJAnnotatedClass annotatedClass) {
-        OJEnum routerEnum = (OJEnum) this.workspace.findOJClass("restlet.RestletRouterEnum");
+        OJEnum routerEnum = (OJEnum) this.workspace.findOJClass(TumlRestletGenerationUtil.RestletRouterEnum.toJavaString());
 
         OJEnumLiteral ojLiteralMeta = new OJEnumLiteral(TumlClassOperations.className(clazz).toUpperCase() + "_META");
         OJField uriMeta = new OJField();

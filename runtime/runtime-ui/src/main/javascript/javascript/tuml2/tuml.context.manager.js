@@ -30,8 +30,8 @@
                     {name: 'Root', uri: uri}
                 ]);
             } else {
-                var replacedUri = uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
-                var pathToCompositeRootUri = replacedUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId) + '/compositePathToRoot';
+                var replacedUri = uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), encodeURIComponent(contextVertexId));
+                var pathToCompositeRootUri = replacedUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), encodeURIComponent(contextVertexId)) + '/compositePathToRoot';
                 $.ajax({
                     url: pathToCompositeRootUri,
                     type: "GET",

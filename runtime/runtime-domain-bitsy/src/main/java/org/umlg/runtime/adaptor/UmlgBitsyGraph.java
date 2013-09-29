@@ -31,11 +31,6 @@ public class UmlgBitsyGraph extends BitsyAutoReloadingGraph implements UmlgGraph
         this.transactionEventHandler = new UmlgTransactionEventHandlerImpl();
     }
 
-//    public UmlgBitsyGraph(Path directory) {
-//        super(directory);
-//        this.transactionEventHandler = new UmlgTransactionEventHandlerImpl();
-//    }
-
     /** Generic for all graphs start */
     @Override
     public void incrementTransactionCount() {
@@ -253,11 +248,11 @@ public class UmlgBitsyGraph extends BitsyAutoReloadingGraph implements UmlgGraph
 
     @Override
     public void clearTxThreadVar() {
-//        if (tx.get() != null) {
-//            logger.warning("Transaction threadvar was not empty!!!!! Bug somewhere in clearing the transaction!!!");
-//            rollback();
-//            throw new IllegalStateException("Transaction thread var is not empty!!!");
-//        }
+        if (isTransactionActive()) {
+            logger.warning("Transaction threadvar was not empty!!!!! Bug somewhere in clearing the transaction!!!");
+            rollback();
+            throw new IllegalStateException("Transaction thread var is not empty!!!");
+        }
     }
 
 }

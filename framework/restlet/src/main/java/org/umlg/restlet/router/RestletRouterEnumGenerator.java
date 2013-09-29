@@ -20,8 +20,8 @@ public class RestletRouterEnumGenerator extends BaseVisitor implements Visitor<M
 
 	@Override
 	public void visitBefore(Model element) {
-		OJEnum restletRouterEnum = new OJEnum("RestletRouterEnum");
-		OJPackage ojPackage = new OJPackage(Namer.name(element.getNearestPackage()) + ".restlet");
+		OJEnum restletRouterEnum = new OJEnum(TumlRestletGenerationUtil.RestletRouterEnum.getLast());
+		OJPackage ojPackage = new OJPackage(TumlRestletGenerationUtil.UmlgBasePath.toJavaString());
 		restletRouterEnum.setMyPackage(ojPackage);
 		addToSource(restletRouterEnum);
 		

@@ -1,24 +1,8 @@
 function retrieveMetaDataIfNotInCache(tumlUri, contextVertexId, result, callback) {
 
-    //when viewing the root entities the qualified name is that of the root entity
-    //This clashes when viewing the root entity as a one, i.e. not from the root.
-    //this ensures that the 2 different scenarios are mapped separately in the cache
-    var isFromRoot = contextVertexId == null;
+    var uriToCache = removeContextFromUrl(tumlUri);
 
-    //put the meta data in the cache
-    //this needs refactoring to use http OPTION to get the meta data only
-    var metaQualifiedName;
-    for (var i = 0; i < result.length; i++) {
-        //The qualified name is the same for all object in the array.
-        //It is the qualified name of the property navigated to.
-        metaQualifiedName = result[i].meta.qualifiedName;
-        break;
-    }
-    if (isFromRoot) {
-        metaQualifiedName = "root_" + metaQualifiedName;
-    }
-
-    var metaDataFromCache = Tuml.Metadata.Cache.getFromCache(metaQualifiedName);
+    var metaDataFromCache = Tuml.Metadata.Cache.getFromCache(uriToCache);
     if (metaDataFromCache === undefined || metaDataFromCache === null) {
         //Get the meta data via the http OPTIONS method
         $.ajax({
@@ -31,24 +15,36 @@ function retrieveMetaDataIfNotInCache(tumlUri, contextVertexId, result, callback
                 for (var i = 0; i < metaDataResult.length; i++) {
                     var metaData = {data: []};
                     metaData.meta = metaDataResult[i].meta;
-                    isFromRoot = (metaData.meta.from === undefined ? false : (metaData.meta.from.name === "Root"));
                     metaDataArray.push(metaData);
                 }
-                Tuml.Metadata.Cache.add(metaQualifiedName, metaDataArray);
+                Tuml.Metadata.Cache.add(uriToCache, metaDataArray);
 
                 combineMetaDataWithResult(result, metaDataResult);
 
                 callback(tumlUri, result, contextVertexId);
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                alert('error getting ' + tumlUri + '\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
+                alert('error getting meta data from retrieveMetaDataIfNotInCache  ' + tumlUri + '\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
             }
         });
     } else {
         combineMetaDataWithResult(result, metaDataFromCache);
         callback(tumlUri, result, contextVertexId);
     }
+
+    function removeContextFromUrl(url) {
+        if (url == '/' + tumlModelName) {
+            return 'root';
+        } else {
+            var trimmedUrl = url.replace('/' + tumlModelName + '/', '');
+            var firstIndexOf =  trimmedUrl.indexOf('/');
+            var secondIndexOf =  trimmedUrl.indexOf('/', firstIndexOf + 1);
+            var result = trimmedUrl.substring(0, firstIndexOf + 1) + '{param}' + trimmedUrl.substring(secondIndexOf);
+            return result;
+        }
+    }
 }
+
 
 function combineMetaDataWithResult(result, metaDataResult) {
     //Combine the meta data with the data
@@ -82,23 +78,30 @@ function escapeColon(string) {
 //}
 
 function retrieveVertexId(url) {
-    var trimmedUrl = url.replace('/' + tumlModelName + '/', '');
-    var lastIndexOfForwardSlash = trimmedUrl.lastIndexOf('/');
-    if (lastIndexOfForwardSlash !== -1) {
-        var tempUrl = trimmedUrl.substring(0, lastIndexOfForwardSlash);
-        var secondLastIndexOfForwardSlash = tempUrl.lastIndexOf('/');
-        var urlId = trimmedUrl.substring(secondLastIndexOfForwardSlash + 1, lastIndexOfForwardSlash);
-        if (urlId != null && urlId !== '') {
-            //OrientDb needs some attention
-            urlId = urlId.replace('#', '\\#');
-            urlId = urlId.replace(':', '\\:');
-            return urlId;
+    if (url == '/' + tumlModelName) {
+        return null;
+    } else {
+        var trimmedUrl = url.replace('/' + tumlModelName + '/', '');
+        var firstIndexOfForwardSlash = trimmedUrl.indexOf('/');
+        var lastIndexOfForwardSlash = trimmedUrl.lastIndexOf('/');
+        if (lastIndexOfForwardSlash !== -1) {
+            if (firstIndexOfForwardSlash == lastIndexOfForwardSlash) {
+                //humans/123
+                //Is a one
+                var urlId = trimmedUrl.substring(lastIndexOfForwardSlash + 1);
+                return urlId;
+            } else {
+                //humans/123/hand
+                var tempUrl = trimmedUrl.substring(0, lastIndexOfForwardSlash);
+                var secondLastIndexOfForwardSlash = tempUrl.lastIndexOf('/');
+                var urlId = trimmedUrl.substring(secondLastIndexOfForwardSlash + 1, lastIndexOfForwardSlash);
+                return urlId;
+            }
         } else {
             return null;
         }
-    } else {
-        return null;
     }
+
 }
 
 function selectFormatter(property, newId, updatedId) {

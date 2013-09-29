@@ -22,17 +22,11 @@ public class NavigatePropertyOverloadedPostForLookupServerResourceBuilder extend
         if (!pWrap.isDataType() && !pWrap.isEnumeration() && pWrap.isNavigable()) {
 
             OJAnnotatedClass owner = findOJClass(pWrap.getType());
-
-//            OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_"
-//                    + pWrap.getOtherEnd().getName() + "_" + pWrap.getName() + "_LookupServerResource");
-            OJPackage ojPackage = new OJPackage(owner.getMyPackage().toString() + ".restlet");
-//            annotatedInf.setMyPackage(ojPackage);
-//            addToSource(annotatedInf);
+            OJPackage ojPackage = owner.getMyPackage();
 
             OJAnnotatedClass annotatedClass = new OJAnnotatedClass(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_"
                     + pWrap.getOtherEnd().getName() + "_" + pWrap.getName() + "_LookupServerResourceImpl");
             annotatedClass.setSuperclass(TumlRestletGenerationUtil.ServerResource);
-//            annotatedClass.addToImplementedInterfaces(annotatedInf.getPathName());
             annotatedClass.setMyPackage(ojPackage);
             addToSource(annotatedClass);
             addDefaultConstructor(annotatedClass);
@@ -183,18 +177,19 @@ public class NavigatePropertyOverloadedPostForLookupServerResourceBuilder extend
         addPutResource(pWrap, annotatedClass, parentPathName);
 
         //get the lookup uri
-        ojTryStatement.getTryPart().addToStatements("String lookupUri = getQueryValue(\"lookupUri\")");
+        ojTryStatement.getTryPart().addToStatements("String lookupUri = getReference().getQueryAsForm(false).getFirstValue(\"lookupUri\")");
         ojTryStatement.getTryPart().addToStatements("lookupUri = \"riap://host\" + lookupUri");
         ojTryStatement.getTryPart().addToStatements("int fakeIdIndex = lookupUri.indexOf(\"fake\")");
         OJIfStatement ifFakeId = new OJIfStatement("fakeIdIndex != -1");
         ifFakeId.addToThenPart("int indexOfForwardSlash = lookupUri.indexOf(\"/\", fakeIdIndex)");
         ifFakeId.addToThenPart("String fakeId = lookupUri.substring(fakeIdIndex, indexOfForwardSlash)");
         ifFakeId.addToThenPart("Object id = " + TinkerGenerationUtil.UmlgTmpIdManager.getLast() + ".INSTANCE.get(fakeId)");
-        ifFakeId.addToThenPart("lookupUri = lookupUri.replace(fakeId, id.toString())");
+        ifFakeId.addToThenPart("lookupUri = lookupUri.replace(fakeId, "+TumlRestletGenerationUtil.UmlgURLEncoder.getLast()+".encode(id.toString()))");
         ojTryStatement.getTryPart().addToStatements(ifFakeId);
         annotatedClass.addToImports(TinkerGenerationUtil.UmlgTmpIdManager);
 
         ojTryStatement.getTryPart().addToStatements(TumlRestletGenerationUtil.ClientResource.getLast() + " cr = new ClientResource(lookupUri)");
+        annotatedClass.addToImports(TumlRestletGenerationUtil.UmlgURLEncoder);
         annotatedClass.addToImports(TumlRestletGenerationUtil.ClientResource);
         ojTryStatement.getTryPart().addToStatements(TumlRestletGenerationUtil.Representation.getLast() + " result = cr.get()");
         ojTryStatement.getTryPart().addToStatements("return result");
@@ -303,7 +298,7 @@ public class NavigatePropertyOverloadedPostForLookupServerResourceBuilder extend
     }
 
     private void addServerResourceToRouterEnum(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass) {
-        OJEnum routerEnum = (OJEnum) this.workspace.findOJClass("restlet.RestletRouterEnum");
+        OJEnum routerEnum = (OJEnum) this.workspace.findOJClass(TumlRestletGenerationUtil.RestletRouterEnum.toJavaString());
 
         OJEnumLiteral ojLiteral = new OJEnumLiteral(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_" + pWrap.fieldname() + "_forwardToLookup");
 

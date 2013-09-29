@@ -27,7 +27,7 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
     @VisitSubclasses({Interface.class, Class.class, AssociationClass.class})
     public void visitBefore(Classifier classifier) {
         if (classifier instanceof Interface || classifier instanceof org.eclipse.uml2.uml.Class) {
-            OJPackage ojPackage = new OJPackage(Namer.name(classifier.getNearestPackage()) + ".restlet");
+            OJPackage ojPackage = new OJPackage(Namer.name(classifier.getNearestPackage()));
             OJAnnotatedClass annotatedClass = new OJAnnotatedClass(getServerResourceImplName(classifier));
             annotatedClass.setSuperclass(TumlRestletGenerationUtil.ServerResource);
             annotatedClass.setMyPackage(ojPackage);
@@ -256,7 +256,7 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
     }
 
     private void addToRouterEnum(Classifier clazz, OJAnnotatedClass annotatedClass) {
-        OJEnum routerEnum = (OJEnum) this.workspace.findOJClass("restlet.RestletRouterEnum");
+        OJEnum routerEnum = (OJEnum) this.workspace.findOJClass(TumlRestletGenerationUtil.RestletRouterEnum.toJavaString());
         OJEnumLiteral ojLiteral = new OJEnumLiteral(TumlClassOperations.className(clazz).toUpperCase());
 
         OJField uri = new OJField();

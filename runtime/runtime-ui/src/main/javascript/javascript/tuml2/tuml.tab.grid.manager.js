@@ -136,7 +136,10 @@
             $('<div id="serverErrorMsg" />').appendTo(tabDiv);
             $('<div id="myGridLookup' + this.metaForDataTo.name + '" style="width:auto;height:90%;"></div>').appendTo(tabDiv);
             $('<div id="pagerLookup' + this.metaForDataTo.name + '" style="width:auto;height:20px;"></div>').appendTo(tabDiv);
-            $('#contextMenu' + this.metaForDataTo.name).remove();
+            //Do not remove the contextMenu for lookups
+            if (!(this instanceof TumlForManyLookupGridManager)) {
+                $('#contextMenu' + this.metaForDataTo.name).remove();
+            }
             this.createGrid(result.data/*, this.metaForDataTo*/, tumlUri);
         };
 

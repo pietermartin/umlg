@@ -50,6 +50,10 @@
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_lnfFoN2_EeK7O_6WBh_v7w" value="1"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_lnfFod2_EeK7O_6WBh_v7w" value="1"/>
+            <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_Z92jwCjkEeO6c-0tSz17qg" name="JobSalaryDefaultValue">
+              <language>OCL</language>
+              <body>100000</body>
+            </defaultValue>
           </ownedAttribute>
           <ownedEnd xmi:type="uml:Property" xmi:id="_pLU1Qd2-EeK7O_6WBh_v7w" name="company" type="_g-eIkN2-EeK7O_6WBh_v7w" association="_pLU1QN2-EeK7O_6WBh_v7w">
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_pLU1Qt2-EeK7O_6WBh_v7w"/>
@@ -110,6 +114,10 @@
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_JaKtQPxpEeKXi9pM4yg14w" value="1"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_JaRa8PxpEeKXi9pM4yg14w" value="1"/>
+            <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_cEG5gCh_EeO6c-0tSz17qg" name="AC2NameDefaultvalue">
+              <language>OCL</language>
+              <body>'halo'</body>
+            </defaultValue>
           </ownedAttribute>
           <ownedAttribute xmi:type="uml:Property" xmi:id="_5r26QAJbEeO9bYUowtpiHA" name="classE" type="_2Z7PcAJbEeO9bYUowtpiHA" aggregation="composite" association="_5r9n8AJbEeO9bYUowtpiHA">
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_5r26QQJbEeO9bYUowtpiHA"/>

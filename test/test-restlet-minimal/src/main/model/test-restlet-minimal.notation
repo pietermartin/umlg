@@ -246,6 +246,10 @@
       </eAnnotations>
       <children xmi:type="notation:DecorationNode" xmi:id="_2Ptrse6gEeKXi9pM4yg14w" type="5066"/>
       <children xmi:type="notation:BasicCompartment" xmi:id="_2Ptrsu6gEeKXi9pM4yg14w" type="7034">
+        <children xmi:type="notation:Shape" xmi:id="_Vfm20CjkEeO6c-0tSz17qg" type="3002" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:Property" href="test-restlet-minimal.uml#_k-BR4N2_EeK7O_6WBh_v7w"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_Vfm20SjkEeO6c-0tSz17qg" x="13" y="11"/>
+        </children>
         <styles xmi:type="notation:TitleStyle" xmi:id="_2Ptrs-6gEeKXi9pM4yg14w"/>
         <styles xmi:type="notation:SortingStyle" xmi:id="_2PtrtO6gEeKXi9pM4yg14w"/>
         <styles xmi:type="notation:FilteringStyle" xmi:id="_2Ptrte6gEeKXi9pM4yg14w"/>

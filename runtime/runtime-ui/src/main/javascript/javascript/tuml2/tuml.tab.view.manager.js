@@ -555,7 +555,7 @@
         var self = this;
         //Get the meta data.
 
-        Tuml.Metadata.Cache.get(property.qualifiedName  + 'metaToOnly', property.tumlMetaDataUri,
+        Tuml.Metadata.Cache.get(property.qualifiedName, property,
             function (result) {
                 var component = {meta: null, data: null};
                 self.tabContainerProperty = property;
@@ -610,7 +610,7 @@
     TumlTabOneViewManager.prototype.openOneComponent = function (data, cell, tumlUri, property) {
         var self = this;
         //Get the meta data.
-        Tuml.Metadata.Cache.get(property.qualifiedName + 'metaToOnly', property.tumlMetaDataUri,
+        Tuml.Metadata.Cache.get(property.qualifiedName, property,
             function (result) {
                 var component = {meta: null, data: null};
                 self.tabContainerProperty = property;
@@ -1068,7 +1068,8 @@
     TumlTabManyViewManager.prototype.openManyComponent = function (data, cell, tumlUri, property) {
         var self = this;
         //Get the meta data.
-        Tuml.Metadata.Cache.get(property.qualifiedName + 'metaToOnly', property.tumlMetaDataUri,
+
+        Tuml.Metadata.Cache.get(property.qualifiedName, property,
             function (result) {
                 self.tabContainerProperty = property;
                 var firstTumlManyComponentTabViewManager = null;
@@ -1173,7 +1174,7 @@
         var self = this;
         //Get the meta data.
 
-        Tuml.Metadata.Cache.get(property.qualifiedName + 'metaToOnly', property.tumlMetaDataUri,
+        Tuml.Metadata.Cache.get(property.qualifiedName, property,
             function (result) {
                 var oneComponent = {meta: null, data: null};
                 self.tabContainerProperty = property;
@@ -1238,7 +1239,7 @@
         var self = this;
         //Get the meta data.
 
-        Tuml.Metadata.Cache.get(property.qualifiedName + 'metaToOnly', property.tumlMetaDataUri,
+        Tuml.Metadata.Cache.get(property.qualifiedName, property,
             function (result) {
                 var oneComponent = {meta: null, data: null};
                 self.tabContainerProperty = property;

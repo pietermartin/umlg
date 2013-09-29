@@ -34,7 +34,11 @@
 
         this.refresh = function (_contextMetaDataFrom, _contextMetaDataTo, _contextVertexId, propertyNavigatingTo) {
             this.contextMetaDataFrom = _contextMetaDataFrom;
-            this.contextVertexId = _contextVertexId;
+            if (_contextVertexId !== undefined && _contextVertexId !== null) {
+                this.contextVertexId = decodeURIComponent(_contextVertexId);
+            } else {
+                this.contextVertexId = null;
+            }
 
             var uiLayoutWest = $('.ui-layout-west');
             uiLayoutWest.children().remove();
@@ -144,7 +148,7 @@
 
             for (var i = 0; i < menuArray.length; i++) {
                 var value = menuArray[i];
-                var adjustedUri = value.tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), this.contextVertexId);
+                var adjustedUri = value.tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), encodeURIComponent(this.contextVertexId));
                 adjustedUri = addUiToUrl(adjustedUri)
                 var li = $('<li />').appendTo(ulMenu);
                 li.data("contextData", {name: value.name, uri: adjustedUri});
@@ -163,7 +167,7 @@
                     a.append(value.name);
                 }
             }
-            ;
+            //This is for enter keystroke on the menu
             ulMenu.menu({
                 select: function (e, ui) {
                     var contextData = ui.item.data("contextData");
@@ -260,7 +264,7 @@
             //Fetch the query data
             var queryProperty = this.findQueryUrl('instanceQuery');
             if (queryProperty != null) {
-                var queryUri = queryProperty.tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), this.contextVertexId);
+                var queryUri = queryProperty.tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), encodeURIComponent(this.contextVertexId));
                 $.ajax({
                     url: queryUri,
                     type: "GET",
@@ -289,7 +293,7 @@
             //Add query tree
             //Fetch the query data
             if (this.contextVertexId !== null) {
-                var classQueryUri = "/" + tumlModelName + "/classquery/" + this.contextVertexId + "/query";
+                var classQueryUri = "/" + tumlModelName + "/classquery/" + encodeURIComponent(this.contextVertexId) + "/query";
                 if (classQueryUri != null) {
 //                    var queryUri = classQueryUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), this.contextVertexId);
                     $.ajax({

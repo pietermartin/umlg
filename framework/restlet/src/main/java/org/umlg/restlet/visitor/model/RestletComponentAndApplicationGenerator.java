@@ -155,7 +155,7 @@ public class RestletComponentAndApplicationGenerator extends BaseVisitor impleme
         application.addToOperations(createInboundRoot);
 
         createInboundRoot.getBody().addToStatements("Router router = new Router(getContext())");
-        createInboundRoot.getBody().addToStatements("restlet.RestletRouterEnum.attachAll(router)");
+        createInboundRoot.getBody().addToStatements(TumlRestletGenerationUtil.RestletRouterEnum.toJavaString() + ".attachAll(router)");
         createInboundRoot.getBody().addToStatements("router.attach(\"/ui2\", " + TumlRestletGenerationUtil.TumlGuiServerResource.getLast() + ".class, Template.MODE_STARTS_WITH)");
 
         application.addToImports(TumlRestletGenerationUtil.Router);

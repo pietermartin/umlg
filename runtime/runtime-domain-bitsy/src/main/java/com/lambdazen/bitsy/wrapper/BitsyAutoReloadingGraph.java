@@ -235,4 +235,8 @@ public class BitsyAutoReloadingGraph implements WrapperGraph<BitsyGraph>, Transa
             iter.remove();
         }
     }
+
+    public boolean isTransactionActive() {
+        return getBaseGraph().isTransactionActive();
+    }
 }

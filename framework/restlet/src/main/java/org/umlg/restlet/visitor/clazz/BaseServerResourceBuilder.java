@@ -45,16 +45,15 @@ public abstract class BaseServerResourceBuilder extends BaseVisitor {
 //        block.addToStatements(ifTransactionNeedsResuming);
 //    }
 
-    protected void commitOrRollback(OJBlock block) {
-        OJIfStatement ifTransactionNeedsCommitOrRollback = new OJIfStatement("getQueryValue(\"" + TinkerGenerationUtil.rollback+ "\") != null && Boolean.valueOf(getQueryValue(\"" + TinkerGenerationUtil.rollback + "\"))");
-        ifTransactionNeedsCommitOrRollback.addToThenPart(TinkerGenerationUtil.graphDbAccess + ".rollback()");
-        ifTransactionNeedsCommitOrRollback.addToElsePart(TinkerGenerationUtil.graphDbAccess + ".commit()");
-        block.addToStatements(ifTransactionNeedsCommitOrRollback);
+    protected void commitOrRollback(OJTryStatement ojTryStatement) {
+        OJIfStatement ifTransactionNeedsCommitOrRollback = new OJIfStatement("!(getQueryValue(\"" + TinkerGenerationUtil.rollback+ "\") != null && Boolean.valueOf(getQueryValue(\"" + TinkerGenerationUtil.rollback + "\")))");
+        ifTransactionNeedsCommitOrRollback.addToThenPart(TinkerGenerationUtil.graphDbAccess + ".commit()");
+        ojTryStatement.getTryPart().addToStatements(ifTransactionNeedsCommitOrRollback);
+        ojTryStatement.getFinallyPart().addToStatements(TinkerGenerationUtil.graphDbAccess + ".rollback()");
     }
 
-
     protected void addToRouterEnum(Model model, OJAnnotatedClass annotatedClass, String name, String path) {
-		OJEnum routerEnum = (OJEnum) this.workspace.findOJClass("restlet.RestletRouterEnum");
+		OJEnum routerEnum = (OJEnum) this.workspace.findOJClass(TumlRestletGenerationUtil.RestletRouterEnum.toJavaString());
 		OJEnumLiteral ojLiteral = new OJEnumLiteral(name);
 
 		OJField uri = new OJField();

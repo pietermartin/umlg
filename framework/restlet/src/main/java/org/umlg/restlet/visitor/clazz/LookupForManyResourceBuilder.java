@@ -25,11 +25,7 @@ public class LookupForManyResourceBuilder extends BaseServerResourceBuilder impl
         if (pWrap.hasLookup() && pWrap.isMany()) {
             OJAnnotatedClass owner = findOJClass(p);
 
-//            OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_"
-//                    + pWrap.getOtherEnd().getName() + "_" + pWrap.getName() + "_lookUpForMany" + "_ServerResource");
-            OJPackage ojPackage = new OJPackage(owner.getMyPackage().toString() + ".restlet");
-//            annotatedInf.setMyPackage(ojPackage);
-//            addToSource(annotatedInf);
+            OJPackage ojPackage = owner.getMyPackage();
 
             OJAnnotatedClass annotatedClass = new OJAnnotatedClass(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_"
                     + pWrap.getOtherEnd().getName() + "_" + pWrap.getName() + "_lookUpForMany" + "_ServerResourceImpl");
@@ -161,7 +157,7 @@ public class LookupForManyResourceBuilder extends BaseServerResourceBuilder impl
     }
 
     private void addServerResourceToRouterEnum(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass) {
-        OJEnum routerEnum = (OJEnum) this.workspace.findOJClass("restlet.RestletRouterEnum");
+        OJEnum routerEnum = (OJEnum) this.workspace.findOJClass(TumlRestletGenerationUtil.RestletRouterEnum.toJavaString());
         OJEnumLiteral ojLiteral = new OJEnumLiteral(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast().toUpperCase() + "_" + pWrap.lookup());
 
         OJField uri = new OJField();

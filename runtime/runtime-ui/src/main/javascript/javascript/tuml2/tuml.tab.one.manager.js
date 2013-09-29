@@ -242,6 +242,11 @@
                 (!property.associationClassOne && (this.isForCreation && property.composite && property.lower > 0) && property.name !== 'uri'));
     }
 
+    /**
+     * This method saves the value of the given property on the ui with the underlying model.
+     *
+     * @param property THe property to synchronize the model with
+     */
     TumlBaseTabOneManager.prototype.synchronizeModel = function (property) {
         if (property.name === 'id') {
             var id = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').val();
@@ -282,7 +287,7 @@
             } else if (property.oneEnumeration) {
                 var $select = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
                 var options = $select.children();
-                for (var j = 0; i < options.length; j++) {
+                for (var j = 0; j < options.length; j++) {
                     if (options[j].selected) {
                         this.data[property.name] = $select.val();
                         break;
@@ -709,7 +714,7 @@
 
     TumlBaseTabOneManager.prototype.appendLoopupOptionsToSelect2 = function (property, contextVertexId, $select, currentValue) {
 
-        var adjustedUri = property.tumlLookupUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), contextVertexId);
+        var adjustedUri = property.tumlLookupUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), encodeURIComponent(contextVertexId));
         var required = property.lower > 0;
 
         this.handleLookup(adjustedUri, this.metaForData.qualifiedName,
@@ -750,8 +755,12 @@
                 return true;
             }
         } else {
-            var validationResult = this.validateField(this.currentActiveProperty);
-            return validationResult.valid;
+            if (this.currentActiveProperty !== undefined && !this.currentActiveProperty.readOnly) {
+                var validationResult = this.validateField(this.currentActiveProperty);
+                return validationResult.valid;
+            } else {
+                return true;
+            }
         }
     }
 

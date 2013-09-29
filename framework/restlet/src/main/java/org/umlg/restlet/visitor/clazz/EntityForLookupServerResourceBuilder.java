@@ -22,20 +22,16 @@ public class EntityForLookupServerResourceBuilder extends BaseServerResourceBuil
     @VisitSubclasses({Class.class, AssociationClass.class})
     public void visitBefore(Class clazz) {
         if (!clazz.isAbstract()) {
-//            OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface(getLookupServerResourceName(clazz));
-            OJPackage ojPackage = new OJPackage(Namer.name(clazz.getNearestPackage()) + ".restlet");
-//            annotatedInf.setMyPackage(ojPackage);
-//            addToSource(annotatedInf);
+            OJPackage ojPackage = new OJPackage(Namer.name(clazz.getNearestPackage()));
             OJAnnotatedClass annotatedClass = new OJAnnotatedClass(getLookupServerResourceImplName(clazz));
             annotatedClass.setSuperclass(TumlRestletGenerationUtil.ServerResource);
-//            annotatedClass.addToImplementedInterfaces(annotatedInf.getPathName());
             annotatedClass.setMyPackage(ojPackage);
             annotatedClass.setVisibility(TumlClassOperations.getVisibility(clazz.getVisibility()));
             addToSource(annotatedClass);
             addPrivateIdVariable(clazz, annotatedClass);
             addDefaultConstructor(annotatedClass);
             if (!clazz.isAbstract()) {
-                addPutRepresentation(clazz/*, annotatedInf*/, annotatedClass);
+                addPutRepresentation(clazz, annotatedClass);
             }
             addToRouterEnum(clazz, annotatedClass);
         }
@@ -46,11 +42,6 @@ public class EntityForLookupServerResourceBuilder extends BaseServerResourceBuil
     }
 
     private void addPutRepresentation(Class clazz, OJAnnotatedClass annotatedClass) {
-
-//        OJAnnotatedOperation putInf = new OJAnnotatedOperation("put", TumlRestletGenerationUtil.Representation);
-//        putInf.addParam("entity", TumlRestletGenerationUtil.Representation);
-//        annotatedInf.addToOperations(putInf);
-//        putInf.addAnnotationIfNew(new OJAnnotationValue(TumlRestletGenerationUtil.Put, "json"));
 
         OJAnnotatedOperation put = new OJAnnotatedOperation("put", TumlRestletGenerationUtil.Representation);
         put.addParam("entity", TumlRestletGenerationUtil.Representation);
@@ -74,19 +65,20 @@ public class EntityForLookupServerResourceBuilder extends BaseServerResourceBuil
         ojTry.getTryPart().addToStatements("c.fromJson(" + entityText.getName() + ")");
 
         //get the lookup uri
-        ojTry.getTryPart().addToStatements("String lookupUri = getQueryValue(\"lookupUri\")");
+        ojTry.getTryPart().addToStatements("String lookupUri = getReference().getQueryAsForm(false).getFirstValue(\"lookupUri\")");
         ojTry.getTryPart().addToStatements("lookupUri = \"riap://host\" + lookupUri");
         ojTry.getTryPart().addToStatements("int fakeIdIndex = lookupUri.indexOf(\"fake\")");
         OJIfStatement ifFakeId = new OJIfStatement("fakeIdIndex != -1");
         ifFakeId.addToThenPart("int indexOfForwardSlash = lookupUri.indexOf(\"/\", fakeIdIndex)");
         ifFakeId.addToThenPart("String fakeId = lookupUri.substring(fakeIdIndex, indexOfForwardSlash)");
         ifFakeId.addToThenPart("Object id = " + TinkerGenerationUtil.UmlgTmpIdManager.getLast() + ".INSTANCE.get(fakeId)");
-        ifFakeId.addToThenPart("lookupUri = lookupUri.replace(fakeId, id.toString())");
+        ifFakeId.addToThenPart("lookupUri = lookupUri.replace(fakeId, "+TumlRestletGenerationUtil.UmlgURLDecoder.getLast()+".encode(id.toString()))");
         ojTry.getTryPart().addToStatements(ifFakeId);
         annotatedClass.addToImports(TinkerGenerationUtil.UmlgTmpIdManager);
 
         ojTry.getTryPart().addToStatements(TumlRestletGenerationUtil.ClientResource.getLast() + " cr = new ClientResource(lookupUri)");
         annotatedClass.addToImports(TumlRestletGenerationUtil.ClientResource);
+        annotatedClass.addToImports(TumlRestletGenerationUtil.UmlgURLEncoder);
         ojTry.getTryPart().addToStatements(TumlRestletGenerationUtil.Representation.getLast() + " result = cr.get()");
         ojTry.getTryPart().addToStatements("return result");
 
@@ -107,7 +99,7 @@ public class EntityForLookupServerResourceBuilder extends BaseServerResourceBuil
     }
 
     private void addToRouterEnum(Class clazz, OJAnnotatedClass annotatedClass) {
-        OJEnum routerEnum = (OJEnum) this.workspace.findOJClass("restlet.RestletRouterEnum");
+        OJEnum routerEnum = (OJEnum) this.workspace.findOJClass(TumlRestletGenerationUtil.RestletRouterEnum.toJavaString());
         OJEnumLiteral ojLiteral = new OJEnumLiteral(TumlClassOperations.className(clazz).toUpperCase() + "_forwardToLookup");
 
         OJField uri = new OJField();

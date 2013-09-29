@@ -147,6 +147,9 @@
                 pushUrlToBrowser(tumlUri);
             }
             var contextVertexId = retrieveVertexId(tumlUri);
+            if (contextVertexId !== null) {
+                contextVertexId = decodeURIComponent(contextVertexId);
+            }
             $.ajax({
                 url: tumlUri,
                 type: "GET",
@@ -193,7 +196,7 @@
                         alert('UIManager.getContextMetaData response.data !== undefined && response.data !== null');
                     }
 
-                    if (!isNaN(response.data.id) || metaDataNavigatingTo.name === 'Root') {
+                    if ((response.data.id !== undefined && response.data.id.indexOf('fake') === -1) || metaDataNavigatingTo.name === 'Root') {
                         metaDataNavigatingTo = result[i].meta.to;
                         return {name: metaDataNavigatingTo.name, uri: metaDataNavigatingTo.uri, contextVertexId: response.data.id};
                     }

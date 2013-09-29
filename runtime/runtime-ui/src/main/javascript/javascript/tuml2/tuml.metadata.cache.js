@@ -17,20 +17,26 @@
     function Cache() {
         var metaDataIdx = {};
 
-        this.add = function (qualifiedName, metaData) {
-            metaDataIdx[qualifiedName] = metaData;
+        this.add = function (url, metaData) {
+            metaDataIdx[url] = metaData;
         }
 
-        this.getFromCache = function (qualifiedName) {
-            return metaDataIdx[qualifiedName];
+        this.getFromCache = function (url) {
+            return metaDataIdx[url];
         }
 
-        this.get = function (qualifiedName, uri, callback) {
+        /**
+         * This is called for a classes meta data only. i.e. from the meta url
+         * @param qualifiedName
+         * @param uri
+         * @param callback
+         */
+        this.get = function (qualifiedName, property, callback) {
             var self = this;
             var metaData = metaDataIdx[qualifiedName];
             if (metaData === undefined) {
                 $.ajax({
-                    url: uri,
+                    url: property.tumlMetaDataUri,
                     type: "OPTIONS",
                     dataType: "json",
                     contentType: "application/json",
@@ -39,7 +45,7 @@
                         callback.call(this, result);
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
-                        alert('error getting ' + uri + '\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
+                        alert('error getting meta data ' + property.tumlMetaDataUri + '\n textStatus: ' + textStatus + '\n errorThrown: ' + errorThrown)
                     }
                 });
             } else {

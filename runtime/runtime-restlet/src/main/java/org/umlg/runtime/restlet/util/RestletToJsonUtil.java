@@ -16,7 +16,7 @@ public class RestletToJsonUtil {
 				json.append("\"name\": ");
 				json.append("\"" + p.getUmlName() + "\", ");
 				json.append("\"uri\": \"");
-				json.append(p.getUri().replace("\"", "").replaceAll("\\{(\\s*?.*?)*?\\}", String.valueOf(p.getId())));
+				json.append(p.getUri().replace("\"", "").replaceAll("\\{(\\s*?.*?)*?\\}", UmlgURLDecoder.encode(p.getId().toString())));
 				json.append("\"}");
 				if (count != entities.size()) {
 					json.append(",");
