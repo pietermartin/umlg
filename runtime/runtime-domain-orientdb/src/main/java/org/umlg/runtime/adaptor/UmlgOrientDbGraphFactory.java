@@ -42,6 +42,7 @@ public class UmlgOrientDbGraphFactory implements UmlgGraphFactory {
             UmlgMetaNodeFactory.getUmlgMetaNodeManager().createAllMetaNodes();
             this.umlgGraph.commit();
         } else {
+
             this.umlgGraph = new UmlgOrientDbGraph(this.propertiesConfiguration);
         }
         return this.umlgGraph;

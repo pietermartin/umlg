@@ -59,7 +59,8 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
 
         OJTryStatement ojTryStatement = new OJTryStatement();
         OJField mapper = new OJField("mapper", TinkerGenerationUtil.ObjectMapper);
-        mapper.setInitExp("new ObjectMapper()");
+        mapper.setInitExp(TinkerGenerationUtil.ObjectMapperFactory.getLast() + ".INSTANCE.getObjectMapper()");
+        annotatedClass.addToImports(TinkerGenerationUtil.ObjectMapperFactory);
         ojTryStatement.getTryPart().addToLocals(mapper);
 
         OJAnnotatedField entityText = new OJAnnotatedField("entityText", "String");

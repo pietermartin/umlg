@@ -66,7 +66,8 @@ public class TinkerGenerationUtil {
     public static final OJPathName Root = new OJPathName("org.umlg.root.Root");
     public static final OJPathName RootRuntimePropertyEnum = new OJPathName("org.umlg.root.Root.RootRuntimePropertyEnum");
 
-    public final static OJPathName ObjectMapper = new OJPathName("org.codehaus.jackson.map.ObjectMapper");
+    public final static OJPathName ObjectMapper = new OJPathName("com.fasterxml.jackson.databind.ObjectMapper");
+    public final static OJPathName ObjectMapperFactory = new OJPathName("org.umlg.runtime.util.ObjectMapperFactory");
     public static final OJPathName ToJsonUtil = new OJPathName("org.umlg.runtime.domain.json.ToJsonUtil");
     public static final OJPathName tumlMemoryCollection = new OJPathName("org.umlg.runtime.collection.memory.TumlMemoryCollection");
     public static final OJPathName tumlMemoryBag = new OJPathName("org.umlg.runtime.collection.memory.TumlMemoryBag");

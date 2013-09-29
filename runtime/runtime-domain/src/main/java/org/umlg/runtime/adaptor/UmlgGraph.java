@@ -10,14 +10,15 @@ public interface UmlgGraph extends TransactionalGraph, KeyIndexableGraph {
     static final String DELETED_VERTEX_EDGE = "deletedVertexEdgeToRoot";
     static final String ROOT_CLASS_NAME = "org.umlg.root.Root";
 
-    //Used for auditing
-    void incrementTransactionCount();
-
-    //Used for auditing
-    long getTransactionCount();
-
+    /**
+     * Adds in a singleton super node. Represents the application/model.
+     * Attached to the root node is each concrete classes meta class.
+     */
     void addRoot();
 
+    /**
+     * @return The singleton root node of the application/model
+     */
     Vertex getRoot();
 
     Vertex addVertex(String className);
@@ -32,14 +33,30 @@ public interface UmlgGraph extends TransactionalGraph, KeyIndexableGraph {
 
     boolean hasEdgeBeenDeleted(Edge edge);
 
-    void clearTxThreadVar();
+    boolean isTransactionActive();
 
-    void clearThreadVars();
+    /**
+     * To be called at the end of a threads interaction with the graph.
+     * This is useful for clearing thread locals.
+     * Blueprints implementation have different threading models.
+     * For OrientDb this is where the graph will be shutdown.
+     */
+    void afterThreadContext();
 
+    /**
+     * For blueprint's implementation that recycle ids, vertexes are not removed but instead attached to a deletion node.
+     * The deletion node is attached to the root node.
+     */
     void addDeletionNode();
 
     String executeQuery(UmlgQueryEnum umlgQueryEnum, Object contextId, String query);
 
     void drop();
+
+    //Used for auditing
+    void incrementTransactionCount();
+
+    //Used for auditing
+    long getTransactionCount();
 
 }

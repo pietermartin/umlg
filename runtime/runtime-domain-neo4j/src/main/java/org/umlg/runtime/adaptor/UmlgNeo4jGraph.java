@@ -119,19 +119,6 @@ public class UmlgNeo4jGraph extends Neo4jGraph implements UmlgGraph {
         }
     }
 
-    @Override
-    public void clearThreadVars() {
-//        if (TransactionThreadEntityVar.get()!=null && TransactionThreadEntityVar.get().size()>0) {
-//            throw new RuntimeException("wtf");
-//        }
-//        if (TransactionThreadMetaNodeVar.get()!=null && TransactionThreadMetaNodeVar.get().size()>0) {
-//            throw new RuntimeException("wtf");
-//        }
-        TransactionThreadEntityVar.remove();
-        TransactionThreadMetaNodeVar.remove();
-        UmlgAssociationClassManager.remove();
-    }
-
     /** Generic for all graphs end */
 
     @Override
@@ -257,12 +244,22 @@ public class UmlgNeo4jGraph extends Neo4jGraph implements UmlgGraph {
     }
 
     @Override
-    public void clearTxThreadVar() {
-        if (tx.get() != null) {
-            logger.warning("Transaction threadvar was not empty!!!!! Bug somewhere in clearing the transaction!!!");
-            rollback();
-            throw new IllegalStateException("Transaction thread var is not empty!!!");
-        }
+    public boolean isTransactionActive() {
+        return  (tx.get() != null);
+    }
+
+    @Override
+    public void afterThreadContext() {
+//        if (TransactionThreadEntityVar.get()!=null && TransactionThreadEntityVar.get().size()>0) {
+//            throw new RuntimeException("wtf");
+//        }
+//        if (TransactionThreadMetaNodeVar.get()!=null && TransactionThreadMetaNodeVar.get().size()>0) {
+//            throw new RuntimeException("wtf");
+//        }
+        TransactionThreadEntityVar.remove();
+        TransactionThreadMetaNodeVar.remove();
+        UmlgAssociationClassManager.remove();
+        GraphDb.remove();
     }
 
 }

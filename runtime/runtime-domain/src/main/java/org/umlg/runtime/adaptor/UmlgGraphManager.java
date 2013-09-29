@@ -18,6 +18,7 @@ public class UmlgGraphManager {
 
     public static UmlgGraphManager INSTANCE = new UmlgGraphManager();
     private static final Logger logger = Logger.getLogger(UmlgGraphManager.class.getPackage().getName());
+    private UmlgGraphFactory nakedGraphFactory;
 
     private UmlgGraphManager() {
 
@@ -26,11 +27,13 @@ public class UmlgGraphManager {
     public UmlgGraph startupGraph() {
         try {
             String dbUrl = UmlgProperties.INSTANCE.getTumlDbLocation();
-            UmlgAdaptorImplementation umlgAdaptorImplementation = UmlgAdaptorImplementation.fromName(UmlgProperties.INSTANCE.getTinkerImplementation());
-            @SuppressWarnings("unchecked")
-            Class<UmlgGraphFactory> factory = (Class<UmlgGraphFactory>) Class.forName(umlgAdaptorImplementation.getTumlGraphFactory());
-            Method m = factory.getDeclaredMethod("getInstance", new Class[0]);
-            UmlgGraphFactory nakedGraphFactory = (UmlgGraphFactory) m.invoke(null);
+            if (this.nakedGraphFactory == null) {
+                UmlgAdaptorImplementation umlgAdaptorImplementation = UmlgAdaptorImplementation.fromName(UmlgProperties.INSTANCE.getTinkerImplementation());
+                @SuppressWarnings("unchecked")
+                Class<UmlgGraphFactory> factory = (Class<UmlgGraphFactory>) Class.forName(umlgAdaptorImplementation.getTumlGraphFactory());
+                Method m = factory.getDeclaredMethod("getInstance", new Class[0]);
+                this.nakedGraphFactory = (UmlgGraphFactory) m.invoke(null);
+            }
             UmlgGraph umlgGraph = nakedGraphFactory.getTumlGraph(dbUrl);
             return umlgGraph;
         } catch (Exception e) {
@@ -38,26 +41,18 @@ public class UmlgGraphManager {
         }
     }
 
-    public void shutdown() {
-        try {
-            UmlgAdaptorImplementation umlgAdaptorImplementation = UmlgAdaptorImplementation.fromName(UmlgProperties.INSTANCE.getTinkerImplementation());
-            @SuppressWarnings("unchecked")
-            Class<UmlgGraphFactory> factory = (Class<UmlgGraphFactory>) Class.forName(umlgAdaptorImplementation.getTumlGraphFactory());
-            Method m = factory.getDeclaredMethod("getInstance", new Class[0]);
-            UmlgGraphFactory nakedGraphFactory = (UmlgGraphFactory) m.invoke(null);
-            nakedGraphFactory.shutdown();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
+    /**
+     * Delete graph invokes drop on the db and then deletes the files.
+     */
     public void deleteGraph() {
         try {
-            UmlgAdaptorImplementation umlgAdaptorImplementation = UmlgAdaptorImplementation.fromName(UmlgProperties.INSTANCE.getTinkerImplementation());
-            @SuppressWarnings("unchecked")
-            Class<UmlgGraphFactory> factory = (Class<UmlgGraphFactory>) Class.forName(umlgAdaptorImplementation.getTumlGraphFactory());
-            Method m = factory.getDeclaredMethod("getInstance", new Class[0]);
-            UmlgGraphFactory nakedGraphFactory = (UmlgGraphFactory) m.invoke(null);
+            if (this.nakedGraphFactory == null) {
+                UmlgAdaptorImplementation umlgAdaptorImplementation = UmlgAdaptorImplementation.fromName(UmlgProperties.INSTANCE.getTinkerImplementation());
+                @SuppressWarnings("unchecked")
+                Class<UmlgGraphFactory> factory = (Class<UmlgGraphFactory>) Class.forName(umlgAdaptorImplementation.getTumlGraphFactory());
+                Method m = factory.getDeclaredMethod("getInstance", new Class[0]);
+                this.nakedGraphFactory = (UmlgGraphFactory) m.invoke(null);
+            }
             nakedGraphFactory.drop();
             //Delete the files
             String dbUrl = UmlgProperties.INSTANCE.getTumlDbLocation();

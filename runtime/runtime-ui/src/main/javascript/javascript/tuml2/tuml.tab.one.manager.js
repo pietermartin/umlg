@@ -318,6 +318,11 @@
                     if (options[j].selected) {
                         var optionId = $select.val();
                         if (optionId.indexOf('fake') === -1) {
+                            if (optionId === '') {
+                                //the server side fromJson method does not like empty strings.
+                                //it expects something or nothing
+                                optionId = null;
+                            }
 //                            this.data[property.name] = {id: parseInt(optionId), displayName: options[j].label, previousId: this.data[property.name].id};
                             this.data[property.name] = {id: optionId, displayName: options[j].label, previousId: this.data[property.name].id};
                         } else {

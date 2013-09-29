@@ -1,7 +1,5 @@
 package org.umlg.runtime.adaptor;
 
-import com.orientechnologies.orient.core.db.ODatabaseRecordThreadLocal;
-import com.orientechnologies.orient.core.db.record.ODatabaseRecord;
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
@@ -121,19 +119,6 @@ public class UmlgOrientDbGraph extends OrientGraph implements UmlgGraph {
         }
     }
 
-    @Override
-    public void clearThreadVars() {
-//        if (TransactionThreadEntityVar.get()!=null && TransactionThreadEntityVar.get().size()>0) {
-//            throw new RuntimeException("wtf");
-//        }
-//        if (TransactionThreadMetaNodeVar.get()!=null && TransactionThreadMetaNodeVar.get().size()>0) {
-//            throw new RuntimeException("wtf");
-//        }
-        TransactionThreadEntityVar.remove();
-        TransactionThreadMetaNodeVar.remove();
-        UmlgAssociationClassManager.remove();
-    }
-
     /** Generic for all graphs end */
 
     @Override
@@ -168,7 +153,7 @@ public class UmlgOrientDbGraph extends OrientGraph implements UmlgGraph {
 
     }
 
-    //    @Override
+//        @Override
 //    public Vertex getRoot() {
 //        OClass cls = this.getRawGraph().getMetadata().getSchema().getClass(ROOT_VERTEX);
 //        if (cls != null) {
@@ -238,23 +223,23 @@ public class UmlgOrientDbGraph extends OrientGraph implements UmlgGraph {
         return false;
     }
 
+    /**
+     * This method does not work for orientdb's threading model.
+     * After commit/rollback orientdb immediately starts a transaction.
+     * the graph needs to be shutdown at the end of the thread workload.
+     * @return
+     */
     @Override
-    public void clearTxThreadVar() {
-        final ODatabaseRecord tlDb = ODatabaseRecordThreadLocal.INSTANCE
-                .getIfDefined();
-        if (tlDb != null) {
-            logger.warning("Transaction threadvar was not empty!!!!! Bug somewhere in clearing the transaction!!!");
-//            rollback();
-//            throw new IllegalStateException("Transaction thread var is not empty!!!");
-        }
+    public boolean isTransactionActive() {
+        return false;
     }
 
     @Override
     public void shutdown() {
         try {
-            commit();
+            this.commit();
         } catch (Exception e) {
-            rollback();
+            this.rollback();
         }
         super.shutdown();
     }
@@ -264,5 +249,19 @@ public class UmlgOrientDbGraph extends OrientGraph implements UmlgGraph {
         this.getRawGraph().drop();
     }
 
+    @Override
+    public void afterThreadContext() {
+//        if (TransactionThreadEntityVar.get()!=null && TransactionThreadEntityVar.get().size()>0) {
+//            throw new RuntimeException("wtf");
+//        }
+//        if (TransactionThreadMetaNodeVar.get()!=null && TransactionThreadMetaNodeVar.get().size()>0) {
+//            throw new RuntimeException("wtf");
+//        }
+        TransactionThreadEntityVar.remove();
+        TransactionThreadMetaNodeVar.remove();
+        UmlgAssociationClassManager.remove();
+        GraphDb.getDb().shutdown();
+        GraphDb.remove();
+    }
 
 }

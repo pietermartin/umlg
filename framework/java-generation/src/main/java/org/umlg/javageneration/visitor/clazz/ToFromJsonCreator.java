@@ -214,7 +214,8 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
         annotatedClass.addToOperations(fromJson);
 
         OJField objectMapper = new OJField("mapper", TinkerGenerationUtil.ObjectMapper);
-        objectMapper.setInitExp("new ObjectMapper()");
+        objectMapper.setInitExp(TinkerGenerationUtil.ObjectMapperFactory.getLast() + ".INSTANCE.getObjectMapper()");
+        annotatedClass.addToImports(TinkerGenerationUtil.ObjectMapperFactory);
         fromJson.getBody().addToLocals(objectMapper);
 
         OJTryStatement tryS = new OJTryStatement();

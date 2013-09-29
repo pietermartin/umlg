@@ -99,10 +99,12 @@
             <artifactId>guava</artifactId>
             <version>14.0.1</version>
         </dependency>
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-mapper-asl</artifactId>
-            <version>1.9.7</version>
-        </dependency>
+
+        <!--  Version 2.1.2 is included as a tinkerpop dependency-->
+        <!--<dependency>-->
+        <!--<groupId>org.codehaus.jackson</groupId>-->
+        <!--<artifactId>jackson-mapper-asl</artifactId>-->
+        <!--<version>1.9.7</version>-->
+        <!--</dependency>-->
     </dependencies>
 </project>
