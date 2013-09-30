@@ -175,7 +175,7 @@ public class TestNeo4jBlueprints {
             Vertex v2 = graph.addVertex(null);
             v2.setProperty("this", "that");
             graph.addEdge(null, v1, v2, "test");
-            if (i % 1000 == 0) {
+            if (i % 10000 == 0) {
                 graph.commit();
                 System.out.println(i + " " + stopWatch.toString());
             }
