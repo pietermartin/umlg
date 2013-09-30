@@ -1,5 +1,6 @@
 package org.umlg.runtime.collection.persistent;
 
+import com.google.common.base.Preconditions;
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
@@ -8,6 +9,7 @@ import org.umlg.runtime.collection.TinkerQualifiedBag;
 import org.umlg.runtime.collection.TumlRuntimeProperty;
 import org.umlg.runtime.domain.UmlgNode;
 
+import java.util.List;
 import java.util.Set;
 
 public class TinkerQualifiedBagImpl<E> extends BaseBag<E> implements TinkerQualifiedBag<E> {
@@ -35,14 +37,18 @@ public class TinkerQualifiedBagImpl<E> extends BaseBag<E> implements TinkerQuali
 					GraphDb.getDb().removeEdge(edge);
 				}
 			} else if (o.getClass().isEnum()) {
-				v = this.internalVertexMap.get(((Enum<?>) o).name());
-				Edge edge = v.getEdges(Direction.IN, this.getLabel()).iterator().next();
-//				removeEdgefromIndex(edge);
+                List<Vertex> vertexes = this.internalVertexMap.get(((Enum<?>) o).name());
+                Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
+                v = vertexes.get(0);
+//				v = this.internalVertexMap.get(((Enum<?>) o).name());
+//				Edge edge = v.getEdges(Direction.IN, this.getLabel()).iterator().next();
 				GraphDb.getDb().removeVertex(v);
 			} else {
-				v = this.internalVertexMap.get(o);
-				Edge edge = v.getEdges(Direction.IN, this.getLabel()).iterator().next();
-//				removeEdgefromIndex(edge);
+                List<Vertex> vertexes = this.internalVertexMap.get(o);
+                Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
+                v = vertexes.get(0);
+//				v = this.internalVertexMap.get(o);
+//				Edge edge = v.getEdges(Direction.IN, this.getLabel()).iterator().next();
 				GraphDb.getDb().removeVertex(v);
 			}
 		}

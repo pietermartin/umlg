@@ -12,6 +12,7 @@ import org.umlg.runtime.test.BaseLocalDbTest;
 import org.umlg.runtime.validation.TumlConstraintViolationException;
 
 import java.util.Arrays;
+import java.util.Iterator;
 
 public class TestEmbeddedTest extends BaseLocalDbTest {
 
@@ -52,6 +53,22 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
         God g = new God(god.getVertex());
         Assert.assertEquals(1, g.getEmbeddedInteger().size());
         Assert.assertEquals(new Integer(1), g.getEmbeddedInteger().iterator().next());
+    }
+
+    @Test
+    public void testOneToManyEmbeddedInteger_Again() {
+        God god = new God(true);
+        god.setName("THEGOD");
+        god.addToEmbeddedInteger(1);
+        god.addToEmbeddedInteger(2);
+        db.commit();
+        Assert.assertEquals(3, countVertices());
+        Assert.assertEquals(3 + 1, countEdges());
+        God g = new God(god.getVertex());
+        Assert.assertEquals(2, g.getEmbeddedInteger().size());
+        Iterator<Integer> iterator = g.getEmbeddedInteger().iterator();
+        Assert.assertEquals(new Integer(1), iterator.next());
+        Assert.assertEquals(new Integer(2), iterator.next());
     }
 
     @Test
@@ -166,11 +183,11 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
     public void testRequiredEmbeddedManyIntegerOrder() {
         God g = new God(true);
         g.setName("ANOTHERGOD");
-        org.umlg.embeddedtest.TestEmbedded testEmbedded = new org.umlg.embeddedtest.TestEmbedded(g);
+        TestEmbedded testEmbedded = new TestEmbedded(g);
         testEmbedded.setName("asd");
         db.commit();
 
-        org.umlg.embeddedtest.TestEmbedded gt = new org.umlg.embeddedtest.TestEmbedded(testEmbedded.getVertex());
+        TestEmbedded gt = new TestEmbedded(testEmbedded.getVertex());
         Assert.assertEquals(3, gt.getManyOrderedRequiredInteger().size());
         Assert.assertEquals(Integer.valueOf(1), gt.getManyOrderedRequiredInteger().get(0));
         Assert.assertEquals(Integer.valueOf(2), gt.getManyOrderedRequiredInteger().get(1));
@@ -183,16 +200,30 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
         Assert.assertEquals(Integer.valueOf(2), gt.getManyOrderedRequiredInteger().get(1));
         Assert.assertEquals(Integer.valueOf(4), gt.getManyOrderedRequiredInteger().get(2));
         Assert.assertEquals(Integer.valueOf(3), gt.getManyOrderedRequiredInteger().get(3));
+
+        //Start testing duplicates
+        gt.getManyOrderedRequiredInteger().add(2);
+        db.commit();
+        gt.reload();
+        Assert.assertEquals(5, gt.getManyOrderedRequiredInteger().size());
+
+        //Now remove both numbers 4
+        gt.reload();
+        gt.removeFromManyOrderedRequiredInteger(2);
+        gt.removeFromManyOrderedRequiredInteger(2);
+        db.commit();
+        Assert.assertEquals(3, gt.getManyOrderedRequiredInteger().size());
+
     }
 
     @Test
-    public void testRequiredOrederedEmbeddedManyString() {
+    public void testRequiredOrderedEmbeddedManyString() {
         God g = new God(true);
         g.setName("ANOTHERGOD");
-        org.umlg.embeddedtest.TestEmbedded testEmbedded = new org.umlg.embeddedtest.TestEmbedded(g);
+        TestEmbedded testEmbedded = new TestEmbedded(g);
         testEmbedded.setName("asd");
         db.commit();
-        org.umlg.embeddedtest.TestEmbedded gt = new org.umlg.embeddedtest.TestEmbedded(testEmbedded.getVertex());
+        TestEmbedded gt = new TestEmbedded(testEmbedded.getVertex());
         Assert.assertEquals("a", gt.getManyRequiredOrderedUniqueString().get(0));
         Assert.assertEquals("b", gt.getManyRequiredOrderedUniqueString().get(1));
         Assert.assertEquals("c", gt.getManyRequiredOrderedUniqueString().get(2));

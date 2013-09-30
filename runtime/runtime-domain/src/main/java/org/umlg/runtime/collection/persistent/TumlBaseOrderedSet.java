@@ -1,5 +1,6 @@
 package org.umlg.runtime.collection.persistent;
 
+import com.google.common.base.Preconditions;
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
@@ -292,9 +293,15 @@ public abstract class TumlBaseOrderedSet<E> extends BaseCollection<E> implements
             UmlgNode node = (UmlgNode) previous;
             previousVertex = node.getVertex();
         } else if (e.getClass().isEnum()) {
-            previousVertex = this.internalVertexMap.get(((Enum<?>) previous).name());
+            List<Vertex> vertexes = this.internalVertexMap.get(((Enum<?>) previous).name());
+            Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
+            previousVertex = vertexes.get(0);
+//            previousVertex = this.internalVertexMap.get(((Enum<?>) previous).name());
         } else {
-            previousVertex = this.internalVertexMap.get(previous);
+            List<Vertex> vertexes = this.internalVertexMap.get(previous);
+            Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
+            previousVertex = vertexes.get(0);
+//            previousVertex = this.internalVertexMap.get(previous);
         }
         return previousVertex;
     }

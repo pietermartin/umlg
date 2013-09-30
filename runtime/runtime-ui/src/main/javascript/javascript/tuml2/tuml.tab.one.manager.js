@@ -531,6 +531,7 @@
                     this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, input);
                 }
             } else if (property.manyEnumeration) {
+                var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
                 if (this.data[property.name] !== undefined) {
                     this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, this.data[property.name], input);
                 } else {
@@ -630,7 +631,7 @@
                 validationResults = validator(currentValues, valueToAdd);
             }
             if (!validationResults.valid) {
-                alert('YYY' + validationResults.msg);
+                alert(validationResults.msg);
             } else {
                 addTr(valueToAdd);
                 //Need to reapply the drag and drop plugin if the table was empty
@@ -643,6 +644,7 @@
             }
         }).appendTo($div);
         $input = this.constructInputForField(property);
+        $input.val('');
         $input.addClass("many-primitive-editor-input");
         $input.appendTo($div);
         $input.keypress(function (e) {
@@ -668,9 +670,11 @@
             $inputToSet.val(currentValues.join(","));
             $inputToSet.blur();
             $div.remove();
+            $inputToSet.focus();
         }).text('Select'));
         selectButtonDiv.append($('<button class="many-primitive-editor-cancel"/>').click(function () {
             $div.remove();
+            $inputToSet.focus();
         }).text('Cancel'));
         $div.appendTo($li);
         $input.focus();
@@ -696,6 +700,8 @@
         var jqxhr = $.getJSON(tumlLookupUri + '?enumQualifiedName=' + propertyJavaClassName,
             function (response, b, c) {
                 //if not a required field add a black value
+                //Clear the select box
+                select.html('');
                 if (!required) {
                     select.append($('<option />)').val("").html(""));
                 }
@@ -780,7 +786,7 @@
             if (property.manyPrimitive) {
                 stringValueArray = validateInput.val().split(',');
             } else {
-                stringValueArray = validateInput.val();
+                stringValueArray = validateInput.chosen().val();
             }
             if (stringValueArray == undefined || stringValueArray == null) {
                 stringValueArray = [];
@@ -794,10 +800,10 @@
                     if (isNaN(tmpValue)) {
                         validationResult = {valid: false, msg: 'Please enter a valid number.'};
                     } else {
-                        if (property.unique && tmpSerializedValue.indexOf(parseInt(stringValueArray[i])) !== -1) {
+                        if (property.unique && tmpSerializedValue.indexOf(parseInt(tmpValue)) !== -1) {
                             validationResult = {valid: false, msg: 'Duplicates are not allowed.'};
                         } else {
-                            tmpSerializedValue.push(parseInt(stringValueArray[i]));
+                            tmpSerializedValue.push(parseInt(tmpValue));
                         }
                     }
                 } else if (property.fieldType === 'Boolean') {
@@ -805,7 +811,7 @@
                         validationResult = {valid: false, msg: 'Value must be "true" or "false".'};
                     }
                 } else {
-                    if (property.unique && tmpSerializedValue.indexOf(stringValueArray[i]) !== -1) {
+                    if (property.unique && tmpSerializedValue.indexOf(tmpValue) !== -1) {
                         validationResult = {valid: false, msg: 'Duplicates are not allowed.'};
                     } else {
                         tmpSerializedValue.push(stringValueArray[i]);

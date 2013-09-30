@@ -235,7 +235,7 @@ public class UmlgBitsyGraph extends BitsyAutoReloadingGraph implements UmlgGraph
 
     @Override
     public boolean isTransactionActive() {
-        return isTransactionActive();
+        return super.isTransactionActive();
     }
 
     @Override

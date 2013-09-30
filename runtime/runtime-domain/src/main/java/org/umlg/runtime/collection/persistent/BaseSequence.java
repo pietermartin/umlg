@@ -1,5 +1,6 @@
 package org.umlg.runtime.collection.persistent;
 
+import com.google.common.base.Preconditions;
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
@@ -291,9 +292,13 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
             UmlgNode node = (UmlgNode) e;
             previousVertex = node.getVertex();
         } else if (e.getClass().isEnum()) {
-            previousVertex = this.internalVertexMap.get(((Enum<?>) e).name());
+            List<Vertex> vertexes = this.internalVertexMap.get(((Enum<?>) e).name());
+            Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
+            previousVertex = vertexes.get(0);
         } else {
-            previousVertex = this.internalVertexMap.get(e);
+            List<Vertex> vertexes = this.internalVertexMap.get(e);
+            Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
+            previousVertex = vertexes.get(0);
         }
         return previousVertex;
     }

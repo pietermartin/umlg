@@ -22,7 +22,7 @@ import org.umlg.tinker.validationtest.TestValidation;
  * Time: 7:18 PM
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({BagTestTest.class})
+@Suite.SuiteClasses({TestEmbeddedTest.class})
 public class Neo4jAnyTest {
 
 }

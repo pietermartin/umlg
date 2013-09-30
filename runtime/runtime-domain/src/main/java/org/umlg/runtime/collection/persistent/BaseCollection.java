@@ -1,15 +1,18 @@
 package org.umlg.runtime.collection.persistent;
 
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
+import org.apache.commons.collections.MultiMap;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.umlg.runtime.adaptor.GraphDb;
 import org.umlg.runtime.adaptor.TransactionThreadEntityVar;
 import org.umlg.runtime.adaptor.TransactionThreadVar;
-import org.umlg.runtime.adaptor.UmlgAdminApp;
 import org.umlg.runtime.collection.*;
 import org.umlg.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator;
@@ -33,7 +36,10 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
     protected Vertex vertex;
     protected Edge edge;
     protected Class<?> parentClass;
-    protected Map<Object, Vertex> internalVertexMap = new HashMap<Object, Vertex>();
+    //The internal map is used to store the vertex representing a primitive or an enumeration
+
+    protected ListMultimap<Object, Vertex> internalVertexMap = ArrayListMultimap.create();
+//    protected Map<Object, Vertex> internalVertexMap = new HashMap<Object, Vertex>();
     protected TumlRuntimeProperty tumlRuntimeProperty;
     protected static final String LABEL_TO_FIRST_HYPER_VERTEX = "labelToFirstHyperVertex";
     protected static final String LABEL_TO_LAST_HYPER_VERTEX = "labelToLastHyperVertex";
@@ -111,7 +117,11 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
     }
 
     protected Vertex removeFromInternalMap(Object key) {
-        return this.internalVertexMap.remove(key);
+        List<Vertex> vertexes = this.internalVertexMap.get(key);
+        Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
+        Vertex vertex = vertexes.get(0);
+        this.internalVertexMap.remove(key, vertex);
+        return vertex;
     }
 
     protected void putToInternalMap(Object key, Vertex vertex) {
