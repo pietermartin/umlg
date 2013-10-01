@@ -6,7 +6,6 @@ import com.google.common.collect.ListMultimap;
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
-import org.apache.commons.collections.MultiMap;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
@@ -37,9 +36,7 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
     protected Edge edge;
     protected Class<?> parentClass;
     //The internal map is used to store the vertex representing a primitive or an enumeration
-
     protected ListMultimap<Object, Vertex> internalVertexMap = ArrayListMultimap.create();
-//    protected Map<Object, Vertex> internalVertexMap = new HashMap<Object, Vertex>();
     protected TumlRuntimeProperty tumlRuntimeProperty;
     protected static final String LABEL_TO_FIRST_HYPER_VERTEX = "labelToFirstHyperVertex";
     protected static final String LABEL_TO_LAST_HYPER_VERTEX = "labelToLastHyperVertex";
@@ -73,7 +70,7 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
                     if (c.isEnum()) {
                         Object value = this.getVertexForDirection(edge).getProperty("value");
                         node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
-                        putToInternalMap(value, this.getVertexForDirection(edge));
+                        putToInternalMap(constructEnumPersistentName((Enum<?>)node), this.getVertexForDirection(edge));
                     } else if (TumlMetaNode.class.isAssignableFrom(c)) {
                         Method m = c.getDeclaredMethod("getInstance", new Class[0]);
                         node = (E) m.invoke(null);
@@ -267,11 +264,11 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
         }
     }
 
-    private void removeFromLinkedList(UmlgNode o) {
+    private void removeFromLinkedList(Vertex v) {
         if (!isUnique()) {
             //Handle duplicates
             //Find hyper vertex
-            Vertex vertexToRemove = o.getVertex();
+            Vertex vertexToRemove = v;
             Vertex hyperVertex = getFirstHyperVertexInListForVertex(vertexToRemove);
 
             Edge edgeToVertexToRemove = hyperVertex.getEdges(Direction.OUT, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX).iterator().next();
@@ -320,7 +317,7 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
             }
         } else {
             //No duplicates to handle, i.e the collection is an ordered set
-            Vertex vertexToRemove = o.getVertex();
+            Vertex vertexToRemove = v;
             //this.vertex has the next and previous links to manage in a inverse situation
             //Check if it is first
             if (vertexToRemove.getEdges(Direction.IN, LABEL_TO_NEXT_IN_SEQUENCE).iterator().hasNext()) {
@@ -394,11 +391,11 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
         return firstHyperVertex;
     }
 
-    private void removeFromInverseLinkedList(UmlgNode o) {
+    private void removeFromInverseLinkedList(Vertex v) {
         if (!isInverseUnique()) {
             //Handle duplicates
             //Find hyper vertex
-            Vertex vertexToRemove = o.getVertex();
+            Vertex vertexToRemove = v;
             //Vertex to remove is the parent in a inverse situation
             Edge edgeToHyperVertex = this.vertex.getEdges(Direction.IN, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX).iterator().next();
             Vertex hyperVertex = edgeToHyperVertex.getVertex(Direction.OUT);
@@ -446,7 +443,7 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
             }
         } else {
             //No duplicates to handle
-            Vertex vertexToRemove = o.getVertex();
+            Vertex vertexToRemove = v;
             //this.vertex has the next and previous links to manage in a inverse situation
             //Check if it is first
             if (this.vertex.getEdges(Direction.IN, LABEL_TO_NEXT_IN_SEQUENCE).iterator().hasNext()) {
@@ -539,10 +536,10 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
                         createAudit(e, true);
                     }
                     if (isOrdered()) {
-                        removeFromLinkedList((UmlgNode) o);
+                        removeFromLinkedList(((UmlgNode) o).getVertex());
                     }
                     if (isInverseOrdered()) {
-                        removeFromInverseLinkedList((UmlgNode) o);
+                        removeFromInverseLinkedList(((UmlgNode) o).getVertex());
                     }
                     GraphDb.getDb().removeEdge(edge);
 
@@ -552,7 +549,13 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
                     break;
                 }
             } else if (o.getClass().isEnum()) {
-                v = removeFromInternalMap(((Enum<?>) o).name());
+                v = removeFromInternalMap(constructEnumPersistentName((Enum<?>)o));
+                if (isOrdered()) {
+                    removeFromLinkedList(v);
+                }
+                if (isInverseOrdered()) {
+                    removeFromInverseLinkedList(v);
+                }
                 GraphDb.getDb().removeVertex(v);
             } else if (isOnePrimitive() || getDataTypeEnum() != null) {
                 this.vertex.removeProperty(getLabel());
@@ -560,6 +563,12 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
                 v = removeFromInternalMap(o);
                 if (this.owner instanceof TinkerAuditableNode) {
                     createAudit(e, true);
+                }
+                if (isOrdered()) {
+                    removeFromLinkedList(v);
+                }
+                if (isInverseOrdered()) {
+                    removeFromInverseLinkedList(v);
                 }
                 GraphDb.getDb().removeVertex(v);
             }
@@ -594,7 +603,7 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
             v = GraphDb.getDb().addVertex(null);
             v.setProperty("value", ((Enum<?>) e).name());
             v.setProperty("className", e.getClass().getName());
-            putToInternalMap(((Enum<?>) e).name(), v);
+            putToInternalMap(constructEnumPersistentName((Enum<?>)e), v);
         } else if (isOnePrimitive()) {
             this.vertex.setProperty(getLabel(), e);
         } else if (getDataTypeEnum() != null && getDataTypeEnum().isDateTime()) {
@@ -836,12 +845,12 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
     protected void addQualifierToIndex(Edge edge, UmlgNode node) {
         // if is qualified update index
         if (isQualified()) {
-            addQualifierToIndex(/*this.index, */edge, this.owner, node, false);
+            addQualifierToIndex(edge, this.owner, node, false);
         }
 
         // if is qualified update index
         if (isInverseQualified()) {
-            addQualifierToIndex(/*index, */edge, node, this.owner, true);
+            addQualifierToIndex(edge, node, this.owner, true);
         }
     }
 
@@ -1241,4 +1250,10 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
         return true;
     }
 
+    protected String constructEnumPersistentName(Enum e) {
+        StringBuilder sb = new StringBuilder(e.getClass().getName());
+        sb.append(".");
+        sb.append(e.name());
+        return  sb.toString();
+    }
 }

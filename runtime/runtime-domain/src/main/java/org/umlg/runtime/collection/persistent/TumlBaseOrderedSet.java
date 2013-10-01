@@ -293,7 +293,7 @@ public abstract class TumlBaseOrderedSet<E> extends BaseCollection<E> implements
             UmlgNode node = (UmlgNode) previous;
             previousVertex = node.getVertex();
         } else if (e.getClass().isEnum()) {
-            List<Vertex> vertexes = this.internalVertexMap.get(((Enum<?>) previous).name());
+            List<Vertex> vertexes = this.internalVertexMap.get(constructEnumPersistentName((Enum<?>) previous));
             Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
             previousVertex = vertexes.get(0);
 //            previousVertex = this.internalVertexMap.get(((Enum<?>) previous).name());
@@ -313,7 +313,7 @@ public abstract class TumlBaseOrderedSet<E> extends BaseCollection<E> implements
             if (c.isEnum()) {
                 Object value = vertex.getProperty("value");
                 node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
-                this.internalVertexMap.put(value, vertex);
+                this.internalVertexMap.put(constructEnumPersistentName((Enum<?>)node), vertex);
             } else if (TumlMetaNode.class.isAssignableFrom(c)) {
                 Method m = c.getDeclaredMethod("getInstance", new Class[0]);
                 node = (E) m.invoke(null);

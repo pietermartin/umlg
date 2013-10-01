@@ -164,19 +164,19 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
     public void testRequiredEmbeddedManyInteger() {
         God g = new God(true);
         g.setName("ANOTHERGOD");
-        org.umlg.embeddedtest.TestEmbedded testEmbedded = new org.umlg.embeddedtest.TestEmbedded(g);
+        TestEmbedded testEmbedded = new TestEmbedded(g);
         testEmbedded.setName("asd");
         db.commit();
         try {
-            org.umlg.embeddedtest.TestEmbedded gt = new org.umlg.embeddedtest.TestEmbedded(testEmbedded.getVertex());
+            TestEmbedded gt = new TestEmbedded(testEmbedded.getVertex());
             Assert.assertEquals(new Integer(1), gt.getManyOrderedRequiredInteger().iterator().next());
             gt.clearManyOrderedRequiredInteger();
             db.commit();
         } catch (Exception e) {
-            junit.framework.Assert.assertTrue("excepting TumlConstraintViolationException", e instanceof TumlConstraintViolationException);
+            Assert.assertTrue("expecting TumlConstraintViolationException", e instanceof TumlConstraintViolationException);
             return;
         }
-        junit.framework.Assert.fail("Expected transaction failed exception");
+        Assert.fail("Expected transaction failed exception");
     }
 
     @Test
@@ -212,8 +212,16 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
         gt.removeFromManyOrderedRequiredInteger(2);
         gt.removeFromManyOrderedRequiredInteger(2);
         db.commit();
+        gt.reload();
         Assert.assertEquals(3, gt.getManyOrderedRequiredInteger().size());
-
+        gt.reload();
+        gt.clearManyOrderedRequiredInteger();
+        gt.addToManyOrderedRequiredInteger(1);
+        gt.addToManyOrderedRequiredInteger(2);
+        gt.addToManyOrderedRequiredInteger(3);
+        db.commit();
+        gt.reload();
+        Assert.assertEquals(3, gt.getManyOrderedRequiredInteger().size());
     }
 
     @Test

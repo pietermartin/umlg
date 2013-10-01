@@ -58,7 +58,7 @@ public class UmlgAssociationClassOrderedSetImpl<AssociationClassNode> extends Ti
                         if (c.isEnum()) {
                             Object value = this.getVertexForDirection(edge).getProperty("value");
                             node = (AssociationClassNode) Enum.valueOf((Class<? extends Enum>) c, (String) value);
-                            putToInternalMap(value, this.getVertexForDirection(edge));
+                            putToInternalMap(constructEnumPersistentName((Enum<?>)node), this.getVertexForDirection(edge));
                         } else if (UmlgNode.class.isAssignableFrom(c)) {
                             node = (AssociationClassNode) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
                         } else {
@@ -122,7 +122,7 @@ public class UmlgAssociationClassOrderedSetImpl<AssociationClassNode> extends Ti
             if (c.isEnum()) {
                 Object value = associationClassVertex.getProperty("value");
                 node = (AssociationClassNode) Enum.valueOf((Class<? extends Enum>) c, (String) value);
-                this.internalVertexMap.put(value, associationClassVertex);
+                this.internalVertexMap.put(constructEnumPersistentName((Enum<?>)node), associationClassVertex);
             } else if (TumlMetaNode.class.isAssignableFrom(c)) {
                 Method m = c.getDeclaredMethod("getInstance", new Class[0]);
                 node = (AssociationClassNode) m.invoke(null);

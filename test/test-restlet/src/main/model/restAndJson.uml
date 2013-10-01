@@ -131,6 +131,11 @@
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_BGWtoHbKEeKXTvZLiS6_pA"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_BGWtoXbKEeKXTvZLiS6_pA" value="*"/>
             </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_oQfkYCrQEeOJbevgaGUOXQ" name="manyList" visibility="public" isOrdered="true" isUnique="false">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_rQl4UCrQEeOJbevgaGUOXQ"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_rQnGcCrQEeOJbevgaGUOXQ" value="*"/>
+            </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Class" xmi:id="_47QggN4jEeGdB9TPHp60mw" name="Ring">
             <generalization xmi:type="uml:Generalization" xmi:id="_NBKjICXTEeKbPYSfIbmXag">

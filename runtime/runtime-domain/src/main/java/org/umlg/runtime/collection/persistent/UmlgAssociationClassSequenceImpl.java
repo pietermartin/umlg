@@ -59,7 +59,7 @@ public class UmlgAssociationClassSequenceImpl<AssociationClassNode> extends Tink
                         if (c.isEnum()) {
                             Object value = this.getVertexForDirection(edge).getProperty("value");
                             node = (AssociationClassNode) Enum.valueOf((Class<? extends Enum>) c, (String) value);
-                            putToInternalMap(value, this.getVertexForDirection(edge));
+                            putToInternalMap(constructEnumPersistentName((Enum<?>)node), this.getVertexForDirection(edge));
                         } else if (UmlgNode.class.isAssignableFrom(c)) {
                             node = (AssociationClassNode) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
                         } else {
@@ -132,7 +132,7 @@ public class UmlgAssociationClassSequenceImpl<AssociationClassNode> extends Tink
             if (c.isEnum()) {
                 Object value = vertexToLoad.getProperty("value");
                 node = (AssociationClassNode) Enum.valueOf((Class<? extends Enum>) c, (String) value);
-                this.internalVertexMap.put(value, vertexToLoad);
+                this.internalVertexMap.put(constructEnumPersistentName((Enum<?>)node), vertexToLoad);
             } else if (TumlMetaNode.class.isAssignableFrom(c)) {
                 Method m = c.getDeclaredMethod("getInstance", new Class[0]);
                 node = (AssociationClassNode) m.invoke(null);

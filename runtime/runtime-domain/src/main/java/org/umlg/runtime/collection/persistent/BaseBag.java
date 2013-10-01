@@ -1,10 +1,8 @@
 package org.umlg.runtime.collection.persistent;
 
 import com.google.common.collect.HashMultiset;
-import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multiset;
 import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.Vertex;
 import org.umlg.runtime.collection.TinkerBag;
 import org.umlg.runtime.collection.TinkerSet;
 import org.umlg.runtime.collection.TumlRuntimeProperty;
@@ -14,13 +12,12 @@ import org.umlg.runtime.collection.ocl.OclStdLibBag;
 import org.umlg.runtime.collection.ocl.OclStdLibBagImpl;
 import org.umlg.runtime.domain.UmlgNode;
 
-import java.util.List;
 import java.util.Set;
 
 public abstract class BaseBag<E> extends BaseCollection<E> implements TinkerBag<E>, OclStdLibBag<E> {
 
 	protected OclStdLibBag<E> oclStdLibBag;
-	protected LinkedListMultimap<Object, Vertex> internalVertexMultiMap = LinkedListMultimap.create();
+//	protected LinkedListMultimap<Object, Vertex> internalVertexMultiMap = LinkedListMultimap.create();
 	
 	public BaseBag(TumlRuntimeProperty runtimeProperty) {
 		super(runtimeProperty);
@@ -41,21 +38,21 @@ public abstract class BaseBag<E> extends BaseCollection<E> implements TinkerBag<
         throw new RuntimeException("addToLinkedList and manageLinkedListInverse should never be called for a BaseSet!");
     }
 	
-	protected Vertex removeFromInternalMap(Object o) {
-		List<Vertex> vertexList = this.internalVertexMultiMap.get(o);
-		if (!vertexList.isEmpty()) {
-			Vertex vertex = vertexList.get(0);
-			this.internalVertexMultiMap.remove(o, vertex);
-			return vertex;
-		} else {
-			return null;
-		}
-	}
-
-	@Override
-	protected void putToInternalMap(Object key, Vertex vertex) {
-		this.internalVertexMultiMap.put(key, vertex);
-	}
+//	protected Vertex removeFromInternalMap(Object o) {
+//		List<Vertex> vertexList = this.internalVertexMultiMap.get(o);
+//		if (!vertexList.isEmpty()) {
+//			Vertex vertex = vertexList.get(0);
+//			this.internalVertexMultiMap.remove(o, vertex);
+//			return vertex;
+//		} else {
+//			return null;
+//		}
+//	}
+//
+//	@Override
+//	protected void putToInternalMap(Object key, Vertex vertex) {
+//		this.internalVertexMultiMap.put(key, vertex);
+//	}
 
 	protected Multiset<E> getInternalBag() {
 		return (Multiset<E>) this.internalCollection;

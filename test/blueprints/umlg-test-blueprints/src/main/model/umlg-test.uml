@@ -301,6 +301,10 @@
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_l0EtgIi3EeKeSZB9UA6Gvw"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_l0GisIi3EeKeSZB9UA6Gvw" value="1"/>
             </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_0lrRcCpZEeOKybaUoQcxlg" name="testOrderedEnumeration" type="_xM4JoCpZEeOKybaUoQcxlg" aggregation="composite" association="_0lr4gCpZEeOKybaUoQcxlg">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_0lrRcSpZEeOKybaUoQcxlg"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_0lrRcipZEeOKybaUoQcxlg" value="*"/>
+            </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Class" xmi:id="_FTxxYOzqEeCemKc79Sc_aw" name="Universe">
             <generalization xmi:type="uml:Generalization" xmi:id="_LJ6HkCXIEeKbPYSfIbmXag">
@@ -426,6 +430,12 @@
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_1BP30zAOEeK9AeutZ8kzPA" value="1"/>
             </ownedEnd>
           </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_0lr4gCpZEeOKybaUoQcxlg" name="god_testOrderedEnumeration_1" memberEnd="_0lr4gSpZEeOKybaUoQcxlg _0lrRcCpZEeOKybaUoQcxlg">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_0lr4gSpZEeOKybaUoQcxlg" name="god" type="_YuD8sOwiEeCSwqyeEHd1tw" association="_0lr4gCpZEeOKybaUoQcxlg">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_0lr4gipZEeOKybaUoQcxlg" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_0lr4gypZEeOKybaUoQcxlg" value="1"/>
+            </ownedEnd>
+          </packagedElement>
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_YhQcgO6jEeCKZsw1ityolg" name="inheritencetest">
           <packagedElement xmi:type="uml:Class" xmi:id="_cikV0O6jEeCKZsw1ityolg" name="AbstractSpecies" isAbstract="true">
@@ -457,6 +467,9 @@
           </packagedElement>
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_Km9o4O7EEeCKZsw1ityolg" name="embeddedtest">
+          <ownedComment xmi:type="uml:Comment" xmi:id="_jqtq4Cq2EeOJbevgaGUOXQ" annotatedElement="_YAjw4Cq2EeOJbevgaGUOXQ">
+            <body>This is modelled to duplicate a bug, where the BaseCollection's internalVertexMap was using the literal's name which is not necessary unique. Replaced it with the qualified name.</body>
+          </ownedComment>
           <packagedElement xmi:type="uml:Enumeration" xmi:id="_PeTyUO7EEeCKZsw1ityolg" name="REASON">
             <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_Qz6TUO7EEeCKZsw1ityolg" name="GOOD"/>
             <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_RvS9gO7EEeCKZsw1ityolg" name="BAD"/>
@@ -505,6 +518,38 @@
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_AoyUYIKdEeKT8t6_7PBWIQ"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Ao5pIIKdEeKT8t6_7PBWIQ" value="*"/>
             </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_xM4JoCpZEeOKybaUoQcxlg" name="TestOrderedEnumeration">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_0rfMQCpeEeOJbevgaGUOXQ" name="testOrderedEnumBug" type="_79GyACpZEeOKybaUoQcxlg" isOrdered="true" isUnique="false" association="_0rfzUCpeEeOJbevgaGUOXQ">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_0rfMQSpeEeOJbevgaGUOXQ"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_0rfMQipeEeOJbevgaGUOXQ" value="*"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_b-CTECq2EeOJbevgaGUOXQ" name="testEnumLiteralDuplicateName" type="_YAjw4Cq2EeOJbevgaGUOXQ" association="_b-CTEyq2EeOJbevgaGUOXQ">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_b-CTESq2EeOJbevgaGUOXQ"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_b-CTEiq2EeOJbevgaGUOXQ" value="*"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Enumeration" xmi:id="_79GyACpZEeOKybaUoQcxlg" name="TestOrderedEnumBug">
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_-hXegCpZEeOKybaUoQcxlg" name="EnumerationLiteral1"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_-7IpYCpZEeOKybaUoQcxlg" name="EnumerationLiteral2"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="__OnmECpZEeOKybaUoQcxlg" name="EnumerationLiteral3"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_0rfzUCpeEeOJbevgaGUOXQ" name="testOrderedEnumeration_testOrderedEnumBug_1" memberEnd="_0rfzUSpeEeOJbevgaGUOXQ _0rfMQCpeEeOJbevgaGUOXQ">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_0rfzUSpeEeOJbevgaGUOXQ" name="testOrderedEnumeration" type="_xM4JoCpZEeOKybaUoQcxlg" association="_0rfzUCpeEeOJbevgaGUOXQ">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_0rfzUipeEeOJbevgaGUOXQ" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_0rfzUypeEeOJbevgaGUOXQ" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Enumeration" xmi:id="_YAjw4Cq2EeOJbevgaGUOXQ" name="TestEnumLiteralDuplicateName">
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_ac4pYCq2EeOJbevgaGUOXQ" name="EnumerationLiteral1"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_a0YjYCq2EeOJbevgaGUOXQ" name="EnumerationLiteral2"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_bGdx4Cq2EeOJbevgaGUOXQ" name="EnumerationLiteral3"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_b-CTEyq2EeOJbevgaGUOXQ" name="testOrderedEnumeration_testEnumLiteralDuplicateName_1" memberEnd="_b-CTFCq2EeOJbevgaGUOXQ _b-CTECq2EeOJbevgaGUOXQ">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_b-CTFCq2EeOJbevgaGUOXQ" name="testOrderedEnumeration" type="_xM4JoCpZEeOKybaUoQcxlg" association="_b-CTEyq2EeOJbevgaGUOXQ">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_b-CTFSq2EeOJbevgaGUOXQ" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_b-CTFiq2EeOJbevgaGUOXQ" value="1"/>
+            </ownedEnd>
           </packagedElement>
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_-S1C4O91EeC2XrXxx1atfA" name="hierarchytest">

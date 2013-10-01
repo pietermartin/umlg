@@ -35,7 +35,7 @@ public class TinkerBagClosableIterableImpl<E> extends BaseBag<E> implements Tink
 				if (c.isEnum()) {
 					Object value = this.getVertexForDirection(edge).getProperty("value");
 					node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
-					this.internalVertexMap.put(value, this.getVertexForDirection(edge));
+					this.internalVertexMap.put(constructEnumPersistentName((Enum<?>)node), this.getVertexForDirection(edge));
                 } else if (TumlMetaNode.class.isAssignableFrom(c)) {
                     Method m = c.getDeclaredMethod("getInstance", new Class[0]);
                     node = (E) m.invoke(null);

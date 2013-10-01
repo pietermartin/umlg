@@ -48,7 +48,7 @@ public class UmlgPropertyAssociationClassBagImpl<E, AC extends AssociationClassN
             v = node.getVertex();
             removeEdge(v);
         } else if (o.getClass().isEnum()) {
-            v = removeFromInternalMap(((Enum<?>) o).name());
+            v = removeFromInternalMap(constructEnumPersistentName((Enum<?>) o));
             removeEdge(v);
             GraphDb.getDb().removeVertex(v);
         } else if (isOnePrimitive() || getDataTypeEnum() != null) {

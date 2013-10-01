@@ -148,7 +148,7 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
             if (c.isEnum()) {
                 Object value = vertexToLoad.getProperty("value");
                 node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
-                this.internalVertexMap.put(value, vertexToLoad);
+                this.internalVertexMap.put(constructEnumPersistentName((Enum<?>)node), vertexToLoad);
             } else if (TumlMetaNode.class.isAssignableFrom(c)) {
                 Method m = c.getDeclaredMethod("getInstance", new Class[0]);
                 node = (E) m.invoke(null);
@@ -292,7 +292,7 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
             UmlgNode node = (UmlgNode) e;
             previousVertex = node.getVertex();
         } else if (e.getClass().isEnum()) {
-            List<Vertex> vertexes = this.internalVertexMap.get(((Enum<?>) e).name());
+            List<Vertex> vertexes = this.internalVertexMap.get(constructEnumPersistentName((Enum<?>) e));
             Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
             previousVertex = vertexes.get(0);
         } else {

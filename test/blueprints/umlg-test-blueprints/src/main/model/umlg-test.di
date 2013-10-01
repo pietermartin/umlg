@@ -87,9 +87,6 @@
           <emfPageIdentifier href="umlg-test.notation#_1chENgAOEeKpVr_ntT6cLA"/>
         </children>
         <children>
-          <emfPageIdentifier href="umlg-test.notation#_HkiPsIlaEeKeSZB9UA6Gvw"/>
-        </children>
-        <children>
           <emfPageIdentifier href="umlg-test.notation#_rs5lAIlaEeKeSZB9UA6Gvw"/>
         </children>
         <children>
@@ -109,6 +106,9 @@
         </children>
         <children>
           <emfPageIdentifier href="umlg-test.notation#_1chrQgAOEeKpVr_ntT6cLA"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="umlg-test.notation#_1chrTAAOEeKpVr_ntT6cLA"/>
         </children>
       </children>
     </windows>

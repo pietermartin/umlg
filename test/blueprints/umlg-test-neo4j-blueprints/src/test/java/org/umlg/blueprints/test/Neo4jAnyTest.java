@@ -2,20 +2,8 @@ package org.umlg.blueprints.test;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
-import org.umlg.enumeration.test.ManyEnumerationTest;
-import org.umlg.gremlin.TestGremlinExecutor;
-import org.umlg.tinker.collectiontest.BagTestTest;
-import org.umlg.tinker.collectiontest.OclStdLibCollectionTest;
-import org.umlg.tinker.collectiontest.SequenceTest;
-import org.umlg.tinker.concretetest.TestOneToMany;
-import org.umlg.tinker.deletiontest.DeletionTest;
 import org.umlg.tinker.embeddedtest.TestEmbeddedTest;
-import org.umlg.tinker.lookup.TestOneLookup;
-import org.umlg.tinker.nonnavigable.NonNavigableTest;
-import org.umlg.tinker.qualifiertest.TestQualifier;
-import org.umlg.tinker.qualifiertest.TestQualifierOnManyToMany;
-import org.umlg.tinker.query.TestMetaQueries;
-import org.umlg.tinker.validationtest.TestValidation;
+import org.umlg.tinker.enumeration.ManyEnumerationTest;
 
 /**
  * Date: 2013/01/28

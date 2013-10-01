@@ -56,7 +56,7 @@ public class UmlgAssociationClassSetImpl<AssociationClassNode> extends TinkerSet
                         if (c.isEnum()) {
                             Object value = this.getVertexForDirection(edge).getProperty("value");
                             node = (AssociationClassNode) Enum.valueOf((Class<? extends Enum>) c, (String) value);
-                            putToInternalMap(value, this.getVertexForDirection(edge));
+                            putToInternalMap(constructEnumPersistentName((Enum<?>)node), this.getVertexForDirection(edge));
                         } else if (UmlgNode.class.isAssignableFrom(c)) {
                             node = (AssociationClassNode) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
                         } else {
