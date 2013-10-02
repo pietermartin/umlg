@@ -185,6 +185,8 @@ public class TinkerGenerationUtil {
                 return "Boolean";
             } else if (primitiveType.getName().equals("UnlimitedNatural")) {
                 return "Long";
+            } else if (primitiveType.getName().equals("Real")) {
+                return "Double";
             } else {
                 throw new IllegalStateException("unknown primitive " + primitiveType.getName());
             }

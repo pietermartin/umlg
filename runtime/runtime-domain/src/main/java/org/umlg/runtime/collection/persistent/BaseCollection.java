@@ -593,12 +593,8 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
                     throw new IllegalStateException("Its a 1");
                 }
                 this.handleInverseSide(node, tumlRuntimeProperty, true, this.owner);
-
-            } else {
-
-                this.handleInverseSide(node, tumlRuntimeProperty, true, this.owner);
-
             }
+            this.handleInverseSide(node, tumlRuntimeProperty, true, this.owner);
         } else if (e.getClass().isEnum()) {
             v = GraphDb.getDb().addVertex(null);
             v.setProperty("value", ((Enum<?>) e).name());

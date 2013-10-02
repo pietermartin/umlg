@@ -120,6 +120,10 @@
           <element xmi:type="uml:Property" href="restAndJson.uml#_0LHjAAc7EeKnuck7rKo4mA"/>
           <layoutConstraint xmi:type="notation:Location" xmi:id="_0LJ_QQc7EeKnuck7rKo4mA"/>
         </children>
+        <children xmi:type="notation:Shape" xmi:id="_39OO0CuHEeOJbevgaGUOXQ" type="3012" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:Property" href="restAndJson.uml#_39NnwCuHEeOJbevgaGUOXQ"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_39OO0SuHEeOJbevgaGUOXQ"/>
+        </children>
       </children>
       <children xmi:type="notation:BasicCompartment" xmi:id="_q5-SgQAOEeKpVr_ntT6cLA" type="7019"/>
       <children xmi:type="notation:DecorationNode" xmi:id="_q8XfMAAOEeKpVr_ntT6cLA" type="5029"/>

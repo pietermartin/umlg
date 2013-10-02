@@ -71,6 +71,8 @@ public class TumlRestletGenerationUtil {
                 return "FieldType.Boolean";
             } else if (primitiveType.getName().equals("UnlimitedNatural")) {
                 return "FieldType.Long";
+            } else if (primitiveType.getName().equals("Real")) {
+                return "FieldType.Real";
             } else {
                 throw new IllegalStateException("unknown primitive " + primitiveType.getName());
             }

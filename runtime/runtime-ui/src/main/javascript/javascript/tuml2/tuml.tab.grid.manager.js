@@ -404,12 +404,14 @@
             this.createContextMenu();
 
             this.grid.onContextMenu.subscribe(
-                function (e) {
+                function (e, args) {
                     e.preventDefault();
-                    var cell = self.grid.getCellFromEvent(e);
-                    //not sure if it is a good idea to move the active cell???
-//                    self.grid.setActiveCell(cell.row, cell.cell);
-                    self.showContextMenu(cell, e.pageX, e.pageY);
+                    var cell = args.grid.getCellFromEvent(e);
+                    //Do not show the context menu for new rows.
+                    //TODO think about showing the context menu for new rows in order to navigate to 'self'
+                    if (!self.dataView.isNewRow(self.dataView.getItemByIdx(cell.row).id)) {
+                        self.showContextMenu(cell, e.pageX, e.pageY);
+                    }
                 }
             );
 
@@ -721,7 +723,7 @@
                     var property = metaForData.properties[i];
                     if (property.name == columnId && property.fieldType == 'String') {
                         return "<input type='text'>";
-                    } else if (property.name == columnId && (property.fieldType == 'Integer' || property.fieldType == 'Long')) {
+                    } else if (property.name == columnId && (property.fieldType == 'Integer' || property.fieldType == 'Long' || property.fieldType == 'Real')) {
                         return "<input type='text'>";
                     } else if (property.name == columnId && property.fieldType == 'Boolean') {
                         //return "<INPUT type=checkbox value='true' class='editor-checkbox' hideFocus>";
@@ -779,7 +781,7 @@
                                     if (item[c.field] !== undefined && item[c.field].indexOf(columnFilters[columnId]) == -1) {
                                         return false;
                                     }
-                                } else if (property.fieldType == 'Integer' || property.fieldType == 'Long') {
+                                } else if (property.fieldType == 'Integer' || property.fieldType == 'Long' || property.fieldType == 'Real') {
                                     if (item[c.field] != columnFilters[columnId]) {
                                         return false;
                                     }
@@ -875,7 +877,11 @@
             var result = {cssClasses: null, columns: null};
             var column = {};
 
-            var isNew = self.dataView.isRowNew(row);
+            //This indicates that a new row has been saved
+            //It is used to color in the id cell to indicate the successful creation
+            var isNew = self.dataView.isRowSaved(row);
+            //This indicates that an existing row has been saved
+            //It is used to color in the id cell to indicate the successful update
             var isUpdated = self.dataView.isRowUpdated(row);
 
             for (var i = 0; i < self.localMetaForData.properties.length; i++) {

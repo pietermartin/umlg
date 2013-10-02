@@ -251,7 +251,6 @@
         if (property.name === 'id') {
             var id = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').val();
             if (id.indexOf('fake') === -1) {
-//                this.data.id = parseInt(id);
                 this.data.id = id;
             } else {
                 this.data.id = id;
@@ -267,6 +266,12 @@
                         this.data[property.name] = null;
                     } else {
                         this.data[property.name] = parseInt(stringValue);
+                    }
+                } else if (property.fieldType == 'Real') {
+                    if (stringValue == '') {
+                        this.data[property.name] = null;
+                    } else {
+                        this.data[property.name] = parseFloat(stringValue);
                     }
                 } else if (property.fieldType == 'String') {
                     if (stringValue == '') {
@@ -295,10 +300,14 @@
                 }
             } else if (property.manyPrimitive) {
                 var inputValue = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').val();
-                var array = inputValue.split(',');
+                var array = inputValue === '' ? [] : inputValue.split(',');
                 if (property.fieldType == 'Integer' || property.fieldType == 'Long') {
                     for (var j = 0; j < array.length; j++) {
                         array[j] = parseInt(array[j], 10);
+                    }
+                } else if (property.fieldType == 'Real') {
+                    for (var j = 0; j < array.length; j++) {
+                        array[j] = parseFloat(array[j]);
                     }
                 } else if (property.fieldType == 'Boolean') {
                     for (var j = 0; j < array.length; j++) {
@@ -323,7 +332,6 @@
                                 //it expects something or nothing
                                 optionId = null;
                             }
-//                            this.data[property.name] = {id: parseInt(optionId), displayName: options[j].label, previousId: this.data[property.name].id};
                             this.data[property.name] = {id: optionId, displayName: options[j].label, previousId: this.data[property.name].id};
                         } else {
                             this.data[property.name] = {id: optionId, displayName: options[j].label, previousId: this.data[property.name].id};
@@ -409,14 +417,18 @@
             $input = $('<input />', {type: 'text', class: 'field', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
             $input.button().addClass('ui-textfield');
             if (!this.isForCreation) {
-//                $input[0].defaultValue = this.data[property.name];
                 $input[0].defaultValue = (this.data[property.name] === null ? '' : this.data[property.name]);
             }
         } else if (property.fieldType == 'Long') {
             $input = $('<input />', {type: 'text', class: 'field', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
             $input.button().addClass('ui-textfield');
             if (!this.isForCreation) {
-//                $input[0].defaultValue = this.data[property.name];
+                $input[0].defaultValue = (this.data[property.name] === null ? '' : this.data[property.name]);
+            }
+        } else if (property.fieldType == 'Real') {
+            $input = $('<input />', {type: 'text', class: 'field', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
+            $input.button().addClass('ui-textfield');
+            if (!this.isForCreation) {
                 $input[0].defaultValue = (this.data[property.name] === null ? '' : this.data[property.name]);
             }
         } else if (property.fieldType == 'Boolean') {
@@ -559,6 +571,11 @@
                     input.val(this.data[property.name]);
                 }
             } else if (property.fieldType == 'Long') {
+                var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+                if (this.data[property.name] !== undefined) {
+                    input.val(this.data[property.name]);
+                }
+            } else if (property.fieldType == 'Real') {
                 var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
                 if (this.data[property.name] !== undefined) {
                     input.val(this.data[property.name]);
@@ -796,7 +813,7 @@
             var tmpSerializedValue = [];
             for (var i = 0; i < stringValueArray.length; i++) {
                 var tmpValue = stringValueArray[i];
-                if (property.fieldType === 'Integer') {
+                if (property.fieldType === 'Integer' || property.fieldType === 'Long') {
                     if (isNaN(tmpValue)) {
                         validationResult = {valid: false, msg: 'Please enter a valid number.'};
                     } else {
@@ -804,6 +821,16 @@
                             validationResult = {valid: false, msg: 'Duplicates are not allowed.'};
                         } else {
                             tmpSerializedValue.push(parseInt(tmpValue));
+                        }
+                    }
+                } else if (property.fieldType === 'Real') {
+                    if (isNaN(tmpValue)) {
+                        validationResult = {valid: false, msg: 'Please enter a valid number.'};
+                    } else {
+                        if (property.unique && tmpSerializedValue.indexOf(parseFloat(tmpValue)) !== -1) {
+                            validationResult = {valid: false, msg: 'Duplicates are not allowed.'};
+                        } else {
+                            tmpSerializedValue.push(parseFloat(tmpValue));
                         }
                     }
                 } else if (property.fieldType === 'Boolean') {

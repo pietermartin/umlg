@@ -577,13 +577,21 @@
             refresh();
         }
 
-        function isRowNew(index) {
+        /**
+         * This method can only be called after a commit or rollback.
+         * @param index
+         * @returns {boolean}
+         */
+        function isRowSaved(index) {
             return postNewIdxById[index] !== undefined && postNewIdxById[index] !== null;
-
         }
 
         function isRowUpdated(index) {
             return postUpdatedIdxById[index] !== undefined && postUpdatedIdxById[index] !== null;
+        }
+
+        function isNewRow(index) {
+            return newIdxById[index] !== undefined && newIdxById[index] !== null;
         }
 
         function addItem(item) {
@@ -1231,7 +1239,9 @@
             "getNewItems": getNewItems,
             "getDeletedItems": getDeletedItems,
             "setNewItems": setNewItems,
-            "isRowNew": isRowNew,
+            "isRowSaved": isRowSaved,
+            "isNewRow": isNewRow,
+
             "isRowUpdated": isRowUpdated ,
             "refreshItemAfterCommit": refreshItemAfterCommit,
             "refreshItemAfterRollback": refreshItemAfterRollback,

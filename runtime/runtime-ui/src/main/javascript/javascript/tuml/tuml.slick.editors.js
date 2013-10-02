@@ -11,6 +11,7 @@
             "Slick": {
                 "Editors": {
                     "Integer": IntegerEditor,
+                    "Double": DoubleEditor,
                     "Text": TextEditor,
                     "SelectOneToOneCellEditor": SelectOneToOneCellEditor,
                     "SelectToOneAssociationClassCellEditor": SelectToOneAssociationClassCellEditor,
@@ -233,7 +234,7 @@
     function ManyBooleanPrimitiveEditor(args) {
         this.args = args;
         if (this.args !== undefined) {
-            this.init();
+            this.init();                                  sync
         }
     }
 
@@ -482,6 +483,79 @@
 
         function serializeValueWithValue(input) {
             return parseInt(input.val(), 10) || 0;
+        }
+
+        this.applyValue = function (item, state) {
+            item[args.column.field] = state;
+        };
+
+        this.isValueChanged = function () {
+            return (!($input.val() == "" && defaultValue == null)) && ($input.val() != defaultValue);
+        };
+
+        this.validate = function () {
+            if (args.column.validator) {
+                var validationResults = args.column.validator($input.val());
+                if (!validationResults.valid) {
+                    return validationResults;
+                }
+            }
+
+            return {
+                valid: true,
+                msg: null
+            };
+        };
+
+        //This is called from the grid, the one only uses the serializeValueWithValue function
+        if (args !== undefined) {
+            this.init();
+        }
+    }
+
+    function DoubleEditor(args) {
+        //Public api
+        $.extend(this, {
+            "TumlDoubleEditor": "1.0.0",
+            "serializeValueWithValue": serializeValueWithValue
+        });
+        var $input;
+        var defaultValue;
+
+        this.init = function () {
+            $input = $("<INPUT type=text class='editor-text' />");
+
+            $input.bind("keydown.nav", function (e) {
+                if (e.keyCode === $.ui.keyCode.LEFT || e.keyCode === $.ui.keyCode.RIGHT) {
+                    e.stopImmediatePropagation();
+                }
+            });
+
+            $input.appendTo(args.container);
+            $input.focus().select();
+        };
+
+        this.destroy = function () {
+            $input.remove();
+        };
+
+        this.focus = function () {
+            $input.focus();
+        };
+
+        this.loadValue = function (item) {
+            defaultValue = item[args.column.field];
+            $input.val(defaultValue);
+            $input[0].defaultValue = defaultValue;
+            $input.select();
+        };
+
+        this.serializeValue = function () {
+            return serializeValueWithValue($input);
+        };
+
+        function serializeValueWithValue(input) {
+            return parseFloat(input.val()) || 0;
         }
 
         this.applyValue = function (item, state) {
