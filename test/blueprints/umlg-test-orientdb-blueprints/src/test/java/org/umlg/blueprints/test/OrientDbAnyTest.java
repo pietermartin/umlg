@@ -19,7 +19,7 @@ import org.umlg.tinker.query.TestMetaQueries;
  * Time: 7:18 PM
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({TestQualifiedDeletion.class})
+@Suite.SuiteClasses({DeletionTest.class})
 public class OrientDbAnyTest {
 
 }
