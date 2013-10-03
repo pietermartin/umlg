@@ -3,9 +3,9 @@ package org.umlg.test.onetoone;
 import junit.framework.Assert;
 import org.junit.Test;
 import org.umlg.runtime.test.BaseLocalDbTest;
-import org.umlg.test.Alien;
-import org.umlg.test.SpaceCraft;
-import org.umlg.test.TerrestrialCraft;
+import org.umlg.test.standard.Alien;
+import org.umlg.test.standard.SpaceCraft;
+import org.umlg.test.standard.TerrestrialCraft;
 
 /**
  * Date: 2013/05/19

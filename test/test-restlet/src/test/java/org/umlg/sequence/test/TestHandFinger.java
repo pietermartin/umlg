@@ -2,7 +2,7 @@ package org.umlg.sequence.test;
 
 import org.junit.Test;
 import org.umlg.runtime.test.BaseLocalDbTest;
-import org.umlg.test.*;
+import org.umlg.test.standard.*;
 
 /**
  * Date: 2013/05/05

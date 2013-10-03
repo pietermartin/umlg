@@ -2,8 +2,8 @@ package org.test.restlet;
 
 import org.umlg.runtime.adaptor.DefaultDataCreator;
 import org.umlg.runtime.adaptor.GraphDb;
-import org.umlg.test.*;
 import org.umlg.test.manytomany.*;
+import org.umlg.test.standard.*;
 
 /**
  * Date: 2012/12/31

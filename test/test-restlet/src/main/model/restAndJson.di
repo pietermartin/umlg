@@ -31,6 +31,9 @@
     <availablePage>
       <emfPageIdentifier href="restAndJson.notation#_1wdkUPCXEeKXi9pM4yg14w"/>
     </availablePage>
+    <availablePage>
+      <emfPageIdentifier href="restAndJson.notation#_KHEDQCvvEeOJbevgaGUOXQ"/>
+    </availablePage>
   </pageList>
   <sashModel xmi:id="_q7tX4gAOEeKpVr_ntT6cLA" currentSelection="_q7tX4AAOEeKpVr_ntT6cLA">
     <windows xmi:id="_q7tX4QAOEeKpVr_ntT6cLA">
@@ -55,6 +58,12 @@
         </children>
         <children>
           <emfPageIdentifier href="restAndJson.notation#_1wdkUPCXEeKXi9pM4yg14w"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="restAndJson.notation#_wUPMMPCXEeKXi9pM4yg14w"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="restAndJson.notation#_KHEDQCvvEeOJbevgaGUOXQ"/>
         </children>
       </children>
     </windows>

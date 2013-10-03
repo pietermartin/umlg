@@ -9,10 +9,10 @@ import org.umlg.runtime.collection.TinkerOrderedSet;
 import org.umlg.runtime.collection.TinkerSequence;
 import org.umlg.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.umlg.runtime.test.BaseLocalDbTest;
-import org.umlg.test.Finger;
-import org.umlg.test.Hand;
-import org.umlg.test.Human;
-import org.umlg.test.Ring;
+import org.umlg.test.standard.Finger;
+import org.umlg.test.standard.Hand;
+import org.umlg.test.standard.Human;
+import org.umlg.test.standard.Ring;
 
 /**
  * Date: 2013/02/13
