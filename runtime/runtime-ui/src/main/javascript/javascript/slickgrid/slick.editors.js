@@ -92,7 +92,6 @@
   function IntegerEditor(args) {
     var $input;
     var defaultValue;
-    var scope = this;
 
     this.init = function () {
       $input = $("<INPUT type=text class='editor-text' />");
