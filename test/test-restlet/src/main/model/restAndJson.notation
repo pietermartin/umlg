@@ -3400,6 +3400,10 @@
           <element xmi:type="uml:Property" href="restAndJson.uml#_N7AZgCvwEeOJbevgaGUOXQ"/>
           <layoutConstraint xmi:type="notation:Location" xmi:id="_N7BnoSvwEeOJbevgaGUOXQ"/>
         </children>
+        <children xmi:type="notation:Shape" xmi:id="_T5rkcC0OEeOJbevgaGUOXQ" type="3012" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:Property" href="restAndJson.uml#_T5qWUC0OEeOJbevgaGUOXQ"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_T5rkcS0OEeOJbevgaGUOXQ"/>
+        </children>
         <styles xmi:type="notation:TitleStyle" xmi:id="_N-lueCvvEeOJbevgaGUOXQ"/>
         <styles xmi:type="notation:SortingStyle" xmi:id="_N-lueSvvEeOJbevgaGUOXQ"/>
         <styles xmi:type="notation:FilteringStyle" xmi:id="_N-lueivvEeOJbevgaGUOXQ"/>

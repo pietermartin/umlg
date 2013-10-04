@@ -889,6 +889,8 @@
                 self.grid.resetActiveCell();
 //                self.grid.setData(data);
                 self.grid.setSelectedRows(selectedRows);
+                self.dataView.updateNewIdxById(insertBefore);
+                self.dataView.updateUpdatedIdxById(insertBefore);
                 self.grid.render();
             });
 

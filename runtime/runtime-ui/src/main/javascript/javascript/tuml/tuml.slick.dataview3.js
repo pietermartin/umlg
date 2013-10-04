@@ -111,7 +111,8 @@
             startingIndex = startingIndex || 0;
             var id;
             for (var i = startingIndex, l = items.length; i < l; i++) {
-                id = items[i][idProperty];
+                var item = items[i];
+                id = item[idProperty];
                 if (id === undefined) {
                     throw "Each data element must implement a unique 'id' property";
                 }
@@ -596,11 +597,12 @@
 
         function addItem(item) {
             items.push(item);
-            updateIdxById(items.length - 1);
+//            updateIdxById(items.length - 1);
             //umlg
             //cache of new items
             newItems.push(item);
             newIdxById[item[idProperty]] = newItems.length - 1;
+            updateIdxById(items.length - 1);
             //umlg
             refresh();
         }
@@ -1245,7 +1247,9 @@
             "isRowUpdated": isRowUpdated ,
             "refreshItemAfterCommit": refreshItemAfterCommit,
             "refreshItemAfterRollback": refreshItemAfterRollback,
-            "clearArraysAfterCommit": clearArraysAfterCommit
+            "clearArraysAfterCommit": clearArraysAfterCommit,
+            "updateNewIdxById" : updateNewIdxById,
+            "updateUpdatedIdxById" : updateUpdatedIdxById
             //umlg
         });
     }
