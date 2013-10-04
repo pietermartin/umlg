@@ -43,9 +43,9 @@ public class TumlGuiServerResource extends ServerResource {
             uri = withHostRef.replace("/ui2", "");
         }
         dataModel.put("app", new App().setRootUrl(ModelLoader.INSTANCE.getModel().getName()).setUri(uri).setUmlgLib(ModelLoader.INSTANCE.isUmlGLibIncluded()));
-        Representation umlgUiFtl = new ClientResource("clap:///org/umlg/ui/umlgui2.html").get();
+//        Representation umlgUiFtl = new ClientResource("clap:///org/umlg/ui/umlgui2.html").get();
 
-        File umlgui2 = new File("/home/pieter/Downloads/umlg/runtime/runtime-ui/src/main/resources/org/umlg/ui/umlgui2.html");
+        File umlgui2 = new File("./runtime/runtime-ui/src/main/resources/org/umlg/ui/umlgui2.html");
         FileRepresentation fileRepresentation = new FileRepresentation(umlgui2, MediaType.APPLICATION_XHTML);
 
 //        //Directory css = new Directory(getContext(), "clap://javascript/css");
