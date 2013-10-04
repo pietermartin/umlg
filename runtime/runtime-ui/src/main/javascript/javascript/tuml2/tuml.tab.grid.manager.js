@@ -400,6 +400,10 @@
 
             this.instantiateGrid();
 
+            if (this.propertyNavigatingTo.ordered) {
+                this.setupRowDrag();
+            }
+
             //Create context menu
             this.createContextMenu();
 
@@ -622,6 +626,7 @@
             this.grid.onViewportChanged.subscribe(function (e, args) {
                 var vp = self.grid.getViewport();
             });
+
             this.grid.onViewportChanged.notify();
 
             this.grid.onBeforeEditCell.subscribe(function (e, args) {
@@ -813,6 +818,7 @@
 
             // initialize the model after all the events have been hooked up
             this.setupColumnFormatter();
+
             this.initializeDataModel(data, filter);
             this.updateHeaderRow(this.localMetaForData);
 
@@ -829,6 +835,70 @@
             this.grid.invalidateAllRows();
             this.grid.updateRowCount();
             this.grid.render();
+        }
+
+        this.setupRowDrag = function () {
+
+            var moveRowsPlugin = new Slick.RowMoveManager({
+                cancelEditOnDrag: true
+            });
+
+            moveRowsPlugin.onBeforeMoveRows.subscribe(function (e, data) {
+                for (var i = 0; i < data.rows.length; i++) {
+                    // no point in moving before or after itself
+                    if (data.rows[i] == data.insertBefore || data.rows[i] == data.insertBefore - 1) {
+                        e.stopPropagation();
+                        return false;
+                    }
+                }
+                return true;
+            });
+
+            moveRowsPlugin.onMoveRows.subscribe(function (e, args) {
+                var extractedRows = [], left, right;
+                var rows = args.rows;
+                var insertBefore = args.insertBefore;
+
+                left = self.dataView.getItems().slice(0, insertBefore);
+                right = self.dataView.getItems().slice(insertBefore, self.dataView.getItems().length);
+
+                rows.sort(function(a,b) { return a-b; });
+
+                for (var i = 0; i < rows.length; i++) {
+                    extractedRows.push(self.dataView.getItems()[rows[i]]);
+                }
+
+                rows.reverse();
+
+                for (var i = 0; i < rows.length; i++) {
+                    var row = rows[i];
+                    if (row < insertBefore) {
+                        left.splice(row, 1);
+                    } else {
+                        right.splice(row - insertBefore, 1);
+                    }
+                }
+
+                self.dataView.setItems(left.concat(extractedRows.concat(right)));
+//                data = left.concat(extractedRows.concat(right));
+
+                var selectedRows = [];
+                for (var i = 0; i < rows.length; i++)
+                    selectedRows.push(left.length + i);
+
+                self.grid.resetActiveCell();
+//                self.grid.setData(data);
+                self.grid.setSelectedRows(selectedRows);
+                self.grid.render();
+            });
+
+            self.grid.registerPlugin(moveRowsPlugin);
+
+            self.grid.onDragInit.subscribe(function (e, dd) {
+                // prevent the grid from cancelling drag'n'drop by default
+                e.stopImmediatePropagation();
+            });
+
         }
 
         this.setCellValue = function (cell, value) {
@@ -1001,6 +1071,11 @@
                         field: property.name,
                         sortable: true
                     });
+                    if (this.propertyNavigatingTo.ordered) {
+                        //This is for slickgrid's row move/drag plugin
+                        this.columns[0].behavior = "selectAndMove";
+                        this.columns[0].cssClass = "cell-reorder";
+                    }
                 } else {
                     this.columns.push({
                         id: property.name,
@@ -1013,8 +1088,6 @@
                             required: property.lower > 0,
                             tumlLookupUri: property.tumlLookupUri,
                             rowEnumerationLookupMap: new RowEnumerationLookupMap(property.qualifiedName, "/" + tumlModelName + "/tumlEnumLookup"),
-//                            rowLookupMap: new RowLookupMap(this.contextVertexId, property.tumlCompositeParentLookupUri, property.tumlCompositeParentLookupUriOnCompositeParent),
-//                            compositeParentLookupMap: new CompositeParentLookupMap(this.contextVertexId, property.tumlLookupUri, property.tumlLookupOnCompositeParentUri),
                             ordered: property.ordered,
                             unique: property.unique,
                             property: property,
@@ -1123,7 +1196,6 @@
                 }
 
                 var li = $('<li />').appendTo(contextMenuUl);
-//                var adjustedUri = property.tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), this.contextVertexId);
                 var adjustedUri = addUiToUrl(property.tumlUri);
                 var a = $('<a />', {href: adjustedUri}).appendTo(li);
                 a.on('click', function (e) {
