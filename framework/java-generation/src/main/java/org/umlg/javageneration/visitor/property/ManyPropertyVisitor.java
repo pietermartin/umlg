@@ -32,7 +32,10 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
                 OJAnnotatedClass associationOJClass = findAssociationClassOJClass(propertyWrapper);
                 OnePropertyVisitor.buildOneAdder(associationOJClass, propertyWrapper, true);
             }
-            buildManyAdder(owner, propertyWrapper);
+            buildManyAdder(owner, propertyWrapper, false);
+            if (propertyWrapper.isOrdered()) {
+                buildManyAdder(owner, propertyWrapper, true);
+            }
             buildSetter(owner, propertyWrapper);
         }
     }
@@ -71,11 +74,17 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
         ac.addToOperations(getter);
     }
 
-    public static void buildManyAdder(OJAnnotatedClass owner, PropertyWrapper propertyWrapper) {
+    public static void buildManyAdder(OJAnnotatedClass owner, PropertyWrapper propertyWrapper, boolean indexed) {
         OJAnnotatedOperation adder = new OJAnnotatedOperation(propertyWrapper.adder());
         if (!propertyWrapper.isMemberOfAssociationClass()) {
+            if (indexed) {
+                adder.addParam("index", "int");
+            }
             adder.addParam(propertyWrapper.fieldname(), propertyWrapper.javaTypePath());
         } else {
+            if (indexed) {
+                adder.addParam("index", "int");
+            }
             adder.addParam(propertyWrapper.getAssociationClassFakePropertyName(), propertyWrapper.javaTypePathWithAssociationClass());
         }
 
@@ -101,6 +110,9 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
         owner.addToOperations(adder);
 
         OJAnnotatedOperation singleAdder = new OJAnnotatedOperation(propertyWrapper.adder());
+        if (indexed) {
+            singleAdder.addParam("index", "int");
+        }
         singleAdder.addParam(propertyWrapper.fieldname(), propertyWrapper.javaBaseTypePath());
         if (propertyWrapper.isMemberOfAssociationClass()) {
             singleAdder.addParam(StringUtils.uncapitalize(propertyWrapper.getAssociationClass().getName()), TumlClassOperations.getPathName(propertyWrapper.getAssociationClass()));
@@ -119,9 +131,17 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
             }
             OJIfStatement ifNotNull = new OJIfStatement(propertyWrapper.fieldname() + " != null");
             if (!propertyWrapper.isMemberOfAssociationClass()) {
-                ifNotNull.addToThenPart("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ")");
+                if (!indexed) {
+                    ifNotNull.addToThenPart("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ")");
+                } else {
+                    ifNotNull.addToThenPart("this." + propertyWrapper.fieldname() + ".add(index, " + propertyWrapper.fieldname() + ")");
+                }
             } else {
-                ifNotNull.addToThenPart("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ", " + StringUtils.uncapitalize(propertyWrapper.getAssociationClass().getName()) + ")");
+                if (!indexed) {
+                    ifNotNull.addToThenPart("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ", " + StringUtils.uncapitalize(propertyWrapper.getAssociationClass().getName()) + ")");
+                } else {
+                    ifNotNull.addToThenPart("this." + propertyWrapper.fieldname() + ".add(index, " + propertyWrapper.fieldname() + ", " + StringUtils.uncapitalize(propertyWrapper.getAssociationClass().getName()) + ")");
+                }
             }
             singleAdder.getBody().addToStatements(ifNotNull);
         }

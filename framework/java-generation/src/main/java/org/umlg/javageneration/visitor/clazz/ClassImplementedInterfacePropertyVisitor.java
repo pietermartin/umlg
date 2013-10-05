@@ -58,7 +58,7 @@ public class ClassImplementedInterfacePropertyVisitor extends BaseVisitor implem
 
 				if (propertyWrapper.isMany()) {
 					ManyPropertyVisitor.buildGetter(owner, propertyWrapper);
-					ManyPropertyVisitor.buildManyAdder(owner, propertyWrapper);
+					ManyPropertyVisitor.buildManyAdder(owner, propertyWrapper, false);
 					ManyPropertyVisitor.buildSetter(owner, propertyWrapper);
 				} else {
 					OnePropertyVisitor.buildGetter(owner, propertyWrapper);

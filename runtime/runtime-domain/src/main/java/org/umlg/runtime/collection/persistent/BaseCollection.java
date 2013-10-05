@@ -33,6 +33,8 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
     protected UmlgNode owner;
     // This is the vertex of the owner of the collection
     protected Vertex vertex;
+    //Created when an element is added to the collection.
+    //Used to store the id of an association class instance.
     protected Edge edge;
     protected Class<?> parentClass;
     //The internal map is used to store the vertex representing a primitive or an enumeration

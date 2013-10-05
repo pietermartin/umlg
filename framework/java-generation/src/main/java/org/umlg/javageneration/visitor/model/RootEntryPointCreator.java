@@ -54,12 +54,9 @@ public class RootEntryPointCreator extends BaseVisitor implements Visitor<Model>
 	private void implementTumlRootNode(OJAnnotatedClass root) {
 		OJAnnotatedOperation getId = new OJAnnotatedOperation("getId");
 		getId.addAnnotationIfNew(new OJAnnotationValue(new OJPathName("java.lang.Override")));
-//		getId.setReturnType(new OJPathName("String"));
         getId.setReturnType(new OJPathName("Object"));
-//		getId.getBody().addToStatements("return UmlgIdUtilFactory.getIdUtil().getId(getRootVertex())");
         getId.getBody().addToStatements("return getRootVertex().getId()");
 		root.addToOperations(getId);
-//		root.addToImports(TinkerGenerationUtil.UmlgIdUtilFactoryPathName);
 
 		OJAnnotatedOperation toJson = new OJAnnotatedOperation("toJson");
 		toJson.setReturnType("String");

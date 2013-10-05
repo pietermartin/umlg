@@ -177,16 +177,16 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
         ifInsert.addToThenPart(ifArrayForInsert);
 
         ojTryStatement.getTryPart().addToStatements(ifInsert);
-        OJForStatement forArray = new OJForStatement("map", new OJPathName("java.util.Map").addToGenerics(new OJPathName("String")).addToGenerics(
+        OJForStatement forArray = new OJForStatement("overloadedJsonMap", new OJPathName("java.util.Map").addToGenerics(new OJPathName("String")).addToGenerics(
                 new OJPathName("Object")), "array");
         ifArrayForInsert.addToThenPart(forArray);
-        forArray.getBody().addToStatements("add(resultMap, parentResource, map)");
+        forArray.getBody().addToStatements("add(resultMap, parentResource, overloadedJsonMap)");
 
-        OJField map = new OJField("map", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object"));
+        OJField map = new OJField("overloadedJsonMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object"));
         map.setInitExp("(Map<String, Object>) o");
         ifArrayForInsert.setElsePart(new OJBlock());
         ifArrayForInsert.getElsePart().addToLocals(map);
-        ifArrayForInsert.getElsePart().addToStatements("add(resultMap, parentResource, map)");
+        ifArrayForInsert.getElsePart().addToStatements("add(resultMap, parentResource, overloadedJsonMap)");
 
         addPostResource(pWrap, annotatedClass, parentPathName);
 
@@ -231,15 +231,15 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
         ifUpdate.addToThenPart(ifArrayForUpdate);
         ojTryStatement.getTryPart().addToStatements(ifUpdate);
 
-        forArray = new OJForStatement("map", new OJPathName("java.util.Map").addToGenerics(new OJPathName("String")).addToGenerics(
+        forArray = new OJForStatement("overloadedJsonMap", new OJPathName("java.util.Map").addToGenerics(new OJPathName("String")).addToGenerics(
                 new OJPathName("Object")), "array");
         ifArrayForUpdate.addToThenPart(forArray);
-        forArray.getBody().addToStatements("put(resultMap, map)");
-        map = new OJField("map", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object"));
+        forArray.getBody().addToStatements("put(resultMap, overloadedJsonMap)");
+        map = new OJField("overloadedJsonMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object"));
         map.setInitExp("(Map<String, Object>) o");
         ifArrayForUpdate.setElsePart(new OJBlock());
         ifArrayForUpdate.getElsePart().addToLocals(map);
-        ifArrayForUpdate.getElsePart().addToStatements("put(resultMap, map)");
+        ifArrayForUpdate.getElsePart().addToStatements("put(resultMap, overloadedJsonMap)");
 
         addPutResource(pWrap, annotatedClass, parentPathName);
 

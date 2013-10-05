@@ -22,6 +22,15 @@ public class UmlgPropertyAssociationClassSequenceImpl<E, AC extends AssociationC
     }
 
     @Override
+    public void add(int index, E e, AC associationClass) {
+        super.add(index, e);
+        associationClass.internalAdder(tumlRuntimeProperty, true, this.owner);
+        associationClass.internalAdder(tumlRuntimeProperty, false, (UmlgNode) e);
+        this.edge.setProperty(TinkerCollection.ASSOCIATION_CLASS_VERTEX_ID, associationClass.getId());
+        this.edge.setProperty("className", associationClass.getClass().getName());
+    }
+
+    @Override
     public boolean add(E e, AC associationClass) {
         if (super.add(e)) {
             associationClass.internalAdder(tumlRuntimeProperty, true, this.owner);

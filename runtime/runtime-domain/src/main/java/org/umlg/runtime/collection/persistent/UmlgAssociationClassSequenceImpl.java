@@ -106,11 +106,11 @@ public class UmlgAssociationClassSequenceImpl<AssociationClassNode> extends Tink
         try {
 
             //Get the edges between the vertexToLoad and the owner vertex.
-            //Take the first one. If there
+            //Take the first one.
             Set<Edge> edges = GraphDb.getDb().getEdgesBetween(this.owner.getVertex(), vertexToLoad, getLabel());
             //Debug check
             if (edges.size() > 1) {
-                throw new IllegalStateException("Only a bag can have multiple edges between vertixes!");
+                throw new IllegalStateException("Only a bag can have multiple edges between vertices!");
             }
             Vertex associationClassVertex = null;
             for (Edge edge : edges) {

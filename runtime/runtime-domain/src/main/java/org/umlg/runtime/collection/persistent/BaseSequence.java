@@ -263,8 +263,8 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
             if (indexOfNewElement > 0) {
                 throw new IndexOutOfBoundsException("List is empty, can only add an element at index 0");
             }
-
-            throw new RuntimeException("Not yet implemented");
+            addToLinkedList(edgeFromParentToElementVertex);
+//            throw new RuntimeException("Not yet implemented");
 
         }
 

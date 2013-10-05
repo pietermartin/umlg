@@ -16,7 +16,7 @@ public class TinkerSequenceImpl<E> extends BaseSequence<E> implements TinkerSequ
 	public void add(int indexOf, E e) {
         //Do not load, it needs to be traversed every time
         //It needs to be traversed because it is not possible to find the hyper vertex via the index because of duplicates
-		addToListAtIndex(indexOf, e);
+		this.edge = addToListAtIndex(indexOf, e);
         if (this.loaded) {
             getInternalList().add(indexOf, e);
         }

@@ -57,9 +57,10 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
         initVariables();
     }
 
-    public void reload() {
+    public BaseUmlg reload() {
         this.vertex = GraphDb.getDb().getVertex(this.vertex.getId());
         initialiseProperties();
+        return this;
     }
 
     public void addToThreadEntityVar() {

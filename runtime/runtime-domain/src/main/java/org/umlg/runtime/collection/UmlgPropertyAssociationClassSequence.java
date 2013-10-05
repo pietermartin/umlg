@@ -9,4 +9,5 @@ import org.umlg.runtime.domain.AssociationClassNode;
 public interface UmlgPropertyAssociationClassSequence<E, AC extends AssociationClassNode> extends TinkerSequence<E> {
 
     boolean add(E e, AC associationClass);
+    void add(int index, E e, AC associationClass);
 }

@@ -766,4 +766,72 @@ public class SequenceTest extends BaseLocalDbTest {
 
     }
 
+    @Test
+    public void testAdderWithIndexForOrderedSet() {
+
+        SequenceRoot sequenceRoot = new SequenceRoot(true);
+        sequenceRoot.setName("sequenceRoot");
+
+        SequenceTestOrderedSet sequenceTestOrderedSet1 = new SequenceTestOrderedSet(true);
+        sequenceTestOrderedSet1.setName("sequenceTestOrderedSet1");
+        SequenceTestOrderedSet sequenceTestOrderedSet2 = new SequenceTestOrderedSet(true);
+        sequenceTestOrderedSet2.setName("sequenceTestOrderedSet2");
+        SequenceTestOrderedSet sequenceTestOrderedSet3 = new SequenceTestOrderedSet(true);
+        sequenceTestOrderedSet3.setName("sequenceTestOrderedSet3");
+        SequenceTestOrderedSet sequenceTestOrderedSet4 = new SequenceTestOrderedSet(true);
+        sequenceTestOrderedSet4.setName("sequenceTestOrderedSet4");
+        SequenceTestOrderedSet sequenceTestOrderedSet5 = new SequenceTestOrderedSet(true);
+        sequenceTestOrderedSet5.setName("sequenceTestOrderedSet5");
+
+        sequenceRoot.addToSequenceTestOrderedSet(0, sequenceTestOrderedSet5);
+        sequenceRoot.addToSequenceTestOrderedSet(1, sequenceTestOrderedSet4);
+        sequenceRoot.addToSequenceTestOrderedSet(2, sequenceTestOrderedSet3);
+        sequenceRoot.addToSequenceTestOrderedSet(3, sequenceTestOrderedSet2);
+        sequenceRoot.addToSequenceTestOrderedSet(4, sequenceTestOrderedSet1);
+
+        db.commit();
+        Assert.assertEquals(6, countVertices());
+        Assert.assertEquals(12 + 6, countEdges());
+
+        sequenceRoot.reload();
+        Assert.assertEquals(sequenceTestOrderedSet5.reload(), sequenceRoot.getSequenceTestOrderedSet().get(0));
+        Assert.assertEquals(sequenceTestOrderedSet4.reload(), sequenceRoot.getSequenceTestOrderedSet().get(1));
+        Assert.assertEquals(sequenceTestOrderedSet3.reload(), sequenceRoot.getSequenceTestOrderedSet().get(2));
+        Assert.assertEquals(sequenceTestOrderedSet2.reload(), sequenceRoot.getSequenceTestOrderedSet().get(3));
+        Assert.assertEquals(sequenceTestOrderedSet1.reload(), sequenceRoot.getSequenceTestOrderedSet().get(4));
+    }
+
+    @Test
+    public void testAdderWithIndexForList() {
+
+        SequenceRoot sequenceRoot = new SequenceRoot(true);
+        sequenceRoot.setName("sequenceRoot");
+
+        SequenceTestListMany sequenceTestListMany1 = new SequenceTestListMany(true);
+        sequenceTestListMany1.setName("sequenceTestListMany1");
+        SequenceTestListMany sequenceTestListMany2 = new SequenceTestListMany(true);
+        sequenceTestListMany2.setName("sequenceTestListMany2");
+        SequenceTestListMany sequenceTestListMany3 = new SequenceTestListMany(true);
+        sequenceTestListMany3.setName("sequenceTestListMany3");
+        SequenceTestListMany sequenceTestListMany4 = new SequenceTestListMany(true);
+        sequenceTestListMany4.setName("sequenceTestListMany4");
+        SequenceTestListMany sequenceTestListMany5 = new SequenceTestListMany(true);
+        sequenceTestListMany5.setName("sequenceTestListMany5");
+
+        sequenceRoot.getSequenceTestListMany().add(0, sequenceTestListMany1);
+        sequenceRoot.getSequenceTestListMany().add(1, sequenceTestListMany2);
+        sequenceRoot.addToSequenceTestListMany(2, sequenceTestListMany3);
+        sequenceRoot.addToSequenceTestListMany(3, sequenceTestListMany4);
+        sequenceRoot.addToSequenceTestListMany(4, sequenceTestListMany5);
+
+        db.commit();
+
+        sequenceRoot.reload();
+        Assert.assertEquals(sequenceTestListMany5.reload(), sequenceRoot.getSequenceTestListMany().get(4));
+        Assert.assertEquals(sequenceTestListMany4.reload(), sequenceRoot.getSequenceTestListMany().get(3));
+        Assert.assertEquals(sequenceTestListMany3.reload(), sequenceRoot.getSequenceTestListMany().get(2));
+        Assert.assertEquals(sequenceTestListMany2.reload(), sequenceRoot.getSequenceTestListMany().get(1));
+        Assert.assertEquals(sequenceTestListMany1.reload(), sequenceRoot.getSequenceTestListMany().get(0));
+    }
+
 }

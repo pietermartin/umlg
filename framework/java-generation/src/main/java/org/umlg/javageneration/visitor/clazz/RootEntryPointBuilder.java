@@ -41,7 +41,7 @@ public class RootEntryPointBuilder extends BaseVisitor implements Visitor<Class>
 		getter.getBody().addToLocals(iter);
 		OJWhileStatement ojWhileStatement = new OJWhileStatement();
 		ojWhileStatement.setCondition("iter.hasNext()");
-		ojWhileStatement.getBody().addToStatements("Edge edge = (Edge) iter.next()");
+		ojWhileStatement.getBody().addToStatements(TinkerGenerationUtil.edgePathName.getLast() + " edge = iter.next()");
 		ojWhileStatement.getBody().addToStatements("result.add(new " + TumlClassOperations.className(clazz) + "(edge.getVertex(Direction.IN)));");
 		getter.getBody().addToStatements(ojWhileStatement);
 		getter.getBody().addToStatements("return result");

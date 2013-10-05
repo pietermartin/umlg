@@ -92,4 +92,60 @@ public class TestAssociationClassForSequence extends BaseLocalDbTest {
 
     }
 
+    @Test
+    public void testAdderWithIndex() {
+
+        Human human = new Human(true);
+        human.setName("human1");
+        AssociationClassSequenceTest associationClassSequence1 = new AssociationClassSequenceTest(true);
+        associationClassSequence1.setWeight(1);
+        ProjectListTest projectList1 = new ProjectListTest(true);
+        projectList1.setName("project1");
+
+        AssociationClassSequenceTest associationClassSequence2 = new AssociationClassSequenceTest(true);
+        associationClassSequence2.setWeight(2);
+        ProjectListTest projectList2 = new ProjectListTest(true);
+        projectList2.setName("projectList2");
+
+        AssociationClassSequenceTest associationClassSequence3 = new AssociationClassSequenceTest(true);
+        associationClassSequence3.setWeight(3);
+        ProjectListTest projectList3 = new ProjectListTest(true);
+        projectList3.setName("projectList3");
+
+        human.addToProjectlist(0, projectList1, associationClassSequence1);
+        human.addToProjectlist(1, projectList2, associationClassSequence2);
+        human.addToProjectlist(2, projectList3, associationClassSequence3);
+
+        db.commit();
+
+        human.reload();
+        Assert.assertEquals(projectList1, human.getProjectlist().get(0));
+        Assert.assertEquals(projectList2, human.getProjectlist().get(1));
+        Assert.assertEquals(projectList3, human.getProjectlist().get(2));
+
+        human.reload();
+        Assert.assertEquals(associationClassSequence1, human.getAssociationClassSequenceTest().get(0));
+        Assert.assertEquals(associationClassSequence2, human.getAssociationClassSequenceTest().get(1));
+        Assert.assertEquals(associationClassSequence3, human.getAssociationClassSequenceTest().get(2));
+
+        AssociationClassSequenceTest associationClassSequence4 = new AssociationClassSequenceTest(true);
+        associationClassSequence4.setWeight(4);
+        ProjectListTest projectList4 = new ProjectListTest(true);
+        projectList4.setName("project4");
+        human.addToProjectlist(1, projectList4, associationClassSequence4);
+
+        db.commit();
+        human.reload();
+        Assert.assertEquals(projectList1, human.getProjectlist().get(0));
+        Assert.assertEquals(projectList2, human.getProjectlist().get(2));
+        Assert.assertEquals(projectList3, human.getProjectlist().get(3));
+        Assert.assertEquals(projectList4, human.getProjectlist().get(1));
+
+        human.reload();
+        Assert.assertEquals(associationClassSequence1, human.getAssociationClassSequenceTest().get(0));
+        Assert.assertEquals(associationClassSequence2, human.getAssociationClassSequenceTest().get(2));
+        Assert.assertEquals(associationClassSequence3, human.getAssociationClassSequenceTest().get(3));
+        Assert.assertEquals(associationClassSequence4, human.getAssociationClassSequenceTest().get(1));
+    }
+
 }

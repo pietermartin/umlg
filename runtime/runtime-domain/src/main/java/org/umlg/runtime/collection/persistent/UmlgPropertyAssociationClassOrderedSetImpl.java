@@ -35,6 +35,15 @@ public class UmlgPropertyAssociationClassOrderedSetImpl<E, AC extends Associatio
     }
 
     @Override
+    public void add(int index, E e, AC associationClass) {
+        super.add(index, e);
+        associationClass.internalAdder(tumlRuntimeProperty, true, this.owner);
+        associationClass.internalAdder(tumlRuntimeProperty, false, (UmlgNode) e);
+        this.edge.setProperty(TinkerCollection.ASSOCIATION_CLASS_VERTEX_ID, associationClass.getId());
+        this.edge.setProperty("className", associationClass.getClass().getName());
+    }
+
+    @Override
     public boolean add(E e) {
         throw new RuntimeException("The standard add method can not be used on an edge that represents and association class. Please use the add(element, associationClass) method.");
     }
