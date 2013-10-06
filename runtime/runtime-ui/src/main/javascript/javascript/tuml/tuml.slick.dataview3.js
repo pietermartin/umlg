@@ -125,10 +125,12 @@
             startingIndex = startingIndex || 0;
             var id;
             for (var i = startingIndex, l = newItems.length; i < l; i++) {
-                id = newItems[i][idProperty];
+                var newItem = newItems[i];
+                id = newItem[idProperty];
                 if (id === undefined) {
                     throw "Each data element must implement a unique 'id' property";
                 }
+                newItem['_index'] = i;
                 newIdxById[id] = i;
             }
         }
@@ -137,10 +139,12 @@
             startingIndex = startingIndex || 0;
             var id;
             for (var i = startingIndex, l = updatedItems.length; i < l; i++) {
-                id = updatedItems[i][idProperty];
+                var updatedItem = updatedItems[i]
+                id = updatedItem[idProperty];
                 if (id === undefined) {
                     throw "Each data element must implement a unique 'id' property";
                 }
+                updatedItem['_index'] = i;
                 updatedIdxById[id] = i;
             }
         }
@@ -591,8 +595,12 @@
             return postUpdatedIdxById[index] !== undefined && postUpdatedIdxById[index] !== null;
         }
 
-        function isNewRow(index) {
-            return newIdxById[index] !== undefined && newIdxById[index] !== null;
+        function isNewRow(id) {
+            return newIdxById[id] !== undefined && newIdxById[id] !== null;
+        }
+
+        function isUpdatedRow(id) {
+            return updatedIdxById[id] !== undefined && updatedIdxById[id] !== null;
         }
 
         function addItem(item) {
@@ -1243,6 +1251,7 @@
             "setNewItems": setNewItems,
             "isRowSaved": isRowSaved,
             "isNewRow": isNewRow,
+            "isUpdatedRow": isUpdatedRow,
 
             "isRowUpdated": isRowUpdated ,
             "refreshItemAfterCommit": refreshItemAfterCommit,

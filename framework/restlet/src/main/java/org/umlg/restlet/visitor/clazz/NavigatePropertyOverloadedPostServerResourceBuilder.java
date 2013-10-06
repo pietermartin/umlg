@@ -234,12 +234,22 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
         forArray = new OJForStatement("overloadedJsonMap", new OJPathName("java.util.Map").addToGenerics(new OJPathName("String")).addToGenerics(
                 new OJPathName("Object")), "array");
         ifArrayForUpdate.addToThenPart(forArray);
-        forArray.getBody().addToStatements("put(resultMap, overloadedJsonMap)");
+        if (pWrap.isOrdered()) {
+            forArray.getBody().addToStatements("put(resultMap, parentResource, overloadedJsonMap)");
+        } else {
+            forArray.getBody().addToStatements("put(resultMap, overloadedJsonMap)");
+        }
         map = new OJField("overloadedJsonMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object"));
         map.setInitExp("(Map<String, Object>) o");
         ifArrayForUpdate.setElsePart(new OJBlock());
         ifArrayForUpdate.getElsePart().addToLocals(map);
-        ifArrayForUpdate.getElsePart().addToStatements("put(resultMap, overloadedJsonMap)");
+
+        if (pWrap.isOrdered()) {
+            //Include the parent as it will be needed to add the child at a particular index
+            ifArrayForUpdate.getElsePart().addToStatements("put(resultMap, parentResource, overloadedJsonMap)");
+        } else {
+            ifArrayForUpdate.getElsePart().addToStatements("put(resultMap, overloadedJsonMap)");
+        }
 
         addPutResource(pWrap, annotatedClass, parentPathName);
 
@@ -334,6 +344,9 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
         OJAnnotatedOperation put = new OJAnnotatedOperation("put");
         put.setVisibility(OJVisibilityKind.PRIVATE);
         put.addToParameters(new OJParameter("resultMap", new OJPathName("java.util.Map").addToGenerics(new OJPathName("Class").addToGenerics("? extends " + pWrap.javaBaseTypePath().getLast())).addToGenerics("List<" + TumlRestletGenerationUtil.UmlgNodeJsonHolder.getLast() + ">")));
+        if (pWrap.isOrdered()) {
+            put.addToParameters(new OJParameter("parentResource", parentPathName));
+        }
         put.addToParameters(new OJParameter("propertyMap", new OJPathName("java.util.Map").addToGenerics("String").addToGenerics("Object")));
         annotatedClass.addToOperations(put);
 
@@ -342,6 +355,16 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
         firstBlock.addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
         annotatedClass.addToImports(pWrap.javaBaseTypePath());
         firstBlock.addToStatements("childResource.fromJson(propertyMap)");
+
+        if (pWrap.isOrdered()) {
+            //Place the child at the correct index
+            firstBlock.addToStatements("Integer index = (Integer)propertyMap.get(\"" + TumlRestletGenerationUtil._INDEX + "\")");
+            OJIfStatement ifIndexNotNull = new OJIfStatement("index != null");
+            ifIndexNotNull.addToThenPart("parentResource." + pWrap.remover() + "(childResource)");
+            ifIndexNotNull.addToThenPart("parentResource." + pWrap.adder() + "(index, childResource)");
+            firstBlock.addToStatements(ifIndexNotNull);
+        }
+
         put.getBody().addToStatements(firstBlock);
 
         OJBlock secondBlock = new OJBlock();
@@ -357,7 +380,6 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
         ifSbExist.addToThenPart("objectList = new ArrayList<" + TumlRestletGenerationUtil.UmlgNodeJsonHolder.getLast() + ">()");
         ifSbExist.addToThenPart("resultMap.put(baseTumlClass, objectList)");
         ifSbExist.addToElsePart("objectList = resultMap.get(baseTumlClass)");
-//        ifSbExist.addToElsePart("sb.append(\",\")");
         secondBlock.addToStatements(ifSbExist);
 
         secondBlock.addToStatements("objectList.add(new " + TumlRestletGenerationUtil.UmlgNodeJsonHolder.getLast() + "(childResource))");

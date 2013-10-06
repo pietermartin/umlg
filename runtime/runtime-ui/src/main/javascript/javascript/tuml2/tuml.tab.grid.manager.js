@@ -7,7 +7,8 @@
             TumlManyComponentGridManager: TumlManyComponentGridManager,
             TumlForManyLookupGridManager: TumlForManyLookupGridManager,
             TumlQueryGridManager: TumlQueryGridManager,
-            TumlTabGridManager: TumlTabGridManager
+            TumlTabGridManager: TumlTabGridManager,
+            UmlgListItemMovedOrder: 0
         }
     });
 
@@ -865,7 +866,8 @@
                 rows.sort(function(a,b) { return a-b; });
 
                 for (var i = 0; i < rows.length; i++) {
-                    extractedRows.push(self.dataView.getItems()[rows[i]]);
+                    var movedItem = self.dataView.getItems()[rows[i]];
+                    extractedRows.push(movedItem);
                 }
 
                 rows.reverse();
@@ -879,18 +881,38 @@
                     }
                 }
 
+                //This if statement only applies if more than one row is being moved together
+                //If so, then, depending on whether the rows are being moved up or down, the _index and moveOrder
+                // is calculated in opposing directions
+                if (rows[0] > insertBefore - 1) {
+                    for (var i = 0; i < extractedRows.length; i++) {
+                        var movedItem = extractedRows[i];
+                        //Add to updated items
+                        movedItem['_index'] = left.length + i;
+                        self.dataView.updateItem(movedItem.id, movedItem, '_index');
+                        movedItem['_movedOrder'] = Tuml.UmlgListItemMovedOrder++;
+                        self.dataView.updateItem(movedItem.id, movedItem, '_movedOrder');
+                    }
+                } else {
+                    for (var i = extractedRows.length - 1; i >= 0; i--) {
+                        var movedItem = extractedRows[i];
+                        //Add to updated items
+                        movedItem['_index'] = left.length + i;
+                        self.dataView.updateItem(movedItem.id, movedItem, '_index');
+                        movedItem['_movedOrder'] = Tuml.UmlgListItemMovedOrder++;
+                        self.dataView.updateItem(movedItem.id, movedItem, '_movedOrder');
+                    }
+                }
+
                 self.dataView.setItems(left.concat(extractedRows.concat(right)));
-//                data = left.concat(extractedRows.concat(right));
 
                 var selectedRows = [];
-                for (var i = 0; i < rows.length; i++)
+                for (var i = 0; i < rows.length; i++) {
                     selectedRows.push(left.length + i);
+                }
 
                 self.grid.resetActiveCell();
-//                self.grid.setData(data);
                 self.grid.setSelectedRows(selectedRows);
-                self.dataView.updateNewIdxById(insertBefore);
-                self.dataView.updateUpdatedIdxById(insertBefore);
                 self.grid.render();
             });
 

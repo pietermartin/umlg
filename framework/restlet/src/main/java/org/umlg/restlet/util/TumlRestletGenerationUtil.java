@@ -10,6 +10,7 @@ import org.umlg.javageneration.util.PropertyWrapper;
 
 public class TumlRestletGenerationUtil {
 
+    public final static String _INDEX = "_index";
     public final static OJPathName UmlgNodeJsonHolder = new OJPathName("org.umlg.runtime.restlet.util.UmlgNodeJsonHolder");
     public final static OJPathName RestletRouterEnum = new OJPathName("org.umlg.RestletRouterEnum");
     public final static OJPathName UmlgBasePath = new OJPathName("org.umlg");

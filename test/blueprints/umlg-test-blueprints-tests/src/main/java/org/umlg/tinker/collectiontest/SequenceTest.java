@@ -834,4 +834,53 @@ public class SequenceTest extends BaseLocalDbTest {
         Assert.assertEquals(sequenceTestListMany1.reload(), sequenceRoot.getSequenceTestListMany().get(0));
     }
 
+    /**
+     * This test shows how if one updates multiple row's index in the list, expecting the index to be as specified after the commit,
+     * then the update must be ordered with the index in descending order.
+     *
+     * Otherwise when subsequent updates happen the list no longer is in the order as when one specified the index.
+     *
+     */
+    @Test
+    public void testMoving2Items() {
+
+        SequenceRoot sequenceRoot = new SequenceRoot(true);
+        sequenceRoot.setName("sequenceRoot");
+
+        SequenceTestListMany sequenceTestListMany1 = new SequenceTestListMany(sequenceRoot);
+        sequenceTestListMany1.setName("sequenceTestListMany1");
+        SequenceTestListMany sequenceTestListMany2 = new SequenceTestListMany(sequenceRoot);
+        sequenceTestListMany2.setName("sequenceTestListMany2");
+        SequenceTestListMany sequenceTestListMany3 = new SequenceTestListMany(sequenceRoot);
+        sequenceTestListMany3.setName("sequenceTestListMany3");
+        SequenceTestListMany sequenceTestListMany4 = new SequenceTestListMany(sequenceRoot);
+        sequenceTestListMany4.setName("sequenceTestListMany4");
+        SequenceTestListMany sequenceTestListMany5 = new SequenceTestListMany(sequenceRoot);
+        sequenceTestListMany5.setName("sequenceTestListMany5");
+
+        db.commit();
+
+        sequenceRoot.reload();
+        Assert.assertEquals(sequenceTestListMany1.reload(), sequenceRoot.getSequenceTestListMany().get(0));
+        Assert.assertEquals(sequenceTestListMany2.reload(), sequenceRoot.getSequenceTestListMany().get(1));
+        Assert.assertEquals(sequenceTestListMany3.reload(), sequenceRoot.getSequenceTestListMany().get(2));
+        Assert.assertEquals(sequenceTestListMany4.reload(), sequenceRoot.getSequenceTestListMany().get(3));
+        Assert.assertEquals(sequenceTestListMany5.reload(), sequenceRoot.getSequenceTestListMany().get(4));
+
+        sequenceRoot.removeFromSequenceTestListMany(sequenceTestListMany2);
+        sequenceRoot.addToSequenceTestListMany(3, sequenceTestListMany2);
+        sequenceRoot.removeFromSequenceTestListMany(sequenceTestListMany1);
+        sequenceRoot.addToSequenceTestListMany(2, sequenceTestListMany1);
+
+        db.commit();
+
+        sequenceRoot.reload();
+        Assert.assertEquals(sequenceTestListMany3.reload(), sequenceRoot.getSequenceTestListMany().get(0));
+        Assert.assertEquals(sequenceTestListMany4.reload(), sequenceRoot.getSequenceTestListMany().get(1));
+        Assert.assertEquals(sequenceTestListMany1.reload(), sequenceRoot.getSequenceTestListMany().get(2));
+        Assert.assertEquals(sequenceTestListMany2.reload(), sequenceRoot.getSequenceTestListMany().get(3));
+        Assert.assertEquals(sequenceTestListMany5.reload(), sequenceRoot.getSequenceTestListMany().get(4));
+
+    }
+
 }
