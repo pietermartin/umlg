@@ -1,0 +1,6 @@
+/.settings
+/.idea
+*.iml
+!spec/*.iml
+/.project
+/.metadata
