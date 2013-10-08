@@ -136,13 +136,13 @@
                         var $label = $('<label />', {for: property.name + 'Id'});
                         $label.text(property.name + ' :').appendTo(li);
                     }
-                    var $input = this.constructInputForField(property);
+                    var $input = this.constructInputForField(property, false);
                     if (first) {
                         first = false;
                         this.currentActiveProperty = property;
                     }
                     $input.appendTo(li);
-                    if (property.manyPrimitive) {
+                    if (property.manyPrimitive || property.manyEnumeration) {
                         var $manyDiv = $('<div />', {class: "many-primitive-one-img"}).appendTo(li);
 
                         $manyDiv.click(
@@ -317,7 +317,8 @@
                 this.data[property.name] = array;
             } else if (property.manyEnumeration) {
                 var inputValue = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').val();
-                this.data[property.name] = inputValue;
+                var array = inputValue === '' ? [] : inputValue.split(',');
+                this.data[property.name] = array;
             } else if (property.composite && property.lower > 0) {
                 //This is already in the data model. the input is not editable
             } else if (!property.onePrimitive && !property.manyPrimitive && !property.inverseComposite) {
@@ -343,11 +344,11 @@
         }
     }
 
-    TumlBaseTabOneManager.prototype.constructInputForField = function (property) {
+    TumlBaseTabOneManager.prototype.constructInputForField = function (property, isForManyEditor) {
         var self = this;
         var $input;
         if (property.name == 'id') {
-            $input = $('<input />', {disabled: 'disabled', type: 'text', class: 'field', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
+            $input = $('<input />', {disabled: 'disabled', type: 'text', class: 'field', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name});
             $input.button().addClass('ui-textfield');
             if (this.data[property.name] !== undefined && this.data[property.name] !== null) {
                 $input[0].defaultValue = this.data[property.name];
@@ -360,14 +361,10 @@
             }
         } else if (property.dataTypeEnum != null && property.dataTypeEnum !== undefined) {
             if (property.dataTypeEnum == 'Date' || property.dataTypeEnum == 'Time' || property.dataTypeEnum == 'DateTime' || property.dataTypeEnum == 'InternationalPhoneNumber' || property.dataTypeEnum == 'LocalPhoneNumber' || property.dataTypeEnum == 'Email') {
-                $input = $("<input />", {type: 'text', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
+                $input = $("<input />", {type: 'text', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name});
                 $input.button().addClass('ui-textfield');
-            } else if (property.dataTypeEnum == 'Video') {
-                $input = $("<input />", {type: 'text', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
-            } else if (property.dataTypeEnum == 'Audio') {
-                $input = $("<input />", {type: 'text', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
-            } else if (property.dataTypeEnum == 'Image') {
-                $input = $("<input />", {type: 'text', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
+            } else if (property.dataTypeEnum == 'Video' || property.dataTypeEnum == 'Audio' || property.dataTypeEnum == 'Image') {
+                $input = $("<input />", {type: 'text', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name});
             } else {
                 alert('Unsupported dataType ' + property.dataTypeEnum);
             }
@@ -375,27 +372,27 @@
                 $input[0].defaultValue = this.data[property.name];
             }
         } else if (property.composite && property.lower > 0) {
-            $input = $("<input />", {type: 'text', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
+            $input = $("<input />", {type: 'text', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name});
             $input.button().addClass('ui-textfield');
             if (!this.isForCreation) {
                 $input[0].defaultValue = this.data[property.name];
             }
         } else if (property.oneEnumeration) {
-            $input = $('<select />', {class: 'chzn-select', style: 'width:350px;', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
+            $input = $('<select />', {class: 'chzn-select', style: 'width:350px;', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name});
             if (!this.isForCreation) {
                 this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, this.data[property.name], $input);
             } else {
                 this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, $input);
             }
-        } else if (property.manyEnumeration) {
-            $input = $('<select />', {multiple: '', id: property.name + this.metaForData.qualifiedName + 'Id', class: 'chzn-select', style: 'width:350px;', name: property.name});
+        } else if (isForManyEditor && property.manyEnumeration) {
+            $input = $('<select />', {id: inputFieldId(property, this.metaForData, isForManyEditor), class: 'chzn-select', style: 'width:350px;', name: property.name});
             if (!this.isForCreation) {
                 this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, this.data[property.name], $input);
             } else {
                 this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, $input);
             }
         } else if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && property.oneToOne) {
-            $input = $('<select />', {class: 'chzn-select', style: 'width:350px;', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
+            $input = $('<select />', {class: 'chzn-select', style: 'width:350px;', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name});
             //On creation the new object must first be created server side before the handleLookup method can be invoked.
             //This is because the lookup needs the current tempory object to exist.
             if (!this.isForCreation) {
@@ -403,30 +400,12 @@
             }
 
         } else if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && property.manyToOne) {
-            $input = $('<select />', {class: 'chzn-select', style: 'width:350px;', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
+            $input = $('<select />', {class: 'chzn-select', style: 'width:350px;', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name});
             if (!this.isForCreation) {
                 this.appendLoopupOptionsToSelect2(property, this.data['id'], $input, this.data[property.name]);
             }
-        } else if (property.fieldType == 'String') {
-            $input = $('<input />', {type: 'text', class: 'field', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
-            $input.button().addClass('ui-textfield');
-            if (!this.isForCreation) {
-                $input[0].defaultValue = (this.data[property.name] === null ? '' : this.data[property.name]);
-            }
-        } else if (property.fieldType == 'Integer') {
-            $input = $('<input />', {type: 'text', class: 'field', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
-            $input.button().addClass('ui-textfield');
-            if (!this.isForCreation) {
-                $input[0].defaultValue = (this.data[property.name] === null ? '' : this.data[property.name]);
-            }
-        } else if (property.fieldType == 'Long') {
-            $input = $('<input />', {type: 'text', class: 'field', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
-            $input.button().addClass('ui-textfield');
-            if (!this.isForCreation) {
-                $input[0].defaultValue = (this.data[property.name] === null ? '' : this.data[property.name]);
-            }
-        } else if (property.fieldType == 'Real') {
-            $input = $('<input />', {type: 'text', class: 'field', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
+        } else if (property.fieldType == 'String' || property.fieldType == 'Integer' || property.fieldType == 'Long' || property.fieldType == 'Real' || property.manyEnumeration) {
+            $input = $('<input />', {type: 'text', class: 'field', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name});
             $input.button().addClass('ui-textfield');
             if (!this.isForCreation) {
                 $input[0].defaultValue = (this.data[property.name] === null ? '' : this.data[property.name]);
@@ -434,14 +413,14 @@
         } else if (property.fieldType == 'Boolean') {
             if (!property.manyPrimitive && this.data !== undefined && this.data !== null) {
                 if (!this.isForCreation) {
-                    $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name, checked: (this.data[property.name] ? 'checked' : false)});
+                    $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name, checked: (this.data[property.name] ? 'checked' : false)});
                 } else {
-                    $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name, checked: false });
+                    $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name, checked: false });
                 }
             } else if (!property.manyPrimitive) {
-                $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name });
+                $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name });
             } else {
-                $input = $('<input />', {type: 'text', class: 'field', id: property.name + this.metaForData.qualifiedName + 'Id', name: property.name});
+                $input = $('<input />', {type: 'text', class: 'field', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name});
                 $input.button().addClass('ui-textfield');
                 if (!this.isForCreation) {
                     $input[0].defaultValue = this.data[property.name];
@@ -456,7 +435,7 @@
             );
             if ($input.is('select')) {
                 $input.change(function () {
-                    var validationResult = self.validateField(property);
+                    var validationResult = self.validateField(property, $input, isForManyEditor);
                     if (validationResult.valid) {
                         self.synchronizeModel(property)
                     } else {
@@ -470,7 +449,7 @@
                 });
             } else if (property.fieldType === 'Boolean') {
                 $input.change(function () {
-                    var validationResult = self.validateField(property);
+                    var validationResult = self.validateField(property, $input, isForManyEditor);
                     if (validationResult.valid) {
                         self.synchronizeModel(property)
                     } else {
@@ -484,7 +463,7 @@
                 });
             } else {
                 $input.blur(function () {
-                    var validationResult = self.validateField(property);
+                    var validationResult = self.validateField(property, $input, isForManyEditor);
                     if (validationResult.valid) {
                         self.synchronizeModel(property)
                     } else {
@@ -500,12 +479,28 @@
             $input.keyup(function (e) {
                 if (e.keyCode == 27) {
                     self.refreshFromDataModelForProperty(property);
-                    self.validateField(property);
+                    self.validateField(property, $input, isForManyEditor);
                     return false;
                 }
             });
         }
         return $input;
+    }
+
+    function inputFieldId(property, metaData, isForManyEditor) {
+        var result = property.name + metaData.qualifiedName + 'Id';
+        if (isForManyEditor) {
+            result += '::manyEditor';
+        }
+        return result;
+    }
+
+    function inputFieldIdForValidate(property, metaData, isForManyEditor) {
+        var result = '#' + property.name + escapeColon(metaData.qualifiedName) + 'Id';
+        if (isForManyEditor) {
+            result += '::manyEditor';
+        }
+        return result;
     }
 
     TumlBaseTabOneManager.prototype.setDataModel = function (dataModel) {
@@ -516,42 +511,42 @@
         var self = this;
         if (this.isPropertyForOnePage(property)) {
             if (property.name == 'id') {
-                var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+                var input = $(inputFieldIdForValidate(property, this.metaForData, false));
                 if (this.data[property.name] !== undefined) {
                     input.val(this.data[property.name]);
                 }
             } else if (property.readOnly) {
-                var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+                var input = $(inputFieldIdForValidate(property, this.metaForData, false));
                 if (this.data[property.name] !== undefined) {
                     input.text(this.data[property.name]);
                 }
             } else if (property.dataTypeEnum != null && property.dataTypeEnum !== undefined) {
-                var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+                var input = $(inputFieldIdForValidate(property, this.metaForData, false));
                 if (this.data[property.name] !== undefined) {
                     input.val(this.data[property.name]);
                 }
             } else if (property.composite && property.lower > 0) {
-                var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+                var input = $(inputFieldIdForValidate(property, this.metaForData, false));
                 if (this.data[property.name] !== undefined) {
                     input.val(this.data[property.name]);
                 }
             } else if (property.oneEnumeration) {
-                var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+                var input = $(inputFieldIdForValidate(property, this.metaForData, false));
                 if (this.data[property.name] !== undefined) {
                     this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, this.data[property.name], input);
                 } else {
                     this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, input);
                 }
-            } else if (property.manyEnumeration) {
-                var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
-                if (this.data[property.name] !== undefined) {
-                    this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, this.data[property.name], input);
-                } else {
-                    this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, input);
-                }
+//            } else if (property.manyEnumeration) {
+//                var input = $(inputFieldIdForValidate(property, this.metaForData, false));
+//                if (this.data[property.name] !== undefined) {
+//                    this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, this.data[property.name], input);
+//                } else {
+//                    this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, input);
+//                }
             } else if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && property.oneToOne) {
 
-                var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+                var input = $(inputFieldIdForValidate(property, this.metaForData, false));
                 this.appendLoopupOptionsToSelect2(property, this.data['id'], input, this.data[property.name]);
 
             } else if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && property.manyToOne) {
@@ -560,45 +555,30 @@
                 } else {
                     this.appendLoopupOptionsToSelect2(property.tumlLookupOnCompositeParentUri, property.lower > 0, this.data['id'], this.data[property.name], input);
                 }
-            } else if (property.fieldType == 'String') {
-                var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
-                if (this.data[property.name] !== undefined) {
-                    input.val(this.data[property.name]);
-                }
-            } else if (property.fieldType == 'Integer') {
-                var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
-                if (this.data[property.name] !== undefined) {
-                    input.val(this.data[property.name]);
-                }
-            } else if (property.fieldType == 'Long') {
-                var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
-                if (this.data[property.name] !== undefined) {
-                    input.val(this.data[property.name]);
-                }
-            } else if (property.fieldType == 'Real') {
-                var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+            } else if (property.fieldType == 'String' || property.fieldType == 'Integer' || property.fieldType == 'Long' || property.fieldType == 'Real' || property.manyEnumeration) {
+                var input = $(inputFieldIdForValidate(property, this.metaForData, false));
                 if (this.data[property.name] !== undefined) {
                     input.val(this.data[property.name]);
                 }
             } else if (property.fieldType == 'Boolean') {
                 if (!property.manyPrimitive) {
-                    var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+                    var input = $(inputFieldIdForValidate(property, this.metaForData, false));
                     if (this.data[property.name]) {
                         input.attr('checked', 'checked');
                     } else {
                         input.attr('checked', false);
                     }
                 } else if (property.manyPrimitive) {
-                    var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+                    var input = $(inputFieldIdForValidate(property, this.metaForData, false));
                     if (this.data[property.name] !== undefined) {
                         input.val(this.data[property.name]);
                     }
                 }
             }
             if (!(property.composite && property.lower > 0)) {
-                var input = $("#" + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+                var input = $(inputFieldIdForValidate(property, this.metaForData, false));
                 input.blur(function () {
-                    self.validateField(property);
+                    self.validateField(property, input, false);
                 });
             }
         }
@@ -657,10 +637,12 @@
                         $table.tableDnD();
                     }
                 }
-                $input.val('');
+                if (!property.manyEnumeration) {
+                    $input.val('');
+                }
             }
         }).appendTo($div);
-        $input = this.constructInputForField(property);
+        $input = this.constructInputForField(property, true);
         $input.val('');
         $input.addClass("many-primitive-editor-input");
         $input.appendTo($div);
@@ -775,16 +757,16 @@
         //Check if it is a component
         if (!(this.tumlTabViewManager.parentTabContainerManager instanceof Tuml.TumlMainViewManager)) {
             //Only validate the field it it is non empty
-            var validateInput = $('#' + this.currentActiveProperty.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+            var validateInput = $(inputFieldIdForValidate(this.currentActiveProperty, this.metaForData, false));
             if (validateInput.val() != "") {
-                var validationResult = this.validateField(this.currentActiveProperty);
+                var validationResult = this.validateField(this.currentActiveProperty, validateInput, false);
                 return validationResult.valid;
             } else {
                 return true;
             }
         } else {
             if (this.currentActiveProperty !== undefined && !this.currentActiveProperty.readOnly) {
-                var validationResult = this.validateField(this.currentActiveProperty);
+                var validationResult = this.validateField(this.currentActiveProperty, null, false);
                 return validationResult.valid;
             } else {
                 return true;
@@ -792,24 +774,19 @@
         }
     }
 
-    TumlBaseTabOneManager.prototype.validateField = function (property) {
+    TumlBaseTabOneManager.prototype.validateField = function (property, input, isForManyEditor) {
         this.removeServerErrorMessage();
         var validateInput;
-        validateInput = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
+        if (input === undefined || input === null) {
+            validateInput = $(inputFieldIdForValidate(property, this.metaForData, isForManyEditor));
+        } else {
+            validateInput = input;
+        }
 
         var validationResult = null;
         if (property.manyPrimitive || property.manyEnumeration) {
-            var stringValueArray;
-            if (property.manyPrimitive) {
-                stringValueArray = validateInput.val().split(',');
-            } else {
-                stringValueArray = validateInput.chosen().val();
-            }
-            if (stringValueArray == undefined || stringValueArray == null) {
-                stringValueArray = [];
-            }
-            //Remove empty strings
-            stringValueArray.remove('');
+            var stringValueArray = [];
+            stringValueArray.push(validateInput.val());
             var tmpSerializedValue = [];
             for (var i = 0; i < stringValueArray.length; i++) {
                 var tmpValue = stringValueArray[i];
