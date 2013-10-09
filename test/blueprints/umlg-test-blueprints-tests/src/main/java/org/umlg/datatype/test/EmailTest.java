@@ -31,10 +31,14 @@ public class EmailTest extends BaseLocalDbTest {
         Assert.assertEquals("ding.dong@lalaland.com", testUniverse1.getEmail());
     }
 
-    @Test
-    public void testManyDataType() {
-        DataTypeEntity dataTypeEntity = new DataTypeEntity(true);
-        dataTypeEntity.addToEmail1("j@j.j");
-        db.commit();
-    }
+//    @Test
+//    public void testManyDataType() {
+//        DataTypeEntity dataTypeEntity = new DataTypeEntity(true);
+//        dataTypeEntity.addToEmail1("asd@asd.asd");
+//        dataTypeEntity.addToEmailList("j@j.j");
+//        dataTypeEntity.addToEmailList("jj@jj.jj");
+//        db.commit();
+//        dataTypeEntity.reload();
+//        Assert.assertEquals(2, dataTypeEntity.getEmailList().size());
+//    }
 }
