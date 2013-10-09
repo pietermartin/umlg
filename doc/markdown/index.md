@@ -20,3 +20,5 @@ Download eclipse and install papyrus.
 
 Getting Started
 ---------------
+
+[Getting Started](http://www.umlg.org/gettingStarted.html)
