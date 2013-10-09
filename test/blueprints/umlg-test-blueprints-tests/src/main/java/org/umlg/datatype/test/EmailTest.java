@@ -7,6 +7,7 @@ import org.umlg.componenttest.SpaceTime;
 import org.umlg.componenttest.Time;
 import org.umlg.concretetest.God;
 import org.umlg.concretetest.Universe;
+import org.umlg.datatype.DataTypeEntity;
 import org.umlg.runtime.test.BaseLocalDbTest;
 
 /**
@@ -28,5 +29,12 @@ public class EmailTest extends BaseLocalDbTest {
         db.commit();
         Universe testUniverse1 = new Universe(universe.getVertex());
         Assert.assertEquals("ding.dong@lalaland.com", testUniverse1.getEmail());
+    }
+
+    @Test
+    public void testManyDataType() {
+        DataTypeEntity dataTypeEntity = new DataTypeEntity(true);
+        dataTypeEntity.addToEmail1("j@j.j");
+        db.commit();
     }
 }

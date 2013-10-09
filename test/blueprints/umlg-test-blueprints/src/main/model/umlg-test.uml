@@ -1605,6 +1605,20 @@
             </ownedEnd>
           </packagedElement>
         </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="_AiPe4DChEeOJbevgaGUOXQ" name="datatype">
+          <packagedElement xmi:type="uml:Class" xmi:id="_GRhV4DChEeOJbevgaGUOXQ" name="DataTypeEntity">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_K04zYDChEeOJbevgaGUOXQ" name="email1" visibility="public">
+              <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_PyFX8AD6EeKS1vh1F4YVWQ"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_TuHd4DChEeOJbevgaGUOXQ" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_TuIsADChEeOJbevgaGUOXQ" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_b34aUDChEeOJbevgaGUOXQ" name="emailList" visibility="public">
+              <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_PyFX8AD6EeKS1vh1F4YVWQ"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_gKbNkDChEeOJbevgaGUOXQ"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_gKb0oDChEeOJbevgaGUOXQ" value="*"/>
+            </ownedAttribute>
+          </packagedElement>
+        </packagedElement>
       </packagedElement>
     </packagedElement>
     <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_1clVoQAOEeKpVr_ntT6cLA">

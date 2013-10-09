@@ -578,7 +578,7 @@
         <layoutConstraint xmi:type="notation:Bounds" xmi:id="_6Ei3yXbJEeKXTvZLiS6_pA"/>
       </children>
       <element xmi:type="uml:Enumeration" href="restAndJson.uml#_6DXMAHbJEeKXTvZLiS6_pA"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_6EhCkXbJEeKXTvZLiS6_pA" x="480" y="810"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_6EhCkXbJEeKXTvZLiS6_pA" x="456" y="868"/>
     </children>
     <element xmi:type="uml:Package" href="restAndJson.uml#_rVRKACvuEeOJbevgaGUOXQ"/>
     <edges xmi:type="notation:Edge" xmi:id="_q7euYAAOEeKpVr_ntT6cLA" type="4001" source="_q67UwAAOEeKpVr_ntT6cLA" target="_q59rcAAOEeKpVr_ntT6cLA">

@@ -120,14 +120,16 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
         OJAnnotatedOperation delete = annotatedClass.findOperation("delete");
         for (Property p : TumlClassOperations.getChildPropertiesToDelete(clazz)) {
             PropertyWrapper pWrap = new PropertyWrapper(p);
-            if (pWrap.isMany()) {
-                OJForStatement forChildToDelete = new OJForStatement("child", pWrap.javaBaseTypePath(), pWrap.getter() + "()");
-                forChildToDelete.getBody().addToStatements("child.delete()");
-                delete.getBody().addToStatements(forChildToDelete);
-            } else if (!pWrap.isDataType()) {
-                OJIfStatement ifChildToDeleteNotNull = new OJIfStatement(pWrap.getter() + "() != null");
-                ifChildToDeleteNotNull.addToThenPart(pWrap.getter() + "().delete()");
-                delete.getBody().addToStatements(ifChildToDeleteNotNull);
+            if (!pWrap.isDataType()) {
+                if (pWrap.isMany()) {
+                    OJForStatement forChildToDelete = new OJForStatement("child", pWrap.javaBaseTypePath(), pWrap.getter() + "()");
+                    forChildToDelete.getBody().addToStatements("child.delete()");
+                    delete.getBody().addToStatements(forChildToDelete);
+                } else {
+                    OJIfStatement ifChildToDeleteNotNull = new OJIfStatement(pWrap.getter() + "() != null");
+                    ifChildToDeleteNotNull.addToThenPart(pWrap.getter() + "().delete()");
+                    delete.getBody().addToStatements(ifChildToDeleteNotNull);
+                }
             }
         }
 

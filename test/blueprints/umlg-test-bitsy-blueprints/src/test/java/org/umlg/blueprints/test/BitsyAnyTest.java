@@ -2,6 +2,7 @@ package org.umlg.blueprints.test;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
+import org.umlg.datatype.test.EmailTest;
 import org.umlg.tinker.collectiontest.SequenceTest;
 import org.umlg.tinker.embeddedtest.TestEmbeddedTest;
 import org.umlg.tinker.enumeration.ManyEnumerationTest;
@@ -11,7 +12,7 @@ import org.umlg.tinker.enumeration.ManyEnumerationTest;
  * Time: 7:18 PM
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({SequenceTest.class})
+@Suite.SuiteClasses({EmailTest.class})
 public class BitsyAnyTest {
 
 }
