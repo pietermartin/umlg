@@ -4,7 +4,9 @@ Umlg Home Page
 Introduction
 ------------
 
-Umlg is a uml to java code generator. Umlg generates java domain entities from uml class diagrams. Domain entities are persisted in a graph database using Tinkerpop Blueprints. In the general case a class wraps a vertex and an associations between classes are edges between vertexes.
+Umlg is a uml to java code generator. Umlg generates, from uml class diagrams, java domain entities that persist in a graph database. For the persistence [Tinkerpop Blueprints](http://blueprints.tinkerpop.com/) is used. This ensures that Umlg is graph database agnostic.
+
+In general, a class wraps a vertex and an associations between classes are realized as edges between vertexes.
 
 Installation
 ------------
