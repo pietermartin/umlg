@@ -16,7 +16,7 @@ Umlg can also, optionally, generate a rest interface to expose the domain model 
 
 Go to [demo.uml.org](http://demo.umlg.org:8111/restAndJson/ui2) to have a look.
 
-Currently, Bitsy, OrientDb, Neo4j and Titan is supported.
+Currently, [Bitsy](https://bitbucket.org/lambdazen/bitsy/wiki/Home), [OrientDb](http://www.orientdb.org/), [Neo4j](http://www.neo4j.org/) and [Titan](https://github.com/thinkaurelius/titan/wiki) is supported as underlying blueprints graph databases.
 
 Getting Started
 ---------------
