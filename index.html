@@ -1,26 +1,29 @@
 <html>
 <body>
 <div>
-<h1>Umlg Home Page</h1>
+<h1>Umlg Home Page Under Construction</h1>
 
 <h2>Introduction</h2>
 
-<p>Umlg is a uml to java code generator. Umlg generates, from uml class diagrams, java domain entities that persist in a graph database. For the persistence <a href="http://blueprints.tinkerpop.com/">Tinkerpop Blueprints</a> is used.</p>
+<p>Umlg is a uml to java code generator. From uml class diagrams, java domain entities are generated. The entities persist in a graph database. For the persistence <a href="http://blueprints.tinkerpop.com/">Tinkerpop Blueprints</a> is used. The semantics of a <a href="https://github.com/tinkerpop/blueprints/wiki/Property-Graph-Model">Property Graph Model</a> is a natural fit for implementing the rich semantics of UML class diagrams.</p>
 
-<p>The semantics of a <a href="https://github.com/tinkerpop/blueprints/wiki/Property-Graph-Model">Property Graph Model</a> is a natural fit for implementing the rich semantics of UML class diagrams.</p>
+<p>In general, a entity wraps a vertex and associations between entities are realized as edges between vertexes.</p>
 
-<p>In general, a class wraps a vertex and an associations between classes are realized as edges between vertexes.</p>
+<p>Umlg uses the <a href="http://projects.eclipse.org/projects/modeling.mdt.uml2">eclipse uml2 project</a> to load the uml model into memory. <a href="http://projects.eclipse.org/projects/modeling.mdt.papyrus">Eclipse Papyrus</a> is the recommended uml2 modelling tool.</p>
 
-<p>Umlg implements []</p>
+<p>A lot of care has been taken to implement the java domain model semantics as close as possible to the [UML2 specification] (http://www.omg.org/spec/UML/2.4.1/Superstructure/PDF)</p>
 
-<h2>Installation</h2>
+<p>Umlg can also, optionally, generate a rest interface to expose the domain model for performing crud and query operations. On top of it there is a web interface that makes it easy to perform crud and query the data. Queries can be executed in <a href="http://www.omg.org/spec/OCL/2.3.1/PDF">OCL</a>, <a href="https://github.com/tinkerpop/gremlin/wiki">Gremlin</a> or the underlying graph databases' native query language.</p>
 
-<p>Umlg is available as a zipped archive and via maven.
-Download eclipse and install papyrus.</p>
+<p>Go to <a href="http://demo.umlg.org:8111/restAndJson/ui2">demo.uml.org</a> to have a look.</p>
+
+<p>Currently, Bitsy, OrientDb, Neo4j and Titan is supported.</p>
 
 <h2>Getting Started</h2>
 
 <p><a href="http://www.umlg.org/gettingStarted.html">Getting Started</a></p>
+
+<h2>The Rest</h2>
 </div>
 </body>
 </html>
