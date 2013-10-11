@@ -48,10 +48,15 @@ public class GremlinExecutor {
 //        GremlinToStringPipe<String> toStringPipe = new GremlinToStringPipe(pipe);
         ToStringPipe toStringPipe = new ToStringPipe();
         toStringPipe.setStarts(new SingleIterator<Object>(pipe));
-        String result = toStringPipe.toString();
+        StringBuilder result = new StringBuilder();
+        while (toStringPipe.hasNext()) {
+            result.append(toStringPipe.next());
+            result.append("\n");
+        }
         stopWatch.stop();
-        result += "\nTime to execute query = " + stopWatch.toString();
-        return result;
+        result.append("Time to execute query = ");
+        result.append(stopWatch.toString());
+        return result.toString();
     }
 
 }
