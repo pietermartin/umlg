@@ -1,4 +1,4 @@
-package org.umlg.datatype.test;
+package org.umlg.tinker.datatype;
 
 import junit.framework.Assert;
 import org.junit.Test;
@@ -41,4 +41,5 @@ public class EmailTest extends BaseLocalDbTest {
         dataTypeEntity.reload();
         Assert.assertEquals(2, dataTypeEntity.getEmailList().size());
     }
+
 }
