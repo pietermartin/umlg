@@ -5,17 +5,17 @@
 
 <h2>Introduction</h2>
 
-<p>Umlg is a uml to java code generator. From uml class diagrams, java domain entities are generated. The entities persist in a graph database. For the persistence <a href="http://blueprints.tinkerpop.com/">Tinkerpop Blueprints</a> is used. The semantics of a <a href="https://github.com/tinkerpop/blueprints/wiki/Property-Graph-Model">Property Graph Model</a> is a natural fit for implementing the rich semantics of UML class diagrams.</p>
+<p>Umlg is a uml to java code generator. From uml class diagrams, java entities are generated. The entities persist in graph databases. For the persistence <a href="http://blueprints.tinkerpop.com/">Tinkerpop Blueprints</a> is used. The semantics of a <a href="https://github.com/tinkerpop/blueprints/wiki/Property-Graph-Model">Property Graph Model</a> is a natural fit for implementing the rich semantics of UML class diagrams in java entities.</p>
 
 <p>In general, a entity wraps a vertex and associations between entities are realized as edges between vertexes.</p>
 
 <p>Umlg uses the <a href="http://projects.eclipse.org/projects/modeling.mdt.uml2">eclipse uml2 project</a> to load the uml model into memory. <a href="http://projects.eclipse.org/projects/modeling.mdt.papyrus">Eclipse Papyrus</a> is the recommended uml2 modelling tool.</p>
 
-<p>A lot of care has been taken to implement the java domain model semantics as close as possible to the [UML2 specification] (http://www.omg.org/spec/UML/2.4.1/Superstructure/PDF)</p>
+<p>A lot of care has gone into implementing <a href="http://www.omg.org/spec/UML/2.4.1/Superstructure/PDF">UML2</a> semantics in the java domain model.</p>
 
-<p>Umlg can also, optionally, generate a rest interface to expose the domain model for performing crud and query operations. On top of it there is a web interface that makes it easy to perform crud and query the data. Queries can be executed in <a href="http://www.omg.org/spec/OCL/2.3.1/PDF">OCL</a>, <a href="https://github.com/tinkerpop/gremlin/wiki">Gremlin</a> or the underlying graph databases' native query language.</p>
+<p>Umlg can also, optionally, generate a rest interface to expose the domain model for performing crud and query operations. A web interface is provided that makes it easy to perform crud and query the data. </p>
 
-<p>Go to <a href="http://demo.umlg.org:8111/restAndJson/ui2">demo.uml.org</a> to have a look.</p>
+<p>Queries can be executed in <a href="http://www.omg.org/spec/OCL/2.3.1/PDF">OCL</a>, <a href="https://github.com/tinkerpop/gremlin/wiki">Gremlin</a> or the underlying graph databases' native query language.</p>
 
 <p>Currently, <a href="https://bitbucket.org/lambdazen/bitsy/wiki/Home">Bitsy</a>, <a href="http://www.orientdb.org/">OrientDb</a>, <a href="http://www.neo4j.org/">Neo4j</a> and <a href="https://github.com/thinkaurelius/titan/wiki">Titan</a> is supported as underlying blueprints graph databases.</p>
 
