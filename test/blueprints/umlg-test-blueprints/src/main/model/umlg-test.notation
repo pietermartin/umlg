@@ -5196,6 +5196,18 @@
           <element xmi:type="uml:Property" href="umlg-test.uml#_b34aUDChEeOJbevgaGUOXQ"/>
           <layoutConstraint xmi:type="notation:Location" xmi:id="_b35ocTChEeOJbevgaGUOXQ"/>
         </children>
+        <children xmi:type="notation:Shape" xmi:id="_mNE98DHdEeOJbevgaGUOXQ" type="3012" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:Property" href="umlg-test.uml#_mNEW4DHdEeOJbevgaGUOXQ"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_mNE98THdEeOJbevgaGUOXQ"/>
+        </children>
+        <children xmi:type="notation:Shape" xmi:id="_B1RB8DHeEeOJbevgaGUOXQ" type="3012" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:Property" href="umlg-test.uml#_B1Qa4DHeEeOJbevgaGUOXQ"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_B1RB8THeEeOJbevgaGUOXQ"/>
+        </children>
+        <children xmi:type="notation:Shape" xmi:id="_IPXXkDHeEeOJbevgaGUOXQ" type="3012" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:Property" href="umlg-test.uml#_IPWJcDHeEeOJbevgaGUOXQ"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_IPXXkTHeEeOJbevgaGUOXQ"/>
+        </children>
         <styles xmi:type="notation:TitleStyle" xmi:id="_GRikCDChEeOJbevgaGUOXQ"/>
         <styles xmi:type="notation:SortingStyle" xmi:id="_GRikCTChEeOJbevgaGUOXQ"/>
         <styles xmi:type="notation:FilteringStyle" xmi:id="_GRikCjChEeOJbevgaGUOXQ"/>

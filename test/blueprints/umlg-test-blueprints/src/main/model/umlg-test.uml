@@ -1617,6 +1617,21 @@
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_gKbNkDChEeOJbevgaGUOXQ"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_gKb0oDChEeOJbevgaGUOXQ" value="*"/>
             </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_mNEW4DHdEeOJbevgaGUOXQ" name="dateSet" visibility="public">
+              <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_cohIAQLgEeKtFpHFDhpFVA"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_vPARcDHdEeOJbevgaGUOXQ"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_vPA4gDHdEeOJbevgaGUOXQ" value="*"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_B1Qa4DHeEeOJbevgaGUOXQ" name="dateOrderedSet" visibility="public" isOrdered="true">
+              <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_cohIAQLgEeKtFpHFDhpFVA"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_E_9cUDHeEeOJbevgaGUOXQ"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_E_-DYDHeEeOJbevgaGUOXQ" value="*"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_IPWJcDHeEeOJbevgaGUOXQ" name="dateList" visibility="public" isOrdered="true" isUnique="false">
+              <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_cohIAQLgEeKtFpHFDhpFVA"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Ksb28DHeEeOJbevgaGUOXQ"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_KsceADHeEeOJbevgaGUOXQ" value="*"/>
+            </ownedAttribute>
           </packagedElement>
         </packagedElement>
       </packagedElement>

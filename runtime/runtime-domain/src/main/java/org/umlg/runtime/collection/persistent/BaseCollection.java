@@ -88,6 +88,43 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
                     throw new RuntimeException(ex);
                 }
             }
+        } else if (getDataTypeEnum() != null && isManyToMany()) {
+            for (Iterator<Edge> iter = getEdges(); iter.hasNext(); ) {
+                Edge edge = iter.next();
+                try {
+                    Vertex v = this.getVertexForDirection(edge);
+                    if (getDataTypeEnum().isDateTime()) {
+                        String s = v.getProperty(getLabel());
+                        if (s != null) {
+                            E node = (E) new DateTime(s);
+                            putToInternalMap(getQualifiedName(), v);
+                            this.internalCollection.add(node);
+                        }
+                    } else if (getDataTypeEnum().isDate()) {
+                        String s = v.getProperty(getLabel());
+                        if (s != null) {
+                            E property = (E) new LocalDate(s);
+                            putToInternalMap(getQualifiedName(), v);
+                            this.internalCollection.add(property);
+                        }
+                    } else if (getDataTypeEnum().isTime()) {
+                        String s = v.getProperty(getLabel());
+                        if (s != null) {
+                            E property = (E) new LocalTime(s);
+                            putToInternalMap(getQualifiedName(), v);
+                            this.internalCollection.add(property);
+                        }
+                    } else {
+                        String s = v.getProperty(getLabel());
+                        if (s != null) {
+                            putToInternalMap(getQualifiedName(), v);
+                            this.internalCollection.add((E)s);
+                        }
+                    }
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
         } else if (getDataTypeEnum() != null && getDataTypeEnum().isDateTime()) {
             String s = this.vertex.getProperty(getLabel());
             if (s != null) {
@@ -604,18 +641,13 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
             putToInternalMap(constructEnumPersistentName((Enum<?>)e), v);
         } else if (isOnePrimitive()) {
             this.vertex.setProperty(getLabel(), e);
-        } else if (getDataTypeEnum() != null && getDataTypeEnum().isDateTime()) {
-            this.vertex.setProperty(getLabel(), e.toString());
-        } else if (getDataTypeEnum() != null && getDataTypeEnum().isDate()) {
-            this.vertex.setProperty(getLabel(), e.toString());
-        } else if (getDataTypeEnum() != null && getDataTypeEnum().isTime()) {
-            this.vertex.setProperty(getLabel(), e.toString());
-        } else if (getDataTypeEnum() != null && getDataTypeEnum().isInternationalPhoneNumber()) {
-            this.vertex.setProperty(getLabel(), e);
-        } else if (getDataTypeEnum() != null && getDataTypeEnum().isLocalPhoneNumber()) {
-            this.vertex.setProperty(getLabel(), e);
-        } else if (getDataTypeEnum() != null && getDataTypeEnum().isEmail()) {
-            this.vertex.setProperty(getLabel(), e);
+        } else if (getDataTypeEnum() != null && isManyToMany()) {
+            v = GraphDb.getDb().addVertex(null);
+            v.setProperty("className", e.getClass().getName());
+            setDataTypeOnVertex(v, e);
+            putToInternalMap(getQualifiedName(), v);
+        } else if (getDataTypeEnum() != null) {
+            setDataTypeOnVertex(this.vertex, e);
         } else {
             v = GraphDb.getDb().addVertex(null);
             v.setProperty("value", e);
@@ -1253,5 +1285,21 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
         sb.append(".");
         sb.append(e.name());
         return  sb.toString();
+    }
+
+    private void setDataTypeOnVertex(Vertex v, E e) {
+        if (getDataTypeEnum().isDateTime()) {
+            v.setProperty(getLabel(), e.toString());
+        } else if (getDataTypeEnum().isDate()) {
+            v.setProperty(getLabel(), e.toString());
+        } else if (getDataTypeEnum().isTime()) {
+            v.setProperty(getLabel(), e.toString());
+        } else if (getDataTypeEnum().isInternationalPhoneNumber()) {
+            v.setProperty(getLabel(), e);
+        } else if (getDataTypeEnum().isLocalPhoneNumber()) {
+            v.setProperty(getLabel(), e);
+        } else if (getDataTypeEnum().isEmail()) {
+            v.setProperty(getLabel(), e);
+        }
     }
 }

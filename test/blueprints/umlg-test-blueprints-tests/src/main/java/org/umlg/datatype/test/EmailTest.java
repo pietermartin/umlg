@@ -16,29 +16,29 @@ import org.umlg.runtime.test.BaseLocalDbTest;
  */
 public class EmailTest extends BaseLocalDbTest {
 
-    @Test
-    public void testEmailDataType() {
-        God g = new God(true);
-        g.setName("g");
-        Universe universe = new Universe(g);
-        universe.setName("u");
-        universe.setEmail("ding.dong@lalaland.com");
-        SpaceTime spaceTime = new SpaceTime(universe);
-        new Space(spaceTime);
-        new Time(spaceTime);
-        db.commit();
-        Universe testUniverse1 = new Universe(universe.getVertex());
-        Assert.assertEquals("ding.dong@lalaland.com", testUniverse1.getEmail());
-    }
-
 //    @Test
-//    public void testManyDataType() {
-//        DataTypeEntity dataTypeEntity = new DataTypeEntity(true);
-//        dataTypeEntity.addToEmail1("asd@asd.asd");
-//        dataTypeEntity.addToEmailList("j@j.j");
-//        dataTypeEntity.addToEmailList("jj@jj.jj");
+//    public void testEmailDataType() {
+//        God g = new God(true);
+//        g.setName("g");
+//        Universe universe = new Universe(g);
+//        universe.setName("u");
+//        universe.setEmail("ding.dong@lalaland.com");
+//        SpaceTime spaceTime = new SpaceTime(universe);
+//        new Space(spaceTime);
+//        new Time(spaceTime);
 //        db.commit();
-//        dataTypeEntity.reload();
-//        Assert.assertEquals(2, dataTypeEntity.getEmailList().size());
+//        Universe testUniverse1 = new Universe(universe.getVertex());
+//        Assert.assertEquals("ding.dong@lalaland.com", testUniverse1.getEmail());
 //    }
+
+    @Test
+    public void testManyDataType() {
+        DataTypeEntity dataTypeEntity = new DataTypeEntity(true);
+        dataTypeEntity.addToEmail1("asd@asd.asd");
+        dataTypeEntity.addToEmailList("j@j.j");
+        dataTypeEntity.addToEmailList("jj@jj.jj");
+        db.commit();
+        dataTypeEntity.reload();
+        Assert.assertEquals(2, dataTypeEntity.getEmailList().size());
+    }
 }
