@@ -79,7 +79,7 @@ public class NavigatePropertyOverloadedPostForLookupServerResourceBuilder extend
 
         OJPathName parentPathName = otherEndPWrap.javaBaseTypePath();
         post.getBody().addToStatements(
-                "this." + parentPathName.getLast().toLowerCase() + "Id = "+TumlRestletGenerationUtil.UmlgURLDecoder.getLast()+".decode((String)getRequestAttributes().get(\""
+                "this." + parentPathName.getLast().toLowerCase() + "Id = " + TumlRestletGenerationUtil.UmlgURLDecoder.getLast() + ".decode((String)getRequestAttributes().get(\""
                         + parentPathName.getLast().toLowerCase() + "Id\"))");
         annotatedClass.addToImports(TumlRestletGenerationUtil.UmlgURLDecoder);
 
@@ -178,14 +178,14 @@ public class NavigatePropertyOverloadedPostForLookupServerResourceBuilder extend
         addPutResource(pWrap, annotatedClass, parentPathName);
 
         //get the lookup uri
-        ojTryStatement.getTryPart().addToStatements("String lookupUri = getReference().getQueryAsForm(false).getFirstValue(\"lookupUri\")");
+        ojTryStatement.getTryPart().addToStatements("String lookupUri = " + TumlRestletGenerationUtil.UmlgURLEncoder.getLast() + ".decode(getReference().getQueryAsForm(false).getFirstValue(\"lookupUri\"))");
         ojTryStatement.getTryPart().addToStatements("lookupUri = \"riap://host\" + lookupUri");
         ojTryStatement.getTryPart().addToStatements("int fakeIdIndex = lookupUri.indexOf(\"fake\")");
         OJIfStatement ifFakeId = new OJIfStatement("fakeIdIndex != -1");
         ifFakeId.addToThenPart("int indexOfForwardSlash = lookupUri.indexOf(\"/\", fakeIdIndex)");
         ifFakeId.addToThenPart("String fakeId = lookupUri.substring(fakeIdIndex, indexOfForwardSlash)");
         ifFakeId.addToThenPart("Object id = " + TinkerGenerationUtil.UmlgTmpIdManager.getLast() + ".INSTANCE.get(fakeId)");
-        ifFakeId.addToThenPart("lookupUri = lookupUri.replace(fakeId, "+TumlRestletGenerationUtil.UmlgURLEncoder.getLast()+".encode(id.toString()))");
+        ifFakeId.addToThenPart("lookupUri = lookupUri.replace(fakeId, " + TumlRestletGenerationUtil.UmlgURLEncoder.getLast() + ".encode(id.toString()))");
         ojTryStatement.getTryPart().addToStatements(ifFakeId);
         annotatedClass.addToImports(TinkerGenerationUtil.UmlgTmpIdManager);
 

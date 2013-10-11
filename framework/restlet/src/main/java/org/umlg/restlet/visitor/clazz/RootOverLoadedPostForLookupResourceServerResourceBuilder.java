@@ -148,7 +148,7 @@ public class RootOverLoadedPostForLookupResourceServerResourceBuilder extends Ba
         addDeleteResource(concreteClassifier, annotatedClass, parentPathName);
 
         //get the lookup uri
-        ojTryStatement.getTryPart().addToStatements("String lookupUri = getReference().getQueryAsForm(false).getFirstValue(\"lookupUri\")");
+        ojTryStatement.getTryPart().addToStatements("String lookupUri = " + TumlRestletGenerationUtil.UmlgURLDecoder.getLast() + ".decode(getReference().getQueryAsForm(false).getFirstValue(\"lookupUri\"))");
         ojTryStatement.getTryPart().addToStatements("lookupUri = \"riap://host\" + lookupUri");
         ojTryStatement.getTryPart().addToStatements("int fakeIdIndex = lookupUri.indexOf(\"fake\")");
         OJIfStatement ifFakeId = new OJIfStatement("fakeIdIndex != -1");

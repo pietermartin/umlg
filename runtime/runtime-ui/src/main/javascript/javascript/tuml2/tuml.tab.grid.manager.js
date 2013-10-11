@@ -401,7 +401,7 @@
 
             this.instantiateGrid();
 
-            if (this.propertyNavigatingTo.ordered) {
+            if (this.propertyNavigatingTo !== undefined && this.propertyNavigatingTo.ordered) {
                 this.setupRowDrag();
             }
 
@@ -1095,7 +1095,7 @@
                         field: property.name,
                         sortable: true
                     });
-                    if (this.propertyNavigatingTo.ordered) {
+                    if (this.propertyNavigatingTo !== undefined && this.propertyNavigatingTo.ordered) {
                         //This is for slickgrid's row move/drag plugin
                         this.columns[0].behavior = "selectAndMove";
                         this.columns[0].cssClass = "cell-reorder";

@@ -433,7 +433,7 @@
                     self.currentActiveProperty = property;
                 }
             );
-            if ($input.is('select')) {
+            if ($input.is('select') && !isForManyEditor) {
                 $input.change(function () {
                     var validationResult = self.validateField(property, $input, isForManyEditor);
                     if (validationResult.valid) {
@@ -447,7 +447,7 @@
                     }
                     return false;
                 });
-            } else if (property.fieldType === 'Boolean') {
+            } else if ((property.fieldType === 'Boolean') && !isForManyEditor) {
                 $input.change(function () {
                     var validationResult = self.validateField(property, $input, isForManyEditor);
                     if (validationResult.valid) {
@@ -461,7 +461,7 @@
                     }
                     return false;
                 });
-            } else {
+            } else if (!isForManyEditor) {
                 $input.blur(function () {
                     var validationResult = self.validateField(property, $input, isForManyEditor);
                     if (validationResult.valid) {
@@ -621,24 +621,26 @@
             var valueToAdd = $('.many-primitive-editor-input').val();
             var currentValues = serializer($table);
             var testArray = [];
-            testArray.push(valueToAdd);
-            var validator = selectFieldValidator(property);
-            var validationResults = validator(testArray);
-            if (currentValues.length !== 0 && validationResults.valid && property.unique) {
-                validationResults = validator(currentValues, valueToAdd);
-            }
-            if (!validationResults.valid) {
-                alert(validationResults.msg);
-            } else {
-                addTr(valueToAdd);
-                //Need to reapply the drag and drop plugin if the table was empty
-                if (currentValues.length == 0) {
-                    if (property.ordered) {
-                        $table.tableDnD();
-                    }
+            if (valueToAdd !== '') {
+                testArray.push(valueToAdd);
+                var validator = selectFieldValidator(property);
+                var validationResults = validator(testArray);
+                if (currentValues.length !== 0 && validationResults.valid && property.unique) {
+                    validationResults = validator(currentValues, valueToAdd);
                 }
-                if (!property.manyEnumeration) {
-                    $input.val('');
+                if (!validationResults.valid) {
+                    alert(validationResults.msg);
+                } else {
+                    addTr(valueToAdd);
+                    //Need to reapply the drag and drop plugin if the table was empty
+                    if (currentValues.length == 0) {
+                        if (property.ordered) {
+                            $table.tableDnD();
+                        }
+                    }
+                    if (!property.manyEnumeration) {
+                        $input.val('');
+                    }
                 }
             }
         }).appendTo($div);
@@ -786,7 +788,10 @@
         var validationResult = null;
         if (property.manyPrimitive || property.manyEnumeration) {
             var stringValueArray = [];
-            stringValueArray.push(validateInput.val());
+            var value = validateInput.val();
+            if (value !== '') {
+                stringValueArray = value.split(',');
+            }
             var tmpSerializedValue = [];
             for (var i = 0; i < stringValueArray.length; i++) {
                 var tmpValue = stringValueArray[i];
