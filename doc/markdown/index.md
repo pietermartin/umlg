@@ -18,10 +18,15 @@ Queries can be executed in [OCL](http://www.omg.org/spec/OCL/2.3.1/PDF), [Gremli
 
 Currently, [Bitsy](https://bitbucket.org/lambdazen/bitsy/wiki/Home), [OrientDb](http://www.orientdb.org/), [Neo4j](http://www.neo4j.org/) and [Titan](https://github.com/thinkaurelius/titan/wiki) is supported as underlying blueprints graph databases.
 
+Quick preview
+-------------
+
+
+
 Getting Started
 ---------------
 
-[Getting Started](http://www.umlg.org/gettingStarted.html)
+[Getting Started](http://www.umlg.org/gettingStarted.html) with maven and Papyrus.
 
 The Rest
 --------
