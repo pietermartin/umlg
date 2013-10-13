@@ -1949,7 +1949,7 @@
         <layoutConstraint xmi:type="notation:Location" xmi:id="_Gp2slUI_EeKpM48zLjI12Q" y="-20"/>
       </children>
       <children xmi:type="notation:DecorationNode" xmi:id="_Gp2slkI_EeKpM48zLjI12Q" type="6005">
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_Gp2sl0I_EeKpM48zLjI12Q" x="-25" y="13"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_Gp2sl0I_EeKpM48zLjI12Q" x="-35" y="80"/>
       </children>
       <children xmi:type="notation:DecorationNode" xmi:id="_Gp2smEI_EeKpM48zLjI12Q" type="6033">
         <layoutConstraint xmi:type="notation:Location" xmi:id="_Gp2smUI_EeKpM48zLjI12Q" y="20"/>
