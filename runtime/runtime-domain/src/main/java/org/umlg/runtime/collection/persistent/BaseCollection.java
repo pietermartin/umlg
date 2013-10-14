@@ -64,85 +64,11 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
     @SuppressWarnings({"unchecked", "rawtypes"})
     protected void loadFromVertex() {
         if (!isOnePrimitive() && getDataTypeEnum() == null) {
-            for (Iterator<Edge> iter = getEdges(); iter.hasNext(); ) {
-                Edge edge = iter.next();
-                E node;
-                try {
-                    Class<?> c = this.getClassToInstantiate(edge);
-                    if (c.isEnum()) {
-                        Object value = this.getVertexForDirection(edge).getProperty("value");
-                        node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
-                        putToInternalMap(constructEnumPersistentName((Enum<?>)node), this.getVertexForDirection(edge));
-                    } else if (TumlMetaNode.class.isAssignableFrom(c)) {
-                        Method m = c.getDeclaredMethod("getInstance", new Class[0]);
-                        node = (E) m.invoke(null);
-                    } else if (UmlgNode.class.isAssignableFrom(c)) {
-                        node = (E) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
-                    } else {
-                        Object value = this.getVertexForDirection(edge).getProperty("value");
-                        node = (E) value;
-                        putToInternalMap(value, this.getVertexForDirection(edge));
-                    }
-                    this.internalCollection.add(node);
-                } catch (Exception ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-        } else if (getDataTypeEnum() != null && isManyToMany()) {
-            for (Iterator<Edge> iter = getEdges(); iter.hasNext(); ) {
-                Edge edge = iter.next();
-                try {
-                    Vertex v = this.getVertexForDirection(edge);
-                    if (getDataTypeEnum().isDateTime()) {
-                        String s = v.getProperty(getLabel());
-                        if (s != null) {
-                            E node = (E) new DateTime(s);
-                            putToInternalMap(getQualifiedName(), v);
-                            this.internalCollection.add(node);
-                        }
-                    } else if (getDataTypeEnum().isDate()) {
-                        String s = v.getProperty(getLabel());
-                        if (s != null) {
-                            E property = (E) new LocalDate(s);
-                            putToInternalMap(getQualifiedName(), v);
-                            this.internalCollection.add(property);
-                        }
-                    } else if (getDataTypeEnum().isTime()) {
-                        String s = v.getProperty(getLabel());
-                        if (s != null) {
-                            E property = (E) new LocalTime(s);
-                            putToInternalMap(getQualifiedName(), v);
-                            this.internalCollection.add(property);
-                        }
-                    } else {
-                        String s = v.getProperty(getLabel());
-                        if (s != null) {
-                            putToInternalMap(getQualifiedName(), v);
-                            this.internalCollection.add((E)s);
-                        }
-                    }
-                } catch (Exception ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-        } else if (getDataTypeEnum() != null && getDataTypeEnum().isDateTime()) {
-            String s = this.vertex.getProperty(getLabel());
-            if (s != null) {
-                E property = (E) new DateTime(s);
-                this.internalCollection.add(property);
-            }
-        } else if (getDataTypeEnum() != null && getDataTypeEnum().isDate()) {
-            String s = this.vertex.getProperty(getLabel());
-            if (s != null) {
-                E property = (E) new LocalDate(s);
-                this.internalCollection.add(property);
-            }
-        } else if (getDataTypeEnum() != null && getDataTypeEnum().isTime()) {
-            String s = this.vertex.getProperty(getLabel());
-            if (s != null) {
-                E property = (E) new LocalTime(s);
-                this.internalCollection.add(property);
-            }
+            loadManyNotPrimitiveNotDataType();
+        } else if (getDataTypeEnum() != null && (isManyToMany() || isOneToMany())) {
+            loadManyDataType();
+        } else if (getDataTypeEnum() != null) {
+            loadOneDataType();
         } else {
             E property = this.vertex.getProperty(getLabel());
             if (property != null) {
@@ -195,6 +121,7 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
     /**
      * This gets invoked from the opposite side in addInternal.
      * It is called before the edge is created so the new element will not be loaded by loadFromVertex
+     *
      * @param e
      * @return
      */
@@ -588,7 +515,7 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
                     break;
                 }
             } else if (o.getClass().isEnum()) {
-                v = removeFromInternalMap(constructEnumPersistentName((Enum<?>)o));
+                v = removeFromInternalMap(constructEnumPersistentName((Enum<?>) o));
                 if (isOrdered()) {
                     removeFromLinkedList(v);
                 }
@@ -596,7 +523,18 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
                     removeFromInverseLinkedList(v);
                 }
                 GraphDb.getDb().removeVertex(v);
-            } else if (isOnePrimitive() || getDataTypeEnum() != null) {
+            } else if (isOnePrimitive() && getDataTypeEnum() == null) {
+                this.vertex.removeProperty(getLabel());
+            } else if (getDataTypeEnum() != null && (isManyToMany() || isOneToMany())) {
+                v = removeFromInternalMap(o.toString());
+                if (isOrdered()) {
+                    removeFromLinkedList(v);
+                }
+                if (isInverseOrdered()) {
+                    removeFromInverseLinkedList(v);
+                }
+                GraphDb.getDb().removeVertex(v);
+            } else if (getDataTypeEnum() != null) {
                 this.vertex.removeProperty(getLabel());
             } else {
                 v = removeFromInternalMap(o);
@@ -638,14 +576,14 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
             v = GraphDb.getDb().addVertex(null);
             v.setProperty("value", ((Enum<?>) e).name());
             v.setProperty("className", e.getClass().getName());
-            putToInternalMap(constructEnumPersistentName((Enum<?>)e), v);
+            putToInternalMap(constructEnumPersistentName((Enum<?>) e), v);
         } else if (isOnePrimitive()) {
             this.vertex.setProperty(getLabel(), e);
-        } else if (getDataTypeEnum() != null && isManyToMany()) {
+        } else if (getDataTypeEnum() != null && (isManyToMany() || isOneToMany())) {
             v = GraphDb.getDb().addVertex(null);
             v.setProperty("className", e.getClass().getName());
             setDataTypeOnVertex(v, e);
-            putToInternalMap(getQualifiedName(), v);
+            putToInternalMap(e.toString(), v);
         } else if (getDataTypeEnum() != null) {
             setDataTypeOnVertex(this.vertex, e);
         } else {
@@ -887,8 +825,9 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
     /**
      * element is the context for the ocl expression representing the qualifier
      * value
+     * <p/>
+     * //     * @param index
      *
-//     * @param index
      * @param qualifiedNode
      * @param qualifierNode
      */
@@ -1284,7 +1223,7 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
         StringBuilder sb = new StringBuilder(e.getClass().getName());
         sb.append(".");
         sb.append(e.name());
-        return  sb.toString();
+        return sb.toString();
     }
 
     private void setDataTypeOnVertex(Vertex v, E e) {
@@ -1300,6 +1239,117 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
             v.setProperty(getLabel(), e);
         } else if (getDataTypeEnum().isEmail()) {
             v.setProperty(getLabel(), e);
+        } else {
+            throw new IllegalStateException(String.format("Uncatered for DataType %s", new String[]{getDataTypeEnum().getClass().getName()}));
         }
     }
+
+    private void loadOneDataType() {
+        switch (getDataTypeEnum()) {
+            case DateTime:
+                String s = this.vertex.getProperty(getLabel());
+                if (s != null) {
+                    E property = (E) new DateTime(s);
+                    this.internalCollection.add(property);
+                }
+                break;
+            case Date:
+                s = this.vertex.getProperty(getLabel());
+                if (s != null) {
+                    E property = (E) new LocalDate(s);
+                    this.internalCollection.add(property);
+                }
+                break;
+            case Time:
+                s = this.vertex.getProperty(getLabel());
+                if (s != null) {
+                    E property = (E) new LocalTime(s);
+                    this.internalCollection.add(property);
+                }
+                break;
+            default:
+                E property = this.vertex.getProperty(getLabel());
+                if (property != null) {
+                    this.internalCollection.add(property);
+                }
+        }
+        this.loaded = true;
+    }
+
+    private void loadManyDataType() {
+        for (Iterator<Edge> iter = getEdges(); iter.hasNext(); ) {
+            Edge edge = iter.next();
+            try {
+                Vertex v = this.getVertexForDirection(edge);
+                loadDataTypeFromVertex(v);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+    }
+
+    protected E loadDataTypeFromVertex(Vertex v) {
+        E result = null;
+        switch (getDataTypeEnum()) {
+            case DateTime:
+                String s = v.getProperty(getLabel());
+                if (s != null) {
+                    result = (E) new DateTime(s);
+                    putToInternalMap(result.toString(), v);
+                    this.internalCollection.add(result);
+                }
+                break;
+            case Date:
+                s = v.getProperty(getLabel());
+                if (s != null) {
+                    result = (E) new LocalDate(s);
+                    putToInternalMap(result.toString(), v);
+                    this.internalCollection.add(result);
+                }
+                break;
+            case Time:
+                s = v.getProperty(getLabel());
+                if (s != null) {
+                    result = (E) new LocalTime(s);
+                    putToInternalMap(result.toString(), v);
+                    this.internalCollection.add(result);
+                }
+                break;
+            default:
+                result = v.getProperty(getLabel());
+                if (result != null) {
+                    putToInternalMap(result.toString(), v);
+                    this.internalCollection.add(result);
+                }
+        }
+        return result;
+    }
+
+    private void loadManyNotPrimitiveNotDataType() {
+        for (Iterator<Edge> iter = getEdges(); iter.hasNext(); ) {
+            Edge edge = iter.next();
+            E node;
+            try {
+                Class<?> c = this.getClassToInstantiate(edge);
+                if (c.isEnum()) {
+                    Object value = this.getVertexForDirection(edge).getProperty("value");
+                    node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
+                    putToInternalMap(constructEnumPersistentName((Enum<?>) node), this.getVertexForDirection(edge));
+                } else if (TumlMetaNode.class.isAssignableFrom(c)) {
+                    Method m = c.getDeclaredMethod("getInstance", new Class[0]);
+                    node = (E) m.invoke(null);
+                } else if (UmlgNode.class.isAssignableFrom(c)) {
+                    node = (E) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
+                } else {
+                    Object value = this.getVertexForDirection(edge).getProperty("value");
+                    node = (E) value;
+                    putToInternalMap(value, this.getVertexForDirection(edge));
+                }
+                this.internalCollection.add(node);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+    }
+
 }

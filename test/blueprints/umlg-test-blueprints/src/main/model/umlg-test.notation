@@ -5226,7 +5226,7 @@
         <layoutConstraint xmi:type="notation:Bounds" xmi:id="_GRikFTChEeOJbevgaGUOXQ"/>
       </children>
       <element xmi:type="uml:Class" href="umlg-test.uml#_GRhV4DChEeOJbevgaGUOXQ"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_GRh88TChEeOJbevgaGUOXQ" x="168" y="114" width="209"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_GRh88TChEeOJbevgaGUOXQ" x="95" y="50" width="209"/>
     </children>
     <styles xmi:type="notation:DiagramStyle" xmi:id="_DyRFMTChEeOJbevgaGUOXQ"/>
     <element xmi:type="uml:Package" href="umlg-test.uml#_AiPe4DChEeOJbevgaGUOXQ"/>

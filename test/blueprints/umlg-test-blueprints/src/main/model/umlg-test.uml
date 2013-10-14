@@ -19,6 +19,9 @@
     <packageImport xmi:type="uml:PackageImport" xmi:id="_eSul0CNHEeKFBpkLESs_WA">
       <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
     </packageImport>
+    <packageImport xmi:type="uml:PackageImport" xmi:id="_mOo4cDQzEeOHFNHuRZubrg">
+      <importedPackage xmi:type="uml:Model" href="umlg-datatypes.uml#_K8N1MAD6EeKS1vh1F4YVWQ"/>
+    </packageImport>
     <packagedElement xmi:type="uml:Package" xmi:id="_lvLY8MTDEeGJXus6eZqdyw" name="org">
       <packagedElement xmi:type="uml:Package" xmi:id="_w8IxIM37EdqwVrslYOdUDA" name="umlg">
         <packagedElement xmi:type="uml:Package" xmi:id="_osC40OwhEeCSwqyeEHd1tw" name="interfacetest">
@@ -1609,10 +1612,10 @@
           <packagedElement xmi:type="uml:Class" xmi:id="_GRhV4DChEeOJbevgaGUOXQ" name="DataTypeEntity">
             <ownedAttribute xmi:type="uml:Property" xmi:id="_K04zYDChEeOJbevgaGUOXQ" name="email1" visibility="public">
               <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_PyFX8AD6EeKS1vh1F4YVWQ"/>
-              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_TuHd4DChEeOJbevgaGUOXQ" value="1"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_TuHd4DChEeOJbevgaGUOXQ"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_TuIsADChEeOJbevgaGUOXQ" value="1"/>
             </ownedAttribute>
-            <ownedAttribute xmi:type="uml:Property" xmi:id="_b34aUDChEeOJbevgaGUOXQ" name="emailList" visibility="public">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_b34aUDChEeOJbevgaGUOXQ" name="emailList" visibility="public" isOrdered="true">
               <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_PyFX8AD6EeKS1vh1F4YVWQ"/>
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_gKbNkDChEeOJbevgaGUOXQ"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_gKb0oDChEeOJbevgaGUOXQ" value="*"/>

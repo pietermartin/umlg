@@ -154,6 +154,8 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
                 node = (E) m.invoke(null);
             } else if (UmlgNode.class.isAssignableFrom(c)) {
                 node = (E) c.getConstructor(Vertex.class).newInstance(vertexToLoad);
+            } else if (getDataTypeEnum() != null) {
+                node = loadDataTypeFromVertex(vertexToLoad);
             } else {
                 Object value = vertexToLoad.getProperty("value");
                 node = (E) value;

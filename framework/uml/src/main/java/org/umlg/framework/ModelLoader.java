@@ -125,6 +125,7 @@ public class ModelLoader {
 
     /**
      * Filter out Behaviors for now
+     *
      * @return
      */
     public List<Class> getAllConcreteClasses() {
@@ -132,7 +133,7 @@ public class ModelLoader {
         filter(results, this.model, new Filter() {
             @Override
             public boolean filter(Element e) {
-                return e instanceof Class && !((Class)e).isAbstract() && !(e instanceof Behavior);
+                return e instanceof Class && !((Class) e).isAbstract() && !(e instanceof Behavior);
             }
         });
 
@@ -148,10 +149,10 @@ public class ModelLoader {
             @Override
             public boolean filter(Element e) {
                 if (e instanceof Property) {
-                    Property qualifier = (Property)e;
+                    Property qualifier = (Property) e;
                     Element owner = qualifier.getOwner();
                     if (owner instanceof Property) {
-                        Property qualifierOwner = (Property)owner;
+                        Property qualifierOwner = (Property) owner;
                         return qualifierOwner.getQualifiers().contains(qualifier);
                     } else {
                         return false;

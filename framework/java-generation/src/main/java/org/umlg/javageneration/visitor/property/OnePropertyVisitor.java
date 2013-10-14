@@ -3,6 +3,7 @@ package org.umlg.javageneration.visitor.property;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.uml2.uml.Constraint;
 import org.eclipse.uml2.uml.Property;
+import org.umlg.framework.VisitFilter;
 import org.umlg.java.metamodel.*;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedField;
