@@ -5196,6 +5196,22 @@
           <element xmi:type="uml:Property" href="umlg-test.uml#_b34aUDChEeOJbevgaGUOXQ"/>
           <layoutConstraint xmi:type="notation:Location" xmi:id="_b35ocTChEeOJbevgaGUOXQ"/>
         </children>
+        <children xmi:type="notation:Shape" xmi:id="_mNE98DHdEeOJbevgaGUOXQ" type="3012" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:Property" href="umlg-test.uml#_mNEW4DHdEeOJbevgaGUOXQ"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_mNE98THdEeOJbevgaGUOXQ"/>
+        </children>
+        <children xmi:type="notation:Shape" xmi:id="_B1RB8DHeEeOJbevgaGUOXQ" type="3012" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:Property" href="umlg-test.uml#_B1Qa4DHeEeOJbevgaGUOXQ"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_B1RB8THeEeOJbevgaGUOXQ"/>
+        </children>
+        <children xmi:type="notation:Shape" xmi:id="_IPXXkDHeEeOJbevgaGUOXQ" type="3012" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:Property" href="umlg-test.uml#_IPWJcDHeEeOJbevgaGUOXQ"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_IPXXkTHeEeOJbevgaGUOXQ"/>
+        </children>
+        <children xmi:type="notation:Shape" xmi:id="_ux0tUDTqEeODK82GiF9aDg" type="3012" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:Property" href="umlg-test.uml#_uv728DTqEeODK82GiF9aDg"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_ux0tUTTqEeODK82GiF9aDg"/>
+        </children>
         <styles xmi:type="notation:TitleStyle" xmi:id="_GRikCDChEeOJbevgaGUOXQ"/>
         <styles xmi:type="notation:SortingStyle" xmi:id="_GRikCTChEeOJbevgaGUOXQ"/>
         <styles xmi:type="notation:FilteringStyle" xmi:id="_GRikCjChEeOJbevgaGUOXQ"/>
@@ -5214,7 +5230,7 @@
         <layoutConstraint xmi:type="notation:Bounds" xmi:id="_GRikFTChEeOJbevgaGUOXQ"/>
       </children>
       <element xmi:type="uml:Class" href="umlg-test.uml#_GRhV4DChEeOJbevgaGUOXQ"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_GRh88TChEeOJbevgaGUOXQ" x="168" y="114" width="209"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_GRh88TChEeOJbevgaGUOXQ" x="95" y="45" width="209"/>
     </children>
     <styles xmi:type="notation:DiagramStyle" xmi:id="_DyRFMTChEeOJbevgaGUOXQ"/>
     <element xmi:type="uml:Package" href="umlg-test.uml#_AiPe4DChEeOJbevgaGUOXQ"/>

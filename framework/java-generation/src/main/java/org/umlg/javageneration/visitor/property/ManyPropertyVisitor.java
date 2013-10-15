@@ -2,6 +2,7 @@ package org.umlg.javageneration.visitor.property;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.uml2.uml.Property;
+import org.umlg.framework.VisitFilter;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.java.metamodel.OJForStatement;

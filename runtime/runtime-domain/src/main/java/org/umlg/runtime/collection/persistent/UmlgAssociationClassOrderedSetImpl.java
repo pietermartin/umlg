@@ -100,7 +100,7 @@ public class UmlgAssociationClassOrderedSetImpl<AssociationClassNode> extends Ti
     }
 
     @Override
-    protected void loadNode(Edge edgeToFirstElement, Vertex vertex) {
+    protected void loadNode(Edge edgeToElement, Vertex vertex) {
         AssociationClassNode node;
         try {
             //Get the edges between the vertexToLoad and the owner vertex.

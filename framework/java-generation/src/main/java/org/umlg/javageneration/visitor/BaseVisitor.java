@@ -90,7 +90,7 @@ public class BaseVisitor {
                 if (otherEnd == null) {
                     throw new IllegalStateException("Oy, where is the other end gone to!!!");
                 }
-                return this.workspace.findOJClass(Namer.qualifiedName((NamedElement) otherEnd.getType()));
+                return this.workspace.findOJClass(Namer.qualifiedName(otherEnd.getType()));
             } else if (owner instanceof Classifier) {
                 return this.workspace.findOJClass(Namer.qualifiedName((NamedElement) owner));
             } else if (owner instanceof Property) {

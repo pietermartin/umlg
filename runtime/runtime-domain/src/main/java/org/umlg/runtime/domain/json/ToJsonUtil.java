@@ -1,9 +1,15 @@
 package org.umlg.runtime.domain.json;
 
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
+import org.joda.time.LocalTime;
 import org.umlg.runtime.domain.PersistentObject;
 import org.umlg.runtime.domain.UmlgApplicationNode;
 import org.umlg.runtime.domain.UmlgEnum;
+import org.umlg.runtime.util.TumlFormatter;
 
+import java.sql.Time;
 import java.util.Collection;
 
 public class ToJsonUtil {
@@ -66,6 +72,51 @@ public class ToJsonUtil {
                 count++;
                 json.append(p.toJson(deep));
                 if (count != entities.size()) {
+                    json.append(",");
+                }
+            }
+        }
+        return json.toString();
+    }
+
+    public static String toJsonLocalDate(Collection<LocalDate> localDates) {
+        StringBuilder json = new StringBuilder();
+        if (localDates != null) {
+            int count = 0;
+            for (LocalDate localDate : localDates) {
+                count++;
+                json.append(TumlFormatter.format(localDate));
+                if (count != localDates.size()) {
+                    json.append(",");
+                }
+            }
+        }
+        return json.toString();
+    }
+
+    public static String toJsonDateTime(Collection<DateTime> dateTimes) {
+        StringBuilder json = new StringBuilder();
+        if (dateTimes != null) {
+            int count = 0;
+            for (DateTime dateTime : dateTimes) {
+                count++;
+                json.append(TumlFormatter.format(dateTime));
+                if (count != dateTimes.size()) {
+                    json.append(",");
+                }
+            }
+        }
+        return json.toString();
+    }
+
+    public static String toJsonLocalTime(Collection<LocalTime> localTimes) {
+        StringBuilder json = new StringBuilder();
+        if (localTimes != null) {
+            int count = 0;
+            for (LocalTime localTime : localTimes) {
+                count++;
+                json.append(TumlFormatter.format(localTime));
+                if (count != localTimes.size()) {
                     json.append(",");
                 }
             }

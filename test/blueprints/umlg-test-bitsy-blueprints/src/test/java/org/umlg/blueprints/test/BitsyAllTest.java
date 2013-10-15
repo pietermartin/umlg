@@ -2,7 +2,7 @@ package org.umlg.blueprints.test;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
-import org.umlg.datatype.test.EmailTest;
+import org.umlg.tinker.datatype.DataTypeTest;
 import org.umlg.tinker.enumeration.ManyEnumerationTest;
 import org.umlg.meta.TestMetaClasses;
 import org.umlg.tinker.allinstances.AllInstancesTest;
@@ -38,7 +38,7 @@ import org.umlg.tinker.validationtest.TestValidation;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        EmailTest.class,
+        DataTypeTest.class,
         ManyEnumerationTest.class,
         TestMetaClasses.class,
         AllInstancesTest.class,

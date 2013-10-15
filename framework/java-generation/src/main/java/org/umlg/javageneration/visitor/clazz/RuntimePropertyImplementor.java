@@ -519,7 +519,6 @@ public class RuntimePropertyImplementor {
         propertyLabelField.setName("label");
         propertyLabelField.setType(new OJPathName("String"));
         propertyLabelField.setInitExp(TinkerGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() + ".getUmlgLabelConverter().convert(\"" + edgeName + "\")");
-//        propertyLabelField.setInitExp("\"" + edgeName + "\"");
         ojLiteral.addToAttributeValues(propertyLabelField);
 
         OJField isOneToOneAttribute = new OJField();

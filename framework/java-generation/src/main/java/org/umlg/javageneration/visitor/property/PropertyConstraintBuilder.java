@@ -2,6 +2,7 @@ package org.umlg.javageneration.visitor.property;
 
 import org.eclipse.ocl.expressions.OCLExpression;
 import org.eclipse.uml2.uml.*;
+import org.umlg.framework.VisitFilter;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.java.metamodel.OJField;

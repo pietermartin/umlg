@@ -296,35 +296,42 @@ public abstract class TumlBaseOrderedSet<E> extends BaseCollection<E> implements
             List<Vertex> vertexes = this.internalVertexMap.get(constructEnumPersistentName((Enum<?>) previous));
             Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
             previousVertex = vertexes.get(0);
-//            previousVertex = this.internalVertexMap.get(((Enum<?>) previous).name());
+        } else if (getDataTypeEnum() != null) {
+            List<Vertex> vertexes = this.internalVertexMap.get(e.toString());
+            Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
+            previousVertex = vertexes.get(0);
         } else {
             List<Vertex> vertexes = this.internalVertexMap.get(previous);
             Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
             previousVertex = vertexes.get(0);
-//            previousVertex = this.internalVertexMap.get(previous);
         }
         return previousVertex;
     }
 
-    protected void loadNode(Edge edgeToFirstElement, Vertex vertex) {
+    protected void loadNode(Edge edgeToElement, Vertex vertex) {
         E node;
         try {
-            Class<?> c = this.getClassToInstantiate(edgeToFirstElement);
+            Class<?> c = this.getClassToInstantiate(edgeToElement);
             if (c.isEnum()) {
                 Object value = vertex.getProperty("value");
                 node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
                 this.internalVertexMap.put(constructEnumPersistentName((Enum<?>)node), vertex);
+                this.getInternalListOrderedSet().add(node);
             } else if (TumlMetaNode.class.isAssignableFrom(c)) {
                 Method m = c.getDeclaredMethod("getInstance", new Class[0]);
                 node = (E) m.invoke(null);
+                this.getInternalListOrderedSet().add(node);
             } else if (UmlgNode.class.isAssignableFrom(c)) {
                 node = (E) c.getConstructor(Vertex.class).newInstance(vertex);
+                this.getInternalListOrderedSet().add(node);
+            } else if (getDataTypeEnum() != null) {
+                loadDataTypeFromVertex(vertex);
             } else {
                 Object value = vertex.getProperty("value");
                 node = (E) value;
                 this.internalVertexMap.put(value, vertex);
+                this.getInternalListOrderedSet().add(node);
             }
-            this.getInternalListOrderedSet().add(node);
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
