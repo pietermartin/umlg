@@ -48,4 +48,24 @@ public class TestTitanBlueprints {
 
     }
 
+    @Test
+    public void testEmailList() throws Exception {
+
+        final String url = "/tmp/titan-test";
+        File dir = new File(url);
+        FileUtils.deleteDirectory(dir);
+        final File f = new File(url);
+        Configuration propertiesConfiguration = new PropertiesConfiguration();
+        propertiesConfiguration.addProperty("storage.backend", "local");
+        propertiesConfiguration.addProperty("storage.directory", f.getAbsolutePath());
+        TitanGraph g = TitanFactory.open(propertiesConfiguration);
+
+        Vertex v1 = g.addVertex(null);
+        Vertex v2 = g.addVertex(null);
+        v2.setProperty("emailList", "jj@jj.jj");
+        g.addEdge(null, v1, v2, "emailList");
+        g.commit();
+
+    }
+
 }
