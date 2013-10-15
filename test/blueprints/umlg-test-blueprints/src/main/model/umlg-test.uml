@@ -1640,6 +1640,16 @@
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_xynk0DTqEeODK82GiF9aDg"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_xy3ccDTqEeODK82GiF9aDg" value="*"/>
             </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_0XbNYDW6EeOAlanvceIpiA" name="email2" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_1m_X0DW6EeOAlanvceIpiA"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_1nAl8DW6EeOAlanvceIpiA" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_1n7hEDW8EeOAlanvceIpiA" name="dateList2" visibility="public" isOrdered="true" isUnique="false">
+              <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_cohIAQLgEeKtFpHFDhpFVA"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_3kkM4DW8EeOAlanvceIpiA"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_3kkM4TW8EeOAlanvceIpiA" value="*"/>
+            </ownedAttribute>
           </packagedElement>
         </packagedElement>
       </packagedElement>

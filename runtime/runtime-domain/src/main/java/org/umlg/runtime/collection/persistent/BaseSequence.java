@@ -146,9 +146,9 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
                 c = this.getClassToInstantiate(edgeToElement);
             }
             if (c.isEnum()) {
-                Object value = vertexToLoad.getProperty("value");
+                Object value = vertexToLoad.getProperty(getQualifiedName());
                 node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
-                this.internalVertexMap.put(constructEnumPersistentName((Enum<?>)node), vertexToLoad);
+                putToInternalMap(node, vertexToLoad);
                 this.getInternalList().add(node);
             } else if (TumlMetaNode.class.isAssignableFrom(c)) {
                 Method m = c.getDeclaredMethod("getInstance", new Class[0]);
@@ -160,9 +160,9 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
             } else if (getDataTypeEnum() != null) {
                 loadDataTypeFromVertex(vertexToLoad);
             } else {
-                Object value = vertexToLoad.getProperty("value");
+                Object value = vertexToLoad.getProperty(getQualifiedName());
                 node = (E) value;
-                this.internalVertexMap.put(value, vertexToLoad);
+                putToInternalMap(value, vertexToLoad);
                 this.getInternalList().add(node);
             }
         } catch (Exception ex) {
@@ -297,15 +297,15 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
             UmlgNode node = (UmlgNode) e;
             previousVertex = node.getVertex();
         } else if (e.getClass().isEnum()) {
-            List<Vertex> vertexes = this.internalVertexMap.get(constructEnumPersistentName((Enum<?>) e));
+            List<Vertex> vertexes = this.internalVertexMap.get(getQualifiedName() + e.toString());
             Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
             previousVertex = vertexes.get(0);
         } else if (getDataTypeEnum() != null) {
-            List<Vertex> vertexes = this.internalVertexMap.get(e.toString());
+            List<Vertex> vertexes = this.internalVertexMap.get(getQualifiedName() + e.toString());
             Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
             previousVertex = vertexes.get(0);
         } else {
-            List<Vertex> vertexes = this.internalVertexMap.get(e);
+            List<Vertex> vertexes = this.internalVertexMap.get(getQualifiedName() + e.toString());
             Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
             previousVertex = vertexes.get(0);
         }

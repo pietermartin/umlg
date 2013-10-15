@@ -293,15 +293,15 @@ public abstract class TumlBaseOrderedSet<E> extends BaseCollection<E> implements
             UmlgNode node = (UmlgNode) previous;
             previousVertex = node.getVertex();
         } else if (e.getClass().isEnum()) {
-            List<Vertex> vertexes = this.internalVertexMap.get(constructEnumPersistentName((Enum<?>) previous));
+            List<Vertex> vertexes = this.internalVertexMap.get(getQualifiedName() + previous.toString());
             Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
             previousVertex = vertexes.get(0);
         } else if (getDataTypeEnum() != null) {
-            List<Vertex> vertexes = this.internalVertexMap.get(e.toString());
+            List<Vertex> vertexes = this.internalVertexMap.get(getQualifiedName() + e.toString());
             Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
             previousVertex = vertexes.get(0);
         } else {
-            List<Vertex> vertexes = this.internalVertexMap.get(previous);
+            List<Vertex> vertexes = this.internalVertexMap.get(getQualifiedName() + previous.toString());
             Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
             previousVertex = vertexes.get(0);
         }
@@ -313,9 +313,9 @@ public abstract class TumlBaseOrderedSet<E> extends BaseCollection<E> implements
         try {
             Class<?> c = this.getClassToInstantiate(edgeToElement);
             if (c.isEnum()) {
-                Object value = vertex.getProperty("value");
+                Object value = vertex.getProperty(getQualifiedName());
                 node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
-                this.internalVertexMap.put(constructEnumPersistentName((Enum<?>)node), vertex);
+                putToInternalMap(node, vertex);
                 this.getInternalListOrderedSet().add(node);
             } else if (TumlMetaNode.class.isAssignableFrom(c)) {
                 Method m = c.getDeclaredMethod("getInstance", new Class[0]);
@@ -327,9 +327,9 @@ public abstract class TumlBaseOrderedSet<E> extends BaseCollection<E> implements
             } else if (getDataTypeEnum() != null) {
                 loadDataTypeFromVertex(vertex);
             } else {
-                Object value = vertex.getProperty("value");
+                Object value = vertex.getProperty(getQualifiedName());
                 node = (E) value;
-                this.internalVertexMap.put(value, vertex);
+                putToInternalMap(node, vertex);
                 this.getInternalListOrderedSet().add(node);
             }
         } catch (Exception ex) {

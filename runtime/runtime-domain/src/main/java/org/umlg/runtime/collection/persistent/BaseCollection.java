@@ -70,7 +70,7 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
         } else if (getDataTypeEnum() != null) {
             loadOneDataType();
         } else {
-            E property = this.vertex.getProperty(getLabel());
+            E property = this.vertex.getProperty(getQualifiedName());
             if (property != null) {
                 this.internalCollection.add(property);
             }
@@ -79,15 +79,15 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
     }
 
     protected Vertex removeFromInternalMap(Object key) {
-        List<Vertex> vertexes = this.internalVertexMap.get(key);
+        List<Vertex> vertexes = this.internalVertexMap.get(getQualifiedName() + key.toString());
         Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
         Vertex vertex = vertexes.get(0);
-        this.internalVertexMap.remove(key, vertex);
+        this.internalVertexMap.remove(getQualifiedName() + key.toString(), vertex);
         return vertex;
     }
 
     protected void putToInternalMap(Object key, Vertex vertex) {
-        this.internalVertexMap.put(key, vertex);
+        this.internalVertexMap.put(getQualifiedName() + key.toString(), vertex);
     }
 
     protected Iterator<Edge> getEdges() {
@@ -515,7 +515,7 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
                     break;
                 }
             } else if (o.getClass().isEnum()) {
-                v = removeFromInternalMap(constructEnumPersistentName((Enum<?>) o));
+                v = removeFromInternalMap(o);
                 if (isOrdered()) {
                     removeFromLinkedList(v);
                 }
@@ -524,7 +524,7 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
                 }
                 GraphDb.getDb().removeVertex(v);
             } else if (isOnePrimitive() && getDataTypeEnum() == null) {
-                this.vertex.removeProperty(getLabel());
+                this.vertex.removeProperty(getQualifiedName());
             } else if (getDataTypeEnum() != null && (isManyToMany() || isOneToMany())) {
                 v = removeFromInternalMap(o.toString());
                 if (isOrdered()) {
@@ -535,7 +535,7 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
                 }
                 GraphDb.getDb().removeVertex(v);
             } else if (getDataTypeEnum() != null) {
-                this.vertex.removeProperty(getLabel());
+                this.vertex.removeProperty(getQualifiedName());
             } else {
                 v = removeFromInternalMap(o);
                 if (this.owner instanceof TinkerAuditableNode) {
@@ -574,21 +574,21 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
             this.handleInverseSide(node, tumlRuntimeProperty, true, this.owner);
         } else if (e.getClass().isEnum()) {
             v = GraphDb.getDb().addVertex(null);
-            v.setProperty("value", ((Enum<?>) e).name());
+            v.setProperty(getQualifiedName(), ((Enum<?>) e).name());
             v.setProperty("className", e.getClass().getName());
-            putToInternalMap(constructEnumPersistentName((Enum<?>) e), v);
+            putToInternalMap(e, v);
         } else if (isOnePrimitive()) {
-            this.vertex.setProperty(getLabel(), e);
+            this.vertex.setProperty(getQualifiedName(), e);
         } else if (getDataTypeEnum() != null && (isManyToMany() || isOneToMany())) {
             v = GraphDb.getDb().addVertex(null);
             v.setProperty("className", e.getClass().getName());
             setDataTypeOnVertex(v, e);
-            putToInternalMap(e.toString(), v);
+            putToInternalMap(e, v);
         } else if (getDataTypeEnum() != null) {
             setDataTypeOnVertex(this.vertex, e);
         } else {
             v = GraphDb.getDb().addVertex(null);
-            v.setProperty("value", e);
+            v.setProperty(getQualifiedName(), e);
             v.setProperty("className", e.getClass().getName());
             putToInternalMap(e, v);
         }
@@ -663,14 +663,14 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
             }
         } else if (e.getClass().isEnum()) {
             Vertex v = GraphDb.getDb().addVertex(null);
-            v.setProperty("value", ((Enum<?>) e).name());
+            v.setProperty(getQualifiedName(), ((Enum<?>) e).name());
             Edge auditEdge = GraphDb.getDb().addEdge(null, auditOwner.getAuditVertex(), v, this.getLabel());
             auditEdge.setProperty("outClass", auditOwner.getClass().getName() + "Audit");
             auditEdge.setProperty("inClass", e.getClass().getName());
         } else {
             if (TransactionThreadVar.hasNoAuditEntry(owner.getClass().getName() + e.getClass().getName() + e.toString())) {
                 Vertex auditVertex = GraphDb.getDb().addVertex(null);
-                auditVertex.setProperty("value", e);
+                auditVertex.setProperty(getQualifiedName(), e);
                 TransactionThreadVar.putAuditVertexFalse(owner.getClass().getName() + e.getClass().getName() + e.toString(), auditVertex);
                 auditVertex.setProperty("transactionNo", GraphDb.getDb().getTransactionCount());
                 Edge auditEdge;
@@ -1219,26 +1219,19 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
         return true;
     }
 
-    protected String constructEnumPersistentName(Enum e) {
-        StringBuilder sb = new StringBuilder(e.getClass().getName());
-        sb.append(".");
-        sb.append(e.name());
-        return sb.toString();
-    }
-
     private void setDataTypeOnVertex(Vertex v, E e) {
         if (getDataTypeEnum().isDateTime()) {
-            v.setProperty(getLabel(), e.toString());
+            v.setProperty(getQualifiedName(), e.toString());
         } else if (getDataTypeEnum().isDate()) {
-            v.setProperty(getLabel(), e.toString());
+            v.setProperty(getQualifiedName(), e.toString());
         } else if (getDataTypeEnum().isTime()) {
-            v.setProperty(getLabel(), e.toString());
+            v.setProperty(getQualifiedName(), e.toString());
         } else if (getDataTypeEnum().isInternationalPhoneNumber()) {
-            v.setProperty(getLabel(), e);
+            v.setProperty(getQualifiedName(), e);
         } else if (getDataTypeEnum().isLocalPhoneNumber()) {
-            v.setProperty(getLabel(), e);
+            v.setProperty(getQualifiedName(), e);
         } else if (getDataTypeEnum().isEmail()) {
-            v.setProperty(getLabel(), e);
+            v.setProperty(getQualifiedName(), e);
         } else {
             throw new IllegalStateException(String.format("Uncatered for DataType %s", new String[]{getDataTypeEnum().getClass().getName()}));
         }
@@ -1247,28 +1240,28 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
     private void loadOneDataType() {
         switch (getDataTypeEnum()) {
             case DateTime:
-                String s = this.vertex.getProperty(getLabel());
+                String s = this.vertex.getProperty(getQualifiedName());
                 if (s != null) {
                     E property = (E) new DateTime(s);
                     this.internalCollection.add(property);
                 }
                 break;
             case Date:
-                s = this.vertex.getProperty(getLabel());
+                s = this.vertex.getProperty(getQualifiedName());
                 if (s != null) {
                     E property = (E) new LocalDate(s);
                     this.internalCollection.add(property);
                 }
                 break;
             case Time:
-                s = this.vertex.getProperty(getLabel());
+                s = this.vertex.getProperty(getQualifiedName());
                 if (s != null) {
                     E property = (E) new LocalTime(s);
                     this.internalCollection.add(property);
                 }
                 break;
             default:
-                E property = this.vertex.getProperty(getLabel());
+                E property = this.vertex.getProperty(getQualifiedName());
                 if (property != null) {
                     this.internalCollection.add(property);
                 }
@@ -1292,33 +1285,33 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
         E result = null;
         switch (getDataTypeEnum()) {
             case DateTime:
-                String s = v.getProperty(getLabel());
+                String s = v.getProperty(getQualifiedName());
                 if (s != null) {
                     result = (E) new DateTime(s);
-                    putToInternalMap(result.toString(), v);
+                    putToInternalMap(result, v);
                     this.internalCollection.add(result);
                 }
                 break;
             case Date:
-                s = v.getProperty(getLabel());
+                s = v.getProperty(getQualifiedName());
                 if (s != null) {
                     result = (E) new LocalDate(s);
-                    putToInternalMap(result.toString(), v);
+                    putToInternalMap(result, v);
                     this.internalCollection.add(result);
                 }
                 break;
             case Time:
-                s = v.getProperty(getLabel());
+                s = v.getProperty(getQualifiedName());
                 if (s != null) {
                     result = (E) new LocalTime(s);
-                    putToInternalMap(result.toString(), v);
+                    putToInternalMap(result, v);
                     this.internalCollection.add(result);
                 }
                 break;
             default:
-                result = v.getProperty(getLabel());
+                result = v.getProperty(getQualifiedName());
                 if (result != null) {
-                    putToInternalMap(result.toString(), v);
+                    putToInternalMap(result, v);
                     this.internalCollection.add(result);
                 }
         }
@@ -1332,16 +1325,16 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
             try {
                 Class<?> c = this.getClassToInstantiate(edge);
                 if (c.isEnum()) {
-                    Object value = this.getVertexForDirection(edge).getProperty("value");
+                    Object value = this.getVertexForDirection(edge).getProperty(getQualifiedName());
                     node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
-                    putToInternalMap(constructEnumPersistentName((Enum<?>) node), this.getVertexForDirection(edge));
+                    putToInternalMap(node, this.getVertexForDirection(edge));
                 } else if (TumlMetaNode.class.isAssignableFrom(c)) {
                     Method m = c.getDeclaredMethod("getInstance", new Class[0]);
                     node = (E) m.invoke(null);
                 } else if (UmlgNode.class.isAssignableFrom(c)) {
                     node = (E) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
                 } else {
-                    Object value = this.getVertexForDirection(edge).getProperty("value");
+                    Object value = this.getVertexForDirection(edge).getProperty(getQualifiedName());
                     node = (E) value;
                     putToInternalMap(value, this.getVertexForDirection(edge));
                 }

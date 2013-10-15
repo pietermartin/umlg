@@ -37,14 +37,14 @@ public class TinkerQualifiedBagImpl<E> extends BaseBag<E> implements TinkerQuali
 					GraphDb.getDb().removeEdge(edge);
 				}
 			} else if (o.getClass().isEnum()) {
-                List<Vertex> vertexes = this.internalVertexMap.get(constructEnumPersistentName((Enum<?>) o));
+                List<Vertex> vertexes = this.internalVertexMap.get(getQualifiedName() + o.toString());
                 Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
                 v = vertexes.get(0);
 //				v = this.internalVertexMap.get(((Enum<?>) o).name());
 //				Edge edge = v.getEdges(Direction.IN, this.getLabel()).iterator().next();
 				GraphDb.getDb().removeVertex(v);
 			} else {
-                List<Vertex> vertexes = this.internalVertexMap.get(o);
+                List<Vertex> vertexes = this.internalVertexMap.get(getQualifiedName() + o.toString());
                 Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
                 v = vertexes.get(0);
 //				v = this.internalVertexMap.get(o);

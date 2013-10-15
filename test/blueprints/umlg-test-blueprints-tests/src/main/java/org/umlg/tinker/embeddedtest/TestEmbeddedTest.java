@@ -42,6 +42,19 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
         Assert.assertEquals("testthis", g.getEmbeddedString().iterator().next());
     }
 
+
+    @Test
+    public void testOneToManyEmbeddedStringWithMany() {
+        God god = new God(true);
+        god.setName("THEGOD");
+        god.addToEmbeddedString("testthis1");
+        god.addToEmbeddedString("testthis2");
+        god.addToEmbeddedString("testthis3");
+        db.commit();
+        god.reload();
+        Assert.assertEquals(3, god.getEmbeddedString().size());
+    }
+
     @Test
     public void testOneToManyEmbeddedInteger() {
         God god = new God(true);

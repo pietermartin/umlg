@@ -5175,7 +5175,7 @@
       <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_TPetsYl3EeKeSZB9UA6Gvw" id="(0.8620689655172413,0.22)"/>
     </edges>
   </notation:Diagram>
-  <notation:Diagram xmi:id="_DyRFMDChEeOJbevgaGUOXQ" type="PapyrusUMLClassDiagram" name="dataTypeClassDiagram" measurementUnit="Pixel">
+  <notation:Diagram xmi:id="_DyRFMDChEeOJbevgaGUOXQ" type="PapyrusUMLClassDiagram" name="dataTypes" measurementUnit="Pixel">
     <children xmi:type="notation:Shape" xmi:id="_GRh88DChEeOJbevgaGUOXQ" type="2008" fontName="Sans" lineColor="0">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_GRikADChEeOJbevgaGUOXQ" source="ShadowFigure">
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_GRikATChEeOJbevgaGUOXQ" key="ShadowFigure_Value" value="false"/>
@@ -5211,6 +5211,14 @@
         <children xmi:type="notation:Shape" xmi:id="_ux0tUDTqEeODK82GiF9aDg" type="3012" fontName="Sans" lineColor="0">
           <element xmi:type="uml:Property" href="umlg-test.uml#_uv728DTqEeODK82GiF9aDg"/>
           <layoutConstraint xmi:type="notation:Location" xmi:id="_ux0tUTTqEeODK82GiF9aDg"/>
+        </children>
+        <children xmi:type="notation:Shape" xmi:id="_0cWJoDW6EeOAlanvceIpiA" type="3012" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:Property" href="umlg-test.uml#_0XbNYDW6EeOAlanvceIpiA"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_0cWJoTW6EeOAlanvceIpiA"/>
+        </children>
+        <children xmi:type="notation:Shape" xmi:id="_1n9WQDW8EeOAlanvceIpiA" type="3012" fontName="Sans" lineColor="0">
+          <element xmi:type="uml:Property" href="umlg-test.uml#_1n7hEDW8EeOAlanvceIpiA"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_1n9WQTW8EeOAlanvceIpiA"/>
         </children>
         <styles xmi:type="notation:TitleStyle" xmi:id="_GRikCDChEeOJbevgaGUOXQ"/>
         <styles xmi:type="notation:SortingStyle" xmi:id="_GRikCTChEeOJbevgaGUOXQ"/>

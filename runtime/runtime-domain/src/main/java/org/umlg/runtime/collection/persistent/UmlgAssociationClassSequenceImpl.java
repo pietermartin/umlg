@@ -57,13 +57,13 @@ public class UmlgAssociationClassSequenceImpl<AssociationClassNode> extends Tink
                     try {
                         Class<?> c = this.getClassToInstantiate(edge);
                         if (c.isEnum()) {
-                            Object value = this.getVertexForDirection(edge).getProperty("value");
+                            Object value = this.getVertexForDirection(edge).getProperty(getQualifiedName());
                             node = (AssociationClassNode) Enum.valueOf((Class<? extends Enum>) c, (String) value);
-                            putToInternalMap(constructEnumPersistentName((Enum<?>)node), this.getVertexForDirection(edge));
+                            putToInternalMap(node, this.getVertexForDirection(edge));
                         } else if (UmlgNode.class.isAssignableFrom(c)) {
                             node = (AssociationClassNode) c.getConstructor(Vertex.class).newInstance(this.getVertexForDirection(edge));
                         } else {
-                            Object value = this.getVertexForDirection(edge).getProperty("value");
+                            Object value = this.getVertexForDirection(edge).getProperty(getQualifiedName());
                             node = (AssociationClassNode) value;
                             putToInternalMap(value, this.getVertexForDirection(edge));
                         }
@@ -130,18 +130,18 @@ public class UmlgAssociationClassSequenceImpl<AssociationClassNode> extends Tink
                 c = this.getClassToInstantiate(edgeToElement);
             }
             if (c.isEnum()) {
-                Object value = vertexToLoad.getProperty("value");
+                Object value = vertexToLoad.getProperty(getQualifiedName());
                 node = (AssociationClassNode) Enum.valueOf((Class<? extends Enum>) c, (String) value);
-                this.internalVertexMap.put(constructEnumPersistentName((Enum<?>)node), vertexToLoad);
+                putToInternalMap(node, vertexToLoad);
             } else if (TumlMetaNode.class.isAssignableFrom(c)) {
                 Method m = c.getDeclaredMethod("getInstance", new Class[0]);
                 node = (AssociationClassNode) m.invoke(null);
             } else if (UmlgNode.class.isAssignableFrom(c)) {
                 node = (AssociationClassNode) c.getConstructor(Vertex.class).newInstance(associationClassVertex);
             } else {
-                Object value = vertexToLoad.getProperty("value");
+                Object value = vertexToLoad.getProperty(getQualifiedName());
                 node = (AssociationClassNode) value;
-                this.internalVertexMap.put(value, vertexToLoad);
+                putToInternalMap(value, vertexToLoad);
             }
             this.getInternalList().add(node);
         } catch (Exception ex) {
