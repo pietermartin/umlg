@@ -1635,6 +1635,11 @@
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Ksb28DHeEeOJbevgaGUOXQ"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_KsceADHeEeOJbevgaGUOXQ" value="*"/>
             </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_uv728DTqEeODK82GiF9aDg" name="dateBag" visibility="public" isUnique="false">
+              <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_cohIAQLgEeKtFpHFDhpFVA"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_xynk0DTqEeODK82GiF9aDg"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_xy3ccDTqEeODK82GiF9aDg" value="*"/>
+            </ownedAttribute>
           </packagedElement>
         </packagedElement>
       </packagedElement>
