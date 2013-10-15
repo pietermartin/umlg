@@ -48,7 +48,7 @@ public class TestTitanBlueprints {
 
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void testEmailList() throws Exception {
 
         final String url = "/tmp/titan-test";

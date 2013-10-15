@@ -14,6 +14,8 @@ import org.neo4j.tooling.GlobalGraphOperations;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.concurrent.*;
 
@@ -22,6 +24,37 @@ import java.util.concurrent.*;
  * Time: 2:53 PM
  */
 public class TestNeo4jBlueprints {
+
+    @Test
+    public void testNeo4jPerformance() {
+        File f = new File("/tmp/neo4j-performence");
+        if (f.exists()) {
+            f.delete();
+        }
+        f.mkdir();
+        Neo4jGraph g = new Neo4jGraph(f.getAbsolutePath());
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        Vertex one = g.addVertex(null);
+        one.setProperty("one", "1");
+        long previousSplitTime = 0;
+        for (int i = 0; i < 100000; i++) {
+            Vertex many = g.addVertex(null);
+            many.setProperty("many", "2");
+            g.addEdge(null, one, many, "toMany");
+
+            if (i % 1000 == 0) {
+                stopWatch.split();
+                long splitTime = stopWatch.getSplitTime();
+                System.out.println(i + " " + stopWatch.toString() + " 1000 in " + (splitTime - previousSplitTime));
+                previousSplitTime = stopWatch.getSplitTime();
+                g.commit();
+            }
+        }
+        g.commit();
+        stopWatch.stop();
+        System.out.println(stopWatch.toString());
+    }
 
     @Test
     public void testIndexCreatedInAThreadUsedInAnother() throws IOException, InterruptedException, ExecutionException {
