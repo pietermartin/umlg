@@ -42,7 +42,33 @@ public class TumlGuiServerResource extends ServerResource {
         } else {
             uri = withHostRef.replace("/ui2", "");
         }
-        dataModel.put("app", new App().setRootUrl(ModelLoader.INSTANCE.getModel().getName()).setUri(uri).setUmlgLib(ModelLoader.INSTANCE.isUmlGLibIncluded()));
+
+        String poweredBy = "";
+        try {
+            Class.forName("org.umlg.runtime.adaptor.UmlgNeo4jGraph");
+            poweredBy = "Neo4j";
+        } catch (ClassNotFoundException e) {
+            try {
+                Class.forName("org.umlg.runtime.adaptor.UmlgBitsyGraph");
+                poweredBy = "Bitsy";
+            } catch (ClassNotFoundException ee) {
+                try {
+                    Class.forName("org.umlg.runtime.adaptor.UmlgTitanGraph");
+                    poweredBy = "Titan";
+                } catch (ClassNotFoundException eee) {
+                    try {
+                        Class.forName("org.umlg.runtime.adaptor.UmlgOrientDbGraph");
+                        poweredBy = "OrientDb";
+                    } catch (ClassNotFoundException eeee) {
+                    }
+                }
+            }
+        }
+
+        dataModel.put("app", new App().setRootUrl(ModelLoader.INSTANCE.getModel().getName())
+                .setUri(uri)
+                .setUmlgLib(ModelLoader.INSTANCE.isUmlGLibIncluded())
+                .setPoweredBy(poweredBy));
 //        Representation umlgUiFtl = new ClientResource("clap:///org/umlg/ui/umlgui2.html").get();
 
         File umlgui2 = new File("./runtime/runtime-ui/src/main/resources/org/umlg/ui/umlgui2.html");
@@ -60,6 +86,16 @@ public class TumlGuiServerResource extends ServerResource {
         private String rootUrl;
         private String uri;
         private boolean umlgLib;
+        private String poweredBy;
+
+        public String getPoweredBy() {
+            return poweredBy;
+        }
+
+        public App setPoweredBy(String poweredBy) {
+            this.poweredBy = poweredBy;
+            return this;
+        }
 
         public boolean isUmlgLib() {
             return umlgLib;

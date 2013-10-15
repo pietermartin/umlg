@@ -28,7 +28,7 @@
                     livePaneResizing: true,
                     north__minSize: 40,
                     east: {initClosed: true},
-                    south: {initClosed: true},
+                    south: {minSize: 30, initClosed: false},
                     west: {minSize: 300}
                 }
             );

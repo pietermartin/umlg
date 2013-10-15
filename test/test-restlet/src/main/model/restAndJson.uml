@@ -924,7 +924,7 @@
               <ownedAttribute xmi:type="uml:Property" xmi:id="__f7YkDXKEeOAlanvceIpiA" name="dates" visibility="public" isOrdered="true" isUnique="false">
                 <type xmi:type="uml:DataType" href="umlgdatatypes.uml#_cohIAQLgEeKtFpHFDhpFVA"/>
                 <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_CnSyIDXLEeOAlanvceIpiA"/>
-                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_CnTZMDXLEeOAlanvceIpiA" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_CnTZMDXLEeOAlanvceIpiA" value="*"/>
               </ownedAttribute>
             </packagedElement>
           </packagedElement>
