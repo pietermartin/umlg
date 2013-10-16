@@ -10,6 +10,7 @@ import org.umlg.java.metamodel.annotation.OJAnnotationValue;
 
 public class TinkerGenerationUtil {
 
+    public static OJPathName UmlgUtil = new OJPathName("org.umlg.runtime.util.UmlgUtil");
     public static OJPathName BASE_CLASS_TUML = new OJPathName("org.umlg.meta.BaseClassTuml");
 
     public static String tinkeriseUmlName(String umlName) {

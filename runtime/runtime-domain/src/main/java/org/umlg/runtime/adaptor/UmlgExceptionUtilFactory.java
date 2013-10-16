@@ -1,6 +1,6 @@
 package org.umlg.runtime.adaptor;
 
-import org.umlg.runtime.util.UmlgProperties;
+import org.umlg.runtime.util.UmlgUtil;
 
 import java.lang.reflect.Method;
 
@@ -16,7 +16,7 @@ public class UmlgExceptionUtilFactory {
     public static UmlgExceptionUtil getTumlExceptionUtil() {
         if (umlgExceptionUtil == null) {
             try {
-                UmlgAdaptorImplementation umlgAdaptorImplementation = UmlgAdaptorImplementation.fromName(UmlgProperties.INSTANCE.getTinkerImplementation());
+                UmlgAdaptorImplementation umlgAdaptorImplementation = UmlgAdaptorImplementation.fromName(UmlgUtil.getBlueprintsImplementation());
                 Class<UmlgExceptionUtil> factory = (Class<UmlgExceptionUtil>) Class.forName(umlgAdaptorImplementation.getUmlgExceptionUtil());
                 Method m = factory.getDeclaredMethod("getInstance", new Class[0]);
                 umlgExceptionUtil = (UmlgExceptionUtil) m.invoke(null);

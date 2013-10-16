@@ -2,6 +2,7 @@ package org.umlg.runtime.adaptor;
 
 import org.apache.commons.io.FileUtils;
 import org.umlg.runtime.util.UmlgProperties;
+import org.umlg.runtime.util.UmlgUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +29,7 @@ public class UmlgGraphManager {
         try {
             String dbUrl = UmlgProperties.INSTANCE.getTumlDbLocation();
             if (this.nakedGraphFactory == null) {
-                UmlgAdaptorImplementation umlgAdaptorImplementation = UmlgAdaptorImplementation.fromName(UmlgProperties.INSTANCE.getTinkerImplementation());
+                UmlgAdaptorImplementation umlgAdaptorImplementation = UmlgAdaptorImplementation.fromName(UmlgUtil.getBlueprintsImplementation());
                 @SuppressWarnings("unchecked")
                 Class<UmlgGraphFactory> factory = (Class<UmlgGraphFactory>) Class.forName(umlgAdaptorImplementation.getTumlGraphFactory());
                 Method m = factory.getDeclaredMethod("getInstance", new Class[0]);
@@ -47,7 +48,7 @@ public class UmlgGraphManager {
     public void deleteGraph() {
         try {
             if (this.nakedGraphFactory == null) {
-                UmlgAdaptorImplementation umlgAdaptorImplementation = UmlgAdaptorImplementation.fromName(UmlgProperties.INSTANCE.getTinkerImplementation());
+                UmlgAdaptorImplementation umlgAdaptorImplementation = UmlgAdaptorImplementation.fromName(UmlgUtil.getBlueprintsImplementation());
                 @SuppressWarnings("unchecked")
                 Class<UmlgGraphFactory> factory = (Class<UmlgGraphFactory>) Class.forName(umlgAdaptorImplementation.getTumlGraphFactory());
                 Method m = factory.getDeclaredMethod("getInstance", new Class[0]);

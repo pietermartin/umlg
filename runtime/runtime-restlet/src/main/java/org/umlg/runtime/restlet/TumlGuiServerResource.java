@@ -13,6 +13,7 @@ import org.restlet.resource.Directory;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 import org.umlg.framework.ModelLoader;
+import org.umlg.runtime.util.UmlgUtil;
 
 public class TumlGuiServerResource extends ServerResource {
 
@@ -43,28 +44,7 @@ public class TumlGuiServerResource extends ServerResource {
             uri = withHostRef.replace("/ui2", "");
         }
 
-        String poweredBy = "";
-        try {
-            Class.forName("org.umlg.runtime.adaptor.UmlgNeo4jGraph");
-            poweredBy = "Neo4j";
-        } catch (ClassNotFoundException e) {
-            try {
-                Class.forName("org.umlg.runtime.adaptor.UmlgBitsyGraph");
-                poweredBy = "Bitsy";
-            } catch (ClassNotFoundException ee) {
-                try {
-                    Class.forName("org.umlg.runtime.adaptor.UmlgTitanGraph");
-                    poweredBy = "Titan";
-                } catch (ClassNotFoundException eee) {
-                    try {
-                        Class.forName("org.umlg.runtime.adaptor.UmlgOrientDbGraph");
-                        poweredBy = "OrientDb";
-                    } catch (ClassNotFoundException eeee) {
-                    }
-                }
-            }
-        }
-
+        String poweredBy = UmlgUtil.getBlueprintsImplementation();
         dataModel.put("app", new App().setRootUrl(ModelLoader.INSTANCE.getModel().getName())
                 .setUri(uri)
                 .setUmlgLib(ModelLoader.INSTANCE.isUmlGLibIncluded())

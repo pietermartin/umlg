@@ -1,7 +1,7 @@
 package org.umlg.runtime.test;
 
 import org.umlg.runtime.adaptor.UmlgAdaptorImplementation;
-import org.umlg.runtime.util.UmlgProperties;
+import org.umlg.runtime.util.UmlgUtil;
 
 import java.lang.reflect.Method;
 
@@ -17,7 +17,7 @@ public class TumlTestUtilFactory {
     public static TumlTestUtil getTestUtil() {
         if (tumlTestUtil == null) {
             try {
-                UmlgAdaptorImplementation umlgAdaptorImplementation = UmlgAdaptorImplementation.fromName(UmlgProperties.INSTANCE.getTinkerImplementation());
+                UmlgAdaptorImplementation umlgAdaptorImplementation = UmlgAdaptorImplementation.fromName(UmlgUtil.getBlueprintsImplementation());
                 Class factory = Class.forName(umlgAdaptorImplementation.getTumlTestUtil());
                 Method m = factory.getDeclaredMethod("getInstance", new Class[0]);
                 tumlTestUtil = (TumlTestUtil) m.invoke(null);

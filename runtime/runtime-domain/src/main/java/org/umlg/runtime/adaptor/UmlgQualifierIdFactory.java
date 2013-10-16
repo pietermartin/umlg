@@ -1,6 +1,6 @@
 package org.umlg.runtime.adaptor;
 
-import org.umlg.runtime.util.UmlgProperties;
+import org.umlg.runtime.util.UmlgUtil;
 
 import java.lang.reflect.Method;
 
@@ -12,7 +12,7 @@ public class UmlgQualifierIdFactory {
 	public static UmlgQualifierId getUmlgQualifierId() {
 		if (umlgQualifierId == null) {
 			try {
-                UmlgAdaptorImplementation umlgAdaptorImplementation = UmlgAdaptorImplementation.fromName(UmlgProperties.INSTANCE.getTinkerImplementation());
+                UmlgAdaptorImplementation umlgAdaptorImplementation = UmlgAdaptorImplementation.fromName(UmlgUtil.getBlueprintsImplementation());
 				Class factory = Class.forName(umlgAdaptorImplementation.getUmlgQualifierId());
 				Method m = factory.getDeclaredMethod("getInstance", new Class[0]);
                 UmlgQualifierId idUtil = (UmlgQualifierId) m.invoke(null);

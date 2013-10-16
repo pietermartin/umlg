@@ -9,7 +9,7 @@ import org.umlg.runtime.domain.BaseTinkerBehavioredClassifier;
 import org.umlg.runtime.domain.UmlgNode;
 import org.umlg.runtime.domain.activity.interf.IActivityEdge;
 import org.umlg.runtime.domain.activity.interf.IActivityNode;
-import org.umlg.runtime.util.TinkerUtil;
+import org.umlg.runtime.util.UmlgUtil;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -81,11 +81,11 @@ public abstract class ActivityNode<IN extends Token, OUT extends Token> extends 
 	}
 
 	public NodeStatus getNodeStatus() {
-		return (NodeStatus) TinkerUtil.convertEnumFromPersistence(NodeStatus.class, (String) this.vertex.getProperty("nodeStatus"));
+		return (NodeStatus) UmlgUtil.convertEnumFromPersistence(NodeStatus.class, (String) this.vertex.getProperty("nodeStatus"));
 	}
 
 	public void setNodeStatus(NodeStatus nodeStatus) {
-		this.vertex.setProperty("nodeStatus", TinkerUtil.convertEnumForPersistence(nodeStatus));
+		this.vertex.setProperty("nodeStatus", UmlgUtil.convertEnumForPersistence(nodeStatus));
 	}
 
 	protected void addIncomingToken(IN token) {
