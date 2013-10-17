@@ -82,25 +82,35 @@ public class ToJsonUtil {
     public static String toJsonLocalDate(Collection<LocalDate> localDates) {
         StringBuilder json = new StringBuilder();
         if (localDates != null) {
+            json.append("[");
             int count = 0;
-            for (LocalDate localDate : localDates) {
+            for (LocalDate p : localDates) {
                 count++;
-                json.append(TumlFormatter.format(localDate));
+                json.append("\"");
+                json.append(TumlFormatter.format(p));
+                json.append("\"");
                 if (count != localDates.size()) {
                     json.append(",");
                 }
             }
+            json.append("]");
+        } else {
+            json.append("null");
         }
         return json.toString();
+
+
     }
 
     public static String toJsonDateTime(Collection<DateTime> dateTimes) {
         StringBuilder json = new StringBuilder();
         if (dateTimes != null) {
             int count = 0;
-            for (DateTime dateTime : dateTimes) {
+                for (DateTime p : dateTimes) {
                 count++;
-                json.append(TumlFormatter.format(dateTime));
+                json.append("\"");
+                json.append(TumlFormatter.format(p));
+                json.append("\"");
                 if (count != dateTimes.size()) {
                     json.append(",");
                 }
@@ -115,7 +125,9 @@ public class ToJsonUtil {
             int count = 0;
             for (LocalTime localTime : localTimes) {
                 count++;
+                json.append("\"");
                 json.append(TumlFormatter.format(localTime));
+                json.append("\"");
                 if (count != localTimes.size()) {
                     json.append(",");
                 }

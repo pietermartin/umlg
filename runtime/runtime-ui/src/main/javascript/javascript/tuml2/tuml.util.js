@@ -153,22 +153,41 @@ function selectFormatter(property, isNew, updatedId) {
 
 function selectFieldValidator(property) {
     if (property.name == 'uri') {
-    } else if (property.dataTypeEnum != null && property.dataTypeEnum !== undefined) {
-        if (property.dataTypeEnum == 'Date') {
-            return new TumlSlick.Validators.TumlDateTime(property).validate;
-        } else if (property.dataTypeEnum == 'Time') {
-            return new TumlSlick.Validators.TumlDateTime(property).validate;
-        } else if (property.dataTypeEnum == 'DateTime') {
-            return new TumlSlick.Validators.TumlDateTime(property).validate;
-        } else if (property.dataTypeEnum == 'InternationalPhoneNumber') {
-        } else if (property.dataTypeEnum == 'LocalPhoneNumber') {
-        } else if (property.dataTypeEnum == 'Email') {
-            return new TumlSlick.Validators.TumlString(property).validate;
-        } else if (property.dataTypeEnum == 'Video') {
-        } else if (property.dataTypeEnum == 'Audio') {
-        } else if (property.dataTypeEnum == 'Image') {
+    } else if (property.dataTypeEnum != null && property.dataTypeEnum !== undefined) { 3
+        if (property.upper > 1 || property.upper === -1) {
+            if (property.dataTypeEnum == 'Date') {
+                return new TumlSlick.Validators.TumlManyDateValidator(property).validate;
+            } else if (property.dataTypeEnum == 'Time') {
+                return new TumlSlick.Validators.TumlManyTimeValidator(property).validate;
+            } else if (property.dataTypeEnum == 'DateTime') {
+                return new TumlSlick.Validators.TumlManyDateTimeValidator(property).validate;
+            } else if (property.dataTypeEnum == 'InternationalPhoneNumber') {
+            } else if (property.dataTypeEnum == 'LocalPhoneNumber') {
+            } else if (property.dataTypeEnum == 'Email') {
+                return new TumlSlick.Validators.TumlManyString(property).validate;
+            } else if (property.dataTypeEnum == 'Video') {
+            } else if (property.dataTypeEnum == 'Audio') {
+            } else if (property.dataTypeEnum == 'Image') {
+            } else {
+                alert('Unsupported dataType ' + property.dataTypeEnum);
+            }
         } else {
-            alert('Unsupported dataType ' + property.dataTypeEnum);
+            if (property.dataTypeEnum == 'Date') {
+                return new TumlSlick.Validators.Date(property).validate;
+            } else if (property.dataTypeEnum == 'Time') {
+                return new TumlSlick.Validators.Time(property).validate;
+            } else if (property.dataTypeEnum == 'DateTime') {
+                return new TumlSlick.Validators.DateTime(property).validate;
+            } else if (property.dataTypeEnum == 'InternationalPhoneNumber') {
+            } else if (property.dataTypeEnum == 'LocalPhoneNumber') {
+            } else if (property.dataTypeEnum == 'Email') {
+                return new TumlSlick.Validators.TumlString(property).validate;
+            } else if (property.dataTypeEnum == 'Video') {
+            } else if (property.dataTypeEnum == 'Audio') {
+            } else if (property.dataTypeEnum == 'Image') {
+            } else {
+                alert('Unsupported dataType ' + property.dataTypeEnum);
+            }
         }
     } else if (property.composite) {
         return new TumlSlick.Validators.TumlObject(property).validate;
@@ -213,29 +232,55 @@ function selectEditor(property) {
         return null;
     } else if (property.readOnly) {
         return null;
-    } else if (property.dataTypeEnum != null && property.dataTypeEnum !== undefined) {
-        if (property.dataTypeEnum == 'Date') {
-            return  Tuml.Slick.Editors.Date;
-        } else if (property.dataTypeEnum == 'Time') {
-            return  Tuml.Slick.Editors.Time;
-        } else if (property.dataTypeEnum == 'DateTime') {
-            return  Tuml.Slick.Editors.DateTime;
-        } else if (property.dataTypeEnum == 'InternationalPhoneNumber') {
-            //TODO
-            return Tuml.Slick.Editors.Text;
-        } else if (property.dataTypeEnum == 'LocalPhoneNumber') {
-            //TODO
-            return Tuml.Slick.Editors.Text;
-        } else if (property.dataTypeEnum == 'Email') {
-            return Tuml.Slick.Editors.Text;
-        } else if (property.dataTypeEnum == 'Video') {
-            return Tuml.Slick.Editors.Text;
-        } else if (property.dataTypeEnum == 'Audio') {
-            return Tuml.Slick.Editors.Text;
-        } else if (property.dataTypeEnum == 'Image') {
-            return Tuml.Slick.Editors.Text;
+    } else if (property.dataTypeEnum !== undefined && property.dataTypeEnum != null) {
+        if (property.upper > 1 || property.upper === -1) {
+            if (property.dataTypeEnum == 'Date') {
+                return  Tuml.Slick.Editors.ManyDate;
+            } else if (property.dataTypeEnum == 'Time') {
+                return  Tuml.Slick.Editors.Time;
+            } else if (property.dataTypeEnum == 'DateTime') {
+                return  Tuml.Slick.Editors.DateTime;
+            } else if (property.dataTypeEnum == 'InternationalPhoneNumber') {
+                //TODO
+                return Tuml.Slick.Editors.Text;
+            } else if (property.dataTypeEnum == 'LocalPhoneNumber') {
+                //TODO
+                return Tuml.Slick.Editors.Text;
+            } else if (property.dataTypeEnum == 'Email') {
+                return Tuml.Slick.Editors.Text;
+            } else if (property.dataTypeEnum == 'Video') {
+                return Tuml.Slick.Editors.Text;
+            } else if (property.dataTypeEnum == 'Audio') {
+                return Tuml.Slick.Editors.Text;
+            } else if (property.dataTypeEnum == 'Image') {
+                return Tuml.Slick.Editors.Text;
+            } else {
+                alert('Unsupported dataType ' + property.dataTypeEnum);
+            }
         } else {
-            alert('Unsupported dataType ' + property.dataTypeEnum);
+            if (property.dataTypeEnum == 'Date') {
+                return  Tuml.Slick.Editors.Date;
+            } else if (property.dataTypeEnum == 'Time') {
+                return  Tuml.Slick.Editors.Time;
+            } else if (property.dataTypeEnum == 'DateTime') {
+                return  Tuml.Slick.Editors.DateTime;
+            } else if (property.dataTypeEnum == 'InternationalPhoneNumber') {
+                //TODO
+                return Tuml.Slick.Editors.Text;
+            } else if (property.dataTypeEnum == 'LocalPhoneNumber') {
+                //TODO
+                return Tuml.Slick.Editors.Text;
+            } else if (property.dataTypeEnum == 'Email') {
+                return Tuml.Slick.Editors.Text;
+            } else if (property.dataTypeEnum == 'Video') {
+                return Tuml.Slick.Editors.Text;
+            } else if (property.dataTypeEnum == 'Audio') {
+                return Tuml.Slick.Editors.Text;
+            } else if (property.dataTypeEnum == 'Image') {
+                return Tuml.Slick.Editors.Text;
+            } else {
+                alert('Unsupported dataType ' + property.dataTypeEnum);
+            }
         }
     } else if (property.composite && property.lower === 1 && property.upper == 1) {
         return null;

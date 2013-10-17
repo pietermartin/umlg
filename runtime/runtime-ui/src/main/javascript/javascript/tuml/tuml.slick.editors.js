@@ -22,6 +22,7 @@
                     "ManyIntegerPrimitiveEditor": ManyIntegerPrimitiveEditor,
                     "ManyBooleanPrimitiveEditor": ManyBooleanPrimitiveEditor,
                     "Checkbox": CheckboxEditor,
+                    "ManyDate": ManyDateEditor,
                     "Date": DateEditor,
                     "DateTime": DateTimeEditor,
                     "Time": TimeEditor
@@ -145,9 +146,9 @@
         return arrayToSerialize;
     }
     ManyEnumerationEditor.prototype.createInput = function () {
-        $select = $("<SELECT id='aaaaaaaaaId' tabIndex='0' class='editor-select many-primitive-editor-input' style='width:115px;'></SELECT>");
+        var $select = $("<SELECT id='aaaaaaaaaId' tabIndex='0' class='editor-select many-primitive-editor-input' style='width:115px;'></SELECT>");
         $select.appendTo(this.args.container);
-        $self = this;
+        var $self = this;
         this.args.column.options.rowEnumerationLookupMap.getOrLoadMap(function (data) {
             if (!$self.args.column.options.required) {
                 $select.append($('<option />)').val("").html(""));
@@ -155,7 +156,7 @@
             $.each(data, function (index, obj) {
                 $select.append($('<option />)').val(obj).html(obj));
             });
-            currentValue = $self.$item[$self.args.column.field];
+            var currentValue = $self.$item[$self.args.column.field];
             $select.val(currentValue);
             if (!$self.args.column.options.required) {
                 $select.chosen({allow_single_deselect: true});
@@ -168,6 +169,57 @@
     }
     ManyEnumerationEditor.prototype.resetInput = function (input) {
         input.val('').trigger('liszt:updated');
+    }
+
+
+
+    function ManyDateEditor(args) {
+        this.args = args;
+        if (this.args !== undefined) {
+            this.$item = args.item;
+            this.init();
+        }
+    }
+
+    ManyDateEditor.prototype = new Tuml.Slick.Editors.ManyPrimitiveEditor();
+    ManyDateEditor.prototype.serializeEditorValue = function (value) {
+        return value;
+    };
+    ManyDateEditor.prototype.serializeValueForOne = function (table) {
+        var rowArray = table.find('.many-primitive-editor-row');
+        var arrayToSerialize = [];
+        for (var i = 0; i < rowArray.length; i++) {
+            var row = rowArray[i];
+            arrayToSerialize.push($(row).data('value'));
+        }
+        return arrayToSerialize;
+    }
+    ManyDateEditor.prototype.serializeValue = function () {
+        var rowArray = this.$table.find('.many-primitive-editor-row');
+        var arrayToSerialize = [];
+        for (var i = 0; i < rowArray.length; i++) {
+            var row = rowArray[i];
+            arrayToSerialize.push($(row).data('value'));
+        }
+        return arrayToSerialize;
+    }
+    ManyDateEditor.prototype.createInput = function (div) {
+        var input = $("<INPUT type=text />");
+        input.appendTo(div);
+        input.focus().select();
+        input.datepicker({
+            showOn: "button",
+            buttonImageOnly: true,
+            buttonImage: "../javascript/slickgrid/images/calendar.gif",
+            dateFormat: "yy-mm-dd",
+            beforeShow: function () {
+                calendarOpen = true
+            },
+            onClose: function () {
+                calendarOpen = false
+            }
+        });
+        return input;
     }
 
     function ManyStringPrimitiveEditor(args) {
@@ -304,6 +356,7 @@
         };
 
         this.loadValue = function (item) {
+            //defaultValue must be an array
             defaultValue = item[this.args.column.field];
             if (defaultValue !== undefined && defaultValue !== null) {
                 for (var i = 0; i < defaultValue.length; i++) {
@@ -388,8 +441,10 @@
     ManyPrimitiveEditor.prototype.serializeValue = function () {
         alert('this must be overriden');
     };
-    ManyPrimitiveEditor.prototype.createInput = function () {
-        return $('<input type=text class="many-primitive-editor-input">');
+    ManyPrimitiveEditor.prototype.createInput = function (div) {
+        var input =  $('<input type=text class="many-primitive-editor-input">');
+        div.append(input);
+        return input;
     }
     ManyPrimitiveEditor.prototype.resetInput = function (input) {
         input.val('');
@@ -400,32 +455,33 @@
             this.args.grid['manyPrimitiveEditor'] = this;
         }
         this.$div = $("<div class='many-primitive-editor' />");
-        var $self = this;
+        var self = this;
         this.$addButton = $('<button id="many-primitive-editor-input-add-button" />').text('Add').click(function () {
-            var valueToAdd = $('.many-primitive-editor-input').val();
-            var currentValues = $self.serializeValue();
+//            var valueToAdd = $('.many-primitive-editor-input').val();
+            var valueToAdd = self.$input.val();
+            var currentValues = self.serializeValue();
             var testArray = [];
             testArray.push(valueToAdd);
-            var validationResults = $self.args.column.validator(testArray);
-            if (currentValues.length !== 0 && validationResults.valid && $self.args.column.options.unique) {
-                var serializedValueToAdd = $self.serializeEditorValue(valueToAdd);
-                validationResults = $self.args.column.validator(currentValues, serializedValueToAdd);
+            var validationResults = self.args.column.validator(testArray);
+            if (currentValues.length !== 0 && validationResults.valid && self.args.column.options.unique) {
+                var serializedValueToAdd = self.serializeEditorValue(valueToAdd);
+                validationResults = self.args.column.validator(currentValues, serializedValueToAdd);
             }
             if (!validationResults.valid) {
                 alert(validationResults.msg);
             } else {
-                $self.addTr(valueToAdd);
+                self.addTr(valueToAdd);
                 //Need to reapply the drag and drop plugin if the table was empty
                 if (currentValues.length == 0) {
-                    if ($self.args.column.options.ordered) {
-                        $self.$table.tableDnD();
+                    if (self.args.column.options.ordered) {
+                        self.$table.tableDnD();
                     }
                 }
-                $self.resetInput($self.$input);
+                self.resetInput(self.$input);
             }
         }).appendTo(this.$div);
-        this.$input = this.createInput();
-        this.$input.appendTo(this.$div)
+        this.$input = this.createInput(this.$div);
+//        this.$input.appendTo(this.$div)
         var resultDiv = $('<div class="many-primitive-editor-result" />').appendTo(this.$div);
         this.$table = $('<table class="many-primitive-editor-result-table" />').appendTo(resultDiv);
 
@@ -607,7 +663,7 @@
                 buttonImage: "../javascript/slickgrid/images/calendar.gif",
                 dateFormat: "yy-mm-dd",
                 beforeShow: function () {
-                    calendarOpen = true
+                    calendarOpen = true;
                 },
                 onClose: function () {
                     calendarOpen = false
@@ -653,8 +709,9 @@
 
         this.loadValue = function (item) {
             defaultValue = item[args.column.field];
-            $input.val(defaultValue);
-            $input[0].defaultValue = defaultValue;
+            if (defaultValue !== undefined && defaultValue !== null) {
+                $input.datepicker("setDate", (new Date(defaultValue)));
+            }
             $input.select();
         };
 
@@ -987,8 +1044,6 @@
         });
         var $select;
         var currentValue;
-        var scope = this;
-        var options;
 
         this.init = function (item) {
             $select = $("<SELECT tabIndex='0' class='editor-select' style='width:115px;'></SELECT>");
@@ -1149,8 +1204,6 @@
                     var value = select.val();
                     if (value === '') {
                         return {id: null, displayName: null, previousId: currentValue.id};
-//                    } else if (!isNaN(value)) {
-//                        return {id: parseInt(value), displayName: options[i].label, previousId: currentValue.id};
                     } else {
                         return {id: select.val(), displayName: options[i].label, previousId: currentValue.id};
                     }

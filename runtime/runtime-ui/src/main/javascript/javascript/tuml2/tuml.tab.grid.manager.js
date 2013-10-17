@@ -1073,7 +1073,7 @@
 
             //This is must occur before the next if.
             return false;
-        } else if (!property.composite && !property.inverseComposite && ((property.oneToOne || (property.manyToOne)) || property.manyPrimitive || property.manyEnumeration)) {
+        } else if (!property.composite && !property.inverseComposite && ((property.oneToOne || (property.manyToOne)) || property.manyPrimitive || property.manyEnumeration || (property.dataTypeEnum !== null && (property.upper > 1 || property.upper === -1)))) {
             return true;
         } else {
             return false;

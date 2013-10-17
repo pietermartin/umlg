@@ -30,7 +30,10 @@
                 "Max": MaxValidator,
                 "Min": MinValidator,
                 "Required": RequiredValidator,
-                "Number": NumberValidator
+                "Number": NumberValidator,
+                "TumlManyDateValidator" : TumlManyDateValidator,
+                "TumlManyTimeValidator" : TumlManyTimeValidator,
+                "TumlManyDateTimeValidator": TumlManyDateTimeValidator
             }
         }
     });
@@ -69,7 +72,7 @@
             if (value !== undefined && value !== null && value !== '') {
                 if (property.validations !== null) {
                     if (property.validations.date !== undefined) {
-                        result = TumlSlick.Validators.Date(property, value);
+                        result = TumlSlick.Validators.Date(property, value).validate();
                     }
                     if (!result.valid) {
                         return result;
@@ -175,6 +178,60 @@
 
         function validateSingleProperty(tmp) {
             return new TumlSlick.Validators.TumlString(property).validate(tmp);
+        }
+
+        function validate(currentValues, valueToAdd) {
+            return manyValidate(property, validateSingleProperty, currentValues, valueToAdd)
+        }
+
+    };
+
+    function TumlManyDateValidator(property) {
+
+        //Public api
+        $.extend(this, {
+            "TumlManyDateValidator": "1.0.0",
+            "validate": validate
+        });
+
+        function validateSingleProperty(tmp) {
+            return new TumlSlick.Validators.Date(property).validate(tmp);
+        }
+
+        function validate(currentValues, valueToAdd) {
+            return manyValidate(property, validateSingleProperty, currentValues, valueToAdd)
+        }
+
+    };
+
+    function TumlManyTimeValidator(property) {
+
+        //Public api
+        $.extend(this, {
+            "TumlManyTimeValidator": "1.0.0",
+            "validate": validate
+        });
+
+        function validateSingleProperty(tmp) {
+            return new TumlSlick.Validators.Time(property).validate(tmp);
+        }
+
+        function validate(currentValues, valueToAdd) {
+            return manyValidate(property, validateSingleProperty, currentValues, valueToAdd)
+        }
+
+    };
+
+    function TumlManyDateTimeValidator(property) {
+
+        //Public api
+        $.extend(this, {
+            "TumlManyDateTimeValidator": "1.0.0",
+            "validate": validate
+        });
+
+        function validateSingleProperty(tmp) {
+            return new TumlSlick.Validators.DateTime(property).validate(tmp);
         }
 
         function validate(currentValues, valueToAdd) {
@@ -452,33 +509,72 @@
     }
 
     function DateTimeValidator(property, value) {
-        try {
-            var result = $.datepicker.parseDateTime('yy-mm-dd', 'HH:mm:ss', value);
-            return {valid: true};
-        } catch (error) {
-            return {valid: false, msg: value + "'s format is incorrect, the format is 'yy-mm-dd HH:mm:ss'"}
+        //Public api
+        $.extend(this, {
+            "DateTimeValidator": "1.0.0",
+            "validate": validate
+        });
+
+        function validate(value) {
+            var result = TumlSlick.Validators.Required(property, value);
+            if (!result.valid) {
+                return result;
+            }
+            try {
+                var result = $.datepicker.parseDateTime('yy-mm-dd', 'HH:mm:ss', value);
+                return {valid: true};
+            } catch (error) {
+                return {valid: false, msg: value + "'s format is incorrect, the format is 'yy-mm-dd HH:mm:ss'"}
+            }
         }
+
     }
 
-
     function DateValidator(property, value) {
-        //datetimepicker thinks there is a time part to the value
-        value = value + ' 00:00:00';
-        try {
-            var result = $.datepicker.parseDate('yy-mm-dd', value);
-            return {valid: true};
-        } catch (error) {
-            return {valid: false, msg: value + "'s format is incorrect, the format is 'yy-mm-dd'"}
+
+        //Public api
+        $.extend(this, {
+            "DateValidator": "1.0.0",
+            "validate": validate
+        });
+
+        function validate(value) {
+            var result = TumlSlick.Validators.Required(property, value);
+            if (!result.valid) {
+                return result;
+            }
+            //datetimepicker thinks there is a time part to the value
+            value = value + ' 00:00:00';
+            try {
+                var result = $.datepicker.parseDate('yy-mm-dd', value);
+                return {valid: true};
+            } catch (error) {
+                return {valid: false, msg: value + "'s format is incorrect, the format is 'yy-mm-dd'"}
+            }
         }
     }
 
     function TimeValidator(property, value) {
-        var result = $.datepicker.parseTime('HH:mm', value, {});
-        if (result) {
-            return {valid: true};
-        } else {
-            return {valid: false, msg: value + "'s format is incorrect, the format is 'HH:mm'"}
+
+        //Public api
+        $.extend(this, {
+            "TimeValidator": "1.0.0",
+            "validate": validate
+        });
+
+        function validate(value) {
+            var result = TumlSlick.Validators.Required(property, value);
+            if (!result.valid) {
+                return result;
+            }
+            var result = $.datepicker.parseTime('HH:mm', value, {});
+            if (result) {
+                return {valid: true};
+            } else {
+                return {valid: false, msg: value + "'s format is incorrect, the format is 'HH:mm'"}
+            }
         }
+
     }
 
     function RequiredValidator(property, value) {
