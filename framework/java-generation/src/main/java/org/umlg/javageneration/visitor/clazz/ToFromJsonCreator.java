@@ -193,33 +193,33 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                     } else {
                         if (pWrap.isDateTime()) {
                             toJson.getBody().addToStatements(
-                                    "sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + (" + pWrap.getter() + "() != null ? \"\\\"\" + "
-                                            + TinkerGenerationUtil.ToJsonUtil.getLast() + ".toJsonDateTime(" + pWrap.getter() + "()) + \"\\\"\" : null " + "))");
+                                    "sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + (" + pWrap.getter() + "() != null ? "
+                                            + TinkerGenerationUtil.ToJsonUtil.getLast() + ".toJsonDateTime(" + pWrap.getter() + "()) : null " + "))");
                             annotatedClass.addToImports(TinkerGenerationUtil.ToJsonUtil);
                         } else if (pWrap.isDate()) {
                             toJson.getBody().addToStatements(
-                                    "sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + (" + pWrap.getter() + "() != null ? \"\\\"\" + "
-                                            + TinkerGenerationUtil.ToJsonUtil.getLast() + ".toJsonLocalDate(" + pWrap.getter() + "()) + \"\\\"\" : null " + "))");
+                                    "sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + (" + pWrap.getter() + "() != null ?  "
+                                            + TinkerGenerationUtil.ToJsonUtil.getLast() + ".toJsonLocalDate(" + pWrap.getter() + "()) : null " + "))");
                             annotatedClass.addToImports(TinkerGenerationUtil.ToJsonUtil);
                         } else if (pWrap.isTime()) {
                             toJson.getBody().addToStatements(
-                                    "sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + (" + pWrap.getter() + "() != null ? \"\\\"\" + "
-                                            + TinkerGenerationUtil.ToJsonUtil.getLast() + ".toJsonLocalTime(" + pWrap.getter() + "()) + \"\\\"\" : null " + "))");
+                                    "sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + (" + pWrap.getter() + "() != null ? "
+                                            + TinkerGenerationUtil.ToJsonUtil.getLast() + ".toJsonLocalTime(" + pWrap.getter() + "()) : null " + "))");
                             annotatedClass.addToImports(TinkerGenerationUtil.ToJsonUtil);
                         } else if (pWrap.isImage()) {
                             toJson.getBody().addToStatements(
-                                    "sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + (" + pWrap.getter() + "() != null ? \"\\\"\" + "
-                                            + TinkerGenerationUtil.ToJsonUtil.getLast() + ".encode(" + pWrap.getter() + "()) + \"\\\"\" : null " + "))");
+                                    "sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + (" + pWrap.getter() + "() != null ? "
+                                            + TinkerGenerationUtil.ToJsonUtil.getLast() + ".encode(" + pWrap.getter() + "()) : null " + "))");
                             annotatedClass.addToImports(TinkerGenerationUtil.ToJsonUtil);
                         } else if (pWrap.isVideo()) {
                             toJson.getBody().addToStatements(
-                                    "sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + (" + pWrap.getter() + "() != null ? \"\\\"\" + "
-                                            + TinkerGenerationUtil.ToJsonUtil.getLast() + ".encode(" + pWrap.getter() + "()) + \"\\\"\" : null " + "))");
+                                    "sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + (" + pWrap.getter() + "() != null ? "
+                                            + TinkerGenerationUtil.ToJsonUtil.getLast() + ".encode(" + pWrap.getter() + "()) : null " + "))");
                             annotatedClass.addToImports(TinkerGenerationUtil.ToJsonUtil);
                         } else if (pWrap.isAudio()) {
                             toJson.getBody().addToStatements(
-                                    "sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + (" + pWrap.getter() + "() != null ? \"\\\"\" + TinkerFormatter.encode("
-                                            + pWrap.getter() + "()) + \"\\\"\" : null " + "))");
+                                    "sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + (" + pWrap.getter() + "() != null ? TinkerFormatter.encode("
+                                            + pWrap.getter() + "()) : null " + "))");
                         } else {
                             toJson.getBody().addToStatements(
                                     "sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + (" + pWrap.getter() + "() != null ? \"\\\"\" + "

@@ -4,6 +4,8 @@ import org.apache.commons.codec.binary.Base64;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 //TODO make this threadvar or something
 /**
@@ -26,7 +28,8 @@ public class TumlFormatter {
 
 	public static DateTime parseDateTime(String dateTime) {
 		if (dateTime != null && !dateTime.isEmpty()) {
-			return DateTime.parse(dateTime);
+            DateTimeFormatter fmt = DateTimeFormat.forPattern("yy-mm-dd HH:mm:ss");
+			return fmt.parseDateTime(dateTime);
 		} else {
 			return null;
 		}
@@ -40,25 +43,31 @@ public class TumlFormatter {
 		}
 	}
 
+    //TODO use stereotypes on model to specify the format
 	public static String format(DateTime dateTime) {
 		if (dateTime != null) {
-			return dateTime.toString();
+            DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+            return fmt.print(dateTime);
 		} else {
 			return "";
 		}
 	}
 
+    //TODO use stereotypes on model to specify the format
 	public static String format(LocalDate date) {
 		if (date != null) {
-			return date.toString();
+            DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd");
+			return fmt.print(date);
 		} else {
 			return "";
 		}
 	}
 
+    //TODO use stereotypes on model to specify the format
 	public static String format(LocalTime time) {
 		if (time != null) {
-			return time.toString();
+            DateTimeFormatter fmt = DateTimeFormat.forPattern("HH:mm");
+			return fmt.print(time);
 		} else {
 			return "";
 		}

@@ -926,6 +926,16 @@
                 <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_CnSyIDXLEeOAlanvceIpiA"/>
                 <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_CnTZMDXLEeOAlanvceIpiA" value="*"/>
               </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_jKdCkDdQEeOAlanvceIpiA" name="time" visibility="public" isOrdered="true" isUnique="false">
+                <type xmi:type="uml:DataType" href="umlgdatatypes.uml#_eqPvMALgEeKtFpHFDhpFVA"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_mU3JEDdQEeOAlanvceIpiA"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_mU3wIDdQEeOAlanvceIpiA" value="*"/>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_pnD5oDdQEeOAlanvceIpiA" name="dateTime" visibility="public" isOrdered="true" isUnique="false">
+                <type xmi:type="uml:DataType" href="umlgdatatypes.uml#_OGOTEAD6EeKS1vh1F4YVWQ"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_sBy2sDdQEeOAlanvceIpiA"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_sBzdwDdQEeOAlanvceIpiA" value="*"/>
+              </ownedAttribute>
             </packagedElement>
           </packagedElement>
         </packagedElement>

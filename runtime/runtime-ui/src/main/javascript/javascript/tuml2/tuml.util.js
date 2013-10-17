@@ -235,11 +235,11 @@ function selectEditor(property) {
     } else if (property.dataTypeEnum !== undefined && property.dataTypeEnum != null) {
         if (property.upper > 1 || property.upper === -1) {
             if (property.dataTypeEnum == 'Date') {
-                return  Tuml.Slick.Editors.ManyDate;
+                return  Tuml.Slick.Editors.ManyDateEditor;
             } else if (property.dataTypeEnum == 'Time') {
-                return  Tuml.Slick.Editors.Time;
+                return  Tuml.Slick.Editors.ManyTime;
             } else if (property.dataTypeEnum == 'DateTime') {
-                return  Tuml.Slick.Editors.DateTime;
+                return  Tuml.Slick.Editors.ManyDateTime;
             } else if (property.dataTypeEnum == 'InternationalPhoneNumber') {
                 //TODO
                 return Tuml.Slick.Editors.Text;

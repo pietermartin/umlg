@@ -32,7 +32,7 @@ public class TestBitsy {
         Vertex one = g.addVertex(null);
         one.setProperty("one", "1");
         long previousSplitTime = 0;
-        for (int i = 0; i < 100000; i++) {
+        for (int i = 0; i < 1000000; i++) {
             Vertex many = g.addVertex(null);
             many.setProperty("many", "2");
             g.addEdge(null, one, many, "toMany");

@@ -105,6 +105,7 @@ public class ToJsonUtil {
     public static String toJsonDateTime(Collection<DateTime> dateTimes) {
         StringBuilder json = new StringBuilder();
         if (dateTimes != null) {
+            json.append("[");
             int count = 0;
                 for (DateTime p : dateTimes) {
                 count++;
@@ -115,6 +116,9 @@ public class ToJsonUtil {
                     json.append(",");
                 }
             }
+            json.append("]");
+        } else {
+            json.append("null");
         }
         return json.toString();
     }
@@ -122,6 +126,7 @@ public class ToJsonUtil {
     public static String toJsonLocalTime(Collection<LocalTime> localTimes) {
         StringBuilder json = new StringBuilder();
         if (localTimes != null) {
+            json.append("[");
             int count = 0;
             for (LocalTime localTime : localTimes) {
                 count++;
@@ -132,6 +137,9 @@ public class ToJsonUtil {
                     json.append(",");
                 }
             }
+            json.append("]");
+        } else {
+            json.append("null");
         }
         return json.toString();
     }
