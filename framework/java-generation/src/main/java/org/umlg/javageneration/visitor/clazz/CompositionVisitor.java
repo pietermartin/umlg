@@ -5,10 +5,7 @@ import org.eclipse.uml2.uml.AssociationClass;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Property;
 import org.umlg.framework.VisitSubclasses;
-import org.umlg.java.metamodel.OJConstructor;
-import org.umlg.java.metamodel.OJForStatement;
-import org.umlg.java.metamodel.OJIfStatement;
-import org.umlg.java.metamodel.OJPathName;
+import org.umlg.java.metamodel.*;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.framework.Visitor;
@@ -17,6 +14,8 @@ import org.umlg.javageneration.util.PropertyWrapper;
 import org.umlg.javageneration.util.TinkerGenerationUtil;
 import org.umlg.javageneration.util.TumlClassOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
+
+import java.util.Set;
 
 public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
 
@@ -39,6 +38,7 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
                 implementRootNode(clazz, annotatedClass);
             }
         }
+        //This adds a constructor for every composite owner
         addGetOwningObject(annotatedClass, clazz);
         addCompositeChildrenToDelete(annotatedClass, clazz);
     }
@@ -61,28 +61,44 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
 
     private void addConstructorWithOwnerAsParameter(OJAnnotatedClass annotatedClass, Class clazz) {
         OJConstructor constructor = new OJConstructor();
-        constructor.addParam("compositeOwner", TumlClassOperations.getOtherEndToCompositePathName(clazz));
-        PropertyWrapper pWrap = new PropertyWrapper(TumlClassOperations.getOtherEndToComposite(clazz));
-        if (pWrap.isMemberOfAssociationClass()) {
-            constructor.addParam(StringUtils.uncapitalize(pWrap.getAssociationClass().getName()), pWrap.getAssociationClassPathName());
+        Set<Property> otherEndsToComposite = TumlClassOperations.getOtherEndToComposite(clazz);
+        for (Property otherEndToComposite : otherEndsToComposite) {
+            OJPathName otherEndToCompositePathName = TumlClassOperations.getPathName(otherEndToComposite.getType());
+            constructor.addParam("compositeOwner", otherEndToCompositePathName);
+            PropertyWrapper pWrap = new PropertyWrapper(otherEndToComposite);
+            if (pWrap.isMemberOfAssociationClass()) {
+                constructor.addParam(StringUtils.uncapitalize(pWrap.getAssociationClass().getName()), pWrap.getAssociationClassPathName());
+            }
+            annotatedClass.addToConstructors(constructor);
+            constructor.getBody().addToStatements("super(true)");
+
+            if (!pWrap.isMemberOfAssociationClass()) {
+                constructor.getBody().addToStatements(pWrap.adder() + "(compositeOwner)");
+            } else {
+                constructor.getBody().addToStatements(pWrap.adder() + "(compositeOwner, " + StringUtils.uncapitalize(pWrap.getAssociationClass().getName()) + ")");
+            }
         }
-        annotatedClass.addToConstructors(constructor);
-        constructor.getBody().addToStatements("super(true)");
-
-        if (!pWrap.isMemberOfAssociationClass()) {
-            constructor.getBody().addToStatements(pWrap.adder() + "(compositeOwner)");
-        } else {
-            constructor.getBody().addToStatements(pWrap.adder() + "(compositeOwner, " + StringUtils.uncapitalize(pWrap.getAssociationClass().getName()) + ")");
-        }
-
-
     }
 
     private void addGetOwningObject(OJAnnotatedClass annotatedClass, Class clazz) {
         OJAnnotatedOperation getOwningObject = new OJAnnotatedOperation("getOwningObject", TinkerGenerationUtil.UMLG_NODE.getCopy());
         TinkerGenerationUtil.addOverrideAnnotation(getOwningObject);
         if (TumlClassOperations.hasCompositeOwner(clazz)) {
-            getOwningObject.getBody().addToStatements("return " + new PropertyWrapper(TumlClassOperations.getOtherEndToComposite(clazz)).getter() + "()");
+            new OJField(getOwningObject.getBody(), "result", TinkerGenerationUtil.UMLG_NODE.getCopy());
+            OJIfStatement ifCompositeParentNotNull = new OJIfStatement();
+            Set<Property> otherEndsToComposite = TumlClassOperations.getOtherEndToComposite(clazz);
+            int count = 1;
+            for (Property otherEndToComposite : otherEndsToComposite) {
+                if (count++ == 1) {
+                    ifCompositeParentNotNull.setCondition(new PropertyWrapper(otherEndToComposite).getter() + "() != null");
+                    ifCompositeParentNotNull.addToThenPart("result = " + new PropertyWrapper(otherEndToComposite).getter() + "()");
+                } else {
+                    ifCompositeParentNotNull.addToElseIfCondition(new PropertyWrapper(otherEndToComposite).getter() + "() != null", "result = " + new PropertyWrapper(otherEndToComposite).getter() + "()");
+                }
+            }
+            ifCompositeParentNotNull.addToElsePart("result = null");
+            getOwningObject.getBody().addToStatements(ifCompositeParentNotNull);
+            getOwningObject.getBody().addToStatements("return result");
         } else if (clazz instanceof AssociationClass) {
             boolean foundOwningObject = false;
             //Make the controlling side the owning object

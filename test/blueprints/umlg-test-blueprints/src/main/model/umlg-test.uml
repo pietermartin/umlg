@@ -1652,6 +1652,58 @@
             </ownedAttribute>
           </packagedElement>
         </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="_XTUhQDe4EeOAlanvceIpiA" name="multiplecompositeparent">
+          <packagedElement xmi:type="uml:Class" xmi:id="_cmhgQDe4EeOAlanvceIpiA" name="Parent1">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_gi0WsDe4EeOAlanvceIpiA" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_iF7vQDe4EeOAlanvceIpiA" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_iF8WUDe4EeOAlanvceIpiA" value="1"/>
+              <defaultValue xmi:type="uml:LiteralString" xmi:id="_iF-ykDe4EeOAlanvceIpiA">
+                <value xsi:nil="true"/>
+              </defaultValue>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_02QasDe4EeOAlanvceIpiA" name="child" type="_e_3WMDe4EeOAlanvceIpiA" aggregation="composite" association="_02Qasze4EeOAlanvceIpiA">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_02QasTe4EeOAlanvceIpiA"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_02Qasje4EeOAlanvceIpiA" value="*"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_d8M5wDe4EeOAlanvceIpiA" name="Parent2">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_imHrMDe4EeOAlanvceIpiA" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_j8UCEDe4EeOAlanvceIpiA" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_j8UpIDe4EeOAlanvceIpiA" value="1"/>
+              <defaultValue xmi:type="uml:LiteralString" xmi:id="_j8WeUDe4EeOAlanvceIpiA">
+                <value xsi:nil="true"/>
+              </defaultValue>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_1FESwDe4EeOAlanvceIpiA" name="child" type="_e_3WMDe4EeOAlanvceIpiA" aggregation="composite" association="_1FE50De4EeOAlanvceIpiA">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_1FESwTe4EeOAlanvceIpiA"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_1FESwje4EeOAlanvceIpiA" value="*"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_e_3WMDe4EeOAlanvceIpiA" name="Child">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_kYvfYDe4EeOAlanvceIpiA" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_l0CYsDe4EeOAlanvceIpiA" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_l0aMIDe4EeOAlanvceIpiA" value="1"/>
+              <defaultValue xmi:type="uml:LiteralString" xmi:id="_l0coYDe4EeOAlanvceIpiA">
+                <value xsi:nil="true"/>
+              </defaultValue>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_02Qasze4EeOAlanvceIpiA" name="parent1_child_1" memberEnd="_02QatDe4EeOAlanvceIpiA _02QasDe4EeOAlanvceIpiA" navigableOwnedEnd="_02QatDe4EeOAlanvceIpiA">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_02QatDe4EeOAlanvceIpiA" name="parent1" type="_cmhgQDe4EeOAlanvceIpiA" association="_02Qasze4EeOAlanvceIpiA">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_02QatTe4EeOAlanvceIpiA" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_02Qatje4EeOAlanvceIpiA" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_1FE50De4EeOAlanvceIpiA" name="parent2_child_1" memberEnd="_1FE50Te4EeOAlanvceIpiA _1FESwDe4EeOAlanvceIpiA" navigableOwnedEnd="_1FE50Te4EeOAlanvceIpiA">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_1FE50Te4EeOAlanvceIpiA" name="parent2" type="_d8M5wDe4EeOAlanvceIpiA" association="_1FE50De4EeOAlanvceIpiA">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_1FE50je4EeOAlanvceIpiA" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_1FE50ze4EeOAlanvceIpiA" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+        </packagedElement>
       </packagedElement>
     </packagedElement>
     <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_1clVoQAOEeKpVr_ntT6cLA">

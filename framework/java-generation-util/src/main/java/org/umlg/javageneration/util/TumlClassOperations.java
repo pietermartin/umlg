@@ -226,18 +226,19 @@ public class TumlClassOperations extends ClassOperations {
         return result;
     }
 
-    public static Property getOtherEndToComposite(Classifier classifier) {
+    public static Set<Property> getOtherEndToComposite(Classifier classifier) {
+        Set<Property> compositeOwners  = new HashSet<Property>();
         Set<Association> associations = getAllAssociations(classifier);
         for (Association association : associations) {
             List<Property> memberEnds = association.getMemberEnds();
             for (Property property : memberEnds) {
                 if (!property.isComposite() && property.getType() != classifier && property.getOtherEnd().isComposite()
                         && isSpecializationOf(classifier, property.getOtherEnd().getType())) {
-                    return property;
+                    compositeOwners.add(property);
                 }
             }
         }
-        return null;
+        return compositeOwners;
     }
 
     /*
@@ -276,13 +277,13 @@ public class TumlClassOperations extends ClassOperations {
         }
     }
 
-    public static OJPathName getOtherEndToCompositePathName(Class clazz) {
-        Property endToComposite = getOtherEndToComposite(clazz);
-        if (endToComposite != null) {
-            return getPathName(endToComposite.getType());
-        } else {
-            return null;
+    public static Set<OJPathName> getOtherEndToCompositePathName(Class clazz) {
+        Set<OJPathName> result = new HashSet<OJPathName>();
+        Set<Property> endsToComposite = getOtherEndToComposite(clazz);
+        for (Property p : endsToComposite) {
+            result.add(getPathName(p.getType()));
         }
+        return result;
     }
 
     public static OJPathName getPathName(Type type) {
@@ -410,7 +411,7 @@ public class TumlClassOperations extends ClassOperations {
     }
 
     public static boolean hasCompositeOwner(Classifier classifier) {
-        return getOtherEndToComposite(classifier) != null;
+        return !getOtherEndToComposite(classifier).isEmpty();
     }
 
     public static String className(Classifier clazz) {

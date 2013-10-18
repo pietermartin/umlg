@@ -15,6 +15,7 @@ import org.umlg.javageneration.util.TinkerGenerationUtil;
 import org.umlg.javageneration.util.TumlClassOperations;
 import org.umlg.restlet.util.TumlRestletGenerationUtil;
 
+import java.util.Set;
 import java.util.SortedSet;
 
 public class EntityServerResourceBuilder extends BaseServerResourceBuilder implements Visitor<Classifier> {
@@ -65,18 +66,17 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
                         + getIdFieldName(clazz) + "))");
         annotatedClass.addToImports(TumlClassOperations.getPathName(clazz));
 
-        OJPathName parentPathName = TumlClassOperations.getOtherEndToCompositePathName(clazz);
-        if (parentPathName != null) {
+        OJTryStatement ojTry = new OJTryStatement();
+        Set<Property> parentProperties = TumlClassOperations.getOtherEndToComposite(clazz);
+        for (Property parentProperty : parentProperties) {
+            OJPathName parentPathName= TumlClassOperations.getPathName(parentProperty.getType());
             annotatedClass.addToImports(parentPathName);
-            Property parentProperty = TumlClassOperations.getOtherEndToComposite(clazz);
             PropertyWrapper parentWrap = new PropertyWrapper(parentProperty);
             delete.getBody().addToStatements(parentPathName.getLast() + " " + parentWrap.fieldname() + " = c." + parentWrap.getter() + "()");
-        }
 
-        OJTryStatement ojTry = new OJTryStatement();
+        }
         ojTry.getTryPart().addToStatements("c.delete()");
         ojTry.getTryPart().addToStatements("GraphDb.getDb().commit()");
-
         ojTry.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
 
         ojTry.getCatchPart().addToStatements("GraphDb.getDb().rollback()");
@@ -84,14 +84,17 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
         annotatedClass.addToImports(TumlRestletGenerationUtil.UmlgExceptionUtilFactory);
         delete.getBody().addToStatements(ojTry);
 
-        if (parentPathName != null) {
-            Property parentProperty = TumlClassOperations.getOtherEndToComposite(clazz);
-            PropertyWrapper parentWrap = new PropertyWrapper(parentProperty);
-            addGetParentRepresentation((Class) parentProperty.getType(), annotatedClass);
-            delete.getBody().addToStatements("return getParent(" + parentWrap.fieldname() + ")");
-        } else {
-            delete.getBody().addToStatements("return new JsonRepresentation(\"\")");
-        }
+        delete.getBody().addToStatements("return new " + TumlRestletGenerationUtil.EmptyRepresentation.getLast() + "()");
+        annotatedClass.addToImports(TumlRestletGenerationUtil.EmptyRepresentation);
+        //TODO can not remember why I return the parens representation
+//        if (parentPathName != null) {
+//            Property parentProperty = TumlClassOperations.getOtherEndToComposite(clazz);
+//            PropertyWrapper parentWrap = new PropertyWrapper(parentProperty);
+//            addGetParentRepresentation((Class) parentProperty.getType(), annotatedClass);
+//            delete.getBody().addToStatements("return getParent(" + parentWrap.fieldname() + ")");
+//        } else {
+//            delete.getBody().addToStatements("return new JsonRepresentation(\"\")");
+//        }
 
         annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
         annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);
