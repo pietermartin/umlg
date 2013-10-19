@@ -24,7 +24,11 @@ public class OJField extends OJFieldGEN {
 		block.addToLocals(this);
 	}
 
-	public OJField(String name, OJPathName type) {
+    public OJField(OJBlock body, String name, String path) {
+        this(body, name, new OJPathName(path));
+    }
+
+    public OJField(String name, OJPathName type) {
 		setName(name);
 		setType(type);
 	}
@@ -38,7 +42,7 @@ public class OJField extends OJFieldGEN {
 		this(name, new OJPathName(path));
 	}
 
-	public String toJavaString() {
+    public String toJavaString() {
 		String result = "";
 		if (this.getOwner() != null) { // field is part of block statement
 			result = result + visToJava(this);

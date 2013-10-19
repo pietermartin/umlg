@@ -40,6 +40,7 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
         }
         //This adds a constructor for every composite owner
         addGetOwningObject(annotatedClass, clazz);
+        addHasOnlyOneCompositeParent(annotatedClass, clazz);
         addCompositeChildrenToDelete(annotatedClass, clazz);
     }
 
@@ -60,9 +61,9 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
     }
 
     private void addConstructorWithOwnerAsParameter(OJAnnotatedClass annotatedClass, Class clazz) {
-        OJConstructor constructor = new OJConstructor();
         Set<Property> otherEndsToComposite = TumlClassOperations.getOtherEndToComposite(clazz);
         for (Property otherEndToComposite : otherEndsToComposite) {
+            OJConstructor constructor = new OJConstructor();
             OJPathName otherEndToCompositePathName = TumlClassOperations.getPathName(otherEndToComposite.getType());
             constructor.addParam("compositeOwner", otherEndToCompositePathName);
             PropertyWrapper pWrap = new PropertyWrapper(otherEndToComposite);
@@ -120,6 +121,21 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
             getOwningObject.getBody().addToStatements("return null");
         }
         annotatedClass.addToOperations(getOwningObject);
+    }
+
+    private void addHasOnlyOneCompositeParent(OJAnnotatedClass annotatedClass, Class clazz) {
+        OJAnnotatedOperation hasOnlyOneCompositeParent = new OJAnnotatedOperation("hasOnlyOneCompositeParent", "boolean");
+        TinkerGenerationUtil.addOverrideAnnotation(hasOnlyOneCompositeParent);
+        OJField result = new OJField(hasOnlyOneCompositeParent.getBody(), "result", "int");
+        result.setInitExp("0");
+        if (TumlClassOperations.hasCompositeOwner(clazz)) {
+            Set<Property> otherEndsToComposite = TumlClassOperations.getOtherEndToComposite(clazz);
+            for (Property otherEndToComposite : otherEndsToComposite) {
+                hasOnlyOneCompositeParent.getBody().addToStatements("result = result + (" + new PropertyWrapper(otherEndToComposite).getter() + "() != null ? 1 : 0)");
+            }
+        }
+        hasOnlyOneCompositeParent.getBody().addToStatements("return result == 1");
+        annotatedClass.addToOperations(hasOnlyOneCompositeParent);
     }
 
     private void addEdgeToRoot(OJAnnotatedClass annotatedClass, Class clazz) {

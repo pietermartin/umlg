@@ -75,7 +75,7 @@ public class AddTumlLookupCompositeParentUriToRuntimePropertyEnum extends BaseVi
 
     private void doWithLiteral(Class clazz, PropertyWrapper propertyWrapper, OJEnumLiteral literal, boolean asAssociationClass) {
 		String uri;
-		if (TumlClassOperations.getOtherEndToComposite(clazz) != null && propertyWrapper != null && propertyWrapper.hasLookup()) {
+		if (!TumlClassOperations.getOtherEndToComposite(clazz).isEmpty() && propertyWrapper != null && propertyWrapper.hasLookup()) {
             String contextPath;
             contextPath = ModelLoader.INSTANCE.getModel().getName();
             if (!asAssociationClass) {

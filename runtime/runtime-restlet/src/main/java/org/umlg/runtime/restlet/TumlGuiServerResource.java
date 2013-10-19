@@ -13,6 +13,7 @@ import org.restlet.resource.Directory;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 import org.umlg.framework.ModelLoader;
+import org.umlg.runtime.util.Pair;
 import org.umlg.runtime.util.UmlgUtil;
 
 public class TumlGuiServerResource extends ServerResource {
@@ -44,11 +45,12 @@ public class TumlGuiServerResource extends ServerResource {
             uri = withHostRef.replace("/ui2", "");
         }
 
-        String poweredBy = UmlgUtil.getBlueprintsImplementation();
+        Pair<String,String> poweredBy = UmlgUtil.getBlueprintsImplementationWithUrl();
         dataModel.put("app", new App().setRootUrl(ModelLoader.INSTANCE.getModel().getName())
                 .setUri(uri)
                 .setUmlgLib(ModelLoader.INSTANCE.isUmlGLibIncluded())
-                .setPoweredBy(poweredBy));
+                .setPoweredBy(poweredBy.getFirst())
+                .setPoweredByLink(poweredBy.getSecond()));
 //        Representation umlgUiFtl = new ClientResource("clap:///org/umlg/ui/umlgui2.html").get();
 
         File umlgui2 = new File("./runtime/runtime-ui/src/main/resources/org/umlg/ui/umlgui2.html");
@@ -66,6 +68,7 @@ public class TumlGuiServerResource extends ServerResource {
         private String rootUrl;
         private String uri;
         private boolean umlgLib;
+        private String poweredByLink;
         private String poweredBy;
 
         public String getPoweredBy() {
@@ -74,6 +77,15 @@ public class TumlGuiServerResource extends ServerResource {
 
         public App setPoweredBy(String poweredBy) {
             this.poweredBy = poweredBy;
+            return this;
+        }
+
+        public String getPoweredByLink() {
+            return poweredByLink;
+        }
+
+        public App setPoweredByLink(String poweredByLink) {
+            this.poweredByLink = poweredByLink;
             return this;
         }
 

@@ -4,6 +4,36 @@ import java.util.*;
 
 public class UmlgUtil {
 
+    public static Pair<String, String> getBlueprintsImplementationWithUrl() {
+        Pair<String, String> poweredBy = new Pair<String, String>();
+        try {
+            Class.forName("org.umlg.runtime.adaptor.UmlgNeo4jGraph");
+            poweredBy.setFirst("Neo4j");
+            poweredBy.setSecond("http://www.neo4j.org");
+        } catch (ClassNotFoundException e) {
+            try {
+                Class.forName("org.umlg.runtime.adaptor.UmlgBitsyGraph");
+                poweredBy.setFirst("Bitsy");
+                poweredBy.setSecond("https://bitbucket.org/lambdazen/bitsy/wiki/Home");
+            } catch (ClassNotFoundException ee) {
+                try {
+                    Class.forName("org.umlg.runtime.adaptor.UmlgTitanGraph");
+                    poweredBy.setFirst("Titan");
+                    poweredBy.setSecond("https://bitbucket.org/lambdazen/bitsy/wiki/Home");
+                } catch (ClassNotFoundException eee) {
+                    try {
+                        Class.forName("org.umlg.runtime.adaptor.UmlgOrientDbGraph");
+                        poweredBy.setFirst("OrientDb");
+                        poweredBy.setSecond("http://www.orientdb.org/");
+                    } catch (ClassNotFoundException eeee) {
+                    }
+                }
+            }
+        }
+        return poweredBy;
+    }
+
+
     public static String getBlueprintsImplementation() {
         String poweredBy = "";
         try {

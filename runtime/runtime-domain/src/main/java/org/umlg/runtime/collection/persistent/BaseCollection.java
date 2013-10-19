@@ -567,7 +567,7 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
                 // the user must first remove it
                 Iterator<Edge> iteratorToOne = getEdges(v).iterator();
                 if (iteratorToOne.hasNext()) {
-                    throw new IllegalStateException("Its a 1");
+                    throw new IllegalStateException(String.format("Property %s has a multiplicity of 1 and is already set. First remove the value before setting it.", new String[]{getInverseQualifiedName()}));
                 }
                 this.handleInverseSide(node, tumlRuntimeProperty, true, this.owner);
             }

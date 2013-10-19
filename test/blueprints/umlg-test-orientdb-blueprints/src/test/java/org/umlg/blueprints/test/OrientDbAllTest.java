@@ -36,46 +36,6 @@ import org.umlg.tinker.validationtest.TestValidation;
  * Date: 2013/01/28
  * Time: 7:18 PM
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({
-        EmailTest.class,
-        ManyEnumerationTest.class,
-        TestMetaClasses.class,
-        AllInstancesTest.class,
-        BagTestTest.class,
-        OclStdLibBagTest.class,
-        OclStdLibCollectionTest.class,
-        OclStdLibSequenceTest.class,
-        OclStdLibSetTest.class,
-        OclStdLibOrderedSetTest.class,
-        OrderedSetTestTest.class,
-        QualifiedBagTest.class,
-        QualifiedOrderedSetTest.class,
-        QualifiedSequenceTest.class,
-        SequenceTest.class,
-        TestInitCalled.class,
-        TestOrderedListKeepsIndex.class,
-        TestComponent.class,
-        TestNonCompositeOneToOne.class,
-        TestOneToMany.class,
-        DeletionInheritenceTest.class, DeletionTest.class, EmbeddedSetDeletionTest.class,
-        TestEmbeddedTest.class,
-        TestHierarchy.class,
-        TestInheritence.class,
-        ManyToManyInverseTest.class, TestOneToManyInterface.class,
-        JsonTest.class,
-        TestOneLookup.class,
-        TestMvel.class,
-        NonNavigableTest.class,
-        TestBooleanPrimitive.class,TestPrimitiveRemoval.class,
-        TestQualifiedDeletion.class, TestQualifier.class,
-        //Fails::TestQualifierChangeEvent.class,
-        TestQualifierOnManyToMany.class,
-        TestMetaQueries.class, TestQueryBaseModelTumlAssociation.class,
-        TestValidation.class,
-//        TransactionSuspendResumeTest.class,
-        ConstrainedPropertyTest.class
-})
-public class OrientDbAllTest {
+public class OrientDbAllTest extends UmlgTestSuite {
 
 }

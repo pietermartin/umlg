@@ -18,8 +18,6 @@ import org.umlg.tinker.query.TestMetaQueries;
  * Date: 2013/01/28
  * Time: 7:18 PM
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({DeletionTest.class})
-public class OrientDbAnyTest {
+public class OrientDbAnyTest extends UmlgAnyTestSuite {
 
 }

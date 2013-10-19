@@ -20,23 +20,23 @@ public class QueryExecuteResourceBuilder extends BaseServerResourceBuilder imple
 
 	@Override
 	public void visitBefore(Model model) {
-		OJAnnotatedInterface queryExecuteInf = new OJAnnotatedInterface(TumlRestletGenerationUtil.QueryExecuteServerResource.getLast());
-		OJPackage ojPackage = new OJPackage(TinkerGenerationUtil.UmlgRootPackage.toJavaString());
-		queryExecuteInf.setMyPackage(ojPackage);
-		addToSource(queryExecuteInf);
+//		OJAnnotatedInterface queryExecuteInf = new OJAnnotatedInterface(TumlRestletGenerationUtil.QueryExecuteServerResource.getLast());
+//		OJPackage ojPackage = new OJPackage(TinkerGenerationUtil.UmlgRootPackage.toJavaString());
+//		queryExecuteInf.setMyPackage(ojPackage);
+//		addToSource(queryExecuteInf);
+//
+//		OJAnnotatedClass queryExecute = new OJAnnotatedClass(TumlRestletGenerationUtil.QueryExecuteServerResourceImpl.getLast());
+//		queryExecute.setMyPackage(ojPackage);
+//		queryExecute.addToImplementedInterfaces(TumlRestletGenerationUtil.QueryExecuteServerResource);
+//		queryExecute.setSuperclass(TumlRestletGenerationUtil.BaseOclExecutionServerResourceImpl);
+//		addToSource(queryExecute);
+//
+//		addDefaultConstructor(queryExecute);
+//
+//		addGetRepresentation(queryExecuteInf, queryExecute);
 
-		OJAnnotatedClass queryExecute = new OJAnnotatedClass(TumlRestletGenerationUtil.QueryExecuteServerResourceImpl.getLast());
-		queryExecute.setMyPackage(ojPackage);
-		queryExecute.addToImplementedInterfaces(TumlRestletGenerationUtil.QueryExecuteServerResource);
-		queryExecute.setSuperclass(TumlRestletGenerationUtil.BaseOclExecutionServerResourceImpl);
-		addToSource(queryExecute);
-		
-		addDefaultConstructor(queryExecute);
-		
-		addGetRepresentation(queryExecuteInf, queryExecute);
-
-		addToRouterEnum(model, queryExecute, "QUERY_EXECUTE", "\"/{contextId}/oclExecuteQuery\"");
-        addToRouterEnum(model, queryExecute, "QUERY_EXECUTE_STATIC", "\"/oclExecuteQuery\"");
+		addToRouterEnum("QUERY_EXECUTE", "\"/{contextId}/oclExecuteQuery\"");
+        addToRouterEnum("QUERY_EXECUTE_STATIC", "\"/oclExecuteQuery\"");
 
         addToClassQueryRouterEnum(model, TumlRestletGenerationUtil.TumlMetaQueryServerResourceImpl, "CLASS_QUERY", "\"/classquery/{contextId}/query\"");
 
@@ -63,6 +63,29 @@ public class QueryExecuteResourceBuilder extends BaseServerResourceBuilder imple
         OJAnnotatedOperation attachAll = routerEnum.findOperation("attachAll", TumlRestletGenerationUtil.Router);
         attachAll.getBody().addToStatements(routerEnum.getName() + "." + ojLiteral.getName() + ".attach(router)");
     }
+
+    protected void addToRouterEnum(String name, String path) {
+        OJEnum routerEnum = (OJEnum) this.workspace.findOJClass(TumlRestletGenerationUtil.RestletRouterEnum.toJavaString());
+        OJEnumLiteral ojLiteral = new OJEnumLiteral(name);
+
+        OJField uri = new OJField();
+        uri.setType(new OJPathName("String"));
+        uri.setInitExp(path);
+        ojLiteral.addToAttributeValues(uri);
+
+        OJField serverResourceClassField = new OJField();
+        serverResourceClassField.setType(new OJPathName("java.lang.Class"));
+        serverResourceClassField.setInitExp(TumlRestletGenerationUtil.QueryExecuteServerResourceImpl.getLast() + ".class");
+        ojLiteral.addToAttributeValues(serverResourceClassField);
+        routerEnum.addToImports(TumlRestletGenerationUtil.QueryExecuteServerResourceImpl);
+        routerEnum.addToImports(TumlRestletGenerationUtil.ServerResource);
+
+        routerEnum.addToLiterals(ojLiteral);
+
+        OJAnnotatedOperation attachAll = routerEnum.findOperation("attachAll", TumlRestletGenerationUtil.Router);
+        attachAll.getBody().addToStatements(routerEnum.getName() + "." + ojLiteral.getName() + ".attach(router)");
+    }
+
 
 
 

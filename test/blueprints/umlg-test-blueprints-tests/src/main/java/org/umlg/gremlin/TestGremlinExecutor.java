@@ -30,7 +30,7 @@ public class TestGremlinExecutor extends BaseLocalDbTest {
         db.commit();
         Assert.assertNotNull(universe1.getGod());
 
-        String result = db.executeQuery(UmlgQueryEnum.GREMLIN, god.getId(), "out");
+        String result = db.executeQuery(UmlgQueryEnum.GREMLIN, god.getId(), "self.out");
         System.out.println(result);
     }
 }

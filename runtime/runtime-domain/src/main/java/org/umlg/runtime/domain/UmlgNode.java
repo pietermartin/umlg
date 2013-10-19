@@ -24,6 +24,7 @@ public interface UmlgNode extends UmlgEnum, OclAny, PersistentObject {
 	List<TumlConstraintViolation> validateMultiplicities();
     List<TumlConstraintViolation> checkClassConstraints();
 	UmlgNode getOwningObject();
+    boolean hasOnlyOneCompositeParent();
 	<T extends UmlgNode> List<T> getPathToCompositionalRoot();
     void addEdgeToMetaNode();
     TumlMetaNode getMetaNode();

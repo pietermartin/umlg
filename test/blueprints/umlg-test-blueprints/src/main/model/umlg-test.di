@@ -67,63 +67,21 @@
     <availablePage>
       <emfPageIdentifier href="umlg-test.notation#_b5Z7kDe4EeOAlanvceIpiA"/>
     </availablePage>
+    <availablePage>
+      <emfPageIdentifier href="umlg-test.notation#_Czx5gDg9EeOAlanvceIpiA"/>
+    </availablePage>
   </pageList>
   <sashModel xmi:id="_1dMZogAOEeKpVr_ntT6cLA" currentSelection="_1dMZoAAOEeKpVr_ntT6cLA">
     <windows xmi:id="_1dMZoQAOEeKpVr_ntT6cLA">
       <children xsi:type="di:TabFolder" xmi:id="_1dMZoAAOEeKpVr_ntT6cLA">
         <children>
-          <emfPageIdentifier href="umlg-test.notation#_1chrRAAOEeKpVr_ntT6cLA"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="umlg-test.notation#_1chrRgAOEeKpVr_ntT6cLA"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="umlg-test.notation#_tvjqgIMeEeKT8t6_7PBWIQ"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="umlg-test.notation#_nGgO8IT3EeKeSZB9UA6Gvw"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="umlg-test.notation#_7KbI4IT6EeKeSZB9UA6Gvw"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="umlg-test.notation#_Bjw3IIaIEeKeSZB9UA6Gvw"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="umlg-test.notation#_1chENgAOEeKpVr_ntT6cLA"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="umlg-test.notation#_rs5lAIlaEeKeSZB9UA6Gvw"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="umlg-test.notation#_1chENAAOEeKpVr_ntT6cLA"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="umlg-test.notation#_1chrVAAOEeKpVr_ntT6cLA"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="umlg-test.notation#_1chrSAAOEeKpVr_ntT6cLA"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="umlg-test.notation#_1chrQAAOEeKpVr_ntT6cLA"/>
+          <emfPageIdentifier href="umlg-test.notation#_b5Z7kDe4EeOAlanvceIpiA"/>
         </children>
         <children>
           <emfPageIdentifier href="umlg-test.notation#_1chrSgAOEeKpVr_ntT6cLA"/>
         </children>
         <children>
-          <emfPageIdentifier href="umlg-test.notation#_1chrQgAOEeKpVr_ntT6cLA"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="umlg-test.notation#_1chrTAAOEeKpVr_ntT6cLA"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="umlg-test.notation#_HkiPsIlaEeKeSZB9UA6Gvw"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="umlg-test.notation#_DyRFMDChEeOJbevgaGUOXQ"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="umlg-test.notation#_b5Z7kDe4EeOAlanvceIpiA"/>
+          <emfPageIdentifier href="umlg-test.notation#_Czx5gDg9EeOAlanvceIpiA"/>
         </children>
       </children>
     </windows>

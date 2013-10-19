@@ -10,6 +10,7 @@ import org.umlg.javageneration.util.PropertyWrapper;
 
 public class TumlRestletGenerationUtil {
 
+    public final static OJPathName QueryExecuteServerResourceImpl = new OJPathName("org.umlg.runtime.restlet.QueryExecuteServerResourceImpl");
     public final static OJPathName EmptyRepresentation = new OJPathName("org.restlet.representation.EmptyRepresentation");
     public final static String _INDEX = "_index";
     public final static OJPathName UmlgNodeJsonHolder = new OJPathName("org.umlg.runtime.restlet.util.UmlgNodeJsonHolder");
@@ -39,8 +40,6 @@ public class TumlRestletGenerationUtil {
     public static final OJPathName Parameter = new OJPathName("org.restlet.data.Parameter");
     public static final OJPathName EnumerationLookupServerResouceImpl = new OJPathName("org.umlg.root.EnumerationLookup_ServerResourceImpl");
     public static final OJPathName EnumerationLookupServerResource = new OJPathName("org.umlg.root.EnumerationLookup_ServerResource");
-    public static final OJPathName QueryExecuteServerResource = new OJPathName("org.umlg.root.QueryExecuteServerResource");
-    public static final OJPathName QueryExecuteServerResourceImpl = new OJPathName("org.umlg.root.QueryExecuteServerResourceImpl");
     public static final OJPathName BaseOclExecutionServerResourceImpl = new OJPathName("org.umlg.runtime.restlet.BaseOclExecutionServerResourceImpl");
     public static final OJPathName UmlgRestletNode = new OJPathName("org.umlg.runtime.restlet.domain.UmlgRestletNode");
     public static final OJPathName RestletToJsonUtil = new OJPathName("org.umlg.runtime.restlet.util.RestletToJsonUtil");

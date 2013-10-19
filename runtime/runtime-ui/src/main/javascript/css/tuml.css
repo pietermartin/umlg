@@ -1,3 +1,21 @@
+*, *:before, *:after {
+    -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+}
+
+.slickgrid,
+.slickgrid *,
+.slick-header-column {
+    box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+    -ms-box-sizing: content-box;
+
+}
+
+.poweredby {
+    float: right
+}
+
 .cell-reorder {
     cursor: move;
     /*background: url("../javascript/slickgrid/images/drag-handle.png") no-repeat center center;*/

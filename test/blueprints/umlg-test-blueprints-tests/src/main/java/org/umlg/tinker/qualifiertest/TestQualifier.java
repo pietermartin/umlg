@@ -30,46 +30,46 @@ public class TestQualifier extends BaseLocalDbTest {
         db.commit();
 	}
 
-//	@Test
-//	public void testQualifiedMany() {
-//		God god = new God(true);
-//		god.setName("THEGOD");
-//
-//		Nature nature = new Nature(true);
-//		nature.setName1("name1_0");
-//		nature.setName2("xxx");
-//		nature.addToGod(god);
-//        db.commit();
-//
-//		nature = new Nature(true);
-//		nature.setName1("name1_1");
-//		nature.setName2("xxx");
-//		nature.addToGod(god);
-//        db.commit();
-//
-//		nature = new Nature(true);
-//		nature.setName1("name1_2");
-//		nature.setName2("xxx");
-//		nature.addToGod(god);
-//        db.commit();
-//
-//		nature = new Nature(true);
-//		nature.setName1("name1_3");
-//		nature.setName2("xxx");
-//		nature.addToGod(god);
-//        db.commit();
-//
-//		nature = new Nature(true);
-//		nature.setName1("name1_4");
-//		nature.setName2("yyy");
-//		nature.addToGod(god);
-//        db.commit();
-//
-//		God godTest = new God(god.getVertex());
-//		Set<Nature> natureForQualifier2 = godTest.getNatureForQualifier2("xxx");
-//		Assert.assertEquals(4, natureForQualifier2.size());
-//		natureForQualifier2 = godTest.getNatureForQualifier2("yyy");
-//		Assert.assertEquals(1, natureForQualifier2.size());
-//	}
+	@Test
+	public void testQualifiedMany() {
+		God god = new God(true);
+		god.setName("THEGOD");
+
+		Nature nature = new Nature(true);
+		nature.setName1("name1_0");
+		nature.setName2("xxx");
+		nature.addToGod(god);
+        db.commit();
+
+		nature = new Nature(true);
+		nature.setName1("name1_1");
+		nature.setName2("xxx");
+		nature.addToGod(god);
+        db.commit();
+
+		nature = new Nature(true);
+		nature.setName1("name1_2");
+		nature.setName2("xxx");
+		nature.addToGod(god);
+        db.commit();
+
+		nature = new Nature(true);
+		nature.setName1("name1_3");
+		nature.setName2("xxx");
+		nature.addToGod(god);
+        db.commit();
+
+		nature = new Nature(true);
+		nature.setName1("name1_4");
+		nature.setName2("yyy");
+		nature.addToGod(god);
+        db.commit();
+
+		God godTest = new God(god.getVertex());
+		Set<Nature> natureForQualifier2 = godTest.getNatureForQualifier2("xxx");
+		Assert.assertEquals(4, natureForQualifier2.size());
+		natureForQualifier2 = godTest.getNatureForQualifier2("yyy");
+		Assert.assertEquals(1, natureForQualifier2.size());
+	}
 
 }

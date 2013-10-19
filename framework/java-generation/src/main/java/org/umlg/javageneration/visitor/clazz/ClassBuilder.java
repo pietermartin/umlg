@@ -39,7 +39,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
         setSuperClass(annotatedClass, clazz);
         implementCompositionNode(annotatedClass);
         addDefaultSerialization(annotatedClass);
-        implementIsRoot(annotatedClass, TumlClassOperations.getOtherEndToComposite(clazz) == null);
+        implementIsRoot(annotatedClass, TumlClassOperations.getOtherEndToComposite(clazz).isEmpty());
         addPersistentConstructor(annotatedClass);
         addInitialiseProperties(annotatedClass, clazz);
         addContructorWithVertex(annotatedClass, clazz);

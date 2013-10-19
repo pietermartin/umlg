@@ -86,7 +86,7 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
 
         delete.getBody().addToStatements("return new " + TumlRestletGenerationUtil.EmptyRepresentation.getLast() + "()");
         annotatedClass.addToImports(TumlRestletGenerationUtil.EmptyRepresentation);
-        //TODO can not remember why I return the parens representation
+        //TODO can not remember why I return the parent's representation
 //        if (parentPathName != null) {
 //            Property parentProperty = TumlClassOperations.getOtherEndToComposite(clazz);
 //            PropertyWrapper parentWrap = new PropertyWrapper(parentProperty);

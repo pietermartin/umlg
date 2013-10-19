@@ -170,13 +170,20 @@ public class TumlClassOperations extends ClassOperations {
      * It does not include inherited properties
      */
     public static Set<Property> getAllOwnedProperties(org.eclipse.uml2.uml.Class clazz) {
+
         Set<Property> result = new HashSet<Property>(clazz.getAttributes());
         List<Association> associations = clazz.getAssociations();
         for (Association association : associations) {
             List<Property> memberEnds = association.getMemberEnds();
-            for (Property property : memberEnds) {
-                if (property.getType() != clazz) {
-                    result.add(property);
+            //For the case of an association to itself both ends are owned.
+            //In particular to generate the collection initialization
+            if (memberEnds.get(0).getType().equals(clazz) && memberEnds.get(1).getType().equals(clazz)) {
+                result.addAll(memberEnds);
+            } else {
+                for (Property property : memberEnds) {
+                    if (property.getType() != clazz) {
+                        result.add(property);
+                    }
                 }
             }
         }
@@ -232,7 +239,7 @@ public class TumlClassOperations extends ClassOperations {
         for (Association association : associations) {
             List<Property> memberEnds = association.getMemberEnds();
             for (Property property : memberEnds) {
-                if (!property.isComposite() && property.getType() != classifier && property.getOtherEnd().isComposite()
+                if (!property.isComposite() /*&& property.getType() != classifier*/ && property.getOtherEnd().isComposite()
                         && isSpecializationOf(classifier, property.getOtherEnd().getType())) {
                     compositeOwners.add(property);
                 }

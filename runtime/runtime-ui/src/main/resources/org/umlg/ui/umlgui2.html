@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <!-- /appRoot is resolved by freemarker to the application's name -->
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -86,11 +87,11 @@
 
     <!-- bootstrap -->
     <!-- Latest compiled and minified CSS -->
-    <!--<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">-->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
     <!-- Optional theme -->
-    <!--<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css">-->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css">
     <!-- Latest compiled and minified JavaScript -->
-    <!--<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>-->
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 
     <script>
         $(document).ready(
@@ -124,7 +125,10 @@
 <div class="ui-layout-north">
     <!--<div id="switcher"></div>-->
 </div>
-<div class="ui-layout-south">Powered by ${app.poweredBy}</div>
+<div class="ui-layout-south">
+    <div class="poweredby">Powered by <a href="https://github.com/tinkerpop/blueprints" target="_blank">Tinkerpop Blueprints</a> and <a href="${app.poweredByLink}" target="_blank">${app.poweredBy}</a>
+    </div>
+</div>
 <div class="ui-layout-east">East</div>
 <div class="ui-layout-west"></div>
 </body>

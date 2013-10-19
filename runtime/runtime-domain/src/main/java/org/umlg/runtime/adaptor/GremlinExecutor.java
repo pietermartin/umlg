@@ -36,7 +36,11 @@ public class GremlinExecutor {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         if (contextId != null) {
-            gremlin = gremlin.replace("this", "g.v(" + contextId + ")");
+            if (!(contextId instanceof Long)) {
+                gremlin = gremlin.replace("self", "g.v(\"" + contextId.toString() + "\")");
+            } else {
+                gremlin = gremlin.replace("self", "g.v(" + contextId + ")");
+            }
         }
         Graph graph = new ReadOnlyGraph(GraphDb.getDb());
         CompilerConfiguration compilerConfiguration = new CompilerConfiguration();

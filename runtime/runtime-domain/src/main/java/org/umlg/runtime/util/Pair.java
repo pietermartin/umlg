@@ -8,6 +8,9 @@ public class Pair<T1, T2> {
     private T1 obj1;
     private T2 obj2;
 
+    public Pair() {
+    }
+
     public Pair(T1 obj1, T2 obj2) {
         this.obj1 = obj1;
         this.obj2 = obj2;
