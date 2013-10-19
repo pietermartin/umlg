@@ -186,8 +186,8 @@
         var self = this;
         var tabsNav = this.tabContainer.find('.ui-tabs-nav');
         var tabsButtonDiv = $('<div />', {id: 'tabcontainer-button', class: 'tabs-button'}).appendTo(tabsNav);
-        var saveButton = $('<button />', {class: 'button-save', id: this.getTabId() + 'save'}).text('Save').appendTo(tabsButtonDiv);
-        saveButton.button().click(
+        var saveButton = $('<button />', {id: this.getTabId() + 'save'}).text('Save').appendTo(tabsButtonDiv);
+        saveButton.click(
             function (event) {
                 if (Slick.GlobalEditorLock.commitCurrentEdit()) {
                     self.saveTabs();
@@ -196,7 +196,7 @@
             }
         );
         var cancelButton = $('<button />', {id: this.getTabId() + 'cancel'}).text('Cancel').appendTo(tabsButtonDiv);
-        cancelButton.button().click(function (event) {
+        cancelButton.click(function (event) {
             self.doCancel();
             event.preventDefault();
         });
