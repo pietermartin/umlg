@@ -26,7 +26,8 @@
                 {
                     enableCursorHotkey: false,
                     livePaneResizing: true,
-                    north__minSize: 40,
+                    //This is the navbar height,
+                    north__minSize: 51,
                     east: {initClosed: true},
                     south: {minSize: 30, initClosed: false},
                     west: {minSize: 300}
@@ -34,14 +35,14 @@
             );
             myLayout.allowOverflow("north");
 
-            //Create the menu
-            menuManager = new Tuml.MenuManager();
-
             //Create the context manager
             contextManager = new Tuml.ContextManager();
             contextManager.onClickContextMenu.subscribe(function (e, args) {
                 self.refresh(args.uri);
             });
+
+            //Create the menu
+            menuManager = new Tuml.MenuManager();
 
             //Create the context manager
             leftMenuManager = new Tuml.LeftMenuManager();

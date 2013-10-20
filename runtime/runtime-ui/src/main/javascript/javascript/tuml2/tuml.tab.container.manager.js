@@ -21,17 +21,54 @@
         this.parentTabContainerManager = null;
 
         this.destroyTabContainer = function () {
-            $('#' + this.getTabId() + 'ui-layout-center-heading').remove();
+//            $('#' + this.getTabId() + 'ui-layout-center-heading').remove();
+//            $('#' + this.getTabId()).find('.panel-heading').remove();
+//            if (this.parentTabContainer != null)  {
+//                this.parentTabContainer.find('.panel.panel-default').remove();
+//            }
             this.clearAllTabs();
             if (this.tabContainer !== null) {
                 this.tabContainer.remove();
             }
+            $('#' + this.getTabId()).find('.panel.panel-default').remove();
         }
 
         this.maybeCreateTabContainer = function () {
             var tabLayoutDiv = $('#' + this.getTabId());
+            //div that holds the jquery-ui tabs
             var tabContainer = $('#' + this.getTabId() + 'Tabs');
             if (tabContainer.length == 0) {
+
+                /*
+                 <div class="panel panel-default">
+                 <div class="panel-heading">
+                 <h3 class="panel-title"></h3>
+                 </div>
+                 <div class="panel-body">
+                 </div>
+                 </div>
+                 */
+
+                //div that contains the panel header and body div
+                //this div is defined in umlgui2.html
+                //it is a bootstrap panel
+
+                //attach the new tab to the current tabs parent. i.e. make it display below the current panel, not in it
+                var tabsLayout = $('#tabs-layout');
+//                tabLayoutDiv
+                var tabLayoutPanelDiv = $('<div />', {class: 'panel panel-default'}).appendTo(tabLayoutDiv);
+
+                //div that contains the tab's heading. i.e. the info, validation and warnings
+                //this div is defined in umlgui2.html
+                //it is a bootstrap panel header
+                var tabLayoutTabHeaderDiv = $('<div />', {class: 'panel-heading'}).appendTo(tabLayoutPanelDiv);
+                var tabLayoutTabHeaderH3Div = $('<h3 />', {class: 'panel-title'}).appendTo(tabLayoutTabHeaderDiv);
+
+                //div that contains the tabs
+                //this div is defined in umlgui2.html
+                //it is a bootstrap panel body
+                var tabLayoutTabBodyDiv = $('<div />', {class: 'umlg-panel-body panel-body'}).appendTo(tabLayoutPanelDiv);
+
 
                 //disable the parents save button
                 if (!(this instanceof Tuml.TumlMainViewManager)) {
@@ -41,12 +78,12 @@
                 this.tumlTabViewManagers = [];
 
                 //add in the div where the property info and validation warning goes
-                var uiLayoutCenterHeading = $('<div />', {id: this.getTabId() + 'ui-layout-center-heading', class: 'ui-layout-center-heading ui-state-default'}).appendTo(tabLayoutDiv);
+                var uiLayoutCenterHeading = $('<div />', {id: this.getTabId() + 'ui-layout-center-heading', class: 'ui-layout-center-heading'}).appendTo(tabLayoutTabHeaderH3Div);
                 $('<div />', {id: this.getTabId() + 'navigation-qualified-name', class: 'navigation-qualified-name'}).appendTo(uiLayoutCenterHeading);
                 $('<div />', {id: this.getTabId() + 'multiplicity-warning', class: 'multiplicity-warning ui-state-error-text'}).appendTo(uiLayoutCenterHeading);
                 $('<div />', {id: this.getTabId() + 'validation-warning', class: 'validation-warning ui-state-error-text'}).appendTo(uiLayoutCenterHeading);
 
-                this.tabContainer = $('<div />', {id: this.getTabId() + 'Tabs', class: 'umlg-tabs'}).appendTo(tabLayoutDiv);
+                this.tabContainer = $('<div />', {id: this.getTabId() + 'Tabs', class: 'umlg-tabs'}).appendTo(tabLayoutTabBodyDiv);
                 this.tabContainer.append('<ul />');
                 this.tabContainer.tabs();
 
@@ -287,7 +324,8 @@
                             }
                             associationClassProperty = null;
                         }
-                        Tuml.Metadata.Cache.get(associationClassProperty.qualifiedName, associationClassProperty, function(){});
+                        Tuml.Metadata.Cache.get(associationClassProperty.qualifiedName, associationClassProperty, function () {
+                        });
 
                         var fakeId = 'fake::' + Tuml.TumlFakeIndex++;
                         item[tumlTabViewManager.propertyNavigatingTo.inverseAssociationClassPropertyName] = {id: fakeId, tmpId: fakeId, displayName: null, refreshFromDb: true};
@@ -448,7 +486,7 @@
      * This executes when the user presses cntrl shift save
      * Find the open tab with a save button and click it
      */
-    TumlTabContainerManager.prototype.saveViaKeyPress = function() {
+    TumlTabContainerManager.prototype.saveViaKeyPress = function () {
         for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
             var tumlTabViewManager = this.tumlTabViewManagers[i];
             if (tumlTabViewManager.saveViaKeyPress()) {
@@ -462,7 +500,7 @@
      * This executes when the user presses esc
      * Find the open tab with a cancel button and click it
      */
-    TumlTabContainerManager.prototype.cancelViaKeyPress = function() {
+    TumlTabContainerManager.prototype.cancelViaKeyPress = function () {
         for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
             var tumlTabViewManager = this.tumlTabViewManagers[i];
             if (tumlTabViewManager.cancelViaKeyPress()) {

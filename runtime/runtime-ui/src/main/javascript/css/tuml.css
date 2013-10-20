@@ -1,5 +1,23 @@
-*, *:before, *:after {
-    -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+.navbar.navbar-default {
+    margin-bottom: 0px;
+}
+
+.breadcrumb.uml-breadcrumb {
+    margin-top: 7px;
+    margin-bottom: 0;
+    background-color: transparent;
+    float: left;
+}
+
+#umlgnavbar .navbar .nav,
+#umlgnavbar .navbar .nav > li {
+    float:none;
+    display:inline-block;
+    vertical-align: top;
+}
+
+#umlgnavbar {
+    text-align:center;
 }
 
 .slickgrid,
@@ -9,11 +27,30 @@
     -moz-box-sizing: content-box;
     -webkit-box-sizing: content-box;
     -ms-box-sizing: content-box;
-
 }
 
 .poweredby {
-    float: right
+    float: right;
+    height: 30px;
+}
+
+.poweredby p {
+    margin-top: 6px;
+    margin-right: 20px;
+}
+
+.umlg-tab.ui-tabs-panel {
+    padding-top: 2px;
+    padding-bottom: 0px;
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
+.umlg-panel-body.panel-body {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 5px;
+    padding-left: 5px;
 }
 
 .cell-reorder {
@@ -105,20 +142,8 @@
 
 
 /*tabs*/
-#tabs-layout {
-    margin: 0.3em;
-    position:absolute;
-    left:0;
-    right:0;
-    height: 98%;
-}
-
-/*.umlg-tabs {*/
-    /*margin: 0.3em;*/
-    /*position:absolute;*/
-    /*left:0;*/
-    /*right:0;*/
-    /*height: 100%;*/
+/*#tabs-layout.panel {*/
+    /*margin: 0;*/
 /*}*/
 
 #tabs-layoutTabs li .ui-icon-cancel {
@@ -463,46 +488,46 @@
     background-image: url(../javascript/images/Chevron.gif);
 }
 
-.ui-layout-north #contextRoot {
-    margin: 0;
-    width: 100%;
-    height: 100%;
-}
+/*.ui-layout-north #contextRoot {*/
+    /*margin: 0;*/
+    /*width: 100%;*/
+    /*height: 100%;*/
+/*}*/
 
-#contextRoot .embossed {
-    padding-top: 0.5em;
-    margin-left: auto;
-    margin-right: auto;
-    width: 5em;
-}
+/*#contextRoot .embossed {*/
+    /*padding-top: 0.5em;*/
+    /*margin-left: auto;*/
+    /*margin-right: auto;*/
+    /*width: 5em;*/
+/*}*/
 
-#contextRoot {
-    margin: 0;
-    position: absolute;
-    z-index: -1;
-    border: none;
-}
+/*#contextRoot {*/
+    /*margin: 0;*/
+    /*position: absolute;*/
+    /*z-index: -1;*/
+    /*border: none;*/
+/*}*/
 
-#contextRootUl {
-    float: left;
-    border: none;
-    margin-top: 0.5em;
-    margin-left: 1em;
-    padding-left: 0;
-}
+/*#contextRootUl {*/
+    /*float: left;*/
+    /*border: none;*/
+    /*margin-top: 0.5em;*/
+    /*margin-left: 1em;*/
+    /*padding-left: 0;*/
+/*}*/
 
-#contextRootUl li {
-    float: left;
-    padding-top: 0.2em;
-    padding-bottom: 0.2em;
-    padding-left: 0;
-    padding-right: 0;
-    border: none;
-}
+/*#contextRootUl li {*/
+    /*float: left;*/
+    /*padding-top: 0.2em;*/
+    /*padding-bottom: 0.2em;*/
+    /*padding-left: 0;*/
+    /*padding-right: 0;*/
+    /*border: none;*/
+/*}*/
 
-#contextRootUl li a span {
-    float: left;
-}
+/*#contextRootUl li a span {*/
+    /*float: left;*/
+/*}*/
 
 .selfUrl {
     cursor: pointer;

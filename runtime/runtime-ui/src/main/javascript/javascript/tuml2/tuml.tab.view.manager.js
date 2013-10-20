@@ -129,11 +129,13 @@
 //        });
 
         this.parentTabContainer.find(".ui-tabs-nav").append(this.li);
-        var divPanel = $('<div />', {id: this.tabId});
+        var divPanel = $('<div />', {id: this.tabId, class: 'umlg-tab'});
         this.parentTabContainer.append(divPanel);
         $.data(divPanel[0], 'tabEnum', this.tabEnum);
 
+        this.parentTabContainer.find(".ui-tabs-nav").append(this.li);
         this.parentTabContainer.tabs("refresh");
+
         return divPanel;
     }
 

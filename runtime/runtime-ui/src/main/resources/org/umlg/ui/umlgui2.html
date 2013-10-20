@@ -5,7 +5,10 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
     <link rel="stylesheet" href="/${app.rootUrl}/javascript/slickgrid/slick.grid.css" type="text/css"/>
+
     <link type="text/css" rel="stylesheet" href="/${app.rootUrl}/css/jquery-ui/base/jquery.ui.all.css"/>
+    <!--trying out jquery-ui-bootstrap-->
+    <!--<link type="text/css" rel="stylesheet" href="/${app.rootUrl}/css/jquery-ui-bootstrap/jquery.ui-1.10.3.css"/>-->
 
     <link type="text/css" rel="stylesheet" href="/${app.rootUrl}/javascript/layout/layout-default-latest.css"/>
 
@@ -85,13 +88,15 @@
     <script src="/${app.rootUrl}/javascript/tuml2/tuml.query.js"></script>
     <script src="/${app.rootUrl}/javascript/tuml2/tuml.tab.enum.js"></script>
 
+
     <!-- bootstrap -->
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/${app.rootUrl}/javascript/bootstrap/css/bootstrap.css">
     <!-- Optional theme -->
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css">
+    <!--<link rel="stylesheet" href="/${app.rootUrl}/javascript/bootstrap/css/bootstrap-theme.css">-->
+
     <!-- Latest compiled and minified JavaScript -->
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="/${app.rootUrl}/javascript/bootstrap/js/bootstrap.js"></script>
 
     <script>
         $(document).ready(
@@ -120,13 +125,28 @@
 <div id="div-context-menu">
 </div>
 <div class="ui-layout-center">
-    <div id="tabs-layout"></div>
+    <div id="tabs-layout">
+    </div>
 </div>
-<div class="ui-layout-north">
+<div id="umlgnavbar" class="ui-layout-north">
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="collapse navbar-collapse">
+        </div>
+    </div>
     <!--<div id="switcher"></div>-->
 </div>
 <div class="ui-layout-south">
-    <div class="poweredby">Powered by <a href="https://github.com/tinkerpop/blueprints" target="_blank">Tinkerpop Blueprints</a> and <a href="${app.poweredByLink}" target="_blank">${app.poweredBy}</a>
+    <div id="footer" class="poweredby">
+        <p class="text-muted credit">Powered by <a href="https://github.com/tinkerpop/blueprintsk" target="_blank">Tinkerpop Blueprints</a> and <a href="${app.poweredByLink}" target="_blank">${app.poweredBy}</a>
+        </p>
     </div>
 </div>
 <div class="ui-layout-east">East</div>
