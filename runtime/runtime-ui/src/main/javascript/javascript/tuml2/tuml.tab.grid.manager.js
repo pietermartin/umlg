@@ -949,9 +949,10 @@
 
         $('<div id="serverErrorMsg" />').appendTo(tabDiv);
 
-        var count = this.calculateGridWindowHeight(0);
-        var windowHeight = count * 125;
-        windowHeight = $('.ui-layout-center').height() - windowHeight;
+//        var count = this.calculateGridWindowHeight(0);
+//        var windowHeight = count * 125;
+//        windowHeight = $('.ui-layout-center').height() - windowHeight;
+        var windowHeight = $('.ui-layout-center').height() - 142;
         $('<div />', {id: 'myGrid' + this.metaForDataTo.name, style: 'width:auto;height:' + windowHeight + 'px;', class: 'umlg-slick-grid'}).appendTo(tabDiv);
         $('<div />', {id: 'pager' + this.metaForDataTo.name, style: 'width:auto;height:20px;'}).appendTo(tabDiv);
 

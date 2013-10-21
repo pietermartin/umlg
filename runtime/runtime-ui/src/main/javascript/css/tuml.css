@@ -1,3 +1,13 @@
+/* protect slickgrid from bootstrap */
+.slickgrid,
+.slickgrid *,
+.slick-header-column {
+    box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+    -ms-box-sizing: content-box;
+}
+
 .navbar.navbar-default {
     margin-bottom: 0px;
 }
@@ -9,6 +19,7 @@
     float: left;
 }
 
+/* Needed to make the band Umlg appear in the middle */
 #umlgnavbar .navbar .nav,
 #umlgnavbar .navbar .nav > li {
     float:none;
@@ -20,15 +31,6 @@
     text-align:center;
 }
 
-.slickgrid,
-.slickgrid *,
-.slick-header-column {
-    box-sizing: content-box;
-    -moz-box-sizing: content-box;
-    -webkit-box-sizing: content-box;
-    -ms-box-sizing: content-box;
-}
-
 .poweredby {
     float: right;
     height: 30px;
@@ -37,6 +39,10 @@
 .poweredby p {
     margin-top: 6px;
     margin-right: 20px;
+}
+
+.umlg-panel.panel.panel-default {
+    margin-bottom: 0;
 }
 
 .umlg-tab.ui-tabs-panel {
@@ -77,16 +83,6 @@
 
 #switcher {
     float: right;
-}
-
-#tabContainer-menu-container {
-    margin: 5px;
-
-    position: absolute;
-    top: 2em;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
 }
 
 .ui-layout-north .embossed {
@@ -354,12 +350,12 @@
     font-weight: bold;
 }
 
-.panel {
-    height: auto;
-}
+/*.panel {*/
+    /*height: auto;*/
+/*}*/
 
 .pane {
-    display: none; /* will appear when layout inits */
+    display: none;  /*will appear when layout inits*/
 }
 
 .oclouter {
@@ -453,36 +449,40 @@
     padding-bottom: 5px;
 }
 
-.ui-layout-center-heading {
-    height: 25px;
-    padding-top: 0.3em;
-    padding-left: 0.5em;
-}
+/*.ui-layout-center-heading {*/
+    /*height: 25px;*/
+    /*padding-top: 0.3em;*/
+    /*padding-left: 0.5em;*/
+/*}*/
 
-.ui-layout-center-heading.ui-state-default {
-    border: none;
-}
+/*.ui-layout-center-heading.ui-state-default {*/
+    /*border: none;*/
+/*}*/
 
-#ui-layout-west-heading-navigation-qualified-name.ui-layout-west-heading {
-    height: 1.7em;
-    border: none;
-    padding-top: 0.3em;
-    padding-left: 0.5em;
+/*#ui-layout-west-heading-navigation-qualified-name.ui-layout-west-heading {*/
+    /*height: 1.7em;*/
+    /*border: none;*/
+    /*padding-top: 0.3em;*/
+    /*padding-left: 0.5em;*/
+/*}*/
+
+.umlg-panel-heading.panel-heading {
+    height: 40px;
 }
 
 .navigation-qualified-name {
     float: left;
 }
 
-.validation-warning {
-    float: right;
-    padding-right: 0.5em;
-}
+/*.validation-warning {*/
+    /*float: right;*/
+    /*padding-right: 0.5em;*/
+/*}*/
 
-.multiplicity-warning {
-    float: right;
-    padding-right: 0.5em;
-}
+/*.multiplicity-warning {*/
+    /*float: right;*/
+    /*padding-right: 0.5em;*/
+/*}*/
 
 .ui-icon.ui-icon-chevron {
     background-image: url(../javascript/images/Chevron.gif);

@@ -30,7 +30,7 @@
             if (this.tabContainer !== null) {
                 this.tabContainer.remove();
             }
-            $('#' + this.getTabId()).find('.panel.panel-default').remove();
+            $('#' + this.getTabId() + 'panelPanelDefault').remove();
         }
 
         this.maybeCreateTabContainer = function () {
@@ -56,13 +56,13 @@
                 //attach the new tab to the current tabs parent. i.e. make it display below the current panel, not in it
                 var tabsLayout = $('#tabs-layout');
 //                tabLayoutDiv
-                var tabLayoutPanelDiv = $('<div />', {class: 'panel panel-default'}).appendTo(tabLayoutDiv);
+                var tabLayoutPanelDiv = $('<div />', {id: this.getTabId() + 'panelPanelDefault', class: 'umlg-panel panel panel-default'}).appendTo(tabsLayout);
 
                 //div that contains the tab's heading. i.e. the info, validation and warnings
                 //this div is defined in umlgui2.html
                 //it is a bootstrap panel header
-                var tabLayoutTabHeaderDiv = $('<div />', {class: 'panel-heading'}).appendTo(tabLayoutPanelDiv);
-                var tabLayoutTabHeaderH3Div = $('<h3 />', {class: 'panel-title'}).appendTo(tabLayoutTabHeaderDiv);
+                var tabLayoutTabHeaderDiv = $('<div />', {class: 'umlg-panel-heading panel-heading'}).appendTo(tabLayoutPanelDiv);
+                var tabLayoutTabHeaderH3InfoDiv = $('<h3 />', {class: 'panel-title'}).appendTo(tabLayoutTabHeaderDiv);
 
                 //div that contains the tabs
                 //this div is defined in umlgui2.html
@@ -78,10 +78,9 @@
                 this.tumlTabViewManagers = [];
 
                 //add in the div where the property info and validation warning goes
-                var uiLayoutCenterHeading = $('<div />', {id: this.getTabId() + 'ui-layout-center-heading', class: 'ui-layout-center-heading'}).appendTo(tabLayoutTabHeaderH3Div);
-                $('<div />', {id: this.getTabId() + 'navigation-qualified-name', class: 'navigation-qualified-name'}).appendTo(uiLayoutCenterHeading);
-                $('<div />', {id: this.getTabId() + 'multiplicity-warning', class: 'multiplicity-warning ui-state-error-text'}).appendTo(uiLayoutCenterHeading);
-                $('<div />', {id: this.getTabId() + 'validation-warning', class: 'validation-warning ui-state-error-text'}).appendTo(uiLayoutCenterHeading);
+                $('<span />', {id: this.getTabId() + 'navigation-qualified-name', class: 'navigation-qualified-name'}).appendTo(tabLayoutTabHeaderH3InfoDiv);
+                $('<span />', {id: this.getTabId() + 'multiplicity-warning', class: 'multiplicity-warning pull-right text-warning'}).appendTo(tabLayoutTabHeaderH3InfoDiv);
+                $('<span />', {id: this.getTabId() + 'validation-warning', class: 'validation-warning pull-right text-warning'}).appendTo(tabLayoutTabHeaderH3InfoDiv);
 
                 this.tabContainer = $('<div />', {id: this.getTabId() + 'Tabs', class: 'umlg-tabs'}).appendTo(tabLayoutTabBodyDiv);
                 this.tabContainer.append('<ul />');
@@ -529,21 +528,21 @@
     }
 
     TumlTabContainerManager.prototype.removeMultiplicityWarningHeader = function () {
-        $('#' + this.getTabId() + 'multiplicity-warning').children().remove();
+        $('#' + this.getTabId() + 'multiplicity-warning').empty();
     }
 
     TumlTabContainerManager.prototype.updateNavigationHeader = function (qualifiedName) {
-        $('#' + this.getTabId() + 'navigation-qualified-name').children().remove();
+        $('#' + this.getTabId() + 'navigation-qualified-name').empty();
         var propertyDescription = qualifiedName;
         if (this.tabContainerProperty !== undefined && this.tabContainerProperty !== null) {
             propertyDescription += '  -  ' + this.createPropertyDescriptionHeading();
         }
-        $('#' + this.getTabId() + 'navigation-qualified-name').append($('<span />').text(propertyDescription));
+        $('#' + this.getTabId() + 'navigation-qualified-name').append(propertyDescription);
     }
 
     TumlTabContainerManager.prototype.updateMultiplicityWarningHeader = function () {
         var multiplicityWarning = $('#' + this.getTabId() + 'multiplicity-warning');
-        multiplicityWarning.children().remove();
+        multiplicityWarning.empty();
         var tumlTabManyViewManagers = this.getTumlTabManyOrOneViewManagers(false);
         var rowCount = 0;
         for (var i = 0; i < tumlTabManyViewManagers.length; i++) {
@@ -555,8 +554,7 @@
             }
         }
         if (rowCount < this.tabContainerProperty.lower || (this.tabContainerProperty.upper !== -1 && rowCount > this.tabContainerProperty.upper)) {
-            multiplicityWarning.append($('<span />').text(
-                'multiplicity falls outside the valid range [' + this.tabContainerProperty.lower + '..' + (this.tabContainerProperty.upper !== -1 ? this.tabContainerProperty.upper : '*') + ']'));
+            multiplicityWarning.append('multiplicity falls outside the valid range [' + this.tabContainerProperty.lower + '..' + (this.tabContainerProperty.upper !== -1 ? this.tabContainerProperty.upper : '*') + ']');
         }
 
     }

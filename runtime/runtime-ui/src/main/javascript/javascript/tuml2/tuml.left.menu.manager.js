@@ -40,16 +40,14 @@
                 this.contextVertexId = null;
             }
 
-            var uiLayoutWest = $('.ui-layout-west');
-            uiLayoutWest.children().remove();
+            var leftMenuPaneH3l = $('#leftMenuPaneH3l');
+            leftMenuPaneH3l.empty();
+            var leftMenuPaneBody = $('#leftMenuPaneBody');
+            leftMenuPaneBody.empty();
 
-            //add in the div where the property info and validation warning goes
-            var uiLayoutWestHeading = $('<div />', {id: 'ui-layout-west-heading'}).appendTo(uiLayoutWest);
-            var westHeading = $('<div />', {id: 'ui-layout-west-heading-navigation-qualified-name', class: 'ui-layout-west-heading ui-state-default'}).appendTo(uiLayoutWestHeading);
-            var span = $('<span />').appendTo(westHeading);
-            span.text(this.contextMetaDataFrom.qualifiedName);
+            leftMenuPaneH3l.text(this.contextMetaDataFrom.qualifiedName);
 
-            this.tabContainer = $('<div />', {id: 'tabContainer-menu-container'}).appendTo('.ui-layout-west');
+            this.tabContainer = $('<div />', {id: 'tabContainer-menu-container'}).appendTo(leftMenuPaneBody);
             this.tabContainer.append('<ul />');
             this.tabContainer.tabs();
 

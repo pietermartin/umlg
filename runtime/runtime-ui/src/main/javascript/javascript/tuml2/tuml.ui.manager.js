@@ -21,19 +21,23 @@
         var currentFocus;
 
         this.init = function () {
+
+            var topHeight = parseInt($('.navbar').css('min-height').replace('px', ''));
+
             //Create layout
             var myLayout = $('body').layout(
                 {
                     enableCursorHotkey: false,
                     livePaneResizing: true,
                     //This is the navbar height,
-                    north__minSize: 51,
+                    north: {initClosed: false, minSize: topHeight, resizable: true},
                     east: {initClosed: true},
                     south: {minSize: 30, initClosed: false},
                     west: {minSize: 300}
                 }
             );
             myLayout.allowOverflow("north");
+            myLayout.resizeAll();
 
             //Create the context manager
             contextManager = new Tuml.ContextManager();
