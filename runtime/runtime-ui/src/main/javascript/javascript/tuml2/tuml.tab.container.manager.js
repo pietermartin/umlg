@@ -104,7 +104,8 @@
                             if (queryId === undefined || queryId === null) {
                                 queryId = -1;
                             }
-                            self.refreshQueryMenuCss(queryId, tabEnum);
+                            //TODO put back in
+//                            self.refreshQueryMenuCss(queryId, tabEnum);
                         }
 
                         //first deactivate all grids
