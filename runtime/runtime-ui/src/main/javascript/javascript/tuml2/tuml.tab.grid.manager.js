@@ -940,7 +940,6 @@
 
     TumlBaseGridManager.prototype.refresh = function (result, gridDiv) {
 
-        this.metaForDataFrom = result.meta.from;
         this.metaForDataTo = result.meta.to;
         this.calculateContainsOne();
 
@@ -949,10 +948,12 @@
 
         $('<div id="serverErrorMsg" />').appendTo(tabDiv);
 
-//        var count = this.calculateGridWindowHeight(0);
-//        var windowHeight = count * 125;
-//        windowHeight = $('.ui-layout-center').height() - windowHeight;
-        var windowHeight = $('.ui-layout-center').height() - 142;
+        var windowHeight;
+        if (this instanceof Tuml.TumlManyComponentGridManager) {
+            windowHeight = 600;
+        } else {
+            windowHeight = $('.ui-layout-center').height() - 185;
+        }
         $('<div />', {id: 'myGrid' + this.metaForDataTo.name, style: 'width:auto;height:' + windowHeight + 'px;', class: 'umlg-slick-grid'}).appendTo(tabDiv);
         $('<div />', {id: 'pager' + this.metaForDataTo.name, style: 'width:auto;height:20px;'}).appendTo(tabDiv);
 
@@ -960,10 +961,6 @@
         this.createGrid(result.data, this.tumlUri);
 
     };
-
-    TumlBaseGridManager.prototype.calculateGridWindowHeight = function (count) {
-         return this.tumlTabViewManager.nestedCount(count);
-    }
 
     TumlBaseGridManager.prototype.setupColumnFormatter = function () {
         var self = this;

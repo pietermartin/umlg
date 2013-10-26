@@ -45,11 +45,11 @@
             var leftMenuPaneBody = $('#leftMenuPaneBody');
             leftMenuPaneBody.empty();
 
-            leftMenuPaneH3l.text(this.contextMetaDataFrom.qualifiedName);
+            leftMenuPaneH3l.text(this.contextMetaDataFrom.name);
 
             this.tabContainer = leftMenuPaneBody;
 
-            this.setupTabsAndAccordian();
+            this.setupTabsAndAccordion();
             this.createPropertiesMenu(propertyNavigatingTo);
             if (isUmlgLib && this.contextVertexId !== undefined && this.contextVertexId !== null) {
                 this.createInstanceQueryMenu(-1);
@@ -59,7 +59,7 @@
 //            this.setFocus();
         }
 
-        this.setupTabsAndAccordian = function () {
+        this.setupTabsAndAccordion = function () {
 
             var tabUl = $('<ul />', {id: 'tabContainer-menu-container', class: 'nav nav-tabs'}).appendTo(this.tabContainer);
             var tabDiv = $('<div />', {class: "tab-content"}).appendTo(this.tabContainer);
@@ -72,7 +72,7 @@
             var treeLi = $(treeTabTemplate);
             tabUl.append(treeLi);
 
-            var standardMenuDiv = $('<div />', {id: "Standard", class: "tab-pane"});
+            var standardMenuDiv = $('<div />', {id: "Standard", class: "tab-pane active"});
             tabDiv.append(standardMenuDiv);
 
             var treeMenuDiv = $('<div />', {id: "Tree", class: "tab-pane"});
@@ -84,35 +84,31 @@
             })
             tabUl.find("a:first").tab('show')
 
-//            this.accordionDiv = standardMenuDiv;
-//            this.accordionDiv.append($('<h3 />').text(Tuml.AccordionEnum.PROPERTIES.label));
-//            this.umlPropertiesDiv = $('<div />', {id: 'umlProperties', class: 'dropdown'});
-//            this.accordionDiv.append(this.umlPropertiesDiv);
-//
-//            this.accordionDiv.append($('<h3 />').text(Tuml.AccordionEnum.OPERATIONS.label));
-//            this.umlOperationsDiv = $('<div />', {id: 'umlOperations'});
-//            this.accordionDiv.append(this.umlOperationsDiv);
-//
-//            if (isUmlgLib && this.contextVertexId !== undefined && this.contextVertexId !== null) {
-//                this.accordionDiv.append($('<h3 />').text(Tuml.AccordionEnum.INSTANCE_QUERIES.label));
-//                this.umlInstanceQueriesDiv = $('<div />', {id: 'umlInstanceQueries'});
-//                this.accordionDiv.append(this.umlInstanceQueriesDiv);
-//                this.accordionDiv.append($('<h3 />').text(Tuml.AccordionEnum.CLASS_QUERIES.label));
-//                this.umlClassQueriesDiv = $('<div />', {id: 'umlClassQueries'});
-//                this.accordionDiv.append(this.umlClassQueriesDiv);
-//
-//                this.accordionDiv.append($('<h3 />').text(Tuml.AccordionEnum.INSTANCE_GROOVY.label));
-//                this.umlInstanceGroovyDiv = $('<div />', {id: 'umlInstanceGroovy'});
-//                this.accordionDiv.append(this.umlInstanceGroovyDiv);
-//                this.accordionDiv.append($('<h3 />').text(Tuml.AccordionEnum.CLASS_GROOVY.label));
-//                this.umlClassGroovyDiv = $('<div />', {id: 'umlClassGroovy'});
-//                this.accordionDiv.append(this.umlClassGroovyDiv);
-//            }
-//            this.accordionDiv.accordion({
-//                heightStyle: "content",
-//                collapsible: true
-//            });
 
+            this.accordionDiv = $('<div />', {id: 'accordion', class: 'panel-group'}).appendTo(standardMenuDiv);
+
+            this.umlPropertiesDiv = addAccordionMenu(this.accordionDiv, true, Tuml.AccordionEnum.PROPERTIES.label, 'propertiesAccordion');
+            addAccordionMenu(this.accordionDiv, false, Tuml.AccordionEnum.OPERATIONS.label, 'operationsAccordion');
+            if (isUmlgLib && this.contextVertexId !== undefined && this.contextVertexId !== null) {
+                addAccordionMenu(this.accordionDiv, false, Tuml.AccordionEnum.INSTANCE_QUERIES.label, 'instanceQueriesAccordion');
+                addAccordionMenu(this.accordionDiv, false, Tuml.AccordionEnum.CLASS_QUERIES.label, 'classQueriesAccordion');
+                addAccordionMenu(this.accordionDiv, false, Tuml.AccordionEnum.INSTANCE_GROOVY.label, 'instanceGroovyAccordion');
+                addAccordionMenu(this.accordionDiv, false, Tuml.AccordionEnum.CLASS_GROOVY.label, 'classGroovyAccordion');
+            }
+
+        }
+
+        function addAccordionMenu(accordionDiv, open, label, id) {
+            //PROPERTIES
+            //The clickable heading part of the properties accordion
+            var propertiesAccordion =  $('<div />', {class: 'panel panel-default'}).appendTo(accordionDiv);
+            var propertiesAccordionHeading =  $('<div />', {class: 'panel-heading'}).appendTo(propertiesAccordion);
+            var propertiesH4 = $('<h4 />', {class: 'panel-title'}).appendTo(propertiesAccordionHeading);
+            $('<a data-toggle="collapse" data-parent="#accordion" class="accordion-toggle" href="#' + id  + '" />').text(label).appendTo(propertiesH4);
+            //The context heading part of the properties accordion
+            var propertiesDiv = $('<div />' ,{id: id, class: 'panel-collapse collapse ' + (open ? 'in' : '')}).appendTo(propertiesAccordion);
+            var divClassBody = $('<div />', {class: 'umlg-leftmenu-panel-body panel-body'}).appendTo(propertiesDiv);
+            return divClassBody;
         }
 
         this.setFocus = function () {
@@ -147,7 +143,9 @@
         }
 
         this.createPropertiesMenu = function (propertyNavigatingTo) {
-            var ulMenu = $('<ul aria-labelledby="dropdownMenu1" />', {id: 'propertiesMenu', class: 'dropdown-menu', role: 'menu'}).appendTo(this.umlPropertiesDiv);
+            var dropDownDiv = $('<div />', {class: 'dropdown'}).appendTo(this.umlPropertiesDiv);
+            $('<a href="#" class="sr-only dropdown-toggle" data-toggle="dropdown">Users <b class="caret"></b></a>').appendTo(dropDownDiv);
+            var ulMenu = $('<ul id="propertiesMenu" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1" />').appendTo(dropDownDiv);
             var menuArray = createLeftMenuDataArray(this.contextMetaDataFrom, propertyNavigatingTo);
 
             for (var i = 0; i < menuArray.length; i++) {
@@ -164,11 +162,11 @@
                     e.preventDefault();
                     e.stopImmediatePropagation();
                 });
-                var span = $('<span class="ui-icon ' + value.menuIconClass + '"></span>').appendTo(a);
+                $('<i class="umlg-icon ' + value.menuIconClass + '"></i>').appendTo(a);
                 if (value.multiplicityDisplay !== undefined) {
-                    a.append(value.name + ' ' + value.multiplicityDisplay);
+                    a.append(' ' + value.name + ' ' + value.multiplicityDisplay);
                 } else {
-                    a.append(value.name);
+                    a.append(' ' + value.name);
                 }
             }
             //This is for enter keystroke on the menu
@@ -399,14 +397,14 @@
 //                }
             }
             //TODO link tabview manager with the accordion div to activate on tab select
-            this.accordionDiv.accordion("option", "active", leftAccordionIndex);
+//            this.accordionDiv.accordion("option", "active", leftAccordionIndex);
         }
 
         function createLeftMenuDataArray(contextMetaDataFrom, propertyNavigatingTo) {
             var menuArray = [];
             if (contextMetaDataFrom.name !== 'Root') {
                 //add a menu item to the context object
-                menuArray.push({tumlUri: contextMetaDataFrom.uri, name: contextMetaDataFrom.name, menuIconClass: 'ui-icon-home', aCssClass: ''});
+                menuArray.push({tumlUri: contextMetaDataFrom.uri, name: contextMetaDataFrom.name, menuIconClass: 'fa fa-circle', aCssClass: ''});
             }
 
             for (var i = 0; i < contextMetaDataFrom.properties.length; i++) {

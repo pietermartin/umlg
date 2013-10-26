@@ -187,10 +187,97 @@
             this.oclExecuteUri = oclExecuteUri;
             var queryTab = $('#' + queryTabDivName);
 
-            var windowHeight = $('.ui-layout-center').height() - 85;
+            var windowHeight = $('.ui-layout-center').height() - 190;
+
+            //create a panel with a header and body.
+            //header contains the a form for executing and saving the query
+            //body contains a layout manager. at the top is the query text and at the bottom the results
+            var queryPanel = $('<div />', {class: 'umlg-query-panel panel panel-default'}).appendTo(queryTab);
+            var queryPanelHeader = $('<div />', {class: 'panel-heading'}).appendTo(queryPanel);
+            var queryPanelBody = $('<div />', {class: 'panel-body'}).appendTo(queryPanel);
+
+            //Create a horizontal inline form for he queries details
+            var queryFormDiv = $('<div />', {class: 'form-inline', role: 'form'}).appendTo(queryPanelHeader);
+            var queryExecuteButtonFormGroupDiv = $('<div />', {class: 'form-group'}).appendTo(queryFormDiv);
+            var executeButton = $('<button />', {type: 'button', id: queryTabDivName + '_' + 'ExecuteButton', class: 'form-control btn btn-primary umlg-button'}).appendTo(queryExecuteButtonFormGroupDiv);
+            $('<span class="glyphicon glyphicon-play-circle"></span>').appendTo(executeButton);
+            $('<span />').text(' Execute').appendTo(executeButton);
+            executeButton.button().click(
+                function () {
+                    self.executeQuery();
+                }
+            );
+
+            var querySelectTypeFormGroupDiv = $('<div />', {class: 'form-group'}).appendTo(queryFormDiv);
+            $('<label />', {class: 'sr-only', for: queryTabDivName + '_' + 'ExecuteButton'}).text('this is hidden').appendTo(querySelectTypeFormGroupDiv);
+            querySelect = $('<select />', {class: 'chzn-select queryEnum', style: 'width: 100px;'});
+            if (query.type.toUpperCase() === 'OCL') {
+
+            } else if (query.type.toUpperCase() === 'GREMLIN') {
+
+            } else if (query.type.toUpperCase() === 'NATIVE') {
+
+            } else {
+                throw 'Unknown query type ' + query.type;
+            }
+            querySelect.append($('<option ' + (query.type.toUpperCase() === 'OCL' ? 'selected="selected"' : '') + '/>)').val('OCL').html('OCL'));
+            querySelect.append($('<option ' + (query.type.toUpperCase() === 'GREMLIN' ? 'selected="selected"' : '') + '/>)').val('GREMLIN').html('GREMLIN'));
+            querySelect.append($('<option ' + (query.type.toUpperCase() === 'NATIVE' ? 'selected="selected"' : '') + '/>)').val('NATIVE').html('NATIVE'));
+            querySelect.appendTo(querySelectTypeFormGroupDiv);
+            querySelect.chosen({disable_search: true});
+
+            var elementOnTheRight = $('<div />', {class: 'pull-right'}).appendTo(queryFormDiv);
+
+            if (isUmlgLib) {
+                var queryQueryNameFormGroupDiv = $('<div />', {class: 'form-group'}).appendTo(elementOnTheRight);
+                var queryNameInput = $('<input >', {id: queryTabDivName + '_' + 'QueryName', type: 'text', class: 'form-control'});
+                queryNameInput.val(query.name).appendTo(queryQueryNameFormGroupDiv);
+            }
+
+            if (isUmlgLib && instanceQueryUri !== '') {
+                var querySaveInstanceFormGroupDiv = $('<div />', {class: 'form-group'}).appendTo(elementOnTheRight);
+                var saveInstanceButton = $('<button />', {id: queryTabDivName + '_' + 'SaveButton', class: 'form-control btn btn-default umlg-button'}).appendTo(querySaveInstanceFormGroupDiv);
+                $('<span class="glyphicon glyphicon-save"></span>').appendTo(saveInstanceButton);
+                $('<span />').text(' save to instance').appendTo(saveInstanceButton);
+
+                saveInstanceButton.button().click(
+                    function () {
+                        self.saveToInstance(post);
+                    });
+            }
+            if (isUmlgLib && classQueryUri !== '') {
+                var querySaveClassFormGroupDiv = $('<div />', {class: 'form-group'}).appendTo(elementOnTheRight);
+                var saveClassButton = $('<button />', {id: queryTabDivName + '_' + 'SaveButton', class: 'form-control btn btn-default umlg-button'}).appendTo(querySaveClassFormGroupDiv);
+                $('<span class="glyphicon glyphicon-save"></span>').appendTo(saveClassButton);
+                $('<span />').text(' save to class').appendTo(saveClassButton);
+                saveClassButton.button().click(
+                    function () {
+                        self.saveToClass(post);
+                    });
+            }
+            if (isUmlgLib && !post) {
+                var queryCancelButtonFormGroupDiv = $('<div />', {class: 'form-group'}).appendTo(elementOnTheRight);
+                var cancelButton = $('<button />', {id: queryTabDivName + '_' + 'CancelButton', class: 'form-control btn btn-default umlg-button'}).appendTo(queryCancelButtonFormGroupDiv);
+                $('<span class="glyphicon glyphicon-ban-circle"></span>').appendTo(cancelButton);
+                $('<span />').text(' cancel').appendTo(cancelButton);
+                cancelButton.button().click(
+                    function () {
+                        self.cancelQuery();
+                    }
+                );
+                var queryDeleteButtonFormGroupDiv = $('<div />', {class: 'form-group'}).appendTo(elementOnTheRight);
+                var deleteButton = $('<button />', {id: queryTabDivName + '_' + 'DeleteButton', class: 'form-control btn btn-default umlg-button'}).appendTo(queryDeleteButtonFormGroupDiv);
+                $('<span class="glyphicon glyphicon-remove"></span>').appendTo(deleteButton);
+                $('<span />').text(' delete').appendTo(deleteButton);
+                deleteButton.button().click(
+                    function () {
+                        self.deleteQuery();
+                    }
+                );
+            }
 
             var layoutDiv = $('<div />', {id: 'queryLayoutDiv', style: 'height: ' + windowHeight + 'px; width" 100%; overflow: hidden;'});
-            layoutDiv.appendTo(queryTab);
+            layoutDiv.appendTo(queryPanelBody);
 
             //Create the layout's center and north pane
             var northDiv = $('<div />', {class: 'query-north'});
@@ -210,87 +297,12 @@
             var textArea = $('<textarea />', {id: queryTabDivName + '_' + 'QueryString'});
             textArea.text(query.queryString).appendTo(oclTextAreaDiv);
 
-            codeMirror = CodeMirror.fromTextArea(textArea[0], {mode: 'text/x-mysql', onKeyEvent: function(o, e) {
+            codeMirror = CodeMirror.fromTextArea(textArea[0], {mode: 'text/x-mysql', onKeyEvent: function (o, e) {
                 if ((e.which === 13 && e.altKey && e.type === "keydown") || (e.which === 13 && e.ctrlKey && e.type === "keydown")) {
                     self.executeQuery();
                     e.preventDefault();
                 }
             }});
-
-            var oclInnerButton = $('<div />', {id: queryTabDivName + '+' + 'OclInnerButton', class: 'oclinnerbutton'}).appendTo(oclInner);
-
-            var oclExecuteButtonDiv = $('<div />', {class: "oclexecutebutton"}).appendTo(oclInnerButton);
-            var $executeButton = $('<button />', {id: queryTabDivName + '_' + 'ExecuteButton'});
-            $executeButton.button().click(
-                function () {
-                    self.executeQuery();
-                }
-            ).text('execute').appendTo(oclExecuteButtonDiv);
-
-            var inputEditButtonDiv;
-            var oclQueryNameInputDiv;
-            var oclEditButtonDiv;
-            if (isUmlgLib) {
-                inputEditButtonDiv = $('<div />', {class: 'oclinputeditbutton'}).appendTo(oclInnerButton);
-                oclQueryNameInputDiv = $('<div />', {class: 'oclqueryname'}).appendTo(inputEditButtonDiv);
-                var $input = $('<input >', {id: queryTabDivName + '_' + 'QueryName', type: 'text'});
-                $input.val(query.name).appendTo(oclQueryNameInputDiv);
-                $input.button().addClass('ui-textfield');
-                oclEditButtonDiv = $('<div />', {class: "ocleditbutton"}).appendTo(inputEditButtonDiv);
-            }
-
-            //create query type select box
-            querySelect = $('<select />', {class: 'chzn-select queryEnum', style: 'width: 100px;'});
-            if (query.type.toUpperCase() === 'OCL') {
-
-            } else if (query.type.toUpperCase() === 'GREMLIN') {
-
-            } else if (query.type.toUpperCase() === 'NATIVE') {
-
-            } else {
-                throw 'Unknown query type ' + query.type;
-            }
-            querySelect.append($('<option ' + (query.type.toUpperCase() === 'OCL' ? 'selected="selected"' : '') + '/>)').val('OCL').html('OCL'));
-            querySelect.append($('<option ' + (query.type.toUpperCase() === 'GREMLIN' ? 'selected="selected"' : '') + '/>)').val('GREMLIN').html('GREMLIN'));
-            querySelect.append($('<option ' + (query.type.toUpperCase() === 'NATIVE' ? 'selected="selected"' : '') + '/>)').val('NATIVE').html('NATIVE'));
-            querySelect.appendTo(oclExecuteButtonDiv);
-            querySelect.chosen({disable_search: true});
-
-//            var ul = $('<ul />', {id: 'queryButtonUl'});
-//            ul.appendTo(oclEditButtonDiv)
-
-            if (isUmlgLib && instanceQueryUri !== '') {
-//                var li = $('<li />', {id: 'querySaveInstanceButtonLi'}).appendTo(ul);
-                var saveInstanceButton = $('<button />', {id: queryTabDivName + '_' + 'SaveButton', class: 'query-save-button'}).appendTo(oclEditButtonDiv);
-                saveInstanceButton.button().text('save to instance').click(
-                    function () {
-                        self.saveToInstance(post);
-                    });
-            }
-            if (isUmlgLib && classQueryUri !== '') {
-//                var li = $('<li />', {id: 'querySaveClassButtonLi'}).appendTo(ul);
-                var saveClassButton = $('<button />', {id: queryTabDivName + '_' + 'SaveButton'}).appendTo(oclEditButtonDiv);
-                saveClassButton.button().text('save to class').click(
-                    function () {
-                        self.saveToClass(post);
-                    });
-            }
-            if (isUmlgLib && !post) {
-//                var li = $('<li />', {id: 'queryCancelButtonLi'}).appendTo(ul);
-                var cancelButton = $('<button />', {id: queryTabDivName + '_' + 'CancelButton'}).appendTo(oclEditButtonDiv);
-                cancelButton.button().text('cancel').click(
-                    function () {
-                        self.cancelQuery();
-                    }
-                );
-//                li = $('<li />', {id: 'queryDeleteButtonLi'}).appendTo(ul);
-                var deleteButton = $('<button />', {id: queryTabDivName + '_' + 'DeleteButton'}).appendTo(oclEditButtonDiv);
-                deleteButton.button().text('delete').click(
-                    function () {
-                        self.deleteQuery();
-                    }
-                );
-            }
 
             //Outer div for results
             var oclResult = $('<div />', {id: queryTabDivName + '_' + 'OclResult', class: 'oclresult'});

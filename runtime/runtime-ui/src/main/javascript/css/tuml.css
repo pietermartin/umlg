@@ -32,8 +32,9 @@
 }
 
 .poweredby {
-    float: right;
+    /*float: right;*/
     height: 30px;
+    margin-left: 5px;
 }
 
 .poweredby p {
@@ -42,7 +43,46 @@
 }
 
 .umlg-panel.panel.panel-default {
-    margin-bottom: 0;
+    margin-bottom: 5px;
+    /*margin-bottom: 0;*/
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0px;
+    margin: -1px;
+    border: 0;
+}
+
+.umlg-leftmenu-panel-body > .dropdown > .dropdown-menu {
+    position: static;
+    display: block;
+    float: none;
+}
+
+.umlg-icon {
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+}
+
+.umlg-tab {
+    margin-top: 5px;
+}
+
+.form-horizontal {
+    margin-top: 45px;
+    margin-bottom: 50px;
+}
+
+/* This is to keep the form elements from causing a horizontal scroll bar */
+.umlg-form-group.form-group {
+    width: 90%;
 }
 
 .umlg-tab.ui-tabs-panel {
@@ -58,6 +98,22 @@
     padding-right: 5px;
     padding-left: 5px;
 }
+
+.umlg-panel-footer.panel-footer {
+    /*padding-top: 5px;*/
+    /*padding-bottom: 5px;*/
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+.btn.umlg-button {
+    margin-left: 2px;
+}
+
+.umlg-query-panel.panel .form-group {
+    margin-right: 10px;
+}
+
 
 .cell-reorder {
     cursor: move;
@@ -127,20 +183,24 @@
     cursor: default;
 }
 
-.ui-tabs-nav .tabs-button {
-    float: right;
-}
+/*.ui-tabs-nav .tabs-button {*/
+    /*float: right;*/
+/*}*/
 
-#buttons {
-    float: right;
-    margin-top: 4px;
-}
+/*#buttons {*/
+    /*float: right;*/
+    /*margin-top: 4px;*/
+/*}*/
 
 
 /*tabs*/
 /*#tabs-layout.panel {*/
     /*margin: 0;*/
 /*}*/
+
+#tabs-layout {
+    height: 100%;
+}
 
 #tabs-layoutTabs li .ui-icon-cancel {
     float: left;
@@ -234,14 +294,14 @@
     font-size: 130%;
 }
 
-.one-tabs-button {
-    padding-left: 180px;
-    margin-left: 5px;
-}
+/*.one-tabs-button {*/
+    /*padding-left: 180px;*/
+    /*margin-left: 5px;*/
+/*}*/
 
-.onesavebuttondiv {
-    padding-left: 170px;
-}
+/*.onesavebuttondiv {*/
+    /*padding-left: 170px;*/
+/*}*/
 
 .many-primitive-one-img {
     width: 15px;
@@ -446,7 +506,7 @@
     padding-top: 0px;
     padding-right: 0px;
     padding-left: 0px;
-    padding-bottom: 5px;
+    padding-bottom: 0px;
 }
 
 /*.ui-layout-center-heading {*/
@@ -604,11 +664,11 @@
     background-color: transparent; /* show default selected row background */
 }
 
-#propertiesMenu .ui-icon.ui-icon-umlassociation {
+.ui-icon-umlassociation {
     background-image: url(../javascript/images/UMLAssociation.png);
 }
 
-#propertiesMenu .ui-icon.ui-icon-umlcomposition {
+.ui-icon-umlcomposition {
     background-image: url(../javascript/images/UMLComposition.png);
 }
 

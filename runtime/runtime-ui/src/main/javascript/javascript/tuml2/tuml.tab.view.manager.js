@@ -75,10 +75,12 @@
 
     TumlBaseTabViewManager.prototype.closeTab = function () {
         this.clearAllTabs();
+        //Clear the tabs div
         $("#" + this.tabId).remove();
+        //Clear the tabs li
         this.li.remove();
-        var indexOftab = this.parentTabContainerManager.tumlTabViewManagers.indexOf(this);
-        this.parentTabContainerManager.tumlTabViewManagers.splice(indexOftab, 1);
+        var indexOfTab = this.parentTabContainerManager.tumlTabViewManagers.indexOf(this);
+        this.parentTabContainerManager.tumlTabViewManagers.splice(indexOfTab, 1);
     }
 
     TumlBaseTabViewManager.prototype.saveAndCloseTab = function () {
@@ -97,9 +99,9 @@
     TumlBaseTabViewManager.prototype.createTab = function () {
         var tabTemplate;
         if (this.parentTabContainerManager instanceof Tuml.TumlMainViewManager) {
-            tabTemplate = "<li id='li" + this.tabId + "'><a href='#{href}'>#{label}</a>";
+            tabTemplate = "<li id='li" + this.tabId + "'><a href='#{href}' data-toggle='tab'>#{label}</a>";
         } else {
-            tabTemplate = "<li id='li" + this.tabId + "'><a href='#{href}'>#{label}</a>" +
+            tabTemplate = "<li id='li" + this.tabId + "'><a href='#{href}' data-toggle='tab'>#{label}</a>" +
 //                "<span class='ui-icon ui-icon-cancel'>Cancel Tab</span>" +
 //                "<span class='ui-icon ui-icon-plus'>Save Tab</span>" +
 //                "<span class='ui-icon ui-icon-close'>Close Tab</span>" +
@@ -128,13 +130,22 @@
 //            }
 //        });
 
-        this.parentTabContainer.find(".ui-tabs-nav").append(this.li);
-        var divPanel = $('<div />', {id: this.tabId, class: 'umlg-tab'});
-        this.parentTabContainer.append(divPanel);
+        this.parentTabContainer.children("ul").append(this.li);
+        var divPanel = $('<div />', {id: this.tabId, class: 'umlg-tab tab-pane'});
+        this.parentTabContainer.children("div.tab-content").append(divPanel);
+        //This is needed to make sure the dom is created. Otherwise slickgrid will not render correctly
+        this.li.children('a:first').tab('show');
+
+        this.li.find("a[href='#" + id + "']").on('shown.bs.tab', function (e) {
+            //Show the footer
+            $('#tabs-layoutpanelPanelDefault').children('.umlg-panel-footer.panel-footer').show();
+        })
+
+
         $.data(divPanel[0], 'tabEnum', this.tabEnum);
 
-        this.parentTabContainer.find(".ui-tabs-nav").append(this.li);
-        this.parentTabContainer.tabs("refresh");
+//        this.parentTabContainer.find(".ui-tabs-nav").append(this.li);
+//        this.parentTabContainer.tabs("refresh");
 
         return divPanel;
     }
@@ -280,7 +291,7 @@
 
     TumlTabQueryViewManager.prototype = new Tuml.TumlBaseTabViewManager;
 
-    TumlTabQueryViewManager.prototype.saveViaKeyPress = function() {
+    TumlTabQueryViewManager.prototype.saveViaKeyPress = function () {
         if (this.open) {
             return true;
         } else {
@@ -288,7 +299,7 @@
         }
     }
 
-    TumlTabQueryViewManager.prototype.cancelViaKeyPress = function() {
+    TumlTabQueryViewManager.prototype.cancelViaKeyPress = function () {
         if (this.open) {
             return true;
         } else {
@@ -300,7 +311,7 @@
         var previousIndex = this.parentTabContainerManager.tumlTabViewManagers.indexOf(this);
         var nextIndex = previousIndex - 1;
         TumlBaseTabViewManager.prototype.closeTab.call(this);
-        this.parentTabContainer.tabs("option", "active", nextIndex);
+//        this.parentTabContainer.tabs("option", "active", nextIndex);
         var currentTab = this.parentTabContainerManager.tumlTabViewManagers[nextIndex];
         if (currentTab instanceof TumlTabQueryViewManager) {
             this.parentTabContainerManager.refreshQueryMenuCss(currentTab.queryId);
@@ -313,12 +324,12 @@
         var self = this;
         var tabTemplate;
         if (this.parentTabContainerManager instanceof Tuml.TumlMainViewManager) {
-            tabTemplate = "<li id='li" + this.tabId + "'><a href='#{href}'>#{label}</a>";
+            tabTemplate = "<li id='li" + this.tabId + "'><a href='#{href}' data-toggle='tab'>#{label}</a>";
         } else {
             if (post) {
-                tabTemplate = "<li id='li" + this.tabId + "'><a href='#{href}'>#{label}</a></li>";
+                tabTemplate = "<li id='li" + this.tabId + "'><a href='#{href}' data-toggle='tab'>#{label}</a></li>";
             } else {
-                tabTemplate = "<li id='li" + this.tabId + "'><a href='#{href}'>#{label}</a><span class='ui-icon ui-icon-close'>Close Tab</span></li>";
+                tabTemplate = "<li id='li" + this.tabId + "'><a href='#{href}' data-toggle='tab'>#{label}</a><span class='ui-icon ui-icon-close'>Close Tab</span></li>";
             }
         }
         var label = this.tabTitleName;
@@ -334,11 +345,27 @@
             });
         }
 
-        this.parentTabContainer.find(".ui-tabs-nav").append(this.li);
-        var divPanel = $('<div />', {id: this.tabId});
-        this.parentTabContainer.append(divPanel);
+        var tabUl = this.parentTabContainer.children("ul");
+        tabUl.append(this.li);
+        var divPanel = $('<div />', {id: this.tabId, class: 'umlg-tab tab-pane'});
+
+        this.parentTabContainer.children(".tab-content").append(divPanel);
         $.data(divPanel[0], 'tabEnum', this.tabEnum);
-        this.parentTabContainer.tabs("refresh");
+//        this.parentTabContainer.tabs("refresh");
+
+        tabUl.find('a:last').tab('show');
+        tabUl.find("a[href='#" + id + "']").on('shown.bs.tab', function (e) {
+//            e.target // activated tab
+//            e.relatedTarget // previous tab
+
+            //Hide the footer
+            $('#tabs-layoutpanelPanelDefault').children('.umlg-panel-footer.panel-footer').hide();
+        })
+//        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+//            e.target // activated tab
+//            e.relatedTarget // previous tab
+//        })
+
 
         if (this.queryId !== undefined) {
             $.data(divPanel[0], 'queryId', this.queryId);
@@ -358,7 +385,7 @@
             this.componentProperty = property;
         }
 
-        this.setFocus = function() {
+        this.setFocus = function () {
             this.li.focus();
         }
 
@@ -367,7 +394,7 @@
 
     TumlTabOneViewManager.prototype = new Tuml.TumlBaseTabViewManager;
 
-    TumlTabOneViewManager.prototype.saveViaKeyPress = function() {
+    TumlTabOneViewManager.prototype.saveViaKeyPress = function () {
         if (this.open) {
             this.parentTabContainerManager.saveTabs();
             return true;
@@ -376,7 +403,7 @@
         }
     }
 
-    TumlTabOneViewManager.prototype.cancelViaKeyPress = function() {
+    TumlTabOneViewManager.prototype.cancelViaKeyPress = function () {
         if (this.open) {
             this.parentTabContainerManager.doCancel();
             return true;
@@ -394,7 +421,7 @@
             this.tabTitleName = this.result.meta.to.name;
         }
         TumlBaseTabViewManager.prototype.createTab.call(this);
-        this.parentTabContainer.tabs("option", "active", this.parentTabContainerManager.tumlTabViewManagers.length - 1);
+//        this.parentTabContainer.tabs("option", "active", this.parentTabContainerManager.tumlTabViewManagers.length - 1);
         this.createOne(result.data, forCreation);
         this.addButtonsToOne();
     }
@@ -565,6 +592,7 @@
                 for (var i = 0; i < result.length; i++) {
                     component.meta = result[i].meta;
                     self.maybeCreateTabContainer();
+                    self.addButtons();
                     component.data = data;
                     var tumlManyComponentTabViewManager = self.createTabContainer(
                         tuml.tab.Enum.Properties,
@@ -576,7 +604,14 @@
                     self.setComponentProperty(property);
                     self.addToTumlTabViewManagers(tumlManyComponentTabViewManager);
                     tumlManyComponentTabViewManager.parentTabContainerManager = self;
-                    $('#formDiv' + self.tabTitleName).hide();
+//                    $('#formDiv' + self.tabTitleName).hide();
+
+                    var parentPanelPanelDefault = $("#" + self.parentTabContainerManager.getTabId() + "panelPanelDefault");
+                    var parentTabContent = parentPanelPanelDefault.find('.tab-content');
+                    parentTabContent.hide();
+                    var parentTabFooter = parentPanelPanelDefault.find('.umlg-panel-footer.panel-footer');
+                    parentTabFooter.hide();
+
                     tumlManyComponentTabViewManager.backupData = $.extend(true, [], data);
                     //pass through component's component validationResults
                     self.passOnValidationResults(tumlManyComponentTabViewManager, 0, self.tabContainerProperty.name);
@@ -588,7 +623,7 @@
                 self.open = false;
                 //Set only the first tab to active
                 if (firstTumlManyComponentTabViewManager !== null) {
-                    self.tabContainer.tabs("option", "active", 0);
+//                    self.tabContainer.tabs("option", "active", 0);
                 }
 
                 var qualifiedName = property.qualifiedName;
@@ -620,6 +655,7 @@
                 for (var i = 0; i < result.length; i++) {
                     component.meta = result[i].meta;
                     self.maybeCreateTabContainer();
+                    self.addButtons();
                     component.data = data;
                     var tumlOneComponentTabViewManager = self.createTabContainer(
                         tuml.tab.Enum.Properties,
@@ -631,7 +667,14 @@
                     self.setCell(cell);
                     self.addToTumlTabViewManagers(tumlOneComponentTabViewManager);
                     tumlOneComponentTabViewManager.parentTabContainerManager = self;
-                    $('#slickGrid' + self.tabId).hide();
+//                    $('#slickGrid' + self.tabId).hide();
+
+                    var parentPanelPanelDefault = $("#" + self.parentTabContainerManager.getTabId() + "panelPanelDefault");
+                    var parentTabContent = parentPanelPanelDefault.find('.tab-content');
+                    parentTabContent.hide();
+                    var parentTabFooter = parentPanelPanelDefault.find('.umlg-panel-footer.panel-footer');
+                    parentTabFooter.hide();
+
                     tumlOneComponentTabViewManager.backupData = $.extend(true, {}, component.data);
 
                     if (component.data.id === undefined || component.data.id === null) {
@@ -672,7 +715,14 @@
 
     TumlTabOneViewManager.prototype.saveTabs = function () {
         Tuml.TumlTabContainerManager.prototype.saveTabs.call(this);
-        $('#formDiv' + this.tabTitleName).show();
+//        $('#formDiv' + this.tabTitleName).show();
+
+        var parentPanelPanelDefault = $("#" + this.parentTabContainerManager.getTabId() + "panelPanelDefault");
+        var parentTabContent = parentPanelPanelDefault.find('.tab-content');
+        parentTabContent.show();
+        var parentTabFooter = parentPanelPanelDefault.find('.umlg-panel-footer.panel-footer');
+        parentTabFooter.show();
+
         this.open = true;
     }
 
@@ -683,7 +733,7 @@
         this.tumlTabGridManager = null;
         TumlBaseTabViewManager.call(this, tabEnum, tabContainer, tumlUri, result, propertyNavigatingTo);
 
-        this.setFocus = function(focusTo) {
+        this.setFocus = function (focusTo) {
             if (focusTo == Tuml.FocusEnum.CENTER_TAB) {
                 this.li.focus();
             } else if (focusTo == Tuml.FocusEnum.CENTER_GRID) {
@@ -870,7 +920,7 @@
         this.updateOneRecursive(item, fakeId, fieldName, one, indexForFakeId);
     }
 
-    TumlTabManyViewManager.prototype.saveViaKeyPress = function() {
+    TumlTabManyViewManager.prototype.saveViaKeyPress = function () {
         if (this.open) {
             if (Slick.GlobalEditorLock.commitCurrentEdit()) {
                 this.parentTabContainerManager.saveTabs();
@@ -882,7 +932,7 @@
         }
     }
 
-    TumlTabManyViewManager.prototype.cancelViaKeyPress = function() {
+    TumlTabManyViewManager.prototype.cancelViaKeyPress = function () {
         if (this.open) {
             if (Slick.GlobalEditorLock.commitCurrentEdit()) {
                 this.parentTabContainerManager.doCancel();
@@ -1033,7 +1083,7 @@
             saveButton.find('span').text('Select');
         }
 
-        this.parentTabContainer.tabs("option", "active", this.parentTabContainerManager.tumlTabViewManagers.length - 1);
+//        this.parentTabContainer.tabs("option", "active", this.parentTabContainerManager.tumlTabViewManagers.length - 1);
         this.createGrid(result);
     }
 
@@ -1079,6 +1129,7 @@
 
                     var component = {meta: result[i].meta, data: []};
                     self.maybeCreateTabContainer();
+                    self.addButtons();
 
                     //Need to filter out the data per concrete class as returned in the meta data
                     for (var j = 0; j < data.length; j++) {
@@ -1096,7 +1147,14 @@
                     self.setCell(cell);
                     self.addToTumlTabViewManagers(tumlManyComponentTabViewManager);
                     tumlManyComponentTabViewManager.parentTabContainerManager = self;
-                    $('#slickGrid' + self.tabId).hide();
+//                    $('#slickGrid' + self.tabId).hide();
+
+                    var parentPanelPanelDefault = $("#" + self.parentTabContainerManager.getTabId() + "panelPanelDefault");
+                    var parentTabContent = parentPanelPanelDefault.find('.tab-content');
+                    parentTabContent.hide();
+                    var parentTabFooter = parentPanelPanelDefault.find('.umlg-panel-footer.panel-footer');
+                    parentTabFooter.hide();
+
                     tumlManyComponentTabViewManager.backupData = $.extend(true, [], data);
                     //pass through component's component validationResults
                     self.passOnValidationResults(tumlManyComponentTabViewManager, cell.row, self.tumlTabGridManager.grid.getColumns()[cell.cell].name);
@@ -1108,7 +1166,7 @@
                 self.open = false;
                 //Set only the first tab to active
                 if (firstTumlManyComponentTabViewManager !== null) {
-                    self.tabContainer.tabs("option", "active", 0);
+//                    self.tabContainer.tabs("option", "active", 0);
                 }
                 var qualifiedName = property.qualifiedName;
                 self.updateNavigationHeader(qualifiedName);
@@ -1184,6 +1242,7 @@
                 for (var i = 0; i < result.length; i++) {
                     oneComponent.meta = result[i].meta
                     self.maybeCreateTabContainer();
+                    self.addButtons();
                     oneComponent.data = data;
                     var tumlOneComponentTabViewManager = self.createTabContainer(
                         tuml.tab.Enum.Properties,
@@ -1195,7 +1254,14 @@
                     self.setCell(cell);
                     self.addToTumlTabViewManagers(tumlOneComponentTabViewManager);
                     tumlOneComponentTabViewManager.parentTabContainerManager = self;
-                    $('#slickGrid' + self.tabId).hide();
+
+                    var parentPanelPanelDefault = $("#" + self.parentTabContainerManager.getTabId() + "panelPanelDefault");
+                    var parentTabContent = parentPanelPanelDefault.find('.tab-content');
+                    parentTabContent.hide();
+                    var parentTabFooter = parentPanelPanelDefault.find('.umlg-panel-footer.panel-footer');
+                    parentTabFooter.hide();
+
+//                    $('#slickGrid' + self.tabId).hide();
                     tumlOneComponentTabViewManager.backupData = $.extend(true, {}, oneComponent.data);
 
                     if (oneComponent.data.id === undefined || oneComponent.data.id === null) {
@@ -1225,7 +1291,7 @@
 
                 //Set only the first tab to active
                 if (firstTumlOneComponentTabViewManager !== null) {
-                    self.tabContainer.tabs("option", "active", 0);
+//                    self.tabContainer.tabs("option", "active", 0);
                 }
 
 //                var qualifiedName = result[0].meta.qualifiedName;
@@ -1302,7 +1368,14 @@
     TumlTabManyViewManager.prototype.saveTabs = function () {
         Tuml.TumlTabContainerManager.prototype.saveTabs.call(this);
         this.tumlTabGridManager.active = true;
-        $('#slickGrid' + this.tabId).show();
+//        $('#slickGrid' + this.tabId).show();
+
+        var parentPanelPanelDefault = $("#" + this.parentTabContainerManager.getTabId() + "panelPanelDefault");
+        var parentTabContent = parentPanelPanelDefault.find('.tab-content');
+        parentTabContent.show();
+        var parentTabFooter = parentPanelPanelDefault.find('.umlg-panel-footer.panel-footer');
+        parentTabFooter.show();
+
         this.open = true;
     }
 

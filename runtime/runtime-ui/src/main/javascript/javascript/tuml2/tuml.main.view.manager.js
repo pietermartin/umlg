@@ -118,13 +118,15 @@
             classQueryTumlUri = "/" + tumlModelName + "/classquery/" + this.contextVertexId + "/query";
 
 
+
             if (this.contextVertexId !== -1 && contextChanged) {
                 //This is the default query tab, always open
                 addDefaultQueryTab();
             }
 
             this.tumlTabViewManagers[0].open = true;
-            this.tabContainer.tabs("option", "active", 0);
+
+            this.tabContainer.find('a:first').tab('show');
 
             this.updateNavigationHeader(this.qualifiedName);
             $('body').layout().resizeAll();
@@ -142,9 +144,9 @@
                 }
             }
             var savedTumlTabViewManagers = this.clearTabsOnAddOneOrMany(newContextVertexId);
-            if (!contextChanged && wasOne) {
-                this.addButtons();
-            }
+//            if (!contextChanged && wasOne) {
+//                this.addButtons();
+//            }
             leftMenuManager.refresh(metaDataNavigatingFrom, metaDataNavigatingTo, this.contextVertexId, this.propertyNavigatingTo);
             refreshInternal(this.tumlUri, result, false);
             //reorder tabs, make sure new tabs are first
@@ -167,6 +169,10 @@
                     var tumlTabViewManager = this.createTabContainer(tuml.tab.Enum.Properties, result[i], this.tumlUri, {forLookup: false, forManyComponent: false, isOne: true, forCreation: false}, this.propertyNavigatingTo);
                     this.addToTumlTabViewManagers(tumlTabViewManager);
                     tumlTabViewManager.createTab(result[i], /*isForCreation*/false);
+
+                    //move buttons to form-div
+                    //this.addButtons();
+
                     //reorder tabs, make sure new tabs are first
                     reorderTabsAfterAddOneOrMany(savedTumlTabViewManagers);
                     break;
@@ -433,8 +439,11 @@
                 }
                 for (var i = 0; i < tumlTabViewManagersToClose.length; i++) {
                     tumlTabViewManagersToClose[i].closeTab();
+                    //Clear the buttons
+                    this.tabLayoutTabFooterDiv.empty();
                 }
             }
+            this.addButtons(this);
 
             //Save current tabs to help with reordering 2 lines down
             var savedTumlTabViewManagers = [];
@@ -471,18 +480,18 @@
                 if (query.id === -1) {
                     this.tumlTabViewManagers.push(tumlTabViewManagerQuery);
                     reorderTabs();
-                    this.tabContainer.tabs("option", "active", this.tumlTabViewManagers.length - 1);
+//                    this.tabContainer.tabs("option", "active", this.tumlTabViewManagers.length - 1);
                 } else {
                     this.tumlTabViewManagers.splice(this.tumlTabViewManagers.length - 1, 0, tumlTabViewManagerQuery);
                     reorderTabs();
-                    this.tabContainer.tabs("option", "active", this.tumlTabViewManagers.length - 2);
+//                    this.tabContainer.tabs("option", "active", this.tumlTabViewManagers.length - 2);
                 }
 
                 tumlTabViewManagerQuery.createQuery(oclExecuteUri, query, post);
 
             } else {
                 //Just make the tab active
-                this.tabContainer.tabs("option", "active", self.tumlTabViewManagers.indexOf(tumlTabViewManagerQuery));
+//                this.tabContainer.tabs("option", "active", self.tumlTabViewManagers.indexOf(tumlTabViewManagerQuery));
             }
             return tumlTabViewManagerQuery;
 
@@ -495,7 +504,7 @@
             var currentIndex = self.tumlTabViewManagers.indexOf(newTumlTabViewManager);
             this.tumlTabViewManagers.splice(currentIndex, 1);
             this.tumlTabViewManagers.splice(previousIndex, 0, newTumlTabViewManager);
-            this.tabContainer.tabs("option", "active", previousIndex);
+//            this.tabContainer.tabs("option", "active", previousIndex);
             leftMenuManager.refreshInstanceQuery(args.query.id);
         }
 
@@ -599,7 +608,7 @@
                 tabsNav = li;
                 first = false;
             }
-            self.tabContainer.tabs("refresh");
+//            self.tabContainer.tabs("refresh");
         }
 
         function findPropertyNavigatingTo(qualifiedName, metaDataNavigatingFrom) {

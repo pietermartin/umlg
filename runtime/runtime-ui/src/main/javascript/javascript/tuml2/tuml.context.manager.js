@@ -68,10 +68,11 @@
                 if (i == 0) {
                     $('<span />', {class: 'glyphicon glyphicon-home'}).appendTo(li);
                 }
-                var a = $('<a />', {href: property.uri, text: (i == 0 ? ' ' : '') + property.name, title: property.name, tabindex: i,
+                var adjustedUri = addUiToUrl(property.uri);
+                var a = $('<a />', {href: adjustedUri, text: (i == 0 ? ' ' : '') + property.name, title: property.name, tabindex: i,
                     click: function (e) {
                         var url = $.data(e.target).data;
-                        self.onClickContextMenu.notify({uri: url, name: "unused"}, null, self);
+                        self.onClickContextMenu.notify({uri: removeUiFromUrl(url), name: "unused"}, null, self);
                         e.preventDefault();
                         return false;
                     }
@@ -83,10 +84,10 @@
                 }
             }
 
-            $('#umlgBrandRoot').remove();
-            var brandUl = $('<ol />', {id: 'umlgBrandRoot', class: 'nav navbar-nav'}).appendTo('.collapse.navbar-collapse');
-            var brandLi = $('<li />').appendTo(brandUl);
-            $('<a />', {class: 'navbar-brand', href: 'http://umlg.org', target: '_blank'}).text('Umlg').appendTo(brandLi);
+//            $('#umlgBrandRoot').remove();
+//            var brandUl = $('<ol />', {id: 'umlgBrandRoot', class: 'nav navbar-nav'}).appendTo('.collapse.navbar-collapse');
+//            var brandLi = $('<li />').appendTo(brandUl);
+//            $('<a />', {class: 'navbar-brand', href: 'http://umlg.org', target: '_blank'}).text('Umlg').appendTo(brandLi);
 
             /*
              $('#contextRoot').remove();

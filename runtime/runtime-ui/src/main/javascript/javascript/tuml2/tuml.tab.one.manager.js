@@ -109,10 +109,9 @@
         var tabDiv = this.getDiv();
         tabDiv.children().remove();
         $('<div id="serverErrorMsg" />').appendTo(tabDiv);
-        var formDiv = $('<div />', {id: 'formDiv' + this.metaForData.name}).appendTo(tabDiv);
+        //The main div that holds all elements
+        var formDiv = $('<div />', {id: 'formDiv' + this.metaForData.name, role: 'form', class: 'form-horizontal'}).appendTo(tabDiv);
 
-        var ul = $('<ul class="oneUl" />')
-        ul.appendTo(formDiv);
         if (this.metaForData.name !== 'Root') {
             //Do everything except for select boxes that require lookups.
             //Lookups need to do a server call and as such need the id field set.
@@ -127,23 +126,37 @@
                         continue;
                     }
 
-                    var li = $('<li>')
-                    li.appendTo(ul);
-                    if (property.lower > 0) {
-                        var $label = $('<label />', {for: property.name + 'Id', class: "required-field"});
-                        $label.text(property.name + ' :').appendTo(li);
-                    } else {
-                        var $label = $('<label />', {for: property.name + 'Id'});
-                        $label.text(property.name + ' :').appendTo(li);
+                    //Each input is wrapped in a form-group
+                    var formGroupDiv = $('<div>', {class: 'umlg-form-group form-group'}).appendTo(formDiv);
+
+                    if (property.fieldType !== 'Boolean') {
+                        $('<label />', {for: property.name + 'Id', class: "col-lg-2 control-label"}).text(property.name + ' :').appendTo(formGroupDiv);
                     }
                     var $input = this.constructInputForField(property, false);
+
                     if (first) {
                         first = false;
                         this.currentActiveProperty = property;
                     }
-                    $input.appendTo(li);
+
+                    var inputDiv = $('<div />', {class: 'input-group col-lg-5'}).appendTo(formGroupDiv);
+                    if (!property.readOnly && property.lower > 0 && property.fieldType !== 'Boolean') {
+                        inputDiv.append('<span class="input-group-addon glyphicon glyphicon-asterisk"></span>');
+                    }
+                    if (property.fieldType == 'Boolean') {
+                        inputDiv.addClass('col-lg-offset-2');
+                        var checkboxLabel = $('<label />');
+                        checkboxLabel.append($input);
+                        checkboxLabel.append(' ' + property.name);
+                        checkboxLabel.appendTo(inputDiv);
+                    } else {
+                        $input.appendTo(inputDiv);
+                        if (property.readOnly) {
+                            $input.wrap('<fieldset disabled />');
+                        }
+                    }
                     if (property.manyPrimitive || property.manyEnumeration) {
-                        var $manyDiv = $('<div />', {class: "many-primitive-one-img"}).appendTo(li);
+                        var $manyDiv = $('<div />', {class: "many-primitive-one-img"}).appendTo(formGroupDiv);
 
                         $manyDiv.click(
 
@@ -152,7 +165,7 @@
                                     self.openEditorForMany(inputScoped, propertyScoped, manyDivScoped, liScoped)
                                 };
 
-                            }($input, property, $manyDiv, li));
+                            }($input, property, $manyDiv, formGroupDiv));
 
                         $input.keypress(
 
@@ -163,7 +176,7 @@
                                     }
                                 };
 
-                            }($input, property, $manyDiv, li));
+                            }($input, property, $manyDiv, formGroupDiv));
 
                     } else if (property.composite && property.lower == 1 && property.upper == 1) {
                         $input.click(function (e, args) {
@@ -187,25 +200,24 @@
                         if (property.dataTypeEnum != null && property.dataTypeEnum !== undefined) {
                             if (property.dataTypeEnum == 'Date') {
                                 $input.datepicker({
-                                    showOn: "button",
+//                                    showOn: "button",
                                     buttonImageOnly: true,
-                                    dateFormat: "yy-mm-dd",
-                                    buttonImage: "/" + tumlModelName + "/javascript/slickgrid/images/calendar.gif"
+                                    dateFormat: "yy-mm-dd"
+//                                    buttonImage: "/" + tumlModelName + "/javascript/slickgrid/images/calendar.gif"
                                 });
+                                $input.parent().append('<label for="' + $input.attr('id') + '" class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></label>');
                             } else if (property.dataTypeEnum == 'Time') {
                                 $input.timepicker({
-                                    showOn: "button",
-                                    buttonImageOnly: true,
-                                    buttonImage: "/" + tumlModelName + "/javascript/slickgrid/images/calendar.gif"
+                                    buttonImageOnly: true
                                 });
+                                $input.parent().append('<label for="' + $input.attr('id') + '" class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></label>');
                             } else if (property.dataTypeEnum == 'DateTime') {
                                 $input.datetimepicker({
-                                    showOn: "button",
                                     buttonImageOnly: true,
-                                    buttonImage: "/" + tumlModelName + "/javascript/slickgrid/images/calendar.gif",
                                     dateFormat: "yy-mm-dd",
                                     timeFormat: "hh:mm:ss"
                                 });
+                                $input.parent().append('<label for="' + $input.attr('id') + '" class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></label>');
                             }
                         }
                     }
@@ -216,11 +228,18 @@
             for (var i = 0; i < this.metaForData.properties.length; i++) {
                 var property = this.metaForData.properties[i];
                 if (this.isPropertyForOnePage(property) && !property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && (property.oneToOne || property.manyToOne)) {
-                    var li = $('<li>')
-                    li.appendTo(ul);
-                    $('<label />', {for: property.name + 'Id'}).text(property.name + ' :').appendTo(li);
+
+                    var formGroupDiv = $('<div>', {class: 'umlg-form-group form-group'});
+                    formGroupDiv.appendTo(formDiv);
+
+                    $('<label />', {for: property.name + 'Id', class: "col-lg-2 control-label"}).text(property.name + ' :').appendTo(formGroupDiv);
                     var $input = this.constructInputForField(property);
-                    $input.appendTo(li);
+
+                    var inputDiv = $('<div />', {class: 'input-group col-lg-5'}).appendTo(formGroupDiv);
+                    if (property.lower > 0) {
+                        inputDiv.append('<span class="input-group-addon glyphicon glyphicon-asterisk"></span>');
+                    }
+                    $input.appendTo(inputDiv);
                 }
             }
 
@@ -348,23 +367,21 @@
         var self = this;
         var $input;
         if (property.name == 'id') {
-            $input = $('<input />', {disabled: 'disabled', type: 'text', class: 'field', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name});
-            $input.button().addClass('ui-textfield');
+            $input = $('<input />', {disabled: 'disabled', type: 'text', class: 'field', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name, class: 'form-control'});
             if (this.data[property.name] !== undefined && this.data[property.name] !== null) {
                 $input[0].defaultValue = this.data[property.name];
             }
         } else if (property.readOnly) {
             if (!this.isForCreation) {
-                $input = $('<p />').text(this.data[property.name]);
+                $input = $('<p />', {class: 'form-control'}).text(this.data[property.name]);
             } else {
-                $input = $('<p />');
+                $input = $('<p />', {class: 'form-control'});
             }
         } else if (property.dataTypeEnum != null && property.dataTypeEnum !== undefined) {
             if (property.dataTypeEnum == 'Date' || property.dataTypeEnum == 'Time' || property.dataTypeEnum == 'DateTime' || property.dataTypeEnum == 'InternationalPhoneNumber' || property.dataTypeEnum == 'LocalPhoneNumber' || property.dataTypeEnum == 'Email') {
-                $input = $("<input />", {type: 'text', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name});
-                $input.button().addClass('ui-textfield');
+                $input = $("<input />", {type: 'text', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name, class: 'form-control'});
             } else if (property.dataTypeEnum == 'Video' || property.dataTypeEnum == 'Audio' || property.dataTypeEnum == 'Image') {
-                $input = $("<input />", {type: 'text', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name});
+                $input = $("<input />", {type: 'text', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name, class: 'form-control'});
             } else {
                 alert('Unsupported dataType ' + property.dataTypeEnum);
             }
@@ -372,27 +389,26 @@
                 $input[0].defaultValue = this.data[property.name];
             }
         } else if (property.composite && property.lower > 0) {
-            $input = $("<input />", {type: 'text', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name});
-            $input.button().addClass('ui-textfield');
+            $input = $("<input />", {type: 'text', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name, class: 'form-control'});
             if (!this.isForCreation) {
                 $input[0].defaultValue = this.data[property.name];
             }
         } else if (property.oneEnumeration) {
-            $input = $('<select />', {class: 'chzn-select', style: 'width:350px;', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name});
+            $input = $('<select />', {class: 'chzn-select form-control', style: 'width:350px;', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name});
             if (!this.isForCreation) {
                 this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, this.data[property.name], $input);
             } else {
                 this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, $input);
             }
         } else if (isForManyEditor && property.manyEnumeration) {
-            $input = $('<select />', {id: inputFieldId(property, this.metaForData, isForManyEditor), class: 'chzn-select', style: 'width:350px;', name: property.name});
+            $input = $('<select />', {id: inputFieldId(property, this.metaForData, isForManyEditor), class: 'chzn-select form-control', style: 'width:350px;', name: property.name});
             if (!this.isForCreation) {
                 this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, this.data[property.name], $input);
             } else {
                 this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, $input);
             }
         } else if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && property.oneToOne) {
-            $input = $('<select />', {class: 'chzn-select', style: 'width:350px;', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name});
+            $input = $('<select />', {class: 'chzn-select form-control', style: 'width:350px;', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name});
             //On creation the new object must first be created server side before the handleLookup method can be invoked.
             //This is because the lookup needs the current tempory object to exist.
             if (!this.isForCreation) {
@@ -400,28 +416,26 @@
             }
 
         } else if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && property.manyToOne) {
-            $input = $('<select />', {class: 'chzn-select', style: 'width:350px;', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name});
+            $input = $('<select />', {class: 'chzn-select form-control', style: 'width:350px;', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name});
             if (!this.isForCreation) {
                 this.appendLoopupOptionsToSelect2(property, this.data['id'], $input, this.data[property.name]);
             }
         } else if (property.fieldType == 'String' || property.fieldType == 'Integer' || property.fieldType == 'Long' || property.fieldType == 'Real' || property.manyEnumeration) {
-            $input = $('<input />', {type: 'text', class: 'field', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name});
-            $input.button().addClass('ui-textfield');
+            $input = $('<input />', {type: 'text', class: 'form-control', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name});
             if (!this.isForCreation) {
                 $input[0].defaultValue = (this.data[property.name] === null ? '' : this.data[property.name]);
             }
         } else if (property.fieldType == 'Boolean') {
             if (!property.manyPrimitive && this.data !== undefined && this.data !== null) {
                 if (!this.isForCreation) {
-                    $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name, checked: (this.data[property.name] ? 'checked' : false)});
+                    $input = $('<input />', {type: 'checkbox', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name, checked: (this.data[property.name] ? 'checked' : false)});
                 } else {
-                    $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name, checked: false });
+                    $input = $('<input />', {type: 'checkbox', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name, checked: false});
                 }
             } else if (!property.manyPrimitive) {
-                $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name });
+                $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name});
             } else {
                 $input = $('<input />', {type: 'text', class: 'field', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name});
-                $input.button().addClass('ui-textfield');
                 if (!this.isForCreation) {
                     $input[0].defaultValue = this.data[property.name];
                 }
@@ -839,13 +853,13 @@
         }
         //selectFieldValidator returns the validate function
         if (!validationResult.valid) {
-            validateInput.removeClass('validation-error');
-            validateInput.parent().children('.validation-error-msg').remove();
-            validateInput.addClass('validation-error');
-            validateInput.parent().append($('<span class="validation-error-msg" />').text(validationResult.msg));
+            validateInput.parents('.form-group').removeClass('has-error');
+            validateInput.parents('.form-group').addClass('has-error');
+            validateInput.parent('div').siblings('p').remove();
+            validateInput.parent('div').after($('<p class="help-block" />').text(validationResult.msg));
         } else {
-            validateInput.removeClass('validation-error');
-            validateInput.parent().children('.validation-error-msg').remove();
+            validateInput.parents('.form-group').removeClass('has-error');
+            validateInput.parent('div').siblings('p').remove();
         }
 
         return validationResult;
