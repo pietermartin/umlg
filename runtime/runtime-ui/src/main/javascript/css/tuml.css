@@ -114,6 +114,17 @@
     margin-right: 10px;
 }
 
+.nav-tabs > li .close {
+    margin: -2px 0 0 10px;
+    font-size: 18px;
+}
+
+
+
+
+
+
+
 
 .cell-reorder {
     cursor: move;
@@ -202,21 +213,8 @@
     height: 100%;
 }
 
-#tabs-layoutTabs li .ui-icon-cancel {
-    float: left;
-    margin: 0.2em 0.2em 0 0;
-    cursor: pointer;
-}
 
-#tabs-layoutTabs li .ui-icon-plus {
-    float: left;
-    margin: 0.2em 0.2em 0 0;
-    cursor: pointer;
-}
-
-#tabs-layoutTabs li .ui-icon-close {
-    float: left;
-    margin: 0.2em 0.2em 0 0;
+.umlg-query-tab.glyphicon.glyphicon-remove {
     cursor: pointer;
 }
 

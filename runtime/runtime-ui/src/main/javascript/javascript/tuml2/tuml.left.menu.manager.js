@@ -90,7 +90,7 @@
             this.umlPropertiesDiv = addAccordionMenu(this.accordionDiv, true, Tuml.AccordionEnum.PROPERTIES.label, 'propertiesAccordion');
             addAccordionMenu(this.accordionDiv, false, Tuml.AccordionEnum.OPERATIONS.label, 'operationsAccordion');
             if (isUmlgLib && this.contextVertexId !== undefined && this.contextVertexId !== null) {
-                addAccordionMenu(this.accordionDiv, false, Tuml.AccordionEnum.INSTANCE_QUERIES.label, 'instanceQueriesAccordion');
+                this.umlInstanceQueriesDiv = addAccordionMenu(this.accordionDiv, false, Tuml.AccordionEnum.INSTANCE_QUERIES.label, 'instanceQueriesAccordion');
                 addAccordionMenu(this.accordionDiv, false, Tuml.AccordionEnum.CLASS_QUERIES.label, 'classQueriesAccordion');
                 addAccordionMenu(this.accordionDiv, false, Tuml.AccordionEnum.INSTANCE_GROOVY.label, 'instanceGroovyAccordion');
                 addAccordionMenu(this.accordionDiv, false, Tuml.AccordionEnum.CLASS_GROOVY.label, 'classGroovyAccordion');
@@ -235,19 +235,24 @@
                     menuCssClass: 'querymenuinactive ' + (isInstanceQuery ? 'instance-query' : 'class-query')
                 });
             }
+            var dropDownDiv = $('<div />', {class: 'dropdown'}).appendTo(queryDiv);
+            $('<a href="#" class="sr-only dropdown-toggle" data-toggle="dropdown">Users <b class="caret"></b></a>').appendTo(dropDownDiv);
             var ulMenu;
             if (isInstanceQuery) {
-                ulMenu = $('<ul />', {id: 'instanceQueryMenu'}).appendTo(queryDiv);
+//                ulMenu = $('<ul />', {id: 'instanceQueryMenu'}).appendTo(queryDiv);
+                ulMenu = $('<ul id="instanceQueryMenu" class="dropdown-menu" role="menu" aria-labelledby="dropdownQueryMenu1" />').appendTo(dropDownDiv);
+
             } else {
-                ulMenu = $('<ul />', {id: 'classQueryMenu'}).appendTo(queryDiv);
+//                ulMenu = $('<ul />', {id: 'classQueryMenu'}).appendTo(queryDiv);
+                ulMenu = $('<ul id="classQueryMenu" class="dropdown-menu" role="menu" aria-labelledby="dropdownQueryMenu1" />').appendTo(queryDiv);
             }
             for (var i = 0; i < queryArray.length; i++) {
                 var value = queryArray[i];
                 var adjustedUri = value.tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), this.contextVertexId);
-                var li = $('<li />').appendTo(ulMenu);
+                var li = $('<li />', {role: 'presentation'}).appendTo(ulMenu);
+
                 li.data("contextData", value);
                 var a = $('<a />', {title: value.name, href: adjustedUri}).appendTo(li);
-
                 a.on('click',
                     function (e) {
                         var a = $(e.target);
@@ -270,30 +275,31 @@
                     }
                 );
 
-                var span = $('<span class="ui-icon ui-icon-gear"></span>').appendTo(a);
-                a.append(value.name);
+                $('<i />', {class: 'fa fa-bolt'}).appendTo(a);
+//                var span = $('<span class="ui-icon ui-icon-gear"></span>').appendTo(a);
+                a.append(' ' + value.name);
             }
-            ulMenu.menu({
-                select: function (e, ui) {
-                    var a = ui.item.find('a');
-                    var contextData = ui.item.data("contextData");
-                    var query = {
-                        post: false,
-                        tumlUri: contextData.tumlUri,
-                        oclExecuteUri: contextData.oclExecuteUri,
-                        qualifiedName: contextData.qualifiedName,
-                        name: contextData._name,
-                        queryEnum: contextData.queryEnum,
-                        queryString: contextData.queryString,
-                        queryType: contextData.queryType,
-                        id: contextData.queryId
-                    };
-                    self.onQueryClick.notify(query, null, self);
-                    a.focus();
-                    e.preventDefault();
-                    e.stopImmediatePropagation();
-                }
-            });
+//            ulMenu.menu({
+//                select: function (e, ui) {
+//                    var a = ui.item.find('a');
+//                    var contextData = ui.item.data("contextData");
+//                    var query = {
+//                        post: false,
+//                        tumlUri: contextData.tumlUri,
+//                        oclExecuteUri: contextData.oclExecuteUri,
+//                        qualifiedName: contextData.qualifiedName,
+//                        name: contextData._name,
+//                        queryEnum: contextData.queryEnum,
+//                        queryString: contextData.queryString,
+//                        queryType: contextData.queryType,
+//                        id: contextData.queryId
+//                    };
+//                    self.onQueryClick.notify(query, null, self);
+//                    a.focus();
+//                    e.preventDefault();
+//                    e.stopImmediatePropagation();
+//                }
+//            });
         }
 
         this.createInstanceQueryMenu = function (queryId) {
