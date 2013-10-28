@@ -11,6 +11,8 @@
         var tumlQueryGridManager;
         var codeMirror;
         var querySelect;
+        this.instanceQueryUri = instanceQueryUri;
+        this.classQueryUri = classQueryUri;
         if (queryId !== undefined) {
             this.queryId = queryId;
         }
@@ -62,7 +64,7 @@
                 overloadedPostData.update.push(query);
             }
             $.ajax({
-                url: instanceQueryUri,
+                url: this.instanceQueryUri,
                 type: "POST",
                 dataType: "json",
                 contentType: "application/json",
@@ -92,17 +94,22 @@
         this.deleteQuery = function () {
             var self = this;
             var query = queryToJson(this.queryTabDivName, this.queryId);
-            query.qualifiedName = 'umlglib::org::umlg::query::InstanceQuery';
+            var isInstanceQuery = this.instanceQueryUri !== '' ? true : false;
+            query.qualifiedName = isInstanceQuery ? 'umlglib::org::umlg::query::InstanceQuery' : 'umlglib::org::umlg::query::ClassQuery';
             var overloadedPostData = {insert: [], update: [], delete: []};
             overloadedPostData.delete.push(query);
             $.ajax({
-                url: instanceQueryUri,
+                url: isInstanceQuery ? this.instanceQueryUri : this.classQueryUri,
                 type: "POST",
                 dataType: "json",
                 contentType: "application/json",
                 data: JSON.stringify(overloadedPostData),
                 success: function (data, textStatus, jqXHR) {
-                    self.afterDeleteInstance({queryType: 'instanceQuery', query: query, gridData: tumlQueryGridManager.getResult()});
+                    if (isInstanceQuery) {
+                        self.afterDeleteInstance({queryType: 'instanceQuery', query: query, gridData: tumlQueryGridManager.getResult()});
+                    } else {
+                        self.afterDeleteClassQuery({queryType: 'classQuery', query: query, gridData: tumlQueryGridManager.getResult()});
+                    }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     $('#serverErrorMsg_' + queryTabDivName).addClass('server-error-msg').html(jqXHR.responseText);
@@ -150,7 +157,7 @@
                 overloadedPostData.update.push(query);
             }
             $.ajax({
-                url: classQueryUri,
+                url: this.classQueryUri,
                 type: "POST",
                 dataType: "json",
                 contentType: "application/json",
@@ -199,7 +206,7 @@
             //Create a horizontal inline form for he queries details
             var queryFormDiv = $('<div />', {class: 'form-inline', role: 'form'}).appendTo(queryPanelHeader);
             var queryExecuteButtonFormGroupDiv = $('<div />', {class: 'form-group'}).appendTo(queryFormDiv);
-            var executeButton = $('<button />', {type: 'button', id: queryTabDivName + '_' + 'ExecuteButton', class: 'form-control btn btn-primary umlg-button'}).appendTo(queryExecuteButtonFormGroupDiv);
+            var executeButton = $('<button />', {type: 'button', id: queryTabDivName + '_' + 'ExecuteButton', class: 'form-control btn btn-success umlg-button'}).appendTo(queryExecuteButtonFormGroupDiv);
             $('<span class="glyphicon glyphicon-play-circle"></span>').appendTo(executeButton);
             $('<span />').text(' Execute').appendTo(executeButton);
             executeButton.button().click(
@@ -234,9 +241,9 @@
                 queryNameInput.val(query.name).appendTo(queryQueryNameFormGroupDiv);
             }
 
-            if (isUmlgLib && instanceQueryUri !== '') {
+            if (isUmlgLib && this.instanceQueryUri !== '') {
                 var querySaveInstanceFormGroupDiv = $('<div />', {class: 'form-group'}).appendTo(elementOnTheRight);
-                var saveInstanceButton = $('<button />', {id: queryTabDivName + '_' + 'SaveButton', class: 'form-control btn btn-default umlg-button'}).appendTo(querySaveInstanceFormGroupDiv);
+                var saveInstanceButton = $('<button />', {id: queryTabDivName + '_' + 'SaveButton', class: 'form-control btn btn-primary umlg-button'}).appendTo(querySaveInstanceFormGroupDiv);
                 $('<span class="glyphicon glyphicon-save"></span>').appendTo(saveInstanceButton);
                 $('<span />').text(' save to instance').appendTo(saveInstanceButton);
 
@@ -245,9 +252,9 @@
                         self.saveToInstance(post);
                     });
             }
-            if (isUmlgLib && classQueryUri !== '') {
+            if (isUmlgLib && this.classQueryUri !== '') {
                 var querySaveClassFormGroupDiv = $('<div />', {class: 'form-group'}).appendTo(elementOnTheRight);
-                var saveClassButton = $('<button />', {id: queryTabDivName + '_' + 'SaveButton', class: 'form-control btn btn-default umlg-button'}).appendTo(querySaveClassFormGroupDiv);
+                var saveClassButton = $('<button />', {id: queryTabDivName + '_' + 'SaveButton', class: 'form-control btn btn-primary umlg-button'}).appendTo(querySaveClassFormGroupDiv);
                 $('<span class="glyphicon glyphicon-save"></span>').appendTo(saveClassButton);
                 $('<span />').text(' save to class').appendTo(saveClassButton);
                 saveClassButton.button().click(
@@ -257,7 +264,7 @@
             }
             if (isUmlgLib && !post) {
                 var queryCancelButtonFormGroupDiv = $('<div />', {class: 'form-group'}).appendTo(elementOnTheRight);
-                var cancelButton = $('<button />', {id: queryTabDivName + '_' + 'CancelButton', class: 'form-control btn btn-default umlg-button'}).appendTo(queryCancelButtonFormGroupDiv);
+                var cancelButton = $('<button />', {id: queryTabDivName + '_' + 'CancelButton', class: 'form-control btn btn-primary umlg-button'}).appendTo(queryCancelButtonFormGroupDiv);
                 $('<span class="glyphicon glyphicon-ban-circle"></span>').appendTo(cancelButton);
                 $('<span />').text(' cancel').appendTo(cancelButton);
                 cancelButton.button().click(
@@ -266,7 +273,7 @@
                     }
                 );
                 var queryDeleteButtonFormGroupDiv = $('<div />', {class: 'form-group'}).appendTo(elementOnTheRight);
-                var deleteButton = $('<button />', {id: queryTabDivName + '_' + 'DeleteButton', class: 'form-control btn btn-default umlg-button'}).appendTo(queryDeleteButtonFormGroupDiv);
+                var deleteButton = $('<button />', {id: queryTabDivName + '_' + 'DeleteButton', class: 'form-control btn btn-primary umlg-button'}).appendTo(queryDeleteButtonFormGroupDiv);
                 $('<span class="glyphicon glyphicon-remove"></span>').appendTo(deleteButton);
                 $('<span />').text(' delete').appendTo(deleteButton);
                 deleteButton.button().click(
@@ -315,6 +322,8 @@
                 center__paneSelector: ".query-center",
                 north__paneSelector: ".query-north",
                 north__size: 125,
+                spacing_open: 3,
+//                north: {spacing_open: 3},
 
                 onresize_end: function () {
                     //Resize the textarea

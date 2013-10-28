@@ -39,7 +39,7 @@
         this.globalOneToOneIndex = new GlobalOneToOneIndex();
         this.qualifiedName = null;
 
-        this.setFocus= function(focusTo) {
+        this.setFocus = function (focusTo) {
             if (focusTo == Tuml.FocusEnum.LEFT_MENU) {
                 //currentFocus == 0
                 leftMenuManager.setFocus();
@@ -51,7 +51,7 @@
             }
         }
 
-        this.refreshQueryMenuCss = function(queryToHighlightId, accordionIndex) {
+        this.refreshQueryMenuCss = function (queryToHighlightId, accordionIndex) {
             leftMenuManager.refreshQueryMenuCss(queryToHighlightId, accordionIndex);
         }
 
@@ -118,7 +118,6 @@
             classQueryTumlUri = "/" + tumlModelName + "/classquery/" + this.contextVertexId + "/query";
 
 
-
             if (this.contextVertexId !== -1 && contextChanged) {
                 //This is the default query tab, always open
                 addDefaultQueryTab();
@@ -128,12 +127,19 @@
 
             this.tabContainer.find('a:first').tab('show');
 
+            //open the relevant accordion
+            this.tabContainer.find('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+//                //Show the footer
+//                $('#tabs-layoutpanelPanelDefault').children('.umlg-panel-footer.panel-footer').show();
+                self.handleTabActivate(e);
+            })
+
             this.updateNavigationHeader(this.qualifiedName);
             $('body').layout().resizeAll();
             return true;
         }
 
-        this.handleMany = function(metaDataNavigatingFrom, metaDataNavigatingTo, result) {
+        this.handleMany = function (metaDataNavigatingFrom, metaDataNavigatingTo, result) {
             var newContextVertexId = retrieveVertexId(this.tumlUri);
             //Check if we coming from a one
             var wasOne = false;
@@ -151,9 +157,16 @@
             refreshInternal(this.tumlUri, result, false);
             //reorder tabs, make sure new tabs are first
             reorderTabsAfterAddOneOrMany(savedTumlTabViewManagers);
+
+            //register the tab listeners
+            this.tabContainer.find('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                //Show the footer
+                $('#tabs-layoutpanelPanelDefault').children('.umlg-panel-footer.panel-footer').show();
+            })
         }
 
-        this.handleOneNotForCreation = function(result) {
+        this.handleOneNotForCreation = function (result) {
+            var self = this;
             //Only one element of the array contains data, i.e. for the return concrete type
             var metaDataNavigatingTo;
             for (var i = 0; i < result.length; i++) {
@@ -181,7 +194,59 @@
             return metaDataNavigatingTo;
         }
 
-        this.handleOneForCreation = function(metaDataNavigatingFrom, metaDataNavigatingTo, result) {
+        this.handleTabActivate = function (e) {
+            var activatedTab = e.target.offsetParent // activated tab
+            var activatedTabContentDiv = this.tabContainer.find('#' + activatedTab.id.substring(2));
+            if (self instanceof Tuml.TumlMainViewManager) {
+                var tabEnum = $.data(activatedTabContentDiv[0], 'tabEnum');
+                var queryId = $.data(activatedTabContentDiv[0], 'queryId');
+                if (queryId === undefined || queryId === null) {
+                    queryId = -1;
+                }
+                self.refreshQueryMenuCss(queryId, tabEnum);
+            }
+
+            //first deactivate all grids
+            self.deactivateGrids();
+
+            //On deletions there is no previous tab
+            if (e.relatedTarget !== undefined) {
+
+                var previousTab = e.relatedTarget.offsetParent // previous tab
+                var previousTabContentDiv = this.tabContainer.find('#' + previousTab.id.substring(2));
+
+                //always set the old tab to being closed
+                for (var i = 0; i < self.tumlTabViewManagers.length; i++) {
+                    var tumlTabViewManager = self.tumlTabViewManagers[i];
+                    if (previousTabContentDiv[0] !== undefined && previousTabContentDiv[0].id == tumlTabViewManager.getTabId()) {
+                        if (tumlTabViewManager.tumlTabGridManager !== undefined || tumlTabViewManager.tumlTabOneManager !== undefined) {
+                            tumlTabViewManager.open = false;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            var tumlTabViewManagerClickedOn = null;
+            //if a leaf node then set it to open
+            for (var i = 0; i < self.tumlTabViewManagers.length; i++) {
+                var tumlTabViewManager = self.tumlTabViewManagers[i];
+                if (activatedTabContentDiv[0].id == tumlTabViewManager.getTabId()) {
+
+                    tumlTabViewManagerClickedOn = tumlTabViewManager;
+
+                    if (tumlTabViewManager.tumlTabViewManagers.length === 0) {
+                        tumlTabViewManager.open = true;
+                    }
+                    break;
+                }
+            }
+
+            tumlTabViewManagerClickedOn.activeOpenTabsGrid();
+
+        }
+
+        this.handleOneForCreation = function (metaDataNavigatingFrom, metaDataNavigatingTo, result) {
             //This is for creation of the one
             var newContextVertexId = retrieveVertexId(this.tumlUri);
             var savedTumlTabViewManagers = this.clearTabsOnAddOneOrMany(newContextVertexId);
@@ -197,7 +262,7 @@
          * This executes when the user presses cntrl shift save
          * Find the open tab with a save button and click it
          */
-        this.saveViaKeyPress = function() {
+        this.saveViaKeyPress = function () {
             for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
                 var tumlTabViewManager = this.tumlTabViewManagers[i];
                 if (tumlTabViewManager.saveViaKeyPress()) {
@@ -443,7 +508,7 @@
                     this.tabLayoutTabFooterDiv.empty();
                 }
             }
-            this.addButtons(this);
+            this.addButtons();
 
             //Save current tabs to help with reordering 2 lines down
             var savedTumlTabViewManagers = [];
@@ -481,23 +546,27 @@
                     this.tumlTabViewManagers.push(tumlTabViewManagerQuery);
                     reorderTabs();
 //                    this.tabContainer.tabs("option", "active", this.tumlTabViewManagers.length - 1);
+//                    this.tabContainer.children('ul').find('li:eq(' + this.tumlTabViewManagers.length - 1 + ') a').tab('show')
                 } else {
                     this.tumlTabViewManagers.splice(this.tumlTabViewManagers.length - 1, 0, tumlTabViewManagerQuery);
                     reorderTabs();
 //                    this.tabContainer.tabs("option", "active", this.tumlTabViewManagers.length - 2);
+//                    this.tabContainer.children('ul').find('li:eq(' + this.tumlTabViewManagers.length - 2 + ') a').tab('show')
                 }
 
                 tumlTabViewManagerQuery.createQuery(oclExecuteUri, query, post);
 
+
+
             } else {
                 //Just make the tab active
-//                this.tabContainer.tabs("option", "active", self.tumlTabViewManagers.indexOf(tumlTabViewManagerQuery));
+                this.tabContainer.children('ul').find('li:eq(' + self.tumlTabViewManagers.indexOf(tumlTabViewManagerQuery) + ') a').tab('show')
             }
             return tumlTabViewManagerQuery;
 
         }
 
-        this.afterSaveInstance = function(args, previousIndex) {
+        this.afterSaveInstance = function (args, previousIndex) {
             addDefaultQueryTab(false);
             var newTumlTabViewManager = this.addQueryTab(false, new Tuml.Query(args.query.id, args.query.name, args.query.name, args.query.queryString, args.query.queryEnum, args.gridData, args.queryType));
             //place it back at the previousIndex
@@ -508,32 +577,31 @@
             leftMenuManager.refreshInstanceQuery(args.query.id);
         }
 
-        this.afterUpdateInstance = function(args) {
+        this.afterUpdateInstance = function (args) {
             this.addQueryTab(false, new Tuml.Query(args.query.id, args.query.name, args.query.name, args.query.queryString, args.query.queryEnum, args.gridData, args.queryType));
             leftMenuManager.refreshInstanceQuery(args.query.id);
         }
 
-        this.afterDeleteInstance = function(args) {
+        this.afterDeleteInstance = function (args) {
             leftMenuManager.deleteInstanceQuery(args.query.id);
         }
 
-        this.afterSaveClassQuery = function(args, previousIndex) {
+        this.afterSaveClassQuery = function (args, previousIndex) {
             addDefaultQueryTab(false);
             var newTumlTabViewManager = this.addQueryTab(false, new Tuml.Query(args.query.id, args.query.name, args.query.name, args.query.queryString, args.query.queryEnum, args.gridData, args.queryType));
             //place it back at the previousIndex
             var currentIndex = self.tumlTabViewManagers.indexOf(newTumlTabViewManager);
             this.tumlTabViewManagers.splice(currentIndex, 1);
             this.tumlTabViewManagers.splice(previousIndex, 0, newTumlTabViewManager);
-            this.tabContainer.tabs("option", "active", previousIndex);
             leftMenuManager.refreshClassQuery(args.query.id);
         }
 
-        this.afterUpdateClassQuery = function(args) {
+        this.afterUpdateClassQuery = function (args) {
             this.addQueryTab(false, new Tuml.Query(args.query.id, args.query.name, args.query.name, args.query.queryString, args.query.queryEnum, args.gridData, args.queryType));
             leftMenuManager.refreshClassQuery(args.query.id);
         }
 
-        this.afterDeleteClassQuery = function(args) {
+        this.afterDeleteClassQuery = function (args) {
             leftMenuManager.deleteClassQuery(args.query.id);
         }
 
@@ -596,7 +664,7 @@
         }
 
         function reorderTabs() {
-            var tabsNav = self.tabContainer.find(".ui-tabs-nav");
+            var tabsNav = self.tabContainer.find(".nav.nav-tabs");
             var first = true;
             for (var j = 0; j < self.tumlTabViewManagers.length; j++) {
                 var li = $('#li' + self.tumlTabViewManagers[j].tabId);

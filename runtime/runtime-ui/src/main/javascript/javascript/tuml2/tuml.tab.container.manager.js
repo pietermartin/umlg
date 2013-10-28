@@ -33,6 +33,9 @@
             var tabContainer = $('#' + this.getTabId() + 'Tabs');
             if (tabContainer.length == 0) {
 
+                var tabsLayout = $('#tabs-layout');
+
+
                 /*
                  <div class="panel panel-default">
                      <div class="panel-heading">
@@ -49,8 +52,6 @@
                 //it is a bootstrap panel
 
                 //attach the new tab to the current tabs parent. i.e. make it display below the current panel, not in it
-                var tabsLayout = $('#tabs-layout');
-//                tabLayoutDiv
                 var tabLayoutPanelDiv = $('<div />', {id: this.getTabId() + 'panelPanelDefault', class: 'umlg-panel panel panel-default'}).appendTo(tabsLayout);
 
                 //div that contains the tab's heading. i.e. the info, validation and warnings
@@ -60,11 +61,18 @@
 
                 //div that contains the tabs
                 //it is a bootstrap panel body
+//                var windowHeight;
+//                if (this instanceof Tuml.TumlManyComponentGridManager) {
+//                    windowHeight = 600;
+//                } else {
+//                    windowHeight = $('.ui-layout-center').height() - 185;
+//                }
+//                var tabLayoutTabBodyDiv = $('<div />', {class: 'umlg-panel-body panel-body', style: 'height:700px'}).appendTo(tabLayoutPanelDiv);
                 var tabLayoutTabBodyDiv = $('<div />', {class: 'umlg-panel-body panel-body'}).appendTo(tabLayoutPanelDiv);
 
                 //div that contains the buttons
                 //it is a bootstrap panel footer
-                this.tabLayoutTabFooterDiv = $('<div />', {class: 'umlg-panel-footer panel-footer'}).appendTo(tabLayoutPanelDiv);
+                this.tabLayoutTabFooterDiv = $('<div />', {class: 'umlg-panel-footer panel-footer', role: 'navigation'}).appendTo(tabLayoutPanelDiv);
 
                 //disable the parents save button
                 if (!(this instanceof Tuml.TumlMainViewManager)) {
@@ -81,76 +89,6 @@
                 this.tabContainer = $('<div />', {id: this.getTabId() + 'Tabs', class: 'umlg-tabs'}).appendTo(tabLayoutTabBodyDiv);
                 this.tabContainer.append('<ul class="nav nav-tabs" />');
                 this.tabContainer.append('<div class="tab-content" />');
-//                this.tabContainer.tabs();
-
-//                this.addButtons();
-
-                //TODO put logic back in
-//                this.tabContainer.find(".ui-tabs-nav").sortable({
-//                    axis: "x",
-//                    stop: function () {
-//                        self.tabContainer.tabs("refresh");
-//                    }
-//                });
-//
-//                this.tabContainer.tabs({
-//                    activate: function (event, ui) {
-//
-//                        if (self instanceof Tuml.TumlMainViewManager) {
-//                            var queryId = $.data(ui.newPanel[0], 'queryId');
-//                            var tabEnum = $.data(ui.newPanel[0], 'tabEnum');
-//                            if (queryId === undefined || queryId === null) {
-//                                queryId = -1;
-//                            }
-//                            //TODO put back in
-////                            self.refreshQueryMenuCss(queryId, tabEnum);
-//                        }
-//
-//                        //first deactivate all grids
-//                        self.deactivateGrids();
-//
-//                        //always set the old tab to being closed
-//                        for (var i = 0; i < self.tumlTabViewManagers.length; i++) {
-//                            var tumlTabViewManager = self.tumlTabViewManagers[i];
-//                            if (ui.oldPanel['0'] !== undefined && ui.oldPanel['0'].id == tumlTabViewManager.getTabId()) {
-//                                if (tumlTabViewManager.tumlTabGridManager !== undefined || tumlTabViewManager.tumlTabOneManager !== undefined) {
-//                                    tumlTabViewManager.open = false;
-//                                    break;
-//                                }
-//                            }
-//                        }
-//
-//                        var tumlTabViewManagerClickedOn = null;
-//                        //if a leaf node then set it to open
-//                        for (var i = 0; i < self.tumlTabViewManagers.length; i++) {
-//                            var tumlTabViewManager = self.tumlTabViewManagers[i];
-//                            if (ui.newPanel['0'].id == tumlTabViewManager.getTabId()) {
-//
-//                                tumlTabViewManagerClickedOn = tumlTabViewManager;
-//
-//                                if (tumlTabViewManager.tumlTabViewManagers.length === 0) {
-//                                    tumlTabViewManager.open = true;
-//                                }
-//                                break;
-//                            }
-//                        }
-//
-//                        tumlTabViewManagerClickedOn.activeOpenTabsGrid();
-//
-//                    }
-//                });
-//
-//                this.tabContainer.tabs({
-//                    beforeActivate: function (event, ui) {
-//                        if (!Slick.GlobalEditorLock.commitCurrentEdit()) {
-//                            return false;
-//                        } else {
-//                            return true;
-//                        }
-//
-//                    }
-//                });
-
             } else {
                 throw "When does this happen!";
             }

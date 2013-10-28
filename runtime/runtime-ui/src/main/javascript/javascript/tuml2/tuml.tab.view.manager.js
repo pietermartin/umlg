@@ -104,17 +104,15 @@
             tabTemplate = "<li id='li" + this.tabId + "'><a href='#{href}' data-toggle='tab'>#{label}</a></li>";
         }
         var label = this.tabTitleName;
-        var id = this.tabId;
-        this.li = $(tabTemplate.replace(/#\{href\}/g, "#" + id).replace(/#\{label\}/g, label));
+        this.li = $(tabTemplate.replace(/#\{href\}/g, "#" + this.tabId).replace(/#\{label\}/g, label));
         this.parentTabContainer.children("ul").append(this.li);
+
+        //Create the div that contains the content of the tab.
+        //It is the div that gets activated when a tab is selected
         var divPanel = $('<div />', {id: this.tabId, class: 'umlg-tab tab-pane'});
         this.parentTabContainer.children("div.tab-content").append(divPanel);
         //This is needed to make sure the dom is created. Otherwise slickgrid will not render correctly
         this.li.children('a:first').tab('show');
-        this.li.find("a[href='#" + id + "']").on('shown.bs.tab', function (e) {
-            //Show the footer
-            $('#tabs-layoutpanelPanelDefault').children('.umlg-panel-footer.panel-footer').show();
-        })
         $.data(divPanel[0], 'tabEnum', this.tabEnum);
         return divPanel;
     }
@@ -231,10 +229,10 @@
         }
 
         this.afterDeleteInstance = function (result) {
-            var previousIndex = this.parentTabContainerManager.tumlTabViewManagers.indexOf(this);
+//            var previousIndex = this.parentTabContainerManager.tumlTabViewManagers.indexOf(this);
             this.parentTabContainerManager.afterDeleteInstance(result);
             this.closeTab();
-            this.parentTabContainer.tabs("option", "active", previousIndex - 1);
+//            this.parentTabContainer.tabs("option", "active", previousIndex - 1);
         }
 
         this.afterSaveClassQuery = function (result) {
@@ -249,10 +247,10 @@
         }
 
         this.afterDeleteClassQuery = function (result) {
-            var previousIndex = this.parentTabContainerManager.tumlTabViewManagers.indexOf(this);
+//            var previousIndex = this.parentTabContainerManager.tumlTabViewManagers.indexOf(this);
             this.parentTabContainerManager.afterDeleteClassQuery(result);
             this.closeTab();
-            this.parentTabContainer.tabs("option", "active", previousIndex - 1);
+//            this.parentTabContainer.tabs("option", "active", previousIndex - 1);
         }
 
         TumlBaseTabViewManager.call(this, tabEnum, tabContainer);
@@ -281,12 +279,12 @@
         var nextIndex = previousIndex - 1;
         TumlBaseTabViewManager.prototype.closeTab.call(this);
         this.tabUl.find('li:eq(' + previousIndex + ') a').tab('show')
-        var currentTab = this.parentTabContainerManager.tumlTabViewManagers[nextIndex];
-        if (currentTab instanceof TumlTabQueryViewManager) {
-            this.parentTabContainerManager.refreshQueryMenuCss(currentTab.queryId);
-        } else {
-            this.parentTabContainerManager.refreshQueryMenuCss(-1, 0);
-        }
+//        var currentTab = this.parentTabContainerManager.tumlTabViewManagers[nextIndex];
+//        if (currentTab instanceof TumlTabQueryViewManager) {
+//            this.parentTabContainerManager.refreshQueryMenuCss(currentTab.queryId, -1);
+//        } else {
+//            this.parentTabContainerManager.refreshQueryMenuCss(-1, 0);
+//        }
     }
 
     TumlTabQueryViewManager.prototype.createTab = function (post) {
@@ -322,10 +320,15 @@
         this.parentTabContainer.children(".tab-content").append(divPanel);
         $.data(divPanel[0], 'tabEnum', this.tabEnum);
 
+        //Show the tab
         this.tabUl.find('a:last').tab('show');
         this.tabUl.find("a[href='#" + id + "']").on('shown.bs.tab', function (e) {
             //Hide the footer
             $('#tabs-layoutpanelPanelDefault').children('.umlg-panel-footer.panel-footer').hide();
+            //Activate the relevant accordion
+            self.parentTabContainerManager.handleTabActivate(e);
+            //This is needed else the layout manager gets the widths wrong.
+            var queryLayoutDiv = $('#queryLayoutDiv').layout().resizeAll();
         })
         if (this.queryId !== undefined) {
             $.data(divPanel[0], 'queryId', this.queryId);

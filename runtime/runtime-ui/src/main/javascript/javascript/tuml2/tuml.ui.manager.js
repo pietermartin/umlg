@@ -30,10 +30,10 @@
                     enableCursorHotkey: false,
                     livePaneResizing: true,
                     //This is the navbar height,
-                    north: {initClosed: false, minSize: topHeight, resizable: true},
-                    east: {initClosed: true},
-                    south: {minSize: 30, initClosed: false},
-                    west: {minSize: 300}
+                    north: {initClosed: false, minSize: topHeight, resizable: false, spacing_open: 3},
+                    east: {initClosed: true, spacing_open: 3},
+                    south: {minSize: 30, initClosed: false, resizable: false, spacing_open: 3},
+                    west: {minSize: 300, spacing_open: 3}
                 }
             );
             myLayout.allowOverflow("north");

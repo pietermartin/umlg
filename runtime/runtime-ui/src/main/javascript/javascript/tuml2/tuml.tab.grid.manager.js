@@ -43,7 +43,7 @@
             $('<div />', {id: "queryResultsDiv"})
             $('<div id="serverErrorMsg' + this.gridDivName + '" />').appendTo(outerDivForResults);
 
-            var windowHeight = $('.query-center').height() - 30;
+            var windowHeight = $('.query-center').height() - 60;
             $('<div />', {id: 'queryResultsDiv' + this.gridDivName, style: 'width:auto;height:' + windowHeight + 'px;'}).appendTo(outerDivForResults);
             $('<div />', {id: 'pagerQueryResultsDiv' + this.gridDivName, style: 'width:auto;height:20px;'}).appendTo(outerDivForResults);
             $('#contextMenu' + this.gridDivName).remove();
@@ -955,6 +955,7 @@
             windowHeight = $('.ui-layout-center').height() - 185;
         }
         $('<div />', {id: 'myGrid' + this.metaForDataTo.name, style: 'width:auto;height:' + windowHeight + 'px;', class: 'umlg-slick-grid'}).appendTo(tabDiv);
+//        $('<div />', {id: 'myGrid' + this.metaForDataTo.name, style: 'width:auto;height:auto;', class: 'umlg-slick-grid'}).appendTo(tabDiv);
         $('<div />', {id: 'pager' + this.metaForDataTo.name, style: 'width:auto;height:20px;'}).appendTo(tabDiv);
 
         $('#contextMenu' + this.metaForDataTo.name).remove();

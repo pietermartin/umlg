@@ -4,12 +4,12 @@
         Tuml: {
             LeftMenuManager: LeftMenuManager,
             AccordionEnum: {
-                PROPERTIES: {index: 0, label: 'Properties'},
-                OPERATIONS: {index: 1, label: 'Operations'},
-                INSTANCE_QUERIES: {index: 2, label: 'Instance Queries'},
-                CLASS_QUERIES: {index: 3, label: 'Class Queries'},
-                INSTANCE_GROOVY: {index: 4, label: 'Instance Groovy'},
-                CLASS_GROOVY: {index: 5, label: 'Class Groovy'}
+                PROPERTIES: {index: 0, label: 'Properties', id: 'propertiesAccordion'},
+                OPERATIONS: {index: 1, label: 'Operations', id: 'operationAccordion'},
+                INSTANCE_QUERIES: {index: 2, label: 'Instance Queries', id: 'instanceQueriesAccordion'},
+                CLASS_QUERIES: {index: 3, label: 'Class Queries', id: 'classQueriesAccordion'},
+                INSTANCE_GROOVY: {index: 4, label: 'Instance Groovy', id: 'instanceQueriesAccordion'},
+                CLASS_GROOVY: {index: 5, label: 'Class Groovy', id: 'classGroovy'}
             }
         }
     });
@@ -87,13 +87,13 @@
 
             this.accordionDiv = $('<div />', {id: 'accordion', class: 'panel-group'}).appendTo(standardMenuDiv);
 
-            this.umlPropertiesDiv = addAccordionMenu(this.accordionDiv, true, Tuml.AccordionEnum.PROPERTIES.label, 'propertiesAccordion');
-            addAccordionMenu(this.accordionDiv, false, Tuml.AccordionEnum.OPERATIONS.label, 'operationsAccordion');
+            this.umlPropertiesDiv = addAccordionMenu(this.accordionDiv, true, Tuml.AccordionEnum.PROPERTIES.label, Tuml.AccordionEnum.PROPERTIES.id);
+            addAccordionMenu(this.accordionDiv, false, Tuml.AccordionEnum.OPERATIONS.label, Tuml.AccordionEnum.OPERATIONS.id);
             if (isUmlgLib && this.contextVertexId !== undefined && this.contextVertexId !== null) {
-                this.umlInstanceQueriesDiv = addAccordionMenu(this.accordionDiv, false, Tuml.AccordionEnum.INSTANCE_QUERIES.label, 'instanceQueriesAccordion');
-                addAccordionMenu(this.accordionDiv, false, Tuml.AccordionEnum.CLASS_QUERIES.label, 'classQueriesAccordion');
-                addAccordionMenu(this.accordionDiv, false, Tuml.AccordionEnum.INSTANCE_GROOVY.label, 'instanceGroovyAccordion');
-                addAccordionMenu(this.accordionDiv, false, Tuml.AccordionEnum.CLASS_GROOVY.label, 'classGroovyAccordion');
+                this.umlInstanceQueriesDiv = addAccordionMenu(this.accordionDiv, false, Tuml.AccordionEnum.INSTANCE_QUERIES.label, Tuml.AccordionEnum.INSTANCE_QUERIES.id);
+                this.umlClassQueriesDiv = addAccordionMenu(this.accordionDiv, false, Tuml.AccordionEnum.CLASS_QUERIES.label, Tuml.AccordionEnum.CLASS_QUERIES.id);
+                this.umlInstanceGroovyDiv = addAccordionMenu(this.accordionDiv, false, Tuml.AccordionEnum.INSTANCE_GROOVY.label, Tuml.AccordionEnum.INSTANCE_GROOVY.id);
+                this.umlClassGroovyDiv = addAccordionMenu(this.accordionDiv, false, Tuml.AccordionEnum.CLASS_GROOVY.label, Tuml.AccordionEnum.CLASS_GROOVY.id);
             }
 
         }
@@ -154,9 +154,14 @@
                 adjustedUri = addUiToUrl(adjustedUri)
                 var li = $('<li />', {role: 'presentation'}).appendTo(ulMenu);
                 li.data("contextData", {name: value.name, uri: adjustedUri});
+                //Set the active link
+                if (value.active) {
+                    li.addClass('active');
+                }
                 var a = $('<a />', {title: value.name, role: 'menuitem', tabindex: -1, href: adjustedUri}).appendTo(li);
                 a.on('click', function (e) {
                     var link = $(e.target);
+                    link.parent().addClass('active');
                     var contextData = link.parent().data("contextData");
                     self.onMenuClick.notify({name: contextData.name, uri: removeUiFromUrl(contextData.uri)}, null, self);
                     e.preventDefault();
@@ -239,17 +244,15 @@
             $('<a href="#" class="sr-only dropdown-toggle" data-toggle="dropdown">Users <b class="caret"></b></a>').appendTo(dropDownDiv);
             var ulMenu;
             if (isInstanceQuery) {
-//                ulMenu = $('<ul />', {id: 'instanceQueryMenu'}).appendTo(queryDiv);
                 ulMenu = $('<ul id="instanceQueryMenu" class="dropdown-menu" role="menu" aria-labelledby="dropdownQueryMenu1" />').appendTo(dropDownDiv);
 
             } else {
-//                ulMenu = $('<ul />', {id: 'classQueryMenu'}).appendTo(queryDiv);
-                ulMenu = $('<ul id="classQueryMenu" class="dropdown-menu" role="menu" aria-labelledby="dropdownQueryMenu1" />').appendTo(queryDiv);
+                ulMenu = $('<ul id="classQueryMenu" class="dropdown-menu" role="menu" aria-labelledby="dropdownQueryMenu1" />').appendTo(dropDownDiv);
             }
             for (var i = 0; i < queryArray.length; i++) {
                 var value = queryArray[i];
                 var adjustedUri = value.tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), this.contextVertexId);
-                var li = $('<li />', {role: 'presentation'}).appendTo(ulMenu);
+                var li = $('<li />', {id: value.queryId, role: 'presentation'}).appendTo(ulMenu);
 
                 li.data("contextData", value);
                 var a = $('<a />', {title: value.name, href: adjustedUri}).appendTo(li);
@@ -268,6 +271,8 @@
                             queryType: contextData.queryType,
                             id: contextData.queryId
                         };
+                        a.parent().parent().children('li.active').removeClass('active');
+                        a.parent().addClass('active');
                         self.onQueryClick.notify(query, null, self);
                         a.focus();
                         e.preventDefault();
@@ -276,7 +281,6 @@
                 );
 
                 $('<i />', {class: 'fa fa-bolt'}).appendTo(a);
-//                var span = $('<span class="ui-icon ui-icon-gear"></span>').appendTo(a);
                 a.append(' ' + value.name);
             }
 //            ulMenu.menu({
@@ -304,6 +308,7 @@
 
         this.createInstanceQueryMenu = function (queryId) {
             var self = this;
+            this.queryToHighlightId = queryId;
             //Add query tree
             //Fetch the query data
             var queryProperty = this.findQueryUrl('instanceQuery');
@@ -324,10 +329,10 @@
             }
         }
 
-        this.continueCreateInstanceQueryMenu = function (tumlUri, result, contextVertexId) {
+        this.continueCreateInstanceQueryMenu = function (tumlUri, result) {
             self.createQueryMenu(self.umlInstanceQueriesDiv, true, result);
-            if (self.queryToHighlightId !== undefined) {
-                self.refreshQueryMenuCss(self.queryToHighlightId);
+            if (self.queryToHighlightId !== undefined && self.queryToHighlightId != -1) {
+                self.refreshQueryMenuCss(self.queryToHighlightId, Tuml.AccordionEnum.INSTANCE_QUERIES.index);
             }
         }
 
@@ -356,10 +361,11 @@
             }
         }
 
-        this.continueCreateClassQueryMenu = function (tumlUri, result, contextVertexId) {
+        this.continueCreateClassQueryMenu = function (tumlUri, result) {
             self.createQueryMenu(self.umlClassQueriesDiv, false, result);
             if (self.queryToHighlightId !== -1) {
-                self.refreshQueryMenuCss(self.queryToHighlightId);
+                self.refreshQueryMenuCss(self.queryToHighlightId, Tuml.AccordionEnum.CLASS_QUERIES.index);
+
             }
         }
 
@@ -374,36 +380,49 @@
         this.refreshInstanceQuery = function (queryId) {
             this.umlInstanceQueriesDiv.children().remove();
             this.createInstanceQueryMenu(queryId);
-            this.accordionDiv.accordion("option", "active", 2);
+//            this.accordionDiv.accordion("option", "active", 2);
         }
 
         this.refreshClassQuery = function (queryId) {
             this.umlClassQueriesDiv.children().remove();
             this.createClassQueryMenu(queryId);
-            this.accordionDiv.accordion("option", "active", 3);
+//            this.accordionDiv.accordion("option", "active", 3);
         }
 
         this.refreshQueryMenuCss = function (/*queryData, */queryToHighlightId, leftAccordionIndex) {
 
             if (this.umlInstanceQueriesDiv !== null) {
-                //Change the css activeproperty
-                this.umlInstanceQueriesDiv.find('.ui-left-menu-query-li').removeClass('querymenuactive');
-                this.umlInstanceQueriesDiv.find('.ui-left-menu-query-li').addClass('querymenuinactive');
-//                if (queryData !== undefined) {
-                this.umlInstanceQueriesDiv.find('#' + queryToHighlightId).removeClass("querymenuinactive");
-                this.umlInstanceQueriesDiv.find('#' + queryToHighlightId).addClass("querymenuactive");
-//                }
+                //Change the css active property
+                this.umlInstanceQueriesDiv.find('li.active').removeClass('active');
+                this.umlInstanceQueriesDiv.find('#' + queryToHighlightId).addClass('active');
             }
             if (this.umlClassQueriesDiv !== null) {
-                this.umlClassQueriesDiv.find('.ui-left-menu-query-li').removeClass('querymenuactive');
-                this.umlClassQueriesDiv.find('.ui-left-menu-query-li').addClass('querymenuinactive');
-//                if (queryData !== undefined) {
-                this.umlClassQueriesDiv.find('#' + queryToHighlightId).removeClass("querymenuinactive");
-                this.umlClassQueriesDiv.find('#' + queryToHighlightId).addClass("querymenuactive");
-//                }
+                //Change the css active property
+                this.umlClassQueriesDiv.find('li.active').removeClass('active');
+                this.umlClassQueriesDiv.find('#' + queryToHighlightId).addClass('active');
             }
-            //TODO link tabview manager with the accordion div to activate on tab select
-//            this.accordionDiv.accordion("option", "active", leftAccordionIndex);
+
+            if (leftAccordionIndex != -1) {
+                //First close all tabs
+                $('#accordion').on('show.bs.collapse', function () {
+                    $('#accordion .in').collapse('hide');
+                });
+                //Open the relevant accordion
+                if (leftAccordionIndex == Tuml.AccordionEnum.PROPERTIES.index) {
+                    $('#' + Tuml.AccordionEnum.PROPERTIES.id).collapse('show');
+                } else if (leftAccordionIndex == Tuml.AccordionEnum.OPERATIONS.index) {
+                    $('#' + Tuml.AccordionEnum.OPERATIONS.id).collapse('show');
+                } else if (leftAccordionIndex == Tuml.AccordionEnum.INSTANCE_QUERIES.index) {
+                    $('#' + Tuml.AccordionEnum.INSTANCE_QUERIES.id).collapse('show');
+                } else if (leftAccordionIndex == Tuml.AccordionEnum.CLASS_QUERIES.index) {
+                    $('#' + Tuml.AccordionEnum.CLASS_QUERIES.id).collapse('show');
+                } else if (leftAccordionIndex == Tuml.AccordionEnum.CLASS_GROOVY.index) {
+                    $('#' + Tuml.AccordionEnum.CLASS_GROOVY.id).collapse('show');
+                } else {
+                    throw 'Unknown accordion index!'
+                }
+            }
+
         }
 
         function createLeftMenuDataArray(contextMetaDataFrom, propertyNavigatingTo) {
@@ -422,14 +441,12 @@
                     metaProperty.manyPrimitive ||
                     metaProperty.name == 'id' ||
                     metaProperty.name == 'uri')) {
+
                     var menuMetaProperty = {active: false};
 
                     if (propertyNavigatingTo !== undefined && propertyNavigatingTo.qualifiedName == metaProperty.qualifiedName) {
                         //This makes the current active property red in the menu
                         menuMetaProperty.active = true;
-                        menuMetaProperty['aCssClass'] = 'ui-state-highlight';
-                    } else {
-                        menuMetaProperty['aCssClass'] = '';
                     }
 
                     //add the icon

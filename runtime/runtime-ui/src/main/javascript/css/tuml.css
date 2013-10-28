@@ -22,13 +22,13 @@
 /* Needed to make the band Umlg appear in the middle */
 #umlgnavbar .navbar .nav,
 #umlgnavbar .navbar .nav > li {
-    float:none;
-    display:inline-block;
+    float: none;
+    display: inline-block;
     vertical-align: top;
 }
 
 #umlgnavbar {
-    text-align:center;
+    text-align: center;
 }
 
 .poweredby {
@@ -44,7 +44,18 @@
 
 .umlg-panel.panel.panel-default {
     margin-bottom: 5px;
-    /*margin-bottom: 0;*/
+}
+
+.umlg-query-panel.panel.panel-default {
+    margin-bottom: 0px;
+}
+
+.umlg-query-panel .panel-body {
+    padding: 0px;
+}
+
+.umlg-query-panel .ui-layout-pane {
+    border: none;
 }
 
 .sr-only {
@@ -110,21 +121,16 @@
     margin-left: 2px;
 }
 
+/* Spaces the elements of the top form on the query screen. The execute button, the query type drop down... */
 .umlg-query-panel.panel .form-group {
     margin-right: 10px;
 }
 
+/* The close icaon on the tabs */
 .nav-tabs > li .close {
     margin: -2px 0 0 10px;
     font-size: 18px;
 }
-
-
-
-
-
-
-
 
 .cell-reorder {
     cursor: move;
@@ -195,24 +201,22 @@
 }
 
 /*.ui-tabs-nav .tabs-button {*/
-    /*float: right;*/
+/*float: right;*/
 /*}*/
 
 /*#buttons {*/
-    /*float: right;*/
-    /*margin-top: 4px;*/
+/*float: right;*/
+/*margin-top: 4px;*/
 /*}*/
-
 
 /*tabs*/
 /*#tabs-layout.panel {*/
-    /*margin: 0;*/
+/*margin: 0;*/
 /*}*/
 
 #tabs-layout {
     height: 100%;
 }
-
 
 .umlg-query-tab.glyphicon.glyphicon-remove {
     cursor: pointer;
@@ -228,7 +232,7 @@
 }
 
 /*#umlProperties {*/
-    /*padding: 0.5em;*/
+/*padding: 0.5em;*/
 /*}*/
 
 .server-error-msg {
@@ -293,12 +297,12 @@
 }
 
 /*.one-tabs-button {*/
-    /*padding-left: 180px;*/
-    /*margin-left: 5px;*/
+/*padding-left: 180px;*/
+/*margin-left: 5px;*/
 /*}*/
 
 /*.onesavebuttondiv {*/
-    /*padding-left: 170px;*/
+/*padding-left: 170px;*/
 /*}*/
 
 .many-primitive-one-img {
@@ -409,11 +413,11 @@
 }
 
 /*.panel {*/
-    /*height: auto;*/
+/*height: auto;*/
 /*}*/
 
 .pane {
-    display: none;  /*will appear when layout inits*/
+    display: none; /*will appear when layout inits*/
 }
 
 .oclouter {
@@ -508,20 +512,20 @@
 }
 
 /*.ui-layout-center-heading {*/
-    /*height: 25px;*/
-    /*padding-top: 0.3em;*/
-    /*padding-left: 0.5em;*/
+/*height: 25px;*/
+/*padding-top: 0.3em;*/
+/*padding-left: 0.5em;*/
 /*}*/
 
 /*.ui-layout-center-heading.ui-state-default {*/
-    /*border: none;*/
+/*border: none;*/
 /*}*/
 
 /*#ui-layout-west-heading-navigation-qualified-name.ui-layout-west-heading {*/
-    /*height: 1.7em;*/
-    /*border: none;*/
-    /*padding-top: 0.3em;*/
-    /*padding-left: 0.5em;*/
+/*height: 1.7em;*/
+/*border: none;*/
+/*padding-top: 0.3em;*/
+/*padding-left: 0.5em;*/
 /*}*/
 
 .umlg-panel-heading.panel-heading {
@@ -533,13 +537,13 @@
 }
 
 /*.validation-warning {*/
-    /*float: right;*/
-    /*padding-right: 0.5em;*/
+/*float: right;*/
+/*padding-right: 0.5em;*/
 /*}*/
 
 /*.multiplicity-warning {*/
-    /*float: right;*/
-    /*padding-right: 0.5em;*/
+/*float: right;*/
+/*padding-right: 0.5em;*/
 /*}*/
 
 .ui-icon.ui-icon-chevron {
@@ -547,44 +551,44 @@
 }
 
 /*.ui-layout-north #contextRoot {*/
-    /*margin: 0;*/
-    /*width: 100%;*/
-    /*height: 100%;*/
+/*margin: 0;*/
+/*width: 100%;*/
+/*height: 100%;*/
 /*}*/
 
 /*#contextRoot .embossed {*/
-    /*padding-top: 0.5em;*/
-    /*margin-left: auto;*/
-    /*margin-right: auto;*/
-    /*width: 5em;*/
+/*padding-top: 0.5em;*/
+/*margin-left: auto;*/
+/*margin-right: auto;*/
+/*width: 5em;*/
 /*}*/
 
 /*#contextRoot {*/
-    /*margin: 0;*/
-    /*position: absolute;*/
-    /*z-index: -1;*/
-    /*border: none;*/
+/*margin: 0;*/
+/*position: absolute;*/
+/*z-index: -1;*/
+/*border: none;*/
 /*}*/
 
 /*#contextRootUl {*/
-    /*float: left;*/
-    /*border: none;*/
-    /*margin-top: 0.5em;*/
-    /*margin-left: 1em;*/
-    /*padding-left: 0;*/
+/*float: left;*/
+/*border: none;*/
+/*margin-top: 0.5em;*/
+/*margin-left: 1em;*/
+/*padding-left: 0;*/
 /*}*/
 
 /*#contextRootUl li {*/
-    /*float: left;*/
-    /*padding-top: 0.2em;*/
-    /*padding-bottom: 0.2em;*/
-    /*padding-left: 0;*/
-    /*padding-right: 0;*/
-    /*border: none;*/
+/*float: left;*/
+/*padding-top: 0.2em;*/
+/*padding-bottom: 0.2em;*/
+/*padding-left: 0;*/
+/*padding-right: 0;*/
+/*border: none;*/
 /*}*/
 
 /*#contextRootUl li a span {*/
-    /*float: left;*/
+/*float: left;*/
 /*}*/
 
 .selfUrl {
@@ -601,7 +605,7 @@
 }
 
 /*.tumlSlickGrid {*/
-    /*margin-bottom: -0.5em;*/
+/*margin-bottom: -0.5em;*/
 /*}*/
 
 .umlg-updated-id {
