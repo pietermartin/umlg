@@ -27,23 +27,32 @@
             $('#' + this.getTabId() + 'panelPanelDefault').remove();
         }
 
+        this.showInlineForm = function() {
+            this.tabLayoutTabFooterDiv.find('.btn-toolbar').hide();
+            this.tabLayoutTabFooterDiv.find('.form-inline').show();
+        }
+
+        this.hideInlineForm = function() {
+            this.tabLayoutTabFooterDiv.find('.form-inline').hide();
+            this.tabLayoutTabFooterDiv.find('.btn-toolbar').show();
+        }
+
         this.maybeCreateTabContainer = function () {
             //div that holds the jquery-ui tabs
-            //if a tab has no open coponents this will be empty
+            //if a tab has no open components this will be empty
             var tabContainer = $('#' + this.getTabId() + 'Tabs');
             if (tabContainer.length == 0) {
 
                 var tabsLayout = $('#tabs-layout');
 
-
                 /*
                  <div class="panel panel-default">
-                     <div class="panel-heading">
-                         <h3 class="panel-title"></h3>
-                     </div>
-                     <div class="panel-body">
-                     </div>
-                    <div class="panel-footer">Panel footer</div>
+                 <div class="panel-heading">
+                 <h3 class="panel-title"></h3>
+                 </div>
+                 <div class="panel-body">
+                 </div>
+                 <div class="panel-footer">Panel footer</div>
                  </div>
                  */
 
@@ -61,14 +70,8 @@
 
                 //div that contains the tabs
                 //it is a bootstrap panel body
-//                var windowHeight;
-//                if (this instanceof Tuml.TumlManyComponentGridManager) {
-//                    windowHeight = 600;
-//                } else {
-//                    windowHeight = $('.ui-layout-center').height() - 185;
-//                }
-//                var tabLayoutTabBodyDiv = $('<div />', {class: 'umlg-panel-body panel-body', style: 'height:700px'}).appendTo(tabLayoutPanelDiv);
-                var tabLayoutTabBodyDiv = $('<div />', {class: 'umlg-panel-body panel-body'}).appendTo(tabLayoutPanelDiv);
+                var windowHeight = calculateBodyHeight(this);
+                var tabLayoutTabBodyDiv = $('<div />', {class: 'umlg-panel-body panel-body', style: 'height:' + windowHeight + 'px'}).appendTo(tabLayoutPanelDiv);
 
                 //div that contains the buttons
                 //it is a bootstrap panel footer
@@ -161,7 +164,9 @@
         var self = this;
         var buttonDiv = $('<div />', {class: "btn-toolbar"}).appendTo(this.tabLayoutTabFooterDiv);
         var buttonPullRightDiv = $('<div />', {class: "pull-right"}).appendTo(buttonDiv);
-        var saveButton = $('<button />', {type: "button", id: this.getTabId() + 'save', class: 'btn btn-primary umlg-button'}).text('Save').appendTo(buttonPullRightDiv);
+        var saveButton = $('<button />', {type: "button", id: this.getTabId() + 'save', class: 'btn btn-primary umlg-button'}).appendTo(buttonPullRightDiv);
+        $('<span class="glyphicon glyphicon-save"></span>').appendTo(saveButton);
+        $('<span />').text(' Save').appendTo(saveButton);
         saveButton.click(
             function (event) {
                 if (Slick.GlobalEditorLock.commitCurrentEdit()) {
@@ -170,7 +175,9 @@
                 event.preventDefault();
             }
         );
-        var cancelButton = $('<button />', {type: "button", id: this.getTabId() + 'cancel', class: 'btn btn-primary umlg-button'}).text('Cancel').appendTo(buttonPullRightDiv);
+        var cancelButton = $('<button />', {type: "button", id: this.getTabId() + 'cancel', class: 'btn btn-primary umlg-button'}).appendTo(buttonPullRightDiv);
+        $('<span class="glyphicon glyphicon-ban-circle"></span>').appendTo(cancelButton);
+        $('<span />').text(' Cancel').appendTo(cancelButton);
         cancelButton.click(function (event) {
             self.doCancel();
             event.preventDefault();
@@ -231,11 +238,12 @@
             var parentPanelPanelDefault = $("#" + this.parentTabContainerManager.getTabId() + "panelPanelDefault");
             var parentTabContent = parentPanelPanelDefault.find('.tab-content');
             parentTabContent.show();
+            var height = calculateBodyHeight(this.parentTabContainerManager);
             var parentTabFooter = parentPanelPanelDefault.find('.umlg-panel-footer.panel-footer');
             parentTabFooter.show();
+            parentPanelPanelDefault.children('.umlg-panel-body.panel-body').height(height - 10);
 
             this.tumlTabGridManager.active = true;
-//            $('#slickGrid' + this.tabId).show();
         }
         //enable the save button
         this.parentTabContainerManager.enableButtons();

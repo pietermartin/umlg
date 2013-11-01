@@ -21,6 +21,16 @@
         //This is needed when repopulating the grids from the server in order to find the visible grid.
         this.open = false;
 
+        this.showInlineForm = function() {
+            this.parentTabContainerManager.tabLayoutTabFooterDiv.find('.btn-toolbar').hide();
+            this.parentTabContainerManager.tabLayoutTabFooterDiv.find('.form-inline').show();
+        }
+
+        this.hideInlineForm = function() {
+            this.parentTabContainerManager.tabLayoutTabFooterDiv.find('.form-inline').hide();
+            this.parentTabContainerManager.tabLayoutTabFooterDiv.find('.btn-toolbar').show();
+        }
+
         function getTab(title) {
             return $('#tab-container').tabs('getTab', title);
         }
@@ -83,6 +93,10 @@
         this.parentTabContainerManager.tumlTabViewManagers.splice(indexOfTab, 1);
     }
 
+    TumlBaseTabViewManager.prototype.updateTabTitle = function (name) {
+        this.li.find('a').text(name);
+    }
+
     TumlBaseTabViewManager.prototype.saveAndCloseTab = function () {
         this.saveAndClearAllTabs();
         this.parentTabContainerManager.setCellValue(this.tumlTabGridManager.dataView.getItems());
@@ -97,6 +111,7 @@
     }
 
     TumlBaseTabViewManager.prototype.createTab = function () {
+        var self = this;
         var tabTemplate;
         if (this.parentTabContainerManager instanceof Tuml.TumlMainViewManager) {
             tabTemplate = "<li id='li" + this.tabId + "'><a href='#{href}' data-toggle='tab'>#{label}</a>";
@@ -114,6 +129,12 @@
         //This is needed to make sure the dom is created. Otherwise slickgrid will not render correctly
         this.li.children('a:first').tab('show');
         $.data(divPanel[0], 'tabEnum', this.tabEnum);
+
+        this.li.find('a[href="#' + this.tabId +'"]').on('shown.bs.tab', function (e) {
+            self.hideInlineForm();
+            self.parentTabContainerManager.handleTabActivate(e);
+        })
+
         return divPanel;
     }
 
@@ -224,7 +245,7 @@
         }
 
         this.afterUpdateInstance = function (result) {
-            this.closeTab();
+            this.updateTabTitle(result.query.name);
             this.parentTabContainerManager.afterUpdateInstance(result);
         }
 
@@ -242,7 +263,7 @@
         }
 
         this.afterUpdateClassQuery = function (result) {
-            this.closeTab();
+            this.updateTabTitle(result.query.name);
             this.parentTabContainerManager.afterUpdateClassQuery(result);
         }
 
@@ -254,6 +275,17 @@
         }
 
         TumlBaseTabViewManager.call(this, tabEnum, tabContainer);
+
+        //Must be after base call, to override nicely
+        this.showInlineForm = function() {
+            this.parentTabContainerManager.showInlineForm()
+            this.tumlTabQueryManager.showCorrectButtons();
+        }
+
+        this.hideInlineForm = function() {
+            this.parentTabContainerManager.hideInlineForm();
+        }
+
     }
 
     TumlTabQueryViewManager.prototype = new Tuml.TumlBaseTabViewManager;
@@ -274,11 +306,16 @@
         }
     }
 
-    TumlTabQueryViewManager.prototype.closeTab = function () {
+    TumlTabQueryViewManager.prototype.closeTab = function (fromUpdate) {
         var previousIndex = this.parentTabContainerManager.tumlTabViewManagers.indexOf(this);
         var nextIndex = previousIndex - 1;
         TumlBaseTabViewManager.prototype.closeTab.call(this);
-        this.tabUl.find('li:eq(' + previousIndex + ') a').tab('show')
+
+        //Id from update we do not want to show the previous tab as we are going to recreate this tab and show it.
+        //Showing the previous tab will fire the onShow event and run unnecessary code
+        if (!fromUpdate) {
+            this.tabUl.find('li:eq(' + previousIndex + ') a').tab('show')
+        }
 //        var currentTab = this.parentTabContainerManager.tumlTabViewManagers[nextIndex];
 //        if (currentTab instanceof TumlTabQueryViewManager) {
 //            this.parentTabContainerManager.refreshQueryMenuCss(currentTab.queryId, -1);
@@ -323,8 +360,9 @@
         //Show the tab
         this.tabUl.find('a:last').tab('show');
         this.tabUl.find("a[href='#" + id + "']").on('shown.bs.tab', function (e) {
-            //Hide the footer
-            $('#tabs-layoutpanelPanelDefault').children('.umlg-panel-footer.panel-footer').hide();
+            //Show the query inline form
+            //Hide the regular save cancel
+            self.showInlineForm();
             //Activate the relevant accordion
             self.parentTabContainerManager.handleTabActivate(e);
             //This is needed else the layout manager gets the widths wrong.
@@ -352,7 +390,17 @@
             this.li.focus();
         }
 
+
         TumlBaseTabViewManager.call(this, tabEnum, tabContainer, tumlUri, result, propertyNavigatingTo);
+
+        //This must be after the base call in order to override the methods
+        this.showInlineForm = function() {
+            this.parentTabContainerManager.showInlineForm()
+        }
+
+        this.hideInlineForm = function() {
+            this.parentTabContainerManager.hideInlineForm();
+        }
     }
 
     TumlTabOneViewManager.prototype = new Tuml.TumlBaseTabViewManager;
@@ -694,6 +742,15 @@
         this.result = result;
         this.tumlTabGridManager = null;
         TumlBaseTabViewManager.call(this, tabEnum, tabContainer, tumlUri, result, propertyNavigatingTo);
+
+        //This must be after the base call in order to override the methods
+        this.showInlineForm = function() {
+            this.parentTabContainerManager.showInlineForm()
+        }
+
+        this.hideInlineForm = function() {
+            this.parentTabContainerManager.hideInlineForm();
+        }
 
         this.setFocus = function (focusTo) {
             if (focusTo == Tuml.FocusEnum.CENTER_TAB) {
@@ -1045,7 +1102,6 @@
             saveButton.find('span').text('Select');
         }
 
-//        this.parentTabContainer.tabs("option", "active", this.parentTabContainerManager.tumlTabViewManagers.length - 1);
         this.createGrid(result);
     }
 
@@ -1109,11 +1165,12 @@
                     self.setCell(cell);
                     self.addToTumlTabViewManagers(tumlManyComponentTabViewManager);
                     tumlManyComponentTabViewManager.parentTabContainerManager = self;
-//                    $('#slickGrid' + self.tabId).hide();
 
                     var parentPanelPanelDefault = $("#" + self.parentTabContainerManager.getTabId() + "panelPanelDefault");
                     var parentTabContent = parentPanelPanelDefault.find('.tab-content');
                     parentTabContent.hide();
+                    //make the body just height enough to display the tab nicely
+                    parentPanelPanelDefault.children('.umlg-panel-body.panel-body').height(45);
                     var parentTabFooter = parentPanelPanelDefault.find('.umlg-panel-footer.panel-footer');
                     parentTabFooter.hide();
 

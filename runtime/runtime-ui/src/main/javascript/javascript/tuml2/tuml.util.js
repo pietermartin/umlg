@@ -1,3 +1,13 @@
+function calculateBodyHeight(container) {
+    var windowHeight;
+    if (container instanceof Tuml.TumlTabManyViewManager) {
+        windowHeight = 600;
+    } else {
+        windowHeight = $('.ui-layout-center').height() - 98;
+    }
+    return windowHeight;
+}
+
 function retrieveMetaDataIfNotInCache(tumlUri, contextVertexId, result, callback) {
 
     var uriToCache = removeContextFromUrl(tumlUri);

@@ -24,16 +24,17 @@
 
             var topHeight = parseInt($('.navbar').css('min-height').replace('px', ''));
 
+            var panelReziserSpace = 5;
             //Create layout
             var myLayout = $('body').layout(
                 {
                     enableCursorHotkey: false,
                     livePaneResizing: true,
                     //This is the navbar height,
-                    north: {initClosed: false, minSize: topHeight, resizable: false, spacing_open: 3},
-                    east: {initClosed: true, spacing_open: 3},
-                    south: {minSize: 30, initClosed: false, resizable: false, spacing_open: 3},
-                    west: {minSize: 300, spacing_open: 3}
+                    north: {initClosed: false, togglerLength_open: 0, minSize: topHeight, resizable: false, spacing_open: panelReziserSpace, spacing_closed: panelReziserSpace},
+                    east: {initClosed: true, spacing_open: panelReziserSpace, spacing_closed: panelReziserSpace},
+                    south: {minSize: 30, togglerLength_open:	0,  initClosed: false, resizable: false, spacing_open: 0, spacing_closed: 0},
+                    west: {minSize: 300, spacing_open: panelReziserSpace, spacing_closed: panelReziserSpace}
                 }
             );
             myLayout.allowOverflow("north");

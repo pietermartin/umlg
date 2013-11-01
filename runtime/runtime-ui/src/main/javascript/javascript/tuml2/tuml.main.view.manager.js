@@ -127,13 +127,6 @@
 
             this.tabContainer.find('a:first').tab('show');
 
-            //open the relevant accordion
-            this.tabContainer.find('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-//                //Show the footer
-//                $('#tabs-layoutpanelPanelDefault').children('.umlg-panel-footer.panel-footer').show();
-                self.handleTabActivate(e);
-            })
-
             this.updateNavigationHeader(this.qualifiedName);
             $('body').layout().resizeAll();
             return true;
@@ -555,7 +548,7 @@
                 }
 
                 tumlTabViewManagerQuery.createQuery(oclExecuteUri, query, post);
-
+                tumlTabViewManagerQuery.showInlineForm();
 
 
             } else {
@@ -573,7 +566,6 @@
             var currentIndex = self.tumlTabViewManagers.indexOf(newTumlTabViewManager);
             this.tumlTabViewManagers.splice(currentIndex, 1);
             this.tumlTabViewManagers.splice(previousIndex, 0, newTumlTabViewManager);
-//            this.tabContainer.tabs("option", "active", previousIndex);
             leftMenuManager.refreshInstanceQuery(args.query.id);
         }
 
@@ -634,7 +626,8 @@
         }
 
         function addDefaultQueryTab() {
-            self.addQueryTab(true, new Tuml.Query(-1, 'New Query', 'New Query Description', 'self.name', 'ocl'));
+            var tumlTabViewManagerQuery = self.addQueryTab(true, new Tuml.Query(-1, 'New Query', 'New Query Description', 'self.name', 'ocl'));
+//            tumlTabViewManagerQuery.showInlineForm();
         }
 
         function refreshInternal(tumlUri, result, isOne, forCreation) {
@@ -676,7 +669,6 @@
                 tabsNav = li;
                 first = false;
             }
-//            self.tabContainer.tabs("refresh");
         }
 
         function findPropertyNavigatingTo(qualifiedName, metaDataNavigatingFrom) {

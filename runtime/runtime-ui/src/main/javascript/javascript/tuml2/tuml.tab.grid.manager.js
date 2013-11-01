@@ -43,7 +43,7 @@
             $('<div />', {id: "queryResultsDiv"})
             $('<div id="serverErrorMsg' + this.gridDivName + '" />').appendTo(outerDivForResults);
 
-            var windowHeight = $('.query-center').height() - 60;
+            var windowHeight = $('.query-center').height() - 40;
             $('<div />', {id: 'queryResultsDiv' + this.gridDivName, style: 'width:auto;height:' + windowHeight + 'px;'}).appendTo(outerDivForResults);
             $('<div />', {id: 'pagerQueryResultsDiv' + this.gridDivName, style: 'width:auto;height:20px;'}).appendTo(outerDivForResults);
             $('#contextMenu' + this.gridDivName).remove();
@@ -223,21 +223,21 @@
     TumlTabGridManager.prototype.createContextMenu = function () {
         var self = this;
         var contextMenuUl = TumlBaseGridManager.prototype.createContextMenu.call(this);
-        var li = $('<li></li>').appendTo(contextMenuUl);
-        var a = $('<a href="#"></a>').appendTo(li);
-        var span = $('<span class="ui-icon ui-icon-close"></span>').appendTo(a);
-        a.append('delete');
-        a.data('contextData', {name: 'delete'});
+
+        var li = $('<li />').appendTo(contextMenuUl);
+        li.data("contextData", {name: 'delete'});
+        var a = $('<a />', {title: 'delete', tabindex: -1, href: '#'}).appendTo(li);
+        $('<i class="umlg-icon glyphicon glyphicon-remove" />').appendTo(a);
+        a.append(' delete');
         a.on('click', function (e) {
-            //Find the link
-            var a = $(e.target);
-            //The row gets saved into the contextMenuUl on right click show menu
-            var row = a.parent().parent().data("row");
-            self.handleContextMenuSelection(a, row);
-            contextMenuUl.hide();
+            var link = $(e.target);
+            var row = contextMenuUl.parent().data("row");
+            self.handleContextMenuSelection(link, row);
+            contextMenuUl.parent().hide();
+            e.preventDefault();
+            e.stopImmediatePropagation();
             return false;
         });
-        contextMenuUl.hide();
         return contextMenuUl;
     };
 
@@ -535,9 +535,9 @@
                     var cell = self.grid.getActiveCell();
                     var column = self.grid.getColumns()[cell.cell];
                     if (isComponentMany(column)) {
-                        doComponentMany(column, {row: cell.row ,cell: cell.cell, grid: self.grid});
+                        doComponentMany(column, {row: cell.row, cell: cell.cell, grid: self.grid});
                     } else if (isComponentOne(column)) {
-                        doComponentOne(column, {row: cell.row ,cell: cell.cell, grid: self.grid});
+                        doComponentOne(column, {row: cell.row, cell: cell.cell, grid: self.grid});
                     }
                 } else {
                     //if not cntrl A return
@@ -863,7 +863,9 @@
                 left = self.dataView.getItems().slice(0, insertBefore);
                 right = self.dataView.getItems().slice(insertBefore, self.dataView.getItems().length);
 
-                rows.sort(function(a,b) { return a-b; });
+                rows.sort(function (a, b) {
+                    return a - b;
+                });
 
                 for (var i = 0; i < rows.length; i++) {
                     var movedItem = self.dataView.getItems()[rows[i]];
@@ -952,7 +954,7 @@
         if (this instanceof Tuml.TumlManyComponentGridManager) {
             windowHeight = 600;
         } else {
-            windowHeight = $('.ui-layout-center').height() - 185;
+            windowHeight = $('.ui-layout-center').height() - 188;
         }
         $('<div />', {id: 'myGrid' + this.metaForDataTo.name, style: 'width:auto;height:' + windowHeight + 'px;', class: 'umlg-slick-grid'}).appendTo(tabDiv);
 //        $('<div />', {id: 'myGrid' + this.metaForDataTo.name, style: 'width:auto;height:auto;', class: 'umlg-slick-grid'}).appendTo(tabDiv);
@@ -1145,21 +1147,29 @@
             link.attr('href', adjustedUri);
         }
 
-        contextMenu.menu({
-            select: function (e, ui) {
-                //Find the link
-                var a = ui.item.find('a');
-                //The row gets saved into the contextMenuUl on right click show menu
-                var row = a.parent().parent().data("row");
-                self.handleContextMenuSelection(a, row);
-                contextMenu.hide();
-                e.preventDefault();
-                e.stopImmediatePropagation();
-            }
+//        contextMenu.menu({
+//            select: function (e, ui) {
+//                //Find the link
+//                var a = ui.item.find('a');
+//                //The row gets saved into the contextMenuUl on right click show menu
+//                var row = a.parent().parent().data("row");
+//                self.handleContextMenuSelection(a, row);
+//                contextMenu.hide();
+//                e.preventDefault();
+//                e.stopImmediatePropagation();
+//            }
+//        });
+
+//        contextMenu.data("row", cell.row).css("top", y).css("left", x).show();
+
+        contextMenu.data("row", cell.row).css({
+            display: "block",
+            left: x,
+            top: y
         });
 
-        contextMenu.data("row", cell.row).css("top", y).css("left", x).show();
         contextMenu.focus();
+
         $("body").one("click", function () {
             contextMenu.hide();
             //reset the links back to {property}
@@ -1168,7 +1178,7 @@
         contextMenu.mouseleave(contextMenu_timer);
 
         function contextMenu_close() {
-            $("#contextMenu" + self.localMetaForData.name).hide();
+            contextMenu.hide();
             resetLinks(cell);
         };
 
@@ -1189,23 +1199,23 @@
 
     TumlBaseGridManager.prototype.createContextMenu = function () {
         var self = this;
-        var contextMenuUl = $('<ul />', {id: 'contextMenu' + this.localMetaForData.name, class: 'contextMenu'}).appendTo('body');
-        var li = $('<li></li>').appendTo(contextMenuUl);
-        var a = $('<a href="#"></a>').appendTo(li);
-        a.on('click', function (e) {
-                //Find the link
-                var a = $(e.target);
-                //The row gets saved into the contextMenuUl on right click show menu
-                var row = a.parent().parent().data("row");
-                self.handleContextMenuSelection(a, row);
-                contextMenuUl.hide();
-                e.preventDefault();
-                e.stopImmediatePropagation();
-            }
-        );
-        var span = $('<span class="ui-icon ui-icon-home"></span>').appendTo(a);
-        a.append('self');
+
+        var contextMenu = $('<div id="contextMenu' + this.localMetaForData.name + '" class="umlg-context-menu dropdown clearfix" />').appendTo('body');
+        var contextMenuUl = $('<ul id="contextMenuUl" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1" style="display:block;position:static;margin-bottom:5px;" />').appendTo(contextMenu);
+
+        var li = $('<li />').appendTo(contextMenuUl);
+        var a = $('<a />', {title: 'self', tabindex: -1, href: '#'}).appendTo(li);
         a.data("contextData", {name: 'self', uri: this.localMetaForData.uri});
+        $('<i class="umlg-icon fa fa-circle" />').appendTo(a);
+        a.append(' self');
+        a.on('click', function (e) {
+            var link = $(e.target);
+            var row = contextMenu.data("row");
+            self.handleContextMenuSelection(link, row);
+            contextMenu.hide();
+            e.preventDefault();
+            e.stopImmediatePropagation();
+        });
 
         for (var i = 0; i < this.localMetaForData.properties.length; i++) {
             var property = this.localMetaForData.properties[i];
@@ -1218,36 +1228,102 @@
                     text += ' [' + property.lower + '..' + property.upper + ']';
                 }
 
-                var li = $('<li />').appendTo(contextMenuUl);
                 var adjustedUri = addUiToUrl(property.tumlUri);
-                var a = $('<a />', {href: adjustedUri}).appendTo(li);
-                a.on('click', function (e) {
-                        //Find the link
-                        var a = $(e.target);
-                        //The row gets saved into the contextMenuUl on right click show menu
-                        var row = a.parent().parent().data("row");
-                        self.handleContextMenuSelection(a, row);
-                        contextMenuUl.hide();
-                        e.preventDefault();
-                        e.stopImmediatePropagation();
-                    }
-                );
-                var span = $('<span class="contextMenu ui-icon ' + (property.composite ? 'ui-icon-umlcomposition' : 'ui-icon-umlassociation') + '"></span>').appendTo(a);
-                a.append(text);
+                var li = $('<li />').appendTo(contextMenuUl);
+                var a = $('<a />', {title: property.name, tabindex: -1, href: adjustedUri}).appendTo(li);
+
+                //add the icon
+                var menuIconClass = 'ui-icon';
+                if (property.composite) {
+                    menuIconClass = menuIconClass + ' ui-icon-umlcomposition';
+                } else {
+                    menuIconClass = menuIconClass + ' ui-icon-umlassociation';
+                }
+                $('<i class="umlg-icon ' + menuIconClass + '"/>').appendTo(a);
                 a.data("contextData", {name: property.name, property: property});
+                a.on('click', function (e) {
+                    var link = $(e.target);
+                    var row = contextMenu.data("row");
+                    self.handleContextMenuSelection(link, row);
+                    contextMenu.hide();
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                });
+                a.append(' ' + text);
             }
         }
 
-        contextMenuUl.keydown(
-            function (e) {
-                //Escape key
-                if (e.which === 27) {
-                    $("#contextMenu" + self.localMetaForData.name).hide();
-                    self.grid.focus();
-                }
-            }
-        );
+//        contextMenuUl.keydown(
+//            function (e) {
+//                //Escape key
+//                if (e.which === 27) {
+//                    $("#contextMenu" + self.localMetaForData.name).hide();
+//                    self.grid.focus();
+//                }
+//            }
+//        );
         return contextMenuUl;
+
+//        var contextMenuUl = $('<ul />', {id: 'contextMenu' + this.localMetaForData.name, class: 'contextMenu'}).appendTo('body');
+//        var li = $('<li />').appendTo(contextMenuUl);
+//        var a = $('<a href="#"></a>').appendTo(li);
+//        a.on('click', function (e) {
+//                //Find the link
+//                var a = $(e.target);
+//                //The row gets saved into the contextMenuUl on right click show menu
+//                var row = a.parent().parent().data("row");
+//                self.handleContextMenuSelection(a, row);
+//                contextMenuUl.hide();
+//                e.preventDefault();
+//                e.stopImmediatePropagation();
+//            }
+//        );
+//        var span = $('<span class="ui-icon ui-icon-home"></span>').appendTo(a);
+//        a.append('self');
+//        a.data("contextData", {name: 'self', uri: this.localMetaForData.uri});
+//
+//        for (var i = 0; i < this.localMetaForData.properties.length; i++) {
+//            var property = this.localMetaForData.properties[i];
+//            if (property.inverseComposite || !((property.dataTypeEnum !== undefined && property.dataTypeEnum !== null) || property.onePrimitive || property.manyPrimitive || property.name == 'id' || property.name == 'uri')) {
+//
+//                var text = property.name;
+//                if (property.upper == -1) {
+//                    text += ' [' + property.lower + '..*]';
+//                } else {
+//                    text += ' [' + property.lower + '..' + property.upper + ']';
+//                }
+//
+//                var li = $('<li />').appendTo(contextMenuUl);
+//                var adjustedUri = addUiToUrl(property.tumlUri);
+//                var a = $('<a />', {href: adjustedUri}).appendTo(li);
+//                a.on('click', function (e) {
+//                        //Find the link
+//                        var a = $(e.target);
+//                        //The row gets saved into the contextMenuUl on right click show menu
+//                        var row = a.parent().parent().data("row");
+//                        self.handleContextMenuSelection(a, row);
+//                        contextMenuUl.hide();
+//                        e.preventDefault();
+//                        e.stopImmediatePropagation();
+//                    }
+//                );
+//                var span = $('<span class="contextMenu ui-icon ' + (property.composite ? 'ui-icon-umlcomposition' : 'ui-icon-umlassociation') + '"></span>').appendTo(a);
+//                a.append(text);
+//                a.data("contextData", {name: property.name, property: property});
+//            }
+//        }
+//
+//        contextMenuUl.keydown(
+//            function (e) {
+//                //Escape key
+//                if (e.which === 27) {
+//                    $("#contextMenu" + self.localMetaForData.name).hide();
+//                    self.grid.focus();
+//                }
+//            }
+//        );
+//        return contextMenuUl;
+
     };
 
     TumlBaseGridManager.prototype.handleContextMenuSelection = function (a, gridRow) {
