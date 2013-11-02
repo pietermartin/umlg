@@ -42,7 +42,7 @@
         var defaultValue;
 
         this.init = function () {
-            $input = $("<INPUT type=text class='editor-text' />")
+            $input = $("<INPUT type='text' class='slick-grid-umlg-editor-text' />")
                 .appendTo(args.container)
                 .bind("keydown.nav", function (e) {
                     if (e.keyCode === $.ui.keyCode.LEFT || e.keyCode === $.ui.keyCode.RIGHT) {
@@ -117,41 +117,6 @@
         }
     }
 
-    function ManyEnumerationEditor(args) {
-        this.args = args;
-        if (this.args !== undefined) {
-            this.$item = args.item;
-            this.init();
-        }
-    }
-
-    ManyEnumerationEditor.prototype = new Tuml.Slick.Editors.ManyStringPrimitiveEditor();
-    ManyEnumerationEditor.prototype.createInput = function () {
-        var $select = $("<SELECT id='aaaaaaaaaId' tabIndex='0' class='editor-select many-primitive-editor-input' style='width:115px;'></SELECT>");
-        $select.appendTo(this.args.container);
-        var $self = this;
-        this.args.column.options.rowEnumerationLookupMap.getOrLoadMap(function (data) {
-            if (!$self.args.column.options.required) {
-                $select.append($('<option />)').val("").html(""));
-            }
-            $.each(data, function (index, obj) {
-                $select.append($('<option />)').val(obj).html(obj));
-            });
-            var currentValue = $self.$item[$self.args.column.field];
-            $select.val(currentValue);
-            if (!$self.args.column.options.required) {
-                $select.chosen({allow_single_deselect: true});
-            } else {
-                $select.chosen();
-            }
-            $select.focus();
-        });
-        return $select;
-    }
-    ManyEnumerationEditor.prototype.resetInput = function (input) {
-        input.val('').trigger('liszt:updated');
-    }
-
     function ManyPrimitiveEditor(args) {
         this.args = args;
         this.$input;
@@ -161,7 +126,7 @@
         this.handleKeyPress = function (e) {
             if (e.target == this.$input[0]) {
                 if (e.which == 13) {
-                    this.$addButton.click();
+                    this.addButton.click();
                     e.stopImmediatePropagation();
                 }
             }
@@ -169,7 +134,7 @@
 
         this.destroy = function () {
             this.args.grid['manyPrimitiveEditorOpen'] = false;
-            this.$div.remove();
+            this.panel.remove();
         };
 
         this.focus = function () {
@@ -275,9 +240,13 @@
             this.args.grid['manyPrimitiveEditorOpen'] = true;
             this.args.grid['manyPrimitiveEditor'] = this;
         }
-        this.$div = $("<div class='many-primitive-editor' />");
+        this.panel = $("<div class='umlg-panel-many-editor panel panel-default many-primitive-editor' />");
+        var panelHeading = $('<div class="panel-heading umlg-panel-heading-popup" />').appendTo(this.panel);
+        var topNavBar = $('<div class="collapse navbar-collapse" />').appendTo(panelHeading);
+        var panelBody = $('<div class="panel-body" />').appendTo(this.panel);
+
         var self = this;
-        this.$addButton = $('<button id="many-primitive-editor-input-add-button" />').text('Add').click(function () {
+        this.addButton = $('<button type="button" id="many-primitive-editor-input-add-button" class="btn btn-default pull-left" />').text('Add').click(function () {
             var valueToAdd = self.$input.val();
             var currentValues = self.serializeValue();
             var testArray = [];
@@ -296,18 +265,22 @@
                 }
                 self.resetInput(self.$input);
             }
-        }).appendTo(this.$div);
-        this.$input = this.createInput(this.$div);
-        var resultDiv = $('<div class="many-primitive-editor-result" />').appendTo(this.$div);
-        this.$table = $('<table class="many-primitive-editor-result-table" />').appendTo(resultDiv);
+        }).appendTo(topNavBar);
+        var formGroup = $('<div class="form-group pull-left" />')
+        this.$input = this.createInput(formGroup);
+        this.$input.addClass("form-control");
+        formGroup.appendTo(topNavBar);
 
-        this.$div.bind("keydown.nav", function (e) {
+        var resultDiv = $('<div class="many-primitive-editor-result" />').appendTo(panelBody);
+        this.$table = $('<table class="table table-bordered many-primitive-editor-result-table" />').appendTo(resultDiv);
+
+        this.panel.bind("keydown.nav", function (e) {
             if (e.keyCode === $.ui.keyCode.LEFT || e.keyCode === $.ui.keyCode.RIGHT) {
                 e.stopImmediatePropagation();
             }
         });
 
-        this.$div.appendTo(this.args.container);
+        this.panel.appendTo(this.args.container);
         this.$input.focus().select();
     };
 
@@ -343,6 +316,41 @@
 
     ManyStringPrimitiveEditor.prototype.serializeValueWithValue = function () {
         alert('ManyStringPrimitiveEditor.prototype.serializeValueWithValue must be overriden!');
+    }
+
+    function ManyEnumerationEditor(args) {
+        this.args = args;
+        if (this.args !== undefined) {
+            this.$item = args.item;
+            this.init();
+        }
+    }
+
+    ManyEnumerationEditor.prototype = new Tuml.Slick.Editors.ManyStringPrimitiveEditor();
+    ManyEnumerationEditor.prototype.createInput = function (parentDiv) {
+        var $select = $("<SELECT id='aaaaaaaaaId' tabIndex='0' class='editor-select many-primitive-editor-input'></SELECT>");
+        $select.appendTo(parentDiv);
+        var $self = this;
+        this.args.column.options.rowEnumerationLookupMap.getOrLoadMap(function (data) {
+            if (!$self.args.column.options.required) {
+                $select.append($('<option />)').val("").html(""));
+            }
+            $.each(data, function (index, obj) {
+                $select.append($('<option />)').val(obj).html(obj));
+            });
+            var currentValue = $self.$item[$self.args.column.field];
+            $select.val(currentValue);
+            if (!$self.args.column.options.required) {
+                $select.chosen({allow_single_deselect: true});
+            } else {
+                $select.chosen();
+            }
+            $select.focus();
+        });
+        return $select;
+    }
+    ManyEnumerationEditor.prototype.resetInput = function (input) {
+        input.val('').trigger('liszt:updated');
     }
 
     function ManyDateEditor(args) {
@@ -465,7 +473,6 @@
         this.args = args;
         if (this.args !== undefined) {
             this.init();
-            sync
         }
     }
 
@@ -499,7 +506,7 @@
         for (var i = 0; i < rowArray.length; i++) {
             var row = rowArray[i];
             var value = $(row).data('value');
-            var isTrueSet = value === 'true' || value === 't' || value === '1';
+            var isTrueSet = value === 'true' || value === 't' || value === '1' || value;
             arrayToSerialize.push(isTrueSet);
         }
         return arrayToSerialize;
@@ -663,7 +670,7 @@
         var calendarOpen = false;
 
         this.init = function () {
-            $input = $("<INPUT type=text />");
+            $input = $("<INPUT type='text' class='slick-grid-umlg-editor-text' />");
             $input.appendTo(args.container);
             $input.focus().select();
             $input.datepicker({
@@ -700,14 +707,14 @@
             }
         };
 
-        this.position = function (position) {
-            if (!calendarOpen) {
-                return;
-            }
-            $.datepicker.dpDiv
-                .css("top", position.top + 30)
-                .css("left", position.left);
-        };
+//        this.position = function (position) {
+//            if (!calendarOpen) {
+//                return;
+//            }
+//            $.datepicker.dpDiv
+//                .css("top", position.top + 30)
+//                .css("left", position.left);
+//        };
 
         this.focus = function () {
             if (!$input.is(":hidden")) {
@@ -771,7 +778,7 @@
         var calendarOpen = false;
 
         this.init = function () {
-            $input = $("<INPUT type=text />");
+            $input = $("<INPUT type='text' class='slick-grid-umlg-editor-text' />");
             $input.appendTo(args.container);
             $input.focus().select();
             $input.datetimepicker({
@@ -809,14 +816,14 @@
             }
         };
 
-        this.position = function (position) {
-            if (!calendarOpen) {
-                return;
-            }
-            $.datepicker.dpDiv
-                .css("top", position.top + 30)
-                .css("left", position.left);
-        };
+//        this.position = function (position) {
+//            if (!calendarOpen) {
+//                return;
+//            }
+//            $.datepicker.dpDiv
+//                .css("top", position.top + 30)
+//                .css("left", position.left);
+//        };
 
         this.focus = function () {
             $input.focus();
@@ -840,8 +847,8 @@
         }
 
         this.applyValue = function (item, state) {
-            //This is to remove the space between date and time fiels in order for joda time not to moan
-            item[args.column.field] = state.replace(/ /g, "T");
+            //This is to remove the space between date and time fields in order for joda time not to moan
+            item[args.column.field] = state;
         };
 
         this.isValueChanged = function () {
@@ -881,7 +888,7 @@
         var calendarOpen = false;
 
         this.init = function () {
-            $input = $("<INPUT type=text />");
+            $input = $("<INPUT type='text' class='slick-grid-umlg-editor-text' />");
             $input.appendTo(args.container);
             $input.focus().select();
             $input.timepicker({
@@ -917,14 +924,14 @@
             }
         };
 
-        this.position = function (position) {
-            if (!calendarOpen) {
-                return;
-            }
-            $.datepicker.dpDiv
-                .css("top", position.top + 30)
-                .css("left", position.left);
-        };
+//        this.position = function (position) {
+//            if (!calendarOpen) {
+//                return;
+//            }
+//            $.datepicker.dpDiv
+//                .css("top", position.top + 30)
+//                .css("left", position.left);
+//        };
 
         this.focus = function () {
             $input.focus();

@@ -253,7 +253,24 @@
         }
 
         function validate(currentValues, valueToAdd) {
-            return manyValidate(property, validateSingleProperty, currentValues, valueToAdd)
+            if (valueToAdd !== undefined) {
+
+                var result = validateSingleProperty(valueToAdd);
+                if (!result.valid) {
+                    throw 'Value must be "true" or "t" or "1" or "false" or "f" or "0"';
+                }
+
+//                if (!(valueToAdd === 'true' || valueToAdd === 't' || valueToAdd === '1' || valueToAdd === 'false' || valueToAdd === 'f' || valueToAdd === '0')) {
+//                    throw 'Value must be "true" or "t" or "1" or "false" or "f" or "0"';
+//                }
+                if (valueToAdd === 'true' || valueToAdd === 't' || valueToAdd === '1' || valueToAdd) {
+                    return manyValidate(property, validateSingleProperty, currentValues, true)
+                } else {
+                    return manyValidate(property, validateSingleProperty, currentValues, false)
+                }
+            } else {
+                return manyValidate(property, validateSingleProperty, currentValues, valueToAdd)
+            }
         }
 
     };
@@ -342,7 +359,7 @@
             if (!result.valid) {
                 return result;
             }
-            if (value !== undefined && value !== null && value !== '') {
+            if (value !== undefined && value !== null && value !== '' && value !== true && value !== false) {
                 if (!(value === 'true' || value === 't' || value === '1' || value === 'false' || value === 'f' || value === '0')) {
                     return {valid: false, msg: 'Value must be "true" or "t" or "1" or "false" or "f" or "0"'};
                 }

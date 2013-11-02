@@ -56,7 +56,7 @@
              </ol>
              */
             $('#contextRoot').remove();
-            var contextRoot = $('<ol />', {id: 'contextRoot', class: 'breadcrumb uml-breadcrumb'}).appendTo('.collapse.navbar-collapse');
+            var contextRoot = $('<ol />', {id: 'contextRoot', class: 'breadcrumb uml-breadcrumb'}).appendTo('#umlgnavbar .collapse.navbar-collapse');
             //Insert keyDown code here start
             //
             //Insert keyDown code here end

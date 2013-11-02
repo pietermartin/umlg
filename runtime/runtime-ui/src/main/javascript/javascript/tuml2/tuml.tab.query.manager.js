@@ -367,9 +367,9 @@
             textArea.appendTo(oclTextAreaDiv);
             codeMirror = CodeMirror.fromTextArea(textArea[0], {
                 lineNumbers: true,
-//                styleActiveLine: true,
-//                matchBrackets: true,
-                mode: 'text/x-mysql', onKeyEvent: function (o, e) {
+                matchBrackets: true,
+                mode: "text/x-groovy",
+                onKeyEvent: function (o, e) {
                 if ((e.which === 13 && e.altKey && e.type === "keydown") || (e.which === 13 && e.ctrlKey && e.type === "keydown")) {
                     self.executeQuery();
                     e.preventDefault();

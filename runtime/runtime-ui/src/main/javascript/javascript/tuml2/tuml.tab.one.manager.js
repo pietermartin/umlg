@@ -129,8 +129,8 @@
                     //Each input is wrapped in a form-group
                     var formGroupDiv = $('<div>', {class: 'umlg-form-group form-group'}).appendTo(formDiv);
 
-                    if (property.fieldType !== 'Boolean') {
-                        $('<label />', {for: property.name + 'Id', class: "col-lg-2 control-label"}).text(property.name + ' :').appendTo(formGroupDiv);
+                    if (property.fieldType !== 'Boolean' || property.upper > 1 || property.upper === -1) {
+                        $('<label />', {for: property.name + 'Id', class: "col-lg-3 control-label"}).text(property.name + ' :').appendTo(formGroupDiv);
                     }
                     var $input = this.constructInputForField(property, false);
 
@@ -139,12 +139,12 @@
                         this.currentActiveProperty = property;
                     }
 
-                    var inputDiv = $('<div />', {class: 'input-group col-lg-5'}).appendTo(formGroupDiv);
-                    if (!property.readOnly && property.lower > 0 && property.fieldType !== 'Boolean') {
+                    var inputDiv = $('<div />', {class: 'input-group col-lg-6'}).appendTo(formGroupDiv);
+                    if (!property.readOnly && property.lower > 0) {
                         inputDiv.append('<span class="input-group-addon glyphicon glyphicon-asterisk"></span>');
                     }
-                    if (property.fieldType == 'Boolean') {
-                        inputDiv.addClass('col-lg-offset-2');
+                    if (property.fieldType == 'Boolean' && property.upper == 1) {
+                        inputDiv.addClass('col-lg-offset-3');
                         var checkboxLabel = $('<label />');
                         checkboxLabel.append($input);
                         checkboxLabel.append(' ' + property.name);
@@ -156,16 +156,19 @@
                         }
                     }
                     if (property.manyPrimitive || property.manyEnumeration) {
-                        var $manyDiv = $('<div />', {class: "many-primitive-one-img"}).appendTo(formGroupDiv);
+                        var $manyDiv = $('<label for="' + $input.attr('id') + '" class="input-group-addon"><i class="glyphicon glyphicon-bell"></i></label>');
+                        $input.parent().append($manyDiv);
 
                         $manyDiv.click(
 
                             function (inputScoped, propertyScoped, manyDivScoped, liScoped) {
-                                return function () {
+                                return function (e) {
                                     self.openEditorForMany(inputScoped, propertyScoped, manyDivScoped, liScoped)
+                                    e.preventDefault();
+                                    e.stopImmediatePropagation();
                                 };
 
-                            }($input, property, $manyDiv, formGroupDiv));
+                            }($input, property, $input, formGroupDiv));
 
                         $input.keypress(
 
@@ -173,10 +176,12 @@
                                 return function (e) {
                                     if (e.which == 13) {
                                         self.openEditorForMany(inputScoped, propertyScoped, manyDivScoped, liScoped)
+                                        e.preventDefault();
+                                        e.stopImmediatePropagation();
                                     }
                                 };
 
-                            }($input, property, $manyDiv, formGroupDiv));
+                            }($input, property, $input, formGroupDiv));
 
                     } else if (property.composite && property.lower == 1 && property.upper == 1) {
                         $input.click(function (e, args) {
@@ -200,10 +205,8 @@
                         if (property.dataTypeEnum != null && property.dataTypeEnum !== undefined) {
                             if (property.dataTypeEnum == 'Date') {
                                 $input.datepicker({
-//                                    showOn: "button",
                                     buttonImageOnly: true,
                                     dateFormat: "yy-mm-dd"
-//                                    buttonImage: "/" + tumlModelName + "/javascript/slickgrid/images/calendar.gif"
                                 });
                                 $input.parent().append('<label for="' + $input.attr('id') + '" class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></label>');
                             } else if (property.dataTypeEnum == 'Time') {
@@ -232,10 +235,10 @@
                     var formGroupDiv = $('<div>', {class: 'umlg-form-group form-group'});
                     formGroupDiv.appendTo(formDiv);
 
-                    $('<label />', {for: property.name + 'Id', class: "col-lg-2 control-label"}).text(property.name + ' :').appendTo(formGroupDiv);
+                    $('<label />', {for: property.name + 'Id', class: "col-lg-3 control-label"}).text(property.name + ' :').appendTo(formGroupDiv);
                     var $input = this.constructInputForField(property);
 
-                    var inputDiv = $('<div />', {class: 'input-group col-lg-5'}).appendTo(formGroupDiv);
+                    var inputDiv = $('<div />', {class: 'input-group col-lg-4'}).appendTo(formGroupDiv);
                     if (property.lower > 0) {
                         inputDiv.append('<span class="input-group-addon glyphicon glyphicon-asterisk"></span>');
                     }
@@ -367,7 +370,7 @@
         var self = this;
         var $input;
         if (property.name == 'id') {
-            $input = $('<input />', {disabled: 'disabled', type: 'text', class: 'field', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name, class: 'form-control'});
+            $input = $('<input />', {disabled: 'disabled', type: 'text', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name, class: 'form-control'});
             if (this.data[property.name] !== undefined && this.data[property.name] !== null) {
                 $input[0].defaultValue = this.data[property.name];
             }
@@ -394,14 +397,14 @@
                 $input[0].defaultValue = this.data[property.name];
             }
         } else if (property.oneEnumeration) {
-            $input = $('<select />', {class: 'chzn-select form-control', style: 'width:350px;', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name});
+            $input = $('<select />', {class: 'chzn-select form-control', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name});
             if (!this.isForCreation) {
                 this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, this.data[property.name], $input);
             } else {
                 this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, $input);
             }
         } else if (isForManyEditor && property.manyEnumeration) {
-            $input = $('<select />', {id: inputFieldId(property, this.metaForData, isForManyEditor), class: 'chzn-select form-control', style: 'width:350px;', name: property.name});
+            $input = $('<select />', {id: inputFieldId(property, this.metaForData, isForManyEditor), class: 'chzn-select form-control', name: property.name});
             if (!this.isForCreation) {
                 this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, this.data[property.name], $input);
             } else {
@@ -435,7 +438,7 @@
             } else if (!property.manyPrimitive) {
                 $input = $('<input />', {type: 'checkbox', class: 'editor-checkbox', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name});
             } else {
-                $input = $('<input />', {type: 'text', class: 'field', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name});
+                $input = $('<input />', {type: 'text', class: 'form-control', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name});
                 if (!this.isForCreation) {
                     $input[0].defaultValue = this.data[property.name];
                 }
@@ -461,7 +464,7 @@
                     }
                     return false;
                 });
-            } else if ((property.fieldType === 'Boolean') && !isForManyEditor) {
+            } else if ((property.fieldType === 'Boolean') && !isForManyEditor && property.upper === 1) {
                 $input.change(function () {
                     var validationResult = self.validateField(property, $input, isForManyEditor);
                     if (validationResult.valid) {
@@ -613,10 +616,10 @@
     }
 
     TumlBaseTabOneManager.prototype.openEditorForMany = function ($inputToSet, property, $manyDiv, $li) {
-        var $div = $("<div class='many-primitive-editor-for-one' />");
+        var $div = $("<div class='panel panel-default many-primitive-editor-for-one' />");
         $div.keyup(function (e) {
             if (e.which == 27) {
-                $('.many-primitive-editor-cancel').click();
+                $div.click();
             }
         });
         $(document).mouseup(function (e) {
@@ -625,14 +628,26 @@
                 container.remove();
             }
         });
-        $div.css('left', $manyDiv.position().left + 10);
-        $div.css('top', $manyDiv.position().top + 5);
+        $div.keydown(function (event) {
+            if (event.which == 27) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                $div.remove();
+            }
+        });
+
+        var panelHeading = $('<div class="panel-heading umlg-panel-heading-popup" />').appendTo($div);
+        var topNavBar = $('<div class="collapse navbar-collapse" />').appendTo(panelHeading);
+        var panelBody = $('<div class="panel-body umlg-panel-body-popup" />').appendTo($div);
+        var panelFooter = $('<div class="panel-footer umlg-panel-footer-popup" />').appendTo($div);
+
         var $table;
         var $input;
         var editor = selectEditor(property);
         var serializer = new editor().serializeValueForOne;
-        var button = $('<button id="many-primitive-editor-input-add-button" />').text('Add').click(function () {
-            var valueToAdd = $('.many-primitive-editor-input').val();
+        var button = $('<button type="button" id="many-primitive-editor-input-add-button" class="btn btn-default pull-left" />').text('Add').click(function () {
+            var input = panelHeading.find('.form-control');
+            var valueToAdd = input.val();
             var currentValues = serializer($table);
             var testArray = [];
             if (valueToAdd !== '') {
@@ -646,29 +661,27 @@
                     alert(validationResults.msg);
                 } else {
                     addTr(valueToAdd);
-                    //Need to reapply the drag and drop plugin if the table was empty
-                    if (currentValues.length == 0) {
-                        if (property.ordered) {
-                            $table.tableDnD();
-                        }
-                    }
+                    //Need to reapply the drag and drop plugin
+                    $table.tableDnD();
                     if (!property.manyEnumeration) {
                         $input.val('');
                     }
                 }
             }
-        }).appendTo($div);
+        }).appendTo(topNavBar);
         $input = this.constructInputForField(property, true);
         $input.val('');
-        $input.addClass("many-primitive-editor-input");
-        $input.appendTo($div);
+        $input.addClass("form-control");
+        var formGroup = $('<div class="form-group pull-left" />')
+        $input.appendTo(formGroup);
+        formGroup.appendTo(topNavBar);
         $input.keypress(function (e) {
             if (e.which == 13) {
                 $('#many-primitive-editor-input-add-button').click();
             }
         });
-        var resultDiv = $('<div class="many-primitive-editor-result" />').appendTo($div);
-        $table = $('<table class="many-primitive-editor-result-table" />').appendTo(resultDiv);
+        var resultDiv = $('<div class="many-primitive-editor-result" />').appendTo(panelBody);
+        $table = $('<table class="table table-bordered" />').appendTo(resultDiv);
         //Add in current value
         var existingValues = $inputToSet.val().split(',');
         for (var i = 0; i < existingValues.length; i++) {
@@ -679,34 +692,44 @@
         if (property.ordered) {
             $table.tableDnD();
         }
-        var selectButtonDiv = $('<div class="many-primitive-editor-select-div"/>').appendTo($div);
-        selectButtonDiv.append($('<button class="many-primitive-editor-select"/>').click(function () {
+        panelFooter.append($('<button type="button" class="btn btn-default many-primitive-editor-select"/>').click(function () {
             var currentValues = serializer($table);
             $inputToSet.val(currentValues.join(","));
             $inputToSet.blur();
             $div.remove();
             $inputToSet.focus();
         }).text('Select'));
-        selectButtonDiv.append($('<button class="many-primitive-editor-cancel"/>').click(function () {
+        panelFooter.append($('<button type="button" class="btn btn-default many-primitive-editor-cancel"/>').click(function () {
             $div.remove();
             $inputToSet.focus();
         }).text('Cancel'));
-        $div.appendTo($li);
+        $div.appendTo($('body'));
         $input.focus();
 
         function addTr(value) {
             var row = $('<tr />').addClass('many-primitive-editor-row');
-            var rowValue = $('<td class="many-primitive-editor-cell" />').text(value);
+            var rowValue = $('<td class="many-primitive-editor-cell col-xs-6" />').text(value);
             row.append(rowValue);
             row.data('value', value);
             var img = $('<img/>', {class: 'umlg-many-select-img', src: '/' + tumlModelName + '/javascript/images/delete.png'}).click(function () {
                 var liClicked = $(this).parent().parent();
                 liClicked.remove();
             });
-            var imgValue = $('<td class="many-primitive-editor-cell many-primitive-editor-cell-img" />');
+            var imgValue = $('<td class="many-primitive-editor-cell-img col-xs-2" />');
             imgValue.append(img);
             row.append(imgValue);
             $table.append(row);
+        }
+
+        var topBox = document.getElementById('umlgnavbar').getBoundingClientRect();
+        var bottomBox = document.getElementById('footer').getBoundingClientRect();
+        var box = document.getElementById($manyDiv[0].id).getBoundingClientRect();
+        if ((bottomBox.bottom - box.bottom - topBox.height) < $div.height()) {
+            $div.css('left', box.left);
+            $div.css('top', box.top - $div.height() + 10);
+        } else {
+            $div.css('left', box.left);
+            $div.css('top', box.top + box.height);
         }
 
     }
@@ -832,6 +855,8 @@
                 } else if (property.fieldType === 'Boolean') {
                     if (tmpValue != 'true' && tmpValue != 'false') {
                         validationResult = {valid: false, msg: 'Value must be "true" or "false".'};
+                    } else {
+                        tmpSerializedValue.push(tmpValue);
                     }
                 } else {
                     if (property.unique && tmpSerializedValue.indexOf(tmpValue) !== -1) {
