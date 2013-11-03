@@ -24,122 +24,136 @@
 	<dependencyManagement>
 		<dependencies>
 
-			<dependency>
-				<groupId>org.eclipse</groupId>
-				<artifactId>osgi</artifactId>
-				<version>3.8.1-v20120830-144521</version>
-			</dependency>
-			<dependency>
-				<groupId>org.eclipse.core</groupId>
-				<artifactId>jobs</artifactId>
-				<version>3.5.300-v20120622-204750</version>
-			</dependency>
-			<dependency>
-				<groupId>org.eclipse.core</groupId>
-				<artifactId>contenttype</artifactId>
-				<version>3.4.200-v20120523-2004</version>
-			</dependency>
-			<dependency>
-				<groupId>org.eclipse.core</groupId>
-				<artifactId>runtime</artifactId>
-				<version>3.8.0-v20120521-2346</version>
-			</dependency>
-			<dependency>
-				<groupId>org.eclipse.equinox</groupId>
-				<artifactId>common</artifactId>
-				<version>3.6.100-v20120522-1841</version>
-			</dependency>
-			<dependency>
-				<groupId>org.eclipse.equinox</groupId>
-				<artifactId>registry</artifactId>
-				<version>3.5.200-v20120522-1841</version>
-			</dependency>
-			<dependency>
-				<groupId>org.eclipse.equinox</groupId>
-				<artifactId>app</artifactId>
-				<version>1.0.0</version>
-			</dependency>
-			<dependency>
-				<groupId>org.eclipse.equinox</groupId>
-				<artifactId>preferences</artifactId>
-				<version>3.5.0-v20120522-1841</version>
-			</dependency>
+            <!-- Eclipse -->
+            <dependency>
+                <groupId>org.eclipse</groupId>
+                <artifactId>osgi</artifactId>
+                <version>3.9.1-v20130814-1242</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.core</groupId>
+                <artifactId>jobs</artifactId>
+                <version>3.5.300-v20130429-1813</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.core</groupId>
+                <artifactId>contenttype</artifactId>
+                <version>3.4.200-v20130326-1255</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.core</groupId>
+                <artifactId>runtime</artifactId>
+                <version>3.9.0-v20130326-1255</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.equinox</groupId>
+                <artifactId>common</artifactId>
+                <version>3.6.200-v20130402-1505</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.equinox</groupId>
+                <artifactId>registry</artifactId>
+                <version>3.5.301-v20130717-1549</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.equinox</groupId>
+                <artifactId>app</artifactId>
+                <version>1.3.100-v20130327-1442</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.equinox</groupId>
+                <artifactId>preferences</artifactId>
+                <version>3.5.100-v20130422-1538</version>
+            </dependency>
+
+            <!-- EMF -->
+            <dependency>
+                <groupId>org.eclipse.emf</groupId>
+                <artifactId>ecore</artifactId>
+                <version>2.9.1-v20130827-0309</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.emf.ecore</groupId>
+                <artifactId>xmi</artifactId>
+                <version>2.9.1-v20130827-0309</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.emf</groupId>
+                <artifactId>common</artifactId>
+                <version>2.9.1-v20130827-0309</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>org.eclipse.emf.mapping</groupId>
+                <artifactId>ecore2xml</artifactId>
+                <version>2.7.0-v20130902-0605</version>
+            </dependency>
+
+            <!-- UML -->
 			<dependency>
 				<groupId>org.eclipse.uml2</groupId>
 				<artifactId>uml</artifactId>
-				<version>4.0.1-v20120913-1441</version>
+				<version>4.1.1-v20130902-0826</version>
 				<exclusions>
 					<exclusion>
 						<groupId>org.eclipse.equinox</groupId>
-						<artifactId>app</artifactId>
+						<artifactId>org.eclipse.equinox.app</artifactId>
 					</exclusion>
+                    <exclusion>
+                        <groupId>org.eclipse.equinox</groupId>
+                        <artifactId>app</artifactId>
+                    </exclusion>
 				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.eclipse.uml2</groupId>
 				<artifactId>common</artifactId>
-				<version>1.7.0-v20120913-1441</version>
+				<version>1.8.1-v20130902-0826</version>
 			</dependency>
 			<dependency>
 				<groupId>org.eclipse.uml2</groupId>
 				<artifactId>types</artifactId>
-				<version>1.0.0-v20120913-1441</version>
+				<version>1.1.0-v20130902-0826</version>
 			</dependency>
+            <dependency>
+                <groupId>org.eclipse.uml2.uml</groupId>
+                <artifactId>resources</artifactId>
+                <version>4.1.0-v20130902-0826</version>
+            </dependency>
 			<dependency>
 				<groupId>org.eclipse.uml2.uml.profile</groupId>
 				<artifactId>l2</artifactId>
-				<version>1.0.1-v20120913-1441</version>
+				<version>1.1.0-v20130902-0826</version>
 			</dependency>
 			<dependency>
 				<groupId>org.eclipse.uml2.uml.profile</groupId>
 				<artifactId>l3</artifactId>
-				<version>1.0.1-v20120913-1441</version>
+				<version>1.1.0-v20130902-0826</version>
 			</dependency>
-			<dependency>
-				<groupId>org.eclipse.uml2.uml</groupId>
-				<artifactId>resources</artifactId>
-				<version>4.0.1-v20120913-1441</version>
-			</dependency>
-			<dependency>
-				<groupId>org.eclipse.emf</groupId>
-				<artifactId>ecore</artifactId>
-				<version>2.8.1-v20120911-0500</version>
-			</dependency>
-			<dependency>
-				<groupId>org.eclipse.emf.ecore</groupId>
-				<artifactId>xmi</artifactId>
-				<version>2.8.0-v20120911-0500</version>
-			</dependency>
-			<dependency>
-				<groupId>org.eclipse.emf</groupId>
-				<artifactId>common</artifactId>
-				<version>2.8.0-v20120911-0500</version>
-			</dependency>
-			<dependency>
-				<groupId>org.eclipse.emf.mapping</groupId>
-				<artifactId>ecore2xml</artifactId>
-				<version>2.7.0-v20120917-0436</version>
-			</dependency>
-			<dependency>
+
+            <!-- OCL -->
+            <dependency>
+                <groupId>org.eclipse</groupId>
+                <artifactId>ocl</artifactId>
+                <version>3.3.0-v20130909-1552</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.ocl</groupId>
+                <artifactId>common</artifactId>
+                <version>1.1.0-v20130531-0544</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.ocl</groupId>
+                <artifactId>ecore</artifactId>
+                <version>3.3.0-v20130520-1222</version>
+            </dependency>
+            <dependency>
 				<groupId>org.eclipse.ocl</groupId>
 				<artifactId>uml</artifactId>
-				<version>4.0.0-v20120917-1739</version>
+				<version>4.0.100-v20130909-1552</version>
 			</dependency>
-			<dependency>
-				<groupId>org.eclipse.ocl</groupId>
-				<artifactId>common</artifactId>
-				<version>1.0.0-v20120516-1543</version>
-			</dependency>			
-			<dependency>
-				<groupId>org.eclipse.ocl</groupId>
-				<artifactId>ecore</artifactId>
-				<version>3.1.2-v20111015-2027</version>
-			</dependency>
-			<dependency>
-				<groupId>org.eclipse</groupId>
-				<artifactId>ocl</artifactId>
-				<version>3.2.1-v20120917-1739</version>
-			</dependency>
+
 			<dependency>
 				<groupId>lpg.runtime</groupId>
 				<artifactId>java</artifactId>

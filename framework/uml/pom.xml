@@ -10,46 +10,75 @@
 	<artifactId>uml</artifactId>
 	<name>uml</name>
 	<dependencies>
-		<dependency>
-			<groupId>org.eclipse.core</groupId>
-			<artifactId>contenttype</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.core</groupId>
-			<artifactId>jobs</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse</groupId>
-			<artifactId>osgi</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.eclipse.core</groupId>
+            <artifactId>contenttype</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.core</groupId>
+            <artifactId>jobs</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse</groupId>
+            <artifactId>osgi</artifactId>
+        </dependency>
 		<dependency>
 			<groupId>org.eclipse.core</groupId>
 			<artifactId>runtime</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.eclipse.equinox</groupId>
-			<artifactId>preferences</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.equinox</groupId>
-			<artifactId>common</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.equinox</groupId>
-			<artifactId>registry</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.equinox</groupId>
-			<artifactId>app</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.eclipse.equinox</groupId>
+            <artifactId>preferences</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.equinox</groupId>
+            <artifactId>common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.equinox</groupId>
+            <artifactId>registry</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.equinox</groupId>
+            <artifactId>app</artifactId>
+        </dependency>
+
+        <!-- EMF -->
+        <dependency>
+            <groupId>org.eclipse.emf</groupId>
+            <artifactId>ecore</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.emf.ecore</groupId>
+            <artifactId>xmi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.emf</groupId>
+            <artifactId>common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.emf.mapping</groupId>
+            <artifactId>ecore2xml</artifactId>
+        </dependency>
+
+
+        <!-- UML2 -->
 		<dependency>
 			<groupId>org.eclipse.uml2</groupId>
 			<artifactId>uml</artifactId>
 		</dependency>
+        <dependency>
+            <groupId>org.eclipse.uml2</groupId>
+            <artifactId>common</artifactId>
+        </dependency>
 		<dependency>
 			<groupId>org.eclipse.uml2</groupId>
 			<artifactId>types</artifactId>
 		</dependency>
+        <dependency>
+            <groupId>org.eclipse.uml2.uml</groupId>
+            <artifactId>resources</artifactId>
+        </dependency>
 		<dependency>
 			<groupId>org.eclipse.uml2.uml.profile</groupId>
 			<artifactId>l2</artifactId>
@@ -58,30 +87,8 @@
 			<groupId>org.eclipse.uml2.uml.profile</groupId>
 			<artifactId>l3</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.eclipse.uml2</groupId>
-			<artifactId>common</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.uml2.uml</groupId>
-			<artifactId>resources</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.emf</groupId>
-			<artifactId>ecore</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.emf.ecore</groupId>
-			<artifactId>xmi</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.emf</groupId>
-			<artifactId>common</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.emf.mapping</groupId>
-			<artifactId>ecore2xml</artifactId>
-		</dependency>
+
+        <!-- OCL -->
 		<dependency>
 			<groupId>org.eclipse.ocl</groupId>
 			<artifactId>uml</artifactId>
@@ -99,13 +106,14 @@
 			<artifactId>common</artifactId>
 		</dependency>
 
-		<dependency>
+        <dependency>
+            <groupId>lpg.runtime</groupId>
+            <artifactId>java</artifactId>
+        </dependency>
+
+        <dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>lpg.runtime</groupId>
-			<artifactId>java</artifactId>
 		</dependency>
 	</dependencies>
 </project>

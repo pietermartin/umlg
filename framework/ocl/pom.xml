@@ -21,18 +21,18 @@
 			<groupId>org.eclipse.uml2.uml</groupId>
 			<artifactId>resources</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.eclipse.emf</groupId>
-			<artifactId>ecore</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.emf.ecore</groupId>
-			<artifactId>xmi</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.emf</groupId>
-			<artifactId>common</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.eclipse.emf</groupId>
+            <artifactId>ecore</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.emf.ecore</groupId>
+            <artifactId>xmi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.emf</groupId>
+            <artifactId>common</artifactId>
+        </dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>

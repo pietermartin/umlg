@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.eclipse.uml2.uml.profile</groupId>
+    <artifactId>l3</artifactId>
+    <version>1.1.0-v20130902-0826</version>
+    <name>UML2 Standard L3 Profile</name>
+    <packaging>jar</packaging>
+    <description>UML2 Standard L3 Profile</description>
+    <url>http://www.eclipse.org</url>
+    <scm>
+        <url/>
+        <connection/>
+    </scm>
+    <developers>
+        <developer/>
+    </developers>
+    <licenses>
+        <license>
+            <name>Eclipse Public License - v 1.0</name>
+            <url>http://www.eclipse.org/org/documents/epl-v10.html</url>
+        </license>
+    </licenses>
+    <dependencies>
+        <dependency>
+            <groupId>org.eclipse.core</groupId>
+            <artifactId>runtime</artifactId>
+            <version>[3.5.0,4.0.0)</version>
+            <optional>false</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.uml2</groupId>
+            <artifactId>uml</artifactId>
+            <version>[4.1.0,5.0.0)</version>
+            <optional>false</optional>
+        </dependency>
+    </dependencies>
+</project>

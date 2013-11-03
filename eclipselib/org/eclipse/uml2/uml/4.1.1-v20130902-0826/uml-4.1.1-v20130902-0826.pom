@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.eclipse.uml2</groupId>
+    <artifactId>uml</artifactId>
+    <version>4.1.1-v20130902-0826</version>
+    <name>UML2 UML Model</name>
+    <packaging>jar</packaging>
+    <description>UML2 UML Model</description>
+    <url>http://www.eclipse.org</url>
+    <scm>
+        <url/>
+        <connection/>
+    </scm>
+    <developers>
+        <developer/>
+    </developers>
+    <licenses>
+        <license>
+            <name>Eclipse Public License - v 1.0</name>
+            <url>http://www.eclipse.org/org/documents/epl-v10.html</url>
+        </license>
+    </licenses>
+    <dependencies>
+        <dependency>
+            <groupId>org.eclipse.core</groupId>
+            <artifactId>runtime</artifactId>
+            <version>[3.5.0,4.0.0)</version>
+            <optional>false</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.emf</groupId>
+            <artifactId>ecore</artifactId>
+            <version>[2.9.0,3.0.0)</version>
+            <optional>false</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.emf.ecore</groupId>
+            <artifactId>xmi</artifactId>
+            <version>[2.9.0,3.0.0)</version>
+            <optional>false</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.uml2</groupId>
+            <artifactId>common</artifactId>
+            <version>[1.8.0,2.0.0)</version>
+            <optional>false</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.uml2</groupId>
+            <artifactId>types</artifactId>
+            <version>[1.1.0,2.0.0)</version>
+            <optional>false</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.emf.mapping</groupId>
+            <artifactId>ecore2xml</artifactId>
+            <version>[2.7.0,3.0.0)</version>
+            <optional>false</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.emf</groupId>
+            <artifactId>validation</artifactId>
+            <version>[1.4.0,2.0.0)</version>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+</project>
