@@ -12,12 +12,26 @@
 			<groupId>org.umlg</groupId>
 			<artifactId>java-generation</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.eclipse.emf</groupId>
+                    <artifactId>ecore</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.eclipse.emf.ecore</groupId>
+                    <artifactId>xmi</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.eclipse.emf.mapping</groupId>
+                    <artifactId>ecore2xml</artifactId>
+                </exclusion>
+            </exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.umlg</groupId>
 			<artifactId>restlet</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
-		</dependency>		
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
