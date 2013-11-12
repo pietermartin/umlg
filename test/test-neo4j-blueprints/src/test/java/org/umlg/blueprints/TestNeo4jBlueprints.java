@@ -26,6 +26,36 @@ import java.util.concurrent.*;
 public class TestNeo4jBlueprints {
 
     @Test
+    public void testNeo4jInsertVertexPerformance() {
+        File f = new File("/tmp/neo4j-performence");
+        if (f.exists()) {
+            f.delete();
+        }
+        f.mkdir();
+        Neo4jGraph g = new Neo4jGraph(f.getAbsolutePath());
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        long previousSplitTime = 0;
+        for (int i = 0; i < 100000000; i++) {
+            Vertex many = g.addVertex(null);
+            many.setProperty("name", "pieter");
+            many.setProperty("surname", "martin");
+
+            if (i % 1000000 == 0) {
+                stopWatch.split();
+                long splitTime = stopWatch.getSplitTime();
+                System.out.println(i + " " + stopWatch.toString() + " 1000000 in " + (splitTime - previousSplitTime));
+                previousSplitTime = stopWatch.getSplitTime();
+                g.commit();
+            }
+        }
+        g.commit();
+        stopWatch.stop();
+        System.out.println(stopWatch.toString());
+    }
+
+
+    @Test
     public void testNeo4jPerformance() {
         File f = new File("/tmp/neo4j-performence");
         if (f.exists()) {

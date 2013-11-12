@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -66,8 +65,7 @@ public class Dependency {
         File pomTarget = Files.copy(pomPath, eclipseLibDestination.resolve(pomPath.getFileName())).toFile();
 
         //Edit the pom
-        correctPomForUPload(pomTarget);
-
+        correctPomForUpload(pomTarget);
 
         File sourceTarget = Files.copy(soursePath, eclipseLibDestination.resolve(soursePath.getFileName())).toFile();
         File destSource = new File(sourceTarget.getParentFile(), jar.getName().replace(".jar", "-sources.jar"));
@@ -121,7 +119,7 @@ public class Dependency {
         logger.fine(String.format("done with %s", toString()));
     }
 
-    private void correctPomForUPload(File pomTarget) throws IOException {
+    private void correctPomForUpload(File pomTarget) throws IOException {
         List<String> pomAsList = FileUtils.readLines(pomTarget);
 
         //Find the name
@@ -152,6 +150,31 @@ public class Dependency {
         sb.append("    <developer/>\n");
         sb.append("  </developers>");
         pomAsList.add(nameLine, sb.toString());
+
+        //Check if there is a licence part, if not give it an eclipse licence
+        boolean hasLicence = false;
+        int endOfdevelopers = 0;
+        nameLine = 0;
+        for (String s : pomAsList) {
+            nameLine++;
+            if (s.contains("</developers>")) {
+                endOfdevelopers = nameLine;
+            }
+            if (s.contains("<licenses>")) {
+                hasLicence = true;
+                break;
+            }
+        }
+        if (!hasLicence) {
+            sb.setLength(0);
+            sb.append("  <licenses>\n");
+            sb.append("    <license>\n");
+            sb.append("      <name>Eclipse Public License - v 1.0</name>\n");
+            sb.append("      <url>http://www.eclipse.org/org/documents/epl-v10.html</url>\n");
+            sb.append("    </license>\n");
+            sb.append("  </licenses>");
+            pomAsList.add(endOfdevelopers, sb.toString());
+        }
 
         FileUtils.writeLines(pomTarget, pomAsList);
     }
