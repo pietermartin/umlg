@@ -27,7 +27,7 @@ public class TestNeo4jBlueprints {
 
     @Test
     public void testNeo4jInsertVertexPerformance() {
-        File f = new File("/tmp/neo4j-performence");
+        File f = new File("/tmp/neo4j-performance");
         if (f.exists()) {
             f.delete();
         }
@@ -38,10 +38,10 @@ public class TestNeo4jBlueprints {
         long previousSplitTime = 0;
         for (int i = 0; i < 100000000; i++) {
             Vertex many = g.addVertex(null);
-            many.setProperty("name", "pieter");
-            many.setProperty("surname", "martin");
+            many.setProperty("name", "123456");
+            many.setProperty("surname", "123456");
 
-            if (i % 1000000 == 0) {
+            if (i != 0 && i % 1000000 == 0) {
                 stopWatch.split();
                 long splitTime = stopWatch.getSplitTime();
                 System.out.println(i + " " + stopWatch.toString() + " 1000000 in " + (splitTime - previousSplitTime));
@@ -57,7 +57,7 @@ public class TestNeo4jBlueprints {
 
     @Test
     public void testNeo4jPerformance() {
-        File f = new File("/tmp/neo4j-performence");
+        File f = new File("/tmp/neo4j-performance");
         if (f.exists()) {
             f.delete();
         }
@@ -66,22 +66,32 @@ public class TestNeo4jBlueprints {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         Vertex one = g.addVertex(null);
+        Long oneId = (Long)one.getId();
         one.setProperty("one", "1");
         long previousSplitTime = 0;
-        for (int i = 0; i < 1000000; i++) {
+        for (int i = 0; i < 10000000; i++) {
             Vertex many = g.addVertex(null);
             many.setProperty("many", "2");
             g.addEdge(null, one, many, "toMany");
 
-            if (i % 1000 == 0) {
+            if (i != 0 && i % 100000 == 0) {
                 stopWatch.split();
                 long splitTime = stopWatch.getSplitTime();
-                System.out.println(i + " " + stopWatch.toString() + " 1000 in " + (splitTime - previousSplitTime));
+                System.out.println(i + " " + stopWatch.toString() + " 100000 in " + (splitTime - previousSplitTime));
                 previousSplitTime = stopWatch.getSplitTime();
                 g.commit();
             }
         }
         g.commit();
+        stopWatch.stop();
+        System.out.println(stopWatch.toString());
+
+        stopWatch.reset();
+        stopWatch.start();
+        Vertex startV = g.getVertex(oneId);
+        for (Vertex v : startV.getVertices(Direction.OUT, "toMany")) {
+            v.getProperty("many");
+        }
         stopWatch.stop();
         System.out.println(stopWatch.toString());
     }
@@ -247,6 +257,363 @@ public class TestNeo4jBlueprints {
         stopWatch.stop();
         System.out.println(stopWatch.toString());
         graph.shutdown();
+    }
+
+    @Test
+    public void testNeo4jPropertyDifferentType() {
+        File f = new File("/tmp/neo4j-performance");
+        if (f.exists()) {
+            f.delete();
+        }
+        f.mkdir();
+        Neo4jGraph g = new Neo4jGraph(f.getAbsolutePath());
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        Vertex one = g.addVertex(null);
+        one.setProperty("one", 1);
+
+        Vertex two = g.addVertex(null);
+        two.setProperty("one", "2");
+
+        g.commit();
+        stopWatch.stop();
+        System.out.println(stopWatch.toString());
+
+    }
+
+
+    @Test
+    public void testSpeedDude1() throws IOException {
+        File f = new File("/tmp/neo4j-performance");
+        if (f.exists()) {
+            FileUtils.deleteDirectory(f);
+        }
+        f.mkdir();
+        Neo4jGraph g = new Neo4jGraph(f.getAbsolutePath());
+        try {
+
+            int NUMBER_TO_ITER = 10000000;
+
+            StopWatch stopWatch = new StopWatch();
+            stopWatch.start();
+
+            Vertex one = g.addVertex(null);
+            one.setProperty("one", "1");
+            long previousSplitTime = 0;
+            for (int i = 0; i < NUMBER_TO_ITER; i++) {
+                Vertex many = g.addVertex(null);
+                many.setProperty("many", "2");
+                g.addEdge(null, one, many, "toMany");
+
+                if (i != 0 && i % 1000000 == 0) {
+                    stopWatch.split();
+                    long splitTime = stopWatch.getSplitTime();
+                    System.out.println(i + " " + stopWatch.toString() + " 100000 in " + (splitTime - previousSplitTime));
+                    previousSplitTime = stopWatch.getSplitTime();
+                    g.commit();
+                }
+            }
+            g.commit();
+            stopWatch.stop();
+            System.out.println("write 10000000 = " + stopWatch.toString());
+
+            stopWatch.reset();
+            stopWatch.start();
+            Vertex startV = g.getVertex(one.getId());
+            int count = 1;
+            for (Vertex v : startV.getVertices(Direction.OUT, "toMany")) {
+                v.getProperty("many");
+                if (count++ % 1000000 == 0) {
+                    System.out.println("in vertex id = " + v.getId());
+                }
+            }
+            stopWatch.stop();
+            System.out.println("read " + NUMBER_TO_ITER + " = " + stopWatch.toString());
+        } finally {
+            g.shutdown();
+        }
+    }
+
+    @Test
+    public void testSpeedDude2() throws IOException {
+        File f = new File("/tmp/neo4j-performance");
+        if (f.exists()) {
+            FileUtils.deleteDirectory(f);
+        }
+        f.mkdir();
+        Neo4jGraph g = new Neo4jGraph(f.getAbsolutePath());
+        try {
+            int NUMBER_TO_ITER = 10000000;
+
+            StopWatch stopWatch = new StopWatch();
+            stopWatch.start();
+
+            Object[] ids = new Object[(NUMBER_TO_ITER / 10) + 1];
+            int objectIdCount = 0;
+
+            Vertex previous = g.addVertex(null);
+            previous.setProperty("one", "1");
+            ids[objectIdCount++] = previous.getId();
+            long previousSplitTime = 0;
+            for (int i = 1; i <= NUMBER_TO_ITER; i++) {
+                Vertex many = g.addVertex(null);
+                many.setProperty("many", i);
+                g.addEdge(null, previous, many, "toMany");
+
+                if (i != 0 && i % 10 == 0) {
+                    previous = many;
+                    ids[objectIdCount++] = previous.getId();
+                }
+
+                if (i != 0 && i % 100000 == 0) {
+                    stopWatch.split();
+                    long splitTime = stopWatch.getSplitTime();
+                    System.out.println(i + " " + stopWatch.toString() + " 100000 in " + (splitTime - previousSplitTime));
+                    previousSplitTime = stopWatch.getSplitTime();
+                    g.commit();
+                }
+            }
+            g.commit();
+            stopWatch.stop();
+            System.out.println("write " + NUMBER_TO_ITER + " = " + stopWatch.toString());
+
+            stopWatch.reset();
+            stopWatch.start();
+            previousSplitTime = 0;
+            int count = 0;
+            for (Object id : ids) {
+                count++;
+                Vertex vertex = g.getVertex(id);
+
+                for (Vertex v : vertex.getVertices(Direction.OUT, "toMany")) {
+                    v.getProperty("many");
+                }
+                if (count == ids.length) {
+                    Assert.assertEquals(0, count(vertex.getVertices(Direction.OUT, "toMany")));
+                } else {
+                    Assert.assertEquals(10, count(vertex.getVertices(Direction.OUT, "toMany")));
+                }
+
+                for (Vertex v : vertex.getVertices(Direction.OUT)) {
+                    v.getProperty("many");
+                }
+                if (count == ids.length) {
+                    Assert.assertEquals(0, count(vertex.getVertices(Direction.OUT)));
+                } else {
+                    Assert.assertEquals(10, count(vertex.getVertices(Direction.OUT)));
+                }
+
+                if (count % 100000 == 0) {
+                    stopWatch.split();
+                    long splitTime = stopWatch.getSplitTime();
+                    System.out.println(id + " " + stopWatch.toString() + " 100000 in " + (splitTime - previousSplitTime));
+                    previousSplitTime = stopWatch.getSplitTime();
+                }
+            }
+            stopWatch.stop();
+            System.out.println("read 10000000 = " + stopWatch.toString());
+        } finally {
+            g.shutdown();
+        }
+    }
+
+    @Test
+    public void testSpeedLinkedList() throws IOException {
+        File f = new File("/tmp/neo4j-performance");
+        if (f.exists()) {
+            FileUtils.deleteDirectory(f);
+        }
+        f.mkdir();
+        Neo4jGraph g = new Neo4jGraph(f.getAbsolutePath());
+        try {
+
+            int NUMBER_TO_ITER = 10000000;
+
+            StopWatch stopWatch = new StopWatch();
+            stopWatch.start();
+
+            Vertex one = g.addVertex(null);
+            Vertex start = one;
+            one.setProperty("one", "1");
+            StringBuilder sb = new StringBuilder();
+            sb.append("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+            sb.append("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
+            sb.append("cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc");
+            sb.append("dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd");
+            sb.append("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+            long previousSplitTime = 0;
+            for (int i = 0; i < NUMBER_TO_ITER; i++) {
+                Vertex many = g.addVertex(null);
+                many.setProperty("many1", sb.toString());
+                many.setProperty("many2", sb.toString());
+                many.setProperty("many3", sb.toString());
+                many.setProperty("many4", sb.toString());
+                many.setProperty("many5", sb.toString());
+                g.addEdge(null, one, many, "toMany");
+                one = many;
+
+                if (i != 0 && i % 10000 == 0) {
+                    g.commit();
+                }
+                if (i != 0 && i % 1000000 == 0) {
+                    stopWatch.split();
+                    long splitTime = stopWatch.getSplitTime();
+                    System.out.println(i + " " + stopWatch.toString() + " 100000 in " + (splitTime - previousSplitTime));
+                    previousSplitTime = stopWatch.getSplitTime();
+                }
+            }
+            g.commit();
+            stopWatch.stop();
+            System.out.println("write 10000000 = " + stopWatch.toString());
+
+            stopWatch.reset();
+            stopWatch.start();
+            int count = 1;
+            Vertex startV = g.getVertex(start.getId());
+            Iterator<Vertex> vertices = startV.getVertices(Direction.OUT).iterator();
+            while (vertices.hasNext()) {
+                Vertex next = vertices.next();
+                Assert.assertEquals(sb.toString(), next.getProperty("many1"));
+                vertices = next.getVertices(Direction.OUT).iterator();
+                if (count++ % 1000000 == 0) {
+                    System.out.println("next vertex id = " + next.getId());
+                }
+            }
+
+            stopWatch.stop();
+            System.out.println("read " + NUMBER_TO_ITER + " = " + stopWatch.toString());
+        } finally {
+            g.shutdown();
+        }
+    }
+
+    @Test
+    public void testRemoveTransactionAlreadyWritable() throws IOException {
+        File f = new File("/tmp/neo4j-performance");
+        if (f.exists()) {
+            FileUtils.deleteDirectory(f);
+        }
+        f.mkdir();
+        Neo4jGraph graph = new Neo4jGraph(f.getAbsolutePath());
+        try {
+            graph.createKeyIndex("name", Vertex.class);
+            graph.commit();
+
+            Vertex v1 = graph.addVertex(null);
+            v1.setProperty("name", "aaaa");
+            for (int i = 0; i < 10; i++) {
+                Vertex v2 = graph.addVertex(null);
+                v2.setProperty("name", "bbbb");
+                Edge e = graph.addEdge(null, v1, v2, "label1");
+                e.setProperty("name", "cccc");
+            }
+            graph.commit();
+
+            org.junit.Assert.assertEquals(11, count(graph.getVertices()) - 1);
+            org.junit.Assert.assertEquals(1, count(graph.getVertices("name", "aaaa")));
+            org.junit.Assert.assertEquals(10, count(graph.getVertices("name", "bbbb")));
+            org.junit.Assert.assertEquals(10, count(graph.getEdges("name", "cccc")));
+
+            Iterator<Vertex> iter = graph.getVertices("name", "bbbb").iterator();
+            Vertex v = iter.next();
+            long removedId = (Long)v.getId();
+//            v.setProperty("name", "bbbba");
+//            org.junit.Assert.assertEquals("bbbba", v.getProperty("name"));
+            iter.remove();
+            org.junit.Assert.assertNull(graph.getVertex(removedId));
+            org.junit.Assert.assertEquals(9, count(iter));
+
+            graph.commit();
+            iter = graph.getVertices("name", "bbbb").iterator();
+            org.junit.Assert.assertEquals(9, count(iter));
+
+        } finally {
+            graph.shutdown();
+        }
+    }
+
+
+    @Test
+    public void testIndexSpeed() throws IOException {
+        File f = new File("/tmp/neo4j-performance");
+        if (f.exists()) {
+            FileUtils.deleteDirectory(f);
+        }
+        f.mkdir();
+        Neo4jGraph g = new Neo4jGraph(f.getAbsolutePath());
+        try {
+
+            g.createKeyIndex("many", Vertex.class);
+
+            int NUMBER_TO_ITER = 10000000;
+
+            StopWatch stopWatch = new StopWatch();
+            stopWatch.start();
+
+            Vertex one = g.addVertex(null);
+            one.setProperty("one", -1);
+            long previousSplitTime = 0;
+            for (int i = 0; i < NUMBER_TO_ITER; i++) {
+                Vertex many = g.addVertex(null);
+                many.setProperty("many", i);
+                g.addEdge(null, one, many, "toMany");
+
+                if (i != 0 && i % 100000 == 0) {
+                    stopWatch.split();
+                    long splitTime = stopWatch.getSplitTime();
+                    System.out.println(i + " " + stopWatch.toString() + " 100000 in " + (splitTime - previousSplitTime));
+                    previousSplitTime = stopWatch.getSplitTime();
+                    g.commit();
+                }
+            }
+            g.commit();
+            stopWatch.stop();
+            System.out.println("write 10000000 = " + stopWatch.toString());
+
+            stopWatch.reset();
+            stopWatch.start();
+
+            for (int i = 0; i < NUMBER_TO_ITER; i++) {
+                Iterator<Vertex> iter = g.getVertices("many", i).iterator();
+                Assert.assertTrue(iter.hasNext());
+
+                if (i != 0 && i % 1000000 == 0) {
+                    stopWatch.split();
+                    long splitTime = stopWatch.getSplitTime();
+                    System.out.println(i + " " + stopWatch.toString() + " 1000000 in " + (splitTime - previousSplitTime));
+                    previousSplitTime = stopWatch.getSplitTime();
+                }
+
+            }
+
+            stopWatch.stop();
+            System.out.println("read " + NUMBER_TO_ITER + " = " + stopWatch.toString());
+        } finally {
+            g.shutdown();
+        }
+    }
+
+
+    protected int countIter(Iterator iter) {
+        int count = 0;
+        while (iter.hasNext()) {
+            count++;
+            iter.next();
+        }
+        return count;
+    }
+
+    public static int count(final Iterable iterable) {
+        return count(iterable.iterator());
+    }
+
+    public static int count(final Iterator iterator) {
+        int counter = 0;
+        while (iterator.hasNext()) {
+            iterator.next();
+            counter++;
+        }
+        return counter;
     }
 
 }

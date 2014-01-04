@@ -82,18 +82,17 @@
                 <artifactId>org.eclipse.emf.common</artifactId>
                 <version>2.9.1-v20130827-0309</version>
             </dependency>
-
+            <dependency>
+                <groupId>org.eclipse.emf</groupId>
+                <artifactId>org.eclipse.emf.mapping.ecore2xml</artifactId>
+                <version>2.5.0.v20100521-1847</version>
+            </dependency>
 
             <!--<dependency>-->
                 <!--<groupId>org.eclipse.emf.mapping</groupId>-->
                 <!--<artifactId>ecore2xml</artifactId>-->
                 <!--<version>2.7.0-v20130902-0605</version>-->
             <!--</dependency>-->
-            <dependency>
-                <groupId>org.eclipse.emf</groupId>
-                <artifactId>org.eclipse.emf.mapping.ecore2xml</artifactId>
-                <version>2.5.0.v20100521-1847</version>
-            </dependency>
 
             <!-- UML -->
 			<dependency>

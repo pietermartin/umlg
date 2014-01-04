@@ -26,6 +26,12 @@ public class UmlgUtil {
                         poweredBy.setFirst("OrientDb");
                         poweredBy.setSecond("http://www.orientdb.org/");
                     } catch (ClassNotFoundException eeee) {
+                        try {
+                            Class.forName("org.umlg.runtime.adaptor.UmlgThunderGraph");
+                            poweredBy.setFirst("ThunderGraph");
+                            poweredBy.setSecond("http://www.umlg.org/");
+                        } catch (ClassNotFoundException eeeee) {
+                        }
                     }
                 }
             }
@@ -52,6 +58,11 @@ public class UmlgUtil {
                         Class.forName("org.umlg.runtime.adaptor.UmlgOrientDbGraph");
                         poweredBy = "OrientDb";
                     } catch (ClassNotFoundException eeee) {
+                        try {
+                            Class.forName("org.umlg.runtime.adaptor.UmlgThunderGraph");
+                            poweredBy = "ThunderGraph";
+                        } catch (ClassNotFoundException eeeee) {
+                        }
                     }
                 }
             }

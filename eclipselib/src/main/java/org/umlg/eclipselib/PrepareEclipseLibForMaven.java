@@ -44,7 +44,7 @@ public class PrepareEclipseLibForMaven {
                 Node nNode = groupIds.item(temp);
                 if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element element = (Element) nNode;
-                    if (element.getTextContent().startsWith("lpg.runtime")) {
+                    if (element.getTextContent().startsWith("org.eclipse")) {
                         Element groupdId = element;
                         //Check if the previous element is exclusion, if so ignore it
                         Element exclusion = (Element) element.getParentNode();

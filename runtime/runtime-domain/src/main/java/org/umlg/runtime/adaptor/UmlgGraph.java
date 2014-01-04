@@ -11,7 +11,7 @@ public interface UmlgGraph extends TransactionalGraph, KeyIndexableGraph {
     static final String ROOT_CLASS_NAME = "org.umlg.root.Root";
 
     /**
-     * Adds in a singleton super node. Represents the application/model.
+     * Adds in a singleton super duper node. Represents the application/model.
      * Attached to the root node is each concrete classes meta class.
      */
     void addRoot();

@@ -32,6 +32,13 @@ public enum UmlgAdaptorImplementation {
             "org.umlg.runtime.adaptor.UmlgBitsyTestUtil",
             "org.umlg.runtime.adaptor.UmlgDefaultLabelConverter",
             "org.umlg.runtime.adaptor.UmlgDefaultQualifierId",
+            "//TODO"),
+    THUNDERGRAPH(
+            "org.umlg.runtime.adaptor.UmlgThunderGraphFactory",
+            "org.umlg.runtime.adaptor.UmlgDefaultDbExceptionUtilImpl",
+            "org.umlg.runtime.adaptor.UmlgThunderTestUtil",
+            "org.umlg.runtime.adaptor.UmlgDefaultLabelConverter",
+            "org.umlg.runtime.adaptor.UmlgDefaultQualifierId",
             "//TODO");
 
     private String tumlGraphFactory;
@@ -83,6 +90,8 @@ public enum UmlgAdaptorImplementation {
             return TITAN;
         } else if (name.equalsIgnoreCase(BITSY.name())) {
             return BITSY;
+        } else if (name.equalsIgnoreCase(THUNDERGRAPH.name())) {
+            return THUNDERGRAPH;
         } else {
             throw new RuntimeException("Unknown tinker implementation " + name);
         }

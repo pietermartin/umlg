@@ -351,6 +351,8 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
                 firstHyperVertex = previousHyperVertex;
                 iterator = firstHyperVertex.getEdges(Direction.IN, LABEL_TO_NEXT_HYPER_VERTEX).iterator();
                 hyperVertexes.remove(previousHyperVertex);
+            } else {
+                iterator = previousHyperVertex.getEdges(Direction.IN, LABEL_TO_NEXT_HYPER_VERTEX).iterator();
             }
         }
 

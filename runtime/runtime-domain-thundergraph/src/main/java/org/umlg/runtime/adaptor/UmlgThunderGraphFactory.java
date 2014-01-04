@@ -1,22 +1,17 @@
 package org.umlg.runtime.adaptor;
 
-import com.thinkaurelius.titan.graphdb.configuration.GraphDatabaseConfiguration;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
-
 import java.io.File;
 
 /**
  * Date: 2013/08/31
  * Time: 3:31 PM
  */
-public class UmlgTitanGraphFactory implements UmlgGraphFactory {
+public class UmlgThunderGraphFactory implements UmlgGraphFactory {
 
-    public static UmlgTitanGraphFactory INSTANCE = new UmlgTitanGraphFactory();
+    public static UmlgThunderGraphFactory INSTANCE = new UmlgThunderGraphFactory();
     private UmlgGraph umlgGraph;
-    private PropertiesConfiguration propertiesConfiguration;
 
-    private UmlgTitanGraphFactory() {
+    private UmlgThunderGraphFactory() {
     }
 
     public static UmlgGraphFactory getInstance() {
@@ -29,13 +24,8 @@ public class UmlgTitanGraphFactory implements UmlgGraphFactory {
             File f = new File(url);
             TransactionThreadEntityVar.remove();
             if (!f.exists()) {
-                try {
-                    this.propertiesConfiguration = new PropertiesConfiguration("umlg.titan.properties");
-                } catch (ConfigurationException e) {
-                    throw new RuntimeException(e);
-                }
-                this.propertiesConfiguration.addProperty("storage.directory", f.getAbsolutePath());
-                this.umlgGraph = new UmlgTitanGraph(new GraphDatabaseConfiguration(this.propertiesConfiguration));
+                f.mkdir();
+                this.umlgGraph = new UmlgThunderGraph(f);
                 this.umlgGraph.addRoot();
                 this.umlgGraph.addDeletionNode();
                 this.umlgGraph.commit();
@@ -43,7 +33,7 @@ public class UmlgTitanGraphFactory implements UmlgGraphFactory {
                 UmlGIndexFactory.getUmlgIndexManager().createIndexes();
                 this.umlgGraph.commit();
             } else {
-                this.umlgGraph = new UmlgTitanGraph(new GraphDatabaseConfiguration(this.propertiesConfiguration));
+                this.umlgGraph = new UmlgThunderGraph(f);
             }
         }
         return this.umlgGraph;

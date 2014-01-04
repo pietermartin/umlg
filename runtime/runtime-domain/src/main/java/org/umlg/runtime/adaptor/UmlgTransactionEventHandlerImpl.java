@@ -1,6 +1,5 @@
 package org.umlg.runtime.adaptor;
 
-import org.umlg.runtime.domain.CompositionNode;
 import org.umlg.runtime.domain.UmlgNode;
 import org.umlg.runtime.validation.TumlConstraintViolation;
 import org.umlg.runtime.validation.TumlConstraintViolationException;

@@ -14,26 +14,6 @@ import org.umlg.runtime.validation.TumlConstraintViolationException;
 
 public class NonNavigableTest extends BaseLocalDbTest {
 
-	@SuppressWarnings("unused")
-	@Test
-	public void testNonNavigableOne() {
-		God god = new God(true);
-		god.setName("THEGOD");
-		Universe universe1 = new Universe(god);
-		universe1.setName("universe1");
-		SpaceTime st1 = new SpaceTime(universe1);
-		Space s1 = new Space(st1);
-		Time t1 = new Time(st1);
-
-		NonNavigableOne nonNavigableOne = new NonNavigableOne(god);
-		nonNavigableOne.setName("nonNovigableOne");
-		universe1.setNonNavigableOne(nonNavigableOne);
-        db.commit();
-		Assert.assertEquals(6, countVertices());
-		Assert.assertEquals(7 + 6, countEdges());
-		Universe testUniverse = new Universe(universe1.getVertex());
-		Assert.assertNotNull(testUniverse.getNonNavigableOne());
-	}
 
     @SuppressWarnings("unused")
     @Test
