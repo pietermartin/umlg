@@ -83,6 +83,12 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
             owner.addToOperations(getter);
 
         }
+
+        //If the property is subsetting another property then add @Override to the getter.
+        //The subsetted property's implementation will add an protected getter with the subsetting property's name
+        if (!propertyWrapper.getSubsettedProperties().isEmpty()) {
+            TinkerGenerationUtil.addOverrideAnnotation(getter);
+        }
     }
 
     public static void buildGetterForAssociationClass(OJAnnotatedClass ac, PropertyWrapper propertyWrapper) {

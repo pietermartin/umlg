@@ -92,6 +92,18 @@ public class ModelLoader {
         return false;
     }
 
+    public List<Property> findSubsettingProperties(final Property subsettedProperty) {
+        List<Property> results = new ArrayList<Property>();
+        filter(results, this.model, new Filter() {
+            @Override
+            public boolean filter(Element e) {
+                return e instanceof Property && ((Property) e).getSubsettedProperties().contains(subsettedProperty);
+            }
+        });
+        return results;
+    }
+
+
     public Stereotype findStereotype(String name) {
         if (this.umlgValidationProfile != null) {
             return this.umlgValidationProfile.getOwnedStereotype(name);

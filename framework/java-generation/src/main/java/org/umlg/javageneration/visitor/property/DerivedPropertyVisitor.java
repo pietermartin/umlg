@@ -30,7 +30,7 @@ public class DerivedPropertyVisitor extends BaseVisitor implements Visitor<Prope
 	@Override
 	public void visitBefore(Property p) {
 		PropertyWrapper propertyWrapper = new PropertyWrapper(p);
-		if (propertyWrapper.isDerived()) {
+		if (propertyWrapper.isDerived() && !propertyWrapper.isDerivedUnion()) {
 			OJAnnotatedClass owner = findOJClass(p);
 			OJAnnotatedOperation getter;
 			if (propertyWrapper.isOne()) {

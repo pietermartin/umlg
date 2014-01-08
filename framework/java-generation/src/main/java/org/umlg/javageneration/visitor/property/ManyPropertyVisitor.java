@@ -13,6 +13,7 @@ import org.umlg.java.metamodel.annotation.OJAnnotatedField;
 import org.umlg.java.metamodel.annotation.OJAnnotatedInterface;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.javageneration.util.PropertyWrapper;
+import org.umlg.javageneration.util.TinkerGenerationUtil;
 import org.umlg.javageneration.util.TumlClassOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
 
@@ -56,6 +57,13 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
             getter.getBody().addToStatements("return this." + propertyWrapper.getAssociationClassFakePropertyName());
             owner.addToOperations(getter);
         }
+
+        //If the property is subsetting another property then add @Override to the getter.
+        //The subsetted property's implementation will add an protected getter with the subsetting property's name
+        if (!propertyWrapper.getSubsettedProperties().isEmpty()) {
+            TinkerGenerationUtil.addOverrideAnnotation(getter);
+        }
+
     }
 
     public static void buildGetterForAssociationClass(OJAnnotatedClass ac, PropertyWrapper propertyWrapper) {

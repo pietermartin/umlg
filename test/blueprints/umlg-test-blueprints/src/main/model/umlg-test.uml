@@ -1763,6 +1763,69 @@
             </ownedEnd>
           </packagedElement>
         </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="_LcQ4wHioEeOViYFNuR_VNg" name="subsetting">
+          <packagedElement xmi:type="uml:Class" xmi:id="_OMY3AHioEeOViYFNuR_VNg" name="Vechile">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_fxMKgHioEeOViYFNuR_VNg" name="steeringControl" type="_UUoAkHioEeOViYFNuR_VNg" isDerived="true" isDerivedUnion="true" association="_fxMxkHioEeOViYFNuR_VNg">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_fxMKgXioEeOViYFNuR_VNg" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_fxMKgnioEeOViYFNuR_VNg" value="1"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_RJEqkHioEeOViYFNuR_VNg" name="Car">
+            <generalization xmi:type="uml:Generalization" xmi:id="_aXh-MHioEeOViYFNuR_VNg" general="_OMY3AHioEeOViYFNuR_VNg"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_gWiTQHioEeOViYFNuR_VNg" name="steeringWheel" type="_WZO8oHioEeOViYFNuR_VNg" subsettedProperty="_fxMKgHioEeOViYFNuR_VNg" association="_gWi6UHioEeOViYFNuR_VNg">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_gWiTQXioEeOViYFNuR_VNg" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_gWiTQnioEeOViYFNuR_VNg" value="1"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_SQj3EHioEeOViYFNuR_VNg" name="Boat">
+            <generalization xmi:type="uml:Generalization" xmi:id="_alycoHioEeOViYFNuR_VNg" general="_OMY3AHioEeOViYFNuR_VNg"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_g-lxwHioEeOViYFNuR_VNg" name="tiller" type="_YQVBIHioEeOViYFNuR_VNg" subsettedProperty="_fxMKgHioEeOViYFNuR_VNg" association="_g-lxw3ioEeOViYFNuR_VNg">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_g-lxwXioEeOViYFNuR_VNg" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_g-lxwnioEeOViYFNuR_VNg" value="1"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_TMOOEHioEeOViYFNuR_VNg" name="Horse">
+            <generalization xmi:type="uml:Generalization" xmi:id="_azrHoHioEeOViYFNuR_VNg" general="_OMY3AHioEeOViYFNuR_VNg"/>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_hSlr0HioEeOViYFNuR_VNg" name="reins" type="_ZBdjIHioEeOViYFNuR_VNg" subsettedProperty="_fxMKgHioEeOViYFNuR_VNg" association="_hSlr03ioEeOViYFNuR_VNg">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_hSlr0XioEeOViYFNuR_VNg" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_hSlr0nioEeOViYFNuR_VNg" value="1"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_UUoAkHioEeOViYFNuR_VNg" name="SteeringControl"/>
+          <packagedElement xmi:type="uml:Class" xmi:id="_WZO8oHioEeOViYFNuR_VNg" name="SteeringWheel">
+            <generalization xmi:type="uml:Generalization" xmi:id="_bB37sHioEeOViYFNuR_VNg" general="_UUoAkHioEeOViYFNuR_VNg"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_YQVBIHioEeOViYFNuR_VNg" name="Tiller">
+            <generalization xmi:type="uml:Generalization" xmi:id="_bNxpsHioEeOViYFNuR_VNg" general="_UUoAkHioEeOViYFNuR_VNg"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_ZBdjIHioEeOViYFNuR_VNg" name="Reins">
+            <generalization xmi:type="uml:Generalization" xmi:id="_bdkZMHioEeOViYFNuR_VNg" general="_UUoAkHioEeOViYFNuR_VNg"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_fxMxkHioEeOViYFNuR_VNg" name="vechile_steeringControl_1" memberEnd="_fxMxkXioEeOViYFNuR_VNg _fxMKgHioEeOViYFNuR_VNg" navigableOwnedEnd="_fxMxkXioEeOViYFNuR_VNg">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_fxMxkXioEeOViYFNuR_VNg" name="vechile" type="_OMY3AHioEeOViYFNuR_VNg" isDerived="true" isDerivedUnion="true" association="_fxMxkHioEeOViYFNuR_VNg">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_fxMxknioEeOViYFNuR_VNg" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_fxMxk3ioEeOViYFNuR_VNg" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_gWi6UHioEeOViYFNuR_VNg" name="car_steeringWheel_1" memberEnd="_gWi6UXioEeOViYFNuR_VNg _gWiTQHioEeOViYFNuR_VNg" navigableOwnedEnd="_gWi6UXioEeOViYFNuR_VNg">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_gWi6UXioEeOViYFNuR_VNg" name="car" type="_RJEqkHioEeOViYFNuR_VNg" subsettedProperty="_fxMxkXioEeOViYFNuR_VNg" association="_gWi6UHioEeOViYFNuR_VNg">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_gWi6UnioEeOViYFNuR_VNg" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_gWi6U3ioEeOViYFNuR_VNg" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_g-lxw3ioEeOViYFNuR_VNg" name="boat_tiller_1" memberEnd="_g-lxxHioEeOViYFNuR_VNg _g-lxwHioEeOViYFNuR_VNg" navigableOwnedEnd="_g-lxxHioEeOViYFNuR_VNg">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_g-lxxHioEeOViYFNuR_VNg" name="boat" type="_SQj3EHioEeOViYFNuR_VNg" subsettedProperty="_fxMxkXioEeOViYFNuR_VNg" association="_g-lxw3ioEeOViYFNuR_VNg">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_g-lxxXioEeOViYFNuR_VNg" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_g-lxxnioEeOViYFNuR_VNg" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_hSlr03ioEeOViYFNuR_VNg" name="horse_reins_1" memberEnd="_hSlr1HioEeOViYFNuR_VNg _hSlr0HioEeOViYFNuR_VNg" navigableOwnedEnd="_hSlr1HioEeOViYFNuR_VNg">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_hSlr1HioEeOViYFNuR_VNg" name="horse" type="_TMOOEHioEeOViYFNuR_VNg" subsettedProperty="_fxMxkXioEeOViYFNuR_VNg" association="_hSlr03ioEeOViYFNuR_VNg">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_hSlr1XioEeOViYFNuR_VNg" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_hSlr1nioEeOViYFNuR_VNg" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+        </packagedElement>
       </packagedElement>
     </packagedElement>
     <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_1clVoQAOEeKpVr_ntT6cLA">

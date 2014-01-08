@@ -22,7 +22,7 @@ import org.umlg.ocl.UmlgOcl2Parser;
 
 public class PropertyVisitor extends BaseVisitor implements Visitor<Property> {
 
-    private static Logger logger = Logger.getLogger(DerivedPropertyVisitor.class.getPackage().getName());
+    private static Logger logger = Logger.getLogger(PropertyVisitor.class.getPackage().getName());
 
     public PropertyVisitor(Workspace workspace) {
         super(workspace);
