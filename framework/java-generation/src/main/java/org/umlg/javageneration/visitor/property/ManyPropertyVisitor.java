@@ -1,6 +1,7 @@
 package org.umlg.javageneration.visitor.property;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.Property;
 import org.umlg.framework.VisitFilter;
 import org.umlg.framework.Visitor;
@@ -61,7 +62,10 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
         //If the property is subsetting another property then add @Override to the getter.
         //The subsetted property's implementation will add an protected getter with the subsetting property's name
         if (!propertyWrapper.getSubsettedProperties().isEmpty()) {
-            TinkerGenerationUtil.addOverrideAnnotation(getter);
+            //if subsetted property is on an interface then there is no fake implementation, so no override
+            if (!(propertyWrapper.getSubsettedProperties().get(0).getType() instanceof Interface)) {
+                TinkerGenerationUtil.addOverrideAnnotation(getter);
+            }
         }
 
     }

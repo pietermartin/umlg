@@ -36,6 +36,7 @@ import org.umlg.tinker.query.TestMetaQueries;
 import org.umlg.tinker.query.TestQueryBaseModelTumlAssociation;
 import org.umlg.tinker.ringtest.TestFingerRing;
 import org.umlg.tinker.speed.SpeedTest;
+import org.umlg.tinker.subsetting.TestSubsetting;
 import org.umlg.tinker.validationtest.TestValidation;
 
 /**
@@ -91,8 +92,8 @@ import org.umlg.tinker.validationtest.TestValidation;
         TestQueryBaseModelTumlAssociation.class,
         TestFingerRing.class,
         SpeedTest.class,
-        TestValidation.class
-
+        TestValidation.class,
+        TestSubsetting.class
 
 
 //        TransactionSuspendResumeTest.class,

@@ -117,8 +117,8 @@ public final class TumlPropertyOperations extends PropertyOperations {
 			result = true;
 		} else if (isOneToOne(p) && !p.isComposite() && !p.getOtherEnd().isComposite()) {
 			// If association is OneToOne and both sides are non composite then
-			// take the 1-1 side as inverse=true else compare alphabetically
-			if (p.getLower() == 0 && p.getOtherEnd().getLower() == 0) {
+			// if there is a 1-1 and 0-1 then take the 1-1 side as inverse=true else compare alphabetically
+			if ((p.getLower() == 0 && p.getOtherEnd().getLower() == 0) || (p.getLower() == 1 && p.getOtherEnd().getLower() == 1)) {
 				result = p.getName().compareTo(p.getOtherEnd().getName()) > -1;
 			} else {
 				result = p.getLower() == 1 && p.getUpper() == 1;
