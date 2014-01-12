@@ -487,7 +487,7 @@ public class TestNeo4jBlueprints {
         }
     }
 
-    @Test
+//    @Test
     public void testRemoveTransactionAlreadyWritable() throws IOException {
         File f = new File("/tmp/neo4j-performance");
         if (f.exists()) {
