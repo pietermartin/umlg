@@ -79,12 +79,21 @@
     <availablePage>
       <emfPageIdentifier href="umlg-test.notation#_Lm8mEHlpEeOViYFNuR_VNg"/>
     </availablePage>
+    <availablePage>
+      <emfPageIdentifier href="umlg-test.notation#_DTv8EHtyEeOYhpiy1kqM8Q"/>
+    </availablePage>
   </pageList>
   <sashModel xmi:id="_1dMZogAOEeKpVr_ntT6cLA" currentSelection="_1dMZoAAOEeKpVr_ntT6cLA">
     <windows xmi:id="_1dMZoQAOEeKpVr_ntT6cLA">
       <children xsi:type="di:TabFolder" xmi:id="_1dMZoAAOEeKpVr_ntT6cLA">
         <children>
           <emfPageIdentifier href="umlg-test.notation#_Lm8mEHlpEeOViYFNuR_VNg"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="umlg-test.notation#_HkiPsIlaEeKeSZB9UA6Gvw"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="umlg-test.notation#_DTv8EHtyEeOYhpiy1kqM8Q"/>
         </children>
       </children>
     </windows>
