@@ -17,7 +17,7 @@ import java.io.IOException;
  */
 public class TestPerformance {
 
-    @Test
+//    @Test
     public void testSpeedDude() throws IOException {
         String url = "/tmp/test-orientdb-blueprints";
         File dir = new File(url);

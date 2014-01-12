@@ -45,7 +45,7 @@ public class TestBitsySpeed {
         graph.shutdown();
     }
 
-    @Test
+//    @Test
     public void testMultiThreadedCommits() throws Exception {
         for (int numThreads : new int[]{1, 2, 3, 4, 5, 10, 25, 50, 100, 150, 250, 500, 750, 1000}) {
             final int numVerticesPerThread = (numThreads <= 10 ? 10000 : (numThreads <= 100 ? 100000 : 100000)) / numThreads;
@@ -148,7 +148,7 @@ public class TestBitsySpeed {
         }
     }
 
-    @Test
+//    @Test
     public void testMultiThreadedReadsOnBipartiteGraph() throws Exception {
         final int numVertices = 1000000; // 100K vertices
         final int numIters = 100000;

@@ -25,7 +25,7 @@ import java.util.concurrent.*;
  */
 public class TestNeo4jBlueprints {
 
-    @Test
+//    @Test
     public void testNeo4jInsertVertexPerformance() {
         File f = new File("/tmp/neo4j-performance");
         if (f.exists()) {
@@ -55,7 +55,7 @@ public class TestNeo4jBlueprints {
     }
 
 
-    @Test
+//    @Test
     public void testNeo4jPerformance() {
         File f = new File("/tmp/neo4j-performance");
         if (f.exists()) {
@@ -233,7 +233,7 @@ public class TestNeo4jBlueprints {
         graph.shutdown();
     }
 
-    @Test
+//    @Test
     public void testSpeed() throws IOException {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
@@ -282,7 +282,7 @@ public class TestNeo4jBlueprints {
     }
 
 
-    @Test
+//    @Test
     public void testSpeedDude1() throws IOException {
         File f = new File("/tmp/neo4j-performance");
         if (f.exists()) {
@@ -334,7 +334,7 @@ public class TestNeo4jBlueprints {
         }
     }
 
-    @Test
+//    @Test
     public void testSpeedDude2() throws IOException {
         File f = new File("/tmp/neo4j-performance");
         if (f.exists()) {
@@ -417,7 +417,7 @@ public class TestNeo4jBlueprints {
         }
     }
 
-    @Test
+//    @Test
     public void testSpeedLinkedList() throws IOException {
         File f = new File("/tmp/neo4j-performance");
         if (f.exists()) {
@@ -533,7 +533,7 @@ public class TestNeo4jBlueprints {
     }
 
 
-    @Test
+//    @Test
     public void testIndexSpeed() throws IOException {
         File f = new File("/tmp/neo4j-performance");
         if (f.exists()) {

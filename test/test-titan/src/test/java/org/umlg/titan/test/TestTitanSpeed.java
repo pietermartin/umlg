@@ -28,7 +28,7 @@ public class TestTitanSpeed {
     private Throwable toThrow;
     Random rand = new Random();
 
-    @Test
+//    @Test
     public void testTitanInsertVertexPerformance() {
         File f = new File("/tmp/titan-performance");
         if (f.exists()) {
@@ -62,7 +62,7 @@ public class TestTitanSpeed {
     }
 
 
-    @Test
+//    @Test
     public void testTitanPerformance() {
         File f = new File("/tmp/neo4j-performance");
         if (f.exists()) {
@@ -97,7 +97,7 @@ public class TestTitanSpeed {
         System.out.println(stopWatch.toString());
     }
 
-    @Test
+//    @Test
     public void testMultiThreadedReadsOnBipartiteGraph() throws Exception {
 
         File f = new File("/tmp/neo4j-performance");
@@ -240,7 +240,7 @@ public class TestTitanSpeed {
 //        ((BitsyGraph)graph).setDefaultIsolationLevel(BitsyIsolationLevel.REPEATABLE_READ);
     }
 
-    @Test
+//    @Test
     public void testSpeedDude() {
         File f = new File("/tmp/neo4j-performance");
         if (f.exists()) {
@@ -289,7 +289,7 @@ public class TestTitanSpeed {
         }
     }
 
-    @Test
+//    @Test
     public void testSpeedDude2() throws IOException {
         final String url = "/tmp/titan-test";
         File dir = new File(url);
@@ -374,7 +374,7 @@ public class TestTitanSpeed {
         }
     }
 
-    @Test
+//    @Test
     public void testSpeedLinkedList() throws IOException {
         final String url = "/tmp/titan-test";
         File dir = new File(url);
@@ -464,7 +464,7 @@ public class TestTitanSpeed {
         return count;
     }
 
-    @Test
+//    @Test
     public void testIndexSpeed() throws IOException {
         final String url = "/tmp/titan-test";
         File dir = new File(url);

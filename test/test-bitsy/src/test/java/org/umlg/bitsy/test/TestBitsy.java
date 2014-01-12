@@ -25,7 +25,7 @@ import java.util.List;
  */
 public class TestBitsy {
 
-    @Test
+//    @Test
     public void testSpeedDude1() throws IOException {
         File f = new File("/tmp/bitsy-performance");
         if (f.exists()) {
@@ -80,7 +80,7 @@ public class TestBitsy {
         }
     }
 
-    @Test
+//    @Test
     public void testSpeedDude2() throws IOException {
         File f = new File("/tmp/bitsy-performance");
         if (f.exists()) {
