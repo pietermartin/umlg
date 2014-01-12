@@ -39,6 +39,7 @@ public class DefaultVisitors {
         result.add(new OnePropertyVisitor(Workspace.INSTANCE));
         result.add(new ClassImplementedInterfacePropertyVisitor(Workspace.INSTANCE));
         result.add(new DerivedPropertyVisitor(Workspace.INSTANCE));
+        result.add(new RedefinitionPropertyVisitor(Workspace.INSTANCE));
         result.add(new DerivedUnionPropertyVisitor(Workspace.INSTANCE));
         result.add(new QualifierValidator(Workspace.INSTANCE));
         result.add(new QualifierVisitor(Workspace.INSTANCE));

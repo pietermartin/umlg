@@ -38,11 +38,18 @@ public class DerivedPropertyVisitor extends BaseVisitor implements Visitor<Prope
 			} else {
 				getter = new OJAnnotatedOperation(propertyWrapper.getter(), propertyWrapper.javaTypePath());
 			}
-			String ocl = propertyWrapper.getOclDerivedValue();
-			getter.setComment(String.format("Implements the ocl statement for derived property '%s'\n<pre>\n%s\n</pre>", propertyWrapper.getName(), ocl));
-			logger.info(String.format("About to parse ocl expression \n%s", new Object[] { ocl }));
-			OCLExpression<Classifier> oclExp = UmlgOcl2Parser.INSTANCE.parseOcl(ocl);
-			getter.getBody().addToStatements("return " + TumlOcl2Java.oclToJava(owner, oclExp));
+            String defaulValue;
+            if (propertyWrapper.hasOclDefaultValue()) {
+                defaulValue = propertyWrapper.getOclDerivedValue();
+			    getter.setComment(String.format("Implements the ocl statement for derived property '%s'\n<pre>\n%s\n</pre>", propertyWrapper.getName(), defaulValue));
+                logger.info(String.format("About to parse ocl expression \n%s", new Object[] { defaulValue }));
+                OCLExpression<Classifier> oclExp = UmlgOcl2Parser.INSTANCE.parseOcl(defaulValue);
+                getter.getBody().addToStatements("return " + TumlOcl2Java.oclToJava(owner, oclExp));
+            } else {
+                defaulValue = propertyWrapper.getDefaultValueAsString();
+                getter.setComment(String.format("The default value for derived property '%s'\n<pre>\n%s\n</pre>", propertyWrapper.getName(), defaulValue));
+                getter.getBody().addToStatements("return " + defaulValue);
+            }
 			owner.addToOperations(getter);
 		}
 	}

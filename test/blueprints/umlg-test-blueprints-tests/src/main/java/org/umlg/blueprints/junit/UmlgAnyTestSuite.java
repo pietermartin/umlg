@@ -8,6 +8,7 @@ import org.umlg.tinker.collectiontest.OrderedSetTestTest;
 import org.umlg.tinker.deletiontest.DeletionTest;
 import org.umlg.tinker.enumeration.ManyEnumerationTest;
 import org.umlg.tinker.nonnavigable.NonNavigableTest;
+import org.umlg.tinker.redefinition.TestRedefinition;
 import org.umlg.tinker.speed.SpeedTest;
 import org.umlg.tinker.subsetting.TestSubsetting;
 
@@ -16,6 +17,6 @@ import org.umlg.tinker.subsetting.TestSubsetting;
  * Time: 10:06 AM
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({TestSubsetting.class})
+@Suite.SuiteClasses({TestRedefinition.class})
 public class UmlgAnyTestSuite {
 }

@@ -133,9 +133,9 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
                     derived = (Property) e;
                 }
             }
-            sb.append(getOclDerivedValue(derived));
+            sb.append(PropertyWrapper.getOclDerivedValue(derived));
         } else {
-            sb.append(getOclDerivedValue(this.property));
+            sb.append(PropertyWrapper.getOclDerivedValue(this.property));
         }
         return sb.toString();
     }
@@ -268,7 +268,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         return TumlClassOperations.propertyEnumName(getOwningType()) + "." + fieldname();
     }
 
-    public String getInitValue() {
+    public String getDefaultValueAsString() {
         ValueSpecification v = getDefaultValue();
         if (v instanceof OpaqueExpression) {
             if (hasOclDefaultValue()) {
@@ -284,8 +284,22 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
             } else {
                 return "\"\"";
             }
+        } else if (v instanceof LiteralReal) {
+            LiteralReal literalReal = (LiteralReal)v;
+            return String.valueOf(literalReal.getValue() + "D");
+        } else if (v instanceof LiteralInteger) {
+            LiteralInteger literalInteger = (LiteralInteger)v;
+            return String.valueOf(literalInteger.getValue());
+        } else if (v instanceof LiteralUnlimitedNatural) {
+            LiteralUnlimitedNatural literalUnlimitedNatural = (LiteralUnlimitedNatural)v;
+            return String.valueOf(literalUnlimitedNatural.getValue());
+        } else if (v instanceof LiteralBoolean) {
+            LiteralBoolean literalBoolean = (LiteralBoolean)v;
+            return String.valueOf(literalBoolean.isValue());
+        } else if (v instanceof LiteralNull) {
+            return "null";
         } else {
-            throw new RuntimeException("Not supported");
+            throw new RuntimeException(String.format("ValueSpecification %s not supported", v.getClass().getSimpleName()));
         }
     }
 

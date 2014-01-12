@@ -1,12 +1,16 @@
 package org.umlg.javageneration.util;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.emf.common.util.BasicDiagnostic;
+import org.eclipse.emf.common.util.Diagnostic;
+import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.uml2.uml.*;
 import org.eclipse.uml2.uml.Class;
+import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.internal.operations.PropertyOperations;
+import org.eclipse.uml2.uml.util.UMLValidator;
 import org.umlg.framework.ModelLoader;
 import org.umlg.java.metamodel.OJPathName;
 import org.umlg.java.metamodel.OJSimpleStatement;
@@ -333,5 +337,51 @@ public final class TumlPropertyOperations extends PropertyOperations {
 	public static String internalRemover(Property property) {
 		return "z_internalRemoveFrom" + StringUtils.capitalize(property.getName());
 	}
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * <!-- begin-model-doc -->
+     * A redefined property must be inherited from a more general classifier containing the redefining property.
+     * if (redefinedProperty->notEmpty()) then
+     *   (redefinitionContext->notEmpty() and
+     *       redefinedProperty->forAll(rp|
+     *         ((redefinitionContext->collect(fc|
+     *           fc.allParents()))->asSet())->collect(c| c.allFeatures())->asSet()->includes(rp))
+     * @param property The receiving '<em><b>Property</b></em>' model object.
+     * @param diagnostics The chain of diagnostics to which problems are to be appended.
+     * @param context The cache of context-specific information.
+     * <!-- end-model-doc -->
+     * @generated
+     */
+    public static boolean validateRedefinedPropertyInherited(Property property,
+                                                             DiagnosticChain diagnostics, Map<Object, Object> context) {
+
+        Property redefiningProperty = (Property)context.get("redefiningProperty");
+        Set<Classifier> redefinedContextAllParents = new HashSet<Classifier>();
+        for (Classifier redefinedContext : redefiningProperty.getRedefinitionContexts()) {
+            redefinedContextAllParents.addAll(redefinedContext.allParents());
+        }
+        Set<Feature> redefinedContextAllFeatures = new HashSet<Feature>();
+        for (Classifier contextParent : redefinedContextAllParents) {
+            redefinedContextAllFeatures.addAll(contextParent.allFeatures());
+        }
+
+        if (!redefinedContextAllFeatures.contains(property)) {
+            if (diagnostics != null) {
+                diagnostics
+                        .add(new BasicDiagnostic(
+                                Diagnostic.ERROR,
+                                UMLValidator.DIAGNOSTIC_SOURCE,
+                                UMLValidator.PROPERTY__REDEFINED_PROPERTY_INHERITED,
+                                org.eclipse.emf.ecore.plugin.EcorePlugin.INSTANCE
+                                        .getString(
+                                                "_UI_GenericInvariant_diagnostic", new Object[]{"validateRedefinedPropertyInherited", org.eclipse.emf.ecore.util.EObjectValidator.getObjectLabel(property, context)}), //$NON-NLS-1$ //$NON-NLS-2$
+                                new Object[]{property}));
+            }
+            return false;
+        }
+        return true;
+    }
 
 }

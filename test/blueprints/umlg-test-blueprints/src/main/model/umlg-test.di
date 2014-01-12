@@ -84,12 +84,6 @@
     <windows xmi:id="_1dMZoQAOEeKpVr_ntT6cLA">
       <children xsi:type="di:TabFolder" xmi:id="_1dMZoAAOEeKpVr_ntT6cLA">
         <children>
-          <emfPageIdentifier href="umlg-test.notation#_NvITQHioEeOViYFNuR_VNg"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="umlg-test.notation#_4l0FoHjzEeOViYFNuR_VNg"/>
-        </children>
-        <children>
           <emfPageIdentifier href="umlg-test.notation#_Lm8mEHlpEeOViYFNuR_VNg"/>
         </children>
       </children>

@@ -7,7 +7,6 @@ import org.eclipse.ocl.expressions.OCLExpression;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.Property;
-import org.umlg.framework.VisitFilter;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedInterface;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
@@ -77,7 +76,7 @@ public class PropertyVisitor extends BaseVisitor implements Visitor<Property> {
 //			java = "//TODO " + constraint.toString();
             initVariables.getBody().addToStatements(propertyWrapper.setter() + "(" + java + ")");
         } else {
-            java = propertyWrapper.getInitValue();
+            java = propertyWrapper.getDefaultValueAsString();
             initVariables.getBody().addToStatements(propertyWrapper.setter() + "(" + java + ")");
         }
     }
