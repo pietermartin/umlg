@@ -1,20 +1,17 @@
 package org.umlg.runtime.restlet;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.restlet.data.MediaType;
 import org.restlet.ext.freemarker.TemplateRepresentation;
-import org.restlet.representation.FileRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
-import org.restlet.resource.Directory;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 import org.umlg.framework.ModelLoader;
 import org.umlg.runtime.util.Pair;
 import org.umlg.runtime.util.UmlgUtil;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class TumlGuiServerResource extends ServerResource {
 
@@ -24,16 +21,16 @@ public class TumlGuiServerResource extends ServerResource {
 
     @Override
     protected Representation get() throws ResourceException {
-        System.out.println("getHostRef = " + getHostRef());
-        System.out.println("getLocationRef = " + getLocationRef());
-        System.out.println("getReference = " + getReference());
-        System.out.println("getReferrerRef = " + getReferrerRef());
-        System.out.println("getOriginalRef = " + getOriginalRef());
-        System.out.println("getRootRef = " + getRootRef());
-        System.out.println("getResourceRef = " + getRequest().getResourceRef());
+        getLogger().fine(String.format("getHostRef = %s", getHostRef()));
+        getLogger().fine(String.format("getLocationRef = %s", getLocationRef()));
+        getLogger().fine(String.format("getReference = %s", getReference()));
+        getLogger().fine(String.format("getReferrerRef = %s", getReferrerRef()));
+        getLogger().fine(String.format("getOriginalRef = %s", getOriginalRef()));
+        getLogger().fine(String.format("getRootRef = %s", getRootRef()));
+        getLogger().fine(String.format("getResourceRef = %s", getRequest().getResourceRef()));
         Map<String, Object> requestAttr = getRequestAttributes();
         for (String requestKey : requestAttr.keySet()) {
-            System.out.println(requestKey + " : " + requestAttr.get(requestKey));
+            getLogger().fine(String.format("%s : %s", requestKey, requestAttr.get(requestKey)));
         }
 
         Map<String, Object> dataModel = new HashMap<String, Object>();
@@ -51,17 +48,17 @@ public class TumlGuiServerResource extends ServerResource {
                 .setUmlgLib(ModelLoader.INSTANCE.isUmlGLibIncluded())
                 .setPoweredBy(poweredBy.getFirst())
                 .setPoweredByLink(poweredBy.getSecond()));
-//        Representation umlgUiFtl = new ClientResource("clap:///org/umlg/ui/umlgui2.html").get();
 
-        File umlgui2 = new File("./runtime/runtime-ui/src/main/resources/org/umlg/ui/umlgui2.html");
-        FileRepresentation fileRepresentation = new FileRepresentation(umlgui2, MediaType.APPLICATION_XHTML);
+        Representation umlgUiFtl = new ClientResource("clap:///org/umlg/ui/umlgui2.html").get();
+        return new TemplateRepresentation(umlgUiFtl, dataModel, MediaType.TEXT_HTML);
 
+//        File umlgui2 = new File("./runtime/runtime-ui/src/main/resources/org/umlg/ui/umlgui2.html");
+//        FileRepresentation fileRepresentation = new FileRepresentation(umlgui2, MediaType.APPLICATION_XHTML);
 //        //Directory css = new Directory(getContext(), "clap://javascript/css");
 //        Directory css = new Directory(getContext(), "file:///home/pieter/Downloads/umlg/runtime/runtime-ui/src/main/resources/org/umlg/ui/");
 //        css.setListingAllowed(true);
 //        router.attach("/css/", css);
-
-        return new TemplateRepresentation(fileRepresentation, dataModel, MediaType.TEXT_HTML);
+//        return new TemplateRepresentation(fileRepresentation, dataModel, MediaType.TEXT_HTML);
     }
 
     public class App {

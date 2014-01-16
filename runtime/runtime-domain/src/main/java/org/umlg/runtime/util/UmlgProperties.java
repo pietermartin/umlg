@@ -54,4 +54,8 @@ public class UmlgProperties {
     public boolean isTransactionsMutliThreaded() {
         return Boolean.parseBoolean(this.properties.getProperty("transaction.multithreaded", "false"));
     }
+
+    public boolean isLoadUiResourcesFromFile() {
+        return Boolean.parseBoolean(this.properties.getProperty("umlg.ui.from.file", "false"));
+    }
 }

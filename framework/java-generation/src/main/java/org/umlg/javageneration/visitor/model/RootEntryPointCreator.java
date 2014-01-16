@@ -36,6 +36,7 @@ public class RootEntryPointCreator extends BaseVisitor implements Visitor<Model>
 	@Override
 	public void visitBefore(Model model) {
 		OJAnnotatedClass root = new OJAnnotatedClass("Root");
+        root.setComment(String.format("This class represents the model %s.\nIt is a singleton and allows on access to all the root classes in the model.", model.getQualifiedName()));
 		root.addToImplementedInterfaces(TinkerGenerationUtil.UmlgApplicationNode);
 		OJPackage ojPackage = new OJPackage(TinkerGenerationUtil.UmlgRootPackage.toJavaString());
 		root.setMyPackage(ojPackage);

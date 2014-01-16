@@ -46,6 +46,9 @@ public class TumlRestletGenerationUtil {
     public static final OJPathName TumlMetaQueryServerResourceImpl = new OJPathName("org.umlg.runtime.restlet.TumlMetaQueryServerResourceImpl");
 //    public static final OJPathName TumlTransactionResourceImpl = new OJPathName("org.umlg.runtime.restlet.TumlTransactionServerResourceImpl");
     public static final OJPathName Component = new OJPathName("org.restlet.Component");
+    public static final OJPathName UmlgRestletApplication = new OJPathName("org.umlg.runtime.restlet.UmlgRestletApplication");
+    public static final OJPathName UmlgRestletComponent = new OJPathName("org.umlg.runtime.restlet.UmlgRestletComponent");
+
     public static final OJPathName Application = new OJPathName("org.restlet.Application");
     public static final OJPathName Server = new OJPathName("org.restlet.Server");
     public static final OJPathName Context = new OJPathName("org.restlet.Context");

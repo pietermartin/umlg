@@ -8,6 +8,7 @@ import org.umlg.generation.Workspace;
 import org.umlg.java.metamodel.*;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
+import org.umlg.java.metamodel.generated.OJVisibilityKindGEN;
 import org.umlg.javageneration.util.TinkerGenerationUtil;
 import org.umlg.javageneration.visitor.BaseVisitor;
 import org.umlg.restlet.util.TumlRestletGenerationUtil;
@@ -34,7 +35,7 @@ public class RestletComponentAndApplicationGenerator extends BaseVisitor impleme
 
     private void createComponent(Model model) {
         OJAnnotatedClass component = new OJAnnotatedClass(getComponentName(model));
-        component.setSuperclass(TumlRestletGenerationUtil.Component);
+        component.setSuperclass(TumlRestletGenerationUtil.UmlgRestletComponent);
         OJPackage org = new OJPackage("org");
         OJPackage tuml = new OJPackage("umlg", org);
         OJPackage restlet = new OJPackage(model.getName().toLowerCase(), tuml);
@@ -42,8 +43,17 @@ public class RestletComponentAndApplicationGenerator extends BaseVisitor impleme
         addToSource(component);
 
         addComponentMainMethod(model, component);
-        addComponentDefaultConstructor(model, component);
-        addStop(component);
+        addComponentAttachApplications(model, component);
+//        addComponentDefaultConstructor(model, component);
+//        addStop(component);
+    }
+
+    private void addComponentAttachApplications(Model model, OJAnnotatedClass component) {
+        OJAnnotatedOperation attachApplications = new OJAnnotatedOperation("attachApplications");
+        attachApplications.setVisibility(OJVisibilityKindGEN.PROTECTED);
+        TinkerGenerationUtil.addOverrideAnnotation(attachApplications);
+        attachApplications.getBody().addToStatements("getDefaultHost().attach(\"/" + model.getName() + "\", new " + getApplicationName(model) + "())");
+        component.addToOperations(attachApplications);
     }
 
     private void addStop(OJAnnotatedClass component) {
@@ -129,15 +139,35 @@ public class RestletComponentAndApplicationGenerator extends BaseVisitor impleme
 
     private void createApplication(Model model) {
         OJAnnotatedClass component = new OJAnnotatedClass(getApplicationName(model));
-        component.setSuperclass(TumlRestletGenerationUtil.Application);
+        component.setSuperclass(TumlRestletGenerationUtil.UmlgRestletApplication);
         OJPackage org = new OJPackage("org");
         OJPackage tuml = new OJPackage("umlg", org);
         OJPackage restlet = new OJPackage(model.getName().toLowerCase(), tuml);
         component.setMyPackage(restlet);
         addToSource(component);
 
-        addApplicationInboundRootMethod(model, component);
+//        addApplicationInboundRootMethod(model, component);
         addApplicationDefaultConstructor(model, component);
+        addAttachAll(model, component);
+        addGetModelFileName(model, component);
+    }
+
+    private void addGetModelFileName(Model model, OJAnnotatedClass component) {
+        OJAnnotatedOperation getModelFileName = new OJAnnotatedOperation("getModelFileName");
+        getModelFileName.setReturnType("String");
+        getModelFileName.setVisibility(OJVisibilityKindGEN.PROTECTED);
+        TinkerGenerationUtil.addOverrideAnnotation(getModelFileName);
+        getModelFileName.getBody().addToStatements("return \"" + this.workspace.getModelFile().getName() + "\"");
+        component.addToOperations(getModelFileName);
+    }
+
+    private void addAttachAll(Model model, OJAnnotatedClass component) {
+        OJAnnotatedOperation attachAll = new OJAnnotatedOperation("attachAll");
+        attachAll.addParam("router", TumlRestletGenerationUtil.Router);
+        attachAll.setVisibility(OJVisibilityKindGEN.PROTECTED);
+        TinkerGenerationUtil.addOverrideAnnotation(attachAll);
+        attachAll.getBody().addToStatements(TumlRestletGenerationUtil.RestletRouterEnum.toJavaString() + ".attachAll(router);");
+        component.addToOperations(attachAll);
     }
 
     private String getApplicationName(Model model) {
@@ -184,8 +214,8 @@ public class RestletComponentAndApplicationGenerator extends BaseVisitor impleme
 
     private void addApplicationDefaultConstructor(Model model, OJAnnotatedClass application) {
         OJConstructor constructor = application.getDefaultConstructor();
-        constructor.getBody().addToStatements("setStatusService(new " + TumlRestletGenerationUtil.ErrorStatusService.getLast() + "())");
-        application.addToImports(TumlRestletGenerationUtil.ErrorStatusService);
+//        constructor.getBody().addToStatements("setStatusService(new " + TumlRestletGenerationUtil.ErrorStatusService.getLast() + "())");
+//        application.addToImports(TumlRestletGenerationUtil.ErrorStatusService);
     }
 
 }

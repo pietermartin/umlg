@@ -38,6 +38,8 @@ public class TinkerGenerationUtil {
     public static final OJPathName UmlgIndexManager = new OJPathName("org.umlg.runtime.adaptor.UmlgIndexManager");
     public static final OJPathName UmlgMetaNodeManager = new OJPathName("org.umlg.runtime.adaptor.UmlgMetaNodeManager");
     public static final String QualifiedNameClassMapName = "qualifiedNameClassMap";
+
+    public static final OJPathName UmlgGraph = new OJPathName("org.umlg.runtime.adaptor.UmlgGraph");
     public static final OJPathName UmlgGraphManager = new OJPathName("org.umlg.runtime.adaptor.UmlgGraphManager");
     public static final OJPathName ModelLoader = new OJPathName("org.umlg.framework.ModelLoader");
     public static final OJPathName UmlgOcl2Parser = new OJPathName("org.umlg.ocl.UmlgOcl2Parser");
@@ -64,7 +66,6 @@ public class TinkerGenerationUtil {
     public static final OJPathName DataTypeEnum = new OJPathName("org.umlg.runtime.domain.DataTypeEnum");
     public static final OJPathName BodyExpressionEvaluator = new OJPathName("org.umlg.runtime.collection.ocl.BodyExpressionEvaluator");
     public static final OJPathName BooleanExpressionEvaluator = new OJPathName("org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator");
-    public static final OJPathName Root = new OJPathName("org.umlg.root.Root");
     public static final OJPathName RootRuntimePropertyEnum = new OJPathName("org.umlg.root.Root.RootRuntimePropertyEnum");
 
     public final static OJPathName ObjectMapper = new OJPathName("com.fasterxml.jackson.databind.ObjectMapper");

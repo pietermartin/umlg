@@ -27,6 +27,7 @@ public class IndexCreator extends BaseVisitor implements Visitor<Model> {
     @Override
     public void visitBefore(Model element) {
         OJAnnotatedClass indexCreator = new OJAnnotatedClass("IndexCreator");
+        indexCreator.setComment("This class is responsible to create all keyed indexes.\nIt is invoked the first time a graph is created.");
         OJPackage ojPackage = new OJPackage(TinkerGenerationUtil.UmlgRootPackage.toJavaString());
         indexCreator.setMyPackage(ojPackage);
         indexCreator.addToImplementedInterfaces(TinkerGenerationUtil.UmlgIndexManager);
@@ -43,7 +44,9 @@ public class IndexCreator extends BaseVisitor implements Visitor<Model> {
         }
         indexCreator.addToImports(TinkerGenerationUtil.UmlgLabelConverterFactoryPathName);
         //Create index for the application root
-        createIndexes.getBody().addToStatements(TinkerGenerationUtil.graphDbAccess + ".createKeyIndex(\"" + TinkerGenerationUtil.UmlgRootVertex + "\", " + TinkerGenerationUtil.vertexPathName.getLast() + ".class)");
+        createIndexes.getBody().addToStatements(TinkerGenerationUtil.graphDbAccess + ".createKeyIndex(" + TinkerGenerationUtil.UmlgGraph.getLast() + ".ROOT_VERTEX, " + TinkerGenerationUtil.vertexPathName.getLast() + ".class)");
+
+        indexCreator.addToImports(TinkerGenerationUtil.UmlgGraph);
         indexCreator.addToImports(TinkerGenerationUtil.vertexPathName);
         indexCreator.addToImports(TinkerGenerationUtil.graphDbPathName);
     }

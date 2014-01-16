@@ -394,7 +394,7 @@ public class AuditClassCreator extends BaseVisitor implements Visitor<Class> {
 		OJConstructor constructor = new OJConstructor();
 		constructor.addParam("vertex", TinkerGenerationUtil.vertexPathName);
 		if (c.getGeneralizations().isEmpty()) {
-			constructor.getBody().addToStatements("this.vertex=vertex");
+			constructor.getBody().addToStatements("this.vertex = vertex");
 		} else {
 			constructor.getBody().addToStatements("super(vertex)");
 		}
