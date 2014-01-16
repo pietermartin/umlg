@@ -277,6 +277,10 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
                 return getDefaultValue().stringValue();
             }
         } else if (v instanceof LiteralString) {
+            if (!TumlPropertyOperations.isString(getType())) {
+                //TODO move validation to some collector to show the user all validation failures in one go
+                throw new IllegalStateException(String.format("Property %s has a LiteralString default value but is of type %s. This is illegal!", getQualifiedName(), getType().getQualifiedName()));
+            }
             LiteralString expr = (LiteralString) v;
             String result = expr.getValue();
             if (result != null) {

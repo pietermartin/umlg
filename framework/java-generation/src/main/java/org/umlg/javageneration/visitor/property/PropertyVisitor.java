@@ -15,6 +15,7 @@ import org.umlg.generation.Workspace;
 import org.umlg.javageneration.ocl.TumlOcl2Java;
 import org.umlg.javageneration.util.PropertyWrapper;
 import org.umlg.javageneration.util.TumlClassOperations;
+import org.umlg.javageneration.util.TumlPropertyOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
 import org.umlg.javageneration.visitor.clazz.ClassBuilder;
 import org.umlg.ocl.UmlgOcl2Parser;

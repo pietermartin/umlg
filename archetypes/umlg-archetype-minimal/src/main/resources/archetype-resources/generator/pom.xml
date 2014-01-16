@@ -18,11 +18,5 @@
             <artifactId>java-generation</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
-        <!-- required for generating restlet resources -->
-        <dependency>
-            <groupId>org.umlg</groupId>
-            <artifactId>restlet</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
     </dependencies>
 </project>

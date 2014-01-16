@@ -298,11 +298,36 @@ public final class TumlPropertyOperations extends PropertyOperations {
 		if (!(p.getType() instanceof PrimitiveType) && !(p.getType() instanceof Enumeration) && p.getType() instanceof DataType) {
 			return DataTypeEnum.getPathNameFromDataType((DataType) p.getType());
 		} else {
-			return new OJPathName(Namer.name(p.getType().getNearestPackage()) + "." + TinkerGenerationUtil.umlPrimitiveTypeToJava(p.getType()));
+			return new OJPathName(Namer.name(p.getType().getNearestPackage()) + "." + TumlPropertyOperations.umlPrimitiveTypeToJava(p.getType()));
 		}
 	}
 
-	public static String getter(Property property) {
+    public static boolean isPrimitiveString(Type type) {
+        return "String".equals(TumlPropertyOperations.umlPrimitiveTypeToJava(type));
+    }
+
+    public static String umlPrimitiveTypeToJava(Type type) {
+        if (type instanceof PrimitiveType) {
+            PrimitiveType primitiveType = (PrimitiveType) type;
+            if (primitiveType.getName().equals("String")) {
+                return "String";
+            } else if (primitiveType.getName().equals("Integer")) {
+                return "Integer";
+            } else if (primitiveType.getName().equals("Boolean")) {
+                return "Boolean";
+            } else if (primitiveType.getName().equals("UnlimitedNatural")) {
+                return "Long";
+            } else if (primitiveType.getName().equals("Real")) {
+                return "Double";
+            } else {
+                throw new IllegalStateException("unknown primitive " + primitiveType.getName());
+            }
+        } else {
+            return type.getName();
+        }
+    }
+
+    public static String getter(Property property) {
 		return "get" + StringUtils.capitalize(property.getName());
 	}
 

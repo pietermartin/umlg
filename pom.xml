@@ -36,6 +36,7 @@
 
 
     <modules>
+        <module>archetypes</module>
         <module>eclipselib</module>
         <module>framework</module>
         <module>runtime</module>
