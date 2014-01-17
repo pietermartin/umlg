@@ -5,8 +5,12 @@ import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
 import org.apache.commons.configuration.Configuration;
+import org.apache.commons.io.FileUtils;
 import org.umlg.runtime.domain.UmlgNode;
+import org.umlg.runtime.util.UmlgProperties;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
@@ -247,6 +251,7 @@ public class UmlgOrientDbGraph extends OrientGraph implements UmlgGraph {
     @Override
     public void drop() {
         this.getRawGraph().drop();
+        UmlgGraphManager.INSTANCE.deleteGraph();
     }
 
     @Override

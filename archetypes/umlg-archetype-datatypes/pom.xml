@@ -12,6 +12,7 @@
     <artifactId>umlg-archetype-datatypes</artifactId>
     <packaging>maven-archetype</packaging>
     <name>umlg archetype datatypes</name>
+    <description>Generates a Umlg application with Umlg datatypes and validation profile</description>
     <build>
         <extensions>
             <extension>

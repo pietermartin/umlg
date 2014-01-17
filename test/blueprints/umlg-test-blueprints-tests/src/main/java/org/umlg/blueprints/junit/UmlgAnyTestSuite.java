@@ -17,6 +17,6 @@ import org.umlg.tinker.subsetting.TestSubsetting;
  * Time: 10:06 AM
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({TestRedefinition.class})
+@Suite.SuiteClasses({DeletionTest.class})
 public class UmlgAnyTestSuite {
 }

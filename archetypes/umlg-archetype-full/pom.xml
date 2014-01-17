@@ -13,6 +13,7 @@
     <artifactId>umlg-archetype-full</artifactId>
     <packaging>maven-archetype</packaging>
     <name>umlg archetype full</name>
+    <description>Generates a Umlg application with Umlg's datatypes, validation profile and a rest interface</description>
 
     <build>
         <extensions>

@@ -35,7 +35,7 @@ public class UmlgOrientDbGraphFactory implements UmlgGraphFactory {
             //New graph
             this.umlgGraph.addRoot();
             //Can not do a regular commit here as the this.transactionEventHandler.beforeCommit() calls getRoot()
-            UmlgOrientDbGraph rawGraph = (UmlgOrientDbGraph)this.umlgGraph;
+            UmlgOrientDbGraph rawGraph = (UmlgOrientDbGraph) this.umlgGraph;
             rawGraph.getRawGraph().commit();
             UmlGIndexFactory.getUmlgIndexManager().createIndexes();
             this.umlgGraph.addDeletionNode();
@@ -51,16 +51,14 @@ public class UmlgOrientDbGraphFactory implements UmlgGraphFactory {
     @Override
     public void shutdown() {
         if (this.umlgGraph != null) {
+            this.umlgGraph.rollback();
             this.umlgGraph.shutdown();
         }
     }
 
     @Override
-    public void drop() {
-        if (this.umlgGraph != null) {
-            this.umlgGraph.drop();
-            this.umlgGraph = null;
-        }
+    public void clear() {
+        this.umlgGraph = null;
     }
 
 }

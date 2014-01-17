@@ -19,7 +19,7 @@ public abstract class BaseRestletTest implements ModelLoadedEvent {
 
     @Before
     public void before() throws Exception {
-        UmlgGraphManager.INSTANCE.deleteGraph();
+//        UmlgGraphManager.INSTANCE.deleteGraph();
         this.component = instantiateComponent();
         this.component.start();
         if (!ModelLoader.INSTANCE.isLoaded()) {

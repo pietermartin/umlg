@@ -149,22 +149,7 @@ public class UmlgBitsyGraph extends BitsyAutoReloadingGraph implements UmlgGraph
 
     @Override
     public void drop() {
-        this.shutdown();
-        //Delete the files
-        String dbUrl = UmlgProperties.INSTANCE.getTumlDbLocation();
-        String parsedUrl = dbUrl;
-        if (dbUrl.startsWith("local:")) {
-            parsedUrl = dbUrl.replace("local:", "");
-        }
-        File dir = new File(parsedUrl);
-        if (dir.exists()) {
-            try {
-                logger.info(String.format("Deleting dir %s", new Object[]{dir.getAbsolutePath()}));
-                FileUtils.deleteDirectory(dir);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
+        UmlgGraphManager.INSTANCE.deleteGraph();
     }
 
     @Override

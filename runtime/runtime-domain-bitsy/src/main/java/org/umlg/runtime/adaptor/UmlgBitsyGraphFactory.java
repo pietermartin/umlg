@@ -52,16 +52,14 @@ public class UmlgBitsyGraphFactory implements UmlgGraphFactory {
     @Override
     public void shutdown() {
         if (this.umlgGraph != null) {
+            this.umlgGraph.rollback();
             this.umlgGraph.shutdown();
         }
     }
 
     @Override
-    public void drop() {
-        if (this.umlgGraph != null) {
-            this.umlgGraph.drop();
-            this.umlgGraph = null;
-        }
+    public void clear() {
+        this.umlgGraph = null;
     }
 
 }

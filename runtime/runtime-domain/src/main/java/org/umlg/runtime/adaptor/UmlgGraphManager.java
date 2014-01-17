@@ -54,7 +54,8 @@ public class UmlgGraphManager {
                 Method m = factory.getDeclaredMethod("getInstance", new Class[0]);
                 this.nakedGraphFactory = (UmlgGraphFactory) m.invoke(null);
             }
-            nakedGraphFactory.drop();
+            nakedGraphFactory.shutdown();
+            nakedGraphFactory.clear();
             //Delete the files
             String dbUrl = UmlgProperties.INSTANCE.getTumlDbLocation();
             String parsedUrl = dbUrl;
@@ -70,6 +71,11 @@ public class UmlgGraphManager {
                     throw new RuntimeException(e);
                 }
             }
+            //Remove threadvars
+            GraphDb.remove();
+            TransactionThreadVar.remove();
+            TransactionThreadEntityVar.remove();
+            TransactionThreadMetaNodeVar.remove();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

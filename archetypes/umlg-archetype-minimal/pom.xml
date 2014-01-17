@@ -9,10 +9,10 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.umlg</groupId>
     <artifactId>umlg-archetype-minimal</artifactId>
     <packaging>maven-archetype</packaging>
     <name>umlg archetype minimal</name>
+    <description>Generates a minimal Umlg application. No Umlg uml libraries and no rest interface is included.</description>
 
     <build>
         <extensions>

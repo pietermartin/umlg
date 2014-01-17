@@ -24,18 +24,12 @@ public class BaseLocalDbTest {
 
 	@Before
 	public void before() {
-        UmlgGraphManager.INSTANCE.deleteGraph();
 		this.db = GraphDb.getDb();
 	}
 
     @After
     public void after() {
-        this.db.rollback();
-        UmlgGraphManager.INSTANCE.deleteGraph();
-        GraphDb.remove();
-        TransactionThreadVar.remove();
-        TransactionThreadEntityVar.remove();
-        TransactionThreadMetaNodeVar.remove();
+        this.db.drop();
     }
 
 	protected long countVertices() {

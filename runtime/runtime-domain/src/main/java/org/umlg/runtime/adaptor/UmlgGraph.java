@@ -51,6 +51,10 @@ public interface UmlgGraph extends TransactionalGraph, KeyIndexableGraph {
 
     String executeQuery(UmlgQueryEnum umlgQueryEnum, Object contextId, String query);
 
+    /**
+     * Shutdown the db and delete the data files.
+     * Remove this instance from the threadvar
+     */
     void drop();
 
     //Used for auditing
