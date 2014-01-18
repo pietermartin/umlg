@@ -7,7 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.umlg.Many;
 import org.umlg.One;
-import org.umlg.root.Root;
+import org.umlg.model.Demo;
 import org.umlg.runtime.adaptor.GraphDb;
 import org.umlg.runtime.adaptor.UmlgGraph;
 import org.umlg.runtime.util.UmlgProperties;
@@ -53,7 +53,7 @@ public class TestDemo {
         many5.setName("many5");
         db.commit();
 
-        Assert.assertEquals(1, Root.INSTANCE.getOne().size());
+        Assert.assertEquals(1, Demo.INSTANCE.getOne().size());
         Assert.assertEquals(5, one1.getMany().size());
     }
 }

@@ -1,19 +1,22 @@
 package com.rorotika.test;
 
+import org.apache.commons.io.FileUtils;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.umlg.Many;
 import org.umlg.One;
-import org.umlg.root.Root;
+import org.umlg.model.Demo;
 import org.umlg.runtime.adaptor.GraphDb;
 import org.umlg.runtime.adaptor.UmlgGraph;
-import org.umlg.runtime.adaptor.UmlgGraphManager;
-import org.umlg.runtime.validation.TumlConstraintViolationException;
+import org.umlg.runtime.util.UmlgProperties;
+import org.umlg.runtime.validation.UmlgConstraintViolationException;
 
+import java.io.File;
 import java.io.IOException;
-import java.net.URL;
-import java.util.logging.LogManager;
 
 /**
  * Date: 2014/01/15
@@ -24,7 +27,11 @@ public class TestDemo {
     private UmlgGraph db;
 
     @Before
-    public void before() {
+    public void before() throws IOException {
+        File dbDir = new File(UmlgProperties.INSTANCE.getTumlDbLocation());
+        if (dbDir.exists()) {
+            FileUtils.deleteDirectory(dbDir);
+        }
         this.db = GraphDb.getDb();
     }
 
@@ -57,11 +64,11 @@ public class TestDemo {
         many5.setDateTime(new DateTime());
         db.commit();
 
-        Assert.assertEquals(1, Root.INSTANCE.getOne().size());
+        Assert.assertEquals(1, Demo.INSTANCE.getOne().size());
         Assert.assertEquals(5, one1.getMany().size());
     }
 
-    @Test(expected = TumlConstraintViolationException.class)
+    @Test(expected = UmlgConstraintViolationException.class)
     public void testDemoValidation() {
         try {
             One one1 = new One(true);
@@ -73,7 +80,7 @@ public class TestDemo {
             many1.setName("1234");
             many1.setDateTime(new DateTime());
             db.commit();
-            Assert.assertEquals(1, Root.INSTANCE.getOne().size());
+            Assert.assertEquals(1, Demo.INSTANCE.getOne().size());
             Assert.assertEquals(5, one1.getMany().size());
         } finally {
             db.rollback();

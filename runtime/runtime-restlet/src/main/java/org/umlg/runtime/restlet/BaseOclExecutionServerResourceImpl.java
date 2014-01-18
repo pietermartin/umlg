@@ -22,7 +22,7 @@ public abstract class BaseOclExecutionServerResourceImpl extends ServerResource 
     protected Representation execute(String query, Object contextId, String type) {
         if (type.equalsIgnoreCase("ocl")) {
             UmlgNode context = GraphDb.getDb().instantiateClassifier(contextId);
-            Object result = UmlgOclExecutor.executeOclQuery(context.getQualifiedName(), context, query);
+            Object result = UmlgOclExecutor.executeOclQuery(context, query);
             if (result instanceof Map) {
 //            return UmlgOclExecutor.tupleMapToJson((Map<String, Object>) result);
                 //TODO

@@ -64,8 +64,8 @@ public class UmlgOclExecutor {
 		return result;
 	}
 
-	public static <T> T executeOclQuery(String contextQualifiedName, UmlgNode contextTumlNode, String query) {
-		Classifier contextClassifier = (Classifier) ModelLoader.INSTANCE.findNamedElement(contextQualifiedName);
+	public static <T> T executeOclQuery(UmlgNode contextTumlNode, String query) {
+		Classifier contextClassifier = (Classifier) ModelLoader.INSTANCE.findNamedElement(contextTumlNode.getQualifiedName());
 		OJAnnotatedClass oclClass = new OJAnnotatedClass("OclQuery");
 		oclClass.setSuperclass(UmlgClassOperations.getPathName(contextClassifier));
 		OJPackage ojPackage = new OJPackage(Namer.name(contextClassifier.getNearestPackage()));
@@ -95,8 +95,8 @@ public class UmlgOclExecutor {
 
     //This is called via reflection from UmlgGraph
 	@SuppressWarnings("unchecked")
-	public static String executeOclQueryToJson(String contextQualifiedName, UmlgNode contextTumlNode, String query) {
-		Object result = executeOclQuery(contextQualifiedName, contextTumlNode, query);
+	public static String executeOclQueryToJson(UmlgNode contextTumlNode, String query) {
+		Object result = executeOclQuery(contextTumlNode, query);
 		if (result instanceof Map) {
 			return tupleMapToJson((Map<String, Object>) result);
 		} else if (result instanceof Collection) {

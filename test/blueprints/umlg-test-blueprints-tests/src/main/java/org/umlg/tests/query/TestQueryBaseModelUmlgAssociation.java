@@ -30,7 +30,7 @@ public class TestQueryBaseModelUmlgAssociation extends BaseLocalDbTest {
 		query1.setQueryString("asd");
 		query1.setName("asd");
 		universe1.addToInstanceQuery(query1);
-		Assert.assertNotNull(query1.getBaseTumlWithQuery());
+		Assert.assertNotNull(query1.getBaseUmlgWithQuery());
         db.commit();
 	}
 
@@ -50,7 +50,7 @@ public class TestQueryBaseModelUmlgAssociation extends BaseLocalDbTest {
 		query1.setQueryString("asd");
 		query1.setName("asd");
 		universe1.getInstanceQuery().add(query1);
-		Assert.assertNotNull(query1.getBaseTumlWithQuery());
+		Assert.assertNotNull(query1.getBaseUmlgWithQuery());
         db.commit();
 	}
 

@@ -7,6 +7,9 @@
     <packageImport xmi:type="uml:PackageImport" xmi:id="_Gqp1gH7rEeOYhpiy1kqM8Q">
       <importedPackage xmi:type="uml:Model" href="umlg-datatypes.uml#_K8N1MAD6EeKS1vh1F4YVWQ"/>
     </packageImport>
+    <packageImport xmi:type="uml:PackageImport" xmi:id="_UYuiYICIEeONC9ep4xkWHQ">
+      <importedPackage xmi:type="uml:Model" href="umlg-lib.uml#_mdTDQCM2EeK-Trh8Ll0qUQ"/>
+    </packageImport>
     <packagedElement xmi:type="uml:Package" xmi:id="_slLHEH1NEeOYhpiy1kqM8Q" name="org">
       <packagedElement xmi:type="uml:Package" xmi:id="_u-dSoH1NEeOYhpiy1kqM8Q" name="umlg">
         <ownedComment xmi:type="uml:Comment" xmi:id="_volzAH81EeOYhpiy1kqM8Q" annotatedElement="__F5yEH4jEeOYhpiy1kqM8Q _xc65IH1NEeOYhpiy1kqM8Q">
@@ -15,6 +18,9 @@
 Date and DateTime are datatypes from the umlgdatatypes uml library.</body>
         </ownedComment>
         <packagedElement xmi:type="uml:Class" xmi:id="_xc65IH1NEeOYhpiy1kqM8Q" name="One">
+          <generalization xmi:type="uml:Generalization" xmi:id="_aJBtEICIEeONC9ep4xkWHQ">
+            <general xmi:type="uml:Class" href="umlg-lib.uml#_FAMz0CXHEeKbPYSfIbmXag"/>
+          </generalization>
           <ownedAttribute xmi:type="uml:Property" xmi:id="_y2pFIH1NEeOYhpiy1kqM8Q" name="name" visibility="public">
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_0N_SkH1NEeOYhpiy1kqM8Q" value="1"/>
@@ -31,6 +37,9 @@ Date and DateTime are datatypes from the umlgdatatypes uml library.</body>
           </ownedAttribute>
         </packagedElement>
         <packagedElement xmi:type="uml:Class" xmi:id="__F5yEH4jEeOYhpiy1kqM8Q" name="Many">
+          <generalization xmi:type="uml:Generalization" xmi:id="_gRLXEICIEeONC9ep4xkWHQ">
+            <general xmi:type="uml:Class" href="umlg-lib.uml#_FAMz0CXHEeKbPYSfIbmXag"/>
+          </generalization>
           <ownedAttribute xmi:type="uml:Property" xmi:id="_ATMEkH4kEeOYhpiy1kqM8Q" name="name" visibility="public">
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_BeTM0H4kEeOYhpiy1kqM8Q" value="1"/>

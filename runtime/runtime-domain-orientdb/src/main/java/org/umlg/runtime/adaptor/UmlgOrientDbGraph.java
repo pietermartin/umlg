@@ -132,9 +132,9 @@ public class UmlgOrientDbGraph extends OrientGraph implements UmlgGraph {
             case OCL:
                 try {
                     Class<?> umlgOclExecutor= Class.forName("org.umlg.ocl.UmlgOclExecutor");
-                    Method method = umlgOclExecutor.getMethod("executeOclQueryToJson", String.class, UmlgNode.class, String.class);
+                    Method method = umlgOclExecutor.getMethod("executeOclQueryToJson", UmlgNode.class, String.class);
                     UmlgNode context = (UmlgNode) GraphDb.getDb().instantiateClassifier(contextId);
-                    String json = (String) method.invoke(null, context.getQualifiedName(), context, query);
+                    String json = (String) method.invoke(null, context, query);
                     return json;
                 } catch (ClassNotFoundException e) {
                     throw new RuntimeException("UmlgOclExecutor is not on the class path.");

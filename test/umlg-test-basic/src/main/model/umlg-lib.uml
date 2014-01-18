@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <uml:Model xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xmi:id="_mdTDQCM2EeK-Trh8Ll0qUQ" name="umlglib">
-  <packageImport xmi:id="_LYfHMCM4EeK-Trh8Ll0qUQ">
+  <packageImport xmi:type="uml:PackageImport" xmi:id="_LYfHMCM4EeK-Trh8Ll0qUQ">
     <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
   </packageImport>
-  <packageImport xmi:id="_AHNFgCQPEeKOmc56p_1Osg">
-    <importedPackage xmi:type="uml:Model" href="umlgdatatypes.uml#_K8N1MAD6EeKS1vh1F4YVWQ"/>
+  <packageImport xmi:type="uml:PackageImport" xmi:id="_AHNFgCQPEeKOmc56p_1Osg">
+    <importedPackage xmi:type="uml:Model" href="umlg-datatypes.uml#_K8N1MAD6EeKS1vh1F4YVWQ"/>
   </packageImport>
   <packagedElement xmi:type="uml:Package" xmi:id="_YOjv0CM6EeK-Trh8Ll0qUQ" name="org">
     <packagedElement xmi:type="uml:Package" xmi:id="_bdslUCM6EeK-Trh8Ll0qUQ" name="umlg">
       <packagedElement xmi:type="uml:Package" xmi:id="_fEtIQCM6EeK-Trh8Ll0qUQ" name="hierarchy">
-        <ownedComment xmi:id="_Gky2ACP5EeKOmc56p_1Osg">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_Gky2ACP5EeKOmc56p_1Osg">
           <body>ocl for getAllChildren()
 self.getChildren()->iterate(iter : tumllib::org::tuml::hierarchy::Hierarchy; acc : Set(tumllib::org::tuml::hierarchy::Hierarchy) = Set{} | acc->including(iter)->union(iter.getAllChildren()))</body>
         </ownedComment>
         <packagedElement xmi:type="uml:Interface" xmi:id="_o0lDsCM2EeK-Trh8Ll0qUQ" name="Hierarchy">
-          <ownedOperation xmi:id="_7wF2ACM3EeK-Trh8Ll0qUQ" name="getParent" isQuery="true">
-            <ownedParameter xmi:id="_EJX1ICM4EeK-Trh8Ll0qUQ" name="getParentResult" type="_o0lDsCM2EeK-Trh8Ll0qUQ" direction="return"/>
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_7wF2ACM3EeK-Trh8Ll0qUQ" name="getParent" isQuery="true">
+            <ownedParameter xmi:type="uml:Parameter" xmi:id="_EJX1ICM4EeK-Trh8Ll0qUQ" name="getParentResult" type="_o0lDsCM2EeK-Trh8Ll0qUQ" direction="return"/>
           </ownedOperation>
-          <ownedOperation xmi:id="_87AJ8CM3EeK-Trh8Ll0qUQ" name="getChildren" isQuery="true">
-            <ownedParameter xmi:id="_HUK9MCM4EeK-Trh8Ll0qUQ" name="getChildrenResult" type="_o0lDsCM2EeK-Trh8Ll0qUQ" direction="return">
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_87AJ8CM3EeK-Trh8Ll0qUQ" name="getChildren" isQuery="true">
+            <ownedParameter xmi:type="uml:Parameter" xmi:id="_HUK9MCM4EeK-Trh8Ll0qUQ" name="getChildrenResult" type="_o0lDsCM2EeK-Trh8Ll0qUQ" direction="return">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Td_g0CNbEeKXA8fV9fB29w"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Td_g0SNbEeKXA8fV9fB29w" value="*"/>
             </ownedParameter>
           </ownedOperation>
-          <ownedOperation xmi:id="_9_-N8CM3EeK-Trh8Ll0qUQ" name="isRoot" isQuery="true">
-            <ownedParameter xmi:id="_I5swkCM4EeK-Trh8Ll0qUQ" name="isRootResult" direction="return">
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_9_-N8CM3EeK-Trh8Ll0qUQ" name="isRoot" isQuery="true">
+            <ownedParameter xmi:type="uml:Parameter" xmi:id="_I5swkCM4EeK-Trh8Ll0qUQ" name="isRootResult" direction="return">
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
             </ownedParameter>
           </ownedOperation>
-          <ownedOperation xmi:id="_fwD6sCPwEeKOmc56p_1Osg" name="getAllChildren" isQuery="true">
-            <ownedParameter xmi:id="_nNShQCPwEeKOmc56p_1Osg" name="allChildrenReturnParam" type="_o0lDsCM2EeK-Trh8Ll0qUQ" direction="return">
+          <ownedOperation xmi:type="uml:Operation" xmi:id="_fwD6sCPwEeKOmc56p_1Osg" name="getAllChildren" isQuery="true">
+            <ownedParameter xmi:type="uml:Parameter" xmi:id="_nNShQCPwEeKOmc56p_1Osg" name="allChildrenReturnParam" type="_o0lDsCM2EeK-Trh8Ll0qUQ" direction="return">
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_TRAp8CP5EeKOmc56p_1Osg"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_TRBRACP5EeKOmc56p_1Osg" value="*"/>
             </ownedParameter>
@@ -37,81 +37,93 @@ self.getChildren()->iterate(iter : tumllib::org::tuml::hierarchy::Hierarchy; acc
         </packagedElement>
       </packagedElement>
       <packagedElement xmi:type="uml:Package" xmi:id="_qyfKsCQOEeKOmc56p_1Osg" name="tag">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_GsOZMH-jEeOYhpiy1kqM8Q">
+          <body>This has not yet been implemented.
+The idea is to tag arbitrary object to facilitate easy searching.</body>
+        </ownedComment>
         <packagedElement xmi:type="uml:Class" xmi:id="_yXSjcCQPEeKzTel_Vwmhog" name="Tag">
-          <ownedAttribute xmi:id="_3v61ACQPEeKzTel_Vwmhog" name="baseTuml" type="_2GNhsCQOEeKOmc56p_1Osg" association="_3v7cECQPEeKzTel_Vwmhog">
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_3v61ACQPEeKzTel_Vwmhog" name="baseUmlg" type="_2GNhsCQOEeKOmc56p_1Osg" association="_3v7cECQPEeKzTel_Vwmhog">
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_3v61ASQPEeKzTel_Vwmhog"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_3v61AiQPEeKzTel_Vwmhog" value="*"/>
           </ownedAttribute>
-          <ownedAttribute xmi:id="_7sle4CQPEeKzTel_Vwmhog" name="name" visibility="public">
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_7sle4CQPEeKzTel_Vwmhog" name="name" visibility="public">
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_78KL8CQPEeKzTel_Vwmhog" value="1"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_78LaECQPEeKzTel_Vwmhog" value="1"/>
           </ownedAttribute>
         </packagedElement>
-        <packagedElement xmi:type="uml:Association" xmi:id="_3v7cECQPEeKzTel_Vwmhog" name="tag_baseTuml_1" memberEnd="_3v7cESQPEeKzTel_Vwmhog _3v61ACQPEeKzTel_Vwmhog" navigableOwnedEnd="_3v7cESQPEeKzTel_Vwmhog">
-          <ownedEnd xmi:id="_3v7cESQPEeKzTel_Vwmhog" name="tag" type="_yXSjcCQPEeKzTel_Vwmhog" association="_3v7cECQPEeKzTel_Vwmhog">
+        <packagedElement xmi:type="uml:Association" xmi:id="_3v7cECQPEeKzTel_Vwmhog" name="tag_baseUmlg_1" memberEnd="_3v7cESQPEeKzTel_Vwmhog _3v61ACQPEeKzTel_Vwmhog" navigableOwnedEnd="_3v7cESQPEeKzTel_Vwmhog">
+          <ownedEnd xmi:type="uml:Property" xmi:id="_3v7cESQPEeKzTel_Vwmhog" name="tag" type="_yXSjcCQPEeKzTel_Vwmhog" association="_3v7cECQPEeKzTel_Vwmhog">
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_3v7cEiQPEeKzTel_Vwmhog"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_3v7cEyQPEeKzTel_Vwmhog" value="*"/>
           </ownedEnd>
         </packagedElement>
       </packagedElement>
       <packagedElement xmi:type="uml:Package" xmi:id="_sPG5sCQOEeKOmc56p_1Osg" name="query">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_juEXwH-jEeOYhpiy1kqM8Q" annotatedElement="_JkrskCQPEeKOmc56p_1Osg">
+          <body>InstanceQuery is used to store queries against a particular instance of a class. Add BaseUmlgWithQuery to the root of your inheritence hierarchy to be able to capture InstanceQueries.</body>
+        </ownedComment>
+        <ownedComment xmi:type="uml:Comment" xmi:id="_2jmRUH-5EeOYhpiy1kqM8Q" annotatedElement="_2GNhsCQOEeKOmc56p_1Osg">
+          <body>If you which to have createdOn and updatedOn automatically saved add BaseModelTuml to the root of your inheritence hierarchy</body>
+        </ownedComment>
         <packagedElement xmi:type="uml:Class" xmi:id="_JkrskCQPEeKOmc56p_1Osg" clientDependency="_wK4jIE6JEeK4HckrDYI0ug" name="InstanceQuery">
-          <generalization xmi:id="_4cJHkCRsEeKzTel_Vwmhog" general="_2GNhsCQOEeKOmc56p_1Osg"/>
-          <interfaceRealization xmi:id="_wK4jIE6JEeK4HckrDYI0ug" name="InterfaceRealization1" client="_JkrskCQPEeKOmc56p_1Osg" supplier="_djoUIE6JEeK4HckrDYI0ug" contract="_djoUIE6JEeK4HckrDYI0ug"/>
+          <generalization xmi:type="uml:Generalization" xmi:id="_4cJHkCRsEeKzTel_Vwmhog" general="_2GNhsCQOEeKOmc56p_1Osg"/>
+          <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_wK4jIE6JEeK4HckrDYI0ug" name="InterfaceRealization1" client="_JkrskCQPEeKOmc56p_1Osg" supplier="_djoUIE6JEeK4HckrDYI0ug" contract="_djoUIE6JEeK4HckrDYI0ug"/>
         </packagedElement>
         <packagedElement xmi:type="uml:Enumeration" xmi:id="_NOrSECQPEeKOmc56p_1Osg" name="QueryEnum">
-          <ownedLiteral xmi:id="_OirQkCQPEeKOmc56p_1Osg" name="OCL"/>
+          <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_OirQkCQPEeKOmc56p_1Osg" name="OCL"/>
+          <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_8_zeIIAZEeOYhpiy1kqM8Q" name="GREMLIN"/>
+          <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_-W2JkIAZEeOYhpiy1kqM8Q" name="NATIVE"/>
         </packagedElement>
-        <packagedElement xmi:type="uml:Class" xmi:id="_FAMz0CXHEeKbPYSfIbmXag" name="BaseTumlWithQuery" isAbstract="true">
-          <generalization xmi:id="_Q4ZJ0CXHEeKbPYSfIbmXag" general="_2GNhsCQOEeKOmc56p_1Osg"/>
-          <ownedAttribute xmi:id="_7L5ZgE6JEeK4HckrDYI0ug" name="instanceQuery" type="_JkrskCQPEeKOmc56p_1Osg" isOrdered="true" aggregation="composite" association="_7L6AkE6JEeK4HckrDYI0ug">
+        <packagedElement xmi:type="uml:Class" xmi:id="_FAMz0CXHEeKbPYSfIbmXag" name="BaseUmlgWithQuery" isAbstract="true">
+          <generalization xmi:type="uml:Generalization" xmi:id="_Q4ZJ0CXHEeKbPYSfIbmXag" general="_2GNhsCQOEeKOmc56p_1Osg"/>
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_7L5ZgE6JEeK4HckrDYI0ug" name="instanceQuery" type="_JkrskCQPEeKOmc56p_1Osg" isOrdered="true" aggregation="composite" association="_7L6AkE6JEeK4HckrDYI0ug">
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_7L5ZgU6JEeK4HckrDYI0ug"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_7L5Zgk6JEeK4HckrDYI0ug" value="*"/>
           </ownedAttribute>
         </packagedElement>
         <packagedElement xmi:type="uml:Interface" xmi:id="_djoUIE6JEeK4HckrDYI0ug" name="IQuery">
-          <ownedAttribute xmi:id="_gHafgE6JEeK4HckrDYI0ug" name="name">
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_gHafgE6JEeK4HckrDYI0ug" name="name">
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
           </ownedAttribute>
-          <ownedAttribute xmi:id="_mST7gE6JEeK4HckrDYI0ug" name="description" visibility="public">
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_mST7gE6JEeK4HckrDYI0ug" name="description" visibility="public">
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_mpVUYE6JEeK4HckrDYI0ug"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_mpV7cE6JEeK4HckrDYI0ug" value="1"/>
           </ownedAttribute>
-          <ownedAttribute xmi:id="_qi9RUE6JEeK4HckrDYI0ug" name="queryString" visibility="public">
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_qi9RUE6JEeK4HckrDYI0ug" name="queryString" visibility="public">
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_q02SkE6JEeK4HckrDYI0ug" value="1"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_q025oE6JEeK4HckrDYI0ug" value="1"/>
           </ownedAttribute>
         </packagedElement>
-        <packagedElement xmi:type="uml:Association" xmi:id="_7L6AkE6JEeK4HckrDYI0ug" name="baseTumlWithQuery_instanceQuery_1" memberEnd="_7L6AkU6JEeK4HckrDYI0ug _7L5ZgE6JEeK4HckrDYI0ug" navigableOwnedEnd="_7L6AkU6JEeK4HckrDYI0ug">
-          <ownedEnd xmi:id="_7L6AkU6JEeK4HckrDYI0ug" name="baseTumlWithQuery" type="_FAMz0CXHEeKbPYSfIbmXag" association="_7L6AkE6JEeK4HckrDYI0ug">
+        <packagedElement xmi:type="uml:Association" xmi:id="_7L6AkE6JEeK4HckrDYI0ug" name="baseUmlgWithQuery_instanceQuery_1" memberEnd="_7L6AkU6JEeK4HckrDYI0ug _7L5ZgE6JEeK4HckrDYI0ug" navigableOwnedEnd="_7L6AkU6JEeK4HckrDYI0ug">
+          <ownedEnd xmi:type="uml:Property" xmi:id="_7L6AkU6JEeK4HckrDYI0ug" name="baseUmlgWithQuery" type="_FAMz0CXHEeKbPYSfIbmXag" association="_7L6AkE6JEeK4HckrDYI0ug">
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_7L6Akk6JEeK4HckrDYI0ug" value="1"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_7L6Ak06JEeK4HckrDYI0ug" value="1"/>
           </ownedEnd>
         </packagedElement>
         <packagedElement xmi:type="uml:Association" xmi:id="_BdnZwE6LEeK4HckrDYI0ug" name="iQuery_queryEnum_1" memberEnd="_BdnZxE6LEeK4HckrDYI0ug _BdnZwU6LEeK4HckrDYI0ug" navigableOwnedEnd="_BdnZwU6LEeK4HckrDYI0ug">
-          <ownedEnd xmi:id="_BdnZwU6LEeK4HckrDYI0ug" name="queryEnum" type="_NOrSECQPEeKOmc56p_1Osg" association="_BdnZwE6LEeK4HckrDYI0ug">
+          <ownedEnd xmi:type="uml:Property" xmi:id="_BdnZwU6LEeK4HckrDYI0ug" name="queryEnum" type="_NOrSECQPEeKOmc56p_1Osg" association="_BdnZwE6LEeK4HckrDYI0ug">
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_BdnZwk6LEeK4HckrDYI0ug" value="1"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_BdnZw06LEeK4HckrDYI0ug" value="1"/>
           </ownedEnd>
-          <ownedEnd xmi:id="_BdnZxE6LEeK4HckrDYI0ug" name="iQuery" type="_djoUIE6JEeK4HckrDYI0ug" association="_BdnZwE6LEeK4HckrDYI0ug">
+          <ownedEnd xmi:type="uml:Property" xmi:id="_BdnZxE6LEeK4HckrDYI0ug" name="iQuery" type="_djoUIE6JEeK4HckrDYI0ug" association="_BdnZwE6LEeK4HckrDYI0ug">
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_BdnZxU6LEeK4HckrDYI0ug"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_BdnZxk6LEeK4HckrDYI0ug" value="*"/>
           </ownedEnd>
         </packagedElement>
       </packagedElement>
-      <packagedElement xmi:type="uml:Class" xmi:id="_2GNhsCQOEeKOmc56p_1Osg" name="BaseModelTuml" isAbstract="true">
-        <ownedAttribute xmi:id="_5NteICQOEeKOmc56p_1Osg" name="createdOn" isReadOnly="true">
-          <type xmi:type="uml:DataType" href="umlgdatatypes.uml#_OGOTEAD6EeKS1vh1F4YVWQ"/>
+      <packagedElement xmi:type="uml:Class" xmi:id="_2GNhsCQOEeKOmc56p_1Osg" name="BaseModelUmlg" isAbstract="true">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_5NteICQOEeKOmc56p_1Osg" name="createdOn" isReadOnly="true">
+          <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_OGOTEAD6EeKS1vh1F4YVWQ"/>
           <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_UqbDMCQVEeKzTel_Vwmhog" name="createdOnDefaultValue">
             <language>Java</language>
             <body>new DateTime()</body>
           </defaultValue>
         </ownedAttribute>
-        <ownedAttribute xmi:id="_EG4nICQPEeKOmc56p_1Osg" name="updatedOn" isReadOnly="true">
-          <type xmi:type="uml:DataType" href="umlgdatatypes.uml#_OGOTEAD6EeKS1vh1F4YVWQ"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_EG4nICQPEeKOmc56p_1Osg" name="updatedOn" isReadOnly="true">
+          <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_OGOTEAD6EeKS1vh1F4YVWQ"/>
           <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_usdMQCQWEeKzTel_Vwmhog" name="updatedOnDefaultTime">
             <language>Java</language>
             <body>new DateTime()</body>
@@ -119,19 +131,25 @@ self.getChildren()->iterate(iter : tumllib::org::tuml::hierarchy::Hierarchy; acc
         </ownedAttribute>
       </packagedElement>
       <packagedElement xmi:type="uml:Package" xmi:id="_uPD6ME6KEeK4HckrDYI0ug" name="meta">
-        <packagedElement xmi:type="uml:Class" xmi:id="_xkJmsE6KEeK4HckrDYI0ug" name="BaseClassTuml">
-          <generalization xmi:id="_zd2TQE6KEeK4HckrDYI0ug" general="_2GNhsCQOEeKOmc56p_1Osg"/>
-          <ownedAttribute xmi:id="__iH-wE-NEeKwIp56YBZIxw" name="classQuery" type="_1o2LME6KEeK4HckrDYI0ug" isOrdered="true" aggregation="composite" association="__iJM4E-NEeKwIp56YBZIxw">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_bAIXQH-jEeOYhpiy1kqM8Q" annotatedElement="_1o2LME6KEeK4HckrDYI0ug">
+          <body>ClassQuery is used to store queries againts any instance of the class. Instances of ClassQuery are added to the generated meta classes.</body>
+        </ownedComment>
+        <ownedComment xmi:type="uml:Comment" xmi:id="_54ARoIAXEeOYhpiy1kqM8Q" annotatedElement="_xkJmsE6KEeK4HckrDYI0ug">
+          <body>Umlg generates a singleton meta class for every concrete Class in your model. If umlg-lib is inported into your model then the generated MetaClass (i.e.CustomerMeta) will extend BaseClassUmlg. This allows ClassQueries to be added to the Meta class.</body>
+        </ownedComment>
+        <packagedElement xmi:type="uml:Class" xmi:id="_xkJmsE6KEeK4HckrDYI0ug" name="BaseClassUmlg">
+          <generalization xmi:type="uml:Generalization" xmi:id="_zd2TQE6KEeK4HckrDYI0ug" general="_2GNhsCQOEeKOmc56p_1Osg"/>
+          <ownedAttribute xmi:type="uml:Property" xmi:id="__iH-wE-NEeKwIp56YBZIxw" name="classQuery" type="_1o2LME6KEeK4HckrDYI0ug" isOrdered="true" aggregation="composite" association="__iJM4E-NEeKwIp56YBZIxw">
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="__iH-wU-NEeKwIp56YBZIxw"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="__iH-wk-NEeKwIp56YBZIxw" value="*"/>
           </ownedAttribute>
         </packagedElement>
         <packagedElement xmi:type="uml:Class" xmi:id="_1o2LME6KEeK4HckrDYI0ug" clientDependency="_9zji0E6KEeK4HckrDYI0ug" name="ClassQuery">
-          <generalization xmi:id="_QdOMoE6LEeK4HckrDYI0ug" general="_2GNhsCQOEeKOmc56p_1Osg"/>
-          <interfaceRealization xmi:id="_9zji0E6KEeK4HckrDYI0ug" name="InterfaceRealization1" client="_1o2LME6KEeK4HckrDYI0ug" supplier="_djoUIE6JEeK4HckrDYI0ug" contract="_djoUIE6JEeK4HckrDYI0ug"/>
+          <generalization xmi:type="uml:Generalization" xmi:id="_QdOMoE6LEeK4HckrDYI0ug" general="_2GNhsCQOEeKOmc56p_1Osg"/>
+          <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_9zji0E6KEeK4HckrDYI0ug" name="InterfaceRealization1" client="_1o2LME6KEeK4HckrDYI0ug" supplier="_djoUIE6JEeK4HckrDYI0ug" contract="_djoUIE6JEeK4HckrDYI0ug"/>
         </packagedElement>
-        <packagedElement xmi:type="uml:Association" xmi:id="__iJM4E-NEeKwIp56YBZIxw" name="baseClassTuml_classQuery_1" memberEnd="__iJM4U-NEeKwIp56YBZIxw __iH-wE-NEeKwIp56YBZIxw" navigableOwnedEnd="__iJM4U-NEeKwIp56YBZIxw">
-          <ownedEnd xmi:id="__iJM4U-NEeKwIp56YBZIxw" name="baseClassTuml" type="_xkJmsE6KEeK4HckrDYI0ug" association="__iJM4E-NEeKwIp56YBZIxw">
+        <packagedElement xmi:type="uml:Association" xmi:id="__iJM4E-NEeKwIp56YBZIxw" name="baseClassUmlg_classQuery_1" memberEnd="__iJM4U-NEeKwIp56YBZIxw __iH-wE-NEeKwIp56YBZIxw" navigableOwnedEnd="__iJM4U-NEeKwIp56YBZIxw">
+          <ownedEnd xmi:type="uml:Property" xmi:id="__iJM4U-NEeKwIp56YBZIxw" name="baseClassUmlg" type="_xkJmsE6KEeK4HckrDYI0ug" association="__iJM4E-NEeKwIp56YBZIxw">
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="__iJM4k-NEeKwIp56YBZIxw" value="1"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="__iJM40-NEeKwIp56YBZIxw" value="1"/>
           </ownedEnd>

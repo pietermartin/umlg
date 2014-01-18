@@ -49,7 +49,7 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 		bank.addToEmployee(employee3);
         db.commit();
 
-        UmlgOrderedSet<?> result = UmlgOclExecutor.executeOclQuery("testoclmodel::org::umlg::qualifier::Bank", bank, "self.employee->select(name='employee3')");
+        UmlgOrderedSet<?> result = UmlgOclExecutor.executeOclQuery(bank, "self.employee->select(name='employee3')");
 		Assert.assertTrue(result instanceof UmlgOrderedSet<?>);
 		Assert.assertEquals(1, result.size());
 	}
@@ -91,7 +91,7 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 		bank.addToEmployee(employee3);
         db.commit();
 
-		String json = UmlgOclExecutor.executeOclQueryToJson("testoclmodel::org::umlg::qualifier::Bank", bank, "self.employee->select(name='employee3')");
+		String json = UmlgOclExecutor.executeOclQueryToJson(bank, "self.employee->select(name='employee3')");
 		System.out.println(json);
 	}
 
@@ -111,7 +111,7 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 		bank.addToEmployee(employee3);
         db.commit();
 
-		Object result = UmlgOclExecutor.executeOclQuery("testoclmodel::org::umlg::qualifier::Bank", bank, "Tuple{name: String = name, employeeSize: Integer = employeeSize}");
+		Object result = UmlgOclExecutor.executeOclQuery(bank, "Tuple{name: String = name, employeeSize: Integer = employeeSize}");
 		Assert.assertTrue(result instanceof Map);
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		Map<String, Object> resultAsMap = (Map)result;
@@ -135,7 +135,7 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 		bank.addToEmployee(employee3);
         db.commit();
 
-		String json = UmlgOclExecutor.executeOclQueryToJson("testoclmodel::org::umlg::qualifier::Bank", bank, "Tuple{name: String = name, employeeSize: Integer = employeeSize}");
+		String json = UmlgOclExecutor.executeOclQueryToJson(bank, "Tuple{name: String = name, employeeSize: Integer = employeeSize}");
 		System.out.println(json);
 	}
 
@@ -155,7 +155,7 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
         db.commit();
 
 		//The employee names should specify a Bag, bug in eclipse ocl
-		Object result = UmlgOclExecutor.executeOclQuery("testoclmodel::org::umlg::qualifier::Bank", bank, "Tuple{bank: Bank = self, employeeNames: Sequence(String) = employee.name}");
+		Object result = UmlgOclExecutor.executeOclQuery(bank, "Tuple{bank: Bank = self, employeeNames: Sequence(String) = employee.name}");
 		Assert.assertTrue(result instanceof Map);
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		Map<String, Object> resultAsMap = (Map)result;
@@ -182,7 +182,7 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
         db.commit();
 
 		//The employee names should specify a Bag, bug in eclipse ocl
-		String json = UmlgOclExecutor.executeOclQueryToJson("testoclmodel::org::umlg::qualifier::Bank", bank, "Tuple{bank: Bank = self, employeeNames: Sequence(String) = employee.name}");
+		String json = UmlgOclExecutor.executeOclQueryToJson(bank, "Tuple{bank: Bank = self, employeeNames: Sequence(String) = employee.name}");
 		System.out.println(json);
 	}
 

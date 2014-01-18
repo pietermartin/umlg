@@ -2,7 +2,7 @@ package org.umlg.tests.allinstances;
 
 import junit.framework.Assert;
 import org.junit.Test;
-import org.umlg.BaseModelTuml;
+import org.umlg.BaseModelUmlg;
 import org.umlg.concretetest.God;
 import org.umlg.hierarchytest.Folder;
 import org.umlg.hierarchytest.RealRootFolder;
@@ -46,7 +46,7 @@ public class AllInstancesTest extends BaseLocalDbTest {
 		Assert.assertEquals(15, Mamal.allInstances().size());
 		Assert.assertEquals(5, Biped.allInstances().size());
 		Assert.assertEquals(5, Quadped.allInstances().size());
-		Assert.assertEquals(16, BaseModelTuml.allInstances().size());
+		Assert.assertEquals(16, BaseModelUmlg.allInstances().size());
 	}
 
 	@Test
@@ -75,7 +75,7 @@ public class AllInstancesTest extends BaseLocalDbTest {
         db.commit();
 		Assert.assertEquals(1, RealRootFolder.allInstances().size());
 		Assert.assertEquals(7, Folder.allInstances().size());
-		Assert.assertEquals(9, BaseModelTuml.allInstances().size());
+		Assert.assertEquals(9, BaseModelUmlg.allInstances().size());
 	}
 
 	@Test
@@ -145,7 +145,7 @@ public class AllInstancesTest extends BaseLocalDbTest {
 
         db.commit();
 
-		Assert.assertEquals(18, BaseModelTuml.allInstances().size());
+		Assert.assertEquals(18, BaseModelUmlg.allInstances().size());
 		Assert.assertEquals(9, InstanceQuery.allInstances().size());
 
 	}

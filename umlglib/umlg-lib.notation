@@ -529,7 +529,7 @@
       </eAnnotations>
       <children xmi:type="notation:DecorationNode" xmi:id="_2jnfdX-5EeOYhpiy1kqM8Q" type="5038"/>
       <element xmi:type="uml:Comment" href="umlg-lib.uml#_2jmRUH-5EeOYhpiy1kqM8Q"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_2jm4YX-5EeOYhpiy1kqM8Q" x="75" y="22" width="249" height="57"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_2jm4YX-5EeOYhpiy1kqM8Q" x="20" y="24" width="249" height="57"/>
     </children>
     <styles xmi:type="notation:DiagramStyle" xmi:id="_wlBKASQOEeKOmc56p_1Osg"/>
     <element xmi:type="uml:Package" href="umlg-lib.uml#_sPG5sCQOEeKOmc56p_1Osg"/>

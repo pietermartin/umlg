@@ -19,7 +19,7 @@
     </eAnnotations>
     <children xmi:type="notation:DecorationNode" xmi:id="_fLAyxgV5EeK9oIwdQfC0-w" type="1084"/>
     <element xmi:type="uml:Class" href="pathmap://UML_METAMODELS/UML.metamodel.uml#Property"/>
-    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_fLAyxwV5EeK9oIwdQfC0-w" x="340" y="208"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_fLAyxwV5EeK9oIwdQfC0-w" x="320" y="248"/>
   </children>
   <children xmi:type="notation:Shape" xmi:id="_gRrf4AV5EeK9oIwdQfC0-w" type="1026" fontName="Sans" lineColor="0">
     <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_gRsG8AV5EeK9oIwdQfC0-w" source="ShadowFigure">

@@ -1,362 +1,272 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <uml:Profile xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xmi:id="_6Zdd4AV1EeK9oIwdQfC0-w" name="Umlg::Validation" metaclassReference="_fK5eAAV5EeK9oIwdQfC0-w">
   <eAnnotations xmi:id="_MTQUgAV3EeK9oIwdQfC0-w" source="http://www.eclipse.org/uml2/2.0.0/UML">
-    <contents xmi:type="ecore:EPackage" xmi:id="_ESZfMPeoEeKXi9pM4yg14w" name="UmlgValidation" nsURI="http:///schemas/UmlgValidation/_ESYREPeoEeKXi9pM4yg14w/11" nsPrefix="UmlgValidation">
-      <eAnnotations xmi:id="_ETCYYPeoEeKXi9pM4yg14w" source="PapyrusVersion">
-        <details xmi:id="_ETCYYfeoEeKXi9pM4yg14w" key="Version" value="0.0.10"/>
-        <details xmi:id="_ETCYYveoEeKXi9pM4yg14w" key="Comment" value=""/>
-        <details xmi:id="_ETCYY_eoEeKXi9pM4yg14w" key="Copyright" value=""/>
-        <details xmi:id="_ETCYZPeoEeKXi9pM4yg14w" key="Date" value="2013-07-28"/>
-        <details xmi:id="_ETCYZfeoEeKXi9pM4yg14w" key="Author" value=""/>
+    <contents xmi:type="ecore:EPackage" xmi:id="_UFsa8NZNEeK9CpmlFL_zvQ" name="UmlgValidation" nsURI="http:///schemas/UmlgValidation/_UFqlwNZNEeK9CpmlFL_zvQ/10" nsPrefix="UmlgValidation">
+      <eAnnotations xmi:id="_UF1k4NZNEeK9CpmlFL_zvQ" source="PapyrusVersion">
+        <details xmi:id="_UF1k4dZNEeK9CpmlFL_zvQ" key="Version" value="0.0.9"/>
+        <details xmi:id="_UF1k4tZNEeK9CpmlFL_zvQ" key="Comment" value=""/>
+        <details xmi:id="_UF1k49ZNEeK9CpmlFL_zvQ" key="Copyright" value=""/>
+        <details xmi:id="_UF1k5NZNEeK9CpmlFL_zvQ" key="Date" value="2013-06-16"/>
+        <details xmi:id="_UF1k5dZNEeK9CpmlFL_zvQ" key="Author" value=""/>
       </eAnnotations>
-      <eClassifiers xmi:type="ecore:EClass" xmi:id="_ESZfMfeoEeKXi9pM4yg14w" name="MinLength">
-        <eAnnotations xmi:id="_ESZfMveoEeKXi9pM4yg14w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_gRqRwAV5EeK9oIwdQfC0-w"/>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_ESZfM_eoEeKXi9pM4yg14w" name="length" ordered="false" lowerBound="1">
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_UFsa8dZNEeK9CpmlFL_zvQ" name="MinLength">
+        <eAnnotations xmi:id="_UFsa8tZNEeK9CpmlFL_zvQ" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_gRqRwAV5EeK9oIwdQfC0-w"/>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_UFsa89ZNEeK9CpmlFL_zvQ" name="length" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/4.0.0/Types#//Integer"/>
         </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_ESZfNfeoEeKXi9pM4yg14w" name="base_Property" ordered="false" lowerBound="1">
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_UFsa9dZNEeK9CpmlFL_zvQ" name="base_Property" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/4.0.0/UML#//Property"/>
         </eStructuralFeatures>
       </eClassifiers>
-      <eClassifiers xmi:type="ecore:EClass" xmi:id="_ESZfN_eoEeKXi9pM4yg14w" name="MaxLength">
-        <eAnnotations xmi:id="_ESZfOPeoEeKXi9pM4yg14w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_Zj2ggAV6EeK9oIwdQfC0-w"/>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_ESZfOfeoEeKXi9pM4yg14w" name="length" ordered="false" lowerBound="1">
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_UFsa99ZNEeK9CpmlFL_zvQ" name="MaxLength">
+        <eAnnotations xmi:id="_UFsa-NZNEeK9CpmlFL_zvQ" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_Zj2ggAV6EeK9oIwdQfC0-w"/>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_UFsa-dZNEeK9CpmlFL_zvQ" name="length" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/4.0.0/Types#//Integer"/>
         </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_ESZfO_eoEeKXi9pM4yg14w" name="base_Property" ordered="false" lowerBound="1">
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_UFsa-9ZNEeK9CpmlFL_zvQ" name="base_Property" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/4.0.0/UML#//Property"/>
         </eStructuralFeatures>
       </eClassifiers>
-      <eClassifiers xmi:type="ecore:EClass" xmi:id="_ESZfPfeoEeKXi9pM4yg14w" name="RangeLength">
-        <eAnnotations xmi:id="_ESZfPveoEeKXi9pM4yg14w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_bWSugAV6EeK9oIwdQfC0-w"/>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_ESZfP_eoEeKXi9pM4yg14w" name="min" ordered="false" lowerBound="1">
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_UFsa_dZNEeK9CpmlFL_zvQ" name="RangeLength">
+        <eAnnotations xmi:id="_UFsa_tZNEeK9CpmlFL_zvQ" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_bWSugAV6EeK9oIwdQfC0-w"/>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_UFsa_9ZNEeK9CpmlFL_zvQ" name="min" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/4.0.0/Types#//Integer"/>
         </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_ESZfQfeoEeKXi9pM4yg14w" name="max" ordered="false" lowerBound="1">
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_UFsbAdZNEeK9CpmlFL_zvQ" name="max" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/4.0.0/Types#//Integer"/>
         </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_ESZfQ_eoEeKXi9pM4yg14w" name="base_Property" ordered="false" lowerBound="1">
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_UFsbA9ZNEeK9CpmlFL_zvQ" name="base_Property" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/4.0.0/UML#//Property"/>
         </eStructuralFeatures>
       </eClassifiers>
-      <eClassifiers xmi:type="ecore:EClass" xmi:id="_ESZfRfeoEeKXi9pM4yg14w" name="Min">
-        <eAnnotations xmi:id="_ESZfRveoEeKXi9pM4yg14w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_ux2dYAV8EeK9oIwdQfC0-w"/>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_ESZfR_eoEeKXi9pM4yg14w" name="value" ordered="false" lowerBound="1">
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_UFsbBdZNEeK9CpmlFL_zvQ" name="Min">
+        <eAnnotations xmi:id="_UFsbBtZNEeK9CpmlFL_zvQ" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_ux2dYAV8EeK9oIwdQfC0-w"/>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_UFsbB9ZNEeK9CpmlFL_zvQ" name="value" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/4.0.0/Types#//Integer"/>
         </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_ESZfSfeoEeKXi9pM4yg14w" name="base_Property" ordered="false" lowerBound="1">
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_UFsbCdZNEeK9CpmlFL_zvQ" name="base_Property" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/4.0.0/UML#//Property"/>
         </eStructuralFeatures>
       </eClassifiers>
-      <eClassifiers xmi:type="ecore:EClass" xmi:id="_ESZfS_eoEeKXi9pM4yg14w" name="Max">
-        <eAnnotations xmi:id="_ESZfTPeoEeKXi9pM4yg14w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_xOe34AV8EeK9oIwdQfC0-w"/>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_ESZfTfeoEeKXi9pM4yg14w" name="value" ordered="false" lowerBound="1">
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_UFsbC9ZNEeK9CpmlFL_zvQ" name="Max">
+        <eAnnotations xmi:id="_UFsbDNZNEeK9CpmlFL_zvQ" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_xOe34AV8EeK9oIwdQfC0-w"/>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_UFsbDdZNEeK9CpmlFL_zvQ" name="value" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/4.0.0/Types#//Integer"/>
         </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_ESZfT_eoEeKXi9pM4yg14w" name="base_Property" ordered="false" lowerBound="1">
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_UFsbD9ZNEeK9CpmlFL_zvQ" name="base_Property" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/4.0.0/UML#//Property"/>
         </eStructuralFeatures>
       </eClassifiers>
-      <eClassifiers xmi:type="ecore:EClass" xmi:id="_ESZfUfeoEeKXi9pM4yg14w" name="Range">
-        <eAnnotations xmi:id="_ESZfUveoEeKXi9pM4yg14w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_zTFM4AV8EeK9oIwdQfC0-w"/>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_ESZfU_eoEeKXi9pM4yg14w" name="min" ordered="false" lowerBound="1">
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_UFsbEdZNEeK9CpmlFL_zvQ" name="Range">
+        <eAnnotations xmi:id="_UFsbEtZNEeK9CpmlFL_zvQ" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_zTFM4AV8EeK9oIwdQfC0-w"/>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_UFsbE9ZNEeK9CpmlFL_zvQ" name="min" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/4.0.0/Types#//Integer"/>
         </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_ESZfVfeoEeKXi9pM4yg14w" name="max" ordered="false" lowerBound="1">
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_UFsbFdZNEeK9CpmlFL_zvQ" name="max" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/4.0.0/Types#//Integer"/>
         </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_ESZfV_eoEeKXi9pM4yg14w" name="base_Property" ordered="false" lowerBound="1">
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_UFsbF9ZNEeK9CpmlFL_zvQ" name="base_Property" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/4.0.0/UML#//Property"/>
         </eStructuralFeatures>
       </eClassifiers>
-      <eClassifiers xmi:type="ecore:EClass" xmi:id="_ESZfWfeoEeKXi9pM4yg14w" name="URL">
-        <eAnnotations xmi:id="_ESZfWveoEeKXi9pM4yg14w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_4-dJYAV-EeK9oIwdQfC0-w"/>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_ESZfW_eoEeKXi9pM4yg14w" name="protocol" ordered="false" lowerBound="1">
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_UFsbGdZNEeK9CpmlFL_zvQ" name="URL">
+        <eAnnotations xmi:id="_UFsbGtZNEeK9CpmlFL_zvQ" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_4-dJYAV-EeK9oIwdQfC0-w"/>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_UFsbG9ZNEeK9CpmlFL_zvQ" name="protocol" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/4.0.0/Types#//String"/>
         </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_ESZfXfeoEeKXi9pM4yg14w" name="host" ordered="false" lowerBound="1">
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_UFsbHdZNEeK9CpmlFL_zvQ" name="host" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/4.0.0/Types#//String"/>
         </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_ESZfX_eoEeKXi9pM4yg14w" name="port" ordered="false" lowerBound="1">
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_UFsbH9ZNEeK9CpmlFL_zvQ" name="port" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/4.0.0/Types#//Integer"/>
         </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_ESZfYfeoEeKXi9pM4yg14w" name="regexp" ordered="false" lowerBound="1">
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_UFsbIdZNEeK9CpmlFL_zvQ" name="regexp" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/4.0.0/Types#//String"/>
         </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_ESZfY_eoEeKXi9pM4yg14w" name="flags" ordered="false" lowerBound="1">
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_UFsbI9ZNEeK9CpmlFL_zvQ" name="flags" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/4.0.0/Types#//String"/>
         </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_ESZfZfeoEeKXi9pM4yg14w" name="base_Property" ordered="false" lowerBound="1">
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_UFsbJdZNEeK9CpmlFL_zvQ" name="base_Property" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/4.0.0/UML#//Property"/>
         </eStructuralFeatures>
       </eClassifiers>
     </contents>
-    <contents xmi:type="ecore:EPackage" xmi:id="_6d0esdaVEeK9CpmlFL_zvQ" name="UmlgValidation" nsURI="http:///schemas/UmlgValidation/_6d0esNaVEeK9CpmlFL_zvQ/10" nsPrefix="UmlgValidation">
-      <eAnnotations xmi:id="_6d268daVEeK9CpmlFL_zvQ" source="PapyrusVersion">
-        <details xmi:id="_6d268taVEeK9CpmlFL_zvQ" key="Version" value="0.0.9"/>
-        <details xmi:id="_6d2689aVEeK9CpmlFL_zvQ" key="Comment" value=""/>
-        <details xmi:id="_6d269NaVEeK9CpmlFL_zvQ" key="Copyright" value=""/>
-        <details xmi:id="_6d269daVEeK9CpmlFL_zvQ" key="Date" value="2013-06-16"/>
-        <details xmi:id="_6d269taVEeK9CpmlFL_zvQ" key="Author" value=""/>
+    <contents xmi:type="ecore:EPackage" xmi:id="_q5MQAGi0EeKm0dDq1_wZ-g" name="TumlValidation" nsURI="http:///schemas/TumlValidation/_q5LB4Gi0EeKm0dDq1_wZ-g/9" nsPrefix="TumlValidation">
+      <eAnnotations xmi:id="_q5UL0Gi0EeKm0dDq1_wZ-g" source="PapyrusVersion">
+        <details xmi:id="_q5UL0Wi0EeKm0dDq1_wZ-g" key="Version" value="0.0.8"/>
+        <details xmi:id="_q5UL0mi0EeKm0dDq1_wZ-g" key="Comment" value=""/>
+        <details xmi:id="_q5UL02i0EeKm0dDq1_wZ-g" key="Copyright" value=""/>
+        <details xmi:id="_q5UL1Gi0EeKm0dDq1_wZ-g" key="Date" value="2013-01-27"/>
+        <details xmi:id="_q5UL1Wi0EeKm0dDq1_wZ-g" key="Author" value=""/>
       </eAnnotations>
-      <eClassifiers xmi:type="ecore:EClass" xmi:id="_6d0estaVEeK9CpmlFL_zvQ" name="MinLength">
-        <eAnnotations xmi:id="_6d0es9aVEeK9CpmlFL_zvQ" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_gRqRwAV5EeK9oIwdQfC0-w"/>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_6d0etNaVEeK9CpmlFL_zvQ" name="length" ordered="false" lowerBound="1">
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_q5MQAWi0EeKm0dDq1_wZ-g" name="MinLength">
+        <eAnnotations xmi:id="_q5MQAmi0EeKm0dDq1_wZ-g" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_gRqRwAV5EeK9oIwdQfC0-w"/>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_q5MQA2i0EeKm0dDq1_wZ-g" name="length" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/4.0.0/Types#//Integer"/>
         </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_6d0ettaVEeK9CpmlFL_zvQ" name="base_Property" ordered="false" lowerBound="1">
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_q5MQBWi0EeKm0dDq1_wZ-g" name="base_Property" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/4.0.0/UML#//Property"/>
         </eStructuralFeatures>
       </eClassifiers>
-      <eClassifiers xmi:type="ecore:EClass" xmi:id="_6d0euNaVEeK9CpmlFL_zvQ" name="MaxLength">
-        <eAnnotations xmi:id="_6d0eudaVEeK9CpmlFL_zvQ" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_Zj2ggAV6EeK9oIwdQfC0-w"/>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_6d0eutaVEeK9CpmlFL_zvQ" name="length" ordered="false" lowerBound="1">
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_q5MQB2i0EeKm0dDq1_wZ-g" name="MaxLength">
+        <eAnnotations xmi:id="_q5MQCGi0EeKm0dDq1_wZ-g" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_Zj2ggAV6EeK9oIwdQfC0-w"/>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_q5MQCWi0EeKm0dDq1_wZ-g" name="length" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/4.0.0/Types#//Integer"/>
         </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_6d0evNaVEeK9CpmlFL_zvQ" name="base_Property" ordered="false" lowerBound="1">
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_q5MQC2i0EeKm0dDq1_wZ-g" name="base_Property" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/4.0.0/UML#//Property"/>
         </eStructuralFeatures>
       </eClassifiers>
-      <eClassifiers xmi:type="ecore:EClass" xmi:id="_6d0evtaVEeK9CpmlFL_zvQ" name="RangeLength">
-        <eAnnotations xmi:id="_6d0ev9aVEeK9CpmlFL_zvQ" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_bWSugAV6EeK9oIwdQfC0-w"/>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_6d0ewNaVEeK9CpmlFL_zvQ" name="min" ordered="false" lowerBound="1">
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_q5MQDWi0EeKm0dDq1_wZ-g" name="RangeLength">
+        <eAnnotations xmi:id="_q5MQDmi0EeKm0dDq1_wZ-g" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_bWSugAV6EeK9oIwdQfC0-w"/>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_q5MQD2i0EeKm0dDq1_wZ-g" name="min" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/4.0.0/Types#//Integer"/>
         </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_6d0ewtaVEeK9CpmlFL_zvQ" name="max" ordered="false" lowerBound="1">
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_q5MQEWi0EeKm0dDq1_wZ-g" name="max" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/4.0.0/Types#//Integer"/>
         </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_6d0exNaVEeK9CpmlFL_zvQ" name="base_Property" ordered="false" lowerBound="1">
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_q5MQE2i0EeKm0dDq1_wZ-g" name="base_Property" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/4.0.0/UML#//Property"/>
         </eStructuralFeatures>
       </eClassifiers>
-      <eClassifiers xmi:type="ecore:EClass" xmi:id="_6d0extaVEeK9CpmlFL_zvQ" name="Min">
-        <eAnnotations xmi:id="_6d0ex9aVEeK9CpmlFL_zvQ" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_ux2dYAV8EeK9oIwdQfC0-w"/>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_6d0eyNaVEeK9CpmlFL_zvQ" name="value" ordered="false" lowerBound="1">
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_q5MQFWi0EeKm0dDq1_wZ-g" name="Min">
+        <eAnnotations xmi:id="_q5MQFmi0EeKm0dDq1_wZ-g" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_ux2dYAV8EeK9oIwdQfC0-w"/>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_q5MQF2i0EeKm0dDq1_wZ-g" name="value" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/4.0.0/Types#//Integer"/>
         </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_6d0eytaVEeK9CpmlFL_zvQ" name="base_Property" ordered="false" lowerBound="1">
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_q5MQGWi0EeKm0dDq1_wZ-g" name="base_Property" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/4.0.0/UML#//Property"/>
         </eStructuralFeatures>
       </eClassifiers>
-      <eClassifiers xmi:type="ecore:EClass" xmi:id="_6d0ezNaVEeK9CpmlFL_zvQ" name="Max">
-        <eAnnotations xmi:id="_6d0ezdaVEeK9CpmlFL_zvQ" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_xOe34AV8EeK9oIwdQfC0-w"/>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_6d0eztaVEeK9CpmlFL_zvQ" name="value" ordered="false" lowerBound="1">
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_q5MQG2i0EeKm0dDq1_wZ-g" name="Max">
+        <eAnnotations xmi:id="_q5MQHGi0EeKm0dDq1_wZ-g" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_xOe34AV8EeK9oIwdQfC0-w"/>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_q5MQHWi0EeKm0dDq1_wZ-g" name="value" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/4.0.0/Types#//Integer"/>
         </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_6d0e0NaVEeK9CpmlFL_zvQ" name="base_Property" ordered="false" lowerBound="1">
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_q5MQH2i0EeKm0dDq1_wZ-g" name="base_Property" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/4.0.0/UML#//Property"/>
         </eStructuralFeatures>
       </eClassifiers>
-      <eClassifiers xmi:type="ecore:EClass" xmi:id="_6d0e0taVEeK9CpmlFL_zvQ" name="Range">
-        <eAnnotations xmi:id="_6d0e09aVEeK9CpmlFL_zvQ" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_zTFM4AV8EeK9oIwdQfC0-w"/>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_6d0e1NaVEeK9CpmlFL_zvQ" name="min" ordered="false" lowerBound="1">
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_q5MQIWi0EeKm0dDq1_wZ-g" name="Range">
+        <eAnnotations xmi:id="_q5MQImi0EeKm0dDq1_wZ-g" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_zTFM4AV8EeK9oIwdQfC0-w"/>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_q5MQI2i0EeKm0dDq1_wZ-g" name="min" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/4.0.0/Types#//Integer"/>
         </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_6d0e1taVEeK9CpmlFL_zvQ" name="max" ordered="false" lowerBound="1">
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_q5MQJWi0EeKm0dDq1_wZ-g" name="max" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/4.0.0/Types#//Integer"/>
         </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_6d0e2NaVEeK9CpmlFL_zvQ" name="base_Property" ordered="false" lowerBound="1">
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_q5MQJ2i0EeKm0dDq1_wZ-g" name="base_Property" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/4.0.0/UML#//Property"/>
         </eStructuralFeatures>
       </eClassifiers>
-      <eClassifiers xmi:type="ecore:EClass" xmi:id="_6d0e2taVEeK9CpmlFL_zvQ" name="URL">
-        <eAnnotations xmi:id="_6d0e29aVEeK9CpmlFL_zvQ" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_4-dJYAV-EeK9oIwdQfC0-w"/>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_6d0e3NaVEeK9CpmlFL_zvQ" name="protocol" ordered="false" lowerBound="1">
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_q5MQKWi0EeKm0dDq1_wZ-g" name="URL">
+        <eAnnotations xmi:id="_q5MQKmi0EeKm0dDq1_wZ-g" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_4-dJYAV-EeK9oIwdQfC0-w"/>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_q5MQK2i0EeKm0dDq1_wZ-g" name="protocol" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/4.0.0/Types#//String"/>
         </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_6d0e3taVEeK9CpmlFL_zvQ" name="host" ordered="false" lowerBound="1">
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_q5MQLWi0EeKm0dDq1_wZ-g" name="host" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/4.0.0/Types#//String"/>
         </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_6d0e4NaVEeK9CpmlFL_zvQ" name="port" ordered="false" lowerBound="1">
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_q5MQL2i0EeKm0dDq1_wZ-g" name="port" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/4.0.0/Types#//Integer"/>
         </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_6d0e4taVEeK9CpmlFL_zvQ" name="regexp" ordered="false" lowerBound="1">
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_q5MQMWi0EeKm0dDq1_wZ-g" name="regexp" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/4.0.0/Types#//String"/>
         </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_6d0e5NaVEeK9CpmlFL_zvQ" name="flags" ordered="false" lowerBound="1">
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_q5MQM2i0EeKm0dDq1_wZ-g" name="flags" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/4.0.0/Types#//String"/>
         </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_6d0e5taVEeK9CpmlFL_zvQ" name="base_Property" ordered="false" lowerBound="1">
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_q5MQNWi0EeKm0dDq1_wZ-g" name="base_Property" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/4.0.0/UML#//Property"/>
         </eStructuralFeatures>
       </eClassifiers>
     </contents>
-    <contents xmi:type="ecore:EPackage" xmi:id="_FLCVECS6EeKLnOYxvH_zlw" name="TumlValidation" nsURI="http:///schemas/TumlValidation/_FLAf4CS6EeKLnOYxvH_zlw/9" nsPrefix="TumlValidation">
-      <eAnnotations xmi:id="_FLF_cCS6EeKLnOYxvH_zlw" source="PapyrusVersion">
-        <details xmi:id="_FLF_cSS6EeKLnOYxvH_zlw" key="Version" value="0.0.8"/>
-        <details xmi:id="_FLF_ciS6EeKLnOYxvH_zlw" key="Comment" value=""/>
-        <details xmi:id="_FLF_cyS6EeKLnOYxvH_zlw" key="Copyright" value=""/>
-        <details xmi:id="_FLF_dCS6EeKLnOYxvH_zlw" key="Date" value="2012-11-02"/>
-        <details xmi:id="_FLF_dSS6EeKLnOYxvH_zlw" key="Author" value=""/>
+    <contents xmi:type="ecore:EPackage" xmi:id="_xdVf4CNPEeKXA8fV9fB29w" name="TumlValidation" nsURI="http:///schemas/TumlValidation/_xdTqsCNPEeKXA8fV9fB29w/8" nsPrefix="TumlValidation">
+      <eAnnotations xmi:id="_xddbsCNPEeKXA8fV9fB29w" source="PapyrusVersion">
+        <details xmi:id="_xddbsSNPEeKXA8fV9fB29w" key="Version" value="0.0.7"/>
+        <details xmi:id="_xddbsiNPEeKXA8fV9fB29w" key="Comment" value=""/>
+        <details xmi:id="_xddbsyNPEeKXA8fV9fB29w" key="Copyright" value=""/>
+        <details xmi:id="_xddbtCNPEeKXA8fV9fB29w" key="Date" value="2012-10-31"/>
+        <details xmi:id="_xddbtSNPEeKXA8fV9fB29w" key="Author" value=""/>
       </eAnnotations>
-      <eClassifiers xmi:type="ecore:EClass" xmi:id="_FLCVESS6EeKLnOYxvH_zlw" name="MinLength">
-        <eAnnotations xmi:id="_FLCVEiS6EeKLnOYxvH_zlw" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_gRqRwAV5EeK9oIwdQfC0-w"/>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_FLCVEyS6EeKLnOYxvH_zlw" name="length" ordered="false" lowerBound="1">
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_xdVf4SNPEeKXA8fV9fB29w" name="MinLength">
+        <eAnnotations xmi:id="_xdVf4iNPEeKXA8fV9fB29w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_gRqRwAV5EeK9oIwdQfC0-w"/>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_xdVf4yNPEeKXA8fV9fB29w" name="length" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/4.0.0/Types#//Integer"/>
         </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_FLCVFSS6EeKLnOYxvH_zlw" name="base_Property" ordered="false" lowerBound="1">
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_xdVf5SNPEeKXA8fV9fB29w" name="base_Property" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/4.0.0/UML#//Property"/>
         </eStructuralFeatures>
       </eClassifiers>
-      <eClassifiers xmi:type="ecore:EClass" xmi:id="_FLCVFyS6EeKLnOYxvH_zlw" name="MaxLength">
-        <eAnnotations xmi:id="_FLCVGCS6EeKLnOYxvH_zlw" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_Zj2ggAV6EeK9oIwdQfC0-w"/>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_FLCVGSS6EeKLnOYxvH_zlw" name="length" ordered="false" lowerBound="1">
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_xdVf5yNPEeKXA8fV9fB29w" name="MaxLength">
+        <eAnnotations xmi:id="_xdVf6CNPEeKXA8fV9fB29w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_Zj2ggAV6EeK9oIwdQfC0-w"/>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_xdVf6SNPEeKXA8fV9fB29w" name="length" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/4.0.0/Types#//Integer"/>
         </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_FLCVGyS6EeKLnOYxvH_zlw" name="base_Property" ordered="false" lowerBound="1">
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_xdVf6yNPEeKXA8fV9fB29w" name="base_Property" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/4.0.0/UML#//Property"/>
         </eStructuralFeatures>
       </eClassifiers>
-      <eClassifiers xmi:type="ecore:EClass" xmi:id="_FLCVHSS6EeKLnOYxvH_zlw" name="RangeLength">
-        <eAnnotations xmi:id="_FLCVHiS6EeKLnOYxvH_zlw" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_bWSugAV6EeK9oIwdQfC0-w"/>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_FLCVHyS6EeKLnOYxvH_zlw" name="min" ordered="false" lowerBound="1">
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_xdVf7SNPEeKXA8fV9fB29w" name="RangeLength">
+        <eAnnotations xmi:id="_xdVf7iNPEeKXA8fV9fB29w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_bWSugAV6EeK9oIwdQfC0-w"/>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_xdVf7yNPEeKXA8fV9fB29w" name="min" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/4.0.0/Types#//Integer"/>
         </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_FLCVISS6EeKLnOYxvH_zlw" name="max" ordered="false" lowerBound="1">
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_xdVf8SNPEeKXA8fV9fB29w" name="max" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/4.0.0/Types#//Integer"/>
         </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_FLCVIyS6EeKLnOYxvH_zlw" name="base_Property" ordered="false" lowerBound="1">
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_xdVf8yNPEeKXA8fV9fB29w" name="base_Property" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/4.0.0/UML#//Property"/>
         </eStructuralFeatures>
       </eClassifiers>
-      <eClassifiers xmi:type="ecore:EClass" xmi:id="_FLCVJSS6EeKLnOYxvH_zlw" name="Min">
-        <eAnnotations xmi:id="_FLCVJiS6EeKLnOYxvH_zlw" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_ux2dYAV8EeK9oIwdQfC0-w"/>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_FLCVJyS6EeKLnOYxvH_zlw" name="value" ordered="false" lowerBound="1">
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_xdVf9SNPEeKXA8fV9fB29w" name="Min">
+        <eAnnotations xmi:id="_xdVf9iNPEeKXA8fV9fB29w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_ux2dYAV8EeK9oIwdQfC0-w"/>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_xdVf9yNPEeKXA8fV9fB29w" name="value" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/4.0.0/Types#//Integer"/>
         </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_FLCVKSS6EeKLnOYxvH_zlw" name="base_Property" ordered="false" lowerBound="1">
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_xdVf-SNPEeKXA8fV9fB29w" name="base_Property" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/4.0.0/UML#//Property"/>
         </eStructuralFeatures>
       </eClassifiers>
-      <eClassifiers xmi:type="ecore:EClass" xmi:id="_FLCVKyS6EeKLnOYxvH_zlw" name="Max">
-        <eAnnotations xmi:id="_FLCVLCS6EeKLnOYxvH_zlw" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_xOe34AV8EeK9oIwdQfC0-w"/>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_FLCVLSS6EeKLnOYxvH_zlw" name="value" ordered="false" lowerBound="1">
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_xdVf-yNPEeKXA8fV9fB29w" name="Max">
+        <eAnnotations xmi:id="_xdVf_CNPEeKXA8fV9fB29w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_xOe34AV8EeK9oIwdQfC0-w"/>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_xdVf_SNPEeKXA8fV9fB29w" name="value" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/4.0.0/Types#//Integer"/>
         </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_FLCVLyS6EeKLnOYxvH_zlw" name="base_Property" ordered="false" lowerBound="1">
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_xdVf_yNPEeKXA8fV9fB29w" name="base_Property" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/4.0.0/UML#//Property"/>
         </eStructuralFeatures>
       </eClassifiers>
-      <eClassifiers xmi:type="ecore:EClass" xmi:id="_FLCVMSS6EeKLnOYxvH_zlw" name="Range">
-        <eAnnotations xmi:id="_FLCVMiS6EeKLnOYxvH_zlw" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_zTFM4AV8EeK9oIwdQfC0-w"/>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_FLCVMyS6EeKLnOYxvH_zlw" name="min" ordered="false" lowerBound="1">
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_xdVgASNPEeKXA8fV9fB29w" name="Range">
+        <eAnnotations xmi:id="_xdVgAiNPEeKXA8fV9fB29w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_zTFM4AV8EeK9oIwdQfC0-w"/>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_xdVgAyNPEeKXA8fV9fB29w" name="min" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/4.0.0/Types#//Integer"/>
         </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_FLCVNSS6EeKLnOYxvH_zlw" name="max" ordered="false" lowerBound="1">
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_xdVgBSNPEeKXA8fV9fB29w" name="max" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/4.0.0/Types#//Integer"/>
         </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_FLCVNyS6EeKLnOYxvH_zlw" name="base_Property" ordered="false" lowerBound="1">
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_xdVgByNPEeKXA8fV9fB29w" name="base_Property" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/4.0.0/UML#//Property"/>
         </eStructuralFeatures>
       </eClassifiers>
-      <eClassifiers xmi:type="ecore:EClass" xmi:id="_FLCVOSS6EeKLnOYxvH_zlw" name="URL">
-        <eAnnotations xmi:id="_FLCVOiS6EeKLnOYxvH_zlw" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_4-dJYAV-EeK9oIwdQfC0-w"/>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_FLCVOyS6EeKLnOYxvH_zlw" name="protocol" ordered="false" lowerBound="1">
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_xdVgCSNPEeKXA8fV9fB29w" name="URL">
+        <eAnnotations xmi:id="_xdVgCiNPEeKXA8fV9fB29w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_4-dJYAV-EeK9oIwdQfC0-w"/>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_xdVgCyNPEeKXA8fV9fB29w" name="protocol" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/4.0.0/Types#//String"/>
         </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_FLCVPSS6EeKLnOYxvH_zlw" name="host" ordered="false" lowerBound="1">
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_xdVgDSNPEeKXA8fV9fB29w" name="host" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/4.0.0/Types#//String"/>
         </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_FLCVPyS6EeKLnOYxvH_zlw" name="port" ordered="false" lowerBound="1">
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_xdVgDyNPEeKXA8fV9fB29w" name="port" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/4.0.0/Types#//Integer"/>
         </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_FLCVQSS6EeKLnOYxvH_zlw" name="regexp" ordered="false" lowerBound="1">
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_xdVgESNPEeKXA8fV9fB29w" name="regexp" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/4.0.0/Types#//String"/>
         </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_FLCVQyS6EeKLnOYxvH_zlw" name="flags" ordered="false" lowerBound="1">
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_xdVgEyNPEeKXA8fV9fB29w" name="flags" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/4.0.0/Types#//String"/>
         </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_FLCVRSS6EeKLnOYxvH_zlw" name="base_Property" ordered="false" lowerBound="1">
-          <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/4.0.0/UML#//Property"/>
-        </eStructuralFeatures>
-      </eClassifiers>
-    </contents>
-    <contents xmi:type="ecore:EPackage" xmi:id="_bfRz4QZVEeK9oIwdQfC0-w" name="TumlValidation" nsURI="http:///schemas/TumlValidation/_bfRz4AZVEeK9oIwdQfC0-w/8" nsPrefix="TumlValidation">
-      <eAnnotations xmi:id="_bfU3MAZVEeK9oIwdQfC0-w" source="PapyrusVersion">
-        <details xmi:id="_bfU3MQZVEeK9oIwdQfC0-w" key="Version" value="0.0.7"/>
-        <details xmi:id="_bfU3MgZVEeK9oIwdQfC0-w" key="Comment" value=""/>
-        <details xmi:id="_bfU3MwZVEeK9oIwdQfC0-w" key="Copyright" value=""/>
-        <details xmi:id="_bfU3NAZVEeK9oIwdQfC0-w" key="Date" value="2012-09-24"/>
-        <details xmi:id="_bfU3NQZVEeK9oIwdQfC0-w" key="Author" value=""/>
-      </eAnnotations>
-      <eClassifiers xmi:type="ecore:EClass" xmi:id="_bfRz4gZVEeK9oIwdQfC0-w" name="MinLength">
-        <eAnnotations xmi:id="_bfRz4wZVEeK9oIwdQfC0-w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_gRqRwAV5EeK9oIwdQfC0-w"/>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_bfRz5AZVEeK9oIwdQfC0-w" name="length" ordered="false" lowerBound="1">
-          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-        </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_bfRz5gZVEeK9oIwdQfC0-w" name="base_Property" ordered="false" lowerBound="1">
-          <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/4.0.0/UML#//Property"/>
-        </eStructuralFeatures>
-      </eClassifiers>
-      <eClassifiers xmi:type="ecore:EClass" xmi:id="_bfRz6AZVEeK9oIwdQfC0-w" name="MaxLength">
-        <eAnnotations xmi:id="_bfRz6QZVEeK9oIwdQfC0-w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_Zj2ggAV6EeK9oIwdQfC0-w"/>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_bfRz6gZVEeK9oIwdQfC0-w" name="length" ordered="false" lowerBound="1">
-          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-        </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_bfRz7AZVEeK9oIwdQfC0-w" name="base_Property" ordered="false" lowerBound="1">
-          <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/4.0.0/UML#//Property"/>
-        </eStructuralFeatures>
-      </eClassifiers>
-      <eClassifiers xmi:type="ecore:EClass" xmi:id="_bfRz7gZVEeK9oIwdQfC0-w" name="RangeLength">
-        <eAnnotations xmi:id="_bfRz7wZVEeK9oIwdQfC0-w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_bWSugAV6EeK9oIwdQfC0-w"/>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_bfRz8AZVEeK9oIwdQfC0-w" name="min" ordered="false" lowerBound="1">
-          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-        </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_bfRz8gZVEeK9oIwdQfC0-w" name="max" ordered="false" lowerBound="1">
-          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-        </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_bfRz9AZVEeK9oIwdQfC0-w" name="base_Property" ordered="false" lowerBound="1">
-          <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/4.0.0/UML#//Property"/>
-        </eStructuralFeatures>
-      </eClassifiers>
-      <eClassifiers xmi:type="ecore:EClass" xmi:id="_bfRz9gZVEeK9oIwdQfC0-w" name="Min">
-        <eAnnotations xmi:id="_bfRz9wZVEeK9oIwdQfC0-w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_ux2dYAV8EeK9oIwdQfC0-w"/>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_bfRz-AZVEeK9oIwdQfC0-w" name="value" ordered="false" lowerBound="1">
-          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-        </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_bfRz-gZVEeK9oIwdQfC0-w" name="base_Property" ordered="false" lowerBound="1">
-          <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/4.0.0/UML#//Property"/>
-        </eStructuralFeatures>
-      </eClassifiers>
-      <eClassifiers xmi:type="ecore:EClass" xmi:id="_bfRz_AZVEeK9oIwdQfC0-w" name="Max">
-        <eAnnotations xmi:id="_bfRz_QZVEeK9oIwdQfC0-w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_xOe34AV8EeK9oIwdQfC0-w"/>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_bfRz_gZVEeK9oIwdQfC0-w" name="value" ordered="false" lowerBound="1">
-          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-        </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_bfR0AAZVEeK9oIwdQfC0-w" name="base_Property" ordered="false" lowerBound="1">
-          <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/4.0.0/UML#//Property"/>
-        </eStructuralFeatures>
-      </eClassifiers>
-      <eClassifiers xmi:type="ecore:EClass" xmi:id="_bfR0AgZVEeK9oIwdQfC0-w" name="Range">
-        <eAnnotations xmi:id="_bfR0AwZVEeK9oIwdQfC0-w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_zTFM4AV8EeK9oIwdQfC0-w"/>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_bfR0BAZVEeK9oIwdQfC0-w" name="min" ordered="false" lowerBound="1">
-          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-        </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_bfR0BgZVEeK9oIwdQfC0-w" name="max" ordered="false" lowerBound="1">
-          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-        </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_bfR0CAZVEeK9oIwdQfC0-w" name="base_Property" ordered="false" lowerBound="1">
-          <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/4.0.0/UML#//Property"/>
-        </eStructuralFeatures>
-      </eClassifiers>
-      <eClassifiers xmi:type="ecore:EClass" xmi:id="_bfR0CgZVEeK9oIwdQfC0-w" name="URL">
-        <eAnnotations xmi:id="_bfR0CwZVEeK9oIwdQfC0-w" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_4-dJYAV-EeK9oIwdQfC0-w"/>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_bfR0DAZVEeK9oIwdQfC0-w" name="protocol" ordered="false" lowerBound="1">
-          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-        </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_bfR0DgZVEeK9oIwdQfC0-w" name="host" ordered="false" lowerBound="1">
-          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-        </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_bfR0EAZVEeK9oIwdQfC0-w" name="port" ordered="false" lowerBound="1">
-          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-        </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_bfR0EgZVEeK9oIwdQfC0-w" name="regexp" ordered="false" lowerBound="1">
-          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-        </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_bfR0FAZVEeK9oIwdQfC0-w" name="flags" ordered="false" lowerBound="1">
-          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-        </eStructuralFeatures>
-        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_bfR0FgZVEeK9oIwdQfC0-w" name="base_Property" ordered="false" lowerBound="1">
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_xdVgFSNPEeKXA8fV9fB29w" name="base_Property" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/4.0.0/UML#//Property"/>
         </eStructuralFeatures>
       </eClassifiers>

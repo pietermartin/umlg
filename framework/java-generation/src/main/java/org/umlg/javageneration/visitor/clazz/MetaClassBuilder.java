@@ -34,7 +34,7 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<Class> {
             metaClass.setVisibility(UmlgClassOperations.getVisibility(clazz.getVisibility()));
 
             if (ModelLoader.INSTANCE.isUmlGLibIncluded()) {
-                metaClass.setSuperclass(UmlgGenerationUtil.BASE_CLASS_TUML);
+                metaClass.setSuperclass(UmlgGenerationUtil.BASE_CLASS_UMLG);
                 addDefaultConstructor(metaClass, clazz);
                 addContructorWithVertex(metaClass, clazz);
                 //Ensure the meta class instance does not also try to create a edge to a meta class as it is also a normal entity
