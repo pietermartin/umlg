@@ -37,19 +37,19 @@ public class RestletVisitors {
         result.add(new AppResourceServerResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
         result.add(new AddIdLiteralsToRuntimeEnum(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
         result.add(new AddUmlgUriFieldToRuntimePropertyEnum(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
-        result.add(new AddTumlMetaDataUriFieldToRuntimePropertyEnum(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+        result.add(new AddUmlgMetaDataUriFieldToRuntimePropertyEnum(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
 
-        //This must be before AddTumlMetaDataUriFieldToRootRuntimePropertyEnum and AddUriToRootRuntimePropertyEnum
+        //This must be before AddUmlgMetaDataUriFieldToRootRuntimePropertyEnum and AddUriToRootRuntimePropertyEnum
         //In order for the tumlMetaDataUri and uri to be added to the literal's constructor
         result.add(new AddIdLiteralsToRootRuntimeEnum(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
 
-        result.add(new AddTumlMetaDataUriFieldToRootRuntimePropertyEnum(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+        result.add(new AddUmlgMetaDataUriFieldToRootRuntimePropertyEnum(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
         result.add(new AddUriToRootRuntimePropertyEnum(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
 
         result.add(new AddFieldTypeFieldToRuntimeLiteral(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
         result.add(new AddFieldTypeFieldToRootRuntimeLiteral(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
-        result.add(new AddTumlLookupUriToRuntimePropertyEnum(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
-        result.add(new AddTumlLookupCompositeParentUriToRuntimePropertyEnum(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+        result.add(new AddUmlgLookupUriToRuntimePropertyEnum(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+        result.add(new AddUmlgLookupCompositeParentUriToRuntimePropertyEnum(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
         result.add(new LookupForOneResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
         result.add(new LookupForManyResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
 //        result.add(new LookupCompositeParentResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
@@ -57,7 +57,7 @@ public class RestletVisitors {
 //        result.add(new LookupOnCompositeParentCompositeParentResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
         result.add(new CompositePathServerResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
         result.add(new EnumLookupResourceServerResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
-        result.add(new TumlRestletNodeBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
+        result.add(new UmlgRestletNodeBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
         result.add(new QueryExecuteResourceBuilder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
 //        result.add(new TransactionResourceRouterAdder(Workspace.INSTANCE, RESTLET_SOURCE_FOLDER));
 

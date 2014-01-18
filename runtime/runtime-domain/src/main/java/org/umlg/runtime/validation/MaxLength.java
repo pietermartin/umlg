@@ -1,6 +1,6 @@
 package org.umlg.runtime.validation;
 
-public class MaxLength implements TumlValidation {
+public class MaxLength implements UmlgValidation {
 	private int maxLength;
 
 	public MaxLength(int maxLength) {

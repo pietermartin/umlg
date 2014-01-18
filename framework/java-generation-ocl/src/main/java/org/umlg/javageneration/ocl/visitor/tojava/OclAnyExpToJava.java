@@ -7,9 +7,9 @@ import org.eclipse.ocl.expressions.Variable;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Parameter;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
-import org.umlg.javageneration.ocl.util.TumlOclUtil;
+import org.umlg.javageneration.ocl.util.UmlgOclUtil;
 import org.umlg.javageneration.ocl.visitor.HandleIteratorExp;
-import org.umlg.javageneration.util.TumlClassOperations;
+import org.umlg.javageneration.util.UmlgClassOperations;
 
 public class OclAnyExpToJava implements HandleIteratorExp {
 
@@ -30,7 +30,7 @@ public class OclAnyExpToJava implements HandleIteratorExp {
 		}
 		Variable<Classifier, Parameter> variable = callExp.getIterator().get(0);
 		
-		String variableType = TumlClassOperations.className(variable.getType());
+		String variableType = UmlgClassOperations.className(variable.getType());
 		StringBuilder result = new StringBuilder(sourceResult);
 		result.append(".any(");
 		result.append("new ");
@@ -40,7 +40,7 @@ public class OclAnyExpToJava implements HandleIteratorExp {
 		result.append(">() {\n");
 		result.append("    @Override\n");
 		result.append("    public Boolean evaluate(");
-		result.append(TumlOclUtil.removeVariableInit(variableResults.get(0)));
+		result.append(UmlgOclUtil.removeVariableInit(variableResults.get(0)));
 		result.append(") {\n");
 		result.append("        return ");
 		result.append(bodyResult);

@@ -9,7 +9,7 @@ import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
-import org.umlg.javageneration.ocl.TumlOcl2Java;
+import org.umlg.javageneration.ocl.UmlgOcl2Java;
 import org.umlg.javageneration.util.PropertyWrapper;
 import org.umlg.javageneration.visitor.BaseVisitor;
 import org.umlg.ocl.UmlgOcl2Parser;
@@ -44,7 +44,7 @@ public class DerivedPropertyVisitor extends BaseVisitor implements Visitor<Prope
 			    getter.setComment(String.format("Implements the ocl statement for derived property '%s'\n<pre>\n%s\n</pre>", propertyWrapper.getName(), defaulValue));
                 logger.info(String.format("About to parse ocl expression \n%s", new Object[] { defaulValue }));
                 OCLExpression<Classifier> oclExp = UmlgOcl2Parser.INSTANCE.parseOcl(defaulValue);
-                getter.getBody().addToStatements("return " + TumlOcl2Java.oclToJava(owner, oclExp));
+                getter.getBody().addToStatements("return " + UmlgOcl2Java.oclToJava(owner, oclExp));
             } else {
                 defaulValue = propertyWrapper.getDefaultValueAsString();
                 getter.setComment(String.format("The default value for derived property '%s'\n<pre>\n%s\n</pre>", propertyWrapper.getName(), defaulValue));

@@ -7,8 +7,8 @@ import org.umlg.generation.Workspace;
 import org.umlg.java.metamodel.OJPackage;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
-import org.umlg.javageneration.util.TinkerGenerationUtil;
-import org.umlg.javageneration.util.TumlClassOperations;
+import org.umlg.javageneration.util.UmlgGenerationUtil;
+import org.umlg.javageneration.util.UmlgClassOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
 import org.eclipse.uml2.uml.Class;
 
@@ -27,9 +27,9 @@ public class MetaNodeCreator extends BaseVisitor implements Visitor<Model> {
     @Override
     public void visitBefore(Model element) {
         OJAnnotatedClass metaNodeCreator = new OJAnnotatedClass("MetaNodeCreator");
-        OJPackage ojPackage = new OJPackage(TinkerGenerationUtil.UmlgRootPackage.toJavaString());
+        OJPackage ojPackage = new OJPackage(UmlgGenerationUtil.UmlgRootPackage.toJavaString());
         metaNodeCreator.setMyPackage(ojPackage);
-        metaNodeCreator.addToImplementedInterfaces(TinkerGenerationUtil.UmlgMetaNodeManager);
+        metaNodeCreator.addToImplementedInterfaces(UmlgGenerationUtil.UmlgMetaNodeManager);
         addToSource(metaNodeCreator);
 
         OJAnnotatedOperation createAll = new OJAnnotatedOperation("createAllMetaNodes");
@@ -37,8 +37,8 @@ public class MetaNodeCreator extends BaseVisitor implements Visitor<Model> {
 
         List<Class> concreteClasses = ModelLoader.INSTANCE.getAllConcreteClasses();
         for (Class c : concreteClasses) {
-            createAll.getBody().addToStatements(TumlClassOperations.getMetaClassName(c) + ".getInstance()");
-            metaNodeCreator.addToImports(TumlClassOperations.getMetaClassPathName(c));
+            createAll.getBody().addToStatements(UmlgClassOperations.getMetaClassName(c) + ".getInstance()");
+            metaNodeCreator.addToImports(UmlgClassOperations.getMetaClassPathName(c));
         }
         OJAnnotatedOperation count = new OJAnnotatedOperation("count", "int");
         count.getBody().addToStatements("return " + concreteClasses.size());

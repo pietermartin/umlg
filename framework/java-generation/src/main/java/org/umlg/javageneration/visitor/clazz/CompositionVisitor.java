@@ -11,8 +11,8 @@ import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.javageneration.util.PropertyWrapper;
-import org.umlg.javageneration.util.TinkerGenerationUtil;
-import org.umlg.javageneration.util.TumlClassOperations;
+import org.umlg.javageneration.util.UmlgGenerationUtil;
+import org.umlg.javageneration.util.UmlgClassOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
 
 import java.util.Set;
@@ -27,10 +27,10 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
     @VisitSubclasses({Class.class, AssociationClass.class})
     public void visitBefore(Class clazz) {
         OJAnnotatedClass annotatedClass = findOJClass(clazz);
-        if (TumlClassOperations.hasCompositeOwner(clazz)) {
+        if (UmlgClassOperations.hasCompositeOwner(clazz)) {
             addConstructorWithOwnerAsParameter(annotatedClass, clazz);
         } else {
-            if (TumlClassOperations.getSpecializations(clazz).isEmpty() && !(clazz instanceof AssociationClass)) {
+            if (UmlgClassOperations.getSpecializations(clazz).isEmpty() && !(clazz instanceof AssociationClass)) {
                 addImplementRootNodeInterface(annotatedClass);
                 addEdgeToRoot(annotatedClass, clazz);
             }
@@ -50,21 +50,21 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
 
     private void implementRootNode(Class clazz, OJAnnotatedClass annotatedClass) {
         OJAnnotatedOperation getEdgeToRootLabel = new OJAnnotatedOperation("getEdgeToRootLabel", new OJPathName("String"));
-        getEdgeToRootLabel.getBody().addToStatements("return " + TinkerGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() + ".getUmlgLabelConverter().convert(\"" + TinkerGenerationUtil.getEdgeToRootLabelStrategy(clazz) + "\")");
-        annotatedClass.addToImports(TinkerGenerationUtil.UmlgLabelConverterFactoryPathName);
+        getEdgeToRootLabel.getBody().addToStatements("return " + UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() + ".getUmlgLabelConverter().convert(\"" + UmlgGenerationUtil.getEdgeToRootLabelStrategy(clazz) + "\")");
+        annotatedClass.addToImports(UmlgGenerationUtil.UmlgLabelConverterFactoryPathName);
         annotatedClass.addToOperations(getEdgeToRootLabel);
     }
 
     private void addImplementRootNodeInterface(OJAnnotatedClass annotatedClass) {
-        annotatedClass.addToImplementedInterfaces(TinkerGenerationUtil.UMLG_ROOT_NODE);
-        annotatedClass.addToImports(TinkerGenerationUtil.UMLG_ROOT_NODE);
+        annotatedClass.addToImplementedInterfaces(UmlgGenerationUtil.UMLG_ROOT_NODE);
+        annotatedClass.addToImports(UmlgGenerationUtil.UMLG_ROOT_NODE);
     }
 
     private void addConstructorWithOwnerAsParameter(OJAnnotatedClass annotatedClass, Class clazz) {
-        Set<Property> otherEndsToComposite = TumlClassOperations.getOtherEndToComposite(clazz);
+        Set<Property> otherEndsToComposite = UmlgClassOperations.getOtherEndToComposite(clazz);
         for (Property otherEndToComposite : otherEndsToComposite) {
             OJConstructor constructor = new OJConstructor();
-            OJPathName otherEndToCompositePathName = TumlClassOperations.getPathName(otherEndToComposite.getType());
+            OJPathName otherEndToCompositePathName = UmlgClassOperations.getPathName(otherEndToComposite.getType());
             constructor.addParam("compositeOwner", otherEndToCompositePathName);
             PropertyWrapper pWrap = new PropertyWrapper(otherEndToComposite);
             if (pWrap.isMemberOfAssociationClass()) {
@@ -82,12 +82,12 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
     }
 
     private void addGetOwningObject(OJAnnotatedClass annotatedClass, Class clazz) {
-        OJAnnotatedOperation getOwningObject = new OJAnnotatedOperation("getOwningObject", TinkerGenerationUtil.UMLG_NODE.getCopy());
-        TinkerGenerationUtil.addOverrideAnnotation(getOwningObject);
-        if (TumlClassOperations.hasCompositeOwner(clazz)) {
-            new OJField(getOwningObject.getBody(), "result", TinkerGenerationUtil.UMLG_NODE.getCopy());
+        OJAnnotatedOperation getOwningObject = new OJAnnotatedOperation("getOwningObject", UmlgGenerationUtil.UMLG_NODE.getCopy());
+        UmlgGenerationUtil.addOverrideAnnotation(getOwningObject);
+        if (UmlgClassOperations.hasCompositeOwner(clazz)) {
+            new OJField(getOwningObject.getBody(), "result", UmlgGenerationUtil.UMLG_NODE.getCopy());
             OJIfStatement ifCompositeParentNotNull = new OJIfStatement();
-            Set<Property> otherEndsToComposite = TumlClassOperations.getOtherEndToComposite(clazz);
+            Set<Property> otherEndsToComposite = UmlgClassOperations.getOtherEndToComposite(clazz);
             int count = 1;
             for (Property otherEndToComposite : otherEndsToComposite) {
                 if (count++ == 1) {
@@ -125,11 +125,11 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
 
     private void addHasOnlyOneCompositeParent(OJAnnotatedClass annotatedClass, Class clazz) {
         OJAnnotatedOperation hasOnlyOneCompositeParent = new OJAnnotatedOperation("hasOnlyOneCompositeParent", "boolean");
-        TinkerGenerationUtil.addOverrideAnnotation(hasOnlyOneCompositeParent);
+        UmlgGenerationUtil.addOverrideAnnotation(hasOnlyOneCompositeParent);
         OJField result = new OJField(hasOnlyOneCompositeParent.getBody(), "result", "int");
         result.setInitExp("0");
-        if (TumlClassOperations.hasCompositeOwner(clazz)) {
-            Set<Property> otherEndsToComposite = TumlClassOperations.getOtherEndToComposite(clazz);
+        if (UmlgClassOperations.hasCompositeOwner(clazz)) {
+            Set<Property> otherEndsToComposite = UmlgClassOperations.getOtherEndToComposite(clazz);
             for (Property otherEndToComposite : otherEndsToComposite) {
                 hasOnlyOneCompositeParent.getBody().addToStatements("result = result + (" + new PropertyWrapper(otherEndToComposite).getter() + "() != null ? 1 : 0)");
             }
@@ -141,16 +141,16 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
     private void addEdgeToRoot(OJAnnotatedClass annotatedClass, Class clazz) {
         OJConstructor constructor = annotatedClass.findConstructor(new OJPathName("java.lang.Boolean"));
         constructor.getBody().addToStatements(
-                TinkerGenerationUtil.edgePathName.getLast() + " edge = " + TinkerGenerationUtil.graphDbAccess + ".addEdge(null, " + TinkerGenerationUtil.graphDbAccess
+                UmlgGenerationUtil.edgePathName.getLast() + " edge = " + UmlgGenerationUtil.graphDbAccess + ".addEdge(null, " + UmlgGenerationUtil.graphDbAccess
                         + ".getRoot(), this.vertex, getEdgeToRootLabel())");
         constructor.getBody().addToStatements("edge.setProperty(\"inClass\", this.getClass().getName())");
-        annotatedClass.addToImports(TinkerGenerationUtil.edgePathName.getCopy());
-        annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName.getCopy());
+        annotatedClass.addToImports(UmlgGenerationUtil.edgePathName.getCopy());
+        annotatedClass.addToImports(UmlgGenerationUtil.graphDbPathName.getCopy());
     }
 
     private void addCompositeChildrenToDelete(OJAnnotatedClass annotatedClass, Class clazz) {
         OJAnnotatedOperation delete = annotatedClass.findOperation("delete");
-        for (Property p : TumlClassOperations.getChildPropertiesToDelete(clazz)) {
+        for (Property p : UmlgClassOperations.getChildPropertiesToDelete(clazz)) {
             PropertyWrapper pWrap = new PropertyWrapper(p);
             if (!pWrap.isDataType()) {
                 if (pWrap.isMany()) {
@@ -165,15 +165,15 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
             }
         }
 
-        for (Property p : TumlClassOperations.getPropertiesToClearOnDeletion(clazz)) {
+        for (Property p : UmlgClassOperations.getPropertiesToClearOnDeletion(clazz)) {
             PropertyWrapper pWrap = new PropertyWrapper(p);
             delete.getBody().addToStatements("this." + pWrap.fieldname() + ".clear()");
         }
         if (clazz.getGenerals().isEmpty()) {
-            delete.getBody().addToStatements(TinkerGenerationUtil.transactionThreadEntityVar.getLast() + ".remove(this)");
-            delete.getBody().addToStatements(TinkerGenerationUtil.graphDbAccess + ".removeVertex(this.vertex)");
-            annotatedClass.addToImports(TinkerGenerationUtil.transactionThreadEntityVar);
-            annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName.getCopy());
+            delete.getBody().addToStatements(UmlgGenerationUtil.transactionThreadEntityVar.getLast() + ".remove(this)");
+            delete.getBody().addToStatements(UmlgGenerationUtil.graphDbAccess + ".removeVertex(this.vertex)");
+            annotatedClass.addToImports(UmlgGenerationUtil.transactionThreadEntityVar);
+            annotatedClass.addToImports(UmlgGenerationUtil.graphDbPathName.getCopy());
         } else {
             delete.getBody().addToStatements("super.delete()");
         }

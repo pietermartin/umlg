@@ -32,11 +32,11 @@ public class SchemaCreator extends BaseVisitor implements Visitor<Class> {
     @Override
     @VisitSubclasses({Class.class, AssociationClass.class})
     public void visitBefore(Class clazz) {
-        OJAnnotatedClass schemaCreatorImpl = this.workspace.findOJClass(TinkerGenerationUtil.UmlgSchemaCreatorImpl.toJavaString());
+        OJAnnotatedClass schemaCreatorImpl = this.workspace.findOJClass(UmlgGenerationUtil.UmlgSchemaCreatorImpl.toJavaString());
         if (schemaCreatorImpl == null) {
-            schemaCreatorImpl = new OJAnnotatedClass(TinkerGenerationUtil.UmlgSchemaCreatorImpl.getLast());
-            schemaCreatorImpl.addToImplementedInterfaces(TinkerGenerationUtil.UmlgSchemaCreator);
-            OJPackage ojPackage = new OJPackage(TinkerGenerationUtil.UmlgAdaptorPackage.toJavaString());
+            schemaCreatorImpl = new OJAnnotatedClass(UmlgGenerationUtil.UmlgSchemaCreatorImpl.getLast());
+            schemaCreatorImpl.addToImplementedInterfaces(UmlgGenerationUtil.UmlgSchemaCreator);
+            OJPackage ojPackage = new OJPackage(UmlgGenerationUtil.UmlgAdaptorPackage.toJavaString());
             schemaCreatorImpl.setMyPackage(ojPackage);
             addToSource(schemaCreatorImpl);
 
@@ -50,7 +50,7 @@ public class SchemaCreator extends BaseVisitor implements Visitor<Class> {
             constructor.getBody().addToStatements("addAllEdgeEntries()");
             addCreateVertexSchemas(schemaCreatorImpl);
             addCreateEdgeSchemas(schemaCreatorImpl);
-            schemaCreatorImpl.addToImports(TinkerGenerationUtil.UMLG_NODE);
+            schemaCreatorImpl.addToImports(UmlgGenerationUtil.UMLG_NODE);
             addGetInstance(schemaCreatorImpl);
         }
         addVertexEntries(schemaCreatorImpl, clazz);
@@ -58,7 +58,7 @@ public class SchemaCreator extends BaseVisitor implements Visitor<Class> {
     }
 
     private void addGetInstance(OJAnnotatedClass schemaMapImpl) {
-        OJAnnotatedOperation getInstance = new OJAnnotatedOperation("getInstance", TinkerGenerationUtil.UmlgSchemaCreator);
+        OJAnnotatedOperation getInstance = new OJAnnotatedOperation("getInstance", UmlgGenerationUtil.UmlgSchemaCreator);
         getInstance.setStatic(true);
         getInstance.getBody().addToStatements("return INSTANCE");
         schemaMapImpl.addToOperations(getInstance);
@@ -73,7 +73,7 @@ public class SchemaCreator extends BaseVisitor implements Visitor<Class> {
     }
 
     private void addQualifiedNameVertexSet(OJAnnotatedClass globalMap) {
-        OJField set = new OJField(TinkerGenerationUtil.QualifiedNameVertexSchemaSet,
+        OJField set = new OJField(UmlgGenerationUtil.QualifiedNameVertexSchemaSet,
                 new OJPathName("java.util.Set").addToGenerics(new OJPathName("List").addToGenerics("String"))
         );
         set.setVisibility(OJVisibilityKind.PRIVATE);
@@ -85,7 +85,7 @@ public class SchemaCreator extends BaseVisitor implements Visitor<Class> {
     }
 
     private void addQualifiedNameEdgeSet(OJAnnotatedClass globalMap) {
-        OJField set = new OJField(TinkerGenerationUtil.QualifiedNameEdgeSchemaSet,
+        OJField set = new OJField(UmlgGenerationUtil.QualifiedNameEdgeSchemaSet,
                 new OJPathName("java.util.Set").addToGenerics("String")
         );
         set.setVisibility(OJVisibilityKind.PRIVATE);
@@ -118,9 +118,9 @@ public class SchemaCreator extends BaseVisitor implements Visitor<Class> {
 
     private void addCreateVertexSchemas(OJAnnotatedClass globalMap) {
         OJAnnotatedOperation createVertexSchemas = new OJAnnotatedOperation("createVertexSchemas");
-        TinkerGenerationUtil.addOverrideAnnotation(createVertexSchemas);
-        createVertexSchemas.addParam("vertexSchemaCreator", TinkerGenerationUtil.VertexSchemaCreator);
-        OJForStatement ojForStatement = new OJForStatement("hierarchy", new OJPathName("List").addToGenerics("String"), TinkerGenerationUtil.QualifiedNameVertexSchemaSet);
+        UmlgGenerationUtil.addOverrideAnnotation(createVertexSchemas);
+        createVertexSchemas.addParam("vertexSchemaCreator", UmlgGenerationUtil.VertexSchemaCreator);
+        OJForStatement ojForStatement = new OJForStatement("hierarchy", new OJPathName("List").addToGenerics("String"), UmlgGenerationUtil.QualifiedNameVertexSchemaSet);
         ojForStatement.getBody().addToStatements("vertexSchemaCreator.create(hierarchy)");
         createVertexSchemas.getBody().addToStatements(ojForStatement);
         globalMap.addToOperations(createVertexSchemas);
@@ -128,9 +128,9 @@ public class SchemaCreator extends BaseVisitor implements Visitor<Class> {
 
     private void addCreateEdgeSchemas(OJAnnotatedClass globalMap) {
         OJAnnotatedOperation createEdgeSchemas = new OJAnnotatedOperation("createEdgeSchemas");
-        TinkerGenerationUtil.addOverrideAnnotation(createEdgeSchemas);
-        createEdgeSchemas.addParam("edgeSchemaCreator", TinkerGenerationUtil.EdgeSchemaCreator);
-        OJForStatement ojForStatement = new OJForStatement("label", new OJPathName("String"), TinkerGenerationUtil.QualifiedNameEdgeSchemaSet);
+        UmlgGenerationUtil.addOverrideAnnotation(createEdgeSchemas);
+        createEdgeSchemas.addParam("edgeSchemaCreator", UmlgGenerationUtil.EdgeSchemaCreator);
+        OJForStatement ojForStatement = new OJForStatement("label", new OJPathName("String"), UmlgGenerationUtil.QualifiedNameEdgeSchemaSet);
         ojForStatement.getBody().addToStatements("edgeSchemaCreator.create(label)");
         createEdgeSchemas.getBody().addToStatements(ojForStatement);
         globalMap.addToOperations(createEdgeSchemas);
@@ -138,30 +138,30 @@ public class SchemaCreator extends BaseVisitor implements Visitor<Class> {
 
     private void addVertexEntries(OJAnnotatedClass globalMap, Class clazz) {
         OJAnnotatedOperation addAllEntries = globalMap.findOperation("addAllVertexEntries");
-        List<Classifier> generals = TumlClassOperations.getGeneralizationHierarchy(clazz);
+        List<Classifier> generals = UmlgClassOperations.getGeneralizationHierarchy(clazz);
         List<String> generalsQualifiedNames = convertClassifierHierarchy(generals);
-        if (TumlBehavioredClassifierOperations.hasBehavior(clazz)) {
-            generalsQualifiedNames.add(TinkerGenerationUtil.BASE_BEHAVIORED_CLASSIFIER_QUALIFIEDNAME);
+        if (UmlgBehavioredClassifierOperations.hasBehavior(clazz)) {
+            generalsQualifiedNames.add(UmlgGenerationUtil.BASE_BEHAVIORED_CLASSIFIER_QUALIFIEDNAME);
         } else {
-            generalsQualifiedNames.add(TinkerGenerationUtil.BaseUmlgCompositionNodeQualifiedName);
+            generalsQualifiedNames.add(UmlgGenerationUtil.BaseUmlgCompositionNodeQualifiedName);
         }
         Collections.reverse(generalsQualifiedNames);
-        addAllEntries.getBody().addToStatements("this." + TinkerGenerationUtil.QualifiedNameVertexSchemaSet + ".add(Arrays.asList(" + convertToCommaSeparatedList(generalsQualifiedNames) + "))");
+        addAllEntries.getBody().addToStatements("this." + UmlgGenerationUtil.QualifiedNameVertexSchemaSet + ".add(Arrays.asList(" + convertToCommaSeparatedList(generalsQualifiedNames) + "))");
 
         //Add in the meta classes
         if (!clazz.isAbstract()) {
-            OJAnnotatedClass metaClass = new OJAnnotatedClass(TumlClassOperations.getMetaClassName(clazz));
+            OJAnnotatedClass metaClass = new OJAnnotatedClass(UmlgClassOperations.getMetaClassName(clazz));
             OJPackage ojPackage = new OJPackage(Namer.name(clazz.getNearestPackage()) + ".meta");
             metaClass.setMyPackage(ojPackage);
             String qualifiedName = metaClass.getQualifiedName();
-            addAllEntries.getBody().addToStatements("this." + TinkerGenerationUtil.QualifiedNameVertexSchemaSet + ".add(Arrays.asList(\"" + qualifiedName + "\"))");
+            addAllEntries.getBody().addToStatements("this." + UmlgGenerationUtil.QualifiedNameVertexSchemaSet + ".add(Arrays.asList(\"" + qualifiedName + "\"))");
         }
 
         //Special entry for the root vertex and deletion vertex
-        addAllEntries.getBody().addToStatements("this." + TinkerGenerationUtil.QualifiedNameVertexSchemaSet + ".add(Arrays.asList(\"rootVertex\"))");
-        addAllEntries.getBody().addToStatements("this." + TinkerGenerationUtil.QualifiedNameVertexSchemaSet + ".add(Arrays.asList(\"deletionVertex\"))");
+        addAllEntries.getBody().addToStatements("this." + UmlgGenerationUtil.QualifiedNameVertexSchemaSet + ".add(Arrays.asList(\"rootVertex\"))");
+        addAllEntries.getBody().addToStatements("this." + UmlgGenerationUtil.QualifiedNameVertexSchemaSet + ".add(Arrays.asList(\"deletionVertex\"))");
 
-        globalMap.addToImports(TumlClassOperations.getPathName(clazz));
+        globalMap.addToImports(UmlgClassOperations.getPathName(clazz));
         globalMap.addToImports("java.util.Arrays");
     }
 
@@ -192,29 +192,29 @@ public class SchemaCreator extends BaseVisitor implements Visitor<Class> {
 
     private void addEdgeEntries(OJAnnotatedClass globalMap, Class clazz) {
         OJAnnotatedOperation addAllEntries = globalMap.findOperation("addAllEdgeEntries");
-        Set<Property> properties = TumlClassOperations.getPropertiesThatHaveAndEdge(clazz);
+        Set<Property> properties = UmlgClassOperations.getPropertiesThatHaveAndEdge(clazz);
         for (Property p : properties) {
             PropertyWrapper pWrap = new PropertyWrapper(p);
             String edgeName;
             if (!(clazz instanceof AssociationClass)) {
-                edgeName = TinkerGenerationUtil.getEdgeName(pWrap.getProperty());
+                edgeName = UmlgGenerationUtil.getEdgeName(pWrap.getProperty());
             } else {
-                edgeName = TinkerGenerationUtil.getEdgeName(pWrap.getProperty()) + "_" + pWrap.getName() + "_AC";
+                edgeName = UmlgGenerationUtil.getEdgeName(pWrap.getProperty()) + "_" + pWrap.getName() + "_AC";
             }
-            addAllEntries.getBody().addToStatements("this." + TinkerGenerationUtil.QualifiedNameEdgeSchemaSet + ".add(\"" + edgeName + "\")");
+            addAllEntries.getBody().addToStatements("this." + UmlgGenerationUtil.QualifiedNameEdgeSchemaSet + ".add(\"" + edgeName + "\")");
         }
 
         //Add in the class and meta class's edge to root
         if (!clazz.isAbstract()) {
-            addAllEntries.getBody().addToStatements("this." + TinkerGenerationUtil.QualifiedNameEdgeSchemaSet + ".add(\"" + TinkerGenerationUtil.getEdgeToRootLabelStrategyMeta(clazz) + "\")");
-            addAllEntries.getBody().addToStatements("this." + TinkerGenerationUtil.QualifiedNameEdgeSchemaSet + ".add(\"" + TinkerGenerationUtil.getEdgeToRootLabelStrategy(clazz) + "\")");
+            addAllEntries.getBody().addToStatements("this." + UmlgGenerationUtil.QualifiedNameEdgeSchemaSet + ".add(\"" + UmlgGenerationUtil.getEdgeToRootLabelStrategyMeta(clazz) + "\")");
+            addAllEntries.getBody().addToStatements("this." + UmlgGenerationUtil.QualifiedNameEdgeSchemaSet + ".add(\"" + UmlgGenerationUtil.getEdgeToRootLabelStrategy(clazz) + "\")");
         }
 
         //Special edges for deletion and all instances node
-        addAllEntries.getBody().addToStatements("this." + TinkerGenerationUtil.QualifiedNameEdgeSchemaSet + ".add(\"deletedVertexEdgeToRoot\")");
-        addAllEntries.getBody().addToStatements("this." + TinkerGenerationUtil.QualifiedNameEdgeSchemaSet + ".add(\"allinstances\")");
+        addAllEntries.getBody().addToStatements("this." + UmlgGenerationUtil.QualifiedNameEdgeSchemaSet + ".add(\"deletedVertexEdgeToRoot\")");
+        addAllEntries.getBody().addToStatements("this." + UmlgGenerationUtil.QualifiedNameEdgeSchemaSet + ".add(\"allinstances\")");
 
-        globalMap.addToImports(TinkerGenerationUtil.UmlgLabelConverterFactoryPathName);
+        globalMap.addToImports(UmlgGenerationUtil.UmlgLabelConverterFactoryPathName);
     }
 
     @Override

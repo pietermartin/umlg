@@ -18,8 +18,8 @@ import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.javageneration.util.PropertyWrapper;
-import org.umlg.javageneration.util.TinkerGenerationUtil;
-import org.umlg.javageneration.util.TumlClassOperations;
+import org.umlg.javageneration.util.UmlgGenerationUtil;
+import org.umlg.javageneration.util.UmlgClassOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
 
 public class AuditPropertyVisitor extends BaseVisitor implements Visitor<Property> {
@@ -44,7 +44,7 @@ public class AuditPropertyVisitor extends BaseVisitor implements Visitor<Propert
 	@Override
 	public void visitAfter(Property p) {
 		PropertyWrapper pWrap = new PropertyWrapper(p);
-		if (!pWrap.isDerived() && !pWrap.isQualifier() && !TumlClassOperations.isOnInterface(pWrap) && !(pWrap.getOwningType() instanceof Enumeration)) {
+		if (!pWrap.isDerived() && !pWrap.isQualifier() && !UmlgClassOperations.isOnInterface(pWrap) && !(pWrap.getOwningType() instanceof Enumeration)) {
 
 			OJAnnotatedClass auditClass = findAuditOJClass(p);
 			OJAnnotatedOperation getter = new OJAnnotatedOperation(pWrap.getter());
@@ -71,7 +71,7 @@ public class AuditPropertyVisitor extends BaseVisitor implements Visitor<Propert
 
 	private void buildGetterForToOnePrimitiveAndEnumeration(PropertyWrapper pWrap, OJAnnotatedOperation getter) {
 		getter.getBody().addToStatements("return (" + pWrap.javaBaseTypePath() + ") this.vertex.getProperty(" + pWrap.getTumlRuntimePropertyEnum() + ".getLabel())");
-		getter.getOwner().addToImports(TumlClassOperations.getPathName(pWrap.getOwningType()).append(TumlClassOperations.propertyEnumName(pWrap.getOwningType())));
+		getter.getOwner().addToImports(UmlgClassOperations.getPathName(pWrap.getOwningType()).append(UmlgClassOperations.propertyEnumName(pWrap.getOwningType())));
 	}
 
 	private void buildGetAllAuditsForMany(PropertyWrapper pWrap, OJAnnotatedClass owner) {
@@ -104,7 +104,7 @@ public class AuditPropertyVisitor extends BaseVisitor implements Visitor<Propert
 	}
 
 	private void buildGetAuditsForThisMany(PropertyWrapper pWrap, OJClass owner, boolean embedded) {
-		owner.addToImports(TinkerGenerationUtil.tumlFormatter);
+		owner.addToImports(UmlgGenerationUtil.umlgFormatter);
 		owner.addToImports(new OJPathName("java.util.Date"));
 		OJOperation getAuditsForThisMany = new OJOperation();
 		getAuditsForThisMany.setVisibility(OJVisibilityKind.PRIVATE);
@@ -125,13 +125,13 @@ public class AuditPropertyVisitor extends BaseVisitor implements Visitor<Propert
 		owner.addToImports(defaultValue);
 		getAuditsForThisMany.getBody().addToLocals(result);
 
-		String asociationName = TinkerGenerationUtil.getEdgeName(pWrap);
+		String asociationName = UmlgGenerationUtil.getEdgeName(pWrap);
 		if (pWrap.isControllingSide()) {
 			getAuditsForThisMany.getBody().addToStatements("Iterable<Edge> iter = this.vertex.getEdges(Direction.OUT, \"" + asociationName + "\")");
 		} else {
 			getAuditsForThisMany.getBody().addToStatements("Iterable<Edge> iter = this.vertex.getEdges(Direction.IN, \"" + asociationName + "\")");
 		}
-		OJForStatement forStatement = new OJForStatement("edge", TinkerGenerationUtil.edgePathName, "iter");
+		OJForStatement forStatement = new OJForStatement("edge", UmlgGenerationUtil.edgePathName, "iter");
 		forStatement.setName(POLYMORPHIC_GETTER_FOR_TO_MANY_FOR);
 		OJTryStatement ojTryStatement = new OJTryStatement();
 		OJIfStatement ifNotDeleted = new OJIfStatement("edge.getProperty(\"deletedOn\") == null");
@@ -239,7 +239,7 @@ public class AuditPropertyVisitor extends BaseVisitor implements Visitor<Propert
 
 	private void buildGetAuditForThisOne(PropertyWrapper pWrap, OJAnnotatedClass owner) {
 
-		owner.addToImports(TinkerGenerationUtil.tumlFormatter);
+		owner.addToImports(UmlgGenerationUtil.umlgFormatter);
 		owner.addToImports(new OJPathName("java.util.Date"));
 		owner.addToImports(new OJPathName("java.util.HashSet"));
 		OJOperation getAuditsForThisOne = new OJOperation();
@@ -258,13 +258,13 @@ public class AuditPropertyVisitor extends BaseVisitor implements Visitor<Propert
 		owner.addToImports(defaultValue);
 
 		boolean isComposite = pWrap.isControllingSide();
-		String associationName = TinkerGenerationUtil.getEdgeName(pWrap);
+		String associationName = UmlgGenerationUtil.getEdgeName(pWrap);
 		if (isComposite) {
 			getAuditsForThisOne.getBody().addToStatements("Iterable<Edge> iter = this.vertex.getEdges(Direction.OUT, \"" + associationName + "\")");
 		} else {
 			getAuditsForThisOne.getBody().addToStatements("Iterable<Edge> iter = this.vertex.getEdges(Direction.IN, \"" + associationName + "\")");
 		}
-		OJForStatement forEdges = new OJForStatement("edge", TinkerGenerationUtil.edgePathName, "iter");
+		OJForStatement forEdges = new OJForStatement("edge", UmlgGenerationUtil.edgePathName, "iter");
 		OJIfStatement ifNotDeleted = new OJIfStatement("edge.getProperty(\"deletedOn\")==null");
 
 		OJTryStatement ojTryStatement = new OJTryStatement();

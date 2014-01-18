@@ -11,9 +11,9 @@ import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedField;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.javageneration.util.PropertyWrapper;
-import org.umlg.javageneration.util.TinkerGenerationUtil;
-import org.umlg.javageneration.util.TumlClassOperations;
-import org.umlg.javageneration.util.TumlPropertyOperations;
+import org.umlg.javageneration.util.UmlgGenerationUtil;
+import org.umlg.javageneration.util.UmlgClassOperations;
+import org.umlg.javageneration.util.UmlgPropertyOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
 
 import java.util.List;
@@ -90,7 +90,7 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
         if (!propertyWrapper.getSubsettedProperties().isEmpty()) {
             //if subsetted property is on an interface then there is no fake implementation, so no override
             if (!(propertyWrapper.getSubsettedProperties().get(0).getType() instanceof Interface)) {
-                TinkerGenerationUtil.addOverrideAnnotation(getter);
+                UmlgGenerationUtil.addOverrideAnnotation(getter);
             }
         }
     }
@@ -116,7 +116,7 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
         OJAnnotatedOperation singleAdder = new OJAnnotatedOperation(propertyWrapper.adder());
         singleAdder.addParam(propertyWrapper.fieldname(), propertyWrapper.javaBaseTypePath());
         if (!isAssociationClass && propertyWrapper.isMemberOfAssociationClass()) {
-            singleAdder.addParam(StringUtils.uncapitalize(propertyWrapper.getAssociationClass().getName()), TumlClassOperations.getPathName(propertyWrapper.getAssociationClass()));
+            singleAdder.addParam(StringUtils.uncapitalize(propertyWrapper.getAssociationClass().getName()), UmlgClassOperations.getPathName(propertyWrapper.getAssociationClass()));
         }
 
         if (!propertyWrapper.isDataType()) {
@@ -138,12 +138,12 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
             } else {
                 ojBlock2.addToStatements("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ", " + StringUtils.uncapitalize(propertyWrapper.getAssociationClass().getName()) + ")");
             }
-            List<Constraint> constraints = TumlPropertyOperations.getConstraints(propertyWrapper.getProperty());
+            List<Constraint> constraints = UmlgPropertyOperations.getConstraints(propertyWrapper.getProperty());
             if (!constraints.isEmpty()) {
 
                 //Check the constraints
-                OJField failedConstraints = new OJField("violations", new OJPathName("java.util.List").addToGenerics(TinkerGenerationUtil.TumlConstraintViolation));
-                failedConstraints.setInitExp("new ArrayList<" + TinkerGenerationUtil.TumlConstraintViolation.getLast() + ">()");
+                OJField failedConstraints = new OJField("violations", new OJPathName("java.util.List").addToGenerics(UmlgGenerationUtil.UmlgConstraintViolation));
+                failedConstraints.setInitExp("new ArrayList<" + UmlgGenerationUtil.UmlgConstraintViolation.getLast() + ">()");
                 ojBlock2.addToLocals(failedConstraints);
 
                 for (Constraint constraint : constraints) {
@@ -152,7 +152,7 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
 
                 OJIfStatement ifConstraintsFail = new OJIfStatement("!violations.isEmpty()");
                 ifConstraintsFail.addToThenPart("this." + propertyWrapper.fieldname() + ".clear()");
-                ifConstraintsFail.addToThenPart("throw new TumlConstraintViolationException(violations)");
+                ifConstraintsFail.addToThenPart("throw new UmlgConstraintViolationException(violations)");
                 ojBlock2.addToStatements(ifConstraintsFail);
 
             }
@@ -165,7 +165,7 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
 
             OJIfStatement ifNotNull = new OJIfStatement(propertyWrapper.fieldname() + " != null");
 
-            OJField failedConstraints = new OJField("violations", new OJPathName("java.util.List").addToGenerics(TinkerGenerationUtil.TumlConstraintViolation));
+            OJField failedConstraints = new OJField("violations", new OJPathName("java.util.List").addToGenerics(UmlgGenerationUtil.UmlgConstraintViolation));
             failedConstraints.setInitExp(propertyWrapper.validator() + "(" + propertyWrapper.fieldname() + ")");
             ifNotNull.getThenPart().addToLocals(failedConstraints);
 
@@ -175,7 +175,7 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
             ifValidated.addToThenPart("this." + propertyWrapper.fieldname() + ".add(" + propertyWrapper.fieldname() + ")");
 
             //Check the constraints
-            List<Constraint> constraints = TumlPropertyOperations.getConstraints(propertyWrapper.getProperty());
+            List<Constraint> constraints = UmlgPropertyOperations.getConstraints(propertyWrapper.getProperty());
             for (Constraint constraint : constraints) {
                 ifValidated.getThenPart().addToStatements("violations.addAll(" + propertyWrapper.checkConstraint(constraint) + "())");
             }
@@ -183,15 +183,15 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
             if (!constraints.isEmpty()) {
                 OJIfStatement ifConstraintsFail = new OJIfStatement("!violations.isEmpty()");
                 ifConstraintsFail.addToThenPart("this." + propertyWrapper.fieldname() + ".clear()");
-                ifConstraintsFail.addToThenPart("throw new TumlConstraintViolationException(violations)");
+                ifConstraintsFail.addToThenPart("throw new UmlgConstraintViolationException(violations)");
                 ifValidated.addToThenPart(ifConstraintsFail);
             }
 
             ifNotNull.addToThenPart(ifValidated);
 
             singleAdder.getBody().addToStatements(ifNotNull);
-            ifValidated.addToElsePart("throw new TumlConstraintViolationException(violations)");
-            owner.addToImports(TinkerGenerationUtil.TumlConstraintViolationException);
+            ifValidated.addToElsePart("throw new UmlgConstraintViolationException(violations)");
+            owner.addToImports(UmlgGenerationUtil.UmlgConstraintViolationException);
         }
         owner.addToOperations(singleAdder);
     }
@@ -200,7 +200,7 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
         OJAnnotatedOperation setter = new OJAnnotatedOperation(pWrap.setter());
         setter.addParam(pWrap.fieldname(), pWrap.javaBaseTypePath());
         if (pWrap.isMemberOfAssociationClass()) {
-            setter.addParam(StringUtils.uncapitalize(pWrap.getAssociationClass().getName()), TumlClassOperations.getPathName(pWrap.getAssociationClass()));
+            setter.addParam(StringUtils.uncapitalize(pWrap.getAssociationClass().getName()), UmlgClassOperations.getPathName(pWrap.getAssociationClass()));
         }
         if (pWrap.isReadOnly()) {
             setter.setVisibility(OJVisibilityKind.PROTECTED);
@@ -209,9 +209,9 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
         if (pWrap.hasOtherEnd() && !pWrap.isEnumeration() && pWrap.isOneToOne()) {
             OJIfStatement ifNotNull = new OJIfStatement(pWrap.fieldname() + " != null");
             ifNotNull.addToThenPart(pWrap.fieldname() + "." + otherEnd.clearer() + "()");
-            ifNotNull.addToThenPart(pWrap.fieldname() + ".initialiseProperty(" + TumlClassOperations.propertyEnumName(otherEnd.getOwningType()) + "."
+            ifNotNull.addToThenPart(pWrap.fieldname() + ".initialiseProperty(" + UmlgClassOperations.propertyEnumName(otherEnd.getOwningType()) + "."
                     + otherEnd.fieldname() + ", false)");
-            owner.addToImports(TumlClassOperations.getPathName(otherEnd.getOwningType()).append(TumlClassOperations.propertyEnumName(otherEnd.getOwningType())));
+            owner.addToImports(UmlgClassOperations.getPathName(otherEnd.getOwningType()).append(UmlgClassOperations.propertyEnumName(otherEnd.getOwningType())));
             setter.getBody().addToStatements(ifNotNull);
         }
         setter.getBody().addToStatements(pWrap.clearer() + "()");

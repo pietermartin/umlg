@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.umlg.collectiontest.*;
 import org.umlg.concretetest.God;
 import org.umlg.embeddedtest.TestEmbedded;
-import org.umlg.runtime.collection.memory.TumlMemorySequence;
+import org.umlg.runtime.collection.memory.UmlgMemorySequence;
 import org.umlg.runtime.test.BaseLocalDbTest;
 
 import java.util.Arrays;
@@ -72,7 +72,7 @@ public class OrderedSetTestTest extends BaseLocalDbTest {
         //3 are created by initial value
         Assert.assertEquals(6, test.getManyOrderedRequiredInteger().size());
 
-        test.setManyOrderedRequiredInteger(new TumlMemorySequence<Integer>(Arrays.asList(3, 2, 1)));
+        test.setManyOrderedRequiredInteger(new UmlgMemorySequence<Integer>(Arrays.asList(3, 2, 1)));
         Assert.assertEquals(3, test.getManyOrderedRequiredInteger().size());
 
         Assert.assertEquals(Integer.valueOf(3), test.getManyOrderedRequiredInteger().get(0));

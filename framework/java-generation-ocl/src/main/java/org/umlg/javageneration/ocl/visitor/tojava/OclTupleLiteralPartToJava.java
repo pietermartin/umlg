@@ -29,7 +29,7 @@ public class OclTupleLiteralPartToJava implements HandleTupleLiteralPart {
 
 //		if (type != null) {
 //			
-//			result.append(" : ").append(TumlClassOperations.className(type) /*getName(type)*/);//$NON-NLS-1$
+//			result.append(" : ").append(UmlgClassOperations.className(type) /*getName(type)*/);//$NON-NLS-1$
 //		}
 
 		if (valueResult != null) {

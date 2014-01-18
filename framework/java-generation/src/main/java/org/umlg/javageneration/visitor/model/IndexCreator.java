@@ -9,7 +9,7 @@ import org.umlg.java.metamodel.OJPackage;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.javageneration.util.PropertyWrapper;
-import org.umlg.javageneration.util.TinkerGenerationUtil;
+import org.umlg.javageneration.util.UmlgGenerationUtil;
 import org.umlg.javageneration.visitor.BaseVisitor;
 
 import java.util.List;
@@ -28,9 +28,9 @@ public class IndexCreator extends BaseVisitor implements Visitor<Model> {
     public void visitBefore(Model element) {
         OJAnnotatedClass indexCreator = new OJAnnotatedClass("IndexCreator");
         indexCreator.setComment("This class is responsible to create all keyed indexes.\nIt is invoked the first time a graph is created.");
-        OJPackage ojPackage = new OJPackage(TinkerGenerationUtil.UmlgRootPackage.toJavaString());
+        OJPackage ojPackage = new OJPackage(UmlgGenerationUtil.UmlgRootPackage.toJavaString());
         indexCreator.setMyPackage(ojPackage);
-        indexCreator.addToImplementedInterfaces(TinkerGenerationUtil.UmlgIndexManager);
+        indexCreator.addToImplementedInterfaces(UmlgGenerationUtil.UmlgIndexManager);
         addToSource(indexCreator);
 
         OJAnnotatedOperation createIndexes = new OJAnnotatedOperation("createIndexes");
@@ -39,16 +39,16 @@ public class IndexCreator extends BaseVisitor implements Visitor<Model> {
         List<Property> qualifiers = ModelLoader.INSTANCE.getAllQualifiers();
         for (Property q : qualifiers) {
             PropertyWrapper qualifierWrap = new PropertyWrapper(q);
-            createIndexes.getBody().addToStatements(TinkerGenerationUtil.graphDbAccess + ".createKeyIndex(" + TinkerGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() + ".getUmlgLabelConverter().convert(\"" + qualifierWrap.getQualifiedName() + "\"), " + TinkerGenerationUtil.edgePathName.getLast() + ".class)");
-            indexCreator.addToImports(TinkerGenerationUtil.edgePathName);
+            createIndexes.getBody().addToStatements(UmlgGenerationUtil.graphDbAccess + ".createKeyIndex(" + UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() + ".getUmlgLabelConverter().convert(\"" + qualifierWrap.getQualifiedName() + "\"), " + UmlgGenerationUtil.edgePathName.getLast() + ".class)");
+            indexCreator.addToImports(UmlgGenerationUtil.edgePathName);
         }
-        indexCreator.addToImports(TinkerGenerationUtil.UmlgLabelConverterFactoryPathName);
+        indexCreator.addToImports(UmlgGenerationUtil.UmlgLabelConverterFactoryPathName);
         //Create index for the application root
-        createIndexes.getBody().addToStatements(TinkerGenerationUtil.graphDbAccess + ".createKeyIndex(" + TinkerGenerationUtil.UmlgGraph.getLast() + ".ROOT_VERTEX, " + TinkerGenerationUtil.vertexPathName.getLast() + ".class)");
+        createIndexes.getBody().addToStatements(UmlgGenerationUtil.graphDbAccess + ".createKeyIndex(" + UmlgGenerationUtil.UmlgGraph.getLast() + ".ROOT_VERTEX, " + UmlgGenerationUtil.vertexPathName.getLast() + ".class)");
 
-        indexCreator.addToImports(TinkerGenerationUtil.UmlgGraph);
-        indexCreator.addToImports(TinkerGenerationUtil.vertexPathName);
-        indexCreator.addToImports(TinkerGenerationUtil.graphDbPathName);
+        indexCreator.addToImports(UmlgGenerationUtil.UmlgGraph);
+        indexCreator.addToImports(UmlgGenerationUtil.vertexPathName);
+        indexCreator.addToImports(UmlgGenerationUtil.graphDbPathName);
     }
 
     @Override

@@ -12,7 +12,7 @@ import org.umlg.java.metamodel.OJPathName;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.java.metamodel.generated.OJVisibilityKindGEN;
-import org.umlg.javageneration.util.TinkerGenerationUtil;
+import org.umlg.javageneration.util.UmlgGenerationUtil;
 import org.umlg.javageneration.visitor.BaseVisitor;
 
 import java.util.List;
@@ -58,8 +58,8 @@ public class TmpIdAdder extends BaseVisitor implements Visitor<Class> {
         OJIfStatement ifStatement1 = new OJIfStatement("propertyMap.get(\"tmpId\") != null");
         ifStatement.addToThenPart(ifStatement1);
         ifStatement1.addToThenPart("this.tmpId = (String)propertyMap.get(\"tmpId\")");
-        ifStatement1.addToThenPart(TinkerGenerationUtil.UmlgTmpIdManager.getLast() + ".INSTANCE.put(this.tmpId, getId())");
-        annotatedClass.addToImports(TinkerGenerationUtil.UmlgTmpIdManager);
+        ifStatement1.addToThenPart(UmlgGenerationUtil.UmlgTmpIdManager.getLast() + ".INSTANCE.put(this.tmpId, getId())");
+        annotatedClass.addToImports(UmlgGenerationUtil.UmlgTmpIdManager);
         ifStatement1.addToElsePart("this.tmpId = null");
         fromJson.getBody().addToStatements(ifStatement);
     }

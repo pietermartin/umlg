@@ -8,7 +8,7 @@ import org.umlg.embeddedtest.TestEnumLiteralDuplicateName;
 import org.umlg.embeddedtest.TestOrderedEnumBug;
 import org.umlg.embeddedtest.TestOrderedEnumeration;
 import org.umlg.runtime.collection.TinkerSet;
-import org.umlg.runtime.collection.memory.TumlMemorySet;
+import org.umlg.runtime.collection.memory.UmlgMemorySet;
 import org.umlg.runtime.test.BaseLocalDbTest;
 
 import java.util.Arrays;
@@ -25,7 +25,7 @@ public class ManyEnumerationTest extends BaseLocalDbTest {
         God g = new God(true);
         g.setName("g");
         Object s = Arrays.asList(new Object[]{"asda", "asd"});
-        TinkerSet<REASON> reasons = new TumlMemorySet<REASON>((Collection<REASON>) s);
+        TinkerSet<REASON> reasons = new UmlgMemorySet<REASON>((Collection<REASON>) s);
         g.addToREASON(reasons);
         db.commit();
     }

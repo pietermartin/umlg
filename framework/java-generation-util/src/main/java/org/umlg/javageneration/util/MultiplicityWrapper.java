@@ -36,11 +36,11 @@ public class MultiplicityWrapper implements MultiplicityElement {
 	}
 
 	public boolean isOne() {
-		return TumlMultiplicityOperations.isOne(this.multiplicityElement);
+		return UmlgMultiplicityOperations.isOne(this.multiplicityElement);
 	}
 
 	public boolean isMany() {
-		return TumlMultiplicityOperations.isMany(this.multiplicityElement);
+		return UmlgMultiplicityOperations.isMany(this.multiplicityElement);
 	}
 
 	@Override

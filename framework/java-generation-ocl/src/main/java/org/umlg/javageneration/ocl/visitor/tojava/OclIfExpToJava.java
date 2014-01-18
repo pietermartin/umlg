@@ -9,8 +9,8 @@ import org.umlg.java.metamodel.OJVisibilityKind;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.javageneration.ocl.visitor.HandleIfExp;
-import org.umlg.javageneration.util.TumlClassOperations;
-import org.umlg.javageneration.util.TumlCollectionKindEnum;
+import org.umlg.javageneration.util.UmlgClassOperations;
+import org.umlg.javageneration.util.UmlgCollectionKindEnum;
 
 public class OclIfExpToJava implements HandleIfExp {
 
@@ -23,10 +23,10 @@ public class OclIfExpToJava implements HandleIfExp {
 		OJPathName ifExpPathName;
 		if (ifExp.getType() instanceof CollectionType) {
 			CollectionType collectionType = (CollectionType)ifExp.getType();
-			ifExpPathName = TumlCollectionKindEnum.from(collectionType.getKind()).getOjPathName();
-			ifExpPathName.addToGenerics(TumlClassOperations.getPathName(collectionType.getElementType()));
+			ifExpPathName = UmlgCollectionKindEnum.from(collectionType.getKind()).getOjPathName();
+			ifExpPathName.addToGenerics(UmlgClassOperations.getPathName(collectionType.getElementType()));
 		} else {
-			ifExpPathName = TumlClassOperations.getPathName(ifExp.getType());
+			ifExpPathName = UmlgClassOperations.getPathName(ifExp.getType());
 		}
 		OJAnnotatedOperation oper = new OJAnnotatedOperation(ifOperationName + this.ojClass.countOperationsStartingWith(ifOperationName), ifExpPathName);
 		this.ojClass.addToOperations(oper);

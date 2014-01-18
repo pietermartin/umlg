@@ -1,12 +1,12 @@
 package org.umlg.runtime.adaptor;
 
-import org.umlg.runtime.test.TumlTestUtil;
+import org.umlg.runtime.test.UmlgTestUtil;
 
 /**
  * Date: 2013/01/09
  * Time: 7:35 AM
  */
-public class UmlgTitanTestUtil implements TumlTestUtil {
+public class UmlgTitanTestUtil implements UmlgTestUtil {
 
     private static final UmlgTitanTestUtil INSTANCE = new  UmlgTitanTestUtil();
 

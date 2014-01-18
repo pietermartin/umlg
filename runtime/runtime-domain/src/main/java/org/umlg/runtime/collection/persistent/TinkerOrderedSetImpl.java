@@ -1,16 +1,16 @@
 package org.umlg.runtime.collection.persistent;
 
 import org.umlg.runtime.collection.TinkerOrderedSet;
-import org.umlg.runtime.collection.TumlRuntimeProperty;
+import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.domain.UmlgNode;
 
 import java.util.Collection;
 
-public class TinkerOrderedSetImpl<E> extends TumlBaseOrderedSet<E> implements TinkerOrderedSet<E> {
+public class TinkerOrderedSetImpl<E> extends UmlgBaseOrderedSet<E> implements TinkerOrderedSet<E> {
 
 
     @SuppressWarnings("unchecked")
-    public TinkerOrderedSetImpl(UmlgNode owner, TumlRuntimeProperty runtimeProperty) {
+    public TinkerOrderedSetImpl(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
         super(owner, runtimeProperty);
     }
 

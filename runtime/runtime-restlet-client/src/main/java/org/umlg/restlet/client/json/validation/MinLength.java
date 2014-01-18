@@ -1,6 +1,6 @@
 package org.umlg.restlet.client.json.validation;
 
-public class MinLength implements TumlValidation {
+public class MinLength implements UmlgValidation {
 	private int minLength;
 
 	public MinLength(Integer value) {

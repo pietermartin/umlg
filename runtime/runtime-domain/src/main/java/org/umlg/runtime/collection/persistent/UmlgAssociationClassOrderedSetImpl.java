@@ -7,8 +7,8 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.umlg.runtime.adaptor.GraphDb;
 import org.umlg.runtime.collection.TinkerCollection;
-import org.umlg.runtime.collection.TumlRuntimeProperty;
-import org.umlg.runtime.domain.TumlMetaNode;
+import org.umlg.runtime.collection.UmlgRuntimeProperty;
+import org.umlg.runtime.domain.UmlgMetaNode;
 import org.umlg.runtime.domain.UmlgNode;
 
 import java.lang.reflect.Method;
@@ -22,7 +22,7 @@ import java.util.Set;
  */
 public class UmlgAssociationClassOrderedSetImpl<AssociationClassNode> extends TinkerOrderedSetImpl<AssociationClassNode> {
 
-    public UmlgAssociationClassOrderedSetImpl(UmlgNode owner, TumlRuntimeProperty runtimeProperty) {
+    public UmlgAssociationClassOrderedSetImpl(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
         super(owner, runtimeProperty);
     }
 
@@ -123,7 +123,7 @@ public class UmlgAssociationClassOrderedSetImpl<AssociationClassNode> extends Ti
                 Object value = associationClassVertex.getProperty(getQualifiedName());
                 node = (AssociationClassNode) Enum.valueOf((Class<? extends Enum>) c, (String) value);
                 putToInternalMap(node, associationClassVertex);
-            } else if (TumlMetaNode.class.isAssignableFrom(c)) {
+            } else if (UmlgMetaNode.class.isAssignableFrom(c)) {
                 Method m = c.getDeclaredMethod("getInstance", new Class[0]);
                 node = (AssociationClassNode) m.invoke(null);
             } else if (UmlgNode.class.isAssignableFrom(c)) {

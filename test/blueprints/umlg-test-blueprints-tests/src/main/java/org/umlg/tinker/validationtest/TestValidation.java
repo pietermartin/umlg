@@ -13,12 +13,12 @@ import org.umlg.componenttest.ValidationTest;
 import org.umlg.concretetest.God;
 import org.umlg.concretetest.Universe;
 import org.umlg.runtime.test.BaseLocalDbTest;
-import org.umlg.runtime.validation.TumlConstraintViolationException;
+import org.umlg.runtime.validation.UmlgConstraintViolationException;
 
 public class TestValidation extends BaseLocalDbTest {
 
     @SuppressWarnings("unused")
-    @Test(expected = TumlConstraintViolationException.class)
+    @Test(expected = UmlgConstraintViolationException.class)
     public void testValidationMaxLengthFail() {
         God g = new God(true);
         Universe u1 = new Universe(g);
@@ -42,7 +42,7 @@ public class TestValidation extends BaseLocalDbTest {
     }
 
     @SuppressWarnings("unused")
-    @Test(expected = TumlConstraintViolationException.class)
+    @Test(expected = UmlgConstraintViolationException.class)
     public void testValidationMinLengthFail() {
         God g = new God(true);
         Universe u1 = new Universe(g);
@@ -66,7 +66,7 @@ public class TestValidation extends BaseLocalDbTest {
     }
 
     @SuppressWarnings("unused")
-    @Test(expected = TumlConstraintViolationException.class)
+    @Test(expected = UmlgConstraintViolationException.class)
     public void testValidationRangeLengthFail1() {
         God g = new God(true);
         Universe u1 = new Universe(g);
@@ -78,7 +78,7 @@ public class TestValidation extends BaseLocalDbTest {
     }
 
     @SuppressWarnings("unused")
-    @Test(expected = TumlConstraintViolationException.class)
+    @Test(expected = UmlgConstraintViolationException.class)
     public void testValidationRangeLengthFail2() {
         God g = new God(true);
         Universe u1 = new Universe(g);
@@ -102,7 +102,7 @@ public class TestValidation extends BaseLocalDbTest {
     }
 
     @SuppressWarnings("unused")
-    @Test(expected = TumlConstraintViolationException.class)
+    @Test(expected = UmlgConstraintViolationException.class)
     public void testValidationMinFail() {
         God g = new God(true);
         Universe u1 = new Universe(g);
@@ -126,7 +126,7 @@ public class TestValidation extends BaseLocalDbTest {
     }
 
     @SuppressWarnings("unused")
-    @Test(expected = TumlConstraintViolationException.class)
+    @Test(expected = UmlgConstraintViolationException.class)
     public void testValidationMaxFail() {
         God g = new God(true);
         Universe u1 = new Universe(g);
@@ -150,7 +150,7 @@ public class TestValidation extends BaseLocalDbTest {
     }
 
     @SuppressWarnings("unused")
-    @Test(expected = TumlConstraintViolationException.class)
+    @Test(expected = UmlgConstraintViolationException.class)
     public void testValidationRangeFail1() {
         God g = new God(true);
         Universe u1 = new Universe(g);
@@ -162,7 +162,7 @@ public class TestValidation extends BaseLocalDbTest {
     }
 
     @SuppressWarnings("unused")
-    @Test(expected = TumlConstraintViolationException.class)
+    @Test(expected = UmlgConstraintViolationException.class)
     public void testValidationRangeFail2() {
         God g = new God(true);
         Universe u1 = new Universe(g);
@@ -194,7 +194,7 @@ public class TestValidation extends BaseLocalDbTest {
             db.commit();
             Assert.fail("Expected TransactionFailureException");
         } catch (Exception e) {
-            Assert.assertTrue("excepting TumlConstraintViolationException", e instanceof TumlConstraintViolationException);
+            Assert.assertTrue("excepting UmlgConstraintViolationException", e instanceof UmlgConstraintViolationException);
         }
     }
 
@@ -216,12 +216,12 @@ public class TestValidation extends BaseLocalDbTest {
             db.commit();
             Assert.fail("Expected TransactionFailureException");
         } catch (Exception e) {
-            Assert.assertTrue("excepting TumlConstraintViolationException", e instanceof TumlConstraintViolationException);
+            Assert.assertTrue("excepting UmlgConstraintViolationException", e instanceof UmlgConstraintViolationException);
         }
     }
 
     @SuppressWarnings("unused")
-    @Test(expected = TumlConstraintViolationException.class)
+    @Test(expected = UmlgConstraintViolationException.class)
     public void testEmailValidationFail() {
         God g = new God(true);
         g.setName("asda");
@@ -256,7 +256,7 @@ public class TestValidation extends BaseLocalDbTest {
             Finger finger1 = new Finger(hand);
             db.commit();
         } catch (Exception e) {
-            Assert.assertTrue("excepting TumlConstraintViolationException", e instanceof TumlConstraintViolationException);
+            Assert.assertTrue("excepting UmlgConstraintViolationException", e instanceof UmlgConstraintViolationException);
             return;
         }
         Assert.fail("Expected transaction failed exception");
@@ -275,7 +275,7 @@ public class TestValidation extends BaseLocalDbTest {
             finger1.setName(null);
             db.commit();
         } catch (Exception e) {
-            Assert.assertTrue("excepting TumlConstraintViolationException", e instanceof TumlConstraintViolationException);
+            Assert.assertTrue("excepting UmlgConstraintViolationException", e instanceof UmlgConstraintViolationException);
             return;
         }
         Assert.fail("Expected transaction failed exception");
@@ -302,7 +302,7 @@ public class TestValidation extends BaseLocalDbTest {
             f6.setName("f6");
             db.commit();
         } catch (Exception e) {
-            Assert.assertTrue("excepting TumlConstraintViolationException", e instanceof TumlConstraintViolationException);
+            Assert.assertTrue("excepting UmlgConstraintViolationException", e instanceof UmlgConstraintViolationException);
             return;
         }
         Assert.fail("Expected transaction failed exception");
@@ -320,7 +320,7 @@ public class TestValidation extends BaseLocalDbTest {
             f1.setName("f1");
             db.commit();
         } catch (Exception e) {
-            Assert.assertTrue("excepting TumlConstraintViolationException", e instanceof TumlConstraintViolationException);
+            Assert.assertTrue("excepting UmlgConstraintViolationException", e instanceof UmlgConstraintViolationException);
             return;
         }
         Assert.fail("Expected transaction failed exception");
@@ -347,7 +347,7 @@ public class TestValidation extends BaseLocalDbTest {
             f6.setName("f6");
             db.commit();
         } catch (Exception e) {
-            Assert.assertTrue("excepting TumlConstraintViolationException", e instanceof TumlConstraintViolationException);
+            Assert.assertTrue("excepting UmlgConstraintViolationException", e instanceof UmlgConstraintViolationException);
             return;
         }
         Assert.fail("Expected transaction failed exception");

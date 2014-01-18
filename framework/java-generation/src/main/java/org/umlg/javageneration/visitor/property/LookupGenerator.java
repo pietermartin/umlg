@@ -36,7 +36,7 @@ public class LookupGenerator extends BaseVisitor implements Visitor<Property> {
 
             lookUp.setReturnType("TinkerSet<" + propertyWrapper.javaBaseTypePath().getLast() + ">");
             OJField result = new OJField("result", "TinkerSet<" + propertyWrapper.javaBaseTypePath().getLast() + ">");
-            result.setInitExp("new " + TinkerGenerationUtil.tumlMemorySet.getLast() + "<" + propertyWrapper.javaBaseTypePath().getLast() + ">()");
+            result.setInitExp("new " + UmlgGenerationUtil.umlgMemorySet.getLast() + "<" + propertyWrapper.javaBaseTypePath().getLast() + ">()");
             ojClass.addToImports("java.util.HashSet");
             ojClass.addToImports("java.util.Set");
             ojBlock1.addToLocals(result);
@@ -57,14 +57,14 @@ public class LookupGenerator extends BaseVisitor implements Visitor<Property> {
                             otherEnd.getter() + "().contains(" + otherEnd.javaBaseTypePath().getLast() + ".this);\n    }\n}");
                 }
 
-                ojBlock1.addToStatements("result.addAll(" + TumlClassOperations.getPathName(propertyWrapper.getType()).getLast() + ".allInstances(filter))");
+                ojBlock1.addToStatements("result.addAll(" + UmlgClassOperations.getPathName(propertyWrapper.getType()).getLast() + ".allInstances(filter))");
 
             } else {
-                ojBlock1.addToStatements("result.addAll(" + TumlClassOperations.getPathName(propertyWrapper.getType()).getLast() + ".allInstances())");
+                ojBlock1.addToStatements("result.addAll(" + UmlgClassOperations.getPathName(propertyWrapper.getType()).getLast() + ".allInstances())");
             }
 
 
-            List<Constraint> constraints = TumlPropertyOperations.getConstraints(propertyWrapper.getProperty());
+            List<Constraint> constraints = UmlgPropertyOperations.getConstraints(propertyWrapper.getProperty());
             if (!constraints.isEmpty()) {
                 //Filter out constrained element
                 OJField iter = new OJField("iter", "java.util.Iterator<" + propertyWrapper.javaBaseTypePath().getLast() + ">");
@@ -79,7 +79,7 @@ public class LookupGenerator extends BaseVisitor implements Visitor<Property> {
                 ojWhileStatement.getBody().addToLocals(next);
                 OJTryStatement tryTumlConstraintException = new OJTryStatement();
                 tryTumlConstraintException.getTryPart().addToStatements(propertyWrapper.adder() + "(" + propertyWrapper.fieldname() + ")");
-                tryTumlConstraintException.setCatchParam(new OJParameter("e", TinkerGenerationUtil.TumlConstraintViolationException));
+                tryTumlConstraintException.setCatchParam(new OJParameter("e", UmlgGenerationUtil.UmlgConstraintViolationException));
                 tryTumlConstraintException.getCatchPart().addToStatements("iter.remove()");
                 ojWhileStatement.getBody().addToStatements(tryTumlConstraintException);
                 ojWhileStatement.getBody().addToStatements(propertyWrapper.remover() + "(" + propertyWrapper.fieldname() + ")");

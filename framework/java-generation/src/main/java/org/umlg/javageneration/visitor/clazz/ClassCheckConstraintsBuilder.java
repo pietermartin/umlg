@@ -11,8 +11,8 @@ import org.umlg.java.metamodel.OJField;
 import org.umlg.java.metamodel.OJPathName;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
-import org.umlg.javageneration.util.TinkerGenerationUtil;
-import org.umlg.javageneration.util.TumlClassOperations;
+import org.umlg.javageneration.util.UmlgGenerationUtil;
+import org.umlg.javageneration.util.UmlgClassOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
 
 import java.util.List;
@@ -42,14 +42,14 @@ public class ClassCheckConstraintsBuilder extends BaseVisitor implements Visitor
     }
 
     private void addCheckConstraints(OJAnnotatedClass annotatedClass, Class clazz) {
-        OJAnnotatedOperation checkConstraints = new OJAnnotatedOperation("checkClassConstraints", new OJPathName("java.util.List").addToGenerics(TinkerGenerationUtil.TumlConstraintViolation));
-        TinkerGenerationUtil.addOverrideAnnotation(checkConstraints);
-        OJField result = new OJField("result", new OJPathName("java.util.List").addToGenerics(TinkerGenerationUtil.TumlConstraintViolation));
-        result.setInitExp("new ArrayList<" + TinkerGenerationUtil.TumlConstraintViolation.getLast() + ">()");
+        OJAnnotatedOperation checkConstraints = new OJAnnotatedOperation("checkClassConstraints", new OJPathName("java.util.List").addToGenerics(UmlgGenerationUtil.UmlgConstraintViolation));
+        UmlgGenerationUtil.addOverrideAnnotation(checkConstraints);
+        OJField result = new OJField("result", new OJPathName("java.util.List").addToGenerics(UmlgGenerationUtil.UmlgConstraintViolation));
+        result.setInitExp("new ArrayList<" + UmlgGenerationUtil.UmlgConstraintViolation.getLast() + ">()");
         checkConstraints.getBody().addToLocals(result);
         List<Constraint> constraints = ModelLoader.INSTANCE.getConstraints(clazz);
         for (Constraint constraint : constraints) {
-            checkConstraints.getBody().addToStatements("result.addAll(" + TumlClassOperations.checkClassConstraintName(constraint) + "())");
+            checkConstraints.getBody().addToStatements("result.addAll(" + UmlgClassOperations.checkClassConstraintName(constraint) + "())");
         }
         checkConstraints.getBody().addToStatements("return result");
         annotatedClass.addToOperations(checkConstraints);

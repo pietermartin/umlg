@@ -10,8 +10,8 @@ import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.javageneration.util.PropertyWrapper;
-import org.umlg.javageneration.util.TinkerGenerationUtil;
-import org.umlg.javageneration.util.TumlClassOperations;
+import org.umlg.javageneration.util.UmlgGenerationUtil;
+import org.umlg.javageneration.util.UmlgClassOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
 
 public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implements Visitor<Class> {
@@ -28,12 +28,12 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
         OJAnnotatedClass annotatedClass = findOJClass(clazz);
         addInitialiseProperty(annotatedClass, clazz);
         addInternalInverseAdder(annotatedClass, clazz);
-        if (TumlClassOperations.isAssociationClass(clazz)) {
+        if (UmlgClassOperations.isAssociationClass(clazz)) {
             addInternalAdder(annotatedClass, (AssociationClass)clazz);
         }
         addGetMetaDataAsJson(annotatedClass, clazz);
-        RuntimePropertyImplementor.addTumlRuntimePropertyEnum(annotatedClass, TumlClassOperations.propertyEnumName(clazz), clazz,
-                TumlClassOperations.getAllProperties(clazz), TumlClassOperations.hasCompositeOwner(clazz), clazz.getModel().getName());
+        RuntimePropertyImplementor.addTumlRuntimePropertyEnum(annotatedClass, UmlgClassOperations.propertyEnumName(clazz), clazz,
+                UmlgClassOperations.getAllProperties(clazz), UmlgClassOperations.hasCompositeOwner(clazz), clazz.getModel().getName());
         addGetQualifiers(annotatedClass, clazz);
         addGetSize(annotatedClass, clazz);
     }
@@ -44,17 +44,17 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
 
     private void addInternalAdder(OJAnnotatedClass annotatedClass, AssociationClass associationClass) {
         OJAnnotatedOperation initialiseProperty = new OJAnnotatedOperation("internalAdder");
-        TinkerGenerationUtil.addOverrideAnnotation(initialiseProperty);
-        initialiseProperty.setReturnType(TinkerGenerationUtil.tumlRuntimePropertyPathName.getCopy());
-        initialiseProperty.addParam("tumlRuntimeProperty", TinkerGenerationUtil.tumlRuntimePropertyPathName.getCopy());
+        UmlgGenerationUtil.addOverrideAnnotation(initialiseProperty);
+        initialiseProperty.setReturnType(UmlgGenerationUtil.umlgRuntimePropertyPathName.getCopy());
+        initialiseProperty.addParam("tumlRuntimeProperty", UmlgGenerationUtil.umlgRuntimePropertyPathName.getCopy());
         initialiseProperty.addParam("inverse", "boolean");
-        initialiseProperty.addParam("umlgNode", TinkerGenerationUtil.UMLG_NODE);
+        initialiseProperty.addParam("umlgNode", UmlgGenerationUtil.UMLG_NODE);
         annotatedClass.addToOperations(initialiseProperty);
 
-        OJField runtimeProperty = new OJField("runtimeProperty", new OJPathName(TumlClassOperations.propertyEnumName(associationClass)));
+        OJField runtimeProperty = new OJField("runtimeProperty", new OJPathName(UmlgClassOperations.propertyEnumName(associationClass)));
         if (!associationClass.getGeneralizations().isEmpty()) {
 
-            OJField fromSuperRuntimeProperty = new OJField("fromSuperRuntimeProperty", TinkerGenerationUtil.tumlRuntimePropertyPathName.getCopy());
+            OJField fromSuperRuntimeProperty = new OJField("fromSuperRuntimeProperty", UmlgGenerationUtil.umlgRuntimePropertyPathName.getCopy());
             fromSuperRuntimeProperty.setInitExp("super.internalAdder(tumlRuntimeProperty, inverse, umlgNode)");
             initialiseProperty.getBody().addToLocals(fromSuperRuntimeProperty);
 
@@ -67,9 +67,9 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
         }
 
         OJIfStatement ifInverse = new OJIfStatement("!inverse");
-        ifInverse.addToThenPart("runtimeProperty = " + "(" + TumlClassOperations.propertyEnumName(associationClass)
+        ifInverse.addToThenPart("runtimeProperty = " + "(" + UmlgClassOperations.propertyEnumName(associationClass)
                 + ".fromQualifiedName(tumlRuntimeProperty.getQualifiedName()))");
-        ifInverse.addToElsePart("runtimeProperty = " + "(" + TumlClassOperations.propertyEnumName(associationClass)
+        ifInverse.addToElsePart("runtimeProperty = " + "(" + UmlgClassOperations.propertyEnumName(associationClass)
                 + ".fromQualifiedName(tumlRuntimeProperty.getInverseQualifiedName()))");
 
         OJIfStatement ifNotNull = new OJIfStatement("runtimeProperty != null");
@@ -110,17 +110,17 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
      */
     private void addInternalInverseAdder(OJAnnotatedClass annotatedClass, Class clazz) {
         OJAnnotatedOperation initialiseProperty = new OJAnnotatedOperation("inverseAdder");
-        TinkerGenerationUtil.addOverrideAnnotation(initialiseProperty);
-        initialiseProperty.setReturnType(TinkerGenerationUtil.tumlRuntimePropertyPathName.getCopy());
-        initialiseProperty.addParam("tumlRuntimeProperty", TinkerGenerationUtil.tumlRuntimePropertyPathName.getCopy());
+        UmlgGenerationUtil.addOverrideAnnotation(initialiseProperty);
+        initialiseProperty.setReturnType(UmlgGenerationUtil.umlgRuntimePropertyPathName.getCopy());
+        initialiseProperty.addParam("tumlRuntimeProperty", UmlgGenerationUtil.umlgRuntimePropertyPathName.getCopy());
         initialiseProperty.addParam("inverse", "boolean");
-        initialiseProperty.addParam("umlgNode", TinkerGenerationUtil.UMLG_NODE);
+        initialiseProperty.addParam("umlgNode", UmlgGenerationUtil.UMLG_NODE);
         annotatedClass.addToOperations(initialiseProperty);
 
-        OJField runtimeProperty = new OJField("runtimeProperty", new OJPathName(TumlClassOperations.propertyEnumName(clazz)));
+        OJField runtimeProperty = new OJField("runtimeProperty", new OJPathName(UmlgClassOperations.propertyEnumName(clazz)));
         if (!clazz.getGeneralizations().isEmpty()) {
 
-            OJField fromSuperRuntimeProperty = new OJField("fromSuperRuntimeProperty", TinkerGenerationUtil.tumlRuntimePropertyPathName.getCopy());
+            OJField fromSuperRuntimeProperty = new OJField("fromSuperRuntimeProperty", UmlgGenerationUtil.umlgRuntimePropertyPathName.getCopy());
             fromSuperRuntimeProperty.setInitExp("super.inverseAdder(tumlRuntimeProperty, inverse, umlgNode)");
             initialiseProperty.getBody().addToLocals(fromSuperRuntimeProperty);
 
@@ -133,9 +133,9 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
         }
 
         OJIfStatement ifInverse = new OJIfStatement("!inverse");
-        ifInverse.addToThenPart("runtimeProperty = " + "(" + TumlClassOperations.propertyEnumName(clazz)
+        ifInverse.addToThenPart("runtimeProperty = " + "(" + UmlgClassOperations.propertyEnumName(clazz)
                 + ".fromQualifiedName(tumlRuntimeProperty.getQualifiedName()))");
-        ifInverse.addToElsePart("runtimeProperty = " + "(" + TumlClassOperations.propertyEnumName(clazz)
+        ifInverse.addToElsePart("runtimeProperty = " + "(" + UmlgClassOperations.propertyEnumName(clazz)
                 + ".fromQualifiedName(tumlRuntimeProperty.getInverseQualifiedName()))");
 
         OJIfStatement ifNotNull = new OJIfStatement("runtimeProperty != null");
@@ -145,7 +145,7 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
         ifNotNull.addToThenPart("return runtimeProperty");
         ifNotNull.addToElsePart("return null");
 
-        for (Property p : TumlClassOperations.getAllOwnedProperties(clazz)) {
+        for (Property p : UmlgClassOperations.getAllOwnedProperties(clazz)) {
             PropertyWrapper pWrap = new PropertyWrapper(p);
             if (!(pWrap.isDerived() || pWrap.isDerivedUnion()) && pWrap.getOtherEnd() != null && !pWrap.isEnumeration()) {
                 OJSwitchCase ojSwitchCase = new OJSwitchCase();
@@ -180,20 +180,20 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
 
     private void addInitialiseProperty(OJAnnotatedClass annotatedClass, Class clazz) {
         OJAnnotatedOperation initialiseProperty = new OJAnnotatedOperation(INITIALISE_PROPERTY);
-        TinkerGenerationUtil.addOverrideAnnotation(initialiseProperty);
-        initialiseProperty.addParam("tumlRuntimeProperty", TinkerGenerationUtil.tumlRuntimePropertyPathName.getCopy());
+        UmlgGenerationUtil.addOverrideAnnotation(initialiseProperty);
+        initialiseProperty.addParam("tumlRuntimeProperty", UmlgGenerationUtil.umlgRuntimePropertyPathName.getCopy());
         initialiseProperty.addParam("inverse", "boolean");
         if (!clazz.getGeneralizations().isEmpty()) {
             initialiseProperty.getBody().addToStatements("super.initialiseProperty(tumlRuntimeProperty, inverse)");
         }
         annotatedClass.addToOperations(initialiseProperty);
 
-        OJField runtimePropoerty = new OJField("runtimeProperty", new OJPathName(TumlClassOperations.propertyEnumName(clazz)));
+        OJField runtimePropoerty = new OJField("runtimeProperty", new OJPathName(UmlgClassOperations.propertyEnumName(clazz)));
         initialiseProperty.getBody().addToLocals(runtimePropoerty);
         OJIfStatement ifInverse = new OJIfStatement("!inverse");
-        ifInverse.addToThenPart("runtimeProperty = " + "(" + TumlClassOperations.propertyEnumName(clazz)
+        ifInverse.addToThenPart("runtimeProperty = " + "(" + UmlgClassOperations.propertyEnumName(clazz)
                 + ".fromQualifiedName(tumlRuntimeProperty.getQualifiedName()))");
-        ifInverse.addToElsePart("runtimeProperty = " + "(" + TumlClassOperations.propertyEnumName(clazz)
+        ifInverse.addToElsePart("runtimeProperty = " + "(" + UmlgClassOperations.propertyEnumName(clazz)
                 + ".fromQualifiedName(tumlRuntimeProperty.getInverseQualifiedName()))");
         initialiseProperty.getBody().addToStatements(ifInverse);
 
@@ -203,7 +203,7 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
         ojSwitchStatement.setCondition("runtimeProperty");
         ifNotNull.addToThenPart(ojSwitchStatement);
 
-        for (Property p : TumlClassOperations.getAllOwnedProperties(clazz)) {
+        for (Property p : UmlgClassOperations.getAllOwnedProperties(clazz)) {
             PropertyWrapper pWrap = new PropertyWrapper(p);
             if (!(pWrap.isDerived() || pWrap.isDerivedUnion())) {
                 OJSwitchCase ojSwitchCase = new OJSwitchCase();
@@ -226,12 +226,12 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
 
     private void addGetQualifiers(OJAnnotatedClass annotatedClass, Class clazz) {
         OJAnnotatedOperation getQualifiers = new OJAnnotatedOperation("getQualifiers");
-        TinkerGenerationUtil.addOverrideAnnotation(getQualifiers);
+        UmlgGenerationUtil.addOverrideAnnotation(getQualifiers);
         getQualifiers.setComment("getQualifiers is called from the collection in order to update the index used to implement the qualifier");
-        getQualifiers.addParam("tumlRuntimeProperty", TinkerGenerationUtil.tumlRuntimePropertyPathName.getCopy());
-        getQualifiers.addParam("node", TinkerGenerationUtil.UMLG_NODE);
+        getQualifiers.addParam("tumlRuntimeProperty", UmlgGenerationUtil.umlgRuntimePropertyPathName.getCopy());
+        getQualifiers.addParam("node", UmlgGenerationUtil.UMLG_NODE);
         getQualifiers.addParam("inverse", "boolean");
-        getQualifiers.setReturnType(new OJPathName("java.util.List").addToGenerics(TinkerGenerationUtil.UmlgQualifierPathName));
+        getQualifiers.setReturnType(new OJPathName("java.util.List").addToGenerics(UmlgGenerationUtil.UmlgQualifierPathName));
         annotatedClass.addToOperations(getQualifiers);
 
         OJField result = null;
@@ -241,11 +241,11 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
             result = new OJField(getQualifiers.getBody(), "result", getQualifiers.getReturnType(), "Collections.emptyList()");
         }
 
-        OJField runtimeProperty = new OJField(getQualifiers.getBody(), "runtimeProperty", new OJPathName(TumlClassOperations.propertyEnumName(clazz)));
+        OJField runtimeProperty = new OJField(getQualifiers.getBody(), "runtimeProperty", new OJPathName(UmlgClassOperations.propertyEnumName(clazz)));
         OJIfStatement ifInverse = new OJIfStatement("!inverse");
-        ifInverse.addToThenPart("runtimeProperty = " + TumlClassOperations.propertyEnumName(clazz)
+        ifInverse.addToThenPart("runtimeProperty = " + UmlgClassOperations.propertyEnumName(clazz)
                 + ".fromQualifiedName(tumlRuntimeProperty.getQualifiedName())");
-        ifInverse.addToElsePart("runtimeProperty = " + TumlClassOperations.propertyEnumName(clazz)
+        ifInverse.addToElsePart("runtimeProperty = " + UmlgClassOperations.propertyEnumName(clazz)
                 + ".fromQualifiedName(tumlRuntimeProperty.getInverseQualifiedName())");
         getQualifiers.getBody().addToStatements(ifInverse);
 
@@ -256,7 +256,7 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
         ojSwitchStatement.setCondition("runtimeProperty");
         ifRuntimePropertyNotNull.addToThenPart(ojSwitchStatement);
 
-        for (Property p : TumlClassOperations.getAllOwnedProperties(clazz)) {
+        for (Property p : UmlgClassOperations.getAllOwnedProperties(clazz)) {
             PropertyWrapper pWrap = new PropertyWrapper(p);
             if (pWrap.isQualified()) {
                 OJSwitchCase ojSwitchCase = new OJSwitchCase();
@@ -278,9 +278,9 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
 
     private void addGetSize(OJAnnotatedClass annotatedClass, Class clazz) {
         OJAnnotatedOperation getQualifiers = new OJAnnotatedOperation("getSize");
-        TinkerGenerationUtil.addOverrideAnnotation(getQualifiers);
+        UmlgGenerationUtil.addOverrideAnnotation(getQualifiers);
         getQualifiers.setComment("getSize is called from the collection in order to update the index used to implement a sequence's index");
-        getQualifiers.addParam("tumlRuntimeProperty", TinkerGenerationUtil.tumlRuntimePropertyPathName.getCopy());
+        getQualifiers.addParam("tumlRuntimeProperty", UmlgGenerationUtil.umlgRuntimePropertyPathName.getCopy());
         getQualifiers.setReturnType(new OJPathName("int"));
         annotatedClass.addToOperations(getQualifiers);
 
@@ -291,8 +291,8 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
             result = new OJField(getQualifiers.getBody(), "result", getQualifiers.getReturnType(), "0");
         }
 
-        OJField runtimeProperty = new OJField(getQualifiers.getBody(), "runtimeProperty", new OJPathName(TumlClassOperations.propertyEnumName(clazz)));
-        runtimeProperty.setInitExp(TumlClassOperations.propertyEnumName(clazz) + ".fromQualifiedName(tumlRuntimeProperty.getQualifiedName())");
+        OJField runtimeProperty = new OJField(getQualifiers.getBody(), "runtimeProperty", new OJPathName(UmlgClassOperations.propertyEnumName(clazz)));
+        runtimeProperty.setInitExp(UmlgClassOperations.propertyEnumName(clazz) + ".fromQualifiedName(tumlRuntimeProperty.getQualifiedName())");
 
         OJIfStatement ifRuntimePropertyNotNull = new OJIfStatement(runtimeProperty.getName() + " != null && result == 0");
         getQualifiers.getBody().addToStatements(ifRuntimePropertyNotNull);
@@ -301,7 +301,7 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
         ojSwitchStatement.setCondition("runtimeProperty");
         ifRuntimePropertyNotNull.addToThenPart(ojSwitchStatement);
 
-        for (Property p : TumlClassOperations.getAllOwnedProperties(clazz)) {
+        for (Property p : UmlgClassOperations.getAllOwnedProperties(clazz)) {
             PropertyWrapper pWrap = new PropertyWrapper(p);
             if (!pWrap.isDerived()) {
                 OJSwitchCase ojSwitchCase = new OJSwitchCase();
@@ -323,9 +323,9 @@ public class ClassRuntimePropertyImplementorVisitor extends BaseVisitor implemen
 
     private void addGetMetaDataAsJson(OJAnnotatedClass annotatedClass, Class clazz) {
         OJAnnotatedOperation getMetaDataAsJSon = new OJAnnotatedOperation("getMetaDataAsJson", new OJPathName("String"));
-        getMetaDataAsJSon.getBody().addToStatements("return " + TumlClassOperations.className(clazz) + "." + TumlClassOperations.propertyEnumName(clazz) + ".asJson()");
+        getMetaDataAsJSon.getBody().addToStatements("return " + UmlgClassOperations.className(clazz) + "." + UmlgClassOperations.propertyEnumName(clazz) + ".asJson()");
         annotatedClass.addToOperations(getMetaDataAsJSon);
-        TinkerGenerationUtil.addOverrideAnnotation(getMetaDataAsJSon);
+        UmlgGenerationUtil.addOverrideAnnotation(getMetaDataAsJSon);
     }
 
 }

@@ -7,7 +7,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.umlg.runtime.adaptor.GraphDb;
 import org.umlg.runtime.collection.TinkerCollection;
-import org.umlg.runtime.collection.TumlRuntimeProperty;
+import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.domain.UmlgNode;
 
 import java.util.Iterator;
@@ -19,7 +19,7 @@ import java.util.Iterator;
  */
 public class UmlgAssociationClassBagImpl<AssociationClassNode> extends TinkerBagImpl<AssociationClassNode> {
 
-    public UmlgAssociationClassBagImpl(UmlgNode owner, TumlRuntimeProperty runtimeProperty) {
+    public UmlgAssociationClassBagImpl(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
         super(owner, runtimeProperty);
     }
 

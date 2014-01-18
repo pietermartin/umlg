@@ -1,6 +1,6 @@
 package org.umlg.runtime.validation;
 
-public class Range implements TumlValidation {
+public class Range implements UmlgValidation {
 private int min;
 	private int max;
 

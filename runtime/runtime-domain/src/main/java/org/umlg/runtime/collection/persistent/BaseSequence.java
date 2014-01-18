@@ -6,12 +6,12 @@ import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 import org.umlg.runtime.adaptor.GraphDb;
 import org.umlg.runtime.collection.TinkerSequence;
-import org.umlg.runtime.collection.TumlRuntimeProperty;
+import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.OclStdLibSequence;
 import org.umlg.runtime.collection.ocl.OclStdLibSequenceImpl;
-import org.umlg.runtime.domain.TumlMetaNode;
+import org.umlg.runtime.domain.UmlgMetaNode;
 import org.umlg.runtime.domain.UmlgNode;
 
 import java.lang.reflect.Method;
@@ -21,7 +21,7 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
 
     protected OclStdLibSequence<E> oclStdLibSequence;
 
-    public BaseSequence(TumlRuntimeProperty runtimeProperty) {
+    public BaseSequence(UmlgRuntimeProperty runtimeProperty) {
         super(runtimeProperty);
         this.internalCollection = new ArrayList<E>();
         this.oclStdLibSequence = new OclStdLibSequenceImpl<E>((List<E>) this.internalCollection);
@@ -29,7 +29,7 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
     }
 
 
-    public BaseSequence(UmlgNode owner, TumlRuntimeProperty runtimeProperty) {
+    public BaseSequence(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
         super(owner, runtimeProperty);
         this.internalCollection = new ArrayList<E>();
         this.oclStdLibSequence = new OclStdLibSequenceImpl<E>((List<E>) this.internalCollection);
@@ -150,7 +150,7 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
                 node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
                 putToInternalMap(node, vertexToLoad);
                 this.getInternalList().add(node);
-            } else if (TumlMetaNode.class.isAssignableFrom(c)) {
+            } else if (UmlgMetaNode.class.isAssignableFrom(c)) {
                 Method m = c.getDeclaredMethod("getInstance", new Class[0]);
                 node = (E) m.invoke(null);
                 this.getInternalList().add(node);

@@ -20,8 +20,8 @@ import org.umlg.java.metamodel.annotation.OJAnnotationValue;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.javageneration.util.Namer;
-import org.umlg.javageneration.util.TinkerGenerationUtil;
-import org.umlg.javageneration.util.TumlClassOperations;
+import org.umlg.javageneration.util.UmlgGenerationUtil;
+import org.umlg.javageneration.util.UmlgClassOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
 
 public class AuditClassCreator extends BaseVisitor implements Visitor<Class> {
@@ -34,10 +34,10 @@ public class AuditClassCreator extends BaseVisitor implements Visitor<Class> {
 
 	@Override
 	public void visitBefore(Class clazz) {
-		this.auditClass = new OJAnnotatedClass(TumlClassOperations.className(clazz) + "Audit");
+		this.auditClass = new OJAnnotatedClass(UmlgClassOperations.className(clazz) + "Audit");
 		OJPackage ojPackage = new OJPackage(Namer.name(clazz.getNearestPackage()));
 		this.auditClass.setMyPackage(ojPackage);
-		this.auditClass.setVisibility(TumlClassOperations.getVisibility(clazz.getVisibility()));
+		this.auditClass.setVisibility(UmlgClassOperations.getVisibility(clazz.getVisibility()));
 		this.auditClass.setAbstract(clazz.isAbstract());
 		if (!clazz.getGenerals().isEmpty()) {
 			Classifier superClassifier = clazz.getGenerals().get(0);
@@ -47,7 +47,7 @@ public class AuditClassCreator extends BaseVisitor implements Visitor<Class> {
 			superTypePathName.replaceTail(className + "Audit");
 			this.auditClass.setSuperclass(superTypePathName);
 		}
-		this.auditClass.addToImplementedInterfaces(TinkerGenerationUtil.tinkerAuditNodePathName);
+		this.auditClass.addToImplementedInterfaces(UmlgGenerationUtil.tinkerAuditNodePathName);
 		addToSource(this.auditClass);
 	}
 
@@ -66,7 +66,7 @@ public class AuditClassCreator extends BaseVisitor implements Visitor<Class> {
 			addGetOriginalUid();
 			implementGetSetId();
 			addGetObjectVersion();
-			if (TumlClassOperations.getAttribute(clazz, "name") == null) {
+			if (UmlgClassOperations.getAttribute(clazz, "name") == null) {
 				addGetName(clazz);
 			}
 		}
@@ -80,12 +80,12 @@ public class AuditClassCreator extends BaseVisitor implements Visitor<Class> {
 		}
 		addContructorWithVertex(clazz);
 		implementTinkerAuditNode();
-		implementIsTinkerRoot(TumlClassOperations.hasCompositeOwner(clazz));
-		this.auditClass.addToImports(TinkerGenerationUtil.tinkerDirection);
+		implementIsTinkerRoot(UmlgClassOperations.hasCompositeOwner(clazz));
+		this.auditClass.addToImports(UmlgGenerationUtil.tinkerDirection);
 	}
 
 	private void addVertexFieldWithSetter() {
-		OJPathName underlyingVertexPath = TinkerGenerationUtil.vertexPathName;
+		OJPathName underlyingVertexPath = UmlgGenerationUtil.vertexPathName;
 		OJField vertexField = new OJAnnotatedField("vertex", underlyingVertexPath);
 		vertexField.setVisibility(OJVisibilityKind.PROTECTED);
 		this.auditClass.addToFields(vertexField);
@@ -102,13 +102,13 @@ public class AuditClassCreator extends BaseVisitor implements Visitor<Class> {
 		} else {
 			getPreviousAuditVertexInternal.setName("getNextAuditVertexInternal");
 		}
-		getPreviousAuditVertexInternal.setReturnType(TinkerGenerationUtil.vertexPathName);
+		getPreviousAuditVertexInternal.setReturnType(UmlgGenerationUtil.vertexPathName);
 		
 		OJIfStatement ifHasOriginal = new OJIfStatement("getOriginal()!=null");
 		getPreviousAuditVertexInternal.getBody().addToStatements(ifHasOriginal);
 		ifHasOriginal.addToElsePart("return null");
 		ifHasOriginal.addToThenPart("TreeMap<Long, Edge> auditTransactions = new TreeMap<Long, Edge>()");
-		OJForStatement forEdge = new OJForStatement("edge", TinkerGenerationUtil.edgePathName, "getOriginal().getVertex().getEdges(Direction.OUT, \"audit\")");
+		OJForStatement forEdge = new OJForStatement("edge", UmlgGenerationUtil.edgePathName, "getOriginal().getVertex().getEdges(Direction.OUT, \"audit\")");
 		forEdge.getBody().addToStatements("Long transaction = (Long) edge.getProperty(\"transactionNo\")");
 		forEdge.getBody().addToStatements("auditTransactions.put(transaction, edge)");
 		ifHasOriginal.addToThenPart(forEdge);
@@ -150,7 +150,7 @@ public class AuditClassCreator extends BaseVisitor implements Visitor<Class> {
 		} else {
 			createEdgeToPreviousAuditInternal.setName("createEdgeToNextAuditInternal");
 		}
-		createEdgeToPreviousAuditInternal.setReturnType(TinkerGenerationUtil.edgePathName);
+		createEdgeToPreviousAuditInternal.setReturnType(UmlgGenerationUtil.edgePathName);
 		createEdgeToPreviousAuditInternal.getBody().addToStatements(
 				"Vertex " + (previous ? "previousAuditVertex  = getPreviousAuditVertexInternal()" : "nextAuditVertex = getNextAuditVertexInternal()"));
 		OJIfStatement ifPreviousAuditVertex = new OJIfStatement();
@@ -163,7 +163,7 @@ public class AuditClassCreator extends BaseVisitor implements Visitor<Class> {
 
 		OJField auditParentEdge = new OJField();
 		auditParentEdge.setName("auditParentEdge");
-		auditParentEdge.setType(TinkerGenerationUtil.edgePathName);
+		auditParentEdge.setType(UmlgGenerationUtil.edgePathName);
 		ifPreviousAuditVertex.getThenPart().addToLocals(auditParentEdge);
 
 		OJIfStatement isTransactionNotActive = new OJIfStatement("!GraphDb.getDb().isTransactionActive()");
@@ -174,17 +174,17 @@ public class AuditClassCreator extends BaseVisitor implements Visitor<Class> {
 		ojTryStatement.getFinallyPart().addToStatements("GraphDb.getDb().commit()");
 		if (previous) {
 			ojTryStatement.getTryPart().addToStatements(
-					"auditParentEdge = " + TinkerGenerationUtil.graphDbAccess + ".addEdge(null, this.vertex, previousAuditVertex, \"previous\")");
+					"auditParentEdge = " + UmlgGenerationUtil.graphDbAccess + ".addEdge(null, this.vertex, previousAuditVertex, \"previous\")");
 		} else {
-			ojTryStatement.getTryPart().addToStatements("auditParentEdge = " + TinkerGenerationUtil.graphDbAccess + ".addEdge(null, nextAuditVertex, this.vertex, \"previous\")");
+			ojTryStatement.getTryPart().addToStatements("auditParentEdge = " + UmlgGenerationUtil.graphDbAccess + ".addEdge(null, nextAuditVertex, this.vertex, \"previous\")");
 		}
 		ojTryStatement.getTryPart().addToStatements("auditParentEdge.setProperty(\"outClass\", this.getClass().getName() + \"Audit\")");
 		ojTryStatement.getTryPart().addToStatements("auditParentEdge.setProperty(\"inClass\", this.getClass().getName() + \"Audit\")");
 
 		if (previous) {
-			isTransactionNotActive.addToElsePart("auditParentEdge = " + TinkerGenerationUtil.graphDbAccess + ".addEdge(null, this.vertex, previousAuditVertex, \"previous\")");
+			isTransactionNotActive.addToElsePart("auditParentEdge = " + UmlgGenerationUtil.graphDbAccess + ".addEdge(null, this.vertex, previousAuditVertex, \"previous\")");
 		} else {
-			isTransactionNotActive.addToElsePart("auditParentEdge = " + TinkerGenerationUtil.graphDbAccess + ".addEdge(null, nextAuditVertex, this.vertex, \"previous\")");
+			isTransactionNotActive.addToElsePart("auditParentEdge = " + UmlgGenerationUtil.graphDbAccess + ".addEdge(null, nextAuditVertex, this.vertex, \"previous\")");
 		}
 		isTransactionNotActive.addToElsePart("auditParentEdge.setProperty(\"outClass\", this.getClass().getName() + \"Audit\")");
 		isTransactionNotActive.addToElsePart("auditParentEdge.setProperty(\"inClass\", this.getClass().getName() + \"Audit\")");
@@ -192,16 +192,16 @@ public class AuditClassCreator extends BaseVisitor implements Visitor<Class> {
 		ifPreviousAuditVertex.addToThenPart("return auditParentEdge");
 		ifPreviousAuditVertex.addToElsePart("return null");
 		createEdgeToPreviousAuditInternal.getBody().addToStatements(ifPreviousAuditVertex);
-		this.auditClass.addToImports(TinkerGenerationUtil.graphDbPathName);
+		this.auditClass.addToImports(UmlgGenerationUtil.graphDbPathName);
 		this.auditClass.addToOperations(createEdgeToPreviousAuditInternal);
 	}
 
 	private void addIteratorToNext() {
 		OJOperation iterateToLatest = new OJOperation();
 		iterateToLatest.setName("iterateToLatest");
-		iterateToLatest.setReturnType(TinkerGenerationUtil.tinkerAuditNodePathName);
+		iterateToLatest.setReturnType(UmlgGenerationUtil.tinkerAuditNodePathName);
 		iterateToLatest.addParam("transactionNo", new OJPathName("java.lang.Long"));
-		iterateToLatest.addParam("previous", TinkerGenerationUtil.tinkerAuditNodePathName);
+		iterateToLatest.addParam("previous", UmlgGenerationUtil.tinkerAuditNodePathName);
 		iterateToLatest.getBody().addToStatements("TinkerAuditNode nextAudit = previous.getNextAuditEntry()");
 		OJIfStatement ifNextAuditNotNull = new OJIfStatement("nextAudit!=null");
 		OJIfStatement ifTransactionNoSmaller = new OJIfStatement("((transactionNo == -1L) || (nextAudit.getTransactionNo() < transactionNo))",
@@ -216,16 +216,16 @@ public class AuditClassCreator extends BaseVisitor implements Visitor<Class> {
 	private void addGetOriginal(Class c) {
 		OJOperation getOriginal = new OJOperation();
 		getOriginal.setName("getOriginal");
-		getOriginal.setReturnType(TumlClassOperations.getPathName(c));
+		getOriginal.setReturnType(UmlgClassOperations.getPathName(c));
 		getOriginal.getBody().addToStatements("Iterable<Edge> iter = this.vertex.getEdges(Direction.IN)");
-		OJForStatement forStatement = new OJForStatement("edge", TinkerGenerationUtil.edgePathName, "iter");
+		OJForStatement forStatement = new OJForStatement("edge", UmlgGenerationUtil.edgePathName, "iter");
 		OJIfStatement ifStatement = new OJIfStatement("edge.getLabel().startsWith(\"audit\")");
 		forStatement.getBody().addToStatements(ifStatement);
 		getOriginal.getBody().addToStatements(forStatement);
 		OJTryStatement ojTryStatement = new OJTryStatement();
 		OJBlock tryBlock = new OJBlock();
 		tryBlock.addToStatements("Class<?> c = Class.forName((String) edge.getProperty(\"outClass\"))");
-		tryBlock.addToStatements("return (" + TumlClassOperations.getPathName(c).getLast() + ")c.getConstructor(Vertex.class).newInstance(edge.getVertex(Direction.OUT))");
+		tryBlock.addToStatements("return (" + UmlgClassOperations.getPathName(c).getLast() + ")c.getConstructor(Vertex.class).newInstance(edge.getVertex(Direction.OUT))");
 		ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
 		OJBlock catchBlock = new OJBlock();
 		catchBlock.addToStatements("throw new RuntimeException(e)");
@@ -262,7 +262,7 @@ public class AuditClassCreator extends BaseVisitor implements Visitor<Class> {
 		OJOperation getOriginalUid = new OJOperation();
 		getOriginalUid.setName("getOriginalUid");
 		getOriginalUid.setReturnType(new OJPathName("String"));
-		getOriginalUid.getBody().addToStatements("return (String) this.vertex.getProperty(\"" + TinkerGenerationUtil.ORIGINAL_UID + "\")");
+		getOriginalUid.getBody().addToStatements("return (String) this.vertex.getProperty(\"" + UmlgGenerationUtil.ORIGINAL_UID + "\")");
 		this.auditClass.addToOperations(getOriginalUid);
 	}
 
@@ -271,7 +271,7 @@ public class AuditClassCreator extends BaseVisitor implements Visitor<Class> {
 		getId.addAnnotationIfNew(new OJAnnotationValue(new OJPathName("java.lang.Override")));
 		getId.setReturnType(new OJPathName("java.lang.Long"));
 		getId.getBody().addToStatements("return TinkerIdUtilFactory.getIdUtil().getId(this.vertex)");
-//		this.auditClass.addToImports(TinkerGenerationUtil.UmlgIdUtilFactoryPathName);
+//		this.auditClass.addToImports(UmlgGenerationUtil.UmlgIdUtilFactoryPathName);
 		this.auditClass.addToOperations(getId);
 
 		OJAnnotatedOperation setId = new OJAnnotatedOperation("setId");
@@ -286,7 +286,7 @@ public class AuditClassCreator extends BaseVisitor implements Visitor<Class> {
 		getObjectVersion.addAnnotationIfNew(new OJAnnotationValue(new OJPathName("java.lang.Override")));
 		getObjectVersion.setReturnType(new OJPathName("int"));
 		getObjectVersion.getBody().addToStatements("return TinkerIdUtilFactory.getIdUtil().getVersion(this.vertex)");
-//		this.auditClass.addToImports(TinkerGenerationUtil.UmlgIdUtilFactoryPathName);
+//		this.auditClass.addToImports(UmlgGenerationUtil.UmlgIdUtilFactoryPathName);
 		this.auditClass.addToOperations(getObjectVersion);
 	}
 
@@ -301,7 +301,7 @@ public class AuditClassCreator extends BaseVisitor implements Visitor<Class> {
 	}
 
 	private void implementGetPreviousAuditEntry() {
-		this.auditClass.addToImports(TinkerGenerationUtil.edgePathName);
+		this.auditClass.addToImports(UmlgGenerationUtil.edgePathName);
 		OJOperation getPreviousAuditEntry = new OJOperation();
 		getPreviousAuditEntry.setName("getPreviousAuditEntry");
 		getPreviousAuditEntry.setReturnType(this.auditClass.getPathName());
@@ -319,7 +319,7 @@ public class AuditClassCreator extends BaseVisitor implements Visitor<Class> {
 	}
 
 	private void implementGetNextAuditEntry() {
-		this.auditClass.addToImports(TinkerGenerationUtil.edgePathName);
+		this.auditClass.addToImports(UmlgGenerationUtil.edgePathName);
 		OJOperation getPreviousAuditEntry = new OJOperation();
 		getPreviousAuditEntry.setName("getNextAuditEntry");
 		getPreviousAuditEntry.setReturnType(this.auditClass.getPathName());
@@ -337,7 +337,7 @@ public class AuditClassCreator extends BaseVisitor implements Visitor<Class> {
 	}
 
 	private void implementGetNextAuditEntries() {
-		this.auditClass.addToImports(TinkerGenerationUtil.edgePathName);
+		this.auditClass.addToImports(UmlgGenerationUtil.edgePathName);
 		OJOperation getNextAuditEntries = new OJOperation();
 		getNextAuditEntries.setName("getNextAuditEntries");
 		OJPathName result = new OJPathName("java.util.List");
@@ -369,7 +369,7 @@ public class AuditClassCreator extends BaseVisitor implements Visitor<Class> {
 	}
 
 	private void implementAbstractGetPreviousAuditEntry() {
-		this.auditClass.addToImports(TinkerGenerationUtil.edgePathName);
+		this.auditClass.addToImports(UmlgGenerationUtil.edgePathName);
 		OJOperation getPreviousAuditEntry = new OJOperation();
 		getPreviousAuditEntry.setName("getPreviousAuditEntry");
 		getPreviousAuditEntry.setReturnType(this.auditClass.getPathName());
@@ -378,7 +378,7 @@ public class AuditClassCreator extends BaseVisitor implements Visitor<Class> {
 	}
 
 	private void implementAbstractGetNextAuditEntries() {
-		this.auditClass.addToImports(TinkerGenerationUtil.edgePathName);
+		this.auditClass.addToImports(UmlgGenerationUtil.edgePathName);
 		OJOperation getNextAuditEntries = new OJOperation();
 		getNextAuditEntries.setName("getNextAuditEntries");
 		OJPathName result = new OJPathName("java.util.List");
@@ -392,7 +392,7 @@ public class AuditClassCreator extends BaseVisitor implements Visitor<Class> {
 
 	private void addContructorWithVertex(Class c) {
 		OJConstructor constructor = new OJConstructor();
-		constructor.addParam("vertex", TinkerGenerationUtil.vertexPathName);
+		constructor.addParam("vertex", UmlgGenerationUtil.vertexPathName);
 		if (c.getGeneralizations().isEmpty()) {
 			constructor.getBody().addToStatements("this.vertex = vertex");
 		} else {
@@ -402,7 +402,7 @@ public class AuditClassCreator extends BaseVisitor implements Visitor<Class> {
 	}
 
 	private void implementTinkerAuditNode() {
-		this.auditClass.addToImplementedInterfaces(TinkerGenerationUtil.tinkerAuditNodePathName);
+		this.auditClass.addToImplementedInterfaces(UmlgGenerationUtil.tinkerAuditNodePathName);
 	}
 
 	private void implementIsTinkerRoot(boolean b) {

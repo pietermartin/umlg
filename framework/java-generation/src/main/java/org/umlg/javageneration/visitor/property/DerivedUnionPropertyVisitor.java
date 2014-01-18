@@ -1,6 +1,5 @@
 package org.umlg.javageneration.visitor.property;
 
-import org.eclipse.ocl.expressions.OCLExpression;
 import org.eclipse.uml2.uml.*;
 import org.eclipse.uml2.uml.Class;
 import org.umlg.framework.ModelLoader;
@@ -8,18 +7,13 @@ import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.java.metamodel.OJField;
 import org.umlg.java.metamodel.OJIfStatement;
-import org.umlg.java.metamodel.OJPathName;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.java.metamodel.generated.OJVisibilityKindGEN;
-import org.umlg.javageneration.ocl.TumlOcl2Java;
 import org.umlg.javageneration.util.PropertyWrapper;
-import org.umlg.javageneration.util.TumlClassOperations;
-import org.umlg.javageneration.util.TumlInterfaceOperations;
+import org.umlg.javageneration.util.UmlgClassOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
-import org.umlg.ocl.UmlgOcl2Parser;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -88,7 +82,7 @@ public class DerivedUnionPropertyVisitor extends BaseVisitor implements Visitor<
             result.setInitExp("new "+subsettedPropertyWrapper.javaTumlMemoryTypePath()+"<" + subsettedPropertyWrapper.javaBaseTypePath().getLast() + ">()");
             getter.getBody().addToLocals(result);
 
-            Set<Property> allOwnedProperties = TumlClassOperations.getAllOwnedProperties((Class)behavioredClassifier);
+            Set<Property> allOwnedProperties = UmlgClassOperations.getAllOwnedProperties((Class) behavioredClassifier);
             for (Property ownedProperty : allOwnedProperties) {
 
                 //For each realization find its properties that are subsettingProperties and add them to the derivedUnion

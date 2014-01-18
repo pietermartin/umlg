@@ -10,8 +10,8 @@ import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.javageneration.util.PropertyWrapper;
-import org.umlg.javageneration.util.TinkerGenerationUtil;
-import org.umlg.javageneration.util.TumlValidationEnum;
+import org.umlg.javageneration.util.UmlgGenerationUtil;
+import org.umlg.javageneration.util.UmlgValidationEnum;
 import org.umlg.javageneration.visitor.BaseVisitor;
 
 public class PropertyValidatorBuilder extends BaseVisitor implements Visitor<Property> {
@@ -36,16 +36,16 @@ public class PropertyValidatorBuilder extends BaseVisitor implements Visitor<Pro
 
 	public static void buildValidator(OJAnnotatedClass owner, PropertyWrapper propertyWrapper) {
 		OJAnnotatedOperation validateProperty = new OJAnnotatedOperation(propertyWrapper.validator());
-		validateProperty.setReturnType(new OJPathName("java.util.List").addToGenerics(TinkerGenerationUtil.TumlConstraintViolation));
+		validateProperty.setReturnType(new OJPathName("java.util.List").addToGenerics(UmlgGenerationUtil.UmlgConstraintViolation));
 		validateProperty.addToParameters(new OJParameter(propertyWrapper.fieldname(), propertyWrapper.javaBaseTypePath()));
 		owner.addToOperations(validateProperty);
-		OJField result = new OJField("result", new OJPathName("java.util.List").addToGenerics(TinkerGenerationUtil.TumlConstraintViolation));
-		result.setInitExp("new ArrayList<" + TinkerGenerationUtil.TumlConstraintViolation.getLast() + ">()");
+		OJField result = new OJField("result", new OJPathName("java.util.List").addToGenerics(UmlgGenerationUtil.UmlgConstraintViolation));
+		result.setInitExp("new ArrayList<" + UmlgGenerationUtil.UmlgConstraintViolation.getLast() + ">()");
 		owner.addToImports(new OJPathName("java.util.ArrayList"));
 		validateProperty.getBody().addToLocals(result);
 
         int count = 0;
-		for (TumlValidationEnum e : TumlValidationEnum.values()) {
+		for (UmlgValidationEnum e : UmlgValidationEnum.values()) {
 			if (propertyWrapper.hasValidation(e)) {
                 count++;
                 if (count == 2) {
@@ -53,16 +53,16 @@ public class PropertyValidatorBuilder extends BaseVisitor implements Visitor<Pro
                 }
 				OJIfStatement ifValidate;
 				if (e.getAttributes().length > 0) {
-					ifValidate = new OJIfStatement("!" + TinkerGenerationUtil.TumlValidator.getLast() + "." + e.getMethodName() + "("
+					ifValidate = new OJIfStatement("!" + UmlgGenerationUtil.UmlgValidator.getLast() + "." + e.getMethodName() + "("
 							+ propertyWrapper.fieldname() + ", " + propertyWrapper.getValidation(e).toStringForMethod() + ")");
 				} else {
-					ifValidate = new OJIfStatement("!" + TinkerGenerationUtil.TumlValidator.getLast() + "." + e.getMethodName() + "("
+					ifValidate = new OJIfStatement("!" + UmlgGenerationUtil.UmlgValidator.getLast() + "." + e.getMethodName() + "("
 							+ propertyWrapper.fieldname() + propertyWrapper.getValidation(e).toStringForMethod() + ")");
 				}
-				ifValidate.addToThenPart("result.add(new " + TinkerGenerationUtil.TumlConstraintViolation.getLast() + "(\"" + e.name() + "\", \""
+				ifValidate.addToThenPart("result.add(new " + UmlgGenerationUtil.UmlgConstraintViolation.getLast() + "(\"" + e.name() + "\", \""
 						+ propertyWrapper.getQualifiedName() + "\", \"" + e.name() + " does not pass validation!\"))");
 				validateProperty.getBody().addToStatements(ifValidate);
-				owner.addToImports(TinkerGenerationUtil.TumlValidator);
+				owner.addToImports(UmlgGenerationUtil.UmlgValidator);
 				validateProperty.getBody().addToStatements(ifValidate);
 			}
 		}

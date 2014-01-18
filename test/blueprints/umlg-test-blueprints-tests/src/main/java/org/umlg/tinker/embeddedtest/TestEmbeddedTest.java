@@ -6,10 +6,10 @@ import org.umlg.concretetest.God;
 import org.umlg.embeddedtest.REASON;
 import org.umlg.embeddedtest.TestEmbedded;
 import org.umlg.inheritencetest.Mamal;
-import org.umlg.runtime.collection.memory.TumlMemoryBag;
-import org.umlg.runtime.collection.memory.TumlMemoryOrderedSet;
+import org.umlg.runtime.collection.memory.UmlgMemoryBag;
+import org.umlg.runtime.collection.memory.UmlgMemoryOrderedSet;
 import org.umlg.runtime.test.BaseLocalDbTest;
-import org.umlg.runtime.validation.TumlConstraintViolationException;
+import org.umlg.runtime.validation.UmlgConstraintViolationException;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -186,7 +186,7 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
             gt.clearManyOrderedRequiredInteger();
             db.commit();
         } catch (Exception e) {
-            Assert.assertTrue("expecting TumlConstraintViolationException", e instanceof TumlConstraintViolationException);
+            Assert.assertTrue("expecting UmlgConstraintViolationException", e instanceof UmlgConstraintViolationException);
             return;
         }
         Assert.fail("Expected transaction failed exception");
@@ -277,7 +277,7 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
         db.commit();
         TestEmbedded testEmbeddedX = new TestEmbedded(testEmbedded.getVertex());
         Assert.assertEquals(2, testEmbeddedX.getManyBoolean().size());
-        testEmbeddedX.setManyBoolean(new TumlMemoryBag<Boolean>(Arrays.asList(new Boolean[]{true, true})));
+        testEmbeddedX.setManyBoolean(new UmlgMemoryBag<Boolean>(Arrays.asList(new Boolean[]{true, true})));
         db.commit();
         TestEmbedded testEmbeddedY = new TestEmbedded(testEmbeddedX.getVertex());
         Assert.assertEquals(2, testEmbeddedY.getManyBoolean().size());
@@ -295,7 +295,7 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
         db.commit();
         TestEmbedded testEmbeddedX = new TestEmbedded(testEmbedded.getVertex());
         Assert.assertEquals(2, testEmbeddedX.getManyBoolean().size());
-        testEmbeddedX.setManyBoolean(new TumlMemoryBag<Boolean>(Arrays.asList(new Boolean[]{false, false})));
+        testEmbeddedX.setManyBoolean(new UmlgMemoryBag<Boolean>(Arrays.asList(new Boolean[]{false, false})));
         db.commit();
         TestEmbedded testEmbeddedY = new TestEmbedded(testEmbeddedX.getVertex());
         Assert.assertEquals(2, testEmbeddedY.getManyBoolean().size());
@@ -315,7 +315,7 @@ public class TestEmbeddedTest extends BaseLocalDbTest {
         testEmbedded.addToManyOrderedString("b");
         testEmbedded.addToManyOrderedString("c");
         testEmbedded.clearManyOrderedString();
-        testEmbedded.setManyRequiredOrderedUniqueString(new TumlMemoryOrderedSet<String>(Arrays.asList(new String[]{"a", "b"})));
+        testEmbedded.setManyRequiredOrderedUniqueString(new UmlgMemoryOrderedSet<String>(Arrays.asList(new String[]{"a", "b"})));
         db.commit();
 
     }

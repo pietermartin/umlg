@@ -9,8 +9,8 @@ import org.umlg.java.metamodel.annotation.OJAnnotatedInterface;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.javageneration.util.Namer;
-import org.umlg.javageneration.util.TinkerGenerationUtil;
-import org.umlg.javageneration.util.TumlClassOperations;
+import org.umlg.javageneration.util.UmlgGenerationUtil;
+import org.umlg.javageneration.util.UmlgClassOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
 
 public class AuditInterfaceCreator extends BaseVisitor implements Visitor<Interface> {
@@ -23,10 +23,10 @@ public class AuditInterfaceCreator extends BaseVisitor implements Visitor<Interf
 
 	@Override
 	public void visitBefore(Interface clazz) {
-		this.auditClass = new OJAnnotatedInterface(TumlClassOperations.className(clazz) + "Audit");
+		this.auditClass = new OJAnnotatedInterface(UmlgClassOperations.className(clazz) + "Audit");
 		OJPackage ojPackage = new OJPackage(Namer.name(clazz.getNearestPackage()));
 		this.auditClass.setMyPackage(ojPackage);
-		this.auditClass.setVisibility(TumlClassOperations.getVisibility(clazz.getVisibility()));
+		this.auditClass.setVisibility(UmlgClassOperations.getVisibility(clazz.getVisibility()));
 		this.auditClass.setAbstract(clazz.isAbstract());
 		if (!clazz.getGenerals().isEmpty()) {
 			Classifier superClassifier = clazz.getGenerals().get(0);
@@ -36,7 +36,7 @@ public class AuditInterfaceCreator extends BaseVisitor implements Visitor<Interf
 			superTypePathName.replaceTail(className + "Audit");
 			this.auditClass.addToSuperInterfaces(superTypePathName);
 		}
-		this.auditClass.addToSuperInterfaces(TinkerGenerationUtil.tinkerAuditNodePathName);
+		this.auditClass.addToSuperInterfaces(UmlgGenerationUtil.tinkerAuditNodePathName);
 		addToSource(this.auditClass);
 	}
 

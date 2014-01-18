@@ -13,7 +13,7 @@ import org.umlg.java.metamodel.annotation.OJAnnotatedInterface;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.javageneration.util.PropertyWrapper;
-import org.umlg.javageneration.util.TumlClassOperations;
+import org.umlg.javageneration.util.UmlgClassOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
 import org.umlg.javageneration.visitor.property.ManyPropertyVisitor;
 import org.umlg.javageneration.visitor.property.OnePropertyVisitor;
@@ -48,7 +48,7 @@ public class ClassImplementedInterfacePropertyVisitor extends BaseVisitor implem
 
 	//TODO move this property visitor and find concrete class via interface dependency supplier association
 	private void addPropertiesFromInterfaces(OJAnnotatedClass owner, Class clazz) {
-		Set<Property> properties = TumlClassOperations.getPropertiesOnRealizedInterfaces(clazz);
+		Set<Property> properties = UmlgClassOperations.getPropertiesOnRealizedInterfaces(clazz);
 		for (Property p : properties) {
 			PropertyWrapper propertyWrapper = new PropertyWrapper(p);
 			if (!propertyWrapper.isDerived() && !propertyWrapper.isQualifier()) {

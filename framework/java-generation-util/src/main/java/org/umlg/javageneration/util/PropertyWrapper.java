@@ -152,7 +152,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         sb.append(" : ");
 
         if (pWrap.isMany()) {
-            sb.append(TinkerGenerationUtil.getCollectionInterface(pWrap));
+            sb.append(UmlgGenerationUtil.getCollectionInterface(pWrap));
             sb.append("(");
             sb.append(pWrap.getType().getName());
             sb.append(")");
@@ -230,7 +230,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         if (!hasQualifiers()) {
             throw new IllegalStateException("getQualifierContextPathName can not only be called on a qualified property");
         }
-        return TumlClassOperations.getPathName(getType());
+        return UmlgClassOperations.getPathName(getType());
     }
 
     public Type getQualifierContext() {
@@ -265,7 +265,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     }
 
     public String getTumlRuntimePropertyEnum() {
-        return TumlClassOperations.propertyEnumName(getOwningType()) + "." + fieldname();
+        return UmlgClassOperations.propertyEnumName(getOwningType()) + "." + fieldname();
     }
 
     public String getDefaultValueAsString() {
@@ -277,7 +277,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
                 return getDefaultValue().stringValue();
             }
         } else if (v instanceof LiteralString) {
-            if (!TumlPropertyOperations.isString(getType())) {
+            if (!UmlgPropertyOperations.isString(getType())) {
                 //TODO move validation to some collector to show the user all validation failures in one go
                 throw new IllegalStateException(String.format("Property %s has a LiteralString default value but is of type %s. This is illegal!", getQualifiedName(), getType().getQualifiedName()));
             }
@@ -329,12 +329,12 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     }
 
     public Type getOwningType() {
-        return TumlPropertyOperations.getOwningType(this.property);
+        return UmlgPropertyOperations.getOwningType(this.property);
 
     }
 
     public boolean isControllingSide() {
-        return TumlPropertyOperations.isControllingSide(this.property);
+        return UmlgPropertyOperations.isControllingSide(this.property);
     }
 
     public String fieldname() {
@@ -349,27 +349,27 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     }
 
     public String getter() {
-        return TumlPropertyOperations.getter(this.property);
+        return UmlgPropertyOperations.getter(this.property);
     }
 
     public String setter() {
-        return TumlPropertyOperations.setter(this.property);
+        return UmlgPropertyOperations.setter(this.property);
     }
 
     public String validator() {
-        return TumlPropertyOperations.validator(this.property);
+        return UmlgPropertyOperations.validator(this.property);
     }
 
     public String checkConstraint(Constraint constraint) {
-        return TumlPropertyOperations.checkConstraint(this.property, constraint);
+        return UmlgPropertyOperations.checkConstraint(this.property, constraint);
     }
 
     public boolean isPrimitive() {
-        return TumlPropertyOperations.isPrimitive(this.property);
+        return UmlgPropertyOperations.isPrimitive(this.property);
     }
 
     public boolean isEnumeration() {
-        return TumlPropertyOperations.isEnumeration(this.property);
+        return UmlgPropertyOperations.isEnumeration(this.property);
     }
 
     public boolean isACUnique() {
@@ -389,7 +389,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     }
 
     public boolean isACManyToOne() {
-        return TumlPropertyOperations.isManyToOne(this.property);
+        return UmlgPropertyOperations.isManyToOne(this.property);
     }
 
     public boolean isACOneToOne() {
@@ -398,55 +398,55 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     }
 
     public boolean isOneToMany() {
-        return TumlPropertyOperations.isOneToMany(this.property);
+        return UmlgPropertyOperations.isOneToMany(this.property);
     }
 
     public boolean isManyToOne() {
-        return TumlPropertyOperations.isManyToOne(this.property);
+        return UmlgPropertyOperations.isManyToOne(this.property);
     }
 
     public boolean isManyToMany() {
-        return TumlPropertyOperations.isManyToMany(this.property);
+        return UmlgPropertyOperations.isManyToMany(this.property);
     }
 
     public boolean isOneToOne() {
-        return TumlPropertyOperations.isOneToOne(this.property);
+        return UmlgPropertyOperations.isOneToOne(this.property);
     }
 
     public String adder() {
-        return TumlPropertyOperations.adder(this.property);
+        return UmlgPropertyOperations.adder(this.property);
     }
 
     public String remover() {
-        return TumlPropertyOperations.remover(this.property);
+        return UmlgPropertyOperations.remover(this.property);
     }
 
     public String clearer() {
-        return TumlPropertyOperations.clearer(this.property);
+        return UmlgPropertyOperations.clearer(this.property);
     }
 
     public String internalRemover() {
-        return TumlPropertyOperations.internalRemover(this.property);
+        return UmlgPropertyOperations.internalRemover(this.property);
     }
 
     public String internalAdder() {
-        return TumlPropertyOperations.internalAdder(this.property);
+        return UmlgPropertyOperations.internalAdder(this.property);
     }
 
     public OJPathName javaBaseTypePath() {
-        return TumlPropertyOperations.getTypePath(this.property);
+        return UmlgPropertyOperations.getTypePath(this.property);
     }
 
     public OJPathName javaAuditBaseTypePath() {
         if (!isPrimitive() && !isEnumeration()) {
-            return TumlPropertyOperations.getTypePath(this.property).appendToTail("Audit");
+            return UmlgPropertyOperations.getTypePath(this.property).appendToTail("Audit");
         } else {
-            return TumlPropertyOperations.getTypePath(this.property);
+            return UmlgPropertyOperations.getTypePath(this.property);
         }
     }
 
     public OJPathName javaImplTypePath() {
-        return TumlPropertyOperations.getDefaultTinkerCollection(this.property);
+        return UmlgPropertyOperations.getDefaultTinkerCollection(this.property);
     }
 
     /*
@@ -467,42 +467,42 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         OJPathName fieldType;
         if (isOrdered() && isUnique()) {
             if (hasQualifiers()) {
-                fieldType = TumlCollectionKindEnum.QUALIFIED_ORDERED_SET.getInterfacePathName();
+                fieldType = UmlgCollectionKindEnum.QUALIFIED_ORDERED_SET.getInterfacePathName();
             } else {
                 if (ignoreAssociationClass || !isMemberOfAssociationClass()) {
-                    fieldType = TumlCollectionKindEnum.ORDERED_SET.getInterfacePathName();
+                    fieldType = UmlgCollectionKindEnum.ORDERED_SET.getInterfacePathName();
                 } else {
-                    fieldType = TumlCollectionKindEnum.ASSOCIATION_CLASS_ORDERED_SET.getInterfacePathName();
+                    fieldType = UmlgCollectionKindEnum.ASSOCIATION_CLASS_ORDERED_SET.getInterfacePathName();
                 }
             }
         } else if (isOrdered() && !isUnique()) {
             if (hasQualifiers()) {
-                fieldType = TumlCollectionKindEnum.QUALIFIED_SEQUENCE.getInterfacePathName();
+                fieldType = UmlgCollectionKindEnum.QUALIFIED_SEQUENCE.getInterfacePathName();
             } else {
                 if (ignoreAssociationClass || !isMemberOfAssociationClass()) {
-                    fieldType = TumlCollectionKindEnum.SEQUENCE.getInterfacePathName();
+                    fieldType = UmlgCollectionKindEnum.SEQUENCE.getInterfacePathName();
                 } else {
-                    fieldType = TumlCollectionKindEnum.ASSOCIATION_CLASS_SEQUENCE.getInterfacePathName();
+                    fieldType = UmlgCollectionKindEnum.ASSOCIATION_CLASS_SEQUENCE.getInterfacePathName();
                 }
             }
         } else if (!isOrdered() && !isUnique()) {
             if (hasQualifiers()) {
-                fieldType = TumlCollectionKindEnum.QUALIFIED_BAG.getInterfacePathName();
+                fieldType = UmlgCollectionKindEnum.QUALIFIED_BAG.getInterfacePathName();
             } else {
                 if (ignoreAssociationClass || !isMemberOfAssociationClass()) {
-                    fieldType = TumlCollectionKindEnum.BAG.getInterfacePathName();
+                    fieldType = UmlgCollectionKindEnum.BAG.getInterfacePathName();
                 } else {
-                    fieldType = TumlCollectionKindEnum.ASSOCIATION_CLASS_BAG.getInterfacePathName();
+                    fieldType = UmlgCollectionKindEnum.ASSOCIATION_CLASS_BAG.getInterfacePathName();
                 }
             }
         } else if (!isOrdered() && isUnique()) {
             if (hasQualifiers()) {
-                fieldType = TumlCollectionKindEnum.QUALIFIED_SET.getInterfacePathName();
+                fieldType = UmlgCollectionKindEnum.QUALIFIED_SET.getInterfacePathName();
             } else {
                 if (ignoreAssociationClass || !isMemberOfAssociationClass()) {
-                    fieldType = TumlCollectionKindEnum.SET.getInterfacePathName();
+                    fieldType = UmlgCollectionKindEnum.SET.getInterfacePathName();
                 } else {
-                    fieldType = TumlCollectionKindEnum.ASSOCIATION_CLASS_SET.getInterfacePathName();
+                    fieldType = UmlgCollectionKindEnum.ASSOCIATION_CLASS_SET.getInterfacePathName();
                 }
             }
         } else {
@@ -522,13 +522,13 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     public OJPathName javaTypePath() {
         OJPathName fieldType;
         if (!isOrdered() && isUnique()) {
-            fieldType = TumlCollectionKindEnum.SET.getInterfacePathName();
+            fieldType = UmlgCollectionKindEnum.SET.getInterfacePathName();
         } else if (isOrdered() && !isUnique()) {
-            fieldType = TumlCollectionKindEnum.SEQUENCE.getInterfacePathName();
+            fieldType = UmlgCollectionKindEnum.SEQUENCE.getInterfacePathName();
         } else if (!isOrdered() && !isUnique()) {
-            fieldType = TumlCollectionKindEnum.BAG.getInterfacePathName();
+            fieldType = UmlgCollectionKindEnum.BAG.getInterfacePathName();
         } else if (isOrdered() && isUnique()) {
-            fieldType = TumlCollectionKindEnum.ORDERED_SET.getInterfacePathName();
+            fieldType = UmlgCollectionKindEnum.ORDERED_SET.getInterfacePathName();
         } else {
             throw new RuntimeException("wtf");
         }
@@ -539,13 +539,13 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     public OJPathName javaTypePathWithAssociationClass() {
         OJPathName fieldType;
         if (!isOrdered() && isUnique()) {
-            fieldType = TumlCollectionKindEnum.SET.getInterfacePathName();
+            fieldType = UmlgCollectionKindEnum.SET.getInterfacePathName();
         } else if (isOrdered() && !isUnique()) {
-            fieldType = TumlCollectionKindEnum.SEQUENCE.getInterfacePathName();
+            fieldType = UmlgCollectionKindEnum.SEQUENCE.getInterfacePathName();
         } else if (!isOrdered() && !isUnique()) {
-            fieldType = TumlCollectionKindEnum.BAG.getInterfacePathName();
+            fieldType = UmlgCollectionKindEnum.BAG.getInterfacePathName();
         } else if (isOrdered() && isUnique()) {
-            fieldType = TumlCollectionKindEnum.ORDERED_SET.getInterfacePathName();
+            fieldType = UmlgCollectionKindEnum.ORDERED_SET.getInterfacePathName();
         } else {
             throw new RuntimeException("wtf");
         }
@@ -554,8 +554,8 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     }
 
     public OJPathName getAssociationClassPair() {
-        OJPathName pair = TinkerGenerationUtil.Pair.getCopy();
-        pair.addToGenerics(javaBaseTypePath()).addToGenerics(TumlClassOperations.getPathName(getAssociationClass()));
+        OJPathName pair = UmlgGenerationUtil.Pair.getCopy();
+        pair.addToGenerics(javaBaseTypePath()).addToGenerics(UmlgClassOperations.getPathName(getAssociationClass()));
         return pair;
     }
 
@@ -563,25 +563,25 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         if (!isMemberOfAssociationClass()) {
             throw new IllegalStateException("Can not call getAssociationClassFakePropertyName on a property that does not belong to an AssociationClass!");
         }
-        return fieldname() + "_" + new PropertyWrapper(getOtherEnd()).fieldname() + "_" + TumlClassOperations.getPathName(getAssociationClass()).getLast();
+        return fieldname() + "_" + new PropertyWrapper(getOtherEnd()).fieldname() + "_" + UmlgClassOperations.getPathName(getAssociationClass()).getLast();
     }
 
     public OJPathName javaTumlMemoryTypePath() {
-        OJPathName memoryCollectionPathName = TumlCollectionKindEnum.from(this).getMemoryCollection();
-        memoryCollectionPathName.addToGenerics(TumlClassOperations.getPathName(this.getType()));
+        OJPathName memoryCollectionPathName = UmlgCollectionKindEnum.from(this).getMemoryCollection();
+        memoryCollectionPathName.addToGenerics(UmlgClassOperations.getPathName(this.getType()));
         return memoryCollectionPathName;
     }
 
     public OJPathName javaAuditTypePath() {
         OJPathName fieldType;
         if (!isOrdered() && isUnique()) {
-            fieldType = TumlCollectionKindEnum.SET.getInterfacePathName();
+            fieldType = UmlgCollectionKindEnum.SET.getInterfacePathName();
         } else if (isOrdered() && !isUnique()) {
-            fieldType = TumlCollectionKindEnum.SEQUENCE.getInterfacePathName();
+            fieldType = UmlgCollectionKindEnum.SEQUENCE.getInterfacePathName();
         } else if (!isOrdered() && !isUnique()) {
-            fieldType = TumlCollectionKindEnum.BAG.getInterfacePathName();
+            fieldType = UmlgCollectionKindEnum.BAG.getInterfacePathName();
         } else if (isOrdered() && isUnique()) {
-            fieldType = TumlCollectionKindEnum.ORDERED_SET.getInterfacePathName();
+            fieldType = UmlgCollectionKindEnum.ORDERED_SET.getInterfacePathName();
         } else {
             throw new RuntimeException("wtf");
         }
@@ -591,13 +591,13 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 
     public String emptyCollection() {
         if (!isOrdered() && isUnique()) {
-            return "TumlCollections.emptySet()";
+            return "UmlgCollections.emptySet()";
         } else if (isOrdered() && !isUnique()) {
-            return "TumlCollections.emptySequence()";
+            return "UmlgCollections.emptySequence()";
         } else if (!isOrdered() && !isUnique()) {
-            return "TumlCollections.emptyBag()";
+            return "UmlgCollections.emptyBag()";
         } else if (isOrdered() && isUnique()) {
-            return "TumlCollections.emptyOrderedSet()";
+            return "UmlgCollections.emptyOrderedSet()";
         } else {
             throw new RuntimeException("wtf");
         }
@@ -606,13 +606,13 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     public OJPathName javaClosableIteratorTypePath() {
         OJPathName fieldType;
         if (!isOrdered() && isUnique()) {
-            fieldType = TumlCollectionKindEnum.SET.getClosableIteratorPathName();
+            fieldType = UmlgCollectionKindEnum.SET.getClosableIteratorPathName();
         } else if (isOrdered() && !isUnique()) {
-            fieldType = TumlCollectionKindEnum.SEQUENCE.getClosableIteratorPathName();
+            fieldType = UmlgCollectionKindEnum.SEQUENCE.getClosableIteratorPathName();
         } else if (!isOrdered() && !isUnique()) {
-            fieldType = TumlCollectionKindEnum.BAG.getClosableIteratorPathName();
+            fieldType = UmlgCollectionKindEnum.BAG.getClosableIteratorPathName();
         } else if (isOrdered() && isUnique()) {
-            fieldType = TumlCollectionKindEnum.ORDERED_SET.getClosableIteratorPathName();
+            fieldType = UmlgCollectionKindEnum.ORDERED_SET.getClosableIteratorPathName();
         } else {
             throw new RuntimeException("wtf");
         }
@@ -637,27 +637,27 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
      * a realization on a BehavioredClassifier
      */
     public String javaDefaultInitialisation(BehavioredClassifier propertyConcreteOwner, boolean ignoreAssociationClass) {
-        return TumlPropertyOperations.getDefaultTinkerCollectionInitalisation(this.property, propertyConcreteOwner, ignoreAssociationClass).getExpression();
+        return UmlgPropertyOperations.getDefaultTinkerCollectionInitalisation(this.property, propertyConcreteOwner, ignoreAssociationClass).getExpression();
     }
 
     public String javaDefaultInitialisationForAssociationClass(BehavioredClassifier propertyConcreteOwner) {
-        return TumlPropertyOperations.getDefaultTinkerCollectionInitalisationForAssociationClass(this.property, propertyConcreteOwner).getExpression();
+        return UmlgPropertyOperations.getDefaultTinkerCollectionInitalisationForAssociationClass(this.property, propertyConcreteOwner).getExpression();
     }
 
     public boolean isOne() {
-        return TumlPropertyOperations.isOne(this.property);
+        return UmlgPropertyOperations.isOne(this.property);
     }
 
     public boolean isUnqualifiedOne() {
-        return TumlPropertyOperations.isUnqualifiedOne(this.property);
+        return UmlgPropertyOperations.isUnqualifiedOne(this.property);
     }
 
     public boolean isMany() {
-        return TumlPropertyOperations.isMany(this.property);
+        return UmlgPropertyOperations.isMany(this.property);
     }
 
     public boolean isUnqualifiedMany() {
-        return TumlPropertyOperations.isUnqualifiedMany(this.property);
+        return UmlgPropertyOperations.isUnqualifiedMany(this.property);
     }
 
     public List<PropertyWrapper> getQualifiersAsPropertyWrappers() {
@@ -1341,56 +1341,56 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     }
 
     public boolean isDate() {
-        return getType() instanceof DataType && TumlDataTypeOperation.isDate((DataType) getType());
+        return getType() instanceof DataType && UmlgDataTypeOperation.isDate((DataType) getType());
     }
 
     public boolean isEmail() {
-        return getType() instanceof DataType && TumlDataTypeOperation.isEmail((DataType) getType());
+        return getType() instanceof DataType && UmlgDataTypeOperation.isEmail((DataType) getType());
     }
 
     public boolean isInternationalPhoneNumber() {
-        return getType() instanceof DataType && TumlDataTypeOperation.isInternationalPhoneNumber((DataType) getType());
+        return getType() instanceof DataType && UmlgDataTypeOperation.isInternationalPhoneNumber((DataType) getType());
     }
 
     public boolean isLocalPhoneNumber() {
-        return getType() instanceof DataType && TumlDataTypeOperation.isLocalPhoneNumber((DataType) getType());
+        return getType() instanceof DataType && UmlgDataTypeOperation.isLocalPhoneNumber((DataType) getType());
     }
 
     public boolean isVideo() {
-        return getType() instanceof DataType && TumlDataTypeOperation.isVideo((DataType) getType());
+        return getType() instanceof DataType && UmlgDataTypeOperation.isVideo((DataType) getType());
     }
 
     public boolean isAudio() {
-        return getType() instanceof DataType && TumlDataTypeOperation.isAudio((DataType) getType());
+        return getType() instanceof DataType && UmlgDataTypeOperation.isAudio((DataType) getType());
     }
 
     public boolean isImage() {
-        return getType() instanceof DataType && TumlDataTypeOperation.isImage((DataType) getType());
+        return getType() instanceof DataType && UmlgDataTypeOperation.isImage((DataType) getType());
     }
 
     public boolean isDateTime() {
-        return getType() instanceof DataType && TumlDataTypeOperation.isDateTime((DataType) getType());
+        return getType() instanceof DataType && UmlgDataTypeOperation.isDateTime((DataType) getType());
     }
 
     public boolean isTime() {
-        return getType() instanceof DataType && TumlDataTypeOperation.isTime((DataType) getType());
+        return getType() instanceof DataType && UmlgDataTypeOperation.isTime((DataType) getType());
     }
 
     public DataTypeEnum getDataTypeEnum() {
         if (getType() instanceof DataType && !(getType() instanceof PrimitiveType) && !(getType() instanceof Enumeration)) {
-            return TumlDataTypeOperation.getDataTypeEnum((DataType) getType());
+            return UmlgDataTypeOperation.getDataTypeEnum((DataType) getType());
         } else {
             return null;
         }
     }
 
     public boolean hasMaxLength() {
-        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(TumlValidationEnum.MaxLength.name());
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.MaxLength.name());
         return property.isStereotypeApplied(stereotype);
     }
 
-    public boolean hasValidation(TumlValidationEnum tumlValidationEnum) {
-        switch (tumlValidationEnum) {
+    public boolean hasValidation(UmlgValidationEnum umlgValidationEnum) {
+        switch (umlgValidationEnum) {
             case MaxLength:
                 return hasMaxLength();
             case MinLength:
@@ -1419,11 +1419,11 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         List<Stereotype> stereoTypes = ModelLoader.INSTANCE.getStereotypes();
         for (Stereotype stereotype : stereoTypes) {
             if (property.isStereotypeApplied(stereotype)) {
-                result.add(TumlValidationEnum.fromStereotype(stereotype, this.property));
+                result.add(UmlgValidationEnum.fromStereotype(stereotype, this.property));
             }
         }
         if (getType() instanceof DataType) {
-            Validation v = TumlValidationEnum.fromDataType((DataType) getType());
+            Validation v = UmlgValidationEnum.fromDataType((DataType) getType());
             if (v != null) {
                 result.add(v);
             }
@@ -1431,8 +1431,8 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         return result;
     }
 
-    public Validation getValidation(TumlValidationEnum tumlValidationEnum) {
-        switch (tumlValidationEnum) {
+    public Validation getValidation(UmlgValidationEnum umlgValidationEnum) {
+        switch (umlgValidationEnum) {
             case MaxLength:
                 return getMaxLength();
             case MinLength:
@@ -1456,37 +1456,37 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     }
 
     public MaxLength getMaxLength() {
-        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(TumlValidationEnum.MaxLength.name());
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.MaxLength.name());
         return new MaxLength((Integer) property.getValue(stereotype, "length"));
     }
 
     public MinLength getMinLength() {
-        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(TumlValidationEnum.MinLength.name());
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.MinLength.name());
         return new MinLength((Integer) property.getValue(stereotype, "length"));
     }
 
     public RangeLength getRangeLength() {
-        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(TumlValidationEnum.RangeLength.name());
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.RangeLength.name());
         return new RangeLength((Integer) property.getValue(stereotype, "min"), (Integer) property.getValue(stereotype, "max"));
     }
 
     public Max getMax() {
-        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(TumlValidationEnum.Max.name());
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.Max.name());
         return new Max((Integer) property.getValue(stereotype, "value"));
     }
 
     public Min getMin() {
-        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(TumlValidationEnum.Min.name());
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.Min.name());
         return new Min((Integer) property.getValue(stereotype, "value"));
     }
 
     public Range getRange() {
-        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(TumlValidationEnum.Range.name());
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.Range.name());
         return new Range((Integer) property.getValue(stereotype, "min"), (Integer) property.getValue(stereotype, "max"));
     }
 
     public Url getUrl() {
-        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(TumlValidationEnum.URL.name());
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.URL.name());
         return new Url((String) property.getValue(stereotype, "protocol"), (String) property.getValue(stereotype, "host"), (Integer) property.getValue(stereotype, "port"),
                 (String) property.getValue(stereotype, "regexp"), (String) property.getValue(stereotype, "flags"));
     }
@@ -1496,32 +1496,32 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     }
 
     public boolean hasMinLength() {
-        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(TumlValidationEnum.MinLength.name());
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.MinLength.name());
         return property.isStereotypeApplied(stereotype);
     }
 
     public boolean hasRangeLength() {
-        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(TumlValidationEnum.RangeLength.name());
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.RangeLength.name());
         return property.isStereotypeApplied(stereotype);
     }
 
     public boolean hasMin() {
-        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(TumlValidationEnum.Min.name());
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.Min.name());
         return property.isStereotypeApplied(stereotype);
     }
 
     public boolean hasMax() {
-        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(TumlValidationEnum.Max.name());
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.Max.name());
         return property.isStereotypeApplied(stereotype);
     }
 
     public boolean hasRange() {
-        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(TumlValidationEnum.Range.name());
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.Range.name());
         return property.isStereotypeApplied(stereotype);
     }
 
     public boolean hasUrl() {
-        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(TumlValidationEnum.URL.name());
+        Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.URL.name());
         return property.isStereotypeApplied(stereotype);
     }
 
@@ -1618,34 +1618,34 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     }
 
     public OJPathName getAssociationClassPathName() {
-        return TumlClassOperations.getPathName(getAssociationClass());
+        return UmlgClassOperations.getPathName(getAssociationClass());
     }
 
     public OJPathName getAssociationClassJavaTumlTypePath() {
         OJPathName fieldType;
         if (isOrdered() && isUnique()) {
             if (hasQualifiers()) {
-                fieldType = TumlCollectionKindEnum.QUALIFIED_ORDERED_SET.getInterfacePathName();
+                fieldType = UmlgCollectionKindEnum.QUALIFIED_ORDERED_SET.getInterfacePathName();
             } else {
-                fieldType = TumlCollectionKindEnum.ORDERED_SET.getInterfacePathName();
+                fieldType = UmlgCollectionKindEnum.ORDERED_SET.getInterfacePathName();
             }
         } else if (isOrdered() && !isUnique()) {
             if (hasQualifiers()) {
-                fieldType = TumlCollectionKindEnum.QUALIFIED_SEQUENCE.getInterfacePathName();
+                fieldType = UmlgCollectionKindEnum.QUALIFIED_SEQUENCE.getInterfacePathName();
             } else {
-                fieldType = TumlCollectionKindEnum.SEQUENCE.getInterfacePathName();
+                fieldType = UmlgCollectionKindEnum.SEQUENCE.getInterfacePathName();
             }
         } else if (!isOrdered() && !isUnique()) {
             if (hasQualifiers()) {
-                fieldType = TumlCollectionKindEnum.QUALIFIED_BAG.getInterfacePathName();
+                fieldType = UmlgCollectionKindEnum.QUALIFIED_BAG.getInterfacePathName();
             } else {
-                fieldType = TumlCollectionKindEnum.BAG.getInterfacePathName();
+                fieldType = UmlgCollectionKindEnum.BAG.getInterfacePathName();
             }
         } else if (!isOrdered() && isUnique()) {
             if (hasQualifiers()) {
-                fieldType = TumlCollectionKindEnum.QUALIFIED_SET.getInterfacePathName();
+                fieldType = UmlgCollectionKindEnum.QUALIFIED_SET.getInterfacePathName();
             } else {
-                fieldType = TumlCollectionKindEnum.SET.getInterfacePathName();
+                fieldType = UmlgCollectionKindEnum.SET.getInterfacePathName();
             }
         } else {
             throw new RuntimeException("wtf");

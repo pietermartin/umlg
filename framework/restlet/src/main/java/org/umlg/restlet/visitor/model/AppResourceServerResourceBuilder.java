@@ -5,13 +5,11 @@ import org.umlg.java.metamodel.OJField;
 import org.umlg.java.metamodel.OJPackage;
 import org.umlg.java.metamodel.OJPathName;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
-import org.umlg.java.metamodel.annotation.OJAnnotatedInterface;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
-import org.umlg.java.metamodel.annotation.OJAnnotationValue;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
-import org.umlg.javageneration.util.TinkerGenerationUtil;
-import org.umlg.restlet.util.TumlRestletGenerationUtil;
+import org.umlg.javageneration.util.UmlgGenerationUtil;
+import org.umlg.restlet.util.UmlgRestletGenerationUtil;
 import org.umlg.restlet.visitor.clazz.BaseServerResourceBuilder;
 
 public class AppResourceServerResourceBuilder extends BaseServerResourceBuilder implements Visitor<Model> {
@@ -33,7 +31,7 @@ public class AppResourceServerResourceBuilder extends BaseServerResourceBuilder 
 //		addToSource(annotatedInf);
 
 		OJAnnotatedClass annotatedClass = new OJAnnotatedClass("RootServerResourceImpl");
-		annotatedClass.setSuperclass(TumlRestletGenerationUtil.ServerResource);
+		annotatedClass.setSuperclass(UmlgRestletGenerationUtil.ServerResource);
 		annotatedClass.setMyPackage(ojPackage);
 //		annotatedClass.addToImplementedInterfaces(annotatedInf.getPathName());
 		addToSource(annotatedClass);
@@ -50,10 +48,10 @@ public class AppResourceServerResourceBuilder extends BaseServerResourceBuilder 
 
 	private void addGetRootObjectRepresentation(Model model, OJAnnotatedClass annotatedClass) {
 
-		OJAnnotatedOperation get = new OJAnnotatedOperation("get", TumlRestletGenerationUtil.Representation);
-		get.addToThrows(TumlRestletGenerationUtil.ResourceException);
-		annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
-		TinkerGenerationUtil.addOverrideAnnotation(get);
+		OJAnnotatedOperation get = new OJAnnotatedOperation("get", UmlgRestletGenerationUtil.Representation);
+		get.addToThrows(UmlgRestletGenerationUtil.ResourceException);
+		annotatedClass.addToImports(UmlgRestletGenerationUtil.ResourceException);
+		UmlgGenerationUtil.addOverrideAnnotation(get);
 
 		OJField json = new OJField("json", new OJPathName("java.lang.StringBuilder"));
 		json.setInitExp("new StringBuilder()");
@@ -66,17 +64,17 @@ public class AppResourceServerResourceBuilder extends BaseServerResourceBuilder 
 //        annotatedClass.addToImports("org.umlg.root.Root");
 //		annotatedClass.addToImports("org.umlg.root.Root.RootRuntimePropertyEnum");
 		get.getBody().addToStatements("json.append(\"}}]\")");
-		get.getBody().addToStatements("return new " + TumlRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
+		get.getBody().addToStatements("return new " + UmlgRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
 		
-		annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);
+		annotatedClass.addToImports(UmlgRestletGenerationUtil.JsonRepresentation);
 		annotatedClass.addToOperations(get);
 	}
 
     private void addOptionsRootObjectRepresentation(Model model, OJAnnotatedClass annotatedClass) {
-        OJAnnotatedOperation options = new OJAnnotatedOperation("options", TumlRestletGenerationUtil.Representation);
-        options.addToThrows(TumlRestletGenerationUtil.ResourceException);
-        annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
-        TinkerGenerationUtil.addOverrideAnnotation(options);
+        OJAnnotatedOperation options = new OJAnnotatedOperation("options", UmlgRestletGenerationUtil.Representation);
+        options.addToThrows(UmlgRestletGenerationUtil.ResourceException);
+        annotatedClass.addToImports(UmlgRestletGenerationUtil.ResourceException);
+        UmlgGenerationUtil.addOverrideAnnotation(options);
 
         OJField json = new OJField("json", new OJPathName("java.lang.StringBuilder"));
         json.setInitExp("new StringBuilder()");
@@ -89,9 +87,9 @@ public class AppResourceServerResourceBuilder extends BaseServerResourceBuilder 
         annotatedClass.addToImports("org.umlg.root.Root");
         annotatedClass.addToImports("org.umlg.root.Root.RootRuntimePropertyEnum");
         options.getBody().addToStatements("json.append(\"}}]\")");
-        options.getBody().addToStatements("return new " + TumlRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
+        options.getBody().addToStatements("return new " + UmlgRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
 
-        annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);
+        annotatedClass.addToImports(UmlgRestletGenerationUtil.JsonRepresentation);
         annotatedClass.addToOperations(options);
     }
 

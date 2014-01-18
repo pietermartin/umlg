@@ -6,7 +6,7 @@ import org.eclipse.uml2.uml.AssociationClass;
  * Date: 2013/06/14
  * Time: 8:32 PM
  */
-public class UmlgAssociationClassOperations extends TumlClassOperations {
+public class UmlgAssociationClassOperations extends UmlgClassOperations {
 
 
     /**

@@ -1,12 +1,11 @@
 package org.umlg.runtime.collection.persistent;
 
 import com.google.common.base.Preconditions;
-import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 import org.umlg.runtime.adaptor.GraphDb;
 import org.umlg.runtime.collection.TinkerQualifiedBag;
-import org.umlg.runtime.collection.TumlRuntimeProperty;
+import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.domain.UmlgNode;
 
 import java.util.List;
@@ -14,7 +13,7 @@ import java.util.Set;
 
 public class TinkerQualifiedBagImpl<E> extends BaseBag<E> implements TinkerQualifiedBag<E> {
 
-	public TinkerQualifiedBagImpl(UmlgNode owner, TumlRuntimeProperty runtimeProperty) {
+	public TinkerQualifiedBagImpl(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
 		super(owner, runtimeProperty);
 //		this.index = GraphDb.getDb().getIndex(getQualifiedName(), Edge.class);
 	}

@@ -4,7 +4,7 @@ import org.apache.commons.collections.set.ListOrderedSet;
 import org.umlg.runtime.collection.TinkerCollection;
 import org.umlg.runtime.collection.TinkerOrderedSet;
 import org.umlg.runtime.collection.TinkerSequence;
-import org.umlg.runtime.collection.memory.TumlMemoryOrderedSet;
+import org.umlg.runtime.collection.memory.UmlgMemoryOrderedSet;
 import org.umlg.runtime.domain.ocl.OclIsInvalidException;
 
 import java.util.*;
@@ -30,21 +30,21 @@ public class OclStdLibOrderedSetImpl<E> extends OclStdLibCollectionImpl<E> imple
 	
 	@Override
 	public TinkerOrderedSet<E> append(E e) {
-        TinkerOrderedSet<E> result = new TumlMemoryOrderedSet<E>(this);
+        TinkerOrderedSet<E> result = new UmlgMemoryOrderedSet<E>(this);
         result.add(e);
         return result;
 	}
 
 	@Override
 	public TinkerOrderedSet<E> prepend(E e) {
-        TinkerOrderedSet<E> result = new TumlMemoryOrderedSet<E>(this);
+        TinkerOrderedSet<E> result = new UmlgMemoryOrderedSet<E>(this);
         result.add(0, e);
         return result;
 	}
 
 	@Override
 	public TinkerOrderedSet<E> insertAt(Integer index, E e) {
-        TinkerOrderedSet<E> result = new TumlMemoryOrderedSet<E>(this);
+        TinkerOrderedSet<E> result = new UmlgMemoryOrderedSet<E>(this);
         result.add(index, e);
         return result;
 	}
@@ -84,7 +84,7 @@ public class OclStdLibOrderedSetImpl<E> extends OclStdLibCollectionImpl<E> imple
 	public TinkerOrderedSet<E> reverse() {
         List<E> result = new ArrayList<E>(this);
         Collections.reverse(result);
-        return new TumlMemoryOrderedSet(result);
+        return new UmlgMemoryOrderedSet(result);
 	}
 
 	

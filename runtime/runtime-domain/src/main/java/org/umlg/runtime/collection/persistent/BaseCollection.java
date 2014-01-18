@@ -19,12 +19,12 @@ import org.umlg.runtime.collection.ocl.IterateExpressionAccumulator;
 import org.umlg.runtime.collection.ocl.OclStdLibCollection;
 import org.umlg.runtime.domain.*;
 import org.umlg.runtime.domain.ocl.OclState;
-import org.umlg.runtime.util.TumlFormatter;
+import org.umlg.runtime.util.UmlgFormatter;
 
 import java.lang.reflect.Method;
 import java.util.*;
 
-public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRuntimeProperty, OclStdLibCollection<E> {
+public abstract class BaseCollection<E> implements TinkerCollection<E>, UmlgRuntimeProperty, OclStdLibCollection<E> {
 
     protected Collection<E> internalCollection;
     protected OclStdLibCollection<E> oclStdLibCollection;
@@ -39,7 +39,7 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
     protected Class<?> parentClass;
     //The internal map is used to store the vertex representing a primitive or an enumeration
     protected ListMultimap<Object, Vertex> internalVertexMap = ArrayListMultimap.create();
-    protected TumlRuntimeProperty tumlRuntimeProperty;
+    protected UmlgRuntimeProperty umlgRuntimeProperty;
     protected static final String LABEL_TO_FIRST_HYPER_VERTEX = "labelToFirstHyperVertex";
     protected static final String LABEL_TO_LAST_HYPER_VERTEX = "labelToLastHyperVertex";
     protected static final String LABEL_TO_NEXT_HYPER_VERTEX = "labelToNextHyperVertex";
@@ -49,16 +49,16 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
     protected static final String LABEL_TO_NEXT_IN_SEQUENCE = "labelToNextElementInSequence";
     protected static final String LABEL_TO_LAST_ELEMENT_IN_SEQUENCE = "labelToLastElementInSequence";
 
-    public BaseCollection(TumlRuntimeProperty runtimeProperty) {
-        this.tumlRuntimeProperty = runtimeProperty;
+    public BaseCollection(UmlgRuntimeProperty runtimeProperty) {
+        this.umlgRuntimeProperty = runtimeProperty;
     }
 
-    public BaseCollection(UmlgNode owner, TumlRuntimeProperty runtimeProperty) {
+    public BaseCollection(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
         super();
         this.owner = owner;
         this.vertex = owner.getVertex();
         this.parentClass = owner.getClass();
-        this.tumlRuntimeProperty = runtimeProperty;
+        this.umlgRuntimeProperty = runtimeProperty;
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -141,7 +141,7 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
         }
         boolean result = this.internalCollection.add(e);
         if (result) {
-            if (!(this.owner instanceof TumlMetaNode)) {
+            if (!(this.owner instanceof UmlgMetaNode)) {
                 TransactionThreadEntityVar.setNewEntity(this.owner);
             }
 
@@ -468,12 +468,12 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
         }
         UmlgNode node = (UmlgNode) e;
         if (isQualified()) {
-            for (Qualifier qualifier : this.owner.getQualifiers(this.tumlRuntimeProperty, node, false)) {
+            for (Qualifier qualifier : this.owner.getQualifiers(this.umlgRuntimeProperty, node, false)) {
                 validateQualifiedMultiplicity(/*index, */qualifier);
             }
         }
         if (isInverseQualified()) {
-            for (Qualifier qualifier : node.getQualifiers(this.tumlRuntimeProperty, this.owner, true)) {
+            for (Qualifier qualifier : node.getQualifiers(this.umlgRuntimeProperty, this.owner, true)) {
                 validateQualifiedMultiplicity(/*tmpIndex, */qualifier);
             }
         }
@@ -484,7 +484,7 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
         maybeLoad();
         boolean result = this.internalCollection.remove(o);
         if (result) {
-            if (!(this.owner instanceof TumlMetaNode)) {
+            if (!(this.owner instanceof UmlgMetaNode)) {
                 TransactionThreadEntityVar.setNewEntity(this.owner);
             }
             @SuppressWarnings("unchecked")
@@ -494,7 +494,7 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
                 UmlgNode node = (UmlgNode) o;
                 v = node.getVertex();
 
-                if (!(this.owner instanceof TumlMetaNode)) {
+                if (!(this.owner instanceof UmlgMetaNode)) {
                     TransactionThreadEntityVar.setNewEntity(node);
                 }
 
@@ -512,7 +512,7 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
                     GraphDb.getDb().removeEdge(edge);
 
                     //TODO optimize this to remove only the node, not initialize the collection
-                    node.initialiseProperty(tumlRuntimeProperty, true);
+                    node.initialiseProperty(umlgRuntimeProperty, true);
                     //Need to break here for bag logic. There will only be more than one edge in the case of the collection being a bag.
                     break;
                 }
@@ -560,7 +560,7 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
         validateElementType(e);
         if (e instanceof UmlgNode) {
             UmlgNode node = (UmlgNode) e;
-            if (!(this.owner instanceof TumlMetaNode)) {
+            if (!(this.owner instanceof UmlgMetaNode)) {
                 TransactionThreadEntityVar.setNewEntity(node);
             }
             v = node.getVertex();
@@ -571,9 +571,9 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
                 if (iteratorToOne.hasNext()) {
                     throw new IllegalStateException(String.format("Property %s has a multiplicity of 1 and is already set. First remove the value before setting it.", new String[]{getInverseQualifiedName()}));
                 }
-                this.handleInverseSide(node, tumlRuntimeProperty, true, this.owner);
+                this.handleInverseSide(node, umlgRuntimeProperty, true, this.owner);
             }
-            this.handleInverseSide(node, tumlRuntimeProperty, true, this.owner);
+            this.handleInverseSide(node, umlgRuntimeProperty, true, this.owner);
         } else if (e.getClass().isEnum()) {
             v = GraphDb.getDb().addVertex(null);
             v.setProperty(getQualifiedName(), ((Enum<?>) e).name());
@@ -609,8 +609,8 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
 
     }
 
-    protected void handleInverseSide(UmlgNode node, TumlRuntimeProperty tumlRuntimeProperty, boolean b, UmlgNode owner) {
-        node.inverseAdder(tumlRuntimeProperty, true, this.owner);
+    protected void handleInverseSide(UmlgNode node, UmlgRuntimeProperty umlgRuntimeProperty, boolean b, UmlgNode owner) {
+        node.inverseAdder(umlgRuntimeProperty, true, this.owner);
     }
 
     protected Edge createEdge(E e, Vertex v) {
@@ -661,7 +661,7 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
                 auditEdge.setProperty("outClass", node.getClass().getName() + "Audit");
             }
             if (deletion) {
-                auditEdge.setProperty("deletedOn", TumlFormatter.format(new DateTime()));
+                auditEdge.setProperty("deletedOn", UmlgFormatter.format(new DateTime()));
             }
         } else if (e.getClass().isEnum()) {
             Vertex v = GraphDb.getDb().addVertex(null);
@@ -687,7 +687,7 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
                 }
                 if (deletion) {
                     auditEdge.setProperty("transactionNo", GraphDb.getDb().getTransactionCount());
-                    auditEdge.setProperty("deletedOn", TumlFormatter.format(new DateTime()));
+                    auditEdge.setProperty("deletedOn", UmlgFormatter.format(new DateTime()));
                 }
             }
         }
@@ -834,7 +834,7 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
      * @param qualifierNode
      */
     private void addQualifierToIndex(/*Index<Edge> index, */Edge edge, UmlgNode qualifiedNode, UmlgNode qualifierNode, boolean inverse) {
-        for (Qualifier qualifier : qualifiedNode.getQualifiers(this.tumlRuntimeProperty, qualifierNode, inverse)) {
+        for (Qualifier qualifier : qualifiedNode.getQualifiers(this.umlgRuntimeProperty, qualifierNode, inverse)) {
             edge.setProperty(qualifier.getKey(), qualifier.getValue());
         }
     }
@@ -870,140 +870,140 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
 
     @Override
     public boolean isAssociationClassProperty() {
-        return this.tumlRuntimeProperty.isAssociationClassProperty();
+        return this.umlgRuntimeProperty.isAssociationClassProperty();
     }
 
     @Override
     public boolean isOnePrimitive() {
-        return this.tumlRuntimeProperty.isOnePrimitive();
+        return this.umlgRuntimeProperty.isOnePrimitive();
     }
 
     @Override
     public DataTypeEnum getDataTypeEnum() {
-        return this.tumlRuntimeProperty.getDataTypeEnum();
+        return this.umlgRuntimeProperty.getDataTypeEnum();
     }
 
     @Override
     public boolean isOneEnumeration() {
-        return this.tumlRuntimeProperty.isOneEnumeration();
+        return this.umlgRuntimeProperty.isOneEnumeration();
     }
 
     @Override
     public boolean isManyPrimitive() {
-        return this.tumlRuntimeProperty.isManyPrimitive();
+        return this.umlgRuntimeProperty.isManyPrimitive();
     }
 
     @Override
     public boolean isManyEnumeration() {
-        return this.tumlRuntimeProperty.isManyEnumeration();
+        return this.umlgRuntimeProperty.isManyEnumeration();
     }
 
     @Override
     public String getLabel() {
-        return this.tumlRuntimeProperty.getLabel();
+        return this.umlgRuntimeProperty.getLabel();
     }
 
     @Override
     public String getQualifiedName() {
-        return this.tumlRuntimeProperty.getQualifiedName();
+        return this.umlgRuntimeProperty.getQualifiedName();
     }
 
     @Override
     public String getInverseQualifiedName() {
-        return this.tumlRuntimeProperty.getInverseQualifiedName();
+        return this.umlgRuntimeProperty.getInverseQualifiedName();
     }
 
     @Override
     public boolean isOneToOne() {
-        return this.tumlRuntimeProperty.isOneToOne();
+        return this.umlgRuntimeProperty.isOneToOne();
     }
 
     @Override
     public boolean isOneToMany() {
-        return this.tumlRuntimeProperty.isOneToMany();
+        return this.umlgRuntimeProperty.isOneToMany();
     }
 
     @Override
     public boolean isManyToOne() {
-        return this.tumlRuntimeProperty.isManyToOne();
+        return this.umlgRuntimeProperty.isManyToOne();
     }
 
     @Override
     public boolean isManyToMany() {
-        return this.tumlRuntimeProperty.isManyToMany();
+        return this.umlgRuntimeProperty.isManyToMany();
     }
 
     @Override
     public int getUpper() {
-        return this.tumlRuntimeProperty.getUpper();
+        return this.umlgRuntimeProperty.getUpper();
     }
 
     @Override
     public int getLower() {
-        return this.tumlRuntimeProperty.getLower();
+        return this.umlgRuntimeProperty.getLower();
     }
 
     @Override
     public int getInverseUpper() {
-        return this.tumlRuntimeProperty.getInverseUpper();
+        return this.umlgRuntimeProperty.getInverseUpper();
     }
 
     @Override
     public boolean isControllingSide() {
-        return this.tumlRuntimeProperty.isControllingSide();
+        return this.umlgRuntimeProperty.isControllingSide();
     }
 
     @Override
     public boolean isComposite() {
-        return this.tumlRuntimeProperty.isComposite();
+        return this.umlgRuntimeProperty.isComposite();
     }
 
     @Override
     public boolean isInverseComposite() {
-        return this.tumlRuntimeProperty.isInverseComposite();
+        return this.umlgRuntimeProperty.isInverseComposite();
     }
 
     @Override
     public boolean isValid(int elementCount) {
-        return this.tumlRuntimeProperty.isValid(elementCount);
+        return this.umlgRuntimeProperty.isValid(elementCount);
     }
 
     @Override
     public boolean isQualified() {
-        return this.tumlRuntimeProperty.isQualified();
+        return this.umlgRuntimeProperty.isQualified();
     }
 
     @Override
     public boolean isInverseQualified() {
-        return this.tumlRuntimeProperty.isInverseQualified();
+        return this.umlgRuntimeProperty.isInverseQualified();
     }
 
     @Override
     public boolean isOrdered() {
-        if (this.tumlRuntimeProperty.isOrdered() && this.tumlRuntimeProperty.isQualified() && getUpper() == 1) {
+        if (this.umlgRuntimeProperty.isOrdered() && this.umlgRuntimeProperty.isQualified() && getUpper() == 1) {
             return true;
         } else {
-            return this.tumlRuntimeProperty.isOrdered() && (getUpper() == -1 || getUpper() > 1);
+            return this.umlgRuntimeProperty.isOrdered() && (getUpper() == -1 || getUpper() > 1);
         }
     }
 
     @Override
     public boolean isInverseOrdered() {
-        if (this.tumlRuntimeProperty.isInverseOrdered() && this.tumlRuntimeProperty.isInverseQualified() && getUpper() == 1) {
+        if (this.umlgRuntimeProperty.isInverseOrdered() && this.umlgRuntimeProperty.isInverseQualified() && getUpper() == 1) {
             return true;
         } else {
-            return this.tumlRuntimeProperty.isInverseOrdered() && (getInverseUpper() == -1 || getInverseUpper() > 1);
+            return this.umlgRuntimeProperty.isInverseOrdered() && (getInverseUpper() == -1 || getInverseUpper() > 1);
         }
     }
 
     @Override
     public boolean isUnique() {
-        return this.tumlRuntimeProperty.isUnique();
+        return this.umlgRuntimeProperty.isUnique();
     }
 
     @Override
     public boolean isInverseUnique() {
-        return this.tumlRuntimeProperty.isInverseUnique();
+        return this.umlgRuntimeProperty.isInverseUnique();
     }
 
     @Override
@@ -1205,17 +1205,17 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
     }
 
     protected boolean validateElementType(E e) {
-        if (this.tumlRuntimeProperty.isManyPrimitive() || this.tumlRuntimeProperty.isOnePrimitive()) {
+        if (this.umlgRuntimeProperty.isManyPrimitive() || this.umlgRuntimeProperty.isOnePrimitive()) {
             if (!(e instanceof String) && !(e instanceof Boolean) && !(e instanceof Integer) && !(e instanceof Long) && !(e instanceof Double)) {
                 throw new IllegalStateException(String.format("Expected primitive got %s", e.getClass().getName()));
             }
-        } else if (this.tumlRuntimeProperty.isManyEnumeration() || this.tumlRuntimeProperty.isOneEnumeration()) {
+        } else if (this.umlgRuntimeProperty.isManyEnumeration() || this.umlgRuntimeProperty.isOneEnumeration()) {
             if (!(e instanceof UmlgEnum)) {
                 throw new IllegalStateException(String.format("Expected %s got %s", UmlgEnum.class.getName(), e.getClass().getName()));
             }
-        } else if (this.tumlRuntimeProperty.getDataTypeEnum() != null) {
-            if (!(e.getClass().equals(this.tumlRuntimeProperty.getDataTypeEnum().getType()))) {
-                throw new IllegalStateException(String.format("Expected %s got %s", this.tumlRuntimeProperty.getDataTypeEnum().getType().getName(), e.getClass().getName()));
+        } else if (this.umlgRuntimeProperty.getDataTypeEnum() != null) {
+            if (!(e.getClass().equals(this.umlgRuntimeProperty.getDataTypeEnum().getType()))) {
+                throw new IllegalStateException(String.format("Expected %s got %s", this.umlgRuntimeProperty.getDataTypeEnum().getType().getName(), e.getClass().getName()));
             }
         }
         return true;
@@ -1330,7 +1330,7 @@ public abstract class BaseCollection<E> implements TinkerCollection<E>, TumlRunt
                     Object value = this.getVertexForDirection(edge).getProperty(getQualifiedName());
                     node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
                     putToInternalMap(node, this.getVertexForDirection(edge));
-                } else if (TumlMetaNode.class.isAssignableFrom(c)) {
+                } else if (UmlgMetaNode.class.isAssignableFrom(c)) {
                     Method m = c.getDeclaredMethod("getInstance", new Class[0]);
                     node = (E) m.invoke(null);
                 } else if (UmlgNode.class.isAssignableFrom(c)) {

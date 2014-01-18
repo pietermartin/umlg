@@ -1,6 +1,6 @@
 package org.umlg.runtime.validation;
 
-public class Url implements TumlValidation {
+public class Url implements UmlgValidation {
 	private String protocol;
 	private String host;
 	private int port;

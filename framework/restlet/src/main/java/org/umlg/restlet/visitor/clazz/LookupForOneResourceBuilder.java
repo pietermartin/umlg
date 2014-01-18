@@ -3,17 +3,15 @@ package org.umlg.restlet.visitor.clazz;
 import org.eclipse.uml2.uml.Property;
 import org.umlg.java.metamodel.*;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
-import org.umlg.java.metamodel.annotation.OJAnnotatedInterface;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
-import org.umlg.java.metamodel.annotation.OJAnnotationValue;
 import org.umlg.java.metamodel.annotation.OJEnum;
 import org.umlg.java.metamodel.annotation.OJEnumLiteral;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.javageneration.util.PropertyWrapper;
-import org.umlg.javageneration.util.TinkerGenerationUtil;
-import org.umlg.javageneration.util.TumlClassOperations;
-import org.umlg.restlet.util.TumlRestletGenerationUtil;
+import org.umlg.javageneration.util.UmlgGenerationUtil;
+import org.umlg.javageneration.util.UmlgClassOperations;
+import org.umlg.restlet.util.UmlgRestletGenerationUtil;
 
 public class LookupForOneResourceBuilder extends BaseServerResourceBuilder implements Visitor<Property> {
 
@@ -29,9 +27,9 @@ public class LookupForOneResourceBuilder extends BaseServerResourceBuilder imple
             OJAnnotatedClass owner = findOJClass(p);
             OJPackage ojPackage = owner.getMyPackage();
 
-            OJAnnotatedClass annotatedClass = new OJAnnotatedClass(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_"
+            OJAnnotatedClass annotatedClass = new OJAnnotatedClass(UmlgClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_"
                     + pWrap.getOtherEnd().getName() + "_" + pWrap.getName() + "_lookUpForOne" + "_ServerResourceImpl");
-            annotatedClass.setSuperclass(TumlRestletGenerationUtil.ServerResource);
+            annotatedClass.setSuperclass(UmlgRestletGenerationUtil.ServerResource);
             annotatedClass.setMyPackage(ojPackage);
             addToSource(annotatedClass);
             addDefaultConstructor(annotatedClass);
@@ -47,7 +45,7 @@ public class LookupForOneResourceBuilder extends BaseServerResourceBuilder imple
     }
 
     private void addCompositeParentIdField(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass) {
-        OJField compositeParentFieldId = new OJField(TumlClassOperations.getPathName(pWrap.getOtherEnd().getType()).getLast().toLowerCase() + "Id",
+        OJField compositeParentFieldId = new OJField(UmlgClassOperations.getPathName(pWrap.getOtherEnd().getType()).getLast().toLowerCase() + "Id",
                 new OJPathName("Object"));
         compositeParentFieldId.setVisibility(OJVisibilityKind.PRIVATE);
         annotatedClass.addToFields(compositeParentFieldId);
@@ -55,22 +53,22 @@ public class LookupForOneResourceBuilder extends BaseServerResourceBuilder imple
 
     private void addGetObjectRepresentation(PropertyWrapper pWrap/*, OJAnnotatedInterface annotatedInf*/, OJAnnotatedClass annotatedClass) {
 
-//        OJAnnotatedOperation getInf = new OJAnnotatedOperation("get", TumlRestletGenerationUtil.Representation);
+//        OJAnnotatedOperation getInf = new OJAnnotatedOperation("get", UmlgRestletGenerationUtil.Representation);
 //        annotatedInf.addToOperations(getInf);
-//        getInf.addAnnotationIfNew(new OJAnnotationValue(TumlRestletGenerationUtil.Get, "json"));
+//        getInf.addAnnotationIfNew(new OJAnnotationValue(UmlgRestletGenerationUtil.Get, "json"));
 
-        OJAnnotatedOperation get = new OJAnnotatedOperation("get", TumlRestletGenerationUtil.Representation);
-        get.addToThrows(TumlRestletGenerationUtil.ResourceException);
-        annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
-        TinkerGenerationUtil.addOverrideAnnotation(get);
+        OJAnnotatedOperation get = new OJAnnotatedOperation("get", UmlgRestletGenerationUtil.Representation);
+        get.addToThrows(UmlgRestletGenerationUtil.ResourceException);
+        annotatedClass.addToImports(UmlgRestletGenerationUtil.ResourceException);
+        UmlgGenerationUtil.addOverrideAnnotation(get);
 
         OJTryStatement ojTryStatement = new OJTryStatement();
 
-        OJPathName parentPathName = TumlClassOperations.getPathName(pWrap.getOtherEnd().getType());
+        OJPathName parentPathName = UmlgClassOperations.getPathName(pWrap.getOtherEnd().getType());
         ojTryStatement.getTryPart().addToStatements(
-                "this." + parentPathName.getLast().toLowerCase() + "Id = "+TumlRestletGenerationUtil.UmlgURLDecoder.getLast()+".decode((String)getRequestAttributes().get(\""
+                "this." + parentPathName.getLast().toLowerCase() + "Id = "+ UmlgRestletGenerationUtil.UmlgURLDecoder.getLast()+".decode((String)getRequestAttributes().get(\""
                         + parentPathName.getLast().toLowerCase() + "Id\"))");
-        annotatedClass.addToImports(TumlRestletGenerationUtil.UmlgURLDecoder);
+        annotatedClass.addToImports(UmlgRestletGenerationUtil.UmlgURLDecoder);
 
         ojTryStatement.getTryPart().addToStatements(
                 parentPathName.getLast() + " resource = GraphDb.getDb().instantiateClassifier(this." + parentPathName.getLast().toLowerCase() + "Id"
@@ -79,42 +77,42 @@ public class LookupForOneResourceBuilder extends BaseServerResourceBuilder imple
         buildToJson(pWrap, annotatedClass, ojTryStatement.getTryPart());
         ojTryStatement.setCatchPart(null);
 
-        ojTryStatement.getFinallyPart().addToStatements(TinkerGenerationUtil.graphDbAccess + ".rollback()");
+        ojTryStatement.getFinallyPart().addToStatements(UmlgGenerationUtil.graphDbAccess + ".rollback()");
         get.getBody().addToStatements(ojTryStatement);
 
-        annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
-        annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);
+        annotatedClass.addToImports(UmlgGenerationUtil.graphDbPathName);
+        annotatedClass.addToImports(UmlgRestletGenerationUtil.JsonRepresentation);
         annotatedClass.addToOperations(get);
     }
 
     private void buildToJson(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass, OJBlock block) {
         block.addToStatements("StringBuilder json = new StringBuilder()");
         block.addToStatements("json.append(\"{\\\"data\\\": [\")");
-        block.addToStatements("json.append(" + TumlRestletGenerationUtil.TumlRestletToJsonUtil.getLast() + ".toJson(resource." + pWrap.lookup() + "()))");
-        annotatedClass.addToImports(TumlRestletGenerationUtil.TumlRestletToJsonUtil);
+        block.addToStatements("json.append(" + UmlgRestletGenerationUtil.UmlgRestletToJsonUtil.getLast() + ".toJson(resource." + pWrap.lookup() + "()))");
+        annotatedClass.addToImports(UmlgRestletGenerationUtil.UmlgRestletToJsonUtil);
         block.addToStatements("json.append(\"],\")");
         block.addToStatements("json.append(\" \\\"meta\\\" : {\")");
         block.addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + pWrap.getQualifiedName() + "\\\"\")");
         block.addToStatements("json.append(\", \\\"to\\\": \")");
-        block.addToStatements("json.append(" + TumlClassOperations.propertyEnumName(new PropertyWrapper(pWrap.getOtherEnd()).getOwningType()) + ".asJson())");
-        annotatedClass.addToImports(TumlClassOperations.getPathName(new PropertyWrapper(pWrap.getOtherEnd()).getOwningType()).append(
-                TumlClassOperations.propertyEnumName(new PropertyWrapper(pWrap.getOtherEnd()).getOwningType())));
+        block.addToStatements("json.append(" + UmlgClassOperations.propertyEnumName(new PropertyWrapper(pWrap.getOtherEnd()).getOwningType()) + ".asJson())");
+        annotatedClass.addToImports(UmlgClassOperations.getPathName(new PropertyWrapper(pWrap.getOtherEnd()).getOwningType()).append(
+                UmlgClassOperations.propertyEnumName(new PropertyWrapper(pWrap.getOtherEnd()).getOwningType())));
         block.addToStatements("json.append(\", \\\"from\\\": \")");
-        block.addToStatements("json.append(" + TumlClassOperations.propertyEnumName(pWrap.getOwningType()) + ".asJson())");
-        annotatedClass.addToImports(TumlClassOperations.getPathName(pWrap.getOwningType()).append(TumlClassOperations.propertyEnumName(pWrap.getOwningType())));
+        block.addToStatements("json.append(" + UmlgClassOperations.propertyEnumName(pWrap.getOwningType()) + ".asJson())");
+        annotatedClass.addToImports(UmlgClassOperations.getPathName(pWrap.getOwningType()).append(UmlgClassOperations.propertyEnumName(pWrap.getOwningType())));
 
         block.addToStatements("json.append(\"}}\")");
-        block.addToStatements("return new " + TumlRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
+        block.addToStatements("return new " + UmlgRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
     }
 
     private void addServerResourceToRouterEnum(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass) {
-        OJEnum routerEnum = (OJEnum) this.workspace.findOJClass(TumlRestletGenerationUtil.RestletRouterEnum.toJavaString());
-        OJEnumLiteral ojLiteral = new OJEnumLiteral(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast().toUpperCase() + "_" + pWrap.lookup());
+        OJEnum routerEnum = (OJEnum) this.workspace.findOJClass(UmlgRestletGenerationUtil.RestletRouterEnum.toJavaString());
+        OJEnumLiteral ojLiteral = new OJEnumLiteral(UmlgClassOperations.getPathName(pWrap.getOwningType()).getLast().toUpperCase() + "_" + pWrap.lookup());
 
         OJField uri = new OJField();
         uri.setType(new OJPathName("String"));
-        uri.setInitExp("\"/" + TumlClassOperations.getPathName(pWrap.getOwningType()).getLast().toLowerCase() + "s/{"
-                + TumlClassOperations.getPathName(pWrap.getOwningType()).getLast().toLowerCase() + "Id}/" + pWrap.lookup() + "\"");
+        uri.setInitExp("\"/" + UmlgClassOperations.getPathName(pWrap.getOwningType()).getLast().toLowerCase() + "s/{"
+                + UmlgClassOperations.getPathName(pWrap.getOwningType()).getLast().toLowerCase() + "Id}/" + pWrap.lookup() + "\"");
         ojLiteral.addToAttributeValues(uri);
 
         OJField serverResourceClassField = new OJField();
@@ -122,11 +120,11 @@ public class LookupForOneResourceBuilder extends BaseServerResourceBuilder imple
         serverResourceClassField.setInitExp(annotatedClass.getName() + ".class");
         ojLiteral.addToAttributeValues(serverResourceClassField);
         routerEnum.addToImports(annotatedClass.getPathName());
-        routerEnum.addToImports(TumlRestletGenerationUtil.ServerResource);
+        routerEnum.addToImports(UmlgRestletGenerationUtil.ServerResource);
 
         routerEnum.addToLiterals(ojLiteral);
 
-        OJAnnotatedOperation attachAll = routerEnum.findOperation("attachAll", TumlRestletGenerationUtil.Router);
+        OJAnnotatedOperation attachAll = routerEnum.findOperation("attachAll", UmlgRestletGenerationUtil.Router);
         attachAll.getBody().addToStatements(routerEnum.getName() + "." + ojLiteral.getName() + ".attach(router)");
     }
 

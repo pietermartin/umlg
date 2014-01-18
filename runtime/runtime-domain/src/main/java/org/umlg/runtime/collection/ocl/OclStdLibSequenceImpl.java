@@ -2,7 +2,7 @@ package org.umlg.runtime.collection.ocl;
 
 import org.umlg.runtime.collection.TinkerCollection;
 import org.umlg.runtime.collection.TinkerSequence;
-import org.umlg.runtime.collection.memory.TumlMemorySequence;
+import org.umlg.runtime.collection.memory.UmlgMemorySequence;
 import org.umlg.runtime.domain.ocl.OclIsInvalidException;
 
 import java.util.*;
@@ -40,28 +40,28 @@ public class OclStdLibSequenceImpl<E> extends OclStdLibCollectionImpl<E> impleme
 
 	@Override
 	public TinkerSequence<E> union(TinkerSequence<? extends E> s) {
-        TinkerSequence<E> result = new TumlMemorySequence<E>(this);
+        TinkerSequence<E> result = new UmlgMemorySequence<E>(this);
         result.addAll(s);
 		return result;
 	}
 
 	@Override
 	public TinkerSequence<E> append(E object) {
-        TinkerSequence<E> result = new TumlMemorySequence<E>(this);
+        TinkerSequence<E> result = new UmlgMemorySequence<E>(this);
         result.add(object);
         return result;
 	}
 
 	@Override
 	public TinkerSequence<E> prepend(E object) {
-        TinkerSequence<E> result = new TumlMemorySequence<E>(this);
+        TinkerSequence<E> result = new UmlgMemorySequence<E>(this);
         result.add(0, object);
         return result;
 	}
 
 	@Override
 	public TinkerSequence<E> insertAt(Integer index, E object) {
-        TinkerSequence<E> result = new TumlMemorySequence<E>(this);
+        TinkerSequence<E> result = new UmlgMemorySequence<E>(this);
         result.add(index, object);
         return result;
 	}
@@ -104,7 +104,7 @@ public class OclStdLibSequenceImpl<E> extends OclStdLibCollectionImpl<E> impleme
 
 	@Override
 	public TinkerSequence<E> including(E e) {
-        TinkerSequence<E> result = new TumlMemorySequence<E>(this);
+        TinkerSequence<E> result = new UmlgMemorySequence<E>(this);
 		if (e != null) {
 			result.add(e);
 		}
@@ -113,7 +113,7 @@ public class OclStdLibSequenceImpl<E> extends OclStdLibCollectionImpl<E> impleme
 
 	@Override
 	public TinkerSequence<E> excluding(E e) {
-        TinkerSequence<E> result = new TumlMemorySequence<E>(this);
+        TinkerSequence<E> result = new UmlgMemorySequence<E>(this);
         if (e != null) {
             result.remove(e);
         }

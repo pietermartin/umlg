@@ -12,6 +12,7 @@ import org.umlg.framework.JavaModelPrinter;
 import org.umlg.framework.ModelLoader;
 import org.umlg.framework.ModelVisitor;
 import org.umlg.framework.Visitor;
+import org.umlg.ocl.UmlgOcl2Parser;
 
 public class Workspace {
 
@@ -73,7 +74,8 @@ public class Workspace {
 	}
 
 	private void visitModel() {
-		this.model = ModelLoader.INSTANCE.loadModel(modelFile);
+//		this.model = ModelLoader.INSTANCE.loadModel(modelFile);
+        this.model = UmlgOcl2Parser.INSTANCE.init(modelFile);
 		logger.info(String.format("Start visiting the model"));
 		for (Visitor<?> v : visitors) {
 			ModelVisitor.visitModel(this.model, v);

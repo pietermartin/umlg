@@ -9,7 +9,7 @@ import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.javageneration.util.PropertyWrapper;
-import org.umlg.javageneration.util.TumlClassOperations;
+import org.umlg.javageneration.util.UmlgClassOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
 
 public class ComponentProperyVisitor extends BaseVisitor implements Visitor<Property> {
@@ -24,7 +24,7 @@ public class ComponentProperyVisitor extends BaseVisitor implements Visitor<Prop
 		if (pWrap.isComponent()) {
 			OJAnnotatedClass owner = findOJClass(p);
 			OJAnnotatedOperation createComponents = owner.findOperation("createComponents");
-			OJAnnotatedOperation init = (OJAnnotatedOperation) owner.findOperation("init", Arrays.asList(TumlClassOperations.getPathName(p.getOtherEnd().getType())));
+			OJAnnotatedOperation init = (OJAnnotatedOperation) owner.findOperation("init", Arrays.asList(UmlgClassOperations.getPathName(p.getOtherEnd().getType())));
 			OJIfStatement ifNull = new OJIfStatement(pWrap.getter() + "() == null", pWrap.setter() + "(new " + pWrap.javaBaseTypePath().getLast() + "(true))");
 			owner.addToImports(pWrap.javaBaseTypePath());
 			createComponents.getBody().addToStatements(ifNull);

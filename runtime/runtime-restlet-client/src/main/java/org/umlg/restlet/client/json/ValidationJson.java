@@ -1,7 +1,7 @@
 package org.umlg.restlet.client.json;
 
 
-import org.umlg.restlet.client.json.validation.TumlValidation;
+import org.umlg.restlet.client.json.validation.UmlgValidation;
 import org.umlg.restlet.client.json.validation.ValidationEnum;
 
 /**
@@ -11,11 +11,11 @@ import org.umlg.restlet.client.json.validation.ValidationEnum;
 public class ValidationJson {
 
     private String name;
-    private TumlValidation tumlValidation;
+    private UmlgValidation umlgValidation;
 
     public ValidationJson(String validationName, Object o) {
         ValidationEnum validationEnum = ValidationEnum.fromName(validationName);
-        this.tumlValidation = validationEnum.getValidation(o);
+        this.umlgValidation = validationEnum.getValidation(o);
         this.name = validationName;
     }
 
@@ -23,7 +23,7 @@ public class ValidationJson {
         return name;
     }
 
-    public TumlValidation getTumlValidation() {
-        return tumlValidation;
+    public UmlgValidation getUmlgValidation() {
+        return umlgValidation;
     }
 }

@@ -3,9 +3,9 @@ package org.umlg.runtime.domain;
 import com.tinkerpop.blueprints.Vertex;
 import org.umlg.runtime.collection.Qualifier;
 import org.umlg.runtime.collection.TinkerSet;
-import org.umlg.runtime.collection.TumlRuntimeProperty;
+import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.domain.ocl.OclAny;
-import org.umlg.runtime.validation.TumlConstraintViolation;
+import org.umlg.runtime.validation.UmlgConstraintViolation;
 
 import java.util.List;
 
@@ -14,18 +14,18 @@ public interface UmlgNode extends UmlgEnum, OclAny, PersistentObject {
 	Vertex getVertex();
 	boolean isTinkerRoot();
 	void initialiseProperties();
-	void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty, boolean inverse);
-    TumlRuntimeProperty inverseAdder(TumlRuntimeProperty tumlRuntimeProperty, boolean inverse, UmlgNode umlgNode);
+	void initialiseProperty(UmlgRuntimeProperty umlgRuntimeProperty, boolean inverse);
+    UmlgRuntimeProperty inverseAdder(UmlgRuntimeProperty umlgRuntimeProperty, boolean inverse, UmlgNode umlgNode);
     void initVariables();
-	List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, UmlgNode node, boolean inverse);
+	List<Qualifier> getQualifiers(UmlgRuntimeProperty umlgRuntimeProperty, UmlgNode node, boolean inverse);
 	void delete();
-	int getSize(TumlRuntimeProperty tumlRuntimeProperty);
+	int getSize(UmlgRuntimeProperty umlgRuntimeProperty);
 	<E> TinkerSet<E> asSet();
-	List<TumlConstraintViolation> validateMultiplicities();
-    List<TumlConstraintViolation> checkClassConstraints();
+	List<UmlgConstraintViolation> validateMultiplicities();
+    List<UmlgConstraintViolation> checkClassConstraints();
 	UmlgNode getOwningObject();
     boolean hasOnlyOneCompositeParent();
 	<T extends UmlgNode> List<T> getPathToCompositionalRoot();
     void addEdgeToMetaNode();
-    TumlMetaNode getMetaNode();
+    UmlgMetaNode getMetaNode();
 }

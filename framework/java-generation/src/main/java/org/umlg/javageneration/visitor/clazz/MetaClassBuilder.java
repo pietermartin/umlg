@@ -11,8 +11,8 @@ import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.java.metamodel.generated.OJVisibilityKindGEN;
 import org.umlg.javageneration.util.Namer;
-import org.umlg.javageneration.util.TinkerGenerationUtil;
-import org.umlg.javageneration.util.TumlClassOperations;
+import org.umlg.javageneration.util.UmlgGenerationUtil;
+import org.umlg.javageneration.util.UmlgClassOperations;
 
 /**
  * Date: 2012/12/25
@@ -28,20 +28,20 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<Class> {
     @VisitSubclasses({Class.class, AssociationClass.class})
     public void visitBefore(Class clazz) {
         if (!clazz.isAbstract()) {
-            OJAnnotatedClass metaClass = new OJAnnotatedClass(TumlClassOperations.getMetaClassName(clazz));
+            OJAnnotatedClass metaClass = new OJAnnotatedClass(UmlgClassOperations.getMetaClassName(clazz));
             OJPackage ojPackage = new OJPackage(Namer.name(clazz.getNearestPackage()) + ".meta");
             metaClass.setMyPackage(ojPackage);
-            metaClass.setVisibility(TumlClassOperations.getVisibility(clazz.getVisibility()));
+            metaClass.setVisibility(UmlgClassOperations.getVisibility(clazz.getVisibility()));
 
             if (ModelLoader.INSTANCE.isUmlGLibIncluded()) {
-                metaClass.setSuperclass(TinkerGenerationUtil.BASE_CLASS_TUML);
+                metaClass.setSuperclass(UmlgGenerationUtil.BASE_CLASS_TUML);
                 addDefaultConstructor(metaClass, clazz);
                 addContructorWithVertex(metaClass, clazz);
                 //Ensure the meta class instance does not also try to create a edge to a meta class as it is also a normal entity
                 addEmptyAddEdgeToMetaNode(metaClass);
                 addAddToThreadEntityVar(metaClass);
             } else {
-                metaClass.setSuperclass(TinkerGenerationUtil.BASE_META_NODE);
+                metaClass.setSuperclass(UmlgGenerationUtil.BASE_META_NODE);
                 addDefaultConstructorStandAlone(metaClass, clazz);
                 addConstructorWithVertexStandAlone(metaClass, clazz);
             }
@@ -65,15 +65,15 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<Class> {
 
     private void addAddToThreadEntityVar(OJAnnotatedClass metaClass) {
         OJAnnotatedOperation addToThreadMetaEntityVar = new OJAnnotatedOperation("addToThreadEntityVar");
-        TinkerGenerationUtil.addOverrideAnnotation(addToThreadMetaEntityVar);
-        addToThreadMetaEntityVar.getBody().addToStatements(TinkerGenerationUtil.transactionThreadMetaNodeVar.getLast() + ".setNewEntity(this)");
+        UmlgGenerationUtil.addOverrideAnnotation(addToThreadMetaEntityVar);
+        addToThreadMetaEntityVar.getBody().addToStatements(UmlgGenerationUtil.transactionThreadMetaNodeVar.getLast() + ".setNewEntity(this)");
         metaClass.addToOperations(addToThreadMetaEntityVar);
 
     }
 
     private void addDefaultCreate(OJAnnotatedClass metaClass) {
         OJAnnotatedOperation defaultCreate = new OJAnnotatedOperation("defaultCreate");
-        TinkerGenerationUtil.addOverrideAnnotation(defaultCreate);
+        UmlgGenerationUtil.addOverrideAnnotation(defaultCreate);
         defaultCreate.getBody().addToStatements("getUid()");
         metaClass.addToOperations(defaultCreate);
     }
@@ -81,72 +81,72 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<Class> {
 //    private void addInternalSetId(Class clazz, OJAnnotatedClass metaClass) {
 //        //This method does nothing as meta node's are not accessed via the id
 //        OJAnnotatedOperation internalSetId = new OJAnnotatedOperation("internalSetId");
-//        TinkerGenerationUtil.addOverrideAnnotation(internalSetId);
+//        UmlgGenerationUtil.addOverrideAnnotation(internalSetId);
 //        internalSetId.getBody().addToStatements("setId(\"" + clazz.getQualifiedName() + "Meta::1\")");
 //        metaClass.addToOperations(internalSetId);
 //    }
 
     private void addConstructorWithVertexStandAlone(OJAnnotatedClass metaClass, Class clazz) {
         OJConstructor constructor = new OJConstructor();
-        constructor.addParam("vertex", TinkerGenerationUtil.vertexPathName);
+        constructor.addParam("vertex", UmlgGenerationUtil.vertexPathName);
         constructor.getBody().addToStatements("this.vertex= vertex");
         metaClass.addToConstructors(constructor);
     }
 
     private void addDefaultConstructorStandAlone(OJAnnotatedClass metaClass, Class clazz) {
-        metaClass.getDefaultConstructor().getBody().addToStatements("this.vertex = " + TinkerGenerationUtil.graphDbAccess + ".addVertex(this.getClass().getName())");
+        metaClass.getDefaultConstructor().getBody().addToStatements("this.vertex = " + UmlgGenerationUtil.graphDbAccess + ".addVertex(this.getClass().getName())");
         metaClass.getDefaultConstructor().getBody().addToStatements("this.vertex.setProperty(\"className\", getClass().getName())");
         metaClass.getDefaultConstructor().getBody().addToStatements("defaultCreate()");
-        metaClass.getDefaultConstructor().getBody().addToStatements(TinkerGenerationUtil.graphDbAccess + ".addEdge(null, " + TinkerGenerationUtil.graphDbAccess + ".getRoot(), this.vertex, getEdgeToRootLabel())");
+        metaClass.getDefaultConstructor().getBody().addToStatements(UmlgGenerationUtil.graphDbAccess + ".addEdge(null, " + UmlgGenerationUtil.graphDbAccess + ".getRoot(), this.vertex, getEdgeToRootLabel())");
     }
 
     private void addEmptyAddEdgeToMetaNode(OJAnnotatedClass metaClass) {
         OJAnnotatedOperation addEdgeToMetaNode = new OJAnnotatedOperation("addEdgeToMetaNode");
-        TinkerGenerationUtil.addOverrideAnnotation(addEdgeToMetaNode);
-        metaClass.addToImports(TinkerGenerationUtil.graphDbPathName);
+        UmlgGenerationUtil.addOverrideAnnotation(addEdgeToMetaNode);
+        metaClass.addToImports(UmlgGenerationUtil.graphDbPathName);
         metaClass.addToOperations(addEdgeToMetaNode);
     }
 
     private void addGetAllInstances(Class clazz, OJAnnotatedClass metaClass) {
         OJAnnotatedOperation allInstances = new OJAnnotatedOperation("getAllInstances");
-        TinkerGenerationUtil.addOverrideAnnotation(allInstances);
-        OJPathName classPathName = TumlClassOperations.getPathName(clazz);
-        allInstances.setReturnType(TinkerGenerationUtil.tinkerSet.getCopy().addToGenerics(classPathName));
+        UmlgGenerationUtil.addOverrideAnnotation(allInstances);
+        OJPathName classPathName = UmlgClassOperations.getPathName(clazz);
+        allInstances.setReturnType(UmlgGenerationUtil.tinkerSet.getCopy().addToGenerics(classPathName));
 
-        OJField resultField = new OJField("result", TinkerGenerationUtil.tumlMemorySet.getCopy().addToGenerics(classPathName));
-        resultField.setInitExp("new " + TinkerGenerationUtil.tumlMemorySet.getCopy().addToGenerics(classPathName).getLast() + "()");
+        OJField resultField = new OJField("result", UmlgGenerationUtil.umlgMemorySet.getCopy().addToGenerics(classPathName));
+        resultField.setInitExp("new " + UmlgGenerationUtil.umlgMemorySet.getCopy().addToGenerics(classPathName).getLast() + "()");
         allInstances.getBody().addToLocals(resultField);
-        OJField iter = new OJField("iter", new OJPathName("java.lang.Iterable").addToGenerics(TinkerGenerationUtil.edgePathName));
-        iter.setInitExp("this.vertex.getEdges(Direction.OUT, " + TinkerGenerationUtil.UMLG_NODE.getLast() + ".ALLINSTANCES_EDGE_LABEL)");
+        OJField iter = new OJField("iter", new OJPathName("java.lang.Iterable").addToGenerics(UmlgGenerationUtil.edgePathName));
+        iter.setInitExp("this.vertex.getEdges(Direction.OUT, " + UmlgGenerationUtil.UMLG_NODE.getLast() + ".ALLINSTANCES_EDGE_LABEL)");
         allInstances.getBody().addToLocals(iter);
 
-        OJForStatement forIter = new OJForStatement("edge", TinkerGenerationUtil.edgePathName, "iter");
+        OJForStatement forIter = new OJForStatement("edge", UmlgGenerationUtil.edgePathName, "iter");
         forIter.getBody().addToStatements("result.add(GraphDb.getDb().<" + classPathName.getLast() + ">instantiateClassifier(edge.getVertex(Direction.IN).getId()))");
         allInstances.getBody().addToStatements(forIter);
         allInstances.getBody().addToStatements("return result");
 
-        metaClass.addToImports(TinkerGenerationUtil.UMLG_NODE);
-//        metaClass.addToImports(TinkerGenerationUtil.UmlgIdUtilFactoryPathName);
+        metaClass.addToImports(UmlgGenerationUtil.UMLG_NODE);
+//        metaClass.addToImports(UmlgGenerationUtil.UmlgIdUtilFactoryPathName);
 
         metaClass.addToOperations(allInstances);
     }
 
     private void addGetAllInstancesWithFilter(Class clazz, OJAnnotatedClass metaClass) {
         OJAnnotatedOperation allInstances = new OJAnnotatedOperation("getAllInstances");
-        allInstances.addToParameters(new OJParameter("filter", TinkerGenerationUtil.Filter));
+        allInstances.addToParameters(new OJParameter("filter", UmlgGenerationUtil.Filter));
 
-        TinkerGenerationUtil.addOverrideAnnotation(allInstances);
-        OJPathName classPathName = TumlClassOperations.getPathName(clazz);
-        allInstances.setReturnType(TinkerGenerationUtil.tinkerSet.getCopy().addToGenerics(classPathName));
+        UmlgGenerationUtil.addOverrideAnnotation(allInstances);
+        OJPathName classPathName = UmlgClassOperations.getPathName(clazz);
+        allInstances.setReturnType(UmlgGenerationUtil.tinkerSet.getCopy().addToGenerics(classPathName));
 
-        OJField resultField = new OJField("result", TinkerGenerationUtil.tumlMemorySet.getCopy().addToGenerics(classPathName));
-        resultField.setInitExp("new " + TinkerGenerationUtil.tumlMemorySet.getCopy().addToGenerics(classPathName).getLast() + "()");
+        OJField resultField = new OJField("result", UmlgGenerationUtil.umlgMemorySet.getCopy().addToGenerics(classPathName));
+        resultField.setInitExp("new " + UmlgGenerationUtil.umlgMemorySet.getCopy().addToGenerics(classPathName).getLast() + "()");
         allInstances.getBody().addToLocals(resultField);
-        OJField iter = new OJField("iter", new OJPathName("java.lang.Iterable").addToGenerics(TinkerGenerationUtil.edgePathName));
-        iter.setInitExp("this.vertex.getEdges(Direction.OUT, " + TinkerGenerationUtil.UMLG_NODE.getLast() + ".ALLINSTANCES_EDGE_LABEL)");
+        OJField iter = new OJField("iter", new OJPathName("java.lang.Iterable").addToGenerics(UmlgGenerationUtil.edgePathName));
+        iter.setInitExp("this.vertex.getEdges(Direction.OUT, " + UmlgGenerationUtil.UMLG_NODE.getLast() + ".ALLINSTANCES_EDGE_LABEL)");
         allInstances.getBody().addToLocals(iter);
 
-        OJForStatement forIter = new OJForStatement("edge", TinkerGenerationUtil.edgePathName, "iter");
+        OJForStatement forIter = new OJForStatement("edge", UmlgGenerationUtil.edgePathName, "iter");
         forIter.getBody().addToStatements(classPathName.getLast() + " instance = GraphDb.getDb().instantiateClassifier(edge.getVertex(Direction.IN).getId())");
         OJIfStatement ifFilter = new OJIfStatement("filter.filter(instance)");
         ifFilter.addToThenPart("result.add(instance)");
@@ -155,16 +155,16 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<Class> {
         allInstances.getBody().addToStatements(forIter);
         allInstances.getBody().addToStatements("return result");
 
-        metaClass.addToImports(TinkerGenerationUtil.UMLG_NODE);
-//        metaClass.addToImports(TinkerGenerationUtil.UmlgIdUtilFactoryPathName);
+        metaClass.addToImports(UmlgGenerationUtil.UMLG_NODE);
+//        metaClass.addToImports(UmlgGenerationUtil.UmlgIdUtilFactoryPathName);
 
         metaClass.addToOperations(allInstances);
     }
 
     private void addGetEdgeToRootLabel(OJAnnotatedClass metaClass, Class clazz) {
         OJAnnotatedOperation getEdgeToRootLabel = new OJAnnotatedOperation("getEdgeToRootLabel", new OJPathName("String"));
-        getEdgeToRootLabel.getBody().addToStatements("return " + TinkerGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() + ".getUmlgLabelConverter().convert(\"" + TinkerGenerationUtil.getEdgeToRootLabelStrategyMeta(clazz) + "\")");
-        metaClass.addToImports(TinkerGenerationUtil.UmlgLabelConverterFactoryPathName);
+        getEdgeToRootLabel.getBody().addToStatements("return " + UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() + ".getUmlgLabelConverter().convert(\"" + UmlgGenerationUtil.getEdgeToRootLabelStrategyMeta(clazz) + "\")");
+        metaClass.addToImports(UmlgGenerationUtil.UmlgLabelConverterFactoryPathName);
         metaClass.addToOperations(getEdgeToRootLabel);
     }
 
@@ -177,12 +177,12 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<Class> {
         OJField result = new OJField("result", metaClass.getPathName());
         INSTANCE.getBody().addToLocals(result);
 
-        INSTANCE.getBody().addToStatements("Iterator<Edge> iter = " + TinkerGenerationUtil.graphDbAccess + ".getRoot().getEdges(Direction.OUT, " + TinkerGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() + ".getUmlgLabelConverter().convert(\"" + TinkerGenerationUtil.getEdgeToRootLabelStrategyMeta(clazz) + "\")).iterator()");
+        INSTANCE.getBody().addToStatements("Iterator<Edge> iter = " + UmlgGenerationUtil.graphDbAccess + ".getRoot().getEdges(Direction.OUT, " + UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() + ".getUmlgLabelConverter().convert(\"" + UmlgGenerationUtil.getEdgeToRootLabelStrategyMeta(clazz) + "\")).iterator()");
         OJIfStatement ifHasNext = new OJIfStatement("iter.hasNext()");
-        ifHasNext.addToThenPart("result =  new " + TumlClassOperations.getMetaClassName(clazz) + "(iter.next().getVertex(Direction.IN))");
+        ifHasNext.addToThenPart("result =  new " + UmlgClassOperations.getMetaClassName(clazz) + "(iter.next().getVertex(Direction.IN))");
         INSTANCE.getBody().addToStatements(ifHasNext);
 
-        ifHasNext.addToElsePart("iter = " + TinkerGenerationUtil.graphDbAccess + ".getRoot().getEdges(Direction.OUT, " + TinkerGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() + ".getUmlgLabelConverter().convert(\"" + TinkerGenerationUtil.getEdgeToRootLabelStrategyMeta(clazz) + "\")).iterator()");
+        ifHasNext.addToElsePart("iter = " + UmlgGenerationUtil.graphDbAccess + ".getRoot().getEdges(Direction.OUT, " + UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() + ".getUmlgLabelConverter().convert(\"" + UmlgGenerationUtil.getEdgeToRootLabelStrategyMeta(clazz) + "\")).iterator()");
 
         OJIfStatement ifIter2 = new OJIfStatement("!iter.hasNext()");
         ifIter2.addToThenPart("result = new " + metaClass.getName() + "()");
@@ -196,7 +196,7 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<Class> {
         metaClass.addToImports("com.tinkerpop.blueprints.Direction");
         metaClass.addToImports("com.tinkerpop.blueprints.Direction");
         metaClass.addToImports("com.tinkerpop.blueprints.Edge");
-        metaClass.addToImports(TinkerGenerationUtil.graphDbPathName);
+        metaClass.addToImports(UmlgGenerationUtil.graphDbPathName);
 
     }
 
@@ -204,22 +204,22 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<Class> {
     protected void addContructorWithVertex(OJAnnotatedClass ojClass, Class clazz) {
         OJConstructor constructor = new OJConstructor();
         constructor.setVisibility(OJVisibilityKindGEN.PUBLIC);
-        constructor.addParam("vertex", TinkerGenerationUtil.vertexPathName);
+        constructor.addParam("vertex", UmlgGenerationUtil.vertexPathName);
         constructor.getBody().addToStatements("super(vertex)");
-        constructor.getBody().addToStatements(TinkerGenerationUtil.transactionThreadMetaNodeVar.getLast() + ".setNewEntity(this)");
-        constructor.getBody().addToStatements(TinkerGenerationUtil.transactionThreadEntityVar.getLast() + ".remove(this)");
-        ojClass.addToImports(TinkerGenerationUtil.transactionThreadMetaNodeVar);
+        constructor.getBody().addToStatements(UmlgGenerationUtil.transactionThreadMetaNodeVar.getLast() + ".setNewEntity(this)");
+        constructor.getBody().addToStatements(UmlgGenerationUtil.transactionThreadEntityVar.getLast() + ".remove(this)");
+        ojClass.addToImports(UmlgGenerationUtil.transactionThreadMetaNodeVar);
         ojClass.addToConstructors(constructor);
     }
 
     private void addAndImplementUmlgLibNodeOnOriginalClass(OJAnnotatedClass annotatedClass, Class clazz, OJPathName metaClassPathName) {
         OJAnnotatedOperation getMetaNode = new OJAnnotatedOperation("getMetaNode");
-        getMetaNode.setReturnType(TinkerGenerationUtil.TumlMetaNode);
+        getMetaNode.setReturnType(UmlgGenerationUtil.UmlgMetaNode);
         annotatedClass.addToOperations(getMetaNode);
         getMetaNode.setAbstract(clazz.isAbstract());
         if (!clazz.isAbstract()) {
             annotatedClass.addToImports(metaClassPathName);
-            getMetaNode.getBody().addToStatements("return " + TumlClassOperations.getMetaClassName(clazz) + ".getInstance()");
+            getMetaNode.getBody().addToStatements("return " + UmlgClassOperations.getMetaClassName(clazz) + ".getInstance()");
         }
     }
 
@@ -228,20 +228,20 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<Class> {
     }
 
     private void addImplementsTumlMetaNode(OJAnnotatedClass annotatedClass) {
-        annotatedClass.addToImplementedInterfaces(TinkerGenerationUtil.TumlMetaNode);
+        annotatedClass.addToImplementedInterfaces(UmlgGenerationUtil.UmlgMetaNode);
     }
 
     private void addDefaultConstructor(OJAnnotatedClass annotatedClass, Class clazz) {
         annotatedClass.getDefaultConstructor().setVisibility(OJVisibilityKind.PRIVATE);
         annotatedClass.getDefaultConstructor().getBody().addToStatements("super(true)");
         annotatedClass.getDefaultConstructor().setVisibility(OJVisibilityKind.PRIVATE);
-        annotatedClass.getDefaultConstructor().getBody().addToStatements(TinkerGenerationUtil.transactionThreadEntityVar.getLast() + ".remove(this)");
-        annotatedClass.addToImports(TinkerGenerationUtil.transactionThreadEntityVar);
+        annotatedClass.getDefaultConstructor().getBody().addToStatements(UmlgGenerationUtil.transactionThreadEntityVar.getLast() + ".remove(this)");
+        annotatedClass.addToImports(UmlgGenerationUtil.transactionThreadEntityVar);
     }
 
     private void addGetHighId(Class clazz, OJAnnotatedClass metaClass) {
         OJAnnotatedOperation getIdHigh = new OJAnnotatedOperation("getIdHigh", new OJPathName("java.lang.Long"));
-        TinkerGenerationUtil.addOverrideAnnotation(getIdHigh);
+        UmlgGenerationUtil.addOverrideAnnotation(getIdHigh);
         getIdHigh.getBody().addToStatements("return this.vertex.getProperty(\"highId\")");
         metaClass.addToOperations(getIdHigh);
     }

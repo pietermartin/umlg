@@ -33,7 +33,7 @@ import org.umlg.tinker.qualifiertest.TestQualifiedDeletion;
 import org.umlg.tinker.qualifiertest.TestQualifier;
 import org.umlg.tinker.qualifiertest.TestQualifierOnManyToMany;
 import org.umlg.tinker.query.TestMetaQueries;
-import org.umlg.tinker.query.TestQueryBaseModelTumlAssociation;
+import org.umlg.tinker.query.TestQueryBaseModelUmlgAssociation;
 import org.umlg.tinker.ringtest.TestFingerRing;
 import org.umlg.tinker.speed.SpeedTest;
 import org.umlg.tinker.subsetting.TestSubsetting;
@@ -89,7 +89,7 @@ import org.umlg.tinker.validationtest.TestValidation;
         //Fails::TestQualifierChangeEvent.class,
         TestQualifierOnManyToMany.class,
         TestMetaQueries.class,
-        TestQueryBaseModelTumlAssociation.class,
+        TestQueryBaseModelUmlgAssociation.class,
         TestFingerRing.class,
         SpeedTest.class,
         TestValidation.class,

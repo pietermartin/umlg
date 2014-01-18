@@ -12,10 +12,9 @@ import org.umlg.java.metamodel.annotation.OJAnnotatedInterface;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
-import org.umlg.javageneration.ocl.TumlOcl2Java;
+import org.umlg.javageneration.ocl.UmlgOcl2Java;
 import org.umlg.javageneration.util.PropertyWrapper;
-import org.umlg.javageneration.util.TumlClassOperations;
-import org.umlg.javageneration.util.TumlPropertyOperations;
+import org.umlg.javageneration.util.UmlgClassOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
 import org.umlg.javageneration.visitor.clazz.ClassBuilder;
 import org.umlg.ocl.UmlgOcl2Parser;
@@ -50,7 +49,7 @@ public class PropertyVisitor extends BaseVisitor implements Visitor<Property> {
         OJAnnotatedOperation initVariables;
         if (owner instanceof OJAnnotatedInterface) {
             Interface inf = (Interface) propertyWrapper.getOwner();
-            Set<Classifier> concreteClassifiers = TumlClassOperations.getConcreteRealization(inf);
+            Set<Classifier> concreteClassifiers = UmlgClassOperations.getConcreteRealization(inf);
             for (Classifier concreteClassifier : concreteClassifiers) {
                 OJAnnotatedClass infOwner = findOJClass(concreteClassifier);
                 initVariables = infOwner.findOperation(ClassBuilder.INIT_VARIABLES);
@@ -69,7 +68,7 @@ public class PropertyVisitor extends BaseVisitor implements Visitor<Property> {
             initVariables.setComment(String.format("Implements the ocl statement for initialization variable '%s'\n<pre>\n%s\n</pre>", propertyWrapper.getName(), ocl));
             logger.info(String.format("About to parse ocl expression \n%s", new Object[]{ocl}));
             OCLExpression<Classifier> constraint = UmlgOcl2Parser.INSTANCE.parseOcl(ocl);
-            java = TumlOcl2Java.oclToJava(owner, constraint);
+            java = UmlgOcl2Java.oclToJava(owner, constraint);
             if (propertyWrapper.isMany()) {
                 //This is used in the initial value
                 owner.addToImports("java.util.Arrays");

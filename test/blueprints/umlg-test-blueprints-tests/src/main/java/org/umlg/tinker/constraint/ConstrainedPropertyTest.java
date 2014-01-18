@@ -6,7 +6,7 @@ import org.umlg.constraints.ConstraintChild1;
 import org.umlg.constraints.ConstraintChild2;
 import org.umlg.constraints.ConstraintRoot;
 import org.umlg.runtime.test.BaseLocalDbTest;
-import org.umlg.runtime.validation.TumlConstraintViolationException;
+import org.umlg.runtime.validation.UmlgConstraintViolationException;
 
 /**
  * Date: 2013/03/10
@@ -14,7 +14,7 @@ import org.umlg.runtime.validation.TumlConstraintViolationException;
  */
 public class ConstrainedPropertyTest extends BaseLocalDbTest {
 
-    @Test(expected = TumlConstraintViolationException.class)
+    @Test(expected = UmlgConstraintViolationException.class)
     public void testConstraintedPropertyFail() {
         God g = new God(true);
         g.setName("g");
@@ -60,7 +60,7 @@ public class ConstrainedPropertyTest extends BaseLocalDbTest {
         db.commit();
     }
 
-    @Test(expected = TumlConstraintViolationException.class)
+    @Test(expected = UmlgConstraintViolationException.class)
     public void testAssociationOnePropertyFail() {
         ConstraintRoot constraintRoot1 = new ConstraintRoot(true);
         constraintRoot1.setName("constraintRoot");

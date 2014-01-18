@@ -5,8 +5,8 @@ import com.google.common.collect.Multiset;
 import org.umlg.runtime.collection.TinkerBag;
 import org.umlg.runtime.collection.TinkerCollection;
 import org.umlg.runtime.collection.TinkerSet;
-import org.umlg.runtime.collection.memory.TumlMemoryBag;
-import org.umlg.runtime.collection.memory.TumlMemorySet;
+import org.umlg.runtime.collection.memory.UmlgMemoryBag;
+import org.umlg.runtime.collection.memory.UmlgMemorySet;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -38,7 +38,7 @@ public class OclStdLibBagImpl<E> extends OclStdLibCollectionImpl<E> implements T
     //Important that the result, self and bag must be the union
 	@Override
 	public TinkerBag<E> union(TinkerBag<E> bag) {
-        TinkerBag<E> copy = new TumlMemoryBag<E>();
+        TinkerBag<E> copy = new UmlgMemoryBag<E>();
         Iterator<E> iter = iterator();
         while (iter.hasNext()) {
             copy.add(iter.next());
@@ -55,7 +55,7 @@ public class OclStdLibBagImpl<E> extends OclStdLibCollectionImpl<E> implements T
 
 	@Override
 	public TinkerBag<E> union(TinkerSet<E> set) {
-        TinkerBag<E> result = new TumlMemoryBag<E>(this);
+        TinkerBag<E> result = new UmlgMemoryBag<E>(this);
         for (E e : set) {
             result.add(e);
         }
@@ -64,7 +64,7 @@ public class OclStdLibBagImpl<E> extends OclStdLibCollectionImpl<E> implements T
 
 	@Override
 	public TinkerBag<E> intersection(TinkerBag<E> bag) {
-        TinkerBag<E> result = new TumlMemoryBag<E>();
+        TinkerBag<E> result = new UmlgMemoryBag<E>();
         for (E e : bag) {
             if (contains(e)) {
                 result.add(e);
@@ -75,7 +75,7 @@ public class OclStdLibBagImpl<E> extends OclStdLibCollectionImpl<E> implements T
 
 	@Override
 	public TinkerSet<E> intersection(TinkerSet<E> set) {
-        TinkerSet<E> result = new TumlMemorySet<E>();
+        TinkerSet<E> result = new UmlgMemorySet<E>();
         for (E e : bag) {
             if (contains(e)) {
                 result.add(e);
@@ -86,7 +86,7 @@ public class OclStdLibBagImpl<E> extends OclStdLibCollectionImpl<E> implements T
 
     @Override
     public TinkerBag<E> including(E e) {
-        TinkerBag<E> result = new TumlMemoryBag<E>(this);
+        TinkerBag<E> result = new UmlgMemoryBag<E>(this);
         if (e != null) {
             result.add(e);
         }
@@ -95,7 +95,7 @@ public class OclStdLibBagImpl<E> extends OclStdLibCollectionImpl<E> implements T
 
     @Override
     public TinkerBag<E> excluding(E e) {
-        TinkerBag<E> result = new TumlMemoryBag<E>(this);
+        TinkerBag<E> result = new UmlgMemoryBag<E>(this);
         if (e != null) {
             result.remove(e);
         }

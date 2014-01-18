@@ -17,7 +17,7 @@ import org.umlg.java.metamodel.annotation.OJEnum;
 import org.umlg.java.metamodel.annotation.OJEnumLiteral;
 import org.umlg.javageneration.util.DataTypeEnum;
 import org.umlg.javageneration.util.PropertyWrapper;
-import org.umlg.javageneration.util.TinkerGenerationUtil;
+import org.umlg.javageneration.util.UmlgGenerationUtil;
 import org.umlg.javageneration.validation.Validation;
 
 public class RuntimePropertyImplementor {
@@ -25,11 +25,11 @@ public class RuntimePropertyImplementor {
     public static OJEnum addTumlRuntimePropertyEnum(OJAnnotatedClass annotatedClass, String enumName, NamedElement className, Set<Property> allOwnedProperties,
                                                     boolean hasCompositeOwner, String modelName) {
 
-        annotatedClass.addToImports(TinkerGenerationUtil.UmlgLabelConverterFactoryPathName);
+        annotatedClass.addToImports(UmlgGenerationUtil.UmlgLabelConverterFactoryPathName);
 
         OJEnum ojEnum = new OJEnum(enumName);
         ojEnum.setStatic(true);
-        ojEnum.addToImplementedInterfaces(TinkerGenerationUtil.tumlRuntimePropertyPathName.getCopy());
+        ojEnum.addToImplementedInterfaces(UmlgGenerationUtil.umlgRuntimePropertyPathName.getCopy());
         annotatedClass.addInnerEnum(ojEnum);
 
         OJField qualifiedName = new OJField();
@@ -83,16 +83,16 @@ public class RuntimePropertyImplementor {
         ojEnum.addToFields(readOnly);
 
         OJField dataTypeEnum = new OJField();
-        dataTypeEnum.setType(TinkerGenerationUtil.DataTypeEnum);
+        dataTypeEnum.setType(UmlgGenerationUtil.DataTypeEnum);
         dataTypeEnum.setName("dataTypeEnum");
         ojEnum.addToFields(dataTypeEnum);
-        annotatedClass.addToImports(TinkerGenerationUtil.DataTypeEnum);
+        annotatedClass.addToImports(UmlgGenerationUtil.DataTypeEnum);
 
         OJField validations = new OJField();
-        validations.setType(new OJPathName("java.util.List").addToGenerics(TinkerGenerationUtil.TumlValidation));
+        validations.setType(new OJPathName("java.util.List").addToGenerics(UmlgGenerationUtil.UmlgValidation));
         validations.setName("validations");
         ojEnum.addToFields(validations);
-        annotatedClass.addToImports(TinkerGenerationUtil.TumlValidation);
+        annotatedClass.addToImports(UmlgGenerationUtil.UmlgValidation);
 
         OJField isManyPrimitiveField = new OJField();
         isManyPrimitiveField.setType(new OJPathName("boolean"));
@@ -218,7 +218,7 @@ public class RuntimePropertyImplementor {
         ojEnum.addToOperations(fromInverseQualifiedName);
 
         OJAnnotatedOperation isValid = new OJAnnotatedOperation("isValid", new OJPathName("boolean"));
-        TinkerGenerationUtil.addOverrideAnnotation(isValid);
+        UmlgGenerationUtil.addOverrideAnnotation(isValid);
         isValid.addParam("elementCount", new OJPathName("int"));
         OJIfStatement ifQualified = new OJIfStatement("isQualified()");
         ifQualified.addToThenPart("return elementCount >= getLower()");
@@ -227,7 +227,7 @@ public class RuntimePropertyImplementor {
         ojEnum.addToOperations(isValid);
 
         OJAnnotatedOperation toJson = new OJAnnotatedOperation("toJson", new OJPathName("String"));
-        TinkerGenerationUtil.addOverrideAnnotation(toJson);
+        UmlgGenerationUtil.addOverrideAnnotation(toJson);
         toJson.getBody().addToStatements("return getJson()");
         ojEnum.addToOperations(toJson);
 
@@ -273,7 +273,7 @@ public class RuntimePropertyImplementor {
                             pWrap.isEnumeration(), pWrap.isManyToOne(), pWrap.isMany(), pWrap.isControllingSide(), pWrap.isComposite(), pWrap.isInverseComposite(),
                             pWrap.isOneToOne(), pWrap.isOneToMany(), pWrap.isManyToMany(), pWrap.getUpper(), pWrap.getLower(), inverseUpper, pWrap.isQualified(),
                             pWrap.isInverseQualified(), pWrap.isOrdered(), pWrap.isInverseOrdered(), pWrap.isUnique(), pWrap.isInverseUnique(),
-                            TinkerGenerationUtil.getEdgeName(pWrap.getProperty())
+                            UmlgGenerationUtil.getEdgeName(pWrap.getProperty())
                     );
                 } else {
                     //This is for properties of the association class itself
@@ -291,7 +291,7 @@ public class RuntimePropertyImplementor {
                                 /*composite*/true, /*inverseComposite*/true, /*oneToOne*/pWrap.isACOneToOne(), /*oneToMany*/pWrap.isACOneToMany(),
                                 /*manyToMany*/pWrap.isACManyToMany(), /*upper*/1, /*lower*/1, inverseUpper, pWrap.isQualified(),
                                 pWrap.isInverseQualified(), pWrap.isOrdered(), pWrap.isInverseOrdered(), pWrap.isACUnique(), pWrap.isInverseUnique(),
-                                TinkerGenerationUtil.getEdgeName(pWrap.getProperty()) + "_" + pWrap.getName() + "_AC"
+                                UmlgGenerationUtil.getEdgeName(pWrap.getProperty()) + "_" + pWrap.getName() + "_AC"
                         );
                     } else {
                         addEnumLiteral(
@@ -305,7 +305,7 @@ public class RuntimePropertyImplementor {
                                 pWrap.isEnumeration(), pWrap.isManyToOne(), pWrap.isMany(), pWrap.isControllingSide(), pWrap.isComposite(), pWrap.isInverseComposite(),
                                 pWrap.isOneToOne(), pWrap.isOneToMany(), pWrap.isManyToMany(), pWrap.getUpper(), pWrap.getLower(), inverseUpper, pWrap.isQualified(),
                                 pWrap.isInverseQualified(), pWrap.isOrdered(), pWrap.isInverseOrdered(), pWrap.isUnique(), pWrap.isInverseUnique(),
-                                TinkerGenerationUtil.getEdgeName(pWrap.getProperty())
+                                UmlgGenerationUtil.getEdgeName(pWrap.getProperty())
                         );
                     }
                 }
@@ -323,7 +323,7 @@ public class RuntimePropertyImplementor {
                             pWrap.isEnumeration(), pWrap.isManyToOne(), pWrap.isMany(), pWrap.isControllingSide(), pWrap.isComposite(), pWrap.isInverseComposite(),
                             pWrap.isOneToOne(), pWrap.isOneToMany(), pWrap.isManyToMany(), pWrap.getUpper(), pWrap.getLower(), inverseUpper, pWrap.isQualified(),
                             pWrap.isInverseQualified(), pWrap.isOrdered(), pWrap.isInverseOrdered(), pWrap.isUnique(), pWrap.isInverseUnique(),
-                            TinkerGenerationUtil.getEdgeName(pWrap.getProperty()) + "_AC");
+                            UmlgGenerationUtil.getEdgeName(pWrap.getProperty()) + "_AC");
                 }
             }
         }
@@ -452,7 +452,7 @@ public class RuntimePropertyImplementor {
 
         OJField propertyDataTypeEnumField = new OJField();
         propertyDataTypeEnumField.setName("dataTypeEnum");
-        propertyDataTypeEnumField.setType(TinkerGenerationUtil.DataTypeEnum);
+        propertyDataTypeEnumField.setType(UmlgGenerationUtil.DataTypeEnum);
         if (dataTypeEnum != null) {
             propertyDataTypeEnumField.setInitExp(dataTypeEnum.getInitExpression());
         } else {
@@ -469,11 +469,11 @@ public class RuntimePropertyImplementor {
             ojEnum.addToImports(validation.getPathName());
         }
         if (validations.isEmpty()) {
-            propertyValidationsField.setInitExp("Collections.<TumlValidation>emptyList()");
+            propertyValidationsField.setInitExp("Collections.<UmlgValidation>emptyList()");
             ojEnum.addToImports("java.util.Collections");
         } else {
             ojEnum.addToImports(new OJPathName("java.util.Arrays"));
-            propertyValidationsField.setInitExp("Arrays.<TumlValidation>asList(" + sb1.toString() + ")");
+            propertyValidationsField.setInitExp("Arrays.<UmlgValidation>asList(" + sb1.toString() + ")");
         }
         ojLiteral.addToAttributeValues(propertyValidationsField);
 
@@ -518,7 +518,7 @@ public class RuntimePropertyImplementor {
         OJField propertyLabelField = new OJField();
         propertyLabelField.setName("label");
         propertyLabelField.setType(new OJPathName("String"));
-        propertyLabelField.setInitExp(TinkerGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() + ".getUmlgLabelConverter().convert(\"" + edgeName + "\")");
+        propertyLabelField.setInitExp(UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() + ".getUmlgLabelConverter().convert(\"" + edgeName + "\")");
         ojLiteral.addToAttributeValues(propertyLabelField);
 
         OJField isOneToOneAttribute = new OJField();

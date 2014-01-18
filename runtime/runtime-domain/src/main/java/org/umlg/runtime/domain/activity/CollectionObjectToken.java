@@ -4,14 +4,14 @@ import com.tinkerpop.blueprints.Vertex;
 import org.umlg.runtime.adaptor.GraphDb;
 import org.umlg.runtime.collection.Qualifier;
 import org.umlg.runtime.collection.TinkerSet;
-import org.umlg.runtime.collection.TumlRuntimeProperty;
+import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.collection.persistent.BaseCollection;
 import org.umlg.runtime.collection.persistent.TinkerSequenceImpl;
 import org.umlg.runtime.domain.CompositionNode;
-import org.umlg.runtime.domain.TumlMetaNode;
+import org.umlg.runtime.domain.UmlgMetaNode;
 import org.umlg.runtime.domain.UmlgNode;
 import org.umlg.runtime.domain.ocl.OclState;
-import org.umlg.runtime.validation.TumlConstraintViolation;
+import org.umlg.runtime.validation.UmlgConstraintViolation;
 
 import java.util.Collection;
 import java.util.List;
@@ -25,12 +25,12 @@ public class CollectionObjectToken<O> extends ObjectToken<O> implements Composit
 
 	public CollectionObjectToken(Vertex vertex) {
 		super(vertex);
-		this.elements = new TinkerSequenceImpl<O>(this, new TumlRuntimePropertyImpl());
+		this.elements = new TinkerSequenceImpl<O>(this, new UmlgRuntimePropertyImpl());
 	}
 
 	public CollectionObjectToken(String edgeName, Collection<O> collection) {
 		super(edgeName);
-		this.elements = new TinkerSequenceImpl<O>(this, new TumlRuntimePropertyImpl());
+		this.elements = new TinkerSequenceImpl<O>(this, new UmlgRuntimePropertyImpl());
 		addCollection(collection);
 	}
 
@@ -126,7 +126,7 @@ public class CollectionObjectToken<O> extends ObjectToken<O> implements Composit
     }
 
     @Override
-    public TumlMetaNode getMetaNode() {
+    public UmlgMetaNode getMetaNode() {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
@@ -138,13 +138,13 @@ public class CollectionObjectToken<O> extends ObjectToken<O> implements Composit
 	}
 
 	@Override
-	public void initialiseProperty(TumlRuntimeProperty tumlRuntimeProperty, boolean inverse) {
+	public void initialiseProperty(UmlgRuntimeProperty umlgRuntimeProperty, boolean inverse) {
 		// TODO Implement
 		throw new RuntimeException("Not implemented");
 	}
 
     @Override
-    public TumlRuntimeProperty inverseAdder(TumlRuntimeProperty tumlRuntimeProperty, boolean inverse, UmlgNode umlgNode) {
+    public UmlgRuntimeProperty inverseAdder(UmlgRuntimeProperty umlgRuntimeProperty, boolean inverse, UmlgNode umlgNode) {
         //To change body of implemented methods use File | Settings | File Templates.
         return null;
     }
@@ -155,13 +155,13 @@ public class CollectionObjectToken<O> extends ObjectToken<O> implements Composit
     }
 
     @Override
-	public List<Qualifier> getQualifiers(TumlRuntimeProperty tumlRuntimeProperty, UmlgNode node, boolean inverse) {
+	public List<Qualifier> getQualifiers(UmlgRuntimeProperty umlgRuntimeProperty, UmlgNode node, boolean inverse) {
 		// TODO Implement
 		throw new RuntimeException("Not implemented");
 	}
 
 	@Override
-	public int getSize(TumlRuntimeProperty tumlRuntimeProperty) {
+	public int getSize(UmlgRuntimeProperty umlgRuntimeProperty) {
 		// TODO Implement
 		throw new RuntimeException("Not implemented");
 	}
@@ -267,12 +267,12 @@ public class CollectionObjectToken<O> extends ObjectToken<O> implements Composit
 	}
 
     @Override
-    public List<TumlConstraintViolation> validateMultiplicities() {
+    public List<UmlgConstraintViolation> validateMultiplicities() {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    public List<TumlConstraintViolation> checkClassConstraints() {
+    public List<UmlgConstraintViolation> checkClassConstraints() {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 

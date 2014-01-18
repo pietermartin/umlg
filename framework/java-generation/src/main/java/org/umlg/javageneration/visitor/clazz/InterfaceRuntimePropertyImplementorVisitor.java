@@ -4,8 +4,8 @@ import org.eclipse.uml2.uml.Interface;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
-import org.umlg.javageneration.util.TumlClassOperations;
-import org.umlg.javageneration.util.TumlInterfaceOperations;
+import org.umlg.javageneration.util.UmlgClassOperations;
+import org.umlg.javageneration.util.UmlgInterfaceOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
 
 public class InterfaceRuntimePropertyImplementorVisitor extends BaseVisitor implements Visitor<Interface> {
@@ -19,8 +19,8 @@ public class InterfaceRuntimePropertyImplementorVisitor extends BaseVisitor impl
 		OJAnnotatedClass annotatedClass = findOJClass(inf);
 		// addTumlRuntimePropertyEnum(annotatedClass, inf);
 
-		RuntimePropertyImplementor.addTumlRuntimePropertyEnum(annotatedClass, TumlClassOperations.propertyEnumName(inf), inf,
-				TumlInterfaceOperations.getAllProperties(inf), TumlInterfaceOperations.hasCompositeOwner(inf), inf.getModel().getName());
+		RuntimePropertyImplementor.addTumlRuntimePropertyEnum(annotatedClass, UmlgClassOperations.propertyEnumName(inf), inf,
+				UmlgInterfaceOperations.getAllProperties(inf), UmlgInterfaceOperations.hasCompositeOwner(inf), inf.getModel().getName());
 
 	}
 

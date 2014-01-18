@@ -1,6 +1,6 @@
 package org.umlg.runtime.domain;
 
-import org.umlg.runtime.collection.TumlRuntimeProperty;
+import org.umlg.runtime.collection.UmlgRuntimeProperty;
 
 /**
  * Date: 2013/06/20
@@ -8,6 +8,6 @@ import org.umlg.runtime.collection.TumlRuntimeProperty;
  */
 public interface AssociationClassNode extends CompositionNode {
 
-    TumlRuntimeProperty internalAdder(TumlRuntimeProperty tumlRuntimeProperty, boolean inverse, UmlgNode umlgNode);
+    UmlgRuntimeProperty internalAdder(UmlgRuntimeProperty umlgRuntimeProperty, boolean inverse, UmlgNode umlgNode);
 
 }

@@ -8,8 +8,8 @@ import org.umlg.generation.Workspace;
 import org.umlg.java.metamodel.*;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
-import org.umlg.javageneration.util.TinkerGenerationUtil;
-import org.umlg.javageneration.util.TumlClassOperations;
+import org.umlg.javageneration.util.UmlgGenerationUtil;
+import org.umlg.javageneration.util.UmlgClassOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
 
 /**
@@ -26,11 +26,11 @@ public class QualifiedNameClassMapCreator extends BaseVisitor implements Visitor
     @Override
     @VisitSubclasses({Class.class, AssociationClass.class})
     public void visitBefore(org.eclipse.uml2.uml.Class clazz) {
-        OJAnnotatedClass schemaMapImpl = this.workspace.findOJClass(TinkerGenerationUtil.UmlgSchemaMapImpl.toJavaString());
+        OJAnnotatedClass schemaMapImpl = this.workspace.findOJClass(UmlgGenerationUtil.UmlgSchemaMapImpl.toJavaString());
         if (schemaMapImpl == null) {
-            schemaMapImpl = new OJAnnotatedClass(TinkerGenerationUtil.UmlgSchemaMapImpl.getLast());
-            schemaMapImpl.addToImplementedInterfaces(TinkerGenerationUtil.UmlgSchemaMap);
-            OJPackage ojPackage = new OJPackage(TinkerGenerationUtil.UmlgAdaptorPackage.toJavaString());
+            schemaMapImpl = new OJAnnotatedClass(UmlgGenerationUtil.UmlgSchemaMapImpl.getLast());
+            schemaMapImpl.addToImplementedInterfaces(UmlgGenerationUtil.UmlgSchemaMap);
+            OJPackage ojPackage = new OJPackage(UmlgGenerationUtil.UmlgAdaptorPackage.toJavaString());
             schemaMapImpl.setMyPackage(ojPackage);
             addToSource(schemaMapImpl);
 
@@ -40,14 +40,14 @@ public class QualifiedNameClassMapCreator extends BaseVisitor implements Visitor
             OJConstructor constructor = addPrivateConstructor(schemaMapImpl);
             constructor.getBody().addToStatements("addAllEntries()");
             addGetForQualifiedName(schemaMapImpl);
-            schemaMapImpl.addToImports(TinkerGenerationUtil.UMLG_NODE);
+            schemaMapImpl.addToImports(UmlgGenerationUtil.UMLG_NODE);
             addGetInstance(schemaMapImpl);
         }
         addEntries(schemaMapImpl, clazz);
     }
 
     private void addGetInstance(OJAnnotatedClass schemaMapImpl) {
-        OJAnnotatedOperation getInstance = new OJAnnotatedOperation("getInstance", TinkerGenerationUtil.UmlgSchemaMap);
+        OJAnnotatedOperation getInstance = new OJAnnotatedOperation("getInstance", UmlgGenerationUtil.UmlgSchemaMap);
         getInstance.setStatic(true);
         getInstance.getBody().addToStatements("return INSTANCE");
         schemaMapImpl.addToOperations(getInstance);
@@ -62,10 +62,10 @@ public class QualifiedNameClassMapCreator extends BaseVisitor implements Visitor
     }
 
     private void addMap(OJAnnotatedClass globalMap) {
-        OJField map = new OJField(TinkerGenerationUtil.QualifiedNameClassMapName, new OJPathName("java.util.Map").addToGenerics("String").addToGenerics(
-                "Class<? extends " + TinkerGenerationUtil.UMLG_NODE.getLast() + ">"));
+        OJField map = new OJField(UmlgGenerationUtil.QualifiedNameClassMapName, new OJPathName("java.util.Map").addToGenerics("String").addToGenerics(
+                "Class<? extends " + UmlgGenerationUtil.UMLG_NODE.getLast() + ">"));
         map.setVisibility(OJVisibilityKind.PRIVATE);
-        map.setInitExp("new HashMap<String, Class<? extends " + TinkerGenerationUtil.UMLG_NODE.getLast() + ">>()");
+        map.setInitExp("new HashMap<String, Class<? extends " + UmlgGenerationUtil.UMLG_NODE.getLast() + ">>()");
         globalMap.addToImports(new OJPathName("java.util.HashMap"));
         globalMap.addToImports(new OJPathName("java.util.Map"));
         globalMap.addToFields(map);
@@ -86,17 +86,17 @@ public class QualifiedNameClassMapCreator extends BaseVisitor implements Visitor
     }
 
     private void addGetForQualifiedName(OJAnnotatedClass globalMap) {
-        OJAnnotatedOperation get = new OJAnnotatedOperation("get", new OJPathName("<T extends " + TinkerGenerationUtil.UMLG_NODE.getLast() + "> Class<T>"));
+        OJAnnotatedOperation get = new OJAnnotatedOperation("get", new OJPathName("<T extends " + UmlgGenerationUtil.UMLG_NODE.getLast() + "> Class<T>"));
         get.addParam("qualifiedName", "String");
-        get.getBody().addToStatements("return (Class<T>)this." + TinkerGenerationUtil.QualifiedNameClassMapName + ".get(qualifiedName)");
+        get.getBody().addToStatements("return (Class<T>)this." + UmlgGenerationUtil.QualifiedNameClassMapName + ".get(qualifiedName)");
         globalMap.addToOperations(get);
     }
 
     private void addEntries(OJAnnotatedClass globalMap, org.eclipse.uml2.uml.Class clazz) {
         OJAnnotatedOperation addAllEntries = globalMap.findOperation("addAllEntries");
-        addAllEntries.getBody().addToStatements("this." + TinkerGenerationUtil.QualifiedNameClassMapName + ".put(\"" + clazz.getQualifiedName() +
-                "\", " + TumlClassOperations.className(clazz) + ".class)");
-        globalMap.addToImports(TumlClassOperations.getPathName(clazz));
+        addAllEntries.getBody().addToStatements("this." + UmlgGenerationUtil.QualifiedNameClassMapName + ".put(\"" + clazz.getQualifiedName() +
+                "\", " + UmlgClassOperations.className(clazz) + ".class)");
+        globalMap.addToImports(UmlgClassOperations.getPathName(clazz));
     }
 
     @Override

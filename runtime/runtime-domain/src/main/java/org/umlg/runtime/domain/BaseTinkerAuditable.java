@@ -2,7 +2,7 @@ package org.umlg.runtime.domain;
 
 import org.joda.time.DateTime;
 import org.umlg.runtime.adaptor.TransactionThreadVar;
-import org.umlg.runtime.util.TumlFormatter;
+import org.umlg.runtime.util.UmlgFormatter;
 
 import java.io.Serializable;
 
@@ -19,7 +19,7 @@ public abstract class BaseTinkerAuditable extends BaseUmlgAudit implements Tinke
 		if ( TransactionThreadVar.hasNoAuditEntry(getClass().getName() + getUid()) ) {
 			createAuditVertex(false);
 		}
-		getAuditVertex().setProperty("deletedOn", TumlFormatter.format(deletedOn));
+		getAuditVertex().setProperty("deletedOn", UmlgFormatter.format(deletedOn));
 
 	}
 

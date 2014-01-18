@@ -119,13 +119,13 @@ public class UmlgTitanGraph extends StandardTitanGraph implements UmlgGraph {
         switch (umlgQueryEnum) {
             case OCL:
                 try {
-                    Class<?> tumlOclExecutor = Class.forName("org.umlg.ocl.TumlOclExecutor");
-                    Method method = tumlOclExecutor.getMethod("executeOclQueryToJson", String.class, UmlgNode.class, String.class);
+                    Class<?> umlgOclExecutor = Class.forName("org.umlg.ocl.UmlgOclExecutor");
+                    Method method = umlgOclExecutor.getMethod("executeOclQueryToJson", String.class, UmlgNode.class, String.class);
                     UmlgNode context = (UmlgNode) GraphDb.getDb().instantiateClassifier(contextId);
                     String json = (String) method.invoke(null, context.getQualifiedName(), context, query);
                     return json;
                 } catch (ClassNotFoundException e) {
-                    throw new RuntimeException("TumlOclExecutor is not on the class path.");
+                    throw new RuntimeException("UmlgOclExecutor is not on the class path.");
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }

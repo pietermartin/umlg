@@ -7,7 +7,7 @@ import org.eclipse.ocl.expressions.Variable;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Parameter;
 import org.umlg.javageneration.ocl.visitor.HandleIterateExp;
-import org.umlg.javageneration.util.TumlClassOperations;
+import org.umlg.javageneration.util.UmlgClassOperations;
 
 public class OclIterateExpToJava implements HandleIterateExp {
 
@@ -21,9 +21,9 @@ public class OclIterateExpToJava implements HandleIterateExp {
 		}
 		
 		String resultVariableName = callExp.getResult().getName();
-		String resultType = TumlClassOperations.className(callExp.getResult().getType());
+		String resultType = UmlgClassOperations.className(callExp.getResult().getType());
 		Variable<Classifier, Parameter> variable = callExp.getIterator().get(0);
-		String variableType = TumlClassOperations.className(variable.getType());
+		String variableType = UmlgClassOperations.className(variable.getType());
 		String iterVariableName = variable.getName();
 		StringBuilder result = new StringBuilder(sourceResult);
 		result.append(".iterate(");

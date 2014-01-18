@@ -8,9 +8,8 @@ import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.java.metamodel.annotation.OJEnum;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
-import org.umlg.javageneration.util.Namer;
 import org.umlg.javageneration.visitor.BaseVisitor;
-import org.umlg.restlet.util.TumlRestletGenerationUtil;
+import org.umlg.restlet.util.UmlgRestletGenerationUtil;
 
 public class RestletRouterEnumGenerator extends BaseVisitor implements Visitor<Model> {
 
@@ -20,8 +19,8 @@ public class RestletRouterEnumGenerator extends BaseVisitor implements Visitor<M
 
 	@Override
 	public void visitBefore(Model element) {
-		OJEnum restletRouterEnum = new OJEnum(TumlRestletGenerationUtil.RestletRouterEnum.getLast());
-		OJPackage ojPackage = new OJPackage(TumlRestletGenerationUtil.UmlgBasePath.toJavaString());
+		OJEnum restletRouterEnum = new OJEnum(UmlgRestletGenerationUtil.RestletRouterEnum.getLast());
+		OJPackage ojPackage = new OJPackage(UmlgRestletGenerationUtil.UmlgBasePath.toJavaString());
 		restletRouterEnum.setMyPackage(ojPackage);
 		addToSource(restletRouterEnum);
 		
@@ -39,13 +38,13 @@ public class RestletRouterEnumGenerator extends BaseVisitor implements Visitor<M
 		restletRouterEnum.createConstructorFromFields();
 		
 		OJAnnotatedOperation attach = new OJAnnotatedOperation("attach");
-		attach.addParam("router", TumlRestletGenerationUtil.Router);
+		attach.addParam("router", UmlgRestletGenerationUtil.Router);
 		attach.getBody().addToStatements("router.attach(uri, serverResource)");
 		restletRouterEnum.addToOperations(attach);
 		
 		OJAnnotatedOperation attachAll = new OJAnnotatedOperation("attachAll");
 		attachAll.setStatic(true);
-		attachAll.addParam("router", TumlRestletGenerationUtil.Router);
+		attachAll.addParam("router", UmlgRestletGenerationUtil.Router);
 		restletRouterEnum.addToOperations(attachAll);
 	}
 

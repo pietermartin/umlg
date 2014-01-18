@@ -1,9 +1,6 @@
 package org.umlg.javageneration.visitor.property;
 
 import org.eclipse.emf.common.util.BasicDiagnostic;
-import org.eclipse.ocl.expressions.OCLExpression;
-import org.eclipse.uml2.uml.Classifier;
-import org.eclipse.uml2.uml.Feature;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.internal.operations.PropertyOperations;
 import org.umlg.framework.Visitor;
@@ -11,17 +8,13 @@ import org.umlg.generation.Workspace;
 import org.umlg.java.metamodel.OJVisibilityKind;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
-import org.umlg.javageneration.ocl.TumlOcl2Java;
 import org.umlg.javageneration.util.PropertyWrapper;
-import org.umlg.javageneration.util.TinkerGenerationUtil;
-import org.umlg.javageneration.util.TumlPropertyOperations;
+import org.umlg.javageneration.util.UmlgGenerationUtil;
+import org.umlg.javageneration.util.UmlgPropertyOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
-import org.umlg.ocl.UmlgOcl2Parser;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Logger;
 
 public class RedefinitionPropertyVisitor extends BaseVisitor implements Visitor<Property> {
@@ -49,7 +42,7 @@ public class RedefinitionPropertyVisitor extends BaseVisitor implements Visitor<
                 BasicDiagnostic diagnostics = new BasicDiagnostic();
                 Map<Object, Object> context = new HashMap<Object, Object>();
                 context.put("redefiningProperty", p);
-                if (!TumlPropertyOperations.validateRedefinedPropertyInherited(redefinedProperty, diagnostics, context)) {
+                if (!UmlgPropertyOperations.validateRedefinedPropertyInherited(redefinedProperty, diagnostics, context)) {
                     throw new IllegalStateException(diagnostics.getMessage());
                 }
 
@@ -75,7 +68,7 @@ public class RedefinitionPropertyVisitor extends BaseVisitor implements Visitor<
                             getter = new OJAnnotatedOperation(redefinedPropertyWrapper.getter(), redefinedPropertyWrapper.javaTypePath());
                         }
                         getter.getBody().addToStatements(String.format("throw new IllegalStateException(\"Property %s has been redefined by %s, please invole the redefined property.\")", redefinedPropertyWrapper.getQualifiedName(), p.getQualifiedName()));
-                        TinkerGenerationUtil.addOverrideAnnotation(getter);
+                        UmlgGenerationUtil.addOverrideAnnotation(getter);
                         owner.addToOperations(getter);
                     }
                 }

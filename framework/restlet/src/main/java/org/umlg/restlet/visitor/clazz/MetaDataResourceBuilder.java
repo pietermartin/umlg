@@ -8,9 +8,9 @@ import org.umlg.generation.Workspace;
 import org.umlg.java.metamodel.*;
 import org.umlg.java.metamodel.annotation.*;
 import org.umlg.javageneration.util.Namer;
-import org.umlg.javageneration.util.TinkerGenerationUtil;
-import org.umlg.javageneration.util.TumlClassOperations;
-import org.umlg.restlet.util.TumlRestletGenerationUtil;
+import org.umlg.javageneration.util.UmlgGenerationUtil;
+import org.umlg.javageneration.util.UmlgClassOperations;
+import org.umlg.restlet.util.UmlgRestletGenerationUtil;
 
 import java.util.Set;
 
@@ -33,10 +33,10 @@ public class MetaDataResourceBuilder extends BaseServerResourceBuilder implement
             annotatedInf.setMyPackage(ojPackage);
             addToSource(annotatedInf);
             OJAnnotatedClass annotatedClass = new OJAnnotatedClass(getServerResourceMetatDataImplName(c));
-            annotatedClass.setSuperclass(TumlRestletGenerationUtil.ServerResource);
+            annotatedClass.setSuperclass(UmlgRestletGenerationUtil.ServerResource);
             annotatedClass.addToImplementedInterfaces(annotatedInf.getPathName());
             annotatedClass.setMyPackage(ojPackage);
-            annotatedClass.setVisibility(TumlClassOperations.getVisibility(c.getVisibility()));
+            annotatedClass.setVisibility(UmlgClassOperations.getVisibility(c.getVisibility()));
             addToSource(annotatedClass);
             addDefaultConstructor(annotatedClass);
             addGetRepresentation(c, annotatedInf, annotatedClass);
@@ -46,17 +46,17 @@ public class MetaDataResourceBuilder extends BaseServerResourceBuilder implement
 
     private void addGetRepresentation(Classifier clazz, OJAnnotatedInterface annotatedInf, OJAnnotatedClass annotatedClass) {
 
-        OJAnnotatedOperation getInf = new OJAnnotatedOperation("get", TumlRestletGenerationUtil.Representation);
+        OJAnnotatedOperation getInf = new OJAnnotatedOperation("get", UmlgRestletGenerationUtil.Representation);
         annotatedInf.addToOperations(getInf);
-        getInf.addAnnotationIfNew(new OJAnnotationValue(TumlRestletGenerationUtil.Get, "json"));
+        getInf.addAnnotationIfNew(new OJAnnotationValue(UmlgRestletGenerationUtil.Get, "json"));
 
-        OJAnnotatedOperation get = new OJAnnotatedOperation("get", TumlRestletGenerationUtil.Representation);
-        get.addToThrows(TumlRestletGenerationUtil.ResourceException);
-        annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
-        TinkerGenerationUtil.addOverrideAnnotation(get);
+        OJAnnotatedOperation get = new OJAnnotatedOperation("get", UmlgRestletGenerationUtil.Representation);
+        get.addToThrows(UmlgRestletGenerationUtil.ResourceException);
+        annotatedClass.addToImports(UmlgRestletGenerationUtil.ResourceException);
+        UmlgGenerationUtil.addOverrideAnnotation(get);
 
         OJTryStatement tryStatement = new OJTryStatement();
-        Set<Classifier> concreteImplementations = TumlClassOperations.getConcreteImplementations(clazz);
+        Set<Classifier> concreteImplementations = UmlgClassOperations.getConcreteImplementations(clazz);
         OJBlock block = tryStatement.getTryPart();
         block.addToStatements("StringBuilder json = new StringBuilder()");
         block.addToStatements("json.append(\"[\")");
@@ -68,37 +68,37 @@ public class MetaDataResourceBuilder extends BaseServerResourceBuilder implement
 
             block.addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + clazz.getQualifiedName() + "\\\"\")");
             block.addToStatements("json.append(\", \\\"to\\\": \")");
-            block.addToStatements("json.append(" + TumlClassOperations.propertyEnumName(classifier) + ".asJson())");
+            block.addToStatements("json.append(" + UmlgClassOperations.propertyEnumName(classifier) + ".asJson())");
             block.addToStatements("json.append(\", \\\"from\\\": \")");
-            block.addToStatements("json.append(" + TumlClassOperations.propertyEnumName(clazz) + ".asJson())");
+            block.addToStatements("json.append(" + UmlgClassOperations.propertyEnumName(clazz) + ".asJson())");
             block.addToStatements("json.append(\"} \")");
-            annotatedClass.addToImports(TumlClassOperations.getPathName(classifier).append(TumlClassOperations.propertyEnumName(classifier)));
+            annotatedClass.addToImports(UmlgClassOperations.getPathName(classifier).append(UmlgClassOperations.propertyEnumName(classifier)));
             if (count++ != concreteImplementations.size()) {
                 block.addToStatements("json.append(\"}, \")");
             }
         }
-        annotatedClass.addToImports(TumlClassOperations.getPathName(clazz).append(TumlClassOperations.propertyEnumName(clazz)));
+        annotatedClass.addToImports(UmlgClassOperations.getPathName(clazz).append(UmlgClassOperations.propertyEnumName(clazz)));
         block.addToStatements("json.append(\"}]\")");
 
-        annotatedClass.addToImports(TumlClassOperations.getPathName(clazz));
-        tryStatement.getTryPart().addToStatements("return new " + TumlRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
+        annotatedClass.addToImports(UmlgClassOperations.getPathName(clazz));
+        tryStatement.getTryPart().addToStatements("return new " + UmlgRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
 
         get.getBody().addToStatements(tryStatement);
         tryStatement.setCatchPart(null);
-        tryStatement.getFinallyPart().addToStatements(TinkerGenerationUtil.graphDbAccess + ".rollback()");
+        tryStatement.getFinallyPart().addToStatements(UmlgGenerationUtil.graphDbAccess + ".rollback()");
 
-        annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
-        annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);
+        annotatedClass.addToImports(UmlgGenerationUtil.graphDbPathName);
+        annotatedClass.addToImports(UmlgRestletGenerationUtil.JsonRepresentation);
         annotatedClass.addToOperations(get);
     }
 
     private void addToRouterEnum(Classifier clazz, OJAnnotatedClass annotatedClass) {
-        OJEnum routerEnum = (OJEnum) this.workspace.findOJClass(TumlRestletGenerationUtil.RestletRouterEnum.toJavaString());
+        OJEnum routerEnum = (OJEnum) this.workspace.findOJClass(UmlgRestletGenerationUtil.RestletRouterEnum.toJavaString());
 
-        OJEnumLiteral ojLiteralMeta = new OJEnumLiteral(TumlClassOperations.className(clazz).toUpperCase() + "_META");
+        OJEnumLiteral ojLiteralMeta = new OJEnumLiteral(UmlgClassOperations.className(clazz).toUpperCase() + "_META");
         OJField uriMeta = new OJField();
         uriMeta.setType(new OJPathName("String"));
-        uriMeta.setInitExp("\"/" + StringUtils.uncapitalize(TumlClassOperations.className(clazz)) + "MetaData\"");
+        uriMeta.setInitExp("\"/" + StringUtils.uncapitalize(UmlgClassOperations.className(clazz)) + "MetaData\"");
         ojLiteralMeta.addToAttributeValues(uriMeta);
 
         OJField serverResourceClassField = new OJField();
@@ -106,11 +106,11 @@ public class MetaDataResourceBuilder extends BaseServerResourceBuilder implement
         serverResourceClassField.setInitExp(annotatedClass.getName() + ".class");
         ojLiteralMeta.addToAttributeValues(serverResourceClassField);
         routerEnum.addToImports(annotatedClass.getPathName());
-        routerEnum.addToImports(TumlRestletGenerationUtil.ServerResource);
+        routerEnum.addToImports(UmlgRestletGenerationUtil.ServerResource);
 
         routerEnum.addToLiterals(ojLiteralMeta);
 
-        OJAnnotatedOperation attachAll = routerEnum.findOperation("attachAll", TumlRestletGenerationUtil.Router);
+        OJAnnotatedOperation attachAll = routerEnum.findOperation("attachAll", UmlgRestletGenerationUtil.Router);
         attachAll.getBody().addToStatements(routerEnum.getName() + "." + ojLiteralMeta.getName() + ".attach(router)");
     }
 

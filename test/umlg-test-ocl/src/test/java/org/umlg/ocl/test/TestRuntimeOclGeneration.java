@@ -4,7 +4,7 @@ import junit.framework.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.umlg.framework.ModelLoader;
-import org.umlg.ocl.TumlOclExecutor;
+import org.umlg.ocl.UmlgOclExecutor;
 import org.umlg.ocl.UmlgOcl2Parser;
 import org.umlg.qualifier.Bank;
 import org.umlg.qualifier.Employee;
@@ -26,7 +26,7 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 			URL url = BaseLocalDbTest.class.getResource("/logging.properties");
 			LogManager.getLogManager().readConfiguration(url.openStream());
             URL umlUrl = BaseLocalDbTest.class.getResource("/test-ocl.uml");
-            ModelLoader.INSTANCE.loadModel(new File(umlUrl.toURI()));
+            UmlgOcl2Parser.INSTANCE.init(new File(umlUrl.toURI()));
             @SuppressWarnings("unused")
             UmlgOcl2Parser instance = UmlgOcl2Parser.INSTANCE;
 		} catch (Exception ex) {
@@ -50,7 +50,7 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 		bank.addToEmployee(employee3);
         db.commit();
 
-		Object result = TumlOclExecutor.executeOclQuery("testoclmodel::org::umlg::qualifier::Bank", bank, "self.employee->select(name='employee3')");
+		Object result = UmlgOclExecutor.executeOclQuery("testoclmodel::org::umlg::qualifier::Bank", bank, "self.employee->select(name='employee3')");
 		Assert.assertTrue(result instanceof TinkerOrderedSet<?>);
 		TinkerOrderedSet result2 = (TinkerOrderedSet<Employee>)result;
 		Assert.assertEquals(1, result2.size());
@@ -72,7 +72,7 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 		bank.addToEmployee(employee3);
         db.commit();
 
-		Object result = TumlOclExecutor.executeOclQuery("testoclmodel::org::umlg::qualifier::Employee", "Employee.allInstances()");
+		Object result = UmlgOclExecutor.executeOclQuery("testoclmodel::org::umlg::qualifier::Employee", "Employee.allInstances()");
 		Assert.assertTrue(result instanceof TinkerSet<?>);
 		TinkerSet result2 = (TinkerSet<Employee>)result;
 		Assert.assertEquals(3, result2.size());
@@ -93,7 +93,7 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 		bank.addToEmployee(employee3);
         db.commit();
 
-		String json = TumlOclExecutor.executeOclQueryToJson("testoclmodel::org::umlg::qualifier::Bank", bank, "self.employee->select(name='employee3')");
+		String json = UmlgOclExecutor.executeOclQueryToJson("testoclmodel::org::umlg::qualifier::Bank", bank, "self.employee->select(name='employee3')");
 		System.out.println(json);
 	}
 
@@ -113,7 +113,7 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 		bank.addToEmployee(employee3);
         db.commit();
 
-		Object result = TumlOclExecutor.executeOclQuery("testoclmodel::org::umlg::qualifier::Bank", bank, "Tuple{name: String = name, employeeSize: Integer = employeeSize}");
+		Object result = UmlgOclExecutor.executeOclQuery("testoclmodel::org::umlg::qualifier::Bank", bank, "Tuple{name: String = name, employeeSize: Integer = employeeSize}");
 		Assert.assertTrue(result instanceof Map);
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		Map<String, Object> resultAsMap = (Map)result;
@@ -137,7 +137,7 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 		bank.addToEmployee(employee3);
         db.commit();
 
-		String json = TumlOclExecutor.executeOclQueryToJson("testoclmodel::org::umlg::qualifier::Bank", bank, "Tuple{name: String = name, employeeSize: Integer = employeeSize}");
+		String json = UmlgOclExecutor.executeOclQueryToJson("testoclmodel::org::umlg::qualifier::Bank", bank, "Tuple{name: String = name, employeeSize: Integer = employeeSize}");
 		System.out.println(json);
 	}
 
@@ -157,7 +157,7 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
         db.commit();
 
 		//The employee names should specify a Bag, bug in eclipse ocl
-		Object result = TumlOclExecutor.executeOclQuery("testoclmodel::org::umlg::qualifier::Bank", bank, "Tuple{bank: Bank = self, employeeNames: Sequence(String) = employee.name}");
+		Object result = UmlgOclExecutor.executeOclQuery("testoclmodel::org::umlg::qualifier::Bank", bank, "Tuple{bank: Bank = self, employeeNames: Sequence(String) = employee.name}");
 		Assert.assertTrue(result instanceof Map);
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		Map<String, Object> resultAsMap = (Map)result;
@@ -184,7 +184,7 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
         db.commit();
 
 		//The employee names should specify a Bag, bug in eclipse ocl
-		String json = TumlOclExecutor.executeOclQueryToJson("testoclmodel::org::umlg::qualifier::Bank", bank, "Tuple{bank: Bank = self, employeeNames: Sequence(String) = employee.name}");
+		String json = UmlgOclExecutor.executeOclQueryToJson("testoclmodel::org::umlg::qualifier::Bank", bank, "Tuple{bank: Bank = self, employeeNames: Sequence(String) = employee.name}");
 		System.out.println(json);
 	}
 

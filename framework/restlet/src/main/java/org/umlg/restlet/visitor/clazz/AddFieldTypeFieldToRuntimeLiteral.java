@@ -15,9 +15,9 @@ import org.umlg.java.metamodel.annotation.OJEnumLiteral;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.javageneration.util.PropertyWrapper;
-import org.umlg.javageneration.util.TumlClassOperations;
+import org.umlg.javageneration.util.UmlgClassOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
-import org.umlg.restlet.util.TumlRestletGenerationUtil;
+import org.umlg.restlet.util.UmlgRestletGenerationUtil;
 
 public class AddFieldTypeFieldToRuntimeLiteral extends BaseVisitor implements Visitor<Class> {
 
@@ -29,35 +29,35 @@ public class AddFieldTypeFieldToRuntimeLiteral extends BaseVisitor implements Vi
     @VisitSubclasses({Class.class, AssociationClass.class})
 	public void visitBefore(Class clazz) {
 		OJAnnotatedClass annotatedClass = findOJClass(clazz);
-		OJEnum ojEnum = annotatedClass.findEnum(TumlClassOperations.propertyEnumName(clazz));
+		OJEnum ojEnum = annotatedClass.findEnum(UmlgClassOperations.propertyEnumName(clazz));
 		OJField fieldTypeField = new OJField();
-		fieldTypeField.setType(TumlRestletGenerationUtil.FieldType);
+		fieldTypeField.setType(UmlgRestletGenerationUtil.FieldType);
 		fieldTypeField.setName("fieldType");
 		ojEnum.addToFields(fieldTypeField);
 
-		OJAnnotatedOperation getter = new OJAnnotatedOperation("getFieldType", TumlRestletGenerationUtil.FieldType);
+		OJAnnotatedOperation getter = new OJAnnotatedOperation("getFieldType", UmlgRestletGenerationUtil.FieldType);
 		getter.getBody().addToStatements("return this.fieldType");
 		ojEnum.addToOperations(getter);
 
 		OJConstructor constructor = ojEnum.getConstructors().iterator().next();
-		constructor.addParam("fieldType", TumlRestletGenerationUtil.FieldType);
+		constructor.addParam("fieldType", UmlgRestletGenerationUtil.FieldType);
 		constructor.getBody().addToStatements("this.fieldType = fieldType");
 		
-		Set<Property> properties = TumlClassOperations.getAllProperties(clazz);
+		Set<Property> properties = UmlgClassOperations.getAllProperties(clazz);
 		for (Property property : properties) {
             PropertyWrapper propertyWrapper = new PropertyWrapper(property);
 			OJEnumLiteral literal = ojEnum.findLiteral(propertyWrapper.fieldname());
-			addFieldTypePropertyToLiteral(literal, TumlRestletGenerationUtil.getFieldTypeForProperty(property));
+			addFieldTypePropertyToLiteral(literal, UmlgRestletGenerationUtil.getFieldTypeForProperty(property));
 
             if (propertyWrapper.isMemberOfAssociationClass() && !(clazz instanceof AssociationClass)) {
                 literal = ojEnum.findLiteral(propertyWrapper.getAssociationClassFakePropertyName());
-                addFieldTypePropertyToLiteral(literal, TumlRestletGenerationUtil.getFieldTypeForProperty(property));
+                addFieldTypePropertyToLiteral(literal, UmlgRestletGenerationUtil.getFieldTypeForProperty(property));
             }
 		}
 
 		addFieldTypePropertyToLiteral(ojEnum.findLiteral("id"), "FieldType.Integer");
 
-		if (!TumlClassOperations.hasCompositeOwner(clazz)) {
+		if (!UmlgClassOperations.hasCompositeOwner(clazz)) {
 			// This is for the fake property to Root
 			addFieldTypePropertyToLiteral(ojEnum.findLiteral(clazz.getModel().getName()), "FieldType.String");
 		}
@@ -66,7 +66,7 @@ public class AddFieldTypeFieldToRuntimeLiteral extends BaseVisitor implements Vi
 
     static void addFieldTypePropertyToLiteral(OJEnumLiteral literal, String fieldType) {
 		OJField uriAttribute = new OJField();
-		uriAttribute.setType(TumlRestletGenerationUtil.FieldType);
+		uriAttribute.setType(UmlgRestletGenerationUtil.FieldType);
 		uriAttribute.setInitExp(fieldType);
         uriAttribute.setName("fieldType");
 		literal.addToAttributeValues(uriAttribute);

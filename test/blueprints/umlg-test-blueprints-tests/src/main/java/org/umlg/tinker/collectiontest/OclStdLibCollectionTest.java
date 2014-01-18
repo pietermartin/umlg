@@ -5,8 +5,8 @@ import org.junit.Test;
 import org.umlg.collectiontest.SequenceRoot;
 import org.umlg.collectiontest.SequenceTestListMany;
 import org.umlg.runtime.collection.TinkerSequence;
-import org.umlg.runtime.collection.memory.TumlMemoryCollection;
-import org.umlg.runtime.collection.memory.TumlMemorySequence;
+import org.umlg.runtime.collection.memory.UmlgMemoryCollection;
+import org.umlg.runtime.collection.memory.UmlgMemorySequence;
 import org.umlg.runtime.test.BaseLocalDbTest;
 
 /**
@@ -17,7 +17,7 @@ public class OclStdLibCollectionTest extends BaseLocalDbTest {
 
     @Test
     public void testMax() {
-        TumlMemoryCollection<Integer> collection = new TumlMemorySequence<Integer>();
+        UmlgMemoryCollection<Integer> collection = new UmlgMemorySequence<Integer>();
         collection.add(Integer.valueOf(1));
         collection.add(Integer.valueOf(2));
         collection.add(Integer.valueOf(3));
@@ -26,7 +26,7 @@ public class OclStdLibCollectionTest extends BaseLocalDbTest {
 
     @Test
     public void testSum() {
-        TumlMemoryCollection<Integer> collection = new TumlMemorySequence<Integer>();
+        UmlgMemoryCollection<Integer> collection = new UmlgMemorySequence<Integer>();
         collection.add(Integer.valueOf(1));
         collection.add(Integer.valueOf(2));
         collection.add(Integer.valueOf(3));
@@ -104,7 +104,7 @@ public class OclStdLibCollectionTest extends BaseLocalDbTest {
 
     @Test
     public void testIncludesAll() {
-        TinkerSequence<SequenceTestListMany> test = new TumlMemorySequence<SequenceTestListMany>();
+        TinkerSequence<SequenceTestListMany> test = new UmlgMemorySequence<SequenceTestListMany>();
         SequenceRoot sequenceRoot = new SequenceRoot(true);
         sequenceRoot.setName("sequenceRoot");
         SequenceTestListMany sequenceTestListMany1 = new SequenceTestListMany(sequenceRoot);
@@ -141,7 +141,7 @@ public class OclStdLibCollectionTest extends BaseLocalDbTest {
 
     @Test
     public void testExcludesAll() {
-        TinkerSequence<SequenceTestListMany> test = new TumlMemorySequence<SequenceTestListMany>();
+        TinkerSequence<SequenceTestListMany> test = new UmlgMemorySequence<SequenceTestListMany>();
         SequenceRoot sequenceRoot = new SequenceRoot(true);
         sequenceRoot.setName("sequenceRoot");
         SequenceTestListMany sequenceTestListMany1 = new SequenceTestListMany(sequenceRoot);

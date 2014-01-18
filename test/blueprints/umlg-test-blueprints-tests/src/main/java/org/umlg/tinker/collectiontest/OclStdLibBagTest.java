@@ -6,8 +6,8 @@ import org.umlg.collectiontest.BagRoot;
 import org.umlg.collectiontest.BagTest;
 import org.umlg.runtime.collection.TinkerBag;
 import org.umlg.runtime.collection.TinkerSet;
-import org.umlg.runtime.collection.memory.TumlMemoryBag;
-import org.umlg.runtime.collection.memory.TumlMemorySet;
+import org.umlg.runtime.collection.memory.UmlgMemoryBag;
+import org.umlg.runtime.collection.memory.UmlgMemorySet;
 import org.umlg.runtime.test.BaseLocalDbTest;
 
 /**
@@ -18,7 +18,7 @@ public class OclStdLibBagTest extends BaseLocalDbTest {
 
     @Test
     public void testEquals() {
-        TinkerBag<BagTest> test = new TumlMemoryBag<BagTest>();
+        TinkerBag<BagTest> test = new UmlgMemoryBag<BagTest>();
         BagRoot bagRoot = new BagRoot(true);
         bagRoot.setName("bagRoot");
         BagTest bagTest1 = new BagTest(bagRoot);
@@ -65,7 +65,7 @@ public class OclStdLibBagTest extends BaseLocalDbTest {
 
     @Test
     public void testUnionBag() {
-        TinkerBag<BagTest> test = new TumlMemoryBag<BagTest>();
+        TinkerBag<BagTest> test = new UmlgMemoryBag<BagTest>();
         BagRoot bagRoot = new BagRoot(true);
         bagRoot.setName("bagRoot");
         BagTest bagTest1 = new BagTest(bagRoot);
@@ -106,7 +106,7 @@ public class OclStdLibBagTest extends BaseLocalDbTest {
         bagTest4.setName("bagTest4");
         bagRoot.getBagTest().add(bagTest2);
 
-        TinkerSet<BagTest> test = new TumlMemorySet<BagTest>();
+        TinkerSet<BagTest> test = new UmlgMemorySet<BagTest>();
         test.add(bagTest1);
         test.add(bagTest2);
         test.add(bagTest3);
@@ -133,7 +133,7 @@ public class OclStdLibBagTest extends BaseLocalDbTest {
         bagTest4.setName("bagTest4");
         bagRoot.getBagTest().add(bagTest2);
 
-        TinkerBag<BagTest> test = new TumlMemoryBag<BagTest>();
+        TinkerBag<BagTest> test = new UmlgMemoryBag<BagTest>();
         test.add(bagTest1);
         test.add(bagTest2);
 

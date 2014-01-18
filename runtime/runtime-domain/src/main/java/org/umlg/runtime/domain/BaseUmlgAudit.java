@@ -3,7 +3,7 @@ package org.umlg.runtime.domain;
 import com.tinkerpop.blueprints.Vertex;
 import org.joda.time.DateTime;
 import org.umlg.runtime.adaptor.TransactionThreadVar;
-import org.umlg.runtime.util.TumlFormatter;
+import org.umlg.runtime.util.UmlgFormatter;
 
 import java.io.Serializable;
 
@@ -21,20 +21,20 @@ public abstract class BaseUmlgAudit extends BaseUmlg implements TinkerAuditableN
 	}
 
 	public DateTime getDeletedOn() {
-		return TumlFormatter.parseDateTime((String) this.vertex.getProperty("deletedOn"));
+		return UmlgFormatter.parseDateTime((String) this.vertex.getProperty("deletedOn"));
 	}
 
 	public void setDeletedOn(DateTime deletedOn) {
-		this.vertex.setProperty("deletedOn", TumlFormatter.format(deletedOn));
+		this.vertex.setProperty("deletedOn", UmlgFormatter.format(deletedOn));
 		if ( TransactionThreadVar.hasNoAuditEntry(getClass().getName() + getUid()) ) {
 			createAuditVertex(false);
 		}
-		getAuditVertex().setProperty("deletedOn", TumlFormatter.format(deletedOn));
+		getAuditVertex().setProperty("deletedOn", UmlgFormatter.format(deletedOn));
 	}
 
 	public void defaultCreate() {
 		super.defaultCreate();
-		this.vertex.setProperty("deletedOn", TumlFormatter.format(new DateTime(1000L * 60 * 60 * 24 * 365 * 1000)));
+		this.vertex.setProperty("deletedOn", UmlgFormatter.format(new DateTime(1000L * 60 * 60 * 24 * 365 * 1000)));
 	}
 
 }

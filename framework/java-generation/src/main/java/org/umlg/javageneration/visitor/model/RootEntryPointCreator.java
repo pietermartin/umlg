@@ -20,9 +20,9 @@ import org.umlg.java.metamodel.annotation.OJEnum;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.javageneration.util.Condition;
-import org.umlg.javageneration.util.TinkerGenerationUtil;
-import org.umlg.javageneration.util.TumlClassOperations;
-import org.umlg.javageneration.util.TumlModelOperations;
+import org.umlg.javageneration.util.UmlgGenerationUtil;
+import org.umlg.javageneration.util.UmlgClassOperations;
+import org.umlg.javageneration.util.UmlgModelOperations;
 import org.umlg.javageneration.validation.Validation;
 import org.umlg.javageneration.visitor.BaseVisitor;
 import org.umlg.javageneration.visitor.clazz.RuntimePropertyImplementor;
@@ -37,14 +37,14 @@ public class RootEntryPointCreator extends BaseVisitor implements Visitor<Model>
 	public void visitBefore(Model model) {
 		OJAnnotatedClass root = new OJAnnotatedClass("Root");
         root.setComment(String.format("This class represents the model %s.\nIt is a singleton and allows on access to all the root classes in the model.", model.getQualifiedName()));
-		root.addToImplementedInterfaces(TinkerGenerationUtil.UmlgApplicationNode);
-		OJPackage ojPackage = new OJPackage(TinkerGenerationUtil.UmlgRootPackage.toJavaString());
+		root.addToImplementedInterfaces(UmlgGenerationUtil.UmlgApplicationNode);
+		OJPackage ojPackage = new OJPackage(UmlgGenerationUtil.UmlgRootPackage.toJavaString());
 		root.setMyPackage(ojPackage);
 		addToSource(root);
 
 		root.getDefaultConstructor().setVisibility(OJVisibilityKind.PRIVATE);
-		root.addToImports(TinkerGenerationUtil.graphDbPathName);
-		root.addToImports(TinkerGenerationUtil.vertexPathName);
+		root.addToImports(UmlgGenerationUtil.graphDbPathName);
+		root.addToImports(UmlgGenerationUtil.vertexPathName);
 
 		addINSTANCE(root);
 		addGetRootVertex(root);
@@ -78,7 +78,7 @@ public class RootEntryPointCreator extends BaseVisitor implements Visitor<Model>
 		asJson.getBody().addToStatements("uri", "sb.append(\"\\\"uri\\\": \\\"TODO\\\", \")");
 		asJson.getBody().addToStatements("properties", "sb.append(\"\\\"properties\\\": [\")");
 
-		asJson.getBody().addToStatements("sb.append(" + TinkerGenerationUtil.RootRuntimePropertyEnum.getLast() + "." + model.getName() + ".toJson())");
+		asJson.getBody().addToStatements("sb.append(" + UmlgGenerationUtil.RootRuntimePropertyEnum.getLast() + "." + model.getName() + ".toJson())");
 		asJson.getBody().addToStatements("sb.append(\",\")");
 
 		OJAnnotatedOperation fromLabel = ojEnum.findOperation("fromLabel", new OJPathName("String"));
@@ -90,12 +90,12 @@ public class RootEntryPointCreator extends BaseVisitor implements Visitor<Model>
 		for (Class clazz : result) {
             count++;
             RuntimePropertyImplementor.addEnumLiteral(false, false, null, null, false, ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName,
-                    StringUtils.uncapitalize(TumlClassOperations.className(clazz)), clazz.getQualifiedName(), "inverseOf::" + clazz.getName(), "inverseOf::" + clazz.getQualifiedName(), false, false,
+                    StringUtils.uncapitalize(UmlgClassOperations.className(clazz)), clazz.getQualifiedName(), "inverseOf::" + clazz.getName(), "inverseOf::" + clazz.getQualifiedName(), false, false,
                     null, Collections.<Validation> emptyList(), true, false, false, false, true, false, false, true, false, -1, 0, 1, false, false, true, false, true,
-                    true, "root" + TumlClassOperations.className(clazz));
+                    true, "root" + UmlgClassOperations.className(clazz));
 
             asJson.getBody().addToStatements(
-                    "sb.append(" + ojEnum.getName() + "." + StringUtils.uncapitalize(TumlClassOperations.className(clazz)) + ".toJson())");
+                    "sb.append(" + ojEnum.getName() + "." + StringUtils.uncapitalize(UmlgClassOperations.className(clazz)) + ".toJson())");
             if (count != result.size()) {
                 asJson.getBody().addToStatements("sb.append(\",\")");
             }
@@ -135,22 +135,22 @@ public class RootEntryPointCreator extends BaseVisitor implements Visitor<Model>
 
 	private List<Class> findRootEntities(Model model) {
 		@SuppressWarnings("unchecked")
-		List<Class> result = (List<Class>) TumlModelOperations.findElements(model, new Condition() {
-			@Override
-			public boolean evaluateOn(Element e) {
-				if (!(e instanceof Class)) {
-					return false;
-				}
-				Class clazz = (Class) e;
-				return !clazz.isAbstract() && !TumlClassOperations.hasCompositeOwner(clazz) && !(clazz instanceof AssociationClass);
-			}
-		});
+		List<Class> result = (List<Class>) UmlgModelOperations.findElements(model, new Condition() {
+            @Override
+            public boolean evaluateOn(Element e) {
+                if (!(e instanceof Class)) {
+                    return false;
+                }
+                Class clazz = (Class) e;
+                return !clazz.isAbstract() && !UmlgClassOperations.hasCompositeOwner(clazz) && !(clazz instanceof AssociationClass);
+            }
+        });
 		return result;
 	}
 
 	private void addGetRootVertex(OJAnnotatedClass root) {
 		OJAnnotatedOperation getRootVertex = new OJAnnotatedOperation("getRootVertex");
-		getRootVertex.setReturnType(TinkerGenerationUtil.vertexPathName);
+		getRootVertex.setReturnType(UmlgGenerationUtil.vertexPathName);
 		getRootVertex.setVisibility(OJVisibilityKind.PRIVATE);
 		getRootVertex.getBody().addToStatements("return GraphDb.getDb().getRoot()");
 		root.addToOperations(getRootVertex);

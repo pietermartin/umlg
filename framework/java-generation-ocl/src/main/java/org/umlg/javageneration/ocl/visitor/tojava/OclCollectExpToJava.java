@@ -10,10 +10,10 @@ import org.eclipse.ocl.uml.impl.CollectionTypeImpl;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Parameter;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
-import org.umlg.javageneration.ocl.util.TumlOclUtil;
+import org.umlg.javageneration.ocl.util.UmlgOclUtil;
 import org.umlg.javageneration.ocl.visitor.HandleIteratorExp;
-import org.umlg.javageneration.util.TumlClassOperations;
-import org.umlg.javageneration.util.TumlCollectionKindEnum;
+import org.umlg.javageneration.util.UmlgClassOperations;
+import org.umlg.javageneration.util.UmlgCollectionKindEnum;
 
 public class OclCollectExpToJava implements HandleIteratorExp {
 
@@ -34,23 +34,23 @@ public class OclCollectExpToJava implements HandleIteratorExp {
 		}
 		
 		Variable<Classifier, Parameter> variable = callExp.getIterator().get(0);
-		String variableType = TumlClassOperations.className(variable.getType());
+		String variableType = UmlgClassOperations.className(variable.getType());
 		
 		OCLExpression<Classifier> body = callExp.getBody();
-		String bodyType = TumlClassOperations.className(body.getType());
+		String bodyType = UmlgClassOperations.className(body.getType());
 
         if (body.getType() instanceof CollectionType) {
             CollectionType collectionType = (CollectionType)body.getType();
-            ojClass.addToImports(TumlCollectionKindEnum.from(collectionType.getKind()).getOjPathName());
+            ojClass.addToImports(UmlgCollectionKindEnum.from(collectionType.getKind()).getOjPathName());
         }
 
         String flattenedType;
 		Classifier c = body.getType();
 		if (c instanceof CollectionTypeImpl) {
 			CollectionTypeImpl collectionTypeImpl = (CollectionTypeImpl)c;
-			flattenedType = TumlClassOperations.className(collectionTypeImpl.getElementType());
+			flattenedType = UmlgClassOperations.className(collectionTypeImpl.getElementType());
 		} else {
-			flattenedType = TumlClassOperations.className(c);
+			flattenedType = UmlgClassOperations.className(c);
 		}
 		
 		StringBuilder result = new StringBuilder(sourceResult);
@@ -68,7 +68,7 @@ public class OclCollectExpToJava implements HandleIteratorExp {
 		result.append("    public ");
 		result.append(bodyType);
 		result.append(" evaluate(");
-		result.append(TumlOclUtil.removeVariableInit(variableResults.get(0)));
+		result.append(UmlgOclUtil.removeVariableInit(variableResults.get(0)));
 		result.append(") {\n");
 		result.append("        return ");
 		result.append(bodyResult);

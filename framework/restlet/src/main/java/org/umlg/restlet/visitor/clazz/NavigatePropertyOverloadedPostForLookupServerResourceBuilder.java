@@ -6,9 +6,9 @@ import org.umlg.generation.Workspace;
 import org.umlg.java.metamodel.*;
 import org.umlg.java.metamodel.annotation.*;
 import org.umlg.javageneration.util.PropertyWrapper;
-import org.umlg.javageneration.util.TinkerGenerationUtil;
-import org.umlg.javageneration.util.TumlClassOperations;
-import org.umlg.restlet.util.TumlRestletGenerationUtil;
+import org.umlg.javageneration.util.UmlgGenerationUtil;
+import org.umlg.javageneration.util.UmlgClassOperations;
+import org.umlg.restlet.util.UmlgRestletGenerationUtil;
 
 public class NavigatePropertyOverloadedPostForLookupServerResourceBuilder extends BaseServerResourceBuilder implements Visitor<Property> {
 
@@ -24,9 +24,9 @@ public class NavigatePropertyOverloadedPostForLookupServerResourceBuilder extend
             OJAnnotatedClass owner = findOJClass(pWrap.getType());
             OJPackage ojPackage = owner.getMyPackage();
 
-            OJAnnotatedClass annotatedClass = new OJAnnotatedClass(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_"
+            OJAnnotatedClass annotatedClass = new OJAnnotatedClass(UmlgClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_"
                     + pWrap.getOtherEnd().getName() + "_" + pWrap.getName() + "_LookupServerResourceImpl");
-            annotatedClass.setSuperclass(TumlRestletGenerationUtil.ServerResource);
+            annotatedClass.setSuperclass(UmlgRestletGenerationUtil.ServerResource);
             annotatedClass.setMyPackage(ojPackage);
             addToSource(annotatedClass);
             addDefaultConstructor(annotatedClass);
@@ -63,33 +63,33 @@ public class NavigatePropertyOverloadedPostForLookupServerResourceBuilder extend
     }
 
     private void addPostObjectRepresentation(PropertyWrapper pWrap/*, OJAnnotatedInterface annotatedInf*/, OJAnnotatedClass annotatedClass) {
-//        OJAnnotatedOperation postInf = new OJAnnotatedOperation("post", TumlRestletGenerationUtil.Representation);
-//        postInf.addToParameters(new OJParameter("entity", TumlRestletGenerationUtil.Representation));
+//        OJAnnotatedOperation postInf = new OJAnnotatedOperation("post", UmlgRestletGenerationUtil.Representation);
+//        postInf.addToParameters(new OJParameter("entity", UmlgRestletGenerationUtil.Representation));
 //        annotatedInf.addToOperations(postInf);
-//        postInf.addAnnotationIfNew(new OJAnnotationValue(TumlRestletGenerationUtil.Post, "json"));
+//        postInf.addAnnotationIfNew(new OJAnnotationValue(UmlgRestletGenerationUtil.Post, "json"));
 
-        OJAnnotatedOperation post = new OJAnnotatedOperation("post", TumlRestletGenerationUtil.Representation);
-        post.addToParameters(new OJParameter("entity", TumlRestletGenerationUtil.Representation));
-        post.addToThrows(TumlRestletGenerationUtil.ResourceException);
-        annotatedClass.addToImports(TumlRestletGenerationUtil.ResourceException);
-        TinkerGenerationUtil.addOverrideAnnotation(post);
-        TinkerGenerationUtil.addSuppressWarning(post);
+        OJAnnotatedOperation post = new OJAnnotatedOperation("post", UmlgRestletGenerationUtil.Representation);
+        post.addToParameters(new OJParameter("entity", UmlgRestletGenerationUtil.Representation));
+        post.addToThrows(UmlgRestletGenerationUtil.ResourceException);
+        annotatedClass.addToImports(UmlgRestletGenerationUtil.ResourceException);
+        UmlgGenerationUtil.addOverrideAnnotation(post);
+        UmlgGenerationUtil.addSuppressWarning(post);
 
         PropertyWrapper otherEndPWrap = new PropertyWrapper(pWrap.getOtherEnd());
 
         OJPathName parentPathName = otherEndPWrap.javaBaseTypePath();
         post.getBody().addToStatements(
-                "this." + parentPathName.getLast().toLowerCase() + "Id = " + TumlRestletGenerationUtil.UmlgURLDecoder.getLast() + ".decode((String)getRequestAttributes().get(\""
+                "this." + parentPathName.getLast().toLowerCase() + "Id = " + UmlgRestletGenerationUtil.UmlgURLDecoder.getLast() + ".decode((String)getRequestAttributes().get(\""
                         + parentPathName.getLast().toLowerCase() + "Id\"))");
-        annotatedClass.addToImports(TumlRestletGenerationUtil.UmlgURLDecoder);
+        annotatedClass.addToImports(UmlgRestletGenerationUtil.UmlgURLDecoder);
 
         post.getBody().addToStatements(
                 parentPathName.getLast() + " parentResource = GraphDb.getDb().instantiateClassifier(" + parentPathName.getLast().toLowerCase() + "Id" + ")");
 
         OJTryStatement ojTryStatement = new OJTryStatement();
-        OJField mapper = new OJField("mapper", TinkerGenerationUtil.ObjectMapper);
-        mapper.setInitExp(TinkerGenerationUtil.ObjectMapperFactory.getLast() + ".INSTANCE.getObjectMapper()");
-        annotatedClass.addToImports(TinkerGenerationUtil.ObjectMapperFactory);
+        OJField mapper = new OJField("mapper", UmlgGenerationUtil.ObjectMapper);
+        mapper.setInitExp(UmlgGenerationUtil.ObjectMapperFactory.getLast() + ".INSTANCE.getObjectMapper()");
+        annotatedClass.addToImports(UmlgGenerationUtil.ObjectMapperFactory);
         ojTryStatement.getTryPart().addToLocals(mapper);
 
 
@@ -178,38 +178,38 @@ public class NavigatePropertyOverloadedPostForLookupServerResourceBuilder extend
         addPutResource(pWrap, annotatedClass, parentPathName);
 
         //get the lookup uri
-        ojTryStatement.getTryPart().addToStatements("String lookupUri = " + TumlRestletGenerationUtil.UmlgURLEncoder.getLast() + ".decode(getReference().getQueryAsForm(false).getFirstValue(\"lookupUri\"))");
+        ojTryStatement.getTryPart().addToStatements("String lookupUri = " + UmlgRestletGenerationUtil.UmlgURLEncoder.getLast() + ".decode(getReference().getQueryAsForm(false).getFirstValue(\"lookupUri\"))");
         ojTryStatement.getTryPart().addToStatements("lookupUri = \"riap://host\" + lookupUri");
         ojTryStatement.getTryPart().addToStatements("int fakeIdIndex = lookupUri.indexOf(\"fake\")");
         OJIfStatement ifFakeId = new OJIfStatement("fakeIdIndex != -1");
         ifFakeId.addToThenPart("int indexOfForwardSlash = lookupUri.indexOf(\"/\", fakeIdIndex)");
         ifFakeId.addToThenPart("String fakeId = lookupUri.substring(fakeIdIndex, indexOfForwardSlash)");
-        ifFakeId.addToThenPart("Object id = " + TinkerGenerationUtil.UmlgTmpIdManager.getLast() + ".INSTANCE.get(fakeId)");
-        ifFakeId.addToThenPart("lookupUri = lookupUri.replace(fakeId, " + TumlRestletGenerationUtil.UmlgURLEncoder.getLast() + ".encode(id.toString()))");
+        ifFakeId.addToThenPart("Object id = " + UmlgGenerationUtil.UmlgTmpIdManager.getLast() + ".INSTANCE.get(fakeId)");
+        ifFakeId.addToThenPart("lookupUri = lookupUri.replace(fakeId, " + UmlgRestletGenerationUtil.UmlgURLEncoder.getLast() + ".encode(id.toString()))");
         ojTryStatement.getTryPart().addToStatements(ifFakeId);
-        annotatedClass.addToImports(TinkerGenerationUtil.UmlgTmpIdManager);
+        annotatedClass.addToImports(UmlgGenerationUtil.UmlgTmpIdManager);
 
-        ojTryStatement.getTryPart().addToStatements(TumlRestletGenerationUtil.ClientResource.getLast() + " cr = new ClientResource(lookupUri)");
-        annotatedClass.addToImports(TumlRestletGenerationUtil.UmlgURLEncoder);
-        annotatedClass.addToImports(TumlRestletGenerationUtil.ClientResource);
-        ojTryStatement.getTryPart().addToStatements(TumlRestletGenerationUtil.Representation.getLast() + " result = cr.get()");
+        ojTryStatement.getTryPart().addToStatements(UmlgRestletGenerationUtil.ClientResource.getLast() + " cr = new ClientResource(lookupUri)");
+        annotatedClass.addToImports(UmlgRestletGenerationUtil.UmlgURLEncoder);
+        annotatedClass.addToImports(UmlgRestletGenerationUtil.ClientResource);
+        ojTryStatement.getTryPart().addToStatements(UmlgRestletGenerationUtil.Representation.getLast() + " result = cr.get()");
         ojTryStatement.getTryPart().addToStatements("return result");
 
         //Always rollback
-        ojTryStatement.getFinallyPart().addToStatements(TinkerGenerationUtil.UmlgTmpIdManager.getLast() + ".INSTANCE.remove()");
-        ojTryStatement.getFinallyPart().addToStatements(TinkerGenerationUtil.graphDbAccess + ".rollback()");
+        ojTryStatement.getFinallyPart().addToStatements(UmlgGenerationUtil.UmlgTmpIdManager.getLast() + ".INSTANCE.remove()");
+        ojTryStatement.getFinallyPart().addToStatements(UmlgGenerationUtil.graphDbAccess + ".rollback()");
 
         ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
 
-        ojTryStatement.getCatchPart().addToStatements("throw " + TumlRestletGenerationUtil.UmlgExceptionUtilFactory.getLast() + ".getTumlExceptionUtil().handle(e)");
-        annotatedClass.addToImports(TumlRestletGenerationUtil.UmlgExceptionUtilFactory);
+        ojTryStatement.getCatchPart().addToStatements("throw " + UmlgRestletGenerationUtil.UmlgExceptionUtilFactory.getLast() + ".getTumlExceptionUtil().handle(e)");
+        annotatedClass.addToImports(UmlgRestletGenerationUtil.UmlgExceptionUtilFactory);
 
         post.getBody().addToStatements(ojTryStatement);
 
         annotatedClass.addToImports(parentPathName);
 
-        annotatedClass.addToImports(TinkerGenerationUtil.graphDbPathName);
-        annotatedClass.addToImports(TumlRestletGenerationUtil.JsonRepresentation);
+        annotatedClass.addToImports(UmlgGenerationUtil.graphDbPathName);
+        annotatedClass.addToImports(UmlgRestletGenerationUtil.JsonRepresentation);
         annotatedClass.addToOperations(post);
     }
 
@@ -248,8 +248,8 @@ public class NavigatePropertyOverloadedPostForLookupServerResourceBuilder extend
         add.getBody().addToLocals(qualifiedName);
 
         OJField baseTumlClass = new OJField("baseTumlClass", new OJPathName("Class").addToGenerics(pWrap.javaBaseTypePath()));
-        baseTumlClass.setInitExp(TinkerGenerationUtil.UmlgSchemaFactory.getLast() + ".getUmlgSchemaMap().get(qualifiedName)");
-        annotatedClass.addToImports(TinkerGenerationUtil.UmlgSchemaFactory);
+        baseTumlClass.setInitExp(UmlgGenerationUtil.UmlgSchemaFactory.getLast() + ".getUmlgSchemaMap().get(qualifiedName)");
+        annotatedClass.addToImports(UmlgGenerationUtil.UmlgSchemaFactory);
         add.getBody().addToLocals(baseTumlClass);
 
         OJTryStatement tryInstantiate = new OJTryStatement();
@@ -299,14 +299,14 @@ public class NavigatePropertyOverloadedPostForLookupServerResourceBuilder extend
     }
 
     private void addServerResourceToRouterEnum(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass) {
-        OJEnum routerEnum = (OJEnum) this.workspace.findOJClass(TumlRestletGenerationUtil.RestletRouterEnum.toJavaString());
+        OJEnum routerEnum = (OJEnum) this.workspace.findOJClass(UmlgRestletGenerationUtil.RestletRouterEnum.toJavaString());
 
-        OJEnumLiteral ojLiteral = new OJEnumLiteral(TumlClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_" + pWrap.fieldname() + "_forwardToLookup");
+        OJEnumLiteral ojLiteral = new OJEnumLiteral(UmlgClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_" + pWrap.fieldname() + "_forwardToLookup");
 
         OJField uri = new OJField();
         uri.setType(new OJPathName("String"));
-        uri.setInitExp("\"/" + TumlClassOperations.getPathName(pWrap.getOwningType()).getLast().toLowerCase() + "s/{"
-                + TumlClassOperations.getPathName(pWrap.getOwningType()).getLast().toLowerCase() + "Id}/" + pWrap.fieldname() + "_forwardToLookup\"");
+        uri.setInitExp("\"/" + UmlgClassOperations.getPathName(pWrap.getOwningType()).getLast().toLowerCase() + "s/{"
+                + UmlgClassOperations.getPathName(pWrap.getOwningType()).getLast().toLowerCase() + "Id}/" + pWrap.fieldname() + "_forwardToLookup\"");
         ojLiteral.addToAttributeValues(uri);
 
         OJField serverResourceClassField = new OJField();
@@ -314,17 +314,17 @@ public class NavigatePropertyOverloadedPostForLookupServerResourceBuilder extend
         serverResourceClassField.setInitExp(annotatedClass.getName() + ".class");
         ojLiteral.addToAttributeValues(serverResourceClassField);
         routerEnum.addToImports(annotatedClass.getPathName());
-        routerEnum.addToImports(TumlRestletGenerationUtil.ServerResource);
+        routerEnum.addToImports(UmlgRestletGenerationUtil.ServerResource);
 
         routerEnum.addToLiterals(ojLiteral);
 
-        OJAnnotatedOperation attachAll = routerEnum.findOperation("attachAll", TumlRestletGenerationUtil.Router);
+        OJAnnotatedOperation attachAll = routerEnum.findOperation("attachAll", UmlgRestletGenerationUtil.Router);
         attachAll.getBody().addToStatements(routerEnum.getName() + "." + ojLiteral.getName() + ".attach(router)");
 
     }
 
     private void addCompositeParentIdField(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass) {
-        OJField compositeParentFieldId = new OJField(TumlClassOperations.getPathName(pWrap.getOtherEnd().getType()).getLast().toLowerCase() + "Id",
+        OJField compositeParentFieldId = new OJField(UmlgClassOperations.getPathName(pWrap.getOtherEnd().getType()).getLast().toLowerCase() + "Id",
                 new OJPathName("Object"));
         compositeParentFieldId.setVisibility(OJVisibilityKind.PRIVATE);
         annotatedClass.addToFields(compositeParentFieldId);

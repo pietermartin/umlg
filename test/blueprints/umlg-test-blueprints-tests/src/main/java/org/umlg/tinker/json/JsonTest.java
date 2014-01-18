@@ -12,8 +12,7 @@ import org.umlg.inheritencetest.Biped;
 import org.umlg.inheritencetest.Mamal;
 import org.umlg.inheritencetest.Quadped;
 import org.umlg.runtime.test.BaseLocalDbTest;
-import org.umlg.runtime.test.TumlTestUtilFactory;
-import org.umlg.runtime.util.TumlFormatter;
+import org.umlg.runtime.util.UmlgFormatter;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -278,7 +277,7 @@ public class JsonTest extends BaseLocalDbTest {
 		@SuppressWarnings("unchecked")
 		Map<String, Object> jsonMap = objectMapper.readValue(testG.toJson(), Map.class);
 
-		Assert.assertEquals(TumlFormatter.format(beginning), jsonMap.get("beginning"));
+		Assert.assertEquals(UmlgFormatter.format(beginning), jsonMap.get("beginning"));
 	}
 
 	@Test

@@ -1,6 +1,6 @@
 package org.umlg.runtime.validation;
 
-public class Min implements TumlValidation {
+public class Min implements UmlgValidation {
 	private int min;
 
 	public Min(int min) {

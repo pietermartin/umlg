@@ -8,7 +8,7 @@ public class TransactionResourceRouterAdder /*extends BaseServerResourceBuilder 
 //
 //	@Override
 //	public void visitBefore(Model model) {
-//        addToClassQueryRouterEnum(model, TumlRestletGenerationUtil.TumlTransactionResourceImpl, "TRANSACTION", "\"/transaction\"");
+//        addToClassQueryRouterEnum(model, UmlgRestletGenerationUtil.TumlTransactionResourceImpl, "TRANSACTION", "\"/transaction\"");
 //	}
 //
 //    protected void addToClassQueryRouterEnum(Model model, String name, String path) {
@@ -25,11 +25,11 @@ public class TransactionResourceRouterAdder /*extends BaseServerResourceBuilder 
 //        serverResourceClassField.setInitExp(ojPathName.getLast() + ".class");
 //        ojLiteral.addToAttributeValues(serverResourceClassField);
 //        routerEnum.addToImports(ojPathName);
-//        routerEnum.addToImports(TumlRestletGenerationUtil.ServerResource);
+//        routerEnum.addToImports(UmlgRestletGenerationUtil.ServerResource);
 //
 //        routerEnum.addToLiterals(ojLiteral);
 //
-//        OJAnnotatedOperation attachAll = routerEnum.findOperation("attachAll", TumlRestletGenerationUtil.Router);
+//        OJAnnotatedOperation attachAll = routerEnum.findOperation("attachAll", UmlgRestletGenerationUtil.Router);
 //        attachAll.getBody().addToStatements(routerEnum.getName() + "." + ojLiteral.getName() + ".attach(router)");
 //    }
 //

@@ -8,7 +8,7 @@ import java.util.UUID;
  * Date: 2013/03/09
  * Time: 8:42 AM
  */
-public abstract class BaseMetaNode implements TumlMetaNode {
+public abstract class BaseMetaNode implements UmlgMetaNode {
     protected Vertex vertex;
 
     public BaseMetaNode() {

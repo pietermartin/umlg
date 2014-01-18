@@ -11,7 +11,7 @@ import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.javageneration.util.PropertyWrapper;
-import org.umlg.javageneration.util.TinkerGenerationUtil;
+import org.umlg.javageneration.util.UmlgGenerationUtil;
 import org.umlg.javageneration.visitor.BaseVisitor;
 
 /**
@@ -27,10 +27,10 @@ public class QualifiedNameClassNameMapBuilder extends BaseVisitor implements Vis
 
 	@Override
 	public void visitBefore(Property p) {
-		OJAnnotatedClass globalMap = this.workspace.findOJClass(TinkerGenerationUtil.QualifiedNameClassMap.toJavaString());
+		OJAnnotatedClass globalMap = this.workspace.findOJClass(UmlgGenerationUtil.QualifiedNameClassMap.toJavaString());
 		if (globalMap == null) {
-			globalMap = new OJAnnotatedClass(TinkerGenerationUtil.QualifiedNameClassMap.getLast());
-			OJPackage ojPackage = new OJPackage(TinkerGenerationUtil.UmlgRootPackage.toJavaString());
+			globalMap = new OJAnnotatedClass(UmlgGenerationUtil.QualifiedNameClassMap.getLast());
+			OJPackage ojPackage = new OJPackage(UmlgGenerationUtil.UmlgRootPackage.toJavaString());
 			globalMap.setMyPackage(ojPackage);
 			addINSTANCE(globalMap);
 			addMap(globalMap);
@@ -46,14 +46,14 @@ public class QualifiedNameClassNameMapBuilder extends BaseVisitor implements Vis
 	private void addGetForQualifiedName(OJAnnotatedClass globalMap) {
 		OJAnnotatedOperation get = new OJAnnotatedOperation("get", new OJPathName("Class<?>"));
 		get.addParam("qualifiedName", "String");
-		get.getBody().addToStatements("return this." + TinkerGenerationUtil.QualifiedNameClassMapName + ".get(qualifiedName)");
+		get.getBody().addToStatements("return this." + UmlgGenerationUtil.QualifiedNameClassMapName + ".get(qualifiedName)");
 		globalMap.addToOperations(get);
 	}
 
 	private void addEntries(OJAnnotatedClass globalMap, Property p) {
 		PropertyWrapper pWrap = new PropertyWrapper(p);
 		OJAnnotatedOperation addAllEntries = globalMap.findOperation("addAllEntries");
-		addAllEntries.getBody().addToStatements("this." + TinkerGenerationUtil.QualifiedNameClassMapName + ".put(\"" + p.getQualifiedName() +
+		addAllEntries.getBody().addToStatements("this." + UmlgGenerationUtil.QualifiedNameClassMapName + ".put(\"" + p.getQualifiedName() +
 				"\", " + pWrap.javaBaseTypePath().getLast() + ".class)");
 		globalMap.addToImports(pWrap.javaBaseTypePath());
 	}
@@ -67,7 +67,7 @@ public class QualifiedNameClassNameMapBuilder extends BaseVisitor implements Vis
 	}
 
 	private void addMap(OJAnnotatedClass globalMap) {
-		OJField map = new OJField(TinkerGenerationUtil.QualifiedNameClassMapName, new OJPathName("java.util.Map").addToGenerics("String").addToGenerics(
+		OJField map = new OJField(UmlgGenerationUtil.QualifiedNameClassMapName, new OJPathName("java.util.Map").addToGenerics("String").addToGenerics(
 				"Class<?>"));
 		map.setVisibility(OJVisibilityKind.PRIVATE);
 		map.setInitExp("new HashMap<String, Class<?>>()");

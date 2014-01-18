@@ -19,8 +19,8 @@ import org.umlg.java.metamodel.annotation.OJEnumLiteral;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.javageneration.util.PropertyWrapper;
-import org.umlg.javageneration.util.TinkerGenerationUtil;
-import org.umlg.javageneration.util.TumlClassOperations;
+import org.umlg.javageneration.util.UmlgGenerationUtil;
+import org.umlg.javageneration.util.UmlgClassOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
 import org.umlg.javageneration.visitor.clazz.ToFromJsonCreator;
 
@@ -34,7 +34,7 @@ public class AddUmlgUriFieldToRuntimePropertyEnum extends BaseVisitor implements
     @VisitSubclasses({Class.class, AssociationClass.class})
 	public void visitBefore(Class clazz) {
 		OJAnnotatedClass annotatedClass = findOJClass(clazz);
-		OJEnum ojEnum = annotatedClass.findEnum(TumlClassOperations.propertyEnumName(clazz));
+		OJEnum ojEnum = annotatedClass.findEnum(UmlgClassOperations.propertyEnumName(clazz));
 
 		add_getUriToObject(clazz, ojEnum);
 		add_getUriToObject_to_ToJson(clazz, annotatedClass);
@@ -64,7 +64,7 @@ public class AddUmlgUriFieldToRuntimePropertyEnum extends BaseVisitor implements
         constructor.addParam(overloadedPostUriPrimitiveField.getName(), overloadedPostUriPrimitiveField.getType());
         constructor.getBody().addToStatements("this." + overloadedPostUriPrimitiveField.getName() + " = " + overloadedPostUriPrimitiveField.getName());
 
-        Set<Property> properties = TumlClassOperations.getAllProperties(clazz);
+        Set<Property> properties = UmlgClassOperations.getAllProperties(clazz);
 		for (Property property : properties) {
 			PropertyWrapper pWrap = new PropertyWrapper(property);
 			if (!(pWrap.isDerived() || pWrap.isDerivedUnion())) {
@@ -184,10 +184,10 @@ public class AddUmlgUriFieldToRuntimePropertyEnum extends BaseVisitor implements
 		}
 		if (!clazz.isAbstract()) {
 			OJAnnotatedOperation getUri = new OJAnnotatedOperation("getUri");
-			TinkerGenerationUtil.addOverrideAnnotation(getUri);
+			UmlgGenerationUtil.addOverrideAnnotation(getUri);
 			getUri.setReturnType(new OJPathName("String"));
 			getUri.setVisibility(OJVisibilityKind.PUBLIC);
-			getUri.getBody().addToStatements("return (\"\\\"\" + " + TumlClassOperations.propertyEnumName(clazz) + ".getUriToObject() + \"\\\"\")");
+			getUri.getBody().addToStatements("return (\"\\\"\" + " + UmlgClassOperations.propertyEnumName(clazz) + ".getUriToObject() + \"\\\"\")");
 			annotatedClass.addToOperations(getUri);
 		}
 	}
@@ -196,8 +196,8 @@ public class AddUmlgUriFieldToRuntimePropertyEnum extends BaseVisitor implements
 		OJAnnotatedOperation getUriToObject = new OJAnnotatedOperation("getUriToObject", new OJPathName("String"));
 		getUriToObject.setStatic(true);
 		getUriToObject.getBody().addToStatements(
-				"return " + "\"/" + this.workspace.getModel().getName() + "/" + TumlClassOperations.getPathName(clazz).getLast().toLowerCase() + "s/{"
-						+ TumlClassOperations.getPathName(clazz).getLast().toLowerCase() + "Id}\"");
+				"return " + "\"/" + this.workspace.getModel().getName() + "/" + UmlgClassOperations.getPathName(clazz).getLast().toLowerCase() + "s/{"
+						+ UmlgClassOperations.getPathName(clazz).getLast().toLowerCase() + "Id}\"");
 		ojEnum.addToOperations(getUriToObject);
 
 		OJAnnotatedOperation asJson = ojEnum.findOperation("asJson");

@@ -1,6 +1,6 @@
 package org.umlg.runtime.adaptor;
 
-import org.umlg.runtime.domain.TumlMetaNode;
+import org.umlg.runtime.domain.UmlgMetaNode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,16 +13,16 @@ public class TransactionThreadMetaNodeVar {
     private TransactionThreadMetaNodeVar() {
     }
 
-    private static ThreadLocal<Map<Object, TumlMetaNode>> transactionEntityVar = new ThreadLocal<Map<Object, TumlMetaNode>>() {
+    private static ThreadLocal<Map<Object, UmlgMetaNode>> transactionEntityVar = new ThreadLocal<Map<Object, UmlgMetaNode>>() {
         @Override
-        protected Map<Object, TumlMetaNode> initialValue() {
-            return new HashMap<Object, TumlMetaNode>();
+        protected Map<Object, UmlgMetaNode> initialValue() {
+            return new HashMap<Object, UmlgMetaNode>();
         }
     };
 
     public static boolean hasNoAuditEntry(String clazzAndId) {
-        Map<Object, TumlMetaNode> newVertexMap = transactionEntityVar.get();
-        TumlMetaNode newVertex = newVertexMap.get(clazzAndId);
+        Map<Object, UmlgMetaNode> newVertexMap = transactionEntityVar.get();
+        UmlgMetaNode newVertex = newVertexMap.get(clazzAndId);
         return newVertex == null;
     }
 
@@ -30,15 +30,15 @@ public class TransactionThreadMetaNodeVar {
         transactionEntityVar.remove();
     }
 
-    public static void setNewEntity(TumlMetaNode node) {
+    public static void setNewEntity(UmlgMetaNode node) {
         transactionEntityVar.get().put(node.getId(), node);
     }
 
-    public static List<TumlMetaNode> get() {
-        return new ArrayList<TumlMetaNode>(transactionEntityVar.get().values());
+    public static List<UmlgMetaNode> get() {
+        return new ArrayList<UmlgMetaNode>(transactionEntityVar.get().values());
     }
 
-    public static TumlMetaNode remove(TumlMetaNode node) {
+    public static UmlgMetaNode remove(UmlgMetaNode node) {
         return transactionEntityVar.get().remove(node.getId());
     }
 

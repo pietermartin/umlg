@@ -5,7 +5,7 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
-import org.umlg.ocl.TumlOclExecutor;
+import org.umlg.ocl.UmlgOclExecutor;
 import org.umlg.runtime.adaptor.GraphDb;
 import org.umlg.runtime.adaptor.GremlinExecutor;
 import org.umlg.runtime.domain.PersistentObject;
@@ -22,9 +22,9 @@ public abstract class BaseOclExecutionServerResourceImpl extends ServerResource 
     protected Representation execute(String query, Object contextId, String type) {
         if (type.equalsIgnoreCase("ocl")) {
             UmlgNode context = GraphDb.getDb().instantiateClassifier(contextId);
-            Object result = TumlOclExecutor.executeOclQuery(context.getQualifiedName(), context, query);
+            Object result = UmlgOclExecutor.executeOclQuery(context.getQualifiedName(), context, query);
             if (result instanceof Map) {
-//            return TumlOclExecutor.tupleMapToJson((Map<String, Object>) result);
+//            return UmlgOclExecutor.tupleMapToJson((Map<String, Object>) result);
                 //TODO
                 return new JsonRepresentation(result.toString());
             } else if (result instanceof Collection) {
@@ -81,9 +81,9 @@ public abstract class BaseOclExecutionServerResourceImpl extends ServerResource 
         int startOfAllInstances = ocl.indexOf(".");
         String context = ocl.substring(0, startOfAllInstances);
 
-        Object result = TumlOclExecutor.executeOclQuery(context, ocl);
+        Object result = UmlgOclExecutor.executeOclQuery(context, ocl);
         if (result instanceof Map) {
-//            return TumlOclExecutor.tupleMapToJson((Map<String, Object>) result);
+//            return UmlgOclExecutor.tupleMapToJson((Map<String, Object>) result);
             //TODO
             return new JsonRepresentation(result.toString());
         } else if (result instanceof Collection) {

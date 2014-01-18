@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.umlg.collectiontest.SequenceRoot;
 import org.umlg.collectiontest.SequenceTestListMany;
 import org.umlg.runtime.collection.TinkerSequence;
-import org.umlg.runtime.collection.memory.TumlMemorySequence;
+import org.umlg.runtime.collection.memory.UmlgMemorySequence;
 import org.umlg.runtime.test.BaseLocalDbTest;
 
 /**
@@ -16,8 +16,8 @@ public class OclStdLibSequenceTest extends BaseLocalDbTest {
 
     @Test
     public void testEquals() {
-        TinkerSequence<SequenceTestListMany> testListPass = new TumlMemorySequence<SequenceTestListMany>();
-        TinkerSequence<SequenceTestListMany> testListFail = new TumlMemorySequence<SequenceTestListMany>();
+        TinkerSequence<SequenceTestListMany> testListPass = new UmlgMemorySequence<SequenceTestListMany>();
+        TinkerSequence<SequenceTestListMany> testListFail = new UmlgMemorySequence<SequenceTestListMany>();
         SequenceRoot sequenceRoot = new SequenceRoot(true);
         sequenceRoot.setName("sequenceRoot");
         SequenceTestListMany sequenceTestListMany1 = new SequenceTestListMany(sequenceRoot);

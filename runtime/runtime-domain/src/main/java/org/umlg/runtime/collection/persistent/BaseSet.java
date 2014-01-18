@@ -3,7 +3,7 @@ package org.umlg.runtime.collection.persistent;
 import com.tinkerpop.blueprints.Edge;
 import org.umlg.runtime.collection.TinkerBag;
 import org.umlg.runtime.collection.TinkerSet;
-import org.umlg.runtime.collection.TumlRuntimeProperty;
+import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.OclStdLibSet;
@@ -17,14 +17,14 @@ public abstract class BaseSet<E> extends BaseCollection<E> implements TinkerSet<
 
 	protected OclStdLibSet<E> oclStdLibSet;
 	
-	public BaseSet(TumlRuntimeProperty runtimeProperty) {
+	public BaseSet(UmlgRuntimeProperty runtimeProperty) {
 		super(runtimeProperty);
 		this.internalCollection = new HashSet<E>();
 		this.oclStdLibSet = new OclStdLibSetImpl<E>((Set<E>)this.internalCollection);
 		this.oclStdLibCollection = this.oclStdLibSet;
 	}
 	
-	public BaseSet(UmlgNode owner, TumlRuntimeProperty runtimeProperty) {
+	public BaseSet(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
 		super(owner, runtimeProperty);
 		this.internalCollection = new HashSet<E>();
 		this.oclStdLibSet = new OclStdLibSetImpl<E>((Set<E>)this.internalCollection);

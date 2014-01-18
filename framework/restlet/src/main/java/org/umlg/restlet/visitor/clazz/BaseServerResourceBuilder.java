@@ -10,10 +10,10 @@ import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.java.metamodel.annotation.OJEnum;
 import org.umlg.java.metamodel.annotation.OJEnumLiteral;
 import org.umlg.generation.Workspace;
-import org.umlg.javageneration.util.TinkerGenerationUtil;
-import org.umlg.javageneration.util.TumlClassOperations;
+import org.umlg.javageneration.util.UmlgGenerationUtil;
+import org.umlg.javageneration.util.UmlgClassOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
-import org.umlg.restlet.util.TumlRestletGenerationUtil;
+import org.umlg.restlet.util.UmlgRestletGenerationUtil;
 
 public abstract class BaseServerResourceBuilder extends BaseVisitor {
 
@@ -27,33 +27,33 @@ public abstract class BaseServerResourceBuilder extends BaseVisitor {
 
 //    protected void checkIfTransactionSuspended(OJAnnotatedOperation post) {
 //        //Check if transaction needs resuming
-//        OJIfStatement ifTransactionNeedsResuming = new OJIfStatement("getAttribute(\"" + TinkerGenerationUtil.transactionIdentifier + "\") != null");
-//        ifTransactionNeedsResuming.addToThenPart(TinkerGenerationUtil.graphDbAccess + ".resume(" + TinkerGenerationUtil.TumlTransactionManager + ".INSTANCE.get(getAttribute(\"" + TinkerGenerationUtil.transactionIdentifier + "\")))");
+//        OJIfStatement ifTransactionNeedsResuming = new OJIfStatement("getAttribute(\"" + UmlgGenerationUtil.transactionIdentifier + "\") != null");
+//        ifTransactionNeedsResuming.addToThenPart(UmlgGenerationUtil.graphDbAccess + ".resume(" + UmlgGenerationUtil.TumlTransactionManager + ".INSTANCE.get(getAttribute(\"" + UmlgGenerationUtil.transactionIdentifier + "\")))");
 //        post.getBody().addToStatements(ifTransactionNeedsResuming);
 //    }
 
 //    protected void commitIfNotFromSuspendedTransaction(OJBlock block) {
 //        //Check if transaction needs resuming
-//        OJIfStatement ifTransactionNeedsResuming = new OJIfStatement("getAttribute(\"" + TinkerGenerationUtil.transactionIdentifier + "\") != null");
-//        ifTransactionNeedsResuming.addToThenPart(TinkerGenerationUtil.graphDbAccess + ".commit()");
+//        OJIfStatement ifTransactionNeedsResuming = new OJIfStatement("getAttribute(\"" + UmlgGenerationUtil.transactionIdentifier + "\") != null");
+//        ifTransactionNeedsResuming.addToThenPart(UmlgGenerationUtil.graphDbAccess + ".commit()");
 //        block.addToStatements(ifTransactionNeedsResuming);
 //    }
 
 //    protected void commitIfNotFromResume(OJBlock block) {
-//        OJIfStatement ifTransactionNeedsResuming = new OJIfStatement("getAttribute(\"" + TinkerGenerationUtil.transactionIdentifier + "\") == null");
-//        ifTransactionNeedsResuming.addToThenPart(TinkerGenerationUtil.graphDbAccess + ".commit()");
+//        OJIfStatement ifTransactionNeedsResuming = new OJIfStatement("getAttribute(\"" + UmlgGenerationUtil.transactionIdentifier + "\") == null");
+//        ifTransactionNeedsResuming.addToThenPart(UmlgGenerationUtil.graphDbAccess + ".commit()");
 //        block.addToStatements(ifTransactionNeedsResuming);
 //    }
 
     protected void commitOrRollback(OJTryStatement ojTryStatement) {
-        OJIfStatement ifTransactionNeedsCommitOrRollback = new OJIfStatement("!(getQueryValue(\"" + TinkerGenerationUtil.rollback+ "\") != null && Boolean.valueOf(getQueryValue(\"" + TinkerGenerationUtil.rollback + "\")))");
-        ifTransactionNeedsCommitOrRollback.addToThenPart(TinkerGenerationUtil.graphDbAccess + ".commit()");
+        OJIfStatement ifTransactionNeedsCommitOrRollback = new OJIfStatement("!(getQueryValue(\"" + UmlgGenerationUtil.rollback+ "\") != null && Boolean.valueOf(getQueryValue(\"" + UmlgGenerationUtil.rollback + "\")))");
+        ifTransactionNeedsCommitOrRollback.addToThenPart(UmlgGenerationUtil.graphDbAccess + ".commit()");
         ojTryStatement.getTryPart().addToStatements(ifTransactionNeedsCommitOrRollback);
-        ojTryStatement.getFinallyPart().addToStatements(TinkerGenerationUtil.graphDbAccess + ".rollback()");
+        ojTryStatement.getFinallyPart().addToStatements(UmlgGenerationUtil.graphDbAccess + ".rollback()");
     }
 
     protected void addToRouterEnum(Model model, OJAnnotatedClass annotatedClass, String name, String path) {
-		OJEnum routerEnum = (OJEnum) this.workspace.findOJClass(TumlRestletGenerationUtil.RestletRouterEnum.toJavaString());
+		OJEnum routerEnum = (OJEnum) this.workspace.findOJClass(UmlgRestletGenerationUtil.RestletRouterEnum.toJavaString());
 		OJEnumLiteral ojLiteral = new OJEnumLiteral(name);
 
 		OJField uri = new OJField();
@@ -66,36 +66,36 @@ public abstract class BaseServerResourceBuilder extends BaseVisitor {
 		serverResourceClassField.setInitExp(annotatedClass.getName() + ".class");
 		ojLiteral.addToAttributeValues(serverResourceClassField);
 		routerEnum.addToImports(annotatedClass.getPathName());
-		routerEnum.addToImports(TumlRestletGenerationUtil.ServerResource);
+		routerEnum.addToImports(UmlgRestletGenerationUtil.ServerResource);
 
 		routerEnum.addToLiterals(ojLiteral);
 
-		OJAnnotatedOperation attachAll = routerEnum.findOperation("attachAll", TumlRestletGenerationUtil.Router);
+		OJAnnotatedOperation attachAll = routerEnum.findOperation("attachAll", UmlgRestletGenerationUtil.Router);
 		attachAll.getBody().addToStatements(routerEnum.getName() + "." + ojLiteral.getName() + ".attach(router)");
 	}
 
     protected String getLookupServerResourceImplName(Class clazz) {
-        return TumlClassOperations.className(clazz) + "LookupServerResourceImpl";
+        return UmlgClassOperations.className(clazz) + "LookupServerResourceImpl";
     }
 
 	protected String getServerResourceImplName(Classifier classifier) {
-		return TumlClassOperations.className(classifier) + "ServerResourceImpl";
+		return UmlgClassOperations.className(classifier) + "ServerResourceImpl";
 	}
 
     protected String getServerResourceMetatDataImplName(Classifier clazz) {
-        return TumlClassOperations.className(clazz) + "MetaDataServerResourceImpl";
+        return UmlgClassOperations.className(clazz) + "MetaDataServerResourceImpl";
     }
 
     protected String getLookupServerResourceName(Classifier clazz) {
-        return TumlClassOperations.className(clazz) + "LookupServerResource";
+        return UmlgClassOperations.className(clazz) + "LookupServerResource";
     }
 
     protected String getServerResourceName(Classifier clazz) {
-		return TumlClassOperations.className(clazz) + "ServerResource";
+		return UmlgClassOperations.className(clazz) + "ServerResource";
 	}
 
     protected String getServerResourceMetaDataName(Classifier clazz) {
-        return TumlClassOperations.className(clazz) + "MetaDataServerResource";
+        return UmlgClassOperations.className(clazz) + "MetaDataServerResource";
     }
 
     protected void addPrivateIdVariable(Classifier clazz, OJAnnotatedClass annotatedClass) {
@@ -105,7 +105,7 @@ public abstract class BaseServerResourceBuilder extends BaseVisitor {
     }
 
     protected String getIdFieldName(Classifier clazz) {
-        return StringUtils.uncapitalize(TumlClassOperations.className(clazz)).toLowerCase() + "Id";
+        return StringUtils.uncapitalize(UmlgClassOperations.className(clazz)).toLowerCase() + "Id";
     }
 
 }

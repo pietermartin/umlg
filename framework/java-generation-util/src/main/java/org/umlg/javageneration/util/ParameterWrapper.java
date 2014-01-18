@@ -36,13 +36,13 @@ public class ParameterWrapper extends MultiplicityWrapper implements Parameter {
 	public OJPathName javaTumlTypePath() {
 		OJPathName fieldType;
 		if (isOrdered() && isUnique()) {
-			fieldType = TumlCollectionKindEnum.ORDERED_SET.getInterfacePathName();
+			fieldType = UmlgCollectionKindEnum.ORDERED_SET.getInterfacePathName();
 		} else if (isOrdered() && !isUnique()) {
-			fieldType = TumlCollectionKindEnum.SEQUENCE.getInterfacePathName();
+			fieldType = UmlgCollectionKindEnum.SEQUENCE.getInterfacePathName();
 		} else if (!isOrdered() && !isUnique()) {
-			fieldType = TumlCollectionKindEnum.BAG.getInterfacePathName();
+			fieldType = UmlgCollectionKindEnum.BAG.getInterfacePathName();
 		} else if (!isOrdered() && isUnique()) {
-			fieldType = TumlCollectionKindEnum.SET.getInterfacePathName();
+			fieldType = UmlgCollectionKindEnum.SET.getInterfacePathName();
 		} else {
 			throw new RuntimeException("wtf");
 		}

@@ -12,7 +12,7 @@ import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
-import org.umlg.javageneration.ocl.TumlOcl2Java;
+import org.umlg.javageneration.ocl.UmlgOcl2Java;
 import org.umlg.javageneration.util.OperationWrapper;
 import org.umlg.javageneration.visitor.BaseVisitor;
 import org.umlg.ocl.UmlgOcl2Parser;
@@ -65,6 +65,6 @@ public class OperationImplementorSimple extends BaseVisitor implements Visitor<o
 		ojOper.setComment(String.format("Implements the ocl statement for operation body condition '%s'\n<pre>\n%s\n</pre>", operWrapper.getName(), ocl));
 		logger.info(String.format("About to parse ocl expression \n%s", new Object[] { ocl }));
 		OCLExpression<Classifier> oclExp = UmlgOcl2Parser.INSTANCE.parseOcl(ocl);
-		ojOper.getBody().addToStatements("return " + TumlOcl2Java.oclToJava(ojClass, oclExp));
+		ojOper.getBody().addToStatements("return " + UmlgOcl2Java.oclToJava(ojClass, oclExp));
 	}
 }

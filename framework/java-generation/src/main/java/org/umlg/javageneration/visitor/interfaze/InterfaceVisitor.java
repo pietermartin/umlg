@@ -6,9 +6,9 @@ import org.umlg.java.metamodel.annotation.OJAnnotatedInterface;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.javageneration.util.Namer;
-import org.umlg.javageneration.util.TinkerGenerationUtil;
-import org.umlg.javageneration.util.TumlClassOperations;
-import org.umlg.javageneration.util.TumlInterfaceOperations;
+import org.umlg.javageneration.util.UmlgGenerationUtil;
+import org.umlg.javageneration.util.UmlgClassOperations;
+import org.umlg.javageneration.util.UmlgInterfaceOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
 
 public class InterfaceVisitor extends BaseVisitor implements Visitor<org.eclipse.uml2.uml.Interface> {
@@ -21,14 +21,14 @@ public class InterfaceVisitor extends BaseVisitor implements Visitor<org.eclipse
 		OJAnnotatedInterface annotatedInterface = new OJAnnotatedInterface(Namer.name(inf));
 		OJPackage ojPackage = new OJPackage(Namer.name(inf.getNearestPackage()));
 		annotatedInterface.setMyPackage(ojPackage);
-		if (TumlInterfaceOperations.hasCompositeOwner(inf)) {
+		if (UmlgInterfaceOperations.hasCompositeOwner(inf)) {
 			extendCompositionNode(annotatedInterface);
 		} else {
 			extendTumlNode(annotatedInterface);
 		}
 		
 		for (Classifier c : inf.getGenerals()) {
-			annotatedInterface.addToSuperInterfaces(TumlClassOperations.getPathName(c));
+			annotatedInterface.addToSuperInterfaces(UmlgClassOperations.getPathName(c));
 		}
 		
 		addToSource(annotatedInterface);
@@ -39,10 +39,10 @@ public class InterfaceVisitor extends BaseVisitor implements Visitor<org.eclipse
 	}
 
 	private void extendCompositionNode(OJAnnotatedInterface annotatedInterface) {
-		annotatedInterface.addToSuperInterfaces(TinkerGenerationUtil.tinkerCompositionNodePathName);
+		annotatedInterface.addToSuperInterfaces(UmlgGenerationUtil.tinkerCompositionNodePathName);
 	}
 	
 	private void extendTumlNode(OJAnnotatedInterface annotatedInterface) {
-		annotatedInterface.addToSuperInterfaces(TinkerGenerationUtil.UMLG_NODE);
+		annotatedInterface.addToSuperInterfaces(UmlgGenerationUtil.UMLG_NODE);
 	}
 }

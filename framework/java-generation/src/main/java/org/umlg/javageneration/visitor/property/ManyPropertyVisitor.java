@@ -3,7 +3,6 @@ package org.umlg.javageneration.visitor.property;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.Property;
-import org.umlg.framework.VisitFilter;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.java.metamodel.OJForStatement;
@@ -14,8 +13,8 @@ import org.umlg.java.metamodel.annotation.OJAnnotatedField;
 import org.umlg.java.metamodel.annotation.OJAnnotatedInterface;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.javageneration.util.PropertyWrapper;
-import org.umlg.javageneration.util.TinkerGenerationUtil;
-import org.umlg.javageneration.util.TumlClassOperations;
+import org.umlg.javageneration.util.UmlgGenerationUtil;
+import org.umlg.javageneration.util.UmlgClassOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
 
 public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property> {
@@ -64,7 +63,7 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
         if (!propertyWrapper.getSubsettedProperties().isEmpty()) {
             //if subsetted property is on an interface then there is no fake implementation, so no override
             if (!(propertyWrapper.getSubsettedProperties().get(0).getType() instanceof Interface)) {
-                TinkerGenerationUtil.addOverrideAnnotation(getter);
+                UmlgGenerationUtil.addOverrideAnnotation(getter);
             }
         }
 
@@ -128,7 +127,7 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
         }
         singleAdder.addParam(propertyWrapper.fieldname(), propertyWrapper.javaBaseTypePath());
         if (propertyWrapper.isMemberOfAssociationClass()) {
-            singleAdder.addParam(StringUtils.uncapitalize(propertyWrapper.getAssociationClass().getName()), TumlClassOperations.getPathName(propertyWrapper.getAssociationClass()));
+            singleAdder.addParam(StringUtils.uncapitalize(propertyWrapper.getAssociationClass().getName()), UmlgClassOperations.getPathName(propertyWrapper.getAssociationClass()));
         }
         if (!(owner instanceof OJAnnotatedInterface)) {
 
@@ -136,10 +135,10 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
             if (/*For bags the one side can have many edges to the same element*/propertyWrapper.isUnique() && propertyWrapper.hasOtherEnd() && !propertyWrapper.isEnumeration() && otherEnd.isOne()) {
                 OJIfStatement ifNotNull2 = new OJIfStatement(propertyWrapper.fieldname() + " != null");
                 ifNotNull2.addToThenPart(propertyWrapper.fieldname() + "." + otherEnd.clearer() + "()");
-                ifNotNull2.addToThenPart(propertyWrapper.fieldname() + ".initialiseProperty(" + TumlClassOperations.propertyEnumName(otherEnd.getOwningType()) + "."
+                ifNotNull2.addToThenPart(propertyWrapper.fieldname() + ".initialiseProperty(" + UmlgClassOperations.propertyEnumName(otherEnd.getOwningType()) + "."
                         + otherEnd.fieldname() + ", false)");
                 ifNotNull2.addToThenPart(propertyWrapper.remover() + "(" + propertyWrapper.fieldname() + ")");
-                owner.addToImports(TumlClassOperations.getPathName(otherEnd.getOwningType()).append(TumlClassOperations.propertyEnumName(otherEnd.getOwningType())));
+                owner.addToImports(UmlgClassOperations.getPathName(otherEnd.getOwningType()).append(UmlgClassOperations.propertyEnumName(otherEnd.getOwningType())));
                 singleAdder.getBody().addToStatements(ifNotNull2);
             }
             OJIfStatement ifNotNull = new OJIfStatement(propertyWrapper.fieldname() + " != null");

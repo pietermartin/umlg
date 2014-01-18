@@ -18,8 +18,8 @@ import org.umlg.java.metamodel.annotation.OJEnumLiteral;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.javageneration.util.Condition;
-import org.umlg.javageneration.util.TumlClassOperations;
-import org.umlg.javageneration.util.TumlModelOperations;
+import org.umlg.javageneration.util.UmlgClassOperations;
+import org.umlg.javageneration.util.UmlgModelOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
 
 public class AddUriToRootRuntimePropertyEnum extends BaseVisitor implements Visitor<Model> {
@@ -64,22 +64,22 @@ public class AddUriToRootRuntimePropertyEnum extends BaseVisitor implements Visi
         constructor.getBody().addToStatements("this." + overloadedPostUriPrimitiveField.getName() + " = " + overloadedPostUriPrimitiveField.getName());
 
         @SuppressWarnings("unchecked")
-		List<Class> result = (List<Class>) TumlModelOperations.findElements(model, new Condition() {
-			@Override
-			public boolean evaluateOn(Element e) {
-				if (!(e instanceof Class)) {
-					return false;
-				}
-				Class clazz = (Class) e;
-				return !clazz.isAbstract() && !TumlClassOperations.hasCompositeOwner(clazz);
-			}
-		});
+		List<Class> result = (List<Class>) UmlgModelOperations.findElements(model, new Condition() {
+            @Override
+            public boolean evaluateOn(Element e) {
+                if (!(e instanceof Class)) {
+                    return false;
+                }
+                Class clazz = (Class) e;
+                return !clazz.isAbstract() && !UmlgClassOperations.hasCompositeOwner(clazz);
+            }
+        });
 
 		List<OJEnumLiteral> literals = ojEnum.getLiterals();
 		for (OJEnumLiteral literal : literals) {
 			Class clazz = null;
 			for (Class c : result) {
-				if (StringUtils.uncapitalize(TumlClassOperations.className(c)).equals(literal.getName())) {
+				if (StringUtils.uncapitalize(UmlgClassOperations.className(c)).equals(literal.getName())) {
 					clazz = c;
 					break;
 				}
@@ -87,7 +87,7 @@ public class AddUriToRootRuntimePropertyEnum extends BaseVisitor implements Visi
 			String uri;
 			if (clazz != null) {
                 String contextPath = ModelLoader.INSTANCE.getModel().getName();
-				uri = "\"/" + contextPath + "/" + TumlClassOperations.getPathName(clazz).getLast().toLowerCase() + "s\"";
+				uri = "\"/" + contextPath + "/" + UmlgClassOperations.getPathName(clazz).getLast().toLowerCase() + "s\"";
 			} else {
 				uri = "\"/" + model.getName() + "\"";
 			}
@@ -95,7 +95,7 @@ public class AddUriToRootRuntimePropertyEnum extends BaseVisitor implements Visi
             String transactionalUri;
             if (clazz != null) {
                 String contextPath = ModelLoader.INSTANCE.getModel().getName();
-                transactionalUri = "\"/" + contextPath + "/overloadedpost/" + TumlClassOperations.getPathName(clazz).getLast().toLowerCase() + "s\"";
+                transactionalUri = "\"/" + contextPath + "/overloadedpost/" + UmlgClassOperations.getPathName(clazz).getLast().toLowerCase() + "s\"";
             } else {
                 transactionalUri = "\"/" + model.getName() + "\"";
             }

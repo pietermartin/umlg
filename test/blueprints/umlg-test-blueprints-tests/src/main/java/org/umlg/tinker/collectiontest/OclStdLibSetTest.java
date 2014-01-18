@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.umlg.collectiontest.SetRoot;
 import org.umlg.collectiontest.SetTest;
 import org.umlg.runtime.collection.TinkerSet;
-import org.umlg.runtime.collection.memory.TumlMemorySet;
+import org.umlg.runtime.collection.memory.UmlgMemorySet;
 import org.umlg.runtime.test.BaseLocalDbTest;
 
 /**
@@ -90,7 +90,7 @@ public class OclStdLibSetTest extends BaseLocalDbTest {
         setTest4.setName("setTest4");
         db.commit();
 
-        TinkerSet<SetTest> other = new TumlMemorySet<SetTest>();
+        TinkerSet<SetTest> other = new UmlgMemorySet<SetTest>();
         other.add(setTest1);
         other.add(setTest2);
         other.add(setTest3);
@@ -127,7 +127,7 @@ public class OclStdLibSetTest extends BaseLocalDbTest {
 
         db.commit();
 
-        TinkerSet<SetTest> other = new TumlMemorySet<SetTest>();
+        TinkerSet<SetTest> other = new UmlgMemorySet<SetTest>();
         other.add(setTest1);
         other.add(setTest2);
 
@@ -168,7 +168,7 @@ public class OclStdLibSetTest extends BaseLocalDbTest {
 
         db.commit();
 
-        TinkerSet<SetTest> other = new TumlMemorySet<SetTest>();
+        TinkerSet<SetTest> other = new UmlgMemorySet<SetTest>();
         other.add(setTest3);
         other.add(setTest4);
         other.add(setTest21);
@@ -212,7 +212,7 @@ public class OclStdLibSetTest extends BaseLocalDbTest {
 
         db.commit();
 
-        TinkerSet<SetTest> other = new TumlMemorySet<SetTest>();
+        TinkerSet<SetTest> other = new UmlgMemorySet<SetTest>();
         other.add(setTest3);
         other.add(setTest4);
         other.add(setTest21);
@@ -256,7 +256,7 @@ public class OclStdLibSetTest extends BaseLocalDbTest {
 
         db.commit();
 
-        TinkerSet<SetTest> other = new TumlMemorySet<SetTest>();
+        TinkerSet<SetTest> other = new UmlgMemorySet<SetTest>();
         other.add(setTest3);
         other.add(setTest4);
         other.add(setTest21);
@@ -300,7 +300,7 @@ public class OclStdLibSetTest extends BaseLocalDbTest {
 
         db.commit();
 
-        TinkerSet<SetTest> other = new TumlMemorySet<SetTest>();
+        TinkerSet<SetTest> other = new UmlgMemorySet<SetTest>();
         other.add(setTest3);
         other.add(setTest4);
         other.add(setTest21);

@@ -1324,8 +1324,8 @@ public class OperationWrapper implements Operation {
 
 	public List<OJParameter> getOJParametersExceptReturn() {
 		List<OJParameter> result = new ArrayList<OJParameter>();
-		for (Parameter parameter : TumlOperationOperations.getParametersExceptReturn(this.operation)) {
-			result.add(new OJParameter(parameter.getName(), TumlClassOperations.getPathName(parameter.getType())));
+		for (Parameter parameter : UmlgOperationOperations.getParametersExceptReturn(this.operation)) {
+			result.add(new OJParameter(parameter.getName(), UmlgClassOperations.getPathName(parameter.getType())));
 		}
 		return result;
 	}
@@ -1335,7 +1335,7 @@ public class OperationWrapper implements Operation {
 			throw new IllegalStateException(String.format("Property %s does not have a body condtion", new Object[] { this.getName() }));
 		}
 		Constraint bodyCondition = getBodyCondition();
-		String ocl = TumlConstraintOperations.getAsOcl(bodyCondition);
+		String ocl = UmlgConstraintOperations.getAsOcl(bodyCondition);
 		return ocl;
 	}
 

@@ -5,7 +5,7 @@ import com.google.common.collect.Multiset;
 import com.tinkerpop.blueprints.Edge;
 import org.umlg.runtime.collection.TinkerBag;
 import org.umlg.runtime.collection.TinkerSet;
-import org.umlg.runtime.collection.TumlRuntimeProperty;
+import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.OclStdLibBag;
@@ -19,14 +19,14 @@ public abstract class BaseBag<E> extends BaseCollection<E> implements TinkerBag<
 	protected OclStdLibBag<E> oclStdLibBag;
 //	protected LinkedListMultimap<Object, Vertex> internalVertexMultiMap = LinkedListMultimap.create();
 	
-	public BaseBag(TumlRuntimeProperty runtimeProperty) {
+	public BaseBag(UmlgRuntimeProperty runtimeProperty) {
 		super(runtimeProperty);
 		this.internalCollection = HashMultiset.create();
 		this.oclStdLibBag = new OclStdLibBagImpl<E>((Multiset<E>)this.internalCollection); 
 		this.oclStdLibCollection = this.oclStdLibBag;
 	}
 	
-	public BaseBag(UmlgNode owner, TumlRuntimeProperty runtimeProperty) {
+	public BaseBag(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
 		super(owner, runtimeProperty);
 		this.internalCollection = HashMultiset.create();
 		this.oclStdLibBag = new OclStdLibBagImpl<E>((Multiset<E>)this.internalCollection); 

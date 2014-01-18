@@ -5,7 +5,6 @@ import org.restlet.Restlet;
 import org.restlet.resource.Directory;
 import org.restlet.routing.Router;
 import org.restlet.routing.Template;
-import org.umlg.framework.ModelLoader;
 import org.umlg.ocl.UmlgOcl2Parser;
 import org.umlg.runtime.adaptor.DefaultDataCreator;
 import org.umlg.runtime.adaptor.UmlgAdminAppFactory;
@@ -13,7 +12,6 @@ import org.umlg.runtime.adaptor.UmlgGraphManager;
 import org.umlg.runtime.util.UmlgProperties;
 
 import java.io.File;
-import java.net.URL;
 
 /**
  * Date: 2014/01/15
@@ -33,7 +31,7 @@ public abstract class UmlgRestletApplication extends Application {
     public Restlet createInboundRoot() {
         Router router = new Router(getContext());
         attachAll(router);
-        router.attach("/ui2", TumlGuiServerResource.class, Template.MODE_STARTS_WITH);
+        router.attach("/ui2", UmlgGuiServerResource.class, Template.MODE_STARTS_WITH);
         File current = new File(".");
         Directory slickgrid;
         if (UmlgProperties.INSTANCE.isLoadUiResourcesFromFile()) {
@@ -51,9 +49,9 @@ public abstract class UmlgRestletApplication extends Application {
         }
         css.setListingAllowed(true);
         router.attach("/css/", css);
-        TumlRestletFilter tumlRestletFilter = new TumlRestletFilter(getContext());
-        tumlRestletFilter.setNext(router);
-        return tumlRestletFilter;
+        UmlgRestletFilter umlgRestletFilter = new UmlgRestletFilter(getContext());
+        umlgRestletFilter.setNext(router);
+        return umlgRestletFilter;
     }
 
     /**
@@ -70,23 +68,13 @@ public abstract class UmlgRestletApplication extends Application {
     protected abstract String getModelFileName();
 
     protected void init() {
-        URL modelFileURL = Thread.currentThread().getContextClassLoader().getResource(getModelFileName());
-        if ( modelFileURL == null ) {
-            throw new IllegalStateException("Model file restAndJson.uml not found. The model's file name must be on the classpath.");
-        }
-        try {
-            final File modelFile = new File(modelFileURL.toURI());
-            //Load the mode async
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    ModelLoader.INSTANCE.loadModel(modelFile);
-                    UmlgOcl2Parser tumlOcl2Parser = UmlgOcl2Parser.INSTANCE;
-                }
-            }).start();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        //Load the mode async
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                UmlgOcl2Parser.INSTANCE.init(getModelFileName());
+            }
+        }).start();
         UmlgGraphManager.INSTANCE.startupGraph();
         if ( UmlgProperties.INSTANCE.isStartAdminApplication() ) {
             UmlgAdminAppFactory.getUmlgAdminApp().startAdminApplication();

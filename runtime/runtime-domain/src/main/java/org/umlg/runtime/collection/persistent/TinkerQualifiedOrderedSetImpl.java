@@ -2,15 +2,15 @@ package org.umlg.runtime.collection.persistent;
 
 import com.tinkerpop.blueprints.Edge;
 import org.umlg.runtime.collection.TinkerQualifiedOrderedSet;
-import org.umlg.runtime.collection.TumlRuntimeProperty;
+import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.domain.UmlgNode;
 
 import java.util.Collection;
 
-public class TinkerQualifiedOrderedSetImpl<E> extends TumlBaseOrderedSet<E> implements TinkerQualifiedOrderedSet<E> {
+public class TinkerQualifiedOrderedSetImpl<E> extends UmlgBaseOrderedSet<E> implements TinkerQualifiedOrderedSet<E> {
 
     @SuppressWarnings("unchecked")
-    public TinkerQualifiedOrderedSetImpl(UmlgNode owner, TumlRuntimeProperty runtimeProperty) {
+    public TinkerQualifiedOrderedSetImpl(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
         super(owner, runtimeProperty);
 //        this.index = GraphDb.getDb().getIndex(getQualifiedName(), Edge.class);
     }

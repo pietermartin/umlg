@@ -4,7 +4,7 @@ import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 import org.umlg.runtime.adaptor.GraphDb;
 import org.umlg.runtime.collection.TinkerCollection;
-import org.umlg.runtime.collection.TumlRuntimeProperty;
+import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.collection.UmlgPropertyAssociationClassSet;
 import org.umlg.runtime.domain.AssociationClassNode;
 import org.umlg.runtime.domain.UmlgNode;
@@ -17,7 +17,7 @@ import java.util.Set;
  */
 public class UmlgPropertyAssociationClassSetImpl<E, AC extends AssociationClassNode> extends TinkerSetImpl<E> implements UmlgPropertyAssociationClassSet<E, AC> {
 
-    public UmlgPropertyAssociationClassSetImpl(UmlgNode owner, TumlRuntimeProperty runtimeProperty, TumlRuntimeProperty associationClassRuntimeProperty) {
+    public UmlgPropertyAssociationClassSetImpl(UmlgNode owner, UmlgRuntimeProperty runtimeProperty, UmlgRuntimeProperty associationClassRuntimeProperty) {
         super(owner, runtimeProperty);
     }
 
@@ -25,8 +25,8 @@ public class UmlgPropertyAssociationClassSetImpl<E, AC extends AssociationClassN
     public boolean add(E e, AC associationClass) {
         //This is needed in handleInverseSide
         if (super.add(e)) {
-            associationClass.internalAdder(this.tumlRuntimeProperty, true, this.owner);
-            associationClass.internalAdder(this.tumlRuntimeProperty, false, (UmlgNode) e);
+            associationClass.internalAdder(this.umlgRuntimeProperty, true, this.owner);
+            associationClass.internalAdder(this.umlgRuntimeProperty, false, (UmlgNode) e);
             this.edge.setProperty(TinkerCollection.ASSOCIATION_CLASS_VERTEX_ID, associationClass.getId());
             this.edge.setProperty("className", associationClass.getClass().getName());
             return true;

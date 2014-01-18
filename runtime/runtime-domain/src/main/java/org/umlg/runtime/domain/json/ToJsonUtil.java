@@ -2,14 +2,12 @@ package org.umlg.runtime.domain.json;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 import org.umlg.runtime.domain.PersistentObject;
 import org.umlg.runtime.domain.UmlgApplicationNode;
 import org.umlg.runtime.domain.UmlgEnum;
-import org.umlg.runtime.util.TumlFormatter;
+import org.umlg.runtime.util.UmlgFormatter;
 
-import java.sql.Time;
 import java.util.Collection;
 
 public class ToJsonUtil {
@@ -87,7 +85,7 @@ public class ToJsonUtil {
             for (LocalDate p : localDates) {
                 count++;
                 json.append("\"");
-                json.append(TumlFormatter.format(p));
+                json.append(UmlgFormatter.format(p));
                 json.append("\"");
                 if (count != localDates.size()) {
                     json.append(",");
@@ -110,7 +108,7 @@ public class ToJsonUtil {
                 for (DateTime p : dateTimes) {
                 count++;
                 json.append("\"");
-                json.append(TumlFormatter.format(p));
+                json.append(UmlgFormatter.format(p));
                 json.append("\"");
                 if (count != dateTimes.size()) {
                     json.append(",");
@@ -131,7 +129,7 @@ public class ToJsonUtil {
             for (LocalTime localTime : localTimes) {
                 count++;
                 json.append("\"");
-                json.append(TumlFormatter.format(localTime));
+                json.append(UmlgFormatter.format(localTime));
                 json.append("\"");
                 if (count != localTimes.size()) {
                     json.append(",");

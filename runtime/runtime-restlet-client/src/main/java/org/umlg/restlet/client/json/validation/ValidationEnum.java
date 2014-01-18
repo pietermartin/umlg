@@ -57,7 +57,7 @@ public enum ValidationEnum {
         }
     }
 
-    public TumlValidation getValidation(Object value) {
+    public UmlgValidation getValidation(Object value) {
         switch (this) {
             case DATETIME_VALIDATION:
                 //TODO

@@ -10,8 +10,8 @@ import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.javageneration.util.PropertyWrapper;
-import org.umlg.javageneration.util.TinkerGenerationUtil;
-import org.umlg.javageneration.util.TumlClassOperations;
+import org.umlg.javageneration.util.UmlgGenerationUtil;
+import org.umlg.javageneration.util.UmlgClassOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
 
 public class AuditToJsonCreator extends BaseVisitor implements Visitor<Class> {
@@ -28,7 +28,7 @@ public class AuditToJsonCreator extends BaseVisitor implements Visitor<Class> {
 	public void visitAfter(Class clazz) {
 		OJAnnotatedClass auditClass = findAuditOJClass(clazz);
 		OJAnnotatedOperation toJson = new OJAnnotatedOperation("toJson", new OJPathName("String"));
-		TinkerGenerationUtil.addOverrideAnnotation(toJson);
+		UmlgGenerationUtil.addOverrideAnnotation(toJson);
 		if (clazz.getGenerals().isEmpty()) {
 			toJson.getBody().addToStatements("StringBuilder sb = new StringBuilder()");
 		} else {
@@ -37,7 +37,7 @@ public class AuditToJsonCreator extends BaseVisitor implements Visitor<Class> {
 			toJson.getBody().addToStatements("StringBuilder sb = new StringBuilder(result)");
 		}
 		toJson.getBody().addToStatements("sb.append(\"{\")");
-		Set<Property> propertiesForToJson = TumlClassOperations.getPrimitiveOrEnumOrComponentsExcludeOneProperties(clazz);
+		Set<Property> propertiesForToJson = UmlgClassOperations.getPrimitiveOrEnumOrComponentsExcludeOneProperties(clazz);
 		int count = 0;
 		for (Property p : propertiesForToJson) {
 			count++;

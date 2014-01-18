@@ -6,9 +6,9 @@ import org.umlg.collectiontest.*;
 import org.umlg.concretetest.God;
 import org.umlg.qualifiertest.Many1;
 import org.umlg.qualifiertest.Many2;
-import org.umlg.runtime.collection.memory.TumlMemorySequence;
+import org.umlg.runtime.collection.memory.UmlgMemorySequence;
 import org.umlg.runtime.test.BaseLocalDbTest;
-import org.umlg.runtime.validation.TumlConstraintViolationException;
+import org.umlg.runtime.validation.UmlgConstraintViolationException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,7 +57,7 @@ public class SequenceTest extends BaseLocalDbTest {
         Hand hand4 = new Hand(true);
         hand4.setLeft(true);
         hand4.setName("hand4");
-        god.setHand(new TumlMemorySequence<Hand>(Arrays.asList(new Hand[]{hand1, hand2, hand3, hand4})));
+        god.setHand(new UmlgMemorySequence<Hand>(Arrays.asList(new Hand[]{hand1, hand2, hand3, hand4})));
         db.commit();
 
         Assert.assertEquals(9, countVertices());
@@ -79,7 +79,7 @@ public class SequenceTest extends BaseLocalDbTest {
             transactionFailed = e;
         }
         Assert.assertNotNull(transactionFailed);
-        Assert.assertTrue("excepting TumlConstraintViolationException", transactionFailed instanceof TumlConstraintViolationException);
+        Assert.assertTrue("excepting UmlgConstraintViolationException", transactionFailed instanceof UmlgConstraintViolationException);
     }
 
     @Test
@@ -98,7 +98,7 @@ public class SequenceTest extends BaseLocalDbTest {
         Hand hand4 = new Hand(true);
         hand4.setLeft(true);
         hand4.setName("hand4");
-        god.setHand(new TumlMemorySequence<Hand>(Arrays.asList(new Hand[]{hand1, hand2, hand3, hand4})));
+        god.setHand(new UmlgMemorySequence<Hand>(Arrays.asList(new Hand[]{hand1, hand2, hand3, hand4})));
         db.commit();
 
         Assert.assertEquals(9, countVertices());
@@ -111,7 +111,7 @@ public class SequenceTest extends BaseLocalDbTest {
         hand6.setLeft(true);
         hand6.setName("hand6");
 
-        god.setHand(new TumlMemorySequence<Hand>(Arrays.asList(new Hand[]{hand5, hand6})));
+        god.setHand(new UmlgMemorySequence<Hand>(Arrays.asList(new Hand[]{hand5, hand6})));
 
         hand1.delete();
         hand2.delete();

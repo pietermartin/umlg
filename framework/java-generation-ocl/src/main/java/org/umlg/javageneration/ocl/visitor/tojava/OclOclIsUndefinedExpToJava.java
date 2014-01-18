@@ -10,7 +10,7 @@ import org.umlg.java.metamodel.OJPathName;
 import org.umlg.java.metamodel.OJTryStatement;
 import org.umlg.java.metamodel.OJVisibilityKind;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
-import org.umlg.javageneration.util.TinkerGenerationUtil;
+import org.umlg.javageneration.util.UmlgGenerationUtil;
 
 public class OclOclIsUndefinedExpToJava extends BaseHandleOperationExp {
 
@@ -29,8 +29,8 @@ public class OclOclIsUndefinedExpToJava extends BaseHandleOperationExp {
 		oper.setVisibility(OJVisibilityKind.PRIVATE);
 		OJTryStatement ojTryStatement = new OJTryStatement();
 		ojTryStatement.getTryPart().addToStatements("return " + sourceResult + " == null");
-		ojTryStatement.setCatchParam(new OJParameter("e", TinkerGenerationUtil.tumlOclIsInvalidException.getCopy()));
-		this.ojClass.addToImports(TinkerGenerationUtil.tumlOclIsInvalidException.getCopy());
+		ojTryStatement.setCatchParam(new OJParameter("e", UmlgGenerationUtil.umlgOclIsInvalidException.getCopy()));
+		this.ojClass.addToImports(UmlgGenerationUtil.umlgOclIsInvalidException.getCopy());
 		ojTryStatement.getCatchPart().addToStatements("return true");
 		oper.getBody().addToStatements(ojTryStatement);
 		return oper.getName() + "()";
