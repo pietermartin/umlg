@@ -2,9 +2,9 @@ package org.umlg.runtime.collection.ocl;
 
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
-import org.umlg.runtime.collection.TinkerBag;
-import org.umlg.runtime.collection.TinkerCollection;
-import org.umlg.runtime.collection.TinkerSet;
+import org.umlg.runtime.collection.UmlgBag;
+import org.umlg.runtime.collection.UmlgCollection;
+import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.collection.memory.UmlgMemoryBag;
 import org.umlg.runtime.collection.memory.UmlgMemorySet;
 
@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
 
-public class OclStdLibBagImpl<E> extends OclStdLibCollectionImpl<E> implements TinkerBag<E> {
+public class OclStdLibBagImpl<E> extends OclStdLibCollectionImpl<E> implements UmlgBag<E> {
 
 	private Multiset<E> bag;
 
@@ -31,14 +31,14 @@ public class OclStdLibBagImpl<E> extends OclStdLibCollectionImpl<E> implements T
 	}
 
 	@Override
-	public Boolean equals(TinkerBag<E> bag) {
+	public Boolean equals(UmlgBag<E> bag) {
         return this.bag.equals(bag);
 	}
 
     //Important that the result, self and bag must be the union
 	@Override
-	public TinkerBag<E> union(TinkerBag<E> bag) {
-        TinkerBag<E> copy = new UmlgMemoryBag<E>();
+	public UmlgBag<E> union(UmlgBag<E> bag) {
+        UmlgBag<E> copy = new UmlgMemoryBag<E>();
         Iterator<E> iter = iterator();
         while (iter.hasNext()) {
             copy.add(iter.next());
@@ -54,8 +54,8 @@ public class OclStdLibBagImpl<E> extends OclStdLibCollectionImpl<E> implements T
 	}
 
 	@Override
-	public TinkerBag<E> union(TinkerSet<E> set) {
-        TinkerBag<E> result = new UmlgMemoryBag<E>(this);
+	public UmlgBag<E> union(UmlgSet<E> set) {
+        UmlgBag<E> result = new UmlgMemoryBag<E>(this);
         for (E e : set) {
             result.add(e);
         }
@@ -63,8 +63,8 @@ public class OclStdLibBagImpl<E> extends OclStdLibCollectionImpl<E> implements T
 	}
 
 	@Override
-	public TinkerBag<E> intersection(TinkerBag<E> bag) {
-        TinkerBag<E> result = new UmlgMemoryBag<E>();
+	public UmlgBag<E> intersection(UmlgBag<E> bag) {
+        UmlgBag<E> result = new UmlgMemoryBag<E>();
         for (E e : bag) {
             if (contains(e)) {
                 result.add(e);
@@ -74,8 +74,8 @@ public class OclStdLibBagImpl<E> extends OclStdLibCollectionImpl<E> implements T
 	}
 
 	@Override
-	public TinkerSet<E> intersection(TinkerSet<E> set) {
-        TinkerSet<E> result = new UmlgMemorySet<E>();
+	public UmlgSet<E> intersection(UmlgSet<E> set) {
+        UmlgSet<E> result = new UmlgMemorySet<E>();
         for (E e : bag) {
             if (contains(e)) {
                 result.add(e);
@@ -85,8 +85,8 @@ public class OclStdLibBagImpl<E> extends OclStdLibCollectionImpl<E> implements T
 	}
 
     @Override
-    public TinkerBag<E> including(E e) {
-        TinkerBag<E> result = new UmlgMemoryBag<E>(this);
+    public UmlgBag<E> including(E e) {
+        UmlgBag<E> result = new UmlgMemoryBag<E>(this);
         if (e != null) {
             result.add(e);
         }
@@ -94,8 +94,8 @@ public class OclStdLibBagImpl<E> extends OclStdLibCollectionImpl<E> implements T
     }
 
     @Override
-    public TinkerBag<E> excluding(E e) {
-        TinkerBag<E> result = new UmlgMemoryBag<E>(this);
+    public UmlgBag<E> excluding(E e) {
+        UmlgBag<E> result = new UmlgMemoryBag<E>(this);
         if (e != null) {
             result.remove(e);
         }
@@ -108,12 +108,12 @@ public class OclStdLibBagImpl<E> extends OclStdLibCollectionImpl<E> implements T
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T2> TinkerBag<T2> flatten() {
+	public <T2> UmlgBag<T2> flatten() {
 		if (needsFlattening()) {
 			Multiset<T2> result = HashMultiset.create();
 			for (E e : this.bag) {
-				if (e instanceof TinkerCollection) {
-					TinkerCollection<?> collection = (TinkerCollection<?>) e;
+				if (e instanceof UmlgCollection) {
+					UmlgCollection<?> collection = (UmlgCollection<?>) e;
 					result.addAll(collection.<T2> flatten());
 				} else {
 					result.add((T2) e);
@@ -130,7 +130,7 @@ public class OclStdLibBagImpl<E> extends OclStdLibCollectionImpl<E> implements T
 	 ***************************************************/
 	
 	@Override
-	public TinkerBag<E> select(BooleanExpressionEvaluator<E> v) {
+	public UmlgBag<E> select(BooleanExpressionEvaluator<E> v) {
 		Multiset<E> result = HashMultiset.create();
 		for (E e : this.collection) {
 			if (v.evaluate(e)) {
@@ -141,7 +141,7 @@ public class OclStdLibBagImpl<E> extends OclStdLibCollectionImpl<E> implements T
 	}
 
 	@Override
-	public <R> TinkerBag<R> collectNested(BodyExpressionEvaluator<R, E> v) {
+	public <R> UmlgBag<R> collectNested(BodyExpressionEvaluator<R, E> v) {
 		Multiset<R> result = HashMultiset.create();
 		for (E e : this.bag) {
 			R evaluate = v.evaluate(e);
@@ -153,12 +153,12 @@ public class OclStdLibBagImpl<E> extends OclStdLibCollectionImpl<E> implements T
 	}
 
 	@Override
-	public <T, R> TinkerBag<T> collect(BodyExpressionEvaluator<R, E> v) {
+	public <T, R> UmlgBag<T> collect(BodyExpressionEvaluator<R, E> v) {
 		return collectNested(v).<T> flatten();
 	}
 
 	private boolean needsFlattening() {
-		return !this.bag.isEmpty() && this.bag.iterator().next() instanceof TinkerCollection;
+		return !this.bag.isEmpty() && this.bag.iterator().next() instanceof UmlgCollection;
 	}
 
 	@Override

@@ -64,7 +64,7 @@ public class UmlgOclExecutor {
 		return result;
 	}
 
-	public static Object executeOclQuery(String contextQualifiedName, UmlgNode contextTumlNode, String query) {
+	public static <T> T executeOclQuery(String contextQualifiedName, UmlgNode contextTumlNode, String query) {
 		Classifier contextClassifier = (Classifier) ModelLoader.INSTANCE.findNamedElement(contextQualifiedName);
 		OJAnnotatedClass oclClass = new OJAnnotatedClass("OclQuery");
 		oclClass.setSuperclass(UmlgClassOperations.getPathName(contextClassifier));
@@ -90,7 +90,7 @@ public class UmlgOclExecutor {
 		}
 		String javaString = oclClass.toJavaString();
 		Object result = UmlgGroovyShell.executeQuery(javaString, contextTumlNode.getVertex());
-		return result;
+		return (T)result;
 	}
 
     //This is called via reflection from UmlgGraph

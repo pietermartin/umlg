@@ -7,7 +7,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.umlg.runtime.adaptor.GraphDb;
-import org.umlg.runtime.collection.TinkerCollection;
+import org.umlg.runtime.collection.UmlgCollection;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.domain.UmlgMetaNode;
 import org.umlg.runtime.domain.UmlgNode;
@@ -21,7 +21,7 @@ import java.util.Set;
  * Date: 2013/06/22
  * Time: 10:08 AM
  */
-public class UmlgAssociationClassSequenceImpl<AssociationClassNode> extends TinkerSequenceImpl<AssociationClassNode> {
+public class UmlgAssociationClassSequenceImpl<AssociationClassNode> extends UmlgSequenceImpl<AssociationClassNode> {
 
     public UmlgAssociationClassSequenceImpl(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
         super(owner, runtimeProperty);
@@ -52,7 +52,7 @@ public class UmlgAssociationClassSequenceImpl<AssociationClassNode> extends Tink
         if (!isOnePrimitive() && getDataTypeEnum() == null) {
             for (Iterator<Edge> iter = getEdges(); iter.hasNext(); ) {
                 Edge edge = iter.next();
-                if (edge.getPropertyKeys().contains(TinkerCollection.ASSOCIATION_CLASS_VERTEX_ID)) {
+                if (edge.getPropertyKeys().contains(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID)) {
                     AssociationClassNode node;
                     try {
                         Class<?> c = this.getClassToInstantiate(edge);
@@ -114,7 +114,7 @@ public class UmlgAssociationClassSequenceImpl<AssociationClassNode> extends Tink
             }
             Vertex associationClassVertex = null;
             for (Edge edge : edges) {
-                associationClassVertex = GraphDb.getDb().getVertex(edge.getProperty(TinkerCollection.ASSOCIATION_CLASS_VERTEX_ID));
+                associationClassVertex = GraphDb.getDb().getVertex(edge.getProperty(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID));
             }
 
             Class<?> c;

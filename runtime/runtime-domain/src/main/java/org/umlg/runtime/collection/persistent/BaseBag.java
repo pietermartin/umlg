@@ -3,8 +3,8 @@ package org.umlg.runtime.collection.persistent;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import com.tinkerpop.blueprints.Edge;
-import org.umlg.runtime.collection.TinkerBag;
-import org.umlg.runtime.collection.TinkerSet;
+import org.umlg.runtime.collection.UmlgBag;
+import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator;
@@ -14,7 +14,7 @@ import org.umlg.runtime.domain.UmlgNode;
 
 import java.util.Set;
 
-public abstract class BaseBag<E> extends BaseCollection<E> implements TinkerBag<E>, OclStdLibBag<E> {
+public abstract class BaseBag<E> extends BaseCollection<E> implements UmlgBag<E>, OclStdLibBag<E> {
 
 	protected OclStdLibBag<E> oclStdLibBag;
 //	protected LinkedListMultimap<Object, Vertex> internalVertexMultiMap = LinkedListMultimap.create();
@@ -116,67 +116,67 @@ public abstract class BaseBag<E> extends BaseCollection<E> implements TinkerBag<
 	}
 
 	@Override
-	public <R> TinkerBag<R> collectNested(BodyExpressionEvaluator<R, E> v) {
+	public <R> UmlgBag<R> collectNested(BodyExpressionEvaluator<R, E> v) {
 		maybeLoad();
 		return this.oclStdLibBag.collectNested(v);
 	}
 
 	@Override
-	public <T, R> TinkerBag<T> collect(BodyExpressionEvaluator<R, E> v) {
+	public <T, R> UmlgBag<T> collect(BodyExpressionEvaluator<R, E> v) {
 		maybeLoad();
 		return this.oclStdLibBag.collect(v);
 	}
 
 	@Override
-	public <R> TinkerBag<R> flatten() {
+	public <R> UmlgBag<R> flatten() {
 		maybeLoad();
 		return this.oclStdLibBag.flatten();
 	}
 	
 	@Override
-	public TinkerBag<E> select(BooleanExpressionEvaluator<E> v) {
+	public UmlgBag<E> select(BooleanExpressionEvaluator<E> v) {
 		maybeLoad();
 		return this.oclStdLibBag.select(v);
 	}
 
 	@Override
-	public Boolean equals(TinkerBag<E> bag) {
+	public Boolean equals(UmlgBag<E> bag) {
 		maybeLoad();
 		return this.oclStdLibBag.equals(bag);
 	}
 
 	@Override
-	public TinkerBag<E> union(TinkerBag<E> bag) {
+	public UmlgBag<E> union(UmlgBag<E> bag) {
 		maybeLoad();
 		return this.oclStdLibBag.union(bag);
 	}
 
 	@Override
-	public TinkerBag<E> union(TinkerSet<E> set) {
+	public UmlgBag<E> union(UmlgSet<E> set) {
 		maybeLoad();
 		return this.oclStdLibBag.union(set);
 	}
 
 	@Override
-	public TinkerBag<E> intersection(TinkerBag<E> bag) {
+	public UmlgBag<E> intersection(UmlgBag<E> bag) {
 		maybeLoad();
 		return this.oclStdLibBag.intersection(bag);
 	}
 
 	@Override
-	public TinkerSet<E> intersection(TinkerSet<E> set) {
+	public UmlgSet<E> intersection(UmlgSet<E> set) {
 		maybeLoad();
 		return this.oclStdLibBag.intersection(set);
 	}
 
 	@Override
-	public TinkerBag<E> including(E object) {
+	public UmlgBag<E> including(E object) {
 		maybeLoad();
 		return this.oclStdLibBag.including(object);
 	}
 
 	@Override
-	public TinkerBag<E> excluding(E object) {
+	public UmlgBag<E> excluding(E object) {
 		maybeLoad();
 		return this.oclStdLibBag.excluding(object);
 	}

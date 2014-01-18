@@ -1,8 +1,10 @@
 package org.umlg.restlet.visitor.clazz;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.uml2.uml.AssociationClass;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Classifier;
+import org.umlg.framework.ModelLoader;
 import org.umlg.framework.VisitSubclasses;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
@@ -77,7 +79,7 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
 //        ojTryStatement.getTryPart().addToStatements("boolean insertedSomething = false");
 
         OJField objectList = new OJField("objectList", new OJPathName("java.util.List").addToGenerics(UmlgGenerationUtil.UMLG_NODE));
-        objectList.setInitExp("new ArrayList<"+ UmlgGenerationUtil.UMLG_NODE.getLast()+">()");
+        objectList.setInitExp("new ArrayList<" + UmlgGenerationUtil.UMLG_NODE.getLast() + ">()");
         ojTryStatement.getTryPart().addToLocals(objectList);
 
         OJIfStatement ifInsert = new OJIfStatement("o != null");
@@ -200,7 +202,10 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
         // change the context
         ojTryStatement.getTryPart().addToStatements("json.append(" + UmlgClassOperations.propertyEnumName(concreteClassifier) + ".asJson())");
         ojTryStatement.getTryPart().addToStatements("json.append(\", \\\"from\\\": \")");
-        ojTryStatement.getTryPart().addToStatements("json.append(" + UmlgGenerationUtil.RootRuntimePropertyEnum.getLast() + ".asJson())");
+
+//        ojTryStatement.getTryPart().addToStatements("json.append(" + StringUtils.capitalize(ModelLoader.INSTANCE.getModel().getName()) + ".asJson())");
+        ojTryStatement.getTryPart().addToStatements("json.append(" + StringUtils.capitalize(ModelLoader.INSTANCE.getModel().getName()) + "RuntimePropertyEnum.asJson())");
+
         ojTryStatement.getTryPart().addToStatements("json.append(\"}}]\")");
         ojTryStatement.getTryPart().addToStatements("return new " + UmlgRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
         ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
@@ -273,9 +278,9 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
         json.setInitExp("new StringBuilder()");
         tryStatement.getTryPart().addToLocals(json);
         OJField resource = new OJField("resource", new OJPathName("java.util.List").addToGenerics(UmlgClassOperations.getPathName(clazz)));
-        resource.setInitExp("Root.INSTANCE.get" + UmlgClassOperations.className(clazz) + "()");
+        resource.setInitExp(StringUtils.capitalize(ModelLoader.INSTANCE.getModel().getName()) + ".INSTANCE.get" + UmlgClassOperations.className(clazz) + "()");
         tryStatement.getTryPart().addToLocals(resource);
-        annotatedClass.addToImports("org.umlg.root.Root");
+        annotatedClass.addToImports(UmlgGenerationUtil.UmlgRootPackage.toJavaString() + "." + StringUtils.capitalize(ModelLoader.INSTANCE.getModel().getName()));
 
         tryStatement.getTryPart().addToStatements("json.append(\"[\")");
         SortedSet<Classifier> sortedConcreteImplementations = UmlgClassOperations.getConcreteImplementations(clazz);
@@ -302,7 +307,6 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
             tryStatement.getTryPart().addToStatements("meta", "json.append(\"], \\\"meta\\\": {\")");
 
             tryStatement.getTryPart().addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + clazz.getQualifiedName() + "\\\"\")");
-            annotatedClass.addToImports(UmlgGenerationUtil.RootRuntimePropertyEnum);
             annotatedClass.addToImports(UmlgClassOperations.getPathName(clazz).append(UmlgClassOperations.propertyEnumName(clazz)));
             if (sortedConcreteImplementations.size() != 1 && count++ != sortedConcreteImplementations.size()) {
                 tryStatement.getTryPart().addToStatements("json.append(\",\")");
@@ -329,7 +333,7 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
         OJField json = new OJField("json", new OJPathName("java.lang.StringBuilder"));
         json.setInitExp("new StringBuilder()");
         tryStatement.getTryPart().addToLocals(json);
-        annotatedClass.addToImports("org.umlg.root.Root");
+        annotatedClass.addToImports(UmlgGenerationUtil.UmlgRootPackage.toJavaString() + "." + StringUtils.capitalize(ModelLoader.INSTANCE.getModel().getName()));
 
         tryStatement.getTryPart().addToStatements("json.append(\"[\")");
         SortedSet<Classifier> sortedConcreteImplementations = UmlgClassOperations.getConcreteImplementations(clazz);
@@ -345,8 +349,8 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
             // change the context
             tryStatement.getTryPart().addToStatements("json.append(" + UmlgClassOperations.propertyEnumName(clazz) + ".asJson())");
             tryStatement.getTryPart().addToStatements("json.append(\", \\\"from\\\": \")");
-            tryStatement.getTryPart().addToStatements("json.append(" + UmlgGenerationUtil.RootRuntimePropertyEnum.getLast() + ".asJson())");
-            annotatedClass.addToImports(UmlgGenerationUtil.RootRuntimePropertyEnum);
+            tryStatement.getTryPart().addToStatements("json.append(" + StringUtils.capitalize(ModelLoader.INSTANCE.getModel().getName()) + "RuntimePropertyEnum.asJson())");
+            annotatedClass.addToImports(UmlgGenerationUtil.UmlgRootPackage.toJavaString() + "." + StringUtils.capitalize(ModelLoader.INSTANCE.getModel().getName()) + "." + StringUtils.capitalize(ModelLoader.INSTANCE.getModel().getName()) + "RuntimePropertyEnum");
             annotatedClass.addToImports(UmlgClassOperations.getPathName(clazz).append(UmlgClassOperations.propertyEnumName(clazz)));
             if (sortedConcreteImplementations.size() != 1 && count++ != sortedConcreteImplementations.size()) {
                 tryStatement.getTryPart().addToStatements("json.append(\",\")");

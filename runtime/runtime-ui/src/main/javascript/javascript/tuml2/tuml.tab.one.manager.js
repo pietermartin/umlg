@@ -112,7 +112,7 @@
         //The main div that holds all elements
         var formDiv = $('<div />', {id: 'formDiv' + this.metaForData.name, role: 'form', class: 'form-horizontal'}).appendTo(tabDiv);
 
-        if (this.metaForData.name !== 'Root') {
+        if (this.metaForData.name !== tumlModelName) {
             //Do everything except for select boxes that require lookups.
             //Lookups need to do a server call and as such need the id field set.
             var first = true;

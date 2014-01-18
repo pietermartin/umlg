@@ -2,6 +2,7 @@ package org.umlg.restlet.visitor.clazz;
 
 import java.util.Collections;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.uml2.uml.Model;
 import org.umlg.java.metamodel.OJPathName;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
@@ -9,6 +10,7 @@ import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.java.metamodel.annotation.OJEnum;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
+import org.umlg.javageneration.util.UmlgGenerationUtil;
 import org.umlg.javageneration.validation.Validation;
 import org.umlg.javageneration.visitor.BaseVisitor;
 import org.umlg.javageneration.visitor.clazz.RuntimePropertyImplementor;
@@ -21,8 +23,8 @@ public class AddIdLiteralsToRootRuntimeEnum extends BaseVisitor implements Visit
 
     @Override
     public void visitBefore(Model model) {
-        OJAnnotatedClass annotatedClass = this.workspace.findOJClass("org.umlg.root.Root");
-        OJEnum ojEnum = annotatedClass.findEnum("RootRuntimePropertyEnum");
+        OJAnnotatedClass annotatedClass = this.workspace.findOJClass(UmlgGenerationUtil.UmlgRootPackage.toJavaString() +  "." + StringUtils.capitalize(model.getName()));
+        OJEnum ojEnum = annotatedClass.findEnum(StringUtils.capitalize(model.getName()) + "RuntimePropertyEnum");
         addField(ojEnum, "id");
     }
 

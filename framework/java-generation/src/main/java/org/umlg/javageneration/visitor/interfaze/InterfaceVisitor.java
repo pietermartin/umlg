@@ -39,7 +39,7 @@ public class InterfaceVisitor extends BaseVisitor implements Visitor<org.eclipse
 	}
 
 	private void extendCompositionNode(OJAnnotatedInterface annotatedInterface) {
-		annotatedInterface.addToSuperInterfaces(UmlgGenerationUtil.tinkerCompositionNodePathName);
+		annotatedInterface.addToSuperInterfaces(UmlgGenerationUtil.umlgCompositionNodePathName);
 	}
 	
 	private void extendTumlNode(OJAnnotatedInterface annotatedInterface) {

@@ -12,7 +12,7 @@ public class UmlGIndexFactory {
     public static UmlgIndexManager getUmlgIndexManager() {
         if (umlgIndexManager == null) {
             try {
-                Class<UmlgIndexManager> factory = (Class<UmlgIndexManager>) Class.forName("org.umlg.root.IndexCreator");
+                Class<UmlgIndexManager> factory = (Class<UmlgIndexManager>) Class.forName("org.umlg.model.IndexCreator");
                 umlgIndexManager = factory.newInstance();
             } catch (Exception e) {
                 throw new RuntimeException(e);

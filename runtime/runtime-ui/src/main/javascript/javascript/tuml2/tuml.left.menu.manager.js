@@ -458,7 +458,7 @@
 
         function createLeftMenuDataArray(contextMetaDataFrom, propertyNavigatingTo) {
             var menuArray = [];
-            if (contextMetaDataFrom.name !== 'Root') {
+            if (contextMetaDataFrom.name !== tumlModelName) {
                 //add a menu item to the context object
                 menuArray.push({tumlUri: contextMetaDataFrom.uri, name: contextMetaDataFrom.name, menuIconClass: 'fa fa-circle', aCssClass: ''});
             }

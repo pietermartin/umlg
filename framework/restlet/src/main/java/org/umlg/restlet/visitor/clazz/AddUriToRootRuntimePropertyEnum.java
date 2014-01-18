@@ -19,6 +19,7 @@ import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.javageneration.util.Condition;
 import org.umlg.javageneration.util.UmlgClassOperations;
+import org.umlg.javageneration.util.UmlgGenerationUtil;
 import org.umlg.javageneration.util.UmlgModelOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
 
@@ -30,9 +31,9 @@ public class AddUriToRootRuntimePropertyEnum extends BaseVisitor implements Visi
 
 	@Override
 	public void visitBefore(Model model) {
-		OJAnnotatedClass annotatedClass = this.workspace.findOJClass("org.umlg.root.Root");
-		OJEnum ojEnum = annotatedClass.findEnum("RootRuntimePropertyEnum");
-		
+        OJAnnotatedClass annotatedClass = this.workspace.findOJClass(UmlgGenerationUtil.UmlgRootPackage.toJavaString() +  "." + StringUtils.capitalize(model.getName()));
+        OJEnum ojEnum = annotatedClass.findEnum(StringUtils.capitalize(model.getName()) + "RuntimePropertyEnum");
+
 		addUriToObject(model, ojEnum);
 		
 		OJField uriPrimitiveField = new OJField();

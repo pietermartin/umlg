@@ -3,10 +3,10 @@ package org.umlg.runtime.domain.activity;
 import com.tinkerpop.blueprints.Vertex;
 import org.umlg.runtime.adaptor.GraphDb;
 import org.umlg.runtime.collection.Qualifier;
-import org.umlg.runtime.collection.TinkerSet;
+import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.collection.persistent.BaseCollection;
-import org.umlg.runtime.collection.persistent.TinkerSequenceImpl;
+import org.umlg.runtime.collection.persistent.UmlgSequenceImpl;
 import org.umlg.runtime.domain.CompositionNode;
 import org.umlg.runtime.domain.UmlgMetaNode;
 import org.umlg.runtime.domain.UmlgNode;
@@ -25,12 +25,12 @@ public class CollectionObjectToken<O> extends ObjectToken<O> implements Composit
 
 	public CollectionObjectToken(Vertex vertex) {
 		super(vertex);
-		this.elements = new TinkerSequenceImpl<O>(this, new UmlgRuntimePropertyImpl());
+		this.elements = new UmlgSequenceImpl<O>(this, new UmlgRuntimePropertyImpl());
 	}
 
 	public CollectionObjectToken(String edgeName, Collection<O> collection) {
 		super(edgeName);
-		this.elements = new TinkerSequenceImpl<O>(this, new UmlgRuntimePropertyImpl());
+		this.elements = new UmlgSequenceImpl<O>(this, new UmlgRuntimePropertyImpl());
 		addCollection(collection);
 	}
 
@@ -261,7 +261,7 @@ public class CollectionObjectToken<O> extends ObjectToken<O> implements Composit
     }
 
     @Override
-	public <E> TinkerSet<E> asSet() {
+	public <E> UmlgSet<E> asSet() {
 		// TODO Auto-generated method stub
 		return null;
 	}

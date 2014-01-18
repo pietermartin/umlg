@@ -1,12 +1,12 @@
 package org.umlg.runtime.collection.persistent;
 
 import com.tinkerpop.blueprints.Edge;
-import org.umlg.runtime.collection.TinkerSet;
+import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
 
 import java.util.Iterator;
 
-public class UmlgSetClosableIterableImpl<E> extends BaseSet<E> implements TinkerSet<E> {
+public class UmlgSetClosableIterableImpl<E> extends BaseSet<E> implements UmlgSet<E> {
 
 	private Iterator<Edge> iterator;
 

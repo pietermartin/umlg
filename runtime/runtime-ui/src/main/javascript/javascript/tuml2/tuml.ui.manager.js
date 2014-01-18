@@ -202,7 +202,7 @@
                         alert('UIManager.getContextMetaData response.data !== undefined && response.data !== null');
                     }
 
-                    if ((response.data.id !== undefined && response.data.id.indexOf('fake') === -1) || metaDataNavigatingTo.name === 'Root') {
+                    if ((response.data.id !== undefined && response.data.id.indexOf('fake') === -1) || metaDataNavigatingTo.name === tumlModelName) {
                         metaDataNavigatingTo = result[i].meta.to;
                         return {name: metaDataNavigatingTo.name, uri: metaDataNavigatingTo.uri, contextVertexId: response.data.id};
                     }

@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.umlg.concretetest.God;
 import org.umlg.qualifiertest.Nature;
 import org.umlg.runtime.adaptor.UmlgNeo4jGraph;
-import org.umlg.runtime.collection.TinkerSet;
+import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.test.BaseLocalDbTest;
 
 /**
@@ -28,7 +28,7 @@ public class OtherTest extends BaseLocalDbTest {
 
 		God godTest = new God(god.getVertex());
 		god.setName("ss");
-		TinkerSet<Nature> natureForQualifier1 = godTest.getNatureForQualifier2(null);
+		UmlgSet<Nature> natureForQualifier1 = godTest.getNatureForQualifier2(null);
 		Assert.assertTrue(!natureForQualifier1.isEmpty());
 		Assert.assertNull(natureForQualifier1.iterator().next().getName1());
         db.commit();

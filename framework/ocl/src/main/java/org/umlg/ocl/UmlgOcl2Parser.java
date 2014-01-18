@@ -50,7 +50,7 @@ public class UmlgOcl2Parser implements ModelLoadedEvent {
     public Model init(String modelFileName) {
         URL modelFileURL = Thread.currentThread().getContextClassLoader().getResource(modelFileName);
         if (modelFileURL == null) {
-            throw new IllegalStateException("Model file restAndJson.uml not found. The model's file name must be on the classpath.");
+            throw new IllegalStateException(String.format("Model file %s not found. The model's file name must be on the classpath.", modelFileName));
         }
         File modelFile;
         try {

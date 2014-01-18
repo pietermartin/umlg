@@ -2,7 +2,7 @@ package org.umlg.runtime.collection.persistent;
 
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
-import org.umlg.runtime.collection.TinkerSequence;
+import org.umlg.runtime.collection.UmlgSequence;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.domain.UmlgMetaNode;
 import org.umlg.runtime.domain.UmlgNode;
@@ -11,7 +11,7 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Iterator;
 
-public class UmlgSequenceClosableIterableImpl<E> extends BaseSequence<E> implements TinkerSequence<E> {
+public class UmlgSequenceClosableIterableImpl<E> extends BaseSequence<E> implements UmlgSequence<E> {
 
 	private Iterator<Edge> closeableIterator;
 

@@ -3,10 +3,10 @@ package org.test.restlet.ocl;
 import junit.framework.Assert;
 import org.junit.Test;
 import org.test.restlet.TestRestletDefaultDataCreator;
-import org.umlg.root.Root;
-import org.umlg.runtime.collection.TinkerBag;
-import org.umlg.runtime.collection.TinkerOrderedSet;
-import org.umlg.runtime.collection.TinkerSequence;
+import org.umlg.model.RestAndJson;
+import org.umlg.runtime.collection.UmlgBag;
+import org.umlg.runtime.collection.UmlgOrderedSet;
+import org.umlg.runtime.collection.UmlgSequence;
 import org.umlg.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.umlg.runtime.test.BaseLocalDbTest;
 import org.umlg.test.standard.Finger;
@@ -24,16 +24,16 @@ public class TestOcl extends BaseLocalDbTest  {
     public void testocl1() {
         TestRestletDefaultDataCreator testRestletDefaultDataCreator = new TestRestletDefaultDataCreator();
         testRestletDefaultDataCreator.createData();
-        Human human = Root.INSTANCE.getHuman().get(0);
-        TinkerBag<Human> humans = execute(human);
+        Human human = RestAndJson.INSTANCE.getHuman().get(0);
+        UmlgBag<Human> humans = execute(human);
         Assert.assertEquals(10, humans.size());
 
     }
 
-    private TinkerBag<Human> execute(Human human) {
-        TinkerBag<Human> result = human.getHand().<Finger, TinkerOrderedSet<Finger>>collect(new BodyExpressionEvaluator<TinkerOrderedSet<Finger>, Hand>() {
+    private UmlgBag<Human> execute(Human human) {
+        UmlgBag<Human> result = human.getHand().<Finger, UmlgOrderedSet<Finger>>collect(new BodyExpressionEvaluator<UmlgOrderedSet<Finger>, Hand>() {
             @Override
-            public TinkerOrderedSet<Finger> evaluate(Hand temp1) {
+            public UmlgOrderedSet<Finger> evaluate(Hand temp1) {
                 return temp1.getFinger();
             }
         }).<Ring, Ring>collect(new BodyExpressionEvaluator<Ring, Finger>() {
@@ -54,15 +54,15 @@ public class TestOcl extends BaseLocalDbTest  {
     public void testocl2() {
         TestRestletDefaultDataCreator testRestletDefaultDataCreator = new TestRestletDefaultDataCreator();
         testRestletDefaultDataCreator.createData();
-        Human human = Root.INSTANCE.getHuman().get(0);
+        Human human = RestAndJson.INSTANCE.getHuman().get(0);
         Hand hand = human.getHand().iterator().next();
-        TinkerSequence<Ring> rings = execute(hand);
+        UmlgSequence<Ring> rings = execute(hand);
         Assert.assertEquals(5, rings.size());
 
     }
 
-    private TinkerSequence<Ring> execute(Hand hand) {
-        TinkerSequence<Ring> result = hand.getFinger().<Ring, Ring>collect(new BodyExpressionEvaluator<Ring, Finger>() {
+    private UmlgSequence<Ring> execute(Hand hand) {
+        UmlgSequence<Ring> result = hand.getFinger().<Ring, Ring>collect(new BodyExpressionEvaluator<Ring, Finger>() {
             @Override
             public Ring evaluate(Finger temp1) {
                 return temp1.getRing();

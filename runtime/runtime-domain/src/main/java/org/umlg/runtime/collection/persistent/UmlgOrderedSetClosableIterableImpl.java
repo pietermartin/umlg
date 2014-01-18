@@ -18,7 +18,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-public class UmlgOrderedSetClosableIterableImpl<E> extends BaseCollection<E> implements TinkerOrderedSet<E> {
+public class UmlgOrderedSetClosableIterableImpl<E> extends BaseCollection<E> implements UmlgOrderedSet<E> {
 
 	private Iterator<Edge> iterator;
 	protected OclStdLibOrderedSet<E> oclStdLibOrderedSet;
@@ -132,50 +132,50 @@ public class UmlgOrderedSetClosableIterableImpl<E> extends BaseCollection<E> imp
 	}
 	
 	@Override
-	public <R> TinkerSequence<R> collectNested(BodyExpressionEvaluator<R, E> v) {
+	public <R> UmlgSequence<R> collectNested(BodyExpressionEvaluator<R, E> v) {
 		maybeLoad();
 		return this.oclStdLibOrderedSet.collectNested(v);
 	}
 
 	@Override
-	public <T, R> TinkerSequence<T> collect(BodyExpressionEvaluator<R, E> v) {
+	public <T, R> UmlgSequence<T> collect(BodyExpressionEvaluator<R, E> v) {
 		maybeLoad();
 		return this.oclStdLibOrderedSet.collect(v);
 	}
 	
 	@Override
-	public <T2> TinkerSequence<T2> flatten() {
+	public <T2> UmlgSequence<T2> flatten() {
 		maybeLoad();
 		return this.oclStdLibOrderedSet.flatten();
 	}
 
 	@Override
-	public TinkerOrderedSet<E> select(BooleanExpressionEvaluator<E> v) {
+	public UmlgOrderedSet<E> select(BooleanExpressionEvaluator<E> v) {
 		maybeLoad();
 		return this.oclStdLibOrderedSet.select(v);
 	}
 
 
 	@Override
-	public TinkerOrderedSet<E> append(E e) {
+	public UmlgOrderedSet<E> append(E e) {
 		maybeLoad();
 		return this.oclStdLibOrderedSet.append(e);
 	}
 
 	@Override
-	public TinkerOrderedSet<E> prepend(E e) {
+	public UmlgOrderedSet<E> prepend(E e) {
 		maybeLoad();
 		return this.oclStdLibOrderedSet.prepend(e);
 	}
 
 	@Override
-	public TinkerOrderedSet<E> insertAt(Integer index, E e) {
+	public UmlgOrderedSet<E> insertAt(Integer index, E e) {
 		maybeLoad();
 		return this.oclStdLibOrderedSet.insertAt(index, e);
 	}
 
 	@Override
-	public TinkerOrderedSet<E> subOrderedSet(Integer lower, Integer upper) {
+	public UmlgOrderedSet<E> subOrderedSet(Integer lower, Integer upper) {
 		maybeLoad();
 		return this.oclStdLibOrderedSet.subOrderedSet(lower, upper);
 	}
@@ -199,13 +199,13 @@ public class UmlgOrderedSetClosableIterableImpl<E> extends BaseCollection<E> imp
 	}
 
 	@Override
-	public TinkerOrderedSet<E> reverse() {
+	public UmlgOrderedSet<E> reverse() {
 		maybeLoad();
 		return this.oclStdLibOrderedSet.reverse();
 	}
 
 	@Override
-	public TinkerOrderedSet<E> including(E e) {
+	public UmlgOrderedSet<E> including(E e) {
 		maybeLoad();
 		return this.oclStdLibOrderedSet.including(e);
 	}

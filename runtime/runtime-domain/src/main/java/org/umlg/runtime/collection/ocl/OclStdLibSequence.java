@@ -1,8 +1,8 @@
 package org.umlg.runtime.collection.ocl;
 
-import org.umlg.runtime.collection.TinkerBag;
-import org.umlg.runtime.collection.TinkerOrderedSet;
-import org.umlg.runtime.collection.TinkerSequence;
+import org.umlg.runtime.collection.UmlgBag;
+import org.umlg.runtime.collection.UmlgOrderedSet;
+import org.umlg.runtime.collection.UmlgSequence;
 
 
 public interface OclStdLibSequence<E> extends OclStdLibCollection<E> {
@@ -25,7 +25,7 @@ public interface OclStdLibSequence<E> extends OclStdLibCollection<E> {
 	 * and
 	 * self->size() = s->size()
 	 */
-	Boolean equals(TinkerSequence<E> s);
+	Boolean equals(UmlgSequence<E> s);
 	
 	/**
 	 * union (s : Sequence(T)) : Sequence(T)
@@ -39,7 +39,7 @@ public interface OclStdLibSequence<E> extends OclStdLibCollection<E> {
 	 * </pre>
 	 * 
 	 */
-	TinkerSequence<E> union(TinkerSequence<? extends E> s);
+	UmlgSequence<E> union(UmlgSequence<? extends E> s);
 	
 	/**
 	 * append (object: T) : Sequence(T)
@@ -52,7 +52,7 @@ public interface OclStdLibSequence<E> extends OclStdLibCollection<E> {
 	 * </pre>
 	 * @return
 	 */
-	TinkerSequence<E> append(E object);
+	UmlgSequence<E> append(E object);
 	
 	/**
 	 * prepend(object : T) : Sequence(T)
@@ -65,7 +65,7 @@ public interface OclStdLibSequence<E> extends OclStdLibCollection<E> {
 	 * </pre>
 	 * @return
 	 */
-	TinkerSequence<E> prepend(E object);
+	UmlgSequence<E> prepend(E object);
 	
 	/**
 	 * insertAt(index : Integer, object : T) : Sequence(T)
@@ -80,7 +80,7 @@ public interface OclStdLibSequence<E> extends OclStdLibCollection<E> {
 	 * </pre>
 	 * @return
 	 */
-	TinkerSequence<E> insertAt(Integer index, E object);
+	UmlgSequence<E> insertAt(Integer index, E object);
 	
 	/**
 	 * subSequence(lower : Integer, upper : Integer) : Sequence(T)
@@ -96,7 +96,7 @@ public interface OclStdLibSequence<E> extends OclStdLibCollection<E> {
 	 * </pre>
 	 * @return
 	 */
-	TinkerSequence<E> subSequence(Integer lower, Integer upper);
+	UmlgSequence<E> subSequence(Integer lower, Integer upper);
 	
 	/**
 	 * at(i : Integer) : T
@@ -146,7 +146,7 @@ public interface OclStdLibSequence<E> extends OclStdLibCollection<E> {
 	 * 	post: result = self.append(object)
 	 * </pre>
 	 */
-	TinkerSequence<E> including(E object);
+	UmlgSequence<E> including(E object);
 	
 	/**
 	 * excluding(object : T) : Sequence(T)
@@ -160,7 +160,7 @@ public interface OclStdLibSequence<E> extends OclStdLibCollection<E> {
 	 * 			if elem = object then acc else acc->append(elem) endif )
 	 * </pre>
 	 */
-	TinkerSequence<E> excluding(E object);
+	UmlgSequence<E> excluding(E object);
 	
 	/**
 	 * reverse() : Sequence(T)
@@ -169,7 +169,7 @@ public interface OclStdLibSequence<E> extends OclStdLibCollection<E> {
 	 * 	post: result->size() = self->size()
 	 * </pre>
 	 */
-	TinkerSequence<E> reverse();
+	UmlgSequence<E> reverse();
 	
 	/**
 	 * sum() : T
@@ -189,7 +189,7 @@ public interface OclStdLibSequence<E> extends OclStdLibCollection<E> {
 	 * </pre>
 	 */
 	@Override
-	TinkerBag<E> asBag();
+    UmlgBag<E> asBag();
 	
 	/**
 	 * asSequence() : Sequence(T)
@@ -199,7 +199,7 @@ public interface OclStdLibSequence<E> extends OclStdLibCollection<E> {
 	 * 
 	 */
 	@Override
-	TinkerSequence<E> asSequence();
+    UmlgSequence<E> asSequence();
 	
 	/**
 	 * asOrderedSet() : OrderedSet(T)
@@ -214,20 +214,20 @@ public interface OclStdLibSequence<E> extends OclStdLibCollection<E> {
 	 * 			implies result->indexOf(elem1) < result->indexOf(elem2) )
 	 * </pre>
 	 */
-	TinkerOrderedSet<E> asOrderedSet();
+	UmlgOrderedSet<E> asOrderedSet();
 	
 	/***************************************************
 	 * Iterate goodies
 	 ***************************************************/
 	
 	@Override
-	TinkerSequence<E> select(BooleanExpressionEvaluator<E> e);
+    UmlgSequence<E> select(BooleanExpressionEvaluator<E> e);
 	
 	@Override
-	<R> TinkerSequence<R> collectNested(BodyExpressionEvaluator<R, E> e);
+	<R> UmlgSequence<R> collectNested(BodyExpressionEvaluator<R, E> e);
 	
 	@Override
-	<T, R> TinkerSequence<T> collect(BodyExpressionEvaluator<R, E> e);
+	<T, R> UmlgSequence<T> collect(BodyExpressionEvaluator<R, E> e);
 
     /**
      * flatten() : Sequence(T2)
@@ -245,6 +245,6 @@ public interface OclStdLibSequence<E> extends OclStdLibCollection<E> {
      *
      */
     @Override
-    <T2> TinkerSequence<T2> flatten();
+    <T2> UmlgSequence<T2> flatten();
 
 }

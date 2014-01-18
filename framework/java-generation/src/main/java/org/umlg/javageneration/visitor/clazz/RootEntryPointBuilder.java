@@ -1,6 +1,8 @@
 package org.umlg.javageneration.visitor.clazz;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.uml2.uml.Class;
+import org.umlg.framework.ModelLoader;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.java.metamodel.OJField;
@@ -14,7 +16,6 @@ import org.umlg.javageneration.visitor.BaseVisitor;
 
 public class RootEntryPointBuilder extends BaseVisitor implements Visitor<Class> {
 
-    public final static String ROOT_PATHNAME = "org.umlg.root.Root";
 	public RootEntryPointBuilder(Workspace workspace) {
 		super(workspace);
 	}
@@ -22,16 +23,16 @@ public class RootEntryPointBuilder extends BaseVisitor implements Visitor<Class>
 	@Override
 	public void visitBefore(Class clazz) {
 		if (!UmlgClassOperations.hasCompositeOwner(clazz) && !clazz.isAbstract()) {
-			OJAnnotatedClass root = this.workspace.findOJClass(ROOT_PATHNAME);
+			OJAnnotatedClass root = this.workspace.findOJClass(UmlgGenerationUtil.UmlgRootPackage.toJavaString() + "." + StringUtils.capitalize(ModelLoader.INSTANCE.getModel().getName()));
 			addGetterToAppRootForRootEntity(clazz, root);
 		}
 	}
 
 	private void addGetterToAppRootForRootEntity(Class clazz, OJAnnotatedClass root) {
 		OJAnnotatedOperation getter = new OJAnnotatedOperation("get" + UmlgClassOperations.className(clazz),
-				UmlgGenerationUtil.tinkerSequence.getCopy().addToGenerics(UmlgClassOperations.getPathName(clazz)));
+				UmlgGenerationUtil.umlgSequence.getCopy().addToGenerics(UmlgClassOperations.getPathName(clazz)));
 		root.addToOperations(getter);
-		OJField result = new OJField("result", UmlgGenerationUtil.tinkerSequence.getCopy().addToGenerics(UmlgClassOperations.getPathName(clazz)));
+		OJField result = new OJField("result", UmlgGenerationUtil.umlgSequence.getCopy().addToGenerics(UmlgClassOperations.getPathName(clazz)));
 		result.setInitExp("new " + UmlgGenerationUtil.umlgMemorySequence.getCopy().getLast() + "<" + UmlgClassOperations.getPathName(clazz).getLast() + ">()");
 		root.addToImports(UmlgGenerationUtil.umlgMemorySequence);
 		root.addToImports(new OJPathName("java.util.ArrayList"));

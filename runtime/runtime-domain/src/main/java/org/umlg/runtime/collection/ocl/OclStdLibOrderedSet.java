@@ -1,8 +1,8 @@
 package org.umlg.runtime.collection.ocl;
 
-import org.umlg.runtime.collection.TinkerBag;
-import org.umlg.runtime.collection.TinkerOrderedSet;
-import org.umlg.runtime.collection.TinkerSequence;
+import org.umlg.runtime.collection.UmlgBag;
+import org.umlg.runtime.collection.UmlgOrderedSet;
+import org.umlg.runtime.collection.UmlgSequence;
 
 
 public interface OclStdLibOrderedSet<E> extends OclStdLibCollection<E> {
@@ -19,7 +19,7 @@ public interface OclStdLibOrderedSet<E> extends OclStdLibCollection<E> {
 	 * @param e
 	 * @return
 	 */
-	TinkerOrderedSet<E> append(E e); 
+	UmlgOrderedSet<E> append(E e);
 
 	/**
 	 * prepend(object : T) : OrderedSet(T)
@@ -33,7 +33,7 @@ public interface OclStdLibOrderedSet<E> extends OclStdLibCollection<E> {
 	 * @param e
 	 * @return
 	 */
-	TinkerOrderedSet<E> prepend(E e); 
+	UmlgOrderedSet<E> prepend(E e);
 	
 	/**
 	 * insertAt(index : Integer, object : T) : OrderedSet(T)
@@ -47,7 +47,7 @@ public interface OclStdLibOrderedSet<E> extends OclStdLibCollection<E> {
 	 * 		self->at(i) = result->at(i + 1))
 	 * </pre>
 	 */
-	TinkerOrderedSet<E> insertAt(Integer index, E e);
+	UmlgOrderedSet<E> insertAt(Integer index, E e);
 	
 	/**
 	 * subOrderedSet(lower : Integer, upper : Integer) : OrderedSet(T)
@@ -61,7 +61,7 @@ public interface OclStdLibOrderedSet<E> extends OclStdLibCollection<E> {
 	 * 		result->at(index - lower + 1) =
 	 * 		self->at(index))</pre>
 	 */
-	TinkerOrderedSet<E> subOrderedSet(Integer lower, Integer upper);
+	UmlgOrderedSet<E> subOrderedSet(Integer lower, Integer upper);
 	
 	/**
 	 * at(i : Integer) : T
@@ -105,7 +105,7 @@ public interface OclStdLibOrderedSet<E> extends OclStdLibCollection<E> {
 	 * The ordered set of elements with same elements but with the opposite order.
 	 * 		post: result->size() = self->size()</pre>
 	 */
-	TinkerOrderedSet<E> reverse();
+	UmlgOrderedSet<E> reverse();
 	
 	/**
 	 * sum() : T
@@ -122,7 +122,7 @@ public interface OclStdLibOrderedSet<E> extends OclStdLibCollection<E> {
 //	 * <pre>
 //	 */
 //	@Override
-//	TinkerSet<E> asSet();
+//	UmlgSet<E> asSet();
 	
 	/**
 	 * asOrderedSet() : OrderedSet(T)
@@ -132,7 +132,7 @@ public interface OclStdLibOrderedSet<E> extends OclStdLibCollection<E> {
 	 * 		post: Sequence{1..self.size()}->forAll(i | result->at(i) = self->at(i))</pre>
 	 */
 	@Override
-	TinkerOrderedSet<E> asOrderedSet();
+    UmlgOrderedSet<E> asOrderedSet();
 	
 	/**
 	 * asSequence() : Sequence(T)
@@ -142,7 +142,7 @@ public interface OclStdLibOrderedSet<E> extends OclStdLibCollection<E> {
 	 * 
 	 */
 	@Override
-	TinkerSequence<E> asSequence();
+    UmlgSequence<E> asSequence();
 	
 	/**
 	 * asBag() : Bag(T)
@@ -151,19 +151,19 @@ public interface OclStdLibOrderedSet<E> extends OclStdLibCollection<E> {
 	 * </pre>
 	 */
 	@Override
-	TinkerBag<E> asBag();
+    UmlgBag<E> asBag();
 	
 	@Override
-	TinkerOrderedSet<E> select(BooleanExpressionEvaluator<E> e);
+    UmlgOrderedSet<E> select(BooleanExpressionEvaluator<E> e);
 	
 	@Override
-	<R> TinkerSequence<R> collectNested(BodyExpressionEvaluator<R, E> e);
+	<R> UmlgSequence<R> collectNested(BodyExpressionEvaluator<R, E> e);
 	
 	@Override
-	<T, R> TinkerSequence<T> collect(BodyExpressionEvaluator<R, E> e);
+	<T, R> UmlgSequence<T> collect(BodyExpressionEvaluator<R, E> e);
 
     @Override
-    <T2> TinkerSequence<T2> flatten();
+    <T2> UmlgSequence<T2> flatten();
 
     /*************************************************
      *
@@ -180,6 +180,6 @@ public interface OclStdLibOrderedSet<E> extends OclStdLibCollection<E> {
 	 * 		post: result->includes(object)
 	 * </pre>
 	 */
-	TinkerOrderedSet<E> including(E e);
+	UmlgOrderedSet<E> including(E e);
 
 }

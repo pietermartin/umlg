@@ -44,7 +44,7 @@ function retrieveMetaDataIfNotInCache(tumlUri, contextVertexId, result, callback
 
     function removeContextFromUrl(url) {
         if (url == '/' + tumlModelName) {
-            return 'root';
+            return tumlModelName;
         } else {
             var trimmedUrl = url.replace('/' + tumlModelName + '/', '');
             var firstIndexOf =  trimmedUrl.indexOf('/');

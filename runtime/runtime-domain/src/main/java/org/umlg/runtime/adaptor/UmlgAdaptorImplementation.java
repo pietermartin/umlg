@@ -93,7 +93,7 @@ public enum UmlgAdaptorImplementation {
         } else if (name.equalsIgnoreCase(THUNDERGRAPH.name())) {
             return THUNDERGRAPH;
         } else {
-            throw new RuntimeException("Unknown tinker implementation " + name);
+            throw new RuntimeException("Unknown tests implementation " + name);
         }
     }
 

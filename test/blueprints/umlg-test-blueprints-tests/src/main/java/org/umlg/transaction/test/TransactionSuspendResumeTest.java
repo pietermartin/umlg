@@ -1,15 +1,6 @@
 package org.umlg.transaction.test;
 
-import junit.framework.Assert;
-import org.junit.Test;
-import org.umlg.collectiontest.World;
-import org.umlg.concretetest.God;
-import org.umlg.root.Root;
-import org.umlg.runtime.adaptor.TransactionIdentifier;
-import org.umlg.runtime.collection.TinkerSequence;
 import org.umlg.runtime.test.BaseLocalDbTest;
-
-import java.util.concurrent.*;
 
 /**
  * Date: 2013/02/01
@@ -31,7 +22,7 @@ public class TransactionSuspendResumeTest extends BaseLocalDbTest {
 //            public TransactionIdentifier call() {
 //                try {
 //                    db.resume(transactionIdentifier);
-//                    TinkerSequence<God> gods = Root.INSTANCE.getGod();
+//                    UmlgSequence<God> gods = Root.INSTANCE.getGod();
 //                    Assert.assertEquals(1, gods.size());
 //                    God god = gods.get(0);
 //                    World world = new World(god);

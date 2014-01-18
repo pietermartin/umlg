@@ -6,7 +6,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.umlg.runtime.adaptor.GraphDb;
-import org.umlg.runtime.collection.TinkerCollection;
+import org.umlg.runtime.collection.UmlgCollection;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.domain.UmlgNode;
 
@@ -18,7 +18,7 @@ import java.util.Iterator;
  * Date: 2013/06/22
  * Time: 10:08 AM
  */
-public class UmlgAssociationClassSetImpl<AssociationClassNode> extends TinkerSetImpl<AssociationClassNode> implements UmlgAssociationClassSet<AssociationClassNode> {
+public class UmlgAssociationClassSetImpl<AssociationClassNode> extends UmlgSetImpl<AssociationClassNode> implements UmlgAssociationClassSet<AssociationClassNode> {
 
     public UmlgAssociationClassSetImpl(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
         super(owner, runtimeProperty);
@@ -49,7 +49,7 @@ public class UmlgAssociationClassSetImpl<AssociationClassNode> extends TinkerSet
         if (!isOnePrimitive() && getDataTypeEnum() == null) {
             for (Iterator<Edge> iter = getEdges(); iter.hasNext(); ) {
                 Edge edge = iter.next();
-                if (edge.getPropertyKeys().contains(TinkerCollection.ASSOCIATION_CLASS_VERTEX_ID)) {
+                if (edge.getPropertyKeys().contains(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID)) {
                     AssociationClassNode node;
                     try {
                         Class<?> c = this.getClassToInstantiate(edge);
@@ -100,7 +100,7 @@ public class UmlgAssociationClassSetImpl<AssociationClassNode> extends TinkerSet
     @Override
     protected Class<?> getClassToInstantiate(Edge edge) {
         try {
-            Vertex associationClassVertex = GraphDb.getDb().getVertex(edge.getProperty(TinkerCollection.ASSOCIATION_CLASS_VERTEX_ID));
+            Vertex associationClassVertex = GraphDb.getDb().getVertex(edge.getProperty(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID));
             return Class.forName((String) associationClassVertex.getProperty("className"));
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
@@ -109,7 +109,7 @@ public class UmlgAssociationClassSetImpl<AssociationClassNode> extends TinkerSet
 
     @Override
     protected Vertex getVertexForDirection(Edge edge) {
-        Vertex associationClassVertex = GraphDb.getDb().getVertex(edge.getProperty(TinkerCollection.ASSOCIATION_CLASS_VERTEX_ID));
+        Vertex associationClassVertex = GraphDb.getDb().getVertex(edge.getProperty(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID));
         return associationClassVertex;
     }
 

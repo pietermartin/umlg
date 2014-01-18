@@ -34,8 +34,8 @@ public class LookupGenerator extends BaseVisitor implements Visitor<Property> {
             OJBlock ojBlock2 = new OJBlock();
             lookUp.getBody().addToStatements(ojBlock2);
 
-            lookUp.setReturnType("TinkerSet<" + propertyWrapper.javaBaseTypePath().getLast() + ">");
-            OJField result = new OJField("result", "TinkerSet<" + propertyWrapper.javaBaseTypePath().getLast() + ">");
+            lookUp.setReturnType(UmlgGenerationUtil.umlgSet.getLast() + "<" + propertyWrapper.javaBaseTypePath().getLast() + ">");
+            OJField result = new OJField("result", UmlgGenerationUtil.umlgSet.getLast() + "<" + propertyWrapper.javaBaseTypePath().getLast() + ">");
             result.setInitExp("new " + UmlgGenerationUtil.umlgMemorySet.getLast() + "<" + propertyWrapper.javaBaseTypePath().getLast() + ">()");
             ojClass.addToImports("java.util.HashSet");
             ojClass.addToImports("java.util.Set");

@@ -2,7 +2,7 @@ package org.umlg.runtime.domain;
 
 import com.tinkerpop.blueprints.Vertex;
 import org.umlg.runtime.collection.Qualifier;
-import org.umlg.runtime.collection.TinkerSet;
+import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.domain.ocl.OclAny;
 import org.umlg.runtime.validation.UmlgConstraintViolation;
@@ -20,7 +20,7 @@ public interface UmlgNode extends UmlgEnum, OclAny, PersistentObject {
 	List<Qualifier> getQualifiers(UmlgRuntimeProperty umlgRuntimeProperty, UmlgNode node, boolean inverse);
 	void delete();
 	int getSize(UmlgRuntimeProperty umlgRuntimeProperty);
-	<E> TinkerSet<E> asSet();
+	<E> UmlgSet<E> asSet();
 	List<UmlgConstraintViolation> validateMultiplicities();
     List<UmlgConstraintViolation> checkClassConstraints();
 	UmlgNode getOwningObject();

@@ -3,7 +3,7 @@ package org.umlg.runtime.collection.persistent;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 import org.umlg.runtime.adaptor.GraphDb;
-import org.umlg.runtime.collection.TinkerCollection;
+import org.umlg.runtime.collection.UmlgCollection;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.collection.UmlgPropertyAssociationClassSequence;
 import org.umlg.runtime.domain.AssociationClassNode;
@@ -15,7 +15,7 @@ import java.util.Set;
  * Date: 2013/06/18
  * Time: 5:59 PM
  */
-public class UmlgPropertyAssociationClassSequenceImpl<E, AC extends AssociationClassNode> extends TinkerSequenceImpl<E> implements UmlgPropertyAssociationClassSequence<E, AC> {
+public class UmlgPropertyAssociationClassSequenceImpl<E, AC extends AssociationClassNode> extends UmlgSequenceImpl<E> implements UmlgPropertyAssociationClassSequence<E, AC> {
 
     public UmlgPropertyAssociationClassSequenceImpl(UmlgNode owner, UmlgRuntimeProperty runtimeProperty, UmlgRuntimeProperty associationClassRuntimeProperty) {
         super(owner, runtimeProperty);
@@ -26,7 +26,7 @@ public class UmlgPropertyAssociationClassSequenceImpl<E, AC extends AssociationC
         super.add(index, e);
         associationClass.internalAdder(umlgRuntimeProperty, true, this.owner);
         associationClass.internalAdder(umlgRuntimeProperty, false, (UmlgNode) e);
-        this.edge.setProperty(TinkerCollection.ASSOCIATION_CLASS_VERTEX_ID, associationClass.getId());
+        this.edge.setProperty(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID, associationClass.getId());
         this.edge.setProperty("className", associationClass.getClass().getName());
     }
 
@@ -35,7 +35,7 @@ public class UmlgPropertyAssociationClassSequenceImpl<E, AC extends AssociationC
         if (super.add(e)) {
             associationClass.internalAdder(umlgRuntimeProperty, true, this.owner);
             associationClass.internalAdder(umlgRuntimeProperty, false, (UmlgNode) e);
-            this.edge.setProperty(TinkerCollection.ASSOCIATION_CLASS_VERTEX_ID, associationClass.getId());
+            this.edge.setProperty(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID, associationClass.getId());
             this.edge.setProperty("className", associationClass.getClass().getName());
             return true;
         } else {
@@ -74,7 +74,7 @@ public class UmlgPropertyAssociationClassSequenceImpl<E, AC extends AssociationC
     private void removeEdge(Vertex v) {
         Set<Edge> edges = GraphDb.getDb().getEdgesBetween(this.vertex, v, this.getLabel());
         for (Edge edge : edges) {
-            Vertex associationClassVertex = GraphDb.getDb().getVertex(edge.getProperty(TinkerCollection.ASSOCIATION_CLASS_VERTEX_ID));
+            Vertex associationClassVertex = GraphDb.getDb().getVertex(edge.getProperty(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID));
             //The remove code will delete all in and out edges
             GraphDb.getDb().removeVertex(associationClassVertex);
         }

@@ -195,7 +195,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
     }
 
     private void implementCompositionNode(OJAnnotatedClass annotatedClass) {
-        annotatedClass.addToImplementedInterfaces(UmlgGenerationUtil.tinkerCompositionNodePathName);
+        annotatedClass.addToImplementedInterfaces(UmlgGenerationUtil.umlgCompositionNodePathName);
     }
 
     public static void addGetQualifiedName(OJAnnotatedClass annotatedClass, Classifier c) {
@@ -210,10 +210,10 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
 //        OJAnnotatedOperation allInstances = new OJAnnotatedOperation("allInstances");
 //        allInstances.setStatic(true);
 //        if (UmlgClassOperations.getSpecializations(clazz).isEmpty()) {
-//            allInstances.setReturnType(UmlgGenerationUtil.tinkerSet.getCopy().addToGenerics(UmlgClassOperations.getPathName(clazz)));
+//            allInstances.setReturnType(UmlgGenerationUtil.umlgSet.getCopy().addToGenerics(UmlgClassOperations.getPathName(clazz)));
 //        } else {
 //            String pathName = "? extends " + UmlgClassOperations.getPathName(clazz).getLast();
-//            allInstances.setReturnType(UmlgGenerationUtil.tinkerSet.getCopy().addToGenerics(pathName));
+//            allInstances.setReturnType(UmlgGenerationUtil.umlgSet.getCopy().addToGenerics(pathName));
 //        }
 //        annotatedClass.addToImports(UmlgGenerationUtil.Root);
 //        List<String> propertyList = new ArrayList<String>();
@@ -508,13 +508,13 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
         OJAnnotatedOperation allInstances = new OJAnnotatedOperation("allInstances");
         allInstances.setStatic(true);
         if (UmlgClassOperations.getConcreteImplementations(clazz).isEmpty()) {
-            allInstances.setReturnType(UmlgGenerationUtil.tinkerSet.getCopy().addToGenerics(UmlgClassOperations.getPathName(clazz)));
+            allInstances.setReturnType(UmlgGenerationUtil.umlgSet.getCopy().addToGenerics(UmlgClassOperations.getPathName(clazz)));
         } else {
             String pathName = "? extends " + UmlgClassOperations.getPathName(clazz).getLast();
-            allInstances.setReturnType(UmlgGenerationUtil.tinkerSet.getCopy().addToGenerics(pathName));
+            allInstances.setReturnType(UmlgGenerationUtil.umlgSet.getCopy().addToGenerics(pathName));
         }
 
-        OJField result = new OJField("result", UmlgGenerationUtil.tinkerSet.getCopy().addToGenerics(UmlgClassOperations.getPathName(clazz)));
+        OJField result = new OJField("result", UmlgGenerationUtil.umlgSet.getCopy().addToGenerics(UmlgClassOperations.getPathName(clazz)));
         result.setInitExp("new " + UmlgGenerationUtil.umlgMemorySet.getCopy().addToGenerics(UmlgClassOperations.getPathName(clazz)).getLast() + "()");
         allInstances.getBody().addToLocals(result);
         Set<Classifier> specializations = UmlgClassOperations.getConcreteImplementations(clazz);
@@ -538,13 +538,13 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
         allInstances.addToParameters(new OJParameter("filter", UmlgGenerationUtil.Filter));
         allInstances.setStatic(true);
         if (UmlgClassOperations.getConcreteImplementations(clazz).isEmpty()) {
-            allInstances.setReturnType(UmlgGenerationUtil.tinkerSet.getCopy().addToGenerics(UmlgClassOperations.getPathName(clazz)));
+            allInstances.setReturnType(UmlgGenerationUtil.umlgSet.getCopy().addToGenerics(UmlgClassOperations.getPathName(clazz)));
         } else {
             String pathName = "? extends " + UmlgClassOperations.getPathName(clazz).getLast();
-            allInstances.setReturnType(UmlgGenerationUtil.tinkerSet.getCopy().addToGenerics(pathName));
+            allInstances.setReturnType(UmlgGenerationUtil.umlgSet.getCopy().addToGenerics(pathName));
         }
 
-        OJField result = new OJField("result", UmlgGenerationUtil.tinkerSet.getCopy().addToGenerics(UmlgClassOperations.getPathName(clazz)));
+        OJField result = new OJField("result", UmlgGenerationUtil.umlgSet.getCopy().addToGenerics(UmlgClassOperations.getPathName(clazz)));
         result.setInitExp("new " + UmlgGenerationUtil.umlgMemorySet.getCopy().addToGenerics(UmlgClassOperations.getPathName(clazz)).getLast() + "()");
         allInstances.getBody().addToLocals(result);
         Set<Classifier> specializations = UmlgClassOperations.getConcreteImplementations(clazz);

@@ -1,15 +1,15 @@
 package org.umlg.runtime.collection.ocl;
 
 import org.apache.commons.collections.set.ListOrderedSet;
-import org.umlg.runtime.collection.TinkerCollection;
-import org.umlg.runtime.collection.TinkerOrderedSet;
-import org.umlg.runtime.collection.TinkerSequence;
+import org.umlg.runtime.collection.UmlgCollection;
+import org.umlg.runtime.collection.UmlgOrderedSet;
+import org.umlg.runtime.collection.UmlgSequence;
 import org.umlg.runtime.collection.memory.UmlgMemoryOrderedSet;
 import org.umlg.runtime.domain.ocl.OclIsInvalidException;
 
 import java.util.*;
 
-public class OclStdLibOrderedSetImpl<E> extends OclStdLibCollectionImpl<E> implements TinkerOrderedSet<E> {
+public class OclStdLibOrderedSetImpl<E> extends OclStdLibCollectionImpl<E> implements UmlgOrderedSet<E> {
 
 	private ListOrderedSet orderedSet;
 
@@ -29,30 +29,30 @@ public class OclStdLibOrderedSetImpl<E> extends OclStdLibCollectionImpl<E> imple
 	}
 	
 	@Override
-	public TinkerOrderedSet<E> append(E e) {
-        TinkerOrderedSet<E> result = new UmlgMemoryOrderedSet<E>(this);
+	public UmlgOrderedSet<E> append(E e) {
+        UmlgOrderedSet<E> result = new UmlgMemoryOrderedSet<E>(this);
         result.add(e);
         return result;
 	}
 
 	@Override
-	public TinkerOrderedSet<E> prepend(E e) {
-        TinkerOrderedSet<E> result = new UmlgMemoryOrderedSet<E>(this);
+	public UmlgOrderedSet<E> prepend(E e) {
+        UmlgOrderedSet<E> result = new UmlgMemoryOrderedSet<E>(this);
         result.add(0, e);
         return result;
 	}
 
 	@Override
-	public TinkerOrderedSet<E> insertAt(Integer index, E e) {
-        TinkerOrderedSet<E> result = new UmlgMemoryOrderedSet<E>(this);
+	public UmlgOrderedSet<E> insertAt(Integer index, E e) {
+        UmlgOrderedSet<E> result = new UmlgMemoryOrderedSet<E>(this);
         result.add(index, e);
         return result;
 	}
 
 	@Override
-	public TinkerOrderedSet<E> subOrderedSet(Integer lower, Integer upper) {
+	public UmlgOrderedSet<E> subOrderedSet(Integer lower, Integer upper) {
         //Sublist excludes the upper element
-        TinkerOrderedSet<E> subList = OclStdLibOrderedSetImpl.get(this.orderedSet.asList().subList(lower, upper));
+        UmlgOrderedSet<E> subList = OclStdLibOrderedSetImpl.get(this.orderedSet.asList().subList(lower, upper));
         subList.add(get(upper));
         return subList;
 	}
@@ -81,7 +81,7 @@ public class OclStdLibOrderedSetImpl<E> extends OclStdLibCollectionImpl<E> imple
 	}
 
 	@Override
-	public TinkerOrderedSet<E> reverse() {
+	public UmlgOrderedSet<E> reverse() {
         List<E> result = new ArrayList<E>(this);
         Collections.reverse(result);
         return new UmlgMemoryOrderedSet(result);
@@ -93,7 +93,7 @@ public class OclStdLibOrderedSetImpl<E> extends OclStdLibCollectionImpl<E> imple
 	 ***************************************************/
 	
 	@Override
-	public TinkerOrderedSet<E> select(BooleanExpressionEvaluator<E> v) {
+	public UmlgOrderedSet<E> select(BooleanExpressionEvaluator<E> v) {
 		ListOrderedSet result = new ListOrderedSet();
 		for (E e : this.collection) {
 			if (v.evaluate(e)) {
@@ -105,7 +105,7 @@ public class OclStdLibOrderedSetImpl<E> extends OclStdLibCollectionImpl<E> imple
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <R> TinkerSequence<R> collectNested(BodyExpressionEvaluator<R, E> v) {
+	public <R> UmlgSequence<R> collectNested(BodyExpressionEvaluator<R, E> v) {
         List<R> result = new ArrayList<R>();
 		for (Object e : this.orderedSet) {
 			R evaluate = v.evaluate((E)e);
@@ -117,16 +117,16 @@ public class OclStdLibOrderedSetImpl<E> extends OclStdLibCollectionImpl<E> imple
 	}
 	
 	@Override
-	public <T, R> TinkerSequence<T> collect(BodyExpressionEvaluator<R, E> v) {
+	public <T, R> UmlgSequence<T> collect(BodyExpressionEvaluator<R, E> v) {
 		return collectNested(v).flatten();
 	}
 
 	@Override
-	public <R> TinkerSequence<R> flatten() {
+	public <R> UmlgSequence<R> flatten() {
         List<R> result = new ArrayList<R>();
 		for (Object e : this.orderedSet) {
-			if (e instanceof TinkerCollection) {
-				TinkerCollection<?> collection = (TinkerCollection<?>) e;
+			if (e instanceof UmlgCollection) {
+				UmlgCollection<?> collection = (UmlgCollection<?>) e;
 				result.addAll(collection.<R> flatten());
 			} else {
 				result.add((R)e);
@@ -255,7 +255,7 @@ public class OclStdLibOrderedSetImpl<E> extends OclStdLibCollectionImpl<E> imple
 	}
 
 	@Override
-	public TinkerOrderedSet<E> including(E e) {
+	public UmlgOrderedSet<E> including(E e) {
 		if (e != null) {
 			this.orderedSet.add(e);
 		}

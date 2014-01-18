@@ -15,7 +15,7 @@ public interface OclStdLibCollection<E> extends OclAny {
 	 * elements in the same quantities and in the same order, in the case of an
 	 * ordered collection type.<pre>
 	 */
-	boolean equals(TinkerCollection<E> c);
+	boolean equals(UmlgCollection<E> c);
 
 	/**
 	 * <> (c : Collection(T)) : Boolean
@@ -24,7 +24,7 @@ public interface OclStdLibCollection<E> extends OclAny {
 	 * 	post: result = not (self = c)
 	 * </pre>
 	 */
-	boolean notEquals(TinkerCollection<E> c);
+	boolean notEquals(UmlgCollection<E> c);
 
 	/**
 	 * size() : Integer
@@ -73,7 +73,7 @@ public interface OclStdLibCollection<E> extends OclAny {
 	 * @param v
 	 * @return
 	 */
-	Boolean includesAll(TinkerCollection<E> c);
+	Boolean includesAll(UmlgCollection<E> c);
 
 	/**
 	 * excludesAll(c2 : Collection(T)) : Boolean
@@ -84,7 +84,7 @@ public interface OclStdLibCollection<E> extends OclAny {
 	 * @param v
 	 * @return
 	 */
-	Boolean excludesAll(TinkerCollection<E> c);
+	Boolean excludesAll(UmlgCollection<E> c);
 
 	/**
 	 * isEmpty() : Boolean
@@ -164,7 +164,7 @@ public interface OclStdLibCollection<E> extends OclAny {
 	 * @return
 	 */
 	// TODO support Tuples
-	TinkerSet<?> product(TinkerCollection<E> c);
+	UmlgSet<?> product(UmlgCollection<E> c);
 
 	/**
 	 * asSet() : Set(T)
@@ -176,7 +176,7 @@ public interface OclStdLibCollection<E> extends OclAny {
 	 * @param v
 	 * @return
 	 */
-	<E> TinkerSet<E> asSet();
+	<E> UmlgSet<E> asSet();
 
 	/**
 	 * asOrderedSet() : OrderedSet(T)
@@ -187,7 +187,7 @@ public interface OclStdLibCollection<E> extends OclAny {
 	 * 	post: self ->forAll(elem | result->includes(elem))
 	 * </pre>
 	 */
-	TinkerOrderedSet<E> asOrderedSet();
+	UmlgOrderedSet<E> asOrderedSet();
 
 	/**
 	 * asSequence() : Sequence(T)
@@ -197,7 +197,7 @@ public interface OclStdLibCollection<E> extends OclAny {
 	 * 	post: self ->forAll(elem | result->includes(elem))
 	 * </pre>
 	 */
-	TinkerSequence<E> asSequence();
+	UmlgSequence<E> asSequence();
 
 	/**
 	 * asBag() : Bag(T)
@@ -207,7 +207,7 @@ public interface OclStdLibCollection<E> extends OclAny {
 	 * 	post: self ->forAll(elem | result->includes(elem))
 	 * </pre>
 	 */
-	TinkerBag<E> asBag();
+	UmlgBag<E> asBag();
 
 	/***************************************************
 	 * Iterate goodies
@@ -221,7 +221,7 @@ public interface OclStdLibCollection<E> extends OclAny {
 	 * result->including(iterator) else result endif) select may have at most
 	 * one iterator variable.
 	 */
-	TinkerCollection<E> select(BooleanExpressionEvaluator<E> e);
+	UmlgCollection<E> select(BooleanExpressionEvaluator<E> e);
 
 	/**
 	 * Returns any element in the source collection for which body evaluates to
@@ -254,7 +254,7 @@ public interface OclStdLibCollection<E> extends OclAny {
 	 * @param e
 	 * @return
 	 */
-	<T, R> TinkerCollection<T> collect(BodyExpressionEvaluator<R, E> e);
+	<T, R> UmlgCollection<T> collect(BodyExpressionEvaluator<R, E> e);
 
 	/**
 	 * The Bag of elements which results from applying body to every member of
@@ -267,7 +267,7 @@ public interface OclStdLibCollection<E> extends OclAny {
 	 * @param e
 	 * @return
 	 */
-	<R> TinkerCollection<R> collectNested(BodyExpressionEvaluator<R, E> e);
+	<R> UmlgCollection<R> collectNested(BodyExpressionEvaluator<R, E> e);
 
     /**
      * flatten() : Collection(T2)
@@ -281,6 +281,6 @@ public interface OclStdLibCollection<E> extends OclAny {
      * </pre>
      * @return
      */
-    <T2> TinkerCollection<T2> flatten();
+    <T2> UmlgCollection<T2> flatten();
 
 }

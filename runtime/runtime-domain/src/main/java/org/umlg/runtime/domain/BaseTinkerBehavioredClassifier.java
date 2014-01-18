@@ -2,7 +2,7 @@ package org.umlg.runtime.domain;
 
 import com.tinkerpop.blueprints.Edge;
 import org.umlg.runtime.adaptor.GraphDb;
-import org.umlg.runtime.collection.TinkerSequence;
+import org.umlg.runtime.collection.UmlgSequence;
 import org.umlg.runtime.domain.activity.AbstractActivity;
 import org.umlg.runtime.domain.activity.Token;
 import org.umlg.runtime.domain.activity.interf.IActivityNode;
@@ -16,7 +16,7 @@ import java.util.Set;
 public abstract class BaseTinkerBehavioredClassifier extends BaseUmlgAudit implements Serializable, CompositionNode, IBehavioredClassifier {
 
 	private static final long serialVersionUID = 228929853082097254L;
-	protected TinkerSequence<IEvent> events;
+	protected UmlgSequence<IEvent> events;
 
 	public BaseTinkerBehavioredClassifier() {
 		super();

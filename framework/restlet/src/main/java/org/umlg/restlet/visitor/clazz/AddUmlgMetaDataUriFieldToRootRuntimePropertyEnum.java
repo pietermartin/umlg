@@ -16,6 +16,7 @@ import org.umlg.java.metamodel.annotation.OJEnum;
 import org.umlg.java.metamodel.annotation.OJEnumLiteral;
 import org.umlg.javageneration.util.Condition;
 import org.umlg.javageneration.util.UmlgClassOperations;
+import org.umlg.javageneration.util.UmlgGenerationUtil;
 import org.umlg.javageneration.util.UmlgModelOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
 
@@ -29,8 +30,8 @@ public class AddUmlgMetaDataUriFieldToRootRuntimePropertyEnum extends BaseVisito
 
 	@Override
 	public void visitBefore(Model model) {
-		OJAnnotatedClass annotatedClass = this.workspace.findOJClass("org.umlg.root.Root");
-		OJEnum ojEnum = annotatedClass.findEnum("RootRuntimePropertyEnum");
+        OJAnnotatedClass annotatedClass = this.workspace.findOJClass(UmlgGenerationUtil.UmlgRootPackage.toJavaString() +  "." + StringUtils.capitalize(model.getName()));
+		OJEnum ojEnum = annotatedClass.findEnum(StringUtils.capitalize(model.getName()) + "RuntimePropertyEnum");
 		
 		OJField uriPrimitiveField = new OJField();
 		uriPrimitiveField.setType(new OJPathName("String"));

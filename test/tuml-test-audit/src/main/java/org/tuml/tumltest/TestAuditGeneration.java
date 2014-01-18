@@ -9,7 +9,7 @@ public class TestAuditGeneration {
 
 	public static void main(String[] args) {
 		JavaGenerator javaGenerator = new JavaGenerator();
-		javaGenerator.generate(new File("src/main/model/tinker-test.uml"), new File("/home/pieter/workspace-umlg/umlg/test/umlg-test-audit"),
+		javaGenerator.generate(new File("src/main/model/tests-test.uml"), new File("/home/pieter/workspace-umlg/umlg/test/umlg-test-audit"),
 				DefaultAuditVisitors.getDefaultJavaVisitors());
 	}
 	

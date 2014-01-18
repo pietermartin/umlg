@@ -5,7 +5,7 @@ import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 import org.umlg.runtime.adaptor.GraphDb;
 import org.umlg.runtime.collection.Qualifier;
-import org.umlg.runtime.collection.TinkerSet;
+import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.domain.ISignal;
 import org.umlg.runtime.domain.UmlgMetaNode;
@@ -136,7 +136,7 @@ public class SignalEvent extends Event {
     }
 
     @Override
-	public <E> TinkerSet<E> asSet() {
+	public <E> UmlgSet<E> asSet() {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -32,7 +32,7 @@ public class UmlgProperties {
     }
 
 //    public String getTinkerImplementation() {
-//        return this.properties.getProperty("tinker.implementation");
+//        return this.properties.getProperty("tests.implementation");
 //    }
 
     public boolean isStartAdminApplication() {

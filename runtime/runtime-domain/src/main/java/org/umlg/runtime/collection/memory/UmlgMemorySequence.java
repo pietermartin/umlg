@@ -1,6 +1,6 @@
 package org.umlg.runtime.collection.memory;
 
-import org.umlg.runtime.collection.TinkerSequence;
+import org.umlg.runtime.collection.UmlgSequence;
 import org.umlg.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.OclStdLibSequence;
@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.ListIterator;
 
-public class UmlgMemorySequence<E> extends UmlgMemoryCollection<E> implements TinkerSequence<E> {
+public class UmlgMemorySequence<E> extends UmlgMemoryCollection<E> implements UmlgSequence<E> {
 
 	protected OclStdLibSequence<E> oclStdLibSequence;
 
@@ -34,22 +34,22 @@ public class UmlgMemorySequence<E> extends UmlgMemoryCollection<E> implements Ti
 	}
 
 	@Override
-	public <T2> TinkerSequence<T2> flatten() {
+	public <T2> UmlgSequence<T2> flatten() {
 		return this.oclStdLibSequence.flatten();
 	}
 
 	@Override
-	public <T, R> TinkerSequence<T> collect(BodyExpressionEvaluator<R, E> e) {
+	public <T, R> UmlgSequence<T> collect(BodyExpressionEvaluator<R, E> e) {
 		return this.oclStdLibSequence.collect(e);
 	}
 
 	@Override
-	public <R> TinkerSequence<R> collectNested(BodyExpressionEvaluator<R, E> e) {
+	public <R> UmlgSequence<R> collectNested(BodyExpressionEvaluator<R, E> e) {
 		return this.oclStdLibSequence.collectNested(e);
 	}
 
 	@Override
-	public TinkerSequence<E> select(BooleanExpressionEvaluator<E> e) {
+	public UmlgSequence<E> select(BooleanExpressionEvaluator<E> e) {
 		return this.oclStdLibSequence.select(e);
 	}
 
@@ -104,32 +104,32 @@ public class UmlgMemorySequence<E> extends UmlgMemoryCollection<E> implements Ti
 	}
 
 	@Override
-	public Boolean equals(TinkerSequence<E> s) {
+	public Boolean equals(UmlgSequence<E> s) {
 		return this.oclStdLibSequence.equals(s);
 	}
 
 	@Override
-	public TinkerSequence<E> union(TinkerSequence<? extends E> s) {
+	public UmlgSequence<E> union(UmlgSequence<? extends E> s) {
 		return this.oclStdLibSequence.union(s);
 	}
 
 	@Override
-	public TinkerSequence<E> append(E object) {
+	public UmlgSequence<E> append(E object) {
 		return this.oclStdLibSequence.append(object);
 	}
 
 	@Override
-	public TinkerSequence<E> prepend(E object) {
+	public UmlgSequence<E> prepend(E object) {
 		return this.oclStdLibSequence.prepend(object);
 	}
 
 	@Override
-	public TinkerSequence<E> insertAt(Integer index, E object) {
+	public UmlgSequence<E> insertAt(Integer index, E object) {
 		return this.oclStdLibSequence.insertAt(index, object);
 	}
 
 	@Override
-	public TinkerSequence<E> subSequence(Integer lower, Integer upper) {
+	public UmlgSequence<E> subSequence(Integer lower, Integer upper) {
 		return this.oclStdLibSequence.subSequence(lower, upper);
 	}
 
@@ -149,17 +149,17 @@ public class UmlgMemorySequence<E> extends UmlgMemoryCollection<E> implements Ti
 	}
 
 	@Override
-	public TinkerSequence<E> including(E object) {
+	public UmlgSequence<E> including(E object) {
 		return this.oclStdLibSequence.including(object);
 	}
 
 	@Override
-	public TinkerSequence<E> excluding(E object) {
+	public UmlgSequence<E> excluding(E object) {
 		return this.oclStdLibSequence.excluding(object);
 	}
 
 	@Override
-	public TinkerSequence<E> reverse() {
+	public UmlgSequence<E> reverse() {
 		return this.oclStdLibSequence.reverse();
 	}
 

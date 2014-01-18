@@ -111,7 +111,7 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<Class> {
         OJAnnotatedOperation allInstances = new OJAnnotatedOperation("getAllInstances");
         UmlgGenerationUtil.addOverrideAnnotation(allInstances);
         OJPathName classPathName = UmlgClassOperations.getPathName(clazz);
-        allInstances.setReturnType(UmlgGenerationUtil.tinkerSet.getCopy().addToGenerics(classPathName));
+        allInstances.setReturnType(UmlgGenerationUtil.umlgSet.getCopy().addToGenerics(classPathName));
 
         OJField resultField = new OJField("result", UmlgGenerationUtil.umlgMemorySet.getCopy().addToGenerics(classPathName));
         resultField.setInitExp("new " + UmlgGenerationUtil.umlgMemorySet.getCopy().addToGenerics(classPathName).getLast() + "()");
@@ -137,7 +137,7 @@ public class MetaClassBuilder extends ClassBuilder implements Visitor<Class> {
 
         UmlgGenerationUtil.addOverrideAnnotation(allInstances);
         OJPathName classPathName = UmlgClassOperations.getPathName(clazz);
-        allInstances.setReturnType(UmlgGenerationUtil.tinkerSet.getCopy().addToGenerics(classPathName));
+        allInstances.setReturnType(UmlgGenerationUtil.umlgSet.getCopy().addToGenerics(classPathName));
 
         OJField resultField = new OJField("result", UmlgGenerationUtil.umlgMemorySet.getCopy().addToGenerics(classPathName));
         resultField.setInitExp("new " + UmlgGenerationUtil.umlgMemorySet.getCopy().addToGenerics(classPathName).getLast() + "()");

@@ -6,8 +6,8 @@ import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 import org.apache.commons.collections.set.ListOrderedSet;
 import org.umlg.runtime.adaptor.GraphDb;
-import org.umlg.runtime.collection.TinkerOrderedSet;
-import org.umlg.runtime.collection.TinkerSequence;
+import org.umlg.runtime.collection.UmlgOrderedSet;
+import org.umlg.runtime.collection.UmlgSequence;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator;
@@ -25,7 +25,7 @@ import java.util.ListIterator;
  * Date: 2013/03/02
  * Time: 9:18 PM
  */
-public abstract class UmlgBaseOrderedSet<E> extends BaseCollection<E> implements TinkerOrderedSet<E> {
+public abstract class UmlgBaseOrderedSet<E> extends BaseCollection<E> implements UmlgOrderedSet<E> {
 
     protected OclStdLibOrderedSet<E> oclStdLibOrderedSet;
 
@@ -210,49 +210,49 @@ public abstract class UmlgBaseOrderedSet<E> extends BaseCollection<E> implements
     }
 
     @Override
-    public <R> TinkerSequence<R> collectNested(BodyExpressionEvaluator<R, E> v) {
+    public <R> UmlgSequence<R> collectNested(BodyExpressionEvaluator<R, E> v) {
         maybeLoad();
         return this.oclStdLibOrderedSet.collectNested(v);
     }
 
     @Override
-    public <T, R> TinkerSequence<T> collect(BodyExpressionEvaluator<R, E> v) {
+    public <T, R> UmlgSequence<T> collect(BodyExpressionEvaluator<R, E> v) {
         maybeLoad();
         return this.oclStdLibOrderedSet.collect(v);
     }
 
     @Override
-    public <T2> TinkerSequence<T2> flatten() {
+    public <T2> UmlgSequence<T2> flatten() {
         maybeLoad();
         return this.oclStdLibOrderedSet.flatten();
     }
 
     @Override
-    public TinkerOrderedSet<E> select(BooleanExpressionEvaluator<E> v) {
+    public UmlgOrderedSet<E> select(BooleanExpressionEvaluator<E> v) {
         maybeLoad();
         return this.oclStdLibOrderedSet.select(v);
     }
 
     @Override
-    public TinkerOrderedSet<E> append(E e) {
+    public UmlgOrderedSet<E> append(E e) {
         maybeLoad();
         return this.oclStdLibOrderedSet.append(e);
     }
 
     @Override
-    public TinkerOrderedSet<E> prepend(E e) {
+    public UmlgOrderedSet<E> prepend(E e) {
         maybeLoad();
         return this.oclStdLibOrderedSet.prepend(e);
     }
 
     @Override
-    public TinkerOrderedSet<E> insertAt(Integer index, E e) {
+    public UmlgOrderedSet<E> insertAt(Integer index, E e) {
         maybeLoad();
         return this.oclStdLibOrderedSet.insertAt(index, e);
     }
 
     @Override
-    public TinkerOrderedSet<E> subOrderedSet(Integer lower, Integer upper) {
+    public UmlgOrderedSet<E> subOrderedSet(Integer lower, Integer upper) {
         maybeLoad();
         return this.oclStdLibOrderedSet.subOrderedSet(lower, upper);
     }
@@ -276,13 +276,13 @@ public abstract class UmlgBaseOrderedSet<E> extends BaseCollection<E> implements
     }
 
     @Override
-    public TinkerOrderedSet<E> reverse() {
+    public UmlgOrderedSet<E> reverse() {
         maybeLoad();
         return this.oclStdLibOrderedSet.reverse();
     }
 
     @Override
-    public TinkerOrderedSet<E> including(E e) {
+    public UmlgOrderedSet<E> including(E e) {
         maybeLoad();
         return this.oclStdLibOrderedSet.including(e);
     }

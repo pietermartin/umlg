@@ -25,9 +25,9 @@
 
         this.refresh = function (name, uri, contextVertexId) {
             //build context path to root
-            if (name === 'Root') {
+            if (name === tumlModelName) {
                 createContextPath([
-                    {name: 'Root', uri: uri}
+                    {name: name, uri: uri}
                 ]);
             } else {
                 var replacedUri = uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), encodeURIComponent(contextVertexId));

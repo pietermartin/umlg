@@ -1,7 +1,7 @@
 package org.umlg.runtime.collection.memory;
 
-import org.umlg.runtime.collection.TinkerBag;
-import org.umlg.runtime.collection.TinkerSet;
+import org.umlg.runtime.collection.UmlgBag;
+import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.OclStdLibSet;
@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-public class UmlgMemorySet<E> extends UmlgMemoryCollection<E> implements TinkerSet<E> {
+public class UmlgMemorySet<E> extends UmlgMemoryCollection<E> implements UmlgSet<E> {
 
 	private OclStdLibSet<E> oclStdLibSet;
 
@@ -30,67 +30,67 @@ public class UmlgMemorySet<E> extends UmlgMemoryCollection<E> implements TinkerS
 	}
 
 	@Override
-	public TinkerSet<E> select(BooleanExpressionEvaluator<E> e) {
+	public UmlgSet<E> select(BooleanExpressionEvaluator<E> e) {
 		return this.oclStdLibSet.select(e);
 	}
 
 	@Override
-	public <R> TinkerBag<R> collectNested(BodyExpressionEvaluator<R, E> e) {
+	public <R> UmlgBag<R> collectNested(BodyExpressionEvaluator<R, E> e) {
 		return this.oclStdLibSet.collectNested(e);
 	}
 
 	@Override
-	public <T, R> TinkerBag<T> collect(BodyExpressionEvaluator<R, E> e) {
+	public <T, R> UmlgBag<T> collect(BodyExpressionEvaluator<R, E> e) {
 		return this.oclStdLibSet.collect(e);
 	}
 
 	@Override
-	public <T2> TinkerSet<T2> flatten() {
+	public <T2> UmlgSet<T2> flatten() {
 		return oclStdLibSet.flatten();
 	}
 
 	@Override
-	public TinkerSet<E> union(TinkerSet<? extends  E> s) {
+	public UmlgSet<E> union(UmlgSet<? extends  E> s) {
 		return oclStdLibSet.union(s);
 	}
 
 	@Override
-	public TinkerBag<E> union(TinkerBag<? extends E> bag) {
+	public UmlgBag<E> union(UmlgBag<? extends E> bag) {
 		return oclStdLibSet.union(bag);
 	}
 
 	@Override
-	public Boolean equals(TinkerSet<E> s) {
+	public Boolean equals(UmlgSet<E> s) {
 		return oclStdLibSet.equals(s);
 	}
 
 	@Override
-	public TinkerSet<E> intersection(TinkerSet<E> s) {
+	public UmlgSet<E> intersection(UmlgSet<E> s) {
 		return oclStdLibSet.intersection(s);
 	}
 
 	@Override
-	public TinkerSet<E> intersection(TinkerBag<E> bag) {
+	public UmlgSet<E> intersection(UmlgBag<E> bag) {
 		return oclStdLibSet.intersection(bag);
 	}
 
 	@Override
-	public TinkerSet<E> subtract(TinkerSet<E> s) {
+	public UmlgSet<E> subtract(UmlgSet<E> s) {
 		return oclStdLibSet.subtract(s);
 	}
 
 	@Override
-	public TinkerSet<E> including(E e) {
+	public UmlgSet<E> including(E e) {
 		return oclStdLibSet.including(e);
 	}
 
 	@Override
-	public TinkerSet<E> excluding(E e) {
+	public UmlgSet<E> excluding(E e) {
 		return oclStdLibSet.excluding(e);
 	}
 
 	@Override
-	public TinkerSet<E> symmetricDifference(TinkerSet<E> s) {
+	public UmlgSet<E> symmetricDifference(UmlgSet<E> s) {
 		return oclStdLibSet.symmetricDifference(s);
 	}
 

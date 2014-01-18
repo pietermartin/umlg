@@ -11,7 +11,7 @@ public class UmlgGenerationUtil {
     public static OJPathName UmlgUtil = new OJPathName("org.umlg.runtime.util.UmlgUtil");
     public static OJPathName BASE_CLASS_TUML = new OJPathName("org.umlg.meta.BaseClassTuml");
 
-    public static String tinkeriseUmlName(String umlName) {
+    public static String umlgizeUmlName(String umlName) {
         return umlName.replace("::", "__");
     }
 
@@ -19,7 +19,7 @@ public class UmlgGenerationUtil {
 
     public static final String INIT_VERTEX = "initVertex";
 
-    public static final String TINKER_DB_NULL = "__NULL__";
+    public static final String UMLG_DB_NULL = "__NULL__";
 
     public static final String ALLINSTANCES_EDGE_LABEL = "ALLINSTANCES_EDGE_LABEL";
 
@@ -42,9 +42,9 @@ public class UmlgGenerationUtil {
     public static final OJPathName ModelLoader = new OJPathName("org.umlg.framework.ModelLoader");
     public static final OJPathName UmlgOcl2Parser = new OJPathName("org.umlg.ocl.UmlgOcl2Parser");
     public static final OJPathName UmlgMetaNode = new OJPathName("org.umlg.runtime.domain.UmlgMetaNode");
-    public static final OJPathName QualifiedNameClassMap = new OJPathName("org.umlg.root.QualifiedNameClassMap");
+    public static final OJPathName QualifiedNameClassMap = new OJPathName("org.umlg.model.QualifiedNameClassMap");
     public static final OJPathName UmlgAdaptorPackage = new OJPathName("org.umlg.runtime.adaptor");
-    public static final OJPathName UmlgRootPackage = new OJPathName("org.umlg.root");
+    public static final OJPathName UmlgRootPackage = new OJPathName("org.umlg.model");
     public static final OJPathName UmlgSchemaMap = new OJPathName("org.umlg.runtime.adaptor.UmlgSchemaMap");
     public static final OJPathName UmlgSchemaFactory = new OJPathName("org.umlg.runtime.adaptor.UmlgSchemaFactory");
     public static final OJPathName UmlgSchemaMapImpl = new OJPathName("org.umlg.runtime.adaptor.UmlgSchemaMapImpl");
@@ -64,7 +64,6 @@ public class UmlgGenerationUtil {
     public static final OJPathName DataTypeEnum = new OJPathName("org.umlg.runtime.domain.DataTypeEnum");
     public static final OJPathName BodyExpressionEvaluator = new OJPathName("org.umlg.runtime.collection.ocl.BodyExpressionEvaluator");
     public static final OJPathName BooleanExpressionEvaluator = new OJPathName("org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator");
-    public static final OJPathName RootRuntimePropertyEnum = new OJPathName("org.umlg.root.Root.RootRuntimePropertyEnum");
 
     public final static OJPathName ObjectMapper = new OJPathName("com.fasterxml.jackson.databind.ObjectMapper");
     public final static OJPathName ObjectMapperFactory = new OJPathName("org.umlg.runtime.util.ObjectMapperFactory");
@@ -81,8 +80,8 @@ public class UmlgGenerationUtil {
     public static final OJPathName umlgMemoryCollectionLib = new OJPathName("org.umlg.runtime.collection.memory.*");
     public static final OJPathName umlgRuntimeCollectionLib = new OJPathName("org.umlg.runtime.collection.*");
 
-    public static final OJPathName umlgTinkerSequenceClosableIterableImpl = new OJPathName("org.umlg.runtime.collection.persistent.UmlgSequenceClosableIterableImpl");
-    public static final OJPathName umlgTinkerSetClosableIterableImpl = new OJPathName("org.umlg.runtime.collection.persistent.UmlgSetClosableIterableImpl");
+    public static final OJPathName umlgUmlgSequenceClosableIterableImpl = new OJPathName("org.umlg.runtime.collection.persistent.UmlgSequenceClosableIterableImpl");
+    public static final OJPathName umlgUmlgSetClosableIterableImpl = new OJPathName("org.umlg.runtime.collection.persistent.UmlgSetClosableIterableImpl");
 
     public static final OJPathName umlgRuntimePropertyPathName = new OJPathName("org.umlg.runtime.collection.UmlgRuntimeProperty");
     public static final OJPathName umlgTransactionalGraphPathName = new OJPathName("com.tinkerpop.blueprints.TransactionalGraph");
@@ -97,9 +96,8 @@ public class UmlgGenerationUtil {
 
     public static final OJPathName tinkerDirection = new OJPathName("com.tinkerpop.blueprints.Direction");
     public static final OJPathName AssociationClassNode = new OJPathName("org.umlg.runtime.domain.AssociationClassNode");
-    public static final OJPathName tinkerCompositionNodePathName = new OJPathName("org.umlg.runtime.domain.CompositionNode");
+    public static final OJPathName umlgCompositionNodePathName = new OJPathName("org.umlg.runtime.domain.CompositionNode");
     public static final OJPathName compositionNodePathName = new OJPathName("org.umlg.runtime.domain.CompositionNode");
-    public static final OJPathName tinkerIdUtilPathName = new OJPathName("org.umlg.runtime.adaptor.TinkerIdUtil");
     public static final OJPathName BASE_TUML_AUDIT = new OJPathName("org.umlg.runtime.domain.BaseTumlAudit");
     public static final OJPathName BASE_BEHAVIORED_CLASSIFIER = new OJPathName("org.umlg.runtime.domain.BaseTinkerBehavioredClassifier");
     public static final String BASE_BEHAVIORED_CLASSIFIER_QUALIFIEDNAME = "org::umlg::runtime::domain::BaseTinkerBehavioredClassifier";
@@ -118,40 +116,40 @@ public class UmlgGenerationUtil {
     public static OJPathName graphDbPathName = new OJPathName("org.umlg.runtime.adaptor.GraphDb");
     public static OJPathName tinkerAuditNodePathName = new OJPathName("org.umlg.runtime.domain.TinkerAuditNode");
 
-    public static OJPathName tinkerCollection = new OJPathName("org.umlg.runtime.collection.TinkerCollection");
-    public static OJPathName tinkerSet = new OJPathName("org.umlg.runtime.collection.TinkerSet");
-    public static OJPathName tinkerSetImpl = new OJPathName("org.umlg.runtime.collection.persistent.TinkerSetImpl");
+    public static OJPathName umlgCollection = new OJPathName("org.umlg.runtime.collection.UmlgCollection");
+    public static OJPathName umlgSet = new OJPathName("org.umlg.runtime.collection.UmlgSet");
+    public static OJPathName umlgSetImpl = new OJPathName("org.umlg.runtime.collection.persistent.UmlgSetImpl");
     public static OJPathName umlgPropertyAssociationClassSet = new OJPathName("org.umlg.runtime.collection.UmlgPropertyAssociationClassSet");
     public static OJPathName umlgPropertyAssociationClassSetImpl = new OJPathName("org.umlg.runtime.collection.persistent.UmlgPropertyAssociationClassSetImpl");
     public static OJPathName umlgAssociationClassSetImpl = new OJPathName("org.umlg.runtime.collection.persistent.UmlgAssociationClassSetImpl");
-    public static OJPathName tinkerQualifiedSet = new OJPathName("org.umlg.runtime.collection.TinkerQualifiedSet");
-    public static OJPathName tinkerQualifiedSetImpl = new OJPathName("org.umlg.runtime.collection.persistent.TinkerQualifiedSetImpl");
+    public static OJPathName umlgQualifiedSet = new OJPathName("org.umlg.runtime.collection.UmlgQualifiedSet");
+    public static OJPathName umlgQualifiedSetImpl = new OJPathName("org.umlg.runtime.collection.persistent.UmlgQualifiedSetImpl");
 
-    public static OJPathName tinkerSequence = new OJPathName("org.umlg.runtime.collection.TinkerSequence");
-    public static OJPathName tinkerSequenceImpl = new OJPathName("org.umlg.runtime.collection.persistent.TinkerSequenceImpl");
+    public static OJPathName umlgSequence = new OJPathName("org.umlg.runtime.collection.UmlgSequence");
+    public static OJPathName umlgSequenceImpl = new OJPathName("org.umlg.runtime.collection.persistent.UmlgSequenceImpl");
     public static OJPathName umlgPropertyAssociationClassSequence = new OJPathName("org.umlg.runtime.collection.UmlgPropertyAssociationClassSequence");
     public static OJPathName umlgPropertyAssociationClassSequenceImpl = new OJPathName("org.umlg.runtime.collection.persistent.UmlgPropertyAssociationClassSequenceImpl");
     public static OJPathName umlgAssociationClassSequenceImpl = new OJPathName("org.umlg.runtime.collection.persistent.UmlgAssociationClassSequenceImpl");
 
 
-    public static OJPathName tinkerQualifiedSequence = new OJPathName("org.umlg.runtime.collection.TinkerQualifiedSequence");
-    public static OJPathName tinkerQualifiedSequenceImpl = new OJPathName("org.umlg.runtime.collection.persistent.TinkerQualifiedSequenceImpl");
-    public static OJPathName tinkerOrderedSet = new OJPathName("org.umlg.runtime.collection.TinkerOrderedSet");
-    public static OJPathName tinkerOrderedSetImpl = new OJPathName("org.umlg.runtime.collection.persistent.TinkerOrderedSetImpl");
-    public static OJPathName tinkerQualifiedOrderedSet = new OJPathName("org.umlg.runtime.collection.TinkerQualifiedOrderedSet");
-    public static OJPathName tinkerQualifiedOrderedSetImpl = new OJPathName("org.umlg.runtime.collection.persistent.TinkerQualifiedOrderedSetImpl");
+    public static OJPathName umlgQualifiedSequence = new OJPathName("org.umlg.runtime.collection.UmlgQualifiedSequence");
+    public static OJPathName umlgQualifiedSequenceImpl = new OJPathName("org.umlg.runtime.collection.persistent.UmlgQualifiedSequenceImpl");
+    public static OJPathName umlgOrderedSet = new OJPathName("org.umlg.runtime.collection.UmlgOrderedSet");
+    public static OJPathName umlgOrderedSetImpl = new OJPathName("org.umlg.runtime.collection.persistent.UmlgOrderedSetImpl");
+    public static OJPathName umlgQualifiedOrderedSet = new OJPathName("org.umlg.runtime.collection.UmlgQualifiedOrderedSet");
+    public static OJPathName umlgQualifiedOrderedSetImpl = new OJPathName("org.umlg.runtime.collection.persistent.UmlgQualifiedOrderedSetImpl");
     public static OJPathName umlgPropertyAssociationClassOrderedSet = new OJPathName("org.umlg.runtime.collection.UmlgPropertyAssociationClassOrderedSet");
     public static OJPathName umlgPropertyAssociationClassOrderedSetImpl = new OJPathName("org.umlg.runtime.collection.persistent.UmlgPropertyAssociationClassOrderedSetImpl");
     public static OJPathName umlgAssociationClassOrderedSetImpl = new OJPathName("org.umlg.runtime.collection.persistent.UmlgAssociationClassOrderedSetImpl");
 
-    public static OJPathName tinkerBag = new OJPathName("org.umlg.runtime.collection.TinkerBag");
-    public static OJPathName tinkerBagImpl = new OJPathName("org.umlg.runtime.collection.persistent.TinkerBagImpl");
+    public static OJPathName umlgBag = new OJPathName("org.umlg.runtime.collection.UmlgBag");
+    public static OJPathName umlgBagImpl = new OJPathName("org.umlg.runtime.collection.persistent.UmlgBagImpl");
     public static OJPathName umlgPropertyAssociationClassBag = new OJPathName("org.umlg.runtime.collection.UmlgPropertyAssociationClassBag");
     public static OJPathName umlgPropertyAssociationClassBagImpl = new OJPathName("org.umlg.runtime.collection.persistent.UmlgPropertyAssociationClassBagImpl");
     public static OJPathName umlgAssociationClassBagImpl = new OJPathName("org.umlg.runtime.collection.persistent.UmlgAssociationClassBagImpl");
 
-    public static OJPathName tinkerQualifiedBag = new OJPathName("org.umlg.runtime.collection.TinkerQualifiedBag");
-    public static OJPathName tinkerQualifiedBagImpl = new OJPathName("org.umlg.runtime.collection.persistent.TinkerQualifiedBagImpl");
+    public static OJPathName umlgQualifiedBag = new OJPathName("org.umlg.runtime.collection.UmlgQualifiedBag");
+    public static OJPathName umlgQualifiedBagImpl = new OJPathName("org.umlg.runtime.collection.persistent.UmlgQualifiedBagImpl");
 
     public static OJPathName edgePathName = new OJPathName("com.tinkerpop.blueprints.Edge");
     public static String graphDbAccess = "GraphDb.getDb()";
@@ -196,13 +194,13 @@ public class UmlgGenerationUtil {
             // !inverse.
             // This is to ensure that the edge on both sides has the same name.
             if (!isControllingSide) {
-                return tinkeriseUmlName(p.getOtherEnd().getQualifiedName() + "__" + p.getQualifiedName());
+                return umlgizeUmlName(p.getOtherEnd().getQualifiedName() + "__" + p.getQualifiedName());
             } else {
                 if (p.getOtherEnd() != null) {
-                    return tinkeriseUmlName(p.getQualifiedName() + "__" + p.getOtherEnd().getQualifiedName());
+                    return umlgizeUmlName(p.getQualifiedName() + "__" + p.getOtherEnd().getQualifiedName());
                 } else {
-//                    return tinkeriseUmlName(p.getQualifiedName());
-                    return tinkeriseUmlName(p.getName());
+//                    return umlgizeUmlName(p.getQualifiedName());
+                    return umlgizeUmlName(p.getName());
                 }
             }
         }

@@ -5,7 +5,7 @@ import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 import org.umlg.runtime.adaptor.GraphDb;
-import org.umlg.runtime.collection.TinkerSequence;
+import org.umlg.runtime.collection.UmlgSequence;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator;
@@ -17,7 +17,7 @@ import org.umlg.runtime.domain.UmlgNode;
 import java.lang.reflect.Method;
 import java.util.*;
 
-public abstract class BaseSequence<E> extends BaseCollection<E> implements TinkerSequence<E> {
+public abstract class BaseSequence<E> extends BaseCollection<E> implements UmlgSequence<E> {
 
     protected OclStdLibSequence<E> oclStdLibSequence;
 
@@ -367,25 +367,25 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
     }
 
     @Override
-    public <R> TinkerSequence<R> collectNested(BodyExpressionEvaluator<R, E> v) {
+    public <R> UmlgSequence<R> collectNested(BodyExpressionEvaluator<R, E> v) {
         maybeLoad();
         return this.oclStdLibSequence.collectNested(v);
     }
 
     @Override
-    public <T, R> TinkerSequence<T> collect(BodyExpressionEvaluator<R, E> v) {
+    public <T, R> UmlgSequence<T> collect(BodyExpressionEvaluator<R, E> v) {
         maybeLoad();
         return this.oclStdLibSequence.collect(v);
     }
 
     @Override
-    public <R> TinkerSequence<R> flatten() {
+    public <R> UmlgSequence<R> flatten() {
         maybeLoad();
         return this.oclStdLibSequence.flatten();
     }
 
     @Override
-    public TinkerSequence<E> select(BooleanExpressionEvaluator<E> v) {
+    public UmlgSequence<E> select(BooleanExpressionEvaluator<E> v) {
         maybeLoad();
         return this.oclStdLibSequence.select(v);
     }
@@ -397,37 +397,37 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
     }
 
     @Override
-    public Boolean equals(TinkerSequence<E> s) {
+    public Boolean equals(UmlgSequence<E> s) {
         maybeLoad();
         return this.oclStdLibSequence.equals(s);
     }
 
     @Override
-    public TinkerSequence<E> union(TinkerSequence<? extends E> s) {
+    public UmlgSequence<E> union(UmlgSequence<? extends E> s) {
         maybeLoad();
         return this.oclStdLibSequence.union(s);
     }
 
     @Override
-    public TinkerSequence<E> append(E object) {
+    public UmlgSequence<E> append(E object) {
         maybeLoad();
         return this.oclStdLibSequence.append(object);
     }
 
     @Override
-    public TinkerSequence<E> prepend(E object) {
+    public UmlgSequence<E> prepend(E object) {
         maybeLoad();
         return this.oclStdLibSequence.prepend(object);
     }
 
     @Override
-    public TinkerSequence<E> insertAt(Integer index, E object) {
+    public UmlgSequence<E> insertAt(Integer index, E object) {
         maybeLoad();
         return this.oclStdLibSequence.insertAt(index, object);
     }
 
     @Override
-    public TinkerSequence<E> subSequence(Integer lower, Integer upper) {
+    public UmlgSequence<E> subSequence(Integer lower, Integer upper) {
         maybeLoad();
         return this.oclStdLibSequence.subSequence(lower, upper);
     }
@@ -445,19 +445,19 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements Tinke
     }
 
     @Override
-    public TinkerSequence<E> including(E object) {
+    public UmlgSequence<E> including(E object) {
         maybeLoad();
         return this.oclStdLibSequence.including(object);
     }
 
     @Override
-    public TinkerSequence<E> excluding(E object) {
+    public UmlgSequence<E> excluding(E object) {
         maybeLoad();
         return this.oclStdLibSequence.excluding(object);
     }
 
     @Override
-    public TinkerSequence<E> reverse() {
+    public UmlgSequence<E> reverse() {
         maybeLoad();
         return this.oclStdLibSequence.reverse();
     }

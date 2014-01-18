@@ -1,9 +1,9 @@
 package org.umlg.runtime.collection.ocl;
 
-import org.umlg.runtime.collection.TinkerBag;
-import org.umlg.runtime.collection.TinkerOrderedSet;
-import org.umlg.runtime.collection.TinkerSequence;
-import org.umlg.runtime.collection.TinkerSet;
+import org.umlg.runtime.collection.UmlgBag;
+import org.umlg.runtime.collection.UmlgOrderedSet;
+import org.umlg.runtime.collection.UmlgSequence;
+import org.umlg.runtime.collection.UmlgSet;
 
 
 public interface OclStdLibBag<E> extends OclStdLibCollection<E> {
@@ -15,7 +15,7 @@ public interface OclStdLibBag<E> extends OclStdLibCollection<E> {
 	 * 		post: result = (self->forAll(elem | self->count(elem) = bag->count(elem)) and
 	 * 		bag->forAll(elem | bag->count(elem) = self->count(elem)) )</pre>
 	 */
-	Boolean equals(TinkerBag<E> bag);
+	Boolean equals(UmlgBag<E> bag);
 	
 	/**
 	 * union(bag : Bag(T)) : Bag(T)
@@ -26,7 +26,7 @@ public interface OclStdLibBag<E> extends OclStdLibCollection<E> {
 	 * 		post: bag ->forAll( elem | result->count(elem) = self->count(elem) + bag->count(elem))
 	 * </pre>
 	 */
-	TinkerBag<E> union(TinkerBag<E> bag);
+	UmlgBag<E> union(UmlgBag<E> bag);
 	
 	/**
 	 * union(set : Set(T)) : Bag(T)
@@ -37,7 +37,7 @@ public interface OclStdLibBag<E> extends OclStdLibCollection<E> {
 	 * 		post: set ->forAll(elem | result->count(elem) = self->count(elem) + set->count(elem))
 	 * </pre>
 	 */
-	TinkerBag<E> union(TinkerSet<E> set);
+	UmlgBag<E> union(UmlgSet<E> set);
 	
 	/**
 	 * intersection(bag : Bag(T)) : Bag(T)
@@ -48,7 +48,7 @@ public interface OclStdLibBag<E> extends OclStdLibCollection<E> {
 	 * 		post: bag->forAll(elem | result->count(elem) = self->count(elem).min(bag->count(elem)) )
 	 * </pre>
 	 */
-	TinkerBag<E> intersection(TinkerBag<E> bag);
+	UmlgBag<E> intersection(UmlgBag<E> bag);
 	
 	/**
 	 * intersection(bag : Bag(T)) : Bag(T)
@@ -57,7 +57,7 @@ public interface OclStdLibBag<E> extends OclStdLibCollection<E> {
      *      post: self->forAll(elem | result->count(elem) = self->count(elem).min(bag->count(elem)) )
      *      post: bag->forAll(elem | result->count(elem) = self->count(elem).min(bag->count(elem)) )
 	 */
-	TinkerSet<E> intersection(TinkerSet<E> set);
+	UmlgSet<E> intersection(UmlgSet<E> set);
 	
 	/**
 	 * including(object : T) : Bag(T)
@@ -77,7 +77,7 @@ public interface OclStdLibBag<E> extends OclStdLibCollection<E> {
 	 * 			endif)
 	 * </pre>
 	 */
-	TinkerBag<E> including(E object);
+	UmlgBag<E> including(E object);
 	
 	/**
 	 * excluding(object : T) : Bag(T)
@@ -97,7 +97,7 @@ public interface OclStdLibBag<E> extends OclStdLibCollection<E> {
 	 * 			endif)
 	 * </pre>
 	 */
-	TinkerBag<E> excluding(E object);
+	UmlgBag<E> excluding(E object);
 	
 	/**
 	 * count(object : T) : Integer
@@ -116,7 +116,7 @@ public interface OclStdLibBag<E> extends OclStdLibCollection<E> {
 	 * </pre>
 	 */
 	@Override
-	TinkerBag<E> asBag();
+    UmlgBag<E> asBag();
 	
 	/**
 	 * asSequence() : Sequence(T)
@@ -127,7 +127,7 @@ public interface OclStdLibBag<E> extends OclStdLibCollection<E> {
 	 * </pre>
 	 */
 	@Override
-	TinkerSequence<E> asSequence();
+    UmlgSequence<E> asSequence();
 	
 //	/**
 //	 * asSet() : Set(T)
@@ -138,7 +138,7 @@ public interface OclStdLibBag<E> extends OclStdLibCollection<E> {
 //	 * </pre>
 //	 */
 //	@Override
-//	<E> TinkerSet<E> asSet();
+//	<E> UmlgSet<E> asSet();
 
 	/**
 	 * asOrderedSet() : OrderedSet(T)
@@ -150,20 +150,20 @@ public interface OclStdLibBag<E> extends OclStdLibCollection<E> {
 	 * 		post: self ->forAll(elem | result->count(elem) = 1)
 	 * </pre>
 	 */
-	TinkerOrderedSet<E> asOrderedSet();
+	UmlgOrderedSet<E> asOrderedSet();
 	
 	/***************************************************
 	 * Iterate goodies
 	 ***************************************************/
 	
 	@Override
-	TinkerBag<E> select(BooleanExpressionEvaluator<E> e);
+    UmlgBag<E> select(BooleanExpressionEvaluator<E> e);
 	
 	@Override
-	<R> TinkerBag<R> collectNested(BodyExpressionEvaluator<R, E> e);
+	<R> UmlgBag<R> collectNested(BodyExpressionEvaluator<R, E> e);
 
 	@Override
-	<T, R> TinkerBag<T> collect(BodyExpressionEvaluator<R, E> e);
+	<T, R> UmlgBag<T> collect(BodyExpressionEvaluator<R, E> e);
 
     /**
      * flatten() : Bag(T2)
@@ -180,6 +180,6 @@ public interface OclStdLibBag<E> extends OclStdLibCollection<E> {
      * </pre>
      */
     @Override
-    <T2> TinkerBag<T2> flatten();
+    <T2> UmlgBag<T2> flatten();
 
 }

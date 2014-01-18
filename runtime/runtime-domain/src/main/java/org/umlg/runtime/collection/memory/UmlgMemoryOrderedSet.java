@@ -1,8 +1,8 @@
 package org.umlg.runtime.collection.memory;
 
 import org.apache.commons.collections.set.ListOrderedSet;
-import org.umlg.runtime.collection.TinkerOrderedSet;
-import org.umlg.runtime.collection.TinkerSequence;
+import org.umlg.runtime.collection.UmlgOrderedSet;
+import org.umlg.runtime.collection.UmlgSequence;
 import org.umlg.runtime.collection.ocl.BodyExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.umlg.runtime.collection.ocl.OclStdLibOrderedSet;
@@ -13,7 +13,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.ListIterator;
 
-public class UmlgMemoryOrderedSet<E> extends UmlgMemoryCollection<E> implements TinkerOrderedSet<E> {
+public class UmlgMemoryOrderedSet<E> extends UmlgMemoryCollection<E> implements UmlgOrderedSet<E> {
 
 	protected OclStdLibOrderedSet<E> oclStdLibOrderedSet;
 
@@ -38,22 +38,22 @@ public class UmlgMemoryOrderedSet<E> extends UmlgMemoryCollection<E> implements 
 	}
 
 	@Override
-	public TinkerOrderedSet<E> select(BooleanExpressionEvaluator<E> e) {
+	public UmlgOrderedSet<E> select(BooleanExpressionEvaluator<E> e) {
 		return this.oclStdLibOrderedSet.select(e);
 	}
 
 	@Override
-	public <T, R> TinkerSequence<T> collect(BodyExpressionEvaluator<R, E> e) {
+	public <T, R> UmlgSequence<T> collect(BodyExpressionEvaluator<R, E> e) {
 		return this.oclStdLibOrderedSet.collect(e);
 	}
 
 	@Override
-	public <R> TinkerSequence<R> collectNested(BodyExpressionEvaluator<R, E> e) {
+	public <R> UmlgSequence<R> collectNested(BodyExpressionEvaluator<R, E> e) {
 		return this.oclStdLibOrderedSet.collectNested(e);
 	}
 
     @Override
-    public <T2> TinkerSequence<T2> flatten() {
+    public <T2> UmlgSequence<T2> flatten() {
         return this.oclStdLibOrderedSet.flatten();
     }
 
@@ -112,22 +112,22 @@ public class UmlgMemoryOrderedSet<E> extends UmlgMemoryCollection<E> implements 
 	}
 
 	@Override
-	public TinkerOrderedSet<E> append(E e) {
+	public UmlgOrderedSet<E> append(E e) {
 		return this.oclStdLibOrderedSet.append(e);
 	}
 
 	@Override
-	public TinkerOrderedSet<E> prepend(E e) {
+	public UmlgOrderedSet<E> prepend(E e) {
 		return this.oclStdLibOrderedSet.prepend(e);
 	}
 
 	@Override
-	public TinkerOrderedSet<E> insertAt(Integer index, E e) {
+	public UmlgOrderedSet<E> insertAt(Integer index, E e) {
 		return this.oclStdLibOrderedSet.insertAt(index, e);
 	}
 
 	@Override
-	public TinkerOrderedSet<E> subOrderedSet(Integer lower, Integer upper) {
+	public UmlgOrderedSet<E> subOrderedSet(Integer lower, Integer upper) {
 		return this.oclStdLibOrderedSet.subOrderedSet(lower, upper);
 	}
 
@@ -147,12 +147,12 @@ public class UmlgMemoryOrderedSet<E> extends UmlgMemoryCollection<E> implements 
 	}
 
 	@Override
-	public TinkerOrderedSet<E> reverse() {
+	public UmlgOrderedSet<E> reverse() {
 		return this.oclStdLibOrderedSet.reverse();
 	}
 
 	@Override
-	public TinkerOrderedSet<E> including(E e) {
+	public UmlgOrderedSet<E> including(E e) {
 		return this.oclStdLibOrderedSet.including(e);
 	}
 

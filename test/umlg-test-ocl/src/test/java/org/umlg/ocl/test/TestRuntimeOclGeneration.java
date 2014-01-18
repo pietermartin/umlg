@@ -3,14 +3,13 @@ package org.umlg.ocl.test;
 import junit.framework.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.umlg.framework.ModelLoader;
 import org.umlg.ocl.UmlgOclExecutor;
 import org.umlg.ocl.UmlgOcl2Parser;
 import org.umlg.qualifier.Bank;
 import org.umlg.qualifier.Employee;
-import org.umlg.runtime.collection.TinkerOrderedSet;
-import org.umlg.runtime.collection.TinkerSequence;
-import org.umlg.runtime.collection.TinkerSet;
+import org.umlg.runtime.collection.UmlgOrderedSet;
+import org.umlg.runtime.collection.UmlgSequence;
+import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.test.BaseLocalDbTest;
 
 import java.io.File;
@@ -50,10 +49,9 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 		bank.addToEmployee(employee3);
         db.commit();
 
-		Object result = UmlgOclExecutor.executeOclQuery("testoclmodel::org::umlg::qualifier::Bank", bank, "self.employee->select(name='employee3')");
-		Assert.assertTrue(result instanceof TinkerOrderedSet<?>);
-		TinkerOrderedSet result2 = (TinkerOrderedSet<Employee>)result;
-		Assert.assertEquals(1, result2.size());
+        UmlgOrderedSet<?> result = UmlgOclExecutor.executeOclQuery("testoclmodel::org::umlg::qualifier::Bank", bank, "self.employee->select(name='employee3')");
+		Assert.assertTrue(result instanceof UmlgOrderedSet<?>);
+		Assert.assertEquals(1, result.size());
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -73,8 +71,8 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
         db.commit();
 
 		Object result = UmlgOclExecutor.executeOclQuery("testoclmodel::org::umlg::qualifier::Employee", "Employee.allInstances()");
-		Assert.assertTrue(result instanceof TinkerSet<?>);
-		TinkerSet result2 = (TinkerSet<Employee>)result;
+		Assert.assertTrue(result instanceof UmlgSet<?>);
+		UmlgSet result2 = (UmlgSet<Employee>)result;
 		Assert.assertEquals(3, result2.size());
 	}
 	
@@ -162,9 +160,9 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		Map<String, Object> resultAsMap = (Map)result;
 		Assert.assertTrue(resultAsMap.get("bank") instanceof Bank);
-		Assert.assertTrue(resultAsMap.get("employeeNames") instanceof TinkerSequence);
+		Assert.assertTrue(resultAsMap.get("employeeNames") instanceof UmlgSequence);
 		@SuppressWarnings({ "rawtypes", "unchecked" })
-        TinkerSequence<String> employeeNameBag = (TinkerSequence)resultAsMap.get("employeeNames");
+        UmlgSequence<String> employeeNameBag = (UmlgSequence)resultAsMap.get("employeeNames");
 		Assert.assertEquals(3, employeeNameBag.size());
 	}
 

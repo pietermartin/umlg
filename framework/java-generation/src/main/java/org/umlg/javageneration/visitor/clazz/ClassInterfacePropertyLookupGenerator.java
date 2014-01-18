@@ -40,9 +40,9 @@ public class ClassInterfacePropertyLookupGenerator extends BaseVisitor implement
 
                 OJAnnotatedOperation lookupOnParent = new OJAnnotatedOperation(propertyWrapper.lookup());
                 String pathName = UmlgClassOperations.getPathName(propertyWrapper.getType()).getLast();
-                lookupOnParent.setReturnType(UmlgGenerationUtil.tinkerSet.getCopy().addToGenerics(pathName));
+                lookupOnParent.setReturnType(UmlgGenerationUtil.umlgSet.getCopy().addToGenerics(pathName));
 
-                OJField result = new OJField("result", UmlgGenerationUtil.tinkerSet.getCopy().addToGenerics(pathName));
+                OJField result = new OJField("result", UmlgGenerationUtil.umlgSet.getCopy().addToGenerics(pathName));
                 result.setInitExp("new " + UmlgGenerationUtil.umlgMemorySet.getCopy().addToGenerics(UmlgClassOperations.getPathName(propertyWrapper.getType()).getLast()).getLast() + "()");
                 lookupOnParent.getBody().addToLocals(result);
                 Set<Classifier> concreteImplementations = UmlgClassOperations.getConcreteRealization((Interface) propertyWrapper.getType());

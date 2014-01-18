@@ -10,7 +10,7 @@ import org.umlg.runtime.domain.ocl.OclState;
 import java.util.Collection;
 import java.util.Iterator;
 
-public class UmlgMemoryCollection<E> implements TinkerCollection<E> {
+public class UmlgMemoryCollection<E> implements UmlgCollection<E> {
 
 	protected Collection<E> internalCollection;
 	protected OclStdLibCollection<E> oclStdLibCollection;
@@ -136,12 +136,12 @@ public class UmlgMemoryCollection<E> implements TinkerCollection<E> {
 	}
 
 	@Override
-	public boolean equals(TinkerCollection<E> c) {
+	public boolean equals(UmlgCollection<E> c) {
 		return this.oclStdLibCollection.equals(c);
 	}
 
 	@Override
-	public boolean notEquals(TinkerCollection<E> c) {
+	public boolean notEquals(UmlgCollection<E> c) {
 		return this.oclStdLibCollection.notEquals(c);
 	}
 
@@ -161,12 +161,12 @@ public class UmlgMemoryCollection<E> implements TinkerCollection<E> {
 	}
 
 	@Override
-	public Boolean includesAll(TinkerCollection<E> c) {
+	public Boolean includesAll(UmlgCollection<E> c) {
 		return this.oclStdLibCollection.includesAll(c);
 	}
 
 	@Override
-	public Boolean excludesAll(TinkerCollection<E> c) {
+	public Boolean excludesAll(UmlgCollection<E> c) {
 		return this.oclStdLibCollection.excludesAll(c);
 	}
 
@@ -191,32 +191,32 @@ public class UmlgMemoryCollection<E> implements TinkerCollection<E> {
 	}
 
 	@Override
-	public TinkerSet<?> product(TinkerCollection<E> c) {
+	public UmlgSet<?> product(UmlgCollection<E> c) {
 		return this.oclStdLibCollection.product(c);
 	}
 
 	@Override
-	public TinkerSet<E> asSet() {
+	public UmlgSet<E> asSet() {
 		return this.oclStdLibCollection.asSet();
 	}
 
 	@Override
-	public TinkerOrderedSet<E> asOrderedSet() {
+	public UmlgOrderedSet<E> asOrderedSet() {
 		return this.oclStdLibCollection.asOrderedSet();
 	}
 
 	@Override
-	public TinkerSequence<E> asSequence() {
+	public UmlgSequence<E> asSequence() {
 		return this.oclStdLibCollection.asSequence();
 	}
 
 	@Override
-	public TinkerBag<E> asBag() {
+	public UmlgBag<E> asBag() {
 		return this.oclStdLibCollection.asBag();
 	}
 
 	@Override
-	public <T2> TinkerCollection<T2> flatten() {
+	public <T2> UmlgCollection<T2> flatten() {
 		return this.oclStdLibCollection.flatten();
 	}
 
@@ -226,7 +226,7 @@ public class UmlgMemoryCollection<E> implements TinkerCollection<E> {
 	}
 
 	@Override
-	public TinkerCollection<E> select(BooleanExpressionEvaluator<E> e) {
+	public UmlgCollection<E> select(BooleanExpressionEvaluator<E> e) {
 		return this.oclStdLibCollection.select(e);
 	}
 
@@ -236,12 +236,12 @@ public class UmlgMemoryCollection<E> implements TinkerCollection<E> {
 	}
 
 	@Override
-	public <T, R> TinkerCollection<T> collect(BodyExpressionEvaluator<R, E> e) {
+	public <T, R> UmlgCollection<T> collect(BodyExpressionEvaluator<R, E> e) {
 		return this.oclStdLibCollection.collect(e);
 	}
 
 	@Override
-	public <R> TinkerCollection<R> collectNested(BodyExpressionEvaluator<R, E> e) {
+	public <R> UmlgCollection<R> collectNested(BodyExpressionEvaluator<R, E> e) {
 		return this.oclStdLibCollection.collectNested(e);
 	}
 

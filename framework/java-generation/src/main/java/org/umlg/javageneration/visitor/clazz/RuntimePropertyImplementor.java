@@ -328,7 +328,7 @@ public class RuntimePropertyImplementor {
             }
         }
 
-        if (!hasCompositeOwner/* && !(className instanceof Model) */) {
+        if (!hasCompositeOwner) {
             // Add in fake property to root
             addEnumLiteral(false, false, null, null, false, ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, modelName, modelName, "inverseOf" + modelName, "inverseOf" + modelName, false, false, null,
                     Collections.<Validation>emptyList(), false, false, false, true, false, true, true, false, false, -1, 0, 1, false, false, false, false, false, false,
@@ -370,7 +370,8 @@ public class RuntimePropertyImplementor {
             boolean isComposite,
             boolean isInverseComposite,
             boolean isOneToOne, boolean isOneToMany, boolean isManyToMany, int getUpper, int getLower, int getInverseUpper,
-            boolean isQualified, boolean isInverseQualified, boolean isOrdered, boolean isInverseOrdered, boolean isUnique, boolean isInverseUnique, String edgeName) {
+            boolean isQualified, boolean isInverseQualified, boolean isOrdered, boolean isInverseOrdered, boolean isUnique,
+            boolean isInverseUnique, String edgeName) {
 
         OJIfStatement ifLabelEquals = new OJIfStatement(fieldName + ".getLabel().equals(label)");
         // Do not make upper case, leave with java case sensitive

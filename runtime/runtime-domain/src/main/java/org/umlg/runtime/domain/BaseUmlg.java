@@ -6,7 +6,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.umlg.runtime.adaptor.GraphDb;
 import org.umlg.runtime.adaptor.TransactionThreadEntityVar;
 import org.umlg.runtime.adaptor.UmlgExceptionUtilFactory;
-import org.umlg.runtime.collection.TinkerSet;
+import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.collection.memory.UmlgMemorySet;
 import org.umlg.runtime.domain.ocl.OclState;
 
@@ -173,8 +173,8 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <E> TinkerSet<E> asSet() {
-        TinkerSet<E> result = new UmlgMemorySet<E>();
+    public <E> UmlgSet<E> asSet() {
+        UmlgSet<E> result = new UmlgMemorySet<E>();
         result.add((E) this);
         return result;
     }
