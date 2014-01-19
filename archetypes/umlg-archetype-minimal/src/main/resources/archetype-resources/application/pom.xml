@@ -1,3 +1,6 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
@@ -53,8 +56,20 @@
     <dependencies>
         <dependency>
             <groupId>org.umlg</groupId>
-            <artifactId>runtime-domain-neo4j</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            #if( ${_1-Bitsy_2-OrientDb_3-Neo4j_4-Titan_BerkeleyDb_5-Titan_Persistit} == 1 )
+        <artifactId>runtime-domain-bitsy</artifactId>
+            #elseif( ${_1-Bitsy_2-OrientDb_3-Neo4j_4-Titan_BerkeleyDb_5-Titan_Persistit} == 2 )
+        <artifactId>runtime-domain-orientdb</artifactId>
+            #elseif( ${_1-Bitsy_2-OrientDb_3-Neo4j_4-Titan_BerkeleyDb_5-Titan_Persistit} == 3 )
+        <artifactId>runtime-domain-neo4j</artifactId>
+            #elseif( ${_1-Bitsy_2-OrientDb_3-Neo4j_4-Titan_BerkeleyDb_5-Titan_Persistit} == 4 )
+        <artifactId>runtime-domain-titan</artifactId>
+            #elseif( ${_1-Bitsy_2-OrientDb_3-Neo4j_4-Titan_BerkeleyDb_5-Titan_Persistit} == 5 )
+        <artifactId>runtime-domain-titan</artifactId>
+            #else
+        <artifactId>runtime-domain-neo4j</artifactId>
+            #end
+        <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

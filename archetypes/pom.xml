@@ -10,7 +10,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>archetypes</artifactId>
 	<packaging>pom</packaging>
-	<name>umlg</name>
+	<name>archetypes</name>
 	<modules>
 		<module>umlg-archetype-datatypes</module>
 		<module>umlg-archetype-full</module>

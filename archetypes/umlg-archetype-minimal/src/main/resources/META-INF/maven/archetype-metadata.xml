@@ -6,7 +6,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
     <requiredProperties>
-        <requiredProperty key="modelName" />
+        <requiredProperty key="_1-Bitsy_2-OrientDb_3-Neo4j_4-Titan_BerkeleyDb_5-Titan_Persistit" />
     </requiredProperties>
     <modules>
         <module id="generator" dir="generator" name="generator">

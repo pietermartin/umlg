@@ -21,7 +21,7 @@ public class UmlgMetaQueryServerResourceImpl extends ServerResource {
         String id = UmlgURLDecoder.decode((String)getRequestAttributes().get("contextId"));
         UmlgNode parentResource = GraphDb.getDb().instantiateClassifier(id);
         Object metaNodeId = parentResource.getMetaNode().getId();
-        String metaQueryUri = "riap://application/" + getRootRef().getLastSegment() + "/baseclasstumls/" + UmlgURLDecoder.encode(metaNodeId.toString()) + "/classQuery";
+        String metaQueryUri = "riap://application/" + getRootRef().getLastSegment() + "/baseclassumlgs/" + UmlgURLDecoder.encode(metaNodeId.toString()) + "/classQuery";
         ClientResource service = new ClientResource(metaQueryUri);
         service.setNext(getContext().getServerDispatcher());
         try {
@@ -37,7 +37,7 @@ public class UmlgMetaQueryServerResourceImpl extends ServerResource {
         String id = UmlgURLDecoder.decode((String)getRequestAttributes().get("contextId"));
         UmlgNode parentResource = GraphDb.getDb().instantiateClassifier(id);
         Object metaNodeId = parentResource.getMetaNode().getId();
-        String metaQueryUri = "riap://application/" + getRootRef().getLastSegment() + "/baseclasstumls/" + UmlgURLDecoder.encode(metaNodeId.toString()) + "/classQuery";
+        String metaQueryUri = "riap://application/" + getRootRef().getLastSegment() + "/baseclassumlgs/" + UmlgURLDecoder.encode(metaNodeId.toString()) + "/classQuery";
         ClientResource service = new ClientResource(metaQueryUri);
         service.setNext(getContext().getServerDispatcher());
         try {
@@ -53,7 +53,7 @@ public class UmlgMetaQueryServerResourceImpl extends ServerResource {
         String id = UmlgURLDecoder.decode((String)getRequestAttributes().get("contextId"));
         UmlgNode parentResource = GraphDb.getDb().instantiateClassifier(id);
         Object metaNodeId = parentResource.getMetaNode().getId();
-        String metaQueryUri = "riap://application/" + getRootRef().getLastSegment() + "/baseclasstumls/" + UmlgURLDecoder.encode(metaNodeId.toString()) + "/classQuery";
+        String metaQueryUri = "riap://application/" + getRootRef().getLastSegment() + "/baseclassumlgs/" + UmlgURLDecoder.encode(metaNodeId.toString()) + "/classQuery";
         ClientResource service = new ClientResource(metaQueryUri);
         service.setNext(getContext().getServerDispatcher());
         return service.post(entity);
@@ -64,7 +64,7 @@ public class UmlgMetaQueryServerResourceImpl extends ServerResource {
         String id = UmlgURLDecoder.decode((String)getRequestAttributes().get("contextId"));
         UmlgNode parentResource = GraphDb.getDb().instantiateClassifier(id);
         Object metaNodeId = parentResource.getMetaNode().getId();
-        String metaQueryUri = "riap://application/" + getRootRef().getLastSegment() + "/baseclasstumls/" + UmlgURLDecoder.encode(metaNodeId.toString()) + "/classQuery";
+        String metaQueryUri = "riap://application/" + getRootRef().getLastSegment() + "/baseclassumlgs/" + UmlgURLDecoder.encode(metaNodeId.toString()) + "/classQuery";
         ClientResource service = new ClientResource(metaQueryUri);
         service.setNext(getContext().getServerDispatcher());
         return service.put(entity);
