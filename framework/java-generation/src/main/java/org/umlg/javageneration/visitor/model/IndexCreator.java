@@ -27,7 +27,7 @@ public class IndexCreator extends BaseVisitor implements Visitor<Model> {
     @Override
     public void visitBefore(Model element) {
         OJAnnotatedClass indexCreator = new OJAnnotatedClass("IndexCreator");
-        indexCreator.setComment("This class is responsible to create all keyed indexes.\nIt is invoked the first time a graph is created.");
+        indexCreator.setComment("This class is responsible to create all keyed indexes.\n * It is invoked via reflection the first time a graph is created.");
         OJPackage ojPackage = new OJPackage(UmlgGenerationUtil.UmlgRootPackage.toJavaString());
         indexCreator.setMyPackage(ojPackage);
         indexCreator.addToImplementedInterfaces(UmlgGenerationUtil.UmlgIndexManager);

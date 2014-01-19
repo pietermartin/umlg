@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20110701" xmlns:xmi="http://www.omg.org/spec/XMI/20110701" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xmi:id="_JKkPEHzeEeOYhpiy1kqM8Q" name="demoQuickPreview">
+  <packageImport xmi:type="uml:PackageImport" xmi:id="_JKkPEXzeEeOYhpiy1kqM8Q">
+    <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+  </packageImport>
+  <packagedElement xmi:type="uml:Package" xmi:id="_slLHEH1NEeOYhpiy1kqM8Q" name="org">
+    <packagedElement xmi:type="uml:Package" xmi:id="_u-dSoH1NEeOYhpiy1kqM8Q" name="umlg">
+      <packagedElement xmi:type="uml:Class" xmi:id="_xc65IH1NEeOYhpiy1kqM8Q" name="Company">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_y2pFIH1NEeOYhpiy1kqM8Q" name="name" visibility="public">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+          <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_0N_SkH1NEeOYhpiy1kqM8Q" value="1"/>
+          <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_0N_5oH1NEeOYhpiy1kqM8Q" value="1"/>
+          <defaultValue xmi:type="uml:LiteralString" xmi:id="_0OBHwH1NEeOYhpiy1kqM8Q">
+            <value xsi:nil="true"/>
+          </defaultValue>
+        </ownedAttribute>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_CBUaUH4kEeOYhpiy1kqM8Q" name="employee" type="__F5yEH4jEeOYhpiy1kqM8Q" association="_CBUaU34kEeOYhpiy1kqM8Q">
+          <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_CBUaUX4kEeOYhpiy1kqM8Q"/>
+          <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_CBUaUn4kEeOYhpiy1kqM8Q" value="*"/>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="__F5yEH4jEeOYhpiy1kqM8Q" name="Person">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_ATMEkH4kEeOYhpiy1kqM8Q" name="firstName" visibility="public">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+          <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_BeTM0H4kEeOYhpiy1kqM8Q" value="1"/>
+          <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_BeTz4H4kEeOYhpiy1kqM8Q" value="1"/>
+          <defaultValue xmi:type="uml:LiteralString" xmi:id="_BeWQIH4kEeOYhpiy1kqM8Q">
+            <value xsi:nil="true"/>
+          </defaultValue>
+        </ownedAttribute>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_thQY4IE_EeOyc-ANCrA-4g" name="lastName" visibility="public">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+          <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_tzmGEIE_EeOyc-ANCrA-4g" value="1"/>
+          <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_tzmtIIE_EeOyc-ANCrA-4g" value="1"/>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="_CBUaU34kEeOYhpiy1kqM8Q" name="worksFor" memberEnd="_CBUaVH4kEeOYhpiy1kqM8Q _CBUaUH4kEeOYhpiy1kqM8Q" navigableOwnedEnd="_CBUaVH4kEeOYhpiy1kqM8Q">
+        <ownedEnd xmi:type="uml:Property" xmi:id="_CBUaVH4kEeOYhpiy1kqM8Q" name="employer" type="_xc65IH1NEeOYhpiy1kqM8Q" association="_CBUaU34kEeOYhpiy1kqM8Q">
+          <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_CBUaVX4kEeOYhpiy1kqM8Q"/>
+          <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_CBUaVn4kEeOYhpiy1kqM8Q" value="*"/>
+        </ownedEnd>
+      </packagedElement>
+    </packagedElement>
+  </packagedElement>
+</uml:Model>

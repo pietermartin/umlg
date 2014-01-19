@@ -27,6 +27,7 @@ public class MetaNodeCreator extends BaseVisitor implements Visitor<Model> {
     @Override
     public void visitBefore(Model element) {
         OJAnnotatedClass metaNodeCreator = new OJAnnotatedClass("MetaNodeCreator");
+        metaNodeCreator.setComment("This class is responsible to create the meta singleton upfront.\n * It is invoked via reflection the first time a graph is created.");
         OJPackage ojPackage = new OJPackage(UmlgGenerationUtil.UmlgRootPackage.toJavaString());
         metaNodeCreator.setMyPackage(ojPackage);
         metaNodeCreator.addToImplementedInterfaces(UmlgGenerationUtil.UmlgMetaNodeManager);
