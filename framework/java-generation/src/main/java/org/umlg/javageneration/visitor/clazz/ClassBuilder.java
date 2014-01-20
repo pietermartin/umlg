@@ -41,6 +41,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
         addDefaultSerialization(annotatedClass);
         implementIsRoot(annotatedClass, UmlgClassOperations.getOtherEndToComposite(clazz).isEmpty());
         addPersistentConstructor(annotatedClass);
+        callPersistentConstructorFromDefault(annotatedClass);
         addInitialiseProperties(annotatedClass, clazz);
         addContructorWithVertex(annotatedClass, clazz);
         if (clazz.getGeneralizations().isEmpty()) {
@@ -107,6 +108,10 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
         persistentConstructor.addParam(UmlgGenerationUtil.PERSISTENT_CONSTRUCTOR_PARAM_NAME, new OJPathName("java.lang.Boolean"));
         persistentConstructor.getBody().addToStatements("super(" + UmlgGenerationUtil.PERSISTENT_CONSTRUCTOR_PARAM_NAME + ")");
         ojClass.addToConstructors(persistentConstructor);
+    }
+
+    private void callPersistentConstructorFromDefault(OJAnnotatedClass annotatedClass) {
+        annotatedClass.getDefaultConstructor().getBody().addToStatements("super(true)");
     }
 
     private void addInitialiseProperties(OJAnnotatedClass annotatedClass, Class clazz) {

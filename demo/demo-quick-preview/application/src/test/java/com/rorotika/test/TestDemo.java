@@ -42,15 +42,15 @@ public class TestDemo {
         Company company1 = new Company(true);
         company1.setName("TBL");
         Person person1 = new Person(true);
-        person1.setFirstName("Joe");
-        person1.setLastName("Bloggs");
+        person1.setFirstname("Joe");
+        person1.setLastname("Bloggs");
         company1.addToEmployee(person1);
 
         Company company2 = new Company(true);
         company2.setName("Company2");
         Person person2 = new Person(true);
-        person2.setFirstName("Todd");
-        person2.setLastName("Dolittle");
+        person2.setFirstname("Todd");
+        person2.setLastname("Dolittle");
         company2.addToEmployee(person2);
         db.commit();
 
