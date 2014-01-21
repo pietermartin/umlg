@@ -1,116 +1,81 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <link rel="stylesheet" href="stylesheets/markdown-css-themes/markdown9.css" type="text/css"/>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="docs-assets/ico/favicon.png">
+
+    <title>Uml</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="stylesheets/jumbotron-narrow.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
 </head>
+
 <body>
-<div>
-<h1>Umlg Home Page Under Construction</h1>
 
-<h2>Introduction</h2>
+<div class="container">
+    <div class="header">
+        <ul class="nav nav-pills pull-right">
+            <li><a href="#">Documentation</a></li>
+            <li><a href="http://demo.umlg.org">Demo</a></li>
+            <li><a href="https://github.com/pietermartin/umlg">Github</a></li>
+        </ul>
+        <h3 class="text-muted">Umlg</h3>
+    </div>
 
-<p>Umlg is a uml to java code generator that uses <a href="http://blueprints.tinkerpop.com/">Tinkerpop Blueprints</a> for the persistence.
-From uml class diagrams, java entities are generated. The entities persist in a Blueprints graph databases.
-The semantics of a <a href="https://github.com/tinkerpop/blueprints/wiki/Property-Graph-Model">Property Graph Model</a> is a natural
-fit for implementing the rich semantics of UML class diagrams in java.</p>
+    <div class="jumbotron">
+        <h1>Umlg</h1>
+        <p class="lead">UML - Java - GraphDb</p>
+        <p>Generate persistent java entities from class diagrams</p>
+    </div>
 
-<p>The basic pattern used is that an entity wraps a vertex. Associations between entities are realized as edges between vertexes.</p>
+    <div class="row marketing">
+        <div class="col-lg-6">
+            <h4>Subheading</h4>
+            <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
 
-<p>Umlg uses the <a href="http://projects.eclipse.org/projects/modeling.mdt.uml2">eclipse uml2 project</a> to load the uml model into memory.
-<a href="http://projects.eclipse.org/projects/modeling.mdt.papyrus">Eclipse Papyrus</a> is the recommended uml2 modelling tool.
-One of the primary objectives of Umlg is to implement the <a href="http://www.omg.org/spec/UML/2.4.1/Superstructure/PDF">UML2</a>
-semantics as accurately as possible.</p>
+            <h4>Subheading</h4>
+            <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
 
-<p>Umlg can also, optionally, generate a rest interface for performing crud and query operations. A web interface is provided
-to perform crud operations and execute queries. Queries can be executed in <a href="http://www.omg.org/spec/OCL/2.3.1/PDF">OCL</a>,
-<a href="https://github.com/tinkerpop/gremlin/wiki">Gremlin</a> or in the underlying graph databases' native query language.</p>
+            <h4>Subheading</h4>
+            <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
+        </div>
 
-<p>Currently, <a href="https://bitbucket.org/lambdazen/bitsy/wiki/Home">Bitsy</a>, <a href="http://www.orientdb.org/">OrientDb</a>,
-<a href="http://www.neo4j.org/">Neo4j</a> and <a href="https://github.com/thinkaurelius/titan/wiki">Titan</a> are supported as the underlying
-blueprints graph databases.</p>
+        <div class="col-lg-6">
+            <h4>Subheading</h4>
+            <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
 
-<h2>Quick preview</h2>
+            <h4>Subheading</h4>
+            <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
 
-<p>A simple uml class diagram.</p>
+            <h4>Subheading</h4>
+            <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
+        </div>
+    </div>
 
-<p><img src="images/uml/Package_umlg_demoQuickPreviewClassDiagram.PNG" alt="image of person works for company" title="" /></p>
+    <div class="footer">
+        <p>&copy; Company 2013</p>
+    </div>
 
-<p>To generate java entities add the following fragment to your pom.</p>
+</div> <!-- /container -->
 
-<pre><code>&lt;dependency&gt;
-    &lt;groupId&gt;org.umlg&lt;/groupId&gt;
-    &lt;artifactId&gt;java-generation&lt;/artifactId&gt;
-    &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;
-&lt;/dependency&gt;
-</code></pre>
 
-<p>The following code will generate the code. <code>JavaGenerator</code> takes 3 parameters. The first is the uml model, the
-second is the output location of the generated source and the 3rd is the default generation visitors. Umlg generates
-code via a sequential list of visitors to the Uml model. Each visitor implements some feature of the model in java.</p>
-
-<pre><code>JavaGenerator javaGenerator = new JavaGenerator();
-javaGenerator.generate(
-        new File("../application/src/main/model/umlg-demo1.uml"),
-        new File("../application"), DefaultVisitors.getDefaultJavaVisitors());
-</code></pre>
-
-<p>After the code is generated, to compile and use the entities add the following fragment to the pom. Replace the artifact
-with the underlying blueprints graph db of your choice.</p>
-
-<pre><code>&lt;dependency&gt;
-    &lt;groupId&gt;org.umlg&lt;/groupId&gt;
-    &lt;artifactId&gt;runtime-domain-bitsy&lt;/artifactId&gt;
-    &lt;!--
-    &lt;artifactId&gt;runtime-domain-orientdb&lt;/artifactId&gt;
-    &lt;artifactId&gt;runtime-domain-neo4j&lt;/artifactId&gt;
-    &lt;artifactId&gt;runtime-domain-titan&lt;/artifactId&gt;
-    --&gt;
-    &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;
-&lt;/dependency&gt;
-</code></pre>
-
-<p>Umlg only needs one configuration property specified in <code>umlg.env.property</code> to specify where the data files should be
-kept.</p>
-
-<pre><code>umlg.db.location=/tmp/demo-quick-preview
-</code></pre>
-
-<p>Each class in the uml model have a respective java entity. To create a company and a person just instantiate <code>Company</code>
-and <code>Person</code>.</p>
-
-<pre><code>Company company = new Company();
-Person person1 = new Person();
-</code></pre>
-
-<p>To set the name properties just set them as normal.</p>
-
-<pre><code>company1.setName("Coolraid");
-person1.setFirstName("Joe");
-person1.setLastName("Bloggs");
-</code></pre>
-
-<p>To add an employee to the company call an adder or just add it to the employee collection.</p>
-
-<pre><code>company1.addToEmployee(person1);
-</code></pre>
-
-<p>or</p>
-
-<pre><code>company1.getEmployee().add(person1);
-</code></pre>
-
-<p>and lastly to persist the entities call,</p>
-
-<pre><code>GraphDb.getDb().commit()
-</code></pre>
-
-<p><code>GraphDb.getDb()</code> returns an instance of <code>UmlgGraph</code>. <code>UmlgGraph</code> wraps the underlying blueprints graph. It is a
-singleton and is always available on the current thread via <code>GraphDb.getDb()</code></p>
-
-<h2>Getting Started</h2>
-
-<p><a href="http://www.umlg.org/gettingStarted.html">Getting Started</a> with maven and Papyrus.</p>
-
-<h2>The Rest</h2>
-</div>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>

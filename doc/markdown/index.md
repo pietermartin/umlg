@@ -1,13 +1,52 @@
-Umlg Home Page Under Construction
-==============
+#Umlg
 
-Introduction
-------------
+***
 
-Umlg is a uml to java code generator that uses [Tinkerpop Blueprints](http://blueprints.tinkerpop.com/) for the persistence.
-From uml class diagrams, java entities are generated. The entities persist in a Blueprints graph databases.
-The semantics of a [Property Graph Model](https://github.com/tinkerpop/blueprints/wiki/Property-Graph-Model) is a natural
-fit for implementing the rich semantics of UML class diagrams in java.
+Umlg is a UML to java code generator that uses [Tinkerpop Blueprints](http://blueprints.tinkerpop.com/) for persistence.
+From uml class diagrams, java entities are generated. The entities persist via an embedded
+[Blueprints](http://blueprints.tinkerpop.com/) graph databases. The semantics of a
+[Property Graph Model](https://github.com/tinkerpop/blueprints/wiki/Property-Graph-Model) is a natural fit for
+implementing the rich semantics of UML class diagrams in java.
+
+***
+
+##Key Features
+
+* Supports most features of class diagrams. Inheritance, interfaces, associations, composition, multiplicity, constraints...
+* Supports UML collection types, i.e. Set, OrderedSet, Bag, Sequence
+* Full [OCL](http://www.omg.org/spec/OCL/2.3.1/PDF) (Object constraint language) support. Constraints, derived properties
+  and query operations can be specified in OCL.
+* OCL runtime execution.
+* All persistence occurs in plain java. No interceptors and no annotations are used.
+* Easy development and test cycle. Unit tests execute fast. Fast startup times.
+* Optional rest interface generated.
+* Admin GUI for performing crud operations and executing queries.
+
+***
+
+##Quick Preview
+
+A simple uml class diagram.
+
+![image of person works for company](images/uml/Package_umlg_demoQuickPreviewClassDiagram.PNG)
+
+The generated code.
+
+    Company company = new Company();
+    company.setName("Umlg");
+    Person person = new Person();
+    person.setFirstname("Joe");
+    person.setLastname("Bloggs");
+    company.getEmployee().add(person);
+    GraphDb.getDb().commit();
+    Assert.assertTrue(company.getEmployee().contains(person));
+
+***
+
+Getting Started
+---------------
+
+[Getting Started](http://www.umlg.org/gettingStarted.html) with maven and Papyrus.
 
 The basic pattern used is that an entity wraps a vertex. Associations between entities are realized as edges between vertexes.
 
@@ -24,12 +63,6 @@ Currently, [Bitsy](https://bitbucket.org/lambdazen/bitsy/wiki/Home), [OrientDb](
 [Neo4j](http://www.neo4j.org/) and [Titan](https://github.com/thinkaurelius/titan/wiki) are supported as the underlying
 blueprints graph databases.
 
-Quick preview
--------------
-
-A simple uml class diagram.
-
-![image of person works for company](images/uml/Package_umlg_demoQuickPreviewClassDiagram.PNG)
 
 To generate java entities add the following fragment to your pom.
 
@@ -93,12 +126,3 @@ and lastly to persist the entities call,
 
 `GraphDb.getDb()` returns an instance of `UmlgGraph`. `UmlgGraph` wraps the underlying blueprints graph. It is a
 singleton and is always available on the current thread via `GraphDb.getDb()`
-
-
-Getting Started
----------------
-
-[Getting Started](http://www.umlg.org/gettingStarted.html) with maven and Papyrus.
-
-The Rest
---------
