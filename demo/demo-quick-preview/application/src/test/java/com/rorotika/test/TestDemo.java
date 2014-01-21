@@ -10,6 +10,7 @@ import org.umlg.Person;
 import org.umlg.model.DemoQuickPreview;
 import org.umlg.runtime.adaptor.GraphDb;
 import org.umlg.runtime.adaptor.UmlgGraph;
+import org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.umlg.runtime.util.UmlgProperties;
 
 import java.io.File;
@@ -60,5 +61,17 @@ public class TestDemo {
         Assert.assertEquals(1, company2.getEmployee().size());
         Assert.assertEquals(1, person1.getEmployer().size());
         Assert.assertEquals(1, person2.getEmployer().size());
+    }
+
+    @Test
+    public void testForDocumentation() {
+        Company company = new Company();
+        company.setName("Umlg");
+        Person person = new Person();
+        person.setFirstname("Joe");
+        person.setLastname("Bloggs");
+        company.getEmployee().add(person);
+        GraphDb.getDb().commit();
+        Assert.assertTrue(company.getEmployee().contains(person));
     }
 }
