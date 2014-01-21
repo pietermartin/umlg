@@ -10,9 +10,9 @@
 markdown $1 -x toc > manual1.tmp
 
 # Add a root element so it's well formed xml
-echo "<div>" > top.tmp
-echo "</div>" > end.tmp
-cat top.tmp manual1.tmp end.tmp > manual2.tmp
+#echo "<div>" > top.tmp
+#echo "</div>" > end.tmp
+#cat top.tmp manual1.tmp end.tmp > manual2.tmp
 
 # Run xsl transform on it to add class attributes and other tweaks needed
 # for good presentation using Twitter Bootstrap
@@ -20,10 +20,10 @@ cat top.tmp manual1.tmp end.tmp > manual2.tmp
 
 # Insert the generated content in the actual HTML page
 sed '/<!-- GENERATED CONTENT -->/ {
-r manual2.tmp
+r manual1.tmp
 d
 }' $2 | cat > $3
 
 rm manual*.tmp
-rm top.tmp
-rm end.tmp
+#rm top.tmp
+#rm end.tmp

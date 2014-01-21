@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="shortcut icon" href="doc-assets/ico/favicon.ico">
+    <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
 
-    <title>Off Canvas Template for Bootstrap</title>
+    <title>Umlg</title>
 
     <!-- Bootstrap core CSS -->
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -36,92 +36,102 @@
             <a class="navbar-brand" href="index.html">Umlg</a>
         </div>
         <div class="collapse navbar-collapse">
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="documentation.html">Documentation</a></li>
-                <li><a href="http://demo.umlg.org">Demo</a></li>
+            <ul class="nav navbar-nav pull-right">
+                <li><a href="documentation.html">Documentation</a></li>
                 <li><a href="https://github.com/pietermartin/umlg">Github</a></li>
+                <li><a href="http://demo.umlg.org">Demo</a></li>
             </ul>
-        </div><!-- /.nav-collapse -->
-    </div><!-- /.container -->
-</div><!-- /.navbar -->
+        </div>
+        <!-- /.nav-collapse -->
+    </div>
+    <!-- /.container -->
+</div>
+<!-- /.navbar -->
 
 <div class="container">
+    <div class="jumbotron">
+        <p>Umlg is a UML to java code generator. From class diagrams, persistent java entities are generated. The
+            entities persist via an embedded
+            <a href="http://blueprints.tinkerpop.com/">Blueprints</a> graph databases. The semantics of a
+            <a href="https://github.com/tinkerpop/blueprints/wiki/Property-Graph-Model">Property Graph Model</a> is a
+            natural fit for implementing the rich semantics of UML class diagrams in java.</p>
+    </div>
 
-    <div class="row row-offcanvas row-offcanvas-right">
+    <div class="container">
+        <!-- Example row of columns -->
+        <div class="row">
+            <div class="col-md-4">
+                <h2>UML</h2>
 
-        <div class="col-xs-12 col-sm-9">
-            <p class="pull-right visible-xs">
-                <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
-            </p>
-            <div class="jumbotron">
-                <h1>Hello, world!</h1>
-                <p>This is an example to show the potential of an offcanvas layout pattern in Bootstrap. Try some responsive-range viewport sizes to see it in action.</p>
+                <p>Umlg endeavours to implement the <a href="http://www.omg.org/spec/UML/2.4.1/Superstructure/PDF">UML2</a>
+                    spec as faithfully as possible. Umlg supports most class diagram
+                    features. Inheritance, interfaces, abstract classes, associations, composition, complex data types,
+                    multiplicity, collection types (Set, OrderedSet, Sequence, Bag), qualifiers, constraints and more
+                    are supported.</p>
+
             </div>
-            <div class="row">
-                <div class="col-6 col-sm-6 col-lg-4">
-                    <h2>Heading</h2>
-                    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-                    <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-                </div><!--/span-->
-                <div class="col-6 col-sm-6 col-lg-4">
-                    <h2>Heading</h2>
-                    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-                    <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-                </div><!--/span-->
-                <div class="col-6 col-sm-6 col-lg-4">
-                    <h2>Heading</h2>
-                    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-                    <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-                </div><!--/span-->
-                <div class="col-6 col-sm-6 col-lg-4">
-                    <h2>Heading</h2>
-                    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-                    <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-                </div><!--/span-->
-                <div class="col-6 col-sm-6 col-lg-4">
-                    <h2>Heading</h2>
-                    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-                    <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-                </div><!--/span-->
-                <div class="col-6 col-sm-6 col-lg-4">
-                    <h2>Heading</h2>
-                    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-                    <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-                </div><!--/span-->
-            </div><!--/row-->
-        </div><!--/span-->
+            <div class="col-md-4">
+                <h2>OCL</h2>
 
-        <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
-            <div class="list-group">
-                <a href="#" class="list-group-item active">Link</a>
-                <a href="#" class="list-group-item">Link</a>
-                <a href="#" class="list-group-item">Link</a>
-                <a href="#" class="list-group-item">Link</a>
-                <a href="#" class="list-group-item">Link</a>
-                <a href="#" class="list-group-item">Link</a>
-                <a href="#" class="list-group-item">Link</a>
-                <a href="#" class="list-group-item">Link</a>
-                <a href="#" class="list-group-item">Link</a>
-                <a href="#" class="list-group-item">Link</a>
+                <p>Umlg has full support for <a href="http://www.omg.org/spec/OCL/2.3.1/PDF">OCL</a> (object constraint language). Constraints, derived properties and
+                    query operations can be fully specified in OCL. For each OCL expression, java is generated directly
+                    into the owning entity.</p>
+
             </div>
-        </div><!--/span-->
-    </div><!--/row-->
+            <div class="col-md-4">
+                <h2>Rest Interface and UI</h2>
 
-    <hr>
+                <p>Umlg can optionally generate a rest interface to the application for performing remote crud and query
+                    operations. Utilizing the rest interface a web based ui is provided. From the gui crud and query
+                    operations can be executed. This makes it easy to visualize, use and maintain the application.</p>
 
-    <footer>
-        <p>&copy; Company 2014</p>
-    </footer>
+            </div>
 
-</div><!--/.container-->
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <h2>Entities</h2>
+
+                <p>Java entities are interceptor and annotation free. Together with the performance of graph databases
+                and super fast start up times, development is a joy again.</p>
+
+            </div>
+
+            <div class="col-md-4">
+                <h2>Queries</h2>
+
+                <p>Queries can be executed in OCL, <a href="https://github.com/tinkerpop/gremlin/wiki">Gremlin</a> or the
+                    underlying blueprint graph's native query language.</p>
+
+            </div>
+
+            <div class="col-md-4">
+                <h2>Blueprints</h2>
+
+                <p>Umlg is based on the pure <a href="http://blueprints.tinkerpop.com/">Blueprints</a> api. As such any
+                    Blueprints enabled graph database will work. The Travis CI test suite currently executes successfully
+                    on <a href="https://bitbucket.org/lambdazen/bitsy/wiki/Home">Bitsy</a>,
+                    <a href="http://www.orientdb.org/">OrientDb</a>, <a href="http://www.neo4j.org/">Neo4j</a> and
+                    <a href="https://github.com/thinkaurelius/titan/wiki">Titan</a>.</p>
+
+            </div>
+
+        </div>
+
+        <hr>
+        <footer>
+            <p>&copy; Company 2014</p>
+        </footer>
+
+    </div>
+    <!--/.container-->
 
 
-
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-<script src="bootstrap/js/bootstrap.min.js"></script>
-<script src="javascripts/offcanvas.js"></script>
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="javascripts/offcanvas.js"></script>
 </body>
 </html>

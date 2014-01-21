@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="shortcut icon" href="doc-assets/ico/favicon.ico">
+    <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
 
     <title>Off Canvas Template for Bootstrap</title>
 
@@ -33,17 +33,20 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Project name</a>
+            <a class="navbar-brand" href="index.html">Umlg</a>
         </div>
         <div class="collapse navbar-collapse">
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
+            <ul class="nav navbar-nav pull-right">
+                <li><a href="documentation.html">Documentation</a></li>
+                <li><a href="https://github.com/pietermartin/umlg">Github</a></li>
+                <li><a href="http://demo.umlg.org">Demo</a></li>
             </ul>
-        </div><!-- /.nav-collapse -->
-    </div><!-- /.container -->
-</div><!-- /.navbar -->
+        </div>
+        <!-- /.nav-collapse -->
+    </div>
+    <!-- /.container -->
+</div>
+<!-- /.navbar -->
 
 <div class="container">
 
@@ -53,43 +56,120 @@
             <p class="pull-right visible-xs">
                 <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
             </p>
-            <div class="jumbotron">
-                <h1>Hello, world!</h1>
-                <p>This is an example to show the potential of an offcanvas layout pattern in Bootstrap. Try some responsive-range viewport sizes to see it in action.</p>
-            </div>
-            <div class="row">
-                <div class="col-6 col-sm-6 col-lg-4">
-                    <h2>Heading</h2>
-                    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-                    <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-                </div><!--/span-->
-                <div class="col-6 col-sm-6 col-lg-4">
-                    <h2>Heading</h2>
-                    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-                    <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-                </div><!--/span-->
-                <div class="col-6 col-sm-6 col-lg-4">
-                    <h2>Heading</h2>
-                    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-                    <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-                </div><!--/span-->
-                <div class="col-6 col-sm-6 col-lg-4">
-                    <h2>Heading</h2>
-                    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-                    <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-                </div><!--/span-->
-                <div class="col-6 col-sm-6 col-lg-4">
-                    <h2>Heading</h2>
-                    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-                    <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-                </div><!--/span-->
-                <div class="col-6 col-sm-6 col-lg-4">
-                    <h2>Heading</h2>
-                    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-                    <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-                </div><!--/span-->
-            </div><!--/row-->
-        </div><!--/span-->
+
+<h2>Quick Preview</h2>
+
+<p>A simple uml class diagram.</p>
+
+<p><img src="images/uml/Package_umlg_demoQuickPreviewClassDiagram.PNG" alt="image of person works for company" title="" /></p>
+
+<p>The generated code.</p>
+
+<pre><code>Company company = new Company();
+company.setName("Umlg");
+Person person = new Person();
+person.setFirstname("Joe");
+person.setLastname("Bloggs");
+company.getEmployee().add(person);
+GraphDb.getDb().commit();
+Assert.assertTrue(company.getEmployee().contains(person));
+</code></pre>
+
+<hr />
+
+<h2>Getting Started</h2>
+
+<p><a href="http://www.umlg.org/gettingStarted.html">Getting Started</a> with maven and Papyrus.</p>
+
+<p>The basic pattern used is that an entity wraps a vertex. Associations between entities are realized as edges between vertexes.</p>
+
+<p>Umlg uses the <a href="http://projects.eclipse.org/projects/modeling.mdt.uml2">eclipse uml2 project</a> to load the uml model into memory.
+<a href="http://projects.eclipse.org/projects/modeling.mdt.papyrus">Eclipse Papyrus</a> is the recommended uml2 modelling tool.
+One of the primary objectives of Umlg is to implement the <a href="http://www.omg.org/spec/UML/2.4.1/Superstructure/PDF">UML2</a>
+semantics as accurately as possible.</p>
+
+<p>Umlg can also, optionally, generate a rest interface for performing crud and query operations. A web interface is provided
+to perform crud operations and execute queries. Queries can be executed in <a href="http://www.omg.org/spec/OCL/2.3.1/PDF">OCL</a>,
+<a href="https://github.com/tinkerpop/gremlin/wiki">Gremlin</a> or in the underlying graph databases' native query language.</p>
+
+<p>Currently, <a href="https://bitbucket.org/lambdazen/bitsy/wiki/Home">Bitsy</a>, <a href="http://www.orientdb.org/">OrientDb</a>,
+<a href="http://www.neo4j.org/">Neo4j</a> and <a href="https://github.com/thinkaurelius/titan/wiki">Titan</a> are supported as the underlying
+blueprints graph databases.</p>
+
+<p>To generate java entities add the following fragment to your pom.</p>
+
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.umlg&lt;/groupId&gt;
+    &lt;artifactId&gt;java-generation&lt;/artifactId&gt;
+    &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+<p>The following code will generate the code. <code>JavaGenerator</code> takes 3 parameters. The first is the uml model, the
+second is the output location of the generated source and the 3rd is the default generation visitors. Umlg generates
+code via a sequential list of visitors to the Uml model. Each visitor implements some feature of the model in java.</p>
+
+<pre><code>JavaGenerator javaGenerator = new JavaGenerator();
+javaGenerator.generate(
+        new File("../application/src/main/model/umlg-demo1.uml"),
+        new File("../application"), DefaultVisitors.getDefaultJavaVisitors());
+</code></pre>
+
+<p>After the code is generated, to compile and use the entities add the following fragment to the pom. Replace the artifact
+with the underlying blueprints graph db of your choice.</p>
+
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.umlg&lt;/groupId&gt;
+    &lt;artifactId&gt;runtime-domain-bitsy&lt;/artifactId&gt;
+    &lt;!--
+    &lt;artifactId&gt;runtime-domain-orientdb&lt;/artifactId&gt;
+    &lt;artifactId&gt;runtime-domain-neo4j&lt;/artifactId&gt;
+    &lt;artifactId&gt;runtime-domain-titan&lt;/artifactId&gt;
+    --&gt;
+    &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+<p>Umlg only needs one configuration property specified in <code>umlg.env.property</code> to specify where the data files should be
+kept.</p>
+
+<pre><code>umlg.db.location=/tmp/demo-quick-preview
+</code></pre>
+
+<p>Each class in the uml model have a respective java entity. To create a company and a person just instantiate <code>Company</code>
+and <code>Person</code>.</p>
+
+<pre><code>Company company = new Company();
+Person person1 = new Person();
+</code></pre>
+
+<p>To set the name properties just set them as normal.</p>
+
+<pre><code>company1.setName("Coolraid");
+person1.setFirstName("Joe");
+person1.setLastName("Bloggs");
+</code></pre>
+
+<p>To add an employee to the company call an adder or just add it to the employee collection.</p>
+
+<pre><code>company1.addToEmployee(person1);
+</code></pre>
+
+<p>or</p>
+
+<pre><code>company1.getEmployee().add(person1);
+</code></pre>
+
+<p>and lastly to persist the entities call,</p>
+
+<pre><code>GraphDb.getDb().commit()
+</code></pre>
+
+<p><code>GraphDb.getDb()</code> returns an instance of <code>UmlgGraph</code>. <code>UmlgGraph</code> wraps the underlying blueprints graph. It is a
+singleton and is always available on the current thread via <code>GraphDb.getDb()</code></p>
+
+        </div>
+        <!--/span-->
 
         <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
             <div class="list-group">
@@ -104,8 +184,10 @@
                 <a href="#" class="list-group-item">Link</a>
                 <a href="#" class="list-group-item">Link</a>
             </div>
-        </div><!--/span-->
-    </div><!--/row-->
+        </div>
+        <!--/span-->
+    </div>
+    <!--/row-->
 
     <hr>
 
@@ -113,8 +195,8 @@
         <p>&copy; Company 2014</p>
     </footer>
 
-</div><!--/.container-->
-
+</div>
+<!--/.container-->
 
 
 <!-- Bootstrap core JavaScript

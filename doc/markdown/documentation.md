@@ -1,29 +1,3 @@
-#Umlg
-
-***
-
-Umlg is a UML to java code generator that uses [Tinkerpop Blueprints](http://blueprints.tinkerpop.com/) for persistence.
-From uml class diagrams, java entities are generated. The entities persist via an embedded
-[Blueprints](http://blueprints.tinkerpop.com/) graph databases. The semantics of a
-[Property Graph Model](https://github.com/tinkerpop/blueprints/wiki/Property-Graph-Model) is a natural fit for
-implementing the rich semantics of UML class diagrams in java.
-
-***
-
-##Key Features
-
-* Supports most features of class diagrams. Inheritance, interfaces, associations, composition, multiplicity, constraints...
-* Supports UML collection types, i.e. Set, OrderedSet, Bag, Sequence
-* Full [OCL](http://www.omg.org/spec/OCL/2.3.1/PDF) (Object constraint language) support. Constraints, derived properties
-  and query operations can be specified in OCL.
-* OCL runtime execution.
-* All persistence occurs in plain java. No interceptors and no annotations are used.
-* Easy development and test cycle. Unit tests execute fast. Fast startup times.
-* Optional rest interface generated.
-* Admin GUI for performing crud operations and executing queries.
-
-***
-
 ##Quick Preview
 
 A simple uml class diagram.
@@ -42,6 +16,8 @@ The generated code.
     Assert.assertTrue(company.getEmployee().contains(person));
 
 ***
+
+
 
 Getting Started
 ---------------
