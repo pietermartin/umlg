@@ -4,7 +4,7 @@ A simple uml class diagram.
 
 ![image of person works for company](images/uml/Package_umlg_demoQuickPreviewClassDiagram.PNG)
 
-The generated code.
+Uging the generated code.
 
     Company company = new Company();
     company.setName("Umlg");
@@ -17,14 +17,26 @@ The generated code.
 
 ***
 
+##Introduction
+
+Umlg is a UML to java code generator. From class diagrams, persistent java entities are generated. The entities persist
+via an embedded [Blueprints](http://blueprints.tinkerpop.com) graph databases. The semantics of a
+[Property Graph Model](https://github.com/tinkerpop/blueprints/wiki/Property-Graph-Model) is a natural fit for
+implementing the rich semantics of UML class diagrams in java.
+
+The basic pattern used is that an entity wraps a vertex. Associations between entities are realized as edges between
+vertexes.
+
+##Getting Started
+
+Umlg uses [maven](http://maven.apache.org/) as its build tool.
+
+For UML modeling [Eclipse Papyrus](http://projects.eclipse.org/projects/modeling.mdt.papyrus) is the recommended tool.
+Umlg uses the [Eclipse Uml2 project](http://projects.eclipse.org/projects/modeling.mdt.uml2) to load the uml model into
+memory for code generation.
 
 
-Getting Started
----------------
 
-[Getting Started](http://www.umlg.org/gettingStarted.html) with maven and Papyrus.
-
-The basic pattern used is that an entity wraps a vertex. Associations between entities are realized as edges between vertexes.
 
 Umlg uses the [eclipse uml2 project](http://projects.eclipse.org/projects/modeling.mdt.uml2) to load the uml model into memory.
 [Eclipse Papyrus](http://projects.eclipse.org/projects/modeling.mdt.papyrus) is the recommended uml2 modelling tool.
@@ -38,7 +50,6 @@ to perform crud operations and execute queries. Queries can be executed in [OCL]
 Currently, [Bitsy](https://bitbucket.org/lambdazen/bitsy/wiki/Home), [OrientDb](http://www.orientdb.org/),
 [Neo4j](http://www.neo4j.org/) and [Titan](https://github.com/thinkaurelius/titan/wiki) are supported as the underlying
 blueprints graph databases.
-
 
 To generate java entities add the following fragment to your pom.
 
@@ -102,3 +113,6 @@ and lastly to persist the entities call,
 
 `GraphDb.getDb()` returns an instance of `UmlgGraph`. `UmlgGraph` wraps the underlying blueprints graph. It is a
 singleton and is always available on the current thread via `GraphDb.getDb()`
+
+
+

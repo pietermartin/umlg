@@ -8,7 +8,7 @@
     <meta name="author" content="">
     <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
 
-    <title>Off Canvas Template for Bootstrap</title>
+    <title>Umlg</title>
 
     <!-- Bootstrap core CSS -->
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -63,7 +63,7 @@
 
 <p><img src="images/uml/Package_umlg_demoQuickPreviewClassDiagram.PNG" alt="image of person works for company" title="" /></p>
 
-<p>The generated code.</p>
+<p>Uging the generated code.</p>
 
 <pre><code>Company company = new Company();
 company.setName("Umlg");
@@ -77,11 +77,20 @@ Assert.assertTrue(company.getEmployee().contains(person));
 
 <hr />
 
+<h2>Introduction</h2>
+
+<p>Umlg is a UML to java code generator. From class diagrams, persistent java entities are generated. The entities persist
+via an embedded <a href="http://blueprints.tinkerpop.com">Blueprints</a> graph databases. The semantics of a
+<a href="https://github.com/tinkerpop/blueprints/wiki/Property-Graph-Model">Property Graph Model</a> is a natural fit for
+implementing the rich semantics of UML class diagrams in java.</p>
+
+<p>The basic pattern used is that an entity wraps a vertex. Associations between entities are realized as edges between
+vertexes.</p>
+
 <h2>Getting Started</h2>
 
-<p><a href="http://www.umlg.org/gettingStarted.html">Getting Started</a> with maven and Papyrus.</p>
-
-<p>The basic pattern used is that an entity wraps a vertex. Associations between entities are realized as edges between vertexes.</p>
+<p>Umlg uses <a href="http://maven.apache.org/">maven</a> as its build tool.
+with maven and Papyrus.</p>
 
 <p>Umlg uses the <a href="http://projects.eclipse.org/projects/modeling.mdt.uml2">eclipse uml2 project</a> to load the uml model into memory.
 <a href="http://projects.eclipse.org/projects/modeling.mdt.papyrus">Eclipse Papyrus</a> is the recommended uml2 modelling tool.
