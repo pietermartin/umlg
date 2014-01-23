@@ -5,9 +5,6 @@
       <emfPageIdentifier href="umlg-lib.notation#_mdWGkCM2EeK-Trh8Ll0qUQ"/>
     </availablePage>
     <availablePage>
-      <emfPageIdentifier href="umlg-lib.notation#_ajY5MCM6EeK-Trh8Ll0qUQ"/>
-    </availablePage>
-    <availablePage>
       <emfPageIdentifier href="umlg-lib.notation#_c-m-cCM6EeK-Trh8Ll0qUQ"/>
     </availablePage>
     <availablePage>
@@ -26,9 +23,6 @@
   <sashModel currentSelection="//@sashModel/@windows.0/@children.0">
     <windows>
       <children xsi:type="di:TabFolder">
-        <children>
-          <emfPageIdentifier href="umlg-lib.notation#_ajY5MCM6EeK-Trh8Ll0qUQ"/>
-        </children>
         <children>
           <emfPageIdentifier href="umlg-lib.notation#_gj3N4CM6EeK-Trh8Ll0qUQ"/>
         </children>

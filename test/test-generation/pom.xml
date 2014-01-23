@@ -48,7 +48,7 @@
 						<configuration>
 							<mainClass>org.umlg.test.generation.GenerateTestProjects</mainClass>
 							<arguments>
--								<argument>${session.executionRootDirectory}</argument>
+								<argument>${session.executionRootDirectory}</argument>
 							</arguments>
 						</configuration>
 					</execution>

@@ -42,7 +42,7 @@ self.getChildren()->iterate(iter : tumllib::org::tuml::hierarchy::Hierarchy; acc
 The idea is to tag arbitrary object to facilitate easy searching.</body>
         </ownedComment>
         <packagedElement xmi:type="uml:Class" xmi:id="_yXSjcCQPEeKzTel_Vwmhog" name="Tag">
-          <ownedAttribute xmi:type="uml:Property" xmi:id="_3v61ACQPEeKzTel_Vwmhog" name="baseTuml" type="_2GNhsCQOEeKOmc56p_1Osg" association="_3v7cECQPEeKzTel_Vwmhog">
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_3v61ACQPEeKzTel_Vwmhog" name="baseUmlg" type="_2GNhsCQOEeKOmc56p_1Osg" association="_3v7cECQPEeKzTel_Vwmhog">
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_3v61ASQPEeKzTel_Vwmhog"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_3v61AiQPEeKzTel_Vwmhog" value="*"/>
           </ownedAttribute>
@@ -52,7 +52,7 @@ The idea is to tag arbitrary object to facilitate easy searching.</body>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_78LaECQPEeKzTel_Vwmhog" value="1"/>
           </ownedAttribute>
         </packagedElement>
-        <packagedElement xmi:type="uml:Association" xmi:id="_3v7cECQPEeKzTel_Vwmhog" name="tag_baseTuml_1" memberEnd="_3v7cESQPEeKzTel_Vwmhog _3v61ACQPEeKzTel_Vwmhog" navigableOwnedEnd="_3v7cESQPEeKzTel_Vwmhog">
+        <packagedElement xmi:type="uml:Association" xmi:id="_3v7cECQPEeKzTel_Vwmhog" name="tag_baseUmlg_1" memberEnd="_3v7cESQPEeKzTel_Vwmhog _3v61ACQPEeKzTel_Vwmhog" navigableOwnedEnd="_3v7cESQPEeKzTel_Vwmhog">
           <ownedEnd xmi:type="uml:Property" xmi:id="_3v7cESQPEeKzTel_Vwmhog" name="tag" type="_yXSjcCQPEeKzTel_Vwmhog" association="_3v7cECQPEeKzTel_Vwmhog">
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_3v7cEiQPEeKzTel_Vwmhog"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_3v7cEyQPEeKzTel_Vwmhog" value="*"/>
@@ -61,7 +61,7 @@ The idea is to tag arbitrary object to facilitate easy searching.</body>
       </packagedElement>
       <packagedElement xmi:type="uml:Package" xmi:id="_sPG5sCQOEeKOmc56p_1Osg" name="query">
         <ownedComment xmi:type="uml:Comment" xmi:id="_juEXwH-jEeOYhpiy1kqM8Q" annotatedElement="_JkrskCQPEeKOmc56p_1Osg">
-          <body>InstanceQuery is used to store queries against a particular instance of a class. Add BaseTumlWithQuery to the root of your inheritence hierarchy to be able to capture InstanceQueries.</body>
+          <body>InstanceQuery is used to store queries against a particular instance of a class. Add BaseUmlgWithQuery to the root of your inheritence hierarchy to be able to capture InstanceQueries.</body>
         </ownedComment>
         <ownedComment xmi:type="uml:Comment" xmi:id="_2jmRUH-5EeOYhpiy1kqM8Q" annotatedElement="_2GNhsCQOEeKOmc56p_1Osg">
           <body>If you which to have createdOn and updatedOn automatically saved add BaseModelTuml to the root of your inheritence hierarchy</body>
@@ -75,7 +75,7 @@ The idea is to tag arbitrary object to facilitate easy searching.</body>
           <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_8_zeIIAZEeOYhpiy1kqM8Q" name="GREMLIN"/>
           <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_-W2JkIAZEeOYhpiy1kqM8Q" name="NATIVE"/>
         </packagedElement>
-        <packagedElement xmi:type="uml:Class" xmi:id="_FAMz0CXHEeKbPYSfIbmXag" name="BaseTumlWithQuery" isAbstract="true">
+        <packagedElement xmi:type="uml:Class" xmi:id="_FAMz0CXHEeKbPYSfIbmXag" name="BaseUmlgWithQuery" isAbstract="true">
           <generalization xmi:type="uml:Generalization" xmi:id="_Q4ZJ0CXHEeKbPYSfIbmXag" general="_2GNhsCQOEeKOmc56p_1Osg"/>
           <ownedAttribute xmi:type="uml:Property" xmi:id="_7L5ZgE6JEeK4HckrDYI0ug" name="instanceQuery" type="_JkrskCQPEeKOmc56p_1Osg" isOrdered="true" aggregation="composite" association="_7L6AkE6JEeK4HckrDYI0ug">
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_7L5ZgU6JEeK4HckrDYI0ug"/>
@@ -97,8 +97,8 @@ The idea is to tag arbitrary object to facilitate easy searching.</body>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_q025oE6JEeK4HckrDYI0ug" value="1"/>
           </ownedAttribute>
         </packagedElement>
-        <packagedElement xmi:type="uml:Association" xmi:id="_7L6AkE6JEeK4HckrDYI0ug" name="baseTumlWithQuery_instanceQuery_1" memberEnd="_7L6AkU6JEeK4HckrDYI0ug _7L5ZgE6JEeK4HckrDYI0ug" navigableOwnedEnd="_7L6AkU6JEeK4HckrDYI0ug">
-          <ownedEnd xmi:type="uml:Property" xmi:id="_7L6AkU6JEeK4HckrDYI0ug" name="baseTumlWithQuery" type="_FAMz0CXHEeKbPYSfIbmXag" association="_7L6AkE6JEeK4HckrDYI0ug">
+        <packagedElement xmi:type="uml:Association" xmi:id="_7L6AkE6JEeK4HckrDYI0ug" name="baseUmlgWithQuery_instanceQuery_1" memberEnd="_7L6AkU6JEeK4HckrDYI0ug _7L5ZgE6JEeK4HckrDYI0ug" navigableOwnedEnd="_7L6AkU6JEeK4HckrDYI0ug">
+          <ownedEnd xmi:type="uml:Property" xmi:id="_7L6AkU6JEeK4HckrDYI0ug" name="baseUmlgWithQuery" type="_FAMz0CXHEeKbPYSfIbmXag" association="_7L6AkE6JEeK4HckrDYI0ug">
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_7L6Akk6JEeK4HckrDYI0ug" value="1"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_7L6Ak06JEeK4HckrDYI0ug" value="1"/>
           </ownedEnd>
@@ -114,7 +114,7 @@ The idea is to tag arbitrary object to facilitate easy searching.</body>
           </ownedEnd>
         </packagedElement>
       </packagedElement>
-      <packagedElement xmi:type="uml:Class" xmi:id="_2GNhsCQOEeKOmc56p_1Osg" name="BaseModelTuml" isAbstract="true">
+      <packagedElement xmi:type="uml:Class" xmi:id="_2GNhsCQOEeKOmc56p_1Osg" name="BaseModelUmlg" isAbstract="true">
         <ownedAttribute xmi:type="uml:Property" xmi:id="_5NteICQOEeKOmc56p_1Osg" name="createdOn" isReadOnly="true">
           <type xmi:type="uml:DataType" href="umlg-datatypes.uml#_OGOTEAD6EeKS1vh1F4YVWQ"/>
           <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_UqbDMCQVEeKzTel_Vwmhog" name="createdOnDefaultValue">
@@ -135,9 +135,9 @@ The idea is to tag arbitrary object to facilitate easy searching.</body>
           <body>ClassQuery is used to store queries againts any instance of the class. Instances of ClassQuery are added to the generated meta classes.</body>
         </ownedComment>
         <ownedComment xmi:type="uml:Comment" xmi:id="_54ARoIAXEeOYhpiy1kqM8Q" annotatedElement="_xkJmsE6KEeK4HckrDYI0ug">
-          <body>Umlg generates a singleton meta class for every concrete Class in your model. If umlg-lib is inported into your model then the generated MetaClass (i.e.CustomerMeta) will extend BaseClassTuml. This allows ClassQueries to be added to the Meta class.</body>
+          <body>Umlg generates a singleton meta class for every concrete Class in your model. If umlg-lib is inported into your model then the generated MetaClass (i.e.CustomerMeta) will extend BaseClassUmlg. This allows ClassQueries to be added to the Meta class.</body>
         </ownedComment>
-        <packagedElement xmi:type="uml:Class" xmi:id="_xkJmsE6KEeK4HckrDYI0ug" name="BaseClassTuml">
+        <packagedElement xmi:type="uml:Class" xmi:id="_xkJmsE6KEeK4HckrDYI0ug" name="BaseClassUmlg">
           <generalization xmi:type="uml:Generalization" xmi:id="_zd2TQE6KEeK4HckrDYI0ug" general="_2GNhsCQOEeKOmc56p_1Osg"/>
           <ownedAttribute xmi:type="uml:Property" xmi:id="__iH-wE-NEeKwIp56YBZIxw" name="classQuery" type="_1o2LME6KEeK4HckrDYI0ug" isOrdered="true" aggregation="composite" association="__iJM4E-NEeKwIp56YBZIxw">
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="__iH-wU-NEeKwIp56YBZIxw"/>
@@ -148,8 +148,8 @@ The idea is to tag arbitrary object to facilitate easy searching.</body>
           <generalization xmi:type="uml:Generalization" xmi:id="_QdOMoE6LEeK4HckrDYI0ug" general="_2GNhsCQOEeKOmc56p_1Osg"/>
           <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_9zji0E6KEeK4HckrDYI0ug" name="InterfaceRealization1" client="_1o2LME6KEeK4HckrDYI0ug" supplier="_djoUIE6JEeK4HckrDYI0ug" contract="_djoUIE6JEeK4HckrDYI0ug"/>
         </packagedElement>
-        <packagedElement xmi:type="uml:Association" xmi:id="__iJM4E-NEeKwIp56YBZIxw" name="baseClassTuml_classQuery_1" memberEnd="__iJM4U-NEeKwIp56YBZIxw __iH-wE-NEeKwIp56YBZIxw" navigableOwnedEnd="__iJM4U-NEeKwIp56YBZIxw">
-          <ownedEnd xmi:type="uml:Property" xmi:id="__iJM4U-NEeKwIp56YBZIxw" name="baseClassTuml" type="_xkJmsE6KEeK4HckrDYI0ug" association="__iJM4E-NEeKwIp56YBZIxw">
+        <packagedElement xmi:type="uml:Association" xmi:id="__iJM4E-NEeKwIp56YBZIxw" name="baseClassUmlg_classQuery_1" memberEnd="__iJM4U-NEeKwIp56YBZIxw __iH-wE-NEeKwIp56YBZIxw" navigableOwnedEnd="__iJM4U-NEeKwIp56YBZIxw">
+          <ownedEnd xmi:type="uml:Property" xmi:id="__iJM4U-NEeKwIp56YBZIxw" name="baseClassUmlg" type="_xkJmsE6KEeK4HckrDYI0ug" association="__iJM4E-NEeKwIp56YBZIxw">
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="__iJM4k-NEeKwIp56YBZIxw" value="1"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="__iJM40-NEeKwIp56YBZIxw" value="1"/>
           </ownedEnd>

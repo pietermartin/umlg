@@ -22,28 +22,6 @@
     <styles xmi:type="notation:DiagramStyle" xmi:id="_mdWGkSM2EeK-Trh8Ll0qUQ"/>
     <element xmi:type="uml:Model" href="umlg-lib.uml#_mdTDQCM2EeK-Trh8Ll0qUQ"/>
   </notation:Diagram>
-  <notation:Diagram xmi:id="_ajY5MCM6EeK-Trh8Ll0qUQ" type="PapyrusUMLClassDiagram" name="TumlClassDiagram" measurementUnit="Pixel">
-    <children xmi:type="notation:Shape" xmi:id="_bdvBkCM6EeK-Trh8Ll0qUQ" type="2007" fontName="Sans" lineColor="0">
-      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_bdvooCM6EeK-Trh8Ll0qUQ" source="ShadowFigure">
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_bdvooSM6EeK-Trh8Ll0qUQ" key="ShadowFigure_Value" value="false"/>
-      </eAnnotations>
-      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_bdvooiM6EeK-Trh8Ll0qUQ" source="displayNameLabelIcon">
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_bdvooyM6EeK-Trh8Ll0qUQ" key="displayNameLabelIcon_value" value="false"/>
-      </eAnnotations>
-      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_bdvopCM6EeK-Trh8Ll0qUQ" source="QualifiedName">
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_bdwPsCM6EeK-Trh8Ll0qUQ" key="QualifiedNameDepth" value="1000"/>
-      </eAnnotations>
-      <children xmi:type="notation:DecorationNode" xmi:id="_bdwPsSM6EeK-Trh8Ll0qUQ" type="5026"/>
-      <children xmi:type="notation:DecorationNode" xmi:id="_bdwPsiM6EeK-Trh8Ll0qUQ" type="7016">
-        <styles xmi:type="notation:TitleStyle" xmi:id="_bdwPsyM6EeK-Trh8Ll0qUQ"/>
-        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_bdwPtCM6EeK-Trh8Ll0qUQ"/>
-      </children>
-      <element xmi:type="uml:Package" href="umlg-lib.uml#_bdslUCM6EeK-Trh8Ll0qUQ"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_bdvBkSM6EeK-Trh8Ll0qUQ" x="172" y="160"/>
-    </children>
-    <styles xmi:type="notation:DiagramStyle" xmi:id="_ajY5MSM6EeK-Trh8Ll0qUQ"/>
-    <element xmi:type="uml:Package" href="umlg-lib.uml#_YOjv0CM6EeK-Trh8Ll0qUQ"/>
-  </notation:Diagram>
   <notation:Diagram xmi:id="_c-m-cCM6EeK-Trh8Ll0qUQ" type="PapyrusUMLClassDiagram" name="ClassDiagram" measurementUnit="Pixel">
     <children xmi:type="notation:Shape" xmi:id="_fE2SMCM6EeK-Trh8Ll0qUQ" type="2007" fontName="Sans" lineColor="0">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_fE25QCM6EeK-Trh8Ll0qUQ" source="ShadowFigure">
@@ -551,7 +529,7 @@
       </eAnnotations>
       <children xmi:type="notation:DecorationNode" xmi:id="_2jnfdX-5EeOYhpiy1kqM8Q" type="5038"/>
       <element xmi:type="uml:Comment" href="umlg-lib.uml#_2jmRUH-5EeOYhpiy1kqM8Q"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_2jm4YX-5EeOYhpiy1kqM8Q" x="75" y="22" width="249" height="57"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_2jm4YX-5EeOYhpiy1kqM8Q" x="20" y="24" width="249" height="57"/>
     </children>
     <styles xmi:type="notation:DiagramStyle" xmi:id="_wlBKASQOEeKOmc56p_1Osg"/>
     <element xmi:type="uml:Package" href="umlg-lib.uml#_sPG5sCQOEeKOmc56p_1Osg"/>
