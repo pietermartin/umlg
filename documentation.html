@@ -63,7 +63,7 @@
 
 <p><img src="images/uml/Package_umlg_demoQuickPreviewClassDiagram.PNG" alt="image of person works for company" title="" /></p>
 
-<p>Uging the generated code.</p>
+<p>Using the generated code.</p>
 
 <pre><code>Company company = new Company();
 company.setName("Umlg");
@@ -75,8 +75,6 @@ GraphDb.getDb().commit();
 Assert.assertTrue(company.getEmployee().contains(person));
 </code></pre>
 
-<hr />
-
 <h2>Introduction</h2>
 
 <p>Umlg is a UML to java code generator. From class diagrams, persistent java entities are generated. The entities persist
@@ -84,17 +82,27 @@ via an embedded <a href="http://blueprints.tinkerpop.com">Blueprints</a> graph d
 <a href="https://github.com/tinkerpop/blueprints/wiki/Property-Graph-Model">Property Graph Model</a> is a natural fit for
 implementing the rich semantics of UML class diagrams in java.</p>
 
-<p>The basic pattern used is that an entity wraps a vertex. Associations between entities are realized as edges between
-vertexes.</p>
+<p>The basic pattern used is that an entity wraps a vertex. Associations are realized as edges between vertexes.</p>
 
-<h2>Getting Started</h2>
+<p>The entities are not POJOs. They are always persistent. They contain no annotations and no interceptors are used in the
+implementation. The only configuration needed is one property to specify the location of the underlying graph database
+on the file system. As such Umlg entities always execute, (unit test or production) in an equivalent environment. Graph
+databases have very fast startup times that do not increase with the number of entities (vertices and edges).</p>
 
-<p>Umlg uses <a href="http://maven.apache.org/">maven</a> as its build tool.
-with maven and Papyrus.</p>
+<p>Even on large projects with thousands of entities Umlg will still start up in milliseconds. No need for mock and integration tests.
+No slow startup times while waiting for annotations to be parsed and databases to be created/updated.</p>
 
-<p>Umlg uses the <a href="http://projects.eclipse.org/projects/modeling.mdt.uml2">eclipse uml2 project</a> to load the uml model into memory.
-<a href="http://projects.eclipse.org/projects/modeling.mdt.papyrus">Eclipse Papyrus</a> is the recommended uml2 modelling tool.
-One of the primary objectives of Umlg is to implement the <a href="http://www.omg.org/spec/UML/2.4.1/Superstructure/PDF">UML2</a>
+<p>Graph databases are very good at traversing relationship. Its their speciality after all. This translates to Umlg entities
+being very efficient and performant at navigating object oriented associations. (//TODO do a simple JPA comparison)</p>
+
+<p>Umlg entities implement most class diagram constructs. A non exhaustive list include, inheritance, interfaces, abstract
+classes, associations, composition, complex data types, multiplicity, collection types (Set, OrderedSet, Sequence, Bag),
+qualifiers, constraints.</p>
+
+<p>Umlg has full support for <a href="href=" title="http://www.omg.org/spec/OCL/2.3.1/PDF">OCL</a> (Object Constraint Language). OCL is a
+powerful constraint and query language that operates directly on the entities.</p>
+
+<p>One of the primary objectives of Umlg is to implement the <a href="http://www.omg.org/spec/UML/2.4.1/Superstructure/PDF">UML2</a>
 semantics as accurately as possible.</p>
 
 <p>Umlg can also, optionally, generate a rest interface for performing crud and query operations. A web interface is provided
@@ -105,7 +113,56 @@ to perform crud operations and execute queries. Queries can be executed in <a hr
 <a href="http://www.neo4j.org/">Neo4j</a> and <a href="https://github.com/thinkaurelius/titan/wiki">Titan</a> are supported as the underlying
 blueprints graph databases.</p>
 
-<p>To generate java entities add the following fragment to your pom.</p>
+<h2>Getting Started</h2>
+
+<hr />
+
+<p>For UML modeling <a href="http://projects.eclipse.org/projects/modeling.mdt.papyrus">Eclipse Papyrus</a> is the recommended tool.</p>
+
+<p>Download and install Papyrus.</p>
+
+<hr />
+
+<p>Umlg uses <a href="http://maven.apache.org/">maven</a> as its build tool.</p>
+
+<p>The easiest way to get started is to generate a maven project using the Umlg Maven Archetype.</p>
+
+<p>To generate a sample project, type in the following at your project's root directory.</p>
+
+<pre><code>mvn archetype:generate -DarchetypeCatalog=local
+</code></pre>
+
+<p>You will be prompted to select the type of project you which to generate. Umlg can generate 3 types of sample projects.</p>
+
+<ol>
+<li>A minimalist project containing a sample uml model but no additional Umlg uml libraries.</li>
+<li>A sample uml model with Umlg's uml validation profile and data types library preloaded.</li>
+<li>A sample uml model with Umlg's uml validation profile and data types library preloaded.
+Includes Umlg's rest interface and gui.</li>
+</ol>
+
+<p>The archetype will generate a project with 2 modules.</p>
+
+<ol>
+<li>The first is the generator. It is responsible to load the uml model and generate the entities.</li>
+<li>The second is where the generated entities and optional rest interface will go.</li>
+</ol>
+
+<p>After generating the project go to the <code>generator</code> module and execute <code>com.rorotika.DemoGenerator</code>'s main method. This
+will load the sample model and generate the corresponding entities.</p>
+
+<p>Now go to the <code>application</code> module. In the <code>generated-java</code> source folder you will find the generated entities
+<code>org.umlg.One</code> and <code>org.umlg.Many</code>. The other classes will be explained later.</p>
+
+<p>In <code>src/main/resources</code> you will find <code>umlg.env.properties</code>. It contains the property <code>umlg.db.location</code>. Change this to
+point the graph database to a location of your choosing.</p>
+
+<p>In the test source folder <code>src/test/java</code> there is a sample junit test class <code>org.umlg.test.TestDemo</code>. You can execute
+it to see Umlg in action.</p>
+
+<hr />
+
+<p>To load the model and generate java entities the following fragment is needed in your pom.</p>
 
 <pre><code>&lt;dependency&gt;
     &lt;groupId&gt;org.umlg&lt;/groupId&gt;
@@ -113,6 +170,28 @@ blueprints graph databases.</p>
     &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;
 &lt;/dependency&gt;
 </code></pre>
+
+<p>The following code will generate the code. <code>JavaGenerator</code> takes 3 parameters. The first is the uml model, the
+second is the output location of the generated source and the 3rd is the default generation visitors. Umlg generates
+code via a sequential list of visitors to the Uml model. Each visitor implements some feature of the model in java.</p>
+
+<pre><code>JavaGenerator javaGenerator = new JavaGenerator();
+javaGenerator.generate(
+        new File("../application/src/main/model/umlg-demo1.uml"),
+        new File("../application"), DefaultVisitors.getDefaultJavaVisitors());
+</code></pre>
+
+<hr />
+
+<hr />
+
+<hr />
+
+<p>Umlg uses the <a href="http://projects.eclipse.org/projects/modeling.mdt.uml2">Eclipse Uml2 project</a> to load the uml model into
+memory for code generation.</p>
+
+<p>Umlg uses the <a href="http://projects.eclipse.org/projects/modeling.mdt.uml2">eclipse uml2 project</a> to load the uml model into memory.
+<a href="http://projects.eclipse.org/projects/modeling.mdt.papyrus">Eclipse Papyrus</a> is the recommended uml2 modelling tool.</p>
 
 <p>The following code will generate the code. <code>JavaGenerator</code> takes 3 parameters. The first is the uml model, the
 second is the output location of the generated source and the 3rd is the default generation visitors. Umlg generates
