@@ -1,10 +1,21 @@
+#Documentation
+
+Umlg documentation consist of,
+
+1. A quick preview,
+2. a short introduction
+3. a getting started guide
+4. a list of popular graphs modeled in UML and demonstrated in Umlg
+5. a reference of UML features and its realization as Umlg entities
+6. an Ocl reference
+
 ##Quick Preview
 
-A simple uml class diagram.
+A simple uml class diagram,
 
 ![image of person works for company](images/uml/Package_umlg_demoQuickPreviewClassDiagram.PNG)
 
-Using the generated code.
+and the generated entities in action.
 
     Company company = new Company();
     company.setName("Umlg");
@@ -84,25 +95,28 @@ The archetype will create a fully functional Umlg application. Go into the appli
 
 Before compiling the application, maven will generate entities and a rest interface to the entities from the sample model.
 
-To startup the rest server and use the web interface run
+To startup the rest server and use the web interface `cd` to the **application** module and run
 
-    mvn ant:run
+    mvn exec:exec
 
-and now go to [http://localhost:8111/demo-1/ui2](http://localhost:8111/demo-1/ui2) to view and use the application.
+and now go to [http://localhost:8111/demo/ui2](http://localhost:8111/demo/ui2) to view and use the application.
 
-There is a sample junit test `org.umlg.test.TestDemo` in `src/test/java`. You can execute it to see Umlg in action.
+Lastly there is a sample junit test `org.umlg.test.TestDemo` in `src/test/java`. You can execute it to see Umlg in action.
 
-###How it works
+###How the build works
 
-The archetype will generate a maven project with 2 sub modules.
+The archetype will generate a maven project with 2 sub modules. The 2 modules are,
 
 * **generator** - This is responsible to load the uml model and generate the entities.
 * **application** - This is where the generated entities and optional rest interface will go.
 
-In the `generator` module there is only one java class `DemoGenerator`. Running this class's `main` method  will load
+<br />
+####generator module
+
+In the `generator` module there is only one java class `DemoGenerator`. Running this class' `main` method  will load
 the sample model and generate the corresponding entities into the **application** module.
 
-To generate code from the UML model the following maven dependency is required.
+For `DemoGenerator` to compile and be able to generate code the following maven dependency is required.
 
     <dependency>
         <groupId>org.umlg</groupId>
@@ -112,53 +126,49 @@ To generate code from the UML model the following maven dependency is required.
 
 and the code to generate the code.
 
-    DemoGenerator demoGenerator = new DemoGenerator();
-    demoGenerator.generate(
-            new File("../application/src/main/model/umlg-demo1.uml"),
-            new File("../application"),
-            RestletVisitors.getDefaultJavaVisitors());
+    public class DemoGenerator {
+        public static void main(String[] args) throws URISyntaxException {
+            if (args.length == 0) {
+                args = new String[]{"."};
+            }
+            JavaGenerator javaGenerator = new JavaGenerator();
+            javaGenerator.generate(
+                    new File(args[0] + "/application/src/main/model/umlg-demo1.uml"),
+                    new File(args[0] + "/application"), RestletVisitors.getDefaultJavaVisitors());
 
-`DemoGenerator` takes 3 parameters. The first is the uml model, the second is the output location of the generated source
-and the 3rd is the generation visitors. Umlg generates code via a sequential list of visitors to the UML model.
-Each visitor implements some feature of the model in java.
+        }
+    }
+
+`org.umlg.generation.JavaGenerator` is the entry point to generating code in Umlg from UML. `JavaGenerator.main` takes 3 parameters.
+The first is the uml model, the second is the output location of the generated source and the 3rd is the generation visitors.
+Umlg generates code via a sequential list of visitors to the UML model. Each visitor implements some feature of the model in java.
 
 
-The **application** module has a couple of source folders.
+It is possible to add custom visitors to customize the entities. This is explained [here //TODO](http://localhost#todo).
+
+<br />
+####application module
+
+The **application** module has 3 java source folders.
 
 * **generated-java** - This is where the generated entities go.
-* **generated-meta** - Each UML class has a corresponding singleton.
-* **generated-restlet** - This is where the rest resources go.
-* **resources** - A resources folder that contains `umlg.env.properties` It contains the property `umlg.db.location`. Change this to
- point the graph database to a location of your choosing.
-* **test** In the test source folder `src/test/java` there is a sample junit test class `org.umlg.test.TestDemo`. You can execute
-it to see Umlg in action.
+* **generated-java-meta** - Each UML class has a corresponding singleton.
+* **generated-java-restlet** - This is where the rest resources go.
 
-To compile the entities and the following dependency is required. Replace the artifact with the underlying blueprints graph db of your choice.
+And a resources folder,
 
-    <dependency>
-        <groupId>org.umlg</groupId>
-        <artifactId>runtime-domain-bitsy</artifactId>
-        <!--
-        <artifactId>runtime-domain-orientdb</artifactId>
-        <artifactId>runtime-domain-neo4j</artifactId>
-        <artifactId>runtime-domain-titan</artifactId>
-        -->
-        <version>0.0.1-SNAPSHOT</version>
-    </dependency>
+* **resources** - A resources folder that contains `umlg.env.properties`.<br />
+It contains the property, `umlg.db.location=/tmp/demo-quick-preview`<br />
+Change this to point the graph database to a location of your choosing.
 
+And a test java source folder
 
+* **test** This contains a sample junit test class `org.umlg.test.TestDemo`. Run it to see Umlg in action.
 
+<br />
 
-
-Umlg uses the [Eclipse Uml2 project](http://projects.eclipse.org/projects/modeling.mdt.uml2) to load the uml model into
-memory for code generation.
-
-Umlg uses the [eclipse uml2 project](http://projects.eclipse.org/projects/modeling.mdt.uml2) to load the uml model into memory.
-[Eclipse Papyrus](http://projects.eclipse.org/projects/modeling.mdt.papyrus) is the recommended uml2 modelling tool.
-
-
-After the code is generated, to compile and use the entities add the following fragment to the pom. Replace the artifact
-with the underlying blueprints graph db of your choice.
+To compile the entities the following dependency is required. Replace the artifact with the underlying blueprints graph db of your choice.
+This dependency will bring in the underlying graph db and everything the Umlg entities need.
 
     <dependency>
         <groupId>org.umlg</groupId>
@@ -171,10 +181,29 @@ with the underlying blueprints graph db of your choice.
         <version>0.0.1-SNAPSHOT</version>
     </dependency>
 
-Umlg only needs one configuration property specified in `umlg.env.property` to specify where the data files should be
-kept.
+<br />
 
-    umlg.db.location=/tmp/demo-quick-preview
+To compile and execute the rest resources the following dependency is required
+This brings in [Restlet](http://restlet.org/). Restlet is the rest framework used by Umlg to expose the entities as rest resources.
+
+         <dependency>
+             <groupId>org.umlg</groupId>
+             <artifactId>runtime-restlet</artifactId>
+             <version>0.0.1-SNAPSHOT</version>
+         </dependency>
+
+<br />
+And lastly to use the web ui add the following dependency This makes available web resources. The javascript, html and
+css files needed for the Umlg admin gui.
+
+         <dependency>
+             <groupId>org.umlg</groupId>
+             <artifactId>runtime-ui</artifactId>
+             <version>0.0.1-SNAPSHOT</version>
+         </dependency>
+
+<br />
+###The entities
 
 Each class in the uml model have a respective java entity. To create a company and a person just instantiate `Company`
 and `Person`.
