@@ -38,8 +38,8 @@ semantics as accurately as possible.
 
 UML has strong and detailed semantics for specifying structural features. In general it is far easier and quicker to
 specify the complex structure and relationships of domain entities in UML. Umlg makes that specification much more than
-just documentation. A large part of the lack of popularity of UML is that it remains only documentation. Many UML tools
-can generate java however it is seldom if ever generates persistent entities.
+just documentation. A large part of the lack of popularity of UML is, that it remains only documentation. Many UML tools
+can generate java, however it is seldom if ever generates persistent entities.
 
 Umlg entities are **not** POJOs. They are always persistent objects. Interceptors are not used in the implementation and
 they contain no annotations. The only configuration required is one property specifying the location of the underlying
