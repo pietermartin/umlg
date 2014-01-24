@@ -33,22 +33,29 @@ via an embedded [Blueprints](http://blueprints.tinkerpop.com) graph databases. T
 [Property Graph Model](https://github.com/tinkerpop/blueprints/wiki/Property-Graph-Model) is a natural fit for
 implementing the rich semantics of UML class diagrams in java.
 
-The basic pattern used is that an entity wraps a vertex. Associations are realized as edges between vertexes.
+One of the primary objectives of Umlg is to implement the [UML2](http://www.omg.org/spec/UML/2.4.1/Superstructure/PDF)
+semantics as accurately as possible.
 
-Umlg entities are **not** POJOs. They are always persistent objects. They contain no annotations. Interceptors are not used in the
-implementation. The only configuration required is one property specifying the location of the underlying graph database.
-As such Umlg entities always execute, (unit test or production) in an equivalent environment.
+UML has strong and detailed semantics for specifying structural features. In general it is far easier and quicker to
+specify the complex structure and relationships of domain entities in UML. Umlg makes that specification much more than
+just documentation. A large part of the lack of popularity of UML is that it remains only documentation. Many UML tools
+can generate java however it is seldom if ever generates persistent entities.
+
+Umlg entities are **not** POJOs. They are always persistent objects. Interceptors are not used in the implementation and
+they contain no annotations. The only configuration required is one property specifying the location of the underlying
+graph database. As such Umlg entities always execute, (unit test or production) in an equivalent environment. The basic
+pattern used is that, an entity wraps a vertex and associations are realized as edges between vertexes.
 
 Graph databases have very fast startup times that do not increase with the number of entities (vertices and edges).
-Even on large projects with thousands of entities Umlg will still start up in milliseconds. No need for mock tests nor integration tests.
+Even on large projects with thousands of entities Umlg will still start up in milliseconds. No need for mock tests nor
+integration tests.
 
 Graph databases are very good at traversing relationship. Its their speciality after all. This translates to Umlg entities
 being very efficient and fast at navigating object oriented associations. (//TODO do a simple JPA comparison)
 
 Umlg entities implement most class diagram constructs. This includes: inheritance, interfaces, abstract
 classes, associations, composition, complex data types, multiplicity, collection types (Set, OrderedSet, Sequence, Bag),
-qualifiers, constraints. One of the primary objectives of Umlg is to implement the [UML2](http://www.omg.org/spec/UML/2.4.1/Superstructure/PDF)
-semantics as accurately as possible.
+qualifiers, constraints.
 
 Umlg has full support for [OCL](href="http://www.omg.org/spec/OCL/2.3.1/PDF") (Object Constraint Language). OCL is a
 powerful constraint and query language that operates directly on the entities. OCL constraints and queries can be specified
