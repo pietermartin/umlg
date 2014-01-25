@@ -9,7 +9,8 @@
                 INSTANCE_QUERIES: {index: 2, label: 'Instance Queries', id: 'instanceQueriesAccordion'},
                 CLASS_QUERIES: {index: 3, label: 'Class Queries', id: 'classQueriesAccordion'},
                 INSTANCE_GROOVY: {index: 4, label: 'Instance Groovy', id: 'instanceQueriesAccordion'},
-                CLASS_GROOVY: {index: 5, label: 'Class Groovy', id: 'classGroovy'}
+                CLASS_GROOVY: {index: 5, label: 'Class Groovy', id: 'classGroovy'},
+                DIAGRAMS: {index: 6, label: 'Diagrams', id: 'diagrams'}
             }
         }
     });
@@ -51,6 +52,7 @@
 
             this.setupTabsAndAccordion();
             this.createPropertiesMenu(propertyNavigatingTo);
+            this.createDiagramsTreeView();
             if (isUmlgLib && this.contextVertexId !== undefined && this.contextVertexId !== null) {
                 this.createInstanceQueryMenu(-1);
                 this.createClassQueryMenu(-1);
@@ -89,6 +91,7 @@
 
             this.umlPropertiesDiv = addAccordionMenu(this.accordionDiv, true, Tuml.AccordionEnum.PROPERTIES.label, Tuml.AccordionEnum.PROPERTIES.id);
             this.umlOperationsDiv = addAccordionMenu(this.accordionDiv, false, Tuml.AccordionEnum.OPERATIONS.label, Tuml.AccordionEnum.OPERATIONS.id);
+            this.umlDiagramDiv = addAccordionMenu(this.accordionDiv, false, Tuml.AccordionEnum.DIAGRAMS.label, Tuml.AccordionEnum.DIAGRAMS.id);
             if (isUmlgLib && this.contextVertexId !== undefined && this.contextVertexId !== null) {
                 this.umlInstanceQueriesDiv = addAccordionMenu(this.accordionDiv, false, Tuml.AccordionEnum.INSTANCE_QUERIES.label, Tuml.AccordionEnum.INSTANCE_QUERIES.id);
                 this.umlClassQueriesDiv = addAccordionMenu(this.accordionDiv, false, Tuml.AccordionEnum.CLASS_QUERIES.label, Tuml.AccordionEnum.CLASS_QUERIES.id);
@@ -100,12 +103,12 @@
         function addAccordionMenu(accordionDiv, open, label, id) {
             //PROPERTIES
             //The clickable heading part of the properties accordion
-            var propertiesAccordion =  $('<div />', {class: 'panel panel-default'}).appendTo(accordionDiv);
-            var propertiesAccordionHeading =  $('<div />', {class: 'panel-heading'}).appendTo(propertiesAccordion);
+            var propertiesAccordion = $('<div />', {class: 'panel panel-default'}).appendTo(accordionDiv);
+            var propertiesAccordionHeading = $('<div />', {class: 'panel-heading'}).appendTo(propertiesAccordion);
             var propertiesH4 = $('<h4 />', {class: 'panel-title'}).appendTo(propertiesAccordionHeading);
-            $('<a data-toggle="collapse" data-parent="#accordion" class="accordion-toggle" href="#' + id  + '" />').text(label).appendTo(propertiesH4);
+            $('<a data-toggle="collapse" data-parent="#accordion" class="accordion-toggle" href="#' + id + '" />').text(label).appendTo(propertiesH4);
             //The context heading part of the properties accordion
-            var propertiesDiv = $('<div />' ,{id: id, class: 'panel-collapse collapse ' + (open ? 'in' : '')}).appendTo(propertiesAccordion);
+            var propertiesDiv = $('<div />', {id: id, class: 'panel-collapse collapse ' + (open ? 'in' : '')}).appendTo(propertiesAccordion);
             var divClassBody = $('<div />', {class: 'umlg-leftmenu-panel-body panel-body'}).appendTo(propertiesDiv);
             return divClassBody;
         }
@@ -134,10 +137,37 @@
                 case Tuml.AccordionEnum.CLASS_GROOVY.index:
                     console.log('INSTANCE_GROOVY');
                     break;
+                case Tuml.AccordionEnum.DIAGRAMS.index:
+                    console.log('DIAGRAM');
+                    break;
                 default:
                     throw 'Unknown active accordion!';
                     break;
             }
+
+        }
+
+        this.createDiagramsTreeView = function () {
+            var self = this;
+            this.diagramsTreeViewDiv = $('<div />', {id: 'diagramTreeView'}).appendTo(this.umlDiagramDiv);
+
+            $.ajax({
+                url: '/restAndJson/diagramPackages',
+                type: 'GET',
+                dataType: "json",
+                contentType: "application/json",
+                success: function (result) {
+                    $(function() {
+                        self.diagramsTreeViewDiv.tree({
+                            data: result
+                        });
+                    });
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                }
+            });
 
         }
 

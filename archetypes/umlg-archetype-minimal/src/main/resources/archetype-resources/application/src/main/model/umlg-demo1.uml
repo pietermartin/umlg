@@ -5,6 +5,9 @@
   </packageImport>
   <packagedElement xmi:type="uml:Package" xmi:id="_slLHEH1NEeOYhpiy1kqM8Q" name="org">
     <packagedElement xmi:type="uml:Package" xmi:id="_u-dSoH1NEeOYhpiy1kqM8Q" name="umlg">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_hkP7YIUQEeORFsmiMkZYdA" annotatedElement="_CBUaU34kEeOYhpiy1kqM8Q">
+        <body>composition</body>
+      </ownedComment>
       <packagedElement xmi:type="uml:Class" xmi:id="_xc65IH1NEeOYhpiy1kqM8Q" name="One">
         <ownedAttribute xmi:type="uml:Property" xmi:id="_y2pFIH1NEeOYhpiy1kqM8Q" name="name" visibility="public">
           <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>

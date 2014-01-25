@@ -940,6 +940,15 @@
           </packagedElement>
         </packagedElement>
       </packagedElement>
+      <packagedElement xmi:type="uml:Package" xmi:id="_9Ayn0IYHEeORFsmiMkZYdA" name="testDiagramTree">
+        <packagedElement xmi:type="uml:Class" xmi:id="_AA5i0IYIEeORFsmiMkZYdA" name="TestDiagrams">
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_Bqk2YIYIEeORFsmiMkZYdA" name="name" visibility="public">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Dnxi4IYIEeORFsmiMkZYdA" value="1"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_DnyxAIYIEeORFsmiMkZYdA" value="1"/>
+          </ownedAttribute>
+        </packagedElement>
+      </packagedElement>
     </packagedElement>
     <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_q7iYwQAOEeKpVr_ntT6cLA">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_q7iYwgAOEeKpVr_ntT6cLA" source="http://www.eclipse.org/uml2/2.0.0/UML">
@@ -949,7 +958,7 @@
     </profileApplication>
     <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_UDUaQPeoEeKXi9pM4yg14w">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_UDyUUPeoEeKXi9pM4yg14w" source="http://www.eclipse.org/uml2/2.0.0/UML">
-        <references xmi:type="ecore:EPackage" href="validation.profile.uml#_ESZfMPeoEeKXi9pM4yg14w"/>
+        <references xmi:type="ecore:EPackage" href="validation.profile.uml#_UFsa8NZNEeK9CpmlFL_zvQ"/>
       </eAnnotations>
       <appliedProfile xmi:type="uml:Profile" href="validation.profile.uml#_6Zdd4AV1EeK9oIwdQfC0-w"/>
     </profileApplication>

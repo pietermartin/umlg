@@ -18,9 +18,9 @@ public class Workspace {
 
 	private static final Logger logger = Logger.getLogger(Workspace.class.getPackage().getName());
 	public final static String DEFAULT_SOURCE_FOLDER = "src/main/generated-java";
-	public final static String RESOURCE_FOLDER = "src/main/generated-resources";
+	public final static String RESOURCE_FOLDER = "src/main/resources";
 	private final Map<JavaModelPrinter.Source, OJAnnotatedClass> javaClassMap = new HashMap<JavaModelPrinter.Source, OJAnnotatedClass>();
-	private File projectRoot;
+    private File projectRoot;
     private File modelFile;
 	private Model model;
 	private List<Visitor<?>> visitors;
@@ -94,5 +94,9 @@ public class Workspace {
         }
         return false;
     }
-	
+
+    public File getProjectRoot() {
+        return projectRoot;
+    }
+
 }

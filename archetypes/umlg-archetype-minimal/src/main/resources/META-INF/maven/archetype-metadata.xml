@@ -25,6 +25,7 @@
                     <directory>src/main/resources</directory>
                     <includes>
                         <include>**/*.properties</include>
+                        <include>**/*.PNG</include>
                     </includes>
                 </fileSet>
                 <fileSet encoding="UTF-8">

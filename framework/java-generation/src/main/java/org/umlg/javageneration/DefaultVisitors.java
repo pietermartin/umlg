@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
+import org.umlg.javageneration.visitor._package.PackageVisitor;
 import org.umlg.javageneration.visitor.clazz.*;
 import org.umlg.javageneration.visitor.enumeration.EnumerationVisitor;
 import org.umlg.javageneration.visitor.enumeration.TofromJsonForEnumCreator;
@@ -58,6 +59,9 @@ public class DefaultVisitors {
         result.add(new MetaClassBuilder(Workspace.INSTANCE, META_SOURCE_FOLDER));
         result.add(new MetaNodeCreator(Workspace.INSTANCE, META_SOURCE_FOLDER));
         result.add(new IndexCreator(Workspace.INSTANCE));
+
+        result.add(new PackageVisitor(Workspace.INSTANCE));
+
         return result;
 
 //		if (this.audit) {

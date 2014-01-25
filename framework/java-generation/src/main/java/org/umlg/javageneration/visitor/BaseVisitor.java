@@ -15,11 +15,13 @@ public class BaseVisitor {
 
     protected Workspace workspace;
     protected String sourceDir;
+    protected String resourceDir;
 
     public BaseVisitor(Workspace workspace) {
         super();
         this.workspace = workspace;
         this.sourceDir = Workspace.DEFAULT_SOURCE_FOLDER;
+        this.resourceDir = Workspace.RESOURCE_FOLDER;
     }
 
     public BaseVisitor(Workspace workspace, String sourceDir) {

@@ -20,6 +20,7 @@ import org.eclipse.ocl.uml.UMLEnvironment;
 import org.eclipse.ocl.uml.UMLEnvironmentFactory;
 import org.eclipse.uml2.uml.*;
 import org.eclipse.uml2.uml.Class;
+import org.eclipse.uml2.uml.Package;
 import org.eclipse.uml2.uml.resource.UMLResource;
 import org.eclipse.uml2.uml.resources.ResourcesPlugin;
 import org.eclipse.uml2.uml.util.UMLUtil;
@@ -149,6 +150,17 @@ public class ModelLoader {
             }
         });
 
+        return results;
+    }
+
+    public List<Package> getAllPackages() {
+        List<Package> results = new ArrayList<Package>();
+        filter(results, this.model, new Filter() {
+            @Override
+            public boolean filter(Element e) {
+                return e instanceof Package;
+            }
+        });
         return results;
     }
 
