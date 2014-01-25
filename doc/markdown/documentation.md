@@ -8,6 +8,7 @@ Umlg documentation consist of,
 4. a list of popular graphs modeled in UML and demonstrated in Umlg
 5. a reference of UML features and its realization as Umlg entities
 6. an Ocl reference
+7. Umlg's gremlin add-on
 
 ##Quick Preview
 
@@ -45,6 +46,8 @@ Umlg entities are **not** POJOs. They are always persistent objects. Interceptor
 they contain no annotations. The only configuration required is one property specifying the location of the underlying
 graph database. As such Umlg entities always execute, (unit test or production) in an equivalent environment. The basic
 pattern used is that, an entity wraps a vertex and associations are realized as edges between vertexes.
+
+Most graph dbs supports a memory only db. Enabling that the entities will reside in memory only.
 
 Graph databases have very fast startup times that do not increase with the number of entities (vertices and edges).
 Even on large projects with thousands of entities Umlg will still start up in milliseconds. No need for mock tests nor
@@ -119,6 +122,7 @@ The archetype will generate a maven project with 2 sub modules. The 2 modules ar
 
 <br />
 ####generator module
+<br />
 
 In the `generator` module there is only one java class `DemoGenerator`. Running this class' `main` method  will load
 the sample model and generate the corresponding entities into the **application** module.
@@ -155,6 +159,7 @@ It is possible to add custom visitors to customize the entities. This is explain
 
 <br />
 ####application module
+<br />
 
 The **application** module has 3 java source folders.
 
@@ -211,30 +216,49 @@ css files needed for the Umlg admin gui.
 
 <br />
 ###The entities
+<br />
+
+The generated demo's model models a simple One to Many relationship.
+
+![One to Many](images/uml/Package_umlg_demo1ClassDiagram.PNG)
 
 Each class in the uml model have a respective java entity. To create a company and a person just instantiate `Company`
 and `Person`.
 
-    Company company = new Company();
-    Person person1 = new Person();
+    One one = new One();
+    Many many = new Many();
 
-To set the name properties just set them as normal.
+For each property a standard setter and getter is generated.
 
-    company1.setName("Coolraid");
-    person1.setFirstName("Joe");
-    person1.setLastName("Bloggs");
+    one.setName("Coolraid");
+    many.setName("Joe");
+    one.setMany(many);
 
-To add an employee to the company call an adder or just add it to the employee collection.
 
-    company1.addToEmployee(person1);
+For each property with a multiplicity greater than 1 an adder method is generated. This is different to the setter in
+that it appends to the collection. The setter replaces the collection.
 
-or
+    one.addToMany(many);
 
-    company1.getEmployee().add(person1);
+or just use the standard java collection 'add' method
+
+    one.getMany().add(many);
+
+Similarly a remover is generated
+
+    one.removeFromMany(many);
+
+or use the standard java collection 'remove' method
+
+    one.getMany().remove(many);
 
 and lastly to persist the entities call,
 
     GraphDb.getDb().commit()
+
+or rollback the transaction
+
+    GraphDb.getDb().rollback()
 
 `GraphDb.getDb()` returns an instance of `UmlgGraph`. `UmlgGraph` wraps the underlying blueprints graph. It is a
 singleton and is always available on the current thread via `GraphDb.getDb()`

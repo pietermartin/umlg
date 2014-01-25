@@ -108,6 +108,8 @@ they contain no annotations. The only configuration required is one property spe
 graph database. As such Umlg entities always execute, (unit test or production) in an equivalent environment. The basic
 pattern used is that, an entity wraps a vertex and associations are realized as edges between vertexes.</p>
 
+<p>Most graph dbs supports a memory only db. Enabling that the entities will reside in memory only.</p>
+
 <p>Graph databases have very fast startup times that do not increase with the number of entities (vertices and edges).
 Even on large projects with thousands of entities Umlg will still start up in milliseconds. No need for mock tests nor
 integration tests.</p>
@@ -190,6 +192,8 @@ Includes Umlg's rest interface and gui.</li>
 
 <h4>generator module</h4>
 
+<p><br /></p>
+
 <p>In the <code>generator</code> module there is only one java class <code>DemoGenerator</code>. Running this class' <code>main</code> method  will load
 the sample model and generate the corresponding entities into the <strong>application</strong> module.</p>
 
@@ -227,6 +231,8 @@ Umlg generates code via a sequential list of visitors to the UML model. Each vis
 <p><br /></p>
 
 <h4>application module</h4>
+
+<p><br /></p>
 
 <p>The <strong>application</strong> module has 3 java source folders.</p>
 
@@ -294,33 +300,55 @@ css files needed for the Umlg admin gui.</p>
 
 <h3>The entities</h3>
 
+<p><br /></p>
+
+<p>The generated demo's model models a simple One to Many relationship.</p>
+
+<p><img src="images/uml/Package_umlg_demo1ClassDiagram.PNG" alt="One to Many" title="" /></p>
+
 <p>Each class in the uml model have a respective java entity. To create a company and a person just instantiate <code>Company</code>
 and <code>Person</code>.</p>
 
-<pre><code>Company company = new Company();
-Person person1 = new Person();
+<pre><code>One one = new One();
+Many many = new Many();
 </code></pre>
 
-<p>To set the name properties just set them as normal.</p>
+<p>For each property a standard setter and getter is generated.</p>
 
-<pre><code>company1.setName("Coolraid");
-person1.setFirstName("Joe");
-person1.setLastName("Bloggs");
+<pre><code>one.setName("Coolraid");
+many.setName("Joe");
+one.setMany(many);
 </code></pre>
 
-<p>To add an employee to the company call an adder or just add it to the employee collection.</p>
+<p>For each property with a multiplicity greater than 1 an adder method is generated. This is different to the setter in
+that it appends to the collection. The setter replaces the collection.</p>
 
-<pre><code>company1.addToEmployee(person1);
+<pre><code>one.addToMany(many);
 </code></pre>
 
-<p>or</p>
+<p>or just use the standard java collection 'add' method</p>
 
-<pre><code>company1.getEmployee().add(person1);
+<pre><code>one.getMany().add(many);
+</code></pre>
+
+<p>Similarly a remover is generated</p>
+
+<pre><code>one.removeFromMany(many);
+</code></pre>
+
+<p>or use the standard java collection 'remove' method</p>
+
+<pre><code>one.getMany().remove(many);
 </code></pre>
 
 <p>and lastly to persist the entities call,</p>
 
 <pre><code>GraphDb.getDb().commit()
+</code></pre>
+
+<p>or rollback the transaction</p>
+
+<pre><code>GraphDb.getDb().rollback()
 </code></pre>
 
 <p><code>GraphDb.getDb()</code> returns an instance of <code>UmlgGraph</code>. <code>UmlgGraph</code> wraps the underlying blueprints graph. It is a
