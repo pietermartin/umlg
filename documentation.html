@@ -33,7 +33,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="index.html">Umlg</a>
+            <a class="navbar-brand" href="index.html">UMLG</a>
         </div>
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav pull-right">
@@ -59,7 +59,7 @@
 
 <h1>Documentation</h1>
 
-<p>Umlg documentation consist of,</p>
+<p>Umlg documentation consists of,</p>
 
 <ol>
 <li>A quick preview,</li>
@@ -73,11 +73,11 @@
 
 <h2>Quick Preview</h2>
 
-<p>A simple uml class diagram,</p>
+<p>Here is a simple uml class diagram.</p>
 
 <p><img src="images/uml/Package_umlg_demoQuickPreviewClassDiagram.PNG" alt="image of person works for company" title="" /></p>
 
-<p>and the generated entities in action.</p>
+<p>Here are the generated entities in action.</p>
 
 <pre><code>Company company = new Company();
 company.setName("Umlg");
@@ -101,15 +101,15 @@ semantics as accurately as possible.</p>
 
 <p>UML has strong and detailed semantics for specifying structural features. In general it is far easier and quicker to
 specify the complex structure and relationships of domain entities in UML. Umlg makes that specification much more than
-just documentation. A large part of the lack of popularity of UML is, that it remains only documentation. Many UML tools
+just documentation. A large part of the lack of popularity of UML is that it remains only documentation. Many UML tools
 can generate java, however it is seldom if ever generates persistent entities.</p>
 
 <p>Umlg entities are <strong>not</strong> POJOs. They are always persistent objects. Interceptors are not used in the implementation and
 they contain no annotations. The only configuration required is one property specifying the location of the underlying
-graph database. As such Umlg entities always execute, (unit test or production) in an equivalent environment. The basic
-pattern used is that, an entity wraps a vertex and associations are realized as edges between vertexes.</p>
+graph database. As such Umlg entities always execute, (unit test or production) in an equivalent environment. UMLG's basic
+pattern is that an entity wraps a vertex and associations between entities are realized as edges between vertices.</p>
 
-<p>Most graph dbs supports a memory only db. Enabling that the entities will reside in memory only.</p>
+<p>Most graph databases support 'memory only' runtime - all entities reside in memory only.</p>
 
 <p>Graph databases have very fast startup times that do not increase with the number of entities (vertices and edges).
 Even on large projects with thousands of entities Umlg will still start up in milliseconds. No need for mock tests nor

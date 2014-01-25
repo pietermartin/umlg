@@ -1,0 +1,9 @@
+1. tell the user what they need to know, i.e. java, uml, graph
+2. Umlg as caps UMLG
+3. POJO wiki pedia hyperlink
+4. mouse over
+5. be clear about where to find doc on graphs
+6. about eclipse papyrus talk about eclipse and no other tools being supported
+7. in archetype options, give name, i.e. proper name
+8. for 2nd person instructions, i.e. Go into the application and run use a different font
+9. explain typology
