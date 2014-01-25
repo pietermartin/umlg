@@ -92,8 +92,8 @@ Assert.assertTrue(company.getEmployee().contains(person));
 <h2>Introduction</h2>
 
 <p>Umlg is a UML to java code generator. From class diagrams, persistent java entities are generated. The entities persist
-via an embedded <a href="http://blueprints.tinkerpop.com">Blueprints</a> graph databases. The semantics of a
-<a href="https://github.com/tinkerpop/blueprints/wiki/Property-Graph-Model">Property Graph Model</a> is a natural fit for
+via an embedded <a href="http://blueprints.tinkerpop.com">Blueprints</a> graph database. The semantics of a
+<a href="https://github.com/tinkerpop/blueprints/wiki/Property-Graph-Model">Property Graph Model</a> fits naturally for
 implementing the rich semantics of UML class diagrams in java.</p>
 
 <p>One of the primary objectives of Umlg is to implement the <a href="http://www.omg.org/spec/UML/2.4.1/Superstructure/PDF">UML2</a>
@@ -115,7 +115,7 @@ pattern used is that, an entity wraps a vertex and associations are realized as 
 Even on large projects with thousands of entities Umlg will still start up in milliseconds. No need for mock tests nor
 integration tests.</p>
 
-<p>Graph databases are very good at traversing relationship. Its their speciality after all. This translates to Umlg entities
+<p>Graph databases are very good at traversing relationships. It's their strength after all. This translates to Umlg entities
 being very efficient and fast at navigating object oriented associations. (//TODO do a simple JPA comparison)</p>
 
 <p>Umlg entities implement most class diagram constructs. This includes: inheritance, interfaces, abstract
@@ -140,7 +140,7 @@ blueprints graph databases.</p>
 
 <p>For UML modeling <a href="http://projects.eclipse.org/projects/modeling.mdt.papyrus">Eclipse Papyrus</a> is the recommended tool.</p>
 
-<p>Download and install Papyrus.</p>
+<p>So you will need to download and install Papyrus.</p>
 
 <hr />
 
@@ -153,13 +153,12 @@ blueprints graph databases.</p>
 <pre><code>mvn archetype:generate -DarchetypeCatalog=local
 </code></pre>
 
-<p>You will be prompted to select the type of project you which to generate. Umlg can generate 3 types of sample projects.</p>
+<p>You will be prompted to select the type of project you which to generate. Umlg can generate three types of sample projects.</p>
 
 <ul>
 <li>A minimalist project containing a sample uml model but no additional Umlg uml libraries.</li>
 <li>A sample uml model with Umlg's uml validation profile and data types library preloaded.</li>
-<li>A sample uml model with Umlg's uml validation profile and data types library preloaded.
-Includes Umlg's rest interface and gui.</li>
+<li>A sample uml model with Umlg's uml validation profile, data types library preloaded and Umlg's rest interface and gui.</li>
 </ul>
 
 <p>For the purpose of this getting started guide, choose the <strong>full</strong> option.</p>

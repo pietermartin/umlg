@@ -1,6 +1,6 @@
 #Documentation
 
-Umlg documentation consist of,
+Umlg documentation consists of,
 
 1. A quick preview,
 2. a short introduction
@@ -12,11 +12,11 @@ Umlg documentation consist of,
 
 ##Quick Preview
 
-A simple uml class diagram,
+Here is a simple uml class diagram.
 
 ![image of person works for company](images/uml/Package_umlg_demoQuickPreviewClassDiagram.PNG)
 
-and the generated entities in action.
+Here are the generated entities in action.
 
     Company company = new Company();
     company.setName("Umlg");
@@ -30,8 +30,8 @@ and the generated entities in action.
 ##Introduction
 
 Umlg is a UML to java code generator. From class diagrams, persistent java entities are generated. The entities persist
-via an embedded [Blueprints](http://blueprints.tinkerpop.com) graph databases. The semantics of a
-[Property Graph Model](https://github.com/tinkerpop/blueprints/wiki/Property-Graph-Model) is a natural fit for
+via an embedded [Blueprints](http://blueprints.tinkerpop.com) graph database. The semantics of a
+[Property Graph Model](https://github.com/tinkerpop/blueprints/wiki/Property-Graph-Model) fits naturally for
 implementing the rich semantics of UML class diagrams in java.
 
 One of the primary objectives of Umlg is to implement the [UML2](http://www.omg.org/spec/UML/2.4.1/Superstructure/PDF)
@@ -39,21 +39,21 @@ semantics as accurately as possible.
 
 UML has strong and detailed semantics for specifying structural features. In general it is far easier and quicker to
 specify the complex structure and relationships of domain entities in UML. Umlg makes that specification much more than
-just documentation. A large part of the lack of popularity of UML is, that it remains only documentation. Many UML tools
+just documentation. A large part of the lack of popularity of UML is that it remains only documentation. Many UML tools
 can generate java, however it is seldom if ever generates persistent entities.
 
 Umlg entities are **not** POJOs. They are always persistent objects. Interceptors are not used in the implementation and
 they contain no annotations. The only configuration required is one property specifying the location of the underlying
-graph database. As such Umlg entities always execute, (unit test or production) in an equivalent environment. The basic
-pattern used is that, an entity wraps a vertex and associations are realized as edges between vertexes.
+graph database. As such Umlg entities always execute, (unit test or production) in an equivalent environment. UMLG's basic
+pattern is that an entity wraps a vertex and associations between entities are realized as edges between vertices.
 
-Most graph dbs supports a memory only db. Enabling that the entities will reside in memory only.
+Most graph databases support 'memory only' runtime - all entities reside in memory only.
 
 Graph databases have very fast startup times that do not increase with the number of entities (vertices and edges).
 Even on large projects with thousands of entities Umlg will still start up in milliseconds. No need for mock tests nor
 integration tests.
 
-Graph databases are very good at traversing relationship. Its their speciality after all. This translates to Umlg entities
+Graph databases are very good at traversing relationships. It's their strength after all. This translates to Umlg entities
 being very efficient and fast at navigating object oriented associations. (//TODO do a simple JPA comparison)
 
 Umlg entities implement most class diagram constructs. This includes: inheritance, interfaces, abstract
@@ -78,7 +78,7 @@ blueprints graph databases.
 
 For UML modeling [Eclipse Papyrus](http://projects.eclipse.org/projects/modeling.mdt.papyrus) is the recommended tool.
 
-Download and install Papyrus.
+So you will need to download and install Papyrus.
 
 ***
 
@@ -90,12 +90,11 @@ To generate a sample project, type in the following at your project's root direc
 
     mvn archetype:generate -DarchetypeCatalog=local
 
-You will be prompted to select the type of project you which to generate. Umlg can generate 3 types of sample projects.
+You will be prompted to select the type of project you which to generate. Umlg can generate three types of sample projects.
 
 * A minimalist project containing a sample uml model but no additional Umlg uml libraries.
 * A sample uml model with Umlg's uml validation profile and data types library preloaded.
-* A sample uml model with Umlg's uml validation profile and data types library preloaded.
-    Includes Umlg's rest interface and gui.
+* A sample uml model with Umlg's uml validation profile, data types library preloaded and Umlg's rest interface and gui.
 
 For the purpose of this getting started guide, choose the **full** option.
 
