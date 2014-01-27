@@ -55,6 +55,10 @@
             leftMenuManager.refreshQueryMenuCss(queryToHighlightId, accordionIndex);
         }
 
+        this.refreshDiagramCss = function (diagramNameHighlightId, accordionIndex) {
+            leftMenuManager.refreshDiagramCss(diagramNameHighlightId, accordionIndex);
+        }
+
         this.refresh = function (tumlUri, result) {
             var metaDataNavigatingTo = result[0].meta.to;
             var metaDataNavigatingFrom = result[0].meta.from;
@@ -192,11 +196,16 @@
             var activatedTabContentDiv = this.tabContainer.find('#' + activatedTab.id.substring(2));
             if (self instanceof Tuml.TumlMainViewManager) {
                 var tabEnum = $.data(activatedTabContentDiv[0], 'tabEnum');
-                var queryId = $.data(activatedTabContentDiv[0], 'queryId');
-                if (queryId === undefined || queryId === null) {
-                    queryId = -1;
+                if (tabEnum != tuml.tab.Enum.Diagrams) {
+                    var queryId = $.data(activatedTabContentDiv[0], 'queryId');
+                    if (queryId === undefined || queryId === null) {
+                        queryId = -1;
+                    }
+                    self.refreshQueryMenuCss(queryId, tabEnum);
+                } else {
+                    var name = $.data(activatedTabContentDiv[0], 'diagramName');
+                    self.refreshDiagramCss(name, tabEnum);
                 }
-                self.refreshQueryMenuCss(queryId, tabEnum);
             }
 
             //first deactivate all grids
@@ -556,6 +565,47 @@
                 this.tabContainer.children('ul').find('li:eq(' + self.tumlTabViewManagers.indexOf(tumlTabViewManagerQuery) + ') a').tab('show')
             }
             return tumlTabViewManagerQuery;
+
+        }
+
+        this.addDiagramTab = function (treeNode) {
+            //Check is there is already a tab open for this query
+            var tumlTabDiagramViewManager;
+            var tabIndex = 0;
+            for (var j = 0; j < this.tumlTabViewManagers.length; j++) {
+                if (this.tumlTabViewManagers[j].tabId == treeNode.name) {
+                    tumlTabDiagramViewManager = this.tumlTabViewManagers[j];
+                    tabIndex = j;
+                    break;
+                }
+            }
+            if (tumlTabDiagramViewManager === undefined) {
+                tumlTabDiagramViewManager = new Tuml.TumlTabDiagramViewManager(tuml.tab.Enum.Diagrams, this.tabContainer, treeNode.name, treeNode.name);
+                tumlTabDiagramViewManager.createTab();
+                tumlTabDiagramViewManager.parentTabContainerManager = this;
+
+//                if (query.id === -1) {
+//                this.tumlTabViewManagers.push(tumlTabDiagramViewManager);
+//                reorderTabs();
+//                    this.tabContainer.tabs("option", "active", this.tumlTabViewManagers.length - 1);
+//                    this.tabContainer.children('ul').find('li:eq(' + this.tumlTabViewManagers.length - 1 + ') a').tab('show')
+//                } else {
+                this.tumlTabViewManagers.splice(this.tumlTabViewManagers.length - 1, 0, tumlTabDiagramViewManager);
+                reorderTabs();
+////                    this.tabContainer.tabs("option", "active", this.tumlTabViewManagers.length - 2);
+////                    this.tabContainer.children('ul').find('li:eq(' + this.tumlTabViewManagers.length - 2 + ') a').tab('show')
+//                }
+
+//                tumlTabViewManagerQuery.showInlineForm();
+
+            } else {
+                //Just make the tab active
+                this.tabContainer.children('ul').find('li:eq(' + self.tumlTabViewManagers.indexOf(tumlTabDiagramViewManager) + ') a').tab('show')
+            }
+
+            tumlTabDiagramViewManager.createDiagram(treeNode.path, treeNode.type);
+
+            return tumlTabDiagramViewManager;
 
         }
 

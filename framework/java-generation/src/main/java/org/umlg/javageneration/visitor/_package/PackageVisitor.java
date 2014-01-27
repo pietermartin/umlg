@@ -1,5 +1,6 @@
 package org.umlg.javageneration.visitor._package;
 
+import org.apache.commons.io.FileUtils;
 import org.eclipse.uml2.uml.*;
 import org.eclipse.uml2.uml.Package;
 import org.umlg.framework.VisitSubclasses;
@@ -28,6 +29,7 @@ public class PackageVisitor extends BaseVisitor implements Visitor<Package> {
     /**
      * Packages are visited in the correct hierarchical manner, so no need to check for the existence of the
      * parent folder
+     *
      * @param _package
      */
     @Override
@@ -48,14 +50,16 @@ public class PackageVisitor extends BaseVisitor implements Visitor<Package> {
                 if (!(_package.getOwner() instanceof Package)) {
                     throw new IllegalStateException(String.format("Package %s owner not a owner!", _package.getQualifiedName()));
                 }
-                Package owner = (Package)_package.getOwner();
+                Package owner = (Package) _package.getOwner();
                 if (this.currentFolder.getName().equals(owner.getName())) {
                     this.currentFolder = new File(this.currentFolder, _package.getName());
                     if (!this.currentFolder.exists() && !this.currentFolder.mkdir()) {
                         throw new IllegalStateException(String.format("Could not create folder for package %s", this.currentFolder.getAbsolutePath()));
                     }
                 } else {
-                    this.currentFolder = new File(this.currentFolder.getParentFile(), _package.getName());
+                    File resourceFolder = FileUtils.getFile(this.workspace.getProjectRoot(), new String[]{"src", "main", "resources"});
+                    String[] dirs = _package.getQualifiedName().split("::");
+                    this.currentFolder = FileUtils.getFile(resourceFolder, dirs);
                     if (!this.currentFolder.exists() && !this.currentFolder.mkdir()) {
                         throw new IllegalStateException(String.format("Could not create folder for package %s", this.currentFolder.getAbsolutePath()));
                     }

@@ -59,6 +59,10 @@
                 mainViewManager.addQueryTab(false, new Tuml.Query(args.id, args.name, args.name, args.queryString, args.queryEnum, null, args.queryType));
             });
 
+            leftMenuManager.onDiagramClick.subscribe(function (e, treeNode) {
+                mainViewManager.addDiagramTab(treeNode);
+            });
+
             currentFocus = Tuml.FocusEnum.LEFT_MENU;
 
             //Create main view manager

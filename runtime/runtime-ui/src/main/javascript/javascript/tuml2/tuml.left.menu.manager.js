@@ -159,9 +159,23 @@
                 success: function (result) {
                     $(function() {
                         self.diagramsTreeViewDiv.tree({
-                            data: result
+                            data: result,
+                            selectable: true
                         });
+
+                        self.diagramsTreeViewDiv.bind(
+                            'tree.dblclick',
+                            function(e) {
+
+                                event.preventDefault();
+                                event.stopImmediatePropagation();
+                                if (e.node.children.length == 0) {
+                                    self.onDiagramClick.notify(e.node, null, self);
+                                }
+                            }
+                        );
                     });
+
 
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -213,42 +227,6 @@
 //            });
             return ulMenu;
         };
-
-//        this.createPropertiesMenu = function (propertyNavigatingTo) {
-//            var ulMenu = $('<ul />', {id: 'propertiesMenu'}).appendTo(this.umlPropertiesDiv);
-//            var menuArray = createLeftMenuDataArray(this.contextMetaDataFrom, propertyNavigatingTo);
-//
-//            for (var i = 0; i < menuArray.length; i++) {
-//                var value = menuArray[i];
-//                var adjustedUri = value.tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), encodeURIComponent(this.contextVertexId));
-//                adjustedUri = addUiToUrl(adjustedUri)
-//                var li = $('<li />').appendTo(ulMenu);
-//                li.data("contextData", {name: value.name, uri: adjustedUri});
-//                var a = $('<a />', {title: value.name, href: adjustedUri, class: value.aCssClass}).appendTo(li);
-//                a.on('click', function (e) {
-//                    var link = $(e.target);
-//                    var contextData = link.parent().data("contextData");
-//                    self.onMenuClick.notify({name: contextData.name, uri: removeUiFromUrl(contextData.uri)}, null, self);
-//                    e.preventDefault();
-//                    e.stopImmediatePropagation();
-//                });
-//                var span = $('<span class="ui-icon ' + value.menuIconClass + '"></span>').appendTo(a);
-//                if (value.multiplicityDisplay !== undefined) {
-//                    a.append(value.name + ' ' + value.multiplicityDisplay);
-//                } else {
-//                    a.append(value.name);
-//                }
-//            }
-//            //This is for enter keystroke on the menu
-//            ulMenu.menu({
-//                select: function (e, ui) {
-//                    var contextData = ui.item.data("contextData");
-//                    self.onMenuClick.notify({name: contextData.name, uri: removeUiFromUrl(contextData.uri)}, null, self);
-//                    e.preventDefault();
-//                }
-//            });
-//            return ulMenu;
-//        };
 
         this.createQueryMenu = function (queryDiv, isInstanceQuery, queryData) {
             var queryArray = [];
@@ -486,6 +464,71 @@
 
         }
 
+        this.refreshDiagramCss = function (/*queryData, */diagramNameHighlightId, leftAccordionIndex) {
+
+            if (leftAccordionIndex != -1) {
+                //First close all tabs
+                $('#accordion').on('show.bs.collapse', function () {
+                    $('#accordion .in').collapse('hide');
+                });
+
+                //Open the relevant accordion
+                if (leftAccordionIndex == Tuml.AccordionEnum.PROPERTIES.index) {
+                    //Check if it is already open, if so do not call show as that closes it, eish
+                    var propertiesAccordion = this.umlPropertiesDiv.parent();
+                    if (!propertiesAccordion.hasClass('in')) {
+                        propertiesAccordion.collapse('show');
+                    }
+                } else if (leftAccordionIndex == Tuml.AccordionEnum.OPERATIONS.index) {
+                    //Check if it is already open, if so do not call show as that closes it, eish
+                    var operationsAccordion = this.umlOperationsDiv.parent();
+                    if (!operationsAccordion.hasClass('in')) {
+                        operationsAccordion.collapse('show');
+                    }
+
+                } else if (leftAccordionIndex == Tuml.AccordionEnum.INSTANCE_QUERIES.index) {
+                    //Check if it is already open, if so do not call show as that closes it, eish
+                    var instanceQueriesAccordion = this.umlInstanceQueriesDiv.parent();
+                    if (!instanceQueriesAccordion.hasClass('in')) {
+                        instanceQueriesAccordion.collapse('show');
+                    }
+
+                } else if (leftAccordionIndex == Tuml.AccordionEnum.CLASS_QUERIES.index) {
+                    //Check if it is already open, if so do not call show as that closes it, eish
+                    var classQueriesAccordion = this.umlClassQueriesDiv.parent();
+                    if (!classQueriesAccordion.hasClass('in')) {
+                        classQueriesAccordion.collapse('show');
+                    }
+
+                } else if (leftAccordionIndex == Tuml.AccordionEnum.CLASS_GROOVY.index) {
+                    //Check if it is already open, if so do not call show as that closes it, eish
+                    var classGroovyAccordion = this.umlClassGroovyDiv.parent();
+                    if (!classGroovyAccordion.hasClass('in')) {
+                        classGroovyAccordion.collapse('show');
+                    }
+
+                } else if (leftAccordionIndex == Tuml.AccordionEnum.INSTANCE_GROOVY.index) {
+                    //Check if it is already open, if so do not call show as that closes it, eish
+                    var instanceGroovyAccordion = this.umlInstanceGroovyDiv.parent();
+                    if (!instanceGroovyAccordion.hasClass('in')) {
+                        instanceGroovyAccordion.collapse('show');
+                    }
+
+                } else if (leftAccordionIndex == Tuml.AccordionEnum.DIAGRAMS.index) {
+                    //Check if it is already open, if so do not call show as that closes it, eish
+                    var instanceDiagramAccordion = this.umlDiagramDiv.parent();
+                    if (!instanceDiagramAccordion.hasClass('in')) {
+                        instanceDiagramAccordion.collapse('show');
+                    }
+                    var node = this.diagramsTreeViewDiv.tree('getNodeById', diagramNameHighlightId);
+                    this.diagramsTreeViewDiv.tree('selectNode', node);
+                } else {
+                    throw 'Unknown accordion index!'
+                }
+            }
+
+        }
+
         function createLeftMenuDataArray(contextMetaDataFrom, propertyNavigatingTo) {
             var menuArray = [];
             if (contextMetaDataFrom.name !== tumlModelName) {
@@ -555,7 +598,8 @@
         $.extend(this, {
             "TumlLeftMenuManagerVersion": "1.0.0",
             "onMenuClick": new Tuml.Event(),
-            "onQueryClick": new Tuml.Event()
+            "onQueryClick": new Tuml.Event(),
+            "onDiagramClick": new Tuml.Event()
         });
 
         init();

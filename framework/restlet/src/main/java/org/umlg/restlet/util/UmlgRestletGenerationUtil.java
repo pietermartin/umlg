@@ -45,6 +45,7 @@ public class UmlgRestletGenerationUtil {
     public static final OJPathName RestletToJsonUtil = new OJPathName("org.umlg.runtime.restlet.util.RestletToJsonUtil");
     public static final OJPathName UmlgMetaQueryServerResourceImpl = new OJPathName("org.umlg.runtime.restlet.UmlgMetaQueryServerResourceImpl");
     public static final OJPathName UmlgDiagramPackageResource = new OJPathName("org.umlg.runtime.restlet.UmlgDiagramPackageResource");
+    public static final OJPathName UmlgDiagramResource = new OJPathName("org.umlg.runtime.restlet.UmlgDiagramResource");
 //    public static final OJPathName TumlTransactionResourceImpl = new OJPathName("org.umlg.runtime.restlet.TumlTransactionServerResourceImpl");
     public static final OJPathName Component = new OJPathName("org.restlet.Component");
     public static final OJPathName UmlgRestletApplication = new OJPathName("org.umlg.runtime.restlet.UmlgRestletApplication");

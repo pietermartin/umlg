@@ -6,7 +6,8 @@
             TumlTabOneViewManager: TumlTabOneViewManager,
             TumlTabManyComponentViewManager: TumlTabManyComponentViewManager,
             TumlTabManyViewManager: TumlTabManyViewManager,
-            TumlTabQueryViewManager: TumlTabQueryViewManager
+            TumlTabQueryViewManager: TumlTabQueryViewManager,
+            TumlTabDiagramViewManager: TumlTabDiagramViewManager
         }
     });
 
@@ -21,12 +22,12 @@
         //This is needed when repopulating the grids from the server in order to find the visible grid.
         this.open = false;
 
-        this.showInlineForm = function() {
+        this.showInlineForm = function () {
             this.parentTabContainerManager.tabLayoutTabFooterDiv.find('.btn-toolbar').hide();
             this.parentTabContainerManager.tabLayoutTabFooterDiv.find('.form-inline').show();
         }
 
-        this.hideInlineForm = function() {
+        this.hideInlineForm = function () {
             this.parentTabContainerManager.tabLayoutTabFooterDiv.find('.form-inline').hide();
             this.parentTabContainerManager.tabLayoutTabFooterDiv.find('.btn-toolbar').show();
         }
@@ -130,7 +131,7 @@
         this.li.children('a:first').tab('show');
         $.data(divPanel[0], 'tabEnum', this.tabEnum);
 
-        this.li.find('a[href="#' + this.tabId +'"]').on('shown.bs.tab', function (e) {
+        this.li.find('a[href="#' + this.tabId + '"]').on('shown.bs.tab', function (e) {
             self.hideInlineForm();
             self.parentTabContainerManager.handleTabActivate(e);
         })
@@ -277,12 +278,12 @@
         TumlBaseTabViewManager.call(this, tabEnum, tabContainer);
 
         //Must be after base call, to override nicely
-        this.showInlineForm = function() {
+        this.showInlineForm = function () {
             this.parentTabContainerManager.showInlineForm()
             this.tumlTabQueryManager.showCorrectButtons();
         }
 
-        this.hideInlineForm = function() {
+        this.hideInlineForm = function () {
             this.parentTabContainerManager.hideInlineForm();
         }
 
@@ -311,7 +312,7 @@
         var nextIndex = previousIndex - 1;
         TumlBaseTabViewManager.prototype.closeTab.call(this);
 
-        //Id from update we do not want to show the previous tab as we are going to recreate this tab and show it.
+        //If from update we do not want to show the previous tab as we are going to recreate this tab and show it.
         //Showing the previous tab will fire the onShow event and run unnecessary code
         if (!fromUpdate) {
             this.tabUl.find('li:eq(' + previousIndex + ') a').tab('show')
@@ -375,6 +376,79 @@
         return divPanel;
     }
 
+    function TumlTabDiagramViewManager(tabEnum, tabContainer, tabDivName, tabTitleName) {
+
+        this.TumlTabDiagramViewManager = "1.0.0";
+
+        this.tabId = tabDivName;
+        this.tabTitleName = tabTitleName;
+        this.tumlTabDiagramManager = new Tuml.TumlTabDiagramManager(this);
+        TumlBaseTabViewManager.call(this, tabEnum, tabContainer);
+
+        /**
+         * type indicates SVG or PNG
+         * @param type
+         */
+        this.createDiagram = function (url, type) {
+            this.tumlTabDiagramManager.createDiagram(this.tabId, url, type);
+        }
+
+    }
+
+    TumlTabDiagramViewManager.prototype = new Tuml.TumlBaseTabViewManager;
+
+    TumlTabDiagramViewManager.prototype.createTab = function () {
+        var self = this;
+        var tabTemplate;
+        if (this.parentTabContainerManager instanceof Tuml.TumlMainViewManager) {
+            tabTemplate = "<li id='li" + this.tabId + "'><a href='#{href}' data-toggle='tab'>#{label}</a>";
+        } else {
+            tabTemplate = "<li id='li" + this.tabId + "'><a href='#{href}' data-toggle='tab'>#{label} <span class='umlg-diagram-tab glyphicon glyphicon-remove'></span></a></li>";
+        }
+        var label = this.tabTitleName;
+        var id = this.tabId;
+        this.li = $(tabTemplate.replace(/#\{href\}/g, "#" + id).replace(/#\{label\}/g, label));
+
+        // close icon: removing the tab on click
+        this.li.find("span.umlg-diagram-tab").click(function () {
+            if (Slick.GlobalEditorLock.commitCurrentEdit()) {
+                self.closeTab();
+            }
+        });
+
+        this.tabUl = this.parentTabContainer.children("ul");
+        this.tabUl.append(this.li);
+        var divPanel = $('<div />', {id: this.tabId, class: 'umlg-tab tab-pane'});
+
+        this.parentTabContainer.children(".tab-content").append(divPanel);
+        $.data(divPanel[0], 'tabEnum', this.tabEnum);
+
+        //Show the tab
+        this.tabUl.find('a:last').tab('show');
+        this.tabUl.find("a[href='#" + id + "']").on('shown.bs.tab', function (e) {
+//            //Show the query inline form
+//            //Hide the regular save cancel
+//            self.showInlineForm();
+            //Activate the relevant accordion
+            self.parentTabContainerManager.handleTabActivate(e);
+        })
+
+        $.data(divPanel[0], 'diagramName', this.tabTitleName);
+
+        return divPanel;
+    }
+
+    TumlTabDiagramViewManager.prototype.closeTab = function () {
+        var previousIndex = this.parentTabContainerManager.tumlTabViewManagers.indexOf(this);
+        var nextIndex = previousIndex - 1;
+        TumlBaseTabViewManager.prototype.closeTab.call(this);
+
+        //Id from update we do not want to show the previous tab as we are going to recreate this tab and show it.
+        //Showing the previous tab will fire the onShow event and run unnecessary code
+        this.tabUl.find('li:eq(' + previousIndex + ') a').tab('show')
+    }
+
+
     function TumlTabOneViewManager(tabEnum, tabContainer, oneManyOrQuery, tumlUri, result, propertyNavigatingTo) {
 
         this.TumlTabOneViewManager = "1.0.0";
@@ -394,11 +468,11 @@
         TumlBaseTabViewManager.call(this, tabEnum, tabContainer, tumlUri, result, propertyNavigatingTo);
 
         //This must be after the base call in order to override the methods
-        this.showInlineForm = function() {
+        this.showInlineForm = function () {
             this.parentTabContainerManager.showInlineForm()
         }
 
-        this.hideInlineForm = function() {
+        this.hideInlineForm = function () {
             this.parentTabContainerManager.hideInlineForm();
         }
     }
@@ -744,11 +818,11 @@
         TumlBaseTabViewManager.call(this, tabEnum, tabContainer, tumlUri, result, propertyNavigatingTo);
 
         //This must be after the base call in order to override the methods
-        this.showInlineForm = function() {
+        this.showInlineForm = function () {
             this.parentTabContainerManager.showInlineForm()
         }
 
-        this.hideInlineForm = function() {
+        this.hideInlineForm = function () {
             this.parentTabContainerManager.hideInlineForm();
         }
 
