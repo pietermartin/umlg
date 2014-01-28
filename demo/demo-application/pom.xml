@@ -8,11 +8,14 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>demo</artifactId>
-    <packaging>pom</packaging>
-    <name>umlg demo pom</name>
-    <modules>
-        <module>demo-application</module>
-        <module>demo-quick-preview</module>
-    </modules>
+    <artifactId>demo-application</artifactId>
+    <packaging>jar</packaging>
+    <name>umlg demo application</name>
+    <dependencies>
+        <dependency>
+            <groupId>org.umlg</groupId>
+            <artifactId>runtime-restlet</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>
