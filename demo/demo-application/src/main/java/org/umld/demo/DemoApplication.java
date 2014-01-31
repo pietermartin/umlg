@@ -30,14 +30,17 @@ public class DemoApplication extends Application {
         Directory bootstrap = new Directory(getContext(), "clap://bootstrap/");
         bootstrap.setListingAllowed(true);
         router.attach("/bootstrap/", bootstrap);
+        router.attach("/demo/bootstrap/", bootstrap);
         Directory javascripts = new Directory(getContext(), "clap://javascripts");
         javascripts.setListingAllowed(true);
-        router.attach("/javascripts/", javascripts);
+        router.attach("/demo/javascripts/", javascripts);
         Directory stylesheets = new Directory(getContext(), "clap://stylesheets");
         stylesheets.setListingAllowed(true);
         router.attach("/stylesheets/", stylesheets);
+        router.attach("/demo/stylesheets/", stylesheets);
 
-        router.attach("/app", DemoApplicationResource.class, Template.MODE_STARTS_WITH);
+        router.attach("", DemoApplicationResource.class, Template.MODE_EQUALS);
+        router.attach("/", DemoApplicationResource.class, Template.MODE_EQUALS);
         DemoFilter demoFilter = new DemoFilter(getContext());
         demoFilter.setNext(router);
         return demoFilter;

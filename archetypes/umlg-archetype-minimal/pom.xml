@@ -12,7 +12,8 @@
     <artifactId>umlg-archetype-minimal</artifactId>
     <packaging>maven-archetype</packaging>
     <name>umlg archetype minimal</name>
-    <description>Generates a minimal Umlg application. No Umlg uml libraries and no rest interface is included.</description>
+    <description>Generates a minimal Umlg application. No Umlg uml libraries and no rest interface is included.
+    </description>
 
     <build>
         <extensions>
