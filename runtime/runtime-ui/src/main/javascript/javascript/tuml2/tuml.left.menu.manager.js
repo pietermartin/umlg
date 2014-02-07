@@ -26,15 +26,18 @@
         this.umlInstanceGroovyDiv = null;
         this.umlClassGroovyDiv = null;
         this.contextMetaDataFrom = null;
+        this.contextMetaDataTo = null;
         this.contextVertexId = null;
         this.tabContainer = null;
         this.queryToHighlightId = -1;
+        this.clickedProperty = null;
 
         function init() {
         }
 
         this.refresh = function (_contextMetaDataFrom, _contextMetaDataTo, _contextVertexId, propertyNavigatingTo) {
             this.contextMetaDataFrom = _contextMetaDataFrom;
+            this.contextMetaDataTo = _contextMetaDataTo;
             if (_contextVertexId !== undefined && _contextVertexId !== null) {
                 this.contextVertexId = decodeURIComponent(_contextVertexId);
             } else {
@@ -151,13 +154,15 @@
             var self = this;
             this.diagramsTreeViewDiv = $('<div />', {id: 'diagramTreeView'}).appendTo(this.umlDiagramDiv);
 
+            var url = '/' + tumlModelName + '/diagramPackages';
+
             $.ajax({
-                url: '/restAndJson/diagramPackages',
+                url: url,
                 type: 'GET',
                 dataType: "json",
                 contentType: "application/json",
                 success: function (result) {
-                    $(function() {
+                    $(function () {
                         self.diagramsTreeViewDiv.tree({
                             data: result,
                             selectable: true
@@ -165,7 +170,7 @@
 
                         self.diagramsTreeViewDiv.bind(
                             'tree.dblclick',
-                            function(e) {
+                            function (e) {
 
                                 event.preventDefault();
                                 event.stopImmediatePropagation();
@@ -186,17 +191,18 @@
         }
 
         this.createPropertiesMenu = function (propertyNavigatingTo) {
+            var self = this;
             var dropDownDiv = $('<div />', {class: 'dropdown'}).appendTo(this.umlPropertiesDiv);
             $('<a href="#" class="sr-only dropdown-toggle" data-toggle="dropdown">Users <b class="caret"></b></a>').appendTo(dropDownDiv);
             var ulMenu = $('<ul id="propertiesMenu" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1" />').appendTo(dropDownDiv);
-            var menuArray = createLeftMenuDataArray(this.contextMetaDataFrom, propertyNavigatingTo);
+            var menuArray = this.createLeftMenuDataArray(this.contextMetaDataFrom, this.contextMetaDataTo, propertyNavigatingTo);
 
             for (var i = 0; i < menuArray.length; i++) {
                 var value = menuArray[i];
                 var adjustedUri = value.tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), encodeURIComponent(this.contextVertexId));
                 adjustedUri = addUiToUrl(adjustedUri)
                 var li = $('<li />', {role: 'presentation'}).appendTo(ulMenu);
-                li.data("contextData", {name: value.name, uri: adjustedUri});
+                li.data("contextData", {name: value.name, uri: adjustedUri, property: value.property});
                 //Set the active link
                 if (value.active) {
                     li.addClass('active');
@@ -206,6 +212,11 @@
                     var link = $(e.target);
                     link.parent().addClass('active');
                     var contextData = link.parent().data("contextData");
+                    if (contextData.property != undefined) {
+                        self.clickedProperty = contextData.property;
+                    } else {
+                        self.clickedProperty = null;
+                    }
                     self.onMenuClick.notify({name: contextData.name, uri: removeUiFromUrl(contextData.uri)}, null, self);
                     e.preventDefault();
                     e.stopImmediatePropagation();
@@ -529,7 +540,13 @@
 
         }
 
-        function createLeftMenuDataArray(contextMetaDataFrom, propertyNavigatingTo) {
+        /**
+         * @param contextMetaDataFrom
+         * @param contextMetaDataTo needed for association class fake properties
+         * @param propertyNavigatingTo
+         * @returns {Array}
+         */
+        this.createLeftMenuDataArray = function(contextMetaDataFrom, contextMetaDataTo, propertyNavigatingTo) {
             var menuArray = [];
             if (contextMetaDataFrom.name !== tumlModelName) {
                 //add a menu item to the context object
@@ -538,18 +555,19 @@
 
             for (var i = 0; i < contextMetaDataFrom.properties.length; i++) {
                 var metaProperty = contextMetaDataFrom.properties[i];
-                if (metaProperty.inverseComposite || !((metaProperty.dataTypeEnum !== undefined && metaProperty.dataTypeEnum !== null) ||
-                    metaProperty.onePrimitive ||
-                    metaProperty.oneEnumeration ||
-                    metaProperty.manyEnumeration ||
-                    metaProperty.manyPrimitive ||
-                    metaProperty.name == 'id' ||
-                    metaProperty.name == 'uri')) {
+                if (metaProperty.inverseComposite || !(
+                    (metaProperty.dataTypeEnum !== undefined && metaProperty.dataTypeEnum !== null) ||
+                        metaProperty.onePrimitive ||
+                        metaProperty.oneEnumeration ||
+                        metaProperty.manyEnumeration ||
+                        metaProperty.manyPrimitive ||
+                        metaProperty.name == 'id' ||
+                        metaProperty.name == 'uri')
+                    ) {
 
                     var menuMetaProperty = {active: false};
 
-                    if (propertyNavigatingTo !== undefined && propertyNavigatingTo.qualifiedName == metaProperty.qualifiedName) {
-                        //This makes the current active property red in the menu
+                    if (this.clickedProperty !== null && this.clickedProperty.qualifiedName === metaProperty.qualifiedName) {
                         menuMetaProperty.active = true;
                     }
 
@@ -568,10 +586,11 @@
                     } else {
                         menuMetaProperty['multiplicityDisplay'] = '[' + metaProperty.lower + '..' + metaProperty.upper + ']';
                     }
+                    menuMetaProperty['property'] = metaProperty;
                     menuArray.push(menuMetaProperty);
                 }
+                menuArray.sort();
             }
-            ;
 
             function compare(a, b) {
                 if (a.name < b.name) return -1;

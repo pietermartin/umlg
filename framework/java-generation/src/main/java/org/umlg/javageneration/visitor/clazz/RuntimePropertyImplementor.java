@@ -489,7 +489,7 @@ public class RuntimePropertyImplementor {
         propertyOneEnumerationField.setType(new OJPathName("boolean"));
         // A one primitive property is a isManyToOne. Seeing as the
         // opposite end is null it defaults to many
-        propertyOneEnumerationField.setInitExp(Boolean.toString(isEnumeration && isManyToOne));
+        propertyOneEnumerationField.setInitExp(Boolean.toString(isEnumeration && (isManyToOne || isOneToOne)));
         ojLiteral.addToAttributeValues(propertyOneEnumerationField);
 
         OJField propertyManyEnumerationField = new OJField();

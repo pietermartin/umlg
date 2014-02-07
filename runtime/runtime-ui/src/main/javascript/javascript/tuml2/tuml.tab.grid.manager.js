@@ -131,12 +131,19 @@
             this.options['editable'] = false;
         }
 
-        this.refresh = function (result) {
+        this.refresh = function (result, gridDiv) {
             this.metaForDataTo = result.meta.to;
-            var tabDiv = $('#' + this.metaForDataTo.name + "Lookup");
+            var tabDiv = gridDiv;
+            var windowHeight;
+            if (this instanceof Tuml.TumlManyComponentGridManager) {
+                windowHeight = 600;
+            } else {
+                windowHeight = $('.ui-layout-center').height() - 188;
+            }
             $('<div id="serverErrorMsg" />').appendTo(tabDiv);
-            $('<div id="myGridLookup' + this.metaForDataTo.name + '" style="width:auto;height:90%;"></div>').appendTo(tabDiv);
-            $('<div id="pagerLookup' + this.metaForDataTo.name + '" style="width:auto;height:20px;"></div>').appendTo(tabDiv);
+            $('<div />', {id: 'myGridLookup' + this.metaForDataTo.name, style: 'width:auto;height:' + windowHeight + 'px;'}).appendTo(tabDiv);
+            $('<div />', {id: 'pagerLookup' + this.metaForDataTo.name, style: 'width:auto;height:20px;'}).appendTo(tabDiv);
+
             //Do not remove the contextMenu for lookups
             if (!(this instanceof TumlForManyLookupGridManager)) {
                 $('#contextMenu' + this.metaForDataTo.name).remove();
@@ -957,7 +964,6 @@
             windowHeight = $('.ui-layout-center').height() - 188;
         }
         $('<div />', {id: 'myGrid' + this.metaForDataTo.name, style: 'width:auto;height:' + windowHeight + 'px;', class: 'umlg-slick-grid'}).appendTo(tabDiv);
-//        $('<div />', {id: 'myGrid' + this.metaForDataTo.name, style: 'width:auto;height:auto;', class: 'umlg-slick-grid'}).appendTo(tabDiv);
         $('<div />', {id: 'pager' + this.metaForDataTo.name, style: 'width:auto;height:20px;'}).appendTo(tabDiv);
 
         $('#contextMenu' + this.metaForDataTo.name).remove();
@@ -1059,8 +1065,15 @@
         //from the root there is no association
         if (this.contextVertexId !== null && property.associationClassOne && property.memberEndOfAssociationClass) {
             return true;
-        } else if (this.contextVertexId != null && property.associationClassOne) {
-            return true;
+        } else if (this.contextVertexId != null && property.associationClassOne && !property.associationClassProperty) {
+            //This is for when navigating to a property or the association class that other association class properties do not display in the grid.
+            //As they are read only and complex it just clutters the grid.
+            //To see them the user must navigate to them
+            if (this.propertyNavigatingTo !== undefined && this.propertyNavigatingTo.associationClassPropertyName === property.inverseAssociationClassPropertyName) {
+                return true;
+            } else {
+                return false;
+            }
         } else if (!property.composite && !property.inverseComposite && property.lower > 0 && !property.associationClassOne) {
             return true;
         } else if (property.associationClassProperty) {
@@ -1088,19 +1101,21 @@
             var property = this.localMetaForData.properties[i];
             if (this.isPropertyForGrid(property)) {
 
-                //Place the id column first
                 if (property.name == "id") {
-                    this.columns.splice(0, 0, {
+                    var options = {
                         id: property.name,
                         name: property.name,
                         field: property.name,
                         sortable: true
-                    });
+                    };
+
                     if (this.propertyNavigatingTo !== undefined && this.propertyNavigatingTo.ordered) {
                         //This is for slickgrid's row move/drag plugin
-                        this.columns[0].behavior = "selectAndMove";
-                        this.columns[0].cssClass = "cell-reorder";
+                        options.behavior = "selectAndMove";
+                        options.cssClass = "cell-reorder";
                     }
+                    this.columns.push(options);
+
                 } else {
                     this.columns.push({
                         id: property.name,
@@ -1122,6 +1137,26 @@
                 }
             }
         }
+        //sort the columns
+        this.columns.sort(function(a, b) {
+
+            if (a.name === "id") {
+                return -1;
+            }
+            if (b.name === "id") {
+                return 1;
+            }
+
+            if ((a.editor === undefined || a.editor === null) && (b.editor !== undefined && b.editor !== null)) {
+                return 1;
+            } else if ((b.editor === undefined || b.editor === null) && (a.editor !== undefined && a.editor !== null)) {
+                return -1;
+            } else if ((a.editor === undefined || a.editor === null) && (b.editor === undefined || b.editor === null)) {
+                return -1;
+            }
+
+            return a.name.localeCompare(b.name);
+        });
     };
 
     TumlBaseGridManager.prototype.instantiateGrid = function () {

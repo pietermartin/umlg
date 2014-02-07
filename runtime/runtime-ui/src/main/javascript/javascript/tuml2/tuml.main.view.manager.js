@@ -125,8 +125,15 @@
             if (this.contextVertexId !== -1 && contextChanged) {
                 //This is the default query tab, always open
                 addDefaultQueryTab();
+            } else {
+//                this.addQueryButtons();
             }
 
+            if (!this.tumlTabViewManagers[0].activated) {
+                this.tumlTabViewManagers[0].activated = true;
+                this.tumlTabViewManagers[0].activeOpenTabsGrid();
+                this.tumlTabViewManagers[0].addOrRemoveSelectButton();
+            }
             this.tumlTabViewManagers[0].open = true;
 
             this.tabContainer.find('a:first').tab('show');
@@ -139,13 +146,13 @@
         this.handleMany = function (metaDataNavigatingFrom, metaDataNavigatingTo, result) {
             var newContextVertexId = retrieveVertexId(this.tumlUri);
             //Check if we coming from a one
-            var wasOne = false;
-            for (var j = 0; j < this.tumlTabViewManagers.length; j++) {
-                var tumlTabViewManager = this.tumlTabViewManagers[j];
-                if (tumlTabViewManager instanceof  Tuml.TumlTabOneViewManager) {
-                    wasOne = true;
-                }
-            }
+//            var wasOne = false;
+//            for (var j = 0; j < this.tumlTabViewManagers.length; j++) {
+//                var tumlTabViewManager = this.tumlTabViewManagers[j];
+//                if (tumlTabViewManager instanceof  Tuml.TumlTabOneViewManager) {
+//                    wasOne = true;
+//                }
+//            }
             var savedTumlTabViewManagers = this.clearTabsOnAddOneOrMany(newContextVertexId);
 //            if (!contextChanged && wasOne) {
 //                this.addButtons();
@@ -173,7 +180,7 @@
                     var newContextVertexId = result[i].data.id;
                     var savedTumlTabViewManagers = this.clearTabsOnAddOneOrMany(newContextVertexId);
 
-                    //If property is a one then there is n navigating from
+                    //If property is a one then there is no navigating from
                     leftMenuManager.refresh(metaDataNavigatingTo, metaDataNavigatingTo, this.contextVertexId);
                     //Do not call refreshInternal as it creates all tabs for the meta data
                     var tumlTabViewManager = this.createTabContainer(tuml.tab.Enum.Properties, result[i], this.tumlUri, {forLookup: false, forManyComponent: false, isOne: true, forCreation: false}, this.propertyNavigatingTo);
@@ -221,6 +228,7 @@
                 for (var i = 0; i < self.tumlTabViewManagers.length; i++) {
                     var tumlTabViewManager = self.tumlTabViewManagers[i];
                     if (previousTabContentDiv[0] !== undefined && previousTabContentDiv[0].id == tumlTabViewManager.getTabId()) {
+                        tumlTabViewManager.isOpen = false;
                         if (tumlTabViewManager.tumlTabGridManager !== undefined || tumlTabViewManager.tumlTabOneManager !== undefined) {
                             tumlTabViewManager.open = false;
                             break;
@@ -239,14 +247,18 @@
 
                     if (tumlTabViewManager.tumlTabViewManagers.length === 0) {
                         tumlTabViewManager.open = true;
-                    }
+                    };
                     break;
-                }
+                };
+            };
+            tumlTabViewManagerClickedOn.isOpen = true;
+            if (!tumlTabViewManagerClickedOn.activated) {
+                tumlTabViewManagerClickedOn.activeOpenTabsGrid();
+                tumlTabViewManagerClickedOn.addOrRemoveSelectButton();
             }
+            tumlTabViewManagerClickedOn.activated = false;
 
-            tumlTabViewManagerClickedOn.activeOpenTabsGrid();
-
-        }
+        };
 
         this.handleOneForCreation = function (metaDataNavigatingFrom, metaDataNavigatingTo, result) {
             //This is for creation of the one
@@ -547,13 +559,9 @@
                 if (query.id === -1) {
                     this.tumlTabViewManagers.push(tumlTabViewManagerQuery);
                     reorderTabs();
-//                    this.tabContainer.tabs("option", "active", this.tumlTabViewManagers.length - 1);
-//                    this.tabContainer.children('ul').find('li:eq(' + this.tumlTabViewManagers.length - 1 + ') a').tab('show')
                 } else {
                     this.tumlTabViewManagers.splice(this.tumlTabViewManagers.length - 1, 0, tumlTabViewManagerQuery);
                     reorderTabs();
-//                    this.tabContainer.tabs("option", "active", this.tumlTabViewManagers.length - 2);
-//                    this.tabContainer.children('ul').find('li:eq(' + this.tumlTabViewManagers.length - 2 + ') a').tab('show')
                 }
 
                 tumlTabViewManagerQuery.createQuery(oclExecuteUri, query, post);

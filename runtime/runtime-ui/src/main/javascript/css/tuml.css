@@ -1,3 +1,8 @@
+/* to make the input add on with glyhicons display correct */
+.input-group-addon.glyphicon {
+    top: 0;
+}
+
 /* protect slickgrid from bootstrap */
 .slickgrid,
 .slickgrid *,

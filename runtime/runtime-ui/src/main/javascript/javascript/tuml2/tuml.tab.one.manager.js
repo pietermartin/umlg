@@ -204,22 +204,47 @@
                     if ($input !== undefined) {
                         if (property.dataTypeEnum != null && property.dataTypeEnum !== undefined) {
                             if (property.dataTypeEnum == 'Date') {
-                                $input.datepicker({
-                                    buttonImageOnly: true,
-                                    dateFormat: "yy-mm-dd"
-                                });
+
+                                //this is called 'freezing your closures', help to get the property into the closure
+                                (function(p){
+                                    $input.datepicker({
+                                        buttonImageOnly: true,
+                                        dateFormat: "yy-mm-dd",
+                                        onClose: function (dateText, inst){
+                                            self.synchronizeModel(p);
+                                        }
+                                    });
+                                })(property);
+
                                 $input.parent().append('<label for="' + $input.attr('id') + '" class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></label>');
                             } else if (property.dataTypeEnum == 'Time') {
-                                $input.timepicker({
-                                    buttonImageOnly: true
-                                });
+
+                                //this is called 'freezing your closures', help to get the property into the closure
+                                (function(p){
+                                    $input.timepicker({
+                                        buttonImageOnly: true,
+                                        onClose: function (dateText, inst){
+                                            self.synchronizeModel(p);
+                                        }
+                                    });
+                                })(property);
+
                                 $input.parent().append('<label for="' + $input.attr('id') + '" class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></label>');
+
                             } else if (property.dataTypeEnum == 'DateTime') {
-                                $input.datetimepicker({
-                                    buttonImageOnly: true,
-                                    dateFormat: "yy-mm-dd",
-                                    timeFormat: "hh:mm:ss"
-                                });
+
+                                //this is called 'freezing your closures', help to get the property into the closure
+                                (function(p){
+                                    $input.datetimepicker({
+                                        buttonImageOnly: true,
+                                        dateFormat: "yy-mm-dd",
+                                        timeFormat: "hh:mm:ss",
+                                        onClose: function (dateText, inst){
+                                            self.synchronizeModel(p);
+                                        }
+                                    });
+                                })(property);
+
                                 $input.parent().append('<label for="' + $input.attr('id') + '" class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></label>');
                             }
                         }

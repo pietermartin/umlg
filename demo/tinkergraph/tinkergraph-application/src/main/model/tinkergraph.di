@@ -16,12 +16,18 @@
     <availablePage>
       <emfPageIdentifier href="tinkergraph.notation#_b2mucIl2EeOj_-E07LlldA"/>
     </availablePage>
+    <availablePage>
+      <emfPageIdentifier href="tinkergraph.notation#_iXakwItSEeOBneXybjuOcw"/>
+    </availablePage>
   </pageList>
   <sashModel currentSelection="//@sashModel/@windows.0/@children.0">
     <windows>
       <children xsi:type="di:TabFolder">
         <children>
           <emfPageIdentifier href="tinkergraph.notation#_b2mucIl2EeOj_-E07LlldA"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="tinkergraph.notation#_iXakwItSEeOBneXybjuOcw"/>
         </children>
       </children>
     </windows>

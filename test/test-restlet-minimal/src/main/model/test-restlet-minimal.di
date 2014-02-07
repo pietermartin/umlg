@@ -24,18 +24,6 @@
     <windows>
       <children xsi:type="di:TabFolder">
         <children>
-          <emfPageIdentifier href="test-restlet-minimal.notation#_EtfRsFVzEeKYaem_7BA6sA"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="test-restlet-minimal.notation#_MPwJQFVzEeKYaem_7BA6sA"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="test-restlet-minimal.notation#_PabVgFVzEeKYaem_7BA6sA"/>
-        </children>
-        <children>
-          <emfPageIdentifier href="test-restlet-minimal.notation#_rJlEwO6gEeKXi9pM4yg14w"/>
-        </children>
-        <children>
           <emfPageIdentifier href="test-restlet-minimal.notation#_wyLsAO6gEeKXi9pM4yg14w"/>
         </children>
         <children>

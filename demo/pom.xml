@@ -11,8 +11,8 @@
     <packaging>pom</packaging>
     <name>umlg demo pom</name>
     <modules>
-        <module>demo-application</module>
-        <module>demo-quick-preview</module>
         <module>tinkergraph</module>
+        <module>demo-quick-preview</module>
+        <module>demo-application</module>
   </modules>
 </project>

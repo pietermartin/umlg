@@ -19,6 +19,15 @@
         this.parentTabContainer = tabContainer;
         this.parentTabContainerManager = null;
 
+        //query footer button divs
+        this.queryExecuteButtonFormGroupDiv = null;
+        this.queryQueryNameFormGroupDiv = null;
+        this.querySaveInstanceFormGroupDiv = null;
+        this.querySaveClassFormGroupDiv = null;
+        this.queryCancelButtonFormGroupDiv = null;
+        this.queryDeleteButtonFormGroupDiv = null;
+        this.executeButton = null;
+
         this.destroyTabContainer = function () {
             this.clearAllTabs();
             if (this.tabContainer !== null) {
@@ -129,31 +138,28 @@
     }
 
     TumlTabContainerManager.prototype.removeSelectButton = function () {
-        var tabsNav = this.parentTabContainer.find('.ui-tabs-nav');
+        var buttonPullRightDiv = this.tabLayoutTabFooterDiv.find('.pull-right');
         //Remove all existing open many buttons
-        var buttons = tabsNav.find('.ui-button');
+        var buttons = buttonPullRightDiv.find('.ui-button');
         for (var i = 0; i < buttons.length; i++) {
             var button = buttons[i];
             if (button.id.indexOf('OpenMany', this.length - 'OpenMany'.length) !== -1) {
-                //button.remove() this does not work in firefox
                 $('#' + button.id).remove();
             }
         }
     }
 
-    TumlTabContainerManager.prototype.addSelectButton = function () {
-        var self = this;
-        var tabsNav = this.parentTabContainer.find('.ui-tabs-nav');
-
+    TumlTabContainerManager.prototype.addSelectButton = function (tabTitleName, tabContext) {
         //Remove all existing open many buttons
         this.removeSelectButton();
-
-        var tabContainerButton = tabsNav.find('#tabcontainer-button');
-        var chooseOpenMany = $('<button />', {id: this.getTabId() + 'OpenMany'}).text('Open ' + this.tabTitleName).prependTo(tabContainerButton);
+        var buttonPullRightDiv = this.tabLayoutTabFooterDiv.find('.pull-right');
+        var chooseOpenMany = $('<button />', {type: "button", id: this.getTabId() + 'OpenMany', class: 'btn btn-primary umlg-button'}).prependTo(buttonPullRightDiv);
+        $('<span class="glyphicon glyphicon-ok"></span>').appendTo(chooseOpenMany);
+        $('<span />').text(' Select ' + tabTitleName).appendTo(chooseOpenMany);
         chooseOpenMany.button().click(
             function (event) {
                 if (Slick.GlobalEditorLock.commitCurrentEdit()) {
-                    self.openNonCompositeMany(self.propertyNavigatingTo, self.metaForData.to.qualifiedName);
+                    tabContext.openNonCompositeMany(tabContext.propertyNavigatingTo, tabContext.metaForData.to.qualifiedName);
                 }
                 event.preventDefault();
             }
@@ -185,6 +191,169 @@
 
     }
 
+    TumlTabContainerManager.prototype.addQueryButtons = function(query) {
+
+        var tabFooter = this.tabLayoutTabFooterDiv;
+        var queryFormDiv = $('<div />', {class: 'form-inline', role: 'form'}).appendTo(tabFooter);
+        //Create a split button for the execute
+        this.queryExecuteButtonFormGroupDiv = $('<div />', {id: 'queryExecuteButtonFormGroupDiv', class: 'form-group'}).appendTo(queryFormDiv);
+        var btnGroup = $('<div />', {class: 'btn-group dropup'}).appendTo(this.queryExecuteButtonFormGroupDiv);
+        this.executeButton = $('<button type="button" id="executeButton" class="btn btn-success umlg-button" />').appendTo(btnGroup);
+        $('<span class="glyphicon glyphicon-play-circle"></span>').appendTo(executeButton);
+        $('<span />').text(' Execute ' + query.type.toUpperCase()).appendTo(executeButton);
+        this.executeButton.val(query.type.toUpperCase());
+        var splitButton = $('<button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">').appendTo(btnGroup);
+        $('<span class="caret"></span>').appendTo(splitButton);
+        var ul = $('<ul class="dropdown-menu" role="menu">').appendTo(btnGroup);
+
+        $('<li><a href="#">OCL</a></li>').appendTo(ul);
+        $('<li><a href="#">GREMLIN</a></li>').appendTo(ul);
+        $('<li><a href="#">NATIVE</a></li>').appendTo(ul);
+
+        ul.find("li a").click(function () {
+            executeButton.text('Execute ' + $(this).text());
+            executeButton.val($(this).text());
+        });
+
+        var querySelectTypeFormGroupDiv = $('<div />', {class: 'form-group'}).appendTo(queryFormDiv);
+        $('<label />', {class: 'sr-only', for: this.queryTabDivName + '_' + 'ExecuteButton'}).text('this is hidden').appendTo(querySelectTypeFormGroupDiv);
+
+        var elementOnTheRight = $('<div />', {class: 'pull-right'}).appendTo(queryFormDiv);
+
+        if (isUmlgLib) {
+            this.queryQueryNameFormGroupDiv = $('<div />', {id: 'queryNameFormDiv', class: 'form-group'}).appendTo(elementOnTheRight);
+            var queryNameInput = $('<input >', {id: 'queryName', type: 'text', class: 'form-control'});
+            queryNameInput.val(query.name).appendTo(this.queryQueryNameFormGroupDiv);
+
+            this.querySaveInstanceFormGroupDiv = $('<div />', {id: 'saveInstanceFormGroup', class: 'form-group'}).appendTo(elementOnTheRight);
+            var saveInstanceButton = $('<button />', {id: 'saveInstanceQueryButton', class: 'form-control btn btn-primary umlg-button'}).appendTo(this.querySaveInstanceFormGroupDiv);
+            $('<span class="glyphicon glyphicon-save"></span>').appendTo(saveInstanceButton);
+            $('<span />').text(' save to instance').appendTo(saveInstanceButton);
+
+            this.querySaveClassFormGroupDiv = $('<div />', {id: 'saveClassFormGroup', class: 'form-group'}).appendTo(elementOnTheRight);
+            var saveClassButton = $('<button />', {id: 'saveClassQueryButton', class: 'form-control btn btn-primary umlg-button'}).appendTo(this.querySaveClassFormGroupDiv);
+            $('<span class="glyphicon glyphicon-save"></span>').appendTo(saveClassButton);
+            $('<span />').text(' save to class').appendTo(saveClassButton);
+
+            this.queryCancelButtonFormGroupDiv = $('<div />', {id: 'cancelButtonFormGroup', class: 'form-group'}).appendTo(elementOnTheRight);
+            var cancelButton = $('<button />', {id: 'cancelQueryButton', class: 'form-control btn btn-primary umlg-button'}).appendTo(this.queryCancelButtonFormGroupDiv);
+            $('<span class="glyphicon glyphicon-ban-circle"></span>').appendTo(cancelButton);
+            $('<span />').text(' cancel').appendTo(cancelButton);
+            this.queryDeleteButtonFormGroupDiv = $('<div />', {id: 'deleteButtonFormGroup', class: 'form-group'}).appendTo(elementOnTheRight);
+            var deleteButton = $('<button />', {id: 'deleteQueryButton', class: 'form-control btn btn-primary umlg-button'}).appendTo(this.queryDeleteButtonFormGroupDiv);
+            $('<span class="glyphicon glyphicon-remove"></span>').appendTo(deleteButton);
+            $('<span />').text(' delete').appendTo(deleteButton);
+        }
+    }
+
+    TumlTabContainerManager.prototype.showCorrectQueryButtons = function (query) {
+        var self = this;
+        //When the context remains the same but to a new property the footer gets destroyed and rebuild.
+        //In this case the query buttons and divs also need to be recreated
+        if (this.tabLayoutTabFooterDiv.find('.form-inline').length === 0)  {
+            this.addQueryButtons(query);
+        }
+        if (isUmlgLib) {
+            if (query.queryType === undefined) {
+                this.querySaveInstanceFormGroupDiv.show();
+                this.querySaveClassFormGroupDiv.show();
+                this.queryCancelButtonFormGroupDiv.hide();
+                this.queryDeleteButtonFormGroupDiv.hide();
+            } else if (query.queryType === 'instanceQuery') {
+                this.querySaveInstanceFormGroupDiv.show();
+                this.querySaveClassFormGroupDiv.hide();
+                this.queryCancelButtonFormGroupDiv.show();
+                this.queryDeleteButtonFormGroupDiv.show();
+            } else {
+                this.querySaveInstanceFormGroupDiv.hide();
+                this.querySaveClassFormGroupDiv.show();
+                this.queryCancelButtonFormGroupDiv.show();
+                this.queryDeleteButtonFormGroupDiv.show();
+            }
+        }
+        //Set the execute buttons name and val to reflect the query type
+        var executeButton = this.queryExecuteButtonFormGroupDiv.find('#executeButton');
+        executeButton.text('Execute ' + query.type.toUpperCase());
+        executeButton.val(query.type.toUpperCase());
+        executeButton.button().unbind("click");
+        executeButton.button().click(
+            function () {
+                self.executeQuery();
+            }
+        );
+
+        if (isUmlgLib) {
+            //Set the queries name
+            var queryNameInput = this.queryQueryNameFormGroupDiv.find('#queryName');
+            queryNameInput.val(query.name);
+
+            //Wire up the buttons to the correct tab
+            var saveInstanceButton = this.querySaveInstanceFormGroupDiv.find('#saveInstanceQueryButton');
+            saveInstanceButton.button().unbind("click");
+            saveInstanceButton.button().click(
+                function () {
+                    self.saveToInstance();
+                });
+
+            var saveClassButton = this.querySaveClassFormGroupDiv.find('#saveClassQueryButton');
+            saveClassButton.button().unbind("click");
+            saveClassButton.button().click(
+                function () {
+                    self.saveToClass();
+                });
+
+            var cancelButton = this.queryCancelButtonFormGroupDiv.find('#cancelQueryButton');
+            cancelButton.button().unbind("click");
+            cancelButton.button().click(
+                function () {
+                    self.cancelQuery();
+                }
+            );
+
+            var deleteButton = this.queryDeleteButtonFormGroupDiv.find('#deleteQueryButton');
+            deleteButton.button().unbind("click");
+            deleteButton.button().click(
+                function () {
+                    self.deleteQuery();
+                }
+            );
+        }
+    }
+
+    TumlTabContainerManager.prototype.executeQuery = function() {
+        this.getOpenQueryTabViewManager().tumlTabQueryManager.executeQuery();
+    }
+
+    TumlTabContainerManager.prototype.saveToInstance = function() {
+        this.getOpenQueryTabViewManager().tumlTabQueryManager.saveToInstance();
+    }
+
+    TumlTabContainerManager.prototype.saveToClass = function() {
+        this.getOpenQueryTabViewManager().tumlTabQueryManager.saveToClass();
+    }
+
+    TumlTabContainerManager.prototype.cancelQuery = function() {
+        this.getOpenQueryTabViewManager().tumlTabQueryManager.cancelQuery();
+    }
+
+    TumlTabContainerManager.prototype.deleteQuery = function() {
+        this.getOpenQueryTabViewManager().tumlTabQueryManager.deleteQuery();
+    }
+
+    TumlTabContainerManager.prototype.getOpenQueryTabViewManager = function() {
+        var tumlQueryTabViewManager = null;
+        for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
+            if (this.tumlTabViewManagers[i].isOpen) {
+                tumlQueryTabViewManager = this.tumlTabViewManagers[i];
+                break;
+            }
+        }
+        if (!(tumlQueryTabViewManager instanceof Tuml.TumlTabQueryViewManager)) {
+            throw 'Expecting Tuml.TumlTabQueryViewManager';
+        }
+        return tumlQueryTabViewManager;
+    }
+
     TumlTabContainerManager.prototype.updateDataModelForOneToOne = function (fakeId, fieldName, one) {
         this.parentTabContainerManager.updateDataModelForOneToOne(fakeId, fieldName, one);
     }
@@ -192,6 +361,8 @@
     TumlTabContainerManager.prototype.updateDataModelForOneToOneForUpdatedItem = function (qualifiedName, id, displayName, fieldName, one) {
         this.parentTabContainerManager.updateDataModelForOneToOneForUpdatedItem(qualifiedName, id, displayName, fieldName, one);
     }
+
+
 
     TumlTabContainerManager.prototype.doInternalCancel = function () {
         //Save the child's backedup data into the component's cell
@@ -233,7 +404,7 @@
             }
         }
         this.destroyTabContainer();
-        if (this instanceof Tuml.TumlTabManyViewManager) {
+        if (this instanceof Tuml.TumlTabManyViewManager || this instanceof Tuml.TumlTabOneViewManager) {
 
             var parentPanelPanelDefault = $("#" + this.parentTabContainerManager.getTabId() + "panelPanelDefault");
             var parentTabContent = parentPanelPanelDefault.find('.tab-content');
@@ -243,7 +414,13 @@
             parentTabFooter.show();
             parentPanelPanelDefault.children('.umlg-panel-body.panel-body').height(height - 10);
 
-            this.tumlTabGridManager.active = true;
+            if (this instanceof Tuml.TumlTabManyViewManager) {
+                if (this.tumlTabGridManager != undefined) {
+                    this.tumlTabGridManager.active = true;
+                } else {
+                    throw 'Illegal state, Tuml.TumlTabManyViewManager but this.tumlTabGridManager is undefined.';
+                }
+            }
         }
         //enable the save button
         this.parentTabContainerManager.enableButtons();
@@ -392,7 +569,7 @@
     /**
      * @param item
      * @param metaDataTo
-     * @param skip only used true for the first time the mthod is called as the root item is neither a component nor an association class
+     * @param skip only used true for the first time the method is called as the root item is neither a component nor an association class
      */
     TumlTabContainerManager.prototype.clearComponentAndAssociationClassTmpId = function (item, metaDataTo, skip) {
         //Need to update the id's to the tmpId as the id no longer exist on a rolled back transaction
@@ -467,17 +644,23 @@
             var tumlTabViewManager = this.tumlTabViewManagers[i];
             tumlTabViewManager.activeOpenTabsGrid();
         }
+    }
+
+    TumlTabContainerManager.prototype.addOrRemoveSelectButton = function () {
         if (this.propertyNavigatingTo !== undefined && this.propertyNavigatingTo !== null && !this.propertyNavigatingTo.associationClassOne && !this.propertyNavigatingTo.composite &&
             (this.propertyNavigatingTo.upper === -1 || this.propertyNavigatingTo.upper > 1) && !this.oneManyOrQuery.forLookup) {
 
-            this.addSelectButton();
+            this.parentTabContainerManager.addSelectButton(this.tabTitleName, this);
         } else {
-            this.removeSelectButton();
+            if (this.tabLayoutTabFooterDiv !== undefined) {
+                this.removeSelectButton();
+            }
         }
     }
 
+
     TumlTabContainerManager.prototype.getTabId = function () {
-        alert('this must be overriden!');
+        alert('this must be overridden!');
     }
 
     TumlTabContainerManager.prototype.removeMultiplicityWarningHeader = function () {

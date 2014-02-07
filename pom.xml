@@ -36,12 +36,12 @@
 
 
     <modules>
-        <module>archetypes</module>
-        <module>eclipselib</module>
         <module>framework</module>
         <module>runtime</module>
-        <module>test</module>
+        <module>archetypes</module>
         <module>demo</module>
+        <module>eclipselib</module>
+        <module>test</module>
     </modules>
     <build>
         <pluginManagement>

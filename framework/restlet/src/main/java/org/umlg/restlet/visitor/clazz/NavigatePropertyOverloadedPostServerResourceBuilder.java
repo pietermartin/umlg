@@ -296,9 +296,12 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
         forConcreteClassifiers.getBody().addToStatements("result.append(\"\\\"qualifiedName\\\": \\\"" + pWrap.getQualifiedName() + "\\\"\")");
         forConcreteClassifiers.getBody().addToStatements("result.append(\", \\\"to\\\": \")");
 
-        OJIfStatement ifClassInstanceOf = new OJIfStatement();
-        forConcreteClassifiers.getBody().addToStatements(ifClassInstanceOf);
+        OJIfStatement ifClassInstanceOf = null;
         Set<Classifier> concreteImplementations = UmlgClassOperations.getConcreteImplementations((Classifier) pWrap.getType());
+        if (!concreteImplementations.isEmpty()) {
+            ifClassInstanceOf = new OJIfStatement();
+            forConcreteClassifiers.getBody().addToStatements(ifClassInstanceOf);
+        }
         boolean first = true;
         for (Classifier concreteImplementation : concreteImplementations) {
             OJBlock ojIfBlock;
@@ -316,12 +319,16 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
             ojIfBlock.addToStatements("result.append(\"}\")");
 
         }
+
+
         OJIfStatement ifLast = new OJIfStatement("count++ == resultMap.size()");
         ifLast.addToThenPart("result.append(\"}\")");
         ifLast.addToElsePart("result.append(\"},\")");
         forConcreteClassifiers.getBody().addToStatements(ifLast);
 
-        ifClassInstanceOf.addToElsePart("throw new IllegalStateException(\"Unknown type \" + baseClass.getName())");
+        if (!concreteImplementations.isEmpty()) {
+            ifClassInstanceOf.addToElsePart("throw new IllegalStateException(\"Unknown type \" + baseClass.getName())");
+        }
         jsonResultBlock.addToStatements("result.append(\"]\")");
         jsonResultBlock.addToStatements("return new " + UmlgRestletGenerationUtil.JsonRepresentation.getLast() + "(result.toString())");
 

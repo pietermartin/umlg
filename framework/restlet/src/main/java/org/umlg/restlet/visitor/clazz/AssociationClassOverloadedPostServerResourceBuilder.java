@@ -544,9 +544,15 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
                 annotatedClass.addToImports(UmlgClassOperations.getPathName(concreteClassifierTo));
 
                 block.addToStatements("json.append(\"{\")");
-
                 block.addToStatements("json.append(\" \\\"meta\\\" : {\")");
-                block.addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + pWrap.getQualifiedName() + "\\\"\")");
+
+
+                if (!asAssociationClass) {
+                    block.addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + pWrap.getQualifiedName() + "AC\\\"\")");
+                } else {
+                    block.addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + pWrap.getQualifiedName() + "\\\"\")");
+                }
+
 
                 // The execute ocl query resource is only required if the below
                 // visitor is available

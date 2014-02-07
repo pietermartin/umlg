@@ -10,7 +10,6 @@
 
         var tumlQueryGridManager;
         var codeMirror;
-        var executeButton;
         this.instanceQueryUri = instanceQueryUri;
         this.classQueryUri = classQueryUri;
         if (queryId !== undefined) {
@@ -26,7 +25,7 @@
         this.executeQuery = function () {
             var self = this;
             $.ajax({
-                url: this.oclExecuteUri + '?query=' + codeMirror.getValue() + '&type=' + executeButton.val(),
+                url: this.oclExecuteUri + '?query=' + codeMirror.getValue() + '&type=' + this.tumlTabViewManager.parentTabContainerManager.executeButton.val(),
                 type: "GET",
                 contentType: "application/json",
                 success: function (data) {
@@ -191,72 +190,74 @@
 
         }
 
-        this.showCorrectButtons = function () {
-            var self = this;
-            if (this.query.queryType === undefined) {
-                this.querySaveInstanceFormGroupDiv.show();
-                this.querySaveClassFormGroupDiv.show();
-                this.queryCancelButtonFormGroupDiv.hide();
-                this.queryDeleteButtonFormGroupDiv.hide();
-            } else if (this.query.queryType === 'instanceQuery') {
-                this.querySaveInstanceFormGroupDiv.show();
-                this.querySaveClassFormGroupDiv.hide();
-                this.queryCancelButtonFormGroupDiv.show();
-                this.queryDeleteButtonFormGroupDiv.show();
-            } else {
-                this.querySaveInstanceFormGroupDiv.hide();
-                this.querySaveClassFormGroupDiv.show();
-                this.queryCancelButtonFormGroupDiv.show();
-                this.queryDeleteButtonFormGroupDiv.show();
-            }
-
-            //Set the execute buttons name and val to reflect the query type
-            executeButton = this.queryExecuteButtonFormGroupDiv.find('#executeButton');
-            executeButton.text('Execute ' + this.query.type.toUpperCase());
-            executeButton.val(this.query.type.toUpperCase());
-            executeButton.button().unbind("click");
-            executeButton.button().click(
-                function () {
-                    self.executeQuery();
-                }
-            );
-
-            //Set the queries name
-            var queryNameInput = this.queryQueryNameFormGroupDiv.find('#queryName');
-            queryNameInput.val(this.query.name);
-
-            //Wire up the buttons to the correct tab
-            var saveInstanceButton = this.querySaveInstanceFormGroupDiv.find('#saveInstanceQueryButton');
-            saveInstanceButton.button().unbind("click");
-            saveInstanceButton.button().click(
-                function () {
-                    self.saveToInstance();
-                });
-
-            var saveClassButton = this.querySaveClassFormGroupDiv.find('#saveClassQueryButton');
-            saveClassButton.button().unbind("click");
-            saveClassButton.button().click(
-                function () {
-                    self.saveToClass();
-                });
-
-            var cancelButton = this.queryCancelButtonFormGroupDiv.find('#cancelQueryButton');
-            cancelButton.button().unbind("click");
-            cancelButton.button().click(
-                function () {
-                    self.cancelQuery();
-                }
-            );
-
-            var deleteButton = this.queryDeleteButtonFormGroupDiv.find('#deleteQueryButton');
-            deleteButton.button().unbind("click");
-            deleteButton.button().click(
-                function () {
-                    self.deleteQuery();
-                }
-            );
-
-        }
+//        this.showCorrectButtons = function () {
+//            var self = this;
+//            if (isUmlgLib) {
+//                if (this.query.queryType === undefined) {
+//                    this.querySaveInstanceFormGroupDiv.show();
+//                    this.querySaveClassFormGroupDiv.show();
+//                    this.queryCancelButtonFormGroupDiv.hide();
+//                    this.queryDeleteButtonFormGroupDiv.hide();
+//                } else if (this.query.queryType === 'instanceQuery') {
+//                    this.querySaveInstanceFormGroupDiv.show();
+//                    this.querySaveClassFormGroupDiv.hide();
+//                    this.queryCancelButtonFormGroupDiv.show();
+//                    this.queryDeleteButtonFormGroupDiv.show();
+//                } else {
+//                    this.querySaveInstanceFormGroupDiv.hide();
+//                    this.querySaveClassFormGroupDiv.show();
+//                    this.queryCancelButtonFormGroupDiv.show();
+//                    this.queryDeleteButtonFormGroupDiv.show();
+//                }
+//            }
+//            //Set the execute buttons name and val to reflect the query type
+//            executeButton = this.queryExecuteButtonFormGroupDiv.find('#executeButton');
+//            executeButton.text('Execute ' + this.query.type.toUpperCase());
+//            executeButton.val(this.query.type.toUpperCase());
+//            executeButton.button().unbind("click");
+//            executeButton.button().click(
+//                function () {
+//                    self.executeQuery();
+//                }
+//            );
+//
+//            if (isUmlgLib) {
+//                //Set the queries name
+//                var queryNameInput = this.queryQueryNameFormGroupDiv.find('#queryName');
+//                queryNameInput.val(this.query.name);
+//
+//                //Wire up the buttons to the correct tab
+//                var saveInstanceButton = this.querySaveInstanceFormGroupDiv.find('#saveInstanceQueryButton');
+//                saveInstanceButton.button().unbind("click");
+//                saveInstanceButton.button().click(
+//                    function () {
+//                        self.saveToInstance();
+//                    });
+//
+//                var saveClassButton = this.querySaveClassFormGroupDiv.find('#saveClassQueryButton');
+//                saveClassButton.button().unbind("click");
+//                saveClassButton.button().click(
+//                    function () {
+//                        self.saveToClass();
+//                    });
+//
+//                var cancelButton = this.queryCancelButtonFormGroupDiv.find('#cancelQueryButton');
+//                cancelButton.button().unbind("click");
+//                cancelButton.button().click(
+//                    function () {
+//                        self.cancelQuery();
+//                    }
+//                );
+//
+//                var deleteButton = this.queryDeleteButtonFormGroupDiv.find('#deleteQueryButton');
+//                deleteButton.button().unbind("click");
+//                deleteButton.button().click(
+//                    function () {
+//                        self.deleteQuery();
+//                    }
+//                );
+//            }
+//        }
 
         this.createQuery = function (queryTabDivName, oclExecuteUri, query, post) {
             var self = this;
@@ -273,75 +274,25 @@
             var queryPanelBody = $('<div />', {class: 'panel-body'}).appendTo(queryPanel);
             //Create a horizontal inline form for the queries details
             var tabFooter = this.tumlTabViewManager.parentTabContainerManager.tabLayoutTabFooterDiv;
-            var queryFormDiv = tabFooter.find('.form-inline');
             this.queryExecuteButtonFormGroupDiv;
             this.queryQueryNameFormGroupDiv;
             this.querySaveInstanceFormGroupDiv;
             this.querySaveClassFormGroupDiv;
             this.queryCancelButtonFormGroupDiv;
             this.queryDeleteButtonFormGroupDiv;
-            if (queryFormDiv.length == 0) {
-                queryFormDiv = $('<div />', {class: 'form-inline', role: 'form'}).appendTo(tabFooter);
-                //Create a split button for the execute
-                this.queryExecuteButtonFormGroupDiv = $('<div />', {id: 'queryExecuteButtonFormGroupDiv', class: 'form-group'}).appendTo(queryFormDiv);
-                var btnGroup = $('<div />', {class: 'btn-group dropup'}).appendTo(this.queryExecuteButtonFormGroupDiv);
-                executeButton = $('<button type="button" id="executeButton" class="btn btn-success umlg-button" />').appendTo(btnGroup);
-                $('<span class="glyphicon glyphicon-play-circle"></span>').appendTo(executeButton);
-                $('<span />').text(' Execute ' + query.type.toUpperCase()).appendTo(executeButton);
-                executeButton.val(query.type.toUpperCase());
-                var splitButton = $('<button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">').appendTo(btnGroup);
-                $('<span class="caret"></span>').appendTo(splitButton);
-                var ul = $('<ul class="dropdown-menu" role="menu">').appendTo(btnGroup);
 
-                $('<li><a href="#">OCL</a></li>').appendTo(ul);
-                $('<li><a href="#">GREMLIN</a></li>').appendTo(ul);
-                $('<li><a href="#">NATIVE</a></li>').appendTo(ul);
-
-                ul.find("li a").click(function () {
-                    executeButton.text('Execute ' + $(this).text());
-                    executeButton.val($(this).text());
-                });
-
-                var querySelectTypeFormGroupDiv = $('<div />', {class: 'form-group'}).appendTo(queryFormDiv);
-                $('<label />', {class: 'sr-only', for: queryTabDivName + '_' + 'ExecuteButton'}).text('this is hidden').appendTo(querySelectTypeFormGroupDiv);
-
-                var elementOnTheRight = $('<div />', {class: 'pull-right'}).appendTo(queryFormDiv);
-
-                if (isUmlgLib) {
-                    this.queryQueryNameFormGroupDiv = $('<div />', {id: 'queryNameFormDiv', class: 'form-group'}).appendTo(elementOnTheRight);
-                    var queryNameInput = $('<input >', {id: 'queryName', type: 'text', class: 'form-control'});
-                    queryNameInput.val(query.name).appendTo(this.queryQueryNameFormGroupDiv);
-
-                    this.querySaveInstanceFormGroupDiv = $('<div />', {id: 'saveInstanceFormGroup', class: 'form-group'}).appendTo(elementOnTheRight);
-                    var saveInstanceButton = $('<button />', {id: 'saveInstanceQueryButton', class: 'form-control btn btn-primary umlg-button'}).appendTo(this.querySaveInstanceFormGroupDiv);
-                    $('<span class="glyphicon glyphicon-save"></span>').appendTo(saveInstanceButton);
-                    $('<span />').text(' save to instance').appendTo(saveInstanceButton);
-
-                    this.querySaveClassFormGroupDiv = $('<div />', {id: 'saveClassFormGroup', class: 'form-group'}).appendTo(elementOnTheRight);
-                    var saveClassButton = $('<button />', {id: 'saveClassQueryButton', class: 'form-control btn btn-primary umlg-button'}).appendTo(this.querySaveClassFormGroupDiv);
-                    $('<span class="glyphicon glyphicon-save"></span>').appendTo(saveClassButton);
-                    $('<span />').text(' save to class').appendTo(saveClassButton);
-
-                    this.queryCancelButtonFormGroupDiv = $('<div />', {id: 'cancelButtonFormGroup', class: 'form-group'}).appendTo(elementOnTheRight);
-                    var cancelButton = $('<button />', {id: 'cancelQueryButton', class: 'form-control btn btn-primary umlg-button'}).appendTo(this.queryCancelButtonFormGroupDiv);
-                    $('<span class="glyphicon glyphicon-ban-circle"></span>').appendTo(cancelButton);
-                    $('<span />').text(' cancel').appendTo(cancelButton);
-                    this.queryDeleteButtonFormGroupDiv = $('<div />', {id: 'deleteButtonFormGroup', class: 'form-group'}).appendTo(elementOnTheRight);
-                    var deleteButton = $('<button />', {id: 'deleteQueryButton', class: 'form-control btn btn-primary umlg-button'}).appendTo(this.queryDeleteButtonFormGroupDiv);
-                    $('<span class="glyphicon glyphicon-remove"></span>').appendTo(deleteButton);
-                    $('<span />').text(' delete').appendTo(deleteButton);
-                }
-            } else {
+            var queryFormDiv = tabFooter.find('.form-inline');
+            if (queryFormDiv.length !== 0) {
                 this.queryExecuteButtonFormGroupDiv = queryFormDiv.find('#queryExecuteButtonFormGroupDiv');
                 this.queryQueryNameFormGroupDiv = queryFormDiv.find('#queryNameFormDiv');
                 this.querySaveInstanceFormGroupDiv = queryFormDiv.find('#saveInstanceFormGroup');
                 this.querySaveClassFormGroupDiv = queryFormDiv.find('#saveClassFormGroup');
                 this.queryCancelButtonFormGroupDiv = queryFormDiv.find('#cancelButtonFormGroup');
                 this.queryDeleteButtonFormGroupDiv = queryFormDiv.find('#deleteButtonFormGroup');
+            } else {
+//                this.addQueryButtons();
+                this.tumlTabViewManager.parentTabContainerManager.addQueryButtons(this.query);
             }
-
-//            //make sure the
-//            queryFormDiv.hide();
 
             var windowHeight = $('.ui-layout-center').height() - 165;
             var layoutDiv = $('<div />', {id: 'queryLayoutDiv', style: 'height: ' + windowHeight + 'px; width" 100%; overflow: hidden;'});
@@ -370,12 +321,11 @@
                 matchBrackets: true,
                 mode: "text/x-groovy",
                 onKeyEvent: function (o, e) {
-                if ((e.which === 13 && e.altKey && e.type === "keydown") || (e.which === 13 && e.ctrlKey && e.type === "keydown")) {
-                    self.executeQuery();
-                    e.preventDefault();
-                }
-            }});
-//            codeMirror.setOption("theme", "3024-day");
+                    if ((e.which === 13 && e.altKey && e.type === "keydown") || (e.which === 13 && e.ctrlKey && e.type === "keydown")) {
+                        self.executeQuery();
+                        e.preventDefault();
+                    }
+                }});
 
             //Outer div for results
             var oclResult = $('<div />', {id: queryTabDivName + '_' + 'OclResult', class: 'oclresult'});
@@ -400,10 +350,10 @@
 
         }
 
-        this.synchronizeQuery = function(id) {
-            this.query.name = this.queryQueryNameFormGroupDiv.find('#queryName').val();
+        this.synchronizeQuery = function (id) {
+            this.query.name = this.tumlTabViewManager.parentTabContainerManager.queryQueryNameFormGroupDiv.find('#queryName').val();
             this.query.queryString = codeMirror.getValue();
-            this.query.queryEnum = executeButton.val();
+            this.query.queryEnum = this.tumlTabViewManager.parentTabContainerManager.executeButton.val();
             if (id !== undefined) {
                 this.query.id = id;
             }
