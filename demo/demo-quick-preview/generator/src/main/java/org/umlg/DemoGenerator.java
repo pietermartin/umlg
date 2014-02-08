@@ -15,8 +15,8 @@ public class DemoGenerator {
     public static void main(String[] args) throws URISyntaxException {
         JavaGenerator javaGenerator = new JavaGenerator();
         javaGenerator.generate(
-                new File("../application/src/main/model/umlg-demo1.uml"),
-                new File("../application"), DefaultVisitors.getDefaultJavaVisitors());
+                new File("demo/demo-quick-preview/application/src/main/model/umlg-demo1.uml"),
+                new File("demo/demo-quick-preview/application"), DefaultVisitors.getDefaultJavaVisitors());
 
     }
 

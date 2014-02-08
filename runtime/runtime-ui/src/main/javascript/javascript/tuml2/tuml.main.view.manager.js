@@ -38,6 +38,7 @@
         var contextChanged = true;
         this.globalOneToOneIndex = new GlobalOneToOneIndex();
         this.qualifiedName = null;
+        this.tumlActiveTabViewManager = null;
 
         this.setFocus = function (focusTo) {
             if (focusTo == Tuml.FocusEnum.LEFT_MENU) {
@@ -115,7 +116,7 @@
                 oclExecuteUri = "/" + tumlModelName + "/" + this.contextVertexId + "/oclExecuteQuery";
             }
             if (hasInstanceQuery(metaDataNavigatingTo, metaDataNavigatingFrom)) {
-                instanceQueryTumlUri = "/" + tumlModelName + "/basetumlwithquerys/" + this.contextVertexId + "/instanceQuery";
+                instanceQueryTumlUri = "/" + tumlModelName + "/baseumlgwithquerys/" + this.contextVertexId + "/instanceQuery";
             } else {
                 instanceQueryTumlUri = '';
             }
@@ -257,6 +258,12 @@
                 tumlTabViewManagerClickedOn.addOrRemoveSelectButton();
             }
             tumlTabViewManagerClickedOn.activated = false;
+            //Set the current open tab to not open
+            if (this.tumlActiveTabViewManager !== null) {
+                this.tumlActiveTabViewManager.isOpen = false;
+            }
+            this.tumlActiveTabViewManager = tumlTabViewManagerClickedOn;
+            this.tumlActiveTabViewManager.isOpen = true;
 
         };
 
@@ -531,7 +538,7 @@
                 savedTumlTabViewManagers.push(tumlTabViewManager);
             }
             return savedTumlTabViewManagers;
-        }
+        };
 
         this.addQueryTab = function (post, query) {
             //Check is there is already a tab open for this query
@@ -567,6 +574,11 @@
                 tumlTabViewManagerQuery.createQuery(oclExecuteUri, query, post);
                 tumlTabViewManagerQuery.showInlineForm();
 
+                if (this.tumlActiveTabViewManager !== null) {
+                    this.tumlActiveTabViewManager.isOpen = false;
+                }
+                this.tumlActiveTabViewManager = tumlTabViewManagerQuery;
+                this.tumlActiveTabViewManager.isOpen = true;
 
             } else {
                 //Just make the tab active
@@ -574,7 +586,7 @@
             }
             return tumlTabViewManagerQuery;
 
-        }
+        };
 
         this.addDiagramTab = function (treeNode) {
             //Check is there is already a tab open for this query

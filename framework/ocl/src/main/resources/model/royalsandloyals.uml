@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<uml:Package xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:uml="http://www.eclipse.org/uml2/3.0.0/UML" xmi:id="_6pUsMMHhEd2UNuYhQ_ApoA" name="tudresden">
+<uml:Package xmi:version="20110701" xmlns:xmi="http://www.omg.org/spec/XMI/20110701" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xmi:id="_6pUsMMHhEd2UNuYhQ_ApoA" name="tudresden">
   <packagedElement xmi:type="uml:Package" xmi:id="_AsKYYMHiEd2UNuYhQ_ApoA" name="ocl20">
     <packagedElement xmi:type="uml:Package" xmi:id="_BlraUMHiEd2UNuYhQ_ApoA" name="pivot">
       <packagedElement xmi:type="uml:Package" xmi:id="_Cff-QMHiEd2UNuYhQ_ApoA" name="examples">
@@ -113,8 +113,8 @@
             </ownedOperation>
             <ownedOperation xmi:id="_ZUJhQMVEEd2gxo2Yyu8isA" name="getServices">
               <ownedParameter xmi:id="_NjeDsMqCEd2SKu80i6SbVA" name="return" type="_bFF6cMVEEd2gxo2Yyu8isA" direction="return">
-                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Nj8vYMqDEd2SKu80i6SbVA" value="*"/>
                 <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_NSXQIMqDEd2SKu80i6SbVA"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Nj8vYMqDEd2SKu80i6SbVA" value="*"/>
               </ownedParameter>
             </ownedOperation>
           </packagedElement>
@@ -174,18 +174,18 @@
           <packagedElement xmi:type="uml:Association" xmi:id="_3XPEYMm4Ed23VbTmZ6CCEw" name="Customer CustomerCards" memberEnd="_5liH8Mm4Ed23VbTmZ6CCEw _6tqNoMm4Ed23VbTmZ6CCEw">
             <ownedEnd xmi:id="_5liH8Mm4Ed23VbTmZ6CCEw" name="owner" type="_VW-hEMVEEd2gxo2Yyu8isA" association="_3XPEYMm4Ed23VbTmZ6CCEw"/>
             <ownedEnd xmi:id="_6tqNoMm4Ed23VbTmZ6CCEw" name="cards" type="_fBpSwMVIEd2gxo2Yyu8isA" association="_3XPEYMm4Ed23VbTmZ6CCEw">
-              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_xFOxcMnREd23VbTmZ6CCEw" value="*"/>
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_w0PvIMnREd23VbTmZ6CCEw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_xFOxcMnREd23VbTmZ6CCEw" value="*"/>
             </ownedEnd>
           </packagedElement>
           <packagedElement xmi:type="uml:Association" xmi:id="_1e-1YMnQEd23VbTmZ6CCEw" name="Customers LoyaltyPrograms" memberEnd="_3Q1NgMnQEd23VbTmZ6CCEw _4ns50MnQEd23VbTmZ6CCEw">
             <ownedEnd xmi:id="_3Q1NgMnQEd23VbTmZ6CCEw" name="participants" type="_VW-hEMVEEd2gxo2Yyu8isA" association="_1e-1YMnQEd23VbTmZ6CCEw">
-              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_8DMwUMnQEd23VbTmZ6CCEw" value="*"/>
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_7t4noMnQEd23VbTmZ6CCEw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_8DMwUMnQEd23VbTmZ6CCEw" value="*"/>
             </ownedEnd>
             <ownedEnd xmi:id="_4ns50MnQEd23VbTmZ6CCEw" name="programs" type="_AVjVsMVEEd2gxo2Yyu8isA" association="_1e-1YMnQEd23VbTmZ6CCEw">
-              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_-YNf4MnQEd23VbTmZ6CCEw" value="*"/>
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_-Fk3wMnQEd23VbTmZ6CCEw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_-YNf4MnQEd23VbTmZ6CCEw" value="*"/>
             </ownedEnd>
           </packagedElement>
           <packagedElement xmi:type="uml:Association" xmi:id="_kNUNMMm4Ed23VbTmZ6CCEw" name="CustomerCard Membership" memberEnd="_p5fs4Mm4Ed23VbTmZ6CCEw _rdoZIMm4Ed23VbTmZ6CCEw">
@@ -195,8 +195,8 @@
           <packagedElement xmi:type="uml:Association" xmi:id="_cpOH4MkvEd2S2cuzoMKaDg" name="CustomerCard Transactions" memberEnd="_e_SAUMkvEd2S2cuzoMKaDg _fo2hwMkvEd2S2cuzoMKaDg">
             <ownedEnd xmi:id="_e_SAUMkvEd2S2cuzoMKaDg" name="card" type="_fBpSwMVIEd2gxo2Yyu8isA" association="_cpOH4MkvEd2S2cuzoMKaDg"/>
             <ownedEnd xmi:id="_fo2hwMkvEd2S2cuzoMKaDg" name="transactions" type="_qdRHkMkkEd2S2cuzoMKaDg" association="_cpOH4MkvEd2S2cuzoMKaDg">
-              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_kERkMMkvEd2S2cuzoMKaDg" value="*"/>
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_jtLS0MkvEd2S2cuzoMKaDg"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_kERkMMkvEd2S2cuzoMKaDg" value="*"/>
             </ownedEnd>
           </packagedElement>
           <packagedElement xmi:type="uml:Association" xmi:id="_4jBocMnAEd23VbTmZ6CCEw" name="LoyaltyAccounts Membership" memberEnd="_7Yh18MnAEd23VbTmZ6CCEw _7_txwMnAEd23VbTmZ6CCEw">
@@ -204,8 +204,8 @@
               <defaultValue xmi:type="uml:LiteralString" xmi:id="_9Xxw4MnAEd23VbTmZ6CCEw" value=""/>
             </ownedEnd>
             <ownedEnd xmi:id="_7_txwMnAEd23VbTmZ6CCEw" name="accounts" type="_MG7VMMVIEd2gxo2Yyu8isA" association="_4jBocMnAEd23VbTmZ6CCEw">
-              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_BeV9oMnBEd23VbTmZ6CCEw" value="*"/>
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Bvn64MnBEd23VbTmZ6CCEw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_BeV9oMnBEd23VbTmZ6CCEw" value="*"/>
             </ownedEnd>
           </packagedElement>
           <packagedElement xmi:type="uml:Association" xmi:id="_yIQdUMkkEd2S2cuzoMKaDg" name="LoyaltyAccount Transactions" memberEnd="_C1aXIMklEd2S2cuzoMKaDg _HkgjgMklEd2S2cuzoMKaDg">
@@ -241,14 +241,14 @@
           <packagedElement xmi:type="uml:Association" xmi:id="_eiu8QMn1Ed2R-LEScdZDXg" name="ProgramPartner Services" memberEnd="_gcCAMMn1Ed2R-LEScdZDXg _g-5csMn1Ed2R-LEScdZDXg">
             <ownedEnd xmi:id="_gcCAMMn1Ed2R-LEScdZDXg" name="partner" type="_ODIWQMn1Ed2R-LEScdZDXg" association="_eiu8QMn1Ed2R-LEScdZDXg"/>
             <ownedEnd xmi:id="_g-5csMn1Ed2R-LEScdZDXg" name="deliveredServices" type="_bFF6cMVEEd2gxo2Yyu8isA" association="_eiu8QMn1Ed2R-LEScdZDXg">
-              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_lmsHMMn1Ed2R-LEScdZDXg" value="*"/>
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_lNWaIMn1Ed2R-LEScdZDXg"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_lmsHMMn1Ed2R-LEScdZDXg" value="*"/>
             </ownedEnd>
           </packagedElement>
           <packagedElement xmi:type="uml:Association" xmi:id="_geG2IMksEd2S2cuzoMKaDg" name="Services ServiceLevel" memberEnd="_kSVVsMksEd2S2cuzoMKaDg _qIWt4MksEd2S2cuzoMKaDg">
             <ownedEnd xmi:id="_kSVVsMksEd2S2cuzoMKaDg" name="availableServices" type="_bFF6cMVEEd2gxo2Yyu8isA" association="_geG2IMksEd2S2cuzoMKaDg">
-              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_mMOPgMksEd2S2cuzoMKaDg" value="*"/>
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_nbzBAMksEd2S2cuzoMKaDg"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_mMOPgMksEd2S2cuzoMKaDg" value="*"/>
             </ownedEnd>
             <ownedEnd xmi:id="_qIWt4MksEd2S2cuzoMKaDg" name="level" type="_8fH4kMkmEd2S2cuzoMKaDg" association="_geG2IMksEd2S2cuzoMKaDg"/>
           </packagedElement>

@@ -54,7 +54,7 @@
         </packagedElement>
         <packagedElement xmi:type="uml:AssociationClass" xmi:id="_jSg58Ip0EeOj_-E07LlldA" name="Friendship" memberEnd="_jSg58Yp0EeOj_-E07LlldA _jSfr0Ip0EeOj_-E07LlldA" navigableOwnedEnd="_jSg58Yp0EeOj_-E07LlldA">
           <ownedAttribute xmi:type="uml:Property" xmi:id="_OgEhYI84EeO_cc6erVqrag" name="weight" visibility="public">
-            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Real"/>
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_QiByEI84EeO_cc6erVqrag" value="1"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_QiHRoI84EeO_cc6erVqrag" value="1"/>
           </ownedAttribute>
@@ -65,7 +65,7 @@
         </packagedElement>
         <packagedElement xmi:type="uml:AssociationClass" xmi:id="_g5QHEIp1EeOj_-E07LlldA" name="Work" memberEnd="_g5QHEYp1EeOj_-E07LlldA _g5PgAIp1EeOj_-E07LlldA" navigableOwnedEnd="_g5QHEYp1EeOj_-E07LlldA">
           <ownedAttribute xmi:type="uml:Property" xmi:id="_REkecI84EeO_cc6erVqrag" name="weight" visibility="public">
-            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Real"/>
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Sp9u8I84EeO_cc6erVqrag" value="1"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_SqCncI84EeO_cc6erVqrag" value="1"/>
           </ownedAttribute>

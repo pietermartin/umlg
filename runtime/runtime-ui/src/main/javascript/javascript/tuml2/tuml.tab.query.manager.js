@@ -190,75 +190,6 @@
 
         }
 
-//        this.showCorrectButtons = function () {
-//            var self = this;
-//            if (isUmlgLib) {
-//                if (this.query.queryType === undefined) {
-//                    this.querySaveInstanceFormGroupDiv.show();
-//                    this.querySaveClassFormGroupDiv.show();
-//                    this.queryCancelButtonFormGroupDiv.hide();
-//                    this.queryDeleteButtonFormGroupDiv.hide();
-//                } else if (this.query.queryType === 'instanceQuery') {
-//                    this.querySaveInstanceFormGroupDiv.show();
-//                    this.querySaveClassFormGroupDiv.hide();
-//                    this.queryCancelButtonFormGroupDiv.show();
-//                    this.queryDeleteButtonFormGroupDiv.show();
-//                } else {
-//                    this.querySaveInstanceFormGroupDiv.hide();
-//                    this.querySaveClassFormGroupDiv.show();
-//                    this.queryCancelButtonFormGroupDiv.show();
-//                    this.queryDeleteButtonFormGroupDiv.show();
-//                }
-//            }
-//            //Set the execute buttons name and val to reflect the query type
-//            executeButton = this.queryExecuteButtonFormGroupDiv.find('#executeButton');
-//            executeButton.text('Execute ' + this.query.type.toUpperCase());
-//            executeButton.val(this.query.type.toUpperCase());
-//            executeButton.button().unbind("click");
-//            executeButton.button().click(
-//                function () {
-//                    self.executeQuery();
-//                }
-//            );
-//
-//            if (isUmlgLib) {
-//                //Set the queries name
-//                var queryNameInput = this.queryQueryNameFormGroupDiv.find('#queryName');
-//                queryNameInput.val(this.query.name);
-//
-//                //Wire up the buttons to the correct tab
-//                var saveInstanceButton = this.querySaveInstanceFormGroupDiv.find('#saveInstanceQueryButton');
-//                saveInstanceButton.button().unbind("click");
-//                saveInstanceButton.button().click(
-//                    function () {
-//                        self.saveToInstance();
-//                    });
-//
-//                var saveClassButton = this.querySaveClassFormGroupDiv.find('#saveClassQueryButton');
-//                saveClassButton.button().unbind("click");
-//                saveClassButton.button().click(
-//                    function () {
-//                        self.saveToClass();
-//                    });
-//
-//                var cancelButton = this.queryCancelButtonFormGroupDiv.find('#cancelQueryButton');
-//                cancelButton.button().unbind("click");
-//                cancelButton.button().click(
-//                    function () {
-//                        self.cancelQuery();
-//                    }
-//                );
-//
-//                var deleteButton = this.queryDeleteButtonFormGroupDiv.find('#deleteQueryButton');
-//                deleteButton.button().unbind("click");
-//                deleteButton.button().click(
-//                    function () {
-//                        self.deleteQuery();
-//                    }
-//                );
-//            }
-//        }
-
         this.createQuery = function (queryTabDivName, oclExecuteUri, query, post) {
             var self = this;
             this.queryTabDivName = queryTabDivName;
@@ -290,7 +221,6 @@
                 this.queryCancelButtonFormGroupDiv = queryFormDiv.find('#cancelButtonFormGroup');
                 this.queryDeleteButtonFormGroupDiv = queryFormDiv.find('#deleteButtonFormGroup');
             } else {
-//                this.addQueryButtons();
                 this.tumlTabViewManager.parentTabContainerManager.addQueryButtons(this.query);
             }
 

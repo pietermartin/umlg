@@ -331,7 +331,8 @@
                 }
             } else if (property.dataTypeEnum !== null && property.dataTypeEnum !== undefined) {
                 if (property.dataTypeEnum == 'DateTime') {
-                    this.data[property.name] = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').val().replace(/ /g, "T");
+                    this.data[property.name] = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').val();
+//                    this.data[property.name] = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').val().replace(/ /g, "T");
                 } else if (property.dataTypeEnum == 'Image') {
                 } else {
                     this.data[property.name] = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').val();

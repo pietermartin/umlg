@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="20110701" xmlns:xmi="http://www.omg.org/spec/XMI/20110701" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:UmlgValidation="http:///schemas/UmlgValidation/_UFqlwNZNEeK9CpmlFL_zvQ/10" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xsi:schemaLocation="http:///schemas/UmlgValidation/_UFqlwNZNEeK9CpmlFL_zvQ/10 platform:/../demo/tinkergraph/tinkergraph-application/src/main/model/validation.profile.uml#_UFsa8NZNEeK9CpmlFL_zvQ">
+  <uml:Model xmi:id="_JKkPEHzeEeOYhpiy1kqM8Q" name="everfresh">
+    <packageImport xmi:type="uml:PackageImport" xmi:id="_JKkPEXzeEeOYhpiy1kqM8Q">
+      <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+    </packageImport>
+    <packageImport xmi:type="uml:PackageImport" xmi:id="_Gqp1gH7rEeOYhpiy1kqM8Q">
+      <importedPackage xmi:type="uml:Model" href="umlg-datatypes.uml#_K8N1MAD6EeKS1vh1F4YVWQ"/>
+    </packageImport>
+    <packageImport xmi:type="uml:PackageImport" xmi:id="_UYuiYICIEeONC9ep4xkWHQ">
+      <importedPackage xmi:type="uml:Model" href="umlg-lib.uml#_mdTDQCM2EeK-Trh8Ll0qUQ"/>
+    </packageImport>
+    <packagedElement xmi:type="uml:Package" xmi:id="_slLHEH1NEeOYhpiy1kqM8Q" name="com">
+      <packagedElement xmi:type="uml:Package" xmi:id="_u-dSoH1NEeOYhpiy1kqM8Q" name="everfresh">
+        <packagedElement xmi:type="uml:Package" xmi:id="_cXuWIJDXEeOH5rT4pmFmrg" name="inventory">
+          <packagedElement xmi:type="uml:Class" xmi:id="_fXJ7sJDXEeOH5rT4pmFmrg" name="Inventory">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_ghirMJDXEeOH5rT4pmFmrg" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_htA_0JDXEeOH5rT4pmFmrg" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_htFRQJDXEeOH5rT4pmFmrg" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_x5IpIJDXEeOH5rT4pmFmrg" name="storage" type="_qsxJEJDXEeOH5rT4pmFmrg" aggregation="composite" association="_x5LFYJDXEeOH5rT4pmFmrg">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_x5IpIZDXEeOH5rT4pmFmrg"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_x5IpIpDXEeOH5rT4pmFmrg" value="*"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Enumeration" xmi:id="_irdlEJDXEeOH5rT4pmFmrg" name="StorageType">
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_kG8EkJDXEeOH5rT4pmFmrg" name="DRY"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_ksPxEJDXEeOH5rT4pmFmrg" name="WET"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Enumeration" xmi:id="_leshsJDXEeOH5rT4pmFmrg" name="UnitOfMeasurement">
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_nsvGkJDXEeOH5rT4pmFmrg" name="KILOGRAM"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_oaTXMJDXEeOH5rT4pmFmrg" name="GRAM"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_pBSesJDXEeOH5rT4pmFmrg" name="LITRE"/>
+            <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_pn0TMJDXEeOH5rT4pmFmrg" name="MILLILITRE"/>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_qsxJEJDXEeOH5rT4pmFmrg" name="Storage">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_sVcXEJDXEeOH5rT4pmFmrg" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_tezL0JDXEeOH5rT4pmFmrg" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_te5ScJDXEeOH5rT4pmFmrg" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_t2R3sJDXEeOH5rT4pmFmrg" name="description" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_vHj5YJDXEeOH5rT4pmFmrg" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_vHpY8JDXEeOH5rT4pmFmrg" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_v5gTsJDXEeOH5rT4pmFmrg" name="amount" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_xSrGEJDXEeOH5rT4pmFmrg" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_xSxzwJDXEeOH5rT4pmFmrg" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_1X-ukJDXEeOH5rT4pmFmrg" name="storageType" type="_irdlEJDXEeOH5rT4pmFmrg" association="_1YBK0JDXEeOH5rT4pmFmrg">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_1X_VoJDXEeOH5rT4pmFmrg" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_1X_VoZDXEeOH5rT4pmFmrg" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_3nWJIJDXEeOH5rT4pmFmrg" name="unitOfMeasurement" type="_leshsJDXEeOH5rT4pmFmrg" association="_3nX-UJDXEeOH5rT4pmFmrg">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_3nWJIZDXEeOH5rT4pmFmrg" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_3nWJIpDXEeOH5rT4pmFmrg" value="1"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_x5LFYJDXEeOH5rT4pmFmrg" name="inventory_storage_1" memberEnd="_x5LFYZDXEeOH5rT4pmFmrg _x5IpIJDXEeOH5rT4pmFmrg" navigableOwnedEnd="_x5LFYZDXEeOH5rT4pmFmrg">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_x5LFYZDXEeOH5rT4pmFmrg" name="inventory" type="_fXJ7sJDXEeOH5rT4pmFmrg" association="_x5LFYJDXEeOH5rT4pmFmrg">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_x5LFYpDXEeOH5rT4pmFmrg" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_x5LFY5DXEeOH5rT4pmFmrg" value="1"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_1YBK0JDXEeOH5rT4pmFmrg" name="storage_storageType_1" memberEnd="_1YBK0ZDXEeOH5rT4pmFmrg _1X-ukJDXEeOH5rT4pmFmrg">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_1YBK0ZDXEeOH5rT4pmFmrg" name="storage" type="_qsxJEJDXEeOH5rT4pmFmrg" association="_1YBK0JDXEeOH5rT4pmFmrg">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_1YBK0pDXEeOH5rT4pmFmrg"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_1YBK05DXEeOH5rT4pmFmrg" value="*"/>
+            </ownedEnd>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_3nX-UJDXEeOH5rT4pmFmrg" name="storage_unitOfMeasurement_1" memberEnd="_3nX-UZDXEeOH5rT4pmFmrg _3nWJIJDXEeOH5rT4pmFmrg">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_3nX-UZDXEeOH5rT4pmFmrg" name="storage" type="_qsxJEJDXEeOH5rT4pmFmrg" association="_3nX-UJDXEeOH5rT4pmFmrg">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_3nX-UpDXEeOH5rT4pmFmrg"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_3nX-U5DXEeOH5rT4pmFmrg" value="*"/>
+            </ownedEnd>
+          </packagedElement>
+        </packagedElement>
+      </packagedElement>
+    </packagedElement>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_D8u2sH7rEeOYhpiy1kqM8Q">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_D84AoH7rEeOYhpiy1kqM8Q" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="validation.profile.uml#_UFsa8NZNEeK9CpmlFL_zvQ"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="validation.profile.uml#_6Zdd4AV1EeK9oIwdQfC0-w"/>
+    </profileApplication>
+  </uml:Model>
+  <UmlgValidation:MaxLength xmi:id="_7RZzYH7sEeOYhpiy1kqM8Q" length="5" base_Property="_y2pFIH1NEeOYhpiy1kqM8Q"/>
+  <UmlgValidation:MinLength xmi:id="_9LFR0H7sEeOYhpiy1kqM8Q" length="5" base_Property="_ATMEkH4kEeOYhpiy1kqM8Q"/>
+</xmi:XMI>

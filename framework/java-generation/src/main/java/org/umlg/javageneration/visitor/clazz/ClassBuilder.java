@@ -111,7 +111,7 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
     }
 
     private void callPersistentConstructorFromDefault(OJAnnotatedClass annotatedClass) {
-        annotatedClass.getDefaultConstructor().getBody().addToStatements("super(true)");
+        annotatedClass.getDefaultConstructor().getBody().addToStatements("this(true)");
     }
 
     private void addInitialiseProperties(OJAnnotatedClass annotatedClass, Class clazz) {

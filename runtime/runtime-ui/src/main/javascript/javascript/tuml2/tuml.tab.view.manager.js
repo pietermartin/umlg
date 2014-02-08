@@ -363,6 +363,7 @@
 
         //Show the tab
         this.tabUl.find('a:last').tab('show');
+
         this.tabUl.find("a[href='#" + id + "']").on('shown.bs.tab', function (e) {
             //Show the query inline form
             //Hide the regular save cancel
@@ -372,6 +373,8 @@
             //This is needed else the layout manager gets the widths wrong.
             var queryLayoutDiv = $('#queryLayoutDiv').layout().resizeAll();
         })
+
+
         if (this.queryId !== undefined) {
             $.data(divPanel[0], 'queryId', this.queryId);
         }

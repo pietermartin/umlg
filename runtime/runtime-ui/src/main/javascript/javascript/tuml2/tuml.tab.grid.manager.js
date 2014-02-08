@@ -77,11 +77,11 @@
             forceFitColumns: false,
             topPanelHeight: 25
         };
-    }
+    };
 
     TumlQueryGridManager.prototype.setData = function (data) {
         this.dataView.setItems(data, 'row');
-    }
+    };
 
     function TumlManyComponentGridManager(tumlTabViewManager, tumlUri, propertyNavigatingTo) {
 
@@ -98,7 +98,7 @@
             );
         };
 
-    }
+    };
 
     TumlManyComponentGridManager.prototype = new TumlBaseGridManager;
 
@@ -110,7 +110,7 @@
         });
         this.dataView.setFilter(filter);
         this.dataView.endUpdate();
-    }
+    };
 
     /**
      * No need for a context menu as component grids are only used for creation.
@@ -129,7 +129,7 @@
         this.setupOptions = function () {
             TumlBaseGridManager.prototype.setupOptions.call(this);
             this.options['editable'] = false;
-        }
+        } ;
 
         this.refresh = function (result, gridDiv) {
             this.metaForDataTo = result.meta.to;
@@ -162,7 +162,7 @@
             new Slick.Controls.ColumnPicker(this.columns, this.grid, this.options);
         };
 
-    }
+    };
 
     TumlForManyLookupGridManager.prototype = new TumlBaseGridManager;
 
@@ -186,9 +186,9 @@
             }
         } else {
             return false;
-        }
+        };
 
-    }
+    };
 
     //Can not navigate from a lookup
     TumlForManyLookupGridManager.prototype.createContextMenu = function () {
@@ -206,8 +206,8 @@
             var activeCell = this.grid.getActiveCell();
             if (activeCell === null) {
                 this.grid.setActiveCell(0, 0);
-            }
-        }
+            };
+        };
 
         this.setupColumns = function () {
 

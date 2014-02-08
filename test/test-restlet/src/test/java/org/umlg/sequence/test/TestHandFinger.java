@@ -1,6 +1,8 @@
 package org.umlg.sequence.test;
 
+import junit.framework.Assert;
 import org.junit.Test;
+import org.umlg.model.RestAndJson;
 import org.umlg.runtime.test.BaseLocalDbTest;
 import org.umlg.test.standard.*;
 
@@ -68,6 +70,8 @@ public class TestHandFinger extends BaseLocalDbTest {
         finger6.setName("finger6");
         finger6.addToManyRequiredInteger(1);
         db.commit();
+
+        Assert.assertTrue(RestAndJson.INSTANCE.getHuman().size()>0);
 
     }
 }

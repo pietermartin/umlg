@@ -192,7 +192,7 @@
     }
 
     TumlTabContainerManager.prototype.addQueryButtons = function(query) {
-
+        var self = this;
         var tabFooter = this.tabLayoutTabFooterDiv;
         var queryFormDiv = $('<div />', {class: 'form-inline', role: 'form'}).appendTo(tabFooter);
         //Create a split button for the execute
@@ -211,8 +211,8 @@
         $('<li><a href="#">NATIVE</a></li>').appendTo(ul);
 
         ul.find("li a").click(function () {
-            executeButton.text('Execute ' + $(this).text());
-            executeButton.val($(this).text());
+            self.executeButton.text('Execute ' + $(this).text());
+            self.executeButton.val($(this).text());
         });
 
         var querySelectTypeFormGroupDiv = $('<div />', {class: 'form-group'}).appendTo(queryFormDiv);
