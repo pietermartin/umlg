@@ -23,12 +23,12 @@ public class QueryExecuteServerResourceImpl extends BaseOclExecutionServerResour
         try {
             String type = getQuery().getFirstValue("type");
             String query = getQuery().getFirstValue("query");
-            Object context = UmlgURLDecoder.decode((String) getRequestAttributes().get("contextId"));
-            if (context != null) {
-                Object contextId = (String) context;
+            String contextId = (String) getRequestAttributes().get("contextId");
+            if (contextId != null) {
+                contextId = UmlgURLDecoder.decode(contextId);
                 return execute(query, contextId, type);
             } else {
-                return execute(query);
+                return execute(query, type);
             }
         } finally {
             GraphDb.getDb().rollback();

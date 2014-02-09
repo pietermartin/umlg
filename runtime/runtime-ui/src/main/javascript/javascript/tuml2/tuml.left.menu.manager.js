@@ -8,9 +8,10 @@
                 OPERATIONS: {index: 1, label: 'Operations', id: 'operationAccordion'},
                 INSTANCE_QUERIES: {index: 2, label: 'Instance Queries', id: 'instanceQueriesAccordion'},
                 CLASS_QUERIES: {index: 3, label: 'Class Queries', id: 'classQueriesAccordion'},
-                INSTANCE_GROOVY: {index: 4, label: 'Instance Groovy', id: 'instanceQueriesAccordion'},
-                CLASS_GROOVY: {index: 5, label: 'Class Groovy', id: 'classGroovy'},
-                DIAGRAMS: {index: 6, label: 'Diagrams', id: 'diagrams'}
+                ROOT_QUERIES: {index: 4, label: 'Root Queries', id: 'rootQueriesAccordion'},
+                INSTANCE_GROOVY: {index: 5, label: 'Instance Groovy', id: 'instanceQueriesAccordion'},
+                CLASS_GROOVY: {index: 6, label: 'Class Groovy', id: 'classGroovy'},
+                DIAGRAMS: {index: 7, label: 'Diagrams', id: 'diagrams'}
             }
         }
     });
@@ -23,6 +24,7 @@
         this.umlOperationsDiv = null;
         this.umlInstanceQueriesDiv = null;
         this.umlClassQueriesDiv = null;
+        this.umlRootQueriesDiv = null;
         this.umlInstanceGroovyDiv = null;
         this.umlClassGroovyDiv = null;
         this.contextMetaDataFrom = null;
@@ -101,6 +103,7 @@
                 this.umlInstanceGroovyDiv = addAccordionMenu(this.accordionDiv, false, Tuml.AccordionEnum.INSTANCE_GROOVY.label, Tuml.AccordionEnum.INSTANCE_GROOVY.id);
                 this.umlClassGroovyDiv = addAccordionMenu(this.accordionDiv, false, Tuml.AccordionEnum.CLASS_GROOVY.label, Tuml.AccordionEnum.CLASS_GROOVY.id);
             }
+            this.umlRootQueriesDiv = addAccordionMenu(this.accordionDiv, false, Tuml.AccordionEnum.ROOT_QUERIES.label, Tuml.AccordionEnum.ROOT_QUERIES.id);
         }
 
         function addAccordionMenu(accordionDiv, open, label, id) {
@@ -395,16 +398,23 @@
             this.umlClassQueriesDiv.find('#' + queryId).remove();
         }
 
+        this.deleteRootQuery = function (queryId) {
+            this.umlRootQueriesDiv.find('#' + queryId).remove();
+        }
+
         this.refreshInstanceQuery = function (queryId) {
             this.umlInstanceQueriesDiv.children().remove();
             this.createInstanceQueryMenu(queryId);
-//            this.accordionDiv.accordion("option", "active", 2);
         }
 
         this.refreshClassQuery = function (queryId) {
             this.umlClassQueriesDiv.children().remove();
             this.createClassQueryMenu(queryId);
-//            this.accordionDiv.accordion("option", "active", 3);
+        }
+
+        this.refreshRootQuery = function (queryId) {
+            this.umlRootQueriesDiv.children().remove();
+            this.createRootQueryMenu(queryId);
         }
 
         this.refreshQueryMenuCss = function (/*queryData, */queryToHighlightId, leftAccordionIndex) {
@@ -418,6 +428,11 @@
                 //Change the css active property
                 this.umlClassQueriesDiv.find('li.active').removeClass('active');
                 this.umlClassQueriesDiv.find('#' + queryToHighlightId).addClass('active');
+            }
+            if (this.umlRootQueriesDiv !== null) {
+                //Change the css active property
+                this.umlRootQueriesDiv.find('li.active').removeClass('active');
+                this.umlRootQueriesDiv.find('#' + queryToHighlightId).addClass('active');
             }
 
             if (leftAccordionIndex != -1) {
@@ -452,6 +467,13 @@
                     var classQueriesAccordion = this.umlClassQueriesDiv.parent();
                     if (!classQueriesAccordion.hasClass('in')) {
                         classQueriesAccordion.collapse('show');
+                    }
+
+                } else if (leftAccordionIndex == Tuml.AccordionEnum.ROOT_QUERIES.index) {
+                    //Check if it is already open, if so do not call show as that closes it, eish
+                    var rootQueriesAccordion = this.umlRootQueriesDiv.parent();
+                    if (!rootQueriesAccordion.hasClass('in')) {
+                        rootQueriesAccordion.collapse('show');
                     }
 
                 } else if (leftAccordionIndex == Tuml.AccordionEnum.CLASS_GROOVY.index) {
@@ -509,6 +531,13 @@
                     var classQueriesAccordion = this.umlClassQueriesDiv.parent();
                     if (!classQueriesAccordion.hasClass('in')) {
                         classQueriesAccordion.collapse('show');
+                    }
+
+                } else if (leftAccordionIndex == Tuml.AccordionEnum.ROOT_QUERIES.index) {
+                    //Check if it is already open, if so do not call show as that closes it, eish
+                    var rootQueriesAccordion = this.umlRootQueriesDiv.parent();
+                    if (!rootQueriesAccordion.hasClass('in')) {
+                        rootQueriesAccordion.collapse('show');
                     }
 
                 } else if (leftAccordionIndex == Tuml.AccordionEnum.CLASS_GROOVY.index) {

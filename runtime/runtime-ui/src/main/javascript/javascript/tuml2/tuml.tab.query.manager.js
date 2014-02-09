@@ -190,6 +190,47 @@
 
         }
 
+        this.saveToRoot = function () {
+            var self = this;
+            this.synchronizeQuery(this.queryId);
+            this.query.qualifiedName = 'umlglib::org::umlg::meta::ClassQuery';
+            var overloadedPostData = {insert: [], update: [], delete: []};
+            if (this.query.post) {
+                overloadedPostData.insert.push(this.query);
+            } else {
+                overloadedPostData.update.push(this.query);
+            }
+            $.ajax({
+                url: this.classQueryUri,
+                type: "POST",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(overloadedPostData),
+                success: function (data) {
+                    var queryFromDb;
+                    var queries = data[0].data;
+                    for (var i = 0; i < queries.length; i++) {
+                        queryFromDb = queries[i];
+                        if (queryFromDb.name == self.query.name) {
+                            break;
+                        }
+                    }
+
+                    if (self.query.post) {
+                        self.afterSaveClassQuery({queryType: 'classQuery', query: queryFromDb, gridData: tumlQueryGridManager.getResult()});
+                    } else {
+                        self.afterUpdateClassQuery({queryType: 'classQuery', query: queryFromDb, gridData: tumlQueryGridManager.getResult()});
+                    }
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    $('#serverErrorMsg_' + self.queryTabDivName).addClass('server-error-msg').html(jqXHR.responseText);
+
+                }
+            });
+
+        }
+
         this.createQuery = function (queryTabDivName, oclExecuteUri, query, post) {
             var self = this;
             this.queryTabDivName = queryTabDivName;

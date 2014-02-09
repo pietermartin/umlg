@@ -199,8 +199,8 @@
         this.queryExecuteButtonFormGroupDiv = $('<div />', {id: 'queryExecuteButtonFormGroupDiv', class: 'form-group'}).appendTo(queryFormDiv);
         var btnGroup = $('<div />', {class: 'btn-group dropup'}).appendTo(this.queryExecuteButtonFormGroupDiv);
         this.executeButton = $('<button type="button" id="executeButton" class="btn btn-success umlg-button" />').appendTo(btnGroup);
-        $('<span class="glyphicon glyphicon-play-circle"></span>').appendTo(executeButton);
-        $('<span />').text(' Execute ' + query.type.toUpperCase()).appendTo(executeButton);
+        $('<span class="glyphicon glyphicon-play-circle"></span>').appendTo(this.executeButton);
+        $('<span />').text(' Execute ' + query.type.toUpperCase()).appendTo(this.executeButton);
         this.executeButton.val(query.type.toUpperCase());
         var splitButton = $('<button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">').appendTo(btnGroup);
         $('<span class="caret"></span>').appendTo(splitButton);

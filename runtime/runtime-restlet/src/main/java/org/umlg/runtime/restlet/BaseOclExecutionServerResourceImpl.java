@@ -68,7 +68,7 @@ public abstract class BaseOclExecutionServerResourceImpl extends ServerResource 
                 return new JsonRepresentation("{\"result\": " + "\"" + result.toString() + "\"}");
             }
         } else if (type.equalsIgnoreCase("gremlin")) {
-            String result =  GremlinExecutor.executeGremlinViaGroovy(contextId, query);
+            String result = GremlinExecutor.executeGremlinViaGroovy(contextId, query);
             return new StringRepresentation(result);
         } else {
             throw new RuntimeException("Unknown query type " + type);
@@ -76,54 +76,61 @@ public abstract class BaseOclExecutionServerResourceImpl extends ServerResource 
     }
 
     //static
-    protected Representation execute(String ocl) {
-        //TODO This will only work for allInstances
-        int startOfAllInstances = ocl.indexOf(".");
-        String context = ocl.substring(0, startOfAllInstances);
+    protected Representation execute(String query, String type) {
+        if (type.equalsIgnoreCase("ocl")) {
 
-        Object result = UmlgOclExecutor.executeOclQuery(context, ocl);
-        if (result instanceof Map) {
+            //TODO This will only work for allInstances
+            int startOfAllInstances = query.indexOf(".");
+            String context = query.substring(0, startOfAllInstances);
+
+            Object result = UmlgOclExecutor.executeOclQuery(context, query);
+            if (result instanceof Map) {
 //            return UmlgOclExecutor.tupleMapToJson((Map<String, Object>) result);
-            //TODO
-            return new JsonRepresentation(result.toString());
-        } else if (result instanceof Collection) {
-            Collection<PersistentObject> poCollection = (Collection<PersistentObject>) result;
+                //TODO
+                return new JsonRepresentation(result.toString());
+            } else if (result instanceof Collection) {
+                Collection<PersistentObject> poCollection = (Collection<PersistentObject>) result;
 
-            StringBuilder json = new StringBuilder();
-            json.append("[");
-            json.append("{\"data\": [");
-            int count = 0;
-            PersistentObject poForMetaData = null;
-            for (PersistentObject po : poCollection) {
-                count++;
-                String objectAsJson = po.toJsonWithoutCompositeParent();
-                String objectAsJsonWithRow = "{\"row\": " + count + ", " + objectAsJson.substring(1);
-                json.append(objectAsJsonWithRow);
-                if (count != poCollection.size()) {
-                    json.append(",");
-                } else {
-                    poForMetaData = po;
+                StringBuilder json = new StringBuilder();
+                json.append("[");
+                json.append("{\"data\": [");
+                int count = 0;
+                PersistentObject poForMetaData = null;
+                for (PersistentObject po : poCollection) {
+                    count++;
+                    String objectAsJson = po.toJsonWithoutCompositeParent();
+                    String objectAsJsonWithRow = "{\"row\": " + count + ", " + objectAsJson.substring(1);
+                    json.append(objectAsJsonWithRow);
+                    if (count != poCollection.size()) {
+                        json.append(",");
+                    } else {
+                        poForMetaData = po;
+                    }
                 }
-            }
-            json.append("],");
-            json.append(" \"meta\" : {");
-            json.append("\"qualifiedName\": \"restAndJson::org::umlg::test::Hand::finger\"");
-            json.append(", \"to\": ");
-            if (poForMetaData != null) {
-                json.append(poForMetaData.getMetaDataAsJson());
+                json.append("],");
+                json.append(" \"meta\" : {");
+                json.append("\"qualifiedName\": \"restAndJson::org::umlg::test::Hand::finger\"");
+                json.append(", \"to\": ");
+                if (poForMetaData != null) {
+                    json.append(poForMetaData.getMetaDataAsJson());
+                } else {
+                    json.append("null");
+                }
+                json.append("}");
+                json.append("}]");
+                return new JsonRepresentation(json.toString());
+            } else if (result instanceof PersistentObject) {
+                PersistentObject po = (PersistentObject) result;
+                return getRepresentation(po);
             } else {
-                json.append("null");
+                return new JsonRepresentation(result.toString());
             }
-            json.append("}");
-            json.append("}]");
-            return new JsonRepresentation(json.toString());
-        } else if (result instanceof PersistentObject) {
-            PersistentObject po = (PersistentObject) result;
-            return getRepresentation(po);
+        } else if (type.equalsIgnoreCase("gremlin")) {
+            String result = GremlinExecutor.executeGremlinViaGroovy(null, query);
+            return new StringRepresentation(result);
         } else {
-            return new JsonRepresentation(result.toString());
+            throw new RuntimeException("Unknown query type " + type);
         }
-
     }
 
     protected Representation getRepresentation(PersistentObject po) throws ResourceException {
