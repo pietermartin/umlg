@@ -24,6 +24,7 @@
         this.queryQueryNameFormGroupDiv = null;
         this.querySaveInstanceFormGroupDiv = null;
         this.querySaveClassFormGroupDiv = null;
+        this.querySaveRootFormGroupDiv = null;
         this.queryCancelButtonFormGroupDiv = null;
         this.queryDeleteButtonFormGroupDiv = null;
         this.executeButton = null;
@@ -235,6 +236,11 @@
             $('<span class="glyphicon glyphicon-save"></span>').appendTo(saveClassButton);
             $('<span />').text(' save to class').appendTo(saveClassButton);
 
+            this.querySaveRootFormGroupDiv = $('<div />', {id: 'saveRootFormGroup', class: 'form-group'}).appendTo(elementOnTheRight);
+            var saveRootButton = $('<button />', {id: 'saveRootQueryButton', class: 'form-control btn btn-primary umlg-button'}).appendTo(this.querySaveRootFormGroupDiv);
+            $('<span class="glyphicon glyphicon-save"></span>').appendTo(saveRootButton);
+            $('<span />').text(' save to root').appendTo(saveRootButton);
+
             this.queryCancelButtonFormGroupDiv = $('<div />', {id: 'cancelButtonFormGroup', class: 'form-group'}).appendTo(elementOnTheRight);
             var cancelButton = $('<button />', {id: 'cancelQueryButton', class: 'form-control btn btn-primary umlg-button'}).appendTo(this.queryCancelButtonFormGroupDiv);
             $('<span class="glyphicon glyphicon-ban-circle"></span>').appendTo(cancelButton);
@@ -254,18 +260,32 @@
             this.addQueryButtons(query);
         }
         if (isUmlgLib) {
-            if (query.queryType === undefined) {
+            if (query.queryType === undefined || query.queryType === null) {
                 this.querySaveInstanceFormGroupDiv.show();
                 this.querySaveClassFormGroupDiv.show();
+                this.querySaveRootFormGroupDiv.show();
                 this.queryCancelButtonFormGroupDiv.hide();
                 this.queryDeleteButtonFormGroupDiv.hide();
             } else if (query.queryType === 'instanceQuery') {
                 this.querySaveInstanceFormGroupDiv.show();
                 this.querySaveClassFormGroupDiv.hide();
+                this.querySaveRootFormGroupDiv.hide();
+                this.queryCancelButtonFormGroupDiv.show();
+                this.queryDeleteButtonFormGroupDiv.show();
+            } else if (query.queryType === 'classQuery') {
+                this.querySaveClassFormGroupDiv.show();
+                this.querySaveInstanceFormGroupDiv.hide();
+                this.querySaveRootFormGroupDiv.hide();
+                this.queryCancelButtonFormGroupDiv.show();
+                this.queryDeleteButtonFormGroupDiv.show();
+            } else if (query.queryType === 'rootQuery') {
+                this.querySaveInstanceFormGroupDiv.hide();
+                this.querySaveClassFormGroupDiv.hide();
+                this.querySaveRootFormGroupDiv.show();
                 this.queryCancelButtonFormGroupDiv.show();
                 this.queryDeleteButtonFormGroupDiv.show();
             } else {
-                this.querySaveInstanceFormGroupDiv.hide();
+                this.querySaveInstanceFormGroupDiv.show();
                 this.querySaveClassFormGroupDiv.show();
                 this.queryCancelButtonFormGroupDiv.show();
                 this.queryDeleteButtonFormGroupDiv.show();
@@ -302,6 +322,13 @@
                     self.saveToClass();
                 });
 
+            var saveRootButton = this.querySaveRootFormGroupDiv.find('#saveRootQueryButton');
+            saveRootButton.button().unbind("click");
+            saveRootButton.button().click(
+                function () {
+                    self.saveToRoot();
+                });
+
             var cancelButton = this.queryCancelButtonFormGroupDiv.find('#cancelQueryButton');
             cancelButton.button().unbind("click");
             cancelButton.button().click(
@@ -330,6 +357,10 @@
 
     TumlTabContainerManager.prototype.saveToClass = function() {
         this.getOpenQueryTabViewManager().tumlTabQueryManager.saveToClass();
+    }
+
+    TumlTabContainerManager.prototype.saveToRoot = function() {
+        this.getOpenQueryTabViewManager().tumlTabQueryManager.saveToRoot();
     }
 
     TumlTabContainerManager.prototype.cancelQuery = function() {

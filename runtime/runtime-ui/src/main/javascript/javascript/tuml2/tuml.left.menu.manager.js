@@ -62,6 +62,7 @@
                 this.createInstanceQueryMenu(-1);
                 this.createClassQueryMenu(-1);
             }
+            this.createRootQueryMenu(-1);
             var windowHeight = calculateBodyHeight(this) + 45;
             leftMenuPaneBody.height(windowHeight);
         }
@@ -184,7 +185,6 @@
                         );
                     });
 
-
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR);
@@ -242,12 +242,26 @@
             return ulMenu;
         };
 
-        this.createQueryMenu = function (queryDiv, isInstanceQuery, queryData) {
+        this.createQueryMenu = function (queryDiv, queryTypeEnum, queryData) {
             var queryArray = [];
             for (var i = 0; i < queryData[0].data.length; i++) {
                 var query = queryData[0].data[i];
                 var queryUri = query.uri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), encodeURIComponent(query.id));
                 var oclExecuteUri = queryData[0].meta.oclExecuteUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), this.contextVertexId);
+                var queryType;
+                var menuCssClass = 'querymenuinactive ';
+                if (queryTypeEnum == tuml.tab.Enum.InstanceQueries) {
+                    queryType = 'instanceQuery';
+                    menuCssClass += 'instance-query';
+                } else if (queryTypeEnum == tuml.tab.Enum.ClassQueries) {
+                    queryType = 'classQuery';
+                    menuCssClass += 'class-query';
+                } else if (queryTypeEnum == tuml.tab.Enum.RootQueries) {
+                    queryType = 'rootQuery';
+                    menuCssClass += 'root-query';
+                } else {
+                    throw 'Unexpected query enum!'
+                }
                 queryArray.push({
                     label: query.name,
                     tumlUri: queryUri,
@@ -257,19 +271,24 @@
                     queryEnum: query.queryEnum,
                     queryString: query.queryString,
                     queryId: query.id,
-                    queryType: isInstanceQuery ? 'instanceQuery' : 'classQuery',
-                    menuCssClass: 'querymenuinactive ' + (isInstanceQuery ? 'instance-query' : 'class-query')
+                    queryType: queryType,
+                    menuCssClass: menuCssClass
                 });
             }
             var dropDownDiv = $('<div />', {class: 'dropdown'}).appendTo(queryDiv);
             $('<a href="#" class="sr-only dropdown-toggle" data-toggle="dropdown">Users <b class="caret"></b></a>').appendTo(dropDownDiv);
             var ulMenu;
-            if (isInstanceQuery) {
-                ulMenu = $('<ul id="instanceQueryMenu" class="dropdown-menu" role="menu" aria-labelledby="dropdownQueryMenu1" />').appendTo(dropDownDiv);
 
-            } else {
+            if (queryTypeEnum == tuml.tab.Enum.InstanceQueries) {
+                ulMenu = $('<ul id="instanceQueryMenu" class="dropdown-menu" role="menu" aria-labelledby="dropdownQueryMenu1" />').appendTo(dropDownDiv);
+            } else if (queryTypeEnum == tuml.tab.Enum.ClassQueries) {
                 ulMenu = $('<ul id="classQueryMenu" class="dropdown-menu" role="menu" aria-labelledby="dropdownQueryMenu1" />').appendTo(dropDownDiv);
+            } else if (queryTypeEnum == tuml.tab.Enum.RootQueries) {
+                ulMenu = $('<ul id="rootQueryMenu" class="dropdown-menu" role="menu" aria-labelledby="dropdownQueryMenu1" />').appendTo(dropDownDiv);
+            } else {
+                throw 'Unexpected query enum!'
             }
+
             for (var i = 0; i < queryArray.length; i++) {
                 var value = queryArray[i];
                 var adjustedUri = value.tumlUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), this.contextVertexId);
@@ -304,27 +323,6 @@
                 $('<i />', {class: 'fa fa-bolt'}).appendTo(a);
                 a.append(' ' + value.name);
             }
-//            ulMenu.menu({
-//                select: function (e, ui) {
-//                    var a = ui.item.find('a');
-//                    var contextData = ui.item.data("contextData");
-//                    var query = {
-//                        post: false,
-//                        tumlUri: contextData.tumlUri,
-//                        oclExecuteUri: contextData.oclExecuteUri,
-//                        qualifiedName: contextData.qualifiedName,
-//                        name: contextData._name,
-//                        queryEnum: contextData.queryEnum,
-//                        queryString: contextData.queryString,
-//                        queryType: contextData.queryType,
-//                        id: contextData.queryId
-//                    };
-//                    self.onQueryClick.notify(query, null, self);
-//                    a.focus();
-//                    e.preventDefault();
-//                    e.stopImmediatePropagation();
-//                }
-//            });
         }
 
         this.createInstanceQueryMenu = function (queryId) {
@@ -351,7 +349,7 @@
         }
 
         this.continueCreateInstanceQueryMenu = function (tumlUri, result) {
-            self.createQueryMenu(self.umlInstanceQueriesDiv, true, result);
+            self.createQueryMenu(self.umlInstanceQueriesDiv, tuml.tab.Enum.InstanceQueries, result);
             if (self.queryToHighlightId !== undefined && self.queryToHighlightId != -1) {
                 self.refreshQueryMenuCss(self.queryToHighlightId, Tuml.AccordionEnum.INSTANCE_QUERIES.index);
             }
@@ -364,28 +362,53 @@
             //Fetch the query data
             if (this.contextVertexId !== null) {
                 var classQueryUri = "/" + tumlModelName + "/classquery/" + encodeURIComponent(this.contextVertexId) + "/query";
-                if (classQueryUri != null) {
-//                    var queryUri = classQueryUri.replace(new RegExp("\{(\s*?.*?)*?\}", 'gi'), this.contextVertexId);
-                    $.ajax({
-                        url: classQueryUri,
-                        type: "GET",
-                        dataType: "json",
-                        contentType: "json",
-                        success: function (response) {
-                            retrieveMetaDataIfNotInCache(classQueryUri, this.contextVertexId, response, self.continueCreateClassQueryMenu);
-                        },
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            alert('Error getting class query data. textStatus: ' + textStatus + ' errorThrown: ' + errorThrown);
-                        }
-                    });
-                }
+                $.ajax({
+                    url: classQueryUri,
+                    type: "GET",
+                    dataType: "json",
+                    contentType: "json",
+                    success: function (response) {
+                        retrieveMetaDataIfNotInCache(classQueryUri, this.contextVertexId, response, self.continueCreateClassQueryMenu);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert('Error getting class query data. textStatus: ' + textStatus + ' errorThrown: ' + errorThrown);
+                    }
+                });
             }
         }
 
         this.continueCreateClassQueryMenu = function (tumlUri, result) {
-            self.createQueryMenu(self.umlClassQueriesDiv, false, result);
+            self.createQueryMenu(self.umlClassQueriesDiv, tuml.tab.Enum.ClassQueries, result);
             if (self.queryToHighlightId !== -1) {
                 self.refreshQueryMenuCss(self.queryToHighlightId, Tuml.AccordionEnum.CLASS_QUERIES.index);
+
+            }
+        }
+
+        this.createRootQueryMenu = function (queryToHighLightId) {
+            var self = this;
+            this.queryToHighlightId = queryToHighLightId;
+            //Add query tree
+            //Fetch the query data
+            var rootQueryUri = "/" + tumlModelName + "/rootquerys";
+            $.ajax({
+                url: rootQueryUri,
+                type: "GET",
+                dataType: "json",
+                contentType: "json",
+                success: function (response) {
+                    retrieveMetaDataIfNotInCache(rootQueryUri, null, response, self.continueCreateRootQueryMenu);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert('Error getting root query data. textStatus: ' + textStatus + ' errorThrown: ' + errorThrown);
+                }
+            });
+        }
+
+        this.continueCreateRootQueryMenu = function (tumlUri, result) {
+            self.createQueryMenu(self.umlRootQueriesDiv, tuml.tab.Enum.RootQueries, result);
+            if (self.queryToHighlightId !== -1) {
+                self.refreshQueryMenuCss(self.queryToHighlightId, Tuml.AccordionEnum.ROOT_QUERIES.index);
 
             }
         }
@@ -575,7 +598,7 @@
          * @param propertyNavigatingTo
          * @returns {Array}
          */
-        this.createLeftMenuDataArray = function(contextMetaDataFrom, contextMetaDataTo, propertyNavigatingTo) {
+        this.createLeftMenuDataArray = function (contextMetaDataFrom, contextMetaDataTo, propertyNavigatingTo) {
             var menuArray = [];
             if (contextMetaDataFrom.name !== tumlModelName) {
                 //add a menu item to the context object

@@ -122,7 +122,7 @@
                 instanceQueryTumlUri = '';
             }
             classQueryTumlUri = "/" + tumlModelName + "/classquery/" + this.contextVertexId + "/query";
-            rootQueryTumlUri = "/" + tumlModelName + "/rootquery";
+            rootQueryTumlUri = "/" + tumlModelName + "/rootquerys";
 
             if (this.contextVertexId != undefined && this.contextVertexId !== -1 && contextChanged) {
                 //This is the default query tab, always open
@@ -558,14 +558,14 @@
             if (tumlTabViewManagerQuery === undefined) {
                 if (query.queryType === undefined || query.queryType === null) {
                     //This is for the new query tab
-                    tumlTabViewManagerQuery = new Tuml.TumlTabQueryViewManager(tuml.tab.Enum.Properties, this.tabContainer, instanceQueryTumlUri, classQueryTumlUri, query.getDivName(), query.name, query.id);
+                    tumlTabViewManagerQuery = new Tuml.TumlTabQueryViewManager(tuml.tab.Enum.Properties, this.tabContainer, instanceQueryTumlUri, classQueryTumlUri, rootQueryTumlUri, query.getDivName(), query.name, query.id);
                 } else if (query.queryType === 'instanceQuery') {
-                    tumlTabViewManagerQuery = new Tuml.TumlTabQueryViewManager(tuml.tab.Enum.InstanceQueries, this.tabContainer, instanceQueryTumlUri, '', query.getDivName(), query.name, query.id);
+                    tumlTabViewManagerQuery = new Tuml.TumlTabQueryViewManager(tuml.tab.Enum.InstanceQueries, this.tabContainer, instanceQueryTumlUri, '', '', query.getDivName(), query.name, query.id);
                 } else if (query.queryType === 'classQuery') {
-                    tumlTabViewManagerQuery = new Tuml.TumlTabQueryViewManager(tuml.tab.Enum.ClassQueries, this.tabContainer, '', classQueryTumlUri, query.getDivName(), query.name, query.id);
+                    tumlTabViewManagerQuery = new Tuml.TumlTabQueryViewManager(tuml.tab.Enum.ClassQueries, this.tabContainer, '', classQueryTumlUri, '', query.getDivName(), query.name, query.id);
                 } else {
                     //Root queries
-                    tumlTabViewManagerQuery = new Tuml.TumlTabQueryViewManager(tuml.tab.Enum.RootQueries, this.tabContainer, '', rootQueryTumlUri, query.getDivName(), query.name, query.id);
+                    tumlTabViewManagerQuery = new Tuml.TumlTabQueryViewManager(tuml.tab.Enum.RootQueries, this.tabContainer, '', '', rootQueryTumlUri, query.getDivName(), query.name, query.id);
                 }
                 tumlTabViewManagerQuery.createTab(post);
                 tumlTabViewManagerQuery.parentTabContainerManager = this;
@@ -626,7 +626,7 @@
         }
 
         this.afterSaveInstance = function (args, previousIndex) {
-            addDefaultQueryTab(false);
+            this.addDefaultQueryTab(false);
             var newTumlTabViewManager = this.addQueryTab(false, new Tuml.Query(args.query.id, args.query.name, args.query.name, args.query.queryString, args.query.queryEnum, args.gridData, args.queryType));
             //place it back at the previousIndex
             var currentIndex = self.tumlTabViewManagers.indexOf(newTumlTabViewManager);
@@ -661,6 +661,25 @@
 
         this.afterDeleteClassQuery = function (args) {
             leftMenuManager.deleteClassQuery(args.query.id);
+        }
+
+        this.afterSaveRootQuery = function (args, previousIndex) {
+            this.addDefaultQueryTab(false);
+            var newTumlTabViewManager = this.addQueryTab(false, new Tuml.Query(args.query.id, args.query.name, args.query.name, args.query.queryString, args.query.queryEnum, args.gridData, args.queryType));
+            //place it back at the previousIndex
+            var currentIndex = self.tumlTabViewManagers.indexOf(newTumlTabViewManager);
+            this.tumlTabViewManagers.splice(currentIndex, 1);
+            this.tumlTabViewManagers.splice(previousIndex, 0, newTumlTabViewManager);
+            leftMenuManager.refreshRootQuery(args.query.id);
+        }
+
+        this.afterUpdateRootQuery = function (args) {
+            this.addQueryTab(false, new Tuml.Query(args.query.id, args.query.name, args.query.name, args.query.queryString, args.query.queryEnum, args.gridData, args.queryType));
+            leftMenuManager.refreshRootQuery(args.query.id);
+        }
+
+        this.afterDeleteRootQuery = function (args) {
+            leftMenuManager.deleteRootQuery(args.query.id);
         }
 
         function reorderTabsAfterAddOneOrMany(savedTumlTabViewManagers) {

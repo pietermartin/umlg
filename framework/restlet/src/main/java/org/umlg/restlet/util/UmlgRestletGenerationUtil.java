@@ -63,6 +63,7 @@ public class UmlgRestletGenerationUtil {
 
     public static final OJPathName UmlgAdminAppFactory = new OJPathName("org.umlg.runtime.adaptor.UmlgAdminAppFactory");
     public static final OJPathName DefaultDataCreator = new OJPathName("org.umlg.runtime.adaptor.DefaultDataCreator");
+    public static String rootQueryQualifiedName = "umlglib::org::umlg::meta::RootQuery";
 
 
     public static String getFieldTypeForProperty(Property p) {

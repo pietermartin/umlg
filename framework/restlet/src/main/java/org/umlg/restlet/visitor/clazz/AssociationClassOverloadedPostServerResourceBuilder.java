@@ -553,7 +553,6 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
                     block.addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + pWrap.getQualifiedName() + "\\\"\")");
                 }
 
-
                 // The execute ocl query resource is only required if the below
                 // visitor is available
                 if (RestletVisitors.containsVisitorForClass(QueryExecuteResourceBuilder.class)

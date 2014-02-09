@@ -13,8 +13,9 @@ import java.util.logging.Logger;
 public enum OclOperationExpEnum implements HandleOperationExp {
 
     ALL_INSTANCES(new OclAllInstancesExprToJava()), UNION(new OclUnionExprToJava()), IS_EMPTY(new OclIsEmptyExprToJava()), OCL_IS_UNDEFINED(new OclOclIsUndefinedExpToJava()), OCL_IS_INVALID(
-            new OclOclIsInvalidExpToJava()), INCLUDING(new OclIncludingExprToJava()), TO_STRING(new OclToStringExprToJava()), FIRST(new OclFirstExprToJava()), MINUS(
-            new OclMinusExprToJava()), EQUAL(new OclEqualExprToJava()), SIZE(new OclSizeExprToJava()), NOT_EQUAL(new OclNotEqualExprToJava()), AS_SET(
+            new OclOclIsInvalidExpToJava()), INCLUDING(new OclIncludingExprToJava()), TO_STRING(new OclToStringExprToJava()), FIRST(new OclFirstExprToJava()), LAST(new OclLastExprToJava()),
+    AT(new OclAtExprToJava()),
+    MINUS(new OclMinusExprToJava()), EQUAL(new OclEqualExprToJava()), SIZE(new OclSizeExprToJava()), NOT_EQUAL(new OclNotEqualExprToJava()), AS_SET(
             new OclAsSetExprToJava()), AS_SEQUENCE(new OclAsSequenceExprToJava()), AS_ORDERED_SET(new OclAsOrderedSetExprToJava()), AS_BAG(
             new OclAsBagExprToJava()), FLATTEN(new OclFlattenExprToJava()), CONCAT(new OclConcatExprToJava()), INCLUDES(new OclIncludesExpToJava()), DEFAULT(new OclDefaultToStringExprToJava()),
             INDEX_OF(new OclIndexOfExprToJava());
@@ -49,6 +50,10 @@ public enum OclOperationExpEnum implements HandleOperationExp {
             return MINUS;
         } else if (name.equals(PredefinedType.FIRST_NAME)) {
             return FIRST;
+        } else if (name.equals(PredefinedType.LAST_NAME)) {
+            return LAST;
+        } else if (name.equals(PredefinedType.AT_NAME)) {
+            return AT;
             // } else if (name.equals(PredefinedType.TO_STRING_NAME)) {
             // return TO_STRING;
         } else if (name.equals(PredefinedType.INCLUDING_NAME)) {

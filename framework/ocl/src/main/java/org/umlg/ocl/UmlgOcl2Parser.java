@@ -69,7 +69,7 @@ public class UmlgOcl2Parser implements ModelLoadedEvent {
     }
 
     public static void main(String[] args) {
-        Model model = ModelLoader.INSTANCE.loadModel(new File("/home/pieter/intellij-projects/umlg/test/umlg-test-ocl/src/main/model/test-ocl.uml"));
+        Model model = ModelLoader.INSTANCE.loadModel(new File("/home/pieter/Downloads/umlg/test/umlg-test-ocl/src/main/model/test-ocl.uml"));
         UmlgOcl2Parser parser = new UmlgOcl2Parser();
         StringBuilder sb = new StringBuilder();
         sb.append("package testoclmodel::org::umlg::testocl\n");
@@ -119,8 +119,7 @@ public class UmlgOcl2Parser implements ModelLoadedEvent {
 
     private OCLExpression<Classifier> parseConstraintUnvalidated(String text) {
         List<Constraint> constraints;
-        Constraint constraint = null;
-
+        Constraint constraint;
         try {
             constraints = ocl.parse(new OCLInput(text));
             constraint = constraints.get(0);

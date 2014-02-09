@@ -230,7 +230,7 @@
     TumlBaseTabViewManager.prototype.endUpdate = function () {
     }
 
-    function TumlTabQueryViewManager(tabEnum, tabContainer, instanceQueryUri, classQueryUri, tabDivName, tabTitleName, queryId) {
+    function TumlTabQueryViewManager(tabEnum, tabContainer, instanceQueryUri, classQueryUri, rootQueryUri, tabDivName, tabTitleName, queryId) {
 
         this.TumlTabQueryViewManager = "1.0.0";
 
@@ -240,7 +240,7 @@
 
         this.tabId = tabDivName;
         this.tabTitleName = tabTitleName;
-        this.tumlTabQueryManager = new Tuml.TumlTabQueryManager(this, instanceQueryUri, classQueryUri, this.queryId);
+        this.tumlTabQueryManager = new Tuml.TumlTabQueryManager(this, instanceQueryUri, classQueryUri, rootQueryUri, this.queryId);
 
         this.createQuery = function (oclExecuteUri, query, post) {
             this.tumlTabQueryManager.createQuery(this.tabId, oclExecuteUri, query, post);
@@ -275,6 +275,22 @@
 
         this.afterDeleteClassQuery = function (result) {
             this.parentTabContainerManager.afterDeleteClassQuery(result);
+            this.closeTab();
+        }
+
+        this.afterSaveRootQuery = function (result) {
+            var previousIndex = this.parentTabContainerManager.tumlTabViewManagers.indexOf(this);
+            this.closeTab();
+            this.parentTabContainerManager.afterSaveRootQuery(result, previousIndex);
+        }
+
+        this.afterUpdateRootQuery = function (result) {
+            this.updateTabTitle(result.query.name);
+            this.parentTabContainerManager.afterUpdateRootQuery(result);
+        }
+
+        this.afterDeleteRootQuery = function (result) {
+            this.parentTabContainerManager.afterDeleteRootQuery(result);
             this.closeTab();
         }
 

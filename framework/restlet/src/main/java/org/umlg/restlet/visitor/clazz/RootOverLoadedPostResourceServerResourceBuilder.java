@@ -13,7 +13,9 @@ import org.umlg.java.metamodel.annotation.*;
 import org.umlg.javageneration.util.Namer;
 import org.umlg.javageneration.util.UmlgGenerationUtil;
 import org.umlg.javageneration.util.UmlgClassOperations;
+import org.umlg.restlet.generation.RestletVisitors;
 import org.umlg.restlet.util.UmlgRestletGenerationUtil;
+import org.umlg.restlet.visitor.model.QueryExecuteResourceBuilder;
 
 import java.util.SortedSet;
 
@@ -307,6 +309,15 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
             tryStatement.getTryPart().addToStatements("meta", "json.append(\"], \\\"meta\\\": {\")");
 
             tryStatement.getTryPart().addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + clazz.getQualifiedName() + "\\\"\")");
+
+            // The execute ocl query resource is only required if the below
+            // visitor is available
+            if (RestletVisitors.containsVisitorForClass(QueryExecuteResourceBuilder.class)
+                    && (classifier.getQualifiedName().equals(UmlgRestletGenerationUtil.rootQueryQualifiedName))) {
+                tryStatement.getTryPart().addToStatements("json.append(\", \\\"oclExecuteUri\\\": \\\"/" + classifier.getModel().getName() + "/oclExecuteQuery\\\"\")");
+            }
+
+
             annotatedClass.addToImports(UmlgClassOperations.getPathName(clazz).append(UmlgClassOperations.propertyEnumName(clazz)));
             if (sortedConcreteImplementations.size() != 1 && count++ != sortedConcreteImplementations.size()) {
                 tryStatement.getTryPart().addToStatements("json.append(\",\")");
@@ -342,6 +353,12 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
             annotatedClass.addToImports(UmlgGenerationUtil.ToJsonUtil);
             tryStatement.getTryPart().addToStatements("meta", "json.append(\"{\\\"meta\\\" : {\")");
             tryStatement.getTryPart().addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + clazz.getQualifiedName() + "\\\"\")");
+            // The execute ocl query resource is only required if the below
+            // visitor is available
+            if (RestletVisitors.containsVisitorForClass(QueryExecuteResourceBuilder.class)
+                    && (classifier.getQualifiedName().equals(UmlgRestletGenerationUtil.rootQueryQualifiedName))) {
+                tryStatement.getTryPart().addToStatements("json.append(\", \\\"oclExecuteUri\\\": \\\"/" + classifier.getModel().getName() + "/oclExecuteQuery\\\"\")");
+            }
             tryStatement.getTryPart().addToStatements("json.append(\", \\\"to\\\": \")");
 
             // Meta data remains for the root object as viewing a many list does
