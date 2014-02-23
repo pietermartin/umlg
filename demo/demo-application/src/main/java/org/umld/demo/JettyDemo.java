@@ -4,9 +4,7 @@ import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.webapp.WebAppContext;
-import org.restlet.ext.servlet.ServerServlet;
 
-import java.io.File;
 import java.net.InetSocketAddress;
 
 /**
@@ -29,14 +27,10 @@ public class JettyDemo {
         WebAppContext graphOfTheGods = new WebAppContext();
         graphOfTheGods.setContextPath("/graphofthegods");
         graphOfTheGods.setWar("./demo/graphofthegods/graphofthegods-application/target/graphofthegods-application");
-        graphOfTheGods.setInitParameter("org.restlet.application", "org.umlg.graphofthegods.GraphofthegodsApplication");
-        graphOfTheGods.setInitParameter("org.restlet.clients", "HTTP FILE CLAP");
 
         WebAppContext tinkerGraph = new WebAppContext();
         tinkerGraph.setContextPath("/tinkergraph");
         tinkerGraph.setWar("./demo/tinkergraph/tinkergraph-application/target/tinkergraph-application");
-        tinkerGraph.setInitParameter("org.restlet.application", "org.umlg.tinkergraph.TinkergraphApplication");
-        tinkerGraph.setInitParameter("org.restlet.clients", "HTTP FILE CLAP");
 
         contexts.setHandlers(new Handler[] {  demo, graphOfTheGods, tinkerGraph });
         server.setHandler(contexts);
