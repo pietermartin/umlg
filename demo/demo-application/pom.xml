@@ -9,23 +9,23 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>demo-application</artifactId>
     <packaging>jar</packaging>
-    <name>umlg demo application</name>
+    <name>demo-application</name>
     <dependencies>
         <dependency>
             <groupId>org.umlg</groupId>
             <artifactId>runtime-restlet</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>org.umlg</groupId>
-            <artifactId>tinkergraph-application</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.umlg</groupId>
-            <artifactId>graphofthegods-application</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.umlg</groupId>-->
+            <!--<artifactId>tinkergraph-application</artifactId>-->
+            <!--<version>1.0-SNAPSHOT</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>org.umlg</groupId>-->
+            <!--<artifactId>graphofthegods-application</artifactId>-->
+            <!--<version>1.0-SNAPSHOT</version>-->
+        <!--</dependency>-->
 
 
         <dependency>

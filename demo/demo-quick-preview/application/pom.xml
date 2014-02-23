@@ -9,7 +9,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>application</artifactId>
     <packaging>jar</packaging>
-    <name>umlg application</name>
+    <name>application</name>
 
     <build>
         <plugins>
