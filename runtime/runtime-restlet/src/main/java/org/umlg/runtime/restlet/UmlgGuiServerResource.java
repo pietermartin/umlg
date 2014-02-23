@@ -2,6 +2,7 @@ package org.umlg.runtime.restlet;
 
 import org.restlet.data.MediaType;
 import org.restlet.ext.freemarker.TemplateRepresentation;
+import org.restlet.representation.FileRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
@@ -10,6 +11,7 @@ import org.umlg.framework.ModelLoader;
 import org.umlg.runtime.util.Pair;
 import org.umlg.runtime.util.UmlgUtil;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,13 +52,16 @@ public class UmlgGuiServerResource extends ServerResource {
                 .setPoweredByLink(poweredBy.getSecond()));
 
 
-//        Representation umlgUiFtl = new ClientResource("war:///resources/org/umlg/ui/umlgui2.html").get();
-        Representation umlgUiFtl = new ClientResource("clap:///resources/org/umlg/ui/umlgui2.html").get();
-        return new TemplateRepresentation(umlgUiFtl, dataModel, MediaType.TEXT_HTML);
-
-//        File umlgui2 = new File("./runtime/runtime-ui/src/main/resources/org/umlg/ui/umlgui2.html");
-//        FileRepresentation fileRepresentation = new FileRepresentation(umlgui2, MediaType.APPLICATION_XHTML);
-//        return new TemplateRepresentation(fileRepresentation, dataModel, MediaType.TEXT_HTML);
+        try {
+            Class.forName("org.restlet.ext.servlet.ServerServlet");
+            Representation umlgUiFtl = new ClientResource("war:///resources/org/umlg/ui/umlgui2.html").get();
+            return new TemplateRepresentation(umlgUiFtl, dataModel, MediaType.TEXT_HTML);
+        } catch (ClassNotFoundException e) {
+            File umlgui2 = new File("./runtime/runtime-ui/src/main/webapp/resources/org/umlg/ui/umlgui2.html");
+            FileRepresentation fileRepresentation = new FileRepresentation(umlgui2, MediaType.APPLICATION_XHTML);
+            return new TemplateRepresentation(fileRepresentation, dataModel, MediaType.TEXT_HTML);
+        }
+//        Representation umlgUiFtl = new ClientResource("clap:///resources/org/umlg/ui/umlgui2.html").get();
 
     }
 

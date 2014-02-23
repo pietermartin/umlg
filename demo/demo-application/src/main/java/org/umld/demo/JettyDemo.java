@@ -20,11 +20,11 @@ public class JettyDemo {
 
         ContextHandlerCollection contexts = new ContextHandlerCollection();
 
-//        WebAppContext demo = new WebAppContext();
-//        demo.setDescriptor("./demo/demo-application/src/main/webapp/WEB-INF/web.xml");
-//        demo.setResourceBase(".demo/demo-application/src/main/webapp");
-//        demo.setContextPath("/demo");
-//        context.setParentLoaderPriority(true);
+        WebAppContext demo = new WebAppContext();
+        demo.setContextPath("/demo");
+        demo.setDescriptor("./demo/demo-application/src/main/webapp/WEB-INF/web.xml");
+        demo.setResourceBase("./demo/demo-application/src/main/webapp");
+        demo.setParentLoaderPriority(true);
 
         WebAppContext graphOfTheGods = new WebAppContext();
         graphOfTheGods.setContextPath("/graphofthegods");
@@ -38,7 +38,7 @@ public class JettyDemo {
         tinkerGraph.setInitParameter("org.restlet.application", "org.umlg.tinkergraph.TinkergraphApplication");
         tinkerGraph.setInitParameter("org.restlet.clients", "HTTP FILE CLAP");
 
-        contexts.setHandlers(new Handler[] {  graphOfTheGods, tinkerGraph });
+        contexts.setHandlers(new Handler[] {  demo, graphOfTheGods, tinkerGraph });
         server.setHandler(contexts);
 
         server.start();
