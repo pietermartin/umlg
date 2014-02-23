@@ -1,6 +1,6 @@
 package org.umlg.tests.validationtest;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.collectiontest.FWomen;
 import org.umlg.collectiontest.Fantasy;

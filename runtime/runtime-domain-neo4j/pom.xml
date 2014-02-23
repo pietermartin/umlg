@@ -53,22 +53,40 @@
             <artifactId>runtime-domain</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>org.neo4j.app</groupId>
-            <artifactId>neo4j-server</artifactId>
-            <version>1.9</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>asm</groupId>
-                    <artifactId>asm</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.neo4j.app</groupId>
-            <artifactId>neo4j-server</artifactId>
-            <classifier>static-web</classifier>
-            <version>1.9</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.neo4j.app</groupId>-->
+            <!--<artifactId>neo4j-server</artifactId>-->
+            <!--<version>1.9</version>-->
+            <!--<exclusions>-->
+                <!--<exclusion>-->
+                    <!--<groupId>asm</groupId>-->
+                    <!--<artifactId>asm</artifactId>-->
+                <!--</exclusion>-->
+                <!--<exclusion>-->
+                    <!--<groupId>org.morbay.jetty</groupId>-->
+                    <!--<artifactId>jetty</artifactId>-->
+                <!--</exclusion>-->
+                <!--<exclusion>-->
+                    <!--<artifactId>jetty</artifactId>-->
+                    <!--<groupId>org.mortbay.jetty</groupId>-->
+                <!--</exclusion>-->
+            <!--</exclusions>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>org.neo4j.app</groupId>-->
+            <!--<artifactId>neo4j-server</artifactId>-->
+            <!--<classifier>static-web</classifier>-->
+            <!--<version>1.9</version>-->
+            <!--<exclusions>-->
+                <!--<exclusion>-->
+                    <!--<groupId>org.morbay.jetty</groupId>-->
+                    <!--<artifactId>jetty</artifactId>-->
+                <!--</exclusion>-->
+                <!--<exclusion>-->
+                    <!--<artifactId>jetty</artifactId>-->
+                    <!--<groupId>org.mortbay.jetty</groupId>-->
+                <!--</exclusion>-->
+            <!--</exclusions>-->
+        <!--</dependency>-->
     </dependencies>
 </project>

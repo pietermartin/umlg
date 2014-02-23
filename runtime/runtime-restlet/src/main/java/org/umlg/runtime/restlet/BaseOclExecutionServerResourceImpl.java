@@ -76,14 +76,10 @@ public abstract class BaseOclExecutionServerResourceImpl extends ServerResource 
     }
 
     //static
-    protected Representation execute(String query, String type) {
+    protected Representation executeStatic(String query, String contextClassifierQualifiedName, String type) {
         if (type.equalsIgnoreCase("ocl")) {
 
-            //TODO This will only work for allInstances
-            int startOfAllInstances = query.indexOf(".");
-            String context = query.substring(0, startOfAllInstances);
-
-            Object result = UmlgOclExecutor.executeOclQuery(context, query);
+            Object result = UmlgOclExecutor.executeOclQuery(contextClassifierQualifiedName, query);
             if (result instanceof Map) {
 //            return UmlgOclExecutor.tupleMapToJson((Map<String, Object>) result);
                 //TODO

@@ -17,14 +17,6 @@ import org.codehaus.groovy.control.CompilerConfiguration;
  */
 public class GremlinExecutor {
 
-    public static String executeGremlinQuery(Long contextId, String gremlin) {
-        StringBuilder result = new StringBuilder();
-        Pipe pipe = Gremlin.compile("_()." + gremlin);
-        ToStringPipe toStringPipe = new ToStringPipe();
-        toStringPipe.setStarts(pipe);
-        return toStringPipe.toString();
-    }
-
     /**
      * Executes a gremlin query. If the contextId is null then it is ignored.
      * If it is not null then all instances of the keywork "this" will be replaced with "g.v(contextId)"
@@ -35,6 +27,10 @@ public class GremlinExecutor {
     public static String executeGremlinViaGroovy(Object contextId, String gremlin) {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
+
+        //remove uml namespacing
+        gremlin = gremlin.replace("::", "____");
+
         if (contextId != null) {
             if (!(contextId instanceof Long)) {
                 gremlin = gremlin.replace("self", "g.v(\"" + contextId.toString() + "\")");
@@ -49,7 +45,6 @@ public class GremlinExecutor {
         binding.setVariable("g", graph);
         GroovyShell shell = new GroovyShell(binding, compilerConfiguration);
         Object pipe = shell.evaluate("return " + gremlin + ";");
-//        GremlinToStringPipe<String> toStringPipe = new GremlinToStringPipe(pipe);
         ToStringPipe toStringPipe = new ToStringPipe();
         toStringPipe.setStarts(new SingleIterator<Object>(pipe));
         StringBuilder result = new StringBuilder();

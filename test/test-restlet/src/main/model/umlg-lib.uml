@@ -154,6 +154,10 @@ The idea is to tag arbitrary object to facilitate easy searching.</body>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="__iJM40-NEeKwIp56YBZIxw" value="1"/>
           </ownedEnd>
         </packagedElement>
+        <packagedElement xmi:type="uml:Class" xmi:id="_-m6csJFuEeOfTrD4sy-PQQ" clientDependency="_bifbMJFvEeOfTrD4sy-PQQ" name="RootQuery">
+          <generalization xmi:id="_IGJ-UJFvEeOfTrD4sy-PQQ" general="_2GNhsCQOEeKOmc56p_1Osg"/>
+          <interfaceRealization xmi:id="_bifbMJFvEeOfTrD4sy-PQQ" name="InterfaceRealization1" client="_-m6csJFuEeOfTrD4sy-PQQ" supplier="_djoUIE6JEeK4HckrDYI0ug" contract="_djoUIE6JEeK4HckrDYI0ug"/>
+        </packagedElement>
       </packagedElement>
     </packagedElement>
   </packagedElement>

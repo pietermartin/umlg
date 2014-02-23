@@ -40,18 +40,18 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         }
     }
 
+    public boolean isDataType() {
+        return getType() instanceof DataType;
+    }
+
     public boolean needsLookup() {
         return !isComposite() && isNavigable() && !(getType() instanceof Enumeration)
                 && !isDerived() && !isQualifier() && getOtherEnd() != null
                 && !(getOtherEnd().getType() instanceof Enumeration) && !getOtherEnd().isComposite();
     }
 
-    public boolean isDataType() {
-        return getType() instanceof DataType;
-    }
-
     public boolean hasLookup() {
-        if (!isComposite() && !(getType() instanceof Enumeration) && !isDerived() && !isQualifier() && getOtherEnd() != null && !(getOtherEnd().getType() instanceof Enumeration)
+        if (!isComposite() && isNavigable() && !(getType() instanceof Enumeration) && !isDerived() && !isQualifier() && getOtherEnd() != null && !(getOtherEnd().getType() instanceof Enumeration)
                 && !getOtherEnd().isComposite()) {
             return true;
         } else {

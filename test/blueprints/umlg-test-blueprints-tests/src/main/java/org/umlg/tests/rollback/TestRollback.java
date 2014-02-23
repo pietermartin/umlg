@@ -16,7 +16,7 @@ import org.umlg.runtime.test.BaseLocalDbTest;
 public class TestRollback extends BaseLocalDbTest {
 
     @SuppressWarnings("unused")
-    @Test
+//    @Test
     public void testRollback() {
         God god = new God(true);
         god.setName("THEGOD");

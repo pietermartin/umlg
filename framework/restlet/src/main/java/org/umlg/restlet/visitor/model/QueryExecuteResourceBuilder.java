@@ -19,26 +19,10 @@ public class QueryExecuteResourceBuilder extends BaseServerResourceBuilder imple
 
 	@Override
 	public void visitBefore(Model model) {
-//		OJAnnotatedInterface queryExecuteInf = new OJAnnotatedInterface(UmlgRestletGenerationUtil.QueryExecuteServerResource.getLast());
-//		OJPackage ojPackage = new OJPackage(UmlgGenerationUtil.UmlgRootPackage.toJavaString());
-//		queryExecuteInf.setMyPackage(ojPackage);
-//		addToSource(queryExecuteInf);
-//
-//		OJAnnotatedClass queryExecute = new OJAnnotatedClass(UmlgRestletGenerationUtil.QueryExecuteServerResourceImpl.getLast());
-//		queryExecute.setMyPackage(ojPackage);
-//		queryExecute.addToImplementedInterfaces(UmlgRestletGenerationUtil.QueryExecuteServerResource);
-//		queryExecute.setSuperclass(UmlgRestletGenerationUtil.BaseOclExecutionServerResourceImpl);
-//		addToSource(queryExecute);
-//
-//		addDefaultConstructor(queryExecute);
-//
-//		addGetRepresentation(queryExecuteInf, queryExecute);
-
 		addToRouterEnum("QUERY_EXECUTE", "\"/{contextId}/oclExecuteQuery\"");
         addToRouterEnum("QUERY_EXECUTE_STATIC", "\"/oclExecuteQuery\"");
-
+        addOclInsightResourceToRouterEnum("OCL_CODE_INSIGHT", "\"/oclCodeInsight\"");
         addToClassQueryRouterEnum(model, UmlgRestletGenerationUtil.UmlgMetaQueryServerResourceImpl, "CLASS_QUERY", "\"/classquery/{contextId}/query\"");
-
 	}
 
     protected void addToClassQueryRouterEnum(Model model, OJPathName ojPathName, String name, String path) {
@@ -85,43 +69,34 @@ public class QueryExecuteResourceBuilder extends BaseServerResourceBuilder imple
         attachAll.getBody().addToStatements(routerEnum.getName() + "." + ojLiteral.getName() + ".attach(router)");
     }
 
+    protected void addOclInsightResourceToRouterEnum(String name, String path) {
+        OJEnum routerEnum = (OJEnum) this.workspace.findOJClass(UmlgRestletGenerationUtil.RestletRouterEnum.toJavaString());
+        OJEnumLiteral ojLiteral = new OJEnumLiteral(name);
+
+        OJField uri = new OJField();
+        uri.setType(new OJPathName("String"));
+        uri.setInitExp(path);
+        ojLiteral.addToAttributeValues(uri);
+
+        OJField serverResourceClassField = new OJField();
+        serverResourceClassField.setType(new OJPathName("java.lang.Class"));
+        serverResourceClassField.setInitExp(UmlgRestletGenerationUtil.OclCodeInsightServerResource.getLast() + ".class");
+        ojLiteral.addToAttributeValues(serverResourceClassField);
+        routerEnum.addToImports(UmlgRestletGenerationUtil.OclCodeInsightServerResource);
+        routerEnum.addToImports(UmlgRestletGenerationUtil.ServerResource);
+
+        routerEnum.addToLiterals(ojLiteral);
+
+        OJAnnotatedOperation attachAll = routerEnum.findOperation("attachAll", UmlgRestletGenerationUtil.Router);
+        attachAll.getBody().addToStatements(routerEnum.getName() + "." + ojLiteral.getName() + ".attach(router)");
+    }
+
 
 
 
     @Override
 	public void visitAfter(Model element) {
 		
-	}
-
-	private void addGetRepresentation(OJAnnotatedInterface queryExecuteInf, OJAnnotatedClass queryExecute) {
-		OJAnnotatedOperation getInf = new OJAnnotatedOperation("get", UmlgRestletGenerationUtil.Representation);
-		queryExecuteInf.addToOperations(getInf);
-		getInf.addAnnotationIfNew(new OJAnnotationValue(UmlgRestletGenerationUtil.Get, "json"));
-		queryExecuteInf.addToOperations(getInf);
-		
-		OJAnnotatedOperation get = new OJAnnotatedOperation("get", UmlgRestletGenerationUtil.Representation);
-		get.addToThrows(UmlgRestletGenerationUtil.ResourceException);
-		queryExecute.addToImports(UmlgRestletGenerationUtil.ResourceException);
-		UmlgGenerationUtil.addOverrideAnnotation(get);
-		queryExecute.addToOperations(get);
-
-        OJField type = new OJField("type", "String");
-        type.setInitExp("getQuery().getFirstValue(\"type\")");
-		OJField query = new OJField("query", "String");
-		query.setInitExp("getQuery().getFirstValue(\"query\")");
-		OJField contextId = new OJField("context", "Object");
-        contextId.setInitExp(UmlgRestletGenerationUtil.UmlgURLDecoder.getLast() + ".decode((String)getRequestAttributes().get(\"contextId\"))");
-        queryExecute.addToImports(UmlgRestletGenerationUtil.UmlgURLDecoder);
-
-        OJIfStatement ifContextNull = new OJIfStatement("context != null");
-        ifContextNull.addToThenPart("Object contextId = (String)context");
-        ifContextNull.addToThenPart("return execute(query, contextId, type)");
-        ifContextNull.addToElsePart("return execute(query)");
-        get.getBody().addToStatements(ifContextNull);
-
-        get.getBody().addToLocals(type);
-		get.getBody().addToLocals(query);
-		get.getBody().addToLocals(contextId);
 	}
 
 }

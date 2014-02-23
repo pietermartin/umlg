@@ -4,6 +4,7 @@ import org.restlet.Component;
 import org.restlet.Context;
 import org.restlet.Server;
 import org.restlet.data.Protocol;
+import org.umlg.graphofthegods.GraphofthegodsApplication;
 import org.umlg.tinkergraph.TinkergraphApplication;
 
 /**
@@ -33,6 +34,7 @@ public class DemoComponent extends Component {
         getDefaultHost().attach("", new RedirectApplication());
         getDefaultHost().attach("/demo", new DemoApplication());
         getDefaultHost().attach("/tinkergraph", new TinkergraphApplication());
+        getDefaultHost().attach("/graphofthegods", new GraphofthegodsApplication());
     }
 
 }

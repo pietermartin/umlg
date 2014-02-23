@@ -10,6 +10,7 @@ import org.umlg.javageneration.util.PropertyWrapper;
 
 public class UmlgRestletGenerationUtil {
 
+    public final static OJPathName OclCodeInsightServerResource = new OJPathName("org.umlg.runtime.restlet.OclCodeInsightServerResource");
     public final static OJPathName QueryExecuteServerResourceImpl = new OJPathName("org.umlg.runtime.restlet.QueryExecuteServerResourceImpl");
     public final static OJPathName EmptyRepresentation = new OJPathName("org.restlet.representation.EmptyRepresentation");
     public final static String _INDEX = "_index";

@@ -33,7 +33,7 @@ public class UmlgGroovyShell {
 	public static Object executeQuery(String javaClassAsString) {
 		Binding binding = new Binding();
 		GroovyShell shell = new GroovyShell(binding);
-		Object value = shell.evaluate(javaClassAsString + "; def oclQuery = new OclQuery(); return oclQuery.execute();");
+		Object value = shell.evaluate(javaClassAsString + "; def oclQuery = new OclQuery(false); return oclQuery.execute();");
 		return value;
 	}
 

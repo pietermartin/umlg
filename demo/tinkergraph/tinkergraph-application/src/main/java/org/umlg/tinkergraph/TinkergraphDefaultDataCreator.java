@@ -1,10 +1,7 @@
 package org.umlg.tinkergraph;
 
-import org.umlg.model.Tinkergraph;
 import org.umlg.runtime.adaptor.DefaultDataCreator;
 import org.umlg.runtime.adaptor.GraphDb;
-
-import java.util.List;
 
 /**
  * Date: 2012/12/31

@@ -279,7 +279,7 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
         OJField json = new OJField("json", new OJPathName("java.lang.StringBuilder"));
         json.setInitExp("new StringBuilder()");
         tryStatement.getTryPart().addToLocals(json);
-        OJField resource = new OJField("resource", new OJPathName("java.util.List").addToGenerics(UmlgClassOperations.getPathName(clazz)));
+        OJField resource = new OJField("resource", UmlgGenerationUtil.umlgSequence.getCopy().addToGenerics(UmlgClassOperations.getPathName(clazz)));
         resource.setInitExp(StringUtils.capitalize(ModelLoader.INSTANCE.getModel().getName()) + ".INSTANCE.get" + UmlgClassOperations.className(clazz) + "()");
         tryStatement.getTryPart().addToLocals(resource);
         annotatedClass.addToImports(UmlgGenerationUtil.UmlgRootPackage.toJavaString() + "." + StringUtils.capitalize(ModelLoader.INSTANCE.getModel().getName()));

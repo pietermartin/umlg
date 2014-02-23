@@ -19,6 +19,9 @@
     <availablePage>
       <emfPageIdentifier href="umlg-lib.notation#_wJwsUE6KEeK4HckrDYI0ug"/>
     </availablePage>
+    <availablePage>
+      <emfPageIdentifier href="umlg-lib.notation#_-ANCAJFuEeOfTrD4sy-PQQ"/>
+    </availablePage>
   </pageList>
   <sashModel currentSelection="//@sashModel/@windows.0/@children.0">
     <windows>
@@ -37,6 +40,9 @@
         </children>
         <children>
           <emfPageIdentifier href="umlg-lib.notation#_wJwsUE6KEeK4HckrDYI0ug"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="umlg-lib.notation#_-ANCAJFuEeOfTrD4sy-PQQ"/>
         </children>
       </children>
     </windows>

@@ -49,16 +49,15 @@ public class UmlgGuiServerResource extends ServerResource {
                 .setPoweredBy(poweredBy.getFirst())
                 .setPoweredByLink(poweredBy.getSecond()));
 
-        Representation umlgUiFtl = new ClientResource("clap:///org/umlg/ui/umlgui2.html").get();
+
+//        Representation umlgUiFtl = new ClientResource("war:///resources/org/umlg/ui/umlgui2.html").get();
+        Representation umlgUiFtl = new ClientResource("clap:///resources/org/umlg/ui/umlgui2.html").get();
         return new TemplateRepresentation(umlgUiFtl, dataModel, MediaType.TEXT_HTML);
 
 //        File umlgui2 = new File("./runtime/runtime-ui/src/main/resources/org/umlg/ui/umlgui2.html");
 //        FileRepresentation fileRepresentation = new FileRepresentation(umlgui2, MediaType.APPLICATION_XHTML);
-//        //Directory css = new Directory(getContext(), "clap://javascript/css");
-//        Directory css = new Directory(getContext(), "file:///home/pieter/Downloads/umlg/runtime/runtime-ui/src/main/resources/org/umlg/ui/");
-//        css.setListingAllowed(true);
-//        router.attach("/css/", css);
 //        return new TemplateRepresentation(fileRepresentation, dataModel, MediaType.TEXT_HTML);
+
     }
 
     public class App {

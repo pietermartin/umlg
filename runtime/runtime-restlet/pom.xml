@@ -18,16 +18,31 @@
         <restlet.version>2.2-M3</restlet.version>
     </properties>
 	<dependencies>
-		<dependency>
-			<groupId>org.restlet.jse</groupId>
-			<artifactId>org.restlet</artifactId>
-			<version>${restlet.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.restlet.jse</groupId>
-			<artifactId>org.restlet.ext.simple</artifactId>
-			<version>${restlet.version}</version>
-		</dependency>
+
+
+		<!--<dependency>-->
+			<!--<groupId>org.restlet.jse</groupId>-->
+			<!--<artifactId>org.restlet</artifactId>-->
+			<!--<version>${restlet.version}</version>-->
+		<!--</dependency>-->
+		<!--<dependency>-->
+			<!--<groupId>org.restlet.jse</groupId>-->
+			<!--<artifactId>org.restlet.ext.simple</artifactId>-->
+			<!--<version>${restlet.version}</version>-->
+		<!--</dependency>-->
+
+
+        <dependency>
+            <groupId>org.restlet.jee</groupId>
+            <artifactId>org.restlet.ext.servlet</artifactId>
+            <version>${restlet.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.restlet.jee</groupId>
+            <artifactId>org.restlet</artifactId>
+            <version>${restlet.version}</version>
+        </dependency>
+
 		<dependency>
 			<groupId>org.restlet.jse</groupId>
 			<artifactId>org.restlet.ext.json</artifactId>

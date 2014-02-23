@@ -35,17 +35,21 @@ public abstract class UmlgRestletApplication extends Application {
         File current = new File(".");
         Directory slickgrid;
         if (UmlgProperties.INSTANCE.isLoadUiResourcesFromFile()) {
-            slickgrid = new Directory(getContext(), "file:///" + current.getAbsolutePath() + "/runtime/runtime-ui/src/main/javascript/javascript");
+//            slickgrid = new Directory(getContext(), "file:///" + current.getAbsolutePath() + "/runtime/runtime-ui/src/main/javascript/javascript");
+//            slickgrid = new Directory(getContext(), "war:///javascript/javascript");
+            slickgrid = new Directory(getContext(), "clap:///javascript");
         } else {
-            slickgrid = new Directory(getContext(), "clap://javascript/javascript/");
+            slickgrid = new Directory(getContext(), "clap:///javascript/");
         }
         slickgrid.setListingAllowed(true);
         router.attach("/javascript/", slickgrid);
         Directory css;
         if (UmlgProperties.INSTANCE.isLoadUiResourcesFromFile()) {
-            css = new Directory(getContext(), "file:///" + current.getAbsolutePath() + "/runtime/runtime-ui/src/main/javascript/css");
+//            css = new Directory(getContext(), "file:///" + current.getAbsolutePath() + "/runtime/runtime-ui/src/main/javascript/css");
+//            css = new Directory(getContext(), "war:///javascript/css");
+            css = new Directory(getContext(), "clap:///css");
         } else {
-            css = new Directory(getContext(), "clap://javascript/css");
+            css = new Directory(getContext(), "clap:///css");
         }
         css.setListingAllowed(true);
         router.attach("/css/", css);

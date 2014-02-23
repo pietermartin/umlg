@@ -7,6 +7,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>runtime-ui</artifactId>
+    <packaging>war</packaging>
 	<name>runtime-ui</name>
 	<url>http://maven.apache.org</url>
 	<repositories>
@@ -20,31 +21,31 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <restlet.version>2.2-M1</restlet.version>
     </properties>
-    <build>
-		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>1.7</version>
-				<executions>
-					<execution>
-                        <id>add-resource</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>add-resource</goal>
-                        </goals>
-                        <configuration>
-                            <resources>
-                                <resource>
-                                    <directory>src/main/javascript</directory>
-                                </resource>
-                            </resources>
-                        </configuration>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+    <!--<build>-->
+		<!--<plugins>-->
+			<!--<plugin>-->
+				<!--<groupId>org.codehaus.mojo</groupId>-->
+				<!--<artifactId>build-helper-maven-plugin</artifactId>-->
+				<!--<version>1.7</version>-->
+				<!--<executions>-->
+					<!--<execution>-->
+                        <!--<id>add-resource</id>-->
+                        <!--<phase>generate-resources</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>add-resource</goal>-->
+                        <!--</goals>-->
+                        <!--<configuration>-->
+                            <!--<resources>-->
+                                <!--<resource>-->
+                                    <!--<directory>src/main/webapp</directory>-->
+                                <!--</resource>-->
+                            <!--</resources>-->
+                        <!--</configuration>-->
+					<!--</execution>-->
+				<!--</executions>-->
+			<!--</plugin>-->
+		<!--</plugins>-->
+	<!--</build>-->
 	<dependencies>
 		<dependency>
 			<groupId>org.restlet.jse</groupId>

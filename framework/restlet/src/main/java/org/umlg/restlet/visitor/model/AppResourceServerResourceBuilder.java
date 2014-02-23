@@ -40,7 +40,7 @@ public class AppResourceServerResourceBuilder extends BaseServerResourceBuilder 
         addDefaultConstructor(annotatedClass);
         addGetRootObjectRepresentation(model, annotatedClass);
         addOptionsRootObjectRepresentation(model, annotatedClass);
-        addToRouterEnum(model, annotatedClass, "ROOT", "\"\"");
+        addToRouterEnum(model, annotatedClass, "ROOT", "\"/umlgRoot\"");
     }
 
     @Override

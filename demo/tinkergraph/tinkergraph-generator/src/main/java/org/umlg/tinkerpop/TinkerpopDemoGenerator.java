@@ -21,6 +21,7 @@ public class TinkerpopDemoGenerator {
                 new File(args[0] + "/demo/tinkergraph/tinkergraph-application/src/main/model/tinkergraph.uml"),
                 new File(args[0] + "/demo/tinkergraph/tinkergraph-application"), RestletVisitors.getDefaultJavaVisitors());
 
+        ///demo/tinkergraph
     }
 
 }

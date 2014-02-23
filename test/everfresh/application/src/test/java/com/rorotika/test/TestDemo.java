@@ -22,7 +22,7 @@ public class TestDemo {
 
     @BeforeClass
     public static void beforeClass() {
-        //To execute ocl queries the model needs to loaded and the ocl parser initialize.
+        //To executeStatic ocl queries the model needs to loaded and the ocl parser initialize.
         //This only needs to happen once.
         UmlgOcl2Parser.INSTANCE.init("umlg-demo1.uml");
     }

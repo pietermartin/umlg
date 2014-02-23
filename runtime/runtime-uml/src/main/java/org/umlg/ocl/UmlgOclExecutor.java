@@ -25,15 +25,7 @@ import org.umlg.runtime.domain.UmlgNode;
 public class UmlgOclExecutor {
 
     /**
-     * Code insight for ocl
-     */
-    public static List<Choice> getCodeInsights(String ocl) {
-        return UmlgOcl2Parser.INSTANCE.getHelper().getSyntaxHelp(null, ocl);
-    }
-
-
-    /**
-     * This is for static ocl, including allInstances
+     * This is for static ocl, mostly allInstances
      *
      * @param contextQualifiedName
      * @param query
@@ -47,14 +39,13 @@ public class UmlgOclExecutor {
         }
 
         OJAnnotatedClass oclClass = new OJAnnotatedClass("OclQuery");
-        oclClass.setSuperclass(UmlgClassOperations.getPathName(contextClassifier));
         OJPackage ojPackage = new OJPackage(Namer.name(contextClassifier.getNearestPackage()));
         oclClass.setMyPackage(ojPackage);
-        oclClass.getDefaultConstructor();
         OJConstructor constructor = new OJConstructor();
-        constructor.addParam("vertex", UmlgGenerationUtil.vertexPathName);
-        constructor.getBody().addToStatements("super(vertex)");
+        //Do not call the default constructor, as it will create try a persistent OclQuery which is all wrong like you know.
+        constructor.addParam("jippo", "boolean");
         oclClass.addToConstructors(constructor);
+        oclClass.addToImports(UmlgClassOperations.getPathName(contextClassifier));
 
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();

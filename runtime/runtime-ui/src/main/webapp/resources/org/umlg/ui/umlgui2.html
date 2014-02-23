@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- /appRoot is resolved by freemarker to the application's name -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+    <link rel="stylesheet" href="/${app.rootUrl}/javascript/slickgrid/slick.grid.css" type="text/css"/>
+
+    <link type="text/css" rel="stylesheet" href="/${app.rootUrl}/css/jquery-ui/base/jquery.ui.all.css"/>
+    <!--trying out jquery-ui-bootstrap-->
+    <!--<link type="text/css" rel="stylesheet" href="/${app.rootUrl}/css/jquery-ui-bootstrap/jquery.ui-1.10.3.css"/>-->
+
+    <!-- bootstrap-datetimepicker-->
+    <!--<link rel="stylesheet" type="text/css" media="screen" href="/${app.rootUrl}/css/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css">-->
+
+    <!-- font-awesome-->
+    <link href="/${app.rootUrl}/css/font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <link type="text/css" rel="stylesheet" href="/${app.rootUrl}/javascript/layout/layout-default-latest.css"/>
+
+    <link rel="stylesheet" href="/${app.rootUrl}/javascript/slickgrid/slick-default-theme.css" type="text/css"/>
+    <link rel="stylesheet" href="/${app.rootUrl}/javascript/slickgrid/controls/slick.pager.css" type="text/css"/>
+    <!--<link rel="stylesheet" href="/${app.rootUrl}/javascript/slickgrid/examples/examples.css" type="text/css"/>-->
+    <link rel="stylesheet" href="/${app.rootUrl}/javascript/slickgrid/controls/slick.columnpicker.css" type="text/css"/>
+
+    <link rel="stylesheet" href="/${app.rootUrl}/javascript/chosen/chosen.css" type="text/css"/>
+    <link rel="stylesheet" href="/${app.rootUrl}/javascript/timepicker/jquery-ui-timepicker-addon.css" type="text/css"/>
+    <link rel="stylesheet" href="/${app.rootUrl}/javascript/jqtree/jqtree.css" type="text/css">
+    <link rel="stylesheet" href="/${app.rootUrl}/javascript/tablednd/tablednd.css" type="text/css">
+    <link rel="stylesheet" href="/${app.rootUrl}/javascript/codemirror/codemirror.css" type="text/css">
+    <link rel="stylesheet" href="/${app.rootUrl}/javascript/codemirror/theme/3024-day.css" type="text/css">
+    <link rel="stylesheet" href="/${app.rootUrl}/javascript/codemirror/addon/hint/show-hint.css" type="text/css">
+
+    <link rel="stylesheet" href="/${app.rootUrl}/css/tuml.css" type="text/css">
+
+    <script src="/${app.rootUrl}/javascript/jquery/jquery-1.9.1.js"></script>
+
+    <script src="/${app.rootUrl}/javascript/jquery-ui/jquery-ui-1.10.3.js"></script>
+    <script src="/${app.rootUrl}/javascript/slickgrid/lib/jquery.event.drag-2.2.js"></script>
+
+    <script src="/${app.rootUrl}/javascript/layout/jquery.layout-latest.js"></script>
+
+    <script src="/${app.rootUrl}/javascript/super-theme-switcher/jquery.themeswitcher.js"></script>
+
+    <script src="/${app.rootUrl}/javascript/slickgrid/lib/jquery.event.drag-2.2.js"></script>
+    <script src="/${app.rootUrl}/javascript/slickgrid/lib/jquery.event.drop-2.2.js"></script>
+    <script src="/${app.rootUrl}/javascript/slickgrid/slick.core.js"></script>
+    <script src="/${app.rootUrl}/javascript/slickgrid/slick.grid.js"></script>
+    <script src="/${app.rootUrl}/javascript/slickgrid/slick.formatters.js"></script>
+    <script src="/${app.rootUrl}/javascript/slickgrid/controls/slick.pager.js"></script>
+    <script src="/${app.rootUrl}/javascript/slickgrid/controls/slick.columnpicker.js"></script>
+
+    <script src="/${app.rootUrl}/javascript/slickgrid/plugins/slick.cellrangedecorator.js"></script>
+    <script src="/${app.rootUrl}/javascript/slickgrid/plugins/slick.cellrangeselector.js"></script>
+    <script src="/${app.rootUrl}/javascript/slickgrid/plugins/slick.cellselectionmodel.js"></script>
+    <script src="/${app.rootUrl}/javascript/slickgrid/plugins/slick.rowselectionmodel.js"></script>
+    <script src="/${app.rootUrl}/javascript/slickgrid/plugins/slick.rowmovemanager.js"></script>
+    <script src="/${app.rootUrl}/javascript/slickgrid/slick.editors.js"></script>
+
+    <script src="/${app.rootUrl}/javascript/jquery-validation/jquery.validate.js"></script>
+    <script src="/${app.rootUrl}/javascript/chosen/chosen.jquery.js" type="text/javascript"></script>
+    <script src="/${app.rootUrl}/javascript/timepicker/jquery-ui-timepicker-addon.js" type="text/javascript"></script>
+    <script src="/${app.rootUrl}/javascript/timepicker/jquery-ui-sliderAccess.js" type="text/javascript"></script>
+
+    <!-- jqTree -->
+    <script src="/${app.rootUrl}/javascript/jqtree/tree.jquery.js" type="text/javascript"></script>
+
+    <!-- table drag and drop -->
+    <script src="/${app.rootUrl}/javascript/tablednd/jquery.tablednd.js" type="text/javascript"></script>
+
+    <!-- codemirror -->
+    <script src="/${app.rootUrl}/javascript/codemirror/codemirror.js" type="text/javascript"></script>
+    <script src="/${app.rootUrl}/javascript/codemirror/mode/sql/sql.js" type="text/javascript"></script>
+    <script src="/${app.rootUrl}/javascript/codemirror/mode/less/less.js" type="text/javascript"></script>
+    <script src="/${app.rootUrl}/javascript/codemirror/mode/groovy/groovy.js" type="text/javascript"></script>
+    <script src="/${app.rootUrl}/javascript/codemirror/addon/edit/matchbrackets.js" type="text/javascript"></script>
+    <script src="/${app.rootUrl}/javascript/codemirror/addon/hint/show-hint.js" type="text/javascript"></script>
+
+    <!-- umlg scripts -->
+    <script src="/${app.rootUrl}/javascript/tuml2/tuml.validation.result.js"></script>
+    <script src="/${app.rootUrl}/javascript/tuml2/tuml.metadata.cache.js"></script>
+    <script src="/${app.rootUrl}/javascript/tuml2/tuml.util.js"></script>
+    <script src="/${app.rootUrl}/javascript/tuml2/tuml.prototypes.js"></script>
+    <script src="/${app.rootUrl}/javascript/tuml2/tuml.ui.manager.js"></script>
+    <script src="/${app.rootUrl}/javascript/tuml2/tuml.menu.manager.js"></script>
+    <script src="/${app.rootUrl}/javascript/tuml2/tuml.context.manager.js"></script>
+    <script src="/${app.rootUrl}/javascript/tuml2/tuml.left.menu.manager.js"></script>
+    <script src="/${app.rootUrl}/javascript/tuml2/tuml.tab.container.manager.js"></script>
+    <script src="/${app.rootUrl}/javascript/tuml2/tuml.main.view.manager.js"></script>
+    <script src="/${app.rootUrl}/javascript/tuml2/tuml.tab.view.manager.js"></script>
+    <script src="/${app.rootUrl}/javascript/tuml2/tuml.tab.grid.manager.js"></script>
+    <script src="/${app.rootUrl}/javascript/tuml2/tuml.tab.diagram.manager.js"></script>
+    <script src="/${app.rootUrl}/javascript/tuml2/tuml.tab.query.manager.js"></script>
+    <script src="/${app.rootUrl}/javascript/tuml2/tuml.tab.one.manager.js"></script>
+    <script src="/${app.rootUrl}/javascript/tuml/tuml.slick.grid.lookup.js"></script>
+    <script src="/${app.rootUrl}/javascript/tuml/tuml.slick.validators.js"></script>
+    <script src="/${app.rootUrl}/javascript/tuml/tuml.slick.editors.js"></script>
+    <script src="/${app.rootUrl}/javascript/tuml/tuml.slick.formatters.js"></script>
+    <script src="/${app.rootUrl}/javascript/tuml/tuml.slick.dataview3.js"></script>
+    <script src="/${app.rootUrl}/javascript/tuml2/tuml.query.js"></script>
+    <script src="/${app.rootUrl}/javascript/tuml2/tuml.tab.enum.js"></script>
+    <script src="/${app.rootUrl}/javascript/tuml2/ocl-hint.js"></script>
+
+
+    <!-- bootstrap -->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="/${app.rootUrl}/javascript/bootstrap/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <!--<link rel="stylesheet" href="/${app.rootUrl}/javascript/bootstrap/css/bootstrap-theme.css">-->
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script type="text/javascript" src="/${app.rootUrl}/javascript/bootstrap/js/bootstrap.js"></script>
+
+    <!-- bootstart-datetimepicker -->
+    <!--<script type="text/javascript" src="/${app.rootUrl}/javascript/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>-->
+
+    <script>
+        $(document).ready(
+                function () {
+                    //"${app.uri}" is replaced when the app starts up with the actual application url
+                    tumlModelName = "${app.rootUrl}";
+                    var appUri = "${app.uri}";
+                    isUmlgLib = "${app.umlgLib?string}" == "true" ? true : false;
+
+                    //Append umlgRoot to the root url,
+                    //This is needed because JEE servlet url pattern can not cope with http://localhost:8111/appName
+                    //It needs something after the appName
+                    if (appUri.indexOf(tumlModelName, appUri.length - tumlModelName.length) !== -1) {
+                        var uiManager = new Tuml.UiManager(appUri + "/umlgRoot");
+                    } else {
+                        var uiManager = new Tuml.UiManager(appUri);
+                    }
+
+//                    setTimeout(
+//                            function () {
+//                                $("#switcher").themeswitcher({
+//                                    imgPath: "/${app.rootUrl}/javascript/super-theme-switcher/images/",
+//                                    loadTheme: "pepper-grinder",
+//                                    jqueryUiVersion: "1.10.3",
+//                                    themePath: "/${app.rootUrl}/css/jquery-ui/"
+//                                });
+//                            },
+//                            50
+//                    );
+                }
+        );
+    </script>
+</head>
+<body>
+<div id="div-context-menu">
+</div>
+<div class="ui-layout-center">
+    <div id="tabs-layout">
+    </div>
+</div>
+<div id="umlgnavbar" class="ui-layout-north">
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="collapse navbar-collapse">
+        </div>
+    </div>
+</div>
+<div class="ui-layout-south">
+    <div id="footer" class="poweredby navbar-default">
+        <p class="text-muted credit">Powered by <a href="https://github.com/tinkerpop/blueprints" target="_blank">Tinkerpop Blueprints</a> and <a href="${app.poweredByLink}" target="_blank">${app.poweredBy}</a>
+        </p>
+        <p class="text-muted credit pull-right"><a href="http://umlg.org" target="_blank">UMLG</a></p>
+    </div>
+</div>
+<div class="ui-layout-east">East</div>
+<div class="ui-layout-west">
+    <div id="leftMenuPanel" class="umlg-panel panel panel-default">
+        <div class="umlg-panel-heading panel-heading">
+            <h3 id="leftMenuPaneH3l" class="panel-title"></h3>
+        </div>
+        <div id="leftMenuPaneBody" class="umlg-panel-body panel-body">
+        </div>
+    </div>
+</div>
+</body>
+</html>

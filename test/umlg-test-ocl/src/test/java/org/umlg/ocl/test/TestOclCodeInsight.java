@@ -62,4 +62,30 @@ public class TestOclCodeInsight extends BaseLocalDbTest {
             System.out.println(choice);
         }
     }
+
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @Test
+    public void testAllInstances() {
+        Bank bank = new Bank(true);
+        bank.setName("thebank");
+        Employee employee1 = new Employee(true);
+        employee1.setName("employee1");
+        bank.addToEmployee(employee1);
+        Employee employee2 = new Employee(true);
+        employee2.setName("employee2");
+        bank.addToEmployee(employee2);
+        Employee employee3 = new Employee(true);
+        employee3.setName("employee3");
+        bank.addToEmployee(employee3);
+        db.commit();
+
+
+        Classifier contextClassifier = (Classifier) ModelLoader.INSTANCE.findNamedElement(bank.getQualifiedName());
+        UmlgOcl2Parser.INSTANCE.getHelper().setContext(contextClassifier);
+        List<Choice> insights = UmlgOcl2Parser.INSTANCE.getHelper().getSyntaxHelp(null, "org::umlg::qualifier::Bank::");
+        for (Choice choice : insights) {
+            System.out.println(choice);
+        }
+    }
 }
