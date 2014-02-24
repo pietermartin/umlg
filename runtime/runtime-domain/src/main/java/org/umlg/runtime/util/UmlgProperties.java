@@ -10,6 +10,7 @@ public class UmlgProperties {
 
     public static UmlgProperties INSTANCE = new UmlgProperties();
     private Properties properties;
+    private String webserverIp;
 
     private UmlgProperties() {
         this.properties = new Properties();
@@ -57,5 +58,9 @@ public class UmlgProperties {
 
     public boolean isLoadUiResourcesFromFile() {
         return Boolean.parseBoolean(this.properties.getProperty("umlg.ui.from.file", "false"));
+    }
+
+    public String getWebserverIp() {
+        return this.properties.getProperty("webserver.ip", "127.0.0.1");
     }
 }

@@ -4,6 +4,7 @@ import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.webapp.WebAppContext;
+import org.umlg.runtime.util.UmlgProperties;
 
 import java.net.InetSocketAddress;
 
@@ -14,7 +15,7 @@ import java.net.InetSocketAddress;
 public class JettyDemo {
 
     public static void main(String[] args) throws Exception {
-        Server server = new Server(new InetSocketAddress("localhost", 8111));
+        Server server = new Server(new InetSocketAddress(UmlgProperties.INSTANCE.getWebserverIp(), 8111));
 
         ContextHandlerCollection contexts = new ContextHandlerCollection();
 
