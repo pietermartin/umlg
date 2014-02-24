@@ -38,6 +38,10 @@ public class PackageVisitor extends BaseVisitor implements Visitor<Package> {
         //Can not do this in the constructor as the workspace is not fully initialized by then
         if (this.currentFolder == null) {
             this.currentFolder = new File(this.workspace.getProjectRoot(), this.resourceDir);
+            //Ensure resources folder exist
+            if (!this.currentFolder.exists()) {
+                this.currentFolder.mkdir();
+            }
         }
 
         if (_package.getModel().equals(this.workspace.getModel())) {
