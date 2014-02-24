@@ -10,7 +10,29 @@
     <artifactId>generator</artifactId>
     <packaging>jar</packaging>
     <name>generator</name>
-
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <executions>
+                    <execution>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>org.umlg.DemoGenerator</mainClass>
+                            <arguments>
+                                <argument>${session.executionRootDirectory}</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
     <dependencies>
         <!-- required for generating umlg entities -->
         <dependency>
