@@ -28,7 +28,7 @@ public class UmlgRestletGenerationUtil {
     public final static OJPathName ClientResource = new OJPathName("org.restlet.resource.ClientResource");
     public final static OJPathName UmlgExceptionUtilFactory = new OJPathName("org.umlg.runtime.adaptor.UmlgExceptionUtilFactory");
     public final static OJPathName ErrorStatusService = new OJPathName("org.umlg.runtime.restlet.ErrorStatusService");
-    public final static OJPathName FieldType = new OJPathName("org.umlg.runtime.restlet.FieldType");
+    public final static OJPathName FieldType = new OJPathName("org.umlg.runtime.domain.restlet.FieldType");
     public final static OJPathName Get = new OJPathName("org.restlet.resource.Get");
     public final static OJPathName Put = new OJPathName("org.restlet.resource.Put");
     public final static OJPathName Post = new OJPathName("org.restlet.resource.Post");
@@ -42,7 +42,7 @@ public class UmlgRestletGenerationUtil {
     public static final OJPathName EnumerationLookupServerResouceImpl = new OJPathName("org.umlg.model.EnumerationLookup_ServerResourceImpl");
     public static final OJPathName EnumerationLookupServerResource = new OJPathName("org.umlg.model.EnumerationLookup_ServerResource");
     public static final OJPathName BaseOclExecutionServerResourceImpl = new OJPathName("org.umlg.runtime.restlet.BaseOclExecutionServerResourceImpl");
-    public static final OJPathName UmlgRestletNode = new OJPathName("org.umlg.runtime.restlet.domain.UmlgRestletNode");
+    public static final OJPathName UmlgRestletNode = new OJPathName("org.umlg.runtime.domain.restlet.UmlgRestletNode");
     public static final OJPathName RestletToJsonUtil = new OJPathName("org.umlg.runtime.restlet.util.RestletToJsonUtil");
     public static final OJPathName UmlgMetaQueryServerResourceImpl = new OJPathName("org.umlg.runtime.restlet.UmlgMetaQueryServerResourceImpl");
     public static final OJPathName UmlgDiagramPackageResource = new OJPathName("org.umlg.runtime.restlet.UmlgDiagramPackageResource");

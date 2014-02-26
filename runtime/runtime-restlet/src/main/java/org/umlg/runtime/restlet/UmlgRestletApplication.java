@@ -36,37 +36,42 @@ public abstract class UmlgRestletApplication extends Application {
         attachAll(router);
         router.attach("/ui2", UmlgGuiServerResource.class, Template.MODE_STARTS_WITH);
         File current = new File(".");
-        Directory slickgrid;
+        Directory slickgrid = null;
+        Directory css = null;
 
+        boolean servlet = true;
+        boolean restlet = true;
         try {
             Class.forName("org.restlet.ext.servlet.ServerServlet");
-            slickgrid = new Directory(getContext(), "war:///javascript/");
+        } catch (NoClassDefFoundError e) {
+            servlet = false;
         } catch (ClassNotFoundException e) {
+            servlet = false;
+        }
+        if (servlet) {
+            slickgrid = new Directory(getContext(), "war:///javascript/");
+            css = new Directory(getContext(), "war:///css");
+        } else if (restlet) {
             if (UmlgProperties.INSTANCE.isLoadUiResourcesFromFile()) {
                 slickgrid = new Directory(getContext(), "file:///" + current.getAbsolutePath() + "/runtime/runtime-ui/src/main/webapp/javascript");
             } else {
                 slickgrid = new Directory(getContext(), "clap:///javascript/");
             }
-        }
-
-        slickgrid.setListingAllowed(true);
-        router.attach("/javascript/", slickgrid);
-        Directory css;
-
-        try {
-            Class.forName("org.restlet.ext.servlet.ServerServlet");
-            css = new Directory(getContext(), "war:///css");
-        } catch (ClassNotFoundException e) {
             //This is only relevant for simple restlet case, not via jetty
             if (UmlgProperties.INSTANCE.isLoadUiResourcesFromFile()) {
                 css = new Directory(getContext(), "file:///" + current.getAbsolutePath() + "/runtime/runtime-ui/src/main/webapp/css");
             } else {
                 css = new Directory(getContext(), "clap:///css");
             }
+        } else {
+            //development environment
         }
 
+        slickgrid.setListingAllowed(true);
+        router.attach("/javascript/", slickgrid);
         css.setListingAllowed(true);
         router.attach("/css/", css);
+
         UmlgRestletFilter umlgRestletFilter = new UmlgRestletFilter(getContext());
         umlgRestletFilter.setNext(router);
         return umlgRestletFilter;

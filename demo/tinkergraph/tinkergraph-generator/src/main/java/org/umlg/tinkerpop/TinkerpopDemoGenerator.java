@@ -18,8 +18,10 @@ public class TinkerpopDemoGenerator {
         }
         JavaGenerator javaGenerator = new JavaGenerator();
         javaGenerator.generate(
-                new File(args[0] + "/demo/tinkergraph/tinkergraph-application/src/main/model/tinkergraph.uml"),
-                new File(args[0] + "/demo/tinkergraph/tinkergraph-application"), RestletVisitors.getDefaultJavaVisitors());
+                new File(args[0] + "/demo/tinkergraph/tinkergraph-application/tinkergraph-entities/src/main/model/tinkergraph.uml"),
+                new File(args[0] + "/demo/tinkergraph/tinkergraph-application/tinkergraph-entities"),
+                new File(args[0] + "/demo/tinkergraph/tinkergraph-application/tinkergraph-restlet"),
+                RestletVisitors.getDefaultJavaVisitors());
 
         ///demo/tinkergraph
     }

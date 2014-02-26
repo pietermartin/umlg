@@ -2,18 +2,14 @@ package org.umlg.restlet.visitor.model;
 
 import org.apache.commons.io.FileUtils;
 import org.eclipse.uml2.uml.*;
-import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Package;
 import org.umlg.framework.ModelLoader;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.java.metamodel.OJField;
-import org.umlg.java.metamodel.OJIfStatement;
 import org.umlg.java.metamodel.OJPackage;
 import org.umlg.java.metamodel.OJPathName;
 import org.umlg.java.metamodel.annotation.*;
-import org.umlg.javageneration.util.Namer;
-import org.umlg.javageneration.util.UmlgClassOperations;
 import org.umlg.javageneration.util.UmlgGenerationUtil;
 import org.umlg.restlet.util.UmlgRestletGenerationUtil;
 import org.umlg.restlet.visitor.clazz.BaseServerResourceBuilder;
@@ -187,7 +183,7 @@ public class DiagramPackageResourceBuilder extends BaseServerResourceBuilder imp
 
     private Map<String, Pair<String, String>> getDiagramNamesInPackage(Package aPackage) {
         String[] dirs = aPackage.getQualifiedName().split("::");
-        File projectRoot = this.workspace.getProjectRoot();
+        File projectRoot = this.workspace.getEntitiesRoot();
         File resourceFolder = FileUtils.getFile(projectRoot, new String[]{"src", "main", "resources"});
         File packageFile = FileUtils.getFile(resourceFolder, dirs);
         Collection<File> diagrams = FileUtils.listFiles(packageFile, new String[]{"PNG", "SVG", "png", "svg"}, false);

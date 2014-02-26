@@ -52,15 +52,29 @@ public class UmlgGuiServerResource extends ServerResource {
                 .setPoweredByLink(poweredBy.getSecond()));
 
 
+        boolean servlet = true;
+        boolean restlet = true;
         try {
             Class.forName("org.restlet.ext.servlet.ServerServlet");
+        } catch (NoClassDefFoundError e) {
+            servlet = false;
+        } catch (ClassNotFoundException e) {
+            servlet = false;
+        }
+
+        if (servlet)  {
             Representation umlgUiFtl = new ClientResource("war:///resources/org/umlg/ui/umlgui2.html").get();
             return new TemplateRepresentation(umlgUiFtl, dataModel, MediaType.TEXT_HTML);
-        } catch (ClassNotFoundException e) {
+        } else if (restlet) {
+            File f = new File(".");
+            System.out.println(f.getAbsolutePath());
             File umlgui2 = new File("./runtime/runtime-ui/src/main/webapp/resources/org/umlg/ui/umlgui2.html");
             FileRepresentation fileRepresentation = new FileRepresentation(umlgui2, MediaType.APPLICATION_XHTML);
             return new TemplateRepresentation(fileRepresentation, dataModel, MediaType.TEXT_HTML);
+        } else {
+            throw new RuntimeException("Not yet implemented");
         }
+
 //        Representation umlgUiFtl = new ClientResource("clap:///resources/org/umlg/ui/umlgui2.html").get();
 
     }

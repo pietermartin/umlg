@@ -18,9 +18,13 @@ public class Workspace {
 
 	private static final Logger logger = Logger.getLogger(Workspace.class.getPackage().getName());
 	public final static String DEFAULT_SOURCE_FOLDER = "src/main/generated-java";
-	public final static String RESOURCE_FOLDER = "src/main/resources";
+    public static final String RESTLET_SOURCE_FOLDER = "src/main/generated-java-restlet";
+    public static final String META_SOURCE_FOLDER = "src/main/generated-java-meta";
+
+    public final static String RESOURCE_FOLDER = "src/main/resources";
 	private final Map<JavaModelPrinter.Source, OJAnnotatedClass> javaClassMap = new HashMap<JavaModelPrinter.Source, OJAnnotatedClass>();
-    private File projectRoot;
+    private File entitiesRoot;
+    private File restletRoot;
     private File modelFile;
 	private Model model;
 	private List<Visitor<?>> visitors;
@@ -45,23 +49,41 @@ public class Workspace {
 		this.javaClassMap.put(new JavaModelPrinter.Source(ojClass.getQualifiedName(), sourceDir), ojClass);
 	}
 
-	public void generate(File projectRoot, File modelFile, List<Visitor<?>> visitors) {
-		this.projectRoot = projectRoot;
+	public void generate(File entitiesRoot, File restletRoot, File modelFile, List<Visitor<?>> visitors) {
+		this.entitiesRoot = entitiesRoot;
+        this.restletRoot = restletRoot;
 		this.modelFile = modelFile;
 		this.visitors = visitors;
-		File sourceDir = new File(projectRoot, Workspace.DEFAULT_SOURCE_FOLDER);
 		logger.info("Generation started");
 		visitModel();
 		toText();
-		logger.info(String.format("Generation completed for project %s and model %s into directory %s", new Object[] { this.projectRoot.getName(), this.modelFile.getName(),
-				sourceDir.getAbsolutePath() }));
+		logger.info(String.format("Generation completed for project %s and model %s entities into directory %s, restlet into directory %s",
+                new Object[] { this.entitiesRoot.getName(), this.modelFile.getName(),
+                        this.entitiesRoot.getAbsolutePath(), this.restletRoot.getAbsolutePath() }));
 	}
 
+    /**
+     * DEFAULT_SOURCE_FOLDER to entitiesRoot
+     * RESTLET_SOURCE_FOLDER to restletRoot
+     */
 	private void toText() {
+        //entities first
 		for (Map.Entry<JavaModelPrinter.Source, OJAnnotatedClass> entry : this.javaClassMap.entrySet()) {
-			this.javaModelPrinter.addToSource(entry.getKey().qualifiedName, entry.getKey().sourceDir, entry.getValue().toJavaString());
+            if (entry.getKey().sourceDir.equals(DEFAULT_SOURCE_FOLDER) || entry.getKey().sourceDir.equals(META_SOURCE_FOLDER)) {
+			    this.javaModelPrinter.addToSource(entry.getKey().qualifiedName, entry.getKey().sourceDir, entry.getValue().toJavaString());
+            }
 		}
-		this.javaModelPrinter.toText(this.projectRoot);
+		this.javaModelPrinter.toText(this.entitiesRoot);
+        this.javaModelPrinter.clear();
+
+        //reslet next
+        for (Map.Entry<JavaModelPrinter.Source, OJAnnotatedClass> entry : this.javaClassMap.entrySet()) {
+            if (entry.getKey().sourceDir.equals(RESTLET_SOURCE_FOLDER)) {
+                this.javaModelPrinter.addToSource(entry.getKey().qualifiedName, entry.getKey().sourceDir, entry.getValue().toJavaString());
+            }
+        }
+        this.javaModelPrinter.toText(this.restletRoot);
+
 	}
 
 	public OJAnnotatedClass findOJClass(String name) {
@@ -75,7 +97,7 @@ public class Workspace {
 
 	private void visitModel() {
 //		this.model = ModelLoader.INSTANCE.loadModel(modelFile);
-        this.model = UmlgOcl2Parser.INSTANCE.init(modelFile);
+        this.model = UmlgOcl2Parser.INSTANCE.init(modelFile.toURI());
 		logger.info(String.format("Start visiting the model"));
 		for (Visitor<?> v : visitors) {
 			ModelVisitor.visitModel(this.model, v);
@@ -95,8 +117,8 @@ public class Workspace {
         return false;
     }
 
-    public File getProjectRoot() {
-        return projectRoot;
+    public File getEntitiesRoot() {
+        return entitiesRoot;
     }
 
 }

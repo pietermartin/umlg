@@ -18,7 +18,14 @@ public class JavaGenerator {
 		logger.info(String.format("Generating code for %s into %s", modelFile.getAbsolutePath(), projectRoot.getAbsolutePath()));
 		Workspace workspace = Workspace.INSTANCE;
 		workspace.clear();
-		workspace.generate(projectRoot, modelFile, visitors);
+		workspace.generate(projectRoot, projectRoot, modelFile, visitors);
 	}
+
+    public void generate(File modelFile, File entitiesRoot, File restletRoot, List<Visitor<?>> visitors) {
+        logger.info(String.format("Generating code for model %s, entities into %s and restlet into %s", modelFile.getAbsolutePath(), entitiesRoot.getAbsolutePath(), restletRoot.getAbsolutePath()));
+        Workspace workspace = Workspace.INSTANCE;
+        workspace.clear();
+        workspace.generate(entitiesRoot, restletRoot, modelFile, visitors);
+    }
 
 }

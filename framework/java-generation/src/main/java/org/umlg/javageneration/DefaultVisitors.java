@@ -18,8 +18,6 @@ import org.umlg.javageneration.visitor.property.*;
 
 public class DefaultVisitors {
 
-    private static final String META_SOURCE_FOLDER = "src/main/generated-java-meta";
-
     public static List<Visitor<?>> getDefaultJavaVisitors() {
         List<Visitor<?>> result = new ArrayList<Visitor<?>>();
         result.add(new InterfaceVisitor(Workspace.INSTANCE));
@@ -56,8 +54,8 @@ public class DefaultVisitors {
 
         result.add(new ClassValidateMultiplicitiesBuilder(Workspace.INSTANCE));
         result.add(new ClassCheckConstraintsBuilder(Workspace.INSTANCE));
-        result.add(new MetaClassBuilder(Workspace.INSTANCE, META_SOURCE_FOLDER));
-        result.add(new MetaNodeCreator(Workspace.INSTANCE, META_SOURCE_FOLDER));
+        result.add(new MetaClassBuilder(Workspace.INSTANCE, Workspace.META_SOURCE_FOLDER));
+        result.add(new MetaNodeCreator(Workspace.INSTANCE, Workspace.META_SOURCE_FOLDER));
         result.add(new IndexCreator(Workspace.INSTANCE));
 
         result.add(new PackageVisitor(Workspace.INSTANCE));

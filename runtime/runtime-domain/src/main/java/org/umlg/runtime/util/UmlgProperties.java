@@ -10,7 +10,6 @@ public class UmlgProperties {
 
     public static UmlgProperties INSTANCE = new UmlgProperties();
     private Properties properties;
-    private String webserverIp;
 
     private UmlgProperties() {
         this.properties = new Properties();
@@ -31,10 +30,6 @@ public class UmlgProperties {
     public String getTumlDbLocation() {
         return this.properties.getProperty("umlg.db.location");
     }
-
-//    public String getTinkerImplementation() {
-//        return this.properties.getProperty("tests.implementation");
-//    }
 
     public boolean isStartAdminApplication() {
         return Boolean.parseBoolean(this.properties.getProperty("start.admin.application", "false"));

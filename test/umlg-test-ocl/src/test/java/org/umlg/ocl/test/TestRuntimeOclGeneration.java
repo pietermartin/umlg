@@ -25,7 +25,7 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 			URL url = BaseLocalDbTest.class.getResource("/logging.properties");
 			LogManager.getLogManager().readConfiguration(url.openStream());
             URL umlUrl = BaseLocalDbTest.class.getResource("/test-ocl.uml");
-            UmlgOcl2Parser.INSTANCE.init(new File(umlUrl.toURI()));
+            UmlgOcl2Parser.INSTANCE.init(umlUrl.toURI());
             @SuppressWarnings("unused")
             UmlgOcl2Parser instance = UmlgOcl2Parser.INSTANCE;
 		} catch (Exception ex) {

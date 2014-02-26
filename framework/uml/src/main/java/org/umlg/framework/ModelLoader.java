@@ -1,14 +1,5 @@
 package org.umlg.framework;
 
-import java.io.File;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.logging.Logger;
-
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -24,6 +15,13 @@ import org.eclipse.uml2.uml.Package;
 import org.eclipse.uml2.uml.resource.UMLResource;
 import org.eclipse.uml2.uml.resources.ResourcesPlugin;
 import org.eclipse.uml2.uml.util.UMLUtil;
+
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.logging.Logger;
 
 public class ModelLoader {
 
@@ -47,22 +45,25 @@ public class ModelLoader {
         return this.model != null;
     }
 
-    public synchronized Model loadModel(File modelFile) {
+    public synchronized Model loadModel(java.net.URI modelFile) {
         if (this.model == null) {
-            logger.info(String.format("Loading model %s", modelFile.getName()));
+            logger.info(String.format("Loading model %s", modelFile.toString()));
             registerResourceFactories();
-            URLClassLoader loader = (URLClassLoader) getClass().getClassLoader();
             String location = findPathJar(ResourcesPlugin.class);
             location = "jar:file:///" + location + "!/";
             URI uri = URI.createURI(location);
             registerPathmaps(uri);
-            File dir = modelFile.getParentFile();
-            URI dirUri = URI.createFileURI(dir.getAbsolutePath());
-            model = (Model) load(dirUri.appendSegment(modelFile.getName()));
+//            File dir = modelFile.getParentFile();
+//            URI dirUri = URI.createFileURI(dir.getAbsolutePath());
+//            model = (Model) load(dirUri.appendSegment(modelFile.getName()));
+            URI modelUri = URI.createURI(modelFile.toString());
+            model = (Model) load(modelUri);
             umlgValidationProfile = model.getAppliedProfile("Umlg::Validation");
             for (PackageImport pi : model.getPackageImports()) {
                 if (pi.getImportedPackage() instanceof Model) {
                     importedModelLibraries.add((Model) pi.getImportedPackage());
+                    EcoreUtil.resolveAll(pi);
+                    EcoreUtil.resolveAll(pi.getImportedPackage());
                 }
             }
             logger.info(String.format("Done loading the model"));
@@ -243,7 +244,7 @@ public class ModelLoader {
     }
 
     protected org.eclipse.uml2.uml.Package load(URI uri) {
-        org.eclipse.uml2.uml.Package package_ = null;
+        org.eclipse.uml2.uml.Package package_;
         Resource resource = this.RESOURCE_SET.getResource(uri, true);
         EcoreUtil.resolveAll(this.RESOURCE_SET);
         EcoreUtil.resolveAll(resource);

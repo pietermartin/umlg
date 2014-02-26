@@ -1,7 +1,6 @@
 package org.umlg.javageneration.visitor._package;
 
 import org.apache.commons.io.FileUtils;
-import org.eclipse.uml2.uml.*;
 import org.eclipse.uml2.uml.Package;
 import org.umlg.framework.VisitSubclasses;
 import org.umlg.framework.Visitor;
@@ -37,7 +36,7 @@ public class PackageVisitor extends BaseVisitor implements Visitor<Package> {
     public void visitBefore(Package _package) {
         //Can not do this in the constructor as the workspace is not fully initialized by then
         if (this.currentFolder == null) {
-            this.currentFolder = new File(this.workspace.getProjectRoot(), this.resourceDir);
+            this.currentFolder = new File(this.workspace.getEntitiesRoot(), this.resourceDir);
             //Ensure resources folder exist
             if (!this.currentFolder.exists()) {
                 this.currentFolder.mkdir();
@@ -61,7 +60,7 @@ public class PackageVisitor extends BaseVisitor implements Visitor<Package> {
                         throw new IllegalStateException(String.format("Could not create folder for package %s", this.currentFolder.getAbsolutePath()));
                     }
                 } else {
-                    File resourceFolder = FileUtils.getFile(this.workspace.getProjectRoot(), new String[]{"src", "main", "resources"});
+                    File resourceFolder = FileUtils.getFile(this.workspace.getEntitiesRoot(), new String[]{"src", "main", "resources"});
                     String[] dirs = _package.getQualifiedName().split("::");
                     this.currentFolder = FileUtils.getFile(resourceFolder, dirs);
                     if (!this.currentFolder.exists() && !this.currentFolder.mkdir()) {

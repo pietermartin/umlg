@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>org.umlg</groupId>
+        <artifactId>tinkergraph-application</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>tinkergraph-war</artifactId>
+    <packaging>war</packaging>
+    <name>tinkergraph-war</name>
+
+    <build>
+        <!-- exclude the version from the war name -->
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <warName>tinkergraph</warName>
+                    <overlays>
+                        <overlay>
+                            <!-- empty groupId/artifactId represents the current build -->
+                        </overlay>
+                        <overlay>
+                            <groupId>org.umlg</groupId>
+                            <artifactId>runtime-ui</artifactId>
+                            <type>jar</type>
+                        </overlay>
+                    </overlays>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+    <dependencies>
+        <dependency>
+            <groupId>org.umlg</groupId>
+            <artifactId>tinkergraph-restlet</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <!-- Not sure why this is here, the war plugin overlay seems to need it even tho
+it is already included via tinkergraph-restlet -->
+        <dependency>
+            <groupId>org.umlg</groupId>
+            <artifactId>runtime-ui</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <!-- This is to force maven to build the generator first -->
+        <dependency>
+            <groupId>org.umlg</groupId>
+            <artifactId>tinkergraph-generator</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+        </dependency>
+    </dependencies>
+</project>

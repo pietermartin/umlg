@@ -1,8 +1,8 @@
 package org.umlg.runtime.restlet.util;
 
-import java.util.List;
+import org.umlg.runtime.domain.restlet.UmlgRestletNode;
 
-import org.umlg.runtime.restlet.domain.UmlgRestletNode;
+import java.util.List;
 
 public class RestletToJsonUtil {
 

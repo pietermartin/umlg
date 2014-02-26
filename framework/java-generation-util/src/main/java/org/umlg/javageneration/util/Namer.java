@@ -2,6 +2,7 @@ package org.umlg.javageneration.util;
 
 import java.util.Arrays;
 
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.ocl.uml.TupleType;
 import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.Package;

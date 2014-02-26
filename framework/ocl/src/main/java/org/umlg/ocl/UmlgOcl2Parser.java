@@ -1,6 +1,7 @@
 package org.umlg.ocl;
 
 import java.io.File;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
@@ -37,7 +38,7 @@ public class UmlgOcl2Parser implements ModelLoadedEvent {
     private OCLHelper<Classifier, Operation, Property, Constraint> helper;
     public final static UmlgOcl2Parser INSTANCE = new UmlgOcl2Parser();
 
-    public Model init(File modelFile) {
+    public Model init(URI modelFile) {
         Model model = ModelLoader.INSTANCE.loadModel(modelFile);
         ModelLoader.INSTANCE.subscribeModelLoaderEvent(this);
         org.eclipse.ocl.uml.OCL.initialize(ModelLoader.INSTANCE.getRESOURCE_SET());
@@ -52,13 +53,13 @@ public class UmlgOcl2Parser implements ModelLoadedEvent {
         if (modelFileURL == null) {
             throw new IllegalStateException(String.format("Model file %s not found. The model's file name must be on the classpath.", modelFileName));
         }
-        File modelFile;
+        URI modelFileURI;
         try {
-            modelFile = new File(modelFileURL.toURI());
+            modelFileURI = modelFileURL.toURI();
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
-        return init(modelFile);
+        return init(modelFileURI);
     }
 
     private UmlgOcl2Parser() {
@@ -69,7 +70,7 @@ public class UmlgOcl2Parser implements ModelLoadedEvent {
     }
 
     public static void main(String[] args) {
-        Model model = ModelLoader.INSTANCE.loadModel(new File("/home/pieter/Downloads/umlg/test/umlg-test-ocl/src/main/model/test-ocl.uml"));
+        Model model = ModelLoader.INSTANCE.loadModel(new File("/home/pieter/Downloads/umlg/test/umlg-test-ocl/src/main/model/test-ocl.uml").toURI());
         UmlgOcl2Parser parser = new UmlgOcl2Parser();
         StringBuilder sb = new StringBuilder();
         sb.append("package testoclmodel::org::umlg::testocl\n");
