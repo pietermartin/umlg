@@ -35,7 +35,6 @@ public abstract class UmlgRestletApplication extends Application {
         Router router = new Router(getContext());
         attachAll(router);
         router.attach("/ui2", UmlgGuiServerResource.class, Template.MODE_STARTS_WITH);
-        File current = new File(".");
         Directory slickgrid = null;
         Directory css = null;
 
@@ -52,6 +51,7 @@ public abstract class UmlgRestletApplication extends Application {
             slickgrid = new Directory(getContext(), "war:///javascript/");
             css = new Directory(getContext(), "war:///css");
         } else if (restlet) {
+            File current = new File(".");
             if (UmlgProperties.INSTANCE.isLoadUiResourcesFromFile()) {
                 slickgrid = new Directory(getContext(), "file:///" + current.getAbsolutePath() + "/runtime/runtime-ui/src/main/webapp/javascript");
             } else {

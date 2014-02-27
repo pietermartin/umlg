@@ -47,7 +47,6 @@ public class TestDemo {
 
     @Test
     public void testDemo() {
-
         Person marko  = new Person(true);
         marko.setName("marko");
         marko.setAge(29);

@@ -1,4 +1,7 @@
-package com.rorotika.test;
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+package ${package};
 
 import org.apache.commons.io.FileUtils;
 import org.joda.time.DateTime;

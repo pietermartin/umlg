@@ -13,7 +13,7 @@ import java.net.URISyntaxException;
  * Date: 2014/01/13
  * Time: 9:19 PM
  */
-public class DemoGenerator {
+public class UmlgDemo1Generator {
 
     public static void main(String[] args) throws URISyntaxException {
         if (args.length == 0) {
@@ -21,9 +21,12 @@ public class DemoGenerator {
         }
         JavaGenerator javaGenerator = new JavaGenerator();
         javaGenerator.generate(
-                new File(args[0] + "/application/src/main/model/umlg-demo1.uml"),
-                new File(args[0] + "/application"), RestletVisitors.getDefaultJavaVisitors());
+                new File(args[0] + "/${parentArtifactId}-application/${parentArtifactId}-entities/src/main/model/umlg-demo1.uml"),
+                new File(args[0] + "/${parentArtifactId}-application/${parentArtifactId}-entities"),
+                new File(args[0] + "/${parentArtifactId}-application/${parentArtifactId}-restlet"),
+                RestletVisitors.getDefaultJavaVisitors());
 
+        ///demo/${parentArtifactId}
     }
 
 }

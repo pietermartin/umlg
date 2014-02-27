@@ -5,10 +5,12 @@ import org.restlet.ext.freemarker.TemplateRepresentation;
 import org.restlet.representation.FileRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
+import org.restlet.resource.Directory;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 import org.umlg.framework.ModelLoader;
 import org.umlg.runtime.util.Pair;
+import org.umlg.runtime.util.UmlgProperties;
 import org.umlg.runtime.util.UmlgUtil;
 
 import java.io.File;
@@ -66,11 +68,14 @@ public class UmlgGuiServerResource extends ServerResource {
             Representation umlgUiFtl = new ClientResource("war:///resources/org/umlg/ui/umlgui2.html").get();
             return new TemplateRepresentation(umlgUiFtl, dataModel, MediaType.TEXT_HTML);
         } else if (restlet) {
-            File f = new File(".");
-            System.out.println(f.getAbsolutePath());
-            File umlgui2 = new File("./runtime/runtime-ui/src/main/webapp/resources/org/umlg/ui/umlgui2.html");
-            FileRepresentation fileRepresentation = new FileRepresentation(umlgui2, MediaType.APPLICATION_XHTML);
-            return new TemplateRepresentation(fileRepresentation, dataModel, MediaType.TEXT_HTML);
+            if (UmlgProperties.INSTANCE.isLoadUiResourcesFromFile()) {
+                File umlgui2 = new File("./runtime/runtime-ui/src/main/webapp/resources/org/umlg/ui/umlgui2.html");
+                FileRepresentation fileRepresentation = new FileRepresentation(umlgui2, MediaType.APPLICATION_XHTML);
+                return new TemplateRepresentation(fileRepresentation, dataModel, MediaType.TEXT_HTML);
+            } else {
+                Representation umlgUiFtl = new ClientResource("clap:///resources/org/umlg/ui/umlgui2.html").get();
+                return new TemplateRepresentation(umlgUiFtl, dataModel, MediaType.TEXT_HTML);
+            }
         } else {
             throw new RuntimeException("Not yet implemented");
         }

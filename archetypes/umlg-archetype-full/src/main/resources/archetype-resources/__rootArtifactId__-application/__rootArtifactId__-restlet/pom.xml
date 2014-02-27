@@ -2,14 +2,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>${groupId}</groupId>
-        <artifactId>${rootArtifactId}</artifactId>
+        <artifactId>${rootArtifactId}-application</artifactId>
         <version>${version}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>${artifactId}</artifactId>
-    <packaging>war</packaging>
-    <name>umlg application</name>
+    <packaging>jar</packaging>
+    <name>tinkergraph-restlet</name>
 
     <build>
         <plugins>
@@ -26,25 +26,8 @@
                         </goals>
                         <configuration>
                             <sources>
-                                <source>src/main/generated-java</source>
                                 <source>src/main/generated-java-restlet</source>
-                                <source>src/main/generated-java-meta</source>
                             </sources>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>add-resource</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>add-resource</goal>
-                        </goals>
-                        <configuration>
-                            <resources>
-                                <resource>
-                                    <directory>src/main/generated-resources</directory>
-                                    <directory>src/main/model</directory>
-                                </resource>
-                            </resources>
                         </configuration>
                     </execution>
                 </executions>
@@ -71,41 +54,13 @@
                     </arguments>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>2.4</version>
-                <configuration>
-                    <overlays>
-                        <overlay>
-                            <!-- empty groupId/artifactId represents the current build -->
-                        </overlay>
-                        <overlay>
-                            <groupId>org.umlg</groupId>
-                            <artifactId>runtime-ui</artifactId>
-                        </overlay>
-                    </overlays>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
     <dependencies>
         <dependency>
-            <groupId>org.umlg</groupId>
-            #if( ${_1-Bitsy_2-OrientDb_3-Neo4j_4-Titan_BerkeleyDb_5-Titan_Persistit} == 1 )
-            <artifactId>runtime-domain-bitsy</artifactId>
-            #elseif( ${_1-Bitsy_2-OrientDb_3-Neo4j_4-Titan_BerkeleyDb_5-Titan_Persistit} == 2 )
-            <artifactId>runtime-domain-orientdb</artifactId>
-            #elseif( ${_1-Bitsy_2-OrientDb_3-Neo4j_4-Titan_BerkeleyDb_5-Titan_Persistit} == 3 )
-            <artifactId>runtime-domain-neo4j</artifactId>
-            #elseif( ${_1-Bitsy_2-OrientDb_3-Neo4j_4-Titan_BerkeleyDb_5-Titan_Persistit} == 4 )
-            <artifactId>runtime-domain-titan</artifactId>
-            #elseif( ${_1-Bitsy_2-OrientDb_3-Neo4j_4-Titan_BerkeleyDb_5-Titan_Persistit} == 5 )
-            <artifactId>runtime-domain-titan</artifactId>
-            #else
-            <artifactId>runtime-domain-neo4j</artifactId>
-            #end
-            <version>0.0.1-SNAPSHOT</version>
+            <groupId>${groupId}</groupId>
+            <artifactId>${rootArtifactId}-entities</artifactId>
+            <version>${version}</version>
         </dependency>
         <dependency>
             <groupId>org.umlg</groupId>
@@ -115,14 +70,14 @@
         <dependency>
             <groupId>org.umlg</groupId>
             <artifactId>runtime-ui</artifactId>
-            <type>war</type>
+            <type>jar</type>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <!-- This is to force maven to build the generator first -->
         <dependency>
             <groupId>${groupId}</groupId>
-            <artifactId>generator</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <artifactId>${rootArtifactId}-generator</artifactId>
+            <version>${version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
