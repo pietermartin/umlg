@@ -59,11 +59,11 @@
       <children xmi:type="notation:BasicCompartment" xmi:id="_xc8uUX1NEeOYhpiy1kqM8Q" type="7017">
         <children xmi:type="notation:Shape" xmi:id="_y2psMH1NEeOYhpiy1kqM8Q" type="3012" fontName="Sans" fontHeight="10" lineColor="0">
           <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_7RcPoH7sEeOYhpiy1kqM8Q" source="Stereotype_Annotation">
-            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7RcPoX7sEeOYhpiy1kqM8Q" key="StereotypeWithQualifiedNameList" value=""/>
-            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7RcPon7sEeOYhpiy1kqM8Q" key="StereotypeList" value="Umlg::Validation::MaxLength"/>
-            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7Rc2sH7sEeOYhpiy1kqM8Q" key="Stereotype_Presentation_Kind" value="HorizontalStereo"/>
-            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7Rc2sX7sEeOYhpiy1kqM8Q" key="PropStereoDisplay" value=""/>
-            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7Rc2sn7sEeOYhpiy1kqM8Q" key="StereotypePropertyLocation" value="Compartment"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_HGsIwKA-EeOdnJvRGBqhtw" key="StereotypeWithQualifiedNameList" value=""/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_HGsIwaA-EeOdnJvRGBqhtw" key="StereotypeList" value="Umlg::Validation::MaxLength"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_HGsIwqA-EeOdnJvRGBqhtw" key="Stereotype_Presentation_Kind" value="HorizontalStereo"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_HGsIw6A-EeOdnJvRGBqhtw" key="PropStereoDisplay" value=""/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_HGsv0KA-EeOdnJvRGBqhtw" key="StereotypePropertyLocation" value="Compartment"/>
           </eAnnotations>
           <element xmi:type="uml:Property" href="umlg-demo1.uml#_y2pFIH1NEeOYhpiy1kqM8Q"/>
           <layoutConstraint xmi:type="notation:Location" xmi:id="_y2psMX1NEeOYhpiy1kqM8Q"/>
@@ -106,11 +106,11 @@
       <children xmi:type="notation:BasicCompartment" xmi:id="__F7AM34jEeOYhpiy1kqM8Q" type="7017">
         <children xmi:type="notation:Shape" xmi:id="_ATMroH4kEeOYhpiy1kqM8Q" type="3012" fontName="Sans" fontHeight="10" lineColor="0">
           <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_9LGf8H7sEeOYhpiy1kqM8Q" source="Stereotype_Annotation">
-            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_9LGf8X7sEeOYhpiy1kqM8Q" key="StereotypeWithQualifiedNameList" value=""/>
-            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_9LHHAH7sEeOYhpiy1kqM8Q" key="StereotypeList" value="Umlg::Validation::MinLength"/>
-            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_9LHHAX7sEeOYhpiy1kqM8Q" key="Stereotype_Presentation_Kind" value="HorizontalStereo"/>
-            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_9LHHAn7sEeOYhpiy1kqM8Q" key="PropStereoDisplay" value=""/>
-            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_9LHHA37sEeOYhpiy1kqM8Q" key="StereotypePropertyLocation" value="Compartment"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_I8RxYKA-EeOdnJvRGBqhtw" key="StereotypeWithQualifiedNameList" value=""/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_I8RxYaA-EeOdnJvRGBqhtw" key="StereotypeList" value="Umlg::Validation::MinLength"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_I8SYcKA-EeOdnJvRGBqhtw" key="Stereotype_Presentation_Kind" value="HorizontalStereo"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_I8SYcaA-EeOdnJvRGBqhtw" key="PropStereoDisplay" value=""/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_I8SYcqA-EeOdnJvRGBqhtw" key="StereotypePropertyLocation" value="Compartment"/>
           </eAnnotations>
           <element xmi:type="uml:Property" href="umlg-demo1.uml#_ATMEkH4kEeOYhpiy1kqM8Q"/>
           <layoutConstraint xmi:type="notation:Location" xmi:id="_ATMroX4kEeOYhpiy1kqM8Q"/>

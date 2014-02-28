@@ -5,7 +5,7 @@
         <requiredProperty key="_1-Bitsy_2-OrientDb_3-Neo4j_4-Titan_BerkeleyDb_5-Titan_Persistit"></requiredProperty>
     </requiredProperties>
     <modules>
-        <module id="generator" dir="generator" name="generator">
+        <module id="${rootArtifactId}-generator" dir="__rootArtifactId__-generator" name="${rootArtifactId}-generator">
             <fileSets>
                 <fileSet filtered="true" packaged="true" encoding="UTF-8">
                     <directory>src/main/java</directory>
@@ -15,7 +15,7 @@
                 </fileSet>
             </fileSets>
         </module>
-        <module id="application" dir="application" name="application">
+        <module id="${rootArtifactId}-application" dir="__rootArtifactId__-application" name="${rootArtifactId}-application">
             <fileSets>
                 <fileSet filtered="true" encoding="UTF-8">
                     <directory>src/main/resources</directory>

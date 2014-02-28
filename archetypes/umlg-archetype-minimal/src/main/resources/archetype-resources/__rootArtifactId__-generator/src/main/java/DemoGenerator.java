@@ -21,9 +21,9 @@ public class DemoGenerator {
         }
         JavaGenerator javaGenerator = new JavaGenerator();
         javaGenerator.generate(
-                new File(args[0] + "/application/src/main/model/umlg-demo1.uml"),
-                new File(args[0] + "/application"), DefaultVisitors.getDefaultJavaVisitors());
-
+                new File(args[0] + "/${parentArtifactId}-application/src/main/model/umlg-demo1.uml"),
+                new File(args[0] + "/${parentArtifactId}-application"),
+                DefaultVisitors.getDefaultJavaVisitors());
     }
 
 }
