@@ -16,6 +16,10 @@
         <styles xmi:type="notation:TitleStyle" xmi:id="_slM8Rn1NEeOYhpiy1kqM8Q"/>
         <layoutConstraint xmi:type="notation:Bounds" xmi:id="_slM8R31NEeOYhpiy1kqM8Q"/>
       </children>
+      <children xmi:type="notation:BasicCompartment" xmi:id="_RccncKIGEeOn3tP_LveSqg" visible="false" type="compartment_shape_display">
+        <styles xmi:type="notation:TitleStyle" xmi:id="_RccncaIGEeOn3tP_LveSqg"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_RccncqIGEeOn3tP_LveSqg"/>
+      </children>
       <element xmi:type="uml:Package" href="graphofthegods.uml#_slLHEH1NEeOYhpiy1kqM8Q"/>
       <layoutConstraint xmi:type="notation:Bounds" xmi:id="_slMVMX1NEeOYhpiy1kqM8Q" x="150" y="87"/>
     </children>
@@ -453,10 +457,10 @@
         <layoutConstraint xmi:type="notation:Location" xmi:id="_-BQjFZfeEeOOvfKC8vSd2w" y="-20"/>
       </children>
       <children xmi:type="notation:DecorationNode" xmi:id="_-BQjFpfeEeOOvfKC8vSd2w" type="6005">
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_-BQjF5feEeOOvfKC8vSd2w" y="20"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_-BQjF5feEeOOvfKC8vSd2w" x="-30" y="-21"/>
       </children>
       <children xmi:type="notation:DecorationNode" xmi:id="_-BQjGJfeEeOOvfKC8vSd2w" type="6033">
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_-BQjGZfeEeOOvfKC8vSd2w" y="20"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_-BQjGZfeEeOOvfKC8vSd2w" x="47" y="-17"/>
       </children>
       <children xmi:type="notation:DecorationNode" xmi:id="_-BQjGpfeEeOOvfKC8vSd2w" type="6034">
         <layoutConstraint xmi:type="notation:Location" xmi:id="_-BQjG5feEeOOvfKC8vSd2w" y="-20"/>
@@ -834,12 +838,26 @@
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_rlaKoJgREeO3XObowowPyg" source="CustomAppearance_Annotation">
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_rlaKoZgREeO3XObowowPyg" key="CustomAppearance_MaskValue" value="46"/>
         </eAnnotations>
+        <styles xmi:type="notation:StringListValueStyle" xmi:id="_VZ8-0KIGEeOn3tP_LveSqg" name="maskLabel">
+          <stringListValue>visibility</stringListValue>
+          <stringListValue>name</stringListValue>
+          <stringListValue>derived</stringListValue>
+          <stringListValue>multiplicity</stringListValue>
+          <stringListValue>modifiers</stringListValue>
+        </styles>
         <layoutConstraint xmi:type="notation:Location" xmi:id="_Kw2hgZfnEeOOvfKC8vSd2w" x="44" y="56"/>
       </children>
       <children xmi:type="notation:DecorationNode" xmi:id="_Kw2hgpfnEeOOvfKC8vSd2w" type="6032">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_sPwvMJgREeO3XObowowPyg" source="CustomAppearance_Annotation">
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_sPxWQJgREeO3XObowowPyg" key="CustomAppearance_MaskValue" value="46"/>
         </eAnnotations>
+        <styles xmi:type="notation:StringListValueStyle" xmi:id="_V_0E8KIGEeOn3tP_LveSqg" name="maskLabel">
+          <stringListValue>visibility</stringListValue>
+          <stringListValue>name</stringListValue>
+          <stringListValue>derived</stringListValue>
+          <stringListValue>multiplicity</stringListValue>
+          <stringListValue>modifiers</stringListValue>
+        </styles>
         <layoutConstraint xmi:type="notation:Location" xmi:id="_Kw2hg5fnEeOOvfKC8vSd2w" x="12" y="44"/>
       </children>
       <styles xmi:type="notation:FontStyle" xmi:id="_Kw16cZfnEeOOvfKC8vSd2w" fontName="Sans"/>

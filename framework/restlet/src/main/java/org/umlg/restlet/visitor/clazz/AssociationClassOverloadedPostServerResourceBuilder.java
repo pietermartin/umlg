@@ -436,14 +436,14 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
                 if (pWrap.isOne() || asAssociationClass) {
 
                     if (asAssociationClass) {
-                        OJIfStatement ifOneInstanceOf = new OJIfStatement("parentResource." + pWrap.getter() + "() instanceof "
-                                + UmlgClassOperations.getPathName(concreteClassifierTo).getLast());
+                        OJIfStatement ifOneInstanceOf = new OJIfStatement("parentResource." + pWrap.getter() + "().getClass() == "
+                                + UmlgClassOperations.getPathName(concreteClassifierTo).getLast() + ".class");
                         ifOneInstanceOf.addToThenPart("json.append(" + UmlgGenerationUtil.ToJsonUtil.getLast() + ".toJsonWithoutCompositeParent(parentResource." + pWrap.getter() + "()))");
                         ifOneInstanceOf.addToElsePart("json.append(\"null\")");
                         block.addToStatements(ifOneInstanceOf);
                     } else {
-                        OJIfStatement ifOneInstanceOf = new OJIfStatement("parentResource." + pWrap.associationClassGetter() + "() instanceof "
-                                + UmlgClassOperations.getPathName(concreteClassifierTo).getLast());
+                        OJIfStatement ifOneInstanceOf = new OJIfStatement("parentResource." + pWrap.associationClassGetter() + "().getClass() == "
+                                + UmlgClassOperations.getPathName(concreteClassifierTo).getLast() + ".class");
                         ifOneInstanceOf.addToThenPart("json.append(" + UmlgGenerationUtil.ToJsonUtil.getLast() + ".toJsonWithoutCompositeParent(parentResource." + pWrap.associationClassGetter() + "()))");
                         ifOneInstanceOf.addToElsePart("json.append(\"null\")");
                         block.addToStatements(ifOneInstanceOf);
@@ -452,7 +452,7 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
                     block.addToStatements("json.append(" + UmlgGenerationUtil.ToJsonUtil.getLast() + ".toJsonWithoutCompositeParent(parentResource.get" + pWrap.getAssociationClassPathName().getLast() + "().select(new "
                             + UmlgGenerationUtil.BooleanExpressionEvaluator.getCopy().addToGenerics(pWrap.getAssociationClassPathName()).getLast()
                             + "() {\n			@Override\n			public Boolean evaluate(" + pWrap.getAssociationClassPathName().getLast()
-                            + " e) {\n				return e instanceof " + UmlgClassOperations.getPathName(concreteClassifierTo).getLast() + ";\n			}\n		})))");
+                            + " e) {\n				return e.getClass() == " + UmlgClassOperations.getPathName(concreteClassifierTo).getLast() + ".class;\n			}\n		})))");
                     annotatedClass.addToImports(UmlgGenerationUtil.BooleanExpressionEvaluator);
                 }
                 annotatedClass.addToImports(UmlgClassOperations.getPathName(pWrap.getType()));
@@ -480,7 +480,7 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
                 for (Classifier concreteClassifierFrom : concreteImplementationsFrom) {
                     OJBlock conditionBlockFrom = new OJBlock();
                     annotatedClass.addToImports(UmlgClassOperations.getPathName(concreteClassifierFrom));
-                    String condition = "parentResource instanceof " + UmlgClassOperations.getPathName(concreteClassifierFrom).getLast();
+                    String condition = "parentResource.getClass() == " + UmlgClassOperations.getPathName(concreteClassifierFrom).getLast() + ".class";
                     if (countFrom == 1) {
                         ifStatementFrom.setCondition(condition);
                         ifStatementFrom.setThenPart(conditionBlockFrom);
@@ -565,7 +565,7 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
                 for (Classifier concreteClassifierFrom : concreteImplementationsFrom) {
                     OJBlock conditionBlockFrom = new OJBlock();
                     annotatedClass.addToImports(UmlgClassOperations.getPathName(concreteClassifierFrom));
-                    String condition = "parentResource instanceof " + UmlgClassOperations.getPathName(concreteClassifierFrom).getLast();
+                    String condition = "parentResource.getClass() == " + UmlgClassOperations.getPathName(concreteClassifierFrom).getLast() + ".class";
                     if (countFrom == 1) {
                         ifStatementFrom.setCondition(condition);
                         ifStatementFrom.setThenPart(conditionBlockFrom);

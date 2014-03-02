@@ -1,6 +1,6 @@
 package org.umlg.tests.allinstances;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.BaseModelUmlg;
 import org.umlg.concretetest.God;
@@ -14,6 +14,9 @@ import org.umlg.interfacetest.ManyA;
 import org.umlg.interfacetest.ManyB;
 import org.umlg.query.InstanceQuery;
 import org.umlg.query.QueryEnum;
+import org.umlg.rootallinstances.BaseRoot;
+import org.umlg.rootallinstances.TopRoot;
+import org.umlg.rootallinstances.meta.BaseRootMeta;
 import org.umlg.runtime.test.BaseLocalDbTest;
 
 public class AllInstancesTest extends BaseLocalDbTest {
@@ -174,5 +177,18 @@ public class AllInstancesTest extends BaseLocalDbTest {
 		//TODO eish
 //		Assert.assertEquals(2, IManyA.allInstances().size());
 	}
+
+    @Test
+    public void testRootAllInstances() {
+        TopRoot topRoot1 = new TopRoot();
+        topRoot1.setName("topRoot1");
+        TopRoot topRoot2 = new TopRoot();
+        topRoot2.setName("topRoot2");
+        TopRoot topRoot3 = new TopRoot();
+        topRoot3.setName("topRoot3");
+        db.commit();
+        Assert.assertEquals(3, BaseRoot.allInstances().size());
+
+    }
 
 }

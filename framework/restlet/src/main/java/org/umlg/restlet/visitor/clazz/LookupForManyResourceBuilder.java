@@ -107,7 +107,7 @@ public class LookupForManyResourceBuilder extends BaseServerResourceBuilder impl
                 block.addToStatements("json.append(" + UmlgGenerationUtil.ToJsonUtil.getLast() + ".toJsonWithoutCompositeParent(resource." + pWrap.lookup() + "().select(new "
                         + UmlgGenerationUtil.BooleanExpressionEvaluator.getCopy().addToGenerics(UmlgClassOperations.getPathName(pWrap.getType())).getLast()
                         + "() {\n			@Override\n			public Boolean evaluate(" + UmlgClassOperations.getPathName(pWrap.getType()).getLast()
-                        + " e) {\n				return e instanceof " + UmlgClassOperations.getPathName(concreteClassifierTo).getLast() + ";\n			}\n		})))");
+                        + " e) {\n				return e.getClass() == " + UmlgClassOperations.getPathName(concreteClassifierTo).getLast() + ".class;\n			}\n		})))");
                 annotatedClass.addToImports(UmlgGenerationUtil.BooleanExpressionEvaluator);
                 annotatedClass.addToImports(UmlgClassOperations.getPathName(pWrap.getType()));
                 block.addToStatements("json.append(\"],\")");
@@ -120,7 +120,7 @@ public class LookupForManyResourceBuilder extends BaseServerResourceBuilder impl
                 for (Classifier concreteClassifierFrom : concreteImplementationsFrom) {
                     OJBlock conditionBlockFrom = new OJBlock();
                     annotatedClass.addToImports(UmlgClassOperations.getPathName(concreteClassifierFrom));
-                    String condition = "resource instanceof " + UmlgClassOperations.getPathName(concreteClassifierFrom).getLast();
+                    String condition = "resource.getClass() == " + UmlgClassOperations.getPathName(concreteClassifierFrom).getLast() + ".class";
                     if (countFrom == 1) {
                         ifStatementFrom.setCondition(condition);
                         ifStatementFrom.setThenPart(conditionBlockFrom);

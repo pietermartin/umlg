@@ -279,8 +279,12 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
         OJField json = new OJField("json", new OJPathName("java.lang.StringBuilder"));
         json.setInitExp("new StringBuilder()");
         tryStatement.getTryPart().addToLocals(json);
-        OJField resource = new OJField("resource", UmlgGenerationUtil.umlgSequence.getCopy().addToGenerics(UmlgClassOperations.getPathName(clazz)));
-        resource.setInitExp(StringUtils.capitalize(ModelLoader.INSTANCE.getModel().getName()) + ".INSTANCE.get" + UmlgClassOperations.className(clazz) + "()");
+
+//        OJField resource = new OJField("resource", UmlgGenerationUtil.umlgSequence.getCopy().addToGenerics(UmlgClassOperations.getPathName(clazz)));
+//        resource.setInitExp(StringUtils.capitalize(ModelLoader.INSTANCE.getModel().getName()) + ".INSTANCE.get" + UmlgClassOperations.className(clazz) + "()");
+
+        OJField resource = new OJField("resource", UmlgGenerationUtil.umlgSet.getCopy().addToGenerics(UmlgClassOperations.getPathName(clazz)));
+        resource.setInitExp("(" + UmlgGenerationUtil.umlgSet.getLast() + "<" + UmlgClassOperations.getPathName(clazz).getLast() + ">)" + UmlgClassOperations.getPathName(clazz).getLast() + ".allInstances()");
         tryStatement.getTryPart().addToLocals(resource);
         annotatedClass.addToImports(UmlgGenerationUtil.UmlgRootPackage.toJavaString() + "." + StringUtils.capitalize(ModelLoader.INSTANCE.getModel().getName()));
 
@@ -296,7 +300,7 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
                         "json.append(ToJsonUtil.toJsonWithoutCompositeParent(resource.select(new "
                                 + UmlgGenerationUtil.BooleanExpressionEvaluator.getCopy().addToGenerics(UmlgClassOperations.getPathName(clazz)).getLast()
                                 + "() {\n			@Override\n			public Boolean evaluate(" + UmlgClassOperations.getPathName(clazz).getLast()
-                                + " e) {\n				return e instanceof " + UmlgClassOperations.getPathName(classifier).getLast() + ";\n			}\n		})))");
+                                + " e) {\n				return e.getClass() == " + UmlgClassOperations.getPathName(classifier).getLast() + ".class;\n			}\n		})))");
                 annotatedClass.addToImports(UmlgGenerationUtil.BooleanExpressionEvaluator);
                 annotatedClass.addToImports(UmlgClassOperations.getPathName(clazz));
                 annotatedClass.addToImports(UmlgClassOperations.getPathName(classifier));
@@ -306,7 +310,7 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
 
             annotatedClass.addToImports(UmlgGenerationUtil.ToJsonUtil);
 
-            tryStatement.getTryPart().addToStatements("meta", "json.append(\"], \\\"meta\\\": {\")");
+            tryStatement.getTryPart().addToStatements("json.append(\"], \\\"meta\\\": {\")");
 
             tryStatement.getTryPart().addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + clazz.getQualifiedName() + "\\\"\")");
 
@@ -319,11 +323,13 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
 
 
             annotatedClass.addToImports(UmlgClassOperations.getPathName(clazz).append(UmlgClassOperations.propertyEnumName(clazz)));
+            tryStatement.getTryPart().addToStatements("json.append(\"}\")");
             if (sortedConcreteImplementations.size() != 1 && count++ != sortedConcreteImplementations.size()) {
-                tryStatement.getTryPart().addToStatements("json.append(\",\")");
+                tryStatement.getTryPart().addToStatements("json.append(\"},\")");
             }
+
         }
-        tryStatement.getTryPart().addToStatements("json.append(\"}}]\")");
+        tryStatement.getTryPart().addToStatements("json.append(\"}]\")");
         tryStatement.getTryPart().addToStatements("return new " + UmlgRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
 
         get.getBody().addToStatements(tryStatement);
@@ -351,7 +357,7 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
         int count = 1;
         for (Classifier classifier : sortedConcreteImplementations) {
             annotatedClass.addToImports(UmlgGenerationUtil.ToJsonUtil);
-            tryStatement.getTryPart().addToStatements("meta", "json.append(\"{\\\"meta\\\" : {\")");
+            tryStatement.getTryPart().addToStatements("json.append(\"{\\\"meta\\\" : {\")");
             tryStatement.getTryPart().addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + clazz.getQualifiedName() + "\\\"\")");
             // The execute ocl query resource is only required if the below
             // visitor is available
@@ -364,16 +370,18 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
             // Meta data remains for the root object as viewing a many list does
             // not
             // change the context
-            tryStatement.getTryPart().addToStatements("json.append(" + UmlgClassOperations.propertyEnumName(clazz) + ".asJson())");
+            tryStatement.getTryPart().addToStatements("json.append(" + UmlgClassOperations.propertyEnumName(classifier) + ".asJson())");
             tryStatement.getTryPart().addToStatements("json.append(\", \\\"from\\\": \")");
             tryStatement.getTryPart().addToStatements("json.append(" + StringUtils.capitalize(ModelLoader.INSTANCE.getModel().getName()) + "RuntimePropertyEnum.asJson())");
             annotatedClass.addToImports(UmlgGenerationUtil.UmlgRootPackage.toJavaString() + "." + StringUtils.capitalize(ModelLoader.INSTANCE.getModel().getName()) + "." + StringUtils.capitalize(ModelLoader.INSTANCE.getModel().getName()) + "RuntimePropertyEnum");
-            annotatedClass.addToImports(UmlgClassOperations.getPathName(clazz).append(UmlgClassOperations.propertyEnumName(clazz)));
+            annotatedClass.addToImports(UmlgClassOperations.getPathName(classifier).append(UmlgClassOperations.propertyEnumName(classifier)));
+
+            tryStatement.getTryPart().addToStatements("json.append(\"}}\")");
             if (sortedConcreteImplementations.size() != 1 && count++ != sortedConcreteImplementations.size()) {
                 tryStatement.getTryPart().addToStatements("json.append(\",\")");
             }
         }
-        tryStatement.getTryPart().addToStatements("json.append(\"}}]\")");
+        tryStatement.getTryPart().addToStatements("json.append(\"]\")");
         tryStatement.getTryPart().addToStatements("return new " + UmlgRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
 
         options.getBody().addToStatements(tryStatement);

@@ -66,18 +66,26 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
             OJConstructor constructor = new OJConstructor();
             OJPathName otherEndToCompositePathName = UmlgClassOperations.getPathName(otherEndToComposite.getType());
             constructor.addParam("compositeOwner", otherEndToCompositePathName);
-            PropertyWrapper pWrap = new PropertyWrapper(otherEndToComposite);
-            if (pWrap.isMemberOfAssociationClass()) {
-                constructor.addParam(StringUtils.uncapitalize(pWrap.getAssociationClass().getName()), pWrap.getAssociationClassPathName());
+            PropertyWrapper otherEndToCompositePWrap = new PropertyWrapper(otherEndToComposite);
+            if (otherEndToCompositePWrap.isMemberOfAssociationClass()) {
+                constructor.addParam(StringUtils.uncapitalize(otherEndToCompositePWrap.getAssociationClass().getName()), otherEndToCompositePWrap.getAssociationClassPathName());
             }
             annotatedClass.addToConstructors(constructor);
             constructor.getBody().addToStatements("super(true)");
 
-            if (!pWrap.isMemberOfAssociationClass()) {
-                constructor.getBody().addToStatements(pWrap.adder() + "(compositeOwner)");
+//            if (!pWrap.isMemberOfAssociationClass()) {
+//                constructor.getBody().addToStatements(otherEndToCompositePWrap.adder() + "(compositeOwner)");
+//            } else {
+//                constructor.getBody().addToStatements(otherEndToCompositePWrap.adder() + "(compositeOwner, " + StringUtils.uncapitalize(otherEndToCompositePWrap.getAssociationClass().getName()) + ")");
+//            }
+
+            PropertyWrapper compositeOwner = new PropertyWrapper(otherEndToCompositePWrap.getOtherEnd());
+            if (!otherEndToCompositePWrap.isMemberOfAssociationClass()) {
+                constructor.getBody().addToStatements("compositeOwner." + compositeOwner.adder() + "(this)");
             } else {
-                constructor.getBody().addToStatements(pWrap.adder() + "(compositeOwner, " + StringUtils.uncapitalize(pWrap.getAssociationClass().getName()) + ")");
+                constructor.getBody().addToStatements("compositeOwner." + compositeOwner.adder() + "(this, " + StringUtils.uncapitalize(compositeOwner.getAssociationClass().getName()) + ")");
             }
+
         }
     }
 

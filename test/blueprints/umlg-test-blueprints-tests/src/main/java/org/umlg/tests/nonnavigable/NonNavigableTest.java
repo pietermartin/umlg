@@ -39,16 +39,7 @@ public class NonNavigableTest extends BaseLocalDbTest {
         universe1.setNonNavigableOne(null);
         testUniverse = new Universe(universe1.getVertex());
         Assert.assertNull(testUniverse.getNonNavigableOne());
-        boolean failed = false;
-        try {
-
-            db.commit();
-        } catch (Exception e) {
-            Assert.assertTrue("excepting UmlgConstraintViolationException", e instanceof UmlgConstraintViolationException);
-            failed = true;
-            db.rollback();
-        }
-        Assert.assertTrue(failed);
+        db.rollback();
         Assert.assertEquals(6, countVertices());
         Assert.assertEquals(7 + 6, countEdges());
     }

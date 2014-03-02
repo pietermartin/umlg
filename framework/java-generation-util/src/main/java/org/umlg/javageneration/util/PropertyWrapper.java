@@ -349,11 +349,19 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     }
 
     public String getter() {
-        return UmlgPropertyOperations.getter(this.property);
+        if (!isDerived() && !isPrimitive() && !isDataType() && !isNavigable()) {
+            return UmlgPropertyOperations.internalGetter(this.property);
+        } else {
+            return UmlgPropertyOperations.getter(this.property);
+        }
     }
 
     public String setter() {
-        return UmlgPropertyOperations.setter(this.property);
+        if (!isDerived() && !isPrimitive() && !isDataType() && !isNavigable()) {
+            return UmlgPropertyOperations.internalSetter(this.property);
+        } else {
+            return UmlgPropertyOperations.setter(this.property);
+        }
     }
 
     public String validator() {

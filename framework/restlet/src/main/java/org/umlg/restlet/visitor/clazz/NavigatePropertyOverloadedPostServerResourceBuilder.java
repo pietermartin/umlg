@@ -512,8 +512,8 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
                     block.addToStatements("json.append(\"{\\\"data\\\": [\")");
                 }
                 if (pWrap.isOne()) {
-                    OJIfStatement ifOneInstanceOf = new OJIfStatement("parentResource." + pWrap.getter() + "() instanceof "
-                            + UmlgClassOperations.getPathName(concreteClassifierTo).getLast());
+                    OJIfStatement ifOneInstanceOf = new OJIfStatement("parentResource." + pWrap.getter() + "().getClass() == "
+                            + UmlgClassOperations.getPathName(concreteClassifierTo).getLast() + ".class");
                     ifOneInstanceOf.addToThenPart("json.append(" + UmlgGenerationUtil.ToJsonUtil.getLast() + ".toJsonWithoutCompositeParent(parentResource." + pWrap.getter() + "()))");
                     ifOneInstanceOf.addToElsePart("json.append(\"null\")");
                     block.addToStatements(ifOneInstanceOf);
@@ -521,7 +521,7 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
                     block.addToStatements("json.append(" + UmlgGenerationUtil.ToJsonUtil.getLast() + ".toJsonWithoutCompositeParent(parentResource." + pWrap.getter() + "().select(new "
                             + UmlgGenerationUtil.BooleanExpressionEvaluator.getCopy().addToGenerics(UmlgClassOperations.getPathName(pWrap.getType())).getLast()
                             + "() {\n			@Override\n			public Boolean evaluate(" + UmlgClassOperations.getPathName(pWrap.getType()).getLast()
-                            + " e) {\n				return e instanceof " + UmlgClassOperations.getPathName(concreteClassifierTo).getLast() + ";\n			}\n		})))");
+                            + " e) {\n				return e.getClass() == " + UmlgClassOperations.getPathName(concreteClassifierTo).getLast() + ".class;\n			}\n		})))");
                     annotatedClass.addToImports(UmlgGenerationUtil.BooleanExpressionEvaluator);
                 }
                 annotatedClass.addToImports(UmlgClassOperations.getPathName(pWrap.getType()));
@@ -586,7 +586,15 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
                 for (Classifier concreteClassifierFrom : concreteImplementationsFrom) {
                     OJBlock conditionBlockFrom = new OJBlock();
                     annotatedClass.addToImports(UmlgClassOperations.getPathName(concreteClassifierFrom));
-                    String condition = "parentResource instanceof " + UmlgClassOperations.getPathName(concreteClassifierFrom).getLast();
+
+                    String condition;
+                    //getClass() == does not work for BaseClassUmlg as the generated XXXMeta classes extends it but are not in the model
+                    //for this case instanceof will do
+                    if (concreteClassifierFrom.getQualifiedName().endsWith(UmlgGenerationUtil.BaseClassUmlgQualifiedName)) {
+                        condition = "parentResource instanceof " + UmlgClassOperations.getPathName(concreteClassifierFrom).getLast();
+                    } else {
+                        condition = "parentResource.getClass() == " + UmlgClassOperations.getPathName(concreteClassifierFrom).getLast() + ".class";
+                    }
                     if (countFrom == 1) {
                         ifStatementFrom.setCondition(condition);
                         ifStatementFrom.setThenPart(conditionBlockFrom);

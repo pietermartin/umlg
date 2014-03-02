@@ -94,9 +94,9 @@
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_7pnyw5fdEeOOvfKC8vSd2w" value="*"/>
           </ownedEnd>
         </packagedElement>
-        <packagedElement xmi:type="uml:Association" xmi:id="_-BJ1YJfeEeOOvfKC8vSd2w" name="god_monster_1" memberEnd="_-BJ1YZfeEeOOvfKC8vSd2w _-BE84JfeEeOOvfKC8vSd2w">
+        <packagedElement xmi:type="uml:Association" xmi:id="_-BJ1YJfeEeOOvfKC8vSd2w" name="god_monster_1" memberEnd="_-BJ1YZfeEeOOvfKC8vSd2w _-BE84JfeEeOOvfKC8vSd2w" navigableOwnedEnd="_-BJ1YZfeEeOOvfKC8vSd2w">
           <ownedEnd xmi:type="uml:Property" xmi:id="_-BJ1YZfeEeOOvfKC8vSd2w" name="god" type="_mODiAJZ9EeOOvfKC8vSd2w" association="_-BJ1YJfeEeOOvfKC8vSd2w">
-            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_-BJ1YpfeEeOOvfKC8vSd2w" value="1"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_-BJ1YpfeEeOOvfKC8vSd2w"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_-BJ1Y5feEeOOvfKC8vSd2w" value="1"/>
           </ownedEnd>
         </packagedElement>

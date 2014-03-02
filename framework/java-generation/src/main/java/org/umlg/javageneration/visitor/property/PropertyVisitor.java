@@ -31,6 +31,7 @@ public class PropertyVisitor extends BaseVisitor implements Visitor<Property> {
     public void visitBefore(Property p) {
         PropertyWrapper propertyWrapper = new PropertyWrapper(p);
         OJAnnotatedClass owner = findOJClass(p);
+        validateProperty(propertyWrapper);
         if (!propertyWrapper.isDerived() && !propertyWrapper.isQualifier() && !propertyWrapper.isForQualifier()) {
             buildField(owner, propertyWrapper);
             buildRemover(owner, propertyWrapper);
@@ -43,6 +44,15 @@ public class PropertyVisitor extends BaseVisitor implements Visitor<Property> {
 
     @Override
     public void visitAfter(Property element) {
+    }
+
+    private void validateProperty(PropertyWrapper propertyWrapper) {
+        //non navigable properties may not be required.
+        //This creates to many problems in capturing the data model, especially for the gui.
+        if (!propertyWrapper.isDerived() && !propertyWrapper.isPrimitive() && !propertyWrapper.isDataType() && !propertyWrapper.isNavigable() && propertyWrapper.getLower() > 0) {
+            throw new IllegalStateException(String.format("Property %s is not navigable and yet is required. its lower multiplicity is %d. This is not supported.", new Object[]{propertyWrapper.getQualifiedName(), propertyWrapper.getLower()}));
+        }
+
     }
 
     private void addInitialization(OJAnnotatedClass owner, PropertyWrapper propertyWrapper) {

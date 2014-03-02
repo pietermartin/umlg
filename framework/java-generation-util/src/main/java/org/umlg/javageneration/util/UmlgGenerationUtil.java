@@ -8,6 +8,7 @@ import org.umlg.java.metamodel.annotation.OJAnnotationValue;
 
 public class UmlgGenerationUtil {
 
+    public static String BaseClassUmlgQualifiedName = "org::umlg::meta::BaseClassUmlg";
     public static OJPathName UmlgUtil = new OJPathName("org.umlg.runtime.util.UmlgUtil");
     public static OJPathName BASE_CLASS_UMLG = new OJPathName("org.umlg.meta.BaseClassUmlg");
 

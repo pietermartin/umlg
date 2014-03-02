@@ -28,13 +28,13 @@ public class UmlgTitanGraphFactory implements UmlgGraphFactory {
         if (this.umlgGraph == null) {
             File f = new File(url);
             TransactionThreadEntityVar.remove();
+            try {
+                this.propertiesConfiguration = new PropertiesConfiguration("umlg.titan.properties");
+            } catch (ConfigurationException e) {
+                throw new RuntimeException(e);
+            }
+            this.propertiesConfiguration.addProperty("storage.directory", f.getAbsolutePath());
             if (!f.exists()) {
-                try {
-                    this.propertiesConfiguration = new PropertiesConfiguration("umlg.titan.properties");
-                } catch (ConfigurationException e) {
-                    throw new RuntimeException(e);
-                }
-                this.propertiesConfiguration.addProperty("storage.directory", f.getAbsolutePath());
                 this.umlgGraph = new UmlgTitanGraph(new GraphDatabaseConfiguration(this.propertiesConfiguration));
                 this.umlgGraph.addRoot();
                 this.umlgGraph.addDeletionNode();
