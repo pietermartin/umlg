@@ -23,14 +23,14 @@ public class TestGremlinExecutor extends BaseLocalDbTest {
         Universe universe1 = new Universe(true);
         universe1.setName("universe1");
         SpaceTime st = new SpaceTime(universe1);
-        Space s = new Space(st);
-        Time t = new Time(st);
+        new Space(st);
+        new Time(st);
 
         god.addToUniverse(universe1);
         db.commit();
         Assert.assertNotNull(universe1.getGod());
 
         String result = db.executeQuery(UmlgQueryEnum.GREMLIN, god.getId(), "self.out");
-        System.out.println(result);
+        Assert.assertTrue(result.startsWith("v["));
     }
 }

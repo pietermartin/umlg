@@ -30,6 +30,7 @@
                                 <source>src/main/generated-java</source>
 								<source>src/main/generated-java-restlet</source>
                                 <source>src/main/generated-java-meta</source>
+                                <source>src/main/generated-groovy</source>
 							</sources>
 						</configuration>
 					</execution>

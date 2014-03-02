@@ -1,6 +1,7 @@
 package org.umlg.runtime.restlet;
 
 import org.eclipse.ocl.helper.Choice;
+import org.eclipse.ocl.helper.ConstraintKind;
 import org.eclipse.uml2.uml.Classifier;
 import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.representation.Representation;
@@ -36,7 +37,7 @@ public class OclCodeInsightServerResource extends ServerResource {
                 Classifier contextClassifier = (Classifier) ModelLoader.INSTANCE.findNamedElement(contextClassifierQualifiedName);
                 UmlgOcl2Parser.INSTANCE.getHelper().setContext(contextClassifier);
             }
-            List<Choice> insights = UmlgOcl2Parser.INSTANCE.getHelper().getSyntaxHelp(null, query);
+            List<Choice> insights = UmlgOcl2Parser.INSTANCE.getHelper().getSyntaxHelp(ConstraintKind.INVARIANT, query);
             return new JsonRepresentation(convertChoicesToJson(insights));
         } finally {
             GraphDb.getDb().rollback();

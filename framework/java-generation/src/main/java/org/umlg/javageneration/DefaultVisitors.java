@@ -10,6 +10,7 @@ import org.umlg.javageneration.visitor.clazz.*;
 import org.umlg.javageneration.visitor.enumeration.EnumerationVisitor;
 import org.umlg.javageneration.visitor.enumeration.TofromJsonForEnumCreator;
 import org.umlg.javageneration.visitor.interfaze.InterfaceVisitor;
+import org.umlg.javageneration.visitor.model.GremlinGroovyModelVisitor;
 import org.umlg.javageneration.visitor.model.IndexCreator;
 import org.umlg.javageneration.visitor.model.MetaNodeCreator;
 import org.umlg.javageneration.visitor.model.RootEntryPointCreator;
@@ -59,6 +60,7 @@ public class DefaultVisitors {
         result.add(new IndexCreator(Workspace.INSTANCE));
 
         result.add(new PackageVisitor(Workspace.INSTANCE));
+        result.add(new GremlinGroovyModelVisitor(Workspace.INSTANCE, Workspace.GROOVY_SOURCE_FOLDER));
 
         return result;
 

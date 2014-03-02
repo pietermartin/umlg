@@ -1,6 +1,6 @@
 package org.umlg.tests.nonnavigable;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.componenttest.Space;
 import org.umlg.componenttest.SpaceTime;
@@ -29,6 +29,7 @@ public class NonNavigableTest extends BaseLocalDbTest {
         NonNavigableOne nonNavigableOne = new NonNavigableOne(god);
         nonNavigableOne.setName("nonNovigableOne");
         universe1.setNonNavigableOne(nonNavigableOne);
+
         db.commit();
         Assert.assertEquals(6, countVertices());
         Assert.assertEquals(7 + 6, countEdges());

@@ -3,7 +3,9 @@
         "http://java.sun.com/dtd/web-app_2_3.dtd">
 
 <web-app>
-    <display-name>tinkergraph Web Application</display-name>
+    <display-name>Demo Web Application</display-name>
+
+
 
     <servlet>
         <servlet-name>TinkergraphApplication</servlet-name>

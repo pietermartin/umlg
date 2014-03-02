@@ -7,8 +7,8 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import org.eclipse.uml2.uml.Model;
+import org.umlg.framework.ModelPrinter;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
-import org.umlg.framework.JavaModelPrinter;
 import org.umlg.framework.ModelLoader;
 import org.umlg.framework.ModelVisitor;
 import org.umlg.framework.Visitor;
@@ -20,15 +20,18 @@ public class Workspace {
 	public final static String DEFAULT_SOURCE_FOLDER = "src/main/generated-java";
     public static final String RESTLET_SOURCE_FOLDER = "src/main/generated-java-restlet";
     public static final String META_SOURCE_FOLDER = "src/main/generated-java-meta";
+    public static final String GROOVY_SOURCE_FOLDER = "src/main/generated-groovy";
 
     public final static String RESOURCE_FOLDER = "src/main/resources";
-	private final Map<JavaModelPrinter.Source, OJAnnotatedClass> javaClassMap = new HashMap<JavaModelPrinter.Source, OJAnnotatedClass>();
+	private final Map<ModelPrinter.Source, OJAnnotatedClass> javaClassMap = new HashMap<ModelPrinter.Source, OJAnnotatedClass>();
+    private final Map<ModelPrinter.Source, String> groovyClassMap = new HashMap<ModelPrinter.Source, String>();
     private File entitiesRoot;
     private File restletRoot;
     private File modelFile;
 	private Model model;
 	private List<Visitor<?>> visitors;
-	private JavaModelPrinter javaModelPrinter = new JavaModelPrinter();
+	private ModelPrinter javaModelPrinter = new ModelPrinter(ModelPrinter.SOURCE_TYPE.JAVA);
+    private ModelPrinter groovyModelPrinter = new ModelPrinter(ModelPrinter.SOURCE_TYPE.GROOVY);
 
 	public final static Workspace INSTANCE = new Workspace();
 
@@ -43,13 +46,18 @@ public class Workspace {
         ModelLoader.INSTANCE.clear();
 		javaClassMap.clear();
 		javaModelPrinter.clear();
+        groovyModelPrinter.clear();
 	}
 
 	public void addToClassMap(OJAnnotatedClass ojClass, String sourceDir) {
-		this.javaClassMap.put(new JavaModelPrinter.Source(ojClass.getQualifiedName(), sourceDir), ojClass);
+		this.javaClassMap.put(new ModelPrinter.Source(ojClass.getQualifiedName(), sourceDir), ojClass);
 	}
 
-	public void generate(File entitiesRoot, File restletRoot, File modelFile, List<Visitor<?>> visitors) {
+    public void addToGroovyMap(String qualifiedName, String source, String sourceDir) {
+        this.groovyClassMap.put(new ModelPrinter.Source(qualifiedName, sourceDir), source);
+    }
+
+    public void generate(File entitiesRoot, File restletRoot, File modelFile, List<Visitor<?>> visitors) {
 		this.entitiesRoot = entitiesRoot;
         this.restletRoot = restletRoot;
 		this.modelFile = modelFile;
@@ -68,7 +76,7 @@ public class Workspace {
      */
 	private void toText() {
         //entities first
-		for (Map.Entry<JavaModelPrinter.Source, OJAnnotatedClass> entry : this.javaClassMap.entrySet()) {
+		for (Map.Entry<ModelPrinter.Source, OJAnnotatedClass> entry : this.javaClassMap.entrySet()) {
             if (entry.getKey().sourceDir.equals(DEFAULT_SOURCE_FOLDER) || entry.getKey().sourceDir.equals(META_SOURCE_FOLDER)) {
 			    this.javaModelPrinter.addToSource(entry.getKey().qualifiedName, entry.getKey().sourceDir, entry.getValue().toJavaString());
             }
@@ -77,17 +85,26 @@ public class Workspace {
         this.javaModelPrinter.clear();
 
         //reslet next
-        for (Map.Entry<JavaModelPrinter.Source, OJAnnotatedClass> entry : this.javaClassMap.entrySet()) {
+        for (Map.Entry<ModelPrinter.Source, OJAnnotatedClass> entry : this.javaClassMap.entrySet()) {
             if (entry.getKey().sourceDir.equals(RESTLET_SOURCE_FOLDER)) {
                 this.javaModelPrinter.addToSource(entry.getKey().qualifiedName, entry.getKey().sourceDir, entry.getValue().toJavaString());
             }
         }
         this.javaModelPrinter.toText(this.restletRoot);
+        this.javaModelPrinter.clear();
 
-	}
+        //groovy next
+        for (Map.Entry<ModelPrinter.Source, String> entry : this.groovyClassMap.entrySet()) {
+            if (entry.getKey().sourceDir.equals(GROOVY_SOURCE_FOLDER)) {
+                this.groovyModelPrinter.addToSource(entry.getKey().qualifiedName, entry.getKey().sourceDir, entry.getValue());
+            }
+        }
+        this.groovyModelPrinter.toText(this.entitiesRoot);
+
+    }
 
 	public OJAnnotatedClass findOJClass(String name) {
-		for (Map.Entry<JavaModelPrinter.Source, OJAnnotatedClass> entry : this.javaClassMap.entrySet()) {
+		for (Map.Entry<ModelPrinter.Source, OJAnnotatedClass> entry : this.javaClassMap.entrySet()) {
 			if (entry.getKey().qualifiedName.equals(name)) {
 				return entry.getValue();
 			}

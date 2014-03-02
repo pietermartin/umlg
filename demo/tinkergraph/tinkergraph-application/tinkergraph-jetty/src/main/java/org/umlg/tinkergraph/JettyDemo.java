@@ -21,11 +21,11 @@ public class JettyDemo {
 
         ContextHandlerCollection contexts = new ContextHandlerCollection();
 
-        WebAppContext tinkerGraph = new WebAppContext();
-        tinkerGraph.setContextPath("/tinkergraph");
-        tinkerGraph.setWar("./demo/tinkergraph/tinkergraph-application/tinkergraph-war/target/tinkergraph-war");
+        WebAppContext graph = new WebAppContext();
+        graph.setContextPath("/tinkergraph");
+        graph.setWar("./demo/tinkergraph/tinkergraph-application/tinkergraph-war/target/tinkergraph-war");
 
-        contexts.setHandlers(new Handler[] {  tinkerGraph });
+        contexts.setHandlers(new Handler[] {  graph });
         server.setHandler(contexts);
 
         server.start();

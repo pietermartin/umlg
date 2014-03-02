@@ -34,6 +34,10 @@ public class BaseVisitor {
         this.workspace.addToClassMap(source, sourceDir);
     }
 
+    protected void addToGroovySource(String qualifiedName, String source) {
+        this.workspace.addToGroovyMap(qualifiedName, source, sourceDir);
+    }
+
     protected OJAnnotatedClass findOJClass(NamedElement owner) {
         return this.workspace.findOJClass(Namer.qualifiedName(owner));
     }

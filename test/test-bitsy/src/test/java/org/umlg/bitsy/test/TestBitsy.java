@@ -25,7 +25,7 @@ import java.util.List;
  */
 public class TestBitsy {
 
-//    @Test
+    @Test
     public void testSpeedDude1() throws IOException {
         File f = new File("/tmp/bitsy-performance");
         if (f.exists()) {
@@ -36,7 +36,7 @@ public class TestBitsy {
         BitsyGraph g = new BitsyGraph(dbPath);
         try {
 
-            int NUMBER_TO_ITER = 10000000;
+            int NUMBER_TO_ITER = 10;
 
             StopWatch stopWatch = new StopWatch();
             stopWatch.start();

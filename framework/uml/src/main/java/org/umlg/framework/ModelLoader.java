@@ -165,6 +165,18 @@ public class ModelLoader {
         return results;
     }
 
+    public List<Property> getAllProperties() {
+        List<Property> results = new ArrayList<Property>();
+        filter(results, this.model, new Filter() {
+            @Override
+            public boolean filter(Element e) {
+                return e instanceof Property;
+            }
+        });
+        return results;
+    }
+
+
     /**
      * @return
      */

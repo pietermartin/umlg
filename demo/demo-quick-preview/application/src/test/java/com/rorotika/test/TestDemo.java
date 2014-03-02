@@ -35,7 +35,7 @@ public class TestDemo {
 
     @After
     public void after() {
-        db.shutdown();
+        db.drop();
     }
 
     @Test

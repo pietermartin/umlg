@@ -18,8 +18,10 @@ public class GraphOfTheGodsGenerator {
         }
         JavaGenerator javaGenerator = new JavaGenerator();
         javaGenerator.generate(
-                new File(args[0] + "/demo/graphofthegods/graphofthegods-application/src/main/model/graphofthegods.uml"),
-                new File(args[0] + "/demo/graphofthegods/graphofthegods-application"), RestletVisitors.getDefaultJavaVisitors());
+                new File(args[0] + "/demo/graphofthegods/graphofthegods-application/graphofthegods-entities/src/main/model/graphofthegods.uml"),
+                new File(args[0] + "/demo/graphofthegods/graphofthegods-application/graphofthegods-entities"),
+                new File(args[0] + "/demo/graphofthegods/graphofthegods-application/graphofthegods-restlet"),
+                RestletVisitors.getDefaultJavaVisitors());
 
         ///demo/graphofthegods
     }

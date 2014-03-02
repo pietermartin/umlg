@@ -9,22 +9,8 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>graphofthegods-generator</artifactId>
     <packaging>jar</packaging>
-    <name>graphofthegods-generator</name>
+    <name>tinkergraph generator</name>
 
-    <dependencies>
-        <!-- required for generating umlg entities -->
-        <dependency>
-            <groupId>org.umlg</groupId>
-            <artifactId>java-generation</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <!-- required for generating restlet resources -->
-        <dependency>
-            <groupId>org.umlg</groupId>
-            <artifactId>restlet</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-    </dependencies>
     <build>
         <plugins>
             <plugin>
@@ -48,4 +34,19 @@
             </plugin>
         </plugins>
     </build>
+
+    <dependencies>
+        <!-- required for generating umlg entities -->
+        <dependency>
+            <groupId>org.umlg</groupId>
+            <artifactId>java-generation</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <!-- required for generating restlet resources -->
+        <dependency>
+            <groupId>org.umlg</groupId>
+            <artifactId>restlet</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>
