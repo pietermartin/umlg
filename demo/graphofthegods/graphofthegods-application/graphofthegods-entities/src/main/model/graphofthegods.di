@@ -19,6 +19,9 @@
     <availablePage>
       <emfPageIdentifier href="graphofthegods.notation#_RadaIJfkEeOOvfKC8vSd2w"/>
     </availablePage>
+    <availablePage>
+      <emfPageIdentifier href="graphofthegods.notation#_o4MaMKJIEeOn3tP_LveSqg"/>
+    </availablePage>
   </pageList>
   <sashModel currentSelection="//@sashModel/@windows.0/@children.0">
     <windows>
@@ -34,6 +37,9 @@
         </children>
         <children>
           <emfPageIdentifier href="graphofthegods.notation#_RadaIJfkEeOOvfKC8vSd2w"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="graphofthegods.notation#_o4MaMKJIEeOn3tP_LveSqg"/>
         </children>
       </children>
     </windows>
