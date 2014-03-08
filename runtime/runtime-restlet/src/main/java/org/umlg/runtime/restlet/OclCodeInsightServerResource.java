@@ -37,7 +37,7 @@ public class OclCodeInsightServerResource extends ServerResource {
                 Classifier contextClassifier = (Classifier) ModelLoader.INSTANCE.findNamedElement(contextClassifierQualifiedName);
                 UmlgOcl2Parser.INSTANCE.getHelper().setContext(contextClassifier);
             }
-            List<Choice> insights = UmlgOcl2Parser.INSTANCE.getHelper().getSyntaxHelp(ConstraintKind.INVARIANT, query);
+            List<Choice> insights = UmlgOcl2Parser.INSTANCE.getCodeInsights(ConstraintKind.INVARIANT, query);
             return new JsonRepresentation(convertChoicesToJson(insights));
         } finally {
             GraphDb.getDb().rollback();
