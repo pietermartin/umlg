@@ -4,7 +4,7 @@ import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.List;
+import java.util.*;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.ocl.Environment;
@@ -13,21 +13,14 @@ import org.eclipse.ocl.OCLInput;
 import org.eclipse.ocl.ParserException;
 import org.eclipse.ocl.SemanticException;
 import org.eclipse.ocl.expressions.OCLExpression;
+import org.eclipse.ocl.helper.Choice;
+import org.eclipse.ocl.helper.ChoiceKind;
+import org.eclipse.ocl.helper.ConstraintKind;
 import org.eclipse.ocl.helper.OCLHelper;
 import org.eclipse.ocl.uml.ExpressionInOCL;
-import org.eclipse.uml2.uml.CallOperationAction;
+import org.eclipse.uml2.uml.*;
 import org.eclipse.uml2.uml.Class;
-import org.eclipse.uml2.uml.Classifier;
-import org.eclipse.uml2.uml.Constraint;
-import org.eclipse.uml2.uml.EnumerationLiteral;
-import org.eclipse.uml2.uml.Model;
-import org.eclipse.uml2.uml.NamedElement;
-import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Package;
-import org.eclipse.uml2.uml.Parameter;
-import org.eclipse.uml2.uml.Property;
-import org.eclipse.uml2.uml.SendSignalAction;
-import org.eclipse.uml2.uml.State;
 import org.umlg.framework.ModelLoadedEvent;
 import org.umlg.framework.ModelLoader;
 
@@ -67,6 +60,47 @@ public class UmlgOcl2Parser implements ModelLoadedEvent {
 
     public OCLHelper<Classifier, Operation, Property, Constraint> getHelper() {
         return helper;
+    }
+
+    public List<Choice> getCodeInsights(ConstraintKind invariant, String query) {
+        List<Choice> insights = UmlgOcl2Parser.INSTANCE.getHelper().getSyntaxHelp(ConstraintKind.INVARIANT, query);
+        UmlgOcl2Parser.INSTANCE.addAssociationMemberEnds(insights);
+        return insights;
+    }
+
+    public void addAssociationMemberEnds(List<Choice> choices) {
+        Set<Type> contextElements = new HashSet<Type>();
+        List<Choice> ownedMemberEnds = new ArrayList<Choice>();
+        for (Choice choice : choices) {
+            if (choice.getElement() instanceof Element) {
+                Element context = ((Element) choice.getElement()).getOwner();
+                if (context instanceof Type) {
+                    contextElements.add((Type) context);
+                }
+            }
+        }
+        for (Type context : contextElements) {
+            List<Association> associations = context.getAssociations();
+            for (Association association : associations) {
+                for (Property ownedMemberEnd : association.getOwnedEnds()) {
+                    //ignore the property pointing back to the context
+                    if (!ownedMemberEnd.getType().equals(context)) {
+                        ownedMemberEnds.add(new UmlgChoice(
+                                ChoiceKind.PROPERTY,
+                                ownedMemberEnd.getName(),
+                                ownedMemberEnd.getType().getName(),
+                                ownedMemberEnd));
+                    }
+                }
+            }
+        }
+        choices.addAll(ownedMemberEnds);
+        Collections.sort(choices, new Comparator<Choice>() {
+            @Override
+            public int compare(Choice o1, Choice o2) {
+                return o1.getKind().compareTo(o2.getKind());
+            }
+        });
     }
 
     public static void main(String[] args) {

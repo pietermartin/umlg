@@ -1,9 +1,9 @@
 package org.umlg.ocl.qualifier.test;
 
-import junit.framework.Assert;
-
 import org.apache.commons.lang.time.StopWatch;
+import org.junit.Assert;
 import org.junit.Test;
+import org.umlg.ocl.UmlgOclExecutor;
 import org.umlg.qualifier.Bank;
 import org.umlg.qualifier.Customer;
 import org.umlg.runtime.test.BaseLocalDbTest;
