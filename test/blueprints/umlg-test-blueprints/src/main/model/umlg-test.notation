@@ -1997,6 +1997,13 @@
           <element xmi:type="uml:Property" href="umlg-test.uml#_6ZuK0BncEeGZfswubjlR9Q"/>
         </children>
         <children xmi:type="notation:DecorationNode" xmi:id="_1ci5ZgAOEeKpVr_ntT6cLA" type="3006">
+          <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_-FuL0KfCEeOPt7R4er8hcg" source="Stereotype_Annotation">
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_-Fuy4KfCEeOPt7R4er8hcg" key="StereotypeWithQualifiedNameList" value=""/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_-Fuy4afCEeOPt7R4er8hcg" key="StereotypeList" value="Umlg::Profile::QualifierListener"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_-Fuy4qfCEeOPt7R4er8hcg" key="Stereotype_Presentation_Kind" value="HorizontalStereo"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_-Fuy46fCEeOPt7R4er8hcg" key="PropStereoDisplay" value=""/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_-Fuy5KfCEeOPt7R4er8hcg" key="StereotypePropertyLocation" value="Compartment"/>
+          </eAnnotations>
           <element xmi:type="uml:Property" href="umlg-test.uml#_1YvXIMRoEeGJXus6eZqdyw"/>
         </children>
         <children xmi:type="notation:DecorationNode" xmi:id="_1ci5ZwAOEeKpVr_ntT6cLA" type="3006">
@@ -2087,7 +2094,7 @@
         <layoutConstraint xmi:type="notation:Location" xmi:id="_1dulJgAOEeKpVr_ntT6cLA" x="-31" y="17"/>
       </children>
       <element xmi:type="uml:Association" href="umlg-test.uml#_Cp4DIBndEeGZfswubjlR9Q"/>
-      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_1dt-GAAOEeKpVr_ntT6cLA" points="[171, -80, -168, -73]"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_1dt-GAAOEeKpVr_ntT6cLA" points="[142, -42, -566, -57]$[237, -69, -471, -84]$[442, -69, -266, -84]$[579, -26, -129, -41]"/>
       <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_1dt-GQAOEeKpVr_ntT6cLA"/>
       <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_1dt-GgAOEeKpVr_ntT6cLA"/>
     </edges>
@@ -2139,7 +2146,7 @@
         <layoutConstraint xmi:type="notation:Location" xmi:id="_1dxBYAAOEeKpVr_ntT6cLA" x="10" y="10"/>
       </children>
       <element xmi:type="uml:Association" href="umlg-test.uml#_h0dj8BnqEeGZfswubjlR9Q"/>
-      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_1dvzTAAOEeKpVr_ntT6cLA" points="[142, 46, -311, 15]$[227, 74, -226, 43]$[324, 55, -129, 24]"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_1dvzTAAOEeKpVr_ntT6cLA" points="[142, 38, -566, 23]$[242, 66, -466, 51]$[447, 72, -261, 57]$[579, 43, -129, 28]"/>
       <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_1dwaUAAOEeKpVr_ntT6cLA"/>
       <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_1dwaUQAOEeKpVr_ntT6cLA"/>
     </edges>

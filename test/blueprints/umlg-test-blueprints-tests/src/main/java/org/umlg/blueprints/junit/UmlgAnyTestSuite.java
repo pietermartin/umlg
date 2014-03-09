@@ -5,12 +5,13 @@ import org.junit.runners.Suite;
 import org.umlg.gremlin.TestGremlinExecutor;
 import org.umlg.tests.allinstances.AllInstancesTest;
 import org.umlg.tests.qualifiertest.TestQualifierChangeEvent;
+import org.umlg.tests.qualifiertest.TestQualifierOnManyToMany;
 
 /**
  * Date: 2013/10/19
  * Time: 10:06 AM
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({TestQualifierChangeEvent.class})
+@Suite.SuiteClasses({TestQualifierOnManyToMany.class})
 public class UmlgAnyTestSuite {
 }

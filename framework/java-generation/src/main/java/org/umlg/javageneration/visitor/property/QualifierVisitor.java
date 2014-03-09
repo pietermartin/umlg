@@ -167,8 +167,13 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
         ojClass.addToImports("java.util.Iterator");
         OJIfStatement ifHasNext = new OJIfStatement("iterator.hasNext()");
         if (qualified.isUnqualifiedOne()) {
-            ifHasNext.addToThenPart("return new " + qualified.javaBaseTypePath().getLast() + "(iterator.next().getVertex("
+            OJIfStatement ifControllingSide = new OJIfStatement();
+            ifControllingSide.setCondition(UmlgClassOperations.propertyEnumName(qualifiedClassifier) + "." + qualified.fieldname() + ".isControllingSide()");
+            ifControllingSide.addToThenPart("return new " + qualified.javaBaseTypePath().getLast() + "(iterator.next().getVertex("
                     + UmlgGenerationUtil.tinkerDirection.getLast() + ".IN))");
+            ifControllingSide.addToElsePart("return new " + qualified.javaBaseTypePath().getLast() + "(iterator.next().getVertex("
+                    + UmlgGenerationUtil.tinkerDirection.getLast() + ".OUT))");
+            ifHasNext.addToThenPart(ifControllingSide);
             ifHasNext.addToElsePart("return null");
         } else {
             OJSimpleStatement ojSimpleStatement;
@@ -222,6 +227,13 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
     private void generateUpdateIndexMethodForQualifier(OJAnnotatedClass contextOJClass, PropertyWrapper qualified, PropertyWrapper qualifier, PropertyWrapper propertyToListenOn) {
         OJAnnotatedOperation updateIndexForQualifier = new OJAnnotatedOperation(qualifier.updateIndexForQualifierName());
 
+        PropertyWrapper otherEnd = new PropertyWrapper(qualified.getOtherEnd());
+
+        OJForStatement forElementsOnOtherSide = null;
+        if (otherEnd.isMany()) {
+            forElementsOnOtherSide = new OJForStatement(otherEnd.fieldname(), otherEnd.javaBaseTypePath(), "this." + otherEnd.getter() + "()");
+        }
+
         OJField qualifierField = new OJField("qualifier", UmlgGenerationUtil.UmlgQualifierPathName);
         StringBuilder sb = new StringBuilder();
         sb.append("new ");
@@ -234,19 +246,36 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
         sb.append(qualifier.getter());
         sb.append("() == null ? ");
         sb.append(UmlgGenerationUtil.UmlgQualifierIdFactory.getLast());
-        sb.append(".getUmlgQualifierId().getId(this.");
-        sb.append(new PropertyWrapper(qualified.getOtherEnd()).getter());
-        sb.append("()) + \"___NULL___\" : ");
+        sb.append(".getUmlgQualifierId().getId(");
+        if (otherEnd.isMany()) {
+            sb.append(otherEnd.fieldname());
+        } else {
+            sb.append("this.");
+            sb.append(otherEnd.getter());
+            sb.append("()");
+        }
+        sb.append(") + \"___NULL___\" : ");
         sb.append(UmlgGenerationUtil.UmlgQualifierIdFactory.getLast());
-        sb.append(".getUmlgQualifierId().getId(this.");
-        sb.append(new PropertyWrapper(qualified.getOtherEnd()).getter());
-        sb.append("()) + this.");
+        sb.append(".getUmlgQualifierId().getId(");
+        if (otherEnd.isMany()) {
+            sb.append(otherEnd.fieldname());
+        } else {
+            sb.append("this.");
+            sb.append(otherEnd.getter());
+            sb.append("()");
+        }
+        sb.append(") + this.");
         sb.append(qualifier.getter());
         sb.append("().toString()}, ");
         sb.append(UmlgGenerationUtil.calculateMultiplcity(qualified));
         sb.append(")");
         qualifierField.setInitExp(sb.toString());
-        updateIndexForQualifier.getBody().addToLocals(qualifierField);
+
+        if (otherEnd.isMany()) {
+            forElementsOnOtherSide.getBody().addToLocals(qualifierField);
+        } else {
+            updateIndexForQualifier.getBody().addToLocals(qualifierField);
+        }
 
         OJAnnotatedField edgesIter = new OJAnnotatedField("iter", new OJPathName("java.lang.Iterable").addToGenerics(UmlgGenerationUtil.edgePathName));
         sb = new StringBuilder();
@@ -261,13 +290,18 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
         sb.append(".IN, ");
         sb.append(UmlgClassOperations.propertyEnumName(qualified.getType()));
         sb.append(".");
-        sb.append(new PropertyWrapper(qualified.getOtherEnd()).fieldname());
+        sb.append(otherEnd.fieldname());
         sb.append(".getLabel())");
         edgesIter.setInitExp(sb.toString());
         updateIndexForQualifier.getBody().addToLocals(edgesIter);
         OJForStatement forIndexedEdges = new OJForStatement("edge", UmlgGenerationUtil.edgePathName, "iter");
-        forIndexedEdges.getBody().addToStatements("edge.setProperty(qualifier.getKey(), qualifier.getValue());");
-        updateIndexForQualifier.getBody().addToStatements(forIndexedEdges);
+        forIndexedEdges.getBody().addToStatements("edge.setProperty(qualifier.getKey(), qualifier.getValue())");
+        if (otherEnd.isMany()) {
+            forElementsOnOtherSide.getBody().addToStatements(forIndexedEdges);
+            updateIndexForQualifier.getBody().addToStatements(forElementsOnOtherSide);
+        } else {
+            updateIndexForQualifier.getBody().addToStatements(forIndexedEdges);
+        }
 
         contextOJClass.addToOperations(updateIndexForQualifier);
         contextOJClass.addToImports(UmlgGenerationUtil.tinkerDirection);
@@ -282,7 +316,6 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
                 "this." + new PropertyWrapper(qualified.getOtherEnd()).getter() + "() != null",
                 "this." + qualifier.updateIndexForQualifierName() + "()");
         setter.getBody().addToStatements(ifOtherSideIsNotNull);
-        UmlgGenerationUtil.getEdgeName(qualified.getProperty());
 
 
     }

@@ -1,6 +1,6 @@
 package org.umlg.tests.qualifiertest;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.concretetest.God;
 import org.umlg.qualifiertest.Many1;
@@ -163,9 +163,63 @@ public class TestQualifierOnManyToMany extends BaseLocalDbTest {
 		Assert.assertEquals(3, m2.getMany1ListForListQualifier1("many1_1").size());
 
 		Assert.assertEquals(1, m2.getMany1ListForListQualifier1("many1_4").size());
-		Assert.assertEquals(1, m2.getMany1ListForListQualifier1("many1_4").size());
-		Assert.assertEquals(1, m2.getMany1ListForListQualifier1("many1_4").size());
-		Assert.assertEquals(1, m2.getMany1ListForListQualifier1("many1_4").size());
 	}
+
+    @Test
+    public void testIndexUpdate() {
+
+        God god = new God(true);
+        god.setName("THEGOD");
+
+        Many1 many1_1 = new Many1(true);
+        many1_1.setName("many1_1");
+        many1_1.addToGod(god);
+
+        Many1 many1_2 = new Many1(true);
+        many1_2.setName("many1_1");
+        many1_2.addToGod(god);
+
+        Many1 many1_3 = new Many1(true);
+        many1_3.setName("many1_1");
+        many1_3.addToGod(god);
+
+        Many1 many1_4 = new Many1(true);
+        many1_4.setName("many1_4");
+        many1_4.addToGod(god);
+
+        Many2 many2_1 = new Many2(true);
+        many2_1.setName("many2_1");
+        many2_1.addToGod(god);
+
+        Many2 many2_2 = new Many2(true);
+        many2_2.setName("many2_2");
+        many2_2.addToGod(god);
+
+        Many2 many2_3 = new Many2(true);
+        many2_3.setName("many2_3");
+        many2_3.addToGod(god);
+
+        Many2 many2_4 = new Many2(true);
+        many2_4.setName("many2_4");
+        many2_4.addToGod(god);
+
+        many1_1.addToMany2(many2_1);
+
+        db.commit();
+
+        many1_1.reload();
+        Many2 m2 = many1_1.getMany2ForQualifier1("many2_1");
+        Assert.assertNotNull(m2);
+        Assert.assertEquals("many2_1", m2.getName());
+        m2.setName("wwww");
+        db.commit();
+        m2 = many1_1.getMany2ForQualifier1("many2_1");
+        Assert.assertNull(m2);
+        m2 = many1_1.getMany2ForQualifier1("wwww");
+        Assert.assertNotNull(m2);
+
+
+
+    }
 
 }

@@ -662,6 +662,10 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         return UmlgPropertyOperations.isOne(this.property);
     }
 
+    /**
+     * Indicates the multipliticity as modelled. i.e. not the raw implied many on a qualified property
+     * @return
+     */
     public boolean isUnqualifiedOne() {
         return UmlgPropertyOperations.isUnqualifiedOne(this.property);
     }
@@ -1672,6 +1676,6 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         if (!this.isQualifier()) {
              throw new IllegalStateException("PropertyWrapper.updateIndexForQualifierName() can only be called for a qualifier!");
         }
-        return "updateIndexFor" + this.getName();
+        return "updateIndexFor" + StringUtils.capitalize(this.getName());
     }
 }

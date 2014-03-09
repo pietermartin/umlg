@@ -711,6 +711,8 @@
             </ownedAttribute>
             <ownedAttribute xmi:type="uml:Property" xmi:id="_vP2fkMRjEeGr8dhiXoL-ZA" name="qualifier2" visibility="public" isDerived="true">
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_nCFVEKeWEeOPt7R4er8hcg" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_nCF8IKeWEeOPt7R4er8hcg" value="1"/>
               <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_xe5KAMRjEeGr8dhiXoL-ZA" name="self.name2">
                 <language>ocl</language>
                 <body>self.name2</body>
@@ -2038,4 +2040,5 @@
   <UmlgValidation:Range xmi:id="_MQSNYJorEeOZ3vCVvyLDGg" min="2" max="4" base_Property="_LoR5UAWBEeK9oIwdQfC0-w"/>
   <UmlgValidation:URL xmi:id="_PcV5sJorEeOZ3vCVvyLDGg" protocol="http" base_Property="_dvZPsAWBEeK9oIwdQfC0-w"/>
   <UmlgProfile:QualifierListener xmi:id="_udPgEKeLEeOPt7R4er8hcg" base_Property="_vP2fkMRjEeGr8dhiXoL-ZA" property="_HGZ5cA1TEeGMEcd2Uio8Tg"/>
+  <UmlgProfile:QualifierListener xmi:id="_-FrvkKfCEeOPt7R4er8hcg" base_Property="_1YvXIMRoEeGJXus6eZqdyw" property="_6ZuK0BncEeGZfswubjlR9Q"/>
 </xmi:XMI>
