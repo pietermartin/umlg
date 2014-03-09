@@ -29,7 +29,7 @@ public class GremlinExecutor {
         stopWatch.start();
 
         //remove uml namespacing
-        gremlin = gremlin.replace("::", "____");
+        gremlin = gremlin.replace("::", "_");
 
         if (contextId != null) {
             if (!(contextId instanceof Long)) {
