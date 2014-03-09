@@ -146,7 +146,13 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         sb.append("package ");
         sb.append(Namer.nameIncludingModel(pWrap.getOwningType().getNearestPackage()).replace(".", "::"));
         sb.append("\n    context ");
-        sb.append(pWrap.getOwningType().getName());
+        if (pWrap.getOwner() instanceof Association) {
+            sb.append(((Association) pWrap.getOwner()).getName());
+//            sb.append("::");
+//            sb.append(pWrap.getName());
+        } else {
+            sb.append(pWrap.getOwningType().getName());
+        }
         sb.append("::");
         sb.append(pWrap.getName());
         sb.append(" : ");
@@ -678,7 +684,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 
     @Override
     public boolean isReadOnly() {
-        return this.property.isReadOnly();
+        return this.property.isReadOnly() || isDerived();
     }
 
     @Override

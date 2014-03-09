@@ -67,7 +67,7 @@ public class AddUmlgUriFieldToRuntimePropertyEnum extends BaseVisitor implements
         Set<Property> properties = UmlgClassOperations.getAllProperties(clazz);
 		for (Property property : properties) {
 			PropertyWrapper pWrap = new PropertyWrapper(property);
-			if (!(pWrap.isDerived() || pWrap.isDerivedUnion())) {
+//			if (!(pWrap.isDerived() || pWrap.isDerivedUnion())) {
 				OJEnumLiteral literal = ojEnum.findLiteral(pWrap.fieldname());
 				addTumlUriToLiteral(clazz, pWrap, literal, clazz instanceof AssociationClass);
                 addTumlOverloadedPostUriToLiteral(clazz, pWrap, literal, clazz instanceof AssociationClass);
@@ -82,7 +82,7 @@ public class AddUmlgUriFieldToRuntimePropertyEnum extends BaseVisitor implements
                 }
 
 
-            }
+//            }
 		}
 		addTumlUriToLiteral(clazz, null, ojEnum.findLiteral("id"));
         addTumlOverloadedPostUriToLiteral(clazz, null, ojEnum.findLiteral("id"));

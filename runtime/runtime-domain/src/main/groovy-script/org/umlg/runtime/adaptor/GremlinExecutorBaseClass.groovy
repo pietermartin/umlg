@@ -1,7 +1,6 @@
 package org.umlg.runtime.adaptor
 
 import com.tinkerpop.gremlin.groovy.Gremlin
-import org.umlg.runtime.util.UmlgProperties
 
 /**
  * Date: 2013/06/23

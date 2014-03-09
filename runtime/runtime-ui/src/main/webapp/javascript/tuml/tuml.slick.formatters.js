@@ -10,6 +10,7 @@
         "TumlSlick":{
             "Formatters":{
                 "TumlRequired":TumlRequiredFormatter,
+                "TumlDerivedPropertyFormatter":TumlDerivedPropertyFormatter,
                 "TumlToOneRequiredFormatter": TumlToOneRequiredFormatter,
                 "TumlToAssociationClassRequiredFormatter": TumlToAssociationClassRequiredFormatter,
                 "TumlToAssociationClassFormatter": TumlToAssociationClassFormatter,
@@ -100,6 +101,14 @@
     function TumlRequiredFormatter(row, cell, value, columnDef, dataContext) {
         if (value == null || value === "" || value.length === 0) {
             return "<div style='color:red;'>required</div>";
+        } else {
+            return value;
+        }
+    }
+
+    function TumlDerivedPropertyFormatter(row, cell, value, columnDef, dataContext) {
+        if (value == null || value === "" || value.length === 0) {
+            return "<div style='color:red;'>derived</div>";
         } else {
             return value;
         }

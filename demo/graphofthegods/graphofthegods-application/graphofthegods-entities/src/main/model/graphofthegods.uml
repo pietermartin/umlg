@@ -62,15 +62,12 @@
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_wNDgoJgQEeO3XObowowPyg"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_wNHyEJgQEeO3XObowowPyg" value="1"/>
           </ownedAttribute>
-          <ownedAttribute xmi:type="uml:Property" xmi:id="_vWSfAKJIEeOn3tP_LveSqg" name="children" type="_R-BvMJb9EeOOvfKC8vSd2w" isOrdered="true" isDerived="true" association="_vWTGEKJIEeOn3tP_LveSqg">
-            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_vWSfAaJIEeOn3tP_LveSqg"/>
-            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_vWSfAqJIEeOn3tP_LveSqg" value="*"/>
-            <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_xM4XwKJJEeOn3tP_LveSqg" name="childrenOcl">
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_jiOxAKb8EeOPt7R4er8hcg" name="parents" visibility="public" type="_R-BvMJb9EeOOvfKC8vSd2w" isDerived="true">
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_lZjfAKb8EeOPt7R4er8hcg"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_lZktIKb8EeOPt7R4er8hcg" value="*"/>
+            <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_tHlhsKb8EeOPt7R4er8hcg" name="parentsOcl">
               <language>OCL</language>
-              <body>if self.gender=Gender::MALE then self.fatherOfChild else 
-if self.gender=Gender::FEMALE then self.motherOfChild else  self.motherOfChild endif endif
-
-</body>
+              <body>self.mother->union(self.father->asSet())</body>
             </defaultValue>
           </ownedAttribute>
         </packagedElement>
@@ -97,7 +94,6 @@ if self.gender=Gender::FEMALE then self.motherOfChild else  self.motherOfChild e
         <packagedElement xmi:type="uml:Enumeration" xmi:id="_y_3usJfdEeOOvfKC8vSd2w" name="Gender">
           <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_z8DDEJfdEeOOvfKC8vSd2w" name="MALE"/>
           <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_0p0vEJfdEeOOvfKC8vSd2w" name="FEMALE"/>
-          <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_5f-lsJfdEeOOvfKC8vSd2w" name="NONE"/>
         </packagedElement>
         <packagedElement xmi:type="uml:Association" xmi:id="_7pnywJfdEeOOvfKC8vSd2w" name="being_gender_1" memberEnd="_7pnywZfdEeOOvfKC8vSd2w _7phsIJfdEeOOvfKC8vSd2w">
           <ownedEnd xmi:type="uml:Property" xmi:id="_7pnywZfdEeOOvfKC8vSd2w" name="being" type="_R-BvMJb9EeOOvfKC8vSd2w" association="_7pnywJfdEeOOvfKC8vSd2w">
@@ -160,16 +156,6 @@ if self.gender=Gender::FEMALE then self.motherOfChild else  self.motherOfChild e
           <ownedEnd xmi:type="uml:Property" xmi:id="_wNOfwZgQEeO3XObowowPyg" name="being" type="_R-BvMJb9EeOOvfKC8vSd2w" association="_wNOfwJgQEeO3XObowowPyg">
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_wNOfwpgQEeO3XObowowPyg"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_wNOfw5gQEeO3XObowowPyg" value="*"/>
-          </ownedEnd>
-        </packagedElement>
-        <packagedElement xmi:type="uml:Association" xmi:id="_vWTGEKJIEeOn3tP_LveSqg" name="being_being_4" memberEnd="_vWTGEaJIEeOn3tP_LveSqg _vWSfAKJIEeOn3tP_LveSqg" navigableOwnedEnd="_vWTGEaJIEeOn3tP_LveSqg">
-          <ownedEnd xmi:type="uml:Property" xmi:id="_vWTGEaJIEeOn3tP_LveSqg" name="parents" type="_R-BvMJb9EeOOvfKC8vSd2w" isDerived="true" association="_vWTGEKJIEeOn3tP_LveSqg">
-            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_vWTGEqJIEeOn3tP_LveSqg"/>
-            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_vWTGE6JIEeOn3tP_LveSqg" value="*"/>
-            <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_qPK-wKJJEeOn3tP_LveSqg" name="parentsOcl">
-              <language>OCL</language>
-              <body>self.mother->asSet()->union(self.father->asSet())</body>
-            </defaultValue>
           </ownedEnd>
         </packagedElement>
       </packagedElement>

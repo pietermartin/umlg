@@ -129,7 +129,9 @@ public final class UmlgPropertyOperations extends PropertyOperations {
         } else if (isOneToMany(p) && !p.isComposite() && !p.getOtherEnd().isComposite()) {
             // If association is OneToMany and both sides are non composite then
             // take the many side as inverse=true
-            result = p.getUpper() == -1 || p.getUpper() > 1;
+
+            //result = p.getUpper() == -1 || p.getUpper() > 1;
+            result = true;
         } else if (isManyToMany(p) && !p.isComposite() && !p.getOtherEnd().isComposite()) {
             // If association is ManyToMany and both sides are non composite
             // then take any side consistently

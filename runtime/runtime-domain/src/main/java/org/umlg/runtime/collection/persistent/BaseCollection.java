@@ -833,7 +833,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
      * @param qualifiedNode
      * @param qualifierNode
      */
-    private void addQualifierToIndex(/*Index<Edge> index, */Edge edge, UmlgNode qualifiedNode, UmlgNode qualifierNode, boolean inverse) {
+    private void addQualifierToIndex(Edge edge, UmlgNode qualifiedNode, UmlgNode qualifierNode, boolean inverse) {
         for (Qualifier qualifier : qualifiedNode.getQualifiers(this.umlgRuntimeProperty, qualifierNode, inverse)) {
             edge.setProperty(qualifier.getKey(), qualifier.getValue());
         }

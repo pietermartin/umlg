@@ -880,7 +880,7 @@
 
                     var validateRequired = false;
                     var validateAssociationClass = false;
-                    if (property.associationClassOne) {
+                    if (property.associationClassOne || property.derived) {
                         validateRequired = false;
                     } else if (property.memberEndOfAssociationClass && (property.inverseQualifiedName === this.propertyNavigatingTo.qualifiedName)) {
                         //Need to validate that the association class has been captured and is valid

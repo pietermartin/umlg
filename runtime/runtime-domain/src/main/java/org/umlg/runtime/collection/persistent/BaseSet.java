@@ -2,6 +2,7 @@ package org.umlg.runtime.collection.persistent;
 
 import com.tinkerpop.blueprints.Edge;
 import org.umlg.runtime.collection.UmlgBag;
+import org.umlg.runtime.collection.UmlgCollection;
 import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.collection.ocl.BodyExpressionEvaluator;

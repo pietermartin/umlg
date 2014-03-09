@@ -10,6 +10,7 @@ import org.umlg.qualifier.Customer;
 import org.umlg.runtime.test.BaseLocalDbTest;
 
 import java.net.URL;
+import java.util.Collection;
 import java.util.logging.LogManager;
 
 /**
@@ -53,8 +54,63 @@ public class TestRuntimeOclQualifiers extends BaseLocalDbTest {
         Assert.assertNotNull(new Bank(bank.getVertex()).getCustomerForNameQualifierAccountNumberQualifier("c1", 1));
         Assert.assertNotNull(new Bank(bank.getVertex()).getCustomerJohn001());
 
-        Object result = UmlgOclExecutor.executeOclQuery(bank, "self.customer['john', 1]");
+        Object result = UmlgOclExecutor.executeOclQuery(bank, "self.customer['john', 1].bank.name");
         Assert.assertNotNull(result);
-        Assert.assertTrue(result instanceof Customer);
+        Assert.assertTrue(result instanceof String);
+        Assert.assertEquals("BADASS", result);
+    }
+
+//    @Test
+    //TODO failing test
+    public void testQualifierOclWithoutQualifier() {
+        Bank bank = new Bank(true);
+        bank.setName("BADASS");
+        for (int i = 0; i < 1000; i++) {
+            Customer customer1 = new Customer(true);
+            customer1.setName("c" + Integer.toString(i));
+            customer1.setAccountNumber(i);
+            customer1.setBank(bank);
+        }
+
+        Customer john1 = new Customer(true);
+        john1.setName("john");
+        john1.setAccountNumber(1);
+        john1.setBank(bank);
+
+        db.commit();
+        Assert.assertEquals(1001, new Bank(bank.getVertex()).getCustomer().size());
+        Assert.assertNotNull(new Bank(bank.getVertex()).getCustomerForNameQualifierAccountNumberQualifier("c1", 1));
+        Assert.assertNotNull(new Bank(bank.getVertex()).getCustomerJohn001());
+
+        Object result = UmlgOclExecutor.executeOclQuery(bank, "self.customer");
+        Assert.assertNotNull(result);
+        Assert.assertTrue(result instanceof Collection);
+    }
+
+    @Test
+    public void testQualifierOclWithoutQualifier2() {
+        Bank bank = new Bank(true);
+        bank.setName("BADASS");
+        for (int i = 0; i < 1000; i++) {
+            Customer customer1 = new Customer(true);
+            customer1.setName("c" + Integer.toString(i));
+            customer1.setAccountNumber(i);
+            customer1.setBank(bank);
+        }
+
+        Customer john1 = new Customer(true);
+        john1.setName("john");
+        john1.setAccountNumber(1);
+        john1.setBank(bank);
+
+        db.commit();
+        Assert.assertEquals(1001, new Bank(bank.getVertex()).getCustomer().size());
+        Assert.assertNotNull(new Bank(bank.getVertex()).getCustomerForNameQualifierAccountNumberQualifier("c1", 1));
+        Assert.assertNotNull(new Bank(bank.getVertex()).getCustomerJohn001());
+
+        Object result = UmlgOclExecutor.executeOclQuery(john1, "self.bank->asSet()");
+//        Object result = UmlgOclExecutor.executeOclQuery(bank, "self.customer->asSet()");
+        Assert.assertNotNull(result);
+        Assert.assertTrue(result instanceof Collection);
     }
 }

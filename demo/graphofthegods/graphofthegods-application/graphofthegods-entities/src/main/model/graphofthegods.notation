@@ -109,10 +109,6 @@
           <element xmi:type="uml:EnumerationLiteral" href="graphofthegods.uml#_0p0vEJfdEeOOvfKC8vSd2w"/>
           <layoutConstraint xmi:type="notation:Location" xmi:id="_0p_HIZfdEeOOvfKC8vSd2w"/>
         </children>
-        <children xmi:type="notation:Shape" xmi:id="_5gIWsJfdEeOOvfKC8vSd2w" type="3017" fontName="Sans" lineColor="0">
-          <element xmi:type="uml:EnumerationLiteral" href="graphofthegods.uml#_5f-lsJfdEeOOvfKC8vSd2w"/>
-          <layoutConstraint xmi:type="notation:Location" xmi:id="_5gIWsZfdEeOOvfKC8vSd2w"/>
-        </children>
         <styles xmi:type="notation:TitleStyle" xmi:id="_zADU45fdEeOOvfKC8vSd2w"/>
         <styles xmi:type="notation:SortingStyle" xmi:id="_zADU5JfdEeOOvfKC8vSd2w"/>
         <styles xmi:type="notation:FilteringStyle" xmi:id="_zADU5ZfdEeOOvfKC8vSd2w"/>
@@ -301,13 +297,25 @@
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_Z1dXEJgREeO3XObowowPyg" source="CustomAppearance_Annotation">
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_aS-ZgJgREeO3XObowowPyg" key="CustomAppearance_MaskValue" value="46"/>
         </eAnnotations>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_wNj28ZgQEeO3XObowowPyg" y="-20"/>
+        <styles xmi:type="notation:StringListValueStyle" xmi:id="_bgbrgKcBEeOPt7R4er8hcg" name="maskLabel">
+          <stringListValue>name</stringListValue>
+          <stringListValue>derived</stringListValue>
+          <stringListValue>multiplicity</stringListValue>
+          <stringListValue>modifiers</stringListValue>
+        </styles>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_wNj28ZgQEeO3XObowowPyg" x="-30" y="-15"/>
       </children>
       <children xmi:type="notation:DecorationNode" xmi:id="_wNkeAJgQEeO3XObowowPyg" type="6032">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_cw08AJgREeO3XObowowPyg" source="CustomAppearance_Annotation">
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_cw08AZgREeO3XObowowPyg" key="CustomAppearance_MaskValue" value="46"/>
         </eAnnotations>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_wNkeAZgQEeO3XObowowPyg" x="-17" y="-13"/>
+        <styles xmi:type="notation:StringListValueStyle" xmi:id="_JNT5cKcBEeOPt7R4er8hcg" name="maskLabel">
+          <stringListValue>name</stringListValue>
+          <stringListValue>derived</stringListValue>
+          <stringListValue>multiplicity</stringListValue>
+          <stringListValue>modifiers</stringListValue>
+        </styles>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_wNkeAZgQEeO3XObowowPyg" x="9" y="-16"/>
       </children>
       <styles xmi:type="notation:FontStyle" xmi:id="_wNio0ZgQEeO3XObowowPyg" fontName="Sans"/>
       <element xmi:type="uml:AssociationClass" href="graphofthegods.uml#_wNOfwJgQEeO3XObowowPyg"/>
@@ -840,6 +848,10 @@
           <element xmi:type="uml:Property" href="graphofthegods.uml#_HTi0gJfkEeOOvfKC8vSd2w"/>
           <layoutConstraint xmi:type="notation:Location" xmi:id="_o4MaO6JIEeOn3tP_LveSqg"/>
         </children>
+        <children xmi:type="notation:Shape" xmi:id="_jiP_IKb8EeOPt7R4er8hcg" type="3012" fontName="Sans" fontHeight="10" lineColor="0">
+          <element xmi:type="uml:Property" href="graphofthegods.uml#_jiOxAKb8EeOPt7R4er8hcg"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_jiP_Iab8EeOPt7R4er8hcg"/>
+        </children>
         <styles xmi:type="notation:TitleStyle" xmi:id="_o4MaPKJIEeOn3tP_LveSqg"/>
         <styles xmi:type="notation:SortingStyle" xmi:id="_o4MaPaJIEeOn3tP_LveSqg"/>
         <styles xmi:type="notation:FilteringStyle" xmi:id="_o4MaPqJIEeOn3tP_LveSqg"/>
@@ -884,10 +896,6 @@
           <element xmi:type="uml:EnumerationLiteral" href="graphofthegods.uml#_0p0vEJfdEeOOvfKC8vSd2w"/>
           <layoutConstraint xmi:type="notation:Location" xmi:id="_o4MaWqJIEeOn3tP_LveSqg"/>
         </children>
-        <children xmi:type="notation:Shape" xmi:id="_o4MaW6JIEeOn3tP_LveSqg" type="3017" fontName="Sans" lineColor="0">
-          <element xmi:type="uml:EnumerationLiteral" href="graphofthegods.uml#_5f-lsJfdEeOOvfKC8vSd2w"/>
-          <layoutConstraint xmi:type="notation:Location" xmi:id="_o4MaXKJIEeOn3tP_LveSqg"/>
-        </children>
         <styles xmi:type="notation:TitleStyle" xmi:id="_o4MaXaJIEeOn3tP_LveSqg"/>
         <styles xmi:type="notation:SortingStyle" xmi:id="_o4MaXqJIEeOn3tP_LveSqg"/>
         <styles xmi:type="notation:FilteringStyle" xmi:id="_o4MaX6JIEeOn3tP_LveSqg"/>
@@ -923,7 +931,7 @@
       </children>
       <styles xmi:type="notation:FontStyle" xmi:id="_o4Mac6JIEeOn3tP_LveSqg" fontName="Sans"/>
       <element xmi:type="uml:Association" href="graphofthegods.uml#_qxNG8JeXEeOOvfKC8vSd2w"/>
-      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_o4MadKJIEeOn3tP_LveSqg" points="[0, -5, 20, -45]$[0, -55, 20, -95]$[-143, -55, -123, -95]$[-143, 41, -123, 1]$[-20, 41, 0, 1]"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_o4MadKJIEeOn3tP_LveSqg" points="[-1, -5, 21, -48]$[-1, -54, 21, -97]$[-160, -54, -138, -97]$[-160, 43, -138, 0]$[-22, 43, 0, 0]"/>
       <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_o4MadaJIEeOn3tP_LveSqg" id="(0.15384615384615385,0.05)"/>
       <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_o4MadqJIEeOn3tP_LveSqg" id="(0.0,0.45)"/>
     </edges>
@@ -938,7 +946,7 @@
         <layoutConstraint xmi:type="notation:Location" xmi:id="_o4MafaJIEeOn3tP_LveSqg" x="35" y="28"/>
       </children>
       <children xmi:type="notation:DecorationNode" xmi:id="_o4MafqJIEeOn3tP_LveSqg" type="6005">
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_o4Maf6JIEeOn3tP_LveSqg" x="3" y="13"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_o4Maf6JIEeOn3tP_LveSqg" x="12" y="14"/>
       </children>
       <children xmi:type="notation:DecorationNode" xmi:id="_o4MagKJIEeOn3tP_LveSqg" type="6033">
         <layoutConstraint xmi:type="notation:Location" xmi:id="_o4MagaJIEeOn3tP_LveSqg" x="-32" y="28"/>
@@ -948,7 +956,7 @@
       </children>
       <styles xmi:type="notation:FontStyle" xmi:id="_o4MahKJIEeOn3tP_LveSqg" fontName="Sans"/>
       <element xmi:type="uml:Association" href="graphofthegods.uml#_qXDsIJeYEeOOvfKC8vSd2w"/>
-      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_o4MahaJIEeOn3tP_LveSqg" points="[0, 0, -4, -44]$[0, -55, -4, -99]$[133, -55, 129, -99]$[133, 41, 129, -3]$[7, 41, 3, -3]"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_o4MahaJIEeOn3tP_LveSqg" points="[0, 0, -5, -47]$[0, -55, -5, -102]$[151, -55, 146, -102]$[151, 47, 146, 0]$[8, 47, 3, 0]"/>
       <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_o4MahqJIEeOn3tP_LveSqg" id="(0.95,0.0)"/>
       <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_o4Mah6JIEeOn3tP_LveSqg" id="(0.98,0.44)"/>
     </edges>
@@ -975,31 +983,6 @@
       <element xmi:type="uml:Association" href="graphofthegods.uml#_7pnywJfdEeOOvfKC8vSd2w"/>
       <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_o4MalqJIEeOn3tP_LveSqg" points="[17, 5, -345, -113]$[312, 101, -50, -17]"/>
       <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_o4Mal6JIEeOn3tP_LveSqg" id="(0.83,0.62)"/>
-    </edges>
-    <edges xmi:type="notation:Connector" xmi:id="_vWU7QKJIEeOn3tP_LveSqg" type="4001" source="_o4MaMaJIEeOn3tP_LveSqg" target="_o4MaMaJIEeOn3tP_LveSqg" lineColor="0">
-      <children xmi:type="notation:DecorationNode" xmi:id="_vWViUKJIEeOn3tP_LveSqg" type="6001">
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_vWViUaJIEeOn3tP_LveSqg" y="-20"/>
-      </children>
-      <children xmi:type="notation:DecorationNode" xmi:id="_vWViUqJIEeOn3tP_LveSqg" type="6002">
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_vWViU6JIEeOn3tP_LveSqg" x="-57" y="-6"/>
-      </children>
-      <children xmi:type="notation:DecorationNode" xmi:id="_vWViVKJIEeOn3tP_LveSqg" type="6003">
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_vWViVaJIEeOn3tP_LveSqg" x="49" y="13"/>
-      </children>
-      <children xmi:type="notation:DecorationNode" xmi:id="_vWViVqJIEeOn3tP_LveSqg" type="6005">
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_vWViV6JIEeOn3tP_LveSqg" x="18" y="39"/>
-      </children>
-      <children xmi:type="notation:DecorationNode" xmi:id="_vWViWKJIEeOn3tP_LveSqg" type="6033">
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_vWViWaJIEeOn3tP_LveSqg" y="13"/>
-      </children>
-      <children xmi:type="notation:DecorationNode" xmi:id="_vWViWqJIEeOn3tP_LveSqg" type="6034">
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_vWViW6JIEeOn3tP_LveSqg" x="15" y="-17"/>
-      </children>
-      <styles xmi:type="notation:FontStyle" xmi:id="_vWU7QaJIEeOn3tP_LveSqg" fontName="Sans" fontHeight="10"/>
-      <element xmi:type="uml:Association" href="graphofthegods.uml#_vWTGEKJIEeOn3tP_LveSqg"/>
-      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_vWU7QqJIEeOn3tP_LveSqg" points="[13, 3, 35, 0]$[-8, 19, 14, 16]"/>
-      <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_vWeFMKJIEeOn3tP_LveSqg" id="(0.9,0.81)"/>
-      <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_vWeFMaJIEeOn3tP_LveSqg" id="(0.7307692307692307,0.84)"/>
     </edges>
   </notation:Diagram>
 </xmi:XMI>

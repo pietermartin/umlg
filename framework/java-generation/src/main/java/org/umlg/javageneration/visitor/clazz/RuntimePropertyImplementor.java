@@ -194,6 +194,11 @@ public class RuntimePropertyImplementor {
         inverseUniqueField.setName("_inverseUnique");
         ojEnum.addToFields(inverseUniqueField);
 
+        OJField derivedField = new OJField();
+        derivedField.setType(new OJPathName("boolean"));
+        derivedField.setName("_derived");
+        ojEnum.addToFields(derivedField);
+
         OJField jsonField = new OJField();
         jsonField.setType(new OJPathName("String"));
         jsonField.setName("_json");
@@ -254,7 +259,7 @@ public class RuntimePropertyImplementor {
 
         for (Property p : allOwnedProperties) {
             PropertyWrapper pWrap = new PropertyWrapper(p);
-            if (!(pWrap.isDerived() || pWrap.isDerivedUnion())) {
+//            if (!(pWrap.isDerived() || pWrap.isDerivedUnion())) {
 
                 int inverseUpper = 1;
                 if (pWrap.getOtherEnd() != null) {
@@ -273,7 +278,7 @@ public class RuntimePropertyImplementor {
                             pWrap.isEnumeration(), pWrap.isManyToOne(), pWrap.isMany(), pWrap.isControllingSide(), pWrap.isComposite(), pWrap.isInverseComposite(),
                             pWrap.isOneToOne(), pWrap.isOneToMany(), pWrap.isManyToMany(), pWrap.getUpper(), pWrap.getLower(), inverseUpper, pWrap.isQualified(),
                             pWrap.isInverseQualified(), pWrap.isOrdered(), pWrap.isInverseOrdered(), pWrap.isUnique(), pWrap.isInverseUnique(),
-                            UmlgGenerationUtil.getEdgeName(pWrap.getProperty())
+                            pWrap.isDerived(), UmlgGenerationUtil.getEdgeName(pWrap.getProperty())
                     );
                 } else {
                     //This is for properties of the association class itself
@@ -291,6 +296,7 @@ public class RuntimePropertyImplementor {
                                 /*composite*/true, /*inverseComposite*/true, /*oneToOne*/pWrap.isACOneToOne(), /*oneToMany*/pWrap.isACOneToMany(),
                                 /*manyToMany*/pWrap.isACManyToMany(), /*upper*/1, /*lower*/1, inverseUpper, pWrap.isQualified(),
                                 pWrap.isInverseQualified(), pWrap.isOrdered(), pWrap.isInverseOrdered(), pWrap.isACUnique(), pWrap.isInverseUnique(),
+                                pWrap.isDerived(),
                                 UmlgGenerationUtil.getEdgeName(pWrap.getProperty()) + "_" + pWrap.getName() + "_AC"
                         );
                     } else {
@@ -305,6 +311,7 @@ public class RuntimePropertyImplementor {
                                 pWrap.isEnumeration(), pWrap.isManyToOne(), pWrap.isMany(), pWrap.isControllingSide(), pWrap.isComposite(), pWrap.isInverseComposite(),
                                 pWrap.isOneToOne(), pWrap.isOneToMany(), pWrap.isManyToMany(), pWrap.getUpper(), pWrap.getLower(), inverseUpper, pWrap.isQualified(),
                                 pWrap.isInverseQualified(), pWrap.isOrdered(), pWrap.isInverseOrdered(), pWrap.isUnique(), pWrap.isInverseUnique(),
+                                false/*derived*/,
                                 UmlgGenerationUtil.getEdgeName(pWrap.getProperty())
                         );
                     }
@@ -323,15 +330,16 @@ public class RuntimePropertyImplementor {
                             pWrap.isEnumeration(), pWrap.isManyToOne(), pWrap.isMany(), pWrap.isControllingSide(), pWrap.isComposite(), pWrap.isInverseComposite(),
                             pWrap.isOneToOne(), pWrap.isOneToMany(), pWrap.isManyToMany(), pWrap.getUpper(), pWrap.getLower(), inverseUpper, pWrap.isQualified(),
                             pWrap.isInverseQualified(), pWrap.isOrdered(), pWrap.isInverseOrdered(), pWrap.isUnique(), pWrap.isInverseUnique(),
+                            false/*derived*/,
                             UmlgGenerationUtil.getEdgeName(pWrap.getProperty()) + "_AC");
                 }
             }
-        }
+//        }
 
         if (!hasCompositeOwner) {
             // Add in fake property to root
             addEnumLiteral(false, false, null, null, false, ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, modelName, modelName, "inverseOf" + modelName, "inverseOf" + modelName, false, false, null,
-                    Collections.<Validation>emptyList(), false, false, false, true, false, true, true, false, false, -1, 0, 1, false, false, false, false, false, false,
+                    Collections.<Validation>emptyList(), false, false, false, true, false, true, true, false, false, -1, 0, 1, false, false, false, false, false, false,false,
                     "root" + className.getName());
         }
         asJson.getBody().addToStatements("sb.append(\"]}\")");
@@ -371,7 +379,7 @@ public class RuntimePropertyImplementor {
             boolean isInverseComposite,
             boolean isOneToOne, boolean isOneToMany, boolean isManyToMany, int getUpper, int getLower, int getInverseUpper,
             boolean isQualified, boolean isInverseQualified, boolean isOrdered, boolean isInverseOrdered, boolean isUnique,
-            boolean isInverseUnique, String edgeName) {
+            boolean isInverseUnique, boolean isDerived, String edgeName) {
 
         OJIfStatement ifLabelEquals = new OJIfStatement(fieldName + ".getLabel().equals(label)");
         // Do not make upper case, leave with java case sensitive
@@ -600,6 +608,12 @@ public class RuntimePropertyImplementor {
         inverseUniqueAttribute.setInitExp(Boolean.toString(isInverseUnique));
         ojLiteral.addToAttributeValues(inverseUniqueAttribute);
 
+        OJField derivedAttribute = new OJField();
+        derivedAttribute.setName("isDerived");
+        derivedAttribute.setType(new OJPathName("boolean"));
+        derivedAttribute.setInitExp(Boolean.toString(isDerived));
+        ojLiteral.addToAttributeValues(derivedAttribute);
+
         OJField jsonAttribute = new OJField();
         jsonAttribute.setName("json");
         jsonAttribute.setType(new OJPathName("String"));
@@ -735,6 +749,9 @@ public class RuntimePropertyImplementor {
         sb.append(", ");
         sb.append("\\\"inverseUnique\\\": ");
         sb.append(inverseUniqueAttribute.getInitExp());
+        sb.append(", ");
+        sb.append("\\\"derived\\\": ");
+        sb.append(derivedAttribute.getInitExp());
         sb.append("}");
         jsonAttribute.setInitExp("\"" + sb.toString() + "\"");
         ojLiteral.addToAttributeValues(jsonAttribute);

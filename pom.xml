@@ -56,14 +56,38 @@
     <build>
         <pluginManagement>
             <plugins>
+                <!--<plugin>-->
+                    <!--<groupId>org.apache.maven.plugins</groupId>-->
+                    <!--<artifactId>maven-compiler-plugin</artifactId>-->
+                    <!--<version>3.0</version>-->
+                    <!--<configuration>-->
+                        <!--<source>1.6</source>-->
+                        <!--<target>1.6</target>-->
+                    <!--</configuration>-->
+                <!--</plugin>-->
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.0</version>
+                    <version>2.3.2</version>
                     <configuration>
+                        <compilerId>groovy-eclipse-compiler</compilerId>
+                        <!-- set verbose to be true if you want lots of uninteresting messages -->
+                        <verbose>false</verbose>
                         <source>1.6</source>
                         <target>1.6</target>
                     </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.codehaus.groovy</groupId>
+                            <artifactId>groovy-eclipse-compiler</artifactId>
+                            <version>2.7.0-01</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.codehaus.groovy</groupId>
+                            <artifactId>groovy-eclipse-batch</artifactId>
+                            <version>1.8.6-01</version>
+                            <!-- <version>1.7.10-06</version> -->
+                        </dependency>
+                    </dependencies>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>

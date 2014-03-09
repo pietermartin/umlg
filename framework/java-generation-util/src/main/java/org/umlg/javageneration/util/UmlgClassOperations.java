@@ -135,7 +135,7 @@ public class UmlgClassOperations extends ClassOperations {
         Set<Property> result = new HashSet<Property>();
         for (Property p : getAllOwnedProperties(clazz)) {
             PropertyWrapper pWrap = new PropertyWrapper(p);
-            if (!pWrap.isDerived() && !pWrap.isQualified()) {
+            if (!pWrap.isQualified()) {
                 if (pWrap.isComponent() || pWrap.isDataType()) {
                     result.add(p);
                 } else if (!pWrap.isDataType() && pWrap.isOne()) {
@@ -150,7 +150,7 @@ public class UmlgClassOperations extends ClassOperations {
         Set<Property> result = new HashSet<Property>();
         for (Property p : getAllOwnedProperties(clazz)) {
             PropertyWrapper pWrap = new PropertyWrapper(p);
-            if (!pWrap.isDerived() && !pWrap.isQualified()) {
+            if (!pWrap.isQualified()) {
                 if (pWrap.isComponent() || pWrap.isDataType()) {
                     if (!(pWrap.getOtherEnd() != null && pWrap.getOtherEnd().isComposite())) {
                         result.add(p);

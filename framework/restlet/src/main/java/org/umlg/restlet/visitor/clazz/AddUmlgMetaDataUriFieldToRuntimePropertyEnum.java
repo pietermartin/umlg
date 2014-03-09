@@ -47,7 +47,7 @@ public class AddUmlgMetaDataUriFieldToRuntimePropertyEnum extends BaseVisitor im
         Set<Property> properties = UmlgClassOperations.getAllProperties(clazz);
         for (Property property : properties) {
             PropertyWrapper pWrap = new PropertyWrapper(property);
-            if (!(pWrap.isDerived() || pWrap.isDerivedUnion())) {
+//            if (!(pWrap.isDerived() || pWrap.isDerivedUnion())) {
                 OJEnumLiteral literal = ojEnum.findLiteral(pWrap.fieldname());
                 addTumlMetaDataUriToLiteral(clazz, pWrap, literal);
 
@@ -55,7 +55,7 @@ public class AddUmlgMetaDataUriFieldToRuntimePropertyEnum extends BaseVisitor im
                     literal = ojEnum.findLiteral(pWrap.getAssociationClassFakePropertyName());
                     addTumlMetaDataUriToLiteral(clazz, pWrap, literal, true);
                 }
-            }
+//            }
         }
         addTumlMetaDataUriToLiteral(clazz, null, ojEnum.findLiteral("id"));
         // This is for root objects that have a literal to to model

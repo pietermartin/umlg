@@ -129,8 +129,18 @@
                     //Each input is wrapped in a form-group
                     var formGroupDiv = $('<div>', {class: 'umlg-form-group form-group'}).appendTo(formDiv);
 
+                    //TODO What is this about?
                     if (property.fieldType !== 'Boolean' || property.upper > 1 || property.upper === -1) {
-                        $('<label />', {for: property.name + 'Id', class: "col-lg-3 control-label"}).text(property.name + ' :').appendTo(formGroupDiv);
+                        var label = $('<label />', {for: property.name + 'Id', class: "col-lg-3 control-label"});
+                        if (property.derived) {
+                            //TODO use font here for derived indicator
+                            label.text('/ ' + property.name + ' :');
+                        } else {
+                            label.text(property.name + ' :')
+                        }
+                        label.appendTo(formGroupDiv);
+                    } else {
+                        console.log('wf');
                     }
                     var $input = this.constructInputForField(property, false);
 
@@ -415,12 +425,14 @@
                 alert('Unsupported dataType ' + property.dataTypeEnum);
             }
             if (!this.isForCreation) {
-                $input[0].defaultValue = this.data[property.name];
+//                $input[0].defaultValue = this.data[property.name];
+                $input.val(this.data[property.name]);
             }
         } else if (property.composite && property.lower > 0) {
             $input = $("<input />", {type: 'text', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name, class: 'form-control'});
             if (!this.isForCreation) {
-                $input[0].defaultValue = this.data[property.name];
+//                $input[0].defaultValue = this.data[property.name];
+                $input.val(this.data[property.name]);
             }
         } else if (property.oneEnumeration) {
             $input = $('<select />', {class: 'chzn-select form-control', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name});
@@ -452,7 +464,8 @@
         } else if (property.fieldType == 'String' || property.fieldType == 'Integer' || property.fieldType == 'Long' || property.fieldType == 'Real' || property.manyEnumeration) {
             $input = $('<input />', {type: 'text', class: 'form-control', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name});
             if (!this.isForCreation) {
-                $input[0].defaultValue = (this.data[property.name] === null ? '' : this.data[property.name]);
+//                $input[0].defaultValue = (this.data[property.name] === null ? '' : this.data[property.name]);
+                $input.val(this.data[property.name] === null ? '' : this.data[property.name]);
             }
         } else if (property.fieldType == 'Boolean') {
             if (!property.manyPrimitive && this.data !== undefined && this.data !== null) {
@@ -466,7 +479,8 @@
             } else {
                 $input = $('<input />', {type: 'text', class: 'form-control', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name});
                 if (!this.isForCreation) {
-                    $input[0].defaultValue = this.data[property.name];
+//                    $input[0].defaultValue = this.data[property.name];
+                    $input.val(this.data[property.name]);
                 }
             }
         }

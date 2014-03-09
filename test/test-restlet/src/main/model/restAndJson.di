@@ -78,9 +78,6 @@
           <emfPageIdentifier href="restAndJson.notation#_82Sc0DXKEeOAlanvceIpiA"/>
         </children>
         <children>
-          <emfPageIdentifier href="restAndJson.notation#_q7f8gAAOEeKpVr_ntT6cLA"/>
-        </children>
-        <children>
           <emfPageIdentifier href="restAndJson.notation#__lbHwIYHEeORFsmiMkZYdA"/>
         </children>
         <children>

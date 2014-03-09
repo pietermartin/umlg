@@ -1834,6 +1834,14 @@
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_zpfGMHlOEeOViYFNuR_VNg"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_zpma8HlOEeOViYFNuR_VNg" value="*"/>
             </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_2R2TYKdgEeOPt7R4er8hcg" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_3mkDkKdgEeOPt7R4er8hcg" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_3mkqoKdgEeOPt7R4er8hcg" value="1"/>
+              <defaultValue xmi:type="uml:LiteralString" xmi:id="_3ml4wKdgEeOPt7R4er8hcg">
+                <value xsi:nil="true"/>
+              </defaultValue>
+            </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Class" xmi:id="_o-T88HlOEeOViYFNuR_VNg" clientDependency="_7remsHlOEeOViYFNuR_VNg" name="Bsc">
             <ownedAttribute xmi:type="uml:Property" xmi:id="_9OhGwHlOEeOViYFNuR_VNg" name="bts" type="_qVOFgHlOEeOViYFNuR_VNg" subsettedProperty="_xvdpgHlOEeOViYFNuR_VNg" association="_9Oht0HlOEeOViYFNuR_VNg">

@@ -580,7 +580,7 @@
                 sortdir = args.sortAsc ? 1 : -1;
                 sortcol = args.sortCol.field;
 
-                if ($.browser.msie && $.browser.version <= 8) {
+                if ($.browser !== undefined && $.browser.msie && $.browser.version <= 8) {
                     // using temporary Object.prototype.toString override
                     // more limited and does lexicographic sort only by default, but can be much faster
                     var percentCompleteValueFn = function () {
@@ -1128,7 +1128,8 @@
                 } else {
                     this.columns.push({
                         id: property.name,
-                        name: property.name,
+                        //TODo use font for derived indicator
+                        name: (property.derived ? '/ ' + property.name : property.name),
                         field: property.name,
                         sortable: true,
                         editor: selectEditor(property),
@@ -1376,7 +1377,7 @@
             var url;
             if (contextData.name !== 'self') {
                 //If non composite one check if the element exist
-                if (!contextData.property.composite && contextData.property.upper == 1) {
+                if (!contextData.property.composite && !contextData.property.qualified && contextData.property.upper == 1) {
                     //For the composite parent property
                     if (!contextData.property.inverseComposite && this.data[gridRow][contextData.property.name].id == null) {
                         alert('Property ' + contextData.property.qualifiedName + ' on ' + this.localMetaForData.name + ' does not exist!\nIt can not be created as it is a non composite property.');

@@ -117,6 +117,8 @@ function retrieveVertexId(url) {
 function selectFormatter(property, isNew, updatedId) {
     if (property.name == 'uri') {
         return new TumlSlick.Formatters.Link;
+    } else if (property.derived) {
+        return TumlSlick.Formatters.TumlDerivedPropertyFormatter;
     } else if (property.name == 'id') {
         if (isNew) {
             return TumlSlick.Formatters.TumlIdNewFormatter;
@@ -163,6 +165,7 @@ function selectFormatter(property, isNew, updatedId) {
 
 function selectFieldValidator(property) {
     if (property.name == 'uri') {
+    } else if (property.derived) {
     } else if (property.dataTypeEnum != null && property.dataTypeEnum !== undefined) { 3
         if (property.upper > 1 || property.upper === -1) {
             if (property.dataTypeEnum == 'Date') {

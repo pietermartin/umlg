@@ -24,7 +24,7 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
     @Override
     public void visitBefore(Property p) {
         PropertyWrapper pWrap = new PropertyWrapper(p);
-        if (!pWrap.isDataType() && !pWrap.isEnumeration() && pWrap.isNavigable()) {
+        if (!pWrap.isDerived() && !pWrap.isDataType() && !pWrap.isEnumeration() && pWrap.isNavigable()) {
 
             OJAnnotatedClass owner = findOJClass(pWrap.getType());
             OJPackage ojPackage = owner.getMyPackage();
