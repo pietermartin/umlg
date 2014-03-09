@@ -25,7 +25,7 @@ public class TestQualifierChangeEvent extends BaseLocalDbTest {
         db.commit();
 		
 		God g = new God(god.getVertex());
-		g.getNatureForQualifier2("nature2").iterator().next().setName1("nameSoGonaFail");
+		g.getNatureForQualifier2("nature2").iterator().next().setName2("nameSoGonaFail");
         db.commit();
 		
 		God gg = new God(god.getVertex());

@@ -60,8 +60,7 @@ public class TestRuntimeOclQualifiers extends BaseLocalDbTest {
         Assert.assertEquals("BADASS", result);
     }
 
-//    @Test
-    //TODO failing test
+    @Test
     public void testQualifierOclWithoutQualifier() {
         Bank bank = new Bank(true);
         bank.setName("BADASS");
@@ -82,7 +81,7 @@ public class TestRuntimeOclQualifiers extends BaseLocalDbTest {
         Assert.assertNotNull(new Bank(bank.getVertex()).getCustomerForNameQualifierAccountNumberQualifier("c1", 1));
         Assert.assertNotNull(new Bank(bank.getVertex()).getCustomerJohn001());
 
-        Object result = UmlgOclExecutor.executeOclQuery(bank, "self.customer");
+        Object result = UmlgOclExecutor.executeOclQuery(bank, "self.customer->asSet()");
         Assert.assertNotNull(result);
         Assert.assertTrue(result instanceof Collection);
     }

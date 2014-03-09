@@ -1430,7 +1430,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 
     public List<Validation> getValidations() {
         List<Validation> result = new ArrayList<Validation>();
-        List<Stereotype> stereoTypes = ModelLoader.INSTANCE.getStereotypes();
+        List<Stereotype> stereoTypes = ModelLoader.INSTANCE.getValidationStereotypes();
         for (Stereotype stereotype : stereoTypes) {
             if (property.isStereotypeApplied(stereotype)) {
                 result.add(UmlgValidationEnum.fromStereotype(stereotype, this.property));
@@ -1666,5 +1666,12 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         }
         fieldType.addToGenerics(getAssociationClassPathName());
         return fieldType;
+    }
+
+    public String updateIndexForQualifierName() {
+        if (!this.isQualifier()) {
+             throw new IllegalStateException("PropertyWrapper.updateIndexForQualifierName() can only be called for a qualifier!");
+        }
+        return "updateIndexFor" + this.getName();
     }
 }

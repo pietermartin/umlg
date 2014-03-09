@@ -200,7 +200,6 @@ public class UmlgGenerationUtil {
                 if (p.getOtherEnd() != null) {
                     return umlgizeUmlName(p.getQualifiedName() + "__" + p.getOtherEnd().getQualifiedName());
                 } else {
-//                    return umlgizeUmlName(p.getQualifiedName());
                     return umlgizeUmlName(p.getName());
                 }
             }

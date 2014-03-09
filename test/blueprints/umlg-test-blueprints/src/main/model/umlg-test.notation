@@ -1913,7 +1913,7 @@
         <layoutConstraint xmi:type="notation:Bounds" xmi:id="_mw5icqdqEeOPt7R4er8hcg"/>
       </children>
       <element xmi:type="uml:Class" href="umlg-test.uml#_YuD8sOwiEeCSwqyeEHd1tw"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_1byEZAAOEeKpVr_ntT6cLA" x="212" y="40" width="161"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_1byEZAAOEeKpVr_ntT6cLA" x="174" y="55" width="161"/>
     </children>
     <children xmi:type="notation:Shape" xmi:id="_1byrcAAOEeKpVr_ntT6cLA" type="2008" fontName="Sans" fontHeight="10" bold="true" fillColor="16770760" lineColor="0">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_1enV8QAOEeKpVr_ntT6cLA" source="QualifiedName">
@@ -1933,6 +1933,13 @@
           <element xmi:type="uml:Property" href="umlg-test.uml#_HGZ5cA1TEeGMEcd2Uio8Tg"/>
         </children>
         <children xmi:type="notation:DecorationNode" xmi:id="_1ci5YQAOEeKpVr_ntT6cLA" type="3006">
+          <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_udUYkKeLEeOPt7R4er8hcg" source="Stereotype_Annotation">
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_udUYkaeLEeOPt7R4er8hcg" key="StereotypeWithQualifiedNameList" value=""/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_udUYkqeLEeOPt7R4er8hcg" key="StereotypeList" value="Umlg::Profile::QualifierListener"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_udUYk6eLEeOPt7R4er8hcg" key="Stereotype_Presentation_Kind" value="HorizontalStereo"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_udUYlKeLEeOPt7R4er8hcg" key="PropStereoDisplay" value=""/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_udUYlaeLEeOPt7R4er8hcg" key="StereotypePropertyLocation" value="Compartment"/>
+          </eAnnotations>
           <element xmi:type="uml:Property" href="umlg-test.uml#_vP2fkMRjEeGr8dhiXoL-ZA"/>
         </children>
       </children>
@@ -1973,7 +1980,7 @@
         <layoutConstraint xmi:type="notation:Bounds" xmi:id="_mw7XoqdqEeOPt7R4er8hcg"/>
       </children>
       <element xmi:type="uml:Class" href="umlg-test.uml#_36iLkBncEeGZfswubjlR9Q"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_1b1HtAAOEeKpVr_ntT6cLA" x="48" y="374" width="283"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_1b1HtAAOEeKpVr_ntT6cLA" x="117" y="391" width="283"/>
     </children>
     <children xmi:type="notation:Shape" xmi:id="_1b284AAOEeKpVr_ntT6cLA" type="2008" fontName="Sans" fontHeight="10" bold="true" fillColor="16770760" lineColor="0">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_1eokEQAOEeKpVr_ntT6cLA" source="QualifiedName">
@@ -2003,7 +2010,7 @@
         <layoutConstraint xmi:type="notation:Bounds" xmi:id="_mw8lwqdqEeOPt7R4er8hcg"/>
       </children>
       <element xmi:type="uml:Class" href="umlg-test.uml#_4rB0YBncEeGZfswubjlR9Q"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_1b285AAOEeKpVr_ntT6cLA" x="736" y="368" width="258"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_1b285AAOEeKpVr_ntT6cLA" x="837" y="406" width="258"/>
     </children>
     <element xmi:type="uml:Package" href="umlg-test.uml#_AoGIIPJKEeCeFLHNTzV0LA"/>
     <edges xmi:type="notation:Edge" xmi:id="_1cfPBgAOEeKpVr_ntT6cLA" type="4001" source="_1byEYAAOEeKpVr_ntT6cLA" target="_1byrcAAOEeKpVr_ntT6cLA">

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Profile xmi:version="20110701" xmlns:xmi="http://www.omg.org/spec/XMI/20110701" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xmi:id="_twUakKeJEeOPt7R4er8hcg" name="Umlg::Profile" metaclassReference="_90b-cKeJEeOPt7R4er8hcg" metamodelReference="_twUakaeJEeOPt7R4er8hcg">
+  <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_pBvWIKeKEeOPt7R4er8hcg" source="http://www.eclipse.org/uml2/2.0.0/UML">
+    <contents xmi:type="ecore:EPackage" xmi:id="_pBvWIaeKEeOPt7R4er8hcg" name="UmlgProfile" nsURI="http:///schemas/UmlgProfile/_pBuIAKeKEeOPt7R4er8hcg/0" nsPrefix="UmlgProfile">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_pBv9MqeKEeOPt7R4er8hcg" source="PapyrusVersion">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_pBv9M6eKEeOPt7R4er8hcg" key="Version" value="0.0.1"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_pBv9NKeKEeOPt7R4er8hcg" key="Comment" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_pBv9NaeKEeOPt7R4er8hcg" key="Copyright" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_pBv9NqeKEeOPt7R4er8hcg" key="Date" value="2014-03-09"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_pBv9N6eKEeOPt7R4er8hcg" key="Author" value=""/>
+      </eAnnotations>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_pBvWIqeKEeOPt7R4er8hcg" name="QualifierListener">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_pBvWI6eKEeOPt7R4er8hcg" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_3aVBwKeJEeOPt7R4er8hcg"/>
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_pBvWJKeKEeOPt7R4er8hcg" name="base_Property" ordered="false" lowerBound="1">
+          <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/4.0.0/UML#//Property"/>
+        </eStructuralFeatures>
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_pBvWJqeKEeOPt7R4er8hcg" name="property" ordered="false" upperBound="-1">
+          <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/4.0.0/UML#//Property"/>
+        </eStructuralFeatures>
+      </eClassifiers>
+    </contents>
+  </eAnnotations>
+  <elementImport xmi:type="uml:ElementImport" xmi:id="_90b-cKeJEeOPt7R4er8hcg" alias="Property">
+    <importedElement xmi:type="uml:Class" href="pathmap://UML_METAMODELS/UML.metamodel.uml#Property"/>
+  </elementImport>
+  <packageImport xmi:type="uml:PackageImport" xmi:id="_twUakaeJEeOPt7R4er8hcg">
+    <importedPackage xmi:type="uml:Model" href="pathmap://UML_METAMODELS/UML.metamodel.uml#_0"/>
+  </packageImport>
+  <packageImport xmi:type="uml:PackageImport" xmi:id="_twUakqeJEeOPt7R4er8hcg">
+    <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+  </packageImport>
+  <packagedElement xmi:type="uml:Stereotype" xmi:id="_3aVBwKeJEeOPt7R4er8hcg" name="QualifierListener">
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_C8ut8KeKEeOPt7R4er8hcg" name="base_Property" association="_C8ut8aeKEeOPt7R4er8hcg">
+      <type xmi:type="uml:Class" href="pathmap://UML_METAMODELS/UML.metamodel.uml#Property"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_EPpuYKeKEeOPt7R4er8hcg" name="property">
+      <type xmi:type="uml:Class" href="pathmap://UML_METAMODELS/UML.metamodel.uml#Property"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_MjhCAKeKEeOPt7R4er8hcg"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_MjhCAaeKEeOPt7R4er8hcg" value="*"/>
+    </ownedAttribute>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Extension" xmi:id="_C8ut8aeKEeOPt7R4er8hcg" name="E_QualifierListener_Property1" memberEnd="_C8ut8qeKEeOPt7R4er8hcg _C8ut8KeKEeOPt7R4er8hcg">
+    <ownedEnd xmi:type="uml:ExtensionEnd" xmi:id="_C8ut8qeKEeOPt7R4er8hcg" name="extension_QualifierListener" type="_3aVBwKeJEeOPt7R4er8hcg" aggregation="composite" association="_C8ut8aeKEeOPt7R4er8hcg"/>
+  </packagedElement>
+</uml:Profile>

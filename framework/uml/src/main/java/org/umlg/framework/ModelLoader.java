@@ -29,6 +29,7 @@ public class ModelLoader {
     private ResourceSet RESOURCE_SET;
     private Model model;
     private Profile umlgValidationProfile;
+    private Profile umlgProfile;
     private List<Model> importedModelLibraries = new ArrayList<Model>();
     private List<ModelLoadedEvent> events = new ArrayList<ModelLoadedEvent>();
     private final Logger logger = Logger.getLogger(ModelLoader.class.getPackage().getName());
@@ -58,6 +59,7 @@ public class ModelLoader {
 //            model = (Model) load(dirUri.appendSegment(modelFile.getName()));
             URI modelUri = URI.createURI(modelFile.toString());
             model = (Model) load(modelUri);
+            umlgProfile = model.getAppliedProfile("Umlg::Profile");
             umlgValidationProfile = model.getAppliedProfile("Umlg::Validation");
             for (PackageImport pi : model.getPackageImports()) {
                 if (pi.getImportedPackage() instanceof Model) {
@@ -107,11 +109,20 @@ public class ModelLoader {
 
 
     public Stereotype findStereotype(String name) {
-        if (this.umlgValidationProfile != null) {
-            return this.umlgValidationProfile.getOwnedStereotype(name);
+        Stereotype result = null;
+        if (this.umlgProfile != null) {
+            result = this.umlgProfile.getOwnedStereotype(name);
+            if (result == null) {
+                if (this.umlgValidationProfile != null) {
+                    result = this.umlgValidationProfile.getOwnedStereotype(name);
+                }
+            }
         } else {
-            return null;
+            if (this.umlgValidationProfile != null) {
+                result = this.umlgValidationProfile.getOwnedStereotype(name);
+            }
         }
+        return result;
     }
 
     public NamedElement findNamedElement(String qualifiedName) {
@@ -247,7 +258,7 @@ public class ModelLoader {
         return results;
     }
 
-    public List<Stereotype> getStereotypes() {
+    public List<Stereotype> getValidationStereotypes() {
         if (this.umlgValidationProfile != null) {
             return this.umlgValidationProfile.getOwnedStereotypes();
         } else {
@@ -305,6 +316,7 @@ public class ModelLoader {
     public void clear() {
         this.model = null;
         this.RESOURCE_SET = new ResourceSetImpl();
+        this.umlgProfile = null;
         this.umlgValidationProfile = null;
         this.importedModelLibraries = new ArrayList<Model>();
     }
