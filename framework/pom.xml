@@ -27,7 +27,7 @@
             <dependency>
                 <groupId>org.eclipse</groupId>
                 <artifactId>osgi</artifactId>
-                <version>3.9.1-v20130814-1242</version>
+                <version>3.9.1-v20140110-1610</version>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.core</groupId>
@@ -42,7 +42,7 @@
             <dependency>
                 <groupId>org.eclipse.core</groupId>
                 <artifactId>runtime</artifactId>
-                <version>3.9.0-v20130326-1255</version>
+                <version>3.9.100-v20131218-1515</version>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.equinox</groupId>
@@ -69,21 +69,22 @@
             <dependency>
                 <groupId>org.eclipse.emf</groupId>
                 <artifactId>org.eclipse.emf.ecore</artifactId>
-                <version>2.9.1-v20130827-0309</version>
+                <version>2.9.2-v20131212-0545</version>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.emf</groupId>
                 <artifactId>org.eclipse.emf.ecore.xmi</artifactId>
-                <version>2.9.1-v20130827-0309</version>
+                <version>2.9.1-v20131212-0545</version>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.emf</groupId>
                 <artifactId>org.eclipse.emf.common</artifactId>
-                <version>2.9.1-v20130827-0309</version>
+                <version>2.9.2-v20131212-0545</version>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.emf</groupId>
                 <artifactId>org.eclipse.emf.mapping.ecore2xml</artifactId>
+                <!--<version>2.7.0-v20140203-1126</version>-->
                 <version>2.5.0.v20100521-1847</version>
             </dependency>
 
@@ -97,7 +98,7 @@
 			<dependency>
 				<groupId>org.eclipse.uml2</groupId>
 				<artifactId>uml</artifactId>
-				<version>4.1.1-v20130902-0826</version>
+				<version>4.1.2-v20140202-2055</version>
 				<exclusions>
 					<exclusion>
 						<groupId>org.eclipse.equinox</groupId>
@@ -124,7 +125,7 @@
 			<dependency>
 				<groupId>org.eclipse.uml2</groupId>
 				<artifactId>common</artifactId>
-				<version>1.8.1-v20130902-0826</version>
+				<version>1.8.2-v20140202-2055</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.eclipse.emf</groupId>
@@ -143,7 +144,7 @@
 			<dependency>
 				<groupId>org.eclipse.uml2</groupId>
 				<artifactId>types</artifactId>
-				<version>1.1.0-v20130902-0826</version>
+				<version>1.1.0-v20140202-2055</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.eclipse.emf</groupId>
@@ -162,7 +163,7 @@
             <dependency>
                 <groupId>org.eclipse.uml2.uml</groupId>
                 <artifactId>resources</artifactId>
-                <version>4.1.0-v20130902-0826</version>
+                <version>4.1.0-v20140202-2055</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.eclipse.emf</groupId>
@@ -181,7 +182,7 @@
 			<dependency>
 				<groupId>org.eclipse.uml2.uml.profile</groupId>
 				<artifactId>l2</artifactId>
-				<version>1.1.0-v20130902-0826</version>
+				<version>1.1.0-v20140202-2055</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.eclipse.emf</groupId>
@@ -200,7 +201,7 @@
 			<dependency>
 				<groupId>org.eclipse.uml2.uml.profile</groupId>
 				<artifactId>l3</artifactId>
-				<version>1.1.0-v20130902-0826</version>
+				<version>1.1.0-v20140202-2055</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.eclipse.emf</groupId>
@@ -221,7 +222,7 @@
             <dependency>
                 <groupId>org.eclipse</groupId>
                 <artifactId>ocl</artifactId>
-                <version>3.3.0-v20130909-1552</version>
+                <version>3.3.0-v20140120-1508</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.eclipse.emf</groupId>
@@ -278,7 +279,7 @@
             <dependency>
 				<groupId>org.eclipse.ocl</groupId>
 				<artifactId>uml</artifactId>
-				<version>4.0.100-v20130909-1552</version>
+				<version>4.0.100-v20140120-1508</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.eclipse.emf</groupId>
