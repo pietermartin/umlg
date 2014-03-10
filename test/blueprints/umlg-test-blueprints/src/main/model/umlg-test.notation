@@ -1970,6 +1970,13 @@
           <element xmi:type="uml:Property" href="umlg-test.uml#_ugE2MMRoEeGJXus6eZqdyw"/>
         </children>
         <children xmi:type="notation:DecorationNode" xmi:id="_1ci5ZAAOEeKpVr_ntT6cLA" type="3006">
+          <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_psiBUKgTEeOPt7R4er8hcg" source="Stereotype_Annotation">
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_psiBUagTEeOPt7R4er8hcg" key="StereotypeWithQualifiedNameList" value=""/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_psiBUqgTEeOPt7R4er8hcg" key="StereotypeList" value="Umlg::Profile::QualifierListener"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_psiBU6gTEeOPt7R4er8hcg" key="Stereotype_Presentation_Kind" value="HorizontalStereo"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_psiBVKgTEeOPt7R4er8hcg" key="PropStereoDisplay" value=""/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_psiBVagTEeOPt7R4er8hcg" key="StereotypePropertyLocation" value="Compartment"/>
+          </eAnnotations>
           <element xmi:type="uml:Property" href="umlg-test.uml#_pgz4IMRuEeGJXus6eZqdyw"/>
         </children>
       </children>
