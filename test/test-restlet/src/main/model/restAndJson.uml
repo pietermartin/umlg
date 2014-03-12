@@ -1029,6 +1029,86 @@
               </ownedEnd>
             </packagedElement>
           </packagedElement>
+          <packagedElement xmi:type="uml:Package" xmi:id="_slDfIKnrEeOPt7R4er8hcg" name="interfacemany">
+            <packagedElement xmi:type="uml:Class" xmi:id="_xwMHQKnrEeOPt7R4er8hcg" name="Root2">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_-bIv4KnrEeOPt7R4er8hcg" name="infOne" type="_0qWLQKnrEeOPt7R4er8hcg" aggregation="composite" association="_-bJW8KnrEeOPt7R4er8hcg">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_-bIv4anrEeOPt7R4er8hcg"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_-bIv4qnrEeOPt7R4er8hcg" value="*"/>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_-wbDYKnrEeOPt7R4er8hcg" name="infTwo" type="_4VCUUKnrEeOPt7R4er8hcg" aggregation="composite" association="_-wbqcKnrEeOPt7R4er8hcg">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_-wbDYanrEeOPt7R4er8hcg"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_-wbDYqnrEeOPt7R4er8hcg" value="*"/>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_WgEIgKnsEeOPt7R4er8hcg" name="name" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_XoskgKnsEeOPt7R4er8hcg" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_XotyoKnsEeOPt7R4er8hcg" value="1"/>
+                <defaultValue xmi:type="uml:LiteralString" xmi:id="_XovAwKnsEeOPt7R4er8hcg">
+                  <value xsi:nil="true"/>
+                </defaultValue>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Interface" xmi:id="_0qWLQKnrEeOPt7R4er8hcg" name="InfOne">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_ReP0cKnsEeOPt7R4er8hcg" name="name" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_TplDkKnsEeOPt7R4er8hcg" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_TplqoKnsEeOPt7R4er8hcg" value="1"/>
+                <defaultValue xmi:type="uml:LiteralString" xmi:id="_Tpnf0KnsEeOPt7R4er8hcg">
+                  <value xsi:nil="true"/>
+                </defaultValue>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Interface" xmi:id="_4VCUUKnrEeOPt7R4er8hcg" name="InfTwo">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_T_xWAKnsEeOPt7R4er8hcg" name="name" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_VGLkcKnsEeOPt7R4er8hcg" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_VGMLgKnsEeOPt7R4er8hcg" value="1"/>
+                <defaultValue xmi:type="uml:LiteralString" xmi:id="_VGNZoKnsEeOPt7R4er8hcg">
+                  <value xsi:nil="true"/>
+                </defaultValue>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_56l84KnrEeOPt7R4er8hcg" name="infOne_infTwo_1" memberEnd="_56l85KnrEeOPt7R4er8hcg _56l84anrEeOPt7R4er8hcg" navigableOwnedEnd="_56l85KnrEeOPt7R4er8hcg _56l84anrEeOPt7R4er8hcg">
+              <ownedEnd xmi:type="uml:Property" xmi:id="_56l84anrEeOPt7R4er8hcg" name="infTwo" type="_4VCUUKnrEeOPt7R4er8hcg" association="_56l84KnrEeOPt7R4er8hcg">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_56l84qnrEeOPt7R4er8hcg"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_56l846nrEeOPt7R4er8hcg" value="*"/>
+              </ownedEnd>
+              <ownedEnd xmi:type="uml:Property" xmi:id="_56l85KnrEeOPt7R4er8hcg" name="infOne" type="_0qWLQKnrEeOPt7R4er8hcg" association="_56l84KnrEeOPt7R4er8hcg">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_56l85anrEeOPt7R4er8hcg" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_56l85qnrEeOPt7R4er8hcg" value="1"/>
+              </ownedEnd>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_-bJW8KnrEeOPt7R4er8hcg" name="root2_infOne_1" memberEnd="_-bJW8anrEeOPt7R4er8hcg _-bIv4KnrEeOPt7R4er8hcg" navigableOwnedEnd="_-bJW8anrEeOPt7R4er8hcg">
+              <ownedEnd xmi:type="uml:Property" xmi:id="_-bJW8anrEeOPt7R4er8hcg" name="root2" type="_xwMHQKnrEeOPt7R4er8hcg" association="_-bJW8KnrEeOPt7R4er8hcg">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_-bJW8qnrEeOPt7R4er8hcg" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_-bJW86nrEeOPt7R4er8hcg" value="1"/>
+              </ownedEnd>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_-wbqcKnrEeOPt7R4er8hcg" name="root2_infTwo_1" memberEnd="_-wbqcanrEeOPt7R4er8hcg _-wbDYKnrEeOPt7R4er8hcg" navigableOwnedEnd="_-wbqcanrEeOPt7R4er8hcg">
+              <ownedEnd xmi:type="uml:Property" xmi:id="_-wbqcanrEeOPt7R4er8hcg" name="root2" type="_xwMHQKnrEeOPt7R4er8hcg" association="_-wbqcKnrEeOPt7R4er8hcg">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_-wbqcqnrEeOPt7R4er8hcg" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_-wbqc6nrEeOPt7R4er8hcg" value="1"/>
+              </ownedEnd>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_EaDlYKnsEeOPt7R4er8hcg" clientDependency="_QM_n8KnsEeOPt7R4er8hcg" name="InfOneC1">
+              <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_QM_n8KnsEeOPt7R4er8hcg" name="InterfaceRealization1" client="_EaDlYKnsEeOPt7R4er8hcg" supplier="_0qWLQKnrEeOPt7R4er8hcg" contract="_0qWLQKnrEeOPt7R4er8hcg"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_GaYeYKnsEeOPt7R4er8hcg" clientDependency="_QX53cKnsEeOPt7R4er8hcg" name="InfOneC2">
+              <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_QX53cKnsEeOPt7R4er8hcg" name="InterfaceRealization1" client="_GaYeYKnsEeOPt7R4er8hcg" supplier="_0qWLQKnrEeOPt7R4er8hcg" contract="_0qWLQKnrEeOPt7R4er8hcg"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_IKr-YKnsEeOPt7R4er8hcg" clientDependency="_QimEgKnsEeOPt7R4er8hcg" name="InfOneC3">
+              <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_QimEgKnsEeOPt7R4er8hcg" name="InterfaceRealization1" client="_IKr-YKnsEeOPt7R4er8hcg" supplier="_0qWLQKnrEeOPt7R4er8hcg" contract="_0qWLQKnrEeOPt7R4er8hcg"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_JlVXcKnsEeOPt7R4er8hcg" clientDependency="_QuCfgKnsEeOPt7R4er8hcg" name="InfTwoC1">
+              <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_QuCfgKnsEeOPt7R4er8hcg" name="InterfaceRealization1" client="_JlVXcKnsEeOPt7R4er8hcg" supplier="_4VCUUKnrEeOPt7R4er8hcg" contract="_4VCUUKnrEeOPt7R4er8hcg"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_Ko7icKnsEeOPt7R4er8hcg" clientDependency="_Q4yW8KnsEeOPt7R4er8hcg" name="InfTwoC2">
+              <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_Q4yW8KnsEeOPt7R4er8hcg" name="InterfaceRealization1" client="_Ko7icKnsEeOPt7R4er8hcg" supplier="_4VCUUKnrEeOPt7R4er8hcg" contract="_4VCUUKnrEeOPt7R4er8hcg"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_MGd3cKnsEeOPt7R4er8hcg" clientDependency="_RDi1cKnsEeOPt7R4er8hcg" name="InfTwoC3">
+              <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_RDi1cKnsEeOPt7R4er8hcg" name="InterfaceRealization1" client="_MGd3cKnsEeOPt7R4er8hcg" supplier="_4VCUUKnrEeOPt7R4er8hcg" contract="_4VCUUKnrEeOPt7R4er8hcg"/>
+            </packagedElement>
+          </packagedElement>
         </packagedElement>
       </packagedElement>
       <packagedElement xmi:type="uml:Package" xmi:id="_9Ayn0IYHEeORFsmiMkZYdA" name="testDiagramTree">

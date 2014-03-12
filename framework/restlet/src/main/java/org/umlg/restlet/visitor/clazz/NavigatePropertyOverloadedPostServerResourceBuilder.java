@@ -65,7 +65,7 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
         OJTryStatement tryStatement = new OJTryStatement();
 
         OJPathName parentPathName;
-        if (pWrap.getOtherEnd()!=null) {
+        if (pWrap.getOtherEnd() != null) {
             parentPathName = UmlgClassOperations.getPathName(pWrap.getOtherEnd().getType());
         } else {
             parentPathName = UmlgClassOperations.getPathName(pWrap.getOwningType());
@@ -618,59 +618,47 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
             for (Classifier concreteClassifierTo : concreteImplementations) {
                 annotatedClass.addToImports(UmlgClassOperations.getPathName(concreteClassifierTo));
 
-                block.addToStatements("json.append(\"{\")");
-
-                block.addToStatements("json.append(\" \\\"meta\\\" : {\")");
-                block.addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + pWrap.getQualifiedName() + "\\\"\")");
-
-                // The execute ocl query resource is only required if the below
-                // visitor is available
-                if (RestletVisitors.containsVisitorForClass(QueryExecuteResourceBuilder.class)
-                        && (pWrap.getType().getQualifiedName().equals(UmlgRestletGenerationUtil.instanceQueryQualifiedName) || pWrap.getType().getQualifiedName().equals(UmlgRestletGenerationUtil.classQueryQualifiedName))) {
-                    block.addToStatements("json.append(\", \\\"oclExecuteUri\\\": \\\"/" + pWrap.getModel().getName() + "/{contextId}/oclExecuteQuery\\\"\")");
-                }
-                block.addToStatements("json.append(\", \\\"to\\\": \")");
-                int countFrom = 1;
-                OJIfStatement ifStatementFrom = new OJIfStatement();
                 for (Classifier concreteClassifierFrom : concreteImplementationsFrom) {
+
+
+                    block.addToStatements("json.append(\"{\")");
+
+                    block.addToStatements("json.append(\" \\\"meta\\\" : {\")");
+                    block.addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + pWrap.getQualifiedName() + "\\\"\")");
+
+                    // The execute ocl query resource is only required if the below
+                    // visitor is available
+                    if (RestletVisitors.containsVisitorForClass(QueryExecuteResourceBuilder.class)
+                            && (pWrap.getType().getQualifiedName().equals(UmlgRestletGenerationUtil.instanceQueryQualifiedName) || pWrap.getType().getQualifiedName().equals(UmlgRestletGenerationUtil.classQueryQualifiedName))) {
+                        block.addToStatements("json.append(\", \\\"oclExecuteUri\\\": \\\"/" + pWrap.getModel().getName() + "/{contextId}/oclExecuteQuery\\\"\")");
+                    }
+                    block.addToStatements("json.append(\", \\\"to\\\": \")");
                     OJBlock conditionBlockFrom = new OJBlock();
                     annotatedClass.addToImports(UmlgClassOperations.getPathName(concreteClassifierFrom));
 
-                    String condition;
-                    //getClass() == does not work for BaseClassUmlg as the generated XXXMeta classes extends it but are not in the model
-                    //for this case instanceof will do
-                    if (concreteClassifierFrom.getQualifiedName().endsWith(UmlgGenerationUtil.BaseClassUmlgQualifiedName)) {
-                        condition = "parentResource instanceof " + UmlgClassOperations.getPathName(concreteClassifierFrom).getLast();
-                    } else {
-                        condition = "parentResource.getClass() == " + UmlgClassOperations.getPathName(concreteClassifierFrom).getLast() + ".class";
-                    }
-                    if (countFrom == 1) {
-                        ifStatementFrom.setCondition(condition);
-                        ifStatementFrom.setThenPart(conditionBlockFrom);
-                    } else if (countFrom == concreteImplementationsFrom.size()) {
-                        ifStatementFrom.setElsePart(conditionBlockFrom);
-                    } else {
-                        conditionBlockFrom = ifStatementFrom.addToElseIfCondition(condition, "");
-                    }
                     conditionBlockFrom.addToStatements("json.append(" + UmlgClassOperations.propertyEnumName(concreteClassifierTo) + ".asJson())");
                     conditionBlockFrom.addToStatements("json.append(\", \\\"from\\\": \")");
                     conditionBlockFrom.addToStatements("json.append(" + UmlgClassOperations.propertyEnumName(concreteClassifierFrom) + ".asJson())");
                     annotatedClass.addToImports(UmlgClassOperations.getPathName(concreteClassifierFrom).append(
                             UmlgClassOperations.propertyEnumName(concreteClassifierFrom)));
-                    countFrom++;
-                }
-                block.addToStatements(ifStatementFrom);
 
-                annotatedClass.addToImports(UmlgClassOperations.getPathName(pWrap.getOwningType()).append(
-                        UmlgClassOperations.propertyEnumName(pWrap.getOwningType())));
-                annotatedClass.addToImports(UmlgClassOperations.getPathName(concreteClassifierTo)
-                        .append(UmlgClassOperations.propertyEnumName(concreteClassifierTo)));
-                block.addToStatements("json.append(\"}\")");
-                if (concreteImplementations.size() != 1 && count != concreteImplementations.size()) {
-                    block.addToStatements("json.append(\"}, \")");
+                    block.addToStatements(conditionBlockFrom);
+
+                    annotatedClass.addToImports(UmlgClassOperations.getPathName(pWrap.getOwningType()).append(
+                            UmlgClassOperations.propertyEnumName(pWrap.getOwningType())));
+                    annotatedClass.addToImports(UmlgClassOperations.getPathName(concreteClassifierTo)
+                            .append(UmlgClassOperations.propertyEnumName(concreteClassifierTo)));
+
+                    if (count++ < (concreteImplementations.size() * concreteImplementationsFrom.size())) {
+                        block.addToStatements("json.append(\"},\")");
+                    } else {
+                        block.addToStatements("json.append(\"}\")");
+                    }
                 }
+//                if (concreteImplementations.size() != 1 && count != concreteImplementations.size()) {
+//                    block.addToStatements("json.append(\"}, \")");
+//                }
                 block = returnBlock;
-                count++;
             }
             returnBlock.addToStatements("json.append(\"}]\")");
             returnBlock.addToStatements("return new " + UmlgRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
