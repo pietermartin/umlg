@@ -10,6 +10,7 @@ import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.java.metamodel.annotation.OJEnum;
 import org.umlg.java.metamodel.annotation.OJEnumLiteral;
 import org.umlg.generation.Workspace;
+import org.umlg.javageneration.util.PropertyWrapper;
 import org.umlg.javageneration.util.UmlgGenerationUtil;
 import org.umlg.javageneration.util.UmlgClassOperations;
 import org.umlg.javageneration.visitor.BaseVisitor;
@@ -25,25 +26,30 @@ public abstract class BaseServerResourceBuilder extends BaseVisitor {
 		annotatedClass.getDefaultConstructor().getBody().addToStatements("setNegotiated(false)");
 	}
 
-//    protected void checkIfTransactionSuspended(OJAnnotatedOperation post) {
-//        //Check if transaction needs resuming
-//        OJIfStatement ifTransactionNeedsResuming = new OJIfStatement("getAttribute(\"" + UmlgGenerationUtil.transactionIdentifier + "\") != null");
-//        ifTransactionNeedsResuming.addToThenPart(UmlgGenerationUtil.graphDbAccess + ".resume(" + UmlgGenerationUtil.TumlTransactionManager + ".INSTANCE.get(getAttribute(\"" + UmlgGenerationUtil.transactionIdentifier + "\")))");
-//        post.getBody().addToStatements(ifTransactionNeedsResuming);
-//    }
+    protected void addCompositeParentIdField(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass) {
+        OJField compositeParentFieldId;
+        if (pWrap.getOtherEnd() != null) {
+            compositeParentFieldId = new OJField(UmlgClassOperations.getPathName(pWrap.getOtherEnd().getType()).getLast().toLowerCase() + "Id",
+                    new OJPathName("Object"));
+        } else {
+            compositeParentFieldId = new OJField(UmlgClassOperations.getPathName(pWrap.getOwningType()).getLast().toLowerCase() + "Id",
+                    new OJPathName("Object"));
+        }
+        compositeParentFieldId.setVisibility(OJVisibilityKind.PRIVATE);
+        annotatedClass.addToFields(compositeParentFieldId);
+    }
 
-//    protected void commitIfNotFromSuspendedTransaction(OJBlock block) {
-//        //Check if transaction needs resuming
-//        OJIfStatement ifTransactionNeedsResuming = new OJIfStatement("getAttribute(\"" + UmlgGenerationUtil.transactionIdentifier + "\") != null");
-//        ifTransactionNeedsResuming.addToThenPart(UmlgGenerationUtil.graphDbAccess + ".commit()");
-//        block.addToStatements(ifTransactionNeedsResuming);
-//    }
-
-//    protected void commitIfNotFromResume(OJBlock block) {
-//        OJIfStatement ifTransactionNeedsResuming = new OJIfStatement("getAttribute(\"" + UmlgGenerationUtil.transactionIdentifier + "\") == null");
-//        ifTransactionNeedsResuming.addToThenPart(UmlgGenerationUtil.graphDbAccess + ".commit()");
-//        block.addToStatements(ifTransactionNeedsResuming);
-//    }
+    protected String getClassName(PropertyWrapper pWrap, String appendName) {
+        String name;
+        if (pWrap.getOtherEnd() != null) {
+            name = UmlgClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_"
+                + pWrap.getOtherEnd().getName() + "_" + pWrap.getName() + "_"  + appendName;
+        } else {
+            name = UmlgClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_"
+                    + pWrap.getName() + "_" + appendName;
+        }
+        return name;
+    }
 
     protected void commitOrRollback(OJTryStatement ojTryStatement) {
         OJIfStatement ifTransactionNeedsCommitOrRollback = new OJIfStatement("!(getQueryValue(\"" + UmlgGenerationUtil.rollback+ "\") != null && Boolean.valueOf(getQueryValue(\"" + UmlgGenerationUtil.rollback + "\")))");

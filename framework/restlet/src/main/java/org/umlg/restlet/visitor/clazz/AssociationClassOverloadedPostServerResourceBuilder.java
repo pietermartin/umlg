@@ -436,13 +436,13 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
                 if (pWrap.isOne() || asAssociationClass) {
 
                     if (asAssociationClass) {
-                        OJIfStatement ifOneInstanceOf = new OJIfStatement("parentResource." + pWrap.getter() + "().getClass() == "
+                        OJIfStatement ifOneInstanceOf = new OJIfStatement("parentResource." + pWrap.getter() + "() != null &&parentResource." + pWrap.getter() + "().getClass() == "
                                 + UmlgClassOperations.getPathName(concreteClassifierTo).getLast() + ".class");
                         ifOneInstanceOf.addToThenPart("json.append(" + UmlgGenerationUtil.ToJsonUtil.getLast() + ".toJsonWithoutCompositeParent(parentResource." + pWrap.getter() + "()))");
                         ifOneInstanceOf.addToElsePart("json.append(\"null\")");
                         block.addToStatements(ifOneInstanceOf);
                     } else {
-                        OJIfStatement ifOneInstanceOf = new OJIfStatement("parentResource." + pWrap.associationClassGetter() + "().getClass() == "
+                        OJIfStatement ifOneInstanceOf = new OJIfStatement("parentResource." + pWrap.getter() + "() != null && parentResource." + pWrap.associationClassGetter() + "().getClass() == "
                                 + UmlgClassOperations.getPathName(concreteClassifierTo).getLast() + ".class");
                         ifOneInstanceOf.addToThenPart("json.append(" + UmlgGenerationUtil.ToJsonUtil.getLast() + ".toJsonWithoutCompositeParent(parentResource." + pWrap.associationClassGetter() + "()))");
                         ifOneInstanceOf.addToElsePart("json.append(\"null\")");
@@ -651,7 +651,8 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
         attachAll.getBody().addToStatements(routerEnum.getName() + "." + ojLiteral.getName() + ".attach(router)");
     }
 
-    private void addCompositeParentIdField(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass) {
+    @Override
+    protected void addCompositeParentIdField(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass) {
         addCompositeParentIdField(pWrap, annotatedClass, false);
     }
 

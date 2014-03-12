@@ -2,6 +2,7 @@ package org.umlg.restlet.visitor.clazz;
 
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Property;
+import org.umlg.framework.ModelLoader;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.java.metamodel.*;
@@ -29,8 +30,8 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
             OJAnnotatedClass owner = findOJClass(pWrap.getType());
             OJPackage ojPackage = owner.getMyPackage();
 
-            OJAnnotatedClass annotatedClass = new OJAnnotatedClass(UmlgClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_"
-                    + pWrap.getOtherEnd().getName() + "_" + pWrap.getName() + "_ServerResourceImpl");
+            OJAnnotatedClass annotatedClass = new OJAnnotatedClass(getClassName(pWrap, "ServerResourceImpl"));
+
             annotatedClass.setSuperclass(UmlgRestletGenerationUtil.ServerResource);
             annotatedClass.setMyPackage(ojPackage);
             addToSource(annotatedClass);
@@ -63,7 +64,12 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
 
         OJTryStatement tryStatement = new OJTryStatement();
 
-        OJPathName parentPathName = UmlgClassOperations.getPathName(pWrap.getOtherEnd().getType());
+        OJPathName parentPathName;
+        if (pWrap.getOtherEnd()!=null) {
+            parentPathName = UmlgClassOperations.getPathName(pWrap.getOtherEnd().getType());
+        } else {
+            parentPathName = UmlgClassOperations.getPathName(pWrap.getOwningType());
+        }
         tryStatement.getTryPart().addToStatements(
                 "this." + parentPathName.getLast().toLowerCase() + "Id = " + UmlgRestletGenerationUtil.UmlgURLDecoder.getLast() + ".decode((String)getRequestAttributes().get(\""
                         + parentPathName.getLast().toLowerCase() + "Id\"))");
@@ -88,7 +94,12 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
         annotatedClass.addToImports(UmlgRestletGenerationUtil.ResourceException);
         annotatedClass.addToOperations(option);
         OJTryStatement tryStatement = new OJTryStatement();
-        OJPathName parentPathName = UmlgClassOperations.getPathName(pWrap.getOtherEnd().getType());
+        OJPathName parentPathName;
+        if (pWrap.getOtherEnd() != null) {
+            parentPathName = UmlgClassOperations.getPathName(pWrap.getOtherEnd().getType());
+        } else {
+            parentPathName = UmlgClassOperations.getPathName(pWrap.getOwningType());
+        }
         tryStatement.getTryPart().addToStatements(
                 "this." + parentPathName.getLast().toLowerCase() + "Id = " + UmlgRestletGenerationUtil.UmlgURLDecoder.getLast() + ".decode((String)getRequestAttributes().get(\""
                         + parentPathName.getLast().toLowerCase() + "Id\"))");
@@ -492,7 +503,25 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
 
         //This is very important to be a sorted set. The get and options method need to return the meta data in the same order.
         //This allows the client to merge them easily
-        SortedSet<Classifier> sortedConcreteImplementations = UmlgClassOperations.getConcreteImplementations((Classifier) pWrap.getType());
+
+        SortedSet<Classifier> sortedConcreteImplementations = new TreeSet<Classifier>(new Comparator<Classifier>() {
+            @Override
+            public int compare(Classifier o1, Classifier o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
+
+        //For derived unions only show tabs for each property that makes up the union.
+        if (pWrap.isDerivedUnion()) {
+            List<Property> subsettingProperties = ModelLoader.INSTANCE.findSubsettingProperties(pWrap.getProperty());
+            for (Property subsettingProperty : subsettingProperties) {
+                sortedConcreteImplementations.addAll(UmlgClassOperations.getConcreteImplementations((Classifier) subsettingProperty.getType()));
+            }
+        } else {
+            //For non derived union show all concrete implementations
+            sortedConcreteImplementations = UmlgClassOperations.getConcreteImplementations((Classifier) pWrap.getType());
+        }
+
         Set<Classifier> concreteImplementationsFrom = UmlgClassOperations.getConcreteImplementations((Classifier) pWrap.getOwningType());
         if (!concreteImplementationsFrom.isEmpty()) {
             annotatedClass.addToImports(UmlgGenerationUtil.ToJsonUtil);
@@ -515,7 +544,7 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
                     block.addToStatements("json.append(\"{\\\"data\\\": [\")");
                 }
                 if (pWrap.isOne()) {
-                    OJIfStatement ifOneInstanceOf = new OJIfStatement("parentResource." + pWrap.getter() + "().getClass() == "
+                    OJIfStatement ifOneInstanceOf = new OJIfStatement("parentResource." + pWrap.getter() + "() != null && parentResource." + pWrap.getter() + "().getClass() == "
                             + UmlgClassOperations.getPathName(concreteClassifierTo).getLast() + ".class");
                     ifOneInstanceOf.addToThenPart("json.append(" + UmlgGenerationUtil.ToJsonUtil.getLast() + ".toJsonWithoutCompositeParent(parentResource." + pWrap.getter() + "()))");
                     ifOneInstanceOf.addToElsePart("json.append(\"null\")");
@@ -554,7 +583,24 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
 
     private void buildToJsonForOption(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass, OJBlock block) {
 
-        Set<Classifier> concreteImplementations = UmlgClassOperations.getConcreteImplementations((Classifier) pWrap.getType());
+        SortedSet<Classifier> concreteImplementations = new TreeSet<Classifier>(new Comparator<Classifier>() {
+            @Override
+            public int compare(Classifier o1, Classifier o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
+
+        //For derived unions only show tabs for each property that makes up the union.
+        if (pWrap.isDerivedUnion()) {
+            List<Property> subsettingProperties = ModelLoader.INSTANCE.findSubsettingProperties(pWrap.getProperty());
+            for (Property subsettingProperty : subsettingProperties) {
+                concreteImplementations.addAll(UmlgClassOperations.getConcreteImplementations((Classifier) subsettingProperty.getType()));
+            }
+        } else {
+            //For non derived union show all concrete implementations
+            concreteImplementations = UmlgClassOperations.getConcreteImplementations((Classifier) pWrap.getType());
+        }
+
         Set<Classifier> concreteImplementationsFrom = UmlgClassOperations.getConcreteImplementations((Classifier) pWrap.getOwningType());
         if (!concreteImplementationsFrom.isEmpty()) {
             annotatedClass.addToImports(UmlgGenerationUtil.ToJsonUtil);
@@ -679,11 +725,17 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
 
     }
 
-    private void addCompositeParentIdField(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass) {
-        OJField compositeParentFieldId = new OJField(UmlgClassOperations.getPathName(pWrap.getOtherEnd().getType()).getLast().toLowerCase() + "Id",
-                new OJPathName("Object"));
-        compositeParentFieldId.setVisibility(OJVisibilityKind.PRIVATE);
-        annotatedClass.addToFields(compositeParentFieldId);
-    }
+//    private void addCompositeParentIdField(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass) {
+//        OJField compositeParentFieldId;
+//        if (pWrap.getOtherEnd() != null) {
+//            compositeParentFieldId = new OJField(UmlgClassOperations.getPathName(pWrap.getOtherEnd().getType()).getLast().toLowerCase() + "Id",
+//                new OJPathName("Object"));
+//        } else {
+//            compositeParentFieldId = new OJField(UmlgClassOperations.getPathName(pWrap.getOwningType()).getLast().toLowerCase() + "Id",
+//                    new OJPathName("Object"));
+//        }
+//        compositeParentFieldId.setVisibility(OJVisibilityKind.PRIVATE);
+//        annotatedClass.addToFields(compositeParentFieldId);
+//    }
 
 }

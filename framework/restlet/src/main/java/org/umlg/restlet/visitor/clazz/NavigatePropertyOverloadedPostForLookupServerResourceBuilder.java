@@ -24,8 +24,10 @@ public class NavigatePropertyOverloadedPostForLookupServerResourceBuilder extend
             OJAnnotatedClass owner = findOJClass(pWrap.getType());
             OJPackage ojPackage = owner.getMyPackage();
 
-            OJAnnotatedClass annotatedClass = new OJAnnotatedClass(UmlgClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_"
-                    + pWrap.getOtherEnd().getName() + "_" + pWrap.getName() + "_LookupServerResourceImpl");
+            OJAnnotatedClass annotatedClass = new OJAnnotatedClass(getClassName(pWrap, "LookupServerResourceImpl"));
+//            OJAnnotatedClass annotatedClass = new OJAnnotatedClass(UmlgClassOperations.getPathName(pWrap.getOwningType()).getLast() + "_"
+//                    + pWrap.getOtherEnd().getName() + "_" + pWrap.getName() + "_LookupServerResourceImpl");
+
             annotatedClass.setSuperclass(UmlgRestletGenerationUtil.ServerResource);
             annotatedClass.setMyPackage(ojPackage);
             addToSource(annotatedClass);
@@ -325,11 +327,11 @@ public class NavigatePropertyOverloadedPostForLookupServerResourceBuilder extend
 
     }
 
-    private void addCompositeParentIdField(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass) {
-        OJField compositeParentFieldId = new OJField(UmlgClassOperations.getPathName(pWrap.getOtherEnd().getType()).getLast().toLowerCase() + "Id",
-                new OJPathName("Object"));
-        compositeParentFieldId.setVisibility(OJVisibilityKind.PRIVATE);
-        annotatedClass.addToFields(compositeParentFieldId);
-    }
+//    private void addCompositeParentIdField(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass) {
+//        OJField compositeParentFieldId = new OJField(UmlgClassOperations.getPathName(pWrap.getOtherEnd().getType()).getLast().toLowerCase() + "Id",
+//                new OJPathName("Object"));
+//        compositeParentFieldId.setVisibility(OJVisibilityKind.PRIVATE);
+//        annotatedClass.addToFields(compositeParentFieldId);
+//    }
 
 }
