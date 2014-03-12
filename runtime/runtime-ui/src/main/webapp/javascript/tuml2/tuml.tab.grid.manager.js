@@ -1128,7 +1128,7 @@
                 } else {
                     this.columns.push({
                         id: property.name,
-                        //TODo use font for derived indicator
+                        //TODO use font for derived indicator
                         name: (property.derived ? '/ ' + property.name : property.name),
                         field: property.name,
                         sortable: true,
@@ -1402,7 +1402,7 @@
             autoHeight: false,
             showHeaderRow: true,
             headerRowHeight: 30,
-            editable: true,
+            editable: !this.propertyNavigatingTo.readOnly,
             enableAddRow: (this.propertyNavigatingTo.composite && !this.propertyNavigatingTo.associationClassOne) ? true : false,
             enableCellNavigation: true,
             asyncEditorLoading: false,

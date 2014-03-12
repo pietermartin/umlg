@@ -690,8 +690,10 @@
     }
 
     TumlTabContainerManager.prototype.addOrRemoveSelectButton = function () {
-        if (this.propertyNavigatingTo !== undefined && this.propertyNavigatingTo !== null && !this.propertyNavigatingTo.associationClassOne && !this.propertyNavigatingTo.composite &&
-            (this.propertyNavigatingTo.upper === -1 || this.propertyNavigatingTo.upper > 1) && !this.oneManyOrQuery.forLookup) {
+        if (this.propertyNavigatingTo !== undefined && this.propertyNavigatingTo !== null && !this.propertyNavigatingTo.associationClassOne &&
+            !this.propertyNavigatingTo.derived &&
+            !this.propertyNavigatingTo.composite && (this.propertyNavigatingTo.upper === -1 || this.propertyNavigatingTo.upper > 1) &&
+            !this.oneManyOrQuery.forLookup) {
 
             this.parentTabContainerManager.addSelectButton(this.tabTitleName, this);
         } else {
