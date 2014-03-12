@@ -5157,7 +5157,7 @@
         <layoutConstraint xmi:type="notation:Bounds" xmi:id="_GdREoqIoEeOn3tP_LveSqg"/>
       </children>
       <element xmi:type="uml:Package" href="umlg-test.uml#_GdFecKIoEeOn3tP_LveSqg"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_GdMMIaIoEeOn3tP_LveSqg" x="290" y="535"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_GdMMIaIoEeOn3tP_LveSqg" x="285" y="530"/>
     </children>
     <styles xmi:type="notation:DiagramStyle" xmi:id="_HkiPsYlaEeKeSZB9UA6Gvw"/>
     <element xmi:type="uml:Package" href="umlg-test.uml#_w8IxIM37EdqwVrslYOdUDA"/>

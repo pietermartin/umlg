@@ -993,6 +993,42 @@
               </ownedEnd>
             </packagedElement>
           </packagedElement>
+          <packagedElement xmi:type="uml:Package" xmi:id="_-qAX0Kh2EeOPt7R4er8hcg" name="subsetting">
+            <packagedElement xmi:type="uml:Class" xmi:id="_2eTdEKj3EeOPt7R4er8hcg" clientDependency="_wmnbgKj4EeOPt7R4er8hcg" name="Bsc">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_2KQqQKj4EeOPt7R4er8hcg" name="bts" type="_jFFwMKj4EeOPt7R4er8hcg" subsettedProperty="_cySVYKj4EeOPt7R4er8hcg" association="_2KRRUKj4EeOPt7R4er8hcg">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_2KQqQaj4EeOPt7R4er8hcg"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_2KQqQqj4EeOPt7R4er8hcg" value="*"/>
+              </ownedAttribute>
+              <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_wmnbgKj4EeOPt7R4er8hcg" name="InterfaceRealization1" client="_2eTdEKj3EeOPt7R4er8hcg" supplier="_5cDAkKj3EeOPt7R4er8hcg" contract="_5cDAkKj3EeOPt7R4er8hcg"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Interface" xmi:id="_5cDAkKj3EeOPt7R4er8hcg" name="INetworkElement">
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_7ZUlkKj3EeOPt7R4er8hcg" name="parent" visibility="public" type="_5cDAkKj3EeOPt7R4er8hcg" isDerived="true" isDerivedUnion="true">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_ZTsuoKj4EeOPt7R4er8hcg"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_ZTtVsKj4EeOPt7R4er8hcg" value="1"/>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_cySVYKj4EeOPt7R4er8hcg" name="children" visibility="public" type="_5cDAkKj3EeOPt7R4er8hcg" isDerived="true" isDerivedUnion="true">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_eeZ48Kj4EeOPt7R4er8hcg"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_eebHEKj4EeOPt7R4er8hcg" value="*"/>
+              </ownedAttribute>
+              <ownedAttribute xmi:type="uml:Property" xmi:id="_ETNh8Kj5EeOPt7R4er8hcg" name="name" visibility="public">
+                <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_FpL2YKj5EeOPt7R4er8hcg" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_FpNrkKj5EeOPt7R4er8hcg" value="1"/>
+                <defaultValue xmi:type="uml:LiteralString" xmi:id="_FpPgwKj5EeOPt7R4er8hcg">
+                  <value xsi:nil="true"/>
+                </defaultValue>
+              </ownedAttribute>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Class" xmi:id="_jFFwMKj4EeOPt7R4er8hcg" clientDependency="_1I3esKj4EeOPt7R4er8hcg" name="Bts">
+              <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_1I3esKj4EeOPt7R4er8hcg" name="InterfaceRealization1" client="_jFFwMKj4EeOPt7R4er8hcg" supplier="_5cDAkKj3EeOPt7R4er8hcg" contract="_5cDAkKj3EeOPt7R4er8hcg"/>
+            </packagedElement>
+            <packagedElement xmi:type="uml:Association" xmi:id="_2KRRUKj4EeOPt7R4er8hcg" name="bsc_bts_1" memberEnd="_2KRRUaj4EeOPt7R4er8hcg _2KQqQKj4EeOPt7R4er8hcg" navigableOwnedEnd="_2KRRUaj4EeOPt7R4er8hcg">
+              <ownedEnd xmi:type="uml:Property" xmi:id="_2KRRUaj4EeOPt7R4er8hcg" name="bsc" type="_2eTdEKj3EeOPt7R4er8hcg" subsettedProperty="_7ZUlkKj3EeOPt7R4er8hcg" association="_2KRRUKj4EeOPt7R4er8hcg">
+                <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_2KRRUqj4EeOPt7R4er8hcg" value="1"/>
+                <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_2KRRU6j4EeOPt7R4er8hcg" value="1"/>
+              </ownedEnd>
+            </packagedElement>
+          </packagedElement>
         </packagedElement>
       </packagedElement>
       <packagedElement xmi:type="uml:Package" xmi:id="_9Ayn0IYHEeORFsmiMkZYdA" name="testDiagramTree">

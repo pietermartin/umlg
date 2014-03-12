@@ -19,7 +19,7 @@ public class NavigatePropertyOverloadedPostForLookupServerResourceBuilder extend
     @Override
     public void visitBefore(Property p) {
         PropertyWrapper pWrap = new PropertyWrapper(p);
-        if (!pWrap.isDerived() && !pWrap.isDataType() && !pWrap.isEnumeration() && pWrap.isNavigable()) {
+        if (!pWrap.isDataType() && !pWrap.isEnumeration() && pWrap.isNavigable()) {
 
             OJAnnotatedClass owner = findOJClass(pWrap.getType());
             OJPackage ojPackage = owner.getMyPackage();
@@ -32,7 +32,9 @@ public class NavigatePropertyOverloadedPostForLookupServerResourceBuilder extend
             addDefaultConstructor(annotatedClass);
 
             addCompositeParentIdField(pWrap, annotatedClass);
-            addPostObjectRepresentation(pWrap/*, annotatedInf*/, annotatedClass);
+            if (!pWrap.isDerived()) {
+                addPostObjectRepresentation(pWrap/*, annotatedInf*/, annotatedClass);
+            }
             addServerResourceToRouterEnum(pWrap, annotatedClass);
 
         }

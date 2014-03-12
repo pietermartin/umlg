@@ -24,7 +24,7 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
     @Override
     public void visitBefore(Property p) {
         PropertyWrapper pWrap = new PropertyWrapper(p);
-        if (!pWrap.isDerived() && !pWrap.isDataType() && !pWrap.isEnumeration() && pWrap.isNavigable()) {
+        if (!pWrap.isDataType() && !pWrap.isEnumeration() && pWrap.isNavigable()) {
 
             OJAnnotatedClass owner = findOJClass(pWrap.getType());
             OJPackage ojPackage = owner.getMyPackage();
@@ -39,7 +39,10 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
             addCompositeParentIdField(pWrap, annotatedClass);
             addGetObjectRepresentation(pWrap, annotatedClass);
             addOptionsObjectRepresentation(pWrap, annotatedClass);
-            addPostObjectRepresentation(pWrap, annotatedClass);
+
+            if (!pWrap.isDerived()) {
+                addPostObjectRepresentation(pWrap, annotatedClass);
+            }
 
             addServerResourceToRouterEnum(pWrap, annotatedClass);
 
