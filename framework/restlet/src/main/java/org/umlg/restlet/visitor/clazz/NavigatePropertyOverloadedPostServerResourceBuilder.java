@@ -620,7 +620,6 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
 
                 for (Classifier concreteClassifierFrom : concreteImplementationsFrom) {
 
-
                     block.addToStatements("json.append(\"{\")");
 
                     block.addToStatements("json.append(\" \\\"meta\\\" : {\")");
@@ -650,17 +649,15 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
                             .append(UmlgClassOperations.propertyEnumName(concreteClassifierTo)));
 
                     if (count++ < (concreteImplementations.size() * concreteImplementationsFrom.size())) {
-                        block.addToStatements("json.append(\"},\")");
+                        block.addToStatements("json.append(\"}},\")");
                     } else {
-                        block.addToStatements("json.append(\"}\")");
+                        block.addToStatements("json.append(\"}}\")");
                     }
+
                 }
-//                if (concreteImplementations.size() != 1 && count != concreteImplementations.size()) {
-//                    block.addToStatements("json.append(\"}, \")");
-//                }
                 block = returnBlock;
             }
-            returnBlock.addToStatements("json.append(\"}]\")");
+            returnBlock.addToStatements("json.append(\"]\")");
             returnBlock.addToStatements("return new " + UmlgRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
         } else {
             //TODO not thought through
