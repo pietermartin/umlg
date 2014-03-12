@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 public class Dependency {
 
     private static Logger logger = Logger.getLogger(Dependency.class.getPackage().getName());
+    private static String GPG_COMMAND = "gpg --batch --yes --passphrase-file /home/pieter/Documents/gpgpassphrase/passphrase -ab ";
 
     private String groupId;
     private String artifactId;
@@ -73,9 +74,9 @@ public class Dependency {
 
         //Run signing
         logger.fine(String.format("signing artifacts for %s", toString()));
-        Runtime.getRuntime().exec("gpg -ab " + jarTarget.getName(), null, jarTarget.getParentFile()).waitFor();
-        Runtime.getRuntime().exec("gpg -ab " + pomTarget.getName(), null, pomTarget.getParentFile()).waitFor();
-        Runtime.getRuntime().exec("gpg -ab " + destSource.getName(), null, destSource.getParentFile()).waitFor();
+        Runtime.getRuntime().exec(GPG_COMMAND + jarTarget.getName(), null, jarTarget.getParentFile()).waitFor();
+        Runtime.getRuntime().exec(GPG_COMMAND + pomTarget.getName(), null, pomTarget.getParentFile()).waitFor();
+        Runtime.getRuntime().exec(GPG_COMMAND + destSource.getName(), null, destSource.getParentFile()).waitFor();
 
         //Create java doc
         File unjarredSourceDir = new File(destSource.getParentFile(), "source");
@@ -93,12 +94,12 @@ public class Dependency {
         Runtime.getRuntime().exec("javadoc -d ./javadoc/ -sourcepath ./source/ ", null, destSource.getParentFile()).waitFor();
         logger.fine(String.format("generating javadoc jar artifacts for %s", toString()));
         Runtime.getRuntime().exec("jar -cvf " + destSource.getName().replace("-sources.jar", "-javadoc.jar *"), null, unjarredJavadocDir).waitFor();
-        Runtime.getRuntime().exec("gpg -ab " + destSource.getName(), null, destSource.getParentFile()).waitFor();
+        Runtime.getRuntime().exec(GPG_COMMAND + destSource.getName(), null, destSource.getParentFile()).waitFor();
 
         File newJavaDocJar = new File(unjarredJavadocDir, destSource.getName().replace("-sources.jar", "-javadoc.jar"));
         FileUtils.copyFileToDirectory(newJavaDocJar, destSource.getParentFile());
         newJavaDocJar = new File(destSource.getParentFile(), newJavaDocJar.getName());
-        Runtime.getRuntime().exec("gpg -ab " + newJavaDocJar.getName(), null, newJavaDocJar.getParentFile()).waitFor();
+        Runtime.getRuntime().exec(GPG_COMMAND + newJavaDocJar.getName(), null, newJavaDocJar.getParentFile()).waitFor();
         FileUtils.forceDelete(unjarredSourceDir);
         FileUtils.forceDelete(unjarredJavadocDir);
 
