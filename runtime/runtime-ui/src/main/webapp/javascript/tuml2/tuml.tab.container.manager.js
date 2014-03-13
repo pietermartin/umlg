@@ -102,8 +102,6 @@
                 this.tabContainer = $('<div />', {id: this.getTabId() + 'Tabs', class: 'umlg-tabs'}).appendTo(tabLayoutTabBodyDiv);
                 this.tabContainer.append('<ul class="nav nav-tabs" />');
                 this.tabContainer.append('<div class="tab-content" />');
-            } else {
-                throw "When does this happen!";
             }
         }
 
@@ -141,7 +139,7 @@
     TumlTabContainerManager.prototype.removeSelectButton = function () {
         var buttonPullRightDiv = this.tabLayoutTabFooterDiv.find('.pull-right');
         //Remove all existing open many buttons
-        var buttons = buttonPullRightDiv.find('.ui-button');
+        var buttons = buttonPullRightDiv.find('#' + this.getTabId() + 'OpenMany');
         for (var i = 0; i < buttons.length; i++) {
             var button = buttons[i];
             if (button.id.indexOf('OpenMany', this.length - 'OpenMany'.length) !== -1) {

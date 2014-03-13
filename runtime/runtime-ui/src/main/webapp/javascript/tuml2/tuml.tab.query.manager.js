@@ -45,7 +45,7 @@
                 var outerDivForResults = $('#' + this.queryTabDivName + '_' + 'OclResult');
                 outerDivForResults.children().remove();
                 var textAreaResult = $('<textarea />', {id: 'queryResultId'});
-                textAreaResult.text(data).appendTo(outerDivForResults);
+                textAreaResult.text(data.result).appendTo(outerDivForResults);
                 CodeMirror.fromTextArea(textAreaResult[0], {mode: 'text/x-less', readOnly: true});
             }
             $('#serverErrorMsg_' + this.queryTabDivName).removeClass('server-error-msg');
@@ -343,7 +343,7 @@
                             closeOnUnfocus: true,
                             completeSingle: false,
                             alignWithWord: true,
-                            contextClassifierQualifiedName: self.tumlTabViewManager.parentTabContainerManager.qualifiedName
+                            contextClassifierQualifiedName: self.tumlTabViewManager.parentTabContainerManager.uiManager.leftMenuManager.contextMetaDataFrom.qualifiedName
                         });
                 };
 
@@ -357,6 +357,8 @@
                             closeOnUnfocus: true,
                             completeSingle: false,
                             alignWithWord: true,
+                            //Bit crappy, the contextManager is not yet initialized to get the context data from.
+                            //However the leftMenuManager has worked it out and has the data
                             contextClassifierQualifiedName: self.tumlTabViewManager.parentTabContainerManager.qualifiedName
                         });
                 };

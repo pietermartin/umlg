@@ -313,6 +313,7 @@ public class RootOverLoadedPostResourceServerResourceBuilder extends BaseServerR
             tryStatement.getTryPart().addToStatements("json.append(\"], \\\"meta\\\": {\")");
 
             tryStatement.getTryPart().addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + clazz.getQualifiedName() + "\\\"\")");
+            tryStatement.getTryPart().addToStatements("json.append(\",\\\"qualifiedNameTo\\\": \\\"" + classifier.getQualifiedName() + "\\\"\")");
 
             // The execute ocl query resource is only required if the below
             // visitor is available

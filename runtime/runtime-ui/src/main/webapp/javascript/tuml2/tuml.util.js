@@ -58,18 +58,32 @@ function retrieveMetaDataIfNotInCache(tumlUri, contextVertexId, result, callback
 
 function combineMetaDataWithResult(result, metaDataResult) {
     //Combine the meta data with the data
-    if (result.length !== metaDataResult.length) {
-        throw Error('get and options must return the same number of meta data!');
-    }
+//    if (result.length !== metaDataResult.length) {
+//        throw Error('get and options must return the same number of meta data!');
+//    }
 
     for (var i = 0; i < result.length; i++) {
         //Copy the meta data from options into the data result
-        if (result[i].data !== null && result[i].data.length > 0) {
-            if (result[i].data[0].qualifiedName !== metaDataResult[i].meta.to.qualifiedName) {
-                throw 'options and get must return the same qualified name!';
+//        if (result[i].data !== null && result[i].data.length > 0) {
+
+            if (metaDataResult[i].meta.from == undefined) {
+                result[i].meta = metaDataResult[i].meta;
+            } else {
+
+                for (var j = 0; j < metaDataResult.length; j++) {
+
+                    if (result[i].meta.qualifiedNameTo == metaDataResult[j].meta.to.qualifiedName) {
+                        //root scenario
+                        if (result[i].meta.qualifiedNameFrom == metaDataResult[j].meta.from.qualifiedName) {
+                            result[i].meta = metaDataResult[j].meta;
+                            break;
+                        }
+                    }
+
+                }
             }
-        }
-        result[i].meta = metaDataResult[i].meta;
+
+//        }
     }
 }
 

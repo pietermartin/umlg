@@ -30,26 +30,38 @@ public abstract class BaseOclExecutionServerResourceImpl extends ServerResource 
             } else if (result instanceof Collection) {
 
                 //TODO need to sort out polymorphic queries
-                Collection<PersistentObject> poCollection = (Collection<PersistentObject>) result;
+                Collection<Object> poCollection = (Collection<Object>) result;
 
                 StringBuilder json = new StringBuilder();
                 json.append("[");
                 json.append("{\"data\": [");
                 int count = 0;
                 PersistentObject poForMetaData = null;
-                for (PersistentObject po : poCollection) {
+                for (Object o : poCollection) {
                     count++;
-                    String objectAsJson = po.toJsonWithoutCompositeParent();
-                    String objectAsJsonWithRow = "{\"row\": " + count + ", " + objectAsJson.substring(1);
-                    json.append(objectAsJsonWithRow);
-                    if (count != poCollection.size()) {
-                        json.append(",");
+                    if (o instanceof PersistentObject) {
+                        PersistentObject po = (PersistentObject)o;
+                        String objectAsJson = po.toJsonWithoutCompositeParent();
+                        String objectAsJsonWithRow = "{\"row\": " + count + ", " + objectAsJson.substring(1);
+                        json.append(objectAsJsonWithRow);
+                        if (count != poCollection.size()) {
+                            json.append(",");
+                        } else {
+                            poForMetaData = po;
+                        }
                     } else {
-                        poForMetaData = po;
+                        String objectAsJson = o.toString();
+                        String objectAsJsonWithRow = "{\"row\": " + count + ", \"value\": \"" + objectAsJson + "\"}";
+                        json.append(objectAsJsonWithRow);
+                        if (count != poCollection.size()) {
+                            json.append(",");
+                        }
+
                     }
                 }
                 json.append("],");
                 json.append(" \"meta\" : {");
+                //TODO create some meta data strategy for tuples and lists of primitives or datatypes
                 //TODO some hardcoding to sort out
                 json.append("\"qualifiedName\": \"restAndJson::org::umlg::test::Hand::finger\"");
                 json.append(", \"to\": ");

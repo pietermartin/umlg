@@ -566,6 +566,9 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
                 block.addToStatements("json.append(\" \\\"meta\\\" : {\")");
                 block.addToStatements("json.append(\"\\\"qualifiedName\\\": \\\"" + pWrap.getQualifiedName() + "\\\"\")");
 
+                block.addToStatements("json.append(\",\\\"qualifiedNameFrom\\\": \\\"\" + parentResource.getQualifiedName() + \"\\\"\")");
+                block.addToStatements("json.append(\",\\\"qualifiedNameTo\\\": \\\"" + concreteClassifierTo.getQualifiedName() + "\\\"\")");
+
                 block.addToStatements("json.append(\"}\")");
                 if (sortedConcreteImplementations.size() != 1 && count != sortedConcreteImplementations.size()) {
                     block.addToStatements("json.append(\"}, \")");

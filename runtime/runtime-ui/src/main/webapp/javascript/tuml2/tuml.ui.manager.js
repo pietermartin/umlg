@@ -15,8 +15,8 @@
 
         var self = this;
         var menuManager;
-        var contextManager;
-        var leftMenuManager;
+        contextManager = null;
+        this.leftMenuManager = null;
         var mainViewManager;
         var currentFocus;
 
@@ -50,23 +50,23 @@
             menuManager = new Tuml.MenuManager();
 
             //Create the context manager
-            leftMenuManager = new Tuml.LeftMenuManager();
-            leftMenuManager.onMenuClick.subscribe(function (e, args) {
+            this.leftMenuManager = new Tuml.LeftMenuManager();
+            this.leftMenuManager.onMenuClick.subscribe(function (e, args) {
                 //Do something like refresh the page
                 self.refresh(args.uri);
             });
-            leftMenuManager.onQueryClick.subscribe(function (e, args) {
+            this.leftMenuManager.onQueryClick.subscribe(function (e, args) {
                 mainViewManager.addQueryTab(false, new Tuml.Query(args.id, args.name, args.name, args.queryString, args.queryEnum, null, args.queryType));
             });
 
-            leftMenuManager.onDiagramClick.subscribe(function (e, treeNode) {
+            this.leftMenuManager.onDiagramClick.subscribe(function (e, treeNode) {
                 mainViewManager.addDiagramTab(treeNode);
             });
 
             currentFocus = Tuml.FocusEnum.LEFT_MENU;
 
             //Create main view manager
-            mainViewManager = new Tuml.TumlMainViewManager(this, leftMenuManager);
+            mainViewManager = new Tuml.TumlMainViewManager(this, this.leftMenuManager);
 
             window.onpopstate = function (event) {
                 if (event.state !== null && document.location.hash === "") {
