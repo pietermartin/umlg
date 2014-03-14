@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<uml:Model xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xmi:id="_qb8akM37EdqwVrslYOdUDA" name="testoclmodel">
+<uml:Model xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xmi:id="_qb8akM37EdqwVrslYOdUDA" name="testoclmodel">
   <elementImport xmi:type="uml:ElementImport" xmi:id="_vH2KoL7zEeG5Bt_b3EGOQQ">
     <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
   </elementImport>
@@ -348,6 +348,51 @@
           <ownedEnd xmi:type="uml:Property" xmi:id="_6jBb1KbrEeOPt7R4er8hcg" name="one" type="_mgx1gKbrEeOPt7R4er8hcg" association="_6jBb06brEeOPt7R4er8hcg">
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_6jBb1abrEeOPt7R4er8hcg" value="1"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_6jBb1qbrEeOPt7R4er8hcg" value="1"/>
+          </ownedEnd>
+        </packagedElement>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Package" xmi:id="_zXk2sKuqEeOPt7R4er8hcg" name="associationclass">
+        <packagedElement xmi:type="uml:Class" xmi:id="_3hUTQKuqEeOPt7R4er8hcg" name="Person">
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_NsWyEKurEeOPt7R4er8hcg" name="name" visibility="public">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_OxtQkKurEeOPt7R4er8hcg" value="1"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Oxt3oKurEeOPt7R4er8hcg" value="1"/>
+            <defaultValue xmi:type="uml:LiteralString" xmi:id="_OxuesKurEeOPt7R4er8hcg">
+              <value xsi:nil="true"/>
+            </defaultValue>
+          </ownedAttribute>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Class" xmi:id="_5J1wQKuqEeOPt7R4er8hcg" name="Company">
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_6--F4KuqEeOPt7R4er8hcg" name="person" type="_3hUTQKuqEeOPt7R4er8hcg" association="_6-_UAKuqEeOPt7R4er8hcg">
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_6--s8KuqEeOPt7R4er8hcg"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_6--s8auqEeOPt7R4er8hcg" value="*"/>
+          </ownedAttribute>
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_K2TyAKurEeOPt7R4er8hcg" name="name" visibility="public">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_MWl5AKurEeOPt7R4er8hcg" value="1"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_MWl5AaurEeOPt7R4er8hcg" value="1"/>
+            <defaultValue xmi:type="uml:LiteralString" xmi:id="_MWmgEKurEeOPt7R4er8hcg">
+              <value xsi:nil="true"/>
+            </defaultValue>
+          </ownedAttribute>
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_g__UAKutEeOPt7R4er8hcg" name="jobs" visibility="public" type="_6-_UAKuqEeOPt7R4er8hcg" isDerived="true">
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_iLjvQKutEeOPt7R4er8hcg"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_iLkWUKutEeOPt7R4er8hcg" value="*"/>
+            <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_8juV0KutEeOPt7R4er8hcg" name="oclForJob">
+              <language>OCL</language>
+              <body>self.job</body>
+            </defaultValue>
+          </ownedAttribute>
+        </packagedElement>
+        <packagedElement xmi:type="uml:AssociationClass" xmi:id="_6-_UAKuqEeOPt7R4er8hcg" name="Job" memberEnd="_6-_UAauqEeOPt7R4er8hcg _6--F4KuqEeOPt7R4er8hcg" navigableOwnedEnd="_6-_UAauqEeOPt7R4er8hcg">
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_IDUtAKurEeOPt7R4er8hcg" name="rate" visibility="public">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_JnaV8KurEeOPt7R4er8hcg" value="1"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_JnaV8aurEeOPt7R4er8hcg" value="1"/>
+          </ownedAttribute>
+          <ownedEnd xmi:type="uml:Property" xmi:id="_6-_UAauqEeOPt7R4er8hcg" name="company" type="_5J1wQKuqEeOPt7R4er8hcg" association="_6-_UAKuqEeOPt7R4er8hcg">
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_6-_UAquqEeOPt7R4er8hcg"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_6-_UA6uqEeOPt7R4er8hcg" value="*"/>
           </ownedEnd>
         </packagedElement>
       </packagedElement>

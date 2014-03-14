@@ -228,6 +228,12 @@
                 } else {
                     a.append(' ' + value.name);
                 }
+                if (value.derived) {
+                    a.append(' {derived}');
+                }
+                if (value.qualified !== undefined && value.qualified) {
+                    a.append(' [qualified]');
+                }
             }
             //This is for enter keystroke on the menu
 //            ulMenu.menu({
@@ -620,8 +626,6 @@
                     var menuIconClass = 'ui-icon';
                     if (metaProperty.composite) {
                         menuIconClass = menuIconClass + ' ui-icon-umlcomposition';
-                    } else if (metaProperty.derived) {
-                        menuIconClass = menuIconClass + ' ui-icon-derived';
                     } else if (metaProperty.associationClassOne && !metaProperty.memberEndOfAssociationClass) {
                         menuIconClass = menuIconClass + ' ui-icon-umlassociationclass';
                     } else {
@@ -636,6 +640,8 @@
                         menuMetaProperty['multiplicityDisplay'] = '[' + metaProperty.lower + '..' + metaProperty.upper + ']';
                     }
                     menuMetaProperty['property'] = metaProperty;
+                    menuMetaProperty['derived'] = metaProperty.derived;
+                    menuMetaProperty['qualified'] = metaProperty.qualified;
                     menuArray.push(menuMetaProperty);
                 }
             }

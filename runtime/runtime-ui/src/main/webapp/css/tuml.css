@@ -771,11 +771,19 @@ input.slick-grid-umlg-editor-text {
 }
 
 .ui-icon-derived {
-    background-image: url(../javascript/images/UMLDerived.svg);
+    background-image: url(../javascript/images/uml2/Derived.svg);
 }
 
 .ui-icon-umlassociationclass {
     background-image: url(../javascript/images/uml2/AssociationClass.gif);
+}
+
+.ui-icon-umlqualifiervalue {
+    background-image: url(../javascript/images/uml2/QualifierValue.gif);
+}
+
+.ui-icon-transparent {
+    background-image: url(../javascript/images/empty.gif);
 }
 
 /* Menu styles */

@@ -1291,8 +1291,6 @@
                 var menuIconClass = 'ui-icon';
                 if (property.composite) {
                     menuIconClass = menuIconClass + ' ui-icon-umlcomposition';
-                } else if (property.derived) {
-                    menuIconClass = menuIconClass + ' ui-icon-derived';
                 } else if (property.associationClassOne && !property.memberEndOfAssociationClass) {
                     menuIconClass = menuIconClass + ' ui-icon-umlassociationclass';
                 } else {
@@ -1309,6 +1307,12 @@
                     e.stopImmediatePropagation();
                 });
                 a.append(' ' + text);
+                if (property.derived) {
+                    a.append(' {derived}');
+                }
+                if (property.qualified !== undefined && property.qualified) {
+                    a.append(' [qualified]');
+                }
             }
         }
 

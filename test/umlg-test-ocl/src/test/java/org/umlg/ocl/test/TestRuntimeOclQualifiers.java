@@ -81,7 +81,8 @@ public class TestRuntimeOclQualifiers extends BaseLocalDbTest {
         Assert.assertNotNull(new Bank(bank.getVertex()).getCustomerForNameQualifierAccountNumberQualifier("c1", 1));
         Assert.assertNotNull(new Bank(bank.getVertex()).getCustomerJohn001());
 
-        Object result = UmlgOclExecutor.executeOclQuery(bank, "self.customer->asSet()");
+//        Object result = UmlgOclExecutor.executeOclQuery(bank, "self.customer->asSet()");
+        Object result = UmlgOclExecutor.executeOclQuery(bank, "self.customer");
         Assert.assertNotNull(result);
         Assert.assertTrue(result instanceof Collection);
     }

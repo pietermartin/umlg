@@ -142,6 +142,14 @@ public class UmlgOcl2Parser implements ModelLoadedEvent {
 
     }
 
+    public OCLExpression<Classifier> parseOcl(String oclText, boolean validate) {
+        if (validate) {
+            return parseConstraint(oclText);
+        } else {
+            return parseConstraintUnvalidated(oclText);
+        }
+    }
+
     public OCLExpression<Classifier> parseOcl(String oclText) {
         return parseConstraint(oclText);
     }
