@@ -63,8 +63,8 @@
             if (isUmlgLib && this.contextVertexId !== undefined && this.contextVertexId !== null) {
                 this.createInstanceQueryMenu(-1);
                 this.createClassQueryMenu(-1);
+                this.createRootQueryMenu(-1);
             }
-            this.createRootQueryMenu(-1);
             var windowHeight = calculateBodyHeight(this) + 45;
             leftMenuPaneBody.height(windowHeight);
         }
@@ -627,6 +627,8 @@
                         menuIconClass = menuIconClass + ' ui-icon-umlcomposition';
                     } else if (metaProperty.derived) {
                         menuIconClass = menuIconClass + ' ui-icon-derived';
+                    } else if (metaProperty.associationClassOne && !metaProperty.memberEndOfAssociationClass) {
+                        menuIconClass = menuIconClass + ' ui-icon-umlassociationclass';
                     } else {
                         menuIconClass = menuIconClass + ' ui-icon-umlassociation';
                     }

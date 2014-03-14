@@ -765,6 +765,10 @@ input.slick-grid-umlg-editor-text {
     background-image: url(../javascript/images/UMLDerived.svg);
 }
 
+.ui-icon-umlassociationclass {
+    background-image: url(../javascript/images/UMLAssociationClass.gif);
+}
+
 /* Menu styles */
 #jsddm {
     /* umlg add start */
