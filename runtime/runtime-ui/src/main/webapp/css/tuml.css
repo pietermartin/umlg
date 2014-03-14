@@ -237,13 +237,13 @@ input.slick-grid-umlg-editor-text {
     position: absolute;
 }
 
-.contextMenu.ui-icon.ui-icon-umlassociation {
-    background-image: url(../javascript/images/UMLAssociation.png);
-}
+/*.contextMenu.ui-icon.ui-icon-umlassociation {*/
+    /*background-image: url(../javascript/images/uml2/Association.gif);*/
+/*}*/
 
-.contextMenu.ui-icon.ui-icon-umlcomposition {
-    background-image: url(../javascript/images/UMLComposition.png);
-}
+/*.contextMenu.ui-icon.ui-icon-umlcomposition {*/
+    /*background-image: url(../javascript/images/uml2/Association_composite.gif);*/
+/*}*/
 
 #switcher {
     float: right;
@@ -688,7 +688,8 @@ input.slick-grid-umlg-editor-text {
 
 .umlg-delete-img {
     display: block;
-    margin: auto
+    margin: auto;
+    cursor:pointer;
 }
 
 /*.tumlSlickGrid {*/
@@ -753,12 +754,20 @@ input.slick-grid-umlg-editor-text {
     background-color: transparent; /* show default selected row background */
 }
 
+.ui-icon-umlpseudostate-terminate {
+    background-image: url(../javascript/images/uml2/Pseudostate_terminate.gif);
+}
+
+.ui-icon-umlactivity-final-node {
+    background-image: url(../javascript/images/uml2/ActivityFinalNode.gif);
+}
+
 .ui-icon-umlassociation {
-    background-image: url(../javascript/images/UMLAssociation.png);
+    background-image: url(../javascript/images/uml2/Association.gif);
 }
 
 .ui-icon-umlcomposition {
-    background-image: url(../javascript/images/UMLComposition.png);
+    background-image: url(../javascript/images/uml2/Association_composite.gif);
 }
 
 .ui-icon-derived {
@@ -766,7 +775,7 @@ input.slick-grid-umlg-editor-text {
 }
 
 .ui-icon-umlassociationclass {
-    background-image: url(../javascript/images/UMLAssociationClass.gif);
+    background-image: url(../javascript/images/uml2/AssociationClass.gif);
 }
 
 /* Menu styles */

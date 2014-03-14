@@ -577,7 +577,8 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         if (!isMemberOfAssociationClass()) {
             throw new IllegalStateException("Can not call getAssociationClassFakePropertyName on a property that does not belong to an AssociationClass!");
         }
-        return fieldname() + "_" + new PropertyWrapper(getOtherEnd()).fieldname() + "_" + UmlgClassOperations.getPathName(getAssociationClass()).getLast();
+//        return fieldname() + "_" + new PropertyWrapper(getOtherEnd()).fieldname() + "_" + UmlgClassOperations.getPathName(getAssociationClass()).getLast();
+        return UmlgClassOperations.getPathName(getAssociationClass()).getLast();
     }
 
     public OJPathName javaTumlMemoryTypePath() {

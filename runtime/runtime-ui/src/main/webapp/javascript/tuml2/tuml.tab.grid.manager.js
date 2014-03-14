@@ -234,7 +234,7 @@
         var li = $('<li />').appendTo(contextMenuUl);
         li.data("contextData", {name: 'delete'});
         var a = $('<a />', {title: 'delete', tabindex: -1, href: '#'}).appendTo(li);
-        $('<i class="umlg-icon glyphicon glyphicon-remove" />').appendTo(a);
+        $('<i class="umlg-icon ui-icon ui-icon-umlpseudostate-terminate" />').appendTo(a);
         a.append(' delete');
         a.on('click', function (e) {
             var link = $(e.target);
@@ -1251,7 +1251,7 @@
         var li = $('<li />').appendTo(contextMenuUl);
         var a = $('<a />', {title: 'self', tabindex: -1, href: '#'}).appendTo(li);
         a.data("contextData", {name: 'self', uri: this.localMetaForData.uri});
-        $('<i class="umlg-icon fa fa-circle" />').appendTo(a);
+        $('<i class="umlg-icon ui-icon ui-icon-umlactivity-final-node" />').appendTo(a);
         a.append(' self');
         a.on('click', function (e) {
             var link = $(e.target);
@@ -1262,8 +1262,17 @@
             e.stopImmediatePropagation();
         });
 
-        for (var i = 0; i < this.localMetaForData.properties.length; i++) {
-            var property = this.localMetaForData.properties[i];
+        //First sort the properties
+        var sortedProperties = this.localMetaForData.properties;
+        function compare(a, b) {
+            if (a.name < b.name) return -1;
+            if (a.name > b.name) return 1;
+            return 0;
+        }
+        sortedProperties.sort(compare);
+
+        for (var i = 0; i < sortedProperties.length; i++) {
+            var property = sortedProperties[i];
             if (property.inverseComposite || !((property.dataTypeEnum !== undefined && property.dataTypeEnum !== null) || property.onePrimitive || property.manyPrimitive || property.name == 'id' || property.name == 'uri')) {
 
                 var text = property.name;
@@ -1275,12 +1284,17 @@
 
                 var adjustedUri = addUiToUrl(property.tumlUri);
                 var li = $('<li />').appendTo(contextMenuUl);
+
                 var a = $('<a />', {title: property.name, tabindex: -1, href: adjustedUri}).appendTo(li);
 
                 //add the icon
                 var menuIconClass = 'ui-icon';
                 if (property.composite) {
                     menuIconClass = menuIconClass + ' ui-icon-umlcomposition';
+                } else if (property.derived) {
+                    menuIconClass = menuIconClass + ' ui-icon-derived';
+                } else if (property.associationClassOne && !property.memberEndOfAssociationClass) {
+                    menuIconClass = menuIconClass + ' ui-icon-umlassociationclass';
                 } else {
                     menuIconClass = menuIconClass + ' ui-icon-umlassociation';
                 }

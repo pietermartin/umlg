@@ -598,11 +598,6 @@
          */
         this.createLeftMenuDataArray = function (contextMetaDataFrom, contextMetaDataTo, propertyNavigatingTo) {
             var menuArray = [];
-            if (contextMetaDataFrom.name !== tumlModelName) {
-                //add a menu item to the context object
-                menuArray.push({tumlUri: contextMetaDataFrom.uri, name: contextMetaDataFrom.name, menuIconClass: 'fa fa-circle', aCssClass: ''});
-            }
-
             for (var i = 0; i < contextMetaDataFrom.properties.length; i++) {
                 var metaProperty = contextMetaDataFrom.properties[i];
                 if (metaProperty.inverseComposite || !(
@@ -643,7 +638,6 @@
                     menuMetaProperty['property'] = metaProperty;
                     menuArray.push(menuMetaProperty);
                 }
-                menuArray.sort();
             }
 
             function compare(a, b) {
@@ -653,6 +647,12 @@
             }
 
             menuArray.sort(compare);
+
+            if (contextMetaDataFrom.name !== tumlModelName) {
+                //add a menu item to the context object
+                menuArray.splice(0, 0, {tumlUri: contextMetaDataFrom.uri, name: contextMetaDataFrom.name, menuIconClass: 'ui-icon ui-icon-umlactivity-final-node', aCssClass: ''});
+            }
+
             return menuArray;
         }
 
