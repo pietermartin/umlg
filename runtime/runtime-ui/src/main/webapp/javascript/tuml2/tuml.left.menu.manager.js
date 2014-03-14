@@ -625,6 +625,8 @@
                     var menuIconClass = 'ui-icon';
                     if (metaProperty.composite) {
                         menuIconClass = menuIconClass + ' ui-icon-umlcomposition';
+                    } else if (metaProperty.derived) {
+                        menuIconClass = menuIconClass + ' ui-icon-derived';
                     } else {
                         menuIconClass = menuIconClass + ' ui-icon-umlassociation';
                     }

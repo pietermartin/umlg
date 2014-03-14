@@ -44,13 +44,6 @@ public class LookupForOneResourceBuilder extends BaseServerResourceBuilder imple
     public void visitAfter(Property p) {
     }
 
-    private void addCompositeParentIdField(PropertyWrapper pWrap, OJAnnotatedClass annotatedClass) {
-        OJField compositeParentFieldId = new OJField(UmlgClassOperations.getPathName(pWrap.getOtherEnd().getType()).getLast().toLowerCase() + "Id",
-                new OJPathName("Object"));
-        compositeParentFieldId.setVisibility(OJVisibilityKind.PRIVATE);
-        annotatedClass.addToFields(compositeParentFieldId);
-    }
-
     private void addGetObjectRepresentation(PropertyWrapper pWrap/*, OJAnnotatedInterface annotatedInf*/, OJAnnotatedClass annotatedClass) {
 
 //        OJAnnotatedOperation getInf = new OJAnnotatedOperation("get", UmlgRestletGenerationUtil.Representation);
