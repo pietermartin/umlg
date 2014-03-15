@@ -234,10 +234,30 @@ public class UmlgJavaVisitor extends
         Classifier ref = ac.getReferredAssociationClass();
         String name = initialLower(getName(ref));
 
-        StringBuilder result = new StringBuilder(maybeAtPre(ac, sourceResult + "." + name));//$NON-NLS-1$
+        //This is a bit silly but its the same way the PropertyVisitors generates the name
+        PropertyWrapper navigationSource = new PropertyWrapper(ac.getNavigationSource());
+        String associationClassName = navigationSource.getAssociationClassPathName().getLast();
 
+        if (!associationClassName.equals(UmlgClassOperations.className(ref))) {
+             throw new IllegalStateException("Association class member end \"getAssociationClassPathName()\" must be the same as the reffered association class!");
+        }
+
+        //TODO @pre not implemented
+//        StringBuilder result = new StringBuilder(maybeAtPre(ac, sourceResult + ".get" + name));//$NON-NLS-1$
+        StringBuilder result = new StringBuilder();
+        if (!sourceResult.equals("self")) {
+            result.append(sourceResult);
+        } else {
+            result.append("this");
+        }
+        result.append(".get");
+        result.append(associationClassName);
+        result.append("()");
+
+        //TODO qualifiers on association class has not been implemented yet
         if (!qualifierResults.isEmpty()) {
             result.append('[').append(qualifierResults.get(0)).append(']');
+            throw new IllegalStateException(String.format("Qualifiers on association classes have not yet been implemented!\n This occurs for navigationSource %s and referred AssociationClass %s", new String[]{navigationSource.getQualifiedName(), ref.getQualifiedName()}));
         }
 
         return result.toString();

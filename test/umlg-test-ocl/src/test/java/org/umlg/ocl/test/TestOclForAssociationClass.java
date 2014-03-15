@@ -1,5 +1,6 @@
 package org.umlg.ocl.test;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.associationclass.Company;
 import org.umlg.associationclass.Job;
@@ -24,9 +25,9 @@ public class TestOclForAssociationClass extends BaseLocalDbTest {
         company1.addToPerson(person1, job1);
         db.commit();
 
-
-
-
+        company1.reload();
+        Assert.assertEquals(1, company1.getJobs().size());
+        Assert.assertTrue(company1.getJobs().iterator().next() instanceof Job);
     }
 
 }

@@ -1,6 +1,6 @@
 package org.umlg.ocl.test;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.umlg.ocl.UmlgOclExecutor;
@@ -12,7 +12,6 @@ import org.umlg.runtime.collection.UmlgSequence;
 import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.test.BaseLocalDbTest;
 
-import java.io.File;
 import java.net.URL;
 import java.util.Map;
 import java.util.logging.LogManager;

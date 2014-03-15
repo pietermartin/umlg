@@ -12,13 +12,34 @@ import java.util.logging.Logger;
 
 public enum OclOperationExpEnum implements HandleOperationExp {
 
-    ALL_INSTANCES(new OclAllInstancesExprToJava()), UNION(new OclUnionExprToJava()), IS_EMPTY(new OclIsEmptyExprToJava()), OCL_IS_UNDEFINED(new OclOclIsUndefinedExpToJava()), OCL_IS_INVALID(
-            new OclOclIsInvalidExpToJava()), INCLUDING(new OclIncludingExprToJava()), TO_STRING(new OclToStringExprToJava()), FIRST(new OclFirstExprToJava()), LAST(new OclLastExprToJava()),
+    ALL_INSTANCES(new OclAllInstancesExprToJava()),
+    UNION(new OclUnionExprToJava()),
+    IS_EMPTY(new OclIsEmptyExprToJava()),
+    OCL_IS_UNDEFINED(new OclOclIsUndefinedExpToJava()),
+    OCL_IS_INVALID(new OclOclIsInvalidExpToJava()),
+    INCLUDING(new OclIncludingExprToJava()),
+    TO_STRING(new OclToStringExprToJava()),
+    FIRST(new OclFirstExprToJava()),
+    LAST(new OclLastExprToJava()),
     AT(new OclAtExprToJava()),
-    MINUS(new OclMinusExprToJava()), EQUAL(new OclEqualExprToJava()), SIZE(new OclSizeExprToJava()), NOT_EQUAL(new OclNotEqualExprToJava()), AS_SET(
-            new OclAsSetExprToJava()), AS_SEQUENCE(new OclAsSequenceExprToJava()), AS_ORDERED_SET(new OclAsOrderedSetExprToJava()), AS_BAG(
-            new OclAsBagExprToJava()), FLATTEN(new OclFlattenExprToJava()), CONCAT(new OclConcatExprToJava()), INCLUDES(new OclIncludesExpToJava()), DEFAULT(new OclDefaultToStringExprToJava()),
-            INDEX_OF(new OclIndexOfExprToJava());
+    MINUS(new OclMinusExprToJava()),
+    EQUAL(new OclEqualExprToJava()),
+    GREATER_THAN(new OclGreaterThanExprToJava()),
+    GREATER_THAN_EQUAL(new OclGreaterThanEqualExprToJava()),
+    LESS_THAN(new OclLessThanExprToJava()),
+    LESS_THAN_EQUAL(new OclLessThanEqualExprToJava()),
+    SIZE(new OclSizeExprToJava()),
+    NOT_EQUAL(new OclNotEqualExprToJava()),
+    AS_SET(new OclAsSetExprToJava()),
+    AS_SEQUENCE(new OclAsSequenceExprToJava()),
+    AS_ORDERED_SET(new OclAsOrderedSetExprToJava()),
+    AS_BAG(new OclAsBagExprToJava()),
+    FLATTEN(new OclFlattenExprToJava()),
+    CONCAT(new OclConcatExprToJava()),
+    INCLUDES(new OclIncludesExpToJava()),
+    DEFAULT(new OclDefaultToStringExprToJava()),
+    INDEX_OF(new OclIndexOfExprToJava());
+
     private static Logger logger = Logger.getLogger(OclOperationExpEnum.class.getPackage().getName());
     private HandleOperationExp implementor;
     private OJAnnotatedClass ojClass;
@@ -30,6 +51,14 @@ public enum OclOperationExpEnum implements HandleOperationExp {
     public static OclOperationExpEnum from(String name) {
         if (name.equals(PredefinedType.EQUAL_NAME)) {
             return EQUAL;
+        } else if (name.equals(PredefinedType.GREATER_THAN_NAME)) {
+            return GREATER_THAN;
+        } else if (name.equals(PredefinedType.GREATER_THAN_EQUAL_NAME)) {
+            return GREATER_THAN_EQUAL;
+        } else if (name.equals(PredefinedType.LESS_THAN_NAME)) {
+            return LESS_THAN;
+        } else if (name.equals(PredefinedType.LESS_THAN_EQUAL_NAME)) {
+            return LESS_THAN_EQUAL;
         } else if (name.equals(PredefinedType.ALL_INSTANCES_NAME)) {
             return ALL_INSTANCES;
         } else if (name.equals(PredefinedType.NOT_EQUAL_NAME)) {
