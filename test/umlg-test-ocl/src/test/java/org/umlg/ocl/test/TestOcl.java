@@ -1,7 +1,6 @@
 package org.umlg.ocl.test;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.runtime.domain.ocl.OclIsInvalidException;
 import org.umlg.runtime.test.BaseLocalDbTest;
@@ -149,5 +148,22 @@ public class TestOcl extends BaseLocalDbTest {
 		Assert.assertNotNull(oclTest1.getTestOclExpResultMany());
 		Assert.assertEquals(0, oclTest1.getTestOclExpResultMany().size());
 	}
+
+    @Test()
+    public void testOclGreaterThan() {
+        OclTest1 oclTest1 = new OclTest1(true);
+        oclTest1.setTestNumber(1);
+        Assert.assertFalse(oclTest1.getTestGreaterThanOne());
+        Assert.assertTrue(oclTest1.getTestGreaterThanEqualOne());
+    }
+
+    @Test()
+    public void testOclSmallerThan() {
+        OclTest1 oclTest1 = new OclTest1(true);
+        oclTest1.setTestNumber(1);
+        Assert.assertFalse(oclTest1.getTestSmallerThanOne());
+        Assert.assertTrue(oclTest1.getTestSmallerThanEqualOne());
+    }
+
 
 }

@@ -143,6 +143,47 @@
               <body>if self.oclTestCollection->isEmpty() then Sequence{} else self.oclTestCollection->asSequence() endif</body>
             </defaultValue>
           </ownedAttribute>
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_RE3mkKwaEeOnn8UJImpdOg" name="testNumber" visibility="public">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_UyqG8KwaEeOnn8UJImpdOg"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Uyr8IKwaEeOnn8UJImpdOg" value="1"/>
+          </ownedAttribute>
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_g0lAsKwaEeOnn8UJImpdOg" name="testGreaterThanOne" visibility="public" isDerived="true">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_i5xyoKwaEeOnn8UJImpdOg" value="1"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_i5yZsKwaEeOnn8UJImpdOg" value="1"/>
+            <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_qP3PYKwaEeOnn8UJImpdOg" name="oclTestGreaterThan">
+              <language>OCL</language>
+              <body>self.testNumber > 1</body>
+            </defaultValue>
+          </ownedAttribute>
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_ujK3oKwaEeOnn8UJImpdOg" name="testGreaterThanEqualOne" visibility="public" isDerived="true">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_wzCBcKwaEeOnn8UJImpdOg" value="1"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_wzCogKwaEeOnn8UJImpdOg" value="1"/>
+            <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_2d8V0KwaEeOnn8UJImpdOg" name="OclTestGreaterThanEqual">
+              <language>OCL</language>
+              <body>self.testNumber >= 1</body>
+            </defaultValue>
+          </ownedAttribute>
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_yVCxUKwbEeOnn8UJImpdOg" name="testSmallerThanOne" visibility="public" isDerived="true">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_0GNM8KwbEeOnn8UJImpdOg" value="1"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_0GN0AKwbEeOnn8UJImpdOg" value="1"/>
+            <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_3-6j4KwbEeOnn8UJImpdOg" name="oclTestSmallerThan">
+              <language>OCL</language>
+              <body>self.testNumber &lt; 1</body>
+            </defaultValue>
+          </ownedAttribute>
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_4hjW4KwbEeOnn8UJImpdOg" name="testSmallerThanEqualOne" visibility="public" isDerived="true">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_7SxhUKwbEeOnn8UJImpdOg" value="1"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_7SyvcKwbEeOnn8UJImpdOg" value="1"/>
+            <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_-_r38KwbEeOnn8UJImpdOg" name="oclTestSmallerThanEqual">
+              <language>OCL</language>
+              <body>self.testNumber &lt;= 1</body>
+            </defaultValue>
+          </ownedAttribute>
         </packagedElement>
         <packagedElement xmi:type="uml:Class" xmi:id="_0vhrEMCDEeGzStsPq17FZA" name="OclTestCollection">
           <ownedAttribute xmi:type="uml:Property" xmi:id="_2P21YMCDEeGzStsPq17FZA" name="name" visibility="public">

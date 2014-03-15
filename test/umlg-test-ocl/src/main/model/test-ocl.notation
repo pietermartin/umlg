@@ -181,6 +181,26 @@
         <children xmi:type="notation:DecorationNode" xmi:id="_PX5BEgAPEeKpVr_ntT6cLA" type="3006">
           <element xmi:type="uml:Property" href="test-ocl.uml#_L8lToNQkEeGSP5acdy3Lgg"/>
         </children>
+        <children xmi:type="notation:Shape" xmi:id="_RFtUEKwaEeOnn8UJImpdOg" type="3012" fontName="Sans" fontHeight="10" lineColor="0">
+          <element xmi:type="uml:Property" href="test-ocl.uml#_RE3mkKwaEeOnn8UJImpdOg"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_RFtUEawaEeOnn8UJImpdOg"/>
+        </children>
+        <children xmi:type="notation:Shape" xmi:id="_g0nc8KwaEeOnn8UJImpdOg" type="3012" fontName="Sans" fontHeight="10" lineColor="0">
+          <element xmi:type="uml:Property" href="test-ocl.uml#_g0lAsKwaEeOnn8UJImpdOg"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_g0nc8awaEeOnn8UJImpdOg"/>
+        </children>
+        <children xmi:type="notation:Shape" xmi:id="_ujLesKwaEeOnn8UJImpdOg" type="3012" fontName="Sans" fontHeight="10" lineColor="0">
+          <element xmi:type="uml:Property" href="test-ocl.uml#_ujK3oKwaEeOnn8UJImpdOg"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_ujLesawaEeOnn8UJImpdOg"/>
+        </children>
+        <children xmi:type="notation:Shape" xmi:id="_yVEmgKwbEeOnn8UJImpdOg" type="3012" fontName="Sans" fontHeight="10" lineColor="0">
+          <element xmi:type="uml:Property" href="test-ocl.uml#_yVCxUKwbEeOnn8UJImpdOg"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_yVEmgawbEeOnn8UJImpdOg"/>
+        </children>
+        <children xmi:type="notation:Shape" xmi:id="_4hj98KwbEeOnn8UJImpdOg" type="3012" fontName="Sans" fontHeight="10" lineColor="0">
+          <element xmi:type="uml:Property" href="test-ocl.uml#_4hjW4KwbEeOnn8UJImpdOg"/>
+          <layoutConstraint xmi:type="notation:Location" xmi:id="_4hj98awbEeOnn8UJImpdOg"/>
+        </children>
       </children>
       <children xmi:type="notation:BasicCompartment" xmi:id="_PXn7VAAPEeKpVr_ntT6cLA" type="7019"/>
       <children xmi:type="notation:DecorationNode" xmi:id="_PYF1aAAPEeKpVr_ntT6cLA" type="5029"/>

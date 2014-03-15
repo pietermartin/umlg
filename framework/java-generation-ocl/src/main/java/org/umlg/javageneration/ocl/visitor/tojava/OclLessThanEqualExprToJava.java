@@ -21,7 +21,7 @@ public class OclLessThanEqualExprToJava extends BaseHandleOperationExp {
         if (datatype instanceof PrimitiveType) {
             PrimitiveType primitiveType = (PrimitiveType) datatype;
             if (primitiveType.getName().equals("Integer") || primitiveType.getName().equals("Real")) {
-                result.append(" =< ");
+                result.append(" <= ");
                 result.append(argumentResults.get(0));
             } else {
                 throw new IllegalStateException("Less than equal operation can only be called on a PrimitiveType Integer and Real " + datatype.getName());
