@@ -69,7 +69,7 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
 
         if (propertyWrapper.isMemberOfAssociationClass()) {
 
-            getter = new OJAnnotatedOperation("get" + propertyWrapper.getAssociationClassPathName().getLast(), propertyWrapper.getAssociationClassPathName());
+            getter = new OJAnnotatedOperation(propertyWrapper.associationClassGetter(), propertyWrapper.getAssociationClassPathName());
             tmpField = new OJAnnotatedField("tmp", propertyWrapper.getAssociationClassJavaTumlTypePath());
             getter.getBody().addToLocals(tmpField);
             tmpField.setInitExp("this." + propertyWrapper.getAssociationClassFakePropertyName());

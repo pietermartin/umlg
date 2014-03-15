@@ -53,7 +53,7 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
         owner.addToOperations(getter);
 
         if (propertyWrapper.isMemberOfAssociationClass()) {
-            getter = new OJAnnotatedOperation("get" + propertyWrapper.getAssociationClassPathName().getLast(), propertyWrapper.getAssociationClassJavaTumlTypePath());
+            getter = new OJAnnotatedOperation(propertyWrapper.associationClassGetter(), propertyWrapper.getAssociationClassJavaTumlTypePath());
             getter.getBody().addToStatements("return this." + propertyWrapper.getAssociationClassFakePropertyName());
             owner.addToOperations(getter);
         }

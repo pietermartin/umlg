@@ -436,7 +436,7 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
                 if (pWrap.isOne() || asAssociationClass) {
 
                     if (asAssociationClass) {
-                        OJIfStatement ifOneInstanceOf = new OJIfStatement("parentResource." + pWrap.getter() + "() != null &&parentResource." + pWrap.getter() + "().getClass() == "
+                        OJIfStatement ifOneInstanceOf = new OJIfStatement("parentResource." + pWrap.getter() + "() != null && parentResource." + pWrap.getter() + "().getClass() == "
                                 + UmlgClassOperations.getPathName(concreteClassifierTo).getLast() + ".class");
                         ifOneInstanceOf.addToThenPart("json.append(" + UmlgGenerationUtil.ToJsonUtil.getLast() + ".toJsonWithoutCompositeParent(parentResource." + pWrap.getter() + "()))");
                         ifOneInstanceOf.addToElsePart("json.append(\"null\")");
@@ -449,7 +449,7 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
                         block.addToStatements(ifOneInstanceOf);
                     }
                 } else {
-                    block.addToStatements("json.append(" + UmlgGenerationUtil.ToJsonUtil.getLast() + ".toJsonWithoutCompositeParent(parentResource.get" + pWrap.getAssociationClassPathName().getLast() + "().select(new "
+                    block.addToStatements("json.append(" + UmlgGenerationUtil.ToJsonUtil.getLast() + ".toJsonWithoutCompositeParent(parentResource." + pWrap.associationClassGetter() + "().select(new "
                             + UmlgGenerationUtil.BooleanExpressionEvaluator.getCopy().addToGenerics(pWrap.getAssociationClassPathName()).getLast()
                             + "() {\n			@Override\n			public Boolean evaluate(" + pWrap.getAssociationClassPathName().getLast()
                             + " e) {\n				return e.getClass() == " + UmlgClassOperations.getPathName(concreteClassifierTo).getLast() + ".class;\n			}\n		})))");

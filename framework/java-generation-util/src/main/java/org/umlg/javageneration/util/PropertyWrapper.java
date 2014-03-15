@@ -26,6 +26,7 @@ import org.umlg.javageneration.validation.Validation;
 public class PropertyWrapper extends MultiplicityWrapper implements Property {
 
     private Property property;
+    private boolean recursive;
 
     public PropertyWrapper(Property property) {
         super(property);
@@ -347,13 +348,6 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         return this.property.getName();
     }
 
-    public String associationClassGetter() {
-        if (!isMemberOfAssociationClass()) {
-            throw new IllegalStateException("Can not call associationClassGetter on a property that is not a member end of an association class. Property = " + getQualifiedName());
-        }
-        return "get" + getAssociationClassPathName().getLast();
-    }
-
     public String getter() {
         if (!isDerived() && !isPrimitive() && !isDataType() && !isNavigable()) {
             return UmlgPropertyOperations.internalGetter(this.property);
@@ -577,8 +571,19 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         if (!isMemberOfAssociationClass()) {
             throw new IllegalStateException("Can not call getAssociationClassFakePropertyName on a property that does not belong to an AssociationClass!");
         }
-        return fieldname() + "_" + new PropertyWrapper(getOtherEnd()).fieldname() + "_" + UmlgClassOperations.getPathName(getAssociationClass()).getLast();
-//        return UmlgClassOperations.getPathName(getAssociationClass()).getLast();
+//        return fieldname() + "_" + new PropertyWrapper(getOtherEnd()).fieldname() + "_" + UmlgClassOperations.getPathName(getAssociationClass()).getLast();
+        if (isRecursive()) {
+            return UmlgClassOperations.getPathName(getAssociationClass()).getLast() + "_" + fieldname();
+        } else {
+            return UmlgClassOperations.getPathName(getAssociationClass()).getLast();
+        }
+    }
+
+    public String associationClassGetter() {
+        if (!isMemberOfAssociationClass()) {
+            throw new IllegalStateException("Can not call associationClassGetter on a property that is not a member end of an association class. Property = " + getQualifiedName());
+        }
+        return "get" + getAssociationClassFakePropertyName();
     }
 
     public OJPathName javaTumlMemoryTypePath() {
@@ -1678,5 +1683,13 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
              throw new IllegalStateException("PropertyWrapper.updateIndexForQualifierName() can only be called for a qualifier!");
         }
         return "updateIndexFor" + StringUtils.capitalize(this.getName());
+    }
+
+    /**
+     * that is an association of a class with itself
+     * @return
+     */
+    public boolean isRecursive() {
+        return getOtherEnd() != null && getOtherEnd().getType() == getType();
     }
 }
