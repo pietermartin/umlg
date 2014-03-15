@@ -44,6 +44,14 @@
           <ownedAttribute xmi:type="uml:Property" xmi:id="_g3OboN2_EeK7O_6WBh_v7w" name="name">
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
           </ownedAttribute>
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_Twaj0Kw7EeOnn8UJImpdOg" name="knownBy" type="_n2OqkN2-EeK7O_6WBh_v7w" association="_TwbK4qw7EeOnn8UJImpdOg">
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_TwbK4Kw7EeOnn8UJImpdOg"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_TwbK4aw7EeOnn8UJImpdOg" value="*"/>
+          </ownedAttribute>
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_TwbK46w7EeOnn8UJImpdOg" name="knows" type="_n2OqkN2-EeK7O_6WBh_v7w" association="_TwbK4qw7EeOnn8UJImpdOg">
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_TwbK5Kw7EeOnn8UJImpdOg"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_TwbK5aw7EeOnn8UJImpdOg" value="*"/>
+          </ownedAttribute>
         </packagedElement>
         <packagedElement xmi:type="uml:AssociationClass" xmi:id="_pLU1QN2-EeK7O_6WBh_v7w" name="Job" memberEnd="_pLU1Qd2-EeK7O_6WBh_v7w _pLTnIN2-EeK7O_6WBh_v7w" navigableOwnedEnd="_pLU1Qd2-EeK7O_6WBh_v7w _pLTnIN2-EeK7O_6WBh_v7w">
           <ownedAttribute xmi:type="uml:Property" xmi:id="_k-BR4N2_EeK7O_6WBh_v7w" name="salary" visibility="public">
@@ -197,6 +205,14 @@
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_rRsLcAaoEeO9bYUowtpiHA"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_rRxD8AaoEeO9bYUowtpiHA" value="*"/>
           </ownedEnd>
+        </packagedElement>
+        <packagedElement xmi:type="uml:AssociationClass" xmi:id="_TwbK4qw7EeOnn8UJImpdOg" name="Friendship" memberEnd="_TwbK46w7EeOnn8UJImpdOg _Twaj0Kw7EeOnn8UJImpdOg">
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_WJ_DQKw7EeOnn8UJImpdOg" name="weight" visibility="public">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_aLZDMKw7EeOnn8UJImpdOg" value="1"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_aLa4YKw7EeOnn8UJImpdOg" value="1"/>
+            <defaultValue xmi:type="uml:LiteralInteger" xmi:id="_4PK_4Kw7EeOnn8UJImpdOg" name="weightDefault" value="1"/>
+          </ownedAttribute>
         </packagedElement>
       </packagedElement>
     </packagedElement>

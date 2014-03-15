@@ -22,6 +22,9 @@
     <availablePage>
       <emfPageIdentifier href="test-ocl.notation#_1i7T8KuqEeOPt7R4er8hcg"/>
     </availablePage>
+    <availablePage>
+      <emfPageIdentifier href="test-ocl.notation#_1dnloKw4EeOnn8UJImpdOg"/>
+    </availablePage>
   </pageList>
   <sashModel xmi:id="_PYAV0gAPEeKpVr_ntT6cLA" currentSelection="_PYAV0AAPEeKpVr_ntT6cLA">
     <windows xmi:id="_PYAV0QAPEeKpVr_ntT6cLA">
@@ -43,6 +46,9 @@
         </children>
         <children>
           <emfPageIdentifier href="test-ocl.notation#_1i7T8KuqEeOPt7R4er8hcg"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="test-ocl.notation#_1dnloKw4EeOnn8UJImpdOg"/>
         </children>
       </children>
     </windows>

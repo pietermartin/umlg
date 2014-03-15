@@ -40,7 +40,7 @@ public abstract class BaseOclExecutionServerResourceImpl extends ServerResource 
                 for (Object o : poCollection) {
                     count++;
                     if (o instanceof PersistentObject) {
-                        PersistentObject po = (PersistentObject)o;
+                        PersistentObject po = (PersistentObject) o;
                         String objectAsJson = po.toJsonWithoutCompositeParent();
                         String objectAsJsonWithRow = "{\"row\": " + count + ", " + objectAsJson.substring(1);
                         json.append(objectAsJsonWithRow);
@@ -77,7 +77,7 @@ public abstract class BaseOclExecutionServerResourceImpl extends ServerResource 
                 PersistentObject po = (PersistentObject) result;
                 return getRepresentation(po);
             } else {
-                return new JsonRepresentation("{\"result\": " + "\"" + result.toString() + "\"}");
+                return new JsonRepresentation("{\"result\": " + "\"" + (result == null ? "No result" : result.toString()) + "\"}");
             }
         } else if (type.equalsIgnoreCase("gremlin")) {
             String result = GremlinExecutor.executeGremlinViaGroovy(contextId, query);

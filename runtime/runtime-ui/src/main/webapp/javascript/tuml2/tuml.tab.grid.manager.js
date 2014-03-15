@@ -1275,7 +1275,15 @@
             var property = sortedProperties[i];
             if (property.inverseComposite || !((property.dataTypeEnum !== undefined && property.dataTypeEnum !== null) || property.onePrimitive || property.manyPrimitive || property.name == 'id' || property.name == 'uri')) {
 
-                var text = property.name;
+                var text = null;
+                if (property.associationClassOne && !property.memberEndOfAssociationClass) {
+                    //This is to make the fake association class property look like specified in the ocl spec
+                    var propertyNameParts = property.name.split('_');
+                    text = propertyNameParts[0] + '[' + propertyNameParts[1] + ']';
+                } else {
+                    text = property.name;
+                }
+
                 if (property.upper == -1) {
                     text += ' [' + property.lower + '..*]';
                 } else {

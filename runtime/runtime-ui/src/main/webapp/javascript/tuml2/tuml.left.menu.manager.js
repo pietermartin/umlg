@@ -632,7 +632,13 @@
                         menuIconClass = menuIconClass + ' ui-icon-umlassociation';
                     }
                     menuMetaProperty['tumlUri'] = metaProperty.tumlUri;
-                    menuMetaProperty['name'] = metaProperty.name;
+                    if (metaProperty.associationClassOne && !metaProperty.memberEndOfAssociationClass) {
+                        //This is to make the fake association class property look like specified in the ocl spec
+                        var propertyNameParts = metaProperty.name.split('_');
+                        menuMetaProperty['name'] = propertyNameParts[0] + '[' + propertyNameParts[1] + ']';
+                    } else {
+                        menuMetaProperty['name'] = metaProperty.name;
+                    }
                     menuMetaProperty['menuIconClass'] = menuIconClass;
                     if (metaProperty.upper == -1) {
                         menuMetaProperty['multiplicityDisplay'] = '[' + metaProperty.lower + '..*]';

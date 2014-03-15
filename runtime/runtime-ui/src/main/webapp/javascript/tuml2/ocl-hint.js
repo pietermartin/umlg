@@ -17,10 +17,14 @@
             dataType: "json",
             contentType: "application/json",
             success: function (result) {
+                var end = 0;
+                if (token.string === '.' || token.string === '->') {
+                    end = token.string.length;
+                }
                 callback(
                     {
                         list: result,
-                        from: CodeMirror.Pos(cur.line, token.start + 1),
+                        from: CodeMirror.Pos(cur.line, token.start + end),
                         to: CodeMirror.Pos(cur.line, token.end)
                     }
                 );

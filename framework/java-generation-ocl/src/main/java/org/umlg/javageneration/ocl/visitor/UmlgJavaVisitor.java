@@ -214,7 +214,7 @@ public class UmlgJavaVisitor extends
             getter += "()";
         }
         StringBuilder result = new StringBuilder();
-        if (!sourceResult.equals("self")) {
+        if (sourceResult != null && !sourceResult.equals("self")) {
             result.append(sourceResult);
             result.append(".");
         }
@@ -232,7 +232,7 @@ public class UmlgJavaVisitor extends
     protected String handleAssociationClassCallExp(AssociationClassCallExp<Classifier, Property> ac, String sourceResult, List<String> qualifierResults) {
 
         Classifier ref = ac.getReferredAssociationClass();
-        String name = initialLower(getName(ref));
+//        String name = initialLower(getName(ref));
 
         //This is a bit silly but its the same way the PropertyVisitors generates the name
         PropertyWrapper navigationSource = new PropertyWrapper(ac.getNavigationSource());
@@ -250,15 +250,17 @@ public class UmlgJavaVisitor extends
         } else {
             result.append("this");
         }
-        result.append(".get");
-        result.append(associationClassName);
-        result.append("()");
+        result.append(".");
 
-        //TODO qualifiers on association class has not been implemented yet
         if (!qualifierResults.isEmpty()) {
-            result.append('[').append(qualifierResults.get(0)).append(']');
-            throw new IllegalStateException(String.format("Qualifiers on association classes have not yet been implemented!\n This occurs for navigationSource %s and referred AssociationClass %s", new String[]{navigationSource.getQualifiedName(), ref.getQualifiedName()}));
+            //qualifiers on association class navigation is necessary on recursive associations to indicate the direction
+            //only one qualifier is supported.
+            if (qualifierResults.size() > 1) {
+                throw new IllegalStateException(String.format("There can only be one qualifier (role) on a association class navigation! Association Class %s", new String[]{ref.getQualifiedName()}));
+            }
         }
+        result.append(navigationSource.associationClassGetter());
+        result.append("()");
 
         return result.toString();
     }

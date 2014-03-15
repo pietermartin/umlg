@@ -402,6 +402,30 @@
               <value xsi:nil="true"/>
             </defaultValue>
           </ownedAttribute>
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_VcxC0Kw5EeOnn8UJImpdOg" name="knownBy" type="_3hUTQKuqEeOPt7R4er8hcg" isOrdered="true" association="_VcyQ8Kw5EeOnn8UJImpdOg">
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Vcxp4Kw5EeOnn8UJImpdOg"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Vcxp4aw5EeOnn8UJImpdOg" value="*"/>
+          </ownedAttribute>
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_hScOUKxPEeOnn8UJImpdOg" name="knowsFriendship" visibility="public" type="_VcyQ8Kw5EeOnn8UJImpdOg" isOrdered="true" isDerived="true">
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_nOBb8KxPEeOnn8UJImpdOg"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_nOCDAKxPEeOnn8UJImpdOg" value="*"/>
+            <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_sNXq0KxPEeOnn8UJImpdOg" name="oclKnowsFriendship">
+              <language>OCL</language>
+              <body>self.friendship[knows]</body>
+            </defaultValue>
+          </ownedAttribute>
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_5YOlwKxTEeOnn8UJImpdOg" name="knownByFriendship" visibility="public" type="_VcyQ8Kw5EeOnn8UJImpdOg" isOrdered="true" isDerived="true">
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_77t2MKxTEeOnn8UJImpdOg"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_77udQKxTEeOnn8UJImpdOg" value="*"/>
+            <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_CVsQAKxUEeOnn8UJImpdOg" name="oclForknownByFriendship">
+              <language>OCL</language>
+              <body>self.friendship[knownBy]</body>
+            </defaultValue>
+          </ownedAttribute>
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_VcyQ8aw5EeOnn8UJImpdOg" name="knows" type="_3hUTQKuqEeOPt7R4er8hcg" isOrdered="true" association="_VcyQ8Kw5EeOnn8UJImpdOg">
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_VcyQ8qw5EeOnn8UJImpdOg"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_VcyQ86w5EeOnn8UJImpdOg" value="*"/>
+          </ownedAttribute>
         </packagedElement>
         <packagedElement xmi:type="uml:Class" xmi:id="_5J1wQKuqEeOPt7R4er8hcg" name="Company">
           <ownedAttribute xmi:type="uml:Property" xmi:id="_6--F4KuqEeOPt7R4er8hcg" name="person" type="_3hUTQKuqEeOPt7R4er8hcg" association="_6-_UAKuqEeOPt7R4er8hcg">
@@ -435,6 +459,14 @@
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_6-_UAquqEeOPt7R4er8hcg"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_6-_UA6uqEeOPt7R4er8hcg" value="*"/>
           </ownedEnd>
+        </packagedElement>
+        <packagedElement xmi:type="uml:AssociationClass" xmi:id="_VcyQ8Kw5EeOnn8UJImpdOg" name="Friendship" memberEnd="_VcyQ8aw5EeOnn8UJImpdOg _VcxC0Kw5EeOnn8UJImpdOg">
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_YbVswKw5EeOnn8UJImpdOg" name="weight" visibility="public">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_abIaQKw5EeOnn8UJImpdOg" value="1"/>
+            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_abJBUKw5EeOnn8UJImpdOg" value="1"/>
+            <defaultValue xmi:type="uml:LiteralInteger" xmi:id="_6fGGAKw5EeOnn8UJImpdOg" name="weightDefault" value="1"/>
+          </ownedAttribute>
         </packagedElement>
       </packagedElement>
     </packagedElement>

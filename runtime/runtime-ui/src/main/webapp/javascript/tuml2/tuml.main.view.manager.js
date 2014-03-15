@@ -373,6 +373,7 @@
                     if (commit) {
                         //post returns the meta data with, unlike get which does not
                         self.updateTabsForResultAfterCommit(result);
+                        //success notify
                     } else {
 //                        var endTimeBeforeUpdateGrids = new Date().getTime();
 //                        console.log("Time taken in millis for server call before update grids = " + (endTimeBeforeUpdateGrids - startTime));
@@ -383,9 +384,15 @@
 //                        var endTimeAfterUpdateGrids = new Date().getTime();
 //                        console.log("Time taken in millis to update grids = " + (endTimeAfterUpdateGrids - endTimeBeforeUpdateGrids));
                     }
+                    $('.top-center').notify({
+                        message: { text: 'Success' }
+                    }).show();
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);
+                    $('.top-center').notify({
+                        message: { text: 'Failure' }
+                    }).show();
                 }
             });
         }

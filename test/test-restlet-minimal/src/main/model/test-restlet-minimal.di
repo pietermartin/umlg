@@ -19,6 +19,9 @@
     <availablePage>
       <emfPageIdentifier href="test-restlet-minimal.notation#_MSuY4AaoEeO9bYUowtpiHA"/>
     </availablePage>
+    <availablePage>
+      <emfPageIdentifier href="test-restlet-minimal.notation#_SDcEoKw7EeOnn8UJImpdOg"/>
+    </availablePage>
   </pageList>
   <sashModel currentSelection="//@sashModel/@windows.0/@children.0">
     <windows>
@@ -28,6 +31,9 @@
         </children>
         <children>
           <emfPageIdentifier href="test-restlet-minimal.notation#_MSuY4AaoEeO9bYUowtpiHA"/>
+        </children>
+        <children>
+          <emfPageIdentifier href="test-restlet-minimal.notation#_SDcEoKw7EeOnn8UJImpdOg"/>
         </children>
       </children>
     </windows>

@@ -40,13 +40,21 @@
 
         this.afterExecuteQuery = function (data) {
             if (Array.isArray(data)) {
-                tumlQueryGridManager.refresh(data[0], this.queryTabDivName + '_' + 'OclResult', true);
+                if (data[0].data.length !== 0) {
+                    tumlQueryGridManager.refresh(data[0], this.queryTabDivName + '_' + 'OclResult', true);
+                } else {
+                    var outerDivForResults = $('#' + this.queryTabDivName + '_' + 'OclResult');
+                    outerDivForResults.children().remove();
+                    var textAreaResult = $('<textarea />', {id: 'queryResultId'});
+                    textAreaResult.text("no result").appendTo(outerDivForResults);
+                    CodeMirror.fromTextArea(textAreaResult[0], {mode: 'text/x-sh', readOnly: true});
+                }
             } else {
                 var outerDivForResults = $('#' + this.queryTabDivName + '_' + 'OclResult');
                 outerDivForResults.children().remove();
                 var textAreaResult = $('<textarea />', {id: 'queryResultId'});
                 textAreaResult.text(data.result).appendTo(outerDivForResults);
-                CodeMirror.fromTextArea(textAreaResult[0], {mode: 'text/x-less', readOnly: true});
+                CodeMirror.fromTextArea(textAreaResult[0], {mode: 'text/x-sh', readOnly: true});
             }
             $('#serverErrorMsg_' + this.queryTabDivName).removeClass('server-error-msg');
             $('#serverErrorMsg_' + this.queryTabDivName).empty();
@@ -339,10 +347,8 @@
                     CodeMirror.showHint(cm, CodeMirror.hint.ocl,
                         {
                             async: true,
-                            completeSingle: false,
                             closeOnUnfocus: true,
-                            completeSingle: false,
-                            alignWithWord: true,
+                            completeSingle: true,
                             contextClassifierQualifiedName: self.tumlTabViewManager.parentTabContainerManager.uiManager.leftMenuManager.contextMetaDataFrom.qualifiedName
                         });
                 };
@@ -353,10 +359,8 @@
                     CodeMirror.showHint(cm, CodeMirror.hint.gremlin,
                         {
                             async: true,
-                            completeSingle: false,
                             closeOnUnfocus: true,
                             completeSingle: false,
-                            alignWithWord: true,
                             //Bit crappy, the contextManager is not yet initialized to get the context data from.
                             //However the leftMenuManager has worked it out and has the data
                             contextClassifierQualifiedName: self.tumlTabViewManager.parentTabContainerManager.qualifiedName
