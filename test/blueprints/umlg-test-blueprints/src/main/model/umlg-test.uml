@@ -2014,6 +2014,14 @@
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_54PYMKx3EeOnn8UJImpdOg" value="1"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_54P_QKx3EeOnn8UJImpdOg" value="1"/>
             </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_zVuWQK1PEeOR4f3Enm7Mow" name="indexedNonUniqueName" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_2fIXMK1PEeOR4f3Enm7Mow"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_2fJlUK1PEeOR4f3Enm7Mow" value="1"/>
+              <defaultValue xmi:type="uml:LiteralString" xmi:id="_2fMooK1PEeOR4f3Enm7Mow">
+                <value xsi:nil="true"/>
+              </defaultValue>
+            </ownedAttribute>
           </packagedElement>
         </packagedElement>
       </packagedElement>
@@ -2048,4 +2056,5 @@
   <UmlgProfile:QualifierListener xmi:id="_-FrvkKfCEeOPt7R4er8hcg" base_Property="_1YvXIMRoEeGJXus6eZqdyw" property="_6ZuK0BncEeGZfswubjlR9Q"/>
   <UmlgProfile:QualifierListener xmi:id="_pse-AKgTEeOPt7R4er8hcg" base_Property="_pgz4IMRuEeGJXus6eZqdyw" property="_5p0-8BncEeGZfswubjlR9Q"/>
   <UmlgProfile:Index xmi:id="_74Eh8Kx3EeOnn8UJImpdOg" base_Property="_4HM4YKx3EeOnn8UJImpdOg"/>
+  <UmlgProfile:Index xmi:id="_5JLioK1PEeOR4f3Enm7Mow" base_Property="_zVuWQK1PEeOR4f3Enm7Mow" type="NON_UNIQUE"/>
 </xmi:XMI>

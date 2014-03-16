@@ -16,6 +16,7 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.kernel.GraphDatabaseAPI;
 import org.neo4j.kernel.impl.core.NodeManager;
 import org.neo4j.kernel.impl.util.StringLogger;
+import org.umlg.runtime.collection.memory.UmlgLazyList;
 import org.umlg.runtime.domain.PersistentObject;
 import org.umlg.runtime.domain.UmlgNode;
 
@@ -140,12 +141,7 @@ public class UmlgNeo4jGraph extends Neo4j2Graph implements UmlgGraph {
     @Override
     public List<PersistentObject> getFromIndex(String indexKey, Object indexValue) {
         final Iterator<Vertex> iterator = query().has(indexKey, indexValue).vertices().iterator();
-        List<PersistentObject> lazy = LazyList.lazyList(new ArrayList<PersistentObject>(), new Factory<PersistentObject>() {
-            @Override
-            public PersistentObject create() {
-                return instantiateClassifier(iterator.next());
-            }
-        });
+        List<PersistentObject> lazy = new UmlgLazyList(iterator);
         return lazy;
     }
 
