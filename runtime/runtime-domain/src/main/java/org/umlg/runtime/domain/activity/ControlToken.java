@@ -2,7 +2,7 @@ package org.umlg.runtime.domain.activity;
 
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Vertex;
-import org.umlg.runtime.adaptor.GraphDb;
+import org.umlg.runtime.adaptor.UMLG;
 
 public class ControlToken extends Token {
 
@@ -18,10 +18,10 @@ public class ControlToken extends Token {
 	protected void addEdgeToActivityNode(ActivityNode<? extends Token, ? extends Token> node) {
 		// Multiple tokens from the same incoming edge is merged
 		if (!node.vertex.getEdges(Direction.OUT, TOKEN + getEdgeName()).iterator().hasNext()) {
-			GraphDb.getDb().addEdge(null, node.vertex, getVertex(), TOKEN + getEdgeName());
+			UMLG.getDb().addEdge(null, node.vertex, getVertex(), TOKEN + getEdgeName());
 		} else {
 			// TODO write test case for this
-			GraphDb.getDb().removeVertex(getVertex());
+			UMLG.getDb().removeVertex(getVertex());
 		}
 	}
 
@@ -33,7 +33,7 @@ public class ControlToken extends Token {
 
 	@Override
 	public void remove() {
-		GraphDb.getDb().removeVertex(getVertex());
+		UMLG.getDb().removeVertex(getVertex());
 	}
 
 }

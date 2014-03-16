@@ -4,7 +4,7 @@ import org.restlet.Component;
 import org.restlet.Context;
 import org.restlet.Server;
 import org.restlet.data.Protocol;
-import org.umlg.runtime.adaptor.GraphDb;
+import org.umlg.runtime.adaptor.UMLG;
 
 /**
  * Date: 2014/01/15
@@ -29,8 +29,8 @@ public abstract class UmlgRestletComponent extends Component {
 
     @Override
     public void stop() throws Exception {
-        GraphDb.getDb().shutdown();
-        GraphDb.remove();
+        UMLG.getDb().shutdown();
+        UMLG.remove();
         super.stop();
     }
 

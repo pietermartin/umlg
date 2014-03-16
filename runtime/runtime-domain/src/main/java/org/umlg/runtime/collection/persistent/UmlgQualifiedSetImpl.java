@@ -8,7 +8,6 @@ public class UmlgQualifiedSetImpl<E> extends BaseSet<E> implements UmlgQualified
 
 	public UmlgQualifiedSetImpl(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
 		super(owner, runtimeProperty);
-//		this.index = GraphDb.getDb().getIndex(getQualifiedName(), Edge.class);
 	}
 	
 }

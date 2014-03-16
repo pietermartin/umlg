@@ -1,7 +1,7 @@
 package org.test.restlet;
 
 import org.umlg.runtime.adaptor.DefaultDataCreator;
-import org.umlg.runtime.adaptor.GraphDb;
+import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.test.manytomany.*;
 import org.umlg.test.manytomany.meta.Root1Meta;
 import org.umlg.test.standard.*;
@@ -114,7 +114,7 @@ public class TestRestletDefaultDataCreator implements DefaultDataCreator {
                     terrestrialCraft.setAquatic(true);
                 }
             }
-            GraphDb.getDb().commit();
+            UMLG.getDb().commit();
         }
 
     }

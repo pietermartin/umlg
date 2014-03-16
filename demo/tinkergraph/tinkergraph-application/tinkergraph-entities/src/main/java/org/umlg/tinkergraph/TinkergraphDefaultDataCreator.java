@@ -1,7 +1,7 @@
 package org.umlg.tinkergraph;
 
 import org.umlg.runtime.adaptor.DefaultDataCreator;
-import org.umlg.runtime.adaptor.GraphDb;
+import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.tinkergraph.meta.PersonMeta;
 
 /**
@@ -61,7 +61,7 @@ public class TinkergraphDefaultDataCreator implements DefaultDataCreator {
             joshRipple.setWeight(1.0);
             josh.addToCreated(ripple, joshRipple);
 
-            GraphDb.getDb().commit();
+            UMLG.getDb().commit();
         }
     }
 }

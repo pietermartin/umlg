@@ -53,9 +53,9 @@ public abstract class BaseServerResourceBuilder extends BaseVisitor {
 
     protected void commitOrRollback(OJTryStatement ojTryStatement) {
         OJIfStatement ifTransactionNeedsCommitOrRollback = new OJIfStatement("!(getQueryValue(\"" + UmlgGenerationUtil.rollback+ "\") != null && Boolean.valueOf(getQueryValue(\"" + UmlgGenerationUtil.rollback + "\")))");
-        ifTransactionNeedsCommitOrRollback.addToThenPart(UmlgGenerationUtil.graphDbAccess + ".commit()");
+        ifTransactionNeedsCommitOrRollback.addToThenPart(UmlgGenerationUtil.UMLGAccess + ".commit()");
         ojTryStatement.getTryPart().addToStatements(ifTransactionNeedsCommitOrRollback);
-        ojTryStatement.getFinallyPart().addToStatements(UmlgGenerationUtil.graphDbAccess + ".rollback()");
+        ojTryStatement.getFinallyPart().addToStatements(UmlgGenerationUtil.UMLGAccess + ".rollback()");
     }
 
     protected void addToRouterEnum(Model model, OJAnnotatedClass annotatedClass, String name, String path) {

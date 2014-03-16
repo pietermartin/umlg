@@ -7,7 +7,7 @@ package org.umlg.runtime.adaptor;
 public class EdgeSchemaCreatorImpl implements EdgeSchemaCreator {
     @Override
     public void create(String label) {
-        UmlgOrientDbGraph g = (UmlgOrientDbGraph)GraphDb.getDb();
+        UmlgOrientDbGraph g = (UmlgOrientDbGraph) UMLG.getDb();
         g.createEdgeType(UmlgLabelConverterFactory.getUmlgLabelConverter().convert(label));
     }
 }

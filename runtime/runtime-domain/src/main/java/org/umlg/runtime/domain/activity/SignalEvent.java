@@ -3,7 +3,7 @@ package org.umlg.runtime.domain.activity;
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
-import org.umlg.runtime.adaptor.GraphDb;
+import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.collection.Qualifier;
 import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
@@ -47,7 +47,7 @@ public class SignalEvent extends Event {
 	}
 	
 	public void setSignal(ISignal signal) {
-		Edge edge = GraphDb.getDb().addEdge(null, ((UmlgNode)signal).getVertex(), this.vertex,"event_signal");
+		Edge edge = UMLG.getDb().addEdge(null, ((UmlgNode)signal).getVertex(), this.vertex,"event_signal");
 		edge.setProperty("outClass", signal.getClass().getName());
 		edge.setProperty("inClass", this.getClass().getName());
 	}

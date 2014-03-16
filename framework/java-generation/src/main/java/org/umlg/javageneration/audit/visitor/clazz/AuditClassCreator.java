@@ -174,17 +174,17 @@ public class AuditClassCreator extends BaseVisitor implements Visitor<Class> {
 		ojTryStatement.getFinallyPart().addToStatements("GraphDb.getDb().commit()");
 		if (previous) {
 			ojTryStatement.getTryPart().addToStatements(
-					"auditParentEdge = " + UmlgGenerationUtil.graphDbAccess + ".addEdge(null, this.vertex, previousAuditVertex, \"previous\")");
+					"auditParentEdge = " + UmlgGenerationUtil.UMLGAccess + ".addEdge(null, this.vertex, previousAuditVertex, \"previous\")");
 		} else {
-			ojTryStatement.getTryPart().addToStatements("auditParentEdge = " + UmlgGenerationUtil.graphDbAccess + ".addEdge(null, nextAuditVertex, this.vertex, \"previous\")");
+			ojTryStatement.getTryPart().addToStatements("auditParentEdge = " + UmlgGenerationUtil.UMLGAccess + ".addEdge(null, nextAuditVertex, this.vertex, \"previous\")");
 		}
 		ojTryStatement.getTryPart().addToStatements("auditParentEdge.setProperty(\"outClass\", this.getClass().getName() + \"Audit\")");
 		ojTryStatement.getTryPart().addToStatements("auditParentEdge.setProperty(\"inClass\", this.getClass().getName() + \"Audit\")");
 
 		if (previous) {
-			isTransactionNotActive.addToElsePart("auditParentEdge = " + UmlgGenerationUtil.graphDbAccess + ".addEdge(null, this.vertex, previousAuditVertex, \"previous\")");
+			isTransactionNotActive.addToElsePart("auditParentEdge = " + UmlgGenerationUtil.UMLGAccess + ".addEdge(null, this.vertex, previousAuditVertex, \"previous\")");
 		} else {
-			isTransactionNotActive.addToElsePart("auditParentEdge = " + UmlgGenerationUtil.graphDbAccess + ".addEdge(null, nextAuditVertex, this.vertex, \"previous\")");
+			isTransactionNotActive.addToElsePart("auditParentEdge = " + UmlgGenerationUtil.UMLGAccess + ".addEdge(null, nextAuditVertex, this.vertex, \"previous\")");
 		}
 		isTransactionNotActive.addToElsePart("auditParentEdge.setProperty(\"outClass\", this.getClass().getName() + \"Audit\")");
 		isTransactionNotActive.addToElsePart("auditParentEdge.setProperty(\"inClass\", this.getClass().getName() + \"Audit\")");
@@ -192,7 +192,7 @@ public class AuditClassCreator extends BaseVisitor implements Visitor<Class> {
 		ifPreviousAuditVertex.addToThenPart("return auditParentEdge");
 		ifPreviousAuditVertex.addToElsePart("return null");
 		createEdgeToPreviousAuditInternal.getBody().addToStatements(ifPreviousAuditVertex);
-		this.auditClass.addToImports(UmlgGenerationUtil.graphDbPathName);
+		this.auditClass.addToImports(UmlgGenerationUtil.UMLGPathName);
 		this.auditClass.addToOperations(createEdgeToPreviousAuditInternal);
 	}
 

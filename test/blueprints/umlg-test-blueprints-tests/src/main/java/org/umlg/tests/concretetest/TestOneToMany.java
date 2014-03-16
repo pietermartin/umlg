@@ -8,7 +8,7 @@ import org.umlg.componenttest.Time;
 import org.umlg.concretetest.Angel;
 import org.umlg.concretetest.God;
 import org.umlg.concretetest.Universe;
-import org.umlg.runtime.adaptor.GraphDb;
+import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.test.BaseLocalDbTest;
 
 import static org.junit.Assert.assertEquals;
@@ -153,7 +153,7 @@ public class TestOneToMany extends BaseLocalDbTest {
 
         db.commit();
         Assert.assertEquals(3, god.getUniverse().size());
-        Universe u = new Universe(GraphDb.getDb().getVertex(universe1.getVertex().getId()));
+        Universe u = new Universe(UMLG.getDb().getVertex(universe1.getVertex().getId()));
         god.addToUniverse(u);
         db.commit();
         God g = new God(god.getVertex());
@@ -185,7 +185,7 @@ public class TestOneToMany extends BaseLocalDbTest {
 
         db.commit();
         Assert.assertEquals(3, god.getUniverse().size());
-        Universe u = new Universe(GraphDb.getDb().getVertex(universe1.getVertex().getId()));
+        Universe u = new Universe(UMLG.getDb().getVertex(universe1.getVertex().getId()));
         god.getUniverse().add(u);
         db.commit();
         God g = new God(god.getVertex());
@@ -225,7 +225,7 @@ public class TestOneToMany extends BaseLocalDbTest {
 
         db.commit();
         Assert.assertEquals(3, god.getUniverse().size());
-        Universe u = new Universe(GraphDb.getDb().getVertex(universe1.getVertex().getId()));
+        Universe u = new Universe(UMLG.getDb().getVertex(universe1.getVertex().getId()));
         u.clearGod();
         god2.getUniverse().add(u);
         db.commit();

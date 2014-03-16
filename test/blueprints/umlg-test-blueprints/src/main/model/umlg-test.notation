@@ -7220,7 +7220,7 @@
         <layoutConstraint xmi:type="notation:Bounds" xmi:id="_MmQcIqIoEeOn3tP_LveSqg"/>
       </children>
       <element xmi:type="uml:Class" href="umlg-test.uml#_MmJucKIoEeOn3tP_LveSqg"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_MmKVgaIoEeOn3tP_LveSqg" x="157" y="374"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_MmKVgaIoEeOn3tP_LveSqg" x="131" y="383"/>
     </children>
     <children xmi:type="notation:Shape" xmi:id="_VRBM0KIoEeOn3tP_LveSqg" type="2012" fontName="Sans" fontHeight="10" lineColor="0">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_VRBM0qIoEeOn3tP_LveSqg" source="ShadowFigure">

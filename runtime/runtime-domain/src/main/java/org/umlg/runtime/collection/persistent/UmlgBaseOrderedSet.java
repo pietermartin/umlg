@@ -5,7 +5,7 @@ import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 import org.apache.commons.collections.set.ListOrderedSet;
-import org.umlg.runtime.adaptor.GraphDb;
+import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.collection.UmlgOrderedSet;
 import org.umlg.runtime.collection.UmlgSequence;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
@@ -51,16 +51,16 @@ public abstract class UmlgBaseOrderedSet<E> extends BaseCollection<E> implements
         if (indexOf == 0) {
             if (this.vertex.getEdges(Direction.OUT, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel()).iterator().hasNext()) {
                 Edge edgeToFirstElement = this.vertex.getEdges(Direction.OUT, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel()).iterator().next();
-                GraphDb.getDb().removeEdge(edgeToFirstElement);
+                UMLG.getDb().removeEdge(edgeToFirstElement);
             }
-            GraphDb.getDb().addEdge(null, this.vertex, edge.getVertex(Direction.IN), LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel());
+            UMLG.getDb().addEdge(null, this.vertex, edge.getVertex(Direction.IN), LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel());
         }
         if (indexOf == size() - 1) {
             if (this.vertex.getEdges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel()).iterator().hasNext()) {
                 Edge edgeToLastElement = this.vertex.getEdges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel()).iterator().next();
-                GraphDb.getDb().removeEdge(edgeToLastElement);
+                UMLG.getDb().removeEdge(edgeToLastElement);
             }
-            GraphDb.getDb().addEdge(null, this.vertex, edge.getVertex(Direction.IN), LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel());
+            UMLG.getDb().addEdge(null, this.vertex, edge.getVertex(Direction.IN), LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel());
         }
         //Shift the linked list
         //Find the element at the index
@@ -69,7 +69,7 @@ public abstract class UmlgBaseOrderedSet<E> extends BaseCollection<E> implements
                 //add a edge to the previous first element
                 E previous = (E) this.getInternalListOrderedSet().get(1);
                 Vertex previousVertex = getVertexFromElement(previous, e);
-                GraphDb.getDb().addEdge(null, edge.getVertex(Direction.IN), previousVertex, LABEL_TO_NEXT_IN_SEQUENCE);
+                UMLG.getDb().addEdge(null, edge.getVertex(Direction.IN), previousVertex, LABEL_TO_NEXT_IN_SEQUENCE);
             } else {
                 E previous = (E) this.getInternalListOrderedSet().get(indexOf - 1);
                 Vertex previousVertex = getVertexFromElement(previous, e);
@@ -77,10 +77,10 @@ public abstract class UmlgBaseOrderedSet<E> extends BaseCollection<E> implements
                 if (size() > 2 && indexOf + 1 < size()) {
                     Edge edgeToNextElement = previousVertex.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE).iterator().next();
                     Vertex shiftedVertex = edgeToNextElement.getVertex(Direction.IN);
-                    GraphDb.getDb().removeEdge(edgeToNextElement);
-                    GraphDb.getDb().addEdge(null, edge.getVertex(Direction.IN), shiftedVertex, LABEL_TO_NEXT_IN_SEQUENCE);
+                    UMLG.getDb().removeEdge(edgeToNextElement);
+                    UMLG.getDb().addEdge(null, edge.getVertex(Direction.IN), shiftedVertex, LABEL_TO_NEXT_IN_SEQUENCE);
                 }
-                GraphDb.getDb().addEdge(null, previousVertex, edge.getVertex(Direction.IN), LABEL_TO_NEXT_IN_SEQUENCE);
+                UMLG.getDb().addEdge(null, previousVertex, edge.getVertex(Direction.IN), LABEL_TO_NEXT_IN_SEQUENCE);
             }
         }
         return edge;
@@ -95,16 +95,16 @@ public abstract class UmlgBaseOrderedSet<E> extends BaseCollection<E> implements
             Vertex lastVertex = edgeToLastVertex.getVertex(Direction.IN);
 
             //move the edge to the last vertex
-            GraphDb.getDb().removeEdge(edgeToLastVertex);
-            GraphDb.getDb().addEdge(null, this.vertex, newElementVertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel());
+            UMLG.getDb().removeEdge(edgeToLastVertex);
+            UMLG.getDb().addEdge(null, this.vertex, newElementVertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel());
 
             //add the element to the linked list
-            GraphDb.getDb().addEdge(null, lastVertex, newElementVertex, LABEL_TO_NEXT_IN_SEQUENCE);
+            UMLG.getDb().addEdge(null, lastVertex, newElementVertex, LABEL_TO_NEXT_IN_SEQUENCE);
 
         } else {
             //its the first element in the list
-            GraphDb.getDb().addEdge(null, this.vertex, newElementVertex, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel());
-            GraphDb.getDb().addEdge(null, this.vertex, newElementVertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel());
+            UMLG.getDb().addEdge(null, this.vertex, newElementVertex, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel());
+            UMLG.getDb().addEdge(null, this.vertex, newElementVertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel());
         }
     }
 
@@ -125,7 +125,7 @@ public abstract class UmlgBaseOrderedSet<E> extends BaseCollection<E> implements
                 this.loaded = true;
             } else {
                 Edge edgeToElement = edgeIterable.iterator().next();
-                if (!GraphDb.getDb().hasEdgeBeenDeleted(edgeToElement)) {
+                if (!UMLG.getDb().hasEdgeBeenDeleted(edgeToElement)) {
                     Vertex element = edgeToElement.getVertex(inverseDirection);
                     loadNode(edgeToElement, element);
                     this.loaded = true;
@@ -139,13 +139,13 @@ public abstract class UmlgBaseOrderedSet<E> extends BaseCollection<E> implements
                 this.loaded = true;
             } else {
                 Edge edgeToFirstElement = edgeIterable.iterator().next();
-                if (!GraphDb.getDb().hasEdgeBeenDeleted(edgeToFirstElement)) {
+                if (!UMLG.getDb().hasEdgeBeenDeleted(edgeToFirstElement)) {
                     Vertex firstVertexInSequence = edgeToFirstElement.getVertex(inverseDirection);
                     loadNode(edgeToFirstElement, firstVertexInSequence);
                     Vertex elementVertex = firstVertexInSequence;
                     while (elementVertex.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE).iterator().hasNext()) {
                         Edge edgeToNext = elementVertex.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE).iterator().next();
-                        if (!GraphDb.getDb().hasEdgeBeenDeleted(edgeToNext)) {
+                        if (!UMLG.getDb().hasEdgeBeenDeleted(edgeToNext)) {
                             elementVertex = edgeToNext.getVertex(Direction.IN);
                             loadNode(edgeToNext, elementVertex);
                         }

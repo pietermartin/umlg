@@ -53,7 +53,7 @@ public class EntityForLookupServerResourceBuilder extends BaseServerResourceBuil
                 "this." + getIdFieldName(clazz) + "= " + UmlgRestletGenerationUtil.UmlgURLDecoder.getLast() + ".decode((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"))");
         annotatedClass.addToImports(UmlgRestletGenerationUtil.UmlgURLDecoder);
         put.getBody().addToStatements(
-                UmlgClassOperations.className(clazz) + " c = new " + UmlgClassOperations.className(clazz) + "(GraphDb.getDb().getVertex(this."
+                UmlgClassOperations.className(clazz) + " c = new " + UmlgClassOperations.className(clazz) + "(" + UmlgGenerationUtil.UMLGAccess + ".getVertex(this."
                         + getIdFieldName(clazz) + "))");
         annotatedClass.addToImports(UmlgClassOperations.getPathName(clazz));
         OJTryStatement ojTry = new OJTryStatement();
@@ -83,7 +83,7 @@ public class EntityForLookupServerResourceBuilder extends BaseServerResourceBuil
         ojTry.getTryPart().addToStatements("return result");
 
         ojTry.getFinallyPart().addToStatements(UmlgGenerationUtil.UmlgTmpIdManager.getLast() + ".INSTANCE.remove()");
-        ojTry.getFinallyPart().addToStatements(UmlgGenerationUtil.graphDbAccess + ".rollback()");
+        ojTry.getFinallyPart().addToStatements(UmlgGenerationUtil.UMLGAccess + ".rollback()");
 
         ojTry.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
 
@@ -94,7 +94,7 @@ public class EntityForLookupServerResourceBuilder extends BaseServerResourceBuil
         put.getBody().addToStatements(ojTry);
 
 
-        annotatedClass.addToImports(UmlgGenerationUtil.graphDbPathName);
+        annotatedClass.addToImports(UmlgGenerationUtil.UMLGPathName);
         annotatedClass.addToOperations(put);
     }
 

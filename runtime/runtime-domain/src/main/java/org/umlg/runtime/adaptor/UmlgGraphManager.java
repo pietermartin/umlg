@@ -72,7 +72,7 @@ public class UmlgGraphManager {
                 }
             }
             //Remove threadvars
-            GraphDb.remove();
+            UMLG.remove();
             TransactionThreadVar.remove();
             TransactionThreadEntityVar.remove();
             TransactionThreadMetaNodeVar.remove();

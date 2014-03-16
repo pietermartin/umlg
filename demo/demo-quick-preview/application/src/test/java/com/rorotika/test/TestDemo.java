@@ -8,9 +8,8 @@ import org.junit.Test;
 import org.umlg.Company;
 import org.umlg.Person;
 import org.umlg.model.DemoQuickPreview;
-import org.umlg.runtime.adaptor.GraphDb;
+import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.adaptor.UmlgGraph;
-import org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.umlg.runtime.util.UmlgProperties;
 
 import java.io.File;
@@ -30,7 +29,7 @@ public class TestDemo {
         if (dbDir.exists()) {
             FileUtils.deleteDirectory(dbDir);
         }
-        this.db = GraphDb.getDb();
+        this.db = UMLG.getDb();
     }
 
     @After
@@ -71,7 +70,7 @@ public class TestDemo {
         person.setFirstname("Joe");
         person.setLastname("Bloggs");
         company.getEmployee().add(person);
-        GraphDb.getDb().commit();
+        UMLG.getDb().commit();
         Assert.assertTrue(company.getEmployee().contains(person));
     }
 }

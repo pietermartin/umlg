@@ -149,11 +149,11 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
     private void addEdgeToRoot(OJAnnotatedClass annotatedClass, Class clazz) {
         OJConstructor constructor = annotatedClass.findConstructor(new OJPathName("java.lang.Boolean"));
         constructor.getBody().addToStatements(
-                UmlgGenerationUtil.edgePathName.getLast() + " edge = " + UmlgGenerationUtil.graphDbAccess + ".addEdge(null, " + UmlgGenerationUtil.graphDbAccess
+                UmlgGenerationUtil.edgePathName.getLast() + " edge = " + UmlgGenerationUtil.UMLGAccess + ".addEdge(null, " + UmlgGenerationUtil.UMLGAccess
                         + ".getRoot(), this.vertex, getEdgeToRootLabel())");
         constructor.getBody().addToStatements("edge.setProperty(\"inClass\", this.getClass().getName())");
         annotatedClass.addToImports(UmlgGenerationUtil.edgePathName.getCopy());
-        annotatedClass.addToImports(UmlgGenerationUtil.graphDbPathName.getCopy());
+        annotatedClass.addToImports(UmlgGenerationUtil.UMLGPathName.getCopy());
     }
 
     private void addCompositeChildrenToDelete(OJAnnotatedClass annotatedClass, Class clazz) {
@@ -179,9 +179,9 @@ public class CompositionVisitor extends BaseVisitor implements Visitor<Class> {
         }
         if (clazz.getGenerals().isEmpty()) {
             delete.getBody().addToStatements(UmlgGenerationUtil.transactionThreadEntityVar.getLast() + ".remove(this)");
-            delete.getBody().addToStatements(UmlgGenerationUtil.graphDbAccess + ".removeVertex(this.vertex)");
+            delete.getBody().addToStatements(UmlgGenerationUtil.UMLGAccess + ".removeVertex(this.vertex)");
             annotatedClass.addToImports(UmlgGenerationUtil.transactionThreadEntityVar);
-            annotatedClass.addToImports(UmlgGenerationUtil.graphDbPathName.getCopy());
+            annotatedClass.addToImports(UmlgGenerationUtil.UMLGPathName.getCopy());
         } else {
             delete.getBody().addToStatements("super.delete()");
         }

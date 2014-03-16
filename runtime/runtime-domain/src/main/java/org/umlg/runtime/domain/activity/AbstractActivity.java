@@ -3,7 +3,7 @@ package org.umlg.runtime.domain.activity;
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
-import org.umlg.runtime.adaptor.GraphDb;
+import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.domain.BaseUmlgAudit;
 import org.umlg.runtime.domain.CompositionNode;
 import org.umlg.runtime.domain.activity.interf.*;
@@ -17,7 +17,7 @@ public abstract class AbstractActivity extends BaseUmlgAudit implements Composit
 	private static final long serialVersionUID = 7647066355373095288L;
 
 	public void setCallAction(CallAction callAction) {
-		Edge edge = GraphDb.getDb().addEdge(null, this.vertex, callAction.getVertex(),"callAction");
+		Edge edge = UMLG.getDb().addEdge(null, this.vertex, callAction.getVertex(),"callAction");
 		edge.setProperty("inClass", callAction.getClass().getName());
 		edge.setProperty("outClass", this.getClass().getName());
 	}

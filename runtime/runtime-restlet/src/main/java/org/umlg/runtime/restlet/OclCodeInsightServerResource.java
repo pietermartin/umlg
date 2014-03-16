@@ -9,9 +9,7 @@ import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 import org.umlg.framework.ModelLoader;
 import org.umlg.ocl.UmlgOcl2Parser;
-import org.umlg.runtime.adaptor.GraphDb;
-import org.umlg.runtime.domain.UmlgNode;
-import org.umlg.runtime.restlet.util.UmlgURLDecoder;
+import org.umlg.runtime.adaptor.UMLG;
 
 import java.util.List;
 
@@ -40,7 +38,7 @@ public class OclCodeInsightServerResource extends ServerResource {
             List<Choice> insights = UmlgOcl2Parser.INSTANCE.getCodeInsights(ConstraintKind.INVARIANT, query);
             return new JsonRepresentation(convertChoicesToJson(insights));
         } finally {
-            GraphDb.getDb().rollback();
+            UMLG.getDb().rollback();
         }
     }
 

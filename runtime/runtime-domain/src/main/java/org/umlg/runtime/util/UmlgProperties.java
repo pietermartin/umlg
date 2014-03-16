@@ -1,6 +1,7 @@
 package org.umlg.runtime.util;
 
-import java.util.Properties;
+import org.apache.commons.configuration.CompositeConfiguration;
+import org.apache.commons.configuration.PropertiesConfiguration;
 
 /**
  * Date: 2013/01/02
@@ -9,12 +10,13 @@ import java.util.Properties;
 public class UmlgProperties {
 
     public static UmlgProperties INSTANCE = new UmlgProperties();
-    private Properties properties;
+    private CompositeConfiguration properties;
 
     private UmlgProperties() {
-        this.properties = new Properties();
         try {
-            this.properties.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("umlg.env.properties"));
+            this.properties = new CompositeConfiguration();
+            PropertiesConfiguration pc = new PropertiesConfiguration("umlg.env.properties");
+            this.properties.addConfiguration(pc);
         } catch (Exception e) {
             throw new RuntimeException("Expecting \"umlg.env.properties\" file on the classpath with ");
         }
@@ -28,34 +30,35 @@ public class UmlgProperties {
     }
 
     public String getTumlDbLocation() {
-        return this.properties.getProperty("umlg.db.location");
+        return this.properties.getString("umlg.db.location");
     }
 
     public boolean isStartAdminApplication() {
-        return Boolean.parseBoolean(this.properties.getProperty("start.admin.application", "false"));
+        return this.properties.getBoolean("start.admin.application", false);
     }
 
     public boolean isClearDbOnStartUp() {
-        return Boolean.parseBoolean(this.properties.getProperty("start.clear.db", "false"));
+        return this.properties.getBoolean("start.clear.db", false);
     }
 
     public boolean isCreateDefaultData() {
-        return Boolean.parseBoolean(this.properties.getProperty("start.default.data", "false"));
+        return this.properties.getBoolean("start.default.data", false);
     }
 
     public String getDefaultDataLoaderClass() {
-        return this.properties.getProperty("default.data.class");
+        return this.properties.getString("default.data.class");
     }
 
     public boolean isTransactionsMutliThreaded() {
-        return Boolean.parseBoolean(this.properties.getProperty("transaction.multithreaded", "false"));
+        return this.properties.getBoolean("transaction.multithreaded", false);
     }
 
     public boolean isLoadUiResourcesFromFile() {
-        return Boolean.parseBoolean(this.properties.getProperty("umlg.ui.from.file", "false"));
+        return this.properties.getBoolean("umlg.ui.from.file", false);
     }
 
     public String getWebserverIp() {
-        return this.properties.getProperty("webserver.ip", "127.0.0.1");
+        return this.properties.getString("webserver.ip", "127.0.0.1");
     }
+
 }

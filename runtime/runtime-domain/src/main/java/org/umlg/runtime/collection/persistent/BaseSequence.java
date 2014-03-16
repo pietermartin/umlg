@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
-import org.umlg.runtime.adaptor.GraphDb;
+import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.collection.UmlgSequence;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.collection.ocl.BodyExpressionEvaluator;
@@ -55,25 +55,25 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements UmlgS
             //Check is duplicate
             if (previousVertex.equals(newElementVertex)) {
                 //Add to the hyper vertex
-                GraphDb.getDb().addEdge(null, lastHyperVertex, newElementVertex, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX);
+                UMLG.getDb().addEdge(null, lastHyperVertex, newElementVertex, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX);
             } else {
                 //Create a new hyper vertex
-                Vertex newHyperVertex = GraphDb.getDb().addVertex("hyperVertex");
-                GraphDb.getDb().addEdge(null, newHyperVertex, newElementVertex, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX);
+                Vertex newHyperVertex = UMLG.getDb().addVertex("hyperVertex");
+                UMLG.getDb().addEdge(null, newHyperVertex, newElementVertex, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX);
                 //Put the new hyper vertex in the linked list
-                GraphDb.getDb().addEdge(null, lastHyperVertex, newHyperVertex, LABEL_TO_NEXT_HYPER_VERTEX);
+                UMLG.getDb().addEdge(null, lastHyperVertex, newHyperVertex, LABEL_TO_NEXT_HYPER_VERTEX);
                 //remove the lastHyperVertex edge to parent, add it to new last hyper vertex
-                GraphDb.getDb().removeEdge(edgeToLastHyperVertex);
-                GraphDb.getDb().addEdge(null, this.vertex, newHyperVertex, LABEL_TO_LAST_HYPER_VERTEX + getLabel());
+                UMLG.getDb().removeEdge(edgeToLastHyperVertex);
+                UMLG.getDb().addEdge(null, this.vertex, newHyperVertex, LABEL_TO_LAST_HYPER_VERTEX + getLabel());
             }
         } else {
             //Is the first element being added, create the hyper vertex
-            Vertex newHyperVertex = GraphDb.getDb().addVertex("hyperVertex");
-            GraphDb.getDb().addEdge(null, newHyperVertex, newElementVertex, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX);
+            Vertex newHyperVertex = UMLG.getDb().addVertex("hyperVertex");
+            UMLG.getDb().addEdge(null, newHyperVertex, newElementVertex, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX);
             //Put the new hyper vertex in the linked list
-            GraphDb.getDb().addEdge(null, this.vertex, newHyperVertex, LABEL_TO_FIRST_HYPER_VERTEX + getLabel());
+            UMLG.getDb().addEdge(null, this.vertex, newHyperVertex, LABEL_TO_FIRST_HYPER_VERTEX + getLabel());
             //remove the lastHyperVertex edge to parent, add it to new last hyper vertex
-            GraphDb.getDb().addEdge(null, this.vertex, newHyperVertex, LABEL_TO_LAST_HYPER_VERTEX + getLabel());
+            UMLG.getDb().addEdge(null, this.vertex, newHyperVertex, LABEL_TO_LAST_HYPER_VERTEX + getLabel());
         }
     }
 
@@ -95,7 +95,7 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements UmlgS
                 this.loaded = true;
             } else {
                 Edge edgeToElement = edgeIterable.iterator().next();
-                if (!GraphDb.getDb().hasEdgeBeenDeleted(edgeToElement)) {
+                if (!UMLG.getDb().hasEdgeBeenDeleted(edgeToElement)) {
                     Vertex elementVertex = edgeToElement.getVertex(inverseDirection);
                     loadNode(edgeToElement, elementVertex, false);
                     this.loaded = true;
@@ -214,18 +214,18 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements UmlgS
                 Vertex elementAtLastHyperVertex = edgeToElementFromLastHyperVertex.getVertex(Direction.IN);
                 if (elementAtLastHyperVertex.equals(newElementVertex)) {
                     //Its a duplicate
-                    GraphDb.getDb().addEdge(null, lastHyperVertex, newElementVertex, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX);
+                    UMLG.getDb().addEdge(null, lastHyperVertex, newElementVertex, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX);
                 } else {
                     //Create a new last hyper vertex
-                    Vertex newLastHyperVertex = GraphDb.getDb().addVertex("hyperVertex");
+                    Vertex newLastHyperVertex = UMLG.getDb().addVertex("hyperVertex");
                     //Remove the current edge to last hyper vertex
-                    GraphDb.getDb().removeEdge(edgeToLastHyperVertex);
+                    UMLG.getDb().removeEdge(edgeToLastHyperVertex);
                     //Create a new edge to last hyper vertex
-                    GraphDb.getDb().addEdge(null, this.vertex, newLastHyperVertex, LABEL_TO_LAST_HYPER_VERTEX + getLabel());
+                    UMLG.getDb().addEdge(null, this.vertex, newLastHyperVertex, LABEL_TO_LAST_HYPER_VERTEX + getLabel());
                     //Link the previous last hyper vertex to the new on
-                    GraphDb.getDb().addEdge(null, lastHyperVertex, newLastHyperVertex, LABEL_TO_NEXT_HYPER_VERTEX);
+                    UMLG.getDb().addEdge(null, lastHyperVertex, newLastHyperVertex, LABEL_TO_NEXT_HYPER_VERTEX);
                     //link the last hyper vertex to the new element
-                    GraphDb.getDb().addEdge(null, newLastHyperVertex, newElementVertex, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX);
+                    UMLG.getDb().addEdge(null, newLastHyperVertex, newElementVertex, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX);
                 }
             } else {
                 Vertex hyperVertexAtIndex = hyperVertexAtIndexPair.hyperVertex;
@@ -234,32 +234,32 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements UmlgS
                 //Check if the hyperVertexAtIndex holds elements that are equal to the element being added
                 if (currentElementAtIndex != null && currentElementAtIndex.equals(newElementVertex)) {
                     //Need to attach the newVertex to the current hyper vertex as its a duplicate
-                    GraphDb.getDb().addEdge(null, hyperVertexAtIndex, newElementVertex, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX);
+                    UMLG.getDb().addEdge(null, hyperVertexAtIndex, newElementVertex, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX);
                 } else {
                     //Element is not a duplicate.
                     //Create a new hyper vertex to attach it to
-                    Vertex newHyperVertex = GraphDb.getDb().addVertex("hyperVertex");
-                    GraphDb.getDb().addEdge(null, newHyperVertex, newElementVertex, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX);
+                    Vertex newHyperVertex = UMLG.getDb().addVertex("hyperVertex");
+                    UMLG.getDb().addEdge(null, newHyperVertex, newElementVertex, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX);
                     //place the hyper vertex in the linked list
                     if (indexOfNewElement == 0) {
                         //Need to move the edge (LABEL_TO_FIRST_HYPER_VERTEX) to the parent
                         //Remove the label to first
                         Edge edgeFromParent = hyperVertexAtIndex.getEdges(Direction.IN, LABEL_TO_FIRST_HYPER_VERTEX + getLabel()).iterator().next();
-                        GraphDb.getDb().removeEdge(edgeFromParent);
+                        UMLG.getDb().removeEdge(edgeFromParent);
                         //Add the edge (LABEL_TO_FIRST_HYPER_VERTEX) to the new hyper vertex in position 0
-                        GraphDb.getDb().addEdge(null, this.vertex, newHyperVertex, LABEL_TO_FIRST_HYPER_VERTEX + getLabel());
+                        UMLG.getDb().addEdge(null, this.vertex, newHyperVertex, LABEL_TO_FIRST_HYPER_VERTEX + getLabel());
                         //Link the new hyper vertex to the next one
-                        GraphDb.getDb().addEdge(null, newHyperVertex, hyperVertexAtIndex, LABEL_TO_NEXT_HYPER_VERTEX);
+                        UMLG.getDb().addEdge(null, newHyperVertex, hyperVertexAtIndex, LABEL_TO_NEXT_HYPER_VERTEX);
                     } else {
                         //Place the new hyper vertex in the list
                         //Break the link to the previous hyper edge
                         Edge edgeToPreviousHyperVertex = hyperVertexAtIndex.getEdges(Direction.IN, LABEL_TO_NEXT_HYPER_VERTEX).iterator().next();
                         Vertex previousHyperVertex = edgeToPreviousHyperVertex.getVertex(Direction.OUT);
-                        GraphDb.getDb().removeEdge(edgeToPreviousHyperVertex);
+                        UMLG.getDb().removeEdge(edgeToPreviousHyperVertex);
                         //Recreate the link from the previous hyper vertex to the new one
-                        GraphDb.getDb().addEdge(null, previousHyperVertex, newHyperVertex, LABEL_TO_NEXT_HYPER_VERTEX);
+                        UMLG.getDb().addEdge(null, previousHyperVertex, newHyperVertex, LABEL_TO_NEXT_HYPER_VERTEX);
                         //Add a edge to the next hyper edge from the new one.
-                        GraphDb.getDb().addEdge(null, newHyperVertex, hyperVertexAtIndex, LABEL_TO_NEXT_HYPER_VERTEX);
+                        UMLG.getDb().addEdge(null, newHyperVertex, hyperVertexAtIndex, LABEL_TO_NEXT_HYPER_VERTEX);
                     }
                 }
             }

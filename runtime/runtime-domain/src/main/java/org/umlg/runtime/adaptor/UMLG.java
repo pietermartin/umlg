@@ -1,9 +1,9 @@
 package org.umlg.runtime.adaptor;
 
 
-public class GraphDb {
+public class UMLG {
 
-    private GraphDb() {
+    private UMLG() {
     }
 
     private static ThreadLocal<UmlgGraph> dbVar = new ThreadLocal<UmlgGraph>() {

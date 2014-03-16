@@ -3,7 +3,7 @@ package org.umlg.runtime.domain.activity;
 
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.pipes.AbstractPipe;
-import org.umlg.runtime.adaptor.GraphDb;
+import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.domain.activity.interf.IActivityEdge;
 
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ public abstract class ActivityEdge<T extends Token> extends AbstractPipe<T, Bool
 			if (evaluateGuardConditions(token)) {
 				this.tokens.add(token);
 			} else {
-				GraphDb.getDb().removeVertex(token.getVertex());
+				UMLG.getDb().removeVertex(token.getVertex());
 			}
 		}
 		if (hasWeightPassed()) {

@@ -73,16 +73,16 @@ public class ClassAuditTransformation extends BaseVisitor implements Visitor<Cla
 	private void addCreateAuditVertexWithAuditEdge(OJAnnotatedClass ojClass, Class c) {
 		OJAnnotatedOperation createAuditVertexWithAuditEdge = new OJAnnotatedOperation("createAuditVertexWithAuditEdge");
 		createAuditVertexWithAuditEdge.setVisibility(OJVisibilityKind.PRIVATE);
-		ojClass.addToImports(UmlgGenerationUtil.graphDbPathName);
-		createAuditVertexWithAuditEdge.getBody().addToStatements("this.auditVertex = " + UmlgGenerationUtil.graphDbAccess + ".addVertex(\"dribble\")");
+		ojClass.addToImports(UmlgGenerationUtil.UMLGPathName);
+		createAuditVertexWithAuditEdge.getBody().addToStatements("this.auditVertex = " + UmlgGenerationUtil.UMLGAccess + ".addVertex(\"dribble\")");
 		createAuditVertexWithAuditEdge.getBody().addToStatements(
 				UmlgGenerationUtil.transactionThreadVar.getLast() + ".putAuditVertexFalse(getClass().getName() + getUid(), this.auditVertex)");
 		createAuditVertexWithAuditEdge.getBody().addToStatements(
-				"this.auditVertex.setProperty(\"transactionNo\", " + UmlgGenerationUtil.graphDbAccess + ".getTransactionCount())");
+				"this.auditVertex.setProperty(\"transactionNo\", " + UmlgGenerationUtil.UMLGAccess + ".getTransactionCount())");
 		createAuditVertexWithAuditEdge.getBody().addToStatements(
-				"Edge auditEdgeToOriginal = " + UmlgGenerationUtil.graphDbAccess + ".addEdge(null, this.vertex, this.auditVertex, \"audit\")");
+				"Edge auditEdgeToOriginal = " + UmlgGenerationUtil.UMLGAccess + ".addEdge(null, this.vertex, this.auditVertex, \"audit\")");
 		createAuditVertexWithAuditEdge.getBody().addToStatements(
-				"auditEdgeToOriginal.setProperty(\"transactionNo\", " + UmlgGenerationUtil.graphDbAccess + ".getTransactionCount())");
+				"auditEdgeToOriginal.setProperty(\"transactionNo\", " + UmlgGenerationUtil.UMLGAccess + ".getTransactionCount())");
 		createAuditVertexWithAuditEdge.getBody().addToStatements("auditEdgeToOriginal.setProperty(\"outClass\", this.getClass().getName())");
 		createAuditVertexWithAuditEdge.getBody().addToStatements("auditEdgeToOriginal.setProperty(\"inClass\", this.getClass().getName() + \"Audit\")");
 		createAuditVertexWithAuditEdge.getBody().addToStatements("copyShallowStateToAudit(this, this)");

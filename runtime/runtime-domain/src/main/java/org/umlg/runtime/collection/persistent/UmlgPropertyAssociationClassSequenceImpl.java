@@ -2,7 +2,7 @@ package org.umlg.runtime.collection.persistent;
 
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
-import org.umlg.runtime.adaptor.GraphDb;
+import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.collection.UmlgCollection;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.collection.UmlgPropertyAssociationClassSequence;
@@ -59,24 +59,24 @@ public class UmlgPropertyAssociationClassSequenceImpl<E, AC extends AssociationC
         } else if (o.getClass().isEnum()) {
             v = removeFromInternalMap(o);
             removeEdge(v);
-            GraphDb.getDb().removeVertex(v);
+            UMLG.getDb().removeVertex(v);
         } else if (isOnePrimitive() || getDataTypeEnum() != null) {
             throw new IllegalStateException("one primitive or data type can not have an association class.");
         } else {
             v = removeFromInternalMap(o);
             removeEdge(v);
-            GraphDb.getDb().removeVertex(v);
+            UMLG.getDb().removeVertex(v);
         }
 
         return super.remove(o);
     }
 
     private void removeEdge(Vertex v) {
-        Set<Edge> edges = GraphDb.getDb().getEdgesBetween(this.vertex, v, this.getLabel());
+        Set<Edge> edges = UMLG.getDb().getEdgesBetween(this.vertex, v, this.getLabel());
         for (Edge edge : edges) {
-            Vertex associationClassVertex = GraphDb.getDb().getVertex(edge.getProperty(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID));
+            Vertex associationClassVertex = UMLG.getDb().getVertex(edge.getProperty(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID));
             //The remove code will delete all in and out edges
-            GraphDb.getDb().removeVertex(associationClassVertex);
+            UMLG.getDb().removeVertex(associationClassVertex);
         }
     }
 

@@ -39,7 +39,7 @@ public class IndexCreator extends BaseVisitor implements Visitor<Model> {
         List<Property> qualifiers = ModelLoader.INSTANCE.getAllQualifiers();
         for (Property q : qualifiers) {
             PropertyWrapper qualifierWrap = new PropertyWrapper(q);
-            createIndexes.getBody().addToStatements(UmlgGenerationUtil.graphDbAccess + ".createKeyIndex(" +
+            createIndexes.getBody().addToStatements(UmlgGenerationUtil.UMLGAccess + ".createKeyIndex(" +
                     UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() +
                     ".getUmlgLabelConverter().convert(\"" + qualifierWrap.getQualifiedName() + "\"), " +
                     UmlgGenerationUtil.edgePathName.getLast() + ".class, " +
@@ -52,7 +52,7 @@ public class IndexCreator extends BaseVisitor implements Visitor<Model> {
         indexCreator.addToImports(UmlgGenerationUtil.UmlgLabelConverterFactoryPathName);
 
         //Create index for the application root
-        createIndexes.getBody().addToStatements(UmlgGenerationUtil.graphDbAccess +
+        createIndexes.getBody().addToStatements(UmlgGenerationUtil.UMLGAccess +
                 ".createKeyIndex(" +
                 UmlgGenerationUtil.UmlgGraph.getLast() +
                 ".ROOT_VERTEX, " +
@@ -79,7 +79,7 @@ public class IndexCreator extends BaseVisitor implements Visitor<Model> {
                 unique = "false";
             }
             createIndexes.getBody().addToStatements(
-                    UmlgGenerationUtil.graphDbAccess + ".createKeyIndex(" +
+                    UmlgGenerationUtil.UMLGAccess + ".createKeyIndex(" +
                             UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() +
                             ".getUmlgLabelConverter().convert(\"" +
                             indexedProperty.getQualifiedName() + "\"), " +
@@ -94,7 +94,7 @@ public class IndexCreator extends BaseVisitor implements Visitor<Model> {
 
         indexCreator.addToImports(UmlgGenerationUtil.UmlgGraph);
         indexCreator.addToImports(UmlgGenerationUtil.vertexPathName);
-        indexCreator.addToImports(UmlgGenerationUtil.graphDbPathName);
+        indexCreator.addToImports(UmlgGenerationUtil.UMLGPathName);
     }
 
     @Override

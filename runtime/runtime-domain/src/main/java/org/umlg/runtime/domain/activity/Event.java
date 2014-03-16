@@ -1,7 +1,7 @@
 package org.umlg.runtime.domain.activity;
 
 import com.tinkerpop.blueprints.Vertex;
-import org.umlg.runtime.adaptor.GraphDb;
+import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.domain.UmlgNode;
 import org.umlg.runtime.domain.ocl.OclState;
 
@@ -17,7 +17,7 @@ public abstract class Event implements UmlgNode {
 
 	public Event(String name) {
 		super();
-		this.vertex = GraphDb.getDb().addVertex(null);
+		this.vertex = UMLG.getDb().addVertex(null);
 		this.vertex.setProperty("name", name);
 	}
 

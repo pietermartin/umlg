@@ -3,7 +3,7 @@ package org.umlg.runtime.collection.persistent;
 import com.google.common.base.Preconditions;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
-import org.umlg.runtime.adaptor.GraphDb;
+import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.collection.UmlgQualifiedBag;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.domain.UmlgNode;
@@ -15,7 +15,6 @@ public class UmlgQualifiedBagImpl<E> extends BaseBag<E> implements UmlgQualified
 
 	public UmlgQualifiedBagImpl(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
 		super(owner, runtimeProperty);
-//		this.index = GraphDb.getDb().getIndex(getQualifiedName(), Edge.class);
 	}
 
 	@Override
@@ -30,10 +29,10 @@ public class UmlgQualifiedBagImpl<E> extends BaseBag<E> implements UmlgQualified
 			if (o instanceof UmlgNode) {
 				UmlgNode node = (UmlgNode) o;
 				v = node.getVertex();
-				Set<Edge> edges = GraphDb.getDb().getEdgesBetween(this.vertex, v, this.getLabel());
+				Set<Edge> edges = UMLG.getDb().getEdgesBetween(this.vertex, v, this.getLabel());
 				for (Edge edge : edges) {
 //					removeEdgefromIndex(edge);
-					GraphDb.getDb().removeEdge(edge);
+					UMLG.getDb().removeEdge(edge);
 				}
 			} else if (o.getClass().isEnum()) {
                 List<Vertex> vertexes = this.internalVertexMap.get(getQualifiedName() + o.toString());
@@ -41,14 +40,14 @@ public class UmlgQualifiedBagImpl<E> extends BaseBag<E> implements UmlgQualified
                 v = vertexes.get(0);
 //				v = this.internalVertexMap.get(((Enum<?>) o).name());
 //				Edge edge = v.getEdges(Direction.IN, this.getLabel()).iterator().next();
-				GraphDb.getDb().removeVertex(v);
+				UMLG.getDb().removeVertex(v);
 			} else {
                 List<Vertex> vertexes = this.internalVertexMap.get(getQualifiedName() + o.toString());
                 Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
                 v = vertexes.get(0);
 //				v = this.internalVertexMap.get(o);
 //				Edge edge = v.getEdges(Direction.IN, this.getLabel()).iterator().next();
-				GraphDb.getDb().removeVertex(v);
+				UMLG.getDb().removeVertex(v);
 			}
 		}
 		return result;

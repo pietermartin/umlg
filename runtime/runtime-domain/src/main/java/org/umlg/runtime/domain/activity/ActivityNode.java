@@ -4,7 +4,7 @@ import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.pipes.AbstractPipe;
-import org.umlg.runtime.adaptor.GraphDb;
+import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.domain.BaseTinkerBehavioredClassifier;
 import org.umlg.runtime.domain.UmlgNode;
 import org.umlg.runtime.domain.activity.interf.IActivityEdge;
@@ -36,7 +36,7 @@ public abstract class ActivityNode<IN extends Token, OUT extends Token> extends 
 
 	public ActivityNode(boolean persist, String name) {
 		super();
-		this.vertex = GraphDb.getDb().addVertex(null);
+		this.vertex = UMLG.getDb().addVertex(null);
 		nodeStat = new NodeStat(vertex, true);
 		this.vertex.setProperty("name", name);
 	}
@@ -94,7 +94,7 @@ public abstract class ActivityNode<IN extends Token, OUT extends Token> extends 
 	}	
 	
 	public void addOutgoingToken(OUT token) {
-		Edge edge = GraphDb.getDb().addEdge(null, this.vertex, token.getVertex(), Token.TOKEN + token.getEdgeName());
+		Edge edge = UMLG.getDb().addEdge(null, this.vertex, token.getVertex(), Token.TOKEN + token.getEdgeName());
 		edge.setProperty("tokenClass", token.getClass().getName());
 		edge.setProperty("outClass", this.getClass().getName());
 	}

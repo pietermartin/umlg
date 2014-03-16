@@ -503,8 +503,8 @@ public class ClassBuilder extends BaseVisitor implements Visitor<Class> {
     private void addEdgeToMetaNode(OJAnnotatedClass annotatedClass, Class clazz) {
         OJAnnotatedOperation addEdgeToMetaNode = new OJAnnotatedOperation("addEdgeToMetaNode");
         UmlgGenerationUtil.addOverrideAnnotation(addEdgeToMetaNode);
-        addEdgeToMetaNode.getBody().addToStatements(UmlgGenerationUtil.graphDbAccess + ".addEdge(null, getMetaNode().getVertex(), this.vertex, " + UmlgGenerationUtil.UMLG_NODE.getLast() + ".ALLINSTANCES_EDGE_LABEL)");
-        annotatedClass.addToImports(UmlgGenerationUtil.graphDbPathName);
+        addEdgeToMetaNode.getBody().addToStatements(UmlgGenerationUtil.UMLGAccess + ".addEdge(null, getMetaNode().getVertex(), this.vertex, " + UmlgGenerationUtil.UMLG_NODE.getLast() + ".ALLINSTANCES_EDGE_LABEL)");
+        annotatedClass.addToImports(UmlgGenerationUtil.UMLGPathName);
         annotatedClass.addToImports(UmlgGenerationUtil.UMLG_NODE);
         annotatedClass.addToOperations(addEdgeToMetaNode);
     }

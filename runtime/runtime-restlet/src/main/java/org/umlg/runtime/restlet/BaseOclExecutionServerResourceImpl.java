@@ -6,7 +6,7 @@ import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 import org.umlg.ocl.UmlgOclExecutor;
-import org.umlg.runtime.adaptor.GraphDb;
+import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.adaptor.GremlinExecutor;
 import org.umlg.runtime.domain.PersistentObject;
 import org.umlg.runtime.domain.UmlgNode;
@@ -21,7 +21,7 @@ public abstract class BaseOclExecutionServerResourceImpl extends ServerResource 
 
     protected Representation execute(String query, Object contextId, String type) {
         if (type.equalsIgnoreCase("ocl")) {
-            UmlgNode context = GraphDb.getDb().instantiateClassifier(contextId);
+            UmlgNode context = UMLG.getDb().instantiateClassifier(contextId);
             Object result = UmlgOclExecutor.executeOclQuery(context, query);
             if (result instanceof Map) {
 //            return UmlgOclExecutor.tupleMapToJson((Map<String, Object>) result);

@@ -3,7 +3,7 @@ package org.umlg.runtime.domain.activity;
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
-import org.umlg.runtime.adaptor.GraphDb;
+import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.domain.CompositionNode;
 import org.umlg.runtime.domain.UmlgNode;
 
@@ -31,13 +31,13 @@ public class SingleObjectToken<O> extends ObjectToken<O> {
 			UmlgNode node = (UmlgNode) object;
 			v = node.getVertex();
 		} else if (object.getClass().isEnum()) {
-			v = GraphDb.getDb().addVertex(null);
+			v = UMLG.getDb().addVertex(null);
 			v.setProperty("value", ((Enum<?>) object).name());
 		} else {
-			v = GraphDb.getDb().addVertex(null);
+			v = UMLG.getDb().addVertex(null);
 			v.setProperty("value", object);
 		}
-		Edge edge = GraphDb.getDb().addEdge(null, this.vertex, v, TOKEN + "toObject");
+		Edge edge = UMLG.getDb().addEdge(null, this.vertex, v, TOKEN + "toObject");
 		edge.setProperty("inClass", object.getClass().getName());
 	}
 
@@ -45,11 +45,11 @@ public class SingleObjectToken<O> extends ObjectToken<O> {
 		O object = getObject();
 		Edge edge = this.vertex.getEdges(Direction.OUT, TOKEN + "toObject").iterator().next();
 		if (object instanceof UmlgNode) {
-			GraphDb.getDb().removeEdge(edge);
+			UMLG.getDb().removeEdge(edge);
 		} else if (object.getClass().isEnum()) {
-			GraphDb.getDb().removeVertex(edge.getVertex(Direction.IN));
+			UMLG.getDb().removeVertex(edge.getVertex(Direction.IN));
 		} else {
-			GraphDb.getDb().removeVertex(edge.getVertex(Direction.IN));
+			UMLG.getDb().removeVertex(edge.getVertex(Direction.IN));
 		}
 	}
 
@@ -94,7 +94,7 @@ public class SingleObjectToken<O> extends ObjectToken<O> {
 	@Override
 	public void remove() {
 		removeEdgeToObject();
-		GraphDb.getDb().removeVertex(getVertex());
+		UMLG.getDb().removeVertex(getVertex());
 	}
 	
 	//TODO think about null token and object tokens that are control tokens

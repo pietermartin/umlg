@@ -1,7 +1,7 @@
 package org.umlg.runtime.domain.activity;
 
 import com.tinkerpop.blueprints.Vertex;
-import org.umlg.runtime.adaptor.GraphDb;
+import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.domain.BaseTinkerBehavioredClassifier;
 import org.umlg.runtime.domain.IClassifierSignalEvent;
 import org.umlg.runtime.domain.ISignal;
@@ -38,9 +38,9 @@ public abstract class SendSignalAction extends InvocationAction implements ISend
 				Thread.sleep(1000);
 				try {
 					resolveTarget().receiveSignal(getSignal());
-					GraphDb.getDb().commit();
+					UMLG.getDb().commit();
 				} catch (Exception e) {
-					GraphDb.getDb().rollback();
+					UMLG.getDb().rollback();
 					throw e;
 				}
 				return true;

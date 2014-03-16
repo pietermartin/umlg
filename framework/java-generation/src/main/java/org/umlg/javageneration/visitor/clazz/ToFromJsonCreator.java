@@ -383,9 +383,9 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
 
                         OJIfStatement ifSetToNull = new OJIfStatement(field.getName() + ".isEmpty() || " + field.getName() + ".get(\"id\") == null",
                                 pWrap.setter() + "(null)");
-                        ifSetToNull.addToElsePart(pWrap.setter() + "((" + pWrap.javaBaseTypePath().getLast() + ")" + UmlgGenerationUtil.graphDbAccess + ".instantiateClassifier(("
+                        ifSetToNull.addToElsePart(pWrap.setter() + "((" + pWrap.javaBaseTypePath().getLast() + ")" + UmlgGenerationUtil.UMLGAccess + ".instantiateClassifier(("
                                 + pWrap.fieldname() + "Map.get(\"id\"))))");
-                        annotatedClass.addToImports(UmlgGenerationUtil.graphDbPathName);
+                        annotatedClass.addToImports(UmlgGenerationUtil.UMLGPathName);
                         ifNotNull.addToThenPart(ifSetToNull);
                         fromJson.getBody().addToStatements(ifInMap);
 
@@ -398,9 +398,9 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                         idField.setInitExp("(String)" + pWrap.fieldname() + "Map.get(\"id\")");
                         ifNotNull.getThenPart().addToLocals(idField);
                         OJIfStatement ojIfStatement = new OJIfStatement("idField != null && !idField.startsWith(\"fake\")");
-                        OJSimpleStatement ojSimpleStatementConstructor = new OJSimpleStatement(pWrap.fieldname() + " = " + UmlgGenerationUtil.graphDbAccess
+                        OJSimpleStatement ojSimpleStatementConstructor = new OJSimpleStatement(pWrap.fieldname() + " = " + UmlgGenerationUtil.UMLGAccess
                                 + ".instantiateClassifier((" + pWrap.fieldname() + "Map.get(\"id\")))");
-                        annotatedClass.addToImports(UmlgGenerationUtil.graphDbPathName);
+                        annotatedClass.addToImports(UmlgGenerationUtil.UMLGPathName);
                         ojIfStatement.addToThenPart(ojSimpleStatementConstructor);
 
                         ojIfStatement.addToElsePart("Class<" + pWrap.javaBaseTypePath().getLast() + "> baseTumlClass = UmlgSchemaFactory.getUmlgSchemaMap().get((String)" + pWrap.fieldname() + "Map.get(\"qualifiedName\"))");
@@ -427,7 +427,7 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                         ifNotNull.addToThenPart(pWrap.clearer() + "()");
                         OJForStatement ojForStatement = new OJForStatement("row", new OJPathName("Map<String,Integer>"), pWrap.fieldname() + "Map");
                         ifNotNull.addToThenPart(ojForStatement);
-                        OJSimpleStatement ojSimpleStatementConstructor = new OJSimpleStatement(pWrap.javaBaseTypePath().getLast() + " " + pWrap.fieldname() + " = " + UmlgGenerationUtil.graphDbAccess
+                        OJSimpleStatement ojSimpleStatementConstructor = new OJSimpleStatement(pWrap.javaBaseTypePath().getLast() + " " + pWrap.fieldname() + " = " + UmlgGenerationUtil.UMLGAccess
                                 + ".instantiateClassifier(row.get(\"id\"))");
                         ojForStatement.getBody().addToStatements(ojSimpleStatementConstructor);
                         OJSimpleStatement ojSimpleStatementFromJson = new OJSimpleStatement(pWrap.adder() + "(" + pWrap.fieldname() + ")");
@@ -444,7 +444,7 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                         idField.setInitExp("(String)row.get(\"id\")");
                         ojForStatement.getBody().addToLocals(idField);
                         OJIfStatement ojIfStatement = new OJIfStatement("idField != null && !idField.startsWith(\"fake\")");
-                        OJSimpleStatement ojSimpleStatementConstructor = new OJSimpleStatement(pWrap.fieldname() + " = " + UmlgGenerationUtil.graphDbAccess
+                        OJSimpleStatement ojSimpleStatementConstructor = new OJSimpleStatement(pWrap.fieldname() + " = " + UmlgGenerationUtil.UMLGAccess
                                 + ".instantiateClassifier((row.get(\"id\")))");
                         ojIfStatement.addToThenPart(ojSimpleStatementConstructor);
 
@@ -605,7 +605,7 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                             ifSetToNull.addToElsePart(pWrap.getAssociationClassPathName().getLast() + " " + pWrap.getAssociationClassFakePropertyName() + " = new "
                                     + pWrap.getAssociationClassPathName().getLast() + "(true)");
                             ifSetToNull.addToElsePart(pWrap.getAssociationClassFakePropertyName() + ".fromJson((Map<String, Object>) propertyMap.get(\"" + pWrap.getAssociationClassFakePropertyName() + "\"))");
-                            ifSetToNull.addToElsePart(pWrap.setter() + "((" + pWrap.javaBaseTypePath().getLast() + ")" + UmlgGenerationUtil.graphDbAccess + ".instantiateClassifier((" + field.getName() + ".get(\"id\"))), " + pWrap.getAssociationClassFakePropertyName() + ")");
+                            ifSetToNull.addToElsePart(pWrap.setter() + "((" + pWrap.javaBaseTypePath().getLast() + ")" + UmlgGenerationUtil.UMLGAccess + ".instantiateClassifier((" + field.getName() + ".get(\"id\"))), " + pWrap.getAssociationClassFakePropertyName() + ")");
 
                             ifSetToNull.addToElsePart("//Store the association class property name in a ThreadVar.");
                             ifSetToNull.addToElsePart("//The corresponding toJson checks the ThreadVar to know whether it should return this association class's data");
@@ -614,10 +614,10 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                         } else {
                             ifSetToNull = new OJIfStatement(field.getName() + ".isEmpty() || " + field.getName() + ".get(\"id\") == null",
                                     pWrap.setter() + "(null)");
-                            ifSetToNull.addToElsePart(pWrap.setter() + "((" + pWrap.javaBaseTypePath().getLast() + ")" + UmlgGenerationUtil.graphDbAccess + ".instantiateClassifier(("
+                            ifSetToNull.addToElsePart(pWrap.setter() + "((" + pWrap.javaBaseTypePath().getLast() + ")" + UmlgGenerationUtil.UMLGAccess + ".instantiateClassifier(("
                                     + pWrap.fieldname() + "Map.get(\"id\"))))");
                         }
-                        annotatedClass.addToImports(UmlgGenerationUtil.graphDbPathName);
+                        annotatedClass.addToImports(UmlgGenerationUtil.UMLGPathName);
                         ifNotNull.addToThenPart(ifSetToNull);
                         fromJson.getBody().addToStatements(ifInMap);
 
@@ -627,9 +627,9 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                         OJField component = new OJField(pWrap.fieldname(), pWrap.javaBaseTypePath());
                         ifNotNull.getThenPart().addToLocals(component);
                         OJIfStatement ojIfStatement = new OJIfStatement(pWrap.fieldname() + "Map.get(\"id\") != null");
-                        OJSimpleStatement ojSimpleStatementConstructor = new OJSimpleStatement(pWrap.fieldname() + " = " + UmlgGenerationUtil.graphDbAccess
+                        OJSimpleStatement ojSimpleStatementConstructor = new OJSimpleStatement(pWrap.fieldname() + " = " + UmlgGenerationUtil.UMLGAccess
                                 + ".instantiateClassifier((" + pWrap.fieldname() + "Map.get(\"id\")))");
-                        annotatedClass.addToImports(UmlgGenerationUtil.graphDbPathName);
+                        annotatedClass.addToImports(UmlgGenerationUtil.UMLGPathName);
                         ojIfStatement.addToThenPart(ojSimpleStatementConstructor);
 
                         ojIfStatement.addToElsePart("Class<" + pWrap.javaBaseTypePath().getLast() + "> baseTumlClass = UmlgSchemaFactory.getUmlgSchemaMap().get((String)" + pWrap.fieldname() + "Map.get(\"qualifiedName\"))");
@@ -656,7 +656,7 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                         ifNotNull.addToThenPart(pWrap.clearer() + "()");
                         OJForStatement ojForStatement = new OJForStatement("row", new OJPathName("Map<String,Integer>"), pWrap.fieldname() + "Map");
                         ifNotNull.addToThenPart(ojForStatement);
-                        OJSimpleStatement ojSimpleStatementConstructor = new OJSimpleStatement(pWrap.javaBaseTypePath().getLast() + " " + pWrap.fieldname() + " = " + UmlgGenerationUtil.graphDbAccess
+                        OJSimpleStatement ojSimpleStatementConstructor = new OJSimpleStatement(pWrap.javaBaseTypePath().getLast() + " " + pWrap.fieldname() + " = " + UmlgGenerationUtil.UMLGAccess
                                 + ".instantiateClassifier(row.get(\"id\"))");
                         ojForStatement.getBody().addToStatements(ojSimpleStatementConstructor);
                         OJSimpleStatement ojSimpleStatementFromJson = new OJSimpleStatement(pWrap.adder() + "(" + pWrap.fieldname() + ")");
@@ -673,7 +673,7 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                         idField.setInitExp("(String)row.get(\"id\")");
                         ojForStatement.getBody().addToLocals(idField);
                         OJIfStatement ojIfStatement = new OJIfStatement("idField != null && !idField.startsWith(\"fake\")");
-                        OJSimpleStatement ojSimpleStatementConstructor = new OJSimpleStatement(pWrap.fieldname() + " = " + UmlgGenerationUtil.graphDbAccess
+                        OJSimpleStatement ojSimpleStatementConstructor = new OJSimpleStatement(pWrap.fieldname() + " = " + UmlgGenerationUtil.UMLGAccess
                                 + ".instantiateClassifier((row.get(\"id\")))");
                         ojIfStatement.addToThenPart(ojSimpleStatementConstructor);
 

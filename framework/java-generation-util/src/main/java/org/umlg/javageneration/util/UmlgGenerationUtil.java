@@ -107,7 +107,7 @@ public class UmlgGenerationUtil {
     public static OJPathName transactionThreadVar = new OJPathName("org.umlg.runtime.adaptor.TransactionThreadVar");
     public static OJPathName transactionThreadEntityVar = new OJPathName("org.umlg.runtime.adaptor.TransactionThreadEntityVar");
     public static OJPathName transactionThreadMetaNodeVar = new OJPathName("org.umlg.runtime.adaptor.TransactionThreadMetaNodeVar");
-    public static OJPathName graphDbPathName = new OJPathName("org.umlg.runtime.adaptor.GraphDb");
+    public static OJPathName UMLGPathName = new OJPathName("org.umlg.runtime.adaptor.UMLG");
     public static OJPathName tinkerAuditNodePathName = new OJPathName("org.umlg.runtime.domain.TinkerAuditNode");
 
     public static OJPathName umlgCollection = new OJPathName("org.umlg.runtime.collection.UmlgCollection");
@@ -146,7 +146,7 @@ public class UmlgGenerationUtil {
     public static OJPathName umlgQualifiedBagImpl = new OJPathName("org.umlg.runtime.collection.persistent.UmlgQualifiedBagImpl");
 
     public static OJPathName edgePathName = new OJPathName("com.tinkerpop.blueprints.Edge");
-    public static String graphDbAccess = "GraphDb.getDb()";
+    public static String UMLGAccess = "UMLG.getDb()";
     public static OJPathName UMLG_NODE = new OJPathName("org.umlg.runtime.domain.UmlgNode");
     public static OJPathName UMLG_ROOT_NODE = new OJPathName("org.umlg.runtime.domain.UmlgRootNode");
 

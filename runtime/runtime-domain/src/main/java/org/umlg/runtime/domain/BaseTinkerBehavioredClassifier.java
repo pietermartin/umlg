@@ -1,7 +1,7 @@
 package org.umlg.runtime.domain;
 
 import com.tinkerpop.blueprints.Edge;
-import org.umlg.runtime.adaptor.GraphDb;
+import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.collection.UmlgSequence;
 import org.umlg.runtime.domain.activity.AbstractActivity;
 import org.umlg.runtime.domain.activity.Token;
@@ -37,7 +37,7 @@ public abstract class BaseTinkerBehavioredClassifier extends BaseUmlgAudit imple
 	}
 	
 	protected void attachToRoot() {
-		Edge edge = GraphDb.getDb().addEdge(null, GraphDb.getDb().getRoot(), this.vertex, "classifierBehavior");
+		Edge edge = UMLG.getDb().addEdge(null, UMLG.getDb().getRoot(), this.vertex, "classifierBehavior");
 		edge.setProperty("inClass", this.getClass().getName());
 	}
 

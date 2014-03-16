@@ -127,7 +127,7 @@ public class RestletFromJsonCreator extends BaseVisitor implements Visitor<Class
                             ifSetToNull.addToElsePart(pWrap.getAssociationClassPathName().getLast() + " " + pWrap.getAssociationClassFakePropertyName() + " = new "
                                     + pWrap.getAssociationClassPathName().getLast() + "(true)");
                             ifSetToNull.addToElsePart(pWrap.getAssociationClassFakePropertyName() + ".fromJson((Map<String, Object>) propertyMap.get(\"" + pWrap.getAssociationClassFakePropertyName() + "\"))");
-                            ifSetToNull.addToElsePart(pWrap.setter() + "((" + pWrap.javaBaseTypePath().getLast() + ")" + UmlgGenerationUtil.graphDbAccess + ".instantiateClassifier(id), " + pWrap.getAssociationClassFakePropertyName() + ")");
+                            ifSetToNull.addToElsePart(pWrap.setter() + "((" + pWrap.javaBaseTypePath().getLast() + ")" + UmlgGenerationUtil.UMLGAccess + ".instantiateClassifier(id), " + pWrap.getAssociationClassFakePropertyName() + ")");
 
                             ifSetToNull.addToElsePart("//Store the association class property name in a ThreadVar.");
                             ifSetToNull.addToElsePart("//The corresponding toJson checks the ThreadVar to know whether it should return this association class's data");
@@ -143,11 +143,11 @@ public class RestletFromJsonCreator extends BaseVisitor implements Visitor<Class
                             ifIdLong.addToElsePart("id = idFromMap");
                             ifIdLong.addToThenPart("id = " + UmlgGenerationUtil.UmlgTmpIdManager.getLast() + ".INSTANCE.get((String)idFromMap)");
                             ifSetToNull.addToElsePart(ifIdLong);
-                            ifSetToNull.addToElsePart(pWrap.setter() + "((" + pWrap.javaBaseTypePath().getLast() + ")" + UmlgGenerationUtil.graphDbAccess + ".instantiateClassifier(id))");
+                            ifSetToNull.addToElsePart(pWrap.setter() + "((" + pWrap.javaBaseTypePath().getLast() + ")" + UmlgGenerationUtil.UMLGAccess + ".instantiateClassifier(id))");
                         }
 
                         annotatedClass.addToImports(UmlgGenerationUtil.UmlgTmpIdManager);
-                        annotatedClass.addToImports(UmlgGenerationUtil.graphDbPathName);
+                        annotatedClass.addToImports(UmlgGenerationUtil.UMLGPathName);
                         ifNotNull.addToThenPart(ifSetToNull);
                         fromJson.getBody().addToStatements(ifInMap);
 
@@ -167,15 +167,15 @@ public class RestletFromJsonCreator extends BaseVisitor implements Visitor<Class
 
                         ifNotNull.addToThenPart("Object idFromMap = " + pWrap.fieldname() + "Map.get(\"id\")");
                         ojIfStatement = new OJIfStatement("(idFromMap instanceof String) && ((String)idFromMap).startsWith(\"fake\")");
-                        OJSimpleStatement ojSimpleStatementConstructor = new OJSimpleStatement(pWrap.fieldname() + " = " + UmlgGenerationUtil.graphDbAccess
+                        OJSimpleStatement ojSimpleStatementConstructor = new OJSimpleStatement(pWrap.fieldname() + " = " + UmlgGenerationUtil.UMLGAccess
                                 + ".instantiateClassifier(" + pWrap.fieldname() + "Map.get(\"id\"))");
                         ojIfStatement.addToElsePart(ojSimpleStatementConstructor);
 
                         ojIfStatement.addToThenPart("Object id = " + UmlgGenerationUtil.UmlgTmpIdManager.getLast() + ".INSTANCE.get((String)" + pWrap.fieldname() + "Map.get(\"tmpId\"))");
-                        ojIfStatement.addToThenPart(pWrap.fieldname() + " = GraphDb.getDb().instantiateClassifier(id)");
+                        ojIfStatement.addToThenPart(pWrap.fieldname() + " = " + UmlgGenerationUtil.UMLGAccess + ".instantiateClassifier(id)");
 
                         annotatedClass.addToImports(UmlgGenerationUtil.UmlgTmpIdManager);
-                        annotatedClass.addToImports(UmlgGenerationUtil.graphDbPathName);
+                        annotatedClass.addToImports(UmlgGenerationUtil.UMLGPathName);
                         annotatedClass.addToImports(UmlgGenerationUtil.UmlgSchemaFactory);
                         annotatedClass.addToImports("java.lang.reflect.Constructor");
 
@@ -198,12 +198,12 @@ public class RestletFromJsonCreator extends BaseVisitor implements Visitor<Class
                         ojForStatement.getBody().addToStatements("Object idFromMap = row.get(\"id\")");
                         OJIfStatement ojIfStatement = new OJIfStatement("(idFromMap instanceof String) && (((String)idFromMap).startsWith(\"fake\"))");
 
-                        OJSimpleStatement ojSimpleStatementConstructor = new OJSimpleStatement(pWrap.fieldname() + " = " + UmlgGenerationUtil.graphDbAccess
+                        OJSimpleStatement ojSimpleStatementConstructor = new OJSimpleStatement(pWrap.fieldname() + " = " + UmlgGenerationUtil.UMLGAccess
                                 + ".instantiateClassifier(row.get(\"id\"))");
                         ojIfStatement.addToElsePart(ojSimpleStatementConstructor);
 
                         ojIfStatement.addToThenPart("Object id = " + UmlgGenerationUtil.UmlgTmpIdManager.getLast() + ".INSTANCE.get((String)row.get(\"tmpId\"))");
-                        ojIfStatement.addToThenPart(pWrap.fieldname() + " = GraphDb.getDb().instantiateClassifier(id)");
+                        ojIfStatement.addToThenPart(pWrap.fieldname() + " = " + UmlgGenerationUtil.UMLGAccess + ".instantiateClassifier(id)");
 
                         annotatedClass.addToImports(UmlgGenerationUtil.UmlgTmpIdManager);
                         annotatedClass.addToImports(UmlgGenerationUtil.UmlgSchemaFactory);

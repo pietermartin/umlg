@@ -2,7 +2,7 @@ package org.umlg.runtime.restlet;
 
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
-import org.umlg.runtime.adaptor.GraphDb;
+import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.restlet.util.UmlgURLDecoder;
 
 /**
@@ -32,7 +32,7 @@ public class QueryExecuteServerResourceImpl extends BaseOclExecutionServerResour
                 return executeStatic(query, contextClassifierQualifiedName, type);
             }
         } finally {
-            GraphDb.getDb().rollback();
+            UMLG.getDb().rollback();
         }
     }
 

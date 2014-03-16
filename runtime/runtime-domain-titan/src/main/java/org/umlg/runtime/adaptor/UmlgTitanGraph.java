@@ -6,13 +6,9 @@ import com.thinkaurelius.titan.graphdb.database.StandardTitanGraph;
 import com.tinkerpop.blueprints.*;
 import org.apache.commons.collections4.Factory;
 import org.apache.commons.collections4.list.LazyList;
-import org.apache.commons.io.FileUtils;
 import org.umlg.runtime.domain.PersistentObject;
 import org.umlg.runtime.domain.UmlgNode;
-import org.umlg.runtime.util.UmlgProperties;
 
-import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.logging.Logger;
@@ -186,7 +182,7 @@ public class UmlgTitanGraph extends StandardTitanGraph implements UmlgGraph {
                 try {
                     Class<?> umlgOclExecutor = Class.forName("org.umlg.ocl.UmlgOclExecutor");
                     Method method = umlgOclExecutor.getMethod("executeOclQueryToJson", UmlgNode.class, String.class);
-                    UmlgNode context = (UmlgNode) GraphDb.getDb().instantiateClassifier(contextId);
+                    UmlgNode context = (UmlgNode) UMLG.getDb().instantiateClassifier(contextId);
                     String json = (String) method.invoke(null, context, query);
                     return json;
                 } catch (ClassNotFoundException e) {
@@ -298,7 +294,7 @@ public class UmlgTitanGraph extends StandardTitanGraph implements UmlgGraph {
         TransactionThreadEntityVar.remove();
         TransactionThreadMetaNodeVar.remove();
         UmlgAssociationClassManager.remove();
-        GraphDb.remove();
+        UMLG.remove();
     }
 
 }

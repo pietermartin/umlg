@@ -106,13 +106,13 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
                         + parentPathName.getLast().toLowerCase() + "Id\"))");
         annotatedClass.addToImports(UmlgRestletGenerationUtil.UmlgURLDecoder);
         tryStatement.getTryPart().addToStatements(
-                parentPathName.getLast() + " parentResource = GraphDb.getDb().instantiateClassifier(" + parentPathName.getLast().toLowerCase() + "Id" + ")");
+                parentPathName.getLast() + " parentResource = " + UmlgGenerationUtil.UMLGAccess + ".instantiateClassifier(" + parentPathName.getLast().toLowerCase() + "Id" + ")");
         annotatedClass.addToImports(parentPathName);
         buildToJson(pWrap, annotatedClass, tryStatement.getTryPart(), asAssociationClass);
         get.getBody().addToStatements(tryStatement);
-        tryStatement.getFinallyPart().addToStatements(UmlgGenerationUtil.graphDbAccess + ".rollback()");
+        tryStatement.getFinallyPart().addToStatements(UmlgGenerationUtil.UMLGAccess + ".rollback()");
         tryStatement.setCatchPart(null);
-        annotatedClass.addToImports(UmlgGenerationUtil.graphDbPathName);
+        annotatedClass.addToImports(UmlgGenerationUtil.UMLGPathName);
         annotatedClass.addToImports(UmlgRestletGenerationUtil.JsonRepresentation);
         annotatedClass.addToOperations(get);
     }
@@ -135,13 +135,13 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
                         + parentPathName.getLast().toLowerCase() + "Id\"))");
         annotatedClass.addToImports(UmlgRestletGenerationUtil.UmlgURLDecoder);
         tryStatement.getTryPart().addToStatements(
-                parentPathName.getLast() + " parentResource = GraphDb.getDb().instantiateClassifier(" + parentPathName.getLast().toLowerCase() + "Id" + ")");
+                parentPathName.getLast() + " parentResource = " + UmlgGenerationUtil.UMLGAccess + ".instantiateClassifier(" + parentPathName.getLast().toLowerCase() + "Id" + ")");
         annotatedClass.addToImports(parentPathName);
         buildToJsonForOptions(pWrap, annotatedClass, tryStatement.getTryPart(), asAssociationClass);
         get.getBody().addToStatements(tryStatement);
-        tryStatement.getFinallyPart().addToStatements(UmlgGenerationUtil.graphDbAccess + ".rollback()");
+        tryStatement.getFinallyPart().addToStatements(UmlgGenerationUtil.UMLGAccess + ".rollback()");
         tryStatement.setCatchPart(null);
-        annotatedClass.addToImports(UmlgGenerationUtil.graphDbPathName);
+        annotatedClass.addToImports(UmlgGenerationUtil.UMLGPathName);
         annotatedClass.addToImports(UmlgRestletGenerationUtil.JsonRepresentation);
         annotatedClass.addToOperations(get);
     }
@@ -293,7 +293,7 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
         jsonResultBlock.addToStatements("return new " + UmlgRestletGenerationUtil.JsonRepresentation.getLast() + "(result.toString())");
 
         ojTryStatement.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
-        ojTryStatement.getCatchPart().addToStatements("GraphDb.getDb().rollback()");
+        ojTryStatement.getCatchPart().addToStatements(UmlgGenerationUtil.UMLGAccess + ".rollback()");
 
         ojTryStatement.getCatchPart().addToStatements("throw " + UmlgRestletGenerationUtil.UmlgExceptionUtilFactory.getLast() + ".getTumlExceptionUtil().handle(e)");
         annotatedClass.addToImports(UmlgRestletGenerationUtil.UmlgExceptionUtilFactory);
@@ -302,7 +302,7 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
 
         annotatedClass.addToImports(parentPathName);
 
-        annotatedClass.addToImports(UmlgGenerationUtil.graphDbPathName);
+        annotatedClass.addToImports(UmlgGenerationUtil.UMLGPathName);
         annotatedClass.addToImports(UmlgRestletGenerationUtil.JsonRepresentation);
         annotatedClass.addToOperations(post);
     }
@@ -316,7 +316,7 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
 
         OJBlock firstBlock = new OJBlock();
         firstBlock.addToStatements("Object id = propertyMap.get(\"id\")");
-        firstBlock.addToStatements(pWrap.getAssociationClassPathName().getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
+        firstBlock.addToStatements(pWrap.getAssociationClassPathName().getLast() + " childResource = " + UmlgGenerationUtil.UMLGAccess + ".instantiateClassifier(id)");
         annotatedClass.addToImports(pWrap.javaBaseTypePath());
         firstBlock.addToStatements("childResource.fromJson(propertyMap)");
         put.getBody().addToStatements(firstBlock);
@@ -386,7 +386,7 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
             tryInstantiate.getTryPart().addToStatements("childResource.fromJson(propertyMap)");
         } else {
             tryInstantiate.getTryPart().addToStatements("Object id = propertyMap.get(\"id\")");
-            tryInstantiate.getTryPart().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = GraphDb.getDb().instantiateClassifier(id)");
+            tryInstantiate.getTryPart().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = " + UmlgGenerationUtil.UMLGAccess + ".instantiateClassifier(id)");
             if (!pWrap.isMemberOfAssociationClass() || asAssociationClass) {
                 tryInstantiate.getTryPart().addToStatements("parentResource." + pWrap.adder() + "(childResource)");
             } else {

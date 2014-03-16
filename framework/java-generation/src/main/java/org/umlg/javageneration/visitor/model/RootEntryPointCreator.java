@@ -43,7 +43,7 @@ public class RootEntryPointCreator extends BaseVisitor implements Visitor<Model>
         addToSource(root);
 
         root.getDefaultConstructor().setVisibility(OJVisibilityKind.PRIVATE);
-        root.addToImports(UmlgGenerationUtil.graphDbPathName);
+        root.addToImports(UmlgGenerationUtil.UMLGPathName);
         root.addToImports(UmlgGenerationUtil.vertexPathName);
 
         addINSTANCE(root, model);
@@ -152,7 +152,7 @@ public class RootEntryPointCreator extends BaseVisitor implements Visitor<Model>
         OJAnnotatedOperation getRootVertex = new OJAnnotatedOperation("getRootVertex");
         getRootVertex.setReturnType(UmlgGenerationUtil.vertexPathName);
         getRootVertex.setVisibility(OJVisibilityKind.PRIVATE);
-        getRootVertex.getBody().addToStatements("return GraphDb.getDb().getRoot()");
+        getRootVertex.getBody().addToStatements("return " + UmlgGenerationUtil.UMLGAccess + ".getRoot()");
         root.addToOperations(getRootVertex);
     }
 

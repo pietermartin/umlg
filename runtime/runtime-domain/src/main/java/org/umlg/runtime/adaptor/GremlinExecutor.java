@@ -2,8 +2,6 @@ package org.umlg.runtime.adaptor;
 
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.util.wrappers.readonly.ReadOnlyGraph;
-import com.tinkerpop.gremlin.groovy.Gremlin;
-import com.tinkerpop.pipes.Pipe;
 import com.tinkerpop.pipes.transform.ToStringPipe;
 import com.tinkerpop.pipes.util.iterators.SingleIterator;
 import groovy.lang.Binding;
@@ -38,7 +36,7 @@ public class GremlinExecutor {
                 gremlin = gremlin.replace("self", "g.v(" + contextId + ")");
             }
         }
-        Graph graph = new ReadOnlyGraph(GraphDb.getDb());
+        Graph graph = new ReadOnlyGraph(UMLG.getDb());
         CompilerConfiguration compilerConfiguration = new CompilerConfiguration();
         compilerConfiguration.setScriptBaseClass("org.umlg.runtime.adaptor.GremlinExecutorBaseClass");
         Binding binding = new Binding();

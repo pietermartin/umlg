@@ -5,7 +5,7 @@ import com.tinkerpop.blueprints.Vertex;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
-import org.umlg.runtime.adaptor.GraphDb;
+import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.collection.UmlgCollection;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
 import org.umlg.runtime.domain.UmlgMetaNode;
@@ -105,14 +105,14 @@ public class UmlgAssociationClassOrderedSetImpl<AssociationClassNode> extends Um
         try {
             //Get the edges between the vertexToLoad and the owner vertex.
             //Take the first one. If there
-            Set<Edge> edges = GraphDb.getDb().getEdgesBetween(this.owner.getVertex(), vertex, getLabel());
+            Set<Edge> edges = UMLG.getDb().getEdgesBetween(this.owner.getVertex(), vertex, getLabel());
             //Debug check
             if (edges.size() > 1) {
                 throw new IllegalStateException("Only a bag can have multiple edges between vertices!");
             }
             Vertex associationClassVertex = null;
             for (Edge edge : edges) {
-                associationClassVertex = GraphDb.getDb().getVertex(edge.getProperty(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID));
+                associationClassVertex = UMLG.getDb().getVertex(edge.getProperty(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID));
             }
             if (associationClassVertex == null) {
                 throw new IllegalStateException("Can not find associationClassVertex, this is a bug!");

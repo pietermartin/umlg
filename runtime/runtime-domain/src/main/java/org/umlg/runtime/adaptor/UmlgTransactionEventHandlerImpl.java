@@ -23,9 +23,9 @@ public class UmlgTransactionEventHandlerImpl implements UmlgTransactionEventHand
     @Override
     public void beforeCommit() {
         try {
-            if (GraphDb.getDb() != null) {
+            if (UMLG.getDb() != null) {
                 TransactionThreadVar.clear();
-                GraphDb.incrementTransactionCount();
+                UMLG.incrementTransactionCount();
                 List<UmlgNode> entities = TransactionThreadEntityVar.get();
                 for (UmlgNode umlgNode : entities) {
                     List<UmlgConstraintViolation> requiredConstraintViolations = umlgNode.validateMultiplicities();

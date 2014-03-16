@@ -15,7 +15,6 @@ import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.javageneration.util.*;
-import org.umlg.javageneration.validation.MaxLength;
 import org.umlg.javageneration.visitor.BaseVisitor;
 
 public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
@@ -161,7 +160,7 @@ public class QualifierVisitor extends BaseVisitor implements Visitor<Property> {
             }
         }
 
-        elseBlock.addToStatements("Iterator<Edge> iterator = " + UmlgGenerationUtil.graphDbAccess + ".query().has(indexKey, indexValue).edges().iterator()");
+        elseBlock.addToStatements("Iterator<Edge> iterator = " + UmlgGenerationUtil.UMLGAccess + ".query().has(indexKey, indexValue).edges().iterator()");
 
         qualifierValue.getBody().addToStatements(elseBlock);
         ojClass.addToImports("java.util.Iterator");

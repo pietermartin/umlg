@@ -52,14 +52,14 @@ public class CompositePathServerResourceBuilder extends BaseServerResourceBuilde
 
         OJTryStatement ojTryStatement = new OJTryStatement();
         ojTryStatement.setCatchPart(null);
-        ojTryStatement.getFinallyPart().addToStatements(UmlgGenerationUtil.graphDbAccess + ".rollback()");
+        ojTryStatement.getFinallyPart().addToStatements(UmlgGenerationUtil.UMLGAccess + ".rollback()");
         get.getBody().addToStatements(ojTryStatement);
 
         ojTryStatement.getTryPart().addToStatements(
-                "this." + getIdFieldName(clazz) + "= "+ UmlgRestletGenerationUtil.UmlgURLDecoder.getLast()+".decode((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"));");
+                "this." + getIdFieldName(clazz) + "= " + UmlgRestletGenerationUtil.UmlgURLDecoder.getLast() + ".decode((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"));");
         annotatedClass.addToImports(UmlgRestletGenerationUtil.UmlgURLDecoder);
         ojTryStatement.getTryPart().addToStatements(
-                UmlgClassOperations.className(clazz) + " c = GraphDb.getDb().instantiateClassifier(this." + getIdFieldName(clazz) + ")");
+                UmlgClassOperations.className(clazz) + " c = " + UmlgGenerationUtil.UMLGAccess + ".instantiateClassifier(this." + getIdFieldName(clazz) + ")");
         annotatedClass.addToImports(UmlgClassOperations.getPathName(clazz));
 
         ojTryStatement.getTryPart().addToStatements("StringBuilder json = new StringBuilder()");
@@ -75,7 +75,7 @@ public class CompositePathServerResourceBuilder extends BaseServerResourceBuilde
         ojTryStatement.getTryPart().addToStatements("json.append(\"]}\")");
         ojTryStatement.getTryPart().addToStatements("return new " + UmlgRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
 
-        annotatedClass.addToImports(UmlgGenerationUtil.graphDbPathName);
+        annotatedClass.addToImports(UmlgGenerationUtil.UMLGPathName);
         annotatedClass.addToImports(UmlgRestletGenerationUtil.JsonRepresentation);
         annotatedClass.addToOperations(get);
     }

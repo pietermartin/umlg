@@ -5,7 +5,7 @@ import org.umlg.associationclass.Company;
 import org.umlg.associationclass.Job;
 import org.umlg.associationclass.Person;
 import org.umlg.runtime.adaptor.DefaultDataCreator;
-import org.umlg.runtime.adaptor.GraphDb;
+import org.umlg.runtime.adaptor.UMLG;
 
 /**
  * Date: 2013/06/29
@@ -32,6 +32,6 @@ public class TestRestletMinimumDefaultData  implements DefaultDataCreator {
         job1.setSalary(1);
         company1.addToPerson(person1, job1);
 
-        GraphDb.getDb().commit();
+        UMLG.getDb().commit();
     }
 }

@@ -2,7 +2,7 @@ package org.umlg.runtime.domain.activity;
 
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
-import org.umlg.runtime.adaptor.GraphDb;
+import org.umlg.runtime.adaptor.UMLG;
 
 import java.util.Collection;
 
@@ -22,7 +22,7 @@ public abstract class ObjectToken<O> extends Token {
 
 	@Override
 	protected void addEdgeToActivityNode(ActivityNode<? extends Token, ? extends Token> node) {
-		Edge edge = GraphDb.getDb().addEdge(null, node.vertex, getVertex(), TOKEN + getEdgeName());
+		Edge edge = UMLG.getDb().addEdge(null, node.vertex, getVertex(), TOKEN + getEdgeName());
 		edge.setProperty("tokenClass", getClass().getName());
 		edge.setProperty("outClass", node.getClass().getName());
 	}

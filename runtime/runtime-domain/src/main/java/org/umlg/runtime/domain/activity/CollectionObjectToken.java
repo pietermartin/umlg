@@ -1,7 +1,7 @@
 package org.umlg.runtime.domain.activity;
 
 import com.tinkerpop.blueprints.Vertex;
-import org.umlg.runtime.adaptor.GraphDb;
+import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.collection.Qualifier;
 import org.umlg.runtime.collection.UmlgSet;
 import org.umlg.runtime.collection.UmlgRuntimeProperty;
@@ -62,7 +62,7 @@ public class CollectionObjectToken<O> extends ObjectToken<O> implements Composit
 	@Override
 	public void remove() {
 		this.elements.clear();
-		GraphDb.getDb().removeVertex(getVertex());
+		UMLG.getDb().removeVertex(getVertex());
 	}
 
 	@Override

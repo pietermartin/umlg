@@ -3,7 +3,7 @@ package org.umlg.graphofthegods;
 import org.umlg.*;
 import org.umlg.meta.TitanMeta;
 import org.umlg.runtime.adaptor.DefaultDataCreator;
-import org.umlg.runtime.adaptor.GraphDb;
+import org.umlg.runtime.adaptor.UMLG;
 
 /**
  * Date: 2014/03/02
@@ -107,7 +107,7 @@ public class GraphOfTheGodsDefaultDataCreator implements DefaultDataCreator {
             battle3.setPlace("[39,22]");
             hercules.addToMonster(cerberus, battle3);
 
-            GraphDb.getDb().commit();
+            UMLG.getDb().commit();
         }
     }
 

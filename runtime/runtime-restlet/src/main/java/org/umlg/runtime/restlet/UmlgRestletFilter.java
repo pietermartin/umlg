@@ -5,7 +5,7 @@ import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.Status;
 import org.restlet.routing.Filter;
-import org.umlg.runtime.adaptor.GraphDb;
+import org.umlg.runtime.adaptor.UMLG;
 
 /**
  * Date: 2013/03/14
@@ -25,10 +25,10 @@ public class UmlgRestletFilter extends Filter {
     @Override
     protected void afterHandle(Request request, Response response) {
         if (response.getStatus() != Status.REDIRECTION_NOT_MODIFIED) {
-            if (GraphDb.getDb().isTransactionActive()) {
+            if (UMLG.getDb().isTransactionActive()) {
                 throw new IllegalStateException("Transaction is still active!");
             }
-            GraphDb.getDb().afterThreadContext();
+            UMLG.getDb().afterThreadContext();
         }
     }
 

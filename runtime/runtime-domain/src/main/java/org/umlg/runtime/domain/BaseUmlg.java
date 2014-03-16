@@ -3,7 +3,7 @@ package org.umlg.runtime.domain;
 import com.tinkerpop.blueprints.Vertex;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.umlg.runtime.adaptor.GraphDb;
+import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.adaptor.TransactionThreadEntityVar;
 import org.umlg.runtime.adaptor.UmlgExceptionUtilFactory;
 import org.umlg.runtime.collection.UmlgSet;
@@ -37,7 +37,7 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
     public BaseUmlg(Object id) {
         super();
         //check if it has been deleted
-        this.vertex = GraphDb.getDb().getVertex(id);
+        this.vertex = UMLG.getDb().getVertex(id);
         Boolean deleted = this.vertex.getProperty("deleted");
         if (deleted != null && deleted) {
             throw new IllegalStateException("Vertex has been deleted!");
@@ -48,7 +48,7 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
 
     public BaseUmlg(Boolean persistent) {
         super();
-        this.vertex = GraphDb.getDb().addVertex(this.getClass().getName());
+        this.vertex = UMLG.getDb().addVertex(this.getClass().getName());
         this.vertex.setProperty("className", getClass().getName());
         addToThreadEntityVar();
         addEdgeToMetaNode();
@@ -58,7 +58,7 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
     }
 
     public BaseUmlg reload() {
-        this.vertex = GraphDb.getDb().getVertex(this.vertex.getId());
+        this.vertex = UMLG.getDb().getVertex(this.vertex.getId());
         initialiseProperties();
         return this;
     }

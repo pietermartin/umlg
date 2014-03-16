@@ -38,9 +38,9 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
             //Interfaces and abstract classes can not have a get put or delete
             if (!(classifier instanceof Interface) && !classifier.isAbstract()) {
                 addPrivateIdVariable(classifier, annotatedClass);
-                addGetRepresentation((Class)classifier, annotatedClass);
-                addPutRepresentation((Class)classifier, annotatedClass);
-                addDeleteRepresentation((Class)classifier, annotatedClass);
+                addGetRepresentation((Class) classifier, annotatedClass);
+                addPutRepresentation((Class) classifier, annotatedClass);
+                addDeleteRepresentation((Class) classifier, annotatedClass);
             }
             //OPTIONS apply to abstract classes and interfaces
             addOptionsRepresentation(classifier, annotatedClass);
@@ -59,27 +59,27 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
         UmlgGenerationUtil.addOverrideAnnotation(delete);
 
         delete.getBody().addToStatements(
-                "this." + getIdFieldName(clazz) + "= "+ UmlgRestletGenerationUtil.UmlgURLDecoder.getLast()+".decode((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"))");
+                "this." + getIdFieldName(clazz) + "= " + UmlgRestletGenerationUtil.UmlgURLDecoder.getLast() + ".decode((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"))");
         annotatedClass.addToImports(UmlgRestletGenerationUtil.UmlgURLDecoder);
         delete.getBody().addToStatements(
-                UmlgClassOperations.className(clazz) + " c = new " + UmlgClassOperations.className(clazz) + "(GraphDb.getDb().getVertex(this."
+                UmlgClassOperations.className(clazz) + " c = new " + UmlgClassOperations.className(clazz) + "(" + UmlgGenerationUtil.UMLGAccess + ".getVertex(this."
                         + getIdFieldName(clazz) + "))");
         annotatedClass.addToImports(UmlgClassOperations.getPathName(clazz));
 
         OJTryStatement ojTry = new OJTryStatement();
         Set<Property> parentProperties = UmlgClassOperations.getOtherEndToComposite(clazz);
         for (Property parentProperty : parentProperties) {
-            OJPathName parentPathName= UmlgClassOperations.getPathName(parentProperty.getType());
+            OJPathName parentPathName = UmlgClassOperations.getPathName(parentProperty.getType());
             annotatedClass.addToImports(parentPathName);
             PropertyWrapper parentWrap = new PropertyWrapper(parentProperty);
             delete.getBody().addToStatements(parentPathName.getLast() + " " + parentWrap.fieldname() + " = c." + parentWrap.getter() + "()");
 
         }
         ojTry.getTryPart().addToStatements("c.delete()");
-        ojTry.getTryPart().addToStatements("GraphDb.getDb().commit()");
+        ojTry.getTryPart().addToStatements(UmlgGenerationUtil.UMLGAccess + ".commit()");
         ojTry.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
 
-        ojTry.getCatchPart().addToStatements("GraphDb.getDb().rollback()");
+        ojTry.getCatchPart().addToStatements(UmlgGenerationUtil.UMLGAccess + ".rollback()");
         ojTry.getCatchPart().addToStatements("throw " + UmlgRestletGenerationUtil.UmlgExceptionUtilFactory.getLast() + ".getTumlExceptionUtil().handle(e)");
         annotatedClass.addToImports(UmlgRestletGenerationUtil.UmlgExceptionUtilFactory);
         delete.getBody().addToStatements(ojTry);
@@ -96,7 +96,7 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
 //            delete.getBody().addToStatements("return new JsonRepresentation(\"\")");
 //        }
 
-        annotatedClass.addToImports(UmlgGenerationUtil.graphDbPathName);
+        annotatedClass.addToImports(UmlgGenerationUtil.UMLGPathName);
         annotatedClass.addToImports(UmlgRestletGenerationUtil.JsonRepresentation);
         annotatedClass.addToOperations(delete);
     }
@@ -110,11 +110,11 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
         annotatedClass.addToImports(UmlgRestletGenerationUtil.ResourceException);
 
         put.getBody().addToStatements(
-                "this." + getIdFieldName(clazz) + "= "+ UmlgRestletGenerationUtil.UmlgURLDecoder.getLast()+".decode((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"))");
+                "this." + getIdFieldName(clazz) + "= " + UmlgRestletGenerationUtil.UmlgURLDecoder.getLast() + ".decode((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"))");
         annotatedClass.addToImports(UmlgRestletGenerationUtil.UmlgURLDecoder);
 
         put.getBody().addToStatements(
-                UmlgClassOperations.className(clazz) + " c = new " + UmlgClassOperations.className(clazz) + "(GraphDb.getDb().getVertex(this."
+                UmlgClassOperations.className(clazz) + " c = new " + UmlgClassOperations.className(clazz) + "(" + UmlgGenerationUtil.UMLGAccess + ".getVertex(this."
                         + getIdFieldName(clazz) + "))");
         annotatedClass.addToImports(UmlgClassOperations.getPathName(clazz));
         OJTryStatement ojTry = new OJTryStatement();
@@ -125,7 +125,7 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
 
         ojTry.getTryPart().addToStatements("c.fromJson(" + entityText.getName() + ")");
 
-        ojTry.getTryPart().addToStatements("GraphDb.getDb().commit()");
+        ojTry.getTryPart().addToStatements(UmlgGenerationUtil.UMLGAccess + ".commit()");
 
         //Now build the json to return, including meta data
         ojTry.getTryPart().addToStatements("StringBuilder json = new StringBuilder()");
@@ -141,15 +141,15 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
 
 
         ojTry.setCatchParam(new OJParameter("e", new OJPathName("java.lang.Exception")));
-        ojTry.getCatchPart().addToStatements("GraphDb.getDb().rollback()");
+        ojTry.getCatchPart().addToStatements(UmlgGenerationUtil.UMLGAccess + ".rollback()");
         OJIfStatement ifRuntime = new OJIfStatement("e instanceof RuntimeException");
         ifRuntime.addToThenPart("throw (RuntimeException)e");
         ojTry.getCatchPart().addToStatements(ifRuntime);
         ojTry.getCatchPart().addToStatements("throw new RuntimeException(e)");
         put.getBody().addToStatements(ojTry);
-        ojTry.getFinallyPart().addToStatements("GraphDb.getDb().rollback()");
+        ojTry.getFinallyPart().addToStatements(UmlgGenerationUtil.UMLGAccess + ".rollback()");
 
-        annotatedClass.addToImports(UmlgGenerationUtil.graphDbPathName);
+        annotatedClass.addToImports(UmlgGenerationUtil.UMLGPathName);
         annotatedClass.addToImports(UmlgRestletGenerationUtil.JsonRepresentation);
         annotatedClass.addToOperations(put);
     }
@@ -163,11 +163,11 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
         OJTryStatement tryStatement = new OJTryStatement();
         tryStatement.getTryPart().addToStatements("StringBuilder json = new StringBuilder()");
         tryStatement.getTryPart().addToStatements(
-                "this." + getIdFieldName(clazz) + "= "+ UmlgRestletGenerationUtil.UmlgURLDecoder.getLast()+".decode((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"))");
+                "this." + getIdFieldName(clazz) + "= " + UmlgRestletGenerationUtil.UmlgURLDecoder.getLast() + ".decode((String)getRequestAttributes().get(\"" + getIdFieldName(clazz) + "\"))");
         annotatedClass.addToImports(UmlgRestletGenerationUtil.UmlgURLDecoder);
 
         tryStatement.getTryPart().addToStatements(
-                UmlgClassOperations.className(clazz) + " c = new " + UmlgClassOperations.className(clazz) + "(GraphDb.getDb().getVertex(this."
+                UmlgClassOperations.className(clazz) + " c = new " + UmlgClassOperations.className(clazz) + "(" + UmlgGenerationUtil.UMLGAccess + ".getVertex(this."
                         + getIdFieldName(clazz) + "))");
         annotatedClass.addToImports(UmlgClassOperations.getPathName(clazz));
         tryStatement.getTryPart().addToStatements("json.append(\"[{\\\"data\\\": \")");
@@ -181,9 +181,9 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
 
         get.getBody().addToStatements(tryStatement);
         tryStatement.setCatchPart(null);
-        tryStatement.getFinallyPart().addToStatements(UmlgGenerationUtil.graphDbAccess + ".rollback()");
+        tryStatement.getFinallyPart().addToStatements(UmlgGenerationUtil.UMLGAccess + ".rollback()");
 
-        annotatedClass.addToImports(UmlgGenerationUtil.graphDbPathName);
+        annotatedClass.addToImports(UmlgGenerationUtil.UMLGPathName);
         annotatedClass.addToImports(UmlgRestletGenerationUtil.JsonRepresentation);
         annotatedClass.addToOperations(get);
     }
@@ -225,9 +225,9 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
 
         options.getBody().addToStatements(tryStatement);
         tryStatement.setCatchPart(null);
-        tryStatement.getFinallyPart().addToStatements(UmlgGenerationUtil.graphDbAccess + ".rollback()");
+        tryStatement.getFinallyPart().addToStatements(UmlgGenerationUtil.UMLGAccess + ".rollback()");
 
-        annotatedClass.addToImports(UmlgGenerationUtil.graphDbPathName);
+        annotatedClass.addToImports(UmlgGenerationUtil.UMLGPathName);
         annotatedClass.addToImports(UmlgRestletGenerationUtil.JsonRepresentation);
         annotatedClass.addToOperations(options);
     }
@@ -253,7 +253,7 @@ public class EntityServerResourceBuilder extends BaseServerResourceBuilder imple
         getParent.getBody().addToStatements("json.append(\"}}]\")");
         getParent.getBody().addToStatements("return new " + UmlgRestletGenerationUtil.JsonRepresentation.getLast() + "(json.toString())");
 
-        annotatedClass.addToImports(UmlgGenerationUtil.graphDbPathName);
+        annotatedClass.addToImports(UmlgGenerationUtil.UMLGPathName);
         annotatedClass.addToImports(UmlgRestletGenerationUtil.JsonRepresentation);
         annotatedClass.addToOperations(getParent);
     }

@@ -24,7 +24,7 @@ public class BaseLocalDbTest {
 
 	@Before
 	public void before() {
-		this.db = GraphDb.getDb();
+		this.db = UMLG.getDb();
 	}
 
     @After

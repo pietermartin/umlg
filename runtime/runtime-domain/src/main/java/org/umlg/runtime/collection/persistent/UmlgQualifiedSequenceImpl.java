@@ -11,7 +11,6 @@ public class UmlgQualifiedSequenceImpl<E> extends BaseSequence<E> implements Uml
 
 	public UmlgQualifiedSequenceImpl(UmlgNode owner, UmlgRuntimeProperty runtimeProperty) {
 		super(owner, runtimeProperty);
-//        this.index = GraphDb.getDb().getIndex(getQualifiedName(), Edge.class);
     }
 
 	@Override

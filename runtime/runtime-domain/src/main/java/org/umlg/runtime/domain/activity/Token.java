@@ -2,7 +2,7 @@ package org.umlg.runtime.domain.activity;
 
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Vertex;
-import org.umlg.runtime.adaptor.GraphDb;
+import org.umlg.runtime.adaptor.UMLG;
 
 public abstract class Token {
 
@@ -10,7 +10,7 @@ public abstract class Token {
 	protected Vertex vertex;
 
 	public Token(String edgeName) {
-		this.vertex = GraphDb.getDb().addVertex("Token");
+		this.vertex = UMLG.getDb().addVertex("Token");
 		setEdgeName(edgeName);
 	}
 
@@ -36,7 +36,7 @@ public abstract class Token {
 
 	protected void removeEdgeFromActivityNode() {
 		if (this.vertex.getEdges(Direction.IN, TOKEN + getEdgeName()).iterator().hasNext()) {
-			GraphDb.getDb().removeEdge(this.vertex.getEdges(Direction.IN).iterator().next());
+			UMLG.getDb().removeEdge(this.vertex.getEdges(Direction.IN).iterator().next());
 			if (this.vertex.getEdges(Direction.IN).iterator().hasNext()) {
 				throw new IllegalStateException("Token can not have more than one edge!");
 			}
