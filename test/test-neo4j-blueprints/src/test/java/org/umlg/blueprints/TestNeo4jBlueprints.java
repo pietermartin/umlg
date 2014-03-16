@@ -1,10 +1,10 @@
 package org.umlg.blueprints;
 
 import com.tinkerpop.blueprints.*;
-import com.tinkerpop.blueprints.impls.neo4j.Neo4jGraph;
-import junit.framework.Assert;
+import com.tinkerpop.blueprints.impls.neo4j2.Neo4j2Graph;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.time.StopWatch;
+import org.junit.Assert;
 import org.junit.Test;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
@@ -14,8 +14,6 @@ import org.neo4j.tooling.GlobalGraphOperations;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.concurrent.*;
 
@@ -32,7 +30,7 @@ public class TestNeo4jBlueprints {
             f.delete();
         }
         f.mkdir();
-        Neo4jGraph g = new Neo4jGraph(f.getAbsolutePath());
+        Neo4j2Graph g = new Neo4j2Graph(f.getAbsolutePath());
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         long previousSplitTime = 0;
@@ -62,7 +60,7 @@ public class TestNeo4jBlueprints {
             f.delete();
         }
         f.mkdir();
-        Neo4jGraph g = new Neo4jGraph(f.getAbsolutePath());
+        Neo4j2Graph g = new Neo4j2Graph(f.getAbsolutePath());
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         Vertex one = g.addVertex(null);
@@ -103,7 +101,7 @@ public class TestNeo4jBlueprints {
         FileUtils.deleteDirectory(dir);
         final File f = new File(url);
 
-        final IndexableGraph graph = new Neo4jGraph(f.getAbsolutePath());
+        final IndexableGraph graph = new Neo4j2Graph(f.getAbsolutePath());
 
         final Semaphore semaphore = new Semaphore(1);
         semaphore.acquire();
@@ -143,7 +141,7 @@ public class TestNeo4jBlueprints {
         File dir = new File(url);
         FileUtils.deleteDirectory(dir);
         final File f = new File(url);
-        Neo4jGraph graph = new Neo4jGraph(f.getAbsolutePath());
+        Neo4j2Graph graph = new Neo4j2Graph(f.getAbsolutePath());
         GraphDatabaseService rawGraph = graph.getRawGraph();
         rawGraph.registerTransactionEventHandler(new TransactionEventHandler<Object>() {
             @Override
@@ -170,7 +168,9 @@ public class TestNeo4jBlueprints {
         } catch (Exception e) {
             graph.rollback();
         }
-        Assert.assertTrue(!GlobalGraphOperations.at(rawGraph).getAllNodes().iterator().hasNext());
+        graph.addVertex(null);
+        int count = countIter(GlobalGraphOperations.at(rawGraph).getAllNodes().iterator());
+        Assert.assertEquals(1, count);
         graph.shutdown();
     }
 
@@ -181,7 +181,7 @@ public class TestNeo4jBlueprints {
         FileUtils.deleteDirectory(dir);
         final File f = new File(url);
 
-        Neo4jGraph graph = new Neo4jGraph(f.getAbsolutePath());
+        Neo4j2Graph graph = new Neo4j2Graph(f.getAbsolutePath());
         Vertex v1 = graph.addVertex(null);
 
         final Semaphore semaphore = new Semaphore(1);
@@ -192,7 +192,7 @@ public class TestNeo4jBlueprints {
             @Override
             public Boolean call() throws Exception {
                 try {
-                    Neo4jGraph graph = new Neo4jGraph(f.getAbsolutePath());
+                    Neo4j2Graph graph = new Neo4j2Graph(f.getAbsolutePath());
                     Vertex v2 = graph.addVertex(null);
                     graph.commit();
                 } finally {
@@ -205,7 +205,10 @@ public class TestNeo4jBlueprints {
         semaphore.acquire();
         graph.commit();
 
+        graph.addVertex(null);
         Iterator<Node> iterator = GlobalGraphOperations.at(graph.getRawGraph()).getAllNodes().iterator();
+        Assert.assertTrue(iterator.hasNext());
+        iterator.next();
         Assert.assertTrue(iterator.hasNext());
         iterator.next();
         Assert.assertFalse(iterator.hasNext());
@@ -219,7 +222,7 @@ public class TestNeo4jBlueprints {
         FileUtils.deleteDirectory(dir);
         final File f = new File(url);
 
-        Neo4jGraph graph = new Neo4jGraph(f.getAbsolutePath());
+        Neo4j2Graph graph = new Neo4j2Graph(f.getAbsolutePath());
         Vertex v1 = graph.addVertex(null);
         Vertex v2 = graph.addVertex(null);
         Edge edge1 = graph.addEdge(null, v1, v1, "test");
@@ -241,7 +244,7 @@ public class TestNeo4jBlueprints {
         File dir = new File(url);
         FileUtils.deleteDirectory(dir);
         final File f = new File(url);
-        Neo4jGraph graph = new Neo4jGraph(f.getAbsolutePath());
+        Neo4j2Graph graph = new Neo4j2Graph(f.getAbsolutePath());
         Vertex v1 = graph.addVertex(null);
         v1.setProperty("this", "that");
         for (int i = 0; i < 1000000; i++) {
@@ -266,7 +269,7 @@ public class TestNeo4jBlueprints {
             f.delete();
         }
         f.mkdir();
-        Neo4jGraph g = new Neo4jGraph(f.getAbsolutePath());
+        Neo4j2Graph g = new Neo4j2Graph(f.getAbsolutePath());
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         Vertex one = g.addVertex(null);
@@ -289,7 +292,7 @@ public class TestNeo4jBlueprints {
             FileUtils.deleteDirectory(f);
         }
         f.mkdir();
-        Neo4jGraph g = new Neo4jGraph(f.getAbsolutePath());
+        Neo4j2Graph g = new Neo4j2Graph(f.getAbsolutePath());
         try {
 
             int NUMBER_TO_ITER = 10000000;
@@ -341,7 +344,7 @@ public class TestNeo4jBlueprints {
             FileUtils.deleteDirectory(f);
         }
         f.mkdir();
-        Neo4jGraph g = new Neo4jGraph(f.getAbsolutePath());
+        Neo4j2Graph g = new Neo4j2Graph(f.getAbsolutePath());
         try {
             int NUMBER_TO_ITER = 10000000;
 
@@ -424,7 +427,7 @@ public class TestNeo4jBlueprints {
             FileUtils.deleteDirectory(f);
         }
         f.mkdir();
-        Neo4jGraph g = new Neo4jGraph(f.getAbsolutePath());
+        Neo4j2Graph g = new Neo4j2Graph(f.getAbsolutePath());
         try {
 
             int NUMBER_TO_ITER = 10000000;
@@ -494,7 +497,7 @@ public class TestNeo4jBlueprints {
             FileUtils.deleteDirectory(f);
         }
         f.mkdir();
-        Neo4jGraph graph = new Neo4jGraph(f.getAbsolutePath());
+        Neo4j2Graph graph = new Neo4j2Graph(f.getAbsolutePath());
         try {
             graph.createKeyIndex("name", Vertex.class);
             graph.commit();
@@ -540,7 +543,7 @@ public class TestNeo4jBlueprints {
             FileUtils.deleteDirectory(f);
         }
         f.mkdir();
-        Neo4jGraph g = new Neo4jGraph(f.getAbsolutePath());
+        Neo4j2Graph g = new Neo4j2Graph(f.getAbsolutePath());
         try {
 
             g.createKeyIndex("many", Vertex.class);

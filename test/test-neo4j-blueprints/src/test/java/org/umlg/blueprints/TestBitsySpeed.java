@@ -3,14 +3,10 @@ package org.umlg.blueprints;
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
-import com.tinkerpop.blueprints.impls.neo4j.Neo4jGraph;
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.commons.lang.time.StopWatch;
+import com.tinkerpop.blueprints.impls.neo4j2.Neo4j2Graph;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,7 +21,7 @@ import java.util.concurrent.Executors;
  */
 public class TestBitsySpeed {
 
-    Neo4jGraph graph;
+    Neo4j2Graph graph;
     private Throwable toThrow;
     Random rand = new Random();
 
@@ -36,7 +32,7 @@ public class TestBitsySpeed {
             f.delete();
         }
         f.mkdir();
-        graph = new Neo4jGraph(f.getAbsolutePath());
+        graph = new Neo4j2Graph(f.getAbsolutePath());
     }
 
 

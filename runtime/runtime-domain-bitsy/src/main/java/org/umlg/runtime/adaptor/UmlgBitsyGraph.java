@@ -6,6 +6,7 @@ import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 import org.apache.commons.io.FileUtils;
+import org.umlg.runtime.domain.PersistentObject;
 import org.umlg.runtime.domain.UmlgNode;
 import org.umlg.runtime.util.UmlgProperties;
 
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.nio.file.Path;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -110,6 +112,16 @@ public class UmlgBitsyGraph extends BitsyAutoReloadingGraph implements UmlgGraph
             return (T) c.getConstructor(Vertex.class).newInstance(v);
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public PersistentObject getFromIndex(String indexKey, Object indexValue) {
+        Iterator<Vertex> iterator = query().has(indexKey, indexValue).vertices().iterator();
+        if ( iterator.hasNext() ) {
+            return instantiateClassifier(iterator.next());
+        } else {
+            return null;
         }
     }
 

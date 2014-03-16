@@ -6,23 +6,17 @@ import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.neo4j2.Neo4j2Edge;
 import com.tinkerpop.blueprints.impls.neo4j2.Neo4j2Graph;
 import com.tinkerpop.blueprints.impls.neo4j2.Neo4j2Vertex;
-import org.apache.commons.io.FileUtils;
 import org.neo4j.cypher.ExecutionEngine;
 import org.neo4j.cypher.ExecutionResult;
 import org.neo4j.graphdb.DynamicRelationshipType;
-import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.kernel.EmbeddedGraphDatabase;
 import org.neo4j.kernel.GraphDatabaseAPI;
 import org.neo4j.kernel.impl.core.NodeManager;
 import org.neo4j.kernel.impl.util.StringLogger;
 import org.umlg.runtime.domain.PersistentObject;
 import org.umlg.runtime.domain.UmlgNode;
-import org.umlg.runtime.util.UmlgProperties;
 
-import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.logging.Logger;
@@ -38,6 +32,7 @@ public class UmlgNeo4jGraph extends Neo4j2Graph implements UmlgGraph {
 
     public UmlgNeo4jGraph(String directory) {
         super(directory);
+        setCheckElementsInTransaction(true);
         this.transactionEventHandler = new UmlgTransactionEventHandlerImpl();
     }
 
@@ -184,7 +179,7 @@ public class UmlgNeo4jGraph extends Neo4j2Graph implements UmlgGraph {
 
     @Override
     public Vertex getRoot() {
-        return this.getVertex(1L);
+        return this.getVertex(0L);
     }
 
     @Override

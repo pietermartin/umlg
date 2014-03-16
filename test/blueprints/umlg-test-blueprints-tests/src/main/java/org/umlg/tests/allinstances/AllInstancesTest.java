@@ -182,9 +182,12 @@ public class AllInstancesTest extends BaseLocalDbTest {
     public void testRootAllInstances() {
         TopRoot topRoot1 = new TopRoot();
         topRoot1.setName("topRoot1");
+        topRoot1.setIndexedName("asd");
         TopRoot topRoot2 = new TopRoot();
+        topRoot2.setIndexedName("asdasd");
         topRoot2.setName("topRoot2");
         TopRoot topRoot3 = new TopRoot();
+        topRoot3.setIndexedName("asdasdasd");
         topRoot3.setName("topRoot3");
         db.commit();
         Assert.assertEquals(3, BaseRoot.allInstances().size());
