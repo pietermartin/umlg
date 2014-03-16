@@ -33,6 +33,7 @@ public class ModelLoader {
     private List<Model> importedModelLibraries = new ArrayList<Model>();
     private List<ModelLoadedEvent> events = new ArrayList<ModelLoadedEvent>();
     private final Logger logger = Logger.getLogger(ModelLoader.class.getPackage().getName());
+    private List<Property> allIndexedFields;
 
     private ModelLoader() {
         this.RESOURCE_SET = new ResourceSetImpl();
@@ -211,6 +212,22 @@ public class ModelLoader {
             }
         });
 
+        return results;
+    }
+
+    public List<Property> getAllIndexedFields() {
+        final Stereotype stereotype = ModelLoader.INSTANCE.findStereotype("Index");
+        List<Property> results = new ArrayList<Property>();
+        filter(results, this.model, new Filter() {
+            @Override
+            public boolean filter(Element e) {
+                if (e instanceof Property && e.isStereotypeApplied(stereotype)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
         return results;
     }
 

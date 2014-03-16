@@ -2,6 +2,7 @@ package org.umlg.javageneration.visitor.model;
 
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Property;
+import org.eclipse.uml2.uml.Stereotype;
 import org.umlg.framework.ModelLoader;
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
@@ -45,6 +46,16 @@ public class IndexCreator extends BaseVisitor implements Visitor<Model> {
         indexCreator.addToImports(UmlgGenerationUtil.UmlgLabelConverterFactoryPathName);
         //Create index for the application root
         createIndexes.getBody().addToStatements(UmlgGenerationUtil.graphDbAccess + ".createKeyIndex(" + UmlgGenerationUtil.UmlgGraph.getLast() + ".ROOT_VERTEX, " + UmlgGenerationUtil.vertexPathName.getLast() + ".class)");
+
+        List<Property> indexedProperties = ModelLoader.INSTANCE.getAllIndexedFields();
+        for (Property indexedProperty : indexedProperties) {
+
+            //This is not used here
+            //Object o = indexedProperty.getValue(stereotype, "type");
+            createIndexes.getBody().addToStatements(UmlgGenerationUtil.graphDbAccess + ".createKeyIndex(" + UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() + ".getUmlgLabelConverter().convert(\"" + indexedProperty.getQualifiedName() + "\"), " + UmlgGenerationUtil.vertexPathName.getLast() + ".class)");
+            indexCreator.addToImports(UmlgGenerationUtil.vertexPathName);
+
+        }
 
         indexCreator.addToImports(UmlgGenerationUtil.UmlgGraph);
         indexCreator.addToImports(UmlgGenerationUtil.vertexPathName);

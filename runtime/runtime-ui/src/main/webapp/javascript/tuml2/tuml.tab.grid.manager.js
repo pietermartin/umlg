@@ -1279,7 +1279,11 @@
                 if (property.associationClassOne && !property.memberEndOfAssociationClass) {
                     //This is to make the fake association class property look like specified in the ocl spec
                     var propertyNameParts = property.name.split('_');
-                    text = propertyNameParts[0] + '[' + propertyNameParts[1] + ']';
+                    if (propertyNameParts.length === 1) {
+                        text = propertyNameParts[0];
+                    } else {
+                        text = propertyNameParts[0] + '[' + propertyNameParts[1] + ']';
+                    }
                 } else {
                     text = property.name;
                 }

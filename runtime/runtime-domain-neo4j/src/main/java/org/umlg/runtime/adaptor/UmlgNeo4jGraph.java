@@ -15,6 +15,7 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
 import org.neo4j.kernel.impl.util.StringLogger;
+import org.umlg.runtime.domain.PersistentObject;
 import org.umlg.runtime.domain.UmlgNode;
 import org.umlg.runtime.util.UmlgProperties;
 
@@ -110,6 +111,24 @@ public class UmlgNeo4jGraph extends Neo4jGraph implements UmlgGraph {
             if (v == null) {
                 throw new RuntimeException(String.format("No vertex found for id %d", new Object[]{id}));
             }
+            return instantiateClassifier(v);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public PersistentObject getFromIndex(String indexKey, Object indexValue) {
+        Iterator<Vertex> iterator = query().has(indexKey, indexValue).vertices().iterator();
+        if ( iterator.hasNext() ) {
+            return instantiateClassifier(iterator.next());
+        } else {
+            return null;
+        }
+    }
+
+    private <T> T instantiateClassifier(Vertex v) {
+        try {
             // TODO reimplement schemaHelper
             String className = v.getProperty("className");
             Class<?> c = Class.forName(className);

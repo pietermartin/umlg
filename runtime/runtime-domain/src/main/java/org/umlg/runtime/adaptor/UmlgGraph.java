@@ -1,6 +1,7 @@
 package org.umlg.runtime.adaptor;
 
 import com.tinkerpop.blueprints.*;
+import org.umlg.runtime.domain.PersistentObject;
 
 import java.util.Set;
 
@@ -30,6 +31,8 @@ public interface UmlgGraph extends TransactionalGraph, KeyIndexableGraph {
     long countEdges();
 
     <T> T instantiateClassifier(Object id);
+
+    PersistentObject getFromIndex(String indexKey, Object indexValue);
 
     boolean hasEdgeBeenDeleted(Edge edge);
 

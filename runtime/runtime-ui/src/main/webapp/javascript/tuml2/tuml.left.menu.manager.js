@@ -635,7 +635,11 @@
                     if (metaProperty.associationClassOne && !metaProperty.memberEndOfAssociationClass) {
                         //This is to make the fake association class property look like specified in the ocl spec
                         var propertyNameParts = metaProperty.name.split('_');
-                        menuMetaProperty['name'] = propertyNameParts[0] + '[' + propertyNameParts[1] + ']';
+                        if (propertyNameParts.length === 1) {
+                            menuMetaProperty['name'] = propertyNameParts[0];
+                        } else {
+                            menuMetaProperty['name'] = propertyNameParts[0] + '[' + propertyNameParts[1] + ']';
+                        }
                     } else {
                         menuMetaProperty['name'] = metaProperty.name;
                     }
