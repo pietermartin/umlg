@@ -1,8 +1,11 @@
 package org.umlg.runtime.adaptor;
 
+import com.google.common.base.Preconditions;
 import com.thinkaurelius.titan.graphdb.configuration.GraphDatabaseConfiguration;
 import com.thinkaurelius.titan.graphdb.database.StandardTitanGraph;
 import com.tinkerpop.blueprints.*;
+import org.apache.commons.collections4.Factory;
+import org.apache.commons.collections4.list.LazyList;
 import org.apache.commons.io.FileUtils;
 import org.umlg.runtime.domain.PersistentObject;
 import org.umlg.runtime.domain.UmlgNode;
@@ -100,6 +103,14 @@ public class UmlgTitanGraph extends StandardTitanGraph implements UmlgGraph {
             if (v == null) {
                 throw new RuntimeException(String.format("No vertex found for id %d", new Object[]{id}));
             }
+            return instantiateClassifier(v);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private <T> T instantiateClassifier(Vertex v) {
+        try {
             // TODO reimplement schemaHelper
             String className = v.getProperty("className");
             Class<?> c = Class.forName(className);
@@ -110,12 +121,58 @@ public class UmlgTitanGraph extends StandardTitanGraph implements UmlgGraph {
     }
 
     @Override
-    public PersistentObject getFromIndex(String indexKey, Object indexValue) {
+    public PersistentObject getFromUniqueIndex(String indexKey, Object indexValue) {
         Iterator<Vertex> iterator = query().has(indexKey, indexValue).vertices().iterator();
         if ( iterator.hasNext() ) {
             return instantiateClassifier(iterator.next());
         } else {
             return null;
+        }
+    }
+
+    @Override
+    public List<PersistentObject> getFromIndex(String indexKey, Object indexValue) {
+        final Iterator<Vertex> iterator = query().has(indexKey, indexValue).vertices().iterator();
+        List<PersistentObject> lazy = LazyList.lazyList(new ArrayList<PersistentObject>(), new Factory<PersistentObject>() {
+            @Override
+            public PersistentObject create() {
+                return instantiateClassifier(iterator.next());
+            }
+        });
+        return lazy;
+    }
+
+    @Override
+    public <T extends Element> void createKeyIndex(final String key, final Class<T> elementClass, final Parameter... indexParameters) {
+        Preconditions.checkState(indexParameters.length == 2, "UmlgGraph.createKeyIndex must have indexParameters of length 2, One for the type and one for uniqueness.");
+        Parameter<String, Class<?>> indexParameter = indexParameters[0];
+        Parameter<String, Boolean> uniqueParameter = indexParameters[1];
+        if (indexParameter.getValue() == String.class) {
+            if (uniqueParameter.getValue()) {
+                this.makeKey(key).dataType(String.class).indexed(elementClass).unique().make();
+            } else {
+                this.makeKey(key).dataType(String.class).indexed(elementClass).make();
+            }
+        } else if (indexParameter.getValue() == Integer.class) {
+            if (uniqueParameter.getValue()) {
+                this.makeKey(key).dataType(Integer.class).indexed(elementClass).unique().make();
+            } else {
+                this.makeKey(key).dataType(Integer.class).indexed(elementClass).make();
+            }
+        } else if (indexParameter.getValue() == Double.class) {
+            if (uniqueParameter.getValue()) {
+                this.makeKey(key).dataType(Double.class).indexed(elementClass).unique().make();
+            } else {
+                this.makeKey(key).dataType(Double.class).indexed(elementClass).make();
+            }
+        } else if (indexParameter.getValue() == Boolean.class) {
+            if (uniqueParameter.getValue()) {
+                this.makeKey(key).dataType(Boolean.class).indexed(elementClass).unique().make();
+            } else {
+                this.makeKey(key).dataType(Boolean.class).indexed(elementClass).make();
+            }
+        } else {
+            throw new RuntimeException(String.format("Unsupport type for indexing!", new String[]{elementClass.getName()}));
         }
     }
 

@@ -9,25 +9,18 @@ import org.umlg.java.metamodel.annotation.OJAnnotationValue;
 public class UmlgGenerationUtil {
 
     public static String BaseClassUmlgQualifiedName = "org::umlg::meta::BaseClassUmlg";
-    public static OJPathName UmlgUtil = new OJPathName("org.umlg.runtime.util.UmlgUtil");
+    public static OJPathName Parameter = new OJPathName("com.tinkerpop.blueprints.Parameter");
     public static OJPathName BASE_CLASS_UMLG = new OJPathName("org.umlg.meta.BaseClassUmlg");
 
     public static String umlgizeUmlName(String umlName) {
         return umlName.replace("::", "__");
     }
 
-    public static final String UmlgRootVertex = "UmlgRootVertex";
-
-    public static final String INIT_VERTEX = "initVertex";
-
-    public static final String UMLG_DB_NULL = "__NULL__";
-
     public static final String ALLINSTANCES_EDGE_LABEL = "ALLINSTANCES_EDGE_LABEL";
 
     public static final OJPathName UmlgProperties = new OJPathName("org.umlg.runtime.util.UmlgProperties");
 
     public static final String rollback = "rollback";
-    public static final String transactionIdentifier = "transactionIdentifier";
 
     public final static OJPathName Pair = new OJPathName("org.umlg.runtime.util.Pair");
 

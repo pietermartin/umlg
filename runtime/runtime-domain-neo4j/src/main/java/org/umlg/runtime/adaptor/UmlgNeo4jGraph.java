@@ -6,6 +6,8 @@ import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.neo4j2.Neo4j2Edge;
 import com.tinkerpop.blueprints.impls.neo4j2.Neo4j2Graph;
 import com.tinkerpop.blueprints.impls.neo4j2.Neo4j2Vertex;
+import org.apache.commons.collections4.Factory;
+import org.apache.commons.collections4.list.LazyList;
 import org.neo4j.cypher.ExecutionEngine;
 import org.neo4j.cypher.ExecutionResult;
 import org.neo4j.graphdb.DynamicRelationshipType;
@@ -114,16 +116,6 @@ public class UmlgNeo4jGraph extends Neo4j2Graph implements UmlgGraph {
         }
     }
 
-    @Override
-    public PersistentObject getFromIndex(String indexKey, Object indexValue) {
-        Iterator<Vertex> iterator = query().has(indexKey, indexValue).vertices().iterator();
-        if ( iterator.hasNext() ) {
-            return instantiateClassifier(iterator.next());
-        } else {
-            return null;
-        }
-    }
-
     private <T> T instantiateClassifier(Vertex v) {
         try {
             // TODO reimplement schemaHelper
@@ -133,6 +125,28 @@ public class UmlgNeo4jGraph extends Neo4j2Graph implements UmlgGraph {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public PersistentObject getFromUniqueIndex(String indexKey, Object indexValue) {
+        Iterator<Vertex> iterator = query().has(indexKey, indexValue).vertices().iterator();
+        if ( iterator.hasNext() ) {
+            return instantiateClassifier(iterator.next());
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public List<PersistentObject> getFromIndex(String indexKey, Object indexValue) {
+        final Iterator<Vertex> iterator = query().has(indexKey, indexValue).vertices().iterator();
+        List<PersistentObject> lazy = LazyList.lazyList(new ArrayList<PersistentObject>(), new Factory<PersistentObject>() {
+            @Override
+            public PersistentObject create() {
+                return instantiateClassifier(iterator.next());
+            }
+        });
+        return lazy;
     }
 
     /* Generic for all graphs end */
