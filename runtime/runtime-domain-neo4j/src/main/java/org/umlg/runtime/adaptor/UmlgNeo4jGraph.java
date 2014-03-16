@@ -3,9 +3,9 @@ package org.umlg.runtime.adaptor;
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
-import com.tinkerpop.blueprints.impls.neo4j.Neo4jEdge;
-import com.tinkerpop.blueprints.impls.neo4j.Neo4jGraph;
-import com.tinkerpop.blueprints.impls.neo4j.Neo4jVertex;
+import com.tinkerpop.blueprints.impls.neo4j2.Neo4j2Edge;
+import com.tinkerpop.blueprints.impls.neo4j2.Neo4j2Graph;
+import com.tinkerpop.blueprints.impls.neo4j2.Neo4j2Vertex;
 import org.apache.commons.io.FileUtils;
 import org.neo4j.cypher.ExecutionEngine;
 import org.neo4j.cypher.ExecutionResult;
@@ -14,6 +14,8 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
+import org.neo4j.kernel.GraphDatabaseAPI;
+import org.neo4j.kernel.impl.core.NodeManager;
 import org.neo4j.kernel.impl.util.StringLogger;
 import org.umlg.runtime.domain.PersistentObject;
 import org.umlg.runtime.domain.UmlgNode;
@@ -29,7 +31,7 @@ import java.util.logging.Logger;
  * Date: 2013/01/09
  * Time: 8:09 PM
  */
-public class UmlgNeo4jGraph extends Neo4jGraph implements UmlgGraph {
+public class UmlgNeo4jGraph extends Neo4j2Graph implements UmlgGraph {
 
     private UmlgTransactionEventHandler transactionEventHandler;
     private static final Logger logger = Logger.getLogger(UmlgNeo4jGraph.class.getPackage().getName());
@@ -187,7 +189,7 @@ public class UmlgNeo4jGraph extends Neo4jGraph implements UmlgGraph {
 
     @Override
     public void removeVertex(final Vertex vertex) {
-        this.autoStartTransaction();
+        this.autoStartTransaction(true);
         Iterable<Edge> edges = vertex.getEdges(Direction.BOTH);
         for (final Edge edge : edges) {
             edge.remove();
@@ -202,8 +204,8 @@ public class UmlgNeo4jGraph extends Neo4jGraph implements UmlgGraph {
 
     @Override
     public Set<Edge> getEdgesBetween(Vertex v1, Vertex v2, String... labels) {
-        Node n1 = ((Neo4jVertex) v1).getRawVertex();
-        Node n2 = ((Neo4jVertex) v2).getRawVertex();
+        Node n1 = ((Neo4j2Vertex) v1).getRawVertex();
+        Node n2 = ((Neo4j2Vertex) v2).getRawVertex();
         List<DynamicRelationshipType> dynaRel = new ArrayList<DynamicRelationshipType>(labels.length);
         for (String label : labels) {
             dynaRel.add(DynamicRelationshipType.withName(label));
@@ -224,7 +226,7 @@ public class UmlgNeo4jGraph extends Neo4jGraph implements UmlgGraph {
         for (Edge edge : getDeletionVertex().getEdges(com.tinkerpop.blueprints.Direction.OUT, DELETION_VERTEX)) {
             countDeletedNodes++;
         }
-        return ((EmbeddedGraphDatabase) this.getRawGraph()).getNodeManager().getNumberOfIdsInUse(Node.class) - 2 - countDeletedNodes;
+        return ((GraphDatabaseAPI) this.getRawGraph()).getDependencyResolver().resolveDependency(NodeManager.class).getNumberOfIdsInUse(Node.class) - 2 - countDeletedNodes;
     }
 
     @Override
@@ -233,12 +235,12 @@ public class UmlgNeo4jGraph extends Neo4jGraph implements UmlgGraph {
         for (Edge edge : getDeletionVertex().getEdges(com.tinkerpop.blueprints.Direction.OUT, DELETION_VERTEX)) {
             countDeletedNodes++;
         }
-        return ((EmbeddedGraphDatabase) this.getRawGraph()).getNodeManager().getNumberOfIdsInUse(Relationship.class) - 1 - countDeletedNodes;
+        return ((GraphDatabaseAPI) this.getRawGraph()).getDependencyResolver().resolveDependency(NodeManager.class).getNumberOfIdsInUse(Relationship.class) - 1 - countDeletedNodes;
     }
 
     @Override
     public boolean hasEdgeBeenDeleted(Edge edge) {
-        Neo4jEdge neo4jEdge = (Neo4jEdge) edge;
+        Neo4j2Edge neo4jEdge = (Neo4j2Edge) edge;
         try {
             neo4jEdge.getRawEdge().hasProperty("asd");
             return false;
