@@ -241,4 +241,47 @@ public class TestQualifierOnManyToMany extends BaseLocalDbTest {
 
     }
 
+    @Test
+    public void testQualifierValidateMultiplicity() {
+        Exception e = null;
+        try {
+            God god = new God(true);
+            god.setName("THEGOD");
+
+            Many1 many1_1 = new Many1(true);
+            many1_1.setName("many1_1");
+            many1_1.addToGod(god);
+
+            Many1 many1_2 = new Many1(true);
+            many1_2.setName("many1_1");
+            many1_2.addToGod(god);
+
+            Many1 many1_3 = new Many1(true);
+            many1_3.setName("many1_1");
+            many1_3.addToGod(god);
+
+            Many1 many1_4 = new Many1(true);
+            many1_4.setName("many1_4");
+            many1_4.addToGod(god);
+
+            Many2 many2_1 = new Many2(true);
+            many2_1.setName("many2_1");
+            many2_1.addToGod(god);
+
+            Many2 many2_2 = new Many2(true);
+            many2_2.setName("many2_1");
+            many2_2.addToGod(god);
+
+            many1_1.addToMany2(many2_1);
+            //Should fail here
+            many1_1.addToMany2(many2_2);
+
+            db.commit();
+        } catch (Exception ex) {
+            e = ex;
+        }
+        Assert.assertNotNull(e);
+        Assert.assertTrue(e.getMessage().startsWith("Qualifier fails, qualifier multiplicity is one and an entry for key"));
+    }
+
 }

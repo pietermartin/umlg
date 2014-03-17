@@ -152,6 +152,12 @@ public class UmlgTitanGraph extends StandardTitanGraph implements UmlgGraph {
             } else {
                 this.makeKey(key).dataType(Integer.class).indexed(elementClass).make();
             }
+        } else if (indexParameter.getValue() == Long.class) {
+            if (uniqueParameter.getValue()) {
+                this.makeKey(key).dataType(Long.class).indexed(elementClass).unique().make();
+            } else {
+                this.makeKey(key).dataType(Long.class).indexed(elementClass).make();
+            }
         } else if (indexParameter.getValue() == Double.class) {
             if (uniqueParameter.getValue()) {
                 this.makeKey(key).dataType(Double.class).indexed(elementClass).unique().make();

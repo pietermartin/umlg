@@ -695,6 +695,9 @@
           </packagedElement>
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_AoGIIPJKEeCeFLHNTzV0LA" name="qualifiertest">
+          <ownedComment xmi:type="uml:Comment" xmi:id="_bdZ1AK35EeOR4f3Enm7Mow" annotatedElement="_Yq2WivJKEeCeFLHNTzV0LA">
+            <body>Qualified Association[name2]</body>
+          </ownedComment>
           <packagedElement xmi:type="uml:Class" xmi:id="_F-NRMPJKEeCeFLHNTzV0LA" name="Nature">
             <generalization xmi:type="uml:Generalization" xmi:id="_dMJlACXIEeKbPYSfIbmXag">
               <general xmi:type="uml:Class" href="umlg-lib.uml#_FAMz0CXHEeKbPYSfIbmXag"/>
@@ -2049,11 +2052,6 @@
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_R0Yt8K2ZEeOR4f3Enm7Mow"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_R0ZVAK2ZEeOR4f3Enm7Mow" value="1"/>
             </ownedAttribute>
-            <ownedAttribute xmi:type="uml:Property" xmi:id="_es1nEK2ZEeOR4f3Enm7Mow" name="indexUniqueBoolean" visibility="public">
-              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
-              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_g1ShUK2ZEeOR4f3Enm7Mow"/>
-              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_g1TIYK2ZEeOR4f3Enm7Mow" value="1"/>
-            </ownedAttribute>
             <ownedAttribute xmi:type="uml:Property" xmi:id="_hUxSoK2ZEeOR4f3Enm7Mow" name="indexNonUniqueBoolean" visibility="public">
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_jGM0AK2ZEeOR4f3Enm7Mow"/>
@@ -2100,6 +2098,5 @@
   <UmlgProfile:Index xmi:id="_MnnuIK2ZEeOR4f3Enm7Mow" base_Property="_DNPeYK2ZEeOR4f3Enm7Mow"/>
   <UmlgProfile:Index xmi:id="_Ux3ywK2ZEeOR4f3Enm7Mow" base_Property="_Ne57cK2ZEeOR4f3Enm7Mow"/>
   <UmlgProfile:Index xmi:id="_VjZWUK2ZEeOR4f3Enm7Mow" base_Property="_QDBeAK2ZEeOR4f3Enm7Mow" type="NON_UNIQUE"/>
-  <UmlgProfile:Index xmi:id="_kD6ZcK2ZEeOR4f3Enm7Mow" base_Property="_es1nEK2ZEeOR4f3Enm7Mow"/>
   <UmlgProfile:Index xmi:id="_k0XmAK2ZEeOR4f3Enm7Mow" base_Property="_hUxSoK2ZEeOR4f3Enm7Mow" type="NON_UNIQUE"/>
 </xmi:XMI>
