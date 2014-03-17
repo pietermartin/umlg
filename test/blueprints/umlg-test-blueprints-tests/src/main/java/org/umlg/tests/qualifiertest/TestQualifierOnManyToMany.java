@@ -242,7 +242,7 @@ public class TestQualifierOnManyToMany extends BaseLocalDbTest {
     }
 
     @Test
-    public void testQualifierValidateMultiplicity() {
+    public void testQualifierValidateUniqueness() {
         Exception e = null;
         try {
             God god = new God(true);
