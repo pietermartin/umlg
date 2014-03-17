@@ -2018,9 +2018,46 @@
               <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
               <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_2fIXMK1PEeOR4f3Enm7Mow"/>
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_2fJlUK1PEeOR4f3Enm7Mow" value="1"/>
-              <defaultValue xmi:type="uml:LiteralString" xmi:id="_2fMooK1PEeOR4f3Enm7Mow">
-                <value xsi:nil="true"/>
-              </defaultValue>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_2gPAQK2YEeOR4f3Enm7Mow" name="indexUniqueInteger" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_5hwQgK2YEeOR4f3Enm7Mow"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_5hw3kK2YEeOR4f3Enm7Mow" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_7xnaUK2YEeOR4f3Enm7Mow" name="indexNonUniqueInteger" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_9v0MYK2YEeOR4f3Enm7Mow"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_9v0MYa2YEeOR4f3Enm7Mow" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_DNPeYK2ZEeOR4f3Enm7Mow" name="indexUniqueLong" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#UnlimitedNatural"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_F6Na8K2ZEeOR4f3Enm7Mow"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_F6OCAK2ZEeOR4f3Enm7Mow" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_GWgVYK2ZEeOR4f3Enm7Mow" name="indexNonUniqueLong" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#UnlimitedNatural"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_It5qkK2ZEeOR4f3Enm7Mow"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_It64sK2ZEeOR4f3Enm7Mow" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_Ne57cK2ZEeOR4f3Enm7Mow" name="indexUniqueDouble" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Real"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Pq548K2ZEeOR4f3Enm7Mow"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Pq548a2ZEeOR4f3Enm7Mow" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_QDBeAK2ZEeOR4f3Enm7Mow" name="indexNonUniqueDouble" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Real"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_R0Yt8K2ZEeOR4f3Enm7Mow"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_R0ZVAK2ZEeOR4f3Enm7Mow" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_es1nEK2ZEeOR4f3Enm7Mow" name="indexUniqueBoolean" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_g1ShUK2ZEeOR4f3Enm7Mow"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_g1TIYK2ZEeOR4f3Enm7Mow" value="1"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_hUxSoK2ZEeOR4f3Enm7Mow" name="indexNonUniqueBoolean" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_jGM0AK2ZEeOR4f3Enm7Mow"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_jGNbEK2ZEeOR4f3Enm7Mow" value="1"/>
             </ownedAttribute>
           </packagedElement>
         </packagedElement>
@@ -2057,4 +2094,12 @@
   <UmlgProfile:QualifierListener xmi:id="_pse-AKgTEeOPt7R4er8hcg" base_Property="_pgz4IMRuEeGJXus6eZqdyw" property="_5p0-8BncEeGZfswubjlR9Q"/>
   <UmlgProfile:Index xmi:id="_74Eh8Kx3EeOnn8UJImpdOg" base_Property="_4HM4YKx3EeOnn8UJImpdOg"/>
   <UmlgProfile:Index xmi:id="_5JLioK1PEeOR4f3Enm7Mow" base_Property="_zVuWQK1PEeOR4f3Enm7Mow" type="NON_UNIQUE"/>
+  <UmlgProfile:Index xmi:id="_60sfEK2YEeOR4f3Enm7Mow" base_Property="_2gPAQK2YEeOR4f3Enm7Mow"/>
+  <UmlgProfile:Index xmi:id="_-s6t0K2YEeOR4f3Enm7Mow" base_Property="_7xnaUK2YEeOR4f3Enm7Mow" type="NON_UNIQUE"/>
+  <UmlgProfile:Index xmi:id="_LMvrkK2ZEeOR4f3Enm7Mow" base_Property="_GWgVYK2ZEeOR4f3Enm7Mow" type="NON_UNIQUE"/>
+  <UmlgProfile:Index xmi:id="_MnnuIK2ZEeOR4f3Enm7Mow" base_Property="_DNPeYK2ZEeOR4f3Enm7Mow"/>
+  <UmlgProfile:Index xmi:id="_Ux3ywK2ZEeOR4f3Enm7Mow" base_Property="_Ne57cK2ZEeOR4f3Enm7Mow"/>
+  <UmlgProfile:Index xmi:id="_VjZWUK2ZEeOR4f3Enm7Mow" base_Property="_QDBeAK2ZEeOR4f3Enm7Mow" type="NON_UNIQUE"/>
+  <UmlgProfile:Index xmi:id="_kD6ZcK2ZEeOR4f3Enm7Mow" base_Property="_es1nEK2ZEeOR4f3Enm7Mow"/>
+  <UmlgProfile:Index xmi:id="_k0XmAK2ZEeOR4f3Enm7Mow" base_Property="_hUxSoK2ZEeOR4f3Enm7Mow" type="NON_UNIQUE"/>
 </xmi:XMI>

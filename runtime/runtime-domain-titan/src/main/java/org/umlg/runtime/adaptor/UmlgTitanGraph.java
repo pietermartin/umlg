@@ -4,13 +4,15 @@ import com.google.common.base.Preconditions;
 import com.thinkaurelius.titan.graphdb.configuration.GraphDatabaseConfiguration;
 import com.thinkaurelius.titan.graphdb.database.StandardTitanGraph;
 import com.tinkerpop.blueprints.*;
-import org.apache.commons.collections4.Factory;
-import org.apache.commons.collections4.list.LazyList;
+import org.umlg.runtime.collection.memory.UmlgLazyList;
 import org.umlg.runtime.domain.PersistentObject;
 import org.umlg.runtime.domain.UmlgNode;
 
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 /**
@@ -129,12 +131,7 @@ public class UmlgTitanGraph extends StandardTitanGraph implements UmlgGraph {
     @Override
     public List<PersistentObject> getFromIndex(String indexKey, Object indexValue) {
         final Iterator<Vertex> iterator = query().has(indexKey, indexValue).vertices().iterator();
-        List<PersistentObject> lazy = LazyList.lazyList(new ArrayList<PersistentObject>(), new Factory<PersistentObject>() {
-            @Override
-            public PersistentObject create() {
-                return instantiateClassifier(iterator.next());
-            }
-        });
+        List<PersistentObject> lazy = new UmlgLazyList(iterator);
         return lazy;
     }
 

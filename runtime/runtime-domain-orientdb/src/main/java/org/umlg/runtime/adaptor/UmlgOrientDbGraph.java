@@ -4,14 +4,16 @@ import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
-import org.apache.commons.collections4.Factory;
-import org.apache.commons.collections4.list.LazyList;
 import org.apache.commons.configuration.Configuration;
+import org.umlg.runtime.collection.memory.UmlgLazyList;
 import org.umlg.runtime.domain.PersistentObject;
 import org.umlg.runtime.domain.UmlgNode;
 
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 /**
@@ -142,12 +144,7 @@ public class UmlgOrientDbGraph extends OrientGraph implements UmlgGraph {
     @Override
     public List<PersistentObject> getFromIndex(String indexKey, Object indexValue) {
         final Iterator<Vertex> iterator = query().has(indexKey, indexValue).vertices().iterator();
-        List<PersistentObject> lazy = LazyList.lazyList(new ArrayList<PersistentObject>(), new Factory<PersistentObject>() {
-            @Override
-            public PersistentObject create() {
-                return instantiateClassifier(iterator.next());
-            }
-        });
+        List<PersistentObject> lazy = new UmlgLazyList(iterator);
         return lazy;
     }
 
