@@ -94,7 +94,7 @@ public class TestNeo4jBlueprints {
         System.out.println(stopWatch.toString());
     }
 
-    @Test
+//    @Test
     public void testIndexCreatedInAThreadUsedInAnother() throws IOException, InterruptedException, ExecutionException {
         final String url = "/tmp/blueprintstest2";
         File dir = new File(url);
