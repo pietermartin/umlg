@@ -14,7 +14,7 @@ import org.umlg.ocl.UmlgOcl2Parser;
 import org.umlg.ocl.UmlgOclExecutor;
 import org.umlg.query.InstanceQuery;
 import org.umlg.query.QueryEnum;
-import org.umlg.runtime.adaptor.GraphDb;
+import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.adaptor.UmlgGraph;
 import org.umlg.runtime.util.UmlgProperties;
 import org.umlg.runtime.validation.UmlgConstraintViolationException;
@@ -44,7 +44,7 @@ public class TestDemo {
         if (dbDir.exists()) {
             FileUtils.deleteDirectory(dbDir);
         }
-        this.db = GraphDb.getDb();
+        this.db = UMLG.getDb();
     }
 
     @After

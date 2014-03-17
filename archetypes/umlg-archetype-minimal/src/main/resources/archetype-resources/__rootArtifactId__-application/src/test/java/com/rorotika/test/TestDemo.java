@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.umlg.Many;
 import org.umlg.One;
 import org.umlg.model.Demo;
-import org.umlg.runtime.adaptor.GraphDb;
+import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.adaptor.UmlgGraph;
 import org.umlg.runtime.util.UmlgProperties;
 
@@ -29,7 +29,7 @@ public class TestDemo {
         if (dbDir.exists()) {
             FileUtils.deleteDirectory(dbDir);
         }
-        this.db = GraphDb.getDb();
+        this.db = UMLG.getDb();
     }
 
     @After
