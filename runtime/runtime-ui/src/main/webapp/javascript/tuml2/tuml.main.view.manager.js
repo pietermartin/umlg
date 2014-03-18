@@ -384,9 +384,6 @@
 //                        var endTimeAfterUpdateGrids = new Date().getTime();
 //                        console.log("Time taken in millis to update grids = " + (endTimeAfterUpdateGrids - endTimeBeforeUpdateGrids));
                     }
-                    $('.top-center').notify({
-                        message: { text: 'Success' }
-                    }).show();
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     $('#serverErrorMsg').addClass('server-error-msg').html(jqXHR.responseText);

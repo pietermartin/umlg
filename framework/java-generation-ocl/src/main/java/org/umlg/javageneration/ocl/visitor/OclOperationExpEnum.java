@@ -30,6 +30,7 @@ public enum OclOperationExpEnum implements HandleOperationExp {
     LESS_THAN_EQUAL(new OclLessThanEqualExprToJava()),
     SIZE(new OclSizeExprToJava()),
     NOT_EQUAL(new OclNotEqualExprToJava()),
+    NOT(new OclNotExprToJava()),
     AS_SET(new OclAsSetExprToJava()),
     AS_SEQUENCE(new OclAsSequenceExprToJava()),
     AS_ORDERED_SET(new OclAsOrderedSetExprToJava()),
@@ -63,6 +64,8 @@ public enum OclOperationExpEnum implements HandleOperationExp {
             return ALL_INSTANCES;
         } else if (name.equals(PredefinedType.NOT_EQUAL_NAME)) {
             return NOT_EQUAL;
+        } else if (name.equals(PredefinedType.NOT_NAME)) {
+            return NOT;
         } else if (name.equals(PredefinedType.AS_SET_NAME)) {
             return AS_SET;
         } else if (name.equals(PredefinedType.AS_SEQUENCE_NAME)) {

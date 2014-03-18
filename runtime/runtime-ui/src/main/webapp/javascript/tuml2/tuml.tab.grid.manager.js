@@ -481,6 +481,8 @@
                     }
                     //unbind the document click event to close many editors
                     self.grid['clicked'] = true;
+                } else {
+                    e.stopImmediatePropagation();
                 }
             });
 
@@ -830,7 +832,9 @@
 //                });
 
             this.grid.onValidationError.subscribe(function (e, args) {
+                e.stopImmediatePropagation();
                 alert(args.validationResults.msg);
+                return true;
             });
 
             // initialize the model after all the events have been hooked up

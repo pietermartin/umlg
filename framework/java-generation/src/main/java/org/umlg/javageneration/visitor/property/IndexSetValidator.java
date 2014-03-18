@@ -49,7 +49,7 @@ public class IndexSetValidator extends BaseVisitor implements Visitor<Property> 
                         pWrap.fieldname() +
                         ") != null"
                 );
-                ifIndexNotNull.addToThenPart("throw new IllegalStateException(\"Unique indexed property "+pWrap.getQualifiedName()+" already has a value.\")");
+                ifIndexNotNull.addToThenPart("throw new IllegalStateException(\"Unique indexed property " + pWrap.getQualifiedName() + " already has a value of '\" + " + pWrap.fieldname() + " + \"'\")");
                 setter.getBody().addToStatements(0, ifIndexNotNull);
                 owner.addToImports(UmlgGenerationUtil.UmlgLabelConverterFactoryPathName);
             }
