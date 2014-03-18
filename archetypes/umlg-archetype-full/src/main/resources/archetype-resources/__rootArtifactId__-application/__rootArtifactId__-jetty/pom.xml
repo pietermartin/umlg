@@ -9,7 +9,27 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>${artifactId}</artifactId>
     <packaging>jar</packaging>
-    <name>tinkergraph-jetty</name>
+    <name>${artifactId}</name>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>${groupId}.${rootArtifactId}.JettyDemo</mainClass>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
     <dependencies>
 

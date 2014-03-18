@@ -65,6 +65,12 @@ Date and DateTime are datatypes from the umlgdatatypes uml library.</body>
       </eAnnotations>
       <appliedProfile xmi:type="uml:Profile" href="validation.profile.uml#_6Zdd4AV1EeK9oIwdQfC0-w"/>
     </profileApplication>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_tGK18K4OEeOR4f3Enm7Mow">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_tGpXEK4OEeOR4f3Enm7Mow" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="umlg.profile.uml#_L49CoazbEeOnn8UJImpdOg"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="umlg.profile.uml#_twUakKeJEeOPt7R4er8hcg"/>
+    </profileApplication>
   </uml:Model>
   <UmlgValidation:MaxLength xmi:id="_dTw4cJ2MEeOdnJvRGBqhtw" length="5" base_Property="_y2pFIH1NEeOYhpiy1kqM8Q"/>
   <UmlgValidation:MinLength xmi:id="_enS84J2MEeOdnJvRGBqhtw" length="5" base_Property="_ATMEkH4kEeOYhpiy1kqM8Q"/>

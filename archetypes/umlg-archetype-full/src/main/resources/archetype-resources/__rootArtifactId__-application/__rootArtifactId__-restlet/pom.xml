@@ -9,7 +9,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>${artifactId}</artifactId>
     <packaging>jar</packaging>
-    <name>tinkergraph-restlet</name>
+    <name>${artifactId}</name>
 
     <build>
         <plugins>
@@ -39,19 +39,12 @@
                 <executions>
                     <execution>
                         <goals>
-                            <goal>exec</goal>
+                            <goal>java</goal>
                         </goals>
                     </execution>
                 </executions>
                 <configuration>
-                    <executable>java</executable>
-                    <arguments>
-                        <argument>-classpath</argument>
-                        <!-- automatically creates the classpath using all project dependencies,
-                            also adding the project build directory -->
-                        <classpath></classpath>
-                        <argument>org.umlg.demo.DemoComponent</argument>
-                    </arguments>
+                    <mainClass>org.umlg.demo.DemoComponent</mainClass>
                 </configuration>
             </plugin>
         </plugins>

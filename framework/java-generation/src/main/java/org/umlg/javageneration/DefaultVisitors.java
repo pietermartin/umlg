@@ -21,6 +21,8 @@ public class DefaultVisitors {
 
     public static List<Visitor<?>> getDefaultJavaVisitors() {
         List<Visitor<?>> result = new ArrayList<Visitor<?>>();
+        result.add(new QualifierValidator(Workspace.INSTANCE));
+        result.add(new IndexValidator(Workspace.INSTANCE));
         result.add(new InterfaceVisitor(Workspace.INSTANCE));
         result.add(new ClassCreator(Workspace.INSTANCE));
         result.add(new ClassBuilder(Workspace.INSTANCE));
@@ -41,7 +43,6 @@ public class DefaultVisitors {
         result.add(new DerivedPropertyVisitor(Workspace.INSTANCE));
         result.add(new RedefinitionPropertyVisitor(Workspace.INSTANCE));
         result.add(new DerivedUnionPropertyVisitor(Workspace.INSTANCE));
-        result.add(new QualifierValidator(Workspace.INSTANCE));
         result.add(new QualifierVisitor(Workspace.INSTANCE));
         result.add(new OperationImplementorSimple(Workspace.INSTANCE));
         result.add(new ToFromJsonCreator(Workspace.INSTANCE));

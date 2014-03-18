@@ -26,8 +26,7 @@ public class JettyDemo {
 
         WebAppContext graph = new WebAppContext();
         graph.setContextPath("/demo");
-        graph.setWar("./${rootArtifactId}-application/${rootArtifactId}-war/target/${rootArtifactId}-war");
-
+        graph.setWar("./../${rootArtifactId}-war/target/${rootArtifactId}-war");
         contexts.setHandlers(new Handler[] {  graph });
         server.setHandler(contexts);
 
