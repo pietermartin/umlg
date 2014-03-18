@@ -147,6 +147,7 @@ public class UmlgGenerationUtil {
 
     public static OJPathName edgePathName = new OJPathName("com.tinkerpop.blueprints.Edge");
     public static String UMLGAccess = "UMLG.getDb()";
+    public static String getFromUniqueIndex = "getFromUniqueIndex";
     public static OJPathName UMLG_NODE = new OJPathName("org.umlg.runtime.domain.UmlgNode");
     public static OJPathName UMLG_ROOT_NODE = new OJPathName("org.umlg.runtime.domain.UmlgRootNode");
 

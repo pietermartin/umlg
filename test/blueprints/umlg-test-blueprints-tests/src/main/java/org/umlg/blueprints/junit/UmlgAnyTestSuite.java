@@ -14,6 +14,6 @@ import org.umlg.tests.qualifiertest.TestQualifierOnManyToMany;
  * Time: 10:06 AM
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({TestQualifierOnManyToMany.class})
+@Suite.SuiteClasses({TestIndexing.class})
 public class UmlgAnyTestSuite {
 }
