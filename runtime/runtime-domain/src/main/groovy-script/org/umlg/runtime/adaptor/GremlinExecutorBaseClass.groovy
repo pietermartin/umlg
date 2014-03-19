@@ -10,6 +10,7 @@ abstract class GremlinExecutorBaseClass extends Script {
 
     static {
         Gremlin.load();
+        Class.forName("org.umlg.runtime.adaptor.UmlgGremlinAddon").defineUmlgSteps();
         Class.forName("org.umlg.gremlin.groovy.UmlgGremlinGroovyGraphPropertyNames").definePropertyNames();
     }
 

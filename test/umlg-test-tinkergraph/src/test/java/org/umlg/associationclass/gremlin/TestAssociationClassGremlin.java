@@ -40,7 +40,7 @@ public class TestAssociationClassGremlin extends BaseLocalDbTest {
 //        Assert.assertEquals(7, countVertices());
 //        Assert.assertEquals(17, countEdges());
 
-        String result = UMLG.getDb().executeQuery(UmlgQueryEnum.GREMLIN, human.getId(), "self.outE.hasU('xlkjljlkjy')");
+        String result = UMLG.getDb().executeQuery(UmlgQueryEnum.GREMLIN, human.getId(), "self.outE.hasAC('xlkjljlkjy')");
         System.out.println(result);
 
     }

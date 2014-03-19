@@ -219,20 +219,21 @@ public class TestIndexing extends BaseLocalDbTest {
         TopRoot topRoot1 = new TopRoot();
         topRoot1.setName("asd");
         topRoot1.setIndexedName("indexedName1");
-        db.commit();;
+        db.commit();
+        ;
 
         Exception expected = null;
         try {
-        TopRoot topRoot2 = new TopRoot();
-        topRoot2.setName("asd");
-        topRoot2.setIndexedName("indexedName1");
-        db.commit();
+            TopRoot topRoot2 = new TopRoot();
+            topRoot2.setName("asd");
+            topRoot2.setIndexedName("indexedName1");
+            db.commit();
         } catch (Exception e) {
             expected = e;
         }
         Assert.assertNotNull(expected);
         Assert.assertTrue(expected instanceof IllegalStateException);
-        Assert.assertEquals("Unique indexed property umlgtest::org::umlg::rootallinstances::TopRoot::indexedName already has a value.", expected.getMessage());
+        Assert.assertEquals("Unique indexed property umlgtest::org::umlg::rootallinstances::TopRoot::indexedName already has a value of 'indexedName1'", expected.getMessage());
 
     }
 
