@@ -1,5 +1,6 @@
 package org.umlg.associationclass.gremlin;
 
+import org.junit.Test;
 import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.adaptor.UmlgQueryEnum;
 import org.umlg.runtime.test.BaseLocalDbTest;
