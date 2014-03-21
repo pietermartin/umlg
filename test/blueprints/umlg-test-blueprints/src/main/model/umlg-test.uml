@@ -2079,6 +2079,36 @@
             </ownedAttribute>
           </packagedElement>
           <packagedElement xmi:type="uml:Association" xmi:id="_QtuQ4LEHEeOR4f3Enm7Mow" name="assocationToSelf_assocationToSelf_1" memberEnd="_QtuQ4bEHEeOR4f3Enm7Mow _QttCwLEHEeOR4f3Enm7Mow"/>
+          <packagedElement xmi:type="uml:Class" xmi:id="_7X-CMLEwEeOR4f3Enm7Mow" name="SequenceTestAgain1">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_CsQvMLExEeOR4f3Enm7Mow" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_D2qFwLExEeOR4f3Enm7Mow" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_D2qs0LExEeOR4f3Enm7Mow" value="1"/>
+              <defaultValue xmi:type="uml:LiteralString" xmi:id="_D2tJELExEeOR4f3Enm7Mow">
+                <value xsi:nil="true"/>
+              </defaultValue>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_FoWF0LExEeOR4f3Enm7Mow" name="sequenceTestAgain2" type="_-YE9MLEwEeOR4f3Enm7Mow" isOrdered="true" association="_FoWF07ExEeOR4f3Enm7Mow">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_FoWF0bExEeOR4f3Enm7Mow"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_FoWF0rExEeOR4f3Enm7Mow" value="*"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_-YE9MLEwEeOR4f3Enm7Mow" name="SequenceTestAgain2">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_ENUSQLExEeOR4f3Enm7Mow" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_FQ52MLExEeOR4f3Enm7Mow" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_FQ6dQLExEeOR4f3Enm7Mow" value="1"/>
+              <defaultValue xmi:type="uml:LiteralString" xmi:id="_FQ8ScLExEeOR4f3Enm7Mow">
+                <value xsi:nil="true"/>
+              </defaultValue>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_FoWF07ExEeOR4f3Enm7Mow" name="sequenceTestAgain1_sequenceTestAgain2_1" memberEnd="_FoWF1LExEeOR4f3Enm7Mow _FoWF0LExEeOR4f3Enm7Mow" navigableOwnedEnd="_FoWF1LExEeOR4f3Enm7Mow">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_FoWF1LExEeOR4f3Enm7Mow" name="sequenceTestAgain1" type="_7X-CMLEwEeOR4f3Enm7Mow" isOrdered="true" association="_FoWF07ExEeOR4f3Enm7Mow">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_FoWF1bExEeOR4f3Enm7Mow"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_FoWF1rExEeOR4f3Enm7Mow" value="*"/>
+            </ownedEnd>
+          </packagedElement>
         </packagedElement>
       </packagedElement>
     </packagedElement>

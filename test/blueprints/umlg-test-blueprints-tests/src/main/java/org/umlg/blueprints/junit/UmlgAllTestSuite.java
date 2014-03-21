@@ -5,6 +5,7 @@ import org.junit.runners.Suite;
 import org.umlg.gremlin.TestGremlinExecutor;
 import org.umlg.meta.TestMetaClasses;
 import org.umlg.tests.allinstances.AllInstancesTest;
+import org.umlg.tests.associationtoself.TestAssociationToSelf;
 import org.umlg.tests.collectiontest.*;
 import org.umlg.tests.componenttest.TestComponent;
 import org.umlg.tests.concretetest.TestNonCompositeOneToOne;
@@ -18,6 +19,7 @@ import org.umlg.tests.deletiontest.EmbeddedSetDeletionTest;
 import org.umlg.tests.embeddedtest.TestEmbeddedTest;
 import org.umlg.tests.enumeration.ManyEnumerationTest;
 import org.umlg.tests.hierarchytest.TestHierarchy;
+import org.umlg.tests.indexing.TestIndexing;
 import org.umlg.tests.inheritencetest.TestInheritence;
 import org.umlg.tests.interfacetest.ManyToManyInverseTest;
 import org.umlg.tests.interfacetest.TestOneToManyInterface;
@@ -93,7 +95,9 @@ import org.umlg.tests.validationtest.TestValidation;
         TestFingerRing.class,
         SpeedTest.class,
         TestValidation.class,
-        TestSubsetting.class
+        TestSubsetting.class,
+        TestIndexing.class,
+        TestAssociationToSelf.class
 
 
 //        TransactionSuspendResumeTest.class,

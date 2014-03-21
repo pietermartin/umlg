@@ -134,13 +134,13 @@ public abstract class UmlgBaseOrderedSet<E> extends BaseCollection<E> implements
                 }
             }
         } else {
-            Iterable<Edge> edgeIterable = this.vertex.getEdges(direction, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel());
+            Iterable<Edge> edgeIterable = this.vertex.getEdges(Direction.OUT, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel());
             if (!edgeIterable.iterator().hasNext()) {
                 this.loaded = true;
             } else {
                 Edge edgeToFirstElement = edgeIterable.iterator().next();
                 if (!UMLG.getDb().hasEdgeBeenDeleted(edgeToFirstElement)) {
-                    Vertex firstVertexInSequence = edgeToFirstElement.getVertex(inverseDirection);
+                    Vertex firstVertexInSequence = edgeToFirstElement.getVertex(Direction.IN);
                     loadNode(edgeToFirstElement, firstVertexInSequence);
                     Vertex elementVertex = firstVertexInSequence;
                     while (elementVertex.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE).iterator().hasNext()) {

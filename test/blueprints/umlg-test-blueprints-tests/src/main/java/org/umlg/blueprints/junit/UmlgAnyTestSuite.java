@@ -5,6 +5,7 @@ import org.junit.runners.Suite;
 import org.umlg.gremlin.TestGremlinExecutor;
 import org.umlg.tests.allinstances.AllInstancesTest;
 import org.umlg.tests.associationtoself.TestAssociationToSelf;
+import org.umlg.tests.collectiontest.SequenceTest;
 import org.umlg.tests.indexing.TestIndexing;
 import org.umlg.tests.qualifiertest.TestQualifier;
 import org.umlg.tests.qualifiertest.TestQualifierChangeEvent;
