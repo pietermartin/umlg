@@ -1,5 +1,6 @@
 package org.umlg.runtime.adaptor
 
+import com.tinkerpop.blueprints.Graph
 import com.tinkerpop.gremlin.groovy.Gremlin
 
 /**
@@ -8,10 +9,10 @@ import com.tinkerpop.gremlin.groovy.Gremlin
  */
 abstract class GremlinExecutorBaseClass extends Script {
 
-    static {
+    public static void load(Graph graph) {
         Gremlin.load();
-        Class.forName("org.umlg.runtime.adaptor.UmlgGremlinAddon").defineUmlgSteps();
         Class.forName("org.umlg.gremlin.groovy.UmlgGremlinGroovyGraphPropertyNames").definePropertyNames();
+        Class.forName("org.umlg.runtime.gremlin.UmlgGremlinAddon").defineUmlgSteps(graph);
     }
 
 }

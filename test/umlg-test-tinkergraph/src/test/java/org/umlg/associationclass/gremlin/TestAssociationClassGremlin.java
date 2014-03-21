@@ -15,8 +15,7 @@ import org.umlg.tinkergraph.ProjectSetTest;
 public class TestAssociationClassGremlin extends BaseLocalDbTest {
 
 
-//    @Test
-    //TODO failing test
+    @Test
     public void testGremlinOnAssociationClass() {
         Human human = new Human(true);
         human.setName("human1");
@@ -37,11 +36,8 @@ public class TestAssociationClassGremlin extends BaseLocalDbTest {
 
         db.commit();
 
-//        Assert.assertEquals(7, countVertices());
-//        Assert.assertEquals(17, countEdges());
-
-        String result = UMLG.getDb().executeQuery(UmlgQueryEnum.GREMLIN, human.getId(), "self.outE.hasAC('xlkjljlkjy')");
-        System.out.println(result);
+        String edges = UMLG.getDb().executeQuery(UmlgQueryEnum.GREMLIN, human.getId(), "self.outE.hasAC('associationclass::org::umlg::tinkergraph::AssociationClassSetTest::weight', T.eq, 1)");
+        System.out.println(edges);
 
     }
 }

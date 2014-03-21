@@ -65,7 +65,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.umlg</groupId>
-			<artifactId>runtime-domain-thundergraph</artifactId>
+			<artifactId>runtime-domain-neo4j</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
@@ -80,7 +80,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.umlg</groupId>
-			<artifactId>runtime-test-thundergraph</artifactId>
+			<artifactId>runtime-test-neo4j</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>

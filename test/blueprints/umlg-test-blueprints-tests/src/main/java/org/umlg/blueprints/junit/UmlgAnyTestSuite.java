@@ -4,6 +4,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.umlg.gremlin.TestGremlinExecutor;
 import org.umlg.tests.allinstances.AllInstancesTest;
+import org.umlg.tests.associationtoself.TestAssociationToSelf;
 import org.umlg.tests.indexing.TestIndexing;
 import org.umlg.tests.qualifiertest.TestQualifier;
 import org.umlg.tests.qualifiertest.TestQualifierChangeEvent;
@@ -14,6 +15,6 @@ import org.umlg.tests.qualifiertest.TestQualifierOnManyToMany;
  * Time: 10:06 AM
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({TestIndexing.class})
+@Suite.SuiteClasses({TestAssociationToSelf.class})
 public class UmlgAnyTestSuite {
 }

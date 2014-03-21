@@ -115,4 +115,26 @@ public class UmlgUtil {
         }
     }
 
+    public static String removeUmlgNameSpacing(String gremlin) {
+        //break the string into part delimeted by qouted string
+        StringBuilder sb = new StringBuilder();
+        int indexOfNextQoute = 0;
+        int indexOfFirstQoute = 0;
+        while (indexOfFirstQoute != -1) {
+            indexOfFirstQoute = gremlin.indexOf("'", indexOfNextQoute);
+            if (indexOfFirstQoute != -1) {
+                String nonQoutedString = gremlin.substring(indexOfNextQoute, indexOfFirstQoute);
+                nonQoutedString = nonQoutedString.replace("::", "_");
+                sb.append(nonQoutedString);
+                indexOfNextQoute = gremlin.indexOf("'", indexOfFirstQoute + 1) + 1;
+                sb.append(gremlin.substring(indexOfFirstQoute, indexOfNextQoute));
+            } else {
+                String substring = gremlin.substring(indexOfNextQoute);
+                substring = substring.replace("::", "_");
+                sb.append(substring);
+            }
+        }
+        return sb.toString();
+    }
+
 }

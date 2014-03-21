@@ -2059,6 +2059,27 @@
             </ownedAttribute>
           </packagedElement>
         </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="_sKCRgLEGEeOR4f3Enm7Mow" name="associationtoself">
+          <packagedElement xmi:type="uml:Class" xmi:id="_Lnog0LEHEeOR4f3Enm7Mow" name="AssociationToSelf">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_O60I0LEHEeOR4f3Enm7Mow" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_QDluwLEHEeOR4f3Enm7Mow" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_QDmV0LEHEeOR4f3Enm7Mow" value="1"/>
+              <defaultValue xmi:type="uml:LiteralString" xmi:id="_QDoLALEHEeOR4f3Enm7Mow">
+                <value xsi:nil="true"/>
+              </defaultValue>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_QttCwLEHEeOR4f3Enm7Mow" name="assocationTo" type="_Lnog0LEHEeOR4f3Enm7Mow" isOrdered="true" association="_QtuQ4LEHEeOR4f3Enm7Mow">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_QttCwbEHEeOR4f3Enm7Mow"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_QttCwrEHEeOR4f3Enm7Mow" value="*"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_QtuQ4bEHEeOR4f3Enm7Mow" name="assocationFrom" type="_Lnog0LEHEeOR4f3Enm7Mow" isOrdered="true" association="_QtuQ4LEHEeOR4f3Enm7Mow">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_QtuQ4rEHEeOR4f3Enm7Mow"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_QtuQ47EHEeOR4f3Enm7Mow" value="*"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_QtuQ4LEHEeOR4f3Enm7Mow" name="assocationToSelf_assocationToSelf_1" memberEnd="_QtuQ4bEHEeOR4f3Enm7Mow _QttCwLEHEeOR4f3Enm7Mow"/>
+        </packagedElement>
       </packagedElement>
     </packagedElement>
     <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_1clVoQAOEeKpVr_ntT6cLA">

@@ -75,6 +75,7 @@ public class TestRuntimeOclForAssociationClass extends BaseLocalDbTest {
         db.commit();
 
         person1.reload();
+        Assert.assertEquals(2, person1.getKnows().size());
         Assert.assertEquals(2, person1.getKnowsFriendship().size());
 
         Assert.assertEquals(1, person2.getKnownByFriendship().size());

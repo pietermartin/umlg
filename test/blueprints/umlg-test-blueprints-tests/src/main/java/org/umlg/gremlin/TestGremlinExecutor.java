@@ -33,4 +33,29 @@ public class TestGremlinExecutor extends BaseLocalDbTest {
         String result = db.executeQuery(UmlgQueryEnum.GREMLIN, god.getId(), "self.out");
         Assert.assertTrue(result.startsWith("v["));
     }
+
+    @Test
+    public void testNameResolution() {
+        God god = new God(true);
+        god.setName("THEGOD");
+        Universe universe1 = new Universe(true);
+        universe1.setName("universe1");
+        SpaceTime st = new SpaceTime(universe1);
+        new Space(st);
+        new Time(st);
+
+        god.addToUniverse(universe1);
+        db.commit();
+        Assert.assertNotNull(universe1.getGod());
+
+        String result = db.executeQuery(UmlgQueryEnum.GREMLIN, god.getId(), "self.umlgtest::org::umlg::concretetest::God::name");
+        Assert.assertTrue(result.startsWith("THEGOD"));
+
+        result = db.executeQuery(UmlgQueryEnum.GREMLIN, god.getId(), "self.has('umlgtest::org::umlg::concretetest::God::name')");
+        Assert.assertTrue(result.startsWith("v["));
+
+        result = db.executeQuery(UmlgQueryEnum.GREMLIN, god.getId(), "self.has('name')");
+        Assert.assertTrue(result.startsWith("v["));
+
+    }
 }

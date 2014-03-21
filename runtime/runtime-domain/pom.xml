@@ -30,17 +30,15 @@
                 <version>1.7</version>
                 <executions>
                     <execution>
-                        <id>add-resource</id>
-                        <phase>generate-resources</phase>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
                         <goals>
-                            <goal>add-resource</goal>
+                            <goal>add-source</goal>
                         </goals>
                         <configuration>
-                            <resources>
-                                <resource>
-                                    <directory>src/main/groovy-script</directory>
-                                </resource>
-                            </resources>
+                            <sources>
+                                <source>src/main/groovy-script</source>
+                            </sources>
                         </configuration>
                     </execution>
                 </executions>
@@ -107,6 +105,12 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>16.0.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
         </dependency>
 
         <!--  Version 2.1.2 is included as a tinkerpop dependency-->
