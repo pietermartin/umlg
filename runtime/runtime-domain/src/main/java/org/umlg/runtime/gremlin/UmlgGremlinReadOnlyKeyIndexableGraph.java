@@ -12,10 +12,10 @@ import java.util.Set;
  * Date: 2014/03/21
  * Time: 3:17 PM
  */
-public class UmlgGremlinReadOnlyKeyIndexableGraph <T extends KeyIndexableGraph> extends UmlgGremlinReadOnlyIndexableGraph<IndexableGraph> implements KeyIndexableGraph {
+public class UmlgGremlinReadOnlyKeyIndexableGraph <T extends KeyIndexableGraph> extends UmlgGremlinReadonlyGraph<T> implements KeyIndexableGraph {
 
     public UmlgGremlinReadOnlyKeyIndexableGraph(final T baseKIGraph) {
-        super((IndexableGraph) baseKIGraph);
+        super(baseKIGraph);
     }
 
     /**
