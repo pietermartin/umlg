@@ -42,7 +42,7 @@ public class DerivedPropertyVisitor extends BaseVisitor implements Visitor<Prope
             if (propertyWrapper.hasOclDefaultValue()) {
                 defaulValue = propertyWrapper.getOclDerivedValue();
 			    getter.setComment(String.format("Implements the ocl statement for derived property '%s'\n<pre>\n%s\n</pre>", propertyWrapper.getName(), defaulValue));
-                logger.info(String.format("About to parse ocl expression \n%s", new Object[] { defaulValue }));
+                logger.fine(String.format("About to parse ocl expression \n%s", new Object[] { defaulValue }));
                 OCLExpression<Classifier> oclExp = UmlgOcl2Parser.INSTANCE.parseOcl(defaulValue);
                 getter.getBody().addToStatements("return " + UmlgOcl2Java.oclToJava(owner, oclExp));
             } else {

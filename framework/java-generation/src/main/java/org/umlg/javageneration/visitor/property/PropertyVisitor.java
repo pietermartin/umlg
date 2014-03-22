@@ -76,7 +76,7 @@ public class PropertyVisitor extends BaseVisitor implements Visitor<Property> {
         if (propertyWrapper.hasOclDefaultValue()) {
             String ocl = propertyWrapper.getOclDerivedValue();
             initVariables.setComment(String.format("Implements the ocl statement for initialization variable '%s'\n<pre>\n%s\n</pre>", propertyWrapper.getName(), ocl));
-            logger.info(String.format("About to parse ocl expression \n%s", new Object[]{ocl}));
+            logger.fine(String.format("About to parse ocl expression \n%s", new Object[]{ocl}));
             OCLExpression<Classifier> constraint = UmlgOcl2Parser.INSTANCE.parseOcl(ocl);
             java = UmlgOcl2Java.oclToJava(owner, constraint);
             if (propertyWrapper.isMany()) {

@@ -63,7 +63,7 @@ public class OperationImplementorSimple extends BaseVisitor implements Visitor<o
 		OperationWrapper operWrapper = new OperationWrapper(oper);
 		String ocl = operWrapper.getOclBodyCondition();
 		ojOper.setComment(String.format("Implements the ocl statement for operation body condition '%s'\n<pre>\n%s\n</pre>", operWrapper.getName(), ocl));
-		logger.info(String.format("About to parse ocl expression \n%s", new Object[] { ocl }));
+		logger.fine(String.format("About to parse ocl expression \n%s", new Object[] { ocl }));
 		OCLExpression<Classifier> oclExp = UmlgOcl2Parser.INSTANCE.parseOcl(ocl);
 		ojOper.getBody().addToStatements("return " + UmlgOcl2Java.oclToJava(ojClass, oclExp));
 	}

@@ -36,7 +36,15 @@ public class TestGremlinExecutor extends BaseLocalDbTest {
         String result = db.executeQuery(UmlgQueryEnum.GREMLIN, god.getId(), "self.out");
         Assert.assertTrue(result.startsWith("v["));
 
-        Object gremlinResult = GremlinExecutor.executeGremlin(god.getId(), "g.v(" + god.getId() + ")");
+        String idAsString;
+        Object id = god.getId();
+        //This logic is for Bitsy that uses its own UUID as id
+        if (id instanceof Long) {
+            idAsString = id.toString();
+        } else {
+            idAsString = "'" + id.toString() + "'";
+        }
+        Object gremlinResult = GremlinExecutor.executeGremlin(god.getId(), "g.v(" + idAsString + ")");
         Assert.assertTrue(gremlinResult instanceof Vertex);
 
         gremlinResult = GremlinExecutor.executeGremlin(null, "TransactionalGraph.Conclusion.SUCCESS.toString(); TransactionalGraph.Conclusion.FAILURE.toString()");
