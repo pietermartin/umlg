@@ -23,6 +23,7 @@ public class QueryExecuteServerResourceImpl extends BaseOclExecutionServerResour
         try {
             String type = getQuery().getFirstValue("type");
             String query = getQuery().getFirstValue("query");
+
             String contextClassifierQualifiedName = getQuery().getFirstValue("contextClassifierQualifiedName");
             String contextId = (String) getRequestAttributes().get("contextId");
             if (contextId != null) {

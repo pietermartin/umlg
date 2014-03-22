@@ -15,6 +15,7 @@ import org.umlg.runtime.gremlin.UmlgGremlinReadOnlyKeyIndexableGraph;
 import org.umlg.runtime.util.UmlgUtil;
 
 import javax.script.ScriptEngine;
+import javax.script.ScriptException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +51,8 @@ public class GremlinExecutor {
     }
 
     public static Object executeGremlin(Object contextId, String gremlin) {
-        gremlin = UmlgUtil.removeUmlgNameSpacing(gremlin);
+//        gremlin = UmlgUtil.removeUmlgNameSpacing(gremlin);
+        gremlin = gremlin.replaceAll("::", "____");
         if (contextId != null) {
             if (!(contextId instanceof Long)) {
                 gremlin = gremlin.replace("self", "g.v(\"" + contextId.toString() + "\")");
@@ -59,26 +61,15 @@ public class GremlinExecutor {
             }
         }
         Graph graph = new UmlgGremlinReadOnlyKeyIndexableGraph(UMLG.getDb());
-        CompilerConfiguration compilerConfiguration = new CompilerConfiguration();
-        DefaultImportCustomizerProvider importCustomizerProvider = new DefaultImportCustomizerProvider();
-        compilerConfiguration.addCompilationCustomizers(importCustomizerProvider.getImportCustomizer());
-        compilerConfiguration.setScriptBaseClass("org.umlg.runtime.adaptor.GremlinExecutorBaseClass");
+        ScriptEngine scriptEngine = new GremlinGroovyScriptEngine();
         GremlinExecutorBaseClass.load(graph);
-        Binding binding = new Binding();
-        binding.setVariable("g", graph);
-        GroovyShell shell = new GroovyShell(binding, compilerConfiguration);
-        //Place the return statement after the last semicolon
-        int lastSemicolon = gremlin.lastIndexOf(";");
-        StringBuilder finalGremlin = new StringBuilder();
-        if (lastSemicolon != -1) {
-            finalGremlin.append(gremlin.substring(0, lastSemicolon + 1));
-            finalGremlin.append("return ");
-            finalGremlin.append(gremlin.substring(lastSemicolon + 1));
-        } else {
-            finalGremlin.append(gremlin);
+        scriptEngine.put("g", graph);
+        Object result;
+        try {
+            result = scriptEngine.eval(gremlin);
+        } catch (ScriptException e) {
+            throw new RuntimeException(e);
         }
-        finalGremlin.append(";");
-        Object pipe = shell.evaluate(finalGremlin.toString());
-        return pipe;
+        return result;
     }
 }

@@ -22,6 +22,7 @@ import java.util.Map;
 /**
  * Date: 2014/03/01
  * Time: 2:46 PM
+ * @deprecated
  */
 public class GremlinGroovyModelVisitor extends BaseVisitor implements Visitor<Model> {
 

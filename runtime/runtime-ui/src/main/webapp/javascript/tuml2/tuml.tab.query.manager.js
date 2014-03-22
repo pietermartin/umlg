@@ -26,7 +26,7 @@
         this.executeQuery = function () {
             var self = this;
             $.ajax({
-                url: this.oclExecuteUri + '?query=' + codeMirror.getValue() + '&type=' + this.tumlTabViewManager.parentTabContainerManager.executeButton.val() + '&contextClassifierQualifiedName=' + this.tumlTabViewManager.parentTabContainerManager.qualifiedName,
+                url: this.oclExecuteUri + '?query=' + encodeURIComponent(codeMirror.getValue()) + '&type=' + this.tumlTabViewManager.parentTabContainerManager.executeButton.val() + '&contextClassifierQualifiedName=' + this.tumlTabViewManager.parentTabContainerManager.qualifiedName,
                 type: "GET",
                 contentType: "application/json",
                 success: function (data) {

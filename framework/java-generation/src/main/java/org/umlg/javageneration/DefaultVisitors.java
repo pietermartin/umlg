@@ -1,8 +1,5 @@
 package org.umlg.javageneration;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.umlg.framework.Visitor;
 import org.umlg.generation.Workspace;
 import org.umlg.javageneration.visitor._package.PackageVisitor;
@@ -10,12 +7,14 @@ import org.umlg.javageneration.visitor.clazz.*;
 import org.umlg.javageneration.visitor.enumeration.EnumerationVisitor;
 import org.umlg.javageneration.visitor.enumeration.TofromJsonForEnumCreator;
 import org.umlg.javageneration.visitor.interfaze.InterfaceVisitor;
-import org.umlg.javageneration.visitor.model.GremlinGroovyModelVisitor;
 import org.umlg.javageneration.visitor.model.IndexCreator;
 import org.umlg.javageneration.visitor.model.MetaNodeCreator;
 import org.umlg.javageneration.visitor.model.RootEntryPointCreator;
 import org.umlg.javageneration.visitor.operation.OperationImplementorSimple;
 import org.umlg.javageneration.visitor.property.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DefaultVisitors {
 
@@ -62,7 +61,7 @@ public class DefaultVisitors {
         result.add(new IndexSetValidator(Workspace.INSTANCE));
 
         result.add(new PackageVisitor(Workspace.INSTANCE));
-        result.add(new GremlinGroovyModelVisitor(Workspace.INSTANCE, Workspace.GROOVY_SOURCE_FOLDER));
+//        result.add(new GremlinGroovyModelVisitor(Workspace.INSTANCE, Workspace.GROOVY_SOURCE_FOLDER));
 
         return result;
 
