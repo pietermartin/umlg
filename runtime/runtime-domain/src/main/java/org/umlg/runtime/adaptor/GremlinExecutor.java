@@ -3,7 +3,9 @@ package org.umlg.runtime.adaptor;
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.util.wrappers.readonly.ReadOnlyGraph;
 import com.tinkerpop.gremlin.groovy.jsr223.DefaultImportCustomizerProvider;
+import com.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine;
 import com.tinkerpop.pipes.transform.ToStringPipe;
+import com.tinkerpop.pipes.util.Pipeline;
 import com.tinkerpop.pipes.util.iterators.SingleIterator;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
@@ -12,6 +14,7 @@ import org.codehaus.groovy.control.CompilerConfiguration;
 import org.umlg.runtime.gremlin.UmlgGremlinReadOnlyKeyIndexableGraph;
 import org.umlg.runtime.util.UmlgUtil;
 
+import javax.script.ScriptEngine;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,18 +27,30 @@ public class GremlinExecutor {
     /**
      * Executes a gremlin query. If the contextId is null then it is ignored.
      * If it is not null then all instances of the keywork "this" will be replaced with "g.v(contextId)"
+     *
      * @param contextId
      * @param gremlin
      * @return
      */
-    public static String executeGremlinViaGroovy(Object contextId, String gremlin) {
+    public static String executeGremlinAsString(Object contextId, String gremlin) {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
+        Object pipe = executeGremlin(contextId, gremlin);
+        ToStringPipe toStringPipe = new ToStringPipe();
+        toStringPipe.setStarts(new SingleIterator<Object>(pipe));
+        StringBuilder result = new StringBuilder();
+        while (toStringPipe.hasNext()) {
+            result.append(toStringPipe.next());
+            result.append("\n");
+        }
+        stopWatch.stop();
+        result.append("Time to execute query = ");
+        result.append(stopWatch.toString());
+        return result.toString();
+    }
 
-        //remove uml namespacing
-//        gremlin.replace("::", "_");
+    public static Object executeGremlin(Object contextId, String gremlin) {
         gremlin = UmlgUtil.removeUmlgNameSpacing(gremlin);
-
         if (contextId != null) {
             if (!(contextId instanceof Long)) {
                 gremlin = gremlin.replace("self", "g.v(\"" + contextId.toString() + "\")");
@@ -52,18 +67,18 @@ public class GremlinExecutor {
         Binding binding = new Binding();
         binding.setVariable("g", graph);
         GroovyShell shell = new GroovyShell(binding, compilerConfiguration);
-        Object pipe = shell.evaluate("return " + gremlin + ";");
-        ToStringPipe toStringPipe = new ToStringPipe();
-        toStringPipe.setStarts(new SingleIterator<Object>(pipe));
-        StringBuilder result = new StringBuilder();
-        while (toStringPipe.hasNext()) {
-            result.append(toStringPipe.next());
-            result.append("\n");
+        //Place the return statement after the last semicolon
+        int lastSemicolon = gremlin.lastIndexOf(";");
+        StringBuilder finalGremlin = new StringBuilder();
+        if (lastSemicolon != -1) {
+            finalGremlin.append(gremlin.substring(0, lastSemicolon + 1));
+            finalGremlin.append("return ");
+            finalGremlin.append(gremlin.substring(lastSemicolon + 1));
+        } else {
+            finalGremlin.append(gremlin);
         }
-        stopWatch.stop();
-        result.append("Time to execute query = ");
-        result.append(stopWatch.toString());
-        return result.toString();
+        finalGremlin.append(";");
+        Object pipe = shell.evaluate(finalGremlin.toString());
+        return pipe;
     }
-
 }

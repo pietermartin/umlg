@@ -16,6 +16,6 @@ import org.umlg.tests.qualifiertest.TestQualifierOnManyToMany;
  * Time: 10:06 AM
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({TestAssociationToSelf.class})
+@Suite.SuiteClasses({TestGremlinExecutor.class})
 public class UmlgAnyTestSuite {
 }

@@ -161,9 +161,9 @@ public class UmlgThunderGraph extends ThunderGraph implements UmlgGraph {
             case GREMLIN:
                 String result;
                 if (contextId != null) {
-                    result = GremlinExecutor.executeGremlinViaGroovy(contextId, query);
+                    result = GremlinExecutor.executeGremlinAsString(contextId, query);
                 } else {
-                    result = GremlinExecutor.executeGremlinViaGroovy(null, query);
+                    result = GremlinExecutor.executeGremlinAsString(null, query);
                 }
                 return result;
             case NATIVE:

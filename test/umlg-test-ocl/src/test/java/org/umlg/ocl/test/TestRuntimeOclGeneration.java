@@ -7,6 +7,8 @@ import org.umlg.ocl.UmlgOclExecutor;
 import org.umlg.ocl.UmlgOcl2Parser;
 import org.umlg.qualifier.Bank;
 import org.umlg.qualifier.Employee;
+import org.umlg.runtime.adaptor.UMLG;
+import org.umlg.runtime.adaptor.UmlgQueryEnum;
 import org.umlg.runtime.collection.UmlgOrderedSet;
 import org.umlg.runtime.collection.UmlgSequence;
 import org.umlg.runtime.collection.UmlgSet;
@@ -69,7 +71,7 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 		bank.addToEmployee(employee3);
         db.commit();
 
-		Object result = UmlgOclExecutor.executeOclQuery("testoclmodel::org::umlg::qualifier::Employee", "Employee.allInstances()");
+        Object result = UmlgOclExecutor.executeOclQuery("testoclmodel::org::umlg::qualifier::Employee", "Employee.allInstances()");
 		Assert.assertTrue(result instanceof UmlgSet<?>);
 		UmlgSet result2 = (UmlgSet<Employee>)result;
 		Assert.assertEquals(3, result2.size());
@@ -90,7 +92,8 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 		bank.addToEmployee(employee3);
         db.commit();
 
-		String json = UmlgOclExecutor.executeOclQueryToJson(bank, "self.employee->select(name='employee3')");
+        String json = UMLG.getDb().executeQuery(UmlgQueryEnum.OCL, bank.getId(), "self.employee->select(name='employee3')");
+//		String json = UmlgOclExecutor.executeOclQueryAsJson(bank, "self.employee->select(name='employee3')");
 		System.out.println(json);
 	}
 
@@ -134,7 +137,7 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 		bank.addToEmployee(employee3);
         db.commit();
 
-		String json = UmlgOclExecutor.executeOclQueryToJson(bank, "Tuple{name: String = name, employeeSize: Integer = employeeSize}");
+		String json = UmlgOclExecutor.executeOclQueryAsJson(bank, "Tuple{name: String = name, employeeSize: Integer = employeeSize}");
 		System.out.println(json);
 	}
 
@@ -181,7 +184,7 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
         db.commit();
 
 		//The employee names should specify a Bag, bug in eclipse ocl
-		String json = UmlgOclExecutor.executeOclQueryToJson(bank, "Tuple{bank: Bank = self, employeeNames: Sequence(String) = employee.name}");
+		String json = UmlgOclExecutor.executeOclQueryAsJson(bank, "Tuple{bank: Bank = self, employeeNames: Sequence(String) = employee.name}");
 		System.out.println(json);
 	}
 

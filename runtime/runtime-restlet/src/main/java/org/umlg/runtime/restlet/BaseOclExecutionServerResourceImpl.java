@@ -22,65 +22,9 @@ public abstract class BaseOclExecutionServerResourceImpl extends ServerResource 
     protected Representation execute(String query, Object contextId, String type) {
         if (type.equalsIgnoreCase("ocl")) {
             UmlgNode context = UMLG.getDb().instantiateClassifier(contextId);
-            Object result = UmlgOclExecutor.executeOclQuery(context, query);
-            if (result instanceof Map) {
-//            return UmlgOclExecutor.tupleMapToJson((Map<String, Object>) result);
-                //TODO
-                return new JsonRepresentation(result.toString());
-            } else if (result instanceof Collection) {
-
-                //TODO need to sort out polymorphic queries
-                Collection<Object> poCollection = (Collection<Object>) result;
-
-                StringBuilder json = new StringBuilder();
-                json.append("[");
-                json.append("{\"data\": [");
-                int count = 0;
-                PersistentObject poForMetaData = null;
-                for (Object o : poCollection) {
-                    count++;
-                    if (o instanceof PersistentObject) {
-                        PersistentObject po = (PersistentObject) o;
-                        String objectAsJson = po.toJsonWithoutCompositeParent();
-                        String objectAsJsonWithRow = "{\"row\": " + count + ", " + objectAsJson.substring(1);
-                        json.append(objectAsJsonWithRow);
-                        if (count != poCollection.size()) {
-                            json.append(",");
-                        } else {
-                            poForMetaData = po;
-                        }
-                    } else {
-                        String objectAsJson = o.toString();
-                        String objectAsJsonWithRow = "{\"row\": " + count + ", \"value\": \"" + objectAsJson + "\"}";
-                        json.append(objectAsJsonWithRow);
-                        if (count != poCollection.size()) {
-                            json.append(",");
-                        }
-
-                    }
-                }
-                json.append("],");
-                json.append(" \"meta\" : {");
-                //TODO create some meta data strategy for tuples and lists of primitives or datatypes
-                //TODO some hardcoding to sort out
-                json.append("\"qualifiedName\": \"restAndJson::org::umlg::test::Hand::finger\"");
-                json.append(", \"to\": ");
-                if (poForMetaData != null) {
-                    json.append(poForMetaData.getMetaDataAsJson());
-                } else {
-                    json.append("null");
-                }
-                json.append("}");
-                json.append("}]");
-                return new JsonRepresentation(json.toString());
-            } else if (result instanceof PersistentObject) {
-                PersistentObject po = (PersistentObject) result;
-                return getRepresentation(po);
-            } else {
-                return new JsonRepresentation("{\"result\": " + "\"" + (result == null ? "No result" : result.toString()) + "\"}");
-            }
+            return new JsonRepresentation(UmlgOclExecutor.executeOclQueryAsJson(context, query));
         } else if (type.equalsIgnoreCase("gremlin")) {
-            String result = GremlinExecutor.executeGremlinViaGroovy(contextId, query);
+            String result = GremlinExecutor.executeGremlinAsString(contextId, query);
             return new StringRepresentation(result);
         } else {
             throw new RuntimeException("Unknown query type " + type);
@@ -134,7 +78,7 @@ public abstract class BaseOclExecutionServerResourceImpl extends ServerResource 
                 return new JsonRepresentation(result.toString());
             }
         } else if (type.equalsIgnoreCase("gremlin")) {
-            String result = GremlinExecutor.executeGremlinViaGroovy(null, query);
+            String result = GremlinExecutor.executeGremlinAsString(null, query);
             return new StringRepresentation(result);
         } else {
             throw new RuntimeException("Unknown query type " + type);

@@ -53,7 +53,11 @@
                 var outerDivForResults = $('#' + this.queryTabDivName + '_' + 'OclResult');
                 outerDivForResults.children().remove();
                 var textAreaResult = $('<textarea />', {id: 'queryResultId'});
-                textAreaResult.text(data.result).appendTo(outerDivForResults);
+                if (data.result === undefined) {
+                    textAreaResult.text(data).appendTo(outerDivForResults);
+                } else {
+                    textAreaResult.text(data.result).appendTo(outerDivForResults);
+                }
                 CodeMirror.fromTextArea(textAreaResult[0], {mode: 'text/x-sh', readOnly: true});
             }
             $('#serverErrorMsg_' + this.queryTabDivName).removeClass('server-error-msg');

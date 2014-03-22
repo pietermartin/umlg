@@ -6,8 +6,6 @@ import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.neo4j2.Neo4j2Edge;
 import com.tinkerpop.blueprints.impls.neo4j2.Neo4j2Graph;
 import com.tinkerpop.blueprints.impls.neo4j2.Neo4j2Vertex;
-import org.apache.commons.collections4.Factory;
-import org.apache.commons.collections4.list.LazyList;
 import org.neo4j.cypher.ExecutionEngine;
 import org.neo4j.cypher.ExecutionResult;
 import org.neo4j.graphdb.DynamicRelationshipType;
@@ -166,9 +164,9 @@ public class UmlgNeo4jGraph extends Neo4j2Graph implements UmlgGraph {
             case GREMLIN:
                 String result;
                 if (contextId != null) {
-                    result = GremlinExecutor.executeGremlinViaGroovy(contextId, query);
+                    result = GremlinExecutor.executeGremlinAsString(contextId, query);
                 } else {
-                    result = GremlinExecutor.executeGremlinViaGroovy(null, query);
+                    result = GremlinExecutor.executeGremlinAsString(null, query);
                 }
                 return result;
             case NATIVE:

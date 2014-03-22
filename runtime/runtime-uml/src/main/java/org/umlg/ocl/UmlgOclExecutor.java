@@ -76,6 +76,7 @@ public class UmlgOclExecutor {
         constructor.addParam("vertex", UmlgGenerationUtil.vertexPathName);
         constructor.getBody().addToStatements("super(vertex)");
         oclClass.addToConstructors(constructor);
+        oclClass.addToImports("org.joda.time.*");
 
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
@@ -97,32 +98,47 @@ public class UmlgOclExecutor {
 
     //This is called via reflection from UmlgGraph
     @SuppressWarnings("unchecked")
-    public static String executeOclQueryToJson(UmlgNode contextTumlNode, String query) {
+    public static String executeOclQueryAsJson(UmlgNode contextTumlNode, String query) {
         Object result = executeOclQuery(contextTumlNode, query);
         if (result instanceof Map) {
-            return tupleMapToJson((Map<String, Object>) result);
+//            return UmlgOclExecutor.tupleMapToJson((Map<String, Object>) result);
+            //TODO
+            return result.toString();
         } else if (result instanceof Collection) {
 
             //TODO need to sort out polymorphic queries
-            Collection<PersistentObject> poCollection = (Collection<PersistentObject>) result;
+            Collection<Object> poCollection = (Collection<Object>) result;
+
             StringBuilder json = new StringBuilder();
             json.append("[");
             json.append("{\"data\": [");
             int count = 0;
             PersistentObject poForMetaData = null;
-            for (PersistentObject po : poCollection) {
+            for (Object o : poCollection) {
                 count++;
-                String objectAsJson = po.toJsonWithoutCompositeParent();
-                String objectAsJsonWithRow = "{\"row\": " + count + ", " + objectAsJson.substring(1);
-                json.append(objectAsJsonWithRow);
-                if (count != poCollection.size()) {
-                    json.append(",");
+                if (o instanceof PersistentObject) {
+                    PersistentObject po = (PersistentObject) o;
+                    String objectAsJson = po.toJsonWithoutCompositeParent();
+                    String objectAsJsonWithRow = "{\"row\": " + count + ", " + objectAsJson.substring(1);
+                    json.append(objectAsJsonWithRow);
+                    if (count != poCollection.size()) {
+                        json.append(",");
+                    } else {
+                        poForMetaData = po;
+                    }
                 } else {
-                    poForMetaData = po;
+                    String objectAsJson = o.toString();
+                    String objectAsJsonWithRow = "{\"row\": " + count + ", \"value\": \"" + objectAsJson + "\"}";
+                    json.append(objectAsJsonWithRow);
+                    if (count != poCollection.size()) {
+                        json.append(",");
+                    }
+
                 }
             }
             json.append("],");
             json.append(" \"meta\" : {");
+            //TODO create some meta data strategy for tuples and lists of primitives or datatypes
             //TODO some hardcoding to sort out
             json.append("\"qualifiedName\": \"restAndJson::org::umlg::test::Hand::finger\"");
             json.append(", \"to\": ");
@@ -136,10 +152,23 @@ public class UmlgOclExecutor {
             return json.toString();
         } else if (result instanceof PersistentObject) {
             PersistentObject po = (PersistentObject) result;
-            return po.toJsonWithoutCompositeParent();
+            return getRepresentation(po);
         } else {
-            return "{\"result\": " + "\"" + result.toString() + "\"}";
+            return "{\"result\": " + "\"" + (result == null ? "No result" : result.toString()) + "\"}";
         }
+    }
+
+    protected static String getRepresentation(PersistentObject po) {
+        StringBuilder json = new StringBuilder();
+        json.append("[{\"data\": [");
+        String poAsJson = po.toJson();
+        json.append(poAsJson.substring(0, poAsJson.length() - 1) + ", \"row\": 1}");
+        json.append("], \"meta\" : {");
+        json.append("\"qualifiedName\": \"restAndJson::org::umlg::test::Human\"");
+        json.append(", \"to\": ");
+        json.append(po.getMetaDataAsJson());
+        json.append("}}]");
+        return json.toString();
     }
 
     public static String tupleMapToJson(Map<String, Object> result) {

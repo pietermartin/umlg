@@ -1,5 +1,7 @@
 package org.umlg.gremlin;
 
+import com.tinkerpop.blueprints.Vertex;
+import com.tinkerpop.pipes.util.Pipeline;
 import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.componenttest.Space;
@@ -7,6 +9,7 @@ import org.umlg.componenttest.SpaceTime;
 import org.umlg.componenttest.Time;
 import org.umlg.concretetest.God;
 import org.umlg.concretetest.Universe;
+import org.umlg.runtime.adaptor.GremlinExecutor;
 import org.umlg.runtime.adaptor.UmlgQueryEnum;
 import org.umlg.runtime.test.BaseLocalDbTest;
 
@@ -32,6 +35,20 @@ public class TestGremlinExecutor extends BaseLocalDbTest {
 
         String result = db.executeQuery(UmlgQueryEnum.GREMLIN, god.getId(), "self.out");
         Assert.assertTrue(result.startsWith("v["));
+
+        Object gremlinResult = GremlinExecutor.executeGremlin(god.getId(), "g.v(1)");
+        Assert.assertTrue(gremlinResult instanceof Vertex);
+
+        gremlinResult = GremlinExecutor.executeGremlin(null, "TransactionalGraph.Conclusion.SUCCESS.toString(); TransactionalGraph.Conclusion.FAILURE.toString()");
+        Assert.assertEquals("FAILURE", gremlinResult);
+
+        gremlinResult = GremlinExecutor.executeGremlin(null, "g.V.hasNot('age',null).has('age',T.gt,25).count()");
+        Assert.assertEquals(0L, gremlinResult);
+
+        gremlinResult = GremlinExecutor.executeGremlin(null, "def isGod(v){v.name=='THEGOD'};g.V.filter{isGod(it)}.next()");
+        Assert.assertTrue(gremlinResult instanceof Vertex);
+        Assert.assertEquals(god.getId(), ((Vertex)gremlinResult).getId());
+
     }
 
     @Test
