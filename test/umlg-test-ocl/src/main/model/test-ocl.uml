@@ -402,7 +402,7 @@
               <value xsi:nil="true"/>
             </defaultValue>
           </ownedAttribute>
-          <ownedAttribute xmi:type="uml:Property" xmi:id="_VcxC0Kw5EeOnn8UJImpdOg" name="knownBy" type="_3hUTQKuqEeOPt7R4er8hcg" association="_VcyQ8Kw5EeOnn8UJImpdOg">
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_VcxC0Kw5EeOnn8UJImpdOg" name="knownBy" type="_3hUTQKuqEeOPt7R4er8hcg" isOrdered="true" association="_VcyQ8Kw5EeOnn8UJImpdOg">
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Vcxp4Kw5EeOnn8UJImpdOg"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Vcxp4aw5EeOnn8UJImpdOg" value="*"/>
           </ownedAttribute>
@@ -422,7 +422,7 @@
               <body>self.friendship[knownBy]</body>
             </defaultValue>
           </ownedAttribute>
-          <ownedAttribute xmi:type="uml:Property" xmi:id="_VcyQ8aw5EeOnn8UJImpdOg" name="knows" type="_3hUTQKuqEeOPt7R4er8hcg" association="_VcyQ8Kw5EeOnn8UJImpdOg">
+          <ownedAttribute xmi:type="uml:Property" xmi:id="_VcyQ8aw5EeOnn8UJImpdOg" name="knows" type="_3hUTQKuqEeOPt7R4er8hcg" isOrdered="true" association="_VcyQ8Kw5EeOnn8UJImpdOg">
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_VcyQ8qw5EeOnn8UJImpdOg"/>
             <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_VcyQ86w5EeOnn8UJImpdOg" value="*"/>
           </ownedAttribute>

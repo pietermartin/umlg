@@ -147,7 +147,7 @@ public class UmlgBitsyGraph extends BitsyAutoReloadingGraph implements UmlgGraph
             case OCL:
                 try {
                     Class<?> umlgOclExecutor = Class.forName("org.umlg.ocl.UmlgOclExecutor");
-                    Method method = umlgOclExecutor.getMethod("executeOclQueryToJson", UmlgNode.class, String.class);
+                    Method method = umlgOclExecutor.getMethod("executeOclQueryAsJson", UmlgNode.class, String.class);
                     UmlgNode context = (UmlgNode) UMLG.getDb().instantiateClassifier(contextId);
                     String json = (String) method.invoke(null, context, query);
                     return json;

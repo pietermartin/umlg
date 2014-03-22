@@ -36,7 +36,7 @@ public class TestGremlinExecutor extends BaseLocalDbTest {
         String result = db.executeQuery(UmlgQueryEnum.GREMLIN, god.getId(), "self.out");
         Assert.assertTrue(result.startsWith("v["));
 
-        Object gremlinResult = GremlinExecutor.executeGremlin(god.getId(), "g.v(1)");
+        Object gremlinResult = GremlinExecutor.executeGremlin(god.getId(), "g.v(" + god.getId() + ")");
         Assert.assertTrue(gremlinResult instanceof Vertex);
 
         gremlinResult = GremlinExecutor.executeGremlin(null, "TransactionalGraph.Conclusion.SUCCESS.toString(); TransactionalGraph.Conclusion.FAILURE.toString()");
@@ -47,7 +47,7 @@ public class TestGremlinExecutor extends BaseLocalDbTest {
 
         gremlinResult = GremlinExecutor.executeGremlin(null, "def isGod(v){v.name=='THEGOD'};g.V.filter{isGod(it)}.next()");
         Assert.assertTrue(gremlinResult instanceof Vertex);
-        Assert.assertEquals(god.getId(), ((Vertex)gremlinResult).getId());
+        Assert.assertEquals(god.getId(), ((Vertex) gremlinResult).getId());
 
     }
 
