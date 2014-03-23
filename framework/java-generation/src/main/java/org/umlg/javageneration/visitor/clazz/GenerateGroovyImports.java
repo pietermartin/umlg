@@ -49,7 +49,7 @@ public class GenerateGroovyImports extends BaseVisitor implements Visitor<Class>
     private void addUMLG(OJAnnotatedClass groovyImporter) {
         groovyImporter.addToStaticBlock(
                 new OJSimpleStatement(
-                        "imports.add(\"" + UmlgGenerationUtil.UMLGPathName.getLast() + ".*\")"
+                        "imports.add(\"" + UmlgGenerationUtil.UmlgAdaptorPackage.toJavaString() + ".*\")"
                 )
         );
     }
