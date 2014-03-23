@@ -6,8 +6,6 @@ import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.adaptor.UmlgExceptionUtilFactory;
 import org.umlg.runtime.restlet.util.UmlgURLDecoder;
 
-import java.util.logging.Level;
-
 /**
  * Date: 2013/10/19
  * Time: 10:47 AM
@@ -36,10 +34,10 @@ public class QueryExecuteServerResourceImpl extends BaseQueryExecutionServerReso
                 } else {
                     result = executeStatic(query, contextClassifierQualifiedName, type);
                 }
-                UMLG.getDb().commit();
+                UMLG.get().commit();
                 return result;
             } catch (Exception e) {
-                UMLG.getDb().rollback();
+                UMLG.get().rollback();
                 throw UmlgExceptionUtilFactory.getTumlExceptionUtil().handle(e);
             }
         } else {
@@ -53,7 +51,7 @@ public class QueryExecuteServerResourceImpl extends BaseQueryExecutionServerReso
                 }
                 return result;
             } finally {
-                UMLG.getDb().rollback();
+                UMLG.get().rollback();
             }
         }
     }

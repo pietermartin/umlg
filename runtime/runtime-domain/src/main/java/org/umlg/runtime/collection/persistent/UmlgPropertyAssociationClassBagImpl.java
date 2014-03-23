@@ -50,24 +50,24 @@ public class UmlgPropertyAssociationClassBagImpl<E, AC extends AssociationClassN
         } else if (o.getClass().isEnum()) {
             v = removeFromInternalMap(o);
             removeEdge(v);
-            UMLG.getDb().removeVertex(v);
+            UMLG.get().removeVertex(v);
         } else if (isOnePrimitive() || getDataTypeEnum() != null) {
             throw new IllegalStateException("one primitive or data type can not have an association class.");
         } else {
             v = removeFromInternalMap(o);
             removeEdge(v);
-            UMLG.getDb().removeVertex(v);
+            UMLG.get().removeVertex(v);
         }
 
         return super.remove(o);
     }
 
     private void removeEdge(Vertex v) {
-        Set<Edge> edges = UMLG.getDb().getEdgesBetween(this.vertex, v, this.getLabel());
+        Set<Edge> edges = UMLG.get().getEdgesBetween(this.vertex, v, this.getLabel());
         for (Edge edge : edges) {
-            Vertex associationClassVertex = UMLG.getDb().getVertex(edge.getProperty(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID));
+            Vertex associationClassVertex = UMLG.get().getVertex(edge.getProperty(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID));
             //The remove code will delete all in and out edges
-            UMLG.getDb().removeVertex(associationClassVertex);
+            UMLG.get().removeVertex(associationClassVertex);
         }
     }
 

@@ -37,12 +37,12 @@
             $('#' + this.getTabId() + 'panelPanelDefault').remove();
         }
 
-        this.showInlineForm = function() {
+        this.showInlineForm = function () {
             this.tabLayoutTabFooterDiv.find('.btn-toolbar').hide();
             this.tabLayoutTabFooterDiv.find('.form-inline').show();
         }
 
-        this.hideInlineForm = function() {
+        this.hideInlineForm = function () {
             this.tabLayoutTabFooterDiv.find('.form-inline').hide();
             this.tabLayoutTabFooterDiv.find('.btn-toolbar').show();
         }
@@ -190,7 +190,7 @@
 
     }
 
-    TumlTabContainerManager.prototype.addQueryButtons = function(query) {
+    TumlTabContainerManager.prototype.addQueryButtons = function (query) {
         var self = this;
         var tabFooter = this.tabLayoutTabFooterDiv;
         var queryFormDiv = $('<div />', {class: 'form-inline', role: 'form'}).appendTo(tabFooter);
@@ -216,14 +216,18 @@
         $('<li><a href="#">NATIVE</a></li>').appendTo(ul);
 
         ul.find("li a").click(function (e) {
-            if ($(this).text() !== 'OCL' &&
-                ((self.contextVertexId !== null && self.contextVertexId !== undefined) || (self.propertyNavigatingTo !== null && self.propertyNavigatingTo !== undefined))) {
+            if ((self.contextVertexId !== null && self.contextVertexId !== undefined) || (self.propertyNavigatingTo !== null && self.propertyNavigatingTo !== undefined)) {
                 self.executeButton.text('Execute ' + $(this).text());
                 self.executeButton.val($(this).text());
             } else {
-                alert('OCL can only be be executed from a context!');
-                e.preventDefault();
-                e.stopImmediatePropagation();
+                if ($(this).text() === 'OCL') {
+                    alert('OCL can only be be executed from a context!');
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                } else {
+                    self.executeButton.text('Execute ' + $(this).text());
+                    self.executeButton.val($(this).text());
+                }
             }
         });
 
@@ -267,7 +271,7 @@
         var self = this;
         //When the context remains the same but to a new property the footer gets destroyed and rebuild.
         //In this case the query buttons and divs also need to be recreated
-        if (this.tabLayoutTabFooterDiv.find('.form-inline').length === 0)  {
+        if (this.tabLayoutTabFooterDiv.find('.form-inline').length === 0) {
             this.addQueryButtons(query);
         }
         if (isUmlgLib) {
@@ -358,31 +362,31 @@
         }
     }
 
-    TumlTabContainerManager.prototype.executeQuery = function() {
+    TumlTabContainerManager.prototype.executeQuery = function () {
         this.getOpenQueryTabViewManager().tumlTabQueryManager.executeQuery();
     }
 
-    TumlTabContainerManager.prototype.saveToInstance = function() {
+    TumlTabContainerManager.prototype.saveToInstance = function () {
         this.getOpenQueryTabViewManager().tumlTabQueryManager.saveToInstance();
     }
 
-    TumlTabContainerManager.prototype.saveToClass = function() {
+    TumlTabContainerManager.prototype.saveToClass = function () {
         this.getOpenQueryTabViewManager().tumlTabQueryManager.saveToClass();
     }
 
-    TumlTabContainerManager.prototype.saveToRoot = function() {
+    TumlTabContainerManager.prototype.saveToRoot = function () {
         this.getOpenQueryTabViewManager().tumlTabQueryManager.saveToRoot();
     }
 
-    TumlTabContainerManager.prototype.cancelQuery = function() {
+    TumlTabContainerManager.prototype.cancelQuery = function () {
         this.getOpenQueryTabViewManager().tumlTabQueryManager.cancelQuery();
     }
 
-    TumlTabContainerManager.prototype.deleteQuery = function() {
+    TumlTabContainerManager.prototype.deleteQuery = function () {
         this.getOpenQueryTabViewManager().tumlTabQueryManager.deleteQuery();
     }
 
-    TumlTabContainerManager.prototype.getOpenQueryTabViewManager = function() {
+    TumlTabContainerManager.prototype.getOpenQueryTabViewManager = function () {
         var tumlQueryTabViewManager = null;
         for (var i = 0; i < this.tumlTabViewManagers.length; i++) {
             if (this.tumlTabViewManagers[i].isOpen) {
@@ -403,7 +407,6 @@
     TumlTabContainerManager.prototype.updateDataModelForOneToOneForUpdatedItem = function (qualifiedName, id, displayName, fieldName, one) {
         this.parentTabContainerManager.updateDataModelForOneToOneForUpdatedItem(qualifiedName, id, displayName, fieldName, one);
     }
-
 
 
     TumlTabContainerManager.prototype.doInternalCancel = function () {
@@ -689,10 +692,7 @@
     }
 
     TumlTabContainerManager.prototype.addOrRemoveSelectButton = function () {
-        if (this.propertyNavigatingTo !== undefined && this.propertyNavigatingTo !== null && !this.propertyNavigatingTo.associationClassOne &&
-            !this.propertyNavigatingTo.derived &&
-            !this.propertyNavigatingTo.composite && (this.propertyNavigatingTo.upper === -1 || this.propertyNavigatingTo.upper > 1) &&
-            !this.oneManyOrQuery.forLookup) {
+        if (this.propertyNavigatingTo !== undefined && this.propertyNavigatingTo !== null && !this.propertyNavigatingTo.associationClassOne && !this.propertyNavigatingTo.derived && !this.propertyNavigatingTo.composite && (this.propertyNavigatingTo.upper === -1 || this.propertyNavigatingTo.upper > 1) && !this.oneManyOrQuery.forLookup) {
 
             this.parentTabContainerManager.addSelectButton(this.tabTitleName, this);
         } else {
@@ -841,7 +841,6 @@
                     tumlUri,
                     result,
                     propertyNavigatingTo
-
                 );
                 tumlTabViewManager.parentTabContainerManager = this;
             } else {

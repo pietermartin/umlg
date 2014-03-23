@@ -47,7 +47,7 @@ public class SignalEvent extends Event {
 	}
 	
 	public void setSignal(ISignal signal) {
-		Edge edge = UMLG.getDb().addEdge(null, ((UmlgNode)signal).getVertex(), this.vertex,"event_signal");
+		Edge edge = UMLG.get().addEdge(null, ((UmlgNode)signal).getVertex(), this.vertex,"event_signal");
 		edge.setProperty("outClass", signal.getClass().getName());
 		edge.setProperty("inClass", this.getClass().getName());
 	}

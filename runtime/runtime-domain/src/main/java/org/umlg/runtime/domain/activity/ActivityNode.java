@@ -36,7 +36,7 @@ public abstract class ActivityNode<IN extends Token, OUT extends Token> extends 
 
 	public ActivityNode(boolean persist, String name) {
 		super();
-		this.vertex = UMLG.getDb().addVertex(null);
+		this.vertex = UMLG.get().addVertex(null);
 		nodeStat = new NodeStat(vertex, true);
 		this.vertex.setProperty("name", name);
 	}
@@ -94,7 +94,7 @@ public abstract class ActivityNode<IN extends Token, OUT extends Token> extends 
 	}	
 	
 	public void addOutgoingToken(OUT token) {
-		Edge edge = UMLG.getDb().addEdge(null, this.vertex, token.getVertex(), Token.TOKEN + token.getEdgeName());
+		Edge edge = UMLG.get().addEdge(null, this.vertex, token.getVertex(), Token.TOKEN + token.getEdgeName());
 		edge.setProperty("tokenClass", token.getClass().getName());
 		edge.setProperty("outClass", this.getClass().getName());
 	}

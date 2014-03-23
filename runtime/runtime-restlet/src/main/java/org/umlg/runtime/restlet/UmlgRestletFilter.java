@@ -25,10 +25,10 @@ public class UmlgRestletFilter extends Filter {
     @Override
     protected void afterHandle(Request request, Response response) {
         if (response.getStatus() != Status.REDIRECTION_NOT_MODIFIED) {
-            if (UMLG.getDb().isTransactionActive()) {
+            if (UMLG.get().isTransactionActive()) {
                 throw new IllegalStateException("Transaction is still active!");
             }
-            UMLG.getDb().afterThreadContext();
+            UMLG.get().afterThreadContext();
         }
     }
 

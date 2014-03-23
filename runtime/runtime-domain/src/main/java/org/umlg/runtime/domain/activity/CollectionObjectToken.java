@@ -62,7 +62,7 @@ public class CollectionObjectToken<O> extends ObjectToken<O> implements Composit
 	@Override
 	public void remove() {
 		this.elements.clear();
-		UMLG.getDb().removeVertex(getVertex());
+		UMLG.get().removeVertex(getVertex());
 	}
 
 	@Override

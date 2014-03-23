@@ -17,7 +17,7 @@ public abstract class Event implements UmlgNode {
 
 	public Event(String name) {
 		super();
-		this.vertex = UMLG.getDb().addVertex(null);
+		this.vertex = UMLG.get().addVertex(null);
 		this.vertex.setProperty("name", name);
 	}
 

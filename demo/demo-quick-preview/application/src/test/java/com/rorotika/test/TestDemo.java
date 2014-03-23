@@ -29,7 +29,7 @@ public class TestDemo {
         if (dbDir.exists()) {
             FileUtils.deleteDirectory(dbDir);
         }
-        this.db = UMLG.getDb();
+        this.db = UMLG.get();
     }
 
     @After
@@ -70,7 +70,7 @@ public class TestDemo {
         person.setFirstname("Joe");
         person.setLastname("Bloggs");
         company.getEmployee().add(person);
-        UMLG.getDb().commit();
+        UMLG.get().commit();
         Assert.assertTrue(company.getEmployee().contains(person));
     }
 }

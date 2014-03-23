@@ -189,24 +189,24 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                 Edge edgeToLastElement = lastHyperVertex.getEdges(Direction.OUT, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX).iterator().next();
                 Vertex lastVertex = edgeToLastElement.getVertex(Direction.IN);
                 if (lastVertex.equals(this.vertex)) {
-                    UMLG.getDb().addEdge(null, lastHyperVertex, this.vertex, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX);
+                    UMLG.get().addEdge(null, lastHyperVertex, this.vertex, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX);
                 } else {
                     //Create a new hyper vertex
-                    Vertex newHyperVertex = UMLG.getDb().addVertex("hyperVertex");
-                    UMLG.getDb().removeEdge(edgeToLastHyperVertex);
-                    UMLG.getDb().addEdge(null, newElementVertex, newHyperVertex, LABEL_TO_LAST_HYPER_VERTEX + getLabel());
-                    UMLG.getDb().addEdge(null, newHyperVertex, this.vertex, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX);
+                    Vertex newHyperVertex = UMLG.get().addVertex("hyperVertex");
+                    UMLG.get().removeEdge(edgeToLastHyperVertex);
+                    UMLG.get().addEdge(null, newElementVertex, newHyperVertex, LABEL_TO_LAST_HYPER_VERTEX + getLabel());
+                    UMLG.get().addEdge(null, newHyperVertex, this.vertex, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX);
                     //add to the linked list
-                    UMLG.getDb().addEdge(null, lastHyperVertex, newHyperVertex, LABEL_TO_NEXT_HYPER_VERTEX);
+                    UMLG.get().addEdge(null, lastHyperVertex, newHyperVertex, LABEL_TO_NEXT_HYPER_VERTEX);
                 }
             } else {
                 //its the first element in the list
                 //Create a new hyper vertex
-                Vertex newHyperVertex = UMLG.getDb().addVertex("hyperVertex");
-                UMLG.getDb().addEdge(null, newElementVertex, newHyperVertex, LABEL_TO_FIRST_HYPER_VERTEX + getLabel());
-                UMLG.getDb().addEdge(null, newElementVertex, newHyperVertex, LABEL_TO_LAST_HYPER_VERTEX + getLabel());
+                Vertex newHyperVertex = UMLG.get().addVertex("hyperVertex");
+                UMLG.get().addEdge(null, newElementVertex, newHyperVertex, LABEL_TO_FIRST_HYPER_VERTEX + getLabel());
+                UMLG.get().addEdge(null, newElementVertex, newHyperVertex, LABEL_TO_LAST_HYPER_VERTEX + getLabel());
                 //Add the new element to the hyper vertex
-                UMLG.getDb().addEdge(null, newHyperVertex, this.vertex, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX);
+                UMLG.get().addEdge(null, newHyperVertex, this.vertex, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX);
             }
         } else {
             //Get the new vertex for the element
@@ -216,16 +216,16 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                 Vertex lastVertex = edgeToLastVertex.getVertex(Direction.IN);
 
                 //move the edge to the last vertex
-                UMLG.getDb().removeEdge(edgeToLastVertex);
-                UMLG.getDb().addEdge(null, newElementVertex, this.vertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel());
+                UMLG.get().removeEdge(edgeToLastVertex);
+                UMLG.get().addEdge(null, newElementVertex, this.vertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel());
 
                 //add the element to the linked list
-                UMLG.getDb().addEdge(null, lastVertex, this.vertex, LABEL_TO_NEXT_IN_SEQUENCE);
+                UMLG.get().addEdge(null, lastVertex, this.vertex, LABEL_TO_NEXT_IN_SEQUENCE);
 
             } else {
                 //its the first element in the list
-                UMLG.getDb().addEdge(null, newElementVertex, this.vertex, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel());
-                UMLG.getDb().addEdge(null, newElementVertex, this.vertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel());
+                UMLG.get().addEdge(null, newElementVertex, this.vertex, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel());
+                UMLG.get().addEdge(null, newElementVertex, this.vertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel());
             }
         }
     }
@@ -240,7 +240,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
             Edge edgeToVertexToRemove = hyperVertex.getEdges(Direction.OUT, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX).iterator().next();
 
             //Remove the edge to the hyper vertex
-            UMLG.getDb().removeEdge(edgeToVertexToRemove);
+            UMLG.get().removeEdge(edgeToVertexToRemove);
             //Check if the are duplicates, i.e. the hyper vertex has remaining edges.
             //If there are duplicates then there is nothing more to do
             if (!hyperVertex.getEdges(Direction.OUT, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX).iterator().hasNext()) {
@@ -257,13 +257,13 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                         Edge edgeToNextHyperVertex = hyperVertex.getEdges(Direction.OUT, LABEL_TO_NEXT_HYPER_VERTEX).iterator().next();
                         Vertex nextHyperVertex = edgeToNextHyperVertex.getVertex(Direction.IN);
                         //Add in a link between previous and next
-                        UMLG.getDb().removeVertex(hyperVertex);
-                        UMLG.getDb().addEdge(null, previousHyperVertex, nextHyperVertex, LABEL_TO_NEXT_HYPER_VERTEX);
+                        UMLG.get().removeVertex(hyperVertex);
+                        UMLG.get().addEdge(null, previousHyperVertex, nextHyperVertex, LABEL_TO_NEXT_HYPER_VERTEX);
 
                     } else {
                         //Its the last, i.e. make the previous point to the parent
-                        UMLG.getDb().removeVertex(hyperVertex);
-                        UMLG.getDb().addEdge(null, this.vertex, previousHyperVertex, LABEL_TO_LAST_HYPER_VERTEX + getLabel());
+                        UMLG.get().removeVertex(hyperVertex);
+                        UMLG.get().addEdge(null, this.vertex, previousHyperVertex, LABEL_TO_LAST_HYPER_VERTEX + getLabel());
                     }
                 } else {
                     //The first in the linked list, make the next the first
@@ -272,12 +272,12 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                         //Not last
                         Edge edgeToNextHyperVertex = hyperVertex.getEdges(Direction.OUT, LABEL_TO_NEXT_HYPER_VERTEX).iterator().next();
                         Vertex nextHyperVertex = edgeToNextHyperVertex.getVertex(Direction.IN);
-                        UMLG.getDb().addEdge(null, this.vertex, nextHyperVertex, LABEL_TO_FIRST_HYPER_VERTEX + getLabel());
-                        UMLG.getDb().removeVertex(hyperVertex);
+                        UMLG.get().addEdge(null, this.vertex, nextHyperVertex, LABEL_TO_FIRST_HYPER_VERTEX + getLabel());
+                        UMLG.get().removeVertex(hyperVertex);
                     } else {
                         //Last
                         //By this time it must be the only element in the list
-                        UMLG.getDb().removeVertex(hyperVertex);
+                        UMLG.get().removeVertex(hyperVertex);
                     }
                 }
             }
@@ -290,38 +290,38 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                 //It is not first
                 Edge edgeToPrevious = vertexToRemove.getEdges(Direction.IN, LABEL_TO_NEXT_IN_SEQUENCE).iterator().next();
                 Vertex previousVertex = edgeToPrevious.getVertex(Direction.OUT);
-                UMLG.getDb().removeEdge(edgeToPrevious);
+                UMLG.get().removeEdge(edgeToPrevious);
                 //Check if it is last
                 if (vertexToRemove.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE).iterator().hasNext()) {
                     //Not last
                     Edge edgeToNext = vertexToRemove.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE).iterator().next();
                     Vertex nextVertex = edgeToNext.getVertex(Direction.IN);
-                    UMLG.getDb().removeEdge(edgeToNext);
-                    UMLG.getDb().addEdge(null, previousVertex, nextVertex, LABEL_TO_NEXT_IN_SEQUENCE);
+                    UMLG.get().removeEdge(edgeToNext);
+                    UMLG.get().addEdge(null, previousVertex, nextVertex, LABEL_TO_NEXT_IN_SEQUENCE);
                 } else {
                     //Last,
                     //previous becomes to last
                     Edge edgeToLast = vertexToRemove.getEdges(Direction.IN, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel()).iterator().next();
-                    UMLG.getDb().removeEdge(edgeToLast);
-                    UMLG.getDb().addEdge(null, this.vertex, previousVertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel());
+                    UMLG.get().removeEdge(edgeToLast);
+                    UMLG.get().addEdge(null, this.vertex, previousVertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel());
                 }
             } else {
                 //It is first
                 Edge edgeToFirst = vertexToRemove.getEdges(Direction.IN, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel()).iterator().next();
-                UMLG.getDb().removeEdge(edgeToFirst);
+                UMLG.get().removeEdge(edgeToFirst);
                 //Check is it is last
                 if (vertexToRemove.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE).iterator().hasNext()) {
                     //Not last
                     //Move the edge to first
                     Edge edgeToNext = vertexToRemove.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE).iterator().next();
                     Vertex nextVertex = edgeToNext.getVertex(Direction.IN);
-                    UMLG.getDb().removeEdge(edgeToNext);
-                    UMLG.getDb().addEdge(null, this.vertex, nextVertex, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel());
+                    UMLG.get().removeEdge(edgeToNext);
+                    UMLG.get().addEdge(null, this.vertex, nextVertex, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel());
                 } else {
                     //Last
                     //Only one element in the list
                     Edge edgeToLast = vertexToRemove.getEdges(Direction.IN, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel()).iterator().next();
-                    UMLG.getDb().removeEdge(edgeToLast);
+                    UMLG.get().removeEdge(edgeToLast);
                 }
             }
         }
@@ -368,7 +368,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
             Edge edgeToHyperVertex = this.vertex.getEdges(Direction.IN, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX).iterator().next();
             Vertex hyperVertex = edgeToHyperVertex.getVertex(Direction.OUT);
             //Remove the edge to the hyper vertex
-            UMLG.getDb().removeEdge(edgeToHyperVertex);
+            UMLG.get().removeEdge(edgeToHyperVertex);
             //Check if the are duplicates, i.e. the hyper vertex has remaining edges.
             //If there are duplicates then there is nothing more to do
             if (!hyperVertex.getEdges(Direction.OUT, LABEL_TO_ELEMENT_FROM_HYPER_VERTEX).iterator().hasNext()) {
@@ -385,13 +385,13 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                         Edge edgeToNextHyperVertex = hyperVertex.getEdges(Direction.OUT, LABEL_TO_NEXT_HYPER_VERTEX).iterator().next();
                         Vertex nextHyperVertex = edgeToNextHyperVertex.getVertex(Direction.IN);
                         //Add in a link between previous and next
-                        UMLG.getDb().removeVertex(hyperVertex);
-                        UMLG.getDb().addEdge(null, previousHyperVertex, nextHyperVertex, LABEL_TO_NEXT_HYPER_VERTEX);
+                        UMLG.get().removeVertex(hyperVertex);
+                        UMLG.get().addEdge(null, previousHyperVertex, nextHyperVertex, LABEL_TO_NEXT_HYPER_VERTEX);
 
                     } else {
                         //Its the last, i.e. make the previous point to the parent
-                        UMLG.getDb().removeVertex(hyperVertex);
-                        UMLG.getDb().addEdge(null, vertexToRemove, previousHyperVertex, LABEL_TO_LAST_HYPER_VERTEX + getLabel());
+                        UMLG.get().removeVertex(hyperVertex);
+                        UMLG.get().addEdge(null, vertexToRemove, previousHyperVertex, LABEL_TO_LAST_HYPER_VERTEX + getLabel());
                     }
                 } else {
                     //The first in the linked list, make the next the first
@@ -400,12 +400,12 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                         //Not last
                         Edge edgeToNextHyperVertex = hyperVertex.getEdges(Direction.OUT, LABEL_TO_NEXT_HYPER_VERTEX).iterator().next();
                         Vertex nextHyperVertex = edgeToNextHyperVertex.getVertex(Direction.IN);
-                        UMLG.getDb().addEdge(null, vertexToRemove, nextHyperVertex, LABEL_TO_FIRST_HYPER_VERTEX + getLabel());
-                        UMLG.getDb().removeVertex(hyperVertex);
+                        UMLG.get().addEdge(null, vertexToRemove, nextHyperVertex, LABEL_TO_FIRST_HYPER_VERTEX + getLabel());
+                        UMLG.get().removeVertex(hyperVertex);
                     } else {
                         //Last
                         //By this time it must be the only element in the list
-                        UMLG.getDb().removeVertex(hyperVertex);
+                        UMLG.get().removeVertex(hyperVertex);
                     }
                 }
             }
@@ -418,38 +418,38 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                 //It is not first
                 Edge edgeToPrevious = this.vertex.getEdges(Direction.IN, LABEL_TO_NEXT_IN_SEQUENCE).iterator().next();
                 Vertex previousVertex = edgeToPrevious.getVertex(Direction.OUT);
-                UMLG.getDb().removeEdge(edgeToPrevious);
+                UMLG.get().removeEdge(edgeToPrevious);
                 //Check if it is last
                 if (this.vertex.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE).iterator().hasNext()) {
                     //Not last
                     Edge edgeToNext = this.vertex.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE).iterator().next();
                     Vertex nextVertex = edgeToNext.getVertex(Direction.IN);
-                    UMLG.getDb().removeEdge(edgeToNext);
-                    UMLG.getDb().addEdge(null, previousVertex, nextVertex, LABEL_TO_NEXT_IN_SEQUENCE);
+                    UMLG.get().removeEdge(edgeToNext);
+                    UMLG.get().addEdge(null, previousVertex, nextVertex, LABEL_TO_NEXT_IN_SEQUENCE);
                 } else {
                     //Last,
                     //previous becomes to last
                     Edge edgeToLast = this.vertex.getEdges(Direction.IN, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel()).iterator().next();
-                    UMLG.getDb().removeEdge(edgeToLast);
-                    UMLG.getDb().addEdge(null, vertexToRemove, previousVertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel());
+                    UMLG.get().removeEdge(edgeToLast);
+                    UMLG.get().addEdge(null, vertexToRemove, previousVertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel());
                 }
             } else {
                 //It is first
                 Edge edgeToFirst = this.vertex.getEdges(Direction.IN, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel()).iterator().next();
-                UMLG.getDb().removeEdge(edgeToFirst);
+                UMLG.get().removeEdge(edgeToFirst);
                 //Check is it is last
                 if (this.vertex.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE).iterator().hasNext()) {
                     //Not last
                     //Move the edge to first
                     Edge edgeToNext = this.vertex.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE).iterator().next();
                     Vertex nextVertex = edgeToNext.getVertex(Direction.IN);
-                    UMLG.getDb().removeEdge(edgeToNext);
-                    UMLG.getDb().addEdge(null, vertexToRemove, nextVertex, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel());
+                    UMLG.get().removeEdge(edgeToNext);
+                    UMLG.get().addEdge(null, vertexToRemove, nextVertex, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel());
                 } else {
                     //Last
                     //Only one element in the list
                     Edge edgeToLast = this.vertex.getEdges(Direction.IN, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel()).iterator().next();
-                    UMLG.getDb().removeEdge(edgeToLast);
+                    UMLG.get().removeEdge(edgeToLast);
                 }
             }
         }
@@ -498,7 +498,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                     TransactionThreadEntityVar.setNewEntity(node);
                 }
 
-                Set<Edge> edges = UMLG.getDb().getEdgesBetween(this.vertex, v, this.getLabel());
+                Set<Edge> edges = UMLG.get().getEdgesBetween(this.vertex, v, this.getLabel());
                 for (Edge edge : edges) {
                     if (o instanceof TinkerAuditableNode) {
                         createAudit(e, true);
@@ -509,7 +509,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                     if (isInverseOrdered()) {
                         removeFromInverseLinkedList(((UmlgNode) o).getVertex());
                     }
-                    UMLG.getDb().removeEdge(edge);
+                    UMLG.get().removeEdge(edge);
 
                     //TODO optimize this to remove only the node, not initialize the collection
                     node.initialiseProperty(umlgRuntimeProperty, true);
@@ -524,7 +524,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                 if (isInverseOrdered()) {
                     removeFromInverseLinkedList(v);
                 }
-                UMLG.getDb().removeVertex(v);
+                UMLG.get().removeVertex(v);
             } else if (isOnePrimitive() && getDataTypeEnum() == null) {
                 this.vertex.removeProperty(getQualifiedName());
             } else if (getDataTypeEnum() != null && (isManyToMany() || isOneToMany())) {
@@ -535,7 +535,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                 if (isInverseOrdered()) {
                     removeFromInverseLinkedList(v);
                 }
-                UMLG.getDb().removeVertex(v);
+                UMLG.get().removeVertex(v);
             } else if (getDataTypeEnum() != null) {
                 this.vertex.removeProperty(getQualifiedName());
             } else {
@@ -549,7 +549,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                 if (isInverseOrdered()) {
                     removeFromInverseLinkedList(v);
                 }
-                UMLG.getDb().removeVertex(v);
+                UMLG.get().removeVertex(v);
             }
         }
         return result;
@@ -575,21 +575,21 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
             }
             this.handleInverseSide(node, umlgRuntimeProperty, true, this.owner);
         } else if (e.getClass().isEnum()) {
-            v = UMLG.getDb().addVertex(null);
+            v = UMLG.get().addVertex(null);
             v.setProperty(getQualifiedName(), ((Enum<?>) e).name());
             v.setProperty("className", e.getClass().getName());
             putToInternalMap(e, v);
         } else if (isOnePrimitive()) {
             this.vertex.setProperty(getQualifiedName(), e);
         } else if (getDataTypeEnum() != null && (isManyToMany() || isOneToMany())) {
-            v = UMLG.getDb().addVertex(null);
+            v = UMLG.get().addVertex(null);
             v.setProperty("className", e.getClass().getName());
             setDataTypeOnVertex(v, e);
             putToInternalMap(e, v);
         } else if (getDataTypeEnum() != null) {
             setDataTypeOnVertex(this.vertex, e);
         } else {
-            v = UMLG.getDb().addVertex(null);
+            v = UMLG.get().addVertex(null);
             v.setProperty(getQualifiedName(), e);
             v.setProperty("className", e.getClass().getName());
             putToInternalMap(e, v);
@@ -616,12 +616,12 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
     protected Edge createEdge(E e, Vertex v) {
         Edge edge;
         if (this.isControllingSide()) {
-            edge = UMLG.getDb().addEdge(null, this.vertex, v, this.getLabel());
+            edge = UMLG.get().addEdge(null, this.vertex, v, this.getLabel());
             if (this.isManyToMany()) {
                 edge.setProperty("manyToManyCorrelationInverseTRUE", "SETTED");
             }
         } else {
-            edge = UMLG.getDb().addEdge(null, v, this.vertex, this.getLabel());
+            edge = UMLG.get().addEdge(null, v, this.vertex, this.getLabel());
             if (this.isManyToMany()) {
                 edge.setProperty("manyToManyCorrelationInverseFALSE", "SETTED");
             }
@@ -652,11 +652,11 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
             }
             Edge auditEdge;
             if (isControllingSide()) {
-                auditEdge = UMLG.getDb().addEdge(null, auditOwner.getAuditVertex(), node.getAuditVertex(), this.getLabel());
+                auditEdge = UMLG.get().addEdge(null, auditOwner.getAuditVertex(), node.getAuditVertex(), this.getLabel());
                 auditEdge.setProperty("outClass", auditOwner.getClass().getName() + "Audit");
                 auditEdge.setProperty("inClass", node.getClass().getName() + "Audit");
             } else {
-                auditEdge = UMLG.getDb().addEdge(null, node.getAuditVertex(), auditOwner.getAuditVertex(), this.getLabel());
+                auditEdge = UMLG.get().addEdge(null, node.getAuditVertex(), auditOwner.getAuditVertex(), this.getLabel());
                 auditEdge.setProperty("inClass", auditOwner.getClass().getName() + "Audit");
                 auditEdge.setProperty("outClass", node.getClass().getName() + "Audit");
             }
@@ -664,29 +664,29 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                 auditEdge.setProperty("deletedOn", UmlgFormatter.format(new DateTime()));
             }
         } else if (e.getClass().isEnum()) {
-            Vertex v = UMLG.getDb().addVertex(null);
+            Vertex v = UMLG.get().addVertex(null);
             v.setProperty(getQualifiedName(), ((Enum<?>) e).name());
-            Edge auditEdge = UMLG.getDb().addEdge(null, auditOwner.getAuditVertex(), v, this.getLabel());
+            Edge auditEdge = UMLG.get().addEdge(null, auditOwner.getAuditVertex(), v, this.getLabel());
             auditEdge.setProperty("outClass", auditOwner.getClass().getName() + "Audit");
             auditEdge.setProperty("inClass", e.getClass().getName());
         } else {
             if (TransactionThreadVar.hasNoAuditEntry(owner.getClass().getName() + e.getClass().getName() + e.toString())) {
-                Vertex auditVertex = UMLG.getDb().addVertex(null);
+                Vertex auditVertex = UMLG.get().addVertex(null);
                 auditVertex.setProperty(getQualifiedName(), e);
                 TransactionThreadVar.putAuditVertexFalse(owner.getClass().getName() + e.getClass().getName() + e.toString(), auditVertex);
-                auditVertex.setProperty("transactionNo", UMLG.getDb().getTransactionCount());
+                auditVertex.setProperty("transactionNo", UMLG.get().getTransactionCount());
                 Edge auditEdge;
                 if (isControllingSide()) {
-                    auditEdge = UMLG.getDb().addEdge(null, auditOwner.getAuditVertex(), auditVertex, this.getLabel());
+                    auditEdge = UMLG.get().addEdge(null, auditOwner.getAuditVertex(), auditVertex, this.getLabel());
                     auditEdge.setProperty("outClass", this.parentClass.getName());
                     auditEdge.setProperty("inClass", e.getClass().getName() + "Audit");
                 } else {
-                    auditEdge = UMLG.getDb().addEdge(null, auditVertex, auditOwner.getAuditVertex(), this.getLabel());
+                    auditEdge = UMLG.get().addEdge(null, auditVertex, auditOwner.getAuditVertex(), this.getLabel());
                     auditEdge.setProperty("inClass", this.parentClass.getName());
                     auditEdge.setProperty("outClass", e.getClass().getName() + "Audit");
                 }
                 if (deletion) {
-                    auditEdge.setProperty("transactionNo", UMLG.getDb().getTransactionCount());
+                    auditEdge.setProperty("transactionNo", UMLG.get().getTransactionCount());
                     auditEdge.setProperty("deletedOn", UmlgFormatter.format(new DateTime()));
                 }
             }
@@ -799,7 +799,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
 
     private void validateQualifiedMultiplicity(Qualifier qualifier) {
         if (qualifier.isOne()) {
-            Iterable<Edge> edgesToCount = UMLG.getDb().query().has(qualifier.getKey(), qualifier.getValue()).edges();
+            Iterable<Edge> edgesToCount = UMLG.get().query().has(qualifier.getKey(), qualifier.getValue()).edges();
             long count = 0;
             for (final Edge edge : edgesToCount) {
                 count++;

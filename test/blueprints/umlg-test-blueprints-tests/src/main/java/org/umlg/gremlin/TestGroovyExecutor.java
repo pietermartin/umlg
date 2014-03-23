@@ -183,7 +183,7 @@ public class TestGroovyExecutor extends BaseLocalDbTest {
             idAsString = "'" + id.toString() + "'";
         }
         Assert.assertNotNull(universe1.getGod());
-        Object result = UMLG.getDb().executeQuery(UmlgQueryEnum.GROOVY, null, "g.v(" + idAsString + ");");
+        Object result = UMLG.get().executeQuery(UmlgQueryEnum.GROOVY, null, "g.v(" + idAsString + ");");
         Assert.assertTrue(result instanceof Vertex);
         db.executeQuery(UmlgQueryEnum.GROOVY, god.getId(), "v = g.v(1);v.name = 'halo'");
     }

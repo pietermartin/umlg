@@ -38,7 +38,7 @@ public class OclCodeInsightServerResource extends ServerResource {
             List<Choice> insights = UmlgOcl2Parser.INSTANCE.getCodeInsights(ConstraintKind.INVARIANT, query);
             return new JsonRepresentation(convertChoicesToJson(insights));
         } finally {
-            UMLG.getDb().rollback();
+            UMLG.get().rollback();
         }
     }
 

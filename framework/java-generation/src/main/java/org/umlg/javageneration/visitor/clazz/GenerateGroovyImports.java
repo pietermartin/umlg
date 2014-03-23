@@ -42,7 +42,16 @@ public class GenerateGroovyImports extends BaseVisitor implements Visitor<Class>
             groovyImporter.addToImports("java.util.HashSet");
         }
         addEntry(groovyImporter, clazz);
+        addUMLG(groovyImporter);
 
+    }
+
+    private void addUMLG(OJAnnotatedClass groovyImporter) {
+        groovyImporter.addToStaticBlock(
+                new OJSimpleStatement(
+                        "imports.add(\"" + UmlgGenerationUtil.UMLGPathName.getLast() + ".*\")"
+                )
+        );
     }
 
     private void addEntry(OJAnnotatedClass groovyImporter, Class clazz) {

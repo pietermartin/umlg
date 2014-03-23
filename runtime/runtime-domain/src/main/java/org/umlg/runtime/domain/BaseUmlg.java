@@ -37,7 +37,7 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
     public BaseUmlg(Object id) {
         super();
         //check if it has been deleted
-        this.vertex = UMLG.getDb().getVertex(id);
+        this.vertex = UMLG.get().getVertex(id);
         Boolean deleted = this.vertex.getProperty("deleted");
         if (deleted != null && deleted) {
             throw new IllegalStateException("Vertex has been deleted!");
@@ -48,7 +48,7 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
 
     public BaseUmlg(Boolean persistent) {
         super();
-        this.vertex = UMLG.getDb().addVertex(this.getClass().getName());
+        this.vertex = UMLG.get().addVertex(this.getClass().getName());
         this.vertex.setProperty("className", getClass().getName());
         addToThreadEntityVar();
         addEdgeToMetaNode();
@@ -58,7 +58,7 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
     }
 
     public BaseUmlg reload() {
-        this.vertex = UMLG.getDb().getVertex(this.vertex.getId());
+        this.vertex = UMLG.get().getVertex(this.vertex.getId());
         initialiseProperties();
         return this;
     }

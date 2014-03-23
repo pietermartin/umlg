@@ -37,7 +37,7 @@ public class GremlinCodeInsightServerResource extends ServerResource {
             List<Choice> insights = UmlgOcl2Parser.INSTANCE.getHelper().getSyntaxHelp(null, query);
             return new JsonRepresentation(convertChoicesToJson(insights));
         } finally {
-            UMLG.getDb().rollback();
+            UMLG.get().rollback();
         }
     }
 

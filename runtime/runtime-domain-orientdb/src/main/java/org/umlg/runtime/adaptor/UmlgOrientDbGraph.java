@@ -158,7 +158,7 @@ public class UmlgOrientDbGraph extends OrientGraph implements UmlgGraph {
                 try {
                     Class<?> umlgOclExecutor= Class.forName("org.umlg.ocl.UmlgOclExecutor");
                     Method method = umlgOclExecutor.getMethod("executeOclQueryAsJson", UmlgNode.class, String.class);
-                    UmlgNode context = (UmlgNode) UMLG.getDb().instantiateClassifier(contextId);
+                    UmlgNode context = (UmlgNode) UMLG.get().instantiateClassifier(contextId);
                     String json = (String) method.invoke(null, context, query);
                     return json;
                 } catch (ClassNotFoundException e) {
@@ -189,7 +189,7 @@ public class UmlgOrientDbGraph extends OrientGraph implements UmlgGraph {
                 try {
                     Class<?> umlgOclExecutor= Class.forName("org.umlg.ocl.UmlgOclExecutor");
                     Method method = umlgOclExecutor.getMethod("executeOclQuery", UmlgNode.class, String.class);
-                    UmlgNode context = (UmlgNode) UMLG.getDb().instantiateClassifier(contextId);
+                    UmlgNode context = (UmlgNode) UMLG.get().instantiateClassifier(contextId);
                     Object json = method.invoke(null, context, query);
                     return json;
                 } catch (ClassNotFoundException e) {
@@ -321,7 +321,7 @@ public class UmlgOrientDbGraph extends OrientGraph implements UmlgGraph {
         TransactionThreadEntityVar.remove();
         TransactionThreadMetaNodeVar.remove();
         UmlgAssociationClassManager.remove();
-        UMLG.getDb().shutdown();
+        UMLG.get().shutdown();
         UMLG.remove();
     }
 

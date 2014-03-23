@@ -406,10 +406,10 @@ public class TestValidation extends BaseLocalDbTest {
 //            Future<Boolean> f = es.submit(new Callable<Boolean>() {
 //                @Override
 //                public Boolean call() throws Exception {
-//                    GraphDb.getDb().resume(transactionIdentifier);
+//                    GraphDb.get().resume(transactionIdentifier);
 //                    FWomen w1ToDelete = new FWomen(w1.getVertex());
 //                    w1ToDelete.delete();
-//                    GraphDb.getDb().suspend();
+//                    GraphDb.get().suspend();
 //                    return true;
 //                }
 //            });
@@ -455,14 +455,14 @@ public class TestValidation extends BaseLocalDbTest {
 //        Future<Boolean> f = es.submit(new Callable<Boolean>() {
 //            @Override
 //            public Boolean call() throws Exception {
-//                GraphDb.getDb().resume(transactionIdentifier);
+//                GraphDb.get().resume(transactionIdentifier);
 //                FWomen w1ToDelete = new FWomen(w1.getVertex());
 //                w1ToDelete.delete();
 //
 //                FWomen w2ToDelete = new FWomen(w2.getVertex());
 //                w2ToDelete.delete();
 //
-//                GraphDb.getDb().suspend();
+//                GraphDb.get().suspend();
 //                return true;
 //            }
 //        });

@@ -18,7 +18,7 @@ public class TestUmlgProperties extends BaseLocalDbTest {
         human.setName("john");
         db.commit();
 
-        String result = UMLG.getDb().executeQueryToString(UmlgQueryEnum.GROOVY, human.getId(), "self.has('associationclass::org::umlg::tinkergraph::Human::name', T.eq, 'john')");
+        String result = UMLG.get().executeQueryToString(UmlgQueryEnum.GROOVY, human.getId(), "self.has('associationclass::org::umlg::tinkergraph::Human::name', T.eq, 'john')");
         System.out.println(result);
     }
 }

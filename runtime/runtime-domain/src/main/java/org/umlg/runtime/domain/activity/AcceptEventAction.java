@@ -78,10 +78,10 @@ public abstract class AcceptEventAction extends Action implements IAcceptEventAc
 		if (event instanceof ISignalEvent) {
 			ISignal signal = ((ISignalEvent)event).getSignal();
 			if (signal instanceof UmlgNode) {
-				UMLG.getDb().removeVertex(((UmlgNode) signal).getVertex());
+				UMLG.get().removeVertex(((UmlgNode) signal).getVertex());
 			}
 		}
-		UMLG.getDb().removeVertex(((UmlgNode)event).getVertex());
+		UMLG.get().removeVertex(((UmlgNode)event).getVertex());
 	}	
 	
 	@Override

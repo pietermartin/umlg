@@ -38,9 +38,9 @@ public abstract class SendSignalAction extends InvocationAction implements ISend
 				Thread.sleep(1000);
 				try {
 					resolveTarget().receiveSignal(getSignal());
-					UMLG.getDb().commit();
+					UMLG.get().commit();
 				} catch (Exception e) {
-					UMLG.getDb().rollback();
+					UMLG.get().rollback();
 					throw e;
 				}
 				return true;

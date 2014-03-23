@@ -11,7 +11,7 @@ import java.util.List;
 public class VertexSchemaCreatorImpl implements VertexSchemaCreator {
     @Override
     public void create(List<String> classHierarchy) {
-        UmlgOrientDbGraph g = (UmlgOrientDbGraph) UMLG.getDb();
+        UmlgOrientDbGraph g = (UmlgOrientDbGraph) UMLG.get();
         //This list contains the class hierarchy starting with the super class
         //The first class is the base class
         String baseClass = classHierarchy.get(0);

@@ -153,7 +153,7 @@ public class TestOneToMany extends BaseLocalDbTest {
 
         db.commit();
         Assert.assertEquals(3, god.getUniverse().size());
-        Universe u = new Universe(UMLG.getDb().getVertex(universe1.getVertex().getId()));
+        Universe u = new Universe(UMLG.get().getVertex(universe1.getVertex().getId()));
         god.addToUniverse(u);
         db.commit();
         God g = new God(god.getVertex());
@@ -185,7 +185,7 @@ public class TestOneToMany extends BaseLocalDbTest {
 
         db.commit();
         Assert.assertEquals(3, god.getUniverse().size());
-        Universe u = new Universe(UMLG.getDb().getVertex(universe1.getVertex().getId()));
+        Universe u = new Universe(UMLG.get().getVertex(universe1.getVertex().getId()));
         god.getUniverse().add(u);
         db.commit();
         God g = new God(god.getVertex());
@@ -225,7 +225,7 @@ public class TestOneToMany extends BaseLocalDbTest {
 
         db.commit();
         Assert.assertEquals(3, god.getUniverse().size());
-        Universe u = new Universe(UMLG.getDb().getVertex(universe1.getVertex().getId()));
+        Universe u = new Universe(UMLG.get().getVertex(universe1.getVertex().getId()));
         u.clearGod();
         god2.getUniverse().add(u);
         db.commit();

@@ -30,6 +30,8 @@ public class UmlgNeo4jGraphFactory implements UmlgGraphFactory {
                 UmlgMetaNodeFactory.getUmlgMetaNodeManager().createAllMetaNodes();
                 UmlGIndexFactory.getUmlgIndexManager().createIndexes();
                 this.umlgGraph.commit();
+                //Prepare groovy
+                GroovyExecutor ge = GroovyExecutor.INSTANCE;
             } else {
                 this.umlgGraph = new UmlgNeo4jGraph(f.getAbsolutePath());
             }

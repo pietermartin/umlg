@@ -107,7 +107,7 @@ public class GraphOfTheGodsDefaultDataCreator implements DefaultDataCreator {
             battle3.setPlace("[39,22]");
             hercules.addToMonster(cerberus, battle3);
 
-            UMLG.getDb().commit();
+            UMLG.get().commit();
         }
     }
 

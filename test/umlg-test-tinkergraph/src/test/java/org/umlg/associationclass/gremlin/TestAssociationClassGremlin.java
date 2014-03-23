@@ -36,7 +36,7 @@ public class TestAssociationClassGremlin extends BaseLocalDbTest {
 
         db.commit();
 
-        String edges = UMLG.getDb().executeQueryToString(UmlgQueryEnum.GROOVY, human.getId(), "self.outE.hasAC('associationclass::org::umlg::tinkergraph::AssociationClassSetTest::weight', T.eq, 1)");
+        String edges = UMLG.get().executeQueryToString(UmlgQueryEnum.GROOVY, human.getId(), "self.outE.hasAC('associationclass::org::umlg::tinkergraph::AssociationClassSetTest::weight', T.eq, 1)");
         System.out.println(edges);
 
     }

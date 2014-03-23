@@ -61,7 +61,7 @@ public class TinkergraphDefaultDataCreator implements DefaultDataCreator {
             joshRipple.setWeight(1.0);
             josh.addToCreated(ripple, joshRipple);
 
-            UMLG.getDb().commit();
+            UMLG.get().commit();
         }
     }
 }

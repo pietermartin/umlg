@@ -114,7 +114,7 @@ public class TestRestletDefaultDataCreator implements DefaultDataCreator {
                     terrestrialCraft.setAquatic(true);
                 }
             }
-            UMLG.getDb().commit();
+            UMLG.get().commit();
         }
 
     }

@@ -43,16 +43,16 @@ public class UmlgOrderedSetClosableIterableImpl<E> extends BaseCollection<E> imp
             Vertex lastVertex = edgeToLastVertex.getVertex(Direction.IN);
 
             //move the edge to the last vertex
-            UMLG.getDb().removeEdge(edgeToLastVertex);
-            UMLG.getDb().addEdge(null, this.vertex, newElementVertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel());
+            UMLG.get().removeEdge(edgeToLastVertex);
+            UMLG.get().addEdge(null, this.vertex, newElementVertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel());
 
             //add the element to the linked list
-            UMLG.getDb().addEdge(null, lastVertex, newElementVertex, LABEL_TO_NEXT_IN_SEQUENCE);
+            UMLG.get().addEdge(null, lastVertex, newElementVertex, LABEL_TO_NEXT_IN_SEQUENCE);
 
         } else {
             //its the first element in the list
-            UMLG.getDb().addEdge(null, this.vertex, newElementVertex, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel());
-            UMLG.getDb().addEdge(null, this.vertex, newElementVertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel());
+            UMLG.get().addEdge(null, this.vertex, newElementVertex, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel());
+            UMLG.get().addEdge(null, this.vertex, newElementVertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel());
         }
     }
 

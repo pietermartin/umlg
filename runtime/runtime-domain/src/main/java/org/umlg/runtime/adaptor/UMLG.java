@@ -13,7 +13,7 @@ public class UMLG {
         }
     };
 
-    public static UmlgGraph getDb() {
+    public static UmlgGraph get() {
         return dbVar.get();
     }
 
@@ -22,7 +22,7 @@ public class UMLG {
     }
 
     public static void incrementTransactionCount() {
-        getDb().incrementTransactionCount();
+        get().incrementTransactionCount();
     }
 
 }

@@ -37,7 +37,7 @@ public abstract class BaseTinkerBehavioredClassifier extends BaseUmlgAudit imple
 	}
 	
 	protected void attachToRoot() {
-		Edge edge = UMLG.getDb().addEdge(null, UMLG.getDb().getRoot(), this.vertex, "classifierBehavior");
+		Edge edge = UMLG.get().addEdge(null, UMLG.get().getRoot(), this.vertex, "classifierBehavior");
 		edge.setProperty("inClass", this.getClass().getName());
 	}
 

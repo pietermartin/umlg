@@ -12,8 +12,8 @@ public class UmlgTransactionServerResourceImpl /*extends ServerResource implemen
 //        try {
 //            String commitValue = entity.getText();
 //            TransactionIdentifier transactionIdentifier = UmlgTransactionManager.INSTANCE.get(uid);
-//            GraphDb.getDb().resume(transactionIdentifier);
-//            GraphDb.getDb().rollback();
+//            GraphDb.get().resume(transactionIdentifier);
+//            GraphDb.get().rollback();
 //            return new StringRepresentation("rolled back");
 //        } catch (IOException e) {
 //            throw new RuntimeException(e);
@@ -27,7 +27,7 @@ public class UmlgTransactionServerResourceImpl /*extends ServerResource implemen
 //     */
 //    @Override
 //    public Representation post(Representation entity) {
-//        TransactionIdentifier transactionIdentifier = GraphDb.getDb().suspend();
+//        TransactionIdentifier transactionIdentifier = GraphDb.get().suspend();
 //        UmlgTransactionManager.INSTANCE.put(transactionIdentifier);
 //        return new JsonRepresentation(transactionIdentifier.toJson());
 //    }
@@ -38,14 +38,14 @@ public class UmlgTransactionServerResourceImpl /*extends ServerResource implemen
 //        try {
 //            String commitValue = entity.getText();
 //            TransactionIdentifier transactionIdentifier = UmlgTransactionManager.INSTANCE.get(uid);
-//            GraphDb.getDb().resume(transactionIdentifier);
+//            GraphDb.get().resume(transactionIdentifier);
 //            ObjectMapper objectMapper = new ObjectMapper();
 //            Map<String, Boolean> commitValueAsMap = objectMapper.readValue(commitValue, Map.class);
 //            if (commitValueAsMap.get(UmlgTransactionServerResource.COMMIT)) {
-//                GraphDb.getDb().commit();
+//                GraphDb.get().commit();
 //                return new JsonRepresentation("{\"transaction\":\"COMMITTED\"}");
 //            } else {
-//                GraphDb.getDb().rollback();
+//                GraphDb.get().rollback();
 //                return new JsonRepresentation("{\"transaction\":\"ROLLED_BACK\"}");
 //            }
 //        } catch (IOException e) {

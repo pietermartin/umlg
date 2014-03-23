@@ -153,7 +153,7 @@ public class UmlgNeo4jGraph extends Neo4j2Graph implements UmlgGraph {
                 try {
                     Class<?> umlgOclExecutor = Class.forName("org.umlg.ocl.UmlgOclExecutor");
                     Method method = umlgOclExecutor.getMethod("executeOclQueryAsJson", UmlgNode.class, String.class);
-                    UmlgNode context = UMLG.getDb().instantiateClassifier(contextId);
+                    UmlgNode context = UMLG.get().instantiateClassifier(contextId);
                     String json = (String) method.invoke(null, context, query);
                     return json;
                 } catch (ClassNotFoundException e) {
@@ -187,7 +187,7 @@ public class UmlgNeo4jGraph extends Neo4j2Graph implements UmlgGraph {
                 try {
                     Class<?> umlgOclExecutor = Class.forName("org.umlg.ocl.UmlgOclExecutor");
                     Method method = umlgOclExecutor.getMethod("executeOclQuery", UmlgNode.class, String.class);
-                    UmlgNode context = UMLG.getDb().instantiateClassifier(contextId);
+                    UmlgNode context = UMLG.get().instantiateClassifier(contextId);
                     Object result = method.invoke(null, context, query);
                     return result;
                 } catch (ClassNotFoundException e) {

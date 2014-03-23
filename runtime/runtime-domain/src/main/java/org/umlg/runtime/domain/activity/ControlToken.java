@@ -18,10 +18,10 @@ public class ControlToken extends Token {
 	protected void addEdgeToActivityNode(ActivityNode<? extends Token, ? extends Token> node) {
 		// Multiple tokens from the same incoming edge is merged
 		if (!node.vertex.getEdges(Direction.OUT, TOKEN + getEdgeName()).iterator().hasNext()) {
-			UMLG.getDb().addEdge(null, node.vertex, getVertex(), TOKEN + getEdgeName());
+			UMLG.get().addEdge(null, node.vertex, getVertex(), TOKEN + getEdgeName());
 		} else {
 			// TODO write test case for this
-			UMLG.getDb().removeVertex(getVertex());
+			UMLG.get().removeVertex(getVertex());
 		}
 	}
 
@@ -33,7 +33,7 @@ public class ControlToken extends Token {
 
 	@Override
 	public void remove() {
-		UMLG.getDb().removeVertex(getVertex());
+		UMLG.get().removeVertex(getVertex());
 	}
 
 }

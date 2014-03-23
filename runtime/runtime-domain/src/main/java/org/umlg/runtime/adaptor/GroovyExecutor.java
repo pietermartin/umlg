@@ -85,7 +85,7 @@ public class GroovyExecutor {
                 groovy = groovy.replace("self", "g.v(" + contextId + ")");
             }
         }
-        Graph graph = new UmlgGremlinReadOnlyKeyIndexableGraph(UMLG.getDb());
+        Graph graph = new UmlgGremlinReadOnlyKeyIndexableGraph(UMLG.get());
         GremlinExecutorBaseClass.load(graph);
         this.scriptEngine.put("g", graph);
         Object result;

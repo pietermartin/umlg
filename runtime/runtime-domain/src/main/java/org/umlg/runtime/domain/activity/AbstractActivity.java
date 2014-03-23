@@ -17,7 +17,7 @@ public abstract class AbstractActivity extends BaseUmlgAudit implements Composit
 	private static final long serialVersionUID = 7647066355373095288L;
 
 	public void setCallAction(CallAction callAction) {
-		Edge edge = UMLG.getDb().addEdge(null, this.vertex, callAction.getVertex(),"callAction");
+		Edge edge = UMLG.get().addEdge(null, this.vertex, callAction.getVertex(),"callAction");
 		edge.setProperty("inClass", callAction.getClass().getName());
 		edge.setProperty("outClass", this.getClass().getName());
 	}

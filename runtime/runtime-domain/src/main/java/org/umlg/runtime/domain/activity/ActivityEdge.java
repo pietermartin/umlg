@@ -29,7 +29,7 @@ public abstract class ActivityEdge<T extends Token> extends AbstractPipe<T, Bool
 			if (evaluateGuardConditions(token)) {
 				this.tokens.add(token);
 			} else {
-				UMLG.getDb().removeVertex(token.getVertex());
+				UMLG.get().removeVertex(token.getVertex());
 			}
 		}
 		if (hasWeightPassed()) {

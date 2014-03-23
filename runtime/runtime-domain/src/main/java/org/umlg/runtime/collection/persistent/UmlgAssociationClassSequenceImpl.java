@@ -107,14 +107,14 @@ public class UmlgAssociationClassSequenceImpl<AssociationClassNode> extends Umlg
 
             //Get the edges between the vertexToLoad and the owner vertex.
             //Take the first one.
-            Set<Edge> edges = UMLG.getDb().getEdgesBetween(this.owner.getVertex(), vertexToLoad, getLabel());
+            Set<Edge> edges = UMLG.get().getEdgesBetween(this.owner.getVertex(), vertexToLoad, getLabel());
             //Debug check
             if (edges.size() > 1) {
                 throw new IllegalStateException("Only a bag can have multiple edges between vertices!");
             }
             Vertex associationClassVertex = null;
             for (Edge edge : edges) {
-                associationClassVertex = UMLG.getDb().getVertex(edge.getProperty(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID));
+                associationClassVertex = UMLG.get().getVertex(edge.getProperty(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID));
             }
 
             Class<?> c;

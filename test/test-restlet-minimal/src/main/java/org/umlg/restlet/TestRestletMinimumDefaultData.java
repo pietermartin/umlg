@@ -32,6 +32,6 @@ public class TestRestletMinimumDefaultData  implements DefaultDataCreator {
         job1.setSalary(1);
         company1.addToPerson(person1, job1);
 
-        UMLG.getDb().commit();
+        UMLG.get().commit();
     }
 }

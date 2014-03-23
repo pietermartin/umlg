@@ -10,7 +10,7 @@ public abstract class Token {
 	protected Vertex vertex;
 
 	public Token(String edgeName) {
-		this.vertex = UMLG.getDb().addVertex("Token");
+		this.vertex = UMLG.get().addVertex("Token");
 		setEdgeName(edgeName);
 	}
 
@@ -36,7 +36,7 @@ public abstract class Token {
 
 	protected void removeEdgeFromActivityNode() {
 		if (this.vertex.getEdges(Direction.IN, TOKEN + getEdgeName()).iterator().hasNext()) {
-			UMLG.getDb().removeEdge(this.vertex.getEdges(Direction.IN).iterator().next());
+			UMLG.get().removeEdge(this.vertex.getEdges(Direction.IN).iterator().next());
 			if (this.vertex.getEdges(Direction.IN).iterator().hasNext()) {
 				throw new IllegalStateException("Token can not have more than one edge!");
 			}

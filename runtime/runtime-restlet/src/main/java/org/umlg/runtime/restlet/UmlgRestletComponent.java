@@ -29,7 +29,7 @@ public abstract class UmlgRestletComponent extends Component {
 
     @Override
     public void stop() throws Exception {
-        UMLG.getDb().shutdown();
+        UMLG.get().shutdown();
         UMLG.remove();
         super.stop();
     }

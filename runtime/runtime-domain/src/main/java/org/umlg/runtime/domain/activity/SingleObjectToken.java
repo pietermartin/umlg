@@ -31,13 +31,13 @@ public class SingleObjectToken<O> extends ObjectToken<O> {
 			UmlgNode node = (UmlgNode) object;
 			v = node.getVertex();
 		} else if (object.getClass().isEnum()) {
-			v = UMLG.getDb().addVertex(null);
+			v = UMLG.get().addVertex(null);
 			v.setProperty("value", ((Enum<?>) object).name());
 		} else {
-			v = UMLG.getDb().addVertex(null);
+			v = UMLG.get().addVertex(null);
 			v.setProperty("value", object);
 		}
-		Edge edge = UMLG.getDb().addEdge(null, this.vertex, v, TOKEN + "toObject");
+		Edge edge = UMLG.get().addEdge(null, this.vertex, v, TOKEN + "toObject");
 		edge.setProperty("inClass", object.getClass().getName());
 	}
 
@@ -45,11 +45,11 @@ public class SingleObjectToken<O> extends ObjectToken<O> {
 		O object = getObject();
 		Edge edge = this.vertex.getEdges(Direction.OUT, TOKEN + "toObject").iterator().next();
 		if (object instanceof UmlgNode) {
-			UMLG.getDb().removeEdge(edge);
+			UMLG.get().removeEdge(edge);
 		} else if (object.getClass().isEnum()) {
-			UMLG.getDb().removeVertex(edge.getVertex(Direction.IN));
+			UMLG.get().removeVertex(edge.getVertex(Direction.IN));
 		} else {
-			UMLG.getDb().removeVertex(edge.getVertex(Direction.IN));
+			UMLG.get().removeVertex(edge.getVertex(Direction.IN));
 		}
 	}
 
@@ -94,7 +94,7 @@ public class SingleObjectToken<O> extends ObjectToken<O> {
 	@Override
 	public void remove() {
 		removeEdgeToObject();
-		UMLG.getDb().removeVertex(getVertex());
+		UMLG.get().removeVertex(getVertex());
 	}
 	
 	//TODO think about null token and object tokens that are control tokens

@@ -29,10 +29,10 @@ public class UmlgQualifiedBagImpl<E> extends BaseBag<E> implements UmlgQualified
 			if (o instanceof UmlgNode) {
 				UmlgNode node = (UmlgNode) o;
 				v = node.getVertex();
-				Set<Edge> edges = UMLG.getDb().getEdgesBetween(this.vertex, v, this.getLabel());
+				Set<Edge> edges = UMLG.get().getEdgesBetween(this.vertex, v, this.getLabel());
 				for (Edge edge : edges) {
 //					removeEdgefromIndex(edge);
-					UMLG.getDb().removeEdge(edge);
+					UMLG.get().removeEdge(edge);
 				}
 			} else if (o.getClass().isEnum()) {
                 List<Vertex> vertexes = this.internalVertexMap.get(getQualifiedName() + o.toString());
@@ -40,14 +40,14 @@ public class UmlgQualifiedBagImpl<E> extends BaseBag<E> implements UmlgQualified
                 v = vertexes.get(0);
 //				v = this.internalVertexMap.get(((Enum<?>) o).name());
 //				Edge edge = v.getEdges(Direction.IN, this.getLabel()).iterator().next();
-				UMLG.getDb().removeVertex(v);
+				UMLG.get().removeVertex(v);
 			} else {
                 List<Vertex> vertexes = this.internalVertexMap.get(getQualifiedName() + o.toString());
                 Preconditions.checkState(vertexes.size() > 0, "BaseCollection.internalVertexMap must have a value for the key!");
                 v = vertexes.get(0);
 //				v = this.internalVertexMap.get(o);
 //				Edge edge = v.getEdges(Direction.IN, this.getLabel()).iterator().next();
-				UMLG.getDb().removeVertex(v);
+				UMLG.get().removeVertex(v);
 			}
 		}
 		return result;
