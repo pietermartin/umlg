@@ -178,7 +178,7 @@ public class UmlgTitanGraph extends StandardTitanGraph implements UmlgGraph {
     /** Generic for all graphs end */
 
     @Override
-    public String executeQuery(UmlgQueryEnum umlgQueryEnum, Object contextId, String query) {
+    public String executeQueryToString(UmlgQueryEnum umlgQueryEnum, Object contextId, String query) {
 
         switch (umlgQueryEnum) {
             case OCL:
@@ -193,20 +193,50 @@ public class UmlgTitanGraph extends StandardTitanGraph implements UmlgGraph {
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
-            case GREMLIN:
+            case GROOVY:
                 String result;
                 if (contextId != null) {
-                    result = GremlinExecutor.executeGremlinAsString(contextId, query);
+                    result = GroovyExecutor.INSTANCE.executeGroovyAsString(contextId, query);
                 } else {
-                    result = GremlinExecutor.executeGremlinAsString(null, query);
+                    result = GroovyExecutor.INSTANCE.executeGroovyAsString(null, query);
                 }
                 return result;
             case NATIVE:
                 throw new IllegalStateException("Titan does not have a native query language!");
+            default:
+                throw new RuntimeException("Unknown query enum");
         }
+    }
 
-        throw new RuntimeException("Unknown query enum");
+    @Override
+    public Object executeQuery(UmlgQueryEnum umlgQueryEnum, Object contextId, String query) {
 
+        switch (umlgQueryEnum) {
+            case OCL:
+                try {
+                    Class<?> umlgOclExecutor = Class.forName("org.umlg.ocl.UmlgOclExecutor");
+                    Method method = umlgOclExecutor.getMethod("executeOclQuery", UmlgNode.class, String.class);
+                    UmlgNode context = (UmlgNode) UMLG.getDb().instantiateClassifier(contextId);
+                    Object json = method.invoke(null, context, query);
+                    return json;
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException("UmlgOclExecutor is not on the class path.");
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            case GROOVY:
+                Object result;
+                if (contextId != null) {
+                    result = GroovyExecutor.INSTANCE.executeGroovy(contextId, query);
+                } else {
+                    result = GroovyExecutor.INSTANCE.executeGroovy(null, query);
+                }
+                return result;
+            case NATIVE:
+                throw new IllegalStateException("Titan does not have a native query language!");
+            default:
+                throw new RuntimeException("Unknown query enum");
+        }
     }
 
     @Override

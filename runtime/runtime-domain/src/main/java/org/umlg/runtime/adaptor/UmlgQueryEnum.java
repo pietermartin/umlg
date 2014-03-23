@@ -6,6 +6,6 @@ package org.umlg.runtime.adaptor;
  */
 public enum UmlgQueryEnum {
 
-    OCL, GREMLIN, NATIVE;
+    OCL, GROOVY, NATIVE;
 
 }

@@ -3,13 +3,16 @@ package org.umlg.runtime.restlet;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 import org.umlg.runtime.adaptor.UMLG;
+import org.umlg.runtime.adaptor.UmlgExceptionUtilFactory;
 import org.umlg.runtime.restlet.util.UmlgURLDecoder;
+
+import java.util.logging.Level;
 
 /**
  * Date: 2013/10/19
  * Time: 10:47 AM
  */
-public class QueryExecuteServerResourceImpl extends BaseOclExecutionServerResourceImpl {
+public class QueryExecuteServerResourceImpl extends BaseQueryExecutionServerResourceImpl {
 
     /**
      * default constructor for QueryExecuteServerResourceImpl
@@ -20,20 +23,38 @@ public class QueryExecuteServerResourceImpl extends BaseOclExecutionServerResour
 
     @Override
     public Representation get() throws ResourceException {
-        try {
-            String type = getQuery().getFirstValue("type");
-            String query = getQuery().getFirstValue("query");
-
-            String contextClassifierQualifiedName = getQuery().getFirstValue("contextClassifierQualifiedName");
-            String contextId = (String) getRequestAttributes().get("contextId");
-            if (contextId != null) {
-                contextId = UmlgURLDecoder.decode(contextId);
-                return execute(query, contextId, type);
-            } else {
-                return executeStatic(query, contextClassifierQualifiedName, type);
+        String type = getQuery().getFirstValue("type");
+        String query = getQuery().getFirstValue("query");
+        String contextClassifierQualifiedName = getQuery().getFirstValue("contextClassifierQualifiedName");
+        String contextId = (String) getRequestAttributes().get("contextId");
+        if (type.equalsIgnoreCase("groovy")) {
+            try {
+                Representation result;
+                if (contextId != null) {
+                    contextId = UmlgURLDecoder.decode(contextId);
+                    result = execute(query, contextId, type);
+                } else {
+                    result = executeStatic(query, contextClassifierQualifiedName, type);
+                }
+                UMLG.getDb().commit();
+                return result;
+            } catch (Exception e) {
+                UMLG.getDb().rollback();
+                throw UmlgExceptionUtilFactory.getTumlExceptionUtil().handle(e);
             }
-        } finally {
-            UMLG.getDb().rollback();
+        } else {
+            try {
+                Representation result;
+                if (contextId != null) {
+                    contextId = UmlgURLDecoder.decode(contextId);
+                    result = execute(query, contextId, type);
+                } else {
+                    result = executeStatic(query, contextClassifierQualifiedName, type);
+                }
+                return result;
+            } finally {
+                UMLG.getDb().rollback();
+            }
         }
     }
 

@@ -62,6 +62,7 @@ public class DefaultVisitors {
 
         result.add(new PackageVisitor(Workspace.INSTANCE));
 //        result.add(new GremlinGroovyModelVisitor(Workspace.INSTANCE, Workspace.GROOVY_SOURCE_FOLDER));
+        result.add( new GenerateGroovyImports(Workspace.INSTANCE));
 
         return result;
 

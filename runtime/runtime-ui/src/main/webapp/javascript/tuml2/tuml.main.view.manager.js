@@ -712,7 +712,7 @@
             if ((this.contextVertexId !== null && this.contextVertexId !== undefined) || (this.propertyNavigatingTo !== null && this.propertyNavigatingTo !== undefined)) {
                 this.addQueryTab(true, new Tuml.Query(-1, 'New Query', 'New Query Description', 'self.name', 'ocl', null, 'rootQuery'));
             } else {
-                this.addQueryTab(true, new Tuml.Query(-1, 'New Query', 'New Query Description', 'self.name', 'gremlin', null, 'rootQuery'));
+                this.addQueryTab(true, new Tuml.Query(-1, 'New Query', 'New Query Description', 'self.name', 'groovy', null, 'rootQuery'));
             }
 
         }

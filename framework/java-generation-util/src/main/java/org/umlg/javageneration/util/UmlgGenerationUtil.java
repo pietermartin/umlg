@@ -46,6 +46,7 @@ public class UmlgGenerationUtil {
     public static final OJPathName UmlgSchemaCreator = new OJPathName("org.umlg.runtime.adaptor.UmlgSchemaCreator");
     public static final OJPathName VertexSchemaCreator = new OJPathName("org.umlg.runtime.adaptor.VertexSchemaCreator");
     public static final OJPathName EdgeSchemaCreator = new OJPathName("org.umlg.runtime.adaptor.EdgeSchemaCreator");
+    public static final OJPathName UmlgGroovyImporter = new OJPathName("org.umlg.runtime.adaptor.UmlgGroovyImporter");
 
     public static final String QualifiedNameVertexSchemaSet = "qualifiedNameVertexSchemaSet";
     public static final String QualifiedNameEdgeSchemaSet = "qualifiedNameEdgeSchemaSet";

@@ -357,7 +357,7 @@
                         });
                 };
 
-            }  else if (query.type === 'gremlin') {
+            }  else if (query.type === 'groovy') {
 
                 CodeMirror.commands.autocomplete = function (cm) {
                     CodeMirror.showHint(cm, CodeMirror.hint.gremlin,

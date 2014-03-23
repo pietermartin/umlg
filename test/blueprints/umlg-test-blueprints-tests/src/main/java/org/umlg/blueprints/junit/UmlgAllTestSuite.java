@@ -2,7 +2,7 @@ package org.umlg.blueprints.junit;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
-import org.umlg.gremlin.TestGremlinExecutor;
+import org.umlg.gremlin.TestGroovyExecutor;
 import org.umlg.meta.TestMetaClasses;
 import org.umlg.tests.allinstances.AllInstancesTest;
 import org.umlg.tests.associationtoself.TestAssociationToSelf;
@@ -47,7 +47,7 @@ import org.umlg.tests.validationtest.TestValidation;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        TestGremlinExecutor.class,
+        TestGroovyExecutor.class,
         TestMetaClasses.class,
         AllInstancesTest.class,
         BagTestTest.class,

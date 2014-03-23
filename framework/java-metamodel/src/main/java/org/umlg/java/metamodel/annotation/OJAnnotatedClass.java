@@ -13,14 +13,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.apache.commons.lang.StringUtils;
-import org.umlg.java.metamodel.OJBlock;
-import org.umlg.java.metamodel.OJClass;
-import org.umlg.java.metamodel.OJConstructor;
-import org.umlg.java.metamodel.OJField;
-import org.umlg.java.metamodel.OJOperation;
-import org.umlg.java.metamodel.OJPackage;
-import org.umlg.java.metamodel.OJParameter;
-import org.umlg.java.metamodel.OJPathName;
+import org.umlg.java.metamodel.*;
 import org.umlg.java.metamodel.utilities.JavaStringHelpers;
 import org.umlg.java.metamodel.utilities.JavaUtil;
 import org.umlg.java.metamodel.utilities.OJOperationComparator;
@@ -29,11 +22,11 @@ public class OJAnnotatedClass extends OJClass implements OJAnnotatedElement {
 	Map<OJPathName, OJAnnotationValue> f_annotations = new TreeMap<OJPathName, OJAnnotationValue>();
 	private List<String> genericTypeParams = new ArrayList<String>();
 	private List<OJEnum> innerEnums = new ArrayList<OJEnum>();
+    private OJBlock staticBlock = new OJBlock();
 
 	public OJAnnotatedClass(String string) {
 		setName(string);
 	}
-
 
 	public void organizeImports() {
 
@@ -158,6 +151,8 @@ public class OJAnnotatedClass extends OJClass implements OJAnnotatedElement {
 		classInfo.append(" {\n");
 		classInfo.append(JavaStringHelpers.indent(fields(), 1));
 		classInfo.append("\n\n");
+        classInfo.append(JavaStringHelpers.indent(staticBlock(), 1));
+        classInfo.append("\n\n");
 		classInfo.append(JavaStringHelpers.indent(constructors(), 1));
 		classInfo.append("\n");
 		classInfo.append(JavaStringHelpers.indent(operations(), 1));
@@ -190,7 +185,15 @@ public class OJAnnotatedClass extends OJClass implements OJAnnotatedElement {
 		return result;
 	}
 
-	public StringBuilder innerEnums() {
+    public StringBuilder staticBlock() {
+        StringBuilder result = new StringBuilder();
+        result.append("static {\n");
+        result.append(JavaStringHelpers.indent(JavaUtil.collectionToJavaString(this.staticBlock.getStatements(), "\n"), 1));
+        result.append("\n}\n");
+        return result;
+    }
+
+    public StringBuilder innerEnums() {
 		StringBuilder result = new StringBuilder();
 		result.append(JavaUtil.collectionToJavaString(this.innerEnums, "\n"));
 		return result;
@@ -388,5 +391,9 @@ public class OJAnnotatedClass extends OJClass implements OJAnnotatedElement {
 		}
 		return null;
 	}
+
+    public void addToStaticBlock(OJStatement ojStatement) {
+        this.staticBlock.addToStatements(ojStatement);
+    }
 
 }

@@ -92,7 +92,7 @@ public class TestRuntimeOclGeneration extends BaseLocalDbTest {
 		bank.addToEmployee(employee3);
         db.commit();
 
-        String json = UMLG.getDb().executeQuery(UmlgQueryEnum.OCL, bank.getId(), "self.employee->select(name='employee3')");
+        String json = UMLG.getDb().executeQueryToString(UmlgQueryEnum.OCL, bank.getId(), "self.employee->select(name='employee3')");
 //		String json = UmlgOclExecutor.executeOclQueryAsJson(bank, "self.employee->select(name='employee3')");
 		System.out.println(json);
 	}

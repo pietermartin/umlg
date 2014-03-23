@@ -212,11 +212,12 @@
         } else {
             oclLink.addClass('disabled');
         }
-        $('<li><a href="#">GREMLIN</a></li>').appendTo(ul);
+        $('<li><a href="#">GROOVY</a></li>').appendTo(ul);
         $('<li><a href="#">NATIVE</a></li>').appendTo(ul);
 
         ul.find("li a").click(function (e) {
-            if ((self.contextVertexId !== null && self.contextVertexId !== undefined) || (self.propertyNavigatingTo !== null && self.propertyNavigatingTo !== undefined)) {
+            if ($(this).text() !== 'OCL' &&
+                ((self.contextVertexId !== null && self.contextVertexId !== undefined) || (self.propertyNavigatingTo !== null && self.propertyNavigatingTo !== undefined))) {
                 self.executeButton.text('Execute ' + $(this).text());
                 self.executeButton.val($(this).text());
             } else {

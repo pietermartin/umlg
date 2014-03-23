@@ -9,7 +9,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>graphofthegods-restlet</artifactId>
     <packaging>jar</packaging>
-    <name>tinkergraph-restlet</name>
+    <name>graphofthegods-restlet</name>
 
     <build>
         <plugins>

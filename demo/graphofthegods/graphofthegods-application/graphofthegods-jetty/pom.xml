@@ -9,7 +9,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>graphofthegods-jetty</artifactId>
     <packaging>jar</packaging>
-    <name>tinkergraph-jetty</name>
+    <name>graphofthegods-jetty</name>
 
     <dependencies>
 

@@ -9,7 +9,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>graphofthegods-war</artifactId>
     <packaging>war</packaging>
-    <name>tinkergraph-war</name>
+    <name>graphofthegods-war</name>
 
     <build>
         <!-- exclude the version from the war name -->
