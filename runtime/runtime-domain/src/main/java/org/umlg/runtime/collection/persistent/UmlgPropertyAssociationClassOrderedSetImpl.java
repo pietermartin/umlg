@@ -49,29 +49,61 @@ public class UmlgPropertyAssociationClassOrderedSetImpl<E, AC extends Associatio
     }
 
     @Override
+    public void move(int index, E e, AC associationClass) {
+        maybeLoad();
+        Vertex v;
+        if (e instanceof UmlgNode) {
+            UmlgNode node = (UmlgNode) e;
+            v = node.getVertex();
+        } else if (e.getClass().isEnum()) {
+            v = removeFromInternalMap(e);
+            UMLG.get().removeVertex(v);
+        } else if (isOnePrimitive() || getDataTypeEnum() != null) {
+            throw new IllegalStateException("one primitive or data type can not have an association class.");
+        } else {
+            if (true) {
+                throw new RuntimeException("wtf");
+            }
+            v = removeFromInternalMap(e);
+            UMLG.get().removeVertex(v);
+        }
+        //remove the edge
+        super.remove(e);
+
+        //add a new the edge
+        super.add(index, e);
+        //set association class vertex id on new edge
+        this.edge.setProperty(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID, associationClass.getId());
+        this.edge.setProperty("className", associationClass.getClass().getName());
+    }
+
+        @Override
     public boolean remove(Object o) {
         maybeLoad();
         Vertex v;
         if (o instanceof UmlgNode) {
             UmlgNode node = (UmlgNode) o;
             v = node.getVertex();
-            removeEdge(v);
+            removeAssociationClassVertex(v);
         } else if (o.getClass().isEnum()) {
             v = removeFromInternalMap(o);
-            removeEdge(v);
+            removeAssociationClassVertex(v);
             UMLG.get().removeVertex(v);
         } else if (isOnePrimitive() || getDataTypeEnum() != null) {
             throw new IllegalStateException("one primitive or data type can not have an association class.");
         } else {
+            if (true) {
+                throw new RuntimeException("wtf");
+            }
             v = removeFromInternalMap(o);
-            removeEdge(v);
+            removeAssociationClassVertex(v);
             UMLG.get().removeVertex(v);
         }
 
         return super.remove(o);
     }
 
-    private void removeEdge(Vertex v) {
+    private void removeAssociationClassVertex(Vertex v) {
         Set<Edge> edges = UMLG.get().getEdgesBetween(this.vertex, v, this.getLabel());
         for (Edge edge : edges) {
             Vertex associationClassVertex = UMLG.get().getVertex(edge.getProperty(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID));

@@ -586,6 +586,20 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         return "get" + getAssociationClassFakePropertyName();
     }
 
+    public String associationClassGetterForProperty() {
+        if (!isMemberOfAssociationClass()) {
+            throw new IllegalStateException("Can not call associationClassGetterForProperty on a property that is not a member end of an association class. Property = " + getQualifiedName());
+        }
+        return "get" + getAssociationClassFakePropertyName() + "_" + getName();
+    }
+
+    public String associationClassMoverForProperty() {
+        if (!isMemberOfAssociationClass()) {
+            throw new IllegalStateException("Can not call associationClassMoverForProperty on a property that is not a member end of an association class. Property = " + getQualifiedName());
+        }
+        return "move" + StringUtils.capitalize(getName());
+    }
+
     public OJPathName javaTumlMemoryTypePath() {
         OJPathName memoryCollectionPathName = UmlgCollectionKindEnum.from(this).getMemoryCollection();
         memoryCollectionPathName.addToGenerics(UmlgClassOperations.getPathName(this.getType()));

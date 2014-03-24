@@ -4,9 +4,11 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import org.eclipse.ocl.expressions.OCLExpression;
+import org.eclipse.uml2.uml.BehavioredClassifier;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.Property;
+import org.umlg.java.metamodel.OJIfStatement;
 import org.umlg.java.metamodel.annotation.OJAnnotatedClass;
 import org.umlg.java.metamodel.annotation.OJAnnotatedInterface;
 import org.umlg.java.metamodel.annotation.OJAnnotatedOperation;
@@ -39,6 +41,13 @@ public class PropertyVisitor extends BaseVisitor implements Visitor<Property> {
         }
         if (!propertyWrapper.isDerived() && propertyWrapper.getDefaultValue() != null) {
             addInitialization(owner, propertyWrapper);
+        }
+        if (propertyWrapper.isMemberOfAssociationClass()) {
+            //build a move method
+            //this is needed for association class as a move is more complex than a remove and add.
+            //A move needs to retain the original association class and just move it.
+            //in a move the association is not destroyed
+            buildMovePropertyInstanceForAssociationClass(owner, propertyWrapper);
         }
     }
 
@@ -89,6 +98,19 @@ public class PropertyVisitor extends BaseVisitor implements Visitor<Property> {
             java = propertyWrapper.getDefaultValueAsString();
             initVariables.getBody().addToStatements(propertyWrapper.setter() + "(" + java + ")");
         }
+    }
+
+    private static void buildMovePropertyInstanceForAssociationClass(OJAnnotatedClass owner, PropertyWrapper propertyWrapper) {
+        OJAnnotatedOperation mover = new OJAnnotatedOperation(propertyWrapper.associationClassMoverForProperty());
+        mover.addParam("index", "Integer");
+        mover.addParam(propertyWrapper.fieldname(), propertyWrapper.javaBaseTypePath());
+
+        OJIfStatement ifNotNull = new OJIfStatement(propertyWrapper.fieldname() + " != null");
+        ifNotNull.addToThenPart("this." + propertyWrapper.fieldname() + ".move(index, " + propertyWrapper.fieldname() + ", this." + propertyWrapper.associationClassGetterForProperty() + "(" + propertyWrapper.fieldname() + "))");
+        ifNotNull.addToThenPart("this." + propertyWrapper.getAssociationClassFakePropertyName() + " = " + propertyWrapper.javaDefaultInitialisationForAssociationClass((BehavioredClassifier)propertyWrapper.getOtherEnd().getType()));
+
+        mover.getBody().addToStatements(ifNotNull);
+        owner.addToOperations(mover);
     }
 
 }

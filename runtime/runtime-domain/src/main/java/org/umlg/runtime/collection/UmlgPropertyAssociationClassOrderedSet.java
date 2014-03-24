@@ -10,4 +10,5 @@ public interface UmlgPropertyAssociationClassOrderedSet<E, AC extends Associatio
 
     boolean add(E e, AC associationClass);
     void add(int index, E e, AC associationClass);
+    void move(int index, E e, AC associationClass);
 }

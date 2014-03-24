@@ -84,6 +84,13 @@
       <children xmi:type="notation:DecorationNode" xmi:id="_diQX94l2EeOj_-E07LlldA" type="5029"/>
       <children xmi:type="notation:BasicCompartment" xmi:id="_diQX-Il2EeOj_-E07LlldA" type="7017">
         <children xmi:type="notation:Shape" xmi:id="_71tf4ItZEeOBnuXybjuOcw" type="3012" fontName="Sans" lineColor="0">
+          <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_3gpd8LKGEeOR4f3Enm7Mow" source="Stereotype_Annotation">
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_3gpd8bKGEeOR4f3Enm7Mow" key="StereotypeWithQualifiedNameList" value=""/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_3gpd8rKGEeOR4f3Enm7Mow" key="StereotypeList" value="Umlg::Profile::Index"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_3gpd87KGEeOR4f3Enm7Mow" key="Stereotype_Presentation_Kind" value="HorizontalStereo"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_3gpd9LKGEeOR4f3Enm7Mow" key="PropStereoDisplay" value=""/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_3gpd9bKGEeOR4f3Enm7Mow" key="StereotypePropertyLocation" value="Compartment"/>
+          </eAnnotations>
           <element xmi:type="uml:Property" href="tinkergraph.uml#_70q-EItZEeOBnuXybjuOcw"/>
           <layoutConstraint xmi:type="notation:Location" xmi:id="_71tf4YtZEeOBnuXybjuOcw"/>
         </children>
@@ -128,6 +135,13 @@
       <children xmi:type="notation:DecorationNode" xmi:id="_prKThopzEeOj_-E07LlldA" type="5029"/>
       <children xmi:type="notation:BasicCompartment" xmi:id="_prKTh4pzEeOj_-E07LlldA" type="7017">
         <children xmi:type="notation:Shape" xmi:id="_8ftswIp1EeOj_-E07LlldA" type="3012" fontName="Sans" fontHeight="10" lineColor="0">
+          <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_4gkC0LKGEeOR4f3Enm7Mow" source="Stereotype_Annotation">
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_4gkC0bKGEeOR4f3Enm7Mow" key="StereotypeWithQualifiedNameList" value=""/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_4gkC0rKGEeOR4f3Enm7Mow" key="StereotypeList" value="Umlg::Profile::Index"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_4gkC07KGEeOR4f3Enm7Mow" key="Stereotype_Presentation_Kind" value="HorizontalStereo"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_4gkC1LKGEeOR4f3Enm7Mow" key="PropStereoDisplay" value=""/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_4gkC1bKGEeOR4f3Enm7Mow" key="StereotypePropertyLocation" value="Compartment"/>
+          </eAnnotations>
           <element xmi:type="uml:Property" href="tinkergraph.uml#_8ftFsIp1EeOj_-E07LlldA"/>
           <layoutConstraint xmi:type="notation:Location" xmi:id="_8ftswYp1EeOj_-E07LlldA"/>
         </children>
@@ -193,7 +207,7 @@
         <layoutConstraint xmi:type="notation:Bounds" xmi:id="_ZBi3UqwcEeOnn8UJImpdOg"/>
       </children>
       <element xmi:type="uml:AssociationClass" href="tinkergraph.uml#_jSg58Ip0EeOj_-E07LlldA"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_jS-M8Yp0EeOj_-E07LlldA" x="235" y="355"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_jS-M8Yp0EeOj_-E07LlldA" x="250" y="355"/>
     </children>
     <children xmi:type="notation:Shape" xmi:id="_g5Xb0Ip1EeOj_-E07LlldA" type="2013" fontName="Sans" fontHeight="10" lineColor="0">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_g5YC4Ip1EeOj_-E07LlldA" source="ShadowFigure">
@@ -233,7 +247,7 @@
         <layoutConstraint xmi:type="notation:Bounds" xmi:id="_ZBksgqwcEeOnn8UJImpdOg"/>
       </children>
       <element xmi:type="uml:AssociationClass" href="tinkergraph.uml#_g5QHEIp1EeOj_-E07LlldA"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_g5Xb0Yp1EeOj_-E07LlldA" x="508" y="212"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_g5Xb0Yp1EeOj_-E07LlldA" x="545" y="220"/>
     </children>
     <children xmi:type="notation:Shape" xmi:id="_BZhUUIp2EeOj_-E07LlldA" type="2006" fontName="Sans" fontHeight="10" lineColor="0">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_BZh7YIp2EeOj_-E07LlldA" source="ShadowFigure">
@@ -273,7 +287,7 @@
         <layoutConstraint xmi:type="notation:Bounds" xmi:id="_ZBl6oqwcEeOnn8UJImpdOg"/>
       </children>
       <element xmi:type="uml:Enumeration" href="tinkergraph.uml#_BZgGMIp2EeOj_-E07LlldA"/>
-      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_BZhUUYp2EeOj_-E07LlldA" x="708" y="360" width="129"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_BZhUUYp2EeOj_-E07LlldA" x="735" y="370" width="129"/>
     </children>
     <styles xmi:type="notation:DiagramStyle" xmi:id="_b2mucYl2EeOj_-E07LlldA"/>
     <element xmi:type="uml:Package" href="tinkergraph.uml#_ZTUSUIl2EeOj_-E07LlldA"/>

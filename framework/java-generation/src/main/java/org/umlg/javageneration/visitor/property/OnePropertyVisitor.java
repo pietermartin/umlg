@@ -130,7 +130,7 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
             ifNotNull.addToThenPart(ojBlock2);
 
             OJIfStatement ifExist = new OJIfStatement("!this." + propertyWrapper.fieldname() + ".isEmpty()");
-            ifExist.addToThenPart("throw new RuntimeException(\"Property is a one and already has a value!\")");
+            ifExist.addToThenPart("throw new RuntimeException(\"Property " + propertyWrapper.getQualifiedName() + "is a one and already has a value!\")");
             ojBlock1.addToStatements(ifExist);
 
             if (isAssociationClass || !propertyWrapper.isMemberOfAssociationClass()) {
@@ -216,9 +216,9 @@ public class OnePropertyVisitor extends BaseVisitor implements Visitor<Property>
         }
         setter.getBody().addToStatements(pWrap.clearer() + "()");
         if (!pWrap.isMemberOfAssociationClass()) {
-            setter.getBody().addToStatements(pWrap.adder() + "(" + pWrap.fieldname()  + ")");
+            setter.getBody().addToStatements(pWrap.adder() + "(" + pWrap.fieldname() + ")");
         } else {
-            setter.getBody().addToStatements(pWrap.adder() + "(" + pWrap.fieldname()  + ", " + StringUtils.uncapitalize(pWrap.getAssociationClass().getName()) + ")");
+            setter.getBody().addToStatements(pWrap.adder() + "(" + pWrap.fieldname() + ", " + StringUtils.uncapitalize(pWrap.getAssociationClass().getName()) + ")");
         }
         owner.addToOperations(setter);
     }

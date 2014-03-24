@@ -2110,6 +2110,46 @@
             </ownedEnd>
           </packagedElement>
         </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="_GuS-8LKqEeOR4f3Enm7Mow" name="associationclass">
+          <packagedElement xmi:type="uml:Class" xmi:id="_Mt6_ELKqEeOR4f3Enm7Mow" name="AssociationClass1">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_SOlLQLKqEeOR4f3Enm7Mow" name="associationclass2" type="_QDxgkLKqEeOR4f3Enm7Mow" isOrdered="true" association="_SOlyUbKqEeOR4f3Enm7Mow">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_SOlLQbKqEeOR4f3Enm7Mow"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_SOlyULKqEeOR4f3Enm7Mow" value="*"/>
+            </ownedAttribute>
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_g0njYLKxEeOR4f3Enm7Mow" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_iBQ8sLKxEeOR4f3Enm7Mow" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_iBRjwLKxEeOR4f3Enm7Mow" value="1"/>
+              <defaultValue xmi:type="uml:LiteralString" xmi:id="_iBTY8LKxEeOR4f3Enm7Mow">
+                <value xsi:nil="true"/>
+              </defaultValue>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_QDxgkLKqEeOR4f3Enm7Mow" name="AssociationClass2">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_iPtBULKxEeOR4f3Enm7Mow" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_jZJVoLKxEeOR4f3Enm7Mow" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_jZJ8sLKxEeOR4f3Enm7Mow" value="1"/>
+              <defaultValue xmi:type="uml:LiteralString" xmi:id="_jZNnELKxEeOR4f3Enm7Mow">
+                <value xsi:nil="true"/>
+              </defaultValue>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:AssociationClass" xmi:id="_SOlyUbKqEeOR4f3Enm7Mow" name="AssociationClassAC" memberEnd="_SOlyUrKqEeOR4f3Enm7Mow _SOlLQLKqEeOR4f3Enm7Mow" navigableOwnedEnd="_SOlyUrKqEeOR4f3Enm7Mow">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_jrj7ULKxEeOR4f3Enm7Mow" name="name" visibility="public">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_kwtlgLKxEeOR4f3Enm7Mow" value="1"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_kwuMkLKxEeOR4f3Enm7Mow" value="1"/>
+              <defaultValue xmi:type="uml:LiteralString" xmi:id="_kwwo0LKxEeOR4f3Enm7Mow">
+                <value xsi:nil="true"/>
+              </defaultValue>
+            </ownedAttribute>
+            <ownedEnd xmi:type="uml:Property" xmi:id="_SOlyUrKqEeOR4f3Enm7Mow" name="associationclass1" type="_Mt6_ELKqEeOR4f3Enm7Mow" isOrdered="true" association="_SOlyUbKqEeOR4f3Enm7Mow">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_SOlyU7KqEeOR4f3Enm7Mow"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_SOlyVLKqEeOR4f3Enm7Mow" value="*"/>
+            </ownedEnd>
+          </packagedElement>
+        </packagedElement>
       </packagedElement>
     </packagedElement>
     <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_1clVoQAOEeKpVr_ntT6cLA">

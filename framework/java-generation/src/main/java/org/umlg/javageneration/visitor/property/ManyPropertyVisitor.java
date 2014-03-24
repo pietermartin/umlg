@@ -1,6 +1,7 @@
 package org.umlg.javageneration.visitor.property;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.uml2.uml.BehavioredClassifier;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.Property;
 import org.umlg.framework.Visitor;
@@ -56,6 +57,9 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
             getter = new OJAnnotatedOperation(propertyWrapper.associationClassGetter(), propertyWrapper.getAssociationClassJavaTumlTypePath());
             getter.getBody().addToStatements("return this." + propertyWrapper.getAssociationClassFakePropertyName());
             owner.addToOperations(getter);
+
+            //Build getter that returns the AssociationClass for an instance of the other end
+            buildGetAssociationClassForPropertyInstance(owner, propertyWrapper);
         }
 
         //If the property is subsetting another property then add @Override to the getter.
@@ -67,6 +71,17 @@ public class ManyPropertyVisitor extends BaseVisitor implements Visitor<Property
             }
         }
 
+    }
+
+    private static void buildGetAssociationClassForPropertyInstance(OJAnnotatedClass owner, PropertyWrapper propertyWrapper) {
+        OJAnnotatedOperation getAC = new OJAnnotatedOperation(propertyWrapper.associationClassGetterForProperty(), propertyWrapper.getAssociationClassPathName());
+        getAC.addParam(propertyWrapper.fieldname(), propertyWrapper.javaBaseTypePath());
+        OJForStatement forAC = new OJForStatement("ac", propertyWrapper.getAssociationClassPathName(), "this." + propertyWrapper.getAssociationClassFakePropertyName());
+        OJIfStatement ifStatement = new OJIfStatement("ac." + propertyWrapper.getter() + "().equals(" + propertyWrapper.fieldname() + ")", "return ac");
+        forAC.getBody().addToStatements(ifStatement);
+        getAC.getBody().addToStatements(forAC);
+        getAC.getBody().addToStatements("return null");
+        owner.addToOperations(getAC);
     }
 
     public static void buildGetterForAssociationClass(OJAnnotatedClass ac, PropertyWrapper propertyWrapper) {

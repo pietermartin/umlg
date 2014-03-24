@@ -28,7 +28,7 @@ public class UmlgOrderedSetImpl<E> extends UmlgBaseOrderedSet<E> implements Umlg
     public void add(int indexOf, E e) {
         maybeLoad();
         if (!this.getInternalListOrderedSet().contains(e)) {
-            addToListAtIndex(indexOf, e);
+            this.edge = addToListAtIndex(indexOf, e);
         }
     }
 

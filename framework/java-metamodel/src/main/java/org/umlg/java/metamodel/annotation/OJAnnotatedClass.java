@@ -151,8 +151,10 @@ public class OJAnnotatedClass extends OJClass implements OJAnnotatedElement {
 		classInfo.append(" {\n");
 		classInfo.append(JavaStringHelpers.indent(fields(), 1));
 		classInfo.append("\n\n");
-        classInfo.append(JavaStringHelpers.indent(staticBlock(), 1));
-        classInfo.append("\n\n");
+        if (!this.staticBlock.getStatements().isEmpty()) {
+            classInfo.append(JavaStringHelpers.indent(staticBlock(), 1));
+            classInfo.append("\n\n");
+        }
 		classInfo.append(JavaStringHelpers.indent(constructors(), 1));
 		classInfo.append("\n");
 		classInfo.append(JavaStringHelpers.indent(operations(), 1));

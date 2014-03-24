@@ -311,7 +311,7 @@ public abstract class UmlgBaseOrderedSet<E> extends BaseCollection<E> implements
     protected void loadNode(Edge edgeToElement, Vertex vertex) {
         E node;
         try {
-            Class<?> c = this.getClassToInstantiate(edgeToElement);
+            Class<?> c =  Class.forName((String) vertex.getProperty("className"));
             if (c.isEnum()) {
                 Object value = vertex.getProperty(getQualifiedName());
                 node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);
