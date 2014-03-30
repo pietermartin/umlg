@@ -43,24 +43,34 @@ public abstract class UmlgBaseOrderedSet<E> extends BaseCollection<E> implements
 
     @SuppressWarnings("unchecked")
     protected Edge addToListAtIndex(int indexOf, E e) {
+        Direction inverseDirection;
+        Direction direction;
+        if (isControllingSide()) {
+            inverseDirection = Direction.IN;
+            direction = Direction.OUT;
+        } else {
+            inverseDirection = Direction.OUT;
+            direction = Direction.IN;
+        }
+
         //If it is the last element then the edge (LABEL_TO_LAST_ELEMENT_IN_SEQUENCE) needs to be moved
         this.getInternalListOrderedSet().add(indexOf, e);
         //Add the regular edge for the label
         Edge edge = addInternal(e);
         //If it is the first element then the edge (LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE) needs to be moved
         if (indexOf == 0) {
-            if (this.vertex.getEdges(Direction.OUT, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel()).iterator().hasNext()) {
-                Edge edgeToFirstElement = this.vertex.getEdges(Direction.OUT, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel()).iterator().next();
+            if (this.vertex.getEdges(Direction.OUT, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel() + direction + this.vertex.getId()).iterator().hasNext()) {
+                Edge edgeToFirstElement = this.vertex.getEdges(Direction.OUT, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel() + direction + this.vertex.getId()).iterator().next();
                 UMLG.get().removeEdge(edgeToFirstElement);
             }
-            UMLG.get().addEdge(null, this.vertex, edge.getVertex(Direction.IN), LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel());
+            UMLG.get().addEdge(null, this.vertex, edge.getVertex(inverseDirection), LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel() + direction + this.vertex.getId());
         }
         if (indexOf == size() - 1) {
-            if (this.vertex.getEdges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel()).iterator().hasNext()) {
-                Edge edgeToLastElement = this.vertex.getEdges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel()).iterator().next();
+            if (this.vertex.getEdges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + direction + this.vertex.getId()).iterator().hasNext()) {
+                Edge edgeToLastElement = this.vertex.getEdges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + direction + this.vertex.getId()).iterator().next();
                 UMLG.get().removeEdge(edgeToLastElement);
             }
-            UMLG.get().addEdge(null, this.vertex, edge.getVertex(Direction.IN), LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel());
+            UMLG.get().addEdge(null, this.vertex, edge.getVertex(inverseDirection), LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + direction + this.vertex.getId());
         }
         //Shift the linked list
         //Find the element at the index
@@ -69,18 +79,18 @@ public abstract class UmlgBaseOrderedSet<E> extends BaseCollection<E> implements
                 //add a edge to the previous first element
                 E previous = (E) this.getInternalListOrderedSet().get(1);
                 Vertex previousVertex = getVertexFromElement(previous, e);
-                UMLG.get().addEdge(null, edge.getVertex(Direction.IN), previousVertex, LABEL_TO_NEXT_IN_SEQUENCE);
+                UMLG.get().addEdge(null, edge.getVertex(inverseDirection), previousVertex, LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction + this.vertex.getId());
             } else {
                 E previous = (E) this.getInternalListOrderedSet().get(indexOf - 1);
                 Vertex previousVertex = getVertexFromElement(previous, e);
                 //size already includes the current added element, so if the size is 2 it means that there was only one in the list, i.e. no edge (LABEL_TO_NEXT_IN_SEQUENCE)
                 if (size() > 2 && indexOf + 1 < size()) {
-                    Edge edgeToNextElement = previousVertex.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE).iterator().next();
-                    Vertex shiftedVertex = edgeToNextElement.getVertex(Direction.IN);
+                    Edge edgeToNextElement = previousVertex.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction + this.vertex.getId()).iterator().next();
+                    Vertex shiftedVertex = edgeToNextElement.getVertex(inverseDirection);
                     UMLG.get().removeEdge(edgeToNextElement);
-                    UMLG.get().addEdge(null, edge.getVertex(Direction.IN), shiftedVertex, LABEL_TO_NEXT_IN_SEQUENCE);
+                    UMLG.get().addEdge(null, edge.getVertex(inverseDirection), shiftedVertex, LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction + this.vertex.getId());
                 }
-                UMLG.get().addEdge(null, previousVertex, edge.getVertex(Direction.IN), LABEL_TO_NEXT_IN_SEQUENCE);
+                UMLG.get().addEdge(null, previousVertex, edge.getVertex(inverseDirection), LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction + this.vertex.getId());
             }
         }
         return edge;
@@ -88,23 +98,28 @@ public abstract class UmlgBaseOrderedSet<E> extends BaseCollection<E> implements
 
     @Override
     protected void addToLinkedList(Edge edge) {
+        Direction direction;
+        if (isControllingSide()) {
+            direction = Direction.OUT;
+        } else {
+            direction = Direction.IN;
+        }
         //Get the new vertex for the element
         Vertex newElementVertex = getVertexForDirection(edge);
-        if (this.vertex.getEdges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel()).iterator().hasNext()) {
-            Edge edgeToLastVertex = this.vertex.getEdges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel()).iterator().next();
+        if (this.vertex.getEdges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + direction + this.vertex.getId()).iterator().hasNext()) {
+            Edge edgeToLastVertex = this.vertex.getEdges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + direction + this.vertex.getId()).iterator().next();
             Vertex lastVertex = edgeToLastVertex.getVertex(Direction.IN);
 
             //move the edge to the last vertex
             UMLG.get().removeEdge(edgeToLastVertex);
-            UMLG.get().addEdge(null, this.vertex, newElementVertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel());
-
+            UMLG.get().addEdge(null, this.vertex, newElementVertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + direction + this.vertex.getId());
             //add the element to the linked list
-            UMLG.get().addEdge(null, lastVertex, newElementVertex, LABEL_TO_NEXT_IN_SEQUENCE);
-
+            //last here is the previous last
+            UMLG.get().addEdge(null, lastVertex, newElementVertex, LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction + this.vertex.getId());
         } else {
             //its the first element in the list
-            UMLG.get().addEdge(null, this.vertex, newElementVertex, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel());
-            UMLG.get().addEdge(null, this.vertex, newElementVertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel());
+            UMLG.get().addEdge(null, this.vertex, newElementVertex, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel() + direction + this.vertex.getId());
+            UMLG.get().addEdge(null, this.vertex, newElementVertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + direction + this.vertex.getId());
         }
     }
 
@@ -134,7 +149,7 @@ public abstract class UmlgBaseOrderedSet<E> extends BaseCollection<E> implements
                 }
             }
         } else {
-            Iterable<Edge> edgeIterable = this.vertex.getEdges(Direction.OUT, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel());
+            Iterable<Edge> edgeIterable = this.vertex.getEdges(Direction.OUT, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel() + direction + this.vertex.getId());
             if (!edgeIterable.iterator().hasNext()) {
                 this.loaded = true;
             } else {
@@ -143,8 +158,8 @@ public abstract class UmlgBaseOrderedSet<E> extends BaseCollection<E> implements
                     Vertex firstVertexInSequence = edgeToFirstElement.getVertex(Direction.IN);
                     loadNode(edgeToFirstElement, firstVertexInSequence);
                     Vertex elementVertex = firstVertexInSequence;
-                    while (elementVertex.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE).iterator().hasNext()) {
-                        Edge edgeToNext = elementVertex.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE).iterator().next();
+                    while (elementVertex.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction + this.vertex.getId()).iterator().hasNext()) {
+                        Edge edgeToNext = elementVertex.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction + this.vertex.getId()).iterator().next();
                         if (!UMLG.get().hasEdgeBeenDeleted(edgeToNext)) {
                             elementVertex = edgeToNext.getVertex(Direction.IN);
                             loadNode(edgeToNext, elementVertex);
@@ -311,7 +326,7 @@ public abstract class UmlgBaseOrderedSet<E> extends BaseCollection<E> implements
     protected void loadNode(Edge edgeToElement, Vertex vertex) {
         E node;
         try {
-            Class<?> c =  Class.forName((String) vertex.getProperty("className"));
+            Class<?> c = Class.forName((String) vertex.getProperty("className"));
             if (c.isEnum()) {
                 Object value = vertex.getProperty(getQualifiedName());
                 node = (E) Enum.valueOf((Class<? extends Enum>) c, (String) value);

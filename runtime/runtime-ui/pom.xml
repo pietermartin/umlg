@@ -19,7 +19,7 @@
 	</repositories>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <restlet.version>2.2-M1</restlet.version>
+        <restlet.version>2.2.0</restlet.version>
     </properties>
     <build>
 		<plugins>

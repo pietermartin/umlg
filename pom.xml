@@ -42,7 +42,7 @@
         </repository>
     </repositories>
     <properties>
-        <restlet.version>2.2-M3</restlet.version>
+        <restlet.version>2.2.0</restlet.version>
     </properties>
 
     <modules>

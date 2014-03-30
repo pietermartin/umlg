@@ -473,6 +473,26 @@ public class SequenceTest extends BaseLocalDbTest {
     }
 
     @Test
+    public void testGodHand() {
+        God god = new God(true);
+        god.setName("THEGOD");
+        Hand hand1 = new Hand(god);
+        hand1.setLeft(true);
+        hand1.setName("hand1");
+        db.commit();
+
+        Assert.assertEquals(3, countVertices());
+        Assert.assertEquals(5 + 2, countEdges());
+
+        Finger finger = new Finger(hand1);
+        finger.setName("finger");
+        db.commit();
+
+        Assert.assertEquals(4, countVertices());
+        Assert.assertEquals(8 + 3, countEdges());
+    }
+
+    @Test
 	public void testAddAtIndex() {
 		God god = new God(true);
 		god.setName("THEGOD");
@@ -747,24 +767,174 @@ public class SequenceTest extends BaseLocalDbTest {
         sequenceTestOrderedSet5.setName("sequenceTestOrderedSet5");
 
         db.commit();
+
         Assert.assertEquals(6, countVertices());
         Assert.assertEquals(12 + 6, countEdges());
-
         sequenceTestOrderedSet3.delete();
-        sequenceTestOrderedSet4.delete();
-        sequenceTestOrderedSet5.delete();
-
         db.commit();
-
+        Assert.assertEquals(5, countVertices());
+        Assert.assertEquals(10 + 5, countEdges());
+        sequenceTestOrderedSet4.delete();
+        db.commit();
+        Assert.assertEquals(4, countVertices());
+        Assert.assertEquals(8 + 4, countEdges());
+        sequenceTestOrderedSet5.delete();
+        db.commit();
         Assert.assertEquals(3, countVertices());
         Assert.assertEquals(6 + 3, countEdges());
 
+        sequenceRoot.reload();
+        Assert.assertEquals(2, sequenceRoot.getSequenceTestOrderedSet().size());
+        Assert.assertEquals(sequenceTestOrderedSet1, sequenceRoot.getSequenceTestOrderedSet().get(0));
+        Assert.assertEquals(sequenceTestOrderedSet2, sequenceRoot.getSequenceTestOrderedSet().get(1));
+
         SequenceTestOrderedSet sequenceTestOrderedSet6 = new SequenceTestOrderedSet(sequenceRoot);
         sequenceTestOrderedSet6.setName("sequenceTestOrderedSet6");
+        db.commit();
+
+        sequenceRoot.reload();
+        Assert.assertEquals(3, sequenceRoot.getSequenceTestOrderedSet().size());
+        Assert.assertEquals(sequenceTestOrderedSet1, sequenceRoot.getSequenceTestOrderedSet().get(0));
+        Assert.assertEquals(sequenceTestOrderedSet2, sequenceRoot.getSequenceTestOrderedSet().get(1));
+        Assert.assertEquals(sequenceTestOrderedSet6, sequenceRoot.getSequenceTestOrderedSet().get(2));
+    }
+
+    @Test
+    public void testDeleteFirst() {
+        SequenceRoot sequenceRoot = new SequenceRoot(true);
+        sequenceRoot.setName("sequenceRoot");
+
+        SequenceTestOrderedSet sequenceTestOrderedSet1 = new SequenceTestOrderedSet(sequenceRoot);
+        sequenceTestOrderedSet1.setName("sequenceTestOrderedSet1");
+        SequenceTestOrderedSet sequenceTestOrderedSet2 = new SequenceTestOrderedSet(sequenceRoot);
+        sequenceTestOrderedSet2.setName("sequenceTestOrderedSet2");
+        SequenceTestOrderedSet sequenceTestOrderedSet3 = new SequenceTestOrderedSet(sequenceRoot);
+        sequenceTestOrderedSet3.setName("sequenceTestOrderedSet3");
+        SequenceTestOrderedSet sequenceTestOrderedSet4 = new SequenceTestOrderedSet(sequenceRoot);
+        sequenceTestOrderedSet4.setName("sequenceTestOrderedSet4");
+        SequenceTestOrderedSet sequenceTestOrderedSet5 = new SequenceTestOrderedSet(sequenceRoot);
+        sequenceTestOrderedSet5.setName("sequenceTestOrderedSet5");
 
         db.commit();
 
+        Assert.assertEquals(6, countVertices());
+        Assert.assertEquals(12 + 6, countEdges());
+
+        sequenceTestOrderedSet1.delete();
+        db.commit();
+        Assert.assertEquals(5, countVertices());
+        Assert.assertEquals(10 + 5, countEdges());
+        sequenceRoot.reload();
+        Assert.assertEquals(sequenceTestOrderedSet2, sequenceRoot.getSequenceTestOrderedSet().iterator().next());
+
+        sequenceTestOrderedSet2.delete();
+        db.commit();
+        Assert.assertEquals(4, countVertices());
+        Assert.assertEquals(8 + 4, countEdges());
+        sequenceRoot.reload();
+        Assert.assertEquals(sequenceTestOrderedSet3, sequenceRoot.getSequenceTestOrderedSet().iterator().next());
+
+        sequenceTestOrderedSet3.delete();
+        db.commit();
+        Assert.assertEquals(3, countVertices());
+        Assert.assertEquals(6 + 3, countEdges());
+        sequenceRoot.reload();
+        Assert.assertEquals(sequenceTestOrderedSet4, sequenceRoot.getSequenceTestOrderedSet().iterator().next());
+
+        sequenceTestOrderedSet4.delete();
+        db.commit();
+        Assert.assertEquals(2, countVertices());
+        Assert.assertEquals(4 + 2, countEdges());
+        sequenceRoot.reload();
+        Assert.assertEquals(sequenceTestOrderedSet5, sequenceRoot.getSequenceTestOrderedSet().iterator().next());
+
+        sequenceTestOrderedSet5.delete();
+        db.commit();
+        Assert.assertEquals(1, countVertices());
+        Assert.assertEquals(1 + 1, countEdges());
+        sequenceRoot.reload();
+        Assert.assertEquals(0, sequenceRoot.getSequenceTestOrderedSet().size());
     }
+
+    @Test
+    public void testDeleteLast() {
+        SequenceRoot sequenceRoot = new SequenceRoot(true);
+        sequenceRoot.setName("sequenceRoot");
+
+        SequenceTestOrderedSet sequenceTestOrderedSet1 = new SequenceTestOrderedSet(sequenceRoot);
+        sequenceTestOrderedSet1.setName("sequenceTestOrderedSet1");
+        SequenceTestOrderedSet sequenceTestOrderedSet2 = new SequenceTestOrderedSet(sequenceRoot);
+        sequenceTestOrderedSet2.setName("sequenceTestOrderedSet2");
+        SequenceTestOrderedSet sequenceTestOrderedSet3 = new SequenceTestOrderedSet(sequenceRoot);
+        sequenceTestOrderedSet3.setName("sequenceTestOrderedSet3");
+        SequenceTestOrderedSet sequenceTestOrderedSet4 = new SequenceTestOrderedSet(sequenceRoot);
+        sequenceTestOrderedSet4.setName("sequenceTestOrderedSet4");
+        SequenceTestOrderedSet sequenceTestOrderedSet5 = new SequenceTestOrderedSet(sequenceRoot);
+        sequenceTestOrderedSet5.setName("sequenceTestOrderedSet5");
+
+        db.commit();
+
+        Assert.assertEquals(6, countVertices());
+        Assert.assertEquals(12 + 6, countEdges());
+
+        sequenceTestOrderedSet5.delete();
+        db.commit();
+        Assert.assertEquals(5, countVertices());
+        Assert.assertEquals(10 + 5, countEdges());
+        sequenceRoot.reload();
+        Assert.assertEquals(sequenceTestOrderedSet1, sequenceRoot.getSequenceTestOrderedSet().iterator().next());
+        Assert.assertEquals(sequenceTestOrderedSet4, sequenceRoot.getSequenceTestOrderedSet().get(3));
+
+        //Check that last edge is correct
+        SequenceTestOrderedSet sequenceTestOrderedSet6 = new SequenceTestOrderedSet(sequenceRoot);
+        sequenceTestOrderedSet6.setName("sequenceTestOrderedSet6");
+        db.commit();
+        sequenceRoot.reload();
+        Assert.assertEquals(sequenceTestOrderedSet1, sequenceRoot.getSequenceTestOrderedSet().iterator().next());
+        Assert.assertEquals(sequenceTestOrderedSet6, sequenceRoot.getSequenceTestOrderedSet().get(4));
+        Assert.assertEquals(6, countVertices());
+        Assert.assertEquals(12 + 6, countEdges());
+
+        sequenceTestOrderedSet6.delete();
+        db.commit();
+        Assert.assertEquals(5, countVertices());
+        Assert.assertEquals(10 + 5, countEdges());
+        sequenceRoot.reload();
+        Assert.assertEquals(sequenceTestOrderedSet1, sequenceRoot.getSequenceTestOrderedSet().iterator().next());
+        Assert.assertEquals(sequenceTestOrderedSet4, sequenceRoot.getSequenceTestOrderedSet().get(3));
+
+        sequenceTestOrderedSet4.delete();
+        db.commit();
+        Assert.assertEquals(4, countVertices());
+        Assert.assertEquals(8 + 4, countEdges());
+        sequenceRoot.reload();
+        Assert.assertEquals(sequenceTestOrderedSet1, sequenceRoot.getSequenceTestOrderedSet().iterator().next());
+        Assert.assertEquals(sequenceTestOrderedSet3, sequenceRoot.getSequenceTestOrderedSet().get(2));
+
+        sequenceTestOrderedSet3.delete();
+        db.commit();
+        Assert.assertEquals(3, countVertices());
+        Assert.assertEquals(6 + 3, countEdges());
+        sequenceRoot.reload();
+        Assert.assertEquals(sequenceTestOrderedSet1, sequenceRoot.getSequenceTestOrderedSet().iterator().next());
+        Assert.assertEquals(sequenceTestOrderedSet2, sequenceRoot.getSequenceTestOrderedSet().get(1));
+
+        sequenceTestOrderedSet2.delete();
+        db.commit();
+        Assert.assertEquals(2, countVertices());
+        Assert.assertEquals(4 + 2, countEdges());
+        sequenceRoot.reload();
+        Assert.assertEquals(sequenceTestOrderedSet1, sequenceRoot.getSequenceTestOrderedSet().iterator().next());
+        Assert.assertEquals(sequenceTestOrderedSet1, sequenceRoot.getSequenceTestOrderedSet().get(0));
+
+        sequenceTestOrderedSet1.delete();
+        db.commit();
+        Assert.assertEquals(1, countVertices());
+        Assert.assertEquals(1 + 1, countEdges());
+        sequenceRoot.reload();
+        Assert.assertEquals(0, sequenceRoot.getSequenceTestOrderedSet().size());
+    }
+
 
     @Test
     public void testAdderWithIndexForOrderedSet() {

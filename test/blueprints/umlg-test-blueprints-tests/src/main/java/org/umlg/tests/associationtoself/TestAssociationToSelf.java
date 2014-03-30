@@ -2,9 +2,7 @@ package org.umlg.tests.associationtoself;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.umlg.associationtoself.AssociationToSelf;
-import org.umlg.associationtoself.SequenceTestAgain1;
-import org.umlg.associationtoself.SequenceTestAgain2;
+import org.umlg.associationtoself.*;
 import org.umlg.collectiontest.SequenceRoot;
 import org.umlg.collectiontest.SequenceTestListMany;
 import org.umlg.collectiontest.SequenceTestOrderedSet;
@@ -38,8 +36,15 @@ public class TestAssociationToSelf extends BaseLocalDbTest {
         db.commit();
 
         associationToSelf1.reload();
+        associationToSelf2.reload();
+        associationToSelf3.reload();
         Assert.assertEquals(2, associationToSelf1.getAssocationTo().size());
         Assert.assertEquals(2, associationToSelf1.getAssocationFrom().size());
+        Assert.assertEquals(associationToSelf1, associationToSelf2.getAssocationFrom().get(0));
+        Assert.assertEquals(associationToSelf1, associationToSelf3.getAssocationFrom().get(0));
+
+        Assert.assertEquals(associationToSelf1, associationToSelf2.getAssocationTo().get(0));
+        Assert.assertEquals(associationToSelf1, associationToSelf3.getAssocationTo().get(0));
 
     }
 
@@ -92,6 +97,90 @@ public class TestAssociationToSelf extends BaseLocalDbTest {
         Assert.assertEquals(3, sequenceTestAgain22.getSequenceTestAgain1().size());
         sequenceTestAgain23.reload();
         Assert.assertEquals(3, sequenceTestAgain23.getSequenceTestAgain1().size());
+    }
+
+    @Test
+    public void testSelfAssociationClass() {
+        E a = new E();
+        a.setName("A");
+        E b = new E();
+        b.setName("B");
+        E c = new E();
+        c.setName("C");
+        E d = new E();
+        d.setName("D");
+
+        EAC ab = new EAC();
+        ab.setName("AB");
+        a.addToTo(b, ab);
+        EAC ac = new EAC();
+        ac.setName("AC");
+        a.addToTo(c, ac);
+        EAC ad = new EAC();
+        ad.setName("AD");
+        a.addToTo(d, ad);
+        db.commit();
+
+        a.reload();
+        b.reload();
+        Assert.assertEquals(3, a.getTo().size());
+        Assert.assertEquals(b, a.getTo().get(0));
+        Assert.assertEquals(c, a.getTo().get(1));
+        Assert.assertEquals(d, a.getTo().get(2));
+        Assert.assertEquals(1, b.getFrom().size());
+        Assert.assertEquals(1, c.getFrom().size());
+        Assert.assertEquals(1, d.getFrom().size());
+        Assert.assertEquals(a, b.getFrom().get(0));
+        Assert.assertEquals(a, c.getFrom().get(0));
+        Assert.assertEquals(a, d.getFrom().get(0));
+        Assert.assertEquals(0, b.getTo().size());
+
+        E e = new E();
+        e.setName("E");
+
+        EAC dc = new EAC();
+        dc.setName("DC");
+        b.addToTo(c, dc);
+        EAC dd = new EAC();
+        dd.setName("DD");
+        b.addToTo(d, dd);
+        EAC de = new EAC();
+        de.setName("DE");
+        b.addToTo(e, de);
+
+        db.commit();
+        a.reload();
+        b.reload();
+        c.reload();
+        d.reload();
+        e.reload();
+
+        Assert.assertEquals(3, b.getTo().size());
+        Assert.assertEquals(c, b.getTo().get(0));
+        Assert.assertEquals(d, b.getTo().get(1));
+        Assert.assertEquals(e, b.getTo().get(2));
+
+        Assert.assertEquals(1, b.getFrom().size());
+        Assert.assertEquals(a, b.getFrom().get(0));
 
     }
+
+    @Test
+    public void testSelfAssociationClassSimple() {
+        E a = new E();
+        a.setName("A");
+        E b = new E();
+        b.setName("B");
+
+        EAC ab = new EAC();
+        ab.setName("AB");
+        a.addToTo(b, ab);
+        db.commit();
+
+        a.reload();
+        b.reload();
+        Assert.assertEquals(1, b.getFrom().size());
+        Assert.assertEquals(0, b.getTo().size());
+    }
+
 }

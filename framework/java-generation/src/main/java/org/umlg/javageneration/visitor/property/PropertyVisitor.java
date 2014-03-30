@@ -42,7 +42,7 @@ public class PropertyVisitor extends BaseVisitor implements Visitor<Property> {
         if (!propertyWrapper.isDerived() && propertyWrapper.getDefaultValue() != null) {
             addInitialization(owner, propertyWrapper);
         }
-        if (propertyWrapper.isMemberOfAssociationClass()) {
+        if (propertyWrapper.isMemberOfAssociationClass() && propertyWrapper.isOrdered()) {
             //build a move method
             //this is needed for association class as a move is more complex than a remove and add.
             //A move needs to retain the original association class and just move it.

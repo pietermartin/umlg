@@ -18,7 +18,7 @@
             contentType: "application/json",
             success: function (result) {
                 var end = 0;
-                if (token.string === '.' || token.string === '->') {
+                if (token.string === '.' || token.string === '->' || token.string === ':') {
                     end = token.string.length;
                 }
                 callback(

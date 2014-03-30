@@ -384,8 +384,13 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
             //Place the child at the correct index
             firstBlock.addToStatements("Integer index = (Integer)propertyMap.get(\"" + UmlgRestletGenerationUtil._INDEX + "\")");
             OJIfStatement ifIndexNotNull = new OJIfStatement("index != null");
-            ifIndexNotNull.addToThenPart("parentResource." + pWrap.remover() + "(childResource)");
-            ifIndexNotNull.addToThenPart("parentResource." + pWrap.adder() + "(index, childResource)");
+            if (!pWrap.isMemberOfAssociationClass()) {
+                ifIndexNotNull.addToThenPart("parentResource." + pWrap.remover() + "(childResource)");
+                ifIndexNotNull.addToThenPart("parentResource." + pWrap.adder() + "(index, childResource)");
+            } else {
+                ifIndexNotNull.addToThenPart("parentResource." + pWrap.associationClassMoverForProperty() + "(index, childResource)");
+            }
+
             firstBlock.addToStatements(ifIndexNotNull);
         }
 

@@ -26,7 +26,7 @@ public class UmlgPropertyAssociationClassOrderedSetImpl<E, AC extends Associatio
         if (super.add(e)) {
             associationClass.internalAdder(umlgRuntimeProperty, true, this.owner);
             associationClass.internalAdder(umlgRuntimeProperty, false, (UmlgNode) e);
-            this.edge.setProperty(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID, associationClass.getId());
+            this.edge.setProperty(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID, associationClass.getId().toString());
             this.edge.setProperty("className", associationClass.getClass().getName());
             return true;
         } else {
@@ -39,7 +39,7 @@ public class UmlgPropertyAssociationClassOrderedSetImpl<E, AC extends Associatio
         super.add(index, e);
         associationClass.internalAdder(umlgRuntimeProperty, true, this.owner);
         associationClass.internalAdder(umlgRuntimeProperty, false, (UmlgNode) e);
-        this.edge.setProperty(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID, associationClass.getId());
+        this.edge.setProperty(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID, associationClass.getId().toString());
         this.edge.setProperty("className", associationClass.getClass().getName());
     }
 
@@ -73,11 +73,11 @@ public class UmlgPropertyAssociationClassOrderedSetImpl<E, AC extends Associatio
         //add a new the edge
         super.add(index, e);
         //set association class vertex id on new edge
-        this.edge.setProperty(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID, associationClass.getId());
+        this.edge.setProperty(UmlgCollection.ASSOCIATION_CLASS_VERTEX_ID, associationClass.getId().toString());
         this.edge.setProperty("className", associationClass.getClass().getName());
     }
 
-        @Override
+    @Override
     public boolean remove(Object o) {
         maybeLoad();
         Vertex v;

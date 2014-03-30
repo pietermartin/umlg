@@ -176,7 +176,16 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
     }
 
 
-    private void addToInverseLinkedList(Edge edge) {
+    protected void addToInverseLinkedList(Edge edge) {
+        Direction direction;
+        Direction inverseDirection;
+        if (isControllingSide()) {
+            direction = Direction.OUT;
+            inverseDirection = Direction.IN;
+        } else {
+            direction = Direction.IN;
+            inverseDirection = Direction.OUT;
+        }
         if (!isInverseUnique()) {
             //Handle duplicates with hyper vertexes
             //Get the new vertex for the element
@@ -211,26 +220,36 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
         } else {
             //Get the new vertex for the element
             Vertex newElementVertex = getVertexForDirection(edge);
-            if (newElementVertex.getEdges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel()).iterator().hasNext()) {
-                Edge edgeToLastVertex = newElementVertex.getEdges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel()).iterator().next();
+            if (newElementVertex.getEdges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + inverseDirection + newElementVertex.getId()).iterator().hasNext()) {
+                Edge edgeToLastVertex = newElementVertex.getEdges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + inverseDirection + newElementVertex.getId()).iterator().next();
                 Vertex lastVertex = edgeToLastVertex.getVertex(Direction.IN);
 
                 //move the edge to the last vertex
                 UMLG.get().removeEdge(edgeToLastVertex);
-                UMLG.get().addEdge(null, newElementVertex, this.vertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel());
 
+                UMLG.get().addEdge(null, newElementVertex, this.vertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + inverseDirection + newElementVertex.getId());
                 //add the element to the linked list
-                UMLG.get().addEdge(null, lastVertex, this.vertex, LABEL_TO_NEXT_IN_SEQUENCE);
+                //lastVertex here is the previous last vertex. its last edge has been removed, this.vertex is the new last vertex
+                UMLG.get().addEdge(null, lastVertex, this.vertex, LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + inverseDirection + newElementVertex.getId());
 
             } else {
                 //its the first element in the list
-                UMLG.get().addEdge(null, newElementVertex, this.vertex, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel());
-                UMLG.get().addEdge(null, newElementVertex, this.vertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel());
+                UMLG.get().addEdge(null, newElementVertex, this.vertex, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel() + inverseDirection + newElementVertex.getId());
+                UMLG.get().addEdge(null, newElementVertex, this.vertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + inverseDirection + newElementVertex.getId());
             }
         }
     }
 
     private void removeFromLinkedList(Vertex v) {
+        Direction direction;
+        Direction inverseDirection;
+        if (isControllingSide()) {
+            direction = Direction.OUT;
+            inverseDirection = Direction.IN;
+        } else {
+            direction = Direction.IN;
+            inverseDirection = Direction.OUT;
+        }
         if (!isUnique()) {
             //Handle duplicates
             //Find hyper vertex
@@ -284,43 +303,42 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
         } else {
             //No duplicates to handle, i.e the collection is an ordered set
             Vertex vertexToRemove = v;
-            //this.vertex has the next and previous links to manage in a inverse situation
-            //Check if it is first
-            if (vertexToRemove.getEdges(Direction.IN, LABEL_TO_NEXT_IN_SEQUENCE).iterator().hasNext()) {
+            //Check if it is first, i.e. see if it has a previous vertex
+            if (vertexToRemove.getEdges(Direction.IN, LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction + this.vertex.getId()).iterator().hasNext()) {
                 //It is not first
-                Edge edgeToPrevious = vertexToRemove.getEdges(Direction.IN, LABEL_TO_NEXT_IN_SEQUENCE).iterator().next();
+                Edge edgeToPrevious = vertexToRemove.getEdges(Direction.IN, LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction  + this.vertex.getId()).iterator().next();
                 Vertex previousVertex = edgeToPrevious.getVertex(Direction.OUT);
                 UMLG.get().removeEdge(edgeToPrevious);
                 //Check if it is last
-                if (vertexToRemove.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE).iterator().hasNext()) {
+                if (vertexToRemove.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE + getLabel()+ direction  + this.vertex.getId()).iterator().hasNext()) {
                     //Not last
-                    Edge edgeToNext = vertexToRemove.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE).iterator().next();
+                    Edge edgeToNext = vertexToRemove.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction + this.vertex.getId()).iterator().next();
                     Vertex nextVertex = edgeToNext.getVertex(Direction.IN);
                     UMLG.get().removeEdge(edgeToNext);
-                    UMLG.get().addEdge(null, previousVertex, nextVertex, LABEL_TO_NEXT_IN_SEQUENCE);
+                    UMLG.get().addEdge(null, previousVertex, nextVertex, LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction + this.vertex.getId());
                 } else {
                     //Last,
                     //previous becomes to last
-                    Edge edgeToLast = vertexToRemove.getEdges(Direction.IN, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel()).iterator().next();
+                    Edge edgeToLast = this.vertex.getEdges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + direction + this.vertex.getId()).iterator().next();
                     UMLG.get().removeEdge(edgeToLast);
-                    UMLG.get().addEdge(null, this.vertex, previousVertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel());
+                    UMLG.get().addEdge(null, this.vertex, previousVertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + direction + this.vertex.getId());
                 }
             } else {
                 //It is first
-                Edge edgeToFirst = vertexToRemove.getEdges(Direction.IN, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel()).iterator().next();
+                Edge edgeToFirst = this.vertex.getEdges(Direction.OUT, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel() + direction + this.vertex.getId()).iterator().next();
                 UMLG.get().removeEdge(edgeToFirst);
                 //Check is it is last
-                if (vertexToRemove.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE).iterator().hasNext()) {
+                if (vertexToRemove.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction + this.vertex.getId()).iterator().hasNext()) {
                     //Not last
                     //Move the edge to first
-                    Edge edgeToNext = vertexToRemove.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE).iterator().next();
-                    Vertex nextVertex = edgeToNext.getVertex(Direction.IN);
+                    Edge edgeToNext = vertexToRemove.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction + this.vertex.getId()).iterator().next();
+                    Vertex nextVertex = edgeToNext.getVertex(inverseDirection);
                     UMLG.get().removeEdge(edgeToNext);
-                    UMLG.get().addEdge(null, this.vertex, nextVertex, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel());
+                    UMLG.get().addEdge(null, this.vertex, nextVertex, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel() + direction + this.vertex.getId());
                 } else {
                     //Last
                     //Only one element in the list
-                    Edge edgeToLast = vertexToRemove.getEdges(Direction.IN, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel()).iterator().next();
+                    Edge edgeToLast = this.vertex.getEdges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + direction + this.vertex.getId()).iterator().next();
                     UMLG.get().removeEdge(edgeToLast);
                 }
             }
@@ -360,6 +378,15 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
     }
 
     private void removeFromInverseLinkedList(Vertex v) {
+        Direction direction;
+        Direction inverseDirection;
+        if (isControllingSide()) {
+            direction = Direction.OUT;
+            inverseDirection = Direction.IN;
+        } else {
+            direction = Direction.IN;
+            inverseDirection = Direction.OUT;
+        }
         if (!isInverseUnique()) {
             //Handle duplicates
             //Find hyper vertex
@@ -414,41 +441,41 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
             Vertex vertexToRemove = v;
             //this.vertex has the next and previous links to manage in a inverse situation
             //Check if it is first
-            if (this.vertex.getEdges(Direction.IN, LABEL_TO_NEXT_IN_SEQUENCE).iterator().hasNext()) {
+            if (this.vertex.getEdges(Direction.IN, LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + inverseDirection + vertexToRemove.getId()).iterator().hasNext()) {
                 //It is not first
-                Edge edgeToPrevious = this.vertex.getEdges(Direction.IN, LABEL_TO_NEXT_IN_SEQUENCE).iterator().next();
+                Edge edgeToPrevious = this.vertex.getEdges(Direction.IN, LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + inverseDirection + vertexToRemove.getId()).iterator().next();
                 Vertex previousVertex = edgeToPrevious.getVertex(Direction.OUT);
                 UMLG.get().removeEdge(edgeToPrevious);
                 //Check if it is last
-                if (this.vertex.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE).iterator().hasNext()) {
+                if (this.vertex.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + inverseDirection + vertexToRemove.getId()).iterator().hasNext()) {
                     //Not last
-                    Edge edgeToNext = this.vertex.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE).iterator().next();
+                    Edge edgeToNext = this.vertex.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + inverseDirection + vertexToRemove.getId()).iterator().next();
                     Vertex nextVertex = edgeToNext.getVertex(Direction.IN);
                     UMLG.get().removeEdge(edgeToNext);
-                    UMLG.get().addEdge(null, previousVertex, nextVertex, LABEL_TO_NEXT_IN_SEQUENCE);
+                    UMLG.get().addEdge(null, previousVertex, nextVertex, LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + inverseDirection + vertexToRemove.getId());
                 } else {
                     //Last,
                     //previous becomes to last
-                    Edge edgeToLast = this.vertex.getEdges(Direction.IN, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel()).iterator().next();
+                    Edge edgeToLast = vertexToRemove.getEdges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + inverseDirection + vertexToRemove.getId()).iterator().next();
                     UMLG.get().removeEdge(edgeToLast);
-                    UMLG.get().addEdge(null, vertexToRemove, previousVertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel());
+                    UMLG.get().addEdge(null, vertexToRemove, previousVertex, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + inverseDirection + vertexToRemove.getId());
                 }
             } else {
                 //It is first
-                Edge edgeToFirst = this.vertex.getEdges(Direction.IN, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel()).iterator().next();
+                Edge edgeToFirst = vertexToRemove.getEdges(Direction.OUT, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel() + inverseDirection + vertexToRemove.getId()).iterator().next();
                 UMLG.get().removeEdge(edgeToFirst);
                 //Check is it is last
-                if (this.vertex.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE).iterator().hasNext()) {
+                if (this.vertex.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + inverseDirection + vertexToRemove.getId()).iterator().hasNext()) {
                     //Not last
                     //Move the edge to first
-                    Edge edgeToNext = this.vertex.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE).iterator().next();
+                    Edge edgeToNext = this.vertex.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + inverseDirection + vertexToRemove.getId()).iterator().next();
                     Vertex nextVertex = edgeToNext.getVertex(Direction.IN);
                     UMLG.get().removeEdge(edgeToNext);
-                    UMLG.get().addEdge(null, vertexToRemove, nextVertex, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel());
+                    UMLG.get().addEdge(null, vertexToRemove, nextVertex, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel() + inverseDirection + vertexToRemove.getId());
                 } else {
                     //Last
                     //Only one element in the list
-                    Edge edgeToLast = this.vertex.getEdges(Direction.IN, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel()).iterator().next();
+                    Edge edgeToLast = vertexToRemove.getEdges(Direction.OUT, LABEL_TO_LAST_ELEMENT_IN_SEQUENCE + getLabel() + inverseDirection + vertexToRemove.getId()).iterator().next();
                     UMLG.get().removeEdge(edgeToLast);
                 }
             }

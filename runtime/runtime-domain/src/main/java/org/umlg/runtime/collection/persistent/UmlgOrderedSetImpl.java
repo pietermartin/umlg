@@ -29,6 +29,9 @@ public class UmlgOrderedSetImpl<E> extends UmlgBaseOrderedSet<E> implements Umlg
         maybeLoad();
         if (!this.getInternalListOrderedSet().contains(e)) {
             this.edge = addToListAtIndex(indexOf, e);
+            if (isInverseOrdered()) {
+                this.addToInverseLinkedList(this.edge);
+            }
         }
     }
 
