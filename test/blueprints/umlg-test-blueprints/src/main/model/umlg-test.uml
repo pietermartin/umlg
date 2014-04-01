@@ -1297,6 +1297,19 @@
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_mgAEk7dhEeORtvbQ18esMQ" value="1"/>
             </ownedEnd>
           </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_I-khsLj7EeORtvbQ18esMQ" name="F">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_LXoDwLj7EeORtvbQ18esMQ" name="g" type="_JxhooLj7EeORtvbQ18esMQ" isOrdered="true" isUnique="false" association="_LXoDw7j7EeORtvbQ18esMQ">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_LXoDwbj7EeORtvbQ18esMQ"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_LXoDwrj7EeORtvbQ18esMQ" value="*"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_JxhooLj7EeORtvbQ18esMQ" name="G"/>
+          <packagedElement xmi:type="uml:Association" xmi:id="_LXoDw7j7EeORtvbQ18esMQ" name="f_g_1" memberEnd="_LXoDxLj7EeORtvbQ18esMQ _LXoDwLj7EeORtvbQ18esMQ" navigableOwnedEnd="_LXoDxLj7EeORtvbQ18esMQ">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_LXoDxLj7EeORtvbQ18esMQ" name="f" type="_I-khsLj7EeORtvbQ18esMQ" isOrdered="true" isUnique="false" association="_LXoDw7j7EeORtvbQ18esMQ">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_LXoDxbj7EeORtvbQ18esMQ"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_LXoDxrj7EeORtvbQ18esMQ" value="*"/>
+            </ownedEnd>
+          </packagedElement>
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_8JtCQBUcEeGL8p1g1fBHHA" name="componenttest">
           <packagedElement xmi:type="uml:Class" xmi:id="_BkczsBUdEeGL8p1g1fBHHA" name="SpaceTime">

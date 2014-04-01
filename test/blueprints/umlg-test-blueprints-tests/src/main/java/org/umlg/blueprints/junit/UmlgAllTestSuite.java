@@ -98,7 +98,8 @@ import org.umlg.tests.validationtest.TestValidation;
         TestSubsetting.class,
         TestIndexing.class,
         TestAssociationToSelf.class,
-        ManyToManyOrderedSetTest.class
+        ManyToManyOrderedSetTest.class,
+        ManyToManySequenceTest.class
 
 
 //        TransactionSuspendResumeTest.class,

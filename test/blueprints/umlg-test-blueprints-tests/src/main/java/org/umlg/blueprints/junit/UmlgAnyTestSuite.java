@@ -28,8 +28,10 @@ import org.umlg.tests.collectiontest.*;
 //        TestOrderedListKeepsIndex.class
 //        ManyToManyOrderedSetTest.class
 //        OneToManyOrderedSetTest.class ,
-        TestAssociationToSelf.class
+//        TestAssociationToSelf.class,
+        ManyToManySequenceTest.class
 
-})
+
+        })
 public class UmlgAnyTestSuite {
 }

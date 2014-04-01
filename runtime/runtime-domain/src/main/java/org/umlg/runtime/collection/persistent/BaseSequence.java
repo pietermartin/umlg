@@ -399,7 +399,7 @@ public abstract class BaseSequence<E> extends BaseCollection<E> implements UmlgS
     @Override
     public Boolean equals(UmlgSequence<E> s) {
         maybeLoad();
-        return this.oclStdLibSequence.equals(s);
+        return this.oclStdLibSequence.equals((org.umlg.runtime.collection.UmlgCollection<E>) s);
     }
 
     @Override
