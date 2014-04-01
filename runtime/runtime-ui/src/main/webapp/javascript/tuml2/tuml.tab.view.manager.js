@@ -499,6 +499,7 @@
 
     TumlTabOneViewManager.prototype.saveViaKeyPress = function () {
         if (this.open) {
+            this.commitCurrentEdit();
             this.parentTabContainerManager.saveTabs();
             return true;
         } else {
