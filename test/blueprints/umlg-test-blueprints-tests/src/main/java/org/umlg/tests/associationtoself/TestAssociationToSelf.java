@@ -194,35 +194,97 @@ public class TestAssociationToSelf extends BaseLocalDbTest {
         Assert.assertEquals(1, a.getEAC_to().size());
     }
 
+    @Test
+    public void testSelfAssociationClassSelf() {
+        E a = new E();
+        a.setName("A");
+        E b = new E();
+        b.setName("B");
+
+        EAC ab = new EAC();
+        ab.setName("AB");
+        a.addToTo(b, ab);
+
+        EAC aa = new EAC();
+        aa.setName("AA");
+        a.addToTo(a, aa);
+        db.commit();
+
+        a.reload();
+        b.reload();
+        aa.reload();
+        ab.reload();
+
+        Assert.assertEquals(2, a.getTo().size());
+        Assert.assertEquals(1, a.getFrom().size());
+        Assert.assertEquals(0, b.getTo().size());
+        Assert.assertEquals(1, b.getFrom().size());
+
+        Assert.assertEquals(2, a.getEAC_to().size());
+        Assert.assertEquals(1, a.getEAC_from().size());
+
+    }
+
 //    @Test
-//    public void testSelfAssociationClassSelf() {
-//        E a = new E();
-//        a.setName("A");
-//        E b = new E();
-//        b.setName("B");
-//
-//        EAC ab = new EAC();
-//        ab.setName("AB");
-//        a.addToTo(b, ab);
-//
-//        EAC aa = new EAC();
-//        aa.setName("AA");
-//        a.addToTo(a, aa);
-//        db.commit();
-//
-//        a.reload();
-//        b.reload();
-//        aa.reload();
-//        ab.reload();
-//
-//        Assert.assertEquals(2, a.getTo().size());
-//        Assert.assertEquals(1, a.getFrom().size());
-//        Assert.assertEquals(0, b.getTo().size());
-//        Assert.assertEquals(1, b.getFrom().size());
-//
-//        Assert.assertEquals(2, a.getEAC_to().size());
-//        Assert.assertEquals(1, a.getEAC_from().size());
-//
-//    }
+    public void moveAssociationClassToSelf() {
+
+        E a = new E();
+        a.setName("A");
+
+        E b = new E();
+        b.setName("B");
+        EAC ab = new EAC();
+        ab.setName("AB");
+        a.addToTo(b, ab);
+
+        E c = new E();
+        c.setName("C");
+        EAC ac = new EAC();
+        ac.setName("AC");
+        a.addToTo(c, ac);
+
+        db.commit();
+
+        a.reload();
+        b.reload();
+        c.reload();
+        ab.reload();
+        ac.reload();
+
+        Assert.assertEquals(b, a.getTo().get(0));
+        Assert.assertEquals(c, a.getTo().get(1));
+
+        a.moveTo(0, c);
+        db.commit();
+
+        a.reload();
+        b.reload();
+        c.reload();
+        ab.reload();
+        ac.reload();
+        Assert.assertEquals(c, a.getTo().get(0));
+        Assert.assertEquals(b, a.getTo().get(1));
+
+        a.moveTo(0, b);
+        a.reload();
+        b.reload();
+        c.reload();
+        ab.reload();
+        ac.reload();
+
+        Assert.assertEquals(b, a.getTo().get(0));
+        Assert.assertEquals(c, a.getTo().get(1));
+
+        a.moveTo(1, b);
+        a.reload();
+        b.reload();
+        c.reload();
+        ab.reload();
+        ac.reload();
+
+        Assert.assertEquals(c, a.getTo().get(0));
+        Assert.assertEquals(b, a.getTo().get(1));
+
+    }
 
 }

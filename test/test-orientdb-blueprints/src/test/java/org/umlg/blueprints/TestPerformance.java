@@ -19,7 +19,7 @@ public class TestPerformance {
 
 //    @Test
     public void testSpeedDude() throws IOException {
-        String url = System.getProperty("java.io.tmpdir") + System.lineSeparator() + "test-orientdb-blueprints";
+        String url = System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "test-orientdb-blueprints";
         File dir = new File(url);
         FileUtils.deleteDirectory(dir);
         File f = new File(url);

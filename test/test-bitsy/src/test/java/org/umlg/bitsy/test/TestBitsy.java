@@ -22,12 +22,12 @@ public class TestBitsy {
 
     @Test
     public void testSpeedDude1() throws IOException {
-        File f = new File(System.getProperty("java.io.tmpdir") + System.lineSeparator() + "bitsy-performance");
+        File f = new File(System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "bitsy-performance");
         if (f.exists()) {
             FileUtils.deleteDirectory(f);
         }
         f.mkdir();
-        Path dbPath = Paths.get(System.getProperty("java.io.tmpdir") + System.lineSeparator() + "bitsy-performance");
+        Path dbPath = Paths.get(System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "bitsy-performance");
         BitsyGraph g = new BitsyGraph(dbPath);
         try {
 
@@ -77,12 +77,12 @@ public class TestBitsy {
 
 //    @Test
     public void testSpeedDude2() throws IOException {
-        File f = new File(System.getProperty("java.io.tmpdir") + System.lineSeparator() + "bitsy-performance");
+        File f = new File(System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "bitsy-performance");
         if (f.exists()) {
             FileUtils.deleteDirectory(f);
         }
         f.mkdir();
-        Path dbPath = Paths.get(System.getProperty("java.io.tmpdir") + System.lineSeparator() + "bitsy-performance");
+        Path dbPath = Paths.get(System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "bitsy-performance");
         BitsyGraph g = new BitsyGraph(dbPath);
         try {
             int NUMBER_TO_ITER = 10000000;

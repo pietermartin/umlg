@@ -242,9 +242,17 @@ public class UmlgNeo4jGraph extends Neo4j2Graph implements UmlgGraph {
 
         Set<Edge> result = new HashSet<Edge>();
         Iterable<Edge> edges = v1.getEdges(Direction.BOTH, labels);
-        for (Edge edge : edges) {
-            if (edge.getVertex(Direction.IN).equals(v2) || edge.getVertex(Direction.OUT).equals(v2)) {
-                result.add(edge);
+        if (!v1.equals(v2)) {
+            for (Edge edge : edges) {
+                if (edge.getVertex(Direction.IN).equals(v2) || edge.getVertex(Direction.OUT).equals(v2)) {
+                    result.add(edge);
+                }
+            }
+        } else {
+            for (Edge edge : edges) {
+                if (edge.getVertex(Direction.IN).equals(v2) && edge.getVertex(Direction.OUT).equals(v2)) {
+                    result.add(edge);
+                }
             }
         }
         return result;
