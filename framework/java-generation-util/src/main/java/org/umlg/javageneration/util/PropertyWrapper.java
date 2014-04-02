@@ -1331,7 +1331,7 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     }
 
     public boolean isNumber() {
-        return getType() instanceof PrimitiveType && (getType().getName().equals("Integer") || getType().getName().equals("UnlimitedNatural"));
+        return getType() instanceof PrimitiveType && (getType().getName().equals("Integer") || getType().getName().equals("UnlimitedNatural") || getType().getName().equals("Real"));
     }
 
     public boolean isBoolean() {
@@ -1344,6 +1344,10 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
 
     public boolean isLong() {
         return getType() instanceof PrimitiveType && (getType().getName().equals("UnlimitedNatural"));
+    }
+
+    public boolean isDouble() {
+        return getType() instanceof PrimitiveType && (getType().getName().equals("Real"));
     }
 
     public String toString() {

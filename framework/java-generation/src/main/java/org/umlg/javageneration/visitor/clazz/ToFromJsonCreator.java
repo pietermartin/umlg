@@ -341,6 +341,8 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                                 field.setInitExp(fieldNumber.getName() + " != null ? " + fieldNumber.getName() + ".intValue() : null");
                             } else if (pWrap.isLong()) {
                                 field.setInitExp(fieldNumber.getName() + " != null ? " + fieldNumber.getName() + ".longValue() : null");
+                            } else if (pWrap.isDouble()) {
+                                field.setInitExp(fieldNumber.getName() + " != null ? " + fieldNumber.getName() + ".doubleValue() : null");
                             } else {
                                 throw new RuntimeException("Not yet implemented!");
                             }

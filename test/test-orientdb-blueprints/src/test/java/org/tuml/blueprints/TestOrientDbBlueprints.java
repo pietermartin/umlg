@@ -20,7 +20,7 @@ public class TestOrientDbBlueprints {
 
     @Test
     public void testIdChangesAfterCommit() throws IOException, InterruptedException, ExecutionException {
-        final String url = "/tmp/test-orientdb-blueprints";
+        final String url = System.getProperty("java.io.tmpdir") + System.lineSeparator() + "test-orientdb-blueprints";
         File dir = new File(url);
         FileUtils.deleteDirectory(dir);
         final File f = new File(url);

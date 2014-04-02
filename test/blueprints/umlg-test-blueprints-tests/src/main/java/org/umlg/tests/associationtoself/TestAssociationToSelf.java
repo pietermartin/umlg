@@ -3,9 +3,6 @@ package org.umlg.tests.associationtoself;
 import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.associationtoself.*;
-import org.umlg.collectiontest.SequenceRoot;
-import org.umlg.collectiontest.SequenceTestListMany;
-import org.umlg.collectiontest.SequenceTestOrderedSet;
 import org.umlg.runtime.test.BaseLocalDbTest;
 
 /**
@@ -135,6 +132,14 @@ public class TestAssociationToSelf extends BaseLocalDbTest {
         Assert.assertEquals(a, d.getFrom().get(0));
         Assert.assertEquals(0, b.getTo().size());
 
+        Assert.assertEquals(3, a.getEAC_to().size());
+        Assert.assertEquals(1, b.getEAC_from().size());
+        Assert.assertEquals(1, b.getEAC_from().size());
+        Assert.assertEquals(1, b.getEAC_from().size());
+        Assert.assertEquals(0, b.getEAC_to().size());
+        Assert.assertEquals(0, b.getEAC_to().size());
+        Assert.assertEquals(0, b.getEAC_to().size());
+
         E e = new E();
         e.setName("E");
 
@@ -163,6 +168,10 @@ public class TestAssociationToSelf extends BaseLocalDbTest {
         Assert.assertEquals(1, b.getFrom().size());
         Assert.assertEquals(a, b.getFrom().get(0));
 
+        Assert.assertEquals(3, a.getEAC_to().size());
+        Assert.assertEquals(3, b.getEAC_to().size());
+        Assert.assertEquals(2, c.getEAC_from().size());
+
     }
 
     @Test
@@ -179,8 +188,41 @@ public class TestAssociationToSelf extends BaseLocalDbTest {
 
         a.reload();
         b.reload();
+        ab.reload();
         Assert.assertEquals(1, b.getFrom().size());
         Assert.assertEquals(0, b.getTo().size());
+        Assert.assertEquals(1, a.getEAC_to().size());
     }
+
+//    @Test
+//    public void testSelfAssociationClassSelf() {
+//        E a = new E();
+//        a.setName("A");
+//        E b = new E();
+//        b.setName("B");
+//
+//        EAC ab = new EAC();
+//        ab.setName("AB");
+//        a.addToTo(b, ab);
+//
+//        EAC aa = new EAC();
+//        aa.setName("AA");
+//        a.addToTo(a, aa);
+//        db.commit();
+//
+//        a.reload();
+//        b.reload();
+//        aa.reload();
+//        ab.reload();
+//
+//        Assert.assertEquals(2, a.getTo().size());
+//        Assert.assertEquals(1, a.getFrom().size());
+//        Assert.assertEquals(0, b.getTo().size());
+//        Assert.assertEquals(1, b.getFrom().size());
+//
+//        Assert.assertEquals(2, a.getEAC_to().size());
+//        Assert.assertEquals(1, a.getEAC_from().size());
+//
+//    }
 
 }

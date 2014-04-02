@@ -239,20 +239,31 @@ public class UmlgNeo4jGraph extends Neo4j2Graph implements UmlgGraph {
 
     @Override
     public Set<Edge> getEdgesBetween(Vertex v1, Vertex v2, String... labels) {
-        Node n1 = ((Neo4j2Vertex) v1).getRawVertex();
-        Node n2 = ((Neo4j2Vertex) v2).getRawVertex();
-        List<DynamicRelationshipType> dynaRel = new ArrayList<DynamicRelationshipType>(labels.length);
-        for (String label : labels) {
-            dynaRel.add(DynamicRelationshipType.withName(label));
-        }
-        Set<Edge> result = new HashSet<Edge>(dynaRel.size());
-        Iterable<Relationship> relationships = n1.getRelationships(dynaRel.toArray(new DynamicRelationshipType[]{}));
-        for (Relationship relationship : relationships) {
-            if (relationship.getEndNode().equals(n2) || relationship.getStartNode().equals(n2)) {
-                result.add(this.getEdge(relationship.getId()));
+
+        Set<Edge> result = new HashSet<Edge>();
+        Iterable<Edge> edges = v1.getEdges(Direction.BOTH, labels);
+        for (Edge edge : edges) {
+            if (edge.getVertex(Direction.IN).equals(v2) || edge.getVertex(Direction.OUT).equals(v2)) {
+                result.add(edge);
             }
         }
         return result;
+
+
+//        Node n1 = ((Neo4j2Vertex) v1).getRawVertex();
+//        Node n2 = ((Neo4j2Vertex) v2).getRawVertex();
+//        List<DynamicRelationshipType> dynaRel = new ArrayList<DynamicRelationshipType>(labels.length);
+//        for (String label : labels) {
+//            dynaRel.add(DynamicRelationshipType.withName(label));
+//        }
+//        Set<Edge> result = new HashSet<Edge>(dynaRel.size());
+//        Iterable<Relationship> relationships = n1.getRelationships(dynaRel.toArray(new DynamicRelationshipType[]{}));
+//        for (Relationship relationship : relationships) {
+//            if (relationship.getEndNode().equals(n2) || relationship.getStartNode().equals(n2)) {
+//                result.add(this.getEdge(relationship.getId()));
+//            }
+//        }
+//        return result;
     }
 
     @Override

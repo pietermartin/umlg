@@ -477,11 +477,11 @@ public class NavigatePropertyOverloadedPostServerResourceBuilder extends BaseSer
             tryInstantiate.getTryPart().addToStatements("propertyMap.remove(\"" + otherEndPWrap.fieldname() + "\")");
             tryInstantiate.getTryPart().addToStatements(pWrap.javaBaseTypePath().getLast() + " childResource = " + UmlgGenerationUtil.UMLGAccess + ".instantiateClassifier(id)");
             if (!pWrap.isMemberOfAssociationClass()) {
-                tryInstantiate.getTryPart().addToStatements("childResource.fromJson(propertyMap)");
+//                tryInstantiate.getTryPart().addToStatements("childResource.fromJson(propertyMap)");
                 tryInstantiate.getTryPart().addToStatements("parentResource." + pWrap.adder() + "(childResource)");
                 tryInstantiate.getTryPart().addToStatements("objectList.add(new " + UmlgRestletGenerationUtil.UmlgNodeJsonHolder.getLast() + "(childResource))");
             } else {
-                tryInstantiate.getTryPart().addToStatements("childResource.fromJson(propertyMap)");
+//                tryInstantiate.getTryPart().addToStatements("childResource.fromJson(propertyMap)");
                 PropertyWrapper otherEnd = new PropertyWrapper(pWrap.getOtherEnd());
 
 //TODO check this out, it creates a duplicate as the fromJson creates the association class
