@@ -20,6 +20,9 @@ public class UmlgSequenceImpl<E> extends BaseSequence<E> implements UmlgSequence
         if (this.loaded) {
             getInternalList().add(indexOf, e);
         }
+        if (!isInverseUnique()) {
+            this.addToInverseLinkedList(this.edge);
+        }
 	}
 
 	@Override

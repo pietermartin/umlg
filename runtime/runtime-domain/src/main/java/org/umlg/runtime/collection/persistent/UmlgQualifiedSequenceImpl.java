@@ -26,6 +26,9 @@ public class UmlgQualifiedSequenceImpl<E> extends BaseSequence<E> implements Uml
         if (this.loaded) {
             getInternalList().add(indexOf, e);
         }
+        if (!isInverseUnique()) {
+            this.addToInverseLinkedList(edge);
+        }
 	}
 
 	@Override

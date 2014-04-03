@@ -1310,6 +1310,18 @@
               <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_LXoDxrj7EeORtvbQ18esMQ" value="*"/>
             </ownedEnd>
           </packagedElement>
+          <packagedElement xmi:type="uml:Class" xmi:id="_fUxwsLtWEeO16qFN_tljCw" name="H">
+            <ownedAttribute xmi:type="uml:Property" xmi:id="_gSTI4LtWEeO16qFN_tljCw" name="from" type="_fUxwsLtWEeO16qFN_tljCw" isOrdered="true" isUnique="false" association="_gSgkQLtWEeO16qFN_tljCw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_gSTI4btWEeO16qFN_tljCw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_gSTI4rtWEeO16qFN_tljCw" value="*"/>
+            </ownedAttribute>
+          </packagedElement>
+          <packagedElement xmi:type="uml:Association" xmi:id="_gSgkQLtWEeO16qFN_tljCw" name="h_h_1" memberEnd="_gSgkQbtWEeO16qFN_tljCw _gSTI4LtWEeO16qFN_tljCw" navigableOwnedEnd="_gSgkQbtWEeO16qFN_tljCw">
+            <ownedEnd xmi:type="uml:Property" xmi:id="_gSgkQbtWEeO16qFN_tljCw" name="to" type="_fUxwsLtWEeO16qFN_tljCw" isOrdered="true" isUnique="false" association="_gSgkQLtWEeO16qFN_tljCw">
+              <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_gSgkQrtWEeO16qFN_tljCw"/>
+              <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_gSgkQ7tWEeO16qFN_tljCw" value="*"/>
+            </ownedEnd>
+          </packagedElement>
         </packagedElement>
         <packagedElement xmi:type="uml:Package" xmi:id="_8JtCQBUcEeGL8p1g1fBHHA" name="componenttest">
           <packagedElement xmi:type="uml:Class" xmi:id="_BkczsBUdEeGL8p1g1fBHHA" name="SpaceTime">

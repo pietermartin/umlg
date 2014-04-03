@@ -605,6 +605,7 @@ public class SequenceTest extends BaseLocalDbTest {
         Assert.assertEquals(3, sequenceRoot.getSequenceTestListMany().size());
         sequenceRoot = new SequenceRoot(sequenceRoot.getVertex());
         Assert.assertEquals(3, sequenceRoot.getSequenceTestListMany().size());
+
         Assert.assertEquals(3, countVertices());
         Assert.assertEquals(9 + 2, countEdges());
 

@@ -23,13 +23,14 @@ import org.umlg.tests.collectiontest.*;
 //        QualifiedBagTest.class,
 //        QualifiedOrderedSetTest.class,
 //        QualifiedSequenceTest.class,
-//        SequenceTest.class
+        SequenceTest.class
 //        TestInitCalled.class,
 //        TestOrderedListKeepsIndex.class
 //        ManyToManyOrderedSetTest.class
 //        OneToManyOrderedSetTest.class ,
 //        TestAssociationToSelf.class,
-        ManyToManySequenceTest.class
+//        ManyToManySequenceTest.class,
+//        ManyToManyToSelfSequenceTest.class
 
 
         })

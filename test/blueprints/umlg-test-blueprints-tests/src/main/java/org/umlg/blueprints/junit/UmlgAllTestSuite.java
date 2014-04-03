@@ -99,9 +99,8 @@ import org.umlg.tests.validationtest.TestValidation;
         TestIndexing.class,
         TestAssociationToSelf.class,
         ManyToManyOrderedSetTest.class,
-        ManyToManySequenceTest.class
-
-
+        ManyToManySequenceTest.class,
+        ManyToManyToSelfSequenceTest.class
 //        TransactionSuspendResumeTest.class,
 })
 public class UmlgAllTestSuite {
