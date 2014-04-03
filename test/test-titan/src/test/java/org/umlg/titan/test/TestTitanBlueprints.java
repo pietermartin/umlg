@@ -25,7 +25,7 @@ public class TestTitanBlueprints {
 
     @Test
     public void testIndexCreatedInAThreadUsedInAnother() throws IOException, InterruptedException, ExecutionException {
-        final String url = "/tmp/titan-test";
+        final String url = System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "titan-test";
         File dir = new File(url);
         FileUtils.deleteDirectory(dir);
         final File f = new File(url);
@@ -55,7 +55,7 @@ public class TestTitanBlueprints {
     @Test(expected = IllegalArgumentException.class)
     public void testEmailList() throws Exception {
 
-        final String url = "/tmp/titan-test";
+        final String url = System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "titan-test";
         File dir = new File(url);
         FileUtils.deleteDirectory(dir);
         final File f = new File(url);
@@ -75,7 +75,7 @@ public class TestTitanBlueprints {
     @Test
     public void testStringArray() throws Exception {
 
-        final String url = "/tmp/titan-test";
+        final String url = System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "titan-test";
         File dir = new File(url);
         FileUtils.deleteDirectory(dir);
         final File f = new File(url);
@@ -100,7 +100,7 @@ public class TestTitanBlueprints {
 
     @Test
     public void testForumQuestion() throws Exception {
-        final String url = "/tmp/titan-test";
+        final String url = System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "titan-test";
         File dir = new File(url);
         FileUtils.deleteDirectory(dir);
         final File f = new File(url);
@@ -126,7 +126,7 @@ public class TestTitanBlueprints {
 
     @Test
     public void testEmptyLabels() throws Exception {
-        final String url = "/tmp/titan-test";
+        final String url = System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "titan-test";
         File dir = new File(url);
         FileUtils.deleteDirectory(dir);
         final File f = new File(url);
@@ -172,7 +172,7 @@ public class TestTitanBlueprints {
 
 //    @Test
     public void testRemoveTransactionAlreadyWritable() throws IOException {
-        final String url = "/tmp/titan-test";
+        final String url = System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "titan-test";
         File dir = new File(url);
         FileUtils.deleteDirectory(dir);
         final File f = new File(url);

@@ -30,7 +30,7 @@ public class TestTitanSpeed {
 
 //    @Test
     public void testTitanInsertVertexPerformance() {
-        File f = new File("/tmp/titan-performance");
+        File f = new File(System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "titan-performance");
         if (f.exists()) {
             f.delete();
         }
@@ -64,7 +64,7 @@ public class TestTitanSpeed {
 
 //    @Test
     public void testTitanPerformance() {
-        File f = new File("/tmp/neo4j-performance");
+        File f = new File(System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "neo4j-performance");
         if (f.exists()) {
             f.delete();
         }
@@ -100,7 +100,7 @@ public class TestTitanSpeed {
 //    @Test
     public void testMultiThreadedReadsOnBipartiteGraph() throws Exception {
 
-        File f = new File("/tmp/neo4j-performance");
+        File f = new File(System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "neo4j-performance");
         if (f.exists()) {
             f.delete();
         }
@@ -242,7 +242,7 @@ public class TestTitanSpeed {
 
 //    @Test
     public void testSpeedDude() {
-        File f = new File("/tmp/neo4j-performance");
+        File f = new File(System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "neo4j-performance");
         if (f.exists()) {
             f.delete();
         }
@@ -291,7 +291,7 @@ public class TestTitanSpeed {
 
 //    @Test
     public void testSpeedDude2() throws IOException {
-        final String url = "/tmp/titan-test";
+        final String url = System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "titan-test";
         File dir = new File(url);
         FileUtils.deleteDirectory(dir);
         final File f = new File(url);
@@ -376,7 +376,7 @@ public class TestTitanSpeed {
 
 //    @Test
     public void testSpeedLinkedList() throws IOException {
-        final String url = "/tmp/titan-test";
+        final String url = System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "titan-test";
         File dir = new File(url);
         FileUtils.deleteDirectory(dir);
         final File f = new File(url);
@@ -466,7 +466,7 @@ public class TestTitanSpeed {
 
 //    @Test
     public void testIndexSpeed() throws IOException {
-        final String url = "/tmp/titan-test";
+        final String url = System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "titan-test";
         File dir = new File(url);
         FileUtils.deleteDirectory(dir);
         final File f = new File(url);

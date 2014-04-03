@@ -27,7 +27,7 @@ public class TestBitsySpeed {
 
     @Before
     public void before() throws IOException {
-        File f = new File("/tmp/neo4j-performance");
+        File f = new File(System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "neo4j-performance");
         if (f.exists()) {
             f.delete();
         }

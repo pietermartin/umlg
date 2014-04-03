@@ -332,7 +332,7 @@ public abstract class BaseCollection<E> implements UmlgCollection<E>, UmlgRuntim
                     //Not last
                     //Move the edge to first
                     Edge edgeToNext = vertexToRemove.getEdges(Direction.OUT, LABEL_TO_NEXT_IN_SEQUENCE + getLabel() + direction + this.vertex.getId()).iterator().next();
-                    Vertex nextVertex = edgeToNext.getVertex(inverseDirection);
+                    Vertex nextVertex = edgeToNext.getVertex(Direction.IN);
                     UMLG.get().removeEdge(edgeToNext);
                     UMLG.get().addEdge(null, this.vertex, nextVertex, LABEL_TO_FIRST_ELEMENT_IN_SEQUENCE + getLabel() + direction + this.vertex.getId());
                 } else {

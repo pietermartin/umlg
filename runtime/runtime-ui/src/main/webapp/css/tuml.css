@@ -225,7 +225,7 @@ input.slick-grid-umlg-editor-text {
 
 .cell-reorder {
     cursor: move;
-    /*background: url("../javascript/slickgrid/images/drag-handle.png") no-repeat center center;*/
+    background: url("../javascript/slickgrid/images/drag-handle.png") no-repeat center center;
 }
 
 #leftMenu.ui-menu {

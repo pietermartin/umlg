@@ -287,8 +287,8 @@ public class RuntimePropertyImplementor {
                         addEnumLiteral(
                                 true,
                                 false,
-                                pWrap.isMemberOfAssociationClass() ? pWrap.getAssociationClassFakePropertyName() : null,
-                                pWrap.isMemberOfAssociationClass() ? new PropertyWrapper(pWrap.getOtherEnd()).getAssociationClassFakePropertyName() : null,
+                                pWrap.getAssociationClassFakePropertyName(),
+                                new PropertyWrapper(pWrap.getOtherEnd()).getAssociationClassFakePropertyName(),
                                 true,
                                 ojEnum, fromLabel, fromQualifiedName, fromInverseQualifiedName, pWrap.fieldname(), pWrap.getQualifiedName(),
                                 pWrap.getInverseName(), pWrap.getInverseQualifiedName() + "AC", pWrap.isReadOnly(), pWrap.isPrimitive(), pWrap.getDataTypeEnum(),
@@ -377,9 +377,20 @@ public class RuntimePropertyImplementor {
             boolean isControllingSide,
             boolean isComposite,
             boolean isInverseComposite,
-            boolean isOneToOne, boolean isOneToMany, boolean isManyToMany, int getUpper, int getLower, int getInverseUpper,
-            boolean isQualified, boolean isInverseQualified, boolean isOrdered, boolean isInverseOrdered, boolean isUnique,
-            boolean isInverseUnique, boolean isDerived, String edgeName) {
+            boolean isOneToOne,
+            boolean isOneToMany,
+            boolean isManyToMany,
+            int getUpper,
+            int getLower,
+            int getInverseUpper,
+            boolean isQualified,
+            boolean isInverseQualified,
+            boolean isOrdered,
+            boolean isInverseOrdered,
+            boolean isUnique,
+            boolean isInverseUnique,
+            boolean isDerived,
+            String edgeName) {
 
         OJIfStatement ifLabelEquals = new OJIfStatement(fieldName + ".getLabel().equals(label)");
         // Do not make upper case, leave with java case sensitive

@@ -3,7 +3,8 @@ function calculateBodyHeight(container) {
     if (container instanceof Tuml.TumlTabManyViewManager) {
         windowHeight = 600;
     } else {
-        windowHeight = $('.ui-layout-center').height() - 98;
+//        windowHeight = $('.ui-layout-center').height() - 98;
+        windowHeight = $('.ui-layout-center').height() - 102;
     }
     return windowHeight;
 }

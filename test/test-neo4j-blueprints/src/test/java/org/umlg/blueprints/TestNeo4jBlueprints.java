@@ -25,7 +25,8 @@ public class TestNeo4jBlueprints {
 
 //    @Test
     public void testNeo4jInsertVertexPerformance() {
-        File f = new File("/tmp/neo4j-performance");
+
+        File f = new File(System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "neo4j-performance");
         if (f.exists()) {
             f.delete();
         }
@@ -55,7 +56,7 @@ public class TestNeo4jBlueprints {
 
 //    @Test
     public void testNeo4jPerformance() {
-        File f = new File("/tmp/neo4j-performance");
+        File f = new File(System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "neo4j-performance");
         if (f.exists()) {
             f.delete();
         }
@@ -96,7 +97,8 @@ public class TestNeo4jBlueprints {
 
 //    @Test
     public void testIndexCreatedInAThreadUsedInAnother() throws IOException, InterruptedException, ExecutionException {
-        final String url = "/tmp/blueprintstest2";
+
+        final String url = System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "blueprintstest2";
         File dir = new File(url);
         FileUtils.deleteDirectory(dir);
         final File f = new File(url);
@@ -137,7 +139,7 @@ public class TestNeo4jBlueprints {
 
     @Test
     public void testRollbackExceptionOnBeforeTxCommit() throws IOException {
-        final String url = "/tmp/blueprintstest2";
+        final String url = System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "blueprintstest2";
         File dir = new File(url);
         FileUtils.deleteDirectory(dir);
         final File f = new File(url);
@@ -176,7 +178,7 @@ public class TestNeo4jBlueprints {
 
     @Test
     public void testNewInstanceInNewThreadFails() throws IOException, InterruptedException {
-        final String url = "/tmp/blueprintstest2";
+        final String url = System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "blueprintstest2";
         File dir = new File(url);
         FileUtils.deleteDirectory(dir);
         final File f = new File(url);
@@ -217,7 +219,7 @@ public class TestNeo4jBlueprints {
 
     @Test
     public void testMultipleEdgesBetweenNodes() throws IOException {
-        final String url = "/tmp/blueprintstest2";
+        final String url = System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "blueprintstest2";
         File dir = new File(url);
         FileUtils.deleteDirectory(dir);
         final File f = new File(url);
@@ -240,7 +242,7 @@ public class TestNeo4jBlueprints {
     public void testSpeed() throws IOException {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
-        final String url = "/tmp/blueprintstest2";
+        final String url = System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "blueprintstest2";
         File dir = new File(url);
         FileUtils.deleteDirectory(dir);
         final File f = new File(url);
@@ -264,7 +266,7 @@ public class TestNeo4jBlueprints {
 
     @Test
     public void testNeo4jPropertyDifferentType() {
-        File f = new File("/tmp/neo4j-performance");
+        File f = new File(System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "neo4j-performance");
         if (f.exists()) {
             f.delete();
         }
@@ -287,7 +289,7 @@ public class TestNeo4jBlueprints {
 
 //    @Test
     public void testSpeedDude1() throws IOException {
-        File f = new File("/tmp/neo4j-performance");
+        File f = new File(System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "neo4j-performance");
         if (f.exists()) {
             FileUtils.deleteDirectory(f);
         }
@@ -339,7 +341,7 @@ public class TestNeo4jBlueprints {
 
 //    @Test
     public void testSpeedDude2() throws IOException {
-        File f = new File("/tmp/neo4j-performance");
+        File f = new File(System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "neo4j-performance");
         if (f.exists()) {
             FileUtils.deleteDirectory(f);
         }
@@ -422,7 +424,7 @@ public class TestNeo4jBlueprints {
 
 //    @Test
     public void testSpeedLinkedList() throws IOException {
-        File f = new File("/tmp/neo4j-performance");
+        File f = new File(System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "neo4j-performance");
         if (f.exists()) {
             FileUtils.deleteDirectory(f);
         }
@@ -492,7 +494,7 @@ public class TestNeo4jBlueprints {
 
 //    @Test
     public void testRemoveTransactionAlreadyWritable() throws IOException {
-        File f = new File("/tmp/neo4j-performance");
+        File f = new File(System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "neo4j-performance");
         if (f.exists()) {
             FileUtils.deleteDirectory(f);
         }
@@ -538,7 +540,7 @@ public class TestNeo4jBlueprints {
 
 //    @Test
     public void testIndexSpeed() throws IOException {
-        File f = new File("/tmp/neo4j-performance");
+        File f = new File(System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "neo4j-performance");
         if (f.exists()) {
             FileUtils.deleteDirectory(f);
         }

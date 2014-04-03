@@ -240,9 +240,19 @@
                 <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_LngEkKasEeOPt7R4er8hcg" value="1"/>
                 <defaultValue xmi:type="uml:OpaqueExpression" xmi:id="_RR1xMKasEeOPt7R4er8hcg" name="fullnameocl">
                   <language>OCL</language>
-                  <body>if (not self.name.oclIsUndefined()) then self.name.concat(' ').concat(self.name2)
+                  <body>if (not self.name.oclIsUndefined()) then 
+	if (not self.name2.oclIsUndefined()) then
+		self.name.concat(' ').concat(self.name2)
+	else
+		self.name
+	endif
+
 else
-null
+	if (not self.name2.oclIsUndefined()) then
+		self.name2
+	else
+		null
+	endif
 endif</body>
                 </defaultValue>
               </ownedAttribute>

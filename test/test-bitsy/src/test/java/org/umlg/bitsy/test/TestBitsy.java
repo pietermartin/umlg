@@ -1,23 +1,18 @@
 package org.umlg.bitsy.test;
 
 import com.lambdazen.bitsy.BitsyGraph;
-import com.lambdazen.bitsy.wrapper.BitsyAutoReloadingGraph;
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Vertex;
-import junit.framework.Assert;
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.time.StopWatch;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 /**
  * Date: 2013/10/15
@@ -27,12 +22,12 @@ public class TestBitsy {
 
     @Test
     public void testSpeedDude1() throws IOException {
-        File f = new File("/tmp/bitsy-performance");
+        File f = new File(System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "bitsy-performance");
         if (f.exists()) {
             FileUtils.deleteDirectory(f);
         }
         f.mkdir();
-        Path dbPath = Paths.get("/tmp/bitsy-performance");
+        Path dbPath = Paths.get(System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "bitsy-performance");
         BitsyGraph g = new BitsyGraph(dbPath);
         try {
 
@@ -82,12 +77,12 @@ public class TestBitsy {
 
 //    @Test
     public void testSpeedDude2() throws IOException {
-        File f = new File("/tmp/bitsy-performance");
+        File f = new File(System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "bitsy-performance");
         if (f.exists()) {
             FileUtils.deleteDirectory(f);
         }
         f.mkdir();
-        Path dbPath = Paths.get("/tmp/bitsy-performance");
+        Path dbPath = Paths.get(System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "bitsy-performance");
         BitsyGraph g = new BitsyGraph(dbPath);
         try {
             int NUMBER_TO_ITER = 10000000;
