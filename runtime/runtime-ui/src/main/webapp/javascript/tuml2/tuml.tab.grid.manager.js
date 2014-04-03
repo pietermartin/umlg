@@ -420,7 +420,7 @@
 
             this.instantiateGrid();
 
-            if (this.propertyNavigatingTo !== undefined && this.propertyNavigatingTo.ordered) {
+            if (this.propertyNavigatingTo !== undefined && !this.propertyNavigatingTo.associationClassOne && this.propertyNavigatingTo.ordered) {
                 this.setupRowDrag();
             }
 
@@ -1122,7 +1122,7 @@
                         sortable: true
                     };
 
-                    if (this.propertyNavigatingTo !== undefined && this.propertyNavigatingTo.ordered) {
+                    if (this.propertyNavigatingTo !== undefined && !this.propertyNavigatingTo.associationClassOne && this.propertyNavigatingTo.ordered) {
                         //This is for slickgrid's row move/drag plugin
                         options.behavior = "selectAndMove";
                         options.cssClass = "cell-reorder";

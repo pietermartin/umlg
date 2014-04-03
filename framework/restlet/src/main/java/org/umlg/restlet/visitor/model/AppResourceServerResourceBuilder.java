@@ -22,19 +22,15 @@ public class AppResourceServerResourceBuilder extends BaseServerResourceBuilder 
     @Override
     public void visitBefore(Model model) {
 
-//		OJAnnotatedInterface annotatedInf = new OJAnnotatedInterface("RootServerResource");
         OJPackage org = new OJPackage("org");
         OJPackage tuml = new OJPackage("umlg");
         tuml.setParent(org);
         OJPackage ojPackage = new OJPackage("restlet");
         ojPackage.setParent(tuml);
-//		annotatedInf.setMyPackage(ojPackage);
-//		addToSource(annotatedInf);
 
         OJAnnotatedClass annotatedClass = new OJAnnotatedClass("RootServerResourceImpl");
         annotatedClass.setSuperclass(UmlgRestletGenerationUtil.ServerResource);
         annotatedClass.setMyPackage(ojPackage);
-//		annotatedClass.addToImplementedInterfaces(annotatedInf.getPathName());
         addToSource(annotatedClass);
 
         addDefaultConstructor(annotatedClass);
