@@ -7,7 +7,7 @@
             Event: Event,
             EventData: EventData,
             EventHandler: EventHandler,
-            FocusEnum: {LEFT_MENU: 0, TOP_CONTEXT : 1, CENTER_TAB: 2, CENTER_GRID: 3}
+            FocusEnum: {LEFT_MENU: 0, TOP_CONTEXT: 1, CENTER_TAB: 2, CENTER_GRID: 3}
         }
     });
 
@@ -33,7 +33,7 @@
                     //This is the navbar height,
                     north: {initClosed: false, togglerLength_open: 0, minSize: topHeight, resizable: false, spacing_open: panelReziserSpace, spacing_closed: panelReziserSpace},
                     east: {initClosed: true, spacing_open: panelReziserSpace, spacing_closed: panelReziserSpace},
-                    south: {minSize: 30, togglerLength_open:	0,  initClosed: false, resizable: false, spacing_open: 0, spacing_closed: 0},
+                    south: {minSize: 30, togglerLength_open: 0, initClosed: false, resizable: false, spacing_open: 0, spacing_closed: 0},
                     west: {minSize: 300, spacing_open: panelReziserSpace, spacing_closed: panelReziserSpace}
                 }
             );
@@ -85,23 +85,23 @@
                     event.preventDefault();
                     event.stopImmediatePropagation();
                     return false;
-                } else  if (event.which == 27) {
+                } else if (event.which == 27) {
                     //27 = esc
                     self.cancelViaKeyPress();
                     event.preventDefault();
                     event.stopImmediatePropagation();
                     return false;
-                } else  if (event.ctrlKey && event.which == 8) {
+                } else if (event.ctrlKey && event.which == 8) {
                     //8 = <- back
                     self.goBackOne();
                     event.preventDefault();
                     event.stopImmediatePropagation();
-                } else  if (event.which == 117) {
+                } else if (event.which == 117) {
                     //F6
                     self.moveFocus();
                     event.preventDefault();
                     event.stopImmediatePropagation();
-                } else  if (event.which == 39) {
+                } else if (event.which == 39) {
                     //right arrow
 //                    alert('right arrow');
                 } else {
@@ -120,10 +120,26 @@
                 }
             });
 
+            var umlgWebsocket = new WebSocket("ws://" + window.location.host + "/" + tumlModelName + "/echo");
+            var userCountP = $('#userCountId');
+            umlgWebsocket.onmessage = function (event) {
+                console.log(event.data);
+                userCountP.text(tumlModelName + ' users = ' + event.data);
+            }
+            umlgWebsocket.onclose = function (event) {
+                console.log(event.data);
+            }
+            umlgWebsocket.onerror = function (event) {
+                console.log(event.data);
+            }
+            umlgWebsocket.onopen = function (event) {
+                console.log(event.data);
+            }
+
             self.refresh(tumlUri);
         }
 
-        this.goBackOne = function() {
+        this.goBackOne = function () {
             contextManager.goBackOne();
         }
 

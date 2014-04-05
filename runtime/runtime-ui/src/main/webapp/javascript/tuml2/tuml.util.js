@@ -48,8 +48,8 @@ function retrieveMetaDataIfNotInCache(tumlUri, contextVertexId, result, callback
             return tumlModelName;
         } else {
             var trimmedUrl = url.replace('/' + tumlModelName + '/', '');
-            var firstIndexOf =  trimmedUrl.indexOf('/');
-            var secondIndexOf =  trimmedUrl.indexOf('/', firstIndexOf + 1);
+            var firstIndexOf = trimmedUrl.indexOf('/');
+            var secondIndexOf = trimmedUrl.indexOf('/', firstIndexOf + 1);
             var result = trimmedUrl.substring(0, firstIndexOf + 1) + '{param}' + trimmedUrl.substring(secondIndexOf);
             return result;
         }
@@ -67,22 +67,22 @@ function combineMetaDataWithResult(result, metaDataResult) {
         //Copy the meta data from options into the data result
 //        if (result[i].data !== null && result[i].data.length > 0) {
 
-            if (metaDataResult[i].meta.from == undefined) {
-                result[i].meta = metaDataResult[i].meta;
-            } else {
+        if (metaDataResult[i].meta.from == undefined) {
+            result[i].meta = metaDataResult[i].meta;
+        } else {
 
-                for (var j = 0; j < metaDataResult.length; j++) {
+            for (var j = 0; j < metaDataResult.length; j++) {
 
-                    if (result[i].meta.qualifiedNameTo == metaDataResult[j].meta.to.qualifiedName) {
-                        //root scenario
-                        if (result[i].meta.qualifiedNameFrom == metaDataResult[j].meta.from.qualifiedName) {
-                            result[i].meta = metaDataResult[j].meta;
-                            break;
-                        }
+                if (result[i].meta.qualifiedNameTo == metaDataResult[j].meta.to.qualifiedName) {
+                    //root scenario
+                    if (result[i].meta.qualifiedNameFrom == metaDataResult[j].meta.from.qualifiedName) {
+                        result[i].meta = metaDataResult[j].meta;
+                        break;
                     }
-
                 }
+
             }
+        }
 
 //        }
     }
@@ -181,7 +181,8 @@ function selectFormatter(property, isNew, updatedId) {
 function selectFieldValidator(property) {
     if (property.name == 'uri') {
     } else if (property.derived) {
-    } else if (property.dataTypeEnum != null && property.dataTypeEnum !== undefined) { 3
+    } else if (property.dataTypeEnum != null && property.dataTypeEnum !== undefined) {
+        3
         if (property.upper > 1 || property.upper === -1) {
             if (property.dataTypeEnum == 'Date') {
                 return new TumlSlick.Validators.TumlManyDateValidator(property).validate;
@@ -365,6 +366,13 @@ function addUiToUrl(url) {
     return result;
 }
 
-function removeUiFromUrl(url){
+function removeUiFromUrl(url) {
     return url.replace("/ui2", "");
+}
+
+function createGuid() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
 }

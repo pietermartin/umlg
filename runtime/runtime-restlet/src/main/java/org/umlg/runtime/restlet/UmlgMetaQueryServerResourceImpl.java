@@ -18,39 +18,47 @@ public class UmlgMetaQueryServerResourceImpl extends ServerResource {
 
     @Override
     public Representation get() {
-        String id = UmlgURLDecoder.decode((String)getRequestAttributes().get("contextId"));
-        UmlgNode parentResource = UMLG.get().instantiateClassifier(id);
-        Object metaNodeId = parentResource.getMetaNode().getId();
-        String metaQueryUri = "riap://application/" + getRootRef().getLastSegment() + "/baseclassumlgs/" + UmlgURLDecoder.encode(metaNodeId.toString()) + "/classQuery";
-        ClientResource service = new ClientResource(metaQueryUri);
-        service.setNext(getContext().getServerDispatcher());
         try {
-            String s = service.get().getText();
-            return new JsonRepresentation(s);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            String id = UmlgURLDecoder.decode((String) getRequestAttributes().get("contextId"));
+            UmlgNode parentResource = UMLG.get().instantiateClassifier(id);
+            Object metaNodeId = parentResource.getMetaNode().getId();
+            String metaQueryUri = "riap://application/" + getRootRef().getLastSegment() + "/baseclassumlgs/" + UmlgURLDecoder.encode(metaNodeId.toString()) + "/classQuery";
+            ClientResource service = new ClientResource(metaQueryUri);
+            service.setNext(getContext().getServerDispatcher());
+            try {
+                String s = service.get().getText();
+                return new JsonRepresentation(s);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        } finally {
+            UMLG.get().rollback();
         }
     }
 
     @Override
     public Representation options() {
-        String id = UmlgURLDecoder.decode((String)getRequestAttributes().get("contextId"));
-        UmlgNode parentResource = UMLG.get().instantiateClassifier(id);
-        Object metaNodeId = parentResource.getMetaNode().getId();
-        String metaQueryUri = "riap://application/" + getRootRef().getLastSegment() + "/baseclassumlgs/" + UmlgURLDecoder.encode(metaNodeId.toString()) + "/classQuery";
-        ClientResource service = new ClientResource(metaQueryUri);
-        service.setNext(getContext().getServerDispatcher());
         try {
-            String s = service.options().getText();
-            return new JsonRepresentation(s);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            String id = UmlgURLDecoder.decode((String) getRequestAttributes().get("contextId"));
+            UmlgNode parentResource = UMLG.get().instantiateClassifier(id);
+            Object metaNodeId = parentResource.getMetaNode().getId();
+            String metaQueryUri = "riap://application/" + getRootRef().getLastSegment() + "/baseclassumlgs/" + UmlgURLDecoder.encode(metaNodeId.toString()) + "/classQuery";
+            ClientResource service = new ClientResource(metaQueryUri);
+            service.setNext(getContext().getServerDispatcher());
+            try {
+                String s = service.options().getText();
+                return new JsonRepresentation(s);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        } finally {
+            UMLG.get().rollback();
         }
     }
 
     @Override
     public Representation post(Representation entity) {
-        String id = UmlgURLDecoder.decode((String)getRequestAttributes().get("contextId"));
+        String id = UmlgURLDecoder.decode((String) getRequestAttributes().get("contextId"));
         UmlgNode parentResource = UMLG.get().instantiateClassifier(id);
         Object metaNodeId = parentResource.getMetaNode().getId();
         String metaQueryUri = "riap://application/" + getRootRef().getLastSegment() + "/baseclassumlgs/" + UmlgURLDecoder.encode(metaNodeId.toString()) + "/classQuery";
@@ -61,7 +69,7 @@ public class UmlgMetaQueryServerResourceImpl extends ServerResource {
 
     @Override
     public Representation put(Representation entity) {
-        String id = UmlgURLDecoder.decode((String)getRequestAttributes().get("contextId"));
+        String id = UmlgURLDecoder.decode((String) getRequestAttributes().get("contextId"));
         UmlgNode parentResource = UMLG.get().instantiateClassifier(id);
         Object metaNodeId = parentResource.getMetaNode().getId();
         String metaQueryUri = "riap://application/" + getRootRef().getLastSegment() + "/baseclassumlgs/" + UmlgURLDecoder.encode(metaNodeId.toString()) + "/classQuery";

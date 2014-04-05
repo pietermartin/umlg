@@ -5,6 +5,8 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Date: 2013/08/31
@@ -12,6 +14,7 @@ import java.io.File;
  */
 public class UmlgTitanGraphFactory implements UmlgGraphFactory {
 
+    private static final Logger logger = Logger.getLogger(UmlgTitanGraphFactory.class.getPackage().getName());
     public static UmlgTitanGraphFactory INSTANCE = new UmlgTitanGraphFactory();
     private UmlgGraph umlgGraph;
     private PropertiesConfiguration propertiesConfiguration;
@@ -35,13 +38,27 @@ public class UmlgTitanGraphFactory implements UmlgGraphFactory {
             }
             this.propertiesConfiguration.addProperty("storage.directory", f.getAbsolutePath());
             if (!f.exists()) {
-                this.umlgGraph = new UmlgTitanGraph(new GraphDatabaseConfiguration(this.propertiesConfiguration));
-                this.umlgGraph.addRoot();
-                this.umlgGraph.addDeletionNode();
-                this.umlgGraph.commit();
-                UmlgMetaNodeFactory.getUmlgMetaNodeManager().createAllMetaNodes();
-                UmlGIndexFactory.getUmlgIndexManager().createIndexes();
-                this.umlgGraph.commit();
+                try {
+                    this.umlgGraph = new UmlgTitanGraph(new GraphDatabaseConfiguration(this.propertiesConfiguration));
+                    this.umlgGraph.addRoot();
+                    this.umlgGraph.addDeletionNode();
+                    this.umlgGraph.commit();
+                    UmlgMetaNodeFactory.getUmlgMetaNodeManager().createAllMetaNodes();
+                    UmlGIndexFactory.getUmlgIndexManager().createIndexes();
+                    this.umlgGraph.commit();
+                    //Prepare groovy
+                    GroovyExecutor ge = GroovyExecutor.INSTANCE;
+                } catch (Exception e) {
+                    logger.log(Level.SEVERE, "Could not start titan db!", e);
+                    if (this.umlgGraph != null) {
+                        this.umlgGraph.rollback();
+                    }
+                    if (e instanceof RuntimeException) {
+                        throw (RuntimeException)e;
+                    } else {
+                        throw new RuntimeException(e);
+                    }
+                }
             } else {
                 this.umlgGraph = new UmlgTitanGraph(new GraphDatabaseConfiguration(this.propertiesConfiguration));
             }

@@ -26,22 +26,21 @@
             var ulClassNavbarRight = $('<ul />', {class: 'nav navbar-nav navbar-right'}).appendTo('.collapse.navbar-collapse');
 
 
-            var liUsersMenu = $('<li />', {class: 'dropdown'}).appendTo(ulClassNavbarRight);
-            $('<a href="#" class="dropdown-toggle" data-toggle="dropdown">Users <b class="caret"></b></a>').appendTo(liUsersMenu);
-            var ulUserMenuHolder = $('<ul />', {class: 'dropdown-menu'}).appendTo(liUsersMenu);
-            var liUsersAdmin1Menu = $('<li />').appendTo(ulUserMenuHolder);
-            var linkUsersAdmin1Menu = $('<a/>', {href: '#'}).text('aaaaaa').appendTo(liUsersAdmin1Menu);
-            var liUsersAdmin2Menu = $('<li />').appendTo(ulUserMenuHolder);
-            var linkUsersAdmin2Menu = $('<a/>', {href: '#'}).text('bbbbbb').appendTo(liUsersAdmin2Menu);
+            var liUMLGMenu = $('<li />', {class: 'dropdown'}).appendTo(ulClassNavbarRight);
+            $('<a href="#" class="dropdown-toggle" data-toggle="dropdown">UMLG <b class="caret"></b></a>').appendTo(liUMLGMenu);
+            var ulUMLGMenuHolder = $('<ul />', {class: 'dropdown-menu'}).appendTo(liUMLGMenu);
+            var liDocumentationMenu = $('<li />').appendTo(ulUMLGMenuHolder);
+            $('<a/>', {href: 'http://www.umlg.org/documentation.html', target: '_blank'}).text('Documentation').appendTo(liDocumentationMenu);
+            var liSourceMenu = $('<li />').appendTo(ulUMLGMenuHolder);
+            $('<a/>', {href: 'https://github.com/pietermartin/umlg', target: '_blank'}).text('Source').appendTo(liSourceMenu);
 
-
-            var liSearchMenu = $('<li />', {class: 'dropdown'}).appendTo(ulClassNavbarRight);
-            $('<a href="#" class="dropdown-toggle" data-toggle="dropdown">Search <b class="caret"></b></a>').appendTo(liSearchMenu);
-            var ulSearchMenuHolder = $('<ul />', {class: 'dropdown-menu'}).appendTo(liSearchMenu);
-            var liSearch1Menu = $('<li />').appendTo(ulSearchMenuHolder);
-            var linkSearch1Menu = $('<a/>', {href: '#'}).text('aaaaaa').appendTo(liSearch1Menu);
-            var liSearch2Menu = $('<li />').appendTo(ulSearchMenuHolder);
-            var linkSearch2Menu = $('<a/>', {href: '#'}).text('bbbbbb').appendTo(liSearch2Menu);
+//            var liSearchMenu = $('<li />', {class: 'dropdown'}).appendTo(ulClassNavbarRight);
+//            $('<a href="#" class="dropdown-toggle" data-toggle="dropdown">Search <b class="caret"></b></a>').appendTo(liSearchMenu);
+//            var ulSearchMenuHolder = $('<ul />', {class: 'dropdown-menu'}).appendTo(liSearchMenu);
+//            var liSearch1Menu = $('<li />').appendTo(ulSearchMenuHolder);
+//            var linkSearch1Menu = $('<a/>', {href: '#'}).text('aaaaaa').appendTo(liSearch1Menu);
+//            var liSearch2Menu = $('<li />').appendTo(ulSearchMenuHolder);
+//            var linkSearch2Menu = $('<a/>', {href: '#'}).text('bbbbbb').appendTo(liSearch2Menu);
 
 //            $('.embossed').remove();
 //            var p = $('<div />', {class: 'embossed'});

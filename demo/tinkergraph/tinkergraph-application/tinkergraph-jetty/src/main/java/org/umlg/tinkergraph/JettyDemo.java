@@ -1,11 +1,15 @@
 package org.umlg.tinkergraph;
 
-import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.handler.ContextHandlerCollection;
-import org.eclipse.jetty.webapp.WebAppContext;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.uml2.uml.Model;
+import org.restlet.ext.servlet.ServerServlet;
+import org.umlg.framework.ModelLoader;
+import org.umlg.jetty.websocket.UmlgWebsocketServlet;
 
 import java.net.InetSocketAddress;
+import java.net.URL;
 import java.util.Properties;
 
 /**
@@ -15,18 +19,32 @@ import java.util.Properties;
 public class JettyDemo {
 
     public static void main(String[] args) throws Exception {
+
+        URL modelFileURL = Thread.currentThread().getContextClassLoader().getResource("tinkergraph.uml");
+        if (modelFileURL == null) {
+            throw new IllegalStateException(String.format("Model file %s not found. The model's file name must be on the classpath.", "tinkergraph.uml"));
+        }
+
+        Model model = ModelLoader.INSTANCE.loadModel(modelFileURL.toURI());
+
         Properties prop = new Properties();
         prop.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("umlg.jetty.properties"));
-        Server server = new Server(new InetSocketAddress(prop.getProperty("webserver.ip"), 8111));
+        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        Server server = new Server(new InetSocketAddress(prop.getProperty("webserver.ip"), Integer.valueOf(prop.getProperty("webserver.port"))));
+        context.setContextPath("/tinkergraph");
+        server.setHandler(context);
 
-        ContextHandlerCollection contexts = new ContextHandlerCollection();
+        //Restlet servlet
+        ServletHolder restletServletHolder = new ServletHolder(new ServerServlet());
+        restletServletHolder.setName("org.umlg.tinkergraph.TinkergraphApplication");
+        restletServletHolder.setInitParameter("org.restlet.application", "org.umlg.tinkergraph.TinkergraphApplication");
+        restletServletHolder.setInitParameter("org.restlet.clients", "HTTP FILE CLAP");
+        context.addServlet(restletServletHolder, "/*");
 
-        WebAppContext graph = new WebAppContext();
-        graph.setContextPath("/tinkergraph");
-        graph.setWar("./demo/tinkergraph/tinkergraph-application/tinkergraph-war/target/tinkergraph-war");
-
-        contexts.setHandlers(new Handler[] {  graph });
-        server.setHandler(contexts);
+        //Websocket servlet
+        ServletHolder websocketServletHolder = new ServletHolder(new UmlgWebsocketServlet());
+        websocketServletHolder.setName("Umlg WebSocket Servlet");
+        context.addServlet(websocketServletHolder, "/echo");
 
         server.start();
         server.join();

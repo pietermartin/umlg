@@ -634,7 +634,7 @@ public class AssociationClassOverloadedPostServerResourceBuilder extends BaseSer
 
         OJField uri = new OJField();
         uri.setType(new OJPathName("String"));
-        uri.setInitExp("\"/" + pWrap.getAssociationClassPathName().getLast().toLowerCase() + "s/{"
+        uri.setInitExp("\""+UmlgRestletGenerationUtil.restletContext+"/" + pWrap.getAssociationClassPathName().getLast().toLowerCase() + "s/{"
                 + pWrap.getAssociationClassPathName().getLast().toLowerCase() + "Id}/" + pWrap.fieldname() + "\"");
         ojLiteral.addToAttributeValues(uri);
 

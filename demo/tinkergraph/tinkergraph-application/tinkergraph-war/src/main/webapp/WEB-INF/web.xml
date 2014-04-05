@@ -5,8 +5,6 @@
 <web-app>
     <display-name>Demo Web Application</display-name>
 
-
-
     <servlet>
         <servlet-name>TinkergraphApplication</servlet-name>
         <servlet-class>
@@ -22,9 +20,21 @@
         </init-param>
     </servlet>
 
+    <servlet>
+        <servlet-name>MyEcho WebSocket Servlet</servlet-name>
+        <servlet-class>
+            org.umlg.jetty.websocket.UmlgWebsocketServlet
+        </servlet-class>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>TinkergraphApplication</servlet-name>
         <url-pattern>/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>MyEcho WebSocket Servlet</servlet-name>
+        <url-pattern>/echo</url-pattern>
     </servlet-mapping>
 
 </web-app>

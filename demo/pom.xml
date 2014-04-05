@@ -13,7 +13,6 @@
     <name>umlg demo pom</name>
     <modules>
         <module>demo-application</module>
-        <module>demo-quick-preview</module>
         <module>tinkergraph</module>
         <module>graphofthegods</module>
     </modules>

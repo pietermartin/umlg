@@ -82,13 +82,18 @@
 			<groupId>org.umlg</groupId>
 			<artifactId>runtime-restlet</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
-		</dependency>		
-		<dependency>
+		</dependency>
+        <dependency>
+            <groupId>org.umlg</groupId>
+            <artifactId>runtime-jetty</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
 			<groupId>org.umlg</groupId>
-			<artifactId>runtime-domain-neo4j</artifactId>
+			<!--<artifactId>runtime-domain-neo4j</artifactId>-->
             <!--<artifactId>runtime-domain-orientdb</artifactId>-->
             <!--<artifactId>runtime-domain-bitsy</artifactId>-->
-            <!--<artifactId>runtime-domain-titan</artifactId>-->
+            <artifactId>runtime-domain-titan</artifactId>
             <!--<artifactId>runtime-domain-thundergraph</artifactId>-->
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>

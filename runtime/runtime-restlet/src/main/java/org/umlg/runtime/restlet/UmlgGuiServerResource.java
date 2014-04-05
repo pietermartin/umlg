@@ -14,6 +14,7 @@ import org.umlg.runtime.util.UmlgProperties;
 import org.umlg.runtime.util.UmlgUtil;
 
 import java.io.File;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -63,7 +64,10 @@ public class UmlgGuiServerResource extends ServerResource {
         } catch (ClassNotFoundException e) {
             servlet = false;
         }
-
+        if (servlet) {
+            URL jettyMarler = Thread.currentThread().getContextClassLoader().getResource("jetty.marker");
+            servlet = jettyMarler == null;
+        }
         if (servlet)  {
             Representation umlgUiFtl = new ClientResource("war:///resources/org/umlg/ui/umlgui2.html").get();
             return new TemplateRepresentation(umlgUiFtl, dataModel, MediaType.TEXT_HTML);

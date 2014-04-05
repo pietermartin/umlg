@@ -7,12 +7,15 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Neo4j db is a singleton
  */
 public class UmlgBitsyGraphFactory implements UmlgGraphFactory {
 
+    private static final Logger logger = Logger.getLogger(UmlgBitsyGraphFactory.class.getPackage().getName());
     public static UmlgBitsyGraphFactory INSTANCE = new UmlgBitsyGraphFactory();
     private UmlgGraph umlgGraph;
 
@@ -32,13 +35,28 @@ public class UmlgBitsyGraphFactory implements UmlgGraphFactory {
                 f.mkdir();
                 Path dbPath = Paths.get(f.getAbsolutePath());
                 BitsyGraph bitsyGraph = new BitsyGraph(dbPath);
-                this.umlgGraph = new UmlgBitsyGraph(bitsyGraph);
-                this.umlgGraph.addRoot();
-                this.umlgGraph.addDeletionNode();
-                this.umlgGraph.commit();
-                UmlgMetaNodeFactory.getUmlgMetaNodeManager().createAllMetaNodes();
-                UmlGIndexFactory.getUmlgIndexManager().createIndexes();
-                this.umlgGraph.commit();
+                try {
+                    this.umlgGraph = new UmlgBitsyGraph(bitsyGraph);
+                    this.umlgGraph.addRoot();
+                    this.umlgGraph.addDeletionNode();
+                    this.umlgGraph.commit();
+                    UmlgMetaNodeFactory.getUmlgMetaNodeManager().createAllMetaNodes();
+                    UmlGIndexFactory.getUmlgIndexManager().createIndexes();
+                    this.umlgGraph.commit();
+                    this.umlgGraph.commit();
+                    //Prepare groovy
+                    GroovyExecutor ge = GroovyExecutor.INSTANCE;
+                } catch (Exception e) {
+                    logger.log(Level.SEVERE, "Could not start titan db!", e);
+                    if (this.umlgGraph != null) {
+                        this.umlgGraph.rollback();
+                    }
+                    if (e instanceof RuntimeException) {
+                        throw (RuntimeException) e;
+                    } else {
+                        throw new RuntimeException(e);
+                    }
+                }
             } else {
                 Path dbPath = Paths.get(f.getAbsolutePath());
                 BitsyGraph bitsyGraph = new BitsyGraph(dbPath);

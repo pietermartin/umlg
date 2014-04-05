@@ -1,27 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <groupId>org.umlg</groupId>
-        <artifactId>tinkergraph-application</artifactId>
-        <version>1.0-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
-    </parent>
-    <modelVersion>4.0.0</modelVersion>
-    <artifactId>tinkergraph-jetty</artifactId>
-    <packaging>jar</packaging>
-    <name>tinkergraph-jetty</name>
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.umlg</groupId>
+		<artifactId>runtime</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>runtime-jetty</artifactId>
+	<dependencies>
 
-    <dependencies>
-
+        <!-- Add restlet servlet bridge -->
         <dependency>
-            <groupId>org.umlg</groupId>
-            <artifactId>tinkergraph-restlet</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>org.restlet.jee</groupId>
+            <artifactId>org.restlet.ext.servlet</artifactId>
+            <version>${restlet.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.umlg</groupId>
-            <artifactId>runtime-jetty</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <groupId>org.restlet.jee</groupId>
+            <artifactId>org.restlet</artifactId>
+            <version>${restlet.version}</version>
         </dependency>
 
         <dependency>
@@ -44,18 +41,20 @@
             <artifactId>jetty-security</artifactId>
             <version>9.1.3.v20140225</version>
         </dependency>
-
-        <!-- This is to force maven to build the generator first -->
         <dependency>
-            <groupId>org.umlg</groupId>
-            <artifactId>tinkergraph-generator</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>provided</scope>
+            <groupId>org.eclipse.jetty.websocket</groupId>
+            <artifactId>websocket-api</artifactId>
+            <version>9.1.3.v20140225</version>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.11</version>
+            <groupId>org.eclipse.jetty.websocket</groupId>
+            <artifactId>websocket-server</artifactId>
+            <version>9.1.3.v20140225</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty.websocket</groupId>
+            <artifactId>websocket-servlet</artifactId>
+            <version>9.1.3.v20140225</version>
         </dependency>
     </dependencies>
 </project>

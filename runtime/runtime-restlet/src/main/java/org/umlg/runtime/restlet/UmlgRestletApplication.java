@@ -10,11 +10,13 @@ import org.restlet.routing.Router;
 import org.restlet.routing.Template;
 import org.umlg.ocl.UmlgOcl2Parser;
 import org.umlg.runtime.adaptor.DefaultDataCreator;
+import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.adaptor.UmlgAdminAppFactory;
 import org.umlg.runtime.adaptor.UmlgGraphManager;
 import org.umlg.runtime.util.UmlgProperties;
 
 import java.io.File;
+import java.net.URL;
 
 /**
  * Date: 2014/01/15
@@ -46,6 +48,10 @@ public abstract class UmlgRestletApplication extends Application {
             servlet = false;
         } catch (ClassNotFoundException e) {
             servlet = false;
+        }
+        if (servlet) {
+            URL jettyMarler = Thread.currentThread().getContextClassLoader().getResource("jetty.marker");
+            servlet = jettyMarler == null;
         }
         if (servlet) {
             slickgrid = new Directory(getContext(), "war:///javascript/");
@@ -106,5 +112,6 @@ public abstract class UmlgRestletApplication extends Application {
                 throw new RuntimeException(e);
             }
         }
+        UMLG.get().rollback();
     }
 }
