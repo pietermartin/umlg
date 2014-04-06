@@ -83,17 +83,17 @@ input.slick-grid-umlg-editor-text {
     float: left;
 }
 
-/* Needed to make the band Umlg appear in the middle */
-#umlgnavbar .navbar .nav,
-#umlgnavbar .navbar .nav > li {
-    float: none;
-    display: inline-block;
-    vertical-align: top;
-}
+/* Needed to make the brand Umlg appear in the middle */
+/*#umlgnavbar .navbar .nav,*/
+/*#umlgnavbar .navbar .nav > li {*/
+    /*float: none;*/
+    /*display: inline-block;*/
+    /*vertical-align: top;*/
+/*}*/
 
-#umlgnavbar {
-    text-align: center;
-}
+/*#umlgnavbar {*/
+    /*text-align: center;*/
+/*}*/
 
 .poweredby {
     /*float: right;*/

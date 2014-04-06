@@ -1,4 +1,4 @@
-package org.umlg.restandjson.jetty;
+package org.umlg.graphofthegods;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -7,32 +7,36 @@ import org.restlet.ext.servlet.ServerServlet;
 import org.umlg.framework.ModelLoader;
 import org.umlg.jetty.websocket.UmlgWebsocketServlet;
 
+import java.net.InetSocketAddress;
 import java.net.URL;
-
+import java.util.Properties;
 
 /**
- * Date: 2014/04/04
- * Time: 9:22 PM
+ * Date: 2014/02/19
+ * Time: 8:34 PM
  */
-public class RestAndJsonJetty {
+public class GraphOfTheGodsDemo {
 
     public static void main(String[] args) throws Exception {
-        //Load the uml model
-        URL modelFileURL = Thread.currentThread().getContextClassLoader().getResource("restAndJson.uml");
+
+        URL modelFileURL = Thread.currentThread().getContextClassLoader().getResource("graphofthegods.uml");
         if (modelFileURL == null) {
-            throw new IllegalStateException(String.format("Model file %s not found. The model's file name must be on the classpath.", "restAndJson.uml"));
+            throw new IllegalStateException(String.format("Model file %s not found. The model's file name must be on the classpath.", "graphofthegods.uml"));
         }
+
         ModelLoader.INSTANCE.loadModel(modelFileURL.toURI());
 
-        Server server = new Server(8111);
+        Properties prop = new Properties();
+        prop.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("umlg.jetty.properties"));
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        context.setContextPath("/restAndJson");
+        Server server = new Server(new InetSocketAddress(prop.getProperty("webserver.ip"), Integer.valueOf(prop.getProperty("webserver.port"))));
+        context.setContextPath("/graphofthegods");
         server.setHandler(context);
 
         //Restlet servlet
         ServletHolder restletServletHolder = new ServletHolder(new ServerServlet());
-        restletServletHolder.setName("org.umlg.restandjson.RestAndJsonApplication");
-        restletServletHolder.setInitParameter("org.restlet.application", "org.umlg.restandjson.RestAndJsonApplication");
+        restletServletHolder.setName("org.umlg.graphofthegods.GraphofthegodsApplication");
+        restletServletHolder.setInitParameter("org.restlet.application", "org.umlg.graphofthegods.GraphofthegodsApplication");
         restletServletHolder.setInitParameter("org.restlet.clients", "HTTP FILE CLAP");
         context.addServlet(restletServletHolder, "/*");
 
@@ -43,5 +47,6 @@ public class RestAndJsonJetty {
 
         server.start();
         server.join();
+
     }
 }

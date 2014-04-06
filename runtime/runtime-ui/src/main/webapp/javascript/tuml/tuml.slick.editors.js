@@ -676,7 +676,7 @@
             $input.datepicker({
                 showOn: "button",
                 buttonImageOnly: true,
-                buttonImage: "../javascript/slickgrid/images/calendar.gif",
+                buttonImage: "/" + tumlModelName + "/javascript/slickgrid/images/calendar.gif",
                 dateFormat: "yy-mm-dd",
                 beforeShow: function () {
                     calendarOpen = true;
@@ -784,7 +784,7 @@
             $input.datetimepicker({
                 showOn: "button",
                 buttonImageOnly: true,
-                buttonImage: "../javascript/slickgrid/images/calendar.gif",
+                buttonImage: "/" + tumlModelName + "/javascript/slickgrid/images/calendar.gif",
                 dateFormat: "yy-mm-dd",
                 timeFormat: "hh:mm:ss",
                 beforeShow: function () {
@@ -894,7 +894,7 @@
             $input.timepicker({
                 showOn: "button",
                 buttonImageOnly: true,
-                buttonImage: "../javascript/slickgrid/images/calendar.gif",
+                buttonImage: "/" + tumlModelName + "/javascript/slickgrid/images/calendar.gif",
                 beforeShow: function () {
                     calendarOpen = true
                 },

@@ -11,8 +11,6 @@
 	<packaging>pom</packaging>
 	<name>archetypes</name>
 	<modules>
-		<module>umlg-archetype-datatypes</module>
-		<module>umlg-archetype-full</module>
-		<module>umlg-archetype-minimal</module>
+		<module>umlg-archetype</module>
 	</modules>
 </project>

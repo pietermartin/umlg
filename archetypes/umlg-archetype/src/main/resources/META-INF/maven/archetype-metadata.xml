@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<archetype-descriptor xsi:schemaLocation="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0 http://maven.apache.org/xsd/archetype-descriptor-1.0.0.xsd" name="tinkergraph"
+    xmlns="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <requiredProperties>
+        <requiredProperty key="_1-Bitsy_2-Neo4j_3-Titan_BerkeleyDb"></requiredProperty>
+    </requiredProperties>
+
+  <modules>
+    <module id="${rootArtifactId}-generator" dir="__rootArtifactId__-generator" name="${rootArtifactId}-generator">
+      <fileSets>
+        <fileSet filtered="true" packaged="true" encoding="UTF-8">
+          <directory>src/main/java</directory>
+          <includes>
+            <include>**/*.java</include>
+          </includes>
+        </fileSet>
+      </fileSets>
+    </module>
+    <module id="${rootArtifactId}-application" dir="__rootArtifactId__-application" name="${rootArtifactId}-application">
+      <modules>
+        <module id="${rootArtifactId}-entities" dir="__rootArtifactId__-entities" name="${rootArtifactId}-entities">
+          <fileSets>
+            <fileSet filtered="true" encoding="UTF-8">
+              <directory>src/main/generated-groovy</directory>
+              <includes>
+                <include>**/*.gitignore</include>
+              </includes>
+            </fileSet>
+            <fileSet encoding="UTF-8">
+              <directory>src/main/generated-java-meta</directory>
+              <includes>
+                <include>**/*.gitignore</include>
+              </includes>
+            </fileSet>
+            <fileSet encoding="UTF-8">
+              <directory>src/main/generated-java</directory>
+              <includes>
+                <include>**/*.gitignore</include>
+              </includes>
+            </fileSet>
+              <fileSet filtered="true" packaged="true" encoding="UTF-8">
+                  <directory>src/main/java</directory>
+                  <includes>
+                      <include>**/*.java</include>
+                  </includes>
+              </fileSet>
+            <fileSet filtered="true" packaged="true" encoding="UTF-8">
+              <directory>src/test/java</directory>
+              <includes>
+                <include>**/*.java</include>
+              </includes>
+            </fileSet>
+              <fileSet filtered="false" encoding="UTF-8">
+                  <directory>src/main/resources</directory>
+                  <includes>
+                      <include>**/*.properties</include>
+                  </includes>
+              </fileSet>
+              <fileSet encoding="UTF-8">
+                  <directory>src/main/model</directory>
+                  <includes>
+                      <include>**/*.di</include>
+                      <include>**/*.uml</include>
+                      <include>**/*.notation</include>
+                  </includes>
+              </fileSet>
+          </fileSets>
+        </module>
+        <module id="${rootArtifactId}-restlet" dir="__rootArtifactId__-restlet" name="${rootArtifactId}-restlet">
+          <fileSets>
+            <fileSet filtered="true" encoding="UTF-8">
+              <directory>src/main/generated-java-restlet</directory>
+              <includes>
+                <include>**/*.java</include>
+              </includes>
+            </fileSet>
+            <fileSet encoding="UTF-8">
+              <directory>src/main/generated-java-restlet</directory>
+              <includes>
+                <include>**/*.gitignore</include>
+              </includes>
+            </fileSet>
+          </fileSets>
+        </module>
+        <module id="${rootArtifactId}-war" dir="__rootArtifactId__-war" name="${rootArtifactId}-war">
+          <fileSets>
+            <fileSet filtered="true" encoding="UTF-8">
+              <directory>src/main/webapp</directory>
+              <includes>
+                <include>**/*.xml</include>
+              </includes>
+            </fileSet>
+          </fileSets>
+        </module>
+        <module id="${rootArtifactId}-jetty" dir="__rootArtifactId__-jetty" name="${rootArtifactId}-jetty">
+          <fileSets>
+            <fileSet filtered="true" packaged="true" encoding="UTF-8">
+              <directory>src/main/java</directory>
+              <includes>
+                <include>**/*.java</include>
+              </includes>
+            </fileSet>
+            <fileSet filtered="true" encoding="UTF-8">
+              <directory>src/main/resources</directory>
+              <includes>
+                <include>**/*.properties</include>
+              </includes>
+            </fileSet>
+          </fileSets>
+        </module>
+      </modules>
+    </module>
+  </modules>
+</archetype-descriptor>

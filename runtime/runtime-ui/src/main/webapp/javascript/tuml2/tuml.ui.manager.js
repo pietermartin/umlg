@@ -120,7 +120,7 @@
                 }
             });
 
-            var umlgWebsocket = new WebSocket("ws://" + window.location.host + "/" + tumlModelName + "/echo");
+            var umlgWebsocket = new WebSocket("ws://" + window.location.host + "/" + tumlModelName + "/websocket");
             var userCountP = $('#userCountId');
             umlgWebsocket.onmessage = function (event) {
                 console.log(event.data);
