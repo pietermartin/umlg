@@ -22,6 +22,7 @@
             <directory>${basedir}/src/main/resources</directory>
             <includes>
                 <include>*.umlg.env.properties</include>
+                <include>umlg.env.properties</include>
             </includes>
             <outputDirectory>./resources</outputDirectory>
         </fileSet>
