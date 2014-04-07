@@ -23,9 +23,6 @@
             <includes>
                 <include>*.umlg.env.properties</include>
             </includes>
-            <excludes>
-                <exclude>umlg.env.properties</exclude>
-            </excludes>
             <outputDirectory>./resources</outputDirectory>
         </fileSet>
         <fileSet>

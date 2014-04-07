@@ -1,12 +1,16 @@
 package org.umlg.demo;
 
+import org.apache.commons.io.FileUtils;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.umlg.runtime.util.UmlgProperties;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.net.InetSocketAddress;
+import java.util.Properties;
 
 /**
  * Date: 2014/02/19
@@ -15,7 +19,11 @@ import java.net.InetSocketAddress;
 public class JettyDemo {
 
     public static void main(String[] args) throws Exception {
-        Server server = new Server(new InetSocketAddress(UmlgProperties.INSTANCE.getWebserverIp(), UmlgProperties.INSTANCE.getWebserverPort()));
+        Properties prop = new Properties();
+        FileInputStream inStream = FileUtils.openInputStream(new File("../resources/umlg.env.properties"));
+        prop.load(inStream);
+        inStream.close();
+        Server server = new Server(new InetSocketAddress(prop.getProperty("webserver.ip"), Integer.valueOf(prop.getProperty("webserver.port"))));
 
         ContextHandlerCollection contexts = new ContextHandlerCollection();
 
