@@ -12,7 +12,7 @@
         </servlet-class>
         <init-param>
             <param-name>org.restlet.application</param-name>
-            <param-value>org.umld.demo.DemoApplication</param-value>
+            <param-value>org.umlg.demo.DemoApplication</param-value>
         </init-param>
         <init-param>
             <param-name>org.restlet.clients</param-name>

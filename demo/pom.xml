@@ -12,9 +12,9 @@
     <packaging>pom</packaging>
     <name>umlg demo pom</name>
     <modules>
-        <module>demo-application</module>
         <module>tinkergraph</module>
         <module>graphofthegods</module>
+        <module>demo-application</module>
     </modules>
     <dependencies>
         <dependency>

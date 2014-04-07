@@ -36,7 +36,7 @@
 		<dependency>
 			<groupId>org.umlg</groupId>
 			<artifactId>uml</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${umlg.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-lang</groupId>

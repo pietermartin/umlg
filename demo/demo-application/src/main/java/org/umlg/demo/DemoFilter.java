@@ -1,4 +1,4 @@
-package org.umld.demo;
+package org.umlg.demo;
 
 import org.restlet.Context;
 import org.restlet.Request;

@@ -1,4 +1,4 @@
-package org.umld.demo;
+package org.umlg.demo;
 
 import org.restlet.data.MediaType;
 import org.restlet.ext.freemarker.TemplateRepresentation;

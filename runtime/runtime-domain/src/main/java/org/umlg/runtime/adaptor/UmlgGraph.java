@@ -35,6 +35,7 @@ public interface UmlgGraph extends TransactionalGraph, KeyIndexableGraph {
     <T> T instantiateClassifier(Object id);
 
     <T extends PersistentObject> T getFromUniqueIndex(String indexKey, Object indexValue);
+
     <T extends PersistentObject> List<T> getFromIndex(String indexKey, Object indexValue);
 
     boolean hasEdgeBeenDeleted(Edge edge);
@@ -56,6 +57,7 @@ public interface UmlgGraph extends TransactionalGraph, KeyIndexableGraph {
     void addDeletionNode();
 
     String executeQueryToString(UmlgQueryEnum umlgQueryEnum, Object contextId, String query);
+
     Object executeQuery(UmlgQueryEnum umlgQueryEnum, Object contextId, String query);
 
     /**

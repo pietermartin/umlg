@@ -13,12 +13,12 @@
         <dependency>
             <groupId>org.umlg</groupId>
             <artifactId>runtime-domain-neo4j</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${umlg.version}</version>
         </dependency>
         <dependency>
             <groupId>org.umlg</groupId>
             <artifactId>runtime-test</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${umlg.version}</version>
         </dependency>
     </dependencies>
 </project>

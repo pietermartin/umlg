@@ -12,17 +12,17 @@
 		<dependency>
 			<groupId>org.umlg</groupId>
 			<artifactId>ocl</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${umlg.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.umlg</groupId>
 			<artifactId>java-generation-ocl</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${umlg.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.umlg</groupId>
 			<artifactId>runtime-groovy</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${umlg.version}</version>
 		</dependency>
 	</dependencies>
 </project>

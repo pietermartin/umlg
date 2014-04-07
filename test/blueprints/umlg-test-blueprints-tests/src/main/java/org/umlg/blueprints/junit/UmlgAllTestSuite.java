@@ -101,7 +101,6 @@ import org.umlg.tests.validationtest.TestValidation;
         ManyToManyOrderedSetTest.class,
         ManyToManySequenceTest.class,
         ManyToManyToSelfSequenceTest.class
-//        TransactionSuspendResumeTest.class,
 })
 public class UmlgAllTestSuite {
 }

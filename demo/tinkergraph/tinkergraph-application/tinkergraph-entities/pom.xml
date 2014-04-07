@@ -55,12 +55,12 @@
         <dependency>
             <groupId>org.umlg</groupId>
             <artifactId>runtime-domain-neo4j</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${umlg.version}</version>
         </dependency>
         <dependency>
             <groupId>org.umlg</groupId>
             <artifactId>runtime-uml</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${umlg.version}</version>
         </dependency>
         <!-- This is to force maven to build the generator first -->
         <dependency>

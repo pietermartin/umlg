@@ -12,22 +12,22 @@
         <dependency>
             <groupId>org.umlg</groupId>
             <artifactId>generation</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${umlg.version}</version>
         </dependency>
         <dependency>
             <groupId>org.umlg</groupId>
             <artifactId>java-generation-util</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${umlg.version}</version>
         </dependency>
         <dependency>
             <groupId>org.umlg</groupId>
             <artifactId>java-generation-ocl</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${umlg.version}</version>
         </dependency>
         <dependency>
             <groupId>org.umlg</groupId>
             <artifactId>ocl</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${umlg.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>

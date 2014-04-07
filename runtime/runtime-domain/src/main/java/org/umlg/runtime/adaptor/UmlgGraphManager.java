@@ -27,7 +27,7 @@ public class UmlgGraphManager {
 
     public UmlgGraph startupGraph() {
         try {
-            String dbUrl = UmlgProperties.INSTANCE.getTumlDbLocation();
+            String dbUrl = UmlgProperties.INSTANCE.getUmlgDbLocation();
             if (this.nakedGraphFactory == null) {
                 UmlgAdaptorImplementation umlgAdaptorImplementation = UmlgAdaptorImplementation.fromName(UmlgUtil.getBlueprintsImplementation());
                 @SuppressWarnings("unchecked")
@@ -57,7 +57,7 @@ public class UmlgGraphManager {
             nakedGraphFactory.shutdown();
             nakedGraphFactory.clear();
             //Delete the files
-            String dbUrl = UmlgProperties.INSTANCE.getTumlDbLocation();
+            String dbUrl = UmlgProperties.INSTANCE.getUmlgDbLocation();
             String parsedUrl = dbUrl;
             if (dbUrl.startsWith("local:")) {
                 parsedUrl = dbUrl.replace("local:", "");
@@ -83,7 +83,7 @@ public class UmlgGraphManager {
 
     public void backupGraph() {
         try {
-            String dbUrl = UmlgProperties.INSTANCE.getTumlDbLocation();
+            String dbUrl = UmlgProperties.INSTANCE.getUmlgDbLocation();
             String parsedUrl = dbUrl;
             if (dbUrl.startsWith("local:")) {
                 parsedUrl = dbUrl.replace("local:", "");

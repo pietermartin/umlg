@@ -81,12 +81,12 @@
 		<dependency>
 			<groupId>org.umlg</groupId>
 			<artifactId>runtime-restlet</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${umlg.version}</version>
 		</dependency>
         <dependency>
             <groupId>org.umlg</groupId>
             <artifactId>runtime-jetty</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${umlg.version}</version>
         </dependency>
         <dependency>
 			<groupId>org.umlg</groupId>
@@ -95,22 +95,22 @@
             <!--<artifactId>runtime-domain-bitsy</artifactId>-->
             <artifactId>runtime-domain-titan</artifactId>
             <!--<artifactId>runtime-domain-thundergraph</artifactId>-->
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${umlg.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.umlg</groupId>
 			<artifactId>runtime-ui</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${umlg.version}</version>
 		</dependency>		
 		<dependency>
 			<groupId>org.umlg</groupId>
 			<artifactId>runtime-test-restlet</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${umlg.version}</version>
 		</dependency>
         <dependency>
             <groupId>org.umlg</groupId>
             <artifactId>runtime-restlet-client</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${umlg.version}</version>
         </dependency>
 	</dependencies>
 </project>

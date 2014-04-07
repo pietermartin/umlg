@@ -40,7 +40,7 @@ public class TestDemo {
 
     @Before
     public void before() throws IOException {
-        File dbDir = new File(UmlgProperties.INSTANCE.getTumlDbLocation());
+        File dbDir = new File(UmlgProperties.INSTANCE.getUmlgDbLocation());
         if (dbDir.exists()) {
             FileUtils.deleteDirectory(dbDir);
         }

@@ -20,7 +20,7 @@
 		<dependency>
 			<groupId>org.umlg</groupId>
 			<artifactId>runtime-domain</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${umlg.version}</version>
 		</dependency>
 	</dependencies>
 </project>

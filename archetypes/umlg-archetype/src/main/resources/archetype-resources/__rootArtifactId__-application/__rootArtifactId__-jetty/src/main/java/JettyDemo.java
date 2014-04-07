@@ -27,7 +27,7 @@ public class JettyDemo {
         if (modelFileURL == null) {
             throw new IllegalStateException(String.format("Model file %s not found. The model's file name must be on the classpath.", "umlg-demo1.uml"));
         }
-        Model model = ModelLoader.INSTANCE.loadModel(modelFileURL.toURI());
+        ModelLoader.INSTANCE.loadModel(modelFileURL.toURI());
 
         Properties prop = new Properties();
         prop.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("umlg.jetty.properties"));

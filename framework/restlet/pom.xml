@@ -12,7 +12,7 @@
 		<dependency>
 			<groupId>org.umlg</groupId>
 			<artifactId>java-generation</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${umlg.version}</version>
 		</dependency>
 	</dependencies>
 </project>

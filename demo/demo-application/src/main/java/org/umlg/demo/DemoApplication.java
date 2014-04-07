@@ -1,4 +1,4 @@
-package org.umld.demo;
+package org.umlg.demo;
 
 import org.restlet.Application;
 import org.restlet.Restlet;
@@ -6,10 +6,6 @@ import org.restlet.resource.Directory;
 import org.restlet.routing.Router;
 import org.restlet.routing.Template;
 import org.umlg.runtime.restlet.ErrorStatusService;
-import org.umlg.runtime.restlet.UmlgRestletFilter;
-import org.umlg.runtime.util.UmlgProperties;
-
-import java.io.File;
 
 /**
  * Date: 2014/01/27
@@ -17,9 +13,6 @@ import java.io.File;
  */
 public class DemoApplication extends Application {
 
-    /**
-     * default constructor for RestAndJsonApplication
-     */
     public DemoApplication()  {
         setStatusService(new ErrorStatusService());
     }

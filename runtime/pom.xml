@@ -30,6 +30,7 @@
         <module>runtime-restlet</module>
         <module>runtime-restlet-client</module>
         <module>runtime-jetty</module>
+        <module>runtime-jetty-websocket</module>
         <module>runtime-jetty-websocket-client</module>
     </modules>
 </project>

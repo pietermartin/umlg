@@ -66,7 +66,7 @@
 		<dependency>
 		<groupId>org.opaeum</groupId>
 		<artifactId>opaeum-runtime-neo4j</artifactId>
-		<version>1.0.0.1-SNAPSHOT</version>
+		<version>1.${umlg.version}</version>
 		</dependency>
 <!-- 		<dependency> -->
 <!-- 			<groupId>org.nakeduml</groupId> -->
@@ -76,7 +76,7 @@
 		<dependency>
 			<groupId>org.opaeum</groupId>
 			<artifactId>opaeum-test-tinker</artifactId>
-			<version>1.0.0.1-SNAPSHOT</version>
+			<version>1.${umlg.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

@@ -21,7 +21,7 @@
     </servlet>
 
     <servlet>
-        <servlet-name>MyEcho WebSocket Servlet</servlet-name>
+        <servlet-name>Umlg WebSocket Servlet</servlet-name>
         <servlet-class>
             org.umlg.jetty.websocket.UmlgWebsocketServlet
         </servlet-class>
@@ -33,8 +33,8 @@
     </servlet-mapping>
 
     <servlet-mapping>
-        <servlet-name>MyEcho WebSocket Servlet</servlet-name>
-        <url-pattern>/echo</url-pattern>
+        <servlet-name>Umlg WebSocket Servlet</servlet-name>
+        <url-pattern>/websocket</url-pattern>
     </servlet-mapping>
 
 </web-app>

@@ -2,6 +2,9 @@ package org.umlg.runtime.util;
 
 import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.configuration.reloading.FileChangedReloadingStrategy;
+
+import java.io.File;
 
 /**
  * Date: 2013/01/02
@@ -17,20 +20,47 @@ public class UmlgProperties {
             this.properties = new CompositeConfiguration();
             PropertiesConfiguration pc = new PropertiesConfiguration("umlg.env.properties");
             this.properties.addConfiguration(pc);
+            //override properties prefixed with the model name
         } catch (Exception e) {
             throw new RuntimeException("Expecting \"umlg.env.properties\" file on the classpath with ");
         }
-        validateRequiredProperties();
-    }
-
-    private void validateRequiredProperties() {
-        if (!this.properties.containsKey("umlg.db.location")) {
-            throw new IllegalStateException("umlg.env.properties must have a property \"umlg.db.location\"");
+        try {
+            PropertiesConfiguration overrideProperties = null;
+            if (isDistribution() && Thread.currentThread().getContextClassLoader().getResource("WEB-INF/web.xml") != null) {
+                //own assembly
+                File f = new File("../resources/" + this.properties.getProperty("umlg.model.name") + ".umlg.env.properties");
+                overrideProperties = new PropertiesConfiguration(f.getAbsolutePath());
+            } else if (isWebContainer()) {
+                //tomcat or glasfish or jetty
+                overrideProperties = new PropertiesConfiguration(this.properties.getProperty("umlg.model.name") + ".umlg.env.properties");
+            }
+            if (overrideProperties != null) {
+                overrideProperties.setReloadingStrategy(new FileChangedReloadingStrategy());
+                this.properties.addConfiguration(overrideProperties);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Could not find " + "../resources/" + this.properties.getProperty("model.name") + ".umlg.env.properties");
         }
     }
 
-    public String getTumlDbLocation() {
-        return this.properties.getString("umlg.db.location");
+    private boolean isDistribution() {
+        return Boolean.valueOf(System.getProperty("UMLGServerDistribution", "false"));
+    }
+
+    private boolean isWebContainer() {
+        return false;
+    }
+
+    public String getUmlgDbRootLocation() {
+        return this.properties.getString("umlg.db.location", System.getProperty("java.io.tmpdir"));
+    }
+
+    public String getModelName() {
+        return this.properties.getString("umlg.model.name", "setumlgmodename");
+    }
+
+    public String getUmlgDbLocation() {
+        return this.getUmlgDbRootLocation() + "/" + getModelName();
     }
 
     public boolean isStartAdminApplication() {
@@ -42,15 +72,11 @@ public class UmlgProperties {
     }
 
     public boolean isCreateDefaultData() {
-        return this.properties.getBoolean("start.default.data", false);
+        return this.properties.getBoolean("create.default.data", false);
     }
 
     public String getDefaultDataLoaderClass() {
         return this.properties.getString("default.data.class");
-    }
-
-    public boolean isTransactionsMutliThreaded() {
-        return this.properties.getBoolean("transaction.multithreaded", false);
     }
 
     public boolean isLoadUiResourcesFromFile() {
@@ -59,6 +85,10 @@ public class UmlgProperties {
 
     public String getWebserverIp() {
         return this.properties.getString("webserver.ip", "127.0.0.1");
+    }
+
+    public int getWebserverPort() {
+        return this.properties.getInteger("webserver.port", 8080);
     }
 
 }

@@ -10,7 +10,7 @@
 	<artifactId>eclipselib</artifactId>
 	<packaging>pom</packaging>
 	<name>umlg eclipse lib pom</name>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>${umlg.version}</version>
 	<!--<build>-->
 		<!--<pluginManagement>-->
 			<!--<plugins>-->

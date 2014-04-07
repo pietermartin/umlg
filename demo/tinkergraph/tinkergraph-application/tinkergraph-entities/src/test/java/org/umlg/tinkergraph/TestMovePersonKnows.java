@@ -8,8 +8,6 @@ import org.junit.Test;
 import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.runtime.adaptor.UmlgGraph;
 import org.umlg.runtime.collection.Filter;
-import org.umlg.runtime.collection.UmlgSet;
-import org.umlg.runtime.collection.ocl.BooleanExpressionEvaluator;
 import org.umlg.runtime.util.UmlgProperties;
 
 import java.io.File;
@@ -26,7 +24,7 @@ public class TestMovePersonKnows {
 
     @Before
     public void before() throws IOException {
-        File dbDir = new File(UmlgProperties.INSTANCE.getTumlDbLocation());
+        File dbDir = new File(UmlgProperties.INSTANCE.getUmlgDbLocation());
         if (dbDir.exists()) {
             FileUtils.deleteDirectory(dbDir);
         }

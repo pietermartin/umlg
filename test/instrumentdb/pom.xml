@@ -50,28 +50,28 @@
         <dependency>
             <groupId>org.umlg</groupId>
             <artifactId>java-generation</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${umlg.version}</version>
         </dependency>
         <!--<dependency>-->
             <!--<groupId>org.umlg</groupId>-->
             <!--<artifactId>runtime-domain-neo4j</artifactId>-->
-            <!--<version>0.0.1-SNAPSHOT</version>-->
+            <!--<version>${umlg.version}</version>-->
         <!--</dependency>-->
         <!--<dependency>-->
             <!--<groupId>org.umlg</groupId>-->
             <!--<artifactId>runtime-test-neo4j</artifactId>-->
-            <!--<version>0.0.1-SNAPSHOT</version>-->
+            <!--<version>${umlg.version}</version>-->
             <!--<scope>test</scope>-->
         <!--</dependency>-->
         <dependency>
             <groupId>org.umlg</groupId>
             <artifactId>runtime-domain-orientdb</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${umlg.version}</version>
         </dependency>
         <dependency>
             <groupId>org.umlg</groupId>
             <artifactId>runtime-test-orientdb</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${umlg.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
