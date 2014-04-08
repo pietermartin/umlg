@@ -60,7 +60,7 @@ public class UmlgProperties {
     }
 
     public String getUmlgDbLocation() {
-        return this.getUmlgDbRootLocation() + "/" + getModelName();
+        return this.getUmlgDbRootLocation() + "/" + this.getModelName();
     }
 
     public boolean isStartAdminApplication() {

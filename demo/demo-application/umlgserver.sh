@@ -103,7 +103,7 @@ start()
 
     echo "ALL_JVM_ARGS = $ALL_JVM_ARGS"
 
-    MAIN_CLASS_NAME="org.umlg.demo.JettyDemo"
+    MAIN_CLASS_NAME="org.umlg.demo.JettyDistributionDemo"
 
     echo "MAIN_CLASS_NAME = $MAIN_CLASS_NAME"
 
@@ -146,7 +146,7 @@ start()
 
 stop()
 {
-  # This will kill the run.sh process AND the ETLServer java process.
+  # This will the umlgserver java process.
   status
   #umlgserverpid=$?
   if [ $umlgserverpid -ne 0 ]; then
@@ -170,7 +170,7 @@ stop()
       fi
     done
   else
-    echo 'etl server is not running'
+    echo 'umlg server is not running'
   fi
 }
 
@@ -200,7 +200,7 @@ restart()
 
 status()
 {
-  umlgserverpid=$( ps aux | grep org.umlg.demo.JettyDemo | grep -v grep | awk '{print $2}' )
+  umlgserverpid=$( ps aux | grep org.umlg.demo.JettyDistributionDemo | grep -v grep | awk '{print $2}' )
   if [ -n "$umlgserverpid" ]; then
     echo "umlg server (pid $umlgserverpid) is running"
     umlgserverpid=$umlgserverpid

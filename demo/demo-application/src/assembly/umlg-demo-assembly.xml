@@ -27,6 +27,10 @@
             <outputDirectory>./resources</outputDirectory>
         </fileSet>
         <fileSet>
+            <directory>${basedir}/src/main/webapp</directory>
+            <outputDirectory>./webapp</outputDirectory>
+        </fileSet>
+        <fileSet>
             <directory>${basedir}</directory>
             <includes>
                 <include>umlgserver.sh</include>

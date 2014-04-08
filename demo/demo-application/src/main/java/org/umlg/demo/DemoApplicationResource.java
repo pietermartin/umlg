@@ -23,7 +23,8 @@ public class DemoApplicationResource extends ServerResource {
 
     @Override
     protected Representation get() throws ResourceException {
-        File demoFtl = new File("demo/demo-application/src/main/webapp/resources/demoHome.html");
+//        File demoFtl = new File("demo/demo-application/src/main/webapp/resources/demoHome.html");
+        File demoFtl = new File("../webapp/resources/demoHome.html");
         return new FileRepresentation(demoFtl, MediaType.TEXT_HTML);
 
 //        Representation demoFreemarker = new ClientResource("clap:///demoHome.ftl").get();

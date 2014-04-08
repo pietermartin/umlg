@@ -5,20 +5,16 @@
 		<groupId>org.umlg</groupId>
 		<artifactId>runtime</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>runtime-jetty</artifactId>
 	<dependencies>
 
         <!-- Add restlet servlet bridge -->
         <dependency>
-            <groupId>org.restlet.jee</groupId>
-            <artifactId>org.restlet.ext.servlet</artifactId>
-            <version>${restlet.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.restlet.jee</groupId>
-            <artifactId>org.restlet</artifactId>
-            <version>${restlet.version}</version>
+            <groupId>org.umlg</groupId>
+            <artifactId>runtime-servlet</artifactId>
+            <version>${umlg.version}</version>
         </dependency>
 
         <!-- Add UMLG jetty websocket servlet -->
