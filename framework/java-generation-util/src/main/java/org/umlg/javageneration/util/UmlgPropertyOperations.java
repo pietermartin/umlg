@@ -329,7 +329,7 @@ public final class UmlgPropertyOperations extends PropertyOperations {
     }
 
     public static String finder(Property property) {
-        return "find" + StringUtils.capitalize(property.getName());
+        return "findBy" + StringUtils.capitalize(property.getName());
     }
 
     public static String getter(Property property) {

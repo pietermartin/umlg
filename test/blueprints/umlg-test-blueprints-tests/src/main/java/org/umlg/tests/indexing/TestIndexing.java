@@ -44,18 +44,19 @@ public class TestIndexing extends BaseLocalDbTest {
             topRoot.setIndexedName(String.valueOf(i));
         }
         db.commit();
-        TopRoot topRoot = TopRoot.findIndexedName("0");
+        TopRoot topRoot = TopRoot.findByIndexedName("0");
         Assert.assertNotNull(topRoot);
         Assert.assertEquals("0", topRoot.getIndexedName());
 
-        topRoot = TopRoot.findIndexedName("50");
+        topRoot = TopRoot.findByIndexedName("50");
         Assert.assertNotNull(topRoot);
         Assert.assertEquals("50", topRoot.getIndexedName());
 
-        topRoot = TopRoot.findIndexedName("99");
+        topRoot = TopRoot.findByIndexedName("99");
         Assert.assertNotNull(topRoot);
         Assert.assertEquals("99", topRoot.getIndexedName());
     }
+
 
     @Test
     public void testIndexingStringNonUnique() {
@@ -115,22 +116,87 @@ public class TestIndexing extends BaseLocalDbTest {
             }
         }
         db.commit();
-        List<TopRoot> topRoots = TopRoot.findIndexedNonUniqueName("aaaa");
+        List<TopRoot> topRoots = TopRoot.findByIndexedNonUniqueName("aaaa");
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findIndexedNonUniqueName("bbbb");
+        topRoots = TopRoot.findByIndexedNonUniqueName("bbbb");
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findIndexedNonUniqueName("cccc");
+        topRoots = TopRoot.findByIndexedNonUniqueName("cccc");
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findIndexedNonUniqueName("dddd");
+        topRoots = TopRoot.findByIndexedNonUniqueName("dddd");
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findIndexedNonUniqueName("eeee");
+        topRoots = TopRoot.findByIndexedNonUniqueName("eeee");
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findIndexedNonUniqueName("ffff");
+        topRoots = TopRoot.findByIndexedNonUniqueName("ffff");
+        Assert.assertEquals(0, topRoots.size());
+
+    }
+
+    @Test
+    public void testIndexingStringNonUniqueFromFinderIndexedZero() {
+        for (int i = 0; i < 100; i++) {
+            TopRoot topRoot = new TopRoot();
+            topRoot.setName("asdasdasd");
+            topRoot.setIndexedName(String.valueOf(i));
+            if (i < 20) {
+                topRoot.setIndexedNonUniqueName("aaaa");
+            } else if (i < 40) {
+                topRoot.setIndexedNonUniqueName("bbbb");
+            } else if (i < 60) {
+                topRoot.setIndexedNonUniqueName("cccc");
+            } else if (i < 80) {
+                topRoot.setIndexedNonUniqueName("dddd");
+            } else {
+                topRoot.setIndexedNonUniqueName("eeee");
+            }
+        }
+        db.commit();
+
+        Assert.assertEquals(0, TopRoot.findByIndexedNonUniqueName("asdasdasd").size());
+        Assert.assertEquals("aaaa", TopRoot.findByIndexedNonUniqueName("aaaa").get(0).getIndexedNonUniqueName());
+        Assert.assertEquals("bbbb", TopRoot.findByIndexedNonUniqueName("bbbb").get(0).getIndexedNonUniqueName());
+        Assert.assertEquals("cccc", TopRoot.findByIndexedNonUniqueName("cccc").get(0).getIndexedNonUniqueName());
+        Assert.assertEquals("dddd", TopRoot.findByIndexedNonUniqueName("dddd").get(0).getIndexedNonUniqueName());
+        Assert.assertEquals("eeee", TopRoot.findByIndexedNonUniqueName("eeee").get(0).getIndexedNonUniqueName());
+
+        Assert.assertEquals("aaaa", TopRoot.findByIndexedNonUniqueName("aaaa").get(10).getIndexedNonUniqueName());
+        Assert.assertEquals("bbbb", TopRoot.findByIndexedNonUniqueName("bbbb").get(10).getIndexedNonUniqueName());
+        Assert.assertEquals("cccc", TopRoot.findByIndexedNonUniqueName("cccc").get(10).getIndexedNonUniqueName());
+        Assert.assertEquals("dddd", TopRoot.findByIndexedNonUniqueName("dddd").get(10).getIndexedNonUniqueName());
+        Assert.assertEquals("eeee", TopRoot.findByIndexedNonUniqueName("eeee").get(10).getIndexedNonUniqueName());
+
+        Assert.assertEquals("aaaa", TopRoot.findByIndexedNonUniqueName("aaaa").get(19).getIndexedNonUniqueName());
+        Assert.assertEquals("bbbb", TopRoot.findByIndexedNonUniqueName("bbbb").get(19).getIndexedNonUniqueName());
+        Assert.assertEquals("cccc", TopRoot.findByIndexedNonUniqueName("cccc").get(19).getIndexedNonUniqueName());
+        Assert.assertEquals("dddd", TopRoot.findByIndexedNonUniqueName("dddd").get(19).getIndexedNonUniqueName());
+        Assert.assertEquals("eeee", TopRoot.findByIndexedNonUniqueName("eeee").get(19).getIndexedNonUniqueName());
+
+        Assert.assertEquals(20, TopRoot.findByIndexedNonUniqueName("aaaa").size());
+        Assert.assertEquals(20, TopRoot.findByIndexedNonUniqueName("bbbb").size());
+        Assert.assertEquals(20, TopRoot.findByIndexedNonUniqueName("cccc").size());
+        Assert.assertEquals(20, TopRoot.findByIndexedNonUniqueName("dddd").size());
+        Assert.assertEquals(20, TopRoot.findByIndexedNonUniqueName("eeee").size());
+
+        List<TopRoot> topRoots = TopRoot.findByIndexedNonUniqueName("aaaa");
+        Assert.assertEquals(20, topRoots.size());
+
+        topRoots = TopRoot.findByIndexedNonUniqueName("bbbb");
+        Assert.assertEquals(20, topRoots.size());
+
+        topRoots = TopRoot.findByIndexedNonUniqueName("cccc");
+        Assert.assertEquals(20, topRoots.size());
+
+        topRoots = TopRoot.findByIndexedNonUniqueName("dddd");
+        Assert.assertEquals(20, topRoots.size());
+
+        topRoots = TopRoot.findByIndexedNonUniqueName("eeee");
+        Assert.assertEquals(20, topRoots.size());
+
+        topRoots = TopRoot.findByIndexedNonUniqueName("ffff");
         Assert.assertEquals(0, topRoots.size());
 
     }
@@ -193,22 +259,22 @@ public class TestIndexing extends BaseLocalDbTest {
             }
         }
         db.commit();
-        List<TopRoot> topRoots = TopRoot.findIndexNonUniqueInteger(1);
+        List<TopRoot> topRoots = TopRoot.findByIndexNonUniqueInteger(1);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findIndexNonUniqueInteger( 2);
+        topRoots = TopRoot.findByIndexNonUniqueInteger( 2);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findIndexNonUniqueInteger(3);
+        topRoots = TopRoot.findByIndexNonUniqueInteger(3);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findIndexNonUniqueInteger(4);
+        topRoots = TopRoot.findByIndexNonUniqueInteger(4);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findIndexNonUniqueInteger(5);
+        topRoots = TopRoot.findByIndexNonUniqueInteger(5);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findIndexNonUniqueInteger(6);
+        topRoots = TopRoot.findByIndexNonUniqueInteger(6);
         Assert.assertEquals(0, topRoots.size());
 
     }
@@ -271,22 +337,22 @@ public class TestIndexing extends BaseLocalDbTest {
             }
         }
         db.commit();
-        List<TopRoot> topRoots = TopRoot.findIndexNonUniqueLong(1L);
+        List<TopRoot> topRoots = TopRoot.findByIndexNonUniqueLong(1L);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findIndexNonUniqueLong(2L);
+        topRoots = TopRoot.findByIndexNonUniqueLong(2L);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findIndexNonUniqueLong(3L);
+        topRoots = TopRoot.findByIndexNonUniqueLong(3L);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findIndexNonUniqueLong(4L);
+        topRoots = TopRoot.findByIndexNonUniqueLong(4L);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findIndexNonUniqueLong(5L);
+        topRoots = TopRoot.findByIndexNonUniqueLong(5L);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findIndexNonUniqueLong(6L);
+        topRoots = TopRoot.findByIndexNonUniqueLong(6L);
         Assert.assertEquals(0, topRoots.size());
 
     }
@@ -349,22 +415,22 @@ public class TestIndexing extends BaseLocalDbTest {
             }
         }
         db.commit();
-        List<TopRoot> topRoots = TopRoot.findIndexNonUniqueDouble(1D);
+        List<TopRoot> topRoots = TopRoot.findByIndexNonUniqueDouble(1D);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findIndexNonUniqueDouble(2D);
+        topRoots = TopRoot.findByIndexNonUniqueDouble(2D);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findIndexNonUniqueDouble(3D);
+        topRoots = TopRoot.findByIndexNonUniqueDouble(3D);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findIndexNonUniqueDouble(4D);
+        topRoots = TopRoot.findByIndexNonUniqueDouble(4D);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findIndexNonUniqueDouble(5D);
+        topRoots = TopRoot.findByIndexNonUniqueDouble(5D);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findIndexNonUniqueInteger(6);
+        topRoots = TopRoot.findByIndexNonUniqueInteger(6);
         Assert.assertEquals(0, topRoots.size());
 
     }
@@ -402,10 +468,10 @@ public class TestIndexing extends BaseLocalDbTest {
             }
         }
         db.commit();
-        List<TopRoot> topRoots = TopRoot.findIndexNonUniqueBoolean(true);
+        List<TopRoot> topRoots = TopRoot.findByIndexNonUniqueBoolean(true);
         Assert.assertEquals(20, topRoots.size());
 
-        topRoots = TopRoot.findIndexNonUniqueBoolean(false);
+        topRoots = TopRoot.findByIndexNonUniqueBoolean(false);
         Assert.assertEquals(80, topRoots.size());
     }
 

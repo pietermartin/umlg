@@ -54,13 +54,13 @@
         <dependency>
             <groupId>org.umlg</groupId>
             #if( ${_1-Bitsy_2-Neo4j_3-Titan_BerkeleyDb} == 1 )
-            <artifactId>runtime-domain-bitsy</artifactId>
+    <artifactId>runtime-domain-bitsy</artifactId>
             #elseif( ${_1-Bitsy_2-Neo4j_3-Titan_BerkeleyDb} == 2 )
-            <artifactId>runtime-domain-neo4j</artifactId>
+    <artifactId>runtime-domain-neo4j</artifactId>
             #elseif( ${_1-Bitsy_2-Neo4j_3-Titan_BerkeleyDb} == 3 )
-            <artifactId>runtime-domain-titan</artifactId>
+    <artifactId>runtime-domain-titan</artifactId>
             #else
-            <artifactId>runtime-domain-neo4j</artifactId>
+    <artifactId>runtime-domain-neo4j</artifactId>
             #end
             <version>${umlg.version}</version>
         </dependency>

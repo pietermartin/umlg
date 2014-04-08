@@ -30,7 +30,6 @@ public class UmlgLazyList<PersistentObject> implements List {
 
     private void loadFully() {
         while (this.iterator.hasNext()) {
-            this.loadedUpTo++;
             this.internal.add(this.iterator.next());
         }
         this.fullyLoaded = true;
@@ -94,11 +93,10 @@ public class UmlgLazyList<PersistentObject> implements List {
 
     @Override
     public PersistentObject get(int index) {
-        if (this.loadedUpTo >= index) {
+        if (this.loadedUpTo > index) {
             return this.internal.get(index);
         } else {
             while (this.iterator.hasNext()) {
-                this.loadedUpTo++;
                 this.internal.add(this.iterator.next());
                 if (this.loadedUpTo == index) {
                     break;
@@ -198,6 +196,7 @@ public class UmlgLazyList<PersistentObject> implements List {
         public PersistentObject next() {
             PersistentObject e = UMLG.get().instantiateClassifier(this.iterator.next().getId());
             UmlgLazyList.this.internal.add(e);
+            UmlgLazyList.this.loadedUpTo++;
             return e;
         }
 
