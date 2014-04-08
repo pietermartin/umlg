@@ -328,6 +328,10 @@ public final class UmlgPropertyOperations extends PropertyOperations {
         }
     }
 
+    public static String finder(Property property) {
+        return "find" + StringUtils.capitalize(property.getName());
+    }
+
     public static String getter(Property property) {
         return "get" + StringUtils.capitalize(property.getName());
     }

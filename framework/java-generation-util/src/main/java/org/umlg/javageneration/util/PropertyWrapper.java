@@ -1,9 +1,5 @@
 package org.umlg.javageneration.util;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.EList;
@@ -11,22 +7,19 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.uml2.uml.*;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Package;
-import org.umlg.java.metamodel.OJPathName;
 import org.umlg.framework.ModelLoader;
-import org.umlg.javageneration.validation.Email;
-import org.umlg.javageneration.validation.Max;
-import org.umlg.javageneration.validation.MaxLength;
-import org.umlg.javageneration.validation.Min;
-import org.umlg.javageneration.validation.MinLength;
-import org.umlg.javageneration.validation.Range;
-import org.umlg.javageneration.validation.RangeLength;
-import org.umlg.javageneration.validation.Url;
-import org.umlg.javageneration.validation.Validation;
+import org.umlg.java.metamodel.OJPathName;
+import org.umlg.javageneration.validation.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class PropertyWrapper extends MultiplicityWrapper implements Property {
 
     private Property property;
     private boolean recursive;
+    private boolean indexed;
 
     public PropertyWrapper(Property property) {
         super(property);
@@ -353,6 +346,14 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
             return UmlgPropertyOperations.internalGetter(this.property);
         } else {
             return UmlgPropertyOperations.getter(this.property);
+        }
+    }
+
+    public String finder() {
+        if (!isIndexed()) {
+            throw new IllegalStateException("Only indexed fields can have finder methods!");
+        } else {
+            return UmlgPropertyOperations.finder(this.property);
         }
     }
 
@@ -1497,6 +1498,11 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
         return null;
     }
 
+    @Override
+    public Object getValue(Stereotype stereotype, String propertyName) {
+        return this.property.getValue(stereotype, propertyName);
+    }
+
     public MaxLength getMaxLength() {
         Stereotype stereotype = ModelLoader.INSTANCE.findStereotype(UmlgValidationEnum.MaxLength.name());
         return new MaxLength((Integer) property.getValue(stereotype, "length"));
@@ -1710,4 +1716,10 @@ public class PropertyWrapper extends MultiplicityWrapper implements Property {
     public boolean isRecursive() {
         return getOtherEnd() != null && getOtherEnd().getType() == getType();
     }
+
+    public boolean isIndexed() {
+        final Stereotype stereotype = ModelLoader.INSTANCE.findStereotype("Index");
+        return isStereotypeApplied(stereotype);
+    }
+
 }

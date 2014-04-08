@@ -30,7 +30,7 @@ public class IndexSetValidator extends BaseVisitor implements Visitor<Property> 
     public void visitBefore(Property element) {
         //Can not get find the stereotype in the constructor as the model is not loaded yet.
         if (this.stereotype == null) {
-            this.stereotype = ModelLoader.INSTANCE.findStereotype("Index");
+            this.stereotype = ModelLoader.INSTANCE.findStereotype(UmlgGenerationUtil.Index);
         }
         PropertyWrapper pWrap = new PropertyWrapper(element);
         if (element.isStereotypeApplied(this.stereotype) && (pWrap.isMany() || !(element.getType() instanceof PrimitiveType))) {
@@ -38,7 +38,7 @@ public class IndexSetValidator extends BaseVisitor implements Visitor<Property> 
         }
         if (element.isStereotypeApplied(this.stereotype) && pWrap.isOne() && (element.getType() instanceof PrimitiveType)) {
             EnumerationLiteral enumerationLiteral = (EnumerationLiteral) element.getValue(stereotype, "type");
-            if (enumerationLiteral.getName().equals("UNIQUE")) {
+            if (enumerationLiteral.getName().equals(UmlgGenerationUtil.Index_UNIQUE)) {
                 OJAnnotatedClass owner = findOJClass(element);
                 OJAnnotatedOperation setter = owner.findOperation(pWrap.setter(), pWrap.javaBaseTypePath());
                 OJIfStatement ifIndexNotNull = new OJIfStatement();

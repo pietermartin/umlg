@@ -8,6 +8,9 @@ import org.umlg.java.metamodel.annotation.OJAnnotationValue;
 
 public class UmlgGenerationUtil {
 
+    public static String Index = "Index";
+    public static String Index_UNIQUE = "UNIQUE";
+    public static String Index_NON_UNIQUE = "NON_UNIQUE";
     public static String BaseClassUmlgQualifiedName = "org::umlg::meta::BaseClassUmlg";
     public static OJPathName Parameter = new OJPathName("com.tinkerpop.blueprints.Parameter");
     public static OJPathName BASE_CLASS_UMLG = new OJPathName("org.umlg.meta.BaseClassUmlg");
@@ -149,6 +152,7 @@ public class UmlgGenerationUtil {
     public static OJPathName edgePathName = new OJPathName("com.tinkerpop.blueprints.Edge");
     public static String UMLGAccess = "UMLG.get()";
     public static String getFromUniqueIndex = "getFromUniqueIndex";
+    public static String getFromNonUniqueIndex = "getFromIndex";
     public static OJPathName UMLG_NODE = new OJPathName("org.umlg.runtime.domain.UmlgNode");
     public static OJPathName UMLG_ROOT_NODE = new OJPathName("org.umlg.runtime.domain.UmlgRootNode");
 
