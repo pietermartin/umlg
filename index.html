@@ -43,8 +43,12 @@
                         <li><a href="documentation.html">Quick Preview</a></li>
                         <li><a href="introduction.html">Introduction</a></li>
                         <li><a href="getting_started.html">Getting Started</a></li>
+                        <li><a href="umlg_inaction.html">UMLG In action</a></li>
+                        <li><a href="gremlin_extension.html">Gremlin Extension</a></li>
                         <li><a href="umlg_reference.html">UMLG Reference</a></li>
                         <li><a href="ocl_reference.html">OCL reference</a></li>
+                        <li><a href="rest_interface.html">Rest Interface</a></li>
+                        <li><a href="gui.html">Gui</a></li>
                     </ul>
                 </li>
                 <li><a href="https://github.com/pietermartin/umlg">Github</a></li>
@@ -83,7 +87,7 @@
                 <h2>OCL</h2>
 
                 <p>UMLG supports <a href="http://www.omg.org/spec/OCL/2.3.1/PDF">OCL</a> (object constraint language). Constraints, derived properties and
-                    query operations can be fully specified in OCL. For each OCL expression, java is generated directly
+                    query operations can be fully specified in OCL. For each OCL expression in the model corresponding java is generated directly
                     into the owning entity.</p>
 
             </div>
@@ -92,7 +96,7 @@
 
                 <p>UMLG can optionally generate a rest interface to the application for performing remote crud and query
                     operations. Utilizing the rest interface a web based ui is provided. From the gui crud and query
-                    operations can be executed. This makes it easy to visualize, use and maintain the application.</p>
+                    operations can be performed. This makes it easy to visualize, use and maintain the application.</p>
 
             </div>
 
@@ -100,10 +104,13 @@
         <div class="row">
             <div class="col-md-4">
                 <h2>Entities</h2>
-
-                <p>Java entities are interceptor and annotation free. Together with the performance of graph databases
-                and super fast start up times, development is a joy again.</p>
-
+                <ul>
+                    <li>Java entities contain no interceptors or annotations.</li>
+                    <li>Unit tests are easy to write.</li>
+                    <li>Fast start up times regardless of the number of entities.</li>
+                    <li>Short stack, no endless framework code.</li>
+                    <li>Persistent entities that are a joy to work with.</li>
+                </ul>
             </div>
 
             <div class="col-md-4">
