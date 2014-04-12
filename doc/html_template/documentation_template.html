@@ -13,88 +13,110 @@
     <!-- Bootstrap core CSS -->
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Custom styles for this template -->
-    <link href="stylesheets/offcanvas.css" rel="stylesheet">
+    <!-- UMLG doc style -->
+    <link href="stylesheets/umlg-doc.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+
 </head>
 
-<body>
-<div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
+<body data-spy="scroll" data-target="#affix-nav">
+<header class="navbar navbar-default navbar-fixed-top" role="banner">
     <div class="container">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="index.html">UMLG</a>
+            <a href="index.html" class="navbar-brand">UMLG</a>
         </div>
-        <div class="collapse navbar-collapse">
+        <nav class="collapse navbar-collapse" role="navigation">
             <ul class="nav navbar-nav pull-right">
-                <li><a href="documentation.html">Documentation</a></li>
-                <li><a href="https://github.com/pietermartin/umlg">Github</a></li>
-                <li><a href="http://demo.umlg.org">Demo</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Documentation <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="documentation.html">Quick Preview</a></li>
+                        <li><a href="introduction.html">Introduction</a></li>
+                        <li><a href="getting_started.html">Getting Started</a></li>
+                        <li><a href="umlg_reference.html">UMLG Reference</a></li>
+                        <li><a href="ocl_reference.html">OCL reference</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="https://github.com/pietermartin/umlg">Github</a>
+                </li>
+                <li>
+                    <a href="http://demo.umlg.org">Demo</a>
+                </li>
             </ul>
-        </div>
-        <!-- /.nav-collapse -->
+        </nav>
     </div>
-    <!-- /.container -->
-</div>
-<!-- /.navbar -->
+</header>
 
+<!-- Begin Body -->
 <div class="container">
+    <div class="row">
+        <div class="col-md-3" id="leftcol">
+            <div class="bs-docs-sidebar hidden-print" role="complementary">
+                <ul class="nav bs-docs-sidebar" id="sidebar">
+                    <!-- GENERATED MENU -->
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-9">
 
-    <div class="row row-offcanvas row-offcanvas-right">
-
-        <div class="col-xs-12 col-sm-9">
             <p class="pull-right visible-xs">
                 <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
             </p>
-
-<!-- GENERATED CONTENT -->
+            <!-- GENERATED CONTENT -->
 
         </div>
-        <!--/span-->
-
-        <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
-            <div class="list-group">
-                <a href="#" class="list-group-item active">Link</a>
-                <a href="#" class="list-group-item">Link</a>
-                <a href="#" class="list-group-item">Link</a>
-                <a href="#" class="list-group-item">Link</a>
-                <a href="#" class="list-group-item">Link</a>
-                <a href="#" class="list-group-item">Link</a>
-                <a href="#" class="list-group-item">Link</a>
-                <a href="#" class="list-group-item">Link</a>
-                <a href="#" class="list-group-item">Link</a>
-                <a href="#" class="list-group-item">Link</a>
-            </div>
-        </div>
-        <!--/span-->
     </div>
-    <!--/row-->
-
-    <hr>
-
-    <footer>
-        <p>&copy; Company 2014</p>
-    </footer>
-
 </div>
-<!--/.container-->
-
-
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <script src="javascripts/offcanvas.js"></script>
+
+<script type='text/javascript'>
+
+    $(document).ready(function() {
+
+        $('#sidebar').affix();
+
+        var $body   = $(document.body);
+        var navHeight = $('.navbar').outerHeight(true) + 10;
+
+        $body.scrollspy({
+            target: '#leftcol',
+            offset: navHeight
+        });
+
+        /* smooth scrolling sections */
+        $('a[href*=#]:not([href=#])').click(function() {
+            if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+                var target = $(this.hash);
+                target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+                if (target.length) {
+                    $('html,body').animate({
+                        scrollTop: target.offset().top - 50
+                    }, 1000);
+                    return false;
+                }
+            }
+        });
+
+    });
+
+</script>
+
 </body>
 </html>

@@ -1,0 +1,219 @@
+<h1>Getting Started</h1>
+
+<hr />
+
+<p>For UML modeling <a href="http://projects.eclipse.org/projects/modeling.mdt.papyrus">Eclipse Papyrus</a> is the recommended tool.</p>
+
+<p>So you will need to download and install Papyrus.</p>
+
+<hr />
+
+<p>UMLG uses <a href="http://maven.apache.org/">maven</a> as its build tool.</p>
+
+<p>The easiest way to get started is to generate a maven project using the UMLG Maven Archetype.</p>
+
+<p>To generate a sample project, type in the following at your project's root directory.</p>
+
+<pre><code>mvn archetype:generate -DarchetypeCatalog=local
+</code></pre>
+
+<p>You will be prompted to select the type of project you which to generate. UMLG can generate three types of sample projects.</p>
+
+<ul>
+<li>A minimalist project containing a sample uml model but no additional UMLG uml libraries.</li>
+<li>A sample uml model with UMLG's uml validation profile and data types library preloaded.</li>
+<li>A sample uml model with UMLG's uml validation profile, data types library preloaded and UMLG's rest interface and gui.</li>
+</ul>
+
+<p>For the purpose of this getting started guide, choose the <strong>full</strong> option.</p>
+
+<p>The archetype will create a fully functional UMLG application. Go into the application and run</p>
+
+<pre><code>maven install
+</code></pre>
+
+<p>Before compiling the application, maven will generate entities and a rest interface to the entities from the sample model.</p>
+
+<p>To startup the rest server and use the web interface <code>cd</code> to the <strong>application</strong> module and run</p>
+
+<pre><code>mvn exec:exec
+</code></pre>
+
+<p>and now go to <a href="http://localhost:8111/demo/ui2">http://localhost:8111/demo/ui2</a> to view and use the application.</p>
+
+<p>Lastly there is a sample junit test <code>org.umlg.test.TestDemo</code> in <code>src/test/java</code>. You can execute it to see UMLG in action.</p>
+
+<h3>How the build works</h3>
+
+<p>The archetype will generate a maven project with 2 sub modules. The 2 modules are,</p>
+
+<ul>
+<li><strong>generator</strong> - This is responsible to load the uml model and generate the entities.</li>
+<li><strong>application</strong> - This is where the generated entities and optional rest interface will go.</li>
+</ul>
+
+<p><br /></p>
+
+<h4>generator module</h4>
+
+<p><br /></p>
+
+<p>In the <code>generator</code> module there is only one java class <code>DemoGenerator</code>. Running this class' <code>main</code> method  will load
+the sample model and generate the corresponding entities into the <strong>application</strong> module.</p>
+
+<p>For <code>DemoGenerator</code> to compile and be able to generate code the following maven dependency is required.</p>
+
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.umlg&lt;/groupId&gt;
+    &lt;artifactId&gt;java-generation&lt;/artifactId&gt;
+    &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+<p>and the code to generate the code.</p>
+
+<pre><code>public class DemoGenerator {
+    public static void main(String[] args) throws URISyntaxException {
+        if (args.length == 0) {
+            args = new String[]{"."};
+        }
+        JavaGenerator javaGenerator = new JavaGenerator();
+        javaGenerator.generate(
+                new File(args[0] + "/application/src/main/model/umlg-demo1.uml"),
+                new File(args[0] + "/application"), RestletVisitors.getDefaultJavaVisitors());
+
+    }
+}
+</code></pre>
+
+<p><code>org.umlg.generation.JavaGenerator</code> is the entry point to generating code in UMLG from UML. <code>JavaGenerator.main</code> takes 3 parameters.
+The first is the uml model, the second is the output location of the generated source and the 3rd is the generation visitors.
+UMLG generates code via a sequential list of visitors to the UML model. Each visitor implements some feature of the model in java.</p>
+
+<p>It is possible to add custom visitors to customize the entities. This is explained <a href="http://localhost/todo">here //TODO</a>.</p>
+
+<p><br /></p>
+
+<h4>application module</h4>
+
+<p><br /></p>
+
+<p>The <strong>application</strong> module has 3 java source folders.</p>
+
+<ul>
+<li><strong>generated-java</strong> - This is where the generated entities go.</li>
+<li><strong>generated-java-meta</strong> - Each UML class has a corresponding singleton.</li>
+<li><strong>generated-java-restlet</strong> - This is where the rest resources go.</li>
+</ul>
+
+<p>And a resources folder,</p>
+
+<ul>
+<li><strong>resources</strong> - A resources folder that contains <code>umlg.env.properties</code>.<br />
+It contains the property, <code>umlg.db.location=/tmp/demo-quick-preview</code><br />
+Change this to point the graph database to a location of your choosing.</li>
+</ul>
+
+<p>And a test java source folder</p>
+
+<ul>
+<li><strong>test</strong> This contains a sample junit test class <code>org.umlg.test.TestDemo</code>. Run it to see UMLG in action.</li>
+</ul>
+
+<p><br /></p>
+
+<p>To compile the entities the following dependency is required. Replace the artifact with the underlying blueprints graph db of your choice.
+This dependency will bring in the underlying graph db and everything the UMLG entities need.</p>
+
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.umlg&lt;/groupId&gt;
+    &lt;artifactId&gt;runtime-domain-bitsy&lt;/artifactId&gt;
+    &lt;!--
+    &lt;artifactId&gt;runtime-domain-orientdb&lt;/artifactId&gt;
+    &lt;artifactId&gt;runtime-domain-neo4j&lt;/artifactId&gt;
+    &lt;artifactId&gt;runtime-domain-titan&lt;/artifactId&gt;
+    --&gt;
+    &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+<p><br /></p>
+
+<p>To compile and execute the rest resources the following dependency is required
+This brings in <a href="http://restlet.org/">Restlet</a>. Restlet is the rest framework used by UMLG to expose the entities as rest resources.</p>
+
+<pre><code>     &lt;dependency&gt;
+         &lt;groupId&gt;org.umlg&lt;/groupId&gt;
+         &lt;artifactId&gt;runtime-restlet&lt;/artifactId&gt;
+         &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;
+     &lt;/dependency&gt;
+</code></pre>
+
+<p><br />
+And lastly to use the web ui add the following dependency This makes available web resources. The javascript, html and
+css files needed for the UMLG admin gui.</p>
+
+<pre><code>     &lt;dependency&gt;
+         &lt;groupId&gt;org.umlg&lt;/groupId&gt;
+         &lt;artifactId&gt;runtime-ui&lt;/artifactId&gt;
+         &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;
+     &lt;/dependency&gt;
+</code></pre>
+
+<p><br /></p>
+
+<h3>The entities</h3>
+
+<p><br /></p>
+
+<p>The generated demo's model models a simple One to Many relationship.</p>
+
+<p><img src="images/uml/Package_umlg_demo1ClassDiagram.PNG" alt="One to Many" title="" /></p>
+
+<p>Each class in the uml model have a respective java entity. To create a company and a person just instantiate <code>Company</code>
+and <code>Person</code>.</p>
+
+<pre><code>One one = new One();
+Many many = new Many();
+</code></pre>
+
+<p>For each property a standard setter and getter is generated.</p>
+
+<pre><code>one.setName("Coolraid");
+many.setName("Joe");
+one.setMany(many);
+</code></pre>
+
+<p>For each property with a multiplicity greater than 1 an adder method is generated. This is different to the setter in
+that it appends to the collection. The setter replaces the collection.</p>
+
+<pre><code>one.addToMany(many);
+</code></pre>
+
+<p>or just use the standard java collection 'add' method</p>
+
+<pre><code>one.getMany().add(many);
+</code></pre>
+
+<p>Similarly a remover is generated</p>
+
+<pre><code>one.removeFromMany(many);
+</code></pre>
+
+<p>or use the standard java collection 'remove' method</p>
+
+<pre><code>one.getMany().remove(many);
+</code></pre>
+
+<p>and lastly to persist the entities call,</p>
+
+<pre><code>GraphDb.getDb().commit()
+</code></pre>
+
+<p>or rollback the transaction</p>
+
+<pre><code>GraphDb.getDb().rollback()
+</code></pre>
+
+<p><code>GraphDb.getDb()</code> returns an instance of <code>UMLGGraph</code>. <code>UMLGGraph</code> wraps the underlying blueprints graph. It is a
+singleton and is always available on the current thread via <code>GraphDb.getDb()</code></p>

@@ -1,0 +1,33 @@
+<h1>Quick Preview</h1>
+
+<p>Here is a simple uml class diagram.</p>
+
+<p><img src="images/uml/Package_umlg_demoQuickPreviewClassDiagram.PNG" alt="image of person works for company" title="" /></p>
+
+<p>Here are the generated entities in action.</p>
+
+<pre><code>Company company = new Company();
+company.setName("UMLG");
+Person person = new Person();
+person.setFirstname("Joe");
+person.setLastname("Bloggs");
+company.getEmployee().add(person);
+UMLG.get().commit();
+Assert.assertTrue(company.getEmployee().contains(person));
+</code></pre>
+
+<h1>Introduction</h1>
+
+<p>A short <a href="introduction.html">introduction</a> to UMLG.</p>
+
+<h1>Getting Started</h1>
+
+<p>Quickly get a UMLG application up and running with the <a href="getting_started.html">getting started guide</a>.</p>
+
+<h1>UMLG Manual</h1>
+
+<p>The UML <a href="umlg_reference.html">manual</a> is organized as a reference document. Going through all uml class diagram features supported and implemented by UMLG.</p>
+
+<h1>OCL Reference</h1>
+
+<p>An <a href="ocl_reference.html">OCL reference document</a> illustrating OCL as supported in UMLG.</p>

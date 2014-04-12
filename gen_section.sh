@@ -18,12 +18,17 @@ markdown $1 -x toc > manual1.tmp
 # for good presentation using Twitter Bootstrap
 #xsltproc addstyles.xsl manual2.tmp > manual3.tmp
 
-# Insert the generated content in the actual HTML page
+# Insert the generated context in the actual HTML page
 sed '/<!-- GENERATED CONTENT -->/ {
 r manual1.tmp
 d
-}' $2 | cat > $3
+}' $2 | cat > manual2.tmp
 
-rm manual*.tmp
+sed '/<!-- GENERATED MENU -->/ {
+r doc/generated-menu/getting_started_menu.html
+d
+}' manual2.tmp | cat > $4
+
+#rm manual*.tmp
 #rm top.tmp
 #rm end.tmp
