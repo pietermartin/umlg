@@ -24,6 +24,7 @@
             <snapshots>
             </snapshots>
         </repository>
+
     </repositories>
   <modules>
     <module>graphofthegods-generator</module>
