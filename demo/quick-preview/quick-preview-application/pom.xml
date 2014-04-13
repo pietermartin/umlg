@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>org.umlg</groupId>
+        <artifactId>quick-preview</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>quick-preview-application</artifactId>
+    <packaging>pom</packaging>
+    <name>tinkergraph-application</name>
+
+  <modules>
+    <module>quick-preview-entities</module>
+    <module>quick-preview-restlet</module>
+    <module>quick-preview-war</module>
+    <module>quick-preview-jetty</module>
+  </modules>
+</project>

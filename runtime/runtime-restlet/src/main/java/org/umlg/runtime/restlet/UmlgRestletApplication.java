@@ -8,6 +8,7 @@ import org.restlet.representation.FileRepresentation;
 import org.restlet.resource.Directory;
 import org.restlet.routing.Router;
 import org.restlet.routing.Template;
+import org.restlet.service.EncoderService;
 import org.umlg.ocl.UmlgOcl2Parser;
 import org.umlg.runtime.adaptor.DefaultDataCreator;
 import org.umlg.runtime.adaptor.UMLG;
@@ -29,6 +30,7 @@ public abstract class UmlgRestletApplication extends Application {
      */
     public UmlgRestletApplication() {
         setStatusService(new ErrorStatusService());
+        getEncoderService().setEnabled(true);
         init();
     }
 
@@ -50,8 +52,8 @@ public abstract class UmlgRestletApplication extends Application {
             servlet = false;
         }
         if (servlet) {
-            URL jettyMarler = Thread.currentThread().getContextClassLoader().getResource("jetty.marker");
-            servlet = jettyMarler == null;
+            URL jettyMarker = Thread.currentThread().getContextClassLoader().getResource("jetty.marker");
+            servlet = jettyMarker == null;
         }
         if (servlet) {
             slickgrid = new Directory(getContext(), "war:///javascript/");

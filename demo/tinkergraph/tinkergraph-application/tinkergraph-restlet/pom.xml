@@ -49,7 +49,7 @@
                         <argument>-classpath</argument>
                         <!-- automatically creates the classpath using all project dependencies,
                             also adding the project build directory -->
-                        <classpath />
+                        <classpath></classpath>
                         <argument>org.umlg.demo.DemoComponent</argument>
                     </arguments>
                 </configuration>

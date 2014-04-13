@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xmi:XMI xmi:version="20110701" xmlns:xmi="http://www.omg.org/spec/XMI/20110701" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:UmlgValidation="http:///schemas/UmlgValidation/_UFqlwNZNEeK9CpmlFL_zvQ/10" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xsi:schemaLocation="http:///schemas/UmlgValidation/_UFqlwNZNEeK9CpmlFL_zvQ/10 ../../../../../../demo/tinkergraph/tinkergraph-application/src/main/model/validation.profile.uml#_UFsa8NZNEeK9CpmlFL_zvQ">
+<xmi:XMI xmi:version="20110701" xmlns:xmi="http://www.omg.org/spec/XMI/20110701" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:UmlgValidation="http:///schemas/UmlgValidation/_UFqlwNZNEeK9CpmlFL_zvQ/10" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xsi:schemaLocation="http:///schemas/UmlgValidation/_UFqlwNZNEeK9CpmlFL_zvQ/10 ../../../../../demo/quick-preview/quick-preview-application/quick-preview-entities/src/main/model/validation.profile.uml#_UFsa8NZNEeK9CpmlFL_zvQ">
   <uml:Model xmi:id="_JKkPEHzeEeOYhpiy1kqM8Q" name="everfresh">
     <packageImport xmi:id="_JKkPEXzeEeOYhpiy1kqM8Q">
       <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
