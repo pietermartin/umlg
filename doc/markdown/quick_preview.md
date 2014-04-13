@@ -1,8 +1,8 @@
-##Quick Preview
+<!-- Quick Preview -->
 
 Here is a simple uml class diagram.
 
-![image of person works for company](images/uml/Package_umlg_demoQuickPreviewClassDiagram.PNG)
+![image of person works for company](images/uml/Package_umlg_demo1ClassDiagram.PNG)
 
 Here are the generated entities in action.
 

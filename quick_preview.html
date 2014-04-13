@@ -8,7 +8,7 @@
     <meta name="author" content="">
     <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
 
-    <title>Umlg</title>
+    <title>UMLG</title>
 
     <!-- Bootstrap core CSS -->
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -42,7 +42,7 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Documentation <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="documentation.html">Quick Preview</a></li>
+                        <li><a href="quick_preview.html">Quick Preview</a></li>
                         <li><a href="introduction.html">Introduction</a></li>
                         <li><a href="getting_started.html">Getting Started</a></li>
                         <li><a href="umlg_inaction.html">UMLG In action</a></li>
@@ -64,19 +64,23 @@
     </div>
 </header>
 
+<div class="jumbotron umlg-doc-jumbotron">
+    <p>Quick Preview</p>
+</div>
+
 <!-- Begin Body -->
-<div class="container">
+<div class="container umlgcontainer">
     <div class="row">
         <div class="col-md-12">
 
             <p class="pull-right visible-xs">
                 <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
             </p>
-            <h2>Quick Preview</h2>
+            <!-- Quick Preview -->
 
 <p>Here is a simple uml class diagram.</p>
 
-<p><img src="images/uml/Package_umlg_demoQuickPreviewClassDiagram.PNG" alt="image of person works for company" title="" /></p>
+<p><img src="images/uml/Package_umlg_demo1ClassDiagram.PNG" alt="image of person works for company" title="" /></p>
 
 <p>Here are the generated entities in action.</p>
 
@@ -135,11 +139,17 @@ Assert.assertTrue(company.getEmployee().contains(person));
 
 <script type='text/javascript'>
 
-    $(document).ready(function() {
+    $(document).ready(function () {
 
-        $('#sidebar').affix();
+        $('#sidebar').affix(
+                {
+                    offset: {
+                        top: 80
+                    }
+                }
+        );
 
-        var $body   = $(document.body);
+        var $body = $(document.body);
         var navHeight = $('.navbar').outerHeight(true) + 10;
 
         $body.scrollspy({
@@ -148,10 +158,10 @@ Assert.assertTrue(company.getEmployee().contains(person));
         });
 
         /* smooth scrolling sections */
-        $('a[href*=#]:not([href=#])').click(function() {
-            if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+        $('a[href*=#]:not([href=#])').click(function () {
+            if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
                 var target = $(this.hash);
-                target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+                target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
                 if (target.length) {
                     $('html,body').animate({
                         scrollTop: target.offset().top - 50

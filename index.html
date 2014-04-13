@@ -16,6 +16,9 @@
     <!-- Custom styles for this template -->
     <link href="stylesheets/offcanvas.css" rel="stylesheet">
 
+    <!-- umlg css -->
+    <link href="stylesheets/umlg-doc.css" rel="stylesheet">
+
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -40,7 +43,7 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Documentation <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="documentation.html">Quick Preview</a></li>
+                        <li><a href="quick_preview.html">Quick Preview</a></li>
                         <li><a href="introduction.html">Introduction</a></li>
                         <li><a href="getting_started.html">Getting Started</a></li>
                         <li><a href="umlg_inaction.html">UMLG In action</a></li>
@@ -55,92 +58,86 @@
                 <li><a href="http://demo.umlg.org">Demo</a></li>
             </ul>
         </div>
-        <!-- /.nav-collapse -->
     </div>
-    <!-- /.container -->
 </div>
-<!-- /.navbar -->
 
-<div class="container">
-    <div class="jumbotron">
-        <p>UMLG is a UML to java code generator. From class diagrams, persistent java entities are generated. The
-            entities persist via an embedded
-            <a href="http://blueprints.tinkerpop.com/">Blueprints</a> graph database. The semantics of a
-            <a href="https://github.com/tinkerpop/blueprints/wiki/Property-Graph-Model">Property Graph Model</a> is a
-            natural fit for implementing the rich semantics of UML class diagrams in java.</p>
-    </div>
+<div class="jumbotron umlgjumbotron">
+    <p>UMLG is a UML to java code generator. From class diagrams, persistent java entities are generated. The
+        entities persist via an embedded
+        <a href="http://blueprints.tinkerpop.com/">Blueprints</a> graph database. The semantics of a
+        <a href="https://github.com/tinkerpop/blueprints/wiki/Property-Graph-Model">Property Graph Model</a> is a
+        natural fit for implementing the rich semantics of UML class diagrams in java.</p>
+</div>
 
-    <div class="container">
-        <!-- Example row of columns -->
-        <div class="row">
-            <div class="col-md-4">
-                <h2>UML</h2>
+<div class="container umlgcontainer">
+    <div class="row">
+        <div class="col-md-4">
+            <h2>UML</h2>
 
-                <p>UMLG endeavours to implement the <a href="http://www.omg.org/spec/UML/2.4.1/Superstructure/PDF">UML2</a>
-                    spec as faithfully as possible. UMLG supports most class diagram
-                    features. Inheritance, interfaces, abstract classes, associations, composition, complex data types,
-                    multiplicity, collection types (Set, OrderedSet, Sequence, Bag), qualifiers, constraints and more
-                    are supported.</p>
-
-            </div>
-            <div class="col-md-4">
-                <h2>OCL</h2>
-
-                <p>UMLG supports <a href="http://www.omg.org/spec/OCL/2.3.1/PDF">OCL</a> (object constraint language). Constraints, derived properties and
-                    query operations can be fully specified in OCL. For each OCL expression in the model corresponding java is generated directly
-                    into the owning entity.</p>
-
-            </div>
-            <div class="col-md-4">
-                <h2>Rest Interface and UI</h2>
-
-                <p>UMLG can optionally generate a rest interface to the application for performing remote crud and query
-                    operations. Utilizing the rest interface a web based ui is provided. From the gui crud and query
-                    operations can be performed. This makes it easy to visualize, use and maintain the application.</p>
-
-            </div>
+            <p>UMLG endeavours to implement the <a href="http://www.omg.org/spec/UML/2.4.1/Superstructure/PDF">UML2</a>
+                spec as faithfully as possible. UMLG supports most class diagram
+                features. Inheritance, interfaces, abstract classes, associations, composition, complex data types,
+                multiplicity, collection types (Set, OrderedSet, Sequence, Bag), qualifiers, constraints and more
+                are supported.</p>
 
         </div>
-        <div class="row">
-            <div class="col-md-4">
-                <h2>Entities</h2>
-                <ul>
-                    <li>Java entities contain no interceptors or annotations.</li>
-                    <li>Unit tests are easy to write.</li>
-                    <li>Fast start up times regardless of the number of entities.</li>
-                    <li>Short stack, no endless framework code.</li>
-                    <li>Persistent entities that are a joy to work with.</li>
-                </ul>
-            </div>
+        <div class="col-md-4">
+            <h2>OCL</h2>
 
-            <div class="col-md-4">
-                <h2>Queries</h2>
+            <p>UMLG supports <a href="http://www.omg.org/spec/OCL/2.3.1/PDF">OCL</a> (object constraint language).
+                Constraints, derived properties and
+                query operations can be fully specified in OCL. For each OCL expression in the model corresponding java
+                is generated directly
+                into the owning entity.</p>
 
-                <p>Queries can be executed in OCL, <a href="https://github.com/tinkerpop/gremlin/wiki">Gremlin</a> or the
-                    underlying blueprint graph's native query language.</p>
+        </div>
+        <div class="col-md-4">
+            <h2>Rest Interface and UI</h2>
 
-            </div>
-
-            <div class="col-md-4">
-                <h2>Blueprints</h2>
-
-                <p>UMLG is based on the pure <a href="http://blueprints.tinkerpop.com/">Blueprints</a> api. As such any
-                    Blueprints enabled graph database will work. The Travis CI test suite currently executes successfully
-                    on <a href="https://bitbucket.org/lambdazen/bitsy/wiki/Home">Bitsy</a>,
-                    <a href="http://www.orientdb.org/">OrientDb</a>, <a href="http://www.neo4j.org/">Neo4j</a> and
-                    <a href="https://github.com/thinkaurelius/titan/wiki">Titan</a>.</p>
-
-            </div>
+            <p>UMLG can optionally generate a rest interface to the application for performing remote crud and query
+                operations. Utilizing the rest interface a web based ui is provided. From the gui crud and query
+                operations can be performed. This makes it easy to visualize, use and maintain the application.</p>
 
         </div>
 
-        <hr>
-        <footer>
-            <p>100% open source. Licensed under the Apache Software License 2.0</p>
-        </footer>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <h2>Entities</h2>
+            <ul>
+                <li>Java entities contain no interceptors or annotations.</li>
+                <li>Unit tests are easy to write.</li>
+                <li>Fast start up times regardless of the number of entities.</li>
+                <li>Short stack, no endless framework code.</li>
+                <li>Persistent entities that are a joy to work with.</li>
+            </ul>
+        </div>
+
+        <div class="col-md-4">
+            <h2>Queries</h2>
+
+            <p>Queries can be executed in OCL, <a href="https://github.com/tinkerpop/gremlin/wiki">Gremlin</a> or the
+                underlying blueprint graph's native query language.</p>
+
+        </div>
+
+        <div class="col-md-4">
+            <h2>Blueprints</h2>
+
+            <p>UMLG is based on the pure <a href="http://blueprints.tinkerpop.com/">Blueprints</a> api. As such any
+                Blueprints enabled graph database will work. The Travis CI test suite currently executes successfully
+                on <a href="https://bitbucket.org/lambdazen/bitsy/wiki/Home">Bitsy</a>,
+                <a href="http://www.neo4j.org/">Neo4j</a> and
+                <a href="https://github.com/thinkaurelius/titan/wiki">Titan</a>.</p>
+
+        </div>
 
     </div>
-    <!--/.container-->
+
+    <hr>
+    <footer>
+        <p>100% open source. Licensed under the Apache Software License 2.0</p>
+    </footer>
 
 
     <!-- Bootstrap core JavaScript

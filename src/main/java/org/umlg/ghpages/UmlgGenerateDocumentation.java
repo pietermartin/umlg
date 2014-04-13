@@ -43,6 +43,12 @@ public class UmlgGenerateDocumentation {
                 //            FileUtils.write(new File("./doc/documentation-template-with-menu/" + md.getName() + ".menu"), template);
             }
 
+            //Insert the heading into the template
+            List<String> rawMarkdown = FileUtils.readLines(md);
+            String heading = rawMarkdown.get(0);
+            heading = heading.replace("<!--", "").replace("-->","");
+            template = template.replace("<!-- GENERATED HEADING -->", heading.trim());
+
             //insert the md content into the template with menu
             String content = FileUtils.readFileToString(new File("./doc/markdown-parsed/" + md.getName() + ".parsed"));
             template = template.replace("<!-- GENERATED CONTENT -->", content);
@@ -59,7 +65,7 @@ public class UmlgGenerateDocumentation {
     }
 
     private static boolean hasMenu(File md) {
-        return !md.getName().equals("documentation.md") && !md.getName().equals("introduction.md");
+        return !md.getName().equals("quick_preview.md") && !md.getName().equals("introduction.md");
     }
 
     private static List<Menu> parseMd(File md) throws IOException {
