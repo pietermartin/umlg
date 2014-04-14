@@ -1,13 +1,10 @@
 package org.umlg.demo;
 
-import org.apache.commons.io.FileUtils;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.webapp.WebAppContext;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.net.InetSocketAddress;
 import java.util.Properties;
 
