@@ -162,7 +162,9 @@
                     } else {
                         $input.appendTo(inputDiv);
                         if (property.readOnly) {
-                            $input.wrap('<fieldset disabled />');
+                            //This breaks bootstrap
+//                            $input.wrap('<fieldset disabled />');
+                            $input.attr("disabled", "disabled");
                         }
                     }
                     if (property.manyPrimitive || property.manyEnumeration) {
