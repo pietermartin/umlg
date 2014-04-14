@@ -14,7 +14,7 @@
         <module>tinkergraph</module>
         <module>graphofthegods</module>
         <module>demo-application</module>
-    <module>quick-preview</module>
+        <module>quick-preview</module>
   </modules>
     <dependencies>
         <dependency>
