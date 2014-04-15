@@ -3,6 +3,7 @@ package org.umlg.demo;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
+import org.eclipse.jetty.server.handler.MovedContextHandler;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 import java.net.InetSocketAddress;
@@ -21,6 +22,11 @@ public class JettyDemo {
 
         ContextHandlerCollection contexts = new ContextHandlerCollection();
 
+        MovedContextHandler root = new MovedContextHandler();
+        root.setContextPath("/");
+        root.setNewContextURL("/demo");
+        root.setClassLoader(Thread.currentThread().getContextClassLoader());
+
         WebAppContext demo = new WebAppContext();
         demo.setContextPath("/demo");
         demo.setDescriptor("./demo/demo-application/src/main/webapp/WEB-INF/web.xml");
@@ -35,7 +41,7 @@ public class JettyDemo {
         tinkerGraph.setContextPath("/tinkergraph");
         tinkerGraph.setWar("./demo/tinkergraph/tinkergraph-application/tinkergraph-war/target/tinkergraph-war");
 
-        contexts.setHandlers(new Handler[] {  demo, graphOfTheGods, tinkerGraph });
+        contexts.setHandlers(new Handler[] {  root, demo, graphOfTheGods, tinkerGraph });
         server.setHandler(contexts);
 
         server.start();
