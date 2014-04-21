@@ -15,4 +15,11 @@ abstract class GremlinExecutorBaseClass extends Script {
         Class.forName("org.umlg.runtime.gremlin.UmlgGremlinAddon").defineUmlgSteps(graph);
     }
 
+    def useInterceptor= { Class theClass, Class theInterceptor, Closure theCode->
+        def proxy= ProxyMetaClass.getInstance( theClass )
+        def interceptor= theInterceptor.newInstance()
+        proxy.interceptor= interceptor
+        proxy.use( theCode )
+    }
+
 }

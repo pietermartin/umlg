@@ -16,7 +16,7 @@ import org.umlg.tests.indexing.TestIndexing;
 @Suite.SuiteClasses({
 //        BagTestTest.class,
 //        OclStdLibBagTest.class,
-//        OclStdLibCollectionTest.class,
+//        OclStdLibCollectionTest.class
 //        OclStdLibOrderedSetTest.class,
 //        OclStdLibSequenceTest.class,
 //        OclStdLibSetTest.class,
@@ -32,7 +32,8 @@ import org.umlg.tests.indexing.TestIndexing;
 //        TestAssociationToSelf.class,
 //        ManyToManySequenceTest.class,
 //        ManyToManyToSelfSequenceTest.class
-        TestIndexing.class
+//        TestIndexing.class,
+        TestGroovyExecutor.class
 
 
         })

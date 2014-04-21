@@ -3,10 +3,8 @@ package org.umlg.tests.indexing;
 import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.rootallinstances.TopRoot;
-import org.umlg.runtime.domain.PersistentObject;
 import org.umlg.runtime.test.BaseLocalDbTest;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -14,6 +12,21 @@ import java.util.List;
  * Time: 10:08 AM
  */
 public class TestIndexing extends BaseLocalDbTest {
+
+    @Test
+    public void testUpdateIndexedFieldToPrevious() {
+        TopRoot topRoot = new TopRoot();
+        topRoot.setName("asdasdasd");
+        topRoot.setIndexedName("a");
+        db.commit();
+        topRoot = db.getFromUniqueIndex(TopRoot.TopRootRuntimePropertyEnum.indexedName.getQualifiedName(), "a");
+        Assert.assertNotNull(topRoot);
+        Assert.assertEquals("a", topRoot.getIndexedName());
+
+        topRoot.setIndexedName("a");
+        db.commit();
+
+    }
 
     @Test
     public void testIndexingStringUnique() {

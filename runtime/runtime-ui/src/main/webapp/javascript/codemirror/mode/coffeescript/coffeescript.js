@@ -2,6 +2,16 @@
  * Link to the project's GitHub page:
  * https://github.com/pickhardt/coffeescript-codemirror-mode
  */
+(function(mod) {
+  if (typeof exports == "object" && typeof module == "object") // CommonJS
+    mod(require("../../lib/codemirror"));
+  else if (typeof define == "function" && define.amd) // AMD
+    define(["../../lib/codemirror"], mod);
+  else // Plain browser env
+    mod(CodeMirror);
+})(function(CodeMirror) {
+"use strict";
+
 CodeMirror.defineMode("coffeescript", function(conf) {
   var ERRORCLASS = "error";
 
@@ -119,13 +129,13 @@ CodeMirror.defineMode("coffeescript", function(conf) {
 
     // Handle strings
     if (stream.match(stringPrefixes)) {
-      state.tokenize = tokenFactory(stream.current(), "string");
+      state.tokenize = tokenFactory(stream.current(), false, "string");
       return state.tokenize(stream, state);
     }
     // Handle regex literals
     if (stream.match(regexPrefixes)) {
       if (stream.current() != "/" || stream.match(/^.*\//, false)) { // prevent highlight of division
-        state.tokenize = tokenFactory(stream.current(), "string-2");
+        state.tokenize = tokenFactory(stream.current(), true, "string-2");
         return state.tokenize(stream, state);
       } else {
         stream.backUp(1);
@@ -161,8 +171,7 @@ CodeMirror.defineMode("coffeescript", function(conf) {
     return ERRORCLASS;
   }
 
-  function tokenFactory(delimiter, outclass) {
-    var singleline = delimiter.length == 1;
+  function tokenFactory(delimiter, singleline, outclass) {
     return function(stream, state) {
       while (!stream.eol()) {
         stream.eatWhile(/[^'"\/\\]/);
@@ -213,6 +222,8 @@ CodeMirror.defineMode("coffeescript", function(conf) {
     if (type !== "coffee") {
       align = null;
       alignOffset = stream.column() + stream.current().length;
+    } else if (state.scope.align) {
+      state.scope.align = false;
     }
     state.scope = {
       offset: offset,
@@ -268,7 +279,6 @@ CodeMirror.defineMode("coffeescript", function(conf) {
     }
     if (((current === "->" || current === "=>") &&
          !state.lambda &&
-         state.scope.type == "coffee" &&
          !stream.peek())
         || style === "indent") {
       indent(stream, state);
@@ -292,9 +302,10 @@ CodeMirror.defineMode("coffeescript", function(conf) {
     }
     delimiter_index = "])}".indexOf(current);
     if (delimiter_index !== -1) {
-      if (dedent(stream, state)) {
-        return ERRORCLASS;
-      }
+      while (state.scope.type == "coffee" && state.scope.prev)
+        state.scope = state.scope.prev;
+      if (state.scope.type == current)
+        state.scope = state.scope.prev;
     }
     if (state.dedent > 0 && stream.eol() && state.scope.type == "coffee") {
       if (state.scope.prev) state.scope = state.scope.prev;
@@ -333,11 +344,14 @@ CodeMirror.defineMode("coffeescript", function(conf) {
 
     indent: function(state, text) {
       if (state.tokenize != tokenBase) return 0;
-      var closes = state.scope.type === (text && text.charAt(0));
-      if (state.scope.align)
-        return state.scope.alignOffset - (closes ? 1 : 0);
+      var scope = state.scope;
+      var closer = text && "])}".indexOf(text.charAt(0)) > -1;
+      if (closer) while (scope.type == "coffee" && scope.prev) scope = scope.prev;
+      var closes = closer && scope.type === text.charAt(0);
+      if (scope.align)
+        return scope.alignOffset - (closes ? 1 : 0);
       else
-        return (closes ? state.scope.prev : state.scope).offset;
+        return (closes ? scope.prev : scope).offset;
     },
 
     lineComment: "#",
@@ -347,3 +361,5 @@ CodeMirror.defineMode("coffeescript", function(conf) {
 });
 
 CodeMirror.defineMIME("text/x-coffeescript", "coffeescript");
+
+});

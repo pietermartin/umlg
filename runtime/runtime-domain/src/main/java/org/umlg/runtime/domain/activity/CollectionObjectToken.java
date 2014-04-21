@@ -261,6 +261,11 @@ public class CollectionObjectToken<O> extends ObjectToken<O> implements Composit
     }
 
     @Override
+    public void doBeforeCommit() {
+
+    }
+
+    @Override
 	public <E> UmlgSet<E> asSet() {
 		// TODO Auto-generated method stub
 		return null;

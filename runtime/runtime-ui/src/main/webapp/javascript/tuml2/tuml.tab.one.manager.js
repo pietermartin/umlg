@@ -79,6 +79,12 @@
         console.log('TumlBaseTabOneManager.prototype.getDiv must be overriden');
     }
 
+    //TODO check this for updateData
+    /**
+     * This is called from tum.tab.view.manager.setCellValue for saving a component on this one
+     * @param property
+     * @param value
+     */
     TumlBaseTabOneManager.prototype.updateData = function (property, value) {
         var foundProperty = false;
         for (var i = 0; i < this.metaForData.properties.length; i++) {
@@ -91,7 +97,7 @@
         if (!foundProperty) {
             throw 'Updating non existing property on one. Property = ' + property.name;
         }
-        this.data[property.name] = value;
+        this.updatedData[property.name] = value;
     }
 
     TumlBaseTabOneManager.prototype.refresh = function (data, metaForData, isForCreation) {
@@ -99,9 +105,18 @@
         this.currentActiveProperty = null;
         this.metaForData = metaForData.to;
         this.qualifiedName = this.metaForData.qualifiedName;
-        this.data = data;
-        this.data.qualifiedName = this.qualifiedName;
         this.isForCreation = isForCreation;
+        if (this.isForCreation) {
+            this.updatedData = JSON.parse(JSON.stringify(data));
+            this.updatedData.qualifiedName = this.qualifiedName;
+            this.data = data;
+            this.data.qualifiedName = this.qualifiedName;
+        } else {
+            this.updatedData = {};
+            this.updatedData.qualifiedName = this.qualifiedName;
+            this.data = data;
+            this.data.qualifiedName = this.qualifiedName;
+        }
 
         this.calculateContainsOne();
 
@@ -149,8 +164,8 @@
                         this.currentActiveProperty = property;
                     }
 
-                    var inputDiv = $('<div />', {class: 'input-group col-lg-6'}).appendTo(formGroupDiv);
-                    if (!property.readOnly && property.lower > 0) {
+                    var inputDiv = $('<div />', {class: 'input-group col-lg-5'}).appendTo(formGroupDiv);
+                    if (property.fieldType !== 'Boolean' && !property.oneEnumeration && !property.readOnly && property.lower > 0) {
                         inputDiv.append('<span class="input-group-addon glyphicon glyphicon-asterisk"></span>');
                     }
                     if (property.fieldType == 'Boolean' && property.upper == 1) {
@@ -161,9 +176,13 @@
                         checkboxLabel.appendTo(inputDiv);
                     } else {
                         $input.appendTo(inputDiv);
+                        if (property.fieldType !== 'Boolean' && !property.oneEnumeration && !property.readOnly && property.lower > 0) {
+                        } else {
+                            if (property.lower === 0 &&  property.dataTypeEnum !== 'Date' && property.dataTypeEnum !== 'Time' && property.dataTypeEnum !== 'DateTime') {
+                                inputDiv.append('<span class="input-group-addon glyphicon glyphicon-pencil"></span>');
+                            }
+                        }
                         if (property.readOnly) {
-                            //This breaks bootstrap
-//                            $input.wrap('<fieldset disabled />');
                             $input.attr("disabled", "disabled");
                         }
                     }
@@ -172,7 +191,6 @@
                         $input.parent().append($manyDiv);
 
                         $manyDiv.click(
-
                             function (inputScoped, propertyScoped, manyDivScoped, liScoped) {
                                 return function (e) {
                                     self.openEditorForMany(inputScoped, propertyScoped, manyDivScoped, liScoped)
@@ -183,7 +201,6 @@
                             }($input, property, $input, formGroupDiv));
 
                         $input.keypress(
-
                             function (inputScoped, propertyScoped, manyDivScoped, liScoped) {
                                 return function (e) {
                                     if (e.which == 13) {
@@ -201,13 +218,12 @@
                         });
                     } else if (property.composite && property.lower >= 1 && (property.upper > 1 || property.upper == -1)) {
                         $input.click(
-
                             function (tumlUriScoped, propertyScoped) {
                                 return function (e) {
-                                    if (self.data[propertyScoped.name] === undefined || self.data[propertyScoped.name] === null) {
+                                    if (self.updatedData[propertyScoped.name] === undefined || self.updatedData[propertyScoped.name] === null) {
                                         self.tumlTabViewManager.openManyComponent([], tumlUriScoped, propertyScoped);
                                     } else {
-                                        self.tumlTabViewManager.openManyComponent(self.data[propertyScoped.name], tumlUriScoped, propertyScoped);
+                                        self.tumlTabViewManager.openManyComponent(self.updatedData[propertyScoped.name], tumlUriScoped, propertyScoped);
                                     }
                                 };
                             }(property.tumlUri, property));
@@ -217,47 +233,59 @@
                         if (property.dataTypeEnum != null && property.dataTypeEnum !== undefined) {
                             if (property.dataTypeEnum == 'Date') {
 
+                                $input.parent().addClass("input-group date");
+                                $input.parent().attr('data-date-format', 'YYYY-MM-DD');
+                                $input.parent().append('<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>');
+
                                 //this is called 'freezing your closures', help to get the property into the closure
-                                (function(p){
-                                    $input.datepicker({
-                                        buttonImageOnly: true,
-                                        dateFormat: "yy-mm-dd",
-                                        onClose: function (dateText, inst){
-                                            self.synchronizeModel(p);
-                                        }
+                                (function (p) {
+                                    $input.parent().datetimepicker({
+                                        pickTime: false
+                                    });
+                                    $input.parent().on("dp.change",function (e) {
+                                        self.synchronizeModel(p);
+                                    });
+                                    $input.parent().on("dp.show",function (e) {
+                                        self.synchronizeModel(p);
                                     });
                                 })(property);
 
-                                $input.parent().append('<label for="' + $input.attr('id') + '" class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></label>');
                             } else if (property.dataTypeEnum == 'Time') {
 
+                                $input.parent().addClass("input-group date");
+                                $input.attr('data-date-format', 'HH:mm');
+                                $input.parent().append('<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>');
+
                                 //this is called 'freezing your closures', help to get the property into the closure
-                                (function(p){
-                                    $input.timepicker({
-                                        buttonImageOnly: true,
-                                        onClose: function (dateText, inst){
-                                            self.synchronizeModel(p);
-                                        }
+                                (function (p) {
+                                    $input.parent().datetimepicker({
+                                        pickDate: false
+                                    });
+                                    $input.parent().on("dp.change",function (e) {
+                                        self.synchronizeModel(p);
+                                    });
+                                    $input.parent().on("dp.show",function (e) {
+                                        self.synchronizeModel(p);
                                     });
                                 })(property);
-
-                                $input.parent().append('<label for="' + $input.attr('id') + '" class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></label>');
 
                             } else if (property.dataTypeEnum == 'DateTime') {
 
+                                $input.parent().addClass("input-group date");
+                                $input.parent().attr('data-date-format', 'YYYY-MM-DD HH:mm');
+                                $input.parent().append('<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>');
+
                                 //this is called 'freezing your closures', help to get the property into the closure
-                                (function(p){
-                                    $input.datetimepicker({
-                                        buttonImageOnly: true,
-                                        dateFormat: "yy-mm-dd",
-                                        timeFormat: "hh:mm:ss",
-                                        onClose: function (dateText, inst){
-                                            self.synchronizeModel(p);
-                                        }
+                                (function (p) {
+                                    $input.parent().datetimepicker();
+                                    $input.parent().on("dp.change",function (e) {
+                                        self.synchronizeModel(p);
+                                    });
+                                    $input.parent().on("dp.show",function (e) {
+                                        self.synchronizeModel(p);
                                     });
                                 })(property);
 
-                                $input.parent().append('<label for="' + $input.attr('id') + '" class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></label>');
                             }
                         }
                     }
@@ -276,9 +304,9 @@
                     var $input = this.constructInputForField(property);
 
                     var inputDiv = $('<div />', {class: 'input-group col-lg-4'}).appendTo(formGroupDiv);
-                    if (property.lower > 0) {
-                        inputDiv.append('<span class="input-group-addon glyphicon glyphicon-asterisk"></span>');
-                    }
+//                    if (property.lower > 0) {
+//                        inputDiv.append('<span class="input-group-addon glyphicon glyphicon-asterisk"></span>');
+//                    }
                     $input.appendTo(inputDiv);
                 }
             }
@@ -297,23 +325,23 @@
     TumlBaseTabOneManager.prototype.isPropertyForOnePage = function (property) {
         return (
             (!property.associationClassOne && !property.inverseComposite && (!property.composite && (property.oneToOne || property.manyToOne || property.manyPrimitive || property.manyEnumeration)))
-                ||
-                (!property.associationClassOne && (this.isForCreation && property.composite && property.lower > 0) && property.name !== 'uri'));
+            ||
+            (!property.associationClassOne && (this.isForCreation && property.composite && property.lower > 0) && property.name !== 'uri'));
     }
 
     /**
      * This method saves the value of the given property on the ui with the underlying model.
      *
-     * @param property THe property to synchronize the model with
+     * @param property The property to synchronize the model with
      */
     TumlBaseTabOneManager.prototype.synchronizeModel = function (property) {
         if (property.name === 'id') {
             var id = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').val();
             if (id.indexOf('fake') === -1) {
-                this.data.id = id;
+                this.updatedData.id = id;
             } else {
-                this.data.id = id;
-                this.data.tmpId = this.data.id;
+                this.updatedData.id = id;
+                this.updatedData.tmpId = this.updatedData.id;
             }
         } else if (property.readOnly) {
             //Do nothing
@@ -322,39 +350,104 @@
                 var stringValue = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').val();
                 if (property.fieldType == 'Integer' || property.fieldType == 'Long') {
                     if (stringValue == '') {
-                        this.data[property.name] = null;
+                        if (this.data[property.name] === null && !this.isForCreation) {
+                            this.updatedData[property.name] = undefined;
+                        } else {
+                            this.updatedData[property.name] = null;
+                        }
                     } else {
-                        this.data[property.name] = parseInt(stringValue);
+                        if (this.data[property.name] === parseInt(stringValue) && !this.isForCreation) {
+                            this.updatedData[property.name] = undefined;
+                        } else {
+                            this.updatedData[property.name] = parseInt(stringValue);
+                        }
                     }
                 } else if (property.fieldType == 'Real') {
                     if (stringValue == '') {
-                        this.data[property.name] = null;
+                        if (this.data[property.name] === null && !this.isForCreation) {
+                            this.updatedData[property.name] = undefined;
+                        } else {
+                            this.updatedData[property.name] = null;
+                        }
                     } else {
-                        this.data[property.name] = parseFloat(stringValue);
+                        if (this.data[property.name] === parseFloat(stringValue) && !this.isForCreation) {
+                            this.updatedData[property.name] = undefined;
+                        } else {
+                            this.updatedData[property.name] = parseFloat(stringValue);
+                        }
                     }
                 } else if (property.fieldType == 'String') {
                     if (stringValue == '') {
-                        this.data[property.name] = null;
+                        if (this.data[property.name] === null && !this.isForCreation) {
+                            this.updatedData[property.name] = undefined;
+                        } else {
+                            this.updatedData[property.name] = null;
+                        }
                     } else {
-                        this.data[property.name] = stringValue;
+                        if (this.data[property.name] === stringValue && !this.isForCreation) {
+                            this.updatedData[property.name] = undefined;
+                        } else {
+                            this.updatedData[property.name] = stringValue;
+                        }
                     }
                 } else if (property.fieldType == 'Boolean') {
-                    this.data[property.name] = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').is(':checked');
+                    var value = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').is(':checked')
+                    if (this.data[property.name] === value && !this.isForCreation) {
+                        this.updatedData[property.name] = undefined;
+                    } else {
+                        this.updatedData[property.name] = value;
+                    }
                 }
             } else if (property.dataTypeEnum !== null && property.dataTypeEnum !== undefined) {
                 if (property.dataTypeEnum == 'DateTime') {
-                    this.data[property.name] = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').val();
-//                    this.data[property.name] = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').val().replace(/ /g, "T");
+                    var value = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').parent().data('DateTimePicker').getDate().format('YYYY-MM-DD HH:mm:ss');
+                    if (this.data[property.name] === value && !this.isForCreation) {
+                        this.updatedData[property.name] = undefined;
+                    } else {
+                        this.updatedData[property.name] = value;
+                    }
+                } else if (property.dataTypeEnum == 'Date') {
+                    var value = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').parent().data('DateTimePicker').getDate().format('YYYY-MM-DD');
+                    if (this.data[property.name] === value && !this.isForCreation) {
+                        this.updatedData[property.name] = undefined;
+                    } else {
+                        this.updatedData[property.name] = value;
+                    }
+                } else if (property.dataTypeEnum == 'Time') {
+                    var value = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').parent().data('DateTimePicker').getDate().format('HH:mm:ss');
+                    if (this.data[property.name] === value && !this.isForCreation) {
+                        this.updatedData[property.name] = undefined;
+                    } else {
+                        this.updatedData[property.name] = value;
+                    }
                 } else if (property.dataTypeEnum == 'Image') {
                 } else {
-                    this.data[property.name] = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').val();
+                    var value = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').val();
+                    if (value === '') {
+                        if (this.data[property.name] === value && !this.isForCreation) {
+                            this.updatedData[property.name] = undefined;
+                        } else {
+                            this.updatedData[property.name] = null;
+                        }
+                    } else {
+                        if (this.data[property.name] === value && !this.isForCreation) {
+                            this.updatedData[property.name] = undefined;
+                        } else {
+                            this.updatedData[property.name] = value;
+                        }
+                    }
                 }
             } else if (property.oneEnumeration) {
                 var $select = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id');
                 var options = $select.children();
                 for (var j = 0; j < options.length; j++) {
                     if (options[j].selected) {
-                        this.data[property.name] = $select.val();
+                        var value = $select.val();
+                        if (this.data[property.name] === value && !this.isForCreation) {
+                            this.updatedData[property.name] = undefined;
+                        } else {
+                            this.updatedData[property.name] = value;
+                        }
                         break;
                     }
                 }
@@ -374,11 +467,19 @@
                         array[j] = array[j] === 'true';
                     }
                 }
-                this.data[property.name] = array;
+                if (this.data[property.name] === array && !this.isForCreation) {
+                    this.updatedData[property.name] = undefined;
+                } else {
+                    this.updatedData[property.name] = array;
+                }
             } else if (property.manyEnumeration) {
                 var inputValue = $('#' + property.name + escapeColon(this.metaForData.qualifiedName) + 'Id').val();
                 var array = inputValue === '' ? [] : inputValue.split(',');
-                this.data[property.name] = array;
+                if (this.data[property.name] === array && !this.isForCreation) {
+                    this.updatedData[property.name] = undefined;
+                } else {
+                    this.updatedData[property.name] = array;
+                }
             } else if (property.composite && property.lower > 0) {
                 //This is already in the data model. the input is not editable
             } else if (!property.onePrimitive && !property.manyPrimitive && !property.inverseComposite) {
@@ -393,9 +494,19 @@
                                 //it expects something or nothing
                                 optionId = null;
                             }
-                            this.data[property.name] = {id: optionId, displayName: options[j].label, previousId: this.data[property.name].id};
+                            var value = {id: optionId, displayName: options[j].label, previousId: this.updatedData[property.name].id};
+                            if (this.data[property.name] === value && !this.isForCreation) {
+                                this.updatedData[property.name] = undefined;
+                            } else {
+                                this.updatedData[property.name] = value;
+                            }
                         } else {
-                            this.data[property.name] = {id: optionId, displayName: options[j].label, previousId: this.data[property.name].id};
+                            var value = {id: optionId, displayName: options[j].label, previousId: this.updatedData[property.name].id};
+                            if (this.data[property.name] === value && !this.isForCreation) {
+                                this.updatedData[property.name] = undefined;
+                            } else {
+                                this.updatedData[property.name] = value;
+                            }
                         }
                         break;
                     }
@@ -414,7 +525,7 @@
             }
         } else if (property.readOnly) {
             if (!this.isForCreation) {
-                $input = $('<p />', {class: 'form-control'}).text(this.data[property.name]);
+                $input = $('<p />', {class: 'form-control', id: inputFieldId(property, this.metaForData, isForManyEditor)}).text(this.data[property.name]);
             } else {
                 $input = $('<p />', {class: 'form-control'});
             }
@@ -427,13 +538,11 @@
                 alert('Unsupported dataType ' + property.dataTypeEnum);
             }
             if (!this.isForCreation) {
-//                $input[0].defaultValue = this.data[property.name];
                 $input.val(this.data[property.name]);
             }
         } else if (property.composite && property.lower > 0) {
             $input = $("<input />", {type: 'text', id: inputFieldId(property, this.metaForData, isForManyEditor), name: property.name, class: 'form-control'});
             if (!this.isForCreation) {
-//                $input[0].defaultValue = this.data[property.name];
                 $input.val(this.data[property.name]);
             }
         } else if (property.oneEnumeration) {
@@ -562,8 +671,19 @@
         return result;
     }
 
+    /**
+     * This is called after saving a one and when creating a new component one. Called from updateGridAfterCommitOrRollback
+     * @param dataMode
+     */
     TumlBaseTabOneManager.prototype.setDataModel = function (dataModel) {
-        this.data = dataModel;
+        if (dataModel.id.indexOf('fake') !== -1) {
+            //new component one
+            this.data = dataModel;
+            //For new components the whole object will be updated, i.e. created really
+            this.updatedData = JSON.parse(JSON.stringify(this.data));
+        } else {
+            this.data = dataModel;
+        }
     }
 
     TumlBaseTabOneManager.prototype.refreshFromDataModelForProperty = function (property) {
@@ -571,8 +691,12 @@
         if (this.isPropertyForOnePage(property)) {
             if (property.name == 'id') {
                 var input = $(inputFieldIdForValidate(property, this.metaForData, false));
-                if (this.data[property.name] !== undefined) {
+                if (this.updatedData[property.name] !== undefined) {
                     input.val(this.data[property.name]);
+                } else {
+                    if (this.data[property.name] !== undefined) {
+                        input.val(this.data[property.name]);
+                    }
                 }
             } else if (property.readOnly) {
                 var input = $(inputFieldIdForValidate(property, this.metaForData, false));
@@ -581,55 +705,75 @@
                 }
             } else if (property.dataTypeEnum != null && property.dataTypeEnum !== undefined) {
                 var input = $(inputFieldIdForValidate(property, this.metaForData, false));
-                if (this.data[property.name] !== undefined) {
-                    input.val(this.data[property.name]);
+                if (this.updatedData[property.name] !== undefined) {
+                    input.val(this.updatedData[property.name]);
+                } else {
+                    if (this.data[property.name] !== undefined) {
+                        input.val(this.data[property.name]);
+                    }
                 }
             } else if (property.composite && property.lower > 0) {
                 var input = $(inputFieldIdForValidate(property, this.metaForData, false));
-                if (this.data[property.name] !== undefined) {
-                    input.val(this.data[property.name]);
+                if (this.updatedData[property.name] !== undefined) {
+                    input.val(this.updatedData[property.name]);
+                } else {
+                    if (this.data[property.name] !== undefined) {
+                        input.val(this.data[property.name]);
+                    }
                 }
             } else if (property.oneEnumeration) {
                 var input = $(inputFieldIdForValidate(property, this.metaForData, false));
-                if (this.data[property.name] !== undefined) {
-                    this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, this.data[property.name], input);
+                if (this.updatedData[property.name] !== undefined) {
+                    this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, this.updatedData[property.name], input);
                 } else {
-                    this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, input);
+                    if (this.data[property.name] !== undefined) {
+                        this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, this.data[property.name], input);
+                    } else {
+                        this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, input);
+                    }
                 }
-//            } else if (property.manyEnumeration) {
-//                var input = $(inputFieldIdForValidate(property, this.metaForData, false));
-//                if (this.data[property.name] !== undefined) {
-//                    this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, this.data[property.name], input);
-//                } else {
-//                    this.appendEnumerationLoopupOptionsToSelect("/" + tumlModelName + "/tumlEnumLookup", property.qualifiedName, property.lower > 0, null, input);
-//                }
             } else if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && property.oneToOne) {
 
                 var input = $(inputFieldIdForValidate(property, this.metaForData, false));
-                this.appendLoopupOptionsToSelect2(property, this.data['id'], input, this.data[property.name]);
+                if (this.updatedData[property.name] !== undefined) {
+                    this.appendLoopupOptionsToSelect2(property, this.updatedData['id'], input, this.updatedData[property.name]);
+                } else {
+                    this.appendLoopupOptionsToSelect2(property, this.data['id'], input, this.data[property.name]);
+                }
 
             } else if (!property.onePrimitive && property.dataTypeEnum == undefined && !property.manyPrimitive && !property.composite && property.manyToOne) {
-                if (this.data[property.name] !== undefined) {
-                    this.appendLoopupOptionsToSelect2(property.tumlLookupUri, property.lower > 0, this.data['id'], this.data[property.name], input);
+                if (this.updatedData[property.name] !== undefined) {
+                    this.appendLoopupOptionsToSelect2(property.tumlLookupUri, property.lower > 0, this.data['id'], this.updatedData[property.name], input);
                 } else {
-                    this.appendLoopupOptionsToSelect2(property.tumlLookupOnCompositeParentUri, property.lower > 0, this.data['id'], this.data[property.name], input);
+                    if (this.data[property.name] !== undefined) {
+                        this.appendLoopupOptionsToSelect2(property.tumlLookupUri, property.lower > 0, this.data['id'], this.data[property.name], input);
+                    } else {
+                        //TODO when does this fire
+                        this.appendLoopupOptionsToSelect2(property.tumlLookupOnCompositeParentUri, property.lower > 0, this.data['id'], this.data[property.name], input);
+                    }
                 }
             } else if (property.fieldType == 'String' || property.fieldType == 'Integer' || property.fieldType == 'Long' || property.fieldType == 'Real' || property.manyEnumeration) {
                 var input = $(inputFieldIdForValidate(property, this.metaForData, false));
-                if (this.data[property.name] !== undefined) {
+                if (this.updatedData[property.name] !== undefined) {
+                    input.val(this.updatedData[property.name]);
+                } else if (this.data[property.name] !== undefined) {
                     input.val(this.data[property.name]);
                 }
             } else if (property.fieldType == 'Boolean') {
                 if (!property.manyPrimitive) {
                     var input = $(inputFieldIdForValidate(property, this.metaForData, false));
-                    if (this.data[property.name]) {
+                    if (this.updatedData[property.name]) {
                         input.attr('checked', 'checked');
+                    } else if (this.data[property.name]){
+                        input.attr('checked', false);
                     } else {
                         input.attr('checked', false);
                     }
                 } else if (property.manyPrimitive) {
                     var input = $(inputFieldIdForValidate(property, this.metaForData, false));
-                    if (this.data[property.name] !== undefined) {
+                    if (this.updatedData[property.name] !== undefined) {
+                        input.val(this.updatedData[property.name]);
+                    } else if (this.data[property.name] !== undefined) {
                         input.val(this.data[property.name]);
                     }
                 }
@@ -644,6 +788,10 @@
     }
 
     TumlBaseTabOneManager.prototype.refreshFromDataModel = function () {
+        if (!this.isForCreation) {
+            this.updatedData = {};
+            this.updatedData.qualifiedName = this.qualifiedName;
+        }
         for (var i = 0; i < this.metaForData.properties.length; i++) {
             var property = this.metaForData.properties[i];
             this.refreshFromDataModelForProperty(property);
@@ -655,6 +803,11 @@
             input.addClass("umlg-updated-id");
         }
         return input;
+    }
+
+    TumlBaseTabOneManager.prototype.updateDataModelForProperty = function (property, value) {
+        this.updatedData[property.name] = value;
+        this.refreshFromDataModelForProperty(property);
     }
 
     TumlBaseTabOneManager.prototype.openEditorForMany = function ($inputToSet, property, $manyDiv, $li) {
@@ -777,7 +930,7 @@
     }
 
     TumlBaseTabOneManager.prototype.appendEnumerationLoopupOptionsToSelect = function (tumlLookupUri, propertyJavaClassName, required, currentValue, select) {
-        var jqxhr = $.getJSON(tumlLookupUri + '?enumQualifiedName=' + propertyJavaClassName,
+        $.getJSON(tumlLookupUri + '?enumQualifiedName=' + propertyJavaClassName,
             function (response, b, c) {
                 //if not a required field add a black value
                 //Clear the select box
@@ -915,7 +1068,11 @@
             if (property.fieldType === 'Boolean') {
                 validationResult = selectFieldValidator(property)((validateInput.is(':checked') ? 't' : 'f'));
             } else {
-                validationResult = selectFieldValidator(property)(validateInput.val());
+                if (property.dataTypeEnum === 'Date' || property.dataTypeEnum === 'DateTime' || property.dataTypeEnum === 'Time') {
+                    validationResult = selectFieldValidator(property)(validateInput.parent().data("DateTimePicker").getDate());
+                } else {
+                    validationResult = selectFieldValidator(property)(validateInput.val());
+                }
             }
         }
         //selectFieldValidator returns the validate function

@@ -115,7 +115,6 @@
     }
 
     function TumlDeleteFormatter(row, cell, value, columnDef, dataContext) {
-//        return "<img class='umlg-delete-img' src='/"+tumlModelName+"/javascript/images/delete.png'>";
         return "<img class='umlg-delete-img' src='/"+tumlModelName+"/javascript/images/uml2/Pseudostate_terminate.gif'>";
     }
 

@@ -1,5 +1,6 @@
 package org.test.restlet;
 
+import org.joda.time.LocalDate;
 import org.umlg.runtime.adaptor.DefaultDataCreator;
 import org.umlg.runtime.adaptor.UMLG;
 import org.umlg.test.manytomany.*;
@@ -30,6 +31,7 @@ public class TestRestletDefaultDataCreator implements DefaultDataCreator {
                 Human human = new Human(true);
                 human.setName("human1" + i);
                 human.setName2("human2" + i);
+                human.setBirthDate(new LocalDate());
                 human.setGender(Gender.MALE);
                 Home home = new Home(human);
                 home.setName("home" + i);

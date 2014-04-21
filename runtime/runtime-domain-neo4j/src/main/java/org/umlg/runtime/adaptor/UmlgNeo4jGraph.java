@@ -231,6 +231,9 @@ public class UmlgNeo4jGraph extends Neo4j2Graph implements UmlgGraph {
         }
         if (!vertex.getId().equals(new Long(0))) {
             getDeletionVertex().addEdge(DELETION_VERTEX, vertex);
+            for (String key : vertex.getPropertyKeys()) {
+                vertex.removeProperty(key);
+            }
             vertex.setProperty("deleted", true);
         } else {
             super.removeVertex(vertex);

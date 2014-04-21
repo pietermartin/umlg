@@ -102,7 +102,18 @@
     }
 
     TumlBaseTabViewManager.prototype.updateTabTitle = function (name) {
-        this.li.find('a').text(name);
+        var self = this;
+        var tabTemplate = "<a href='#{href}' data-toggle='tab'>#{label} <span class='umlg-query-tab glyphicon glyphicon-remove'></span></a>";
+        tabTemplate = tabTemplate.replace(/#\{href\}/g, "#" +  this.tabId).replace(/#\{label\}/g, name);
+        this.li.find('a').remove();
+        this.li.append(tabTemplate);
+
+        // close icon: removing the tab on click
+        this.li.find("span.umlg-query-tab").click(function () {
+            if (Slick.GlobalEditorLock.commitCurrentEdit()) {
+                self.closeTab();
+            }
+        });
     }
 
     TumlBaseTabViewManager.prototype.saveAndCloseTab = function () {
@@ -175,7 +186,7 @@
                 }
             }
 
-            this.setCellValue(data);
+            this.setCellValueNoRefresh(data);
         }
         this.parentTabContainerManager.saveNewRow();
     }
@@ -354,7 +365,6 @@
                 tabTemplate = "<li id='li" + this.tabId + "'><a href='#{href}' data-toggle='tab'>#{label}</a></li>";
             } else {
                 tabTemplate = "<li id='li" + this.tabId + "'><a href='#{href}' data-toggle='tab'>#{label} <span class='umlg-query-tab glyphicon glyphicon-remove'></span></a></li>";
-
             }
         }
         var label = this.tabTitleName;
@@ -559,13 +569,13 @@
                 var property = this.metaForData.to.properties[k];
                 if (!property.composite && !property.inverseComposite && property.lower > 0) {
                     if (property.upper === -1 || property.upper > 1) {
-                        if (item[property.name].length === 0) {
+                        if (item[property.name] !== undefined && item[property.name].length === 0) {
                             var validationResult = new Tuml.ValidationResult(0, property.name);
                             validationResult.message = property.name + " is a required field!";
                             validationResults.push(validationResult);
                         }
                     } else {
-                        if (item[property.name] == null) {
+                        if (item[property.name] !== undefined && item[property.name] === null) {
                             var validationResult = new Tuml.ValidationResult(0, property.name);
                             validationResult.message = property.name + " is a required field!";
                             validationResults.push(validationResult);
@@ -616,7 +626,7 @@
     }
 
     TumlTabOneViewManager.prototype.getTabData = function () {
-        return this.tumlTabOneManager.data;
+        return this.tumlTabOneManager.updatedData;
     }
 
     TumlTabOneViewManager.prototype.updateGridAfterCommit = function (item) {
@@ -653,9 +663,14 @@
         this.tumlTabOneManager.setComponentProperty(property);
     }
 
+    TumlTabOneViewManager.prototype.setCellValueNoRefresh = function (value) {
+        this.tumlTabOneManager.updateData(this.componentProperty, value);
+    }
+
     TumlTabOneViewManager.prototype.setCellValue = function (value) {
         this.tumlTabOneManager.updateData(this.componentProperty, value);
-        this.tumlTabOneManager.refreshFromDataModel();
+//        this.tumlTabOneManager.refreshFromDataModel();
+        this.tumlTabOneManager.refreshFromDataModelForProperty(this.componentProperty);
     }
 
     TumlTabOneViewManager.prototype.openManyComponent = function (data, /*cell,*/ tumlUri, property) {
@@ -1197,6 +1212,10 @@
     }
 
     TumlTabManyViewManager.prototype.setCellValue = function (value) {
+        this.tumlTabGridManager.setCellValue(this.componentCell, value);
+    }
+
+    TumlTabManyViewManager.prototype.setCellValueNoRefresh = function (value) {
         this.tumlTabGridManager.setCellValue(this.componentCell, value);
     }
 

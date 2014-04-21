@@ -63,8 +63,8 @@
             if (isUmlgLib && this.contextVertexId !== undefined && this.contextVertexId !== null) {
                 this.createInstanceQueryMenu(-1);
                 this.createClassQueryMenu(-1);
-                this.createRootQueryMenu(-1);
             }
+            this.createRootQueryMenu(-1);
             var windowHeight = calculateBodyHeight(this) + 45;
             leftMenuPaneBody.height(windowHeight);
         }
@@ -94,9 +94,7 @@
             })
             leftPanelTabUl.find("a:first").tab('show')
 
-
             this.accordionDiv = $('<div />', {id: 'accordion', class: 'panel-group'}).appendTo(standardMenuDiv);
-
             this.umlPropertiesDiv = addAccordionMenu(this.accordionDiv, true, Tuml.AccordionEnum.PROPERTIES.label, Tuml.AccordionEnum.PROPERTIES.id);
             this.umlOperationsDiv = addAccordionMenu(this.accordionDiv, false, Tuml.AccordionEnum.OPERATIONS.label, Tuml.AccordionEnum.OPERATIONS.id);
             this.umlDiagramDiv = addAccordionMenu(this.accordionDiv, false, Tuml.AccordionEnum.DIAGRAMS.label, Tuml.AccordionEnum.DIAGRAMS.id);
@@ -158,35 +156,22 @@
 
             var url = '/' + tumlModelName + '/diagramPackages';
 
-            $.ajax({
-                url: url,
-                type: 'GET',
-                dataType: "json",
-                contentType: "application/json",
-                success: function (result) {
-                    $(function () {
-                        self.diagramsTreeViewDiv.tree({
-                            data: result,
-                            selectable: true
-                        });
+            Umlg.Diagrams.Cache.get(url, function(result) {
+                self.diagramsTreeViewDiv.tree({
+                    data: result,
+                    selectable: true
+                });
 
-                        self.diagramsTreeViewDiv.bind(
-                            'tree.dblclick',
-                            function (e) {
-
-                                event.preventDefault();
-                                event.stopImmediatePropagation();
-                                if (e.node.children.length == 0) {
-                                    self.onDiagramClick.notify(e.node, null, self);
-                                }
-                            }
-                        );
-                    });
-
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR);
-                }
+                self.diagramsTreeViewDiv.bind(
+                    'tree.dblclick',
+                    function (e) {
+                        event.preventDefault();
+                        event.stopImmediatePropagation();
+                        if (e.node.children.length == 0) {
+                            self.onDiagramClick.notify(e.node, null, self);
+                        }
+                    }
+                );
             });
 
         }
@@ -366,18 +351,11 @@
             //Fetch the query data
             if (this.contextVertexId !== null) {
                 var classQueryUri = "/" + tumlModelName + "/classquery/" + encodeURIComponent(this.contextVertexId) + "/query";
-                $.ajax({
-                    url: classQueryUri,
-                    type: "GET",
-                    dataType: "json",
-                    contentType: "json",
-                    success: function (response) {
-                        retrieveMetaDataIfNotInCache(classQueryUri, this.contextVertexId, response, self.continueCreateClassQueryMenu);
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        alert('Error getting class query data. textStatus: ' + textStatus + ' errorThrown: ' + errorThrown);
-                    }
-                });
+
+                Umlg.ClassQuery.Cache.get(classQueryUri, function(response) {
+                    retrieveMetaDataIfNotInCache(classQueryUri, null, response, self.continueCreateClassQueryMenu);
+                })
+
             }
         }
 
@@ -395,18 +373,10 @@
             //Add query tree
             //Fetch the query data
             var rootQueryUri = "/" + tumlModelName + "/rootquerys";
-            $.ajax({
-                url: rootQueryUri,
-                type: "GET",
-                dataType: "json",
-                contentType: "json",
-                success: function (response) {
-                    retrieveMetaDataIfNotInCache(rootQueryUri, null, response, self.continueCreateRootQueryMenu);
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert('Error getting root query data. textStatus: ' + textStatus + ' errorThrown: ' + errorThrown);
-                }
-            });
+            Umlg.RootQuery.Cache.get(rootQueryUri, function(response) {
+                retrieveMetaDataIfNotInCache(rootQueryUri, null, response, self.continueCreateRootQueryMenu);
+            })
+
         }
 
         this.continueCreateRootQueryMenu = function (tumlUri, result) {
@@ -440,6 +410,7 @@
         }
 
         this.refreshRootQuery = function (queryId) {
+            Umlg.RootQuery.Cache.clear();
             this.umlRootQueriesDiv.children().remove();
             this.createRootQueryMenu(queryId);
         }

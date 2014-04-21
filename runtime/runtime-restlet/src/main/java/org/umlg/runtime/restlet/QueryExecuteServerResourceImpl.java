@@ -34,7 +34,7 @@ public class QueryExecuteServerResourceImpl extends BaseQueryExecutionServerReso
                 } else {
                     result = executeStatic(query, contextClassifierQualifiedName, type);
                 }
-                UMLG.get().commit();
+                UMLG.get().rollback();
                 return result;
             } catch (Exception e) {
                 UMLG.get().rollback();

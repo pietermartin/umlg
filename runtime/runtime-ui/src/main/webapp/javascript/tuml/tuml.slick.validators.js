@@ -31,8 +31,8 @@
                 "Min": MinValidator,
                 "Required": RequiredValidator,
                 "Number": NumberValidator,
-                "TumlManyDateValidator" : TumlManyDateValidator,
-                "TumlManyTimeValidator" : TumlManyTimeValidator,
+                "TumlManyDateValidator": TumlManyDateValidator,
+                "TumlManyTimeValidator": TumlManyTimeValidator,
                 "TumlManyDateTimeValidator": TumlManyDateTimeValidator
             }
         }
@@ -537,10 +537,13 @@
             if (!result.valid) {
                 return result;
             }
-            try {
-                var result = $.datepicker.parseDateTime('yy-mm-dd', 'HH:mm:ss', value);
+            if (property.lower === 0 && value === '') {
                 return {valid: true};
-            } catch (error) {
+            }
+            var m = moment(value);
+            if (m.isValid()) {
+                return {valid: true};
+            } else {
                 return {valid: false, msg: value + "'s format is incorrect, the format is 'yy-mm-dd HH:mm:ss'"}
             }
         }
@@ -560,12 +563,13 @@
             if (!result.valid) {
                 return result;
             }
-            //datetimepicker thinks there is a time part to the value
-            value = value + ' 00:00:00';
-            try {
-                var result = $.datepicker.parseDate('yy-mm-dd', value);
+            if (property.lower === 0 && value === '') {
                 return {valid: true};
-            } catch (error) {
+            }
+            var m = moment(value);
+            if (m.isValid()) {
+                return {valid: true};
+            } else {
                 return {valid: false, msg: value + "'s format is incorrect, the format is 'yy-mm-dd'"}
             }
         }
@@ -584,12 +588,17 @@
             if (!result.valid) {
                 return result;
             }
-            var result = $.datepicker.parseTime('HH:mm', value, {});
-            if (result) {
+            if (property.lower === 0 && value === '') {
+                return {valid: true};
+            }
+
+            var m = moment(value);
+            if (m.isValid()) {
                 return {valid: true};
             } else {
                 return {valid: false, msg: value + "'s format is incorrect, the format is 'HH:mm'"}
             }
+
         }
 
     }

@@ -353,7 +353,7 @@
       <children xmi:type="notation:DecorationNode" xmi:id="_NzbQQIp2EeOj_-E07LlldA" type="6001">
         <layoutConstraint xmi:type="notation:Location" xmi:id="_Nzb3UIp2EeOj_-E07LlldA" y="-20"/>
       </children>
-      <children xmi:type="notation:DecorationNode" xmi:id="_Nzb3UYp2EeOj_-E07LlldA" type="6002">
+      <children xmi:type="notation:DecorationNode" xmi:id="_Nzb3UYp2EeOj_-E07LlldA" visible="false" type="6002">
         <layoutConstraint xmi:type="notation:Location" xmi:id="_Nzb3Uop2EeOj_-E07LlldA" x="-3" y="-95"/>
       </children>
       <children xmi:type="notation:DecorationNode" xmi:id="_Nzb3U4p2EeOj_-E07LlldA" type="6003">

@@ -220,12 +220,13 @@ public class UmlgBitsyGraph extends BitsyAutoReloadingGraph implements UmlgGraph
         for (final Edge edge : edges) {
             edge.remove();
         }
-        if (!vertex.getId().equals(new Long(0))) {
-            getDeletionVertex().addEdge(DELETION_VERTEX, vertex);
-            vertex.setProperty("deleted", true);
-        } else {
-            super.removeVertex(vertex);
-        }
+        super.removeVertex(vertex);
+//        if (!vertex.getId().equals(new Long(0))) {
+//            getDeletionVertex().addEdge(DELETION_VERTEX, vertex);
+//            vertex.setProperty("deleted", true);
+//        } else {
+//            super.removeVertex(vertex);
+//        }
     }
 
     @Override

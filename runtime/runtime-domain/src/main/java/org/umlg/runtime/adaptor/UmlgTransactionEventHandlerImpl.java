@@ -1,5 +1,6 @@
 package org.umlg.runtime.adaptor;
 
+import org.joda.time.DateTime;
 import org.umlg.runtime.domain.UmlgNode;
 import org.umlg.runtime.validation.UmlgConstraintViolation;
 import org.umlg.runtime.validation.UmlgConstraintViolationException;
@@ -40,6 +41,8 @@ public class UmlgTransactionEventHandlerImpl implements UmlgTransactionEventHand
 //                            }
                         throw new IllegalStateException(String.format("Entity %s %s does not have a composite owner", umlgNode.getClass().getSimpleName(), umlgNode.getId()));
                     }
+
+                    umlgNode.doBeforeCommit();
                 }
             }
         } finally {

@@ -3,6 +3,11 @@
     top: 0;
 }
 
+.input-group-addon.glyphicon-none {
+    background-color: transparent;
+    border-left: none;
+}
+
 /* protect slickgrid from bootstrap */
 .slickgrid,
 .slickgrid *,
@@ -28,6 +33,14 @@ input.slick-grid-umlg-editor-text {
     outline: 0 none;
     padding: 0;
     width: 100%;
+}
+
+.slick-grid-umlg-editor-text > span {
+    padding-right: 0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    background-color: transparent;
+    border: none;
 }
 
 .umlg-panel-many-editor,
@@ -69,7 +82,7 @@ input.slick-grid-umlg-editor-text {
 
 .umlg-context-menu.dropdown {
     position: absolute;
-    display:none;
+    display: none;
 }
 
 .navbar.navbar-default {
@@ -86,13 +99,13 @@ input.slick-grid-umlg-editor-text {
 /* Needed to make the brand Umlg appear in the middle */
 /*#umlgnavbar .navbar .nav,*/
 /*#umlgnavbar .navbar .nav > li {*/
-    /*float: none;*/
-    /*display: inline-block;*/
-    /*vertical-align: top;*/
+/*float: none;*/
+/*display: inline-block;*/
+/*vertical-align: top;*/
 /*}*/
 
 /*#umlgnavbar {*/
-    /*text-align: center;*/
+/*text-align: center;*/
 /*}*/
 
 .poweredby {
@@ -128,7 +141,7 @@ input.slick-grid-umlg-editor-text {
 }
 
 #leftMenuPanel.umlg-panel.panel.panel-default {
-  margin-bottom: 0px;
+    margin-bottom: 0px;
 }
 
 .sr-only {
@@ -187,7 +200,7 @@ input.slick-grid-umlg-editor-text {
 }
 
 /*.form-group .btn.umlg-button {*/
-    /*margin-left: 15px;*/
+/*margin-left: 15px;*/
 /*}*/
 
 .btn.umlg-button {
@@ -238,11 +251,11 @@ input.slick-grid-umlg-editor-text {
 }
 
 /*.contextMenu.ui-icon.ui-icon-umlassociation {*/
-    /*background-image: url(../javascript/images/uml2/Association.gif);*/
+/*background-image: url(../javascript/images/uml2/Association.gif);*/
 /*}*/
 
 /*.contextMenu.ui-icon.ui-icon-umlcomposition {*/
-    /*background-image: url(../javascript/images/uml2/Association_composite.gif);*/
+/*background-image: url(../javascript/images/uml2/Association_composite.gif);*/
 /*}*/
 
 #switcher {
@@ -427,44 +440,44 @@ input.slick-grid-umlg-editor-text {
 }
 
 /*.many-primitive-editor input[type=text] {*/
-    /*width: 70px;*/
+/*width: 70px;*/
 /*}*/
 
 /*.many-primitive-editor-result {*/
-    /*height: 175px;*/
-    /*width: 90%;*/
-    /*margin-left: auto;*/
-    /*margin-right: auto;*/
-    /*overflow: auto;*/
+/*height: 175px;*/
+/*width: 90%;*/
+/*margin-left: auto;*/
+/*margin-right: auto;*/
+/*overflow: auto;*/
 /*}*/
 
 /*.many-primitive-editor-result table {*/
-    /*border-collapse: collapse;*/
+/*border-collapse: collapse;*/
 /*}*/
 
 /*.many-primitive-editor-result-table {*/
-    /*width: 100%;*/
-    /*border: 1px solid silver;*/
+/*width: 100%;*/
+/*border: 1px solid silver;*/
 /*}*/
 
 /*.many-primitive-editor-row:hover {*/
-    /*background-color: #E0F8F7;*/
+/*background-color: #E0F8F7;*/
 /*}*/
 
 /*.many-primitive-editor-row td {*/
-    /*border-right: 1px dotted silver;*/
-    /*border-bottom: 1px dotted silver;*/
+/*border-right: 1px dotted silver;*/
+/*border-bottom: 1px dotted silver;*/
 
-    /*overflow: hidden;*/
-    /*text-overflow: ellipsis;*/
-    /*white-space: nowrap;*/
-    /*vertical-align: middle;*/
-    /*z-index: 1;*/
-    /*margin: 0;*/
+/*overflow: hidden;*/
+/*text-overflow: ellipsis;*/
+/*white-space: nowrap;*/
+/*vertical-align: middle;*/
+/*z-index: 1;*/
+/*margin: 0;*/
 
-    /*white-space: nowrap;*/
+/*white-space: nowrap;*/
 
-    /*cursor: default;*/
+/*cursor: default;*/
 /*}*/
 
 .many-primitive-editor-cell-img {
@@ -484,7 +497,7 @@ input.slick-grid-umlg-editor-text {
 }
 
 /*.many-primitive-editor-for-one input[type=text] {*/
-    /*width: 70px;*/
+/*width: 70px;*/
 /*}*/
 
 .selectheader {
@@ -689,7 +702,7 @@ input.slick-grid-umlg-editor-text {
 .umlg-delete-img {
     display: block;
     margin: auto;
-    cursor:pointer;
+    cursor: pointer;
 }
 
 /*.tumlSlickGrid {*/

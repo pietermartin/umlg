@@ -256,12 +256,13 @@ public class UmlgTitanGraph extends StandardTitanGraph implements UmlgGraph {
         for (final Edge edge : edges) {
             edge.remove();
         }
-        if (!vertex.getId().equals(new Long(4))) {
-            getDeletionVertex().addEdge(DELETION_VERTEX, vertex);
-            vertex.setProperty("deleted", true);
-        } else {
             super.removeVertex(vertex);
-        }
+//        if (!vertex.getId().equals(new Long(4))) {
+//            getDeletionVertex().addEdge(DELETION_VERTEX, vertex);
+//            vertex.setProperty("deleted", true);
+//        } else {
+//            super.removeVertex(vertex);
+//        }
     }
 
     @Override

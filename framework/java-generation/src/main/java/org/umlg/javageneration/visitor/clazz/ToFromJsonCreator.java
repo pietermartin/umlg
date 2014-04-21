@@ -230,7 +230,7 @@ public class ToFromJsonCreator extends BaseVisitor implements Visitor<Class> {
                 } else {
                     toJson.getBody().addToStatements(
                             "sb.append(\"\\\"" + pWrap.getName() + "\\\": \" + (" + pWrap.getter() + "() != null ? \"\\\"\" + " + pWrap.getter()
-                                    + "() + \"\\\"\" : null " + "))");
+                                    + "().replace(\"\\n\", \"\\\\n\").replace(\"\\\"\", \"\\\\\\\"\") + \"\\\"\" : null " + "))");
                 }
             }
             first = false;

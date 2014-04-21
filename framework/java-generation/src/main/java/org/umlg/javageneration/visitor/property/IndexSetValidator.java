@@ -42,7 +42,9 @@ public class IndexSetValidator extends BaseVisitor implements Visitor<Property> 
                 OJAnnotatedClass owner = findOJClass(element);
                 OJAnnotatedOperation setter = owner.findOperation(pWrap.setter(), pWrap.javaBaseTypePath());
                 OJIfStatement ifIndexNotNull = new OJIfStatement();
-                ifIndexNotNull.setCondition(UmlgGenerationUtil.UMLGAccess + "." + UmlgGenerationUtil.getFromUniqueIndex + "(" +
+                ifIndexNotNull.setCondition(
+                        pWrap.fieldname() + " != null && !" + pWrap.fieldname() + ".equals("+pWrap.getter()+"()) && " +
+                        UmlgGenerationUtil.UMLGAccess + "." + UmlgGenerationUtil.getFromUniqueIndex + "(" +
                         UmlgGenerationUtil.UmlgLabelConverterFactoryPathName.getLast() +
                         ".getUmlgLabelConverter().convert(\"" +
                         pWrap.getQualifiedName() + "\"), " +

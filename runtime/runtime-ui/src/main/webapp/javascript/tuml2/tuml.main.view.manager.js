@@ -324,12 +324,12 @@
                         }
                     } else {
                         if (this.propertyNavigatingTo == null) {
-                            overloadedPostData = tumlTabViewManager.tumlTabOneManager.data;
+                            overloadedPostData = tumlTabViewManager.tumlTabOneManager.updatedData;
                             if (commit) {
                                 validationResults.push.apply(validationResults, tumlTabViewManager.validateUpdate());
                             }
                         } else {
-                            overloadedPostData.update.push(tumlTabViewManager.tumlTabOneManager.data);
+                            overloadedPostData.update.push(tumlTabViewManager.tumlTabOneManager.updatedData);
                             if (commit) {
                                 validationResults.push.apply(validationResults, tumlTabViewManager.validateUpdate());
                             }
@@ -537,7 +537,10 @@
             return savedTumlTabViewManagers;
         };
 
-        this.addQueryTab = function (post, query) {
+        this.addQueryTab = function (post, query, activate) {
+            if (activate == undefined) {
+                activate = true;
+            }
             //Check is there is already a tab open for this query
             var tumlTabViewManagerQuery;
             var tabIndex = 0;
@@ -580,9 +583,9 @@
                 this.tumlActiveTabViewManager = tumlTabViewManagerQuery;
                 this.tumlActiveTabViewManager.isOpen = true;
 
-            } else {
+            } else if (activate) {
                 //Just make the tab active
-//                this.tabContainer.children('ul').find('li:eq(' + self.tumlTabViewManagers.indexOf(tumlTabViewManagerQuery) + ') a').tab('show')
+                this.tabContainer.children('ul').find('li:eq(' + self.tumlTabViewManagers.indexOf(tumlTabViewManagerQuery) + ') a').tab('show')
             }
             return tumlTabViewManagerQuery;
 
@@ -710,9 +713,9 @@
         this.addRootQueryTab = function () {
 
             if ((this.contextVertexId !== null && this.contextVertexId !== undefined) || (this.propertyNavigatingTo !== null && this.propertyNavigatingTo !== undefined)) {
-                this.addQueryTab(true, new Tuml.Query(-1, 'New Query', 'New Query Description', 'self.name', 'ocl', null, 'rootQuery'));
+                this.addQueryTab(true, new Tuml.Query(-1, 'New Query', 'New Query Description', 'self.name', 'ocl', null, 'rootQuery'), false);
             } else {
-                this.addQueryTab(true, new Tuml.Query(-1, 'New Query', 'New Query Description', 'self.name', 'groovy', null, 'rootQuery'));
+                this.addQueryTab(true, new Tuml.Query(-1, 'New Query', 'New Query Description', 'self.name', 'groovy', null, 'rootQuery'), false);
             }
 
         }

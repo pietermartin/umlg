@@ -57,6 +57,11 @@ public abstract class BaseUmlg implements UmlgNode, Serializable {
         initVariables();
     }
 
+    @Override
+    public void doBeforeCommit() {
+        //Override to do something exciting!
+    }
+
     public BaseUmlg reload() {
         this.vertex = UMLG.get().getVertex(this.vertex.getId());
         initialiseProperties();

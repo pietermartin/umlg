@@ -1,6 +1,7 @@
 package org.umlg.sequence.test;
 
-import junit.framework.Assert;
+import org.joda.time.LocalDate;
+import org.junit.Assert;
 import org.junit.Test;
 import org.umlg.model.RestAndJson;
 import org.umlg.runtime.test.BaseLocalDbTest;
@@ -17,6 +18,7 @@ public class TestHandFinger extends BaseLocalDbTest {
 
         Human h1 = new Human(true);
         h1.setName("human1");
+        h1.setBirthDate(new LocalDate());
         h1.setGender(Gender.FEMALE);
         Home home = new Home(h1);
         home.setEmail("aaa@aaa.aaa");
@@ -71,7 +73,7 @@ public class TestHandFinger extends BaseLocalDbTest {
         finger6.addToManyRequiredInteger(1);
         db.commit();
 
-        Assert.assertTrue(RestAndJson.INSTANCE.getHuman().size()>0);
+        Assert.assertTrue(RestAndJson.INSTANCE.getHuman().size() > 0);
 
     }
 }

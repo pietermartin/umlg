@@ -136,6 +136,11 @@ public class SignalEvent extends Event {
     }
 
     @Override
+    public void doBeforeCommit() {
+
+    }
+
+    @Override
 	public <E> UmlgSet<E> asSet() {
 		// TODO Auto-generated method stub
 		return null;

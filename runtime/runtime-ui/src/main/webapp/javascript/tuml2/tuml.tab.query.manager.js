@@ -13,6 +13,7 @@
         this.instanceQueryUri = instanceQueryUri;
         this.classQueryUri = classQueryUri;
         this.rootQueryUri = rootQueryUri;
+        this.resultCodeMirror = null;
         if (queryId !== undefined) {
             this.queryId = queryId;
         }
@@ -47,7 +48,7 @@
                     outerDivForResults.children().remove();
                     var textAreaResult = $('<textarea />', {id: 'queryResultId'});
                     textAreaResult.text("no result").appendTo(outerDivForResults);
-                    CodeMirror.fromTextArea(textAreaResult[0], {mode: 'text/x-sh', readOnly: true});
+                    resultCodeMirror = CodeMirror.fromTextArea(textAreaResult[0], {mode: 'text/x-sh', readOnly: true});
                 }
             } else {
                 var outerDivForResults = $('#' + this.queryTabDivName + '_' + 'OclResult');
@@ -58,7 +59,7 @@
                 } else {
                     textAreaResult.text(data.result).appendTo(outerDivForResults);
                 }
-                CodeMirror.fromTextArea(textAreaResult[0], {mode: 'text/x-sh', readOnly: true});
+                resultCodeMirror = CodeMirror.fromTextArea(textAreaResult[0], {mode: 'text/x-sh', readOnly: true});
             }
             $('#serverErrorMsg_' + this.queryTabDivName).removeClass('server-error-msg');
             $('#serverErrorMsg_' + this.queryTabDivName).empty();
@@ -308,6 +309,7 @@
                 this.tumlTabViewManager.parentTabContainerManager.addQueryButtons(this.query);
             }
 
+
             var windowHeight = $('.ui-layout-center').height() - 165;
             var layoutDiv = $('<div />', {id: 'queryLayoutDiv', style: 'height: ' + windowHeight + 'px; width" 100%; overflow: hidden;'});
             layoutDiv.appendTo(queryPanelBody);
@@ -330,19 +332,27 @@
             var textArea = $('<textarea />', {id: queryTabDivName + '_' + 'QueryString'});
             textArea.text(query.queryString);
             textArea.appendTo(oclTextAreaDiv);
+
+            var newLines = query.queryString.match(/\n/g);
+            var count = 0;
+            if (newLines !== null) {
+                count = newLines.length;
+            }
+
             codeMirror = CodeMirror.fromTextArea(textArea[0], {
                     lineNumbers: true,
                     extraKeys: {"Ctrl-Space": "autocomplete"},
                     matchBrackets: true,
-                    mode: "text/x-groovy",
-                    onKeyEvent: function (o, e) {
-                        if ((e.which === 13 && e.altKey && e.type === "keydown") || (e.which === 13 && e.ctrlKey && e.type === "keydown")) {
-                            self.executeQuery();
-                            e.preventDefault();
-                        }
-                    }
+                    mode: "text/x-groovy"
                 }
             );
+
+            codeMirror.on('keydown', function (o, e) {
+                if ((e.which === 13 && e.altKey && e.type === "keydown") || (e.which === 13 && e.ctrlKey && e.type === "keydown")) {
+                    self.executeQuery();
+                    e.preventDefault();
+                }
+            });
 
             //Check if ocl or gremlin code insight
             if (query.type === 'ocl') {
@@ -373,14 +383,7 @@
 
             }
 
-            //Outer div for results
-            var oclResult = $('<div />', {id: queryTabDivName + '_' + 'OclResult', class: 'oclresult'});
-            oclResult.appendTo(centerDiv);
-            if (query.data !== undefined && query.data !== null) {
-                tumlQueryGridManager.refresh(query.data, queryTabDivName + '_' + 'OclResult');
-            }
-
-            layoutDiv.layout({
+            var myLayout = layoutDiv.layout({
                 center__paneSelector: ".query-center",
                 north__paneSelector: ".query-north",
                 north__size: 125,
@@ -388,11 +391,23 @@
 
                 onresize_end: function () {
                     //Resize the textarea
+                    console.log(myLayout.state.north.size);
                     var northHeight = $('.query-north').height() - 15;
-                    $('.CodeMirror').height(northHeight);
+                    $('.ocltextarea .CodeMirror').css("height", myLayout.state.north.size);
+                    codeMirror.refresh();
+                    this.resultCodeMirror.refresh();
                     return true;
                 }
             });
+            $('.CodeMirror').css("height", myLayout.state.north.size);
+            codeMirror.refresh();
+
+            //Outer div for results
+            var oclResult = $('<div />', {id: queryTabDivName + '_' + 'OclResult', class: 'oclresult'});
+            oclResult.appendTo(centerDiv);
+            if (query.data !== undefined && query.data !== null) {
+                tumlQueryGridManager.refresh(query.data, queryTabDivName + '_' + 'OclResult');
+            }
 
         }
 

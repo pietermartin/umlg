@@ -1,12 +1,16 @@
 package org.umlg.runtime.adaptor;
 
+import com.google.common.io.Resources;
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.gremlin.groovy.jsr223.DefaultImportCustomizerProvider;
 import com.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine;
 import com.tinkerpop.pipes.transform.ToStringPipe;
 import com.tinkerpop.pipes.util.iterators.SingleIterator;
+import groovy.lang.Closure;
+import groovy.lang.ProxyMetaClass;
 import org.apache.commons.lang.time.StopWatch;
 import org.umlg.runtime.gremlin.UmlgGremlinReadOnlyKeyIndexableGraph;
+import org.umlg.runtime.util.UmlgProperties;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
@@ -20,7 +24,8 @@ import java.util.Set;
 public class GroovyExecutor {
 
     public static GroovyExecutor INSTANCE = new GroovyExecutor();
-    private ScriptEngine scriptEngine;
+    private UmlgGremlinGroovyScriptEngine scriptEngine;
+    private boolean isNeo4j;
 
     private static Set<String> getUmlgImports() {
         try {
@@ -43,12 +48,18 @@ public class GroovyExecutor {
     }
 
     private GroovyExecutor() {
+        try {
+            Class.forName("org.umlg.runtime.adaptor.UmlgNeo4jGraph");
+            this.isNeo4j = true;
+        } catch (ClassNotFoundException e) {
+            this.isNeo4j = false;
+        }
         DefaultImportCustomizerProvider.initializeStatically(getUmlgImports(), getUmlgStaticImports());
-        this.scriptEngine = new GremlinGroovyScriptEngine();
+        this.refresh();
     }
 
     public void refresh() {
-        this.scriptEngine = new GremlinGroovyScriptEngine();
+        this.scriptEngine = new UmlgGremlinGroovyScriptEngine("GremlinExecutorBaseClass");
     }
 
     /**
@@ -80,9 +91,9 @@ public class GroovyExecutor {
         groovy = groovy.replaceAll("::", "____");
         if (contextId != null) {
             if (!(contextId instanceof Long)) {
-                groovy = groovy.replace("self", "g.v(\"" + contextId.toString() + "\")");
+                groovy = groovy.replaceAll("self(?=([^\"']*[\"'][^\"']*[\"'])*[^\"']*$)", "g.v(\"" + contextId.toString() + "\")");
             } else {
-                groovy = groovy.replace("self", "g.v(" + contextId + ")");
+                groovy = groovy.replaceAll("self(?=([^\"']*[\"'][^\"']*[\"'])*[^\"']*$)", "g.v(" + contextId + ")");
             }
         }
         Graph graph = new UmlgGremlinReadOnlyKeyIndexableGraph(UMLG.get());
@@ -90,10 +101,42 @@ public class GroovyExecutor {
         this.scriptEngine.put("g", graph);
         Object result;
         try {
+            if (this.isNeo4j) {
+                StringBuilder groovyToIntercept = new StringBuilder();
+                StringBuilder groovyDef = new StringBuilder();
+                this.seperateOutDefFromGroovy(groovy, groovyToIntercept, groovyDef);
+                groovy = "useInterceptor( GremlinGroovyPipeline, GremlinGroovyPipelineInterceptor) {" + groovyToIntercept.toString() + "}";
+                groovy = groovyDef.toString() + groovy;
+            }
             result = this.scriptEngine.eval(groovy);
         } catch (ScriptException e) {
             throw UmlgExceptionUtilFactory.getTumlExceptionUtil().handle(e);
         }
         return result;
+    }
+
+    private void seperateOutDefFromGroovy(String groovy, StringBuilder groovyToIntercept, StringBuilder groovyDef) {
+        while (groovy.indexOf("def") != -1) {
+            int indexOfdef = groovy.indexOf("def");
+            groovyToIntercept.append(groovy.substring(0, indexOfdef));
+            groovy = groovy.substring(indexOfdef, groovy.length());
+            int indexOfCurly = groovy.indexOf("}");
+            groovyDef.append(groovy.substring(0, indexOfCurly + 1));
+            groovy = groovy.substring(indexOfCurly + 1, groovy.length());
+
+            //check for semicolon
+            int indexOfSemicolon = groovy.indexOf(";");
+            if (indexOfSemicolon != -1) {
+                groovyDef.append(groovy.substring(0, indexOfSemicolon + 1));
+                groovy = groovy.substring(indexOfSemicolon + 1, groovy.length());
+            }
+            //check for new line
+            int indexOfNewline = groovy.indexOf("\n");
+            if (indexOfNewline != -1) {
+                groovyDef.append(groovy.substring(0, indexOfNewline + 1));
+                groovy = groovy.substring(indexOfNewline + 1, groovy.length());
+            }
+        }
+        groovyToIntercept.append(groovy);
     }
 }

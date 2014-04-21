@@ -15,5 +15,6 @@ public interface PersistentObject extends Serializable {
 	void fromJson(Map<String,Object> propertyMap);
     void fromJsonDataTypeAndComposite(Map<String,Object> propertyMap);
     void fromJsonNonCompositeOne(Map<String,Object> propertyMap);
+    void doBeforeCommit();
 
 }
